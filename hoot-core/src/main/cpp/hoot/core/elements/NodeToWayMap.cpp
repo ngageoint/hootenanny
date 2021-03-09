@@ -82,7 +82,7 @@ void NodeToWayMap::removeWay(const std::shared_ptr<const Way>& w)
     set<long>& s = (*this)[nodes[i]];
     s.erase(w->getId());
     // if we just removed the last node, then remove the entry from the map.
-    if (s.size() == 0)
+    if (s.empty())
     {
       erase(nodes[i]);
     }

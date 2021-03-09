@@ -26,6 +26,7 @@
  */
 
 #include "Roundabout.h"
+
 #include <hoot/core/algorithms/linearreference/LocationOfPoint.h>
 #include <hoot/core/algorithms/splitter/WaySplitter.h>
 #include <hoot/core/elements/MapProjector.h>
@@ -232,7 +233,7 @@ void Roundabout::handleCrossingWays(OsmMapPtr pMap)
         }
 
         // Remove the original way if it's been split
-        if (newWays.size() > 0 && replace)
+        if (!newWays.empty() && replace)
         {
           // Remove pWay
           LOG_TRACE("Removing original way: " << pWay->getElementId() << "...");

@@ -2075,7 +2075,7 @@ bool XmlChangeset::isMatch(const XmlChangeset& changeset)
         missingNodes.insert(node->id());
     }
     //  Output missing nodes in full
-    if (missingNodes.size() > 0)
+    if (!missingNodes.empty())
     {
       QString buffer;
       QTextStream ts(&buffer);
@@ -2109,7 +2109,7 @@ bool XmlChangeset::isMatch(const XmlChangeset& changeset)
         missingWays.insert(way->id());
     }
     //  Output missing ways in full
-    if (missingWays.size() > 0)
+    if (!missingWays.empty())
     {
       QString buffer;
       QTextStream ts(&buffer);
@@ -2143,7 +2143,7 @@ bool XmlChangeset::isMatch(const XmlChangeset& changeset)
         missingRelations.insert(relation->id());
     }
     //  Output missing relations in full
-    if (missingRelations.size() > 0)
+    if (!missingRelations.empty())
     {
       QString buffer;
       QTextStream ts(&buffer);

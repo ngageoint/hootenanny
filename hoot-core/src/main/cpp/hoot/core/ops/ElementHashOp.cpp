@@ -28,10 +28,10 @@
 
 // hoot
 #include <hoot/core/conflate/review/ReviewMarker.h>
+#include <hoot/core/elements/WayUtils.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/elements/WayUtils.h>
 #include <hoot/core/util/StringUtils.h>
 
 // Qt
@@ -106,7 +106,7 @@ void ElementHashOp::apply(const OsmMapPtr& map)
       const std::set<QString> containingWaysTypeKeys =
         WayUtils::getContainingWaysMostSpecificTypeKeysByNodeId(node->getId(), map);
       LOG_VART(containingWaysTypeKeys);
-      if (containingWaysTypeKeys.size() > 0)
+      if (!containingWaysTypeKeys.empty())
       {
         QString nodeJson = _hashVis.toJson(node);
         nodeJson.chop(1); // chop off the ending brace that's already there

@@ -73,7 +73,7 @@ public:
     refs.removeAll("todo");
     refs.removeAll("none");
 
-    if (refs.size() > 0)
+    if (!refs.empty())
     {
       for (int i = 0; i < refs.size(); i++)
       {
@@ -120,7 +120,7 @@ public:
       refs.removeAll("todo");
       refs.removeAll("none");
 
-      if (refs.size() > 0)
+      if (!refs.empty())
       {
         // Find the REF1 id's in REF2.
         // NOTE: this blindly assumes that there is only ONE value in the REF1 tag list

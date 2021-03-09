@@ -89,8 +89,8 @@ void ImplicitTagRulesDatabaseDeriver::deriveRulesDatabase(const QString& input, 
   LOG_VARD(_customRules.getCustomRulesList());
 
   if (_minTagOccurrencesPerWord == 1 && _minWordLength == 1 &&
-      _customRules.getWordIgnoreList().size() == 0 && _customRules.getTagIgnoreList().size() == 0 &&
-      _customRules.getCustomRulesList().size() == 0 && !_useSchemaTagValuesForWordsOnly)
+      _customRules.getWordIgnoreList().empty() && _customRules.getTagIgnoreList().empty() &&
+      _customRules.getCustomRulesList().empty() && !_useSchemaTagValuesForWordsOnly)
   {
     LOG_INFO("Skipping filtering, as no filtering criteria were specified...");
     if (_minTagOccurrencesPerWord >= 2)
@@ -447,7 +447,7 @@ void ImplicitTagRulesDatabaseDeriver::_writeCustomRules(long& linesWrittenCount)
   LOG_DEBUG("Writing custom rules...");
   long ruleCount = 0;
   LOG_VARD(_customRules.getCustomRulesList().size());
-  if (_customRules.getCustomRulesList().size() > 0)
+  if (!_customRules.getCustomRulesList().empty())
   {
     const QMap<QString, QString> customRulesList = _customRules.getCustomRulesList();
     for (QMap<QString, QString>::const_iterator customRulesItr = customRulesList.begin();

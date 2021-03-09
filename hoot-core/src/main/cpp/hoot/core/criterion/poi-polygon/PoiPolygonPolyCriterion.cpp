@@ -27,13 +27,13 @@
 #include "PoiPolygonPolyCriterion.h"
 
 // hoot
+#include <hoot/core/conflate/poi-polygon/PoiPolygonTagIgnoreListReader.h>
+#include <hoot/core/criterion/AreaCriterion.h>
+#include <hoot/core/criterion/poi-polygon/PoiPolygonPolyWayNodeCriterion.h>
+#include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/schema/MetadataTags.h>
-#include <hoot/core/criterion/AreaCriterion.h>
-#include <hoot/core/conflate/poi-polygon/PoiPolygonTagIgnoreListReader.h>
-#include <hoot/core/criterion/poi-polygon/PoiPolygonPolyWayNodeCriterion.h>
 
 using namespace std;
 
@@ -87,7 +87,7 @@ bool PoiPolygonPolyCriterion::isSatisfied(const ConstElementPtr& e) const
   LOG_VART(AreaCriterion().isSatisfied(e));
   // isArea includes building too
   const bool isPoly =
-    AreaCriterion().isSatisfied(e) && (inABuildingOrPoiCategory || tags.getNames().size() > 0);
+    AreaCriterion().isSatisfied(e) && (inABuildingOrPoiCategory || !tags.getNames().empty());
 
   LOG_VART(isPoly);
   return isPoly;

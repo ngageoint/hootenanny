@@ -30,9 +30,9 @@
 #include <hoot/core/info/ApiEntityDisplayInfo.h>
 #include <hoot/core/info/ConfigOptionsDisplayer.h>
 #include <hoot/core/info/FormatsDisplayer.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/ConfigOptions.h>
 
 // Qt
 #include <QUrl>
@@ -65,14 +65,14 @@ public:
     for (int i = 0; i < args.size(); i++)
     {
       const QString arg = args.at(i);
-      if (specifiedOpts.contains(arg) || (supportedOpts.contains(arg) && specifiedOpts.size() > 0))
+      if (specifiedOpts.contains(arg) || (supportedOpts.contains(arg) && !specifiedOpts.empty()))
       {
         std::cout << getHelp() << std::endl << std::endl;
         throw IllegalArgumentException(QString("%1 takes a single option.").arg(getName()));
       }
       specifiedOpts.append(arg);
     }
-    if (specifiedOpts.size() == 0)
+    if (specifiedOpts.empty())
     {
       std::cout << getHelp() << std::endl << std::endl;
       throw IllegalArgumentException(QString("%1 takes a single option.").arg(getName()));
@@ -112,7 +112,7 @@ public:
             .arg(getName()));
       }
 
-      if (args.size() == 0)
+      if (args.empty())
       {
         std::cout << ConfigOptionsDisplayer::getAllOptionNames(getDetails).toStdString();
       }
@@ -195,7 +195,7 @@ public:
       // This is getting a little messy...maybe pass in an object with the settings instead...
       if (!displayInputs && !displayInputsSupportingBounds && !displayInputsSupportingStreaming &&
           !displayOutputs && !displayOutputsSupportingStreaming &&
-          (args.size() == 0 || (args.size() == 1 && displayOgrOnly)))
+          (args.empty() || (args.size() == 1 && displayOgrOnly)))
       {
         displayInputs = true;
         displayInputsSupportingStreaming = true;
@@ -237,7 +237,7 @@ public:
         }
       }
       LOG_VARD(apiEntityType);
-      if (args.size() != 0)
+      if (!args.empty())
       {
         std::cout << getHelp() << std::endl << std::endl;
         throw IllegalArgumentException(

@@ -28,17 +28,17 @@
 #include "WayUtils.h"
 
 // Hoot
-#include <hoot/core/util/HootException.h>
-#include <hoot/core/util/Log.h>
-#include <hoot/core/elements/NodeUtils.h>
-#include <hoot/core/criterion/ChainCriterion.h>
 #include <hoot/core/algorithms/Distance.h>
 #include <hoot/core/algorithms/WayDiscretizer.h>
 #include <hoot/core/algorithms/linearreference/LocationOfPoint.h>
+#include <hoot/core/criterion/ChainCriterion.h>
 #include <hoot/core/elements/NodeToWayMap.h>
+#include <hoot/core/elements/NodeUtils.h>
 #include <hoot/core/index/OsmMapIndex.h>
-#include <hoot/core/util/CollectionUtils.h>
 #include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/util/CollectionUtils.h>
+#include <hoot/core/util/HootException.h>
+#include <hoot/core/util/Log.h>
 
 // GEOS
 #include <geos/geom/Coordinate.h>
@@ -352,12 +352,12 @@ bool WayUtils::nodesAreContainedInTheSameWay(const long nodeId1, const long node
     std::inserter(commonNodesBetweenWayGroups, commonNodesBetweenWayGroups.begin()));
   LOG_VART(commonNodesBetweenWayGroups);
 
-  return commonNodesBetweenWayGroups.size() != 0;
+  return !commonNodesBetweenWayGroups.empty();
 }
 
 bool WayUtils::nodeContainedByAnyWay(const long nodeId, const ConstOsmMapPtr& map)
 {
-  return map->getIndex().getNodeToWayMap()->getWaysByNode(nodeId).size() > 0;
+  return !map->getIndex().getNodeToWayMap()->getWaysByNode(nodeId).empty();
 }
 
 bool WayUtils::nodeContainedByAnyWay(const long nodeId, const std::set<long> wayIds,
@@ -368,7 +368,7 @@ bool WayUtils::nodeContainedByAnyWay(const long nodeId, const std::set<long> way
   std::set_intersection(
     waysContainingNode.begin(), waysContainingNode.end(), wayIds.begin(), wayIds.end(),
     std::inserter(commonWayIds, commonWayIds.begin()));
-  return commonWayIds.size() > 0;
+  return !commonWayIds.empty();
 }
 
 bool WayUtils::nodeContainedByMoreThanOneWay(const long nodeId, const ConstOsmMapPtr& map)

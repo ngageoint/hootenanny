@@ -27,27 +27,27 @@
 #include "BuildingOutlineUpdateOp.h"
 
 // geos
+#include <geos/opBuffer.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Polygon.h>
 #include <geos/util/TopologyException.h>
-#include <geos/opBuffer.h>
 
 // hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/index/OsmMapIndex.h>
+#include <hoot/core/criterion/BuildingCriterion.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/elements/NodeToWayMap.h>
-#include <hoot/core/visitors/ConstElementVisitor.h>
-#include <hoot/core/ops/RemoveNodeByEid.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/geometry/GeometryToElementConverter.h>
 #include <hoot/core/geometry/GeometryUtils.h>
-#include <hoot/core/elements/MapProjector.h>
-#include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/util/Log.h>
+#include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
+#include <hoot/core/ops/RemoveNodeByEid.h>
 #include <hoot/core/ops/RemoveWayByEid.h>
-#include <hoot/core/criterion/BuildingCriterion.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 
 using namespace geos::geom;
 using namespace std;
@@ -115,7 +115,7 @@ public:
       const NodeToWayMap& n2w = *_map.getIndex().getNodeToWayMap();
       for (size_t i = 0; i < oldNodes.size(); i++)
       {
-        if (n2w.getWaysByNode(oldNodes[i]).size() == 0 && _map.containsNode(oldNodes[i]))
+        if (n2w.getWaysByNode(oldNodes[i]).empty() && _map.containsNode(oldNodes[i]))
         {
           RemoveNodeByEid::removeNode(_map.shared_from_this(), oldNodes[i]);
         }

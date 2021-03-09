@@ -277,7 +277,7 @@ void DataConverter::_validateInput(const QStringList& inputs, const QString& out
   LOG_VART(_translation);
   LOG_VART(_shapeFileColumns);
   LOG_VART(_ogrFeatureReadLimit);
-  if (inputs.size() > 0)
+  if (!inputs.empty())
   {
     LOG_VART(IoUtils::isSupportedOsmFormat(inputs.at(0)));
     LOG_VART(IoUtils::isSupportedOgrFormat(inputs.at(0), true));
@@ -286,7 +286,7 @@ void DataConverter::_validateInput(const QStringList& inputs, const QString& out
   LOG_VART(IoUtils::isSupportedOsmFormat(output));
   LOG_VART(IoUtils::isSupportedOgrFormat(output));
 
-  if (inputs.size() == 0)
+  if (inputs.empty())
   {
     throw HootException("No input(s) specified.");
   }
@@ -465,7 +465,7 @@ void DataConverter::_convertToOgr(const QStringList& inputs, const QString& outp
       // TODO: if we have a single convert op that is a SchemaTranslationOp or
       // SchemaTranslationVisitor should we pop it off and then run multithreaded with that
       // translation?...seems like we should
-      _convertOps.size() == 0 &&
+      _convertOps.empty() &&
       // multithreaded code doesn't support a bounds...not sure if it could be made to at some point
       !ConfigUtils::boundsOptionEnabled())
   {
@@ -476,7 +476,7 @@ void DataConverter::_convertToOgr(const QStringList& inputs, const QString& outp
   {
     // The number of task steps here must be updated as you add/remove job steps in the logic.
     int numTasks = 2;
-    if (_convertOps.size() > 0)
+    if (!_convertOps.empty())
     {
       numTasks++;
     }
@@ -497,7 +497,7 @@ void DataConverter::_convertToOgr(const QStringList& inputs, const QString& outp
     }
     currentTask++;
 
-    if (_convertOps.size() > 0)
+    if (!_convertOps.empty())
     {
       QElapsedTimer timer;
       timer.start();
@@ -605,7 +605,7 @@ QStringList DataConverter::_getOgrLayersFromPath(OgrReader& reader, QString& inp
   }
   LOG_VARD(layers);
 
-  if (layers.size() == 0)
+  if (layers.empty())
   {
     if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
     {
@@ -697,7 +697,7 @@ void DataConverter::_convertFromOgr(const QStringList& inputs, const QString& ou
 
   // The number of task steps here must be updated as you add/remove job steps in the logic.
   int numTasks = 2;
-  if (_convertOps.size() > 0)
+  if (!_convertOps.empty())
   {
     numTasks++;
   }
@@ -745,7 +745,7 @@ void DataConverter::_convertFromOgr(const QStringList& inputs, const QString& ou
   //OsmMapWriterFactory::writeDebugMap(map, "after-convert-from-ogr");
   currentTask++;
 
-  if (_convertOps.size() > 0)
+  if (!_convertOps.empty())
   {
     QElapsedTimer timer2;
     timer2.start();
@@ -854,7 +854,7 @@ void DataConverter::_convert(const QStringList& inputs, const QString& output)
   else
   {
     numTasks = 2;
-    if (_convertOps.size() > 0)
+    if (!_convertOps.empty())
     {
       numTasks++;
     }
@@ -892,7 +892,7 @@ void DataConverter::_convert(const QStringList& inputs, const QString& output)
     }
     currentTask++;
 
-    if (_convertOps.size() > 0)
+    if (!_convertOps.empty())
     {
       QElapsedTimer timer;
       timer.start();

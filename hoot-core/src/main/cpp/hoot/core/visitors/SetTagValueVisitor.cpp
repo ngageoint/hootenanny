@@ -27,11 +27,11 @@
 #include "SetTagValueVisitor.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/schema/MetadataTags.h>
 
 namespace hoot
 {
@@ -132,7 +132,7 @@ void SetTagValueVisitor::_setTag(const ElementPtr& e, const QString& k, const QS
 
   LOG_VART(e->getElementId());
 
-  if (_criteria.size() > 0 && !_criteriaSatisfied(e))
+  if (!_criteria.empty() && !_criteriaSatisfied(e))
   {
     return;
   }

@@ -29,8 +29,8 @@
 // hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Relation.h>
-#include <hoot/core/visitors/ConstElementVisitor.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 
 using namespace std;
 
@@ -122,7 +122,7 @@ void ElementToRelationMap::removeRelation(const OsmMap& map,
       ElementId ep(e->getElementType(), e->getId());
       set<long>& relations = _mapping[ep];
       relations.erase(_rid);
-      if (relations.size() == 0)
+      if (relations.empty())
       {
         _mapping.erase(ep);
       }

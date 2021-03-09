@@ -28,15 +28,15 @@
 #include "MapProjector.h"
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/algorithms/WayHeading.h>
 #include <hoot/core/elements/Node.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/geometry/GeometryUtils.h>
-#include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 
 // GEOS
 #include <geos/geom/CoordinateFilter.h>
@@ -296,7 +296,7 @@ std::shared_ptr<OGRSpatialReference> MapProjector::createPlanarProjection(const 
 
   QString deg = QChar(0x00B0);
 
-  if (projs.size() == 0)
+  if (projs.empty())
   {
     throw HootException("No candidate planar projections are available.");
   }
@@ -345,7 +345,7 @@ std::shared_ptr<OGRSpatialReference> MapProjector::createPlanarProjection(const 
   Log::WarningLevel level = Log::Trace;
   LOG_VART(passingResults.size());
   LOG_VART(testResults.size());
-  if (passingResults.size() > 0)
+  if (!passingResults.empty())
   {
     bestIndex = _findBestScore(passingResults);
     LOG_VART(bestIndex);
@@ -355,7 +355,7 @@ std::shared_ptr<OGRSpatialReference> MapProjector::createPlanarProjection(const 
   {
     level = Log::Warn;
   }
-  else if (testResults.size() > 0)
+  else if (!testResults.empty())
   {
     LOG_WARN(errorMessage);
     bestIndex = _findBestScore(testResults);

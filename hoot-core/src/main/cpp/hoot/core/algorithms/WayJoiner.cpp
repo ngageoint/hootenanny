@@ -434,7 +434,7 @@ bool WayJoiner::_joinWays(const WayPtr& parent, const WayPtr& child)
   vector<long> parent_nodes = parent->getNodeIds();
 
   //  Make sure that there are nodes in the ways
-  if (parent_nodes.size() == 0 || child_nodes.size() == 0)
+  if (parent_nodes.empty() || child_nodes.empty())
   {
     LOG_TRACE(
       "One or more of the ways: " << parent->getElementId() << " and " << child->getElementId() <<

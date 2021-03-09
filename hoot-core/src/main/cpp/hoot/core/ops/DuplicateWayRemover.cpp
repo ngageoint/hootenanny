@@ -28,10 +28,13 @@
 #include "DuplicateWayRemover.h"
 
 // Hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/algorithms/DirectionFinder.h>
 #include <hoot/core/algorithms/LongestCommonNodeString.h>
+#include <hoot/core/criterion/LinearCriterion.h>
+#include <hoot/core/criterion/OneWayCriterion.h>
+#include <hoot/core/criterion/PolygonCriterion.h>
+#include <hoot/core/conflate/ConflateUtils.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/NodeToWayMap.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/index/OsmMapIndex.h>
@@ -39,11 +42,8 @@
 #include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/ops/RemoveWayByEid.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/criterion/LinearCriterion.h>
-#include <hoot/core/criterion/OneWayCriterion.h>
-#include <hoot/core/criterion/PolygonCriterion.h>
-#include <hoot/core/conflate/ConflateUtils.h>
 
 // Standard
 #include <iostream>
@@ -99,7 +99,7 @@ void DuplicateWayRemover::apply(OsmMapPtr& map)
     const vector<long>& nodes = w->getNodeIds();
     for (size_t i = 0; i < nodes.size(); i++)
     {
-      if (newNodes.size() == 0 || newNodes[newNodes.size() - 1] != nodes[i])
+      if (newNodes.empty() || newNodes[newNodes.size() - 1] != nodes[i])
         newNodes.push_back(nodes[i]);
     }
 
@@ -187,7 +187,7 @@ bool DuplicateWayRemover::_isCandidateWay(const ConstWayPtr& w) const
     // is this a linear way
     (LinearCriterion().isSatisfied(w) &&
      // if this is not part of a relation
-     _map->getIndex().getParents(w->getElementId()).size() == 0);
+     _map->getIndex().getParents(w->getElementId()).empty());
 }
 
 void DuplicateWayRemover::_splitDuplicateWays(WayPtr w1, WayPtr w2, bool rev1, bool rev2)

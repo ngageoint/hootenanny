@@ -86,7 +86,7 @@ void EdgeString::addFirstEdge(const ConstEdgeSublinePtr& subline)
 
 void EdgeString::appendEdge(const ConstNetworkEdgePtr& e)
 {
-  if (_edges.size() == 0)
+  if (_edges.empty())
   {
     addFirstEdge(e);
   }
@@ -117,7 +117,7 @@ void EdgeString::appendEdge(const ConstNetworkEdgePtr& e)
 
 void EdgeString::appendEdge(const ConstEdgeSublinePtr& subline)
 {
-  if (_edges.size() == 0)
+  if (_edges.empty())
   {
     addFirstEdge(subline);
   }
@@ -404,7 +404,7 @@ bool EdgeString::overlaps(const ConstEdgeSublinePtr& es) const
 
 void EdgeString::prependEdge(const ConstEdgeSublinePtr& subline)
 {
-  if (_edges.size() == 0)
+  if (_edges.empty())
   {
     addFirstEdge(subline);
   }
@@ -634,7 +634,7 @@ bool EdgeString::validate() const
 
 bool EdgeString::isValid() const
 {
-  if (_edges.size() == 0)
+  if (_edges.empty())
   {
     return false;
   }

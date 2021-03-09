@@ -33,13 +33,13 @@
 #include <hoot/core/elements/ElementType.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/util/DateTimeUtils.h>
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/elements/Tags.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/DateTimeUtils.h>
 #include <hoot/core/util/Exception.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/StringUtils.h>
@@ -150,7 +150,7 @@ void OsmGeoJsonWriter::_writeGeometry(ConstWayPtr w)
   string geoType = "LineString";
   if (_useTaskingManagerFormat)
     geoType = "MultiPolygon";
-  else if (AreaCriterion().isSatisfied(w) || (nodes.size() > 0 && nodes[0] == nodes[nodes.size() - 1]))
+  else if (AreaCriterion().isSatisfied(w) || (!nodes.empty() && nodes[0] == nodes[nodes.size() - 1]))
     geoType = "Polygon";
   _writeGeometry(nodes, geoType);
 }
@@ -205,7 +205,7 @@ void OsmGeoJsonWriter::_writeGeometry(const vector<long>& nodes, string type)
       temp_nodes.push_back(*it);
   }
   //  Empty nodes list should output an empty coordinate array
-  if (temp_nodes.size() == 0)
+  if (temp_nodes.empty())
   {
     _writeKvp("type", type.c_str());
     _write(",");
@@ -321,7 +321,7 @@ void OsmGeoJsonWriter::_writeWays()
     ConstWayPtr w = it->second;
     //  Skip any ways that have parents
     set<ElementId> parents = _map->getParents(w->getElementId());
-    if (parents.size() > 0)
+    if (!parents.empty())
       continue;
     if (w.get() == NULL)
       continue;

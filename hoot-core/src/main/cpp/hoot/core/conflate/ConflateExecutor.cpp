@@ -28,30 +28,30 @@
 #include "ConflateExecutor.h"
 
 // Hoot
+#include <hoot/core/conflate/SuperfluousConflateOpRemover.h>
 #include <hoot/core/conflate/UnifyingConflator.h>
+#include <hoot/core/conflate/merging/LinearTagOnlyMerger.h>
 #include <hoot/core/conflate/stats/ConflateStatsHelper.h>
+#include <hoot/core/criterion/ReviewRelationCriterion.h>
+#include <hoot/core/criterion/ReviewScoreCriterion.h>
 #include <hoot/core/criterion/StatusCriterion.h>
+#include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/elements/VersionUtils.h>
+#include <hoot/core/io/ChangesetStatsFormat.h>
+#include <hoot/core/io/IoUtils.h>
 #include <hoot/core/io/MapStatsWriter.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/ops/OpExecutor.h>
-#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/io/IoUtils.h>
-#include <hoot/core/util/Log.h>
-#include <hoot/core/criterion/ReviewScoreCriterion.h>
-#include <hoot/core/criterion/ReviewRelationCriterion.h>
-#include <hoot/core/util/StringUtils.h>
-#include <hoot/core/visitors/CountUniqueReviewsVisitor.h>
-#include <hoot/core/util/ConfigUtils.h>
-#include <hoot/core/elements/VersionUtils.h>
 #include <hoot/core/ops/RemoveRoundabouts.h>
 #include <hoot/core/ops/ReplaceRoundabouts.h>
-#include <hoot/core/io/ChangesetStatsFormat.h>
-#include <hoot/core/util/FileUtils.h>
-#include <hoot/core/conflate/SuperfluousConflateOpRemover.h>
-#include <hoot/core/util/MemoryUsageChecker.h>
 #include <hoot/core/ops/RoadCrossingPolyReviewMarker.h>
-#include <hoot/core/elements/MapProjector.h>
-#include <hoot/core/conflate/merging/LinearTagOnlyMerger.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/ConfigUtils.h>
+#include <hoot/core/util/FileUtils.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/util/MemoryUsageChecker.h>
+#include <hoot/core/util/StringUtils.h>
+#include <hoot/core/visitors/CountUniqueReviewsVisitor.h>
 
 // Qt
 #include <QFileInfo>
@@ -138,11 +138,11 @@ void ConflateExecutor::_initTaskCount()
 
   // Only add one task for each set of conflate ops, since OpExecutor will create its own task step
   // for each op internally.
-  if (ConfigOptions().getConflatePreOps().size() > 0)
+  if (!ConfigOptions().getConflatePreOps().empty())
   {
     _numTotalTasks++;
   }
-  if (ConfigOptions().getConflatePostOps().size() > 0)
+  if (!ConfigOptions().getConflatePostOps().empty())
   {
     _numTotalTasks++;
   }
@@ -243,7 +243,7 @@ void ConflateExecutor::conflate(const QString& input1, const QString& input2, QS
   _stats.append(SingleStat("Initial Element Count", initialElementCount));
   OsmMapWriterFactory::writeDebugMap(map, "after-load");
 
-  if (ConfigOptions().getConflatePreOps().size() > 0)
+  if (!ConfigOptions().getConflatePreOps().empty())
   {
     _runConflateOps(map, true);
   }
@@ -251,7 +251,7 @@ void ConflateExecutor::conflate(const QString& input1, const QString& input2, QS
   OsmMapPtr result = map;
   _runConflate(result);
 
-  if (ConfigOptions().getConflatePostOps().size() > 0)
+  if (!ConfigOptions().getConflatePostOps().empty())
   {
     _runConflateOps(map, false);
   }

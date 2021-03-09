@@ -27,9 +27,9 @@
 #include "HootApiDbSqlStatementFormatter.h"
 
 // hoot
-#include <hoot/core/util/Log.h>
-#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/io/OsmApiDbSqlStatementFormatter.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Log.h>
 
 // Qt
 #include <QDateTime>
@@ -142,7 +142,7 @@ QString HootApiDbSqlStatementFormatter::nodeToSqlString(const ConstNodePtr& node
       .arg(_dateString)
       .arg(tileNumberString)
       .arg(ver);
-  if (node->getTags().size() > 0)
+  if (!node->getTags().empty())
   {
     nodeStr.replace(
       "\\N", OsmApiDbSqlStatementFormatter::escapeCopyToData(_toTagsString(node->getTags())));
@@ -161,7 +161,7 @@ QString HootApiDbSqlStatementFormatter::wayToSqlString(const long wayId, const l
       .arg(changesetId)
       .arg(_dateString)
       .arg(ver);
-  if (tags.size() > 0)
+  if (!tags.empty())
   {
     wayStr.replace("\\N", OsmApiDbSqlStatementFormatter::escapeCopyToData(_toTagsString(tags)));
   }
@@ -193,7 +193,7 @@ QString HootApiDbSqlStatementFormatter::relationToSqlString(const long relationI
       .arg(changesetId)
       .arg(_dateString)
       .arg(ver);
-  if (tags.size() > 0)
+  if (!tags.empty())
   {
     relationStr.replace("\\N", OsmApiDbSqlStatementFormatter::escapeCopyToData(_toTagsString(tags)));
   }

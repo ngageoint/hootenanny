@@ -28,22 +28,22 @@
 #include "JavaScriptSchemaTranslator.h"
 
 // hoot
-#include <hoot/core/util/Exception.h>
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/ElementType.h>
 #include <hoot/core/elements/Tags.h>
+#include <hoot/js/io/DataConvertJs.h>
+#include <hoot/core/io/schema/DoubleFieldDefinition.h>
 #include <hoot/core/io/schema/Feature.h>
 #include <hoot/core/io/schema/FeatureDefinition.h>
-#include <hoot/core/io/schema/DoubleFieldDefinition.h>
 #include <hoot/core/io/schema/IntegerFieldDefinition.h>
-#include <hoot/core/io/schema/LongIntegerFieldDefinition.h>
-#include <hoot/core/io/schema/StringFieldDefinition.h>
 #include <hoot/core/io/schema/Layer.h>
+#include <hoot/core/io/schema/LongIntegerFieldDefinition.h>
 #include <hoot/core/io/schema/Schema.h>
+#include <hoot/core/io/schema/StringFieldDefinition.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Exception.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/UuidHelper.h>
-#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/js/io/DataConvertJs.h>
 #include <hoot/js/util/HootExceptionJs.h>
 #include <hoot/js/PluginContext.h>
 
@@ -91,7 +91,7 @@ void JavaScriptSchemaTranslator::setConfiguration(const Settings& conf)
 
 JavaScriptSchemaTranslator::~JavaScriptSchemaTranslator()
 {
-  if (_timing.size() != 0)
+  if (!_timing.empty())
   {
     tbs::SampleStats stats(_timing);
     LOG_TRACE("Translation script run time (ms): " << stats.toString());

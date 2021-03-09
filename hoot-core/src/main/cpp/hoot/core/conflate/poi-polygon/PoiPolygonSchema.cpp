@@ -207,7 +207,7 @@ bool PoiPolygonSchema::hasMoreThanOneType(const ConstElementPtr& element)
 {
   int typeCount = 0;
   QStringList typesParsed;
-  if (_allTypeKeys.size() == 0)
+  if (_allTypeKeys.empty())
   {
     _allTypeKeys = OsmSchema::getInstance().getAllTypeKeys();
   }

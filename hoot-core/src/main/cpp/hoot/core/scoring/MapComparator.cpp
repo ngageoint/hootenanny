@@ -29,10 +29,10 @@
 // hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/geometry/GeometryUtils.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
 #include <hoot/core/visitors/CountUniqueReviewsVisitor.h>
-#include <hoot/core/util/ConfigOptions.h>
 
 // Standard
 #include <iomanip>
@@ -340,7 +340,7 @@ void MapComparator::_printIdDiff(
 
   const bool printFullElements =
     ConfigOptions().getMapComparatorPrintFullMismatchElementsOnMapSizeDiff();
-  if (idsIn1AndNotIn2Limited.size() > 0)
+  if (!idsIn1AndNotIn2Limited.empty())
   {
     LOG_WARN(
       "\t" << elementType.toString() << "s in map 1 and not in map 2 (limit " << limit << "): " <<
@@ -354,7 +354,7 @@ void MapComparator::_printIdDiff(
       }
     }
   }
-  if (idsIn2AndNotIn1Limited.size() > 0)
+  if (!idsIn2AndNotIn1Limited.empty())
   {
     LOG_WARN(
       "\t" << elementType.toString() << "s in map 2 and not in map 1 (limit " << limit << "): " <<

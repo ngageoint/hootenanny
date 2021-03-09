@@ -28,12 +28,12 @@
 #include "RemoveInvalidRelationVisitor.h"
 
 //  hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/conflate/review/ReviewMarker.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/ops/RemoveRelationByEid.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/schema/MetadataTags.h>
 
 //  Standard library
 #include <unordered_map>
@@ -116,7 +116,7 @@ void RemoveInvalidRelationVisitor::_removeDuplicates(const RelationPtr& r)
     }
   }
   //  Re-insert the members that were duplicates but all instances were deleted
-  if (membersMap.size() > 0)
+  if (!membersMap.empty())
   {
     for (unordered_map<long, RelationData::Entry>::iterator it = membersMap.begin();
          it != membersMap.end(); ++it)

@@ -27,8 +27,8 @@
 #include "TransliterateNameVisitor.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/language/ToEnglishDictionaryTranslator.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
@@ -62,7 +62,7 @@ void TransliterateNameVisitor::visit(const std::shared_ptr<Element>& e)
     }
   }
 
-  if (names.size() > 0)
+  if (!names.empty())
   {
     // Should we be translating all of the names here?
     e->getTags().addNote(

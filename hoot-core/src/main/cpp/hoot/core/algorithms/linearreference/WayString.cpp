@@ -59,7 +59,7 @@ Meters WayString::_aggregateCircularError() const
 
 void WayString::append(const WaySubline& subline)
 {
-  if (_sublines.size() > 0)
+  if (!_sublines.empty())
   {
     if (back().getWay() == subline.getWay() &&
       back().getEnd() != subline.getStart())

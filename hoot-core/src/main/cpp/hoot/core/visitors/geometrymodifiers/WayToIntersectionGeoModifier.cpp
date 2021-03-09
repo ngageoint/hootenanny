@@ -99,7 +99,7 @@ bool WayToIntersectionGeoModifier::processElement(const ElementPtr& pElement, Os
     }
   }
 
-  if (allIntersections.size() > 0)
+  if (!allIntersections.empty())
   {
     processIntersections(pMap, pMyWay, allIntersections);
   }
@@ -142,7 +142,7 @@ bool WayToIntersectionGeoModifier::assignToAdjacentWay(OsmMap* pMap, const std::
   long nodeId = nodesToAttach[0];
   const set<long>& wayIds = n2w->getWaysByNode(nodeId);
 
-  if (wayIds.size() > 0)
+  if (!wayIds.empty())
   {
     for (long wayId : wayIds)
     {

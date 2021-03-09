@@ -276,7 +276,7 @@ std::shared_ptr<OsmMap> DualHighwaySplitter::splitAll()
   bool todoLogged = false;
   for (size_t i = 0; i < wayIds.size(); i++)
   {
-    if (wayIds.size() % 1000 == 0 && wayIds.size() > 0)
+    if (wayIds.size() % 1000 == 0 && !wayIds.empty())
     {
       PROGRESS_DEBUG("  splitting " << i << " / " << wayIds.size());
       todoLogged = true;

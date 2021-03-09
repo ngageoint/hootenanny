@@ -40,18 +40,18 @@
 #include <geos/geom/Polygon.h>
 
 // hoot
-#include <hoot/core/geometry/RelationToMultiPolygonConverter.h>
 #include <hoot/core/criterion/AreaCriterion.h>
 #include <hoot/core/criterion/StatsAreaCriterion.h>
 #include <hoot/core/criterion/LinearCriterion.h>
 #include <hoot/core/criterion/CollectionRelationCriterion.h>
-#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
+#include <hoot/core/geometry/GeometryUtils.h>
+#include <hoot/core/geometry/RelationToMultiPolygonConverter.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/NotImplementedException.h>
 #include <hoot/core/visitors/MultiLineStringVisitor.h>
-#include <hoot/core/geometry/GeometryUtils.h>
 
 // Qt
 #include <QString>
@@ -230,7 +230,7 @@ std::shared_ptr<Polygon> ElementToGeometryConverter::convertToPolygon(const Cons
   }
 
   // if the first and last nodes aren't the same.
-  if (ids.size() > 0 && ids[0] != ids[ids.size() - 1])
+  if (!ids.empty() && ids[0] != ids[ids.size() - 1])
   {
     size++;
   }
@@ -387,7 +387,7 @@ geos::geom::GeometryTypeId ElementToGeometryConverter::getGeometryType(
         else if (linearCrit.isSatisfied(r))
           return GEOS_MULTILINESTRING;
         // an empty geometry, pass back a collection
-        else if (r->getMembers().size() == 0 || CollectionRelationCriterion().isSatisfied(r))
+        else if (r->getMembers().empty() || CollectionRelationCriterion().isSatisfied(r))
           return GEOS_GEOMETRYCOLLECTION;
       }
 

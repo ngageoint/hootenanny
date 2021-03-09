@@ -26,9 +26,9 @@
  */
 
 // Hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/io/HootApiDb.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
@@ -58,7 +58,7 @@ public:
     mapReader.open(args[0]);
     mapReader.setUserId(mapReader.getUserId(ConfigOptions().getApiDbEmail(), true));
     const QStringList mapNames = mapReader.selectMapNamesAvailableToCurrentUser();
-    if (mapNames.size() == 0)
+    if (mapNames.empty())
     {
       std::cout << "There are no maps available to the specified user in the Hootenanny Web Services database." << std::endl;
     }

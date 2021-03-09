@@ -103,8 +103,8 @@ void TagAdvancedCriterion::_parseFilterString(const QString& filterJsonStringOrP
   _loadTagFilters("should", propTree);
   _loadTagFilters("must_not", propTree);
 
-  if (_tagFilters["must"].size() == 0 && _tagFilters["must_not"].size() == 0 &&
-      _tagFilters["should"].size() == 0)
+  if (_tagFilters["must"].empty() && _tagFilters["must_not"].empty() &&
+      _tagFilters["should"].empty())
   {
     throw IllegalArgumentException("Empty tag filter specified.");
   }
