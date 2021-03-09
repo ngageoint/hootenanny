@@ -368,7 +368,7 @@ void OsmGbdxXmlWriter::_writeWays(ConstOsmMapPtr map)
     ConstWayPtr w = it->second;
 
     // Skip if null
-    if (w.get() == NULL)
+    if (w.get() == nullptr)
       continue;
 
     //  Skip any ways that have parents
@@ -384,7 +384,7 @@ void OsmGbdxXmlWriter::_writeWays(ConstOsmMapPtr map)
       for (vector<long>::const_iterator nodeIt = nodes.begin(); nodeIt != nodes.end(); ++nodeIt)
       {
         ConstNodePtr node = map->getNode(*nodeIt);
-        if (node.get() == NULL)
+        if (node.get() == nullptr)
         {
           valid = false;
           break;
@@ -402,7 +402,7 @@ void OsmGbdxXmlWriter::_writeWays(ConstOsmMapPtr map)
       for (vector<long>::const_iterator nodeIt = nodes.begin(); nodeIt != nodes.end(); ++nodeIt)
       {
         ConstNodePtr node = map->getNode(*nodeIt);
-        if (node.get() != NULL)
+        if (node.get() != nullptr)
         {
           LOG_INFO("Writing Nodes XXX");
           _newOutputFile();
@@ -627,7 +627,7 @@ void OsmGbdxXmlWriter::_writeRelationWithPoints(const ConstRelationPtr& r,  Cons
   for (vector<RelationData::Entry>::const_iterator it = members.begin(); it != members.end(); ++it)
   {
     ConstElementPtr elm = map->getElement(it->getElementId());
-    if (elm.get() == NULL)
+    if (elm.get() == nullptr)
       continue;
 
     if (firstRel)

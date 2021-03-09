@@ -57,11 +57,10 @@ std::shared_ptr<OsmChangesetFileWriter> OsmChangesetFileWriterFactory::createWri
     LOG_VARD(names[i]);
     writer.reset(Factory::getInstance().constructObject<OsmChangesetFileWriter>(names[i]));
     if (writer->isSupported(url))
-    {
-      LOG_DEBUG("Using changeset output writer: " << names[i]);
+    { LOG_DEBUG("Using changeset output writer: " << names[i]);
 
       Configurable* c = dynamic_cast<Configurable*>(writer.get());
-      if (c != 0)
+      if (c != nullptr)
       {
         c->setConfiguration(conf());
       }

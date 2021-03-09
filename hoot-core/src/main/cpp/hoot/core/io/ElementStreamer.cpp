@@ -103,7 +103,7 @@ bool ElementStreamer::areValidStreamingOps(const QStringList& ops)
         ElementCriterionPtr criterion(
           Factory::getInstance().constructObject<ElementCriterion>(opName));
         // when streaming we can't provide a reliable OsmMap.
-        if (dynamic_cast<OsmMapConsumer*>(criterion.get()) != 0)
+        if (dynamic_cast<OsmMapConsumer*>(criterion.get()) != nullptr)
         {
           LOG_INFO(unstreamableMsg);
           return false;
@@ -114,7 +114,7 @@ bool ElementStreamer::areValidStreamingOps(const QStringList& ops)
         ElementVisitorPtr vis(
           Factory::getInstance().constructObject<ElementVisitor>(opName));
         // when streaming we can't provide a reliable OsmMap.
-        if (dynamic_cast<OsmMapConsumer*>(vis.get()) != 0)
+        if (dynamic_cast<OsmMapConsumer*>(vis.get()) != nullptr)
         {
           LOG_INFO(unstreamableMsg);
           return false;
@@ -125,7 +125,7 @@ bool ElementStreamer::areValidStreamingOps(const QStringList& ops)
         ConstElementVisitorPtr vis(
           Factory::getInstance().constructObject<ConstElementVisitor>(opName));
         // when streaming we can't provide a reliable OsmMap.
-        if (dynamic_cast<OsmMapConsumer*>(vis.get()) != 0)
+        if (dynamic_cast<OsmMapConsumer*>(vis.get()) != nullptr)
         {
           LOG_INFO(unstreamableMsg);
           return false;

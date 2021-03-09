@@ -87,7 +87,7 @@ bool PoiPolygonInfoCache::isType(const ConstElementPtr& element, const PoiPolygo
   {
     key = element->getElementId().toString() % ";" % type.toString().toLower();
     const bool* cachedVal = _isTypeCache[key];
-    if (cachedVal != 0)
+    if (cachedVal != nullptr)
     {
       _incrementCacheHitCount("isType");
       return *cachedVal;
@@ -156,7 +156,7 @@ bool PoiPolygonInfoCache::hasMoreThanOneType(const ConstElementPtr& element)
   if (_cachingEnabled)
   {
     const bool* cachedVal = _hasMoreThanOneTypeCache[element->getElementId()];
-    if (cachedVal != 0)
+    if (cachedVal != nullptr)
     {
       _incrementCacheHitCount("hasMoreThanOneType");
       return *cachedVal;
@@ -192,7 +192,7 @@ double PoiPolygonInfoCache::getReviewDistance(const ConstElementPtr& element,
   if (_cachingEnabled)
   {
     const double* cachedVal = _reviewDistanceCache[element->getElementId()];
-    if (cachedVal != 0)
+    if (cachedVal != nullptr)
     {
       _incrementCacheHitCount("reviewDistance");
       double distance = *cachedVal;

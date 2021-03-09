@@ -251,7 +251,7 @@ void HootServicesTranslatorClient::_parseResponse(const std::shared_ptr<boost::p
 bool HootServicesTranslatorClient::_getTranslationFromCache(const QString& text)
 {
   TranslationResult* cachedTranslation = _cache->object(text.toLower());
-  if (cachedTranslation != 0)
+  if (cachedTranslation != nullptr)
   {
     _translatedText = cachedTranslation->translatedText;
     _detectedLang = cachedTranslation->detectedLang;

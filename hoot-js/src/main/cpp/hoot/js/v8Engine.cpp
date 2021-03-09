@@ -39,8 +39,8 @@ v8Engine::v8Engine()
   //  Setup and initialize the platform
   if (v8Engine::_needPlatform)
   {
-    V8::InitializeICUDefaultLocation(NULL);
-    V8::InitializeExternalStartupData(NULL);
+    V8::InitializeICUDefaultLocation(nullptr);
+    V8::InitializeExternalStartupData(nullptr);
     _platform.reset(platform::CreateDefaultPlatform());
     V8::InitializePlatform(_platform.get());
     //  Initialize v8

@@ -65,7 +65,7 @@ double EuclideanDistanceExtractor::distance(
   g1.reset(GeometryUtils::validateGeometry(g1.get()));
   g2.reset(GeometryUtils::validateGeometry(g2.get()));
 
-  if (g1.get() == 0 || g2.get() == 0)
+  if (g1.get() == nullptr || g2.get() == nullptr)
   {
     return nullValue();
   }
@@ -96,7 +96,7 @@ double EuclideanDistanceExtractor::distance(
   g1.reset(GeometryUtils::validateGeometry(g1.get()));
   g2.reset(GeometryUtils::validateGeometry(g2.get()));
 
-  if (g1.get() == 0 || g2.get() == 0)
+  if (g1.get() == nullptr || g2.get() == nullptr)
   {
     return nullValue();
   }

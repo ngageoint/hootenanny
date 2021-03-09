@@ -52,8 +52,9 @@ private:
   Point2d *data;
 public:
   InternalEdge()
+    : next(nullptr),
+      data(nullptr)
   {
-    data = 0;
   }
 
   InternalEdge *Rot();
@@ -173,7 +174,7 @@ std::string Edge::toString() const
 {
   std::stringstream strm;
 
-  if (_ie == 0)
+  if (_ie == nullptr)
   {
     strm << "(null)" << endl;
   }
@@ -642,7 +643,7 @@ Edge& EdgeIterator::operator++()
     ++_it;
     for (int i = 0; i < 4; i++)
     {
-      if (qe->getInternalEdge(i).Org() != 0)
+      if (qe->getInternalEdge(i).Org() != nullptr)
       {
         _todo.push_back(&qe->getInternalEdge(i));
       }
@@ -859,7 +860,7 @@ Face& FaceIterator::operator++()
 }
 
 DelaunayTriangulation::DelaunayTriangulation()
-  : _subdivision(NULL),
+  : _subdivision(nullptr),
     _x{0.0, 0.0, 0.0},
     _y{0.0, 0.0, 0.0},
     _pointCount(0)

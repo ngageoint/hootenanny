@@ -128,11 +128,11 @@ void OsmMap::append(const ConstOsmMapPtr& appendFromMap, const bool throwOutDupe
   }
   if (!getProjection()->IsSame(appendFromMap->getProjection().get()))
   {
-    char* wkt1 = 0;
+    char* wkt1 = nullptr;
     getProjection()->exportToPrettyWkt(&wkt1);
     QString proj1 = QString::fromLatin1(wkt1);
     CPLFree(wkt1);
-    char* wkt2 = 0;
+    char* wkt2 = nullptr;
     appendFromMap->getProjection()->exportToPrettyWkt(&wkt2);
     QString proj2 = QString::fromLatin1(wkt2);
     CPLFree(wkt2);
@@ -624,10 +624,10 @@ void OsmMap::replaceNode(long oldId, long newId)
     LOG_VART(w->getElementId());
 
 #   ifdef DEBUG
-      if (w.get() == NULL)
-      {
-        LOG_WARN("Way for way id: " << *it << " is null.");
-      }
+    if (w.get() == nullptr)
+    {
+      LOG_WARN("Way for way id: " << *it << " is null.");
+    }
 #   endif
 
     w->replaceNode(oldId, newId);
@@ -733,7 +733,7 @@ void OsmMap::visitRo(ConstElementVisitor& visitor) const
 void OsmMap::visitNodesRo(ConstElementVisitor& visitor) const
 {
   ConstOsmMapConsumer* consumer = dynamic_cast<ConstOsmMapConsumer*>(&visitor);
-  if (consumer != 0)
+  if (consumer != nullptr)
   {
     consumer->setOsmMap(this);
   }
@@ -766,7 +766,7 @@ void OsmMap::visitNodesRo(ConstElementVisitor& visitor) const
 void OsmMap::visitWaysRo(ConstElementVisitor& visitor) const
 {
   ConstOsmMapConsumer* consumer = dynamic_cast<ConstOsmMapConsumer*>(&visitor);
-  if (consumer != 0)
+  if (consumer != nullptr)
   {
     consumer->setOsmMap(this);
   }
@@ -799,7 +799,7 @@ void OsmMap::visitWaysRo(ConstElementVisitor& visitor) const
 void OsmMap::visitRelationsRo(ConstElementVisitor& visitor) const
 {
   ConstOsmMapConsumer* consumer = dynamic_cast<ConstOsmMapConsumer*>(&visitor);
-  if (consumer != 0)
+  if (consumer != nullptr)
   {
     consumer->setOsmMap(this);
   }
@@ -832,7 +832,7 @@ void OsmMap::visitRelationsRo(ConstElementVisitor& visitor) const
 void OsmMap::visitRw(ConstElementVisitor& visitor)
 {
   OsmMapConsumer* consumer = dynamic_cast<OsmMapConsumer*>(&visitor);
-  if (consumer != 0)
+  if (consumer != nullptr)
   {
     consumer->setOsmMap(this);
   }
@@ -913,7 +913,7 @@ void OsmMap::visitRw(ConstElementVisitor& visitor)
 void OsmMap::visitRw(ElementVisitor& visitor)
 {
   OsmMapConsumer* consumer = dynamic_cast<OsmMapConsumer*>(&visitor);
-  if (consumer != 0)
+  if (consumer != nullptr)
   {
     consumer->setOsmMap(this);
   }
@@ -1048,7 +1048,7 @@ void OsmMap::visitNodesRw(ConstElementVisitor& visitor)
 void OsmMap::visitWaysRw(ConstElementVisitor& visitor)
 {
   OsmMapConsumer* consumer = dynamic_cast<OsmMapConsumer*>(&visitor);
-  if (consumer != 0)
+  if (consumer != nullptr)
   {
     consumer->setOsmMap(this);
   }
@@ -1081,7 +1081,7 @@ void OsmMap::visitWaysRw(ConstElementVisitor& visitor)
 void OsmMap::visitWaysRw(ElementVisitor& visitor)
 {
   OsmMapConsumer* consumer = dynamic_cast<OsmMapConsumer*>(&visitor);
-  if (consumer != 0)
+  if (consumer != nullptr)
   {
     consumer->setOsmMap(this);
   }
@@ -1114,7 +1114,7 @@ void OsmMap::visitWaysRw(ElementVisitor& visitor)
 void OsmMap::visitRelationsRw(ConstElementVisitor& visitor)
 {
   OsmMapConsumer* consumer = dynamic_cast<OsmMapConsumer*>(&visitor);
-  if (consumer != 0)
+  if (consumer != nullptr)
   {
     consumer->setOsmMap(this);
   }
@@ -1147,7 +1147,7 @@ void OsmMap::visitRelationsRw(ConstElementVisitor& visitor)
 void OsmMap::visitRelationsRw(ElementVisitor& visitor)
 {
   OsmMapConsumer* consumer = dynamic_cast<OsmMapConsumer*>(&visitor);
-  if (consumer != 0)
+  if (consumer != nullptr)
   {
     consumer->setOsmMap(this);
   }

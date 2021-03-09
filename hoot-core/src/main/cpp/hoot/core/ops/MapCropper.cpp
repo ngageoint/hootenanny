@@ -503,7 +503,7 @@ void MapCropper::_cropWay(const OsmMapPtr& map, long wid)
     return;
   }
 
-  if (e == 0)
+  if (e == nullptr)
   {
     LOG_TRACE("Removing way during crop check: " << way->getElementId() << "...");
     RemoveWayByEid::removeWayFully(map, way->getId());

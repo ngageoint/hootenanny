@@ -79,7 +79,7 @@ void MergerFactory::createMergers(
     // We don't want the creators to hold onto a map pointer that will go out of scope.
     if (omc)
     {
-      omc->setOsmMap((OsmMap*)0);
+      omc->setOsmMap(nullptr);
     }
   }
 

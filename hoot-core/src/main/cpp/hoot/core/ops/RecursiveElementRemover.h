@@ -70,12 +70,12 @@ public:
    * will be deleted. Even if isSatisfied returns false the children of that element will still
    * be searched.
    */
-  RecursiveElementRemover(ElementId eid, const ElementCriterion* criterion = NULL);
+  RecursiveElementRemover(ElementId eid, const ElementCriterion* criterion = nullptr);
 
   /**
    * It is expected that the eid will be populated with addElement after construction.
    */
-  RecursiveElementRemover() : _criterion(NULL) { }
+  RecursiveElementRemover() : _criterion(nullptr) { }
   virtual ~RecursiveElementRemover() = default;
 
   virtual void addElement(const ConstElementPtr& e) { _eid = e->getElementId(); }

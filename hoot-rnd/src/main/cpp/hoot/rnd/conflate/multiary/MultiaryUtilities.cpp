@@ -179,7 +179,7 @@ QList<hoot::MultiarySimpleMatch> MultiaryUtilities::findMatches(QByteArray check
 
 SearchBoundsCalculatorPtr MultiaryUtilities::getBoundsCalculator()
 {
-  if (_searchBoundsCalculator.get() == 0)
+  if (_searchBoundsCalculator.get() == nullptr)
   {
     // find a match creator that can provide the search bounds.
     foreach (std::shared_ptr<MatchCreator> mc, MatchFactory::getInstance().getCreators())

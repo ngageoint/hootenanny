@@ -165,7 +165,7 @@ void IntersectionSplitter::splitIntersections()
 void IntersectionSplitter::_splitWay(long wayId, long nodeId)
 {
   std::shared_ptr<Way> way = _map->getWay(wayId);
-  if (way == 0)
+  if (way == nullptr)
   {
     LOG_TRACE("way at " << wayId << " does not exist.");
     return;

@@ -65,7 +65,7 @@ namespace Tgs
 
   RandomTree::~RandomTree()
   {
-    if (_root != NULL)
+    if (_root != nullptr)
     {
       _destroyTree(_root);
       _root.reset();
@@ -596,7 +596,7 @@ namespace Tgs
     //Perform a post order traversal of the tree
     //Delete node after its children have been deleted
 
-    if (node.get() != 0)
+    if (node.get() != nullptr)
     {
       _destroyTree(node->leftChild);
       _destroyTree(node->rightChild);
@@ -613,7 +613,7 @@ namespace Tgs
 
       if (fileStream.good())
       {
-        if (node != NULL)
+        if (node != nullptr)
         {
           fileStream << tabDepth + "<TreeNode>" << std::endl;
 

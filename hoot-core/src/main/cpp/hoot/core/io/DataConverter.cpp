@@ -72,7 +72,7 @@ void elementTranslatorThread::run()
   threadIsolate->Enter();
   v8::Locker v8Lock(threadIsolate);
 
-  ElementPtr pNewElement(NULL);
+  ElementPtr pNewElement(nullptr);
   ElementProviderPtr cacheProvider(_pElementCache);
 
   // Setup writer used for translation

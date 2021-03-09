@@ -267,7 +267,7 @@ int ConflateInfoCache::numAddresses(const ConstElementPtr& element)
   if (_cachingEnabled)
   {
     const int* cachedVal = _numAddressesCache[element->getElementId()];
-    if (cachedVal != 0)
+    if (cachedVal != nullptr)
     {
       _incrementCacheHitCount("numAddresses");
       return *cachedVal;
@@ -334,7 +334,7 @@ bool ConflateInfoCache::elementsIntersect(
     key2 = element2->getElementId().toString() % ";" % element1->getElementId().toString();
 
     bool* cachedVal = _elementIntersectsCache[key1];
-    if (cachedVal != 0)
+    if (cachedVal != nullptr)
     {
       _incrementCacheHitCount("intersects");
       const bool intersects = *cachedVal;
@@ -342,7 +342,7 @@ bool ConflateInfoCache::elementsIntersect(
       return intersects;
     }
     cachedVal = _elementIntersectsCache[key2];
-    if (cachedVal != 0)
+    if (cachedVal != nullptr)
     {
       _incrementCacheHitCount("intersects");
       const bool intersects = *cachedVal;
@@ -444,7 +444,7 @@ bool ConflateInfoCache::hasCriterion(const ConstElementPtr& element,
   {
     key = element->getElementId().toString() % ";" % criterionClassName;
     const bool* cachedVal = _hasCriterionCache[key];
-    if (cachedVal != 0)
+    if (cachedVal != nullptr)
     {
       _incrementCacheHitCount("hasCrit");
       return *cachedVal;
@@ -512,7 +512,7 @@ bool ConflateInfoCache::elementCanBeConflatedByActiveMatcher(
   {
     // Check the element can be conflated cache first.
     bool* cachedVal = _conflatableElementCache[element->getElementId()];
-    if (cachedVal != 0)
+    if (cachedVal != nullptr)
     {
       _incrementCacheHitCount("conflatable");
       const bool conflatable = *cachedVal;
