@@ -81,7 +81,7 @@ QString PertyTestRunResult::toString() const
   str += "\n\nTest Run #" + QString::number(_testRunNum) + "\n\n";
   str += "Reference Input: " + _referenceInput + "\n";
   str += "Output Directory: " + _outputDir + "\n";
-  if (getDynamicVariables().size() > 0)
+  if (!getDynamicVariables().empty())
   {
     str += "Dynamic Variable Names: " + getDynamicVariables().join(", ") + "\n";
     str += "Dynamic Variable Starting Value: " + QString::number(getDynamicVariableStartingValue()) + "\n";

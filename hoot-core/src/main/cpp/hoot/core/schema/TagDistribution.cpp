@@ -28,11 +28,11 @@
 #include "TagDistribution.h"
 
 // Hoot
-#include <hoot/core/io/OsmMapReaderFactory.h>
-#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/io/ElementCriterionInputStream.h>
-#include <hoot/core/util/CollectionUtils.h>
 #include <hoot/core/criterion/NotCriterion.h>
+#include <hoot/core/io/ElementCriterionInputStream.h>
+#include <hoot/core/io/OsmMapReaderFactory.h>
+#include <hoot/core/util/CollectionUtils.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/StringUtils.h>
@@ -75,7 +75,7 @@ QString TagDistribution::getTagCountsString(const std::map<QString, int>& tagCou
   QTextStream ts(&buffer);
   QLocale locale(QLocale::English);
 
-  if (tagCounts.size() == 0)
+  if (tagCounts.empty())
   {
     ts << "No tags with keys: " << _tagKeys.join(",") << " were found." << endl;
   }

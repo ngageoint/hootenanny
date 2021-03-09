@@ -55,7 +55,7 @@ _iterations(0)
 
 void BaseInterpolator::_checkRebuild()
 {
-  if (_indColumns.size() > 0 && _depColumns.size() > 0 && _df.get() != 0)
+  if (!_indColumns.empty() && !_depColumns.empty() && _df.get() != 0)
   {
     _buildModel();
   }
@@ -122,9 +122,9 @@ void BaseInterpolator::readInterpolator(QIODevice& is)
   for (size_t i = 0; i < _indColumns.size(); i++)
   {
     ds >> _indColumns[i];
-    QString s;
-    ds >> s;
-    _indColumnsLabels[i] = s.toStdString();
+    QString str;
+    ds >> str;
+    _indColumnsLabels[i] = str.toStdString();
   }
 
   ds >> s;
@@ -133,9 +133,9 @@ void BaseInterpolator::readInterpolator(QIODevice& is)
   for (size_t i = 0; i < _depColumns.size(); i++)
   {
     ds >> _depColumns[i];
-    QString s;
-    ds >> s;
-    _depColumnsLabels[i] = s.toStdString();
+    QString str;
+    ds >> str;
+    _depColumnsLabels[i] = str.toStdString();
   }
 
   QByteArray qb;

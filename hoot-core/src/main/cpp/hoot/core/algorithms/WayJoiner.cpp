@@ -209,9 +209,9 @@ void WayJoiner::_joinAtNode()
       //  Find all ways connected to this node
       const set<long>& way_ids = nodeToWayMap->getWaysByNode(*e);
       LOG_VART(way_ids);
-      for (set<long>::const_iterator ways = way_ids.begin(); ways != way_ids.end(); ++ways)
+      for (set<long>::const_iterator w = way_ids.begin(); w != way_ids.end(); ++w)
       {
-        WayPtr child = _map->getWay(*ways);
+        WayPtr child = _map->getWay(*w);
         if (child && way->getId() != child->getId() && _areJoinable(way, child))
         {
           LOG_VART(child->getElementId());
@@ -434,7 +434,7 @@ bool WayJoiner::_joinWays(const WayPtr& parent, const WayPtr& child)
   vector<long> parent_nodes = parent->getNodeIds();
 
   //  Make sure that there are nodes in the ways
-  if (parent_nodes.size() == 0 || child_nodes.size() == 0)
+  if (parent_nodes.empty() || child_nodes.empty())
   {
     LOG_TRACE(
       "One or more of the ways: " << parent->getElementId() << " and " << child->getElementId() <<

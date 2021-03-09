@@ -26,13 +26,13 @@
  */
 #include "RemoveElementsVisitor.h"
 
-#include <hoot/core/util/Factory.h>
+#include <hoot/core/elements/NodeToWayMap.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/index/OsmMapIndex.h>
-#include <hoot/core/elements/NodeToWayMap.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/ops/RemoveElementByEid.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 
 namespace hoot
@@ -103,7 +103,7 @@ void RemoveElementsVisitor::visit(const ElementPtr& e)
     return;
   }
 
-  if (_criteria.size() == 0)
+  if (_criteria.empty())
   {
     throw IllegalArgumentException("No criteria specified for RemoveElementsVisitor.");
   }

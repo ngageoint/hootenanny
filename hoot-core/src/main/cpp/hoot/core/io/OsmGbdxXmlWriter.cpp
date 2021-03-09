@@ -373,7 +373,7 @@ void OsmGbdxXmlWriter::_writeWays(ConstOsmMapPtr map)
 
     //  Skip any ways that have parents
     set<ElementId> parents = map->getParents(w->getElementId());
-    if (parents.size() > 0)
+    if (!parents.empty())
       continue;
 
     // Make sure that building ways are "complete"

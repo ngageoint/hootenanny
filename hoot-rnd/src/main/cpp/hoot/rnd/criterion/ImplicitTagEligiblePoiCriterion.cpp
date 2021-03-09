@@ -27,8 +27,8 @@
 #include "ImplicitTagEligiblePoiCriterion.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/util/Factory.h>
 
 // Qt
 #include <QStringBuilder>
@@ -44,7 +44,7 @@ bool ImplicitTagEligiblePoiCriterion::isSatisfied(const ConstElementPtr& e) cons
   LOG_VART(e->getTags().getNames().size());
   LOG_VART(hasEligibleKvp(e->getTags()));
   return
-    e->getElementType() == ElementType::Node && e->getTags().getNames().size() > 0 &&
+    e->getElementType() == ElementType::Node && !e->getTags().getNames().empty() &&
     hasEligibleKvp(e->getTags());
 }
 

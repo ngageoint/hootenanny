@@ -27,9 +27,9 @@
 #include "PoiCriterion.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/elements/Element.h>
+#include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 
 namespace hoot
@@ -49,7 +49,7 @@ bool PoiCriterion::isSatisfied(const ConstElementPtr& e) const
   {
     result =
       OsmSchema::getInstance().hasCategory(e->getTags(), "poi") ||
-      e->getTags().getNames().size() > 0;
+      !e->getTags().getNames().empty();
   }
 
   if (result)

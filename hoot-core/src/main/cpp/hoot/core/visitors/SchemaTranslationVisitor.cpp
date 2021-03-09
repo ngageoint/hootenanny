@@ -32,12 +32,12 @@
 #include <geos/geom/Geometry.h>
 
 #include <hoot/core/elements/Element.h>
-#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/elements/Tags.h>
-#include <hoot/core/schema/ScriptToOgrSchemaTranslator.h>
-#include <hoot/core/schema/ScriptSchemaTranslatorFactory.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/schema/ScriptToOgrSchemaTranslator.h>
+#include <hoot/core/schema/ScriptSchemaTranslatorFactory.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
@@ -120,7 +120,7 @@ void SchemaTranslationVisitor::visit(const ElementPtr& e)
     {
       vector<Tags> allTags = _ogrTranslator->translateToOgrTags(tags, e->getElementType(), gtype);
 
-      if (allTags.size() > 0)
+      if (!allTags.empty())
       {
         if (allTags.size() > 1)
         {

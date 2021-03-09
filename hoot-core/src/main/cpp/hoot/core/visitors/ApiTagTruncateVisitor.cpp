@@ -119,7 +119,6 @@ QString ApiTagTruncateVisitor::_truncateTag(const QString &key, const QString &v
       else
       {
         //  These values are lists that will be truncated at a split point before or at the max length mark
-        int index = value.lastIndexOf(";", _maxLength);
         if (index == -1)
           index = _maxLength;
         //  Truncate at the index

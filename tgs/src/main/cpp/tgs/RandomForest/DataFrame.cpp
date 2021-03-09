@@ -692,9 +692,7 @@ namespace Tgs
   {
     try
     {
-      //std::cout << "isDataPure ";
-      //std::cout << indices.size() << std::endl;
-      if (indices.size() > 0)
+      if (!indices.empty())
       {
         HashMap<std::string, int> populations;
 
@@ -729,7 +727,7 @@ namespace Tgs
       {
         return true;
       }
-      if (_factorType.size() == 0)
+      if (_factorType.empty())
       {
         return false;
       }
@@ -1332,19 +1330,19 @@ namespace Tgs
 
         if (childList.at(i).isElement())
         {
-          QDomElement e = childList.at(i).toElement(); // try to convert the node to an element.
+          QDomElement element = childList.at(i).toElement(); // try to convert the node to an element.
 
-          QString tag = e.tagName().toUpper();
+          QString tag = element.tagName().toUpper();
 
           bool parseOk = true;
 
           if (tag == "CLASSNAME")
           {
-            _trainingLabels.push_back(e.text().toLatin1().constData());
+            _trainingLabels.push_back(element.text().toLatin1().constData());
           }
           else if (tag == "DATA")
           {
-            QStringList factorList = e.text().split(" ");
+            QStringList factorList = element.text().split(" ");
 
             std::vector<double> dataVector(factorList.size());
 
@@ -1367,9 +1365,9 @@ namespace Tgs
         }
       }
     }
-    catch(const Exception & e)
+    catch(const Exception & ex)
     {
-      throw Exception(typeid(this).name(), __FUNCTION__, __LINE__, e);
+      throw Exception(typeid(this).name(), __FUNCTION__, __LINE__, ex);
     }
   }
 

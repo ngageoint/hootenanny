@@ -92,7 +92,7 @@ GeometryPtr GeometryMerger::mergeGeometries(std::vector<GeometryPtr> geometries,
     _geometryStackMutex.lock();
     _geometryStack.empty();
     for (size_t i = 0; i < geometries.size() - 1; i += 2)
-      _geometryStack.push(GeometryPair(geometries[i], geometries[i + 1]));
+      _geometryStack.emplace(geometries[i], geometries[i + 1]);
     _geometryStackMutex.unlock();
     //  Reset finished threads to zero each round of merges
     _finishedThreads = 0;
@@ -105,7 +105,7 @@ GeometryPtr GeometryMerger::mergeGeometries(std::vector<GeometryPtr> geometries,
     //  Now that we have everything from geometries, clear it before the swap
     geometries.clear();
     //  Don't start the next round of pairings until all threads are done processing pairs
-    while (_geometryStack.size() > 0 || _finishedThreads < _maxThreads)
+    while (!_geometryStack.empty() || _finishedThreads < _maxThreads)
       std::this_thread::sleep_for(std::chrono::milliseconds(10));
     //  Add the extra geometry on to the end
     if (extra)
@@ -140,7 +140,7 @@ void GeometryMerger::mergeGeometryThread()
     //  Lock the mutex and try to get a geometry pair to union
     GeometryPair pair;
     _geometryStackMutex.lock();
-    if (_geometryStack.size() > 0)
+    if (!_geometryStack.empty())
     {
       pair = _geometryStack.top();
       _geometryStack.pop();

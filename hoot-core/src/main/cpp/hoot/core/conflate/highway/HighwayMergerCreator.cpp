@@ -82,7 +82,7 @@ bool HighwayMergerCreator::createMergers(const MatchSet& matches, vector<MergerP
   LOG_VART(eids);
 
   // Only add the highway merger if there are elements to merge.
-  if (eids.size() > 0)
+  if (!eids.empty())
   {
     mergers.push_back(
       LinearMergerFactory::getMerger(eids, sublineMatcher, HighwayMatch::MATCH_NAME));
@@ -95,11 +95,10 @@ bool HighwayMergerCreator::createMergers(const MatchSet& matches, vector<MergerP
 vector<CreatorDescription> HighwayMergerCreator::getAllCreators() const
 {
   vector<CreatorDescription> result;
-  result.push_back(
-    CreatorDescription(
-      className(),
-      "Generates mergers that merge roads with the 2nd Generation (Unifying) Algorithm",
-      false));
+  result.emplace_back(
+    className(),
+    "Generates mergers that merge roads with the 2nd Generation (Unifying) Algorithm",
+    false);
   return result;
 }
 

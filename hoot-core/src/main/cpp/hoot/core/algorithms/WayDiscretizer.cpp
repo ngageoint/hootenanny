@@ -55,7 +55,7 @@ _way(way)
   double l = 0;
   const std::vector<long>& nodeIds = _way->getNodeIds();
   LOG_VART(nodeIds.size());
-  if (nodeIds.size() == 0)
+  if (nodeIds.empty())
   {
     throw IllegalArgumentException("Empty way passed to WayDiscretizer.");
   }

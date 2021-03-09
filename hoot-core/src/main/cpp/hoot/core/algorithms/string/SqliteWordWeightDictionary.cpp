@@ -53,7 +53,7 @@ double SqliteWordWeightDictionary::getWeight(const QString& word) const
   long c;
   if (it == _weights.end())
   {
-    long c = _reader.readCount(normalized);
+    c = _reader.readCount(normalized);
     if (c > 0)
     {
       _weights[normalized] = c;

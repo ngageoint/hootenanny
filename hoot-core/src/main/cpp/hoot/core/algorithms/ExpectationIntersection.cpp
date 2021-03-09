@@ -27,8 +27,8 @@
 #include "ExpectationIntersection.h"
 
 // Hoot
-#include <hoot/core/util/Log.h>
 #include <hoot/core/util/HootException.h>
+#include <hoot/core/util/Log.h>
 
 // Tbs
 #include <tbs/stats/TDistribution.h>
@@ -107,7 +107,7 @@ vector<double> ExpectationIntersection::snapMatches(const Mat& matches, const Ma
   vector<int> splitsInt(ranges.rows - 1);
   vector<double> splits(ranges.rows - 1);
 
-  if (splits.size() == 0)
+  if (splits.empty())
   {
     return splits;
   }

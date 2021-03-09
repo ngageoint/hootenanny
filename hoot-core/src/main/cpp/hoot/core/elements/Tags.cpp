@@ -28,12 +28,12 @@
 #include "Tags.h"
 
 // Hoot
-#include <hoot/core/util/Exception.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Exception.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/Units.h>
 #include <hoot/core/util/UuidHelper.h>
 
@@ -518,7 +518,7 @@ QString Tags::getName() const
 const QStringList& Tags::getNameKeys()
 {
   // Getting the name tags can be a bit expensive, so we'll just do it once.
-  if (_nameKeys.size() == 0)
+  if (_nameKeys.empty())
   {
     const vector<SchemaVertex>& tags =
       OsmSchema::getInstance().getTagByCategory(OsmSchemaCategory::name());
@@ -565,7 +565,7 @@ int Tags::getNonDebugCount() const
 const QStringList& Tags::getPseudoNameKeys() const
 {
   // getting the name tags can be a bit expensive so we'll just do it once.
-  if (_pseudoNameKeys.size() == 0)
+  if (_pseudoNameKeys.empty())
   {
     const vector<SchemaVertex>& tags =
         OsmSchema::getInstance().getTagByCategory(OsmSchemaCategory::pseudoName());

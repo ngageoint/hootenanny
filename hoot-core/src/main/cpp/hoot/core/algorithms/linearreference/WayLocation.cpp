@@ -32,8 +32,8 @@
 #include <geos/geom/LineString.h>
 
 // Hoot
-#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
 
 // Standard
@@ -382,8 +382,7 @@ WayLocation WayLocation::move(Meters distance) const
         {
           return result;
         }
-        Coordinate last = lastNode->toCoordinate();
-        double segmentLength = last.distance(next);
+        double segmentLength = lastNode->toCoordinate().distance(next);
         result._segmentFraction += (distance / segmentLength);
 
         // this can happen due to floating point errors when the new location is very close to a
@@ -423,8 +422,7 @@ WayLocation WayLocation::move(Meters distance) const
         {
           return result;
         }
-        Coordinate last = lastNode->toCoordinate();
-        double segmentLength = last.distance(next);
+        double segmentLength = lastNode->toCoordinate().distance(next);
         result._segmentFraction = 1.0 + (distance / segmentLength);
         // if we're suffering from a floating point issue.
         if (result._segmentFraction >= 1.0)

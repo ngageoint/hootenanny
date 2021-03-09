@@ -44,7 +44,7 @@ bool BuildingMergerCreator::createMergers(const MatchSet& matches, vector<Merger
   LOG_TRACE("Creating mergers with " << className() << "...");
 
   bool result = false;
-  assert(matches.size() > 0);
+  assert(!matches.empty());
 
   set<pair<ElementId, ElementId>> eids;
 
@@ -72,7 +72,7 @@ bool BuildingMergerCreator::createMergers(const MatchSet& matches, vector<Merger
   LOG_VART(eids);
 
   // only add the building merge if there are elements to merge.
-  if (eids.size() > 0)
+  if (!eids.empty())
   {
     mergers.push_back(MergerPtr(new BuildingMerger(eids)));
     result = true;
@@ -84,11 +84,10 @@ bool BuildingMergerCreator::createMergers(const MatchSet& matches, vector<Merger
 vector<CreatorDescription> BuildingMergerCreator::getAllCreators() const
 {
   vector<CreatorDescription> result;
-  result.push_back(
-    CreatorDescription(
-      className(),
-      "Generates mergers that merge buildings together",
-      false));
+  result.emplace_back(
+    className(),
+    "Generates mergers that merge buildings together",
+    false);
   return result;
 }
 

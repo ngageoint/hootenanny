@@ -33,13 +33,13 @@
 #include <geos/geom/Point.h>
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/algorithms/WayDiscretizer.h>
 #include <hoot/core/algorithms/aggregator/MeanAggregator.h>
 #include <hoot/core/algorithms/aggregator/ValueAggregator.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/geometry/GeometryToElementConverter.h>
 #include <hoot/core/geometry/GeometryUtils.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
 
 using namespace geos::geom;
@@ -164,7 +164,7 @@ double EdgeDistanceExtractor::_oneDistance(
     std::shared_ptr<Point> p(GeometryFactory::getDefaultInstance()->createPoint(points[i]));
     distances.push_back(g->distance(p.get()));
   }
-  if (distances.size() == 0)
+  if (distances.empty())
   {
     return -1;
   }

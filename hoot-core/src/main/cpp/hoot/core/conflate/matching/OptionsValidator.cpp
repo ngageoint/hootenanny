@@ -27,9 +27,9 @@
 #include "OptionsValidator.h"
 
 // hoot
-#include <hoot/core/util/StringUtils.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/util/HootException.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/util/StringUtils.h>
 
 namespace hoot
 {
@@ -67,7 +67,7 @@ void OptionsValidator::fixMisc()
   LOG_VART(matchCreators);
   LOG_VART(mergerCreators);
 
-  if ((matchCreators.size() == 0 || mergerCreators.size() == 0))
+  if (matchCreators.empty() || mergerCreators.empty())
   {
     LOG_WARN("Match or merger creators empty.  Setting to defaults.");
     matchCreators = ConfigOptions::getMatchCreatorsDefaultValue();

@@ -37,10 +37,10 @@ using namespace geos::geom;
 
 // Hoot
 #include <hoot/core/criterion/AreaCriterion.h>
-#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/elements/Way.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/io/OgrOptions.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/Factory.h>
@@ -108,7 +108,7 @@ ShapefileWriter::ShapefileWriter()
 
 QStringList ShapefileWriter::getColumns(ConstOsmMapPtr map, ElementType type) const
 {
-  if (_columns.size() != 0)
+  if (!_columns.empty())
   {
     return _columns;
   }

@@ -29,11 +29,11 @@
 
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/geometry/GeometryMerger.h>
 #include <hoot/core/geometry/GeometryToElementConverter.h>
 #include <hoot/core/geometry/GeometryUtils.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
 
 // GEOS
@@ -324,7 +324,7 @@ GeometryPtr AlphaShape::toGeometry()
   vector<GeometryPtr> faces;
   Envelope e;
   double preUnionArea = 0.0;
-  double alpha = -1;
+  double alpha = -1.0;
 
   bool calculateAlpha = _alpha < 0.0;
   std::vector<double> alpha_options;
@@ -353,14 +353,13 @@ GeometryPtr AlphaShape::toGeometry()
       alpha_options.push_back((*it) / scale);
     //  Iterate the alpha values searching for one that uses at least
     //  90% of the Delauney triangle faces
-    double alpha = -1.0;
     bool success = _searchAlpha(alpha, faces, e, preUnionArea, faceCount, alpha_options, 0, alpha_options.size() - 1);
     LOG_VARD(e);
     LOG_DEBUG("Area: " << (long)preUnionArea);
     LOG_VARD(faces.size());
 
     // if the result is an empty geometry
-    if (faces.size() == 0 || !success)
+    if (faces.empty() || !success)
     {
       throw IllegalArgumentException(
         "Unable to find alpha value to create alpha shape.");
@@ -375,7 +374,7 @@ GeometryPtr AlphaShape::toGeometry()
     alpha_options.push_back(_alpha);
     alpha_options.push_back(getLongestFaceEdge());
     //  Iterate both options for the alpha value
-    while (faces.size() < 1 && alpha_options.size() > 0)
+    while (faces.size() < 1 && !alpha_options.empty())
     {
       //  Clear out any previous faces that may exist
       faces.clear();
@@ -390,7 +389,7 @@ GeometryPtr AlphaShape::toGeometry()
     LOG_VARD(faces.size());
 
     // if the result is an empty geometry
-    if (faces.size() == 0)
+    if (faces.empty())
     {
       throw IllegalArgumentException(
         "Unable to create alpha shape with alpha value of: " + QString::number(_alpha) + ".");

@@ -123,7 +123,7 @@ MergerFactory& MergerFactory::getInstance()
     _theInstance.reset(new MergerFactory());
   }
 
-  if (_theInstance->_creators.size() == 0)
+  if (_theInstance->_creators.empty())
   {
     _theInstance->registerDefaultCreators();
   }
@@ -162,7 +162,7 @@ void MergerFactory::registerDefaultCreators()
       MergerCreatorPtr mc(Factory::getInstance().constructObject<MergerCreator>(className));
       registerCreator(mc);
 
-      if (args.size() > 0)
+      if (!args.empty())
       {
         // TODO: Is this actually used on any MergerCreators?
         mc->setArguments(args);

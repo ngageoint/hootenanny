@@ -28,13 +28,13 @@
 #include "SuperfluousWayRemover.h"
 
 // Hoot
-#include <hoot/core/util/Factory.h>
+#include <hoot/core/conflate/ConflateUtils.h>
+#include <hoot/core/criterion/LinearCriterion.h>
+#include <hoot/core/criterion/PolygonCriterion.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/ops/RemoveWayByEid.h>
-#include <hoot/core/criterion/LinearCriterion.h>
-#include <hoot/core/criterion/PolygonCriterion.h>
-#include <hoot/core/conflate/ConflateUtils.h>
+#include <hoot/core/util/Factory.h>
 
 using namespace std;
 
@@ -111,7 +111,7 @@ void SuperfluousWayRemover::_removeWays(std::shared_ptr<OsmMap>& map)
     bool same = true;
     const vector<long>& nodeIds = w->getNodeIds();
     LOG_VART(nodeIds);
-    if (nodeIds.size() > 0)
+    if (!nodeIds.empty())
     {
       long firstId = nodeIds[0];
       for (size_t i = 1; i < nodeIds.size(); i++)
@@ -124,12 +124,12 @@ void SuperfluousWayRemover::_removeWays(std::shared_ptr<OsmMap>& map)
     }
     LOG_VART(same);
 
-    const bool inRelation = e2r->getRelationByElement(w).size() > 0;
+    const bool inRelation = !e2r->getRelationByElement(w).empty();
     LOG_VART(inRelation);
     LOG_VART(w->getTags().size());
 
     // if all the nodes in a way are the same or there are zero nodes
-    if ((same || w->getTags().size() == 0) && !inRelation)
+    if ((same || w->getTags().empty()) && !inRelation)
     {  
       LOG_TRACE("Removing superflous way: " << w->getElementId() << "...");
       RemoveWayByEid::removeWayFully(map, w->getId());

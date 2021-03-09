@@ -30,17 +30,16 @@
 #include <geos/util/TopologyException.h>
 
 // hoot
+#include <hoot/core/algorithms/extractors/AddressScoreExtractor.h>
+#include <hoot/core/conflate/matching/MatchFactory.h>
+#include <hoot/core/criterion/ConflatableElementCriterion.h>
+#include <hoot/core/elements/ConstOsmMapConsumer.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
+#include <hoot/core/geometry/GeometryUtils.h>
+#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/geometry/GeometryUtils.h>
-#include <hoot/core/algorithms/extractors/AddressScoreExtractor.h>
-#include <hoot/core/geometry/GeometryUtils.h>
-#include <hoot/core/conflate/matching/MatchFactory.h>
-#include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/criterion/ConflatableElementCriterion.h>
-#include <hoot/core/elements/ConstOsmMapConsumer.h>
 
 // Std
 #include <float.h>
@@ -525,7 +524,7 @@ bool ConflateInfoCache::elementCanBeConflatedByActiveMatcher(
   LOG_VART(element->getElementId());
 
   // Get all the configured matchers.
-  if (_activeMatchCreators.size() == 0)
+  if (_activeMatchCreators.empty())
   {
     _activeMatchCreators = MatchFactory::getInstance().getCreators();
   }
@@ -560,9 +559,9 @@ bool ConflateInfoCache::elementCanBeConflatedByActiveMatcher(
         else if (!conflatableCrit->getChildCriteria().isEmpty())
         {
           const QStringList childCritClassNames = conflatableCrit->getChildCriteria();
-          for (int i = 0; i < childCritClassNames.size(); i++)
+          for (int j = 0; j < childCritClassNames.size(); j++)
           {
-            const QString childCritClassName = childCritClassNames.at(i);
+            const QString childCritClassName = childCritClassNames.at(j);
             ElementCriterionPtr childCrit = _getCrit(childCritClassName);
             // These don't inherit from ConflatableElementCriterion, since matchers look for
             // their parents only. So, don't require that it casts to ConflatableElementCriterion.
@@ -615,7 +614,7 @@ bool ConflateInfoCache::elementCriterionInUseByActiveMatcher(const QString& crit
   }
 
   // Get all the configured matchers.
-  if (_activeMatchCreators.size() == 0)
+  if (_activeMatchCreators.empty())
   {
     _activeMatchCreators = MatchFactory::getInstance().getCreators();
   }
@@ -648,9 +647,9 @@ bool ConflateInfoCache::elementCriterionInUseByActiveMatcher(const QString& crit
           // don't inherit from ConflatableElementCriterion, since matchers look for their
           // parents only.
           const QStringList childCritClassNames = conflatableCrit->getChildCriteria();
-          for (int i = 0; i < childCritClassNames.size(); i++)
+          for (int j = 0; j < childCritClassNames.size(); ++j)
           {
-            const QString childCritClassName = childCritClassNames.at(i);
+            const QString childCritClassName = childCritClassNames.at(j);
             LOG_VART(childCritClassName);
             // No need to instantiate this child crit. Just check for a crit class name match.
             if (childCritClassName == criterionClassName)

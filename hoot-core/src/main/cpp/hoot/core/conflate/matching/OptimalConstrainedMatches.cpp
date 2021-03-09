@@ -48,7 +48,7 @@ std::vector<ConstMatchPtr> OptimalConstrainedMatches::calculateSubset()
   _score = -1;
   vector<ConstMatchPtr> result;
 
-  if (_matches.size() == 0)
+  if (_matches.empty())
   {
     return result;
   }

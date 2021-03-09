@@ -36,12 +36,12 @@
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/scoring/TextTable.h>
 #include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/ElementCountVisitor.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/UniqueTagValuesVisitor.h>
 #include <hoot/core/visitors/SetTagValueVisitor.h>
 #include <hoot/core/visitors/UniqueElementIdVisitor.h>
-#include <hoot/core/util/Log.h>
 
 // Qt
 #include <QSet>
@@ -88,7 +88,7 @@ public:
     refs.removeAll("none");
 
     QString uuid = e->getTags()["uuid"];
-    if (refs.size() > 0 && uuid.isEmpty())
+    if (!refs.empty() && uuid.isEmpty())
     {
       LOG_TRACE("refs: " << refs);
       LOG_TRACE("Element: " << e->toString());
@@ -485,7 +485,7 @@ void MatchComparator::_findActualMatches(const ConstOsmMapPtr& in, const ConstOs
       {
         u2.insert(uuidStr);
       }
-      else if (u1.size() == 0 && u2.size() > 0)
+      else if (u1.empty() && u2.empty())
       {
         u1.insert(uuidStr);
       }

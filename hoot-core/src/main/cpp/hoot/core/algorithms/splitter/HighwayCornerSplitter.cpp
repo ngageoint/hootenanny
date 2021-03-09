@@ -32,17 +32,17 @@
 #include <hoot/core/algorithms/WayHeading.h>
 #include <hoot/core/algorithms/linearreference/WayLocation.h>
 #include <hoot/core/algorithms/splitter/WaySplitter.h>
+#include <hoot/core/criterion/HighwayCriterion.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Way.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/criterion/HighwayCriterion.h>
 
-#include <geos/geom/LineString.h>
 #include <geos/geom/CoordinateArraySequence.h>
 #include <geos/geom/GeometryFactory.h>
+#include <geos/geom/LineString.h>
 using namespace geos::geom;
-#include <hoot/core/geometry/ElementToGeometryConverter.h>
 
 // Qt
 #include <QDebug>
@@ -183,9 +183,9 @@ void HighwayCornerSplitter::_splitRoundedCorners()
       for (int start_index = 0; start_index < headings.size() - 2; ++start_index)
       {
         double total = 0.0;
-        for (int i = 0; i < _roundedMaxNodeCount && start_index + i + 1 < headings.size(); ++i)
+        for (int j = 0; j < _roundedMaxNodeCount && start_index + j + 1 < headings.size(); ++j)
         {
-          double delta = headings[start_index + i + 1] - headings[start_index + i];
+          double delta = headings[start_index + j + 1] - headings[start_index + j];
           total += delta;
         }
         //  Save the highest heading delta and the start index of that subline
@@ -219,9 +219,9 @@ void HighwayCornerSplitter::_splitRoundedCorners()
       {
         QString buffer;
         QTextStream ts(&buffer);
-        for (int i = 0; i < headings.size(); ++i)
-          ts << QString().setNum(headings[i], 'f') << "\t| " <<
-                QString().setNum(distances[i], 'f') << "\n";
+        for (int j = 0; j < headings.size(); ++j)
+          ts << QString().setNum(headings[j], 'f') << "\t| " <<
+                QString().setNum(distances[j], 'f') << "\n";
         //  Output a bunch of stuff here to help develop the algorithm
         LOG_TRACE("\nWay: " << pWay->getTags().getName() <<
                   "\nHeadings\t| Distances" <<

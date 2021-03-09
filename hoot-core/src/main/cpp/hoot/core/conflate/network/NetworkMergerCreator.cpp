@@ -27,9 +27,9 @@
 #include "NetworkMergerCreator.h"
 
 // hoot
-#include <hoot/core/conflate/merging/LinearMergerFactory.h>
 #include <hoot/core/conflate/matching/MatchFactory.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
+#include <hoot/core/conflate/merging/LinearMergerFactory.h>
 #include <hoot/core/conflate/merging/MarkForReviewMerger.h>
 #include <hoot/core/conflate/merging/MergerFactory.h>
 #include <hoot/core/conflate/network/NetworkMatch.h>
@@ -64,10 +64,10 @@ bool NetworkMergerCreator::createMergers(
   {
     for (MatchSet::const_iterator it = matchesIn.begin(); it != matchesIn.end(); ++it)
     {
-      const NetworkMatch* nmi = dynamic_cast<const NetworkMatch*>(it->get());
-      if (nmi)
+      const NetworkMatch* match = dynamic_cast<const NetworkMatch*>(it->get());
+      if (match)
       {
-        matchesList += nmi->getEdgeMatch()->getUid() + " ";
+        matchesList += match->getEdgeMatch()->getUid() + " ";
       }
     }
   }
@@ -153,15 +153,15 @@ bool NetworkMergerCreator::createMergers(
             }
             LOG_VART(eids);
 
-            const NetworkMatch* m = dynamic_cast<const NetworkMatch*>(it->get());
+            const NetworkMatch* nm = dynamic_cast<const NetworkMatch*>(it->get());
             mergers.push_back(
               MergerPtr(
                 new MarkForReviewMerger(
                   eids,
                   "A complex road situation was found with multiple plausible solutions. Please "
                   "reference input data/imagery and manually merge or modify as needed.",
-                  m->getName(),
-                  m->getScore())));
+                  nm->getName(),
+                  nm->getScore())));
 
             count++;
             if (count % 100 == 0)
@@ -188,11 +188,10 @@ bool NetworkMergerCreator::createMergers(
 vector<CreatorDescription> NetworkMergerCreator::getAllCreators() const
 {
   vector<CreatorDescription> result;
-  result.push_back(
-    CreatorDescription(
-      className(),
-      "Generates mergers that merge roads conflated with the Network Algorithm",
-      false));
+  result.emplace_back(
+    className(),
+    "Generates mergers that merge roads conflated with the Network Algorithm",
+    false);
   return result;
 }
 
@@ -205,15 +204,15 @@ bool NetworkMergerCreator::_containsOverlap(const MatchSet& matches) const
   {
     for (MatchSet::const_iterator it = matches.begin(); it != matches.end(); ++it)
     {
-      const NetworkMatch* nmi = dynamic_cast<const NetworkMatch*>(it->get());
+      const NetworkMatch* match1 = dynamic_cast<const NetworkMatch*>(it->get());
 
       MatchSet::const_iterator jt = it;
       for (++jt; jt != matches.end(); ++jt)
       {
-        const NetworkMatch* nmj = dynamic_cast<const NetworkMatch*>(jt->get());
+        const NetworkMatch* match2 = dynamic_cast<const NetworkMatch*>(jt->get());
 
         // Sanity check to make sure our matches
-        if (!nmi || !nmj)
+        if (!match1 || !match2)
         {
           LOG_VART(*it);
           LOG_VART(*jt);
@@ -221,12 +220,12 @@ bool NetworkMergerCreator::_containsOverlap(const MatchSet& matches) const
             "If one match is a network match they should all be network matches.");
         }
 
-        if (nmi->getEdgeMatch()->overlaps(nmj->getEdgeMatch()))
+        if (match1->getEdgeMatch()->overlaps(match2->getEdgeMatch()))
         {
           matchOverlap = true;
           LOG_TRACE("Overlapping matches:");
-          LOG_VART(nmi->getEdgeMatch());
-          LOG_VART(nmj->getEdgeMatch());
+          LOG_VART(match1->getEdgeMatch());
+          LOG_VART(match2->getEdgeMatch());
           break;
         }
       }
@@ -245,14 +244,14 @@ double NetworkMergerCreator::_getOverlapPercent(const MatchSet& matches) const
 
   for (MatchSet::const_iterator it = matches.begin(); it != matches.end(); ++it)
   {
-    const NetworkMatch* nmi = dynamic_cast<const NetworkMatch*>(it->get());
+    const NetworkMatch* match1 = dynamic_cast<const NetworkMatch*>(it->get());
 
     MatchSet::const_iterator jt = it;
     for (++jt; jt != matches.end(); ++jt)
     {
-      const NetworkMatch* nmj = dynamic_cast<const NetworkMatch*>(jt->get());
-      LOG_TRACE(nmi->getEdgeMatch()->getUid() << ":" << nmj->getEdgeMatch()->getUid());
-      double percent = _getOverlapPercent(nmi, nmj);
+      const NetworkMatch* match2 = dynamic_cast<const NetworkMatch*>(jt->get());
+      LOG_TRACE(match1->getEdgeMatch()->getUid() << ":" << match2->getEdgeMatch()->getUid());
+      double percent = _getOverlapPercent(match1, match2);
       LOG_VART(percent);
       count += percent;
       total += 100.0;
@@ -315,7 +314,7 @@ double NetworkMergerCreator::_getOverlapPercent(const NetworkMatch* m1, const Ne
 
   foreach (EdgeString::EdgeEntry ee, m1e2)
   {
-    std::shared_ptr<const OsmMap> pMap(_map->shared_from_this());
+    pMap = _map->shared_from_this();
     Meters edgeLen = ee.getEdge()->calculateLength(pMap);
     if (m2e2.contains(ee))
     {
@@ -331,7 +330,7 @@ double NetworkMergerCreator::_getOverlapPercent(const NetworkMatch* m1, const Ne
     total += edgeLen;
   }
 
-  return 100.0*count / total;
+  return 100.0 * count / total;
 }
 
 const NetworkMatch* NetworkMergerCreator::_getLargest(const MatchSet& matches) const

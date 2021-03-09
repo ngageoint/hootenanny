@@ -199,7 +199,7 @@ void ChangesetCutOnlyCreator::create(
 
   LOG_VART(refMaps.size());
   LOG_VART(conflatedMaps.size());
-  if (refMaps.size() == 0 && conflatedMaps.size() == 0)
+  if (refMaps.empty() && conflatedMaps.empty())
   {
     LOG_WARN("No features remain after filtering, so no changeset will be generated.");
     return;

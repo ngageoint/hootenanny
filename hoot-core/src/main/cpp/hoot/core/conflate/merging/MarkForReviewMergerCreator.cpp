@@ -82,7 +82,7 @@ bool MarkForReviewMergerCreator::createMergers(const MatchSet& matches,
   }
 
   // only add the mark for review merger if there are elements to merge.
-  if (eids.size() > 0)
+  if (!eids.empty())
   {
     mergers.push_back(
       MergerPtr(

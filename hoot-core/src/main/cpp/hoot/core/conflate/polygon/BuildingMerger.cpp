@@ -27,20 +27,24 @@
 #include "BuildingMerger.h"
 
 // hoot
+#include <hoot/core/algorithms/extractors/IntersectionOverUnionExtractor.h>
 #include <hoot/core/conflate/IdSwap.h>
+#include <hoot/core/conflate/merging/LinearTagOnlyMerger.h>
+#include <hoot/core/conflate/polygon/BuildingMatch.h>
 #include <hoot/core/conflate/review/ReviewMarker.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
 #include <hoot/core/criterion/BuildingPartCriterion.h>
 #include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/criterion/ElementTypeCriterion.h>
+#include <hoot/core/elements/ElementIdUtils.h>
 #include <hoot/core/elements/InMemoryElementSorter.h>
 #include <hoot/core/elements/OsmUtils.h>
-#include <hoot/core/elements/ElementIdUtils.h>
 #include <hoot/core/elements/TagUtils.h>
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/ops/IdSwapOp.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
+#include <hoot/core/ops/RemoveRelationByEid.h>
 #include <hoot/core/ops/ReplaceElementOp.h>
 #include <hoot/core/ops/ReuseNodeIdsOnWayOp.h>
 #include <hoot/core/schema/BuildingRelationMemberTagMerger.h>
@@ -54,10 +58,6 @@
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/UniqueElementIdVisitor.h>
 #include <hoot/core/visitors/WorstCircularErrorVisitor.h>
-#include <hoot/core/algorithms/extractors/IntersectionOverUnionExtractor.h>
-#include <hoot/core/conflate/polygon/BuildingMatch.h>
-#include <hoot/core/ops/RemoveRelationByEid.h>
-#include <hoot/core/conflate/merging/LinearTagOnlyMerger.h>
 
 using namespace std;
 
@@ -136,10 +136,10 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementI
   for (set<pair<ElementId, ElementId>>::const_iterator sit = _pairs.begin(); sit != _pairs.end();
        ++sit)
   {
-    firstPairs.insert(sit->first);
-    secondPairs.insert(sit->second);
-    combined.insert(sit->first);
-    combined.insert(sit->second);
+    firstPairs.emplace(sit->first);
+    secondPairs.emplace(sit->second);
+    combined.emplace(sit->first);
+    combined.emplace(sit->second);
   }
   _manyToManyMatch = firstPairs.size() > 1 && secondPairs.size() > 1;
 
@@ -289,13 +289,10 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementI
   {
     // if we replaced the second group of buildings
     if (it->second != keeper->getElementId())
-    {
-      replacedSet.insert(pair<ElementId, ElementId>(it->second, keeper->getElementId()));
-    }
+      replacedSet.emplace(it->second, keeper->getElementId());
+
     if (it->first != keeper->getElementId())
-    {
-      replacedSet.insert(pair<ElementId, ElementId>(it->first, keeper->getElementId()));
-    }
+      replacedSet.emplace(it->first, keeper->getElementId());
   }
   replaced.insert(replaced.end(), replacedSet.begin(), replacedSet.end());
 }
@@ -327,7 +324,7 @@ Tags BuildingMerger::_getMergedTags(const ElementPtr& e1, const ElementPtr& e2)
   ref1.sort();
   ref2.sort();
 
-  if (ref1.size() != 0 || ref2.size() != 0)
+  if (!ref1.empty() || !ref2.empty())
   {
     if (ref1 == ref2)
     {
@@ -448,12 +445,12 @@ QSet<ElementId> BuildingMerger::_getMultiPolyMemberIds(const ConstElementPtr& el
 std::shared_ptr<Element> BuildingMerger::buildBuilding(
   const OsmMapPtr& map, const set<ElementId>& eid, const bool preserveTypes)
 {
-  if (eid.size() > 0)
+  if (!eid.empty())
   {
     LOG_TRACE("Creating building for eid's: " << eid << "...");
   }
 
-  if (eid.size() == 0)
+  if (eid.empty())
   {
     throw IllegalArgumentException("No element ID passed to building builder.");
   }
@@ -574,7 +571,7 @@ std::shared_ptr<Element> BuildingMerger::buildBuilding(
 RelationPtr BuildingMerger::combineConstituentBuildingsIntoRelation(
   const OsmMapPtr& map, std::vector<ElementPtr>& constituentBuildings, const bool preserveTypes)
 {
-  if (constituentBuildings.size() == 0)
+  if (constituentBuildings.empty())
   {
     throw IllegalArgumentException("No constituent buildings passed to building merger.");
   }
@@ -830,7 +827,7 @@ void BuildingMerger::mergeBuildings(OsmMapPtr map, const ElementId& mergeTargetI
       }
 
       std::set<std::pair<ElementId, ElementId>> pairs;
-      pairs.insert(std::pair<ElementId, ElementId>(mergeTargetId, way->getElementId()));
+      pairs.emplace(mergeTargetId, way->getElementId());
       BuildingMerger merger(pairs);
       LOG_VART(pairs.size());
       std::vector<std::pair<ElementId, ElementId>> replacedElements;
@@ -852,7 +849,7 @@ void BuildingMerger::mergeBuildings(OsmMapPtr map, const ElementId& mergeTargetI
       }
 
       std::set<std::pair<ElementId, ElementId>> pairs;
-      pairs.insert(std::pair<ElementId, ElementId>(mergeTargetId, relation->getElementId()));
+      pairs.emplace(mergeTargetId, relation->getElementId());
       BuildingMerger merger(pairs);
       LOG_VART(pairs.size());
       std::vector<std::pair<ElementId, ElementId>> replacedElements;

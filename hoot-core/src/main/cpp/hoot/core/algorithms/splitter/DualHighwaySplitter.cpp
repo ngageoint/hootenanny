@@ -39,25 +39,25 @@ using namespace geos::geom;
 using namespace geos::operation::buffer;
 
 // Hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/algorithms/Distance.h>
 #include <hoot/core/algorithms/WayHeading.h>
 #include <hoot/core/algorithms/linearreference/LocationOfPoint.h>
-#include <hoot/core/elements/Way.h>
 #include <hoot/core/criterion/ChainCriterion.h>
 #include <hoot/core/criterion/DistanceNodeCriterion.h>
+#include <hoot/core/criterion/HighwayCriterion.h>
 #include <hoot/core/criterion/NotCriterion.h>
 #include <hoot/core/criterion/TagCriterion.h>
-#include <hoot/core/ops/RemoveNodeByEid.h>
-#include <hoot/core/ops/RemoveWayByEid.h>
-#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/elements/Way.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/geometry/GeometryUtils.h>
-#include <hoot/core/util/Log.h>
+#include <hoot/core/ops/RemoveNodeByEid.h>
+#include <hoot/core/ops/RemoveWayByEid.h>
 #include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/ElementIdsVisitor.h>
-#include <hoot/core/criterion/HighwayCriterion.h>
 
 // Qt
 #include <QDebug>
@@ -217,11 +217,10 @@ bool DualHighwaySplitter::_onRight(long intersectionId, const std::shared_ptr<Wa
                                    long leftNn, long rightNn)
 {
   // calculate the normalized vector from nodeId to the nearest end point on left.
-  size_t inboundNodeIndex;
+  size_t inboundNodeIndex = 0;
   Coordinate vi;
   if (inbound->getNodeId(0) == intersectionId)
   {
-    inboundNodeIndex = 0;
     vi = WayHeading::calculateVector(_result->getNode(inbound->getNodeId(0))->toCoordinate(),
                                      _result->getNode(inbound->getNodeId(1))->toCoordinate());
   }
@@ -277,7 +276,7 @@ std::shared_ptr<OsmMap> DualHighwaySplitter::splitAll()
   bool todoLogged = false;
   for (size_t i = 0; i < wayIds.size(); i++)
   {
-    if (wayIds.size() % 1000 == 0 && wayIds.size() > 0)
+    if (wayIds.size() % 1000 == 0 && !wayIds.empty())
     {
       PROGRESS_DEBUG("  splitting " << i << " / " << wayIds.size());
       todoLogged = true;

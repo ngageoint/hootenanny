@@ -29,15 +29,15 @@
 
 // hoot
 #include <hoot/core/Hoot.h>
-#include <hoot/core/util/ConfPath.h>
-#include <hoot/core/util/ConfigDefaults.h>
-#include <hoot/core/util/HootException.h>
-#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/Log.h>
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/ops/OsmMapOperation.h>
-#include <hoot/core/visitors/ElementVisitor.h>
 #include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/ops/OsmMapOperation.h>
+#include <hoot/core/util/ConfigDefaults.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/ConfPath.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/HootException.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/visitors/ElementVisitor.h>
 
 // Boost
 #include <boost/property_tree/ptree.hpp>
@@ -578,7 +578,7 @@ void Settings::parseCommonArguments(QStringList& args)
   const QString optionInputFormatErrorMsg =
     "Define with -D must take the form key=value, key+=value, key++=value, or key-=value";
 
-  while (args.size() > 0 && foundOne)
+  while (!args.empty() && foundOne)
   {
     if (args[0] == "--conf" || args[0] == "-C")
     {
@@ -833,11 +833,11 @@ QString Settings::_replaceVariables(const QString& key, std::set<QString> used) 
 QString Settings::_replaceStaticVariables(QString value) const
 {
   bool done = false;
+  int offset = 0;
 
   while (!done)
   {
     done = true;
-    int offset = 0;
     QRegularExpressionMatch match = _staticRegex.match(value, offset);
     if (match.hasMatch())
     {
@@ -864,11 +864,11 @@ QString Settings::_replaceVariablesValue(QString value) const
 QString Settings::_replaceVariablesValue(QString value, std::set<QString> used) const
 {
   bool done = false;
+  int offset = 0;
 
   while (!done)
   {
     done = true;
-    int offset = 0;
     QRegularExpressionMatch match = _dynamicRegex.match(value, offset);
     if (match.hasMatch())
     {

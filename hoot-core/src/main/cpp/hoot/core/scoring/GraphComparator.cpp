@@ -39,16 +39,16 @@ using namespace geos::operation::distance;
 #include <hoot/core/algorithms/linearreference/LocationOfPoint.h>
 #include <hoot/core/algorithms/splitter/IntersectionSplitter.h>
 #include <hoot/core/algorithms/splitter/WaySplitter.h>
-#include <hoot/core/geometry/ElementToGeometryConverter.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/elements/Way.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
+#include <hoot/core/geometry/GeometryPainter.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/scoring/DirectedGraph.h>
 #include <hoot/core/scoring/ShortestPath.h>
 #include <hoot/core/util/FileUtils.h>
-#include <hoot/core/geometry/GeometryPainter.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/elements/MapProjector.h>
 
 // Qt
 #include <QDebug>
@@ -460,7 +460,7 @@ cv::Mat GraphComparator::_paintGraph(OsmMapPtr map, DirectedGraph& graph, Shorte
     WayPtr w = it->second;
     LOG_VART(w.get());
     LOG_VART(w->getNodeIds().size());
-    if (w->getNodeIds().size() == 0)
+    if (w->getNodeIds().empty())
     {
       continue;
     }

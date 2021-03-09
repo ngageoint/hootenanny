@@ -28,16 +28,16 @@
 #include "SearchRadiusCalculator.h"
 
 // Hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/ops/MapCleaner.h>
 #include <hoot/core/algorithms/rubber-sheet/RubberSheet.h>
-#include <hoot/core/criterion/StatusCriterion.h>
 #include <hoot/core/criterion/ChainCriterion.h>
-#include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/elements/MapProjector.h>
-#include <hoot/core/util/StringUtils.h>
-#include <hoot/core/ops/CopyMapSubsetOp.h>
 #include <hoot/core/criterion/OrCriterion.h>
+#include <hoot/core/criterion/StatusCriterion.h>
+#include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/ops/CopyMapSubsetOp.h>
+#include <hoot/core/ops/MapCleaner.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/StringUtils.h>
 
 namespace hoot
 {
@@ -77,7 +77,7 @@ void SearchRadiusCalculator::apply(std::shared_ptr<OsmMap>& map)
 
   // determine tie points with rubbersheeting
   const std::vector<double> tiePointDistances = _getTiePointDistances(filteredMap);
-  if (tiePointDistances.size() == 0)
+  if (tiePointDistances.empty())
   {
     // no tie points found, so use CE
     _result = _circularError;

@@ -31,12 +31,12 @@
 #include <hoot/core/elements/ElementType.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/util/DateTimeUtils.h>
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/elements/Tags.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/util/DateTimeUtils.h>
 #include <hoot/core/util/Exception.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/StringUtils.h>
@@ -271,7 +271,7 @@ void OsmJsonWriter::_write(const QString& str, bool newLine)
 
 bool OsmJsonWriter::_hasTags(const ConstElementPtr& e)
 {
-  return e->getTags().size() > 0 ||
+  return !e->getTags().empty() ||
          e->getElementType() != ElementType::Node ||
         (e->getCircularError() >= 0 && e->getTags().getInformationCount() > 0) ||
          _includeDebug;
@@ -302,7 +302,7 @@ void OsmJsonWriter::_writeTags(const ConstElementPtr& e)
 
   bool firstTag = true;
   const Tags& tags = eClone->getTags();
-  if (tags.size() > 0)
+  if (!tags.empty())
   {
     for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
     {

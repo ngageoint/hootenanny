@@ -28,14 +28,14 @@
 
 // hoot
 #include <hoot/core/elements/Relation.h>
-#include <hoot/core/util/DateTimeUtils.h>
 #include <hoot/core/io/ElementCacheLRU.h>
 #include <hoot/core/io/InternalIdReserver.h>
+#include <hoot/core/io/ServicesJobStatus.h>
 #include <hoot/core/io/SqlBulkDelete.h>
 #include <hoot/core/io/SqlBulkInsert.h>
 #include <hoot/core/io/TableType.h>
-#include <hoot/core/io/ServicesJobStatus.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/DateTimeUtils.h>
 #include <hoot/core/util/DbUtils.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
@@ -246,7 +246,7 @@ void HootApiDb::_copyTableStructure(const QString& from, const QString& to)
 
 void HootApiDb::createPendingMapIndexes()
 {
-  if (_pendingMapIndexes.size() > 0)
+  if (!_pendingMapIndexes.empty())
   {
     LOG_DEBUG("Creating " << _pendingMapIndexes.size() << " map indexes...");
   }
@@ -1240,7 +1240,6 @@ long HootApiDb::getMapIdFromUrl(const QUrl& url)
   // If a map with the parsed ID doesn't exist, let's try it as a map name.
   if (!ok)
   {
-    mapId = -1;
     // get all map ids with name
     const QString mapName = urlParts[urlParts.size() - 1];
     LOG_VART(mapName);
@@ -1602,7 +1601,7 @@ void HootApiDb::_deleteFolderMapMappingsByMapId(const long mapId)
 
 void HootApiDb::_deleteAllFolders(const set<long>& folderIds)
 {
-  if (folderIds.size() == 0)
+  if (folderIds.empty())
   {
     return;
   }

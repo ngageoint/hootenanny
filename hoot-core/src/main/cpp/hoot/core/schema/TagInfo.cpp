@@ -145,7 +145,7 @@ QString TagInfo::_getInfo(const QString& input) const
       layers = ogrReader->getFilteredLayerNames(inputInfo);
     }
 
-    if (layers.size() == 0)
+    if (layers.empty())
     {
       LOG_WARN("Could not find any valid layers to read from in " + inputInfo + ".");
     }
@@ -335,7 +335,7 @@ QString TagInfo::_printJSON(const QString& lName, TagInfoHash& data) const
 {
   QStringList attrKey = data.keys();
   // Skip empty layers
-  if (attrKey.count() == 0)
+  if (attrKey.empty())
   {
     return "";
   }
