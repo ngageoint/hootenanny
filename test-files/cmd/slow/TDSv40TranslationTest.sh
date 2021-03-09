@@ -12,18 +12,18 @@ mkdir -p $outputDir
 rm -f $outputDir/*
 
 # Normal Hoot options
-HOOT_OPT=""
+HOOT_OPT="--debug -C Testing.conf"
 
 # Hoot options for debugging the test input and output
 # NOTE: This will generate HEAPS of output.
-# HOOT_OPT="-D ogr.debug.dumptags=true -D ogr.debug.lookupcolumn=true -D ogr.debug.lookupclash=true -D ogr.debug.dumpvalidate=true"
+# HOOT_OPT+=" -D ogr.debug.dumptags=true -D ogr.debug.lookupcolumn=true -D ogr.debug.lookupclash=true -D ogr.debug.dumpvalidate=true"
 
 # Script to compare shapefiles. NOTE: This might not run on Jenkins.
 COMPARE_SHAPE=$HOOT_HOME/scripts/util/CompareShapefiles.py
 
 ##### Start Tests #####
 #  jam all of the shapefiles into one OSM file
-hoot convert --warn  -C Testing.conf $HOOT_OPT \
+hoot convert $HOOT_OPT \
   -D schema.translation.script=$TRANS \
   $inputDir/*.shp $outputDir/new_TDSv40.osm # > tmp/TDSv40_to_OSM.txt
 
@@ -31,11 +31,11 @@ hoot convert --warn  -C Testing.conf $HOOT_OPT \
 #cp $outputDir/new_TDSv40.osm $inputDir/TDSv40X.osm
 
 # compareFiles. Test taken from MGCP test
-hoot diff -C Testing.conf $outputDir/new_TDSv40.osm $inputDir/TDSv40.osm || diff $outputDir/new_TDSv40.osm $inputDir/TDSv40.osm
+hoot diff --error-limit 20 $outputDir/new_TDSv40.osm $inputDir/TDSv40.osm  || diff $outputDir/new_TDSv40.osm $inputDir/TDSv40.osm
 
 # Make shapefiles
 # NOTE: These are thematic.
-hoot convert --debug -C Testing.conf $HOOT_OPT \
+hoot convert $HOOT_OPT \
   -D schema.translation.script=$TRANS \
   $outputDir/new_TDSv40.osm $outputDir".shp" # > tmp/TDSv40_toTDSv40.txt
 

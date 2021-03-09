@@ -2096,106 +2096,106 @@
     <way visible="true" id="-69" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-309"/>
         <nd ref="-310"/>
-        <tag k="security:resource_owner" v="USA"/>
-        <tag k="surface" v="asphalt"/>
-        <tag k="seasonal" v="no"/>
-        <tag k="in_tunnel" v="yes"/>
-        <tag k="ref:road:class:2" v="local"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="name" v="Main"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="construction" v="motorway"/>
-        <tag k="security:dissemination_control:non_ic" v="DS"/>
-        <tag k="ref:road:type" v="motorway"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="construction"/>
+        <tag k="highway:through_route" v="yes"/>
+        <tag k="in_tunnel" v="yes"/>
         <tag k="lanes" v="2"/>
-        <tag k="uuid" v="{c87f3ed7-5656-4f80-b556-5b85df1cb9be}"/>
-        <tag k="width:minimum_traveled_way" v="4"/>
+        <tag k="location" v="surface"/>
+        <tag k="name" v="Main"/>
         <tag k="on_bridge" v="yes"/>
         <tag k="ref:road:class" v="primary"/>
-        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
-        <tag k="highway:through_route" v="yes"/>
-        <tag k="source:ingest:datetime" v="2020-11-16T15:26:02.371Z"/>
-        <tag k="location" v="surface"/>
+        <tag k="ref:road:class:2" v="local"/>
+        <tag k="ref:road:type" v="motorway"/>
+        <tag k="seasonal" v="no"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv40:road_c"/>
-        <tag k="highway" v="construction"/>
+        <tag k="source:ingest:datetime" v="2020-11-16T15:26:02.371Z"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="uuid" v="{c87f3ed7-5656-4f80-b556-5b85df1cb9be}"/>
+        <tag k="width:minimum_traveled_way" v="4"/>
     </way>
     <way visible="true" id="-68" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-307"/>
         <nd ref="-308"/>
-        <tag k="security:resource_owner" v="USA"/>
-        <tag k="surface" v="asphalt"/>
-        <tag k="layer" v="0"/>
-        <tag k="in_tunnel" v="no"/>
-        <tag k="seasonal" v="not_winter"/>
-        <tag k="feature_configuration" v="same"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="name" v="back"/>
-        <tag k="ref" v="470"/>
-        <tag k="construction" v="secondary"/>
-        <tag k="security:dissemination_control:non_ic" v="DS"/>
-        <tag k="ref:road:type" v="street"/>
-        <tag k="lanes" v="1"/>
-        <tag k="uuid" v="{632db716-7256-4b2c-b27d-593bf9a2093e}"/>
-        <tag k="operator" v="public"/>
-        <tag k="width:minimum_traveled_way" v="4"/>
-        <tag k="on_bridge" v="no"/>
-        <tag k="road:runway" v="no"/>
-        <tag k="ref:road:class" v="local"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="median" v="yes"/>
-        <tag k="source:ingest:datetime" v="2020-11-16T15:26:02.370Z"/>
-        <tag k="location" v="surface"/>
-        <tag k="is_divided" v="yes"/>
-        <tag k="source" v="tdsv40:road_c"/>
+        <tag k="construction" v="secondary"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="feature_configuration" v="same"/>
         <tag k="highway" v="construction"/>
+        <tag k="in_tunnel" v="no"/>
+        <tag k="is_divided" v="yes"/>
+        <tag k="lanes" v="1"/>
+        <tag k="layer" v="0"/>
+        <tag k="location" v="surface"/>
+        <tag k="median" v="yes"/>
+        <tag k="name" v="back"/>
+        <tag k="on_bridge" v="no"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="operator" v="public"/>
+        <tag k="ref" v="470"/>
+        <tag k="ref:road:class" v="local"/>
+        <tag k="ref:road:type" v="street"/>
+        <tag k="road:runway" v="no"/>
+        <tag k="seasonal" v="not_winter"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="source" v="tdsv40:road_c"/>
+        <tag k="source:ingest:datetime" v="2020-11-16T15:26:02.370Z"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="uuid" v="{632db716-7256-4b2c-b27d-593bf9a2093e}"/>
+        <tag k="width:minimum_traveled_way" v="4"/>
     </way>
     <way visible="true" id="-67" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-305"/>
         <nd ref="-306"/>
-        <tag k="security:resource_owner" v="USA"/>
-        <tag k="surface" v="compacted"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="primary"/>
+        <tag k="lanes" v="2"/>
         <tag k="layer" v="0"/>
+        <tag k="location" v="underground"/>
+        <tag k="median" v="no"/>
+        <tag k="operator" v="joint_military_civilian"/>
+        <tag k="ref:road:class" v="secondary"/>
+        <tag k="ref:road:type" v="road"/>
         <tag k="seasonal" v="fair"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="error:circular" v="15"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
-        <tag k="ref:road:type" v="road"/>
-        <tag k="lanes" v="2"/>
-        <tag k="uuid" v="{68d0dd28-6b60-468a-b33c-eaa663675dc8}"/>
-        <tag k="operator" v="joint_military_civilian"/>
-        <tag k="width:minimum_traveled_way" v="4"/>
-        <tag k="ref:road:class" v="secondary"/>
-        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
-        <tag k="median" v="no"/>
-        <tag k="source:ingest:datetime" v="2020-11-16T15:26:02.370Z"/>
-        <tag k="location" v="underground"/>
+        <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv40:road_c"/>
-        <tag k="highway" v="primary"/>
+        <tag k="source:ingest:datetime" v="2020-11-16T15:26:02.370Z"/>
+        <tag k="surface" v="compacted"/>
+        <tag k="uuid" v="{68d0dd28-6b60-468a-b33c-eaa663675dc8}"/>
+        <tag k="width:minimum_traveled_way" v="4"/>
     </way>
     <way visible="true" id="-66" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-303"/>
         <nd ref="-304"/>
-        <tag k="security:resource_owner" v="USA"/>
-        <tag k="surface" v="wood"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="lanes" v="1"/>
         <tag k="layer" v="0"/>
+        <tag k="location" v="surface"/>
+        <tag k="median" v="no"/>
+        <tag k="operator" v="military"/>
+        <tag k="ref:road:class" v="local"/>
+        <tag k="ref:road:type" v="street"/>
         <tag k="seasonal" v="no"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="error:circular" v="15"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
-        <tag k="ref:road:type" v="street"/>
-        <tag k="lanes" v="1"/>
-        <tag k="uuid" v="{f0ecd77e-fdac-4deb-bd9c-d4f84dad328c}"/>
-        <tag k="operator" v="military"/>
-        <tag k="width:minimum_traveled_way" v="4"/>
-        <tag k="ref:road:class" v="local"/>
-        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
-        <tag k="median" v="no"/>
-        <tag k="source:ingest:datetime" v="2020-11-16T15:26:02.369Z"/>
-        <tag k="location" v="surface"/>
+        <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv40:road_c"/>
-        <tag k="highway" v="secondary"/>
+        <tag k="source:ingest:datetime" v="2020-11-16T15:26:02.369Z"/>
+        <tag k="surface" v="wood"/>
+        <tag k="uuid" v="{f0ecd77e-fdac-4deb-bd9c-d4f84dad328c}"/>
+        <tag k="width:minimum_traveled_way" v="4"/>
     </way>
     <way visible="true" id="-65" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-301"/>

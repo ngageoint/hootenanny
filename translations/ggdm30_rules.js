@@ -49,6 +49,7 @@ ggdm30.rules = {
     ['F_CODE','AA010','landuse','quarry'], // Extraction Mine
     ['F_CODE','AA054','man_made','petroleum_well'], // Non-Water Well
     ['F_CODE','AD010','power','station'], // Electric Power Station, Power Plant
+    ['F_CODE','AG040','landuse','retail'], // Electric Power Station, Power Plant
     ['F_CODE','AJ110','building','greenhouse_horticulture'], // Greenhouse
     ['F_CODE','AK030','leisure','water_park'], // Amusement Park
     ['F_CODE','AK120','landuse','recreation_ground'], // Park
@@ -6290,7 +6291,7 @@ ggdm30.rules = {
     ['RTY','4','ref:road:type','place'], // Place
     ['RTY','4','ref:road:type','terrace'], // Terrace
     ['RTY','4','ref:roadtype','roundabout'], // Roundabout
-    ['RTY','999','highway','other'],
+    // ['RTY','999','highway','other'],
 
     // ['TTC','999','tower:type','radar'], //  Radar Tower -> Other
 

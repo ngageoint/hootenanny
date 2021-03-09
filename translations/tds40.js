@@ -841,15 +841,8 @@ tds40 = {
                 TYP -> TYP     -> RTY     -> RTY
                 */
 
-      // Work around ugly conflicts
-      if (tags.highway == 'yes')
-      {
-        tags.highway = 'road';
-        break;
-      }
-
       // Skip this if we already have a highway tag
-      if (tags.highway && tags.highway !== 'road') break;
+      // if (tags.highway && tags.highway !== 'road') break;
 
       // Set a Default: "It is a road but we don't know what it is"
       // tags.highway = 'road';
@@ -887,7 +880,7 @@ tds40 = {
 
       if (tags['ref:road:type'] == 'street')
       {
-        tags.highway = 'unclassified';
+        if (tags.highway !== 'road') tags.highway = 'unclassified';
         break;
       }
 
@@ -977,6 +970,9 @@ tds40 = {
         if (! tags.boundary) tags.boundary = 'hazard';
         break;
     } // End switch F_CODE
+
+    // Ugly hack to get around a number of conflicts
+    if (tags.highway == 'yes') tags.highway = 'road';
 
     // Remove a default
     if (tags.highway == 'road' && tags['ref:road:class'] == 'local') delete tags['ref:road:class'];
