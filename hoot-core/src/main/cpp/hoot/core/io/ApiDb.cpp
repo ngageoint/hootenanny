@@ -88,15 +88,15 @@ ApiDb::~ApiDb()
 
 void ApiDb::_resetQueries()
 {
-  if (_selectUserByEmail != 0)
+  if (_selectUserByEmail != nullptr)
   {
     _selectUserByEmail.reset();
   }
-  if (_insertUser != 0)
+  if (_insertUser != nullptr)
   {
     _insertUser.reset();
   }
-  if (_selectNodeIdsForWay != 0)
+  if (_selectNodeIdsForWay != nullptr)
   {
     _selectNodeIdsForWay.reset();
   }
@@ -229,7 +229,7 @@ void ApiDb::rollback()
 long ApiDb::getUserIdByName(const QString& userName)
 {
   LOG_VART(userName);
-  if (_getUserIdByName == 0)
+  if (_getUserIdByName == nullptr)
   {
     _getUserIdByName.reset(new QSqlQuery(_db));
     _getUserIdByName->prepare(
@@ -268,7 +268,7 @@ long ApiDb::getUserIdByName(const QString& userName)
 QString ApiDb::getUserNameById(const long userId)
 {
   LOG_VART(userId);
-  if (_getUserNameById == 0)
+  if (_getUserNameById == nullptr)
   {
     _getUserNameById.reset(new QSqlQuery(_db));
     _getUserNameById->prepare(
@@ -308,7 +308,7 @@ bool ApiDb::userExists(const QString& userName)
 bool ApiDb::userExists(const long id)
 {
   LOG_VART(id);
-  if (_userExists == 0)
+  if (_userExists == nullptr)
   {
     _userExists.reset(new QSqlQuery(_db));
     _userExists->prepare("SELECT id FROM " + ApiDb::getUsersTableName() + " WHERE id = :id");
@@ -344,7 +344,7 @@ bool ApiDb::userExists(const long id)
 
 long ApiDb::getUserId(const QString& email, bool throwWhenMissing)
 {
-  if (_selectUserByEmail == 0)
+  if (_selectUserByEmail == nullptr)
   {
     _selectUserByEmail.reset(new QSqlQuery(_db));
     _selectUserByEmail->prepare(
@@ -386,7 +386,7 @@ long ApiDb::insertUser(const QString& email, const QString& displayName)
 
   long id = -1;
 
-  if (_insertUser == 0)
+  if (_insertUser == nullptr)
   {
     _insertUser.reset(new QSqlQuery(_db));
     _insertUser->prepare("INSERT INTO " + ApiDb::getUsersTableName() + " (email, display_name) "

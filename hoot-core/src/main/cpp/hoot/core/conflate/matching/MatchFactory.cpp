@@ -69,7 +69,7 @@ MatchPtr MatchFactory::createMatch(const ConstOsmMapPtr& map, ElementId eid1, El
     }
   }
 
-  return 0;
+  return nullptr;
 }
 
 void MatchFactory::createMatches(const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& matches,
@@ -99,7 +99,7 @@ void MatchFactory::_checkMatchCreatorBoundable(
   if (bounds.get())
   {
     std::shared_ptr<Boundable> boundable = std::dynamic_pointer_cast<Boundable>(matchCreator);
-    if (boundable == 0)
+    if (boundable == nullptr)
     {
       throw HootException("One or more match creators is not boundable and cannot be used with "
                           "boundable match operations.");

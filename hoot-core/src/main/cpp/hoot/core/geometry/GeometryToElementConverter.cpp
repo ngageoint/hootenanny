@@ -243,7 +243,7 @@ void GeometryToElementConverter::convertPolygonToRelation(
   double circularError)
 {
   WayPtr outer = convertLineStringToWay(polygon->getExteriorRing(), map, s, circularError);
-  if (outer != NULL)
+  if (outer != nullptr)
   {
     r->addElement(MetadataTags::RoleOuter(), outer);
     for (size_t i = 0; i < polygon->getNumInteriorRing(); i++)
@@ -257,7 +257,7 @@ void GeometryToElementConverter::convertPolygonToRelation(
 NodePtr GeometryToElementConverter::_createNode(const OsmMapPtr& map, const Coordinate& c,
   Status s, double circularError)
 {
-  if (_nf == 0)
+  if (_nf == nullptr)
   {
     NodePtr n = NodePtr(new Node(s, map->createNextNodeId(), c, circularError));
     map->addNode(n);

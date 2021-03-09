@@ -68,7 +68,7 @@ inline void toCpp(v8::Handle<v8::Value> v, IdGeneratorPtr& idGen)
   }
 
   v8::Handle<v8::Object> obj = v8::Handle<v8::Object>::Cast(v);
-  IdGeneratorJs* js = 0;
+  IdGeneratorJs* js = nullptr;
   js = node::ObjectWrap::Unwrap<IdGeneratorJs>(obj);
   if (js)
   {

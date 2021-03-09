@@ -417,7 +417,7 @@ bool MapProjector::_evaluateProjection(const OGREnvelope& env,
 
   std::shared_ptr<OGRCoordinateTransformation> t(
     OGRCreateCoordinateTransformation(wgs84.get(), srs.get()));
-  if (t.get() == 0)
+  if (t.get() == nullptr)
   {
     return false;
   }
@@ -511,7 +511,7 @@ Coordinate MapProjector::project(const Coordinate& c,
 {
   OGRCoordinateTransformation* t(OGRCreateCoordinateTransformation(srs1.get(), srs2.get()));
 
-  if (t == 0)
+  if (t == nullptr)
   {
     throw HootException(QString("Error creating transformation object: ") + CPLGetLastErrorMsg());
   }
@@ -536,7 +536,7 @@ void MapProjector::project(const std::shared_ptr<OsmMap>& map,
   std::shared_ptr<OGRSpatialReference> sourceSrs = map->getProjection();
   OGRCoordinateTransformation* t(OGRCreateCoordinateTransformation(sourceSrs.get(), ref.get()));
 
-  if (t == 0)
+  if (t == nullptr)
   {
     throw HootException(QString("Error creating transformation object: ") + CPLGetLastErrorMsg());
   }
@@ -591,7 +591,7 @@ void MapProjector::project(const std::shared_ptr<Geometry>& g,
 {
   OGRCoordinateTransformation* t(OGRCreateCoordinateTransformation(srs1.get(), srs2.get()));
 
-  if (t == 0)
+  if (t == nullptr)
   {
     throw HootException(QString("Error creating transformation object: ") + CPLGetLastErrorMsg());
   }
@@ -678,7 +678,7 @@ bool MapProjector::_scoreLessThan(const MapProjector::PlanarTestResult& p1,
 
 QString MapProjector::toWkt(OGRSpatialReference* srs)
 {
-  char* wkt = 0;
+  char* wkt = nullptr;
   srs->exportToWkt(&wkt);
   QString result = QString::fromUtf8(wkt);
   OGRFree(wkt);

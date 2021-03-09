@@ -85,7 +85,7 @@ inline void toCpp(v8::Handle<v8::Value> v, ElementId& eid)
   v8::Handle<v8::Object> obj = v8::Handle<v8::Object>::Cast(v);
 
   QString className = str(obj->Get(PopulateConsumersJs::baseClass()));
-  ElementIdJs* eidj = 0;
+  ElementIdJs* eidj = nullptr;
   if (obj->InternalFieldCount() >= 1 && className == ElementId::className())
   {
     eidj = node::ObjectWrap::Unwrap<ElementIdJs>(obj);

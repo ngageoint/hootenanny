@@ -55,7 +55,7 @@ public:
     XmlObject n;
     n.first = "node";
     n.second = attributes;
-    ChangesetNode node(n, NULL);
+    ChangesetNode node(n, nullptr);
 
     HOOT_STR_EQUALS("\t\t<node id=\"-1\" version=\"0\" "
                     "lat=\"38.8549321261880536\" lon=\"-104.8979050333482093\" changeset=\"1\"/>\n",
@@ -86,7 +86,7 @@ public:
     XmlObject n;
     n.first = "node";
     n.second = attributes;
-    ChangesetNode node(n, NULL);
+    ChangesetNode node(n, nullptr);
     //  Name tags taken from OSM node in Djibouti
     QXmlStreamAttributes tagAttributesAr;
     tagAttributesAr.append("k", "name:ar");
@@ -128,7 +128,7 @@ public:
     XmlObject w;
     w.first = "way";
     w.second = attributes;
-    ChangesetWay way(w, NULL);
+    ChangesetWay way(w, nullptr);
 
     HOOT_STR_EQUALS("\t\t<way id=\"-1\" version=\"0\" timestamp=\"\" changeset=\"1\">\n\t\t</way>\n",
                     way.toString(1, ChangesetType::TypeCreate));
@@ -167,7 +167,7 @@ public:
     XmlObject w;
     w.first = "relation";
     w.second = attributes;
-    ChangesetRelation relation(w, NULL);
+    ChangesetRelation relation(w, nullptr);
 
     HOOT_STR_EQUALS("\t\t<relation id=\"-1\" version=\"0\" timestamp=\"\" changeset=\"1\">\n\t\t</relation>\n",
                     relation.toString(1, ChangesetType::TypeCreate));
@@ -208,7 +208,7 @@ public:
     XmlObject n;
     n.first = "node";
     n.second = attributes;
-    ChangesetNode node(n, NULL);
+    ChangesetNode node(n, nullptr);
 
     //  There are max-9 Xs quoted, when HTML encoded the second '&quot;' runs over the max length mark
     //  and is truncated mid-encoding. ChangesetElement::toTagString() fixes that and truncates before

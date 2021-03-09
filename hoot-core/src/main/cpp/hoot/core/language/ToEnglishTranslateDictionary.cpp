@@ -59,7 +59,7 @@ _transliterationCachingEnabled(false)
   UErrorCode error = U_ZERO_ERROR;
 
   _titler.reset(Transliterator::createInstance("Any-Title", UTRANS_FORWARD, error));
-  if (_titler == NULL || error != U_ZERO_ERROR)
+  if (_titler == nullptr || error != U_ZERO_ERROR)
   {
     LOG_ERROR("transliterator error code: " << error);
     throw HootException("transliterator error");
@@ -67,7 +67,7 @@ _transliterationCachingEnabled(false)
 
   _transliterator.reset(
     Transliterator::createInstance("Any-Latin; Latin-ASCII", UTRANS_FORWARD, error));
-  if (_transliterator == NULL || error != U_ZERO_ERROR)
+  if (_transliterator == nullptr || error != U_ZERO_ERROR)
   {
     LOG_ERROR("transliterator error code: " << error);
     throw HootException("transliterator error");

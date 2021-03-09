@@ -110,7 +110,7 @@ public:
 
   QRegExp getNameFilter();
 
-  bool isOpen() const { return _dataSource != NULL; }
+  bool isOpen() const { return _dataSource != nullptr; }
 
   /**
    * Reads all the features into the given map.
@@ -287,7 +287,7 @@ OgrReader::~OgrReader()
 
 void OgrReader::setProgress(Progress progress)
 {
-  if (_d == 0)
+  if (_d == nullptr)
   {
     throw IllegalArgumentException(
       "Internal reader must be initialized before setting progress on OgrReader.");
@@ -513,8 +513,8 @@ OgrReaderInternal::OgrReaderInternal()
   _nodesItr = _map->getNodes().begin();
   _waysItr =  _map->getWays().begin();
   _relationsItr = _map->getRelations().begin();
-  _layer = NULL;
-  _transform = NULL;
+  _layer = nullptr;
+  _transform = nullptr;
   _status = Status::Invalid;
   _defaultCircularError = ConfigOptions().getCircularErrorDefaultValue();
   _circularErrorTagKeys = ConfigOptions().getCircularErrorTagKeys();
@@ -528,7 +528,7 @@ OgrReaderInternal::~OgrReaderInternal()
 {
   close();
 
-  if (_transform != NULL)
+  if (_transform != nullptr)
   {
     OGRCoordinateTransformation::DestroyCT(_transform);
   }
@@ -755,7 +755,7 @@ void OgrReaderInternal::_addPolygon(OGRPolygon* p, Tags& t)
   if (p->getNumInteriorRings() == 0)
   {
     OGRLinearRing* exteriorRing = p->getExteriorRing();
-    if (exteriorRing != 0)
+    if (exteriorRing != nullptr)
     {
       WayPtr outer = _createWay(p->getExteriorRing(), circularError);
       if (areaCrit.isSatisfied(t, ElementType::Way) == false)
@@ -823,14 +823,14 @@ void OgrReaderInternal::close()
 
   _useFileId = false;
 
-  if (_dataSource != NULL)
+  if (_dataSource != nullptr)
   {
-    if (_layer != NULL)
+    if (_layer != nullptr)
     {
       _layer->Dereference();
     }
     _dataSource.reset();
-    _layer = NULL;
+    _layer = nullptr;
     _pendingLayers.clear();
   }
 }
@@ -943,12 +943,12 @@ std::shared_ptr<Envelope> OgrReaderInternal::getBoundingBoxFromConfig(
 
 void OgrReaderInternal::_initTranslate()
 {
-  if (_translatePath != "" && _translator.get() == 0)
+  if (_translatePath != "" && _translator.get() == nullptr)
   {
     // Nice and short. Taken from TranslatedTagDifferencer
     _translator.reset(ScriptSchemaTranslatorFactory::getInstance().createTranslator(_translatePath));
 
-    if (_translator.get() == 0)
+    if (_translator.get() == nullptr)
     {
       throw HootException("Unable to find a valid translation format for: " + _translatePath);
     }
@@ -986,7 +986,7 @@ void OgrReaderInternal::_openLayer(const QString& path, const QString& layer)
     _layer = _dataSource->GetLayerByName(layer.toUtf8());
   }
 
-  if (_layer == NULL)
+  if (_layer == nullptr)
   {
     throw HootException("Failed to identify source layer from data source.");
   }
@@ -999,7 +999,7 @@ void OgrReaderInternal::_openLayer(const QString& path, const QString& layer)
     sourceSrs = _fixProjection(sourceSrs);
   }
 
-  if (sourceSrs.get() != 0 && sourceSrs->IsProjected())
+  if (sourceSrs.get() != nullptr && sourceSrs->IsProjected())
   {
     LOG_DEBUG("Input SRS: " << _toWkt(sourceSrs.get()));
     _wgs84.reset(new OGRSpatialReference());
@@ -1010,7 +1010,7 @@ void OgrReaderInternal::_openLayer(const QString& path, const QString& layer)
 
     _transform = OGRCreateCoordinateTransformation(sourceSrs.get(), _wgs84.get());
 
-    if (_transform == 0)
+    if (_transform == nullptr)
     {
       throw HootException(QString("Error creating transformation object: ") + CPLGetLastErrorMsg());
     }
@@ -1030,7 +1030,7 @@ void OgrReaderInternal::_openLayer(const QString& path, const QString& layer)
 
 void OgrReaderInternal::_openNextLayer()
 {
-  _layer = NULL;
+  _layer = nullptr;
 
   if (_pendingLayers.isEmpty() == false)
   {
@@ -1087,7 +1087,7 @@ void OgrReaderInternal::read(const OsmMapPtr& map)
 
   _openNextLayer();
 
-  if (_layer == NULL)
+  if (_layer == nullptr)
   {
     throw HootException("Error reading from input. No valid layers. Did you forget to set the "
       "layer name?");
@@ -1097,11 +1097,11 @@ void OgrReaderInternal::read(const OsmMapPtr& map)
 
   const int statusUpdateInterval = ConfigOptions().getTaskStatusUpdateInterval();
   OGRFeature* f;
-  while ((f = _layer->GetNextFeature()) != NULL && (_limit == -1 || _count < _limit))
+  while ((f = _layer->GetNextFeature()) != nullptr && (_limit == -1 || _count < _limit))
   {
     _addFeature(f);
     OGRFeature::DestroyFeature(f);
-    f = 0;
+    f = nullptr;
 
     _count++;
     if (_count % (statusUpdateInterval * 10) == 0)
@@ -1129,14 +1129,14 @@ void OgrReaderInternal::readNext(const OsmMapPtr& map)
   while (!done)
   {
     // if the current layer is empty
-    if (_layer == NULL)
+    if (_layer == nullptr)
     {
       // open the next layer
       _openNextLayer();
     }
 
     // if there are no more layers
-    if (_layer == NULL)
+    if (_layer == nullptr)
     {
       // we're done
       done = true;
@@ -1147,7 +1147,7 @@ void OgrReaderInternal::readNext(const OsmMapPtr& map)
       // read the next feature
       OGRFeature* f = _layer->GetNextFeature();
       // if there was a "next" feature
-      if (f != NULL)
+      if (f != nullptr)
       {
         // add the feature
         _addFeature(f);
@@ -1159,7 +1159,7 @@ void OgrReaderInternal::readNext(const OsmMapPtr& map)
       else
       {
         // this layer is now empty set it to null so we'll load the next layer
-        _layer = NULL;
+        _layer = nullptr;
       }
     }
   }
@@ -1167,7 +1167,7 @@ void OgrReaderInternal::readNext(const OsmMapPtr& map)
 
 void OgrReaderInternal::_reproject(double& x, double& y)
 {
-  if (_transform != NULL)
+  if (_transform != nullptr)
   {
     double inx = x;
     double iny = y;
@@ -1194,7 +1194,7 @@ const QString& OgrReaderInternal::_saveMemory(const QString& s)
 
 void OgrReaderInternal::_translate(Tags& t)
 {
-  if (_translator.get() != 0)
+  if (_translator.get() != nullptr)
   {
     QByteArray geomType;
 

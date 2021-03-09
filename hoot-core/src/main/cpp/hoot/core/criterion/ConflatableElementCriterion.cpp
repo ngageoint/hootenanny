@@ -83,7 +83,7 @@ void ConflatableElementCriterion::_createConflatableCriteria()
        itr != criterionClassNames.end(); ++itr)
   {
     ElementCriterionPtr crit(Factory::getInstance().constructObject<ElementCriterion>(*itr));
-    if (std::dynamic_pointer_cast<ConflatableElementCriterion>(crit) != 0)
+    if (std::dynamic_pointer_cast<ConflatableElementCriterion>(crit) != nullptr)
     {
       _conflatableCriteria[*itr] = crit;
     }
@@ -108,7 +108,7 @@ QStringList ConflatableElementCriterion::getConflatableCriteriaForElement(
     ElementCriterionPtr crit = itr.value();
 
     ConstOsmMapConsumer* mapConsumer = dynamic_cast<ConstOsmMapConsumer*>(crit.get());
-    if (mapConsumer != 0)
+    if (mapConsumer != nullptr)
     {
       mapConsumer->setOsmMap(map.get());
     }

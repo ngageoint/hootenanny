@@ -177,7 +177,7 @@ void OgrWriter::_addFeature(OGRLayer* layer, const std::shared_ptr<Feature>& f,
 
   // convert the geometry.
   std::shared_ptr<GeometryCollection> gc = std::dynamic_pointer_cast<GeometryCollection>(g);
-  if (gc.get() != 0)
+  if (gc.get() != nullptr)
   {
     for (size_t i = 0; i < gc->getNumGeometries(); i++)
     {
@@ -299,7 +299,7 @@ void OgrWriter::_createLayer(const std::shared_ptr<const Layer>& layer)
   poLayer = _ds->GetLayerByName(layerName.toStdString().c_str());
 
   // We only want to add to a layer IFF the config option "ogr.append.data" set
-  if (poLayer != NULL && _appendData)
+  if (poLayer != nullptr && _appendData)
   {
     // Layer exists
     _layers[layer->getName()] = poLayer;
@@ -334,7 +334,7 @@ void OgrWriter::_createLayer(const std::shared_ptr<const Layer>& layer)
     poLayer = _ds->CreateLayer(layerName.toLatin1(), projection.get(),
                   gtype, options.getCrypticOptions());
 
-    if (poLayer == NULL)
+    if (poLayer == nullptr)
     {
       throw HootException(QString("Layer creation failed. %1").arg(layerName));
     }
@@ -379,7 +379,7 @@ OGRLayer* OgrWriter::_getLayer(const QString& layerName)
     if (!_schema->hasLayer(layerName))
     {
       strictError("Layer specified is not part of the schema. (" + layerName + ")");
-      return 0;
+      return nullptr;
     }
     else
     {
@@ -406,7 +406,7 @@ void OgrWriter::initTranslator()
     throw HootException("A script path must be set before the output data source is opened.");
   }
 
-  if (_translator == 0)
+  if (_translator == nullptr)
   {
     // Great bit of code taken from TranslatedTagDifferencer.cpp
     std::shared_ptr<ScriptSchemaTranslator> st(
@@ -590,7 +590,7 @@ void OgrWriter::write(const ConstOsmMapPtr& map)
           std::shared_ptr<Geometry> &g, // output
           std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature> &tf) // output
 {
-  if (_translator.get() == 0)
+  if (_translator.get() == nullptr)
   {
     throw HootException("You must call open before attempting to write.");
   }
@@ -643,7 +643,7 @@ void OgrWriter::writeTranslatedFeature(
   {
     LOG_TRACE("Writing feature " + QString::number(i) + "  to " + QString(tf[i].tableName));
     OGRLayer* layer = _getLayer(tf[i].tableName);
-    if (layer != 0)
+    if (layer != nullptr)
     {
       _addFeature(layer, tf[i].feature, g);
     }

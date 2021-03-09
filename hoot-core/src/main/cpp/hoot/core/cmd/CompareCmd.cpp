@@ -79,7 +79,7 @@ public:
 
     int aic, aim;
     MapCompareUtils::getAttributeComparisonFinalScores(map1, outMap, aim, aic, 600);
-    if (map2 != 0)
+    if (map2 != nullptr)
     {
       int aic2, aim2;
       MapCompareUtils::getAttributeComparisonFinalScores(map2, outMap, aim2, aic2, 600);
@@ -93,7 +93,7 @@ public:
 
     double rMean = 0.0;
     MapCompareUtils::getRasterComparisonRawScores(map1, outMap, rMean);
-    if (map2 != 0)
+    if (map2 != nullptr)
     {
       double rMean2 = 0.0;
       MapCompareUtils::getRasterComparisonRawScores(map2, outMap, rMean2);
@@ -107,7 +107,7 @@ public:
     double gMean = 0.0;
     double gConfidence = 0.0;
     MapCompareUtils::getGraphComparisonRawScores(map1, outMap, gMean, gConfidence);
-    if (map2 != 0)
+    if (map2 != nullptr)
     {
       double gMean2 = 0.0;
       double gConfidence2 = 0.0;

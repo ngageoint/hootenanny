@@ -122,7 +122,7 @@ public:
       cout  << "  " << failure.sourceLine().fileName() << "(" <<
         failure.sourceLine().lineNumber() << ") ";
       CppUnit::Exception* e = failure.thrownException();
-      if (e != NULL && QString::fromStdString(e->message().details()).trimmed() != "")
+      if (e != nullptr && QString::fromStdString(e->message().details()).trimmed() != "")
       {
         cout << "  " << e->message().details();
       }
@@ -287,7 +287,7 @@ CppUnit::Test* findTest(CppUnit::Test* t, std::string name)
     }
   }
 
-  return NULL;
+  return nullptr;
 }
 
 CppUnit::Test* findTest(std::vector<TestPtr> vTests, std::string name)
@@ -316,7 +316,7 @@ CppUnit::Test* findTest(std::vector<TestPtr> vTests, std::string name)
     }
   }
 
-  return NULL;
+  return nullptr;
 }
 
 void getNames(vector<string>& names, CppUnit::Test* t)
@@ -647,7 +647,7 @@ int main(int argc, char* argv[])
       Log::getInstance().setLevel(Log::Info);
       populateTests(ALL, vAllTests, printDiff, suppressFailureDetail, true);
       CppUnit::Test* t = findTest(vAllTests, testName.toStdString());
-      if (t == NULL)
+      if (t == nullptr)
       {
         cout << "Could not find the specified test: " << testName.toStdString() << endl;
         return -1;

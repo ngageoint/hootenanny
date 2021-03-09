@@ -142,7 +142,7 @@ int64_t AddHilbertReviewSortOrderOp::_calculateHilbertValue(
     {
       std::unique_ptr<Envelope> te(element->getEnvelope(map));
       LOG_VART(env.get());
-      if (env.get() == 0)
+      if (env.get() == nullptr)
       {
         env.reset(new Envelope(*te));
       }
@@ -158,7 +158,7 @@ int64_t AddHilbertReviewSortOrderOp::_calculateHilbertValue(
   }
   LOG_VART(env->toString());
 
-  if (_mapEnvelope.get() == 0)
+  if (_mapEnvelope.get() == nullptr)
   {
     _mapEnvelope.reset(new Envelope(CalculateMapBoundsVisitor::getGeosBounds(map)));
   }

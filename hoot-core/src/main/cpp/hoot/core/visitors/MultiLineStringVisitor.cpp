@@ -47,13 +47,13 @@ HOOT_FACTORY_REGISTER(ElementVisitor, MultiLineStringVisitor)
 
 MultiLineStringVisitor::MultiLineStringVisitor() :
 _provider(),
-_ls(0)
+_ls(nullptr)
 {
 }
 
 MultiLineString* MultiLineStringVisitor::createMultiLineString()
 {
-  if (_ls != 0)
+  if (_ls != nullptr)
   {
     return GeometryFactory::getDefaultInstance()->createMultiLineString(_ls);
   }
@@ -86,7 +86,7 @@ void MultiLineStringVisitor::visit(const ConstWayPtr& w)
 
   if (w->getNodeCount() >= 2)
   {
-    if (_ls == 0)
+    if (_ls == nullptr)
     {
       _ls = new vector<Geometry*>();
     }
