@@ -796,7 +796,7 @@ FaceIterator::FaceIterator(const FaceIterator& from)
   _f = new Face(*_it);
 }
 
-FaceIterator::FaceIterator(EdgeIterator it, EdgeIterator end)
+FaceIterator::FaceIterator(EdgeIterator it, const EdgeIterator& end)
   : _f(new Face(*it)),
     _it(it),
     _end(end),

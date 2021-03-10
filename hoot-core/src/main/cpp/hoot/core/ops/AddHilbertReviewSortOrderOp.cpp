@@ -132,7 +132,7 @@ void AddHilbertReviewSortOrderOp::apply(OsmMapPtr& map)
 }
 
 int64_t AddHilbertReviewSortOrderOp::_calculateHilbertValue(
-  const ConstOsmMapPtr& map, const set<ElementId> eids)
+  const ConstOsmMapPtr& map, const std::set<ElementId>& eids)
 {
   std::shared_ptr<Envelope> env;
   for (set<ElementId>::const_iterator it = eids.begin(); it != eids.end(); ++it)

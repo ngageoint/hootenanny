@@ -31,10 +31,10 @@
 #include <geos/geom/Envelope.h>
 
 // hoot
-#include <hoot/core/util/Units.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/OpenCv.h>
+#include <hoot/core/util/Units.h>
 
 // Qt
 #include <QString>
@@ -128,7 +128,7 @@ private:
 
   void _configure();
 
-  cv::Mat _calculatePermuteGrid(geos::geom::Envelope env, int& rows, int& cols);
+  cv::Mat _calculatePermuteGrid(const geos::geom::Envelope& env, int& rows, int& cols);
 };
 
 }

@@ -35,9 +35,9 @@ using namespace std;
 #include <QtCore/QStringBuilder>
 
 // hoot
-#include <hoot/core/util/Log.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/HootException.h>
+#include <hoot/core/util/Log.h>
 
 namespace hoot
 {

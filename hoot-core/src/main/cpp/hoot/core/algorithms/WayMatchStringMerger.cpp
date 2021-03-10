@@ -92,8 +92,9 @@ WaySublineMatchStringPtr WayMatchStringMerger::createMatchString() const
   return result;
 }
 
-void WayMatchStringMerger::_createWayMappings(WayLocation splitStart, WayLocation splitEnd,
-  WaySubline subline2)
+void WayMatchStringMerger::_createWayMappings(const WayLocation& splitStart,
+                                              const WayLocation& splitEnd,
+                                              const WaySubline& subline2)
 {
   LOG_TRACE("Creating way mappings...");
 
@@ -286,7 +287,7 @@ void WayMatchStringMerger::mergeTags()
   }
 }
 
-void WayMatchStringMerger::_moveNode(ElementId scrapNodeId, WayLocation wl1)
+void WayMatchStringMerger::_moveNode(ElementId scrapNodeId, const WayLocation& wl1)
 {
   LOG_TRACE("Moving node...");
 
