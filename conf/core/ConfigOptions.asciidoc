@@ -420,6 +420,20 @@ Example Usage:
 hoot convert -D bounds="106.851,-6.160,107.052,-5.913" input.osm output.osm
 ----
 
+=== bounds.input.file
+
+* Data Type: string
+* Default Value: ``
+
+A complete file path that contains the bounds of to be used.  The bounds will be the min/max lat/lon
+for the entire file.
+
+Example Usage:
+
+---
+hoot convert -D bounds.input.file="$HOOT_HOME/test-files/ToyTestA.osm" input.osm output.osm
+---
+
 === bounds.hoot.api.database
 
 * Data Type: string

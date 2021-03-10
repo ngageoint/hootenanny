@@ -279,6 +279,14 @@ public:
    */
   static QMap<int, geos::geom::Envelope> readBoundsFileWithIds(const QString& input);
 
+  /**
+   * Reads a file and returns the bounds of the nodes within the file
+   *
+   * @param input path to the file
+   * @return an envelope representing the bounds of the file
+   */
+  static std::shared_ptr<geos::geom::Geometry> readBoundsFromFile(const QString& input);
+
 };
 
 }
