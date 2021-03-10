@@ -163,6 +163,9 @@ then
     # the inputs.
   
     HOOT_ATTRIBUTE_TRANSFER_OPTS=" -C AttributeConflation.conf -C ${ALGORITHM_CONF}"
+    # conflate ops we don't need
+    HOOT_ATTRIBUTE_TRANSFER_OPTS+=" -D conflate.post.ops-=hoot::RoadCrossingPolyReviewMarker"
+    HOOT_ATTRIBUTE_TRANSFER_OPTS+=" -D conflate.post.ops-=hoot::AddHilbertReviewSortOrderOp"
     HOOT_ATTRIBUTE_TRANSFER_OPTS+=$AOI_OPTS
     
     if [ $PARALLEL == "no" ]
@@ -217,8 +220,6 @@ CONFLATION_CONF=ReferenceConflation.conf
 HOOT_CONFLATE_OPTS="-C ${ALGORITHM_CONF} -C ${CONFLATION_CONF}"
 
 # conflate ops we don't need
-HOOT_CONFLATE_OPTS+=" -D conflate.pre.ops-=hoot::RemoveRoundabouts"
-HOOT_CONFLATE_OPTS+=" -D conflate.post.ops-=hoot::ReplaceRoundabouts"
 HOOT_CONFLATE_OPTS+=" -D conflate.post.ops-=hoot::RoadCrossingPolyReviewMarker"
 HOOT_CONFLATE_OPTS+=" -D conflate.post.ops-=hoot::AddHilbertReviewSortOrderOp"
 
