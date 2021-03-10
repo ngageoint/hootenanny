@@ -137,21 +137,21 @@ QList<Address> AddressParser::parseAddresses(const Element& element,
   // class's init when its a mem var on another class, since this init is expensive.
   LibPostalInit::getInstance();
 
-  LOG_VART(element.getElementId());
+  LOG_VARD(element.getElementId());
   QList<Address> addresses;
 
   QString houseNum;
   QString street;
   const QSet<QString> parsedAddresses = _parseAddresses(element, houseNum, street);
-  LOG_TRACE("Parsed " << parsedAddresses.size() << " addresses for " << element.getElementId());
-  LOG_VART(parsedAddresses);
+  LOG_DEBUG("Parsed " << parsedAddresses.size() << " addresses for " << element.getElementId());
+  LOG_VARD(parsedAddresses);
 
   // add the parsed addresses to a collection in which they will later be compared to each other
   for (QSet<QString>::const_iterator parsedAddressItr = parsedAddresses.begin();
        parsedAddressItr != parsedAddresses.end(); ++parsedAddressItr)
   {
     QString parsedAddress = *parsedAddressItr;
-    LOG_VART(parsedAddress);
+    LOG_VARD(parsedAddress);
 
     // optional additional lang pre-normalization translation
     if (_preTranslateTagValuesToEnglish)
@@ -168,26 +168,26 @@ QList<Address> AddressParser::parseAddresses(const Element& element,
         parsedAddress = houseNum + " " + street;
       }
     }
-    LOG_VART(parsedAddress);
+    LOG_VARD(parsedAddress);
 
     if (normalizeAddresses)
     {
       // normalize and translate the address strings, so we end up comparing apples to apples
       const QSet<QString> normalizedAddresses = _addressNormalizer.normalizeAddress(parsedAddress);
-      LOG_VART(normalizedAddresses);
+      LOG_VARD(normalizedAddresses);
 
       for (QSet<QString>::const_iterator normalizedAddressItr = normalizedAddresses.begin();
            normalizedAddressItr != normalizedAddresses.end(); ++normalizedAddressItr)
       {
         const QString normalizedAddress = *normalizedAddressItr;
-        LOG_VART(normalizedAddress);
+        LOG_VARD(normalizedAddress);
         Address address(normalizedAddress, _allowLenientHouseNumberMatching);
         address.setParsedFromAddressTag(_parsedFromAddressTag);
         address.setIsRange(_isHouseNumRange);
         address.setIsSubLetter(_isSubLetter);
         if (!addresses.contains(address))
         {
-          LOG_TRACE("Adding address: " << address << " for element: " << element.getElementId());
+          LOG_DEBUG("Adding address: " << address << " for element: " << element.getElementId());
           addresses.append(address);
         }
       }
@@ -200,7 +200,7 @@ QList<Address> AddressParser::parseAddresses(const Element& element,
       address.setIsSubLetter(_isSubLetter);
       if (!addresses.contains(address))
       {
-        LOG_TRACE("Adding address: " << address << " for element: " << element.getElementId());
+        LOG_DEBUG("Adding address: " << address << " for element: " << element.getElementId());
         addresses.append(address);
       }
     }
@@ -213,7 +213,7 @@ QList<Address> AddressParser::parseAddressesFromWayNodes(const Way& way, const O
                                                          const ElementId& skipElementId) const
 {
   QList<Address> addresses;
-  LOG_TRACE("Collecting addresses from way nodes...");
+  LOG_DEBUG("Collecting addresses from way nodes...");
   const std::vector<long> wayNodeIds = way.getNodeIds();
   for (size_t i = 0; i < wayNodeIds.size(); i++)
   {
@@ -232,7 +232,7 @@ QList<Address> AddressParser::parseAddressesFromRelationMembers(const Relation& 
                                                                 const ElementId& skipElementId) const
 {
   QList<Address> addresses;
-  LOG_TRACE("Collecting addresses from relation members...");
+  LOG_DEBUG("Collecting addresses from relation members...");
   const std::vector<RelationData::Entry> relationMembers = relation.getMembers();
   for (size_t i = 0; i < relationMembers.size(); i++)
   {
@@ -275,18 +275,18 @@ QSet<QString> AddressParser::_parseAddressAsRange(const QString& houseNum,
   {
     bool startHouseNumParsedOk = false;
     const int startHouseNum = houseNumParts[0].toInt(&startHouseNumParsedOk);
-    LOG_VART(startHouseNum);
+    LOG_VARD(startHouseNum);
     if (startHouseNumParsedOk)
     {
       bool endHouseNumParsedOk = false;
       const int endHouseNum = houseNumParts[1].toInt(&endHouseNumParsedOk);
-      LOG_VART(endHouseNum);
+      LOG_VARD(endHouseNum);
       if (endHouseNumParsedOk && startHouseNum < endHouseNum)
       {
         for (int i = startHouseNum; i < endHouseNum + 1; i++)
         {
           const QString parsedAddress = QString::number(i) + " " + street;
-          LOG_TRACE("Parsed address as range: " << parsedAddress);
+          LOG_DEBUG("Parsed address as range: " << parsedAddress);
           parsedAddresses.insert(parsedAddress);
         }
       }
@@ -300,17 +300,17 @@ bool AddressParser::_isParseableAddressFromComponents(const Tags& tags, QString&
 {
   // we only require a valid street address...no other higher order parts, like city, state, etc.
   houseNum = _addressNormalizer.getAddressTagKeys()->getAddressTagValue(tags, "house_number");
-  LOG_VART(houseNum);
+  LOG_VARD(houseNum);
   street = _addressNormalizer.getAddressTagKeys()->getAddressTagValue(tags, "street").toLower();
-  LOG_VART(street);
+  LOG_VARD(street);
   if (!houseNum.isEmpty() && !street.isEmpty())
   {
-    LOG_TRACE("Found address from components: " << houseNum << ", " << street << ".");
+    LOG_DEBUG("Found address from components: " << houseNum << ", " << street << ".");
     return true;
   }
   else
   {
-    LOG_TRACE("No parseable address present.");
+    LOG_DEBUG("No parseable address present.");
     return false;
   }
 }
@@ -328,7 +328,11 @@ bool AddressParser::_isSubLetterAddress(const QString& houseNum) const
 bool AddressParser::_isValidAddressStr(QString& address, QString& houseNum, QString& street,
                                        const bool requireStreetTypeInIntersection) const
 {
-  LOG_VART(address);
+  if (address.trimmed().isEmpty())
+  {
+    return false;
+  }
+  LOG_VARD(address);
 
   // use libpostal to break down the address string
   libpostal_address_parser_response_t* parsed =
@@ -347,9 +351,9 @@ bool AddressParser::_isValidAddressStr(QString& address, QString& houseNum, QStr
   for (size_t i = 0; i < parsed->num_components; i++)
   {
     const QString label = parsed->labels[i];
-    LOG_VART(label);
+    LOG_VARD(label);
     const QString component = QString::fromUtf8((const char*)parsed->components[i]);
-    LOG_VART(component);
+    LOG_VARD(component);
     // we only care about the street address
     if (label == "house_number")
     {
@@ -362,18 +366,18 @@ bool AddressParser::_isValidAddressStr(QString& address, QString& houseNum, QStr
   }
   libpostal_address_parser_response_destroy(parsed);
 
-  LOG_VART(street);
-  LOG_VART(houseNum);
-  LOG_VART(requireStreetTypeInIntersection);
-  LOG_VART(Address::isStreetIntersectionAddress(street, requireStreetTypeInIntersection));
-  LOG_VART(Address::isStreetIntersectionAddress(address, requireStreetTypeInIntersection));
+  LOG_VARD(street);
+  LOG_VARD(houseNum);
+  LOG_VARD(requireStreetTypeInIntersection);
+  LOG_VARD(Address::isStreetIntersectionAddress(street, requireStreetTypeInIntersection));
+  LOG_VARD(Address::isStreetIntersectionAddress(address, requireStreetTypeInIntersection));
 
   // street address with house number
   if (!houseNum.isEmpty() && !street.isEmpty())
   {
     address = houseNum + " " + street;
     address = address.trimmed();
-    LOG_TRACE("Found address: " << address);
+    LOG_DEBUG("Found address: " << address);
     return true;
   }
   // intersections won't have numbers
@@ -382,7 +386,7 @@ bool AddressParser::_isValidAddressStr(QString& address, QString& houseNum, QStr
   {
     address = street;
     address = address.trimmed();
-    LOG_TRACE("Found intersection address: " << address);
+    LOG_DEBUG("Found intersection address: " << address);
     return true;
   }
   // if libpostal didn't pull out a street, then let's see if the string passed in is an
@@ -390,7 +394,7 @@ bool AddressParser::_isValidAddressStr(QString& address, QString& houseNum, QStr
   else if (Address::isStreetIntersectionAddress(address, requireStreetTypeInIntersection))
   {
     address = address.trimmed();
-    LOG_TRACE("Found intersection address: " << address);
+    LOG_DEBUG("Found intersection address: " << address);
     return true;
   }
   else
@@ -417,7 +421,7 @@ QString AddressParser::_parseFullAddress(const QString& fullAddress, QString& ho
     msg += " invalid";
   }
   msg += " address: " + parsedAddress + " from full address: " + fullAddress;
-  LOG_TRACE(msg);
+  LOG_DEBUG(msg);
 
   if (validAddress)
   {
@@ -429,7 +433,7 @@ QString AddressParser::_parseFullAddress(const QString& fullAddress, QString& ho
 QSet<QString> AddressParser::_parseAddressFromComponents(const Tags& tags, QString& houseNum,
                                                          QString& street) const
 {
-  LOG_TRACE("Parsing address from component tags...");
+  LOG_DEBUG("Parsing address from component tags...");
   QSet<QString> parsedAddresses;
 
   if (_isParseableAddressFromComponents(tags, houseNum, street))
@@ -439,14 +443,14 @@ QSet<QString> AddressParser::_parseAddressFromComponents(const Tags& tags, QStri
       // use custom logic for a address containing a range of addresses
       parsedAddresses = _parseAddressAsRange(houseNum, street);
       _isHouseNumRange = true;
-      LOG_TRACE("Address is range address.");
+      LOG_DEBUG("Address is range address.");
     }
     else
     {
       if (_isSubLetterAddress(houseNum))
       {
         _isSubLetter = true;
-        LOG_TRACE("Address is subletter address.");
+        LOG_DEBUG("Address is subletter address.");
       }
 
       QString parsedAddress = houseNum + " ";
@@ -464,7 +468,7 @@ QSet<QString> AddressParser::_parseAddressFromComponents(const Tags& tags, QStri
         parsedAddress += " " + streetPrefix;
       }
       parsedAddresses.insert(parsedAddress);
-      LOG_TRACE(
+      LOG_DEBUG(
         "Found address by parsing address parts from component tags: " << parsedAddress << ".");
     }
   }
@@ -475,38 +479,38 @@ QSet<QString> AddressParser::_parseAddressFromComponents(const Tags& tags, QStri
 QString AddressParser::_parseAddressFromAltTags(const Tags& tags, QString& houseNum,
                                                 QString& street) const
 {
-  LOG_TRACE("Parsing address from alt tags...");
+  LOG_DEBUG("Parsing address from alt tags...");
   QString parsedAddress;
 
   // let's always look in the name field; arguably, we could look in all of them instead of just
   // one...
   QSet<QString> additionalTagKeys = _addressNormalizer.getAddressTagKeys()->getAdditionalTagKeys();
-  LOG_VART(additionalTagKeys);
+  LOG_VARD(additionalTagKeys);
 
   for (QSet<QString>::const_iterator tagItr = additionalTagKeys.begin();
        tagItr != additionalTagKeys.end(); ++tagItr)
   {
     const QString tagKey = *tagItr;
-    QString tagVal = tags.get(tagKey);
+    QString tagVal = tags.get(tagKey).trimmed();
     if (!tagVal.isEmpty() && _isValidAddressStr(tagVal, houseNum, street))
     {
       parsedAddress = tagVal;
-      LOG_TRACE("Found address: " << parsedAddress << " from additional tag key: " << tagKey << ".");
+      LOG_DEBUG("Found address: " << parsedAddress << " from additional tag key: " << tagKey << ".");
       break;
     }
   }
 
   additionalTagKeys = QSet<QString>::fromList(tags.getNameKeys());
-  LOG_VART(additionalTagKeys);
+  LOG_VARD(additionalTagKeys);
   for (QSet<QString>::const_iterator tagItr = additionalTagKeys.begin();
        tagItr != additionalTagKeys.end(); ++tagItr)
   {
     const QString tagKey = *tagItr;
-    QString tagVal = tags.get(tagKey);
+    QString tagVal = tags.get(tagKey).trimmed();
     if (!tagVal.isEmpty() && _isValidAddressStr(tagVal, houseNum, street, true))
     {
       parsedAddress = tagVal;
-      LOG_TRACE("Found address: " << parsedAddress << " from additional tag key: " << tagKey << ".");
+      LOG_DEBUG("Found address: " << parsedAddress << " from additional tag key: " << tagKey << ".");
       break;
     }
   }
@@ -523,7 +527,7 @@ QSet<QString> AddressParser::_parseAddresses(const Element& element, QString& ho
   // look for a full address tag first
   QString fullAddress =
     _addressNormalizer.getAddressTagKeys()->getAddressTagValue(element.getTags(), "full_address");
-  LOG_VART(fullAddress);
+  LOG_VARD(fullAddress);
   if (fullAddress.isEmpty())
   {
     // If we don't have the full address, let's try to get an address from parts.
@@ -557,8 +561,8 @@ QSet<QString> AddressParser::_parseAddresses(const Element& element, QString& ho
 bool AddressParser::addressesMatchDespiteSubletterDiffs(const QString& address1,
                                                         const QString& address2)
 {
-  LOG_VART(address1);
-  LOG_VART(address2);
+  LOG_VARD(address1);
+  LOG_VARD(address2);
 
   /* going to allow sub letter differences be matches; ex "34 elm street" matches
    * "34a elm street".  This is b/c the subletters are sometimes left out of the addresses by
@@ -588,7 +592,7 @@ QString AddressParser::_getSubLetterCleanedAddress(const QString& address)
 
   QString addressTemp = addressParts[0];
   const QString addressHouseNumStr = addressTemp.replace(QRegExp("[a-z]+"), "");
-  LOG_VART(addressHouseNumStr);
+  LOG_VARD(addressHouseNumStr);
   bool addressHouseNumOk = false;
   /*const int address1HouseNum = */addressHouseNumStr.toInt(&addressHouseNumOk);
 
@@ -602,7 +606,7 @@ QString AddressParser::_getSubLetterCleanedAddress(const QString& address)
   {
     subletterCleanedAddress += " " + addressParts[k];
   }
-  LOG_VART(subletterCleanedAddress);
+  LOG_VARD(subletterCleanedAddress);
   return subletterCleanedAddress;
 }
 
