@@ -42,7 +42,6 @@
 #include <hoot/core/schema/ScriptSchemaTranslatorFactory.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/MapProjector.h>
-//#include <hoot/core/visitors/CalculateAreaVisitor.h>
 #include <hoot/core/visitors/CalculateAreaForStatsVisitor.h>
 #include <hoot/core/visitors/CountUniqueReviewsVisitor.h>
 #include <hoot/core/visitors/ElementCountVisitor.h>
@@ -1021,21 +1020,21 @@ void CalculateStatsOp::_generateFeatureStats(const CreatorDescription::BaseFeatu
         FilteredVisitor(
           ChainCriterion(
             ElementCriterionPtr(new StatusCriterion(Status::Conflated)), criterion->clone()),
-          ConstElementVisitorPtr(new /*CalculateAreaVisitor*/CalculateAreaForStatsVisitor())),
+          ConstElementVisitorPtr(new CalculateAreaForStatsVisitor())),
         "Area Conflated: " + description));
     _addStat(QString("Square Meters of Unmatched %1s From Map 1").arg(description),
       _applyVisitor(
         FilteredVisitor(
           ChainCriterion(
             ElementCriterionPtr(new StatusCriterion(Status::Unknown1)), criterion->clone()),
-          ConstElementVisitorPtr(new /*CalculateAreaVisitor*/CalculateAreaForStatsVisitor())),
+          ConstElementVisitorPtr(new CalculateAreaForStatsVisitor())),
         "Area Unmatched Map 1: " + description));
     _addStat(QString("Square Meters of Unmatched %1s From Map 2").arg(description),
       _applyVisitor(
         FilteredVisitor(
           ChainCriterion(
             ElementCriterionPtr(new StatusCriterion(Status::Unknown2)), criterion->clone()),
-          ConstElementVisitorPtr(new /*CalculateAreaVisitor*/CalculateAreaForStatsVisitor())),
+          ConstElementVisitorPtr(new CalculateAreaForStatsVisitor())),
         "Area Unmatched Map 2: " + description));
     _numGenerateFeatureStatCalls++;
   }
