@@ -118,8 +118,9 @@ void OsmApiReader::read(const OsmMapPtr& map)
   LOG_VART(_keepStatusTag);
   LOG_VART(_preserveAllTags);
 
-  //  Set the bounds once we begin the read
-  setBounds(_getBoundsEnvelope());
+  //  Set the bounds once we begin the read if setBounds() hasn't already been called
+  if (_bounds == nullptr)
+    setBounds(_getBoundsEnvelope());
 
   // If a non-rectangular bounds was passed in from the config, we'll catch it here. If it is passed
   // in from setBounds, we'll silently disregard by using the envelope of the bounds only.
