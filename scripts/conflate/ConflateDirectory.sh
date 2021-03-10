@@ -3,9 +3,11 @@ set -e
 
 # example: 
 #
-# ./scripts/conflate/ConflateDirectory.sh 1 bison/kano_033133330302/input --quiet --parallel --reverse-inputs \
+# ./scripts/conflate/ConflateDirectory.sh 1 bison/kano_033133330302/ --quiet --parallel --reverse-inputs \
 #   --remove-disconnected --remove-unlikely --resolve --snap-unconnected --suppress-divided-roads \
-#   --attribute-file=bison/kano_033133330302/kano_033133330302-osm-cropped.osm
+#   --attribute-file=bison/kano_033133330302-osm-cropped.osm
+#
+# Convert *.gpkg inputs to a file directory beforehand with scripts/util/ConvertGpkg.sh.
 
 function usage() {
   echo "Usage: ConflateDirectory.sh [OPTIONS...] [START POSITION (1-based index)] DIRECTORY..."
@@ -28,8 +30,7 @@ FILE_PATH=
 
 QUIET="--status"
 PARALLEL="no"
-PARALLEL_DEBUG=
-#PARALLEL_DEBUG="--will-cite"
+PARALLEL_DEBUG= #"--will-cite"
 # REVERSE_INPUTS=yes may be useful when using --suppress-divided-roads if the files are default ordered from oldest to newest 
 # and the newest file has the best divided roads.
 REVERSE_INPUTS="no"
@@ -46,7 +47,7 @@ INPUT_TAG_KEYS=
 ATTRIBUTE_TRANSFER_OUTPUT_PATH=
 
 # for debugging smaller AOIs only
-DEBUG_AOI_OPTS=" -D bounds=8.4762,12.0504,8.4793,12.0526 -D bounds.keep.entire.features.crossing.bounds=false"
+AOI_OPTS= #" -D bounds=8.4762,12.0504,8.4793,12.0526 -D bounds.keep.entire.features.crossing.bounds=false"
 
 if [ $# -eq 0 ]
 then
@@ -162,7 +163,7 @@ then
     # the inputs.
   
     HOOT_ATTRIBUTE_TRANSFER_OPTS=" -C AttributeConflation.conf -C ${ALGORITHM_CONF}"
-    # HOOT_ATTRIBUTE_TRANSFER_OPTS+=$DEBUG_AOI_OPTS
+    HOOT_ATTRIBUTE_TRANSFER_OPTS+=$AOI_OPTS
     
     if [ $PARALLEL == "no" ]
     then
@@ -194,7 +195,7 @@ then
         RESULT_ARRAY+=("${ATTRIBUTE_TRANSFER_OUTPUT_FILE}")
       done
     
-      echo "Transferring attributes to files in parallel..."
+      echo "Transferring attributes to $LENGTH maps in parallel..."
       parallel $PARALLEL_DEBUG --xapply hoot conflate ${QUIET} ${HOOT_ATTRIBUTE_TRANSFER_OPTS} {1} {2} {3} ::: ${INPUT_ARRAY[@]} ::: ${ATTRIBUTE_FILE_ARRAY[@]} ::: ${RESULT_ARRAY[@]}
     fi
     
@@ -239,7 +240,7 @@ then
     HOOT_CONFLATE_OPTS+=' -D map.cleaner.transforms+="hoot::DualHighwayMarker;hoot::RemoveElementsVisitor" -D remove.elements.visitor.element.criteria="hoot::TagCriterion;hoot::StatusCriterion" -D remove.elements.visitor.recursive=true -D remove.elements.visitor.chain.element.criteria=true -D tag.criterion.kvps="hoot:dual_highway=yes;hoot:dual_highway_crossing=yes" -D status.criterion.status=Unknown2'
   fi
 fi
-#HOOT_CONFLATE_OPTS+=$DEBUG_AOI_OPTS
+HOOT_CONFLATE_OPTS+=$AOI_OPTS
 
 # Clean out previously conflated files.
 rm -f ${OUTPUT_PATH}/conflation_*
@@ -281,7 +282,7 @@ then
   CONVERT_SRC="${OUTPUT_PATH}/conflation_$(( $LENGTH - 1 )).osm"
 else
 
-  echo "Conflating files in parallel..."
+  echo "Conflating $LENGTH maps in parallel..."
 
   CONFLATION=1
   
