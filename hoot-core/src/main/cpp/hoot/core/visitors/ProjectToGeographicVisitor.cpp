@@ -42,7 +42,7 @@ namespace hoot
 HOOT_FACTORY_REGISTER(ElementVisitor, ProjectToGeographicVisitor)
 
 ProjectToGeographicVisitor::ProjectToGeographicVisitor()
-  : _transform(0)
+  : _transform(nullptr)
 {
 }
 

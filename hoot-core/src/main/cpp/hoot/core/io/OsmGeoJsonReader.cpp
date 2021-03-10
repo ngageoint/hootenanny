@@ -483,7 +483,7 @@ void OsmGeoJsonReader::_parseGeoJsonRelation(const string& id, const pt::ptree& 
     if (roles_values.compare("") != 0)
     {
       typedef boost::tokenizer<boost::char_separator<char>> _tokenizer;
-      _tokenizer tokens(roles_values, boost::char_separator<char>(";", 0, boost::keep_empty_tokens));
+      _tokenizer tokens(roles_values, boost::char_separator<char>(";", nullptr, boost::keep_empty_tokens));
       for (_tokenizer::iterator it = tokens.begin(); it != tokens.end(); ++it)
         _roles.push(*it);
     }
@@ -698,7 +698,7 @@ JsonCoordinates OsmGeoJsonReader::_parseGeometry(const pt::ptree& geometry)
     double x = it->second.get_value<double>();
     ++it;
     double y = it->second.get_value<double>();
-    results.push_back(Coordinate(x, y));
+    results.emplace_back(x, y);
   }
   else if (type == "LineString")
   {

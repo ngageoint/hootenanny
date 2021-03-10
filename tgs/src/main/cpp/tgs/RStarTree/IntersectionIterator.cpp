@@ -118,7 +118,7 @@ namespace Tgs
           {
             if (node->isLeafNode())
             {
-              _pendingResults.push_back(Result(b, node->getChildUserId(i)));
+              _pendingResults.emplace_back(b, node->getChildUserId(i));
             }
             else
             {

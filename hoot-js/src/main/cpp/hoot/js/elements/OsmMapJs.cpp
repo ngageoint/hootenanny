@@ -150,7 +150,7 @@ void OsmMapJs::clone(const FunctionCallbackInfo<Value>& args)
 
 OsmMapPtr& OsmMapJs::getMap()
 {
-  if (_map.get() == 0 && _constMap.get())
+  if (_map.get() == nullptr && _constMap.get())
   {
     throw IllegalArgumentException("This map is const and may not be modified.");
   }

@@ -45,7 +45,7 @@ namespace Tgs
     if (readOnly == true)
     {
       _pageFile = fopen(fileName, "rb");
-      if (_pageFile != NULL)
+      if (_pageFile != nullptr)
       {
         _pageCount = _determinePageCount();
       }
@@ -53,12 +53,12 @@ namespace Tgs
     else
     {
       _pageFile = fopen(fileName, "wb+");
-      if (_pageFile != NULL)
+      if (_pageFile != nullptr)
       {
         _pageCount = _determinePageCount();
       }
     }
-    if (_pageFile == NULL)
+    if (_pageFile == nullptr)
     {
       throw Tgs::Exception(_getError("Error opening file."));
     }

@@ -300,7 +300,7 @@ vector<WaySublineMatch> MaximalSubline::_extractAllMatches(const ConstOsmMapPtr&
     if (ws1.isValid() && ws1.isZeroLength() == false &&
         ws2.isValid() && ws2.isZeroLength() == false)
     {
-      result.push_back(WaySublineMatch(ws1, ws2));
+      result.emplace_back(ws1, ws2);
     }
   }
 

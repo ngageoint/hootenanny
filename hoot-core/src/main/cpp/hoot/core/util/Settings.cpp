@@ -171,7 +171,7 @@ private:
   }
 };
 
-std::shared_ptr<Settings> Settings::_theInstance = NULL;
+std::shared_ptr<Settings> Settings::_theInstance = nullptr;
 
 Settings::Settings() :
 _dynamicRegex("\\$\\{([\\w\\.]+)\\}"),
@@ -305,7 +305,7 @@ double Settings::getDoubleValue(const QString& value) const
 
 Settings& Settings::getInstance()
 {
-  if (_theInstance == NULL)
+  if (_theInstance == nullptr)
   {
     _theInstance.reset(new Settings());
     _theInstance->loadDefaults();

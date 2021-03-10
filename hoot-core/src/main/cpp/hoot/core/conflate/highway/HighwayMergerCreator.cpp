@@ -62,7 +62,7 @@ bool HighwayMergerCreator::createMergers(const MatchSet& matches, vector<MergerP
     LOG_VART(m->toString());
     const HighwayMatch* hm = dynamic_cast<const HighwayMatch*>(m.get());
     // Check to make sure all the input matches are highway matches.
-    if (hm == 0)
+    if (hm == nullptr)
     {
       // return an empty result
       LOG_TRACE(
@@ -95,11 +95,10 @@ bool HighwayMergerCreator::createMergers(const MatchSet& matches, vector<MergerP
 vector<CreatorDescription> HighwayMergerCreator::getAllCreators() const
 {
   vector<CreatorDescription> result;
-  result.push_back(
-    CreatorDescription(
-      className(),
-      "Generates mergers that merge roads with the 2nd Generation (Unifying) Algorithm",
-      false));
+  result.emplace_back(
+    className(),
+    "Generates mergers that merge roads with the 2nd Generation (Unifying) Algorithm",
+    false);
   return result;
 }
 

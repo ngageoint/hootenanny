@@ -29,16 +29,16 @@
 // hoot
 #include <hoot/core/algorithms/DirectionFinder.h>
 #include <hoot/core/criterion/BridgeCriterion.h>
-#include <hoot/core/criterion/OneWayCriterion.h>
 #include <hoot/core/criterion/CriterionUtils.h>
-#include <hoot/core/elements/OsmUtils.h>
+#include <hoot/core/criterion/OneWayCriterion.h>
+#include <hoot/core/conflate/highway/HighwayMatch.h>
 #include <hoot/core/conflate/highway/HighwayUtils.h>
+#include <hoot/core/elements/OsmUtils.h>
+#include <hoot/core/elements/TagUtils.h>
 #include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/conflate/highway/HighwayMatch.h>
-#include <hoot/core/elements/TagUtils.h>
 
 namespace hoot
 {
@@ -213,9 +213,7 @@ bool LinearTagOnlyMerger::_mergeWays(
   if (removeSecondaryElement)
   {
     LOG_TRACE("Marking " << elementWithTagsToRemove->getElementId() << " for replacement...");
-    replaced.push_back(
-      std::pair<ElementId, ElementId>(
-        elementWithTagsToRemove->getElementId(), elementWithTagsToKeep->getElementId()));
+    replaced.emplace_back(elementWithTagsToRemove->getElementId(), elementWithTagsToKeep->getElementId());
   }
 
   return true;

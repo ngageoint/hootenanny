@@ -22,8 +22,10 @@
         <nd ref="4"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:first_seen" v="b"/>
+        <tag k="hoot:histogram" v="_XXXX____________XXXXXXXXX"/>
         <tag k="hoot:last_seen" v="z"/>
         <tag k="hoot:max_consecutive" v="9"/>
+        <tag k="hoot:max_consecutive_start" v="r"/>
         <tag k="hoot:total_misses" v="13"/>
         <tag k="hoot:total_observations" v="13"/>
         <tag k="source:imagery" v="b;c;d;e;r;s;t;u;v;w;x;y;z"/>
@@ -34,8 +36,10 @@
         <nd ref="6"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:first_seen" v="a"/>
+        <tag k="hoot:histogram" v="X_X_X_X_X_X_X_X__X_X_X_XXX"/>
         <tag k="hoot:last_seen" v="z"/>
         <tag k="hoot:max_consecutive" v="3"/>
+        <tag k="hoot:max_consecutive_start" v="x"/>
         <tag k="hoot:total_misses" v="12"/>
         <tag k="hoot:total_observations" v="14"/>
         <tag k="source:imagery" v="a;c;e;g;i;k;m;o;r;t;v;x;y;z"/>
@@ -47,8 +51,10 @@
         <nd ref="4"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:first_seen" v="p"/>
+        <tag k="hoot:histogram" v="_______________XXXXXXXXXXX"/>
         <tag k="hoot:last_seen" v="z"/>
         <tag k="hoot:max_consecutive" v="11"/>
+        <tag k="hoot:max_consecutive_start" v="p"/>
         <tag k="hoot:total_misses" v="15"/>
         <tag k="hoot:total_observations" v="11"/>
         <tag k="source:imagery" v="p;q;r;s;t;u;v;w;x;y;z"/>
@@ -60,8 +66,10 @@
         <nd ref="9"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:first_seen" v="c"/>
+        <tag k="hoot:histogram" v="__XXXXXXXX____X___XXXXXXX_"/>
         <tag k="hoot:last_seen" v="y"/>
         <tag k="hoot:max_consecutive" v="8"/>
+        <tag k="hoot:max_consecutive_start" v="c"/>
         <tag k="hoot:total_misses" v="10"/>
         <tag k="hoot:total_observations" v="16"/>
         <tag k="source:imagery" v="c;d;e;f;g;h;i;j;o;s;t;u;v;w;x;y"/>

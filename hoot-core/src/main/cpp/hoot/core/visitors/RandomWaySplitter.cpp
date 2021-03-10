@@ -192,7 +192,7 @@ vector<ElementPtr> RandomWaySplitter::_split(ElementPtr element)
       //_updateNewNodeProperties does not need to be called b/c the MultiLineStringSplitter has
       //already properly updated the new node's properties.  when a way is split, however, the
       //new node's properties must be updated by the call to _updateNewNodeProperties.
-      if (way != 0)
+      if (way != nullptr)
       {
         assert(nodeIdsBeforeSplit.size() > 0);
         //update properties on any nodes added as a result of the way splitting (new ways created as a

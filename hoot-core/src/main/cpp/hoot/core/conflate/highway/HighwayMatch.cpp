@@ -180,7 +180,7 @@ bool HighwayMatch::isConflicting(
 {
   const HighwayMatch* hm = dynamic_cast<const HighwayMatch*>(other.get());
   // if the other match isn't a highway match then this is a conflict.
-  if (hm == 0)
+  if (hm == nullptr)
   {
     return true;
   }

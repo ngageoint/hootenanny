@@ -90,7 +90,7 @@ void ImplicitTagRawRulesDeriver::setElementCriterion(const QString& criterionNam
 {
   ElementCriterion* criterion =
     Factory::getInstance().constructObject<ElementCriterion>(criterionName);
-  if (dynamic_cast<ImplicitTagEligibleCriterion*>(criterion) != 0)
+  if (dynamic_cast<ImplicitTagEligibleCriterion*>(criterion) != nullptr)
   {
     _elementCriterion.reset(dynamic_cast<ImplicitTagEligibleCriterion*>(criterion));
   }

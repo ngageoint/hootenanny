@@ -92,7 +92,7 @@ GeometryPtr GeometryMerger::mergeGeometries(std::vector<GeometryPtr> geometries,
     _geometryStackMutex.lock();
     _geometryStack.empty();
     for (size_t i = 0; i < geometries.size() - 1; i += 2)
-      _geometryStack.push(GeometryPair(geometries[i], geometries[i + 1]));
+      _geometryStack.emplace(geometries[i], geometries[i + 1]);
     _geometryStackMutex.unlock();
     //  Reset finished threads to zero each round of merges
     _finishedThreads = 0;

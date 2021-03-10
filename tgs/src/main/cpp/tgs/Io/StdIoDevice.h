@@ -53,7 +53,7 @@ public:
 
   virtual bool open(QIODevice::OpenMode mode) { QIODevice::open(mode); return true; }
 
-  virtual void close() { delete _in; _in = 0; }
+  virtual void close() { delete _in; _in = nullptr; }
 
   virtual void flush() { }
 

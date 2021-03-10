@@ -151,7 +151,7 @@ double TranslatedTagDifferencer::diff(const ConstOsmMapPtr& map, const ConstElem
 
 std::shared_ptr<ScriptToOgrSchemaTranslator> TranslatedTagDifferencer::_getTranslator() const
 {
-  if (_translator == 0)
+  if (_translator == nullptr)
   {
     std::shared_ptr<ScriptSchemaTranslator> st(
       ScriptSchemaTranslatorFactory::getInstance().createTranslator(_script));

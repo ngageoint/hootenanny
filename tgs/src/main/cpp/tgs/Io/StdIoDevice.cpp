@@ -45,7 +45,7 @@ bool StdIoDevice::atEnd() const
 
 qint64 StdIoDevice::readData(char* data, qint64 maxlen)
 {
-  if (_in == 0)
+  if (_in == nullptr)
   {
     return 0;
   }

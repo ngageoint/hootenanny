@@ -77,7 +77,7 @@ int main(int argc, char *argv[])
     }
   }
 
-  if (c != NULL)
+  if (c != nullptr)
   {
     try
     {

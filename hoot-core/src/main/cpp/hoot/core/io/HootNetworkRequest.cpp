@@ -131,7 +131,7 @@ bool HootNetworkRequest::_networkRequest(const QUrl& url, int timeout,
     pNAM->setCookieJar(_cookies.get());
     // don't want to take ownership of these cookies so they could potentially be shared across
     // different requests made by the same caller
-    _cookies->setParent(0);
+    _cookies->setParent(nullptr);
   }
   //  Setup the OAuth header on the request object
   if (_useOAuth && _consumer && _tokenRequest)
@@ -140,7 +140,7 @@ bool HootNetworkRequest::_networkRequest(const QUrl& url, int timeout,
   QEventLoop loop;
   QTimer timeoutTimer;
   //  Call the correct function on the network access manager
-  QNetworkReply* reply = NULL;
+  QNetworkReply* reply = nullptr;
   switch (http_op)
   {
   case QNetworkAccessManager::GetOperation:
@@ -215,7 +215,7 @@ bool HootNetworkRequest::_networkRequest(const QUrl& url, int timeout,
 
 int HootNetworkRequest::_getHttpResponseCode(QNetworkReply* reply)
 {
-  if (reply != NULL)
+  if (reply != nullptr)
   {
     //  Get the status code
     QVariant status = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute);

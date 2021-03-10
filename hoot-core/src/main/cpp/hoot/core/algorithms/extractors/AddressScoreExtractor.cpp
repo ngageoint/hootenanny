@@ -152,7 +152,7 @@ QList<Address> AddressScoreExtractor::_getElementAddresses(
   if (_cacheEnabled)
   {
     const QList<Address>* cachedVal = _addressesCache[element->getElementId()];
-    if (cachedVal != 0)
+    if (cachedVal != nullptr)
     {
       LOG_TRACE("Found cached address(es): " << *cachedVal);
       _addressCacheHits++;

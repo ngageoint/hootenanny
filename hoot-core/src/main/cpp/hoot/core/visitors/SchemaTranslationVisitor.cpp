@@ -94,7 +94,7 @@ void SchemaTranslationVisitor::setTranslationScript(QString path)
   if (_toOgr)
   {
     _ogrTranslator = dynamic_cast<ScriptToOgrSchemaTranslator*>(_translator.get());
-    if (_ogrTranslator == 0)
+    if (_ogrTranslator == nullptr)
     {
       throw IllegalArgumentException(
         "Translating to OGR requires a script that supports to OGR translations.");

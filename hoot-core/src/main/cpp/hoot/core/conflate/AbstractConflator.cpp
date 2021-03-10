@@ -77,7 +77,7 @@ AbstractConflator::~AbstractConflator()
 
 void AbstractConflator::_reset()
 {
-  if (_mergerFactory == 0)
+  if (_mergerFactory == nullptr)
   {
     _mergerFactory.reset(new MergerFactory());
     // register the mark for review merger first so all reviews get tagged before another merger

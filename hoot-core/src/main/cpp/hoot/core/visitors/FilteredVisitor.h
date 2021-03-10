@@ -45,7 +45,7 @@ public:
 
   static QString className() { return "hoot::FilteredVisitor"; }
 
-  FilteredVisitor() : _criterion(0), _visitor(0) { }
+  FilteredVisitor() : _criterion(nullptr), _visitor(nullptr) { }
   virtual ~FilteredVisitor() = default;
 
   /**

@@ -81,7 +81,7 @@ public:
 OsmPbfWriter::OsmPbfWriter()
 {
   _d = new OsmPbfWriterData();
-  _dn = 0;
+  _dn = nullptr;
   _lonOffset = 0.0;
   _latOffset = 0.0;
   _granularity = 100;
@@ -202,8 +202,8 @@ void OsmPbfWriter::_initBlob()
   _lastLon = 0;
   _lastLat = 0;
   _lastWayNid = 0;
-  _pg = 0;
-  _dn = 0;
+  _pg = nullptr;
+  _dn = nullptr;
   _tick = 0;
   _strings.clear();
 }
@@ -483,7 +483,7 @@ void OsmPbfWriter::_writeNode(const std::shared_ptr<const hoot::Node>& n)
   if (!n) return;
 
   _elementsWritten++;
-  if (_pg == 0)
+  if (_pg == nullptr)
   {
     _pg = _d->primitiveBlock.add_primitivegroup();
   }
@@ -540,7 +540,7 @@ void OsmPbfWriter::_writeNodeDense(const std::shared_ptr<const hoot::Node>& n)
   LOG_TRACE("Writing node: " << n->getElementId() << "...");
 
   _elementsWritten++;
-  if (_dn == 0)
+  if (_dn == nullptr)
   {
     _dn = _d->primitiveBlock.add_primitivegroup()->mutable_dense();
   }
@@ -708,7 +708,7 @@ void OsmPbfWriter::_writeRelation(const std::shared_ptr<const hoot::Relation>& r
 
   _elementsWritten++;
 
-  if (_pg == 0)
+  if (_pg == nullptr)
   {
     _pg = _d->primitiveBlock.add_primitivegroup();
   }
@@ -781,7 +781,7 @@ void OsmPbfWriter::_writeWay(const std::shared_ptr<const hoot::Way>& w)
 
   _elementsWritten++;
 
-  if (_pg == 0)
+  if (_pg == nullptr)
   {
     _pg = _d->primitiveBlock.add_primitivegroup();
   }

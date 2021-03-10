@@ -157,7 +157,7 @@ class SimilarToOnly
 {
 public:
 
-  SimilarToOnly() : _graph(0) { }
+  SimilarToOnly() : _graph(nullptr) { }
 
   SimilarToOnly(TagGraph& graph) : _graph(&graph) { }
 
@@ -1384,7 +1384,7 @@ private:
   }
 };
 
-std::shared_ptr<OsmSchema> OsmSchema::_theInstance = NULL;
+std::shared_ptr<OsmSchema> OsmSchema::_theInstance = nullptr;
 
 QStringList _genericKvps;
 
@@ -1578,7 +1578,7 @@ const SchemaVertex& OsmSchema::getFirstCommonAncestor(const QString& kvp1, const
 
 OsmSchema& OsmSchema::getInstance()
 {
-  if (_theInstance == NULL)
+  if (_theInstance == nullptr)
   {
     _theInstance.reset(new OsmSchema());
     _theInstance->loadDefault();

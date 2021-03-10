@@ -143,7 +143,7 @@ public:
     }
 
     Configurable* c = dynamic_cast<Configurable*>(consumer);
-    if (c == 0)
+    if (c == nullptr)
     {
       throw IllegalArgumentException("Object does not accept custom settings as an argument.");
     }
@@ -152,8 +152,8 @@ public:
     // we expect the child crits to be configured separately outside of the parent visitor.
     MultipleCriterionConsumerVisitor* multipleCritVis =
       dynamic_cast<MultipleCriterionConsumerVisitor*>(consumer);
-    LOG_VART(multipleCritVis == 0);
-    if (multipleCritVis != 0)
+    LOG_VART(multipleCritVis == nullptr);
+    if (multipleCritVis != nullptr)
     {
       multipleCritVis->setConfigureChildren(false);
     }
@@ -169,7 +169,7 @@ public:
     ElementCriterionJs* obj = node::ObjectWrap::Unwrap<ElementCriterionJs>(v->ToObject());
     ElementCriterionConsumer* c = dynamic_cast<ElementCriterionConsumer*>(consumer);
 
-    if (c == 0)
+    if (c == nullptr)
     {
       throw IllegalArgumentException("Object does not accept ElementCriterion as an argument.");
     }
@@ -187,7 +187,7 @@ public:
     ElementJs* obj = node::ObjectWrap::Unwrap<ElementJs>(v->ToObject());
     ElementConsumer* c = dynamic_cast<ElementConsumer*>(consumer);
 
-    if (c == 0)
+    if (c == nullptr)
     {
       throw IllegalArgumentException("Object does not accept Element as an argument.");
     }
@@ -212,18 +212,18 @@ public:
     JsFunctionConsumer* c = dynamic_cast<JsFunctionConsumer*>(consumer);
     ElementCriterionConsumer* ecc = dynamic_cast<ElementCriterionConsumer*>(consumer);
 
-    if (c != 0 && ecc != 0)
+    if (c != nullptr && ecc != nullptr)
     {
       // At the time of this writing this isn't possible. Give a good hard think about how the code
       // should respond before you change it.
       throw IllegalArgumentException(
         "Ambiguous consumption of both a function and an ElementCriterionConsumer.");
     }
-    else if (c != 0)
+    else if (c != nullptr)
     {
       c->addFunction(current, func);
     }
-    else if (ecc != 0)
+    else if (ecc != nullptr)
     {
       std::shared_ptr<JsFunctionCriterion> ecp(new JsFunctionCriterion());
       ecp->addFunction(current, func);
@@ -246,7 +246,7 @@ public:
     {
       ConstOsmMapConsumer* c = dynamic_cast<ConstOsmMapConsumer*>(consumer);
 
-      if (c == 0)
+      if (c == nullptr)
       {
         throw IllegalArgumentException("Object does not accept const OsmMap as an argument. Maybe "
           "try a non-const OsmMap?");
@@ -260,7 +260,7 @@ public:
     {
       OsmMapConsumer* c = dynamic_cast<OsmMapConsumer*>(consumer);
 
-      if (c == 0)
+      if (c == nullptr)
       {
         throw IllegalArgumentException("Object does not accept OsmMap as an argument.");
       }
@@ -280,7 +280,7 @@ public:
 
     StringDistanceConsumer* c = dynamic_cast<StringDistanceConsumer*>(consumer);
 
-    if (c == 0)
+    if (c == nullptr)
     {
       throw IllegalArgumentException("Object does not accept StringDistance as an argument.");
     }
@@ -299,7 +299,7 @@ public:
 
     ValueAggregatorConsumer* c = dynamic_cast<ValueAggregatorConsumer*>(consumer);
 
-    if (c == 0)
+    if (c == nullptr)
     {
       throw IllegalArgumentException("Object does not accept ValueAggregator as an argument.");
     }
@@ -318,7 +318,7 @@ public:
 
     ElementVisitorConsumer* c = dynamic_cast<ElementVisitorConsumer*>(consumer);
 
-    if (c == 0)
+    if (c == nullptr)
     {
       throw IllegalArgumentException("Object does not accept ElementCriterion as an argument.");
     }

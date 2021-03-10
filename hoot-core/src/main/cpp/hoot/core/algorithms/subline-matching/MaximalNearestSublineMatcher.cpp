@@ -31,9 +31,9 @@
 
 // hoot
 #include <hoot/core/algorithms/subline-matching/MaximalNearestSubline.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/ops/CopyMapSubsetOp.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/geometry/ElementToGeometryConverter.h>
 
 using namespace geos::geom;
 using namespace std;
@@ -110,7 +110,7 @@ WaySublineMatchString MaximalNearestSublineMatcher::findMatch(const ConstOsmMapP
 
   vector<WaySublineMatch> v;
   // switch the subline match to reference a different map.
-  v.push_back(WaySublineMatch(match, map));
+  v.emplace_back(match, map);
 
   return WaySublineMatchString(v);
 }
