@@ -35,8 +35,8 @@ namespace hoot
 {
 
 /**
- * Sums the length of all the ways. The map projection is used so to get meters the map must be
- * first reprojected into meters.
+ * Sums the area of all the ways. The map projection is used so to get meters the map must be
+ * first reprojected into meters. This is meant for use in calculating map statistics only.
  */
 class CalculateAreaForStatsVisitor : public ElementConstOsmMapVisitor, public SingleStatistic
 {

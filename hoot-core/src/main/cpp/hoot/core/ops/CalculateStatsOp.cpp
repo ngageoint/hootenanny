@@ -42,7 +42,8 @@
 #include <hoot/core/schema/ScriptSchemaTranslatorFactory.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/MapProjector.h>
-#include <hoot/core/visitors/CalculateAreaVisitor.h>
+//#include <hoot/core/visitors/CalculateAreaVisitor.h>
+#include <hoot/core/visitors/CalculateAreaForStatsVisitor.h>
 #include <hoot/core/visitors/CountUniqueReviewsVisitor.h>
 #include <hoot/core/visitors/ElementCountVisitor.h>
 #include <hoot/core/visitors/FeatureCountVisitor.h>
@@ -227,6 +228,9 @@ void CalculateStatsOp::_initStatCalc()
   // way. Admittedly, the way the stat total count is being calculated here is a very brittle way to
   // do it but haven't come up with a better way yet. This also could eventually be tied in with
   // progress reporting.
+
+  // TODO: This isn't quite right. Have recently seen 198 calculated as the total when 202 stats
+  // were actually run.
 
   const int numQuickStatCalcs = _quickStatData.size();
   LOG_VARD(numQuickStatCalcs);
@@ -1017,21 +1021,21 @@ void CalculateStatsOp::_generateFeatureStats(const CreatorDescription::BaseFeatu
         FilteredVisitor(
           ChainCriterion(
             ElementCriterionPtr(new StatusCriterion(Status::Conflated)), criterion->clone()),
-          ConstElementVisitorPtr(new CalculateAreaVisitor())),
+          ConstElementVisitorPtr(new /*CalculateAreaVisitor*/CalculateAreaForStatsVisitor())),
         "Area Conflated: " + description));
     _addStat(QString("Square Meters of Unmatched %1s From Map 1").arg(description),
       _applyVisitor(
         FilteredVisitor(
           ChainCriterion(
             ElementCriterionPtr(new StatusCriterion(Status::Unknown1)), criterion->clone()),
-          ConstElementVisitorPtr(new CalculateAreaVisitor())),
+          ConstElementVisitorPtr(new /*CalculateAreaVisitor*/CalculateAreaForStatsVisitor())),
         "Area Unmatched Map 1: " + description));
     _addStat(QString("Square Meters of Unmatched %1s From Map 2").arg(description),
       _applyVisitor(
         FilteredVisitor(
           ChainCriterion(
             ElementCriterionPtr(new StatusCriterion(Status::Unknown2)), criterion->clone()),
-          ConstElementVisitorPtr(new CalculateAreaVisitor())),
+          ConstElementVisitorPtr(new /*CalculateAreaVisitor*/CalculateAreaForStatsVisitor())),
         "Area Unmatched Map 2: " + description));
     _numGenerateFeatureStatCalls++;
   }

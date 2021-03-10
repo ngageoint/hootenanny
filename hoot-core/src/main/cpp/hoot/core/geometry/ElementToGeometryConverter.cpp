@@ -361,7 +361,8 @@ geos::geom::GeometryTypeId ElementToGeometryConverter::getGeometryType(
 
       if (statsFlag)
       {
-        if (r->isMultiPolygon() || StatsAreaCriterion().isSatisfied(r))
+        if (r->isMultiPolygon() || r->getType() == MetadataTags::RelationSite() ||
+            StatsAreaCriterion().isSatisfied(r))
           return GEOS_MULTIPOLYGON;
         else if (linearCrit.isSatisfied(r))
           return GEOS_MULTILINESTRING;
@@ -369,7 +370,7 @@ geos::geom::GeometryTypeId ElementToGeometryConverter::getGeometryType(
       else
       {
         if (r->isMultiPolygon() ||
-            // relation type=site was added to fix BadMatchPairTest crashing in Polygon.js.
+            // Relation type=site was added to fix BadMatchPairTest crashing in Polygon.js.
             r->getType() == MetadataTags::RelationSite() ||
             AreaCriterion().isSatisfied(r))
           return GEOS_MULTIPOLYGON;
@@ -402,20 +403,33 @@ geos::geom::GeometryTypeId ElementToGeometryConverter::getGeometryType(
     break;
   }
 
-  if (throwError)
+  QString errorMsg;
+  if (relationType != "")
   {
-    if (relationType != "")
-    {
-      throw IllegalArgumentException(
-        "Unknown geometry type: relation type = " + relationType + "; relation: " + e->toString());
-    }
-    else
-    {
-      throw IllegalArgumentException("Unknown geometry type for: " + e->toString());
-    }
+    errorMsg =
+      "Unknown geometry type for " + e->getElementId().toString() + " with type=" + relationType ;
   }
   else
   {
+    errorMsg =
+      "Unknown geometry type for " + e->getElementId().toString() + " with missing type.";
+  }
+  if (throwError)
+  {
+    throw IllegalArgumentException(errorMsg);
+  }
+  else
+  {
+    if (logWarnCount < Log::getWarnMessageLimit())
+    {
+      LOG_WARN(errorMsg);
+    }
+    else if (logWarnCount == Log::getWarnMessageLimit())
+    {
+      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+    }
+    logWarnCount++;
+
     return GeometryTypeId(UNKNOWN_GEOMETRY);
   }
 }
