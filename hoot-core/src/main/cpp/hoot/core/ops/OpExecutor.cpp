@@ -88,6 +88,8 @@ void OpExecutor::_substituteForContainingOps()
 
 void OpExecutor::apply(OsmMapPtr& map)
 {
+  LOG_DEBUG("Applying ops...");
+
   Factory& f = Factory::getInstance();
   QElapsedTimer timer;
 
@@ -100,11 +102,12 @@ void OpExecutor::apply(OsmMapPtr& map)
   int opCount = 1;
   foreach (QString s, _namedOps)
   {
-    LOG_VARD(s);
+    s = s.remove("\"");
     if (s.isEmpty())
     {
       return;
     }
+    LOG_VART(s);
 
     timer.restart();
     LOG_DEBUG(
