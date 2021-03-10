@@ -26,7 +26,6 @@
  */
 
 #include "GeometryModifierVisitor.h"
-#include "GeometryModifierAction.h"
 
 // Hoot
 #include <hoot/core/util/Factory.h>

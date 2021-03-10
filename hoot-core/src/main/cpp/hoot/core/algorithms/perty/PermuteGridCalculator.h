@@ -56,7 +56,7 @@ public:
    * Calculates a permutation grid and the values in that grid for a given envelope. The number of
    * rows and columns are returned in rows and cols.
    */
-  virtual cv::Mat permute(geos::geom::Envelope env, int& pointRows, int& pointCols) = 0;
+  virtual cv::Mat permute(const geos::geom::Envelope& env, int& pointRows, int& pointCols) = 0;
 
   /**
    * Seeds the permutation process. By default a seed is generated based on time. The seed should

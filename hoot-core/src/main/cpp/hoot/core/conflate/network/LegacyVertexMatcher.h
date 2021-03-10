@@ -28,9 +28,9 @@
 #define LEGACYVERTEXMATCHER_H
 
 // hoot
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/conflate/matching/NodeMatcher.h>
 #include <hoot/core/conflate/network/OsmNetwork.h>
-#include <hoot/core/elements/OsmMap.h>
 
 // Qt
 #include <QList>
@@ -128,7 +128,7 @@ private:
 
   double _confidentThreshold;
 
-  Tgs::IntersectionIterator _createIterator(geos::geom::Envelope env);
+  Tgs::IntersectionIterator _createIterator(const geos::geom::Envelope& env);
 
   void _createVertexIndex(const OsmNetwork::VertexMap& vm, SearchRadiusProvider &srp);
 

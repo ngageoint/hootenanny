@@ -71,7 +71,7 @@ public:
    */
   int getNumChanges() const override;
 
-  void addChange(Change newChange);
+  void addChange(const Change& newChange);
 
   bool containsChange(ElementId eID);
 

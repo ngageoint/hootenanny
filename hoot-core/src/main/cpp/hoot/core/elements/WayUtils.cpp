@@ -360,7 +360,7 @@ bool WayUtils::nodeContainedByAnyWay(const long nodeId, const ConstOsmMapPtr& ma
   return !map->getIndex().getNodeToWayMap()->getWaysByNode(nodeId).empty();
 }
 
-bool WayUtils::nodeContainedByAnyWay(const long nodeId, const std::set<long> wayIds,
+bool WayUtils::nodeContainedByAnyWay(const long nodeId, const std::set<long>& wayIds,
                                      const ConstOsmMapPtr& map)
 {
   std::set<long> waysContainingNode = map->getIndex().getNodeToWayMap()->getWaysByNode(nodeId);
