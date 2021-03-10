@@ -145,8 +145,9 @@ public:
   inline static const QString HootLastSeen()            { return "hoot:last_seen"; }
   inline static const QString HootTotalObservations()   { return "hoot:total_observations"; }
   inline static const QString HootTotalMisses()         { return "hoot:total_misses"; }
-  inline static const QString MaxConsecutive()          { return "hoot:max_consecutive"; }
-
+  inline static const QString HootMaxConsecutive()      { return "hoot:max_consecutive"; }
+  inline static const QString HootMaxConsecutiveStart() { return "hoot:max_consecutive_start"; }
+  inline static const QString HootHistogram()           { return "hoot:histogram"; }
 
   inline static const QString Ref1()                    { return "REF1"; }
   inline static const QString Ref2()                    { return "REF2"; }
