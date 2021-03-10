@@ -62,7 +62,7 @@ public:
 
   virtual QString getDescription() const override { return ""; }
 
-  virtual void setProgress(Progress progress) override { _progress = progress; }
+  void setProgress(const Progress& progress) override { _progress = progress; }
   virtual unsigned int getNumSteps() const override { return _namedOps.size(); }
 
   virtual QString getName() const { return className(); }

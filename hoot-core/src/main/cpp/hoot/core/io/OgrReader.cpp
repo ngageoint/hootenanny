@@ -86,7 +86,7 @@ public:
   /**
    * @see ProgressReporter
    */
-  virtual void setProgress(Progress progress) { _progress = progress; }
+  void setProgress(const Progress& progress) override { _progress = progress; }
   /**
    * @see ProgressReporter
    */
@@ -285,7 +285,7 @@ OgrReader::~OgrReader()
   delete _d;
 }
 
-void OgrReader::setProgress(Progress progress)
+void OgrReader::setProgress(const Progress& progress)
 {
   if (_d == nullptr)
   {

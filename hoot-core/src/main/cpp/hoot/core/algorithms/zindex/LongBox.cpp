@@ -39,13 +39,13 @@ using namespace std;
 namespace hoot
 {
 
-LongBox::LongBox(vector<long int> min, vector<long int> max)
+LongBox::LongBox(const std::vector<long>& min, const std::vector<long>& max)
 {
   setMin(min);
   setMax(max);
 }
 
-std::shared_ptr<LongBox> LongBox::copy()
+std::shared_ptr<LongBox> LongBox::copy() const
 {
   std::shared_ptr<LongBox> box = std::shared_ptr<LongBox>(new LongBox(getMin(), getMax()));
   return box;
@@ -67,7 +67,7 @@ long int LongBox::calculateVolume()
   return result;
 }
 
-bool LongBox::edgeOverlaps(LongBox b)
+bool LongBox::edgeOverlaps(const LongBox& b)
 {
   bool result = false;
   for (uint i = 0; i < getMin().size(); i++)
@@ -95,7 +95,7 @@ LongBox LongBox::expand(int size)
   return LongBox(min, max);
 }
 
-bool LongBox::in(vector<long int> p)
+bool LongBox::in(const vector<long int>& p)
 {
   if (p.size() < _min.size() || p.size() < _max.size())
   {
@@ -110,7 +110,7 @@ bool LongBox::in(vector<long int> p)
   return result;
 }
 
-bool LongBox::intersects(LongBox b)
+bool LongBox::intersects(const LongBox& b)
 {
   bool result = true;
   for (uint i = 0; i < getMin().size(); i++)

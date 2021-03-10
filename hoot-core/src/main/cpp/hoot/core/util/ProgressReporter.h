@@ -50,7 +50,7 @@ public:
    * @param progress progress info; A copy initialized to the most recent progress state is passed
    * in to avoid maintaining progress with the same information across the entire application.
    */
-  virtual void setProgress(Progress progress) = 0;
+  virtual void setProgress(const Progress& progress) = 0;
 
   /**
    * The number of job task steps performed by the implementer related to status progress reporting

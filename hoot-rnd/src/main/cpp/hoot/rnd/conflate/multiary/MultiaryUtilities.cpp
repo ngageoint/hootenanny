@@ -31,13 +31,12 @@
 #include <hoot/core/conflate/UnifyingConflator.h>
 #include <hoot/core/conflate/matching/MatchFactory.h>
 #include <hoot/core/conflate/merging/MergerFactory.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/io/OsmPbfReader.h>
 #include <hoot/core/io/OsmPbfWriter.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/elements/MapProjector.h>
-#include <hoot/rnd/visitors/MultiaryPoiHashVisitor.h>
-
 #include <hoot/rnd/conflate/multiary/MultiaryPoiMergerCreator.h>
+#include <hoot/rnd/visitors/MultiaryPoiHashVisitor.h>
 
 namespace hoot
 {

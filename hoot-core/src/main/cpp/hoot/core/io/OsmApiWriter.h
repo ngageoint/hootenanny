@@ -129,7 +129,7 @@ public:
   /**
    * @see ProgressReporter
    */
-  virtual void setProgress(Progress progress) { _progress = progress; }
+  void setProgress(const Progress& progress) override { _progress = progress; }
   /**
    * @see ProgressReporter
    */
