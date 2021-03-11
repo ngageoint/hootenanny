@@ -56,12 +56,24 @@ public:
 
 protected:
 
-  virtual bool _mergePair(const OsmMapPtr& map, ElementId eid1, ElementId eid2,
-                          std::vector<std::pair<ElementId, ElementId>>& replaced) override;
+  virtual bool _mergePair(
+    const OsmMapPtr& map, ElementId eid1, ElementId eid2,
+    std::vector<std::pair<ElementId, ElementId>>& replaced) override;
 
 private:
 
+  OsmMapPtr _map;
+
   static const bool WRITE_DETAILED_DEBUG_MAPS;
+
+  double _getMinSplitSize(const ConstWayPtr& way1, const ConstWayPtr& way2) const;
+
+  WayPtr _getMaximalNearestSubline(
+    const ConstWayPtr& way1, const ConstWayPtr& way2, const double minSplitSize,
+    std::vector<WayPtr>& splits);
+
+  void _mergeTags(
+    const WayPtr& averagedWay, const WayPtr& originalWay1, const WayPtr& originalWay2);
 };
 
 }

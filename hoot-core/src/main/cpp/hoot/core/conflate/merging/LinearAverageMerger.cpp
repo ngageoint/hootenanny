@@ -77,70 +77,51 @@ bool LinearAverageMerger::_mergePair(
     return true;
   }
 
-  WayPtr way1 = std::dynamic_pointer_cast<Way>(map->getElement(eid1));
-  WayPtr way2 = std::dynamic_pointer_cast<Way>(map->getElement(eid2));
+  _map = map;
+
+  WayPtr way1 = std::dynamic_pointer_cast<Way>(_map->getElement(eid1));
+  WayPtr way2 = std::dynamic_pointer_cast<Way>(_map->getElement(eid2));
 
   if (!way1 || !way2)
   {
     return false;
   }
 
-  // TODO: refactor
-
   // Determine the split size.
-  ElementToGeometryConverter geomConverter(map);
-  Meters minSplitSize = ConfigOptions().getWayMergerMinSplitSize();
-  std::shared_ptr<geos::geom::LineString> lineString1 = geomConverter.convertToLineString(way1);
-  std::shared_ptr<geos::geom::LineString> lineString2 = geomConverter.convertToLineString(way2);
-  if (!lineString1 || !lineString2)
+  const double minSplitSize = _getMinSplitSize(way1, way2);
+  if (minSplitSize == 0.0)
   {
     return false;
   }
-  LOG_VART(lineString1->getLength());
-  LOG_VART(lineString2->getLength());
-  const double lengthMultiplier = ConfigOptions().getAverageConflationMinSplitSizeMultiplier();
-  minSplitSize = std::min(minSplitSize, lineString1->getLength() * lengthMultiplier);
-  minSplitSize = std::min(minSplitSize, lineString2->getLength() * lengthMultiplier);
-  LOG_VART(minSplitSize);
 
   // Split left into its maximal nearest sublines.
-  MaximalNearestSubline mns1(
-    map, way1, way2, minSplitSize, way1->getCircularError() + way2->getCircularError());
-  int mnsLeftIndex = -1;
-  std::vector<WayPtr> splitsLeft = mns1.splitWay(map, mnsLeftIndex);
-  LOG_VART(splitsLeft.size());
-  if (splitsLeft.size() == 0)
+  std::vector<WayPtr> splitsLeft;
+  WayPtr mnsLeft = _getMaximalNearestSubline(way1, way2, minSplitSize, splitsLeft);
+  if (!mnsLeft || splitsLeft.size() == 0)
   {
     return false;
   }
-  assert(mnsLeftIndex > -1);
-  WayPtr mnsLeft = splitsLeft[mnsLeftIndex];
 
   // Split right into its maximal nearest sublines.
-  MaximalNearestSubline mns2(
-    map, way2, mnsLeft, minSplitSize, way1->getCircularError() + way2->getCircularError());
-  int mnsRightIndex = -1;
-  std::vector<WayPtr> splitsRight = mns2.splitWay(map, mnsRightIndex);
-  LOG_VART(splitsRight.size());
-  if (splitsRight.size() == 0)
+  std::vector<WayPtr> splitsRight;
+  WayPtr mnsRight = _getMaximalNearestSubline(way2, mnsLeft, minSplitSize, splitsRight);
+  if (!mnsRight || splitsRight.size() == 0)
   {
     return false;
   }
-  assert(mnsRightIndex > -1);
-  WayPtr mnsRight = splitsRight[mnsRightIndex];
 
   // Add the way splits (?).
   for (size_t i = 0; i < splitsLeft.size(); i++)
   {
-    map->addWay(splitsLeft[i]);
+    _map->addWay(splitsLeft[i]);
   }
   for (size_t i = 0; i < splitsRight.size(); i++)
   {
-    map->addWay(splitsRight[i]);
+    _map->addWay(splitsRight[i]);
   }
 
   // Average the two maximal nearest sublines.
-  WayPtr averagedWay = WayAverager::average(map, mnsRight, mnsLeft);
+  WayPtr averagedWay = WayAverager::average(_map, mnsRight, mnsLeft);
   LOG_VART(averagedWay.get());
   if (!averagedWay)
   {
@@ -149,23 +130,14 @@ bool LinearAverageMerger::_mergePair(
   LOG_VART(averagedWay->getElementId());
 
   // Merge the tags.
-  LOG_VART(averagedWay->getTags().size());
-  Tags mergedTags =
-    TagMergerFactory::mergeTags(averagedWay->getTags(), way1->getTags(), ElementType::Way);
-  averagedWay->setTags(mergedTags);
-  LOG_VART(averagedWay->getTags().size());
-  mergedTags =
-    TagMergerFactory::mergeTags(averagedWay->getTags(), way2->getTags(), ElementType::Way);
-  averagedWay->setTags(mergedTags);
-  LOG_VART(averagedWay->getTags().size());
-  averagedWay->setStatus(Status::Conflated);
+  _mergeTags(averagedWay, way1, way2);
 
   // Remove the original ways.
-  RemoveWayByEid::removeWay(map, way1->getId());
-  RemoveWayByEid::removeWay(map, way2->getId());
+  RemoveWayByEid::removeWay(_map, way1->getId());
+  RemoveWayByEid::removeWay(_map, way2->getId());
 
   // Add the merged way.
-  map->addWay(averagedWay);
+  _map->addWay(averagedWay);
 
   // Adding this ID replacement wreaks havoc on the output. The original average merging was created
   // before the concept of updating the "replaced" list, although it still feels like this update
@@ -178,6 +150,57 @@ bool LinearAverageMerger::_mergePair(
 //  LOG_VART(replaced);
 
   return false;
+}
+
+double LinearAverageMerger::_getMinSplitSize(const ConstWayPtr& way1, const ConstWayPtr& way2) const
+{
+  ElementToGeometryConverter geomConverter(_map);
+  Meters minSplitSize = ConfigOptions().getWayMergerMinSplitSize();
+  std::shared_ptr<geos::geom::LineString> lineString1 = geomConverter.convertToLineString(way1);
+  std::shared_ptr<geos::geom::LineString> lineString2 = geomConverter.convertToLineString(way2);
+  if (!lineString1 || !lineString2)
+  {
+    return 0.0;
+  }
+  LOG_VART(lineString1->getLength());
+  LOG_VART(lineString2->getLength());
+  const double lengthMultiplier = ConfigOptions().getAverageConflationMinSplitSizeMultiplier();
+  minSplitSize = std::min(minSplitSize, lineString1->getLength() * lengthMultiplier);
+  minSplitSize = std::min(minSplitSize, lineString2->getLength() * lengthMultiplier);
+  LOG_VART(minSplitSize);
+  return minSplitSize;
+}
+
+WayPtr LinearAverageMerger::_getMaximalNearestSubline(
+  const ConstWayPtr& way1, const ConstWayPtr& way2, const double minSplitSize,
+  std::vector<WayPtr>& splits)
+{
+  MaximalNearestSubline maximalNearestSubline(
+    _map, way1, way2, minSplitSize, way1->getCircularError() + way2->getCircularError());
+  int index = -1;
+  splits = maximalNearestSubline.splitWay(_map, index);
+  LOG_VART(splits.size());
+  if (splits.size() == 0)
+  {
+    return WayPtr();
+  }
+  assert(index > -1);
+  return splits[index];
+}
+
+void LinearAverageMerger::_mergeTags(
+  const WayPtr& averagedWay, const WayPtr& originalWay1, const WayPtr& originalWay2)
+{
+  LOG_VART(averagedWay->getTags().size());
+  Tags mergedTags =
+    TagMergerFactory::mergeTags(averagedWay->getTags(), originalWay1->getTags(), ElementType::Way);
+  averagedWay->setTags(mergedTags);
+  LOG_VART(averagedWay->getTags().size());
+  mergedTags =
+    TagMergerFactory::mergeTags(averagedWay->getTags(), originalWay2->getTags(), ElementType::Way);
+  averagedWay->setTags(mergedTags);
+  LOG_VART(averagedWay->getTags().size());
+  averagedWay->setStatus(Status::Conflated);
 }
 
 }
