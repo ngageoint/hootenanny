@@ -220,8 +220,7 @@ WayPtr WayString::copySimplifiedWayIntoMap(const ElementProvider& map, OsmMapPtr
     ConstWayPtr oldWay = subline.getWay();
     newWay->setPid(Way::getPid(newWay, oldWay));
 
-    newTags =
-      TagMergerFactory::getInstance().mergeTags(newTags, oldWay->getTags(), ElementType::Way);
+    newTags = TagMergerFactory::mergeTags(newTags, oldWay->getTags(), ElementType::Way);
 
     // Figure out which node is the first node. If we're between nodes, then create a new node to
     // add.

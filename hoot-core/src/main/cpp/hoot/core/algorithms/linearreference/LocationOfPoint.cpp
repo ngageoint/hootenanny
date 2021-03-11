@@ -110,7 +110,7 @@ WayLocation LocationOfPoint::locate(const ConstOsmMapPtr& map, ConstWayPtr way,
 
 WayLocation LocationOfPoint::locate(const Coordinate& inputPt) const
 {
-  double minDistance = std::numeric_limits<double>().max();
+  double minDistance = std::numeric_limits<double>::max();
   int minIndex = 0;
   double minFrac = -1.0;
 
@@ -161,7 +161,7 @@ WayLocation LocationOfPoint::locateAfter(const Coordinate& inputPt, const WayLoc
 
   assert(minLocation.getWay() == _way);
 
-  double minDistance = std::numeric_limits<double>().max();
+  double minDistance = std::numeric_limits<double>::max();
   WayLocation nextClosestLocation = minLocation;
 
   LineSegment seg;
