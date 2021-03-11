@@ -33,7 +33,6 @@
 #include <geos/geom/LineString.h>
 #include <geos/geom/Point.h>
 #include <geos/operation/distance/DistanceOp.h>
-using namespace geos::operation::distance;
 
 // Hoot
 #include <hoot/core/algorithms/linearreference/LocationOfPoint.h>
@@ -60,6 +59,7 @@ using namespace geos::operation::distance;
 #include <tgs/ProbablePath/ProbablePathCalculator.h>
 
 using namespace geos::geom;
+using namespace geos::operation::distance;
 using namespace std;
 using namespace Tgs;
 

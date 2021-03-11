@@ -29,19 +29,19 @@
 // geos
 #include <geos/geom/Envelope.h>
 
-using namespace geos::geom;
-
 // hoot
 #include <hoot/core/conflate/matching/MatchFactory.h>
+#include <hoot/core/io/OsmXmlWriter.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Exception.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/schema/MetadataTags.h>
-#include <hoot/core/io/OsmXmlWriter.h>
 
 // Qt
 #include <QStringBuilder>
+
+using namespace geos::geom;
 
 namespace hoot
 {

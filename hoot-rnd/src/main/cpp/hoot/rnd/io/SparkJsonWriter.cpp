@@ -29,8 +29,6 @@
 // geos
 #include <geos/geom/Envelope.h>
 
-using namespace geos::geom;
-
 // hoot
 #include <hoot/core/conflate/matching/MatchFactory.h>
 #include <hoot/core/io/OsmJsonWriter.h>
@@ -42,6 +40,8 @@ using namespace geos::geom;
 
 // Qt
 #include <QStringBuilder>
+
+using namespace geos::geom;
 
 namespace hoot
 {

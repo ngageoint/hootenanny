@@ -29,8 +29,6 @@
 
 // GDAL
 #include <ogr_core.h>
-class OGRCoordinateTransformation;
-class OGRSpatialReference;
 
 // GEOS
 #include <geos/geom/Coordinate.h>
@@ -38,8 +36,8 @@ class OGRSpatialReference;
 #include <geos/geom/Geometry.h>
 
 // Hoot
-#include <hoot/core/util/Units.h>
 #include <hoot/core/elements/ElementProvider.h>
+#include <hoot/core/util/Units.h>
 
 // Qt
 #include <QString>
@@ -47,6 +45,9 @@ class OGRSpatialReference;
 // Standard
 #include <memory>
 #include <vector>
+
+class OGRCoordinateTransformation;
+class OGRSpatialReference;
 
 namespace hoot
 {

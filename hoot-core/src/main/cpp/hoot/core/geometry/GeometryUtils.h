@@ -28,23 +28,6 @@
 #ifndef GEOMETRYUTILS_H
 #define GEOMETRYUTILS_H
 
-// GEOS
-#include <geos/geom/Envelope.h>
-#include <geos/geom/Polygon.h>
-
-namespace geos
-{
-  namespace geom
-  {
-    class Geometry;
-    class GeometryCollection;
-    class LinearRing;
-    class LineString;
-    class MultiLineString;
-    class MultiPolygon;
-  }
-}
-
 // GDAL
 #include <ogr_geometry.h>
 
@@ -53,6 +36,18 @@ namespace geos
 
 // Qt
 #include <QString>
+
+// GEOS
+#include <geos/geom/Envelope.h>
+#include <geos/geom/Polygon.h>
+
+namespace geos
+{
+  namespace geom
+  {
+    class GeometryCollection;
+  }
+}
 
 namespace hoot
 {

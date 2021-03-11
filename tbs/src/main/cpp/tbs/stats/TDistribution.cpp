@@ -34,12 +34,12 @@
 // Standard
 #include <iostream>
 #include <math.h>
-using namespace std;
 
 // tbs
 #include <tbs/optimization/GoldenSectionSearch.h>
 
 using namespace cv;
+using namespace std;
 
 namespace tbs
 {

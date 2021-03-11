@@ -38,11 +38,11 @@
 #include <QHash>
 #include <QString>
 #include <QXmlDefaultHandler>
-class QXmlStreamWriter;
 
 // Standard
 #include <deque>
 
+class QXmlStreamWriter;
 
 namespace hoot
 {

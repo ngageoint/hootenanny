@@ -28,27 +28,9 @@
 #ifndef ELEMENT_TO_GEOMETRY_CONVERTER_H
 #define ELEMENT_TO_GEOMETRY_CONVERTER_H
 
-// GDAL
-class OGRSpatialReference;
-
 // GEOS
 #include <geos/geom/Envelope.h>
 #include <geos/geom/Geometry.h>
-
-namespace geos
-{
-  namespace geom
-  {
-    class Geometry;
-    class GeometryCollection;
-    class LinearRing;
-    class LineString;
-    class MultiLineString;
-    class MultiPolygon;
-    class Point;
-    class Polygon;
-  }
-}
 
 // GDAL
 #include <ogr_geometry.h>
@@ -62,6 +44,15 @@ namespace geos
 
 // Standard
 #include <memory>
+
+namespace geos
+{
+  namespace geom
+  {
+    class LineString;
+    class Polygon;
+  }
+}
 
 namespace hoot
 {

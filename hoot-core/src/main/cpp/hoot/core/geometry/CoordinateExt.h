@@ -29,21 +29,19 @@
 
 #include <geos/geom/Coordinate.h>
 
-using namespace geos::geom;
-
 namespace hoot
 {
 
 /*
  * Helper for 2D vector math with Coordinates
  */
-class CoordinateExt : public Coordinate
+class CoordinateExt : public geos::geom::Coordinate
 {
 public:
 
-  CoordinateExt(Coordinate c) : Coordinate(c) {}
+  CoordinateExt(geos::geom::Coordinate c) : geos::geom::Coordinate(c) { }
   CoordinateExt(double xNew = 0.0, double yNew = 0.0, double zNew = DoubleNotANumber)
-    : Coordinate( xNew, yNew, zNew ) {}
+    : Coordinate( xNew, yNew, zNew ) { }
 
   double length() const
   {

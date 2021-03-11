@@ -30,11 +30,12 @@
 // Standard
 #include <algorithm>
 #include <sstream>
-using namespace std;
 
 // Tgs
 #include <tgs/HashMap.h>
 #include <tgs/TgsException.h>
+
+using namespace std;
 
 namespace Tgs
 {

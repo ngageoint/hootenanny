@@ -43,7 +43,6 @@
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/foreach.hpp>
-namespace pt = boost::property_tree;
 
 // Qt
 #include <QStringList>
@@ -53,7 +52,10 @@ namespace pt = boost::property_tree;
 #include <iostream>
 #include <sstream>
 #include <unistd.h>
+
 using namespace std;
+
+namespace pt = boost::property_tree;
 
 namespace hoot
 {

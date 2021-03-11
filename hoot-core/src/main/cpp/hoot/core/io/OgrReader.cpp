@@ -33,7 +33,6 @@
 
 // GEOS
 #include <geos/geom/LineString.h>
-using namespace geos::geom;
 
 // Hoot
 #include <hoot/core/criterion/AreaCriterion.h>
@@ -58,6 +57,7 @@ using namespace geos::geom;
 #include <QFileInfo>
 #include <QDateTime>
 
+using namespace geos::geom;
 using namespace std;
 
 namespace hoot

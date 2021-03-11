@@ -33,13 +33,13 @@
 #include <cmath>
 #include <exception>
 #include <iostream>
-using namespace std;
 
 #include <tgs/StreamUtils.h>
 #include <tgs/TgsException.h>
 #include <tgs/RStarTree/PageStore.h>
 #include <tgs/RStarTree/RTreeNode.h>
 
+using namespace std;
 using namespace Tgs;
 
 RStarTree::RStarTree(const std::shared_ptr<PageStore>& ps, int dimensions)
