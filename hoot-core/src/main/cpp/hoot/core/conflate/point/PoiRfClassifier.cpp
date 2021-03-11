@@ -31,12 +31,6 @@
 #include <hoot/core/algorithms/aggregator/RmseAggregator.h>
 #include <hoot/core/algorithms/aggregator/SigmaAggregator.h>
 #include <hoot/core/algorithms/aggregator/QuantileAggregator.h>
-#include <hoot/core/algorithms/splitter/MultiLineStringSplitter.h>
-#include <hoot/core/algorithms/string/ExactStringDistance.h>
-#include <hoot/core/algorithms/string/LevenshteinDistance.h>
-#include <hoot/core/algorithms/string/MaxWordSetDistance.h>
-#include <hoot/core/algorithms/string/MeanWordSetDistance.h>
-#include <hoot/core/algorithms/string/Soundex.h>
 #include <hoot/core/algorithms/extractors/AngleHistogramExtractor.h>
 #include <hoot/core/algorithms/extractors/AttributeScoreExtractor.h>
 #include <hoot/core/algorithms/extractors/CentroidDistanceExtractor.h>
@@ -49,6 +43,12 @@
 #include <hoot/core/algorithms/extractors/SmallerOverlapExtractor.h>
 #include <hoot/core/algorithms/extractors/WeightedMetricDistanceExtractor.h>
 #include <hoot/core/algorithms/extractors/WeightedShapeDistanceExtractor.h>
+#include <hoot/core/algorithms/splitter/MultiLineStringSplitter.h>
+#include <hoot/core/algorithms/string/ExactStringDistance.h>
+#include <hoot/core/algorithms/string/LevenshteinDistance.h>
+#include <hoot/core/algorithms/string/MaxWordSetDistance.h>
+#include <hoot/core/algorithms/string/MeanWordSetDistance.h>
+#include <hoot/core/algorithms/string/Soundex.h>
 #include <hoot/core/conflate/matching/MatchClassification.h>
 #include <hoot/core/conflate/matching/MatchType.h>
 #include <hoot/core/language/ToEnglishTranslateStringDistance.h>

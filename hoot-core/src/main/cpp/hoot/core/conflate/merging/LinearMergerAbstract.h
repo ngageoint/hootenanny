@@ -28,10 +28,10 @@
 #define LINEAR_MERGER_ABSTRACT_H
 
 // Hoot
+#include <hoot/core/algorithms/subline-matching/SublineStringMatcher.h>
 #include <hoot/core/conflate/merging/MergerBase.h>
 #include <hoot/core/conflate/review/ReviewMarker.h>
 #include <hoot/core/visitors/LengthOfWaysVisitor.h>
-#include <hoot/core/algorithms/subline-matching/SublineStringMatcher.h>
 
 namespace hoot
 {
@@ -39,6 +39,9 @@ namespace hoot
 class ShortestFirstComparator
 {
 public:
+
+  ShortestFirstComparator() = default;
+  virtual ~ShortestFirstComparator() = default;
 
   bool operator()(const std::pair<ElementId, ElementId>& p1,
                   const std::pair<ElementId, ElementId>& p2)
