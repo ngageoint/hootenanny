@@ -24,3 +24,5 @@ hoot tag-info $CONFIG $HOOT_HOME/test-files/DcTigerRoads.osm --keys "high" --par
 hoot tag-info $CONFIG $HOOT_HOME/test-files/DcTigerRoads.osm --keys "HIGH" --partial-key-match
 
 hoot tag-info $CONFIG $HOOT_HOME/test-files/DcTigerRoads.osm --keys "HIGH" --partial-key-match --case-insensitive
+
+hoot tag-info $CONFIG $HOOT_HOME/test-files/DcTigerRoads.osm --keys-only --delimited-text

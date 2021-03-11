@@ -50,8 +50,12 @@ Meters CalculateAreaVisitor::getArea(const OsmMapPtr& map, ElementPtr e)
 
 void CalculateAreaVisitor::visit(const ConstElementPtr& e)
 {
-  std::shared_ptr<Geometry> g = ElementToGeometryConverter(_map->shared_from_this()).convertToGeometry(e);
-  _total += g->getArea();
+  std::shared_ptr<Geometry> g =
+    ElementToGeometryConverter(_map->shared_from_this()).convertToGeometry(e, false, true);
+  if (!g->isEmpty())
+  {
+    _total += g->getArea();
+  }
 }
 
 }

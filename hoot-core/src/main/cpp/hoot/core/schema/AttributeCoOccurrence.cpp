@@ -99,7 +99,7 @@ class CoOccurrenceVisitor : public ConstElementVisitor, public ConstOsmMapConsum
 {
 public:
 
-  CoOccurrenceVisitor(RefToEidVisitor::RefToEid refSet, AttributeCoOccurrence::CoOccurrenceHash& h) :
+  CoOccurrenceVisitor(const RefToEidVisitor::RefToEid& refSet, AttributeCoOccurrence::CoOccurrenceHash& h) :
   _refSet(refSet), _coOccurrence(h) { }
 
   virtual ~CoOccurrenceVisitor() = default;

@@ -53,13 +53,13 @@ public:
 
   bool hashCode();
 
-  bool operator>(Range r) const { return _min > r.getMin(); }
+  bool operator>(const Range& r) const { return _min > r.getMin(); }
 
-  bool operator<(Range r) const { return _min < r.getMin(); }
+  bool operator<(const Range& r) const { return _min < r.getMin(); }
 
-  bool operator<=(Range r) const { return operator <(r) || operator==(r); }
+  bool operator<=(const Range& r) const { return operator <(r) || operator==(r); }
 
-  bool operator==(Range r) const { return _min == r.getMin() && _max == r.getMax(); }
+  bool operator==(const Range& r) const { return _min == r.getMin() && _max == r.getMax(); }
 
   bool in(long int l);
 

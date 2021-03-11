@@ -53,7 +53,7 @@ Change MemChangesetProvider::readNextChange()
   return nextChange;
 }
 
-void MemChangesetProvider::addChange(Change newChange)
+void MemChangesetProvider::addChange(const Change& newChange)
 {
   _changes.push_back(newChange);
 }

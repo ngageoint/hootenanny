@@ -26,16 +26,16 @@
  */
 
 // Hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
+#include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/io/EnvelopeProvider.h>
 #include <hoot/core/io/OsmMapReader.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/PartialOsmMapReader.h>
-#include <hoot/core/geometry/GeometryUtils.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/OpenCv.h>
-#include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 
 // Qt
 #include <QImage>
@@ -114,7 +114,7 @@ class PlotNodeDensityCmd : public BaseCommand
       }
     }
 
-    cv::Mat calculateDensity(Envelope envelope, double pixelSize,
+    cv::Mat calculateDensity(const Envelope& envelope, double pixelSize,
                              std::shared_ptr<OsmMapReader> reader)
     {
       std::shared_ptr<PartialOsmMapReader> r =
