@@ -27,15 +27,10 @@
 #include "LinearAverageMerger.h"
 
 // geos
-//#include <geos/geom/CoordinateSequence.h>
-//#include <geos/geom/CoordinateSequenceFactory.h>
-//#include <geos/geom/GeometryFactory.h>
 #include <geos/geom/LineString.h>
 
 // hoot
-//#include <hoot/core/algorithms/subline-matching/SublineStringMatcher.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
-//#include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/algorithms/WayAverager.h>

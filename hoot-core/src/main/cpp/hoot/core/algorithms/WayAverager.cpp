@@ -100,7 +100,6 @@ WayPtr WayAverager::average()
     ElementToGeometryConverter(_map.shared_from_this()).convertToLineString(_w2);
   if (!ls1 || !ls2)
   {
-    // TODO: log warning
     return WayPtr();
   }
 
