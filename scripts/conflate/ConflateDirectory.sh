@@ -3,7 +3,7 @@ set -e
 
 # example: 
 #
-# ./scripts/conflate/ConflateDirectory.sh 1 bison/kano_033133330302/ --quiet --parallel --reverse-inputs \
+# ./scripts/conflate/ConflateDirectory.sh 1 bison/kano_033133330302/ --quiet --parallel --average --reverse-inputs \
 #   --remove-disconnected --remove-unlikely --resolve --snap-unconnected --suppress-divided-roads \
 #   --attribute-file=bison/kano_033133330302-osm-cropped.osm
 #
@@ -14,6 +14,7 @@ function usage() {
   echo ""
   echo "  -h, --help                show usage"
   echo "  --attribute-file=[FILE]   full path to file to be used for attribute transfer; required by --suppress-divided-roads"
+  echo "  --average                 merge features by averaging"
   echo "  --network                 use Hootenanny network conflation algorithm"
   echo "  --parallel                run conflation jobs in parallel"
   echo "  --quiet                   run Hootenanny in quiet mode"
@@ -31,6 +32,7 @@ FILE_PATH=
 QUIET="--status"
 PARALLEL="no"
 PARALLEL_DEBUG= #"--will-cite"
+AVERAGE_MERGING="no"
 # REVERSE_INPUTS=yes may be useful when using --suppress-divided-roads if the files are default ordered from oldest to newest 
 # and the newest file has the best divided roads.
 REVERSE_INPUTS="no"
@@ -98,6 +100,10 @@ do
     IFS='=' read -ra tmpArr <<< "$ARGUMENT"
     ATTRIBUTE_FILE=${tmpArr[1]}
     echo "Using attribute file: "$ATTRIBUTE_FILE
+  elif [ $ARGUMENT == "--average" ]
+  then
+    AVERAGE_MERGING="yes"
+    echo "Configured to merge features by averaging."
   elif [ $ARGUMENT == "-h" ] || [ $ARGUMENT == "--help" ]
   then
     usage
@@ -216,7 +222,12 @@ fi
 
 # CONFLATION
 
-CONFLATION_CONF=ReferenceConflation.conf
+if [ $AVERAGE_MERGING == "no" ]
+then
+  CONFLATION_CONF=ReferenceConflation.conf
+else
+  CONFLATION_CONF=AverageConflation.conf
+fi
 
 HOOT_CONFLATE_OPTS="-C ${ALGORITHM_CONF} -C ${CONFLATION_CONF}"
 

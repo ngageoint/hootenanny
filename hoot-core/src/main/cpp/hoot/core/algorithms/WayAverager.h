@@ -45,6 +45,9 @@ namespace hoot
 
 class Way;
 
+/**
+ * @todo don't love that this removes ways or adds them to the map
+ */
 class WayAverager
 {
 public:
@@ -92,9 +95,9 @@ protected:
   int _moveCount1, _moveCount2;
 
   /**
-   * Merges the two nodes with the given node ids and returns a newly created node id.
+   * Merges the two nodes and returns a newly created node id.
    */
-  long _merge(long ni1, double weight1, long ni2, double weight2);
+  long _merge(const ConstNodePtr& node1, double weight1, const ConstNodePtr& node2, double weight2);
 
   /**
    * Moves the node with id n half way to the specified line string. The input node id is returned

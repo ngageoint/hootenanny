@@ -77,10 +77,14 @@ bool LinearAverageMerger::_mergePair(
   WayPtr way1 = std::dynamic_pointer_cast<Way>(_map->getElement(eid1));
   WayPtr way2 = std::dynamic_pointer_cast<Way>(_map->getElement(eid2));
 
+  // Not sure what needs to be done for this with relations.
   if (!way1 || !way2)
   {
     return false;
   }
+
+  // Remove any ways that spanned both inputs.
+  _removeSpans(_map, way1, way2);
 
   // Determine the split size.
   const double minSplitSize = _getMinSplitSize(way1, way2);
@@ -92,6 +96,7 @@ bool LinearAverageMerger::_mergePair(
   // Split left into its maximal nearest sublines.
   std::vector<WayPtr> splitsLeft;
   WayPtr mnsLeft = _getMaximalNearestSubline(way1, way2, minSplitSize, splitsLeft);
+  LOG_VART(mnsLeft.get());
   if (!mnsLeft || splitsLeft.size() == 0)
   {
     return false;
@@ -100,23 +105,21 @@ bool LinearAverageMerger::_mergePair(
   // Split right into its maximal nearest sublines.
   std::vector<WayPtr> splitsRight;
   WayPtr mnsRight = _getMaximalNearestSubline(way2, mnsLeft, minSplitSize, splitsRight);
+  LOG_VART(mnsRight.get());
   if (!mnsRight || splitsRight.size() == 0)
   {
     return false;
   }
 
-  // Add the way splits (?).
-  for (size_t i = 0; i < splitsLeft.size(); i++)
-  {
-    _map->addWay(splitsLeft[i]);
-  }
-  for (size_t i = 0; i < splitsRight.size(); i++)
-  {
-    _map->addWay(splitsRight[i]);
-  }
+  // Add the sublines to the map, as that's required in order to average them.
+  _map->addWay(mnsLeft);
+  _map->addWay(mnsRight);
 
   // Average the two maximal nearest sublines.
   WayPtr averagedWay = WayAverager::average(_map, mnsRight, mnsLeft);
+  // Remove the sublines from the map, as they're not needed anymore.
+  RemoveWayByEid::removeWay(_map, mnsLeft->getId());
+  RemoveWayByEid::removeWay(_map, mnsRight->getId());
   LOG_VART(averagedWay.get());
   if (!averagedWay)
   {
@@ -124,25 +127,22 @@ bool LinearAverageMerger::_mergePair(
   }
   LOG_VART(averagedWay->getElementId());
 
-  // Merge the tags.
+  // Merge the tags in from the original ways.
   _mergeTags(averagedWay, way1, way2);
 
   // Remove the original ways.
   RemoveWayByEid::removeWay(_map, way1->getId());
   RemoveWayByEid::removeWay(_map, way2->getId());
 
-  // Add the merged way.
+  // Add the averaged way.
   _map->addWay(averagedWay);
 
-  // Adding this ID replacement wreaks havoc on the output. The original average merging was created
-  // before the concept of updating the "replaced" list, although it still feels like this update
-  // should be made in order to keep IDs consistent as multiple mergers are applied...but maybe
-  // not?? The output is bad with this added even if you disable the original way removal above.
-//  replaced.push_back(
-//    std::pair<ElementId, ElementId>(way1->getElementId(), averagedWay->getElementId()));
-//  replaced.push_back(
-//    std::pair<ElementId, ElementId>(way2->getElementId(), averagedWay->getElementId()));
-//  LOG_VART(replaced);
+  // Do bookkeeping on what ways are replacing.
+  replaced.push_back(
+    std::pair<ElementId, ElementId>(averagedWay->getElementId(), way1->getElementId()));
+  replaced.push_back(
+    std::pair<ElementId, ElementId>(averagedWay->getElementId(), way2->getElementId()));
+  LOG_VART(replaced);
 
   return false;
 }
@@ -174,6 +174,7 @@ WayPtr LinearAverageMerger::_getMaximalNearestSubline(
     _map, way1, way2, minSplitSize, way1->getCircularError() + way2->getCircularError());
   int index = -1;
   splits = maximalNearestSubline.splitWay(_map, index);
+  LOG_VART(index);
   LOG_VART(splits.size());
   if (splits.size() == 0)
   {
