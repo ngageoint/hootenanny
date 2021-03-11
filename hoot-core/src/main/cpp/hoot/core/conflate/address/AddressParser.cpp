@@ -328,6 +328,10 @@ bool AddressParser::_isSubLetterAddress(const QString& houseNum) const
 bool AddressParser::_isValidAddressStr(QString& address, QString& houseNum, QString& street,
                                        const bool requireStreetTypeInIntersection) const
 {
+  if (address.trimmed().isEmpty())
+  {
+    return false;
+  }
   LOG_VART(address);
 
   // use libpostal to break down the address string
@@ -487,7 +491,7 @@ QString AddressParser::_parseAddressFromAltTags(const Tags& tags, QString& house
        tagItr != additionalTagKeys.end(); ++tagItr)
   {
     const QString tagKey = *tagItr;
-    QString tagVal = tags.get(tagKey);
+    QString tagVal = tags.get(tagKey).trimmed();
     if (!tagVal.isEmpty() && _isValidAddressStr(tagVal, houseNum, street))
     {
       parsedAddress = tagVal;
@@ -502,7 +506,7 @@ QString AddressParser::_parseAddressFromAltTags(const Tags& tags, QString& house
        tagItr != additionalTagKeys.end(); ++tagItr)
   {
     const QString tagKey = *tagItr;
-    QString tagVal = tags.get(tagKey);
+    QString tagVal = tags.get(tagKey).trimmed();
     if (!tagVal.isEmpty() && _isValidAddressStr(tagVal, houseNum, street, true))
     {
       parsedAddress = tagVal;
