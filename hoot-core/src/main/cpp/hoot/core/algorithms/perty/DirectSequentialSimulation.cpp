@@ -97,8 +97,8 @@ Mat DirectSequentialSimulation::_gm2dPerturb2(geos::geom::Envelope env, Meters s
   // effects
   env.expandBy(3 * _gridSpacing);
 
-  int rows = max<int>(2, ceil(env.getHeight() / (double)_gridSpacing) + 1);
-  int cols = max<int>(2, ceil(env.getWidth() / (double)_gridSpacing) + 1);
+  int rows = max<int>(2, ceil(env.getHeight() / _gridSpacing) + 1);
+  int cols = max<int>(2, ceil(env.getWidth() / _gridSpacing) + 1);
 
   double r = exp(-_gridSpacing / _D);
   double s = exp(-_gridSpacing / _D);

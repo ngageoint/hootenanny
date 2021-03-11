@@ -128,7 +128,7 @@ int OsmPbfWriter::_convertString(const QString& s)
   else
   {
     _strings.insert(s, _strings.size() + 1);
-    id = (int)_strings.size();
+    id = _strings.size();
     _d->primitiveBlock.mutable_stringtable()->add_s(s.toUtf8());
   }
 

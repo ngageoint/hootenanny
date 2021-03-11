@@ -1092,7 +1092,7 @@ Status OsmPbfReader::_parseStatus(const QString& s)
 {
   Status result;
 
-  result = (Status::Type)_parseInt(s);
+  result = _parseInt(s);
   if (result.getEnum() < Status::Invalid || result.getEnum() > Status::Conflated)
   {
     throw HootException(QObject::tr("Invalid status value: %1").arg(s));

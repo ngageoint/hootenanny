@@ -386,7 +386,7 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
     }
     _addStat("Total Conflatable Features", conflatableFeatureCount);
     _addStat("Percentage of Total Features Conflatable",
-             ((double)conflatableFeatureCount / (double)featureCount) * 100.0);
+             (conflatableFeatureCount / (double)featureCount) * 100.0);
     const double numFeaturesMarkedForReview =
       _applyVisitor(
         new NeedsReviewCriterion(_constMap), new FeatureCountVisitor(), "Reviewable Feature Count");
@@ -475,10 +475,10 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
 
     _addStat("Total Conflated Features", conflatedFeatureCount);
     _addStat("Percentage of Total Features Conflated",
-              ((double)conflatedFeatureCount / (double)featureCount) * 100.0);
+              (conflatedFeatureCount / (double)featureCount) * 100.0);
     _addStat("Total Features Marked for Review", numFeaturesMarkedForReview);
     _addStat("Percentage of Total Features Marked for Review",
-             ((double)numFeaturesMarkedForReview / (double)featureCount) * 100.0);
+             (numFeaturesMarkedForReview / (double)featureCount) * 100.0);
     _addStat("Total Reviews to be Made", numReviewsToBeMade);
     const double unconflatedFeatureCountFromMap1 =
       _applyVisitor(
@@ -494,13 +494,13 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
         "Unconflated Feature Count");
     _addStat("Total Unmatched Features", totalUnconflatedFeatureCount);
     _addStat("Percentage of Total Features Unmatched",
-             ((double)totalUnconflatedFeatureCount / (double)featureCount) * 100.0);
+             (totalUnconflatedFeatureCount / (double)featureCount) * 100.0);
     _addStat("Total Unmatched Features From Map 1", unconflatedFeatureCountFromMap1);
     _addStat("Percentage of Total Features Unmatched From Map 1",
-             ((double)unconflatedFeatureCountFromMap1 / (double)featureCount) * 100.0);
+             (unconflatedFeatureCountFromMap1 / (double)featureCount) * 100.0);
     _addStat("Total Unmatched Features From Map 2", unconflatedFeatureCountFromMap2);
     _addStat("Percentage of Total Features Unmatched From Map 2",
-             ((double)unconflatedFeatureCountFromMap2 / (double)featureCount) * 100.0);
+             (unconflatedFeatureCountFromMap2 / (double)featureCount) * 100.0);
 
     for (QMap<CreatorDescription::BaseFeatureType, double>::const_iterator it =
            _conflatableFeatureCounts.begin(); it != _conflatableFeatureCounts.end(); ++it)
@@ -615,9 +615,7 @@ void CalculateStatsOp::_interpretStatData(shared_ptr<const OsmMap>& constMap, St
       {
         // create criterion
         pCrit =
-          shared_ptr<ElementCriterion>(
-            static_cast<ElementCriterion*>(
-              Factory::getInstance().constructObject<ElementCriterion>(d.criterion)));
+          shared_ptr<ElementCriterion>(Factory::getInstance().constructObject<ElementCriterion>(d.criterion));
 
         // make sure the map is set before we use it
         ConstOsmMapConsumer* pMapConsumer = dynamic_cast<ConstOsmMapConsumer*>(pCrit.get());
@@ -1040,7 +1038,7 @@ void CalculateStatsOp::_generateFeatureStats(const CreatorDescription::BaseFeatu
   if (totalFeatures > 0.0)
   {
     percentageOfTotalFeaturesConflated =
-      ((double)conflatedFeatureCount / (double)totalFeatures) * 100.0;
+      (conflatedFeatureCount / totalFeatures) * 100.0;
   }
   LOG_VARD(percentageOfTotalFeaturesConflated);
   _addStat(
@@ -1049,7 +1047,7 @@ void CalculateStatsOp::_generateFeatureStats(const CreatorDescription::BaseFeatu
   if (totalFeatures > 0.0)
   {
     percentageOfTotalFeaturesMarkedForReview =
-      ((double)featuresMarkedForReview / (double)totalFeatures) * 100.0;
+      (featuresMarkedForReview / totalFeatures) * 100.0;
   }
   _addStat(QString("Percentage of %1s Marked for Review").arg(description),
            percentageOfTotalFeaturesMarkedForReview);
@@ -1057,7 +1055,7 @@ void CalculateStatsOp::_generateFeatureStats(const CreatorDescription::BaseFeatu
   if (totalFeatures > 0.0)
   {
     percentageOfMap1FeaturesUnconflated =
-      ((double)unconflatedFeatureCountMap1 / (double)totalFeatures) * 100.0;
+      (unconflatedFeatureCountMap1 / totalFeatures) * 100.0;
   }
   LOG_VARD(percentageOfMap1FeaturesUnconflated);
   _addStat(
@@ -1067,7 +1065,7 @@ void CalculateStatsOp::_generateFeatureStats(const CreatorDescription::BaseFeatu
   if (totalFeatures > 0.0)
   {
     percentageOfMap2FeaturesUnconflated =
-      ((double)unconflatedFeatureCountMap2 / (double)totalFeatures) * 100.0;
+      (unconflatedFeatureCountMap2 / totalFeatures) * 100.0;
   }
   LOG_VARD(percentageOfMap2FeaturesUnconflated);
   _addStat(
@@ -1077,7 +1075,7 @@ void CalculateStatsOp::_generateFeatureStats(const CreatorDescription::BaseFeatu
   if (totalFeatures > 0.0)
   {
     percentageOfTotalFeaturesUnconflated =
-      ((double)totalUnconflatedFeatureCount / (double)totalFeatures) * 100.0;
+      (totalUnconflatedFeatureCount / totalFeatures) * 100.0;
   }
   LOG_VARD(percentageOfTotalFeaturesUnconflated);
   _addStat(
