@@ -394,7 +394,6 @@ The value to compare with AttributeValueCriterion.
 The type of attribute to compare with AttributeValueCriterion. Valid key values are: changeset,
 timestamp, user, uid, or version.
 
-
 === autocorrect.options
 
 * Data Type: bool
@@ -402,6 +401,13 @@ timestamp, user, uid, or version.
 
 Temporary setting that addresses some Hootenanny iD Editor UI bugs.  See
 MatchFactory::_tempFixDefaults() for more info.
+
+=== average.conflation.min.split.size.multiplier
+
+* Data Type: double
+* Default Value: `0.7`
+
+TODO
 
 === bounds
 

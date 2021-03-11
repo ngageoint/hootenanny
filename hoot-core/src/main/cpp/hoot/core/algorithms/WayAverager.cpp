@@ -98,6 +98,11 @@ WayPtr WayAverager::average()
     ElementToGeometryConverter(_map.shared_from_this()).convertToLineString(_w1);
   std::shared_ptr<const LineString> ls2 =
     ElementToGeometryConverter(_map.shared_from_this()).convertToLineString(_w2);
+  if (!ls1 || !ls2)
+  {
+    // TODO: log warning
+    return WayPtr();
+  }
 
   // All of the fancy stats here are compliments of Mike Porter.
 

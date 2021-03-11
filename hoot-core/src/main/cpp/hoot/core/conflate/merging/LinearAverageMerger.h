@@ -34,7 +34,7 @@ namespace hoot
 {
 
 /**
- * TODO
+ * Uses averaging to merge linear features
  */
 class LinearAverageMerger : public LinearMergerAbstract
 {
@@ -48,7 +48,7 @@ public:
   virtual ~LinearAverageMerger() = default;
 
   virtual QString getDescription() const override
-  { return "Merges linear features by averaging geometries"; }
+  { return "Merges linear features by averaging tags and geometries"; }
 
   virtual QString getName() const override { return className(); }
 
