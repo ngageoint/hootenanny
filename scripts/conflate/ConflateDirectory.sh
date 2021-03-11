@@ -134,7 +134,8 @@ done
 LENGTH=${#FILE_ARRAY[@]}
 
 # The tag sources are the filenames of each file in the source directory.
-TAG_SOURCES=`echo $FILE_LIST | sed 's/.osm//g' | sed 's/ /;/g'`
+TAG_LIST=`ls -l $FILE_PATH | grep .osm | awk '{print $9}'`
+TAG_SOURCES=`echo $TAG_LIST | sed 's/.osm//g' | sed 's/ /;/g'`
 
 # ATTRIBUTE TRANSFER
 
