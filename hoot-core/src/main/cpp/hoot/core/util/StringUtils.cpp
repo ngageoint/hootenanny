@@ -41,12 +41,12 @@ QString StringUtils::millisecondsToDhms(const qint64 durationInMilliseconds)
 {
   QString res;
   int duration = (int)(durationInMilliseconds / 1000);
-  const int seconds = (int)(duration % 60);
+  const int seconds = duration % 60;
   duration /= 60;
-  const int minutes = (int)(duration % 60);
+  const int minutes = duration % 60;
   duration /= 60;
-  const int hours = (int)(duration % 24);
-  const int days = (int)(duration / 24);
+  const int hours = duration % 24;
+  const int days = duration / 24;
   if ((hours == 0) && (days == 0))
   {
     return res.sprintf("%02d:%02d", minutes, seconds);
