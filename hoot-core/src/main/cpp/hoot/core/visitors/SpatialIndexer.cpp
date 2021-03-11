@@ -54,7 +54,7 @@ int SpatialIndexer::logWarnCount = 0;
 SpatialIndexer::SpatialIndexer(
   std::shared_ptr<HilbertRTree>& index, deque<ElementId>& indexToEid,
   const std::shared_ptr<ElementCriterion>& criterion,
-  std::function<Meters (const ConstElementPtr& e)> getSearchRadius, ConstOsmMapPtr pMap) :
+  const std::function<Meters (const ConstElementPtr& e)>& getSearchRadius, ConstOsmMapPtr pMap) :
 _criterion(criterion),
 _getSearchRadius(getSearchRadius),
 _index(index),

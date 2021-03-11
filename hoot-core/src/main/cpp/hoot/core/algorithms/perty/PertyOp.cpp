@@ -27,17 +27,17 @@
 #include "PertyOp.h"
 
 // hoot
+#include <hoot/core/algorithms/perty/DirectSequentialSimulation.h>
+#include <hoot/core/algorithms/perty/PermuteGridCalculator.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/ops/OpExecutor.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
-#include <hoot/core/algorithms/perty/DirectSequentialSimulation.h>
-#include <hoot/core/algorithms/perty/PermuteGridCalculator.h>
-#include <hoot/core/io/OsmMapWriterFactory.h>
 
 //Qt
 #include <QVector>
@@ -213,7 +213,7 @@ void PertyOp::apply(std::shared_ptr<OsmMap>& map)
   namedOps.apply(map);
 }
 
-Mat PertyOp::_calculatePermuteGrid(geos::geom::Envelope env, int& rows, int& cols)
+Mat PertyOp::_calculatePermuteGrid(const geos::geom::Envelope& env, int& rows, int& cols)
 {
   LOG_DEBUG("Using permute algorithm: " + _permuteAlgorithm);
   _gridCalculator.reset(

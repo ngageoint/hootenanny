@@ -861,7 +861,7 @@ QString Settings::_replaceVariablesValue(QString value) const
   return _replaceVariablesValue(value, used);
 }
 
-QString Settings::_replaceVariablesValue(QString value, std::set<QString> used) const
+QString Settings::_replaceVariablesValue(QString value, const std::set<QString>& used) const
 {
   bool done = false;
   int offset = 0;
