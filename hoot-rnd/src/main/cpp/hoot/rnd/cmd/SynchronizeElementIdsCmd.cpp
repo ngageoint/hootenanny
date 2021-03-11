@@ -52,7 +52,7 @@ public:
   virtual QString getName() const override { return "sync-element-ids"; }
 
   virtual QString getDescription() const override
-  { return "Copies element IDs from one map to another for identical elements (experimental)"; }
+  { return "Copies IDs for identical elements from one map to another (experimental)"; }
 
   virtual QString getType() const { return "rnd"; }
 
