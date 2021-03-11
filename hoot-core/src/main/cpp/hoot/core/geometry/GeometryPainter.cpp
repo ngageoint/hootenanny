@@ -31,7 +31,6 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/util/Exception.h>
-using namespace hoot::elements;
 
 // GDAL Includes
 #include <ogrsf_frmts.h>
@@ -39,6 +38,8 @@ using namespace hoot::elements;
 // Qt Includes
 #include <QPainter>
 #include <QPainterPath>
+
+using namespace hoot::elements;
 
 namespace hoot
 {

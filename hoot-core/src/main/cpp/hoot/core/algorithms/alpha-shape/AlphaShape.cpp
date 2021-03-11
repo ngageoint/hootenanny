@@ -43,7 +43,6 @@
 #include <geos/geom/MultiPolygon.h>
 #include <geos/geom/Point.h>
 #include <geos/util/IllegalArgumentException.h>
-using namespace geos::geom;
 
 // Qt
 #include <QString>
@@ -52,13 +51,15 @@ using namespace geos::geom;
 #include <stdlib.h>
 #include <limits>
 #include <queue>
-using namespace std;
 
 // TGS
 #include <tgs/DelaunayTriangulation/DelaunayTriangulation.h>
 #include <tgs/DisjointSet/DisjointSet.h>
 #include <tgs/RStarTree/HilbertCurve.h>
 #include <tgs/Statistics/Random.h>
+
+using namespace geos::geom;
+using namespace std;
 using namespace Tgs;
 
 namespace hoot

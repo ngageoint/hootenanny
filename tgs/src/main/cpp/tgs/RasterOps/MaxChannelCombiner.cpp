@@ -27,10 +27,9 @@
 
 #include "MaxChannelCombiner.h"
 
-// Standard Includes
-using namespace std;
-
 #include <tgs/TgsException.h>
+
+using namespace std;
 
 namespace Tgs
 {

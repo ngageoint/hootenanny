@@ -31,27 +31,29 @@
 #include <geos/geom/LineString.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Point.h>
-using namespace geos::geom;
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/algorithms/DirectionFinder.h>
 #include <hoot/core/algorithms/WayDiscretizer.h>
+#include <hoot/core/criterion/OneWayCriterion.h>
 #include <hoot/core/criterion/ParallelWayCriterion.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Way.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/schema/TagComparator.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Settings.h>
-#include <hoot/core/criterion/OneWayCriterion.h>
+
 // Standard
 #include <vector>
-using namespace std;
 
 // Tgs
 #include <tgs/StreamUtils.h>
 #include <tgs/Statistics/Normal.h>
+
+using namespace geos::geom;
+using namespace std;
 using namespace Tgs;
 
 namespace hoot

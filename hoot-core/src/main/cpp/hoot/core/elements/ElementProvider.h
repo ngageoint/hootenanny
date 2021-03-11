@@ -30,14 +30,14 @@
 // std
 #include <memory>
 
+#include <hoot/core/elements/Element.h>
+#include <hoot/core/elements/ElementId.h>
+#include <hoot/core/elements/Node.h>
+#include <hoot/core/elements/Relation.h>
+#include <hoot/core/elements/Way.h>
+
 // GDAL
 class OGRSpatialReference;
-
-#include <hoot/core/elements/ElementId.h>
-#include <hoot/core/elements/Element.h>
-#include <hoot/core/elements/Node.h>
-#include <hoot/core/elements/Way.h>
-#include <hoot/core/elements/Relation.h>
 
 namespace hoot
 {

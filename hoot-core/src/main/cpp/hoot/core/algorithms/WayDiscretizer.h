@@ -27,15 +27,6 @@
 #ifndef __WAY_DISCRETIZER_H__
 #define __WAY_DISCRETIZER_H__
 
-// GEOS
-namespace geos
-{
-  namespace geom
-  {
-    class Coordinate;
-  }
-}
-
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/Units.h>
@@ -46,6 +37,15 @@ namespace geos
 
 // Tgs
 #include <tgs/HashMap.h>
+
+// GEOS
+namespace geos
+{
+  namespace geom
+  {
+    class Coordinate;
+  }
+}
 
 namespace hoot
 {

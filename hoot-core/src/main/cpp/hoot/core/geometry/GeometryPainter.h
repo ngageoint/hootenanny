@@ -28,7 +28,13 @@
 #ifndef __GEOMETRY_PAINTER_H__
 #define __GEOMETRY_PAINTER_H__
 
-//OGR Includes
+// Qt Includes
+#include <QMatrix>
+class QPainter;
+class QPolygonF;
+class QRect;
+
+// OGR
 class OGREnvelope;
 class OGRGeometry;
 class OGRGeometryCollection;
@@ -37,12 +43,6 @@ class OGRLineString;
 class OGRPoint;
 class OGRPolygon;
 class OGRMultiPoint;
-
-// Qt Includes
-#include <QMatrix>
-class QPainter;
-class QPolygonF;
-class QRect;
 
 namespace hoot
 {

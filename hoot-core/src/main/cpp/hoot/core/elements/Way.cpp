@@ -40,10 +40,10 @@
 #include <geos/geom/LinearRing.h>
 #include <geos/geom/LineString.h>
 #include <geos/geom/Polygon.h>
-using namespace geos::geom;
 
 #include <tgs/StreamUtils.h>
 
+using namespace geos::geom;
 using namespace std;
 
 namespace hoot

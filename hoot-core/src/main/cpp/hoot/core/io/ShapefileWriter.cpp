@@ -33,7 +33,6 @@
 // GEOS
 #include <geos/geom/LineString.h>
 #include <geos/geom/Polygon.h>
-using namespace geos::geom;
 
 // Hoot
 #include <hoot/core/criterion/AreaCriterion.h>
@@ -53,6 +52,8 @@ using namespace geos::geom;
 #include <QFileInfo>
 #include <QHash>
 #include <QMap>
+
+using namespace geos::geom;
 
 namespace hoot
 {

@@ -66,7 +66,6 @@
 // Standard
 #include <iostream>
 #include <fstream>
-using namespace std;
 
 // TGS
 #include <tgs/HashMap.h>
@@ -74,6 +73,8 @@ using namespace std;
 #ifdef BOOST_GRAPH_NO_BUNDLED_PROPERTIES
 #error Bundle support is required.
 #endif
+
+using namespace std;
 
 namespace hoot
 {

@@ -35,7 +35,6 @@
 
 // GDAL
 #include <ogr_core.h>
-class OGRSpatialReference;
 
 // Qt
 #include <QString>
@@ -45,6 +44,8 @@ class OGRSpatialReference;
 #include <memory>
 #include <set>
 #include <vector>
+
+class OGRSpatialReference;
 
 namespace Tgs
 {

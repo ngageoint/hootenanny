@@ -28,6 +28,15 @@
 #ifndef GEOMETRY_TO_ELEMENT_CONVERTER_H
 #define GEOMETRY_TO_ELEMENT_CONVERTER_H
 
+// GDAL
+#include <ogr_geometry.h>
+
+// Hoot
+#include <hoot/core/elements/OsmMap.h>
+
+// Qt
+#include <QString>
+
 // GEOS
 #include <geos/geom/Envelope.h>
 
@@ -45,15 +54,6 @@ namespace geos
     class Point;
   }
 }
-
-// GDAL
-#include <ogr_geometry.h>
-
-// Hoot
-#include <hoot/core/elements/OsmMap.h>
-
-// Qt
-#include <QString>
 
 namespace hoot
 {

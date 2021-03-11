@@ -34,8 +34,8 @@
 #include <geos/geom/Envelope.h>
 
 // Hoot
+#include <hoot/core/elements/ElementIterator.h>
 #include <hoot/core/elements/ElementProvider.h>
-#include <hoot/core/visitors/ElementVisitor.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/NodeMap.h>
 #include <hoot/core/elements/Relation.h>
@@ -44,9 +44,11 @@
 #include <hoot/core/elements/WayMap.h>
 #include <hoot/core/util/DefaultIdGenerator.h>
 #include <hoot/core/util/Units.h>
-#include <hoot/core/elements/ElementIterator.h>
+#include <hoot/core/visitors/ElementVisitor.h>
 
+// Standard
 #include <memory>
+#include <vector>
 
 namespace hoot
 {
@@ -55,9 +57,6 @@ namespace hoot
     class Tags;
   }
 }
-
-// Standard
-#include <vector>
 
 namespace hoot
 {

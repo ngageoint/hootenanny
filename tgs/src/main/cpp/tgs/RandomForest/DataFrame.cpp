@@ -42,11 +42,12 @@
 #include <limits>
 #include <sstream>
 #include <stdexcept>
-using namespace std;
 
 // Tgs
 #include <tgs/TgsException.h>
 #include <tgs/Statistics/Random.h>
+
+using namespace std;
 
 namespace Tgs
 {

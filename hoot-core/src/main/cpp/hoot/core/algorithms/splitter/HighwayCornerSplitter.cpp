@@ -42,12 +42,12 @@
 #include <geos/geom/CoordinateArraySequence.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/LineString.h>
-using namespace geos::geom;
 
 // Qt
 #include <QDebug>
 #include <QTextStream>
 
+using namespace geos::geom;
 using namespace std;
 
 namespace hoot
