@@ -28,13 +28,13 @@
 #define ITERATIVENETWORKMATCHER_H
 
 // hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/algorithms/optimizer/SingleAssignmentProblemSolver.h>
 #include <hoot/core/conflate/network/IndexedEdgeMatchSet.h>
 #include <hoot/core/conflate/network/NetworkMatcher.h>
 #include <hoot/core/conflate/network/NetworkEdgeScore.h>
 #include <hoot/core/conflate/network/NetworkVertexScore.h>
 #include <hoot/core/conflate/network/OsmNetwork.h>
+#include <hoot/core/elements/OsmMap.h>
 
 // tgs
 #include <tgs/RStarTree/HilbertRTree.h>
@@ -114,6 +114,8 @@ private:
       em1 = 0;
       em2 = 0;
     }
+
+    virtual ~CostFunction() = default;
 
     /**
      * Returns the cost associated with assigning actor a to task t.

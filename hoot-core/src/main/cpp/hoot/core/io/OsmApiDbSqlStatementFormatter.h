@@ -73,6 +73,7 @@ class OsmApiDbSqlStatementFormatter : public ApiDbSqlStatementFormatter
 public:
 
   OsmApiDbSqlStatementFormatter(const QString& delimiter);
+  virtual ~OsmApiDbSqlStatementFormatter() = default;
 
   QStringList nodeToSqlStrings(const ConstNodePtr& node, const long nodeId, const long changesetId,
                                const bool validate = false);

@@ -33,7 +33,9 @@ namespace tbs
 class NegateFunction : public LineSearch::Function
 {
 public:
-  NegateFunction(LineSearch::Function& f) : _f(f) {}
+  NegateFunction(LineSearch::Function& f) : _f(f) { }
+
+  virtual ~NegateFunction() = default;
 
   /**
    * Calculates a function f for the given x.

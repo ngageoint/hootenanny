@@ -47,6 +47,9 @@ using namespace std;
 namespace hoot
 {
 
+/**
+ * @see PertyOp
+ */
 class PerturbCmd : public BaseCommand
 {
 public:
@@ -57,7 +60,7 @@ public:
 
   virtual QString getName() const override { return "perturb"; }
 
-  virtual QString getDescription() const override { return "Perturbs a map using PERTY"; }
+  virtual QString getDescription() const override { return "Perturbs features in a map"; }
 
   virtual int runSimple(QStringList& args) override
   {

@@ -44,6 +44,7 @@ class PoiPolygonRfClassifier
 public:
 
   PoiPolygonRfClassifier();
+  virtual ~PoiPolygonRfClassifier() = default;
 
   virtual std::map<QString, double> getFeatures(const ConstOsmMapPtr& m, ElementId eid1,
                                                 ElementId eid2) const;
