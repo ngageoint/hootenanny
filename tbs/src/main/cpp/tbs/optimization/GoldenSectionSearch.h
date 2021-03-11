@@ -53,7 +53,9 @@ public:
    */
   GoldenSectionSearch(double epsilon);
 
-  virtual double argmin(Function& f, double minx, double maxx);
+  virtual ~GoldenSectionSearch() = default;
+
+  double argmin(Function& f, double minx, double maxx) override;
 
 private:
   double _phi;
