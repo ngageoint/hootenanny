@@ -115,19 +115,19 @@ namespace Tgs
     ss << std::setprecision(4);
     if (bytes >= 1024l * 1024l * 1024l * 1024l)
     {
-      ss << (double)(bytes / (1024.0 * 1024.0 * 1024.0 * 1024.0)) << "TB";
+      ss << (bytes / (1024.0 * 1024.0 * 1024.0 * 1024.0)) << "TB";
     }
     if (bytes >= 1024l * 1024l * 1024l)
     {
-      ss << (double)(bytes / (1024.0 * 1024.0 * 1024.0)) << "GB";
+      ss << (bytes / (1024.0 * 1024.0 * 1024.0)) << "GB";
     }
     else if (bytes >= 1024 * 1024)
     {
-      ss << (double)(bytes / (1024.0 * 1024.0)) << "MB";
+      ss << (bytes / (1024.0 * 1024.0)) << "MB";
     }
     else if (bytes >= 1024)
     {
-      ss << (double)(bytes / 1024.0) << "KB";
+      ss << (bytes / 1024.0) << "KB";
     }
     else
     {

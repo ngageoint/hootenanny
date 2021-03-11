@@ -313,7 +313,7 @@ double NodeMatcher::scorePair(long nid1, long nid2)
   }
 
   // simple stupid heuristic. Replace w/ some cosine fanciness later.
-  int diff = abs((int)s1 - (int)s2);
+  int diff = abs(s1 - s2);
 
   double result = (min(s1, s2) - diff) * thetaScore * distanceScore;
 

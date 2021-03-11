@@ -158,7 +158,7 @@ QList<std::shared_ptr<const PertyTestRunResult>> PertyTestRunner::runTest(
       LOG_VARD(scoreSum);
     }
 
-    const double avgScore = (double)scoreSum / (double)_numTestSimulations;
+    const double avgScore = scoreSum / (double)_numTestSimulations;
     LOG_VARD(avgScore);
     const double scoreVariance = abs(_expectedScores[i] - avgScore);
     LOG_VARD(scoreVariance);

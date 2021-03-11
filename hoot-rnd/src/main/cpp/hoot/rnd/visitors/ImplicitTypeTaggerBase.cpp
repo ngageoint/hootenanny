@@ -100,7 +100,7 @@ ImplicitTypeTaggerBase::~ImplicitTypeTaggerBase()
     " features were involved in multiple tag rules and were not modified.");
   if (_numTagsAdded > 0 && _numFeaturesModified > 0)
   {
-    long avgTagsAdded = (long)(_numTagsAdded / _numFeaturesModified);
+    long avgTagsAdded = _numTagsAdded / _numFeaturesModified;
     LOG_INFO(
       "Average tags added per feature: " << StringUtils::formatLargeNumber(avgTagsAdded));
     LOG_INFO(
