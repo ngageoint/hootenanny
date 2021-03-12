@@ -48,10 +48,9 @@ A conflation workflow defines the manner in which two maps are merged together. 
 * **[Reference Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/user/OldDocs.asciidoc)** **(default)** - _Keep the best of both maps while favoring the first_
   * Merge geometry and tag from map B into map A, and favor map A's data when there are conflicts. 
   * Use this type of conflation when you want conflated output based on the best state of both input datasets while favoring one of them.
-* **[Average Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/user/OldDocs.asciidoc)** - _Keep the average of both maps_
-  * Merge by using the average of each feature's geometry and tags between maps A and B. 
-  * Use this type of conflation when you consider both inputs equal in quality.
-  * Currently, geometry averaging only applies to linear features but may eventually be extended to point and polygon geometries. Point and polygon geometries are merged the same as in Reference Conflation. Average Conflation is not available from iD Editor.
+* **[Average Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/user/OldDocs.asciidoc)** - _Keep the average of both maps_ 
+  * Use this type of conflation when you consider both input maps equal in quality and want a result that is an average of the two..
+  * Currently, geometry averaging only applies to linear features but may eventually be extended to point and polygon geometries. Point and polygon geometries are merged the same as in Reference Conflation. Also, Average Conflation is not available from iD Editor.
 * **[Horizontal Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/cut.asciidoc)** (aka Cookie Cutter Conflation) - _Completely replace a section_
   * Either:
     * Define a region in map A and replace data in that region with data in the same region from map B OR 
