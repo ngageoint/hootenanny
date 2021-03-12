@@ -54,8 +54,8 @@ class PaintVisitor : public ConstElementVisitor
 {
 public:
 
-  PaintVisitor(OsmMapPtr map, GeometryPainter& gp, QPainter& pt, QMatrix& m) :
-    _map(map), _gp(gp), _pt(pt), _m(m) { }
+  PaintVisitor(OsmMapPtr map, QPainter& pt, QMatrix& m) :
+    _map(map), _pt(pt), _m(m) { }
   virtual ~PaintVisitor() = default;
 
   virtual void visit(const ConstElementPtr& e)
@@ -64,7 +64,7 @@ public:
 
     for (size_t i = 0; i < ways.size(); i++)
     {
-      _gp.drawWay(_pt, _map.get(), ways[i].get(), _m);
+      GeometryPainter::drawWay(_pt, _map.get(), ways[i].get(), _m);
     }
   }
 
@@ -75,7 +75,6 @@ public:
 private:
 
   OsmMapPtr _map;
-  GeometryPainter& _gp;
   QPainter& _pt;
   QMatrix& _m;
 };
@@ -159,10 +158,9 @@ void RasterComparator::_renderImage(const std::shared_ptr<OsmMap>& map, cv::Mat&
   pen.setColor(qRgb(1, 0, 0));
   pt.setPen(pen);
 
-  GeometryPainter gp;
-  QMatrix m = gp.createMatrix(pt.viewport(), _projectedBounds);
+  QMatrix m = GeometryPainter::createMatrix(pt.viewport(), _projectedBounds);
 
-  PaintVisitor pv(map, gp, pt, m);
+  PaintVisitor pv(map, pt, m);
   HighwayCriterion crit(map);
   FilteredVisitor v(crit, pv);
   map->visitRo(v);

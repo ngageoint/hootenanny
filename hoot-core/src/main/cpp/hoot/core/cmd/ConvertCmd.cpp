@@ -81,7 +81,7 @@ public:
     {
       throw IllegalArgumentException(
         "When using " + MapCropper::className() + " with the convert command, the " +
-        configOpts.getCropBoundsKey() + " option must be specified.");
+        ConfigOptions::getCropBoundsKey() + " option must be specified.");
     }
 
     QStringList inputs;

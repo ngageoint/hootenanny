@@ -77,7 +77,7 @@ public:
     }
 
     // adding the source datetime just makes things really slow.
-    conf().set(ConfigOptions().getReaderAddSourceDatetimeKey(), false);
+    conf().set(ConfigOptions::getReaderAddSourceDatetimeKey(), false);
 
     const QStringList inputs = args[0].split(";");
     const QString output = args[1];

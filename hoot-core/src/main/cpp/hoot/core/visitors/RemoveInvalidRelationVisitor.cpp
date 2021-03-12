@@ -77,7 +77,7 @@ void RemoveInvalidRelationVisitor::visit(const ElementPtr& e)
           //  Merge the relation tags back on to the single way before deleting the relation
           ElementPtr element = _map->getElement(members[0].getElementId());
           Tags merged =
-            TagMergerFactory::getInstance().mergeTags(
+            TagMergerFactory::mergeTags(
               element->getTags(), r->getTags(), ElementType::Relation);
           element->setTags(merged);
         }

@@ -500,7 +500,7 @@ QString AddressParser::_parseAddressFromAltTags(const Tags& tags, QString& house
     }
   }
 
-  additionalTagKeys = QSet<QString>::fromList(tags.getNameKeys());
+  additionalTagKeys = QSet<QString>::fromList(Tags::getNameKeys());
   LOG_VART(additionalTagKeys);
   for (QSet<QString>::const_iterator tagItr = additionalTagKeys.begin();
        tagItr != additionalTagKeys.end(); ++tagItr)

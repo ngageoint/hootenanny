@@ -151,14 +151,13 @@ void RemoveInvalidMultilineStringMembersVisitor::visit(const ElementPtr& e)
 
       // Copy tags from the multiline string tags to the children and remove from relation
       vector<RelationData::Entry> members = r->getMembers();
-      TagMergerFactory& merger = TagMergerFactory::getInstance();
       for (vector<RelationData::Entry>::iterator i = members.begin(); i != members.end(); i++)
       {
         ElementId id = i->getElementId();
         ElementPtr element = _map->getElement(id);
         if (element)
         {
-          Tags merged = merger.mergeTags(element->getTags(), tags, id.getType());
+          Tags merged = TagMergerFactory::mergeTags(element->getTags(), tags, id.getType());
           element->setTags(merged);
         }
         LOG_TRACE("Removing: " << id << "...");
