@@ -3,7 +3,7 @@ set -e
 
 # example: 
 #
-# ./scripts/conflate/ConflateDirectory.sh 1 bison/kano_033133330302/ --quiet --parallel --average --reverse-inputs \
+# ./scripts/conflate/ConflateDirectory.sh 1 bison/kano_033133330302/ --quiet --parallel --reverse-inputs \
 #   --remove-disconnected --remove-unlikely --resolve --snap-unconnected --suppress-divided-roads \
 #   --attribute-file=bison/kano_033133330302-osm-cropped.osm
 #
