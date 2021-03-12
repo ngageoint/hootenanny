@@ -27,6 +27,7 @@
 #include "NeedsReviewCriterion.h"
 
 // Hoot
+#include <hoot/core/conflate/review/ReviewMarker.h>
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/util/Factory.h>
 
@@ -37,7 +38,7 @@ HOOT_FACTORY_REGISTER(ElementCriterion, NeedsReviewCriterion)
 
 bool NeedsReviewCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  return _reviewMarker.isNeedsReview(_map, e);
+  return ReviewMarker::isNeedsReview(_map, e);
 }
 
 }

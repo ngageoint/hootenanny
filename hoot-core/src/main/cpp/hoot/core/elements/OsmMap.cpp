@@ -50,12 +50,12 @@
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/util/Validate.h>
 #include <hoot/core/visitors/ConstElementVisitor.h>
-using namespace hoot::elements;
 
 // Qt
 #include <QDebug>
 #include <QFileInfo>
 
+using namespace hoot::elements;
 using namespace std;
 
 namespace hoot

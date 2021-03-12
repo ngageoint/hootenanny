@@ -30,7 +30,6 @@
 // GEOS
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/LineString.h>
-using namespace geos::geom;
 
 // Hoot
 #include <hoot/core/algorithms/Distance.h>
@@ -40,6 +39,8 @@ using namespace geos::geom;
 
 // Standard
 #include <iostream>
+
+using namespace geos::geom;
 using namespace std;
 
 namespace hoot

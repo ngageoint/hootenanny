@@ -28,9 +28,6 @@
 #ifndef OSMPBFREADER_H
 #define OSMPBFREADER_H
 
-// GDAL
-class OGRSpatialReference;
-
 // Qt
 #include <QHash>
 #include <QString>
@@ -46,6 +43,9 @@ class OGRSpatialReference;
 
 // tgs
 #include <tgs/BigContainers/BigMap.h>
+
+// GDAL
+class OGRSpatialReference;
 
 namespace hoot
 {

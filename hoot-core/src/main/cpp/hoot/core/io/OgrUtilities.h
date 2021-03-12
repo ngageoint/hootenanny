@@ -29,14 +29,15 @@
 
 // GDAL
 #include <gdal.h>
-// Forward declaration
-class GDALDataset;
 
 // Qt
 #include <QString>
 #include <QSet>
 
 #include <vector>
+
+// Forward declaration
+class GDALDataset;
 
 namespace hoot
 {

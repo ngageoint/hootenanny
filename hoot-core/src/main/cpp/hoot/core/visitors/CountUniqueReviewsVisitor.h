@@ -28,9 +28,9 @@
 #define COUNTUNIQUEREVIEWSVISITOR_H
 
 // hoot
-#include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
 #include <hoot/core/conflate/review/ReviewMarker.h>
 #include <hoot/core/info/SingleStatistic.h>
+#include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
 
 namespace hoot
 {
@@ -65,7 +65,6 @@ public:
 private:
 
   std::set<ReviewMarker::ReviewUid> _reviews;
-  ReviewMarker _reviewMarker;
 };
 
 }

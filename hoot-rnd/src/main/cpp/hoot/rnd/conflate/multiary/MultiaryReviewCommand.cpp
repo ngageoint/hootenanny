@@ -39,10 +39,10 @@
 // Boost
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/foreach.hpp>
-namespace pt = boost::property_tree;
-
 
 #include <QCryptographicHash>
+
+namespace pt = boost::property_tree;
 
 namespace hoot
 {

@@ -147,7 +147,7 @@ void MultiaryMatchComparator::_calculateNodeBasedStats(const ConstOsmMapPtr& con
       {
         std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature> translated =
             translator->translateToOgr(tags, e->getElementType(),
-              ec.getGeometryType(e, false));
+              ElementToGeometryConverter::getGeometryType(e, false));
 
         bool foundCategory = false;
         foreach (const ScriptToOgrSchemaTranslator::TranslatedFeature& tf, translated)

@@ -34,12 +34,12 @@
 #include <geos/geom/LineString.h>
 #include <geos/geom/Point.h>
 #include <geos/operation/distance/DistanceOp.h>
-using namespace geos::operation::distance;
 
 // Qt
 #include <QDebug>
 
 using namespace geos::geom;
+using namespace geos::operation::distance;
 
 namespace hoot
 {

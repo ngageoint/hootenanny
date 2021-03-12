@@ -67,7 +67,7 @@ bool AreaCriterion::isSatisfied(const Tags& tags, const ElementType& elementType
   // this to be an area feature.
   for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
   {
-    const QString kvp = OsmSchema::getInstance().toKvp(it.key(), it.value());
+    const QString kvp = OsmSchema::toKvp(it.key(), it.value());
     const SchemaVertex& tv = OsmSchema::getInstance().getTagVertex(kvp);
     uint16_t g = tv.geometries;
 

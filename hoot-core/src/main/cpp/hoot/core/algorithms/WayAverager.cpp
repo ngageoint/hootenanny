@@ -33,18 +33,18 @@
 #include <geos/geom/LineString.h>
 #include <geos/geom/Point.h>
 #include <geos/operation/distance/DistanceOp.h>
-using namespace geos::operation::distance;
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/algorithms/DirectionFinder.h>
-#include <hoot/core/schema/TagMergerFactory.h>
+#include <hoot/core/criterion/OneWayCriterion.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/elements/Way.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/ops/RemoveWayByEid.h>
-#include <hoot/core/elements/Way.h>
-#include <hoot/core/criterion/OneWayCriterion.h>
+#include <hoot/core/schema/TagMergerFactory.h>
 
 using namespace geos::geom;
+using namespace geos::operation::distance;
 using namespace std;
 
 namespace hoot

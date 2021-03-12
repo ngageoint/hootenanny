@@ -199,7 +199,7 @@ void DuplicateWayRemover::_splitDuplicateWays(WayPtr w1, WayPtr w2, bool rev1, b
   if (length > 1)
   {
     const Tags mergedTags =
-      TagMergerFactory::getInstance().mergeTags(w1->getTags(), w2->getTags(), ElementType::Way);
+      TagMergerFactory::mergeTags(w1->getTags(), w2->getTags(), ElementType::Way);
     const vector<long>& nodes1 = w1->getNodeIds();
     const vector<long>& nodes2 = w2->getNodeIds();
     // _splitDuplicateWays is always called where num_nodes(w1) >= num_nodes(w2), so the following

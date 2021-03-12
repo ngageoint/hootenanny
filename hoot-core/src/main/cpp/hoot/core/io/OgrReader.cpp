@@ -33,7 +33,6 @@
 
 // GEOS
 #include <geos/geom/LineString.h>
-using namespace geos::geom;
 
 // Hoot
 #include <hoot/core/criterion/AreaCriterion.h>
@@ -58,6 +57,7 @@ using namespace geos::geom;
 #include <QFileInfo>
 #include <QDateTime>
 
+using namespace geos::geom;
 using namespace std;
 
 namespace hoot
@@ -903,7 +903,7 @@ std::shared_ptr<Envelope> OgrReaderInternal::getBoundingBoxFromConfig(
     if (bbox.size() != 4)
     {
       throw HootException(
-        QString("Error parsing %1 (%2)").arg(co.getBoundsKey()).arg(bboxStr));
+        QString("Error parsing %1 (%2)").arg(ConfigOptions::getBoundsKey()).arg(bboxStr));
     }
 
     bool ok;
@@ -914,7 +914,7 @@ std::shared_ptr<Envelope> OgrReaderInternal::getBoundingBoxFromConfig(
       if (!ok)
       {
         throw HootException(
-          QString("Error parsing %1 (%2)").arg(co.getBoundsKey()).arg(bboxStr));
+          QString("Error parsing %1 (%2)").arg(ConfigOptions::getBoundsKey()).arg(bboxStr));
       }
     }
 

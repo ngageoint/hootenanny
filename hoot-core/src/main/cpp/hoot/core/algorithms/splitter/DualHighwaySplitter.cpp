@@ -35,8 +35,6 @@
 #include <geos/geom/Point.h>
 #include <geos/operation/buffer/BufferParameters.h>
 #include <geos/operation/buffer/BufferBuilder.h>
-using namespace geos::geom;
-using namespace geos::operation::buffer;
 
 // Hoot
 #include <hoot/core/algorithms/Distance.h>
@@ -70,6 +68,7 @@ using namespace geos::operation::buffer;
 #include <tgs/StreamUtils.h>
 
 using namespace geos::geom;
+using namespace geos::operation::buffer;
 using namespace std;
 using namespace Tgs;
 

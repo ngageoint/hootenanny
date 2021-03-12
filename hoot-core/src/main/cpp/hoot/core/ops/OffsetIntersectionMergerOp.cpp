@@ -61,7 +61,7 @@ namespace hoot
 HOOT_FACTORY_REGISTER(OsmMapOperation, OffsetIntersectionMergerOp)
 
 OffsetIntersectionMergerOp::OffsetIntersectionMergerOp()
-  : _offsetMax(ConfigOptions().getOffsetIntersectionMaxDefaultValue())
+  : _offsetMax(ConfigOptions().getOffsetIntersectionMax())
 {
 }
 
