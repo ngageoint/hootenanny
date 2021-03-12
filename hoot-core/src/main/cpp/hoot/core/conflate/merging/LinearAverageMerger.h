@@ -64,8 +64,6 @@ private:
 
   OsmMapPtr _map;
 
-  static const bool WRITE_DETAILED_DEBUG_MAPS;
-
   double _getMinSplitSize(const ConstWayPtr& way1, const ConstWayPtr& way2) const;
 
   WayPtr _getMaximalNearestSubline(

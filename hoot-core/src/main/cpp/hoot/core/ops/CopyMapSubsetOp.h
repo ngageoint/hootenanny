@@ -58,7 +58,7 @@ public:
   virtual ~CopyMapSubsetOp() = default;
 
   /**
-   * A new map is created and the eids specified in the constructor and their depedencies will be
+   * A new map is created and the eids specified in the constructor and their dependencies will be
    * copied into the new map. The map will be set to point to the new map.
    */
   virtual void apply(OsmMapPtr& map);

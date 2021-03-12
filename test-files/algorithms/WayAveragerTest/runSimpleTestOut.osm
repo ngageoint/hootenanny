@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="12.05022765699879" minlon="8.476768423763378" maxlat="12.05313865514646" maxlon="8.479272471150463"/>
+    <node visible="true" id="-748" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0502276569987945" lon="8.4781995287598164"/>
+    <node visible="true" id="-747" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0507043326384604" lon="8.4792724711504626"/>
+    <node visible="true" id="-746" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0529971004877865" lon="8.4767684237633780"/>
+    <node visible="true" id="-745" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0531386551464585" lon="8.4771999416180108"/>
+    <node visible="true" id="-475" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.0530634872320448" lon="8.4769397043874584">
+        <tag k="error:circular" v="15"/>
+        <tag k="uuid" v="{c9939563-9957-4f00-9b65-be0ed72abeb8}"/>
+    </node>
+    <way visible="true" id="-261" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-747"/>
+        <nd ref="-748"/>
+        <tag k="error:circular" v="10.6066"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:layername" v="2020-06-20_104001005D526500"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="length_m" v="128.41437036638496"/>
+        <tag k="note" v="average input 1;average input 2"/>
+        <tag k="source:datetime" v="2020-06-20T00:00:00Z;2020-04-05T00:00:00Z"/>
+        <tag k="source:imagery" v="2020-06-20_104001005D526500;2020-04-05_10400100593CB500"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:49:50.383Z;2021-03-10T15:49:47.112Z"/>
+        <tag k="travel_time_s" v="16.414999999999999"/>
+        <tag k="uuid" v="{ea7d50c0-52cc-489b-861a-3c26ff3eb86b};{c6523954-dc6a-4df5-84d6-10e059cf63a3}"/>
+    </way>
+    <way visible="true" id="-102" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-745"/>
+        <nd ref="-475"/>
+        <nd ref="-746"/>
+        <tag k="error:circular" v="10.6066"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:layername" v="2020-06-20_104001005D526500"/>
+        <tag k="inferred_speed_mph" v="17.5"/>
+        <tag k="length_m" v="40.498430579866486"/>
+        <tag k="note" v="average input 1;average input 2"/>
+        <tag k="source:datetime" v="2020-06-20T00:00:00Z;2020-04-05T00:00:00Z"/>
+        <tag k="source:imagery" v="2020-06-20_104001005D526500;2020-04-05_10400100593CB500"/>
+        <tag k="source:ingest:datetime" v="2021-03-10T15:49:50.971Z;2021-03-10T15:49:47.839Z"/>
+        <tag k="travel_time_s" v="5.1769999999999996"/>
+        <tag k="uuid" v="{7dec13af-4519-426b-a007-a392a3e8710c};{46030cab-b4e4-4a65-952f-99bb09de439f}"/>
+    </way>
+</osm>

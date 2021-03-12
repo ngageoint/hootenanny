@@ -45,22 +45,35 @@ namespace hoot
 
 class Way;
 
-/**
- * @todo don't love that this removes ways or adds them to the map
- */
 class WayAverager
 {
 public:
 
-  WayAverager(OsmMapPtr map, WayPtr w1, WayPtr w2);
+  /**
+   * TODO
+   *
+   * @param map
+   * @param w1
+   * @param w2
+   */
+  WayAverager(const OsmMapPtr& map, const WayPtr& w1, const WayPtr& w2);
 
   /**
    * Averages the two input ways into a new output way. The two input ways are removed from their
    * containing map.
    */
-  WayPtr average();
+  WayPtr replaceWaysWithAveragedWay();
 
-  static WayPtr average(OsmMapPtr map, WayPtr w1, WayPtr w2);
+  /**
+   * TODO
+   *
+   * @param map
+   * @param w1
+   * @param w2
+   * @return
+   */
+  static WayPtr replaceWaysWithAveragedWay(
+    const OsmMapPtr& map, const WayPtr& w1, const WayPtr& w2);
 
   /**
    * Returns the maximum distance that w1 moved.
@@ -84,11 +97,13 @@ public:
    */
   Meters getMeanMovement2() { return _meanMovement2; }
 
-protected:
+private:
 
   WayPtr _w1;
   WayPtr _w2;
-  OsmMap& _map;
+
+  OsmMapPtr _map;
+
   Meters _meanMovement1, _meanMovement2;
   Meters _sumMovement1, _sumMovement2;
   Meters _maxMovement1, _maxMovement2;

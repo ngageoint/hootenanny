@@ -44,10 +44,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(Merger, LinearAverageMerger)
 
-// ONLY ENABLE THIS DURING DEBUGGING; We don't want to tie it to debug.maps.write, as it may
-// produce a very large number of files.
-const bool LinearAverageMerger::WRITE_DETAILED_DEBUG_MAPS = false;
-
 LinearAverageMerger::LinearAverageMerger() :
 LinearMergerAbstract()
 {
@@ -83,7 +79,7 @@ bool LinearAverageMerger::_mergePair(
     return false;
   }
 
-  // Remove any ways that spanned both inputs.
+  // Remove any ways that span both inputs.
   _removeSpans(_map, way1, way2);
 
   // Determine the split size.
@@ -116,28 +112,27 @@ bool LinearAverageMerger::_mergePair(
   _map->addWay(mnsRight);
 
   // Average the two maximal nearest sublines.
-  WayPtr averagedWay = WayAverager::average(_map, mnsRight, mnsLeft);
-  // Remove the sublines from the map, as they're not needed anymore.
-  RemoveWayByEid::removeWay(_map, mnsLeft->getId());
-  RemoveWayByEid::removeWay(_map, mnsRight->getId());
+  WayPtr averagedWay = WayAverager::replaceWaysWithAveragedWay(_map, mnsRight, mnsLeft);
   LOG_VART(averagedWay.get());
   if (!averagedWay)
   {
+    // Remove the sublines that would have automatically been removed if averaging was successful.
+    RemoveWayByEid::removeWay(_map, mnsLeft->getId());
+    RemoveWayByEid::removeWay(_map, mnsRight->getId());
     return false;
   }
   LOG_VART(averagedWay->getElementId());
-
-  // Merge the tags in from the original ways.
-  _mergeTags(averagedWay, way1, way2);
 
   // Remove the original ways.
   RemoveWayByEid::removeWay(_map, way1->getId());
   RemoveWayByEid::removeWay(_map, way2->getId());
 
-  // Add the averaged way.
+  // Add the averaged way (don't understand why this needs to be done, since WayAverager is already
+  // doing it).
+  averagedWay->setStatus(Status::Conflated);
   _map->addWay(averagedWay);
 
-  // Do bookkeeping on what ways are replacing.
+  // Do bookkeeping on the ways being replaced.
   replaced.push_back(
     std::pair<ElementId, ElementId>(averagedWay->getElementId(), way1->getElementId()));
   replaced.push_back(
@@ -150,6 +145,7 @@ bool LinearAverageMerger::_mergePair(
 double LinearAverageMerger::_getMinSplitSize(const ConstWayPtr& way1, const ConstWayPtr& way2) const
 {
   ElementToGeometryConverter geomConverter(_map);
+  // TODO: play with this value
   Meters minSplitSize = ConfigOptions().getWayMergerMinSplitSize();
   std::shared_ptr<geos::geom::LineString> lineString1 = geomConverter.convertToLineString(way1);
   std::shared_ptr<geos::geom::LineString> lineString2 = geomConverter.convertToLineString(way2);
@@ -159,6 +155,7 @@ double LinearAverageMerger::_getMinSplitSize(const ConstWayPtr& way1, const Cons
   }
   LOG_VART(lineString1->getLength());
   LOG_VART(lineString2->getLength());
+  // TODO: play with this value
   const double lengthMultiplier = ConfigOptions().getAverageConflationMinSplitSizeMultiplier();
   minSplitSize = std::min(minSplitSize, lineString1->getLength() * lengthMultiplier);
   minSplitSize = std::min(minSplitSize, lineString2->getLength() * lengthMultiplier);
