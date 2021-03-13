@@ -185,7 +185,7 @@ private:
   bool _includeInfo;
   bool _includeVersion;
   // Bend over backwards to keep the PBF headers out of the normal build. They're quite large.
-  OsmPbfWriterData* _d;
+  std::shared_ptr<OsmPbfWriterData> _d;
   QHash<QString, int> _strings;
   ConstOsmMapPtr _map;
   int _rawSize;

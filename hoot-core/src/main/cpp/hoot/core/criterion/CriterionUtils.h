@@ -68,7 +68,7 @@ public:
         "Non-criterion passed to CriterionUtils::containsSatisfyingElements");
     }
 
-    ElementCriterionPtr crit(new C());
+    ElementCriterionPtr crit = std::make_shared<C>();
     std::shared_ptr<ConstOsmMapConsumer> mapConsumer =
       std::dynamic_pointer_cast<ConstOsmMapConsumer>(crit);
     if (mapConsumer)
@@ -105,7 +105,7 @@ public:
         "Non-criterion passed to CriterionUtils::getSatisfyingElementIds");
     }
 
-    ElementCriterionPtr crit(new C());
+    ElementCriterionPtr crit = std::make_shared<C>();
     std::shared_ptr<ConstOsmMapConsumer> mapConsumer =
       std::dynamic_pointer_cast<ConstOsmMapConsumer>(crit);
     if (mapConsumer)
@@ -142,7 +142,7 @@ public:
         "Non-criterion passed to CriterionUtils::getSatisfyingElementIds");
     }
 
-    ElementCriterionPtr crit(new C());
+    ElementCriterionPtr crit = std::make_shared<C>();
     std::shared_ptr<ConstOsmMapConsumer> mapConsumer =
       std::dynamic_pointer_cast<ConstOsmMapConsumer>(crit);
     if (mapConsumer)

@@ -103,10 +103,10 @@ std::shared_ptr<NameExtractor> PoiPolygonNameScoreExtractor::_getNameExtractor()
   assert(_stringComp);
   if (_translateTagValuesToEnglish)
   {
-    ToEnglishTranslateStringDistance* translateStringDist =
-      new ToEnglishTranslateStringDistance(_stringComp, _translator);
+    std::shared_ptr<ToEnglishTranslateStringDistance> translateStringDist(
+      new ToEnglishTranslateStringDistance(_stringComp, _translator));
     translateStringDist->setTranslateAll(false);
-    return std::shared_ptr<NameExtractor>(new NameExtractor(StringDistancePtr(translateStringDist)));
+    return std::shared_ptr<NameExtractor>(new NameExtractor(translateStringDist));
   }
   else
   {

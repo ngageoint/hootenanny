@@ -240,16 +240,13 @@ Coordinate WayAverager::_moveToLineAsCoordinate(long ni, double nWeight, const L
                                                 double lWeight)
 {
   NodePtr n = _map.getNode(ni);
-  Point* point(GeometryFactory::getDefaultInstance()->createPoint(n->toCoordinate()));
+  std::shared_ptr<Point> point(GeometryFactory::getDefaultInstance()->createPoint(n->toCoordinate()));
 
   // find the two closest points
-  CoordinateSequence* cs = DistanceOp::closestPoints(point, const_cast<LineString*>(ls));
+  std::shared_ptr<CoordinateSequence> cs(DistanceOp::closestPoints(point.get(), const_cast<LineString*>(ls)));
 
   Coordinate result = Coordinate(cs->getAt(0).x * nWeight + cs->getAt(1).x * lWeight,
                                  cs->getAt(0).y * nWeight + cs->getAt(1).y * lWeight);
-
-  delete cs;
-  delete point;
 
   return result;
 }

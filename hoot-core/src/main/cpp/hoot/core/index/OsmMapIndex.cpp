@@ -33,11 +33,11 @@
 #include <geos/geom/Point.h>
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/elements/NodeToWayMap.h>
-#include <hoot/core/index/KnnWayIterator.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
+#include <hoot/core/index/KnnWayIterator.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Validate.h>
 #include <hoot/core/util/StringUtils.h>
@@ -335,7 +335,7 @@ long OsmMapIndex::findNearestWay(Coordinate c) const
   double bestDistance = std::numeric_limits<double>::max();
 
   // grab the geometry for the way that we're comparing all others against.
-  Point* p = GeometryFactory::getDefaultInstance()->createPoint(c);
+  std::shared_ptr<Point> p(GeometryFactory::getDefaultInstance()->createPoint(c));
 
   // go through all other ways
   for (WayMap::const_iterator it = _map.getWays().begin();
@@ -356,9 +356,6 @@ long OsmMapIndex::findNearestWay(Coordinate c) const
       }
     }
   }
-
-  delete p;
-
   return result;
 }
 
@@ -367,7 +364,7 @@ std::vector<long> OsmMapIndex::findWayNeighbors(Coordinate& from, Meters buffer)
   vector<long> result;
 
   // grab the geometry for the way that we're comparing all others against.
-  Point* p = GeometryFactory::getDefaultInstance()->createPoint(from);
+  std::shared_ptr<Point> p(GeometryFactory::getDefaultInstance()->createPoint(from));
 
   // go through all other ways
   for (WayMap::const_iterator it = _map.getWays().begin();
@@ -387,9 +384,6 @@ std::vector<long> OsmMapIndex::findWayNeighbors(Coordinate& from, Meters buffer)
       }
     }
   }
-
-  delete p;
-
   return result;
 }
 
