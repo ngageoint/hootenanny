@@ -31,6 +31,7 @@
 #include <tgs/TgsExport.h>
 
 //Std Includes
+#include <memory>
 #include <vector>
 
 /**
@@ -53,7 +54,7 @@ namespace Tgs
     /**
     *  Destructor
     */
-    ~RStarTreeWrapper();
+    ~RStarTreeWrapper() = default;
 
     /**
     *  Updates an iterator over all the current R*Tree of all objects intersecting
@@ -88,7 +89,7 @@ namespace Tgs
       const std::vector<double>& maxBounds);
 
   private:
-    InternalRStarTreeWrapper * _irtw;
+    std::shared_ptr<InternalRStarTreeWrapper> _irtw;
   };
 }
 

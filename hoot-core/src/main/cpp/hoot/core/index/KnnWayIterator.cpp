@@ -32,8 +32,8 @@
 #include <geos/geom/GeometryFactory.h>
 
 // hoot
-#include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
+#include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/util/Log.h>
 
 // Standard

@@ -1390,56 +1390,51 @@ std::shared_ptr<OsmSchema> OsmSchema::_theInstance = nullptr;
 QStringList _genericKvps;
 
 OsmSchema::OsmSchema()
+  : _d(new OsmSchemaData())
 {
-  d = new OsmSchemaData();
-}
-
-OsmSchema::~OsmSchema()
-{
-  delete d;
 }
 
 void OsmSchema::addAssociatedWith(const QString& name1, const QString& name2)
 {
-  d->addAssociatedWith(name1, name2);
+  _d->addAssociatedWith(name1, name2);
 }
 
 void OsmSchema::addIsA(const QString& name1, const QString& name2)
 {
-  d->addIsA(name1, name2);
+  _d->addIsA(name1, name2);
 }
 
 void OsmSchema::addSimilarTo(const QString& name1, const QString& name2, double weight, bool oneway)
 {
-  d->addSimilarTo(name1, name2, weight, oneway);
+  _d->addSimilarTo(name1, name2, weight, oneway);
 }
 
 QString OsmSchema::average(const QString& kvp1, const QString& kvp2, double& score)
 {
-  return d->average(kvp1, 1.0, kvp2, 1.0, score);
+  return _d->average(kvp1, 1.0, kvp2, 1.0, score);
 }
 
 QString OsmSchema::average(const QString& kvp1, double w1, const QString& kvp2, double w2,
                            double& score)
 {
-  return d->average(kvp1, w1, kvp2, w2, score);
+  return _d->average(kvp1, w1, kvp2, w2, score);
 }
 
 void OsmSchema::createTestingGraph()
 {
-  d->createTestingGraph();
+  _d->createTestingGraph();
 }
 
 vector<SchemaVertex> OsmSchema::getAllTags()
 {
-  return d->getAllTags();
+  return _d->getAllTags();
 }
 
 QSet<QString> OsmSchema::getAllTagKeys()
 {
   if (_allTagKeysCache.isEmpty())
   {
-    _allTagKeysCache = d->getAllTagKeys();
+    _allTagKeysCache = _d->getAllTagKeys();
   }
   return _allTagKeysCache;
 }
@@ -1448,7 +1443,7 @@ QSet<QString> OsmSchema::getAllTypeKeys()
 {
   if (_allTypeKeysCache.isEmpty())
   {  
-    QSet<QString> allTypeKeysCacheTemp = d->getAllTagKeys();
+    QSet<QString> allTypeKeysCacheTemp = _d->getAllTagKeys();
     for (QSet<QString>::const_iterator typeKeyItr = allTypeKeysCacheTemp.constBegin();
          typeKeyItr != allTypeKeysCacheTemp.constEnd(); ++typeKeyItr)
     {
@@ -1498,7 +1493,7 @@ Tags OsmSchema::getAssociatedTags(const Tags& tags)
 
 vector<SchemaVertex> OsmSchema::getAssociatedTagsAsVertices(const QString& name)
 {
-  return d->getAssociatedTags(name);
+  return _d->getAssociatedTags(name);
 }
 
 OsmSchemaCategory OsmSchema::getCategories(const Tags& t) const
@@ -1538,7 +1533,7 @@ OsmSchemaCategory OsmSchema::getCategories(const QString& kvp) const
 
 vector<SchemaVertex> OsmSchema::getChildTagsAsVertices(const QString& name)
 {
-  return d->getChildTags(name);
+  return _d->getChildTags(name);
 }
 
 Tags OsmSchema::getChildTags(const Tags& tags)
@@ -1562,7 +1557,7 @@ Tags OsmSchema::getChildTags(const Tags& tags)
 Tags OsmSchema::getAliasTags(const Tags& tags)
 {
   Tags tagsToReturn;
-  const std::vector<SchemaVertex> schemaVertices = d->getSchemaVertices(tags);
+  const std::vector<SchemaVertex> schemaVertices = _d->getSchemaVertices(tags);
   for (std::vector<SchemaVertex>::const_iterator itr = schemaVertices.begin();
        itr != schemaVertices.end(); ++itr)
   {
@@ -1574,7 +1569,7 @@ Tags OsmSchema::getAliasTags(const Tags& tags)
 
 const SchemaVertex& OsmSchema::getFirstCommonAncestor(const QString& kvp1, const QString& kvp2)
 {
-  return d->getFirstCommonAncestor(kvp1, kvp2);
+  return _d->getFirstCommonAncestor(kvp1, kvp2);
 }
 
 OsmSchema& OsmSchema::getInstance()
@@ -1612,12 +1607,12 @@ OsmSchema& OsmSchema::getInstance()
 
 double OsmSchema::getIsACost() const
 {
-  return d->getIsACost();
+  return _d->getIsACost();
 }
 
 vector<SchemaVertex> OsmSchema::getSchemaVertices(const Tags& tags) const
 {
-  return d->getSchemaVertices(tags);
+  return _d->getSchemaVertices(tags);
 }
 
 vector<SchemaVertex> OsmSchema::getSimilarTagsAsVertices(const QString& name, double minimumScore)
@@ -1626,13 +1621,13 @@ vector<SchemaVertex> OsmSchema::getSimilarTagsAsVertices(const QString& name, do
   {
     throw IllegalArgumentException("minimumScore must be > 0");
   }
-  return d->getSimilarTags(name, minimumScore);
+  return _d->getSimilarTags(name, minimumScore);
 }
 
 Tags OsmSchema::getSimilarTags(const QString& name, double minimumScore)
 {
   Tags tags;
-  const vector<SchemaVertex> vertices = d->getSimilarTags(name, minimumScore);
+  const vector<SchemaVertex> vertices = _d->getSimilarTags(name, minimumScore);
   for (std::vector<SchemaVertex>::const_iterator itr = vertices.begin();
        itr != vertices.end(); ++itr)
   {
@@ -1644,17 +1639,17 @@ Tags OsmSchema::getSimilarTags(const QString& name, double minimumScore)
 
 vector<SchemaVertex> OsmSchema::getTagByCategory(const OsmSchemaCategory& c) const
 {
-  return d->getTagByCategory(c);
+  return _d->getTagByCategory(c);
 }
 
 const SchemaVertex& OsmSchema::getTagVertex(const QString& kvp) const
 {
-  return d->getTagVertex(kvp);
+  return _d->getTagVertex(kvp);
 }
 
 vector<SchemaVertex> OsmSchema::getUniqueSchemaVertices(const Tags& tags) const
 {
-  return d->getUniqueSchemaVertices(tags);
+  return _d->getUniqueSchemaVertices(tags);
 }
 
 bool OsmSchema::hasAnyCategory(const QString& key, const QString& val) const
@@ -1704,7 +1699,7 @@ bool OsmSchema::hasCategory(const QString& kvp, const OsmSchemaCategory& categor
 
 bool OsmSchema::isAncestor(const QString& childKvp, const QString& parentKvp)
 {
-  return d->isAncestor(childKvp, parentKvp);
+  return _d->isAncestor(childKvp, parentKvp);
 }
 
 bool OsmSchema::containsTagFromList(const Tags& tags, const QStringList& tagList) const
@@ -1796,8 +1791,7 @@ void OsmSchema::loadDefault()
 {
   QString path = ConfPath::search("schema.json");
 
-  delete d;
-  d = new OsmSchemaData();
+  _d.reset(new OsmSchemaData());
 
   LOG_DEBUG("Loading translation files...");
   OsmSchemaLoaderFactory::getInstance().createLoader(path)->load(path, *this);
@@ -1807,7 +1801,7 @@ void OsmSchema::loadDefault()
 double OsmSchema::score(const QString& kvp1, const QString& kvp2)
 {
   // I tried using a LruCache here to speed up scoring, but it had a negative impact. :(
-  return std::max(d->score(kvp1, kvp2), d->score(kvp2, kvp1));
+  return std::max(_d->score(kvp1, kvp2), _d->score(kvp2, kvp1));
 }
 
 double OsmSchema::score(const SchemaVertex& v1, const SchemaVertex& v2)
@@ -2090,17 +2084,17 @@ bool OsmSchema::isTypeKey(const QString& key)
 
 double OsmSchema::scoreOneWay(const QString& kvp1, const QString& kvp2)
 {
-  return d->score(kvp1, kvp2);
+  return _d->score(kvp1, kvp2);
 }
 
 void OsmSchema::setIsACost(double cost)
 {
-  d->setIsACost(cost);
+  _d->setIsACost(cost);
 }
 
 QString OsmSchema::toGraphvizString() const
 {
-  return d->toGraphvizString();
+  return _d->toGraphvizString();
 }
 
 QString OsmSchema::toKvp(const QString& key, const QString& value)
@@ -2117,12 +2111,12 @@ QString OsmSchema::toKvp(const QString& key, const QString& value)
 
 void OsmSchema::update()
 {
-  d->update();
+  _d->update();
 }
 
 void OsmSchema::updateOrCreateVertex(const SchemaVertex& tv)
 {
-  d->updateOrCreateVertex(tv);
+  _d->updateOrCreateVertex(tv);
 }
 
 QString OsmSchema::getParentKvp(const QString& kvp1, const QString& kvp2)

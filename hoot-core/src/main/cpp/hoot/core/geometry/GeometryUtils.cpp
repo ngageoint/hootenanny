@@ -37,11 +37,11 @@
 #include <geos/util/IllegalArgumentException.h>
 
 // hoot
+#include <hoot/core/geometry/PolygonCompare.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Float.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/geometry/PolygonCompare.h>
 #include <hoot/core/util/Units.h>
 #include <hoot/core/util/StringUtils.h>
 
