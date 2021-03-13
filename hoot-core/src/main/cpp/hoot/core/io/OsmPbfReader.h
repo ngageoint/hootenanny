@@ -204,7 +204,7 @@ private:
 
   std::string _inflated;
   // Bend over backwards to keep the PBF headers out of the normal build. They're quite large.
-  OsmPbfReaderData* _d;
+  std::shared_ptr<OsmPbfReaderData> _d;
   std::vector<QString> _strings;
 
   OsmMapPtr _map;

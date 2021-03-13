@@ -78,8 +78,8 @@ public:
 };
 
 OsmPbfWriter::OsmPbfWriter()
+  : _d(new OsmPbfWriterData())
 {
-  _d = new OsmPbfWriterData();
   _dn = nullptr;
   _lonOffset = 0.0;
   _latOffset = 0.0;
@@ -103,7 +103,6 @@ OsmPbfWriter::OsmPbfWriter()
 OsmPbfWriter::~OsmPbfWriter()
 {
   close();
-  delete _d;
 }
 
 long OsmPbfWriter::_convertLon(double lon)
