@@ -44,7 +44,8 @@ using namespace geos::operation::distance;
 namespace hoot
 {
 
-LineStringAverager::LineStringAverager(const std::shared_ptr<LineString>& l1, const std::shared_ptr<LineString>& l2)
+LineStringAverager::LineStringAverager(const std::shared_ptr<LineString>& l1,
+                                       const std::shared_ptr<LineString>& l2)
 {
   _l1 = l1;
   _l2 = l2;
@@ -102,7 +103,8 @@ std::shared_ptr<LineString> LineStringAverager::average()
   // merge the last two nodes and move to the average location
   result.setAt(_merge(cs1[i1], cs2[i2]), ri++);
 
-  return std::shared_ptr<LineString>(GeometryFactory::getDefaultInstance()->createLineString(&result));
+  return
+    std::shared_ptr<LineString>(GeometryFactory::getDefaultInstance()->createLineString(&result));
 }
 
 std::shared_ptr<LineString> LineStringAverager::average(const std::shared_ptr<LineString>& l1,
@@ -122,7 +124,8 @@ Coordinate LineStringAverager::_moveToLine(const Coordinate& c1, const LineStrin
   std::shared_ptr<Point> point(GeometryFactory::getDefaultInstance()->createPoint(c1));
 
   // find the two closest points
-  std::shared_ptr<CoordinateSequence> cs(DistanceOp::closestPoints(point.get(), const_cast<LineString*>(ls)));
+  std::shared_ptr<CoordinateSequence> cs(
+    DistanceOp::closestPoints(point.get(), const_cast<LineString*>(ls)));
 
   Coordinate result = _merge(cs->getAt(0), cs->getAt(1));
 
