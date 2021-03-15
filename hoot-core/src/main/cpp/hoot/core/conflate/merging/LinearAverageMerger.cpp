@@ -122,8 +122,16 @@ bool LinearAverageMerger::_mergePair(
     return false;
   }
   LOG_VART(averagedWay->getElementId());
+  const long pid = Way::getPid(way1, way2);
+  // If the the parent IDs for both matched ways are empty, we won't write the empty ID to the
+  // averaged portion to possibly avoid overwriting a pre-existing valid parent ID.
+  if (pid != WayData::PID_EMPTY)
+  {
+    averagedWay->setPid(pid);
+    LOG_TRACE("Set PID: " << pid << " on: " << averagedWay->getElementId());
+  }
 
-  // Remove the original ways.
+  // Remove the averaged ways.
   RemoveWayByEid::removeWay(_map, way1->getId());
   RemoveWayByEid::removeWay(_map, way2->getId());
 
