@@ -345,12 +345,12 @@ ConstElementPtr ElementCacheLRU::getElement(const ElementId& eid) const
 // This const function kind of defeats the purpose of the LRU cache,
 // but it's necessary to conform to the interface. It should call
 // _updateNodeAccess(id) - but can't because of const
-const ConstNodePtr ElementCacheLRU::getNode(long id) const
+ConstNodePtr ElementCacheLRU::getNode(long id) const
 {
   return _nodes.find(id)->second.first;
 }
 
-const NodePtr ElementCacheLRU::getNode(long id)
+NodePtr ElementCacheLRU::getNode(long id)
 {
   _updateNodeAccess(id);
   return std::const_pointer_cast<Node>(_nodes.find(id)->second.first);
@@ -359,12 +359,12 @@ const NodePtr ElementCacheLRU::getNode(long id)
 // This const function kind of defeats the purpose of the LRU cache,
 // but it's necessary to conform to the interface. It should call
 // _updateWayAccess - but can't because of const
-const ConstWayPtr ElementCacheLRU::getWay(long id) const
+ConstWayPtr ElementCacheLRU::getWay(long id) const
 {
   return _ways.find(id)->second.first;
 }
 
-const WayPtr ElementCacheLRU::getWay(long id)
+WayPtr ElementCacheLRU::getWay(long id)
 {
   _updateWayAccess(id);
   return std::const_pointer_cast<Way>(_ways.find(id)->second.first);
@@ -373,12 +373,12 @@ const WayPtr ElementCacheLRU::getWay(long id)
 // This const function kind of defeats the purpose of the LRU cache,
 // but it's necessary to conform to the interface. It should call
 // _updateRelationAccess - but can't becuase of const
-const ConstRelationPtr ElementCacheLRU::getRelation(long id) const
+ConstRelationPtr ElementCacheLRU::getRelation(long id) const
 {
   return _relations.find(id)->second.first;
 }
 
-const RelationPtr ElementCacheLRU::getRelation(long id)
+RelationPtr ElementCacheLRU::getRelation(long id)
 {
   _updateRelationAccess(id);
   return std::const_pointer_cast<Relation>(_relations.find(id)->second.first);

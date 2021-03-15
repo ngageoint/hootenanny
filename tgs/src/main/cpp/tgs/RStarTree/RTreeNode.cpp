@@ -241,7 +241,7 @@ int RTreeNode::getChildCount() const
   return _getHeader()->childCount;
 }
 
-const BoxInternalData RTreeNode::getChildEnvelope(int childIndex) const
+BoxInternalData RTreeNode::getChildEnvelope(int childIndex) const
 {
   assert(childIndex < getChildCount());
   BoxInternalData bid(_dimensions, _getChildPtr(childIndex)->getBox());
