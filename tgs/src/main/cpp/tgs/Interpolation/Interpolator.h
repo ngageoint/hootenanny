@@ -27,14 +27,14 @@
 #ifndef INTERPOLATOR_H
 #define INTERPOLATOR_H
 
-// Qt
-class QIODevice;
-
 // Standard
 #include <vector>
 
 // Tgs
 #include <tgs/RandomForest/DataFrame.h>
+
+// Qt
+class QIODevice;
 
 namespace Tgs
 {

@@ -29,13 +29,13 @@
 // Hoot
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/util/DateTimeUtils.h>
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/elements/Tags.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/DateTimeUtils.h>
 #include <hoot/core/util/Exception.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/StringUtils.h>
@@ -119,9 +119,9 @@ QString OsmXmlWriter::removeInvalidCharacters(const QString& s)
 
 void OsmXmlWriter::open(const QString& url)
 {
-  QFile* f = new QFile();
-  _fp.reset(f);
+  std::shared_ptr<QFile> f(new QFile());
   f->setFileName(url);
+  _fp = f;
   if (!_fp->open(QIODevice::WriteOnly | QIODevice::Text))
   {
     throw Exception(QObject::tr("Error opening %1 for writing").arg(url));
@@ -155,8 +155,8 @@ QString OsmXmlWriter::toString(const ConstOsmMapPtr& map, const bool formatXml)
   OsmXmlWriter writer;
   writer.setFormatXml(formatXml);
   // this will be deleted by the _fp std::shared_ptr
-  QBuffer* buf = new QBuffer();
-  writer._fp.reset(buf);
+  std::shared_ptr<QBuffer> buf(new QBuffer());
+  writer._fp = buf;
   if (!writer._fp->open(QIODevice::WriteOnly | QIODevice::Text))
   {
     throw InternalErrorException(QObject::tr("Error opening QBuffer for writing. Odd."));

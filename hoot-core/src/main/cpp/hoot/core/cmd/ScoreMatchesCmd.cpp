@@ -26,22 +26,22 @@
  */
 
 // Hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/UnifyingConflator.h>
+#include <hoot/core/conflate/matching/MatchThreshold.h>
+#include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/io/IoUtils.h>
 #include <hoot/core/ops/BuildingOutlineUpdateOp.h>
+#include <hoot/core/ops/ManualMatchValidator.h>
 #include <hoot/core/ops/OpExecutor.h>
 #include <hoot/core/scoring/MatchComparator.h>
 #include <hoot/core/scoring/MatchScoringMapPreparer.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/schema/MetadataTags.h>
-#include <hoot/core/util/Settings.h>
-#include <hoot/core/io/IoUtils.h>
-#include <hoot/core/visitors/CountManualMatchesVisitor.h>
 #include <hoot/core/util/ConfigUtils.h>
-#include <hoot/core/ops/ManualMatchValidator.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/util/Settings.h>
+#include <hoot/core/visitors/CountManualMatchesVisitor.h>
 
 // tgs
 #include <tgs/Optimization/NelderMead.h>

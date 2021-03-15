@@ -37,11 +37,11 @@
 #include <geos/util/IllegalArgumentException.h>
 
 // hoot
+#include <hoot/core/geometry/PolygonCompare.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Float.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/geometry/PolygonCompare.h>
 #include <hoot/core/util/Units.h>
 #include <hoot/core/util/StringUtils.h>
 
@@ -625,6 +625,31 @@ QMap<int, geos::geom::Envelope> GeometryUtils::readBoundsFileWithIds(const QStri
     boundsById[id] = way->getEnvelopeInternal(map);
   }
   return boundsById;
+}
+
+std::shared_ptr<geos::geom::Geometry> GeometryUtils::readBoundsFromFile(const QString& input)
+{
+  OsmMapPtr map(new OsmMap());
+  LOG_INFO("Loading map bounds from ..." << input.right(50) << "...");
+  OsmMapReaderFactory::read(map, input);
+  const NodeMap nodes = map->getNodes();
+  double min_x =  180.0,
+         max_x = -180.0,
+         min_y =  90.0,
+         max_y = -90.0;
+  //  No nodes should return an empty pointer
+  if (nodes.empty())
+    return nullptr;
+  //  Iterate all nodes and find the min/max x/y
+  for (NodeMap::const_iterator nodeItr = nodes.begin(); nodeItr != nodes.end(); ++nodeItr)
+  {
+    ConstNodePtr node = nodeItr->second;
+    min_x = std::min(min_x, node->getX());
+    max_x = std::max(max_x, node->getX());
+    min_y = std::min(min_y, node->getY());
+    max_y = std::max(max_y, node->getY());
+  }
+  return GeometryUtils::envelopeToPolygon(geos::geom::Envelope(min_x, max_x, min_y, max_y));
 }
 
 QString GeometryUtils::geometryTypeIdToString(const geos::geom::GeometryTypeId& geometryTypeId)

@@ -31,7 +31,6 @@
 #include <geos/geom/CoordinateSequenceFactory.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/GeometryFactory.h>
-using namespace geos::geom;
 
 // Hoot
 #include <hoot/core/algorithms/Distance.h>
@@ -43,10 +42,12 @@ using namespace geos::geom;
 // Standard
 #include <iostream>
 #include <vector>
-using namespace std;
 
 // TGS
 #include <tgs/StreamUtils.h>
+
+using namespace geos::geom;
+using namespace std;
 using namespace Tgs;
 
 namespace hoot

@@ -28,11 +28,11 @@
 #define SpatialIndexer_H
 
 // hoot
-#include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
 #include <hoot/core/criterion/ElementCriterionConsumer.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/info/OperationStatus.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
 
 // TGS
 #include <tgs/RStarTree/HilbertRTree.h>
@@ -62,7 +62,7 @@ public:
   explicit SpatialIndexer(std::shared_ptr<Tgs::HilbertRTree>& index,
                           std::deque<ElementId>& indexToEid,
                           const std::shared_ptr<ElementCriterion>& criterion,
-                          std::function<Meters (const ConstElementPtr& e)> getSearchRadius,
+                          const std::function<Meters (const ConstElementPtr&)>& getSearchRadius,
                           ConstOsmMapPtr pMap);
   virtual ~SpatialIndexer() = default;
 

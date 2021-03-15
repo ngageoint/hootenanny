@@ -29,8 +29,8 @@
 #define WAY_UTILS_H
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/elements/OsmMap.h>
 
 namespace hoot
 {
@@ -206,7 +206,7 @@ public:
    * @param map the map containing the nodes/ways
    * @return true if any way in the ID list contains the node; false otherwise
    */
-  static bool nodeContainedByAnyWay(const long nodeId, const std::set<long> wayIds,
+  static bool nodeContainedByAnyWay(const long nodeId, const std::set<long>& wayIds,
                                     const ConstOsmMapPtr& map);
 
   /**

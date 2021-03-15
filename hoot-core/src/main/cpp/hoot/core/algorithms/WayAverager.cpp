@@ -33,18 +33,18 @@
 #include <geos/geom/LineString.h>
 #include <geos/geom/Point.h>
 #include <geos/operation/distance/DistanceOp.h>
-using namespace geos::operation::distance;
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/algorithms/DirectionFinder.h>
-#include <hoot/core/schema/TagMergerFactory.h>
+#include <hoot/core/criterion/OneWayCriterion.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/elements/Way.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/ops/RemoveWayByEid.h>
-#include <hoot/core/elements/Way.h>
-#include <hoot/core/criterion/OneWayCriterion.h>
+#include <hoot/core/schema/TagMergerFactory.h>
 
 using namespace geos::geom;
+using namespace geos::operation::distance;
 using namespace std;
 
 namespace hoot
@@ -240,16 +240,13 @@ Coordinate WayAverager::_moveToLineAsCoordinate(long ni, double nWeight, const L
                                                 double lWeight)
 {
   NodePtr n = _map.getNode(ni);
-  Point* point(GeometryFactory::getDefaultInstance()->createPoint(n->toCoordinate()));
+  std::shared_ptr<Point> point(GeometryFactory::getDefaultInstance()->createPoint(n->toCoordinate()));
 
   // find the two closest points
-  CoordinateSequence* cs = DistanceOp::closestPoints(point, const_cast<LineString*>(ls));
+  std::shared_ptr<CoordinateSequence> cs(DistanceOp::closestPoints(point.get(), const_cast<LineString*>(ls)));
 
   Coordinate result = Coordinate(cs->getAt(0).x * nWeight + cs->getAt(1).x * lWeight,
                                  cs->getAt(0).y * nWeight + cs->getAt(1).y * lWeight);
-
-  delete cs;
-  delete point;
 
   return result;
 }

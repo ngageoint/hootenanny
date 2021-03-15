@@ -648,7 +648,7 @@ bool MatchComparator::_isNeedsReview(const QString& uuid1, const QString& uuid2,
         return false;
       }
 
-      if (_reviewMarker.isNeedsReview(conflated, conflated->getElement(eid1),
+      if (ReviewMarker::isNeedsReview(conflated, conflated->getElement(eid1),
                                       conflated->getElement(eid2)))
       {
         result = true;

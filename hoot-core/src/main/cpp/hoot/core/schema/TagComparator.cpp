@@ -209,7 +209,7 @@ void TagComparator::compareEnumeratedTags(Tags t1, Tags t2, double& score,
     {
       if (tv->value == "*")
       {
-        n1.push_back(schema.toKvp(tv->key, t1[tv->key]));
+        n1.push_back(OsmSchema::toKvp(tv->key, t1[tv->key]));
       }
       else
       {
@@ -225,7 +225,7 @@ void TagComparator::compareEnumeratedTags(Tags t1, Tags t2, double& score,
     {
       if (tv->value == "*")
       {
-        n2.push_back(schema.toKvp(tv->key, t2[tv->key]));
+        n2.push_back(OsmSchema::toKvp(tv->key, t2[tv->key]));
       }
       else
       {

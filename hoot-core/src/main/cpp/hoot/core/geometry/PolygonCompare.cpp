@@ -52,7 +52,7 @@ using namespace Tgs;
 namespace hoot
 {
 
-PolygonCompare::PolygonCompare(Envelope e)
+PolygonCompare::PolygonCompare(const Envelope& e)
 {
   _curve.reset(new HilbertCurve(2, 8));
   _e = e;

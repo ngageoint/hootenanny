@@ -796,9 +796,9 @@ void BuildingMerger::mergeBuildings(OsmMapPtr map, const ElementId& mergeTargetI
   //child nodes, we want to override the default behavior and make sure the building merger always
   //arbitrarily keeps the geometry of the first building passed in.  This is ok, b/c the UI workflow
   //lets the user select which building to keep and using complexity wouldn't make sense.
-  LOG_VART(ConfigOptions().getBuildingKeepMoreComplexGeometryWhenAutoMergingKey());
+  LOG_VART(ConfigOptions::getBuildingKeepMoreComplexGeometryWhenAutoMergingKey());
   conf().set(
-    ConfigOptions().getBuildingKeepMoreComplexGeometryWhenAutoMergingKey(), "false");
+    ConfigOptions::getBuildingKeepMoreComplexGeometryWhenAutoMergingKey(), "false");
   LOG_VART(ConfigOptions().getBuildingKeepMoreComplexGeometryWhenAutoMerging());
 
   // See related note about statuses in PoiPolygonMerger::mergePoiAndPolygon. Don't know how to

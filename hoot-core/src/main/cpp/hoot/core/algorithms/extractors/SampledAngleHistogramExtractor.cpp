@@ -29,20 +29,20 @@
 
 // GEOS
 #include <geos/geom/LineString.h>
-using namespace geos::geom;
 
 // hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/algorithms/extractors/Histogram.h>
-#include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
 #include <hoot/core/algorithms/WayDiscretizer.h>
-#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/algorithms/WayHeading.h>
+#include <hoot/core/algorithms/extractors/Histogram.h>
 #include <hoot/core/algorithms/linearreference/WayLocation.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
 
 // Qt
 #include <qnumeric.h>
 
+using namespace geos::geom;
 using namespace std;
 
 namespace hoot

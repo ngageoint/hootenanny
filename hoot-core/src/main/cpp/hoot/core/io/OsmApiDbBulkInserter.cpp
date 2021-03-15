@@ -1405,7 +1405,8 @@ void OsmApiDbBulkInserter::_writeChangeset()
   if (!_outputSections[ApiDb::getChangesetsTableName()])
   {
     _createOutputFile(
-      ApiDb::getChangesetsTableName(), _sqlFormatter->getChangesetSqlHeaderString());
+      ApiDb::getChangesetsTableName(),
+      OsmApiDbSqlStatementFormatter::getChangesetSqlHeaderString());
   }
 
   _outputSections[ApiDb::getChangesetsTableName()]->write(

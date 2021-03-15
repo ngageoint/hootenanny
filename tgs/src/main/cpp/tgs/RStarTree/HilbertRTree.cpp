@@ -33,7 +33,6 @@
 #include <cmath>
 #include <exception>
 #include <iostream>
-using namespace std;
 
 // Tgs
 #include <tgs/RStarTree/HilbertCurve.h>
@@ -41,17 +40,13 @@ using namespace std;
 #include <tgs/RStarTree/RTreeNode.h>
 #include <tgs/Statistics/Random.h>
 
+using namespace std;
 using namespace Tgs;
 
 HilbertRTree::HilbertRTree(const std::shared_ptr<PageStore>& ps, int dimensions) :
-  RStarTree(ps, dimensions)
+  RStarTree(ps, dimensions),
+  _hilbertCurve(new HilbertCurve(dimensions, 8))
 {
-  _hilbertCurve = new HilbertCurve(dimensions, 8);
-}
-
-HilbertRTree::~HilbertRTree()
-{
-  delete _hilbertCurve;
 }
 
 void HilbertRTree::bulkInsert(const std::vector<Box>& boxes, const std::vector<int>& fids)

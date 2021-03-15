@@ -32,17 +32,15 @@
 #include <hoot/core/io/PbfConstants.h>
 #include <hoot/core/proto/FileFormat.pb.h>
 #include <hoot/core/proto/OsmFormat.pb.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 
 //  Version must be included last
 #include <hoot/core/info/Version.h>
 #include <hoot/core/info/VersionDefines.h>
-
-using namespace hoot::pb;
 
 // Qt
 #include <qendian.h>
@@ -57,6 +55,7 @@ using namespace hoot::pb;
 #include <arpa/inet.h>
 
 using namespace geos::geom;
+using namespace hoot::pb;
 using namespace std;
 
 namespace hoot
@@ -79,8 +78,8 @@ public:
 };
 
 OsmPbfWriter::OsmPbfWriter()
+  : _d(new OsmPbfWriterData())
 {
-  _d = new OsmPbfWriterData();
   _dn = nullptr;
   _lonOffset = 0.0;
   _latOffset = 0.0;
@@ -104,7 +103,6 @@ OsmPbfWriter::OsmPbfWriter()
 OsmPbfWriter::~OsmPbfWriter()
 {
   close();
-  delete _d;
 }
 
 long OsmPbfWriter::_convertLon(double lon)
@@ -128,7 +126,7 @@ int OsmPbfWriter::_convertString(const QString& s)
   else
   {
     _strings.insert(s, _strings.size() + 1);
-    id = (int)_strings.size();
+    id = _strings.size();
     _d->primitiveBlock.mutable_stringtable()->add_s(s.toUtf8());
   }
 

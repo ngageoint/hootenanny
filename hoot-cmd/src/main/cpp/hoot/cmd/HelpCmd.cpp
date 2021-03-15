@@ -59,6 +59,7 @@ public:
     _forceToRndList.append("optimize-network-conf");
     _forceToRndList.append("perturb");
     _forceToRndList.append("score-matches");
+    _forceToRndList.append("sort");
     _forceToRndList.append("type-similarity");
   }
 
@@ -139,23 +140,6 @@ private:
             "  [-D optionName=\"<optionValueEntry 1>;<optionValueEntry 2>;...\"] [args]"
          << endl << endl;
 
-    cout << "Log Levels:" << endl << endl;
-    cout << "  --trace" << endl;
-    cout << "  --debug" << endl;
-    cout << "  --info" << endl;
-    cout << "  --status" << endl;
-    cout << "  --warn" << endl;
-    cout << "  --error" << endl;
-    cout << endl;
-
-    cout << "List Option Operations:" << endl << endl;
-    cout << "  Append:  [-D optionName+=optionValue]" << endl;
-    cout << "  Prepend: [-D optionName++=optionValue]" << endl;
-    cout << "  Remove:  [-D optionName-=optionValue]" << endl;
-    cout << "  Replace: [-D optionName=\"[old optionValue 1]->[new optionValue 1];\\"
-         << endl << "                           [old optionValue 2]->[new optionValue 2]\"...]"
-         << endl;
-
     const vector<QString> cmds = Factory::getInstance().getObjectNamesByBase(Command::className());
     vector<std::shared_ptr<Command>> coreCmds;
     vector<std::shared_ptr<Command>> rndCmds;
@@ -192,6 +176,22 @@ private:
     _printCommands(coreCmds);
     cout << endl << "Advanced Commands:" << endl << endl;
     _printCommands(rndCmds);
+
+    cout << endl << "Log Levels:" << endl << endl;
+    cout << "  --trace" << endl;
+    cout << "  --debug" << endl;
+    cout << "  --info" << endl;
+    cout << "  --status" << endl;
+    cout << "  --warn" << endl;
+    cout << "  --error" << endl;
+    cout << endl;
+
+    cout << "List Option Operations:" << endl << endl;
+    cout << "  Append:  [-D optionName+=optionValue]" << endl;
+    cout << "  Prepend: [-D optionName++=optionValue]" << endl;
+    cout << "  Remove:  [-D optionName-=optionValue]" << endl;
+    cout << "  Replace: [-D optionName=\"[old optionValue 1]->[new optionValue 1];\\"
+         << endl << "                           [old optionValue 2]->[new optionValue 2]\"...]";
 
     return 0;
   }

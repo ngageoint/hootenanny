@@ -33,7 +33,6 @@
 
 // GEOS
 #include <geos/geom/LineString.h>
-using namespace geos::geom;
 
 // Hoot
 #include <hoot/core/criterion/AreaCriterion.h>
@@ -58,6 +57,7 @@ using namespace geos::geom;
 #include <QFileInfo>
 #include <QDateTime>
 
+using namespace geos::geom;
 using namespace std;
 
 namespace hoot
@@ -86,7 +86,7 @@ public:
   /**
    * @see ProgressReporter
    */
-  virtual void setProgress(Progress progress) { _progress = progress; }
+  void setProgress(const Progress& progress) override { _progress = progress; }
   /**
    * @see ProgressReporter
    */
@@ -258,13 +258,13 @@ private:
 };
 
 OgrReader::OgrReader()
+  : _d(new OgrReaderInternal())
 {
-  _d = new OgrReaderInternal();
 }
 
 OgrReader::OgrReader(const QString& path)
+  : _d(new OgrReaderInternal())
 {
-  _d = new OgrReaderInternal();
   if (isSupported(path) == true)
   {
     _d->open(path, QString(""));
@@ -272,20 +272,15 @@ OgrReader::OgrReader(const QString& path)
 }
 
 OgrReader::OgrReader(const QString& path, const QString& layer)
+  : _d(new OgrReaderInternal())
 {
-  _d = new OgrReaderInternal();
   if (isSupported(path) == true)
   {
     _d->open(path, layer);
   }
 }
 
-OgrReader::~OgrReader()
-{
-  delete _d;
-}
-
-void OgrReader::setProgress(Progress progress)
+void OgrReader::setProgress(const Progress& progress)
 {
   if (_d == nullptr)
   {
@@ -903,7 +898,7 @@ std::shared_ptr<Envelope> OgrReaderInternal::getBoundingBoxFromConfig(
     if (bbox.size() != 4)
     {
       throw HootException(
-        QString("Error parsing %1 (%2)").arg(co.getBoundsKey()).arg(bboxStr));
+        QString("Error parsing %1 (%2)").arg(ConfigOptions::getBoundsKey()).arg(bboxStr));
     }
 
     bool ok;
@@ -914,7 +909,7 @@ std::shared_ptr<Envelope> OgrReaderInternal::getBoundingBoxFromConfig(
       if (!ok)
       {
         throw HootException(
-          QString("Error parsing %1 (%2)").arg(co.getBoundsKey()).arg(bboxStr));
+          QString("Error parsing %1 (%2)").arg(ConfigOptions::getBoundsKey()).arg(bboxStr));
       }
     }
 

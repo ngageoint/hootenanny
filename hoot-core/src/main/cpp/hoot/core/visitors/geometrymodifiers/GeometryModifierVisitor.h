@@ -31,9 +31,9 @@
 #include "GeometryModifierAction.h"
 
 // hoot
-#include <hoot/core/visitors/ElementVisitor.h>
-#include <hoot/core/elements/Way.h>
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/elements/Way.h>
+#include <hoot/core/visitors/ElementVisitor.h>
 
 namespace hoot
 {
@@ -55,7 +55,7 @@ public:
 
   virtual void setOsmMap(OsmMap* pMap) { _pMap = pMap; }
 
-  void setActionDesc(GeometryModifierActionDesc actionDesc ) { _actionDesc = actionDesc; }
+  void setActionDesc(const GeometryModifierActionDesc& actionDesc ) { _actionDesc = actionDesc; }
 
   // ElementVisitor
   static QString className() { return "hoot::GeometryModifierVisitor"; }

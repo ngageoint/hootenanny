@@ -37,9 +37,15 @@ class LineSearch
 {
 public:
 
+  LineSearch() = default;
+  virtual ~LineSearch() = default;
+
   class Function
   {
   public:
+
+    Function() = default;
+    virtual ~Function() = default;
     /**
      * Calculates a function f for the given x.
      */

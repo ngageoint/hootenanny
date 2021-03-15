@@ -29,14 +29,15 @@
 
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/geometry/GeometryUtils.h>
+#include <hoot/core/io/OsmMapReaderFactory.h>
+#include <hoot/core/util/ConfigUtils.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/OsmApiUtils.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/visitors/ReportMissingElementsVisitor.h>
-#include <hoot/core/util/ConfigUtils.h>
 
 // Qt
 #include <QBuffer>
@@ -74,7 +75,8 @@ void OsmApiReader::setConfiguration(const Settings& conf)
   setMaxThreads(configOptions.getReaderHttpBboxThreadCount());
   setCoordGridSize(configOptions.getReaderHttpBboxMaxSize());
   setMaxGridSize(configOptions.getReaderHttpBboxMaxDownloadSize());
-  setBounds(GeometryUtils::boundsFromString(configOptions.getBounds()));
+  _boundsString = configOptions.getBounds();
+  _boundsFilename = configOptions.getBoundsInputFile();
 }
 
 void OsmApiReader::setUseDataSourceIds(bool /*useDataSourceIds*/)
@@ -116,13 +118,20 @@ void OsmApiReader::read(const OsmMapPtr& map)
   LOG_VART(_keepStatusTag);
   LOG_VART(_preserveAllTags);
 
+  //  Set the bounds once we begin the read if setBounds() hasn't already been called
+  if (_bounds == nullptr)
+    setBounds(_getBoundsEnvelope());
+
   // If a non-rectangular bounds was passed in from the config, we'll catch it here. If it is passed
   // in from setBounds, we'll silently disregard by using the envelope of the bounds only.
-  if (!ConfigOptions().getBounds().trimmed().isEmpty() &&
-      !GeometryUtils::isEnvelopeString(ConfigOptions().getBounds()))
+  if (!_boundsString.trimmed().isEmpty() && !GeometryUtils::isEnvelopeString(_boundsString))
   {
     throw IllegalArgumentException(
-      "OsmApiReader does not support a non-rectangular bounds: " + ConfigOptions().getBounds());
+      "OsmApiReader does not support a non-rectangular bounds: " + _boundsString);
+  }
+  else if (_bounds == nullptr)
+  {
+    throw IllegalArgumentException("OsmApiReader requires rectangular bounds");
   }
 
   //  Reusing the reader for multiple reads has two options, the first is the
@@ -188,6 +197,19 @@ void OsmApiReader::close()
   finalizePartial();
 
   _map.reset();
+}
+
+std::shared_ptr<geos::geom::Geometry> OsmApiReader::_getBoundsEnvelope()
+{
+  //  Try to read the bounds from the `bounds` string
+  if (_boundsString != ConfigOptions::getBoundsDefaultValue())
+    return GeometryUtils::boundsFromString(_boundsString);
+  //  Try to read the bounds from the `bounds.input.file` file
+  else if (_boundsFilename != ConfigOptions::getBoundsInputFileDefaultValue())
+    return GeometryUtils::readBoundsFromFile(_boundsFilename);
+  //  Neither exist return a NULL pointer
+  else
+    return nullptr;
 }
 
 }

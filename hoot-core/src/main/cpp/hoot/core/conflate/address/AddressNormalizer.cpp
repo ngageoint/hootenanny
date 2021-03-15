@@ -101,6 +101,11 @@ QSet<QString> AddressNormalizer::normalizeAddress(const QString& address) const
 
 QSet<QString> AddressNormalizer::_normalizeAddressWithLibPostal(const QString& address) const
 {
+  if (address.trimmed().isEmpty())
+  {
+    return QSet<QString>();
+  }
+
   LOG_TRACE("Normalizing " << address << " with libpostal...");
 
   QSet<QString> normalizedAddresses;

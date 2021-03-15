@@ -27,10 +27,10 @@
 #include "LegacyVertexMatcher.h"
 
 // hoot
-#include <hoot/core/conflate/matching/NodeMatcher.h>
 #include <hoot/core/algorithms/extractors/EuclideanDistanceExtractor.h>
-#include <hoot/core/util/Log.h>
+#include <hoot/core/conflate/matching/NodeMatcher.h>
 #include <hoot/core/conflate/network/SearchRadiusProvider.h>
+#include <hoot/core/util/Log.h>
 
 // tgs
 #include <tgs/RStarTree/IntersectionIterator.h>
@@ -93,7 +93,7 @@ void LegacyVertexMatcher::_balanceVertexScores()
   }
 }
 
-IntersectionIterator LegacyVertexMatcher::_createIterator(Envelope env)
+IntersectionIterator LegacyVertexMatcher::_createIterator(const Envelope& env)
 {
   vector<double> min(2), max(2);
   min[0] = env.getMinX();

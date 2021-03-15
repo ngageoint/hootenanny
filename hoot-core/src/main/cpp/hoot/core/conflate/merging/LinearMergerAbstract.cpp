@@ -34,11 +34,11 @@
 
 // hoot
 #include <hoot/core/conflate/highway/HighwayMatch.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/elements/NodeToWayMap.h>
-#include <hoot/core/ops/RecursiveElementRemover.h>
-#include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
+#include <hoot/core/index/OsmMapIndex.h>
+#include <hoot/core/ops/RecursiveElementRemover.h>
+#include <hoot/core/util/Log.h>
 
 using namespace geos::geom;
 using namespace std;

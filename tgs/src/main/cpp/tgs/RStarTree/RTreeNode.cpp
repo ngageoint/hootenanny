@@ -31,11 +31,11 @@
 #include <algorithm>
 #include <assert.h>
 #include <math.h>
-using namespace std;
 
 #include <tgs/TgsException.h>
 #include <tgs/RStarTree/RTreeNodeStore.h>
 
+using namespace std;
 using namespace Tgs;
 
 BoxInternalData::BoxInternalData(int dimensions, const char* data)

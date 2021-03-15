@@ -186,7 +186,7 @@ void ApiDbReader::_updateMetadataOnElement(ElementPtr element)
   {
     QString statusStr = tags.get(MetadataTags::HootStatus());
     const int statusInt = statusStr.toInt(&ok);
-    Status status = static_cast<Status::Type>(statusInt);
+    Status status = statusInt;
     if (ok && status.getEnum() >= Status::Invalid && status.getEnum() <= Status::Conflated)
     {
       element->setStatus(status);

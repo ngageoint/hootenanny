@@ -61,10 +61,15 @@ void RemoveTagsVisitor::setConfiguration(const Settings& conf)
 
 void RemoveTagsVisitor::_setKeys(const QStringList& keys)
 {
+  QSet<QString> keysParsed;
   for (int i = 0; i < keys.size(); i++)
   {
     const QString key = keys.at(i);
-    _keyRegexs.append(QRegExp(key, Qt::CaseInsensitive, QRegExp::Wildcard));
+    if (!keysParsed.contains(key))
+    {
+      keysParsed.insert(key);
+      _keyRegexs.append(QRegExp(key, Qt::CaseInsensitive, QRegExp::Wildcard));
+    }
   }
 }
 

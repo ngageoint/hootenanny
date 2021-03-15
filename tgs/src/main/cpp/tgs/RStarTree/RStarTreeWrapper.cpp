@@ -32,13 +32,8 @@
 namespace Tgs
 {
   RStarTreeWrapper::RStarTreeWrapper(unsigned int pageSize, unsigned int dimensions)
+    : _irtw(new InternalRStarTreeWrapper(pageSize, dimensions))
   {
-    _irtw  = new InternalRStarTreeWrapper(pageSize, dimensions);
-  }
-
-  RStarTreeWrapper::~RStarTreeWrapper()
-  {
-    delete _irtw;
   }
 
   void RStarTreeWrapper::bulkInsert(const std::vector<int>& uniqueId,

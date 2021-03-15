@@ -33,11 +33,11 @@
 #include <geos/geom/Point.h>
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/elements/NodeToWayMap.h>
-#include <hoot/core/index/KnnWayIterator.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
+#include <hoot/core/index/KnnWayIterator.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Validate.h>
 #include <hoot/core/util/StringUtils.h>
@@ -335,7 +335,7 @@ long OsmMapIndex::findNearestWay(Coordinate c) const
   double bestDistance = std::numeric_limits<double>::max();
 
   // grab the geometry for the way that we're comparing all others against.
-  Point* p = GeometryFactory::getDefaultInstance()->createPoint(c);
+  std::shared_ptr<Point> p(GeometryFactory::getDefaultInstance()->createPoint(c));
 
   // go through all other ways
   for (WayMap::const_iterator it = _map.getWays().begin();
@@ -356,9 +356,6 @@ long OsmMapIndex::findNearestWay(Coordinate c) const
       }
     }
   }
-
-  delete p;
-
   return result;
 }
 
@@ -367,7 +364,7 @@ std::vector<long> OsmMapIndex::findWayNeighbors(Coordinate& from, Meters buffer)
   vector<long> result;
 
   // grab the geometry for the way that we're comparing all others against.
-  Point* p = GeometryFactory::getDefaultInstance()->createPoint(from);
+  std::shared_ptr<Point> p(GeometryFactory::getDefaultInstance()->createPoint(from));
 
   // go through all other ways
   for (WayMap::const_iterator it = _map.getWays().begin();
@@ -387,9 +384,6 @@ std::vector<long> OsmMapIndex::findWayNeighbors(Coordinate& from, Meters buffer)
       }
     }
   }
-
-  delete p;
-
   return result;
 }
 
@@ -617,7 +611,7 @@ void OsmMapIndex::removeNode(ConstNodePtr n)
     _pendingNodeRemoval.insert(n->getId());
     _pendingNodeInsert.erase(n->getId());
 
-    if (_pendingNodeRemoval.size() > std::max((size_t)100, (size_t)_map.getNodes().size() / 8) &&
+    if (_pendingNodeRemoval.size() > std::max((size_t)100, _map.getNodes().size() / 8) &&
         _nodeTree != nullptr)
     {
       LOG_DEBUG("pending removal size: " << _pendingNodeRemoval.size());
@@ -646,7 +640,7 @@ void OsmMapIndex::removeWay(ConstWayPtr w)
   }
 
   if (_wayTree != nullptr &&
-      _pendingWayRemoval.size() > std::max((size_t)100, (size_t)_map.getWays().size() / 8))
+      _pendingWayRemoval.size() > std::max((size_t)100, _map.getWays().size() / 8))
   {
     LOG_DEBUG("pending removal size: " << _pendingWayRemoval.size());
     _wayTree.reset();

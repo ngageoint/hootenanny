@@ -991,7 +991,7 @@ long HootApiDb::getOrCreateUser(QString email, QString displayName, bool admin)
       {
         _setUserAsAdmin.reset(new QSqlQuery(_db));
         _setUserAsAdmin->prepare(
-          "UPDATE " + this->getUsersTableName() +
+          "UPDATE " + getUsersTableName() +
           " SET privileges = privileges || '\"admin\"=>\"true\"' :: hstore"
           " WHERE id=:id;");
       }

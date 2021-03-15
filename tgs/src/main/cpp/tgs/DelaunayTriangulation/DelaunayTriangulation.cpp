@@ -30,11 +30,12 @@
 // Standard
 #include <algorithm>
 #include <sstream>
-using namespace std;
 
 // Tgs
 #include <tgs/HashMap.h>
 #include <tgs/TgsException.h>
+
+using namespace std;
 
 namespace Tgs
 {
@@ -796,7 +797,7 @@ FaceIterator::FaceIterator(const FaceIterator& from)
   _f = new Face(*_it);
 }
 
-FaceIterator::FaceIterator(EdgeIterator it, EdgeIterator end)
+FaceIterator::FaceIterator(EdgeIterator it, const EdgeIterator& end)
   : _f(new Face(*it)),
     _it(it),
     _end(end),

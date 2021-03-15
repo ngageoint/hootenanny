@@ -50,7 +50,6 @@
 // Standard
 #include <fstream>
 #include <functional>
-using namespace std;
 
 // tgs
 #include <tgs/RandomForest/RandomForest.h>
@@ -62,6 +61,7 @@ using namespace std;
 #include <QElapsedTimer>
 
 using namespace geos::geom;
+using namespace std;
 
 namespace hoot
 {

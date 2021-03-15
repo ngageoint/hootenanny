@@ -204,7 +204,7 @@ class FaceIterator
 {
 public:
 
-  FaceIterator(EdgeIterator it, EdgeIterator end);
+  FaceIterator(EdgeIterator it, const EdgeIterator& end);
   FaceIterator(const FaceIterator& from);
 
   FaceIterator() : _f(nullptr), _atEnd(true) { }

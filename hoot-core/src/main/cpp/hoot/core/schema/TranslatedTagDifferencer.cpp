@@ -27,16 +27,16 @@
 #include "TranslatedTagDifferencer.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/algorithms/optimizer/SingleAssignmentProblemSolver.h>
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/elements/Tags.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
+#include <hoot/core/io/schema/Feature.h>
 #include <hoot/core/schema/ScriptSchemaTranslator.h>
 #include <hoot/core/schema/ScriptSchemaTranslatorFactory.h>
-#include <hoot/core/io/schema/Feature.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/util/HootException.h>
+#include <hoot/core/util/Factory.h>
 
 using namespace geos::geom;
 using namespace std;
@@ -106,6 +106,9 @@ double TranslatedTagDifferencer::diff(const ConstOsmMapPtr& map, const ConstElem
         ScriptToOgrSchemaTranslator::TranslatedFeature>::CostFunction
   {
   public:
+    CostFunction() = default;
+    virtual ~CostFunction() = default;
+
     const TranslatedTagDifferencer* ttd;
     /**
      * Returns the cost associated with assigning actor a to task t.

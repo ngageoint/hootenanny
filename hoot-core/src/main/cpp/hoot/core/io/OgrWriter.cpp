@@ -687,7 +687,7 @@ void OgrWriter::writePartial(const ConstWayPtr& way)
    * Make sure this way has any hope of working (i.e., are there enough spots in the cache
    * for all its nodes?
    */
-  if ((unsigned long)way->getNodeCount() > _elementCache->getNodeCacheSize())
+  if (way->getNodeCount() > _elementCache->getNodeCacheSize())
   {
     throw HootException("Cannot do partial write of Way ID " + QString::number(way->getId()) +
       " as it contains " + QString::number(way->getNodeCount()) + " nodes, but our cache can " +

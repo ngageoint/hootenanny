@@ -51,7 +51,7 @@ public:
   virtual QString getType() const override { return "rnd"; }
 
   virtual QString getDescription() const override
-  { return "Compares conflation performance between files output by score-matches (experimental)"; }
+  { return "Compares conflate performance between score-matches outputs (experimental)"; }
 
   virtual int runSimple(QStringList& args) override
   {

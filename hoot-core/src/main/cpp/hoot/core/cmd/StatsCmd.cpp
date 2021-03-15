@@ -57,7 +57,7 @@ public:
   virtual QString getName() const override { return "stats"; }
 
   virtual QString getDescription() const override
-  { return "Displays a pre-configured set of statistics for a map"; }
+  { return "Calculates a pre-configured set of statistics for a map"; }
 
   virtual int runSimple(QStringList& args) override
   {

@@ -42,12 +42,12 @@
 #include <geos/geom/CoordinateArraySequence.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/LineString.h>
-using namespace geos::geom;
 
 // Qt
 #include <QDebug>
 #include <QTextStream>
 
+using namespace geos::geom;
 using namespace std;
 
 namespace hoot
@@ -56,19 +56,19 @@ namespace hoot
 HOOT_FACTORY_REGISTER(OsmMapOperation, HighwayCornerSplitter)
 
 HighwayCornerSplitter::HighwayCornerSplitter()
-  : _cornerThreshold(ConfigOptions().getHighwayCornerSplitterThresholdDefaultValue()),
-    _splitRounded(ConfigOptions().getHighwayCornerSplitterRoundedSplitDefaultValue()),
-    _roundedThreshold(ConfigOptions().getHighwayCornerSplitterRoundedThresholdDefaultValue()),
-    _roundedMaxNodeCount(ConfigOptions().getHighwayCornerSplitterRoundedMaxNodeCountDefaultValue())
+  : _cornerThreshold(ConfigOptions().getHighwayCornerSplitterThreshold()),
+    _splitRounded(ConfigOptions().getHighwayCornerSplitterRoundedSplit()),
+    _roundedThreshold(ConfigOptions().getHighwayCornerSplitterRoundedThreshold()),
+    _roundedMaxNodeCount(ConfigOptions().getHighwayCornerSplitterRoundedMaxNodeCount())
 {
 }
 
 HighwayCornerSplitter::HighwayCornerSplitter(const std::shared_ptr<OsmMap>& map)
   : _map(map),
-    _cornerThreshold(ConfigOptions().getHighwayCornerSplitterThresholdDefaultValue()),
-    _splitRounded(ConfigOptions().getHighwayCornerSplitterRoundedSplitDefaultValue()),
-    _roundedThreshold(ConfigOptions().getHighwayCornerSplitterRoundedThresholdDefaultValue()),
-    _roundedMaxNodeCount(ConfigOptions().getHighwayCornerSplitterRoundedMaxNodeCountDefaultValue())
+    _cornerThreshold(ConfigOptions().getHighwayCornerSplitterThreshold()),
+    _splitRounded(ConfigOptions().getHighwayCornerSplitterRoundedSplit()),
+    _roundedThreshold(ConfigOptions().getHighwayCornerSplitterRoundedThreshold()),
+    _roundedMaxNodeCount(ConfigOptions().getHighwayCornerSplitterRoundedMaxNodeCount())
 {
 }
 

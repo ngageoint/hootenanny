@@ -99,7 +99,7 @@ class CoOccurrenceVisitor : public ConstElementVisitor, public ConstOsmMapConsum
 {
 public:
 
-  CoOccurrenceVisitor(RefToEidVisitor::RefToEid refSet, AttributeCoOccurrence::CoOccurrenceHash& h) :
+  CoOccurrenceVisitor(const RefToEidVisitor::RefToEid& refSet, AttributeCoOccurrence::CoOccurrenceHash& h) :
   _refSet(refSet), _coOccurrence(h) { }
 
   virtual ~CoOccurrenceVisitor() = default;
@@ -136,14 +136,14 @@ public:
             for (Tags::const_iterator tag1 = e->getTags().begin(); tag1 != e->getTags().end();
                  ++tag1)
             {
-              QString kvp1 = OsmSchema::getInstance().toKvp(tag1.key(),tag1.value());
+              QString kvp1 = OsmSchema::toKvp(tag1.key(),tag1.value());
 
               // We are only looking at Enumerated tags
               if (OsmSchema::getInstance().getTagVertex(kvp1).valueType == hoot::Enumeration)
               {
                 // Get the value from the corresponding tag in REF2
                 QString kvp2 =
-                  OsmSchema::getInstance().toKvp(
+                  OsmSchema::toKvp(
                     tag1.key(), _map->getElement(*eid)->getTags()[tag1.key()]);
 
                 // LOG_INFO("Got Tags:" + kvp1 + " " + kvp2);
@@ -155,7 +155,7 @@ public:
             for (Tags::const_iterator tag2 = _map->getElement(*eid)->getTags().begin();
                  tag2 != _map->getElement(*eid)->getTags().end(); ++tag2 )
             {
-              QString kvp2 = OsmSchema::getInstance().toKvp(tag2.key(),tag2.value());
+              QString kvp2 = OsmSchema::toKvp(tag2.key(),tag2.value());
 
               // Skip the tags that are common
               if (e->getTags().contains(tag2.key())) continue;
@@ -163,7 +163,7 @@ public:
               if (OsmSchema::getInstance().getTagVertex(kvp2).valueType == hoot::Enumeration)
               {
                 // "Missing" == "" tag value
-                QString kvp1 = OsmSchema::getInstance().toKvp(tag2.key(),"");
+                QString kvp1 = OsmSchema::toKvp(tag2.key(),"");
 
                 // LOG_INFO("Got Tags:" + kvp1 + " " + kvp2);
                 _coOccurrence[kvp1][kvp2]++;

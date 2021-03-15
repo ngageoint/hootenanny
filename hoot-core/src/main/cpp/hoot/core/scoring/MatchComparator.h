@@ -145,8 +145,6 @@ private:
 
   QMap<ElementType::Type, long> _elementWrongCounts;
 
-  ReviewMarker _reviewMarker;
-
   int _statusUpdateInterval;
 
   void _addWrong(const Tags& t1, const Tags& t2);

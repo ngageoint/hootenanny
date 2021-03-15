@@ -41,7 +41,7 @@ NaiveWayMatchStringMapping::NaiveWayMatchStringMapping(WayStringPtr str1,
   _length2 = _ws2->calculateLength();
 }
 
-WayLocation NaiveWayMatchStringMapping::map1To2(WayLocation l1, ElementId preferredEid)
+WayLocation NaiveWayMatchStringMapping::map1To2(const WayLocation& l1, ElementId preferredEid)
 {
   // be certain that the ends match exactly (avoid floating point rounding issues)
   if (_ws1->at(0).getStart() == l1)
@@ -59,7 +59,7 @@ WayLocation NaiveWayMatchStringMapping::map1To2(WayLocation l1, ElementId prefer
   return _ws2->calculateLocationFromStart(distanceOn2, preferredEid);
 }
 
-WayLocation NaiveWayMatchStringMapping::map2To1(WayLocation l2, ElementId preferredEid)
+WayLocation NaiveWayMatchStringMapping::map2To1(const WayLocation& l2, ElementId preferredEid)
 {
   // be certain that the ends match exactly (avoid floating point rounding issues)
   if (_ws2->at(0).getStart() == l2)

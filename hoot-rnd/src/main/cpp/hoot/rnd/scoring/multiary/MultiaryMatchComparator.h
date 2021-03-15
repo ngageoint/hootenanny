@@ -66,6 +66,8 @@ public:
 
   MultiaryMatchComparator();
 
+  virtual ~MultiaryMatchComparator() = default;
+
   /**
    * Compares the maps and stores the confusion matrix.
    *

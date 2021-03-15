@@ -43,7 +43,6 @@
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/foreach.hpp>
-namespace pt = boost::property_tree;
 
 // Qt
 #include <QStringList>
@@ -53,7 +52,10 @@ namespace pt = boost::property_tree;
 #include <iostream>
 #include <sstream>
 #include <unistd.h>
+
 using namespace std;
+
+namespace pt = boost::property_tree;
 
 namespace hoot
 {
@@ -493,7 +495,8 @@ void Settings::_validateOperatorRefs(const QStringList& operators)
 {
   for (int i = 0; i < operators.size(); i++)
   {
-    const QString operatorName = operators[i];
+    QString operatorName = operators[i];
+    operatorName = operatorName.remove("\"");
     LOG_VART(operatorName);
     const QString errorMsg = "Invalid option operator class name: " + operatorName;
 
@@ -860,7 +863,7 @@ QString Settings::_replaceVariablesValue(QString value) const
   return _replaceVariablesValue(value, used);
 }
 
-QString Settings::_replaceVariablesValue(QString value, std::set<QString> used) const
+QString Settings::_replaceVariablesValue(QString value, const std::set<QString>& used) const
 {
   bool done = false;
   int offset = 0;

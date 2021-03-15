@@ -33,7 +33,6 @@
 #include <geos/geom/LineString.h>
 #include <geos/geom/Point.h>
 #include <geos/operation/distance/DistanceOp.h>
-using namespace geos::operation::distance;
 
 // Hoot
 #include <hoot/core/algorithms/linearreference/LocationOfPoint.h>
@@ -60,6 +59,7 @@ using namespace geos::operation::distance;
 #include <tgs/ProbablePath/ProbablePathCalculator.h>
 
 using namespace geos::geom;
+using namespace geos::operation::distance;
 using namespace std;
 using namespace Tgs;
 
@@ -388,14 +388,13 @@ void GraphComparator::_exportGraphImage(OsmMapPtr map, DirectedGraph& /*graph*/,
   pt.setRenderHint(QPainter::Antialiasing, true);
   pt.fillRect(pt.viewport(), Qt::black);
 
-  GeometryPainter gp;
-  QMatrix m = gp.createMatrix(pt.viewport(), _projectedBounds);
+  QMatrix m = GeometryPainter::createMatrix(pt.viewport(), _projectedBounds);
 
   QPen pen(Qt::white);
 
   pen.setWidth(7);
   pt.setPen(pen);
-  gp.drawPoint(pt, coord.x, coord.y, m);
+  GeometryPainter::drawPoint(pt, coord.x, coord.y, m);
 
   pen.setWidth(3);
   QColor c;
@@ -423,7 +422,7 @@ void GraphComparator::_exportGraphImage(OsmMapPtr map, DirectedGraph& /*graph*/,
 
     pen.setColor(c);
     pt.setPen(pen);
-    gp.drawNode(pt, it->second.get(), m);
+    GeometryPainter::drawNode(pt, it->second.get(), m);
   }
 
   image.save(path);
