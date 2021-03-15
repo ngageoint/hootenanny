@@ -274,7 +274,7 @@ long WayAverager::_moveToLine(
 Coordinate WayAverager::_moveToLineAsCoordinate(
   long ni, double nWeight, const LineString* ls, double lWeight)
 {
-  NodePtr n = _map.getNode(ni);
+  NodePtr n = _map->getNode(ni);
   std::shared_ptr<Point> point(
     GeometryFactory::getDefaultInstance()->createPoint(n->toCoordinate()));
 
