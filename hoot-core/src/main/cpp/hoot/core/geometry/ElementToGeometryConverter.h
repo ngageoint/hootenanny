@@ -69,7 +69,7 @@ public:
   static QString className() { return "hoot::ElementToGeometryConverter"; }
 
   /**
-   * see class description
+   * Constructor
    *
    * @note If the element provider passed as a parameter is an OsmMap, the spatial reference
    *      from the parameter will be set as the spatial reference for the element converter
@@ -80,8 +80,15 @@ public:
   ~ElementToGeometryConverter() = default;
 
   /**
-   * Converts the given element to a geos geometry object. The tags are used with OsmSchema to
+   * Converts the given element to a geos geometry object. The tags are used with the schema to
    * determine the geometry type.
+   *
+   * @param e the element to convert
+   * @param throwError If true, an exception is thrown when encountering an invalid element. If
+   * false, an empty geometry is returned when encountering an invalid element.
+   * @param statsFlag If true, this geometry type is being retrieved for the purpose of map
+   * statistics.
+   * @return a geometry
    */
   std::shared_ptr<geos::geom::Geometry> convertToGeometry(
     const std::shared_ptr<const Element>& e, bool throwError = true,
@@ -101,16 +108,17 @@ public:
   /**
    * Return the geometry type of the specific element.
    *
-   * @param e
-   * @param throwError If true an exception is thrown with an invalid geometry. If false a -1 is
-   *  returned on error.
-   * @param statsFlag if true, this geometry type is being retrieved for the purpose of map
-   * statistics
+   * @param e the element to retrieve the geometry type of
+   * @param throwError If true, an exception is thrown when encountering an invalid element. If
+   * false, a an unknown geometry ID is returned when encountering an invalid element.
+   * @param statsFlag If true, this geometry type is being retrieved for the purpose of map
+   * statistics.
    * @param requireAreaForPolygonConversion if true, in order for the element being converted to
    * become a polygon it must be classifiable in the schema as an area
+   * @return a geometry ID
    */
   static geos::geom::GeometryTypeId getGeometryType(const ConstElementPtr& e,
-    bool throwError = true, const bool statsFlag = false,
+    bool throwError = false, const bool statsFlag = false,
     const bool requireAreaForPolygonConversion = true);
 
   void setRequireAreaForPolygonConversion(bool require)

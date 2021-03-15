@@ -123,7 +123,7 @@ private:
 
   ConstOsmMapPtr _map;
 
-  std::shared_ptr<ElementToGeometryConverter> _ElementToGeometryConverter;
+  std::shared_ptr<ElementToGeometryConverter> _elementToGeomeryConverter;
 
   // protects the input data
   QMutex* _buildingPartInputMutex;

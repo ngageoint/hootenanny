@@ -619,7 +619,7 @@ void OgrWriter::write(const ConstOsmMapPtr& map)
       g.reset((GeometryFactory::getDefaultInstance()->createEmptyGeometry()));
     }
 
-    LOG_TRACE("After conversion to geometry, element is now a " << g->getGeometryType() );
+    LOG_TRACE("After conversion to geometry, element is now a " << g->getGeometryType());
 
     Tags t = e->getTags();
     for (Tags::const_iterator it = t.begin(); it != t.end(); ++it)
