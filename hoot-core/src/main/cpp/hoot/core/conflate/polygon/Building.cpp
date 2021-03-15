@@ -24,53 +24,54 @@
  *
  * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
-#include "Building.h"
+//#include "Building.h"
 
-// geos
-#include <geos/geom/GeometryFactory.h>
-#include <geos/geom/Polygon.h>
+//// geos
+//#include <geos/geom/GeometryFactory.h>
+//#include <geos/geom/Polygon.h>
 
-// hoot
-#include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/geometry/ElementToGeometryConverter.h>
+//// hoot
+//#include <hoot/core/elements/OsmMap.h>
+//#include <hoot/core/geometry/ElementToGeometryConverter.h>
 
-using namespace geos::geom;
-using namespace std;
+//using namespace geos::geom;
+//using namespace std;
 
-namespace hoot
-{
+//namespace hoot
+//{
 
-Building::Building(const OsmMap& map, const ConstElementPtr& e) : _e(e), _map(map)
-{
-}
+//Building::Building(const OsmMap& map, const ConstElementPtr& e) : _e(e), _map(map)
+//{
+//}
 
-std::shared_ptr<Geometry> Building::buildOutline() const
-{
-  ElementToGeometryConverter ec(_map.shared_from_this());
-  std::shared_ptr<Geometry> result;
+//std::shared_ptr<Geometry> Building::buildOutline() const
+//{
+//  ElementToGeometryConverter ec(_map.shared_from_this());
+//  std::shared_ptr<Geometry> result;
 
-  // if this is a building relation
-  if (_e->getElementType() == ElementType::Relation)
-  {
-    // construct the outline from the union of the parts.
-    result.reset(GeometryFactory::getDefaultInstance()->createEmptyGeometry());
+//  // if this is a building relation
+//  if (_e->getElementType() == ElementType::Relation)
+//  {
+//    // construct the outline from the union of the parts.
+//    result.reset(GeometryFactory::getDefaultInstance()->createEmptyGeometry());
 
-    ConstRelationPtr r = std::dynamic_pointer_cast<const Relation>(_e);
-    const vector<RelationData::Entry> entries = r->getMembers();
-    for (size_t i = 0; i < entries.size(); i++)
-    {
-      if (entries[i].role == MetadataTags::RolePart())
-      {
-        std::shared_ptr<Geometry> g = ec.convertToGeometry(_map.getElement(entries[i].getElementId()));
-        result.reset(result->Union(g.get()));
-      }
-    }
-  }
-  else
-  {
-    result = ec.convertToGeometry(_e);
-  }
-  return result;
-}
+//    ConstRelationPtr r = std::dynamic_pointer_cast<const Relation>(_e);
+//    const vector<RelationData::Entry> entries = r->getMembers();
+//    for (size_t i = 0; i < entries.size(); i++)
+//    {
+//      if (entries[i].role == MetadataTags::RolePart())
+//      {
+//        std::shared_ptr<Geometry> g =
+//          ec.convertToGeometry(_map.getElement(entries[i].getElementId()));
+//        result.reset(result->Union(g.get()));
+//      }
+//    }
+//  }
+//  else
+//  {
+//    result = ec.convertToGeometry(_e);
+//  }
+//  return result;
+//}
 
-}
+//}

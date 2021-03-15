@@ -104,6 +104,10 @@ void SchemaTranslatedTagCountVisitor::visit(const ConstElementPtr& e)
   {
     std::shared_ptr<Geometry> g =
       ElementToGeometryConverter(_map->shared_from_this()).convertToGeometry(e, false);
+    if (!g || g->isEmpty())
+    {
+      return;
+    }
 
     Tags t = e->getTags();
     t[MetadataTags::ErrorCircular()] = QString::number(e->getCircularError());

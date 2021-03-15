@@ -306,9 +306,6 @@ geos::geom::GeometryTypeId ElementToGeometryConverter::getGeometryType(
   const ConstElementPtr& e, bool throwError, const bool statsFlag,
   const bool requireAreaForPolygonConversion)
 {
-  // This is used to pass the relation type back to the exception handler
-  QString relationType = "";
-
   ElementType t = e->getElementType();
 
   switch (t.getEnum())
@@ -392,46 +389,44 @@ geos::geom::GeometryTypeId ElementToGeometryConverter::getGeometryType(
           return GEOS_GEOMETRYCOLLECTION;
       }
 
+      QString errorMsg;
       // We are going to throw an error so we save the type of relation
-      relationType = r->getType();
-      break;
-
+      QString relationType = r->getType().trimmed();
+      if (relationType != "")
+      {
+        errorMsg =
+          "Unknown geometry type for " + e->getElementId().toString() + " with type=" +
+          relationType;
+      }
+      else
+      {
+        errorMsg =
+          "Unknown geometry type for " + e->getElementId().toString() + " with missing type.";
+      }
+      if (throwError)
+      {
+        throw IllegalArgumentException(errorMsg);
+      }
+      else
+      {
+        if (logWarnCount < Log::getWarnMessageLimit())
+        {
+          LOG_WARN(errorMsg);
+        }
+        else if (logWarnCount == Log::getWarnMessageLimit())
+        {
+          LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+        }
+        logWarnCount++;
+      }
     }
 
   default:
-    LOG_ERROR("Element was not a node, way, or relation");
+    LOG_WARN("Element was not a node, way, or relation");
     break;
   }
 
-  QString errorMsg;
-  if (relationType != "")
-  {
-    errorMsg =
-      "Unknown geometry type for " + e->getElementId().toString() + " with type=" + relationType ;
-  }
-  else
-  {
-    errorMsg =
-      "Unknown geometry type for " + e->getElementId().toString() + " with missing type.";
-  }
-  if (throwError)
-  {
-    throw IllegalArgumentException(errorMsg);
-  }
-  else
-  {
-    if (logWarnCount < Log::getWarnMessageLimit())
-    {
-      LOG_WARN(errorMsg);
-    }
-    else if (logWarnCount == Log::getWarnMessageLimit())
-    {
-      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
-    }
-    logWarnCount++;
-
-    return GeometryTypeId(UNKNOWN_GEOMETRY);
-  }
+  return GeometryTypeId(UNKNOWN_GEOMETRY);
 }
 
 }

@@ -24,39 +24,42 @@
  *
  * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
-#ifndef BUILDING_H
-#define BUILDING_H
+//#ifndef BUILDING_H
+//#define BUILDING_H
 
-// geos
-#include <geos/geom/Geometry.h>
+//// geos
+//#include <geos/geom/Geometry.h>
 
-// hoot
-#include <hoot/core/elements/Element.h>
+//// hoot
+//#include <hoot/core/elements/Element.h>
 
-namespace hoot
-{
+//namespace hoot
+//{
 
-class OsmMap;
+//class OsmMap;
 
-class Building
-{
-public:
+///**
+// * @todo This class isn't used anywhere, so remove.
+// */
+//class Building
+//{
+//public:
 
-  Building(const OsmMap& map, const ConstElementPtr& e);
+//  Building(const OsmMap& map, const ConstElementPtr& e);
 
-  /**
-   * Given an input building, build the outline for the building and return it. This will not
-   * add the outline to the building's element. If the building does have an outline it is ignored
-   * and a new one is generated from the parts.
-   */
-  std::shared_ptr<geos::geom::Geometry> buildOutline() const;
+//  /**
+//   * Given an input building, build the outline for the building and return it. This will not
+//   * add the outline to the building's element. If the building does have an outline it is ignored
+//   * and a new one is generated from the parts.
+//   */
+//  std::shared_ptr<geos::geom::Geometry> buildOutline() const;
 
-private:
+//private:
 
-  ConstElementPtr _e;
-  const OsmMap& _map;
-};
+//  ConstElementPtr _e;
+//  const OsmMap& _map;
+//};
 
-}
+//}
 
-#endif // BUILDING_H
+//#endif // BUILDING_H

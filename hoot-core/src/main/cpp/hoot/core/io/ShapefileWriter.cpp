@@ -508,7 +508,13 @@ void ShapefileWriter::_writeRelationPolygon(const ConstOsmMapPtr& map,
 
   // convert the geometry.
   const ConstRelationPtr& r = relation;
-  std::string wkt = ElementToGeometryConverter(map).convertToGeometry(r)->toString();
+  std::shared_ptr<geos::geom::Geometry> geometry =
+    ElementToGeometryConverter(map).convertToGeometry(r);
+  if (!geometry.get() || geometry->isEmpty())
+  {
+    throw HootException(QString("Error converting geometry"));
+  }
+  std::string wkt = geometry->toString();
   char* t = (char*)wkt.data();
   OGRGeometry* geom;
   if (OGRGeometryFactory::createFromWkt(&t, poLayer->GetSpatialRef(), &geom) != OGRERR_NONE)
