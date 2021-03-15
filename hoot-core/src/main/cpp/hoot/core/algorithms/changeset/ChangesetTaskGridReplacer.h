@@ -1,4 +1,3 @@
-
 /*
  * This file is part of Hootenanny.
  *
@@ -25,6 +24,7 @@
  *
  * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
+
 #ifndef CHANGESET_TASK_GRID_REPLACER_H
 #define CHANGESET_TASK_GRID_REPLACER_H
 
