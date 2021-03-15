@@ -123,7 +123,7 @@ public:
     WayPtr way1(new Way(Status::Unknown1, 1, 15.0));
     way1->setTag("key1", "value1");
     way1->addNode(node1->getId());
-    way1->addNode(node2->getId());;
+    way1->addNode(node2->getId());
 
     WayPtr way2(new Way(Status::Unknown1, 2, 15.0));
     way2->setTag("key1", "value1");
@@ -210,7 +210,7 @@ public:
 
     RelationPtr relation1(new Relation(Status::Unknown1, 1, 15.0, "type1"));
     relation1->setTag("key1", "value1");
-    relation1->addElement("role1", way1);;
+    relation1->addElement("role1", way1);
 
     RelationPtr relation2(new Relation(Status::Unknown1, 1, 15.0, "type1"));
     relation2->setTag("key1", "value1");

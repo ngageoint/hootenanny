@@ -95,18 +95,18 @@ public:
   double getDestinationX() const;
   double getDestinationY() const;
 
-  const Edge getOriginNext() const;
-  const Edge getOriginPrevious() const;
-  const Edge getDestinationNext() const;
-  const Edge getDestinationPrevious() const;
+  Edge getOriginNext() const;
+  Edge getOriginPrevious() const;
+  Edge getDestinationNext() const;
+  Edge getDestinationPrevious() const;
 
-  const Edge getLeftNext() const;
-  const Edge getLeftPrevious() const;
+  Edge getLeftNext() const;
+  Edge getLeftPrevious() const;
 
-  const Edge getReverse() const;
+  Edge getReverse() const;
 
-  const Edge getRightNext() const;
-  const Edge getRightPrevious() const;
+  Edge getRightNext() const;
+  Edge getRightPrevious() const;
 
   double getLength() const;
 
@@ -250,7 +250,7 @@ public:
    * built while points are inserted so this should return very quickly. Any inserts that occur
    * will invalidate all previous edge pointers.
    */
-  const Edge getStartingEdge() const;
+  Edge getStartingEdge() const;
 
   const EdgeIterator& getEdgeEnd() const { return _edgeEnd; }
 
