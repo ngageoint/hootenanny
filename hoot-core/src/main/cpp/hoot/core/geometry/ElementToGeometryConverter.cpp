@@ -422,7 +422,15 @@ geos::geom::GeometryTypeId ElementToGeometryConverter::getGeometryType(
     }
 
   default:
-    LOG_WARN("Element was not a node, way, or relation");
+    if (logWarnCount < Log::getWarnMessageLimit())
+    {
+      LOG_WARN("Element was not a node, way, or relation");
+    }
+    else if (logWarnCount == Log::getWarnMessageLimit())
+    {
+      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+    }
+    logWarnCount++;
     break;
   }
 
