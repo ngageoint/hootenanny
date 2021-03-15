@@ -258,13 +258,13 @@ private:
 };
 
 OgrReader::OgrReader()
+  : _d(new OgrReaderInternal())
 {
-  _d = new OgrReaderInternal();
 }
 
 OgrReader::OgrReader(const QString& path)
+  : _d(new OgrReaderInternal())
 {
-  _d = new OgrReaderInternal();
   if (isSupported(path) == true)
   {
     _d->open(path, QString(""));
@@ -272,17 +272,12 @@ OgrReader::OgrReader(const QString& path)
 }
 
 OgrReader::OgrReader(const QString& path, const QString& layer)
+  : _d(new OgrReaderInternal())
 {
-  _d = new OgrReaderInternal();
   if (isSupported(path) == true)
   {
     _d->open(path, layer);
   }
-}
-
-OgrReader::~OgrReader()
-{
-  delete _d;
 }
 
 void OgrReader::setProgress(const Progress& progress)

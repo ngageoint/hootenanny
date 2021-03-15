@@ -257,16 +257,14 @@ void GeometryPainter::drawPolygon(QPainter& pt, const OGRPolygon* polygon, const
 
   if (polygon->getNumInteriorRings() > 0)
   {
-    QPainter* lpt = nullptr;
-    QImage* image = new QImage(pt.window().size(), QImage::Format_ARGB32);
+    std::shared_ptr<QImage> image(new QImage(pt.window().size(), QImage::Format_ARGB32));
     if (image->isNull() == true)
     {
-      delete image;
       throw Exception("Internal Error: GeometryPainter::drawPolygon "
                       "Error allocating image.");
     }
     image->fill(qRgba(0, 0, 0, 0));
-    lpt = new QPainter(image);
+    std::shared_ptr<QPainter> lpt(new QPainter(image.get()));
     lpt->setMatrix(pt.matrix());
     lpt->setPen(pen);
     lpt->setBrush(brush);
@@ -307,9 +305,6 @@ void GeometryPainter::drawPolygon(QPainter& pt, const OGRPolygon* polygon, const
     pt.resetMatrix();
     pt.drawImage(pt.window(), *image);
     pt.setMatrix(matrix);
-
-    delete lpt;
-    delete image;
   }
   else
   {

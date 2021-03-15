@@ -167,9 +167,8 @@ void OsmGbdxXmlWriter::_newOutputFile()
 //    LOG_ERROR("Final name: " + url);
   }
 
-  QFile* f = new QFile();
-  _fp.reset(f);
-  f->setFileName(url);
+  _fp.reset(new QFile());
+  std::dynamic_pointer_cast<QFile>(_fp)->setFileName(url);
 
   if (!_fp->open(QIODevice::WriteOnly | QIODevice::Text))
   {
@@ -208,8 +207,8 @@ QString OsmGbdxXmlWriter::toString(const ConstOsmMapPtr& map, const bool formatX
   OsmGbdxXmlWriter writer;
   writer.setFormatXml(formatXml);
   // this will be deleted by the _fp std::shared_ptr
-  QBuffer* buf = new QBuffer();
-  writer._fp.reset(buf);
+  std::shared_ptr<QBuffer> buf(new QBuffer());
+  writer._fp = buf;
   if (!writer._fp->open(QIODevice::WriteOnly | QIODevice::Text))
   {
     throw InternalErrorException(QObject::tr("Error opening QBuffer for writing. Odd."));

@@ -101,7 +101,7 @@ OsmPbfReader::OsmPbfReader(const QString& urlString)
 
 void OsmPbfReader::_init(bool useFileId)
 {
-  _d = new OsmPbfReaderData();
+  _d.reset(new OsmPbfReaderData());
   _useFileId = useFileId;
   _status = hoot::Status::Invalid;
   _useFileStatus = false;
@@ -119,7 +119,6 @@ void OsmPbfReader::_init(bool useFileId)
 
 OsmPbfReader::~OsmPbfReader()
 {
-  delete _d;
   if (_needToCloseInput == true)
   {
     close();

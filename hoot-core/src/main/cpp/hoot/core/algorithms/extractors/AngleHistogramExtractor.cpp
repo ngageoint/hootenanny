@@ -31,11 +31,11 @@
 #include <geos/geom/Geometry.h>
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/algorithms/extractors/Histogram.h>
-#include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
-#include <hoot/core/elements/Way.h>
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/elements/Way.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
 
 using namespace geos::geom;
 using namespace std;
