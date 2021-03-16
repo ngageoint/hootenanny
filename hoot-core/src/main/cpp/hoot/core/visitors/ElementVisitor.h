@@ -105,7 +105,7 @@ public:
   QString toString() const override { return ""; }
 };
 
-typedef std::shared_ptr<ElementVisitor> ElementVisitorPtr;
+using ElementVisitorPtr = std::shared_ptr<ElementVisitor>;
 
 }
 

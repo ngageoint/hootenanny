@@ -32,7 +32,7 @@
 #include <tgs/HashMap.h>
 namespace hoot
 {
-  typedef HashMap<long, NodePtr> NodeMap;
+  using NodeMap = HashMap<long, NodePtr>;
 }
 
 #endif // NODEMAP_H

@@ -80,8 +80,8 @@ public:
   virtual QString toString() const = 0;
 };
 
-typedef std::shared_ptr<Merger> MergerPtr;
-typedef std::shared_ptr<const Merger> ConstMergerPtr;
+using MergerPtr = std::shared_ptr<Merger>;
+using ConstMergerPtr = std::shared_ptr<const Merger>;
 
 }
 

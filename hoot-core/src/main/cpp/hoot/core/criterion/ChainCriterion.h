@@ -84,7 +84,7 @@ private:
   friend class RemoveRef2VisitorMultipleCriterion;
 };
 
-typedef std::shared_ptr<ChainCriterion> ChainCriterionPtr;
+using ChainCriterionPtr = std::shared_ptr<ChainCriterion>;
 
 }
 #endif // CHAINCRITERION_H

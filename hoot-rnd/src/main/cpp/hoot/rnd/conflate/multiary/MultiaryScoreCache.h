@@ -75,7 +75,7 @@ private:
   std::shared_ptr<MatchCreator> _matchCreator;
 };
 
-typedef std::shared_ptr<MultiaryScoreCache> MultiaryScoreCachePtr;
+using MultiaryScoreCachePtr = std::shared_ptr<MultiaryScoreCache>;
 
 }
 

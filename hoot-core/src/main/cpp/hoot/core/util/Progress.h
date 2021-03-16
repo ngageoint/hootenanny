@@ -41,14 +41,14 @@ class Progress
 {
 public:
 
-  typedef enum
+  enum JobState
   {
     Pending = 1,
     NotRunning,
     Running,
     Successful,
     Failed
-  } JobState;
+  };
 
   Progress(QString jobId = "", QString source = "", JobState jobState = JobState::Pending,
            float percentComplete = 0.0, float taskWeight = 0.0);

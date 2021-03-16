@@ -50,6 +50,10 @@
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MemoryUsageChecker.h>
+#include <hoot/core/ops/RoadCrossingPolyReviewMarker.h>
+#include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/conflate/merging/LinearTagOnlyMerger.h>
+#include <hoot/core/conflate/merging/LinearAverageMerger.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/visitors/CountUniqueReviewsVisitor.h>
 
@@ -70,6 +74,7 @@ ConflateExecutor::ConflateExecutor() :
 _isDiffConflate(false),
 _diffConflateSeparateOutput(false),
 _isAttributeConflate(false),
+_isAverageConflate(false),
 _displayStats(false),
 _displayChangesetStats(false),
 _filterOps(ConfigOptions().getConflateRemoveSuperfluousOps()),
@@ -89,10 +94,18 @@ void ConflateExecutor::_initConfig()
   // Use of LinearTagOnlyMerger for geometries signifies that we're doing Attribute Conflation.
   _isAttributeConflate =
     ConfigOptions().getGeometryLinearMergerDefault() == LinearTagOnlyMerger::className();
+  // Use of LinearAverageMerger for geometries signifies that we're doing Average Conflation.
+  _isAverageConflate =
+    ConfigOptions().getGeometryLinearMergerDefault() == LinearAverageMerger::className();
   if (_isAttributeConflate && _isDiffConflate) // This is a little kludgy but seems useful for now.
   {
     throw IllegalArgumentException(
       "Differential and Attribute Conflation configurations may not both be used at the same time.");
+  }
+  else if (_isAttributeConflate && _isAverageConflate)
+  {
+    throw IllegalArgumentException(
+      "Attribute and Average Conflation configurations may not both be used at the same time.");
   }
   if (_isAttributeConflate)
   {
@@ -193,6 +206,10 @@ void ConflateExecutor::conflate(const QString& input1, const QString& input2, QS
   else if (_isAttributeConflate)
   {
     msg = msg.replace("Conflating", "Attribute conflating ");
+  }
+  else if (_isAverageConflate)
+  {
+    msg = msg.replace("Conflating", "Average conflating ");
   }
   _progress->set(0.0, msg);
 

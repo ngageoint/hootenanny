@@ -114,8 +114,8 @@ namespace Tgs
     double _swapGrandChildNodes(int parentId, const std::vector<double>& overlaps);
   };
 
-  typedef std::shared_ptr<HilbertRTree> HilbertRTreePtr;
-  typedef std::shared_ptr<const HilbertRTree> ConstHilbertRTreePtr;
+  using HilbertRTreePtr = std::shared_ptr<HilbertRTree>;
+  using ConstHilbertRTreePtr = std::shared_ptr<const HilbertRTree>;
 }
 
 

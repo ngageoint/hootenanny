@@ -44,14 +44,14 @@ class NumericComparisonType
 
 public:
 
-  typedef enum Type
+  enum Type
   {
     EqualTo = 0,
     LessThan,
     LessThanOrEqualTo,
     GreaterThan,
     GreaterThanOrEqualTo
-  } Type;
+  };
 
   NumericComparisonType();
   NumericComparisonType(Type type);

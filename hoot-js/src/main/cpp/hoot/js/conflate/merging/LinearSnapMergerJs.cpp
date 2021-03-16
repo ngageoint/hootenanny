@@ -29,6 +29,7 @@
 // hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/conflate/merging/LinearTagOnlyMerger.h>
+#include <hoot/core/conflate/merging/LinearAverageMerger.h>
 #include <hoot/core/conflate/merging/LinearMergerFactory.h>
 
 #include <hoot/js/JsRegistrar.h>
@@ -127,8 +128,11 @@ void LinearSnapMergerJs::apply(const FunctionCallbackInfo<Value>& args)
   // Use of LinearTagOnlyMerger for geometries signifies that we're doing Attribute Conflation.
   const bool isAttributeConflate =
     ConfigOptions().getGeometryLinearMergerDefault() == LinearTagOnlyMerger::className();
+  // Use of LinearAverageMerger for geometries signifies that we're doing Average Conflation.
+  const bool isAverageConflate =
+    ConfigOptions().getGeometryLinearMergerDefault() == LinearAverageMerger::className();
   MergerPtr merger;
-  if (isAttributeConflate || (matchedBy != "Waterway" && matchedBy != "Line"))
+  if (isAttributeConflate || isAverageConflate || (matchedBy != "Waterway" && matchedBy != "Line"))
   {
     merger = LinearMergerFactory::getMerger(pairs, sublineMatcher, matchedBy);
   }

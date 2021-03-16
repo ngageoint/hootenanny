@@ -482,7 +482,7 @@ void OsmGeoJsonReader::_parseGeoJsonRelation(const string& id, const pt::ptree& 
     string roles_values = properties.get("roles", "");
     if (roles_values.compare("") != 0)
     {
-      typedef boost::tokenizer<boost::char_separator<char>> _tokenizer;
+      using _tokenizer = boost::tokenizer<boost::char_separator<char>>;
       _tokenizer tokens(roles_values, boost::char_separator<char>(";", nullptr, boost::keep_empty_tokens));
       for (_tokenizer::iterator it = tokens.begin(); it != tokens.end(); ++it)
         _roles.push(*it);

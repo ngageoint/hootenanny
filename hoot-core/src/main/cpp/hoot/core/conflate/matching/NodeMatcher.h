@@ -113,8 +113,8 @@ private:
                               size_t depth, bool debug = false);
 };
 
-typedef std::shared_ptr<NodeMatcher> NodeMatcherPtr;
-typedef std::shared_ptr<const NodeMatcher> ConstNodeMatcherPtr;
+using NodeMatcherPtr = std::shared_ptr<NodeMatcher>;
+using ConstNodeMatcherPtr = std::shared_ptr<const NodeMatcher>;
 
 }
 

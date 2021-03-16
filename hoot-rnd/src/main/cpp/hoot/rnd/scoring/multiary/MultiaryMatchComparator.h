@@ -62,7 +62,7 @@ public:
 
   static int logWarnCount;
 
-  typedef QMap<QString, ElementId> IdToEid;
+  using IdToEid = QMap<QString, ElementId>;
 
   MultiaryMatchComparator();
 
@@ -149,8 +149,8 @@ public:
 private:
 
   /// a cluster of IDs.
-  typedef QSet<QString> IdCluster;
-  typedef std::shared_ptr<IdCluster> IdClusterPtr;
+  using IdCluster = QSet<QString>;
+  using IdClusterPtr = std::shared_ptr<IdCluster>;
 
   /// Provides indexed access to a set of elements that need to be reviewed.
   class ReviewClusterIndex : public QMap<QString, IdClusterPtr>
@@ -216,7 +216,7 @@ private:
   QHash<QString, IdClusterPtr> _expectedMatchGroups;
   ReviewClusterIndex _expectedReviews;
 
-  typedef QHash<int, QHash<int, int>> ConfusionTable;
+  using ConfusionTable = QHash<int, QHash<int, int>>;
 
   /**
    * Confusion matrix with [actual][expected]

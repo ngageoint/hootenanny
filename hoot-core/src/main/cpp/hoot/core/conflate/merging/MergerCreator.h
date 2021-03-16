@@ -90,8 +90,8 @@ public:
   virtual void setArguments(QStringList /*args*/) { throw IllegalArgumentException(); }
 };
 
-typedef std::shared_ptr<MergerCreator> MergerCreatorPtr;
-typedef std::shared_ptr<const MergerCreator> ConstMergerCreatorPtr;
+using MergerCreatorPtr = std::shared_ptr<MergerCreator>;
+using ConstMergerCreatorPtr = std::shared_ptr<const MergerCreator>;
 
 }
 

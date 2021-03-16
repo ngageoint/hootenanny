@@ -72,7 +72,7 @@ public:
   virtual QString toString() const override { return ""; }
 };
 
-typedef std::shared_ptr<ElementCriterion> ElementCriterionPtr;
+using ElementCriterionPtr = std::shared_ptr<ElementCriterion>;
 
 }
 

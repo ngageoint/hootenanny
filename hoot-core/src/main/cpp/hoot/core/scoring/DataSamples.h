@@ -39,7 +39,7 @@
 namespace hoot
 {
 
-typedef std::map<QString, double> Sample;
+using Sample = std::map<QString, double>;
 
 /**
  * A very simple construct for storing simple data samples.

@@ -106,7 +106,7 @@ private:
   QStringList _metadataAllowKeys;
 };
 
-typedef std::shared_ptr<ChangesetDeriver> ChangesetDeriverPtr;
+using ChangesetDeriverPtr = std::shared_ptr<ChangesetDeriver>;
 
 }
 

@@ -26,6 +26,12 @@ See the User Guide for more details on command usage.
     hoot conflate input1.osm input2.osm output.osm
 -----
 
+===== Conflate two maps into a single map while averaging features (Average Conflation):
+
+-----
+    hoot conflate -C AverageConflation.conf input1.osm input2.osm output.osm
+-----
+
 ===== Conflate, adding data from the second map to output that does not conflict with data in the first map (Differential Conflation):
 
 -----
@@ -451,6 +457,12 @@ hoot alpha-shape --buffer 10 input.osm 200 0 output.osm
     1	(<1%)	small building overlap similar building orientation building edges not very close to each other
     1	(<1%)	small building overlap semisimilar building orientation building edges not very close to each other
     1	(<1%)	medium building overlap building orientation not similar building edges not very close to each other
+-----
+
+===== Display a delimited list as a string of all tag keys in a map:
+
+-----
+    hoot tag-info --warn --keys-only --delimited-text input.osm
 -----
 
 === Advanced

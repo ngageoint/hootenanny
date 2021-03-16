@@ -41,7 +41,7 @@ public:
 
 protected:
   /** respond() function that responds once to the OSM API Capabilities request */
-  virtual bool respond(HttpConnection::HttpConnectionPtr& connection) override;
+  virtual bool respond(HttpConnectionPtr& connection) override;
 };
 
 class GeographicSplitReaderTestServer : public HttpSequencedServer
@@ -54,7 +54,7 @@ public:
 
 protected:
   /** respond() function that responds once to the OSM API Capabilities request */
-  virtual bool respond(HttpConnection::HttpConnectionPtr& connection) override;
+  virtual bool respond(HttpConnectionPtr& connection) override;
   /** get_sequence_response() function that gets the response message based on the URL requested */
   virtual HttpResponsePtr get_sequence_response(const std::string& request) override;
 };
@@ -70,7 +70,7 @@ public:
 
 protected:
   /** respond() function that responds once to the OSM API Capabilities request */
-  virtual bool respond(HttpConnection::HttpConnectionPtr& connection) override;
+  virtual bool respond(HttpConnectionPtr& connection) override;
   /** get_sequence_response() function that gets the response message based on the URL requested */
   virtual HttpResponsePtr get_sequence_response(const std::string& url) override;
   /** Force split based on "element count" */

@@ -55,7 +55,7 @@ public:
   }
 };
 
-typedef std::shared_ptr<ConstElementVisitor> ConstElementVisitorPtr;
+using ConstElementVisitorPtr = std::shared_ptr<ConstElementVisitor>;
 
 }
 

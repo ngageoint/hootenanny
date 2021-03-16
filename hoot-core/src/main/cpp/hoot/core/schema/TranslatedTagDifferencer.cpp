@@ -124,8 +124,8 @@ double TranslatedTagDifferencer::diff(const ConstOsmMapPtr& map, const ConstElem
 
   CostFunction cost;
   cost.ttd = this;
-  typedef SingleAssignmentProblemSolver<ScriptToOgrSchemaTranslator::TranslatedFeature,
-      ScriptToOgrSchemaTranslator::TranslatedFeature> Saps;
+  using Saps = SingleAssignmentProblemSolver<ScriptToOgrSchemaTranslator::TranslatedFeature,
+      ScriptToOgrSchemaTranslator::TranslatedFeature> ;
   Saps sap(cost);
 
   for (size_t i = 0; i < tf1.size(); i++)

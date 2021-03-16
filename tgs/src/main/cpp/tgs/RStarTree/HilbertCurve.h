@@ -55,8 +55,8 @@ namespace Tgs
   {
   public:
 
-    typedef int64_t bitmask_t;
-    typedef int64_t halfmask_t;
+    using bitmask_t = int64_t;
+    using halfmask_t = int64_t;
 
     HilbertCurve(int dimensions, int order)
     {

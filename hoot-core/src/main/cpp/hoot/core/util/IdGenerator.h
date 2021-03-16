@@ -63,7 +63,7 @@ private:
   static std::shared_ptr<IdGenerator> _theInstance;
 };
 
-typedef std::shared_ptr<IdGenerator> IdGeneratorPtr;
+using IdGeneratorPtr = std::shared_ptr<IdGenerator>;
 
 }
 

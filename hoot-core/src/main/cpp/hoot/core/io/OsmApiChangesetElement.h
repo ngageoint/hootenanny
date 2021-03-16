@@ -50,10 +50,10 @@ namespace hoot
 class ElementIdToIdMap;
 
 /** Object that matches an XML tag to its XML attributes */
-typedef QPair<QString, QXmlStreamAttributes> XmlObject;
-typedef std::vector<std::pair<QString, QString>> ElementAttributes;
-typedef std::pair<QString, QString> ElementTag;
-typedef std::vector<ElementTag> ElementTags;
+using XmlObject = QPair<QString, QXmlStreamAttributes>;
+using ElementAttributes = std::vector<std::pair<QString, QString>>;
+using ElementTag = std::pair<QString, QString>;
+using ElementTags = std::vector<ElementTag>;
 
 /** Elements in a changeset can be in three sections, create, modify, and delete.  Max is used for iterating */
 enum ChangesetType : int
@@ -199,8 +199,8 @@ protected:
   /** Element status */
   ElementStatus _status;
 };
-/** Handy typedef for element shared pointer */
-typedef std::shared_ptr<ChangesetElement> ChangesetElementPtr;
+/** Handy alias for element shared pointer */
+using ChangesetElementPtr = std::shared_ptr<ChangesetElement>;
 
 /** Simplified changeset node abstraction */
 class ChangesetNode : public ChangesetElement
@@ -229,8 +229,8 @@ public:
    */
   bool diff(const ChangesetNode& node, QString& diffOutput) const;
 };
-/** Handy typedef for node shared pointer */
-typedef std::shared_ptr<ChangesetNode> ChangesetNodePtr;
+/** Handy alias for node shared pointer */
+using ChangesetNodePtr = std::shared_ptr<ChangesetNode>;
 
 /** Simplified changeset way abstraction */
 class ChangesetWay : public ChangesetElement
@@ -285,8 +285,8 @@ private:
   /** Vector of node ID in the way */
   QVector<long> _nodes;
 };
-/** Handy typedef for way shared pointer */
-typedef std::shared_ptr<ChangesetWay> ChangesetWayPtr;
+/** Handy alias for way shared pointer */
+using ChangesetWayPtr = std::shared_ptr<ChangesetWay>;
 
 /** Simplified changeset relation member abstraction */
 class ChangesetRelationMember
@@ -404,8 +404,8 @@ private:
   /** List of relation members */
   QList<ChangesetRelationMember> _members;
 };
-/** Handy typedef for relation shared pointer */
-typedef std::shared_ptr<ChangesetRelation> ChangesetRelationPtr;
+/** Handy alias for relation shared pointer */
+using ChangesetRelationPtr = std::shared_ptr<ChangesetRelation>;
 
 /** Custom sorting function to sort IDs from -1 to -n followed by 1 to m */
 bool id_sort_order(long lhs, long rhs);
@@ -417,8 +417,8 @@ public:
     return id_sort_order(lhs, rhs);
   }
 };
-/** Handy typedef for a vector of sorted ID maps */
-typedef std::vector<std::map<long, long, osm_id_sort>> ChangesetElementIdMap;
+/** Handy alias for a vector of sorted ID maps */
+using ChangesetElementIdMap = std::vector<std::map<long, long, osm_id_sort>>;
 
 /**
  *  Class for storing ID to ID associations, this is required because elements that are created in
@@ -431,12 +431,12 @@ class ElementIdToIdMap
 {
 public:
   /** Helpful typedefs for iterators */
-  typedef typename std::map<long, long, osm_id_sort>::iterator iterator;
-  typedef typename std::map<long, long, osm_id_sort>::const_iterator const_iterator;
+  using iterator = std::map<long, long, osm_id_sort>::iterator;
+  using const_iterator = std::map<long, long, osm_id_sort>::const_iterator;
   /** Constructor */
   ElementIdToIdMap()
     : _idToId(ElementType::Unknown)
-  {}
+  { }
   /**
    * @brief addId Add ID to the map
    * @param type Element type (node/way/relation)

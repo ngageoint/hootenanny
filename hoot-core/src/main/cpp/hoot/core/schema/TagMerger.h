@@ -72,8 +72,8 @@ protected:
   bool _caseSensitive;
 };
 
-typedef std::shared_ptr<TagMerger> TagMergerPtr;
-typedef std::shared_ptr<const TagMerger> ConstTagMergerPtr;
+using TagMergerPtr = std::shared_ptr<TagMerger>;
+using ConstTagMergerPtr = std::shared_ptr<const TagMerger>;
 
 }
 

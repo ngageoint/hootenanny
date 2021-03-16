@@ -51,7 +51,7 @@ class ArffWriter
 {
 public:
 
-  typedef std::map<QString, double> Sample;
+  using Sample = std::map<QString, double>;
 
   /**
    * @brief ArffWriter

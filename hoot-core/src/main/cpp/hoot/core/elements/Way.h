@@ -269,8 +269,8 @@ private:
   bool _nodeIdsAreDuplicated(const std::vector<long>& ids) const;
 };
 
-typedef std::shared_ptr<Way> WayPtr;
-typedef std::shared_ptr<const Way> ConstWayPtr;
+using WayPtr = std::shared_ptr<Way>;
+using ConstWayPtr = std::shared_ptr<const Way>;
 
 inline bool operator<(const WayPtr& w1, const WayPtr& w2)
 {

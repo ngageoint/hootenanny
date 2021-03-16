@@ -50,8 +50,8 @@ private:
 
 };
 
-typedef std::shared_ptr<StateDescription> StateDescriptionPtr;
-typedef std::shared_ptr<const StateDescription> ConstStateDescriptionPtr;
+using StateDescriptionPtr = std::shared_ptr<StateDescription>;
+using ConstStateDescriptionPtr = std::shared_ptr<const StateDescription>;
 
 }
 

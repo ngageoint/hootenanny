@@ -75,7 +75,7 @@ private:
    */
   void _placeElementInMap(const ElementPtr& element);
 
-  typedef QMap<geos::geom::Envelope, OsmMapPtr> TileMap;
+  using TileMap = QMap<geos::geom::Envelope, OsmMapPtr>;
   /** Original map to split up */
   OsmMapPtr _map;
   /** Map of polygon ways that indicate tile divisions */
