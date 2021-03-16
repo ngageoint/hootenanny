@@ -119,7 +119,6 @@ bool OsmMapWriterFactory::hasElementOutputStream(const QString& url)
   {
     result = true;
   }
-
   return result;
 }
 
