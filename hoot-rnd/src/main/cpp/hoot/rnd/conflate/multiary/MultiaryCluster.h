@@ -65,7 +65,7 @@ public:
   QString toString() const;
 };
 
-typedef std::shared_ptr<MultiaryCluster> MultiaryClusterPtr;
+using MultiaryClusterPtr = std::shared_ptr<MultiaryCluster>;
 
 }
 

@@ -128,8 +128,8 @@ private:
   void _resetHash() const { _hash = 0; }
 };
 
-typedef std::shared_ptr<EdgeMatch> EdgeMatchPtr;
-typedef std::shared_ptr<const EdgeMatch> ConstEdgeMatchPtr;
+using EdgeMatchPtr = std::shared_ptr<EdgeMatch>;
+using ConstEdgeMatchPtr = std::shared_ptr<const EdgeMatch>;
 
 // not implemented
 bool operator<(ConstEdgeMatchPtr, ConstEdgeMatchPtr);

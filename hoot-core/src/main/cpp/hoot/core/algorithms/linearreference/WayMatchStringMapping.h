@@ -93,8 +93,8 @@ public:
   { return "1: " + getWayString1()->toString() + "; 2: " + getWayString2()->toString(); }
 };
 
-typedef std::shared_ptr<WayMatchStringMapping> WayMatchStringMappingPtr;
-typedef std::shared_ptr<const WayMatchStringMapping> ConstWayMatchStringMappingPtr;
+using WayMatchStringMappingPtr = std::shared_ptr<WayMatchStringMapping>;
+using ConstWayMatchStringMappingPtr = std::shared_ptr<const WayMatchStringMapping>;
 
 }
 

@@ -43,7 +43,7 @@ class TableType
 public:
 
   // we could add the changesets table to this
-  typedef enum Type
+  enum Type
   {
     Node = 0,
     Way = 1,
@@ -51,7 +51,7 @@ public:
     WayNode = 3,
     RelationMember = 4,
     Unknown
-  } Type;
+  };
 
   TableType() { _type = Unknown; }
   TableType(Type type) { _type = type; }

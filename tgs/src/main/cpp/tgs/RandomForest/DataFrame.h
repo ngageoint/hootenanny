@@ -57,17 +57,17 @@ namespace Tgs
   {
   public:
 
-    typedef enum FactorType
+    enum FactorType
     {
       Numerical,
       Nominal
-    } FactorType;
+    };
 
-    typedef enum NullTreatment
+    enum NullTreatment
     {
       NullAsValue,
       NullAsMissingValue
-    } NullTreatment;
+    };
 
     /**
     * Constructor

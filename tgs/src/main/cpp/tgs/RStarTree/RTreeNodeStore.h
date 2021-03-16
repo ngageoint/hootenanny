@@ -85,7 +85,7 @@ protected:
     RTreeNode * pNode;
   };
 
-  typedef HashMap<int, RecItem*> NodeMap;
+  using NodeMap = HashMap<int, RecItem*>;
 
   // mutable cache
   NodeMap _availableNodes;

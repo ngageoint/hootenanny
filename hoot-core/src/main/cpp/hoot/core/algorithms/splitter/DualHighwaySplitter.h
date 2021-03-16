@@ -55,11 +55,11 @@ public:
 
   static QString className() { return "hoot::DualHighwaySplitter"; }
 
-  typedef enum DrivingSide
+  enum DrivingSide
   {
     Left,
     Right
-  } DrivingSide;
+  };
 
   DualHighwaySplitter();
   DualHighwaySplitter(const std::shared_ptr<const OsmMap>& map, DrivingSide drivingSide,

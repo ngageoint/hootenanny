@@ -51,7 +51,7 @@ class RemoveRef2Visitor : public ElementVisitor, public ConstOsmMapConsumer,
 
 public:
 
-  typedef QMap<QString, ElementId> Ref1ToEid;
+  using Ref1ToEid = QMap<QString, ElementId>;
 
   static QString className() { return "hoot::RemoveRef2Visitor"; }
 

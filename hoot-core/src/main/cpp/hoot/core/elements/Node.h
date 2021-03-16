@@ -163,8 +163,8 @@ protected:
   virtual const ElementData& _getElementData() const { return _nodeData; }
 };
 
-typedef std::shared_ptr<Node> NodePtr;
-typedef std::shared_ptr<const Node> ConstNodePtr;
+using NodePtr = std::shared_ptr<Node>;
+using ConstNodePtr = std::shared_ptr<const Node>;
 
 inline NodePtr Node::newSp(Status s, long id, double x, double y, Meters circularError)
 {

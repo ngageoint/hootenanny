@@ -182,7 +182,7 @@ public:
 
 };
 
-typedef std::shared_ptr<ElementCache> ElementCachePtr;
+using ElementCachePtr = std::shared_ptr<ElementCache>;
 
 }
 

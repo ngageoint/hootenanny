@@ -47,7 +47,7 @@
 
 #define EPS 1e-6
 
-typedef double	Real;
+using Real = double;
 
 class Vector2d
 {

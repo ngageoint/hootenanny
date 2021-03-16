@@ -42,8 +42,8 @@
 namespace hoot
 {
 
-typedef std::shared_ptr<geos::geom::Geometry> GeometryPtr;
-typedef std::pair<GeometryPtr, GeometryPtr> GeometryPair;
+using GeometryPtr = std::shared_ptr<geos::geom::Geometry>;
+using GeometryPair = std::pair<GeometryPtr, GeometryPtr>;
 
 class GeometryMerger
 {

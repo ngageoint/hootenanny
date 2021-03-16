@@ -60,7 +60,7 @@ public:
   virtual QString toString() const = 0;
 };
 
-typedef std::shared_ptr<StringDistance> StringDistancePtr;
+using StringDistancePtr = std::shared_ptr<StringDistance>;
 
 }
 

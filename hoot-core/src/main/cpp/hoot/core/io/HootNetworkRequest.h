@@ -185,7 +185,7 @@ private:
   bool _timedOut;
 };
 
-typedef std::shared_ptr<HootNetworkRequest> HootNetworkRequestPtr;
+using HootNetworkRequestPtr = std::shared_ptr<HootNetworkRequest>;
 
 }
 

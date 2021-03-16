@@ -90,11 +90,11 @@ private:
   // for white box testing.
   friend class IterativeNetworkMatcherTest;
 
-  typedef SingleAssignmentProblemSolver<EdgeString, EdgeString> Saps;
+  using Saps = SingleAssignmentProblemSolver<EdgeString, EdgeString>;
 
-  typedef QHash<ConstEdgeMatchPtr, double> EdgeScoreMap;
+  using EdgeScoreMap = QHash<ConstEdgeMatchPtr, double>;
   /// [row][col]
-  typedef QHash<ConstNetworkVertexPtr, QHash<ConstNetworkVertexPtr, double>> VertexScoreMap;
+  using VertexScoreMap = QHash<ConstNetworkVertexPtr, QHash<ConstNetworkVertexPtr, double>>;
 
   /**
    * A cost function used to compare network edges. It is a simple lookup.
@@ -185,8 +185,8 @@ private:
 
 };
 
-typedef std::shared_ptr<IterativeNetworkMatcher> IterativeNetworkMatcherPtr;
-typedef std::shared_ptr<const IterativeNetworkMatcher> ConstIterativeNetworkMatcherPtr;
+using IterativeNetworkMatcherPtr = std::shared_ptr<IterativeNetworkMatcher>;
+using ConstIterativeNetworkMatcherPtr = std::shared_ptr<const IterativeNetworkMatcher>;
 
 // not implemented
 bool operator<(ConstIterativeNetworkMatcherPtr, ConstIterativeNetworkMatcherPtr);

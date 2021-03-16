@@ -68,8 +68,8 @@ struct ElementComparePq
   }
 };
 
-typedef std::priority_queue<PqElement,
-                            std::vector<PqElement>, ElementComparePq> ElementPriorityQueue;
+using ElementPriorityQueue =
+  std::priority_queue<PqElement, std::vector<PqElement>, ElementComparePq>;
 
 /**
   This performs element sorting outside of main memory on disk and serves the sorted results up

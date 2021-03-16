@@ -66,7 +66,7 @@ private:
 
 };
 
-typedef std::shared_ptr<NetworkVertexScore> NetworkVertexScorePtr;
+using NetworkVertexScorePtr = std::shared_ptr<NetworkVertexScore>;
 
 // not implemented
 bool operator<(NetworkVertexScorePtr, NetworkVertexScorePtr);

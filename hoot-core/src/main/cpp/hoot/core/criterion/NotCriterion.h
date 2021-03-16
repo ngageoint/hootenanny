@@ -74,7 +74,7 @@ private:
   ElementCriterionPtr _child;
 };
 
-typedef std::shared_ptr<NotCriterion> NotCriterionPtr;
+using NotCriterionPtr = std::shared_ptr<NotCriterion>;
 
 }
 

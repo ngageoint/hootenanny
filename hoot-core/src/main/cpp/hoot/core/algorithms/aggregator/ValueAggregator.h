@@ -59,7 +59,7 @@ public:
   virtual QString toString() const { return ""; }
 };
 
-typedef std::shared_ptr<ValueAggregator> ValueAggregatorPtr;
+using ValueAggregatorPtr = std::shared_ptr<ValueAggregator>;
 
 }
 

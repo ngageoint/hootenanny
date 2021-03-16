@@ -117,8 +117,8 @@ private:
   ConstEdgeLocationPtr _start, _end;
 };
 
-typedef std::shared_ptr<EdgeSubline> EdgeSublinePtr;
-typedef std::shared_ptr<const EdgeSubline> ConstEdgeSublinePtr;
+using EdgeSublinePtr = std::shared_ptr<EdgeSubline>;
+using ConstEdgeSublinePtr = std::shared_ptr<const EdgeSubline>;
 
 bool operator==(const ConstEdgeSublinePtr&, const ConstEdgeSublinePtr&);
 

@@ -33,7 +33,7 @@
 
 namespace hoot
 {
-  typedef HashMap<long, WayPtr> WayMap;
+  using WayMap = HashMap<long, WayPtr>;
 }
 
 #endif // WAYMAP_H

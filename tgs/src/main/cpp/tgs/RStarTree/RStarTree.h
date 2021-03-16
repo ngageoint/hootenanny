@@ -138,7 +138,7 @@ protected:
     Reinsert
   };
 
-  typedef std::vector<BoxPair> BoxVector;
+  using BoxVector = std::vector<BoxPair>;
 
   // TODO: store dimensions and such.
   class Header

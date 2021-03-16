@@ -225,8 +225,8 @@ private:
     const WaySublineCollection& ws) const;
 };
 
-typedef std::shared_ptr<NetworkDetails> NetworkDetailsPtr;
-typedef std::shared_ptr<const NetworkDetails> ConstNetworkDetailsPtr;
+using NetworkDetailsPtr = std::shared_ptr<NetworkDetails>;
+using ConstNetworkDetailsPtr = std::shared_ptr<const NetworkDetails>;
 
 // not implemented
 bool operator<(ConstNetworkDetailsPtr, ConstNetworkDetailsPtr);

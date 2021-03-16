@@ -62,7 +62,7 @@ public:
   // then be a true Singleton?
   Settings();
 
-  typedef QHash<QString, QVariant> SettingsMap;
+  using SettingsMap = QHash<QString, QVariant>;
 
   void append(const QString& key, const QStringList& values);
   void prepend(const QString& key, const QStringList& values);

@@ -48,12 +48,12 @@ class LruCache
 {
 public:
 
-  typedef std::pair<K, V> Entry;
+  using Entry = std::pair<K, V>;
   // back of the list is the most recently used.
-  typedef std::list<Entry> CacheList;
-  typedef HashMap<K, typename CacheList::iterator> CacheMap;
+  using CacheList = std::list<Entry>;
+  using CacheMap = HashMap<K, typename CacheList::iterator>;
 
-  LruCache(long maxSize = 1000) : _maxSize(maxSize) {}
+  LruCache(long maxSize = 1000) : _maxSize(maxSize) { }
 
   /**
    * Intert a new item. This becomes the most recently used item. After inserting check for

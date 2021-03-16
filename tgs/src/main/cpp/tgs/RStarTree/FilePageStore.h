@@ -69,7 +69,7 @@ private:
 
   int _pageSize;
 
-  typedef HashMap<int, std::weak_ptr<Page>> PageMap;
+  using PageMap = HashMap<int, std::weak_ptr<Page>>;
   PageMap _pagesMap;
   bool _readOnly;
   int _pageCount;
