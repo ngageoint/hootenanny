@@ -147,7 +147,7 @@ public:
     left->setTag("name", "right");
     map->addWay(right);
 
-    WayPtr w = WayAverager::average(map, right, left);
+    WayPtr w = WayAverager::replaceWaysWithAveragedWay(map, right, left);
     w->setStatus(Status::Conflated);
     w->setTag("name", "average");
     map->addWay(w);
@@ -162,10 +162,9 @@ public:
       writer.write(wgs84, _outputPath + "MaximalNearestSubline2TestOutput.osm");
     }
 
-    HOOT_FILE_EQUALS( _inputPath + "MaximalNearestSubline2TestOutput.osm",
+    HOOT_FILE_EQUALS(_inputPath + "MaximalNearestSubline2TestOutput.osm",
                      _outputPath + "MaximalNearestSubline2TestOutput.osm");
   }
-
 
   void oneShortTest()
   {
@@ -197,7 +196,7 @@ public:
     right->setTag("name", "right");
     map->addWay(right);
 
-    WayPtr w = WayAverager::average(map, right, left);
+    WayPtr w = WayAverager::replaceWaysWithAveragedWay(map, right, left);
     w->setStatus(Status::Conflated);
     w->setTag("name", "average");
     map->addWay(w);
@@ -210,21 +209,11 @@ public:
       writer.write(wgs84, fn);
     }
 
-//    QFile fp("test-files/algorithms/MaximalNearestSublineOneShortTestOutput.osm");
-//    fp.open(QIODevice::ReadOnly);
-//    QString s1 = fp.readAll();
-
-//    QFile fp2("test-output/algorithms/MaximalNearestSublineOneShortTestOutput.osm");
-//    fp2.open(QIODevice::ReadOnly);
-//    QString s2 = fp2.readAll();
-
-//    CPPUNIT_ASSERT_EQUAL(s1.toStdString(), s2.toStdString());
-
+    HOOT_FILE_EQUALS(_inputPath + "MaximalNearestSublineOneShortTestOutput.osm",
+                     _outputPath + "MaximalNearestSublineOneShortTestOutput.osm");
   }
 };
 
-
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MaximalNearestSublineTest, "current");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MaximalNearestSublineTest, "quick");
 
 }

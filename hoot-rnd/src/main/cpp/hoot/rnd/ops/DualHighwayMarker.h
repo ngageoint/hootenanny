@@ -65,7 +65,8 @@ public:
    */
   virtual void setConfiguration(const Settings& conf);
 
-  virtual QString getInitStatusMessage() const { return "Marking dual highways..."; }
+  virtual QString getInitStatusMessage() const
+  { return "Marking roads that appear to be dual highways..."; }
 
   virtual QString getCompletedStatusMessage() const
   {
