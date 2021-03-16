@@ -875,6 +875,10 @@ bool UnconnectedWaySnapper::_snapClosestEndpointToWay(const WayPtr& disconnected
   const std::vector<long> nodeIds = disconnected->getNodeIds();
   ElementToGeometryConverter converter(_map);
   std::shared_ptr<geos::geom::Geometry> geometry = converter.convertToGeometry(connectTo);
+  if (!geometry || geometry->isEmpty())
+  {
+    return false;
+  }
 
   NodePtr endpoint1 = _map->getNode(nodeIds[0]);
   std::shared_ptr<geos::geom::Geometry> ep1 = converter.convertToGeometry(ConstNodePtr(endpoint1));

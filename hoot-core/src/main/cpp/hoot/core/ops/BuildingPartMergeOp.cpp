@@ -75,7 +75,7 @@ void BuildingPartMergeOp::_init(OsmMapPtr& map)
 {
   _buildingPartGroups.clear();
   _map = map;
-  _ElementToGeometryConverter.reset(new ElementToGeometryConverter(_map));
+  _elementToGeometryConverter.reset(new ElementToGeometryConverter(_map));
   _numAffected = 0;
   _totalBuildingGroupsProcessed = 0;
   _numBuildingGroupsMerged = 0;
@@ -113,7 +113,7 @@ QQueue<BuildingPartRelationship> BuildingPartMergeOp::_getBuildingPartWayPreProc
     WayPtr way = it->second;
     std::shared_ptr<geos::geom::Geometry> buildingGeom = _getGeometry(way);
     // If the way wasn't a building, this will be null.
-    if (buildingGeom)
+    if (buildingGeom && !buildingGeom->isEmpty())
     {
       const std::vector<long>& intersectIds =
         _map->getIndex().findWays(*buildingGeom->getEnvelopeInternal());
@@ -171,7 +171,7 @@ QQueue<BuildingPartRelationship> BuildingPartMergeOp::_getBuildingPartRelationPr
 
     std::shared_ptr<geos::geom::Geometry> buildingGeom = _getGeometry(relation);
     // If the relation wasn't a building, this will be null.
-    if (buildingGeom)
+    if (buildingGeom && !buildingGeom->isEmpty())
     {
       const std::vector<long>& intersectIds =
         _map->getIndex().findWays(*buildingGeom->getEnvelopeInternal());
@@ -396,10 +396,11 @@ std::shared_ptr<geos::geom::Geometry> BuildingPartMergeOp::_getGeometry(
     {
       case ElementType::Way:
         return
-          _ElementToGeometryConverter->convertToGeometry(std::dynamic_pointer_cast<const Way>(element));
+          _elementToGeometryConverter->convertToGeometry(
+            std::dynamic_pointer_cast<const Way>(element));
       case ElementType::Relation:
         return
-          _ElementToGeometryConverter->convertToGeometry(
+          _elementToGeometryConverter->convertToGeometry(
             std::dynamic_pointer_cast<const Relation>(element));
       default:
         throw IllegalArgumentException(

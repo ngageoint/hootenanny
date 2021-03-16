@@ -24,12 +24,13 @@
  *
  * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
+
 #ifndef CHANGESET_TASK_GRID_REPLACER_H
 #define CHANGESET_TASK_GRID_REPLACER_H
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/algorithms/changeset/TaskGrid.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/ops/DataQualityMetricTagger.h>
 
 // Qt
@@ -67,7 +68,7 @@ public:
    */
   OsmMapPtr replace(const QString& toReplace, const QString& replacement, const TaskGrid& taskGrid);
 
-  const DataQualityMetricTagger getOutputMetrics() { return _metricTagger; }
+  DataQualityMetricTagger getOutputMetrics() { return _metricTagger; }
   QMap<QString, long> getChangesetStats() const { return _changesetStats; }
 
   void setOriginalDataSize(int size) { _originalDataSize = size; }

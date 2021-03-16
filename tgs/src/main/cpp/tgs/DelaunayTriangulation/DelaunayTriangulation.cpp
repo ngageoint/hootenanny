@@ -97,18 +97,18 @@ double Edge::getOriginY() const { return _ie->Org2d().y; }
 double Edge::getDestinationX() const { return _ie->Dest2d().x; }
 double Edge::getDestinationY() const { return _ie->Dest2d().y; }
 
-const Edge Edge::getOriginNext() const { return _ie->Onext(); }
-const Edge Edge::getOriginPrevious() const { return _ie->Oprev(); }
-const Edge Edge::getDestinationNext() const { return _ie->Dnext(); }
-const Edge Edge::getDestinationPrevious() const { return _ie->Dprev(); }
+Edge Edge::getOriginNext() const { return _ie->Onext(); }
+Edge Edge::getOriginPrevious() const { return _ie->Oprev(); }
+Edge Edge::getDestinationNext() const { return _ie->Dnext(); }
+Edge Edge::getDestinationPrevious() const { return _ie->Dprev(); }
 
-const Edge Edge::getLeftNext() const { return _ie->Lnext(); }
-const Edge Edge::getLeftPrevious() const { return _ie->Lprev(); }
+Edge Edge::getLeftNext() const { return _ie->Lnext(); }
+Edge Edge::getLeftPrevious() const { return _ie->Lprev(); }
 
-const Edge Edge::getReverse() const { return _ie->Sym(); }
+Edge Edge::getReverse() const { return _ie->Sym(); }
 
-const Edge Edge::getRightNext() const { return _ie->Rnext(); }
-const Edge Edge::getRightPrevious() const { return _ie->Rprev(); }
+Edge Edge::getRightNext() const { return _ie->Rnext(); }
+Edge Edge::getRightPrevious() const { return _ie->Rprev(); }
 
 inline double distance(double x1, double x2, double y1, double y2)
 {
@@ -917,7 +917,7 @@ FaceIterator DelaunayTriangulation::getFaceIterator() const
   return FaceIterator(getEdgeIterator(), getEdgeEnd());
 }
 
-const Edge DelaunayTriangulation::getStartingEdge() const
+Edge DelaunayTriangulation::getStartingEdge() const
 {
   if (_pointCount < 3)
   {

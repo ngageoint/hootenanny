@@ -507,7 +507,7 @@ OsmMapPtr ChangesetReplacementCreatorAbstract::_getCookieCutMap(
 
   LOG_VART(doughMap->size());
   LOG_VART(MapProjector::toWkt(doughMap->getProjection()));
-  OsmMapWriterFactory::writeDebugMap(doughMap, _changesetId + "-dough-map");;
+  OsmMapWriterFactory::writeDebugMap(doughMap, _changesetId + "-dough-map");
   LOG_VART(MapProjector::toWkt(cutterMap->getProjection()));
 
   OsmMapPtr cookieCutMap(new OsmMap(doughMap));

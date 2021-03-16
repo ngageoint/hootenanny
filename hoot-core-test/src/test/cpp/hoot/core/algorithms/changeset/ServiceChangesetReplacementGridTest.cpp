@@ -27,27 +27,27 @@
 
 // Hoot
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/util/Log.h>
-#include <hoot/core/io/OsmMapReaderFactory.h>
-#include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/io/HootApiDb.h>
-#include <hoot/core/geometry/GeometryUtils.h>
-#include <hoot/core/io/ServicesDbTestUtils.h>
-#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/ConfigUtils.h>
-#include <hoot/core/util/StringUtils.h>
-#include <hoot/core/ops/MapCropper.h>
-#include <hoot/core/algorithms/changeset/ChangesetTaskGridReplacer.h>
 #include <hoot/core/algorithms/changeset/BoundsFileTaskGridGenerator.h>
+#include <hoot/core/algorithms/changeset/BoundsStringTaskGridGenerator.h>
+#include <hoot/core/algorithms/changeset/ChangesetTaskGridReplacer.h>
 #include <hoot/core/algorithms/changeset/NodeDensityTaskGridGenerator.h>
 #include <hoot/core/algorithms/changeset/UniformTaskGridGenerator.h>
-#include <hoot/core/algorithms/changeset/BoundsStringTaskGridGenerator.h>
 #include <hoot/core/conflate/ConflateUtils.h>
-#include <hoot/core/visitors/SetTagValueVisitor.h>
-#include <hoot/core/criterion/WayNodeCriterion.h>
 #include <hoot/core/criterion/NotCriterion.h>
-#include <hoot/core/visitors/FilteredVisitor.h>
+#include <hoot/core/criterion/WayNodeCriterion.h>
+#include <hoot/core/geometry/GeometryUtils.h>
+#include <hoot/core/io/HootApiDb.h>
 #include <hoot/core/io/OsmApiDbSqlChangesetApplier.h>
+#include <hoot/core/io/OsmMapReaderFactory.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/io/ServicesDbTestUtils.h>
+#include <hoot/core/ops/MapCropper.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/ConfigUtils.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/util/StringUtils.h>
+#include <hoot/core/visitors/FilteredVisitor.h>
+#include <hoot/core/visitors/SetTagValueVisitor.h>
 
 namespace hoot
 {
@@ -1388,7 +1388,7 @@ public:
     const QString outDir = rootDir + "/" + _testName;
     conf().set(ConfigOptions::getDebugMapsFilenameKey(), outDir + "/" + _testName + "-debug.osm");
     QDir(outDir).removeRecursively();
-    QDir().mkpath(outDir);;
+    QDir().mkpath(outDir);
     _prepInput(
       rootDir + "/NOME_14992d.osm",
       rootDir + "/OSM_14992d.osm"/*,

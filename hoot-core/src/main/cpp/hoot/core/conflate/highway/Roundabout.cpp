@@ -148,6 +148,10 @@ void Roundabout::handleCrossingWays(OsmMapPtr pMap)
   // Calculate intersection points of crossing ways
   ElementToGeometryConverter converter(pMap);
   GeomPtr pRndGeo = converter.convertToGeometry(_roundaboutWay);
+  if (!pRndGeo || pRndGeo->isEmpty())
+  {
+    return;
+  }
   for (size_t i = 0; i < intersectIds.size(); i++)
   {
     WayPtr pWay = pMap->getWay(intersectIds[i]);
@@ -420,8 +424,10 @@ void Roundabout::replaceRoundabout(OsmMapPtr pMap)
         //  Validate the endpoints
         if (!node1 || !node2)
           continue;
-        std::shared_ptr<geos::geom::Geometry> ep1 = converter.convertToGeometry(ConstNodePtr(node1));
-        std::shared_ptr<geos::geom::Geometry> ep2 = converter.convertToGeometry(ConstNodePtr(node2));
+        std::shared_ptr<geos::geom::Geometry> ep1 =
+          converter.convertToGeometry(ConstNodePtr(node1));
+        std::shared_ptr<geos::geom::Geometry> ep2 =
+          converter.convertToGeometry(ConstNodePtr(node2));
         //  Use the distance to find the right end to use
         NodePtr endpoint;
         if (geometry->distance(ep1.get()) < geometry->distance(ep2.get()))

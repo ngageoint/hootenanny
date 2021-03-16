@@ -177,6 +177,10 @@ void BuildingOutlineUpdateOp::_unionOutline(const RelationPtr& pBuilding,
       pGeometry = elementConverter.convertToGeometry(pElement);
       LOG_VART(pGeometry->getGeometryTypeId());
     }
+    if (!pGeometry || pGeometry->isEmpty())
+    {
+      return;
+    }
 
     pOutline.reset(pOutline->Union(pGeometry.get()));
     LOG_VART(pOutline->getGeometryTypeId());
