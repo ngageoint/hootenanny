@@ -48,7 +48,7 @@
 namespace hoot
 {
 
-typedef std::vector<geos::geom::Coordinate> JsonCoordinates;
+using JsonCoordinates = std::vector<geos::geom::Coordinate>;
 
 /**
  * This class is intended to create an OsmMap from a given GeoJSON string.

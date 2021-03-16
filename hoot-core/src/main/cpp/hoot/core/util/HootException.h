@@ -95,7 +95,7 @@ class HootExceptionThrower
 {
 public:
 
-  typedef void (*ThrowMethod)(HootException* e);
+  using ThrowMethod = void(*)(HootException* e);
 
   static HootExceptionThrower& getInstance();
 

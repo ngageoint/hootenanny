@@ -95,7 +95,7 @@ public:
     WayPtr _newWay1;
     WayPtr _newWay2;
   };
-  typedef std::shared_ptr<SublineMapping> SublineMappingPtr;
+  using SublineMappingPtr = std::shared_ptr<SublineMapping>;
 
   class SublineMappingLessThan
   {
@@ -205,8 +205,8 @@ private:
   void _splitPrimary();
 };
 
-typedef std::shared_ptr<WayMatchStringMerger> WayMatchStringMergerPtr;
-typedef std::shared_ptr<const WayMatchStringMerger> ConstWayMatchStringMergerPtr;
+using WayMatchStringMergerPtr = std::shared_ptr<WayMatchStringMerger>;
+using ConstWayMatchStringMergerPtr = std::shared_ptr<const WayMatchStringMerger>;
 
 }
 

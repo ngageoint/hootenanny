@@ -157,13 +157,13 @@ void HttpTestServer::start_accept()
   if (_interupt)
     return;
   //  Creat the connection
-  HttpConnection::HttpConnectionPtr new_connection(new HttpConnection(_acceptor->get_io_service()));
+  HttpConnectionPtr new_connection(new HttpConnection(_acceptor->get_io_service()));
   //  Accept connections async
   _acceptor->async_accept(new_connection->socket(),
     boost::bind(&HttpTestServer::handle_accept, this, new_connection, boost::asio::placeholders::error));
 }
 
-void HttpTestServer::handle_accept(HttpConnection::HttpConnectionPtr new_connection, const boost::system::error_code& error)
+void HttpTestServer::handle_accept(HttpConnectionPtr new_connection, const boost::system::error_code& error)
 {
   //  Call the overridden respond() function
   bool continue_processing = !error;
@@ -176,7 +176,7 @@ void HttpTestServer::handle_accept(HttpConnection::HttpConnectionPtr new_connect
     stop();
 }
 
-bool HttpTestServer::respond(HttpConnection::HttpConnectionPtr& connection)
+bool HttpTestServer::respond(HttpConnectionPtr& connection)
 {
   //  Read the HTTP request
   parse_request(connection);
@@ -188,7 +188,7 @@ bool HttpTestServer::respond(HttpConnection::HttpConnectionPtr& connection)
   return !_interupt;
 }
 
-void HttpTestServer::parse_request(HttpConnection::HttpConnectionPtr &connection)
+void HttpTestServer::parse_request(HttpConnectionPtr &connection)
 {
   //  Reset headers and body
   _headers.clear();
@@ -233,7 +233,7 @@ void HttpTestServer::parse_request(HttpConnection::HttpConnectionPtr &connection
   }
 }
 
-void HttpTestServer::write_response(HttpConnection::HttpConnectionPtr& connection, const std::string& response)
+void HttpTestServer::write_response(HttpConnectionPtr& connection, const std::string& response)
 {
   LOG_TRACE("Response:\n" << response);
   //  Write the response to the socket synchronously

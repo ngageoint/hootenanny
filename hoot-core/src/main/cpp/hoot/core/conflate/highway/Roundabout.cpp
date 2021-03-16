@@ -50,7 +50,7 @@ using geos::geom::CoordinateSequence;
 namespace hoot
 {
 
-typedef std::shared_ptr<geos::geom::Geometry> GeomPtr;
+using GeomPtr = std::shared_ptr<geos::geom::Geometry>;
 
 Roundabout::Roundabout() :
 _status(Status::Invalid),

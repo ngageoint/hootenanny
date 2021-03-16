@@ -81,7 +81,7 @@ private:
   std::list<Change> _changes;
 };
 
-typedef std::shared_ptr<MemChangesetProvider> MemChangesetProviderPtr;
+using MemChangesetProviderPtr = std::shared_ptr<MemChangesetProvider>;
 
 }
 

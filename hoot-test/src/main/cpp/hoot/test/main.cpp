@@ -74,7 +74,7 @@ using namespace std;
 // Tgs
 #include <tgs/System/Time.h>
 
-typedef std::shared_ptr<CppUnit::Test> TestPtr;
+using TestPtr = std::shared_ptr<CppUnit::Test>;
 
 enum _TestType
 {

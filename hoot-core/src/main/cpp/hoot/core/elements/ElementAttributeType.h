@@ -48,7 +48,7 @@ class ElementAttributeType
 
 public:
 
-  typedef enum Type
+  enum Type
   {
     Changeset = 0,
     Timestamp = 1,
@@ -56,7 +56,7 @@ public:
     Uid = 3,
     Version = 4,
     Id = 5
-  } Type;
+  };
 
   ElementAttributeType() : _type(Changeset) {}
   ElementAttributeType(Type type) : _type(type) {}

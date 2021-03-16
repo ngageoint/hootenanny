@@ -38,12 +38,12 @@ namespace Tgs
 {
 // disjoint-set forests using union-by-rank and path compression (sort of).
 
-typedef struct
+struct uni_elt
 {
   int rank;
   int p;
   int size;
-} uni_elt;
+};
 
 class DisjointSet
 {

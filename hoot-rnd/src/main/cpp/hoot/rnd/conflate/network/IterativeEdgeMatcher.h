@@ -84,12 +84,12 @@ private:
     bool reversed;
   };
 
-  typedef SingleAssignmentProblemSolver<ConstNetworkEdgePtr, ConstNetworkEdgePtr> Saps;
+  using Saps = SingleAssignmentProblemSolver<ConstNetworkEdgePtr, ConstNetworkEdgePtr>;
 
   /// [row][col]
-  typedef QHash<ConstNetworkEdgePtr, QHash<ConstNetworkEdgePtr, DirectedEdgeScore>> EdgeScoreMap;
+  using EdgeScoreMap = QHash<ConstNetworkEdgePtr, QHash<ConstNetworkEdgePtr, DirectedEdgeScore>>;
   /// [row][col]
-  typedef QHash<ConstNetworkVertexPtr, QHash<ConstNetworkVertexPtr, double>> VertexScoreMap;
+  using VertexScoreMap = QHash<ConstNetworkVertexPtr, QHash<ConstNetworkVertexPtr, double>>;
 
   /**
    * A cost function used to compare network edges. It is a simple lookup.

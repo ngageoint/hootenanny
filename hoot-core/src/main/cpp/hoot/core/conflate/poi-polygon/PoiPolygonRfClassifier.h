@@ -56,7 +56,7 @@ private:
   void _createExtractors();
 };
 
-typedef std::shared_ptr<PoiPolygonRfClassifier> PoiPolygonRfClassifierPtr;
+using PoiPolygonRfClassifierPtr = std::shared_ptr<PoiPolygonRfClassifier>;
 
 }
 

@@ -37,7 +37,7 @@ class Status
 {
 public:
 
-  typedef enum TypeEnum
+  enum TypeEnum
   {
     Invalid = 0,
     Unknown1,
@@ -45,9 +45,9 @@ public:
     Conflated,
     TagChange, // Tags have been changed, but not geometry
     EnumEnd // Used for calculating multiary inputs
-  } TypeEnum;
+  };
 
-  typedef int Type;
+  using Type = int;
 
   Status() { _type = Invalid; }
   Status(Type type) { _type = type; }

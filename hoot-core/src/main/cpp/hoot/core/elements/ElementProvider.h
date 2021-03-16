@@ -68,8 +68,8 @@ public:
   virtual bool containsWay(long id) const = 0;
 };
 
-typedef std::shared_ptr<const ElementProvider> ConstElementProviderPtr;
-typedef std::shared_ptr<ElementProvider> ElementProviderPtr;
+using ElementProviderPtr = std::shared_ptr<ElementProvider>;
+using ConstElementProviderPtr = std::shared_ptr<const ElementProvider>;
 
 }
 

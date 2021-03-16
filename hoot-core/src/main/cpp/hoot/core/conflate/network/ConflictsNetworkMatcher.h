@@ -83,9 +83,9 @@ private:
   // for white box testing.
   friend class ConflictsNetworkMatcherTest;
 
-  typedef SingleAssignmentProblemSolver<EdgeString, EdgeString> Saps;
+  using Saps = SingleAssignmentProblemSolver<EdgeString, EdgeString>;
 
-  typedef QHash<ConstEdgeMatchPtr, double> EdgeScoreMap;
+  using EdgeScoreMap = QHash<ConstEdgeMatchPtr, double>;
 
   class MatchRelationship
   {
@@ -111,10 +111,10 @@ private:
     bool _conflict;
     QSet<ConstEdgeMatchPtr> _throughStub;
   };
-  typedef std::shared_ptr<const MatchRelationship> ConstMatchRelationshipPtr;
-  typedef std::shared_ptr<MatchRelationship> MatchRelationshipPtr;
+  using MatchRelationshipPtr = std::shared_ptr<MatchRelationship>;
+  using ConstMatchRelationshipPtr = std::shared_ptr<const MatchRelationship>;
 
-  typedef QHash<ConstEdgeMatchPtr, QList<ConstMatchRelationshipPtr>> MatchRelationshipMap;
+  using MatchRelationshipMap = QHash<ConstEdgeMatchPtr, QList<ConstMatchRelationshipPtr>>;
 
   IndexedEdgeMatchSetPtr _edgeMatches;
   EdgeScoreMap _scores, _weights;
@@ -170,8 +170,8 @@ private:
   void _printEdgeMatches();
 };
 
-typedef std::shared_ptr<ConflictsNetworkMatcher> ConflictsNetworkMatcherPtr;
-typedef std::shared_ptr<const ConflictsNetworkMatcher> ConstConflictsNetworkMatcherPtr;
+using ConflictsNetworkMatcherPtr = std::shared_ptr<ConflictsNetworkMatcher>;
+using ConstConflictsNetworkMatcherPtr = std::shared_ptr<const ConflictsNetworkMatcher>;
 
 // not implemented
 bool operator<(ConstConflictsNetworkMatcherPtr, ConstConflictsNetworkMatcherPtr);

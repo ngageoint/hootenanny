@@ -74,8 +74,8 @@ private:
   QString _value;
 };
 
-typedef std::shared_ptr<KeyValuePair> KeyValuePairPtr;
-typedef std::shared_ptr<const KeyValuePair> ConstKeyValuePairPtr;
+using KeyValuePairPtr = std::shared_ptr<KeyValuePair>;
+using ConstKeyValuePairPtr = std::shared_ptr<const KeyValuePair>;
 
 }
 

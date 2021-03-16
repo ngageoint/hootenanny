@@ -71,7 +71,7 @@ protected:
   virtual QString _getHelpPath() const;
 };
 
-typedef std::shared_ptr<BaseCommand> BaseCommandPtr;
+using BaseCommandPtr = std::shared_ptr<BaseCommand>;
 
 }
 

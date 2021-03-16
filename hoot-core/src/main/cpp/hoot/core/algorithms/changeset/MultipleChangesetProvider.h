@@ -73,7 +73,7 @@ private:
   std::list<ChangesetProviderPtr> _changesets;
 };
 
-typedef std::shared_ptr<MultipleChangesetProvider> MultipleChangesetProviderPtr;
+using MultipleChangesetProviderPtr = std::shared_ptr<MultipleChangesetProvider>;
 
 }
 

@@ -42,13 +42,13 @@
 namespace hoot
 {
 
-typedef boost::multi_array<Meters, 2> frechet_matrix;
-typedef frechet_matrix::index frechet_index;
-typedef std::pair<int, int> vertex_match;
-typedef std::vector<vertex_match> subline_entry;
-typedef std::pair<Meters, subline_entry> frechet_subline;
+using frechet_matrix = boost::multi_array<Meters, 2>;
+using frechet_index = frechet_matrix::index;
+using vertex_match = std::pair<int, int>;
+using subline_entry = std::vector<vertex_match>;
+using frechet_subline = std::pair<Meters, subline_entry>;
 
-typedef std::shared_ptr<geos::geom::LineString> LineStringPtr;
+using LineStringPtr = std::shared_ptr<geos::geom::LineString>;
 
 /** Class for calculating Frechet Distance between two ways and calculating maximal subline matches.
  *  Algorithm developed from "A new merging process for data integration base on the descrete Frechet distance"

@@ -38,7 +38,7 @@ class TextTable
 {
 public:
 
-  typedef QHash<QString, QHash<QString, QVariant>> Data;
+  using Data = QHash<QString, QHash<QString, QVariant>>;
 
   TextTable(const Data& d) : _data(d) {}
 

@@ -60,7 +60,7 @@ public:
   virtual double getWeight(const QString& word) const = 0;
 };
 
-typedef std::shared_ptr<WordWeightDictionary> WordWeightDictionaryPtr;
+using WordWeightDictionaryPtr = std::shared_ptr<WordWeightDictionary>;
 
 }
 

@@ -52,7 +52,7 @@ public:
 
   static int logWarnCount;
 
-  typedef std::vector<WaySubline> SublineCollection;
+  using SublineCollection = std::vector<WaySubline>;
 
   WaySublineCollection() = default;
 

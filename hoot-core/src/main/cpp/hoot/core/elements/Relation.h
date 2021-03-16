@@ -231,8 +231,8 @@ void Relation::replaceElements(RelationData::Entry old, IT start, IT end)
   _postGeometryChange();
 }
 
-typedef std::shared_ptr<Relation> RelationPtr;
-typedef std::shared_ptr<const Relation> ConstRelationPtr;
+using RelationPtr = std::shared_ptr<Relation>;
+using ConstRelationPtr = std::shared_ptr<const Relation>;
 
 }
 

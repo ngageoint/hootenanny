@@ -183,7 +183,7 @@ private:
   void _updateRelationAccess(long id);
 };
 
-typedef std::shared_ptr<ElementCacheLRU> ElementCacheLRUPtr;
+using ElementCacheLRUPtr = std::shared_ptr<ElementCacheLRU>;
 
 }
 

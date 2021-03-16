@@ -44,8 +44,8 @@ class MatchType;
 class MatchClassification;
 class Match;
 
-typedef std::shared_ptr<Match> MatchPtr;
-typedef std::shared_ptr<const Match> ConstMatchPtr;
+using MatchPtr = std::shared_ptr<Match>;
+using ConstMatchPtr = std::shared_ptr<const Match>;
 
 /**
  * Describes a specific match between two sets of elements. For example the match between two

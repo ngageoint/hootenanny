@@ -38,7 +38,7 @@ public:
 
   static QString className() { return "hoot::MergerBase"; }
 
-  typedef std::set<std::pair<ElementId, ElementId>> PairsSet;
+  using PairsSet = std::set<std::pair<ElementId, ElementId>>;
 
   MergerBase() = default;
   virtual ~MergerBase() = default;

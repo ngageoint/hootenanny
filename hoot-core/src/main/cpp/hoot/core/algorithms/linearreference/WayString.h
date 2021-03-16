@@ -105,8 +105,8 @@ private:
   WayLocation _changeToPreferred(int index, const WayLocation& wl, ElementId preferredEid) const;
 };
 
-typedef std::shared_ptr<WayString> WayStringPtr;
-typedef std::shared_ptr<const WayString> ConstWayStringPtr;
+using WayStringPtr = std::shared_ptr<WayString>;
+using ConstWayStringPtr = std::shared_ptr<const WayString>;
 
 }
 

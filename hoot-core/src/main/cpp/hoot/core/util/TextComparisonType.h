@@ -44,13 +44,13 @@ class TextComparisonType
 
 public:
 
-  typedef enum Type
+  enum Type
   {
     EqualTo = 0,
     Contains,
     StartsWith,
     EndsWith
-  } Type;
+  };
 
   TextComparisonType() : _type(EqualTo) {}
   TextComparisonType(Type type) : _type(type) {}

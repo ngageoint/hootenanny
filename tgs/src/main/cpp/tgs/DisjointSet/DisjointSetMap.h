@@ -47,8 +47,8 @@ template<class T>
 class DisjointSetMap
 {
 public:
-  typedef typename HashMap<T, int> UserMap;
-  typedef HashMap<int, std::vector<T>> AllGroups;
+  using UserMap = typename HashMap<T, int>;
+  using AllGroups = HashMap<int, std::vector<T>>;
 
   void clear()
   {

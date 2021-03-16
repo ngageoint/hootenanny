@@ -129,7 +129,7 @@ protected:
   virtual void _translateToOsm(Tags& tags, const char *layerName, const char* geomType) = 0;
 };
 
-typedef std::shared_ptr<ScriptSchemaTranslator> ScriptSchemaTranslatorPtr;
+using ScriptSchemaTranslatorPtr = std::shared_ptr<ScriptSchemaTranslator>;
 
 }
 

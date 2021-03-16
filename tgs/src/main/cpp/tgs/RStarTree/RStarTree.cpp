@@ -373,7 +373,7 @@ public:
   Child(int id, const BoxInternalData& b) : b(b.toBox()), id(id) { }
 };
 
-typedef std::pair<double, int> DistancePair;
+using DistancePair = std::pair<double, int>;
 
 class CompareDistancePairs
 {
