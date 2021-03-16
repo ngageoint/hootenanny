@@ -93,7 +93,7 @@ bool LinearAverageMerger::_mergePair(
   std::vector<WayPtr> splitsLeft;
   WayPtr mnsLeft = _getMaximalNearestSubline(way1, way2, minSplitSize, splitsLeft);
   LOG_VART(mnsLeft.get());
-  if (!mnsLeft || splitsLeft.isEmpty())
+  if (!mnsLeft || splitsLeft.empty())
   {
     return false;
   }
@@ -102,7 +102,7 @@ bool LinearAverageMerger::_mergePair(
   std::vector<WayPtr> splitsRight;
   WayPtr mnsRight = _getMaximalNearestSubline(way2, mnsLeft, minSplitSize, splitsRight);
   LOG_VART(mnsRight.get());
-  if (!mnsRight || splitsRight.isEmpty())
+  if (!mnsRight || splitsRight.empty())
   {
     return false;
   }
@@ -179,7 +179,7 @@ WayPtr LinearAverageMerger::_getMaximalNearestSubline(
   splits = maximalNearestSubline.splitWay(_map, index);
   LOG_VART(index);
   LOG_VART(splits.size());
-  if (splits.isEmpty())
+  if (splits.empty())
   {
     return WayPtr();
   }
