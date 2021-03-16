@@ -53,7 +53,7 @@ class BufferedOverlapExtractor : public FeatureExtractorBase, public Configurabl
 public:
 
   BufferedOverlapExtractor();
-  virtual ~BufferedOverlapExtractor() = default;
+  ~BufferedOverlapExtractor() = default;
   /**
    * Similar to OverlapExtractor, but the objects are buffered before the overlap is calculated.
    *
@@ -63,16 +63,16 @@ public:
 
   static QString className() { return "hoot::BufferedOverlapExtractor"; }
 
-  virtual QString getClassName() const override { return BufferedOverlapExtractor::className(); }
+  QString getClassName() const override { return BufferedOverlapExtractor::className(); }
 
-  virtual QString getName() const override;
+  QString getName() const override;
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
-  virtual double extract(const OsmMap& map, const std::shared_ptr<const Element>& target,
+  double extract(const OsmMap& map, const std::shared_ptr<const Element>& target,
     const std::shared_ptr<const Element>& candidate) const override;
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Determines the overlap between two features with buffering"; }
 
 private:

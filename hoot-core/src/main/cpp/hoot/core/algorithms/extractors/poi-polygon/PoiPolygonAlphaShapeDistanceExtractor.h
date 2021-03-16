@@ -45,9 +45,9 @@ public:
   static QString className() { return "hoot::PoiPolygonAlphaShapeDistanceExtractor"; }
 
   PoiPolygonAlphaShapeDistanceExtractor() = default;
-  virtual ~PoiPolygonAlphaShapeDistanceExtractor() = default;
+  ~PoiPolygonAlphaShapeDistanceExtractor() = default;
 
-  virtual QString getClassName() const { return className(); }
+  QString getClassName() const override { return className(); }
 
   /**
    * Calculates the convex hull distance between a poi and a polygon
@@ -57,13 +57,13 @@ public:
    * @param poly a polygon element
    * @return the distance between the two elements
    */
-  virtual double extract(const OsmMap& map, const ConstElementPtr& poi,
-                         const ConstElementPtr& poly) const;
+  double extract(const OsmMap& map, const ConstElementPtr& poi,
+                 const ConstElementPtr& poly) const override;
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Calculates the convex hull distance between a poi and a polygon"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 };
 
 }

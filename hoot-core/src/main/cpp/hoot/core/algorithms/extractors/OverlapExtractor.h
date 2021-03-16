@@ -53,18 +53,18 @@ class OverlapExtractor : public FeatureExtractorBase
 public:
 
   OverlapExtractor() = default;
-  virtual ~OverlapExtractor() = default;
+  ~OverlapExtractor() = default;
 
   static QString className() { return "hoot::OverlapExtractor"; }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
-  virtual double extract(const OsmMap& map, const std::shared_ptr<const Element>& target,
+  double extract(const OsmMap& map, const std::shared_ptr<const Element>& target,
     const std::shared_ptr<const Element>& candidate) const override;
 
-  virtual QString getDescription() const { return "Determines the overlap between two features"; }
+  QString getDescription() const override { return "Determines the overlap between two features"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 };
 
 }

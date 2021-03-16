@@ -39,18 +39,18 @@ public:
   static QString className() { return "hoot::SigmaAggregator"; }
 
   SigmaAggregator() = default;
-  virtual ~SigmaAggregator() = default;
+  ~SigmaAggregator() = default;
 
-  virtual double aggregate(std::vector<double>& d) const override;
+  double aggregate(std::vector<double>& d) const override;
 
-  virtual QString toString() const override { return QString("Sigma Aggregator"); }
+  QString toString() const override { return QString("Sigma Aggregator"); }
 
-  virtual QString getDescription() const override
+  QString getDescription() const override
   { return "Aggregates data based on the unbiased Standard Deviation value"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 };
 
 }

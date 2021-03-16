@@ -51,8 +51,7 @@ public:
    * @param candidate the second element of the pair to measure
    * @return the distance between the two elements in meters
    */
-  virtual double distance(
-    const OsmMap& map, const ConstElementPtr& target,
+  double distance(const OsmMap& map, const ConstElementPtr& target,
     const ConstElementPtr& candidate) const override;
 
   /**
@@ -68,17 +67,17 @@ public:
     const OsmMap& map1, const OsmMap& map2, const ConstElementPtr& target,
     const ConstElementPtr& candidate) const;
 
-  virtual QString getClassName() const { return className(); }
+  QString getClassName() const  override{ return className(); }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Calculates the Euclidean distance between two features"; }
 
   /**
    * @see Configurable
    */
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
 private:
 

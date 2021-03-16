@@ -44,13 +44,13 @@ public:
   LengthScoreExtractor(ValueAggregatorPtr wayAgg);
 
   LengthScoreExtractor() = default;
-  virtual ~LengthScoreExtractor() = default;
+  ~LengthScoreExtractor() = default;
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Calculates a score based on the length of a match between way features"; }
 
 protected:

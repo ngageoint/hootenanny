@@ -56,7 +56,7 @@ class DiscretizeWaysVisitor : public ElementConstOsmMapVisitor
 public:
 
   DiscretizeWaysVisitor(double spacing, vector<Coordinate>& v) : _spacing(spacing), _result(v) { }
-  virtual ~DiscretizeWaysVisitor() = default;
+  ~DiscretizeWaysVisitor() = default;
 
   void visit(const ConstElementPtr& e) override
   {
@@ -83,7 +83,7 @@ class LinesWaysVisitor : public ElementConstOsmMapVisitor
 public:
 
   LinesWaysVisitor(vector<Geometry*>& lines) : _lines(lines) { }
-  virtual ~LinesWaysVisitor() = default;
+  ~LinesWaysVisitor() = default;
 
   void visit(const ConstElementPtr& e) override
   {

@@ -56,18 +56,18 @@ class CompactnessExtractor : public FeatureExtractorBase
 public:
 
   CompactnessExtractor() = default;
-  virtual ~CompactnessExtractor() = default;
+  ~CompactnessExtractor() = default;
 
   static QString className() { return "hoot::CompactnessExtractor"; }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual double extract(const OsmMap& map, const std::shared_ptr<const Element>& target,
+  double extract(const OsmMap& map, const std::shared_ptr<const Element>& target,
     const std::shared_ptr<const Element>& candidate) const override;
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Calculates the compactness of a shape where circles score the highest"; }
 
 private:

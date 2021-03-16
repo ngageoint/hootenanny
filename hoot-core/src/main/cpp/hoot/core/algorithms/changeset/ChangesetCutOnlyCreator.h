@@ -58,9 +58,8 @@ public:
    * @param bounds the rectangular bounds over which features are to be replaced
    * @param output the changeset file output location
    */
-  virtual void create(
-    const QString& input1, const QString& input2, const geos::geom::Envelope& bounds,
-    const QString& output);
+  void create(const QString& input1, const QString& input2, const geos::geom::Envelope& bounds,
+    const QString& output) override;
 
   /**
    * Creates a changeset that replaces features in the first input
@@ -71,15 +70,14 @@ public:
    * @param bounds the bounds over which features are to be replaced
    * @param output the changeset file output location
    */
-  virtual void create(
-    const QString& input1, const QString& input2,
-    const std::shared_ptr<geos::geom::Polygon>& bounds, const QString& output);
+  void create(const QString& input1, const QString& input2,
+    const std::shared_ptr<geos::geom::Polygon>& bounds, const QString& output) override;
 
-  virtual QString toString() const override { return className().remove("hoot::"); }
+  QString toString() const override { return className().remove("hoot::"); }
 
 protected:
 
-  virtual void _setGlobalOpts() override;
+  void _setGlobalOpts() override;
 
 private:
 
