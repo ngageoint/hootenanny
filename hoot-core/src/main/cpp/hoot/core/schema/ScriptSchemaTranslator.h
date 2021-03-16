@@ -73,7 +73,7 @@ public:
   /**
    * String containing the regexp to use for filtering the layer names.
    */
-  virtual const QString getLayerNameFilter() { return "."; }
+  virtual QString getLayerNameFilter() { return "."; }
 
   /**
    * lower order values make the script engine get evaluated earlier.

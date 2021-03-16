@@ -462,6 +462,10 @@ void MapCropper::_cropWay(const OsmMapPtr& map, long wid)
   std::shared_ptr<Geometry> fg =
     ElementToGeometryConverter(map, _logWarningsForMissingElements).convertToGeometry(way);
   LOG_VART(GeometryUtils::geometryTypeIdToString(fg));
+  if (!fg || fg->isEmpty())
+  {
+    return;
+  }
 
   // perform the intersection with the geometry
   std::shared_ptr<Geometry> g;

@@ -132,7 +132,7 @@ bool InBoundsCriterion::isSatisfied(const ConstElementPtr& e) const
 bool InBoundsCriterion::_nonWayNodeInBounds(const ConstElementPtr& e) const
 {
   std::shared_ptr<geos::geom::Geometry> geom = _elementConverter->convertToGeometry(e);
-  if (!geom)
+  if (!geom || geom->isEmpty())
   {
     return false;
   }

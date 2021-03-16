@@ -98,7 +98,7 @@ public:
   QString toString() const override { return QString("%1-skip bi-gram").arg(_k); }
 
   virtual QString getDescription() const override
-  { return "Returns a string comparison score derived using Skip-gram modelling"; }
+  { return "Returns a string comparison score derived using Skip-gram modeling"; }
 
   virtual QString getName() const override { return className(); }
 

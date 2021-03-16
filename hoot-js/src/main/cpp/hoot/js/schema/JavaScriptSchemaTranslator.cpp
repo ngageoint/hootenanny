@@ -30,7 +30,6 @@
 // hoot
 #include <hoot/core/elements/ElementType.h>
 #include <hoot/core/elements/Tags.h>
-#include <hoot/js/io/DataConvertJs.h>
 #include <hoot/core/io/schema/DoubleFieldDefinition.h>
 #include <hoot/core/io/schema/Feature.h>
 #include <hoot/core/io/schema/FeatureDefinition.h>
@@ -44,8 +43,9 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/UuidHelper.h>
-#include <hoot/js/util/HootExceptionJs.h>
 #include <hoot/js/PluginContext.h>
+#include <hoot/js/io/DataConvertJs.h>
+#include <hoot/js/util/HootExceptionJs.h>
 
 // Qt
 #include <QCoreApplication>
@@ -307,7 +307,7 @@ void JavaScriptSchemaTranslator::_init()
 }
 
 // Use the layerNameFilter function to get the filter string (regexp)
-const QString JavaScriptSchemaTranslator::getLayerNameFilter()
+QString JavaScriptSchemaTranslator::getLayerNameFilter()
 {
   // Just making sure
   if (!_initialized)

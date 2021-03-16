@@ -48,11 +48,15 @@ void AddGeometryTypeVisitor::visit(const std::shared_ptr<Element>& e)
     }
     else
     {
-      QString type =
-        QString::fromStdString(
-          ElementToGeometryConverter(_map->shared_from_this())
-          .convertToGeometry(e)->getGeometryType());
-      e->getTags()["geometry_type"] = type;
+      std::shared_ptr<geos::geom::Geometry> geometry =
+        ElementToGeometryConverter(_map->shared_from_this())
+          .convertToGeometry(e);
+      LOG_VART(geometry->isEmpty());
+      if (geometry && !geometry->isEmpty())
+      {
+        const QString type = QString::fromStdString(geometry->getGeometryType());
+        e->getTags()["geometry_type"] = type;
+      }
     }
   }
 }

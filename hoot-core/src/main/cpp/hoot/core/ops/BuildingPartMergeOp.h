@@ -140,7 +140,7 @@ private:
   OsmMapPtr _map;
 
   BuildingCriterion _buildingCrit;
-  std::shared_ptr<ElementToGeometryConverter> _ElementToGeometryConverter;
+  std::shared_ptr<ElementToGeometryConverter> _elementToGeometryConverter;
 
   int _totalBuildingGroupsProcessed;
   int _numBuildingGroupsMerged;

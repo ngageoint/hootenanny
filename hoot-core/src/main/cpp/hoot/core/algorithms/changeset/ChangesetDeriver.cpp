@@ -26,11 +26,11 @@
  */
 #include "ChangesetDeriver.h"
 
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/FileUtils.h>
-#include <hoot/core/elements/MapProjector.h>
 
 namespace hoot
 {

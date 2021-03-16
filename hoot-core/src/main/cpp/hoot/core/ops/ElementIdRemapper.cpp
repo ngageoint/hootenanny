@@ -27,8 +27,8 @@
 #include "ElementIdRemapper.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/ops/RemoveElementByEid.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
@@ -168,7 +168,7 @@ void ElementIdRemapper::restore(OsmMapPtr& map)
       LOG_TRACE(
         "Restoring " << currentElement->getElementId() << " to " <<
         originalElement->getElementId() << "...");
-      map->addElement(originalElement);;
+      map->addElement(originalElement);
       map->replace(currentElement, originalElement);
       _restoredIds++;
     }

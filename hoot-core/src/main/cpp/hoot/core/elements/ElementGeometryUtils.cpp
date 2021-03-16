@@ -205,7 +205,8 @@ std::shared_ptr<geos::geom::Geometry> ElementGeometryUtils::_getGeometry(
     }
   }
   if (newGeom.get() &&
-      QString::fromStdString(newGeom->toString()).toUpper().contains("EMPTY"))
+      (newGeom->isEmpty() ||
+       QString::fromStdString(newGeom->toString()).toUpper().contains("EMPTY")))
   {
     if (_badGeomCount <= Log::getWarnMessageLimit())
     {
