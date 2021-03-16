@@ -256,7 +256,8 @@ vector<Range> ZCurveRanger::decomposeRange(const BBox& box, int levels)
 
 vector<Range> ZCurveRanger::decomposeRange(const LongBox& box, int levels)
 {
-  vector<std::shared_ptr<LongBox>> boxes = decomposeBox(std::make_shared<LongBox>(_clipBox(box)), levels);
+  vector<std::shared_ptr<LongBox>> boxes =
+    decomposeBox(std::make_shared<LongBox>(_clipBox(box)), levels);
 
   vector<Range> result;
   result.reserve((boxes.size()));

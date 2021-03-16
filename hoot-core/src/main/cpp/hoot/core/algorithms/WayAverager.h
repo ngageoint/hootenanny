@@ -129,7 +129,7 @@ private:
    * line string.
    */
   geos::geom::Coordinate _moveToLineAsCoordinate(
-    long n, double nWeight, const geos::geom::LineString* ls, double lWeight);
+    long n, double nWeight, const geos::geom::LineString* ls, double lWeight) const;
 };
 
 }

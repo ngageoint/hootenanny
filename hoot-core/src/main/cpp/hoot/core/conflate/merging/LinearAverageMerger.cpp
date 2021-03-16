@@ -93,7 +93,7 @@ bool LinearAverageMerger::_mergePair(
   std::vector<WayPtr> splitsLeft;
   WayPtr mnsLeft = _getMaximalNearestSubline(way1, way2, minSplitSize, splitsLeft);
   LOG_VART(mnsLeft.get());
-  if (!mnsLeft || splitsLeft.size() == 0)
+  if (!mnsLeft || splitsLeft.isEmpty())
   {
     return false;
   }
@@ -102,7 +102,7 @@ bool LinearAverageMerger::_mergePair(
   std::vector<WayPtr> splitsRight;
   WayPtr mnsRight = _getMaximalNearestSubline(way2, mnsLeft, minSplitSize, splitsRight);
   LOG_VART(mnsRight.get());
-  if (!mnsRight || splitsRight.size() == 0)
+  if (!mnsRight || splitsRight.isEmpty())
   {
     return false;
   }
@@ -141,9 +141,9 @@ bool LinearAverageMerger::_mergePair(
   _map->addWay(averagedWay);
 
   // Do bookkeeping on the ways being replaced.
-  replaced.push_back(
+  replaced.emplace_back(
     std::pair<ElementId, ElementId>(averagedWay->getElementId(), way1->getElementId()));
-  replaced.push_back(
+  replaced.emplace_back(
     std::pair<ElementId, ElementId>(averagedWay->getElementId(), way2->getElementId()));
   LOG_VART(replaced);
 
@@ -171,7 +171,7 @@ double LinearAverageMerger::_getMinSplitSize(const ConstWayPtr& way1, const Cons
 
 WayPtr LinearAverageMerger::_getMaximalNearestSubline(
   const ConstWayPtr& way1, const ConstWayPtr& way2, const double minSplitSize,
-  std::vector<WayPtr>& splits)
+  std::vector<WayPtr>& splits) const
 {
   MaximalNearestSubline maximalNearestSubline(
     _map, way1, way2, minSplitSize, way1->getCircularError() + way2->getCircularError());
@@ -179,7 +179,7 @@ WayPtr LinearAverageMerger::_getMaximalNearestSubline(
   splits = maximalNearestSubline.splitWay(_map, index);
   LOG_VART(index);
   LOG_VART(splits.size());
-  if (splits.size() == 0)
+  if (splits.isEmpty())
   {
     return WayPtr();
   }
@@ -188,7 +188,7 @@ WayPtr LinearAverageMerger::_getMaximalNearestSubline(
 }
 
 void LinearAverageMerger::_mergeTags(
-  const WayPtr& averagedWay, const WayPtr& originalWay1, const WayPtr& originalWay2)
+  const WayPtr& averagedWay, const WayPtr& originalWay1, const WayPtr& originalWay2) const
 {
   LOG_VART(averagedWay->getTags().size());
   Tags mergedTags =

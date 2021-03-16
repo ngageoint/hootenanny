@@ -47,16 +47,16 @@ public:
   LinearAverageMerger(const std::set<std::pair<ElementId, ElementId>>& pairs);
   virtual ~LinearAverageMerger() = default;
 
-  virtual QString getDescription() const override
+  QString getDescription() const override
   { return "Merges linear features by averaging tags and geometries"; }
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 protected:
 
-  virtual bool _mergePair(
+  bool _mergePair(
     const OsmMapPtr& map, ElementId eid1, ElementId eid2,
     std::vector<std::pair<ElementId, ElementId>>& replaced) override;
 
@@ -68,10 +68,10 @@ private:
 
   WayPtr _getMaximalNearestSubline(
     const ConstWayPtr& way1, const ConstWayPtr& way2, const double minSplitSize,
-    std::vector<WayPtr>& splits);
+    std::vector<WayPtr>& splits) const;
 
   void _mergeTags(
-    const WayPtr& averagedWay, const WayPtr& originalWay1, const WayPtr& originalWay2);
+    const WayPtr& averagedWay, const WayPtr& originalWay1, const WayPtr& originalWay2) const;
 };
 
 }
