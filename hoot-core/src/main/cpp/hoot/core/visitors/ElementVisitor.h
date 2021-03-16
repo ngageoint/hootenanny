@@ -37,7 +37,7 @@ namespace hoot
 {
 
 /**
- * Visits elements in a way that they can be modified.
+ * Visits elements in a manner in which they can be modified.
  *
  * This allows for streaming I/O during data conversions if not combined with an OsmMapConsumer.
  * Favor this over OsmMapOperation when you do not need the entire input map in memory at once

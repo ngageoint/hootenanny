@@ -73,7 +73,7 @@ CalculateStatsOp::CalculateStatsOp(QString mapName, bool inputIsConflatedMapOutp
   _inputIsConflatedMapOutput(inputIsConflatedMapOutput),
   _currentStatCalcIndex(1),
   _totalStatCalcs(0),
-  // Unknown does not get us a usable element criterion, so skip it
+  // Unknown does not get us a usable element criterion, so skip it.
   _featureTypesToSkip(QStringList("unknown")),
   _numInterpresetStatDataCalls(0),
   _numInterpretStatVisCacheHits(0),
@@ -180,8 +180,7 @@ void CalculateStatsOp::_readGenericStatsData()
 }
 
 shared_ptr<MatchCreator> CalculateStatsOp::getMatchCreator(
-  const vector<shared_ptr<MatchCreator>>& matchCreators,
-  const QString& matchCreatorName,
+  const vector<shared_ptr<MatchCreator>>& matchCreators, const QString& matchCreatorName,
   CreatorDescription::BaseFeatureType& featureType)
 {
   for (vector<shared_ptr<MatchCreator>>::const_iterator matchIt = matchCreators.begin();
@@ -618,7 +617,8 @@ void CalculateStatsOp::_interpretStatData(shared_ptr<const OsmMap>& constMap, St
       {
         // create criterion
         pCrit =
-          shared_ptr<ElementCriterion>(Factory::getInstance().constructObject<ElementCriterion>(d.criterion));
+          shared_ptr<ElementCriterion>(
+            Factory::getInstance().constructObject<ElementCriterion>(d.criterion));
 
         // make sure the map is set before we use it
         ConstOsmMapConsumer* pMapConsumer = dynamic_cast<ConstOsmMapConsumer*>(pCrit.get());
@@ -738,28 +738,27 @@ double CalculateStatsOp::GetRequestedStatValue(const ElementVisitor* pVisitor, S
   }
 }
 
-bool CalculateStatsOp::_matchDescriptorCompare(const CreatorDescription& m1,
-                                               const CreatorDescription& m2)
+bool CalculateStatsOp::_matchDescriptorCompare(
+  const CreatorDescription& m1, const CreatorDescription& m2)
 {
   return m1.className > m2.className;
 }
 
-double CalculateStatsOp::_applyVisitor(ElementCriterion* pCrit,
-                                       ConstElementVisitor* pVis, const QString& statName,
-                                       StatCall call)
+double CalculateStatsOp::_applyVisitor(
+  ElementCriterion* pCrit, ConstElementVisitor* pVis, const QString& statName, StatCall call)
 {
   return _applyVisitor(FilteredVisitor(pCrit, pVis), statName, call);
 }
 
-double CalculateStatsOp::_applyVisitor(const FilteredVisitor& v, const QString& statName,
-                                       StatCall call)
+double CalculateStatsOp::_applyVisitor(
+  const FilteredVisitor& v, const QString& statName, StatCall call)
 {
   boost::any emptyVisitorData;
   return _applyVisitor(v, emptyVisitorData, statName, call);
 }
 
-double CalculateStatsOp::_applyVisitor(const FilteredVisitor& v, boost::any& visitorData,
-                                       const QString& statName, StatCall call)
+double CalculateStatsOp::_applyVisitor(
+  const FilteredVisitor& v, boost::any& visitorData, const QString& statName, StatCall call)
 {
   LOG_STATUS(
     "Calculating statistic: " << statName << " (" << _currentStatCalcIndex << "/" <<
@@ -872,13 +871,11 @@ ConstElementVisitorPtr CalculateStatsOp::_getElementVisitorForFeatureType(
   }
 }
 
-void CalculateStatsOp::_generateFeatureStats(const CreatorDescription::BaseFeatureType& featureType,
-                                             const float conflatableCount,
-                                             const CreatorDescription::FeatureCalcType& type,
-                                             ElementCriterionPtr criterion,
-                                             const long poisMergedIntoPolys,
-                                             const long poisMergedIntoPolysFromMap1,
-                                             const long poisMergedIntoPolysFromMap2)
+void CalculateStatsOp::_generateFeatureStats(
+  const CreatorDescription::BaseFeatureType& featureType, const float conflatableCount,
+  const CreatorDescription::FeatureCalcType& type, ElementCriterionPtr criterion,
+  const long poisMergedIntoPolys, const long poisMergedIntoPolysFromMap1,
+  const long poisMergedIntoPolysFromMap2)
 {
   LOG_VARD(poisMergedIntoPolys);
   const QString description = CreatorDescription::baseFeatureTypeToString(featureType);
@@ -1083,8 +1080,6 @@ void CalculateStatsOp::_generateFeatureStats(const CreatorDescription::BaseFeatu
   LOG_VARD(percentageOfTotalFeaturesUnconflated);
   _addStat(
     QString("Percentage of Unmatched %1s").arg(description), percentageOfTotalFeaturesUnconflated);
-
-
 
   _numGenerateFeatureStatCalls += 6;
 }

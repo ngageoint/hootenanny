@@ -35,7 +35,8 @@ namespace hoot
 
 /**
  * This is used to weed down the list of conflate pre/post ops to only those needed given the
- * matchers being run for the conflate job.
+ * matchers being run for the conflate job, which helps with both runtime performance and conflated
+ * output quality.
  *
  * So for instance, you don't try to split road intersections if you're only conflating buildings.
  * Only GeometryTypeCriterion are checked via FilteredByGeometryTypeCriteria. Not sure if this can

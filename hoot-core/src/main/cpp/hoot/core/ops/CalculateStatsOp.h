@@ -47,7 +47,9 @@ class FilteredVisitor;
  * Calcs the set of stats that feeds the stats command.
  *
  * Statistics data definitions which can be defined generically have moved to a json file:
+ *
  * ConfigOptions.getStatsGenericDataFile()
+ *
  * The json file contains two StatData struct lists containing the slow and quick generic stat
  * definitions. See the CalculateStatsOp::StatCall and CalculateStatsOp::StatData comments
  * below for an explanation of the entries.
@@ -116,7 +118,8 @@ private:
   {
     QString name;       // name of the output statistics value
     QString visitor;    // visitor object name used to collect the data
-    QString criterion;  // criterion object name used if a FilteredVisitor is desired, otherwise an empty string
+    QString criterion;  // criterion object name used if a FilteredVisitor is desired, otherwise an
+                        // empty string
     StatCall statCall;  // defines how the visitor data is being interpreted
   };
 
@@ -183,16 +186,14 @@ private:
   static bool _matchDescriptorCompare(const CreatorDescription& m1,
                                       const CreatorDescription& m2);
 
-  void _generateFeatureStats(const CreatorDescription::BaseFeatureType& featureType,
-                             const float conflatableCount,
-                             const CreatorDescription::FeatureCalcType& type,
-                             ElementCriterionPtr criterion,
-                             const long poisMergedIntoPolys, const long poisMergedIntoPolysFromMap1,
-                             const long poisMergedIntoPolysFromMap2);
+  void _generateFeatureStats(
+    const CreatorDescription::BaseFeatureType& featureType, const float conflatableCount,
+    const CreatorDescription::FeatureCalcType& type, ElementCriterionPtr criterion,
+    const long poisMergedIntoPolys, const long poisMergedIntoPolysFromMap1,
+    const long poisMergedIntoPolysFromMap2);
 
   ConstElementVisitorPtr _getElementVisitorForFeatureType(
     const CreatorDescription::BaseFeatureType& featureType);
-
 };
 
 }

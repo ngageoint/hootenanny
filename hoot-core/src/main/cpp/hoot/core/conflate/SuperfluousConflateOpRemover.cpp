@@ -49,9 +49,9 @@ void SuperfluousConflateOpRemover::removeSuperfluousOps()
 
   QSet<QString> removedOps;
 
-  // for each of the conflate pre/post and map cleaner transforms (if conflate pre/post specifies
-  // MapCleaner) filter out any that aren't associated with the same ElementCriterion as the ones
-  // associated with the matchers
+  // For each of the conflate pre/post and map cleaner transforms (if conflate pre/post specifies
+  // MapCleaner), filter out any that aren't associated with the same ElementCriterion as the ones
+  // associated with the matchers.
 
   const QStringList modifiedPreConflateOps =
     _filterOutUnneededOps(
@@ -189,7 +189,7 @@ QSet<QString> SuperfluousConflateOpRemover::_getMatchCreatorGeometryTypeCrits()
 {
   QSet<QString> matcherCrits;
 
-  // get all of the matchers from our current config
+  // Get all of the matchers from our current config.
   std::vector<std::shared_ptr<MatchCreator>> matchCreators =
       MatchFactory::getInstance().getCreators();
   for (std::vector<std::shared_ptr<MatchCreator>>::const_iterator it = matchCreators.begin();
