@@ -45,7 +45,7 @@ QSet<QString> SuperfluousConflateOpRemover::_geometryTypeClassNameCache;
 void SuperfluousConflateOpRemover::removeSuperfluousOps()
 {
   // get all crits involved in the current matcher configuration
-  const QSet<QString> matcherCrits = _getMatchCreatorGeometryTypeCrits();
+  const QSet<QString> matcherCrits = getMatchCreatorGeometryTypeCrits();
 
   QSet<QString> removedOps;
 
@@ -185,7 +185,7 @@ QStringList SuperfluousConflateOpRemover::_filterOutUnneededOps(
   return modifiedOps;
 }
 
-QSet<QString> SuperfluousConflateOpRemover::_getMatchCreatorGeometryTypeCrits()
+QSet<QString> SuperfluousConflateOpRemover::getMatchCreatorGeometryTypeCrits()
 {
   QSet<QString> matcherCrits;
 

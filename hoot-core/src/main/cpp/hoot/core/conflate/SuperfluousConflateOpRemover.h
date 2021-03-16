@@ -52,6 +52,13 @@ public:
    */
   static void removeSuperfluousOps();
 
+  /**
+   * Determines GeometryTypeCriterion compatible with conflate matches in the current configuration
+   *
+   * @return a list of GeometryTypeCriterion class names
+   */
+  static QSet<QString> getMatchCreatorGeometryTypeCrits();
+
 private:
 
   // cache supported GeometryTypeCriterion class names to avoid instantiating them unnecessarily
@@ -70,12 +77,6 @@ private:
    */
   static QStringList _filterOutUnneededOps(
     const QSet<QString>& geometryTypeCrits, const QStringList& ops, QSet<QString>& removedOps);
-
-  /*
-   * Returns a list of GeometryTypeCriterion class names that match up with those supported by the
-   * current matcher config
-   */
-  static QSet<QString> _getMatchCreatorGeometryTypeCrits();
 
   static bool _isGeometryTypeCrit(const QString& className);
 };

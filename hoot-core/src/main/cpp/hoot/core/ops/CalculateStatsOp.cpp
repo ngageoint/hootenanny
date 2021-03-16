@@ -119,15 +119,18 @@ void CalculateStatsOp::_readGenericStatsData()
   _quickStatData.clear();
   _slowStatData.clear();
   QList<StatData>* pCurr = nullptr;
-  QHash<QString,StatCall> enumLookup({ {"stat", Stat},
-                                       {"min", Min},
-                                       {"max", Max},
-                                       {"average", Average},
-                                       {"infocount", InfoCount},
-                                       {"infomin", InfoMin},
-                                       {"infomax", InfoMax},
-                                       {"infoaverage", InfoAverage},
-                                       {"infodiff", InfoDiff} });
+  QHash<QString, StatData::StatCall> enumLookup(
+  {
+    {"stat", StatData::Stat},
+    {"min", StatData::Min},
+    {"max", StatData::Max},
+    {"average", StatData::Average},
+    {"infocount", StatData::InfoCount},
+    {"infomin", StatData::InfoMin},
+    {"infomax", StatData::InfoMax},
+    {"infoaverage", StatData::InfoAverage},
+    {"infodiff", StatData::InfoDiff}
+  });
 
   foreach (bpt::ptree::value_type listType, propPtree)
   {
@@ -149,15 +152,15 @@ void CalculateStatsOp::_readGenericStatsData()
         QString key = QString::fromStdString(data.first).toLower();
         QString val = QString::fromStdString(data.second.data());
 
-        if (key == "name") newStatData.name = val;
-        else if (key == "visitor") newStatData.visitor = val;
-        else if (key == "criterion") newStatData.criterion = val;
+        if (key == "name") newStatData.setName(val);
+        else if (key == "visitor") newStatData.setVisitor(val);
+        else if (key == "criterion") newStatData.setCriterion(val);
         else if (key == "statcall")
         {
           QString enumVal = val.toLower();
           if (enumLookup.contains(enumVal))
           {
-            newStatData.statCall = enumLookup[enumVal];
+            newStatData.setStatCall(enumLookup[enumVal]);
           }
           else
           {
@@ -520,7 +523,7 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
 
     _addStat("Longest Tag", _getApplyVisitor(new LongestTagVisitor(), "Longest Tag"));
 
-    // TODO: this should be moved into _generateFeatureStats?
+    // TODO: move these into _generateFeatureStats
     LOG_DEBUG("config script: " + ConfigOptions().getStatsTranslateScript());
     if (ConfigOptions().getStatsTranslateScript() != "")
     {
@@ -605,11 +608,11 @@ void CalculateStatsOp::_interpretStatData(shared_ptr<const OsmMap>& constMap, St
 {
   shared_ptr<ElementCriterion> pCrit;
 
-  if (d.criterion.length() > 0)
+  if (d.getCriterion().length() > 0)
   {
-    if (_criterionCache.contains(d.criterion))
+    if (_criterionCache.contains(d.getCriterion()))
     {
-      pCrit = _criterionCache[d.criterion];
+      pCrit = _criterionCache[d.getCriterion()];
     }
     else
     {
@@ -618,7 +621,7 @@ void CalculateStatsOp::_interpretStatData(shared_ptr<const OsmMap>& constMap, St
         // create criterion
         pCrit =
           shared_ptr<ElementCriterion>(
-            Factory::getInstance().constructObject<ElementCriterion>(d.criterion));
+            Factory::getInstance().constructObject<ElementCriterion>(d.getCriterion()));
 
         // make sure the map is set before we use it
         ConstOsmMapConsumer* pMapConsumer = dynamic_cast<ConstOsmMapConsumer*>(pCrit.get());
@@ -628,14 +631,14 @@ void CalculateStatsOp::_interpretStatData(shared_ptr<const OsmMap>& constMap, St
       {
         throw HootException(
           QString("Unable to construct criterion '%1' in stats data entry '%2'")
-            .arg(d.criterion, d.name) );
+            .arg(d.getCriterion(), d.getName()) );
       }
 
-      _criterionCache[d.criterion] = pCrit;
+      _criterionCache[d.getCriterion()] = pCrit;
     }
   }
 
-  if (d.visitor.length() > 0)
+  if (d.getVisitor().length() > 0)
   {
     double val = 0;
 
@@ -651,32 +654,32 @@ void CalculateStatsOp::_interpretStatData(shared_ptr<const OsmMap>& constMap, St
         pCriterionVisitor =
           shared_ptr<ConstElementVisitor>(
             static_cast<ConstElementVisitor *>(
-              Factory::getInstance().constructObject<ElementVisitor>(d.visitor)));
+              Factory::getInstance().constructObject<ElementVisitor>(d.getVisitor())));
       }
       catch (...)
       {
         throw HootException(
           QString("Unable to construct visitor '%1' in stats data entry '%2'")
-            .arg(d.visitor, d.name) );
+            .arg(d.getVisitor(), d.getName()) );
       }
 
       FilteredVisitor filteredVisitor =
         FilteredVisitor(pCrit, ConstElementVisitorPtr(pCriterionVisitor));
-      val = _applyVisitor(filteredVisitor, d.name, d.statCall);
+      val = _applyVisitor(filteredVisitor, d.getName(), d.getStatCall());
       _numInterpresetStatDataCalls++;
     }
     else
     {
       shared_ptr<ConstElementVisitor> pVisitor;
 
-      if (_appliedVisitorCache.contains(d.visitor))
+      if (_appliedVisitorCache.contains(d.getVisitor()))
       {  
-        pVisitor = _appliedVisitorCache[d.visitor];
+        pVisitor = _appliedVisitorCache[d.getVisitor()];
 
         // Even though this is cached, and its a freebie runtime-wise, we'll still log status to
         // ensure the stat calc index remains acurate.
         LOG_STATUS(
-          "Calculating statistic: " << d.name << " (" << _currentStatCalcIndex << "/" <<
+          "Calculating statistic: " << d.getName() << " (" << _currentStatCalcIndex << "/" <<
           _totalStatCalcs << ") ...");
 
         _currentStatCalcIndex++;
@@ -689,31 +692,32 @@ void CalculateStatsOp::_interpretStatData(shared_ptr<const OsmMap>& constMap, St
           pVisitor =
             shared_ptr<ConstElementVisitor>(
               static_cast<ConstElementVisitor *>(
-                Factory::getInstance().constructObject<ElementVisitor>(d.visitor)));
+                Factory::getInstance().constructObject<ElementVisitor>(d.getVisitor())));
         }
         catch (...)
         {
           throw HootException(
             QString("Unable to construct visitor '%1' in stats data entry '%2'")
-              .arg(d.visitor, d.name) );
+              .arg(d.getVisitor(), d.getName()));
         }
 
         // without criterion, apply the visitor directly and interpret as NumericStatistic
-        _applyVisitor(pVisitor.get(), d.name);
-        _appliedVisitorCache[d.visitor] = pVisitor;
+        _applyVisitor(pVisitor.get(), d.getName());
+        _appliedVisitorCache[d.getVisitor()] = pVisitor;
         _numInterpresetStatDataCalls++;
       }
 
-      val = GetRequestedStatValue(pVisitor.get(), d.statCall);
+      val = GetRequestedStatValue(pVisitor.get(), d.getStatCall());
     }
 
-    _addStat(d.name, val);
+    _addStat(d.getName(), val);
   }
 }
 
-double CalculateStatsOp::GetRequestedStatValue(const ElementVisitor* pVisitor, StatCall call)
+double CalculateStatsOp::GetRequestedStatValue(
+  const ElementVisitor* pVisitor, StatData::StatCall call)
 {
-  if (call == Stat)
+  if (call == StatData::Stat)
   {
     const SingleStatistic* ss = dynamic_cast<const SingleStatistic*>(pVisitor);
     return ss ? ss->getStat() : 0;
@@ -725,15 +729,15 @@ double CalculateStatsOp::GetRequestedStatValue(const ElementVisitor* pVisitor, S
 
   switch (call)
   {
-    case Stat: return ns->getStat();
-    case Min: return ns->getMin();
-    case Max: return ns->getMax();
-    case Average: return ns->getAverage();
-    case InfoCount: return ns->getInformationCount();
-    case InfoMin: return ns->getInformationMin();
-    case InfoMax: return ns->getInformationMax();
-    case InfoAverage: return ns->getInformationAverage();
-    case InfoDiff: return ns->getInformationCountDiff();
+    case StatData::Stat: return ns->getStat();
+    case StatData::Min: return ns->getMin();
+    case StatData::Max: return ns->getMax();
+    case StatData::Average: return ns->getAverage();
+    case StatData::InfoCount: return ns->getInformationCount();
+    case StatData::InfoMin: return ns->getInformationMin();
+    case StatData::InfoMax: return ns->getInformationMax();
+    case StatData::InfoAverage: return ns->getInformationAverage();
+    case StatData::InfoDiff: return ns->getInformationCountDiff();
     default: return 0;
   }
 }
@@ -745,20 +749,23 @@ bool CalculateStatsOp::_matchDescriptorCompare(
 }
 
 double CalculateStatsOp::_applyVisitor(
-  ElementCriterion* pCrit, ConstElementVisitor* pVis, const QString& statName, StatCall call)
+  ElementCriterion* pCrit, ConstElementVisitor* pVis, const QString& statName,
+  StatData::StatCall call)
 {
   return _applyVisitor(FilteredVisitor(pCrit, pVis), statName, call);
 }
 
 double CalculateStatsOp::_applyVisitor(
-  const FilteredVisitor& v, const QString& statName, StatCall call)
+  const FilteredVisitor& v, const QString& statName,
+  StatData::StatCall call)
 {
   boost::any emptyVisitorData;
   return _applyVisitor(v, emptyVisitorData, statName, call);
 }
 
 double CalculateStatsOp::_applyVisitor(
-  const FilteredVisitor& v, boost::any& visitorData, const QString& statName, StatCall call)
+  const FilteredVisitor& v, boost::any& visitorData, const QString& statName,
+  StatData::StatCall call)
 {
   LOG_STATUS(
     "Calculating statistic: " << statName << " (" << _currentStatCalcIndex << "/" <<
