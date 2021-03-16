@@ -131,8 +131,8 @@ private:
   bool _boundsAddedToFilter;
 };
 
-typedef std::shared_ptr<MatchCreator> MatchCreatorPtr;
-typedef std::shared_ptr<const MatchCreator> ConstMatchCreatorPtr;
+using MatchCreatorPtr = std::shared_ptr<MatchCreator>;
+using ConstMatchCreatorPtr = std::shared_ptr<const MatchCreator>;
 
 }
 

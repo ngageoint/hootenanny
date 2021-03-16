@@ -41,7 +41,7 @@ namespace hoot
 
 class MatchGraphInternal;
 
-typedef std::vector<MatchSet> MatchSetVector;
+using MatchSetVector = std::vector<MatchSet>;
 
 /**
  * Represents a graph of matches. At some point I'd like to extend this to include additional

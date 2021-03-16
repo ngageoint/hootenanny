@@ -45,8 +45,8 @@ public:
 
 };
 
-typedef std::shared_ptr<EdgeMatchSet> EdgeMatchSetPtr;
-typedef std::shared_ptr<const EdgeMatchSet> ConstEdgeMatchSetPtr;
+using EdgeMatchSetPtr = std::shared_ptr<EdgeMatchSet>;
+using ConstEdgeMatchSetPtr = std::shared_ptr<const EdgeMatchSet>;
 
 // not implemented
 bool operator<(ConstEdgeMatchSetPtr, ConstEdgeMatchSetPtr);

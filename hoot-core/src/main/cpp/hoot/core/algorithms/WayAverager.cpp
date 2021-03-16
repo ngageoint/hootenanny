@@ -227,12 +227,13 @@ long WayAverager::_merge(
   _moveCount2++;
   _maxMovement2 = max(_maxMovement2, d * weight1);
 
-  NodePtr node(
-    new Node(
-      Status::Conflated, _map->createNextNodeId(),
-      node1->getX() * weight1 + node2->getX() * weight2,
-      node1->getY() * weight1 + node2->getY() * weight2,
-      std::min(node1->getCircularError(), node2->getCircularError())));
+  NodePtr node =
+    std::make_shared<Node>(
+      Node(
+        Status::Conflated, _map->createNextNodeId(),
+        node1->getX() * weight1 + node2->getX() * weight2,
+        node1->getY() * weight1 + node2->getY() * weight2,
+        std::min(node1->getCircularError(), node2->getCircularError())));
 
   _map->addNode(node);
   OsmMapWriterFactory::writeDebugMap(_map, "WayAverager-after-merger-add-node");
@@ -272,7 +273,7 @@ long WayAverager::_moveToLine(
 }
 
 Coordinate WayAverager::_moveToLineAsCoordinate(
-  long ni, double nWeight, const LineString* ls, double lWeight)
+  long ni, double nWeight, const LineString* ls, double lWeight) const
 {
   NodePtr n = _map->getNode(ni);
   std::shared_ptr<Point> point(

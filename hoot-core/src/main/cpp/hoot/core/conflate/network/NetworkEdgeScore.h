@@ -67,7 +67,7 @@ private:
 
 };
 
-typedef std::shared_ptr<NetworkEdgeScore> NetworkEdgeScorePtr;
+using NetworkEdgeScorePtr = std::shared_ptr<NetworkEdgeScore>;
 
 // not implemented
 bool operator<(NetworkEdgeScorePtr, NetworkEdgeScorePtr);

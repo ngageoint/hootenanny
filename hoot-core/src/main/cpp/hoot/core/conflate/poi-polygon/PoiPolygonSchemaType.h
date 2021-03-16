@@ -44,7 +44,7 @@ class PoiPolygonSchemaType
 
 public:
 
-  typedef enum Type
+  enum Type
   {
     Natural = 0,
     Park,
@@ -57,7 +57,7 @@ public:
     School,
     SpecificSchool,
     Sport
-  } Type;
+  };
 
   PoiPolygonSchemaType(Type type) : _type(type) {}
 

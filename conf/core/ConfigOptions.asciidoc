@@ -407,7 +407,12 @@ MatchFactory::_tempFixDefaults() for more info.
 * Data Type: double
 * Default Value: `0.7`
 
-TODO
+Multiplier used in determining the minimum linear feature split size during Average Conflation.
+The valid range is greater than 0.0 and less than or equal to 1.0. The lesser of
+`way.merger.min.split.size` and the result of applying this multiple to the length of the feature
+being conflated determines the actual minimum split size. The higher this multiplier is, the larger
+the minimum split size becomes, if the feature being conflated has a length greater than
+`way.merger.min.split.size`.
 
 === bounds
 

@@ -45,8 +45,8 @@ public:
   virtual ~IndexedEdgeLinks() = default;
 };
 
-typedef std::shared_ptr<IndexedEdgeLinks> IndexedEdgeLinksPtr;
-typedef std::shared_ptr<const IndexedEdgeLinks> ConstIndexedEdgeLinksPtr;
+using IndexedEdgeLinksPtr = std::shared_ptr<IndexedEdgeLinks>;
+using ConstIndexedEdgeLinksPtr = std::shared_ptr<const IndexedEdgeLinks>;
 
 // not implemented
 bool operator<(ConstIndexedEdgeLinksPtr, ConstIndexedEdgeLinksPtr);

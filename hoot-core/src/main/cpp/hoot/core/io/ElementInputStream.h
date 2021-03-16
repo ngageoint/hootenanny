@@ -66,7 +66,7 @@ public:
   virtual ElementPtr readNextElement() = 0;
 };
 
-typedef std::shared_ptr<ElementInputStream> ElementInputStreamPtr;
+using ElementInputStreamPtr = std::shared_ptr<ElementInputStream>;
 
 }
 

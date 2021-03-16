@@ -77,7 +77,7 @@ public:
     }
   };
 
-  typedef std::shared_ptr<TiePointScore> TiePointScorePtr;
+  using TiePointScorePtr = std::shared_ptr<TiePointScore>;
 
   LegacyVertexMatcher(ConstOsmMapPtr map);
 
@@ -171,8 +171,8 @@ inline uint qHash(const LegacyVertexMatcher::TiePointScorePtr& t)
   return qHash(std::pair<ElementId, ElementId>(t->v1->getElementId(), t->v2->getElementId()));
 }
 
-typedef std::shared_ptr<LegacyVertexMatcher> LegacyVertexMatcherPtr;
-typedef std::shared_ptr<const LegacyVertexMatcher> ConstLegacyVertexMatcherPtr;
+using LegacyVertexMatcherPtr = std::shared_ptr<LegacyVertexMatcher>;
+using ConstLegacyVertexMatcherPtr = std::shared_ptr<const LegacyVertexMatcher>;
 
 // not implemented
 bool operator<(ConstLegacyVertexMatcherPtr, ConstLegacyVertexMatcherPtr);

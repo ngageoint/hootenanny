@@ -58,7 +58,7 @@ public:
 
 private:
 
-  typedef QHash<QString, QHash<QString, int>> TagInfoHash;
+  using TagInfoHash = QHash<QString, QHash<QString, int>>;
 
   // the maximum number of tag values to return per key
   int _tagValuesPerKeyLimit;

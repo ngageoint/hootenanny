@@ -40,11 +40,11 @@ class VariableDescription
 {
 public:
 
-  typedef enum
+  enum VariableType
   {
     Real,
     Integer
-  } VariableType;
+  };
 
   VariableDescription(QString name, VariableType type, double min, double max);
 
@@ -71,8 +71,8 @@ private:
   VariableType _type;
 };
 
-typedef std::shared_ptr<VariableDescription> VariableDescriptionPtr;
-typedef std::shared_ptr<const VariableDescription> ConstVariableDescriptionPtr;
+using VariableDescriptionPtr = std::shared_ptr<VariableDescription>;
+using ConstVariableDescriptionPtr = std::shared_ptr<const VariableDescription>;
 
 }
 

@@ -53,7 +53,7 @@ public:
 
   static QString className() { return "hoot::WaySublineMatchString"; }
 
-  typedef std::vector<WaySublineMatch> MatchCollection;
+  using MatchCollection = std::vector<WaySublineMatch>;
 
   WaySublineMatchString() = default;
   /**
@@ -127,8 +127,8 @@ private:
 
 HOOT_DEFINE_EXCEPTION(OverlappingMatchesException)
 
-typedef std::shared_ptr<WaySublineMatchString> WaySublineMatchStringPtr;
-typedef std::shared_ptr<const WaySublineMatchString> ConstWaySublineMatchStringPtr;
+using WaySublineMatchStringPtr = std::shared_ptr<WaySublineMatchString>;
+using ConstWaySublineMatchStringPtr = std::shared_ptr<const WaySublineMatchString>;
 
 }
 

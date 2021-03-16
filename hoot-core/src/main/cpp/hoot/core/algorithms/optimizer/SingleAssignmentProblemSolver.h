@@ -65,7 +65,7 @@ public:
     virtual double cost(const Actor* a, const Task* t) const = 0;
   };
 
-  typedef struct ResultPair
+  struct ResultPair
   {
     const Actor* actor;
     const Task* task;
@@ -75,7 +75,7 @@ public:
       return (actor ? actor->toString() : QString("null")) + " " +
              (task ? task->toString() : QString("null"));
     }
-  } ResultPair;
+  };
 
   SingleAssignmentProblemSolver(CostFunction& costFunction) : _costFunction(costFunction) { }
 

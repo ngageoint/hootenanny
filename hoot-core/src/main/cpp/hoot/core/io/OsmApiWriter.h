@@ -164,7 +164,7 @@ private:
     /** HTTP response body */
     QString response;
   };
-  typedef std::shared_ptr<OsmApiFailureInfo> OsmApiFailureInfoPtr;
+  using OsmApiFailureInfoPtr = std::shared_ptr<OsmApiFailureInfo>;
   /**
    * @brief _createChangeset Request a changeset ID from the API
    *  see: https://wiki.openstreetmap.org/wiki/API_v0.6#Create:_PUT_.2Fapi.2F0.6.2Fchangeset.2Fcreate

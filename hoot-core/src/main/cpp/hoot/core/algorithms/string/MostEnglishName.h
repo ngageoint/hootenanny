@@ -43,7 +43,7 @@ namespace hoot
 class MostEnglishName;
 class Tags;
 
-typedef std::shared_ptr<MostEnglishName> MostEnglishNamePtr;
+using MostEnglishNamePtr = std::shared_ptr<MostEnglishName>;
 
 /**
  * Return a best guess at the "most english" name in the list (Singleton). There are no guarantees.

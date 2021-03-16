@@ -89,12 +89,12 @@ public:
     }
   };
 
-  typedef std::shared_ptr<ClusterLink> ClusterLinkPtr;
+  using ClusterLinkPtr = std::shared_ptr<ClusterLink>;
 
   /**
    * A list of clusters that represent a subgraph.
    */
-  typedef QList<MultiaryClusterPtr> ClusterList;
+  using ClusterList = QList<MultiaryClusterPtr>;
 
   /**
    * Comparison operation to determine if one link has a lower score than another. This is used
@@ -165,10 +165,8 @@ protected:
   ClusterList _clusters;
 
   /// Priority queue that is used to store cluster links. High scoring links are at the top.
-  typedef std::priority_queue<
-    ClusterLinkPtr,
-    std::vector<ClusterLinkPtr>,
-    ClusterLinkPtrLess> LinkPriorityQueue;
+  using LinkPriorityQueue =
+    std::priority_queue<ClusterLinkPtr, std::vector<ClusterLinkPtr>, ClusterLinkPtrLess>;
   LinkPriorityQueue _linkQueue;
 
   MultiaryPoiMergeCachePtr _mergeCache;

@@ -46,8 +46,8 @@ class MatchConflicts
 {
 public:
 
-  typedef QMultiHash<size_t, size_t> ConflictMap;
-  typedef std::multimap<ElementId, size_t> EidIndexMap;
+  using ConflictMap = QMultiHash<size_t, size_t>;
+  using EidIndexMap = std::multimap<ElementId, size_t>;
 
   MatchConflicts(const ConstOsmMapPtr& map);
 

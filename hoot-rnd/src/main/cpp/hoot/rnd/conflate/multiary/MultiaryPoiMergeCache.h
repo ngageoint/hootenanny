@@ -70,7 +70,7 @@ private:
   std::shared_ptr<MergerCreator> _mergerCreator;
 };
 
-typedef std::shared_ptr<MultiaryPoiMergeCache> MultiaryPoiMergeCachePtr;
+using MultiaryPoiMergeCachePtr = std::shared_ptr<MultiaryPoiMergeCache>;
 
 }
 

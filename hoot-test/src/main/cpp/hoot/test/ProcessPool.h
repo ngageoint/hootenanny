@@ -37,7 +37,7 @@
 #include <QProcess>
 #include <QThread>
 #include <QWaitCondition>
-typedef std::shared_ptr<QProcess> QProcessPtr;
+using QProcessPtr = std::shared_ptr<QProcess>;
 
 #define HOOT_TEST_FINISHED "HOOT_TEST_FINISHED"
 
@@ -154,7 +154,8 @@ private:
   /** Shared pointer containing ownership of the process pointer from createProcess() */
   QProcessPtr _proc;
 };
-typedef std::shared_ptr<ProcessThread> ProcessThreadPtr;
+
+using ProcessThreadPtr = std::shared_ptr<ProcessThread>;
 
 /**
  * @brief The ProcessPool class that encapsulates the division of work amongs processes.  Tests

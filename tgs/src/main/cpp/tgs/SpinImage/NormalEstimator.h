@@ -110,11 +110,11 @@ protected:
   /// this is set to true for a point if its children have been traversed.
   std::vector<bool> _processed;
 
-  typedef std::vector<HashSet<int>> RiemannianGraph;
+  using RiemannianGraph = std::vector<HashSet<int>>;
 
   RiemannianGraph _edges;
 
-  typedef std::priority_queue<VertexOrder, std::vector<VertexOrder>, LessVertexOrder> MstQueue;
+  using MstQueue = std::priority_queue<VertexOrder, std::vector<VertexOrder>, LessVertexOrder>;
 
   MstQueue _mstQueue;
 

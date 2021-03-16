@@ -81,7 +81,7 @@ public:
   static bool isNull(double v) { return v == nullValue() || ::qIsNaN(v); }
 };
 
-typedef std::shared_ptr<FeatureExtractor> FeatureExtractorPtr;
+using FeatureExtractorPtr = std::shared_ptr<FeatureExtractor>;
 
 }
 

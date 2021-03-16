@@ -40,13 +40,13 @@ class LanguageDetectionConfidenceLevel
 {
 public:
 
-  typedef enum Level
+  enum Level
   {
     None = 0,
     Low,
     Medium,
     High
-  } Level;
+  };
 
   LanguageDetectionConfidenceLevel();
   LanguageDetectionConfidenceLevel(Level level);

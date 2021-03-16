@@ -196,8 +196,8 @@ inline uint qHash(const WayLocation& wl)
   return qHash(wl.toString());
 }
 
-typedef std::shared_ptr<WayLocation> WayLocationPtr;
-typedef std::shared_ptr<const WayLocation> ConstWayLocationPtr;
+using WayLocationPtr = std::shared_ptr<WayLocation>;
+using ConstWayLocationPtr = std::shared_ptr<const WayLocation>;
 
 }
 

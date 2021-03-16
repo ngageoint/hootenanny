@@ -55,7 +55,7 @@ protected:
   OsmMap* _map;
 };
 
-typedef std::shared_ptr<ElementOsmMapVisitor> ElementOsmMapVisitorPtr;
+using ElementOsmMapVisitorPtr = std::shared_ptr<ElementOsmMapVisitor>;
 }
 
 #endif // ELEMENTOSMMAPVISITOR_H

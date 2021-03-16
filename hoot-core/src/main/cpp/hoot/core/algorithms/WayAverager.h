@@ -50,27 +50,30 @@ class WayAverager
 public:
 
   /**
-   * TODO
+   * Constructor
    *
-   * @param map
-   * @param w1
-   * @param w2
+   * @param map map owning ways to be averaged
+   * @param w1 the first way to be averaged
+   * @param w2 the second way to be averaged
    */
   WayAverager(const OsmMapPtr& map, const WayPtr& w1, const WayPtr& w2);
 
   /**
    * Averages the two input ways into a new output way. The two input ways are removed from their
    * containing map.
+   *
+   * @return the averaged way
    */
   WayPtr replaceWaysWithAveragedWay();
 
   /**
-   * TODO
+   * Averages the two input ways into a new output way. The two input ways are removed from their
+   * containing map.
    *
-   * @param map
-   * @param w1
-   * @param w2
-   * @return
+   * @param map map owning ways to be averaged
+   * @param w1 the first way to be averaged
+   * @param w2 the second way to be averaged
+   * @return the averaged way
    */
   static WayPtr replaceWaysWithAveragedWay(
     const OsmMapPtr& map, const WayPtr& w1, const WayPtr& w2);
@@ -126,7 +129,7 @@ private:
    * line string.
    */
   geos::geom::Coordinate _moveToLineAsCoordinate(
-    long n, double nWeight, const geos::geom::LineString* ls, double lWeight);
+    long n, double nWeight, const geos::geom::LineString* ls, double lWeight) const;
 };
 
 }

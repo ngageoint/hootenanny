@@ -39,7 +39,7 @@ namespace hoot
 
 class AddressTagKeys;
 
-typedef std::shared_ptr<AddressTagKeys> AddressTagKeysPtr;
+using AddressTagKeysPtr = std::shared_ptr<AddressTagKeys>;
 
 /**
  * Allows for mapping an address part type to a range of valid OSM tag keys

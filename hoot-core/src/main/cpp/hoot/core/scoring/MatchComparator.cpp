@@ -60,7 +60,7 @@ class GetRefUuidVisitor : public ConstElementVisitor
 {
 public:
 
-  typedef map<QString, set<QString>> RefToUuid;
+  using RefToUuid = map<QString, set<QString>>;
 
   GetRefUuidVisitor(QString ref) : _ref(ref) { }
 
