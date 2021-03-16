@@ -229,7 +229,7 @@ long WayAverager::_merge(
 
   NodePtr node =
     std::make_shared<Node>(
-      new Node(
+      Node(
         Status::Conflated, _map->createNextNodeId(),
         node1->getX() * weight1 + node2->getX() * weight2,
         node1->getY() * weight1 + node2->getY() * weight2,
