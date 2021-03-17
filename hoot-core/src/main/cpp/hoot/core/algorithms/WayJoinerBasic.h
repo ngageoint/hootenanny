@@ -45,19 +45,19 @@ public:
   static QString className() { return "hoot::WayJoinerBasic"; }
 
   WayJoinerBasic() = default;
-  virtual ~WayJoinerBasic() = default;
+  ~WayJoinerBasic() = default;
 
   /**
    * Static method to join all joinable ways using WayJoinerBasic
    */
   static void joinWays(const OsmMapPtr& map);
 
-  virtual QString getDescription() const override
+  QString getDescription() const override
   { return "Rejoins ways split during pre-conflation cleaning or conflation matching."; }
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 };
 
 }

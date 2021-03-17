@@ -65,12 +65,12 @@ public:
 
   ScoreMatchesCmd() = default;
 
-  virtual QString getName() const override { return "score-matches"; }
+  QString getName() const override { return "score-matches"; }
 
-  virtual QString getDescription() const override
+  QString getDescription() const override
   { return "Scores conflation performance against a manually matched map"; }
 
-  virtual int runSimple(QStringList& args) override
+  int runSimple(QStringList& args) override
   {
     QElapsedTimer timer;
     timer.start();
@@ -151,7 +151,7 @@ public:
   {
   public:
 
-    virtual double f(Tgs::Vector v)
+    double f(Tgs::Vector v) override
     {
       double score;
       std::shared_ptr<MatchThreshold> mt(new MatchThreshold(v[0], v[1], v[2]));

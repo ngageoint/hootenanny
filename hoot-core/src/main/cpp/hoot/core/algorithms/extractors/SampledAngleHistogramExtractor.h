@@ -51,20 +51,20 @@ public:
 
   SampledAngleHistogramExtractor();
   SampledAngleHistogramExtractor(Radians smoothing, unsigned int bins = 8);
-  virtual ~SampledAngleHistogramExtractor() = default;
+  ~SampledAngleHistogramExtractor() = default;
 
   static QString className() { return "hoot::SampledAngleHistogramExtractor"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
-  virtual void setConfiguration(const Settings& conf) override;
+  void setConfiguration(const Settings& conf) override;
 
   void setSampleDistance(double sampleDistance) { _sampleDistance = sampleDistance; }
   void setHeadingDelta(double headingDelta) { _headingDelta = headingDelta; }
 
-  virtual QString getDescription() const override
+  QString getDescription() const override
   {
     return
       "Calculates the angle of each line segment in a sampled fashion and adds it to a histogram";
@@ -72,7 +72,7 @@ public:
 
 protected:
 
-  virtual Histogram* _createHistogram(const OsmMap& map, const ConstElementPtr& e) const;
+  Histogram* _createHistogram(const OsmMap& map, const ConstElementPtr& e) const override;
 
 private:
 

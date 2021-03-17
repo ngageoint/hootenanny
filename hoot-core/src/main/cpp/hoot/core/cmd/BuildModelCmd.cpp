@@ -46,12 +46,12 @@ public:
 
   BuildModelCmd() = default;
 
-  virtual QString getName() const override { return "build-model"; }
+  QString getName() const override { return "build-model"; }
 
-  virtual QString getDescription() const override
+  QString getDescription() const override
   { return "Builds a random forest model to be used by conflation"; }
 
-  virtual int runSimple(QStringList& args) override
+  int runSimple(QStringList& args) override
   {
     QElapsedTimer timer;
     timer.start();

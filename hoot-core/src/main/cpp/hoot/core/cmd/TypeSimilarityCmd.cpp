@@ -43,12 +43,12 @@ public:
 
   TypeSimilarityCmd() = default;
 
-  virtual QString getName() const override { return "type-similarity"; }
+  QString getName() const override { return "type-similarity"; }
 
-  virtual QString getDescription() const override
+  QString getDescription() const override
   { return "Calculates a similarity score between two type tags"; }
 
-  virtual int runSimple(QStringList& args) override
+  int runSimple(QStringList& args) override
   {
     if (args.size() != 2)
     {

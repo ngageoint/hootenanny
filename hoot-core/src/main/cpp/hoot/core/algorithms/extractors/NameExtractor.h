@@ -42,23 +42,23 @@ public:
 
   NameExtractor();
   NameExtractor(StringDistancePtr d);
-  virtual ~NameExtractor() = default;
+  ~NameExtractor() = default;
 
   static QString className() { return "hoot::NameExtractor"; }
 
-  virtual QString getClassName() const { return className(); }
+  QString getClassName() const override { return className(); }
 
-  virtual QString getName() const;
+  QString getName() const override;
 
-  virtual double extract(const OsmMap& map, const std::shared_ptr<const Element>& target,
-    const std::shared_ptr<const Element>& candidate) const;
+  double extract(const OsmMap& map, const std::shared_ptr<const Element>& target,
+    const std::shared_ptr<const Element>& candidate) const override;
 
   virtual double extract(const ConstElementPtr& target,
     const ConstElementPtr& candidate) const;
 
-  virtual void setStringDistance(const StringDistancePtr &sd) { _d = sd; }
+  void setStringDistance(const StringDistancePtr &sd) override { _d = sd; }
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Calculates name similarity between features"; }
 
   long getNamesProcessed() const { return _namesProcessed; }

@@ -44,7 +44,7 @@ public:
   explicit MultipleChangesetProvider(const std::shared_ptr<OGRSpatialReference>& pProjection)
     : _projection(pProjection) { }
 
-  virtual ~MultipleChangesetProvider() = default;
+  ~MultipleChangesetProvider() = default;
 
   std::shared_ptr<OGRSpatialReference> getProjection() const override;
 

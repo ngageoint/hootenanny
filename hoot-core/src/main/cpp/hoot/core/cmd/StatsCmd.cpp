@@ -54,12 +54,12 @@ public:
 
   StatsCmd() = default;
 
-  virtual QString getName() const override { return "stats"; }
+  QString getName() const override { return "stats"; }
 
-  virtual QString getDescription() const override
+  QString getDescription() const override
   { return "Calculates a pre-configured set of statistics for a map"; }
 
-  virtual int runSimple(QStringList& args) override
+  int runSimple(QStringList& args) override
   {
     QElapsedTimer timer;
     timer.start();

@@ -51,12 +51,12 @@ public:
 
   ConflateCmd() = default;
 
-  virtual QString getName() const override { return "conflate"; }
+  QString getName() const override { return "conflate"; }
 
-  virtual QString getDescription() const override
+  QString getDescription() const override
   { return "Conflates two maps into a single map"; }
 
-  virtual int runSimple(QStringList& args) override;
+  int runSimple(QStringList& args) override;
 
 private:
 

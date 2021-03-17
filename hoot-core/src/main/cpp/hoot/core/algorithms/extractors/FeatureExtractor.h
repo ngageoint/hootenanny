@@ -66,7 +66,7 @@ public:
   virtual double extract(const OsmMap& map, const std::shared_ptr<const Element>& target,
     const std::shared_ptr<const Element>& candidate) const = 0;
 
-  virtual QString toString() const { return ""; }
+  QString toString() const override { return ""; }
 
   /**
    * Returns the factor type for this feature/factor (Nominal or Numeric).

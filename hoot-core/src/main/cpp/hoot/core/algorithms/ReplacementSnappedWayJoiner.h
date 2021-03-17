@@ -55,50 +55,50 @@ public:
    * @param refIdToVersionMappings a mapping of reference element IDs to their versions
    */
   ReplacementSnappedWayJoiner(const QMap<ElementId, long>& refIdToVersionMappings);
-  virtual ~ReplacementSnappedWayJoiner() = default;
+  ~ReplacementSnappedWayJoiner() = default;
 
   /**
    * @see WayJoiner
    */
-  virtual void join(const OsmMapPtr& map) override;
+  void join(const OsmMapPtr& map) override;
 
   /**
    * @see ApiEntityInfo
    */
-  virtual QString getDescription() const override
+  QString getDescription() const override
   { return "Way joiner for use after way snapping when generating replacement changesets."; }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
 protected:
 
   /*
    * @see WayJoiner
    */
-  virtual bool _areJoinable(const WayPtr& w1, const WayPtr& w2) const override;
+  bool _areJoinable(const WayPtr& w1, const WayPtr& w2) const override;
 
   /*
    * @see WayJoinerAdvanced
    */
-  virtual void _determineKeeperFeatureForTags(WayPtr parent, WayPtr child, WayPtr& keeper,
-                                              WayPtr& toRemove) const override;
+  void _determineKeeperFeatureForTags(WayPtr parent, WayPtr child, WayPtr& keeper,
+                                      WayPtr& toRemove) const override;
 
   /*
    * @see WayJoinerAdvanced
    */
-  virtual void _determineKeeperFeatureForId(WayPtr parent, WayPtr child, WayPtr& keeper,
-                                            WayPtr& toRemove) const override;
+  void _determineKeeperFeatureForId(WayPtr parent, WayPtr child, WayPtr& keeper,
+                                    WayPtr& toRemove) const override;
 
   /*
    * @see WayJoinerAdvanced
    */
-  virtual bool _hasPid(const ConstWayPtr& way) const override;
+  bool _hasPid(const ConstWayPtr& way) const override;
   /*
    * @see WayJoinerAdvanced
    */
-  virtual long _getPid(const ConstWayPtr& way) const override;
+  long _getPid(const ConstWayPtr& way) const override;
 
 private:
 
