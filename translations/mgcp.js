@@ -1850,6 +1850,14 @@ mgcp = {
       case undefined: // Break early if no value
         break;
 
+      case 'AA050': // Well
+        if (attrs.PPO && attrs.PPO !== '0' && attrs.PPO !== '122')
+        {
+          if (!attrs.HYP) attrs.HYP = '998'; // Not Applicable for non-water wells
+          if (!attrs.SCC) attrs.SCC = '998'; // Not Applicable for non-water wells
+        }
+        break;
+
       case 'AJ085': // Barn: Valid NFDD/NAS FCODE but not in the MGCP spec
         attrs.F_CODE = 'AL015'; // Barns are Buildings
         break;
