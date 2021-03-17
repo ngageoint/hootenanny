@@ -58,12 +58,12 @@ public:
   {
   }
 
-  virtual QString getName() const override { return "stat"; }
+  QString getName() const override { return "stat"; }
 
-  virtual QString getDescription() const override
+  QString getDescription() const override
   { return "Calculates a single statistic for a map"; }
 
-  virtual int runSimple(QStringList& args) override
+  int runSimple(QStringList& args) override
   {
     QElapsedTimer timer;
     timer.start();

@@ -56,12 +56,12 @@ public:
 
   DiffCmd() = default;
 
-  virtual QString getName() const override { return "diff"; }
+  QString getName() const override { return "diff"; }
 
-  virtual QString getDescription() const override
+  QString getDescription() const override
   { return "Calculates the difference between two maps or changesets"; }
 
-  virtual int runSimple(QStringList& args) override
+  int runSimple(QStringList& args) override
   {
     QElapsedTimer timer;
     timer.start();

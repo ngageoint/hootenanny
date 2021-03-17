@@ -59,19 +59,19 @@ public:
 
   static QString className() { return "hoot::AngleHistogramExtractor"; }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
-  virtual QString getName() const override;
+  QString getName() const override;
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
-  virtual double extract(const OsmMap& map, const std::shared_ptr<const Element>& target,
+  double extract(const OsmMap& map, const std::shared_ptr<const Element>& target,
     const std::shared_ptr<const Element>& candidate) const override;
 
   void setBins(int bins) { _bins = bins; }
   void setSmoothing(Radians sigma) { _smoothing = sigma; }
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Calculates the angle of each line segment and adds it to a histogram"; }
 
   /**

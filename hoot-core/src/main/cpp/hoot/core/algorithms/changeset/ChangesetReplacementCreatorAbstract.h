@@ -128,19 +128,19 @@ public:
   /**
    * @see ChangesetReplacement
    */
-  virtual void setChangesetOptions(
-    const bool printStats, const QString& statsOutputFile, const QString osmApiDbUrl);
+  void setChangesetOptions(const bool printStats, const QString& statsOutputFile,
+                           const QString osmApiDbUrl) override;
 
-  virtual int getNumChanges() const { return _numChanges; }
+  int getNumChanges() const  override{ return _numChanges; }
 
-  virtual void setFullReplacement(const bool full) { _fullReplacement = full; }
-  virtual void setBoundsInterpretation(const BoundsInterpretation& interpretation)
+  void setFullReplacement(const bool full) override { _fullReplacement = full; }
+  void setBoundsInterpretation(const BoundsInterpretation& interpretation) override
   { _boundsInterpretation = interpretation; }
-  virtual void setEnableWaySnapping(const bool enable) { _enableWaySnapping = enable; }
-  virtual void setChangesetId(const QString& id) { _changesetId = id; }
+  void setEnableWaySnapping(const bool enable) override { _enableWaySnapping = enable; }
+  void setChangesetId(const QString& id) override { _changesetId = id; }
 
-  virtual QString toString() const override
-    { return className().remove("hoot::"); }
+  QString toString() const override
+  { return className().remove("hoot::"); }
 
 protected:
 

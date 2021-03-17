@@ -47,12 +47,12 @@ public:
 
   DbDeleteCmd() = default;
 
-  virtual QString getName() const override { return "db-delete"; }
+  QString getName() const override { return "db-delete"; }
 
-  virtual QString getDescription() const override
+  QString getDescription() const override
   { return "Deletes a map from the Hootenanny Web Services database"; }
 
-  virtual int runSimple(QStringList& args) override
+  int runSimple(QStringList& args) override
   {
     QElapsedTimer timer;
     timer.start();

@@ -61,9 +61,9 @@ public:
     _gridSpacing(gridSpacing)
   {
   }
-  virtual ~ShiftMapVisitor() = default;
+  ~ShiftMapVisitor() = default;
 
-  virtual void visit(const ConstElementPtr& e)
+  void visit(const ConstElementPtr& e) override
   {
     if (e->getElementType() == ElementType::Node)
     {
@@ -76,11 +76,11 @@ public:
     }
   }
 
-  virtual QString getDescription() const { return ""; }
-  virtual QString getName() const { return ""; }
-  virtual QString getClassName() const override { return ""; }
+  QString getDescription() const override { return ""; }
+  QString getName() const override { return ""; }
+  QString getClassName() const override { return ""; }
 
-  virtual void visit(const std::shared_ptr<Element>&) {}
+  void visit(const std::shared_ptr<Element>&) override { }
 
   /**
    * User barycentric interpolation to determine the shift at a given point.

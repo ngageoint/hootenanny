@@ -51,12 +51,12 @@ public:
    * @param output optional output path for writing the bounds file
    */
   BoundsStringTaskGridGenerator(const QString& bounds, const QString& outputPath = "");
-  virtual ~BoundsStringTaskGridGenerator() = default;
+  ~BoundsStringTaskGridGenerator() = default;
 
   /**
    * @see TaskGridGenerator
    */
-  virtual TaskGrid generateTaskGrid();
+  TaskGrid generateTaskGrid() override;
 
 private:
 
