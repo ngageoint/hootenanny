@@ -963,7 +963,8 @@ set to `hoot::HighwayRfClassifier`.
 * Data Type: bool
 * Default Value: `false`
 
-TODO
+If enabled, features will be matched but not merged during conflation. Combine with
+`writer.include.conflate.score.tags=true` to see conflate match scores in the output.
 
 === conflate.match.poi.model
 
