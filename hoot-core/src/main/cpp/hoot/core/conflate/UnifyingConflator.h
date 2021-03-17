@@ -77,7 +77,9 @@ private:
   static const bool WRITE_DETAILED_DEBUG_MAPS;
 
   void _addConflateScoreTags();
-  void _addConflateScoreTags(const ElementPtr& e, const MatchClassification& mc);
+  void _addConflateScoreTags(
+    const ElementPtr& e, const MatchClassification& matchClassification,
+    const MatchThreshold& matchThreshold);
 };
 
 }

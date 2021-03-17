@@ -241,38 +241,41 @@ void UnifyingConflator::_mergeFeatures(const std::vector<MergerPtr>& relationMer
     StringUtils::millisecondsToDhms(mergersTimer.elapsed()) << ".");
 }
 
-void UnifyingConflator::_addConflateScoreTags(const ElementPtr& e, const MatchClassification& mc)
+void UnifyingConflator::_addConflateScoreTags(
+  const ElementPtr& e, const MatchClassification& matchClassification,
+  const MatchThreshold& matchThreshold)
 {
   Tags& tags = e->getTags();
-  tags.appendValue(MetadataTags::HootScoreReview(), mc.getReviewP());
-  tags.appendValue(MetadataTags::HootScoreMatch(), mc.getMatchP());
-  tags.appendValue(MetadataTags::HootScoreMiss(), mc.getMissP());
+  tags.appendValue(MetadataTags::HootScoreMatch(), matchClassification.getMatchP());
+  tags.appendValue(MetadataTags::HootScoreMiss(), matchClassification.getMissP());
+  tags.appendValue(MetadataTags::HootScoreReview(), matchClassification.getReviewP());
+  // The thresholds are global, so don't append.
+  tags.set(MetadataTags::HootScoreMatchThreshold(), matchThreshold.getMatchThreshold());
+  tags.set(MetadataTags::HootScoreMissThreshold(), matchThreshold.getMissThreshold());
+  tags.set(MetadataTags::HootScoreReviewThreshold(), matchThreshold.getReviewThreshold());
 }
 
 void UnifyingConflator::_addConflateScoreTags()
 {
   for (size_t i = 0; i < _matches.size(); i++)
   {
-    ConstMatchPtr m = _matches[i];
-    const MatchClassification& mc = m->getClassification();
-    std::set<std::pair<ElementId, ElementId>> pairs = m->getMatchPairs();
+    ConstMatchPtr match = _matches[i];
+    const MatchClassification& matchClassification = match->getClassification();
+    std::shared_ptr<const MatchThreshold> matchThreshold = match->getThreshold();
+    std::set<std::pair<ElementId, ElementId>> pairs = match->getMatchPairs();
     for (std::set<std::pair<ElementId, ElementId>>::const_iterator it = pairs.begin();
          it != pairs.end(); ++it)
     {
-      //if (mc.getReviewP() > 0.0)
-      //{
-        ElementPtr e1 = _map->getElement(it->first);
-        ElementPtr e2 = _map->getElement(it->second);
+      ElementPtr e1 = _map->getElement(it->first);
+      ElementPtr e2 = _map->getElement(it->second);
 
-        LOG_TRACE(
-          "Adding score tags to " << e1->getElementId() << " and " << e2->getElementId() <<
-          "...");
+      LOG_TRACE(
+        "Adding score tags to " << e1->getElementId() << " and " << e2->getElementId() << "...");
 
-        _addConflateScoreTags(e1, mc);
-        _addConflateScoreTags(e2, mc);
-        e1->getTags().appendValue(MetadataTags::HootScoreUuid(), e2->getTags().getCreateUuid());
-        e2->getTags().appendValue(MetadataTags::HootScoreUuid(), e1->getTags().getCreateUuid());
-      //}
+      _addConflateScoreTags(e1, matchClassification, *matchThreshold);
+      _addConflateScoreTags(e2, matchClassification, *matchThreshold);
+      e1->getTags().appendValue(MetadataTags::HootScoreUuid(), e2->getTags().getCreateUuid());
+      e2->getTags().appendValue(MetadataTags::HootScoreUuid(), e1->getTags().getCreateUuid());
     }
   }
 }
