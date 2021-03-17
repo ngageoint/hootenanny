@@ -136,7 +136,7 @@ public:
     else
     {
       double score;
-      std::shared_ptr<MatchThreshold> mt;
+      std::shared_ptr<MatchThreshold> mt(new MatchThreshold(0.5, 0.5, 1.0, false));
       const QString result = evaluateThreshold(maps, output, mt, showConfusion, score);
       cout << result;
     }
@@ -154,7 +154,7 @@ public:
     virtual double f(Tgs::Vector v)
     {
       double score;
-      std::shared_ptr<MatchThreshold> mt(new MatchThreshold(v[0], v[1], v[2]));
+      std::shared_ptr<MatchThreshold> mt(new MatchThreshold(v[0], v[1], v[2], false));
       _cmd->evaluateThreshold(_maps, "", mt, _showConfusion, score);
       return score;
     }

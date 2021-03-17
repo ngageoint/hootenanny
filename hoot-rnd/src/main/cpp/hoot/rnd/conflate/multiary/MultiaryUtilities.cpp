@@ -52,7 +52,8 @@ void MultiaryUtilities::conflate(OsmMapPtr map)
   mergerFactory->registerCreator(
         MergerCreatorPtr(new MultiaryPoiMergerCreator()));
 
-  MatchThresholdPtr mt(new MatchThreshold(0.39, 0.61, 1.1));
+  // Apparently, multiary will allow with > 1.0 review thresholds.
+  MatchThresholdPtr mt(new MatchThreshold(0.39, 0.61, 1.1, false));
 
   // call new conflation routine
   UnifyingConflator conflator(mt);

@@ -66,8 +66,8 @@ void MatchFeatureExtractor::addMatchCreator(const std::shared_ptr<MatchCreator>&
   _creators.push_back(m);
 }
 
-MatchType MatchFeatureExtractor::_getActualMatchType(const set<ElementId> &eids,
-  const std::shared_ptr<const OsmMap>& map) const
+MatchType MatchFeatureExtractor::_getActualMatchType(
+  const set<ElementId> &eids, const std::shared_ptr<const OsmMap>& map) const
 {
   set<QString> ref1, ref2, review;
 
@@ -250,7 +250,9 @@ QString MatchFeatureExtractor::getResults(bool useNulls)
 void MatchFeatureExtractor::processMap(const std::shared_ptr<const OsmMap>& map)
 {
   vector<ConstMatchPtr> matches;
-  std::shared_ptr<const MatchThreshold> mt(new MatchThreshold(0, 0));
+  // We don't want to validate the thresholds here in order to do the full match feature extraction.
+  // Reviews aren't applicable here, so just use the default value.
+  std::shared_ptr<const MatchThreshold> mt(new MatchThreshold(0.0, 0.0, 1.0, false));
   _matchFactory->createMatches(map, matches, std::shared_ptr<geos::geom::Geometry>(), mt);
   size_t matchCount = 0;
   for (size_t i = 0; i < matches.size(); i++)

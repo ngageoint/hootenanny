@@ -415,10 +415,10 @@ std::shared_ptr<MatchThreshold> HighwayMatchCreator::getMatchThreshold()
 {
   if (!_matchThreshold.get())
   {
-    ConfigOptions config;
     _matchThreshold.reset(
-      new MatchThreshold(config.getHighwayMatchThreshold(), config.getHighwayMissThreshold(),
-                         config.getHighwayReviewThreshold()));
+      new MatchThreshold(
+        ConfigOptions().getHighwayMatchThreshold(), ConfigOptions().getHighwayMissThreshold(),
+        ConfigOptions().getHighwayReviewThreshold()));
   }
   return _matchThreshold;
 }

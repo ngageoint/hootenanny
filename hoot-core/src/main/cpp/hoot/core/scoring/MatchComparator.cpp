@@ -542,7 +542,7 @@ void MatchComparator::_findActualMatches(const ConstOsmMapPtr& in, const ConstOs
       else
       {
         LOG_TRACE("Missing UUID: " << cList[i]);
-        throw HootException("Conflated uuid wasn't found in either input.");
+        throw HootException("Conflated uuid was not found in either input: " + cList[i]);
       }
     }
     // create a match between all the combinations of ref1 uuid to ref2 uuid
@@ -675,9 +675,9 @@ void MatchComparator::_tagTestOutcome(const OsmMapPtr& map, const QString& uuid,
   }
 }
 
-void MatchComparator::_tagError(const OsmMapPtr &map, const QString &uuid, const QString& value)
+void MatchComparator::_tagError(const OsmMapPtr& map, const QString& uuid, const QString& value)
 {
-  // if the uuid contains the first uuid, set mismatch
+  // If the uuid contains the first uuid, set mismatch.
   SetTagValueVisitor stv(MetadataTags::HootMismatch(), value);
   for (MatchComparator::UuidToEid::iterator it = _actualUuidToEid.begin();
        it != _actualUuidToEid.end(); ++it)
@@ -690,9 +690,9 @@ void MatchComparator::_tagError(const OsmMapPtr &map, const QString &uuid, const
   }
 }
 
-void MatchComparator::_tagWrong(const OsmMapPtr &map, const QString &uuid)
+void MatchComparator::_tagWrong(const OsmMapPtr& map, const QString &uuid)
 {
-  // if the uuid contains the first uuid, set wrong
+  // If the uuid contains the first uuid, set wrong.
   SetTagValueVisitor stv(MetadataTags::HootWrong(), "1");
   for (MatchComparator::UuidToEid::iterator it = _actualUuidToEid.begin();
        it != _actualUuidToEid.end(); ++it)
