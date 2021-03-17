@@ -49,11 +49,10 @@ void MultiaryUtilities::conflate(OsmMapPtr map)
 
   MergerFactory::getInstance().reset();
   std::shared_ptr<MergerFactory> mergerFactory(new MergerFactory());
-  mergerFactory->registerCreator(
-        MergerCreatorPtr(new MultiaryPoiMergerCreator()));
+  mergerFactory->registerCreator(MergerCreatorPtr(new MultiaryPoiMergerCreator()));
 
   // Apparently, multiary will allow with > 1.0 review thresholds.
-  std::shared_ptr<const MatchThreshold> mt =
+  std::shared_ptr<MatchThreshold> mt =
     std::make_shared<MatchThreshold>(MatchThreshold(0.39, 0.61, 1.1, false));
 
   // call new conflation routine
@@ -112,8 +111,9 @@ QList<MultiaryElement> MultiaryUtilities::conflateCluster(QList<QByteArray> pbfE
     MultiaryElement me;
     NodePtr n = it->second;
     me.setHash(n->getTags().get(MetadataTags::HootHash()));
-    me.setBounds(getInstance().getBoundsCalculator()->calculateSearchBounds(map,
-      std::dynamic_pointer_cast<Node>(n)));
+    me.setBounds(
+      getInstance().getBoundsCalculator()->calculateSearchBounds(
+        map, std::dynamic_pointer_cast<Node>(n)));
     me.setPayload(convertElementToPbf(n));
     result.append(me);
   }
@@ -121,8 +121,8 @@ QList<MultiaryElement> MultiaryUtilities::conflateCluster(QList<QByteArray> pbfE
   return result;
 }
 
-QList<hoot::MultiarySimpleMatch> MultiaryUtilities::findMatches(QByteArray checkElement,
-  QList<QByteArray> againstElements)
+QList<hoot::MultiarySimpleMatch> MultiaryUtilities::findMatches(
+  QByteArray checkElement, QList<QByteArray> againstElements)
 {
   QList<hoot::MultiarySimpleMatch> result;
   OsmPbfReader reader;
