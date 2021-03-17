@@ -136,7 +136,8 @@ public:
     else
     {
       double score;
-      std::shared_ptr<MatchThreshold> mt(new MatchThreshold(0.5, 0.5, 1.0, false));
+      std::shared_ptr<const MatchThreshold> mt =
+        std::make_shared<MatchThreshold>(MatchThreshold(0.5, 0.5, 1.0, false));
       const QString result = evaluateThreshold(maps, output, mt, showConfusion, score);
       cout << result;
     }

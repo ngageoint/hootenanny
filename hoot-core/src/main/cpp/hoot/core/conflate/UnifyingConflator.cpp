@@ -243,7 +243,7 @@ void UnifyingConflator::_mergeFeatures(const std::vector<MergerPtr>& relationMer
 
 void UnifyingConflator::_addConflateScoreTags(
   const ElementPtr& e, const MatchClassification& matchClassification,
-  const MatchThreshold& matchThreshold)
+  const MatchThreshold& matchThreshold) const
 {
   Tags& tags = e->getTags();
   tags.appendValue(MetadataTags::HootScoreMatch(), matchClassification.getMatchP());

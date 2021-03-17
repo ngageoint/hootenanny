@@ -79,7 +79,7 @@ private:
   void _addConflateScoreTags();
   void _addConflateScoreTags(
     const ElementPtr& e, const MatchClassification& matchClassification,
-    const MatchThreshold& matchThreshold);
+    const MatchThreshold& matchThreshold) const;
 };
 
 }
