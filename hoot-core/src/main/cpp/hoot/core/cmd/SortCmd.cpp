@@ -52,11 +52,11 @@ public:
 
   SortCmd() = default;
 
-  virtual QString getName() const override { return "sort"; }
+  QString getName() const override { return "sort"; }
 
-  virtual QString getDescription() const override { return "Sorts a map to the OSM standard"; }
+  QString getDescription() const override { return "Sorts a map to the OSM standard"; }
 
-  virtual int runSimple(QStringList& args) override
+  int runSimple(QStringList& args) override
   {
     QElapsedTimer timer;
     timer.start();

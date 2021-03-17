@@ -49,12 +49,12 @@ public:
 
   IsSortedCmd() = default;
 
-  virtual QString getName() const override { return "is-sorted"; }
+  QString getName() const override { return "is-sorted"; }
 
-  virtual QString getDescription() const override
+  QString getDescription() const override
   { return "Determines if a map is sorted to the OSM standard"; }
 
-  virtual int runSimple(QStringList& args) override
+  int runSimple(QStringList& args) override
   {
     QElapsedTimer timer;
     timer.start();

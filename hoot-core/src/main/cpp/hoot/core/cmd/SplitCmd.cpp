@@ -48,11 +48,11 @@ public:
 
   SplitCmd() = default;
 
-  virtual QString getName() const override { return "split"; }
+  QString getName() const override { return "split"; }
 
-  virtual QString getDescription() const override { return "Splits a map into tiles"; }
+  QString getDescription() const override { return "Splits a map into tiles"; }
 
-  virtual int runSimple(QStringList& args) override
+  int runSimple(QStringList& args) override
   {
     QElapsedTimer timer;
     timer.start();

@@ -53,7 +53,7 @@ public:
   Soundex() = default;
   virtual ~Soundex() = default;
 
-  virtual double compare(const QString& s1, const QString& s2) const override;
+  double compare(const QString& s1, const QString& s2) const override;
 
   /**
    * Compares word1 & word2 by encoding the strings and counting each mismatched character as an
@@ -79,11 +79,11 @@ public:
 
   QString toString() const override { return "Soundex"; }
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
-  virtual QString getDescription() const override
+  QString getDescription() const override
   { return "Returns a string comparison score based on the Soundex algorithm"; }
 };
 

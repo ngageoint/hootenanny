@@ -52,11 +52,11 @@ public:
 
   CutCmd() = default;
 
-  virtual QString getName() const override { return "cut"; }
+  QString getName() const override { return "cut"; }
 
-  virtual QString getDescription() const override { return "Cuts out a portion from a map"; }
+  QString getDescription() const override { return "Cuts out a portion from a map"; }
 
-  virtual int runSimple(QStringList& args) override
+  int runSimple(QStringList& args) override
   {
     QElapsedTimer timer;
     timer.start();
