@@ -593,7 +593,7 @@ manual review process.
 * Data Type: double
 * Default Value: `${conflate.match.threshold.default}`
 
-The threshold at which a match is called a match for buildings.
+The threshold at which a match is called a match for buildings. The valid range is (0.0, 1.0].
 
 See also:
 
@@ -612,7 +612,7 @@ together when matched.
 * Data Type: double
 * Default Value: `${conflate.miss.threshold.default}`
 
-The threshold at which a miss is called a miss for buildings.
+The threshold at which a miss is called a miss for buildings. The valid range is (0.0, 1.0].
 
 See also:
 
@@ -649,7 +649,7 @@ If true, any building matches other than 1:1 matches are automatically marked fo
 * Data Type: double
 * Default Value: `${conflate.review.threshold.default}`
 
-The threshold at which a review is called a review for buildings.  See
+The threshold at which a review is called a review for buildings. The valid range is (0.0, 1.0]. See
 `conflate.review.threshold.default`.
 
 See also:
@@ -958,6 +958,13 @@ Path to the RF highway model. A new model can be created with `build-model`. Sea
 and then `$HOOT_HOME/conf/`. This is only relevant if the `conflate.match.highway.classifier` is
 set to `hoot::HighwayRfClassifier`.
 
+=== conflate.match.only
+
+* Data Type: bool
+* Default Value: `false`
+
+TODO
+
 === conflate.match.poi.model
 
 * Data Type: string
@@ -971,7 +978,7 @@ local path and then `$HOOT_HOME/conf/`.
 * Data Type: double
 * Default Value: `0.6`
 
-The default threshold at which a match is called a match. Valid values are between 0.0 and 1.0.
+The default threshold at which a match is called a match. The valid range is (0.0, 1.0].
 
 See also:
 
@@ -982,7 +989,7 @@ See also:
 * Data Type: double
 * Default Value: `0.6`
 
-The default threshold at which a miss is called a miss. Valid values are between 0.0 and 1.0.
+The default threshold at which a miss is called a miss. The valid range is (0.0, 1.0].
 
 See also:
 
@@ -1054,7 +1061,7 @@ associated with conflate operators.
 * Default Value: `0.6`
 
 The default threshold at which a review is called a review. Reviews are also declared in some
-other situations when the relationship is not clear. Valid values are between 0.0 and 1.0.
+other situations when the relationship is not clear. The valid range is (0.0, 1.0].
 
 See also:
 
@@ -1511,32 +1518,33 @@ The way subline matcher to use when determining matching sublines with generic l
 * Data Type: double
 * Default Value: `0.8`
 
-Tag similarity threshold (0.0 to 1.0) at or above which an linear element not conflatable by
-specific Hootenanny conflation routines is considered to have similar tags.
+Tag similarity threshold, in the range (0.0,1.0], at or above which an linear element not
+conflatable by specific Hootenanny conflation routines is considered to have similar tags.
 
 === generic.point.type.threshold
 
 * Data Type: double
 * Default Value: `0.8`
 
-Tag similarity threshold (0.0 to 1.0) at or above which an point element not conflatable by
-specific Hootenanny conflation routines is considered to have similar tags.
+Tag similarity threshold, in the range (0.0,1.0], at or above which an point element not
+conflatable by specific Hootenanny conflation routines is considered to have similar tags.
 
 === generic.point.polygon.type.threshold
 
 * Data Type: double
 * Default Value: `0.8`
 
-Tag similarity threshold (0.0 to 1.0) at or above which a pair of point and polygon elements not
-conflatable by specific Hootenanny conflation routines is considered to have similar tags.
+Tag similarity threshold, in the range (0.0,1.0], at or above which a pair of point and polygon
+elements not conflatable by specific Hootenanny conflation routines is considered to have similar
+tags.
 
 === generic.polygon.type.threshold
 
 * Data Type: double
 * Default Value: `0.8`
 
-Tag similarity threshold (0.0 to 1.0) at or above which an polygon element not conflatable by
-specific Hootenanny conflation routines is considered to have similar tags.
+Tag similarity threshold, in the range (0.0,1.0], at or above which an polygon element not
+conflatable by specific Hootenanny conflation routines is considered to have similar tags.
 
 === geometry.linear.merger.default
 
@@ -1663,7 +1671,7 @@ documentation for detail on the rule file format.
 * Data Type: double
 * Default Value: `0.161`
 
-The threshold at which a match is called a match for roads. Valid values are between 0.0 and 1.0.
+The threshold at which a match is called a match for roads. The valid range is (0.0, 1.0].
 
 See also:
 
@@ -1700,7 +1708,7 @@ for match. For example:
 * Data Type: double
 * Default Value: `0.999`
 
-The threshold at which a miss is called a miss for roads. Valid values are between 0.0 and 1.0.
+The threshold at which a miss is called a miss for roads. The valid range is (0.0, 1.0].
 
 See also:
 
@@ -1711,7 +1719,7 @@ See also:
 * Data Type: double
 * Default Value: `0.25`
 
-The threshold at which a review is called a review for roads. Valid values are between 0.0 and 1.0.
+The threshold at which a review is called a review for roads. The valid range is (0.0, 1.0].
 
 See also:
 
@@ -2826,7 +2834,8 @@ Added to a conflicting match score to allow for match pruning
 * Data Type: double
 * Default Value: `0.35`
 
-The score threshold used to compare whole networks with the ConflictsNetworkMatcher
+The score threshold used to compare whole networks with the ConflictsNetworkMatcher. The valid range
+is (0.0, 1.0].
 
 === network.conflicts.outbound.weighting
 
@@ -2835,14 +2844,14 @@ The score threshold used to compare whole networks with the ConflictsNetworkMatc
 
 A value of 0 will cause an edge to contribute (1 * score * weight) to each neighbor when using
 network conflation. A value of 1 will give approx (1 / n * score * weight) influence to each
-neighbor.  This value is generally not changed by users.  Reasonable range is [0, 2].
+neighbor. This value is generally not changed by users.  Reasonable range is [0, 2].
 
 === network.conflicts.partial.handicap
 
 * Data Type: double
 * Default Value: `0.2`
 
-A larger value will increase the weight of partial matches when using network conflation.  A
+A larger value will increase the weight of partial matches when using network conflation. A
 smaller value prefers whole matches over partial matches. This value is generally not changed by
 users. Reasonable range is (0, ~2].
 
@@ -2923,7 +2932,8 @@ Algorithm. This value is generally not changed by users.
 * Data Type: double
 * Default Value: `0.15`
 
-The threshold at which a network match is called a match when using network conflation.
+The threshold at which a network match is called a match when using network conflation. The valid
+range is (0.0, 1.0].
 
 See also:
 
@@ -2958,7 +2968,7 @@ The minimum network match overlap percentage allowed for a network merge to occu
 * Data Type: double
 * Default Value: `0.85`
 
-The threshold at which a network miss is called a miss.
+The threshold at which a network miss is called a miss. The valid range is (0.0, 1.0].
 
 See also:
 
@@ -2978,7 +2988,7 @@ conflation.
 * Default Value: `0.5`
 
 The threshold at which a network review is called a review. Reviews are also declared in some
-other situations when the relationship is not clear.
+other situations when the relationship is not clear. The valid range is (0.0, 1.0].
 
 See also:
 
@@ -3461,11 +3471,11 @@ Y direction is in the output permutation. Units in meters.
 * Data Type: double
 * Default Value: `0.025`
 
-A score variance in the range of 0.0 to 1.0 by which a `perty-test` test run score may vary
-while still allowing the test run's status to be described as passing.  Test run score differences
-larger than this value will cause the test run's status to be described as failing.  If you are
-not sure what your expected scores should be and want to bypass this check, create a list with
-all entries equal to "1.0" of the same size as perty.test.num.runs, and then set
+A score variance in the range, in the range [0.0,1.0], by which a `perty-test` test run score may
+vary while still allowing the test run's status to be described as passing.  Test run score
+differences larger than this value will cause the test run's status to be described as failing. If
+you are not sure what your expected scores should be and want to bypass this check, create a list
+with all entries equal to "1.0" of the same size as perty.test.num.runs, and then set
 perty.test.allowed.score.variance to "1.0".  This effectively disables the score validation.
 
 === perty.test.dynamic.variable.increment
@@ -3501,9 +3511,9 @@ restricted to Hootenanny PERTY options only (perty.*) of a numeric type.
 * Default Value:
 ** `1.0`
 
-A list of expected PERTY scores in the range of 0.0 to 1.0 for a `perty-test` run.  The number of
-scores must match the value assigned to perty.test.num.runs.  If you are not sure what your
-expected scores should be and want to bypass this check, create a list with all entries equal
+A list of expected PERTY scores in the range of, in the range [0.0,1.0], for a `perty-test` run. The
+number of scores must match the value assigned to perty.test.num.runs.  If you are not sure what
+your expected scores should be and want to bypass this check, create a list with all entries equal
 to "1.0" of the same size as perty.test.num.runs, and then set perty.test.allowed.score.variance
 to "1.0".  This effectively disables the score validation.
 
@@ -3735,9 +3745,9 @@ POI/POI review.
 * Data Type: double
 * Default Value: `0.8`
 
-The minimum similarity the name scores of two features can have and be considered a name
-match, with 0.0 being the least similar and 1.0 being the most similar (-1.0 if there are no names
-present (null).
+The minimum similarity the name scores, in the range (0.0,1.0], of two features can have and be
+considered a name match, with 0.0 being the least similar and 1.0 being the most similar (-1.0 if
+there are no names present (null).
 
 === poi.polygon.name.translate.to.english
 
@@ -3852,8 +3862,8 @@ is always used and changes to this option value are ignore.
 * Data Type: double
 * Default Value: `0.7`
 
-The minimum similarity the type scores a POI and polygon can have and be considered a type
-match, with 0.0 being the least similar and 1.0 being the most similar.
+The minimum similarity the type scores, in the range (0.0,1.0], a POI and polygon can have and be
+considered a type match, with 0.0 being the least similar and 1.0 being the most similar.
 
 === poi.polygon.type.to.names.file
 
@@ -3895,7 +3905,7 @@ sheet tie point distances.
 * Data Type: double
 * Default Value: `${conflate.match.threshold.default}`
 
-The threshold at which a match is called a match for power lines.
+The threshold at which a match is called a match for power lines. The valid range is (0.0, 1.0].
 
 See also:
 
@@ -3906,9 +3916,9 @@ See also:
 * Data Type: double
 * Default Value: `0.01`
 
-A weighting coefficient value from 0.0 to 1.0 for the applying distance weighting to power line
-matches.  This will favor feature that are closer together.  The higher the coefficient value, the
-higher the weighting applied.  A value of 0.0 will disable distance weighting.
+A weighting coefficient value, in the range [0.0,1.0], for the applying distance weighting to power
+line matches. This will favor feature that are closer together. The higher the coefficient value,
+the higher the weighting applied. A value of 0.0 will disable distance weighting.
 
 === power.line.matcher.max.angle
 
@@ -3922,7 +3932,7 @@ Sets that maximum angle that is still considered a power line match. Units in de
 * Data Type: double
 * Default Value: `${conflate.miss.threshold.default}`
 
-The threshold at which a miss is called a miss for power lines.
+The threshold at which a miss is called a miss for power lines. The valid range is (0.0, 1.0].
 
 See also:
 
@@ -3933,7 +3943,7 @@ See also:
 * Data Type: double
 * Default Value: `${conflate.review.threshold.default}`
 
-The threshold at which a review is called a review for power lines.
+The threshold at which a review is called a review for power lines. The valid range is (0.0, 1.0].
 
 See also:
 
@@ -3951,7 +3961,7 @@ The way subline matcher to use when determining matching power line sublines.
 * Data Type: double
 * Default Value: `0.0`
 
-A quantile value from 0.0 to 1.0 for the QuantileAggregator.
+A quantile value, in the range [0.0,1.0], for the QuantileAggregator.
 
 === progress.var.print.length.max
 
@@ -4108,7 +4118,8 @@ removed).
 * Data Type: double
 * Default Value: `0.1`
 
-The probability between 0.0 and 1.0 that a way will be randomly generalized by RandomWayGeneralizer.
+The probability, in the range [0.0,1.0], that a way will be randomly generalized by
+RandomWayGeneralizer.
 
 === random.way.splitter.min.node.spacing
 
@@ -4123,7 +4134,7 @@ splits.
 * Data Type: double
 * Default Value: `0.1`
 
-The probability between 0.0 and 1.0 that a way will randomly be split into multiple features by
+The probability, in the range [0.0,1.0], that a way will randomly be split into multiple features by
 RandomWayGeneralizer.
 
 === reader.add.source.datetime
@@ -4220,16 +4231,16 @@ Allows for requiring a type tag match when using RelationCriterion.
 * Data Type: double
 * Default Value: `0.9`
 
-Name similarity threshold (0.0 to 1.0) at or above which an collection relation feature is
-considered to have a name match.
+Name similarity threshold, in the range (0.0,1.0], at or above which an collection relation feature
+is considered to have a name match.
 
 === relation.type.threshold
 
 * Data Type: double
 * Default Value: `0.8`
 
-Tag similarity threshold (0.0 to 1.0) at or above which an collection relation feature is considered
-to have similar tags.
+Tag similarity threshold, in the range (0.0,1.0], at or above which an collection relation feature
+is considered to have similar tags.
 
 === relation.with.members.of.type.criterion.allow.mixed.children
 
@@ -4331,9 +4342,9 @@ with attribute.conflation.allow.reviews.by.score.
 * Data Type: double
 * Default Value: `0.0`
 
-The score threshold below which reviews will not pass the filter.  A value of 0.0 signifies no
-minimum score threshold.  This currently works with Attribute Conflation only and can be enabled
-with attribute.conflation.allow.reviews.by.score.
+The score threshold below which reviews will not pass the filter, in the range [0.0,1.0],.  A value
+of 0.0 signifies no minimum score threshold.  This currently works with Attribute Conflation only
+and can be enabled with attribute.conflation.allow.reviews.by.score.
 
 === rubber.sheet.debug
 
@@ -4765,8 +4776,8 @@ marked with a custom tag. Useful for debugging purposes.
 * Default Value: `-1.0`
 
 The feature type similarity score at or above which two ways being snapped must score. Valid values
-are between 0.0 and 1.0. A value of -1.0 disables the feature type match requirement completely and
-only the snap criterions will influence the snapping.
+are, -1.0 and the range (0.0,1.0],. A value of -1.0 disables the feature type match requirement
+completely and only the snap criterions will influence the snapping.
 
 === snap.unconnected.ways.review.snapped.ways
 
@@ -5340,8 +5351,8 @@ runtime performance.
 * Data Type: double
 * Default Value: `0.9`
 
-Name similarity threshold (0.0 to 1.0) at or above which a linear watereay feature is considered to
-have a name match.
+Name similarity threshold, in the range (0.0,1.0], at or above which a linear waterway feature is
+considered to have a name match.
 
 === waterway.rubber.sheet.minimum.ties
 
@@ -5370,8 +5381,8 @@ The way subline matcher to use when determining matching sublines.
 * Data Type: double
 * Default Value: `0.7`
 
-Tag similarity threshold (0.0 to 1.0) at or above which a waterway element is considered to have
-similar tags.
+Tag similarity threshold, in the range (0.0,1.0], at or above which a waterway element is considered
+to have similar tags.
 
 === way.angle.sample.distance
 
@@ -5483,7 +5494,7 @@ The minimum size that a way should be split into for merging. Units in meters.
 * Data Type: double
 * Default Value: `0.05`
 
-Distance tolerance, in the range of 0.0 to 1.0, allowed for WayNodeCopier to consider two nodes
+Distance tolerance, in the range (0.0,1.0], allowed for WayNodeCopier to consider two nodes
 duplicates and not copy them. The higher the value, the more likely two nearby nodes would be
 considered to be duplicates.
 
