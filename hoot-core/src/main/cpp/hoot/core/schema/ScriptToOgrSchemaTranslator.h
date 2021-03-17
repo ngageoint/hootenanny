@@ -48,7 +48,7 @@ class ScriptToOgrSchemaTranslator
 {
 public:
 
-  typedef struct TranslatedFeature
+  struct TranslatedFeature
   {
   public:
 
@@ -59,7 +59,7 @@ public:
     {
       return tableName + ": " + feature->toString();
     }
-  } TranslatedFeature;
+  };
 
   ScriptToOgrSchemaTranslator() = default;
   virtual ~ScriptToOgrSchemaTranslator() = default;
@@ -73,8 +73,8 @@ public:
     geos::geom::GeometryTypeId geometryType) = 0;
 };
 
-typedef std::shared_ptr<ScriptToOgrSchemaTranslator> ScriptToOgrSchemaTranslatorPtr;
-typedef std::shared_ptr<const ScriptToOgrSchemaTranslator> ConstScriptToOgrSchemaTranslatorPtr;
+using ScriptToOgrSchemaTranslatorPtr = std::shared_ptr<ScriptToOgrSchemaTranslator>;
+using ConstScriptToOgrSchemaTranslatorPtr = std::shared_ptr<const ScriptToOgrSchemaTranslator>;
 
 }
 

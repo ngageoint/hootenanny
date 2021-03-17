@@ -37,21 +37,25 @@ namespace hoot
 class LineStringAverager
 {
 public:
+
   LineStringAverager(const std::shared_ptr<geos::geom::LineString>& l1,
                      const std::shared_ptr<geos::geom::LineString>& l2);
 
   std::shared_ptr<geos::geom::LineString> average();
 
-  static std::shared_ptr<geos::geom::LineString> average(const std::shared_ptr<geos::geom::LineString>& l1,
-                                                         const std::shared_ptr<geos::geom::LineString>& l2);
+  static std::shared_ptr<geos::geom::LineString> average(
+    const std::shared_ptr<geos::geom::LineString>& l1,
+    const std::shared_ptr<geos::geom::LineString>& l2);
 
 protected:
+
   std::shared_ptr<geos::geom::LineString> _l1;
   std::shared_ptr<geos::geom::LineString> _l2;
 
   geos::geom::Coordinate _merge(const geos::geom::Coordinate& c1, const geos::geom::Coordinate& c2);
 
-  geos::geom::Coordinate _moveToLine(const geos::geom::Coordinate& c1, const geos::geom::LineString* ls);
+  geos::geom::Coordinate _moveToLine(
+    const geos::geom::Coordinate& c1, const geos::geom::LineString* ls);
 };
 
 }

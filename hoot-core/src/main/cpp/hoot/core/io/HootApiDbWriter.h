@@ -93,7 +93,7 @@ public:
 
 protected:
 
-  typedef Tgs::BigMap<long, long> IdRemap;
+  using IdRemap = Tgs::BigMap<long, long>;
   IdRemap _nodeRemap;
   IdRemap _relationRemap;
   IdRemap _wayRemap;

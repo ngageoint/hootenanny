@@ -35,10 +35,10 @@ namespace hoot
 #if HOOT_HAVE_FLOAT128
 // this is a GCC extension. If this becomes a problem in the future then the Boost multiprecision
 // or similar library may be an option.
-typedef __float128 Float128;
+using Float128 = __float128;
 #else
 #warning "Float128 does not work properly on this platform, falling back to double."
-typedef double Float128;
+using Float128 = double;
 #endif
 
 }

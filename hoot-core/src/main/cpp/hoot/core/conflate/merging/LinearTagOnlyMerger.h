@@ -89,7 +89,7 @@ private:
                   std::vector<std::pair<ElementId, ElementId>>& replaced);
 };
 
-typedef std::shared_ptr<LinearTagOnlyMerger> LinearTagOnlyMergerPtr;
+using LinearTagOnlyMergerPtr = std::shared_ptr<LinearTagOnlyMerger>;
 
 }
 

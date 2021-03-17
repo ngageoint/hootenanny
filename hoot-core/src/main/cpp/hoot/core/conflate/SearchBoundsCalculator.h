@@ -56,7 +56,7 @@ private:
   std::shared_ptr<SearchRadiusProvider> _radiusProvider;
 };
 
-typedef std::shared_ptr<SearchBoundsCalculator> SearchBoundsCalculatorPtr;
+using SearchBoundsCalculatorPtr = std::shared_ptr<SearchBoundsCalculator>;
 
 }
 

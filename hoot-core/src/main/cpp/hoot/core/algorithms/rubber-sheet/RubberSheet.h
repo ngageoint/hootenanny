@@ -177,7 +177,7 @@ private:
 
   static int logWarnCount;
 
-  typedef std::map<long, std::list<Match>> MatchList;
+  using MatchList = std::map<long, std::list<Match>>;
 
   class Tie
   {

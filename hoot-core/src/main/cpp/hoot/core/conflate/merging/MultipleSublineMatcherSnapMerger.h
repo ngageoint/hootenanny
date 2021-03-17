@@ -76,7 +76,7 @@ private:
   std::shared_ptr<SublineStringMatcher> _sublineMatcher2;
 };
 
-typedef std::shared_ptr<MultipleSublineMatcherSnapMerger> MultipleSublineMatcherSnapMergerPtr;
+using MultipleSublineMatcherSnapMergerPtr = std::shared_ptr<MultipleSublineMatcherSnapMerger>;
 
 }
 

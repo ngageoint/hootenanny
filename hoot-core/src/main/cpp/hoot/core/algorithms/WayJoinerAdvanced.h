@@ -46,12 +46,12 @@ public:
 
   static QString className() { return "hoot::WayJoinerAdvanced"; }
 
-  typedef enum
+  enum JoinAtNodeMergeType
   {
     ParentFirst,
     ParentLast,
     ShareFirstNode
-  } JoinAtNodeMergeType;
+  };
 
   WayJoinerAdvanced();
   virtual ~WayJoinerAdvanced() = default;

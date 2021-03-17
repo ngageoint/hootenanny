@@ -34,6 +34,7 @@
 #include <hoot/core/conflate/network/PartialNetworkMerger.h>
 #include <hoot/core/conflate/merging/LinearTagOnlyMerger.h>
 #include <hoot/core/conflate/merging/MultipleSublineMatcherSnapMerger.h>
+#include <hoot/core/conflate/merging/LinearAverageMerger.h>
 
 namespace hoot
 {
@@ -68,6 +69,9 @@ MergerPtr LinearMergerFactory::getMerger(
   // Use of LinearTagOnlyMerger for geometries signifies that we're doing Attribute Conflation.
   const bool isAttributeConflate =
     ConfigOptions().getGeometryLinearMergerDefault() == LinearTagOnlyMerger::className();
+  // Use of LinearAverageMerger for geometries signifies that we're doing Average Conflation.
+  const bool isAverageConflate =
+    ConfigOptions().getGeometryLinearMergerDefault() == LinearAverageMerger::className();
   if (isAttributeConflate)
   {
     merger.reset(
@@ -78,6 +82,10 @@ MergerPtr LinearMergerFactory::getMerger(
     std::shared_ptr<LinearMergerAbstract> linearMerger =
       std::dynamic_pointer_cast<LinearMergerAbstract>(merger);
     linearMerger->setMatchedBy(matchedBy);
+  }
+  else if (isAverageConflate)
+  {
+    return getMerger(eids, std::shared_ptr<SublineStringMatcher>(), matchedBy);
   }
   else
   {
@@ -100,7 +108,10 @@ MergerPtr LinearMergerFactory::getMerger(
   // Use of LinearTagOnlyMerger for geometries signifies that we're doing Attribute Conflation.
   const bool isAttributeConflate =
     ConfigOptions().getGeometryLinearMergerDefault() == LinearTagOnlyMerger::className();
-  if (isAttributeConflate)
+  // Use of LinearAverageMerger for geometries signifies that we're doing Average Conflation.
+  const bool isAverageConflate =
+    ConfigOptions().getGeometryLinearMergerDefault() == LinearAverageMerger::className();
+  if (isAttributeConflate || isAverageConflate)
   {
     throw IllegalArgumentException(
       "MultipleSublineMatcherSnapMerger may not be used with Attribute or Average Conflation.");

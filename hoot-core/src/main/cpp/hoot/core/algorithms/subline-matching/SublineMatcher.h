@@ -62,7 +62,7 @@ public:
   virtual QString toString() const override { return ""; }
 };
 
-typedef std::shared_ptr<SublineMatcher> SublineMatcherPtr;
+using SublineMatcherPtr = std::shared_ptr<SublineMatcher>;
 
 }
 

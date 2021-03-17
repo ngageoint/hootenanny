@@ -174,8 +174,8 @@ private:
 };
 
 // For convenience
-typedef std::shared_ptr<Roundabout> RoundaboutPtr;
-typedef std::shared_ptr<const Roundabout> ConstRoundaboutPtr;
+using RoundaboutPtr = std::shared_ptr<Roundabout>;
+using ConstRoundaboutPtr = std::shared_ptr<const Roundabout>;
 
 }
 

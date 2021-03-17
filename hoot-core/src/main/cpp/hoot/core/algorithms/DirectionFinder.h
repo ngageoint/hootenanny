@@ -39,7 +39,8 @@ public:
   /**
    * Returns true if these lines are generally pointed in a similar direction.
    */
-  static bool isSimilarDirection(const ConstOsmMapPtr& map, ConstWayPtr w1, ConstWayPtr w2);
+  static bool isSimilarDirection(
+    const ConstOsmMapPtr& map, const ConstWayPtr& w1, const ConstWayPtr& w2);
 
   /**
    * Returns true if these lines are generally pointed in a similar direction.
@@ -52,6 +53,8 @@ public:
    * @param way2 the second way to compare direction for
    * @return true if both ways are running in a similar direction; false otherwise
    * @see direction.finder.angle.threshold
+   * @todo After recent fixes, we may be able to have Attribute Conflation switch back to the
+   * original isSimilarDirection implementation.
    */
   static bool isSimilarDirection2(const ConstOsmMapPtr& map, ConstWayPtr way1, ConstWayPtr way2);
 

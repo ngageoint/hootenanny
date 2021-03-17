@@ -35,7 +35,7 @@ namespace hoot
 
 class LibPostalInit;
 
-typedef std::shared_ptr<LibPostalInit> LibPostalInitPtr;
+using LibPostalInitPtr = std::shared_ptr<LibPostalInit>;
 
 /**
  * Singleton access for initializing/destroying libpostal (Singleton)

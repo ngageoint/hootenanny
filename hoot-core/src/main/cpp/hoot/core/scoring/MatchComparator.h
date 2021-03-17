@@ -55,7 +55,7 @@ public:
 
   static QString className() { return "hoot::MatchComparator"; }
 
-  typedef QMultiMap<QString, ElementId> UuidToEid;
+  using UuidToEid = QMultiMap<QString, ElementId>;
 
   MatchComparator();
   virtual ~MatchComparator() = default;
@@ -118,7 +118,7 @@ private:
 
   static int logWarnCount;
 
-  typedef std::pair<QString, QString> UuidPair;
+  using UuidPair = std::pair<QString, QString>;
 
   std::set<UuidPair> _actual;
   std::set<UuidPair> _expected;

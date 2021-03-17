@@ -62,7 +62,7 @@ class FaceGroup;
 class OsmMap;
 class Way;
 
-typedef std::shared_ptr<geos::geom::Geometry> GeometryPtr;
+using GeometryPtr = std::shared_ptr<geos::geom::Geometry>;
 
 /**
  * Representation of an Alpha Shape. Technically an Alpha complex, not an Alpha Shape, but the

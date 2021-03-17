@@ -38,16 +38,16 @@ class ServicesJobStatus
 public:
 
   // matches the same enum in hoot-services JobStatus.java
-  typedef enum TypeEnum
+  enum TypeEnum
   {
     Running = 0,
     Complete,
     Failed,
     Cancelled,
     Unknown
-  } TypeEnum;
+  };
 
-  typedef int Type;
+  using Type = int;
 
   ServicesJobStatus() { _type = Unknown; }
   ServicesJobStatus(Type type) { _type = type; }

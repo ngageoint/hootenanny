@@ -115,14 +115,14 @@ private:
     double score;
   };
 
-  typedef std::shared_ptr<EdgeLinkScore> EdgeLinkScorePtr;
+  using EdgeLinkScorePtr = std::shared_ptr<EdgeLinkScore>;
 
-  typedef SingleAssignmentProblemSolver<ConstNetworkEdgePtr, ConstNetworkEdgePtr> Saps;
+  using Saps = SingleAssignmentProblemSolver<ConstNetworkEdgePtr, ConstNetworkEdgePtr>;
 
   /// [v2]
-  typedef QHash<ConstNetworkEdgePtr, QList<EdgeLinkScorePtr>> EdgeMatchScoreMap;
+  using EdgeMatchScoreMap = QHash<ConstNetworkEdgePtr, QList<EdgeLinkScorePtr>>;
   /// [v2][v1]
-  typedef QHash<ConstNetworkVertexPtr, QHash<ConstNetworkVertexPtr, double>> VertexScoreMap;
+  using VertexScoreMap = QHash<ConstNetworkVertexPtr, QHash<ConstNetworkVertexPtr, double>>;
 
   IndexedEdgeMatchSetPtr _edgeMatches;
   EdgeMatchScoreMap _edge2Scores;
@@ -153,8 +153,8 @@ private:
 
 };
 
-typedef std::shared_ptr<SingleSidedNetworkMatcher> SingleSidedNetworkMatcherPtr;
-typedef std::shared_ptr<const SingleSidedNetworkMatcher> ConstSingleSidedNetworkMatcherPtr;
+using SingleSidedNetworkMatcherPtr = std::shared_ptr<SingleSidedNetworkMatcher>;
+using ConstSingleSidedNetworkMatcherPtr = std::shared_ptr<const SingleSidedNetworkMatcher>;
 
 // not implemented
 bool operator<(ConstSingleSidedNetworkMatcherPtr, ConstSingleSidedNetworkMatcherPtr);

@@ -74,7 +74,7 @@ private:
 
 };
 
-typedef std::shared_ptr<PoiRfClassifier> PoiRfClassifierPtr;
+using PoiRfClassifierPtr = std::shared_ptr<PoiRfClassifier>;
 
 }
 

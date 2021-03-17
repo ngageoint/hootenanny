@@ -239,8 +239,8 @@ private:
   QList<EdgeEntry> _edges;
 };
 
-typedef std::shared_ptr<EdgeString> EdgeStringPtr;
-typedef std::shared_ptr<const EdgeString> ConstEdgeStringPtr;
+using EdgeStringPtr = std::shared_ptr<EdgeString>;
+using ConstEdgeStringPtr = std::shared_ptr<const EdgeString>;
 
 // not implemented
 bool operator<(ConstEdgeStringPtr, ConstEdgeStringPtr);

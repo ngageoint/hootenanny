@@ -79,7 +79,7 @@ using namespace std;
 namespace hoot
 {
 
-typedef boost::adjacency_list<
+using TagGraph = boost::adjacency_list<
   // Use listS for storing VertexList -- faster, but not as space efficient (no biggie)
   boost::listS,
   // use vecS for storing OutEdgeList -- faster for traversal, but slower to build (no biggie)
@@ -88,10 +88,10 @@ typedef boost::adjacency_list<
   boost::directedS,
   SchemaVertex,
   TagEdge
-> TagGraph;
+>;
 
-typedef boost::graph_traits<TagGraph>::vertex_descriptor VertexId;
-typedef boost::graph_traits<TagGraph>::edge_descriptor EdgeId;
+using VertexId = boost::graph_traits<TagGraph>::vertex_descriptor;
+using EdgeId = boost::graph_traits<TagGraph>::edge_descriptor;
 
 SchemaVertex empty;
 
@@ -920,7 +920,7 @@ private:
   HashMap<VertexId, VertexId> _parents;
   QList<pair<QRegExp, VertexId>> _regexKeys;
   HashMap<pair<VertexId, VertexId>, bool> _isAncestorCache;
-  typedef HashMap<VertexId, vector<pair<VertexId, double>>> VertexToScoreCache;
+  using VertexToScoreCache = HashMap<VertexId, vector<pair<VertexId, double>>>;
   VertexToScoreCache _vertexToScoresCache;
 
   TagGraph _graph;

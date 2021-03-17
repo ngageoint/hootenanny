@@ -122,7 +122,7 @@ public:
   virtual int getNumChanges() const { return 0; }
 };
 
-typedef std::shared_ptr<ChangesetProvider> ChangesetProviderPtr;
+using ChangesetProviderPtr = std::shared_ptr<ChangesetProvider>;
 
 }
 

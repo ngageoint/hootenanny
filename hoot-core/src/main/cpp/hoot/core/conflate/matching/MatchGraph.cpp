@@ -67,12 +67,12 @@ class MatchEdge
 {
 public:
 
-  typedef enum
+  enum MatchType
   {
     AssociatedWith,
     MatchWith,
     InvalidMatch
-  } MatchType;
+  };
 
   MatchEdge() : match(nullptr), type(InvalidMatch) { }
   MatchEdge(ConstMatchPtr m, MatchType t) : match(m), type(t) { }
@@ -91,7 +91,7 @@ public:
   ElementId eid;
 };
 
-typedef boost::adjacency_list<
+using MatchBoostGraph = boost::adjacency_list<
   // Use listS for storing VertexList -- faster, but not as space efficient (no biggie)
   boost::listS,
   // use vecS for storing OutEdgeList -- faster for traversal, but slower to build (no biggie)
@@ -99,11 +99,10 @@ typedef boost::adjacency_list<
   // Our graph is undirected
   boost::undirectedS,
   MatchVertex,
-  MatchEdge
-> MatchBoostGraph;
+  MatchEdge>;
 
-typedef boost::graph_traits<MatchBoostGraph>::vertex_descriptor MatchVertexId;
-typedef boost::graph_traits<MatchBoostGraph>::edge_descriptor MatchEdgeId;
+using MatchVertexId = boost::graph_traits<MatchBoostGraph>::vertex_descriptor;
+using MatchEdgeId = boost::graph_traits<MatchBoostGraph>::edge_descriptor;
 
 class MatchGraphInternal
 {

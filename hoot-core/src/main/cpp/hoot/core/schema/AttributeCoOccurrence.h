@@ -41,7 +41,7 @@ class AttributeCoOccurrence
 {
 public:
 
-  typedef HashMap<QString, HashMap<QString, int>> CoOccurrenceHash;
+  using CoOccurrenceHash = HashMap<QString, HashMap<QString, int>>;
 
   AttributeCoOccurrence() = default;
 

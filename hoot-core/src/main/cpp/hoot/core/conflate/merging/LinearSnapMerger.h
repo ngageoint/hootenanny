@@ -109,7 +109,7 @@ private:
   void _updateScrapParent(const OsmMapPtr& map, long id, const ElementPtr& scrap);
 };
 
-typedef std::shared_ptr<LinearSnapMerger> LinearSnapMergerPtr;
+using LinearSnapMergerPtr = std::shared_ptr<LinearSnapMerger>;
 
 }
 

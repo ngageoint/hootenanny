@@ -412,8 +412,8 @@ protected:
   void resetIterator() override;
 };
 
-typedef std::shared_ptr<OsmMap> OsmMapPtr;
-typedef std::shared_ptr<const OsmMap> ConstOsmMapPtr;
+using OsmMapPtr = std::shared_ptr<OsmMap>;
+using ConstOsmMapPtr = std::shared_ptr<const OsmMap>;
 
 template<class T>
 void addElements(T it, T end)

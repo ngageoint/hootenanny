@@ -67,7 +67,7 @@ private:
   // ** Using this one, fast, low memory and I don't have to worry about int overflow **
   // HashMap<QString, long>   1.069GB   19.4sec
   // HashMap<QString, int>    1.069GB   19.2sec
-  typedef HashMap<QString, long> WeightHash;
+  using WeightHash = HashMap<QString, long>;
   mutable WeightHash _weights;
   long _count;
   QRegExp _nonWord;

@@ -243,8 +243,8 @@ protected:
   mutable geos::geom::Envelope _cachedEnvelope;
 };
 
-typedef std::shared_ptr<Element> ElementPtr;
-typedef std::shared_ptr<const Element> ConstElementPtr;
+using ElementPtr = std::shared_ptr<Element>;
+using ConstElementPtr = std::shared_ptr<const Element>;
 
 }
 
