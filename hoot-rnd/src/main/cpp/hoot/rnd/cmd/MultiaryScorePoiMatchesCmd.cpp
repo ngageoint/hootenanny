@@ -182,7 +182,7 @@ public:
     MapProjector::projectToPlanar(map);
 
     // Apparently, multiary will allow with > 1.0 review thresholds.
-    std::shared_ptr<const MatchThreshold> mt =
+    std::shared_ptr<MatchThreshold> mt =
       std::make_shared<MatchThreshold>(MatchThreshold(0.5, 0.5, 1.0, false));
     QString result = evaluateThreshold(map, output, mt, showConfusion);
 
