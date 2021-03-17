@@ -56,7 +56,7 @@ public:
    */
   virtual double aggregate(std::vector<double>& d) const = 0;
 
-  virtual QString toString() const { return ""; }
+  QString toString() const override { return ""; }
 };
 
 using ValueAggregatorPtr = std::shared_ptr<ValueAggregator>;

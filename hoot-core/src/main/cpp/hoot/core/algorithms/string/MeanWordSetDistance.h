@@ -52,24 +52,24 @@ public:
    */
   MeanWordSetDistance(StringDistancePtr d, double portion = 1.0);
   MeanWordSetDistance();
-  virtual ~MeanWordSetDistance() = default;
+  ~MeanWordSetDistance() = default;
 
   static QString className() { return "hoot::MeanWordSetDistance"; }
 
-  virtual double compare(const QString& s1, const QString& s2) const override;
+  double compare(const QString& s1, const QString& s2) const override;
 
-  virtual void setConfiguration(const Settings& conf) { _tokenizer.setConfiguration(conf); }
+  void setConfiguration(const Settings& conf) override { _tokenizer.setConfiguration(conf); }
 
-  virtual void setStringDistance(const StringDistancePtr &sd) { _d = sd; }
+  void setStringDistance(const StringDistancePtr &sd) override { _d = sd; }
 
-  virtual QString toString() const override
+  QString toString() const override
   { return QString("MeanWordSet %1 %2").arg(_p).arg(_d->toString()); }
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
-  virtual QString getDescription() const override
+  QString getDescription() const override
   { return "Returns a score based on the mean distance between two sets of words"; }
 
 private:

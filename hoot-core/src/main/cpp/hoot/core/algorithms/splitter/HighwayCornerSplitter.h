@@ -57,33 +57,33 @@ public:
 
   HighwayCornerSplitter();
   HighwayCornerSplitter(const std::shared_ptr<OsmMap>& map);
-  virtual ~HighwayCornerSplitter() = default;
+  ~HighwayCornerSplitter() = default;
 
-  virtual void apply(std::shared_ptr<OsmMap>& map) override;
+  void apply(std::shared_ptr<OsmMap>& map) override;
 
   static void splitCorners(const std::shared_ptr<OsmMap>& map);
 
   void splitCorners();
 
-  virtual QString getDescription() const override { return "Splits sharp road corners"; }
+  QString getDescription() const override { return "Splits sharp road corners"; }
   /**
    * Set the configuration for this object.
    */
-  virtual void setConfiguration(const Settings& conf) override;
+  void setConfiguration(const Settings& conf) override;
 
-  virtual QString getInitStatusMessage() const { return "Splitting sharp road corners..."; }
+  QString getInitStatusMessage() const override { return "Splitting sharp road corners..."; }
 
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   { return "Split " + QString::number(_numAffected) + " road corners"; }
 
   /**
    * @see FilteredByGeometryTypeCriteria
    */
-  virtual QStringList getCriteria() const;
+  QStringList getCriteria() const override;
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

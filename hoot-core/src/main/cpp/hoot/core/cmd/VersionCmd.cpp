@@ -101,11 +101,11 @@ public:
 
   VersionCmd() = default;
 
-  virtual QString getName() const override { return "version"; }
+  QString getName() const override { return "version"; }
 
-  virtual QString getDescription() const override { return "Displays version information"; }
+  QString getDescription() const override { return "Displays version information"; }
 
-  virtual int runSimple(QStringList& args) override
+  int runSimple(QStringList& args) override
   {
     if (!args.empty())
     {

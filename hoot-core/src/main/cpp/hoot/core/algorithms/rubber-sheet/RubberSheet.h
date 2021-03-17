@@ -77,22 +77,22 @@ public:
   };
 
   RubberSheet();
-  virtual ~RubberSheet() = default;
+  ~RubberSheet() = default;
 
   RubberSheet* clone() const { return new RubberSheet(*this); }
 
-  virtual void setConflateInfoCache(const std::shared_ptr<ConflateInfoCache>& cache)
+  void setConflateInfoCache(const std::shared_ptr<ConflateInfoCache>& cache) override
   { _conflateInfoCache = cache; }
 
   /**
    * @see OsmMapOperation
    */
-  virtual void apply(std::shared_ptr<OsmMap>& map) override;
+  void apply(std::shared_ptr<OsmMap>& map) override;
 
   /**
    * @see Configurable
    */
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
   /**
    * Applies a perviously calculated or loaded transform to the specified map
@@ -147,26 +147,26 @@ public:
    void setMaxAllowedWays(int max) { _maxAllowedWays = max; }
    void setCriteria(const QStringList& criteria, OsmMapPtr map = OsmMapPtr());
 
-   virtual QString getDescription() const override { return "Applies rubber sheeting to a map"; }
+   QString getDescription() const override { return "Applies rubber sheeting to a map"; }
 
    /**
     * @see FilteredByGeometryTypeCriteria
     */
-   virtual QStringList getCriteria() const;
+   QStringList getCriteria() const override;
 
-   virtual QString getName() const { return className(); }
+   QString getName() const override { return className(); }
 
-   virtual QString getClassName() const override { return className(); }
-
-   /**
-    * @see OperationStatus
-    */
-   virtual QString getInitStatusMessage() const override { return "Rubbersheeting data..."; }
+   QString getClassName() const override { return className(); }
 
    /**
     * @see OperationStatus
     */
-   virtual QString getCompletedStatusMessage() const override
+   QString getInitStatusMessage() const override { return "Rubbersheeting data..."; }
+
+   /**
+    * @see OperationStatus
+    */
+   QString getCompletedStatusMessage() const override
    {
      return
        "Rubbersheeted " + StringUtils::formatLargeNumber(_numAffected) + " / " +

@@ -55,9 +55,9 @@ public:
 
   CompareCmd() = default;
 
-  virtual QString getName() const override { return "compare"; }
+  QString getName() const override { return "compare"; }
 
-  virtual QString getDescription() const override { return "Compares maps using metrics"; }
+  QString getDescription() const override { return "Compares maps using metrics"; }
 
   int compareMaps(QString in1, QString in2, QString out)
   {
@@ -153,7 +153,7 @@ public:
     return result;
   }
 
-  virtual int runSimple(QStringList& args) override
+  int runSimple(QStringList& args) override
   {
     QElapsedTimer timer;
     timer.start();

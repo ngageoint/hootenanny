@@ -68,7 +68,7 @@ public:
 
   static const MostEnglishNamePtr& getInstance();
 
-  virtual ~MostEnglishName() = default;
+  ~MostEnglishName() = default;
 
   /**
    * Returns the most English name tag value from a set of tags
@@ -87,7 +87,7 @@ public:
    */
   double scoreName(const QString& text);
 
-  void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
   /**
    * Determines if a single input is in the English dictionary

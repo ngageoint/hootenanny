@@ -47,11 +47,11 @@ public:
 
   TaskGridCmd() = default;
 
-  virtual QString getName() const override { return "task-grid"; }
+  QString getName() const override { return "task-grid"; }
 
-  virtual QString getDescription() const override { return "Creates a task grid covering a map"; }
+  QString getDescription() const override { return "Creates a task grid covering a map"; }
 
-  virtual int runSimple(QStringList& args) override
+  int runSimple(QStringList& args) override
   {
     if (args.contains("--uniform") && args.contains("--node-density"))
     {

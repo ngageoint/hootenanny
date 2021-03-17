@@ -53,7 +53,7 @@ class PertyTestRunner : public Configurable
 public:
 
   PertyTestRunner();
-  virtual ~PertyTestRunner() = default;
+  ~PertyTestRunner() = default;
 
   /**
     * Runs a PERTY test
@@ -64,7 +64,7 @@ public:
   QList<std::shared_ptr<const PertyTestRunResult>> runTest(const QString& referenceMapInputPath,
                                                            const QString& outputPath);
 
-  virtual void setConfiguration(const Settings& conf) { _settings = conf; }
+  void setConfiguration(const Settings& conf) override { _settings = conf; }
 
   /**
     Sets the number of PERTY test runs

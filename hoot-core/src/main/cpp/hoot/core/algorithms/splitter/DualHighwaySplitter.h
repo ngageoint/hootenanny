@@ -64,22 +64,22 @@ public:
   DualHighwaySplitter();
   DualHighwaySplitter(const std::shared_ptr<const OsmMap>& map, DrivingSide drivingSide,
                       Meters splitSize);
-  virtual ~DualHighwaySplitter() = default;
+  ~DualHighwaySplitter() = default;
 
   std::shared_ptr<OsmMap> splitAll();
 
   static std::shared_ptr<OsmMap> splitAll(const std::shared_ptr<const OsmMap>& map,
                                           DrivingSide drivingSide, Meters defaultSplitSize);
 
-  virtual void apply(std::shared_ptr<OsmMap>& map);
+  void apply(std::shared_ptr<OsmMap>& map) override;
 
-  virtual QString getInitStatusMessage() const
+  QString getInitStatusMessage() const override
   { return "Splitting divided highways into two one way streets..."; }
 
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   { return "Split " + QString::number(_numAffected) + " divided highways"; }
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Splits all 'divided=yes' highways into two one way streets"; }
 
   /**
@@ -88,11 +88,11 @@ public:
    * This isn't actually using HighwayCriterion in the filtering, but for the purposes of reducing
    * unnecessary conflate ops we don't need to run it unless we're running road conflation.
    */
-  virtual QStringList getCriteria() const;
+  QStringList getCriteria() const override;
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

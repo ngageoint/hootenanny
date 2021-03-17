@@ -63,12 +63,12 @@ public:
   {
   }
 
-  virtual QString getName() const override { return "count"; }
+  QString getName() const override { return "count"; }
 
-  virtual QString getDescription() const override
+  QString getDescription() const override
   { return "Counts the number of features in a map that meet specified criteria"; }
 
-  virtual int runSimple(QStringList& args) override
+  int runSimple(QStringList& args) override
   {
     QElapsedTimer timer;
     timer.start();

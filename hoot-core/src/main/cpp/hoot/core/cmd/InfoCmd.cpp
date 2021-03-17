@@ -52,12 +52,12 @@ public:
 
   InfoCmd() = default;
 
-  virtual QString getName() const override { return "info"; }
+  QString getName() const override { return "info"; }
 
-  virtual QString getDescription() const override
+  QString getDescription() const override
   { return "Displays information about capabilities"; }
 
-  virtual int runSimple(QStringList& args) override
+  int runSimple(QStringList& args) override
   {
     // only allowing one option per command
     const QStringList supportedOpts = _getSupportedOptions();

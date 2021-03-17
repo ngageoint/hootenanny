@@ -49,11 +49,11 @@ public:
 
   TagInfoCmd() = default;
 
-  virtual QString getName() const override { return "tag-info"; }
+  QString getName() const override { return "tag-info"; }
 
-  virtual QString getDescription() const override { return "Displays tag information for a map"; }
+  QString getDescription() const override { return "Displays tag information for a map"; }
 
-  virtual int runSimple(QStringList& args) override
+  int runSimple(QStringList& args) override
   {
     QElapsedTimer timer;
     timer.start();

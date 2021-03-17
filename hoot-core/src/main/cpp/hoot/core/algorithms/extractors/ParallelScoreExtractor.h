@@ -42,13 +42,13 @@ public:
   static QString className() { return "hoot::ParallelScoreExtractor"; }
 
   ParallelScoreExtractor() = default;
-  virtual ~ParallelScoreExtractor() = default;
+  ~ParallelScoreExtractor() = default;
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Calculates how parallel ways are with each other"; }
 
 protected:

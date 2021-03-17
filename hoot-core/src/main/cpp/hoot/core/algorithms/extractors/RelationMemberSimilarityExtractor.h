@@ -50,19 +50,19 @@ class RelationMemberSimilarityExtractor : public FeatureExtractorBase
 public:
 
   RelationMemberSimilarityExtractor() = default;
-  virtual ~RelationMemberSimilarityExtractor() = default;
+  ~RelationMemberSimilarityExtractor() = default;
 
   static QString className() { return "hoot::RelationMemberSimilarityExtractor"; }
 
-  virtual QString getClassName() const { return className(); }
+  QString getClassName() const override { return className(); }
 
-  virtual double extract(const OsmMap& map, const std::shared_ptr<const Element>& target,
-    const std::shared_ptr<const Element>& candidate) const;
+  double extract(const OsmMap& map, const std::shared_ptr<const Element>& target,
+    const std::shared_ptr<const Element>& candidate) const override;
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Scores the similarity between two sets of relation members"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 };
 
 }
