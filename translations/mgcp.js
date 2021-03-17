@@ -847,6 +847,23 @@ mgcp = {
         tags.landuse = 'industrial';
         break;
 
+      case 'AD010': // Electric Power Plant
+        if (!tags['plant:output:electricity']) tags['plant:output:electricity'] = 'yes';
+        if (!tags.landuse) tags.landuse = 'industrial';
+
+        switch (attrs.PPC)
+        {
+          case undefined:
+            break;
+
+          case '5':
+            tags['plant:method'] = 'wind_turbine';
+            break;
+
+        }
+        break;
+
+
       case 'AF030': // Cooling Tower
         if (!tags['tower:type']) tags['tower:type'] = 'cooling';
         break;
@@ -1253,8 +1270,12 @@ mgcp = {
         switch (tags.industrial)
         {
           case undefined: // Built up Area
-            tags.use = 'industrial';
-            tags.landuse = 'built_up_area';
+            if (!tags.power)
+            {
+              tags.use = 'industrial';
+              tags.landuse = 'built_up_area';
+            }
+
             break;
 
           case 'oil':
@@ -1856,6 +1877,11 @@ mgcp = {
           if (!attrs.HYP) attrs.HYP = '998'; // Not Applicable for non-water wells
           if (!attrs.SCC) attrs.SCC = '998'; // Not Applicable for non-water wells
         }
+        break;
+
+      case 'AD010': // Electric Power Plants
+        if (notUsedTags['plant:output:electricity'] == 'yes') delete notUsedTags['plant:output:electricity'];
+        if (notUsedTags.landuse == 'industrial') delete notUsedTags.landuse;
         break;
 
       case 'AJ085': // Barn: Valid NFDD/NAS FCODE but not in the MGCP spec
