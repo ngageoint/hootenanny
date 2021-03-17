@@ -52,12 +52,12 @@ public:
 
   ChangesetApplyCmd() = default;
 
-  virtual QString getName() const override { return "changeset-apply"; }
+  QString getName() const override { return "changeset-apply"; }
 
-  virtual QString getDescription() const override
+  QString getDescription() const override
   { return "Writes an OSM changeset to an OSM data store"; }
 
-  virtual int runSimple(QStringList& args) override
+  int runSimple(QStringList& args) override
   {
     QElapsedTimer timer;
     timer.start();

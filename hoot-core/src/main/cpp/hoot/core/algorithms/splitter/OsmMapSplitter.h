@@ -52,9 +52,9 @@ class OsmMapSplitter : public Configurable
 public:
 
   OsmMapSplitter(const OsmMapPtr& map, const OsmMapPtr& tiles);
-  virtual ~OsmMapSplitter() = default;
+  ~OsmMapSplitter() = default;
 
-  virtual void setConfiguration(const Settings& conf) override;
+  void setConfiguration(const Settings& conf) override;
 
   void apply();
   /**

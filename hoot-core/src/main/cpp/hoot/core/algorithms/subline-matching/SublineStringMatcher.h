@@ -71,7 +71,7 @@ public:
    */
   virtual QString getSublineMatcherName() const = 0;
 
-  virtual QString toString() const override { return ""; }
+  QString toString() const override { return ""; }
 };
 
 using SublineStringMatcherPtr = std::shared_ptr<SublineStringMatcher>;

@@ -90,7 +90,7 @@ class BuildingPartPreMergeCollector : public QRunnable
 public:
 
   BuildingPartPreMergeCollector();
-  virtual ~BuildingPartPreMergeCollector() = default;
+  ~BuildingPartPreMergeCollector() = default;
 
   /**
    * Takes building part input from an input queue and adds groups it with a disjoint set as

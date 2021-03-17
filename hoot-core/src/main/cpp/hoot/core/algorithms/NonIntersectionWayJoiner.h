@@ -46,7 +46,7 @@ public:
   static QString className() { return "hoot::NonIntersectionWayJoiner"; }
 
   NonIntersectionWayJoiner() = default;
-  virtual ~NonIntersectionWayJoiner() = default;
+  ~NonIntersectionWayJoiner() = default;
 
   /**
    * Static method to join all joinable ways using NonIntersectionWayJoiner

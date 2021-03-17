@@ -58,11 +58,11 @@ public:
 
   PerturbCmd() = default;
 
-  virtual QString getName() const override { return "perturb"; }
+  QString getName() const override { return "perturb"; }
 
-  virtual QString getDescription() const override { return "Perturbs features in a map"; }
+  QString getDescription() const override { return "Perturbs features in a map"; }
 
-  virtual int runSimple(QStringList& args) override
+  int runSimple(QStringList& args) override
   {
     QElapsedTimer timer;
     timer.start();

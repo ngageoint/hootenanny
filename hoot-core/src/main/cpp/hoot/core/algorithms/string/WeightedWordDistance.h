@@ -51,21 +51,21 @@ public:
 
   WeightedWordDistance(StringDistance* d, WordWeightDictionary* dictionary);
   WeightedWordDistance();
-  virtual ~WeightedWordDistance() = default;
+  ~WeightedWordDistance() = default;
 
-  virtual double compare(const QString& s1, const QString& s2) const override;
+  double compare(const QString& s1, const QString& s2) const override;
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
-  virtual void setStringDistance(const StringDistancePtr& sd) { _d = sd; }
+  void setStringDistance(const StringDistancePtr& sd) override { _d = sd; }
 
-  virtual QString toString() const override { return "WeightedWordDistance " + _d->toString(); }
+  QString toString() const override { return "WeightedWordDistance " + _d->toString(); }
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
-  virtual QString getDescription() const override
+  QString getDescription() const override
   { return "Returns a score based on the best pairwise comparison within two sets of words"; }
 
 private:

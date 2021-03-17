@@ -64,14 +64,14 @@ public:
   static QString className() { return "hoot::PertyOp"; }
 
   PertyOp();
-  virtual ~PertyOp() = default;
+  ~PertyOp() = default;
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
   /**
    * Permute the map and then apply all "perty.ops" to the map as well.
    */
-  virtual void apply(std::shared_ptr<OsmMap>& map);
+  void apply(std::shared_ptr<OsmMap>& map) override;
 
   /**
    * Generates a map of all the grid offset vectors and permutes the given map.
@@ -101,11 +101,11 @@ public:
    */
   void setSystematicError(Meters sigmaX, Meters sigmaY) { _sigmaSx = sigmaX; _sigmaSy = sigmaY; }
 
-  virtual QString getDescription() const { return "Perturbs map data"; }
+  QString getDescription() const override { return "Perturbs map data"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

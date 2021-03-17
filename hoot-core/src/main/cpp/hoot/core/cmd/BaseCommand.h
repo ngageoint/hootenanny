@@ -49,7 +49,7 @@ public:
 
   virtual ~BaseCommand() = default;
 
-  virtual QString getHelp() const;
+  QString getHelp() const override;
 
   /**
    * Parses a comma delimited envelope in the form minx,miny,maxx,maxy.
@@ -60,7 +60,7 @@ public:
    * This method will pull out common arguments (e.g. --conf), convert the args to a QStringList
    * and pass it to runSimple.
    */
-  virtual int run(char* argv[], int argc);
+  int run(char* argv[], int argc) override;
 
   /**
    * This is the preferred method to override.

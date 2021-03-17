@@ -54,9 +54,9 @@ public:
   {
     _distance = -1;
   }
-  virtual ~VertexHausdorffFilter() = default;
+  ~VertexHausdorffFilter() = default;
 
-  virtual void filter_ro(const Coordinate* c)
+  void filter_ro(const Coordinate* c) override
   {
     std::shared_ptr<Point> pt(GeometryFactory::getDefaultInstance()->createPoint(*c));
     double d = _g.distance(pt.get());

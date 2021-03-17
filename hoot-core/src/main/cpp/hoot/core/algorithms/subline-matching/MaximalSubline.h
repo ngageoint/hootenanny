@@ -61,7 +61,7 @@ public:
   public:
 
     MatchCriteria() = default;
-    virtual ~MatchCriteria() = default;
+    ~MatchCriteria() = default;
 
     /**
      * Returns a match score for @a index1 way segment matches @a index2. The indexes refer to a
@@ -106,9 +106,9 @@ public:
 
     ThresholdMatchCriteria(Meters maxDistance, Radians maxAngleDiff);
 
-    virtual ~ThresholdMatchCriteria() = default;
+    ~ThresholdMatchCriteria() = default;
 
-    virtual double match(int index1, int index2) const;
+    double match(int index1, int index2) const override;
 
     void matchingSubline(geos::geom::LineSegment& a, geos::geom::LineSegment& b) const;
 
@@ -127,7 +127,7 @@ public:
    */
   MaximalSubline(MatchCriteria* criteria, Meters minSplitSize);
 
-  virtual ~MaximalSubline() = default;
+  ~MaximalSubline() = default;
 
   /**
    * This code is still experimental at best.

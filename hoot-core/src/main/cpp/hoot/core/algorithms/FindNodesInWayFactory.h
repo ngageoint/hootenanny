@@ -45,11 +45,11 @@ public:
 
   FindNodesInWayFactory() = default;
   FindNodesInWayFactory(const ConstWayPtr& w);
-  virtual ~FindNodesInWayFactory() = default;
+  ~FindNodesInWayFactory() = default;
 
   void addWay(const ConstWayPtr& w);
 
-  virtual NodePtr createNode(const OsmMapPtr& map, const geos::geom::Coordinate& c,
+  NodePtr createNode(const OsmMapPtr& map, const geos::geom::Coordinate& c,
     Status s, double circularError) override;
 
 private:

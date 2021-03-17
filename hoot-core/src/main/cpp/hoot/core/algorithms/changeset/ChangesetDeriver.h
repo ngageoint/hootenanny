@@ -51,7 +51,7 @@ public:
    */
   std::shared_ptr<OGRSpatialReference> getProjection() const override;
 
-  virtual ~ChangesetDeriver();
+  ~ChangesetDeriver();
 
   /**
    * @see ChangeSetProvider

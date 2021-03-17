@@ -54,11 +54,11 @@ public:
 
   ConvertCmd() = default;
 
-  virtual QString getName() const override { return "convert"; }
+  QString getName() const override { return "convert"; }
 
-  virtual QString getDescription() const override { return "Converts between map formats"; }
+  QString getDescription() const override { return "Converts between map formats"; }
 
-  virtual int runSimple(QStringList& args) override
+  int runSimple(QStringList& args) override
   {
     QElapsedTimer timer;
     timer.start();
