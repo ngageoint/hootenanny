@@ -603,7 +603,7 @@
         <tag k="hoot:actual" v="Review"/>
         <tag k="hoot:building:match" v="false"/>
         <tag k="hoot:expected" v="Miss"/>
-        <tag k="hoot:mismatch" v="1"/>
+        <tag k="hoot:mismatch" v="2"/>
         <tag k="hoot:status" v="3"/>
         <tag k="name" v="Convoluted Example"/>
         <tag k="uuid" v="{ee5efb97-18e3-5230-9800-62ed07d81cae}"/>
@@ -620,7 +620,7 @@
         <tag k="hoot:actual" v="Review"/>
         <tag k="hoot:building:match" v="false"/>
         <tag k="hoot:expected" v="Miss"/>
-        <tag k="hoot:mismatch" v="2"/>
+        <tag k="hoot:mismatch" v="1"/>
         <tag k="hoot:status" v="3"/>
         <tag k="name" v="Bad Pair"/>
         <tag k="uuid" v="{d1012bc9-92bc-5931-aac2-aa5702f42b8b}"/>
@@ -637,7 +637,7 @@
         <tag k="hoot:actual" v="Review"/>
         <tag k="hoot:building:match" v="false"/>
         <tag k="hoot:expected" v="Miss"/>
-        <tag k="hoot:mismatch" v="2"/>
+        <tag k="hoot:mismatch" v="1"/>
         <tag k="hoot:status" v="3"/>
         <tag k="name" v="Bad Pair"/>
         <tag k="uuid" v="{c254d8ab-3f1a-539f-91b7-98b485c5c129}"/>
@@ -654,7 +654,7 @@
         <tag k="hoot:actual" v="Review"/>
         <tag k="hoot:building:match" v="false"/>
         <tag k="hoot:expected" v="Miss"/>
-        <tag k="hoot:mismatch" v="2"/>
+        <tag k="hoot:mismatch" v="1"/>
         <tag k="hoot:status" v="3"/>
         <tag k="name" v="Bad Pair"/>
         <tag k="uuid" v="{fde621f3-c915-5f50-b521-49cb75c20337}"/>
