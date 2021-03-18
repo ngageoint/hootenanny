@@ -194,11 +194,11 @@ shared_ptr<MatchCreator> CalculateStatsOp::getMatchCreator(
     for (vector<CreatorDescription>::const_iterator descIt = desc.begin();
          descIt != desc.end(); ++descIt)
     {
-      QString testName = descIt->className;
+      QString testName = descIt->getClassName();
       LOG_VART(testName);
       if (0 == matchCreatorName.compare(testName))
       {
-        featureType = descIt->baseFeatureType;
+        featureType = descIt->getBaseFeatureType();
         LOG_VART(featureType);
         return (*matchIt);
       }
@@ -230,9 +230,6 @@ void CalculateStatsOp::_initStatCalc()
   // way. Admittedly, the way the stat total count is being calculated here is a very brittle way to
   // do it but haven't come up with a better way yet. This also could eventually be tied in with
   // progress reporting.
-
-  // TODO: This isn't quite right. Have recently seen 198 calculated as the total when 202 stats
-  // were actually run.
 
   const int numQuickStatCalcs = _quickStatData.size();
   LOG_VARD(numQuickStatCalcs);
@@ -368,26 +365,35 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
         "Conflatable Feature Count");
     LOG_VARD(matchCreators.size());
 
-    const double poisMergedIntoPolys =
-      _getApplyVisitor(
-        new SumNumericTagsVisitor(QStringList(MetadataTags::HootPoiPolygonPoisMerged())),
-        "POIs Merged Into Polygons");
-    const double poisMergedIntoPolysFromMap1 =
-      _getApplyVisitor(
-        new SumNumericTagsVisitor(QStringList(MetadataTags::HootPoiPolygonPoisMerged1())),
-        "Map 1 POIs Merged Into Polygons");
-    const double poisMergedIntoPolysFromMap2 =
-      _getApplyVisitor(
-        new SumNumericTagsVisitor(QStringList(MetadataTags::HootPoiPolygonPoisMerged2())),
-        "Map 2 POIs Merged Into Polygons");
-    //we need to add any pois that may have been merged into polygons by poi/poly into the total
-    //conflated feature count
-    conflatedFeatureCount += poisMergedIntoPolys;
+    double poisMergedIntoPolys = 0.0;
+    double poisMergedIntoPolysFromMap1 = 0.0;
+    double poisMergedIntoPolysFromMap2 = 0.0;
+    // TODO
+    if (_filter.isEmpty() ||
+        (_filter.contains(PoiPolygonPoiCriterion::className()) &&
+         _filter.contains(PoiPolygonPolyCriterion::className())))
+    {
+      poisMergedIntoPolys =
+        _getApplyVisitor(
+          new SumNumericTagsVisitor(QStringList(MetadataTags::HootPoiPolygonPoisMerged())),
+          "POIs Merged Into Polygons");
+      poisMergedIntoPolysFromMap1 =
+        _getApplyVisitor(
+          new SumNumericTagsVisitor(QStringList(MetadataTags::HootPoiPolygonPoisMerged1())),
+          "Map 1 POIs Merged Into Polygons");
+      poisMergedIntoPolysFromMap2 =
+        _getApplyVisitor(
+          new SumNumericTagsVisitor(QStringList(MetadataTags::HootPoiPolygonPoisMerged2())),
+          "Map 2 POIs Merged Into Polygons");
+      // We need to add any pois that may have been merged into polygons by poi/poly into the total
+      // Conflated feature count.
+      conflatedFeatureCount += poisMergedIntoPolys;
+    }
 
     if (_inputIsConflatedMapOutput)
     {
-      //The conflatable stat has no meaning on a conflated output map, since everything in the
-      //output is either conflated, passed through, marked for review, or left unconflated.
+      // The conflatable stat has no meaning on a conflated output map, since everything in the
+      // output is either conflated, passed through, marked for review, or left unconflated.
       conflatableFeatureCount = 0.0;
     }
     _addStat("Total Conflatable Features", conflatableFeatureCount);
@@ -412,8 +418,8 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
     }
     else
     {
-      //this stat has no meaning on a conflated output map (see total feature conflatable stat
-      //comment)
+      // This stat has no meaning on a conflated output map (see total feature conflatable stat
+      // comment).
       unconflatableFeatureCount = 0.0;
     }
     _addStat("Total Unconflatable Features", unconflatableFeatureCount);
@@ -443,16 +449,16 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
         LOG_VARD(conflatableFeatureCountForFeatureType);
       }
 
-      //Poi/poly is a special case in that it conflates two different types of features, so it must
-      //be treated with different logic than the rest of the single feature type conflation logic
-      //here and in MatchCandidateCountVisitor.
+      // Poi/poly conflation is a special case in that it conflates two different types of features,
+      // so it must be treated with different logic than the rest of the single feature type
+      // conflation logic here and in MatchCandidateCountVisitor.
       if (featureType == CreatorDescription::Polygon)
       {
         double conflatablePolyCount = 0.0;
         if (!_inputIsConflatedMapOutput)
         {
-          //see comment in _generateFeatureStats as to why ElementCountVisitor is used here
-          //instead of FeatureCountVisitor
+          // See comment in _generateFeatureStats as to why ElementCountVisitor is used here
+          // instead of FeatureCountVisitor.
           conflatablePolyCount =
             _applyVisitor(
               new PoiPolygonPolyCriterion(), new ElementCountVisitor(),
@@ -464,8 +470,8 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
         double conflatablePoiPolyPoiCount = 0.0;
         if (!_inputIsConflatedMapOutput)
         {
-          //see comment in _generateFeatureStats as to why ElementCountVisitor is used here
-          //instead of FeatureCountVisitor
+          // See comment in _generateFeatureStats as to why ElementCountVisitor is used here
+          // instead of FeatureCountVisitor.
           conflatablePoiPolyPoiCount =
             _applyVisitor(
               new PoiPolygonPoiCriterion(), new ElementCountVisitor(),
@@ -511,20 +517,24 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
     for (QMap<CreatorDescription::BaseFeatureType, double>::const_iterator it =
            _conflatableFeatureCounts.begin(); it != _conflatableFeatureCounts.end(); ++it)
     {
-      const QString featureType = CreatorDescription::baseFeatureTypeToString(it.key());
-      if (!_featureTypesToSkip.contains(featureType, Qt::CaseInsensitive))
+      CreatorDescription::BaseFeatureType featureType = it.key();
+      const QString featureTypeStr = CreatorDescription::baseFeatureTypeToString(featureType);
+      if (!_featureTypesToSkip.contains(featureTypeStr, Qt::CaseInsensitive))
       {
-        _generateFeatureStats(it.key(), it.value(),
-                              CreatorDescription::getFeatureCalcType(it.key()),
-                              CreatorDescription::getElementCriterion(it.key(), map),
-                              poisMergedIntoPolys, poisMergedIntoPolysFromMap1,
-                              poisMergedIntoPolysFromMap2);
+        if (_filter.isEmpty() ||
+            _filter.contains(CreatorDescription::getElementCriterionName(featureType)))
+        {
+          _generateFeatureStats(
+            featureType, it.value(), CreatorDescription::getFeatureCalcType(featureType),
+            CreatorDescription::getElementCriterion(featureType, map),
+            poisMergedIntoPolys, poisMergedIntoPolysFromMap1, poisMergedIntoPolysFromMap2);
+        }
       }
     }
 
     _addStat("Longest Tag", _getApplyVisitor(new LongestTagVisitor(), "Longest Tag"));
 
-    // TODO: move these into _generateFeatureStats
+    // TODO: move all of these into _generateFeatureStats
     LOG_DEBUG("config script: " + ConfigOptions().getStatsTranslateScript());
     if (ConfigOptions().getStatsTranslateScript() != "")
     {
@@ -539,42 +549,77 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
       _addStat("Translated Default Tags", tcv.getDefaultCount());
       _addStat("Translated Null Tags", tcv.getNullCount());
 
-      // TODO: make this more extensible
-      _addStat("Area Translated Populated Tag Percent",
-        _applyVisitor(
-          new AreaCriterion(map), new SchemaTranslatedTagCountVisitor(st),
-          "Translated Areas Count"));
-      _addStat("Building Translated Populated Tag Percent",
-        _applyVisitor(
-          new BuildingCriterion(map), new SchemaTranslatedTagCountVisitor(st),
-          "Translated Buildings Count"));
-      _addStat("Road Translated Populated Tag Percent",
-        _applyVisitor(
-          new HighwayCriterion(map), new SchemaTranslatedTagCountVisitor(st),
-          "Translated Roads Count"));
-      _addStat("POI Translated Populated Tag Percent",
-        _applyVisitor(
-          new PoiCriterion(), new SchemaTranslatedTagCountVisitor(st), "Translated POIs Count"));
-      _addStat("Polygon Conflatable POI Translated Populated Tag Percent",
-        _applyVisitor(
-          new PoiPolygonPoiCriterion(), new SchemaTranslatedTagCountVisitor(st),
-          "Translated POI/Polygon POIs Count"));
-      _addStat("Polygon Translated Populated Tag Percent",
-        _applyVisitor(
-          new PoiPolygonPolyCriterion(), new SchemaTranslatedTagCountVisitor(st),
-          "Translated POI/Polygon Polygons Count"));
-      _addStat("Power Line Translated Populated Tag Percent",
-        _applyVisitor(
-          new PowerLineCriterion(), new SchemaTranslatedTagCountVisitor(st),
-          "Translated Power Lines Count"));
-      _addStat("Railway Translated Populated Tag Percent",
-        _applyVisitor(
-          new RailwayCriterion(), new SchemaTranslatedTagCountVisitor(st),
-          "Translated Railways Count"));
-      _addStat("Waterway Translated Populated Tag Percent",
-        _applyVisitor(
-          new LinearWaterwayCriterion(), new SchemaTranslatedTagCountVisitor(st),
-          "Translated Waterways Count"));
+      if (_filter.isEmpty() || _filter.contains(AreaCriterion::className()))
+      {
+        _addStat(
+          "Area Translated Populated Tag Percent",
+          _applyVisitor(
+            new AreaCriterion(map), new SchemaTranslatedTagCountVisitor(st),
+            "Translated Areas Count"));
+      }
+      if (_filter.isEmpty() || _filter.contains(BuildingCriterion::className()))
+      {
+        _addStat(
+          "Building Translated Populated Tag Percent",
+          _applyVisitor(
+            new BuildingCriterion(map), new SchemaTranslatedTagCountVisitor(st),
+            "Translated Buildings Count"));
+      }
+      if (_filter.isEmpty() || _filter.contains(HighwayCriterion::className()))
+      {
+        _addStat(
+          "Road Translated Populated Tag Percent",
+          _applyVisitor(
+            new HighwayCriterion(map), new SchemaTranslatedTagCountVisitor(st),
+            "Translated Roads Count"));
+      }
+      if (_filter.isEmpty() || _filter.contains(PoiCriterion::className()))
+      {
+        _addStat(
+          "POI Translated Populated Tag Percent",
+          _applyVisitor(
+            new PoiCriterion(), new SchemaTranslatedTagCountVisitor(st), "Translated POIs Count"));
+      }
+      if (_filter.isEmpty() || _filter.contains(PoiPolygonPoiCriterion::className()))
+      {
+        _addStat(
+          "Polygon Conflatable POI Translated Populated Tag Percent",
+          _applyVisitor(
+            new PoiPolygonPoiCriterion(), new SchemaTranslatedTagCountVisitor(st),
+            "Translated POI/Polygon POIs Count"));
+      }
+      if (_filter.isEmpty() || _filter.contains(PoiPolygonPolyCriterion::className()))
+      {
+        _addStat(
+          "Polygon Translated Populated Tag Percent",
+          _applyVisitor(
+            new PoiPolygonPolyCriterion(), new SchemaTranslatedTagCountVisitor(st),
+            "Translated POI/Polygon Polygons Count"));
+      }
+      if (_filter.isEmpty() || _filter.contains(PowerLineCriterion::className()))
+      {
+        _addStat(
+          "Power Line Translated Populated Tag Percent",
+          _applyVisitor(
+            new PowerLineCriterion(), new SchemaTranslatedTagCountVisitor(st),
+            "Translated Power Lines Count"));
+      }
+      if (_filter.isEmpty() || _filter.contains(RailwayCriterion::className()))
+      {
+        _addStat(
+          "Railway Translated Populated Tag Percent",
+          _applyVisitor(
+            new RailwayCriterion(), new SchemaTranslatedTagCountVisitor(st),
+            "Translated Railways Count"));
+      }
+      if (_filter.isEmpty() || _filter.contains(LinearWaterwayCriterion::className()))
+      {
+        _addStat(
+          "Waterway Translated Populated Tag Percent",
+          _applyVisitor(
+            new LinearWaterwayCriterion(), new SchemaTranslatedTagCountVisitor(st),
+            "Translated Waterways Count"));
+      }
     }
     else
     {
@@ -755,7 +800,7 @@ double CalculateStatsOp::GetRequestedStatValue(
 bool CalculateStatsOp::_matchDescriptorCompare(
   const CreatorDescription& m1, const CreatorDescription& m2)
 {
-  return m1.className > m2.className;
+  return m1.getClassName() > m2.getClassName();
 }
 
 double CalculateStatsOp::_applyVisitor(

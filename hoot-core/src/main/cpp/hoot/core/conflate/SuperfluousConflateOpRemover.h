@@ -55,9 +55,10 @@ public:
   /**
    * Determines GeometryTypeCriterion compatible with conflate matches in the current configuration
    *
+   * @param addParents TODO
    * @return a list of GeometryTypeCriterion class names
    */
-  static QSet<QString> getMatchCreatorGeometryTypeCrits();
+  static QSet<QString> getMatchCreatorGeometryTypeCrits(const bool addParents = true);
 
 private:
 

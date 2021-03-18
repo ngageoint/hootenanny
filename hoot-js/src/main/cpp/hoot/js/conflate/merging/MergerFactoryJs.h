@@ -54,9 +54,9 @@ private:
 inline v8::Handle<v8::Value> toV8(const CreatorDescription& d)
 {
   v8::Handle<v8::Object> result = v8::Object::New(v8::Isolate::GetCurrent());
-  result->Set(toV8("className"), toV8(d.className));
-  result->Set(toV8("description"), toV8(d.description));
-  result->Set(toV8("experimental"), toV8(d.experimental));
+  result->Set(toV8("className"), toV8(d.getClassName()));
+  result->Set(toV8("description"), toV8(d.getDescription()));
+  result->Set(toV8("experimental"), toV8(d.getExperimental()));
   return result;
 }
 

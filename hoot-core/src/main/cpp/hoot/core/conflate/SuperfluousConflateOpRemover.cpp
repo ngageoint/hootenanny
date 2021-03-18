@@ -185,7 +185,7 @@ QStringList SuperfluousConflateOpRemover::_filterOutUnneededOps(
   return modifiedOps;
 }
 
-QSet<QString> SuperfluousConflateOpRemover::getMatchCreatorGeometryTypeCrits()
+QSet<QString> SuperfluousConflateOpRemover::getMatchCreatorGeometryTypeCrits(const bool addParents)
 {
   QSet<QString> matcherCrits;
 
@@ -230,33 +230,36 @@ QSet<QString> SuperfluousConflateOpRemover::getMatchCreatorGeometryTypeCrits()
       // add the crit
       matcherCrits.insert(critStr);
 
-      // also add any generic geometry crits the crit inherits from
-
-      const QStringList pointCrits =
-        GeometryTypeCriterion::getCriterionClassNamesByGeometryType(
-          GeometryTypeCriterion::GeometryType::Point);
-      LOG_VART(pointCrits);
-      if (pointCrits.contains(critStr))
+      if (addParents)
       {
-        matcherCrits.insert(PointCriterion::className());
-      }
+        // also add any generic geometry crits the crit inherits from
 
-      const QStringList lineCrits =
-        GeometryTypeCriterion::getCriterionClassNamesByGeometryType(
-          GeometryTypeCriterion::GeometryType::Line);
-      LOG_VART(lineCrits);
-      if (lineCrits.contains(critStr))
-      {
-        matcherCrits.insert(LinearCriterion::className());
-      }
+        const QStringList pointCrits =
+          GeometryTypeCriterion::getCriterionClassNamesByGeometryType(
+            GeometryTypeCriterion::GeometryType::Point);
+        LOG_VART(pointCrits);
+        if (pointCrits.contains(critStr))
+        {
+          matcherCrits.insert(PointCriterion::className());
+        }
 
-      const QStringList polyCrits =
-        GeometryTypeCriterion::getCriterionClassNamesByGeometryType(
-          GeometryTypeCriterion::GeometryType::Polygon);
-      LOG_VART(polyCrits);
-      if (polyCrits.contains(critStr))
-      {
-        matcherCrits.insert(PolygonCriterion::className());
+        const QStringList lineCrits =
+          GeometryTypeCriterion::getCriterionClassNamesByGeometryType(
+            GeometryTypeCriterion::GeometryType::Line);
+        LOG_VART(lineCrits);
+        if (lineCrits.contains(critStr))
+        {
+          matcherCrits.insert(LinearCriterion::className());
+        }
+
+        const QStringList polyCrits =
+          GeometryTypeCriterion::getCriterionClassNamesByGeometryType(
+            GeometryTypeCriterion::GeometryType::Polygon);
+        LOG_VART(polyCrits);
+        if (polyCrits.contains(critStr))
+        {
+          matcherCrits.insert(PolygonCriterion::className());
+        }
       }
     }
   }

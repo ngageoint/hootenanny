@@ -230,8 +230,9 @@ void ConflateExecutor::conflate(const QString& input1, const QString& input2, QS
   _stats.append(SingleStat("(Dubious) Read Inputs Bytes", inputBytes));
   _stats.append(SingleStat("(Dubious) Read Inputs Bytes per Second", inputBytes / elapsed));
 
+  // TODO
   const QSet<QString> matchCreatorCrits =
-    SuperfluousConflateOpRemover::getMatchCreatorGeometryTypeCrits();
+    SuperfluousConflateOpRemover::getMatchCreatorGeometryTypeCrits(false);
   CalculateStatsOp input1Cso(
     ElementCriterionPtr(new StatusCriterion(Status::Unknown1)), "input map 1");
   input1Cso.setFilter(matchCreatorCrits);
@@ -518,7 +519,8 @@ void ConflateExecutor::_writeStats(
     "Calculating output data statistics for: ..." + outputFileName.right(_maxFilePrintLength) +
     "...");
   CalculateStatsOp outputCso("output map", true);
-  outputCso.setFilter(SuperfluousConflateOpRemover::getMatchCreatorGeometryTypeCrits());
+  // TODO
+  outputCso.setFilter(SuperfluousConflateOpRemover::getMatchCreatorGeometryTypeCrits(false));
   outputCso.apply(map);
   QList<SingleStat> outputStats = outputCso.getStats();
   ConflateStatsHelper(input1Cso.getStats(), input2Cso.getStats(), outputCso.getStats())

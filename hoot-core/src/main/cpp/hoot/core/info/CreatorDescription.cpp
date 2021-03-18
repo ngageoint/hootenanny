@@ -29,6 +29,7 @@
 
 // hoot
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/criterion/AreaCriterion.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
 #include <hoot/core/criterion/CollectionRelationCriterion.h>
 #include <hoot/core/criterion/LinearCriterion.h>
@@ -46,29 +47,29 @@ namespace hoot
 {
 
 CreatorDescription::CreatorDescription() :
-experimental(),
-baseFeatureType(BaseFeatureType::Unknown),
-geometryType(GeometryTypeCriterion::GeometryType::Unknown)
+_experimental(false),
+_baseFeatureType(BaseFeatureType::Unknown),
+_geometryType(GeometryTypeCriterion::GeometryType::Unknown)
 {
 }
 
 CreatorDescription::CreatorDescription(const QString& className, const QString& description,
                                        bool experimental) :
-experimental(experimental),
-className(className),
-description(description),
-baseFeatureType(BaseFeatureType::Unknown),
-geometryType(GeometryTypeCriterion::GeometryType::Unknown)
+_experimental(experimental),
+_className(className),
+_description(description),
+_baseFeatureType(BaseFeatureType::Unknown),
+_geometryType(GeometryTypeCriterion::GeometryType::Unknown)
 {
 }
 
 CreatorDescription::CreatorDescription(const QString& className, const QString& description,
                                        BaseFeatureType featureType, bool experimental) :
-experimental(experimental),
-className(className),
-description(description),
-baseFeatureType(featureType),
-geometryType(GeometryTypeCriterion::GeometryType::Unknown)
+_experimental(experimental),
+_className(className),
+_description(description),
+_baseFeatureType(featureType),
+_geometryType(GeometryTypeCriterion::GeometryType::Unknown)
 {
 }
 
@@ -202,9 +203,42 @@ ElementCriterionPtr CreatorDescription::getElementCriterion(BaseFeatureType t, C
   }
 }
 
+QString CreatorDescription::getElementCriterionName(BaseFeatureType t)
+{
+  switch (t)
+  {
+    case POI:
+      return PoiCriterion::className();
+    case Highway:
+      return HighwayCriterion::className();
+    case Building:
+      return BuildingCriterion::className();
+    case Waterway:
+      return LinearWaterwayCriterion::className();
+    case PoiPolygonPOI:
+      return PoiPolygonPoiCriterion::className();
+    case Polygon:
+      return PolygonCriterion::className();
+    case Area:
+      return AreaCriterion::className(); // TODO: Is this right?
+    case Railway:
+      return RailwayCriterion::className();
+    case PowerLine:
+      return PowerLineCriterion::className();
+    case Point:
+      return PointCriterion::className();
+    case Line:
+      return LinearCriterion::className();
+    case CollectionRelation:
+      return CollectionRelationCriterion::className();
+    default:
+      return "";
+  }
+}
+
 QString CreatorDescription::toString() const
 {
-  return className + ";" + baseFeatureTypeToString(baseFeatureType);
+  return _className + ";" + baseFeatureTypeToString(_baseFeatureType);
 }
 
 }

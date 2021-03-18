@@ -77,18 +77,24 @@ public:
 
   CreatorDescription();
   CreatorDescription(const QString& className, const QString& description, bool experimental);
-  CreatorDescription(const QString& className, const QString& description,
-                     BaseFeatureType featureType, bool experimental);
+  CreatorDescription(
+    const QString& className, const QString& description, BaseFeatureType featureType,
+    bool experimental);
 
-  bool experimental;
-  QString className;
-  QString description;
-  BaseFeatureType baseFeatureType;
-  GeometryTypeCriterion::GeometryType geometryType;
-  QStringList matchCandidateCriteria;
-
+  /**
+   * TODO
+   *
+   * @param t
+   * @return
+   */
   static QString baseFeatureTypeToString(BaseFeatureType t);
 
+  /**
+   * TODO
+   *
+   * @param s
+   * @return
+   */
   static BaseFeatureType stringToBaseFeatureType(QString s);
 
   /*
@@ -99,12 +105,61 @@ public:
    * ElementCriterions for each script down in the ScriptMatchCreator class. SO, rather than
    * that - we'll just keep all of this feature type stuff grouped together in one place.
    */
+
+  /**
+   * TODO
+   *
+   * @param t
+   * @return
+   */
   static FeatureCalcType getFeatureCalcType(BaseFeatureType t);
 
+  /**
+   * TODO
+   *
+   * @param t
+   * @param map
+   * @return
+   */
   static std::shared_ptr<ElementCriterion> getElementCriterion(
     BaseFeatureType t, ConstOsmMapPtr map);
 
+  /**
+   * TODO
+   *
+   * @param t
+   * @param map
+   * @return
+   */
+  static QString getElementCriterionName(BaseFeatureType t);
+
   QString toString() const;
+
+  bool getExperimental() const { return _experimental; }
+  QString getClassName() const { return _className; }
+  QString getDescription() const { return _description; }
+  BaseFeatureType getBaseFeatureType() const { return _baseFeatureType; }
+  GeometryTypeCriterion::GeometryType getGeometryType() const { return _geometryType; }
+  QStringList getMatchCandidateCriteria() const { return _matchCandidateCriteria; }
+
+  void setExperimental(bool experimental) { _experimental = experimental; }
+  void setClassName(const QString& className) { _className = className; }
+  void setDescription(const QString& description) { _description = description; }
+  void setBaseFeatureType(const BaseFeatureType& baseFeatureType)
+  { _baseFeatureType = baseFeatureType; }
+  void setGeometryType(const GeometryTypeCriterion::GeometryType& geometryType)
+  { _geometryType = geometryType; }
+  void setMatchCandidateCriteria(const QStringList& matchCandidateCriteria)
+  { _matchCandidateCriteria = matchCandidateCriteria; }
+
+private:
+
+  bool _experimental;
+  QString _className;
+  QString _description;
+  BaseFeatureType _baseFeatureType;
+  GeometryTypeCriterion::GeometryType _geometryType;
+  QStringList _matchCandidateCriteria;
 };
 
 }
