@@ -44,12 +44,12 @@ public:
   static QString className() { return "hoot::HighwayRfClassifier"; }
 
   HighwayRfClassifier() = default;
-  virtual ~HighwayRfClassifier() = default;
+  ~HighwayRfClassifier() = default;
 
-  virtual MatchClassification classify(const ConstOsmMapPtr& map,
+  MatchClassification classify(const ConstOsmMapPtr& map,
     ElementId eid1, ElementId eid2, const WaySublineMatchString& match) override;
 
-  virtual std::map<QString, double> getFeatures(const ConstOsmMapPtr& m,
+  std::map<QString, double> getFeatures(const ConstOsmMapPtr& m,
     ElementId eid1, ElementId eid2, const WaySublineMatchString& match) const override;
 
 private:

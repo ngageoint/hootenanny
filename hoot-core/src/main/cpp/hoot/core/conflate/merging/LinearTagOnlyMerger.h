@@ -59,15 +59,14 @@ public:
     const std::set<std::pair<ElementId, ElementId>>& pairs,
     std::shared_ptr<PartialNetworkMerger> networkMerger);
 
-  virtual ~LinearTagOnlyMerger() = default;
+  ~LinearTagOnlyMerger() = default;
 
-  virtual QString getDescription() const
+  QString getDescription() const
   { return "Merges linear feature tags only with minimal geometry exceptions"; }
 
 protected:
 
-  virtual bool _mergePair(
-    const OsmMapPtr& map, ElementId eid1, ElementId eid2,
+  bool _mergePair(const OsmMapPtr& map, ElementId eid1, ElementId eid2,
     std::vector<std::pair<ElementId, ElementId>>& replaced) override;
 
 private:

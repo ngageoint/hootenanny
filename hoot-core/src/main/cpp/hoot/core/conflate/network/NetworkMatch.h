@@ -51,12 +51,12 @@ public:
     const ConstNetworkDetailsPtr& details, ConstEdgeMatchPtr edgeMatch,
     double score, ConstMatchThresholdPtr mt, double scoringFunctionMax,
     double scoringFunctionCurveMidpointX, double scoringFunctionCurveSteepness);
-  virtual ~NetworkMatch() = default;
+  ~NetworkMatch() = default;
 
   /**
    * Classifies the match and returns a classification object.
    */
-  virtual const MatchClassification& getClassification() const override { return _classification; }
+  const MatchClassification& getClassification() const override { return _classification; }
 
   ConstNetworkDetailsPtr getNetworkDetails() const { return _details; }
 
@@ -66,24 +66,23 @@ public:
    * This may require modification if the network matcher ever matches things besides lines. E.g.
    * river polygons.
    */
-  virtual MatchMembers getMatchMembers() const override { return MatchMembers::Polyline; }
+  MatchMembers getMatchMembers() const override { return MatchMembers::Polyline; }
 
   /**
    * As new network matching routines are introduced this will need to be modified. E.g. Railway
    */
-  virtual QString getName() const override { return HighwayMatch::MATCH_NAME; }
+  QString getName() const override { return HighwayMatch::MATCH_NAME; }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
-  virtual double getScore() const override { return getProbability(); }
+  double getScore() const override { return getProbability(); }
 
-  virtual double getProbability() const override { return _classification.getMatchP(); }
+  double getProbability() const override { return _classification.getMatchP(); }
 
   /**
    * Returns true if any of the elements in this are also in other's match pairs.
    */
-  virtual bool isConflicting(
-    const ConstMatchPtr& other, const ConstOsmMapPtr& map,
+  bool isConflicting(const ConstMatchPtr& other, const ConstOsmMapPtr& map,
     const QHash<QString, ConstMatchPtr>& matches = QHash<QString, ConstMatchPtr>()) const override;
 
   /**
@@ -91,23 +90,23 @@ public:
    */
   bool isPartialMatch() const { return _edgeMatch->containsPartial(); }
 
-  virtual bool isWholeGroup() const override { return true; }
+  bool isWholeGroup() const override { return true; }
 
   /**
    * @see Match
    */
-  virtual std::set<std::pair<ElementId, ElementId>> getMatchPairs() const override
+  std::set<std::pair<ElementId, ElementId>> getMatchPairs() const override
   { return _pairs; }
 
-  virtual QString toString() const override;
+  QString toString() const override;
 
-  virtual MatchType getType() const override { return _threshold->getType(getClassification()); }
+  MatchType getType() const override { return _threshold->getType(getClassification()); }
 
   bool isVerySimilarTo(const NetworkMatch* other) const;
 
   bool contains(const NetworkMatch* other) const;
 
-  virtual QString getDescription() const override
+  QString getDescription() const override
   { return "Matches roads with the Network Algorithm"; }
 
 protected:

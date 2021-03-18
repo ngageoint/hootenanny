@@ -52,7 +52,7 @@ public:
   static const long DEBUG_ID = 0;
 
   ElementComparer();
-  virtual ~ElementComparer() = default;
+  ~ElementComparer() = default;
 
   /**
    * Determines if two elements are the same
@@ -72,7 +72,7 @@ public:
    * This only needs to be set if _ignoreElementId = true. The reason a const map isn't used here
    * is for the same reason isSame doesn't take in const elements.
    */
-  virtual void setOsmMap(OsmMap* map) { _map = map->shared_from_this(); }
+  void setOsmMap(OsmMap* map) override { _map = map->shared_from_this(); }
 
   /**
    * Wrapper around ElementHashVisitor::toHashString

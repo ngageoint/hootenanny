@@ -61,7 +61,7 @@ public:
            QString user = ElementData::USER_EMPTY, long uid = ElementData::UID_EMPTY,
            bool visible = ElementData::VISIBLE_EMPTY);
 
-  virtual ~Relation() = default;
+  ~Relation() = default;
 
   void addElement(const QString& role, const std::shared_ptr<const Element>& e);
   void addElement(const QString& role, ElementType t, long id);
@@ -72,7 +72,7 @@ public:
    */
   void clear() override;
 
-  Element* clone() const { return new Relation(*this); }
+  Element* clone() const override { return new Relation(*this); }
 
   /**
    * Returns true if this relation contains the specified ElementId. This does not recursively
@@ -191,7 +191,7 @@ public:
    */
   void setType(const QString& type);
 
-  QString toString() const;
+  QString toString() const override;
 
   /**
    * @see Element

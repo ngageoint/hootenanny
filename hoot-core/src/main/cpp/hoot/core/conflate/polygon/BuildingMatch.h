@@ -55,38 +55,37 @@ public:
   BuildingMatch(const ConstMatchThresholdPtr& mt);
   BuildingMatch(const ConstOsmMapPtr& map, const std::shared_ptr<const BuildingRfClassifier>& rf,
                 const ElementId& eid1, const ElementId& eid2, const ConstMatchThresholdPtr& mt);
-  virtual ~BuildingMatch() = default;
+  ~BuildingMatch() = default;
 
-  virtual const MatchClassification& getClassification() const override { return _p; }
+  const MatchClassification& getClassification() const override { return _p; }
 
-  virtual std::map<QString, double> getFeatures(const ConstOsmMapPtr& m) const override;
+  std::map<QString, double> getFeatures(const ConstOsmMapPtr& m) const override;
 
-  virtual MatchMembers getMatchMembers() const override { return MatchMembers::Polygon; }
+  MatchMembers getMatchMembers() const override { return MatchMembers::Polygon; }
 
-  virtual QString getName() const override { return MATCH_NAME; }
+  QString getName() const override { return MATCH_NAME; }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
-  virtual double getProbability() const override;
+  double getProbability() const override;
 
   /**
    * Building matches never conflict other building matches, but conflict with everything else.
    */
-  virtual bool isConflicting(
-    const ConstMatchPtr& other, const ConstOsmMapPtr& map,
+  bool isConflicting(const ConstMatchPtr& other, const ConstOsmMapPtr& map,
     const QHash<QString, ConstMatchPtr>& matches = QHash<QString, ConstMatchPtr>()) const override;
 
   /**
    * Simply returns the two elements that were matched.
    */
-  virtual std::set<std::pair<ElementId, ElementId>> getMatchPairs() const override;
+  std::set<std::pair<ElementId, ElementId>> getMatchPairs() const override;
 
-  virtual QString toString() const override;
+  QString toString() const override;
 
-  virtual QString explain() const override { return _explainText; }
-  virtual void setExplain(const QString& explainText) override { _explainText = explainText; }
+  QString explain() const override { return _explainText; }
+  void setExplain(const QString& explainText) override { _explainText = explainText; }
 
-  virtual QString getDescription() const override { return "Matches buildings"; }
+  QString getDescription() const override { return "Matches buildings"; }
 
 private:
 

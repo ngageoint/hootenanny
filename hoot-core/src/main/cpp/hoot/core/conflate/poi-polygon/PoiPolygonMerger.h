@@ -61,17 +61,17 @@ public:
   static QString className() { return "hoot::PoiPolygonMerger"; }
 
   PoiPolygonMerger();
-  virtual ~PoiPolygonMerger() = default;
+  ~PoiPolygonMerger() = default;
   /**
    * Constructed with a set of element matching pairs. The pairs are generally Unknown1 as first
    * and Unknown2 as second.
    */
   explicit PoiPolygonMerger(const std::set<std::pair<ElementId, ElementId>>& pairs);
 
-  virtual void apply(const OsmMapPtr& map,
-                     std::vector<std::pair<ElementId, ElementId>>& replaced) override;
+  void apply(const OsmMapPtr& map,
+             std::vector<std::pair<ElementId, ElementId>>& replaced) override;
 
-  virtual QString toString() const override;
+  QString toString() const override;
 
   /**
    * Utility method for merging a single POI with a single polygon
@@ -83,18 +83,18 @@ public:
    */
   static ElementId mergeOnePoiAndOnePolygon(OsmMapPtr map);
 
-  virtual QString getDescription() const { return "Merges POIs into polygons"; }
+  QString getDescription() const override { return "Merges POIs into polygons"; }
 
   void setTagMergerClass(const QString& className) { _tagMergerClass = className; }
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 protected:
 
-  virtual PairsSet& _getPairs() override { return _pairs; }
-  virtual const PairsSet& _getPairs() const override { return _pairs; }
+  PairsSet& _getPairs() override { return _pairs; }
+  const PairsSet& _getPairs() const override { return _pairs; }
 
 private:
 

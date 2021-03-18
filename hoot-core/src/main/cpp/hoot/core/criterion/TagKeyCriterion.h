@@ -50,22 +50,22 @@ public:
   explicit TagKeyCriterion(QString key);
   TagKeyCriterion(QString key1, QString key2);
   TagKeyCriterion(QString key1, QString key2, QString key3);
-  virtual ~TagKeyCriterion() = default;
+  ~TagKeyCriterion() = default;
 
   void addKey(QString key);
 
-  virtual bool isSatisfied(const ConstElementPtr& e) const override;
+  bool isSatisfied(const ConstElementPtr& e) const override;
 
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new TagKeyCriterion(_keys)); }
+  ElementCriterionPtr clone() override { return ElementCriterionPtr(new TagKeyCriterion(_keys)); }
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Identifies elements that contain a specified tag key"; }
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 protected:
 

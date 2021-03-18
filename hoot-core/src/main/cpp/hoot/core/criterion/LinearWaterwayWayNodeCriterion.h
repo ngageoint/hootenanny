@@ -41,17 +41,17 @@ public:
 
   LinearWaterwayWayNodeCriterion();
   LinearWaterwayWayNodeCriterion(ConstOsmMapPtr map);
-  virtual ~LinearWaterwayWayNodeCriterion() = default;
+  ~LinearWaterwayWayNodeCriterion() = default;
 
-  virtual ElementCriterionPtr clone() override
+  ElementCriterionPtr clone() override
   { return ElementCriterionPtr(new LinearWaterwayWayNodeCriterion(_map)); }
 
-  virtual QString getDescription() const override
+  QString getDescription() const override
   { return "Identifies nodes belonging to linear bodies of water"; }
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 };
 
 }

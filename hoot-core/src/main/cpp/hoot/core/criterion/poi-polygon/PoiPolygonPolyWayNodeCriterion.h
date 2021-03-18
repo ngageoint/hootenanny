@@ -41,17 +41,17 @@ public:
 
   PoiPolygonPolyWayNodeCriterion();
   PoiPolygonPolyWayNodeCriterion(ConstOsmMapPtr map);
-  virtual ~PoiPolygonPolyWayNodeCriterion() = default;
+  ~PoiPolygonPolyWayNodeCriterion() = default;
 
-  virtual ElementCriterionPtr clone()
+  ElementCriterionPtr clone() override
   { return ElementCriterionPtr(new PoiPolygonPolyWayNodeCriterion(_map)); }
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Identifies nodes belonging to polygons as identified by POI/Polygon Conflation"; }
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 };
 
 }

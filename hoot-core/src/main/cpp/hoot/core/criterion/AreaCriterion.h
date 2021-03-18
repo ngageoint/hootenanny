@@ -46,27 +46,27 @@ public:
 
   AreaCriterion() = default;
   AreaCriterion(ConstOsmMapPtr map) : _map(map) { }
-  virtual ~AreaCriterion() = default;
+  ~AreaCriterion() = default;
 
-  virtual bool isSatisfied(const ConstElementPtr& e) const override;
+  bool isSatisfied(const ConstElementPtr& e) const override;
 
   bool isSatisfied(const Tags& tags, const ElementType& elementType) const;
 
-  virtual GeometryType getGeometryType() const { return GeometryType::Polygon; }
+  GeometryType getGeometryType() const override { return GeometryType::Polygon; }
 
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new AreaCriterion(_map)); }
+  ElementCriterionPtr clone() override { return ElementCriterionPtr(new AreaCriterion(_map)); }
 
-  virtual QString getDescription() const { return "Identifies areas"; }
+  QString getDescription() const override { return "Identifies areas"; }
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
-  virtual void setOsmMap(const OsmMap* map) { _map = map->shared_from_this(); }
+  void setOsmMap(const OsmMap* map) override { _map = map->shared_from_this(); }
 
-  virtual bool supportsSpecificConflation() const { return true; }
+  bool supportsSpecificConflation() const override { return true; }
 
-  virtual QStringList getChildCriteria() const;
+  QStringList getChildCriteria() const override;
 
 private:
 

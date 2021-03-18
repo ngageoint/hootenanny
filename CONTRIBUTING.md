@@ -4,10 +4,9 @@ development process. Hootenanny developers use a customization of the
 ## Workflow Summary
 * Open a GitHub issue for the new feature to be worked on.
 * Perform work for the feature on a new git feature branch derived from the master branch and named with the number of the GitHub issue that was opened.
-* Ensure your changes are adequately tested via CPPUnit, conflate case, or command line tests and that they are properly documented.
-via code comments and updates to the User Guide.
+* Ensure your changes are adequately tested via CPPUnit, conflate case, or command line tests and that they are properly documented with code comments and updates to the User Guide.
 * Open a pull request to merge the feature branch into the master branch and assign at least one individual to review the changes before merging.
-* Correct test failures as needed.
+* Correct test failures if necessary.
 * Check the quality of your changes using [Sonar](https://sonarcloud.io/dashboard?id=hoot) and improve them as necessary before merging.
-* Once the pull request is approved, all tests are passing, and all Sonar issues have been dealt with, merge the pull request.
-* Check the status of the nightly regression tests the following day for test failures and fix as needed.
+* Once the pull request is approved, all tests are passing, and all [Sonar](https://sonarcloud.io/dashboard?id=hoot) issues have been dealt with, merge the pull request.
+* Check the status of the nightly regression tests the following day and fix failing regression tests if necessary.

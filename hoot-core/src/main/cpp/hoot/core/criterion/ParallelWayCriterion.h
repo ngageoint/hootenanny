@@ -49,25 +49,25 @@ public:
 
   ParallelWayCriterion() = default;
   ParallelWayCriterion(const ConstOsmMapPtr& map, ConstWayPtr baseWay, bool isParallel = true);
-  virtual ~ParallelWayCriterion();
+  ~ParallelWayCriterion();
 
   Radians calculateDifference(const ConstWayPtr& w) const;
 
   void setThreshold(Degrees threshold) { _threshold = threshold; }
 
-  virtual bool isSatisfied(const ConstElementPtr& e) const;
+  bool isSatisfied(const ConstElementPtr& e) const override;
 
-  virtual ElementCriterionPtr clone()
+  ElementCriterionPtr clone() override
   { return ElementCriterionPtr(new ParallelWayCriterion(_map, _baseWay, _isParallel)); }
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Identifies ways that are parallel to each other"; }
 
-  virtual GeometryType getGeometryType() const { return GeometryType::Line; }
+  GeometryType getGeometryType() const override { return GeometryType::Line; }
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
   static bool isParallel(const ConstOsmMapPtr& map, const ConstElementPtr& e1, const ConstElementPtr& e2);
   static bool notParallel(const ConstOsmMapPtr& map, const ConstElementPtr& e1, const ConstElementPtr& e2);

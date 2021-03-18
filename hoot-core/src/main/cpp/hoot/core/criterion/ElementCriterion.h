@@ -69,7 +69,7 @@ public:
    */
   virtual std::shared_ptr<ElementCriterion> clone() = 0;
 
-  virtual QString toString() const override { return ""; }
+  QString toString() const override { return ""; }
 };
 
 using ElementCriterionPtr = std::shared_ptr<ElementCriterion>;

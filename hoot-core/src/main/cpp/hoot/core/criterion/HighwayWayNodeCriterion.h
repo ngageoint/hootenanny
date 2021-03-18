@@ -41,18 +41,18 @@ public:
 
   HighwayWayNodeCriterion();
   HighwayWayNodeCriterion(ConstOsmMapPtr map);
-  virtual ~HighwayWayNodeCriterion() = default;
+  ~HighwayWayNodeCriterion() = default;
 
-  virtual void setOsmMap(const OsmMap* map) override;
+  void setOsmMap(const OsmMap* map) override;
 
-  virtual ElementCriterionPtr clone() override
+  ElementCriterionPtr clone() override
   { return ElementCriterionPtr(new HighwayWayNodeCriterion(_map)); }
 
-  virtual QString getDescription() const { return "Identifies highway nodes"; }
+  QString getDescription() const override { return "Identifies highway nodes"; }
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 };
 
 }

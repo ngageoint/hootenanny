@@ -49,20 +49,20 @@ public:
 
   HighwayIntersectionCriterion() = default;
   explicit HighwayIntersectionCriterion(ConstOsmMapPtr map);
-  virtual ~HighwayIntersectionCriterion() = default;
+  ~HighwayIntersectionCriterion() = default;
 
-  virtual ElementCriterionPtr clone()
+  ElementCriterionPtr clone() override
   { return ElementCriterionPtr(new HighwayIntersectionCriterion(_map)); }
 
-  virtual bool isSatisfied(const ConstElementPtr& e) const;
+  bool isSatisfied(const ConstElementPtr& e) const override;
 
-  virtual void setOsmMap(const OsmMap* map);
+  void setOsmMap(const OsmMap* map) override;
 
-  virtual QString getDescription() const { return "Identifies highway intersections"; }
+  QString getDescription() const override { return "Identifies highway intersections"; }
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

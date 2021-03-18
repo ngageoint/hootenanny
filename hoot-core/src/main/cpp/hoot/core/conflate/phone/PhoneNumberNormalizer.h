@@ -51,12 +51,12 @@ class PhoneNumberNormalizer : public Configurable
 public:
 
   PhoneNumberNormalizer();
-  virtual ~PhoneNumberNormalizer() = default;
+  ~PhoneNumberNormalizer() = default;
 
   /**
    * @see Configurable
    */
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
   /**
    * Normalizes the values of all address tags on an element

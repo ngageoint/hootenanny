@@ -47,7 +47,7 @@ public:
   using MatchHash = QHash<ConstEdgeMatchPtr, double>;
 
   IndexedEdgeMatchSet() = default;
-  virtual ~IndexedEdgeMatchSet()  = default;
+  ~IndexedEdgeMatchSet()  = default;
 
   /**
    * The edge match should not be modified after it has been added to the index.
@@ -63,7 +63,7 @@ public:
   /**
    * Returns true if the specified element (or the reversed equivalent) is contained in this set.
    */
-  virtual bool contains(const ConstEdgeMatchPtr &em) const;
+  bool contains(const ConstEdgeMatchPtr &em) const override;
 
   const MatchHash& getAllMatches() const { return _matches; }
   MatchHash& getAllMatches() { return _matches; }

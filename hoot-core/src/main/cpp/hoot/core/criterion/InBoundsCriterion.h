@@ -56,24 +56,24 @@ public:
 
   InBoundsCriterion();
   InBoundsCriterion(const bool mustCompletelyContain);
-  virtual ~InBoundsCriterion();
+  ~InBoundsCriterion();
 
   /**
    * @see ElementCriterion
    */
-  virtual bool isSatisfied(const ConstElementPtr& e) const;
+  bool isSatisfied(const ConstElementPtr& e) const override;
 
   /**
    * @see Configurable
    */
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
   /**
    * @see ConstOsmMapConsumer
    */
-  virtual void setOsmMap(const OsmMap* map);
+  void setOsmMap(const OsmMap* map) override;
 
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new InBoundsCriterion()); }
+  ElementCriterionPtr clone() override { return ElementCriterionPtr(new InBoundsCriterion()); }
 
   void setTreatWayNodesAsPartOfWays(const bool treatAsPartOfWays)
   { _treatWayNodesAsPartOfWays = treatAsPartOfWays; }
@@ -81,15 +81,15 @@ public:
   /**
    * @see ApiEntityInfo
    */
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Determines whether an element is within a specified geospatial bounds"; }
 
   void setMustCompletelyContain(bool mustCompletelyContain)
   { _mustCompletelyContain = mustCompletelyContain; }
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

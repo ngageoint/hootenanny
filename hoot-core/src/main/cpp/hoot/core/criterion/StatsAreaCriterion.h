@@ -43,17 +43,17 @@ public:
   static QString className() { return "hoot::StatsAreaCriterion"; }
 
   StatsAreaCriterion() = default;
-  virtual ~StatsAreaCriterion() = default;
+  ~StatsAreaCriterion() = default;
 
-  virtual bool isSatisfied(const ConstElementPtr& e) const override;
+  bool isSatisfied(const ConstElementPtr& e) const override;
 
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new StatsAreaCriterion()); }
+  ElementCriterionPtr clone() override { return ElementCriterionPtr(new StatsAreaCriterion()); }
 
-  virtual QString getDescription() const { return "Identifies areas for use by statistics"; }
+  QString getDescription() const override { return "Identifies areas for use by statistics"; }
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 };
 
 }

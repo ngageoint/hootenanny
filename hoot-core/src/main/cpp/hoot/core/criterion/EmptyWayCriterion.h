@@ -46,22 +46,22 @@ public:
   static QString className() { return "hoot::EmptyWayCriterion"; }
 
   EmptyWayCriterion() = default;
-  virtual ~EmptyWayCriterion() = default;
+  ~EmptyWayCriterion() = default;
 
   /**
    * @see ElementCriterion
    */
-  virtual bool isSatisfied(const ConstElementPtr& e) const override;
+  bool isSatisfied(const ConstElementPtr& e) const override;
 
-  virtual ElementCriterionPtr clone() override
+  ElementCriterionPtr clone() override
   { return ElementCriterionPtr(new EmptyWayCriterion()); }
 
-  virtual QString getDescription() const override
+  QString getDescription() const override
   { return "Identifies ways with no nodes"; }
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 };
 
 }

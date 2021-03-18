@@ -48,24 +48,24 @@ public:
   static QString className() { return "hoot::PoiPolygonPolyCriterion"; }
 
   PoiPolygonPolyCriterion();
-  virtual ~PoiPolygonPolyCriterion() = default;
+  ~PoiPolygonPolyCriterion() = default;
 
-  virtual bool isSatisfied(const ConstElementPtr& e) const override;
+  bool isSatisfied(const ConstElementPtr& e) const override;
 
-  virtual GeometryType getGeometryType() const { return GeometryType::Polygon; }
+  GeometryType getGeometryType() const override { return GeometryType::Polygon; }
 
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new PoiPolygonPolyCriterion()); }
+  ElementCriterionPtr clone() override { return ElementCriterionPtr(new PoiPolygonPolyCriterion()); }
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Identifies polygons as defined by POI/Polygon Conflation"; }
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
-  virtual bool supportsSpecificConflation() const { return true; }
+  bool supportsSpecificConflation() const override { return true; }
 
-  virtual QStringList getChildCriteria() const;
+  QStringList getChildCriteria() const override;
 
 private:
 

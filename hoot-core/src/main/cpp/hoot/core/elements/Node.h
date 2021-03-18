@@ -58,7 +58,7 @@ public:
        QString user = ElementData::USER_EMPTY, long uid = ElementData::UID_EMPTY,
        bool visible = ElementData::VISIBLE_EMPTY);
 
-  virtual ~Node() = default;
+  ~Node() = default;
 
   /**
    * Allocate a node as a shared pointer. At this time the allocated node will be allocated as
@@ -88,9 +88,9 @@ public:
    * Clears all tags. However, unlike the other elements the x/y data and circular error aren't
    * modified b/c there isn't a clear definition of "unset" for this value.
    */
-  virtual void clear();
+  void clear() override;
 
-  virtual Element* clone() const { return new Node(*this); }
+  Element* clone() const override { return new Node(*this); }
 
   /**
    * Clone this node as a shared pointer. At this time the allocated node will be allocated as
@@ -103,10 +103,10 @@ public:
    */
   std::shared_ptr<Node> cloneSp() const;
 
-  virtual geos::geom::Envelope* getEnvelope(
+  geos::geom::Envelope* getEnvelope(
     const std::shared_ptr<const ElementProvider>& ep) const override;
 
-  virtual const geos::geom::Envelope& getEnvelopeInternal(
+  const geos::geom::Envelope& getEnvelopeInternal(
     const std::shared_ptr<const ElementProvider>& ep) const override;
 
   double getX() const { return _nodeData.getX(); }
@@ -115,7 +115,7 @@ public:
   void setX(double y);
   void setY(double x);
 
-  virtual ElementType getElementType() const { return ElementType(ElementType::Node); }
+  ElementType getElementType() const override { return ElementType(ElementType::Node); }
 
   geos::geom::Coordinate toCoordinate() const
   { return geos::geom::Coordinate(_nodeData.getX(), _nodeData.getY()); }
@@ -127,14 +127,14 @@ public:
   /**
    * @see Element
    */
-  virtual void visitRo(const ElementProvider& map, ConstElementVisitor& visitor,
-                       const bool recursive = false) const;
+  void visitRo(const ElementProvider& map, ConstElementVisitor& visitor,
+                       const bool recursive = false) const override;
 
   /**
    * @see Element
    */
-  virtual void visitRw(ElementProvider& map, ConstElementVisitor& visitor,
-                       const bool recursive = false);
+  void visitRw(ElementProvider& map, ConstElementVisitor& visitor,
+                       const bool recursive = false) override;
 
   /**
    * Determines if the coordinates from this node match with that of another given a configurable
@@ -158,9 +158,9 @@ protected:
 
   NodeData _nodeData;
 
-  virtual ElementData& _getElementData() { return _nodeData; }
+  ElementData& _getElementData() override { return _nodeData; }
 
-  virtual const ElementData& _getElementData() const { return _nodeData; }
+  const ElementData& _getElementData() const override { return _nodeData; }
 };
 
 using NodePtr = std::shared_ptr<Node>;

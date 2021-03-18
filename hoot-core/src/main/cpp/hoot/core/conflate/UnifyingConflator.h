@@ -55,13 +55,13 @@ public:
    * Conflates the specified map. If the map is not in a planar projection it is reprojected. The
    * map is not reprojected back to the original projection when conflation is complete.
    */
-  virtual void apply(OsmMapPtr& map) override;
+  void apply(OsmMapPtr& map) override;
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
-  virtual QString getDescription() const override
+  QString getDescription() const override
   { return "Conflates two inputs maps into one with Unifying Conflation"; }
 
   unsigned int getNumSteps() const override;

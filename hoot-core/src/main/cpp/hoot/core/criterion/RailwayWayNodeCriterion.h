@@ -41,16 +41,16 @@ public:
 
   RailwayWayNodeCriterion();
   RailwayWayNodeCriterion(ConstOsmMapPtr map);
-  virtual ~RailwayWayNodeCriterion() = default;
+  ~RailwayWayNodeCriterion() = default;
 
-  virtual ElementCriterionPtr clone() override
+  ElementCriterionPtr clone() override
   { return ElementCriterionPtr(new RailwayWayNodeCriterion(_map)); }
 
-  virtual QString getDescription() const override { return "Identifies railway nodes"; }
+  QString getDescription() const override { return "Identifies railway nodes"; }
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 };
 
 }

@@ -55,9 +55,9 @@ class PhoneNumberParser : public Configurable
 public:
 
   PhoneNumberParser();
-  virtual ~PhoneNumberParser() = default;
+  ~PhoneNumberParser() = default;
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
   /**
    * Parses phone numbers from an element's tags

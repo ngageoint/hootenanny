@@ -46,18 +46,18 @@ public:
   WayDirectionCriterion(const ConstOsmMapPtr& map,
                         ConstWayPtr baseWay,
                         bool similarDirection = true);
-  virtual ~WayDirectionCriterion() = default;
+  ~WayDirectionCriterion() = default;
 
-  virtual bool isSatisfied(const ConstElementPtr& e) const;
+  bool isSatisfied(const ConstElementPtr& e) const override;
 
-  virtual ElementCriterionPtr clone()
+  ElementCriterionPtr clone() override
   { return ElementCriterionPtr(new WayDirectionCriterion(_map, _baseWay, _similarDirection)); }
 
-  virtual QString getDescription() const { return "Identifies which direction a way is pointing"; }
+  QString getDescription() const override { return "Identifies which direction a way is pointing"; }
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 
