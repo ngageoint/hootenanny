@@ -103,7 +103,7 @@ public:
          it != pairs.end(); ++it)
     {
       SingleAssignmentProblemSolver<ActorTask, ActorTask>::ResultPair pair = *it;
-      if (pair.actor != NULL && pair.task != NULL)
+      if (pair.actor != nullptr && pair.task != nullptr)
       {
         totalCost += costFunction.cost(pair.actor, pair.task);
       }

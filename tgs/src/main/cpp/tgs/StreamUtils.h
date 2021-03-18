@@ -37,14 +37,6 @@
 #include <typeinfo>
 #include <vector>
 
-#if HAVE_LIBNEWMAT
-// newmat
-namespace NEWMAT
-{
-  class Matrix;
-}
-#endif
-
 #include <tgs/HashMap.h>
 #include <tgs/TgsException.h>
 #include <tgs/TgsExport.h>
@@ -58,6 +50,14 @@ namespace NEWMAT
 # include <QVector>
 #endif
 
+#if HAVE_LIBNEWMAT
+// newmat
+namespace NEWMAT
+{
+  class Matrix;
+}
+#endif
+
 namespace Tgs
 {
 #if HAVE_LIBNEWMAT
@@ -67,6 +67,5 @@ namespace Tgs
 #include <tgs/StreamUtils.hh>
 
 }
-
 
 #endif

@@ -27,17 +27,17 @@
 #include "PertyOp.h"
 
 // hoot
+#include <hoot/core/algorithms/perty/DirectSequentialSimulation.h>
+#include <hoot/core/algorithms/perty/PermuteGridCalculator.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/ops/NamedOp.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/ops/OpExecutor.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
-#include <hoot/core/algorithms/perty/DirectSequentialSimulation.h>
-#include <hoot/core/algorithms/perty/PermuteGridCalculator.h>
-#include <hoot/core/io/OsmMapWriterFactory.h>
 
 //Qt
 #include <QVector>
@@ -61,9 +61,9 @@ public:
     _gridSpacing(gridSpacing)
   {
   }
-  virtual ~ShiftMapVisitor() = default;
+  ~ShiftMapVisitor() = default;
 
-  virtual void visit(const ConstElementPtr& e)
+  void visit(const ConstElementPtr& e) override
   {
     if (e->getElementType() == ElementType::Node)
     {
@@ -76,11 +76,11 @@ public:
     }
   }
 
-  virtual QString getDescription() const { return ""; }
-  virtual QString getName() const { return ""; }
-  virtual QString getClassName() const override { return ""; }
+  QString getDescription() const override { return ""; }
+  QString getName() const override { return ""; }
+  QString getClassName() const override { return ""; }
 
-  virtual void visit(const std::shared_ptr<Element>&) {}
+  void visit(const std::shared_ptr<Element>&) override { }
 
   /**
    * User barycentric interpolation to determine the shift at a given point.
@@ -208,12 +208,12 @@ void PertyOp::apply(std::shared_ptr<OsmMap>& map)
   OsmMapWriterFactory::writeDebugMap(map, "perty-after-perty-op");
 
   // apply any custom perturbation ops
-  NamedOp namedOps(_namedOps);
+  OpExecutor namedOps(_namedOps);
   namedOps.setConfiguration(_settings);
   namedOps.apply(map);
 }
 
-Mat PertyOp::_calculatePermuteGrid(geos::geom::Envelope env, int& rows, int& cols)
+Mat PertyOp::_calculatePermuteGrid(const geos::geom::Envelope& env, int& rows, int& cols)
 {
   LOG_DEBUG("Using permute algorithm: " + _permuteAlgorithm);
   _gridCalculator.reset(

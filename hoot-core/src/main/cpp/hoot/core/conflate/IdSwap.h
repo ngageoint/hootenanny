@@ -42,11 +42,11 @@ class IdSwap
 public:
 
   /** Helpful typedefs for container and iterators */
-  typedef std::map<ElementId, ElementId> container;
-  typedef typename container::iterator iterator;
-  typedef typename container::const_iterator const_iterator;
+  using container = std::map<ElementId, ElementId>;
+  using iterator = container::iterator;
+  using const_iterator = container::const_iterator;
 
-  IdSwap();
+  IdSwap() = default;
   IdSwap(ElementId id_1, ElementId id_2) { add(id_1, id_2); }
 
   /**
@@ -79,7 +79,7 @@ private:
   container _idMapReversed;
 };
 
-typedef std::shared_ptr<IdSwap> IdSwapPtr;
+using IdSwapPtr = std::shared_ptr<IdSwap>;
 
 }
 

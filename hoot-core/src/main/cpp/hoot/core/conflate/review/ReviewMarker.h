@@ -48,7 +48,7 @@ class ReviewMarker
 public:
 
   /// This definition may change over time.
-  typedef ElementId ReviewUid;
+  using ReviewUid = ElementId;
 
   ReviewMarker();
 

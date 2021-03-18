@@ -54,11 +54,11 @@ public:
 
   ConvertCmd() = default;
 
-  virtual QString getName() const override { return "convert"; }
+  QString getName() const override { return "convert"; }
 
-  virtual QString getDescription() const override { return "Converts between map formats"; }
+  QString getDescription() const override { return "Converts between map formats"; }
 
-  virtual int runSimple(QStringList& args) override
+  int runSimple(QStringList& args) override
   {
     QElapsedTimer timer;
     timer.start();
@@ -81,7 +81,7 @@ public:
     {
       throw IllegalArgumentException(
         "When using " + MapCropper::className() + " with the convert command, the " +
-        configOpts.getCropBoundsKey() + " option must be specified.");
+        ConfigOptions::getCropBoundsKey() + " option must be specified.");
     }
 
     QStringList inputs;

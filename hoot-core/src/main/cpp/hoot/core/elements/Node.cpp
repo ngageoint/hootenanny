@@ -31,13 +31,13 @@
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Point.h>
-using namespace geos::geom;
 
 // Hoot
-#include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 
+using namespace geos::geom;
 using namespace std;
 
 namespace hoot

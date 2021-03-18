@@ -46,17 +46,17 @@ public:
   AttributeScoreExtractor(ValueAggregatorPtr wayAgg, bool useWeight = false);
 
   AttributeScoreExtractor(bool useWeight = false);
-  virtual ~AttributeScoreExtractor() = default;
+  ~AttributeScoreExtractor() = default;
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
-  virtual QString getName() const override;
+  QString getName() const override;
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
   void setUseWeight(const bool useWeight);
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Calculates the similarity between two tag sets"; }
 
 protected:

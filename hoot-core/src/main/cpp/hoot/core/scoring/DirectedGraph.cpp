@@ -31,17 +31,13 @@
 #include <geos/geom/LineString.h>
 
 // Hoot
+#include <hoot/core/criterion/OneWayCriterion.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
-#include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/criterion/OneWayCriterion.h>
 
 namespace hoot
 {
-
-DirectedGraph::DirectedGraph()
-{
-}
 
 void DirectedGraph::addEdge(long from, long to, double weight)
 {
@@ -84,8 +80,16 @@ void DirectedGraph::deriveEdges(const std::shared_ptr<const OsmMap>& map)
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
     const std::shared_ptr<Way>& way = it->second;
+    LOG_VART(way.get());
+    LOG_VART(way->getNodeIds().size());
     double cost = determineCost(way);
+    LOG_VART(cost);
     double length = ElementToGeometryConverter(map).convertToLineString(way)->getLength();
+    LOG_VART(length);
+    if (length == 0)
+    {
+      continue;
+    }
 
     long nStart = way->getNodeId(0);
     long nEnd = way->getNodeId(way->getNodeCount() - 1);

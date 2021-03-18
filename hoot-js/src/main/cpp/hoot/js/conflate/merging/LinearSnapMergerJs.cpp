@@ -28,8 +28,9 @@
 
 // hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/conflate/linear/LinearTagOnlyMerger.h>
-#include <hoot/core/conflate/MultipleSublineMatcherSnapMerger.h>
+#include <hoot/core/conflate/merging/LinearTagOnlyMerger.h>
+#include <hoot/core/conflate/merging/LinearAverageMerger.h>
+#include <hoot/core/conflate/merging/LinearMergerFactory.h>
 
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/elements/OsmMapJs.h>
@@ -124,27 +125,25 @@ void LinearSnapMergerJs::apply(const FunctionCallbackInfo<Value>& args)
     sublineMatcher2 = toCpp<SublineStringMatcherPtr>(args[5]);
   }
 
-  // see explanation in ConflateCmd as to why we use this option to identify Attribute Conflation
-  const bool isAttributeConflate = ConfigOptions().getHighwayMergeTagsOnly();
-  LinearSnapMergerPtr snapMerger;
-  if (isAttributeConflate)
+  // Use of LinearTagOnlyMerger for geometries signifies that we're doing Attribute Conflation.
+  const bool isAttributeConflate =
+    ConfigOptions().getGeometryLinearMergerDefault() == LinearTagOnlyMerger::className();
+  // Use of LinearAverageMerger for geometries signifies that we're doing Average Conflation.
+  const bool isAverageConflate =
+    ConfigOptions().getGeometryLinearMergerDefault() == LinearAverageMerger::className();
+  MergerPtr merger;
+  if (isAttributeConflate || isAverageConflate || (matchedBy != "Waterway" && matchedBy != "Line"))
   {
-    // LinearTagOnlyMerger inherits from LinearSnapMerger, so this works.
-    snapMerger.reset(new LinearTagOnlyMerger(pairs, sublineMatcher));
-  }
-  else if (matchedBy == "Waterway" || matchedBy == "Line")
-  {
-    // see note above about multiple subline matchers here
-    snapMerger.reset(new MultipleSublineMatcherSnapMerger(pairs, sublineMatcher, sublineMatcher2));
+    merger = LinearMergerFactory::getMerger(pairs, sublineMatcher, matchedBy);
   }
   else
   {
-    snapMerger.reset(new LinearSnapMerger(pairs, sublineMatcher));
+    merger = LinearMergerFactory::getMerger(pairs, sublineMatcher, sublineMatcher2, matchedBy);
   }
-  snapMerger->setMatchedBy(matchedBy);
-  // Some attempts were made to use cached subline matches from SublineStringMatcherJst for
-  // performance reasons, but the results were unstable. See branch 3969b.
-  snapMerger->apply(map, replaced);
+  // Some attempts were made to use cached subline matches from SublineStringMatcherJs for
+  // performance reasons, but the results were unstable. Doing so could lead to a runtime
+  // performance boost, so worth revisiting. See branch 3969b.
+  merger->apply(map, replaced);
 
   // modify the parameter that was passed in
   Handle<Array> newArr = Handle<Array>::Cast(toV8(replaced));

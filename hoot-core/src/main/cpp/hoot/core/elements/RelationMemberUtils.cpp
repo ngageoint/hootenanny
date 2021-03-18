@@ -28,13 +28,13 @@
 #include "RelationMemberUtils.h"
 
 // Hoot
-#include <hoot/core/util/HootException.h>
-#include <hoot/core/util/Log.h>
+#include <hoot/core/conflate/ConflateInfoCache.h>
+#include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/util/CollectionUtils.h>
-#include <hoot/core/conflate/ConflateUtils.h>
+#include <hoot/core/util/HootException.h>
+#include <hoot/core/util/Log.h>
 
 namespace hoot
 {
@@ -175,7 +175,7 @@ bool RelationMemberUtils::isMemberOfRelationWithTagKey(
 bool RelationMemberUtils::elementContainedByAnyRelation(
   const ElementId& elementId, const ConstOsmMapPtr& map)
 {
-  return map->getIndex().getElementToRelationMap()->getRelationByElement(elementId).size() > 0;
+  return !map->getIndex().getElementToRelationMap()->getRelationByElement(elementId).empty();
 }
 
 bool RelationMemberUtils::containsMemberWithCriterion(
@@ -313,6 +313,8 @@ bool RelationMemberUtils::relationHasConflatableMember(
     return false;
   }
 
+  std::shared_ptr<ConflateInfoCache> conflateInfoCache(new ConflateInfoCache(map));
+
   const std::vector<RelationData::Entry>& relationMembers = relation->getMembers();
   for (size_t i = 0; i < relationMembers.size(); i++)
   {
@@ -320,8 +322,7 @@ bool RelationMemberUtils::relationHasConflatableMember(
     if (member)
     {
       LOG_VART(member->getElementId());
-
-      if (ConflateUtils::elementCanBeConflatedByActiveMatcher(member, map))
+      if (conflateInfoCache->elementCanBeConflatedByActiveMatcher(member))
       {
         return true;
       }

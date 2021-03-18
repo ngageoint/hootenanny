@@ -45,7 +45,7 @@ namespace hoot
 class ConfPath
 {
 public:
-  ConfPath();
+  ConfPath() = default;
 
   /**
    * @brief Find all the files in the conf path that meet the requirements in filters.

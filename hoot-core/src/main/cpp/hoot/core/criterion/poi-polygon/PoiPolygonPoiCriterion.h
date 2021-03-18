@@ -56,7 +56,8 @@ public:
 
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new PoiPolygonPoiCriterion()); }
 
-  virtual QString getDescription() const { return ""; }
+  virtual QString getDescription() const
+  { return "Identifies POIs as defined by POI/Polygon Conflation"; }
 
   virtual QString getName() const override { return className(); }
 

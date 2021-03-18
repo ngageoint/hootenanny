@@ -48,7 +48,7 @@ void PoiPolygonInfoCache::setConfiguration(const Settings& conf)
 {
   ConflateInfoCache::setConfiguration(conf);
 
-  const int maxCacheSize = ConfigOptions(conf).getPoiPolygonMaxSizePerCache();
+  const int maxCacheSize = ConfigOptions(conf).getConflateInfoMaxSizePerCache();
   if (maxCacheSize > 0)
   {
     _isTypeCache.setMaxCost(maxCacheSize);
@@ -57,7 +57,7 @@ void PoiPolygonInfoCache::setConfiguration(const Settings& conf)
   }
   else
   {
-    _cacheEnabled = false;
+    _cachingEnabled = false;
   }
 }
 
@@ -65,7 +65,7 @@ void PoiPolygonInfoCache::clear()
 {
   ConflateInfoCache::clear();
 
-  if (_cacheEnabled)
+  if (_cachingEnabled)
   {
     LOG_DEBUG("Clearing cache...");
 
@@ -83,11 +83,11 @@ bool PoiPolygonInfoCache::isType(const ConstElementPtr& element, const PoiPolygo
 
   QString key;
 
-  if (_cacheEnabled)
+  if (_cachingEnabled)
   {
     key = element->getElementId().toString() % ";" % type.toString().toLower();
     const bool* cachedVal = _isTypeCache[key];
-    if (cachedVal != 0)
+    if (cachedVal != nullptr)
     {
       _incrementCacheHitCount("isType");
       return *cachedVal;
@@ -137,7 +137,7 @@ bool PoiPolygonInfoCache::isType(const ConstElementPtr& element, const PoiPolygo
       throw IllegalArgumentException("Unsupported POI/Polygon schema type.");
   }
 
-  if (_cacheEnabled)
+  if (_cachingEnabled)
   {
     _isTypeCache.insert(key, new bool(isType));
     _incrementCacheSizeCount("isType");
@@ -153,10 +153,10 @@ bool PoiPolygonInfoCache::hasMoreThanOneType(const ConstElementPtr& element)
     throw IllegalArgumentException("The input element is null.");
   }
 
-  if (_cacheEnabled)
+  if (_cachingEnabled)
   {
     const bool* cachedVal = _hasMoreThanOneTypeCache[element->getElementId()];
-    if (cachedVal != 0)
+    if (cachedVal != nullptr)
     {
       _incrementCacheHitCount("hasMoreThanOneType");
       return *cachedVal;
@@ -165,7 +165,7 @@ bool PoiPolygonInfoCache::hasMoreThanOneType(const ConstElementPtr& element)
 
   const bool hasMoreThanOneType = PoiPolygonSchema::hasMoreThanOneType(element);
 
-  if (_cacheEnabled)
+  if (_cachingEnabled)
   {
     _hasMoreThanOneTypeCache.insert(element->getElementId(), new bool(hasMoreThanOneType));
     _incrementCacheSizeCount("hasMoreThanOneType");
@@ -186,13 +186,13 @@ bool PoiPolygonInfoCache::hasRelatedType(const ConstElementPtr& element)
 }
 
 double PoiPolygonInfoCache::getReviewDistance(const ConstElementPtr& element,
-                                          const Tags& polyTags,
-                                          const double reviewDistanceThresholdDefault)
+                                              const Tags& polyTags,
+                                              const double reviewDistanceThresholdDefault)
 {
-  if (_cacheEnabled)
+  if (_cachingEnabled)
   {
     const double* cachedVal = _reviewDistanceCache[element->getElementId()];
-    if (cachedVal != 0)
+    if (cachedVal != nullptr)
     {
       _incrementCacheHitCount("reviewDistance");
       double distance = *cachedVal;
@@ -220,7 +220,7 @@ double PoiPolygonInfoCache::getReviewDistance(const ConstElementPtr& element,
     distance = reviewDistanceThresholdDefault;
   }
 
-  if (_cacheEnabled)
+  if (_cachingEnabled)
   {
     _reviewDistanceCache.insert(element->getElementId(), new double(distance));
     _incrementCacheSizeCount("reviewDistance");

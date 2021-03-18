@@ -71,10 +71,10 @@ public:
    */
   virtual QString getSublineMatcherName() const = 0;
 
-  virtual QString toString() const override { return ""; }
+  QString toString() const override { return ""; }
 };
 
-typedef std::shared_ptr<SublineStringMatcher> SublineStringMatcherPtr;
+using SublineStringMatcherPtr = std::shared_ptr<SublineStringMatcher>;
 
 }
 

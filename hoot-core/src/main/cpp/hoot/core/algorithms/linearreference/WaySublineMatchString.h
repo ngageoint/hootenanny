@@ -29,8 +29,8 @@
 
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/algorithms/linearreference/WaySublineMatch.h>
+#include <hoot/core/elements/OsmMap.h>
 
 // Std
 #include <string>
@@ -53,10 +53,9 @@ public:
 
   static QString className() { return "hoot::WaySublineMatchString"; }
 
-  typedef std::vector<WaySublineMatch> MatchCollection;
+  using MatchCollection = std::vector<WaySublineMatch>;
 
-  WaySublineMatchString() {}
-  WaySublineMatchString(const WaySublineMatchString& other);
+  WaySublineMatchString() = default;
   /**
    * Makes a new WaySublineMatchString where all the WayLocations are remapped to reference the
    * new map.
@@ -128,8 +127,8 @@ private:
 
 HOOT_DEFINE_EXCEPTION(OverlappingMatchesException)
 
-typedef std::shared_ptr<WaySublineMatchString> WaySublineMatchStringPtr;
-typedef std::shared_ptr<const WaySublineMatchString> ConstWaySublineMatchStringPtr;
+using WaySublineMatchStringPtr = std::shared_ptr<WaySublineMatchString>;
+using ConstWaySublineMatchStringPtr = std::shared_ptr<const WaySublineMatchString>;
 
 }
 

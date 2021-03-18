@@ -28,7 +28,7 @@
 #define ELEMENTOSMMAPVISITOR_H
 
 // hoot
-#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 #include <hoot/core/elements/ConstOsmMapConsumer.h>
 
 namespace hoot
@@ -41,7 +41,7 @@ class ElementOsmMapVisitor : public ConstElementVisitor, public ConstOsmMapConsu
 {
 public:
 
-  ElementOsmMapVisitor() = default;
+  ElementOsmMapVisitor() : _map(nullptr) { }
   virtual ~ElementOsmMapVisitor() = default;
 
   virtual void setOsmMap(OsmMap* map) { _map = map; }
@@ -55,7 +55,7 @@ protected:
   OsmMap* _map;
 };
 
-typedef std::shared_ptr<ElementOsmMapVisitor> ElementOsmMapVisitorPtr;
+using ElementOsmMapVisitorPtr = std::shared_ptr<ElementOsmMapVisitor>;
 }
 
 #endif // ELEMENTOSMMAPVISITOR_H

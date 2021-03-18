@@ -37,7 +37,7 @@ tds70 = {
   // getDbSchema - Load the standard schema or modify it into the TDS structure.
   getDbSchema: function() {
     tds70.layerNameLookup = {}; // <GLOBAL> Lookup table for converting an FCODE to a layername
-    tds70.AttrLookup = {}; // <GLOBAL> Lookup table for checking what attrs are in an FCODE
+    tds70.attrLookup = {}; // <GLOBAL> Lookup table for checking what attrs are in an FCODE
 
     // Warning: This is <GLOBAL> so we can get access to it from other functions
     tds70.rawSchema = tds70.schema.getDbSchema();
@@ -49,11 +49,11 @@ tds70 = {
     if (config.getOgrNoteExtra() == 'file') tds70.rawSchema = translate.addExtraFeature(tds70.rawSchema);
 
     // Build the TDS fcode/attrs lookup table. Note: This is <GLOBAL>
-    tds70.AttrLookup = translate.makeAttrLookup(tds70.rawSchema);
+    tds70.attrLookup = translate.makeAttrLookup(tds70.rawSchema);
 
     // Debug:
-    // print("tds70.AttrLookup");
-    // translate.dumpLookup(tds70.AttrLookup);
+    // print("tds70.attrLookup");
+    // translate.dumpLookup(tds70.attrLookup);
     // print("##########");
 
     // Decide if we are going to use TDS structure or 1 FCODE / File
@@ -194,12 +194,12 @@ tds70 = {
       } // End newSchema loop
     } // end tds70.rawSchema loop
 
-    // Create a lookup table of TDS structures attributes. Note this is <GLOBAL>
-    tdsAttrLookup = translate.makeTdsAttrLookup(newSchema);
+    // Create a lookup table of TDS structures attributes.
+    tds70.thematicLookup = translate.makeThematicAttrLookup(newSchema);
 
     // Debug:
-    // print("tdsAttrLookup");
-    // translate.dumpLookup(tdsAttrLookup);
+    // print("thematicLookup");
+    // translate.dumpLookup(tds70.thematicLookup);
     // print('##########');
 
     // Add the ESRI Feature Dataset name to the schema
@@ -230,16 +230,14 @@ tds70 = {
     // print('##########');
 
     return newSchema;
-
   }, // End getDbSchema
 
   // validateAttrs: Clean up the supplied attr list by dropping anything that should not be part of the
   //                feature, checking values and populateing the OTH field.
   validateAttrs: function(geometryType,attrs,notUsed,transMap) {
-
     // First, use the lookup table to quickly drop all attributes that are not part of the feature.
     // This is quicker than going through the Schema due to the way the Schema is arranged
-    var attrList = tds70.AttrLookup[geometryType.toString().charAt(0) + attrs.F_CODE];
+    var attrList = tds70.attrLookup[geometryType.toString().charAt(0) + attrs.F_CODE];
 
     var othList = {};
 
@@ -372,18 +370,17 @@ tds70 = {
   }, // End validateAttrs
 
 
-  // validateTDSAttrs - Clean up the TDS format attrs.  This sets all of the extra attrs to be "undefined"
-  validateTDSAttrs: function(gFcode, attrs) {
-
-    var tdsAttrList = tdsAttrLookup[tds70.rules.thematicGroupList[gFcode]];
-    var AttrList = tds70.AttrLookup[gFcode];
+  // validateThematicAttrs - Clean up the TDS format attrs.  This sets all of the extra attrs to be "undefined"
+  validateThematicAttrs: function(gFcode, attrs) {
+    var tdsAttrList = tds70.thematicLookup[tds70.rules.thematicGroupList[gFcode]];
+    var attrList = tds70.attrLookup[gFcode];
 
     for (var i = 0, len = tdsAttrList.length; i < len; i++)
     {
-      if (AttrList.indexOf(tdsAttrList[i]) == -1) attrs[tdsAttrList[i]] = undefined;
-      //if (AttrList.indexOf(tdsAttrList[i]) == -1) attrs[tdsAttrList[i]] = null;
+      if (attrList.indexOf(tdsAttrList[i]) == -1) attrs[tdsAttrList[i]] = undefined;
+      //if (attrList.indexOf(tdsAttrList[i]) == -1) attrs[tdsAttrList[i]] = null;
     }
-  }, // End validateTDSAttrs
+  }, // End validateThematicAttrs
 
 
   // Sort out if we need to return more than one feature.
@@ -395,12 +392,15 @@ tds70 = {
 
     // Quit early if we don't need to check anything. We are only looking at linework
     if (geometryType !== 'Line') return returnData;
-
+print('Many: Start');
     // Only looking at roads & railways with something else tacked on
     if (!(tags.highway || tags.railway)) return returnData;
+  print('Many: After railway');
 
     // Check the list of secondary/tertiary etc features
+    // Need to think about: tags.covered
     if (!(tags.bridge || tags.tunnel || tags.embankment || tags.cutting || tags.ford)) return returnData;
+  print('Many: After bridge tunnel');
 
     // We are going to make another feature so copy tags and trash the UUID so it gets a new one
     var newFeatures = [];
@@ -513,6 +513,14 @@ tds70 = {
       delete nTags.embankment;
     }
 
+    // Need to think about this
+    // if (nTags.covered)
+    // {
+    //   newAttributes.F_CODE = 'AQ151'; // Arcade
+    //   newFeatures.push({attrs: JSON.parse(JSON.stringify(newAttributes)), tags: JSON.parse(JSON.stringify(nTags))});
+    //   delete nTags.covered;
+    // }
+
     // Loop through the new features and process them.
     for (var i = 0, nFeat = newFeatures.length; i < nFeat; i++)
     {
@@ -561,7 +569,7 @@ tds70 = {
   cleanAttrs : function (attrs)
   {
     // Drop the FCSUBTYPE since we don't use it
-    if (attrs.FCSUBTYPE) delete attrs.FCSUBTYPE;
+    delete attrs.FCSUBTYPE;
 
     // Backward compatibility
     if (attrs.AEI)
@@ -972,6 +980,19 @@ tds70 = {
       }
       break;
 
+    case 'AF040': // Crane
+        if (tags['transport:type'] == 'railway' && !(tags.railway))
+        {
+          tags.railway = 'rail';
+          delete tags['transport:type'];
+        }
+        if (tags['transport:type'] == 'road' && !(tags.highway))
+        {
+          tags.highway = 'road';
+          delete tags['transport:type'];
+        }
+      break;
+
     // Fix up landuse tags
     case 'AL020':
       switch (tags.use) // Fixup the landuse tags
@@ -1152,10 +1173,10 @@ tds70 = {
   applyToOgrPreProcessing: function(tags, attrs, geometryType)
   {
     // Remove Hoot assigned tags for the source of the data
-    if (tags['source:ingest:datetime']) delete tags['source:ingest:datetime'];
-    if (tags.area) delete tags.area;
-    if (tags['error:circular']) delete tags['error:circular'];
-    if (tags['hoot:status']) delete tags['hoot:status'];
+    delete tags['source:ingest:datetime'];
+    delete tags.area;
+    delete tags['error:circular'];
+    delete tags['hoot:status'];
 
     // If we use ogr2osm, the GDAL driver jams any tag it doesn't know about into an "other_tags" tag.
     // We need to unpack this before we can do anything.
@@ -1343,6 +1364,13 @@ tds70 = {
       delete tags.man_made;
     }
 
+    // Cranes
+    if (tags.man_made == 'crane')
+    {
+      attrs.F_CODE = 'AF040'; // Crane
+      if (tags.railway) tags['transport:type'] = 'railway';
+      if (tags.highway) tags['transport:type'] = 'road';
+    } // End Cranes
 
     // Fix up OSM 'walls' around facilities
     if ((tags.barrier == 'wall' || tags.barrier == 'fence') && geometryType == 'Area')
@@ -1358,6 +1386,23 @@ tds70 = {
 
       delete tags.barrier; // Take away the walls...
     }
+
+    // Railways and other features
+    if (tags.building == 'yes' && tags.railway == 'rail')
+    {
+      delete tags.railway;
+      attrs.FFN = '490'; // Railway Transport
+    }
+
+    // Area Embankments can't be transportation features as well.
+    if (tags.embankment == 'yes' && geometryType == 'Area')
+    {
+      // Hot sure if we should delete highway features as well. Have not seen any in the data so far.
+      delete tags.railway;
+    }
+
+    // VERY data specific...
+    if (tags.covered == 'arcade' && tags.railway) attrs.F_CODE = 'AN010'; // Railway
 
     // Some tags imply that they are buildings but don't actually say so.
     // Most of these are taken from raw OSM and the OSM Wiki
@@ -1653,12 +1698,11 @@ tds70 = {
     // If we have a point, we need to make sure that it becomes a bridge, not a road.
     if (tags.bridge && geometryType =='Point') attrs.F_CODE = 'AQ040';
 
-
     // Railway sidetracks
     if (tags.service == 'siding' || tags.service == 'spur' || tags.service == 'passing' || tags.service == 'crossover')
     {
       tags.sidetrack = 'yes';
-      if (tags.railway) delete tags.railway;
+      delete tags.railway;
     }
 
     // Movable Bridges
@@ -1689,6 +1733,13 @@ tds70 = {
         delete tags.junction;
       }
     } // End AP020 not Point
+
+    // Railway Crossings.
+    if (tags.railway == 'crossing_box')
+    {
+      // Push this to Crossing but try and keep the tags
+      attrs.F_CODE = 'AQ062'; // Crossing
+    }
 
     // Cables
     if (tags.man_made == 'submarine_cable')
@@ -1782,7 +1833,7 @@ tds70 = {
     // Protected areas have two attributes that need sorting out
     if (tags.protection_object == 'habitat' || tags.protection_object == 'breeding_ground')
     {
-      if (tags.protect_class) delete tags.protect_class;
+      delete tags.protect_class;
     }
 
     // Split link roads. TDSv61 now has an attribute for this
@@ -1827,6 +1878,12 @@ tds70 = {
         }
       }
     } // End Highway & Railway construction
+
+    // Embankments & Railways
+    if (tags.embankment == 'yes' && geometryType == 'Area')
+    {
+      delete tags.railway;
+    }
 
     // Now set the relative levels and transportation types for various features
     if (tags.highway || tags.railway)
@@ -2344,7 +2401,7 @@ tds70 = {
     if (tds70.configIn.OgrDebugDumptags == 'true') translate.debugOutput(attrs,layerName,geometryType,'','In attrs: ');
 
     // See if we have an o2s_X layer and try to unpack it.
-    if (layerName.indexOf('o2s_') > -1)
+    if (~layerName.indexOf('o2s_'))
     {
       tags = translate.parseO2S(attrs);
 
@@ -2559,14 +2616,16 @@ tds70 = {
     // Pre Processing
     tds70.applyToOgrPreProcessing(tags, attrs, geometryType);
 
+    if (tds70.configOut.OgrDebugDumptags == 'true') translate.debugOutput(tags,'',geometryType,elementType,'After Pre: ');
+
     // Make a copy of the input tags so we can remove them as they get translated. What is left is
     // the not used tags.
     // not in v8 yet: // var tTags = Object.assign({},tags);
     var notUsedTags = (JSON.parse(JSON.stringify(tags)));
 
-    if (notUsedTags.hoot) delete notUsedTags.hoot; // Added by the UI
+    delete notUsedTags.hoot; // Added by the UI
     // Debug info. We use this in postprocessing via "tags"
-    if (notUsedTags['hoot:id']) delete notUsedTags['hoot:id'];
+    delete notUsedTags['hoot:id'];
 
     // Apply the simple number and text biased rules
     // NOTE: These are BACKWARD, not forward!
@@ -2577,6 +2636,7 @@ tds70 = {
     // Apply the fuzzy rules
     // NOTE: This deletes tags as they are used
     translate.applyOne2OneQuiet(notUsedTags, attrs, tds70.fuzzy,{'k':'v'});
+    if (tds70.configOut.OgrDebugDumptags == 'true') translate.debugOutput(notUsedTags,'',geometryType,elementType,'Not used 0: ');
 
     // Translate the XXX:2, XXX2, XXX:3 etc attributes
     // Note: This deletes tags as they are used
@@ -2603,7 +2663,7 @@ tds70 = {
     // push the feature to o2s layer
     var gFcode = geometryType.toString().charAt(0) + attrs.F_CODE;
 
-    if (!(tds70.AttrLookup[gFcode.toUpperCase()]))
+    if (!(tds70.attrLookup[gFcode.toUpperCase()]))
     {
       // For the UI: Throw an error and die if we don't have a valid feature
       if (tds70.configOut.getOgrThrowError == 'true')
@@ -2650,10 +2710,10 @@ tds70 = {
 
         // NOTE: if the start & end of the substring are grater than the length of the string, they get assigned to the length of the string
         // which means that it returns an empty string.
-        attrs = {tag1:str.substring(0,253),
-          tag2:str.substring(253,506),
-          tag3:str.substring(506,759),
-          tag4:str.substring(759,1012)};
+        attrs = {tag1:str.substring(0,225),
+          tag2:str.substring(225,450),
+          tag3:str.substring(450,675),
+          tag4:str.substring(675,900)};
       }
       else
       {
@@ -2677,7 +2737,7 @@ tds70 = {
       {
         // Make sure that we have a valid FCODE
         var gFcode = gType + returnData[i]['attrs']['F_CODE'];
-        if (tds70.AttrLookup[gFcode.toUpperCase()])
+        if (tds70.attrLookup[gFcode.toUpperCase()])
         {
           // Validate attrs: remove all that are not supposed to be part of a feature
           tds70.validateAttrs(geometryType,returnData[i]['attrs'], notUsedTags,transMap);
@@ -2686,7 +2746,7 @@ tds70 = {
           if (Object.keys(notUsedTags).length > 0 && tds70.configOut.OgrNoteExtra == 'attribute')
           {
             var tStr = '<OSM>' + JSON.stringify(notUsedTags) + '</OSM>';
-            attrs.ZI006_MEM = translate.appendValue(attrs.ZI006_MEM,tStr,';');
+            returnData[i]['attrs']['ZI006_MEM'] = translate.appendValue(returnData[i]['attrs']['ZI006_MEM'],tStr,';');
           }
 
           // Now set the FCSubtype.
@@ -2700,7 +2760,7 @@ tds70 = {
           if (tds70.configOut.OgrThematicStructure == 'true')
           {
             returnData[i]['tableName'] = tds70.rules.thematicGroupList[gFcode];
-            tds70.validateTDSAttrs(gFcode, returnData[i]['attrs']);
+            tds70.validateThematicAttrs(gFcode, returnData[i]['attrs']);
           }
           else
           {

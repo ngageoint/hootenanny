@@ -26,11 +26,11 @@
  */
 
 // Hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/elements/ElementIdSynchronizer.h>
-#include <hoot/core/util/StringUtils.h>
 #include <hoot/core/io/IoUtils.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -47,14 +47,12 @@ public:
 
   static QString className() { return "hoot::SynchronizeElementIdsCmd"; }
 
-  SynchronizeElementIdsCmd()
-  {
-  }
+  SynchronizeElementIdsCmd() = default;
 
   virtual QString getName() const override { return "sync-element-ids"; }
 
   virtual QString getDescription() const override
-  { return "Copies element IDs from one map to another for identical elements (experimental)"; }
+  { return "Copies IDs for identical elements from one map to another (experimental)"; }
 
   virtual QString getType() const { return "rnd"; }
 

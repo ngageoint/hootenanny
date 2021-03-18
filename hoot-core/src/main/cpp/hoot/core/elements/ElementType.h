@@ -40,14 +40,14 @@ class ElementType
 {
 public:
 
-  typedef enum Type
+  enum Type
   {
     Node = 0,
     Way = 1,
     Relation = 2,
     Unknown = 3,
     Max = 3
-  } Type;
+  };
 
   ElementType() : _type(Unknown) { }
   ElementType(Type type) : _type(type) { }

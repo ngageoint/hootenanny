@@ -43,7 +43,7 @@ public:
 
   static QString className() { return "hoot::AddUserIdVisitor"; }
 
-  AddUserIdVisitor();
+  AddUserIdVisitor() = default;
 
   /**
    * Adds the user name and user id as tags to all valid elements.

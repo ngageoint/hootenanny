@@ -84,6 +84,9 @@ private:
   DiffConflator _diffConflator;
   ChangesetProviderPtr _pTagChanges;
 
+  bool _isAttributeConflate;
+  bool _isAverageConflate;
+
   QString _osmApiDbUrl;
 
   QList<QList<SingleStat>> _allStats;

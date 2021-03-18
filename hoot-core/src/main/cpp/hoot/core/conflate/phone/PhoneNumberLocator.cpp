@@ -33,9 +33,10 @@
 
 // libphonenumber
 #include <phonenumbers/phonenumberutil.h>
-using namespace i18n::phonenumbers;
 
 #include <unicode/locid.h>
+
+using namespace i18n::phonenumbers;
 
 namespace hoot
 {

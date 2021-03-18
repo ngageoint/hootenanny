@@ -62,26 +62,12 @@ bool operator==(const ConstEdgeStringPtr& es1, const ConstEdgeStringPtr& es2)
     }
   }
 
-//  bool strResult = es1->toString() == es2->toString();
-//  if (result != strResult)
-//  {
-//    LOG_VARE(result);
-//    LOG_VARE(strResult);
-//    LOG_VARE(es1);
-//    LOG_VARE(es2);
-//    throw HootException();
-//  }
-
   return result;
 }
 
 QString EdgeString::EdgeEntry::toString() const
 {
   return hoot::toString(_subline);
-}
-
-EdgeString::EdgeString()
-{
 }
 
 void EdgeString::addFirstEdge(const ConstNetworkEdgePtr& e)
@@ -100,7 +86,7 @@ void EdgeString::addFirstEdge(const ConstEdgeSublinePtr& subline)
 
 void EdgeString::appendEdge(const ConstNetworkEdgePtr& e)
 {
-  if (_edges.size() == 0)
+  if (_edges.empty())
   {
     addFirstEdge(e);
   }
@@ -131,7 +117,7 @@ void EdgeString::appendEdge(const ConstNetworkEdgePtr& e)
 
 void EdgeString::appendEdge(const ConstEdgeSublinePtr& subline)
 {
-  if (_edges.size() == 0)
+  if (_edges.empty())
   {
     addFirstEdge(subline);
   }
@@ -418,7 +404,7 @@ bool EdgeString::overlaps(const ConstEdgeSublinePtr& es) const
 
 void EdgeString::prependEdge(const ConstEdgeSublinePtr& subline)
 {
-  if (_edges.size() == 0)
+  if (_edges.empty())
   {
     addFirstEdge(subline);
   }
@@ -648,7 +634,7 @@ bool EdgeString::validate() const
 
 bool EdgeString::isValid() const
 {
-  if (_edges.size() == 0)
+  if (_edges.empty())
   {
     return false;
   }

@@ -30,21 +30,21 @@
 // hoot
 #include <hoot/core/algorithms/Distance.h>
 #include <hoot/core/criterion/ChainCriterion.h>
+#include <hoot/core/criterion/OrCriterion.h>
 #include <hoot/core/criterion/StatusCriterion.h>
-#include <hoot/core/geometry/ElementToGeometryConverter.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/elements/NodeToWayMap.h>
 #include <hoot/core/elements/WayUtils.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/index/OsmMapIndex.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/ops/ReplaceElementOp.h>
 #include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/visitors/SpatialIndexer.h>
-#include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/criterion/OrCriterion.h>
-#include <hoot/core/schema/OsmSchema.h>
 
 // tgs
 #include <tgs/RStarTree/MemoryPageStore.h>
@@ -277,6 +277,7 @@ void UnconnectedWaySnapper::setMinTypeMatchScore(double score)
   for (WayMap::iterator wayItr = ways.begin(); wayItr != ways.end(); ++wayItr)
   {
     WayPtr wayToSnap = wayItr->second;
+    _numProcessed++;
     if (wayToSnap)
     {
       LOG_VART(wayToSnap->getElementId());
@@ -374,7 +375,7 @@ void UnconnectedWaySnapper::setMinTypeMatchScore(double score)
         }
       }
 
-      if (unconnectedEndNodeIds.size() == 0)
+      if (unconnectedEndNodeIds.empty())
       {
         LOG_TRACE("No unconnected end nodes to snap for " << wayToSnap->getElementId());
       }
@@ -602,7 +603,7 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWayNode(const NodePtr& nodeToS
   // node belongs to.
   const QList<ElementId> wayNodesToSnapTo =
     _getNearbyFeaturesToSnapTo(nodeToSnap, ElementType::Node);
-  if (wayNodesToSnapTo.size() == 0)
+  if (wayNodesToSnapTo.empty())
   {
     LOG_TRACE(
       "No nearby way nodes to snap to for " << nodeToSnap->getElementId() <<
@@ -874,6 +875,10 @@ bool UnconnectedWaySnapper::_snapClosestEndpointToWay(const WayPtr& disconnected
   const std::vector<long> nodeIds = disconnected->getNodeIds();
   ElementToGeometryConverter converter(_map);
   std::shared_ptr<geos::geom::Geometry> geometry = converter.convertToGeometry(connectTo);
+  if (!geometry || geometry->isEmpty())
+  {
+    return false;
+  }
 
   NodePtr endpoint1 = _map->getNode(nodeIds[0]);
   std::shared_ptr<geos::geom::Geometry> ep1 = converter.convertToGeometry(ConstNodePtr(endpoint1));

@@ -28,9 +28,9 @@
 
 // hoot
 #include <hoot/core/elements/Node.h>
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/elements/NodeToWayMap.h>
+#include <hoot/core/index/OsmMapIndex.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
@@ -51,7 +51,7 @@ bool WayNodeCriterion::isSatisfied(const ConstElementPtr& e) const
 
   const std::set<long>& containingWays =
     _map->getIndex().getNodeToWayMap()->getWaysByNode(e->getId());
-  if (containingWays.size() == 0)
+  if (containingWays.empty())
   {
     return false;
   }

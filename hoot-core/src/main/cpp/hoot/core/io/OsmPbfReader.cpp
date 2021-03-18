@@ -36,14 +36,12 @@
 #include <hoot/core/io/PbfConstants.h>
 #include <hoot/core/proto/FileFormat.pb.h>
 #include <hoot/core/proto/OsmFormat.pb.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/visitors/ReportMissingElementsVisitor.h>
-
-using namespace hoot::pb;
 
 // Standard Includes
 #include <fstream>
@@ -62,6 +60,7 @@ using namespace hoot::pb;
 #include <zlib.h>
 
 using namespace geos::geom;
+using namespace hoot::pb;
 using namespace std;
 
 namespace hoot
@@ -102,12 +101,12 @@ OsmPbfReader::OsmPbfReader(const QString& urlString)
 
 void OsmPbfReader::_init(bool useFileId)
 {
-  _d = new OsmPbfReaderData();
+  _d.reset(new OsmPbfReaderData());
   _useFileId = useFileId;
   _status = hoot::Status::Invalid;
   _useFileStatus = false;
   _permissive = true;
-  _in = NULL;
+  _in = nullptr;
   _needToCloseInput = false;
   _typeThenId = false;
 
@@ -120,7 +119,6 @@ void OsmPbfReader::_init(bool useFileId)
 
 OsmPbfReader::~OsmPbfReader()
 {
-  delete _d;
   if (_needToCloseInput == true)
   {
     close();
@@ -1092,7 +1090,7 @@ Status OsmPbfReader::_parseStatus(const QString& s)
 {
   Status result;
 
-  result = (Status::Type)_parseInt(s);
+  result = _parseInt(s);
   if (result.getEnum() < Status::Invalid || result.getEnum() > Status::Conflated)
   {
     throw HootException(QObject::tr("Invalid status value: %1").arg(s));
@@ -1265,7 +1263,7 @@ void OsmPbfReader::initializePartial()
   _firstPartialReadCompleted = false;
 
   // If nothing's been opened yet, this needs to be a no-op to be safe
-  if (_in != NULL)
+  if (_in != nullptr)
   {
     _blobs = loadOsmDataBlobOffsets(*_in);
     _in->seekg (0, ios::end);
@@ -1277,7 +1275,7 @@ void OsmPbfReader::initializePartial()
 bool OsmPbfReader::hasMoreElements()
 {
   // If we've closed/finalized, definitely no
-  if (_in == NULL)
+  if (_in == nullptr)
   {
     return false;
   }
@@ -1406,7 +1404,7 @@ void OsmPbfReader::close()
   }
 
   // Either path, drop our pointer to the stream
-  _in = NULL;
+  _in = nullptr;
 }
 
 void OsmPbfReader::_parseTimestamp(const hoot::pb::Info& info, Tags& t)

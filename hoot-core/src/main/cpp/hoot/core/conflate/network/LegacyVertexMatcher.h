@@ -28,9 +28,9 @@
 #define LEGACYVERTEXMATCHER_H
 
 // hoot
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/conflate/matching/NodeMatcher.h>
 #include <hoot/core/conflate/network/OsmNetwork.h>
-#include <hoot/core/elements/OsmMap.h>
 
 // Qt
 #include <QList>
@@ -77,7 +77,7 @@ public:
     }
   };
 
-  typedef std::shared_ptr<TiePointScore> TiePointScorePtr;
+  using TiePointScorePtr = std::shared_ptr<TiePointScore>;
 
   LegacyVertexMatcher(ConstOsmMapPtr map);
 
@@ -128,7 +128,7 @@ private:
 
   double _confidentThreshold;
 
-  Tgs::IntersectionIterator _createIterator(geos::geom::Envelope env);
+  Tgs::IntersectionIterator _createIterator(const geos::geom::Envelope& env);
 
   void _createVertexIndex(const OsmNetwork::VertexMap& vm, SearchRadiusProvider &srp);
 
@@ -171,8 +171,8 @@ inline uint qHash(const LegacyVertexMatcher::TiePointScorePtr& t)
   return qHash(std::pair<ElementId, ElementId>(t->v1->getElementId(), t->v2->getElementId()));
 }
 
-typedef std::shared_ptr<LegacyVertexMatcher> LegacyVertexMatcherPtr;
-typedef std::shared_ptr<const LegacyVertexMatcher> ConstLegacyVertexMatcherPtr;
+using LegacyVertexMatcherPtr = std::shared_ptr<LegacyVertexMatcher>;
+using ConstLegacyVertexMatcherPtr = std::shared_ptr<const LegacyVertexMatcher>;
 
 // not implemented
 bool operator<(ConstLegacyVertexMatcherPtr, ConstLegacyVertexMatcherPtr);

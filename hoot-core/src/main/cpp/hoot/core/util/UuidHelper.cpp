@@ -27,8 +27,8 @@
 #include "UuidHelper.h"
 
 // hoot
-#include <hoot/core/util/Log.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Log.h>
 
 // Qt
 #include <QCryptographicHash>
@@ -37,10 +37,6 @@ namespace hoot
 {
 
 int UuidHelper::_repeatableKey;
-
-UuidHelper::UuidHelper()
-{
-}
 
 QUuid UuidHelper::createUuid()
 {

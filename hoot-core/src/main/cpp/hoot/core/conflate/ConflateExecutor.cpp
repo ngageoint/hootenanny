@@ -28,29 +28,34 @@
 #include "ConflateExecutor.h"
 
 // Hoot
+#include <hoot/core/conflate/SuperfluousConflateOpRemover.h>
 #include <hoot/core/conflate/UnifyingConflator.h>
+#include <hoot/core/conflate/merging/LinearTagOnlyMerger.h>
 #include <hoot/core/conflate/stats/ConflateStatsHelper.h>
+#include <hoot/core/criterion/ReviewRelationCriterion.h>
+#include <hoot/core/criterion/ReviewScoreCriterion.h>
 #include <hoot/core/criterion/StatusCriterion.h>
+#include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/elements/VersionUtils.h>
+#include <hoot/core/io/ChangesetStatsFormat.h>
+#include <hoot/core/io/IoUtils.h>
 #include <hoot/core/io/MapStatsWriter.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/ops/NamedOp.h>
-#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/io/IoUtils.h>
-#include <hoot/core/util/Log.h>
-#include <hoot/core/criterion/ReviewScoreCriterion.h>
-#include <hoot/core/criterion/ReviewRelationCriterion.h>
-#include <hoot/core/util/StringUtils.h>
-#include <hoot/core/visitors/CountUniqueReviewsVisitor.h>
-#include <hoot/core/util/ConfigUtils.h>
-#include <hoot/core/elements/VersionUtils.h>
+#include <hoot/core/ops/OpExecutor.h>
 #include <hoot/core/ops/RemoveRoundabouts.h>
 #include <hoot/core/ops/ReplaceRoundabouts.h>
-#include <hoot/core/io/ChangesetStatsFormat.h>
+#include <hoot/core/ops/RoadCrossingPolyReviewMarker.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/ConfigUtils.h>
 #include <hoot/core/util/FileUtils.h>
-#include <hoot/core/conflate/SuperfluousConflateOpRemover.h>
+#include <hoot/core/util/Log.h>
 #include <hoot/core/util/MemoryUsageChecker.h>
 #include <hoot/core/ops/RoadCrossingPolyReviewMarker.h>
 #include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/conflate/merging/LinearTagOnlyMerger.h>
+#include <hoot/core/conflate/merging/LinearAverageMerger.h>
+#include <hoot/core/util/StringUtils.h>
+#include <hoot/core/visitors/CountUniqueReviewsVisitor.h>
 
 // Qt
 #include <QFileInfo>
@@ -68,6 +73,8 @@ const QString ConflateExecutor::JOB_SOURCE = "Conflate";
 ConflateExecutor::ConflateExecutor() :
 _isDiffConflate(false),
 _diffConflateSeparateOutput(false),
+_isAttributeConflate(false),
+_isAverageConflate(false),
 _displayStats(false),
 _displayChangesetStats(false),
 _filterOps(ConfigOptions().getConflateRemoveSuperfluousOps()),
@@ -84,11 +91,23 @@ void ConflateExecutor::_initConfig()
   allOps += ConfigOptions().getConflatePostOps();
   ConfigUtils::checkForDuplicateElementCorrectionMismatch(allOps);
 
-  // The highway.merge.tags.only option only gets used with Attribute Conflation for now, so we'll
-  // use it as the sole identifier for it. If that ever changes, then we'll need a different way
-  // to recognize when AC is occurring.
-  const bool isAttributeConflate = ConfigOptions().getHighwayMergeTagsOnly();
-  if (isAttributeConflate)
+  // Use of LinearTagOnlyMerger for geometries signifies that we're doing Attribute Conflation.
+  _isAttributeConflate =
+    ConfigOptions().getGeometryLinearMergerDefault() == LinearTagOnlyMerger::className();
+  // Use of LinearAverageMerger for geometries signifies that we're doing Average Conflation.
+  _isAverageConflate =
+    ConfigOptions().getGeometryLinearMergerDefault() == LinearAverageMerger::className();
+  if (_isAttributeConflate && _isDiffConflate) // This is a little kludgy but seems useful for now.
+  {
+    throw IllegalArgumentException(
+      "Differential and Attribute Conflation configurations may not both be used at the same time.");
+  }
+  else if (_isAttributeConflate && _isAverageConflate)
+  {
+    throw IllegalArgumentException(
+      "Attribute and Average Conflation configurations may not both be used at the same time.");
+  }
+  if (_isAttributeConflate)
   {
     _updateConfigOptionsForAttributeConflation();
   }
@@ -97,7 +116,7 @@ void ConflateExecutor::_initConfig()
   {
     _updateConfigOptionsForDifferentialConflation();
   }
-  if (_isDiffConflate || isAttributeConflate)
+  if (_isDiffConflate || _isAttributeConflate)
   {
     _disableRoundaboutRemoval();
   }
@@ -130,13 +149,13 @@ void ConflateExecutor::_initTaskCount()
     _numTotalTasks++;
   }
 
-  // Only add one task for each set of conflate ops, since NamedOp will create its own task step for
-  // each op internally.
-  if (ConfigOptions().getConflatePreOps().size() > 0)
+  // Only add one task for each set of conflate ops, since OpExecutor will create its own task step
+  // for each op internally.
+  if (!ConfigOptions().getConflatePreOps().empty())
   {
     _numTotalTasks++;
   }
-  if (ConfigOptions().getConflatePostOps().size() > 0)
+  if (!ConfigOptions().getConflatePostOps().empty())
   {
     _numTotalTasks++;
   }
@@ -183,6 +202,14 @@ void ConflateExecutor::conflate(const QString& input1, const QString& input2, QS
     {
       msg = msg.replace("Conflating", "Differentially conflating ");
     }
+  }
+  else if (_isAttributeConflate)
+  {
+    msg = msg.replace("Conflating", "Attribute conflating ");
+  }
+  else if (_isAverageConflate)
+  {
+    msg = msg.replace("Conflating", "Average conflating ");
   }
   _progress->set(0.0, msg);
 
@@ -233,7 +260,7 @@ void ConflateExecutor::conflate(const QString& input1, const QString& input2, QS
   _stats.append(SingleStat("Initial Element Count", initialElementCount));
   OsmMapWriterFactory::writeDebugMap(map, "after-load");
 
-  if (ConfigOptions().getConflatePreOps().size() > 0)
+  if (!ConfigOptions().getConflatePreOps().empty())
   {
     _runConflateOps(map, true);
   }
@@ -241,7 +268,7 @@ void ConflateExecutor::conflate(const QString& input1, const QString& input2, QS
   OsmMapPtr result = map;
   _runConflate(result);
 
-  if (ConfigOptions().getConflatePostOps().size() > 0)
+  if (!ConfigOptions().getConflatePostOps().empty())
   {
     _runConflateOps(map, false);
   }
@@ -413,14 +440,22 @@ void ConflateExecutor::_runConflateOps(OsmMapPtr& map, const bool runPre)
   LOG_STATUS("Running " << opStr.toLower() << "-conflate operations...");
   QElapsedTimer opsTimer;
   opsTimer.start();
-  NamedOp ops(opNames);
+
+  // Since this is a conflate operation, tell OpExecutor to require that all ops it runs check to
+  // make sure the elements they encounter are conflatable in the current configuration. We don't
+  // want to operate on any elements that aren't considered conflatable. Superfluous conflate op
+  // removal has already taken care of this for any ops that conflate specific feature types,
+  // however, for those who don't, they must examine each element (@see ElementConflatableCheck).
+  OpExecutor ops(opNames, true);
   ops.setProgress(
     Progress(
       ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running,
       _getJobPercentComplete(_currentTask - 1), _getTaskWeight()));
   ops.apply(map);
+
   _stats.append(
     SingleStat("Apply " + opStr + "-Conflate Ops Time (sec)", _taskTimer.getElapsedAndRestart()));
+
   OsmMapWriterFactory::writeDebugMap(map, "after-" + opStr.toLower() + "-ops");
   _currentTask++;
   LOG_STATUS(

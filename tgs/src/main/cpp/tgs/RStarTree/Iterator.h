@@ -36,7 +36,7 @@ namespace Tgs
   class TGS_EXPORT Iterator
   {
   public:
-    virtual ~Iterator() {}
+    virtual ~Iterator() = default;
 
     virtual bool hasNext() = 0;
 

@@ -30,14 +30,14 @@
 // std
 #include <memory>
 
+#include <hoot/core/elements/Element.h>
+#include <hoot/core/elements/ElementId.h>
+#include <hoot/core/elements/Node.h>
+#include <hoot/core/elements/Relation.h>
+#include <hoot/core/elements/Way.h>
+
 // GDAL
 class OGRSpatialReference;
-
-#include <hoot/core/elements/ElementId.h>
-#include <hoot/core/elements/Element.h>
-#include <hoot/core/elements/Node.h>
-#include <hoot/core/elements/Way.h>
-#include <hoot/core/elements/Relation.h>
 
 namespace hoot
 {
@@ -54,22 +54,22 @@ public:
   virtual bool containsElement(const ElementId& eid) const = 0;
   virtual ConstElementPtr getElement(const ElementId& id) const = 0;
 
-  virtual const ConstNodePtr getNode(long id) const = 0;
-  virtual const NodePtr getNode(long id) = 0;
+  virtual ConstNodePtr getNode(long id) const = 0;
+  virtual NodePtr getNode(long id) = 0;
 
-  virtual const ConstRelationPtr getRelation(long id) const = 0;
-  virtual const RelationPtr getRelation(long id) = 0;
+  virtual ConstRelationPtr getRelation(long id) const = 0;
+  virtual RelationPtr getRelation(long id) = 0;
 
-  virtual const ConstWayPtr getWay(long id) const = 0;
-  virtual const WayPtr getWay(long id) = 0;
+  virtual ConstWayPtr getWay(long id) const = 0;
+  virtual WayPtr getWay(long id) = 0;
 
   virtual bool containsNode(long id) const = 0;
   virtual bool containsRelation(long id) const = 0;
   virtual bool containsWay(long id) const = 0;
 };
 
-typedef std::shared_ptr<const ElementProvider> ConstElementProviderPtr;
-typedef std::shared_ptr<ElementProvider> ElementProviderPtr;
+using ElementProviderPtr = std::shared_ptr<ElementProvider>;
+using ConstElementProviderPtr = std::shared_ptr<const ElementProvider>;
 
 }
 

@@ -27,15 +27,15 @@
 #include "SuperfluousConflateOpRemover.h"
 
 // hoot
+#include <hoot/core/conflate/matching/MatchFactory.h>
+#include <hoot/core/criterion/LinearCriterion.h>
+#include <hoot/core/criterion/PointCriterion.h>
+#include <hoot/core/criterion/PolygonCriterion.h>
+#include <hoot/core/ops/MapCleaner.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/criterion/PointCriterion.h>
-#include <hoot/core/criterion/LinearCriterion.h>
-#include <hoot/core/criterion/PolygonCriterion.h>
-#include <hoot/core/conflate/matching/MatchFactory.h>
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/visitors/ElementVisitor.h>
-#include <hoot/core/ops/MapCleaner.h>
 
 namespace hoot
 {
@@ -82,7 +82,7 @@ void SuperfluousConflateOpRemover::removeSuperfluousOps()
     }
   }
 
-  if (removedOps.size() > 0)
+  if (!removedOps.empty())
   {
     QStringList removedOpsList = removedOps.values();
     qSort(removedOpsList);
@@ -202,7 +202,7 @@ QSet<QString> SuperfluousConflateOpRemover::_getMatchCreatorGeometryTypeCrits()
 
     // Technically not sure we'd have to error out here, but it will be good to know if any
     // matchers weren't configured with crits to keep conflate bugs from sneaking in over time.
-    if (crits.size() == 0)
+    if (crits.empty())
     {
       throw HootException(
         "Match creator: " + matchCreator->getName() +

@@ -27,12 +27,12 @@
 #include "RelationMerger.h"
 
 // hoot
-#include <hoot/core/schema/TagMergerFactory.h>
-#include <hoot/core/ops/ReplaceElementOp.h>
+#include <hoot/core/criterion/InBoundsCriterion.h>
+#include <hoot/core/elements/RelationMemberComparison.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/ops/RemoveRelationByEid.h>
-#include <hoot/core/elements/RelationMemberComparison.h>
-#include <hoot/core/criterion/InBoundsCriterion.h>
+#include <hoot/core/ops/ReplaceElementOp.h>
+#include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/util/ConfigUtils.h>
 
 namespace hoot
@@ -296,15 +296,14 @@ bool RelationMerger::_mergeMembers(RelationPtr replacingRelation, RelationPtr re
   {
     const RelationMemberComparison currentMemberFromReplaced = replacingRelationMemberComps[i];
     // Add the relation member to the relation we're keeping.
-    modifiedMembers.push_back(
-      RelationData::Entry(
+    modifiedMembers.emplace_back(
         currentMemberFromReplaced.getRole(),
-        currentMemberFromReplaced.getElement()->getElementId()));
+        currentMemberFromReplaced.getElement()->getElementId());
     // Remove the member from the relation we may or may not be keeping.
     relationBeingReplaced->removeElement(currentMemberFromReplaced.getElement()->getElementId());
     numMembersCopied++;
   }
-  if (modifiedMembers.size() > 0)
+  if (!modifiedMembers.empty())
   {
     replacingRelation->setMembers(modifiedMembers);
   }

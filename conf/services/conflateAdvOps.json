@@ -563,14 +563,6 @@
                                 "hoot_key":"merger.creators"
                             },
                             {
-            	              "id":"highway_merge_tags_only",
-                              "elem_type":"bool",
-                              "defaultvalue":"false",
-                              "description":"If true, road conflation will merge tags only and not geometries.",
-                              "name":"Merge Road Tags Only",
-                              "hoot_key":"highway.merge.tags.only"
-                            },
-                            {
                                 "id":"highway_matcher_heading_delta",
                                 "minvalue":"0.0",
                                 "elem_type":"double",

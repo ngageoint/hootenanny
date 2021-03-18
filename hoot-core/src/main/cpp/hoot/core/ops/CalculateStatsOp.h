@@ -30,7 +30,7 @@
 // hoot
 #include <hoot/core/conflate/matching/MatchCreator.h>
 #include <hoot/core/criterion/ElementCriterion.h>
-#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 #include <hoot/core/info/SingleStat.h>
 #include <hoot/core/ops/ConstOsmMapOperation.h>
 #include <hoot/core/util/Configurable.h>

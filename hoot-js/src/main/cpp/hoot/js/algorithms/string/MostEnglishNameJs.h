@@ -73,7 +73,7 @@ inline void toCpp(v8::Handle<v8::Value> v, MostEnglishNamePtr& p)
   }
 
   v8::Handle<v8::Object> obj = v8::Handle<v8::Object>::Cast(v);
-  MostEnglishNameJs* js = 0;
+  MostEnglishNameJs* js = nullptr;
   js = node::ObjectWrap::Unwrap<MostEnglishNameJs>(obj);
   if (js)
   {

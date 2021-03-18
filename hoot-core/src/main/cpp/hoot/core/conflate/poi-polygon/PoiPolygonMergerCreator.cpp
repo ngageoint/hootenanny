@@ -27,7 +27,6 @@
 #include "PoiPolygonMergerCreator.h"
 
 // hoot
-#include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/matching/MatchFactory.h>
 #include <hoot/core/conflate/merging/MarkForReviewMerger.h>
 #include <hoot/core/conflate/merging/MergerFactory.h>
@@ -49,7 +48,7 @@ namespace hoot
 HOOT_FACTORY_REGISTER(MergerCreator, PoiPolygonMergerCreator)
 
 PoiPolygonMergerCreator::PoiPolygonMergerCreator() :
-_map(0),
+_map(nullptr),
 _autoMergeManyPoiToOnePolyMatches(ConfigOptions().getPoiPolygonAutoMergeManyPoiToOnePolyMatches()),
 _allowCrossConflationMerging(ConfigOptions().getPoiPolygonAllowCrossConflationMerging())
 {
@@ -146,11 +145,10 @@ bool PoiPolygonMergerCreator::createMergers(
 vector<CreatorDescription> PoiPolygonMergerCreator::getAllCreators() const
 {
   vector<CreatorDescription> result;
-  result.push_back(
-    CreatorDescription(
-      className(),
-      "Generates mergers that merge POIs into polygons",
-      false));
+  result.emplace_back(
+    className(),
+    "Generates mergers that merge POIs into polygons",
+    false);
   return result;
 }
 
@@ -248,7 +246,7 @@ bool PoiPolygonMergerCreator::isConflicting(const ConstOsmMapPtr& map, ConstMatc
 
     // Return conflict only if it is a miss, a review is ok.
     result = false;
-    if (ma.get() == 0 || ma->getType() == MatchType::Miss)
+    if (ma.get() == nullptr || ma->getType() == MatchType::Miss)
     {
       LOG_TRACE("miss");
       result = true;

@@ -26,8 +26,8 @@
  */
 #include "CountUniqueReviewsVisitor.h"
 
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/util/Factory.h>
 
 using namespace std;
 
@@ -39,7 +39,7 @@ HOOT_FACTORY_REGISTER(ElementVisitor, CountUniqueReviewsVisitor)
 void CountUniqueReviewsVisitor::visit(const ConstElementPtr& e)
 {
   set<ReviewMarker::ReviewUid> reviews =
-    _reviewMarker.getReviewUids(_map->shared_from_this(), e);
+    ReviewMarker::getReviewUids(_map->shared_from_this(), e);
   _reviews.insert(reviews.begin(), reviews.end());
 }
 

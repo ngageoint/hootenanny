@@ -50,7 +50,7 @@ RelationData::RelationData(const RelationData& rd)
 
 void RelationData::addElement(const QString& role, ElementId eid)
 {
-  _members.push_back(Entry(role, eid));
+  _members.emplace_back(role, eid);
 }
 
 void RelationData::clear()
@@ -124,9 +124,9 @@ void RelationData::replaceElement(ElementId from, const QList<ElementId>& to)
     Entry& e = _members[i];
     if (e.getElementId() == from)
     {
-      for (int i = 0; i < to.size(); ++i)
+      for (int j = 0; j < to.size(); ++j)
       {
-        newCopy.push_back(Entry(e.role, to[i]));
+        newCopy.emplace_back(e.role, to[j]);
       }
     }
     else

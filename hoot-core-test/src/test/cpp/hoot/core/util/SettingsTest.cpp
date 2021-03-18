@@ -133,7 +133,8 @@ public:
     CPPUNIT_ASSERT_EQUAL(false, uut.getBool("uuid.helper.repeatable"));
     //  Default value before change in AttributeConflation.conf
     HOOT_STR_EQUALS("hoot::OverwriteTag2Merger", uut.getString("tag.merger.default"));
-    CPPUNIT_ASSERT_EQUAL(false, uut.getBool("highway.merge.tags.only"));
+    HOOT_STR_EQUALS(
+      "hoot::LinearSnapMerger", uut.getString("geometry.linear.merger.default"));
     //  Default value before change in NetworkAlgorithm.conf
     HOOT_STR_EQUALS("hoot::HighwayRfClassifier", uut.getString("conflate.match.highway.classifier"));
     HOOT_STR_EQUALS("hoot::MaximalNearestSublineMatcher", uut.getString("way.subline.matcher"));
@@ -143,7 +144,8 @@ public:
     CPPUNIT_ASSERT_EQUAL(true, uut.getBool("uuid.helper.repeatable"));
     //  From AttributeConflation.conf
     HOOT_STR_EQUALS("hoot::OverwriteTag1Merger", uut.getString("tag.merger.default"));
-    CPPUNIT_ASSERT_EQUAL(true, uut.getBool("highway.merge.tags.only"));
+    HOOT_STR_EQUALS(
+      "hoot::LinearTagOnlyMerger", uut.getString("geometry.linear.merger.default"));
     //  From NetworkAlgorithm.conf
     HOOT_STR_EQUALS("hoot::HighwayExpertClassifier", uut.getString("conflate.match.highway.classifier"));
     HOOT_STR_EQUALS("hoot::MaximalSublineMatcher", uut.getString("way.subline.matcher"));

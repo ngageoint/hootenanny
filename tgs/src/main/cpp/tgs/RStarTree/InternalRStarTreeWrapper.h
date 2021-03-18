@@ -30,8 +30,8 @@
 //TGS Includes
 #include <tgs/TgsExport.h>
 #include <tgs/RStarTree/DistanceIterator.h>
-#include <tgs/RStarTree/IntersectionIterator.h>
 #include <tgs/RStarTree/HilbertRTree.h>
+#include <tgs/RStarTree/IntersectionIterator.h>
 
 //Std Includes
 #include <vector>
@@ -49,7 +49,7 @@ namespace Tgs
     /**
     *  Destructor
     */
-    ~InternalRStarTreeWrapper();
+    ~InternalRStarTreeWrapper() = default;
 
     /**
     *  Updates an iterator over all the current R*Tree of all objects intersecting

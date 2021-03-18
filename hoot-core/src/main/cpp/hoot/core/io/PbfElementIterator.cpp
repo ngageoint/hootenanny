@@ -36,37 +36,32 @@ namespace hoot
 
 PbfElementIterator::PbfElementIterator(QString path)
 {
-  fstream* fp = new fstream();
+  std::shared_ptr<fstream> fp(new fstream());
   try
   {
     fp->open(path.toUtf8().data(), ios::in | ios::binary);
     if (fp->is_open() == false)
-    {
-      delete fp;
       throw HootException("Error opening " + path + " for writing.");
-    }
     _init(fp);
   }
   catch (const HootException&)
   {
-    delete fp;
     throw;
   }
   catch (const std::exception& e)
   {
-    delete fp;
     throw HootException(e.what());
   }
 }
 
 PbfElementIterator::PbfElementIterator(istream* in)
 {
-  _init(in);
+  _init(std::shared_ptr<istream>(in));
 }
 
-void PbfElementIterator::_init(istream* in)
+void PbfElementIterator::_init(const std::shared_ptr<istream>& in)
 {
-  _in.reset(in);
+  _in = in;
   _reader.reset(new OsmPbfReader(false));
   _reader->setPermissive(true);
   _reader->setUseDataSourceIds(true);

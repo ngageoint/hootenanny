@@ -47,7 +47,7 @@ public:
   BoundedCommand();
   virtual ~BoundedCommand() = default;
 
-  virtual int runSimple(QStringList& args) override;
+  int runSimple(QStringList& args) override;
 
 protected:
 

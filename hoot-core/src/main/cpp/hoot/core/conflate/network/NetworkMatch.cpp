@@ -108,7 +108,7 @@ void NetworkMatch::_discoverWayPairs(ConstOsmMapPtr map, ConstEdgeMatchPtr edgeM
     ElementId element2Id =
       _toElement(string2->getEdgeAtOffset(map, d1 / length1 * length2))->getElementId();
     LOG_VART(element2Id);
-    _pairs.insert(pair<ElementId, ElementId>(element1Id, element2Id));
+    _pairs.emplace(element1Id, element2Id);
 
     d1 += string1->getEdge(i)->calculateLength(map);
 
@@ -117,7 +117,7 @@ void NetworkMatch::_discoverWayPairs(ConstOsmMapPtr map, ConstEdgeMatchPtr edgeM
     element2Id =
       _toElement(string2->getEdgeAtOffset(map, d1 / length1 * length2))->getElementId();
     LOG_VART(element2Id);
-    _pairs.insert(pair<ElementId, ElementId>(element1Id, element2Id));
+    _pairs.emplace(element1Id, element2Id);
   }
 
   Meters d2 = 0.0;
@@ -128,7 +128,7 @@ void NetworkMatch::_discoverWayPairs(ConstOsmMapPtr map, ConstEdgeMatchPtr edgeM
     LOG_VART(element1Id);
     ElementId element2Id = _toElement(string2->getEdge(i))->getElementId();
     LOG_VART(element2Id);
-    _pairs.insert(pair<ElementId, ElementId>(element1Id, element2Id));
+    _pairs.emplace(element1Id, element2Id);
 
     d2 += string2->getEdge(i)->calculateLength(map);
 
@@ -137,7 +137,7 @@ void NetworkMatch::_discoverWayPairs(ConstOsmMapPtr map, ConstEdgeMatchPtr edgeM
     LOG_VART(element1Id);
     element2Id = _toElement(string2->getEdge(i))->getElementId();
     LOG_VART(element2Id);
-    _pairs.insert(pair<ElementId, ElementId>(element1Id, element2Id));
+    _pairs.emplace(element1Id, element2Id);
   }
 
   LOG_VART(_pairs);

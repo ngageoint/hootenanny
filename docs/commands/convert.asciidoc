@@ -179,6 +179,12 @@ Retrieve OSM data around Paris, France from an OSM API and save it to an OSM fil
 hoot convert -D bounds=2.277303,48.851684,2.311635,48.864701 https://osm-api-url/api/0.6/map download.osm
 --------------------------------------
 
+Same command but using a file containing the bounds around Paris, France:
+
+--------------------------------------
+hoot convert -D bounds.input.filename=bounds.osm https://osm-api-url/api/0.6/map download.osm
+--------------------------------------
+
 === Notes
 
 * The format for OSM database URLs is: protocol://<user name>:<password>@<host name>:<port>/<database name>

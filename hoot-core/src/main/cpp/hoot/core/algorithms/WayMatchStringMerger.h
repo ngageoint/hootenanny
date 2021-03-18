@@ -79,8 +79,8 @@ public:
     void setNewWay(WayNumber way, WayPtr newWay)
     { (way == WayNumber::Way1) ? setNewWay1(newWay) : setNewWay2(newWay); }
 
-    void setStart1(WayLocation start) { _start = start; }
-    void setEnd1(WayLocation end) { _end = end; }
+    void setStart1(const WayLocation& start) { _start = start; }
+    void setEnd1(const WayLocation& end) { _end = end; }
 
     void setSubline2(const WaySubline& ws) { _subline2 = ws; }
 
@@ -95,7 +95,7 @@ public:
     WayPtr _newWay1;
     WayPtr _newWay2;
   };
-  typedef std::shared_ptr<SublineMapping> SublineMappingPtr;
+  using SublineMappingPtr = std::shared_ptr<SublineMapping>;
 
   class SublineMappingLessThan
   {
@@ -188,11 +188,11 @@ private:
 
   void _addSublineMapping(SublineMappingPtr sm);
 
-  void _createWayMappings(WayLocation split1, WayLocation split2, WaySubline subline2);
+  void _createWayMappings(const WayLocation& split1, const WayLocation& split2, const WaySubline& subline2);
 
   WayLocation _findNodeLocation2(WayStringPtr ws, ElementId nodeId);
 
-  void _moveNode(ElementId scrapNodeId, WayLocation wl1);
+  void _moveNode(ElementId scrapNodeId, const WayLocation& wl1);
 
   void _rebuildWayString(WayNumber way);
 
@@ -205,8 +205,8 @@ private:
   void _splitPrimary();
 };
 
-typedef std::shared_ptr<WayMatchStringMerger> WayMatchStringMergerPtr;
-typedef std::shared_ptr<const WayMatchStringMerger> ConstWayMatchStringMergerPtr;
+using WayMatchStringMergerPtr = std::shared_ptr<WayMatchStringMerger>;
+using ConstWayMatchStringMergerPtr = std::shared_ptr<const WayMatchStringMerger>;
 
 }
 

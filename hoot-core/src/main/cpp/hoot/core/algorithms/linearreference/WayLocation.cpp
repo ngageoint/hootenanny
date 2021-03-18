@@ -32,8 +32,8 @@
 #include <geos/geom/LineString.h>
 
 // Hoot
-#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
 
 // Standard
@@ -85,7 +85,7 @@ _segmentFraction(-1)
 
     for (size_t i = 1; i < way->getNodeCount(); i++)
     {
-      ConstNodePtr n = _map->getNode(_way->getNodeId(i));;
+      ConstNodePtr n = _map->getNode(_way->getNodeId(i));
       Coordinate next = n->toCoordinate();
       double delta = next.distance(last);
       last = next;
@@ -237,7 +237,7 @@ WayLocation WayLocation::createAtEndOfWay(const ConstOsmMapPtr& map, const Const
   return WayLocation(map, way, way->getNodeCount() - 1, 0.0);
 }
 
-const Coordinate WayLocation::getCoordinate() const
+Coordinate WayLocation::getCoordinate() const
 {
   ConstNodePtr p0 = _map->getNode(_way->getNodeId(_segmentIndex));
   if (!p0)
@@ -388,8 +388,7 @@ WayLocation WayLocation::move(Meters distance) const
         {
           return result;
         }
-        Coordinate last = lastNode->toCoordinate();
-        double segmentLength = last.distance(next);
+        double segmentLength = lastNode->toCoordinate().distance(next);
         result._segmentFraction += (distance / segmentLength);
 
         // this can happen due to floating point errors when the new location is very close to a
@@ -429,8 +428,7 @@ WayLocation WayLocation::move(Meters distance) const
         {
           return result;
         }
-        Coordinate last = lastNode->toCoordinate();
-        double segmentLength = last.distance(next);
+        double segmentLength = lastNode->toCoordinate().distance(next);
         result._segmentFraction = 1.0 + (distance / segmentLength);
         // if we're suffering from a floating point issue.
         if (result._segmentFraction >= 1.0)
@@ -460,9 +458,9 @@ WayLocation WayLocation::move(Meters distance) const
   return result;
 }
 
-const Coordinate WayLocation::pointAlongSegmentByFraction(const Coordinate& p0,
-                                                          const Coordinate& p1,
-                                                          double frac)
+Coordinate WayLocation::pointAlongSegmentByFraction(const Coordinate& p0,
+                                                    const Coordinate& p1,
+                                                    double frac)
 {
   if (frac <= 0.0) return p0;
   if (frac >= 1.0) return p1;

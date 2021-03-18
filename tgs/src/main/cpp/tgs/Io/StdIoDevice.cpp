@@ -38,10 +38,6 @@ StdIoDevice::StdIoDevice(istream& in) : _in(&in)
   open(QIODevice::ReadOnly);
 }
 
-StdIoDevice::~StdIoDevice()
-{
-}
-
 bool StdIoDevice::atEnd() const
 {
   return _in->eof();
@@ -49,7 +45,7 @@ bool StdIoDevice::atEnd() const
 
 qint64 StdIoDevice::readData(char* data, qint64 maxlen)
 {
-  if (_in == 0)
+  if (_in == nullptr)
   {
     return 0;
   }

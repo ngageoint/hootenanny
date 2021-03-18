@@ -31,11 +31,11 @@
 #include <geos/geom/Geometry.h>
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/algorithms/extractors/Histogram.h>
-#include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
-#include <hoot/core/elements/Way.h>
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/elements/Way.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
 
 using namespace geos::geom;
 using namespace std;
@@ -52,9 +52,9 @@ public:
   static QString className() { return "hoot::HistogramVisitor"; }
 
   HistogramVisitor(Histogram& h) : _h(h) { }
-  virtual ~HistogramVisitor() = default;
+  ~HistogramVisitor() = default;
 
-  virtual void visit(const ConstElementPtr& e)
+  void visit(const ConstElementPtr& e) override
   {
     if (e->getElementType() == ElementType::Way)
     {
@@ -75,10 +75,10 @@ public:
     }
   }
 
-  virtual QString getDescription() const { return ""; }
-  virtual QString getClassName() const { return ""; }
-  virtual QString toString() const { return ""; }
-  virtual QString getName() const { return ""; }
+  QString getDescription() const override { return ""; }
+  QString getClassName() const override { return ""; }
+  QString toString() const override { return ""; }
+  QString getName() const override { return ""; }
 
 private:
 

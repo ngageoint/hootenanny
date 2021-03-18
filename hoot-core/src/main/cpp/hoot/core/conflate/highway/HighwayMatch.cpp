@@ -165,7 +165,7 @@ map<QString, double> HighwayMatch::getFeatures(const ConstOsmMapPtr& m) const
 set<pair<ElementId, ElementId>> HighwayMatch::getMatchPairs() const
 {
   set<pair<ElementId, ElementId>> result;
-  result.insert(pair<ElementId, ElementId>(_eid1, _eid2));
+  result.emplace(_eid1, _eid2);
   return result;
 }
 
@@ -180,7 +180,7 @@ bool HighwayMatch::isConflicting(
 {
   const HighwayMatch* hm = dynamic_cast<const HighwayMatch*>(other.get());
   // if the other match isn't a highway match then this is a conflict.
-  if (hm == 0)
+  if (hm == nullptr)
   {
     return true;
   }

@@ -34,12 +34,12 @@
 // Standard
 #include <iostream>
 #include <math.h>
-using namespace std;
 
 // tbs
 #include <tbs/optimization/GoldenSectionSearch.h>
 
 using namespace cv;
+using namespace std;
 
 namespace tbs
 {
@@ -67,12 +67,6 @@ private:
   const vector<double>& _EH;
   const vector<double>& _ELogH;
 };
-
-
-TDistribution::TDistribution()
-{
-
-}
 
 TDistribution::TDistribution(const Mat& m)
 {

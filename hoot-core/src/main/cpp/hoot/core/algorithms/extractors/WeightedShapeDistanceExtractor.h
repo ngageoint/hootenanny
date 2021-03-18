@@ -45,18 +45,18 @@ public:
   WeightedShapeDistanceExtractor(ValueAggregatorPtr wayAgg);
 
   WeightedShapeDistanceExtractor() = default;
-  virtual ~WeightedShapeDistanceExtractor() = default;
+  ~WeightedShapeDistanceExtractor() = default;
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Calculates shape distance between features"; }
 
 private:
 
-  double _extract(const OsmMap& map, const ConstWayPtr& w1, const ConstWayPtr& w2) const;
+  double _extract(const OsmMap& map, const ConstWayPtr& w1, const ConstWayPtr& w2) const override;
 };
 
 }

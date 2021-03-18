@@ -20,16 +20,22 @@ See the User Guide for more details on command usage.
 
 ==== Conflation
 
-===== Conflate two maps into a single map (Reference Conflation):
+===== Conflate two maps into a single map using the first map as a reference (Reference Conflation):
 
 -----
     hoot conflate input1.osm input2.osm output.osm
 -----
 
+===== Conflate two maps into a single map while averaging features (Average Conflation):
+
+-----
+    hoot conflate -C AverageConflation.conf input1.osm input2.osm output.osm
+-----
+
 ===== Conflate, adding data from the second map to output that does not conflict with data in the first map (Differential Conflation):
 
 -----
-    hoot conflate --differential input1.osm input2.osm output.osm
+    hoot conflate -C DifferentialConflation.conf input1.osm input2.osm output.osm --differential
 -----
 
 ===== Conflate only buildings:
@@ -453,6 +459,12 @@ hoot alpha-shape --buffer 10 input.osm 200 0 output.osm
     1	(<1%)	medium building overlap building orientation not similar building edges not very close to each other
 -----
 
+===== Display a delimited list as a string of all tag keys in a map:
+
+-----
+    hoot tag-info --warn --keys-only --delimited-text input.osm
+-----
+
 === Advanced
 
 ==== Conflation
@@ -466,7 +478,7 @@ hoot alpha-shape --buffer 10 input.osm 200 0 output.osm
 ===== Conflate, adding geometry data from the second map to output that does not conflict with data in the first map (Differential Tag Only Conflation; tags may be overwritten):
 
 -----
-    hoot conflate --differential --include-tags input1.osm input2.osm output.osm
+    hoot conflate -C DifferentialConflation.conf --include-tags input1.osm input2.osm output.osm --differential
 -----
 
 ===== Conflate only tags from a second map into a first map without changing the first map's geometry (Attribute Conflation):
@@ -528,6 +540,13 @@ hoot alpha-shape --buffer 10 input.osm 200 0 output.osm
     # The value for myTagKey will consist of a semicolon delimited list of all the unique values 
     # found when merging features together.
     hoot conflate -D tag.merger.overwrite.accumulate.values.keys="myTagKey" input1.osm input2.osm
+-----
+
+===== Generate feature match scores between maps without merging them:
+
+-----
+    hoot conflate -D conflate.match.only=true -D writer.include.conflate.score.tags=true \
+      input1.osm input2.osm output.osm
 -----
 
 ==== Applying Changes

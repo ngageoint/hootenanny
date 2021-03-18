@@ -32,7 +32,7 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/criterion/ElementCriterionConsumer.h>
 #include <hoot/core/visitors/ElementVisitorConsumer.h>
-#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 
 namespace hoot
 {
@@ -45,7 +45,7 @@ public:
 
   static QString className() { return "hoot::FilteredVisitor"; }
 
-  FilteredVisitor() : _criterion(0), _visitor(0) { }
+  FilteredVisitor() : _criterion(nullptr), _visitor(nullptr) { }
   virtual ~FilteredVisitor() = default;
 
   /**

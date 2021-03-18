@@ -33,13 +33,13 @@
 #include <cmath>
 #include <exception>
 #include <iostream>
-using namespace std;
 
 #include <tgs/StreamUtils.h>
 #include <tgs/TgsException.h>
 #include <tgs/RStarTree/PageStore.h>
 #include <tgs/RStarTree/RTreeNode.h>
 
+using namespace std;
 using namespace Tgs;
 
 RStarTree::RStarTree(const std::shared_ptr<PageStore>& ps, int dimensions)
@@ -77,10 +77,6 @@ RStarTree::RStarTree(const std::shared_ptr<PageStore>& ps, int dimensions)
   _m = (int)(_M * _mPercent);
   _p = .3;
   _dimensions = dimensions;
-}
-
-RStarTree::~RStarTree()
-{
 }
 
 void RStarTree::_addChild(RTreeNode* parent, const Box& b, int id)
@@ -310,7 +306,7 @@ void RStarTree::_insert(const Box& b, int id, int level)
   else
   {
     // splits 'node' into 'N' and 'newNode'. These nodes contain everything from N
-    RTreeNode* newNode = NULL;
+    RTreeNode* newNode = nullptr;
     int a = _overflowTreatment(N, newNode, level);
     
     // I3 If OverflowTreatment was called and a split was performed, propagate OverflowTreatment
@@ -372,12 +368,12 @@ public:
   Box b;
   int id;
 
-  Child() {}
+  Child() : id(0) { }
 
   Child(int id, const BoxInternalData& b) : b(b.toBox()), id(id) { }
 };
 
-typedef std::pair<double, int> DistancePair;
+using DistancePair = std::pair<double, int>;
 
 class CompareDistancePairs
 {
@@ -490,11 +486,11 @@ void RStarTree::_split(RTreeNode* node, RTreeNode*& newNode)
   {
     if (leaf)
     {
-      boxes.push_back(BoxPair(node->getChildEnvelope(i), node->getChildUserId(i)));
+      boxes.emplace_back(node->getChildEnvelope(i), node->getChildUserId(i));
     }
     else
     {
-      boxes.push_back(BoxPair(node->getChildEnvelope(i), node->getChildNodeId(i)));
+      boxes.emplace_back(node->getChildEnvelope(i), node->getChildNodeId(i));
     }
   }
 
@@ -515,7 +511,7 @@ void RStarTree::_split(RTreeNode* node, RTreeNode*& newNode)
     // efficient.
     for (unsigned int i = 0; i < boxes.size(); i++)
     {
-      tmp.push_back(std::pair<Box, int>(boxes[i].box.toBox(), boxes[i].id)); 
+      tmp.emplace_back(boxes[i].box.toBox(), boxes[i].id);
     }
     node->clear();
     node->setParentId(parentId);

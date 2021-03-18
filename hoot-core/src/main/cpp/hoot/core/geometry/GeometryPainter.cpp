@@ -31,7 +31,6 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/util/Exception.h>
-using namespace hoot::elements;
 
 // GDAL Includes
 #include <ogrsf_frmts.h>
@@ -39,6 +38,8 @@ using namespace hoot::elements;
 // Qt Includes
 #include <QPainter>
 #include <QPainterPath>
+
+using namespace hoot::elements;
 
 namespace hoot
 {
@@ -141,11 +142,11 @@ QMatrix GeometryPainter::createMatrix(const QRect& window, const OGREnvelope& wo
 void GeometryPainter::drawElement(QPainter& pt, const OsmMap* map, const Element* e,
   const QMatrix& m)
 {
-  if (dynamic_cast<const Way*>(e) != 0)
+  if (dynamic_cast<const Way*>(e) != nullptr)
   {
     drawWay(pt, map, dynamic_cast<const Way*>(e), m);
   }
-  else if (dynamic_cast<const Node*>(e) != 0)
+  else if (dynamic_cast<const Node*>(e) != nullptr)
   {
     drawNode(pt, dynamic_cast<const Node*>(e), m);
   }
@@ -191,7 +192,7 @@ void GeometryPainter::drawGeometry(QPainter& pt, const OGRGeometry* geom, const 
 void GeometryPainter::drawGeometryCollection(QPainter& pt, const OGRGeometryCollection* collection,
                                              const QMatrix& m)
 {
-  if (collection == NULL)
+  if (collection == nullptr)
   {
     throw Exception("Internal Error: GeometryPainter::drawGeometryCollection - Null geometry");
   }
@@ -256,16 +257,14 @@ void GeometryPainter::drawPolygon(QPainter& pt, const OGRPolygon* polygon, const
 
   if (polygon->getNumInteriorRings() > 0)
   {
-    QPainter* lpt = NULL;
-    QImage* image = new QImage(pt.window().size(), QImage::Format_ARGB32);
+    std::shared_ptr<QImage> image(new QImage(pt.window().size(), QImage::Format_ARGB32));
     if (image->isNull() == true)
     {
-      delete image;
       throw Exception("Internal Error: GeometryPainter::drawPolygon "
                       "Error allocating image.");
     }
     image->fill(qRgba(0, 0, 0, 0));
-    lpt = new QPainter(image);
+    std::shared_ptr<QPainter> lpt(new QPainter(image.get()));
     lpt->setMatrix(pt.matrix());
     lpt->setPen(pen);
     lpt->setBrush(brush);
@@ -302,13 +301,10 @@ void GeometryPainter::drawPolygon(QPainter& pt, const OGRPolygon* polygon, const
 
     lpt->end();
 
-    QMatrix m = pt.matrix();
+    QMatrix matrix = pt.matrix();
     pt.resetMatrix();
     pt.drawImage(pt.window(), *image);
-    pt.setMatrix(m);
-
-    delete lpt;
-    delete image;
+    pt.setMatrix(matrix);
   }
   else
   {

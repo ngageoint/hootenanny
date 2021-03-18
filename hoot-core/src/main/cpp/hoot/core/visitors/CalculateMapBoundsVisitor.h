@@ -29,7 +29,7 @@
 #define CALCULATEMAPBOUNDSVISITOR_H
 
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 
 /**
  * A visitor for finding the bounds of a map, based on the old OsmMap::calculateBounds

@@ -32,14 +32,13 @@
 #include <geos/geom/Point.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/operation/distance/DistanceOp.h>
-using namespace geos::operation::distance;
 
 // Hoot
-#include <hoot/core/geometry/GeometryPainter.h>
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
+#include <hoot/core/geometry/GeometryPainter.h>
+#include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/util/OpenCv.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 
@@ -49,6 +48,7 @@ using namespace geos::operation::distance;
 #include <QPainter>
 
 using namespace geos::geom;
+using namespace geos::operation::distance;
 
 namespace hoot
 {
@@ -146,6 +146,8 @@ void BaseComparator::_calculateRingColor(double v, double, QRgb& c)
 Coordinate BaseComparator::_findNearestPointOnFeature(
   const std::shared_ptr<OsmMap>& map, const Coordinate& c)
 {
+  LOG_TRACE("Finding nearest point to: " << c << "...");
+
   Coordinate result;
 
   // find the nearest feature

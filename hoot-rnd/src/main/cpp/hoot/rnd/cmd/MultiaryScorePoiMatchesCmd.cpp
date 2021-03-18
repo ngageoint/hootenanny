@@ -33,7 +33,7 @@
 #include <hoot/core/io/IoUtils.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/io/OsmXmlWriter.h>
-#include <hoot/core/ops/NamedOp.h>
+#include <hoot/core/ops/OpExecutor.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/Factory.h>
@@ -72,11 +72,11 @@ public:
     OsmMapPtr copy(new OsmMap(map));
 
     // Apply any user specified operations.
-    NamedOp(ConfigOptions().getConflatePreOps()).apply(copy);
+    OpExecutor(ConfigOptions().getConflatePreOps()).apply(copy);
 
     MultiaryUtilities::conflate(copy);
     // Apply any user specified operations.
-    NamedOp(ConfigOptions().getConflatePostOps()).apply(copy);
+    OpExecutor(ConfigOptions().getConflatePostOps()).apply(copy);
 
     comparator.evaluateMatches(map, copy);
 
@@ -108,7 +108,7 @@ public:
   virtual QString getName() const override { return "multiary-score-poi-matches"; }
 
   virtual QString getDescription() const override
-  { return "Scores the performance of multiary-conflate against a manually matched map (experimental) "; }
+  { return "Scores the performance of multiary-poi-conflate against a manually matched map (experimental) "; }
 
   virtual QString getType() const override { return "rnd"; }
 
@@ -181,7 +181,9 @@ public:
     OsmMapWriterFactory::write(map, ConfPath::getHootHome() + "/tmp/score-matches-after-prep.osm");
     MapProjector::projectToPlanar(map);
 
-    std::shared_ptr<MatchThreshold> mt;
+    // Apparently, multiary will allow with > 1.0 review thresholds.
+    std::shared_ptr<MatchThreshold> mt =
+      std::make_shared<MatchThreshold>(MatchThreshold(0.5, 0.5, 1.0, false));
     QString result = evaluateThreshold(map, output, mt, showConfusion);
 
     cout << result;

@@ -40,7 +40,7 @@ class MatchScoringMapPreparer
 {
 public:
 
-  MatchScoringMapPreparer();
+  MatchScoringMapPreparer() = default;
 
   /**
     Prepares a map for match scoring

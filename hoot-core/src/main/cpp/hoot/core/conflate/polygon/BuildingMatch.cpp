@@ -272,7 +272,7 @@ map<QString, double> BuildingMatch::getFeatures(const ConstOsmMapPtr& m) const
 set<pair<ElementId, ElementId>> BuildingMatch::getMatchPairs() const
 {
   set<pair<ElementId, ElementId>> result;
-  result.insert(pair<ElementId, ElementId>(_eid1, _eid2));
+  result.emplace(_eid1, _eid2);
   return result;
 }
 
@@ -285,14 +285,7 @@ bool BuildingMatch::isConflicting(const ConstMatchPtr& other, const ConstOsmMapP
                                   const QHash<QString, ConstMatchPtr>& /*matches*/) const
 {
   const BuildingMatch* bm = dynamic_cast<const BuildingMatch*>(other.get());
-  if (bm == 0)
-  {
-    return true;
-  }
-  else
-  {
-    return false;
-  }
+  return (bm == nullptr);
 }
 
 QString BuildingMatch::toString() const

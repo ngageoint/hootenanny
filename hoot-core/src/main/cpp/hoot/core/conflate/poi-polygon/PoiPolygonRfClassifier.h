@@ -44,6 +44,7 @@ class PoiPolygonRfClassifier
 public:
 
   PoiPolygonRfClassifier();
+  virtual ~PoiPolygonRfClassifier() = default;
 
   virtual std::map<QString, double> getFeatures(const ConstOsmMapPtr& m, ElementId eid1,
                                                 ElementId eid2) const;
@@ -55,7 +56,7 @@ private:
   void _createExtractors();
 };
 
-typedef std::shared_ptr<PoiPolygonRfClassifier> PoiPolygonRfClassifierPtr;
+using PoiPolygonRfClassifierPtr = std::shared_ptr<PoiPolygonRfClassifier>;
 
 }
 

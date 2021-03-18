@@ -29,20 +29,20 @@
 
 // GEOS
 #include <geos/geom/LineString.h>
-using namespace geos::geom;
 
 // hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/algorithms/extractors/Histogram.h>
-#include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
 #include <hoot/core/algorithms/WayDiscretizer.h>
-#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/algorithms/WayHeading.h>
+#include <hoot/core/algorithms/extractors/Histogram.h>
 #include <hoot/core/algorithms/linearreference/WayLocation.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
 
 // Qt
 #include <qnumeric.h>
 
+using namespace geos::geom;
 using namespace std;
 
 namespace hoot
@@ -64,9 +64,9 @@ public:
   {
   }
 
-  virtual ~SampledAngleHistogramVisitor() = default;
+  ~SampledAngleHistogramVisitor() = default;
 
-  virtual void visit(const std::shared_ptr<const Element>& e)
+  void visit(const std::shared_ptr<const Element>& e) override
   {
     if (!e)
     {
@@ -92,9 +92,9 @@ public:
     }
   }
 
-  virtual QString getDescription() const { return ""; }
-  virtual QString getName() const { return ""; }
-  virtual QString getClassName() const override { return className(); }
+  QString getDescription() const override { return ""; }
+  QString getName() const override { return ""; }
+  QString getClassName() const override { return className(); }
 
 private:
 

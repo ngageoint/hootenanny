@@ -52,7 +52,7 @@
 
 // Python version before 2.4 don't have a Py_ssize_t typedef.
 #if PY_VERSION_HEX < 0x02050000 && !defined(PY_SSIZE_T_MIN)
-typedef int Py_ssize_t;
+using Py_ssize_t = int;
 #endif
 
 using namespace std;
@@ -108,14 +108,14 @@ void PythonSchemaTranslator::_init()
   const char* data = moduleName.toLatin1().data();
   PyObject* module = PyImport_ImportModule(data);
 
-  if (module == NULL)
+  if (module == nullptr)
   {
     PyErr_Print();
     throw Exception("Error loading module " + _scriptPath);
   }
 
   _translateFunction = PyObject_GetAttrString(module, "translateToOsm");
-  if (_translateFunction == NULL)
+  if (_translateFunction == nullptr)
   {
     throw Exception("Error retrieving 'translateToOsm'");
   }
@@ -179,7 +179,7 @@ void PythonSchemaTranslator::_translateToOsm(Tags& tags, const char* layerName, 
 
   tags.clear();
 
-  if (pyResult == NULL)
+  if (pyResult == nullptr)
   {
     PyErr_Print();
     throw Exception("Python call failed.");
@@ -203,7 +203,7 @@ void PythonSchemaTranslator::_translateToOsm(Tags& tags, const char* layerName, 
       PyObject* keyUnicode = PyUnicode_FromObject(key);
       PyObject* valueUnicode = PyUnicode_FromObject(value);
 
-      if (keyUnicode == 0 || valueUnicode == 0)
+      if (keyUnicode == nullptr || valueUnicode == nullptr)
       {
         throw Exception("Both the key and value in the return translation must be "
                             "convertable to strings.");

@@ -50,7 +50,7 @@ namespace Tgs
     /**
      * @brief ~MultithreadedRandomForest destructor
      */
-    virtual ~MultithreadedRandomForest(){}
+    virtual ~MultithreadedRandomForest() = default;
 
     /**
     * Build the forest from a data set

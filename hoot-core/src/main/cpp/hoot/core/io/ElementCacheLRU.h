@@ -32,8 +32,8 @@
 
 #include <boost/date_time/posix_time/posix_time.hpp>
 
-#include <hoot/core/elements/ElementType.h>
 #include <hoot/core/elements/ElementId.h>
+#include <hoot/core/elements/ElementType.h>
 #include <hoot/core/io/ElementCache.h>
 
 #include <ogr_spatialref.h>
@@ -66,11 +66,11 @@ public:
    */
   virtual ~ElementCacheLRU() = default;
 
-  virtual bool isEmpty() const;
+  bool isEmpty() const override;
 
-  virtual unsigned long size() const;
+  unsigned long size() const override;
 
-  virtual unsigned long typeCount(const ElementType::Type typeToCount) const;
+  unsigned long typeCount(const ElementType::Type typeToCount) const override;
 
   /**
    * @brief addElement
@@ -78,61 +78,61 @@ public:
    * @note The last access time for an element added to the cache will be initialized to the
    *    current time
    */
-  virtual void addElement(ConstElementPtr& newElement);
+  void addElement(ConstElementPtr& newElement) override;
 
-  virtual void resetElementIterators();
+  void resetElementIterators() override;
 
-  virtual ConstNodePtr getNextNode();
+  ConstNodePtr getNextNode() override;
 
-  virtual ConstWayPtr getNextWay();
+  ConstWayPtr getNextWay() override;
 
-  virtual ConstRelationPtr getNextRelation();
+  ConstRelationPtr getNextRelation() override;
 
   // Functions for ElementInputStream
-  virtual void close();
-  virtual bool hasMoreElements();
+  void close() override;
+  bool hasMoreElements() override;
 
-  virtual ElementPtr readNextElement();
+  ElementPtr readNextElement() override;
 
   // Functions for ElementOutputStream
-  virtual void writeElement(ElementPtr& element);
+  void writeElement(ElementPtr& element) override;
 
   // Functions for ElementProvider
 
-  virtual std::shared_ptr<OGRSpatialReference> getProjection() const;
+  std::shared_ptr<OGRSpatialReference> getProjection() const override;
 
-  virtual bool containsElement(const ElementId& eid) const;
+  bool containsElement(const ElementId& eid) const override;
 
-  virtual ConstElementPtr getElement(const ElementId& id) const;
+  ConstElementPtr getElement(const ElementId& id) const override;
 
-  virtual const ConstNodePtr getNode(long id) const;
+  ConstNodePtr getNode(long id) const override;
 
-  virtual const NodePtr getNode(long id);
+  NodePtr getNode(long id) override;
 
-  virtual const ConstRelationPtr getRelation(long id) const;
+  ConstRelationPtr getRelation(long id) const override;
 
-  virtual const RelationPtr getRelation(long id);
+  RelationPtr getRelation(long id) override;
 
-  virtual const ConstWayPtr getWay(long id) const;
+  ConstWayPtr getWay(long id) const override;
 
-  virtual const WayPtr getWay(long id);
+  WayPtr getWay(long id) override;
 
-  virtual bool containsNode(long id) const;
+  bool containsNode(long id) const override;
 
-  virtual bool containsRelation(long id) const;
+  bool containsRelation(long id) const override;
 
-  virtual bool containsWay(long id) const;
+  bool containsWay(long id) const override;
 
   // Cache-specific items
-  virtual void removeElement(const ElementId& eid);
+  void removeElement(const ElementId& eid) override;
 
-  virtual void removeElements(const ElementType::Type type);
+  void removeElements(const ElementType::Type type) override;
 
-  virtual unsigned long getNodeCacheSize() { return _maxNodeCount; }
+  unsigned long getNodeCacheSize() override { return _maxNodeCount; }
 
-  virtual unsigned long getWayCacheSize() { return _maxWayCount; }
+  unsigned long getWayCacheSize() override { return _maxWayCount; }
 
-  virtual unsigned long getRelationCacheSize() { return _maxRelationCount; }
+  unsigned long getRelationCacheSize() override { return _maxRelationCount; }
 
   // For testing - gets a comma-seperated list of IDs of the Least Recently Used
   // cache items, from most recent to least recent.
@@ -183,7 +183,7 @@ private:
   void _updateRelationAccess(long id);
 };
 
-typedef std::shared_ptr<ElementCacheLRU> ElementCacheLRUPtr;
+using ElementCacheLRUPtr = std::shared_ptr<ElementCacheLRU>;
 
 }
 

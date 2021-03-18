@@ -32,21 +32,21 @@
 #include <geos/geom/LineString.h>
 #include <geos/geom/Point.h>
 #include <geos/operation/distance/DistanceOp.h>
-using namespace geos::operation::distance;
 
 // Hoot
 #include <hoot/core/algorithms/WayDiscretizer.h>
 #include <hoot/core/algorithms/WayHeading.h>
 #include <hoot/core/algorithms/linearreference/LocationOfPoint.h>
-#include <hoot/core/elements/ElementGeometryUtils.h>
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/Element.h>
+#include <hoot/core/elements/ElementGeometryUtils.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
+#include <hoot/core/util/Factory.h>
 
 // Qt
 #include <QDebug>
 
 using namespace geos::geom;
+using namespace geos::operation::distance;
 
 namespace hoot
 {
@@ -101,7 +101,7 @@ Radians ParallelWayCriterion::calculateDifference(const ConstWayPtr& w) const
   for (size_t i = 0; i < _points.size(); i++)
   {
     // calculate the heading from point to the nearest point on the candidate way.
-    CoordinateSequence* seq = DistanceOp::closestPoints(_points[i], ls.get());
+    std::shared_ptr<CoordinateSequence> seq(DistanceOp::closestPoints(_points[i], ls.get()));
     double d = seq->getAt(0).distance(seq->getAt(1));
     if (d > 0.5)
     {
@@ -117,7 +117,6 @@ Radians ParallelWayCriterion::calculateDifference(const ConstWayPtr& w) const
       deltaSum += toRadians(90.0);
       count++;
     }
-    delete seq;
   }
 
   if (count == 0)

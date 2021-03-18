@@ -27,28 +27,27 @@
 #include "HighwayMatchCreator.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/algorithms/subline-matching/MaximalNearestSublineMatcher.h>
 #include <hoot/core/algorithms/subline-matching/MaximalSublineStringMatcher.h>
+#include <hoot/core/algorithms/subline-matching/SublineStringMatcher.h>
+#include <hoot/core/conflate/highway/HighwayClassifier.h>
+#include <hoot/core/conflate/highway/HighwayExpertClassifier.h>
+#include <hoot/core/conflate/highway/HighwayMatch.h>
 #include <hoot/core/conflate/matching/MatchType.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
-#include <hoot/core/conflate/highway/HighwayMatch.h>
-#include <hoot/core/conflate/highway/HighwayExpertClassifier.h>
-#include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/criterion/ArbitraryCriterion.h>
-#include <hoot/core/util/NotImplementedException.h>
+#include <hoot/core/criterion/HighwayCriterion.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/schema/TagAncestorDifferencer.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/Units.h>
-#include <hoot/core/visitors/SpatialIndexer.h>
-#include <hoot/core/conflate/highway/HighwayClassifier.h>
-#include <hoot/core/algorithms/subline-matching/SublineStringMatcher.h>
-#include <hoot/core/util/NotImplementedException.h>
-#include <hoot/core/schema/TagAncestorDifferencer.h>
-#include <hoot/core/util/StringUtils.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/MemoryUsageChecker.h>
-#include <hoot/core/criterion/HighwayCriterion.h>
+#include <hoot/core/util/NotImplementedException.h>
+#include <hoot/core/util/StringUtils.h>
+#include <hoot/core/util/Units.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
+#include <hoot/core/visitors/SpatialIndexer.h>
 
 // Standard
 #include <fstream>
@@ -398,12 +397,11 @@ void HighwayMatchCreator::createMatches(
 vector<CreatorDescription> HighwayMatchCreator::getAllCreators() const
 {
   vector<CreatorDescription> result;
-  result.push_back(
-    CreatorDescription(
-      className(),
-      "Generates matchers that match roads with the 2nd Generation (Unifying) Algorithm",
-      CreatorDescription::Highway,
-      false));
+  result.emplace_back(
+    className(),
+    "Generates matchers that match roads with the 2nd Generation (Unifying) Algorithm",
+    CreatorDescription::Highway,
+    false);
   return result;
 }
 
@@ -417,10 +415,10 @@ std::shared_ptr<MatchThreshold> HighwayMatchCreator::getMatchThreshold()
 {
   if (!_matchThreshold.get())
   {
-    ConfigOptions config;
     _matchThreshold.reset(
-      new MatchThreshold(config.getHighwayMatchThreshold(), config.getHighwayMissThreshold(),
-                         config.getHighwayReviewThreshold()));
+      new MatchThreshold(
+        ConfigOptions().getHighwayMatchThreshold(), ConfigOptions().getHighwayMissThreshold(),
+        ConfigOptions().getHighwayReviewThreshold()));
   }
   return _matchThreshold;
 }

@@ -27,11 +27,11 @@
 #include "RemoveRef2Visitor.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/ConstOsmMapConsumer.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/schema/MetadataTags.h>
-#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 
 namespace hoot
 {
@@ -79,7 +79,7 @@ _errorOnMissingRef1(false)
   // make sure we're re-entrant.
   QMutexLocker ml(&_mutex);
 
-  if (_ref2Keys.size() == 0)
+  if (_ref2Keys.empty())
   {
     _ref2Keys << MetadataTags::Ref2();
     _ref2Keys << "REVIEW";
@@ -131,20 +131,20 @@ void RemoveRef2Visitor::_checkAndDeleteRef2(ElementPtr e, QString key)
       }
       logWarnCount++;
       refs.removeAll(r);
-      if (refs.size() == 0 && key == MetadataTags::Ref2())
+      if (refs.empty() && key == MetadataTags::Ref2())
       {
         refs.append("none");
       }
     }
     else
     {
-      ElementPtr e = _map->getElement(eid);
+      ElementPtr element = _map->getElement(eid);
       // if the REF1 element meets the criterion.
-      if (ref1CriterionSatisfied(e))
+      if (ref1CriterionSatisfied(element))
       {
         // remove the specified REF2 from the appropriate REF2 field.
         refs.removeAll(r);
-        if (refs.size() == 0 && key == MetadataTags::Ref2())
+        if (refs.empty() && key == MetadataTags::Ref2())
         {
           refs.append("none");
         }
@@ -152,7 +152,7 @@ void RemoveRef2Visitor::_checkAndDeleteRef2(ElementPtr e, QString key)
     }
   }
 
-  if (refs.size() > 0)
+  if (!refs.empty())
   {
     e->getTags().setList(key, refs);
   }
@@ -205,6 +205,7 @@ void RemoveRef2Visitor::visit(const ElementPtr& e)
     {
       _checkAndDeleteRef2(e, _ref2Keys[i]);
     }
+    _numProcessed++;
   }
 }
 

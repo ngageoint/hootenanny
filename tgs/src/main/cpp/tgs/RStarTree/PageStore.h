@@ -49,7 +49,7 @@ public:
   /**
    * All page shared pointers should be freed before the PageStore is destroyed.
    */
-  virtual ~PageStore() {}
+  virtual ~PageStore() = default;
 
   /**
    * Creates a new page w/ a new id and returns the page. All page shared pointers should be

@@ -28,9 +28,9 @@
 #include "DistanceNodeCriterion.h"
 
 // Hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
 
 using namespace geos::geom;
 
@@ -54,7 +54,7 @@ void DistanceNodeCriterion::setConfiguration(const Settings& s)
     "Invalid center value passed to DistanceNodeCriterion: " +
     opts.getDistanceNodeCriterionCenter();
   const QStringList centerParts = opts.getDistanceNodeCriterionCenter().split(",");
-  if (centerParts.size() == 0)
+  if (centerParts.empty())
   {
     throw HootException(errorMsg);
   }

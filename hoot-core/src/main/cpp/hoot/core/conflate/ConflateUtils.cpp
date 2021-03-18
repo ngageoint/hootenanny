@@ -28,27 +28,24 @@
 #include "ConflateUtils.h"
 
 // Hoot
-#include <hoot/core/util/Log.h>
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/visitors/RemoveElementsVisitor.h>
+#include <hoot/core/conflate/DiffConflator.h>
+#include <hoot/core/criterion/ConflatableElementCriterion.h>
 #include <hoot/core/criterion/NonConflatableCriterion.h>
+#include <hoot/core/io/IoUtils.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/geometry/GeometryUtils.h>
+#include <hoot/core/ops/OpExecutor.h>
 #include <hoot/core/ops/RemoveRoundabouts.h>
 #include <hoot/core/ops/ReplaceRoundabouts.h>
-#include <hoot/core/io/IoUtils.h>
-#include <hoot/core/ops/NamedOp.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/visitors/RemoveElementsVisitor.h>
 #include <hoot/core/visitors/RemoveMissingElementsVisitor.h>
-#include <hoot/core/conflate/DiffConflator.h>
-#include <hoot/core/conflate/matching/MatchFactory.h>
 
 // Qt
 #include <QElapsedTimer>
 
 namespace hoot
 {
-
-QMap<QString, ElementCriterionPtr> ConflateUtils::_critCache;
 
 int ConflateUtils::writeNonConflatable(const ConstOsmMapPtr& map, const QString& output)
 {
@@ -129,10 +126,10 @@ void ConflateUtils::writeDiff(const QString& mapUrl1, const QString& mapUrl2,
     StringUtils::formatLargeNumber(diffMap->size() - replacementMapSize) <<
     " and replacement data of size: " << StringUtils::formatLargeNumber(replacementMapSize)  <<
     "...");
-  NamedOp(ConfigOptions().getConflatePreOps()).apply(diffMap);
+  OpExecutor(ConfigOptions().getConflatePreOps()).apply(diffMap);
   DiffConflator diffGen;
   diffGen.apply(diffMap);
-  NamedOp(ConfigOptions().getConflatePostOps()).apply(diffMap);
+  OpExecutor(ConfigOptions().getConflatePostOps()).apply(diffMap);
   LOG_STATUS(
     "Calculated a diff with: " << StringUtils::formatLargeNumber(diffMap->size()) <<
     " features in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << " (skipped " <<
@@ -150,53 +147,43 @@ void ConflateUtils::writeDiff(const QString& mapUrl1, const QString& mapUrl2,
   timer.restart();
 }
 
-bool ConflateUtils::elementCanBeConflatedByActiveMatcher(
-  const ConstElementPtr& element, const ConstOsmMapPtr& map)
+bool ConflateUtils::operatesOnGenericElementsOnly(const std::shared_ptr<OsmMapOperation>& op)
 {
-  // Get all the configured matchers.
-  const std::vector<std::shared_ptr<MatchCreator>> activeMatchCreators =
-    MatchFactory::getInstance().getCreators();
-  for (std::vector<std::shared_ptr<MatchCreator>>::const_iterator itr = activeMatchCreators.begin();
-       itr != activeMatchCreators.end(); ++itr)
+  // Tried to implement this and the one with the ElementVisitor input generically via templated
+  // code but was getting link errors...worth revisiting at some point.
+
+  const QStringList geometryTypeCriteriaClassNames = op->getCriteria();
+  if (geometryTypeCriteriaClassNames.size() == 0)
   {
-    // Get the element criterion this matcher uses for matching elements.
-    std::shared_ptr<MatchCreator> activeMatchCreator = *itr;
-    const QStringList supportedCriteriaClassNames = activeMatchCreator->getCriteria();
-    for (int i = 0; i < supportedCriteriaClassNames.size(); i++)
+    return true;
+  }
+  for (int i = 0; i < geometryTypeCriteriaClassNames.size(); i++)
+  {
+    if (ConflatableElementCriterion::supportsSpecificConflation(
+          geometryTypeCriteriaClassNames.at(i)))
     {
-      const QString criterionClassName = supportedCriteriaClassNames.at(i);
-
-      // Crit creation can be expensive, so cache those created.
-      ElementCriterionPtr crit;
-      if (_critCache.contains(criterionClassName))
-      {
-        crit = _critCache[criterionClassName];
-      }
-      else
-      {
-        crit.reset(Factory::getInstance().constructObject<ElementCriterion>(criterionClassName));
-        _critCache[criterionClassName] = crit;
-
-        // All ElementCriterion that are map consumers inherit from ConstOsmMapConsumer, so this
-        // works.
-        std::shared_ptr<ConstOsmMapConsumer> mapConsumer =
-          std::dynamic_pointer_cast<ConstOsmMapConsumer>(crit);
-        LOG_VART(mapConsumer.get());
-        if (mapConsumer)
-        {
-          mapConsumer->setOsmMap(map.get());
-        }
-      }
-
-      // If any matcher's crit matches the element, return true.
-      if (crit->isSatisfied(element))
-      {
-        return true;
-      }
+      return false;
     }
   }
+  return true;
+}
 
-  return false;
+bool ConflateUtils::operatesOnGenericElementsOnly(const std::shared_ptr<ElementVisitor>& vis)
+{
+  const QStringList geometryTypeCriteriaClassNames = vis->getCriteria();
+  if (geometryTypeCriteriaClassNames.empty())
+  {
+    return true;
+  }
+  for (int i = 0; i < geometryTypeCriteriaClassNames.size(); i++)
+  {
+    if (ConflatableElementCriterion::supportsSpecificConflation(
+          geometryTypeCriteriaClassNames.at(i)))
+    {
+      return false;
+    }
+  }
+  return true;
 }
 
 }

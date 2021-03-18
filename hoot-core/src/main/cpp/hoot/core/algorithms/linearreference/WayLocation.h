@@ -32,8 +32,8 @@
 #include <geos/geom/Coordinate.h>
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Node.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Way.h>
 
 namespace hoot
@@ -73,7 +73,7 @@ public:
 
   WayLocation(const WayLocation& other);
 
-  virtual ~WayLocation() {}
+  virtual ~WayLocation() = default;
 
   Meters calculateDistanceFromEnd() const;
 
@@ -109,7 +109,7 @@ public:
    * @param length the length to the desired point
    * @return the Coordinate of the desired point
    */
-  static const geos::geom::Coordinate pointAlongSegmentByFraction(const geos::geom::Coordinate& p0,
+  static geos::geom::Coordinate pointAlongSegmentByFraction(const geos::geom::Coordinate& p0,
                                                                   const geos::geom::Coordinate& p1,
                                                                   double frac);
 
@@ -143,7 +143,7 @@ public:
 
   bool isValid() const { return _segmentIndex != -1; }
 
-  const geos::geom::Coordinate getCoordinate() const;
+  geos::geom::Coordinate getCoordinate() const;
 
   /**
    * Move the location on the way. Negative values will move closer to the beginning of the way.
@@ -198,8 +198,8 @@ inline uint qHash(const WayLocation& wl)
   return qHash(wl.toString());
 }
 
-typedef std::shared_ptr<WayLocation> WayLocationPtr;
-typedef std::shared_ptr<const WayLocation> ConstWayLocationPtr;
+using WayLocationPtr = std::shared_ptr<WayLocation>;
+using ConstWayLocationPtr = std::shared_ptr<const WayLocation>;
 
 }
 

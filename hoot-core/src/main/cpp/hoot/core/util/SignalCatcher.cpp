@@ -137,7 +137,9 @@ void SignalCatcher::print_stacktrace(FILE *out, unsigned int max_frames)
     // address of this function.
     for (int i = 1; i < addrlen; i++)
     {
-        char *begin_name = 0, *begin_offset = 0, *end_offset = 0;
+        char *begin_name = nullptr,
+             *begin_offset = nullptr,
+             *end_offset = nullptr;
 
         // find parentheses and +address offset surrounding the mangled name:
         // ./module(function+0x15c) [0x8048a6d]

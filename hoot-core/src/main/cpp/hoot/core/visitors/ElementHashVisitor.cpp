@@ -152,7 +152,7 @@ QString ElementHashVisitor::_toJson(const ConstNodePtr& node) const
 
 QString ElementHashVisitor::_toJson(const ConstWayPtr& way) const
 {
-  if (_map == 0)
+  if (_map == nullptr)
   {
     throw IllegalArgumentException("A map must be set when calculating a way hash.");
   }
@@ -182,7 +182,7 @@ QString ElementHashVisitor::_toJson(const ConstWayPtr& way) const
 
 QString ElementHashVisitor::_toJson(const ConstRelationPtr& relation) const
 {
-  if (_map == 0)
+  if (_map == nullptr)
   {
     throw IllegalArgumentException("A map must be set when calculating a relation hash.");
   }

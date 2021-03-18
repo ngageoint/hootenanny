@@ -51,11 +51,6 @@ IdwInterpolator::IdwInterpolator(double p)
   _stopDelta = 0.1;
 }
 
-IdwInterpolator::~IdwInterpolator()
-{
-  //cout << "IdwInterpolator::~IdwInterpolator()" << endl << flush;
-}
-
 class IdwOptimizeFunction : public NelderMead::Function
 {
 public:

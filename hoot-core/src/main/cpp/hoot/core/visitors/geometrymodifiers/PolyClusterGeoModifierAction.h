@@ -108,7 +108,7 @@ private:
   QList<QList<long>> _clusters;
   QList<long> _processedPolys;
   QHash<long, CoordinateExt> _coordinateByNodeIx;
-  QHash<long, std::shared_ptr<Polygon>> _polyByWayId;
+  QHash<long, std::shared_ptr<geos::geom::Polygon>> _polyByWayId;
   std::shared_ptr<ClosePointHash> _pClosePointHash;
   QHash<QString,QString> _clusterTags;
 

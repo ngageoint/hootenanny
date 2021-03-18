@@ -27,10 +27,10 @@
 
 #include "KskipBigramDistance.h"
 //  Hoot
-#include <hoot/core/util/Log.h>
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/algorithms/string/StringTokenizer.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/HootException.h>
+#include <hoot/core/util/Log.h>
 
 //  Qt
 #include <QMap>
@@ -98,9 +98,9 @@ double KskipBigramDistance::score(const QString& s1, const QString& s2) const
   QSet<QString> grams1 = getBigrams(s1);
   QSet<QString> grams2 = getBigrams(s2);
   //  Validate bi-gram set size
-  if (grams1.count() == 0 && grams2.count() == 0)
+  if (grams1.empty() && grams2.empty())
     return 1.0;
-  else if (grams1.count() == 0 || grams2.count() == 0)
+  else if (grams1.empty() || grams2.empty())
     return 0.0;
   /**  To calculate the score use the following
    *   intersection of sets 1 and 2

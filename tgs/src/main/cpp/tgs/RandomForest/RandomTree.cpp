@@ -65,7 +65,7 @@ namespace Tgs
 
   RandomTree::~RandomTree()
   {
-    if (_root != NULL)
+    if (_root != nullptr)
     {
       _destroyTree(_root);
       _root.reset();
@@ -412,7 +412,7 @@ namespace Tgs
   {
     try
     {
-      Tgs::Random::instance()->seed((unsigned int)_treeId);
+      Tgs::Random::instance()->seed(_treeId);
 
       //std::cout << "Train Tree" << std::endl;
       _factPerNode = numFactors;
@@ -596,7 +596,7 @@ namespace Tgs
     //Perform a post order traversal of the tree
     //Delete node after its children have been deleted
 
-    if (node.get() != 0)
+    if (node.get() != nullptr)
     {
       _destroyTree(node->leftChild);
       _destroyTree(node->rightChild);
@@ -613,7 +613,7 @@ namespace Tgs
 
       if (fileStream.good())
       {
-        if (node != NULL)
+        if (node != nullptr)
         {
           fileStream << tabDepth + "<TreeNode>" << std::endl;
 
@@ -918,11 +918,11 @@ namespace Tgs
         {
           QStringList classList = nodeElement.text().split(" ");
 
-          for (unsigned int i = 0; i < (unsigned int)classList.size(); i++)
+          for (unsigned int j = 0; j < (unsigned int)classList.size(); j++)
           {
-            node->classLabel += classList[i].toLatin1().constData();
+            node->classLabel += classList[j].toLatin1().constData();
 
-            if (i != (unsigned int)classList.size() - 1)
+            if (j != (unsigned int)classList.size() - 1)
             {
               node->classLabel += " ";
             }
@@ -938,9 +938,9 @@ namespace Tgs
 
             bool parsedOk;
 
-            for (unsigned int i = 0; i < (unsigned int)dataList.size(); i++)
+            for (unsigned int j = 0; j < (unsigned int)dataList.size(); j++)
             {
-              QString dataIndexString = dataList[i];
+              QString dataIndexString = dataList[j];
 
               unsigned int dataIndex = dataIndexString.toUInt(&parsedOk);
 

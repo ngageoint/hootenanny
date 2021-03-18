@@ -51,7 +51,7 @@ public:
 
   Box(int dimensions);
 
-  ~Box() {}
+  ~Box() = default;
 
   double calculateOverlap(const Box& b) const;
 

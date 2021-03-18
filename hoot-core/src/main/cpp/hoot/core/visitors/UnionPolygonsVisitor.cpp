@@ -54,9 +54,13 @@ void UnionPolygonsVisitor::visit(const std::shared_ptr<const Element>& e)
 
   if (AreaCriterion().isSatisfied(e))
   {
-    std::shared_ptr<Geometry> g = ElementToGeometryConverter(_map->shared_from_this()).convertToGeometry(e);
-    _result.reset(g->Union(_result.get()));
-    _numAffected++;
+    std::shared_ptr<Geometry> g =
+      ElementToGeometryConverter(_map->shared_from_this()).convertToGeometry(e);
+    if (g && !g->isEmpty())
+    {
+      _result.reset(g->Union(_result.get()));
+      _numAffected++;
+    }
   }
 }
 

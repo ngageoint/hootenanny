@@ -29,8 +29,8 @@
 
 // Hoot
 #include <hoot/core/algorithms/changeset/ChangesetProvider.h>
-#include <hoot/core/io/ElementInputStream.h>
 #include <hoot/core/elements/ElementComparer.h>
+#include <hoot/core/io/ElementInputStream.h>
 
 namespace hoot
 {
@@ -49,35 +49,35 @@ public:
   /**
    * @see ChangeSetProvider
    */
-  virtual std::shared_ptr<OGRSpatialReference> getProjection() const override;
+  std::shared_ptr<OGRSpatialReference> getProjection() const override;
 
-  virtual ~ChangesetDeriver();
-
-  /**
-   * @see ChangeSetProvider
-   */
-  virtual void close();
+  ~ChangesetDeriver();
 
   /**
    * @see ChangeSetProvider
    */
-  virtual bool hasMoreChanges();
+  void close() override;
 
   /**
    * @see ChangeSetProvider
    */
-  virtual Change readNextChange() override;
+  bool hasMoreChanges() override;
 
-  virtual int getNumFromElementsParsed() const override { return _numFromElementsParsed; }
-  virtual int getNumToElementsParsed() const override { return _numToElementsParsed; }
+  /**
+   * @see ChangeSetProvider
+   */
+  Change readNextChange() override;
 
-  virtual int getNumCreateChanges() const override
+  int getNumFromElementsParsed() const override { return _numFromElementsParsed; }
+  int getNumToElementsParsed() const override { return _numToElementsParsed; }
+
+  int getNumCreateChanges() const override
   { return _changesByType[Change::ChangeType::Create]; }
-  virtual int getNumModifyChanges() const override
+  int getNumModifyChanges() const override
   { return _changesByType[Change::ChangeType::Modify]; }
-  virtual int getNumDeleteChanges() const override
+  int getNumDeleteChanges() const override
   { return _changesByType[Change::ChangeType::Delete]; }
-  virtual int getNumChanges() const override
+  int getNumChanges() const override
   { return getNumCreateChanges() + getNumModifyChanges() + getNumDeleteChanges(); }
 
   void setAllowDeletingReferenceFeatures(bool allow) { _allowDeletingReferenceFeatures = allow; }
@@ -106,7 +106,7 @@ private:
   QStringList _metadataAllowKeys;
 };
 
-typedef std::shared_ptr<ChangesetDeriver> ChangesetDeriverPtr;
+using ChangesetDeriverPtr = std::shared_ptr<ChangesetDeriver>;
 
 }
 

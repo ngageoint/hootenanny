@@ -57,11 +57,11 @@ class OsmNetwork
 {
 public:
 
-  typedef QMultiHash<ElementId, ConstNetworkVertexPtr> VertexMap;
-  typedef QMultiHash<ElementId, ConstNetworkEdgePtr> EdgeMap;
-  typedef QMultiHash<ConstNetworkVertexPtr, ConstNetworkEdgePtr> VertexToEdgeMap;
+  using VertexMap = QMultiHash<ElementId, ConstNetworkVertexPtr>;
+  using EdgeMap = QMultiHash<ElementId, ConstNetworkEdgePtr>;
+  using VertexToEdgeMap = QMultiHash<ConstNetworkVertexPtr, ConstNetworkEdgePtr>;
 
-  OsmNetwork();
+  OsmNetwork() = default;
 
   void addEdge(NetworkEdgePtr edge);
 
@@ -96,8 +96,8 @@ private:
   VertexToEdgeMap _vertexToEdge;
 };
 
-typedef std::shared_ptr<OsmNetwork> OsmNetworkPtr;
-typedef std::shared_ptr<const OsmNetwork> ConstOsmNetworkPtr;
+using OsmNetworkPtr = std::shared_ptr<OsmNetwork>;
+using ConstOsmNetworkPtr = std::shared_ptr<const OsmNetwork>;
 
 // not implemented
 bool operator<(ConstOsmNetworkPtr, ConstOsmNetworkPtr);

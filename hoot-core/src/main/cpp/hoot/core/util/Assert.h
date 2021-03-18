@@ -37,7 +37,7 @@ namespace hoot
 class Assert
 {
 public:
-  Assert();
+  Assert() = default;
 
   static void isFalse(bool exp, QString s) { isTrue(!exp, s); }
   static void isTrue(bool exp, QString s);

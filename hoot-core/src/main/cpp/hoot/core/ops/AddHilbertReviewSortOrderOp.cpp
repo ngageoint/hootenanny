@@ -27,11 +27,11 @@
 #include "AddHilbertReviewSortOrderOp.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
+#include <hoot/core/conflate/review/ReviewMarker.h>
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/conflate/review/ReviewMarker.h>
 #include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 
 // Tgs
@@ -92,7 +92,7 @@ void AddHilbertReviewSortOrderOp::apply(OsmMapPtr& map)
       const set<ElementId> eids = ReviewMarker::getReviewElements(map, r->getElementId());
       LOG_VART(eids.size());
       LOG_VART(eids);
-      if (eids.size() > 0)
+      if (!eids.empty())
       {
         int64_t hv = _calculateHilbertValue(map, eids);
         if (hv != -1)
@@ -132,7 +132,7 @@ void AddHilbertReviewSortOrderOp::apply(OsmMapPtr& map)
 }
 
 int64_t AddHilbertReviewSortOrderOp::_calculateHilbertValue(
-  const ConstOsmMapPtr& map, const set<ElementId> eids)
+  const ConstOsmMapPtr& map, const std::set<ElementId>& eids)
 {
   std::shared_ptr<Envelope> env;
   for (set<ElementId>::const_iterator it = eids.begin(); it != eids.end(); ++it)
@@ -142,7 +142,7 @@ int64_t AddHilbertReviewSortOrderOp::_calculateHilbertValue(
     {
       std::unique_ptr<Envelope> te(element->getEnvelope(map));
       LOG_VART(env.get());
-      if (env.get() == 0)
+      if (env.get() == nullptr)
       {
         env.reset(new Envelope(*te));
       }
@@ -158,7 +158,7 @@ int64_t AddHilbertReviewSortOrderOp::_calculateHilbertValue(
   }
   LOG_VART(env->toString());
 
-  if (_mapEnvelope.get() == 0)
+  if (_mapEnvelope.get() == nullptr)
   {
     _mapEnvelope.reset(new Envelope(CalculateMapBoundsVisitor::getGeosBounds(map)));
   }

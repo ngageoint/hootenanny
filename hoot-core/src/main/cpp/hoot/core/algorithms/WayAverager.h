@@ -28,6 +28,9 @@
 #ifndef WAYAVERAGER_H
 #define WAYAVERAGER_H
 
+// Hoot
+#include <hoot/core/elements/OsmMap.h>
+
 // GEOS
 namespace geos
 {
@@ -37,9 +40,6 @@ namespace geos
   }
 }
 
-// Hoot
-#include <hoot/core/elements/OsmMap.h>
-
 namespace hoot
 {
 
@@ -48,15 +48,35 @@ class Way;
 class WayAverager
 {
 public:
-  WayAverager(OsmMapPtr map, WayPtr w1, WayPtr w2);
+
+  /**
+   * Constructor
+   *
+   * @param map map owning ways to be averaged
+   * @param w1 the first way to be averaged
+   * @param w2 the second way to be averaged
+   */
+  WayAverager(const OsmMapPtr& map, const WayPtr& w1, const WayPtr& w2);
 
   /**
    * Averages the two input ways into a new output way. The two input ways are removed from their
    * containing map.
+   *
+   * @return the averaged way
    */
-  WayPtr average();
+  WayPtr replaceWaysWithAveragedWay();
 
-  static WayPtr average(OsmMapPtr map, WayPtr w1, WayPtr w2);
+  /**
+   * Averages the two input ways into a new output way. The two input ways are removed from their
+   * containing map.
+   *
+   * @param map map owning ways to be averaged
+   * @param w1 the first way to be averaged
+   * @param w2 the second way to be averaged
+   * @return the averaged way
+   */
+  static WayPtr replaceWaysWithAveragedWay(
+    const OsmMapPtr& map, const WayPtr& w1, const WayPtr& w2);
 
   /**
    * Returns the maximum distance that w1 moved.
@@ -80,20 +100,22 @@ public:
    */
   Meters getMeanMovement2() { return _meanMovement2; }
 
-protected:
+private:
 
   WayPtr _w1;
   WayPtr _w2;
-  OsmMap& _map;
+
+  OsmMapPtr _map;
+
   Meters _meanMovement1, _meanMovement2;
   Meters _sumMovement1, _sumMovement2;
   Meters _maxMovement1, _maxMovement2;
   int _moveCount1, _moveCount2;
 
   /**
-   * Merges the two nodes with the given node ids and returns a newly created node id.
+   * Merges the two nodes and returns a newly created node id.
    */
-  long _merge(long ni1, double weight1, long ni2, double weight2);
+  long _merge(const ConstNodePtr& node1, double weight1, const ConstNodePtr& node2, double weight2);
 
   /**
    * Moves the node with id n half way to the specified line string. The input node id is returned
@@ -107,7 +129,7 @@ protected:
    * line string.
    */
   geos::geom::Coordinate _moveToLineAsCoordinate(
-    long n, double nWeight, const geos::geom::LineString* ls, double lWeight);
+    long n, double nWeight, const geos::geom::LineString* ls, double lWeight) const;
 };
 
 }

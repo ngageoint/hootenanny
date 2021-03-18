@@ -88,7 +88,7 @@ inline void toCpp(v8::Handle<v8::Value> v, Tags& t)
   }
 
   v8::Handle<v8::Object> obj = v8::Handle<v8::Object>::Cast(v);
-  TagsJs* js = 0;
+  TagsJs* js = nullptr;
   if (obj->InternalFieldCount() > 0)
   {
     js = node::ObjectWrap::Unwrap<TagsJs>(obj);
@@ -101,7 +101,7 @@ inline void toCpp(v8::Handle<v8::Value> v, Tags& t)
   {
     QStringList keys = toCpp<QStringList>(obj->GetPropertyNames());
 
-    if (keys.size() == 0)
+    if (keys.empty())
     {
       throw IllegalArgumentException("Expected a MostEnglishNameJs, got: (" + toJson(v) + ")");
     }

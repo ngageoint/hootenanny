@@ -90,7 +90,7 @@ void LongIntegerFieldDefinition::validate(const QVariant& v, StrictChecking stri
     // we're good
   }
   else if (_max == numeric_limits<long long>::max() && _min == -numeric_limits<long long>::max() &&
-           _enumeratedValues.size() != 0)
+           !_enumeratedValues.empty())
   {
 /* Setting Strict to StrictWarn stops Hoot dieing when an enumerated value is outside what
    is in the Schema.

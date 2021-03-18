@@ -27,30 +27,30 @@
 #include "DataConverter.h"
 
 #include <hoot/core/criterion/ElementCriterion.h>
-#include <hoot/core/visitors/ElementVisitor.h>
+#include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/io/ElementCacheLRU.h>
 #include <hoot/core/io/ElementStreamer.h>
+#include <hoot/core/io/IoUtils.h>
+#include <hoot/core/io/OgrWriter.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/io/ShapefileWriter.h>
-#include <hoot/core/io/OgrWriter.h>
-#include <hoot/core/io/ElementCacheLRU.h>
-#include <hoot/core/ops/NamedOp.h>
+#include <hoot/core/ops/BuildingOutlineUpdateOp.h>
+#include <hoot/core/ops/BuildingPartMergeOp.h>
+#include <hoot/core/ops/DuplicateNodeRemover.h>
+#include <hoot/core/ops/OpExecutor.h>
+#include <hoot/core/ops/SchemaTranslationOp.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ConfigUtils.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/io/IoUtils.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/elements/MapProjector.h>
-#include <hoot/core/visitors/ProjectToGeographicVisitor.h>
-#include <hoot/js/v8Engine.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/ops/SchemaTranslationOp.h>
-#include <hoot/core/visitors/SchemaTranslationVisitor.h>
-#include <hoot/core/ops/BuildingPartMergeOp.h>
-#include <hoot/core/ops/DuplicateNodeRemover.h>
-#include <hoot/core/ops/BuildingOutlineUpdateOp.h>
-#include <hoot/core/visitors/WayGeneralizeVisitor.h>
+#include <hoot/core/visitors/ElementVisitor.h>
+#include <hoot/core/visitors/ProjectToGeographicVisitor.h>
 #include <hoot/core/visitors/RemoveDuplicateWayNodesVisitor.h>
+#include <hoot/core/visitors/SchemaTranslationVisitor.h>
+#include <hoot/core/visitors/WayGeneralizeVisitor.h>
+#include <hoot/js/v8Engine.h>
 
 // std
 #include <vector>
@@ -72,7 +72,7 @@ void elementTranslatorThread::run()
   threadIsolate->Enter();
   v8::Locker v8Lock(threadIsolate);
 
-  ElementPtr pNewElement(NULL);
+  ElementPtr pNewElement(nullptr);
   ElementProviderPtr cacheProvider(_pElementCache);
 
   // Setup writer used for translation
@@ -159,7 +159,6 @@ void ogrWriterThread::run()
     // Write element or sleep
     if (doSleep)
     {
-      doSleep = false;
       msleep(100);
     }
     else
@@ -278,7 +277,7 @@ void DataConverter::_validateInput(const QStringList& inputs, const QString& out
   LOG_VART(_translation);
   LOG_VART(_shapeFileColumns);
   LOG_VART(_ogrFeatureReadLimit);
-  if (inputs.size() > 0)
+  if (!inputs.empty())
   {
     LOG_VART(IoUtils::isSupportedOsmFormat(inputs.at(0)));
     LOG_VART(IoUtils::isSupportedOgrFormat(inputs.at(0), true));
@@ -287,7 +286,7 @@ void DataConverter::_validateInput(const QStringList& inputs, const QString& out
   LOG_VART(IoUtils::isSupportedOsmFormat(output));
   LOG_VART(IoUtils::isSupportedOgrFormat(output));
 
-  if (inputs.size() == 0)
+  if (inputs.empty())
   {
     throw HootException("No input(s) specified.");
   }
@@ -466,7 +465,7 @@ void DataConverter::_convertToOgr(const QStringList& inputs, const QString& outp
       // TODO: if we have a single convert op that is a SchemaTranslationOp or
       // SchemaTranslationVisitor should we pop it off and then run multithreaded with that
       // translation?...seems like we should
-      _convertOps.size() == 0 &&
+      _convertOps.empty() &&
       // multithreaded code doesn't support a bounds...not sure if it could be made to at some point
       !ConfigUtils::boundsOptionEnabled())
   {
@@ -477,7 +476,7 @@ void DataConverter::_convertToOgr(const QStringList& inputs, const QString& outp
   {
     // The number of task steps here must be updated as you add/remove job steps in the logic.
     int numTasks = 2;
-    if (_convertOps.size() > 0)
+    if (!_convertOps.empty())
     {
       numTasks++;
     }
@@ -498,11 +497,11 @@ void DataConverter::_convertToOgr(const QStringList& inputs, const QString& outp
     }
     currentTask++;
 
-    if (_convertOps.size() > 0)
+    if (!_convertOps.empty())
     {
       QElapsedTimer timer;
       timer.start();
-      NamedOp convertOps(_convertOps);
+      OpExecutor convertOps(_convertOps);
       convertOps.setProgress(
         Progress(
           ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running,
@@ -606,7 +605,7 @@ QStringList DataConverter::_getOgrLayersFromPath(OgrReader& reader, QString& inp
   }
   LOG_VARD(layers);
 
-  if (layers.size() == 0)
+  if (layers.empty())
   {
     if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
     {
@@ -698,7 +697,7 @@ void DataConverter::_convertFromOgr(const QStringList& inputs, const QString& ou
 
   // The number of task steps here must be updated as you add/remove job steps in the logic.
   int numTasks = 2;
-  if (_convertOps.size() > 0)
+  if (!_convertOps.empty())
   {
     numTasks++;
   }
@@ -719,16 +718,16 @@ void DataConverter::_convertFromOgr(const QStringList& inputs, const QString& ou
     const QStringList layers = _getOgrLayersFromPath(reader, input);
     const std::vector<float> progressWeights = _getOgrInputProgressWeights(reader, input, layers);
     // read each layer's data
-    for (int i = 0; i < layers.size(); i++)
+    for (int j = 0; j < layers.size(); j++)
     {
       PROGRESS_INFO(
-        "Reading layer " << i + 1 << " of " << layers.size() << ": " << layers[i] << "...");
-      LOG_VART(progressWeights[i]);
+        "Reading layer " << j + 1 << " of " << layers.size() << ": " << layers[j] << "...");
+      LOG_VART(progressWeights[j]);
       reader.setProgress(
         Progress(
           ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running,
-          (float)i / (float)(layers.size() * numTasks), progressWeights[i]));
-      reader.read(input, layers[i], map);
+          (float)j / (float)(layers.size() * numTasks), progressWeights[j]));
+      reader.read(input, layers[j], map);
     }
   }
 
@@ -746,11 +745,11 @@ void DataConverter::_convertFromOgr(const QStringList& inputs, const QString& ou
   //OsmMapWriterFactory::writeDebugMap(map, "after-convert-from-ogr");
   currentTask++;
 
-  if (_convertOps.size() > 0)
+  if (!_convertOps.empty())
   {
-    QElapsedTimer timer;
-    timer.start();
-    NamedOp convertOps(_convertOps);
+    QElapsedTimer timer2;
+    timer2.start();
+    OpExecutor convertOps(_convertOps);
     convertOps.setProgress(
       Progress(
         ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running,
@@ -758,7 +757,7 @@ void DataConverter::_convertFromOgr(const QStringList& inputs, const QString& ou
     convertOps.apply(map);
     currentTask++;
     LOG_STATUS(
-      "Convert operations ran in " + StringUtils::millisecondsToDhms(timer.elapsed()) <<
+      "Convert operations ran in " + StringUtils::millisecondsToDhms(timer2.elapsed()) <<
       " total.");
   }
 
@@ -855,7 +854,7 @@ void DataConverter::_convert(const QStringList& inputs, const QString& output)
   else
   {
     numTasks = 2;
-    if (_convertOps.size() > 0)
+    if (!_convertOps.empty())
     {
       numTasks++;
     }
@@ -893,11 +892,11 @@ void DataConverter::_convert(const QStringList& inputs, const QString& output)
     }
     currentTask++;
 
-    if (_convertOps.size() > 0)
+    if (!_convertOps.empty())
     {
       QElapsedTimer timer;
       timer.start();
-      NamedOp convertOps(_convertOps);
+      OpExecutor convertOps(_convertOps);
       convertOps.setProgress(
         Progress(
           ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running,

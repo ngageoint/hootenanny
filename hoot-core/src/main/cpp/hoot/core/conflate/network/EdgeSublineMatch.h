@@ -57,8 +57,8 @@ private:
 
 };
 
-typedef std::shared_ptr<EdgeSublineMatch> EdgeSublineMatchPtr;
-typedef std::shared_ptr<const EdgeSublineMatch> ConstEdgeSublineMatchPtr;
+using EdgeSublineMatchPtr = std::shared_ptr<EdgeSublineMatch>;
+using ConstEdgeSublineMatchPtr = std::shared_ptr<const EdgeSublineMatch>;
 
 // not implemented
 bool operator<(ConstEdgeSublineMatchPtr, ConstEdgeSublineMatchPtr);

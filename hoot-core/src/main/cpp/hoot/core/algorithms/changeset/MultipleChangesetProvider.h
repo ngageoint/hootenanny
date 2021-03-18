@@ -44,24 +44,24 @@ public:
   explicit MultipleChangesetProvider(const std::shared_ptr<OGRSpatialReference>& pProjection)
     : _projection(pProjection) { }
 
-  virtual ~MultipleChangesetProvider() = default;
+  ~MultipleChangesetProvider() = default;
 
-  virtual std::shared_ptr<OGRSpatialReference> getProjection() const override;
-
-  /**
-   * @see ChangeSetProvider
-   */
-  virtual void close();
+  std::shared_ptr<OGRSpatialReference> getProjection() const override;
 
   /**
    * @see ChangeSetProvider
    */
-  virtual bool hasMoreChanges();
+  void close() override;
 
   /**
    * @see ChangeSetProvider
    */
-  virtual Change readNextChange() override;
+  bool hasMoreChanges() override;
+
+  /**
+   * @see ChangeSetProvider
+   */
+  Change readNextChange() override;
 
   void addChangesetProvider(ChangesetProviderPtr newChangeset);
 
@@ -73,7 +73,7 @@ private:
   std::list<ChangesetProviderPtr> _changesets;
 };
 
-typedef std::shared_ptr<MultipleChangesetProvider> MultipleChangesetProviderPtr;
+using MultipleChangesetProviderPtr = std::shared_ptr<MultipleChangesetProvider>;
 
 }
 

@@ -44,8 +44,8 @@ class MatchType;
 class MatchClassification;
 class Match;
 
-typedef std::shared_ptr<Match> MatchPtr;
-typedef std::shared_ptr<const Match> ConstMatchPtr;
+using MatchPtr = std::shared_ptr<Match>;
+using ConstMatchPtr = std::shared_ptr<const Match>;
 
 /**
  * Describes a specific match between two sets of elements. e.g. the match between two
@@ -174,6 +174,8 @@ public:
     const std::set<std::pair<ElementId, ElementId>>& matchPairs);
 
   virtual QString toString() const = 0;
+
+  std::shared_ptr<const MatchThreshold> getThreshold() const { return _threshold; }
 
 protected:
 

@@ -40,7 +40,7 @@ namespace hoot
 int TileUtils::getRandomTileIndex(const std::vector<std::vector<geos::geom::Envelope>>& tiles,
                                   int randomSeed)
 {
-  if (tiles.size() == 0)
+  if (tiles.empty())
   {
     throw IllegalArgumentException("No tiles passed to TileUtils::getRandomTileIndex.");
   }

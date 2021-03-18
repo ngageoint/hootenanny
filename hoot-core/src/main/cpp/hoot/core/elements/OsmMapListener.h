@@ -37,7 +37,7 @@ class OsmMapListener
 {
 public:
 
-  virtual ~OsmMapListener() {}
+  virtual ~OsmMapListener() = default;
 
   virtual std::shared_ptr<OsmMapListener> clone() const = 0;
 

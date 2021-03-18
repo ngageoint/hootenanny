@@ -51,7 +51,7 @@ _tableName(tableName)
 SqlBulkDelete::~SqlBulkDelete()
 {
   LOG_DEBUG("(" << _tableName << ") Total time deleting: " << _time);
-  if (_pending.size() > 0)
+  if (!_pending.empty())
   {
     LOG_WARN("(" << _tableName << ") There are pending deletes in SqlBulkDelete. You should call "
              "flush before destruction.");
@@ -63,7 +63,7 @@ void SqlBulkDelete::flush()
   LOG_TRACE("Flushing bulk delete...");
   LOG_VART(_pending.size());
 
-  if (_pending.size() > 0)
+  if (!_pending.empty())
   {
     double start = Tgs::Time::getTime();
     QString sql;

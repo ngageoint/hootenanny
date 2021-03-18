@@ -27,8 +27,8 @@
 #include "ImplicitTagEligiblePoiPolyCriterion.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/util/Factory.h>
 
 // Qt
 #include <QStringBuilder>
@@ -40,7 +40,7 @@ HOOT_FACTORY_REGISTER(ElementCriterion, ImplicitTagEligiblePoiPolyCriterion)
 
 bool ImplicitTagEligiblePoiPolyCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  return e->getTags().getNames().size() > 0 && hasEligibleKvp(e->getTags());
+  return !e->getTags().getNames().empty() && hasEligibleKvp(e->getTags());
 }
 
 QStringList ImplicitTagEligiblePoiPolyCriterion::getEligibleKvps(const Tags& tags) const

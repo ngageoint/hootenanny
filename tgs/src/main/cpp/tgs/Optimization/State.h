@@ -39,7 +39,7 @@ namespace Tgs
 class State
 {
 public:
-  State();
+  State() : _score(0.0) { }
 
   double get(QString name) const { return _values[name]; }
 
@@ -62,8 +62,8 @@ private:
   QMap<QString, double> _values;
 };
 
-typedef std::shared_ptr<State> StatePtr;
-typedef std::shared_ptr<const State> ConstStatePtr;
+using StatePtr = std::shared_ptr<State>;
+using ConstStatePtr = std::shared_ptr<const State>;
 
 inline uint qHash(const ConstStatePtr& s)
 {

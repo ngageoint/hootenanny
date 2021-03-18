@@ -78,10 +78,10 @@ class Sparse2dMatrix
 {
 public:
 
-  typedef Sparse2dCellId CellId;
-  typedef HashMap<CellId, double>::const_iterator const_iterator;
+  using CellId = Sparse2dCellId;
+  using const_iterator = HashMap<CellId, double>::const_iterator;
 
-  Sparse2dMatrix();
+  Sparse2dMatrix() = default;
   virtual ~Sparse2dMatrix() = default;
 
   double get(const CellId& cid) const;

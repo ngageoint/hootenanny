@@ -31,6 +31,7 @@
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/criterion/LinearCriterion.h>
+#include <hoot/core/criterion/RailwayWayNodeCriterion.h>
 
 namespace hoot
 {
@@ -71,6 +72,13 @@ bool RailwayCriterion::isSatisfied(const ConstElementPtr& e) const
   }
 
   return passedTagFilter;
+}
+
+QStringList RailwayCriterion::getChildCriteria() const
+{
+  QStringList criteria;
+  criteria.append(RailwayWayNodeCriterion::className());
+  return criteria;
 }
 
 }

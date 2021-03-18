@@ -61,7 +61,7 @@ private:
   OsmMapPtr _map;
   int _blobIndex;
 
-  void _init(std::istream* in);
+  void _init(const std::shared_ptr<std::istream>& in);
 
   virtual void _next();
 };

@@ -54,7 +54,7 @@ public:
     geos::geom::Envelope bounds;
   };
 
-  TaskGrid();
+  TaskGrid() = default;
 
   /**
    * Adds a task grid cell to this task grid; cell ordering will be maintainied

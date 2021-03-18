@@ -28,8 +28,8 @@
 #define TAGS_H
 
 // Hoot
-#include <hoot/core/util/Units.h>
 #include <hoot/core/schema/SchemaVertex.h>
+#include <hoot/core/util/Units.h>
 
 // Qt
 #include <QHash>
@@ -102,7 +102,7 @@ public:
    */
   bool hasInformationTag() const;
 
-  const QString get(const QString& k) const { return operator[](k); }
+  QString get(const QString& k) const { return operator[](k); }
 
   /**
    * Gets the element's UUID(s). If the UUID doesn't exist then it creates a new UUID.

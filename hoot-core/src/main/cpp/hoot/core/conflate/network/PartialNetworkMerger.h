@@ -51,8 +51,9 @@ public:
    * Constructed with a set of element matching pairs. The pairs are generally Unknown1 as first
    * and Unknown2 as second.
    */
-  PartialNetworkMerger(const std::set<std::pair<ElementId, ElementId>>& pairs,
-    QSet<ConstEdgeMatchPtr> edgeMatches, ConstNetworkDetailsPtr details);
+  PartialNetworkMerger(
+    const std::set<std::pair<ElementId, ElementId>>& pairs,
+    const QSet<ConstEdgeMatchPtr>& edgeMatches, const ConstNetworkDetailsPtr& details);
   virtual ~PartialNetworkMerger() = default;
 
   virtual void apply(const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced);

@@ -59,10 +59,10 @@ public:
   virtual void setMinSplitSize(Meters minSplitSize) = 0;
   virtual void setHeadingDelta(Meters headingDelta) = 0;
 
-  virtual QString toString() const override { return ""; }
+  QString toString() const override { return ""; }
 };
 
-typedef std::shared_ptr<SublineMatcher> SublineMatcherPtr;
+using SublineMatcherPtr = std::shared_ptr<SublineMatcher>;
 
 }
 

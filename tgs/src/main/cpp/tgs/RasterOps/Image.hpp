@@ -25,7 +25,7 @@ namespace Tgs
 
     Image(int width, int height) { resize(width, height); }
 
-    ~Image() { }
+    ~Image() = default;
 
     _T* getData() { return &(_values[0]); }
 

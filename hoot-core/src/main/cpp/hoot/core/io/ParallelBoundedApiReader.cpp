@@ -28,9 +28,9 @@
 #include "ParallelBoundedApiReader.h"
 
 //  Hootenanny
+#include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/io/HootNetworkRequest.h>
 #include <hoot/core/util/FileUtils.h>
-#include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/util/HootNetworkUtils.h>
 #include <hoot/core/util/StringUtils.h>
 
@@ -90,12 +90,11 @@ void ParallelBoundedApiReader::beginRead(const QUrl& endpoint, const geos::geom:
       double lat = envelope.getMinY() + _coordGridSize * j;
       _bboxMutex.lock();
       //  Start at the upper right corner and create boxes left to right, top to bottom
-      _bboxes.push(
-          geos::geom::Envelope(
-              lon,
-              std::min(lon + _coordGridSize, envelope.getMaxX()),
-              lat,
-              std::min(lat + _coordGridSize, envelope.getMaxY())));
+      _bboxes.emplace(
+        lon,
+        std::min(lon + _coordGridSize, envelope.getMaxX()),
+        lat,
+        std::min(lat + _coordGridSize, envelope.getMaxY()));
       _bboxMutex.unlock();
     }
   }
@@ -123,7 +122,7 @@ bool ParallelBoundedApiReader::getSingleResult(QString& result)
   bool success = true;
   //  takeFirst() pops the first element and returns it
   _resultsMutex.lock();
-  if (_resultsList.size() > 0)
+  if (!_resultsList.empty())
     result = _resultsList.takeFirst();
   else
     success = false;
@@ -135,7 +134,7 @@ bool ParallelBoundedApiReader::getSingleResult(QString& result)
 bool ParallelBoundedApiReader::hasMoreResults()
 {
   _resultsMutex.lock();
-  bool more = _resultsList.size() > 0;
+  bool more = !_resultsList.empty();
   _resultsMutex.unlock();
   bool done = isComplete();
   //  There are more results when the queue contains results
@@ -229,10 +228,10 @@ void ParallelBoundedApiReader::_process()
           double lat3 = envelope.getMaxY();
           _bboxMutex.lock();
           //  Split the boxes into quads and push them onto the queue
-          _bboxes.push(geos::geom::Envelope(lon1, lon2, lat1, lat2));
-          _bboxes.push(geos::geom::Envelope(lon2, lon3, lat1, lat2));
-          _bboxes.push(geos::geom::Envelope(lon1, lon2, lat2, lat3));
-          _bboxes.push(geos::geom::Envelope(lon2, lon3, lat2, lat3));
+          _bboxes.emplace(lon1, lon2, lat1, lat2);
+          _bboxes.emplace(lon2, lon3, lat1, lat2);
+          _bboxes.emplace(lon1, lon2, lat2, lat3);
+          _bboxes.emplace(lon2, lon3, lat2, lat3);
           //  Increment by three because 1 turned into 4, i.e. 3 more were added
           _totalEnvelopes += 3;
           _bboxMutex.unlock();

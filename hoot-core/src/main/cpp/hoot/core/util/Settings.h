@@ -62,7 +62,7 @@ public:
   // then be a true Singleton?
   Settings();
 
-  typedef QHash<QString, QVariant> SettingsMap;
+  using SettingsMap = QHash<QString, QVariant>;
 
   void append(const QString& key, const QStringList& values);
   void prepend(const QString& key, const QStringList& values);
@@ -196,7 +196,7 @@ private:
   QString _replaceStaticVariables(QString value) const;
   QString _replaceVariables(const QString& key, std::set<QString> used) const;
   QString _replaceVariablesValue(QString value) const;
-  QString _replaceVariablesValue(QString value, std::set<QString> used) const;
+  QString _replaceVariablesValue(QString value, const std::set<QString>& used) const;
 
   /*
    * This validates input for options that take a list of hoot operators (factory configurable

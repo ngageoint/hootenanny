@@ -52,10 +52,6 @@
 namespace hoot
 {
 
-// ONLY ENABLE THIS DURING DEBUGGING; We don't want to tie it to debug.maps.write, as it may
-// produce a very large number of output files.
-const bool UnifyingConflator::WRITE_DETAILED_DEBUG_MAPS = false;
-
 HOOT_FACTORY_REGISTER(OsmMapOperation, UnifyingConflator)
 
 UnifyingConflator::UnifyingConflator() :
@@ -66,6 +62,18 @@ AbstractConflator()
 UnifyingConflator::UnifyingConflator(const std::shared_ptr<MatchThreshold>& matchThreshold) :
 AbstractConflator::AbstractConflator(matchThreshold)
 {
+}
+
+unsigned int UnifyingConflator::getNumSteps() const
+{
+  if (!ConfigOptions().getConflateMatchOnly())
+  {
+    return 3;
+  }
+  else
+  {
+    return 1;
+  }
 }
 
 void UnifyingConflator::apply(OsmMapPtr& map)
@@ -97,21 +105,27 @@ void UnifyingConflator::apply(OsmMapPtr& map)
 
   _updateProgress(_currentStep - 1, "Matching features...");
   _createMatches();
-  // Add score tags to all matches that have some score component.
-  _addReviewAndScoreTags();
+  if (ConfigOptions().getWriterIncludeConflateScoreTags())
+  {
+    // Add score tags to all matches that have some score component.
+    _addConflateScoreTags();
+  }
   _currentStep++;
 
-  _updateProgress(_currentStep - 1, "Optimizing feature matches...");
-  _matchSets = _optimizeMatches();
-  _currentStep++;
+  if (!ConfigOptions().getConflateMatchOnly())
+  {
+    _updateProgress(_currentStep - 1, "Optimizing feature matches...");
+    MatchSetVector matchSets = _optimizeMatches();
+    _currentStep++;
 
-  _updateProgress(_currentStep - 1, "Merging feature matches...");
+    _updateProgress(_currentStep - 1, "Merging feature matches...");
 
-  std::vector<MergerPtr> relationMergers;
-  _createMergers(relationMergers);
+    std::vector<MergerPtr> relationMergers;
+    _createMergers(matchSets, relationMergers);
 
-  _mergeFeatures(relationMergers);
-  _currentStep++;
+    _mergeFeatures(relationMergers);
+    _currentStep++;
+  }
 
   // cleanup
 
@@ -138,7 +152,7 @@ void UnifyingConflator::_createMergers(std::vector<MergerPtr>& relationMergers)
   // a POI matcher, then mark all matches involved as reviews before having each MergerCreator
   // create Mergers (poi.polygon.match.takes.precedence.over.poi.to.poi.review=false). Note that
   // we're only doing this right now for POI matches and not Building matches, as it hasn't been
-  // seen as necessary for buildings so far.
+  // seen as necessary for building matches so far.
 
   if (!ConfigOptions().getPoiPolygonMatchTakesPrecedenceOverPoiToPoiReview())
   {
@@ -227,41 +241,41 @@ void UnifyingConflator::_mergeFeatures(const std::vector<MergerPtr>& relationMer
     StringUtils::millisecondsToDhms(mergersTimer.elapsed()) << ".");
 }
 
-void UnifyingConflator::_addScoreTags(const ElementPtr& e, const MatchClassification& mc)
+void UnifyingConflator::_addConflateScoreTags(
+  const ElementPtr& e, const MatchClassification& matchClassification,
+  const MatchThreshold& matchThreshold) const
 {
   Tags& tags = e->getTags();
-  tags.appendValue(MetadataTags::HootScoreReview(), mc.getReviewP());
-  tags.appendValue(MetadataTags::HootScoreMatch(), mc.getMatchP());
-  tags.appendValue(MetadataTags::HootScoreMiss(), mc.getMissP());
+  tags.appendValue(MetadataTags::HootScoreMatch(), matchClassification.getMatchP());
+  tags.appendValue(MetadataTags::HootScoreMiss(), matchClassification.getMissP());
+  tags.appendValue(MetadataTags::HootScoreReview(), matchClassification.getReviewP());
+  // The thresholds are global, so don't append.
+  tags.set(MetadataTags::HootScoreMatchThreshold(), matchThreshold.getMatchThreshold());
+  tags.set(MetadataTags::HootScoreMissThreshold(), matchThreshold.getMissThreshold());
+  tags.set(MetadataTags::HootScoreReviewThreshold(), matchThreshold.getReviewThreshold());
 }
 
-void UnifyingConflator::_addReviewAndScoreTags()
+void UnifyingConflator::_addConflateScoreTags()
 {
-  if (ConfigOptions().getWriterIncludeConflateScoreTags())
+  for (size_t i = 0; i < _matches.size(); i++)
   {
-    for (size_t i = 0; i < _matches.size(); i++)
+    ConstMatchPtr match = _matches[i];
+    const MatchClassification& matchClassification = match->getClassification();
+    std::shared_ptr<const MatchThreshold> matchThreshold = match->getThreshold();
+    std::set<std::pair<ElementId, ElementId>> pairs = match->getMatchPairs();
+    for (std::set<std::pair<ElementId, ElementId>>::const_iterator it = pairs.begin();
+         it != pairs.end(); ++it)
     {
-      ConstMatchPtr m = _matches[i];
-      const MatchClassification& mc = m->getClassification();
-      std::set<std::pair<ElementId, ElementId>> pairs = m->getMatchPairs();
-      for (std::set<std::pair<ElementId, ElementId>>::const_iterator it = pairs.begin();
-           it != pairs.end(); ++it)
-      {
-        if (mc.getReviewP() > 0.0)
-        {
-          ElementPtr e1 = _map->getElement(it->first);
-          ElementPtr e2 = _map->getElement(it->second);
+      ElementPtr e1 = _map->getElement(it->first);
+      ElementPtr e2 = _map->getElement(it->second);
 
-          LOG_TRACE(
-            "Adding score tags to " << e1->getElementId() << " and " << e2->getElementId() <<
-            "...");
+      LOG_TRACE(
+        "Adding score tags to " << e1->getElementId() << " and " << e2->getElementId() << "...");
 
-          _addScoreTags(e1, mc);
-          _addScoreTags(e2, mc);
-          e1->getTags().appendValue(MetadataTags::HootScoreUuid(), e2->getTags().getCreateUuid());
-          e2->getTags().appendValue(MetadataTags::HootScoreUuid(), e1->getTags().getCreateUuid());
-        }
-      }
+      _addConflateScoreTags(e1, matchClassification, *matchThreshold);
+      _addConflateScoreTags(e2, matchClassification, *matchThreshold);
+      e1->getTags().appendValue(MetadataTags::HootScoreUuid(), e2->getTags().getCreateUuid());
+      e2->getTags().appendValue(MetadataTags::HootScoreUuid(), e1->getTags().getCreateUuid());
     }
   }
 }

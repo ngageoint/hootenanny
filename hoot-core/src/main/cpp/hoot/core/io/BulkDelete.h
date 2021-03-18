@@ -40,7 +40,7 @@ class BulkDelete
 {
 public:
 
-  virtual ~BulkDelete() {}
+  virtual ~BulkDelete() = default;
 
   virtual void flush() = 0;
 

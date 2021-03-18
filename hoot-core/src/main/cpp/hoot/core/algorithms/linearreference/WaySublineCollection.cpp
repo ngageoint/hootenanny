@@ -33,10 +33,6 @@ namespace hoot
 
 int WaySublineCollection::logWarnCount = 0;
 
-WaySublineCollection::WaySublineCollection()
-{
-}
-
 void WaySublineCollection::addSubline(const WaySubline& subline)
 {
   if (_sublines.size() == 0)

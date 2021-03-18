@@ -43,12 +43,12 @@ namespace Tgs
     /**
     *  Constructor
     */
-    InfoGainCalculator();
+    InfoGainCalculator() = default;
 
     /**
     *  Destructor
     */
-    ~InfoGainCalculator();
+    ~InfoGainCalculator() = default;
 
     /**
     *  Computes the entropy of a dataset based only on the class label

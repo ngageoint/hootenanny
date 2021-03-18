@@ -138,9 +138,9 @@ double AttributeComparator::compareMaps()
     if (scores.size() > 1)
     {
       double v = 0;
-      for (size_t i = 0; i < scores.size(); i++)
+      for (size_t j = 0; j < scores.size(); j++)
       {
-        v += (scores[i] - _mean) * (scores[i] - _mean);
+        v += (scores[j] - _mean) * (scores[j] - _mean);
       }
       _s = sqrt(v / (scores.size() - 1));
 

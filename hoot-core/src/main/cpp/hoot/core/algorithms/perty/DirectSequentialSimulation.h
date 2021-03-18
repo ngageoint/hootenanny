@@ -46,12 +46,12 @@ public:
   static QString className() { return "hoot::DirectSequentialSimulation"; }
 
   DirectSequentialSimulation() = default;
-  virtual ~DirectSequentialSimulation() = default;
+  ~DirectSequentialSimulation() = default;
 
   /**
    * @see PermuteGridCalculator
    */
-  virtual cv::Mat permute(geos::geom::Envelope env, int& pointRows, int& pointCols);
+  cv::Mat permute(const geos::geom::Envelope& env, int& pointRows, int& pointCols) override;
 
 private:
 

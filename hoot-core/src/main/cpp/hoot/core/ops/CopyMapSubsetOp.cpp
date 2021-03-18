@@ -26,7 +26,7 @@
  */
 #include "CopyMapSubsetOp.h"
 
-#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/UniqueElementIdVisitor.h>
@@ -96,7 +96,7 @@ public:
 
   virtual QString getDescription() const { return ""; }
   virtual QString getName() const { return ""; }
-virtual QString getClassName() const override { return ""; }
+  virtual QString getClassName() const override { return ""; }
 
   std::set<ElementId>& getElementsAdded() { return _elementsAdded; }
 

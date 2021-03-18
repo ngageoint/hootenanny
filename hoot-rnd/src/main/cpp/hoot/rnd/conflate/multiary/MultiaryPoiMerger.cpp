@@ -27,8 +27,8 @@
 #include "MultiaryPoiMerger.h"
 
 // hoot
-#include <hoot/core/conflate/merging/MergerCreator.h>
 #include <hoot/core/conflate/matching/MatchFactory.h>
+#include <hoot/core/conflate/merging/MergerCreator.h>
 #include <hoot/core/conflate/merging/MergerFactory.h>
 #include <hoot/core/conflate/review/ReviewMarker.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
@@ -120,10 +120,9 @@ void MultiaryPoiMerger::_mergeClusters(const OsmMapPtr& map,
       if (e->getElementId() != mc->mergedElement->getElementId())
       {
         RecursiveElementRemover(e->getElementId()).apply(map);
-        replaced.push_back(
-          std::pair<ElementId, ElementId>(
+        replaced.emplace_back(
             e->getElementId(),
-            mc->mergedElement->getElementId()));
+            mc->mergedElement->getElementId());
       }
     }
     // Copy mergedElement so we know this is the only map that contains the element.

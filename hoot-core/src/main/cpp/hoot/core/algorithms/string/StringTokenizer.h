@@ -43,9 +43,9 @@ public:
 
   StringTokenizer();
   StringTokenizer(const QString& sepRegex);
-  virtual ~StringTokenizer() = default;
+  ~StringTokenizer() = default;
 
-  void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
   QStringList tokenize(const QString& s) const;
 

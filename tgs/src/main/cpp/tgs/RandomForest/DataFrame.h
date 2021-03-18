@@ -57,17 +57,17 @@ namespace Tgs
   {
   public:
 
-    typedef enum FactorType
+    enum FactorType
     {
       Numerical,
       Nominal
-    } FactorType;
+    };
 
-    typedef enum NullTreatment
+    enum NullTreatment
     {
       NullAsValue,
       NullAsMissingValue
-    } NullTreatment;
+    };
 
     /**
     * Constructor
@@ -79,7 +79,7 @@ namespace Tgs
     /**
     * Destructor
     */
-    virtual ~DataFrame();
+    virtual ~DataFrame() = default;
 
     /**
     * Appends a data vector to the end of the dataframe

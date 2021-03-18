@@ -92,10 +92,6 @@ namespace Tgs
   {
   }
 
-  ProbablePathCalculator::~ProbablePathCalculator()
-  {
-  }
-
   bool ProbablePathCalculator::_addReturnPaths(const PpPoint& source,
     const Destination& destination)
   {
@@ -152,7 +148,7 @@ namespace Tgs
       _result[_toIndex(pos)]++;
     }
 
-    if (route.waypoints.size() > 0)
+    if (!route.waypoints.empty())
     {
       reverse(route.waypoints.begin(), route.waypoints.end());
       float wayPointCost = 0.0;
@@ -219,7 +215,7 @@ namespace Tgs
         // ...to every destination
         _resetRemainingDestinations();
         int attempt = 0;
-        while (_remainingDest.size() > 0)
+        while (!_remainingDest.empty())
         {
           attempt++;
           // if we can't find a path in 10 tries the two are probably too far away with the given
@@ -235,7 +231,7 @@ namespace Tgs
 
           // we only need to randomize if the current random surface doesn't reach the 
           // destination
-          if (_remainingDest.size() > 0)
+          if (!_remainingDest.empty())
           {
             _v(Debug) << "Randomizing...\n";
             _randomizeCurrentValues();
@@ -366,7 +362,7 @@ namespace Tgs
 //       float d = _calculateDistance(_toPoint(start), _destinations[0]);
 //       result = d * _minCost;
 //     }
-    if (_minCost > 0 && _destPending.size() > 0)
+    if (_minCost > 0 && !_destPending.empty())
     {
       float minD = 1e10f;
       for (HashSet<int>::const_iterator it = _destPending.begin(); it != _destPending.end(); 
@@ -496,7 +492,7 @@ namespace Tgs
       tmp.row = _destinations[d].row;
       tmp.col = _destinations[d].col;
       tmp.name = _destinations[d].name;
-      if (_destinationMaxCost.size() != 0)
+      if (!_destinationMaxCost.empty())
       {
         tmp.maxCost = _destinationMaxCost[d];
       }
@@ -664,7 +660,7 @@ namespace Tgs
       _costSurface[index] = _tmpCost[index];
 
       _destPending.erase(index);
-      if (_destPending.size() == 0)
+      if (_destPending.empty())
       {
         return;
       }

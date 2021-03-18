@@ -78,7 +78,7 @@ void RemoveReviewsByEidOp::apply(const OsmMapPtr &map)
 
   LOG_TRACE("Removing reviews for " << _eid << " from map...");
   ElementPtr from = map->getElement(_eid);
-  set<ReviewMarker::ReviewUid> reviews = ReviewMarker().getReviewUids(map, from);
+  set<ReviewMarker::ReviewUid> reviews = ReviewMarker::getReviewUids(map, from);
   for (set<ReviewMarker::ReviewUid>::const_iterator it = reviews.begin(); it != reviews.end();
     ++it)
   {

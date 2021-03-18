@@ -115,8 +115,8 @@ private:
   QSet<EdgeMatchPtr> _getConnectedEdges(ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2);
 };
 
-typedef std::shared_ptr<VagabondNetworkMatcher> VagabondNetworkMatcherPtr;
-typedef std::shared_ptr<const VagabondNetworkMatcher> ConstVagabondNetworkMatcherPtr;
+using VagabondNetworkMatcherPtr = std::shared_ptr<VagabondNetworkMatcher>;
+using ConstVagabondNetworkMatcherPtr = std::shared_ptr<const VagabondNetworkMatcher>;
 
 // not implemented
 bool operator<(ConstVagabondNetworkMatcherPtr, ConstVagabondNetworkMatcherPtr);

@@ -1108,7 +1108,7 @@ size_t XmlChangeset::getObjectCount(ChangesetRelation* relation, ElementCountSet
 size_t XmlChangeset::getObjectCount(const ChangesetInfoPtr& /*changeset*/, ChangesetNode* node, ElementCountSet& elements, bool countSent)
 {
   //  Cannot count NULL nodes
-  if (node == NULL)
+  if (node == nullptr)
     return 0;
   //  Do not recount nodes already counted
   if (elements[ElementType::Node].find(node->id()) != elements[ElementType::Node].end())
@@ -1124,7 +1124,7 @@ size_t XmlChangeset::getObjectCount(const ChangesetInfoPtr& /*changeset*/, Chang
 
 size_t XmlChangeset::getObjectCount(const ChangesetInfoPtr& changeset, ChangesetWay* way, ElementCountSet& elements, bool countSent)
 {
-  if (way == NULL)
+  if (way == nullptr)
     return 0;
   //  Get the count of nodes and way that make up this "change"
   size_t count = 0;
@@ -1147,7 +1147,7 @@ size_t XmlChangeset::getObjectCount(const ChangesetInfoPtr& changeset, Changeset
       //  Do not recount this node
       if (!changeset || changeset->contains(ElementType::Node, (ChangesetType)current_type, id))
       {
-        ChangesetNode* node = NULL;
+        ChangesetNode* node = nullptr;
         if (_allNodes.find(id) != _allNodes.end())
           node = dynamic_cast<ChangesetNode*>(_allNodes[id].get());
         count += getObjectCount(changeset, node, elements);
@@ -1159,7 +1159,7 @@ size_t XmlChangeset::getObjectCount(const ChangesetInfoPtr& changeset, Changeset
 
 size_t XmlChangeset::getObjectCount(const ChangesetInfoPtr& changeset, ChangesetRelation* relation, ElementCountSet& elements, bool countSent)
 {
-  if (relation == NULL)
+  if (relation == nullptr)
     return 0;
   //  Get the count of nodes, ways, and relations that make up this "change"
   size_t count = 0;
@@ -1184,7 +1184,7 @@ size_t XmlChangeset::getObjectCount(const ChangesetInfoPtr& changeset, Changeset
       {
         if (!changeset || changeset->contains(ElementType::Node, (ChangesetType)current_type, id))
         {
-          ChangesetNode* node = NULL;
+          ChangesetNode* node = nullptr;
           if (_allNodes.find(id) != _allNodes.end())
             node = dynamic_cast<ChangesetNode*>(_allNodes[id].get());
           count += getObjectCount(changeset, node, elements, countSent);
@@ -1197,7 +1197,7 @@ size_t XmlChangeset::getObjectCount(const ChangesetInfoPtr& changeset, Changeset
       {
         if (!changeset || changeset->contains(ElementType::Way, (ChangesetType)current_type, id))
         {
-          ChangesetWay* way = NULL;
+          ChangesetWay* way = nullptr;
           if (_allWays.find(id) != _allWays.end())
             way = dynamic_cast<ChangesetWay*>(_allWays[id].get());
           count += getObjectCount(changeset, way, elements, countSent);
@@ -1213,10 +1213,10 @@ size_t XmlChangeset::getObjectCount(const ChangesetInfoPtr& changeset, Changeset
         {
           if (!changeset || changeset->contains(ElementType::Relation, (ChangesetType)current_type, id))
           {
-            ChangesetRelation* relation = NULL;
+            ChangesetRelation* r = nullptr;
             if (_allRelations.find(id) != _allRelations.end())
-              relation = dynamic_cast<ChangesetRelation*>(_allRelations[id].get());
-            count += getObjectCount(changeset, relation, elements, countSent);
+              r = dynamic_cast<ChangesetRelation*>(_allRelations[id].get());
+            count += getObjectCount(changeset, r, elements, countSent);
           }
         }
       }
@@ -1227,7 +1227,7 @@ size_t XmlChangeset::getObjectCount(const ChangesetInfoPtr& changeset, Changeset
 
 bool XmlChangeset::isSent(ChangesetElement* element)
 {
-  if (element == NULL)
+  if (element == nullptr)
     return false;
   else
     //  Sent means Buffering, Sent, or Finalized
@@ -1239,7 +1239,7 @@ bool XmlChangeset::isSent(ChangesetElement* element)
 bool XmlChangeset::canSend(ChangesetNode* node)
 {
   //  Able to send means Available
-  if (node == NULL)
+  if (node == nullptr)
     return false;
   else
     return node->getStatus() == ChangesetElement::Available;
@@ -1248,7 +1248,7 @@ bool XmlChangeset::canSend(ChangesetNode* node)
 bool XmlChangeset::canSend(ChangesetWay* way)
 {
   //  Able to send means Available
-  if (way == NULL)
+  if (way == nullptr)
     return false;
   else if (way->getStatus() != ChangesetElement::Available)
     return false;
@@ -1270,7 +1270,7 @@ bool XmlChangeset::canSend(ChangesetWay* way)
 bool XmlChangeset::canSend(ChangesetRelation* relation)
 {
   //  Able to send means Available
-  if (relation == NULL)
+  if (relation == nullptr)
     return false;
   else if (relation->getStatus() != ChangesetElement::Available)
     return false;
@@ -1331,7 +1331,7 @@ bool XmlChangeset::canSend(ChangesetRelation* relation)
 
 void XmlChangeset::markBuffered(ChangesetElement* element)
 {
-  if (element != NULL)
+  if (element != nullptr)
   {
     //  Mark buffering
     element->setStatus(ChangesetElement::Buffering);
@@ -2075,7 +2075,7 @@ bool XmlChangeset::isMatch(const XmlChangeset& changeset)
         missingNodes.insert(node->id());
     }
     //  Output missing nodes in full
-    if (missingNodes.size() > 0)
+    if (!missingNodes.empty())
     {
       QString buffer;
       QTextStream ts(&buffer);
@@ -2109,7 +2109,7 @@ bool XmlChangeset::isMatch(const XmlChangeset& changeset)
         missingWays.insert(way->id());
     }
     //  Output missing ways in full
-    if (missingWays.size() > 0)
+    if (!missingWays.empty())
     {
       QString buffer;
       QTextStream ts(&buffer);
@@ -2143,7 +2143,7 @@ bool XmlChangeset::isMatch(const XmlChangeset& changeset)
         missingRelations.insert(relation->id());
     }
     //  Output missing relations in full
-    if (missingRelations.size() > 0)
+    if (!missingRelations.empty())
     {
       QString buffer;
       QTextStream ts(&buffer);
@@ -2376,7 +2376,7 @@ bool XmlChangeset::fixElementGoneDeletedFailure(ChangesetInfoPtr changeset, Chan
   if (changeset->contains(element_type, ChangesetType::TypeDelete, element_id))
   {
     //  Get the element from the correct element map
-    ChangesetElement* element = NULL;
+    ChangesetElement* element = nullptr;
     if (element_type == ElementType::Node)
       element = _allNodes[element_id].get();
     else if (element_type == ElementType::Way)

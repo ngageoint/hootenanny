@@ -28,13 +28,13 @@
 #define ABSTRACT_CONFLATOR_H
 
 // hoot
+#include <hoot/core/conflate/matching/MatchGraph.h>
+#include <hoot/core/conflate/merging/Merger.h>
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/info/SingleStat.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Boundable.h>
 #include <hoot/core/util/ProgressReporter.h>
-#include <hoot/core/info/SingleStat.h>
-#include <hoot/core/conflate/merging/Merger.h>
-#include <hoot/core/conflate/matching/MatchGraph.h>
 
 // tgs
 #include <tgs/HashMap.h>
@@ -67,7 +67,7 @@ public:
    */
   void setMergerFactory(const std::shared_ptr<MergerFactory>& mf) { _mergerFactory = mf; }
 
-  virtual void setProgress(Progress progress) override { _progress = progress; }
+  void setProgress(const Progress& progress) override { _progress = progress; }
 
 protected:
 

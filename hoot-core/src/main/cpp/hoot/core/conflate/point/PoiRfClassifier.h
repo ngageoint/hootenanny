@@ -53,6 +53,7 @@ public:
   static int logWarnCount;
 
   PoiRfClassifier();
+  virtual ~PoiRfClassifier() = default;
 
   virtual MatchClassification classify(const ConstOsmMapPtr& map,
     ElementId eid1, ElementId eid2);
@@ -73,7 +74,7 @@ private:
 
 };
 
-typedef std::shared_ptr<PoiRfClassifier> PoiRfClassifierPtr;
+using PoiRfClassifierPtr = std::shared_ptr<PoiRfClassifier>;
 
 }
 

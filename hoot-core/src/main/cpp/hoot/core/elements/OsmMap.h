@@ -34,8 +34,8 @@
 #include <geos/geom/Envelope.h>
 
 // Hoot
+#include <hoot/core/elements/ElementIterator.h>
 #include <hoot/core/elements/ElementProvider.h>
-#include <hoot/core/visitors/ElementVisitor.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/NodeMap.h>
 #include <hoot/core/elements/Relation.h>
@@ -44,9 +44,11 @@
 #include <hoot/core/elements/WayMap.h>
 #include <hoot/core/util/DefaultIdGenerator.h>
 #include <hoot/core/util/Units.h>
-#include <hoot/core/elements/ElementIterator.h>
+#include <hoot/core/visitors/ElementVisitor.h>
 
+// Standard
 #include <memory>
+#include <vector>
 
 namespace hoot
 {
@@ -55,9 +57,6 @@ namespace hoot
     class Tags;
   }
 }
-
-// Standard
-#include <vector>
 
 namespace hoot
 {
@@ -106,7 +105,7 @@ public:
   template<class T>
   void addElements(T it, T end);
 
-  virtual ConstElementPtr getElement(const ElementId& id) const;
+  ConstElementPtr getElement(const ElementId& id) const override;
   ConstElementPtr getElement(ElementType type, long id) const;
   ElementPtr getElement(const ElementId& id);
   ElementPtr getElement(ElementType type, long id);
@@ -120,7 +119,7 @@ public:
    * Returns true if an element with the specified type/id exists.
    * Throws an exception if the type is unrecognized.
    */
-  virtual bool containsElement(const ElementId& eid) const;
+  bool containsElement(const ElementId& eid) const override;
   bool containsElement(ElementType type, long id) const;
   bool containsElement(const std::shared_ptr<const Element>& e) const;
 
@@ -168,10 +167,10 @@ public:
 
   //NODE///////////////////////////////////////////////////////////////////////////////////
 
-  virtual const ConstNodePtr getNode(long id) const;
-  virtual const NodePtr getNode(long id);
+  ConstNodePtr getNode(long id) const override;
+  NodePtr getNode(long id) override;
   ConstNodePtr getNode(const ElementId& eid) const { return getNode(eid.getId()); }
-  const NodePtr getNode(const ElementId& eid) { return getNode(eid.getId()); }
+  NodePtr getNode(const ElementId& eid) { return getNode(eid.getId()); }
   const NodeMap& getNodes() const { return _nodes; }
   QSet<long> getNodeIds() const;
   QSet<ElementId> getNodeElementIds() const;
@@ -181,7 +180,7 @@ public:
   /**
    * Returns true if the node is in this map.
    */
-  virtual bool containsNode(long id) const { return _nodes.find(id) != _nodes.end(); }
+  bool containsNode(long id) const override { return _nodes.find(id) != _nodes.end(); }
 
   void addNode(const NodePtr& n);
   /**
@@ -211,8 +210,8 @@ public:
   /**
    * Return the way with the specified id or null if it doesn't exist.
    */
-  virtual const WayPtr getWay(long id);
-  const WayPtr getWay(ElementId eid);
+  WayPtr getWay(long id) override;
+  WayPtr getWay(ElementId eid);
   /**
    * Similar to above but const'd.
    *
@@ -220,8 +219,8 @@ public:
    * a copy. The copy would be a temporary variable if we returned a reference which creates some
    * weirdness and a warning.
    */
-  const ConstWayPtr getWay(long id) const;
-  const ConstWayPtr getWay(ElementId eid) const;
+  ConstWayPtr getWay(long id) const;
+  ConstWayPtr getWay(ElementId eid) const;
   const WayMap& getWays() const { return _ways; }
   QSet<long> getWayIds() const;
   QSet<ElementId> getWayElementIds() const;
@@ -229,7 +228,7 @@ public:
 
   void addWay(const WayPtr& w);
 
-  virtual bool containsWay(long id) const { return _ways.find(id) != _ways.end(); }
+  bool containsWay(long id) const override { return _ways.find(id) != _ways.end(); }
 
   long createNextWayId() const { return _idGen->createWayId(); }
 
@@ -242,9 +241,9 @@ public:
 
   //RELATION///////////////////////////////////////////////////////////////////////////////////
 
-  virtual const ConstRelationPtr getRelation(long id) const;
-  virtual const RelationPtr getRelation(long id);
-  const ConstRelationPtr getRelation(ElementId eid) const;
+  ConstRelationPtr getRelation(long id) const override;
+  RelationPtr getRelation(long id) override;
+  ConstRelationPtr getRelation(ElementId eid) const;
   const RelationMap& getRelations() const { return _relations; }
   QSet<long> getRelationIds() const;
   QSet<ElementId> getRelationElementIds() const;
@@ -252,7 +251,7 @@ public:
 
   void addRelation(const RelationPtr& r);
 
-  virtual bool containsRelation(long id) const { return _relations.find(id) != _relations.end(); }
+  bool containsRelation(long id) const override { return _relations.find(id) != _relations.end(); }
 
   long createNextRelationId() const { return _idGen->createRelationId(); }
 
@@ -296,7 +295,7 @@ public:
   /**
    * Returns the SRS for this map. The SRS should never be changed and defaults to WGS84.
    */
-  virtual std::shared_ptr<OGRSpatialReference> getProjection() const { return _srs; }
+  std::shared_ptr<OGRSpatialReference> getProjection() const override { return _srs; }
 
   void clear();
 
@@ -409,12 +408,12 @@ protected:
 
   void _initCounters();
 
-  virtual void _next();
-  virtual void resetIterator();
+  void _next() override;
+  void resetIterator() override;
 };
 
-typedef std::shared_ptr<OsmMap> OsmMapPtr;
-typedef std::shared_ptr<const OsmMap> ConstOsmMapPtr;
+using OsmMapPtr = std::shared_ptr<OsmMap>;
+using ConstOsmMapPtr = std::shared_ptr<const OsmMap>;
 
 template<class T>
 void addElements(T it, T end)
@@ -426,7 +425,7 @@ void addElements(T it, T end)
   }
 }
 
-inline const NodePtr OsmMap::getNode(long id)
+inline NodePtr OsmMap::getNode(long id)
 {
   _tmpNodeMapIt = _nodes.find(id);
   if (_tmpNodeMapIt != _nodes.end())
@@ -439,7 +438,7 @@ inline const NodePtr OsmMap::getNode(long id)
   }
 }
 
-inline const ConstNodePtr OsmMap::getNode(long id) const
+inline ConstNodePtr OsmMap::getNode(long id) const
 {
   _tmpNodeMapIt = _nodes.find(id);
   if (_tmpNodeMapIt != _nodes.end())
@@ -452,7 +451,7 @@ inline const ConstNodePtr OsmMap::getNode(long id) const
   }
 }
 
-inline const ConstRelationPtr OsmMap::getRelation(long id) const
+inline ConstRelationPtr OsmMap::getRelation(long id) const
 {
   RelationMap::iterator it = _relations.find(id);
   if (it != _relations.end())
@@ -465,12 +464,12 @@ inline const ConstRelationPtr OsmMap::getRelation(long id) const
   }
 }
 
-inline const ConstRelationPtr OsmMap::getRelation(ElementId eid) const
+inline ConstRelationPtr OsmMap::getRelation(ElementId eid) const
 {
   return getRelation(eid.getId());
 }
 
-inline const RelationPtr OsmMap::getRelation(long id)
+inline RelationPtr OsmMap::getRelation(long id)
 {
   _tmpRelationIt = _relations.find(id);
   if (_tmpRelationIt != _relations.end())
@@ -483,7 +482,7 @@ inline const RelationPtr OsmMap::getRelation(long id)
   }
 }
 
-inline const ConstWayPtr OsmMap::getWay(long id) const
+inline ConstWayPtr OsmMap::getWay(long id) const
 {
   _tmpWayIt = _ways.find(id);
   if (_tmpWayIt != _ways.end())
@@ -496,12 +495,12 @@ inline const ConstWayPtr OsmMap::getWay(long id) const
   }
 }
 
-inline const ConstWayPtr OsmMap::getWay(ElementId eid) const
+inline ConstWayPtr OsmMap::getWay(ElementId eid) const
 {
   return getWay(eid.getId());
 }
 
-inline const WayPtr OsmMap::getWay(long id)
+inline WayPtr OsmMap::getWay(long id)
 {
   _tmpWayIt = _ways.find(id);
   if (_tmpWayIt != _ways.end())
@@ -514,7 +513,7 @@ inline const WayPtr OsmMap::getWay(long id)
   }
 }
 
-inline const WayPtr OsmMap::getWay(ElementId eid)
+inline WayPtr OsmMap::getWay(ElementId eid)
 {
   return getWay(eid.getId());
 }

@@ -34,12 +34,6 @@ using namespace std;
 namespace hoot
 {
 
-WaySublineMatchString::WaySublineMatchString(const WaySublineMatchString& other)
-{
-  // no need to check for overlaps, the incoming object should already be consistent.
-  _matches = other._matches;
-}
-
 WaySublineMatchString::WaySublineMatchString(const MatchCollection& m)
 {
   for (size_t i = 0; i < m.size(); i++)

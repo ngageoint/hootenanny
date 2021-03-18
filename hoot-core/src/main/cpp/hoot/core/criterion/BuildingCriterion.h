@@ -68,6 +68,8 @@ public:
 
   virtual QString getClassName() const override { return className(); }
 
+  virtual QStringList getChildCriteria() const;
+
 private:
 
   ConstOsmMapPtr _map;

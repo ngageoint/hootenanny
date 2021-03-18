@@ -45,7 +45,7 @@ class PertyMatchScorer : public Configurable
 public:
 
   PertyMatchScorer();
-  virtual ~PertyMatchScorer() = default;
+  ~PertyMatchScorer() = default;
 
   /**
     Takes a single file as input, runs PERTY on the file, and then conflates the unmodified data
@@ -61,7 +61,7 @@ public:
   /**
     @see Configurable
     */
-  virtual void setConfiguration(const Settings &conf) { _settings = conf; }
+  void setConfiguration(const Settings &conf) override { _settings = conf; }
 
   /**
     Returns the output path of the reference map

@@ -36,12 +36,12 @@
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/scoring/TextTable.h>
 #include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/ElementCountVisitor.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/UniqueTagValuesVisitor.h>
 #include <hoot/core/visitors/SetTagValueVisitor.h>
 #include <hoot/core/visitors/UniqueElementIdVisitor.h>
-#include <hoot/core/util/Log.h>
 
 // Qt
 #include <QSet>
@@ -60,7 +60,7 @@ class GetRefUuidVisitor : public ConstElementVisitor
 {
 public:
 
-  typedef map<QString, set<QString>> RefToUuid;
+  using RefToUuid = map<QString, set<QString>>;
 
   GetRefUuidVisitor(QString ref) : _ref(ref) { }
 
@@ -88,7 +88,7 @@ public:
     refs.removeAll("none");
 
     QString uuid = e->getTags()["uuid"];
-    if (refs.size() > 0 && uuid.isEmpty())
+    if (!refs.empty() && uuid.isEmpty())
     {
       LOG_TRACE("refs: " << refs);
       LOG_TRACE("Element: " << e->toString());
@@ -485,7 +485,7 @@ void MatchComparator::_findActualMatches(const ConstOsmMapPtr& in, const ConstOs
       {
         u2.insert(uuidStr);
       }
-      else if (u1.size() == 0 && u2.size() > 0)
+      else if (u1.empty() && !u2.empty())
       {
         u1.insert(uuidStr);
       }
@@ -542,7 +542,7 @@ void MatchComparator::_findActualMatches(const ConstOsmMapPtr& in, const ConstOs
       else
       {
         LOG_TRACE("Missing UUID: " << cList[i]);
-        throw HootException("Conflated uuid wasn't found in either input.");
+        throw HootException("Conflated uuid was not found in either input: " + cList[i]);
       }
     }
     // create a match between all the combinations of ref1 uuid to ref2 uuid
@@ -648,7 +648,7 @@ bool MatchComparator::_isNeedsReview(const QString& uuid1, const QString& uuid2,
         return false;
       }
 
-      if (_reviewMarker.isNeedsReview(conflated, conflated->getElement(eid1),
+      if (ReviewMarker::isNeedsReview(conflated, conflated->getElement(eid1),
                                       conflated->getElement(eid2)))
       {
         result = true;
@@ -675,9 +675,9 @@ void MatchComparator::_tagTestOutcome(const OsmMapPtr& map, const QString& uuid,
   }
 }
 
-void MatchComparator::_tagError(const OsmMapPtr &map, const QString &uuid, const QString& value)
+void MatchComparator::_tagError(const OsmMapPtr& map, const QString& uuid, const QString& value)
 {
-  // if the uuid contains the first uuid, set mismatch
+  // If the uuid contains the first uuid, set mismatch.
   SetTagValueVisitor stv(MetadataTags::HootMismatch(), value);
   for (MatchComparator::UuidToEid::iterator it = _actualUuidToEid.begin();
        it != _actualUuidToEid.end(); ++it)
@@ -690,9 +690,9 @@ void MatchComparator::_tagError(const OsmMapPtr &map, const QString &uuid, const
   }
 }
 
-void MatchComparator::_tagWrong(const OsmMapPtr &map, const QString &uuid)
+void MatchComparator::_tagWrong(const OsmMapPtr& map, const QString &uuid)
 {
-  // if the uuid contains the first uuid, set wrong
+  // If the uuid contains the first uuid, set wrong.
   SetTagValueVisitor stv(MetadataTags::HootWrong(), "1");
   for (MatchComparator::UuidToEid::iterator it = _actualUuidToEid.begin();
        it != _actualUuidToEid.end(); ++it)

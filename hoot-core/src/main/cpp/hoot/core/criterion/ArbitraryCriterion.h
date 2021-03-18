@@ -28,8 +28,8 @@
 #define ARBITRARYCRITERION_H
 
 // hoot
-#include <hoot/core/elements/Element.h>
 #include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/elements/Element.h>
 #include <hoot/core/util/Log.h>
 
 // Qt
@@ -47,9 +47,9 @@ public:
 
   static QString className() { return "hoot::ArbitraryCriterion"; }
 
-  explicit ArbitraryCriterion(std::function<bool (ConstElementPtr e)> f)
+  explicit ArbitraryCriterion(const std::function<bool (ConstElementPtr e)>& f)
     : _f(f) { }
-  explicit ArbitraryCriterion(std::function<bool (const std::shared_ptr<const Element> &e)> f)
+  explicit ArbitraryCriterion(const std::function<bool (const std::shared_ptr<const Element> &e)>& f)
     : _f(f) { }
   virtual ~ArbitraryCriterion() = default;
 

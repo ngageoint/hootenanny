@@ -65,11 +65,11 @@ class TextFileWordWeightDictionary : public WordWeightDictionary
 {
 public:
   TextFileWordWeightDictionary(const QString& filePath);
-  virtual ~TextFileWordWeightDictionary() = default;
+  ~TextFileWordWeightDictionary() = default;
 
-  virtual double getMinWeight() const override { return 1.0 / (double)_count; }
+  double getMinWeight() const override { return 1.0 / (double)_count; }
 
-  virtual double getWeight(const QString& word) const override;
+  double getWeight(const QString& word) const override;
 
 private:
   // some white box testing.
@@ -85,7 +85,7 @@ private:
   // ** Using this one, fast, low memory and I don't have to worry about int overflow **
   // HashMap<QString, long>   1.069GB   19.4sec
   // HashMap<QString, int>    1.069GB   19.2sec
-  typedef HashMap<QString, long> WeightHash;
+  using WeightHash = HashMap<QString, long>;
   WeightHash _weights;
   long _count;
   QRegExp _nonWord;

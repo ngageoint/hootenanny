@@ -84,7 +84,7 @@ namespace Tgs
     bool _is_single;
   };
 
-  typedef std::shared_ptr<Random> RandomPtr;
+  using RandomPtr = std::shared_ptr<Random>;
 }
 
 #endif

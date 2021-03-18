@@ -45,18 +45,18 @@ public:
   static QString className() { return "hoot::RmseAggregator"; }
 
   RmseAggregator() = default;
-  virtual ~RmseAggregator() = default;
+  ~RmseAggregator() = default;
 
-  virtual double aggregate(std::vector<double>& d) const;
+  double aggregate(std::vector<double>& d) const override;
 
-  virtual QString toString() const { return "RmseAggregator"; }
+  QString toString() const override { return "RmseAggregator"; }
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Aggregates data based on the Root Mean Square Deviation value"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 };
 
 }

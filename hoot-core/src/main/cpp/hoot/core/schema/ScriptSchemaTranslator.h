@@ -73,7 +73,7 @@ public:
   /**
    * String containing the regexp to use for filtering the layer names.
    */
-  virtual const QString getLayerNameFilter() { return "."; }
+  virtual QString getLayerNameFilter() { return "."; }
 
   /**
    * lower order values make the script engine get evaluated earlier.
@@ -129,7 +129,7 @@ protected:
   virtual void _translateToOsm(Tags& tags, const char *layerName, const char* geomType) = 0;
 };
 
-typedef std::shared_ptr<ScriptSchemaTranslator> ScriptSchemaTranslatorPtr;
+using ScriptSchemaTranslatorPtr = std::shared_ptr<ScriptSchemaTranslator>;
 
 }
 

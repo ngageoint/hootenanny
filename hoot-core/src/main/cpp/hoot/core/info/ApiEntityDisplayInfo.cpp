@@ -28,28 +28,28 @@
 #include "ApiEntityDisplayInfo.h"
 
 // Hoot
-#include <hoot/core/util/Log.h>
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/info/SingleStatistic.h>
-#include <hoot/core/info/NumericStatistic.h>
-#include <hoot/core/ops/OsmMapOperation.h>
-#include <hoot/core/criterion/ElementCriterion.h>
-#include <hoot/core/visitors/ElementVisitor.h>
-#include <hoot/core/algorithms/extractors/FeatureExtractor.h>
-#include <hoot/core/conflate/matching/MatchCreator.h>
-#include <hoot/core/conflate/merging/MergerCreator.h>
-#include <hoot/core/schema/TagMerger.h>
-#include <hoot/core/algorithms/string/StringDistance.h>
+#include <hoot/core/algorithms/WayJoiner.h>
 #include <hoot/core/algorithms/aggregator/ValueAggregator.h>
-#include <hoot/core/info/ApiEntityInfo.h>
-#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/algorithms/extractors/FeatureExtractor.h>
+#include <hoot/core/algorithms/string/StringDistance.h>
 #include <hoot/core/algorithms/subline-matching/SublineMatcher.h>
 #include <hoot/core/algorithms/subline-matching/SublineStringMatcher.h>
 #include <hoot/core/conflate/matching/Match.h>
+#include <hoot/core/conflate/matching/MatchCreator.h>
 #include <hoot/core/conflate/merging/Merger.h>
-#include <hoot/core/algorithms/WayJoiner.h>
+#include <hoot/core/conflate/merging/MergerCreator.h>
 #include <hoot/core/criterion/ConflatableElementCriterion.h>
+#include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/criterion/ElementCriterionConsumer.h>
+#include <hoot/core/info/ApiEntityInfo.h>
+#include <hoot/core/info/NumericStatistic.h>
+#include <hoot/core/info/SingleStatistic.h>
+#include <hoot/core/ops/OsmMapOperation.h>
+#include <hoot/core/schema/TagMerger.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/visitors/ElementVisitor.h>
 
 //  Qt
 #include <QTextStream>
@@ -65,7 +65,7 @@ class ApiEntityNameComparator
 {
 public:
 
-  ApiEntityNameComparator() {}
+  ApiEntityNameComparator() = default;
 
   bool operator()(const QString& name1, const QString& name2)
   {

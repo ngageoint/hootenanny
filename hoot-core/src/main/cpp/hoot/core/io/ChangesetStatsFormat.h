@@ -43,12 +43,12 @@ class ChangesetStatsFormat
 {
 public:
 
-  typedef enum Format
+  enum Format
   {
     Text = 0,
     Json,
     Unknown
-  } Format;
+  };
 
   ChangesetStatsFormat() : _format(Unknown) { }
   ChangesetStatsFormat(Format format) : _format(format) { }

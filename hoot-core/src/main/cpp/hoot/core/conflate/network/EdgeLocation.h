@@ -89,8 +89,8 @@ private:
 
 };
 
-typedef std::shared_ptr<EdgeLocation> EdgeLocationPtr;
-typedef std::shared_ptr<const EdgeLocation> ConstEdgeLocationPtr;
+using EdgeLocationPtr = std::shared_ptr<EdgeLocation>;
+using ConstEdgeLocationPtr = std::shared_ptr<const EdgeLocation>;
 
 inline bool operator==(const ConstEdgeLocationPtr& a, const ConstEdgeLocationPtr& b)
 {

@@ -27,17 +27,17 @@
 #include "AbstractConflator.h"
 
 // hoot
-#include <hoot/core/conflate/merging/MarkForReviewMergerCreator.h>
+#include <hoot/core/conflate/matching/GreedyConstrainedMatches.h>
 #include <hoot/core/conflate/matching/MatchFactory.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
-#include <hoot/core/conflate/merging/MergerFactory.h>
-#include <hoot/core/conflate/matching/GreedyConstrainedMatches.h>
 #include <hoot/core/conflate/matching/OptimalConstrainedMatches.h>
+#include <hoot/core/conflate/merging/MarkForReviewMergerCreator.h>
+#include <hoot/core/conflate/merging/MergerFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/StringUtils.h>
 #include <hoot/core/util/MemoryUsageChecker.h>
+#include <hoot/core/util/StringUtils.h>
 
 // standard
 #include <algorithm>
@@ -77,7 +77,7 @@ AbstractConflator::~AbstractConflator()
 
 void AbstractConflator::_reset()
 {
-  if (_mergerFactory == 0)
+  if (_mergerFactory == nullptr)
   {
     _mergerFactory.reset(new MergerFactory());
     // register the mark for review merger first so all reviews get tagged before another merger
@@ -269,10 +269,10 @@ void AbstractConflator::_replaceElementIds(
     {
       const std::vector<MergerPtr>& mergers = it->second;
       // Replace the element id in all mergers.
-      for (size_t i = 0; i < mergers.size(); ++i)
+      for (size_t j = 0; j < mergers.size(); ++j)
       {
-        mergers[i]->replace(replaced[i].first, replaced[i].second);
-        _e2m[replaced[i].second].push_back(mergers[i]);
+        mergers[j]->replace(replaced[j].first, replaced[j].second);
+        _e2m[replaced[j].second].push_back(mergers[j]);
       }
       // Don't need to hold on to the old reference any more.
       _e2m.erase(it->first);

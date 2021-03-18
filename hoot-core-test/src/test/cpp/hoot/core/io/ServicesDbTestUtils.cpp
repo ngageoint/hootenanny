@@ -56,7 +56,7 @@ namespace hoot
 void ServicesDbTestUtils::compareRecords(QString sql, QString expected, QString testName, QVariant v1, QVariant v2)
 {
   HootApiDb db;
-  QUrl url = (testName == NULL) ? ServicesDbTestUtils::getDbModifyUrl() : ServicesDbTestUtils::getDbModifyUrl(testName);
+  QUrl url = (testName == nullptr) ? ServicesDbTestUtils::getDbModifyUrl() : ServicesDbTestUtils::getDbModifyUrl(testName);
   db.open(url);
   QString result = db.execToString(sql, v1, v2);
   if (expected == "")

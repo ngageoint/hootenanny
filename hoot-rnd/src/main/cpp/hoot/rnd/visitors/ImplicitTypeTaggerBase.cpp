@@ -27,14 +27,14 @@
 #include "ImplicitTypeTaggerBase.h"
 
 #include <hoot/core/algorithms/string/StringTokenizer.h>
-#include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/util/Log.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonSchema.h>
 #include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/rnd/schema/ImplicitTagUtils.h>
-#include <hoot/core/conflate/poi-polygon/PoiPolygonSchema.h>
-#include <hoot/core/util/Factory.h>
 
 // Qt
 #include <QSet>
@@ -100,7 +100,7 @@ ImplicitTypeTaggerBase::~ImplicitTypeTaggerBase()
     " features were involved in multiple tag rules and were not modified.");
   if (_numTagsAdded > 0 && _numFeaturesModified > 0)
   {
-    long avgTagsAdded = (long)(_numTagsAdded / _numFeaturesModified);
+    long avgTagsAdded = _numTagsAdded / _numFeaturesModified;
     LOG_INFO(
       "Average tags added per feature: " << StringUtils::formatLargeNumber(avgTagsAdded));
     LOG_INFO(
@@ -188,13 +188,13 @@ void ImplicitTypeTaggerBase::visit(const ElementPtr& e)
 
     QStringList filteredNames = _cleanNames(e->getTags());
 
-    if (filteredNames.size() > 0)
+    if (!filteredNames.empty())
     {
       Tags implicitlyDerivedTags;
       QSet<QString> matchingWords;
       bool wordsInvolvedInMultipleRules = false;
 
-      if (implicitlyDerivedTags.size() == 0)
+      if (implicitlyDerivedTags.empty())
       {
         //the complete name phrases take precendence over the tokenized names, so look for tags
         //associated with them first
@@ -216,7 +216,7 @@ void ImplicitTypeTaggerBase::visit(const ElementPtr& e)
           matchingWords);
         foundDuplicateMatch = true;
       }
-      else if (implicitlyDerivedTags.size() > 0)
+      else if (!implicitlyDerivedTags.empty())
       {
         LOG_TRACE(
           "Derived implicit tags for names: " << filteredNames << " with matching words: " <<
@@ -235,14 +235,14 @@ void ImplicitTypeTaggerBase::visit(const ElementPtr& e)
 
         //only going up to token group size = 2, as larger sizes weren't found experimentally to
         //yield any better results
-        if (implicitlyDerivedTags.size() == 0 && nameTokensList.size() > 2)
+        if (implicitlyDerivedTags.empty() && nameTokensList.size() > 2)
         {
           _getImplicitlyDerivedTagsFromMultipleNameTokens(
             filteredNames, nameTokensList, e->getTags(), implicitlyDerivedTags, matchingWords,
             wordsInvolvedInMultipleRules);
         }
 
-        if (implicitlyDerivedTags.size() == 0)
+        if (implicitlyDerivedTags.empty())
         {
           //didn't find any matches with the token groups, so let's try with single tokens
           _getImplicitlyDerivedTagsFromSingleNameTokens(
@@ -260,7 +260,7 @@ void ImplicitTypeTaggerBase::visit(const ElementPtr& e)
             matchingWords);
           foundDuplicateMatch = true;
         }
-        else if (implicitlyDerivedTags.size() > 0)
+        else if (!implicitlyDerivedTags.empty())
         {
           LOG_TRACE(
             "Derived implicit tags for name tokens: " << nameTokensList << " with matching words: " <<
@@ -351,10 +351,10 @@ QStringList ImplicitTypeTaggerBase::_cleanNames(Tags& tags)
 {
   //the normal hoot convention is to split the name tag on ';' into multiple names; bypassing that
   //here, as it seems to cause more harm to implicit tagging than good
-  QString name = tags.get("name");
-  if (name.contains(";"))
+  QString nameValue = tags.get("name");
+  if (nameValue.contains(";"))
   {
-    tags.set("name", name.replace(";", "").trimmed());
+    tags.set("name", nameValue.replace(";", "").trimmed());
   }
 
   QStringList names = _getNames(tags);
@@ -453,7 +453,7 @@ void ImplicitTypeTaggerBase::_getImplicitlyDerivedTagsFromMultipleNameTokens(con
       implicitlyDerivedTags =
         _ruleReader->getImplicitTags(
           tempTokenList.toSet(), matchingWords, wordsInvolvedInMultipleRules);
-      if (implicitlyDerivedTags.size() == 0)
+      if (implicitlyDerivedTags.empty())
       {
         //end of name token didn't match; do token matching
         implicitlyDerivedTags =
@@ -532,7 +532,7 @@ void ImplicitTypeTaggerBase::_getImplicitlyDerivedTagsFromSingleNameTokens(const
   }
   LOG_VART(nameTokensList);
 
-  if (implicitlyDerivedTags.size() == 0 && nameTokensList.size() > 0)
+  if (implicitlyDerivedTags.empty() && !nameTokensList.empty())
   {
     if (_matchEndOfNameSingleTokenFirst)
     {
@@ -564,7 +564,7 @@ void ImplicitTypeTaggerBase::_getImplicitlyDerivedTagsFromSingleNameTokens(const
         implicitlyDerivedTags =
           _ruleReader->getImplicitTags(
             tempTokenList.toSet(), matchingWords, wordsInvolvedInMultipleRules);       
-        if (implicitlyDerivedTags.size() == 0)
+        if (implicitlyDerivedTags.empty())
         {
           //end of name token didn't match; do token matching
           implicitlyDerivedTags =

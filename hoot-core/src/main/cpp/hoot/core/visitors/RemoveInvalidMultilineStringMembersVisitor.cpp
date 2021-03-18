@@ -28,9 +28,9 @@
 #include "RemoveInvalidMultilineStringMembersVisitor.h"
 
 //  hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/ops/RemoveRelationByEid.h>
 #include <hoot/core/schema/TagMergerFactory.h>
+#include <hoot/core/util/Factory.h>
 
 using namespace geos::geom;
 using namespace std;
@@ -146,19 +146,18 @@ void RemoveInvalidMultilineStringMembersVisitor::visit(const ElementPtr& e)
       // Don't remove multilinestring relations that are members of a review relation
       // only contains one member that is the original multilinestring
       LOG_VART(map->getParents(r->getElementId()).size());
-      if (map->getParents(r->getElementId()).size() > 0)
+      if (!map->getParents(r->getElementId()).empty())
         return;
 
       // Copy tags from the multiline string tags to the children and remove from relation
       vector<RelationData::Entry> members = r->getMembers();
-      TagMergerFactory& merger = TagMergerFactory::getInstance();
       for (vector<RelationData::Entry>::iterator i = members.begin(); i != members.end(); i++)
       {
         ElementId id = i->getElementId();
         ElementPtr element = _map->getElement(id);
         if (element)
         {
-          Tags merged = merger.mergeTags(element->getTags(), tags, id.getType());
+          Tags merged = TagMergerFactory::mergeTags(element->getTags(), tags, id.getType());
           element->setTags(merged);
         }
         LOG_TRACE("Removing: " << id << "...");

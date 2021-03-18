@@ -45,11 +45,11 @@ public:
 
   SchemaCmd() = default;
 
-  virtual QString getName() const override { return "schema"; }
+  QString getName() const override { return "schema"; }
 
-  virtual QString getDescription() const override { return "Displays the tag schema in use"; }
+  QString getDescription() const override { return "Displays the tag schema in use"; }
 
-  virtual int runSimple(QStringList& args) override
+  int runSimple(QStringList& args) override
   {
     QString printScript(ConfigOptions().getTagPrintingScript());
 

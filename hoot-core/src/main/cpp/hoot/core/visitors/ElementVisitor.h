@@ -37,15 +37,33 @@ namespace hoot
 {
 
 /**
- * Visits elements in a collection in a way that they can be modified.
+ * Visits elements in a way that they can be modified.
  *
- * This allows for streaming I/O if not combined with an OsmMapConsumer.  Favor this over
- * OsmMapOperation when you do not need the entire input map in memory at once (visitor logic
- * does not require it and you are not running in the conflate pipeline where all map data must
- * be read into memory).
+ * This allows for streaming I/O during data conversions if not combined with an OsmMapConsumer.
+ * Favor this over OsmMapOperation when you do not need the entire input map in memory at once
+ * (visitor logic does not require it and you are not running in the conflate pipeline where all map
+ * data must be read into memory).
  *
- * We could eventually remove the default empty string implementations of OperationStatus
- * methods and require them to be implemented in children.
+ * Most ElementVisitors added to the conflate pipeline (conflate.pre.ops and conflate.post.ops)
+ * should either override the default implementation of
+ * FilteredByGeometryTypeCriteria::getCriteria or implement the ConflateInfoCacheConsumer interface
+ * (doing both is ok). Implement FilteredByGeometryTypeCriteria::getCriteria and return a list of
+ * supported element criteria the visitor operates on (e.g. for roads, return HighwayCriterion). If
+ * the visitor operates on elements whose types maps to a conflate matcher, then the
+ * SuperfluousConflateOpRemover will ensure the visitor is not run in the conflate pipeline if that
+ * matcher isn't part of the configuration. If the visitor only operates generically on elements
+ * that may have multiple feature types (e.g.operates on all ways and
+ * FilteredByGeometryTypeCriteria::getCriteria returns LinearCriterion),ConflateInfoCacheConsumer
+ * should be implemented and the info in the cache be used to ensure that
+ * only elements that are conflatable in the current conflation configuration are modified (see
+ * ConflateInfoCache::elementCanBeConflatedByActiveMatcher and DuplicateNameRemover as an example
+ * implementation). An example of a visitor that doesn't need to implement either interface is
+ * RemoveMissingElementsVisitor, due to the fact that we always want to remove references to all
+ * missing elements regardless of whether they are conflatable in the current configuration or not.
+ *
+ * We could eventually remove the default empty string implementations of OperationStatus methods
+ * and require them to be implemented in children. If we ever have multiple inheritance issues via
+ * inheritance from the OperationStatus, we can change it to be a proper interface.
  */
 class ElementVisitor : public ApiEntityInfo, public FilteredByGeometryTypeCriteria,
   public OperationStatus
@@ -77,18 +95,17 @@ public:
   /**
    * @see FilteredByGeometryTypeCriteria
    *
-   * An empty list returned here means that the visitor is associated no specific criteria and
-   * can be run against any feature type. Any visitors that want to control which feature types
-   * they are run against during conflation should populate this list. The list is treated in a
-   * logical OR fashion.
+   * An empty list returned here means that the visitor is associated with no specific element type
+   * criteria and can be run against any feature type. Any visitors that want to control which
+   * feature types they are run against during conflation should populate this list. The list is
+   * treated in a logical OR fashion.
    */
   QStringList getCriteria() const override { return QStringList(); }
 
   QString toString() const override { return ""; }
-
 };
 
-typedef std::shared_ptr<ElementVisitor> ElementVisitorPtr;
+using ElementVisitorPtr = std::shared_ptr<ElementVisitor>;
 
 }
 

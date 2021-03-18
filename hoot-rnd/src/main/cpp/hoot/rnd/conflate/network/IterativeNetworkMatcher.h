@@ -28,13 +28,13 @@
 #define ITERATIVENETWORKMATCHER_H
 
 // hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/algorithms/optimizer/SingleAssignmentProblemSolver.h>
 #include <hoot/core/conflate/network/IndexedEdgeMatchSet.h>
 #include <hoot/core/conflate/network/NetworkMatcher.h>
 #include <hoot/core/conflate/network/NetworkEdgeScore.h>
 #include <hoot/core/conflate/network/NetworkVertexScore.h>
 #include <hoot/core/conflate/network/OsmNetwork.h>
+#include <hoot/core/elements/OsmMap.h>
 
 // tgs
 #include <tgs/RStarTree/HilbertRTree.h>
@@ -90,11 +90,11 @@ private:
   // for white box testing.
   friend class IterativeNetworkMatcherTest;
 
-  typedef SingleAssignmentProblemSolver<EdgeString, EdgeString> Saps;
+  using Saps = SingleAssignmentProblemSolver<EdgeString, EdgeString>;
 
-  typedef QHash<ConstEdgeMatchPtr, double> EdgeScoreMap;
+  using EdgeScoreMap = QHash<ConstEdgeMatchPtr, double>;
   /// [row][col]
-  typedef QHash<ConstNetworkVertexPtr, QHash<ConstNetworkVertexPtr, double>> VertexScoreMap;
+  using VertexScoreMap = QHash<ConstNetworkVertexPtr, QHash<ConstNetworkVertexPtr, double>>;
 
   /**
    * A cost function used to compare network edges. It is a simple lookup.
@@ -114,6 +114,8 @@ private:
       em1 = 0;
       em2 = 0;
     }
+
+    virtual ~CostFunction() = default;
 
     /**
      * Returns the cost associated with assigning actor a to task t.
@@ -183,8 +185,8 @@ private:
 
 };
 
-typedef std::shared_ptr<IterativeNetworkMatcher> IterativeNetworkMatcherPtr;
-typedef std::shared_ptr<const IterativeNetworkMatcher> ConstIterativeNetworkMatcherPtr;
+using IterativeNetworkMatcherPtr = std::shared_ptr<IterativeNetworkMatcher>;
+using ConstIterativeNetworkMatcherPtr = std::shared_ptr<const IterativeNetworkMatcher>;
 
 // not implemented
 bool operator<(ConstIterativeNetworkMatcherPtr, ConstIterativeNetworkMatcherPtr);

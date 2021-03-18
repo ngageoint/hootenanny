@@ -79,7 +79,7 @@ public:
   /**
    * Used to finalize a call to writePartial.
    */
-  virtual void finalizePartial();
+  void finalizePartial() override;
 
   /**
    * Returns the number of elements written by this class since it was instantiated.
@@ -93,12 +93,12 @@ public:
 
   void initializePartial(std::ostream* strm);
 
-  virtual void initializePartial() override;
+  void initializePartial() override;
 
-  virtual bool isSupported(const QString& url) override { return url.toLower().endsWith("osm.pbf"); }
+  bool isSupported(const QString& url) override { return url.toLower().endsWith("osm.pbf"); }
 
-  virtual void open(const QString& url) override;
-  virtual void close();
+  void open(const QString& url) override;
+  void close() override;
 
   /**
    * Set the compression level to a value of -1 to 9. -1 is "default" or equivalent to about 7.
@@ -123,7 +123,7 @@ public:
   /**
    * The write command called after open.
    */
-  virtual void write(const ConstOsmMapPtr& map) override;
+  void write(const ConstOsmMapPtr& map) override;
 
   void write(const ConstOsmMapPtr& map, const QString& path);
 
@@ -139,11 +139,10 @@ public:
    * Write out a map in chunks. This may be called multiple times and must be precceded with a
    * call to initializePartial and finalized with a call to finalizePartial.
    */
-  virtual void writePartial(const ConstOsmMapPtr& map) override;
-
-  virtual void writePartial(const ConstNodePtr& n) override;
-  virtual void writePartial(const ConstWayPtr& w) override;
-  virtual void writePartial(const ConstRelationPtr& r) override;
+  void writePartial(const ConstOsmMapPtr& map) override;
+  void writePartial(const ConstNodePtr& n) override;
+  void writePartial(const ConstWayPtr& w) override;
+  void writePartial(const ConstRelationPtr& r) override;
 
   /**
    * Write out the map as a PrimitiveBlock to the specified stream. The size of the primitive
@@ -173,7 +172,7 @@ public:
   void writePb(const ConstRelationPtr& r, std::ostream* strm);
   void writePb(const RelationPtr& r, std::ostream* strm) { writePb((const ConstRelationPtr)r, strm); }
 
-  virtual QString supportedFormats() { return ".osm.pbf"; }
+  QString supportedFormats() override { return ".osm.pbf"; }
 
 private:
 
@@ -186,7 +185,7 @@ private:
   bool _includeInfo;
   bool _includeVersion;
   // Bend over backwards to keep the PBF headers out of the normal build. They're quite large.
-  OsmPbfWriterData* _d;
+  std::shared_ptr<OsmPbfWriterData> _d;
   QHash<QString, int> _strings;
   ConstOsmMapPtr _map;
   int _rawSize;

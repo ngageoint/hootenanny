@@ -117,7 +117,7 @@ private:
   std::shared_ptr<PluginContext> _script;
   QString _explainText;
 
-  typedef std::pair<ElementId, ElementId> ConflictKey;
+  using ConflictKey = std::pair<ElementId, ElementId>;
   mutable QHash<ConflictKey, bool> _conflicts;
 
   void _calculateClassification(

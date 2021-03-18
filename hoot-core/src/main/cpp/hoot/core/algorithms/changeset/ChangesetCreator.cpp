@@ -27,33 +27,33 @@
 #include "ChangesetCreator.h"
 
 // Hoot
+#include <hoot/core/algorithms/changeset/ChangesetCleaner.h>
+#include <hoot/core/algorithms/changeset/ChangesetDeriver.h>
 #include <hoot/core/criterion/NotCriterion.h>
 #include <hoot/core/criterion/TagKeyCriterion.h>
 #include <hoot/core/elements/ExternalMergeElementSorter.h>
 #include <hoot/core/elements/InMemoryElementSorter.h>
+#include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/io/ElementCriterionVisitorInputStream.h>
 #include <hoot/core/io/ElementStreamer.h>
+#include <hoot/core/io/IoUtils.h>
+#include <hoot/core/io/OsmChangesetFileWriter.h>
+#include <hoot/core/io/OsmChangesetFileWriterFactory.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/io/OsmPbfReader.h>
 #include <hoot/core/io/PartialOsmMapReader.h>
-#include <hoot/core/ops/NamedOp.h>
+#include <hoot/core/ops/OpExecutor.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/ConfigUtils.h>
+#include <hoot/core/util/DbUtils.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/geometry/GeometryUtils.h>
-#include <hoot/core/io/IoUtils.h>
-#include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Progress.h>
 #include <hoot/core/visitors/ApiTagTruncateVisitor.h>
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
 #include <hoot/core/visitors/RemoveUnknownVisitor.h>
-#include <hoot/core/util/ConfigUtils.h>
-#include <hoot/core/algorithms/changeset/ChangesetDeriver.h>
-#include <hoot/core/algorithms/changeset/ChangesetCleaner.h>
-#include <hoot/core/io/OsmChangesetFileWriterFactory.h>
-#include <hoot/core/io/OsmChangesetFileWriter.h>
-#include <hoot/core/util/FileUtils.h>
-#include <hoot/core/util/DbUtils.h>
 
 //GEOS
 #include <geos/geom/Envelope.h>
@@ -134,9 +134,9 @@ void ChangesetCreator::create(const QString& output, const QString& input1, cons
     // the larger number of steps. With streaming I/O that isn't possible since all the data
     // conversion operations are executed inline at the same time the data is read in.
     _numTotalTasks += 3;
-    if (ConfigOptions().getConvertOps().size() > 0)
+    if (!ConfigOptions().getConvertOps().empty())
     {
-      // Convert ops get a single task, which NamedOp will break down into sub-tasks during
+      // Convert ops get a single task, which OpExecutor will break down into sub-tasks during
       // progress reporting.
       _numTotalTasks++;
       if (!ElementStreamer::areValidStreamingOps(ConfigOptions().getConvertOps()))
@@ -324,7 +324,7 @@ bool ChangesetCreator::_isSupportedOutputFormat(const QString& format) const
 bool ChangesetCreator::_inputIsSorted(const QString& input) const
 {
   // ops could change the ordering
-  if (ConfigOptions().getConvertOps().size() > 0)
+  if (!ConfigOptions().getConvertOps().empty())
   {
     return false;
   }
@@ -413,7 +413,7 @@ void ChangesetCreator::_handleUnstreamableConvertOpsInMemory(
   // then they some will exhibit undefined behavior if you try to exec them on the inputs
   // separately.
   LOG_DEBUG("Applying convert ops...");
-  NamedOp convertOps(ConfigOptions().getConvertOps());
+  OpExecutor convertOps(ConfigOptions().getConvertOps());
   convertOps.setProgress(
     Progress(
       ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running,
@@ -480,7 +480,7 @@ void ChangesetCreator::_handleStreamableConvertOpsInMemory(
 
   // Apply our convert ops to each map separately.
   LOG_DEBUG("Applying convert ops...");
-  NamedOp convertOps(ConfigOptions().getConvertOps());
+  OpExecutor convertOps(ConfigOptions().getConvertOps());
   convertOps.setProgress(
     Progress(
       ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running,
@@ -499,7 +499,7 @@ void ChangesetCreator::_readInputsFully(
   const QString& input1, const QString& input2, OsmMapPtr& map1, OsmMapPtr& map2, Progress progress)
 {  
   LOG_VARD(ConfigOptions().getConvertOps().size());
-  if (ConfigOptions().getConvertOps().size() > 0)
+  if (!ConfigOptions().getConvertOps().empty())
   {
     if (!ElementStreamer::areValidStreamingOps(ConfigOptions().getConvertOps()))
     {

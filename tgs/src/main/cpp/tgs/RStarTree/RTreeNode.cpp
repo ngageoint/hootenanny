@@ -31,11 +31,11 @@
 #include <algorithm>
 #include <assert.h>
 #include <math.h>
-using namespace std;
 
 #include <tgs/TgsException.h>
 #include <tgs/RStarTree/RTreeNodeStore.h>
 
+using namespace std;
 using namespace Tgs;
 
 BoxInternalData::BoxInternalData(int dimensions, const char* data)
@@ -179,10 +179,6 @@ RTreeNode::RTreeNode(int dimensions, const std::shared_ptr<Page>& page)
   _getHeader()->childCount = *childCount;
 }
 
-RTreeNode::~RTreeNode()
-{
-}
-
 void RTreeNode::addChild(const Box& envelope, int id)
 {
   assert(getChildCount() < _maxChildCount);
@@ -245,7 +241,7 @@ int RTreeNode::getChildCount() const
   return _getHeader()->childCount;
 }
 
-const BoxInternalData RTreeNode::getChildEnvelope(int childIndex) const
+BoxInternalData RTreeNode::getChildEnvelope(int childIndex) const
 {
   assert(childIndex < getChildCount());
   BoxInternalData bid(_dimensions, _getChildPtr(childIndex)->getBox());

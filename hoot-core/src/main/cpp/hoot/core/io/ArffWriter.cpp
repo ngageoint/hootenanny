@@ -50,13 +50,12 @@ _useNulls(useNulls)
 
 ArffWriter::ArffWriter(QString path, bool useNulls) :
 _path(path),
+_autoStrm(new fstream()),
 _useNulls(useNulls)
 {
-  fstream* fs = new fstream();
-  fs->exceptions(fstream::failbit | fstream::badbit);
-  fs->open(path.toUtf8().data(), ios_base::out);
-  _autoStrm.reset(fs);
-  _strm = fs;
+  _autoStrm->exceptions(fstream::failbit | fstream::badbit);
+  _autoStrm->open(path.toUtf8().data(), ios_base::out);
+  _strm = _autoStrm.get();
 }
 
 void ArffWriter::_w(const QString& s)

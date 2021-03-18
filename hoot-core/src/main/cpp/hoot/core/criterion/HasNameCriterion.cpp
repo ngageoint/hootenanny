@@ -27,8 +27,8 @@
 #include "HasNameCriterion.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
@@ -37,7 +37,7 @@ HOOT_FACTORY_REGISTER(ElementCriterion, HasNameCriterion)
 
 bool HasNameCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  return e->getTags().getNames().size() > 0;
+  return !e->getTags().getNames().empty();
 }
 
 }

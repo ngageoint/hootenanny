@@ -40,7 +40,7 @@ struct EdgeMatchScore
 };
 
 // Stores a set of edge matches, keyed by a similarity string; see EdgeMatch::isVerySimilarTo
-typedef QHash<QString, EdgeMatchScore> EdgeMatchSimilarity;
+using EdgeMatchSimilarity = QHash<QString, EdgeMatchScore>;
 
 class EdgeMatchSetFinder
 {
@@ -129,8 +129,8 @@ private:
   void _resetEdgeMatchSimilarities();
 };
 
-typedef std::shared_ptr<EdgeMatchSetFinder> EdgeMatchSetFinderPtr;
-typedef std::shared_ptr<const EdgeMatchSetFinder> ConstEdgeMatchSetFinderPtr;
+using EdgeMatchSetFinderPtr = std::shared_ptr<EdgeMatchSetFinder>;
+using ConstEdgeMatchSetFinderPtr = std::shared_ptr<const EdgeMatchSetFinder>;
 
 }
 

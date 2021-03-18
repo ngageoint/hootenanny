@@ -27,8 +27,8 @@
 #ifndef WAYSUBLINE_H
 #define WAYSUBLINE_H
 
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/algorithms/linearreference/WayLocation.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/geometry/GeometryToElementConverter.h>
 
 namespace hoot
@@ -46,7 +46,7 @@ class WaySubline
 {
 public:
 
-  WaySubline();
+  WaySubline() = default;
   WaySubline(const WayLocation& start, const WayLocation& end);
   WaySubline(const WaySubline& from);
   WaySubline(const WaySubline& from, const ConstOsmMapPtr &newMap);
@@ -121,7 +121,7 @@ public:
    * @param reuse - flag for reusing way id or getting a new one from the map
    * @return the created way
    */
-  WayPtr toWay(const OsmMapPtr& map, GeometryToElementConverter::NodeFactory* nf = 0,
+  WayPtr toWay(const OsmMapPtr& map, GeometryToElementConverter::NodeFactory* nf = nullptr,
                bool reuse = false) const;
 
   /**

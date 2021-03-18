@@ -36,7 +36,7 @@ namespace hoot
 
 class PoiPolygonInfoCache;
 
-typedef std::shared_ptr<PoiPolygonInfoCache> PoiPolygonInfoCachePtr;
+using PoiPolygonInfoCachePtr = std::shared_ptr<PoiPolygonInfoCache>;
 
 /**
  * Cached storing POI/Polygon feature comparison info

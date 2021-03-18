@@ -27,23 +27,23 @@
 
 // Hoot
 #include <hoot/core/cmd/BaseCommand.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/IoUtils.h>
 #include <hoot/core/io/OsmApiChangeset.h>
+#include <hoot/core/ops/DuplicateNodeRemover.h>
 #include <hoot/core/scoring/MapComparator.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/util/Settings.h>
-#include <hoot/core/ops/DuplicateNodeRemover.h>
 #include <hoot/core/util/StringUtils.h>
-
-using namespace std;
 
 // Qt
 #include <QDir>
 #include <QFileInfo>
 #include <QElapsedTimer>
+
+using namespace std;
 
 namespace hoot
 {
@@ -56,12 +56,12 @@ public:
 
   DiffCmd() = default;
 
-  virtual QString getName() const override { return "diff"; }
+  QString getName() const override { return "diff"; }
 
-  virtual QString getDescription() const override
+  QString getDescription() const override
   { return "Calculates the difference between two maps or changesets"; }
 
-  virtual int runSimple(QStringList& args) override
+  int runSimple(QStringList& args) override
   {
     QElapsedTimer timer;
     timer.start();

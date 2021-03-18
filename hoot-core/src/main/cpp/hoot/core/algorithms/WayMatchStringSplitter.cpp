@@ -28,8 +28,8 @@
 
 // hoot
 #include <hoot/core/algorithms/splitter/WaySplitter.h>
-#include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/elements/ElementGeometryUtils.h>
+#include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/util/Log.h>
 
 using namespace std;
@@ -41,10 +41,6 @@ QString WayMatchStringSplitter::_overlyAggressiveMergeReviewText =
   "One or more ways in the merge are being removed. This is likely due to an inconsistent match. "
   "Please review the length of the review for overly aggressive merges and manually merge features "
   "using input data/imagery. There may also be one or more zero length ways at intersections.";
-
-WayMatchStringSplitter::WayMatchStringSplitter()
-{
-}
 
 void WayMatchStringSplitter::applySplits(OsmMapPtr map,
   vector<pair<ElementId, ElementId>> &replaced,
@@ -135,18 +131,17 @@ void WayMatchStringSplitter::_splitWay(WayNumber wn, OsmMapPtr map,
     if (w && ElementGeometryUtils::calculateLength(w, map) > 0.0)
     {
       newWays.append(w);
-      replaced.push_back(pair<ElementId, ElementId>(way->getElementId(), w->getElementId()));
+      replaced.emplace_back(way->getElementId(), w->getElementId());
     }
 
     for (int i = 0; i < sm.size(); ++i)
     {
-      WayPtr w;
       w = splits[c++];
       if (!w)
         throw NeedsReviewException(_overlyAggressiveMergeReviewText);
 
       sm.at(i)->setNewWay(wn, w);
-      replaced.push_back(pair<ElementId, ElementId>(way->getElementId(), w->getElementId()));
+      replaced.emplace_back(way->getElementId(), w->getElementId());
       newWays.append(w);
 
       w = splits[c++];
@@ -158,7 +153,7 @@ void WayMatchStringSplitter::_splitWay(WayNumber wn, OsmMapPtr map,
           throw InternalErrorException("Only the last split should be empty.");
 
         newWays.append(w);
-        replaced.push_back(pair<ElementId, ElementId>(way->getElementId(), w->getElementId()));
+        replaced.emplace_back(way->getElementId(), w->getElementId());
       }
     }
 

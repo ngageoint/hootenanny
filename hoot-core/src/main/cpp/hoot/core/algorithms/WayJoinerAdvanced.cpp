@@ -29,22 +29,22 @@
 
 //  Hoot
 #include <hoot/core/algorithms/DirectionFinder.h>
+#include <hoot/core/conflate/highway/HighwayUtils.h>
 #include <hoot/core/criterion/AreaCriterion.h>
 #include <hoot/core/criterion/BridgeCriterion.h>
+#include <hoot/core/criterion/CriterionUtils.h>
 #include <hoot/core/criterion/HighwayCriterion.h>
 #include <hoot/core/criterion/OneWayCriterion.h>
 #include <hoot/core/elements/NodeToWayMap.h>
-#include <hoot/core/conflate/highway/HighwayUtils.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/ops/ReplaceElementOp.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/schema/TagMergerFactory.h>
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/criterion/CriterionUtils.h>
 
 #include <unordered_set>
 #include <vector>
@@ -197,7 +197,7 @@ void WayJoinerAdvanced::_joinAtNode()
     LOG_VART(currentNumSplitParentIds);
     // If we didn't reduce the number of ways from the previous iteration, or there are none left
     // to reduce, then exit out.
-    if (currentNumSplitParentIds == ids.size() || ids.size() == 0)
+    if (ids.empty() || currentNumSplitParentIds == ids.size())
     {
       break;
     }
@@ -233,10 +233,10 @@ void WayJoinerAdvanced::_joinAtNode()
         const set<long>& way_ids = nodeToWayMap->getWaysByNode(*e);
         LOG_VART(way_ids.size());
         LOG_VART(way_ids);
-        for (set<long>::const_iterator ways = way_ids.begin(); ways != way_ids.end(); ++ways)
+        for (set<long>::const_iterator w = way_ids.begin(); w != way_ids.end(); ++w)
         {
           LOG_VART(way->getElementId());
-          WayPtr child = _map->getWay(*ways);
+          WayPtr child = _map->getWay(*w);
           if (child)
           {
             LOG_VART(child->getElementId());
@@ -454,7 +454,7 @@ bool WayJoinerAdvanced::_joinWays(const WayPtr& parent, const WayPtr& child)
   //  Check if the two ways are able to be joined back up
 
   //  Make sure that there are nodes in the ways
-  if (parent->getNodeIds().size() == 0 || child->getNodeIds().size() == 0)
+  if (parent->getNodeIds().empty() || child->getNodeIds().empty())
   {
     LOG_TRACE(
       "One or more of the ways: " << parent->getElementId() << " and " << child->getElementId() <<
@@ -711,7 +711,7 @@ void WayJoinerAdvanced::_joinUnsplitWaysAtNode()
 void WayJoinerAdvanced::_determineKeeperFeatureForTags(WayPtr parent, WayPtr child, WayPtr& keeper,
                                                        WayPtr& toRemove) const
 {
-  // This logic is kind of a mess.
+  // This logic is kind of a mess but works.
 
   const QString tagMergerClassName = ConfigOptions().getTagMergerDefault();
   LOG_VART(tagMergerClassName);

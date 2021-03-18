@@ -45,12 +45,12 @@ public:
 
   TagDistributionCmd() = default;
 
-  virtual QString getName() const override { return "tag-distribution"; }
+  QString getName() const override { return "tag-distribution"; }
 
-  virtual QString getDescription() const override
+  QString getDescription() const override
   { return "Calculates the distribution of values for specified tags in a map"; }
 
-  virtual int runSimple(QStringList& args) override
+  int runSimple(QStringList& args) override
   {
     QElapsedTimer timer;
     timer.start();

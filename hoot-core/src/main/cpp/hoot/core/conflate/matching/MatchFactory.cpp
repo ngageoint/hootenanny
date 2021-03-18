@@ -27,15 +27,15 @@
 #include "MatchFactory.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/util/Boundable.h>
-#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
-#include <hoot/core/util/Log.h>
-#include <hoot/core/criterion/TagAdvancedCriterion.h>
 #include <hoot/core/conflate/matching/OptionsValidator.h>
 #include <hoot/core/criterion/ChainCriterion.h>
 #include <hoot/core/criterion/NotCriterion.h>
+#include <hoot/core/criterion/TagAdvancedCriterion.h>
+#include <hoot/core/util/Boundable.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/Log.h>
 
 //Qt
 #include <QString>
@@ -69,7 +69,7 @@ MatchPtr MatchFactory::createMatch(const ConstOsmMapPtr& map, ElementId eid1, El
     }
   }
 
-  return 0;
+  return nullptr;
 }
 
 void MatchFactory::createMatches(const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& matches,
@@ -99,7 +99,7 @@ void MatchFactory::_checkMatchCreatorBoundable(
   if (bounds.get())
   {
     std::shared_ptr<Boundable> boundable = std::dynamic_pointer_cast<Boundable>(matchCreator);
-    if (boundable == 0)
+    if (boundable == nullptr)
     {
       throw HootException("One or more match creators is not boundable and cannot be used with "
                           "boundable match operations.");
@@ -156,7 +156,7 @@ void MatchFactory::registerCreator(const QString& c)
 
     registerCreator(mc);
 
-    if (args.size() > 0)
+    if (!args.empty())
     {
       mc->setArguments(args);
     }
@@ -251,7 +251,7 @@ MatchFactory& MatchFactory::getInstance()
   OptionsValidator::validateMatchers();
 
   //only get the match creators that are specified in the config
-  if (instance._creators.size() == 0)
+  if (instance._creators.empty())
     instance._setMatchCreators(ConfigOptions().getMatchCreators());
   return instance;
 }

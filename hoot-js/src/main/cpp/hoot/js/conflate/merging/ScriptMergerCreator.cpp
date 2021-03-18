@@ -63,7 +63,7 @@ bool ScriptMergerCreator::createMergers(const MatchSet& matches, vector<MergerPt
     //LOG_VART(m->toString());
     std::shared_ptr<const ScriptMatch> sm = dynamic_pointer_cast<const ScriptMatch>(m);
     // check to make sure all the input matches are script matches
-    if (sm == 0)
+    if (sm == nullptr)
     {
       // return an empty result
       LOG_TRACE("Match invalid; skipping merge: " << m->toString());

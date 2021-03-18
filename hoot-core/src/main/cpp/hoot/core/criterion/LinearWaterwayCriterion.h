@@ -46,8 +46,7 @@ public:
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 
-  virtual GeometryType getGeometryType() const
-  { return GeometryType::Line; }
+  virtual GeometryType getGeometryType() const { return GeometryType::Line; }
 
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new LinearWaterwayCriterion()); }
 
@@ -58,6 +57,8 @@ public:
   virtual QString getClassName() const override { return className(); }
 
   virtual bool supportsSpecificConflation() const { return true; }
+
+  virtual QStringList getChildCriteria() const;
 };
 
 }

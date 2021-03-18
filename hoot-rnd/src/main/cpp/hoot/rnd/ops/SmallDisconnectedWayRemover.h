@@ -34,6 +34,7 @@
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/conflate/ConflateInfoCacheConsumer.h>
 
 namespace hoot
 {
@@ -43,7 +44,8 @@ namespace hoot
  *
  * This is primarily useful for using with incompletely collected data e.g. extracted features.
  */
-class SmallDisconnectedWayRemover : public OsmMapOperation, public Configurable
+class SmallDisconnectedWayRemover : public OsmMapOperation, public Configurable,
+  public ConflateInfoCacheConsumer
 {
 public:
 
@@ -82,6 +84,9 @@ public:
    */
   virtual QStringList getCriteria() const;
 
+  virtual void setConflateInfoCache(const std::shared_ptr<ConflateInfoCache>& cache)
+  { _conflateInfoCache = cache; }
+
  private:
 
   OsmMapPtr _map;
@@ -90,6 +95,10 @@ public:
   int _maxWayLength;
   // max node count a way can have to be eligible for removal
   int _maxWayNodeCount;
+
+  // Existence of this cache tells us that elements must be individually checked to see that they
+  // are conflatable given the current configuration before modifying them.
+  std::shared_ptr<ConflateInfoCache> _conflateInfoCache;
 };
 
 }

@@ -73,7 +73,7 @@ public:
 
   OgrReader(const QString& path, const QString& layer);
 
-  ~OgrReader();
+  ~OgrReader() = default;
 
   ElementIterator* createIterator(const QString& path, const QString& layer) const;
 
@@ -132,7 +132,7 @@ public:
   /**
    * @see ProgressReporter
    */
-  virtual void setProgress(Progress progress);
+  void setProgress(const Progress& progress) override;
   /**
    * @see ProgressReporter
    */
@@ -140,7 +140,7 @@ public:
 
 protected:
 
-  OgrReaderInternal* _d;
+  std::shared_ptr<OgrReaderInternal> _d;
 
   Progress _progress;
 };

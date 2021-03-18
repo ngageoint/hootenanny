@@ -27,14 +27,14 @@
 #ifndef INTERPOLATOR_H
 #define INTERPOLATOR_H
 
-// Qt
-class QIODevice;
-
 // Standard
 #include <vector>
 
 // Tgs
 #include <tgs/RandomForest/DataFrame.h>
+
+// Qt
+class QIODevice;
 
 namespace Tgs
 {
@@ -45,7 +45,7 @@ public:
 
   static QString className() { return "Tgs::Interpolator"; }
 
-  virtual ~Interpolator() {}
+  virtual ~Interpolator() = default;
 
   virtual QString getName() const = 0;
 

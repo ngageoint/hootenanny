@@ -70,7 +70,7 @@ public:
   /**
    * Removes members, tags, type and circularError.
    */
-  virtual void clear();
+  void clear() override;
 
   Element* clone() const { return new Relation(*this); }
 
@@ -111,7 +111,7 @@ public:
    * @param role role to search for
    * @return a collection of members
    */
-  const std::vector<RelationData::Entry> getElementsByRole(const QString& role);
+  std::vector<RelationData::Entry> getElementsByRole(const QString& role);
 
   const std::vector<RelationData::Entry>& getMembers() const
   { return _relationData->getElements(); }
@@ -126,12 +126,12 @@ public:
    */
   std::set<ElementId> getMemberIds(const ElementType& elementType = ElementType::Unknown) const;
 
-  virtual geos::geom::Envelope* getEnvelope(
+  geos::geom::Envelope* getEnvelope(
     const std::shared_ptr<const ElementProvider>& ep) const override;
-  virtual const geos::geom::Envelope& getEnvelopeInternal(
+  const geos::geom::Envelope& getEnvelopeInternal(
     const std::shared_ptr<const ElementProvider>& ep) const override;
 
-  virtual ElementType getElementType() const { return ElementType(ElementType::Relation); }
+  ElementType getElementType() const override { return ElementType(ElementType::Relation); }
 
   QString getType() const { return _relationData->getType(); }
 
@@ -196,14 +196,14 @@ public:
   /**
    * @see Element
    */
-  virtual void visitRo(const ElementProvider& map, ConstElementVisitor& filter,
-                       const bool recursive = true) const;
+  void visitRo(const ElementProvider& map, ConstElementVisitor& filter,
+               const bool recursive = true) const override;
 
   /**
    * @see Element
    */
-  virtual void visitRw(ElementProvider& map, ConstElementVisitor& filter,
-                       const bool recursive = true);
+  void visitRw(ElementProvider& map, ConstElementVisitor& filter,
+               const bool recursive = true) override;
 
 private:
 
@@ -211,8 +211,8 @@ private:
 
   std::shared_ptr<RelationData> _relationData;
 
-  virtual ElementData& _getElementData() { _makeWritable(); return *_relationData; }
-  virtual const ElementData& _getElementData() const { return *_relationData; }
+  ElementData& _getElementData() override { _makeWritable(); return *_relationData; }
+  const ElementData& _getElementData() const override { return *_relationData; }
 
   void _makeWritable();
 
@@ -231,8 +231,8 @@ void Relation::replaceElements(RelationData::Entry old, IT start, IT end)
   _postGeometryChange();
 }
 
-typedef std::shared_ptr<Relation> RelationPtr;
-typedef std::shared_ptr<const Relation> ConstRelationPtr;
+using RelationPtr = std::shared_ptr<Relation>;
+using ConstRelationPtr = std::shared_ptr<const Relation>;
 
 }
 

@@ -42,6 +42,8 @@ class ApiDbSqlStatementFormatter
 public:
   /** Constructor */
   ApiDbSqlStatementFormatter();
+  /** Destructor */
+  virtual ~ApiDbSqlStatementFormatter() = default;
 
 protected:
   /** Map of table names and output format strings */

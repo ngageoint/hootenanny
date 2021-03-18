@@ -168,7 +168,6 @@
         "merger": "hoot::HighwayMergerCreator",
         "members": {
             "highway.match.threshold": "Match threshold; 0.0 to 1.0",
-            "highway.merge.tags.only": "Merge road tags only",
             "search.radius.highway": "Search radius (m); -1 for default"
         }
     },

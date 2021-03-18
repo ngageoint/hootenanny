@@ -53,11 +53,11 @@ public:
 
   CropCmd() = default;
 
-  virtual QString getName() const override { return "crop"; }
+  QString getName() const override { return "crop"; }
 
-  virtual QString getDescription() const override { return "Crops a map to a bounds"; }
+  QString getDescription() const override { return "Crops a map to a bounds"; }
 
-  virtual int runSimple(QStringList& args) override
+  int runSimple(QStringList& args) override
   {
     if (args.size() < 3 || args.size() > 4)
     {
@@ -94,7 +94,7 @@ protected:
 
   std::shared_ptr<geos::geom::Geometry> _env;
 
-  virtual void _writeBoundsFile() override
+  void _writeBoundsFile() override
   {
     OsmMapWriterFactory::write(
       GeometryUtils::createMapFromBounds(*(_env->getEnvelopeInternal())),

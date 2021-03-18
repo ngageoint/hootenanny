@@ -36,9 +36,6 @@
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 
-//Boost Includes
-#include <boost/make_shared.hpp>
-
 //Qt includes
 #include <QStringList>
 
@@ -53,14 +50,14 @@ class LongBoxContainer
 {
 public:
 
-  LongBoxContainer() {}
+  LongBoxContainer() = default;
 
-  LongBoxContainer(LongBox box, long int excess)
+  LongBoxContainer(const LongBox& box, long int excess)
     : _box(box), _excess(excess)
   {
   }
 
-  bool operator==(LongBoxContainer bc) const
+  bool operator==(const LongBoxContainer& bc) const
   {
     if (_excess != bc.getExcess())
     {
@@ -247,19 +244,20 @@ long int ZCurveRanger::getSplitValue(long int v1, long int v2)
   return v2 & mask;
 }
 
-vector<Range> ZCurveRanger::decomposeRange(BBox box, BBox focusBox, int levels)
+vector<Range> ZCurveRanger::decomposeRange(const BBox& box, const BBox& focusBox, int levels)
 {
   return _decomposeRange(_toLongBox(box), _toLongBox(focusBox), levels);
 }
 
-vector<Range> ZCurveRanger::decomposeRange(BBox box, int levels)
+vector<Range> ZCurveRanger::decomposeRange(const BBox& box, int levels)
 {
    return decomposeRange(_toLongBox(box), levels);
 }
 
-vector<Range> ZCurveRanger::decomposeRange(LongBox box, int levels)
+vector<Range> ZCurveRanger::decomposeRange(const LongBox& box, int levels)
 {
-  vector<std::shared_ptr<LongBox>> boxes = decomposeBox(std::make_shared<LongBox>(_clipBox(box)), levels);
+  vector<std::shared_ptr<LongBox>> boxes =
+    decomposeBox(std::make_shared<LongBox>(_clipBox(box)), levels);
 
   vector<Range> result;
   result.reserve((boxes.size()));
@@ -271,12 +269,12 @@ vector<Range> ZCurveRanger::decomposeRange(LongBox box, int levels)
   return _condenseRanges(result);
 }
 
-vector<Range> ZCurveRanger::decomposeRangeIterative(BBox box, int count)
+vector<Range> ZCurveRanger::decomposeRangeIterative(const BBox& box, int count)
 {
   return _decomposeRangeIterative(_toLongBox(box), count);
 }
 
-bool ZCurveRanger::rangeCoversIdentity(Range r)
+bool ZCurveRanger::rangeCoversIdentity(const Range& r)
 {
   vector<long int> min;
   min.reserve(_zv.getDimensions());
@@ -299,7 +297,7 @@ bool ZCurveRanger::rangeCoversIdentity(Range r)
   return int2 >= int1;
 }
 
-vector<Range> ZCurveRanger::_decomposeRange(LongBox box, LongBox focusBox, int levels)
+vector<Range> ZCurveRanger::_decomposeRange(const LongBox& box, const LongBox& focusBox, int levels)
 {
   vector<std::shared_ptr<LongBox>> boxes = decomposeBox(std::make_shared<LongBox>(box), levels/2);
 
@@ -332,10 +330,10 @@ vector<Range> ZCurveRanger::_decomposeRange(LongBox box, LongBox focusBox, int l
   return _condenseRanges(result);
 }
 
-vector<Range> ZCurveRanger::_decomposeRangeIterative(LongBox box, int count)
+vector<Range> ZCurveRanger::_decomposeRangeIterative(const LongBox& box, int count)
 {
   priority_queue<LongBoxContainer> pq;
-  pq.push(LongBoxContainer(box, calculateExcess(std::make_shared<LongBox>(box))));
+  pq.emplace(box, calculateExcess(std::make_shared<LongBox>(box)));
 
   vector<LongBox> completed;
   while ((!pq.empty()) && (((int)pq.size() + (int)completed.size()) < count))
@@ -357,8 +355,8 @@ vector<Range> ZCurveRanger::_decomposeRangeIterative(LongBox box, int count)
       }
       else if (boxes.size() == 2)
       {
-        pq.push(LongBoxContainer(*boxes[0].get(), calculateExcess(boxes[0])));
-        pq.push(LongBoxContainer(*boxes[1].get(), calculateExcess(boxes[1])));
+        pq.emplace(*boxes[0].get(), calculateExcess(boxes[0]));
+        pq.emplace(*boxes[1].get(), calculateExcess(boxes[1]));
       }
       else
       {
@@ -383,7 +381,7 @@ vector<Range> ZCurveRanger::_decomposeRangeIterative(LongBox box, int count)
   return _condenseRanges(result);
 }
 
-LongBox ZCurveRanger::_clipBox(LongBox box)
+LongBox ZCurveRanger::_clipBox(const LongBox& box)
 {
   LongBox result = *box.copy().get();
 
@@ -440,7 +438,7 @@ Range ZCurveRanger::_toRange(const std::shared_ptr<LongBox>& box)
   return result;
 }
 
-LongBox ZCurveRanger::_toLongBox(BBox box)
+LongBox ZCurveRanger::_toLongBox(const BBox& box)
 {
   vector<long int> min;
   min.reserve(box.getDimensions());

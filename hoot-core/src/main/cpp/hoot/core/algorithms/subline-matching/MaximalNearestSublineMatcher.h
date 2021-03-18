@@ -39,23 +39,23 @@ public:
   static QString className() { return "hoot::MaximalNearestSublineMatcher"; }
 
   MaximalNearestSublineMatcher();
-  virtual ~MaximalNearestSublineMatcher() = default;
+  ~MaximalNearestSublineMatcher() = default;
 
-  virtual WaySublineMatchString findMatch(const ConstOsmMapPtr& map, const ConstWayPtr& way1,
+  WaySublineMatchString findMatch(const ConstOsmMapPtr& map, const ConstWayPtr& way1,
     const ConstWayPtr& way2, double& score, Meters maxRelevantDistance) const override;
 
-  virtual void setMaxRelevantAngle(Radians r) override { _maxRelevantAngle = r; }
+  void setMaxRelevantAngle(Radians r) override { _maxRelevantAngle = r; }
 
-  virtual void setMinSplitSize(Meters minSplitSize) override { _minSplitSize = minSplitSize; }
+  void setMinSplitSize(Meters minSplitSize) override { _minSplitSize = minSplitSize; }
 
-  virtual void setHeadingDelta(Meters headingDelta) override { _headingDelta = headingDelta; }
+  void setHeadingDelta(Meters headingDelta) override { _headingDelta = headingDelta; }
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Matches lines based on the maximal nearest subline found"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

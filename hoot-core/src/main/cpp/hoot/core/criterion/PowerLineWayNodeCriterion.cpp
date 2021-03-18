@@ -47,9 +47,4 @@ WayNodeCriterion(map)
   _parentCriterion.reset(new PowerLineCriterion());
 }
 
-void PowerLineWayNodeCriterion::setOsmMap(const OsmMap* map)
-{
-  _map = map->shared_from_this();
-}
-
 }

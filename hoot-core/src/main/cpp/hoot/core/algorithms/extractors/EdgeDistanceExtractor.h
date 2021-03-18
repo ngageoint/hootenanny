@@ -53,7 +53,7 @@ public:
 
   EdgeDistanceExtractor(ValueAggregatorPtr, Meters spacing = 5.0);
   EdgeDistanceExtractor(Meters spacing = 5.0);
-  virtual ~EdgeDistanceExtractor() = default;
+  ~EdgeDistanceExtractor() = default;
 
   static QString className() { return "hoot::EdgeDistanceExtractor"; }
 

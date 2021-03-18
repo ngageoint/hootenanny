@@ -56,7 +56,8 @@ class TDistribution
 {
 public:
 
-  TDistribution();
+  TDistribution() = default;
+  virtual ~TDistribution() = default;
 
   /**
    * Similar to calling initialize.

@@ -28,12 +28,12 @@
 #define NETWORKMATCHER_H
 
 // hoot
-#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/conflate/network/IndexedEdgeMatchSet.h>
 #include <hoot/core/conflate/network/NetworkDetails.h>
 #include <hoot/core/conflate/network/NetworkEdgeScore.h>
 #include <hoot/core/conflate/network/NetworkVertexScore.h>
 #include <hoot/core/conflate/network/OsmNetwork.h>
-#include <hoot/core/conflate/network/IndexedEdgeMatchSet.h>
+#include <hoot/core/elements/OsmMap.h>
 
 // tgs
 #include <tgs/RStarTree/HilbertRTree.h>
@@ -86,11 +86,11 @@ protected:
 
   void _createVertex2Index();
 
-  Tgs::IntersectionIterator _createIterator(geos::geom::Envelope env, Tgs::HilbertRTreePtr tree);
+  Tgs::IntersectionIterator _createIterator(const geos::geom::Envelope& env, Tgs::HilbertRTreePtr tree);
 };
 
-typedef std::shared_ptr<NetworkMatcher> NetworkMatcherPtr;
-typedef std::shared_ptr<const NetworkMatcher> ConstNetworkMatcherPtr;
+using NetworkMatcherPtr = std::shared_ptr<NetworkMatcher>;
+using ConstNetworkMatcherPtr = std::shared_ptr<const NetworkMatcher>;
 
 // not implemented
 bool operator<(ConstNetworkMatcherPtr, ConstNetworkMatcherPtr);

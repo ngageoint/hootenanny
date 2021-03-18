@@ -32,7 +32,7 @@
 namespace Tgs
 {
 
-DisableCout::DisableCout() : _nullStream(0)
+DisableCout::DisableCout() : _nullStream(nullptr)
 {
   _oldBuf = std::cout.rdbuf();
   std::cout.rdbuf(_nullStream.rdbuf());

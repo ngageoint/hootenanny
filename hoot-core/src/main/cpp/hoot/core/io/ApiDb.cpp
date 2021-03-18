@@ -88,15 +88,15 @@ ApiDb::~ApiDb()
 
 void ApiDb::_resetQueries()
 {
-  if (_selectUserByEmail != 0)
+  if (_selectUserByEmail != nullptr)
   {
     _selectUserByEmail.reset();
   }
-  if (_insertUser != 0)
+  if (_insertUser != nullptr)
   {
     _insertUser.reset();
   }
-  if (_selectNodeIdsForWay != 0)
+  if (_selectNodeIdsForWay != nullptr)
   {
     _selectNodeIdsForWay.reset();
   }
@@ -183,7 +183,7 @@ void ApiDb::open(const QUrl& url)
     }
   }
 
-  if (_db.tables().size() == 0)
+  if (_db.tables().empty())
   {
     throw HootException("Attempting to open _db " + url.toString(QUrl::RemoveUserInfo) +
                         " but found zero tables. Does the DB exist? Has it been populated?");
@@ -229,7 +229,7 @@ void ApiDb::rollback()
 long ApiDb::getUserIdByName(const QString& userName)
 {
   LOG_VART(userName);
-  if (_getUserIdByName == 0)
+  if (_getUserIdByName == nullptr)
   {
     _getUserIdByName.reset(new QSqlQuery(_db));
     _getUserIdByName->prepare(
@@ -268,7 +268,7 @@ long ApiDb::getUserIdByName(const QString& userName)
 QString ApiDb::getUserNameById(const long userId)
 {
   LOG_VART(userId);
-  if (_getUserNameById == 0)
+  if (_getUserNameById == nullptr)
   {
     _getUserNameById.reset(new QSqlQuery(_db));
     _getUserNameById->prepare(
@@ -308,7 +308,7 @@ bool ApiDb::userExists(const QString& userName)
 bool ApiDb::userExists(const long id)
 {
   LOG_VART(id);
-  if (_userExists == 0)
+  if (_userExists == nullptr)
   {
     _userExists.reset(new QSqlQuery(_db));
     _userExists->prepare("SELECT id FROM " + ApiDb::getUsersTableName() + " WHERE id = :id");
@@ -344,7 +344,7 @@ bool ApiDb::userExists(const long id)
 
 long ApiDb::getUserId(const QString& email, bool throwWhenMissing)
 {
-  if (_selectUserByEmail == 0)
+  if (_selectUserByEmail == nullptr)
   {
     _selectUserByEmail.reset(new QSqlQuery(_db));
     _selectUserByEmail->prepare(
@@ -386,7 +386,7 @@ long ApiDb::insertUser(const QString& email, const QString& displayName)
 
   long id = -1;
 
-  if (_insertUser == 0)
+  if (_insertUser == nullptr)
   {
     _insertUser.reset(new QSqlQuery(_db));
     _insertUser->prepare("INSERT INTO " + ApiDb::getUsersTableName() + " (email, display_name) "
@@ -642,7 +642,7 @@ std::shared_ptr<QSqlQuery> ApiDb::selectNodesByBounds(const Envelope& bounds)
 
 std::shared_ptr<QSqlQuery> ApiDb::selectWayIdsByWayNodeIds(const QSet<QString>& nodeIds)
 {
-  if (nodeIds.size() == 0)
+  if (nodeIds.empty())
   {
     throw HootException("Empty node ID list.");
   }
@@ -670,7 +670,7 @@ std::shared_ptr<QSqlQuery> ApiDb::selectWayIdsByWayNodeIds(const QSet<QString>& 
 
 QSet<QString> ApiDb::selectConnectedWayIds(const QSet<QString>& wayIds)
 {
-  if (wayIds.size() == 0)
+  if (wayIds.empty())
   {
     throw IllegalArgumentException("Empty way ID list.");
   }
@@ -706,7 +706,7 @@ QSet<QString> ApiDb::selectConnectedWayIds(const QSet<QString>& wayIds)
 std::shared_ptr<QSqlQuery> ApiDb::selectElementsByElementIdList(const QSet<QString>& elementIds,
                                                                 const TableType& tableType)
 {
-  if (elementIds.size() == 0)
+  if (elementIds.empty())
   {
     throw HootException("Empty element ID list.");
   }
@@ -736,7 +736,7 @@ std::shared_ptr<QSqlQuery> ApiDb::selectElementsByElementIdList(const QSet<QStri
 
 std::shared_ptr<QSqlQuery> ApiDb::selectWayNodeIdsByWayIds(const QSet<QString>& wayIds)
 {
-  if (wayIds.size() == 0)
+  if (wayIds.empty())
   {
     throw HootException("Empty way ID list.");
   }
@@ -766,7 +766,7 @@ std::shared_ptr<QSqlQuery> ApiDb::selectWayNodeIdsByWayIds(const QSet<QString>& 
 std::shared_ptr<QSqlQuery> ApiDb::selectRelationIdsByMemberIds(const QSet<QString>& memberIds,
                                                                const ElementType& memberElementType)
 {
-  if (memberIds.size() == 0)
+  if (memberIds.empty())
   {
     throw HootException("Empty member ID list.");
   }

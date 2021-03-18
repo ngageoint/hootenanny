@@ -59,7 +59,7 @@ public:
   virtual QString getClassName() const override { return className(); }
 };
 
-typedef std::shared_ptr<OrCriterion> OrCriterionPtr;
+using OrCriterionPtr = std::shared_ptr<OrCriterion>;
 
 }
 

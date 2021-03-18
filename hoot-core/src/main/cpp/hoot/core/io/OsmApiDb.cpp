@@ -510,7 +510,7 @@ long OsmApiDb::_getIdFromSequence(const ElementType& elementType, const QString&
 long OsmApiDb::_getIdFromSequence(const QString& tableName, const QString& sequenceType)
 {
   long result;
-  if (_seqQueries[tableName].get() == 0)
+  if (_seqQueries[tableName].get() == nullptr)
   {
     _seqQueries[tableName].reset(new QSqlQuery(_db));
     _seqQueries[tableName]->setForwardOnly(true);

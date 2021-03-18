@@ -48,7 +48,7 @@ HOOT_FACTORY_REGISTER(ElementVisitor, SchemaTranslatedTagCountVisitor)
 
 SchemaTranslatedTagCountVisitor::SchemaTranslatedTagCountVisitor(
   const std::shared_ptr<ScriptSchemaTranslator>& t) :
-  _map(NULL),
+  _map(nullptr),
   _populatedCount(0),
   _defaultCount(0),
   _nullCount(0),
@@ -104,6 +104,10 @@ void SchemaTranslatedTagCountVisitor::visit(const ConstElementPtr& e)
   {
     std::shared_ptr<Geometry> g =
       ElementToGeometryConverter(_map->shared_from_this()).convertToGeometry(e, false);
+    if (!g || g->isEmpty())
+    {
+      return;
+    }
 
     Tags t = e->getTags();
     t[MetadataTags::ErrorCircular()] = QString::number(e->getCircularError());

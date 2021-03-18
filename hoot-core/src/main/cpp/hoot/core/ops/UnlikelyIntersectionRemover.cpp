@@ -28,15 +28,15 @@
 #include "UnlikelyIntersectionRemover.h"
 
 // Hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/algorithms/WayHeading.h>
-#include <hoot/core/elements/Way.h>
 #include <hoot/core/algorithms/linearreference/WayLocation.h>
-#include <hoot/core/util/Log.h>
-#include <hoot/core/elements/NodeToWayMap.h>
+#include <hoot/core/conflate/ConflateUtils.h>
 #include <hoot/core/criterion/LinearCriterion.h>
-
+#include <hoot/core/elements/NodeToWayMap.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/elements/Way.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/Log.h>
 
 // Standard
 #include <iostream>
@@ -52,6 +52,25 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, UnlikelyIntersectionRemover)
 
+void UnlikelyIntersectionRemover::apply(std::shared_ptr<OsmMap>& map)
+{
+  _numAffected = 0;
+  _result = map;
+
+  NodeToWayMap n2w(*_result);
+
+  // go through each node
+  for (NodeToWayMap::const_iterator it = n2w.begin(); it != n2w.end(); ++it)
+  {
+    // if the node is part of multiple ways
+    if (it->second.size() > 1)
+    {
+      // evaluate and split the intersection
+      _evaluateAndSplit(it->first, it->second);
+    }
+  }
+}
+
 void UnlikelyIntersectionRemover::_evaluateAndSplit(long intersectingNode, const set<long>& wayIds)
 {
   // This evaluate and split method uses a simple heuristic for finding a split. It also assumes
@@ -63,13 +82,13 @@ void UnlikelyIntersectionRemover::_evaluateAndSplit(long intersectingNode, const
   // situations with more than two ways this may be non-optimal, but again, for most real world
   // scenarios this should be just fine.
 
-  // create two groups for the ways
+  // Create two groups for the ways.
   vector<std::shared_ptr<Way>> g1, g2;
 
   LOG_VART(intersectingNode);
   LOG_VART(wayIds);
 
-  // put the first valid way in the first group
+  // Put the first valid way in the first group.
   set<long>::const_iterator it = wayIds.begin();
   std::shared_ptr<Way> first;
   while (!first && it != wayIds.end())
@@ -82,16 +101,33 @@ void UnlikelyIntersectionRemover::_evaluateAndSplit(long intersectingNode, const
     }
     ++it;
   }
+  LOG_VART(first.get());
   if (!first)
   {
     return;
   }
 
-  // go through all the other ways
-  for (set<long>::const_iterator it = wayIds.begin(); it != wayIds.end(); ++it)
-  // while (it != wayIds.end())
+  // Go through all the other ways.
+  for (set<long>::const_iterator way_it = wayIds.begin(); way_it != wayIds.end(); ++way_it)
   {
-    std::shared_ptr<Way> w = _result->getWay(*it);
+    std::shared_ptr<Way> w = _result->getWay(*way_it);
+    _numProcessed++;
+    if (!w)
+    {
+      continue;
+    }
+    // Since this class operates on elements with generic types, an additional check must be
+    // performed here during conflation to enure we don't modify any element not associated with
+    // and active conflate matcher in the current conflation configuration.
+    else if (_conflateInfoCache &&
+             !_conflateInfoCache->elementCanBeConflatedByActiveMatcher(w, className()))
+    {
+      LOG_TRACE(
+        "Skipping processing of " << w->getElementId() << " as it cannot be conflated by any " <<
+        "actively configured conflate matcher...");
+      continue;
+    }
+
     if (w && w->getElementId() != first->getElementId())
     {
       const double p = _pIntersection(intersectingNode, first, w);
@@ -108,17 +144,10 @@ void UnlikelyIntersectionRemover::_evaluateAndSplit(long intersectingNode, const
         g2.push_back(w);
       }
     }
-
-    //++it;
   }
 
-  // If all ways are in the first group, we're done.
-  if (g2.size() == 0)
-  {
-    // pass
-  }
-  // Otherwise, split the intersection into two groups.
-  else
+  // If all ways aren't in the first group, split the intersection into two groups
+  if (!g2.empty())
   {
     _numAffected = g2.size();
     LOG_TRACE("Splitting intersection for ways: " << g2 << " at node " << intersectingNode);
@@ -238,29 +267,9 @@ void UnlikelyIntersectionRemover::_splitIntersection(long intersectingNode,
   }
 }
 
-void UnlikelyIntersectionRemover::apply(std::shared_ptr<OsmMap>& map)
-{
-  _numAffected = 0;
-  _result = map;
-
-  NodeToWayMap n2w(*_result);
-
-  // go through each node
-  for (NodeToWayMap::const_iterator it = n2w.begin(); it != n2w.end(); ++it)
-  {
-    // if the node is part of multiple ways
-    if (it->second.size() > 1)
-    {
-      // evaluate and split the intersection
-      _evaluateAndSplit(it->first, it->second);
-    }
-  }
-}
-
 QStringList UnlikelyIntersectionRemover::getCriteria() const
 {
   return QStringList(LinearCriterion::className());
 }
-
 
 }

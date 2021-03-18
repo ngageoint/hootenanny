@@ -27,17 +27,17 @@
 #include "ImplicitTagRawRulesDeriver.h"
 
 // hoot
+#include <hoot/core/elements/Tags.h>
+#include <hoot/core/io/ElementVisitorInputStream.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/PartialOsmMapReader.h>
 #include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/elements/Tags.h>
-#include <hoot/core/util/StringUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/io/ElementVisitorInputStream.h>
-#include <hoot/core/visitors/SchemaTranslationVisitor.h>
-#include <hoot/core/util/FileUtils.h>
-#include <hoot/rnd/schema/ImplicitTagUtils.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/util/FileUtils.h>
+#include <hoot/core/util/StringUtils.h>
+#include <hoot/core/visitors/SchemaTranslationVisitor.h>
+#include <hoot/rnd/schema/ImplicitTagUtils.h>
 
 // Qt
 #include <QStringBuilder>
@@ -90,7 +90,7 @@ void ImplicitTagRawRulesDeriver::setElementCriterion(const QString& criterionNam
 {
   ElementCriterion* criterion =
     Factory::getInstance().constructObject<ElementCriterion>(criterionName);
-  if (dynamic_cast<ImplicitTagEligibleCriterion*>(criterion) != 0)
+  if (dynamic_cast<ImplicitTagEligibleCriterion*>(criterion) != nullptr)
   {
     _elementCriterion.reset(dynamic_cast<ImplicitTagEligibleCriterion*>(criterion));
   }
@@ -209,7 +209,7 @@ void ImplicitTagRawRulesDeriver::deriveRawRules(const QStringList& inputs,
   _sortByTagOccurrence();   //sort in descending count order
   _removeDuplicatedKeyTypes();
   bool tieCountsNeededResolved = false;
-  if (_duplicatedWordTagKeyCountsToValues.size() > 0)
+  if (!_duplicatedWordTagKeyCountsToValues.empty())
   {
     _resolveCountTies();
     tieCountsNeededResolved = true;

@@ -26,11 +26,11 @@
  */
 
 // Hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/elements/ElementDeduplicator.h>
-#include <hoot/core/util/StringUtils.h>
 #include <hoot/core/io/IoUtils.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -47,9 +47,7 @@ public:
 
   static QString className() { return "hoot::DeDuplicateCmd"; }
 
-  DeDuplicateCmd()
-  {
-  }
+  DeDuplicateCmd() = default;
 
   virtual QString getName() const override { return "de-duplicate"; }
 

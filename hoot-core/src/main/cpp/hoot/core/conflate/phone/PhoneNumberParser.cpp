@@ -28,10 +28,10 @@
 #include "PhoneNumberParser.h"
 
 // Hoot
+#include <hoot/core/elements/Element.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/elements/Element.h>
 
 // libphonenumber
 #include <phonenumbers/phonenumberutil.h>
@@ -168,7 +168,7 @@ QList<ElementPhoneNumber> PhoneNumberParser::parsePhoneNumbers(const Element& el
         }
       }
 
-      if (parsedPhoneNums.size() == 0)
+      if (parsedPhoneNums.empty())
       {
         LOG_TRACE("Not a phone number: " << tagKey << "=" << tagValue);
       }

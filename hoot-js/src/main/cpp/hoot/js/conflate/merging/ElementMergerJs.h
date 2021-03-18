@@ -64,13 +64,13 @@ class ElementMergerJs : public HootBaseJs
 
 public:
 
- typedef enum MergeType
+ enum MergeType
  {
    PoiToPoi = 0,        // supports multiple
    PoiToPolygon,        // one poi and one poly
    AreaToArea,          // supports multiple
    BuildingToBuilding   // supports multiple
-  } MergeType;
+  };
 
  static void Init(v8::Handle<v8::Object> target);
  static void mergeElements(const v8::FunctionCallbackInfo<v8::Value>& args);

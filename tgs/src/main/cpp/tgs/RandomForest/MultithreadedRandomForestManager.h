@@ -42,12 +42,12 @@ namespace Tgs
     /**
      * @brief MultithreadedRandomForestManager Constructor
      */
-    MultithreadedRandomForestManager();
+    MultithreadedRandomForestManager() = default;
 
     /**
     *  @brief ~MultithreadedRandomForestManager Destructor
     */
-    virtual ~MultithreadedRandomForestManager();
+    virtual ~MultithreadedRandomForestManager() = default;
 
   protected:
     /**

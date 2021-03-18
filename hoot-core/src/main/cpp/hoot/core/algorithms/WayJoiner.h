@@ -37,7 +37,9 @@ namespace hoot
 {
 
 /**
- * Interface for way joiners
+ * Interface for way joiners. During conflation, linear features may need to be split in order for
+ * matching and/or merging to perform correctly. The job of the way joiners is to restore such split
+ * features by rejoining them.
  */
 class WayJoiner : public ApiEntityInfo
 {
@@ -65,14 +67,14 @@ public:
 
   QHash<long, long> getJoinedWayIdMappings() const { return _joinedWayIdMappings; }
 
-  virtual QString toString() const override { return ""; }
+  QString toString() const override { return ""; }
 
 protected:
 
   /** Debugging flag to leave parent IDs intact for output */
   bool _leavePid;
   // If enabled, the ID of any element with a parent ID will be updated with the parent ID's value.
-  // at the end of joinin. In the case of multiple elements with the same parent ID, only the first
+  // at the end of joining. In the case of multiple elements with the same parent ID, only the first
   // element's ID will be updated.
   bool _writePidToChildId;
   /** Pointer to the map to work on */
@@ -113,6 +115,12 @@ protected:
   virtual void _rejoinSiblings(std::deque<long>& way_ids);
 
   /**
+   * @brief joinSiblings Joining algorithm that searches for all ways that have the same parent id,
+   *    attempts to order them into adjoining way order, then joins them
+   */
+  virtual void _joinSiblings();
+
+  /**
    * @brief joinWays Function to rejoin two ways
    * @param parent Way that is modified to include the child way
    * @param child Way that will be merged into the parent and then deleted
@@ -121,12 +129,6 @@ protected:
   virtual bool _joinWays(const WayPtr& parent, const WayPtr& child);
 
 private:
-
-  /**
-   * @brief joinSiblings Joining algorithm that searches for all ways that have the same parent id,
-   *    attempts to order them into adjoining way order, then joins them
-   */
-  void _joinSiblings();
 
   /**
    * @brief resetParents Resets parent id for all ways after joining operation has completed

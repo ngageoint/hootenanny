@@ -28,12 +28,12 @@
 #define __ITERATIVE_EDGE_MATCHER_H__
 
 // hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/algorithms/optimizer/SingleAssignmentProblemSolver.h>
-#include <hoot/rnd/conflate/network/VagabondNetworkMatcher.h>
 #include <hoot/core/conflate/network/NetworkEdgeScore.h>
 #include <hoot/core/conflate/network/NetworkVertexScore.h>
 #include <hoot/core/conflate/network/OsmNetwork.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/rnd/conflate/network/VagabondNetworkMatcher.h>
 
 // tgs
 #include <tgs/RStarTree/HilbertRTree.h>
@@ -84,12 +84,12 @@ private:
     bool reversed;
   };
 
-  typedef SingleAssignmentProblemSolver<ConstNetworkEdgePtr, ConstNetworkEdgePtr> Saps;
+  using Saps = SingleAssignmentProblemSolver<ConstNetworkEdgePtr, ConstNetworkEdgePtr>;
 
   /// [row][col]
-  typedef QHash<ConstNetworkEdgePtr, QHash<ConstNetworkEdgePtr, DirectedEdgeScore>> EdgeScoreMap;
+  using EdgeScoreMap = QHash<ConstNetworkEdgePtr, QHash<ConstNetworkEdgePtr, DirectedEdgeScore>>;
   /// [row][col]
-  typedef QHash<ConstNetworkVertexPtr, QHash<ConstNetworkVertexPtr, double>> VertexScoreMap;
+  using VertexScoreMap = QHash<ConstNetworkVertexPtr, QHash<ConstNetworkVertexPtr, double>>;
 
   /**
    * A cost function used to compare network edges. It is a simple lookup.
@@ -109,6 +109,8 @@ private:
       em1 = 0;
       em2 = 0;
     }
+
+    virtual ~CostFunction() = default;
 
     /**
      * Returns the cost associated with assigning actor a to task t.

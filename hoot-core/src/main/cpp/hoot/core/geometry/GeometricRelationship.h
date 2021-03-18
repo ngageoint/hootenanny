@@ -48,7 +48,7 @@ class GeometricRelationship
 
 public:
 
-  typedef enum Type
+  enum Type
   {
     Contains = 0,
     Covers,
@@ -60,10 +60,10 @@ public:
     Overlaps,
     Touches,
     Invalid
-  } Type;
+  };
 
-  GeometricRelationship() : _type(Contains) {}
-  GeometricRelationship(Type type) : _type(type) {}
+  GeometricRelationship() : _type(Contains) { }
+  GeometricRelationship(Type type) : _type(type) { }
 
   bool operator==(GeometricRelationship t) const { return t._type == _type; }
   bool operator!=(GeometricRelationship t) const { return t._type != _type; }

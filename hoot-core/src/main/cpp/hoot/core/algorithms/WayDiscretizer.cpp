@@ -30,7 +30,6 @@
 // GEOS
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/LineString.h>
-using namespace geos::geom;
 
 // Hoot
 #include <hoot/core/algorithms/Distance.h>
@@ -40,6 +39,8 @@ using namespace geos::geom;
 
 // Standard
 #include <iostream>
+
+using namespace geos::geom;
 using namespace std;
 
 namespace hoot
@@ -55,7 +56,7 @@ _way(way)
   double l = 0;
   const std::vector<long>& nodeIds = _way->getNodeIds();
   LOG_VART(nodeIds.size());
-  if (nodeIds.size() == 0)
+  if (nodeIds.empty())
   {
     throw IllegalArgumentException("Empty way passed to WayDiscretizer.");
   }

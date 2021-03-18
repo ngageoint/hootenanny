@@ -69,7 +69,7 @@ public:
 
   RStarTree(const std::shared_ptr<PageStore>& ps, int dimensions);
 
-  virtual ~RStarTree();
+  virtual ~RStarTree() = default;
 
   /**
    * Returns the node with the specified node ID. This can then be used for any number of
@@ -138,7 +138,7 @@ protected:
     Reinsert
   };
 
-  typedef std::vector<BoxPair> BoxVector;
+  using BoxVector = std::vector<BoxPair>;
 
   // TODO: store dimensions and such.
   class Header

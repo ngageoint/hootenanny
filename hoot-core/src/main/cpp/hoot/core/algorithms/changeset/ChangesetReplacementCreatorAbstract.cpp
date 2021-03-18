@@ -209,7 +209,7 @@ void ChangesetReplacementCreatorAbstract::_validateInputs()
     }
   }
 
-  if (ConfigOptions().getConvertOps().size() > 0)
+  if (!ConfigOptions().getConvertOps().empty())
   {
     throw IllegalArgumentException(
       "Replacement changeset derivation does not support convert operations.");
@@ -507,7 +507,7 @@ OsmMapPtr ChangesetReplacementCreatorAbstract::_getCookieCutMap(
 
   LOG_VART(doughMap->size());
   LOG_VART(MapProjector::toWkt(doughMap->getProjection()));
-  OsmMapWriterFactory::writeDebugMap(doughMap, _changesetId + "-dough-map");;
+  OsmMapWriterFactory::writeDebugMap(doughMap, _changesetId + "-dough-map");
   LOG_VART(MapProjector::toWkt(cutterMap->getProjection()));
 
   OsmMapPtr cookieCutMap(new OsmMap(doughMap));
@@ -568,7 +568,7 @@ OsmMapPtr ChangesetReplacementCreatorAbstract::_getCookieCutMap(
   // map and replace them with small square shaped polys...from that we can generate the alpha
   // shape.
   const int cutterMapToUseSize = cutterMapToUse->getNodeCount();
-  if ((int)cutterMapToUseSize < 3 && MapUtils::mapIsPointsOnly(cutterMapToUse))
+  if (cutterMapToUseSize < 3 && MapUtils::mapIsPointsOnly(cutterMapToUse))
   {
     LOG_DEBUG("Creating a cutter shape map transformation for point map...");
     // Make a copy here since we're making destructive changes to the geometry here for alpha shape

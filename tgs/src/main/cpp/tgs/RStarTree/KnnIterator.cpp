@@ -55,7 +55,7 @@ KnnIterator::KnnIterator(const RStarTree* tree, const double x, const double y,
   _knnX = x;
   _knnY = y;
 
-  assert(_searchTree->getRoot() != NULL);
+  assert(_searchTree->getRoot() != nullptr);
 
   _knnBounds = searchRegion;
   reset(x, y);
@@ -64,7 +64,7 @@ KnnIterator::KnnIterator(const RStarTree* tree, const double x, const double y,
 KnnIterator::~KnnIterator()
 {
   // clean up our little memory mess
-  while (_nodeDistanceAllocationPool.size() > 0)
+  while (!_nodeDistanceAllocationPool.empty())
   {
     NodeDistance* nd = _nodeDistanceAllocationPool.back();
     _nodeDistanceAllocationPool.pop_back();
@@ -88,11 +88,11 @@ void KnnIterator::_calculateNextNn()
   double tmpDistance;
   int tmpId;
 
-  while (_knnSearchQueue.size() > 0 || _knnLeafHeap.size() > 0)
+  while (!_knnSearchQueue.empty() || !_knnLeafHeap.empty())
   {
     // get the next most likely area to search (minimum distance first)
-    NodeDistance* nd = NULL;
-    const RTreeNode* currNode = NULL;
+    NodeDistance* nd = nullptr;
+    const RTreeNode* currNode = nullptr;
     if (_knnSearchQueue.size() != 0)
     {
       nd = _knnSearchQueue.top();
@@ -101,17 +101,17 @@ void KnnIterator::_calculateNextNn()
 
     LeafDistance ld;
     // get rid of any leaves on our heap that have the same fids as results we've returned.
-    if (_knnLeafHeap.size() > 0)
+    if (!_knnLeafHeap.empty())
     {
       ld = _knnLeafHeap.top();
-      while (_knnLeafHeap.size() > 0 && _knnReturnedFids.find(ld.fid) != _knnReturnedFids.end())
+      while (!_knnLeafHeap.empty() && _knnReturnedFids.find(ld.fid) != _knnReturnedFids.end())
       {       
         _knnLeafHeap.pop();  
-        if (_knnLeafHeap.size() > 0)
+        if (!_knnLeafHeap.empty())
           ld = _knnLeafHeap.top();
       }
 
-      if (_knnSearchQueue.size() == 0 && _knnLeafHeap.size() == 0)
+      if (_knnSearchQueue.empty() && _knnLeafHeap.empty())
       {
         // if we're all out of features
         break;
@@ -120,9 +120,9 @@ void KnnIterator::_calculateNextNn()
 
     // if we already have some leaf distances calculated, check to see if they're closer than
     // the node
-    if (_knnLeafHeap.size() > 0)
+    if (!_knnLeafHeap.empty())
     {
-      if (nd == NULL || (ld.distance <= nd->minPossibleDistance))
+      if (nd == nullptr || (ld.distance <= nd->minPossibleDistance))
       {
         // if the leaf is closer than the next most likely node, return the result
         _knnLeafHeap.pop();
@@ -132,7 +132,7 @@ void KnnIterator::_calculateNextNn()
       }
     }
 
-    if (nd == NULL)
+    if (nd == nullptr)
     {
       throw Tgs::Exception("Internal Error: RTree::calculateNextNn This state should not occur.");
     }
@@ -143,7 +143,7 @@ void KnnIterator::_calculateNextNn()
 
     _knnSearchQueue.pop();
     
-    if (currNode != NULL)
+    if (currNode != nullptr)
     {
       if (currNode->isLeafNode())
       {
@@ -194,7 +194,7 @@ void KnnIterator::_calculateNextNn()
 //   while (_knnSearchQueue.size() > 0)
 //   {
 //     // get the next most likely area to search (minimum distance first)
-//     NodeDistance* nd = NULL;
+//     NodeDistance* nd = nullptr;
 //     const RTreeNode * currNode;
 //     if (_knnSearchQueue.size() != 0)
 //     {
@@ -213,13 +213,13 @@ void KnnIterator::_calculateNextNn()
 //     // the node
 //     if (distance >= 0)
 //     {
-//       if (nd == NULL || (distance <= nd->minPossibleDistance && !currNode->isLeafNode()))
+//       if (nd == nullptr || (distance <= nd->minPossibleDistance && !currNode->isLeafNode()))
 //       {
 //         break;
 //       }
 //     }
 // 
-//     if (nd == NULL)
+//     if (nd == nullptr)
 //     {
 //       throw std::exception("Internal Error: RTree::calculateNextNn This state should not occur.");
 //     }
@@ -345,7 +345,7 @@ double KnnIterator::_calculateDistance(const BoxInternalData& box) const
 
 KnnIterator::NodeDistance* KnnIterator::_createNodeDistance(double minPossibleDistance, int nodeId)
 {
-  if (_nodeDistancePool.size() == 0)
+  if (_nodeDistancePool.empty())
   {
     NodeDistance* allocation = new NodeDistance[ALLOCATION_SIZE];
     _nodeDistanceAllocationPool.push_back(allocation);

@@ -52,7 +52,7 @@ _numBuildingPartsProcessed(0)
 void BuildingPartPreMergeCollector::setMap(ConstOsmMapPtr map)
 {
   _map = map;
-  _ElementToGeometryConverter.reset(new ElementToGeometryConverter(_map));
+  _elementToGeomeryConverter.reset(new ElementToGeometryConverter(_map));
 }
 
 void BuildingPartPreMergeCollector::run()
@@ -124,6 +124,10 @@ void BuildingPartPreMergeCollector::_addContainedBuildingPartToGroup(
   std::shared_ptr<geos::geom::Geometry> buildingPartMatchCandidateGeom =
     _getGeometry(buildingPartNeighbor);
   assert(buildingPartMatchCandidateGeom);
+  if (buildingPartMatchCandidateGeom->isEmpty())
+  {
+    return;
+  }
   // if this is another building part totally contained by this building
   bool contains = false;
   try
@@ -161,20 +165,21 @@ std::shared_ptr<geos::geom::Geometry> BuildingPartPreMergeCollector::_getGeometr
       // but that was causing stability issues as noted in
       // BuildingPartMergeOp::_getBuildingPartPreProcessingInput.
       QMutexLocker schemaLock(_hootSchemaMutex);
-      geom = _ElementToGeometryConverter->convertToGeometry(std::dynamic_pointer_cast<const Way>(element));
+      geom =
+        _elementToGeomeryConverter->convertToGeometry(
+          std::dynamic_pointer_cast<const Way>(element));
       break;
     }
-
     case ElementType::Relation:
     {
       // Interestingly enough, conversion to a relation doesn't make any calls to OsmSchema and,
       // therefore, don't require a mutex lock.  Its not inconceivable that fact could change at
       // some point and then a mutex would have to be added here.
       geom =
-        _ElementToGeometryConverter->convertToGeometry(std::dynamic_pointer_cast<const Relation>(element));
+        _elementToGeomeryConverter->convertToGeometry(
+          std::dynamic_pointer_cast<const Relation>(element));
       break; 
     }
-
     default:
     {
       throw IllegalArgumentException(

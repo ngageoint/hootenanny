@@ -41,10 +41,6 @@ int WayString::logWarnCount = 0;
 // if the difference is smaller than this we consider it to be equivalent.
 Meters WayString::_epsilon = 1e-9;
 
-WayString::WayString()
-{
-}
-
 Meters WayString::_aggregateCircularError() const
 {
   // I considered averaging the circular errors, but I think that could cause undesireable behaviour
@@ -63,7 +59,7 @@ Meters WayString::_aggregateCircularError() const
 
 void WayString::append(const WaySubline& subline)
 {
-  if (_sublines.size() > 0)
+  if (!_sublines.empty())
   {
     if (back().getWay() == subline.getWay() &&
       back().getEnd() != subline.getStart())
@@ -224,8 +220,7 @@ WayPtr WayString::copySimplifiedWayIntoMap(const ElementProvider& map, OsmMapPtr
     ConstWayPtr oldWay = subline.getWay();
     newWay->setPid(Way::getPid(newWay, oldWay));
 
-    newTags =
-      TagMergerFactory::getInstance().mergeTags(newTags, oldWay->getTags(), ElementType::Way);
+    newTags = TagMergerFactory::mergeTags(newTags, oldWay->getTags(), ElementType::Way);
 
     // Figure out which node is the first node. If we're between nodes, then create a new node to
     // add.

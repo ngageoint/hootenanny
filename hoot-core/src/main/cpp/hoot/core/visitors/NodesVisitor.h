@@ -28,7 +28,7 @@
 #define NODESVISITOR_H
 
 // hoot
-#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 #include <hoot/core/elements/Node.h>
 
 // Qt

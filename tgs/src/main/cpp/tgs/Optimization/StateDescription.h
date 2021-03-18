@@ -38,7 +38,7 @@ namespace Tgs
 class StateDescription
 {
 public:
-  StateDescription();
+  StateDescription() = default;
 
   void addVariable(ConstVariableDescriptionPtr v) { _variables.append(v); }
   void addVariable(VariableDescription* v) { _variables.append(VariableDescriptionPtr(v)); }
@@ -50,8 +50,8 @@ private:
 
 };
 
-typedef std::shared_ptr<StateDescription> StateDescriptionPtr;
-typedef std::shared_ptr<const StateDescription> ConstStateDescriptionPtr;
+using StateDescriptionPtr = std::shared_ptr<StateDescription>;
+using ConstStateDescriptionPtr = std::shared_ptr<const StateDescription>;
 
 }
 

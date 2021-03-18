@@ -51,11 +51,11 @@ public:
 
   ExtentCmd() = default;
 
-  virtual QString getName() const override { return "extent"; }
+  QString getName() const override { return "extent"; }
 
-  virtual QString getDescription() const override { return "Calculates the bounds of a map"; }
+  QString getDescription() const override { return "Calculates the bounds of a map"; }
 
-  virtual int runSimple(QStringList& args) override
+  int runSimple(QStringList& args) override
   {
     QElapsedTimer timer;
     timer.start();

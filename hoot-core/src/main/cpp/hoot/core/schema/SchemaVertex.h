@@ -74,15 +74,15 @@ class SchemaVertex
 {
 public:
 
-  typedef enum VertexType
+  enum VertexType
   {
     UnknownVertexType,
     Tag,
     Compound
-  } VertexType;
+  };
 
-  typedef QList<KeyValuePairPtr> CompoundRule;
-  typedef QList<CompoundRule> CompoundRuleList;
+  using CompoundRule = QList<KeyValuePairPtr>;
+  using CompoundRuleList = QList<CompoundRule>;
 
   SchemaVertex();
 

@@ -64,11 +64,8 @@ class Edge
 {
 public:
 
-  Edge() { _ie = 0; }
+  Edge() : _ie(nullptr) { }
   Edge(InternalEdge* ie);
-  Edge(const Edge& e) : _ie(e._ie) {}
-  Edge(Edge& e) : _ie(e._ie) {}
-  Edge& operator=(const Edge& e) { _ie = e._ie; return *this; }
   bool operator==(const Edge& e) const
   {
     if (_ie == e._ie)
@@ -98,18 +95,18 @@ public:
   double getDestinationX() const;
   double getDestinationY() const;
 
-  const Edge getOriginNext() const;
-  const Edge getOriginPrevious() const;
-  const Edge getDestinationNext() const;
-  const Edge getDestinationPrevious() const;
+  Edge getOriginNext() const;
+  Edge getOriginPrevious() const;
+  Edge getDestinationNext() const;
+  Edge getDestinationPrevious() const;
 
-  const Edge getLeftNext() const;
-  const Edge getLeftPrevious() const;
+  Edge getLeftNext() const;
+  Edge getLeftPrevious() const;
 
-  const Edge getReverse() const;
+  Edge getReverse() const;
 
-  const Edge getRightNext() const;
-  const Edge getRightPrevious() const;
+  Edge getRightNext() const;
+  Edge getRightPrevious() const;
 
   double getLength() const;
 
@@ -137,7 +134,7 @@ inline double TriArea2(const Point2d & a, const Point2d & b, const Point2d & c)
 class Face
 {
 public:
-  Face() { _id = -1; }
+  Face() : _id(-1) { }
 
   Face(Face& other);
   Face(const Face& other);
@@ -176,7 +173,7 @@ public:
 
   EdgeIterator(const std::set<QuadEdge*>& edges);
 
-  EdgeIterator() { _atEnd = true; }
+  EdgeIterator() : _atEnd(true) { }
 
   Edge operator*();
   Edge operator++(int);
@@ -207,10 +204,10 @@ class FaceIterator
 {
 public:
 
-  FaceIterator(EdgeIterator it, EdgeIterator end);
+  FaceIterator(EdgeIterator it, const EdgeIterator& end);
   FaceIterator(const FaceIterator& from);
 
-  FaceIterator() { _atEnd = true; }
+  FaceIterator() : _f(nullptr), _atEnd(true) { }
   virtual ~FaceIterator();
 
   const Face& operator*();
@@ -253,7 +250,7 @@ public:
    * built while points are inserted so this should return very quickly. Any inserts that occur
    * will invalidate all previous edge pointers.
    */
-  const Edge getStartingEdge() const;
+  Edge getStartingEdge() const;
 
   const EdgeIterator& getEdgeEnd() const { return _edgeEnd; }
 

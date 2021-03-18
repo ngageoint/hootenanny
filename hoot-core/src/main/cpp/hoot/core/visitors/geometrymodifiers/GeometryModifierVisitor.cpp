@@ -26,7 +26,6 @@
  */
 
 #include "GeometryModifierVisitor.h"
-#include "GeometryModifierAction.h"
 
 // Hoot
 #include <hoot/core/util/Factory.h>
@@ -41,7 +40,7 @@ HOOT_FACTORY_REGISTER(ElementVisitor, GeometryModifierVisitor)
 
 void GeometryModifierVisitor::visit(const ElementPtr& pElement)
 {
-  if (_actionDesc.pAction == NULL) return;
+  if (_actionDesc.pAction == nullptr) return;
 
   _numProcessed++;
 

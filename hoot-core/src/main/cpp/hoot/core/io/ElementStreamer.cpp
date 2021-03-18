@@ -27,7 +27,6 @@
 #include "ElementStreamer.h"
 
 // Hoot
-#include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/elements/OsmMapConsumer.h>
 #include <hoot/core/io/ElementCriterionInputStream.h>
 #include <hoot/core/io/ElementOutputStream.h>
@@ -41,6 +40,7 @@
 #include <hoot/core/util/ConfigUtils.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -103,7 +103,7 @@ bool ElementStreamer::areValidStreamingOps(const QStringList& ops)
         ElementCriterionPtr criterion(
           Factory::getInstance().constructObject<ElementCriterion>(opName));
         // when streaming we can't provide a reliable OsmMap.
-        if (dynamic_cast<OsmMapConsumer*>(criterion.get()) != 0)
+        if (dynamic_cast<OsmMapConsumer*>(criterion.get()) != nullptr)
         {
           LOG_INFO(unstreamableMsg);
           return false;
@@ -114,7 +114,7 @@ bool ElementStreamer::areValidStreamingOps(const QStringList& ops)
         ElementVisitorPtr vis(
           Factory::getInstance().constructObject<ElementVisitor>(opName));
         // when streaming we can't provide a reliable OsmMap.
-        if (dynamic_cast<OsmMapConsumer*>(vis.get()) != 0)
+        if (dynamic_cast<OsmMapConsumer*>(vis.get()) != nullptr)
         {
           LOG_INFO(unstreamableMsg);
           return false;
@@ -125,7 +125,7 @@ bool ElementStreamer::areValidStreamingOps(const QStringList& ops)
         ConstElementVisitorPtr vis(
           Factory::getInstance().constructObject<ConstElementVisitor>(opName));
         // when streaming we can't provide a reliable OsmMap.
-        if (dynamic_cast<OsmMapConsumer*>(vis.get()) != 0)
+        if (dynamic_cast<OsmMapConsumer*>(vis.get()) != nullptr)
         {
           LOG_INFO(unstreamableMsg);
           return false;
@@ -146,7 +146,7 @@ bool ElementStreamer::areValidStreamingOps(const QStringList& ops)
 ElementInputStreamPtr ElementStreamer::getFilteredInputStream(
   ElementInputStreamPtr streamToFilter, const QStringList& ops)
 {
-  if (ops.size() == 0)
+  if (ops.empty())
   {
     return streamToFilter;
   }

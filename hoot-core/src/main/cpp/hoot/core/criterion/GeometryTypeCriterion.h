@@ -102,7 +102,7 @@ public:
                                                       const ConstOsmMapPtr& map);
 };
 
-typedef std::shared_ptr<GeometryTypeCriterion> GeometryTypeCriterionPtr;
+using GeometryTypeCriterionPtr = std::shared_ptr<GeometryTypeCriterion>;
 
 }
 

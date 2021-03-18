@@ -38,10 +38,6 @@
 
 namespace Tgs
 {
-  InfoGainCalculator::InfoGainCalculator(){}
-
-  InfoGainCalculator::~InfoGainCalculator(){}
-
   double InfoGainCalculator::_calcLogFunc(double n)
   {
     if (n < std::numeric_limits<double>::epsilon())
@@ -49,7 +45,7 @@ namespace Tgs
       n = std::numeric_limits<double>::epsilon();
     }
 
-    return (-n * (log(n)/log((double)2.0)));
+    return (-n * (log(n)/log(2.0)));
   }
 
   double InfoGainCalculator::computeEntropyByClass(DataFrame & df, 

@@ -29,7 +29,7 @@
 
 // hoot
 #include <hoot/core/elements/ConstOsmMapConsumer.h>
-#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 #include <hoot/js/util/JsFunctionConsumer.h>
 #include <hoot/js/SystemNodeJs.h>
 
@@ -46,7 +46,7 @@ public:
 
   static QString className() { return "hoot::JsFunctionVisitor"; }
 
-  JsFunctionVisitor() : _map(0) {}
+  JsFunctionVisitor() : _map(nullptr) { }
   virtual ~JsFunctionVisitor() = default;
 
   virtual void addFunction(v8::Isolate* isolate, v8::Local<v8::Function>& func)
@@ -54,7 +54,7 @@ public:
 
   virtual void setOsmMap(OsmMap* map) { _map = map; }
 
-  virtual void setOsmMap(const OsmMap*) {}
+  virtual void setOsmMap(const OsmMap*) { }
 
   virtual void visit(const ConstElementPtr& e);
 

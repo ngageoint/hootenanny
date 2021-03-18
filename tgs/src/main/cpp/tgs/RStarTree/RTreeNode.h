@@ -122,7 +122,7 @@ class TGS_EXPORT RTreeNode
 {
 public:
 
-  virtual ~RTreeNode();
+  virtual ~RTreeNode() = default;
 
   /**
    * This is only intended for RStarTree class
@@ -167,7 +167,7 @@ public:
    * Returns the envelope for a specific child index
    * @param childIndex >= 0 && < getChildCount()
    */
-  const BoxInternalData getChildEnvelope(int childIndex) const;
+  BoxInternalData getChildEnvelope(int childIndex) const;
 
   /**
    * This method should rarely be used, and probably only be internal structure, not iterators

@@ -71,7 +71,7 @@ void DelaunayInterpolator::_buildModel()
   // only supports 2 dimensions
   assert(_indColumns.size() == 2);
 
-  if (_dt.get() == 0)
+  if (_dt.get() == nullptr)
   {
     _dt.reset(new DelaunayTriangulation());
 

@@ -30,12 +30,16 @@
 #include <geos/util/TopologyException.h>
 
 // hoot
+#include <hoot/core/algorithms/extractors/AddressScoreExtractor.h>
+#include <hoot/core/conflate/matching/MatchFactory.h>
+#include <hoot/core/criterion/ConflatableElementCriterion.h>
+#include <hoot/core/elements/ConstOsmMapConsumer.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
+#include <hoot/core/geometry/GeometryUtils.h>
+#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/geometry/GeometryUtils.h>
-#include <hoot/core/algorithms/extractors/AddressScoreExtractor.h>
 
 // Std
 #include <float.h>
@@ -48,10 +52,11 @@ namespace hoot
 
 ConflateInfoCache::ConflateInfoCache(const ConstOsmMapPtr& map) :
 _map(map),
-_cacheEnabled(true),
+_cachingEnabled(true),
 _elementIntersectsCache(CACHE_SIZE_DEFAULT),
 _hasCriterionCache(CACHE_SIZE_DEFAULT),
-_numAddressesCache(CACHE_SIZE_DEFAULT)
+_numAddressesCache(CACHE_SIZE_DEFAULT),
+_conflatableElementCache(CACHE_SIZE_DEFAULT)
 {
   _geometryCache.reset(
     new Tgs::LruCache<ElementId, std::shared_ptr<geos::geom::Geometry>>(CACHE_SIZE_DEFAULT));
@@ -61,24 +66,25 @@ void ConflateInfoCache::setConfiguration(const Settings& conf)
 {
   _addressParser.setConfiguration(conf);
 
-  const int maxCacheSize = ConfigOptions(conf).getPoiPolygonMaxSizePerCache();
+  const int maxCacheSize = ConfigOptions(conf).getConflateInfoMaxSizePerCache();
   if (maxCacheSize > 0)
   {
     _elementIntersectsCache.setMaxCost(maxCacheSize);
     _hasCriterionCache.setMaxCost(maxCacheSize);
     _numAddressesCache.setMaxCost(maxCacheSize);
     _geometryCache.reset(
-        new Tgs::LruCache<ElementId, std::shared_ptr<geos::geom::Geometry>>(maxCacheSize));
+      new Tgs::LruCache<ElementId, std::shared_ptr<geos::geom::Geometry>>(maxCacheSize));
+    _conflatableElementCache.setMaxCost(maxCacheSize);
   }
   else
   {
-    _cacheEnabled = false;
+    _cachingEnabled = false;
   }
 }
 
 void ConflateInfoCache::clear()
 {
-  if (_cacheEnabled)
+  if (_cachingEnabled)
   {
     LOG_DEBUG("Clearing cache...");
 
@@ -91,17 +97,22 @@ void ConflateInfoCache::clear()
     _numAddressesCache.clear();
     _elementIntersectsCache.clear();
     _numAddressesCache.clear();
+
+    _conflatableElementCache.clear();
+    _conflatableCritActiveCache.clear();
+    _activeMatchCreators.clear();
   }
 }
 
 void ConflateInfoCache::printCacheInfo()
 {
-  if (_cacheEnabled)
+  if (_cachingEnabled)
   {
     // Add one for the address cache on AddressScoreExtractor.
     LOG_VARD(_numCacheHitsByCacheType.size());
     LOG_DEBUG("Conflate caches used: " <<  (_numCacheHitsByCacheType.size() + 1));
-    for (QMap<QString, int>::const_iterator numCacheHitsByCacheTypeItr = _numCacheHitsByCacheType.begin();
+    for (QMap<QString, int>::const_iterator numCacheHitsByCacheTypeItr =
+           _numCacheHitsByCacheType.begin();
          numCacheHitsByCacheTypeItr != _numCacheHitsByCacheType.end(); ++numCacheHitsByCacheTypeItr)
     {
       const QString line =
@@ -159,7 +170,7 @@ std::shared_ptr<geos::geom::Geometry> ConflateInfoCache::_getGeometry(
   }
 
   std::shared_ptr<geos::geom::Geometry> cachedVal;
-  if (_cacheEnabled && _geometryCache->get(element->getElementId(), cachedVal))
+  if (_cachingEnabled && _geometryCache->get(element->getElementId(), cachedVal))
   {
     _incrementCacheHitCount("geometry");
     return cachedVal;
@@ -167,7 +178,7 @@ std::shared_ptr<geos::geom::Geometry> ConflateInfoCache::_getGeometry(
 
   std::shared_ptr<geos::geom::Geometry> newGeom;
   QString errorMsg =
-    "Feature passed to PoiPolygonInfoCache caused topology exception on conversion to a geometry: ";
+    "Feature passed to ConflateInfoCache caused topology exception on conversion to a geometry: ";
   try
   {
     newGeom = ElementToGeometryConverter(_map).convertToGeometry(element);
@@ -191,7 +202,8 @@ std::shared_ptr<geos::geom::Geometry> ConflateInfoCache::_getGeometry(
     }
   }
   if (newGeom.get() &&
-      QString::fromStdString(newGeom->toString()).toUpper().contains("EMPTY"))
+      (newGeom->isEmpty() ||
+       QString::fromStdString(newGeom->toString()).toUpper().contains("EMPTY")))
   {
     if (_badGeomCount <= Log::getWarnMessageLimit())
     {
@@ -201,7 +213,7 @@ std::shared_ptr<geos::geom::Geometry> ConflateInfoCache::_getGeometry(
     newGeom.reset();
   }
 
-  if (_cacheEnabled)
+  if (_cachingEnabled)
   {
     _geometryCache->insert(element->getElementId(), newGeom);
     _incrementCacheSizeCount("geometry");
@@ -253,10 +265,10 @@ int ConflateInfoCache::numAddresses(const ConstElementPtr& element)
     throw IllegalArgumentException("The input element is null.");
   }
 
-  if (_cacheEnabled)
+  if (_cachingEnabled)
   {
     const int* cachedVal = _numAddressesCache[element->getElementId()];
-    if (cachedVal != 0)
+    if (cachedVal != nullptr)
     {
       _incrementCacheHitCount("numAddresses");
       return *cachedVal;
@@ -265,7 +277,7 @@ int ConflateInfoCache::numAddresses(const ConstElementPtr& element)
 
   const int numAddresses = _addressParser.numAddressesRecursive(element, *_map);
 
-  if (_cacheEnabled)
+  if (_cachingEnabled)
   {
     _numAddressesCache.insert(element->getElementId(), new int(numAddresses));
     _incrementCacheSizeCount("numAddresses");
@@ -317,13 +329,13 @@ bool ConflateInfoCache::elementsIntersect(
   QString key1;
   QString key2;
 
-  if (_cacheEnabled)
+  if (_cachingEnabled)
   {
     key1 = element1->getElementId().toString() % ";" % element2->getElementId().toString();
     key2 = element2->getElementId().toString() % ";" % element1->getElementId().toString();
 
     bool* cachedVal = _elementIntersectsCache[key1];
-    if (cachedVal != 0)
+    if (cachedVal != nullptr)
     {
       _incrementCacheHitCount("intersects");
       const bool intersects = *cachedVal;
@@ -331,7 +343,7 @@ bool ConflateInfoCache::elementsIntersect(
       return intersects;
     }
     cachedVal = _elementIntersectsCache[key2];
-    if (cachedVal != 0)
+    if (cachedVal != nullptr)
     {
       _incrementCacheHitCount("intersects");
       const bool intersects = *cachedVal;
@@ -358,7 +370,7 @@ bool ConflateInfoCache::elementsIntersect(
       " and: " << element2->getElementId() << ".");
   }
 
-  if (_cacheEnabled)
+  if (_cachingEnabled)
   {
     _elementIntersectsCache.insert(key1, new bool(intersects));
     _incrementCacheSizeCount("intersects");
@@ -429,11 +441,11 @@ bool ConflateInfoCache::hasCriterion(const ConstElementPtr& element,
 
   QString key;
 
-  if (_cacheEnabled)
+  if (_cachingEnabled)
   {
     key = element->getElementId().toString() % ";" % criterionClassName;
     const bool* cachedVal = _hasCriterionCache[key];
-    if (cachedVal != 0)
+    if (cachedVal != nullptr)
     {
       _incrementCacheHitCount("hasCrit");
       return *cachedVal;
@@ -443,7 +455,7 @@ bool ConflateInfoCache::hasCriterion(const ConstElementPtr& element,
   ElementCriterionPtr crit = _getCrit(criterionClassName);
   const bool hasCrit = crit->isSatisfied(element);
 
-  if (_cacheEnabled)
+  if (_cachingEnabled)
   {
     _hasCriterionCache.insert(key, new bool(hasCrit));
     _incrementCacheSizeCount("hasCrit");
@@ -459,7 +471,7 @@ ElementCriterionPtr ConflateInfoCache::_getCrit(const QString& criterionClassNam
     throw IllegalArgumentException("The criterion class name is empty.");
   }
 
-  if (_cacheEnabled)
+  if (_cachingEnabled)
   {
     QHash<QString, ElementCriterionPtr>::const_iterator itr =
       _criterionCache.find(criterionClassName);
@@ -475,15 +487,192 @@ ElementCriterionPtr ConflateInfoCache::_getCrit(const QString& criterionClassNam
   if (!crit)
   {
     throw IllegalArgumentException(
-      "Invalid criterion passed to PoiPolygonInfoCache::hasCriterion: " + criterionClassName);
+      "Invalid criterion passed to ConflateInfoCache::hasCriterion: " + criterionClassName);
   }
 
-  if (_cacheEnabled)
+  std::shared_ptr<ConstOsmMapConsumer> mapConsumer =
+    std::dynamic_pointer_cast<ConstOsmMapConsumer>(crit);
+  LOG_VART(mapConsumer.get());
+  if (mapConsumer)
   {
-     _criterionCache[criterionClassName] = crit;
+    mapConsumer->setOsmMap(_map.get());
+  }
+
+  if (_cachingEnabled)
+  {
+    _criterionCache[criterionClassName] = crit;
   }
 
   return crit;
+}
+
+bool ConflateInfoCache::elementCanBeConflatedByActiveMatcher(
+  const ConstElementPtr& element, const QString& caller)
+{
+  if (_cachingEnabled)
+  {
+    // Check the element can be conflated cache first.
+    bool* cachedVal = _conflatableElementCache[element->getElementId()];
+    if (cachedVal != nullptr)
+    {
+      _incrementCacheHitCount("conflatable");
+      const bool conflatable = *cachedVal;
+      LOG_TRACE("Found cached conflatable: " << conflatable << " for: " << element->getElementId());
+      return conflatable;
+    }
+  }
+
+  LOG_VART(element->getElementId());
+
+  // Get all the configured matchers.
+  if (_activeMatchCreators.empty())
+  {
+    _activeMatchCreators = MatchFactory::getInstance().getCreators();
+  }
+  for (std::vector<std::shared_ptr<MatchCreator>>::const_iterator itr = _activeMatchCreators.begin();
+       itr != _activeMatchCreators.end(); ++itr)
+  {
+    // Get the element criterion this matcher uses for matching elements.
+    std::shared_ptr<MatchCreator> activeMatchCreator = *itr;
+    LOG_VART(activeMatchCreator->getName());
+    const QStringList supportedCriteriaClassNames = activeMatchCreator->getCriteria();
+    for (int i = 0; i < supportedCriteriaClassNames.size(); i++)
+    {
+      const QString criterionClassName = supportedCriteriaClassNames.at(i);
+      LOG_VART(criterionClassName);
+      ElementCriterionPtr crit = _getCrit(criterionClassName);
+      std::shared_ptr<ConflatableElementCriterion> conflatableCrit =
+        std::dynamic_pointer_cast<ConflatableElementCriterion>(crit);
+
+      if (conflatableCrit)
+      {
+        // If any matcher's crit matches the element, return true.
+        if (crit->isSatisfied(element))
+        {
+          if (_cachingEnabled)
+          {
+            _conflatableElementCache.insert(element->getElementId(), new bool(true));
+          }
+          return true;
+        }
+        // Otherwise, also check for the crit's conflate "child" criteria
+        // (e.g. RailwayWayNodeCriterion for RailwayCriterion).
+        else if (!conflatableCrit->getChildCriteria().isEmpty())
+        {
+          const QStringList childCritClassNames = conflatableCrit->getChildCriteria();
+          for (int j = 0; j < childCritClassNames.size(); j++)
+          {
+            const QString childCritClassName = childCritClassNames.at(j);
+            ElementCriterionPtr childCrit = _getCrit(childCritClassName);
+            // These don't inherit from ConflatableElementCriterion, since matchers look for
+            // their parents only. So, don't require that it casts to ConflatableElementCriterion.
+            if (childCrit)
+            {
+              LOG_VART(childCrit->isSatisfied(element));
+              // If any matcher's crit matches the element, return true.
+              if (childCrit->isSatisfied(element))
+              {
+                if (_cachingEnabled)
+                {
+                  _conflatableElementCache.insert(element->getElementId(), new bool(true));
+                }
+                return true;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  if (_cachingEnabled)
+  {
+    _conflatableElementCache.insert(element->getElementId(), new bool(false));
+  }
+  if (Log::getInstance().getLevel() <= Log::Trace)
+  {
+    const QString mostSpecificType = OsmSchema::getInstance().mostSpecificType(element->getTags());
+    const QString name = element->getTags().getName();
+    LOG_TRACE(
+      element->getElementId() << " rejected as conflatable element. Name: " << name <<
+      ", most specific type: " << mostSpecificType << ", caller: " << caller);
+    if (mostSpecificType.trimmed().isEmpty())
+    {
+      LOG_VART(element);
+    }
+  }
+  return false;
+}
+
+bool ConflateInfoCache::elementCriterionInUseByActiveMatcher(const QString& criterionClassName)
+{
+  LOG_VART(criterionClassName);
+
+  // Check the in use cache first.
+  if (_cachingEnabled && _conflatableCritActiveCache.contains(criterionClassName))
+  {
+    return _conflatableCritActiveCache[criterionClassName];
+  }
+
+  // Get all the configured matchers.
+  if (_activeMatchCreators.empty())
+  {
+    _activeMatchCreators = MatchFactory::getInstance().getCreators();
+  }
+  for (std::vector<std::shared_ptr<MatchCreator>>::const_iterator itr = _activeMatchCreators.begin();
+       itr != _activeMatchCreators.end(); ++itr)
+  {
+    // Get the element criterion this matcher uses for matching elements.
+    std::shared_ptr<MatchCreator> activeMatchCreator = *itr;
+    const QStringList supportedCriteriaClassNames = activeMatchCreator->getCriteria();
+    for (int i = 0; i < supportedCriteriaClassNames.size(); i++)
+    {
+      const QString matcherCriterionClassName = supportedCriteriaClassNames.at(i);
+      LOG_VART(matcherCriterionClassName);
+      if (matcherCriterionClassName == criterionClassName)
+      {
+        if (_cachingEnabled)
+        {
+          _conflatableCritActiveCache[matcherCriterionClassName] = true;
+        }
+        return true;
+      }
+      else
+      {
+        ElementCriterionPtr crit = _getCrit(matcherCriterionClassName);
+        std::shared_ptr<ConflatableElementCriterion> conflatableCrit =
+          std::dynamic_pointer_cast<ConflatableElementCriterion>(crit);
+        if (conflatableCrit && !conflatableCrit->getChildCriteria().isEmpty())
+        {
+          // Also, check for conflate "child" criteria (e.g. RailwayWayNodeCriterion). These
+          // don't inherit from ConflatableElementCriterion, since matchers look for their
+          // parents only.
+          const QStringList childCritClassNames = conflatableCrit->getChildCriteria();
+          for (int j = 0; j < childCritClassNames.size(); ++j)
+          {
+            const QString childCritClassName = childCritClassNames.at(j);
+            LOG_VART(childCritClassName);
+            // No need to instantiate this child crit. Just check for a crit class name match.
+            if (childCritClassName == criterionClassName)
+            {
+              if (_cachingEnabled)
+              {
+                _conflatableCritActiveCache[childCritClassName] = true;
+              }
+              return true;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  LOG_TRACE("Conflate crit rejected: " << criterionClassName);
+  if (_cachingEnabled)
+  {
+    _conflatableCritActiveCache[criterionClassName] = false;
+  }
+  return false;
 }
 
 }

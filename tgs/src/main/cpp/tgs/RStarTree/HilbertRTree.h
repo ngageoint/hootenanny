@@ -44,7 +44,7 @@ namespace Tgs
 
     HilbertRTree(const std::shared_ptr<PageStore>& ps, int dimensions);
 
-    virtual ~HilbertRTree();
+    virtual ~HilbertRTree() = default;
 
     /**
      * This method can only be called before the tree has been built. 
@@ -78,7 +78,7 @@ namespace Tgs
     };
 
     static const int ORDER = 8;
-    HilbertCurve* _hilbertCurve;
+    std::shared_ptr<HilbertCurve> _hilbertCurve;
     int _shuffleSize;
 
     virtual int _splitBoxes(BoxVector& boxes);
@@ -114,8 +114,8 @@ namespace Tgs
     double _swapGrandChildNodes(int parentId, const std::vector<double>& overlaps);
   };
 
-  typedef std::shared_ptr<HilbertRTree> HilbertRTreePtr;
-  typedef std::shared_ptr<const HilbertRTree> ConstHilbertRTreePtr;
+  using HilbertRTreePtr = std::shared_ptr<HilbertRTree>;
+  using ConstHilbertRTreePtr = std::shared_ptr<const HilbertRTree>;
 }
 
 

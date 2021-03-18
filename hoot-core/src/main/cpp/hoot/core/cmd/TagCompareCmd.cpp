@@ -48,12 +48,12 @@ public:
 
   TagCompareCmd() = default;
 
-  virtual QString getName() const override { return "tag-compare"; }
+  QString getName() const override { return "tag-compare"; }
 
-  virtual QString getDescription() const override
+  QString getDescription() const override
   { return "Compares tags between two maps"; }
 
-  virtual int runSimple(QStringList& args) override
+  int runSimple(QStringList& args) override
   {
     QElapsedTimer timer;
     timer.start();
