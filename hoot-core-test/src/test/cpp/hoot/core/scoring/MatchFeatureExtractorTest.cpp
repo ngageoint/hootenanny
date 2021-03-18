@@ -83,7 +83,9 @@ public:
   {
     // This test is primarily useful as an input to Weka for training models.
     MatchFeatureExtractor uut;
-    uut.addMatchCreator(std::shared_ptr<MatchCreator>(new BuildingMatchCreator()));
+    std::shared_ptr<BuildingMatchCreator> matchCreator(new BuildingMatchCreator());
+    matchCreator->getMatchThreshold(); // This inits the threshold on the match creator.
+    uut.addMatchCreator(matchCreator);
     uut.processMap(load(_inputPath + "BuildingsA.osm", _inputPath + "BuildingsB.osm"));
 
     LOG_TRACE(uut.getResults().toStdString());
@@ -98,7 +100,6 @@ public:
     HOOT_FILE_EQUALS(_inputPath + "Buildings.arff",
                      _outputPath + "Buildings.arff");
   }
-
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MatchFeatureExtractorTest, "quick");

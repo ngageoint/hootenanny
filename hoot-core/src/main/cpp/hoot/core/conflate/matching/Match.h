@@ -173,6 +173,8 @@ public:
    */
   virtual QString toString() const = 0;
 
+  std::shared_ptr<const MatchThreshold> getThreshold() const { return _threshold; }
+
 protected:
 
   /*

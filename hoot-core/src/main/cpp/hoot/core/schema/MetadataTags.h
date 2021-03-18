@@ -118,6 +118,9 @@ public:
   inline static QString HootScoreMatch()                { return "hoot:score:match"; }
   inline static QString HootScoreMiss()                 { return "hoot:score:miss"; }
   inline static QString HootScoreReview()               { return "hoot:score:review"; }
+  inline static QString HootScoreMatchThreshold()       { return "hoot:score:match:threshold"; }
+  inline static QString HootScoreMissThreshold()        { return "hoot:score:miss:threshold"; }
+  inline static QString HootScoreReviewThreshold()      { return "hoot:score:review:threshold"; }
   inline static QString HootScoreUuid()                 { return "hoot:score:uuid"; }
   inline static QString HootUserName()                  { return "hoot:user_name"; }
   inline static QString HootUserId()                    { return "hoot:user_id"; }
