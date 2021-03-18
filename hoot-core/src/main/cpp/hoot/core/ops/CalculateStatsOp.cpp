@@ -155,6 +155,7 @@ void CalculateStatsOp::_readGenericStatsData()
         if (key == "name") newStatData.setName(val);
         else if (key == "visitor") newStatData.setVisitor(val);
         else if (key == "criterion") newStatData.setCriterion(val);
+        else if (key == "filtercriterion") newStatData.setFilterCriterion(val);
         else if (key == "statcall")
         {
           QString enumVal = val.toLower();
@@ -606,6 +607,15 @@ void CalculateStatsOp::_addStat(const char* name, double value)
 
 void CalculateStatsOp::_interpretStatData(shared_ptr<const OsmMap>& constMap, StatData& d)
 {
+  // TODO
+  LOG_VART(_filter);
+  LOG_VART(d.getFilterCriterion());
+  if (!_filter.isEmpty() && !d.getFilterCriterion().isEmpty() &&
+      !_filter.contains(d.getFilterCriterion()))
+  {
+    return;
+  }
+
   shared_ptr<ElementCriterion> pCrit;
 
   if (d.getCriterion().length() > 0)

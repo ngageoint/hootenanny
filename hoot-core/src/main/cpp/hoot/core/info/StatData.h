@@ -59,11 +59,13 @@ public:
   QString getName() const { return _name; }
   QString getVisitor() const { return _visitor; }
   QString getCriterion() const { return _criterion; }
+  QString getFilterCriterion() const { return _filterCriterion; }
   StatCall getStatCall() const { return _statCall; }
 
   void setName(const QString& name) { _name = name; }
   void setVisitor(const QString& visitor) { _visitor = visitor; }
   void setCriterion(const QString& criterion) { _criterion = criterion; }
+  void setFilterCriterion(const QString& criterion) { _filterCriterion = criterion; }
   void setStatCall(const StatCall& statCall) { _statCall = statCall; }
 
 private:
@@ -72,6 +74,8 @@ private:
   QString _visitor;    // visitor object name used to collect the data
   QString _criterion;  // criterion object name used if a FilteredVisitor is desired, otherwise an
                        // empty string
+  // TODO
+  QString _filterCriterion;
   StatCall _statCall;  // defines how the visitor data is being interpreted
 };
 
