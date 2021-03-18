@@ -28,7 +28,6 @@
 
 // hoot
 #include <hoot/core/conflate/matching/MatchFactory.h>
-#include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/merging/LinearMergerFactory.h>
 #include <hoot/core/conflate/merging/MarkForReviewMerger.h>
 #include <hoot/core/conflate/merging/MergerFactory.h>
