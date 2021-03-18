@@ -45,21 +45,21 @@ public:
 
   RelationWithPointMembersCriterion();
   RelationWithPointMembersCriterion(ConstOsmMapPtr map);
-  virtual ~RelationWithPointMembersCriterion() = default;
+  ~RelationWithPointMembersCriterion() = default;
 
-  virtual ElementCriterionPtr clone()
+  ElementCriterionPtr clone() override
   { return ElementCriterionPtr(new RelationWithPointMembersCriterion(_map)); }
 
-  virtual QString getCriterion() const override;
+  QString getCriterion() const override;
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Identifies relations with children having point geometries"; }
 
-  virtual GeometryType getGeometryType() const;
+  GeometryType getGeometryType() const override;
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 };
 
 }

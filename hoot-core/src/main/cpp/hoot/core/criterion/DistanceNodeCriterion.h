@@ -52,21 +52,21 @@ public:
 
   DistanceNodeCriterion() = default;
   DistanceNodeCriterion(geos::geom::Coordinate center, Meters distance);
-  virtual ~DistanceNodeCriterion() = default;
+  ~DistanceNodeCriterion() = default;
 
-  virtual bool isSatisfied(const ConstElementPtr& e) const;
+  bool isSatisfied(const ConstElementPtr& e) const override;
 
-  virtual ElementCriterionPtr clone()
+  ElementCriterionPtr clone() override
   { return ElementCriterionPtr(new DistanceNodeCriterion(_center, _distance)); }
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Determines if an element is within the specified distance of a point"; }
 
-  virtual void setConfiguration(const Settings& s);
+  void setConfiguration(const Settings& s) override;
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

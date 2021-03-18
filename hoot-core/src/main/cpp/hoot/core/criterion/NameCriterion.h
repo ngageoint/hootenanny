@@ -52,17 +52,17 @@ public:
   NameCriterion();
   NameCriterion(const QStringList& names, const bool caseSensitive = false,
                 const bool partialMatch = false);
-  virtual ~NameCriterion() = default;
+  ~NameCriterion() = default;
 
-  virtual bool isSatisfied(const ConstElementPtr& e) const override;
+  bool isSatisfied(const ConstElementPtr& e) const override;
 
-  virtual ElementCriterionPtr clone()
+  ElementCriterionPtr clone() override
   { return ElementCriterionPtr(new NameCriterion(_names, _caseSensitive)); }
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Identifies elements that contain a specified name"; }
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
   QStringList getNames() const { return _names; }
   bool getCaseSensitive() const { return _caseSensitive; }
@@ -71,9 +71,9 @@ public:
   void setCaseSensitive(bool caseSens) { _caseSensitive = caseSens; }
   void setPartialMatch(bool partialMatch) { _partialMatch = partialMatch; }
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

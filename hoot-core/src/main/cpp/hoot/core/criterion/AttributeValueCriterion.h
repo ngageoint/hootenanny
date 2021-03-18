@@ -50,28 +50,28 @@ public:
   AttributeValueCriterion(const ElementAttributeType& attributeType,
                           const double comparisonVal,
                           const NumericComparisonType& comparisonType);
-  virtual ~AttributeValueCriterion() = default;
+  ~AttributeValueCriterion() = default;
 
   /**
    * @see ElementCriterion
    */
-  virtual bool isSatisfied(const ConstElementPtr& e) const override;
+  bool isSatisfied(const ConstElementPtr& e) const override;
 
   /**
    * @see Configurable
    */
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new AttributeValueCriterion()); }
+  ElementCriterionPtr clone() override { return ElementCriterionPtr(new AttributeValueCriterion()); }
 
   /**
    * @see ApiEntityInfo
    */
-  virtual QString getDescription() const { return "Identifies element attributes by value"; }
+  QString getDescription() const override { return "Identifies element attributes by value"; }
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

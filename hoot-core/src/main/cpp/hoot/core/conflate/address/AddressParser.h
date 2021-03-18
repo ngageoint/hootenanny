@@ -59,9 +59,9 @@ class AddressParser : public Configurable
 public:
 
   AddressParser();
-  virtual ~AddressParser() = default;
+  ~AddressParser() = default;
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
   /**
    * Parse all addresses from an element

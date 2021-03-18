@@ -48,25 +48,25 @@ public:
 
   TagCriterion();
   TagCriterion(const QString& k, const QString& v);
-  virtual ~TagCriterion() = default;
+  ~TagCriterion() = default;
 
-  virtual bool isSatisfied(const ConstElementPtr& e) const override;
+  bool isSatisfied(const ConstElementPtr& e) const override;
 
-  void setConfiguration(const Settings& s);
+  void setConfiguration(const Settings& s) override;
 
   void setKvps(const QStringList kvps);
   void setCaseSensitive(bool caseSens) { _caseSensitive = caseSens; }
 
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new TagCriterion()); }
+  ElementCriterionPtr clone() override { return ElementCriterionPtr(new TagCriterion()); }
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Identifies elements containing a specified tag key/value combination"; }
 
-  virtual QString toString() const override;
+  QString toString() const override;
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

@@ -57,7 +57,7 @@ public:
 
   Way(const Way& way);
 
-  virtual ~Way() = default;
+  ~Way() = default;
 
   void addNode(long id);
   void insertNode(long index, long id);
@@ -74,9 +74,9 @@ public:
   /**
    * Removes tags, nodes and circularError.
    */
-  virtual void clear();
+  void clear() override;
 
-  Element* clone() const { return new Way(*this); }
+  Element* clone() const override { return new Way(*this); }
 
   bool containsNodeId(long nid) const;
 
@@ -99,12 +99,12 @@ public:
   const geos::geom::Envelope& getApproximateEnvelope(
     const std::shared_ptr<const ElementProvider>& ep) const;
 
-  virtual ElementType getElementType() const { return ElementType(ElementType::Way); }
+  ElementType getElementType() const override { return ElementType(ElementType::Way); }
 
   /**
    * Returns the same result as getEnvelopeInternal, but copied so the caller gets ownership.
    */
-  virtual geos::geom::Envelope* getEnvelope(
+  geos::geom::Envelope* getEnvelope(
     const std::shared_ptr<const ElementProvider>& ep) const override
   { return new geos::geom::Envelope(getEnvelopeInternal(ep)); }
 
@@ -112,7 +112,7 @@ public:
    * Returns the envelope for this way. This is guaranteed to be exact. If any of the nodes for
    * this way are not loaded into RAM then the behavior is undefined (probably an assert).
    */
-  virtual const geos::geom::Envelope& getEnvelopeInternal(
+  const geos::geom::Envelope& getEnvelopeInternal(
     const std::shared_ptr<const ElementProvider>& ep) const override;
 
   /**
@@ -227,19 +227,19 @@ public:
    */
   void setCachedEnvelope(const geos::geom::Envelope& e) { _cachedEnvelope = e; }
 
-  QString toString() const;
+  QString toString() const override;
 
   /**
    * @see Element
    */
-  virtual void visitRo(const ElementProvider& map, ConstElementVisitor& filter,
-                       const bool recursive = true) const;
+  void visitRo(const ElementProvider& map, ConstElementVisitor& filter,
+                       const bool recursive = true) const override;
 
   /**
    * @see Element
    */
-  virtual void visitRw(ElementProvider& map, ConstElementVisitor& filter,
-                       const bool recursive = true);
+  void visitRw(ElementProvider& map, ConstElementVisitor& filter,
+                       const bool recursive = true) override;
 
   /**
    * Functions for getting/setting/resetting the parent ID, i.e. the ID of the way
@@ -254,9 +254,9 @@ public:
 
 protected:
 
-  virtual ElementData& _getElementData() { _makeWritable(); return *_wayData; }
+  ElementData& _getElementData() override { _makeWritable(); return *_wayData; }
 
-  virtual const ElementData& _getElementData() const { return *_wayData; }
+  const ElementData& _getElementData() const override { return *_wayData; }
 
   void _makeWritable();
 

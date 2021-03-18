@@ -58,7 +58,7 @@ public:
   ApiDbReader();
   virtual ~ApiDbReader() = default;
 
-  virtual bool isSupported(const QString& urlStr) override;
+  bool isSupported(const QString& urlStr) override;
 
   void setBoundingBox(const QString& bbox);
   void setOverrideBoundingBox(const QString& bbox);
@@ -69,12 +69,12 @@ public:
    * Determines the reader's default element status. By default this is Invalid which specifies that
    * the file's status will be used.
    */
-  virtual void setDefaultStatus(Status status) override { _status = status; }
+  void setDefaultStatus(Status status) override { _status = status; }
 
   /**
    * Determines whether the reader should use the element id's from the file being read
    */
-  virtual void setUseDataSourceIds(bool useDataSourceIds) override
+  void setUseDataSourceIds(bool useDataSourceIds) override
   { _useDataSourceIds = useDataSourceIds; }
 
   void setUserEmail(const QString& email) { _email = email; }
@@ -82,34 +82,34 @@ public:
   /**
    * @see PartialOsmMapReader
    */
-  virtual void initializePartial() override;
+  void initializePartial() override;
 
   /**
    * The read command called after open.
    */
-  virtual void read(const OsmMapPtr& map) override;
+  void read(const OsmMapPtr& map) override;
 
   /**
    * @see PartialOsmMapReader
    */
-  virtual void finalizePartial() override;
+  void finalizePartial() override;
 
-  void close();
-
-  /**
-   * @see PartialOsmMapReader
-   */
-  virtual bool hasMoreElements() override;
+  void close() override;
 
   /**
    * @see PartialOsmMapReader
    */
-  virtual std::shared_ptr<Element> readNextElement() override;
+  bool hasMoreElements() override;
 
   /**
    * @see PartialOsmMapReader
    */
-  virtual std::shared_ptr<OGRSpatialReference> getProjection() const override;
+  std::shared_ptr<Element> readNextElement() override;
+
+  /**
+   * @see PartialOsmMapReader
+   */
+  std::shared_ptr<OGRSpatialReference> getProjection() const override;
 
   void setKeepImmediatelyConnectedWaysOutsideBounds(bool keep)
   { _keepImmediatelyConnectedWaysOutsideBounds = keep; }

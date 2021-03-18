@@ -43,7 +43,7 @@ class RelationMemberNodeCounter : public ConstOsmMapConsumer
 public:
 
   RelationMemberNodeCounter() = default;
-  virtual ~RelationMemberNodeCounter() = default;
+  ~RelationMemberNodeCounter() = default;
 
   /**
    * Returns the total recursive count of all nodes contained in a relation
@@ -56,7 +56,7 @@ public:
   /**
    * @see ConstOsmMapConsumer
    */
-  virtual void setOsmMap(const OsmMap* map) { _map = map->shared_from_this(); }
+  void setOsmMap(const OsmMap* map) override { _map = map->shared_from_this(); }
 
 private:
 

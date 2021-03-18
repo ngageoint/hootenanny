@@ -45,7 +45,7 @@ public:
 
 protected:
 
-  virtual void _createExtractors() const;
+  void _createExtractors() const override;
 
   /**
    * Creates all the reasonable extractors for a data set. This can be quite large and is good

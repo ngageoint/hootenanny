@@ -44,7 +44,7 @@ class ConnectedRelationMemberFinder : public ConstOsmMapConsumer
 public:
 
   ConnectedRelationMemberFinder() = default;
-  virtual ~ConnectedRelationMemberFinder() = default;
+  ~ConnectedRelationMemberFinder() = default;
 
   /**
    * Determines if any way from one relation is connected to a way in another relation
@@ -59,7 +59,7 @@ public:
   /**
    * @see ConstOsmMapConsumer
    */
-  virtual void setOsmMap(const OsmMap* map) { _map = map->shared_from_this(); }
+  void setOsmMap(const OsmMap* map) override { _map = map->shared_from_this(); }
 
 private:
 

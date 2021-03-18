@@ -44,7 +44,7 @@ class WayNodeCopier : public OsmMapConsumer, public ElementCriterionConsumer, pu
 public:
 
   WayNodeCopier();
-  virtual ~WayNodeCopier() = default;
+  ~WayNodeCopier() = default;
 
   /**
    * Copies all nodes from one way to another based on an optional filtering criterion set
@@ -58,17 +58,17 @@ public:
   /**
    * @see OsmMapConsumer
    */
-  virtual void setOsmMap(OsmMap* map) { _map = map->shared_from_this(); }
+  void setOsmMap(OsmMap* map) override { _map = map->shared_from_this(); }
 
   /**
    * @see ElementCriterionConsumer
    */
-  virtual void addCriterion(const ElementCriterionPtr& e);
+  void addCriterion(const ElementCriterionPtr& e) override;
 
   /**
    * @see Configurable
    */
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
 private:
 

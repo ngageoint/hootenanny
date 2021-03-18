@@ -46,21 +46,21 @@ public:
 
   RelationWithAreaMembersCriterion();
   RelationWithAreaMembersCriterion(ConstOsmMapPtr map);
-  virtual ~RelationWithAreaMembersCriterion() = default;
+  ~RelationWithAreaMembersCriterion() = default;
 
-  virtual ElementCriterionPtr clone()
+  ElementCriterionPtr clone() override
   { return ElementCriterionPtr(new RelationWithAreaMembersCriterion(_map)); }
 
-  virtual QString getCriterion() const override;
+  QString getCriterion() const override;
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Identifies relations with area members"; }
 
-  virtual GeometryType getGeometryType() const;
+  GeometryType getGeometryType() const override;
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 };
 
 }

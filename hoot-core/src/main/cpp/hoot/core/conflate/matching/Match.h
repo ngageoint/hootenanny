@@ -63,7 +63,7 @@ public:
   virtual ~Match() = default;
 
   virtual QString explain() const;
-  virtual void setExplain(const QString& /*explainText*/){ }
+  virtual void setExplain(const QString& /*explainText*/) { }
 
   /**
    * Classifies the match and returns a classification object.
@@ -77,12 +77,7 @@ public:
   virtual MatchMembers getMatchMembers() const { return MatchMembers::None; }
 
   /**
-   * Return the name of this kind of match. This is used when tagging the types of reviews. This
-   * typically just returns the name of the feature being reviewed. (e.g. Building or Highway)
-   *
-   * Since this is likely the same name returned over and over it is suggested you use a static
-   * QString to return the name. This avoid constructing multiple duplicate QStrings (possibly
-   * lots of duplicates).
+   * TODO: This already exists in ApiEntityInfo
    */
   virtual QString getName() const = 0;
 
@@ -173,6 +168,9 @@ public:
   static QString matchPairsToString(
     const std::set<std::pair<ElementId, ElementId>>& matchPairs);
 
+  /**
+   * TODO: This already exists in ApiEntityInfo
+   */
   virtual QString toString() const = 0;
 
   std::shared_ptr<const MatchThreshold> getThreshold() const { return _threshold; }

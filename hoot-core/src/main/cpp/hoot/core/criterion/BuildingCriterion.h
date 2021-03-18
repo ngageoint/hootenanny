@@ -46,29 +46,29 @@ public:
 
   BuildingCriterion() = default;
   BuildingCriterion(ConstOsmMapPtr map) : _map(map) { }
-  virtual ~BuildingCriterion() = default;
+  ~BuildingCriterion() = default;
 
   bool isParentABuilding(ElementId eid) const;
 
-  virtual bool isSatisfied(const ConstElementPtr& e) const override;
+  bool isSatisfied(const ConstElementPtr& e) const override;
 
   bool isSatisfied(const Tags& tags, const ElementType& elementType) const;
 
-  virtual GeometryType getGeometryType() const { return GeometryType::Polygon; }
+  GeometryType getGeometryType() const override { return GeometryType::Polygon; }
 
-  virtual void setOsmMap(const OsmMap* map) { _map = map->shared_from_this(); }
+  void setOsmMap(const OsmMap* map) override { _map = map->shared_from_this(); }
 
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new BuildingCriterion(_map)); }
+  ElementCriterionPtr clone() override { return ElementCriterionPtr(new BuildingCriterion(_map)); }
 
-  virtual QString getDescription() const { return "Identifies buildings"; }
+  QString getDescription() const override { return "Identifies buildings"; }
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual bool supportsSpecificConflation() const { return true; }
+  bool supportsSpecificConflation() const override { return true; }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
-  virtual QStringList getChildCriteria() const;
+  QStringList getChildCriteria() const override;
 
 private:
 

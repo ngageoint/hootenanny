@@ -99,20 +99,20 @@ public:
    * is not reprojected back to the original projection when conflation is complete.
    * @param map - The map to operate on
    */
-  virtual void apply(OsmMapPtr& map);
+  void apply(OsmMapPtr& map) override;
 
   /**
    * @brief getClassName - Gets the class name
    * @return The class name string
    */
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
   void enableTags() { _conflateTags = true; }
   bool conflatingTags() const { return _conflateTags;}
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Creates a map with features from the second input which are not in the first"; }
 
   /**
@@ -166,7 +166,7 @@ public:
 
   void calculateStats(OsmMapPtr pResultMap, QList<SingleStat>& stats);
 
-  virtual unsigned int getNumSteps() const { return 3; }
+  unsigned int getNumSteps() const override { return 3; }
 
   QString getGeometryChangesetStats() const { return _geometryChangesetStats; }
   QString getTagChangesetStats() const { return _tagChangesetStats; }
@@ -176,9 +176,9 @@ public:
 protected:
 
   // TODO: implement
-  virtual void _createMergers(
-    MatchSetVector& /*matchSets*/, std::vector<MergerPtr>& /*relationMergers*/) {}
-  virtual void _mergeFeatures(const std::vector<MergerPtr>& /*relationMergers*/) {}
+  void _createMergers(
+    MatchSetVector& /*matchSets*/, std::vector<MergerPtr>& /*relationMergers*/) override { }
+  void _mergeFeatures(const std::vector<MergerPtr>& /*relationMergers*/) override { }
 
 private:
 
@@ -212,7 +212,7 @@ private:
    * Cleans up any resources used by the object during conflation. This also makes exceptions that
    * might be thrown during apply() clean up the leftovers nicely (albeit delayed).
    */
-  virtual void _reset();
+  void _reset() override;
 
   void _discardUnconflatableElements();
 

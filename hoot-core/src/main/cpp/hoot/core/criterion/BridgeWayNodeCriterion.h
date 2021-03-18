@@ -41,18 +41,18 @@ public:
 
   BridgeWayNodeCriterion();
   BridgeWayNodeCriterion(ConstOsmMapPtr map);
-  virtual ~BridgeWayNodeCriterion() = default;
+  ~BridgeWayNodeCriterion() = default;
 
-  virtual void setOsmMap(const OsmMap* map) override;
+  void setOsmMap(const OsmMap* map) override;
 
-  virtual ElementCriterionPtr clone() override
+  ElementCriterionPtr clone() override
   { return ElementCriterionPtr(new BridgeWayNodeCriterion(_map)); }
 
-  virtual QString getDescription() const override { return "Identifies bridge nodes"; }
+  QString getDescription() const override { return "Identifies bridge nodes"; }
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 };
 
 }

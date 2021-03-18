@@ -41,18 +41,18 @@ public:
 
   PolygonWayNodeCriterion();
   PolygonWayNodeCriterion(ConstOsmMapPtr map);
-  virtual ~PolygonWayNodeCriterion() = default;
+  ~PolygonWayNodeCriterion() = default;
 
-  virtual void setOsmMap(const OsmMap* map) override;
+  void setOsmMap(const OsmMap* map) override;
 
-  virtual ElementCriterionPtr clone()
+  ElementCriterionPtr clone() override
   { return ElementCriterionPtr(new PolygonWayNodeCriterion(_map)); }
 
-  virtual QString getDescription() const { return "Identifies nodes belonging to polygons"; }
+  QString getDescription() const override { return "Identifies nodes belonging to polygons"; }
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 };
 
 }

@@ -44,21 +44,21 @@ public:
 
   ContainsNodeCriterion() = default;
   explicit ContainsNodeCriterion(long nodeId) : _nodeId(nodeId) { }
-  virtual ~ContainsNodeCriterion() = default;
+  ~ContainsNodeCriterion() = default;
 
-  virtual bool isSatisfied(const ConstElementPtr& e) const override;
+  bool isSatisfied(const ConstElementPtr& e) const override;
 
-  virtual ElementCriterionPtr clone()
+  ElementCriterionPtr clone() override
   { return ElementCriterionPtr(new ContainsNodeCriterion(_nodeId)); }
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Determines if an element contains the given node ID"; }
 
-  virtual void setConfiguration(const Settings& s);
+  void setConfiguration(const Settings& s) override;
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

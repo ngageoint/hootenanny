@@ -48,27 +48,27 @@ class InMemoryElementSorter : public ElementInputStream
 public:
 
   InMemoryElementSorter(ConstOsmMapPtr map);
-  virtual ~InMemoryElementSorter() = default;
+  ~InMemoryElementSorter() = default;
 
   /**
    * @see ElementInputStream
    */
-  virtual std::shared_ptr<OGRSpatialReference> getProjection() const;
+  std::shared_ptr<OGRSpatialReference> getProjection() const override;
 
   /**
    * @see ElementInputStream
    */
-  virtual void close() {}
+  void close() override { }
 
   /**
    * @see ElementInputStream
    */
-  virtual bool hasMoreElements();
+  bool hasMoreElements() override;
 
   /**
    * @see ElementInputStream
    */
-  virtual ElementPtr readNextElement();
+  ElementPtr readNextElement() override;
 
   /**
    * Sort a collection of elements to the OSM standard

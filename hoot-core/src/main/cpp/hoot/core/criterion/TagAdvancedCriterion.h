@@ -63,20 +63,20 @@ public:
 
   TagAdvancedCriterion();
   TagAdvancedCriterion(const QString& filterJsonStrOrPath);
-  virtual ~TagAdvancedCriterion() = default;
+  ~TagAdvancedCriterion() = default;
 
-  virtual bool isSatisfied(const ConstElementPtr& e) const override;
+  bool isSatisfied(const ConstElementPtr& e) const override;
 
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new TagAdvancedCriterion()); }
+  ElementCriterionPtr clone() override { return ElementCriterionPtr(new TagAdvancedCriterion()); }
 
-  void setConfiguration(const Settings& s);
+  void setConfiguration(const Settings& s) override;
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Identifies elements by tag using a set of advanced schema functionality"; }
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

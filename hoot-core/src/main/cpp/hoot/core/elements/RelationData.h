@@ -80,11 +80,11 @@ public:
 
   RelationData(const RelationData& rd);
 
-  virtual ~RelationData() = default;
+  ~RelationData() = default;
 
   void addElement(const QString& role, ElementId eid);
 
-  virtual void clear();
+  void clear() override;
 
   const std::vector<Entry>& getElements() const { return _members; }
 

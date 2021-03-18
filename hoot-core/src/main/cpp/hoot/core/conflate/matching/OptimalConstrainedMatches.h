@@ -47,14 +47,14 @@ class OptimalConstrainedMatches : public ConstrainedMatches
 public:
 
   OptimalConstrainedMatches(const ConstOsmMapPtr& map);
-  virtual ~OptimalConstrainedMatches() = default;
+  ~OptimalConstrainedMatches() = default;
 
   /**
    * Calculate a consistent subset of matches while attempting to maximizing the sum of match
    * scores. All matches will be considered so if you don't want matches below a threshold included
    * then don't add them.
    */
-  virtual std::vector<ConstMatchPtr> calculateSubset() override;
+  std::vector<ConstMatchPtr> calculateSubset() override;
 
 private:
 
