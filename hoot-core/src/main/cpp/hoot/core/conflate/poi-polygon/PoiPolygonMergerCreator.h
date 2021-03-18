@@ -48,23 +48,22 @@ public:
   static QString className() { return "hoot::PoiPolygonMergerCreator"; }
 
   PoiPolygonMergerCreator();
-  virtual ~PoiPolygonMergerCreator() = default;
+  ~PoiPolygonMergerCreator() = default;
 
   /**
    * If there is one match and it is a PoiPolygonMatch then a PoiPolygonMerger is created and
    * appended. If there is more than one match and at least one is a PoiPolygonMatch then a
    * MarkForReviewMerger is created.
    */
-  virtual bool createMergers(const MatchSet& matches,
-                             std::vector<MergerPtr>& mergers) const override;
+  bool createMergers(const MatchSet& matches,
+                     std::vector<MergerPtr>& mergers) const override;
 
-  virtual std::vector<CreatorDescription> getAllCreators() const override;
+  std::vector<CreatorDescription> getAllCreators() const override;
 
-  virtual bool isConflicting(
-    const ConstOsmMapPtr& map, ConstMatchPtr m1, ConstMatchPtr m2,
+  bool isConflicting(const ConstOsmMapPtr& map, ConstMatchPtr m1, ConstMatchPtr m2,
     const QHash<QString, ConstMatchPtr>& matches = QHash<QString, ConstMatchPtr>()) const override;
 
-  virtual void setOsmMap(const OsmMap* map) override { _map = map; }
+  void setOsmMap(const OsmMap* map) override { _map = map; }
 
   /**
    * Converts all POI/Polygon matches also involved in another match of one of the specified types

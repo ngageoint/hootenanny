@@ -46,7 +46,7 @@ public:
   static QString className() { return "hoot::MarkForReviewMerger"; }
 
   MarkForReviewMerger() = default;
-  virtual ~MarkForReviewMerger() = default;
+  ~MarkForReviewMerger() = default;
 
   /**
    * Constructed with a set of element matching pairs. The pairs are generally Unknown1 as first
@@ -62,23 +62,23 @@ public:
   MarkForReviewMerger(const std::set<ElementId>& eids, QString note,
                       QString reviewType, double score);
 
-  virtual void apply(const OsmMapPtr& map,
-                     std::vector<std::pair<ElementId, ElementId>>& replaced) override;
+  void apply(const OsmMapPtr& map,
+             std::vector<std::pair<ElementId, ElementId>>& replaced) override;
 
-  virtual std::set<ElementId> getImpactedElementIds() const override;
+  std::set<ElementId> getImpactedElementIds() const override;
 
-  virtual bool isValid(const ConstOsmMapPtr& map) const;
+  bool isValid(const ConstOsmMapPtr& map) const override;
 
-  virtual void replace(ElementId oldEid, ElementId newEid);
+  void replace(ElementId oldEid, ElementId newEid) override;
 
-  virtual QString toString() const override;
+  QString toString() const override;
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Marks elements as needing review before merging"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

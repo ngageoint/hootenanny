@@ -43,21 +43,21 @@ public:
 
   WayNodeCriterion() = default;
   WayNodeCriterion(ConstOsmMapPtr map) : _map(map) { }
-  virtual ~WayNodeCriterion() = default;
+  ~WayNodeCriterion() = default;
 
-  virtual bool isSatisfied(const ConstElementPtr& e) const override;
+  bool isSatisfied(const ConstElementPtr& e) const override;
 
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new WayNodeCriterion(_map)); }
+  ElementCriterionPtr clone() override { return ElementCriterionPtr(new WayNodeCriterion(_map)); }
 
-  virtual QString getDescription() const { return "Identifies way nodes"; }
+  QString getDescription() const override { return "Identifies way nodes"; }
 
-  virtual void setOsmMap(const OsmMap* map) { _map = map->shared_from_this(); }
+  void setOsmMap(const OsmMap* map) override { _map = map->shared_from_this(); }
 
-  virtual GeometryType getGeometryType() const { return GeometryType::Point; }
+  GeometryType getGeometryType() const override { return GeometryType::Point; }
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
   /**
    * Returns the ID of the first way that owns input node

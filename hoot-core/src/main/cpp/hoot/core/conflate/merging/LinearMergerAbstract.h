@@ -92,10 +92,9 @@ public:
   LinearMergerAbstract() = default;
   virtual ~LinearMergerAbstract() = default;
 
-  virtual void apply(
-    const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced) override;
+  void apply(const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced) override;
 
-  virtual QString toString() const override;
+  QString toString() const override;
 
   void setPairs(const std::set<std::pair<ElementId, ElementId>>& pairs) { _pairs = pairs; }
   void setMatchedBy(const QString& matchedBy) { _matchedBy = matchedBy; }
@@ -115,8 +114,8 @@ protected:
   // indicates which matcher matched the elements being processed by this merger
   QString _matchedBy;
 
-  virtual PairsSet& _getPairs() override { return _pairs; }
-  virtual const PairsSet& _getPairs() const override { return _pairs; }
+  PairsSet& _getPairs() override { return _pairs; }
+  const PairsSet& _getPairs() const override { return _pairs; }
 
   /*
    * Return true if pair needs review.

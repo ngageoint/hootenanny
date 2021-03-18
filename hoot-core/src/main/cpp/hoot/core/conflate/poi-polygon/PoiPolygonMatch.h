@@ -70,36 +70,36 @@ public:
     std::shared_ptr<const PoiPolygonRfClassifier> rf,
     PoiPolygonInfoCachePtr infoCache = PoiPolygonInfoCachePtr(),
     const std::set<ElementId>& polyNeighborIds = std::set<ElementId>());
-  virtual ~PoiPolygonMatch() = default;
+  ~PoiPolygonMatch() = default;
 
-  virtual void setConfiguration(const Settings& conf) override;
+  void setConfiguration(const Settings& conf) override;
 
   void calculateMatch(const ElementId& eid1, const ElementId& eid2);
 
-  virtual const MatchClassification& getClassification() const override { return _class; }
+  const MatchClassification& getClassification() const override { return _class; }
 
-  virtual MatchMembers getMatchMembers() const override
+  MatchMembers getMatchMembers() const override
   { return MatchMembers::Poi | MatchMembers::Polygon; }
 
-  virtual QString getName() const override { return getPoiPolygonMatchName(); }
+  QString getName() const override { return getPoiPolygonMatchName(); }
   static QString getPoiPolygonMatchName() { return MATCH_NAME; }
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
-  virtual std::set<std::pair<ElementId, ElementId>> getMatchPairs() const override;
+  std::set<std::pair<ElementId, ElementId>> getMatchPairs() const override;
 
-  virtual double getProbability() const override { return _class.getMatchP(); }
+  double getProbability() const override { return _class.getMatchP(); }
 
   // Is this the right implementation?
-  virtual bool isConflicting(const ConstMatchPtr& /*other*/,
-                             const ConstOsmMapPtr& /*map*/,
-                             const QHash<QString, ConstMatchPtr>& /*matches*/) const override
+  bool isConflicting(const ConstMatchPtr& /*other*/,
+                     const ConstOsmMapPtr& /*map*/,
+                     const QHash<QString, ConstMatchPtr>& /*matches*/) const override
   { return false; }
 
-  virtual bool isWholeGroup() const override { return true; }
+  bool isWholeGroup() const override { return true; }
 
-  virtual QString toString() const override;
+  QString toString() const override;
 
-  virtual std::map<QString, double> getFeatures(const ConstOsmMapPtr& m) const override;
+  std::map<QString, double> getFeatures(const ConstOsmMapPtr& m) const override;
 
   /**
    * Pass through to the same method in PoiPolygonDistanceTruthRecorder
@@ -111,11 +111,11 @@ public:
    */
   static void resetMatchDistanceInfo();
 
-  virtual QString explain() const override { return _explainText; }
+  QString explain() const override { return _explainText; }
 
-  virtual QString getDescription() const override { return "Matches POIs with polygons"; }
+  QString getDescription() const override { return "Matches POIs with polygons"; }
 
-  virtual MatchType getType() const override;
+  MatchType getType() const override;
 
   void setMatchDistanceThreshold(const double distance);
   void setReviewDistanceThreshold(const double distance);

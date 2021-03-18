@@ -46,16 +46,16 @@ class OsmNetworkExtractorVisitor : public ConstElementVisitor
 public:
 
   OsmNetworkExtractorVisitor(OsmNetworkExtractor& parent) : _parent(parent) { }
-  virtual ~OsmNetworkExtractorVisitor() = default;
+  ~OsmNetworkExtractorVisitor() = default;
 
-  virtual void visit(const ConstElementPtr& e)
+  void visit(const ConstElementPtr& e) override
   {
     _parent._visit(e);
   }
 
-  virtual QString getDescription() const { return ""; }
-  virtual QString getName() const { return ""; }
-  virtual QString getClassName() const override { return ""; }
+  QString getDescription() const override { return ""; }
+  QString getName() const override { return ""; }
+  QString getClassName() const override { return ""; }
 
 private:
 

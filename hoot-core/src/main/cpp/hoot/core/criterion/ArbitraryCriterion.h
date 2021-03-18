@@ -51,22 +51,22 @@ public:
     : _f(f) { }
   explicit ArbitraryCriterion(const std::function<bool (const std::shared_ptr<const Element> &e)>& f)
     : _f(f) { }
-  virtual ~ArbitraryCriterion() = default;
+  ~ArbitraryCriterion() = default;
 
-  virtual bool isSatisfied(const std::shared_ptr<const Element>& e) const
+  bool isSatisfied(const std::shared_ptr<const Element>& e) const override
   {
     const bool result = _f(e);
     LOG_VART(result);
     return result;
   }
 
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new ArbitraryCriterion(_f)); }
+  ElementCriterionPtr clone() override { return ElementCriterionPtr(new ArbitraryCriterion(_f)); }
 
-  virtual QString getDescription() const { return ""; }
+  QString getDescription() const override { return ""; }
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

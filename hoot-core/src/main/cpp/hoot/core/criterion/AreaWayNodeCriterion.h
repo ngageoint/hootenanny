@@ -41,18 +41,18 @@ public:
 
   AreaWayNodeCriterion();
   AreaWayNodeCriterion(ConstOsmMapPtr map);
-  virtual ~AreaWayNodeCriterion() = default;
+  ~AreaWayNodeCriterion() = default;
 
-  virtual void setOsmMap(const OsmMap* map) override;
+  void setOsmMap(const OsmMap* map) override;
 
-  virtual ElementCriterionPtr clone() override
+  ElementCriterionPtr clone() override
   { return ElementCriterionPtr(new AreaWayNodeCriterion(_map)); }
 
-  virtual QString getDescription() const override { return "Identifies area nodes"; }
+  QString getDescription() const override { return "Identifies area nodes"; }
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 };
 
 }

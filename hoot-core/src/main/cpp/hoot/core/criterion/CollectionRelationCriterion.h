@@ -43,23 +43,23 @@ public:
   static QString className() { return "hoot::CollectionRelationCriterion"; }
 
   CollectionRelationCriterion() = default;
-  virtual ~CollectionRelationCriterion() = default;
+  ~CollectionRelationCriterion() = default;
 
-  virtual bool isSatisfied(const ConstElementPtr& e) const override;
+  bool isSatisfied(const ConstElementPtr& e) const override;
 
   // TODO: should this be linear instead?
-  virtual GeometryType getGeometryType() const { return GeometryType::Polygon; }
+  GeometryType getGeometryType() const override { return GeometryType::Polygon; }
 
-  virtual bool supportsSpecificConflation() const { return true; }
+  bool supportsSpecificConflation() const override { return true; }
 
-  virtual ElementCriterionPtr clone()
+  ElementCriterionPtr clone() override
   { return ElementCriterionPtr(new CollectionRelationCriterion()); }
 
-  virtual QString getDescription() const { return "Identifies collection relations"; }
+  QString getDescription() const override { return "Identifies collection relations"; }
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 };
 
 }

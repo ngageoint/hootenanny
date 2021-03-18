@@ -52,14 +52,14 @@ public:
   LinearSnapMerger(
     const std::set<std::pair<ElementId, ElementId>>& pairs,
     const std::shared_ptr<SublineStringMatcher>& sublineMatcher);
-  virtual ~LinearSnapMerger() = default;
+  ~LinearSnapMerger() = default;
 
-  virtual QString getDescription() const override
+  QString getDescription() const override
   { return "Merges linear features by snapping geometries"; }
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 protected:
 
@@ -71,8 +71,8 @@ protected:
   // This is useful for getting rid of them later, if necessary.
   bool _markAddedMultilineStringRelations;
 
-  virtual bool _mergePair(const OsmMapPtr& map, ElementId eid1, ElementId eid2,
-                          std::vector<std::pair<ElementId, ElementId>>& replaced) override;
+  bool _mergePair(const OsmMapPtr& map, ElementId eid1, ElementId eid2,
+                  std::vector<std::pair<ElementId, ElementId>>& replaced) override;
 
   /*
    * Finds a matching subline between two elements with the configured subline matcher
