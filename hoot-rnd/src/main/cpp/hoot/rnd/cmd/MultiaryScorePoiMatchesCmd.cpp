@@ -181,7 +181,9 @@ public:
     OsmMapWriterFactory::write(map, ConfPath::getHootHome() + "/tmp/score-matches-after-prep.osm");
     MapProjector::projectToPlanar(map);
 
-    std::shared_ptr<MatchThreshold> mt;
+    // Apparently, multiary will allow with > 1.0 review thresholds.
+    std::shared_ptr<MatchThreshold> mt =
+      std::make_shared<MatchThreshold>(MatchThreshold(0.5, 0.5, 1.0, false));
     QString result = evaluateThreshold(map, output, mt, showConfusion);
 
     cout << result;

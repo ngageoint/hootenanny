@@ -64,7 +64,7 @@ public:
   virtual QString getDescription() const override
   { return "Conflates two inputs maps into one with Unifying Conflation"; }
 
-  virtual unsigned int getNumSteps() const override { return 3; }
+  unsigned int getNumSteps() const override;
 
 protected:
 
@@ -76,8 +76,10 @@ private:
 
   static const bool WRITE_DETAILED_DEBUG_MAPS;
 
-  void _addReviewAndScoreTags();
-  void _addScoreTags(const ElementPtr& e, const MatchClassification& mc);
+  void _addConflateScoreTags();
+  void _addConflateScoreTags(
+    const ElementPtr& e, const MatchClassification& matchClassification,
+    const MatchThreshold& matchThreshold) const;
 };
 
 }

@@ -65,6 +65,12 @@ ConflictsNetworkMatcher::ConflictsNetworkMatcher()
     conf.getNetworkConflictsSanityCheckSeparationDistanceMultiplier();
   _conflictingScoreThresholdModifier = conf.getNetworkConflictsConflictingScoreThresholdModifier();
   _matchThreshold = conf.getNetworkConflictsMatcherThreshold();
+  if (_matchThreshold <= 0.0 || _matchThreshold > 1.0)
+  {
+    throw IllegalArgumentException(
+      "Invalid conflicts match threshold: " + QString::number(_matchThreshold) +
+      ". Must be greater than 0.0 and less than 1.0.");
+  }
 }
 
 double ConflictsNetworkMatcher::_aggregateScores(QList<double> pairs)
