@@ -57,24 +57,24 @@ public:
    * Always construct with create() to make a shared pointer.
    */
   ConflictsNetworkMatcher();
-  virtual ~ConflictsNetworkMatcher() = default;
+  ~ConflictsNetworkMatcher() = default;
 
   /**
    * Use this instead of a constructor.
    */
   static std::shared_ptr<ConflictsNetworkMatcher> create();
 
-  virtual double getMatchThreshold() const { return _matchThreshold; }
+  double getMatchThreshold() const override { return _matchThreshold; }
 
-  virtual void iterate();
+  void iterate() override;
 
-  virtual void matchNetworks(ConstOsmMapPtr map, OsmNetworkPtr n1, OsmNetworkPtr n2);
+  void matchNetworks(ConstOsmMapPtr map, OsmNetworkPtr n1, OsmNetworkPtr n2) override;
 
-  virtual void finalize();
+  void finalize() override;
 
-  virtual QList<NetworkEdgeScorePtr> getAllEdgeScores() const;
+  QList<NetworkEdgeScorePtr> getAllEdgeScores() const override;
 
-  virtual QList<NetworkVertexScorePtr> getAllVertexScores() const;
+  QList<NetworkVertexScorePtr> getAllVertexScores() const override;
 
   virtual IndexedEdgeMatchSetPtr getMatches() { return _edgeMatches; }
 

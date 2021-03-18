@@ -47,7 +47,7 @@ class RelationMerger : public OsmMapConsumer
 public:
 
   RelationMerger();
-  virtual ~RelationMerger() = default;
+  ~RelationMerger() = default;
 
   /**
    * Merges the members from the relation with the second element ID into the relation with the
@@ -62,7 +62,7 @@ public:
   /**
    * @see OsmMapConsumer
    */
-  virtual void setOsmMap(OsmMap* map) { _map = map->shared_from_this(); }
+  void setOsmMap(OsmMap* map) override { _map = map->shared_from_this(); }
 
   void setMergeTags(bool merge) { _mergeTags = merge; }
   void setDeleteRelation2(bool deleteRelation) { _deleteRelation2 = deleteRelation; }

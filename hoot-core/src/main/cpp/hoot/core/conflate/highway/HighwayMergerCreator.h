@@ -41,21 +41,19 @@ public:
   static QString className() { return "hoot::HighwayMergerCreator"; }
 
   HighwayMergerCreator();
-  virtual ~HighwayMergerCreator() = default;
+  ~HighwayMergerCreator() = default;
 
   /**
    * If there is a single HighwayMatch, a single HighwayMergerCreator will be created and returned.
    */
-  virtual bool createMergers(const MatchSet& matches,
-                             std::vector<MergerPtr>& mergers) const override;
+  bool createMergers(const MatchSet& matches, std::vector<MergerPtr>& mergers) const override;
 
-  virtual std::vector<CreatorDescription> getAllCreators() const override;
+  std::vector<CreatorDescription> getAllCreators() const override;
 
-  virtual bool isConflicting(
-    const ConstOsmMapPtr& map, ConstMatchPtr m1, ConstMatchPtr m2,
+  bool isConflicting(const ConstOsmMapPtr& map, ConstMatchPtr m1, ConstMatchPtr m2,
     const QHash<QString, ConstMatchPtr>& matches = QHash<QString, ConstMatchPtr>()) const override;
 
-  virtual void setConfiguration(const Settings &conf) override;
+  void setConfiguration(const Settings &conf) override;
 
 private:
 

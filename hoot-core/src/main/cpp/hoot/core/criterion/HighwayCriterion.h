@@ -46,26 +46,26 @@ public:
 
   HighwayCriterion() = default;
   HighwayCriterion(ConstOsmMapPtr map) : _map(map) { }
-  virtual ~HighwayCriterion() = default;
+  ~HighwayCriterion() = default;
 
-  virtual bool isSatisfied(const ConstElementPtr& e) const override;
+  bool isSatisfied(const ConstElementPtr& e) const override;
 
-  virtual GeometryType getGeometryType() const
+  GeometryType getGeometryType() const override
   { return GeometryType::Line; }
 
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new HighwayCriterion()); }
+  ElementCriterionPtr clone() override { return ElementCriterionPtr(new HighwayCriterion()); }
 
-  virtual QString getDescription() const { return "Identifies roads"; }
+  QString getDescription() const override { return "Identifies roads"; }
 
-  virtual void setOsmMap(const OsmMap* map) { _map = map->shared_from_this(); }
+  void setOsmMap(const OsmMap* map) override { _map = map->shared_from_this(); }
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
-  virtual bool supportsSpecificConflation() const { return true; }
+  bool supportsSpecificConflation() const override { return true; }
 
-  virtual QStringList getChildCriteria() const;
+  QStringList getChildCriteria() const override;
 
 private:
 
