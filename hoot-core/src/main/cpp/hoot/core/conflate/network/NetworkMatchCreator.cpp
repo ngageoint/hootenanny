@@ -217,10 +217,10 @@ std::shared_ptr<MatchThreshold> NetworkMatchCreator::getMatchThreshold()
 {
   if (!_matchThreshold.get())
   {
-    ConfigOptions config;
     _matchThreshold.reset(
-      new MatchThreshold(config.getNetworkMatchThreshold(), config.getNetworkMissThreshold(),
-                         config.getNetworkReviewThreshold()));
+      new MatchThreshold(
+        ConfigOptions().getNetworkMatchThreshold(), ConfigOptions().getNetworkMissThreshold(),
+        ConfigOptions().getNetworkReviewThreshold()));
   }
   return _matchThreshold;
 }

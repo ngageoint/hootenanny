@@ -542,6 +542,13 @@ hoot alpha-shape --buffer 10 input.osm 200 0 output.osm
     hoot conflate -D tag.merger.overwrite.accumulate.values.keys="myTagKey" input1.osm input2.osm
 -----
 
+===== Generate feature match scores between maps without merging them:
+
+-----
+    hoot conflate -D conflate.match.only=true -D writer.include.conflate.score.tags=true \
+      input1.osm input2.osm output.osm
+-----
+
 ==== Applying Changes
 
 ===== Derive a changeset between two maps and write the result directly to an OSM API database:
