@@ -44,18 +44,18 @@ public:
 
   BuildingWayNodeCriterion();
   BuildingWayNodeCriterion(ConstOsmMapPtr map);
-  virtual ~BuildingWayNodeCriterion() = default;
+  ~BuildingWayNodeCriterion() = default;
 
-  virtual void setOsmMap(const OsmMap* map) override;
+  void setOsmMap(const OsmMap* map) override;
 
-  virtual ElementCriterionPtr clone() override
+  ElementCriterionPtr clone() override
   { return ElementCriterionPtr(new BuildingWayNodeCriterion(_map)); }
 
-  virtual QString getDescription() const override { return "Identifies way nodes in buildings"; }
+  QString getDescription() const override { return "Identifies way nodes in buildings"; }
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 };
 
 }

@@ -59,7 +59,7 @@ public:
   static QString className() { return "hoot::NetworkDetails"; }
 
   NetworkDetails(ConstOsmMapPtr map, ConstOsmNetworkPtr n1, ConstOsmNetworkPtr n2);
-  virtual ~NetworkDetails() = default;
+  ~NetworkDetails() = default;
 
   Meters calculateDistance(ConstEdgeLocationPtr el) const;
   /**
@@ -119,8 +119,8 @@ public:
 
   double getEdgeStringMatchScore(ConstEdgeStringPtr e1, ConstEdgeStringPtr e2);
 
-  virtual geos::geom::Envelope getEnvelope(ConstNetworkEdgePtr e) const;
-  virtual geos::geom::Envelope getEnvelope(ConstNetworkVertexPtr v) const;
+  geos::geom::Envelope getEnvelope(ConstNetworkEdgePtr e) const override;
+  geos::geom::Envelope getEnvelope(ConstNetworkVertexPtr v) const override;
 
   ConstOsmMapPtr getMap() const { return _map; }
 
@@ -128,10 +128,10 @@ public:
 
   double getPartialEdgeMatchScore(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2);
 
-  Meters getSearchRadius(ConstNetworkEdgePtr e1) const;
-  Meters getSearchRadius(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2) const;
-  Meters getSearchRadius(ConstNetworkVertexPtr v1) const;
-  Meters getSearchRadius(ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2) const;
+  Meters getSearchRadius(ConstNetworkEdgePtr e1) const override;
+  Meters getSearchRadius(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2) const override;
+  Meters getSearchRadius(ConstNetworkVertexPtr v1) const override;
+  Meters getSearchRadius(ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2) const override;
   Meters getSearchRadius(ConstWayStringPtr ws1, ConstWayStringPtr ws2) const;
   Meters getSearchRadius(ConstWayPtr w1, ConstWayPtr w2) const;
 
@@ -175,7 +175,7 @@ public:
 
   WayStringPtr toWayString(ConstEdgeStringPtr e, const EidMapper& mapper = EidMapper()) const;
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
 private:
 

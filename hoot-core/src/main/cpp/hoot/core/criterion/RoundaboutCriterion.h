@@ -45,20 +45,20 @@ public:
   static QString className() { return "hoot::RoundaboutCriterion"; }
 
   RoundaboutCriterion() = default;
-  virtual ~RoundaboutCriterion() = default;
+  ~RoundaboutCriterion() = default;
 
-  virtual bool isSatisfied(const ConstElementPtr& e) const override;
+  bool isSatisfied(const ConstElementPtr& e) const override;
 
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new RoundaboutCriterion()); }
+  ElementCriterionPtr clone() override { return ElementCriterionPtr(new RoundaboutCriterion()); }
 
-  virtual QString getDescription() const { return "Identifies road roundabout junctions"; }
+  QString getDescription() const override { return "Identifies road roundabout junctions"; }
 
-  virtual GeometryType getGeometryType() const
+  GeometryType getGeometryType() const override
   { return GeometryType::Line; }
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 };
 
 }

@@ -111,11 +111,6 @@ public:
    */
   virtual QString getName() const = 0;
 
-  /**
-   * @see FilteredByGeometryTypeCriteria
-   */
-  virtual QStringList getCriteria() const = 0;
-
 protected:
 
   QString _description;

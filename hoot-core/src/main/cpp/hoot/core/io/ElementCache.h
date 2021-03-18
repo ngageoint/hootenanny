@@ -125,6 +125,10 @@ public:
 
   // Functions for ElementInputStream
   virtual void close() = 0;             // Also works for elementoutputstream
+
+  /**
+   * TODO: Fix this, overrides ElementInputStream::hasMoreElements with pure virtual function
+   */
   virtual bool hasMoreElements() = 0;
 
   /**

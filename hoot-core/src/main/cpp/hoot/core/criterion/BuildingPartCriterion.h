@@ -43,20 +43,20 @@ public:
   static QString className() { return "hoot::BuildingPartCriterion"; }
 
   BuildingPartCriterion() = default;
-  virtual ~BuildingPartCriterion() = default;
+  ~BuildingPartCriterion() = default;
 
-  virtual bool isSatisfied(const ConstElementPtr& e) const override;
+  bool isSatisfied(const ConstElementPtr& e) const override;
 
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new BuildingPartCriterion()); }
+  ElementCriterionPtr clone() override { return ElementCriterionPtr(new BuildingPartCriterion()); }
 
-  virtual QString getDescription() const { return "Identifies parts of buildings"; }
+  QString getDescription() const override { return "Identifies parts of buildings"; }
 
-  virtual GeometryType getGeometryType() const
+  GeometryType getGeometryType() const override
   { return GeometryType::Polygon; }
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 };
 
 }

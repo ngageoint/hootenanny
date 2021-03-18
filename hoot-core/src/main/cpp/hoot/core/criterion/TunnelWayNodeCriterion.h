@@ -41,16 +41,16 @@ public:
 
   TunnelWayNodeCriterion();
   TunnelWayNodeCriterion(ConstOsmMapPtr map);
-  virtual ~TunnelWayNodeCriterion() = default;
+  ~TunnelWayNodeCriterion() = default;
 
-  virtual ElementCriterionPtr clone() override
+  ElementCriterionPtr clone() override
   { return ElementCriterionPtr(new TunnelWayNodeCriterion()); }
 
-  virtual QString getDescription() const override { return "Identifies tunnel nodes"; }
+  QString getDescription() const override { return "Identifies tunnel nodes"; }
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 };
 
 }

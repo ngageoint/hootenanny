@@ -52,24 +52,24 @@ public:
   ChainCriterion(ElementCriterion* child1, ElementCriterion* child2, ElementCriterion* child3);
   virtual ~ChainCriterion() = default;
 
-  virtual void addCriterion(const ElementCriterionPtr& e);
+  void addCriterion(const ElementCriterionPtr& e) override;
 
-  virtual bool isSatisfied(const ConstElementPtr& e) const override;
+  bool isSatisfied(const ConstElementPtr& e) const override;
 
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new ChainCriterion(_criteria)); }
+  ElementCriterionPtr clone() override { return ElementCriterionPtr(new ChainCriterion(_criteria)); }
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Allows for chaining criteria together (logical AND)"; }
 
-  virtual QString toString() const override;
+  QString toString() const override;
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
-  virtual void setOsmMap(const OsmMap* map);
+  void setOsmMap(const OsmMap* map) override;
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
   int criteriaSize() const { return _criteria.size(); }
 

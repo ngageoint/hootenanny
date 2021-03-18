@@ -50,19 +50,19 @@ public:
 
   UselessElementCriterion() = default;
   UselessElementCriterion(ConstOsmMapPtr map) : _map(map) { }
-  virtual ~UselessElementCriterion() = default;
+  ~UselessElementCriterion() = default;
 
-  virtual void setOsmMap(const OsmMap* map) { _map = map->shared_from_this(); }
+  void setOsmMap(const OsmMap* map) override { _map = map->shared_from_this(); }
 
-  virtual bool isSatisfied(const ConstElementPtr& e) const;
+  bool isSatisfied(const ConstElementPtr& e) const override;
 
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new UselessElementCriterion()); }
+  ElementCriterionPtr clone() override { return ElementCriterionPtr(new UselessElementCriterion()); }
 
-  virtual QString getDescription() const { return "Identifies elements that have no use"; }
+  QString getDescription() const override { return "Identifies elements that have no use"; }
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

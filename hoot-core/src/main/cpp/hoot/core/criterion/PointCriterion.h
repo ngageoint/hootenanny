@@ -48,24 +48,24 @@ public:
 
   PointCriterion() = default;
   PointCriterion(ConstOsmMapPtr map);
-  virtual ~PointCriterion() = default;
+  ~PointCriterion() = default;
 
-  virtual bool isSatisfied(const ConstElementPtr& e) const override;
+  bool isSatisfied(const ConstElementPtr& e) const override;
 
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new PointCriterion(_map)); }
+  ElementCriterionPtr clone() override { return ElementCriterionPtr(new PointCriterion(_map)); }
 
-  virtual QString getDescription() const { return "Identifies point features"; }
+  QString getDescription() const override { return "Identifies point features"; }
 
-  virtual GeometryType getGeometryType() const
+  GeometryType getGeometryType() const override
   { return GeometryType::Point; }
 
-  virtual void setOsmMap(const OsmMap* map);
+  void setOsmMap(const OsmMap* map) override;
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
-  virtual bool supportsSpecificConflation() const { return false; }
+  bool supportsSpecificConflation() const override { return false; }
 
 private:
 

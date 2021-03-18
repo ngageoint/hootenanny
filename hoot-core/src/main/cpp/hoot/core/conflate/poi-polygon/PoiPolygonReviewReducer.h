@@ -67,9 +67,9 @@ public:
     double nameScoreThreshold, double nameScore, bool nameMatch, bool exactNameMatch,
     double typeScoreThreshold, double typeScore, bool typeMatch, double matchDistanceThreshold,
     double addressScore, bool addressParsingEnabled, PoiPolygonInfoCachePtr infoCache);
-  virtual ~PoiPolygonReviewReducer() = default;
+  ~PoiPolygonReviewReducer() = default;
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
   /**
    * Determines whether the input features trigger a rule which precludes them from being matched or

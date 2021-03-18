@@ -49,9 +49,9 @@ class PoiPolygonInfoCache : public ConflateInfoCache
 public:
 
   PoiPolygonInfoCache(const ConstOsmMapPtr& map);
-  virtual ~PoiPolygonInfoCache() = default;
+  ~PoiPolygonInfoCache() = default;
 
-  virtual void setConfiguration(const Settings& conf) override;
+  void setConfiguration(const Settings& conf) override;
 
   /**
    * Determines if an element is of the given type as defined by the poi/poly schema; backed by a
@@ -96,7 +96,7 @@ public:
   /**
    * Clears the contents of the cache
    */
-  virtual void clear() override;
+  void clear() override;
 
 private:
 

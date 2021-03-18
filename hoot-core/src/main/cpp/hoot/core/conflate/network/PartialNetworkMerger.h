@@ -54,32 +54,32 @@ public:
   PartialNetworkMerger(
     const std::set<std::pair<ElementId, ElementId>>& pairs,
     const QSet<ConstEdgeMatchPtr>& edgeMatches, const ConstNetworkDetailsPtr& details);
-  virtual ~PartialNetworkMerger() = default;
+  ~PartialNetworkMerger() = default;
 
-  virtual void apply(const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced);
+  void apply(const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced) override;
 
   /**
    * Maps from a retired EID to its latest EID. If this EID has no mapping then the original EID
    * is returned.
    */
-  virtual ElementId mapEid(const ElementId& oldEid) const;
+  ElementId mapEid(const ElementId& oldEid) const override;
 
-  virtual void replace(ElementId oldEid, ElementId newEid);
+  void replace(ElementId oldEid, ElementId newEid) override;
 
-  virtual QString toString() const;
+  QString toString() const override;
 
-  virtual QString getDescription() const { return "Merges roads matched by the Network Algorithm"; }
+  QString getDescription() const override { return "Merges roads matched by the Network Algorithm"; }
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
   bool getNeedsReview() const { return _needsReview; }
 
 protected:
 
-  virtual PairsSet& _getPairs() { return _pairs; }
-  virtual const PairsSet& _getPairs() const { return _pairs; }
+  PairsSet& _getPairs() override { return _pairs; }
+  const PairsSet& _getPairs() const override { return _pairs; }
 
 private:
 

@@ -56,7 +56,7 @@ public:
    */
   static MatchFactory& getInstance();
 
-  void setConfiguration(const Settings& s);
+  void setConfiguration(const Settings& s) override;
 
   /**
    * Create a match object for the specified element IDs. If the element IDs aren't recognized as
@@ -126,7 +126,7 @@ private:
   std::vector<std::shared_ptr<MatchCreator>> _creators;
 
   MatchFactory();
-  virtual ~MatchFactory() = default;
+  ~MatchFactory() = default;
 
   void _checkMatchCreatorBoundable(const std::shared_ptr<MatchCreator>& matchCreator,
                                    const std::shared_ptr<geos::geom::Geometry>& bounds) const;

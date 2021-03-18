@@ -47,23 +47,23 @@ public:
 
   ChildElementCriterion() = default;
   ChildElementCriterion(ConstOsmMapPtr map) : _map(map) { }
-  virtual ~ChildElementCriterion() = default;
+  ~ChildElementCriterion() = default;
 
   /**
    * @see ElementVisitor
    */
-  virtual bool isSatisfied(const ConstElementPtr& e) const override;
+  bool isSatisfied(const ConstElementPtr& e) const override;
 
-  virtual ElementCriterionPtr clone()
+  ElementCriterionPtr clone() override
   { return ElementCriterionPtr(new ChildElementCriterion(_map)); }
 
-  virtual QString getDescription() const { return "Identifies way nodes and relation members"; }
+  QString getDescription() const override { return "Identifies way nodes and relation members"; }
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
-  virtual void setOsmMap(const OsmMap* map) { _map = map->shared_from_this(); }
+  void setOsmMap(const OsmMap* map) override { _map = map->shared_from_this(); }
 
 private:
 

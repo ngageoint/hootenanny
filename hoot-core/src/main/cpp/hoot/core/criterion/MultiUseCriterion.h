@@ -43,17 +43,17 @@ public:
   static QString className() { return "hoot::MultiUseCriterion"; }
 
   MultiUseCriterion() = default;
-  virtual ~MultiUseCriterion() = default;
+  ~MultiUseCriterion() = default;
 
-  virtual bool isSatisfied(const ConstElementPtr& e) const override;
+  bool isSatisfied(const ConstElementPtr& e) const override;
 
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new MultiUseCriterion()); }
+  ElementCriterionPtr clone() override { return ElementCriterionPtr(new MultiUseCriterion()); }
 
-  virtual QString getDescription() const { return "Identifies features with multiple purposes"; }
+  QString getDescription() const override { return "Identifies features with multiple purposes"; }
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 };
 
 }

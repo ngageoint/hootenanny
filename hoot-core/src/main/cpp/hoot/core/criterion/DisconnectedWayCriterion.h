@@ -46,27 +46,27 @@ public:
 
   DisconnectedWayCriterion() = default;
   DisconnectedWayCriterion(ConstOsmMapPtr map);
-  virtual ~DisconnectedWayCriterion() = default;
+  ~DisconnectedWayCriterion() = default;
 
   /**
    * @see ElementCriterion
    */
-  virtual bool isSatisfied(const ConstElementPtr& e) const override;
+  bool isSatisfied(const ConstElementPtr& e) const override;
 
   /**
    * @see ConstOsmMapConsumer
    */
-  virtual void setOsmMap(const OsmMap* map) override { _map = map->shared_from_this(); }
+  void setOsmMap(const OsmMap* map) override { _map = map->shared_from_this(); }
 
-  virtual ElementCriterionPtr clone() override
+  ElementCriterionPtr clone() override
   { return ElementCriterionPtr(new DisconnectedWayCriterion(_map)); }
 
-  virtual QString getDescription() const override
+  QString getDescription() const override
   { return "Identifies ways that are connected to no other ways"; }
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

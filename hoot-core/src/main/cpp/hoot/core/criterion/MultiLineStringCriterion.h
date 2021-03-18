@@ -43,21 +43,20 @@ public:
   static QString className() { return "hoot::MultiLineStringCriterion"; }
 
   MultiLineStringCriterion() = default;
-  virtual ~MultiLineStringCriterion() = default;
+  ~MultiLineStringCriterion() = default;
 
-  virtual bool isSatisfied(const ConstElementPtr& e) const override;
+  bool isSatisfied(const ConstElementPtr& e) const override;
 
-  virtual ElementCriterionPtr clone()
+  ElementCriterionPtr clone() override
   { return ElementCriterionPtr(new MultiLineStringCriterion()); }
 
-  virtual QString getDescription() const { return "Identifies multi-line string features"; }
+  virtual QString getDescription() const override { return "Identifies multi-line string features"; }
 
-  virtual GeometryType getGeometryType() const
-  { return GeometryType::Line; }
+  GeometryType getGeometryType() const override { return GeometryType::Line; }
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 };
 
 }

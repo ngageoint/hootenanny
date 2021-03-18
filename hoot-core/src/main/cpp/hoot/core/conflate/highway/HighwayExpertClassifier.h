@@ -41,16 +41,16 @@ public:
   static QString className() { return "hoot::HighwayExpertClassifier"; }
 
   HighwayExpertClassifier() = default;
-  virtual ~HighwayExpertClassifier() = default;
+  ~HighwayExpertClassifier() = default;
 
-  virtual MatchClassification classify(const ConstOsmMapPtr& map,
-    ElementId eid1, ElementId eid2, const WaySublineMatchString& match);
+  MatchClassification classify(const ConstOsmMapPtr& map,
+    ElementId eid1, ElementId eid2, const WaySublineMatchString& match) override;
 
   MatchClassification classify(const ConstOsmMapPtr& map,
     const WaySublineMatch& match);
 
   std::map<QString, double> getFeatures(const ConstOsmMapPtr& m,
-    ElementId eid1, ElementId eid2, const WaySublineMatchString& match) const;
+    ElementId eid1, ElementId eid2, const WaySublineMatchString& match) const override;
 };
 
 }

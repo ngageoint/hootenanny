@@ -43,22 +43,21 @@ public:
   static QString className() { return "hoot::PoiCriterion"; }
 
   PoiCriterion() = default;
-  virtual ~PoiCriterion() = default;
+  ~PoiCriterion() = default;
 
-  virtual bool isSatisfied(const ConstElementPtr& e) const override;
+  bool isSatisfied(const ConstElementPtr& e) const override;
 
-  virtual GeometryType getGeometryType() const
-  { return GeometryType::Point; }
+  GeometryType getGeometryType() const override { return GeometryType::Point; }
 
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new PoiCriterion()); }
+  ElementCriterionPtr clone() override { return ElementCriterionPtr(new PoiCriterion()); }
 
-  virtual QString getDescription() const { return "Identifies POIs"; }
+  QString getDescription() const override { return "Identifies POIs"; }
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
-  virtual bool supportsSpecificConflation() const { return true; }
+  bool supportsSpecificConflation() const override { return true; }
 };
 
 }

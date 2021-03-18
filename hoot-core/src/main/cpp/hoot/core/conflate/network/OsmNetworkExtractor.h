@@ -48,7 +48,7 @@ public:
   static QString className() { return "hoot::OsmNetworkExtractor"; }
 
   OsmNetworkExtractor() = default;
-  virtual ~OsmNetworkExtractor() = default;
+  ~OsmNetworkExtractor() = default;
 
   OsmNetworkPtr extractNetwork(ConstOsmMapPtr map);
 
