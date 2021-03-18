@@ -50,7 +50,7 @@ class OsmMapIndex : public ElementListener
 public:
 
   OsmMapIndex(const OsmMap& map);
-  virtual ~OsmMapIndex() = default;
+  ~OsmMapIndex() = default;
 
   void addNode(const ConstNodePtr& n);
   void addRelation(const ConstRelationPtr& r);
@@ -119,8 +119,8 @@ public:
    * This gets called before an element changes. Between this call and the call to
    * postGeometryChange the index is in an inconsistent state.
    */
-  virtual void preGeometryChange(Element* element);
-  virtual void postGeometryChange(Element* element);
+  void preGeometryChange(Element* element) override;
+  void postGeometryChange(Element* element) override;
 
   void removeNode(ConstNodePtr n);
   void removeRelation(const ConstRelationPtr& r);

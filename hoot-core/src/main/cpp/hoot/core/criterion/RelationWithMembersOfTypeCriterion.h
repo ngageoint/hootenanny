@@ -51,13 +51,13 @@ public:
   RelationWithMembersOfTypeCriterion(ConstOsmMapPtr map);
   virtual ~RelationWithMembersOfTypeCriterion() = default;
 
-  virtual bool isSatisfied(const ConstElementPtr& e) const override;
+  bool isSatisfied(const ConstElementPtr& e) const override;
 
   virtual QString getCriterion() const = 0;
 
-  virtual void setOsmMap(const OsmMap* map);
+  void setOsmMap(const OsmMap* map) override;
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
   void setAllowMixedChildren(bool allow) { _allowMixedChildren = allow; }
 

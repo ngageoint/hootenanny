@@ -46,23 +46,23 @@ public:
 
   TagKeyContainsCriterion() : _text(""), _caseSensitive(false) { }
   explicit TagKeyContainsCriterion(const QString& text);
-  virtual ~TagKeyContainsCriterion() = default;
+  ~TagKeyContainsCriterion() = default;
 
-  virtual bool isSatisfied(const ConstElementPtr& e) const override;
+  bool isSatisfied(const ConstElementPtr& e) const override;
 
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new TagKeyContainsCriterion()); }
+  ElementCriterionPtr clone() override { return ElementCriterionPtr(new TagKeyContainsCriterion()); }
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Identifies elements which have a tag key containing specified text"; }
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
   void setText(const QString& text) { _text = text; }
   void setCaseSensitive(bool caseSens) { _caseSensitive = caseSens; }
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

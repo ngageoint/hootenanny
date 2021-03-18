@@ -48,21 +48,21 @@ public:
   NoInformationCriterion() { setConfiguration(conf()); }
   NoInformationCriterion(bool treatReviewTagsAsMetadata) :
     _treatReviewTagsAsMetadata(treatReviewTagsAsMetadata) { }
-  virtual ~NoInformationCriterion() = default;
+  ~NoInformationCriterion() = default;
 
-  virtual bool isSatisfied(const ConstElementPtr& e) const override;
+  bool isSatisfied(const ConstElementPtr& e) const override;
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
-  virtual ElementCriterionPtr clone()
+  ElementCriterionPtr clone() override
   { return ElementCriterionPtr(new NoInformationCriterion(_treatReviewTagsAsMetadata)); }
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Identifies features with no useful information"; }
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

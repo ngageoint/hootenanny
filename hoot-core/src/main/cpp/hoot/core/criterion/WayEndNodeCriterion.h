@@ -49,13 +49,13 @@ public:
 
   WayEndNodeCriterion(const bool allowShared = true);
   WayEndNodeCriterion(ConstOsmMapPtr map, const bool allowShared = true);
-  virtual ~WayEndNodeCriterion() = default;
+  ~WayEndNodeCriterion() = default;
 
-  virtual bool isSatisfied(const ConstElementPtr& e) const override;
+  bool isSatisfied(const ConstElementPtr& e) const override;
 
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new WayEndNodeCriterion(_map)); }
+  ElementCriterionPtr clone() override { return ElementCriterionPtr(new WayEndNodeCriterion(_map)); }
 
-  virtual QString getDescription() const { return "Identifies way end nodes"; }
+  QString getDescription() const override { return "Identifies way end nodes"; }
 
 private:
 

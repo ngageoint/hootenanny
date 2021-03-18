@@ -47,7 +47,7 @@ namespace hoot
 class elementTranslatorThread : public QThread
 {
   Q_OBJECT
-  void run();
+  void run() override;
 
 public:
 
@@ -64,7 +64,7 @@ public:
 class ogrWriterThread : public QThread
 {
   Q_OBJECT
-  void run();
+  void run() override;
 
 public:
 
@@ -92,9 +92,9 @@ public:
   static const QString JOB_SOURCE;
 
   DataConverter();
-  virtual ~DataConverter() = default;
+  ~DataConverter() = default;
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
   /**
    * Converts multiple datasets from format to a single output format

@@ -44,20 +44,19 @@ public:
   static QString className() { return "hoot::TunnelCriterion"; }
 
   TunnelCriterion() = default;
-  virtual ~TunnelCriterion() = default;
+  ~TunnelCriterion() = default;
 
-  virtual bool isSatisfied(const ConstElementPtr& e) const;
+  bool isSatisfied(const ConstElementPtr& e) const override;
 
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new TunnelCriterion()); }
+  ElementCriterionPtr clone() override { return ElementCriterionPtr(new TunnelCriterion()); }
 
-  virtual QString getDescription() const { return "Identifies tunnels"; }
+  QString getDescription() const override { return "Identifies tunnels"; }
 
-  virtual GeometryType getGeometryType() const
-  { return GeometryType::Line; }
+  GeometryType getGeometryType() const override { return GeometryType::Line; }
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 };
 
 }
