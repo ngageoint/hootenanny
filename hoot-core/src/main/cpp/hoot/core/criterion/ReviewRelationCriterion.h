@@ -43,19 +43,19 @@ public:
   static QString className() { return "hoot::ReviewRelationCriterion"; }
 
   ReviewRelationCriterion() = default;
-  virtual ~ReviewRelationCriterion() = default;
+  ~ReviewRelationCriterion() = default;
 
-  virtual bool isSatisfied(const ConstElementPtr& e) const override;
+  bool isSatisfied(const ConstElementPtr& e) const override;
 
-  virtual ElementCriterionPtr clone()
+  ElementCriterionPtr clone() override
   { return ElementCriterionPtr(new ReviewRelationCriterion()); }
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Identifies review relations created during conflation"; }
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 };
 
 }

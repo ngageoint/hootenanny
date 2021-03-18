@@ -47,28 +47,27 @@ public:
 
   PolygonCriterion() = default;
   PolygonCriterion(ConstOsmMapPtr map);
-  virtual ~PolygonCriterion() = default;
+  ~PolygonCriterion() = default;
 
-  virtual bool isSatisfied(const ConstElementPtr& e) const override;
+  bool isSatisfied(const ConstElementPtr& e) const override;
 
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new PolygonCriterion(_map)); }
+  ElementCriterionPtr clone() override { return ElementCriterionPtr(new PolygonCriterion(_map)); }
 
-  virtual QString getDescription() const { return "Identifies polygon features"; }
+  QString getDescription() const override { return "Identifies polygon features"; }
 
-  virtual GeometryType getGeometryType() const
-  { return GeometryType::Polygon; }
+  GeometryType getGeometryType() const override { return GeometryType::Polygon; }
 
-  virtual void setOsmMap(const OsmMap* map);
+  void setOsmMap(const OsmMap* map) override;
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
-  virtual bool supportsSpecificConflation() const { return false; }
+  bool supportsSpecificConflation() const override { return false; }
 
   void setAllowMixedChildren(bool allow) { _relationCrit.setAllowMixedChildren(allow); }
 
-  virtual QStringList getChildCriteria() const;
+  QStringList getChildCriteria() const override;
 
 private:
 

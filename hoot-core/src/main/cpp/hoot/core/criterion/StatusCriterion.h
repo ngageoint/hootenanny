@@ -46,19 +46,19 @@ public:
 
   StatusCriterion() { setConfiguration(conf()); }
   StatusCriterion(Status s) : _status(s) { }
-  virtual ~StatusCriterion() = default;
+  ~StatusCriterion() = default;
 
-  virtual bool isSatisfied(const ConstElementPtr& e) const override;
+  bool isSatisfied(const ConstElementPtr& e) const override;
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new StatusCriterion(_status)); }
+  ElementCriterionPtr clone() override { return ElementCriterionPtr(new StatusCriterion(_status)); }
 
-  virtual QString getDescription() const { return "Identifies elements with a particular status"; }
+  QString getDescription() const override { return "Identifies elements with a particular status"; }
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

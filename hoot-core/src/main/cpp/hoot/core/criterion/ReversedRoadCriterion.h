@@ -48,22 +48,21 @@ public:
 
   ReversedRoadCriterion() = default;
   ReversedRoadCriterion(ConstOsmMapPtr map) : _map(map) { }
-  virtual ~ReversedRoadCriterion() = default;
+  ~ReversedRoadCriterion() = default;
 
-  virtual bool isSatisfied(const ConstElementPtr& e) const override;
+  bool isSatisfied(const ConstElementPtr& e) const override;
 
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new ReversedRoadCriterion()); }
+  ElementCriterionPtr clone() override { return ElementCriterionPtr(new ReversedRoadCriterion()); }
 
-  virtual QString getDescription() const { return "Identifies reversed roads"; }
+  QString getDescription() const override { return "Identifies reversed roads"; }
 
-  virtual GeometryType getGeometryType() const
-  { return GeometryType::Line; }
+  GeometryType getGeometryType() const override { return GeometryType::Line; }
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
-  virtual void setOsmMap(const OsmMap* map) { _map = map->shared_from_this(); }
+  void setOsmMap(const OsmMap* map) override { _map = map->shared_from_this(); }
 
 private:
 

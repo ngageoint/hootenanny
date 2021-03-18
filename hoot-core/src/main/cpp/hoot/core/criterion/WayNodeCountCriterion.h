@@ -43,22 +43,22 @@ public:
   WayNodeCountCriterion();
   WayNodeCountCriterion(
     const int comparisonCount, const NumericComparisonType& numericComparisonType);
-  virtual ~WayNodeCountCriterion() = default;
+  ~WayNodeCountCriterion() = default;
 
   /**
    * @see ElementCriterion
    */
-  virtual bool isSatisfied(const ConstElementPtr& e) const override;
+  bool isSatisfied(const ConstElementPtr& e) const override;
 
-  virtual ElementCriterionPtr clone() override
+  ElementCriterionPtr clone() override
   { return ElementCriterionPtr(new WayNodeCountCriterion()); }
 
-  virtual QString getDescription() const override
+  QString getDescription() const override
   { return "Identifies ways that meet a node count threshold"; }
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

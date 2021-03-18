@@ -83,7 +83,7 @@ class ExternalMergeElementSorter : public ElementInputStream
 public:
 
   ExternalMergeElementSorter();
-  virtual ~ExternalMergeElementSorter();
+  ~ExternalMergeElementSorter();
 
   /**
    * Sorts elements first by type, then increasing by ID
@@ -95,22 +95,22 @@ public:
   /**
    * @see ElementInputStream
    */
-  virtual std::shared_ptr<OGRSpatialReference> getProjection() const override;
+  std::shared_ptr<OGRSpatialReference> getProjection() const override;
 
   /**
    * @see ElementInputStream
    */
-  virtual void close();
+  void close() override;
 
   /**
    * @see ElementInputStream
    */
-  virtual bool hasMoreElements();
+  bool hasMoreElements() override;
 
   /**
    * @see ElementInputStream
    */
-  virtual ElementPtr readNextElement() override;
+  ElementPtr readNextElement() override;
 
   void setMaxElementsPerFile(long max) { _maxElementsPerFile = max; }
   void setRetainTempFiles(bool retain) { _retainTempFiles = retain; }

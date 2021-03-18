@@ -50,12 +50,12 @@ public:
 
   WayData(const WayData& from);
 
-  virtual ~WayData() = default;
+  ~WayData() = default;
 
   void addNode(long id) { _nodes.push_back(id); }
   void insertNode(long index, long id ) { _nodes.insert(_nodes.begin() + index, id); }
 
-  void clear();
+  void clear() override;
 
   const std::vector<long>& getNodeIds() const { return _nodes; }
 

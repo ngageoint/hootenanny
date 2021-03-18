@@ -41,16 +41,16 @@ public:
 
   PowerLineWayNodeCriterion();
   PowerLineWayNodeCriterion(ConstOsmMapPtr map);
-  virtual ~PowerLineWayNodeCriterion() = default;
+  ~PowerLineWayNodeCriterion() = default;
 
-  virtual ElementCriterionPtr clone() override
+  ElementCriterionPtr clone() override
   { return ElementCriterionPtr(new PowerLineWayNodeCriterion(_map)); }
 
-  virtual QString getDescription() const override { return "Identifies power line nodes"; }
+  QString getDescription() const override { return "Identifies power line nodes"; }
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 };
 
 }

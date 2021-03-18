@@ -64,7 +64,7 @@ public:
   /**
    * @brief ~ElementCache
    */
-  virtual ~ElementCacheLRU() = default;
+  ~ElementCacheLRU() = default;
 
   bool isEmpty() const override;
 

@@ -46,24 +46,24 @@ public:
   WayLengthCriterion(ConstOsmMapPtr map);
   WayLengthCriterion(const double comparisonLength,
                      const NumericComparisonType& numericComparisonType, ConstOsmMapPtr map);
-  virtual ~WayLengthCriterion() = default;
+  ~WayLengthCriterion() = default;
 
   /**
    * @see ElementCriterion
    */
-  virtual bool isSatisfied(const ConstElementPtr& e) const override;
+  bool isSatisfied(const ConstElementPtr& e) const override;
 
-  virtual ElementCriterionPtr clone() override
+  ElementCriterionPtr clone() override
   { return ElementCriterionPtr(new WayLengthCriterion(_map)); }
 
-  virtual QString getDescription() const override
+  QString getDescription() const override
   { return "Identifies ways that meet a length threshold"; }
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
-  virtual void setOsmMap(const OsmMap* map) { _map = map->shared_from_this(); }
+  void setOsmMap(const OsmMap* map) override { _map = map->shared_from_this(); }
 
 private:
 

@@ -49,9 +49,9 @@ void ElementToRelationMap::addRelation(const OsmMap& map,
       _rid = rid;
       LOG_VART(_rid);
     }
-    virtual ~AddMemberVisitor() = default;
+    ~AddMemberVisitor() = default;
 
-    virtual void visit(const ConstElementPtr& e)
+    void visit(const ConstElementPtr& e) override
     {
       ElementId eid = e->getElementId();
       LOG_VART(eid);
@@ -62,9 +62,9 @@ void ElementToRelationMap::addRelation(const OsmMap& map,
       }
     }
 
-    virtual QString getDescription() const { return ""; }
-    virtual QString getName() const { return ""; }
-    virtual QString getClassName() const override { return ""; }
+    QString getDescription() const override { return ""; }
+    QString getName() const override { return ""; }
+    QString getClassName() const override { return ""; }
 
   protected:
     HashMap<ElementId, set<long>>& _mapping;
@@ -111,13 +111,13 @@ void ElementToRelationMap::removeRelation(const OsmMap& map,
     {
       _rid = rid;
     }
-    virtual ~RemoveMemberVisitor() = default;
+    ~RemoveMemberVisitor() = default;
 
-    virtual QString getDescription() const { return ""; }
-    virtual QString getName() const { return ""; }
-    virtual QString getClassName() const override { return ""; }
+    QString getDescription() const override { return ""; }
+    QString getName() const override { return ""; }
+    QString getClassName() const override { return ""; }
 
-    virtual void visit(const ConstElementPtr& e)
+    void visit(const ConstElementPtr& e) override
     {
       ElementId ep(e->getElementType(), e->getId());
       set<long>& relations = _mapping[ep];
@@ -150,13 +150,13 @@ bool ElementToRelationMap::validate(const OsmMap& map) const
     {
       _found = false;
     }
-    virtual ~ContainsElementVisitor() = default;
+    ~ContainsElementVisitor() = default;
 
-    virtual QString getDescription() const { return ""; }
-    virtual QString getName() const { return ""; }
-    virtual QString getClassName() const override { return ""; }
+    QString getDescription() const override { return ""; }
+    QString getName() const override { return ""; }
+    QString getClassName() const override { return ""; }
 
-    virtual void visit(const ConstElementPtr& e)
+    void visit(const ConstElementPtr& e) override
     {
       if (e->getElementId() == _eid)
       {
@@ -184,11 +184,11 @@ bool ElementToRelationMap::validate(const OsmMap& map) const
     {
       _good = true;
     }
-    virtual ~CheckVisitor() = default;
+    ~CheckVisitor() = default;
 
-    virtual QString getDescription() const { return ""; }
-    virtual QString getName() const { return ""; }
-    virtual QString getClassName() const override { return ""; }
+    QString getDescription() const override { return ""; }
+    QString getName() const override { return ""; }
+    QString getClassName() const override { return ""; }
 
     bool containsRecursive(const ConstRelationPtr& r, ElementId eid)
     {
@@ -197,7 +197,7 @@ bool ElementToRelationMap::validate(const OsmMap& map) const
       return v.isFound();
     }
 
-    virtual void visit(const ConstElementPtr& e)
+    void visit(const ConstElementPtr& e) override
     {
       ElementType type = e->getElementType();
       long id = e->getId();
