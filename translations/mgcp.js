@@ -350,15 +350,6 @@ mgcp = {
     delete attrs.FCSUBTYPE;
     delete attrs.FCSubtype;
 
-    // The swap list. These are the same attr, just named differently
-    // These may get converted back on output
-    var swapList = {
-        'CPYRT_NOTE':'CCN',
-        'SRC_INFO':'SDP',
-        'SRC_DATE':'SDV',
-        'SMC':'MCC'
-        };
-
     // List of data values to drop/ignore
     var ignoreList = { '-32765':1,'-32767':1,'-32768':1,
                '998':1,'-999999':1,'fcsubtype':1,
@@ -389,10 +380,10 @@ mgcp = {
       // if (col in unitList) attrs[col] = attrs[col] / unitList[col];
 
       // Now see if we need to swap attr names
-      if (col in swapList)
+      if (col in mgcp.rules.swapListIn)
       {
         // print('Swapped: ' + swapList[i]); // debug
-        attrs[swapList[col]] = attrs[col];
+        attrs[mgcp.rules.swapListIn[col]] = attrs[col];
         delete attrs[col];
         continue
       }
@@ -511,21 +502,25 @@ mgcp = {
       }
     } // End of Find an FCode
 
-    // Posible Building F_CODE screwup
-    if (attrs.F_CODE == 'AL013') attrs.F_CODE = 'AL015';
-
-    // Swap the F_CODE for a Ferry Terminal
-    if (attrs.F_CODE == 'AQ125' && attrs.TRS == '7')
-    {
-      attrs.F_CODE = 'AQ080'; // TDS/GGDM fcode for Ferry Terminal
-    }
-
     // Tag retired
     if (tags.controlling_authority)
     {
       tags.operator = tags.controlling_authority;
       delete tags.controlling_authority;
     }
+
+    switch (attrs.F_CODE)
+    {
+      case 'AL013':     // Posible Building F_CODE screwup
+        attrs.F_CODE = 'AL015';
+        break;
+
+      case 'AQ125': // Swap the F_CODE for a Ferry Terminal
+        if (attrs.TRS == '7') attrs.F_CODE = 'AQ080'; // TDS/GGDM fcode for Ferry Terminal
+        break;
+    } // End F_CODE
+
+
   }, // End of applyToOsmPreProcessing
 
   // Post Processing: Lots of cleanup
@@ -796,31 +791,32 @@ mgcp = {
     // if ('ford' in tags && !tags.highway) tags.highway = 'road';
 
     // Sort out TRS (Transport Type)
-    switch (attrs.TRS)
+    // DONT add transportation features to Ferry Crossings or Transportation Stations
+    if (attrs.TRS && attrs.F_CODE !== 'AQ125' && attrs.F_CODE !== 'AQ070')
     {
-      case undefined:
-        break;
+      switch (attrs.TRS)
+      {
+        case '9': // Pedestrian
+          // NOTE: This _might_ be a path: AP050 (Trail)
+          if (!tags.highway) tags.highway = 'track';
+          break;
 
-      case '9': // Pedestrian
-        // NOTE: This _might_ be a path: AP050 (Trail)
-        if (!tags.highway) tags.highway = 'track';
-        break;
+        case '12': // Railway
+          if (!tags.railway) tags.railway = 'rail';
+          break;
 
-      case '12': // Railway
-        if (!tags.railway) tags.railway = 'rail';
-        break;
+        case '3': // TRD3 'Automotive'
+        case '4': // Bus
+        case '13': // Road
+          if (!tags.highway) tags.highway = 'road';
+          break;
 
-      case '3': // TRD3 'Automotive'
-      case '4': // Bus
-      case '13': // Road
-        if (!tags.highway) tags.highway = 'road';
-        break;
-
-      case '14': // Road and Railway. This might be ugly....
-        if (!tags.highway) tags.highway = 'road';
-        if (!tags.railway) tags.railway = 'rail';
-        break;
-    } // End switch TRS
+        case '14': // Road and Railway. This might be ugly....
+          if (!tags.highway) tags.highway = 'road';
+          if (!tags.railway) tags.railway = 'rail';
+          break;
+      } // End switch TRS
+    }
 
     // Some FCODE specific rules
     switch (attrs.F_CODE)
@@ -856,10 +852,13 @@ mgcp = {
           case undefined:
             break;
 
+          case '2':
+            tags['plant:method'] = 'fission';
+            break;
+
           case '5':
             tags['plant:method'] = 'wind_turbine';
             break;
-
         }
         break;
 
@@ -877,6 +876,17 @@ mgcp = {
         else if (!tags.building)
         {
           tags.building = 'bunker';
+        }
+        break;
+
+      case 'AK040': // Athletic Field, Sports Ground
+      case 'BA050': // Beach
+      case 'DA010': // Soil Surface Region
+      case 'DB070': // Cut
+        if (tags.material && !tags.surface)
+        {
+          tags.surface = tags.material;
+          delete tags.material;
         }
         break;
 
@@ -936,6 +946,10 @@ mgcp = {
             break;
         } // End switch
 
+        break;
+
+      case 'AN010':
+        if (attrs.RGC == '6' && attrs.RRC == '0') tags.railway = 'monorail';
         break;
 
       // case 'AP010': // Track
@@ -1600,13 +1614,24 @@ mgcp = {
       delete tags.vertical_obstruction_identifier;
     }
 
+    // Surface vs Material
+    // Deconflict based on F_CODE for Sports Ground, Beach, Soil Surface Region & Cut
+    if (tags.surface && ['AK040','BA050','DA010','DB070'].indexOf(attrs.F_CODE > -1))
+    {
+      if (!tags.material) // Defensive
+      {
+        tags.material = tags.surface;
+        delete tags.surface;
+      }
+    }
+
     // Soil Surface Regions
-    if (! attrs.F_CODE)
+    if (!attrs.F_CODE)
     {
       if (tags.surface)
       {
         attrs.F_CODE = 'DA010'; // Soil Surface Region
-        if (! tags.material)
+        if (!tags.material)
         {
           tags.material = tags.surface;
           delete tags.surface;
@@ -1792,6 +1817,20 @@ mgcp = {
       if (mgcp.configOut.OgrAddUuid == 'true') attrs.UID = createUuid().replace('{','').replace('}','');
     }
 
+    // The follwing bit of ugly code is to account for the specs haveing two different attributes
+    // with similar names and roughly the same attributes. Bleah!
+    if (mgcp.rules.swapListOut[attrs.F_CODE])
+    {
+      for (var i in mgcp.rules.swapListOut[attrs.F_CODE])
+      {
+        if (i in attrs)
+        {
+          attrs[mgcp.rules.swapListOut[attrs.F_CODE][i]] = attrs[i];
+          delete attrs[i];
+        }
+      }
+    }
+
     // Default railway
     // if (attrs.F_CODE == 'AN010' && tags.railway == 'yes') attrs.RRC = '0';
 
@@ -1882,19 +1921,20 @@ mgcp = {
       case 'AD010': // Electric Power Plants
         if (notUsedTags['plant:output:electricity'] == 'yes') delete notUsedTags['plant:output:electricity'];
         if (notUsedTags.landuse == 'industrial') delete notUsedTags.landuse;
+        if (notUsedTags['plant:method']) delete notUsedTags['plant:method'];
         break;
 
       case 'AJ085': // Barn: Valid NFDD/NAS FCODE but not in the MGCP spec
         attrs.F_CODE = 'AL015'; // Barns are Buildings
         break;
 
-      case 'AK040': // Athletic Field, Sports Ground
-        if (attrs.MCC)
-        {
-          attrs.SMC = attrs.MCC;
-          delete attrs.MCC;
-        }
-        break;
+      // case 'AK040': // Athletic Field, Sports Ground
+      //   if (attrs.MCC)
+      //   {
+      //     attrs.SMC = attrs.MCC;
+      //     delete attrs.MCC;
+      //   }
+      //   break;
 
       case 'AL015': // General Building
         // Unknown House of Worship
@@ -1934,6 +1974,23 @@ mgcp = {
         if (tags.bridge) attrs.LOC = '45'; // Above Surface
         if (tags.tunnel) attrs.LOC = '40'; // Below Surface
         if (tags.embankment || tags.man_made == 'causeway') attrs.LOC = '44'; // On Surface
+        if (tags.railway == 'rail') delete attrs.RRC; // Avoid sending RRC=0 when it is "unknown"
+
+        break;
+
+      // case 'AP010': // Cart Track
+      //   if (attrs.WID && !attrs.WD1)
+      //   {
+      //     attrs.WD1 = attrs.WID;
+      //     delete attrs.WID;
+      //   }
+      //   break;
+
+      case 'AP030': // Road
+        if (tags.bridge) attrs.LOC = '45'; // Above Surface
+        if (tags.tunnel) attrs.LOC = '40'; // Below Surface
+        if (tags.embankment || tags.man_made == 'causeway') attrs.LOC = '44'; // On Surface
+        if (attrs.RST == '6') attrs.RST = '2'; // Move 'ground' to 'unpaved'
 
         // Single lane roads dont have a median and are not separated
         // NOTE: This could cause problems
@@ -1942,26 +1999,12 @@ mgcp = {
           attrs.SEP = '1000';
           attrs.MES = '1000';
         }
-        break;
 
-      case 'AP010': // Cart Track
-        if (attrs.WID && ! attrs.WD1)
-        {
-          attrs.WD1 = attrs.WID;
-          delete attrs.WID;
-        }
-        break;
-
-      case 'AP030': // Road
-        if (tags.bridge) attrs.LOC = '45'; // Above Surface
-        if (tags.tunnel) attrs.LOC = '40'; // Below Surface
-        if (tags.embankment || tags.man_made == 'causeway') attrs.LOC = '44'; // On Surface
-        if (attrs.RST == '6') attrs.RST = '2'; // Move 'ground' to 'unpaved'
-        if (attrs.WID && ! attrs.WD1)
-        {
-          attrs.WD1 = attrs.WID;
-          delete attrs.WID;
-        }
+        // if (attrs.WID && !attrs.WD1)
+        // {
+        //   attrs.WD1 = attrs.WID;
+        //   delete attrs.WID;
+        // }
         break;
 
       case 'AP050': // Trail
@@ -1978,6 +2021,11 @@ mgcp = {
           attrs.MCC = convSurf[attrs.RST];
           delete attrs.RST;
         }
+        // if (attrs.HGT)
+        // {
+        //   attrs.OHB = attrs.HGT;
+        //   delete attrs.HGT;
+        // }
         break;
 
       case 'AQ140': // Vehicle Lot/Vehicle Storage area: Valid NFDD/NAS FCODE but not in the MGCP spec
@@ -1995,38 +2043,37 @@ mgcp = {
         delete attrs.TID;
         break;
 
+      // case 'BA050': // Beach
+      //   if (attrs.MCC)
+      //   {
+      //     attrs.SMC = attrs.MCC;
+      //     delete attrs.MCC;
+      //   }
+      //   break;
 
-      case 'BA050': // Beach
-        if (attrs.MCC)
-        {
-          attrs.SMC = attrs.MCC;
-          delete attrs.MCC;
-        }
-        break;
+      // case 'DA010': // Soil Surface Area
+      //   if (attrs.MCC)
+      //   {
+      //     attrs.SMC = attrs.MCC;
+      //     delete attrs.MCC;
+      //   }
+      //   break;
 
-      case 'DA010': // Soil Surface Area
-        if (attrs.MCC)
-        {
-          attrs.SMC = attrs.MCC;
-          delete attrs.MCC;
-        }
-        break;
+      // case 'DB010': // Bluff/Cliff/Escarpment
+      //   if (attrs.MCC)
+      //   {
+      //     attrs.SMC = attrs.MCC;
+      //     delete attrs.MCC;
+      //   }
+      //   break;
 
-      case 'DB010': // Bluff/Cliff/Escarpment
-        if (attrs.MCC)
-        {
-          attrs.SMC = attrs.MCC;
-          delete attrs.MCC;
-        }
-        break;
-
-      case 'DB070': // Cut
-        if (attrs.MCC)
-        {
-          attrs.SMC = attrs.MCC;
-          delete attrs.MCC;
-        }
-        break;
+      // case 'DB070': // Cut
+      //   if (attrs.MCC)
+      //   {
+      //     attrs.SMC = attrs.MCC;
+      //     delete attrs.MCC;
+      //   }
+      //   break;
 
       case 'DB090': // Embankment
         // If the embankment supports a transportation feature

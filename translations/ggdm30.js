@@ -971,9 +971,9 @@ ggdm30 = {
     case undefined: // Break early if no value. Should not get here.....
       break;
 
-      case 'AA052': // Hydrocarbons Field
-        tags.landuse = 'industrial';
-        break;
+    case 'AA052': // Hydrocarbons Field
+      tags.landuse = 'industrial';
+      break;
 
     case 'AA054': // Non-water Well
       if (tags.product)
@@ -986,131 +986,139 @@ ggdm30 = {
       }
       break;
 
-      case 'AF030': // Cooling Tower
-        if (!tags['tower:type']) tags['tower:type'] = 'cooling';
-        break;
+    case 'AF030': // Cooling Tower
+      if (!tags['tower:type']) tags['tower:type'] = 'cooling';
+      break;
 
-      case 'AK030': // Amusement Park
-        // F_CODE translation == tourism but FFN translation could be leisure
-        // E.g. water parks
-        if (tags.leisure && tags.tourism) delete tags.tourism;
-      // Remove a default
-      if (tags.use == 'recreation') delete tags.use;        break;
+    case 'AK030': // Amusement Park
+      // F_CODE translation == tourism but FFN translation could be leisure
+      // E.g. water parks
+      if (tags.leisure && tags.tourism) delete tags.tourism;
+    // Remove a default
+    if (tags.use == 'recreation') delete tags.use;        break;
 
-      case 'AL020': // AL020 (Built-up Area) should become a Place. NOTE: This is a bit vague...
-        tags.place = 'yes'; // Catch All
+    case 'AL020': // AL020 (Built-up Area) should become a Place. NOTE: This is a bit vague...
+      tags.place = 'yes'; // Catch All
 
-        switch (tags['place:importance'])
-        {
-          case undefined: // Break early if no value
-            break;
+      switch (tags['place:importance'])
+      {
+        case undefined: // Break early if no value
+          break;
 
-          case 'first':
-            tags.place = 'city';
-            tags.capital = 'yes'
-            break;
+        case 'first':
+          tags.place = 'city';
+          tags.capital = 'yes'
+          break;
 
-          case 'second':
-            tags.place = 'city';
-            break;
+        case 'second':
+          tags.place = 'city';
+          break;
 
-          case 'third':
-          case 'fourth':
-            tags.place = 'town';
-            break;
+        case 'third':
+        case 'fourth':
+          tags.place = 'town';
+          break;
 
-          case 'fifth':
-            tags.place = 'village';
-            break;
+        case 'fifth':
+          tags.place = 'village';
+          break;
 
-          case 'sixth':
-            tags.place = 'hamlet';
-            break;
-        } // End switch
+        case 'sixth':
+          tags.place = 'hamlet';
+          break;
+      } // End switch
 
-        switch (tags.use) // Fixup the landuse tags
-        {
-          case undefined: // Break early if no value
-            break;
+      switch (tags.use) // Fixup the landuse tags
+      {
+        case undefined: // Break early if no value
+          break;
 
-          case 'industrial':
-            tags.landuse = 'industrial';
-            delete tags.use;
-            break;
-
-          case 'commercial':
-            tags.landuse = 'commercial';
-            delete tags.use;
-            break;
-
-          case 'residential':
-            tags.landuse = 'residential';
-            delete tags.use;
-            break;
-        } // End switch
-        break;
-
-      // case 'AP010': // Track
-      // case 'AP050': // Trail
-      //     tags.seasonal = 'fair';
-      //     break;
-
-      // Add defaults for common features
-      case 'AP020':
-        if (! tags.junction) tags.junction = 'yes';
-        break;
-
-      case 'AQ040':
-        if (! tags.bridge) tags.bridge = 'yes';
-        break;
-
-      case 'AQ125': // Transportation Station
-      //   if (tags.amenity == 'ferry_terminal')
-      //   {
-      //     tags['transport:type'] = 'maritime';
-      //     delete tags.bus;
-      //   }
-        if (!tags.amenity && (tags['transport:type'] == 'road' && tags.use == 'road_transport'))
-        {
-          tags.amenity = 'bus_station';
-          delete tags['transport:type'];
+        case 'industrial':
+          tags.landuse = 'industrial';
           delete tags.use;
-        }
-        break;
+          break;
 
-      case 'BH140':
-        if (! tags.waterway) tags.waterway = 'river';
-        break;
+        case 'commercial':
+          tags.landuse = 'commercial';
+          delete tags.use;
+          break;
 
-      case 'BA040': // Tidal Water
-        tags.natural = 'water';
-        break;
+        case 'residential':
+          tags.landuse = 'residential';
+          delete tags.use;
+          break;
+      } // End switch
+      break;
 
-      case 'BH082': // Inland Water
-        // This leaves us with just "natural=water"
-        if (tags.water == 'undifferentiated_water_body') delete tags.water;
-        break;
+    case 'AN010': // Railway
+      if (tags['railway:track'] == 'monorail')
+      {
+        tags.railway = 'monorail';
+        delete tags['railway:track'];
+      }
+      break;
 
-      case 'EA031': // Botanic Garden
-        if (! tags.leisure) tags.leisure = 'garden';
-        break;
+    // case 'AP010': // Track
+    // case 'AP050': // Trail
+    //     tags.seasonal = 'fair';
+    //     break;
 
-      case 'EC015': // Forest
-        if (geometryType == 'Line')
-        {
-          delete tags.landuse; // Default EC015 translation
-          tags.natural = 'tree_row';
-        }
-        break;
+    // Add defaults for common features
+    case 'AP020':
+      if (! tags.junction) tags.junction = 'yes';
+      break;
 
-      case 'FA015': // Firing Range
-        if (! tags.landuse) tags.landuse = 'military';
-        break;
+    case 'AQ040':
+      if (! tags.bridge) tags.bridge = 'yes';
+      break;
 
-      case 'FA012': // Contaminated Area
-      case 'AL065': // Minefield
-        if (! tags.boundary) tags.boundary = 'hazard';
-        break;
+    case 'AQ125': // Transportation Station
+    //   if (tags.amenity == 'ferry_terminal')
+    //   {
+    //     tags['transport:type'] = 'maritime';
+    //     delete tags.bus;
+    //   }
+      if (!tags.amenity && (tags['transport:type'] == 'road' && tags.use == 'road_transport'))
+      {
+        tags.amenity = 'bus_station';
+        delete tags['transport:type'];
+        delete tags.use;
+      }
+      break;
+
+    case 'BH140':
+      if (! tags.waterway) tags.waterway = 'river';
+      break;
+
+    case 'BA040': // Tidal Water
+      tags.natural = 'water';
+      break;
+
+    case 'BH082': // Inland Water
+      // This leaves us with just "natural=water"
+      if (tags.water == 'undifferentiated_water_body') delete tags.water;
+      break;
+
+    case 'EA031': // Botanic Garden
+      if (! tags.leisure) tags.leisure = 'garden';
+      break;
+
+    case 'EC015': // Forest
+      if (geometryType == 'Line')
+      {
+        delete tags.landuse; // Default EC015 translation
+        tags.natural = 'tree_row';
+      }
+      break;
+
+    case 'FA015': // Firing Range
+      if (! tags.landuse) tags.landuse = 'military';
+      break;
+
+    case 'FA012': // Contaminated Area
+    case 'AL065': // Minefield
+      if (! tags.boundary) tags.boundary = 'hazard';
+      break;
     } // End switch F_CODE
 
     // Fix lifecycle tags
@@ -1853,14 +1861,6 @@ ggdm30 = {
     // If we have a point, we need to make sure that it becomes a bridge, not a road
     if (tags.bridge && tags.bridge !== 'no' && geometryType =='Point') attrs.F_CODE = 'AQ040';
 
-
-    // Railway sidetracks
-    if (tags.service == 'siding' || tags.service == 'spur' || tags.service == 'passing' || tags.service == 'crossover')
-    {
-      tags.sidetrack = 'yes';
-      delete tags.railway;
-    }
-
     // Movable Bridges
     if (tags.bridge == 'movable')
     {
@@ -1877,6 +1877,21 @@ ggdm30 = {
     {
       tags.bridge = 'yes';
       tags.note = translate.appendValue(tags.note,'Viaduct',';');
+    }
+
+    // Railway sidetracks
+    if (tags.railway == 'monorail')
+    {
+      // This should not be set differently
+      attrs.F_CODE = 'AN010';
+      tags['railway:track'] = 'monorail';
+      delete tags.railway;
+    }
+
+    if (tags.service == 'siding' || tags.service == 'spur' || tags.service == 'passing' || tags.service == 'crossover')
+    {
+      tags.sidetrack = 'yes';
+      delete tags.railway;
     }
 
     // Fix road junctions

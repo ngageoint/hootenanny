@@ -2267,12 +2267,12 @@ tds70.rules = {
     ['RRC','2','railway','carline'], // Carline
     ['RRC','6','railway','subway'], // Underground Railway
     ['RRC','8','railway','logging'], // Logging
-    ['RRC','11','railway','rapid_transit'], // Rail Rapid Transit
+    ['RRC','11','rapid_transit','yes'], // Rail Rapid Transit
     ['RRC','13','railway','marine_railway'], // Marine Railway
     ['RRC','14','railway','tram'], // Tramway
     ['RRC','15','railway','funicular'], // Funicular
     ['RRC','24','railway','museum'], // Museum
-    ['RRC','32','railway','automated_transit_system'], // Automated Transit System
+    ['RRC','32','automated_transit_system','yes'], // Automated Transit System
     ['RRC','33','railway','longhaul'], // Long-haul
     ['RRC','999','railway','Other'], // Other
 

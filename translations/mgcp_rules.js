@@ -206,7 +206,7 @@ mgcp.rules = {
     'LEN':'length', // Length or Diameter
     'LTN':'lanes', // Track or Lane Count
     'NOS':'bridge:span_count', // Span Count
-    'OHB':'height', // Overall Bridge Height
+    // 'OHB':'height', // Overall Bridge Height - copy of HGT
     'SDO':'dune:orientation',  // Sand Dune Orientation
     'WD1':'width:minimum_traveled_way', // Route Minimum Travelled Way
     'WID':'width', // Width
@@ -633,6 +633,7 @@ mgcp.rules = {
     ['MCC','5','material','asphalt'],
     ['MCC','9','material','brick'],
     ['MCC','8','material','boulders'], // From SMC
+    ['MCC','14','material','cinders'], // From SMC
     ['MCC','16','material','clay'],
     ['MCC','20','material','composition'],
     ['MCC','21','material','concrete'],
@@ -650,6 +651,7 @@ mgcp.rules = {
     ['MCC','77','material','prestressed_concrete'],
     ['MCC','83','material','reinforced_concrete'],
     ['MCC','84','material','rock'],
+    ['MCC','85','material','rubber'], // From SMC
     ['MCC','86','material','rubble'],
     ['MCC','87','material','salt'], // From SMC
     ['MCC','88','material','sand'],
@@ -901,7 +903,7 @@ mgcp.rules = {
     ['RRC','8','railway','logging'],
     ['RRC','14','railway','tram'],
     ['RRC','15','railway','funicular'],
-    ['RRC','32','railway','automated_transit_system'],
+    ['RRC','32','automated_transit_system','yes'],
     ['RRC','33','railway','longhaul'],
     ['RRC','999','railway','Other'],
 
@@ -1107,7 +1109,7 @@ mgcp.rules = {
     ['SUC','1','man_made','snow_fence'],
     ['SUC','2','man_made','rock_shed'],
     ['SUC','4','man_made','rock_and_snow_fence'],
-    // ['SUC','999','building','shed'],
+    ['SUC','999','protection:type','other'],
 
     // SWT - Natural Pool Type
     // ['SWT','0','raw:SWT','unknown'], // Unknown
@@ -2296,6 +2298,23 @@ mgcp.rules = {
     // This is taken from OSM pre processing and a few things added.
     ignoreList : ['FCODE','error_circ','CPYRT_NOTE','SRC_INFO','SRC_DATE','SMC'],
     // ##### End of ignoreList #####
+
+    // Attribute names to swap on input. These are to avoid having copies of the same translation.
+    swapListIn : {'OHB':'HGT','CPYRT_NOTE':'CCN','SRC_INFO':'SDP','SRC_DATE':'SDV','SMC':'MCC'},
+
+    // Swap attribute values on export.
+    // Format is: <FCODE>:{<from>:<to>}
+    swapListOut : {
+      'AQ040':{'HGT':'OHB'},
+      'AK040':{'MCC':'SMC'},
+      'AP010':{'WID':'WD1'},
+      'AP030':{'WID':'WD1'},
+      'BA050':{'MCC':'SMC'},
+      'DA010':{'MCC':'SMC'},
+      'DB010':{'MCC':'SMC'},
+      'DB070':{'MCC':'SMC'},
+
+    },
 
     // ##### Start of txtLength #####
     // This list is for validateing the lengths of text attributes prior to export

@@ -1869,7 +1869,6 @@ ufd = {
     ['RGC','3','gauge:type','standard'],
     ['RGC','Normal (Country Specific)','gauge:type','standard'],
     ['RGC','6','railway','monorail'], // Gauge = 0.5?
-    ['RGC','6','railway','monorail'], // Gauge = 0.5?
     ['RGC','997',undefined,undefined], // In data, not in spec
 
     // RIT - Road Interchange Type
@@ -1918,7 +1917,7 @@ ufd = {
     ['RRC','3','railway','monorail'],
     ['RRC','6','railway','subway'],
     ['RRC','8','railway','logging'],
-    ['RRC','11','railway','rapid_transit'],
+    ['RRC','11','rapid_transit','yes'],
     ['RRC','14','railway','tram'],
     ['RRC','15','railway','funicular'],
     ['RRC','16','railway','rail'],
@@ -1926,7 +1925,7 @@ ufd = {
     ['RRC','18','usage','main'], // Main Line/Branch Line
     ['RRC','21','railway:in_road','yes'], // Railroad in Road
     ['RRC','31','railway','magnetic_levitation'], // Magnetic Levitation
-    ['RRC','32','railway','automated_transit_system'],
+    ['RRC','32','automated_transit_system','yes'],
     ['RRC','33','railway','longhaul'],
     ['RRC','999','railway','other'],
     ['RRC','Unknown','railway','rail'],
@@ -1934,7 +1933,7 @@ ufd = {
     ['RRC','Monorail','railway','monorail'],
     ['RRC','Subway','railway','subway'],
     ['RRC','Logging','railway','logging'],
-    ['RRC','Rapid Transit Route - Rail','railway','rapid_transit'],
+    ['RRC','Rapid Transit Route - Rail','rapid_transit','yes'],
     ['RRC','Tram','railway','tram'],
     ['RRC','Funicular','railway','funicular'],
     ['RRC','Main Line','railway','rail'],

@@ -1017,6 +1017,14 @@ tds61 = {
       } // End switch
       break;
 
+    case 'AN010': // Railway
+      if (tags['railway:track'] == 'monorail')
+      {
+        tags.railway = 'monorail';
+        delete tags['railway:track'];
+      }
+      break;
+
     case 'AP010': // Track
     case 'AP050': // Trail
         if (!tags.seasonal) tags.seasonal = 'fair';
@@ -1870,13 +1878,6 @@ tds61 = {
     // If we have a point, we need to make sure that it becomes a bridge, not a road
     if (tags.bridge && tags.bridge !== 'no' && geometryType =='Point') attrs.F_CODE = 'AQ040';
 
-    // Railway sidetracks
-    if (tags.service == 'siding' || tags.service == 'spur' || tags.service == 'passing' || tags.service == 'crossover')
-    {
-      tags.sidetrack = 'yes';
-      delete tags.railway;
-    }
-
     // Movable Bridges
     if (tags.bridge == 'movable')
     {
@@ -1893,6 +1894,21 @@ tds61 = {
     {
       tags.bridge = 'yes';
       tags.note = translate.appendValue(tags.note,'Viaduct',';');
+    }
+
+    // Railway sidetracks
+    if (tags.railway == 'monorail')
+    {
+      // This should not be set differently
+      attrs.F_CODE = 'AN010';
+      tags['railway:track'] = 'monorail';
+      delete tags.railway;
+    }
+
+    if (tags.service == 'siding' || tags.service == 'spur' || tags.service == 'passing' || tags.service == 'crossover')
+    {
+      tags.sidetrack = 'yes';
+      delete tags.railway;
     }
 
     // Fix road junctions

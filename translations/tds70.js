@@ -1049,6 +1049,14 @@ tds70 = {
       } // End switch
       break;
 
+    case 'AN010': // Railway
+      if (tags['railway:track'] == 'monorail')
+      {
+        tags.railway = 'monorail';
+        delete tags['railway:track'];
+      }
+      break;
+
     // case 'AP010': // Track
     // case 'AP050': // Trail
     //     tags.seasonal = 'fair';
@@ -1854,13 +1862,6 @@ tds70 = {
     // If we have a point, we need to make sure that it becomes a bridge, not a road.
     if (tags.bridge && geometryType =='Point') attrs.F_CODE = 'AQ040';
 
-    // Railway sidetracks
-    if (tags.service == 'siding' || tags.service == 'spur' || tags.service == 'passing' || tags.service == 'crossover')
-    {
-      tags.sidetrack = 'yes';
-      delete tags.railway;
-    }
-
     // Movable Bridges
     if (tags.bridge == 'movable')
     {
@@ -1877,6 +1878,21 @@ tds70 = {
     {
       tags.bridge = 'yes';
       tags.note = translate.appendValue(tags.note,'Viaduct',';');
+    }
+
+    // Railway sidetracks
+    if (tags.railway == 'monorail')
+    {
+      // This should not be set differently
+      attrs.F_CODE = 'AN010';
+      tags['railway:track'] = 'monorail';
+      delete tags.railway;
+    }
+
+    if (tags.service == 'siding' || tags.service == 'spur' || tags.service == 'passing' || tags.service == 'crossover')
+    {
+      tags.sidetrack = 'yes';
+      delete tags.railway;
     }
 
     // Fix road junctions.
@@ -2844,7 +2860,7 @@ tds70 = {
     if (!(tds70.attrLookup[gFcode.toUpperCase()]))
     {
       // For the UI: Throw an error and die if we don't have a valid feature
-      if (tds70.configOut.getOgrThrowError == 'true')
+      if (tds70.configOut.OgrThrowError == 'true')
       {
         if (! attrs.F_CODE)
         {

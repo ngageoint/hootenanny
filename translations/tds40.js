@@ -786,6 +786,8 @@ tds40 = {
         ['t.pylon =="yes" && t["cable:type"] == "power"',' t.power = "tower"'],
         ['t.service == "yard"','t.railway = "yes"'],
         ['t.service == "siding"','t.railway = "yes"'],
+        ['t.sidetrack && !(t.railway)','t.railway = "rail"'],
+        ['t.sidetrack && !(t.service)','t.service = "siding"'],
         ['t.social_facility','t.amenity = "social_facility"; t["social_facility:for"] = t.social_facility; t.social_facility = "shelter"'],
         ['t["tower:material"]','t.material = t["tower:material"]; delete t["tower:material"]'],
         ['t["tower:type"] && !(t.man_made)','t.man_made = "tower"'],
@@ -935,6 +937,14 @@ tds40 = {
       if (tags.use == 'recreation') delete tags.use;
       break;
 
+    case 'AN010': // Railway
+      if (tags['railway:track'] == 'monorail')
+      {
+        tags.railway = 'monorail';
+        delete tags['railway:track'];
+      }
+      break;
+
       // case 'AP010': // Track
       // case 'AP050': // Trail
       //     tags.seasonal = 'fair';
@@ -953,22 +963,22 @@ tds40 = {
       if (tags.water == 'undifferentiated_water_body') delete tags.water;
       break;
 
-      case 'EA031': // Botanic Garden
-        if (! tags.leisure) tags.leisure = 'garden';
-        break;
+    case 'EA031': // Botanic Garden
+      if (! tags.leisure) tags.leisure = 'garden';
+      break;
 
-      case 'EC015': // Forest
-        if (geometryType == 'Line')
-        {
-          delete tags.landuse; // Default EC015 translation
-          tags.natural = 'tree_row';
-        }
-        break;
+    case 'EC015': // Forest
+      if (geometryType == 'Line')
+      {
+        delete tags.landuse; // Default EC015 translation
+        tags.natural = 'tree_row';
+      }
+      break;
 
-      case 'FA012': // Contaminated Area
-      case 'AL065': // Minefield
-        if (! tags.boundary) tags.boundary = 'hazard';
-        break;
+    case 'FA012': // Contaminated Area
+    case 'AL065': // Minefield
+      if (! tags.boundary) tags.boundary = 'hazard';
+      break;
     } // End switch F_CODE
 
     // Ugly hack to get around a number of conflicts
@@ -1856,6 +1866,21 @@ tds40 = {
     {
       tags.bridge = 'yes';
       tags.note = translate.appendValue(tags.note,'Viaduct',';');
+    }
+
+    // Railway sidetracks
+    if (tags.railway == 'monorail')
+    {
+      // This should not be set differently
+      attrs.F_CODE = 'AN010';
+      tags['railway:track'] = 'monorail';
+      delete tags.railway;
+    }
+
+    if (tags.service == 'siding' || tags.service == 'spur' || tags.service == 'passing' || tags.service == 'crossover')
+    {
+      tags.sidetrack = 'yes';
+      delete tags.railway;
     }
 
     // Fix road junctions
