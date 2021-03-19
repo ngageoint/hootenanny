@@ -1,149 +1,150 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="-25.41894578281751" minlon="153.0722721908122" maxlat="-25.40819657243664" maxlon="153.0956058426145"/>
-    <node visible="true" id="-18" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4187709989088759" lon="153.0952562747972650"/>
-    <node visible="true" id="-17" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4187709989088759" lon="153.0954310587058842"/>
-    <node visible="true" id="-16" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4083713563452704" lon="153.0956058426145319"/>
-    <node visible="true" id="-15" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4188583908631891" lon="153.0912362448987381"/>
-    <node visible="true" id="-14" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4188583908631855" lon="153.0914110288073857"/>
+    <node visible="true" id="-18" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4187709989088724" lon="153.0952562747972934"/>
+    <node visible="true" id="-17" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4187709989088724" lon="153.0954310587059126"/>
+    <node visible="true" id="-16" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4083713563452740" lon="153.0956058426145319"/>
+    <node visible="true" id="-15" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4188583908631891" lon="153.0912362448987665"/>
+    <node visible="true" id="-14" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4188583908631891" lon="153.0914110288073857"/>
     <node visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4084587482995907" lon="153.0915858127160050"/>
-    <node visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4188583908631855" lon="153.0866918632743534"/>
-    <node visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4188583908631855" lon="153.0868666471829727"/>
-    <node visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4084587482995872" lon="153.0870414310915919"/>
-    <node visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4185962150002389" lon="153.0824096575128408"/>
+    <node visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4188583908631891" lon="153.0866918632743534"/>
+    <node visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4188583908631891" lon="153.0868666471829727"/>
+    <node visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4084587482995907" lon="153.0870414310915919"/>
+    <node visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4185962150002389" lon="153.0824096575128692"/>
     <node visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4185962150002389" lon="153.0825844414214885"/>
     <node visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4081965724366405" lon="153.0827592253301077"/>
-    <node visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4189457828175094" lon="153.0774283161168512"/>
-    <node visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4189457828175094" lon="153.0776031000254704"/>
-    <node visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4085461402539146" lon="153.0777778839340897"/>
-    <node visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4189457828175058" lon="153.0722721908121855"/>
-    <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4189457828175094" lon="153.0724469747208332"/>
-    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4085461402539110" lon="153.0726217586294524"/>
+    <node visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4189457828175058" lon="153.0774283161168512"/>
+    <node visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4189457828175058" lon="153.0776031000254704"/>
+    <node visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4085461402539075" lon="153.0777778839340897"/>
+    <node visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4189457828175058" lon="153.0722721908122139"/>
+    <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4189457828175058" lon="153.0724469747208332"/>
+    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4085461402539075" lon="153.0726217586294524"/>
     <way visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-16"/>
         <nd ref="-17"/>
         <nd ref="-18"/>
-        <tag k="source:ingest:datetime" v="2019-02-28T07:16:40.238Z"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="gauge" v="2"/>
-        <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
-        <tag k="gauge:type" v="narrow"/>
-        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
         <tag k="condition" v="functional"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="gauge" v="2"/>
+        <tag k="gauge:type" v="narrow"/>
         <tag k="location" v="surface"/>
-        <tag k="railway:in_road" v="separated"/>
-        <tag k="uuid" v="{1f223636-e82b-4c63-8224-24c2e701577f}"/>
-        <tag k="source" v="mgcp:lan010"/>
         <tag k="railway" v="carline"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="source" v="mgcp:lan010"/>
         <tag k="source:accuracy:horizontal" v="25"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
+        <tag k="source:ingest:datetime" v="2021-03-19T13:33:00.246Z"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="uuid" v="{1f223636-e82b-4c63-8224-24c2e701577f}"/>
     </way>
     <way visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-13"/>
         <nd ref="-14"/>
         <nd ref="-15"/>
+        <tag k="arrangement" v="juxtaposition"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="rail"/>
+        <tag k="error:circular" v="28.65"/>
         <tag k="gauge" v="1"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="location" v="surface"/>
+        <tag k="name" v="Steam Train"/>
+        <tag k="railway" v="rail"/>
+        <tag k="railway:in_road" v="separated"/>
         <tag k="source" v="mgcp:lan010"/>
         <tag k="source:accuracy:horizontal" v="25"/>
-        <tag k="condition" v="functional"/>
-        <tag k="railway" v="rail"/>
-        <tag k="name" v="Steam Train"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="electrified" v="rail"/>
-        <tag k="arrangement" v="juxtaposition"/>
-        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
-        <tag k="railway:in_road" v="separated"/>
-        <tag k="source:ingest:datetime" v="2019-02-28T07:16:40.237Z"/>
-        <tag k="gauge:type" v="standard"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="uuid" v="{1ea0b3a4-8ad2-4eb6-b523-8207d4da5b2e}"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
         <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
-        <tag k="location" v="surface"/>
-        <tag k="error:circular" v="28.65"/>
+        <tag k="source:ingest:datetime" v="2021-03-19T13:33:00.245Z"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="uuid" v="{1ea0b3a4-8ad2-4eb6-b523-8207d4da5b2e}"/>
     </way>
     <way visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-10"/>
         <nd ref="-11"/>
         <nd ref="-12"/>
-        <tag k="source:ingest:datetime" v="2019-02-28T07:16:40.237Z"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="demolished:railway" v="Other"/>
         <tag k="electrified" v="no"/>
+        <tag k="error:circular" v="28.65"/>
         <tag k="gauge" v="4"/>
-        <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
         <tag k="gauge:type" v="standard"/>
-        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
         <tag k="location" v="surface"/>
         <tag k="railway:in_road" v="yes"/>
-        <tag k="uuid" v="{1e982638-ad7d-4850-89dd-cd0aaf7b5e9b}"/>
         <tag k="source" v="mgcp:lan010"/>
         <tag k="source:accuracy:horizontal" v="25"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="demolished:railway" v="Other"/>
-        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
+        <tag k="source:ingest:datetime" v="2021-03-19T13:33:00.245Z"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="uuid" v="{1e982638-ad7d-4850-89dd-cd0aaf7b5e9b}"/>
     </way>
     <way visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-7"/>
         <nd ref="-8"/>
         <nd ref="-9"/>
-        <tag k="source:ingest:datetime" v="2019-02-28T07:16:40.237Z"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="electrified" v="contact_line"/>
-        <tag k="gauge" v="2"/>
-        <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
-        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="automated_transit_system" v="yes"/>
         <tag k="condition" v="destroyed"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="gauge" v="2"/>
         <tag k="location" v="surface"/>
+        <tag k="railway" v="rail"/>
         <tag k="railway:in_road" v="separated"/>
-        <tag k="uuid" v="{1e953118-1f79-4dd3-add7-181bdfece9bf}"/>
         <tag k="source" v="mgcp:lan010"/>
-        <tag k="railway" v="automated_transit_system"/>
         <tag k="source:accuracy:horizontal" v="25"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
+        <tag k="source:ingest:datetime" v="2021-03-19T13:33:00.244Z"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="uuid" v="{1e953118-1f79-4dd3-add7-181bdfece9bf}"/>
     </way>
     <way visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-4"/>
         <nd ref="-5"/>
         <nd ref="-6"/>
-        <tag k="source:ingest:datetime" v="2019-02-28T07:16:40.236Z"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="electrified" v="rail"/>
-        <tag k="gauge" v="3"/>
-        <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
-        <tag k="gauge:type" v="broad"/>
-        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
-        <tag k="location" v="surface"/>
-        <tag k="railway:in_road" v="separated"/>
-        <tag k="uuid" v="{1ddc1109-9eef-442d-b959-4b973b429c8e}"/>
+        <tag k="abandoned:railway" v="funicular"/>
         <tag k="arrangement" v="single"/>
-        <tag k="source" v="mgcp:lan010"/>
+        <tag k="electrified" v="rail"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="gauge" v="3"/>
+        <tag k="gauge:type" v="broad"/>
+        <tag k="location" v="surface"/>
         <tag k="name" v="Choo Choo Train"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="source" v="mgcp:lan010"/>
         <tag k="source:accuracy:horizontal" v="25"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="abandoned:railway" v="funicular"/>
-        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
+        <tag k="source:ingest:datetime" v="2021-03-19T13:33:00.243Z"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="uuid" v="{1ddc1109-9eef-442d-b959-4b973b429c8e}"/>
     </way>
     <way visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1"/>
         <nd ref="-2"/>
         <nd ref="-3"/>
-        <tag k="source:ingest:datetime" v="2019-02-28T07:16:40.235Z"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="construction" v="logging"/>
-        <tag k="gauge" v="1"/>
-        <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
-        <tag k="gauge:type" v="narrow"/>
-        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
-        <tag k="location" v="surface"/>
-        <tag k="railway:in_road" v="separated"/>
-        <tag k="uuid" v="{ae014362-8c96-46b2-8149-d377ed03f334}"/>
         <tag k="arrangement" v="single"/>
-        <tag k="source" v="mgcp:lan010"/>
-        <tag k="railway" v="construction"/>
+        <tag k="construction" v="logging"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="gauge" v="1"/>
+        <tag k="gauge:type" v="narrow"/>
+        <tag k="location" v="surface"/>
         <tag k="name" v="Santa Train"/>
+        <tag k="railway" v="construction"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="source" v="mgcp:lan010"/>
         <tag k="source:accuracy:horizontal" v="25"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
+        <tag k="source:ingest:datetime" v="2021-03-19T13:33:00.242Z"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="uuid" v="{ae014362-8c96-46b2-8149-d377ed03f334}"/>
     </way>
 </osm>
