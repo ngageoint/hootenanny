@@ -219,7 +219,7 @@ public:
    * a copy. The copy would be a temporary variable if we returned a reference which creates some
    * weirdness and a warning.
    */
-  ConstWayPtr getWay(long id) const;
+  ConstWayPtr getWay(long id) const override;
   ConstWayPtr getWay(ElementId eid) const;
   const WayMap& getWays() const { return _ways; }
   QSet<long> getWayIds() const;

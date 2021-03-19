@@ -47,20 +47,20 @@ namespace Tgs
     /**
     *  @brief ~MultithreadedRandomForestManager Destructor
     */
-    virtual ~MultithreadedRandomForestManager() = default;
+    ~MultithreadedRandomForestManager() = default;
 
   protected:
     /**
      * @brief _initForests initializes the list of random forests
      * @param numForests the number of forests to create
      */
-    virtual void _initForests(int numForests);
+    void _initForests(int numForests) override;
 
     /**
      * @brief _parseXmlForestNodes loads the XML form of a fores
      * @param forestsNode the list of <RandomForest> DOM nodes
      */
-    virtual void _parseXmlForestNodes(QDomNodeList & forestNodes);
+    void _parseXmlForestNodes(QDomNodeList & forestNodes) override;
 
     /**
     *  Trains a set of binary 1 to all random forests on the training vectors previously added
@@ -72,7 +72,7 @@ namespace Tgs
     * @param balanced true if the random forests should be balanced
     */
     void _trainBinary(unsigned int numTrees, unsigned int numFactors, unsigned int nodeSize,
-      double retrain, bool balanced);
+      double retrain, bool balanced) override;
 
     /**
     *  Trains a single multi-class random forest on the training vectors previously added
@@ -84,7 +84,7 @@ namespace Tgs
     * @param balanced true if the random forests should be balanced
     */
     void _trainMultiClass(unsigned int numTrees, unsigned int numFactors, unsigned int nodeSize,
-      double retrain, bool balanced);
+      double retrain, bool balanced) override;
 
     /**
     *  Trains a set of pair wise class to class random forests on the training vectors previously added
@@ -96,7 +96,7 @@ namespace Tgs
     * @param balanced true if the random forests should be balanced
     */
     void _trainRoundRobin(unsigned int numTrees, unsigned int numFactors, unsigned int nodeSize,
-      double retrain, bool balanced);
+      double retrain, bool balanced) override;
   };
 }
 

@@ -46,14 +46,14 @@ public:
    * @return class name
    */
   static QString className() { return "hoot::RemoveRelationByEid"; }
-  virtual QString getName() const { return className(); }
-  virtual QString getClassName() const override { return className(); }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
   /**
    * @brief RemoveRelationByEid Default constructor
    */
   RemoveRelationByEid();
-  virtual ~RemoveRelationByEid() = default;
+  ~RemoveRelationByEid() = default;
 
   /**
    * @brief RemoveRelationByEid
@@ -65,7 +65,7 @@ public:
    * @brief apply Peform the remove operation
    * @param map Map to operate on
    */
-  void apply(OsmMapPtr& map);
+  void apply(OsmMapPtr& map) override;
 
   /**
    * @brief setRelationId Set the ID of the relation to remove
@@ -80,7 +80,7 @@ public:
    */
   static void removeRelation(OsmMapPtr map, long rId);
 
-  virtual QString getDescription() const { return "Removes a single relation by element ID"; }
+  QString getDescription() const override { return "Removes a single relation by element ID"; }
 
 private:
 

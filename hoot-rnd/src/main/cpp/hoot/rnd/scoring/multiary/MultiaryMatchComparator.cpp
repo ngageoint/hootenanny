@@ -353,11 +353,11 @@ void MultiaryMatchComparator::_findActualMatches(const ConstOsmMapPtr& conflated
     {
     }
 
-    virtual QString getDescription() const { return ""; }
-    virtual QString getName() const { return ""; }
-    virtual QString getClassName() const override { return ""; }
+    QString getDescription() const override { return ""; }
+    QString getName() const override { return ""; }
+    QString getClassName() const override { return ""; }
 
-    virtual void visit(const ConstElementPtr& e)
+    void visit(const ConstElementPtr& e) override
     {
       QList<QString> ids = _getAllIds(e);
 
@@ -445,11 +445,11 @@ void MultiaryMatchComparator::_findExpectedMatches(const ConstOsmMapPtr& in)
     {
     }
 
-    virtual QString getDescription() const { return ""; }
-    virtual QString getName() const { return ""; }
-    virtual QString getClassName() const override { return ""; }
+    QString getDescription() const override { return ""; }
+    QString getName() const override { return ""; }
+    QString getClassName() const override { return ""; }
 
-    virtual void visit(const ConstElementPtr& e)
+    void visit(const ConstElementPtr& e) override
     {
       const Tags& t = e->getTags();
       QString id = MetadataTags::TrainingId();
@@ -525,11 +525,11 @@ void MultiaryMatchComparator::_findExpectedReviews(const ConstOsmMapPtr& in)
     {
     }
 
-    virtual QString getDescription() const { return ""; }
-    virtual QString getName() const { return ""; }
-    virtual QString getClassName() const override { return ""; }
+    QString getDescription() const override { return ""; }
+    QString getName() const override { return ""; }
+    QString getClassName() const override { return ""; }
 
-    virtual void visit(const ConstElementPtr& e)
+    void visit(const ConstElementPtr& e) override
     {
       if (e->getStatus().isInput())
       {

@@ -45,23 +45,23 @@ public:
 
   ImplicitPoiPolygonTypeTagger() = default;
   ImplicitPoiPolygonTypeTagger(const QString& databasePath);
-  virtual ~ImplicitPoiPolygonTypeTagger() = default;
+  ~ImplicitPoiPolygonTypeTagger() = default;
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Adds tags to POIs and polygons implicitly derived from their names"; }
 
-  virtual QString getInitStatusMessage() const { return "Adding tags to POIs and polygons..."; }
+  QString getInitStatusMessage() const override { return "Adding tags to POIs and polygons..."; }
 
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   { return "Added " + QString::number(_numAffected) + " tags to POIs and polygons"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 protected:
 
-  virtual bool _visitElement(const ElementPtr& e);
+  bool _visitElement(const ElementPtr& e) override;
 
 private:
 

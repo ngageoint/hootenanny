@@ -35,12 +35,12 @@ class NegateFunction : public LineSearch::Function
 public:
   NegateFunction(LineSearch::Function& f) : _f(f) { }
 
-  virtual ~NegateFunction() = default;
+  ~NegateFunction() = default;
 
   /**
    * Calculates a function f for the given x.
    */
-  virtual double operator()(double x)
+  double operator()(double x) override
   {
     return -_f(x);
   }

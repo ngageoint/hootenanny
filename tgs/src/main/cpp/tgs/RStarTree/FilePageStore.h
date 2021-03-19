@@ -47,19 +47,19 @@ class TGS_EXPORT FilePageStore : public PageStore
 public:
   FilePageStore(int pageSize, const char * fileName, bool readOnly = false);
 
-  virtual ~FilePageStore();
+  ~FilePageStore();
 
-  virtual std::shared_ptr<Page> createPage();
+  std::shared_ptr<Page> createPage() override;
 
-  virtual void flush();
+  void flush() override;
 
-  virtual std::shared_ptr<Page> getPage(int id);
+  std::shared_ptr<Page> getPage(int id) override;
 
-  virtual int getPageCount() const;
+  int getPageCount() const override;
 
-  virtual int getPageSize() const;
+  int getPageSize() const override;
 
-  virtual void save();
+  void save() override;
 
 private:
 
@@ -74,7 +74,7 @@ private:
   bool _readOnly;
   int _pageCount;
 
-  virtual void _savePage(int, char *);
+  void _savePage(int, char *) override;
   std::string _getError(const std::string& error);
 
   bool _bDestructing;

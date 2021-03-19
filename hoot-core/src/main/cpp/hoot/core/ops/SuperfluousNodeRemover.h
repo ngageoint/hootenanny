@@ -71,16 +71,16 @@ public:
   static QString className() { return "hoot::SuperfluousNodeRemover"; }
 
   SuperfluousNodeRemover();
-  virtual ~SuperfluousNodeRemover() = default;
+  ~SuperfluousNodeRemover() = default;
 
   /**
    * @see OsmMapOperation
    */
-  virtual void apply(std::shared_ptr<OsmMap>& map);
+  void apply(std::shared_ptr<OsmMap>& map) override;
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
   /**
    * Removes superfluous nodes from a map
@@ -121,13 +121,13 @@ public:
   /**
    * @see Configurable
    */
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
-  virtual QString getDescription() const { return "Removes all nodes not part of a way"; }
+  QString getDescription() const override { return "Removes all nodes not part of a way"; }
 
-  virtual QString getInitStatusMessage() const { return "Removing superfluous nodes..."; }
+  QString getInitStatusMessage() const override { return "Removing superfluous nodes..."; }
 
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   { return "Removed " + StringUtils::formatLargeNumber(_numAffected) + " superfluous nodes"; }
 
   std::set<long> getSuperfluousNodeIds() const { return _superfluousNodeIds; }
@@ -135,7 +135,7 @@ public:
   void setIgnoreInformationTags(bool ignore) { _ignoreInformationTags = ignore; }
   void setRemoveNodes(bool remove) { _removeNodes = remove; }
 
-  virtual void setConflateInfoCache(const std::shared_ptr<ConflateInfoCache>& cache)
+  void setConflateInfoCache(const std::shared_ptr<ConflateInfoCache>& cache) override
   { _conflateInfoCache = cache; }
 
 protected:

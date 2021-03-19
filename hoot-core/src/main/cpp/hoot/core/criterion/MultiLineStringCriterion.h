@@ -50,7 +50,7 @@ public:
   ElementCriterionPtr clone() override
   { return ElementCriterionPtr(new MultiLineStringCriterion()); }
 
-  virtual QString getDescription() const override { return "Identifies multi-line string features"; }
+  QString getDescription() const override { return "Identifies multi-line string features"; }
 
   GeometryType getGeometryType() const override { return GeometryType::Line; }
 

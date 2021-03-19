@@ -50,25 +50,25 @@ public:
   static QString className() { return "hoot::SearchRadiusCalculator"; }
 
   SearchRadiusCalculator();
-  virtual ~SearchRadiusCalculator() = default;
+  ~SearchRadiusCalculator() = default;
 
-  virtual void apply(std::shared_ptr<OsmMap>& map) override;
+  void apply(std::shared_ptr<OsmMap>& map) override;
 
-  virtual boost::any getResult() override { boost::any result = _result; return result; }
+  boost::any getResult() override { boost::any result = _result; return result; }
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
   void setCircularError(double val) { _circularError = val; }
   void setRubberSheetRef(bool val) { _rubberSheetRef = val; }
   void setRubberSheetMinTies(int minTies) { _minTies = minTies; }
   void setPrecision(int precision) { _precision = precision; }
 
-  virtual QString getDescription() const override
+  QString getDescription() const override
   { return "Calculates a search radius using tie points found by rubbersheeting"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

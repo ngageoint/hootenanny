@@ -69,7 +69,7 @@ public:
    * @brief RemoveRoundabouts - Default constructor
    */
   RemoveRoundabouts() = default;
-  virtual ~RemoveRoundabouts() = default;
+  ~RemoveRoundabouts() = default;
 
   /**
    * @brief apply - Apply the RemoveRoundabouts op
@@ -84,22 +84,22 @@ public:
    */
   void removeRoundabouts(std::vector<RoundaboutPtr> &removed);
 
-  virtual QString getDescription() const override { return "Removes roundabouts from roads"; }
+  QString getDescription() const override { return "Removes roundabouts from roads"; }
 
-  virtual QString getInitStatusMessage() const
+  QString getInitStatusMessage() const override
   { return "Removing road roundabouts..."; }
 
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   { return "Removed " + QString::number(_numAffected) + " road roundabouts"; }
 
   /**
    * @see FilteredByGeometryTypeCriteria
    */
-  virtual QStringList getCriteria() const;
+  QStringList getCriteria() const override;
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

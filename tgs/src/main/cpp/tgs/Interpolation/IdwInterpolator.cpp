@@ -55,12 +55,9 @@ class IdwOptimizeFunction : public NelderMead::Function
 {
 public:
 
-  IdwOptimizeFunction(IdwInterpolator& idw) : _idw(idw)
-  {
+  IdwOptimizeFunction(IdwInterpolator& idw) : _idw(idw) { }
 
-  }
-
-  virtual double f(Vector v)
+  double f(Vector v) override
   {
     // a value less than zero isn't meaningful.
     double p = std::max(0.0, v[0]);
