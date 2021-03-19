@@ -55,11 +55,11 @@ public:
   /** Constructor */
   OsmApiReader();
   /** Destructor */
-  virtual ~OsmApiReader();
+  ~OsmApiReader();
   /**
    * @brief close Close the reader
    */
-  void close();
+  void close() override;
   /**
    * @brief isSupported
    * @param url URL of the OSM API to read

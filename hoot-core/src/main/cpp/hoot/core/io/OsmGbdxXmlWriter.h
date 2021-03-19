@@ -57,7 +57,7 @@ public:
   static QString className() { return "hoot::OsmGbdxXmlWriter"; }
 
   OsmGbdxXmlWriter();
-  virtual ~OsmGbdxXmlWriter();
+  ~OsmGbdxXmlWriter();
 
   bool isSupported(const QString& url) override { return url.toLower().endsWith(".gxml"); }
 

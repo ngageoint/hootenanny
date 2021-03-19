@@ -53,35 +53,35 @@ public:
 
   ImmediatelyConnectedOutOfBoundsWayTagger();
   ImmediatelyConnectedOutOfBoundsWayTagger(const bool strictBounds);
-  virtual ~ImmediatelyConnectedOutOfBoundsWayTagger() = default;
+  ~ImmediatelyConnectedOutOfBoundsWayTagger() = default;
 
   /**
    * @see OsmMapOperation
    */
-  virtual void apply(OsmMapPtr& map);
+  void apply(OsmMapPtr& map) override;
 
   /**
    * @see Boundable
    */
-  virtual void setBounds(std::shared_ptr<geos::geom::Geometry> bounds) override
+  void setBounds(std::shared_ptr<geos::geom::Geometry> bounds) override
   { _boundsChecker.setBounds(bounds); }
 
   // Why must this be explicitly called once the
   // setBounds(std::shared_ptr<geos::geom::Geometry> bounds) version is overridden to avoid compiler
   // errors?
-  virtual void setBounds(const geos::geom::Envelope& bounds) override
+  void setBounds(const geos::geom::Envelope& bounds) override
   { Boundable::setBounds(bounds); }
 
   /**
    * @see OperationStatus
    */
-  virtual QString getInitStatusMessage() const
+  QString getInitStatusMessage() const override
   { return "Adding tags to immediately connected out of bounds ways..."; }
 
   /**
    * @see OperationStatus
    */
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   {
     return
       "Added " + StringUtils::formatLargeNumber(_numAffected) + " tags out of " +
@@ -91,7 +91,7 @@ public:
   /**
    * @see ApiEntityInfo
    */
-  virtual QString getDescription() const
+  QString getDescription() const override
   {
     return
       "Tags ways outside of a bounds but immediately connected to ways that cross the bounds";
@@ -99,9 +99,9 @@ public:
 
   long getNumTagged() const { return _numAffected; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

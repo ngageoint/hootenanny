@@ -52,15 +52,15 @@ public:
 
   MapCleaner() = default;
   MapCleaner(const Progress& progress) : _progress(progress) { }
-  virtual ~MapCleaner() = default;
+  ~MapCleaner() = default;
 
-  virtual void apply(std::shared_ptr<OsmMap>& map) override;
+  void apply(std::shared_ptr<OsmMap>& map) override;
 
-  virtual QString getDescription() const override { return "Cleans map data"; }
+  QString getDescription() const override { return "Cleans map data"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

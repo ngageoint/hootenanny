@@ -44,7 +44,7 @@ class HootNetworkCookieJar : public QNetworkCookieJar
 public:
 
   explicit HootNetworkCookieJar(QObject* parent = nullptr);
-  virtual ~HootNetworkCookieJar() = default;
+  ~HootNetworkCookieJar() = default;
 
   int size() const { return allCookies().size(); }
 

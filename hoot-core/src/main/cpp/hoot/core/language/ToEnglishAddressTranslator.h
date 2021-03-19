@@ -44,9 +44,9 @@ public:
   static QString className() { return "hoot::ToEnglishAddressTranslator"; }
 
   ToEnglishAddressTranslator() = default;
-  virtual ~ToEnglishAddressTranslator() = default;
+  ~ToEnglishAddressTranslator() = default;
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
   /**
    * Translates an address to English

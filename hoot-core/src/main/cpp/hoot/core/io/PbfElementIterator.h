@@ -48,10 +48,10 @@ public:
    */
   PbfElementIterator(QString path);
 
-  virtual ~PbfElementIterator() = default;
+  ~PbfElementIterator() = default;
 
   // not implemented
-  virtual void resetIterator() { }
+  void resetIterator() override { }
 
 private:
 
@@ -63,7 +63,7 @@ private:
 
   void _init(const std::shared_ptr<std::istream>& in);
 
-  virtual void _next();
+  void _next() override;
 };
 
 }

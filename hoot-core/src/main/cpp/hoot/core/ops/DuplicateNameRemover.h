@@ -52,7 +52,7 @@ public:
   static QString className() { return "hoot::DuplicateNameRemover"; }
 
   DuplicateNameRemover();
-  virtual ~DuplicateNameRemover() = default;
+  ~DuplicateNameRemover() = default;
 
   void apply(std::shared_ptr<OsmMap>& map);
 
@@ -61,22 +61,22 @@ public:
    */
   static void removeDuplicates(std::shared_ptr<OsmMap> map);
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
   void setCaseSensitive(bool caseSensitive) { _caseSensitive = caseSensitive; }
 
-  virtual QString getInitStatusMessage() const { return "Removing duplicate name tags..."; }
+  QString getInitStatusMessage() const override { return "Removing duplicate name tags..."; }
 
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   { return "Removed " + QString::number(_numAffected) + " duplicate name tags"; }
 
-  virtual QString getDescription() const { return "Removes duplicate name tags from a feature"; }
+  QString getDescription() const override { return "Removes duplicate name tags from a feature"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
-  virtual void setConflateInfoCache(const std::shared_ptr<ConflateInfoCache>& cache)
+  void setConflateInfoCache(const std::shared_ptr<ConflateInfoCache>& cache) override
   { _conflateInfoCache = cache; }
 
 private:

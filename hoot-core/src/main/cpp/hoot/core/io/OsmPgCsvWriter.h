@@ -47,7 +47,7 @@ public:
   static QString className() { return "hoot::OsmCsvWriter"; }
 
   OsmPgCsvWriter();
-  virtual ~OsmPgCsvWriter() = default;
+  ~OsmPgCsvWriter() = default;
 
   /**
    * @brief isSupported returns true if the URL is likely supported

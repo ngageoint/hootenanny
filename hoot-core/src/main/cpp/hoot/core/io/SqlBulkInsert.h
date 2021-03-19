@@ -46,15 +46,15 @@ class SqlBulkInsert : public BulkInsert
 public:
   SqlBulkInsert(QSqlDatabase& db, const QString& tableName, const QStringList& columns, bool ignoreConflict = false);
 
-  virtual ~SqlBulkInsert();
+  ~SqlBulkInsert();
 
-  virtual void flush();
+  void flush() override;
 
-  virtual int getPendingCount() const { return _pending.size(); }
+  int getPendingCount() const override { return _pending.size(); }
 
-  virtual QString getTableName() const { return _tableName; }
+  QString getTableName() const override { return _tableName; }
 
-  virtual void insert(const QList<QVariant> l);
+  void insert(const QList<QVariant> l) override;
 
 private:
   QList<QList<QVariant>> _pending;

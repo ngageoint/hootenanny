@@ -60,19 +60,19 @@ public:
   virtual ~MetadataOp() = default;
 
   // OsmMapOperation
-  virtual void apply(std::shared_ptr<OsmMap>& pMap) override;
+  void apply(std::shared_ptr<OsmMap>& pMap) override;
 
   // OperationStatus
-  virtual QString getInitStatusMessage() const { return "Processing metadata..."; }
-  virtual QString getCompletedStatusMessage() const
+  QString getInitStatusMessage() const override { return "Processing metadata..."; }
+  QString getCompletedStatusMessage() const override
   { return "Modified " + QString::number(_numAffected) + " elements"; }
 
   // Configurable
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 protected:
 
