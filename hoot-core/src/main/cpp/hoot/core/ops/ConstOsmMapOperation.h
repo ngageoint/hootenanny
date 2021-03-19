@@ -46,7 +46,7 @@ public:
   ConstOsmMapOperation() = default;
   virtual ~ConstOsmMapOperation() = default;
 
-  virtual void apply(std::shared_ptr<OsmMap>& map)
+  void apply(std::shared_ptr<OsmMap>& map) override
   { apply((const std::shared_ptr<OsmMap>&)map); }
 
   /**
@@ -55,7 +55,7 @@ public:
    */
   virtual void apply(const std::shared_ptr<OsmMap>& map) = 0;
 
-  virtual QString getDescription() const { return ""; }
+  QString getDescription() const override { return ""; }
 };
 
 }

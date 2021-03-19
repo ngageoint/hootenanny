@@ -101,7 +101,7 @@ public:
   void setWarnOnVersionZeroElement(bool warn) { _warnOnVersionZeroElement = warn; }
 
   /** Configurable interface */
-  virtual void setConfiguration(const Settings& conf) override
+  void setConfiguration(const Settings& conf) override
   {
     _ignoreDuplicates =  ConfigOptions(conf).getMapMergeIgnoreDuplicateIds();
   }

@@ -44,21 +44,21 @@ public:
   static int logWarnCount;
 
   AddHilbertReviewSortOrderOp() = default;
-  virtual ~AddHilbertReviewSortOrderOp() = default;
+  ~AddHilbertReviewSortOrderOp() = default;
 
-  virtual void apply(OsmMapPtr& map);
+  void apply(OsmMapPtr& map) override;
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
-  virtual QString getInitStatusMessage() const
+  QString getInitStatusMessage() const override
   { return "Adding geospatial sorting tags to review relations..."; }
 
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   { return "Added " + StringUtils::formatLargeNumber(_numAffected) + " sorting tags"; }
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Adds tags that enable sorting reviewable features geospatially"; }
 
 private:

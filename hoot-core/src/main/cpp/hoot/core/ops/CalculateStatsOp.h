@@ -61,9 +61,9 @@ public:
   CalculateStatsOp(QString mapName = "", bool inputIsConflatedMapOutput = false);
   CalculateStatsOp(ElementCriterionPtr criterion, QString mapName = "",
                    bool inputIsConflatedMapOutput = false);
-  virtual ~CalculateStatsOp() = default;
+  ~CalculateStatsOp() = default;
 
-  virtual void apply(const OsmMapPtr& map);
+  void apply(const OsmMapPtr& map) override;
 
   QList<SingleStat> getStats() const { return _stats; }
 
@@ -84,13 +84,13 @@ public:
 
   void setQuickSubset(bool quick) { _quick = quick; }
 
-  virtual QString getDescription() const { return "Calculates map statistics"; }
+  QString getDescription() const override { return "Calculates map statistics"; }
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

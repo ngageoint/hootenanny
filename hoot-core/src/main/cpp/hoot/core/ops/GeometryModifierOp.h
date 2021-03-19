@@ -61,7 +61,7 @@ namespace hoot
   public:
 
     GeometryModifierOp();
-    virtual ~GeometryModifierOp() = default;
+    ~GeometryModifierOp() = default;
 
     // OsmMapOperation
     static QString className() { return "hoot::GeometryModifierOp"; }
@@ -72,16 +72,16 @@ namespace hoot
     void apply(std::shared_ptr<OsmMap>& map);
 
     // OperationStatus
-    virtual QString getInitStatusMessage() const { return "Modifying geometry..."; }
-    virtual QString getCompletedStatusMessage() const
+    QString getInitStatusMessage() const override { return "Modifying geometry..."; }
+    QString getCompletedStatusMessage() const override
     { return "Modified " + QString::number(_numAffected) + " elements"; }
 
     // Configurable
-    virtual void setConfiguration(const Settings& conf);
+    void setConfiguration(const Settings& conf) override;
 
-    virtual QString getName() const { return className(); }
+    QString getName() const override { return className(); }
 
-    virtual QString getClassName() const override { return className(); }
+    QString getClassName() const override { return className(); }
 
   private:
     // json rules file name

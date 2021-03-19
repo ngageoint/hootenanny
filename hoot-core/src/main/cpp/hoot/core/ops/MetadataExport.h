@@ -65,19 +65,19 @@ public:
   static QString className() { return "hoot::MetadataExport"; }
 
   MetadataExport() = default;
-  virtual ~MetadataExport() = default;
+  ~MetadataExport() = default;
 
   // OsmMapOperation
-  virtual QString getDescription() const override { return "Creates and exports metadata"; }
+  QString getDescription() const override { return "Creates and exports metadata"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 
   // MetadataOp
-  virtual void _apply();
+  void _apply() override;
 
   // private data
   QList<WayPtr> _modifiedDatasets;

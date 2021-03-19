@@ -50,26 +50,26 @@ public:
   static QString className() { return "hoot::DataQualityMetricTagger"; }
 
   DataQualityMetricTagger();
-  virtual ~DataQualityMetricTagger() = default;
+  ~DataQualityMetricTagger() = default;
 
   /**
    * Calculates select data quality metrics for a map and tags features with issues
    */
-  virtual void apply(OsmMapPtr& map);
+  void apply(OsmMapPtr& map) override;
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
-  virtual QString getInitStatusMessage() const
+  QString getInitStatusMessage() const override
   { return "Calculating data quality metrics..."; }
 
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   {
     return "Calculated data quality metrics.";
   }
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Calculates select data quality metrics for a map and tags features with issues"; }
 
   int getNumOrphanedNodes() const { return _orphanedNodes; }

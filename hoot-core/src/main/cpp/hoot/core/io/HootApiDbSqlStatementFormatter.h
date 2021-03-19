@@ -59,7 +59,7 @@ class HootApiDbSqlStatementFormatter : public ApiDbSqlStatementFormatter
 public:
 
   HootApiDbSqlStatementFormatter(const QString& delimiter, const long mapId);
-  virtual ~HootApiDbSqlStatementFormatter() = default;
+  ~HootApiDbSqlStatementFormatter() = default;
 
   QString nodeToSqlString(const ConstNodePtr& node, const long nodeId, const long changesetId,
                           const long version, const bool validate = false);

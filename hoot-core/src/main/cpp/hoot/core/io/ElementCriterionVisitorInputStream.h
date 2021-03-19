@@ -69,31 +69,31 @@ public:
                                      const ElementCriterionPtr& criterion,
                                      const QList<ElementVisitorPtr>& visitors);
 
-  virtual ~ElementCriterionVisitorInputStream();
+  ~ElementCriterionVisitorInputStream();
 
   /**
    * @brief close
    * Invokes the close function on the source element input stream
    */
-  virtual void close();
+  void close() override;
 
   /**
    * Returns the source's projection.
    */
-  virtual std::shared_ptr<OGRSpatialReference> getProjection() const override;
+  std::shared_ptr<OGRSpatialReference> getProjection() const override;
 
   /**
    * @brief hasMoreElements
    * @return return value from call to source ElementInputStream's hasMoreElements() method
    */
-  virtual bool hasMoreElements();
+  bool hasMoreElements() override;
 
   /**
    * @brief readNextElement
    * @return Pointer to an elemement that is read from elementSource and is satisfied by the
    *    criterion.
    */
-  virtual ElementPtr readNextElement() override;
+  ElementPtr readNextElement() override;
 
   long getNumFeaturesTotal() const { return _numFeaturesTotal; }
 
