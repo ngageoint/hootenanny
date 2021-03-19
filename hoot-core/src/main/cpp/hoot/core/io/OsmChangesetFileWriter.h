@@ -86,11 +86,6 @@ public:
   virtual bool isSupported(const QString& output) const = 0;
 
   /**
-   * @see Configurable
-   */
-  virtual void setConfiguration(const Settings& conf) = 0;
-
-  /**
    * Sets all maps corresponding to the former state of the datasets
    *
    * @todo These map setters feel a little kludgy...maybe use a new map list interface, similar to

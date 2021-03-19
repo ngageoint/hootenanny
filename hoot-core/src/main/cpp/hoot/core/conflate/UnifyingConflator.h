@@ -55,29 +55,31 @@ public:
    * Conflates the specified map. If the map is not in a planar projection it is reprojected. The
    * map is not reprojected back to the original projection when conflation is complete.
    */
-  virtual void apply(OsmMapPtr& map) override;
+  void apply(OsmMapPtr& map) override;
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
-  virtual QString getDescription() const override
+  QString getDescription() const override
   { return "Conflates two inputs maps into one with Unifying Conflation"; }
 
-  virtual unsigned int getNumSteps() const override { return 3; }
+  unsigned int getNumSteps() const override;
 
 protected:
 
-  virtual void _createMergers(
-    MatchSetVector& matchSets, std::vector<MergerPtr>& relationMergers);
-  virtual void _mergeFeatures(const std::vector<MergerPtr>& relationMergers);
+  void _createMergers(
+    MatchSetVector& matchSets, std::vector<MergerPtr>& relationMergers) override;
+  void _mergeFeatures(const std::vector<MergerPtr>& relationMergers) override;
 
 private:
 
   static const bool WRITE_DETAILED_DEBUG_MAPS;
 
-  void _addReviewAndScoreTags();
-  void _addScoreTags(const ElementPtr& e, const MatchClassification& mc);
+  void _addConflateScoreTags();
+  void _addConflateScoreTags(
+    const ElementPtr& e, const MatchClassification& matchClassification,
+    const MatchThreshold& matchThreshold) const;
 };
 
 }

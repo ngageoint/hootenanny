@@ -116,15 +116,15 @@ public:
     _memoryCheckUpdateInterval = opts.getMemoryUsageCheckerInterval();
   }
 
-  virtual ~HighwayMatchVisitor()
+  ~HighwayMatchVisitor()
   {
     LOG_TRACE("neighbor counts, max: " << _neighborCountMax << " mean: " <<
               (double)_neighborCountSum / (double)_elementsEvaluated);
   }
 
-  virtual QString getDescription() const { return ""; }
-  virtual QString getName() const { return ""; }
-  virtual QString getClassName() const override { return ""; }
+  QString getDescription() const override { return ""; }
+  QString getName() const override { return ""; }
+  QString getClassName() const override { return ""; }
 
   void checkForMatch(const std::shared_ptr<const Element>& e)
   {
@@ -225,7 +225,7 @@ public:
     return searchRadius;
   }
 
-  virtual void visit(const ConstElementPtr& e)
+  void visit(const ConstElementPtr& e) override
   {
     if (e->getStatus() == _matchStatus && isMatchCandidate(e))
     {
@@ -415,10 +415,10 @@ std::shared_ptr<MatchThreshold> HighwayMatchCreator::getMatchThreshold()
 {
   if (!_matchThreshold.get())
   {
-    ConfigOptions config;
     _matchThreshold.reset(
-      new MatchThreshold(config.getHighwayMatchThreshold(), config.getHighwayMissThreshold(),
-                         config.getHighwayReviewThreshold()));
+      new MatchThreshold(
+        ConfigOptions().getHighwayMatchThreshold(), ConfigOptions().getHighwayMissThreshold(),
+        ConfigOptions().getHighwayReviewThreshold()));
   }
   return _matchThreshold;
 }

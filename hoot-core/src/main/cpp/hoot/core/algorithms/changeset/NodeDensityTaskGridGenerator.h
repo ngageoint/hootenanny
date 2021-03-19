@@ -58,7 +58,7 @@ public:
   /**
    * @see TaskGridGenerator
    */
-  virtual TaskGrid generateTaskGrid();
+  TaskGrid generateTaskGrid() override;
 
   void setReadInputFullThenCrop(const bool readInputFullThenCrop)
   { _readInputFullThenCrop = readInputFullThenCrop; }

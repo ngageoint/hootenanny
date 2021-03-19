@@ -212,15 +212,15 @@ public:
    * @param idMap ID to ID Map for updated IDs
    */
   ChangesetNode(const XmlObject& node, ElementIdToIdMap* idMap);
-  /** Virtual destructor */
-  virtual ~ChangesetNode() = default;
+  /** Destructor */
+  ~ChangesetNode() = default;
   /**
    * @brief toString Get the XML string equivalent for the node
    * @param changesetId ID of the changeset to insert into the node
    * @param type Changeset section type (create, modify, delete)
    * @return XML string
    */
-  virtual QString toString(long changesetId, ChangesetType type) const;
+  QString toString(long changesetId, ChangesetType type) const override;
   /**
    * @brief diff Compare two nodes and build a 'diff' style string
    * @param node Node to compare this node against
@@ -242,8 +242,8 @@ public:
    * @param idMap ID to ID Map for updated IDs
    */
   ChangesetWay(const XmlObject& way, ElementIdToIdMap* idMap);
-  /** Virtual destructor */
-  virtual ~ChangesetWay() = default;
+  /** Destructor */
+  ~ChangesetWay() = default;
   /**
    * @brief addNode Add a node ID to the node (in order)
    * @param id Node ID
@@ -272,7 +272,7 @@ public:
    * @param type Changeset section type (create, modify, delete)
    * @return XML string
    */
-  virtual QString toString(long changesetId, ChangesetType type) const;
+  QString toString(long changesetId, ChangesetType type) const override;
   /**
    * @brief diff Compare two ways and build a 'diff' style string
    * @param way Way to compare this way against
@@ -355,8 +355,8 @@ public:
    * @param idMap ID to ID Map for updated IDs
    */
   ChangesetRelation(const XmlObject& relation, ElementIdToIdMap* idMap);
-  /** Virtual destructor */
-  virtual ~ChangesetRelation() = default;
+  /** Destructor */
+  ~ChangesetRelation() = default;
   /**
    * @brief addMember Add relation member
    * @param member XML attributes of the relation member
@@ -391,7 +391,7 @@ public:
    * @param type Changeset section type (create, modify, delete)
    * @return XML string
    */
-  virtual QString toString(long changesetId, ChangesetType type) const;
+  QString toString(long changesetId, ChangesetType type) const override;
   /**
    * @brief diff Compare two relations and build a 'diff' style string
    * @param relation Relation to compare this relation against

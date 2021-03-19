@@ -128,7 +128,7 @@ public:
    * @param url
    * @return
    */
-  virtual bool isSupported(const QString& url) override;
+  bool isSupported(const QString& url) override;
 
   /**
    * @brief open Specifies the URL to read from. Can be a file (file://some/path/to/a/file)
@@ -136,7 +136,7 @@ public:
    *    http://overpass-api.de/api/interpreter?data=[out:json];way(35.2097,-120.6207,35.2241,-120.5955);out;
    * @param url
    */
-  virtual void open(const QString& url) override;
+  void open(const QString& url) override;
 
   /**
    * @brief close close internal filehandle, if needed
@@ -149,21 +149,21 @@ public:
    *        will likely be closed after this call
    * @param map
    */
-  virtual void read(const OsmMapPtr& map) override;
+  void read(const OsmMapPtr& map) override;
 
   /**
    * @brief setDefaultStatus Sets the default status to use for elements
    *        in the map
    * @param status
    */
-  virtual void setDefaultStatus(Status status) override { _defaultStatus = status; }
+  void setDefaultStatus(Status status) override { _defaultStatus = status; }
 
   /**
    * @brief setUseDataSourceIds Sets whether the reader should use the element IDs
    *        from the data being read, or self-generate unique IDs
    * @param useDataSourceIds true to use source IDs
    */
-  virtual void setUseDataSourceIds(bool useDataSourceIds) override
+  void setUseDataSourceIds(bool useDataSourceIds) override
   { _useDataSourceIds = useDataSourceIds; }
 
   /**
@@ -227,12 +227,12 @@ public:
    */
   static void scrubBigInts(QString &jsonStr);
 
-  virtual QString supportedFormats() override { return ".json"; }
+  QString supportedFormats() override { return ".json"; }
 
   /**
    * Set the configuration for this object.
    */
-  virtual void setConfiguration(const Settings& conf) override;
+  void setConfiguration(const Settings& conf) override;
 
   void setKeepImmediatelyConnectedWaysOutsideBounds(bool keep)
   { _keepImmediatelyConnectedWaysOutsideBounds = keep; }

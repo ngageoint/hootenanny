@@ -53,21 +53,21 @@ public:
     const std::set<std::pair<ElementId, ElementId>>& pairs,
     const std::shared_ptr<SublineStringMatcher>& sublineMatcher,
     const std::shared_ptr<SublineStringMatcher>& sublineMatcher2);
-  virtual ~MultipleSublineMatcherSnapMerger() = default;
+  ~MultipleSublineMatcherSnapMerger() = default;
 
-  virtual QString getDescription() const override
+  QString getDescription() const override
   { return "Merges ways using snapping with one or more subline matchers"; }
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 protected:
 
   /*
    * @see LinearSnapMerger
    */
-  virtual WaySublineMatchString _matchSubline(OsmMapPtr map, ElementPtr e1, ElementPtr e2);
+  WaySublineMatchString _matchSubline(OsmMapPtr map, ElementPtr e1, ElementPtr e2) override;
 
 private:
 

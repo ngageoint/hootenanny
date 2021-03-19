@@ -54,12 +54,12 @@ public:
 
   AlphaShapeCmd() = default;
 
-  virtual QString getName() const override { return "alpha-shape"; }
+  QString getName() const override { return "alpha-shape"; }
 
-  virtual QString getDescription() const override
+  QString getDescription() const override
   { return "Generates a shape that covers a set of features in a map"; }
 
-  virtual int runSimple(QStringList& args) override
+  int runSimple(QStringList& args) override
   {
     QElapsedTimer timer;
     timer.start();

@@ -55,24 +55,24 @@ class SmallerOverlapExtractor : public FeatureExtractorBase, public Configurable
 public:
 
   SmallerOverlapExtractor();
-  virtual ~SmallerOverlapExtractor() = default;
+  ~SmallerOverlapExtractor() = default;
 
   static QString className() { return "hoot::SmallerOverlapExtractor"; }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
-  virtual double extract(const OsmMap& map, const std::shared_ptr<const Element>& target,
+  double extract(const OsmMap& map, const std::shared_ptr<const Element>& target,
     const std::shared_ptr<const Element>& candidate) const override;
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Determines the overlap between two features focusing on the feature with more overlap"; }
 
   /**
    * @see Configurable
    */
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
 private:
 

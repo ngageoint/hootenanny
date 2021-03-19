@@ -40,19 +40,19 @@ class DoubleFieldDefinition : public FieldDefinition
 public:
 
   DoubleFieldDefinition();
-  virtual ~DoubleFieldDefinition() = default;
+  ~DoubleFieldDefinition() = default;
 
   void addEnumeratedValue(double v) { _enumeratedValues.insert(v); }
 
-  virtual QVariant::Type getType() const { return QVariant::Double; }
+  QVariant::Type getType() const override { return QVariant::Double; }
 
-  virtual QVariant getDefaultValue() const;
+  QVariant getDefaultValue() const override;
 
   double getMaxValue() const { return _max; }
 
   double getMinValue() const { return _min; }
 
-  virtual bool hasDefaultValue() const;
+  bool hasDefaultValue() const override;
 
   bool hasEnumeratedValue(double v) { return _enumeratedValues.find(v) != _enumeratedValues.end(); }
 
@@ -62,9 +62,9 @@ public:
 
   void setMinValue(double min) { _min = min; }
 
-  virtual QString toString() const;
+  QString toString() const override;
 
-  virtual void validate(const QVariant& v, StrictChecking strict) const;
+  void validate(const QVariant& v, StrictChecking strict) const;
 
 private:
 

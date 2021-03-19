@@ -57,7 +57,6 @@ public:
    */
   virtual double compare(const QString& s1, const QString& s2) const = 0;
 
-  virtual QString toString() const = 0;
 };
 
 using StringDistancePtr = std::shared_ptr<StringDistance>;

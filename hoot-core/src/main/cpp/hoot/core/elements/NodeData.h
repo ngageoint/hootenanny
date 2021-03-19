@@ -40,7 +40,7 @@ public:
   NodeData(const NodeData& nd);
   NodeData(long id, double x, double y);
 
-  virtual ~NodeData() = default;
+  ~NodeData() = default;
 
   void init(long id, double x, double y, long changeset = ElementData::CHANGESET_EMPTY,
             long version = ElementData::VERSION_EMPTY,

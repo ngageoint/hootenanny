@@ -44,19 +44,19 @@ public:
   OrCriterion() = default;
   OrCriterion(ElementCriterion* child1, ElementCriterion* child2);
   OrCriterion(ElementCriterionPtr child1, ElementCriterionPtr child2);
-  virtual ~OrCriterion() = default;
+  ~OrCriterion() = default;
 
-  virtual bool isSatisfied(const ConstElementPtr& e) const override;
+  bool isSatisfied(const ConstElementPtr& e) const override;
 
-  virtual ElementCriterionPtr clone();
+  ElementCriterionPtr clone() override;
 
-  virtual QString getDescription() const { return "Allows for combining criteria (logical OR)"; }
+  QString getDescription() const override { return "Allows for combining criteria (logical OR)"; }
 
-  virtual QString toString() const override;
+  QString toString() const override;
 
- virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 };
 
 using OrCriterionPtr = std::shared_ptr<OrCriterion>;

@@ -212,7 +212,7 @@ public:
 
   ReprojectCoordinateFilter(OGRCoordinateTransformation* t);
 
-  virtual void filter_rw(geos::geom::Coordinate* c) const;
+  void filter_rw(geos::geom::Coordinate* c) const override;
 
   void project(geos::geom::Coordinate* c) const;
 

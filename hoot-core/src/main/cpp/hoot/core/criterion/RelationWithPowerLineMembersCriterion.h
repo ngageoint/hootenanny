@@ -44,21 +44,21 @@ public:
   static QString className() { return "hoot::RelationWithPowerLineMembersCriterion"; }
 
   RelationWithPowerLineMembersCriterion();
-  virtual ~RelationWithPowerLineMembersCriterion() = default;
+  ~RelationWithPowerLineMembersCriterion() = default;
 
-  virtual ElementCriterionPtr clone()
+  ElementCriterionPtr clone() override
   { return ElementCriterionPtr(new RelationWithPowerLineMembersCriterion()); }
 
-  virtual QString getCriterion() const override;
+  QString getCriterion() const override;
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Identifies relations with power line members"; }
 
-  virtual GeometryType getGeometryType() const;
+  GeometryType getGeometryType() const override;
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 };
 
 }

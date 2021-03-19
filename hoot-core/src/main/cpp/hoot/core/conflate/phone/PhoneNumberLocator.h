@@ -50,9 +50,9 @@ public:
 
   PhoneNumberLocator();
   PhoneNumberLocator(const QString& regionCode);
-  virtual ~PhoneNumberLocator() = default;
+  ~PhoneNumberLocator() = default;
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
   /**
    * Returns an admin level address string for a given phone number

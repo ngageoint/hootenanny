@@ -46,25 +46,25 @@ public:
 
   ElementReplacer() = default;
   ElementReplacer(OsmMapPtr mapToReplaceFrom) : _mapToReplaceFrom(mapToReplaceFrom) { }
-  virtual ~ElementReplacer() = default;
+  ~ElementReplacer() = default;
 
   /**
    * @see OsmMapOperation
    */
-  virtual void apply(std::shared_ptr<OsmMap>& map) override;
+  void apply(std::shared_ptr<OsmMap>& map) override;
 
-  virtual QString getDescription() const override
+  QString getDescription() const override
   { return "Replace features in a map with those from another map"; }
 
-  virtual QString getInitStatusMessage() const
+  QString getInitStatusMessage() const override
   { return "Replacing elements..."; }
 
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   { return "Replaced " + QString::number(_numAffected) + " elements"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

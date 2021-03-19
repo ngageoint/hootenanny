@@ -77,6 +77,9 @@ public:
    */
   virtual void replace(ElementId oldEid, ElementId newEid) = 0;
 
+  /**
+   * TODO: This already exists in ApiEntityInfo
+   */
   virtual QString toString() const = 0;
 };
 

@@ -46,20 +46,20 @@ public:
 
   NeedsReviewCriterion() = default;
   NeedsReviewCriterion(ConstOsmMapPtr& map) : _map(map) { }
-  virtual ~NeedsReviewCriterion() = default;
+  ~NeedsReviewCriterion() = default;
 
-  virtual bool isSatisfied(const ConstElementPtr& e) const;
+  bool isSatisfied(const ConstElementPtr& e) const override;
 
-  virtual ElementCriterionPtr clone()
+  ElementCriterionPtr clone() override
   { return ElementCriterionPtr(new NeedsReviewCriterion(_map)); }
 
-  virtual void setOsmMap(const OsmMap* map) { _map = map->shared_from_this(); }
+  void setOsmMap(const OsmMap* map) override { _map = map->shared_from_this(); }
 
-  virtual QString getDescription() const { return "Identifies features that need to be reviewed"; }
+  QString getDescription() const override { return "Identifies features that need to be reviewed"; }
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

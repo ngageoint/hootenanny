@@ -46,24 +46,24 @@ public:
   static QString className() { return "hoot::RailwayCriterion"; }
 
   RailwayCriterion() = default;
-  virtual ~RailwayCriterion() = default;
+  ~RailwayCriterion() = default;
 
-  virtual bool isSatisfied(const ConstElementPtr& e) const override;
+  bool isSatisfied(const ConstElementPtr& e) const override;
 
-  virtual GeometryType getGeometryType() const { return GeometryType::Line; }
+  GeometryType getGeometryType() const override { return GeometryType::Line; }
 
-  virtual ElementCriterionPtr clone()
+  ElementCriterionPtr clone() override
   { return ElementCriterionPtr(new RailwayCriterion()); }
 
-  virtual QString getDescription() const { return "Identifies linear railways"; }
+  QString getDescription() const override { return "Identifies linear railways"; }
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
-  virtual bool supportsSpecificConflation() const { return true; }
+  bool supportsSpecificConflation() const override { return true; }
 
-  virtual QStringList getChildCriteria() const;
+  QStringList getChildCriteria() const override;
 };
 
 }

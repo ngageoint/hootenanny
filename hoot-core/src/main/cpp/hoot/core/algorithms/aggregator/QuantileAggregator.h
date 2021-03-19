@@ -41,26 +41,26 @@ public:
   static QString className() { return "hoot::QuantileAggregator"; }
 
   QuantileAggregator();
-  virtual ~QuantileAggregator() = default;
+  ~QuantileAggregator() = default;
 
   /**
    * quantile - A value from 0 to 1 for the quantile.
    */
   QuantileAggregator(double quantile);
 
-  virtual double aggregate(std::vector<double>& d) const override;
+  double aggregate(std::vector<double>& d) const override;
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
-  virtual QString toString() const override
+  QString toString() const override
   { return QString("QuantileAggregator %1").arg(_quantile); }
 
-  virtual QString getDescription() const override
+  QString getDescription() const override
   { return "Aggregates data based on the quantile value"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

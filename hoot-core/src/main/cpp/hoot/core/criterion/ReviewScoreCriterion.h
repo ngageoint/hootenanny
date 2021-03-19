@@ -45,24 +45,24 @@ public:
   static QString className() { return "hoot::ReviewScoreCriterion"; }
 
   ReviewScoreCriterion();
-  virtual ~ReviewScoreCriterion() = default;
+  ~ReviewScoreCriterion() = default;
 
-  virtual bool isSatisfied(const ConstElementPtr& e) const override;
+  bool isSatisfied(const ConstElementPtr& e) const override;
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
-  virtual ElementCriterionPtr clone()
+  ElementCriterionPtr clone() override
   { return ElementCriterionPtr(new ReviewScoreCriterion()); }
 
-  virtual QString getDescription() const { return "Allows for filtering reviews by score"; }
+  QString getDescription() const override { return "Allows for filtering reviews by score"; }
 
   void setMinScoreThreshold(const double threshold);
   void setMaxScoreThreshold(const double threshold);
   void setInvertThresholding(const bool invert) { _invertThresholding = invert; }
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

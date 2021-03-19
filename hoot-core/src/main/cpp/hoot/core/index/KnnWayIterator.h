@@ -50,21 +50,21 @@ public:
 
   KnnWayIterator(const OsmMap& map, ConstWayPtr way, const Tgs::RStarTree* tree,
                  const std::vector<long>& treeIdToWid, bool addError = false);
-  virtual ~KnnWayIterator() = default;
+  ~KnnWayIterator() = default;
 
   long getWayId() const { return _treeIdToWid[getId()]; }
 
   ConstWayPtr getWay() const { return _map.getWay(getWayId()); }
 
-  virtual bool hasNext();
+  bool hasNext() override;
 
   int getDistanceCount() { return _distanceCount; }
 
 protected:
 
-  virtual double _calculateDistance(const Tgs::BoxInternalData& box, int id) const;
+  double _calculateDistance(const Tgs::BoxInternalData& box, int id) const override;
 
-  virtual double _calculateDistance(const Tgs::BoxInternalData& box) const;
+  double _calculateDistance(const Tgs::BoxInternalData& box) const override;
 
 private:
 

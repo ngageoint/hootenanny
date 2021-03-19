@@ -50,11 +50,11 @@ public:
   RelationMemberComparison() = default;
   RelationMemberComparison(ElementPtr element, const OsmMap& sourceMap, const QString& role,
                            const bool ignoreElementId = false);
-  virtual ~RelationMemberComparison() = default;
+  ~RelationMemberComparison() = default;
 
-  virtual bool operator==(const RelationMemberComparison& memberComp) const;
+  bool operator==(const RelationMemberComparison& memberComp) const;
 
-  virtual QString toString() const;
+  QString toString() const override;
 
   QString getRole() const { return _role; }
 

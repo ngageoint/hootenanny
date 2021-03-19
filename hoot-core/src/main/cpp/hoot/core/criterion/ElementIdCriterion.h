@@ -52,20 +52,20 @@ public:
   /**
    * @see ElementCriterion
    */
-  virtual bool isSatisfied(const ConstElementPtr& e) const;
+  bool isSatisfied(const ConstElementPtr& e) const override;
 
   /**
    * @see Configurable
    */
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new ElementIdCriterion()); }
+  ElementCriterionPtr clone() override { return ElementCriterionPtr(new ElementIdCriterion()); }
 
-  virtual QString getDescription() const { return "Identifies elements by type and ID"; }
+  QString getDescription() const override { return "Identifies elements by type and ID"; }
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

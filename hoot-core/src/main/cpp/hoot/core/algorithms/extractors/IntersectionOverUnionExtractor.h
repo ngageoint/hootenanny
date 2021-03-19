@@ -55,21 +55,21 @@ public:
   /**
    * @see FeatureExtractor
    */
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
   /**
    * @see FeatureExtractor
    */
-  virtual double extract(const OsmMap& map, const ConstElementPtr& target,
+  double extract(const OsmMap& map, const ConstElementPtr& target,
     const ConstElementPtr& candidate) const override;
 
   /**
    * @see ApiEntityInfo
    */
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Calculates Intersection over Union (IoU) for polygons"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 };
 
 }

@@ -500,7 +500,6 @@ std::shared_ptr<BuildingRfClassifier> BuildingMatchCreator::_getRf()
       file.close();
       throw HootException("Error opening file: " + path);
     }
-    //LOG_VARD(doc.toString());
     file.close();
 
     _rf.reset(new BuildingRfClassifier());
@@ -521,10 +520,11 @@ std::shared_ptr<MatchThreshold> BuildingMatchCreator::getMatchThreshold()
 {
   if (!_matchThreshold.get())
   {
-    ConfigOptions config;
+    LOG_VART(ConfigOptions().getBuildingMatchThreshold());
     _matchThreshold.reset(
-      new MatchThreshold(config.getBuildingMatchThreshold(), config.getBuildingMissThreshold(),
-                         config.getBuildingReviewThreshold()));
+      new MatchThreshold(
+        ConfigOptions().getBuildingMatchThreshold(), ConfigOptions().getBuildingMissThreshold(),
+        ConfigOptions().getBuildingReviewThreshold()));
   }
   return _matchThreshold;
 }

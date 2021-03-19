@@ -54,14 +54,14 @@ public:
   WayFeatureExtractor();
   virtual ~WayFeatureExtractor() = default;
 
-  virtual double extract(const OsmMap& map, const std::shared_ptr<const Element>& target,
-    const std::shared_ptr<const Element>& candidate) const;
+  double extract(const OsmMap& map, const std::shared_ptr<const Element>& target,
+    const std::shared_ptr<const Element>& candidate) const override;
 
-  virtual QString getClassName() const { return className(); }
+  QString getClassName() const override { return className(); }
 
-  virtual QString getName() const;
+  QString getName() const override;
 
-  virtual void setValueAggregator(const ValueAggregatorPtr& va) { _agg = va; }
+  void setValueAggregator(const ValueAggregatorPtr& va) override { _agg = va; }
 
 protected:
 

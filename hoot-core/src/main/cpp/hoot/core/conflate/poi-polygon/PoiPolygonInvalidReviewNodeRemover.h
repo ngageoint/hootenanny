@@ -53,20 +53,20 @@ public:
   static QString className() { return "hoot::PoiPolygonInvalidReviewNodeRemover"; }
 
   PoiPolygonInvalidReviewNodeRemover();
-  virtual ~PoiPolygonInvalidReviewNodeRemover() = default;
+  ~PoiPolygonInvalidReviewNodeRemover() = default;
 
-  virtual void apply(const std::shared_ptr<OsmMap>& map);
+  void apply(const std::shared_ptr<OsmMap>& map) override;
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Removes all reviewable POI/Polygon POIs and their reviews that are invalid"; }
 
-  virtual QString getInitStatusMessage() const { return "Removing invalid POIs from reviews..."; }
+  QString getInitStatusMessage() const override { return "Removing invalid POIs from reviews..."; }
 
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   {
     return
       "Removed " + QString::number(_numAffected) + " invalid reviewable POIs and " +
@@ -76,7 +76,7 @@ public:
   /**
    * @see FilteredByGeometryTypeCriteria
    */
-  virtual QStringList getCriteria() const;
+  QStringList getCriteria() const override;
 
 protected:
 

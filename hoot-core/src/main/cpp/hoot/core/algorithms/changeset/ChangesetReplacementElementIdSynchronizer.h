@@ -44,13 +44,13 @@ class ChangesetReplacementElementIdSynchronizer : public ElementIdSynchronizer
 public:
 
   ChangesetReplacementElementIdSynchronizer() = default;
-  virtual ~ChangesetReplacementElementIdSynchronizer() = default;
+  ~ChangesetReplacementElementIdSynchronizer() = default;
 
   /**
    * see ElementIdSynchronizer
    */
-  virtual void synchronize(const OsmMapPtr& map1, const OsmMapPtr& map2,
-                           const ElementType& elementType = ElementType::Unknown) override;
+  void synchronize(const OsmMapPtr& map1, const OsmMapPtr& map2,
+                   const ElementType& elementType = ElementType::Unknown) override;
 
 private:
 

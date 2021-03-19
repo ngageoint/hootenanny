@@ -46,7 +46,7 @@ public:
   static QString className() { return "hoot::DirectSequentialSimulation"; }
 
   DirectSequentialSimulation() = default;
-  virtual ~DirectSequentialSimulation() = default;
+  ~DirectSequentialSimulation() = default;
 
   /**
    * @see PermuteGridCalculator

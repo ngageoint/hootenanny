@@ -50,11 +50,11 @@ public:
   static QString className() { return "hoot::PoiPolygonTypeScoreExtractor"; }
 
   PoiPolygonTypeScoreExtractor(PoiPolygonInfoCachePtr infoCache = PoiPolygonInfoCachePtr());
-  virtual ~PoiPolygonTypeScoreExtractor() = default;
+  ~PoiPolygonTypeScoreExtractor() = default;
 
-  virtual QString getClassName() const { return className(); }
+  QString getClassName() const override { return className(); }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
   /**
    * Returns a score from 0 to 1 representing the similarity of the feature types.
@@ -63,10 +63,10 @@ public:
    * @param poi a POI element
    * @param poly a polygon element
    */
-  virtual double extract(const OsmMap& map, const ConstElementPtr& poi,
-                         const ConstElementPtr& poly) const;
+  double extract(const OsmMap& map, const ConstElementPtr& poi,
+                 const ConstElementPtr& poly) const override;
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
   double getTypeScoreThreshold() { return _typeScoreThreshold; }
   void setTypeScoreThreshold(double threshold) { _typeScoreThreshold = threshold; }
@@ -77,7 +77,7 @@ public:
   bool getPrintMatchDistanceTruth() { return _printMatchDistanceTruth; }
   void setPrintMatchDistanceTruth(bool print) { _printMatchDistanceTruth = print; }
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Scores element type similarity for POI/Polygon conflation"; }
 
   QStringList getFailedMatchRequirements() const { return _failedMatchRequirements; }

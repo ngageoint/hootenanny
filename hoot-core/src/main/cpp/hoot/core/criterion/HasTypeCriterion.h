@@ -43,18 +43,18 @@ public:
   static QString className() { return "hoot::HasTypeCriterion"; }
 
   HasTypeCriterion() = default;
-  virtual ~HasTypeCriterion() = default;
+  ~HasTypeCriterion() = default;
 
-  virtual bool isSatisfied(const ConstElementPtr& e) const;
+  bool isSatisfied(const ConstElementPtr& e) const override;
 
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new HasTypeCriterion()); }
+  ElementCriterionPtr clone() override { return ElementCriterionPtr(new HasTypeCriterion()); }
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Determines if an element has a recognizable type."; }
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 };
 
 }

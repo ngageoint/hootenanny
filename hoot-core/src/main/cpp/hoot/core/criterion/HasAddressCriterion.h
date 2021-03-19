@@ -45,19 +45,19 @@ public:
   static QString className() { return "hoot::HasAddressCriterion"; }
 
   HasAddressCriterion() = default;
-  virtual ~HasAddressCriterion() = default;
+  ~HasAddressCriterion() = default;
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
-  virtual bool isSatisfied(const ConstElementPtr& e) const override;
+  bool isSatisfied(const ConstElementPtr& e) const override;
 
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new HasAddressCriterion()); }
+  ElementCriterionPtr clone() override { return ElementCriterionPtr(new HasAddressCriterion()); }
 
-  virtual QString getDescription() const { return "Identifies features with addresses"; }
+  QString getDescription() const override { return "Identifies features with addresses"; }
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

@@ -123,52 +123,6 @@ public:
    */
   virtual ConstRelationPtr getNextRelation() = 0;
 
-  // Functions for ElementInputStream
-  virtual void close() = 0;             // Also works for elementoutputstream
-  virtual bool hasMoreElements() = 0;
-
-  /**
-   * @brief readNextElement
-   *
-   * @note There is no guarantee of the order that items will be pulled from the cache when this
-   *      method is invoked. If ordering of elements (e.g., all nodes first, then all ways, and
-   *      finally all relations) is required, the getNext(Node/Way/Relation) methods should be
-   *      invoked
-   *
-   * @return Pointer to next element out of cache
-   */
-  virtual ElementPtr readNextElement() = 0;
-
-  // Functions for ElementOutputStream
-  virtual void writeElement(ElementPtr& element) = 0;
-
-  // Functions from ElementProvider
-
-  virtual std::shared_ptr<OGRSpatialReference> getProjection() const = 0;
-
-  virtual bool containsElement(const ElementId& eid) const = 0;
-
-  virtual ConstElementPtr getElement(const ElementId& id) const = 0;
-
-  virtual ConstNodePtr getNode(long id) const = 0;
-
-  virtual NodePtr getNode(long id) = 0;
-
-  virtual ConstRelationPtr getRelation(long id) const = 0;
-
-  virtual RelationPtr getRelation(long id) = 0;
-
-  virtual ConstWayPtr getWay(long id) const = 0;
-
-  virtual WayPtr getWay(long id) = 0;
-
-  virtual bool containsNode(long id) const = 0;
-
-  virtual bool containsRelation(long id) const = 0;
-
-  virtual bool containsWay(long id) const = 0;
-
-
   // Cache-specific items
   virtual void removeElement(const ElementId& eid) = 0;
 

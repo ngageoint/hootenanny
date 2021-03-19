@@ -53,12 +53,12 @@ public:
 
   ChangesetDeriveCmd() = default;
 
-  virtual QString getName() const override { return "changeset-derive"; }
+  QString getName() const override { return "changeset-derive"; }
 
-  virtual QString getDescription() const override
+  QString getDescription() const override
   { return "Creates a changeset representing the difference between two maps"; }
 
-  virtual int runSimple(QStringList& args) override
+  int runSimple(QStringList& args) override
   {
     _timer.start();
 

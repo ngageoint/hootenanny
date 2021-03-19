@@ -100,22 +100,22 @@ public:
 
 
   BuildingPartMergeOp(bool preserveTypes = false);
-  virtual ~BuildingPartMergeOp() = default;
+  ~BuildingPartMergeOp() = default;
 
-  virtual void apply(OsmMapPtr& map) override;
+  void apply(OsmMapPtr& map) override;
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
-  virtual QString getDescription() const override
+  QString getDescription() const override
   { return "Merges individual building parts into a single building"; }
 
-  virtual QString getInitStatusMessage() const { return "Merging building parts..."; }
+  QString getInitStatusMessage() const override { return "Merging building parts..."; }
 
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   {
     return
       "Merged " + StringUtils::formatLargeNumber(_numAffected) +

@@ -45,13 +45,13 @@ public:
   DistanceScoreExtractor(ValueAggregatorPtr wayAgg);
 
   DistanceScoreExtractor() = default;
-  virtual ~DistanceScoreExtractor() = default;
+  ~DistanceScoreExtractor() = default;
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Calculates metric distance between features"; }
 
 protected:

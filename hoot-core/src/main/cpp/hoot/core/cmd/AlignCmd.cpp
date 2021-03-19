@@ -47,12 +47,12 @@ public:
 
   AlignCmd() = default;
 
-  virtual QString getName() const override { return "align"; }
+  QString getName() const override { return "align"; }
 
-  virtual QString getDescription() const override
+  QString getDescription() const override
   { return "Brings two maps into alignment using rubbersheeting"; }
 
-  virtual int runSimple(QStringList& args) override
+  int runSimple(QStringList& args) override
   {
     QElapsedTimer timer;
     timer.start();

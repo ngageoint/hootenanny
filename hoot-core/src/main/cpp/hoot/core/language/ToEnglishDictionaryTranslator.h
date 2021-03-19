@@ -58,7 +58,7 @@ public:
   static QString className() { return "hoot::ToEnglishDictionaryTranslator"; }
 
   ToEnglishDictionaryTranslator();
-  virtual ~ToEnglishDictionaryTranslator() = default;
+  ~ToEnglishDictionaryTranslator() = default;
 
   /**
    * Translates the given input string into a translation & transliteration of the input.
@@ -68,7 +68,7 @@ public:
   /**
    * @see ToEnglishTranslator; wraps call to toEnglish
    */
-  virtual QString translate(const QString& textToTranslate) override;
+  QString translate(const QString& textToTranslate) override;
 
   /**
    * Converts the given input string into all possible known translations. E.g.
@@ -91,15 +91,15 @@ public:
 
   QString translateStreet(const QString& input);
 
-  virtual QStringList getSourceLanguages() const override { return QStringList(); }
-  virtual void setSourceLanguages(const QStringList& /*langCodes*/) override {}
-  virtual QString getDetectedLanguage() const override { return ""; }
+  QStringList getSourceLanguages() const override { return QStringList(); }
+  void setSourceLanguages(const QStringList& /*langCodes*/) override { }
+  QString getDetectedLanguage() const override { return ""; }
 
-  virtual void setConfiguration(const Settings& /*conf*/) {}
+  void setConfiguration(const Settings& /*conf*/) override { }
 
   void setTokenizeInput(bool tokenize) { _tokenizeInput = tokenize; }
 
-  virtual void setId(const QString& /*id*/) override {}
+  void setId(const QString& /*id*/) override { }
 
 private:
 

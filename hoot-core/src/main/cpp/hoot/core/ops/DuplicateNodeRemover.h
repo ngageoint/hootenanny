@@ -63,13 +63,13 @@ public:
   static QString className() { return "hoot::DuplicateNodeRemover"; }
 
   DuplicateNodeRemover(Meters distanceThreshold = -1.0);
-  virtual ~DuplicateNodeRemover() = default;
+  ~DuplicateNodeRemover() = default;
 
-  virtual void apply(std::shared_ptr<OsmMap>& map);
+  void apply(std::shared_ptr<OsmMap>& map) override;
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
   /**
    * Removes duplicate nodes from a map
@@ -80,14 +80,14 @@ public:
    */
   static void removeNodes(std::shared_ptr<OsmMap> map, Meters distanceThreshold = -1);
 
-  virtual QString getDescription() const override { return "Removes duplicate nodes"; }
+  QString getDescription() const override { return "Removes duplicate nodes"; }
 
-  virtual QString getInitStatusMessage() const override { return "Removing duplicate nodes..."; }
+  QString getInitStatusMessage() const override { return "Removing duplicate nodes..."; }
 
-  virtual QString getCompletedStatusMessage() const override
+  QString getCompletedStatusMessage() const override
   { return "Merged " + StringUtils::formatLargeNumber(_numAffected) + " node pairs."; }
 
-  virtual void setConflateInfoCache(const std::shared_ptr<ConflateInfoCache>& cache)
+  void setConflateInfoCache(const std::shared_ptr<ConflateInfoCache>& cache) override
   { _conflateInfoCache = cache; }
 
 protected:

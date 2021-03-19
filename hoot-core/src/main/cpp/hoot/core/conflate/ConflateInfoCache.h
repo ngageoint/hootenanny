@@ -81,7 +81,7 @@ public:
   ConflateInfoCache(const ConstOsmMapPtr& map);
   virtual ~ConflateInfoCache() = default;
 
-  virtual void setConfiguration(const Settings& conf) override;
+  void setConfiguration(const Settings& conf) override;
 
   /**
    * Returns the distance between two elements; backed by a cache

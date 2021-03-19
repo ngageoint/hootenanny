@@ -64,9 +64,9 @@ public:
   {
   }
 
-  virtual ~SampledAngleHistogramVisitor() = default;
+  ~SampledAngleHistogramVisitor() = default;
 
-  virtual void visit(const std::shared_ptr<const Element>& e)
+  void visit(const std::shared_ptr<const Element>& e) override
   {
     if (!e)
     {
@@ -92,9 +92,9 @@ public:
     }
   }
 
-  virtual QString getDescription() const { return ""; }
-  virtual QString getName() const { return ""; }
-  virtual QString getClassName() const override { return className(); }
+  QString getDescription() const override { return ""; }
+  QString getName() const override { return ""; }
+  QString getClassName() const override { return className(); }
 
 private:
 

@@ -54,7 +54,7 @@ public:
   /**
    * The default reads the map and then calls finalizePartial();
    */
-  virtual void read(const OsmMapPtr& map) override;
+  void read(const OsmMapPtr& map) override;
 
   /**
    * Reads all the entries in the OsmMap.
@@ -73,20 +73,6 @@ public:
      complete.
    */
   virtual void finalizePartial() = 0;
-
-  /**
-   * Returns true if the reader can read any more elements
-   *
-   * @return true if there are more elements; false otherwise
-   */
-  virtual bool hasMoreElements() = 0;
-
-  /**
-   * Reads the next available element from the data source
-   *
-   * @return an element
-   */
-  virtual ElementPtr readNextElement() = 0;
 
 protected:
 

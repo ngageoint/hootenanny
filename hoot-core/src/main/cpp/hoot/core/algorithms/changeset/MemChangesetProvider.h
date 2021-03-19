@@ -44,7 +44,7 @@ public:
   explicit MemChangesetProvider(const std::shared_ptr<OGRSpatialReference>& pProjection)
     : _projection(pProjection) { }
 
-  virtual ~MemChangesetProvider() = default;
+  ~MemChangesetProvider() = default;
 
   /**
    * @see ChangeSetProvider

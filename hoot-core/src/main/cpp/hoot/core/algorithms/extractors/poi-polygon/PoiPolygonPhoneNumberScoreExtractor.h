@@ -52,18 +52,18 @@ public:
   static QString className() { return "hoot::PoiPolygonPhoneNumberScoreExtractor"; }
 
   PoiPolygonPhoneNumberScoreExtractor();
-  virtual ~PoiPolygonPhoneNumberScoreExtractor() = default;
+  ~PoiPolygonPhoneNumberScoreExtractor() = default;
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const  override{ return className(); }
 
-  virtual double extract(const OsmMap& map, const ConstElementPtr& poi,
-                         const ConstElementPtr& poly) const;
+  double extract(const OsmMap& map, const ConstElementPtr& poi,
+                 const ConstElementPtr& poly) const override;
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Scores phone number similarity for POI/Polygon conflation"; }
 
   long getPhoneNumbersProcessed() const { return _phoneNumberParser.getPhoneNumbersProcessed(); }

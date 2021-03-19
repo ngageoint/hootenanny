@@ -46,18 +46,17 @@ public:
   OneWayCriterion() = default;
   virtual ~OneWayCriterion() = default;
 
-  virtual bool isSatisfied(const ConstElementPtr& e) const override;
+  bool isSatisfied(const ConstElementPtr& e) const override;
 
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new OneWayCriterion()); }
+  ElementCriterionPtr clone() override { return ElementCriterionPtr(new OneWayCriterion()); }
 
-  virtual QString getDescription() const { return "Identifies one way streets"; }
+  QString getDescription() const override { return "Identifies one way streets"; }
 
-  virtual GeometryType getGeometryType() const
-  { return GeometryType::Line; }
+  GeometryType getGeometryType() const override { return GeometryType::Line; }
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 };
 
 }

@@ -60,13 +60,13 @@ public:
   static QString className() { return "hoot::AddressScoreExtractor"; }
 
   AddressScoreExtractor();
-  virtual ~AddressScoreExtractor() = default;
+  ~AddressScoreExtractor() = default;
 
-  virtual QString getClassName() const { return className(); }
+  QString getClassName() const override { return className(); }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
   /**
    * Calculates the address similarity score of two features
@@ -78,10 +78,10 @@ public:
    * for a non-match where both input elements have an address, and a score of -1.0 is returned if
    * either input element does not have an address
    */
-  virtual double extract(const OsmMap& map, const ConstElementPtr& element1,
-                         const ConstElementPtr& element2) const;
+  double extract(const OsmMap& map, const ConstElementPtr& element1,
+                         const ConstElementPtr& element2) const override;
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Scores address similarity for conflation"; }
 
   long getAddressesProcessed() const { return _addressesProcessed; }

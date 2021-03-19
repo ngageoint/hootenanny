@@ -43,21 +43,21 @@ public:
   static QString className() { return "hoot::OsmApiDbReader"; }
 
   OsmApiDbReader();
-  virtual ~OsmApiDbReader();
+  ~OsmApiDbReader();
 
-  virtual void open(const QString& urlStr) override;
+  void open(const QString& urlStr) override;
 
-  virtual void setConfiguration(const Settings &conf) override;
+  void setConfiguration(const Settings &conf) override;
 
-  virtual QString supportedFormats() override { return MetadataTags::OsmApiDbScheme() + "://"; }
+  QString supportedFormats() override { return MetadataTags::OsmApiDbScheme() + "://"; }
 
 protected:
 
-  virtual NodePtr _resultToNode(const QSqlQuery& resultIterator, OsmMap& map) override;
-  virtual WayPtr _resultToWay(const QSqlQuery& resultIterator, OsmMap& map) override;
-  virtual RelationPtr _resultToRelation(const QSqlQuery& resultIterator, const OsmMap& map) override;
+  NodePtr _resultToNode(const QSqlQuery& resultIterator, OsmMap& map) override;
+  WayPtr _resultToWay(const QSqlQuery& resultIterator, OsmMap& map) override;
+  RelationPtr _resultToRelation(const QSqlQuery& resultIterator, const OsmMap& map) override;
 
-  virtual std::shared_ptr<ApiDb> _getDatabase() const override { return _database; }
+  std::shared_ptr<ApiDb> _getDatabase() const override { return _database; }
 
 private:
 

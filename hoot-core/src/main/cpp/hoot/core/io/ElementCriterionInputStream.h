@@ -47,31 +47,31 @@ public:
    */
   ElementCriterionInputStream(const ElementInputStreamPtr& elementSource,
                               const ElementCriterionPtr& criterion);
-  virtual ~ElementCriterionInputStream() = default;
+  ~ElementCriterionInputStream() = default;
 
   /**
    * @brief close
    * Invokes the close function on the source element input stream
    */
-  virtual void close() { _elementSource->close(); }
+  void close() override { _elementSource->close(); }
 
   /**
    * Returns the source's projection.
    */
-  virtual std::shared_ptr<OGRSpatialReference> getProjection() const;
+  std::shared_ptr<OGRSpatialReference> getProjection() const override;
 
   /**
    * @brief hasMoreElements
    * @return return value from call to source ElementInputStream's hasMoreElements() method
    */
-  virtual bool hasMoreElements() { return _elementSource->hasMoreElements(); }
+  bool hasMoreElements() override { return _elementSource->hasMoreElements(); }
 
   /**
    * @brief readNextElement
    * @return Pointer to an elemement that is read from elementSource and is satisfied by the
    *    criterion.
    */
-  virtual ElementPtr readNextElement();
+  ElementPtr readNextElement() override;
 
 private:
 

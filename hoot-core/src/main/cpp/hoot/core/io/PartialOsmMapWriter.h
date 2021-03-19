@@ -70,7 +70,7 @@ public:
   virtual void writePartial(const ConstWayPtr& w) = 0;
   virtual void writePartial(const ConstRelationPtr& r) = 0;
 
-  virtual void writeElement(ElementPtr& element);
+  void writeElement(ElementPtr& element) override;
 };
 
 }

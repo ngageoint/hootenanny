@@ -39,18 +39,18 @@ public:
   static QString className() { return "hoot::MeanAggregator"; }
 
   MeanAggregator() = default;
-  virtual ~MeanAggregator() = default;
+  ~MeanAggregator() = default;
 
-  virtual double aggregate(std::vector<double>& d) const override;
+  double aggregate(std::vector<double>& d) const override;
 
-  virtual QString toString() const override { return "MeanAggregator"; }
+  QString toString() const override { return "MeanAggregator"; }
 
-  virtual QString getDescription() const override
+  QString getDescription() const override
   { return "Aggregates data based on the mean value"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 };
 
 }

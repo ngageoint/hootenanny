@@ -72,9 +72,9 @@ class DeletableBuildingCriterion : public ElementCriterion
 public:
 
   DeletableBuildingCriterion() = default;
-  virtual ~DeletableBuildingCriterion() = default;
+  ~DeletableBuildingCriterion() = default;
 
-  virtual bool isSatisfied(const ConstElementPtr& e) const
+  bool isSatisfied(const ConstElementPtr& e) const override
   {
     bool result = false;
 
@@ -93,16 +93,16 @@ public:
     return !result;
   }
 
-  virtual QString getDescription() const { return ""; }
+  QString getDescription() const override { return ""; }
 
-  virtual QString getName() const override { return ""; }
+  QString getName() const override { return ""; }
 
-virtual QString getClassName() const override { return ""; }
+  QString getClassName() const override { return ""; }
 
-  virtual ElementCriterionPtr clone()
+  ElementCriterionPtr clone() override
   { return ElementCriterionPtr(new DeletableBuildingCriterion()); }
 
-  virtual QString toString() const override { return ""; }
+  QString toString() const override { return ""; }
 
 private:
 
