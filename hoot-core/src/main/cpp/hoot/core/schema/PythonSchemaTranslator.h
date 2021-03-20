@@ -45,25 +45,25 @@ public:
   static QString className() { return "hoot::PythonSchemaTranslator"; }
 
   PythonSchemaTranslator() = default;
-  virtual ~PythonSchemaTranslator();
+  ~PythonSchemaTranslator();
 
-  virtual bool isValidScript();
+  bool isValidScript() override;
 
   /**
    * don't evaluate this first.
    */
-  virtual int order() const { return 100; }
+  int order() const override { return 100; }
 
 protected:
 
   // avoid including Python.h in this header file.
   void* _translateFunction;
 
-  virtual void _init();
+  void _init() override;
 
-  virtual void _finalize();
+  void _finalize() override;
 
-  virtual void _translateToOsm(Tags& t, const char *layerName, const char* geomType);
+  void _translateToOsm(Tags& t, const char *layerName, const char* geomType) override;
 };
 
 }

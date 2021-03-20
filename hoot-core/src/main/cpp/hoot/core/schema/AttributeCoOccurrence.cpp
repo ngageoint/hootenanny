@@ -59,11 +59,11 @@ public:
 
   explicit RefToEidVisitor(QString ref) : _ref(ref) { }
 
-  virtual ~RefToEidVisitor() = default;
+  ~RefToEidVisitor() = default;
 
   const RefToEid& getRefToEid() const { return _ref2Eid; }
 
-  virtual void visit(const ConstElementPtr& e)
+  void visit(const ConstElementPtr& e) override
   {
     QStringList refs;
     if (e->getTags().contains(_ref))
@@ -82,9 +82,9 @@ public:
     }
   }
 
-  virtual QString getDescription() const { return ""; }
-  virtual QString getName() const { return ""; }
-  virtual QString getClassName() const override { return ""; }
+  QString getDescription() const override { return ""; }
+  QString getName() const override { return ""; }
+  QString getClassName() const override { return ""; }
 
 private:
 
@@ -102,15 +102,15 @@ public:
   CoOccurrenceVisitor(const RefToEidVisitor::RefToEid& refSet, AttributeCoOccurrence::CoOccurrenceHash& h) :
   _refSet(refSet), _coOccurrence(h) { }
 
-  virtual ~CoOccurrenceVisitor() = default;
+  ~CoOccurrenceVisitor() = default;
 
-  virtual void setOsmMap(const OsmMap* map) { _map = map; }
+  void setOsmMap(const OsmMap* map) override { _map = map; }
 
-  virtual QString getDescription() const { return ""; }
-  virtual QString getName() const { return ""; }
-  virtual QString getClassName() const override { return ""; }
+  QString getDescription() const override { return ""; }
+  QString getName() const override { return ""; }
+  QString getClassName() const override { return ""; }
 
-  virtual void visit(const ConstElementPtr& e)
+  void visit(const ConstElementPtr& e) override
   {
     QStringList refs;
     if (e->getTags().contains(MetadataTags::Ref1()))

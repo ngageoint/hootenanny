@@ -45,20 +45,20 @@ public:
   static QString className() { return "hoot::FeatureCountVisitor"; }
 
   FeatureCountVisitor() : _count(0) { }
-  virtual ~FeatureCountVisitor() = default;
+  ~FeatureCountVisitor() = default;
 
   int getCount() const { return _count; }
 
-  double getStat() const { return _count; }
+  double getStat() const override { return _count; }
 
-  virtual void visit(const std::shared_ptr<const Element>& e);
+  void visit(const std::shared_ptr<const Element>& e) override;
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Counts the number of elements having at least one information tag"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

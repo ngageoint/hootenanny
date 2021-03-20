@@ -48,17 +48,17 @@ public:
 
   CountManualMatchesVisitor() : _numManualMatches(0) { }
 
-  virtual ~CountManualMatchesVisitor() = default;
+  ~CountManualMatchesVisitor() = default;
 
-  double getStat() const { return _numManualMatches; }
+  double getStat() const override { return _numManualMatches; }
 
-  virtual void visit(const ConstElementPtr& e);
+  void visit(const ConstElementPtr& e) override;
 
-  virtual QString getDescription() const { return "Counts manual matches"; }
+  QString getDescription() const override { return "Counts manual matches"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

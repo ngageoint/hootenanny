@@ -47,31 +47,31 @@ public:
   static QString className() { return "hoot::BuildingLevelsVisitor"; }
 
   BuildingLevelsVisitor();
-  virtual ~BuildingLevelsVisitor() = default;
+  ~BuildingLevelsVisitor() = default;
 
-  virtual void visit(const ConstElementPtr& e) override;
+  void visit(const ConstElementPtr& e) override;
 
-  virtual QString getDescription() const { return "Calculates building level statistics"; }
+  QString getDescription() const override { return "Calculates building level statistics"; }
 
-  virtual QString getInitStatusMessage() const
+  QString getInitStatusMessage() const override
   { return "Calculating building level statistics..."; }
 
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   { return "Calculated level statistics for " + QString::number(_numAffected) + " buildings"; }
 
-  virtual long numWithStat() const { return _numAffected; }
-  virtual double getStat() const { return _totalLevels; }
-  virtual double getMin() const { return _minLevels; }
-  virtual double getMax() const { return _maxLevels; }
-  virtual double getAverage() const
+  long numWithStat() const override { return _numAffected; }
+  double getStat() const override { return _totalLevels; }
+  double getMin() const override { return _minLevels; }
+  double getMax() const override { return _maxLevels; }
+  double getAverage() const override
   {
     const double average = _numAffected == 0 ? 0.0 : _totalLevels / _numAffected;
     return average;
   }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

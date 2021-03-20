@@ -50,9 +50,9 @@ public:
     _error = error;
   }
 
-  virtual ~Exception() throw() = default;
+  ~Exception() throw() = default;
 
-  virtual const char* what() const throw()
+  const char* what() const throw() override
   {
     return _error.toLatin1();
   }

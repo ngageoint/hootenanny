@@ -95,15 +95,15 @@ public:
       _errorLimit(errorLimit)
   {
   }
-  virtual ~CompareVisitor() = default;
+  ~CompareVisitor() = default;
 
   bool isMatch() { return _matches; }
 
-  virtual QString getDescription() const { return ""; }
-  virtual QString getName() const { return ""; }
-  virtual QString getClassName() const override { return ""; }
+  QString getDescription() const override { return ""; }
+  QString getName() const override { return ""; }
+  QString getClassName() const override { return ""; }
 
-  virtual void visit(const std::shared_ptr<const Element>& e)
+  void visit(const std::shared_ptr<const Element>& e) override
   {
     // e is the test element
 

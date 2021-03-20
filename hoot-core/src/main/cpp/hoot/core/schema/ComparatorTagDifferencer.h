@@ -42,9 +42,9 @@ public:
   static QString className() { return "hoot::ComparatorTagDifferencer"; }
 
   ComparatorTagDifferencer() = default;
-  virtual ~ComparatorTagDifferencer() = default;
+  ~ComparatorTagDifferencer() = default;
 
-  virtual double diff(const ConstOsmMapPtr& map, const ConstElementPtr& e1,
+  double diff(const ConstOsmMapPtr& map, const ConstElementPtr& e1,
     const ConstElementPtr& e2) const override;
 };
 

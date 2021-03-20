@@ -46,12 +46,12 @@ public:
   static QString className() { return "hoot::CalculateMapBoundsVisitor"; }
 
   CalculateMapBoundsVisitor() = default;
-  virtual ~CalculateMapBoundsVisitor() = default;
+  ~CalculateMapBoundsVisitor() = default;
 
   OGREnvelope getBounds() { return _envelope; }
 
   // Note: should only visit nodes when calculating bounds
-  virtual void visit(const std::shared_ptr<const Element>& e);
+  void visit(const std::shared_ptr<const Element>& e) override;
 
   // Convenient way to get bounds
   static OGREnvelope getBounds(const OsmMapPtr& map);
@@ -59,11 +59,11 @@ public:
   static geos::geom::Envelope getGeosBounds(const OsmMapPtr& map);
   static geos::geom::Envelope getGeosBounds(const ConstOsmMapPtr& map);
 
-  virtual QString getDescription() const { return "Calculates the extent of a map"; }
+  QString getDescription() const override { return "Calculates the extent of a map"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

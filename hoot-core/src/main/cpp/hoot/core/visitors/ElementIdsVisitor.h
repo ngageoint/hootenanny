@@ -49,7 +49,7 @@ public:
 
   ElementIdsVisitor(const ElementType& elementType);
   ElementIdsVisitor(const ElementType& elementType, ElementCriterion* pCrit);
-  virtual ~ElementIdsVisitor() = default;
+  ~ElementIdsVisitor() = default;
 
   void visit(const std::shared_ptr<const Element>& e) override;
 
@@ -124,11 +124,11 @@ public:
    */
   static std::vector<long> findWaysByNode(const ConstOsmMapPtr& map, long nodeId);
 
-  virtual QString getDescription() const { return "Collects the element IDs visited"; }
+  QString getDescription() const override { return "Collects the element IDs visited"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

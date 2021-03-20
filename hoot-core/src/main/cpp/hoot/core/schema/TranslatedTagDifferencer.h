@@ -62,12 +62,12 @@ public:
   static QString className() { return "hoot::TranslatedTagDifferencer"; }
 
   TranslatedTagDifferencer();
-  virtual ~TranslatedTagDifferencer() = default;
+  ~TranslatedTagDifferencer() = default;
 
-  virtual double diff(const ConstOsmMapPtr& map, const ConstElementPtr& e1,
-    const ConstElementPtr& e2) const;
+  double diff(const ConstOsmMapPtr& map, const ConstElementPtr& e1,
+    const ConstElementPtr& e2) const override;
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
 private:
   QSet<QString> _ignoreList;
