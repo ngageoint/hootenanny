@@ -27,7 +27,6 @@
 #include "SchemaTranslatedTagCountVisitor.h"
 
 // hoot
-#include <hoot/core/schema/ScriptToOgrSchemaTranslator.h>
 #include <hoot/core/io/schema/Feature.h>
 #include <hoot/core/io/schema/FeatureDefinition.h>
 #include <hoot/core/io/schema/FieldDefinition.h>
@@ -57,10 +56,16 @@ SchemaTranslatedTagCountVisitor::SchemaTranslatedTagCountVisitor(
   _translator = std::dynamic_pointer_cast<ScriptToOgrSchemaTranslator>(t);
   if (!_translator)
   {
-    throw HootException("Error allocating translator, the translation script must support "
-                        "converting to OGR.");
+    throw HootException(
+      "Error allocating translator, the translation script must support converting to OGR.");
   }
+  _schema = _translator->getOgrOutputSchema();
+}
 
+void SchemaTranslatedTagCountVisitor::setTranslator(
+  const std::shared_ptr<ScriptSchemaTranslator>& translator)
+{
+  _translator = std::dynamic_pointer_cast<ScriptToOgrSchemaTranslator>(translator);
   _schema = _translator->getOgrOutputSchema();
 }
 

@@ -352,6 +352,69 @@
          "visitor":"hoot::FeatureCountVisitor",
          "criterion":"",
          "StatCall":"Stat"
+      },
+      {
+         "name":"Area Translated Populated Tag Percent",
+         "visitor":"hoot::SchemaTranslatedTagCountVisitor",
+         "criterion":"hoot::AreaCriterion",
+         "filterCriterion":"hoot::AreaCriterion",
+         "StatCall":"Stat"
+      },
+      {
+         "name":"Building Translated Populated Tag Percent",
+         "visitor":"hoot::SchemaTranslatedTagCountVisitor",
+         "criterion":"hoot::BuildingCriterion",
+         "filterCriterion":"hoot::BuildingCriterion",
+         "StatCall":"Stat"
+      },
+      {
+         "name":"Road Translated Populated Tag Percent",
+         "visitor":"hoot::SchemaTranslatedTagCountVisitor",
+         "criterion":"hoot::HighwayCriterion",
+         "filterCriterion":"hoot::HighwayCriterion",
+         "StatCall":"Stat"
+      },
+      {
+         "name":"POI Translated Populated Tag Percent",
+         "visitor":"hoot::SchemaTranslatedTagCountVisitor",
+         "criterion":"hoot::PoiCriterion",
+         "filterCriterion":"hoot::PoiCriterion",
+         "StatCall":"Stat"
+      },
+      {
+         "name":"Polygon Conflatable POI Translated Populated Tag Percent",
+         "visitor":"hoot::SchemaTranslatedTagCountVisitor",
+         "criterion":"hoot::PoiPolygonPoiCriterion",
+         "filterCriterion":"hoot::PoiPolygonPoiCriterion",
+         "StatCall":"Stat"
+      },
+      {
+         "name":"Polygon Translated Populated Tag Percent",
+         "visitor":"hoot::SchemaTranslatedTagCountVisitor",
+         "criterion":"hoot::PoiPolygonPolyCriterion",
+         "filterCriterion":"hoot::PoiPolygonPolyCriterion",
+         "StatCall":"Stat"
+      },
+      {
+         "name":"Power Line Translated Populated Tag Percent",
+         "visitor":"hoot::SchemaTranslatedTagCountVisitor",
+         "criterion":"hoot::PowerLineCriterion",
+         "filterCriterion":"hoot::PowerLineCriterion",
+         "StatCall":"Stat"
+      },
+      {
+         "name":"Railway Translated Populated Tag Percent",
+         "visitor":"hoot::SchemaTranslatedTagCountVisitor",
+         "criterion":"hoot::RailwayCriterion",
+         "filterCriterion":"hoot::RailwayCriterion",
+         "StatCall":"Stat"
+      },
+      {
+         "name":"Waterway Translated Populated Tag Percent",
+         "visitor":"hoot::SchemaTranslatedTagCountVisitor",
+         "criterion":"hoot::LinearWaterwayCriterion",
+         "filterCriterion":"hoot::LinearWaterwayCriterion",
+         "StatCall":"Stat"
       }
    ]
 }

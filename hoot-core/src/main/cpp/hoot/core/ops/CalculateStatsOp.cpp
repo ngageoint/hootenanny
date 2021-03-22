@@ -38,7 +38,6 @@
 #include <hoot/core/criterion/StatusCriterion.h>
 #include <hoot/core/criterion/poi-polygon/PoiPolygonPoiCriterion.h>
 #include <hoot/core/criterion/poi-polygon/PoiPolygonPolyCriterion.h>
-#include <hoot/core/schema/ScriptSchemaTranslator.h>
 #include <hoot/core/schema/ScriptSchemaTranslatorFactory.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/MapProjector.h>
@@ -249,7 +248,7 @@ void CalculateStatsOp::_initStatCalc()
     if (ConfigOptions().getStatsTranslateScript() != "")
     {
       // the number of calls to _applyVisitor made during translated tag calc
-      numSlowStatCalcs += 10;
+      numSlowStatCalcs += 4; //14 (10)
     }
 
     LOG_VARD(_inputIsConflatedMapOutput);
@@ -534,15 +533,18 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
 
     _addStat("Longest Tag", _getApplyVisitor(new LongestTagVisitor(), "Longest Tag"));
 
-    // TODO: move all of these into _generateFeatureStats
     LOG_DEBUG("config script: " + ConfigOptions().getStatsTranslateScript());
     if (ConfigOptions().getStatsTranslateScript() != "")
     {
-      shared_ptr<ScriptSchemaTranslator> st(
-        ScriptSchemaTranslatorFactory::getInstance().createTranslator(
-          ConfigOptions().getStatsTranslateScript()));
-      st->setErrorTreatment(StrictOff);
-      SchemaTranslatedTagCountVisitor tcv(st);
+      if (!_schemaTranslator)
+      {
+        assert(!ConfigOptions().getStatsTranslateScript().isEmpty());
+        _schemaTranslator.reset(
+          ScriptSchemaTranslatorFactory::getInstance().createTranslator(
+            ConfigOptions().getStatsTranslateScript()));
+        _schemaTranslator->setErrorTreatment(StrictOff);
+      }
+      SchemaTranslatedTagCountVisitor tcv(_schemaTranslator);
       _applyVisitor(&tcv, "Translated Tag Count");
       _addStat("Translated Populated Tag Percent", tcv.getStat());
       _addStat("Translated Populated Tags", tcv.getPopulatedCount());
@@ -554,7 +556,8 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
         _addStat(
           "Area Translated Populated Tag Percent",
           _applyVisitor(
-            new AreaCriterion(map), new SchemaTranslatedTagCountVisitor(st),
+            new AreaCriterion(map),
+            new SchemaTranslatedTagCountVisitor(_schemaTranslator),
             "Translated Areas Count"));
       }
       if (_filter.isEmpty() || _filter.contains(BuildingCriterion::className()))
@@ -562,7 +565,8 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
         _addStat(
           "Building Translated Populated Tag Percent",
           _applyVisitor(
-            new BuildingCriterion(map), new SchemaTranslatedTagCountVisitor(st),
+            new BuildingCriterion(map),
+            new SchemaTranslatedTagCountVisitor(_schemaTranslator),
             "Translated Buildings Count"));
       }
       if (_filter.isEmpty() || _filter.contains(HighwayCriterion::className()))
@@ -570,7 +574,8 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
         _addStat(
           "Road Translated Populated Tag Percent",
           _applyVisitor(
-            new HighwayCriterion(map), new SchemaTranslatedTagCountVisitor(st),
+            new HighwayCriterion(map),
+            new SchemaTranslatedTagCountVisitor(_schemaTranslator),
             "Translated Roads Count"));
       }
       if (_filter.isEmpty() || _filter.contains(PoiCriterion::className()))
@@ -578,14 +583,17 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
         _addStat(
           "POI Translated Populated Tag Percent",
           _applyVisitor(
-            new PoiCriterion(), new SchemaTranslatedTagCountVisitor(st), "Translated POIs Count"));
+            new PoiCriterion(),
+            new SchemaTranslatedTagCountVisitor(_schemaTranslator),
+            "Translated POIs Count"));
       }
       if (_filter.isEmpty() || _filter.contains(PoiPolygonPoiCriterion::className()))
       {
         _addStat(
           "Polygon Conflatable POI Translated Populated Tag Percent",
           _applyVisitor(
-            new PoiPolygonPoiCriterion(), new SchemaTranslatedTagCountVisitor(st),
+            new PoiPolygonPoiCriterion(),
+            new SchemaTranslatedTagCountVisitor(_schemaTranslator),
             "Translated POI/Polygon POIs Count"));
       }
       if (_filter.isEmpty() || _filter.contains(PoiPolygonPolyCriterion::className()))
@@ -593,7 +601,8 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
         _addStat(
           "Polygon Translated Populated Tag Percent",
           _applyVisitor(
-            new PoiPolygonPolyCriterion(), new SchemaTranslatedTagCountVisitor(st),
+            new PoiPolygonPolyCriterion(),
+            new SchemaTranslatedTagCountVisitor(_schemaTranslator),
             "Translated POI/Polygon Polygons Count"));
       }
       if (_filter.isEmpty() || _filter.contains(PowerLineCriterion::className()))
@@ -601,7 +610,8 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
         _addStat(
           "Power Line Translated Populated Tag Percent",
           _applyVisitor(
-            new PowerLineCriterion(), new SchemaTranslatedTagCountVisitor(st),
+            new PowerLineCriterion(),
+            new SchemaTranslatedTagCountVisitor(_schemaTranslator),
             "Translated Power Lines Count"));
       }
       if (_filter.isEmpty() || _filter.contains(RailwayCriterion::className()))
@@ -609,7 +619,8 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
         _addStat(
           "Railway Translated Populated Tag Percent",
           _applyVisitor(
-            new RailwayCriterion(), new SchemaTranslatedTagCountVisitor(st),
+            new RailwayCriterion(),
+            new SchemaTranslatedTagCountVisitor(_schemaTranslator),
             "Translated Railways Count"));
       }
       if (_filter.isEmpty() || _filter.contains(LinearWaterwayCriterion::className()))
@@ -617,7 +628,8 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
         _addStat(
           "Waterway Translated Populated Tag Percent",
           _applyVisitor(
-            new LinearWaterwayCriterion(), new SchemaTranslatedTagCountVisitor(st),
+            new LinearWaterwayCriterion(),
+            new SchemaTranslatedTagCountVisitor(_schemaTranslator),
             "Translated Waterways Count"));
       }
     }
@@ -661,6 +673,12 @@ void CalculateStatsOp::_interpretStatData(shared_ptr<const OsmMap>& constMap, St
     return;
   }
 
+  // TODO: remove
+  if (d.getVisitor() == SchemaTranslatedTagCountVisitor::className())
+  {
+    return;
+  }
+
   shared_ptr<ElementCriterion> pCrit;
 
   if (d.getCriterion().length() > 0)
@@ -695,6 +713,13 @@ void CalculateStatsOp::_interpretStatData(shared_ptr<const OsmMap>& constMap, St
 
   if (d.getVisitor().length() > 0)
   {
+    // Don't collect translation related stats if no translation script has been specified.
+    if (d.getVisitor() == SchemaTranslatedTagCountVisitor::className() &&
+        ConfigOptions().getStatsTranslateScript().isEmpty())
+    {
+      return;
+    }
+
     double val = 0;
 
     if (pCrit)
@@ -716,6 +741,21 @@ void CalculateStatsOp::_interpretStatData(shared_ptr<const OsmMap>& constMap, St
         throw HootException(
           QString("Unable to construct visitor '%1' in stats data entry '%2'")
             .arg(d.getVisitor(), d.getName()) );
+      }
+
+      if (d.getVisitor() == SchemaTranslatedTagCountVisitor::className())
+      {
+        if (!_schemaTranslator)
+        {
+          assert(!ConfigOptions().getStatsTranslateScript().isEmpty());
+          _schemaTranslator.reset(
+            ScriptSchemaTranslatorFactory::getInstance().createTranslator(
+              ConfigOptions().getStatsTranslateScript()));
+          _schemaTranslator->setErrorTreatment(StrictOff);
+        }
+        shared_ptr<SchemaTranslatedTagCountVisitor> translatedVis =
+          std::dynamic_pointer_cast<SchemaTranslatedTagCountVisitor>(pCriterionVisitor);
+        translatedVis->setTranslator(_schemaTranslator);
       }
 
       FilteredVisitor filteredVisitor =
@@ -811,8 +851,7 @@ double CalculateStatsOp::_applyVisitor(
 }
 
 double CalculateStatsOp::_applyVisitor(
-  const FilteredVisitor& v, const QString& statName,
-  StatData::StatCall call)
+  const FilteredVisitor& v, const QString& statName, StatData::StatCall call)
 {
   boost::any emptyVisitorData;
   return _applyVisitor(v, emptyVisitorData, statName, call);

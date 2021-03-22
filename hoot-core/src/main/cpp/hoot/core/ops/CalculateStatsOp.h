@@ -35,6 +35,7 @@
 #include <hoot/core/info/StatData.h>
 #include <hoot/core/ops/ConstOsmMapOperation.h>
 #include <hoot/core/util/Configurable.h>
+#include <hoot/core/schema/ScriptSchemaTranslator.h>
 
 // Qt
 #include <QList>
@@ -111,6 +112,8 @@ private:
   QList<SingleStat> _stats;
   // TODO
   QSet<QString> _filter;
+
+  std::shared_ptr<ScriptSchemaTranslator> _schemaTranslator;
 
   QHash<QString, std::shared_ptr<ElementCriterion>> _criterionCache;
   QHash<QString, std::shared_ptr<ConstElementVisitor>> _appliedVisitorCache;
