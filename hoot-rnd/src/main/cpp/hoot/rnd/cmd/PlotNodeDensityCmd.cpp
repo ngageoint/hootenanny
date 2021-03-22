@@ -59,12 +59,12 @@ class PlotNodeDensityCmd : public BaseCommand
 
     PlotNodeDensityCmd() = default;
 
-    virtual QString getName() const override { return "plot-node-density"; }
+    QString getName() const override { return "plot-node-density"; }
 
-    virtual QString getDescription() const override
+    QString getDescription() const override
     { return "Creates a node density plot for a map"; }
 
-    virtual QString getType() const { return "rnd"; }
+    QString getType() const { return "rnd"; }
 
     Envelope getEnvelope(const std::shared_ptr<OsmMapReader>& reader)
     {
@@ -171,7 +171,7 @@ class PlotNodeDensityCmd : public BaseCommand
       return result;
     }
 
-    virtual int runSimple(QStringList& args) override
+    int runSimple(QStringList& args) override
     {
       QElapsedTimer timer;
       timer.start();

@@ -66,12 +66,12 @@ public:
 
   EvalPointMovesCmd() = default;
 
-  virtual QString getName() const override { return "evaluate-point-moves"; }
+  QString getName() const override { return "evaluate-point-moves"; }
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Calculates the error introduced by various operations on random map points"; }
 
-  virtual QString getType() const override { return "rnd"; }
+  QString getType() const override { return "rnd"; }
 
   struct Comparison
   {
@@ -192,7 +192,7 @@ public:
     return result;
   }
 
-  virtual int runSimple(QStringList& args) override
+  int runSimple(QStringList& args) override
   {
     QElapsedTimer timer;
     timer.start();

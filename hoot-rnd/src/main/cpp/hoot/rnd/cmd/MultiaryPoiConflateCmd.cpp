@@ -65,14 +65,14 @@ public:
 
   MultiaryConflatePoiCmd() = default;
 
-  virtual QString getName() const override { return "multiary-poi-conflate"; }
+  QString getName() const override { return "multiary-poi-conflate"; }
 
-  virtual QString getDescription() const override
+  QString getDescription() const override
   { return "Conflates two or more POI maps into a single map (experimental) "; }
 
-  virtual QString getType() const override { return "rnd"; }
+  QString getType() const override { return "rnd"; }
 
-  virtual int runSimple(QStringList& args) override
+  int runSimple(QStringList& args) override
   {
     QElapsedTimer timer;
     timer.start();

@@ -105,14 +105,14 @@ public:
     return result;
   }
 
-  virtual QString getName() const override { return "multiary-score-poi-matches"; }
+  QString getName() const override { return "multiary-score-poi-matches"; }
 
-  virtual QString getDescription() const override
+  QString getDescription() const override
   { return "Scores the performance of multiary-poi-conflate against a manually matched map (experimental) "; }
 
-  virtual QString getType() const override { return "rnd"; }
+  QString getType() const override { return "rnd"; }
 
-  virtual int runSimple(QStringList& args) override
+  int runSimple(QStringList& args) override
   {
     QElapsedTimer timer;
     timer.start();

@@ -42,14 +42,14 @@ public:
 
   LoginCmd() = default;
 
-  virtual QString getName() const override { return "login"; }
+  QString getName() const override { return "login"; }
 
-  virtual QString getDescription() const override
+  QString getDescription() const override
   { return "Logs a user into the Hootenanny Web Services"; }
 
-  virtual QString getType() const { return "rnd"; }
+  QString getType() const override { return "rnd"; }
 
-  virtual int runSimple(QStringList& args) override
+  int runSimple(QStringList& args) override
   {
     if (!args.empty())
     {

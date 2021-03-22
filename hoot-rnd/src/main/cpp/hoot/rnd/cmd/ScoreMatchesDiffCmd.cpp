@@ -46,14 +46,14 @@ public:
 
   ScoreMatchesDiffCmd() = default;
 
-  virtual QString getName() const override { return "score-matches-diff"; }
+  QString getName() const override { return "score-matches-diff"; }
 
-  virtual QString getType() const override { return "rnd"; }
+  QString getType() const override { return "rnd"; }
 
-  virtual QString getDescription() const override
+  QString getDescription() const override
   { return "Compares conflate performance between score-matches outputs (experimental)"; }
 
-  virtual int runSimple(QStringList& args) override
+  int runSimple(QStringList& args) override
   {
     QElapsedTimer timer;
     timer.start();

@@ -58,9 +58,9 @@ public:
 
   ClassInitializerTemplate() = default;
 
-  virtual ~ClassInitializerTemplate() = default;
+  ~ClassInitializerTemplate() = default;
 
-  virtual void Init(v8::Handle<v8::Object> exports) override
+  void Init(v8::Handle<v8::Object> exports) override
   {
     T::Init(exports);
   }
