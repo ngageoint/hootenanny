@@ -43,7 +43,8 @@ namespace hoot
 {
 
 /**
- * Contains descriptive information about MatchCreators and MergerCreators
+ * Contains descriptive information about MatchCreators and MergerCreators. This class bridges
+ * several concepts used through out conflation and statistics generation.
  */
 class CreatorDescription
 {
@@ -82,23 +83,23 @@ public:
     bool experimental);
 
   /**
-   * TODO
+   * Converts a base feature type to a string representation
    *
-   * @param t
-   * @return
+   * @param t the feature type to convert
+   * @return a string
    */
   static QString baseFeatureTypeToString(BaseFeatureType t);
 
   /**
-   * TODO
+   * Converts the string representation of a base feature type to an enum
    *
-   * @param s
-   * @return
+   * @param s the string to convert
+   * @return a feature type enumeration value
    */
   static BaseFeatureType stringToBaseFeatureType(QString s);
 
   /*
-   * These two functions, getFeatureCalcType & getElementCriterion could be pushed down into the
+   * These two functions, getFeatureCalcType and getElementCriterion, could be pushed down into the
    * classes that are derived from MatchCreator, and that would seem logical and clean - BUT
    * ScriptMatchCreator becomes problematic, as those match creators are generated at runtime.
    * So you'd have to hard code the mappings between featureTypes and FeatureCalcTypes and the
@@ -107,29 +108,33 @@ public:
    */
 
   /**
-   * TODO
+   * Returns the physical measurement feature stat calculation type for a base feature type e.g.
+   * an area calc type is returned for polygon features
    *
-   * @param t
-   * @return
+   * @param t the feature type to retrieve the statistics calculation type for
+   * @return a feature statistics calculation type enumeration value
    */
   static FeatureCalcType getFeatureCalcType(BaseFeatureType t);
 
   /**
-   * TODO
+   * Returns a GeometryTypeCriterion instantiation associated with the given feature type
    *
-   * @param t
-   * @param map
-   * @return
+   * @param t a feature type
+   * @param map map used to initialize the criterion
+   * @return a GeometryTypeCriterion
+   * @note It would be better to return a ConflatableElementCriterion here instead, but returning
+   * NonBuildingAreaCriterion doesn't allow for that. Doing so also makes this inconsistent with
+   * getElementCriterionName. Think if we change to AreaCriterion, however, that will throw the
+   * stats off.
    */
-  static std::shared_ptr<ElementCriterion> getElementCriterion(
+  static std::shared_ptr<GeometryTypeCriterion> getElementCriterion(
     BaseFeatureType t, ConstOsmMapPtr map);
 
   /**
-   * TODO
+   * Returns the name of a ConflatableElementCriterion associated with the given feature type
    *
-   * @param t
-   * @param map
-   * @return
+   * @param t a feature type
+   * @return the class name of a ConflatableElementCriterion
    */
   static QString getElementCriterionName(BaseFeatureType t);
 

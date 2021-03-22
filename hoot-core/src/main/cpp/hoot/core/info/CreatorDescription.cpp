@@ -170,36 +170,37 @@ CreatorDescription::FeatureCalcType CreatorDescription::getFeatureCalcType(BaseF
   }
 }
 
-ElementCriterionPtr CreatorDescription::getElementCriterion(BaseFeatureType t, ConstOsmMapPtr map)
+std::shared_ptr<GeometryTypeCriterion> CreatorDescription::getElementCriterion(
+  BaseFeatureType t, ConstOsmMapPtr map)
 {
   switch (t)
   {
     case POI:
-      return ElementCriterionPtr(new PoiCriterion());
+      return std::shared_ptr<GeometryTypeCriterion>(new PoiCriterion());
     case Highway:
-      return ElementCriterionPtr(new HighwayCriterion(map));
+      return std::shared_ptr<GeometryTypeCriterion>(new HighwayCriterion(map));
     case Building:
-      return ElementCriterionPtr(new BuildingCriterion(map));
+      return std::shared_ptr<GeometryTypeCriterion>(new BuildingCriterion(map));
     case Waterway:
-      return ElementCriterionPtr(new LinearWaterwayCriterion());
+      return std::shared_ptr<GeometryTypeCriterion>(new LinearWaterwayCriterion());
     case PoiPolygonPOI:
-      return ElementCriterionPtr(new PoiPolygonPoiCriterion());
+      return std::shared_ptr<GeometryTypeCriterion>(new PoiPolygonPoiCriterion());
     case Polygon:
-      return ElementCriterionPtr(new PolygonCriterion(map));
+      return std::shared_ptr<GeometryTypeCriterion>(new PolygonCriterion(map));
     case Area:
-      return ElementCriterionPtr(new NonBuildingAreaCriterion(map));
+      return std::shared_ptr<GeometryTypeCriterion>(new NonBuildingAreaCriterion(map));
     case Railway:
-      return ElementCriterionPtr(new RailwayCriterion());
+      return std::shared_ptr<GeometryTypeCriterion>(new RailwayCriterion());
     case PowerLine:
-      return ElementCriterionPtr(new PowerLineCriterion());
+      return std::shared_ptr<GeometryTypeCriterion>(new PowerLineCriterion());
     case Point:
-      return ElementCriterionPtr(new PointCriterion(map));
+      return std::shared_ptr<GeometryTypeCriterion>(new PointCriterion(map));
     case Line:
-      return ElementCriterionPtr(new LinearCriterion());
+      return std::shared_ptr<GeometryTypeCriterion>(new LinearCriterion());
     case CollectionRelation:
-      return ElementCriterionPtr(new CollectionRelationCriterion());
+      return std::shared_ptr<GeometryTypeCriterion>(new CollectionRelationCriterion());
     default:
-      return ElementCriterionPtr();
+      return std::shared_ptr<GeometryTypeCriterion>();
   }
 }
 
@@ -220,7 +221,7 @@ QString CreatorDescription::getElementCriterionName(BaseFeatureType t)
     case Polygon:
       return PolygonCriterion::className();
     case Area:
-      return AreaCriterion::className(); // TODO: Is this right?
+      return AreaCriterion::className();
     case Railway:
       return RailwayCriterion::className();
     case PowerLine:

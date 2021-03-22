@@ -53,9 +53,10 @@ public:
   static void removeSuperfluousOps();
 
   /**
-   * Determines GeometryTypeCriterion compatible with conflate matches in the current configuration
+   * Determines GeometryTypeCriterion compatible with conflate matches for the current configuration
    *
-   * @param addParents TODO
+   * @param addParents if true, ancestor geometry types are included in the output; e.g.
+   * PolygonCriterion will be included along with BuildingCriterion
    * @return a list of GeometryTypeCriterion class names
    */
   static QSet<QString> getMatchCreatorGeometryTypeCrits(const bool addParents = true);
