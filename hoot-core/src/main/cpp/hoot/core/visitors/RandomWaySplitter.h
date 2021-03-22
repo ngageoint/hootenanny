@@ -63,9 +63,9 @@ public:
   static QString className() { return "hoot::RandomWaySplitter"; }
 
   RandomWaySplitter();
-  virtual ~RandomWaySplitter() = default;
+  ~RandomWaySplitter() = default;
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
   /**
     Randomly and recursively applies the PERTY way split operation to each visited way or multi-line
@@ -73,14 +73,14 @@ public:
 
     @see ConstElementVisitor
     */
-  virtual void visit(const std::shared_ptr<Element>& e) override;
+  void visit(const std::shared_ptr<Element>& e) override;
 
   /**
     @see RngConsumer
     */
-  virtual void setRng(boost::minstd_rand& rng) { _rng = &rng; }
+  void setRng(boost::minstd_rand& rng) override { _rng = &rng; }
 
-  virtual void setOsmMap(OsmMap* map) override;
+  void setOsmMap(OsmMap* map) override;
 
   /**
     the probability that any way will be split into smaller segements
@@ -106,11 +106,11 @@ public:
     _minNodeSpacing = spacing;
   }
 
-  virtual QString getDescription() const { return "Randomly splits ways"; }
+  QString getDescription() const override { return "Randomly splits ways"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

@@ -40,16 +40,16 @@ public:
   static QString className() { return "hoot::UpdateWayParentVisitor"; }
 
   UpdateWayParentVisitor(long oldParentId, long newParentId);
-  virtual ~UpdateWayParentVisitor() = default;
+  ~UpdateWayParentVisitor() = default;
 
-  virtual void visit(const ElementPtr& e) override;
+  void visit(const ElementPtr& e) override;
 
-  virtual QString getDescription() const override
+  QString getDescription() const override
   { return "Updates all way parent IDs to a new ID"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

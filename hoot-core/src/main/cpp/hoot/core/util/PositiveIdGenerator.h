@@ -45,19 +45,19 @@ public:
 
   PositiveIdGenerator() { reset(); }
 
-  virtual ~PositiveIdGenerator() = default;
+  ~PositiveIdGenerator() = default;
 
-  virtual IdGeneratorPtr clone() const;
+  IdGeneratorPtr clone() const override;
 
-  virtual long createNodeId() { return ++_nodeId; }
-  virtual long createRelationId() { return ++_relationId; }
-  virtual long createWayId() { return ++_wayId; }
+  long createNodeId() override { return ++_nodeId; }
+  long createRelationId() override { return ++_relationId; }
+  long createWayId() override { return ++_wayId; }
 
-  void ensureNodeBounds(long nid) { _nodeId = std::max(nid, _nodeId); }
-  void ensureRelationBounds(long rid) { _relationId = std::max(rid, _relationId); }
-  void ensureWayBounds(long wid) { _wayId = std::max(wid, _wayId); }
+  void ensureNodeBounds(long nid) override { _nodeId = std::max(nid, _nodeId); }
+  void ensureRelationBounds(long rid) override { _relationId = std::max(rid, _relationId); }
+  void ensureWayBounds(long wid) override { _wayId = std::max(wid, _wayId); }
 
-  void reset()
+  void reset() override
   {
     _wayId = ConfigOptions().getIdGeneratorWayStart();
     _nodeId = ConfigOptions().getIdGeneratorNodeStart();

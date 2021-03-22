@@ -45,27 +45,27 @@ public:
   static QString className() { return "hoot::OneWayRoadStandardizer"; }
 
   OneWayRoadStandardizer() = default;
-  virtual ~OneWayRoadStandardizer() = default;
+  ~OneWayRoadStandardizer() = default;
 
-  virtual void visit(const std::shared_ptr<Element>& e);
+  void visit(const std::shared_ptr<Element>& e) override;
 
-  virtual QString getInitStatusMessage() const
+  QString getInitStatusMessage() const override
   { return "Standardizing one way roads..."; }
 
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   { return "Standardized " + QString::number(_numAffected) + " one way roads."; }
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Replaces all reversed one way roads with regular one way roads"; }
 
   /**
    * @see FilteredByGeometryTypeCriteria
    */
-  virtual QStringList getCriteria() const;
+  QStringList getCriteria() const override;
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 };
 
 }

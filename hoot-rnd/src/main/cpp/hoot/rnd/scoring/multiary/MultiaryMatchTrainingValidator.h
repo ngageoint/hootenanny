@@ -40,18 +40,18 @@ public:
   static QString className() { return "hoot::AddressCountVisitor"; }
 
   MultiaryMatchTrainingValidator() = default;
-  virtual ~MultiaryMatchTrainingValidator() = default;
+  ~MultiaryMatchTrainingValidator() = default;
 
   /**
    * @see OsmMapOperation::apply()
    */
-  virtual void apply(std::shared_ptr<OsmMap>& map) override;
+  void apply(std::shared_ptr<OsmMap>& map) override;
 
-  virtual QString getDescription() const override { return "TODO"; }
+  QString getDescription() const override { return "TODO"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 };
 
 }

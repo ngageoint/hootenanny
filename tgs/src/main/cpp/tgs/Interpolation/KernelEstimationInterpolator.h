@@ -52,15 +52,15 @@ public:
    */
   KernelEstimationInterpolator(double sigma = -1);
 
-  virtual ~KernelEstimationInterpolator() = default;
+  ~KernelEstimationInterpolator() = default;
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
   double getSigma() const { return _sigma; }
 
   double getStopDelta() const { return _stopDelta; }
 
-  virtual const std::vector<double>& interpolate(const std::vector<double>& point) const;
+  const std::vector<double>& interpolate(const std::vector<double>& point) const override;
 
   void setSigma(double sigma) { _sigma = sigma; _checkRebuild(); }
 
@@ -69,20 +69,20 @@ public:
    */
   void setStopDelta(double stopDelta) { _stopDelta = stopDelta; _checkRebuild(); }
 
-  virtual QString toString() const;
+  QString toString() const override;
 
 protected:
 
   double _sigma;
   double _stopDelta;
 
-  virtual void _buildModel();
+  void _buildModel() override;
 
-  virtual double _estimateError(unsigned int index) const;
+  double _estimateError(unsigned int index) const override;
 
-  virtual void _readInterpolator(QIODevice& is);
+  void _readInterpolator(QIODevice& is) override;
 
-  virtual void _writeInterpolator(QIODevice& os) const;
+  void _writeInterpolator(QIODevice& os) const override;
 };
 
 }

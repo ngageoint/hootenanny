@@ -30,8 +30,8 @@
 // hoot
 #include <hoot/core/criterion/ElementCriterionConsumer.h>
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/visitors/ElementOsmMapVisitor.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/visitors/ElementOsmMapVisitor.h>
 
 // Qt
 #include <QRegExp>
@@ -55,29 +55,29 @@ public:
   explicit RemoveTagsVisitor(const QStringList& keys);
   virtual ~RemoveTagsVisitor()  = default;
 
-  virtual void addCriterion(const ElementCriterionPtr& e);
+  void addCriterion(const ElementCriterionPtr& e) override;
 
-  void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
-  virtual void visit(const std::shared_ptr<Element>& e);
+  void visit(const std::shared_ptr<Element>& e) override;
 
-  virtual QString getDescription() const { return "Removes tags by key"; }
+  QString getDescription() const override { return "Removes tags by key"; }
 
   void setNegateCriterion(bool negate) { _negateCriterion = negate; }
 
-  virtual QString getInitStatusMessage() const
+  QString getInitStatusMessage() const override
   { return "Removing tags..."; }
 
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   {
     return
       "Removed " + StringUtils::formatLargeNumber(_numTagsRemoved) + " tags from " +
       StringUtils::formatLargeNumber(_numAffected) + " different elements";
   }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 protected:
 

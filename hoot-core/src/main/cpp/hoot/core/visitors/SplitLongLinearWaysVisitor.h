@@ -50,28 +50,28 @@ public:
   static int logWarnCount;
 
   SplitLongLinearWaysVisitor();
-  virtual ~SplitLongLinearWaysVisitor() = default;
+  ~SplitLongLinearWaysVisitor() = default;
 
-  virtual void setOsmMap(OsmMap* map) { _map = map; }
+  void setOsmMap(OsmMap* map) override { _map = map; }
 
-  virtual void setOsmMap(const OsmMap*) { assert(false); }
+  void setOsmMap(const OsmMap*) override { assert(false); }
 
-  virtual void visit(const std::shared_ptr<Element>& e);
+  void visit(const std::shared_ptr<Element>& e) override;
 
   unsigned int getMaxNumberOfNodes() const { return _maxNodesPerWay; }
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Splits ways containing a number of nodes above a specified threshold"; }
 
-  virtual QString getInitStatusMessage() const
+  QString getInitStatusMessage() const override
   { return "Splitting ways..."; }
 
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   { return "Split " + QString::number(_numAffected) + " ways"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

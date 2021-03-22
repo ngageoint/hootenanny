@@ -51,17 +51,17 @@ public:
   HootServicesLanguageInfoClient() : _useCookies(true), _timeout(500) { }
   virtual ~HootServicesLanguageInfoClient() = default;
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
   /**
    * @see LanguageInfoProvider
    */
-  virtual std::shared_ptr<boost::property_tree::ptree> getAvailableApps(const QString& type) override;
+  std::shared_ptr<boost::property_tree::ptree> getAvailableApps(const QString& type) override;
 
   /**
    * @see LanguageInfoProvider
    */
-  virtual std::shared_ptr<boost::property_tree::ptree> getAvailableLanguages(const QString& type) override;
+  std::shared_ptr<boost::property_tree::ptree> getAvailableLanguages(const QString& type) override;
 
 protected:
 

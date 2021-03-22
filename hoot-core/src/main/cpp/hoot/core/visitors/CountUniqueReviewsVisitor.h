@@ -48,19 +48,19 @@ public:
   static QString className() { return "hoot::CountUniqueReviewsVisitor"; }
 
   CountUniqueReviewsVisitor() = default;
-  virtual ~CountUniqueReviewsVisitor() = default;
+  ~CountUniqueReviewsVisitor() = default;
 
-  double getStat() const { return _reviews.size(); }
+  double getStat() const override { return _reviews.size(); }
 
-  virtual void visit(const ConstElementPtr& e) override;
+  void visit(const ConstElementPtr& e) override;
 
-  virtual QString getDescription() const { return "Counts the number of unique feature reviews"; }
+  QString getDescription() const override { return "Counts the number of unique feature reviews"; }
 
   void clear();
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

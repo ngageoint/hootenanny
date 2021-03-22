@@ -53,7 +53,7 @@ public:
   static QString className() { return "hoot::HootServicesLanguageInfoMockClient"; }
 
   HootServicesLanguageInfoMockClient();
-  virtual ~HootServicesLanguageInfoMockClient() = default;
+  ~HootServicesLanguageInfoMockClient() = default;
 
   /**
    * Retrieves available language apps
@@ -61,7 +61,7 @@ public:
    * @param type type of app to retrieve; "translator" or "detector"
    * @return a property tree containing the language app information
    */
-  virtual std::shared_ptr<boost::property_tree::ptree> getAvailableApps(const QString& type) override;
+  std::shared_ptr<boost::property_tree::ptree> getAvailableApps(const QString& type) override;
 
   /**
    * Retrieves translation available languages info
@@ -69,7 +69,7 @@ public:
    * @param type type of language information to retrieve; "translatable" or "detectable"
    * @return a property tree containing the language information
    */
-  virtual std::shared_ptr<boost::property_tree::ptree> getAvailableLanguages(const QString& type) override;
+  std::shared_ptr<boost::property_tree::ptree> getAvailableLanguages(const QString& type) override;
 };
 
 }

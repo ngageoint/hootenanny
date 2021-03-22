@@ -58,22 +58,22 @@ public:
   AddMeasurementTagsVisitor() = default;
   AddMeasurementTagsVisitor(bool area, bool length, bool width) :
     _addArea(area), _addLength(length), _addWidth(width) { }
-  virtual ~AddMeasurementTagsVisitor() = default;
+  ~AddMeasurementTagsVisitor() = default;
 
   // ElementVisitor
   static QString className() { return "hoot::AddMeasurementTagsVisitor"; }
-  QString getDescription() const { return "Modifies map geometry as specified"; }
+  QString getDescription() const override { return "Modifies map geometry as specified"; }
 
-  virtual void visit(const ElementPtr& e);
+  void visit(const ElementPtr& e) override;
 
   // OperationStatus
-  virtual QString getInitStatusMessage() const { return "Adding measurement tags..."; }
-  virtual QString getCompletedStatusMessage() const
+  QString getInitStatusMessage() const override { return "Adding measurement tags..."; }
+  QString getCompletedStatusMessage() const override
   { return "Added tags to " + QString::number(_numAffected) + " elements"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

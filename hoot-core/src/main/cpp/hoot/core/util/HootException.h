@@ -58,7 +58,7 @@ public:
   virtual QString getName() const { return className(); }
 
   const QString& getWhat() const { return _what; }
-  virtual const char* what() const throw() { _tmp = _what.toLatin1(); return _tmp.constData(); }
+  const char* what() const throw() override { _tmp = _what.toLatin1(); return _tmp.constData(); }
 
 private:
 

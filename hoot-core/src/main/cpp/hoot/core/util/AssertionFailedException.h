@@ -43,7 +43,7 @@ public:
 
   AssertionFailedException(QString str) : HootException(str) { }
 
-  virtual ~AssertionFailedException() throw() = default;
+  ~AssertionFailedException() throw() = default;
 };
 
 }

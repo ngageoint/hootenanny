@@ -45,15 +45,15 @@ public:
 
   TagAncestorDifferencer() = default;
   TagAncestorDifferencer(QString ancestor);
-  virtual ~TagAncestorDifferencer() = default;
+  ~TagAncestorDifferencer() = default;
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
 protected:
 
   QString _ancestor;
 
-  virtual bool isValidTag(const SchemaVertex& sv) const;
+  bool isValidTag(const SchemaVertex& sv) const override;
 };
 
 }

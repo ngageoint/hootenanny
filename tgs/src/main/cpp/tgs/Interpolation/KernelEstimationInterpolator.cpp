@@ -55,12 +55,9 @@ class OptimizeFunction : public NelderMead::Function
 {
 public:
 
-  OptimizeFunction(KernelEstimationInterpolator& kei) : _kei(kei)
-  {
+  OptimizeFunction(KernelEstimationInterpolator& kei) : _kei(kei) { }
 
-  }
-
-  virtual double f(Vector v)
+  double f(Vector v) override
   {
     double s = std::max(0.1, v[0]);
     _kei.setSigma(s);

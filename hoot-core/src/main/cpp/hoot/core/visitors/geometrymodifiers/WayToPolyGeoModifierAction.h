@@ -48,13 +48,13 @@ public:
   static QString className() { return "hoot::WayToPolyGeoModifierAction"; }
 
   WayToPolyGeoModifierAction() = default;
-  virtual ~WayToPolyGeoModifierAction() = default;
+  ~WayToPolyGeoModifierAction() = default;
 
-  virtual QString getCommandName() const override { return "way_to_poly"; }
-  virtual QList<QString> getParameterNames() const override { return QList<QString>( { WIDTH_TAG_PARAM, DEFAULT_WIDTH_PARAM } ); }
+  QString getCommandName() const override { return "way_to_poly"; }
+  QList<QString> getParameterNames() const override { return QList<QString>( { WIDTH_TAG_PARAM, DEFAULT_WIDTH_PARAM } ); }
 
-  virtual void parseArguments(const QHash<QString, QString>& arguments) override;
-  virtual bool processElement(const ElementPtr& pElement, OsmMap* pMap) override;
+  void parseArguments(const QHash<QString, QString>& arguments) override;
+  bool processElement(const ElementPtr& pElement, OsmMap* pMap) override;
 
 private:
 

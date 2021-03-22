@@ -49,10 +49,10 @@ public:
   static QString className() { return "hoot::HootServicesTranslatorMockClient"; }
 
   HootServicesTranslatorMockClient();
-  virtual ~HootServicesTranslatorMockClient() = default;
+  ~HootServicesTranslatorMockClient() = default;
 
-  virtual QString translate(const QString& text) override;
-  virtual void setSourceLanguages(const QStringList& langCodes) override;
+  QString translate(const QString& text) override;
+  void setSourceLanguages(const QStringList& langCodes) override;
 
 private:
 

@@ -58,19 +58,19 @@ public:
   static QString className() { return "hoot::OffsetIntersectionMergerOp"; }
 
   OffsetIntersectionMergerOp();
-  virtual ~OffsetIntersectionMergerOp() = default;
+  ~OffsetIntersectionMergerOp() = default;
 
   void apply(std::shared_ptr<OsmMap>& map) override;
 
   static void mergeOffsetIntersections(std::shared_ptr<OsmMap> map);
 
-  virtual QString getInitStatusMessage() const override
+  QString getInitStatusMessage() const override
   { return "Merging offset intersections..."; }
 
-  virtual QString getCompletedStatusMessage() const override
+  QString getCompletedStatusMessage() const override
   { return "Merged " + QString::number(_numAffected) + " offset intersections"; }
 
-  virtual QString getDescription() const override
+  QString getDescription() const override
   { return "Merges road intersections that are offset into one intersection"; }
 
   QString getName() const override { return className(); }

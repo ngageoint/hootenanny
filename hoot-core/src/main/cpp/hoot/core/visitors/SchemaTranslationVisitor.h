@@ -51,29 +51,29 @@ public:
   static QString className() { return "hoot::SchemaTranslationVisitor"; }
 
   SchemaTranslationVisitor();
-  virtual ~SchemaTranslationVisitor() = default;
+  ~SchemaTranslationVisitor() = default;
 
   /**
    * @see Configurable
    */
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
   void setTranslationScript(QString path);
   void setTranslationDirection(QString direction);
 
-  virtual void visit(const ElementPtr& e);
+  void visit(const ElementPtr& e) override;
 
-  virtual QString getDescription() const { return "Translates features to a schema"; }
+  QString getDescription() const override { return "Translates features to a schema"; }
 
-  virtual QString getInitStatusMessage() const
+  QString getInitStatusMessage() const override
   { return "Translating features to a schema..."; }
 
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   { return "Translated " + QString::number(_numAffected) + " features to a schema"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

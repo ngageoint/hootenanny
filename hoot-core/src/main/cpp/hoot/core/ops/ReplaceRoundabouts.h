@@ -64,13 +64,13 @@ public:
    * @brief ReplaceRoundabouts - default constructor
    */
   ReplaceRoundabouts() = default;
-  virtual ~ReplaceRoundabouts() = default;
+  ~ReplaceRoundabouts() = default;
 
   /**
    * @brief apply - Apply the ReplaceRoundabouts Op to the map.
    * @param pMap - Map to operate on.
    */
-  virtual void apply(std::shared_ptr<OsmMap>& pMap) override;
+  void apply(std::shared_ptr<OsmMap>& pMap) override;
 
   /**
    * @brief replaceRoundabouts - Loops through all the roundabouts stored
@@ -80,23 +80,23 @@ public:
    */
   void replaceRoundabouts(const std::shared_ptr<OsmMap>& pMap);
 
-  virtual QString getInitStatusMessage() const override
+  QString getInitStatusMessage() const override
   { return "Replacing road roundabouts with simple intersections..."; }
 
-  virtual QString getCompletedStatusMessage() const override
+  QString getCompletedStatusMessage() const override
   { return "Replaced " + QString::number(_numAffected) + " road roundabouts"; }
 
-  virtual QString getDescription() const override
+  QString getDescription() const override
   { return "Replaces road roundabouts with simple intersections"; }
 
   /**
    * @see FilteredByGeometryTypeCriteria
    */
-  virtual QStringList getCriteria() const;
+  QStringList getCriteria() const override;
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

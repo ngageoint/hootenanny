@@ -47,7 +47,7 @@ public:
   static QString className() { return "hoot::RecursiveSetTagValueOp"; }
 
   RecursiveSetTagValueOp() = default;
-  virtual ~RecursiveSetTagValueOp() = default;
+  ~RecursiveSetTagValueOp() = default;
 
   // We have the constructor signatures from SetTagValueVisitor here, as well as a signature that
   // allows passing in an already configured, possibly complex, criterion. We may want to extend
@@ -70,39 +70,39 @@ public:
   /**
    * @see OsmMapOperation
    */
-  virtual void apply(std::shared_ptr<OsmMap>& map) override;
+  void apply(std::shared_ptr<OsmMap>& map) override;
 
   /**
    * @see ElementCriterionConsumer
    */
-  virtual void addCriterion(const ElementCriterionPtr& e);
+  void addCriterion(const ElementCriterionPtr& e) override;
 
   /**
    * @see Configurable
    */
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
   void setNegateCriterion(bool negate) { _negateCriterion = negate; }
 
   /**
    * @see ApiEntityInfo
    */
-  virtual QString getDescription() const override
+  QString getDescription() const override
   { return "Adds or updates specific tags on elements and their children"; }
 
   /**
    * @see OperationStatus
    */
-  virtual QString getInitStatusMessage() const { return _tagger->getInitStatusMessage(); }
+  QString getInitStatusMessage() const override { return _tagger->getInitStatusMessage(); }
 
   /**
    * @see OperationStatus
    */
-  virtual QString getCompletedStatusMessage() const { return _tagger->getCompletedStatusMessage(); }
+  QString getCompletedStatusMessage() const override { return _tagger->getCompletedStatusMessage(); }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

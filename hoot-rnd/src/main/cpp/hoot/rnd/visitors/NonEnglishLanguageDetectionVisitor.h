@@ -56,24 +56,24 @@ public:
   static QString className() { return "hoot::NonEnglishLanguageDetectionVisitor"; }
 
   NonEnglishLanguageDetectionVisitor();
-  virtual ~NonEnglishLanguageDetectionVisitor();
+  ~NonEnglishLanguageDetectionVisitor();
 
   /**
    * @see ElementVisitor
    */
-  virtual void visit(const std::shared_ptr<Element>& e);
+  void visit(const std::shared_ptr<Element>& e) override;
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Detects source languages for selected tags"; }
 
-  virtual QString getInitStatusMessage() const;
-  virtual QString getCompletedStatusMessage() const;
+  QString getInitStatusMessage() const override;
+  QString getCompletedStatusMessage() const override;
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

@@ -50,9 +50,9 @@ public:
    */
   RasterComparator(const std::shared_ptr<OsmMap>& map1, const std::shared_ptr<OsmMap>& map2);
 
-  virtual ~RasterComparator() = default;
+  ~RasterComparator() = default;
 
-  virtual double compareMaps() override;
+  double compareMaps() override;
 
 protected:
 

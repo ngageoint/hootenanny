@@ -47,17 +47,17 @@ public:
 
   StatusUpdateVisitor();
   StatusUpdateVisitor(Status status, bool onlyUpdateIfStatusInvalid = false);
-  virtual ~StatusUpdateVisitor() = default;
+  ~StatusUpdateVisitor() = default;
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
-  virtual void visit(const ElementPtr& e) override;
+  void visit(const ElementPtr& e) override;
 
-  virtual QString getDescription() const { return "Sets element statuses"; }
+  QString getDescription() const override { return "Sets element statuses"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

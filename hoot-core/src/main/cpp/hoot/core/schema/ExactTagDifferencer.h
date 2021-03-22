@@ -43,12 +43,12 @@ public:
   static QString className() { return "hoot::ExactTagDifferencer"; }
 
   ExactTagDifferencer() = default;
-  virtual ~ExactTagDifferencer() = default;
+  ~ExactTagDifferencer() = default;
 
   /**
    * @see TagDifferencer
    */
-  virtual double diff(
+  double diff(
     const ConstOsmMapPtr& map, const ConstElementPtr& e1, const ConstElementPtr& e2) const override;
 };
 

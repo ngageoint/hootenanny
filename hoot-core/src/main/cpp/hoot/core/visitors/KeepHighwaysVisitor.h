@@ -49,22 +49,22 @@ public:
   static QString className() { return "hoot::KeepHighwaysVisitor"; }
 
   KeepHighwaysVisitor() = default;
-  virtual ~KeepHighwaysVisitor() = default;
+  ~KeepHighwaysVisitor() = default;
 
-  virtual void setOsmMap(OsmMap* map) { _map = map; }
+  void setOsmMap(OsmMap* map) override { _map = map; }
   /**
    * KeepHighwaysVisitor requires a read/write map.
    */
-  virtual void setOsmMap(const OsmMap* /*map*/) { assert(false); }
+  void setOsmMap(const OsmMap* /*map*/) { assert(false); }
 
-  virtual void visit(const ConstElementPtr& e);
+  void visit(const ConstElementPtr& e) override;
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Removes all ways and relations that are not part of a linear highway"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

@@ -50,25 +50,25 @@ public:
   static QString className() { return "hoot::RelationWithMostMembersOp"; }
 
   RelationWithMostMembersOp();
-  virtual ~RelationWithMostMembersOp() = default;
+  ~RelationWithMostMembersOp() = default;
 
-  virtual void apply(std::shared_ptr<OsmMap>& map) override;
+  void apply(std::shared_ptr<OsmMap>& map) override;
 
-  virtual QString getDescription() const override
+  QString getDescription() const override
   { return "Finds relation with most members satisfying a criterion"; }
 
   void setCriterion(const QString& criterionClass, const QString& type, const Settings& conf);
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
-  virtual QString getInitStatusMessage() const
+  QString getInitStatusMessage() const override
   { return "Collecting relation info by criterion..."; }
 
-  virtual QString getCompletedStatusMessage() const;
+  QString getCompletedStatusMessage() const override;
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

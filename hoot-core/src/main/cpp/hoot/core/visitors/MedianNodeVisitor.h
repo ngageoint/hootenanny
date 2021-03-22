@@ -45,17 +45,17 @@ public:
   static QString className() { return "hoot::MedianNodeVisitor"; }
 
   MedianNodeVisitor() = default;
-  virtual ~MedianNodeVisitor() = default;
+  ~MedianNodeVisitor() = default;
 
-  virtual void visit(const ConstElementPtr& e);
+  void visit(const ConstElementPtr& e) override;
 
   ConstNodePtr calculateMedianNode() const;
 
-  virtual QString getDescription() const { return "Calculates the median node"; }
+  QString getDescription() const override { return "Calculates the median node"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

@@ -111,13 +111,13 @@ namespace Tgs
 
     KnnIteratorNd(const RStarTree* tree, const std::vector<double>& point, 
       const Box& searchRegion = Box());
-    virtual ~KnnIteratorNd();
+    ~KnnIteratorNd();
 
-    virtual const Box& getBox() const;
-    int getId() const { return _knnId; }
+    const Box& getBox() const override;
+    int getId() const override { return _knnId; }
     double getDistance() const { return _knnDistance; }
-    bool hasNext(); 
-    bool next();
+    bool hasNext() override;
+    bool next() override;
 
     void reset(const std::vector<double>& point);
 

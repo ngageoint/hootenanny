@@ -46,13 +46,13 @@ class AddExportTagsVisitor : public ElementVisitor
 public:
 
   AddExportTagsVisitor();
-  virtual ~AddExportTagsVisitor() = default;
+  ~AddExportTagsVisitor() = default;
 
   static QString className() { return "hoot::AddExportTagsVisitor"; }
 
-  virtual void visit(const ElementPtr& pElement);
+  void visit(const ElementPtr& pElement) override;
 
-  virtual QString getDescription() const { return "Adds tags needed for exporting"; }
+  QString getDescription() const override { return "Adds tags needed for exporting"; }
 
   void setIncludeHootInfo(bool includeInfo) { _includeDebug = includeInfo; }
   void setIncludeIds(bool includeIds) { _includeIds = includeIds; }
@@ -60,9 +60,9 @@ public:
   { _includeCircularError = includeCircularError; }
   void overrideDebugSettings();
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

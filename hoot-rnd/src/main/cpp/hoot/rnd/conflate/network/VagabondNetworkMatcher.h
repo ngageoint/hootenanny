@@ -76,14 +76,14 @@ public:
 
   // Leaving this hardcoded for now, as we don't use this matcher in production conflation jobs.
   // If we ever do end up using it production, then add a config option for it.
-  virtual double getMatchThreshold() const { return 0.15; }
+  double getMatchThreshold() const override { return 0.15; }
 
   /**
    * Use this instead of a constructor. To simplify life a shared pointer should always be used.
    */
   static std::shared_ptr<VagabondNetworkMatcher> create();
 
-  virtual void iterate();
+  void iterate() override;
 
   virtual void iteratePageRank();
 
@@ -91,11 +91,11 @@ public:
 
   virtual void iterateVoting();
 
-  virtual void matchNetworks(ConstOsmMapPtr map, OsmNetworkPtr n1, OsmNetworkPtr n2);
+  void matchNetworks(ConstOsmMapPtr map, OsmNetworkPtr n1, OsmNetworkPtr n2) override;
 
-  virtual QList<NetworkEdgeScorePtr> getAllEdgeScores() const;
+  QList<NetworkEdgeScorePtr> getAllEdgeScores() const override;
 
-  virtual QList<NetworkVertexScorePtr> getAllVertexScores() const;
+  QList<NetworkVertexScorePtr> getAllVertexScores() const override;
 
 private:
 

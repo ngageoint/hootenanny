@@ -45,20 +45,20 @@ public:
   static QString className() { return "hoot::MaxIdVisitor"; }
 
   MaxIdVisitor() : _maxId(-std::numeric_limits<long>::max()) { }
-  virtual ~MaxIdVisitor() = default;
+  ~MaxIdVisitor() = default;
 
   long getMinId() const { return _maxId; }
 
-  double getStat() const { return _maxId; }
+  double getStat() const override { return _maxId; }
 
-  virtual void visit(const ConstElementPtr& e);
+  void visit(const ConstElementPtr& e) override;
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Returns the largest element ID value found"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 
