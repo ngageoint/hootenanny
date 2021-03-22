@@ -46,14 +46,14 @@ public:
 
   void set(Status status) { _status = status; }
 
-  virtual void visit(const std::shared_ptr<Element>& e) override;
+  void visit(const std::shared_ptr<Element>& e) override;
 
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   { return "Removed " + QString::number(_numAffected) + " elements."; }
 
 protected:
 
-  RemoveUnknownVisitor(Status status) : _status(status) {}
+  RemoveUnknownVisitor(Status status) : _status(status) { }
 
 private:
 
@@ -72,16 +72,16 @@ public:
   static QString className() { return "hoot::RemoveUnknown1Visitor"; }
 
   RemoveUnknown1Visitor() : RemoveUnknownVisitor(Status::Unknown1) {}
-  virtual ~RemoveUnknown1Visitor() = default;
+  ~RemoveUnknown1Visitor() = default;
 
-  virtual QString getInitStatusMessage() const { return "Removing unknown1 elements..."; }
+  QString getInitStatusMessage() const override { return "Removing unknown1 elements..."; }
 
-  virtual QString getDescription() const override
+  QString getDescription() const override
   { return "Removes all elements with a status of Unknown1"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 };
 
 /**
@@ -94,16 +94,16 @@ public:
   static QString className() { return "hoot::RemoveUnknown2Visitor"; }
 
   RemoveUnknown2Visitor() : RemoveUnknownVisitor(Status::Unknown2) {}
-  virtual ~RemoveUnknown2Visitor() = default;
+  ~RemoveUnknown2Visitor() = default;
 
-  virtual QString getInitStatusMessage() const { return "Removing unknown2 elements..."; }
+  QString getInitStatusMessage() const override { return "Removing unknown2 elements..."; }
 
-  virtual QString getDescription() const override
+  QString getDescription() const override
   { return "Removes all elements with a status of Unknown2"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 };
 
 }

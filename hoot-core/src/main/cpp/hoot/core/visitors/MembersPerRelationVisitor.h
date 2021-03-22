@@ -43,31 +43,31 @@ public:
   static QString className() { return "hoot::MembersPerRelationVisitor"; }
 
   MembersPerRelationVisitor();
-  virtual ~MembersPerRelationVisitor() = default;
+  ~MembersPerRelationVisitor() = default;
 
-  virtual void visit(const ConstElementPtr& e) override;
+  void visit(const ConstElementPtr& e) override;
 
-  virtual QString getDescription() const { return "Calculates relation member statistics"; }
+  QString getDescription() const override { return "Calculates relation member statistics"; }
 
-  virtual QString getInitStatusMessage() const
+  QString getInitStatusMessage() const override
   { return "Calculating relation member statistics..."; }
 
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   { return "Calculated member statistics for " + QString::number(_numAffected) + " relations"; }
 
-  virtual long numWithStat() const { return _numAffected; }
-  virtual double getStat() const { return _totalMembers; }
-  virtual double getMin() const { return _minMembersPerRelation; }
-  virtual double getMax() const { return _maxMembersPerRelation; }
-  virtual double getAverage() const
+  long numWithStat() const override { return _numAffected; }
+  double getStat() const override { return _totalMembers; }
+  double getMin() const override { return _minMembersPerRelation; }
+  double getMax() const override { return _maxMembersPerRelation; }
+  double getAverage() const override
   {
     const double average = _numAffected == 0 ? 0.0 : _totalMembers / _numAffected;
     return average;
   }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

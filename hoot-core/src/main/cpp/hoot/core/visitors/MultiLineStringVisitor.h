@@ -53,7 +53,7 @@ public:
   static QString className() { return "hoot::MultiLineStringVisitor"; }
 
   MultiLineStringVisitor();
-  virtual ~MultiLineStringVisitor() = default;
+  ~MultiLineStringVisitor() = default;
 
   void setElementProvider(const ConstElementProviderPtr& provider ) { _provider = provider; }
 
@@ -65,21 +65,21 @@ public:
    */
   geos::geom::MultiLineString* createMultiLineString();
 
-  virtual void visit(const ConstElementPtr& e);
+  void visit(const ConstElementPtr& e) override;
 
-  virtual void visit(const ConstWayPtr& w);
+  void visit(const ConstWayPtr& w);
 
-  virtual QString getDescription() const { return "Creates a multi-linestring out of ways"; }
+  QString getDescription() const override { return "Creates a multi-linestring out of ways"; }
 
-  virtual QString getInitStatusMessage() const
+  QString getInitStatusMessage() const override
   { return "Creating multi-linestrings..."; }
 
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   { return "Created " + QString::number(_numAffected) + " multi-line strings"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 protected:
 

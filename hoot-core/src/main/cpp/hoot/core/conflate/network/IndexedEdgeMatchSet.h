@@ -127,7 +127,7 @@ public:
 
   void setScore(ConstEdgeMatchPtr em, double score) { _matches[em] = score; }
 
-  virtual QString toString() const override;
+  QString toString() const override;
 
 private:
 

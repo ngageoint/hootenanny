@@ -48,20 +48,20 @@ public:
   static QString className() { return "hoot::MinIdVisitor"; }
 
   MinIdVisitor() : _minId(std::numeric_limits<long>::max()) { }
-  virtual ~MinIdVisitor() = default;
+  ~MinIdVisitor() = default;
 
   long getMinId() const { return _minId; }
 
-  double getStat() const { return _minId; }
+  double getStat() const override { return _minId; }
 
-  virtual void visit(const ConstElementPtr& e);
+  void visit(const ConstElementPtr& e) override;
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Returns the smallest element ID value found"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

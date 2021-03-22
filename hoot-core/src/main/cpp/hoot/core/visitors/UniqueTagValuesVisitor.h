@@ -50,15 +50,15 @@ public:
   UniqueTagValuesVisitor(QString key, std::set<QString>& bag, bool split=false)
     : _key(key), _bag(bag), _split(split)
   { }
-  virtual ~UniqueTagValuesVisitor() = default;
+  ~UniqueTagValuesVisitor() = default;
 
-  virtual void visit(const ConstElementPtr& e);
+  void visit(const ConstElementPtr& e) override;
 
-  virtual QString getDescription() const { return "Returns all the unique element IDs visited"; }
+  QString getDescription() const override { return "Returns all the unique element IDs visited"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

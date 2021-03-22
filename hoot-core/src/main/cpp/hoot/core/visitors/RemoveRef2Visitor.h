@@ -60,22 +60,22 @@ public:
   RemoveRef2Visitor();
   virtual ~RemoveRef2Visitor() = default;
 
-  virtual void addCriterion(const ElementCriterionPtr& e);
+  void addCriterion(const ElementCriterionPtr& e) override;
 
-  virtual void setOsmMap(OsmMap* map);
-  virtual void setOsmMap(const OsmMap* /*map*/) { assert(false); }
+  void setOsmMap(OsmMap* map) override;
+  void setOsmMap(const OsmMap* /*map*/) override { assert(false); }
 
-  virtual void visit(const ElementPtr& e);
+  void visit(const ElementPtr& e) override;
 
   virtual bool ref1CriterionSatisfied(const ConstElementPtr& e) const;
   virtual bool ref2CriterionSatisfied(const ConstElementPtr& e) const;
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Removes REF2 tags when a criterion is met for both REF1 and REF2 elements"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 protected:
 

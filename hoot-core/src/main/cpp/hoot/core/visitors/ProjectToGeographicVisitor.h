@@ -45,18 +45,18 @@ public:
   static QString className() { return "hoot::ProjectToGeographicVisitor"; }
 
   ProjectToGeographicVisitor();
-  virtual ~ProjectToGeographicVisitor();
+  ~ProjectToGeographicVisitor();
 
   void initialize(std::shared_ptr<OGRSpatialReference>& projection);
 
-  virtual void visit(const std::shared_ptr<Element>& e);
+  void visit(const std::shared_ptr<Element>& e) override;
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Projects features to a geographic coordinate system"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const  override{ return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 
