@@ -923,8 +923,8 @@ ConstElementVisitorPtr CalculateStatsOp::_getElementVisitorForFeatureType(
   if (featureType == CreatorDescription::PoiPolygonPOI ||
       featureType == CreatorDescription::Polygon)
   {
-    //Poi/poly doesn't have the restriction that an element have a tag information count > 0 to
-    //be considered for conflation.
+    // Poi/poly doesn't have the restriction that an element have a tag information count > 0 to
+    // be considered for conflation.
     return ConstElementVisitorPtr(new ElementCountVisitor());
   }
   else
