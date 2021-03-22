@@ -236,6 +236,10 @@ void CalculateStatsOp::_initStatCalc()
   // a very brittle way to do it but haven't come up with a better way yet. This also could
   // eventually be tied in with progress reporting.
 
+  // TODO: These total stat count is off by a bit (consistently, at least). When run from the stats
+  // command, the total is 4 higher than when it should be. When run from the conflate command the
+  // total is 2 higher than it should be.
+
   const int numQuickStatCalcs = _getNumStatsPassingFilter(_quickStatData);
   LOG_VARD(numQuickStatCalcs);
   int numSlowStatCalcs = 0;
