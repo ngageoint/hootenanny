@@ -531,8 +531,6 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
       }
     }
 
-    _addStat("Longest Tag", _getApplyVisitor(new LongestTagVisitor(), "Longest Tag"));
-
     LOG_DEBUG("config script: " + ConfigOptions().getStatsTranslateScript());
     if (ConfigOptions().getStatsTranslateScript() != "")
     {

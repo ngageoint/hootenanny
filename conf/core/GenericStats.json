@@ -354,6 +354,12 @@
          "StatCall":"Stat"
       },
       {
+         "name":"Longest Tag Length",
+         "visitor":"hoot::LongestTagVisitor",
+         "criterion":"",
+         "StatCall":"Stat"
+      },
+      {
          "name":"Area Translated Populated Tag Percent",
          "visitor":"hoot::SchemaTranslatedTagCountVisitor",
          "criterion":"hoot::AreaCriterion",
