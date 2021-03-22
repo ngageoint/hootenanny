@@ -329,7 +329,7 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
 
   if (!_quick)
   {
-    const long featureCount = _getApplyVisitor(new FeatureCountVisitor(), "Feature Count");
+    const long featureCount = _getApplyVisitor(new FeatureCountVisitor(), "Total Features");
     LOG_VART(featureCount);
 
     double conflatedFeatureCount =
@@ -340,12 +340,12 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
     // We're tailoring the stats to whether the map being examined is the input to a conflation job
     // or the output from a conflation job.  When the stats option is called from the conflate
     // command, this is accomplished by allowing the conflate command to notify this op which kind
-    // of map is being examined.  When the stats command is called by itself, there is no mechanism
-    // for doing that, so we're assuming if there are any conflated features in the map, that the
-    // map should be considered an the output of a conflation job.  This logic, of course, breaks
-    // down if the same data is conflated more than once.  In that case, it may be wise to let the
-    // stats command pass in a variable stating whether the map is input/output, like the conflate
-    // command does.
+    // of map is being examined. When the stats command is called by itself there is no mechanism
+    // for doing that, so we're assuming if there are any conflated features in the map that the
+    // map should be considered the output of a conflation job. This logic, of course, breaks down
+    // if the same data is conflated more than once. In that case, it may be wise to let the stats
+    // command pass in a variable stating whether the map is input/output, like the conflate command
+    // does.
     if (conflatedFeatureCount > 0)
     {
       _inputIsConflatedMapOutput = true;
@@ -968,8 +968,8 @@ void CalculateStatsOp::_generateFeatureStats(
   LOG_VARD(conflatedFeatureCount);
   if (featureType == CreatorDescription::PoiPolygonPOI)
   {
-    //we need to add any pois that may have been merged into polygons by poi/poly into the
-    //conflated feature count for this feature type
+    // We need to add any pois that may have been merged into polygons by poi/poly into the
+    // conflated feature count for this feature type.
     conflatedFeatureCount += poisMergedIntoPolys;
     LOG_VARD(conflatedFeatureCount);
   }
