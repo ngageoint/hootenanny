@@ -328,12 +328,6 @@
          "StatCall":"Stat"
       },
       {
-         "name":"Total Features",
-         "visitor":"hoot::FeatureCountVisitor",
-         "criterion":"",
-         "StatCall":"Stat"
-      },
-      {
          "name":"Longest Tag Length",
          "visitor":"hoot::LongestTagVisitor",
          "StatCall":"Stat"

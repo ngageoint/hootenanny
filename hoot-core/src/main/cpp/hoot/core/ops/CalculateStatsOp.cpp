@@ -209,6 +209,19 @@ void CalculateStatsOp::_initConflatableFeatureCounts()
   }
 }
 
+int CalculateStatsOp::_getNumStatsPassingFilter(const QList<StatData>& stats) const
+{
+  int numPassingFilter = 0;
+  for (QList<StatData>::const_iterator it = stats.begin(); it != stats.end(); ++it)
+  {
+    if (_statPassesFilter(*it))
+    {
+      numPassingFilter++;
+    }
+  }
+  return numPassingFilter;
+}
+
 void CalculateStatsOp::_initStatCalc()
 {
   // for debugging only
@@ -216,14 +229,14 @@ void CalculateStatsOp::_initStatCalc()
   _numGenerateFeatureStatCalls = 0;
 
   // Basically, we're trying to count the total calls to _applyVisitor here, which results in a
-  // pass over the data. Technically the number of stats is larger, since each _applyVisitor call
-  // may fuel multiple stats. However, for status reporting purposes we're more concerned with the
-  // processing time incurred by _applyVisitor, and the status is easier to update doing it this
-  // way. Admittedly, the way the stat total count is being calculated here is a very brittle way to
-  // do it but haven't come up with a better way yet. This also could eventually be tied in with
-  // progress reporting.
+  // complete pass over the data. Technically the number of stats is larger, since each
+  // _applyVisitor call may fuel multiple stats. However, for status reporting purposes we're more
+  // concerned with the processing time incurred by _applyVisitor, and the status is easier to
+  // update doing it this way. Admittedly, the way the stat total count is being calculated here is
+  // a very brittle way to do it but haven't come up with a better way yet. This also could
+  // eventually be tied in with progress reporting.
 
-  const int numQuickStatCalcs = _quickStatData.size();
+  const int numQuickStatCalcs = _getNumStatsPassingFilter(_quickStatData);
   LOG_VARD(numQuickStatCalcs);
   int numSlowStatCalcs = 0;
   // number of quick stat calcs, each one calling _applyVisitor once
@@ -233,22 +246,30 @@ void CalculateStatsOp::_initStatCalc()
   {
     LOG_VARD(_slowStatData.size());
     // number of slow stat calcs, each one calling _applyVisitor once
-    numSlowStatCalcs = _slowStatData.size();
+    numSlowStatCalcs = _getNumStatsPassingFilter(_slowStatData);
 
     // the number of calls to _applyVisitor outside of a loop and always called
-    numSlowStatCalcs += 11;
+    numSlowStatCalcs += 8;
 
     if (ConfigOptions().getStatsTranslateScript() != "")
     {
       // the number of calls to _applyVisitor made during translated tag calc
-      numSlowStatCalcs += 4; //14 (10)
+      numSlowStatCalcs += 4;
     }
 
     LOG_VARD(_inputIsConflatedMapOutput);
-    if (!_inputIsConflatedMapOutput)
+    if (_filter.isEmpty() ||
+         (_filter.contains(PoiPolygonPoiCriterion::className()) &&
+          _filter.contains(PoiPolygonPolyCriterion::className())))
     {
-      // extra calls to _applyVisitor made for poi/poly only and only for input maps
-      numSlowStatCalcs += 2;
+      // extra calls to _applyVisitor made for poi/poly only and for all types of maps
+      numSlowStatCalcs += 3;
+
+      if (!_inputIsConflatedMapOutput)
+      {
+        // extra calls to _applyVisitor made for poi/poly only and only for input maps
+        numSlowStatCalcs += 2;
+      }
     }
 
     LOG_VARD(MatchFactory::getInstance().getCreators().size());
@@ -258,25 +279,29 @@ void CalculateStatsOp::_initStatCalc()
     for (QMap<CreatorDescription::BaseFeatureType, double>::const_iterator it =
            _conflatableFeatureCounts.begin(); it != _conflatableFeatureCounts.end(); ++it)
     {
-      CreatorDescription::BaseFeatureType featureTypeEnum = it.key();
-      const QString featureType = CreatorDescription::baseFeatureTypeToString(featureTypeEnum);
-      if (!_featureTypesToSkip.contains(featureType, Qt::CaseInsensitive))
+      CreatorDescription::BaseFeatureType featureType = it.key();
+      const QString featureTypeStr = CreatorDescription::baseFeatureTypeToString(featureType);
+      if (!_featureTypesToSkip.contains(featureTypeStr, Qt::CaseInsensitive))
       {
-        numCallsToGenerateFeatureStats++;
-
-        const CreatorDescription::FeatureCalcType calcType =
-          CreatorDescription::getFeatureCalcType(featureTypeEnum);
-        if (calcType == CreatorDescription::CalcTypeArea ||
-            calcType == CreatorDescription::CalcTypeLength)
+        if (_filter.isEmpty() ||
+            _filter.contains(CreatorDescription::getElementCriterionName(featureType)))
         {
-          numSizeCalcs += 4;
+          numCallsToGenerateFeatureStats++;
+
+          const CreatorDescription::FeatureCalcType calcType =
+            CreatorDescription::getFeatureCalcType(featureType);
+          if (calcType == CreatorDescription::CalcTypeArea ||
+              calcType == CreatorDescription::CalcTypeLength)
+          {
+            numSizeCalcs += 4;
+          }
         }
       }
     }
     LOG_VARD(numCallsToGenerateFeatureStats);
-    // _generateFeatureStats calls _applyVisitor multiple times for each feature type
+    // _generateFeatureStats calls _applyVisitor multiple times for each feature type.
     numSlowStatCalcs += (7 * numCallsToGenerateFeatureStats);
-    // these _applyVisitor calls are made in _generateFeatureStats but are conditional on feature
+    // These _applyVisitor calls are made in _generateFeatureStats but are conditional on feature
     // type, so computing the total separately
     numSlowStatCalcs += numSizeCalcs;
 
@@ -292,9 +317,8 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
 {
   // We don't want to auto calc search radius unless conflating, b/c it could result in a somewhat
   // expensive rubbersheeting operation. Changing the config glocally works here b/c stats are
-  // either calculated by themselves or after a conflation job. As more script conflators
-  // implement a search radius function vs using a predefined value, this list could get a little
-  // unruly.
+  // either calculated by themselves or after a conflation job. As more script conflators implement
+  // a search radius function vs using a predefined value, this list could get a little unruly.
   conf().set(ConfigOptions::getPowerLineAutoCalcSearchRadiusKey(), false);
   conf().set(ConfigOptions::getWaterwayAutoCalcSearchRadiusKey(), false);
 
@@ -321,7 +345,13 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
 
   if (!_quick)
   {
-    const long featureCount = _getApplyVisitor(new FeatureCountVisitor(), "Total Features");
+    // There are some stats here that could be moved to the generic stats file if they weren't
+    // needed to calculate derivative stats. In order to prevent calculating them more than once,
+    // they haven't been moved to the generic stats.
+
+    const long featureCount =
+      _getApplyVisitor(new FeatureCountVisitor(), "Total Features");
+    _addStat("Total Features", featureCount);
     LOG_VART(featureCount);
 
     double conflatedFeatureCount =
@@ -360,7 +390,6 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
     double poisMergedIntoPolys = 0.0;
     double poisMergedIntoPolysFromMap1 = 0.0;
     double poisMergedIntoPolysFromMap2 = 0.0;
-    // TODO
     if (_filter.isEmpty() ||
         (_filter.contains(PoiPolygonPoiCriterion::className()) &&
          _filter.contains(PoiPolygonPolyCriterion::className())))
@@ -573,13 +602,19 @@ void CalculateStatsOp::_addStat(const char* name, double value)
   _stats.append(SingleStat(QString(name), value));
 }
 
+bool CalculateStatsOp::_statPassesFilter(const StatData& statData) const
+{
+  return
+    _filter.isEmpty() || statData.getFilterCriterion().isEmpty() ||
+    _filter.contains(statData.getFilterCriterion());
+}
+
 void CalculateStatsOp::_interpretStatData(shared_ptr<const OsmMap>& constMap, StatData& d)
 {
-  // If
+  // Check against the applied filter to see whether this stat should be generated.
   LOG_VART(_filter);
   LOG_VART(d.getFilterCriterion());
-  if (!_filter.isEmpty() && !d.getFilterCriterion().isEmpty() &&
-      !_filter.contains(d.getFilterCriterion()))
+  if (!_statPassesFilter(d))
   {
     return;
   }

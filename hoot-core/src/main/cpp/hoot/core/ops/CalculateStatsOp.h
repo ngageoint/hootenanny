@@ -141,6 +141,8 @@ private:
   void _readGenericStatsConfiguration();
   void _addStat(const QString& name, double value);
   void _addStat(const char* name, double value);
+  bool _statPassesFilter(const StatData& statData) const;
+  int _getNumStatsPassingFilter(const QList<StatData>& stats) const;
   void _interpretStatData(std::shared_ptr<const OsmMap>& constMap, StatData& d);
   double GetRequestedStatValue(const ElementVisitor* pVisitor, StatData::StatCall call);
 
