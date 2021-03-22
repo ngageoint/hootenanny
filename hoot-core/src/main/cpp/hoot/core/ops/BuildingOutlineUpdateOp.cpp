@@ -64,9 +64,9 @@ class NodeIdVisitor : public ConstElementVisitor
 public:
 
   NodeIdVisitor(set<long>& nodes) : allNodes(nodes) { }
-  virtual ~NodeIdVisitor() = default;
+  ~NodeIdVisitor() = default;
 
-  virtual void visit(const ConstElementPtr& e)
+  void visit(const ConstElementPtr& e) override
   {
     if (e->getElementType() == ElementType::Node)
     {
@@ -74,9 +74,9 @@ public:
     }
   }
 
-  virtual QString getDescription() const { return ""; }
-  virtual QString getName() const { return ""; }
-virtual QString getClassName() const override { return ""; }
+  QString getDescription() const override { return ""; }
+  QString getName() const override { return ""; }
+  QString getClassName() const override { return ""; }
 
 private:
 
@@ -90,9 +90,9 @@ public:
   NodeReplaceVisitor(OsmMap& map, const std::map<long, long>& fromTo)
     : _fromTo(fromTo), _map(map)
   { }
-  virtual ~NodeReplaceVisitor() = default;
+  ~NodeReplaceVisitor() = default;
 
-  virtual void visit(const ConstElementPtr& e)
+  void visit(const ConstElementPtr& e) override
   {
     if (e->getElementType() == ElementType::Way)
     {
@@ -123,9 +123,9 @@ public:
     }
   }
 
-  virtual QString getDescription() const { return ""; }
-  virtual QString getName() const { return ""; }
-  virtual QString getClassName() const override { return ""; }
+  QString getDescription() const override { return ""; }
+  QString getName() const override { return ""; }
+  QString getClassName() const override { return ""; }
 
 private:
 

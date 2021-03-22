@@ -69,19 +69,19 @@ public:
   static QString className() { return "hoot::MetadataImport"; }
 
   MetadataImport() = default;
-  virtual ~MetadataImport() = default;
+  ~MetadataImport() = default;
 
   // OsmMapOperation
-  virtual QString getDescription() const override { return "Imports metadata"; }
+  QString getDescription() const override { return "Imports metadata"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 
   // MetadataOp
-  virtual void _apply();
+  void _apply() override;
 
   // process sequence functions
 

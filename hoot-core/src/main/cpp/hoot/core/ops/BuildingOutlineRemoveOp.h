@@ -48,25 +48,25 @@ public:
   static QString className() { return "hoot::BuildingOutlineRemoveOp"; }
 
   BuildingOutlineRemoveOp() = default;
-  virtual ~BuildingOutlineRemoveOp() = default;
+  ~BuildingOutlineRemoveOp() = default;
 
-  virtual void apply(std::shared_ptr<OsmMap>& map) override;
+  void apply(std::shared_ptr<OsmMap>& map) override;
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
-  virtual QString getInitStatusMessage() const { return "Removing outlines around buildings..."; }
+  QString getInitStatusMessage() const override { return "Removing outlines around buildings..."; }
 
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   { return "Removed " + QString::number(_numAffected) + " building outlines"; }
 
-  virtual QString getDescription() const override { return "Removes the outline around buildings"; }
+  QString getDescription() const override { return "Removes the outline around buildings"; }
 
   /**
    * @see FilteredByGeometryTypeCriteria
    */
-  virtual QStringList getCriteria() const;
+  QStringList getCriteria() const override;
 
 private:
 

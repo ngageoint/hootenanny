@@ -65,9 +65,9 @@ class ColumnVisitor : public ElementConstOsmMapVisitor
 public:
 
   ColumnVisitor(ElementType type) : _type(type) { }
-  virtual ~ColumnVisitor() = default;
+  ~ColumnVisitor() = default;
 
-  virtual void visit(const std::shared_ptr<const Element>& e)
+  void visit(const std::shared_ptr<const Element>& e) override
   {
     if (e->getElementType() == _type || _type == ElementType::Unknown)
     {
@@ -91,9 +91,9 @@ public:
     return result;
   }
 
-  virtual QString getDescription() const { return ""; }
-  virtual QString getName() const { return ""; }
-  virtual QString getClassName() const override { return ""; }
+  QString getDescription() const override { return ""; }
+  QString getName() const override { return ""; }
+  QString getClassName() const override { return ""; }
 
 private:
 

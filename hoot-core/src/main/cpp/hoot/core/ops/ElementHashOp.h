@@ -50,15 +50,15 @@ public:
   static QString className() { return "hoot::ElementHashOp"; }
 
   ElementHashOp();
-  virtual ~ElementHashOp() = default;
+  ~ElementHashOp() = default;
 
-  virtual void apply(const OsmMapPtr& map);
+  void apply(const OsmMapPtr& map) override;
 
-  virtual QString getDescription() const { return _hashVis.getDescription(); }
+  QString getDescription() const override { return _hashVis.getDescription(); }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
   QMap<QString, ElementId> getHashesToElementIds() const
   { return _hashVis.getHashesToElementIds(); }

@@ -55,29 +55,29 @@ public:
   CopyMapSubsetOp(const ConstOsmMapPtr& from, ElementId eid);
   CopyMapSubsetOp(const ConstOsmMapPtr& from, ElementId eid1, ElementId eid2);
   CopyMapSubsetOp(const ConstOsmMapPtr& from, const ElementCriterionPtr& crit);
-  virtual ~CopyMapSubsetOp() = default;
+  ~CopyMapSubsetOp() = default;
 
   /**
    * A new map is created and the eids specified in the constructor and their dependencies will be
    * copied into the new map. The map will be set to point to the new map.
    */
-  virtual void apply(OsmMapPtr& map);
+  void apply(OsmMapPtr& map) override;
 
   /**
    * @see ConstOsmMapConsumer
    */
-  virtual void setOsmMap(const OsmMap* map) { _from = map->shared_from_this(); }
+  void setOsmMap(const OsmMap* map) override { _from = map->shared_from_this(); }
 
   /**
    * @see ElementCriterionConsumer
    */
-  virtual void addCriterion(const ElementCriterionPtr& crit);
+  void addCriterion(const ElementCriterionPtr& crit) override;
 
-  virtual QString getDescription() const { return "Copies a subset of the map into a new map"; }
+  QString getDescription() const override { return "Copies a subset of the map into a new map"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
   std::set<ElementId>& getEidsCopied() { return _eidsCopied; }
 

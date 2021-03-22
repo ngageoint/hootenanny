@@ -79,7 +79,7 @@ public:
 
   OgrReaderInternal();
 
-  virtual ~OgrReaderInternal();
+  ~OgrReaderInternal();
 
   void close();
 
@@ -90,7 +90,7 @@ public:
   /**
    * @see ProgressReporter
    */
-  virtual unsigned int getNumSteps() const { return 1; }
+  unsigned int getNumSteps() const override { return 1; }
 
   /**
    * See the associated configuration options text for details.
@@ -222,18 +222,18 @@ public:
     _map.reset(new OsmMap());
   }
 
-  virtual ~OgrElementIterator()
+  ~OgrElementIterator()
   {
     _d->close();
     delete _d;
   }
 
   // not implemented
-  virtual void resetIterator() {}
+  void resetIterator() override { }
 
 protected:
 
-  virtual void _next()
+  void _next() override
   {
     _map->clear();
     _d->readNext(_map);

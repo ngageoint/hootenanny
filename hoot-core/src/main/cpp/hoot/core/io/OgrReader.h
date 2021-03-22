@@ -93,7 +93,7 @@ public:
 
   void setDefaultCircularError(Meters circularError);
 
-  void setDefaultStatus(Status s);
+  void setDefaultStatus(Status s) override;
 
   void setLimit(long limit);
 
@@ -101,21 +101,21 @@ public:
 
   long getFeatureCount(const QString& path, const QString& layer);
 
-  virtual void initializePartial() override;
+  void initializePartial() override;
 
-  virtual bool hasMoreElements() override;
+  bool hasMoreElements() override;
 
-  virtual ElementPtr readNextElement() override;
+  ElementPtr readNextElement() override;
 
-  virtual void close() override;
+  void close() override;
 
-  virtual bool isSupported(const QString& url) override;
+  bool isSupported(const QString& url) override;
 
-  virtual void open(const QString& url) override;
+  void open(const QString& url) override;
 
-  virtual void setUseDataSourceIds(bool useDataSourceIds) override;
+  void setUseDataSourceIds(bool useDataSourceIds) override;
 
-  virtual void finalizePartial() override;
+  void finalizePartial() override;
 
   /**
    * Returns the bounding box for the specified projection and configuration settings. This is
@@ -124,10 +124,10 @@ public:
   virtual std::shared_ptr<geos::geom::Envelope> getBoundingBoxFromConfig(const Settings& s,
     OGRSpatialReference* srs);
 
-  virtual std::shared_ptr<OGRSpatialReference> getProjection() const;
+  std::shared_ptr<OGRSpatialReference> getProjection() const override;
 
   //leaving this empty for the time being
-  virtual QString supportedFormats() override { return ""; }
+  QString supportedFormats() override { return ""; }
 
   /**
    * @see ProgressReporter
@@ -136,7 +136,7 @@ public:
   /**
    * @see ProgressReporter
    */
-  virtual unsigned int getNumSteps() const { return 1; }
+  unsigned int getNumSteps() const override { return 1; }
 
 protected:
 
