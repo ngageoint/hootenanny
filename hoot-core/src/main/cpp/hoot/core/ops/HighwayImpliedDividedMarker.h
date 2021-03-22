@@ -58,7 +58,7 @@ public:
 
   HighwayImpliedDividedMarker() = default;
   HighwayImpliedDividedMarker(const std::shared_ptr<const OsmMap>& map) : _inputMap(map) { }
-  virtual ~HighwayImpliedDividedMarker() = default;
+  ~HighwayImpliedDividedMarker() = default;
 
   void apply(std::shared_ptr<OsmMap>& map);
 
@@ -69,13 +69,13 @@ public:
 
   std::shared_ptr<OsmMap> markDivided();
 
-  virtual QString getInitStatusMessage() const
+  QString getInitStatusMessage() const override
   { return "Marking road sections that appear to be divided highways..."; }
 
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   { return "Marked " + QString::number(_numAffected) + " road sections as divided highways"; }
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Marks road sections that implicitly appear to be divided highways"; }
 
   /**
@@ -84,11 +84,11 @@ public:
    * This isn't actually using HighwayCriterion in the filtering, but for the purposes of reducing
    * unnecessary conflate ops we don't need to run it unless we're running road conflation.
    */
-  virtual QStringList getCriteria() const;
+  QStringList getCriteria() const override;
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

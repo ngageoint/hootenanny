@@ -43,31 +43,31 @@ public:
   static QString className() { return "hoot::GeoNamesReader"; }
 
   GeoNamesReader();
-  virtual ~GeoNamesReader() = default;
+  ~GeoNamesReader() = default;
 
-  virtual void close();
+  void close() override;
 
-  virtual void initializePartial() { }
+  void initializePartial() override { }
 
-  virtual void finalizePartial() { }
+  void finalizePartial() override { }
 
-  virtual std::shared_ptr<OGRSpatialReference> getProjection() const;
+  std::shared_ptr<OGRSpatialReference> getProjection() const override;
 
-  virtual bool hasMoreElements();
+  bool hasMoreElements() override;
 
-  virtual bool isSupported(const QString& url) override;
+  bool isSupported(const QString& url) override;
 
-  virtual void open(const QString& url) override;
+  void open(const QString& url) override;
 
-  virtual ElementPtr readNextElement() override;
+  ElementPtr readNextElement() override;
 
   void setDefaultAccuracy(Meters circularError) { _defaultCircularError = circularError; }
 
   void setDefaultStatus(Status s) { _status = s; }
 
-  virtual void setUseDataSourceIds(bool useDataSourceIds) { _useDataSourceIds = useDataSourceIds; }
+  void setUseDataSourceIds(bool useDataSourceIds) override { _useDataSourceIds = useDataSourceIds; }
 
-  virtual QString supportedFormats() override { return ".geonames"; }
+  QString supportedFormats() override { return ".geonames"; }
 
 private:
 

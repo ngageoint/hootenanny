@@ -52,9 +52,9 @@ public:
   {
     LOG_VART(_copyChildren);
   }
-  virtual ~AddAllVisitor() = default;
+  ~AddAllVisitor() = default;
 
-  virtual void visit(const ConstElementPtr& e)
+  void visit(const ConstElementPtr& e) override
   {
     ElementId eid = e->getElementId();
     LOG_VART(eid);
@@ -94,9 +94,9 @@ public:
     }
   }
 
-  virtual QString getDescription() const { return ""; }
-  virtual QString getName() const { return ""; }
-  virtual QString getClassName() const override { return ""; }
+  QString getDescription() const override { return ""; }
+  QString getName() const override { return ""; }
+  QString getClassName() const override { return ""; }
 
   std::set<ElementId>& getElementsAdded() { return _elementsAdded; }
 

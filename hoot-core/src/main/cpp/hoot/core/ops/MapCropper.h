@@ -59,21 +59,21 @@ public:
   static QString className() { return "hoot::MapCropper"; }
 
   MapCropper();
-  virtual ~MapCropper() = default;
+  ~MapCropper() = default;
 
-  virtual void apply(std::shared_ptr<OsmMap>& map);
+  void apply(std::shared_ptr<OsmMap>& map) override;
 
-  virtual void setConfiguration(const Settings& conf) override;
+  void setConfiguration(const Settings& conf) override;
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
-  virtual QString getDescription() const override { return "Crops a map"; }
+  QString getDescription() const override { return "Crops a map"; }
 
-  virtual QString getInitStatusMessage() const override;
+  QString getInitStatusMessage() const override;
 
-  virtual QString getCompletedStatusMessage() const override
+  QString getCompletedStatusMessage() const override
   {
     return
       "Cropped " + StringUtils::formatLargeNumber(_numAffected) + " / " +

@@ -56,21 +56,21 @@ public:
   static QString className() { return "hoot::ManualMatchValidator"; }
 
   ManualMatchValidator();
-  virtual ~ManualMatchValidator() = default;
+  ~ManualMatchValidator() = default;
 
   /**
    * Validates all manual matches in the map and records the first error found for each element
    *
    * @param map
    */
-  virtual void apply(const OsmMapPtr& map);
+  void apply(const OsmMapPtr& map) override;
 
-  virtual QString getDescription() const { return "Validates manual matches"; }
+  QString getDescription() const override { return "Validates manual matches"; }
 
-  virtual QString getInitStatusMessage() const
+  QString getInitStatusMessage() const override
   { return "Validating manual matches..."; }
 
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   { return "Validated " + QString::number(_numAffected) + " manual matches"; }
 
   /**
@@ -105,9 +105,9 @@ public:
   void setAllowUuidManualMatchIds(bool allow) { _allowUuidManualMatchIds = allow; }
   void setFullDebugOutput(bool fullDebugOutput) { _fullDebugOutput = fullDebugOutput; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

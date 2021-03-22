@@ -40,15 +40,15 @@ class IntegerFieldDefinition : public FieldDefinition
 public:
 
   IntegerFieldDefinition();
-  virtual ~IntegerFieldDefinition() = default;
+  ~IntegerFieldDefinition() = default;
 
   void addEnumeratedValue(int v) { _enumeratedValues.insert(v); }
 
-  virtual QVariant getDefaultValue() const;
+  QVariant getDefaultValue() const override;
 
-  virtual QVariant::Type getType() const { return QVariant::Int; }
+  QVariant::Type getType() const override { return QVariant::Int; }
 
-  virtual bool hasDefaultValue() const;
+  bool hasDefaultValue() const override;
 
   bool hasEnumeratedValue(int v) { return _enumeratedValues.find(v) != _enumeratedValues.end(); }
 
@@ -58,9 +58,9 @@ public:
 
   void setMinValue(double min) { _min = min; }
 
-  virtual QString toString() const;
+  QString toString() const override;
 
-  virtual void validate(const QVariant& v, StrictChecking strict) const;
+  void validate(const QVariant& v, StrictChecking strict) const override;
 
 private:
 

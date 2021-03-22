@@ -47,15 +47,15 @@ public:
 
   SqlBulkDelete(const QSqlDatabase& db, const QString& tableName);
 
-  virtual ~SqlBulkDelete();
+  ~SqlBulkDelete();
 
-  virtual void flush();
+  void flush() override;
 
-  virtual int getPendingCount() const { return _pending.size(); }
+  int getPendingCount() const override { return _pending.size(); }
 
-  virtual QString getTableName() const { return _tableName; }
+  QString getTableName() const override { return _tableName; }
 
-  virtual void deleteElement(const long id);
+  void deleteElement(const long id) override;
 
 private:
 

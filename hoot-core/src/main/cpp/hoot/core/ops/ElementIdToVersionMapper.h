@@ -42,24 +42,24 @@ public:
   static QString className() { return "hoot::ElementIdToVersionMapper"; }
 
   ElementIdToVersionMapper() = default;
-  virtual ~ElementIdToVersionMapper() = default;
+  ~ElementIdToVersionMapper() = default;
 
-  virtual void apply(const OsmMapPtr& map);
+  void apply(const OsmMapPtr& map) override;
 
   QMap<ElementId, long> getMappings() const { return _idToVersionMappings; }
 
-  virtual QString getInitStatusMessage() const
+  QString getInitStatusMessage() const override
   { return "Mapping element IDs to changeset versions..."; }
 
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   { return "Mapped " +  StringUtils::formatLargeNumber(_numAffected) + " element IDs to versions."; }
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Maintains a mapping of element IDs to changeset versions"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

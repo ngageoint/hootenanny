@@ -50,12 +50,12 @@ public:
   ElementIdRemapper(const ElementCriterionPtr& remapFilter);
   ElementIdRemapper(
     const ElementCriterionPtr& remapFilter, const ElementCriterionPtr& restoreFilter);
-  virtual ~ElementIdRemapper() = default;
+  ~ElementIdRemapper() = default;
 
   /**
    * @see OsmMapOperation
    */
-  virtual void apply(OsmMapPtr& map);
+  void apply(OsmMapPtr& map) override;
 
   /**
    * Restores all IDs in the map back to their original values
@@ -64,14 +64,14 @@ public:
    */
   void restore(OsmMapPtr& map);
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
-  virtual QString getInitStatusMessage() const
+  QString getInitStatusMessage() const override
   { return "Remapping element IDs..."; }
 
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   {
     return "Remapped " + StringUtils::formatLargeNumber(_numAffected) + " element IDs.";
   }
@@ -81,7 +81,7 @@ public:
     return "Restored " + StringUtils::formatLargeNumber(_restoredIds) + " element IDs.";
   }
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Remaps element IDs and is capable of restoring the IDs"; }
 
   QMap<ElementId, ElementId> getIdMappings() const { return _originalToRemappedElementIds; }

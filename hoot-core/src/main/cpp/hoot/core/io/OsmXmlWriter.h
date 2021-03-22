@@ -58,7 +58,7 @@ public:
   static QString className() { return "hoot::OsmXmlWriter"; }
 
   OsmXmlWriter();
-  virtual ~OsmXmlWriter();
+  ~OsmXmlWriter();
 
   bool isSupported(const QString& url) override { return url.toLower().endsWith(".osm"); }
 

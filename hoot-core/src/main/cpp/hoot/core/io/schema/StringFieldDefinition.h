@@ -37,19 +37,19 @@ class StringFieldDefinition : public FieldDefinition
 public:
 
   StringFieldDefinition() = default;
-  virtual ~StringFieldDefinition() = default;
+  ~StringFieldDefinition() = default;
 
-  virtual QVariant::Type getType() const override { return QVariant::String; }
+  QVariant::Type getType() const override { return QVariant::String; }
 
-  virtual void validate(const QVariant& v, StrictChecking strict) const override;
+  void validate(const QVariant& v, StrictChecking strict) const override;
 
-  virtual QVariant getDefaultValue() const override;
+  QVariant getDefaultValue() const override;
 
-  virtual bool hasDefaultValue() const;
+  bool hasDefaultValue() const override;
 
   void setDefaultValue(const QString& v) { _defaultValue = v; }
 
-  virtual QString toString() const;
+  QString toString() const override;
 
 private:
   QString _defaultValue;
