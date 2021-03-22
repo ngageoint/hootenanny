@@ -144,7 +144,7 @@ private:
   bool _statPassesFilter(const StatData& statData) const;
   int _getNumStatsPassingFilter(const QList<StatData>& stats) const;
   void _interpretStatData(std::shared_ptr<const OsmMap>& constMap, StatData& d);
-  double GetRequestedStatValue(const ElementVisitor* pVisitor, StatData::StatCall call);
+  double GetRequestedStatValue(const ElementVisitor* pVisitor, StatData::StatCall call) const;
 
   /**
    * @brief getMatchCreator finds the match creator (in the supplied vector) by name
@@ -159,13 +159,13 @@ private:
 
   double _applyVisitor(
     const hoot::FilteredVisitor& v, const QString& statName,
-    StatData::StatCall call = StatData::Stat);
+    StatData::StatCall call = StatData::StatCall::Stat);
   double _applyVisitor(
     const hoot::FilteredVisitor& v, boost::any& visitorData, const QString& statName,
-    StatData::StatCall call = StatData::Stat);
+    StatData::StatCall call = StatData::StatCall::Stat);
   double _applyVisitor(
     ElementCriterion* pCrit, ConstElementVisitor* pVis, const QString& statName,
-    StatData::StatCall call = StatData::Stat);
+    StatData::StatCall call = StatData::StatCall::Stat);
   void _applyVisitor(ConstElementVisitor* v, const QString& statName);
   double _getApplyVisitor(ConstElementVisitor* v, const QString& statName);
 

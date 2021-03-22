@@ -112,15 +112,15 @@ void CalculateStatsOp::_readGenericStatsConfiguration()
   QList<StatData>* pCurr = nullptr;
   QHash<QString, StatData::StatCall> enumLookup(
   {
-    {"stat", StatData::Stat},
-    {"min", StatData::Min},
-    {"max", StatData::Max},
-    {"average", StatData::Average},
-    {"infocount", StatData::InfoCount},
-    {"infomin", StatData::InfoMin},
-    {"infomax", StatData::InfoMax},
-    {"infoaverage", StatData::InfoAverage},
-    {"infodiff", StatData::InfoDiff}
+    {"stat", StatData::StatCall::Stat},
+    {"min", StatData::StatCall::Min},
+    {"max", StatData::StatCall::Max},
+    {"average", StatData::StatCall::Average},
+    {"infocount", StatData::StatCall::InfoCount},
+    {"infomin", StatData::StatCall::InfoMin},
+    {"infomax", StatData::StatCall::InfoMax},
+    {"infoaverage", StatData::StatCall::InfoAverage},
+    {"infodiff", StatData::StatCall::InfoDiff}
   });
 
   foreach (bpt::ptree::value_type listType, propPtree)
@@ -285,20 +285,18 @@ void CalculateStatsOp::_initStatCalc()
     {
       CreatorDescription::BaseFeatureType featureType = it.key();
       const QString featureTypeStr = CreatorDescription::baseFeatureTypeToString(featureType);
-      if (!_featureTypesToSkip.contains(featureTypeStr, Qt::CaseInsensitive))
+      if (!_featureTypesToSkip.contains(featureTypeStr, Qt::CaseInsensitive) &&
+          (_filter.isEmpty() ||
+           _filter.contains(CreatorDescription::getElementCriterionName(featureType))))
       {
-        if (_filter.isEmpty() ||
-            _filter.contains(CreatorDescription::getElementCriterionName(featureType)))
-        {
-          numCallsToGenerateFeatureStats++;
+        numCallsToGenerateFeatureStats++;
 
-          const CreatorDescription::FeatureCalcType calcType =
-            CreatorDescription::getFeatureCalcType(featureType);
-          if (calcType == CreatorDescription::CalcTypeArea ||
-              calcType == CreatorDescription::CalcTypeLength)
-          {
-            numSizeCalcs += 4;
-          }
+        const CreatorDescription::FeatureCalcType calcType =
+          CreatorDescription::getFeatureCalcType(featureType);
+        if (calcType == CreatorDescription::CalcTypeArea ||
+            calcType == CreatorDescription::CalcTypeLength)
+        {
+          numSizeCalcs += 4;
         }
       }
     }
@@ -353,10 +351,9 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
     // needed to calculate derivative stats. In order to prevent calculating them more than once,
     // they haven't been moved to the generic stats.
 
-    const long featureCount =
+    const double featureCount =
       _getApplyVisitor(new FeatureCountVisitor(), "Total Features");
     _addStat("Total Features", featureCount);
-    LOG_VART(featureCount);
 
     double conflatedFeatureCount =
       _applyVisitor(
@@ -544,16 +541,15 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
     {
       CreatorDescription::BaseFeatureType featureType = it.key();
       const QString featureTypeStr = CreatorDescription::baseFeatureTypeToString(featureType);
-      if (!_featureTypesToSkip.contains(featureTypeStr, Qt::CaseInsensitive))
+      if (!_featureTypesToSkip.contains(featureTypeStr, Qt::CaseInsensitive) &&
+          (_filter.isEmpty() ||
+           _filter.contains(CreatorDescription::getElementCriterionName(featureType))))
       {
-        if (_filter.isEmpty() ||
-            _filter.contains(CreatorDescription::getElementCriterionName(featureType)))
-        {
-          _generateFeatureStats(
-            featureType, it.value(), CreatorDescription::getFeatureCalcType(featureType),
-            CreatorDescription::getElementCriterion(featureType, map),
-            poisMergedIntoPolys, poisMergedIntoPolysFromMap1, poisMergedIntoPolysFromMap2);
-        }
+        _generateFeatureStats(
+          featureType, (float)it.value(), CreatorDescription::getFeatureCalcType(featureType),
+          CreatorDescription::getElementCriterion(featureType, map),
+          (long)poisMergedIntoPolys, (long)poisMergedIntoPolysFromMap1,
+          (long)poisMergedIntoPolysFromMap2);
       }
     }
 
@@ -754,9 +750,9 @@ void CalculateStatsOp::_interpretStatData(shared_ptr<const OsmMap>& constMap, St
 }
 
 double CalculateStatsOp::GetRequestedStatValue(
-  const ElementVisitor* pVisitor, StatData::StatCall call)
+  const ElementVisitor* pVisitor, StatData::StatCall call) const
 {
-  if (call == StatData::Stat)
+  if (call == StatData::StatCall::Stat)
   {
     const SingleStatistic* ss = dynamic_cast<const SingleStatistic*>(pVisitor);
     return ss ? ss->getStat() : 0;
@@ -768,15 +764,15 @@ double CalculateStatsOp::GetRequestedStatValue(
 
   switch (call)
   {
-    case StatData::Stat: return ns->getStat();
-    case StatData::Min: return ns->getMin();
-    case StatData::Max: return ns->getMax();
-    case StatData::Average: return ns->getAverage();
-    case StatData::InfoCount: return ns->getInformationCount();
-    case StatData::InfoMin: return ns->getInformationMin();
-    case StatData::InfoMax: return ns->getInformationMax();
-    case StatData::InfoAverage: return ns->getInformationAverage();
-    case StatData::InfoDiff: return ns->getInformationCountDiff();
+    case StatData::StatCall::Stat: return ns->getStat();
+    case StatData::StatCall::Min: return ns->getMin();
+    case StatData::StatCall::Max: return ns->getMax();
+    case StatData::StatCall::Average: return ns->getAverage();
+    case StatData::StatCall::InfoCount: return (double)ns->getInformationCount();
+    case StatData::StatCall::InfoMin: return (double)ns->getInformationMin();
+    case StatData::StatCall::InfoMax: return (double)ns->getInformationMax();
+    case StatData::StatCall::InfoAverage: return ns->getInformationAverage();
+    case StatData::StatCall::InfoDiff: return (double)ns->getInformationCountDiff();
     default: return 0;
   }
 }

@@ -42,7 +42,7 @@ public:
 
   // Enum defining what stat value of the SingleStatistic or NumericStatistic
   // implementation of the specific visitor is being used.
-  enum StatCall
+  enum class StatCall
   {
     Stat,           // SingleStatistic::getStat()
     Min,            // NumericStatistic::getMin()
@@ -55,7 +55,7 @@ public:
     InfoDiff,       // NumericStatistic::getInformationCountDiff()
   };
 
-  StatData();
+  StatData() = default;
 
   QString getName() const { return _name; }
   QString getVisitor() const { return _visitor; }

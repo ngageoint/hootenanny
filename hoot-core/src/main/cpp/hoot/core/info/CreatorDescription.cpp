@@ -176,29 +176,29 @@ std::shared_ptr<GeometryTypeCriterion> CreatorDescription::getElementCriterion(
   switch (t)
   {
     case POI:
-      return std::shared_ptr<GeometryTypeCriterion>(new PoiCriterion());
+      return std::make_shared<PoiCriterion>(PoiCriterion());
     case Highway:
-      return std::shared_ptr<GeometryTypeCriterion>(new HighwayCriterion(map));
+      return std::make_shared<HighwayCriterion>(HighwayCriterion(map));
     case Building:
-      return std::shared_ptr<GeometryTypeCriterion>(new BuildingCriterion(map));
+      return std::make_shared<BuildingCriterion>(BuildingCriterion(map));
     case Waterway:
-      return std::shared_ptr<GeometryTypeCriterion>(new LinearWaterwayCriterion());
+      return std::make_shared<LinearWaterwayCriterion>(LinearWaterwayCriterion());
     case PoiPolygonPOI:
-      return std::shared_ptr<GeometryTypeCriterion>(new PoiPolygonPoiCriterion());
+      return std::make_shared<PoiPolygonPoiCriterion>(PoiPolygonPoiCriterion());
     case Polygon:
-      return std::shared_ptr<GeometryTypeCriterion>(new PolygonCriterion(map));
+      return std::make_shared<PolygonCriterion>(PolygonCriterion(map));
     case Area:
-      return std::shared_ptr<GeometryTypeCriterion>(new NonBuildingAreaCriterion(map));
+      return std::make_shared<NonBuildingAreaCriterion>(NonBuildingAreaCriterion(map));
     case Railway:
-      return std::shared_ptr<GeometryTypeCriterion>(new RailwayCriterion());
+      return std::make_shared<RailwayCriterion>(RailwayCriterion());
     case PowerLine:
-      return std::shared_ptr<GeometryTypeCriterion>(new PowerLineCriterion());
+      return std::make_shared<PowerLineCriterion>(PowerLineCriterion());
     case Point:
-      return std::shared_ptr<GeometryTypeCriterion>(new PointCriterion(map));
+      return std::make_shared<PointCriterion>(PointCriterion(map));
     case Line:
-      return std::shared_ptr<GeometryTypeCriterion>(new LinearCriterion());
+      return std::make_shared<LinearCriterion>(LinearCriterion());
     case CollectionRelation:
-      return std::shared_ptr<GeometryTypeCriterion>(new CollectionRelationCriterion());
+      return std::make_shared<CollectionRelationCriterion>(CollectionRelationCriterion());
     default:
       return std::shared_ptr<GeometryTypeCriterion>();
   }
