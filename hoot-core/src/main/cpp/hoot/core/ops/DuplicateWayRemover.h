@@ -53,9 +53,9 @@ public:
   static QString className() { return "hoot::DuplicateWayRemover"; }
 
   DuplicateWayRemover();
-  virtual ~DuplicateWayRemover() = default;
+  ~DuplicateWayRemover() = default;
 
-  void apply(OsmMapPtr& map);
+  void apply(OsmMapPtr& map) override;
 
   /**
    * Remove parts of ways that are duplicates.
@@ -75,23 +75,23 @@ public:
     _strictTagMatching = strictTagMatching;
   }
 
-  virtual QString getInitStatusMessage() const { return "Removing duplicate ways..."; }
+  QString getInitStatusMessage() const override { return "Removing duplicate ways..."; }
 
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   { return "Removed " + QString::number(_numAffected) + " duplicate ways"; }
 
-  virtual QString getDescription() const { return "Removes duplicate ways from a map"; }
+  QString getDescription() const { return "Removes duplicate ways from a map"; }
 
   /**
    * @see FilteredByGeometryTypeCriteria
    */
-  virtual QStringList getCriteria() const;
+  QStringList getCriteria() const override;
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
-  virtual void setConflateInfoCache(const std::shared_ptr<ConflateInfoCache>& cache)
+  void setConflateInfoCache(const std::shared_ptr<ConflateInfoCache>& cache) override
   { _conflateInfoCache = cache; }
 
 protected:

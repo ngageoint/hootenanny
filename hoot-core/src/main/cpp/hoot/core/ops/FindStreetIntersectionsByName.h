@@ -51,34 +51,34 @@ public:
   static QString className() { return "hoot::FindStreetIntersectionsByName"; }
 
   FindStreetIntersectionsByName() = default;
-  virtual ~FindStreetIntersectionsByName() = default;
+  ~FindStreetIntersectionsByName() = default;
 
-  virtual void apply(OsmMapPtr& map) override;
+  void apply(OsmMapPtr& map) override;
 
   /**
    * @see Configurable
    */
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
   /**
    * @see ApiEntityInfo
    */
-  virtual QString getDescription() const override
+  QString getDescription() const override
   { return "Locates street intersections by street name"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
-
-  /**
-   * @see OperationStatus
-   */
-  virtual QString getInitStatusMessage() const { return "Locating street intersections..."; }
+  QString getClassName() const override { return className(); }
 
   /**
    * @see OperationStatus
    */
-  virtual QString getCompletedStatusMessage() const
+  QString getInitStatusMessage() const override { return "Locating street intersections..."; }
+
+  /**
+   * @see OperationStatus
+   */
+  QString getCompletedStatusMessage() const override
   {
     return
       "Located " + StringUtils::formatLargeNumber(_numAffected) +

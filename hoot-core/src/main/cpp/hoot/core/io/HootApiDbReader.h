@@ -51,23 +51,26 @@ public:
    * Called after open. This will read the bounds of the specified layer in a relatively efficient
    * manner. (e.g. SELECT min(x)...)
    */
+  /**
+   * TODO: Implement EnvelopeProvider
+   */
   virtual geos::geom::Envelope calculateEnvelope() const;
 
-  virtual void setConfiguration(const Settings& conf) override;
+  void setConfiguration(const Settings& conf) override;
 
-  virtual void open(const QString& urlStr) override;
+  void open(const QString& urlStr) override;
 
-  virtual void read(const OsmMapPtr& map) override;
+  void read(const OsmMapPtr& map) override;
 
 protected:
 
-  virtual NodePtr _resultToNode(const QSqlQuery& resultIterator, OsmMap& map) override;
-  virtual WayPtr _resultToWay(const QSqlQuery& resultIterator, OsmMap& map) override;
-  virtual RelationPtr _resultToRelation(const QSqlQuery& resultIterator, const OsmMap& map) override;
+  NodePtr _resultToNode(const QSqlQuery& resultIterator, OsmMap& map) override;
+  WayPtr _resultToWay(const QSqlQuery& resultIterator, OsmMap& map) override;
+  RelationPtr _resultToRelation(const QSqlQuery& resultIterator, const OsmMap& map) override;
 
-  virtual std::shared_ptr<ApiDb> _getDatabase() const override { return _database; }
+  std::shared_ptr<ApiDb> _getDatabase() const override { return _database; }
 
-  virtual QString supportedFormats() { return MetadataTags::HootApiDbScheme() + "://"; }
+  QString supportedFormats() { return MetadataTags::HootApiDbScheme() + "://"; }
 
 private:
 

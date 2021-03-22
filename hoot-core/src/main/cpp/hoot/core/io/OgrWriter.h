@@ -63,7 +63,7 @@ public:
   static QString className() { return "hoot::OgrWriter"; }
 
   OgrWriter();
-  virtual ~OgrWriter() = default;
+  ~OgrWriter() = default;
 
   /**
    * @brief setCacheCapacity
@@ -77,7 +77,7 @@ public:
   void setCacheCapacity(const unsigned long maxNodes, const unsigned long maxWays,
                         const unsigned long maxRelations);
 
-  void close();
+  void close() override;
 
   bool isSupported(const QString& url) override;
 

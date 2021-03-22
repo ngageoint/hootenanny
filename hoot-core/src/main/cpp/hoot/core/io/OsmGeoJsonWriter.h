@@ -48,30 +48,30 @@ public:
   static QString className() { return "hoot::OsmGeoJsonWriter"; }
 
   OsmGeoJsonWriter(int precision = ConfigOptions().getWriterPrecision());
-  virtual ~OsmGeoJsonWriter() = default;
+  ~OsmGeoJsonWriter() = default;
 
   /**
    * @brief write Write the OsmMap out to a file in GeoJSON format, writer must be "open"
    * @param map
    */
-  virtual void write(const ConstOsmMapPtr& map) override;
+  void write(const ConstOsmMapPtr& map) override;
 
   /**
    * @brief isSupported returns true if the URL is likely supported
    * @param url Filename ending in ".geojson"
    * @return
    */
-  virtual bool isSupported(const QString& url) override { return url.toLower().endsWith(".geojson"); }
+  bool isSupported(const QString& url) override { return url.toLower().endsWith(".geojson"); }
 
   /**
    * @brief setConfiguration allows configuration settings to override the defaults
    * @param conf Configuration settings object
    */
-  virtual void setConfiguration(const Settings& conf) override;
+  void setConfiguration(const Settings& conf) override;
 
-  virtual QString supportedFormats() override { return ".geojson"; }
+  QString supportedFormats() override { return ".geojson"; }
 
-  virtual QString toString(const ConstOsmMapPtr& map);
+  QString toString(const ConstOsmMapPtr& map);
 
 protected:
 
@@ -79,7 +79,7 @@ protected:
    * @brief _writeNodes Iterates all nodes that aren't part of another element and writes
    *   them out to the GeoJSON file
    */
-  virtual void _writeNodes();
+  void _writeNodes() override;
 
   /**
    * @brief _writeNode Writes a single node; metadata, tags, and geometry
@@ -91,7 +91,7 @@ protected:
    * @brief _writeWays Iterates all ways that aren't part of another element and writes
    *   them out to the GeoJSON file
    */
-  virtual void _writeWays();
+  void _writeWays() override;
 
   /**
    * @brief _writeWay Writes a single way; metadata, tags, and geometry
@@ -103,7 +103,7 @@ protected:
    * @brief _writeRelations Iterates all relations that aren't part of another element and writes
    *   them out to the GeoJSON file
    */
-  virtual void _writeRelations();
+  void _writeRelations() override;
 
   /**
    * @brief _writeRelationInfo Writes relation specific information, relation-type and roles

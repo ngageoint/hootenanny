@@ -46,7 +46,7 @@ public:
   static QString className() { return "hoot::HootApiDbWriter"; }
 
   HootApiDbWriter();
-  virtual ~HootApiDbWriter();
+  ~HootApiDbWriter();
 
   void close() override;
 

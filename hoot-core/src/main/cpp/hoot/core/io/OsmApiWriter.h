@@ -68,12 +68,12 @@ public:
   /** Constructors with one or multiple files consisting of one large changeset */
   OsmApiWriter(const QUrl& url, const QString& changeset);
   OsmApiWriter(const QUrl& url, const QList<QString>& changesets);
-  virtual ~OsmApiWriter() = default;
+  ~OsmApiWriter() = default;
   /**
    * @brief setConfiguration Update the configuration settings with new configuration
    * @param conf - Updated configurations
    */
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
   /**
    * @brief isSupported
    * @param url - Must be a valid, full HTTP[S] URL pointing to an OSM website
@@ -133,7 +133,7 @@ public:
   /**
    * @see ProgressReporter
    */
-  virtual unsigned int getNumSteps() const { return 1; }
+  unsigned int getNumSteps() const override { return 1; }
   /**
    * @brief setErrorPathname Record the pathname of the error changeset
    * @param path Pathname

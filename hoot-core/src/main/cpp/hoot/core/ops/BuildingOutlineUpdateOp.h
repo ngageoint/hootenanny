@@ -50,27 +50,27 @@ public:
   static QString className() { return "hoot::BuildingOutlineUpdateOp"; }
 
   BuildingOutlineUpdateOp() = default;
-  virtual ~BuildingOutlineUpdateOp() = default;
+  ~BuildingOutlineUpdateOp() = default;
 
-  virtual void apply(std::shared_ptr<OsmMap>& map) override;
+  void apply(std::shared_ptr<OsmMap>& map) override;
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
-  virtual QString getInitStatusMessage() const
+  QString getInitStatusMessage() const override
   { return "Updating building outlines..."; }
 
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   { return "Updated " + QString::number(_numAffected) + " building outlines"; }
 
-  virtual QString getDescription() const override
+  QString getDescription() const override
   { return "Updates multi-part building outlines"; }
 
   /**
    * @see FilteredByGeometryTypeCriteria
    */
-  virtual QStringList getCriteria() const;
+  QStringList getCriteria() const override;
 
 private:
 
