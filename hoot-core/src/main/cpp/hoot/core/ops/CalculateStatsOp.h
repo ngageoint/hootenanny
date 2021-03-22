@@ -110,7 +110,8 @@ private:
   // meant to be input to a conflation job and those that are output from a conflation job.
   bool _inputIsConflatedMapOutput;
   QList<SingleStat> _stats;
-  // TODO
+  // list of GeometryTypeCriterion class names used to control which statistics are generated; see
+  // ConflateExecutor and SuperfluousConflateOpRemover
   QSet<QString> _filter;
 
   std::shared_ptr<ScriptSchemaTranslator> _schemaTranslator;

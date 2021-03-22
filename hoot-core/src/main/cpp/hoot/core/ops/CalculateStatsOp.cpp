@@ -27,14 +27,10 @@
 #include "CalculateStatsOp.h"
 
 #include <hoot/core/conflate/matching/MatchFactory.h>
-#include <hoot/core/criterion/BuildingCriterion.h>
 #include <hoot/core/criterion/ChainCriterion.h>
-#include <hoot/core/criterion/HighwayCriterion.h>
-#include <hoot/core/criterion/LinearWaterwayCriterion.h>
 #include <hoot/core/criterion/NeedsReviewCriterion.h>
 #include <hoot/core/criterion/NoInformationCriterion.h>
 #include <hoot/core/criterion/NotCriterion.h>
-#include <hoot/core/criterion/PoiCriterion.h>
 #include <hoot/core/criterion/StatusCriterion.h>
 #include <hoot/core/criterion/poi-polygon/PoiPolygonPoiCriterion.h>
 #include <hoot/core/criterion/poi-polygon/PoiPolygonPolyCriterion.h>
@@ -47,13 +43,9 @@
 #include <hoot/core/visitors/FeatureCountVisitor.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/LengthOfWaysVisitor.h>
-#include <hoot/core/visitors/LongestTagVisitor.h>
 #include <hoot/core/visitors/MatchCandidateCountVisitor.h>
 #include <hoot/core/visitors/SumNumericTagsVisitor.h>
 #include <hoot/core/visitors/SchemaTranslatedTagCountVisitor.h>
-#include <hoot/core/criterion/RailwayCriterion.h>
-#include <hoot/core/criterion/PowerLineCriterion.h>
-#include <hoot/core/criterion/AreaCriterion.h>
 
 #include <math.h>
 
@@ -133,7 +125,8 @@ void CalculateStatsOp::_readGenericStatsConfiguration()
 
   foreach (bpt::ptree::value_type listType, propPtree)
   {
-    if (listType.first == "quick") pCurr = &_quickStatData;
+    if (listType.first == "#") continue; // skip comments
+    else if (listType.first == "quick") pCurr = &_quickStatData;
     else if (listType.first == "slow") pCurr = &_slowStatData;
     else
     {
@@ -544,6 +537,8 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
       }
       SchemaTranslatedTagCountVisitor tcv(_schemaTranslator);
       _applyVisitor(&tcv, "Translated Tag Count");
+      // This stat could be made generic, but since the ones following it cannot currently we'll
+      // leave it non-generic so it shows up next to them in the list.
       _addStat("Translated Populated Tag Percent", tcv.getStat());
       _addStat("Translated Populated Tags", tcv.getPopulatedCount());
       _addStat("Translated Default Tags", tcv.getDefaultCount());
@@ -580,7 +575,7 @@ void CalculateStatsOp::_addStat(const char* name, double value)
 
 void CalculateStatsOp::_interpretStatData(shared_ptr<const OsmMap>& constMap, StatData& d)
 {
-  // TODO
+  // If
   LOG_VART(_filter);
   LOG_VART(d.getFilterCriterion());
   if (!_filter.isEmpty() && !d.getFilterCriterion().isEmpty() &&

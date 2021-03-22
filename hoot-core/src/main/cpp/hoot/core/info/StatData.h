@@ -33,7 +33,8 @@ namespace hoot
 {
 
 /**
- * TODO - generic statistics calculation
+ * Represents a single statistic that is part of generic statistics calculation processed by
+ * CalculateStatsOp.
  */
 class StatData
 {
@@ -70,13 +71,16 @@ public:
 
 private:
 
-  QString _name;       // name of the output statistics value
-  QString _visitor;    // visitor object name used to collect the data
-  QString _criterion;  // criterion object name used if a FilteredVisitor is desired, otherwise an
-                       // empty string
-  // TODO
-  QString _filterCriterion;
-  StatCall _statCall;  // defines how the visitor data is being interpreted
+  QString _name;            // displayable name of the statistic
+  QString _visitor;         // class name of the visitor used to collect the data
+  QString _criterion;       // optional criterion class name used to filter the data processed by
+                            // _visitor
+  QString _filterCriterion; // optional filter populated with the class name of a criterion used to
+                            // determine whether the statistic is generated; e.g. ConflateExecutor
+                            // requires CalculateStatsOp check against this criterion to suppress
+                            // generation of statistics that do not map to data types being
+                            // conflated.
+  StatCall _statCall;       // defines how the visitor data is being interpreted
 };
 
 }

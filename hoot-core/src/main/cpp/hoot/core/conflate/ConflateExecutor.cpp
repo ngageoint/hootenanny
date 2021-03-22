@@ -230,7 +230,6 @@ void ConflateExecutor::conflate(const QString& input1, const QString& input2, QS
   _stats.append(SingleStat("(Dubious) Read Inputs Bytes", inputBytes));
   _stats.append(SingleStat("(Dubious) Read Inputs Bytes per Second", inputBytes / elapsed));
 
-  // TODO
   const QSet<QString> matchCreatorCrits =
     SuperfluousConflateOpRemover::getMatchCreatorGeometryTypeCrits(false);
   CalculateStatsOp input1Cso(
@@ -238,6 +237,7 @@ void ConflateExecutor::conflate(const QString& input1, const QString& input2, QS
   input1Cso.setFilter(matchCreatorCrits);
   CalculateStatsOp input2Cso(
     ElementCriterionPtr(new StatusCriterion(Status::Unknown2)), "input map 2");
+  // We only want statistics generated that correspond to the feature types being conflated.
   input2Cso.setFilter(matchCreatorCrits);
   if (_displayStats)
   {
@@ -519,7 +519,7 @@ void ConflateExecutor::_writeStats(
     "Calculating output data statistics for: ..." + outputFileName.right(_maxFilePrintLength) +
     "...");
   CalculateStatsOp outputCso("output map", true);
-  // TODO
+  // We only want statistics generated that correspond to the feature types being conflated.
   outputCso.setFilter(SuperfluousConflateOpRemover::getMatchCreatorGeometryTypeCrits(false));
   outputCso.apply(map);
   QList<SingleStat> outputStats = outputCso.getStats();

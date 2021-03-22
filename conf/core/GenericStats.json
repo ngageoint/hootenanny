@@ -1,4 +1,7 @@
 {
+   "#": "This file automates generation of statistics and is each statistic maps to a StatsData instance and is ",
+   "#": "processed by CalculateStatsOp. Statistics may be organized in either the 'quick' or 'slow' lists depending ",
+   "#": "upon their expected runtime. See comments in the StatsData class that describe the properties used here.",
    "quick":[
       {
          "name":"Nodes",
