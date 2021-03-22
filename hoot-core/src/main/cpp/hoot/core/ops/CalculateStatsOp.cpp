@@ -550,88 +550,6 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
       _addStat("Translated Populated Tags", tcv.getPopulatedCount());
       _addStat("Translated Default Tags", tcv.getDefaultCount());
       _addStat("Translated Null Tags", tcv.getNullCount());
-
-      if (_filter.isEmpty() || _filter.contains(AreaCriterion::className()))
-      {
-        _addStat(
-          "Area Translated Populated Tag Percent",
-          _applyVisitor(
-            new AreaCriterion(map),
-            new SchemaTranslatedTagCountVisitor(_schemaTranslator),
-            "Translated Areas Count"));
-      }
-      if (_filter.isEmpty() || _filter.contains(BuildingCriterion::className()))
-      {
-        _addStat(
-          "Building Translated Populated Tag Percent",
-          _applyVisitor(
-            new BuildingCriterion(map),
-            new SchemaTranslatedTagCountVisitor(_schemaTranslator),
-            "Translated Buildings Count"));
-      }
-      if (_filter.isEmpty() || _filter.contains(HighwayCriterion::className()))
-      {
-        _addStat(
-          "Road Translated Populated Tag Percent",
-          _applyVisitor(
-            new HighwayCriterion(map),
-            new SchemaTranslatedTagCountVisitor(_schemaTranslator),
-            "Translated Roads Count"));
-      }
-      if (_filter.isEmpty() || _filter.contains(PoiCriterion::className()))
-      {
-        _addStat(
-          "POI Translated Populated Tag Percent",
-          _applyVisitor(
-            new PoiCriterion(),
-            new SchemaTranslatedTagCountVisitor(_schemaTranslator),
-            "Translated POIs Count"));
-      }
-      if (_filter.isEmpty() || _filter.contains(PoiPolygonPoiCriterion::className()))
-      {
-        _addStat(
-          "Polygon Conflatable POI Translated Populated Tag Percent",
-          _applyVisitor(
-            new PoiPolygonPoiCriterion(),
-            new SchemaTranslatedTagCountVisitor(_schemaTranslator),
-            "Translated POI/Polygon POIs Count"));
-      }
-      if (_filter.isEmpty() || _filter.contains(PoiPolygonPolyCriterion::className()))
-      {
-        _addStat(
-          "Polygon Translated Populated Tag Percent",
-          _applyVisitor(
-            new PoiPolygonPolyCriterion(),
-            new SchemaTranslatedTagCountVisitor(_schemaTranslator),
-            "Translated POI/Polygon Polygons Count"));
-      }
-      if (_filter.isEmpty() || _filter.contains(PowerLineCriterion::className()))
-      {
-        _addStat(
-          "Power Line Translated Populated Tag Percent",
-          _applyVisitor(
-            new PowerLineCriterion(),
-            new SchemaTranslatedTagCountVisitor(_schemaTranslator),
-            "Translated Power Lines Count"));
-      }
-      if (_filter.isEmpty() || _filter.contains(RailwayCriterion::className()))
-      {
-        _addStat(
-          "Railway Translated Populated Tag Percent",
-          _applyVisitor(
-            new RailwayCriterion(),
-            new SchemaTranslatedTagCountVisitor(_schemaTranslator),
-            "Translated Railways Count"));
-      }
-      if (_filter.isEmpty() || _filter.contains(LinearWaterwayCriterion::className()))
-      {
-        _addStat(
-          "Waterway Translated Populated Tag Percent",
-          _applyVisitor(
-            new LinearWaterwayCriterion(),
-            new SchemaTranslatedTagCountVisitor(_schemaTranslator),
-            "Translated Waterways Count"));
-      }
     }
     else
     {
@@ -673,8 +591,9 @@ void CalculateStatsOp::_interpretStatData(shared_ptr<const OsmMap>& constMap, St
     return;
   }
 
-  // TODO: remove
-  if (d.getVisitor() == SchemaTranslatedTagCountVisitor::className())
+  // Don't collect translation related stats if no translation script has been specified.
+  if (d.getVisitor() == SchemaTranslatedTagCountVisitor::className() &&
+      ConfigOptions().getStatsTranslateScript().isEmpty())
   {
     return;
   }
@@ -713,13 +632,6 @@ void CalculateStatsOp::_interpretStatData(shared_ptr<const OsmMap>& constMap, St
 
   if (d.getVisitor().length() > 0)
   {
-    // Don't collect translation related stats if no translation script has been specified.
-    if (d.getVisitor() == SchemaTranslatedTagCountVisitor::className() &&
-        ConfigOptions().getStatsTranslateScript().isEmpty())
-    {
-      return;
-    }
-
     double val = 0;
 
     if (pCrit)

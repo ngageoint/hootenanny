@@ -48,7 +48,7 @@ public:
 
   static QString className() { return "hoot::SchemaTranslatedTagCountVisitor"; }
 
-  SchemaTranslatedTagCountVisitor() = default;
+  SchemaTranslatedTagCountVisitor();
   SchemaTranslatedTagCountVisitor(const std::shared_ptr<ScriptSchemaTranslator>& t);
   virtual ~SchemaTranslatedTagCountVisitor() = default;
 
