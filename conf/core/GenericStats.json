@@ -59,43 +59,36 @@
       {
          "name":"Least Nodes in a Way",
          "visitor":"hoot::NodesPerWayVisitor",
-         "criterion":"",
          "StatCall":"Min"
       },
       {
          "name":"Most Nodes in a Way",
          "visitor":"hoot::NodesPerWayVisitor",
-         "criterion":"",
          "StatCall":"Max"
       },
       {
          "name":"Average Nodes Per Way",
          "visitor":"hoot::NodesPerWayVisitor",
-         "criterion":"",
          "StatCall":"Average"
       },
       {
          "name":"Total Way Nodes",
          "visitor":"hoot::NodesPerWayVisitor",
-         "criterion":"",
          "StatCall":"Stat"
       },
       {
          "name":"Least Members in a Relation",
          "visitor":"hoot::MembersPerRelationVisitor",
-         "criterion":"",
          "StatCall":"Min"
       },
       {
          "name":"Most Members in a Relation",
          "visitor":"hoot::MembersPerRelationVisitor",
-         "criterion":"",
          "StatCall":"Max"
       },
       {
          "name":"Average Members Per Relation",
          "visitor":"hoot::MembersPerRelationVisitor",
-         "criterion":"",
          "StatCall":"Average"
       },
       {
@@ -113,19 +106,16 @@
       {
          "name":"Total Feature Information Tags",
          "visitor":"hoot::TagCountVisitor",
-         "criterion":"",
          "StatCall":"InfoCount"
       },
       {
          "name":"Total Feature Metadata Tags",
          "visitor":"hoot::TagCountVisitor",
-         "criterion":"",
          "StatCall":"InfoDiff"
       },
       {
          "name":"Least Tags on a Feature",
          "visitor":"hoot::TagCountVisitor",
-         "criterion":"",
          "StatCall":"Min"
       },
       {
@@ -137,25 +127,21 @@
       {
          "name":"Average Tags Per Feature",
          "visitor":"hoot::TagCountVisitor",
-         "criterion":"",
          "StatCall":"Average"
       },
       {
          "name":"Least Information Tags on a Feature",
          "visitor":"hoot::TagCountVisitor",
-         "criterion":"",
          "StatCall":"InfoMin"
       },
       {
          "name":"Most Information Tags on a Feature",
          "visitor":"hoot::TagCountVisitor",
-         "criterion":"",
          "StatCall":"InfoMax"
       },
       {
          "name":"Average Information Tags Per Feature",
          "visitor":"hoot::TagCountVisitor",
-         "criterion":"",
          "StatCall":"InfoAverage"
       },
       {
@@ -263,28 +249,24 @@
       {
          "name":"Buildings With Height Info",
          "visitor":"hoot::BuildingHeightVisitor",
-         "criterion":"",
          "filterCriterion":"hoot::BuildingCriterion",
          "StatCall":"Stat"
       },
       {
          "name":"Shortest Building Height",
          "visitor":"hoot::BuildingHeightVisitor",
-         "criterion":"",
          "filterCriterion":"hoot::BuildingCriterion",
          "StatCall":"Min"
       },
       {
          "name":"Tallest Building Height",
          "visitor":"hoot::BuildingHeightVisitor",
-         "criterion":"",
          "filterCriterion":"hoot::BuildingCriterion",
          "StatCall":"Max"
       },
       {
          "name":"Average Height Per Building",
          "visitor":"hoot::BuildingHeightVisitor",
-         "criterion":"",
          "filterCriterion":"hoot::BuildingCriterion",
          "StatCall":"Average"
       },
@@ -298,21 +280,18 @@
       {
          "name":"Least Levels in a Building",
          "visitor":"hoot::BuildingLevelsVisitor",
-         "criterion":"",
          "filterCriterion":"hoot::BuildingCriterion",
          "StatCall":"Min"
       },
       {
          "name":"Most Levels in a Building",
          "visitor":"hoot::BuildingLevelsVisitor",
-         "criterion":"",
          "filterCriterion":"hoot::BuildingCriterion",
          "StatCall":"Max"
       },
       {
          "name":"Average Levels Per Building",
          "visitor":"hoot::BuildingLevelsVisitor",
-         "criterion":"",
          "filterCriterion":"hoot::BuildingCriterion",
          "StatCall":"Average"
       },
@@ -332,7 +311,6 @@
       {
          "name":"Total Addresses",
          "visitor":"hoot::AddressCountVisitor",
-         "criterion":"",
          "StatCall":"Stat"
       },
       {
@@ -344,7 +322,6 @@
       {
          "name":"Total Phone Numbers",
          "visitor":"hoot::PhoneNumberCountVisitor",
-         "criterion":"",
          "StatCall":"Stat"
       },
       {
@@ -356,7 +333,6 @@
       {
          "name":"Longest Tag Length",
          "visitor":"hoot::LongestTagVisitor",
-         "criterion":"",
          "StatCall":"Stat"
       },
       {

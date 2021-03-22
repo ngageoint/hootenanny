@@ -79,7 +79,7 @@ CalculateStatsOp::CalculateStatsOp(QString mapName, bool inputIsConflatedMapOutp
   _numGenerateFeatureStatCalls(0)
 {
   _initConflatableFeatureCounts();
-  _readGenericStatsData();
+  _readGenericStatsConfiguration();
 }
 
 CalculateStatsOp::CalculateStatsOp(ElementCriterionPtr criterion, QString mapName,
@@ -99,7 +99,7 @@ CalculateStatsOp::CalculateStatsOp(ElementCriterionPtr criterion, QString mapNam
   LOG_VART(_inputIsConflatedMapOutput);
 
   _initConflatableFeatureCounts();
-  _readGenericStatsData();
+  _readGenericStatsConfiguration();
 }
 
 void CalculateStatsOp::setConfiguration(const Settings& conf)
@@ -107,7 +107,7 @@ void CalculateStatsOp::setConfiguration(const Settings& conf)
   _pConf = &conf;
 }
 
-void CalculateStatsOp::_readGenericStatsData()
+void CalculateStatsOp::_readGenericStatsConfiguration()
 {
   // read generic stats from json file
   ConfigOptions opts = ConfigOptions(*_pConf);
@@ -148,8 +148,8 @@ void CalculateStatsOp::_readGenericStatsData()
 
       foreach (bpt::ptree::value_type data, entry.second)
       {
-        QString key = QString::fromStdString(data.first).toLower();
-        QString val = QString::fromStdString(data.second.data());
+        const QString key = QString::fromStdString(data.first).toLower().trimmed();
+        const QString val = QString::fromStdString(data.second.data()).trimmed();
 
         if (key == "name") newStatData.setName(val);
         else if (key == "visitor") newStatData.setVisitor(val);

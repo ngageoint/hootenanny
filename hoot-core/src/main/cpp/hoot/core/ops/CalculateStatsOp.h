@@ -137,7 +137,7 @@ private:
 
   void _initStatCalc();
   void _initConflatableFeatureCounts();
-  void _readGenericStatsData();
+  void _readGenericStatsConfiguration();
   void _addStat(const QString& name, double value);
   void _addStat(const char* name, double value);
   void _interpretStatData(std::shared_ptr<const OsmMap>& constMap, StatData& d);
