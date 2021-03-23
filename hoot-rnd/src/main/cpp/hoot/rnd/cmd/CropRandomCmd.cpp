@@ -51,14 +51,14 @@ public:
 
   CropRandomCmd() = default;
 
-  virtual QString getName() const override { return "crop-random"; }
+  QString getName() const override { return "crop-random"; }
 
-  virtual QString getDescription() const override
+  QString getDescription() const override
   { return "Crops out a random section of a map (experimental)"; }
 
-  virtual QString getType() const { return "rnd"; }
+  QString getType() const override { return "rnd"; }
 
-  virtual int runSimple(QStringList& args) override
+  int runSimple(QStringList& args) override
   {
     QElapsedTimer timer;
     timer.start();

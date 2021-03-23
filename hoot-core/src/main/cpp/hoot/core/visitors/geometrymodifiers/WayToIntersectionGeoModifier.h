@@ -58,13 +58,13 @@ public:
   static QString className() { return "hoot::WayToIntersectionGeoModifier"; }
 
   WayToIntersectionGeoModifier() = default;
-  virtual ~WayToIntersectionGeoModifier() = default;
+  ~WayToIntersectionGeoModifier() = default;
 
-  virtual QString getCommandName() const override { return "way_to_intersection"; }
-  virtual QList<QString> getParameterNames() const override { return QList<QString>(); }
+  QString getCommandName() const override { return "way_to_intersection"; }
+  QList<QString> getParameterNames() const override { return QList<QString>(); }
 
-  virtual void parseArguments(const QHash<QString, QString>& /*arguments*/) override { }
-  virtual bool processElement(const ElementPtr& pElement, OsmMap* pMap) override;
+  void parseArguments(const QHash<QString, QString>& /*arguments*/) override { }
+  bool processElement(const ElementPtr& pElement, OsmMap* pMap) override;
 private:
 
   void processIntersections(OsmMap* pMap, const WayPtr pWay, std::vector<IntersectionInfo>& inters);

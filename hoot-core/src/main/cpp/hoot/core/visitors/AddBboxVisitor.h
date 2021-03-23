@@ -39,16 +39,16 @@ public:
   static QString className() { return "hoot::AddBboxVisitor"; }
 
   AddBboxVisitor() = default;
-  virtual ~AddBboxVisitor() = default;
+  ~AddBboxVisitor() = default;
 
-  virtual void visit(const std::shared_ptr<Element>& e) override;
+  void visit(const std::shared_ptr<Element>& e) override;
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Adds a bounding box tag to applicable elements"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 };
 
 }

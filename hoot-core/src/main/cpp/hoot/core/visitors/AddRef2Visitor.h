@@ -41,21 +41,21 @@ public:
   static QString className() { return "hoot::AddRef2Visitor"; }
 
   AddRef2Visitor();
-  virtual ~AddRef2Visitor() = default;
+  ~AddRef2Visitor() = default;
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
   /**
    * Adds a REF2 tag with a "todo" to all valid elements. If the Tags::getNonDebugCount() is greater
    * than zero then the element is tagged with a REF2.
    */
-  virtual void visit(const ElementPtr& e);
+  void visit(const ElementPtr& e) override;
 
-  virtual QString getDescription() const { return "Adds REF2 tags"; }
+  QString getDescription() const override { return "Adds REF2 tags"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

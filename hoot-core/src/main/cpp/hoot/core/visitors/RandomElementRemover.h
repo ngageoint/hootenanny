@@ -49,31 +49,31 @@ public:
    * @arg p Probability that any given feature will be removed.
    */
   RandomElementRemover();
-  virtual ~RandomElementRemover() = default;
+  ~RandomElementRemover() = default;
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
   /**
    * Set the probability that a feature will be removed.
    */
   void setProbability(double p) { _p = p; }
 
-  virtual void setRng(boost::minstd_rand& rng) { _rng = &rng; }
+  void setRng(boost::minstd_rand& rng) override { _rng = &rng; }
 
-  virtual void visit(const ConstElementPtr& e);
-  virtual void visit(const std::shared_ptr<Element>& /*e*/) override {}
+  void visit(const ConstElementPtr& e) override;
+  void visit(const std::shared_ptr<Element>& /*e*/) override { }
 
-  virtual QString getDescription() const { return "Randomly removes elements from a map"; }
+  QString getDescription() const override { return "Randomly removes elements from a map"; }
 
-  virtual QString getInitStatusMessage() const
+  QString getInitStatusMessage() const override
   { return "Removing random elements..."; }
 
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   { return "Randomly removed " + QString::number(_numAffected) + " elements"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

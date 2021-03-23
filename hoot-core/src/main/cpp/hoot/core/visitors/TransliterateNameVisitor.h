@@ -40,22 +40,22 @@ public:
   static QString className() { return "hoot::TransliterateNameVisitor"; }
 
   TransliterateNameVisitor() = default;
-  virtual ~TransliterateNameVisitor() = default;
+  ~TransliterateNameVisitor() = default;
 
   static bool isLatin(const QString& s);
 
-  virtual void visit(const std::shared_ptr<Element>& e) override;
+  void visit(const std::shared_ptr<Element>& e) override;
 
-  virtual QString getDescription() const { return "Transliterates names"; }
+  QString getDescription() const override { return "Transliterates names"; }
 
-  virtual QString getInitStatusMessage() const { return "Transliterating names..."; }
+  QString getInitStatusMessage() const override { return "Transliterating names..."; }
 
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   { return "Transliterated " + QString::number(_numAffected) + " names"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 };
 
 }

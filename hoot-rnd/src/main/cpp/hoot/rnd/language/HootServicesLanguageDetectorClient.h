@@ -66,12 +66,12 @@ public:
   HootServicesLanguageDetectorClient();
   virtual ~HootServicesLanguageDetectorClient();
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
   /**
    * @see LanguageDetector
    */
-  virtual QString detect(const QString& text) override;
+  QString detect(const QString& text) override;
 
 protected:
 

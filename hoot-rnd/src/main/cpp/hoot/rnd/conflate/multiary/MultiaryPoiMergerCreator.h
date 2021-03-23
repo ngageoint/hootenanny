@@ -58,22 +58,21 @@ public:
   static QString className() { return "hoot::MultiaryPoiMergerCreator"; }
 
   MultiaryPoiMergerCreator() = default;
-  virtual ~MultiaryPoiMergerCreator() = default;
+  ~MultiaryPoiMergerCreator() = default;
 
   /**
    * This merger is very aggressive and will merge pretty much any set of matches that are passed
    * in. This should generally be the last merger.
    */
-  virtual bool createMergers(const MatchSet& matches, std::vector<MergerPtr>& mergers) const override;
+  bool createMergers(const MatchSet& matches, std::vector<MergerPtr>& mergers) const override;
 
   /**
    * Returns a description of this merger creator.
    */
-  virtual std::vector<CreatorDescription> getAllCreators() const override;
+  std::vector<CreatorDescription> getAllCreators() const override;
 
-  virtual bool isConflicting(
-    const ConstOsmMapPtr& map, ConstMatchPtr m1, ConstMatchPtr m2,
-    const QHash<QString, ConstMatchPtr>& matches = QHash<QString, ConstMatchPtr>()) const;
+  bool isConflicting(const ConstOsmMapPtr& map, ConstMatchPtr m1, ConstMatchPtr m2,
+    const QHash<QString, ConstMatchPtr>& matches = QHash<QString, ConstMatchPtr>()) const override;
 };
 
 }

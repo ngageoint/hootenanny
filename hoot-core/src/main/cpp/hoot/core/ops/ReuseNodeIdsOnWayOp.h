@@ -50,16 +50,16 @@ public:
 
   ReuseNodeIdsOnWayOp(ElementId from, ElementId to);
   ReuseNodeIdsOnWayOp() = default;
-  virtual ~ReuseNodeIdsOnWayOp() = default;
+  ~ReuseNodeIdsOnWayOp() = default;
 
-  virtual void apply(const std::shared_ptr<OsmMap> &map) override;
-  virtual void addElement(const ConstElementPtr& e) override;
+  void apply(const std::shared_ptr<OsmMap> &map) override;
+  void addElement(const ConstElementPtr& e) override;
 
-  virtual QString getDescription() const { return "Reuses the node IDs from one way in another."; }
+  QString getDescription() const override { return "Reuses the node IDs from one way in another."; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

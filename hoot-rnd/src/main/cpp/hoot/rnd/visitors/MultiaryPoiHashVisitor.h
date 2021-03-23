@@ -44,18 +44,18 @@ public:
   static QString className() { return "hoot::MultiaryPoiHashVisitor"; }
 
   MultiaryPoiHashVisitor() = default;
-  virtual ~MultiaryPoiHashVisitor() = default;
+  ~MultiaryPoiHashVisitor() = default;
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Calculates unique hash values for POIs conflated with Multiary POI Conflation"; }
 
 protected:
 
-  virtual QString _toJson(const ConstNodePtr& node) const;
+  QString _toJson(const ConstNodePtr& node) const override;
 };
 
 }

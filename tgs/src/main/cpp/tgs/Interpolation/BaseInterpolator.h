@@ -43,22 +43,22 @@ public:
 
   virtual ~BaseInterpolator() = default;
 
-  virtual double estimateError();
+  double estimateError() override;
 
-  virtual void readInterpolator(QIODevice& is);
+  void readInterpolator(QIODevice& is) override;
 
-  virtual void setData(const std::shared_ptr<const DataFrame>& df);
+  void setData(const std::shared_ptr<const DataFrame>& df) override;
 
-  virtual void setDependentColumns(const std::vector<std::string>& labels);
+  void setDependentColumns(const std::vector<std::string>& labels) override;
 
-  virtual void setIndependentColumns(const std::vector<std::string>& labels);
+  void setIndependentColumns(const std::vector<std::string>& labels) override;
 
-  virtual void writeInterpolator(QIODevice& os) const;
+  void writeInterpolator(QIODevice& os) const override;
 
-  virtual void setMaxAllowedPerLoopOptimizationIterations(int maxIterations)
+  void setMaxAllowedPerLoopOptimizationIterations(int maxIterations) override
   { _maxAllowedPerLoopOptimizationIterations = maxIterations; }
 
-  virtual int getMaxOptimizationLoopIterations() { return _iterations; }
+  int getMaxOptimizationLoopIterations() override { return _iterations; }
 
 protected:
 

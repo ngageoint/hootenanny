@@ -73,21 +73,21 @@ public:
    * must be called exactly two times.
    */
   ReplaceElementOp();
-  virtual ~ReplaceElementOp() = default;
+  ~ReplaceElementOp() = default;
 
   /**
    * If the elements aren't specified in the constructor this must be called exactly two times. Once
    * for 'from' and a second time for 'to'.
    */
-  virtual void addElement(const ConstElementPtr& e) override;
+  void addElement(const ConstElementPtr& e) override;
 
-  virtual void apply(const OsmMapPtr& map) override;
+  void apply(const OsmMapPtr& map) override;
 
-  virtual QString getDescription() const override { return "Replaces one element with another"; }
+  QString getDescription() const override { return "Replaces one element with another"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

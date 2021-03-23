@@ -56,7 +56,7 @@ public:
 
   }
 
-  virtual double operator()(double x)
+  double operator()(double x) override
   {
     double y = _td->_calculateTCost(x, _EH, _ELogH);
     return y;

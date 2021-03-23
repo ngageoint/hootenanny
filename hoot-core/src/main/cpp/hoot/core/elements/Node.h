@@ -122,7 +122,7 @@ public:
 
   std::shared_ptr<geos::geom::Point> toPoint() const;
 
-  QString toString() const;
+  QString toString() const override;
 
   /**
    * @see Element

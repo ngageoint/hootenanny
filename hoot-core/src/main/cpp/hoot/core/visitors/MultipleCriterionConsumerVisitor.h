@@ -51,17 +51,17 @@ public:
   MultipleCriterionConsumerVisitor();
   virtual ~MultipleCriterionConsumerVisitor() = default;
 
-  virtual void addCriterion(const ElementCriterionPtr& crit) override;
+  void addCriterion(const ElementCriterionPtr& crit) override;
 
   void setChainCriteria(bool chain) { _chainCriteria = chain; }
   void setNegateCriteria(bool negate) { _negateCriteria = negate; }
   void setConfigureChildren(bool configure) { _configureChildren = configure; }
 
-  QString toString() const;
+  QString toString() const override;
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 protected:
 

@@ -43,7 +43,7 @@ public:
 
   BuildingRelationMemberTagMerger() = default;
   BuildingRelationMemberTagMerger(const QSet<QString>& ignoreTagKeys);
-  virtual ~BuildingRelationMemberTagMerger() = default;
+  ~BuildingRelationMemberTagMerger() = default;
 
   /**
    * Merges tags between a building and a single building part
@@ -53,17 +53,17 @@ public:
    * @param elementType the type of element whose tags are being merged (ignored)
    * @return a merged set of tags
    */
-  virtual Tags mergeTags(const Tags& relationTags, const Tags& constituentBuildingTags,
+  Tags mergeTags(const Tags& relationTags, const Tags& constituentBuildingTags,
                          ElementType elementType) const override;
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Merges building and building part tags together"; }
 
   static QSet<QString> getBuildingPartTagNames();
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

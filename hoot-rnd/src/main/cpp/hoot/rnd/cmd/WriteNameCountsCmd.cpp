@@ -58,14 +58,14 @@ public:
 
   WriteNameCountsCmd() = default;
 
-  virtual QString getName() const override { return "write-name-counts"; }
+  QString getName() const override { return "write-name-counts"; }
 
-  virtual QString getDescription() const override
+  QString getDescription() const override
   { return "Writes name tag counts for a map"; }
 
-  virtual QString getType() const { return "rnd"; }
+  QString getType() const override { return "rnd"; }
 
-  virtual int runSimple(QStringList& args) override
+  int runSimple(QStringList& args) override
   {
     QElapsedTimer timer;
     timer.start();

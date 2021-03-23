@@ -65,9 +65,9 @@ public:
   static QString className() { return "hoot::SmallHighwayMerger"; }
 
   SmallHighwayMerger(Meters threshold = -1);
-  virtual ~SmallHighwayMerger() = default;
+  ~SmallHighwayMerger() = default;
 
-  void apply(std::shared_ptr<OsmMap>& map);
+  void apply(std::shared_ptr<OsmMap>& map) override;
 
   /**
    * Remove parts of ways that are duplicates.
@@ -75,21 +75,21 @@ public:
   static void mergeWays(std::shared_ptr<OsmMap> map,
                         const Meters threshold = ConfigOptions().getSmallHighwayMergerThreshold());
 
-  virtual QString getInitStatusMessage() const { return "Merging very small roads..."; }
+  QString getInitStatusMessage() const override { return "Merging very small roads..."; }
 
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   { return "Merged " + QString::number(_numAffected) + " very small roads"; }
 
-  virtual QString getDescription() const { return "Merges very small roads"; }
+  QString getDescription() const override { return "Merges very small roads"; }
 
   /**
    * @see FilteredByGeometryTypeCriteria
    */
-  virtual QStringList getCriteria() const;
+  QStringList getCriteria() const override;
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 protected:
 

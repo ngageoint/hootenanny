@@ -53,25 +53,25 @@ public:
   ReportMissingElementsVisitor(const bool removeMissing = false,
                                const Log::WarningLevel& logLevel = Log::Trace,
                                const int maxReport = Log::getWarnMessageLimit());
-  virtual ~ReportMissingElementsVisitor() = default;
+  ~ReportMissingElementsVisitor() = default;
 
-  virtual void visit(const ConstElementPtr& e);
+  void visit(const ConstElementPtr& e) override;
 
-  virtual void setOsmMap(OsmMap* map) { _map = map; }
+  void setOsmMap(OsmMap* map) override { _map = map; }
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Reports references to missing elements in a map"; }
 
-  virtual QString getInitStatusMessage() const { return "Reporting missing elements..."; }
+  QString getInitStatusMessage() const override { return "Reporting missing elements..."; }
 
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   { return "Reported " + StringUtils::formatLargeNumber(_missingCount) + " missing elements."; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
   int getMissingCount() const { return _missingCount; }
 

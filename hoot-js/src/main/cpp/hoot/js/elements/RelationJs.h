@@ -46,9 +46,9 @@ public:
 
   static void Init(v8::Handle<v8::Object> target);
 
-  virtual ConstElementPtr getConstElement() const { return getConstRelation(); }
+  ConstElementPtr getConstElement() const override { return getConstRelation(); }
   ConstRelationPtr getConstRelation() const { return _constRelation; }
-  virtual ElementPtr getElement() { return getRelation(); }
+  ElementPtr getElement() override { return getRelation(); }
   RelationPtr getRelation() { assert(_relation); return _relation; }
 
   static v8::Handle<v8::Object> New(ConstRelationPtr relation);
@@ -58,7 +58,7 @@ private:
 
   RelationJs(ConstRelationPtr r) : _constRelation(r) { }
   RelationJs() = default;
-  virtual ~RelationJs() = default;
+  ~RelationJs() = default;
 
   static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void replaceElement(const v8::FunctionCallbackInfo<v8::Value>& args);

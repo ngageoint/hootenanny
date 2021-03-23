@@ -46,26 +46,26 @@ namespace Tgs
   public:
     MemoryPageStore(int pageSize);
 
-    virtual ~MemoryPageStore() = default;
+    ~MemoryPageStore() = default;
 
-    virtual std::shared_ptr<Page> createPage();
+    std::shared_ptr<Page> createPage() override;
 
-    virtual void flush() {}
+    void flush() override { }
 
-    virtual std::shared_ptr<Page> getPage(int id);
+    std::shared_ptr<Page> getPage(int id) override;
 
-    virtual int getPageCount() const { return (int)_pages.size(); }
+    int getPageCount() const override { return (int)_pages.size(); }
 
-    virtual int getPageSize() const;
+    int getPageSize() const override;
 
-    virtual void save() {}
+    void save() override { }
 
   private:
 
     int _pageSize;
     std::vector<std::shared_ptr<Page>> _pages;
 
-    virtual void _savePage(int, char *) {}
+    void _savePage(int, char *) override { }
 
   };
 }

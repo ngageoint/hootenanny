@@ -47,20 +47,20 @@ public:
   static QString className() { return "hoot::JsFunctionVisitor"; }
 
   JsFunctionVisitor() : _map(nullptr) { }
-  virtual ~JsFunctionVisitor() = default;
+  ~JsFunctionVisitor() = default;
 
-  virtual void addFunction(v8::Isolate* isolate, v8::Local<v8::Function>& func)
+  void addFunction(v8::Isolate* isolate, v8::Local<v8::Function>& func) override
   { _func.Reset(isolate, func); }
 
-  virtual void setOsmMap(OsmMap* map) { _map = map; }
+  void setOsmMap(OsmMap* map) override { _map = map; }
 
-  virtual void setOsmMap(const OsmMap*) { }
+  void setOsmMap(const OsmMap*) override { }
 
-  virtual void visit(const ConstElementPtr& e);
+  void visit(const ConstElementPtr& e) override;
 
-  virtual QString getDescription() const { return ""; }
-  virtual QString getName() const { return ""; }
-  virtual QString getClassName() const override { return ""; }
+  QString getDescription() const override { return ""; }
+  QString getName() const override { return ""; }
+  QString getClassName() const override { return ""; }
 
 private:
 
