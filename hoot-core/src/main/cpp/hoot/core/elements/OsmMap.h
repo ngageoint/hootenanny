@@ -341,7 +341,8 @@ public:
 
   void setEnableProgressLogging(bool enable) { _enableProgressLogging = enable; }
 
-  void setCachedRubberSheet(std::shared_ptr<RubberSheet> rubbersheet) { _cachedRubberSheet = rubbersheet; }
+  void setCachedRubberSheet(std::shared_ptr<RubberSheet> rubbersheet)
+  { _cachedRubberSheet = rubbersheet; }
   std::shared_ptr<RubberSheet> getCachedRubberSheet() const { return _cachedRubberSheet; }
 
 protected:
