@@ -196,7 +196,12 @@ Object.keys(objs).forEach(s => {
         let code = items[i].fcode.slice(0,2);
 
         items[i].geoms.forEach(geom => {
-            let it = subGroupCodeElements[code].ele('item', {name: i, type: lookupType(geom), preset_name_label: true});
+            let itemInfo = {
+                name: i + ' - ' + geom,
+                type: lookupType(geom),
+                preset_name_label: true
+            }
+            let it = subGroupCodeElements[code].ele('item', itemInfo);
 
             usedGroups.add(code); //Sub-group
             usedGroups.add(code.charAt(0)); //Group
