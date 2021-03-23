@@ -49,9 +49,16 @@ namespace hoot
 HOOT_FACTORY_REGISTER(OsmMapOperation, ResolveReviewsOp)
 
 ResolveReviewsOp::ResolveReviewsOp()
-  : _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
-    _type(_resolveString(ConfigOptions().getResolveReviewType()))
+  : _taskStatusUpdateInterval(1000),
+    _type(ResolveType::ResolveReviews)
 {
+}
+
+void ResolveReviewsOp::setConfiguration(const Settings& conf)
+{
+  _taskStatusUpdateInterval = ConfigOptions().getTaskStatusUpdateInterval();
+  _type = _resolveString(ConfigOptions().getResolveReviewType());
+  _relationCollapser.setConfiguration(conf);
 }
 
 void ResolveReviewsOp::apply(std::shared_ptr<OsmMap>& map)
@@ -72,7 +79,6 @@ void ResolveReviewsOp::apply(std::shared_ptr<OsmMap>& map)
     if (ReviewMarker::isReviewUid(map, eid))
       reviews[eid.getId()] = dynamic_pointer_cast<Relation>(map->getElement(eid));
   }
-  LOG_VARD(reviews.size());
   //  The number affected is the same as the total number
   _numProcessed = _numAffected = reviews.size();
 
@@ -115,6 +121,13 @@ void ResolveReviewsOp::apply(std::shared_ptr<OsmMap>& map)
       }
     }
   }
+
+  // If we're configured to collapse ms relations that may have been created by merging, do so here.
+  if (_relationCollapser.hasTypes())
+  {
+    LOG_INFO("Collapsing multilinestring relations in merged output...");
+    map->visitRelationsRw(_relationCollapser);
+  }
 }
 
 void ResolveReviewsOp::_resolveReview(std::shared_ptr<OsmMap>& map, const ElementId& relation_id,
@@ -128,6 +141,10 @@ void ResolveReviewsOp::_resolveReview(std::shared_ptr<OsmMap>& map, const Elemen
 void ResolveReviewsOp::_resolveMultipleReviews(std::shared_ptr<OsmMap>& map, const ElementId& relation_id,
                                                const ElementId& eid1, const ElementId& eid2)
 {
+  LOG_TRACE(
+    "Resolving multiple reviews for review: " << relation_id << ", elements: " <<
+    eid1 << ", " << eid2 << "...");
+
   //  Get the initial match
   MatchPtr match = _getCachedMatch(map, relation_id, eid1, eid2);
   if (!match)
@@ -174,6 +191,10 @@ void ResolveReviewsOp::_resolveMatchReview(std::shared_ptr<Match>& match,
                                            const ElementId& eid1,
                                            const ElementId& eid2)
 {
+  LOG_TRACE(
+    "Resolving match review: " << relation_id << ", for match: " << match << ", elements: " <<
+    eid1 << ", " << eid2 << "...");
+
   //  Only resolve valid matches
   if (match)
   {
@@ -193,6 +214,14 @@ void ResolveReviewsOp::_resolveMatchReview(std::shared_ptr<Match>& match,
       {
         std::vector<std::pair<ElementId, ElementId>> replaced;
         MergerPtr merger = *it;
+        // We require that each individual merger to set the option to mark merge created relations
+        // in order to allow for subsets of mergers to mark them. So, this option needs to be set
+        // by each merger. Marking the ms relations here allows _relationCollapser to operate
+        // correctly on the output.  See related note in AbstractConflator::_applyMergers.
+        if (_relationCollapser.hasTypes())
+        {
+          conf().set(ConfigOptions::getConflateMarkMergeCreatedMultilinestringRelationsKey(), true);
+        }
         merger->apply(map, replaced);
       }
     }
@@ -209,13 +238,21 @@ void ResolveReviewsOp::_resolveMatchReview(std::shared_ptr<Match>& match,
 void ResolveReviewsOp::_resolveManualReview(std::shared_ptr<OsmMap>& map, const ElementId& relation_id,
                                             const ElementId& eid1, const ElementId& eid2)
 {
+  LOG_TRACE(
+    "Manually resolving review: " << relation_id << ", elements: " << eid1 << ", " << eid2 << "...");
+
   ElementPtr element1 = map->getElement(eid1);
   ElementPtr element2 = map->getElement(eid2);
   //  Remove UNKNOWN2
   if (element1->getStatus() == Status::Unknown2)
+  {
     ReviewMarker::removeElement(map, eid1);
+  }
+
   if (element2->getStatus() == Status::Unknown2)
+  {
     ReviewMarker::removeElement(map, eid2);
+  }
   //  Remove the review relation
   ReviewMarker::removeElement(map, relation_id);
 }

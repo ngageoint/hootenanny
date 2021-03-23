@@ -82,7 +82,7 @@ do
     echo "Configured to reverse inputs."
   elif [ $ARGUMENT == "--resolve" ]
   then
-    RESOLVE_REVIEWS=" -D resolve.review.type=resolve -D conflate.post.ops+=hoot::ResolveReviewsOp"
+    RESOLVE_REVIEWS=" -D resolve.review.type=resolve -D conflate.post.ops+=hoot::ResolveReviewsOp -D multilinestring.relation.collapser.types=highway"
     echo "Configured to automatically resolve reviews."
   elif [ $ARGUMENT == "--snap-unconnected" ]
   then

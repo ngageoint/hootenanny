@@ -932,7 +932,8 @@ completely specify a value less than one.
 * Default Value: `false`
 
 Marks any multilinestring relations created as a result of merging during conflation with a custom
-tag. Individual mergers must enable this option independently.
+tag. Individual mergers must enable this option independently. This option must be enabled in order
+for `MultilineStringMergeRelationCollapser` to be able to run properly against conflated output.
 
 === conflate.match.building.model
 
@@ -2788,7 +2789,7 @@ collected (export).
 * Default Value: ``
 
 A list of type keys or key/value pairs eligible for moving from multilinestring relations to
-their relation members when using `MultilineStringRelationCollapser`.
+their relation members when using `MultilineStringMergeRelationCollapser`.
 
 === name.criterion.case.sensitive
 

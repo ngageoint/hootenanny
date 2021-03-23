@@ -51,17 +51,15 @@ class ResolveReviewsOpTest : public HootTestFixture
   CPPUNIT_TEST(runKeepTest);
   CPPUNIT_TEST(runRemoveTest);
   CPPUNIT_TEST(runResolveTest);
+  CPPUNIT_TEST(runResolveMsTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  const QString inputPath = "test-files/ops/ResolveReviewsOp/";
-  const QString outputPath = "test-output/ops/ResolveReviewsOp/";
-
-  ResolveReviewsOpTest()
+  ResolveReviewsOpTest() :
+  HootTestFixture("test-files/rnd/ops/ResolveReviewsOp/", "test-output/rnd/ops/ResolveReviewsOp/")
   {
-    setResetType(ResetBasic);
-    FileUtils::makeDir(outputPath);
+    setResetType(ResetAll);
   }
 
   void runKeepTest()
@@ -72,9 +70,10 @@ public:
     reader.setPreserveAllTags(true);
     reader.setUseDataSourceIds(true);
     reader.setUseFileStatus(true);
-    reader.read(inputPath + "input.osm", map);
+    reader.read(_inputPath + "input.osm", map);
 
     ResolveReviewsOp uut;
+    uut.setConfiguration(conf());
     uut.setResolveType(ResolveReviewsOp::KeepReviews);
     uut.apply(map);
 
@@ -82,9 +81,9 @@ public:
     OsmXmlWriter writer;
     writer.setIncludeIds(true);
     writer.setIncludeHootInfo(true);
-    writer.write(map, outputPath + "KeepOutput.osm");
-    HOOT_FILE_EQUALS(inputPath + "KeepExpected.osm",
-                     outputPath + "KeepOutput.osm");
+    writer.write(map, _outputPath + "KeepOutput.osm");
+    HOOT_FILE_EQUALS(_inputPath + "KeepExpected.osm",
+                     _outputPath + "KeepOutput.osm");
   }
 
   void runRemoveTest()
@@ -95,9 +94,10 @@ public:
     reader.setPreserveAllTags(true);
     reader.setUseDataSourceIds(true);
     reader.setUseFileStatus(true);
-    reader.read(inputPath + "input.osm", map);
+    reader.read(_inputPath + "input.osm", map);
 
     ResolveReviewsOp uut;
+    uut.setConfiguration(conf());
     uut.setResolveType(ResolveReviewsOp::RemoveReviews);
     uut.apply(map);
 
@@ -105,9 +105,9 @@ public:
     OsmXmlWriter writer;
     writer.setIncludeIds(true);
     writer.setIncludeHootInfo(true);
-    writer.write(map, outputPath + "RemoveOutput.osm");
-    HOOT_FILE_EQUALS(inputPath + "RemoveExpected.osm",
-                     outputPath + "RemoveOutput.osm");
+    writer.write(map, _outputPath + "RemoveOutput.osm");
+    HOOT_FILE_EQUALS(_inputPath + "RemoveExpected.osm",
+                     _outputPath + "RemoveOutput.osm");
   }
 
   void runResolveTest()
@@ -118,9 +118,10 @@ public:
     reader.setPreserveAllTags(true);
     reader.setUseDataSourceIds(true);
     reader.setUseFileStatus(true);
-    reader.read(inputPath + "input.osm", map);
+    reader.read(_inputPath + "input.osm", map);
 
     ResolveReviewsOp uut;
+    uut.setConfiguration(conf());
     uut.setResolveType(ResolveReviewsOp::ResolveReviews);
     uut.apply(map);
 
@@ -128,12 +129,50 @@ public:
     OsmXmlWriter writer;
     writer.setIncludeIds(true);
     writer.setIncludeHootInfo(true);
-    writer.write(map, outputPath + "ResolveOutput.osm");
-    HOOT_FILE_EQUALS(inputPath + "ResolveExpected.osm",
-                     outputPath + "ResolveOutput.osm");
+    writer.write(map, _outputPath + "ResolveOutput.osm");
+    HOOT_FILE_EQUALS(_inputPath + "ResolveExpected.osm",
+                     _outputPath + "ResolveOutput.osm");
+  }
+
+  void runResolveMsTest()
+  {
+    // When features are difficult to merge, LinearSnapMerger (ref conflate linear default)
+    // sometimes undesirably leaves multilinestring relations in output. This tests that all ms
+    // relations are removed. See notes in MultilineStringMergeRelationCollapser for more detail.
+
+    OsmXmlReader reader;
+    OsmMapPtr map(new OsmMap());
+    reader.setDefaultStatus(Status::Unknown1);
+    reader.setPreserveAllTags(true);
+    reader.setUseDataSourceIds(true);
+    reader.setUseFileStatus(true);
+    reader.read(_inputPath + "runResolveMsTestInput.osm", map);
+    // The input test data was already in planar, so make that happen.
+    MapProjector::projectToPlanar(map);
+
+    // Setting this option ensure that the merger marks any ms relations it creates with a custom
+    // tag.
+    conf().set(ConfigOptions::getConflateMarkMergeCreatedMultilinestringRelationsKey(), true);
+    // Setting this option allows MultilineStringMergeRelationCollapser, called internally by
+    // ResolveReviewsOp, to remove ms relations involving roads.
+    conf().set(
+      ConfigOptions::getMultilinestringRelationCollapserTypesKey(), QStringList("highway"));
+
+    ResolveReviewsOp uut;
+    uut.setConfiguration(conf());
+    uut.setResolveType(ResolveReviewsOp::ResolveReviews);
+    uut.apply(map);
+
+    MapProjector::projectToWgs84(map);
+    OsmXmlWriter writer;
+    writer.setIncludeIds(true);
+    writer.setIncludeHootInfo(true);
+    writer.write(map, _outputPath + "runResolveMsTestOutput.osm");
+    HOOT_FILE_EQUALS(
+      _inputPath + "runResolveMsTestOutput.osm", _outputPath + "runResolveMsTestOutput.osm");
   }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ResolveReviewsOpTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ResolveReviewsOpTest, "slow");
 
 }

@@ -32,7 +32,9 @@
 #include <hoot/core/conflate/matching/Match.h>
 #include <hoot/core/elements/ElementId.h>
 #include <hoot/core/ops/OsmMapOperation.h>
+#include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/visitors/MultilineStringMergeRelationCollapser.h>
 
 namespace hoot
 {
@@ -41,7 +43,7 @@ class OsmMap;
 /**
  * Goes through all review relations and resolves them
  */
-class ResolveReviewsOp : public OsmMapOperation
+class ResolveReviewsOp : public OsmMapOperation, public Configurable
 {
 public:
 
@@ -90,7 +92,15 @@ public:
    */
   void apply(std::shared_ptr<OsmMap>& map) override;
 
+  /**
+   * @see Configurable
+   */
+  void setConfiguration(const Settings& conf) override;
+
 private:
+
+  // Prevents ms relations in the auto-merged output.
+  MultilineStringMergeRelationCollapser _relationCollapser;
 
   /**
    * @brief _resolveReview
