@@ -73,9 +73,9 @@ void MultiaryPoiMerger::apply(const OsmMapPtr& map,
   {
     // ugh. Magic string. To work around this we'll need to link against hoot-js, or find another
     // way to add that dep.
-    if (d.className == "hoot::ScriptMergerCreator")
+    if (d.getClassName() == "hoot::ScriptMergerCreator")
     {
-      _mergerCreator.reset(Factory::getInstance().constructObject<MergerCreator>(d.className));
+      _mergerCreator.reset(Factory::getInstance().constructObject<MergerCreator>(d.getClassName()));
     }
   }
 

@@ -67,6 +67,8 @@ void PertyTestRunner::_writeStatsForOutputFiles(const QString& inputMapPath, con
 {
   QString statsOutputPath = inputMapPath;
   statsOutputPath = statsOutputPath.replace(".osm", "-stats");
+  // We could add stats filtering here at some point to make the stats calculated correspond to the
+  // conflate matchers configured.
   MapStatsWriter().writeStats(inputMapPath, statsOutputPath, sep);
 }
 
@@ -92,6 +94,8 @@ QList<std::shared_ptr<const PertyTestRunResult>> PertyTestRunner::runTest(
     QFileInfo inputFileInfo(referenceMapInputPath);
     QString statsOutputPath = outputPath + "/" + inputFileInfo.fileName();
     statsOutputPath = statsOutputPath.replace(".osm", "-stats");
+    // We could add stats filtering here at some point to make the stats calculated correspond to the
+    // conflate matchers configured.
     MapStatsWriter().writeStats(referenceMapInputPath, statsOutputPath, sep);
   }
 

@@ -414,15 +414,15 @@ QString ApiEntityDisplayInfo::_getApiEntitiesForMatchMergerCreators(
     {
       CreatorDescription description = *itr;
       LOG_VARD(description);
-      const QString name = description.className.replace("hoot::", "");
+      const QString name = description.getClassName().replace("hoot::", "");
       LOG_VARD(name);
       //this suppresses test and auxiliary rules files
       if (!name.endsWith("Test.js") && !name.endsWith("Rules.js"))
       {
         const int indentAfterName = maxNameSize - name.size();
         QString line = "  " + name + QString(indentAfterName, ' ');
-        line += description.description;
-        if (description.experimental)
+        line += description.getDescription();
+        if (description.getExperimental())
           line += " (experimental)";
         LOG_VARD(line);
         output.append(line);
