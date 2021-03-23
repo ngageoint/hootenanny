@@ -29,6 +29,7 @@
 
 // hoot
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/criterion/AreaCriterion.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
 #include <hoot/core/criterion/CollectionRelationCriterion.h>
 #include <hoot/core/criterion/LinearCriterion.h>
@@ -46,29 +47,29 @@ namespace hoot
 {
 
 CreatorDescription::CreatorDescription() :
-experimental(),
-baseFeatureType(BaseFeatureType::Unknown),
-geometryType(GeometryTypeCriterion::GeometryType::Unknown)
+_experimental(false),
+_baseFeatureType(BaseFeatureType::Unknown),
+_geometryType(GeometryTypeCriterion::GeometryType::Unknown)
 {
 }
 
 CreatorDescription::CreatorDescription(const QString& className, const QString& description,
                                        bool experimental) :
-experimental(experimental),
-className(className),
-description(description),
-baseFeatureType(BaseFeatureType::Unknown),
-geometryType(GeometryTypeCriterion::GeometryType::Unknown)
+_experimental(experimental),
+_className(className),
+_description(description),
+_baseFeatureType(BaseFeatureType::Unknown),
+_geometryType(GeometryTypeCriterion::GeometryType::Unknown)
 {
 }
 
 CreatorDescription::CreatorDescription(const QString& className, const QString& description,
                                        BaseFeatureType featureType, bool experimental) :
-experimental(experimental),
-className(className),
-description(description),
-baseFeatureType(featureType),
-geometryType(GeometryTypeCriterion::GeometryType::Unknown)
+_experimental(experimental),
+_className(className),
+_description(description),
+_baseFeatureType(featureType),
+_geometryType(GeometryTypeCriterion::GeometryType::Unknown)
 {
 }
 
@@ -169,42 +170,76 @@ CreatorDescription::FeatureCalcType CreatorDescription::getFeatureCalcType(BaseF
   }
 }
 
-ElementCriterionPtr CreatorDescription::getElementCriterion(BaseFeatureType t, ConstOsmMapPtr map)
+std::shared_ptr<GeometryTypeCriterion> CreatorDescription::getElementCriterion(
+  BaseFeatureType t, ConstOsmMapPtr map)
 {
   switch (t)
   {
     case POI:
-      return ElementCriterionPtr(new PoiCriterion());
+      return std::make_shared<PoiCriterion>(PoiCriterion());
     case Highway:
-      return ElementCriterionPtr(new HighwayCriterion(map));
+      return std::make_shared<HighwayCriterion>(HighwayCriterion(map));
     case Building:
-      return ElementCriterionPtr(new BuildingCriterion(map));
+      return std::make_shared<BuildingCriterion>(BuildingCriterion(map));
     case Waterway:
-      return ElementCriterionPtr(new LinearWaterwayCriterion());
+      return std::make_shared<LinearWaterwayCriterion>(LinearWaterwayCriterion());
     case PoiPolygonPOI:
-      return ElementCriterionPtr(new PoiPolygonPoiCriterion());
+      return std::make_shared<PoiPolygonPoiCriterion>(PoiPolygonPoiCriterion());
     case Polygon:
-      return ElementCriterionPtr(new PolygonCriterion(map));
+      return std::make_shared<PolygonCriterion>(PolygonCriterion(map));
     case Area:
-      return ElementCriterionPtr(new NonBuildingAreaCriterion(map));
+      return std::make_shared<NonBuildingAreaCriterion>(NonBuildingAreaCriterion(map));
     case Railway:
-      return ElementCriterionPtr(new RailwayCriterion());
+      return std::make_shared<RailwayCriterion>(RailwayCriterion());
     case PowerLine:
-      return ElementCriterionPtr(new PowerLineCriterion());
+      return std::make_shared<PowerLineCriterion>(PowerLineCriterion());
     case Point:
-      return ElementCriterionPtr(new PointCriterion(map));
+      return std::make_shared<PointCriterion>(PointCriterion(map));
     case Line:
-      return ElementCriterionPtr(new LinearCriterion());
+      return std::make_shared<LinearCriterion>(LinearCriterion());
     case CollectionRelation:
-      return ElementCriterionPtr(new CollectionRelationCriterion());
+      return std::make_shared<CollectionRelationCriterion>(CollectionRelationCriterion());
     default:
-      return ElementCriterionPtr();
+      return std::shared_ptr<GeometryTypeCriterion>();
+  }
+}
+
+QString CreatorDescription::getElementCriterionName(BaseFeatureType t)
+{
+  switch (t)
+  {
+    case POI:
+      return PoiCriterion::className();
+    case Highway:
+      return HighwayCriterion::className();
+    case Building:
+      return BuildingCriterion::className();
+    case Waterway:
+      return LinearWaterwayCriterion::className();
+    case PoiPolygonPOI:
+      return PoiPolygonPoiCriterion::className();
+    case Polygon:
+      return PolygonCriterion::className();
+    case Area:
+      return AreaCriterion::className();
+    case Railway:
+      return RailwayCriterion::className();
+    case PowerLine:
+      return PowerLineCriterion::className();
+    case Point:
+      return PointCriterion::className();
+    case Line:
+      return LinearCriterion::className();
+    case CollectionRelation:
+      return CollectionRelationCriterion::className();
+    default:
+      return "";
   }
 }
 
 QString CreatorDescription::toString() const
 {
-  return className + ";" + baseFeatureTypeToString(baseFeatureType);
+  return _className + ";" + baseFeatureTypeToString(_baseFeatureType);
 }
 
 }

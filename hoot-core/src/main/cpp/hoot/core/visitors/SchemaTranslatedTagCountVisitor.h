@@ -32,12 +32,12 @@
 #include <hoot/core/visitors/ConstElementVisitor.h>
 #include <hoot/core/info/SingleStatistic.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/schema/ScriptToOgrSchemaTranslator.h>
 
 namespace hoot
 {
 
 class Feature;
-class ScriptToOgrSchemaTranslator;
 class ScriptSchemaTranslator;
 class Schema;
 
@@ -48,8 +48,8 @@ public:
 
   static QString className() { return "hoot::SchemaTranslatedTagCountVisitor"; }
 
+  SchemaTranslatedTagCountVisitor();
   SchemaTranslatedTagCountVisitor(const std::shared_ptr<ScriptSchemaTranslator>& t);
-  SchemaTranslatedTagCountVisitor() = default;
   ~SchemaTranslatedTagCountVisitor() = default;
 
   long getPopulatedCount() const { return _populatedCount; }
@@ -78,6 +78,8 @@ public:
       "Counted " + StringUtils::formatLargeNumber(getTotalCount()) + " translated tags on " +
       StringUtils::formatLargeNumber(_numAffected) + " features.";
   }
+
+  void setTranslator(const std::shared_ptr<ScriptSchemaTranslator>& translator);
 
 private:
 

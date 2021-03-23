@@ -45,13 +45,13 @@ QSet<QString> SuperfluousConflateOpRemover::_geometryTypeClassNameCache;
 void SuperfluousConflateOpRemover::removeSuperfluousOps()
 {
   // get all crits involved in the current matcher configuration
-  const QSet<QString> matcherCrits = _getMatchCreatorGeometryTypeCrits();
+  const QSet<QString> matcherCrits = getMatchCreatorGeometryTypeCrits();
 
   QSet<QString> removedOps;
 
-  // for each of the conflate pre/post and map cleaner transforms (if conflate pre/post specifies
-  // MapCleaner) filter out any that aren't associated with the same ElementCriterion as the ones
-  // associated with the matchers
+  // For each of the conflate pre/post and map cleaner transforms (if conflate pre/post specifies
+  // MapCleaner), filter out any that aren't associated with the same ElementCriterion as the ones
+  // associated with the matchers.
 
   const QStringList modifiedPreConflateOps =
     _filterOutUnneededOps(
@@ -185,11 +185,11 @@ QStringList SuperfluousConflateOpRemover::_filterOutUnneededOps(
   return modifiedOps;
 }
 
-QSet<QString> SuperfluousConflateOpRemover::_getMatchCreatorGeometryTypeCrits()
+QSet<QString> SuperfluousConflateOpRemover::getMatchCreatorGeometryTypeCrits(const bool addParents)
 {
   QSet<QString> matcherCrits;
 
-  // get all of the matchers from our current config
+  // Get all of the matchers from our current config.
   std::vector<std::shared_ptr<MatchCreator>> matchCreators =
       MatchFactory::getInstance().getCreators();
   for (std::vector<std::shared_ptr<MatchCreator>>::const_iterator it = matchCreators.begin();
@@ -230,33 +230,36 @@ QSet<QString> SuperfluousConflateOpRemover::_getMatchCreatorGeometryTypeCrits()
       // add the crit
       matcherCrits.insert(critStr);
 
-      // also add any generic geometry crits the crit inherits from
-
-      const QStringList pointCrits =
-        GeometryTypeCriterion::getCriterionClassNamesByGeometryType(
-          GeometryTypeCriterion::GeometryType::Point);
-      LOG_VART(pointCrits);
-      if (pointCrits.contains(critStr))
+      if (addParents)
       {
-        matcherCrits.insert(PointCriterion::className());
-      }
+        // also add any generic geometry crits the crit inherits from
 
-      const QStringList lineCrits =
-        GeometryTypeCriterion::getCriterionClassNamesByGeometryType(
-          GeometryTypeCriterion::GeometryType::Line);
-      LOG_VART(lineCrits);
-      if (lineCrits.contains(critStr))
-      {
-        matcherCrits.insert(LinearCriterion::className());
-      }
+        const QStringList pointCrits =
+          GeometryTypeCriterion::getCriterionClassNamesByGeometryType(
+            GeometryTypeCriterion::GeometryType::Point);
+        LOG_VART(pointCrits);
+        if (pointCrits.contains(critStr))
+        {
+          matcherCrits.insert(PointCriterion::className());
+        }
 
-      const QStringList polyCrits =
-        GeometryTypeCriterion::getCriterionClassNamesByGeometryType(
-          GeometryTypeCriterion::GeometryType::Polygon);
-      LOG_VART(polyCrits);
-      if (polyCrits.contains(critStr))
-      {
-        matcherCrits.insert(PolygonCriterion::className());
+        const QStringList lineCrits =
+          GeometryTypeCriterion::getCriterionClassNamesByGeometryType(
+            GeometryTypeCriterion::GeometryType::Line);
+        LOG_VART(lineCrits);
+        if (lineCrits.contains(critStr))
+        {
+          matcherCrits.insert(LinearCriterion::className());
+        }
+
+        const QStringList polyCrits =
+          GeometryTypeCriterion::getCriterionClassNamesByGeometryType(
+            GeometryTypeCriterion::GeometryType::Polygon);
+        LOG_VART(polyCrits);
+        if (polyCrits.contains(critStr))
+        {
+          matcherCrits.insert(PolygonCriterion::className());
+        }
       }
     }
   }

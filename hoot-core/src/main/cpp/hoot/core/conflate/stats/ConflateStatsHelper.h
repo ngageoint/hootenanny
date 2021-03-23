@@ -38,8 +38,6 @@ class SingleStat;
 
 /**
  * Used to calculate conflation stats that require the conflation input *and* output data
- *
- * TODO: rename this class to something more relevant
  */
 class ConflateStatsHelper
 {
