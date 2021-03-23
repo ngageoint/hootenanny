@@ -45,7 +45,7 @@ public:
   static QString className() { return "hoot::SplitNameVisitor"; }
 
   SplitNameVisitor();
-  virtual ~SplitNameVisitor() = default;
+  ~SplitNameVisitor() = default;
 
   void setMaxSize(int s) { _maxSize = s; }
 
@@ -62,9 +62,9 @@ public:
 
   void setConfiguration(const Settings& conf) override;
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

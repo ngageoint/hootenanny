@@ -65,11 +65,11 @@ namespace hoot
 
     // OsmMapOperation
     static QString className() { return "hoot::GeometryModifierOp"; }
-    QString getDescription() const { return "Modifies map geometry as specified"; }
+    QString getDescription() const override { return "Modifies map geometry as specified"; }
 
     // applies all actions specified in the rules file '_rulesFileName' to the map.
     // runs through each action in the sequence they appear in the rules file
-    void apply(std::shared_ptr<OsmMap>& map);
+    void apply(std::shared_ptr<OsmMap>& map) override;
 
     // OperationStatus
     QString getInitStatusMessage() const override { return "Modifying geometry..."; }

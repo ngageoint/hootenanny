@@ -47,20 +47,20 @@ public:
   static QString className() { return "hoot::RemoveDuplicateRelationMembersVisitor"; }
 
   RemoveDuplicateRelationMembersVisitor() = default;
-  virtual ~RemoveDuplicateRelationMembersVisitor() = default;
+  ~RemoveDuplicateRelationMembersVisitor() = default;
 
-  virtual void visit(const ElementPtr& e);
+  void visit(const ElementPtr& e) override;
 
-  virtual QString getInitStatusMessage() const { return "Removing duplicate relation members..."; }
+  QString getInitStatusMessage() const override { return "Removing duplicate relation members..."; }
 
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   { return "Removed " + QString::number(_numAffected) + " duplicate relation members"; }
 
-  virtual QString getDescription() const { return "Removes duplicate relation members"; }
+  QString getDescription() const override { return "Removes duplicate relation members"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 };
 
 }

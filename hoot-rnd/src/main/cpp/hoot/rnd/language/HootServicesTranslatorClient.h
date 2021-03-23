@@ -60,8 +60,8 @@ public:
   HootServicesTranslatorClient();
   virtual ~HootServicesTranslatorClient();
 
-  virtual QStringList getSourceLanguages() const override { return _sourceLangs; }
-  virtual void setSourceLanguages(const QStringList& langCodes) override;
+  QStringList getSourceLanguages() const override { return _sourceLangs; }
+  void setSourceLanguages(const QStringList& langCodes) override;
 
   /**
    * Translates text given a source language
@@ -69,15 +69,15 @@ public:
    * @param text the text to translate
    * @return translated text or an empty string if a translation could not be made
    */
-  virtual QString translate(const QString& text) override;
+  QString translate(const QString& text) override;
 
-  virtual QString getDetectedLanguage() const override { return _detectedLang; }
+  QString getDetectedLanguage() const override { return _detectedLang; }
 
   QString getTranslatedText() const { return _translatedText; }
 
-  virtual void setConfiguration(const Settings& conf) override;
+  void setConfiguration(const Settings& conf) override;
 
-  virtual void setId(const QString& id) override { _id = id; }
+  void setId(const QString& id) override { _id = id; }
 
 protected:
 

@@ -114,11 +114,11 @@ public:
     const Box& searchRegion = Box());
   virtual ~KnnIterator();
 
-  virtual const Box& getBox() const;
+  const Box& getBox() const override;
   int getId() const { return _knnId; }
-  double getDistance() const { return _knnDistance; }
-  virtual bool hasNext();
-  bool next();
+  virtual double getDistance() const { return _knnDistance; }
+  bool hasNext() override;
+  bool next() override;
 
   virtual void reset(const double x, const double y);
 

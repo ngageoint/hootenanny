@@ -39,16 +39,16 @@ public:
   static QString className() { return "hoot::GeneralizeTagMerger"; }
 
   GeneralizeTagMerger() = default;
-  virtual ~GeneralizeTagMerger() = default;
+  ~GeneralizeTagMerger() = default;
 
-  virtual Tags mergeTags(const Tags& t1, const Tags& t2, ElementType et) const override;
+  Tags mergeTags(const Tags& t1, const Tags& t2, ElementType et) const override;
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Keeps tags from both features and overlapping tags are generalized to a common parent"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 };
 
 }

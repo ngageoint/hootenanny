@@ -47,7 +47,7 @@ public:
   static QString className() { return "hoot::MultiaryPoiMerger"; }
 
   MultiaryPoiMerger() = default;
-  virtual ~MultiaryPoiMerger() = default;
+  ~MultiaryPoiMerger() = default;
   /**
    * Construct with a subgraph of pairs. The links in the set of pairs are used to determine links
    * between elements so it is important that the pairs are represenetative of the matches.
@@ -57,22 +57,22 @@ public:
   /**
    * See parent.
    */
-  virtual void apply(const OsmMapPtr& map,
-    std::vector<std::pair<ElementId, ElementId>>& replaced);
+  void apply(const OsmMapPtr& map,
+    std::vector<std::pair<ElementId, ElementId>>& replaced) override;
 
-  virtual QString toString() const { return "MultiaryPoiMerger"; }
+  QString toString() const override { return "MultiaryPoiMerger"; }
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Merges POIs matched with Multiary Conflation (experimental)"; }
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 protected:
 
-  virtual PairsSet& _getPairs() { return _pairs; }
-  virtual const PairsSet& _getPairs() const { return _pairs; }
+  PairsSet& _getPairs() override { return _pairs; }
+  const PairsSet& _getPairs() const override { return _pairs; }
 
 private:
 

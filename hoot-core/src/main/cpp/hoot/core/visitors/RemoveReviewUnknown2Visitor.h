@@ -44,26 +44,26 @@ public:
   static QString className() { return "hoot::RemoveReviewUnknown2Visitor"; }
 
   RemoveReviewUnknown2Visitor() = default;
-  virtual ~RemoveReviewUnknown2Visitor() = default;
+  ~RemoveReviewUnknown2Visitor() = default;
 
-  virtual void visit(const std::shared_ptr<Element>& e) override;
+  void visit(const std::shared_ptr<Element>& e) override;
 
-  virtual QString getDescription() const override
+  QString getDescription() const override
   { return "Removes review relations and their UNKNOWN2 elements"; }
 
-  virtual QString getInitStatusMessage() const
+  QString getInitStatusMessage() const override
   { return "Removing relations..."; }
 
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   {
     return
       "Removed " + QString::number(_numAffected) + " review relations and their " +
       QString::number(_numElements) + " UNKNOWN2 elements.";
   }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

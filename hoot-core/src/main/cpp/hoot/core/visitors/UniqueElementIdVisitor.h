@@ -46,20 +46,20 @@ public:
   static QString className() { return "hoot::UniqueElementIdVisitor"; }
 
   UniqueElementIdVisitor() = default;
-  virtual ~UniqueElementIdVisitor() = default;
+  ~UniqueElementIdVisitor() = default;
 
   /**
    * Returns a set containing all the ElementIds visited.
    */
   const std::set<ElementId>& getElementSet() const { return _elements; }
 
-  virtual void visit(const ConstElementPtr& e);
+  void visit(const ConstElementPtr& e) override;
 
-  virtual QString getDescription() const { return "Returns the unique element IDs visited"; }
+  QString getDescription() const override { return "Returns the unique element IDs visited"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

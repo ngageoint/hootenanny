@@ -48,20 +48,20 @@ public:
   static QString className() { return "hoot::AddressCountVisitor"; }
 
   AddressCountVisitor() : _totalCount(0) { }
-  virtual ~AddressCountVisitor() = default;
+  ~AddressCountVisitor() = default;
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
-  double getStat() const { return _totalCount; }
+  double getStat() const override { return _totalCount; }
 
-  virtual void visit(const ConstElementPtr& e);
+  void visit(const ConstElementPtr& e) override;
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Counts the total number of valid element addresses"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

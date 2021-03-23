@@ -60,7 +60,7 @@ public:
                          ConstMatchThresholdPtr threshold,
                          std::shared_ptr<PoiPolygonRfClassifier> rf, PoiPolygonInfoCachePtr infoCache,
                          ElementCriterionPtr filter = ElementCriterionPtr());
-  virtual ~PoiPolygonMatchVisitor() = default;
+  ~PoiPolygonMatchVisitor() = default;
 
   /**
    * Determines whether an element is a Poi/Polygon conflation match candidate and, if so,
@@ -68,17 +68,17 @@ public:
    *
    * @param e element to examine
    */
-  virtual void visit(const ConstElementPtr& e) override;
+  void visit(const ConstElementPtr& e) override;
 
   bool isMatchCandidate(ConstElementPtr element);
 
-  virtual QString getDescription() const override { return ""; }
+  QString getDescription() const override { return ""; }
 
   long getNumMatchCandidatesFound() const { return _numMatchCandidatesVisited; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

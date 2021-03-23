@@ -119,7 +119,7 @@ public:
     _timer.start();
   }
 
-  virtual ~ScriptMatchVisitor()
+  ~ScriptMatchVisitor()
   {
     //  Free the perisistent object
     if (_mapJs.IsEmpty())
@@ -162,9 +162,9 @@ public:
     }
   }
 
-  virtual QString getDescription() const { return ""; }
-  virtual QString getName() const { return ""; }
-  virtual QString getClassName() const override { return ""; }
+  QString getDescription() const override { return ""; }
+  QString getName() const override { return ""; }
+  QString getClassName() const override { return ""; }
 
   void checkForMatch(const std::shared_ptr<const Element>& e)
   {
@@ -434,7 +434,7 @@ public:
                          pC,
                          std::bind(&ScriptMatchVisitor::getSearchRadius, this, placeholders::_1),
                          getMap());
-        switch (_scriptInfo.geometryType)
+        switch (_scriptInfo.getGeometryType())
         {
           case GeometryTypeCriterion::GeometryType::Point:
             getMap()->visitNodesRo(v);
@@ -560,7 +560,7 @@ public:
     return result;
   }
 
-  virtual void visit(const ConstElementPtr& e)
+  void visit(const ConstElementPtr& e) override
   {
     if (isMatchCandidate(e))
     {
@@ -620,7 +620,7 @@ public:
     }
     else
     {
-      switch (_scriptInfo.geometryType)
+      switch (_scriptInfo.getGeometryType())
       {
         case GeometryTypeCriterion::GeometryType::Point:
           _totalElementsToProcess = getMap()->getNodeCount();
@@ -844,7 +844,7 @@ void ScriptMatchCreator::createMatches(
   _cachedCustomSearchRadii[_scriptPath] = searchRadius;
   _candidateDistanceSigmaCache[_scriptPath] = v.getCandidateDistanceSigma();
 
-  LOG_VARD(GeometryTypeCriterion::typeToString(_scriptInfo.geometryType));
+  LOG_VARD(GeometryTypeCriterion::typeToString(_scriptInfo.getGeometryType()));
   // kind of hack; not sure of a better way to do determine if we're doing collection relation
   // conflation
   if (scriptFileInfo.fileName().toLower().contains("relation"))
@@ -853,7 +853,7 @@ void ScriptMatchCreator::createMatches(
   }
   else
   {
-    switch (_scriptInfo.geometryType)
+    switch (_scriptInfo.getGeometryType())
     {
       case GeometryTypeCriterion::GeometryType::Point:
         map->visitNodesRo(v);
@@ -875,7 +875,7 @@ void ScriptMatchCreator::createMatches(
 
   const int matchesSizeAfter = matches.size();
 
-  QString matchType = CreatorDescription::baseFeatureTypeToString(_scriptInfo.baseFeatureType);
+  QString matchType = CreatorDescription::baseFeatureTypeToString(_scriptInfo.getBaseFeatureType());
   // Workaround for the Point/Polygon script since it doesn't identify a base feature type. See
   // note in ScriptMatchVisitor::getIndex and rules/PointPolygon.js.
   if (_scriptPath.contains(POINT_POLYGON_SCRIPT_NAME))
@@ -903,10 +903,10 @@ vector<CreatorDescription> ScriptMatchCreator::getAllCreators() const
     {
       // if the script is a valid generic script w/ 'description' exposed, add it to the list.
       CreatorDescription d = _getScriptDescription(scripts[i]);
-      if (!d.description.isEmpty())
+      if (!d.getDescription().isEmpty())
       {
         result.push_back(d);
-        LOG_TRACE(d.description);
+        LOG_TRACE(d.getDescription());
       }
       else
       {
@@ -982,7 +982,7 @@ CreatorDescription ScriptMatchCreator::_getScriptDescription(QString path) const
   LOG_DEBUG("Getting script description...");
 
   CreatorDescription result;
-  result.experimental = true;
+  result.setExperimental(true);
 
   std::shared_ptr<PluginContext> script(new PluginContext());
   Isolate* current = v8::Isolate::GetCurrent();
@@ -995,25 +995,25 @@ CreatorDescription ScriptMatchCreator::_getScriptDescription(QString path) const
   if (ToLocal(&plugin)->Has(descriptionStr))
   {
     Handle<Value> value = ToLocal(&plugin)->Get(descriptionStr);
-    result.description = toCpp<QString>(value);
+    result.setDescription(toCpp<QString>(value));
   }
   Handle<String> experimentalStr = String::NewFromUtf8(current, "experimental");
   if (ToLocal(&plugin)->Has(experimentalStr))
   {
     Handle<Value> value = ToLocal(&plugin)->Get(experimentalStr);
-    result.experimental = toCpp<bool>(value);
+    result.setExperimental(toCpp<bool>(value));
   }
   Handle<String> featureTypeStr = String::NewFromUtf8(current, "baseFeatureType");
   if (ToLocal(&plugin)->Has(featureTypeStr))
   {
     Handle<Value> value = ToLocal(&plugin)->Get(featureTypeStr);
-    result.baseFeatureType = CreatorDescription::stringToBaseFeatureType(toCpp<QString>(value));
+    result.setBaseFeatureType(CreatorDescription::stringToBaseFeatureType(toCpp<QString>(value)));
   }
   Handle<String> geometryTypeStr = String::NewFromUtf8(current, "geometryType");
   if (ToLocal(&plugin)->Has(geometryTypeStr))
   {
     Handle<Value> value = ToLocal(&plugin)->Get(geometryTypeStr);
-    result.geometryType = GeometryTypeCriterion::typeFromString(toCpp<QString>(value));
+    result.setGeometryType(GeometryTypeCriterion::typeFromString(toCpp<QString>(value)));
   }
   // This controls which feature types a script conflates and is required. It allows for disabling
   // superfluous conflate ops. It should probably be integrated with isMatchCandidate somehow at
@@ -1026,16 +1026,16 @@ CreatorDescription ScriptMatchCreator::_getScriptDescription(QString path) const
     const QString valueStr = toCpp<QString>(value);
     if (valueStr.contains(";"))
     {
-      result.matchCandidateCriteria = valueStr.split(";");
+      result.setMatchCandidateCriteria(valueStr.split(";"));
     }
     else
     {
-      result.matchCandidateCriteria = QStringList(valueStr);
+      result.setMatchCandidateCriteria(QStringList(valueStr));
     }
   }
 
   QFileInfo fi(path);
-  result.className = className() + "," + fi.fileName();
+  result.setClassName(className() + "," + fi.fileName());
 
   return result;
 }
@@ -1097,7 +1097,7 @@ QString ScriptMatchCreator::getName() const
 
 QStringList ScriptMatchCreator::getCriteria() const
 {
-  return _scriptInfo.matchCandidateCriteria;
+  return _scriptInfo.getMatchCandidateCriteria();
 }
 
 }

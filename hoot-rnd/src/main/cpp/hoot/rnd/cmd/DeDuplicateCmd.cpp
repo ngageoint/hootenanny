@@ -49,14 +49,14 @@ public:
 
   DeDuplicateCmd() = default;
 
-  virtual QString getName() const override { return "de-duplicate"; }
+  QString getName() const override { return "de-duplicate"; }
 
-  virtual QString getDescription() const override
+  QString getDescription() const override
   { return "Removes duplicate features within a single map or between two maps (experimental)"; }
 
-  virtual QString getType() const { return "rnd"; }
+  QString getType() const override { return "rnd"; }
 
-  virtual int runSimple(QStringList& args) override
+  int runSimple(QStringList& args) override
   {  
     QElapsedTimer timer;
     timer.start();

@@ -41,17 +41,17 @@ public:
   static QString className() { return "hoot::MultiVisitor"; }
 
   MultiVisitor() = default;
-  virtual ~MultiVisitor() = default;
+   ~MultiVisitor() = default;
 
-  virtual void visit(const std::shared_ptr<Element>& e);
+  void visit(const std::shared_ptr<Element>& e) override;
 
   void addVisitor(ElementOsmMapVisitor *v) { _visitors.push_back(v); }
 
-  virtual QString getDescription() const { return "Allows for combining multiple visitors"; }
+  QString getDescription() const override { return "Allows for combining multiple visitors"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

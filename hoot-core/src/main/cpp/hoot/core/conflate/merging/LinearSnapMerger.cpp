@@ -557,7 +557,7 @@ void LinearSnapMerger::_snapEnds(const OsmMapPtr& map, ElementPtr snapee, Elemen
   {
   public:
 
-    WaysVisitor(vector<WayPtr>& w) : _w(w) {}
+    WaysVisitor(vector<WayPtr>& w) : _w(w) { }
 
     static vector<WayPtr> getWays(const OsmMapPtr& map, const ElementPtr& e)
     {
@@ -578,11 +578,11 @@ void LinearSnapMerger::_snapEnds(const OsmMapPtr& map, ElementPtr snapee, Elemen
       return result;
     }
 
-    virtual QString getDescription() const { return ""; }
-    virtual QString getName() const { return ""; }
-    virtual QString getClassName() const override { return ""; }
+    QString getDescription() const override { return ""; }
+    QString getName() const override { return ""; }
+    QString getClassName() const override { return ""; }
 
-    virtual void visit(const std::shared_ptr<Element>& e)
+    void visit(const std::shared_ptr<Element>& e) override
     {
       if (e->getElementType() == ElementType::Way)
       {

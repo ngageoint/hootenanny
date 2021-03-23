@@ -55,39 +55,39 @@ public:
   static QString className() { return "hoot::MultilineStringMergeRelationCollapser"; }
 
   MultilineStringMergeRelationCollapser();
-  virtual ~MultilineStringMergeRelationCollapser() = default;
+  ~MultilineStringMergeRelationCollapser() = default;
 
   /**
    * @see ElementVisitor
    */
-  virtual void visit(const ElementPtr& e);
+  void visit(const ElementPtr& e) override;
 
   /**
    * @see OsmMapConsumer
    */
-  virtual void setOsmMap(OsmMap* map);
+  void setOsmMap(OsmMap* map) override;
 
-  virtual QString getInitStatusMessage() const
+  QString getInitStatusMessage() const override
   { return "Collapsing multilinestring merge relations..."; }
 
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   {
     return
       "Collapsed " + StringUtils::formatLargeNumber(_numAffected) + " relations and modified " +
       StringUtils::formatLargeNumber(_numRelationMembersModified) + " members.";
   }
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Collapses multilinestring relations created during conflation merging"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
   /**
    * @see Configurable
    */
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
 private:
 

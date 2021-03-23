@@ -46,9 +46,9 @@ public:
 
   static void Init(v8::Handle<v8::Object> target);
 
-  virtual ConstElementPtr getConstElement() const { return getConstWay(); }
+  ConstElementPtr getConstElement() const override { return getConstWay(); }
   ConstWayPtr getConstWay() const { return _constWay; }
-  virtual ElementPtr getElement() { return getWay(); }
+  ElementPtr getElement() override { return getWay(); }
   WayPtr getWay() { assert(_way); return _way; }
 
   static v8::Handle<v8::Object> New(ConstWayPtr way);
@@ -58,7 +58,7 @@ private:
 
   WayJs(ConstWayPtr w) : _constWay(w) { }
   WayJs() = default;
-  virtual ~WayJs() = default;
+  ~WayJs() = default;
 
   static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void getNodeCount(const v8::FunctionCallbackInfo<v8::Value>& args);

@@ -47,20 +47,20 @@ public:
   TagKeyCountVisitor();
   TagKeyCountVisitor(const QString& key);
   explicit TagKeyCountVisitor(const QStringList& keys);
-  virtual ~TagKeyCountVisitor() = default;
+  ~TagKeyCountVisitor() = default;
 
-  virtual void visit(const ConstElementPtr& e);
+  void visit(const ConstElementPtr& e) override;
 
-  virtual double getStat() const { return _keyCount; }
+  double getStat() const override { return _keyCount; }
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Counts the number of tags with the given keys"; }
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

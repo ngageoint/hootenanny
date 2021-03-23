@@ -32,8 +32,10 @@
 #include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/visitors/ConstElementVisitor.h>
 #include <hoot/core/info/SingleStat.h>
+#include <hoot/core/info/StatData.h>
 #include <hoot/core/ops/ConstOsmMapOperation.h>
 #include <hoot/core/util/Configurable.h>
+#include <hoot/core/schema/ScriptSchemaTranslator.h>
 
 // Qt
 #include <QList>
@@ -46,11 +48,10 @@ class FilteredVisitor;
 /**
  * Calcs the set of stats that feeds the stats command.
  *
- * Statistics data definitions which can be defined generically have moved to a json file:
- * ConfigOptions.getStatsGenericDataFile()
- * The json file contains two StatData struct lists containing the slow and quick generic stat
- * definitions. See the CalculateStatsOp::StatCall and CalculateStatsOp::StatData comments
- * below for an explanation of the entries.
+ * Statistics data definitions which can be defined generically have moved to the json file
+ * identified by ConfigOptions.getStatsGenericDataFile(). The json file contains two StatData struct
+ * lists containing the slow and quick generic stat definitions. See the CalculateStatsOp::StatCall
+ * and CalculateStatsOp::StatData comments below for an explanation of the entries.
  */
 class CalculateStatsOp : public ConstOsmMapOperation, public Configurable
 {
@@ -92,37 +93,15 @@ public:
 
   QString getClassName() const override { return className(); }
 
+  void setFilter(const QSet<QString>& filter) { _filter = filter; }
+
 private:
 
   friend class CalculateStatsOpTest;
 
-  // Enum defining what stat value of the SingleStatistic or NumericStatistic
-  // implementation of the specific visitor is being used.
-  enum StatCall
-  {
-    Stat,           // SingleStatistic::getStat()
-    Min,            // NumericStatistic::getMin()
-    Max,            // NumericStatistic::getMax()
-    Average,        // NumericStatistic::getAverage()
-    InfoCount,      // NumericStatistic::getInformationCount()
-    InfoMin,        // NumericStatistic::getInformationMin()
-    InfoMax,        // NumericStatistic::getInformationMax()
-    InfoAverage,    // NumericStatistic::getInformationAverage()
-    InfoDiff,       // NumericStatistic::getInformationCountDiff()
-  };
-
-  // Structure definition for a generic statistics calculation
-  struct StatData
-  {
-    QString name;       // name of the output statistics value
-    QString visitor;    // visitor object name used to collect the data
-    QString criterion;  // criterion object name used if a FilteredVisitor is desired, otherwise an empty string
-    StatCall statCall;  // defines how the visitor data is being interpreted
-  };
-
   const Settings* _pConf;
   ElementCriterionPtr _criterion;
-  //simple map name string for logging purposes
+  // simple map name string for logging purposes
   QString _mapName;
   std::shared_ptr<const OsmMap> _constMap;
   bool _quick;
@@ -131,9 +110,14 @@ private:
   // meant to be input to a conflation job and those that are output from a conflation job.
   bool _inputIsConflatedMapOutput;
   QList<SingleStat> _stats;
+  // list of GeometryTypeCriterion class names used to control which statistics are generated; see
+  // ConflateExecutor and SuperfluousConflateOpRemover
+  QSet<QString> _filter;
 
-  QHash<QString,std::shared_ptr<ElementCriterion>> _criterionCache;
-  QHash<QString,std::shared_ptr<ConstElementVisitor>> _appliedVisitorCache;
+  std::shared_ptr<ScriptSchemaTranslator> _schemaTranslator;
+
+  QHash<QString, std::shared_ptr<ElementCriterion>> _criterionCache;
+  QHash<QString, std::shared_ptr<ConstElementVisitor>> _appliedVisitorCache;
 
   QList<StatData> _quickStatData;
   QList<StatData> _slowStatData;
@@ -154,11 +138,13 @@ private:
 
   void _initStatCalc();
   void _initConflatableFeatureCounts();
-  void _readGenericStatsData();
+  void _readGenericStatsConfiguration();
   void _addStat(const QString& name, double value);
   void _addStat(const char* name, double value);
+  bool _statPassesFilter(const StatData& statData) const;
+  int _getNumStatsPassingFilter(const QList<StatData>& stats) const;
   void _interpretStatData(std::shared_ptr<const OsmMap>& constMap, StatData& d);
-  double GetRequestedStatValue(const ElementVisitor* pVisitor, StatCall call);
+  double GetRequestedStatValue(const ElementVisitor* pVisitor, StatData::StatCall call) const;
 
   /**
    * @brief getMatchCreator finds the match creator (in the supplied vector) by name
@@ -171,28 +157,29 @@ private:
     const std::vector<std::shared_ptr<MatchCreator>>& matchCreators,
     const QString &matchCreatorName, CreatorDescription::BaseFeatureType& featureType);
 
-  double _applyVisitor(const hoot::FilteredVisitor& v, const QString& statName,
-                       StatCall call = Stat);
-  double _applyVisitor(const hoot::FilteredVisitor& v, boost::any& visitorData, const
-                       QString& statName, StatCall call = Stat);
-  double _applyVisitor(ElementCriterion* pCrit, ConstElementVisitor* pVis,
-                       const QString& statName, StatCall call = Stat);
+  double _applyVisitor(
+    const hoot::FilteredVisitor& v, const QString& statName,
+    StatData::StatCall call = StatData::StatCall::Stat);
+  double _applyVisitor(
+    const hoot::FilteredVisitor& v, boost::any& visitorData, const QString& statName,
+    StatData::StatCall call = StatData::StatCall::Stat);
+  double _applyVisitor(
+    ElementCriterion* pCrit, ConstElementVisitor* pVis, const QString& statName,
+    StatData::StatCall call = StatData::StatCall::Stat);
   void _applyVisitor(ConstElementVisitor* v, const QString& statName);
   double _getApplyVisitor(ConstElementVisitor* v, const QString& statName);
 
-  static bool _matchDescriptorCompare(const CreatorDescription& m1,
-                                      const CreatorDescription& m2);
+  static bool _matchDescriptorCompare(
+    const CreatorDescription& m1, const CreatorDescription& m2);
 
-  void _generateFeatureStats(const CreatorDescription::BaseFeatureType& featureType,
-                             const float conflatableCount,
-                             const CreatorDescription::FeatureCalcType& type,
-                             ElementCriterionPtr criterion,
-                             const long poisMergedIntoPolys, const long poisMergedIntoPolysFromMap1,
-                             const long poisMergedIntoPolysFromMap2);
+  void _generateFeatureStats(
+    const CreatorDescription::BaseFeatureType& featureType, const float conflatableCount,
+    const CreatorDescription::FeatureCalcType& type, ElementCriterionPtr criterion,
+    const long poisMergedIntoPolys, const long poisMergedIntoPolysFromMap1,
+    const long poisMergedIntoPolysFromMap2);
 
   ConstElementVisitorPtr _getElementVisitorForFeatureType(
     const CreatorDescription::BaseFeatureType& featureType);
-
 };
 
 }

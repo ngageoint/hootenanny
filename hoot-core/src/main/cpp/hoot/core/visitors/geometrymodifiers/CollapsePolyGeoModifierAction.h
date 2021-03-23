@@ -48,14 +48,14 @@ public:
   static QString className() { return "hoot::CollapsePolyGeoModifierAction"; }
 
   CollapsePolyGeoModifierAction() = default;
-  virtual ~CollapsePolyGeoModifierAction() = default;
+  ~CollapsePolyGeoModifierAction() = default;
 
-  virtual QString getCommandName() const override { return "collapse_poly"; }
-  virtual QList<QString> getParameterNames() const override
+  QString getCommandName() const override { return "collapse_poly"; }
+  QList<QString> getParameterNames() const override
   { return QList<QString> { MAX_AREA_PARAM, MAX_LENGTH_PARAM }; }
 
-  virtual void parseArguments(const QHash<QString, QString>& arguments) override;
-  virtual bool processElement(const ElementPtr& pElement, OsmMap* pMap) override;
+  void parseArguments(const QHash<QString, QString>& arguments) override;
+  bool processElement(const ElementPtr& pElement, OsmMap* pMap) override;
 
 private:
   const double DEFAULT_AREA = 15000;

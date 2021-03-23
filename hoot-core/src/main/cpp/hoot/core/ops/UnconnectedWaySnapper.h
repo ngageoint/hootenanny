@@ -85,12 +85,12 @@ public:
   static QString className() { return "hoot::UnconnectedWaySnapper"; }
 
   UnconnectedWaySnapper();
-  virtual ~UnconnectedWaySnapper() = default;
+  ~UnconnectedWaySnapper() = default;
 
   /**
    * Snaps unconnected ways in the input to each other
    */
-  virtual void apply(OsmMapPtr& map);
+  void apply(OsmMapPtr& map) override;
 
   /**
    * Finds the closest endpont on 'disconnected' and snaps it to the closest node in 'connectTo'
@@ -106,29 +106,29 @@ public:
   /**
    * @see OperationStatus
    */
-  virtual QString getInitStatusMessage() const
+  QString getInitStatusMessage() const override
   { return "Snapping unconnected ways to the nearest way..."; }
 
   /**
    * @see OperationStatus
    */
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   { return "Snapped " + QString::number(_numAffected) + " unconnected ways."; }
 
   /**
    * @see OperationStatus
    */
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Snaps unconnected ways to the nearest way."; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
   /**
    * @see Configurable
    */
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
   long getNumSnappedToWays() const { return _numSnappedToWays; }
   long getNumSnappedToWayNodes() const { return _numSnappedToWayNodes; }

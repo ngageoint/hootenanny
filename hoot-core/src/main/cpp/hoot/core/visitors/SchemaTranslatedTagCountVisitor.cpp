@@ -27,7 +27,6 @@
 #include "SchemaTranslatedTagCountVisitor.h"
 
 // hoot
-#include <hoot/core/schema/ScriptToOgrSchemaTranslator.h>
 #include <hoot/core/io/schema/Feature.h>
 #include <hoot/core/io/schema/FeatureDefinition.h>
 #include <hoot/core/io/schema/FieldDefinition.h>
@@ -46,6 +45,15 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, SchemaTranslatedTagCountVisitor)
 
+SchemaTranslatedTagCountVisitor::SchemaTranslatedTagCountVisitor() :
+  _map(nullptr),
+  _populatedCount(0),
+  _defaultCount(0),
+  _nullCount(0),
+  _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
+{
+}
+
 SchemaTranslatedTagCountVisitor::SchemaTranslatedTagCountVisitor(
   const std::shared_ptr<ScriptSchemaTranslator>& t) :
   _map(nullptr),
@@ -57,10 +65,16 @@ SchemaTranslatedTagCountVisitor::SchemaTranslatedTagCountVisitor(
   _translator = std::dynamic_pointer_cast<ScriptToOgrSchemaTranslator>(t);
   if (!_translator)
   {
-    throw HootException("Error allocating translator, the translation script must support "
-                        "converting to OGR.");
+    throw HootException(
+      "Error allocating translator, the translation script must support converting to OGR.");
   }
+  _schema = _translator->getOgrOutputSchema();
+}
 
+void SchemaTranslatedTagCountVisitor::setTranslator(
+  const std::shared_ptr<ScriptSchemaTranslator>& translator)
+{
+  _translator = std::dynamic_pointer_cast<ScriptToOgrSchemaTranslator>(translator);
   _schema = _translator->getOgrOutputSchema();
 }
 
@@ -71,9 +85,7 @@ void SchemaTranslatedTagCountVisitor::_countTags(std::shared_ptr<Feature>& f)
   for (size_t i = 0; i < defn->getFieldCount(); i++)
   {
     std::shared_ptr<const FieldDefinition> fd = defn->getFieldDefinition(i);
-
     const QVariantMap& vm = f->getValues();
-
     if (vm.contains(fd->getName()) == false)
     {
       _nullCount++;
@@ -113,7 +125,7 @@ void SchemaTranslatedTagCountVisitor::visit(const ConstElementPtr& e)
     t[MetadataTags::ErrorCircular()] = QString::number(e->getCircularError());
     t[MetadataTags::HootStatus()] = e->getStatusString();
 
-    // remove all the empty tags.
+    // Remove all the empty tags.
     for (Tags::const_iterator it = e->getTags().begin(); it != e->getTags().end(); ++it)
     {
       if (t[it.key()] == "")
@@ -125,7 +137,7 @@ void SchemaTranslatedTagCountVisitor::visit(const ConstElementPtr& e)
     vector<ScriptToOgrSchemaTranslator::TranslatedFeature> f =
       _translator->translateToOgr(t, e->getElementType(), g->getGeometryTypeId());
 
-    // only write the feature if it wasn't filtered by the translation script.
+    // Only write the feature if it wasn't filtered by the translation script.
     for (size_t i = 0; i < f.size(); i++)
     {
       _countTags(f[i].feature);

@@ -57,18 +57,18 @@ public:
 
   DelaunayInterpolator();
 
-  virtual ~DelaunayInterpolator() = default;
+  ~DelaunayInterpolator() = default;
 
   /**
    * Use k-fold cross validation to estimate the error.
    */
-  virtual double estimateError();
+  double estimateError() override;
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual const std::vector<double>& interpolate(const std::vector<double>& point) const;
+  const std::vector<double>& interpolate(const std::vector<double>& point) const override;
 
-  virtual QString toString() const;
+  QString toString() const override;
 
 protected:
 
@@ -86,18 +86,18 @@ protected:
    */
   double _addToResult(const Point2d& p, double w) const;
 
-  virtual void _buildModel();
+  void _buildModel() override;
 
   /**
    * Calculate the squared error for a given fold.
    */
   double _calculateFoldError(int fold, const std::vector<size_t>& indexes) const;
 
-  virtual double _estimateError(unsigned int /*index*/) const { throw Tgs::Exception("Not Implemented."); }
+  double _estimateError(unsigned int /*index*/) const override { throw Tgs::Exception("Not Implemented."); }
 
-  virtual void _readInterpolator(QIODevice& is);
+  void _readInterpolator(QIODevice& is) override;
 
-  virtual void _writeInterpolator(QIODevice& os) const;
+  void _writeInterpolator(QIODevice& os) const override;
 };
 
 }

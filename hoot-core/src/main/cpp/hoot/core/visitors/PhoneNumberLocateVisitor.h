@@ -46,36 +46,36 @@ class PhoneNumberLocateVisitor : public ElementVisitor, public Configurable
 public:
 
   PhoneNumberLocateVisitor() = default;
-  virtual ~PhoneNumberLocateVisitor() = default;
+  ~PhoneNumberLocateVisitor() = default;
 
   static QString className() { return "hoot::PhoneNumberLocateVisitor"; }
 
   /**
    * @see Configurable
    */
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
   /**
    * @see ElementVisitor
    */
-  virtual void visit(const ElementPtr& e);
+  void visit(const ElementPtr& e) override;
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Determines admin level locations for elements based on phone numbers"; }
 
-  virtual QString getInitStatusMessage() const
+  QString getInitStatusMessage() const
   { return "Locating elements with phone numbers..."; }
 
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   {
     return
       "Located " + QString::number(_totalPhoneNumbersLocated) + " phone numbers on " +
       QString::number(_numAffected) + " different elements";
   }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

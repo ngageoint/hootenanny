@@ -53,20 +53,20 @@ public:
   RemoveAttributesVisitor();
   explicit RemoveAttributesVisitor(const QStringList types);
   explicit RemoveAttributesVisitor(const QList<ElementAttributeType>& types);
-  virtual ~RemoveAttributesVisitor() = default;
+  ~RemoveAttributesVisitor() = default;
 
-  virtual void visit(const std::shared_ptr<Element>& e);
+  void visit(const std::shared_ptr<Element>& e) override;
 
-  virtual void setConfiguration(const Settings &conf);
+  void setConfiguration(const Settings &conf) override;
 
   void setTypes(const QStringList types);
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Removes one or more common OSM attributes from features"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

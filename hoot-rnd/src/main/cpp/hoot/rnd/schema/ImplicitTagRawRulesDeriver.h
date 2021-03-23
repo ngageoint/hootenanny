@@ -62,7 +62,7 @@ class ImplicitTagRawRulesDeriver : public Configurable
 public:
 
   ImplicitTagRawRulesDeriver();
-  virtual ~ImplicitTagRawRulesDeriver() = default;
+  ~ImplicitTagRawRulesDeriver() = default;
 
   /**
    * Derives implicit tag rules for POIs given input data and writes the rules to output
@@ -75,7 +75,7 @@ public:
   void deriveRawRules(const QStringList& inputs, const QStringList& translationScripts,
                       const QString& output);
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
   void setSortParallelCount(int count) { _sortParallelCount = count; }
   void setSkipFiltering(bool skip) { _skipFiltering = skip; }

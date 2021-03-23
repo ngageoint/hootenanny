@@ -53,7 +53,7 @@ public:
 
   SmallDisconnectedWayRemover();
   SmallDisconnectedWayRemover(const int maxWayLength, const int maxWayNodeCount);
-  virtual ~SmallDisconnectedWayRemover() = default;
+  ~SmallDisconnectedWayRemover() = default;
 
   /**
    * @see OsmMapOperation
@@ -63,28 +63,28 @@ public:
   /**
    * @see Configurable
    */
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
-  virtual QString getInitStatusMessage() const { return "Removing small and disconnected ways..."; }
+  QString getInitStatusMessage() const override { return "Removing small and disconnected ways..."; }
 
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   {
     return
       "Removed " + StringUtils::formatLargeNumber(_numAffected) + " small and disconnected ways.";
   }
 
-  virtual QString getDescription() const { return "Removes small and disconnected ways"; }
+  QString getDescription() const override { return "Removes small and disconnected ways"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
   /**
    * @see FilteredByGeometryTypeCriteria
    */
-  virtual QStringList getCriteria() const;
+  QStringList getCriteria() const override;
 
-  virtual void setConflateInfoCache(const std::shared_ptr<ConflateInfoCache>& cache)
+  void setConflateInfoCache(const std::shared_ptr<ConflateInfoCache>& cache) override
   { _conflateInfoCache = cache; }
 
  private:

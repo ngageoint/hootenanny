@@ -53,7 +53,7 @@ void MatchCandidateCountVisitor::_setupCreators(
     const QString matchCreatorDescription = matchCreator->getDescription();
     if (matchCreatorDescription.isEmpty())
     {
-      matchCreatorName = matchCreator->getAllCreators().at(0).className;
+      matchCreatorName = matchCreator->getAllCreators().at(0).getClassName();
     }
     else
     {

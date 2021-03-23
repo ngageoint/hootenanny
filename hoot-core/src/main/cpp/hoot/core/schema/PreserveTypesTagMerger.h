@@ -54,21 +54,21 @@ public:
    * list will be not be preserved.
    */
   PreserveTypesTagMerger(const QSet<QString>& skipTagKeys = QSet<QString>());
-  virtual ~PreserveTypesTagMerger() = default;
+  ~PreserveTypesTagMerger() = default;
 
   /**
    * @see TagMerger
    */
-  virtual Tags mergeTags(const Tags& t1, const Tags& t2, ElementType et) const override;
+  Tags mergeTags(const Tags& t1, const Tags& t2, ElementType et) const override;
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Keeps tags from both features and preserves overlapping type tags"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
   void setOverwrite1(bool overwrite) { _overwrite1 = overwrite; }
   void setSkipTagKeys(const QSet<QString>& keys) { _skipTagKeys = keys; }

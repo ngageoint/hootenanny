@@ -46,23 +46,23 @@ public:
   static QString className() { return "hoot::RemoveEmptyRelationsOp"; }
 
   RemoveEmptyRelationsOp() = default;
-  virtual ~RemoveEmptyRelationsOp() = default;
+  ~RemoveEmptyRelationsOp() = default;
 
-  virtual void apply(OsmMapPtr& map) override;
+  void apply(OsmMapPtr& map) override;
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
   long getNumRemoved() const { return _numAffected; }
 
-  virtual QString getInitStatusMessage() const override
+  QString getInitStatusMessage() const override
   { return "Removing empty relations..."; }
 
-  virtual QString getCompletedStatusMessage() const override
+  QString getCompletedStatusMessage() const override
   { return "Removed " + StringUtils::formatLargeNumber(_numAffected) + " empty relations"; }
 
-  virtual QString getDescription() const override
+  QString getDescription() const override
   { return "Removes relations with no members"; }
 
 private:

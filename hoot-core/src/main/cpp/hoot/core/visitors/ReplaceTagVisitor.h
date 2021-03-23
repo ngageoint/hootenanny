@@ -53,7 +53,7 @@ public:
    * @brief ReplaceTagVisitor - default constructor
    */
   ReplaceTagVisitor();
-  virtual ~ReplaceTagVisitor() = default;
+  ~ReplaceTagVisitor() = default;
 
   /**
    * @brief ReplaceTagVisitor - This constructor lets you specify the tag
@@ -84,24 +84,24 @@ public:
    * @brief visit - visit an element & perform check and replace
    * @param e - element to visit
    */
-  virtual void visit(const std::shared_ptr<Element>& e);
+  void visit(const std::shared_ptr<Element>& e) override;
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Replaces matching tags with the specified replacement tag"; }
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
-  virtual QString getInitStatusMessage() const
+  QString getInitStatusMessage() const override
   { return "Replacing tags..."; }
 
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   {
     return "Replaced " + QString::number(_numAffected) + " element tags";
   }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

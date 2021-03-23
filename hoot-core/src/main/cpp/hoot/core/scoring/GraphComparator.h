@@ -53,9 +53,9 @@ public:
 
   GraphComparator(OsmMapPtr map1, OsmMapPtr map2);
 
-  virtual ~GraphComparator() = default;
+  ~GraphComparator() = default;
 
-  double compareMaps();
+  double compareMaps() override;
 
   /**
    * Returns the 90% confidence interval.

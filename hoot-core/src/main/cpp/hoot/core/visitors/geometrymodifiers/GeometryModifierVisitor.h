@@ -51,28 +51,28 @@ class GeometryModifierVisitor : public ElementVisitor
 public:
 
   GeometryModifierVisitor() = default;
-  virtual ~GeometryModifierVisitor() = default;
+  ~GeometryModifierVisitor() = default;
 
-  virtual void setOsmMap(OsmMap* pMap) { _pMap = pMap; }
+  void setOsmMap(OsmMap* pMap) { _pMap = pMap; }
 
   void setActionDesc(const GeometryModifierActionDesc& actionDesc ) { _actionDesc = actionDesc; }
 
   // ElementVisitor
   static QString className() { return "hoot::GeometryModifierVisitor"; }
-  QString getDescription() const { return "Modifies map geometry as specified"; }
+  QString getDescription() const override { return "Modifies map geometry as specified"; }
 
   // visits the element, checks if it matches the filter set in _actionDesc and
   // calls the action's process function
-  virtual void visit(const ElementPtr& e) override;
+  void visit(const ElementPtr& e) override;
 
   // OperationStatus
-  virtual QString getInitStatusMessage() const { return "Modifying geometry..."; }
-  virtual QString getCompletedStatusMessage() const
+  QString getInitStatusMessage() const override { return "Modifying geometry..."; }
+  QString getCompletedStatusMessage() const override
   { return "Modified " + QString::number(_numAffected) + " elements"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
   OsmMap* _pMap;

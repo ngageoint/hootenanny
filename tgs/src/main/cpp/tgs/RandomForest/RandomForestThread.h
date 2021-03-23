@@ -65,7 +65,7 @@ namespace Tgs
     /**
      * @brief starts the thread
      */
-    void run();
+    void run() override;
 
   private:
     std::shared_ptr<RandomTree> _tree;

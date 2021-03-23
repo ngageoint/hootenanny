@@ -45,15 +45,15 @@ public:
 
   TagCategoryDifferencer() = default;
   TagCategoryDifferencer(OsmSchemaCategory category);
-  virtual ~TagCategoryDifferencer() = default;
+  ~TagCategoryDifferencer() = default;
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
 protected:
 
   OsmSchemaCategory _category;
 
-  virtual bool isValidTag(const SchemaVertex& sv) const;
+  bool isValidTag(const SchemaVertex& sv) const override;
 };
 
 }

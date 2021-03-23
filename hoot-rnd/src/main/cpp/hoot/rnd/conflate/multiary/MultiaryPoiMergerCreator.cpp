@@ -65,10 +65,9 @@ bool MultiaryPoiMergerCreator::createMergers(const MatchSet& matches, std::vecto
 std::vector<CreatorDescription> MultiaryPoiMergerCreator::getAllCreators() const
 {
   CreatorDescription d;
-  d.className = className();
-  d.description =
-    "Generates mergers that identify Multiary POI clusters within a match set and merges each cluster.";
-  d.experimental = true;
+  d.setClassName(className());
+  d.setDescription("Generates mergers that identify Multiary POI clusters within a match set and merges each cluster.");
+  d.setExperimental(true);
   vector<CreatorDescription> result;
   result.push_back(d);
 

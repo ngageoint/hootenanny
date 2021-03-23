@@ -54,20 +54,20 @@ public:
 
   OpExecutor();
   OpExecutor(const QStringList& namedOps, const bool operateOnlyOnConflatableElements = false);
-  virtual ~OpExecutor() = default;
+  ~OpExecutor() = default;
 
-  virtual void apply(std::shared_ptr<OsmMap>& map) override;
+  void apply(std::shared_ptr<OsmMap>& map) override;
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
-  virtual QString getDescription() const override { return ""; }
+  QString getDescription() const override { return ""; }
 
   void setProgress(const Progress& progress) override { _progress = progress; }
-  virtual unsigned int getNumSteps() const override { return _namedOps.size(); }
+  unsigned int getNumSteps() const override { return _namedOps.size(); }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
   std::shared_ptr<OsmMapOperation> getAppliedOperation(const QString& className)
   { return _appliedOps[className]; }

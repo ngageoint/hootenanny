@@ -39,9 +39,9 @@ public:
 
   AttributeComparator(const std::shared_ptr<OsmMap>& map1, const std::shared_ptr<OsmMap>& map2);
 
-  virtual ~AttributeComparator() = default;
+  ~AttributeComparator() = default;
 
-  virtual double compareMaps() override;
+  double compareMaps() override;
 
   double getConfidenceInterval() { return _ci; }
 

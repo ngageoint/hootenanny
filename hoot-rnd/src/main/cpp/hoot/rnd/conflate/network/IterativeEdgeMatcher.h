@@ -51,15 +51,15 @@ class IterativeEdgeMatcher : public VagabondNetworkMatcher
 public:
 
   IterativeEdgeMatcher();
-  virtual ~IterativeEdgeMatcher() = default;
+  ~IterativeEdgeMatcher() = default;
 
-  void iterate();
+  void iterate() override;
 
-  void matchNetworks(ConstOsmMapPtr map, OsmNetworkPtr n1, OsmNetworkPtr n2);
+  void matchNetworks(ConstOsmMapPtr map, OsmNetworkPtr n1, OsmNetworkPtr n2) override;
 
-  QList<NetworkEdgeScorePtr> getAllEdgeScores() const;
+  QList<NetworkEdgeScorePtr> getAllEdgeScores() const override;
 
-  QList<NetworkVertexScorePtr> getAllVertexScores() const;
+  QList<NetworkVertexScorePtr> getAllVertexScores() const override;
 
 protected:
   virtual double _scoreEdges(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2) const;
@@ -110,13 +110,13 @@ private:
       em2 = 0;
     }
 
-    virtual ~CostFunction() = default;
+    ~CostFunction() = default;
 
     /**
      * Returns the cost associated with assigning actor a to task t.
      */
-    virtual double cost(const ConstNetworkEdgePtr* e1,
-                        const ConstNetworkEdgePtr* e2) const
+    double cost(const ConstNetworkEdgePtr* e1,
+                const ConstNetworkEdgePtr* e2) const override
     {
       assert((*em1)[*e1][*e2].reversed == (*em2)[*e2][*e1].reversed);
       double result = 0.0;

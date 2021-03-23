@@ -49,23 +49,23 @@ public:
   static QString className() { return "hoot::RelationCircularRefRemover"; }
 
   RelationCircularRefRemover() = default;
-  virtual ~RelationCircularRefRemover() = default;
+  ~RelationCircularRefRemover() = default;
 
-  void apply(OsmMapPtr& map);
+  void apply(OsmMapPtr& map) override;
 
-  virtual QString getInitStatusMessage() const
+  QString getInitStatusMessage() const override
   { return "Removing relation members with circular references..."; }
 
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   { return "Removed " + QString::number(_numAffected) +
            " relation members involved in circular references"; }
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Removes half of a relation pair that reference each other from a map"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

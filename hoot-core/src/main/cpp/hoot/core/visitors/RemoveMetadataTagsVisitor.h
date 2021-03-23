@@ -46,28 +46,28 @@ public:
   static QString className() { return "hoot::RemoveMetadataTagsVisitor"; }
 
   RemoveMetadataTagsVisitor() = default;
-  virtual ~RemoveMetadataTagsVisitor()  = default;
+  ~RemoveMetadataTagsVisitor()  = default;
 
   /**
    * @see ElementVisitor
    */
-  virtual void visit(const ElementPtr& e) override;
+  void visit(const ElementPtr& e) override;
 
-  virtual QString getDescription() const { return "Removes metadata tags"; }
+  QString getDescription() const override { return "Removes metadata tags"; }
 
-  virtual QString getInitStatusMessage() const
+  QString getInitStatusMessage() const override
   { return "Removing metadata tags..."; }
 
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   {
     return
       "Removed " + QString::number(_numTagsRemoved) + " metadata tags from " +
       QString::number(_numAffected) + " different elements";
   }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 };
 
 }

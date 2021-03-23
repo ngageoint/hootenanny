@@ -47,19 +47,19 @@ public:
   static QString className() { return "hoot::UniqueNamesVisitor"; }
 
   UniqueNamesVisitor() = default;
-  virtual ~UniqueNamesVisitor() = default;
+  ~UniqueNamesVisitor() = default;
 
   QSet<QString> getUniqueNames() const { return _names; }
 
-  double getStat() const { return _names.size(); }
+  double getStat() const override { return _names.size(); }
 
-  virtual void visit(const ConstElementPtr& e);
+  void visit(const ConstElementPtr& e) override;
 
-  virtual QString getDescription() const { return "Counts unique names"; }
+  QString getDescription() const override { return "Counts unique names"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

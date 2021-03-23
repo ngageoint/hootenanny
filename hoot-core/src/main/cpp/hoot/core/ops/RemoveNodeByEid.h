@@ -51,8 +51,8 @@ public:
    * @return the name of the class
    */
   static QString className() { return "hoot::RemoveNodeByEid"; }
-  virtual QString getName() const { return className(); }
-  virtual QString getClassName() const override { return className(); }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
   /**
    * @brief RemoveNodeByEid Removes a node from a map
@@ -74,13 +74,13 @@ public:
   RemoveNodeByEid(long nId, bool doCheck = true, bool removeFully = false,
                   bool removeOnlyUnused = false);
 
-  virtual ~RemoveNodeByEid() = default;
+  ~RemoveNodeByEid() = default;
 
   /**
    * @brief apply Peform the op on the given map
    * @param map map upon which to operate
    */
-  void apply(const OsmMapPtr& map);
+  void apply(const OsmMapPtr& map) override;
 
   /**
    * @brief setNodeId Sets the ID of the node to remove
@@ -112,7 +112,7 @@ public:
    */
   static void removeNodeFully(const OsmMapPtr& map, long nId);
 
-  virtual QString getDescription() const { return "Removes a single node by element ID"; }
+  QString getDescription() const override { return "Removes a single node by element ID"; }
 
 private:
 

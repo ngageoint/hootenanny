@@ -52,7 +52,7 @@ public:
 
   SumNumericTagsVisitor();
   explicit SumNumericTagsVisitor(const QStringList keys);
-  virtual ~SumNumericTagsVisitor() = default;
+  ~SumNumericTagsVisitor() = default;
 
   /**
    * Given a set of tag keys and for all features having those tags, sums the numerical values of
@@ -61,21 +61,21 @@ public:
    *
    * @param e element to check for tag on
    */
-  virtual void visit(const ConstElementPtr& e);
+  void visit(const ConstElementPtr& e) override;
 
-  virtual double getStat() const { return _sum; }
+  double getStat() const override { return _sum; }
 
-  virtual QString getDescription() const { return "Sums numeric tag values with specified keys"; }
+  QString getDescription() const override { return "Sums numeric tag values with specified keys"; }
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
-  virtual QString getInitStatusMessage() const { return "Summing values of numeric tags..."; }
+  QString getInitStatusMessage() const override { return "Summing values of numeric tags..."; }
 
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   {
     return
       "Summed " + StringUtils::formatLargeNumber(_numAffected) + " numeric tags on " +

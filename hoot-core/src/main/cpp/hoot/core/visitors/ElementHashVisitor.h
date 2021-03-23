@@ -54,9 +54,9 @@ public:
   static QString className() { return "hoot::ElementHashVisitor"; }
 
   ElementHashVisitor();
-  virtual ~ElementHashVisitor() = default;
+  ~ElementHashVisitor() = default;
 
-  virtual void visit(const ElementPtr& e);
+  void visit(const ElementPtr& e) override;
 
   /**
    * Inserts a hash tag into an element and/or records the hash mapping with the element for later
@@ -77,11 +77,11 @@ public:
 
   void clearHashes();
 
-  virtual QString getDescription() const { return "Calculates unique hash values for elements"; }
+  QString getDescription() const override { return "Calculates unique hash values for elements"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
   QMap<QString, ElementId> getHashesToElementIds() const { return _hashesToElementIds; }
   QMap<ElementId, QString> getElementIdsToHashes() const { return _elementIdsToHashes; }

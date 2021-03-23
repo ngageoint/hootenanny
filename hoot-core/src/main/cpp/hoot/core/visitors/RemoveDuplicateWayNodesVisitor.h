@@ -53,14 +53,14 @@ public:
   static QString className() { return "hoot::RemoveDuplicateWayNodesVisitor"; }
 
   RemoveDuplicateWayNodesVisitor() = default;
-  virtual ~RemoveDuplicateWayNodesVisitor() = default;
+  ~RemoveDuplicateWayNodesVisitor() = default;
 
-  virtual void visit(const ElementPtr& e);
+  void visit(const ElementPtr& e) override;
 
   /**
    * @see OsmMapConsumer
    */
-  virtual void setOsmMap(OsmMap* map) { _map = map->shared_from_this(); }
+  void setOsmMap(OsmMap* map) override { _map = map->shared_from_this(); }
 
   /**
    * Removes duplicates nodes from a way
@@ -69,23 +69,23 @@ public:
    */
   static void removeDuplicates(const WayPtr& way);
 
-  virtual QString getInitStatusMessage() const { return "Removing duplicate way nodes..."; }
+  QString getInitStatusMessage() const override { return "Removing duplicate way nodes..."; }
 
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   { return "Removed " + QString::number(_numAffected) + " duplicate way nodes"; }
 
-  virtual QString getDescription() const { return "Removes duplicate way nodes"; }
+  QString getDescription() const override { return "Removes duplicate way nodes"; }
 
   /**
    * @see FilteredByGeometryTypeCriteria
    */
-  virtual QStringList getCriteria() const;
+  QStringList getCriteria() const override;
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
-  virtual void setConflateInfoCache(const std::shared_ptr<ConflateInfoCache>& cache)
+  void setConflateInfoCache(const std::shared_ptr<ConflateInfoCache>& cache) override
   { _conflateInfoCache = cache; }
 
 private:

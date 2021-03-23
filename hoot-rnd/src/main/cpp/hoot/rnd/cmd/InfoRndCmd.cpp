@@ -47,14 +47,14 @@ public:
 
   InfoRndCmd() = default;
 
-  virtual QString getName() const override { return "info-rnd"; }
+  QString getName() const override { return "info-rnd"; }
 
-  virtual QString getDescription() const override
+  QString getDescription() const override
   { return "Displays information about capabilities specific to the hoot-rnd module"; }
 
-  virtual QString getType() const override { return "rnd"; }
+  QString getType() const override { return "rnd"; }
 
-  virtual int runSimple(QStringList& args) override
+  int runSimple(QStringList& args) override
   {
     // only allowing one option per command
     const QStringList supportedOpts = _getSupportedOptions();

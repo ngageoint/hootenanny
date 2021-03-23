@@ -46,7 +46,7 @@ public:
   static QString className() { return "hoot::FilteredVisitor"; }
 
   FilteredVisitor() : _criterion(nullptr), _visitor(nullptr) { }
-  virtual ~FilteredVisitor() = default;
+  ~FilteredVisitor() = default;
 
   /**
    * Calls the visit method on visitor whenever ElementCriterion::isSatisfied == true.
@@ -71,16 +71,16 @@ public:
    */
   FilteredVisitor(ElementCriterion* criterion, ElementVisitor* visitor);
 
-  virtual void addCriterion(const ElementCriterionPtr& e);
+  void addCriterion(const ElementCriterionPtr& e) override;
 
-  virtual void addVisitor(const ElementVisitorPtr& v);
+  void addVisitor(const ElementVisitorPtr& v) override;
 
   ElementVisitor& getChildVisitor() const { return *_visitor; }
 
-  virtual void setOsmMap(OsmMap* map);
-  virtual void setOsmMap(const OsmMap* map);
+  void setOsmMap(OsmMap* map) override;
+  void setOsmMap(const OsmMap* map) override;
 
-  virtual void visit(const ConstElementPtr& e);
+  void visit(const ConstElementPtr& e) override;
 
   static double getStat(ElementCriterionPtr criterion, ElementVisitorPtr visitor,
                         const ConstOsmMapPtr& map);
@@ -89,11 +89,11 @@ public:
   static double getStat(ElementCriterion* criterion, ElementVisitor* visitor,
                         const ConstOsmMapPtr& map, const ElementPtr& element);
 
-  virtual QString getDescription() const { return ""; }
+  QString getDescription() const override { return ""; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 
