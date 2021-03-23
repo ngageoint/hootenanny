@@ -53,7 +53,7 @@ class ImplicitTagRulesDatabaseDeriver : public Configurable
 public:
 
   ImplicitTagRulesDatabaseDeriver();
-  virtual ~ImplicitTagRulesDatabaseDeriver() = default;
+  ~ImplicitTagRulesDatabaseDeriver() = default;
 
   /**
    * Creates an implicit tag rules database given input element data
@@ -63,7 +63,7 @@ public:
    */
   void deriveRulesDatabase(const QString& input, const QString& output);
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
   void setMinTagOccurrencesPerWord(const int minOccurrences)
   { _minTagOccurrencesPerWord = minOccurrences; }

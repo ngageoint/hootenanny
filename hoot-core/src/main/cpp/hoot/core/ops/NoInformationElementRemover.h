@@ -50,25 +50,25 @@ public:
   static QString className() { return "hoot::NoInformationElementRemover"; }
 
   NoInformationElementRemover() = default;
-  virtual ~NoInformationElementRemover() = default;
+  ~NoInformationElementRemover() = default;
 
   /**
     @see OsmMapOperation
   */
-  void apply(std::shared_ptr<OsmMap>& map);
+  void apply(std::shared_ptr<OsmMap>& map) override;
 
-  virtual QString getInitStatusMessage() const
+  QString getInitStatusMessage() const override
   { return "Removing elements with no information tags..."; }
 
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   { return "Removed " + QString::number(_numAffected) + " elements with no information tags"; }
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Removes elements containing no information in tags"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 protected:
 

@@ -61,7 +61,7 @@ public:
 
   ~LinearTagOnlyMerger() = default;
 
-  QString getDescription() const
+  QString getDescription() const override
   { return "Merges linear feature tags only with minimal geometry exceptions"; }
 
 protected:

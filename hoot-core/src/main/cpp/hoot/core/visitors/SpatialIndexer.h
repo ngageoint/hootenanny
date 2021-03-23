@@ -64,11 +64,11 @@ public:
                           const std::shared_ptr<ElementCriterion>& criterion,
                           const std::function<Meters (const ConstElementPtr&)>& getSearchRadius,
                           ConstOsmMapPtr pMap);
-  virtual ~SpatialIndexer() = default;
+  ~SpatialIndexer() = default;
 
-  void addCriterion(const ElementCriterionPtr& e);
+  void addCriterion(const ElementCriterionPtr& e) override;
 
-  void visit(const ConstElementPtr& e);
+  void visit(const ConstElementPtr& e) override;
 
   void finalizeIndex();
 
@@ -105,19 +105,19 @@ public:
     const std::shared_ptr<Tgs::HilbertRTree>& index, const std::deque<ElementId>& indexToEid,
     ConstOsmMapPtr pMap);
 
-  virtual QString getDescription() const { return "Build an index of input elements"; }
+  QString getDescription() const override { return "Build an index of input elements"; }
 
-  virtual QString getInitStatusMessage() const
+  QString getInitStatusMessage() const override
   { return "Indexing elements..."; }
 
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   { return "Indexed " + StringUtils::formatLargeNumber(_numAffected) + " elements."; }
 
   long getSize() const { return _numAffected; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

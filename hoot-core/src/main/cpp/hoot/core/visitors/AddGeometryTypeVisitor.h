@@ -39,15 +39,15 @@ public:
   static QString className() { return "hoot::AddGeometryTypeVisitor"; }
 
   AddGeometryTypeVisitor() = default;
-  virtual ~AddGeometryTypeVisitor() = default;
+  ~AddGeometryTypeVisitor() = default;
 
-  virtual void visit(const std::shared_ptr<Element>& e) override;
+  void visit(const std::shared_ptr<Element>& e) override;
 
-  virtual QString getDescription() const { return "Adds geometry types"; }
+  QString getDescription() const override { return "Adds geometry types"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 };
 
 }

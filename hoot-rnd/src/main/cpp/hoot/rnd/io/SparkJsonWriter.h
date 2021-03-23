@@ -51,7 +51,7 @@ public:
   static QString className() { return "hoot::SparkJsonWriter"; }
 
   SparkJsonWriter();
-  virtual ~SparkJsonWriter() = default;
+  ~SparkJsonWriter() = default;
 
   /**
    * @see OsmMapWriter

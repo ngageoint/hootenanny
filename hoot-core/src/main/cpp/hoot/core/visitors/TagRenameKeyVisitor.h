@@ -44,27 +44,27 @@ public:
   static QString className() { return "hoot::TagRenameKeyVisitor"; }
 
   TagRenameKeyVisitor() = default;
-  virtual ~TagRenameKeyVisitor() = default;
+  ~TagRenameKeyVisitor() = default;
 
   TagRenameKeyVisitor(const QString& oldKey, const QString& newKey);
 
-  virtual void visit(const ElementPtr& e) override;
+  void visit(const ElementPtr& e) override;
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
-  virtual QString getDescription() const { return "Renames tag keys"; }
+  QString getDescription() const override { return "Renames tag keys"; }
 
-  virtual QString getInitStatusMessage() const { return "Renaming tag keys..."; }
+  QString getInitStatusMessage() const override { return "Renaming tag keys..."; }
 
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   { return "Renamed " + QString::number(_numAffected) + " tag keys"; }
 
   void setOldKey(const QString& key) { _oldKey = key; }
   void setNewKey(const QString& key) { _newKey = key; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

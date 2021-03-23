@@ -47,30 +47,30 @@ public:
   static QString className() { return "hoot::RemoveEmptyAreasVisitor"; }
 
   RemoveEmptyAreasVisitor();
-  virtual ~RemoveEmptyAreasVisitor() = default;
+  ~RemoveEmptyAreasVisitor() = default;
 
-  virtual void visit(const std::shared_ptr<Element>& e);
+  void visit(const std::shared_ptr<Element>& e) override;
 
-  virtual QString getInitStatusMessage() const { return "Removing empty areas..."; }
+  QString getInitStatusMessage() const override { return "Removing empty areas..."; }
 
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   { return "Removed " + QString::number(_numAffected) + " empty areas"; }
 
-  virtual QString getDescription() const { return "Removes empty areas"; }
+  QString getDescription() const override { return "Removes empty areas"; }
 
   /**
    * @see FilteredByGeometryTypeCriteria
    */
-  virtual QStringList getCriteria() const;
+  QStringList getCriteria() const override;
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
   /**
    * @see Configurable
    */
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
 private:
 

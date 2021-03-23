@@ -64,15 +64,15 @@ public:
 
   GetRefUuidVisitor(QString ref) : _ref(ref) { }
 
-  virtual ~GetRefUuidVisitor() = default;
+  ~GetRefUuidVisitor() = default;
 
   const RefToUuid& getRefToUuid() const { return _ref2Uuid; }
 
-  virtual QString getDescription() const { return ""; }
-  virtual QString getName() const { return ""; }
-  virtual QString getClassName() const override { return ""; }
+  QString getDescription() const override { return ""; }
+  QString getName() const override { return ""; }
+  QString getClassName() const override { return ""; }
 
-  virtual void visit(const ConstElementPtr& e)
+  void visit(const ConstElementPtr& e) override
   {
     QStringList refs;
     if (e->getTags().contains(_ref))
@@ -119,15 +119,15 @@ class UuidToEidVisitor : public ConstElementVisitor
 public:
 
   UuidToEidVisitor() = default;
-  virtual ~UuidToEidVisitor() = default;
+  ~UuidToEidVisitor() = default;
 
   const MatchComparator::UuidToEid& getUuidToEid() const { return _uuidToEid; }
 
-  virtual QString getDescription() const { return ""; }
-  virtual QString getName() const { return ""; }
-  virtual QString getClassName() const override { return ""; }
+  QString getDescription() const override { return ""; }
+  QString getName() const override { return ""; }
+  QString getClassName() const override { return ""; }
 
-  virtual void visit(const ConstElementPtr& e)
+  void visit(const ConstElementPtr& e) override
   {
     QString uuid;
     if (e->getTags().contains("uuid"))

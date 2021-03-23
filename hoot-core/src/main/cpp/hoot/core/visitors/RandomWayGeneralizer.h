@@ -58,23 +58,23 @@ public:
   static QString className() { return "hoot::RandomWayGeneralizer"; }
 
   RandomWayGeneralizer();
-  virtual ~RandomWayGeneralizer() = default;
+  ~RandomWayGeneralizer() = default;
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
   /**
     Randomly and recursively applies a way generalize operation to each visited way
 
     @see ConstElementVisitor
     */
-  virtual void visit(const std::shared_ptr<Element>& element);
+  void visit(const std::shared_ptr<Element>& element) override;
 
   /**
     @see RngConsumer
     */
-  virtual void setRng(boost::minstd_rand& rng) { _rng = &rng; }
+  void setRng(boost::minstd_rand& rng) override { _rng = &rng; }
 
-  virtual void setOsmMap(OsmMap* map);
+  void setOsmMap(OsmMap* map) override;
 
   /**
     the probability that any way will be generalized
@@ -93,13 +93,13 @@ public:
     */
   void setEpsilon(double epsilon) { _epsilon = epsilon; }
 
-  virtual QString getDescription() const { return "Randomly simplifies ways by removing nodes"; }
+  QString getDescription() const override { return "Randomly simplifies ways by removing nodes"; }
 
   void setRemoveNodesSharedByWays(bool remove) { _removeNodesSharedByWays = remove; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

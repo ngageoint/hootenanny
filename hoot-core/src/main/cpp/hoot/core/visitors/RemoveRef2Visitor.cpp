@@ -51,11 +51,11 @@ class Ref1ToEidVisitor : public ConstElementVisitor
 public:
 
   Ref1ToEidVisitor() = default;
-  virtual ~Ref1ToEidVisitor() = default;
+  ~Ref1ToEidVisitor() = default;
 
   const RemoveRef2Visitor::Ref1ToEid& getRef1ToEid() const { return _ref1ToEid; }
 
-  virtual void visit(const ConstElementPtr& e)
+  void visit(const ConstElementPtr& e) override
   {
     if (e->getTags().contains(MetadataTags::Ref1()))
     {
@@ -64,9 +64,9 @@ public:
     }
   }
 
-  virtual QString getDescription() const { return ""; }
-  virtual QString getName() const { return ""; }
-  virtual QString getClassName() const override { return ""; }
+  QString getDescription() const override { return ""; }
+  QString getName() const override { return ""; }
+  QString getClassName() const override { return ""; }
 
 private:
 

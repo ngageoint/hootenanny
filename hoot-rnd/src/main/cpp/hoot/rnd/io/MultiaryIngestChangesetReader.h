@@ -48,7 +48,7 @@ public:
 
   MultiaryIngestChangesetReader();
 
-  virtual ~MultiaryIngestChangesetReader();
+  ~MultiaryIngestChangesetReader();
 
   /**
    * @see ChangesetProvider

@@ -51,7 +51,7 @@ public:
   static QString className() { return "hoot::Soundex"; }
 
   Soundex() = default;
-  virtual ~Soundex() = default;
+  ~Soundex() = default;
 
   double compare(const QString& s1, const QString& s2) const override;
 

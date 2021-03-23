@@ -41,22 +41,22 @@ public:
   static QString className() { return "hoot::AddRef1Visitor"; }
 
   AddRef1Visitor();
-  virtual ~AddRef1Visitor() = default;
+  ~AddRef1Visitor() = default;
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
   /**
    * Adds a REF1 tag with a unique string to all valid elements. If the Tags::getNonDebugCount() is
    * greater than zero then the element is tagged with a REF1. The unique string is simply a counter
    * so it isn't going to be unique across multiple runs.
    */
-  virtual void visit(const ElementPtr& e);
+  void visit(const ElementPtr& e) override;
 
-  virtual QString getDescription() const { return "Adds REF1 tags"; }
+  QString getDescription() const override { return "Adds REF1 tags"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

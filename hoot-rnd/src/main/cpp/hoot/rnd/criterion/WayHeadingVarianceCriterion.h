@@ -50,14 +50,14 @@ public:
   WayHeadingVarianceCriterion(
     const Degrees comparisonVariance, const NumericComparisonType& numericComparisonType,
     ConstOsmMapPtr map);
-  virtual ~WayHeadingVarianceCriterion() = default;
+  ~WayHeadingVarianceCriterion() = default;
 
   /**
    * @see ElementCriterion
    */
-  virtual bool isSatisfied(const ConstElementPtr& e) const override;
+  bool isSatisfied(const ConstElementPtr& e) const override;
 
-  virtual ElementCriterionPtr clone() override
+  ElementCriterionPtr clone() override
   { return ElementCriterionPtr(new WayHeadingVarianceCriterion(_map)); }
 
   /**
@@ -68,14 +68,14 @@ public:
    */
   Degrees getLargestHeadingVariance(const ConstWayPtr& way) const;
 
-  virtual QString getDescription() const override
+  QString getDescription() const override
   { return "Identifies ways that meet a heading variance threshold"; }
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
-  virtual void setOsmMap(const OsmMap* map) { _map = map->shared_from_this(); }
+  void setOsmMap(const OsmMap* map) override { _map = map->shared_from_this(); }
 
   void setNumHistogramBins(const int numBins);
   void setSampleDistance(const Meters distance);

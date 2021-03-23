@@ -44,24 +44,24 @@ public:
   static QString className() { return "hoot::NonConflatableElementRemover"; }
 
   NonConflatableElementRemover() = default;
-  virtual ~NonConflatableElementRemover() = default;
+  ~NonConflatableElementRemover() = default;
 
   /**
     @see OsmMapOperation
   */
-  void apply(std::shared_ptr<OsmMap>& map);
+  void apply(std::shared_ptr<OsmMap>& map) override;
 
-  virtual QString getDescription() const { return "Removes elements that are not conflatable"; }
+  QString getDescription() const override { return "Removes elements that are not conflatable"; }
 
-  virtual QString getInitStatusMessage() const
+  QString getInitStatusMessage() const override
   { return "Removing unconfaltable elements..."; }
 
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   { return "Removed " + QString::number(_numAffected) + " unconflatable elements"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

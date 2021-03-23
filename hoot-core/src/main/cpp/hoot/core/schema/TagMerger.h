@@ -65,7 +65,7 @@ public:
     _caseSensitive = ConfigOptions(conf).getDuplicateNameCaseSensitive();
   }
 
-  virtual QString toString() const override { return ""; }
+  QString toString() const override { return ""; }
 
 protected:
 

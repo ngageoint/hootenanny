@@ -46,16 +46,16 @@ public:
   ImplicitPoiTypeTagger(const QString& databasePath);
   virtual ~ImplicitPoiTypeTagger() = default;
 
-  virtual QString getDescription() const override
+  QString getDescription() const override
   { return "Adds tags to POIs implicitly derived from their names"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 protected:
 
-  virtual bool _visitElement(const ElementPtr& e);
+  bool _visitElement(const ElementPtr& e) override;
 };
 
 }

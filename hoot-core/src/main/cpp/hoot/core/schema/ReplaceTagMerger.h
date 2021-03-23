@@ -49,14 +49,14 @@ public:
 
   virtual ~ReplaceTagMerger() = default;
 
-  virtual Tags mergeTags(const Tags& t1, const Tags& t2, ElementType et) const override;
+  Tags mergeTags(const Tags& t1, const Tags& t2, ElementType et) const override;
 
   // leave empty to avoid duplicate tag mergers displayed by the info command
-  virtual QString getDescription() const { return ""; }
-  virtual QString getName() const { return ""; }
-  virtual QString getClassName() const override { return ""; }
+  QString getDescription() const override { return ""; }
+  QString getName() const override { return ""; }
+  QString getClassName() const override { return ""; }
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
   void setOverwriteExcludeTagKeys(const QStringList& overwriteExcludeTagKeys)
   { _overwriteExcludeTagKeys = overwriteExcludeTagKeys; }
@@ -79,17 +79,17 @@ public:
   static QString className() { return "hoot::ReplaceTag2Merger"; }
 
   ReplaceTag2Merger() : ReplaceTagMerger(false) { }
-  virtual ~ReplaceTag2Merger() = default;
+  ~ReplaceTag2Merger() = default;
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   {
     return
       "Completely replaces tags in the secondary feature with those from the reference feature";
   }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 };
 
 /**
@@ -103,17 +103,17 @@ public:
   static QString className() { return "hoot::ReplaceTag1Merger"; }
 
   ReplaceTag1Merger() : ReplaceTagMerger(true) { }
-  virtual ~ReplaceTag1Merger() = default;
+  ~ReplaceTag1Merger() = default;
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   {
     return
       "Completely replaces tags in the reference feature with those from the secondary feature";
   }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 };
 
 }

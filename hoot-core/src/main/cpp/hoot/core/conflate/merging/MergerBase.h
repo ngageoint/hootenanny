@@ -43,17 +43,17 @@ public:
   MergerBase() = default;
   virtual ~MergerBase() = default;
 
-  virtual std::set<ElementId> getImpactedElementIds() const override;
+  std::set<ElementId> getImpactedElementIds() const override;
 
   /**
    * @see Merger
    */
-  virtual bool isValid(const ConstOsmMapPtr& map) const;
+  bool isValid(const ConstOsmMapPtr& map) const override;
 
   /**
    * @see Merger
    */
-  virtual void replace(ElementId oldEid, ElementId newEid);
+  void replace(ElementId oldEid, ElementId newEid) override;
 
 protected:
 

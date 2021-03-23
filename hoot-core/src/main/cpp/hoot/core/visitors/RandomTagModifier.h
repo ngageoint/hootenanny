@@ -45,30 +45,30 @@ public:
   static QString className() { return "hoot::RandomTagModifier"; }
 
   RandomTagModifier();
-  virtual ~RandomTagModifier() = default;
+  ~RandomTagModifier() = default;
 
   QString permuteName(const QString& s);
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
   /**
    * Set the probability that a tag will be removed.
    */
   void setProbability(double p) { _p = p; }
 
-  virtual void setRng(boost::minstd_rand& rng) { _rng = &rng; }
+  void setRng(boost::minstd_rand& rng) override { _rng = &rng; }
 
-  virtual void visit(const std::shared_ptr<Element>& e) override;
+  void visit(const std::shared_ptr<Element>& e) override;
 
   void setExemptTagKeys(const QStringList& keys) { _exemptTagKeys = keys; }
   void setReplacementTagKeys(const QStringList& keys) { _replacementTagKeys = keys; }
   void setReplacementTagValues(const QStringList& values) { _replacementTagValues = values; }
 
-  virtual QString getDescription() const { return "Randomly modifies feature tags"; }
+  QString getDescription() const override { return "Randomly modifies feature tags"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

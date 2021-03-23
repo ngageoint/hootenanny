@@ -46,25 +46,25 @@ public:
   static QString className() { return "hoot::PointsToPolysConverter"; }
 
   PointsToPolysConverter(const double bufferSize = 1.0);
-  virtual ~PointsToPolysConverter() = default;
+  ~PointsToPolysConverter() = default;
 
-  virtual void apply(OsmMapPtr& map);
+  void apply(OsmMapPtr& map) override;
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
-  virtual QString getInitStatusMessage() const
+  QString getInitStatusMessage() const override
   { return "Converting non-child points to polygons..."; }
 
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   {
     return
       "Converted " + StringUtils::formatLargeNumber(_numAffected) + " / " +
       StringUtils::formatLargeNumber(_numProcessed) + " non-child points to polygons.";
   }
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Converts non-child points to rectangular polygons"; }
 
 private:

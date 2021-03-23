@@ -119,7 +119,7 @@ public:
     _timer.start();
   }
 
-  virtual ~ScriptMatchVisitor()
+  ~ScriptMatchVisitor()
   {
     //  Free the perisistent object
     if (_mapJs.IsEmpty())
@@ -162,9 +162,9 @@ public:
     }
   }
 
-  virtual QString getDescription() const { return ""; }
-  virtual QString getName() const { return ""; }
-  virtual QString getClassName() const override { return ""; }
+  QString getDescription() const override { return ""; }
+  QString getName() const override { return ""; }
+  QString getClassName() const override { return ""; }
 
   void checkForMatch(const std::shared_ptr<const Element>& e)
   {
@@ -557,7 +557,7 @@ public:
     return result;
   }
 
-  virtual void visit(const ConstElementPtr& e)
+  void visit(const ConstElementPtr& e) override
   {
     if (isMatchCandidate(e))
     {

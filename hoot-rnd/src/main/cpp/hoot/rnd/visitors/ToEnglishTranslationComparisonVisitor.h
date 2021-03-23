@@ -48,28 +48,28 @@ public:
   static QString className() { return "hoot::ToEnglishTranslationComparisonVisitor"; }
 
   ToEnglishTranslationComparisonVisitor();
-  virtual ~ToEnglishTranslationComparisonVisitor() = default;
+  ~ToEnglishTranslationComparisonVisitor() = default;
 
-  virtual void visit(const std::shared_ptr<Element>& e) override;
+  void visit(const std::shared_ptr<Element>& e) override;
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
-  virtual QString getDescription() const override
+  QString getDescription() const override
   { return "Translates selected tags to English and scores them against known translations"; }
 
-  virtual QString getInitStatusMessage() const
+  QString getInitStatusMessage() const override
   { return "Comparing to English tag translations..."; }
 
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   {
     return
       "Compared " + QString::number(_numProcessedTags) + " to English tag translations on " +
       QString::number(_numProcessedElements) + " different elements";
   }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

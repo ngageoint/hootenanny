@@ -47,26 +47,26 @@ public:
   static QString className() { return "hoot::RemoveInvalidMultilineStringMembersVisitor"; }
 
   RemoveInvalidMultilineStringMembersVisitor();
-  virtual ~RemoveInvalidMultilineStringMembersVisitor() = default;
+  ~RemoveInvalidMultilineStringMembersVisitor() = default;
 
-  virtual void visit(const ElementPtr& e);
+  void visit(const ElementPtr& e) override;
 
-  virtual QString getInitStatusMessage() const
+  QString getInitStatusMessage() const override
   { return "Removing invalid multiline string relation members..."; }
 
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   {
     return
       "Removed " + StringUtils::formatLargeNumber(_numAffected) + " invalid relations / " +
       StringUtils::formatLargeNumber(_map->getRelationCount()) + " total relations.";
   }
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Removes invalid multiline string relation members"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

@@ -46,27 +46,27 @@ public:
   static QString className() { return "hoot::ElementIdToTagValueMapper"; }
 
   ElementIdToTagValueMapper() = default;
-  virtual ~ElementIdToTagValueMapper() = default;
+  ~ElementIdToTagValueMapper() = default;
 
-  virtual void visit(const ConstElementPtr& e);
+  void visit(const ConstElementPtr& e) override;
 
-  virtual void addCriterion(const ElementCriterionPtr& e);
+  void addCriterion(const ElementCriterionPtr& e) override;
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Maps element IDs to tag values for a given tag key"; }
 
-  virtual QString getInitStatusMessage() const { return "Mapping tag values..."; }
+  QString getInitStatusMessage() const override { return "Mapping tag values..."; }
 
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   { return "Mapped " + StringUtils::formatLargeNumber(_numAffected) + " tag values."; }
 
   QMap<ElementId, QString> getIdToTagValueMappings() const { return _idToTagValueMappings; }
 
   void setTagKey(const QString& key) { _tagKey = key; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

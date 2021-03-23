@@ -49,15 +49,15 @@ class TGS_EXPORT DistanceIterator : public Iterator
 public:
   DistanceIterator(RStarTree* tree, const std::vector<double>& point, double distance);
 
-  virtual ~DistanceIterator() = default;
+  ~DistanceIterator() = default;
 
-  virtual const Box& getBox() const;
+  const Box& getBox() const override;
 
-  virtual int getId() const;
+  int getId() const override;
 
-  virtual bool hasNext();
+  bool hasNext() override;
 
-  virtual bool next();
+  bool next() override;
 
   int nodeHits;
   int distCalcs;

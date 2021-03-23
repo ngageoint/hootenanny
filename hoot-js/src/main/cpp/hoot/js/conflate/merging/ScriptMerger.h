@@ -46,27 +46,27 @@ public:
   static int logWarnCount;
 
   ScriptMerger() = default;
-  virtual ~ScriptMerger() = default;
+  ~ScriptMerger() = default;
 
   ScriptMerger(const std::shared_ptr<PluginContext>& script, v8::Persistent<v8::Object>& plugin,
     const std::set<std::pair<ElementId, ElementId>>& pairs);
 
-  virtual void apply(const OsmMapPtr& map,
-                     std::vector<std::pair<ElementId, ElementId>>& replaced) override;
+  void apply(const OsmMapPtr& map,
+             std::vector<std::pair<ElementId, ElementId>>& replaced) override;
 
   /**
    * Returns true if the plugin has a function with the specified name.
    */
   bool hasFunction(QString name) const;
 
-  virtual QString toString() const override { return QString("ScriptMerger"); }
+  QString toString() const override { return QString("ScriptMerger"); }
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Merges elements matched with Generic Conflation"; }
 
-  virtual QString getName() const { return className() + "-" + _matchType; }
+  QString getName() const override { return className() + "-" + _matchType; }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
   void setMatchType(const QString& matchType) { _matchType = matchType; }
 
@@ -92,8 +92,8 @@ protected:
   v8::Handle<v8::Value> _callMergePair(const OsmMapPtr& map) const;
   void _callMergeSets(const OsmMapPtr& map,
                       std::vector<std::pair<ElementId, ElementId>>& replaced) const;
-  virtual PairsSet& _getPairs() override { return _pairs; }
-  virtual const PairsSet& _getPairs() const override { return _pairs; }
+  PairsSet& _getPairs() override { return _pairs; }
+  const PairsSet& _getPairs() const override { return _pairs; }
 };
 
 }

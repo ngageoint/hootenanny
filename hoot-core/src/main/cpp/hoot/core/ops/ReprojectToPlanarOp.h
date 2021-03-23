@@ -45,20 +45,20 @@ public:
   static QString className() { return "hoot::ReprojectToPlanarOp"; }
 
   ReprojectToPlanarOp() = default;
-  virtual ~ReprojectToPlanarOp() = default;
+  ~ReprojectToPlanarOp() = default;
 
-  virtual void apply(std::shared_ptr<OsmMap>& map);
+  void apply(std::shared_ptr<OsmMap>& map) override;
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
-  virtual QString getDescription() const { return "Reprojects to a custom planar projection"; }
+  QString getDescription() const override { return "Reprojects to a custom planar projection"; }
 
-  virtual QString getInitStatusMessage() const
+  QString getInitStatusMessage() const override
   { return "Reprojecting map to planar coordinates..."; }
 
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   { return  "Reprojected map to planar coordinates"; }
 };
 

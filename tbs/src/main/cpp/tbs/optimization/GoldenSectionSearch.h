@@ -53,7 +53,7 @@ public:
    */
   GoldenSectionSearch(double epsilon);
 
-  virtual ~GoldenSectionSearch() = default;
+  ~GoldenSectionSearch() = default;
 
   double argmin(Function& f, double minx, double maxx) override;
 

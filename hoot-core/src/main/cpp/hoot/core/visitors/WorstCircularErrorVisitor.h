@@ -45,13 +45,13 @@ public:
   static QString className() { return "hoot::WorstCircularErrorVisitor"; }
 
   WorstCircularErrorVisitor() : _worst(ElementData::CIRCULAR_ERROR_EMPTY) {}
-  virtual ~WorstCircularErrorVisitor() = default;
+  ~WorstCircularErrorVisitor() = default;
 
   Meters getWorstCircularError() { return _worst; }
 
-  virtual double getStat() const { return _worst; }
+  double getStat() const override { return _worst; }
 
-  virtual void visit(const std::shared_ptr<const Element>& e);
+  void visit(const std::shared_ptr<const Element>& e) override;
 
   // Convenient way to get worst circular error
   static Meters getWorstCircularError(const OsmMapPtr& map);
@@ -61,12 +61,12 @@ public:
 
   static Meters getWorstCircularError(const std::vector<ElementPtr>& elements);
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Determines the highest circular error value"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

@@ -50,29 +50,29 @@ public:
 
   SchemaTranslatedTagCountVisitor();
   SchemaTranslatedTagCountVisitor(const std::shared_ptr<ScriptSchemaTranslator>& t);
-  virtual ~SchemaTranslatedTagCountVisitor() = default;
+  ~SchemaTranslatedTagCountVisitor() = default;
 
   long getPopulatedCount() const { return _populatedCount; }
   long getDefaultCount() const { return _defaultCount; }
   long getNullCount() const { return _nullCount; }
   long getTotalCount() const { return getPopulatedCount() + getDefaultCount() + getNullCount(); }
 
-  double getStat() const { return (double)getPopulatedCount() / (double)getTotalCount(); }
+  double getStat() const override { return (double)getPopulatedCount() / (double)getTotalCount(); }
 
-  virtual void setOsmMap(const OsmMap* map) { _map = map; }
+  void setOsmMap(const OsmMap* map) override { _map = map; }
 
-  virtual void visit(const ConstElementPtr& e);
+  void visit(const ConstElementPtr& e) override;
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Counts the number of tags translated to a schema"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
-  virtual QString getInitStatusMessage() const { return "Counting translated tags..."; }
+  QString getInitStatusMessage() const override { return "Counting translated tags..."; }
 
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   {
     return
       "Counted " + StringUtils::formatLargeNumber(getTotalCount()) + " translated tags on " +

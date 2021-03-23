@@ -44,10 +44,12 @@ public:
   ElementOsmMapVisitor() : _map(nullptr) { }
   virtual ~ElementOsmMapVisitor() = default;
 
-  virtual void setOsmMap(OsmMap* map) { _map = map; }
-  virtual void setOsmMap(const OsmMap* /*map*/) { throw NotImplementedException(); }
+  void setOsmMap(OsmMap* map) override { _map = map; }
+  void setOsmMap(const OsmMap* /*map*/) override { throw NotImplementedException(); }
 
-  virtual void visit(const ConstElementPtr& e);
+  void visit(const ConstElementPtr& e) override; /**
+   * TODO: ElementVisitor already implements visit(const ElementPtr&)
+   */
   virtual void visit(const std::shared_ptr<Element>& e) = 0;
 
 protected:

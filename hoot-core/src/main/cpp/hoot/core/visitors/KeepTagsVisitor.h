@@ -44,15 +44,15 @@ public:
 
   KeepTagsVisitor() = default;
   explicit KeepTagsVisitor(const QStringList& keys);
-  virtual ~KeepTagsVisitor() = default;
+  ~KeepTagsVisitor() = default;
 
-  virtual void visit(const std::shared_ptr<Element>& e);
+  void visit(const std::shared_ptr<Element>& e) override;
 
-  virtual QString getDescription() const { return "Keeps tags by key"; }
+  QString getDescription() const override { return "Keeps tags by key"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 };
 
 }

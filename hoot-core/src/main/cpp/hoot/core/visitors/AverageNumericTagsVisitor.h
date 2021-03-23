@@ -55,7 +55,7 @@ public:
 
   AverageNumericTagsVisitor();
   explicit AverageNumericTagsVisitor(const QStringList keys);
-  virtual ~AverageNumericTagsVisitor() = default;
+  ~AverageNumericTagsVisitor() = default;
 
   /**
    * Given a set of tag keys and for all features having those tags, averages the numerical values
@@ -64,17 +64,17 @@ public:
    *
    * @param e element to check for tag on
    */
-  virtual void visit(const ConstElementPtr& e);
+  void visit(const ConstElementPtr& e) override;
 
-  virtual double getStat() const;
+  double getStat() const override;
 
-  virtual QString getDescription() const { return "Calculates the average of numeric tag values"; }
+  QString getDescription() const override { return "Calculates the average of numeric tag values"; }
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

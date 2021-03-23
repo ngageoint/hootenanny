@@ -48,26 +48,26 @@ public:
 
   AddAttributesVisitor();
   explicit AddAttributesVisitor(const QStringList attributes, const bool negateCriteria = false);
-  virtual ~AddAttributesVisitor() = default;
+  ~AddAttributesVisitor() = default;
 
-  virtual void visit(const std::shared_ptr<Element>& e);
+  void visit(const std::shared_ptr<Element>& e) override;
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
   void setAttributes(const QStringList attributes) { _attributes = attributes; }
   void setAddOnlyIfEmpty(const bool addOnlyIfEmpty) { _addOnlyIfEmpty = addOnlyIfEmpty; }
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Adds one or more common OSM attributes to features"; }
 
-  virtual QString getInitStatusMessage() const { return "Adding attributes..."; }
+  QString getInitStatusMessage() const override { return "Adding attributes..."; }
 
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   { return "Added " + QString::number(_numAffected) + " attributes"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

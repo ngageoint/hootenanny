@@ -56,9 +56,9 @@ public:
 
   PaintVisitor(OsmMapPtr map, QPainter& pt, QMatrix& m) :
     _map(map), _pt(pt), _m(m) { }
-  virtual ~PaintVisitor() = default;
+  ~PaintVisitor() = default;
 
-  virtual void visit(const ConstElementPtr& e)
+  void visit(const ConstElementPtr& e) override
   {
     vector<ConstWayPtr> ways = WaysVisitor::extractWays(_map, e);
 
@@ -68,9 +68,9 @@ public:
     }
   }
 
-  virtual QString getDescription() const { return ""; }
-  virtual QString getName() const { return ""; }
-  virtual QString getClassName() const override { return ""; }
+  QString getDescription() const override { return ""; }
+  QString getName() const override { return ""; }
+  QString getClassName() const override { return ""; }
 
 private:
 

@@ -55,22 +55,22 @@ public:
     const QString& key, const QString& value, bool appendToExistingValue = false,
     const QStringList& criteriaClassNames = QStringList(), const bool overwriteExistingTag = true,
     const bool negateCriteria = false);
-  virtual ~SetTagValueVisitor() = default;
+  ~SetTagValueVisitor() = default;
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
-  virtual void visit(const std::shared_ptr<Element>& e);
+  void visit(const std::shared_ptr<Element>& e) override;
 
-  virtual QString getDescription() const { return "Adds or updates specific tags on elements"; }
+  QString getDescription() const override { return "Adds or updates specific tags on elements"; }
 
-  virtual QString getInitStatusMessage() const { return "Updating tags..."; }
+  QString getInitStatusMessage() const override { return "Updating tags..."; }
 
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   { return "Updated " + StringUtils::formatLargeNumber(_numAffected) + " tags"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

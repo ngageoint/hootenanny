@@ -44,15 +44,15 @@ public:
   static QString className() { return "hoot::NodesVisitor"; }
 
   NodesVisitor(QList<ConstNodePtr>& n) : _n(n) { }
-  virtual ~NodesVisitor() = default;
+  ~NodesVisitor() = default;
 
-  virtual void visit(const std::shared_ptr<const Element>& e);
+  void visit(const std::shared_ptr<const Element>& e) override;
 
-  virtual QString getDescription() const { return "Collects the nodes visited"; }
+  QString getDescription() const override { return "Collects the nodes visited"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

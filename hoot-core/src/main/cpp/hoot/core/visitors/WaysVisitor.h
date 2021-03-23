@@ -40,20 +40,20 @@ public:
   static QString className() { return "hoot::WaysVisitor"; }
 
   WaysVisitor(std::vector<ConstWayPtr>& w) : _w(w) { }
-  virtual ~WaysVisitor() = default;
+  ~WaysVisitor() = default;
 
-  virtual void visit(const std::shared_ptr<const Element>& e) override;
+  void visit(const std::shared_ptr<const Element>& e) override;
 
   /**
    * Convenience method.
    */
   static std::vector<ConstWayPtr> extractWays(const ConstOsmMapPtr& map, const ConstElementPtr& e);
 
-  virtual QString getDescription() const { return "Collects the ways visited"; }
+  QString getDescription() const override { return "Collects the ways visited"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

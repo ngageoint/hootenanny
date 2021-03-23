@@ -59,25 +59,25 @@ public:
   static QString className() { return "hoot::RemoveDuplicateAreasVisitor"; }
 
   RemoveDuplicateAreasVisitor();
-  virtual ~RemoveDuplicateAreasVisitor() = default;
+  ~RemoveDuplicateAreasVisitor() = default;
 
-  virtual void visit(const std::shared_ptr<Element>& e) override;
+  void visit(const std::shared_ptr<Element>& e) override;
 
-  virtual QString getInitStatusMessage() const override { return "Removing duplicate areas..."; }
+  QString getInitStatusMessage() const override { return "Removing duplicate areas..."; }
 
-  virtual QString getCompletedStatusMessage() const override
+  QString getCompletedStatusMessage() const override
   { return "Removed " + QString::number(_numAffected) + " duplicate areas"; }
 
-  virtual QString getDescription() const override { return "Removes duplicate areas"; }
+  QString getDescription() const override { return "Removes duplicate areas"; }
 
   /**
    * @see FilteredByGeometryTypeCriteria
    */
-  virtual QStringList getCriteria() const;
+  QStringList getCriteria() const override;
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

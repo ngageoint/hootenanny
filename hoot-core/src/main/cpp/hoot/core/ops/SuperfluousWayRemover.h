@@ -56,12 +56,12 @@ public:
   static QString className() { return "hoot::SuperfluousWayRemover"; }
 
   SuperfluousWayRemover() = default;
-  virtual ~SuperfluousWayRemover() = default;
+  ~SuperfluousWayRemover() = default;
 
   /**
    * @see OsmMapOperation
    */
-  virtual void apply(std::shared_ptr<OsmMap>& map);
+  void apply(std::shared_ptr<OsmMap>& map) override;
 
   /**
    * Splits all the ways in the input map and returns the resulting map.
@@ -73,26 +73,26 @@ public:
   /**
    * @see Configurable
    */
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
-  virtual QString getInitStatusMessage() const { return "Removing superfluous ways..."; }
+  QString getInitStatusMessage() const override { return "Removing superfluous ways..."; }
 
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   { return "Removed " + QString::number(_numAffected) + " superfluous ways"; }
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Removes ways not in relations or containing zero or all identical nodes"; }
 
   /**
    * @see FilteredByGeometryTypeCriteria
    */
-  virtual QStringList getCriteria() const;
+  QStringList getCriteria() const override;
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
-  virtual void setConflateInfoCache(const std::shared_ptr<ConflateInfoCache>& cache)
+  void setConflateInfoCache(const std::shared_ptr<ConflateInfoCache>& cache) override
   { _conflateInfoCache = cache; }
 
 private:

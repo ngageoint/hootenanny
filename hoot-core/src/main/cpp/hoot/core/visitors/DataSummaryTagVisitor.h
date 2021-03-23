@@ -48,21 +48,21 @@ public:
 
   DataSummaryTagVisitor();
   DataSummaryTagVisitor(const QString& sources);
-  virtual ~DataSummaryTagVisitor() = default;
+  ~DataSummaryTagVisitor() = default;
 
   /**
    * Adds a tag with a UUID to all valid elements.
    */
-  virtual void visit(const ElementPtr& e);
+  void visit(const ElementPtr& e) override;
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Adds summary tags to conflated datasets for further analysis"; }
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 
