@@ -28,7 +28,6 @@
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/criterion/AreaCriterion.h>
-#include <hoot/core/schema/OsmSchema.h>
 
 using namespace geos::geom;
 
