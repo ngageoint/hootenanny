@@ -32,7 +32,7 @@ FILE_PATH=
 
 QUIET="--status"
 PARALLEL="no"
-PARALLEL_DEBUG="--will-cite"
+PARALLEL_DEBUG= #"--will-cite"
 AVERAGE_MERGING="no"
 # REVERSE_INPUTS=yes may be useful when using --suppress-divided-roads if the files are default ordered from oldest to newest 
 # and the newest file has the best divided roads.
@@ -264,6 +264,7 @@ HOOT_CONFLATE_OPTS+=$AOI_OPTS
 
 # Clean out previously conflated files.
 rm -f ${OUTPUT_PATH}/conflation_*
+rm -f ${OUTPUT_PATH}/results*
 
 if [ $PARALLEL == "no" ]
 then

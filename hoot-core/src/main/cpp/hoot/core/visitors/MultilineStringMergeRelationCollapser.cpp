@@ -44,6 +44,7 @@ MultilineStringMergeRelationCollapser::MultilineStringMergeRelationCollapser() :
 _numRelationMembersModified(0)
 {
   _relationMerger.setMergeTags(false);
+  // We don't want RelationMerger to auto-delete the relation we're merging in.
   _relationMerger.setDeleteRelation2(false);
 }
 
@@ -74,8 +75,8 @@ void MultilineStringMergeRelationCollapser::setTypes(const QStringList& types)
       }
     }
   }
-  LOG_VARD(_typeKvps);
-  LOG_VARD(_typeKeys);
+  LOG_VART(_typeKvps);
+  LOG_VART(_typeKeys);
 }
 
 void MultilineStringMergeRelationCollapser::setConfiguration(const Settings& conf)
@@ -99,7 +100,7 @@ void MultilineStringMergeRelationCollapser::setConfiguration(const Settings& con
       tagCrit->addKey(MetadataTags::HootMultilineString());
     }
   }
-  LOG_VARD(_criteria.size());
+  LOG_VART(_criteria.size());
 
   ConfigOptions opts(conf);
 
@@ -147,6 +148,7 @@ void MultilineStringMergeRelationCollapser::visit(const ElementPtr& e)
   if (!matchingType.isEmpty())
   {
     RelationPtr relation = _map->getRelation(e->getId());
+    LOG_VART(relation.get());
     if (relation)
     {
       LOG_VART(relation->getElementId());
@@ -161,7 +163,7 @@ void MultilineStringMergeRelationCollapser::visit(const ElementPtr& e)
       LOG_VART(relationsOwningMsRelation.size());
 
       // For all the members of our relation being collapsed,
-      bool anyMemberModified = false;
+      QSet<ElementId> parsedOwningRelationIds;
       const std::vector<RelationData::Entry>& members = relation->getMembers();
       for (std::vector<RelationData::Entry>::const_iterator membersItr = members.begin();
            membersItr != members.end(); ++membersItr)
@@ -185,38 +187,38 @@ void MultilineStringMergeRelationCollapser::visit(const ElementPtr& e)
             memberElement->setTag(Tags::kvpToKey(matchingType), Tags::kvpToVal(matchingType));
           }
 
-          // Insert the member element into any relation that the relation being collapsed was a
-          // part of at the same index.
-          for (std::vector<ConstRelationPtr>::const_iterator owningRelationsItr =
-                 relationsOwningMsRelation.begin();
-               owningRelationsItr != relationsOwningMsRelation.end(); ++owningRelationsItr)
-          {
-            RelationPtr relationOwningMsRelation =
-              std::const_pointer_cast<Relation>(*owningRelationsItr);
-            if (relationOwningMsRelation)
-            {
-              // Use relation merger here, as will make the member insert indexes be correct.
-              // Prevent the merger from deleting the merged ms relation, as we may need to merge it
-              // with multiple parent relations and will delete it outside of this loop.
-              _relationMerger.merge(
-                relationOwningMsRelation->getElementId(), relation->getElementId());
-            }
-          }
-
           _numRelationMembersModified++;
-          anyMemberModified = true;
         }
       }
-      LOG_VART(anyMemberModified);
-      if (anyMemberModified)
+
+      // Merge the relation we're removing with any relations that own it.
+      for (std::vector<ConstRelationPtr>::const_iterator owningRelationsItr =
+             relationsOwningMsRelation.begin();
+           owningRelationsItr != relationsOwningMsRelation.end(); ++owningRelationsItr)
       {
-        _numAffected++;
+        RelationPtr relationOwningMsRelation =
+          std::const_pointer_cast<Relation>(*owningRelationsItr);
+        LOG_VART(relationOwningMsRelation.get());
+        LOG_VART(parsedOwningRelationIds);
+        if (relationOwningMsRelation &&
+            !parsedOwningRelationIds.contains(relationOwningMsRelation->getElementId()))
+        {
+          LOG_VART(relationOwningMsRelation->getElementId());
+          // Use relation merger here, as will make the member insert indexes be correct.
+          // Prevent the merger from deleting the merged ms relation, as we may need to merge it
+          // with multiple parent relations and will delete it outside of this loop.
+          _relationMerger.merge(
+            relationOwningMsRelation->getElementId(), relation->getElementId());
+          parsedOwningRelationIds.insert(relationOwningMsRelation->getElementId());
+        }
       }
       LOG_VART(relation->getMemberCount());
 
-      // Remove the ms relation we collapsed.
+      // Remove the ms relation we collapsed, since we didn't have RelationMerger remove it.
       LOG_TRACE("Non-recursively removing " << relation->getElementId() << "...");
       RemoveRelationByEid::removeRelation(_map, relation->getId());
+
+      _numAffected++;
     }
   }
 }
