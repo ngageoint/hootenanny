@@ -19,6 +19,7 @@ function usage() {
   echo "  --parallel                run conflation jobs in parallel"
   echo "  --quiet                   run Hootenanny in quiet mode"
   echo "  --remove-disconnected     remove small and completely disconnected roads"
+  echo "  --remove-merge-relations  remove any multilinestring relations created as a result of merging"
   echo "  --remove-unlikely         remove features that are unlikely to be roads"
   echo "  --resolve                 resolve reviews automatically"
   echo "  --reverse-inputs          process the inputs in reverse order"
@@ -31,7 +32,7 @@ FILE_PATH=
 
 QUIET="--status"
 PARALLEL="no"
-PARALLEL_DEBUG= #"--will-cite"
+PARALLEL_DEBUG="--will-cite"
 AVERAGE_MERGING="no"
 # REVERSE_INPUTS=yes may be useful when using --suppress-divided-roads if the files are default ordered from oldest to newest 
 # and the newest file has the best divided roads.
@@ -41,6 +42,7 @@ REMOVE_DISCONNECTED=
 SNAP_UNCONNECTED=
 REMOVE_UNLIKELY=
 SUPRESS_DIVIDED_ROADS="no"
+REMOVE_MERGE_RELATIONS=
 
 ALGORITHM_CONF="UnifyingAlgorithm.conf -D match.creators=hoot::HighwayMatchCreator -D merger.creators=hoot::HighwayMergerCreator"
 
@@ -82,7 +84,7 @@ do
     echo "Configured to reverse inputs."
   elif [ $ARGUMENT == "--resolve" ]
   then
-    RESOLVE_REVIEWS=" -D resolve.review.type=resolve -D conflate.post.ops+=hoot::ResolveReviewsOp -D multilinestring.relation.collapser.types=highway"
+    RESOLVE_REVIEWS=" -D resolve.review.type=resolve -D conflate.post.ops+=hoot::ResolveReviewsOp"
     echo "Configured to automatically resolve reviews."
   elif [ $ARGUMENT == "--snap-unconnected" ]
   then
@@ -104,6 +106,10 @@ do
   then
     AVERAGE_MERGING="yes"
     echo "Configured to merge features by averaging."
+  elif [ $ARGUMENT == "--remove-merge-relations" ]
+  then
+    REMOVE_MERGE_RELATIONS=" -D multilinestring.relation.collapser.types=highway"
+    echo "Configured to remove multilinestring relations created by merging."
   elif [ $ARGUMENT == "-h" ] || [ $ARGUMENT == "--help" ]
   then
     usage
@@ -240,6 +246,7 @@ HOOT_CONFLATE_OPTS+=$RESOLVE_REVIEWS
 HOOT_CONFLATE_OPTS+=$REMOVE_DISCONNECTED
 HOOT_CONFLATE_OPTS+=$SNAP_UNCONNECTED
 HOOT_CONFLATE_OPTS+=$REMOVE_UNLIKELY
+HOOT_CONFLATE_OPTS+=$REMOVE_MERGE_RELATIONS
 if [ $SUPRESS_DIVIDED_ROADS == "yes" ]
 then
   # Use these opts to mark all div roads and roads crossing div roads in both inputs and remove them from the secondary 
