@@ -17,7 +17,7 @@ CONVERT_OPS+=" -D convert.ops+=hoot::OffsetIntersectionMergerOp"
 
 for LAYER in $LLIST; do
   echo "Converting: ${FILE_NAME} ${LAYER}"
-  LAYER_DATE=`echo $LAYER | sed --regexp-extended 's|([0-9]+)-([0-9]+)-([0-9]+)_.*|\1-\2-\3|g'`
+  LAYER_DATE=`echo $LAYER | sed --regexp-extended 's|([0-9]+)-([0-9]+)-([0-9]+)[_-].*|\1-\2-\3|g'`
   LAYER_SRC=$LAYER
 
   hoot convert --error $HOOT_OPT \
