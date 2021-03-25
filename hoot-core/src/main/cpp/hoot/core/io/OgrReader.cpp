@@ -1041,7 +1041,7 @@ Meters OgrReaderInternal::_parseCircularError(Tags& t)
 
   // Arbitrarily pick the first error tag found. If the element has both, the last one parsed will
   // be used. We're not expecting elements to have more than one CE tag.
-  const QString ceKey = t.getFirstKey(_circularErrorTagKeys);
+  const QString ceKey = t.getFirstMatchingKey(_circularErrorTagKeys);
   if (!ceKey.isEmpty())
   {
     bool ok;

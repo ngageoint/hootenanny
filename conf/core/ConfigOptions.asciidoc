@@ -929,7 +929,7 @@ completely specify a value less than one.
 === conflate.mark.merge.created.multilinestring.relations
 
 * Data Type: bool
-* Default Value: `false`
+* Default Value: `true`
 
 Marks any multilinestring relations created as a result of merging during conflation with a custom
 tag. Individual mergers must enable this option independently. This option must be enabled in order
@@ -1019,6 +1019,7 @@ See also:
 ** `hoot::RemoveDuplicateRelationMembersVisitor`
 ** `hoot::RemoveEmptyRelationsOp`
 ** `hoot::RelationCircularRefRemover`
+** `hoot::MultilineStringMergeRelationCollapser`
 ** `hoot::RoadCrossingPolyReviewMarker`
 ** `hoot::ApiTagTruncateVisitor`
 ** `hoot::AddHilbertReviewSortOrderOp`
@@ -2786,10 +2787,12 @@ collected (export).
 === multilinestring.relation.collapser.types
 
 * Data Type: list
-* Default Value: ``
+* Default Value:
+** `*`
 
 A list of type keys or key/value pairs eligible for moving from multilinestring relations to
-their relation members when using `MultilineStringMergeRelationCollapser`.
+their relation members when using `MultilineStringMergeRelationCollapser`. Use a single list with
+the item, '*', to collapse relations of any type.
 
 === name.criterion.case.sensitive
 
@@ -5327,13 +5330,6 @@ SampledAngleHistogramExtractor
 
 Automatically calculates the search radius to be used during conflation of waterways using rubber
 sheet tie point distances.
-
-=== waterway.mark.merge.created.multilinestring.relations
-
-* Data Type: bool
-* Default Value: `true`
-
-River specific setting which overrides `conflate.mark.merge.created.multilinestring.relations`.
 
 === waterway.matcher.heading.delta
 

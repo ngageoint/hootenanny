@@ -207,15 +207,6 @@ void ResolveReviewsOp::_resolveMatchReview(std::shared_ptr<Match>& match,
       {
         std::vector<std::pair<ElementId, ElementId>> replaced;
         MergerPtr merger = *it;
-        // We require that each individual merger to set the option to mark merge created relations
-        // in order to allow for subsets of mergers to mark them. So, this option needs to be set
-        // by each merger. Marking the ms relations here allows
-        // MultilineStringMergeRelationCollapser to operate correctly on the output.  See related
-        // note in AbstractConflator::_applyMergers.
-        if (!ConfigOptions().getMultilinestringRelationCollapserTypes().isEmpty())
-        {
-          conf().set(ConfigOptions::getConflateMarkMergeCreatedMultilinestringRelationsKey(), true);
-        }
         merger->apply(map, replaced);
       }
     }

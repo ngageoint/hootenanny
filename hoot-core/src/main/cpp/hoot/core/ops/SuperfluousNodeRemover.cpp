@@ -183,7 +183,7 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
     {
       LOG_TRACE(
         "Marking " << n->getElementId() << " for removal with unallowed orphan kvp: " <<
-        n->getTags().getFirstKvp(_unallowedOrphanKvps) << "...");
+        n->getTags().getFirstMatchingKvp(_unallowedOrphanKvps) << "...");
     }
     else if (!_ignoreInformationTags && n->getTags().getNonDebugCount() != 0)
     {

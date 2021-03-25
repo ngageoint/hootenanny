@@ -1802,6 +1802,7 @@
         <tag k="hoot:hash" v="sha1sum:1e632f077b7028a533a04896dd4c2a3e3b4f64d3;sha1sum:8620b7d635eeee4ec85a593498e8206c80ee1d0c"/>
         <tag k="hoot:id" v="-7"/>
         <tag k="hoot:layername" v="2020-06-20_104001005D526500"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:snapped" v="to_way_target"/>
         <tag k="hoot:status" v="1"/>
         <tag k="inferred_speed_mph" v="35"/>

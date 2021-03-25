@@ -40,6 +40,7 @@ class MultilineStringMergeRelationCollapserTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(MultilineStringMergeRelationCollapserTest);
   CPPUNIT_TEST(runBasicTest);
+  // TODO: add test for all types
   CPPUNIT_TEST_SUITE_END();
 
 public:
