@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "PertyMatchScorer.h"
 
@@ -35,7 +35,7 @@
 #include <hoot/core/io/IoUtils.h>
 #include <hoot/core/ops/BuildingOutlineUpdateOp.h>
 #include <hoot/core/ops/MapCleaner.h>
-#include <hoot/core/ops/NamedOp.h>
+#include <hoot/core/ops/OpExecutor.h>
 #include <hoot/core/algorithms/rubber-sheet/RubberSheet.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/scoring/MatchScoringMapPreparer.h>
@@ -256,17 +256,9 @@ std::shared_ptr<MatchComparator> PertyMatchScorer::_conflateAndScoreMatches(
 
   // TODO: We're not applying pre/post conflate ops here, since they tank scores. Should we be? We
   // are, however, cleaning each input map with MapCleaner beforehand.
-
-  //NamedOp preOps(ConfigOptions().getConflatePreOps());
-  //preOps.apply(conflationCopy);
-
   UnifyingConflator conflator;
-  conflator.setConfiguration(_settings);
   conflator.apply(conflationCopy);
   OsmMapWriterFactory::writeDebugMap(conflationCopy, "perty-conflated-map");
-
-  //NamedOp postOps(ConfigOptions().getConflatePostOps());
-  //postOps.apply(conflationCopy);
 
   try
   {

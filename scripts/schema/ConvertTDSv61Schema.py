@@ -21,10 +21,10 @@
  #* The following copyright notices are generated automatically. If you
  #* have a new notice to add, please use the format:
  #* " * @copyright Copyright ..."
- #* This will properly maintain the copyright information. DigitalGlobe
+ #* This will properly maintain the copyright information. Maxar
  #* copyrights will be updated automatically.
  #*
- #* @copyright Copyright (C) 2012, 2013 DigitalGlobe (http://www.digitalglobe.com/)
+ #* @copyright Copyright (C) 2012, 2013 Maxar (http://www.maxar.com/)
  #*/
 
 
@@ -1244,9 +1244,12 @@ def addImgAttrs(schema):
         #                                         'length':'256'.encode('utf8'),
         #                                         'optional':'R'
         #                                         }
-        schema[featureName]['columns']['AEI'] = {}
-        schema[featureName]['columns']['AEI'] = {'name':'AEI','desc':'Acquisition Event Identifier','type':'String',
-                                                'defValue':'No Information','length':'256','optional':'R'}
+        schema[featureName]['columns']['image_id'] = {}
+        schema[featureName]['columns']['image_id'] = {'name':'image_id','desc':'Image Id','type':'String',
+                                                'defValue':'No Information','length':'254','optional':'R'}
+        schema[featureName]['columns']['legacy_id'] = {}
+        schema[featureName]['columns']['legacy_id'] = {'name':'legacy_id','desc':'Legacy Image Id','type':'String',
+                                                'defValue':'No Information','length':'254','optional':'R'}
         schema[featureName]['columns']['earlydate'] = {}
         schema[featureName]['columns']['earlydate'] = {'name':'earlydate','desc':'Earliest image date in mosaic','type':'String',
                                                 'defValue':'No Information','length':'256','optional':'R'}

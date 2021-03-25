@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef HOOT_SERVICES_TRANSLATOR_CLIENT_H
@@ -60,8 +60,8 @@ public:
   HootServicesTranslatorClient();
   virtual ~HootServicesTranslatorClient();
 
-  virtual QStringList getSourceLanguages() const override { return _sourceLangs; }
-  virtual void setSourceLanguages(const QStringList& langCodes) override;
+  QStringList getSourceLanguages() const override { return _sourceLangs; }
+  void setSourceLanguages(const QStringList& langCodes) override;
 
   /**
    * Translates text given a source language
@@ -69,15 +69,15 @@ public:
    * @param text the text to translate
    * @return translated text or an empty string if a translation could not be made
    */
-  virtual QString translate(const QString& text) override;
+  QString translate(const QString& text) override;
 
-  virtual QString getDetectedLanguage() const override { return _detectedLang; }
+  QString getDetectedLanguage() const override { return _detectedLang; }
 
   QString getTranslatedText() const { return _translatedText; }
 
-  virtual void setConfiguration(const Settings& conf) override;
+  void setConfiguration(const Settings& conf) override;
 
-  virtual void setId(const QString& id) override { _id = id; }
+  void setId(const QString& id) override { _id = id; }
 
 protected:
 

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef HOOT_HYBRID_NODE_H
 #define HOOT_HYBRID_NODE_H
@@ -44,7 +44,7 @@ class Node
 {
 public:
 
-  virtual ~Node() {}
+  virtual ~Node() = default;
 
   virtual const Node<KeyType, DataType>* getChild(size_t i) const = 0;
 

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef INTEGERFIELDDEFINITION_H
 #define INTEGERFIELDDEFINITION_H
@@ -40,15 +40,15 @@ class IntegerFieldDefinition : public FieldDefinition
 public:
 
   IntegerFieldDefinition();
-  virtual ~IntegerFieldDefinition() = default;
+  ~IntegerFieldDefinition() = default;
 
   void addEnumeratedValue(int v) { _enumeratedValues.insert(v); }
 
-  virtual QVariant getDefaultValue() const;
+  QVariant getDefaultValue() const override;
 
-  virtual QVariant::Type getType() const { return QVariant::Int; }
+  QVariant::Type getType() const override { return QVariant::Int; }
 
-  virtual bool hasDefaultValue() const;
+  bool hasDefaultValue() const override;
 
   bool hasEnumeratedValue(int v) { return _enumeratedValues.find(v) != _enumeratedValues.end(); }
 
@@ -58,9 +58,9 @@ public:
 
   void setMinValue(double min) { _min = min; }
 
-  virtual QString toString() const;
+  QString toString() const override;
 
-  virtual void validate(const QVariant& v, StrictChecking strict) const;
+  void validate(const QVariant& v, StrictChecking strict) const override;
 
 private:
 

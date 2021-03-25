@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef ELEMENTCRITERION_H
 #define ELEMENTCRITERION_H
@@ -69,10 +69,10 @@ public:
    */
   virtual std::shared_ptr<ElementCriterion> clone() = 0;
 
-  virtual QString toString() const override { return ""; }
+  QString toString() const override { return ""; }
 };
 
-typedef std::shared_ptr<ElementCriterion> ElementCriterionPtr;
+using ElementCriterionPtr = std::shared_ptr<ElementCriterion>;
 
 }
 

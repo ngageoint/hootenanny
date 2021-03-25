@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef COMPARATORTAGDIFFERENCER_H
 #define COMPARATORTAGDIFFERENCER_H
@@ -42,9 +42,9 @@ public:
   static QString className() { return "hoot::ComparatorTagDifferencer"; }
 
   ComparatorTagDifferencer() = default;
-  virtual ~ComparatorTagDifferencer() = default;
+  ~ComparatorTagDifferencer() = default;
 
-  virtual double diff(const ConstOsmMapPtr& map, const ConstElementPtr& e1,
+  double diff(const ConstOsmMapPtr& map, const ConstElementPtr& e1,
     const ConstElementPtr& e2) const override;
 };
 

@@ -19,19 +19,19 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "PoiPolygonTypeScoreExtractor.h"
 
 // hoot
 #include <hoot/core/conflate/poi-polygon/PoiPolygonDistanceTruthRecorder.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonSchemaType.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/conflate/poi-polygon/PoiPolygonSchemaType.h>
 
 // Qt
 #include <QSet>
@@ -198,7 +198,7 @@ double PoiPolygonTypeScoreExtractor::_getTagScore(ConstElementPtr poi,
 
   LOG_VART(poiTagList);
   LOG_VART(polyTagList);
-  if (poiTagList.size() == 0 || polyTagList.size() == 0)
+  if (poiTagList.empty() || polyTagList.empty())
   {
     _noTypeFound = true;
     LOG_TRACE("No valid type found when comparing: " << poi << " to: " << poly);

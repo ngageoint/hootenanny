@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef NODE_DENSITY_TILE_BOUNDS_CALCULATOR_H
@@ -30,9 +30,9 @@
 
 
 // Hoot
-#include <hoot/core/util/OpenCv.h>
-#include <hoot/core/util/HootException.h>
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/util/HootException.h>
+#include <hoot/core/util/OpenCv.h>
 
 // Qt
 #include <QString>
@@ -109,14 +109,6 @@ public:
     int maxX;
     int maxY;
 
-    PixelBox(const PixelBox& pb)
-    {
-      minX = pb.minX;
-      maxX = pb.maxX;
-      minY = pb.minY;
-      maxY = pb.maxY;
-    }
-
     PixelBox()
     {
       minX = -1;
@@ -140,15 +132,6 @@ public:
     PixelBox getRowBox(int row) const { return PixelBox(minX, maxX, row, row); }
 
     int getWidth() const { return maxX - minX + 1; }
-
-    PixelBox& operator=(const PixelBox& pb)
-    {
-      minX = pb.minX;
-      maxX = pb.maxX;
-      minY = pb.minY;
-      maxY = pb.maxY;
-      return *this;
-    }
 
     QString toString() const
     {

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef HIGHWAYEXPERTCLASSIFIER_H
 #define HIGHWAYEXPERTCLASSIFIER_H
@@ -41,16 +41,16 @@ public:
   static QString className() { return "hoot::HighwayExpertClassifier"; }
 
   HighwayExpertClassifier() = default;
-  virtual ~HighwayExpertClassifier() = default;
+  ~HighwayExpertClassifier() = default;
 
-  virtual MatchClassification classify(const ConstOsmMapPtr& map,
-    ElementId eid1, ElementId eid2, const WaySublineMatchString& match);
+  MatchClassification classify(const ConstOsmMapPtr& map,
+    ElementId eid1, ElementId eid2, const WaySublineMatchString& match) override;
 
   MatchClassification classify(const ConstOsmMapPtr& map,
     const WaySublineMatch& match);
 
   std::map<QString, double> getFeatures(const ConstOsmMapPtr& m,
-    ElementId eid1, ElementId eid2, const WaySublineMatchString& match) const;
+    ElementId eid1, ElementId eid2, const WaySublineMatchString& match) const override;
 };
 
 }

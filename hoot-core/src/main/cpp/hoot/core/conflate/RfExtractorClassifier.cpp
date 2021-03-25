@@ -19,18 +19,18 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "RfExtractorClassifier.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/conflate/matching/MatchType.h>
 #include <hoot/core/algorithms/extractors/FeatureExtractor.h>
 #include <hoot/core/conflate/matching/MatchClassification.h>
+#include <hoot/core/conflate/matching/MatchType.h>
+#include <hoot/core/util/Factory.h>
 
 // Standard
 #include <sstream>
@@ -74,7 +74,7 @@ MatchClassification RfExtractorClassifier::classify(const ConstOsmMapPtr& map,
 const vector<std::shared_ptr<const FeatureExtractor>>& RfExtractorClassifier::_getExtractors()
   const
 {
-  if (_extractors.size() == 0)
+  if (_extractors.empty())
   {
     _createExtractors();
   }
@@ -129,7 +129,7 @@ void RfExtractorClassifier::import(QDomElement& docRoot)
     _rfFactorLabels.append(fn);
   }
 
-  if (missingExtractors.size() > 0)
+  if (!missingExtractors.empty())
   {
     if (logWarnCount < Log::getWarnMessageLimit())
     {

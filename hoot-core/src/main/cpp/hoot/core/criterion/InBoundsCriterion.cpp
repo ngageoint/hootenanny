@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "InBoundsCriterion.h"
@@ -132,7 +132,7 @@ bool InBoundsCriterion::isSatisfied(const ConstElementPtr& e) const
 bool InBoundsCriterion::_nonWayNodeInBounds(const ConstElementPtr& e) const
 {
   std::shared_ptr<geos::geom::Geometry> geom = _elementConverter->convertToGeometry(e);
-  if (!geom)
+  if (!geom || geom->isEmpty())
   {
     return false;
   }

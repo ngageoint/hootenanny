@@ -19,26 +19,25 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "IntersectionSplitter.h"
 
 // Hoot
-#include <hoot/core/util/Factory.h>
+#include <hoot/core/algorithms/linearreference/WayLocation.h>
 #include <hoot/core/algorithms/splitter/WaySplitter.h>
+#include <hoot/core/conflate/matching/NodeMatcher.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/index/OsmMapIndex.h>
-#include <hoot/core/algorithms/linearreference/WayLocation.h>
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/conflate/matching/NodeMatcher.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/conflate/matching/NodeMatcher.h>
 // Qt
 #include <QDebug>
 
@@ -109,6 +108,8 @@ void IntersectionSplitter::_mapNodesToWays()
 
 void IntersectionSplitter::_removeWayFromMap(const std::shared_ptr<Way>& way)
 {
+  LOG_TRACE("Removing " << way->getElementId() << " from map...");
+
   long wId = way->getId();
 
   const std::vector<long>& nodes = way->getNodeIds();
@@ -140,7 +141,7 @@ void IntersectionSplitter::splitIntersections()
     _todoNodes.remove(nodeId);
     numProcessed++;
 
-    if (numProcessed % (taskStatusUpdateInterval * 10) == 0 && _todoNodes.size() > 0)
+    if (numProcessed % (taskStatusUpdateInterval * 10) == 0 && !_todoNodes.empty())
     {
       PROGRESS_INFO(
         "\tCreated  " <<  StringUtils::formatLargeNumber(numProcessed) <<
@@ -164,7 +165,7 @@ void IntersectionSplitter::splitIntersections()
 void IntersectionSplitter::_splitWay(long wayId, long nodeId)
 {
   std::shared_ptr<Way> way = _map->getWay(wayId);
-  if (way == 0)
+  if (way == nullptr)
   {
     LOG_TRACE("way at " << wayId << " does not exist.");
     return;
@@ -185,8 +186,9 @@ void IntersectionSplitter::_splitWay(long wayId, long nodeId)
       break;
     }
   }
+  LOG_VART(firstIndex);
 
-  // if the first index wasn't an endpoint.
+  // if the first index wasn't an endpoint
   if (firstIndex != -1)
   {
     QList<long> ways = _nodeToWays.values(nodeId);
@@ -197,14 +199,19 @@ void IntersectionSplitter::_splitWay(long wayId, long nodeId)
     {
       long compWayId = *it;
       LOG_VART(compWayId);
-      //  Don't compare it against itself
+      //  Don't compare it against itself.
       if (wayId == compWayId)
         continue;
 
       std::shared_ptr<Way> comp = _map->getWay(compWayId);
       LOG_VART(comp.get());
+      if (!comp)
+      {
+        continue;
+      }
       const std::vector<long>& compIds = comp->getNodeIds();
       long idx = comp->getNodeIndex(nodeId);
+      LOG_VART(idx);
 
       //  Endpoints of the other way should be split
       if (idx < 1 || idx > (long)compIds.size() - 1)
@@ -216,11 +223,13 @@ void IntersectionSplitter::_splitWay(long wayId, long nodeId)
         concurrent_count++;
     }
 
+    LOG_VART(concurrent_count);
     //  A split point is found when there is at least one non-concurrent way at this node
     if (concurrent_count < otherWays_count)
     {
       // split the way and remove it from the map
       WayLocation wl(_map, way, firstIndex, 0.0);
+      LOG_VART(wl.isValid());
       vector<std::shared_ptr<Way>> splits = WaySplitter::split(_map, way, wl);
 
       // if a split occurred.
@@ -230,6 +239,7 @@ void IntersectionSplitter::_splitWay(long wayId, long nodeId)
 
         LOG_VART(way->getElementId());
         LOG_VART(way->getStatus());
+        LOG_VART(splits[0].get());
         LOG_VART(splits[0]->getElementId());
 
         const ElementId splitWayId = way->getElementId();
@@ -237,11 +247,12 @@ void IntersectionSplitter::_splitWay(long wayId, long nodeId)
         QList<ElementPtr> newWays;
         foreach (const std::shared_ptr<Way>& w, splits)
         {
+          LOG_VART(w.get());
           newWays.append(w);
         }
 
-        // make sure any ways that are part of relations continue to be part of those relations after
-        // they're split.
+        // Make sure any ways that are part of relations continue to be part of those relations
+        // after they're split.
         _map->replace(way, newWays);
 
         _removeWayFromMap(way);

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef WEIGHTEDMETRICDISTANCEEXTRACTOR_H
 #define WEIGHTEDMETRICDISTANCEEXTRACTOR_H
@@ -49,24 +49,24 @@ public:
   // Get point aggregator from ConfigOptions()
   WeightedMetricDistanceExtractor(Meters searchRadius = -1);
 
-  virtual ~WeightedMetricDistanceExtractor() = default;
+  ~WeightedMetricDistanceExtractor() = default;
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
-  virtual QString getName() const override;
+  QString getName() const override;
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
   void setPointAggregator(const QString& aggregator);
 
   void setSearchRadius(const double radius);
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Calculates weighted metric distance between features"; }
 
 protected:
 
-  double _extract(const OsmMap& /*map*/, const ConstWayPtr& w1, const ConstWayPtr& w2) const override;
+  double _extract(const OsmMap& map, const ConstWayPtr& w1, const ConstWayPtr& w2) const override;
 
   std::shared_ptr<ValueAggregator> _pointAgg;
   Meters _searchRadius;

@@ -497,6 +497,10 @@
         <tag k="hoot:id" v="-374041"/>
         <tag k="hoot:status" v="2"/>
     </node>
+    <node visible="true" id="-374040" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7442090000000068" lon="-17.5284814551058545">
+        <tag k="hoot:id" v="-374040"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
     <node visible="true" id="-374039" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7442089999999997" lon="-17.5286624394957968">
         <tag k="hoot:id" v="-374039"/>
         <tag k="hoot:status" v="2"/>
@@ -511,6 +515,10 @@
     </node>
     <node visible="true" id="-374036" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7442089999999943" lon="-17.5277384336363617">
         <tag k="hoot:id" v="-374036"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-374035" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7442766469122386" lon="-17.5272229999999993">
+        <tag k="hoot:id" v="-374035"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-374034" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7455526449239827" lon="-17.5272229999999993">
@@ -706,7 +714,7 @@
         <nd ref="-374084"/>
         <nd ref="-374046"/>
         <nd ref="-374047"/>
-        <tag k="alt_name" v="Ambassade des États Unis d'Amérique;Embassy of the United States of America"/>
+        <tag k="alt_name" v="US Embassy"/>
         <tag k="amenity" v="embassy"/>
         <tag k="barrier" v="fence"/>
         <tag k="country" v="US"/>
@@ -715,7 +723,7 @@
         <tag k="hoot:id" v="-374021"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="11"/>
-        <tag k="name" v="US Embassy"/>
+        <tag k="name" v="Ambassade des États Unis d'Amérique"/>
         <tag k="name:en" v="Embassy of the United States of America"/>
         <tag k="source:datetime" v="2017-08-17T11:14:27Z"/>
         <tag k="target" v="SN"/>
@@ -768,7 +776,7 @@
     <way visible="true" id="-374017" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-374076"/>
         <nd ref="-374075"/>
-        <nd ref="-374041"/>
+        <nd ref="-374040"/>
         <nd ref="-374039"/>
         <nd ref="-374076"/>
         <tag k="error:circular" v="15"/>
@@ -792,7 +800,7 @@
         <nd ref="-374036"/>
         <nd ref="-374072"/>
         <nd ref="-374071"/>
-        <nd ref="-374047"/>
+        <nd ref="-374035"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-374015"/>
         <tag k="hoot:status" v="2"/>

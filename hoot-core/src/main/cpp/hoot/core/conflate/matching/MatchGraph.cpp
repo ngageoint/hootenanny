@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "MatchGraph.h"
 
@@ -45,11 +45,11 @@
 #endif
 
 // hoot
+#include <hoot/core/conflate/matching/Match.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/merging/MergerFactory.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/conflate/matching/Match.h>
 
 // Qt
 #include <QHash>
@@ -67,15 +67,15 @@ class MatchEdge
 {
 public:
 
-  typedef enum
+  enum MatchType
   {
     AssociatedWith,
     MatchWith,
     InvalidMatch
-  } MatchType;
+  };
 
-  MatchEdge() : match(0), type(InvalidMatch) {}
-  MatchEdge(ConstMatchPtr m, MatchType t) : match(m), type(t) {}
+  MatchEdge() : match(nullptr), type(InvalidMatch) { }
+  MatchEdge(ConstMatchPtr m, MatchType t) : match(m), type(t) { }
 
   ConstMatchPtr match;
   MatchType type;
@@ -85,13 +85,13 @@ class MatchVertex
 {
 public:
 
-  MatchVertex() {}
-  MatchVertex(ElementId e) : eid(e) {}
+  MatchVertex() = default;
+  MatchVertex(ElementId e) : eid(e) { }
 
   ElementId eid;
 };
 
-typedef boost::adjacency_list<
+using MatchBoostGraph = boost::adjacency_list<
   // Use listS for storing VertexList -- faster, but not as space efficient (no biggie)
   boost::listS,
   // use vecS for storing OutEdgeList -- faster for traversal, but slower to build (no biggie)
@@ -99,17 +99,16 @@ typedef boost::adjacency_list<
   // Our graph is undirected
   boost::undirectedS,
   MatchVertex,
-  MatchEdge
-> MatchBoostGraph;
+  MatchEdge>;
 
-typedef boost::graph_traits<MatchBoostGraph>::vertex_descriptor MatchVertexId;
-typedef boost::graph_traits<MatchBoostGraph>::edge_descriptor MatchEdgeId;
+using MatchVertexId = boost::graph_traits<MatchBoostGraph>::vertex_descriptor;
+using MatchEdgeId = boost::graph_traits<MatchBoostGraph>::edge_descriptor;
 
 class MatchGraphInternal
 {
 public:
 
-  MatchGraphInternal(const vector<ConstMatchPtr>& matches) : _matches(matches) {}
+  MatchGraphInternal(const vector<ConstMatchPtr>& matches) : _matches(matches) { }
 
   /**
    * Only return true for edges that are matches and meet the specified threshold.
@@ -119,12 +118,12 @@ public:
   public:
 
     MatchThresholdFilter() :
-      _graph(0),
-      _threshold(-1) {}
+      _graph(nullptr),
+      _threshold(-1) { }
 
     MatchThresholdFilter(MatchBoostGraph& graph, double threshold) :
       _graph(&graph),
-      _threshold(threshold) {}
+      _threshold(threshold) { }
 
     bool operator()(const MatchEdgeId& edgeId) const
     {
@@ -177,7 +176,7 @@ public:
       // if this is a match that requires review.
       else if (type == MatchType::Review)
       {
-        result.push_back(MatchSet());
+        result.emplace_back();
         MatchSet& matches = result.back();
         matches.insert(m);
       }
@@ -191,7 +190,7 @@ public:
     for (DisjointSetMap<ElementId>::AllGroups::const_iterator it = ag.begin(); it != ag.end(); ++it)
     {
       const vector<ElementId>& v = it->second;
-      result.push_back(MatchSet());
+      result.emplace_back();
       MatchSet& matches = result.back();
 
       for (size_t i = 0; i < v.size(); i++)
@@ -201,12 +200,12 @@ public:
       }
 
       // while this is O(n^2) matches should generally be pretty small.
-      for (MatchSet::const_iterator it = matches.begin(); it != matches.end(); ++it)
+      for (MatchSet::const_iterator m1_it = matches.begin(); m1_it != matches.end(); ++m1_it)
       {
-        ConstMatchPtr m1 = *it;
-        for (MatchSet::const_iterator jt = matches.begin(); jt != matches.end(); ++jt)
+        ConstMatchPtr m1 = *m1_it;
+        for (MatchSet::const_iterator m2_it = matches.begin(); m2_it != matches.end(); ++m2_it)
         {
-          ConstMatchPtr m2 = *jt;
+          ConstMatchPtr m2 = *m2_it;
           if (m1 != m2)
           {
             if (checkForConflicts &&

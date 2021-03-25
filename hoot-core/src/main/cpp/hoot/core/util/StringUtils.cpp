@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "StringUtils.h"
@@ -41,12 +41,12 @@ QString StringUtils::millisecondsToDhms(const qint64 durationInMilliseconds)
 {
   QString res;
   int duration = (int)(durationInMilliseconds / 1000);
-  const int seconds = (int)(duration % 60);
+  const int seconds = duration % 60;
   duration /= 60;
-  const int minutes = (int)(duration % 60);
+  const int minutes = duration % 60;
   duration /= 60;
-  const int hours = (int)(duration % 24);
-  const int days = (int)(duration / 24);
+  const int hours = duration % 24;
+  const int days = duration / 24;
   if ((hours == 0) && (days == 0))
   {
     return res.sprintf("%02d:%02d", minutes, seconds);
@@ -183,7 +183,7 @@ QSet<QString> StringUtils::getDuplicates(const QStringList& input)
 bool StringUtils::containsSubstring(const QStringList& input, const QString& substring,
                                     Qt::CaseSensitivity caseSensitivity)
 {
-  return input.filter(substring, caseSensitivity).size() > 0;
+  return !input.filter(substring, caseSensitivity).empty();
 }
 
 bool StringUtils::containsSubstrings(const QStringList& input, const QStringList& substrings,
@@ -191,7 +191,7 @@ bool StringUtils::containsSubstrings(const QStringList& input, const QStringList
 {
   for (int i = 0; i < substrings.size(); i++)
   {
-    if (input.filter(substrings.at(i), caseSensitivity).size() > 0)
+    if (!input.filter(substrings.at(i), caseSensitivity).empty())
     {
       return true;
     }
@@ -329,7 +329,7 @@ void StringUtils::splitAndRemoveAtIndex(QString& input, const QRegExp& splitExp,
 QString StringUtils::_splitAndRemoveAtIndex(QStringList& input, const int index,
                                             const QString& separator)
 {
-  if (input.size() > 0 && index < input.size())
+  if (!input.empty() && index < input.size())
   {
     input.removeAt(index);
   }
@@ -346,6 +346,14 @@ QString StringUtils::splitAndGetAtIndex(
     return tokens.at(index);
   }
   return "";
+}
+
+void StringUtils::reverse(QStringList& strList)
+{
+  // sure there's a better qt way to do this...
+  std::list<QString> strStdList = strList.toStdList();
+  std::reverse(strStdList.begin(), strStdList.end());
+  strList = QStringList::fromStdList(strStdList);
 }
 
 }

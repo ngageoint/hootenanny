@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef SERVICES_JOB_STATUS_H
 #define SERVICES_JOB_STATUS_H
@@ -38,16 +38,16 @@ class ServicesJobStatus
 public:
 
   // matches the same enum in hoot-services JobStatus.java
-  typedef enum TypeEnum
+  enum TypeEnum
   {
     Running = 0,
     Complete,
     Failed,
     Cancelled,
     Unknown
-  } TypeEnum;
+  };
 
-  typedef int Type;
+  using Type = int;
 
   ServicesJobStatus() { _type = Unknown; }
   ServicesJobStatus(Type type) { _type = type; }

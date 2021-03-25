@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef WAYBUFFERCRITERION_H
@@ -48,7 +48,7 @@ public:
   static QString className() { return "hoot::WayBufferCriterion"; }
 
   WayBufferCriterion() = default;
-  virtual ~WayBufferCriterion() = default;
+  ~WayBufferCriterion() = default;
 
   /**
    * Buffer is the buffer in meters to put around the way. The circular
@@ -72,16 +72,16 @@ public:
                      Meters circularError,
                      double matchPercent);
 
-  virtual bool isSatisfied(const ConstElementPtr& e) const;
+  bool isSatisfied(const ConstElementPtr& e) const override;
 
-  virtual ElementCriterionPtr clone()
+  ElementCriterionPtr clone() override
   { return ElementCriterionPtr(new WayBufferCriterion(_map, _baseLs, _buffer, 0, _matchPercent)); }
 
-  virtual QString getDescription() const { return "Allows for operations on ways with buffers"; }
+  QString getDescription() const override { return "Allows for operations on ways with buffers"; }
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

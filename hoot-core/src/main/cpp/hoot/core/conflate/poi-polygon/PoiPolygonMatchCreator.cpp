@@ -19,24 +19,24 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "PoiPolygonMatchCreator.h"
 
 // hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonMatch.h>
-#include <hoot/core/visitors/poi-polygon/PoiPolygonMatchVisitor.h>
+#include <hoot/core/criterion/poi-polygon/PoiPolygonPoiCriterion.h>
+#include <hoot/core/criterion/poi-polygon/PoiPolygonPolyCriterion.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/criterion/PoiCriterion.h>
-#include <hoot/core/criterion/BuildingCriterion.h>
+#include <hoot/core/visitors/poi-polygon/PoiPolygonMatchVisitor.h>
 
 // Std
 #include <float.h>
@@ -539,15 +539,14 @@ int PoiPolygonMatchCreator::_retainClosestDistanceMatchesOnlyByType(
 std::vector<CreatorDescription> PoiPolygonMatchCreator::getAllCreators() const
 {
   std::vector<CreatorDescription> result;
-  result.push_back(
-    CreatorDescription(
-      className(),
-      "Generates matchers that match POIs to polygons",
-      //this match creator has two conflatable types, so arbitrarily just picking one of them as
-      //the base feature type; stats class will handle the logic to deal with both poi and polygon
-      //input types
-      CreatorDescription::Polygon,
-      false));
+  result.emplace_back(
+    className(),
+    "Generates matchers that match POIs to polygons",
+    //this match creator has two conflatable types, so arbitrarily just picking one of them as
+    //the base feature type; stats class will handle the logic to deal with both poi and polygon
+    //input types
+    CreatorDescription::Polygon,
+    false);
   return result;
 }
 
@@ -578,8 +577,8 @@ std::shared_ptr<PoiPolygonRfClassifier> PoiPolygonMatchCreator::_getRf()
 QStringList PoiPolygonMatchCreator::getCriteria() const
 {
   QStringList criteria;
-  criteria.append(PoiCriterion::className());
-  criteria.append(BuildingCriterion::className());
+  criteria.append(PoiPolygonPoiCriterion::className());
+  criteria.append(PoiPolygonPolyCriterion::className());
   return criteria;
 }
 

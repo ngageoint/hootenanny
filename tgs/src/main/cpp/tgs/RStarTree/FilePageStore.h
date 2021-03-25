@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
 
@@ -47,19 +47,19 @@ class TGS_EXPORT FilePageStore : public PageStore
 public:
   FilePageStore(int pageSize, const char * fileName, bool readOnly = false);
 
-  virtual ~FilePageStore();
+  ~FilePageStore();
 
-  virtual std::shared_ptr<Page> createPage();
+  std::shared_ptr<Page> createPage() override;
 
-  virtual void flush();
+  void flush() override;
 
-  virtual std::shared_ptr<Page> getPage(int id);
+  std::shared_ptr<Page> getPage(int id) override;
 
-  virtual int getPageCount() const;
+  int getPageCount() const override;
 
-  virtual int getPageSize() const;
+  int getPageSize() const override;
 
-  virtual void save();
+  void save() override;
 
 private:
 
@@ -69,12 +69,12 @@ private:
 
   int _pageSize;
 
-  typedef HashMap<int, std::weak_ptr<Page>> PageMap;
+  using PageMap = HashMap<int, std::weak_ptr<Page>>;
   PageMap _pagesMap;
   bool _readOnly;
   int _pageCount;
 
-  virtual void _savePage(int, char *);
+  void _savePage(int, char *) override;
   std::string _getError(const std::string& error);
 
   bool _bDestructing;

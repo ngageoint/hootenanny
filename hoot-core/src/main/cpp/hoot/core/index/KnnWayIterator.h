@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef KNNWAYITERATOR_H
@@ -50,21 +50,21 @@ public:
 
   KnnWayIterator(const OsmMap& map, ConstWayPtr way, const Tgs::RStarTree* tree,
                  const std::vector<long>& treeIdToWid, bool addError = false);
-  virtual ~KnnWayIterator() = default;
+  ~KnnWayIterator() = default;
 
   long getWayId() const { return _treeIdToWid[getId()]; }
 
   ConstWayPtr getWay() const { return _map.getWay(getWayId()); }
 
-  virtual bool hasNext();
+  bool hasNext() override;
 
   int getDistanceCount() { return _distanceCount; }
 
 protected:
 
-  virtual double _calculateDistance(const Tgs::BoxInternalData& box, int id) const;
+  double _calculateDistance(const Tgs::BoxInternalData& box, int id) const override;
 
-  virtual double _calculateDistance(const Tgs::BoxInternalData& box) const;
+  double _calculateDistance(const Tgs::BoxInternalData& box) const override;
 
 private:
 

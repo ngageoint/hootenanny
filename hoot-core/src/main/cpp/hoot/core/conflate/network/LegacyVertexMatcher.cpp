@@ -19,18 +19,18 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #include "LegacyVertexMatcher.h"
 
 // hoot
-#include <hoot/core/conflate/matching/NodeMatcher.h>
 #include <hoot/core/algorithms/extractors/EuclideanDistanceExtractor.h>
-#include <hoot/core/util/Log.h>
+#include <hoot/core/conflate/matching/NodeMatcher.h>
 #include <hoot/core/conflate/network/SearchRadiusProvider.h>
+#include <hoot/core/util/Log.h>
 
 // tgs
 #include <tgs/RStarTree/IntersectionIterator.h>
@@ -93,7 +93,7 @@ void LegacyVertexMatcher::_balanceVertexScores()
   }
 }
 
-IntersectionIterator LegacyVertexMatcher::_createIterator(Envelope env)
+IntersectionIterator LegacyVertexMatcher::_createIterator(const Envelope& env)
 {
   vector<double> min(2), max(2);
   min[0] = env.getMinX();

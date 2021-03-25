@@ -19,18 +19,18 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "KskipBigramDistance.h"
 //  Hoot
-#include <hoot/core/util/Log.h>
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/algorithms/string/StringTokenizer.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/HootException.h>
+#include <hoot/core/util/Log.h>
 
 //  Qt
 #include <QMap>
@@ -98,9 +98,9 @@ double KskipBigramDistance::score(const QString& s1, const QString& s2) const
   QSet<QString> grams1 = getBigrams(s1);
   QSet<QString> grams2 = getBigrams(s2);
   //  Validate bi-gram set size
-  if (grams1.count() == 0 && grams2.count() == 0)
+  if (grams1.empty() && grams2.empty())
     return 1.0;
-  else if (grams1.count() == 0 || grams2.count() == 0)
+  else if (grams1.empty() || grams2.empty())
     return 0.0;
   /**  To calculate the score use the following
    *   intersection of sets 1 and 2

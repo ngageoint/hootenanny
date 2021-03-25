@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -32,6 +32,8 @@
 #include <hoot/core/io/ChangesetStatsFormat.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/util/ConfigUtils.h>
+#include <hoot/core/algorithms/changeset/ChangesetReplacement.h>
+#include <hoot/core/geometry/GeometryUtils.h>
 
 // Qt
 #include <QFileInfo>
@@ -51,56 +53,55 @@ public:
 
   ChangesetDeriveCmd() = default;
 
-  virtual QString getName() const override { return "changeset-derive"; }
+  QString getName() const override { return "changeset-derive"; }
 
-  virtual QString getDescription() const override
-  { return "Creates an OSM changeset representing the difference between two maps"; }
+  QString getDescription() const override
+  { return "Creates a changeset representing the difference between two maps"; }
 
-  virtual int runSimple(QStringList& args) override
+  int runSimple(QStringList& args) override
   {
-    QElapsedTimer timer;
-    timer.start();
+    _timer.start();
+
+    LOG_VARD(args);
 
     BoundedCommand::runSimple(args);
 
+    // process optional params
+
+    bool isReplacement = false;
+    if (args.contains("--replacement"))
+    {
+      isReplacement = true;
+      args.removeAll("--replacement");
+    }
+    LOG_VARD(isReplacement);
+
+    bool enableWaySnapping = false;
+    if (args.contains("--enable-way-snapping"))
+    {
+      enableWaySnapping = true;
+      args.removeAll("--enable-way-snapping");
+    }
+    LOG_VARD(enableWaySnapping);
+
+    if (!isReplacement && enableWaySnapping)
+    {
+      throw IllegalArgumentException(
+        "The --enable-way-snapping option is only valid when the --replacement option is specified.");
+    }
+
     bool printStats = false;
     QString outputStatsFile;
-    if (args.contains("--stats"))
-    {
-      printStats = true;
-      const int statsIndex = args.indexOf("--stats");
-      LOG_VARD(statsIndex);
-      // See similar note in ConflateCmd's parsing of --changeset-stats.
-      if (statsIndex != -1 && statsIndex != (args.size() - 1) &&
-          !args[statsIndex + 1].startsWith("--"))
-      {
-        outputStatsFile = args[statsIndex + 1];
-        LOG_VARD(outputStatsFile);
-        QFileInfo statsInfo(outputStatsFile);
-        LOG_VARD(statsInfo.completeSuffix());
-        if (!ChangesetStatsFormat::isValidFileOutputFormat(statsInfo.completeSuffix()))
-        {
-          outputStatsFile = "";
-        }
-        else
-        {
-          args.removeAll(outputStatsFile);
-        }
-      }
-      args.removeAll("--stats");
-    }
-    LOG_VARD(printStats);
-    LOG_VARD(outputStatsFile);
+    _processStatsParams(args, printStats, outputStatsFile);
 
-    if (args.size() < 3 || args.size() > 4)
-    {
-      std::cout << getHelp() << std::endl << std::endl;
-      throw HootException(QString("%1 takes three or four parameters.").arg(getName()));
-    }
+    LOG_VARD(args);
 
-    const QString input1 = args[0];
-    const QString input2 = args[1];
-    const QString output = args[2];
+    // process required params
+
+    const QString input1 = args[0].trimmed();
+    const QString input2 = args[1].trimmed();
+    const QString output = args[2].trimmed();
+
     QString osmApiDbUrl;
     if (output.endsWith(".osc.sql"))
     {
@@ -119,6 +120,60 @@ public:
         QString("%1 with output: " + output + " takes three parameters.").arg(getName()));
     }
 
+    if (!isReplacement)
+    {
+      _deriveStandardChangeset(input1, input2, output, printStats, outputStatsFile, osmApiDbUrl);
+    }
+    else
+    {
+      _deriveReplacementChangeset(
+        input1, input2, output, printStats, outputStatsFile, osmApiDbUrl, enableWaySnapping);
+    }
+
+    return 0;
+  }
+
+private:
+
+  QElapsedTimer _timer;
+
+  void _processStatsParams(QStringList& args, bool& printStats, QString& outputStatsFile)
+  {
+    if (args.contains("--stats"))
+    {
+      printStats = true;
+      const int statsIndex = args.indexOf("--stats");
+      // See similar note in ConflateCmd's parsing of --changeset-stats.
+      if (statsIndex != -1 && statsIndex != (args.size() - 1) &&
+          !args[statsIndex + 1].startsWith("--"))
+      {
+        outputStatsFile = args[statsIndex + 1];
+        QFileInfo statsInfo(outputStatsFile);
+        if (!ChangesetStatsFormat::isValidFileOutputFormat(statsInfo.completeSuffix()))
+        {
+          outputStatsFile = "";
+        }
+        else
+        {
+          args.removeAll(outputStatsFile);
+        }
+      }
+      args.removeAll("--stats");
+    }
+    LOG_VARD(printStats);
+    LOG_VARD(outputStatsFile);
+  }
+
+  void _deriveStandardChangeset(
+    const QString& input1, const QString& input2, const QString& output, const bool printStats,
+    const QString& outputStatsFile, const QString& osmApiDbUrl)
+  {
+    const int maxFilePrintLength = ConfigOptions().getProgressVarPrintLengthMax();
+    LOG_STATUS(
+      "Generating standard changeset for inputs: ..." << input1.right(maxFilePrintLength) <<
+      " and ..." << input2.right(maxFilePrintLength) << " and output: ..." <<
+      output.right(maxFilePrintLength));
+
     // Note that we may need to eventually further restrict this to only data with relation having
     // oob members due to full hydration (would then need to move this code to inside
     // ChangesetCreator).
@@ -127,19 +182,55 @@ public:
       _updateConfigOptionsForBounds();
     }
 
+    // printStats = true with an empty file means stdout only
     ChangesetCreator(printStats, outputStatsFile, osmApiDbUrl).create(output, input1, input2);
 
     LOG_STATUS(
-      "Changeset generated in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
-
-    return 0;
+      "Changeset generated in " << StringUtils::millisecondsToDhms(_timer.elapsed()) << " total.");
   }
 
-private:
+  void _deriveReplacementChangeset(
+    const QString& input1, const QString& input2, const QString& output, const bool printStats,
+    const QString& outputStatsFile, const QString& osmApiDbUrl, const bool enableWaySnapping)
+  {
+    const bool isCutOnly = input2.isEmpty();
+    QString implementation = ConfigOptions().getChangesetReplacementImplementation();
+    if (isCutOnly)
+    {
+      implementation = ConfigOptions().getChangesetReplacementCutOnlyImplementation();
+    }
+    LOG_VARD(implementation);
+    std::shared_ptr<ChangesetReplacement> changesetCreator(
+      Factory::getInstance().constructObject<ChangesetReplacement>(implementation));
+    changesetCreator->setFullReplacement(true);
+    ChangesetReplacement::BoundsInterpretation boundInterpretation =
+      ChangesetReplacement::BoundsInterpretation::Lenient;
+    if (isCutOnly)
+    {
+      boundInterpretation = ChangesetReplacement::BoundsInterpretation::Strict;
+    }
+    LOG_VARD(boundInterpretation);
+    changesetCreator->setBoundsInterpretation(boundInterpretation);
+    changesetCreator->setEnableWaySnapping(enableWaySnapping);
+    // printStats = true with an empty file means stdout only
+    changesetCreator->setChangesetOptions(printStats, outputStatsFile, osmApiDbUrl);
+
+    std::shared_ptr<geos::geom::Polygon> bounds;
+    if (ConfigUtils::boundsOptionEnabled())
+    {
+      bounds = std::dynamic_pointer_cast<geos::geom::Polygon>(ConfigUtils::getBounds());
+    }
+    else
+    {
+      bounds = GeometryUtils::polygonFromString("-180,-90,180,90");
+    }
+
+    changesetCreator->create(input1, input2, bounds, output);
+  }
 
   void _updateConfigOptionsForBounds()
   {
-    // If we're working with a bounds, we need to ensure that reference features outside of the
+    // If we're working within a bounds, we need to ensure that reference features outside of the
     // bounds don't get deleted.
     conf().set(ConfigOptions::getChangesetAllowDeletingReferenceFeaturesKey(), false);
   }

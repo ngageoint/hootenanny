@@ -19,16 +19,16 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "WayMatchStringMerger.h"
 
 // hoot
-#include <hoot/core/algorithms/splitter/WaySplitter.h>
 #include <hoot/core/algorithms/linearreference/WayString.h>
+#include <hoot/core/algorithms/splitter/WaySplitter.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/util/Log.h>
 
@@ -83,7 +83,7 @@ WaySublineMatchStringPtr WayMatchStringMerger::createMatchString() const
     ws1.ensureForwards();
     ws2.ensureForwards();
 
-    matches.push_back(WaySublineMatch(ws1, ws2, reversed));
+    matches.emplace_back(ws1, ws2, reversed);
   }
 
   LOG_VAR(matches);
@@ -92,8 +92,9 @@ WaySublineMatchStringPtr WayMatchStringMerger::createMatchString() const
   return result;
 }
 
-void WayMatchStringMerger::_createWayMappings(WayLocation splitStart, WayLocation splitEnd,
-  WaySubline subline2)
+void WayMatchStringMerger::_createWayMappings(const WayLocation& splitStart,
+                                              const WayLocation& splitEnd,
+                                              const WaySubline& subline2)
 {
   LOG_TRACE("Creating way mappings...");
 
@@ -165,7 +166,7 @@ WayLocation WayMatchStringMerger::_findNodeLocation2(WayStringPtr ws, ElementId 
   assert(nodeId.getType() == ElementType::Node);
 
   // if we haven't created the index, create it.
-  if (_nodeToWayLocation2.size() == 0)
+  if (_nodeToWayLocation2.empty())
   {
     // go through the way string and look at each subline.
     for (int i = 0; i < ws->getSize(); ++i)
@@ -286,7 +287,7 @@ void WayMatchStringMerger::mergeTags()
   }
 }
 
-void WayMatchStringMerger::_moveNode(ElementId scrapNodeId, WayLocation wl1)
+void WayMatchStringMerger::_moveNode(ElementId scrapNodeId, const WayLocation& wl1)
 {
   LOG_TRACE("Moving node...");
 
@@ -327,7 +328,7 @@ void WayMatchStringMerger::_moveNode(ElementId scrapNodeId, WayLocation wl1)
 
     n1->setTags(t);
 
-    _replaced.push_back(pair<ElementId, ElementId>(scrapNodeId, n1->getElementId()));
+    _replaced.emplace_back(scrapNodeId, n1->getElementId());
   }
   else
   {
@@ -395,8 +396,7 @@ void WayMatchStringMerger::replaceScraps()
 
     for (int i = 0; i < it.value().size(); ++i)
     {
-      _replaced.push_back(
-        pair<ElementId, ElementId>(it.key()->getElementId(), it.value()[i]->getElementId()));
+      _replaced.emplace_back(it.key()->getElementId(), it.value()[i]->getElementId());
     }
   }
 }

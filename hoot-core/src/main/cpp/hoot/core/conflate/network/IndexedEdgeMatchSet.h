@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef __INDEXED_EDGE_MATCH_SET_H__
 #define __INDEXED_EDGE_MATCH_SET_H__
@@ -44,10 +44,10 @@ public:
 
   static QString className() { return "hoot::IndexedEdgeMatchSet"; }
 
-  typedef QHash<ConstEdgeMatchPtr, double> MatchHash;
+  using MatchHash = QHash<ConstEdgeMatchPtr, double>;
 
   IndexedEdgeMatchSet() = default;
-  virtual ~IndexedEdgeMatchSet()  = default;
+  ~IndexedEdgeMatchSet()  = default;
 
   /**
    * The edge match should not be modified after it has been added to the index.
@@ -63,7 +63,7 @@ public:
   /**
    * Returns true if the specified element (or the reversed equivalent) is contained in this set.
    */
-  virtual bool contains(const ConstEdgeMatchPtr &em) const;
+  bool contains(const ConstEdgeMatchPtr &em) const override;
 
   const MatchHash& getAllMatches() const { return _matches; }
   MatchHash& getAllMatches() { return _matches; }
@@ -127,14 +127,14 @@ public:
 
   void setScore(ConstEdgeMatchPtr em, double score) { _matches[em] = score; }
 
-  virtual QString toString() const override;
+  QString toString() const override;
 
 private:
 
   static int logWarnCount;
 
-  typedef QHash<ConstNetworkEdgePtr, QSet<ConstEdgeMatchPtr>> EdgeToMatchMap;
-  typedef QHash<ConstNetworkVertexPtr, QSet<ConstEdgeMatchPtr>> VertexToMatchMap;
+  using EdgeToMatchMap = QHash<ConstNetworkEdgePtr, QSet<ConstEdgeMatchPtr>>;
+  using VertexToMatchMap = QHash<ConstNetworkVertexPtr, QSet<ConstEdgeMatchPtr>>;
 
   EdgeToMatchMap _edgeToMatch;
   /**
@@ -149,8 +149,8 @@ private:
   void _removeVertexToMatchMapping(ConstEdgeStringPtr str, const ConstEdgeMatchPtr& em);
 };
 
-typedef std::shared_ptr<IndexedEdgeMatchSet> IndexedEdgeMatchSetPtr;
-typedef std::shared_ptr<const IndexedEdgeMatchSet> ConstIndexedEdgeMatchSetPtr;
+using IndexedEdgeMatchSetPtr = std::shared_ptr<IndexedEdgeMatchSet>;
+using ConstIndexedEdgeMatchSetPtr = std::shared_ptr<const IndexedEdgeMatchSet>;
 
 // not implemented
 bool operator<(ConstIndexedEdgeMatchSetPtr, ConstIndexedEdgeMatchSetPtr);

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "OsmApiWriterTestServer.h"
@@ -35,7 +35,7 @@
 namespace hoot
 {
 
-bool CapabilitiesTestServer::respond(HttpConnection::HttpConnectionPtr &connection)
+bool CapabilitiesTestServer::respond(HttpConnectionPtr &connection)
 {
   //  Read the HTTP request
   parse_request(connection);
@@ -51,7 +51,7 @@ bool CapabilitiesTestServer::respond(HttpConnection::HttpConnectionPtr &connecti
   return false;
 }
 
-bool PermissionsTestServer::respond(HttpConnection::HttpConnectionPtr &connection)
+bool PermissionsTestServer::respond(HttpConnectionPtr &connection)
 {
   //  Read the HTTP request
   parse_request(connection);
@@ -67,7 +67,7 @@ bool PermissionsTestServer::respond(HttpConnection::HttpConnectionPtr &connectio
   return false;
 }
 
-bool RetryConflictsTestServer::respond(HttpConnection::HttpConnectionPtr& connection)
+bool RetryConflictsTestServer::respond(HttpConnectionPtr& connection)
 {
   //  Stop processing by setting this to false
   bool continue_processing = true;
@@ -103,7 +103,7 @@ bool RetryConflictsTestServer::respond(HttpConnection::HttpConnectionPtr& connec
   return continue_processing && !get_interupt();
 }
 
-bool RetryVersionTestServer::respond(HttpConnection::HttpConnectionPtr &connection)
+bool RetryVersionTestServer::respond(HttpConnectionPtr &connection)
 {
   /*
   *  - Capabilities
@@ -162,7 +162,7 @@ bool RetryVersionTestServer::respond(HttpConnection::HttpConnectionPtr &connecti
   return continue_processing && !get_interupt();
 }
 
-bool ChangesetOutputTestServer::respond(HttpConnection::HttpConnectionPtr& connection)
+bool ChangesetOutputTestServer::respond(HttpConnectionPtr& connection)
 {
   //  Stop processing by setting this to false
   bool continue_processing = true;
@@ -200,7 +200,7 @@ bool ChangesetOutputTestServer::respond(HttpConnection::HttpConnectionPtr& conne
   return continue_processing && !get_interupt();
 }
 
-bool ChangesetOutputThrottleTestServer::respond(HttpConnection::HttpConnectionPtr& connection)
+bool ChangesetOutputThrottleTestServer::respond(HttpConnectionPtr& connection)
 {
   //  Stop processing by setting this to false
   bool continue_processing = true;
@@ -240,7 +240,7 @@ bool ChangesetOutputThrottleTestServer::respond(HttpConnection::HttpConnectionPt
   return continue_processing && !get_interupt();
 }
 
-bool ChangesetCreateFailureTestServer::respond(HttpConnection::HttpConnectionPtr& connection)
+bool ChangesetCreateFailureTestServer::respond(HttpConnectionPtr& connection)
 {
   //  Stop processing by setting this to false
   bool continue_processing = true;
@@ -271,7 +271,7 @@ bool ChangesetCreateFailureTestServer::respond(HttpConnection::HttpConnectionPtr
   return continue_processing && !get_interupt();
 }
 
-bool CreateWaysFailNodesTestServer::respond(HttpConnection::HttpConnectionPtr& connection)
+bool CreateWaysFailNodesTestServer::respond(HttpConnectionPtr& connection)
 {
   //  Stop processing by setting this to false
   bool continue_processing = true;
@@ -309,7 +309,7 @@ bool CreateWaysFailNodesTestServer::respond(HttpConnection::HttpConnectionPtr& c
   return continue_processing && !get_interupt();
 }
 
-bool VersionFailureTestServer::respond(HttpConnection::HttpConnectionPtr& connection)
+bool VersionFailureTestServer::respond(HttpConnectionPtr& connection)
 {
   static int version = 1;
   //  Stop processing by setting this to false
@@ -354,7 +354,7 @@ bool VersionFailureTestServer::respond(HttpConnection::HttpConnectionPtr& connec
   return continue_processing && !get_interupt();
 }
 
-bool ElementGoneTestServer::respond(HttpConnection::HttpConnectionPtr& connection)
+bool ElementGoneTestServer::respond(HttpConnectionPtr& connection)
 {
   //  Stop processing by setting this to false
   bool continue_processing = true;
@@ -395,7 +395,7 @@ bool ElementGoneTestServer::respond(HttpConnection::HttpConnectionPtr& connectio
 }
 
 
-bool ChangesetSplitDeleteTestServer::respond(HttpConnection::HttpConnectionPtr& connection)
+bool ChangesetSplitDeleteTestServer::respond(HttpConnectionPtr& connection)
 {
   //  Stop processing by setting this to false
   bool continue_processing = true;
@@ -439,7 +439,7 @@ bool ChangesetSplitDeleteTestServer::respond(HttpConnection::HttpConnectionPtr& 
   return continue_processing && !get_interupt();
 }
 
-bool TimeoutTestServer::respond(HttpConnection::HttpConnectionPtr &connection)
+bool TimeoutTestServer::respond(HttpConnectionPtr &connection)
 {
   //  Read the HTTP request
   parse_request(connection);

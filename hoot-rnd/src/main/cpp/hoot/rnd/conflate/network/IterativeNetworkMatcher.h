@@ -19,22 +19,22 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef ITERATIVENETWORKMATCHER_H
 #define ITERATIVENETWORKMATCHER_H
 
 // hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/algorithms/optimizer/SingleAssignmentProblemSolver.h>
 #include <hoot/core/conflate/network/IndexedEdgeMatchSet.h>
 #include <hoot/core/conflate/network/NetworkMatcher.h>
 #include <hoot/core/conflate/network/NetworkEdgeScore.h>
 #include <hoot/core/conflate/network/NetworkVertexScore.h>
 #include <hoot/core/conflate/network/OsmNetwork.h>
+#include <hoot/core/elements/OsmMap.h>
 
 // tgs
 #include <tgs/RStarTree/HilbertRTree.h>
@@ -61,24 +61,24 @@ public:
    * Always construct with create() to make a shared pointer.
    */
   IterativeNetworkMatcher();
-  virtual ~IterativeNetworkMatcher() = default;
+  ~IterativeNetworkMatcher() = default;
 
   // Leaving this hardcoded for now, as we don't use this matcher in production conflation jobs.
   // If we ever do end up using it production, then add a config option for it.
-  virtual double getMatchThreshold() const { return 0.15; }
+  double getMatchThreshold() const override { return 0.15; }
 
   /**
    * Use this instead of a constructor.
    */
   static std::shared_ptr<IterativeNetworkMatcher> create();
 
-  void iterate();
+  void iterate() override;
 
-  void matchNetworks(ConstOsmMapPtr map, OsmNetworkPtr n1, OsmNetworkPtr n2);
+  void matchNetworks(ConstOsmMapPtr map, OsmNetworkPtr n1, OsmNetworkPtr n2) override;
 
-  QList<NetworkEdgeScorePtr> getAllEdgeScores() const;
+  QList<NetworkEdgeScorePtr> getAllEdgeScores() const override;
 
-  QList<NetworkVertexScorePtr> getAllVertexScores() const;
+  QList<NetworkVertexScorePtr> getAllVertexScores() const override;
 
 protected:
   virtual double _scoreEdges(ConstEdgeMatchPtr em) const;
@@ -90,11 +90,11 @@ private:
   // for white box testing.
   friend class IterativeNetworkMatcherTest;
 
-  typedef SingleAssignmentProblemSolver<EdgeString, EdgeString> Saps;
+  using Saps = SingleAssignmentProblemSolver<EdgeString, EdgeString>;
 
-  typedef QHash<ConstEdgeMatchPtr, double> EdgeScoreMap;
+  using EdgeScoreMap = QHash<ConstEdgeMatchPtr, double>;
   /// [row][col]
-  typedef QHash<ConstNetworkVertexPtr, QHash<ConstNetworkVertexPtr, double>> VertexScoreMap;
+  using VertexScoreMap = QHash<ConstNetworkVertexPtr, QHash<ConstNetworkVertexPtr, double>>;
 
   /**
    * A cost function used to compare network edges. It is a simple lookup.
@@ -115,11 +115,13 @@ private:
       em2 = 0;
     }
 
+    ~CostFunction() = default;
+
     /**
      * Returns the cost associated with assigning actor a to task t.
      */
-    virtual double cost(const EdgeString* e1,
-                        const EdgeString* e2) const
+    double cost(const EdgeString* e1,
+                const EdgeString* e2) const override
     {
       bool valid = (e1->getFromVertex() == v1 && e2->getFromVertex() == v2) ||
         (e1->getToVertex() == v1 && e2->getToVertex() == v2);
@@ -183,8 +185,8 @@ private:
 
 };
 
-typedef std::shared_ptr<IterativeNetworkMatcher> IterativeNetworkMatcherPtr;
-typedef std::shared_ptr<const IterativeNetworkMatcher> ConstIterativeNetworkMatcherPtr;
+using IterativeNetworkMatcherPtr = std::shared_ptr<IterativeNetworkMatcher>;
+using ConstIterativeNetworkMatcherPtr = std::shared_ptr<const IterativeNetworkMatcher>;
 
 // not implemented
 bool operator<(ConstIterativeNetworkMatcherPtr, ConstIterativeNetworkMatcherPtr);

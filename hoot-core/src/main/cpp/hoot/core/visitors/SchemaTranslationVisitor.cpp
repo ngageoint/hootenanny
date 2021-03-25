@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "SchemaTranslationVisitor.h"
@@ -32,12 +32,12 @@
 #include <geos/geom/Geometry.h>
 
 #include <hoot/core/elements/Element.h>
-#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/elements/Tags.h>
-#include <hoot/core/schema/ScriptToOgrSchemaTranslator.h>
-#include <hoot/core/schema/ScriptSchemaTranslatorFactory.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/schema/ScriptToOgrSchemaTranslator.h>
+#include <hoot/core/schema/ScriptSchemaTranslatorFactory.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
@@ -61,7 +61,7 @@ void SchemaTranslationVisitor::setConfiguration(const Settings& conf)
 
   LOG_VARD(conf.hasKey(c.getSchemaTranslationScriptKey()));
   LOG_VARD(c.getSchemaTranslationScript());
-  if (conf.hasKey(c.getSchemaTranslationScriptKey()) && c.getSchemaTranslationScript() != "")
+  if (conf.hasKey(ConfigOptions::getSchemaTranslationScriptKey()) && c.getSchemaTranslationScript() != "")
   {
     setTranslationDirection(c.getSchemaTranslationDirection());
     setTranslationScript(c.getSchemaTranslationScript());
@@ -94,7 +94,7 @@ void SchemaTranslationVisitor::setTranslationScript(QString path)
   if (_toOgr)
   {
     _ogrTranslator = dynamic_cast<ScriptToOgrSchemaTranslator*>(_translator.get());
-    if (_ogrTranslator == 0)
+    if (_ogrTranslator == nullptr)
     {
       throw IllegalArgumentException(
         "Translating to OGR requires a script that supports to OGR translations.");
@@ -120,7 +120,7 @@ void SchemaTranslationVisitor::visit(const ElementPtr& e)
     {
       vector<Tags> allTags = _ogrTranslator->translateToOgrTags(tags, e->getElementType(), gtype);
 
-      if (allTags.size() > 0)
+      if (!allTags.empty())
       {
         if (allTags.size() > 1)
         {

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef PERTY_MAP_SCORER_H
 #define PERTY_MAP_SCORER_H
@@ -45,7 +45,7 @@ class PertyMatchScorer : public Configurable
 public:
 
   PertyMatchScorer();
-  virtual ~PertyMatchScorer() = default;
+  ~PertyMatchScorer() = default;
 
   /**
     Takes a single file as input, runs PERTY on the file, and then conflates the unmodified data
@@ -61,7 +61,7 @@ public:
   /**
     @see Configurable
     */
-  virtual void setConfiguration(const Settings &conf) { _settings = conf; }
+  void setConfiguration(const Settings &conf) override { _settings = conf; }
 
   /**
     Returns the output path of the reference map

@@ -19,18 +19,18 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef WAYSUBLINEMATCHSTRING_H
 #define WAYSUBLINEMATCHSTRING_H
 
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/algorithms/linearreference/WaySublineMatch.h>
+#include <hoot/core/elements/OsmMap.h>
 
 // Std
 #include <string>
@@ -53,10 +53,9 @@ public:
 
   static QString className() { return "hoot::WaySublineMatchString"; }
 
-  typedef std::vector<WaySublineMatch> MatchCollection;
+  using MatchCollection = std::vector<WaySublineMatch>;
 
-  WaySublineMatchString() {}
-  WaySublineMatchString(const WaySublineMatchString& other);
+  WaySublineMatchString() = default;
   /**
    * Makes a new WaySublineMatchString where all the WayLocations are remapped to reference the
    * new map.
@@ -128,8 +127,8 @@ private:
 
 HOOT_DEFINE_EXCEPTION(OverlappingMatchesException)
 
-typedef std::shared_ptr<WaySublineMatchString> WaySublineMatchStringPtr;
-typedef std::shared_ptr<const WaySublineMatchString> ConstWaySublineMatchStringPtr;
+using WaySublineMatchStringPtr = std::shared_ptr<WaySublineMatchString>;
+using ConstWaySublineMatchStringPtr = std::shared_ptr<const WaySublineMatchString>;
 
 }
 

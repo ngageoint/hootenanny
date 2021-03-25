@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "ChangesetCutOnlyCreator.h"
 
@@ -86,8 +86,6 @@ const QString ChangesetReplacementCreatorAbstract::JOB_SOURCE = "ChangesetDerive
 ChangesetReplacementCreatorAbstract::ChangesetReplacementCreatorAbstract() :
 _maxFilePrintLength(ConfigOptions().getProgressVarPrintLengthMax() * 1.5),
 _geometryFiltersSpecified(false),
-_chainReplacementFilters(false),
-_chainRetainmentFilters(false),
 _enableWaySnapping(false),
 _changesetId("1"),
 _numChanges(0),
@@ -129,24 +127,6 @@ void ChangesetReplacementCreatorAbstract::_printJobDescription() const
   QString boundsStr = "Bounds calculation is " +
     _boundsInterpretationToString(_boundsInterpretation);
   const QString replacementTypeStr = _fullReplacement ? "full" : "overlapping only";
-  QString geometryFiltersStr = "are ";
-  if (!_geometryFiltersSpecified)
-  {
-    geometryFiltersStr += "not ";
-  }
-  geometryFiltersStr += "specified";
-  QString replacementFiltersStr = "is ";
-  if (!_replacementFilter)
-  {
-    replacementFiltersStr += "not ";
-  }
-  replacementFiltersStr += "specified";
-  QString retainmentFiltersStr = "is ";
-  if (!_retainmentFilter)
-  {
-    retainmentFiltersStr += "not ";
-  }
-  retainmentFiltersStr += "specified";
   QString waySnappingStr = "is ";
   if (!_enableWaySnapping)
   {
@@ -174,9 +154,6 @@ void ChangesetReplacementCreatorAbstract::_printJobDescription() const
   str = "";
   str += "\nBounds interpretation: " + boundsStr;
   str += "\nReplacement is: " + replacementTypeStr;
-  str += "\nGeometry filters: " + geometryFiltersStr;
-  str += "\nReplacement filter: " + replacementFiltersStr;
-  str += "\nRetainment filter: " + retainmentFiltersStr;
   str += "\nWay snapping: " + waySnappingStr;
   str += "\nCropping database inputs after read: " + cropDbInputOnReadStr;
   LOG_INFO(str);
@@ -232,15 +209,7 @@ void ChangesetReplacementCreatorAbstract::_validateInputs()
     }
   }
 
-  LOG_VARD(_fullReplacement);
-  if (_fullReplacement && _retainmentFilter)
-  {
-    throw IllegalArgumentException(
-      "Both full reference data replacement and a reference data retainment filter may not "
-      "be specified for replacement changeset derivation.");
-  }
-
-  if (ConfigOptions().getConvertOps().size() > 0)
+  if (!ConfigOptions().getConvertOps().empty())
   {
     throw IllegalArgumentException(
       "Replacement changeset derivation does not support convert operations.");
@@ -538,7 +507,7 @@ OsmMapPtr ChangesetReplacementCreatorAbstract::_getCookieCutMap(
 
   LOG_VART(doughMap->size());
   LOG_VART(MapProjector::toWkt(doughMap->getProjection()));
-  OsmMapWriterFactory::writeDebugMap(doughMap, _changesetId + "-dough-map");;
+  OsmMapWriterFactory::writeDebugMap(doughMap, _changesetId + "-dough-map");
   LOG_VART(MapProjector::toWkt(cutterMap->getProjection()));
 
   OsmMapPtr cookieCutMap(new OsmMap(doughMap));
@@ -599,7 +568,7 @@ OsmMapPtr ChangesetReplacementCreatorAbstract::_getCookieCutMap(
   // map and replace them with small square shaped polys...from that we can generate the alpha
   // shape.
   const int cutterMapToUseSize = cutterMapToUse->getNodeCount();
-  if ((int)cutterMapToUseSize < 3 && MapUtils::mapIsPointsOnly(cutterMapToUse))
+  if (cutterMapToUseSize < 3 && MapUtils::mapIsPointsOnly(cutterMapToUse))
   {
     LOG_DEBUG("Creating a cutter shape map transformation for point map...");
     // Make a copy here since we're making destructive changes to the geometry here for alpha shape

@@ -19,19 +19,19 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "MergerFactory.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/elements/OsmMapConsumer.h>
 #include <hoot/core/conflate/matching/Match.h>
 #include <hoot/core/conflate/matching/MatchType.h>
+#include <hoot/core/elements/OsmMapConsumer.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
@@ -44,10 +44,6 @@ namespace hoot
 int MergerFactory::logWarnCount = 0;
 
 std::shared_ptr<MergerFactory> MergerFactory::_theInstance;
-
-MergerFactory::MergerFactory()
-{
-}
 
 MergerFactory::~MergerFactory()
 {
@@ -83,7 +79,7 @@ void MergerFactory::createMergers(
     // We don't want the creators to hold onto a map pointer that will go out of scope.
     if (omc)
     {
-      omc->setOsmMap((OsmMap*)0);
+      omc->setOsmMap(nullptr);
     }
   }
 
@@ -127,7 +123,7 @@ MergerFactory& MergerFactory::getInstance()
     _theInstance.reset(new MergerFactory());
   }
 
-  if (_theInstance->_creators.size() == 0)
+  if (_theInstance->_creators.empty())
   {
     _theInstance->registerDefaultCreators();
   }
@@ -166,7 +162,7 @@ void MergerFactory::registerDefaultCreators()
       MergerCreatorPtr mc(Factory::getInstance().constructObject<MergerCreator>(className));
       registerCreator(mc);
 
-      if (args.size() > 0)
+      if (!args.empty())
       {
         // TODO: Is this actually used on any MergerCreators?
         mc->setArguments(args);

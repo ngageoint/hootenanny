@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef WAYMATCHSTRINGMAPPING_H
 #define WAYMATCHSTRINGMAPPING_H
@@ -76,13 +76,13 @@ public:
    * @param preferedEid Prefer to use this element ID if possible. (e.g. if the mapped point falls
    *        between two sublines.
    */
-  virtual WayLocation map1To2(WayLocation l1, ElementId preferedEid = ElementId()) = 0;
+  virtual WayLocation map1To2(const WayLocation& l1, ElementId preferedEid = ElementId()) = 0;
 
   /**
    * @param preferedEid Prefer to use this element ID if possible. (e.g. if the mapped point falls
    *        between two sublines.
    */
-  virtual WayLocation map2To1(WayLocation l2, ElementId preferedEid = ElementId()) = 0;
+  virtual WayLocation map2To1(const WayLocation& l2, ElementId preferedEid = ElementId()) = 0;
 
   virtual void setWayString1(const WayStringPtr& ws1) = 0;
   virtual void setWayString2(const WayStringPtr& ws2) = 0;
@@ -93,8 +93,8 @@ public:
   { return "1: " + getWayString1()->toString() + "; 2: " + getWayString2()->toString(); }
 };
 
-typedef std::shared_ptr<WayMatchStringMapping> WayMatchStringMappingPtr;
-typedef std::shared_ptr<const WayMatchStringMapping> ConstWayMatchStringMappingPtr;
+using WayMatchStringMappingPtr = std::shared_ptr<WayMatchStringMapping>;
+using ConstWayMatchStringMappingPtr = std::shared_ptr<const WayMatchStringMapping>;
 
 }
 

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "IoUtils.h"
@@ -31,6 +31,7 @@
 #include <hoot/core/criterion/ChainCriterion.h>
 #include <hoot/core/criterion/ElementTypeCriterion.h>
 #include <hoot/core/criterion/TagKeyCriterion.h>
+#include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/io/OgrReader.h>
 #include <hoot/core/io/OgrUtilities.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
@@ -41,7 +42,6 @@
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Progress.h>
-#include <hoot/core/geometry/GeometryUtils.h>
 
 // Qt
 #include <QFileInfo>
@@ -115,10 +115,8 @@ bool IoUtils::isSupportedOgrFormat(const QString& input, const bool allowDir)
 
 bool IoUtils::anyAreSupportedOgrFormats(const QStringList& inputs, const bool allowDir)
 {
-  if (inputs.size() == 0)
-  {
+  if (inputs.empty())
     return false;
-  }
 
   for (int i = 0; i < inputs.size(); i++)
   {
@@ -127,19 +125,15 @@ bool IoUtils::anyAreSupportedOgrFormats(const QStringList& inputs, const bool al
     const QString file = input.split(";")[0];
     LOG_VART(file);
     if (isSupportedOgrFormat(file, allowDir))
-    {
       return true;
-    }
   }
   return false;
 }
 
 bool IoUtils::areSupportedOgrFormats(const QStringList& inputs, const bool allowDir)
 {
-  if (inputs.size() == 0)
-  {
+  if (inputs.empty())
     return false;
-  }
 
   for (int i = 0; i < inputs.size(); i++)
   {
@@ -148,9 +142,7 @@ bool IoUtils::areSupportedOgrFormats(const QStringList& inputs, const bool allow
     const QString file = input.split(";")[0];
     LOG_VART(file);
     if (!isSupportedOgrFormat(file, allowDir))
-    {
       return false;
-    }
   }
   return true;
 }

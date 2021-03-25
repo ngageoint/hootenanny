@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "WaySublineMatchString.h"
 
@@ -33,12 +33,6 @@ using namespace std;
 
 namespace hoot
 {
-
-WaySublineMatchString::WaySublineMatchString(const WaySublineMatchString& other)
-{
-  // no need to check for overlaps, the incoming object should already be consistent.
-  _matches = other._matches;
-}
 
 WaySublineMatchString::WaySublineMatchString(const MatchCollection& m)
 {
@@ -196,8 +190,6 @@ bool WaySublineMatchString::touches(const WaySublineMatchString& other) const
 QString WaySublineMatchString::toString() const
 {
   QString result;
-  //result += "subline 1: " + getSublineString1().toString() + "\n";
-  //result += "subline 2: " + getSublineString2().toString() + "\n";
   result += QString("matches:\n");
   QStringList l;
   for (size_t i = 0; i < _matches.size(); i++)

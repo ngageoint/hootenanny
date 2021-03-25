@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef REMOVEREF2VISITORMULTIPLECRITERION_H
@@ -48,16 +48,16 @@ public:
   static QString className() { return "hoot::RemoveRef2VisitorMultipleCriterion"; }
 
   RemoveRef2VisitorMultipleCriterion() = default;
-  virtual ~RemoveRef2VisitorMultipleCriterion() = default;
+  ~RemoveRef2VisitorMultipleCriterion() = default;
 
-  virtual void addCriterion(const ElementCriterionPtr& e) override;
+  void addCriterion(const ElementCriterionPtr& e) override;
 
-  virtual void visit(const ElementPtr& e) override;
+  void visit(const ElementPtr& e) override;
 
-  virtual bool ref1CriterionSatisfied(const ConstElementPtr& e) const override;
-  virtual bool ref2CriterionSatisfied(const ConstElementPtr& e) const override;
+  bool ref1CriterionSatisfied(const ConstElementPtr& e) const override;
+  bool ref2CriterionSatisfied(const ConstElementPtr& e) const override;
 
-  virtual QString getDescription() const override
+  QString getDescription() const override
   { return "Removes REF2 tags when multiple criteria are met for both REF1 and REF2 elements"; }
 
 private:

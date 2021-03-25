@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef LEVENSHTEINDISTANCE_H
@@ -52,9 +52,9 @@ public:
    * @param alph See the levenshtein.distance.alpha configuration option for an explanation.
    */
   LevenshteinDistance(double alpha = -1);
-  virtual ~LevenshteinDistance() = default;
+  ~LevenshteinDistance() = default;
 
-  virtual double compare(const QString& s1, const QString& s2) const override;
+  double compare(const QString& s1, const QString& s2) const override;
 
   static double score(const char* s1, const char* s2)
   {
@@ -114,16 +114,16 @@ public:
 
   void setAlpha(double alpha);
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
   QString toString() const override { return QString("Levenshtein %1").arg(_alpha); }
 
-  virtual QString getDescription() const override
+  QString getDescription() const override
   { return "Returns a string comparison score derived using Levenshtein Distance"; }
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

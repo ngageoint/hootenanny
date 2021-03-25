@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "PertyTestRunner.h"
 
@@ -67,6 +67,8 @@ void PertyTestRunner::_writeStatsForOutputFiles(const QString& inputMapPath, con
 {
   QString statsOutputPath = inputMapPath;
   statsOutputPath = statsOutputPath.replace(".osm", "-stats");
+  // We could add stats filtering here at some point to make the stats calculated correspond to the
+  // conflate matchers configured.
   MapStatsWriter().writeStats(inputMapPath, statsOutputPath, sep);
 }
 
@@ -92,6 +94,8 @@ QList<std::shared_ptr<const PertyTestRunResult>> PertyTestRunner::runTest(
     QFileInfo inputFileInfo(referenceMapInputPath);
     QString statsOutputPath = outputPath + "/" + inputFileInfo.fileName();
     statsOutputPath = statsOutputPath.replace(".osm", "-stats");
+    // We could add stats filtering here at some point to make the stats calculated correspond to the
+    // conflate matchers configured.
     MapStatsWriter().writeStats(referenceMapInputPath, statsOutputPath, sep);
   }
 
@@ -122,7 +126,7 @@ QList<std::shared_ptr<const PertyTestRunResult>> PertyTestRunner::runTest(
       LOG_INFO(
         "Running test run #" << QString::number(i + 1) << ", simulation #" <<
         QString::number(j + 1));
-      if (_dynamicVariables.size() > 0)
+      if (!_dynamicVariables.empty())
       {
         LOG_INFO(" with dynamic variables: " << _dynamicVariables << " having value: " <<
                  dynamicVariableValue);
@@ -158,7 +162,7 @@ QList<std::shared_ptr<const PertyTestRunResult>> PertyTestRunner::runTest(
       LOG_VARD(scoreSum);
     }
 
-    const double avgScore = (double)scoreSum / (double)_numTestSimulations;
+    const double avgScore = scoreSum / (double)_numTestSimulations;
     LOG_VARD(avgScore);
     const double scoreVariance = abs(_expectedScores[i] - avgScore);
     LOG_VARD(scoreVariance);
@@ -193,7 +197,7 @@ QList<std::shared_ptr<const PertyTestRunResult>> PertyTestRunner::runTest(
   }
   _testScores.clear();
 
-  if (_dynamicVariables.size() > 0)
+  if (!_dynamicVariables.empty())
   {
     _writePlotFile(outputPath, testRunResults);
   }

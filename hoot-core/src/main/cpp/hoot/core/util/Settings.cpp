@@ -19,31 +19,30 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "Settings.h"
 
 // hoot
 #include <hoot/core/Hoot.h>
-#include <hoot/core/util/ConfPath.h>
-#include <hoot/core/util/ConfigDefaults.h>
-#include <hoot/core/util/HootException.h>
-#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/Log.h>
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/ops/OsmMapOperation.h>
-#include <hoot/core/visitors/ElementVisitor.h>
 #include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/ops/OsmMapOperation.h>
+#include <hoot/core/util/ConfigDefaults.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/ConfPath.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/HootException.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/visitors/ElementVisitor.h>
 
 // Boost
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/foreach.hpp>
-namespace pt = boost::property_tree;
 
 // Qt
 #include <QStringList>
@@ -53,7 +52,10 @@ namespace pt = boost::property_tree;
 #include <iostream>
 #include <sstream>
 #include <unistd.h>
+
 using namespace std;
+
+namespace pt = boost::property_tree;
 
 namespace hoot
 {
@@ -171,7 +173,7 @@ private:
   }
 };
 
-std::shared_ptr<Settings> Settings::_theInstance = NULL;
+std::shared_ptr<Settings> Settings::_theInstance = nullptr;
 
 Settings::Settings() :
 _dynamicRegex("\\$\\{([\\w\\.]+)\\}"),
@@ -305,7 +307,7 @@ double Settings::getDoubleValue(const QString& value) const
 
 Settings& Settings::getInstance()
 {
-  if (_theInstance == NULL)
+  if (_theInstance == nullptr)
   {
     _theInstance.reset(new Settings());
     _theInstance->loadDefaults();
@@ -493,7 +495,8 @@ void Settings::_validateOperatorRefs(const QStringList& operators)
 {
   for (int i = 0; i < operators.size(); i++)
   {
-    const QString operatorName = operators[i];
+    QString operatorName = operators[i];
+    operatorName = operatorName.remove("\"");
     LOG_VART(operatorName);
     const QString errorMsg = "Invalid option operator class name: " + operatorName;
 
@@ -577,7 +580,7 @@ void Settings::parseCommonArguments(QStringList& args)
   const QString optionInputFormatErrorMsg =
     "Define with -D must take the form key=value, key+=value, key++=value, or key-=value";
 
-  while (args.size() > 0 && foundOne)
+  while (!args.empty() && foundOne)
   {
     if (args[0] == "--conf" || args[0] == "-C")
     {
@@ -585,6 +588,7 @@ void Settings::parseCommonArguments(QStringList& args)
       {
         throw HootException("--conf must be followed by a file name.");
       }
+      LOG_DEBUG("Loading " << args[1] << "...");
       conf().loadJson(args[1]);
       // move on to the next argument.
       args = args.mid(2);
@@ -831,11 +835,11 @@ QString Settings::_replaceVariables(const QString& key, std::set<QString> used) 
 QString Settings::_replaceStaticVariables(QString value) const
 {
   bool done = false;
+  int offset = 0;
 
   while (!done)
   {
     done = true;
-    int offset = 0;
     QRegularExpressionMatch match = _staticRegex.match(value, offset);
     if (match.hasMatch())
     {
@@ -859,14 +863,14 @@ QString Settings::_replaceVariablesValue(QString value) const
   return _replaceVariablesValue(value, used);
 }
 
-QString Settings::_replaceVariablesValue(QString value, std::set<QString> used) const
+QString Settings::_replaceVariablesValue(QString value, const std::set<QString>& used) const
 {
   bool done = false;
+  int offset = 0;
 
   while (!done)
   {
     done = true;
-    int offset = 0;
     QRegularExpressionMatch match = _dynamicRegex.match(value, offset);
     if (match.hasMatch())
     {

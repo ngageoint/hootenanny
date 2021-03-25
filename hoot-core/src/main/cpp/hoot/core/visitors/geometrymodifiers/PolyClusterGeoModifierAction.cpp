@@ -19,23 +19,23 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "PolyClusterGeoModifierAction.h"
 
 // Hoot
 #include <hoot/core/algorithms/alpha-shape/AlphaShape.h>
+#include <hoot/core/geometry/CoordinateExt.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
+#include <hoot/core/geometry/GeometryToElementConverter.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/ops/RemoveNodeByEid.h>
 #include <hoot/core/ops/RemoveWayByEid.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/geometry/CoordinateExt.h>
-#include <hoot/core/geometry/GeometryToElementConverter.h>
 #include <hoot/core/visitors/WorstCircularErrorVisitor.h>
 
 // Geos
@@ -182,6 +182,8 @@ void PolyClusterGeoModifierAction::_createWayPolygons()
 
   foreach (WayPtr pWay, _ways)
   {
+    if (!pWay)
+      continue;
     std::shared_ptr<Polygon> pPoly = ElementToGeometryConverter.convertToPolygon(pWay);
     long wayId = pWay->getId();
     // set id as user data

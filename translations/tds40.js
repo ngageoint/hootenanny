@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2019 Maxar (http://www.maxar.com/)
  */
 
 /*
@@ -37,7 +37,7 @@ tds40 = {
   // getDbSchema - Load the standard schema or modify it into the TDS structure
   getDbSchema: function() {
     tds40.layerNameLookup = {}; // <GLOBAL> Lookup table for converting an FCODE to a layername
-    tds40.AttrLookup = {}; // <GLOBAL> Lookup table for checking what attrs are in an FCODE
+    tds40.attrLookup = {}; // <GLOBAL> Lookup table for checking what attrs are in an FCODE
 
     // Warning: This is <GLOBAL> so we can get access to it from other functions
     tds40.rawSchema = tds40.schema.getDbSchema();
@@ -51,32 +51,12 @@ tds40 = {
     // Add empty "extra" feature layers if needed
     if (config.getOgrNoteExtra() == 'file') tds40.rawSchema = translate.addExtraFeature(tds40.rawSchema);
 
-    /*
-        // This has been removed since we no longer have text enumerations in the schema
-
-        // Go go through the Schema and fix/add attributes
-        for (var i=0, slen = tds40.rawSchema.length; i < slen; i++)
-        {
-            // Cycle throught he columns and "edit" the attribute fields with Text Enumerations
-            // We convert these to plain String types and avoid having to handle String enumerations
-            for (var j=0, clen = tds40.rawSchema[i].columns.length; j < clen; j++)
-            {
-                // exploit the Object and avoid a Switch :-)
-                if (tds40.rawSchema[i].columns[j].name in {'ZI004_RCG':1,'ZSAX_RS0':1,'ZI020_IC2':1})
-                {
-                    tds40.rawSchema[i].columns[j].type = "String";
-                    delete tds40.rawSchema[i].columns[j].enumerations;
-                }
-            } // End For tds40.rawSchema.columns.length
-        } // End For tds40.rawSchema.length
-     */
-
     // Build the TDS fcode/attrs lookup table. Note: This is <GLOBAL>
-    tds40.AttrLookup = translate.makeAttrLookup(tds40.rawSchema);
+    tds40.attrLookup = translate.makeAttrLookup(tds40.rawSchema);
 
     // Debug
-    // print("tds40.AttrLookup");
-    // translate.dumpLookup(tds40.AttrLookup);
+    // print("tds40.attrLookup");
+    // translate.dumpLookup(tds40.attrLookup);
 
     // Decide if we are going to use TDS structure or 1 FCODE / File
     // if we DON't want the new structure, just return the tds40.rawSchema
@@ -217,11 +197,11 @@ tds40 = {
     } // end tds40.rawSchema loop
 
     // Create a lookup table of TDS structures attributes. Note this is <GLOBAL>
-    tdsAttrLookup = translate.makeTdsAttrLookup(newSchema);
+    tds40.thematicLookup = translate.makeThematicAttrLookup(newSchema);
 
     // Debug:
-    // print("tdsAttrLookup");
-    // translate.dumpLookup(tdsAttrLookup);
+    // print("tds40.thematicLookup");
+    // translate.dumpLookup(tds40.thematicLookup);
 
     // Add the ESRI Feature Dataset name to the schema
     // newSchema = translate.addFdName(newSchema,'TDS');
@@ -258,7 +238,7 @@ tds40 = {
 
     // First, use the lookup table to quickly drop all attributes that are not part of the feature
     // This is quicker than going through the Schema due to the way the Schema is arranged
-    var attrList = tds40.AttrLookup[geometryType.toString().charAt(0) + attrs.F_CODE];
+    var attrList = tds40.attrLookup[geometryType.toString().charAt(0) + attrs.F_CODE];
 
     var othList = {};
 
@@ -392,17 +372,16 @@ tds40 = {
   }, // End validateAttrs
 
 
-  // validateTDSAttrs - Clean up the TDS format attrs.  This sets all of the extra attrs to be "undefined"
-  validateTDSAttrs: function(gFcode, attrs) {
-
-    var tdsAttrList = tdsAttrLookup[tds40.rules.thematicGroupList[gFcode]];
-    var AttrList = tds40.AttrLookup[gFcode];
+  // validateThematicAttrs - Clean up the TDS format attrs.  This sets all of the extra attrs to be "undefined"
+  validateThematicAttrs: function(gFcode, attrs) {
+    var tdsAttrList = tds40.thematicLookup[tds40.rules.thematicGroupList[gFcode]];
+    var attrList = tds40.attrLookup[gFcode];
 
     for (var i = 0, len = tdsAttrList.length; i < len; i++)
     {
-      if (AttrList.indexOf(tdsAttrList[i]) == -1) attrs[tdsAttrList[i]] = undefined;
+      if (attrList.indexOf(tdsAttrList[i]) == -1) attrs[tdsAttrList[i]] = undefined;
     }
-  }, // End validateTDSAttrs
+  }, // End validateThematicAttrs
 
 
   // Sort out if we need to return more than one feature
@@ -577,96 +556,102 @@ tds40 = {
     }
   },
 
+// Clean up the attributes
+cleanAttrs : function (attrs)
+{
+  // Drop the FCSUBTYPE since we don't use it
+  delete attrs.FCSUBTYPE;
+
+  // List of data values to drop/ignore
+  var ignoreList = { '-999999.0':1,'-999999':1,'noinformation':1 };
+
+  // List of attributes that can't have '0' as a value
+  var noZeroList = ['BNF','DZC','LC1','LC2','LC3','LC4','LTN','NOS','NPL','VST','WD1','WD2','WT2','ZI016_WD1'];
+
+  // This is a handy loop. We use it to:
+  // 1) Remove all of the "No Information" and -999999 fields
+  // 2) Convert all of the Attrs to uppercase - if needed
+  // 3) Swap some of the funky named attrs around
+  for (var col in attrs)
+  {
+    // slightly ugly but we would like to account for: 'No Information','noInformation' etc
+    // First, push to lowercase
+    var attrValue = attrs[col].toString().toLowerCase();
+
+    // Get rid of the spaces in the text
+    attrValue = attrValue.replace(/\s/g, '');
+
+    // Wipe out the useless values
+    if (attrs[col] == '' || attrs[col] == ' ' || attrValue in ignoreList || attrs[col] in ignoreList)
+    {
+      delete attrs[col]; // debug: Comment this out to leave all of the No Info stuff in for testing
+      continue;
+    }
+
+    // Remove attributes with '0' values if they can't be '0'
+    if (noZeroList.indexOf(col) > -1 && attrs[col] == '0')
+    {
+      delete attrs[col];
+      continue;
+    }
+
+    // Now see if we need to swap attr names
+    if (col in tds40.rules.swapListIn)
+    {
+      // Debug:
+      // print('Swapped: ' + tds40.rules.swapList[i]);
+      attrs[tds40.rules.swapListIn[col]] = attrs[col];
+      delete attrs[col];
+      continue;
+    }
+
+    // The following is to account for TDSv30 vs TDSv40 attribute naming. Somehow
+    // they had the bright idea to rename XXX1 to XXX for a stack of features:
+    // E.g. FFN1 -> FFN
+    var endChar = col.charAt(col.length - 1);
+    if (endChar == 1 && ['LC1','ZI016_WD1','ZI020_FI1','MGL1'].indexOf(col) == -1)
+    {
+      attrs[col.slice(0,-1)] = attrs[col];
+      // Debug:
+      // print('Swapped: ' + col);
+      delete attrs[col];
+      continue;
+    }
+  } // End in attrs loop
+
+  // Undergrowth Density in Thicket & Swamp
+  if (attrs.DMBL && (attrs.DMBL == attrs.DMBU))
+  {
+    tags['undergrowth:density'] = attrs.DMBL;
+    delete attrs.DMBU;
+    delete attrs.DMBL;
+  }
+
+  // Drop all of the XXX Closure default values IFF the associated attributes are not set
+  // Doing this after the main cleaning loop so all of the -999999 values are
+  // already gone and we can just check for existance
+  for (var i in tds40.rules.closureList)
+  {
+    if (attrs[i])
+    {
+      if (attrs[tds40.rules.closureList[i][0]] || attrs[tds40.rules.closureList[i][1]])
+      {
+        continue;
+      }
+      else
+      {
+        delete attrs[i];
+      }
+    }
+  } // End closureList
+
+}, // End cleanAttrs
+
+
   // #####################################################################################################
   // ##### Start of the xxToOsmxx Block #####
   applyToOsmPreProcessing: function(attrs, layerName, geometryType)
   {
-    // Drop the FCSUBTYPE since we don't use it
-    if (attrs.FCSUBTYPE) delete attrs.FCSUBTYPE;
-
-    // List of data values to drop/ignore
-    var ignoreList = { '-999999.0':1,'-999999':1,'noinformation':1 };
-
-    // List of attributes that can't have '0' as a value
-    var noZeroList = ['BNF','DZC','LC1','LC2','LC3','LC4','LTN','NOS','NPL','VST','WD1','WD2','WT2','ZI016_WD1'];
-
-    // This is a handy loop. We use it to:
-    // 1) Remove all of the "No Information" and -999999 fields
-    // 2) Convert all of the Attrs to uppercase - if needed
-    // 3) Swap some of the funky named attrs around
-    for (var col in attrs)
-    {
-      // slightly ugly but we would like to account for: 'No Information','noInformation' etc
-      // First, push to lowercase
-      var attrValue = attrs[col].toString().toLowerCase();
-
-      // Get rid of the spaces in the text
-      attrValue = attrValue.replace(/\s/g, '');
-
-      // Wipe out the useless values
-      if (attrs[col] == '' || attrs[col] == ' ' || attrValue in ignoreList || attrs[col] in ignoreList)
-      {
-        delete attrs[col]; // debug: Comment this out to leave all of the No Info stuff in for testing
-        continue;
-      }
-
-      // Remove attributes with '0' values if they can't be '0'
-      if (noZeroList.indexOf(col) > -1 && attrs[col] == '0')
-      {
-        delete attrs[col];
-        continue;
-      }
-
-      // Now see if we need to swap attr names
-      if (col in tds40.rules.swapListIn)
-      {
-        // Debug:
-        // print('Swapped: ' + tds40.rules.swapList[i]);
-        attrs[tds40.rules.swapListIn[col]] = attrs[col];
-        delete attrs[col];
-        continue;
-      }
-
-      // The following is to account for TDSv30 vs TDSv40 attribute naming. Somehow
-      // they had the bright idea to rename XXX1 to XXX for a stack of features:
-      // E.g. FFN1 -> FFN
-      var endChar = col.charAt(col.length - 1);
-      if (endChar == 1 && ['LC1','ZI016_WD1','ZI020_FI1','MGL1'].indexOf(col) == -1)
-      {
-        attrs[col.slice(0,-1)] = attrs[col];
-        // Debug:
-        // print('Swapped: ' + col);
-        delete attrs[col];
-        continue;
-      }
-    } // End in attrs loop
-
-    // Undergrowth Density in Thicket & Swamp
-    if (attrs.DMBL && (attrs.DMBL == attrs.DMBU))
-    {
-      tags['undergrowth:density'] = attrs.DMBL;
-      delete attrs.DMBU;
-      delete attrs.DMBL;
-    }
-
-    // Drop all of the XXX Closure default values IFF the associated attributes are not set
-    // Doing this after the main cleaning loop so all of the -999999 values are
-    // already gone and we can just check for existance
-    for (var i in tds40.rules.closureList)
-    {
-      if (attrs[i])
-      {
-        if (attrs[tds40.rules.closureList[i][0]] || attrs[tds40.rules.closureList[i][1]])
-        {
-          continue;
-        }
-        else
-        {
-          delete attrs[i];
-        }
-      }
-    } // End closureList
-
     // Tag retired
     if (tags.controlling_authority)
     {
@@ -986,22 +971,19 @@ tds40 = {
 
     // Add a building tag to Buildings and Fortified Buildings if we don't have one
     // We can't do this in the funky rules function as it uses "attrs" _and_ "tags"
-    if ((attrs.F_CODE == 'AL013' || attrs.F_CODE == 'AH055') && !(tags.building)) tags.building = 'yes';
+    if (attrs.F_CODE == 'AH055' && !(tags.building)) tags.building = 'bunker';
+
+    if (attrs.F_CODE == 'AL013' && !(tags.building)) tags.building = 'yes';
 
     if (tags.building == 'yes')
     {
       // Fix the building 'use' tag. If the building has a 'use' and no specific building tag. Give it one
       if (tags.use && ((tags.use.indexOf('manufacturing') > -1) || (tags.use.indexOf('processing') > -1))) tags.building = 'industrial';
-      /*
-            else if (tags.use in facilityList)
-            {
-                tags.building = facilityList[tags.use];
-                // delete tags.use;
-            }
-       */
-
-      // Undo the blanket AL013/AL055 building assignment if required
-      if (tags.military == 'bunker') delete tags.building;
+      // else if (tags.use in facilityList)
+      // {
+      //     tags.building = facilityList[tags.use];
+      //     // delete tags.use;
+      // }
     }
 
     // Education:
@@ -1208,10 +1190,10 @@ tds40 = {
   applyToOgrPreProcessing: function(tags, attrs, geometryType)
   {
     // Remove Hoot assigned tags for the source of the data
-    if (tags['source:ingest:datetime']) delete tags['source:ingest:datetime'];
-    if (tags.area) delete tags.area;
-    if (tags['error:circular']) delete tags['error:circular'];
-    if (tags['hoot:status']) delete tags['hoot:status'];
+    delete tags['source:ingest:datetime'];
+    delete tags.area;
+    delete tags['error:circular'];
+    delete tags['hoot:status'];
 
     // If we use ogr2osm, the GDAL driver jams any tag it doesn't know about into an "other_tags" tag.
     // We need to unpack this before we can do anything.
@@ -1456,7 +1438,7 @@ tds40 = {
         attrs.F_CODE = 'AL010'; // Facility
 
         // If the user has also set a building tag, delete it
-        if (tags.building) delete tags.building;
+        delete tags.building;
       }
       else
       {
@@ -1858,7 +1840,7 @@ tds40 = {
     // Protected areas have two attributes that need sorting out
     if (tags.protection_object == 'habitat' || tags.protection_object == 'breeding_ground')
     {
-      if (tags.protect_class) delete tags.protect_class;
+      delete tags.protect_class;
     }
 
 
@@ -2252,7 +2234,7 @@ tds40 = {
     } // End Wetlands
 
     // Undergrowth Density is not in Brush (EB070)
-    if (attrs.F_CODE !== 'EB070' || notUsedTags['undergrowth:density'])
+    if (attrs.F_CODE !== 'EB070' && notUsedTags['undergrowth:density'])
     {
       if (!(attrs.DMBL || attrs.DMBU))
       {
@@ -2339,6 +2321,9 @@ tds40 = {
 
       tds40.lookup = translate.createLookup(tds40.rules.one2one);
     }
+
+    // Clean out the usless values
+    tds40.cleanAttrs(attrs);
 
     // Untangle TDS attributes & OSM tags
     // NOTE: This could get wrapped with an ENV variable so it only gets called during import
@@ -2498,9 +2483,9 @@ tds40 = {
     // not in v8 yet: // var tTags = Object.assign({},tags);
     var notUsedTags = (JSON.parse(JSON.stringify(tags)));
 
-    if (notUsedTags.hoot) delete notUsedTags.hoot; // Added by the UI
+    delete notUsedTags.hoot; // Added by the UI
     // Debug info. We use this in postprocessing via "tags"
-    if (notUsedTags['hoot:id']) delete notUsedTags['hoot:id'];
+    delete notUsedTags['hoot:id'];
 
     // Apply the simple number and text biased rules
     // NOTE: These are BACKWARD, not forward!
@@ -2528,7 +2513,7 @@ tds40 = {
     // push the feature to o2s layer
     var gFcode = geometryType.toString().charAt(0) + attrs.F_CODE;
 
-    if (tds40.AttrLookup[gFcode.toUpperCase()])
+    if (tds40.attrLookup[gFcode.toUpperCase()])
     {
       // Check if we need to make more features
       // NOTE: This returns the structure we are going to send back to Hoot:  {attrs: attrs, tableName: 'Name'}
@@ -2543,7 +2528,7 @@ tds40 = {
       {
         // Make sure that we have a valid FCODE
         var gFcode = gType + returnData[i]['attrs']['F_CODE'];
-        if (tds40.AttrLookup[gFcode.toUpperCase()])
+        if (tds40.attrLookup[gFcode.toUpperCase()])
         {
           // Validate attrs: remove all that are not supposed to be part of a feature
           tds40.validateAttrs(geometryType,returnData[i]['attrs'],notUsedTags,transMap);
@@ -2552,7 +2537,7 @@ tds40 = {
           if (Object.keys(notUsedTags).length > 0 && tds40.configOut.OgrNoteExtra == 'attribute')
           {
             var tStr = '<OSM>' + JSON.stringify(notUsedTags) + '</OSM>';
-            attrs.ZI006_MEM = translate.appendValue(attrs.ZI006_MEM,tStr,';');
+            returnData[i]['attrs']['ZI006_MEM'] = translate.appendValue(returnData[i]['attrs']['ZI006_MEM'],tStr,';');
           }
 
           // Now set the FCSubtype
@@ -2566,7 +2551,7 @@ tds40 = {
           if (tds40.configOut.OgrThematicStructure == 'true')
           {
             returnData[i]['tableName'] = tds40.rules.thematicGroupList[gFcode];
-            tds40.validateTDSAttrs(gFcode, returnData[i]['attrs']);
+            tds40.validateThematicAttrs(gFcode, returnData[i]['attrs']);
           }
           else
           {
@@ -2653,14 +2638,14 @@ tds40 = {
       if (tds40.configOut.OgrFormat == 'shp')
       {
         // Throw a warning that text will get truncated.
-        if (str.length > 1012) hoot.logWarn('o2s tags truncated to fit in available space.');
+        if (str.length > 900) hoot.logWarn('o2s tags truncated to fit in available space.');
 
         // NOTE: if the start & end of the substring are grater than the length of the string, they get assigned to the length of the string
         // which means that it returns an empty string.
-        attrs = {tag1:str.substring(0,253),
-          tag2:str.substring(253,506),
-          tag3:str.substring(506,759),
-          tag4:str.substring(759,1012)};
+        attrs = {tag1:str.substring(0,225),
+          tag2:str.substring(225,450),
+          tag3:str.substring(450,675),
+          tag4:str.substring(675,900)};
       }
       else
       {

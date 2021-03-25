@@ -19,21 +19,21 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "FrechetSublineMatcher.h"
 // geos
 #include <geos/geom/LineString.h>
 // hoot
+#include <hoot/core/algorithms/FrechetDistance.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
+#include <hoot/core/ops/CopyMapSubsetOp.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Units.h>
-#include <hoot/core/algorithms/FrechetDistance.h>
-#include <hoot/core/ops/CopyMapSubsetOp.h>
-#include <hoot/core/geometry/ElementToGeometryConverter.h>
 
 using namespace geos::geom;
 using namespace std;
@@ -94,7 +94,7 @@ WaySublineMatchString FrechetSublineMatcher::findMatch(
         insert = false;
     }
     if (insert)
-      v.push_back(WaySublineMatch(match, map));
+      v.emplace_back(match, map);
   }
   return WaySublineMatchString(v);
 }

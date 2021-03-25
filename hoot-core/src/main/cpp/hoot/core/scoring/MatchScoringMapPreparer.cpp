@@ -19,18 +19,18 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "MatchScoringMapPreparer.h"
 
 // hoot
-#include <hoot/core/ops/MapCleaner.h>
-#include <hoot/core/criterion/TagKeyCriterion.h>
 #include <hoot/core/criterion/ElementTypeCriterion.h>
 #include <hoot/core/criterion/TagCriterion.h>
+#include <hoot/core/criterion/TagKeyCriterion.h>
+#include <hoot/core/ops/MapCleaner.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/visitors/AddUuidVisitor.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
@@ -45,9 +45,9 @@ class ConvertUuidToRefVisitor : public ElementOsmMapVisitor
 public:
 
   ConvertUuidToRefVisitor() = default;
-  virtual ~ConvertUuidToRefVisitor() = default;
+  ~ConvertUuidToRefVisitor() = default;
 
-  virtual void visit(const std::shared_ptr<Element>& e)
+  void visit(const ElementPtr& e) override
   {
     if (!e->getTags().contains(MetadataTags::Ref1()) &&
         !e->getTags().contains(MetadataTags::Ref2()) && e->getTags().contains("uuid"))
@@ -64,14 +64,10 @@ public:
     }
   }
 
-  virtual QString getDescription() const { return ""; }
-  virtual QString getName() const { return ""; }
-  virtual QString getClassName() const override { return ""; }
+  QString getDescription() const override { return ""; }
+  QString getName() const override { return ""; }
+  QString getClassName() const override { return ""; }
 };
-
-MatchScoringMapPreparer::MatchScoringMapPreparer()
-{
-}
 
 void MatchScoringMapPreparer::prepMap(OsmMapPtr map, const bool removeNodes)
 {

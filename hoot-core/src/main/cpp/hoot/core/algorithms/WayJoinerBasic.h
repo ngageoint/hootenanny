@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef WAYJOINER_BASIC_H
@@ -45,19 +45,19 @@ public:
   static QString className() { return "hoot::WayJoinerBasic"; }
 
   WayJoinerBasic() = default;
-  virtual ~WayJoinerBasic() = default;
+  ~WayJoinerBasic() = default;
 
   /**
    * Static method to join all joinable ways using WayJoinerBasic
    */
   static void joinWays(const OsmMapPtr& map);
 
-  virtual QString getDescription() const override
+  QString getDescription() const override
   { return "Rejoins ways split during pre-conflation cleaning or conflation matching."; }
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 };
 
 }

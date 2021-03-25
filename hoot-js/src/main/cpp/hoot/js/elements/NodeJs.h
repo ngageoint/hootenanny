@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef NODEJS_H
 #define NODEJS_H
@@ -46,9 +46,9 @@ public:
 
   static void Init(v8::Handle<v8::Object> target);
 
-  virtual ConstElementPtr getConstElement() const { return getConstNode(); }
+  ConstElementPtr getConstElement() const override { return getConstNode(); }
   ConstNodePtr getConstNode() const { return _constNode; }
-  virtual ElementPtr getElement() { return getNode(); }
+  ElementPtr getElement() override { return getNode(); }
   NodePtr getNode() { assert(_node); return _node; }
 
   static v8::Handle<v8::Object> New(ConstNodePtr n);
@@ -58,7 +58,7 @@ private:
 
   NodeJs(ConstNodePtr n) : _constNode(n) { }
   NodeJs() = default;
-  virtual ~NodeJs() = default;
+  ~NodeJs() = default;
 
   static void getX(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void getY(const v8::FunctionCallbackInfo<v8::Value>& args);

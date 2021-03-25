@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef OSM_API_WRITER_TEST_SERVER_H
@@ -41,7 +41,7 @@ public:
 
 protected:
   /** respond() function that responds once to the OSM API Capabilities request */
-  bool respond(HttpConnection::HttpConnectionPtr& connection) override;
+  bool respond(HttpConnectionPtr& connection) override;
 };
 
 class PermissionsTestServer : public HttpTestServer
@@ -52,7 +52,7 @@ public:
 
 protected:
   /** respond() function that responds once to the OSM API Permissions request */
-  bool respond(HttpConnection::HttpConnectionPtr &connection) override;
+  bool respond(HttpConnectionPtr &connection) override;
 };
 
 class RetryConflictsTestServer : public HttpTestServer
@@ -71,7 +71,7 @@ protected:
    *   - Changeset Upload - responding with an HTTP 405 error for the test
    *   - Changeset Close
    */
-  bool respond(HttpConnection::HttpConnectionPtr& connection) override;
+  bool respond(HttpConnectionPtr& connection) override;
 };
 
 class RetryVersionTestServer : public HttpTestServer
@@ -92,7 +92,7 @@ protected:
    *  - Changeset 1 Upload - respond with updated version
    *  - Changeset Close
    */
-  bool respond(HttpConnection::HttpConnectionPtr &connection) override;
+  bool respond(HttpConnectionPtr &connection) override;
 
 private:
   /** Flag set to false until the first changeset has failed once */
@@ -116,7 +116,7 @@ protected:
    *   - Changeset Upload - responds with HTTP 200
    *   - Changeset Close
    */
-  bool respond(HttpConnection::HttpConnectionPtr& connection) override;
+  bool respond(HttpConnectionPtr& connection) override;
 };
 
 class ChangesetOutputThrottleTestServer : public HttpTestServer
@@ -137,7 +137,7 @@ protected:
    *   - Changeset Upload - responds with HTTP 200
    *   - Changeset Close
    */
-  bool respond(HttpConnection::HttpConnectionPtr& connection) override;
+  bool respond(HttpConnectionPtr& connection) override;
 };
 
 class ChangesetCreateFailureTestServer : public HttpTestServer
@@ -154,7 +154,7 @@ protected:
    *   - Permissions
    *   - Changeset Create Failure x6
    */
-  bool respond(HttpConnection::HttpConnectionPtr &connection) override;
+  bool respond(HttpConnectionPtr &connection) override;
 };
 
 class CreateWaysFailNodesTestServer : public HttpTestServer
@@ -174,7 +174,7 @@ protected:
    *   - Changeset Upload - responds with HTTP 200
    *   - Changeset Close
    */
-  bool respond(HttpConnection::HttpConnectionPtr &connection) override;
+  bool respond(HttpConnectionPtr &connection) override;
 };
 
 class VersionFailureTestServer : public HttpTestServer
@@ -194,7 +194,7 @@ protected:
    *   - Element Get - responds with HTTP 200
    *   - Changeset Close
    */
-  bool respond(HttpConnection::HttpConnectionPtr &connection) override;
+  bool respond(HttpConnectionPtr &connection) override;
 };
 
 class ElementGoneTestServer : public HttpTestServer
@@ -214,7 +214,7 @@ protected:
    *   - Changeset Upload - responds with HTTP 200
    *   - Changeset Close
    */
-  bool respond(HttpConnection::HttpConnectionPtr &connection) override;
+  bool respond(HttpConnectionPtr &connection) override;
 };
 
 class ChangesetSplitDeleteTestServer : public HttpTestServer
@@ -236,7 +236,7 @@ protected:
    *   - Changeset Upload - responds with HTTP 200
    *   - Changeset Close
    */
-  bool respond(HttpConnection::HttpConnectionPtr &connection) override;
+  bool respond(HttpConnectionPtr &connection) override;
 };
 
 class TimeoutTestServer : public HttpTestServer
@@ -248,7 +248,7 @@ public:
 protected:
   /** respond() function that waits 5 seconds before responding to simulate a timeout
    */
-  bool respond(HttpConnection::HttpConnectionPtr &connection) override;
+  bool respond(HttpConnectionPtr &connection) override;
 };
 
 class OsmApiSampleRequestResponse

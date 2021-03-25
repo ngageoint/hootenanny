@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef CONFLATABLE_ELEMENT_CRITERION_H
 #define CONFLATABLE_ELEMENT_CRITERION_H
@@ -55,7 +55,17 @@ public:
   virtual bool supportsSpecificConflation() const = 0;
 
   /**
-   * Determines which criteria consider an element as conflatable.
+   * Returns all associated GeometryTypeCriterion class names associated with children elements of
+   * this conflatable element (e.g. RailwayWayNodeCriterion for RailwayCriterion). The criteria are
+   * logically OR'd together. If a class that doesn't inherit from GeometryTypeCriterion is returned
+   * by an implementer, an exception will be thrown.
+   *
+   * @return a list of class names
+   */
+  virtual QStringList getChildCriteria() const { return QStringList(); }
+
+  /**
+   * Determines which element criteria consider an element as conflatable.
    *
    * Adds only specific conflate criteria, if the element supports it. Otherwise, attempts to add
    * non-specific (generic) conflate criteria.
@@ -68,14 +78,14 @@ public:
   static QStringList getConflatableCriteriaForElement(const ConstElementPtr& e, ConstOsmMapPtr map);
 
   /**
-   * Returns instantiations of conflatable criteria index by class name
+   * Returns instantiations of conflatable criteria indexed by class name
    *
    * @return a conflatable criteria map of class names to criterion
    */
   static QMap<QString, ElementCriterionPtr> getConflatableCriteria();
 
   /**
-   * Returns instantiations of conflatable criteria index by class name
+   * Returns instantiations of conflatable criteria indexed by class name
    *
    * @param geometryType a geometry type filter; only criteria supporting the specified geometry
    * type will be returned
@@ -91,6 +101,16 @@ public:
    * @return a list of class names inheriting from ConflatableElementCriterion
    */
   static QStringList getCriterionClassNamesByGeometryType(const GeometryType& geometryType);
+
+  /**
+   * Determines if the ConflatableCriterion with the input class name conflates specifically typed
+   * elements (e.g. buildings, roads)
+   *
+   * @param criterionClassName the class name of the ConflatableElementCriterion to examine
+   * @return true if a ConflatableElementCriterion with the input name exists and is configured to
+   * conflate specifically typed elements
+   */
+  static bool supportsSpecificConflation(const QString& criterionClassName);
 
 private:
 

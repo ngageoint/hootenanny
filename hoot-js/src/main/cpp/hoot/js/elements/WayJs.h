@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef WAYJS_H
 #define WAYJS_H
@@ -46,9 +46,9 @@ public:
 
   static void Init(v8::Handle<v8::Object> target);
 
-  virtual ConstElementPtr getConstElement() const { return getConstWay(); }
+  ConstElementPtr getConstElement() const override { return getConstWay(); }
   ConstWayPtr getConstWay() const { return _constWay; }
-  virtual ElementPtr getElement() { return getWay(); }
+  ElementPtr getElement() override { return getWay(); }
   WayPtr getWay() { assert(_way); return _way; }
 
   static v8::Handle<v8::Object> New(ConstWayPtr way);
@@ -58,7 +58,7 @@ private:
 
   WayJs(ConstWayPtr w) : _constWay(w) { }
   WayJs() = default;
-  virtual ~WayJs() = default;
+  ~WayJs() = default;
 
   static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void getNodeCount(const v8::FunctionCallbackInfo<v8::Value>& args);

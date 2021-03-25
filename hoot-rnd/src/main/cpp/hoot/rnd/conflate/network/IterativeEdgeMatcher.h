@@ -19,21 +19,21 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef __ITERATIVE_EDGE_MATCHER_H__
 #define __ITERATIVE_EDGE_MATCHER_H__
 
 // hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/algorithms/optimizer/SingleAssignmentProblemSolver.h>
-#include <hoot/rnd/conflate/network/VagabondNetworkMatcher.h>
 #include <hoot/core/conflate/network/NetworkEdgeScore.h>
 #include <hoot/core/conflate/network/NetworkVertexScore.h>
 #include <hoot/core/conflate/network/OsmNetwork.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/rnd/conflate/network/VagabondNetworkMatcher.h>
 
 // tgs
 #include <tgs/RStarTree/HilbertRTree.h>
@@ -51,15 +51,15 @@ class IterativeEdgeMatcher : public VagabondNetworkMatcher
 public:
 
   IterativeEdgeMatcher();
-  virtual ~IterativeEdgeMatcher() = default;
+  ~IterativeEdgeMatcher() = default;
 
-  void iterate();
+  void iterate() override;
 
-  void matchNetworks(ConstOsmMapPtr map, OsmNetworkPtr n1, OsmNetworkPtr n2);
+  void matchNetworks(ConstOsmMapPtr map, OsmNetworkPtr n1, OsmNetworkPtr n2) override;
 
-  QList<NetworkEdgeScorePtr> getAllEdgeScores() const;
+  QList<NetworkEdgeScorePtr> getAllEdgeScores() const override;
 
-  QList<NetworkVertexScorePtr> getAllVertexScores() const;
+  QList<NetworkVertexScorePtr> getAllVertexScores() const override;
 
 protected:
   virtual double _scoreEdges(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2) const;
@@ -84,12 +84,12 @@ private:
     bool reversed;
   };
 
-  typedef SingleAssignmentProblemSolver<ConstNetworkEdgePtr, ConstNetworkEdgePtr> Saps;
+  using Saps = SingleAssignmentProblemSolver<ConstNetworkEdgePtr, ConstNetworkEdgePtr>;
 
   /// [row][col]
-  typedef QHash<ConstNetworkEdgePtr, QHash<ConstNetworkEdgePtr, DirectedEdgeScore>> EdgeScoreMap;
+  using EdgeScoreMap = QHash<ConstNetworkEdgePtr, QHash<ConstNetworkEdgePtr, DirectedEdgeScore>>;
   /// [row][col]
-  typedef QHash<ConstNetworkVertexPtr, QHash<ConstNetworkVertexPtr, double>> VertexScoreMap;
+  using VertexScoreMap = QHash<ConstNetworkVertexPtr, QHash<ConstNetworkVertexPtr, double>>;
 
   /**
    * A cost function used to compare network edges. It is a simple lookup.
@@ -110,11 +110,13 @@ private:
       em2 = 0;
     }
 
+    ~CostFunction() = default;
+
     /**
      * Returns the cost associated with assigning actor a to task t.
      */
-    virtual double cost(const ConstNetworkEdgePtr* e1,
-                        const ConstNetworkEdgePtr* e2) const
+    double cost(const ConstNetworkEdgePtr* e1,
+                const ConstNetworkEdgePtr* e2) const override
     {
       assert((*em1)[*e1][*e2].reversed == (*em2)[*e2][*e1].reversed);
       double result = 0.0;

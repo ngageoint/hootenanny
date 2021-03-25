@@ -19,11 +19,11 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef __WAY_LOCATION_H__
 #define __WAY_LOCATION_H__
@@ -32,8 +32,8 @@
 #include <geos/geom/Coordinate.h>
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Node.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Way.h>
 
 namespace hoot
@@ -71,7 +71,7 @@ public:
 
   WayLocation(ConstOsmMapPtr map, ConstWayPtr way, int segmentIndex, double segmentFraction);
 
-  virtual ~WayLocation() {}
+  virtual ~WayLocation() = default;
 
   Meters calculateDistanceFromEnd() const;
 
@@ -107,7 +107,7 @@ public:
    * @param length the length to the desired point
    * @return the Coordinate of the desired point
    */
-  static const geos::geom::Coordinate pointAlongSegmentByFraction(const geos::geom::Coordinate& p0,
+  static geos::geom::Coordinate pointAlongSegmentByFraction(const geos::geom::Coordinate& p0,
                                                                   const geos::geom::Coordinate& p1,
                                                                   double frac);
 
@@ -141,7 +141,7 @@ public:
 
   bool isValid() const { return _segmentIndex != -1; }
 
-  const geos::geom::Coordinate getCoordinate() const;
+  geos::geom::Coordinate getCoordinate() const;
 
   /**
    * Move the location on the way. Negative values will move closer to the beginning of the way.
@@ -196,8 +196,8 @@ inline uint qHash(const WayLocation& wl)
   return qHash(wl.toString());
 }
 
-typedef std::shared_ptr<WayLocation> WayLocationPtr;
-typedef std::shared_ptr<const WayLocation> ConstWayLocationPtr;
+using WayLocationPtr = std::shared_ptr<WayLocation>;
+using ConstWayLocationPtr = std::shared_ptr<const WayLocation>;
 
 }
 

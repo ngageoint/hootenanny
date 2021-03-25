@@ -19,7 +19,7 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2020 Maxar (http://www.maxar.com/)
@@ -42,6 +42,7 @@ function initialize()
 // Create the output Schema
 function getDbSchema()
 {
+  // print('schema: ' + enc311.schema);
   if (enc311.schema == undefined) hoot.require('encv311_schema');
 
   // Warning: This is <GLOBAL> so we can get access to it from other functions
@@ -634,10 +635,11 @@ enc311 = {
       {
         // Debug
         // print('## Loading Schema');
-        enc311.rawSchema = enc311.schema.getDbSchema();
+        // enc311.rawSchema = enc311.schema.getDbSchema();
+        enc311.rawSchema = getDbSchema();
       }
 
-      enc311.attrLookup = translate.makeTdsAttrLookup(enc311.rawSchema);
+      enc311.attrLookup = translate.makeThematicAttrLookup(enc311.rawSchema);
       delete enc311.rawSchema; // We don't need this any more
     }
 
@@ -731,14 +733,14 @@ enc311 = {
       if (enc311.configOut.OgrFormat == 'shp')
       {
         // Throw a warning that text will get truncated.
-        if (str.length > 1012) hoot.logWarn('o2s tags truncated to fit in available space.');
+        if (str.length > 900) hoot.logWarn('o2s tags truncated to fit in available space.');
 
         // NOTE: if the start & end of the substring are grater than the length of the string, they get assigned to the length of the string
         // which means that it returns an empty string.
-        attrs = {tag1:str.substring(0,253),
-          tag2:str.substring(253,506),
-          tag3:str.substring(506,759),
-          tag4:str.substring(759,1012)};
+        attrs = {tag1:str.substring(0,225),
+          tag2:str.substring(225,450),
+          tag3:str.substring(450,675),
+          tag4:str.substring(675,900)};
       }
       else
       {

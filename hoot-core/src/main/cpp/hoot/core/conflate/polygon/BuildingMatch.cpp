@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "BuildingMatch.h"
 
@@ -272,7 +272,7 @@ map<QString, double> BuildingMatch::getFeatures(const ConstOsmMapPtr& m) const
 set<pair<ElementId, ElementId>> BuildingMatch::getMatchPairs() const
 {
   set<pair<ElementId, ElementId>> result;
-  result.insert(pair<ElementId, ElementId>(_eid1, _eid2));
+  result.emplace(_eid1, _eid2);
   return result;
 }
 
@@ -285,14 +285,7 @@ bool BuildingMatch::isConflicting(const ConstMatchPtr& other, const ConstOsmMapP
                                   const QHash<QString, ConstMatchPtr>& /*matches*/) const
 {
   const BuildingMatch* bm = dynamic_cast<const BuildingMatch*>(other.get());
-  if (bm == 0)
-  {
-    return true;
-  }
-  else
-  {
-    return false;
-  }
+  return (bm == nullptr);
 }
 
 QString BuildingMatch::toString() const

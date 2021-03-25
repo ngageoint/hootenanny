@@ -19,11 +19,11 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "CentroidDistanceExtractor.h"
 
@@ -58,7 +58,7 @@ double CentroidDistanceExtractor::distance(const OsmMap& map,
   std::shared_ptr<Point> tc(g1->getCentroid());
   std::shared_ptr<Point> cc(g2->getCentroid());
 
-  if (tc.get() == 0 || cc.get() == 0)
+  if (tc.get() == nullptr || cc.get() == nullptr)
   {
     return nullValue();
   }

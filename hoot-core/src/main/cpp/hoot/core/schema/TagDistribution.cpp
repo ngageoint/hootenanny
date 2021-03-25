@@ -19,20 +19,20 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "TagDistribution.h"
 
 // Hoot
-#include <hoot/core/io/OsmMapReaderFactory.h>
-#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/io/ElementCriterionInputStream.h>
-#include <hoot/core/util/CollectionUtils.h>
 #include <hoot/core/criterion/NotCriterion.h>
+#include <hoot/core/io/ElementCriterionInputStream.h>
+#include <hoot/core/io/OsmMapReaderFactory.h>
+#include <hoot/core/util/CollectionUtils.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/StringUtils.h>
@@ -75,7 +75,7 @@ QString TagDistribution::getTagCountsString(const std::map<QString, int>& tagCou
   QTextStream ts(&buffer);
   QLocale locale(QLocale::English);
 
-  if (tagCounts.size() == 0)
+  if (tagCounts.empty())
   {
     ts << "No tags with keys: " << _tagKeys.join(",") << " were found." << endl;
   }

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef REMOVEINVALIDMULTILINESTRINGMEMBERSVISITOR_H
 #define REMOVEINVALIDMULTILINESTRINGMEMBERSVISITOR_H
@@ -47,26 +47,26 @@ public:
   static QString className() { return "hoot::RemoveInvalidMultilineStringMembersVisitor"; }
 
   RemoveInvalidMultilineStringMembersVisitor();
-  virtual ~RemoveInvalidMultilineStringMembersVisitor() = default;
+  ~RemoveInvalidMultilineStringMembersVisitor() = default;
 
-  virtual void visit(const ElementPtr& e);
+  void visit(const ElementPtr& e) override;
 
-  virtual QString getInitStatusMessage() const
+  QString getInitStatusMessage() const override
   { return "Removing invalid multiline string relation members..."; }
 
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   {
     return
       "Removed " + StringUtils::formatLargeNumber(_numAffected) + " invalid relations / " +
       StringUtils::formatLargeNumber(_map->getRelationCount()) + " total relations.";
   }
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Removes invalid multiline string relation members"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

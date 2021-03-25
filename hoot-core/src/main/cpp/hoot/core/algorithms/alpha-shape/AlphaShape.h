@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef __ALPHASHAPE_H__
@@ -35,7 +35,6 @@
 
 // GDAL
 #include <ogr_core.h>
-class OGRSpatialReference;
 
 // Qt
 #include <QString>
@@ -45,6 +44,8 @@ class OGRSpatialReference;
 #include <memory>
 #include <set>
 #include <vector>
+
+class OGRSpatialReference;
 
 namespace Tgs
 {
@@ -61,7 +62,7 @@ class FaceGroup;
 class OsmMap;
 class Way;
 
-typedef std::shared_ptr<geos::geom::Geometry> GeometryPtr;
+using GeometryPtr = std::shared_ptr<geos::geom::Geometry>;
 
 /**
  * Representation of an Alpha Shape. Technically an Alpha complex, not an Alpha Shape, but the

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2019, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #include "IdwInterpolator.h"
 
@@ -51,21 +51,13 @@ IdwInterpolator::IdwInterpolator(double p)
   _stopDelta = 0.1;
 }
 
-IdwInterpolator::~IdwInterpolator()
-{
-  //cout << "IdwInterpolator::~IdwInterpolator()" << endl << flush;
-}
-
 class IdwOptimizeFunction : public NelderMead::Function
 {
 public:
 
-  IdwOptimizeFunction(IdwInterpolator& idw) : _idw(idw)
-  {
+  IdwOptimizeFunction(IdwInterpolator& idw) : _idw(idw) { }
 
-  }
-
-  virtual double f(Vector v)
+  double f(Vector v) override
   {
     // a value less than zero isn't meaningful.
     double p = std::max(0.0, v[0]);

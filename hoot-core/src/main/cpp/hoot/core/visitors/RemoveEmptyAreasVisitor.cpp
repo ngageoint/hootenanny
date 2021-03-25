@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "RemoveEmptyAreasVisitor.h"
 
@@ -78,7 +78,7 @@ void RemoveEmptyAreasVisitor::visit(const std::shared_ptr<Element>& e)
   {
     std::shared_ptr<Geometry> g = _ec->convertToGeometry(e);
     LOG_VART(g.get());
-    if (g.get())
+    if (g.get() && !g->isEmpty())
     {
       LOG_VART(GeometryUtils::geometryTypeIdToString(g->getGeometryTypeId()));
       LOG_VART(g->getArea());
@@ -106,7 +106,7 @@ void RemoveEmptyAreasVisitor::visit(const std::shared_ptr<Element>& e)
             {
               std::shared_ptr<Geometry> wayGeom = _ec->convertToGeometry(memberWay);
               LOG_VART(wayGeom->toString());
-              if (wayGeom && wayGeom->getArea() > 0.0)
+              if (wayGeom && !wayGeom->isEmpty() && wayGeom->getArea() > 0.0)
               {
                 LOG_TRACE(memberWay->getElementId() << " has positive area.");
                 anyMemberHasPositiveArea = true;

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "ReversedRoadCriterion.h"
 
@@ -38,8 +38,9 @@ HOOT_FACTORY_REGISTER(ElementCriterion, ReversedRoadCriterion)
 
 bool ReversedRoadCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  // only time reversed road relations have been seen so far is as a result of cropping, but think
-  // that still needs to be supported
+  // The only time reversed road relations have been seen so far is as a result of cropping, but
+  // think that it still needs to be supported.
+
   if (!HighwayCriterion(_map).isSatisfied(e))
   {
     return false;

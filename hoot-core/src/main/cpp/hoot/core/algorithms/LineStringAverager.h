@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef LINESTRINGAVERAGER_H
@@ -37,21 +37,25 @@ namespace hoot
 class LineStringAverager
 {
 public:
+
   LineStringAverager(const std::shared_ptr<geos::geom::LineString>& l1,
                      const std::shared_ptr<geos::geom::LineString>& l2);
 
   std::shared_ptr<geos::geom::LineString> average();
 
-  static std::shared_ptr<geos::geom::LineString> average(const std::shared_ptr<geos::geom::LineString>& l1,
-                                                         const std::shared_ptr<geos::geom::LineString>& l2);
+  static std::shared_ptr<geos::geom::LineString> average(
+    const std::shared_ptr<geos::geom::LineString>& l1,
+    const std::shared_ptr<geos::geom::LineString>& l2);
 
 protected:
+
   std::shared_ptr<geos::geom::LineString> _l1;
   std::shared_ptr<geos::geom::LineString> _l2;
 
   geos::geom::Coordinate _merge(const geos::geom::Coordinate& c1, const geos::geom::Coordinate& c2);
 
-  geos::geom::Coordinate _moveToLine(const geos::geom::Coordinate& c1, const geos::geom::LineString* ls);
+  geos::geom::Coordinate _moveToLine(
+    const geos::geom::Coordinate& c1, const geos::geom::LineString* ls);
 };
 
 }

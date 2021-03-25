@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef OSMXMLWRITER_H
 #define OSMXMLWRITER_H
@@ -36,13 +36,14 @@
 #include <QHash>
 #include <QString>
 #include <QXmlDefaultHandler>
-class QXmlStreamWriter;
 
 // Standard
 #include <deque>
 
 // geos
 #include <geos/geom/Envelope.h>
+
+class QXmlStreamWriter;
 
 namespace hoot
 {
@@ -57,13 +58,13 @@ public:
   static QString className() { return "hoot::OsmXmlWriter"; }
 
   OsmXmlWriter();
-  virtual ~OsmXmlWriter();
+  ~OsmXmlWriter();
 
-  virtual bool isSupported(const QString& url) override { return url.toLower().endsWith(".osm"); }
+  bool isSupported(const QString& url) override { return url.toLower().endsWith(".osm"); }
 
-  virtual void open(const QString& url) override;
+  void open(const QString& url) override;
 
-  void close();
+  void close() override;
 
   /**
    * These tags can be included to allow Osmosis to read the files. There is no useful
@@ -100,17 +101,17 @@ public:
    */
   void write(const ConstOsmMapPtr& map, const QString& path);
 
-  virtual void write(const ConstOsmMapPtr& map) override;
+  void write(const ConstOsmMapPtr& map) override;
 
-  virtual void writePartial(const ConstNodePtr& node) override;
-  virtual void writePartial(const ConstWayPtr& way) override;
-  virtual void writePartial(const ConstRelationPtr& relation) override;
-  virtual void finalizePartial() override;
+  void writePartial(const ConstNodePtr& node) override;
+  void writePartial(const ConstWayPtr& way) override;
+  void writePartial(const ConstRelationPtr& relation) override;
+  void finalizePartial() override;
 
   bool getFormatXml() const { return _formatXml; }
   void setFormatXml(const bool format) { _formatXml = format; }
 
-  virtual QString supportedFormats() override { return ".osm"; }
+  QString supportedFormats() override { return ".osm"; }
 
   /**
    * Remove illegal XML characters from the string s and print an error if one is found.  These

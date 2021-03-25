@@ -19,25 +19,21 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "DisconnectedWayCriterion.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/WayUtils.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementCriterion, DisconnectedWayCriterion)
-
-DisconnectedWayCriterion::DisconnectedWayCriterion()
-{
-}
 
 DisconnectedWayCriterion::DisconnectedWayCriterion(ConstOsmMapPtr map) :
 _map(map)
@@ -46,11 +42,20 @@ _map(map)
 
 bool DisconnectedWayCriterion::isSatisfied(const ConstElementPtr& e) const
 {
+  if (!_map)
+  {
+    throw IllegalArgumentException("No map set on " + className());
+  }
+
   if (e && e->getElementType() == ElementType::Way)
   {
     LOG_VART(e->getElementId());
     ConstWayPtr way = std::dynamic_pointer_cast<const Way>(e);
-    return way && way->getNodeCount() > 0 && !WayUtils::hasConnectedWays(way->getId(), _map);
+    LOG_VART(way->getNodeCount());
+    LOG_VART(WayUtils::hasConnectedWays(way->getId(), _map));
+    return
+      way->getNodeCount() > 0 && !way->isClosedArea() &&
+      !WayUtils::hasConnectedWays(way->getId(), _map);
   }
   return false;
 }

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #include "JsonOsmSchemaLoader.h"
 
@@ -97,7 +97,7 @@ void JsonOsmSchemaLoader::load(QString path, OsmSchema& s)
   _baseDir.pop_back();
 
   // update implied values via inheritance after all imports are processed
-  if (_baseDir.size() == 0)
+  if (_baseDir.empty())
   {
     s.update();
 
@@ -312,9 +312,9 @@ void JsonOsmSchemaLoader::_loadCompoundTags(SchemaVertex& tv, const QVariant& va
       }
 
       QList<KeyValuePairPtr> rule;
-      for (int i = 0; i < a2.size(); i++)
+      for (int j = 0; j < a2.size(); j++)
       {
-        QVariant v3 = a2[i];
+        QVariant v3 = a2[j];
         if (v3.type() != QVariant::String)
         {
           throw HootException("A compound tag rule must be an array of strings.");
@@ -341,9 +341,9 @@ void JsonOsmSchemaLoader::_loadGeometries(SchemaVertex& tv, const QVariant& v) c
     uint16_t g = 0;
     for (int i = 0; i < arr.size(); i++)
     {
-      QString v = toString(_asString(arr[i])).toLower();
-      LOG_VART(v);
-      uint16_t e = OsmGeometries::fromString(v);
+      QString value = toString(_asString(arr[i])).toLower();
+      LOG_VART(value);
+      uint16_t e = OsmGeometries::fromString(value);
       g |= e;
     }
     LOG_VART(g);

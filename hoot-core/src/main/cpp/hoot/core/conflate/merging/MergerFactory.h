@@ -19,18 +19,18 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
-#ifndef MERGEFACTORY_H
-#define MERGEFACTORY_H
+#ifndef MERGER_FACTORY_H
+#define MERGER_FACTORY_H
 
 // hoot
-#include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/conflate/merging/MergerCreator.h>
 #include <hoot/core/conflate/matching/MatchSet.h>
+#include <hoot/core/conflate/merging/MergerCreator.h>
+#include <hoot/core/elements/OsmMap.h>
 
 // Qt
 #include <QString>
@@ -46,7 +46,7 @@ class Match;
 class Merger;
 
 /**
- * A factory for creating a merge from a set of matches (Singleton).
+ * A factory for creating a merger from a set of matches (Singleton).
  */
 class MergerFactory
 {
@@ -106,10 +106,10 @@ private:
 
   // Since this is a Singleton, we shouldn't be accessing its constructor, but there are a some
   // spots where we are.  This is here to limit any further constructor access.
-  friend class UnifyingConflator;
+  friend class AbstractConflator;
   friend class MultiaryUtilities;
 
-  MergerFactory();
+  MergerFactory() = default;
 
   static std::shared_ptr<MergerFactory> _theInstance;
 
@@ -118,4 +118,4 @@ private:
 
 }
 
-#endif // MERGEFACTORY_H
+#endif // MERGER_FACTORY_H

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef BUILDING_PART_PRE_MERGE_COLLECTOR_H
 #define BUILDING_PART_PRE_MERGE_COLLECTOR_H
@@ -90,7 +90,7 @@ class BuildingPartPreMergeCollector : public QRunnable
 public:
 
   BuildingPartPreMergeCollector();
-  virtual ~BuildingPartPreMergeCollector() = default;
+  ~BuildingPartPreMergeCollector() = default;
 
   /**
    * Takes building part input from an input queue and adds groups it with a disjoint set as
@@ -123,7 +123,7 @@ private:
 
   ConstOsmMapPtr _map;
 
-  std::shared_ptr<ElementToGeometryConverter> _ElementToGeometryConverter;
+  std::shared_ptr<ElementToGeometryConverter> _elementToGeomeryConverter;
 
   // protects the input data
   QMutex* _buildingPartInputMutex;

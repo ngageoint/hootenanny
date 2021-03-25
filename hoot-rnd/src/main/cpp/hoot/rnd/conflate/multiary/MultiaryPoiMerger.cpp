@@ -19,16 +19,16 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "MultiaryPoiMerger.h"
 
 // hoot
-#include <hoot/core/conflate/merging/MergerCreator.h>
 #include <hoot/core/conflate/matching/MatchFactory.h>
+#include <hoot/core/conflate/merging/MergerCreator.h>
 #include <hoot/core/conflate/merging/MergerFactory.h>
 #include <hoot/core/conflate/review/ReviewMarker.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
@@ -73,9 +73,9 @@ void MultiaryPoiMerger::apply(const OsmMapPtr& map,
   {
     // ugh. Magic string. To work around this we'll need to link against hoot-js, or find another
     // way to add that dep.
-    if (d.className == "hoot::ScriptMergerCreator")
+    if (d.getClassName() == "hoot::ScriptMergerCreator")
     {
-      _mergerCreator.reset(Factory::getInstance().constructObject<MergerCreator>(d.className));
+      _mergerCreator.reset(Factory::getInstance().constructObject<MergerCreator>(d.getClassName()));
     }
   }
 
@@ -120,10 +120,9 @@ void MultiaryPoiMerger::_mergeClusters(const OsmMapPtr& map,
       if (e->getElementId() != mc->mergedElement->getElementId())
       {
         RecursiveElementRemover(e->getElementId()).apply(map);
-        replaced.push_back(
-          std::pair<ElementId, ElementId>(
+        replaced.emplace_back(
             e->getElementId(),
-            mc->mergedElement->getElementId()));
+            mc->mergedElement->getElementId());
       }
     }
     // Copy mergedElement so we know this is the only map that contains the element.

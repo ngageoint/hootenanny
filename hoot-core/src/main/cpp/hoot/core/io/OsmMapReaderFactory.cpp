@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "OsmMapReaderFactory.h"
 
@@ -57,6 +57,20 @@ bool OsmMapReaderFactory::hasElementInputStream(const QString& url)
   }
 
   return result;
+}
+
+bool OsmMapReaderFactory::hasElementInputStream(const QStringList& inputs)
+{
+  for (int i = 0; i < inputs.size(); i++)
+  {
+    if (!hasElementInputStream(inputs.at(i)))
+    {
+      LOG_INFO(
+        "Unable to stream Inputs due to input: " << inputs.at(i).right(25) << ". Loading entire map...");
+      return false;
+    }
+  }
+  return true;
 }
 
 bool OsmMapReaderFactory::hasPartialReader(const QString& url)

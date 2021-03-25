@@ -19,16 +19,16 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef CRITERIONCOUNTVISITOR_H
 #define CRITERIONCOUNTVISITOR_H
 
 // hoot
-#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 #include <hoot/core/criterion/ElementCriterionConsumer.h>
 
 namespace hoot
@@ -45,25 +45,25 @@ public:
 
   CriterionCountVisitor();
   CriterionCountVisitor(const ElementCriterionPtr& pCrit);
-  virtual ~CriterionCountVisitor() = default;
+  ~CriterionCountVisitor() = default;
 
-  virtual void addCriterion(const ElementCriterionPtr& pCrit)
+  void addCriterion(const ElementCriterionPtr& pCrit) override
   {
     assert(_pCrit.get() == 0);
     _pCrit = pCrit;
   }
 
-  virtual void visit(const ConstElementPtr& e);
+  void visit(const ConstElementPtr& e) override;
 
   uint64_t getCount() const { return _count; }
   uint64_t getTotal() const { return _visited; }
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Counts the number of elements matching a criterion"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

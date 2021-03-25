@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "HilbertRTree.h"
@@ -33,7 +33,6 @@
 #include <cmath>
 #include <exception>
 #include <iostream>
-using namespace std;
 
 // Tgs
 #include <tgs/RStarTree/HilbertCurve.h>
@@ -41,17 +40,13 @@ using namespace std;
 #include <tgs/RStarTree/RTreeNode.h>
 #include <tgs/Statistics/Random.h>
 
+using namespace std;
 using namespace Tgs;
 
 HilbertRTree::HilbertRTree(const std::shared_ptr<PageStore>& ps, int dimensions) :
-  RStarTree(ps, dimensions)
+  RStarTree(ps, dimensions),
+  _hilbertCurve(new HilbertCurve(dimensions, 8))
 {
-  _hilbertCurve = new HilbertCurve(dimensions, 8);
-}
-
-HilbertRTree::~HilbertRTree()
-{
-  delete _hilbertCurve;
 }
 
 void HilbertRTree::bulkInsert(const std::vector<Box>& boxes, const std::vector<int>& fids)
@@ -332,11 +327,7 @@ public:
   HilbertRTree::BoxPair boxPair;
   int hilbertValue;
 
-  BoxHolder(const BoxHolder& bh) :
-    boxPair(bh.boxPair)
-  {
-    hilbertValue = bh.hilbertValue;
-  }
+  BoxHolder(const BoxHolder&)  = default;
 
   BoxHolder(const HilbertRTree::BoxPair& bp, int hv) :
     boxPair(bp)
@@ -393,7 +384,7 @@ int HilbertRTree::_splitBoxes(BoxVector& boxes)
       assert(point[j] >= 0 && point[j] < (1 << ORDER));
     }
 
-    hilbertBoxes.push_back(BoxHolder(boxes[i], _hilbertCurve->encode(point)));
+    hilbertBoxes.emplace_back(boxes[i], _hilbertCurve->encode(point));
   }
   //sort(hilbertBoxes.begin(), hilbertBoxes.end());
   bool swap = false;

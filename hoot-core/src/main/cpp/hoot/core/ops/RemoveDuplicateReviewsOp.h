@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef DUPLICATEREVIEWSOP_H
 #define DUPLICATEREVIEWSOP_H
@@ -48,25 +48,25 @@ public:
   static QString className() { return "hoot::RemoveDuplicateReviewsOp"; }
 
   RemoveDuplicateReviewsOp();
-  virtual ~RemoveDuplicateReviewsOp() = default;
+  ~RemoveDuplicateReviewsOp() = default;
 
-  virtual void apply(std::shared_ptr<OsmMap>& map) override;
+  void apply(std::shared_ptr<OsmMap>& map) override;
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
-  virtual QString getInitStatusMessage() const
+  QString getInitStatusMessage() const override
   { return "Removing duplicate conflation review relations..."; }
 
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   {
     return
       "Removed " + StringUtils::formatLargeNumber(_numAffected) +
       " duplicate conflation review relations";
   }
 
-  virtual QString getDescription() const override { return "Removes duplicate conflation reviews"; }
+  QString getDescription() const override { return "Removes duplicate conflation reviews"; }
 
 private:
 

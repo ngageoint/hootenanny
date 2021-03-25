@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef FINDINTERSECTIONSOP_H
 #define FINDINTERSECTIONSOP_H
@@ -53,18 +53,18 @@ public:
   FindIntersectionsOp() = default;
   virtual ~FindIntersectionsOp() = default;
 
-  virtual void apply(std::shared_ptr<OsmMap>& map) override;
+  void apply(std::shared_ptr<OsmMap>& map) override;
 
-  virtual QString getDescription() const override { return "Identifies generic intersections"; }
+  QString getDescription() const override { return "Identifies generic intersections"; }
 
   /**
    *  Pure virtual function called by constructor to create the intersection visitor
    */
   virtual std::shared_ptr<FindIntersectionsVisitor> createVisitor() = 0;
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 };
 
 /**
@@ -75,17 +75,17 @@ class FindHighwayIntersectionsOp : public FindIntersectionsOp
 public:
 
   FindHighwayIntersectionsOp() = default;
-  virtual ~FindHighwayIntersectionsOp() = default;
+  ~FindHighwayIntersectionsOp() = default;
 
   static QString className() { return "hoot::FindHighwayIntersectionsOp"; }
 
-  virtual QString getDescription() const override { return "Identifies highway intersections"; }
+  QString getDescription() const override { return "Identifies highway intersections"; }
 
-  virtual std::shared_ptr<FindIntersectionsVisitor> createVisitor();
+  std::shared_ptr<FindIntersectionsVisitor> createVisitor() override;
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 };
 
 /**
@@ -96,17 +96,17 @@ class FindRailwayIntersectionsOp : public FindIntersectionsOp
 public:
 
   FindRailwayIntersectionsOp() = default;
-  virtual ~FindRailwayIntersectionsOp() = default;
+  ~FindRailwayIntersectionsOp() = default;
 
   static QString className() { return "hoot::FindRailwayIntersectionsOp"; }
 
-  virtual QString getDescription() const override { return "Identifies railway intersections"; }
+  QString getDescription() const override { return "Identifies railway intersections"; }
 
-  virtual std::shared_ptr<FindIntersectionsVisitor> createVisitor();
+  std::shared_ptr<FindIntersectionsVisitor> createVisitor() override;
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 };
 
 }

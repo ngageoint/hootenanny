@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef __VAGABOND_NETWORK_MATCHER_H__
 #define __VAGABOND_NETWORK_MATCHER_H__
@@ -76,14 +76,14 @@ public:
 
   // Leaving this hardcoded for now, as we don't use this matcher in production conflation jobs.
   // If we ever do end up using it production, then add a config option for it.
-  virtual double getMatchThreshold() const { return 0.15; }
+  double getMatchThreshold() const override { return 0.15; }
 
   /**
    * Use this instead of a constructor. To simplify life a shared pointer should always be used.
    */
   static std::shared_ptr<VagabondNetworkMatcher> create();
 
-  virtual void iterate();
+  void iterate() override;
 
   virtual void iteratePageRank();
 
@@ -91,11 +91,11 @@ public:
 
   virtual void iterateVoting();
 
-  virtual void matchNetworks(ConstOsmMapPtr map, OsmNetworkPtr n1, OsmNetworkPtr n2);
+  void matchNetworks(ConstOsmMapPtr map, OsmNetworkPtr n1, OsmNetworkPtr n2) override;
 
-  virtual QList<NetworkEdgeScorePtr> getAllEdgeScores() const;
+  QList<NetworkEdgeScorePtr> getAllEdgeScores() const override;
 
-  virtual QList<NetworkVertexScorePtr> getAllVertexScores() const;
+  QList<NetworkVertexScorePtr> getAllVertexScores() const override;
 
 private:
 
@@ -115,8 +115,8 @@ private:
   QSet<EdgeMatchPtr> _getConnectedEdges(ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2);
 };
 
-typedef std::shared_ptr<VagabondNetworkMatcher> VagabondNetworkMatcherPtr;
-typedef std::shared_ptr<const VagabondNetworkMatcher> ConstVagabondNetworkMatcherPtr;
+using VagabondNetworkMatcherPtr = std::shared_ptr<VagabondNetworkMatcher>;
+using ConstVagabondNetworkMatcherPtr = std::shared_ptr<const VagabondNetworkMatcher>;
 
 // not implemented
 bool operator<(ConstVagabondNetworkMatcherPtr, ConstVagabondNetworkMatcherPtr);

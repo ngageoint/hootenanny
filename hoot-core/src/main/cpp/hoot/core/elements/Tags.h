@@ -19,17 +19,17 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef TAGS_H
 #define TAGS_H
 
 // Hoot
-#include <hoot/core/util/Units.h>
 #include <hoot/core/schema/SchemaVertex.h>
+#include <hoot/core/util/Units.h>
 
 // Qt
 #include <QHash>
@@ -102,7 +102,7 @@ public:
    */
   bool hasInformationTag() const;
 
-  const QString get(const QString& k) const { return operator[](k); }
+  QString get(const QString& k) const { return operator[](k); }
 
   /**
    * Gets the element's UUID(s). If the UUID doesn't exist then it creates a new UUID.

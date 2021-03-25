@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "PoiPolygonSchema.h"
 
@@ -207,7 +207,7 @@ bool PoiPolygonSchema::hasMoreThanOneType(const ConstElementPtr& element)
 {
   int typeCount = 0;
   QStringList typesParsed;
-  if (_allTypeKeys.size() == 0)
+  if (_allTypeKeys.empty())
   {
     _allTypeKeys = OsmSchema::getInstance().getAllTypeKeys();
   }

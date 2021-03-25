@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef RDP_WAY_GENERALIZER_H
@@ -75,7 +75,7 @@ class RdpWayGeneralizer : public OsmMapConsumer
 public:
 
   RdpWayGeneralizer(double epsilon);
-  virtual ~RdpWayGeneralizer() = default;
+  ~RdpWayGeneralizer() = default;
 
   /**
     Generalizes a way to a set of reduced points.  The map the way belongs to is modified.
@@ -93,7 +93,7 @@ public:
 
   void setRemoveNodesSharedByWays(bool remove) { _removeNodesSharedByWays = remove; }
 
-  virtual void setOsmMap(OsmMap* map) { _map = map->shared_from_this(); }
+  void setOsmMap(OsmMap* map) override { _map = map->shared_from_this(); }
 
 private:
 
@@ -116,7 +116,7 @@ private:
     @param wayPoints the collection of points to be reduced
     @returns a reduced set of line points
     */
-  virtual QList<std::shared_ptr<const Node>> _getGeneralizedPoints(
+  QList<std::shared_ptr<const Node>> _getGeneralizedPoints(
     const QList<std::shared_ptr<const Node>>& wayPoints);
 
   /*

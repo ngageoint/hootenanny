@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef IMPLICIT_TAG_ELIGIBLE_POI_POLY_CRITERION_H
 #define IMPLICIT_TAG_ELIGIBLE_POI_POLY_CRITERION_H
@@ -44,11 +44,11 @@ public:
   static QString className() { return "hoot::ImplicitTagEligiblePoiPolyCriterion"; }
 
   ImplicitTagEligiblePoiPolyCriterion() = default;
-  virtual ~ImplicitTagEligiblePoiPolyCriterion() = default;
+  ~ImplicitTagEligiblePoiPolyCriterion() = default;
 
-  virtual bool isSatisfied(const ConstElementPtr& e) const override;
+  bool isSatisfied(const ConstElementPtr& e) const override;
 
-  virtual ElementCriterionPtr clone()
+  ElementCriterionPtr clone() override
   { return ElementCriterionPtr(new ImplicitTagEligiblePoiPolyCriterion()); }
 
   /**
@@ -57,7 +57,7 @@ public:
    * @param tags tags to examine
    * @return a list of key/value pairs (key=value)
    */
-  virtual QStringList getEligibleKvps(const Tags& tags) const override;
+  QStringList getEligibleKvps(const Tags& tags) const override;
 
   /**
    * Returns true if the input tags contain at least one key/value pair which could be applied
@@ -66,14 +66,14 @@ public:
    * @param tags tags to examine
    * @return true if any eligible tags are present; false otherwise
    */
-  virtual bool hasEligibleKvp(const Tags& tags) const override;
+  bool hasEligibleKvp(const Tags& tags) const override;
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Identifies POIs and polygons eligible for type tag addition"; }
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 };
 
 }

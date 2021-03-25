@@ -19,21 +19,21 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "TagAdvancedCriterion.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/elements/Element.h>
+#include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/schema/OsmSchema.h>
 
 // Boost
 #include <boost/foreach.hpp>
@@ -103,8 +103,8 @@ void TagAdvancedCriterion::_parseFilterString(const QString& filterJsonStringOrP
   _loadTagFilters("should", propTree);
   _loadTagFilters("must_not", propTree);
 
-  if (_tagFilters["must"].size() == 0 && _tagFilters["must_not"].size() == 0 &&
-      _tagFilters["should"].size() == 0)
+  if (_tagFilters["must"].empty() && _tagFilters["must_not"].empty() &&
+      _tagFilters["should"].empty())
   {
     throw IllegalArgumentException("Empty tag filter specified.");
   }
@@ -210,8 +210,8 @@ bool TagAdvancedCriterion::_hasAuxMatch(const ConstElementPtr& e, const TagFilte
     const QStringList tagValues = tagValue.split(";");
     for (int i = 0; i < tagValues.length(); i++)
     {
-      const QString tagValue = tagValues.at(i).trimmed().toLower();
-      if (!tagValue.isEmpty() && _filterMatchesAnyTag(TagFilter(tagKey, tagValue), e->getTags()))
+      const QString splitValue = tagValues.at(i).trimmed().toLower();
+      if (!splitValue.isEmpty() && _filterMatchesAnyTag(TagFilter(tagKey, splitValue), e->getTags()))
       {
         LOG_TRACE("Found " << matchType << " match.");
         return true;

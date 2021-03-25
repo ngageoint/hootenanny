@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef EDGESTRING_H
 #define EDGESTRING_H
@@ -49,9 +49,7 @@ public:
 
   struct EdgeEntry
   {
-    EdgeEntry(const ConstEdgeSublinePtr& subline) : _subline(subline)
-    {
-    }
+    EdgeEntry(const ConstEdgeSublinePtr& subline) : _subline(subline) { }
 
     const ConstNetworkEdgePtr& getEdge() const { return _subline->getEdge(); }
 
@@ -93,7 +91,7 @@ public:
 
   static int logWarnCount;
 
-  EdgeString();
+  EdgeString() = default;
 
   void addFirstEdge(const ConstNetworkEdgePtr& e);
 
@@ -241,8 +239,8 @@ private:
   QList<EdgeEntry> _edges;
 };
 
-typedef std::shared_ptr<EdgeString> EdgeStringPtr;
-typedef std::shared_ptr<const EdgeString> ConstEdgeStringPtr;
+using EdgeStringPtr = std::shared_ptr<EdgeString>;
+using ConstEdgeStringPtr = std::shared_ptr<const EdgeString>;
 
 // not implemented
 bool operator<(ConstEdgeStringPtr, ConstEdgeStringPtr);

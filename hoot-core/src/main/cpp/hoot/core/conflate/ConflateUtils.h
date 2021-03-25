@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef CONFLATE_UTILS_H
@@ -30,7 +30,8 @@
 
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/ops/OsmMapOperation.h>
+#include <hoot/core/visitors/ElementVisitor.h>
 
 namespace hoot
 {
@@ -53,7 +54,7 @@ public:
   static int writeNonConflatable(const ConstOsmMapPtr& map, const QString& output);
 
   /**
-   * Writes the differential between to maps
+   * Writes the differential between two maps
    *
    * @param mapUrl1 map 1 URL
    * @param mapUrl2 map 2 URL
@@ -64,19 +65,23 @@ public:
                         const geos::geom::Envelope& bounds, const QString& output);
 
   /**
-   * Checks to see if an element can be conflated by any of the configured matchers for conflation.
+   * Determines whether an OsmMapOperation operates on generically typed elements exclusively (e.g.
+   * node or way)
    *
-   * @param element element to examine
-   * @param map map containing the element
-   * @return true if the conflate matchers are configured with at least one matcher that
-   * can conflate the input element; false otherwise
+   * @param op the operation to examine
+   * @return true if the input operation only operates on generically typed elements; false
+   * otherwise
    */
-  static bool elementCanBeConflatedByActiveMatcher(
-    const ConstElementPtr& element, const ConstOsmMapPtr& map);
+  static bool operatesOnGenericElementsOnly(const std::shared_ptr<OsmMapOperation>& op);
 
-private:
-
-  static QMap<QString, ElementCriterionPtr> _critCache;
+  /**
+   * Determines whether an ElementVisitor operates on generically typed elements exclusively (e.g.
+   * node or way)
+   *
+   * @param vis the visitor to examine
+   * @return true if the input visitor only operates on generically typed elements; false otherwise
+   */
+  static bool operatesOnGenericElementsOnly(const std::shared_ptr<ElementVisitor>& vis);
 };
 
 }

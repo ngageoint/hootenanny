@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef APITAGTRUNCATEVISITOR_H
 #define APITAGTRUNCATEVISITOR_H
@@ -45,6 +45,10 @@ namespace hoot
  *  `source:datetime` and `source:ingest:datetime` are date lists that are truncated down
  *  to include only the last date in the list.  Thirdly the `uuid` field is handled the
  *  same way, only the last UUID in the list is preserved.
+ *
+ * No need to implement FilteredByGeometryTypeCriteria or ElementConflatableCheck here, as this op
+ * is necessary for any element to be written back to an OSM data store via HTTP and should always
+ * be run.
  */
 class ApiTagTruncateVisitor : public ElementVisitor, public Configurable
 {
@@ -53,7 +57,7 @@ public:
   static QString className() { return "hoot::ApiTagTruncateVisitor"; }
 
   ApiTagTruncateVisitor();
-  virtual ~ApiTagTruncateVisitor() = default;
+  ~ApiTagTruncateVisitor() = default;
 
   void visit(const ElementPtr& e) override;
 
@@ -70,9 +74,9 @@ public:
       " elements";
   }
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
   void setConfiguration(const Settings& conf) override;
 

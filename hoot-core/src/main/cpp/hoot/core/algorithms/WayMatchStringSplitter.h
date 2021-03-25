@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef WAYMATCHSTRINGSPLITTER_H
 #define WAYMATCHSTRINGSPLITTER_H
@@ -36,26 +36,28 @@ class WayMatchStringSplitter
 {
 public:
 
-  WayMatchStringSplitter();
+  WayMatchStringSplitter() = default;
 
   /**
    * Traverses all mappings, splits ways where appropriate and updates the subline mappings in
    * place.
-   * Throws NeedsReviewException
+   *
+   * @throws NeedsReviewException
    */
-  void applySplits(OsmMapPtr map, std::vector<std::pair<ElementId, ElementId>> &replaced,
+  void applySplits(
+    OsmMapPtr map, std::vector<std::pair<ElementId, ElementId>>& replaced,
     QList<WayMatchStringMerger::SublineMappingPtr> mappings);
 
 private:
 
   static QString _overlyAggressiveMergeReviewText;
 
-  QMultiMap<WayPtr, WayMatchStringMerger::SublineMappingPtr> _buildWayIndex(WayNumber wn, OsmMapPtr map,
-    QList<WayMatchStringMerger::SublineMappingPtr> mappings) const;
+  QMultiMap<WayPtr, WayMatchStringMerger::SublineMappingPtr> _buildWayIndex(
+    WayNumber wn, OsmMapPtr map, QList<WayMatchStringMerger::SublineMappingPtr> mappings) const;
 
-  void _splitWay(WayNumber wn, OsmMapPtr map, std::vector<std::pair<ElementId, ElementId>> &replaced,
+  void _splitWay(
+    WayNumber wn, OsmMapPtr map, std::vector<std::pair<ElementId, ElementId>>& replaced,
     QList<WayMatchStringMerger::SublineMappingPtr> mappings);
-
 };
 
 }

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2019, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef OSMAPIDB_H
 #define OSMAPIDB_H
@@ -56,32 +56,32 @@ public:
 
   OsmApiDb();
 
-  virtual ~OsmApiDb();
+  ~OsmApiDb();
 
-  virtual void close();
+  void close() override;
 
-  virtual bool isSupported(const QUrl& url) override;
+  bool isSupported(const QUrl& url) override;
 
-  virtual void open(const QUrl& url) override;
+  void open(const QUrl& url) override;
 
-  virtual void commit();
+  void commit() override;
 
-  virtual void deleteUser(long userId);
+  void deleteUser(long userId) override;
 
   /**
    * Returns a vector with all the OSM node ID's for a given way
    */
-  virtual std::vector<long> selectNodeIdsForWay(long wayId) override;
+  std::vector<long> selectNodeIdsForWay(long wayId) override;
 
   /**
    * Returns a query results with node_id, lat, and long with all the OSM node ID's for a given way
    */
-  virtual std::shared_ptr<QSqlQuery> selectNodesForWay(long wayId) override;
+  std::shared_ptr<QSqlQuery> selectNodesForWay(long wayId) override;
 
   /**
    * Returns a vector with all the relation members for a given relation
    */
-  virtual std::vector<RelationData::Entry> selectMembersForRelation(long relationId) override;
+  std::vector<RelationData::Entry> selectMembersForRelation(long relationId) override;
 
   /**
     * Deletes data in the Osm Api db
@@ -114,7 +114,7 @@ public:
    * @param tableName element type associated with the sequence
    * @return the next sequence ID for the given type
    */
-  virtual long getNextId(const ElementType& elementType);
+  long getNextId(const ElementType& elementType) override;
 
   /**
    * Increment the sequence ID for the given sequence and return it
@@ -150,7 +150,7 @@ public:
   /**
    * @see ApiDb::elementTypeToElementTableName
    */
-  virtual QString elementTypeToElementTableName(const ElementType& elementType) const override;
+  QString elementTypeToElementTableName(const ElementType& elementType) const override;
 
   /**
    * Converts a table type to a OSM API database table name
@@ -158,7 +158,7 @@ public:
    * @param tableType table type enum to convert
    * @return a database table name string
    */
-  virtual QString tableTypeToTableName(const TableType& tableType) const override;
+  QString tableTypeToTableName(const TableType& tableType) const override;
 
   /**
    * Returns an OSM API database table name
@@ -193,7 +193,7 @@ public:
 
 protected:
 
-  void _resetQueries();
+  void _resetQueries() override;
 
 private:
 

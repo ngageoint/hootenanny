@@ -19,17 +19,17 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef DECOMPOSEBUILDINGRELATIONSVISITOR_H
 #define DECOMPOSEBUILDINGRELATIONSVISITOR_H
 
 // hoot
 #include <hoot/core/elements/OsmMapConsumer.h>
-#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 
 namespace hoot
 {
@@ -52,24 +52,24 @@ public:
   static int logWarnCount;
 
   DecomposeBuildingRelationsVisitor() = default;
-  virtual ~DecomposeBuildingRelationsVisitor() = default;
+  ~DecomposeBuildingRelationsVisitor() = default;
 
-  virtual void visit(const ConstElementPtr& e);
+  void visit(const ConstElementPtr& e) override;
 
-  virtual void setOsmMap(OsmMap* map) { _map = map; }
-  virtual void setOsmMap(const OsmMap* /*map*/) { assert(false); }
+  void setOsmMap(OsmMap* map) override { _map = map; }
+  void setOsmMap(const OsmMap* /*map*/) { assert(false); }
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Decomposes complex buildings into simpler elements"; }
 
-  virtual QString getInitStatusMessage() const { return "Decomposing complex buildings..."; }
+  QString getInitStatusMessage() const override { return "Decomposing complex buildings..."; }
 
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   { return "Decomposed " + QString::number(_numAffected) + " complex buildings"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

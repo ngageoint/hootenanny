@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef FRECHETDISTANCE_H
 #define FRECHETDISTANCE_H
@@ -42,13 +42,13 @@
 namespace hoot
 {
 
-typedef boost::multi_array<Meters, 2> frechet_matrix;
-typedef frechet_matrix::index frechet_index;
-typedef std::pair<int, int> vertex_match;
-typedef std::vector<vertex_match> subline_entry;
-typedef std::pair<Meters, subline_entry> frechet_subline;
+using frechet_matrix = boost::multi_array<Meters, 2>;
+using frechet_index = frechet_matrix::index;
+using vertex_match = std::pair<int, int>;
+using subline_entry = std::vector<vertex_match>;
+using frechet_subline = std::pair<Meters, subline_entry>;
 
-typedef std::shared_ptr<geos::geom::LineString> LineStringPtr;
+using LineStringPtr = std::shared_ptr<geos::geom::LineString>;
 
 /** Class for calculating Frechet Distance between two ways and calculating maximal subline matches.
  *  Algorithm developed from "A new merging process for data integration base on the descrete Frechet distance"

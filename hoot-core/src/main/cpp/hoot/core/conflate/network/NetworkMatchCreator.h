@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef NETWORKMATCHCREATOR_H
 #define NETWORKMATCHCREATOR_H
@@ -43,28 +43,28 @@ public:
   static QString className() { return "hoot::NetworkMatchCreator"; }
 
   NetworkMatchCreator();
-  virtual ~NetworkMatchCreator() = default;
+  ~NetworkMatchCreator() = default;
 
-  virtual MatchPtr createMatch(const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2);
+  MatchPtr createMatch(const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2) override;
 
   /**
    * Search the provided map for network matches and add the matches to the matches vector.
    */
-  virtual void createMatches(const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& matches,
-                             ConstMatchThresholdPtr threshold) override;
+  void createMatches(const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& matches,
+                     ConstMatchThresholdPtr threshold) override;
 
-  virtual std::vector<CreatorDescription> getAllCreators() const override;
+  std::vector<CreatorDescription> getAllCreators() const override;
 
-  virtual bool isMatchCandidate(ConstElementPtr element, const ConstOsmMapPtr& map) override;
+  bool isMatchCandidate(ConstElementPtr element, const ConstOsmMapPtr& map) override;
 
-  virtual std::shared_ptr<MatchThreshold> getMatchThreshold() override;
+  std::shared_ptr<MatchThreshold> getMatchThreshold() override;
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
   /**
    * @see FilteredByGeometryTypeCriteria
    */
-  virtual QStringList getCriteria() const;
+  QStringList getCriteria() const override;
 
 private:
 

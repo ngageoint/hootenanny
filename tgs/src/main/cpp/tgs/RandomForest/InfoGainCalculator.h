@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2018, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef __INFO_GAIN_CALCULATOR_H__
@@ -43,12 +43,12 @@ namespace Tgs
     /**
     *  Constructor
     */
-    InfoGainCalculator();
+    InfoGainCalculator() = default;
 
     /**
     *  Destructor
     */
-    ~InfoGainCalculator();
+    ~InfoGainCalculator() = default;
 
     /**
     *  Computes the entropy of a dataset based only on the class label

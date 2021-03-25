@@ -19,22 +19,22 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "AddressScoreExtractor.h"
 
 // hoot
+#include <hoot/core/algorithms/string/LevenshteinDistance.h>
+#include <hoot/core/algorithms/string/MeanWordSetDistance.h>
+#include <hoot/core/conflate/address/Address.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/conflate/address/Address.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/algorithms/string/MeanWordSetDistance.h>
-#include <hoot/core/algorithms/string/LevenshteinDistance.h>
 
 using namespace std;
 
@@ -76,8 +76,7 @@ void AddressScoreExtractor::setConfiguration(const Settings& conf)
   _cacheEnabled = config.getAddressScorerEnableCaching();
   if (_cacheEnabled)
   {
-    // Sharing this setting with POI/Poly's max cache sizes for now.
-    const int maxCacheSize = config.getPoiPolygonMaxSizePerCache();
+    const int maxCacheSize = config.getConflateInfoMaxSizePerCache();
     if (maxCacheSize > 0)
     {
       _addressesCache.setMaxCost(maxCacheSize);
@@ -99,7 +98,7 @@ double AddressScoreExtractor::extract(const OsmMap& map, const ConstElementPtr& 
   // see if the first element has any address
   const QList<Address> element1Addresses = _getElementAddresses(map, element1, element2);
   LOG_VART(element1Addresses.size());
-  if (element1Addresses.size() == 0)
+  if (element1Addresses.empty())
   {
     LOG_TRACE("No element 1 addresses.");
     return -1.0;
@@ -108,7 +107,7 @@ double AddressScoreExtractor::extract(const OsmMap& map, const ConstElementPtr& 
   // see if the second element has an address
   const QList<Address> element2Addresses = _getElementAddresses(map, element2, element1);
   LOG_VART(element2Addresses.size());
-  if (element2Addresses.size() == 0)
+  if (element2Addresses.empty())
   {
     LOG_TRACE("No element 2 addresses.");
     return -1.0;
@@ -153,7 +152,7 @@ QList<Address> AddressScoreExtractor::_getElementAddresses(
   if (_cacheEnabled)
   {
     const QList<Address>* cachedVal = _addressesCache[element->getElementId()];
-    if (cachedVal != 0)
+    if (cachedVal != nullptr)
     {
       LOG_TRACE("Found cached address(es): " << *cachedVal);
       _addressCacheHits++;
@@ -162,7 +161,7 @@ QList<Address> AddressScoreExtractor::_getElementAddresses(
   }
 
   QList<Address> elementAddresses = _addressParser.parseAddresses(*element);
-  if (elementAddresses.size() == 0)
+  if (elementAddresses.empty())
   {
     //if not, try to find the address from a poly way node instead
     if (element->getElementType() == ElementType::Way)
@@ -171,7 +170,7 @@ QList<Address> AddressScoreExtractor::_getElementAddresses(
       elementAddresses =
         _addressParser.parseAddressesFromWayNodes(
           *way, map, elementBeingComparedWith->getElementId());
-      if (elementAddresses.size() != 0)
+      if (!elementAddresses.empty())
       {
         LOG_TRACE(
           "Found " << elementAddresses.size() << " address(es) on the way nodes of " <<
@@ -185,7 +184,7 @@ QList<Address> AddressScoreExtractor::_getElementAddresses(
       elementAddresses =
         _addressParser.parseAddressesFromRelationMembers(
           *relation, map, elementBeingComparedWith->getElementId());
-      if (elementAddresses.size() != 0)
+      if (!elementAddresses.empty())
       {
         LOG_TRACE(
           "Found " << elementAddresses.size() << " address(es) on the relation members of " <<

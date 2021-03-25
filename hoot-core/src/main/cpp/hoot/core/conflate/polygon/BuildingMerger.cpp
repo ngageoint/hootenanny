@@ -19,28 +19,32 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "BuildingMerger.h"
 
 // hoot
+#include <hoot/core/algorithms/extractors/IntersectionOverUnionExtractor.h>
 #include <hoot/core/conflate/IdSwap.h>
+#include <hoot/core/conflate/merging/LinearTagOnlyMerger.h>
+#include <hoot/core/conflate/polygon/BuildingMatch.h>
 #include <hoot/core/conflate/review/ReviewMarker.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
 #include <hoot/core/criterion/BuildingPartCriterion.h>
 #include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/criterion/ElementTypeCriterion.h>
+#include <hoot/core/elements/ElementIdUtils.h>
 #include <hoot/core/elements/InMemoryElementSorter.h>
 #include <hoot/core/elements/OsmUtils.h>
-#include <hoot/core/elements/ElementIdUtils.h>
 #include <hoot/core/elements/TagUtils.h>
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/ops/IdSwapOp.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
+#include <hoot/core/ops/RemoveRelationByEid.h>
 #include <hoot/core/ops/ReplaceElementOp.h>
 #include <hoot/core/ops/ReuseNodeIdsOnWayOp.h>
 #include <hoot/core/schema/BuildingRelationMemberTagMerger.h>
@@ -54,9 +58,6 @@
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/UniqueElementIdVisitor.h>
 #include <hoot/core/visitors/WorstCircularErrorVisitor.h>
-#include <hoot/core/algorithms/extractors/IntersectionOverUnionExtractor.h>
-#include <hoot/core/conflate/polygon/BuildingMatch.h>
-#include <hoot/core/ops/RemoveRelationByEid.h>
 
 using namespace std;
 
@@ -71,9 +72,9 @@ class DeletableBuildingCriterion : public ElementCriterion
 public:
 
   DeletableBuildingCriterion() = default;
-  virtual ~DeletableBuildingCriterion() = default;
+  ~DeletableBuildingCriterion() = default;
 
-  virtual bool isSatisfied(const ConstElementPtr& e) const
+  bool isSatisfied(const ConstElementPtr& e) const override
   {
     bool result = false;
 
@@ -92,16 +93,16 @@ public:
     return !result;
   }
 
-  virtual QString getDescription() const { return ""; }
+  QString getDescription() const override { return ""; }
 
-  virtual QString getName() const override { return ""; }
+  QString getName() const override { return ""; }
 
-virtual QString getClassName() const override { return ""; }
+  QString getClassName() const override { return ""; }
 
-  virtual ElementCriterionPtr clone()
+  ElementCriterionPtr clone() override
   { return ElementCriterionPtr(new DeletableBuildingCriterion()); }
 
-  virtual QString toString() const override { return ""; }
+  QString toString() const override { return ""; }
 
 private:
 
@@ -135,10 +136,10 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementI
   for (set<pair<ElementId, ElementId>>::const_iterator sit = _pairs.begin(); sit != _pairs.end();
        ++sit)
   {
-    firstPairs.insert(sit->first);
-    secondPairs.insert(sit->second);
-    combined.insert(sit->first);
-    combined.insert(sit->second);
+    firstPairs.emplace(sit->first);
+    secondPairs.emplace(sit->second);
+    combined.emplace(sit->first);
+    combined.emplace(sit->second);
   }
   _manyToManyMatch = firstPairs.size() > 1 && secondPairs.size() > 1;
 
@@ -288,13 +289,10 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementI
   {
     // if we replaced the second group of buildings
     if (it->second != keeper->getElementId())
-    {
-      replacedSet.insert(pair<ElementId, ElementId>(it->second, keeper->getElementId()));
-    }
+      replacedSet.emplace(it->second, keeper->getElementId());
+
     if (it->first != keeper->getElementId())
-    {
-      replacedSet.insert(pair<ElementId, ElementId>(it->first, keeper->getElementId()));
-    }
+      replacedSet.emplace(it->first, keeper->getElementId());
   }
   replaced.insert(replaced.end(), replacedSet.begin(), replacedSet.end());
 }
@@ -326,7 +324,7 @@ Tags BuildingMerger::_getMergedTags(const ElementPtr& e1, const ElementPtr& e2)
   ref1.sort();
   ref2.sort();
 
-  if (ref1.size() != 0 || ref2.size() != 0)
+  if (!ref1.empty() || !ref2.empty())
   {
     if (ref1 == ref2)
     {
@@ -447,12 +445,12 @@ QSet<ElementId> BuildingMerger::_getMultiPolyMemberIds(const ConstElementPtr& el
 std::shared_ptr<Element> BuildingMerger::buildBuilding(
   const OsmMapPtr& map, const set<ElementId>& eid, const bool preserveTypes)
 {
-  if (eid.size() > 0)
+  if (!eid.empty())
   {
     LOG_TRACE("Creating building for eid's: " << eid << "...");
   }
 
-  if (eid.size() == 0)
+  if (eid.empty())
   {
     throw IllegalArgumentException("No element ID passed to building builder.");
   }
@@ -573,7 +571,7 @@ std::shared_ptr<Element> BuildingMerger::buildBuilding(
 RelationPtr BuildingMerger::combineConstituentBuildingsIntoRelation(
   const OsmMapPtr& map, std::vector<ElementPtr>& constituentBuildings, const bool preserveTypes)
 {
-  if (constituentBuildings.size() == 0)
+  if (constituentBuildings.empty())
   {
     throw IllegalArgumentException("No constituent buildings passed to building merger.");
   }
@@ -683,10 +681,12 @@ RelationPtr BuildingMerger::combineConstituentBuildingsIntoRelation(
   relationTags = parentRelation->getTags();
   LOG_VART(relationTags);
 
+  const bool isAttributeConflate =
+    ConfigOptions().getGeometryLinearMergerDefault() == LinearTagOnlyMerger::className();
   // Doing this for multipoly relations in Attribute Conflation only for the time being.
   const bool suppressBuildingTagOnConstituents =
-    // relatively loose way to identify AC; also used in ConflateCmd
-    ConfigOptions().getHighwayMergeTagsOnly() &&
+    // relatively loose way to identify AC; also used in ConflateExecutor
+    isAttributeConflate &&
     // allAreBuildingParts = building relation
     !allAreBuildingParts &&
     ConfigOptions().getAttributeConflationSuppressBuildingTagOnMultipolyRelationConstituents();
@@ -796,9 +796,9 @@ void BuildingMerger::mergeBuildings(OsmMapPtr map, const ElementId& mergeTargetI
   //child nodes, we want to override the default behavior and make sure the building merger always
   //arbitrarily keeps the geometry of the first building passed in.  This is ok, b/c the UI workflow
   //lets the user select which building to keep and using complexity wouldn't make sense.
-  LOG_VART(ConfigOptions().getBuildingKeepMoreComplexGeometryWhenAutoMergingKey());
+  LOG_VART(ConfigOptions::getBuildingKeepMoreComplexGeometryWhenAutoMergingKey());
   conf().set(
-    ConfigOptions().getBuildingKeepMoreComplexGeometryWhenAutoMergingKey(), "false");
+    ConfigOptions::getBuildingKeepMoreComplexGeometryWhenAutoMergingKey(), "false");
   LOG_VART(ConfigOptions().getBuildingKeepMoreComplexGeometryWhenAutoMerging());
 
   // See related note about statuses in PoiPolygonMerger::mergePoiAndPolygon. Don't know how to
@@ -827,7 +827,7 @@ void BuildingMerger::mergeBuildings(OsmMapPtr map, const ElementId& mergeTargetI
       }
 
       std::set<std::pair<ElementId, ElementId>> pairs;
-      pairs.insert(std::pair<ElementId, ElementId>(mergeTargetId, way->getElementId()));
+      pairs.emplace(mergeTargetId, way->getElementId());
       BuildingMerger merger(pairs);
       LOG_VART(pairs.size());
       std::vector<std::pair<ElementId, ElementId>> replacedElements;
@@ -849,7 +849,7 @@ void BuildingMerger::mergeBuildings(OsmMapPtr map, const ElementId& mergeTargetI
       }
 
       std::set<std::pair<ElementId, ElementId>> pairs;
-      pairs.insert(std::pair<ElementId, ElementId>(mergeTargetId, relation->getElementId()));
+      pairs.emplace(mergeTargetId, relation->getElementId());
       BuildingMerger merger(pairs);
       LOG_VART(pairs.size());
       std::vector<std::pair<ElementId, ElementId>> replacedElements;

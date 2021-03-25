@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014 Maxar (http://www.maxar.com/)
  */
 
 /*
@@ -47,13 +47,13 @@ mgcp.rules = {
     // MGCP TRDv4 Only FCODES
     // These are used for both import and export
     ['F_CODE','AA012','landuse','quarry'], // Quarry - NFDD AA010
-    ['F_CODE','AL015','building','yes'], // Building - changed to AL013
     ['F_CODE','AA050','man_made','well'], // Well - NFDD BH230 or AA054 based on Product type
     ['F_CODE','AC000','facility','processing'], // Processing Facility - NFDD AL010
-    // ['F_CODE','AH050','site:type','fortification'], // Fortification - FCODE Retired
     ['F_CODE','AH050','military','bunker'], // Fortification - FCODE Retired
+    // ['F_CODE','AH050','site:type','fortification'], // Fortification - FCODE Retired
     ['F_CODE','AJ010','farm:irrigation','centre_pivot'], // Circular Irrigation System - FCODE Retired
     ['F_CODE','AK190','man_made','recreational_pier'], // Recreational Pier - NFDD BB081
+    ['F_CODE','AL015','building','yes'], // Building - changed to AL013
     ['F_CODE','AL210','route:protection','yes'], // Protection Shed - NFDD AL211
     ['F_CODE','AT030','power','line'], // Power Line - NFDD AT005
     ['F_CODE','AT050','use','communication'], // Communication Station - No replacement code
@@ -2026,6 +2026,29 @@ mgcp.rules = {
     [undefined,undefined,'amenity','hospital'], // To stop warnings. Fixed in biased rules
     [undefined,undefined,'natural','water'], // To stop warnings. Fixed in biased rules
 
+    // CAA - Controlling Authority - TRD3/NFDD values. Convert to 'civilian'
+    ['CAA','16','operator','national'],
+    ['CAA','16','operator','state'],
+    ['CAA','16','operator','tribal'], // From NFDD
+    ['CAA','16','operator','municipal'], // From NFDD
+    ['CAA','16','operator','international'],
+    ['CAA','16','operator','province'], // From NFDD
+    ['CAA','16','operator','regional'], // From NFDD
+    ['CAA','16','operator','public'], // From NFDD
+
+    // AP020 - Interchange
+    ['CON','35','junction','cloverleaf'],
+    ['CON','35','junction','diamond'],
+    ['CON','35','junction','fork'],
+    ['CON','35','junction','roundabout'],
+    ['CON','35','junction','staggered_ramps'],
+    ['CON','35','junction','standard_ramps'],
+    ['CON','35','junction','symetrical_ramps'],
+    ['CON','35','junction','trumpet'],
+    ['CON','35','junction','turban'],
+    ['CON','35','junction','wye'],
+    ['CON','35','junction','other'],
+
     ['COS','4','operational_status','non_operational'], // Non-operational
 
     ['FIC','1','embankment:type','mound'], // Mound
@@ -2174,30 +2197,51 @@ mgcp.rules = {
     ['FFN','99','building','manufacturing'],
     ['FFN','192','product','petroleum'],
 
-    // CAA - Controlling Authority - TRD3/NFDD values. Convert to 'civilian'
-    ['CAA','16','operator','national'],
-    ['CAA','16','operator','state'],
-    ['CAA','16','operator','tribal'], // From NFDD
-    ['CAA','16','operator','municipal'], // From NFDD
-    ['CAA','16','operator','international'],
-    ['CAA','16','operator','province'], // From NFDD
-    ['CAA','16','operator','regional'], // From NFDD
-    ['CAA','16','operator','public'], // From NFDD
+    // Building
+    ['FFN','563','building','detached'],
+    ['FFN','563','building','terrace'],
+    ['FFN','440','building','retail'],
+    ['FFN','999','building','civic'],
+    ['FFN','999','building','public'],
+    ['FFN','999','building','bridge'],
+    ['FFN','835','building','bunker'], // Possibly another FCODE AM060
+    ['FFN','563','building','cabin'],
+    ['FFN','535','building','garage'],
+    ['FFN','535','building','garages'],
+    ['FFN','999','building','roof'],
+    ['FFN','919','building','stable'],
+    ['FFN','811','amenity','public_building'], // Not good - Government
+    ['FFN','481','amenity','bus_station'], // Not good - terminal
+    ['FFN','999','amenity','arts_centre'], // Nothing close to this, going with Other
 
-    // AP020 - Interchange
-    ['CON','35','junction','cloverleaf'],
-    ['CON','35','junction','diamond'],
-    ['CON','35','junction','fork'],
-    ['CON','35','junction','roundabout'],
-    ['CON','35','junction','staggered_ramps'],
-    ['CON','35','junction','standard_ramps'],
-    ['CON','35','junction','symetrical_ramps'],
-    ['CON','35','junction','trumpet'],
-    ['CON','35','junction','turban'],
-    ['CON','35','junction','wye'],
-    ['CON','35','junction','other'],
+    // Office: Things that are not "commerce"
+    ['FFN','720','office','research'], // Scientific R&D
+    ['FFN','810','office','association'], // Administrative
+    ['FFN','810','office','educational_institution'], // Administrative
+    ['FFN','810','office','religion'], // Administrative
+    ['FFN','810','office','foundation'], // Administrative
+    ['FFN','825','office','diplomatic'], // Diplomacy
+    ['FFN','841','office','police'], // Law Enforcement
+    ['FFN','859','office','ngo'], // Institution
+    ['FFN','859','office','charity'], // Institution
+    ['FFN','860','office','physician'], // Human Health
+    ['FFN','860','office','therapist'], // Human Health
+    ['FFN','860','office','medical'], // Human Health
+    ['FFN','440','information','office'], // Commerce - Tourist information as a "service"
+    ['FFN','192','industrial','oil_gas_facility'],
 
-    // From UFD
+    // Tags from "native" OSM start here - for export
+    ['FFN','550','tourism','hotel'], // Accomodation
+    ['FFN','550','tourism','guest_house'], // Accomodation
+    ['FFN','550','amenity','doctors'], // Healthcare
+    ['FFN','572','amenity','cafe'],
+    ['FFN','850','use','education'],
+    ['FFN','850','amenity','school'],
+    ['FFN','850','amenity','kindergarten'],
+    ['FFN','850','amenity','college'],
+    ['FFN','850','amenity','university'],
+
+    ['FUN','6','condition','intact'],
     ['FUN','6','condition','not_isolated'], // Changed to Fully Functional
 
     // Highway
@@ -2232,42 +2276,6 @@ mgcp.rules = {
     ['RST','999','surface','ice'],
     ['RST','999','surface','snow'],
 
-    // Building
-    ['FFN','563','building','detached'],
-    ['FFN','563','building','terrace'],
-    ['FFN','440','building','retail'],
-    ['FFN','999','building','civic'],
-    ['FFN','999','building','public'],
-    ['FFN','999','building','bridge'],
-    ['FFN','835','building','bunker'], // Possibly another FCODE AM060
-    ['FFN','563','building','cabin'],
-    ['FFN','535','building','garage'],
-    ['FFN','535','building','garages'],
-    ['FFN','999','building','roof'],
-    ['FFN','919','building','stable'],
-    ['FFN','811','amenity','public_building'], // Not good - Government
-    ['FFN','481','amenity','bus_station'], // Not good - terminal
-    ['FFN','999','amenity','arts_centre'], // Nothing close to this, going with Other
-
-    // Office: Things that are not "commerce"
-    ['FFN','720','office','research'], // Scientific R&D
-    ['FFN','810','office','association'], // Administrative
-    ['FFN','810','office','educational_institution'], // Administrative
-    ['FFN','810','office','religion'], // Administrative
-    ['FFN','810','office','foundation'], // Administrative
-    ['FFN','825','office','diplomatic'], // Diplomacy
-    ['FFN','841','office','police'], // Law Enforcement
-    ['FFN','859','office','ngo'], // Institution
-    ['FFN','859','office','charity'], // Institution
-    ['FFN','860','office','physician'], // Human Health
-    ['FFN','860','office','therapist'], // Human Health
-    ['FFN','860','office','medical'], // Human Health
-
-    ['FFN','440','information','office'], // Commerce - Tourist information as a "service"
-
-    // UFD
-    ['FFN','192','industrial','oil_gas_facility'],
-
     // Source stuff from UFD
     ['SRT','116','source:name','landsat'], // Landsat
     ['SRT','999','source:name','foundation_feature_data/relocatable_target_data_(ffd/rtad)'], //  Foundation Feature Data/Relocatable Target Data (FFD/RTAD)
@@ -2276,23 +2284,12 @@ mgcp.rules = {
     ['SRT','999','source:name','digital_globe'], // Digital Globe
     ['SRT','999','source:name','boundaries_(international_boundaries_database)'], // Boundaries (International Boundaries Database)
 
-    // Tags from "native" OSM start here - for export
-    ['FFN','550','tourism','hotel'], // Accomodation
-    ['FFN','550','tourism','guest_house'], // Accomodation
-    ['FFN','550','amenity','doctors'], // Healthcare
-    ['FFN','572','amenity','cafe'],
-    ['FFN','850','use','education'],
-    ['FFN','850','amenity','school'],
-    ['FFN','850','amenity','kindergarten'],
-    ['FFN','850','amenity','college'],
-    ['FFN','850','amenity','university'],
-
     // TRE - Foliage Type
     ['TRE','1','wood','deciduous'], // Deciduous
     ['TRE','2','wood','evergreen'], // Evergreen
     ['TRE','3','wood','mixed'], // Mixed
 
-      ], // End one2oneOut
+    ], // End one2oneOut
     // ##### End of One2One Rules #####
 
     // Stuff to be ignored or that gets swapped later
@@ -2314,6 +2311,11 @@ mgcp.rules = {
     intList : ['LTN','NOS'],
     // ##### End of intList#####
 
+    // fCodeList - This is a list of all of the valid MGCP F_CODES in TRD4.5.1
+    fcodeList : ["AA010","AA012","AA040","AA050","AA052","AB000","AB010","AC000","AC020","AC030","AD010","AD020","AD030","AD050","AF010","AF020","AF040","AF070","AH025","AH050","AH070","AI030","AJ010","AJ030","AJ050","AJ051","AJ110","AK030","AK040","AK060","AK090","AK100","AK120","AK130","AK150","AK160","AK170","AK180","AK190","AL010","AL012","AL015","AL019","AL020","AL025","AL030","AL060","AL070","AL099","AL105","AL130","AL140","AL170","AL200","AL208","AL210","AL241","AL260","AM010","AM020","AM030","AM040","AM060","AM070","AN010","AN050","AN060","AN075","AN076","AP010","AP030","AP050","AQ040","AQ063","AQ065","AQ070","AQ075","AQ090","AQ110","AQ113","AQ116","AQ125","AQ130","AQ135","AQ140","AT010","AT030","AT041","AT042","AT045","AT050","AT060","BA010","BA030","BA040","BA050","BB005","BB041","BB043","BB090","BB140","BB155","BB190","BB230","BB240","BD100","BD110","BD120","BD130","BD180","BH010","BH015","BH020","BH030","BH040","BH050","BH051","BH060","BH070","BH080","BH090","BH110","BH120","BH130","BH135","BH140","BH145","BH150","BH155","BH160","BH165","BH170","BH180","BI010","BI020","BI030","BI040","BI041","BI050","BJ020","BJ030","BJ031","BJ040","BJ060","BJ100","BJ110","DA010","DB010","DB029","DB061","DB070","DB071","DB090","DB100","DB110","DB115","DB150","DB160","DB170","DB180","DB200","EA010","EA020","EA040","EA050","EA055","EB010","EB020","EC010","EC020","EC030","EC040","EC060","ED010","ED020","ED030","FA015","FA090","FA100","GA034","GB005","GB015","GB030","GB035","GB040","GB045","GB050","GB055","GB065","GB075","GB220","GB230","GB485","SU001","ZD020","ZD040"],
+
+    // layerNameLookup - List of all of the possibl;e geometry & F_CODES.
+    // AKA the list of layer names
+    layerNameLookup : {"AAA010":"AAA010","AAA012":"AAA012","AAA052":"AAA052","AAB000":"AAB000","AAB010":"AAB010","AAC000":"AAC000","AAC030":"AAC030","AAD010":"AAD010","AAD030":"AAD030","AAD050":"AAD050","AAH050":"AAH050","AAI030":"AAI030","AAJ010":"AAJ010","AAJ030":"AAJ030","AAJ110":"AAJ110","AAK030":"AAK030","AAK040":"AAK040","AAK060":"AAK060","AAK090":"AAK090","AAK100":"AAK100","AAK120":"AAK120","AAK160":"AAK160","AAK170":"AAK170","AAK180":"AAK180","AAK190":"AAK190","AAL010":"AAL010","AAL012":"AAL012","AAL015":"AAL015","AAL019":"AAL019","AAL020":"AAL020","AAL030":"AAL030","AAL060":"AAL060","AAL105":"AAL105","AAL140":"AAL140","AAL170":"AAL170","AAL200":"AAL200","AAL208":"AAL208","AAM010":"AAM010","AAM020":"AAM020","AAM030":"AAM030","AAM040":"AAM040","AAM060":"AAM060","AAM070":"AAM070","AAN060":"AAN060","AAN076":"AAN076","AAQ040":"AAQ040","AAQ116":"AAQ116","AAQ125":"AAQ125","AAQ130":"AAQ130","AAQ135":"AAQ135","AAQ140":"AAQ140","AAT050":"AAT050","ABA030":"ABA030","ABA040":"ABA040","ABA050":"ABA050","ABB005":"ABB005","ABB041":"ABB041","ABB043":"ABB043","ABB090":"ABB090","ABB140":"ABB140","ABB190":"ABB190","ABB240":"ABB240","ABD100":"ABD100","ABD120":"ABD120","ABH010":"ABH010","ABH015":"ABH015","ABH020":"ABH020","ABH030":"ABH030","ABH040":"ABH040","ABH050":"ABH050","ABH051":"ABH051","ABH080":"ABH080","ABH090":"ABH090","ABH120":"ABH120","ABH130":"ABH130","ABH135":"ABH135","ABH140":"ABH140","ABH150":"ABH150","ABH155":"ABH155","ABH160":"ABH160","ABH165":"ABH165","ABI020":"ABI020","ABI030":"ABI030","ABJ020":"ABJ020","ABJ030":"ABJ030","ABJ031":"ABJ031","ABJ100":"ABJ100","ABJ110":"ABJ110","ADA010":"ADA010","ADB061":"ADB061","ADB090":"ADB090","ADB115":"ADB115","ADB160":"ADB160","ADB170":"ADB170","ADB180":"ADB180","ADB200":"ADB200","AEA010":"AEA010","AEA040":"AEA040","AEA050":"AEA050","AEA055":"AEA055","AEB010":"AEB010","AEB020":"AEB020","AEC010":"AEC010","AEC020":"AEC020","AEC030":"AEC030","AEC040":"AEC040","AEC060":"AEC060","AED010":"AED010","AED020":"AED020","AED030":"AED030","AFA015":"AFA015","AFA100":"AFA100","AGB005":"AGB005","AGB015":"AGB015","AGB035":"AGB035","AGB045":"AGB045","AGB055":"AGB055","AGB065":"AGB065","AGB075":"AGB075","AGB230":"AGB230","ASU001":"ASU001","AZD020":"AZD020","LAF020":"LAF020","LAH025":"LAH025","LAK130":"LAK130","LAK150":"LAK150","LAK190":"LAK190","LAL060":"LAL060","LAL070":"LAL070","LAL210":"LAL210","LAL260":"LAL260","LAN010":"LAN010","LAN050":"LAN050","LAP010":"LAP010","LAP030":"LAP030","LAP050":"LAP050","LAQ040":"LAQ040","LAQ063":"LAQ063","LAQ070":"LAQ070","LAQ075":"LAQ075","LAQ113":"LAQ113","LAQ130":"LAQ130","LAT030":"LAT030","LAT041":"LAT041","LAT060":"LAT060","LBA010":"LBA010","LBB041":"LBB041","LBB043":"LBB043","LBB140":"LBB140","LBB190":"LBB190","LBB230":"LBB230","LBD120":"LBD120","LBH010":"LBH010","LBH020":"LBH020","LBH030":"LBH030","LBH060":"LBH060","LBH070":"LBH070","LBH110":"LBH110","LBH120":"LBH120","LBH140":"LBH140","LBH165":"LBH165","LBH180":"LBH180","LBI020":"LBI020","LBI030":"LBI030","LBI040":"LBI040","LBI041":"LBI041","LBJ031":"LBJ031","LBJ040":"LBJ040","LDB010":"LDB010","LDB061":"LDB061","LDB070":"LDB070","LDB071":"LDB071","LDB090":"LDB090","LDB100":"LDB100","LDB110":"LDB110","LDB160":"LDB160","LDB200":"LDB200","LEA020":"LEA020","LEC030":"LEC030","LFA090":"LFA090","LGB050":"LGB050","PAA010":"PAA010","PAA012":"PAA012","PAA040":"PAA040","PAA050":"PAA050","PAC000":"PAC000","PAC020":"PAC020","PAC030":"PAC030","PAD010":"PAD010","PAD020":"PAD020","PAD030":"PAD030","PAD050":"PAD050","PAF010":"PAF010","PAF040":"PAF040","PAF070":"PAF070","PAH050":"PAH050","PAH070":"PAH070","PAJ030":"PAJ030","PAJ050":"PAJ050","PAJ051":"PAJ051","PAJ110":"PAJ110","PAK040":"PAK040","PAK150":"PAK150","PAK160":"PAK160","PAK170":"PAK170","PAL012":"PAL012","PAL015":"PAL015","PAL019":"PAL019","PAL020":"PAL020","PAL025":"PAL025","PAL030":"PAL030","PAL099":"PAL099","PAL105":"PAL105","PAL130":"PAL130","PAL210":"PAL210","PAL241":"PAL241","PAM020":"PAM020","PAM030":"PAM030","PAM040":"PAM040","PAM060":"PAM060","PAM070":"PAM070","PAN075":"PAN075","PAN076":"PAN076","PAQ065":"PAQ065","PAQ070":"PAQ070","PAQ090":"PAQ090","PAQ110":"PAQ110","PAQ116":"PAQ116","PAQ125":"PAQ125","PAT010":"PAT010","PAT042":"PAT042","PAT045":"PAT045","PBA050":"PBA050","PBB155":"PBB155","PBD100":"PBD100","PBD110":"PBD110","PBD130":"PBD130","PBD180":"PBD180","PBH010":"PBH010","PBH070":"PBH070","PBH120":"PBH120","PBH145":"PBH145","PBH170":"PBH170","PBH180":"PBH180","PBI010":"PBI010","PBI020":"PBI020","PBI030":"PBI030","PBI040":"PBI040","PBI041":"PBI041","PBI050":"PBI050","PBJ060":"PBJ060","PDB029":"PDB029","PDB115":"PDB115","PDB150":"PDB150","PDB160":"PDB160","PDB180":"PDB180","PEC030":"PEC030","PGA034":"PGA034","PGB030":"PGB030","PGB040":"PGB040","PGB050":"PGB050","PGB065":"PGB065","PGB220":"PGB220","PGB230":"PGB230","PGB485":"PGB485","PSU001":"PSU001","PZD040":"PZD040"},
+
 } // End of mgcp.rules
-
-

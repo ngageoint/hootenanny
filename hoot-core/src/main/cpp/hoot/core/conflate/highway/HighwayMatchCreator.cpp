@@ -19,36 +19,35 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "HighwayMatchCreator.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/algorithms/subline-matching/MaximalNearestSublineMatcher.h>
 #include <hoot/core/algorithms/subline-matching/MaximalSublineStringMatcher.h>
+#include <hoot/core/algorithms/subline-matching/SublineStringMatcher.h>
+#include <hoot/core/conflate/highway/HighwayClassifier.h>
+#include <hoot/core/conflate/highway/HighwayExpertClassifier.h>
+#include <hoot/core/conflate/highway/HighwayMatch.h>
 #include <hoot/core/conflate/matching/MatchType.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
-#include <hoot/core/conflate/highway/HighwayMatch.h>
-#include <hoot/core/conflate/highway/HighwayExpertClassifier.h>
-#include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/criterion/ArbitraryCriterion.h>
-#include <hoot/core/util/NotImplementedException.h>
+#include <hoot/core/criterion/HighwayCriterion.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/schema/TagAncestorDifferencer.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/Units.h>
-#include <hoot/core/visitors/SpatialIndexer.h>
-#include <hoot/core/conflate/highway/HighwayClassifier.h>
-#include <hoot/core/algorithms/subline-matching/SublineStringMatcher.h>
-#include <hoot/core/util/NotImplementedException.h>
-#include <hoot/core/schema/TagAncestorDifferencer.h>
-#include <hoot/core/util/StringUtils.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/MemoryUsageChecker.h>
-#include <hoot/core/criterion/HighwayCriterion.h>
+#include <hoot/core/util/NotImplementedException.h>
+#include <hoot/core/util/StringUtils.h>
+#include <hoot/core/util/Units.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
+#include <hoot/core/visitors/SpatialIndexer.h>
 
 // Standard
 #include <fstream>
@@ -90,8 +89,6 @@ public:
 
   /**
    * @param matchStatus If the element's status matches this status then it is checked for a match.
-   *
-   * This constructor has gotten a little out of hand.
    */
   HighwayMatchVisitor(const ConstOsmMapPtr& map,
     vector<ConstMatchPtr>& result, std::shared_ptr<HighwayClassifier> c,
@@ -119,15 +116,15 @@ public:
     _memoryCheckUpdateInterval = opts.getMemoryUsageCheckerInterval();
   }
 
-  virtual ~HighwayMatchVisitor()
+  ~HighwayMatchVisitor()
   {
     LOG_TRACE("neighbor counts, max: " << _neighborCountMax << " mean: " <<
               (double)_neighborCountSum / (double)_elementsEvaluated);
   }
 
-  virtual QString getDescription() const { return ""; }
-  virtual QString getName() const { return ""; }
-  virtual QString getClassName() const override { return ""; }
+  QString getDescription() const override { return ""; }
+  QString getName() const override { return ""; }
+  QString getClassName() const override { return ""; }
 
   void checkForMatch(const std::shared_ptr<const Element>& e)
   {
@@ -228,7 +225,7 @@ public:
     return searchRadius;
   }
 
-  virtual void visit(const ConstElementPtr& e)
+  void visit(const ConstElementPtr& e) override
   {
     if (e->getStatus() == _matchStatus && isMatchCandidate(e))
     {
@@ -400,12 +397,11 @@ void HighwayMatchCreator::createMatches(
 vector<CreatorDescription> HighwayMatchCreator::getAllCreators() const
 {
   vector<CreatorDescription> result;
-  result.push_back(
-    CreatorDescription(
-      className(),
-      "Generates matchers that match roads with the 2nd Generation (Unifying) Algorithm",
-      CreatorDescription::Highway,
-      false));
+  result.emplace_back(
+    className(),
+    "Generates matchers that match roads with the 2nd Generation (Unifying) Algorithm",
+    CreatorDescription::Highway,
+    false);
   return result;
 }
 
@@ -419,10 +415,10 @@ std::shared_ptr<MatchThreshold> HighwayMatchCreator::getMatchThreshold()
 {
   if (!_matchThreshold.get())
   {
-    ConfigOptions config;
     _matchThreshold.reset(
-      new MatchThreshold(config.getHighwayMatchThreshold(), config.getHighwayMissThreshold(),
-                         config.getHighwayReviewThreshold()));
+      new MatchThreshold(
+        ConfigOptions().getHighwayMatchThreshold(), ConfigOptions().getHighwayMissThreshold(),
+        ConfigOptions().getHighwayReviewThreshold()));
   }
   return _matchThreshold;
 }

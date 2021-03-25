@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef CHAINCRITERION_H
 #define CHAINCRITERION_H
@@ -52,24 +52,24 @@ public:
   ChainCriterion(ElementCriterion* child1, ElementCriterion* child2, ElementCriterion* child3);
   virtual ~ChainCriterion() = default;
 
-  virtual void addCriterion(const ElementCriterionPtr& e);
+  void addCriterion(const ElementCriterionPtr& e) override;
 
-  virtual bool isSatisfied(const ConstElementPtr& e) const override;
+  bool isSatisfied(const ConstElementPtr& e) const override;
 
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new ChainCriterion(_criteria)); }
+  ElementCriterionPtr clone() override { return ElementCriterionPtr(new ChainCriterion(_criteria)); }
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Allows for chaining criteria together (logical AND)"; }
 
-  virtual QString toString() const override;
+  QString toString() const override;
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
-  virtual void setOsmMap(const OsmMap* map);
+  void setOsmMap(const OsmMap* map) override;
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
   int criteriaSize() const { return _criteria.size(); }
 
@@ -84,7 +84,7 @@ private:
   friend class RemoveRef2VisitorMultipleCriterion;
 };
 
-typedef std::shared_ptr<ChainCriterion> ChainCriterionPtr;
+using ChainCriterionPtr = std::shared_ptr<ChainCriterion>;
 
 }
 #endif // CHAINCRITERION_H

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "ProcessPool.h"
 
@@ -121,7 +121,7 @@ QProcess* ProcessThread::createProcess()
 void ProcessThread::run()
 {
   _proc.reset(createProcess());
-  if (_serialJobs != NULL)
+  if (_serialJobs != nullptr)
   {
     processJobs(_serialJobs);
     //  Reset the process between queues
@@ -230,7 +230,7 @@ ProcessPool::ProcessPool(int nproc, double waitTime,
   for (int i = 0; i < nproc; ++i)
   {
     //  First process gets the serial jobs
-    JobQueue* serial = (i == 0) ? &_serialJobs : NULL;
+    JobQueue* serial = (i == 0) ? &_serialJobs : nullptr;
     ProcessThreadPtr thread(new ProcessThread(showTestName,
                                               suppressFailureDetail,
                                               printDiff,

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef ID_TAG_MATCHES_ID_H
 #define ID_TAG_MATCHES_ID_H
@@ -41,18 +41,18 @@ public:
   static QString className() { return "hoot::IdTagMatchesId"; }
 
   IdTagMatchesId() = default;
-  virtual ~IdTagMatchesId() = default;
+  ~IdTagMatchesId() = default;
 
-  virtual bool isSatisfied(const ConstElementPtr& e) const override;
+  bool isSatisfied(const ConstElementPtr& e) const override;
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Determines whether an element's " + MetadataTags::HootId() + " tag matches its ID"; }
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new IdTagMatchesId()); }
+  ElementCriterionPtr clone() override { return ElementCriterionPtr(new IdTagMatchesId()); }
 };
 
 }

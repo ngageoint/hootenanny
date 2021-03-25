@@ -19,20 +19,20 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "ImplicitTagRulesDatabaseDeriver.h"
 
 // hoot
+#include <hoot/core/algorithms/string/StringTokenizer.h>
 #include <hoot/core/elements/Tags.h>
-#include <hoot/core/util/StringUtils.h>
+#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/HootException.h>
-#include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/algorithms/string/StringTokenizer.h>
+#include <hoot/core/util/StringUtils.h>
 #include <hoot/rnd/io/ImplicitTagRulesSqliteWriter.h>
 
 // Qt
@@ -89,8 +89,8 @@ void ImplicitTagRulesDatabaseDeriver::deriveRulesDatabase(const QString& input, 
   LOG_VARD(_customRules.getCustomRulesList());
 
   if (_minTagOccurrencesPerWord == 1 && _minWordLength == 1 &&
-      _customRules.getWordIgnoreList().size() == 0 && _customRules.getTagIgnoreList().size() == 0 &&
-      _customRules.getCustomRulesList().size() == 0 && !_useSchemaTagValuesForWordsOnly)
+      _customRules.getWordIgnoreList().empty() && _customRules.getTagIgnoreList().empty() &&
+      _customRules.getCustomRulesList().empty() && !_useSchemaTagValuesForWordsOnly)
   {
     LOG_INFO("Skipping filtering, as no filtering criteria were specified...");
     if (_minTagOccurrencesPerWord >= 2)
@@ -356,9 +356,9 @@ void ImplicitTagRulesDatabaseDeriver::_applyFiltering(const QString& input)
           //write the valid count line
           const long count = lineParts[0].trimmed().toLong();
           LOG_VART(count);
-          const QString line = QString::number(count) % "\t" % word % "\t" % kvp % "\n";
-          LOG_VART(line);
-          _filteredCountFile->write(line.toUtf8());
+          const QString count_line = QString::number(count) % "\t" % word % "\t" % kvp % "\n";
+          LOG_VART(count_line);
+          _filteredCountFile->write(count_line.toUtf8());
           linesWrittenCount++;
         }
       }
@@ -447,7 +447,7 @@ void ImplicitTagRulesDatabaseDeriver::_writeCustomRules(long& linesWrittenCount)
   LOG_DEBUG("Writing custom rules...");
   long ruleCount = 0;
   LOG_VARD(_customRules.getCustomRulesList().size());
-  if (_customRules.getCustomRulesList().size() > 0)
+  if (!_customRules.getCustomRulesList().empty())
   {
     const QMap<QString, QString> customRulesList = _customRules.getCustomRulesList();
     for (QMap<QString, QString>::const_iterator customRulesItr = customRulesList.begin();

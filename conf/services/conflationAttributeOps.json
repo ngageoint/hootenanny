@@ -79,12 +79,28 @@
         "defaultvalue":"hoot::RemoveElementsVisitor;hoot::RemoveUnknown2Visitor"
       },
       {
+        "id": "conflate_mark_merger_created_multilinestring_relations",
+        "elem_type": "bool",
+        "description": "Marks any multilinestring relations created as a result of merging during conflation with a custom tag.",
+        "name": "Mark Conflated Multilinestring Relations",
+        "defaultvalue": "true",
+        "hoot_key": "conflate.mark.merge.created.multilinestring.relations"
+      },
+      {
         "id": "corner_splitter_rounded_split",
         "elem_type": "bool",
         "description": "Rounded corners in one dataset can cause non-rounded corners in the secondary dataset to not conflate",
         "name": "Corner Splitter Rounded Split",
         "defaultvalue": "true",
         "hoot_key": "highway.corner.splitter.rounded.split"
+      },
+      {
+        "id": "hootapi_db_writer_preserve_version_on_insert",
+        "elem_type": "bool",
+        "description": "If true, versions for elements are retained on new writes to the Hootenanny API database.",
+        "name": "Preserve Version on insert",
+        "defaultvalue": "true",
+        "hoot_key": "hootapi.db.writer.preserve.version.on.insert"
       },
       {
         "id": "duplicate_name_preserve_original_name",
@@ -95,12 +111,12 @@
         "hoot_key": "duplicate.name.preserve.original.name"
       },
       {
-        "id": "attribute_override_highway_merge_tags_only",
-        "elem_type": "bool",
-        "description": "If true, road conflation merges tag changes into the reference only and makes no geometry changes.",
-        "name": "Tag only merger creator",
-        "defaultvalue": "true",
-        "hoot_key": "highway.merge.tags.only"
+        "id": "geometry_linear_merger_default",
+        "elem_type": "string",
+        "description": "The merger to use when merging features with linear geometries during conflation.",
+        "name": "Default Linear Geometry Merger",
+        "defaultvalue": "hoot::LinearTagOnlyMerger",
+        "hoot_key": "geometry.linear.merger.default"
       },
       {
         "id": "poi_polygon_allow_cross_conflation_merging",
@@ -119,12 +135,28 @@
         "hoot_key": "poi.polygon.auto.merge.many.poi.to.one.poly.matches"
       },
       {
+        "id": "poi_polygon_tag_merger",
+        "elem_type": "string",
+        "description": "The tag merger used by POI/Polygon conflation.",
+        "name": "POI/Polygon tag merger",
+        "defaultvalue": "hoot::OverwriteTag1Merger",
+        "hoot_key": "poi.polygon.tag.merger"
+      },
+      {
         "id": "conflate_use_data_source_ids_1",
         "elem_type": "bool",
         "description": "Determines whether the reader used by the conflate command to read the first input dataset will use the element ID's specified by the input datasets (true) or use internal ID management for the inputs (false).",
         "name": "Use Ref IDs During Conflation",
         "defaultvalue": "false",
         "hoot_key": "conflate.use.data.source.ids.1"
+      },
+      {
+        "id": "conflate_use_data_source_ids_2",
+        "elem_type": "bool",
+        "description": "Determines whether the reader used by the conflate command to read the second input dataset will use the element ID's specified by the input datasets (true) or use internal ID management for the inputs (false).",
+        "name": "Use Secondary IDs During Conflation",
+        "defaultvalue": "true",
+        "hoot_key": "conflate.use.data.source.ids.2"
       },
       {
         "id": "remove_elements_visitor_chain.element_criteria",
@@ -193,6 +225,14 @@
         "name": "Tag Merger",
         "defaultvalue": "hoot::OverwriteTag1Merger",
         "hoot_key": "tag.merger.default"
+      },
+      {
+        "id": "tag_merger_overwrite_exclude",
+        "elem_type": "string",
+        "description": "A list of tag keys not to be overwritten on target features during tag merging when using OverwriteTagMerger or ReplaceTagMerger.",
+        "name": "Tag Merger Overwrite Exclude",
+        "defaultvalue": "source;source:imagery;source:imagery:datetime;source:imagery:id;source:imagery:sensor",
+        "hoot_key": "tag.merger.overwrite.exclude"
       },
       {
         "id": "way_joiner",

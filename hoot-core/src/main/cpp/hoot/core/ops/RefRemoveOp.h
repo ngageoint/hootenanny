@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef REFREMOVEOP_H
 #define REFREMOVEOP_H
@@ -39,7 +39,7 @@ namespace hoot
  * values are tracked. After all the elements have been removed any REF2 references to REF1 are
  * updated appropriately. See [1] for an overview of the REF1/REF2 tags.
  *
- * 1. https://insightcloud.digitalglobe.com/redmine/projects/hootenany/wiki/Manual_Conflation
+ * 1. https://github.com/ngageoint/hootenanny/blob/master/docs/developer/HootenannyManualConflation.asciidoc
  */
 class RefRemoveOp : public OsmMapOperation, public ElementCriterionConsumer
 {
@@ -48,21 +48,21 @@ public:
   static QString className() { return "hoot::RefRemoveOp"; }
 
   RefRemoveOp() = default;
-  virtual ~RefRemoveOp() = default;
+  ~RefRemoveOp() = default;
 
-  virtual void addCriterion(const ElementCriterionPtr &e) { assert(!_criterion); _criterion = e; }
+  void addCriterion(const ElementCriterionPtr &e) override { assert(!_criterion); _criterion = e; }
 
   /**
    * Remove all the ops that meet the given criterion.
    */
-  virtual void apply(std::shared_ptr<OsmMap>& map);
+  void apply(std::shared_ptr<OsmMap>& map) override;
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Removes elements meeting a criterion and updates REF tags"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

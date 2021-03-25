@@ -19,26 +19,25 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "RandomForestModelBuilder.h"
 
 // Hoot
-#include <hoot/core/ops/MapCleaner.h>
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/conflate/matching/MatchCreator.h>
+#include <hoot/core/io/ArffToRfConverter.h>
 #include <hoot/core/io/ArffWriter.h>
+#include <hoot/core/io/IoUtils.h>
+#include <hoot/core/ops/MapCleaner.h>
 #include <hoot/core/scoring/MatchFeatureExtractor.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/io/IoUtils.h>
 #include <hoot/core/util/StringUtils.h>
-
-#include <hoot/core/io/ArffToRfConverter.h>
 
 // Standard
 #include <fstream>
@@ -69,7 +68,7 @@ void RandomForestModelBuilder::build(const QStringList trainingData, QString out
     QString className = creatorParts[0];
     creatorParts.removeFirst();
     MatchCreator* mc = Factory::getInstance().constructObject<MatchCreator>(className);
-    if (creatorParts.size() > 0)
+    if (!creatorParts.empty())
     {
       mc->setArguments(creatorParts);
     }

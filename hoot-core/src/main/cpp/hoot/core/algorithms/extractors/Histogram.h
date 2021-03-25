@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef HISTOGRAM_H
 #define HISTOGRAM_H
@@ -48,7 +48,7 @@ public:
 
   Histogram(int bins);
 
-  const std::vector<double>& getAllBins() const { return _bins; }
+  const std::vector<double>& getBins() const { return _bins; }
 
   size_t numBins() const { return _bins.size(); }
 
@@ -76,14 +76,25 @@ public:
    */
   void smooth(Radians sigma);
 
+  /**
+   * Creates a printable string for all histogram bins
+   *
+   * @return a histogram string
+   */
   QString toString() const;
+
+  /**
+   * Creates a printable string for histogram bins with positive values only
+   *
+   * @return a histogram string
+   */
+  QString printPositiveBins() const;
 
 private:
 
   std::vector<double> _bins;
 
   Radians _getBinAngle(size_t i);
-
 };
 
 }

@@ -19,16 +19,16 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "ElementIdRemapper.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/ops/RemoveElementByEid.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
@@ -69,6 +69,7 @@ void ElementIdRemapper::apply(OsmMapPtr& map)
   for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
   {
     ElementPtr currentElement = it->second;
+    _numProcessed++;
     if (!currentElement || (_remapFilter && !_remapFilter->isSatisfied(currentElement)))
     {
       continue;
@@ -90,6 +91,7 @@ void ElementIdRemapper::apply(OsmMapPtr& map)
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
     ElementPtr currentElement = it->second;
+    _numProcessed++;
     if (!currentElement || (_remapFilter && !_remapFilter->isSatisfied(currentElement)))
     {
       continue;
@@ -111,6 +113,7 @@ void ElementIdRemapper::apply(OsmMapPtr& map)
   for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
   {
     ElementPtr currentElement = it->second;
+    _numProcessed++;
     if (!currentElement || (_remapFilter && !_remapFilter->isSatisfied(currentElement)))
     {
       continue;
@@ -134,6 +137,7 @@ void ElementIdRemapper::restore(OsmMapPtr& map)
   LOG_INFO("Restoring original element IDs for: " << map->getName() << "...");
 
   _restoredIds = 0;
+  _numProcessed = 0;
   if (!_restoreFilter)
   {
     _restoreFilter = _remapFilter;
@@ -145,6 +149,7 @@ void ElementIdRemapper::restore(OsmMapPtr& map)
   for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
   {
     ElementPtr currentElement = it->second;
+    _numProcessed++;
     if (!currentElement || (_restoreFilter && !_restoreFilter->isSatisfied(currentElement)))
     {
       continue;
@@ -163,7 +168,7 @@ void ElementIdRemapper::restore(OsmMapPtr& map)
       LOG_TRACE(
         "Restoring " << currentElement->getElementId() << " to " <<
         originalElement->getElementId() << "...");
-      map->addElement(originalElement);;
+      map->addElement(originalElement);
       map->replace(currentElement, originalElement);
       _restoredIds++;
     }
@@ -173,6 +178,7 @@ void ElementIdRemapper::restore(OsmMapPtr& map)
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
     ElementPtr currentElement = it->second;
+    _numProcessed++;
     if (!currentElement || (_restoreFilter && !_restoreFilter->isSatisfied(currentElement)))
     {
       continue;
@@ -201,6 +207,7 @@ void ElementIdRemapper::restore(OsmMapPtr& map)
   for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
   {
     ElementPtr currentElement = it->second;
+    _numProcessed++;
     if (!currentElement || (_restoreFilter && !_restoreFilter->isSatisfied(currentElement)))
     {
       continue;

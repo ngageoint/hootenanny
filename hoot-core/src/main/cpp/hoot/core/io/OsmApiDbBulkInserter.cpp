@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "OsmApiDbBulkInserter.h"
@@ -1405,7 +1405,8 @@ void OsmApiDbBulkInserter::_writeChangeset()
   if (!_outputSections[ApiDb::getChangesetsTableName()])
   {
     _createOutputFile(
-      ApiDb::getChangesetsTableName(), _sqlFormatter->getChangesetSqlHeaderString());
+      ApiDb::getChangesetsTableName(),
+      OsmApiDbSqlStatementFormatter::getChangesetSqlHeaderString());
   }
 
   _outputSections[ApiDb::getChangesetsTableName()]->write(

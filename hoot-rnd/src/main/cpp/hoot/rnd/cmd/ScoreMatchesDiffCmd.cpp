@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -46,14 +46,14 @@ public:
 
   ScoreMatchesDiffCmd() = default;
 
-  virtual QString getName() const override { return "score-matches-diff"; }
+  QString getName() const override { return "score-matches-diff"; }
 
-  virtual QString getType() const override { return "rnd"; }
+  QString getType() const override { return "rnd"; }
 
-  virtual QString getDescription() const override
-  { return "Compares conflation performance between files output by score-matches (experimental)"; }
+  QString getDescription() const override
+  { return "Compares conflate performance between score-matches outputs (experimental)"; }
 
-  virtual int runSimple(QStringList& args) override
+  int runSimple(QStringList& args) override
   {
     QElapsedTimer timer;
     timer.start();

@@ -19,17 +19,17 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef WORSTCIRCULARERRORVISITOR_H
 #define WORSTCIRCULARERRORVISITOR_H
 
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 #include <hoot/core/info/SingleStatistic.h>
 
 /**
@@ -45,13 +45,13 @@ public:
   static QString className() { return "hoot::WorstCircularErrorVisitor"; }
 
   WorstCircularErrorVisitor() : _worst(ElementData::CIRCULAR_ERROR_EMPTY) {}
-  virtual ~WorstCircularErrorVisitor() = default;
+  ~WorstCircularErrorVisitor() = default;
 
   Meters getWorstCircularError() { return _worst; }
 
-  virtual double getStat() const { return _worst; }
+  double getStat() const override { return _worst; }
 
-  virtual void visit(const std::shared_ptr<const Element>& e);
+  void visit(const std::shared_ptr<const Element>& e) override;
 
   // Convenient way to get worst circular error
   static Meters getWorstCircularError(const OsmMapPtr& map);
@@ -61,12 +61,12 @@ public:
 
   static Meters getWorstCircularError(const std::vector<ElementPtr>& elements);
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Determines the highest circular error value"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef JAVASCRIPT_SCHEMA_TRANSLATOR_H
@@ -77,7 +77,7 @@ public:
 
   const Settings& getConfiguration() const { return _conf; }
 
-  virtual bool isValidScript();
+  bool isValidScript() override;
 
   /**
    * Should not be called publicly.
@@ -89,23 +89,23 @@ public:
    */
   int getLogCount(const QString& log);
 
-  virtual std::shared_ptr<const Schema> getOgrOutputSchema();
+  std::shared_ptr<const Schema> getOgrOutputSchema() override;
 
   // Filter for file names
-  virtual const QString getLayerNameFilter() override;
+  QString getLayerNameFilter() override;
 
   /**
    * Uses the specified script text instead of loading the script from a file.
    */
   void setScriptText(const QString& text) { close(); _scriptText = text; _scriptPath = QString(); }
 
-  virtual std::vector<TranslatedFeature> translateToOgr(Tags& tags, ElementType elementType,
-    geos::geom::GeometryTypeId geometryType);
+  std::vector<TranslatedFeature> translateToOgr(Tags& tags, ElementType elementType,
+    geos::geom::GeometryTypeId geometryType) override;
 
-  virtual std::vector<Tags> translateToOgrTags(Tags& tags, ElementType elementType,
-    geos::geom::GeometryTypeId geometryType);
+  std::vector<Tags> translateToOgrTags(Tags& tags, ElementType elementType,
+    geos::geom::GeometryTypeId geometryType) override;
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
 protected:
 
@@ -125,7 +125,7 @@ protected:
   std::vector<TranslatedFeature> _createAllFeatures(const QVariantList& vm);
   std::shared_ptr<Feature> _createFeature(const QVariantMap& vm, QString& tableName);
 
-  virtual void _init();
+  void _init() override;
 
   /**
    * Warn the user about the feature currently being processed.
@@ -133,7 +133,7 @@ protected:
   void _featureWarn(const QString& message, const QString& fileName, const QString& functionName,
                     int lineNumber);
 
-  virtual void _finalize();
+  void _finalize() override;
 
   QVariant& _getMapValue(QVariantMap& map, const QString& key);
 
@@ -156,7 +156,7 @@ protected:
   QVariantList _translateToOgrVariants(Tags& tags,
     ElementType elementType, geos::geom::GeometryTypeId geometryType);
 
-  virtual void _translateToOsm(Tags& t, const char *layerName, const char* geomType);
+  void _translateToOsm(Tags& t, const char *layerName, const char* geomType) override;
 };
 
 }

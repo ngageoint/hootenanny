@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef POI_POLYGON_POLY_CRITERION_H
 #define POI_POLYGON_POLY_CRITERION_H
@@ -38,6 +38,8 @@ namespace hoot
 
 /**
  * Identifies polygons for use with POI/Polygon conflation
+ *
+ * @todo this needs to be a map consumer b/c it uses AreaCriterion
  */
 class PoiPolygonPolyCriterion : public ConflatableElementCriterion
 {
@@ -46,22 +48,24 @@ public:
   static QString className() { return "hoot::PoiPolygonPolyCriterion"; }
 
   PoiPolygonPolyCriterion();
-  virtual ~PoiPolygonPolyCriterion() = default;
+  ~PoiPolygonPolyCriterion() = default;
 
-  virtual bool isSatisfied(const ConstElementPtr& e) const override;
+  bool isSatisfied(const ConstElementPtr& e) const override;
 
-  virtual GeometryType getGeometryType() const
-  { return GeometryType::Polygon; }
+  GeometryType getGeometryType() const override { return GeometryType::Polygon; }
 
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new PoiPolygonPolyCriterion()); }
+  ElementCriterionPtr clone() override { return ElementCriterionPtr(new PoiPolygonPolyCriterion()); }
 
-  virtual QString getDescription() const { return ""; }
+  QString getDescription() const override
+  { return "Identifies polygons as defined by POI/Polygon Conflation"; }
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
-  virtual bool supportsSpecificConflation() const { return true; }
+  bool supportsSpecificConflation() const override { return true; }
+
+  QStringList getChildCriteria() const override;
 
 private:
 

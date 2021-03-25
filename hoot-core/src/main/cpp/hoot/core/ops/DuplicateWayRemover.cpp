@@ -19,19 +19,22 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "DuplicateWayRemover.h"
 
 // Hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/algorithms/DirectionFinder.h>
 #include <hoot/core/algorithms/LongestCommonNodeString.h>
+#include <hoot/core/criterion/LinearCriterion.h>
+#include <hoot/core/criterion/OneWayCriterion.h>
+#include <hoot/core/criterion/PolygonCriterion.h>
+#include <hoot/core/conflate/ConflateUtils.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/NodeToWayMap.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/index/OsmMapIndex.h>
@@ -39,10 +42,8 @@
 #include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/ops/RemoveWayByEid.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/criterion/LinearCriterion.h>
-#include <hoot/core/criterion/OneWayCriterion.h>
-#include <hoot/core/criterion/PolygonCriterion.h>
 
 // Standard
 #include <iostream>
@@ -83,11 +84,22 @@ void DuplicateWayRemover::apply(OsmMapPtr& map)
     {
       continue;
     }
+    // Since this class operates on elements with generic types, an additional check must be
+    // performed here during conflation to enure we don't modify any element not associated with
+    // and active conflate matcher in the current conflation configuration.
+    else if (_conflateInfoCache &&
+             !_conflateInfoCache->elementCanBeConflatedByActiveMatcher(w, className()))
+    {
+      LOG_TRACE(
+        "Skipping processing of " << w->getElementId() << " as it cannot be conflated by any " <<
+        "actively configured conflate matcher...");
+      continue;
+    }
     vector<long> newNodes;
     const vector<long>& nodes = w->getNodeIds();
     for (size_t i = 0; i < nodes.size(); i++)
     {
-      if (newNodes.size() == 0 || newNodes[newNodes.size() - 1] != nodes[i])
+      if (newNodes.empty() || newNodes[newNodes.size() - 1] != nodes[i])
         newNodes.push_back(nodes[i]);
     }
 
@@ -102,6 +114,14 @@ void DuplicateWayRemover::apply(OsmMapPtr& map)
     const WayPtr& w = it->second;
     if (!w)
     {
+      continue;
+    }
+    else if (_conflateInfoCache &&
+             !_conflateInfoCache->elementCanBeConflatedByActiveMatcher(w, className()))
+    {
+      LOG_TRACE(
+        "Skipping processing of " << w->getElementId() << " as it cannot be conflated by any " <<
+        "actively configured conflate matcher...");
       continue;
     }
     // If the way isn't in the map anymore (deleted as part of this process) or the way is an
@@ -167,7 +187,7 @@ bool DuplicateWayRemover::_isCandidateWay(const ConstWayPtr& w) const
     // is this a linear way
     (LinearCriterion().isSatisfied(w) &&
      // if this is not part of a relation
-     _map->getIndex().getParents(w->getElementId()).size() == 0);
+     _map->getIndex().getParents(w->getElementId()).empty());
 }
 
 void DuplicateWayRemover::_splitDuplicateWays(WayPtr w1, WayPtr w2, bool rev1, bool rev2)
@@ -179,7 +199,7 @@ void DuplicateWayRemover::_splitDuplicateWays(WayPtr w1, WayPtr w2, bool rev1, b
   if (length > 1)
   {
     const Tags mergedTags =
-      TagMergerFactory::getInstance().mergeTags(w1->getTags(), w2->getTags(), ElementType::Way);
+      TagMergerFactory::mergeTags(w1->getTags(), w2->getTags(), ElementType::Way);
     const vector<long>& nodes1 = w1->getNodeIds();
     const vector<long>& nodes2 = w2->getNodeIds();
     // _splitDuplicateWays is always called where num_nodes(w1) >= num_nodes(w2), so the following

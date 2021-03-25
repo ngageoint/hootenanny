@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef OSMXMLREADER_H
 #define OSMXMLREADER_H
@@ -58,28 +58,28 @@ public:
   static QString className() { return "hoot::OsmXmlReader"; }
 
   OsmXmlReader();
-  virtual ~OsmXmlReader();
+  ~OsmXmlReader();
 
-  virtual void close();
+  void close() override;
 
-  virtual QString errorString() const { return _errorString; }
+  QString errorString() const override { return _errorString; }
 
-  virtual bool endElement(const QString& namespaceURI, const QString& localName,
-                          const QString& qName);
+  bool endElement(const QString& namespaceURI, const QString& localName,
+                  const QString& qName) override;
 
-  virtual bool fatalError(const QXmlParseException &exception);
+  bool fatalError(const QXmlParseException &exception) override;
 
-  virtual void initializePartial() {}
+  void initializePartial() override { }
 
-  virtual void finalizePartial();
+  void finalizePartial() override;
 
-  virtual std::shared_ptr<OGRSpatialReference> getProjection() const;
+  std::shared_ptr<OGRSpatialReference> getProjection() const override;
 
-  virtual bool hasMoreElements();
+  bool hasMoreElements() override;
 
-  virtual bool isSupported(const QString& url) override;
+  bool isSupported(const QString& url) override;
 
-  virtual void read(const OsmMapPtr& map) override;
+  void read(const OsmMapPtr& map) override;
 
   void readFromString(const QString& xml, const OsmMapPtr& map);
 
@@ -100,15 +100,15 @@ public:
 
   void read(const QString& path, const OsmMapPtr& map);
 
-  virtual ElementPtr readNextElement() override;
+  ElementPtr readNextElement() override;
 
-  virtual void setDefaultStatus(Status s) override { _status = s; }
-  virtual void setUseFileStatus(bool useFileStatus) { _useFileStatus = useFileStatus; }
+  void setDefaultStatus(Status s) override { _status = s; }
+  void setUseFileStatus(bool useFileStatus) override { _useFileStatus = useFileStatus; }
 
-  virtual bool startElement(const QString& namespaceURI, const QString& localName,
-                            const QString& qName, const QXmlAttributes& attributes);
+  bool startElement(const QString& namespaceURI, const QString& localName,
+                    const QString& qName, const QXmlAttributes& attributes) override;
 
-  virtual void setUseDataSourceIds(bool useDataSourceIds) { _useDataSourceId = useDataSourceIds; }
+  void setUseDataSourceIds(bool useDataSourceIds) override { _useDataSourceId = useDataSourceIds; }
   void setKeepStatusTag(bool keepStatusTag) { _keepStatusTag = keepStatusTag; }
   void setDefaultAccuracy(Meters circularError) { _defaultCircularError = circularError; }
   void setAddSourceDateTime(bool add) { _addSourceDateTime = add; }
@@ -125,9 +125,9 @@ public:
   { _addChildRefsWhenMissing = addChildRefsWhenMissing; }
   void setCircularErrorTagKeys(const QStringList& keys) { _circularErrorTagKeys = keys; }
 
-  virtual QString supportedFormats() override { return ".osm;.osm.bz2;.osm.gz"; }
+  QString supportedFormats() override { return ".osm;.osm.bz2;.osm.gz"; }
 
-  virtual void setConfiguration(const Settings& conf) override;
+  void setConfiguration(const Settings& conf) override;
 
   // Its possible we may want to move this method and the ones for all other classes using it up
   // to OsmMapReader.

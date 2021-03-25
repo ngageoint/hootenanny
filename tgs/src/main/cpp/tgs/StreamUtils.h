@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef __TGS__STREAM_UTILS_H__
@@ -37,14 +37,6 @@
 #include <typeinfo>
 #include <vector>
 
-#if HAVE_LIBNEWMAT
-// newmat
-namespace NEWMAT
-{
-  class Matrix;
-}
-#endif
-
 #include <tgs/HashMap.h>
 #include <tgs/TgsException.h>
 #include <tgs/TgsExport.h>
@@ -58,6 +50,14 @@ namespace NEWMAT
 # include <QVector>
 #endif
 
+#if HAVE_LIBNEWMAT
+// newmat
+namespace NEWMAT
+{
+  class Matrix;
+}
+#endif
+
 namespace Tgs
 {
 #if HAVE_LIBNEWMAT
@@ -67,6 +67,5 @@ namespace Tgs
 #include <tgs/StreamUtils.hh>
 
 }
-
 
 #endif

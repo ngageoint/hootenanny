@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef EDGEMATCH_H
 #define EDGEMATCH_H
@@ -128,8 +128,8 @@ private:
   void _resetHash() const { _hash = 0; }
 };
 
-typedef std::shared_ptr<EdgeMatch> EdgeMatchPtr;
-typedef std::shared_ptr<const EdgeMatch> ConstEdgeMatchPtr;
+using EdgeMatchPtr = std::shared_ptr<EdgeMatch>;
+using ConstEdgeMatchPtr = std::shared_ptr<const EdgeMatch>;
 
 // not implemented
 bool operator<(ConstEdgeMatchPtr, ConstEdgeMatchPtr);

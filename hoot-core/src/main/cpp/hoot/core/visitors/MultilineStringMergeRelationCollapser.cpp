@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "MultilineStringMergeRelationCollapser.h"
@@ -53,6 +53,31 @@ void MultilineStringMergeRelationCollapser::setOsmMap(OsmMap* map)
   _relationMerger.setOsmMap(_map.get());
 }
 
+void MultilineStringMergeRelationCollapser::setTypes(const QStringList& types)
+{
+  for (int i = 0; i < types.size(); i++)
+  {
+    const QString type = types.at(i).trimmed();
+    if (!type.isEmpty())
+    {
+      // Each list entry can either be:
+
+      // a ';' delimited kvp,
+      if (Tags::isValidKvp(type) && !_typeKvps.contains(type))
+      {
+        _typeKvps.append(type);
+      }
+      // or just a type key.
+      else if (!_typeKeys.contains(type))
+      {
+        _typeKeys.append(type);
+      }
+    }
+  }
+  LOG_VARD(_typeKvps);
+  LOG_VARD(_typeKeys);
+}
+
 void MultilineStringMergeRelationCollapser::setConfiguration(const Settings& conf)
 {
   _negateCriteria = false;
@@ -76,31 +101,21 @@ void MultilineStringMergeRelationCollapser::setConfiguration(const Settings& con
   }
   LOG_VARD(_criteria.size());
 
+  ConfigOptions opts(conf);
+
   // Create a list of types to search for on the relations we process. Any types found will be
   // transferred to relation members.
-  ConfigOptions opts(conf);
-  const QStringList types = opts.getMultilinestringRelationCollapserTypes();
-  for (int i = 0; i < types.size(); i++)
-  {
-    const QString type = types.at(i).trimmed();
-    if (!type.isEmpty())
-    {
-      if (Tags::isValidKvp(type) && !_typeKvps.contains(type))
-      {
-        _typeKvps.append(type);
-      }
-      else if (!_typeKeys.contains(type))
-      {
-        _typeKeys.append(type);
-      }
-    }
-  }
-  LOG_VARD(_typeKvps);
-  LOG_VARD(_typeKeys);
+  setTypes(opts.getMultilinestringRelationCollapserTypes());
 }
 
 void MultilineStringMergeRelationCollapser::visit(const ElementPtr& e)
 {
+  if (_typeKeys.isEmpty() && _typeKvps.isEmpty())
+  {
+    throw IllegalArgumentException(
+      "MultilineStringMergeRelationCollapser has not been configured with any feature types.");
+  }
+
   _numProcessed++;
 
   if (!e)
@@ -115,10 +130,12 @@ void MultilineStringMergeRelationCollapser::visit(const ElementPtr& e)
     return;
   }
 
+  LOG_VART(e->getElementId());
+
   // Check the relation for any type tags matching the ones we added during configuration. This
-  // doesn't handle multiple matching types. Only grabs the first one. No checking is done here to
-  // verify the type passed in is contained in the schema...not sure yet if that needs to be done at
-  // this point.
+  // doesn't handle multiple matching types. It only grabs the first one. No checking is done here
+  // to verify the type passed in is contained in the schema...not sure yet if that needs to be done
+  // at this point.
   bool matchingTypeIsKey = false;
   // Check to see whether its a key/value pair or just a type tag key.
   QString matchingType = e->getTags().getFirstKvp(_typeKvps);
@@ -179,7 +196,7 @@ void MultilineStringMergeRelationCollapser::visit(const ElementPtr& e)
             if (relationOwningMsRelation)
             {
               // Use relation merger here, as will make the member insert indexes be correct.
-              // Prevent the merger from deleting the merged ms relation, we may need to merge it
+              // Prevent the merger from deleting the merged ms relation, as we may need to merge it
               // with multiple parent relations and will delete it outside of this loop.
               _relationMerger.merge(
                 relationOwningMsRelation->getElementId(), relation->getElementId());

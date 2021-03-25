@@ -1,6 +1,5 @@
 
 = Hootenanny - Installation Instructions
-DigitalGlobe, Inc.
 
 include::install/HootenannyInstall.asciidoc[]
 include::install/Tuning.asciidoc[]

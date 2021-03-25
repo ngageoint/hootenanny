@@ -19,20 +19,20 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "OsmApiDbReader.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/util/Settings.h>
 #include <hoot/core/elements/ElementId.h>
 #include <hoot/core/elements/ElementType.h>
 #include <hoot/core/io/ApiDb.h>
 #include <hoot/core/util/DbUtils.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/Settings.h>
 
 // Qt
 #include <QUrl>
@@ -113,7 +113,7 @@ void OsmApiDbReader::_parseAndSetTagsOnElement(const ElementId& elementId,
       tags << tag;
     }
   }
-  if (tags.size() > 0)
+  if (!tags.empty())
   {
     element->setTags(ApiDb::unescapeTags(tags.join(", ")));
   }

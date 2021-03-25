@@ -19,38 +19,37 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "BuildingMatchCreator.h"
 
 // hoot
-#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/algorithms/extractors/OverlapExtractor.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/matching/MatchType.h>
 #include <hoot/core/conflate/polygon/BuildingMatch.h>
 #include <hoot/core/conflate/polygon/BuildingRfClassifier.h>
 #include <hoot/core/criterion/ArbitraryCriterion.h>
-#include <hoot/core/elements/ConstElementVisitor.h>
-#include <hoot/core/util/NotImplementedException.h>
+#include <hoot/core/criterion/BuildingCriterion.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/util/CollectionUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/Settings.h>
-#include <hoot/core/visitors/SpatialIndexer.h>
-#include <hoot/core/util/StringUtils.h>
-#include <hoot/core/util/CollectionUtils.h>
-#include <hoot/core/algorithms/extractors/OverlapExtractor.h>
-#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/MemoryUsageChecker.h>
-#include <hoot/core/criterion/BuildingCriterion.h>
+#include <hoot/core/util/NotImplementedException.h>
+#include <hoot/core/util/Settings.h>
+#include <hoot/core/util/StringUtils.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
+#include <hoot/core/visitors/SpatialIndexer.h>
 
 // Standard
 #include <fstream>
 #include <functional>
-using namespace std;
 
 // tgs
 #include <tgs/RandomForest/RandomForest.h>
@@ -62,6 +61,7 @@ using namespace std;
 #include <QElapsedTimer>
 
 using namespace geos::geom;
+using namespace std;
 
 namespace hoot
 {
@@ -111,15 +111,15 @@ public:
     _memoryCheckUpdateInterval = opts.getMemoryUsageCheckerInterval();
   }
 
-  virtual ~BuildingMatchVisitor()
+  ~BuildingMatchVisitor()
   {
     LOG_TRACE("neighbor counts, max: " << _neighborCountMax << " mean: " <<
               (double)_neighborCountSum / (double)_elementsEvaluated);
   }
 
-  virtual QString getDescription() const { return ""; }
-  virtual QString getName() const { return ""; }
-  virtual QString getClassName() const override { return ""; }
+  QString getDescription() const override { return ""; }
+  QString getName() const override { return ""; }
+  QString getClassName() const override { return ""; }
 
   void checkForMatch(const std::shared_ptr<const Element>& e)
   {
@@ -210,7 +210,7 @@ public:
     return searchRadius;
   }
 
-  virtual void visit(const ConstElementPtr& e)
+  void visit(const ConstElementPtr& e) override
   {
     if (e->getStatus() == _matchStatus && isMatchCandidate(e))
     {
@@ -474,12 +474,11 @@ void BuildingMatchCreator::createMatches(const ConstOsmMapPtr& map,
 std::vector<CreatorDescription> BuildingMatchCreator::getAllCreators() const
 {
   std::vector<CreatorDescription> result;
-  result.push_back(
-    CreatorDescription(
-      className(),
-      "Generates matchers that match buildings",
-      CreatorDescription::Building,
-      false));
+  result.emplace_back(
+    className(),
+    "Generates matchers that match buildings",
+    CreatorDescription::Building,
+    false);
   return result;
 }
 
@@ -501,7 +500,6 @@ std::shared_ptr<BuildingRfClassifier> BuildingMatchCreator::_getRf()
       file.close();
       throw HootException("Error opening file: " + path);
     }
-    //LOG_VARD(doc.toString());
     file.close();
 
     _rf.reset(new BuildingRfClassifier());
@@ -522,10 +520,11 @@ std::shared_ptr<MatchThreshold> BuildingMatchCreator::getMatchThreshold()
 {
   if (!_matchThreshold.get())
   {
-    ConfigOptions config;
+    LOG_VART(ConfigOptions().getBuildingMatchThreshold());
     _matchThreshold.reset(
-      new MatchThreshold(config.getBuildingMatchThreshold(), config.getBuildingMissThreshold(),
-                         config.getBuildingReviewThreshold()));
+      new MatchThreshold(
+        ConfigOptions().getBuildingMatchThreshold(), ConfigOptions().getBuildingMissThreshold(),
+        ConfigOptions().getBuildingReviewThreshold()));
   }
   return _matchThreshold;
 }

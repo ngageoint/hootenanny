@@ -19,18 +19,18 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "BuildingRelationMemberTagMerger.h"
 
 // hoot
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/schema/TagComparator.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/schema/MetadataTags.h>
 
 // Qt
 #include <QStringBuilder>
@@ -50,7 +50,7 @@ _ignoreTagKeys(ignoreTagKeys)
 
 QSet<QString> BuildingRelationMemberTagMerger::getBuildingPartTagNames()
 {
-  if (_buildingPartTagNames.size() == 0)
+  if (_buildingPartTagNames.empty())
   {
     const std::vector<SchemaVertex>& buildingPartTags =
       OsmSchema::getInstance().getAssociatedTagsAsVertices(MetadataTags::BuildingPart() + "=yes");

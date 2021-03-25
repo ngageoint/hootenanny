@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "PoiPolygonDistanceExtractor.h"
 
@@ -57,7 +57,8 @@ double PoiPolygonDistanceExtractor::extract(const OsmMap& /*map*/, const ConstEl
   LOG_VART(poi->getElementId());
   LOG_VART(poly->getElementId());
 
-  //to suppress the ElementToGeometryConverter poly warnings...warnings worth looking into at some point
+  // to suppress the ElementToGeometryConverter poly warnings...warnings worth looking into at some
+  // point
   //DisableLog dl(Log::Warn);
 
   return _infoCache->getDistance(poly, poi);

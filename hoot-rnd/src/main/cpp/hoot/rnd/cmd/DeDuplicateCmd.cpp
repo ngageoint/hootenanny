@@ -19,18 +19,18 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/elements/ElementDeduplicator.h>
-#include <hoot/core/util/StringUtils.h>
 #include <hoot/core/io/IoUtils.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -47,18 +47,16 @@ public:
 
   static QString className() { return "hoot::DeDuplicateCmd"; }
 
-  DeDuplicateCmd()
-  {
-  }
+  DeDuplicateCmd() = default;
 
-  virtual QString getName() const override { return "de-duplicate"; }
+  QString getName() const override { return "de-duplicate"; }
 
-  virtual QString getDescription() const override
+  QString getDescription() const override
   { return "Removes duplicate features within a single map or between two maps (experimental)"; }
 
-  virtual QString getType() const { return "rnd"; }
+  QString getType() const override { return "rnd"; }
 
-  virtual int runSimple(QStringList& args) override
+  int runSimple(QStringList& args) override
   {  
     QElapsedTimer timer;
     timer.start();

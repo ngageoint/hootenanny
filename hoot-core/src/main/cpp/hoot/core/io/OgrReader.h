@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef __OGR_READER_H__
@@ -73,7 +73,7 @@ public:
 
   OgrReader(const QString& path, const QString& layer);
 
-  ~OgrReader();
+  ~OgrReader() = default;
 
   ElementIterator* createIterator(const QString& path, const QString& layer) const;
 
@@ -93,7 +93,7 @@ public:
 
   void setDefaultCircularError(Meters circularError);
 
-  void setDefaultStatus(Status s);
+  void setDefaultStatus(Status s) override;
 
   void setLimit(long limit);
 
@@ -101,21 +101,21 @@ public:
 
   long getFeatureCount(const QString& path, const QString& layer);
 
-  virtual void initializePartial() override;
+  void initializePartial() override;
 
-  virtual bool hasMoreElements() override;
+  bool hasMoreElements() override;
 
-  virtual ElementPtr readNextElement() override;
+  ElementPtr readNextElement() override;
 
-  virtual void close() override;
+  void close() override;
 
-  virtual bool isSupported(const QString& url) override;
+  bool isSupported(const QString& url) override;
 
-  virtual void open(const QString& url) override;
+  void open(const QString& url) override;
 
-  virtual void setUseDataSourceIds(bool useDataSourceIds) override;
+  void setUseDataSourceIds(bool useDataSourceIds) override;
 
-  virtual void finalizePartial() override;
+  void finalizePartial() override;
 
   /**
    * Returns the bounding box for the specified projection and configuration settings. This is
@@ -124,23 +124,23 @@ public:
   virtual std::shared_ptr<geos::geom::Envelope> getBoundingBoxFromConfig(const Settings& s,
     OGRSpatialReference* srs);
 
-  virtual std::shared_ptr<OGRSpatialReference> getProjection() const;
+  std::shared_ptr<OGRSpatialReference> getProjection() const override;
 
   //leaving this empty for the time being
-  virtual QString supportedFormats() override { return ""; }
+  QString supportedFormats() override { return ""; }
 
   /**
    * @see ProgressReporter
    */
-  virtual void setProgress(Progress progress);
+  void setProgress(const Progress& progress) override;
   /**
    * @see ProgressReporter
    */
-  virtual unsigned int getNumSteps() const { return 1; }
+  unsigned int getNumSteps() const override { return 1; }
 
 protected:
 
-  OgrReaderInternal* _d;
+  std::shared_ptr<OgrReaderInternal> _d;
 
   Progress _progress;
 };

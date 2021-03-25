@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef RUBBERSHEET_H
@@ -35,6 +35,7 @@
 #include <hoot/core/criterion/OrCriterion.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/conflate/ConflateInfoCacheConsumer.h>
 
 // tgs
 #include <tgs/Interpolation/Interpolator.h>
@@ -52,7 +53,7 @@ class RubberSheetTest;
 class OsmMap;
 class Status;
 
-class RubberSheet : public OsmMapOperation, public Configurable
+class RubberSheet : public OsmMapOperation, public Configurable, public ConflateInfoCacheConsumer
 {
 public:
 
@@ -76,19 +77,22 @@ public:
   };
 
   RubberSheet();
-  virtual ~RubberSheet() = default;
+  ~RubberSheet() = default;
 
   RubberSheet* clone() const { return new RubberSheet(*this); }
+
+  void setConflateInfoCache(const std::shared_ptr<ConflateInfoCache>& cache) override
+  { _conflateInfoCache = cache; }
 
   /**
    * @see OsmMapOperation
    */
-  virtual void apply(std::shared_ptr<OsmMap>& map) override;
+  void apply(std::shared_ptr<OsmMap>& map) override;
 
   /**
    * @see Configurable
    */
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
   /**
    * Applies a perviously calculated or loaded transform to the specified map
@@ -143,26 +147,26 @@ public:
    void setMaxAllowedWays(int max) { _maxAllowedWays = max; }
    void setCriteria(const QStringList& criteria, OsmMapPtr map = OsmMapPtr());
 
-   virtual QString getDescription() const override { return "Applies rubber sheeting to a map"; }
+   QString getDescription() const override { return "Applies rubber sheeting to a map"; }
 
    /**
     * @see FilteredByGeometryTypeCriteria
     */
-   virtual QStringList getCriteria() const;
+   QStringList getCriteria() const override;
 
-   virtual QString getName() const { return className(); }
+   QString getName() const override { return className(); }
 
-   virtual QString getClassName() const override { return className(); }
-
-   /**
-    * @see OperationStatus
-    */
-   virtual QString getInitStatusMessage() const override { return "Rubbersheeting data..."; }
+   QString getClassName() const override { return className(); }
 
    /**
     * @see OperationStatus
     */
-   virtual QString getCompletedStatusMessage() const override
+   QString getInitStatusMessage() const override { return "Rubbersheeting data..."; }
+
+   /**
+    * @see OperationStatus
+    */
+   QString getCompletedStatusMessage() const override
    {
      return
        "Rubbersheeted " + StringUtils::formatLargeNumber(_numAffected) + " / " +
@@ -173,7 +177,7 @@ private:
 
   static int logWarnCount;
 
-  typedef std::map<long, std::list<Match>> MatchList;
+  using MatchList = std::map<long, std::list<Match>>;
 
   class Tie
   {
@@ -223,6 +227,10 @@ private:
   int _maxAllowedWays;
 
   OrCriterionPtr _criteria;
+
+  // Existence of this cache tells us that elements must be individually checked to see that they
+  // are conflatable given the current configuration before modifying them.
+  std::shared_ptr<ConflateInfoCache> _conflateInfoCache;
 
   bool _calcAndApplyTransform(OsmMapPtr& map);
   void _filterCalcAndApplyTransform(OsmMapPtr& map);

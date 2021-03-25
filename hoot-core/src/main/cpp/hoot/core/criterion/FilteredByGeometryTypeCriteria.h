@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef FILTERED_BY_GEOMETRY_TYPE_CRITERIA_H
 #define FILTERED_BY_GEOMETRY_TYPE_CRITERIA_H
@@ -36,9 +36,9 @@ namespace hoot
 /**
  * This interface allows for identifying feature geometry types associated with a hoot operator.
  * This is used during conflation to weed out unnecessary conflate ops specified in the
- * configuration. A list of class names is returned instead of instantiated criterion classes for
- * performance reasons. Callers are responsible for verifying that the classes are valid
- * GeometryTypeCriterion classes.
+ * configuration (SuperfluousConflateOpRemover). A list of class names is returned instead of
+ * instantiated criterion classes for performance reasons. Callers are responsible for verifying
+ * that the classes are valid GeometryTypeCriterion classes.
  */
 class FilteredByGeometryTypeCriteria
 {

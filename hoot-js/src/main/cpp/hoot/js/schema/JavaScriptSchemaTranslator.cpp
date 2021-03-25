@@ -19,33 +19,33 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "JavaScriptSchemaTranslator.h"
 
 // hoot
-#include <hoot/core/util/Exception.h>
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/ElementType.h>
 #include <hoot/core/elements/Tags.h>
+#include <hoot/core/io/schema/DoubleFieldDefinition.h>
 #include <hoot/core/io/schema/Feature.h>
 #include <hoot/core/io/schema/FeatureDefinition.h>
-#include <hoot/core/io/schema/DoubleFieldDefinition.h>
 #include <hoot/core/io/schema/IntegerFieldDefinition.h>
-#include <hoot/core/io/schema/LongIntegerFieldDefinition.h>
-#include <hoot/core/io/schema/StringFieldDefinition.h>
 #include <hoot/core/io/schema/Layer.h>
+#include <hoot/core/io/schema/LongIntegerFieldDefinition.h>
 #include <hoot/core/io/schema/Schema.h>
+#include <hoot/core/io/schema/StringFieldDefinition.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Exception.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/UuidHelper.h>
-#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/js/PluginContext.h>
 #include <hoot/js/io/DataConvertJs.h>
 #include <hoot/js/util/HootExceptionJs.h>
-#include <hoot/js/PluginContext.h>
 
 // Qt
 #include <QCoreApplication>
@@ -91,7 +91,7 @@ void JavaScriptSchemaTranslator::setConfiguration(const Settings& conf)
 
 JavaScriptSchemaTranslator::~JavaScriptSchemaTranslator()
 {
-  if (_timing.size() != 0)
+  if (!_timing.empty())
   {
     tbs::SampleStats stats(_timing);
     LOG_TRACE("Translation script run time (ms): " << stats.toString());
@@ -149,7 +149,7 @@ std::shared_ptr<Feature> JavaScriptSchemaTranslator::_createFeature(const QVaria
     }
   }
 
-  if (layer == 0)
+  if (layer == nullptr)
   {
     strictError("Table name: " + tableName + " not found in schema.");
   }
@@ -307,7 +307,7 @@ void JavaScriptSchemaTranslator::_init()
 }
 
 // Use the layerNameFilter function to get the filter string (regexp)
-const QString JavaScriptSchemaTranslator::getLayerNameFilter()
+QString JavaScriptSchemaTranslator::getLayerNameFilter()
 {
   // Just making sure
   if (!_initialized)
@@ -384,7 +384,7 @@ std::shared_ptr<const Schema> JavaScriptSchemaTranslator::getOgrOutputSchema()
 {
   LOG_TRACE("Started getOgrOutputSchema");
 
-  if (_schema == 0)
+  if (_schema == nullptr)
   {
     if (!_initialized)
     {

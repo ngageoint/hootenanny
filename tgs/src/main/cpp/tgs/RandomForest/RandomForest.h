@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef __RANDOM_FOREST_H__
@@ -70,7 +70,7 @@ public:
   * @param retrain fraction of top factors to use in retraining model (1.0 means use all factors and no retraining)
   * @param balanced true if the forest will be balanced
   */
-  virtual void trainBinary(const std::shared_ptr<DataFrame>& data, unsigned int numTrees,
+  void trainBinary(const std::shared_ptr<DataFrame>& data, unsigned int numTrees,
     unsigned int numFactors, std::string posClass, unsigned int nodeSize = 1,
     double retrain = 1.0, bool balanced = false) override;
 
@@ -84,7 +84,7 @@ public:
   * @param retrain fraction of top factors to use in retraining model (1.0 means use all factors and no retraining)
   * @param balanced true if the forest will be balanced
   */
-  virtual void trainMulticlass(const std::shared_ptr<DataFrame>& data, unsigned int numTrees,
+  void trainMulticlass(const std::shared_ptr<DataFrame>& data, unsigned int numTrees,
     unsigned int numFactors, unsigned int nodeSize = 1, double retrain = 1.0,
     bool balanced = false) override;
 
@@ -100,7 +100,7 @@ public:
   * @param retrain fraction of top factors to use in retraining model (1.0 means use all factors and no retraining)
   * @param balanced true if the forest will be balanced
   */
-  virtual void trainRoundRobin(const std::shared_ptr<DataFrame>& data, unsigned int numTrees,
+  void trainRoundRobin(const std::shared_ptr<DataFrame>& data, unsigned int numTrees,
     unsigned int numFactors, std::string posClass, std::string negClass,
     unsigned int nodeSize = 1, double retrain = 1.0, bool balanced = false) override;
 

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "ImplicitTagRulesSqliteReader.h"
@@ -100,7 +100,7 @@ Tags ImplicitTagRulesSqliteReader::getImplicitTags(const QSet<QString>& words,
   //This method can probably be sped up by combining some queries, but the sizes of the databases
   //being used so far have been small enough that performance has not yet been an issue.
 
-  if (words.size() == 0)
+  if (words.empty())
   {
     LOG_TRACE("No words specified.");
     return Tags();
@@ -126,7 +126,7 @@ Tags ImplicitTagRulesSqliteReader::getImplicitTags(const QSet<QString>& words,
   QSet<long> queriedWordIds;
   QSet<QString> queriedWords;
   _queryWords(words, queriedWordIds, queriedWords);
-  if (queriedWordIds.size() == 0)
+  if (queriedWordIds.empty())
   {
     //cache empty set of tags
     _cacheTags(words, Tags());
@@ -160,7 +160,7 @@ Tags ImplicitTagRulesSqliteReader::getImplicitTags(const QSet<QString>& words,
   Tags tags =
     _getTagsForWords(queriedWordIds, queriedWords, words, matchingWords,
                      wordsInvolvedInMultipleRules);
-  if (tags.size() == 0)
+  if (tags.empty())
   {
     return tags;
   }
@@ -168,7 +168,7 @@ Tags ImplicitTagRulesSqliteReader::getImplicitTags(const QSet<QString>& words,
   //e.g. amenity=hospital and building=hospital.  This behavior could be captured in the rules
   //deriver instead, as well as improved overall.
   _removeTagsWithDuplicatedValues(tags);
-  if (tags.size() == 0)
+  if (tags.empty())
   {
     //cache empty set of tags
     _cacheTags(matchingWords, Tags());
@@ -313,7 +313,7 @@ Tags ImplicitTagRulesSqliteReader::_checkCachedTags(const QSet<QString>& words,
   const QStringList wordsList = words.toList();
   const QString wordsKey = wordsList.join(";");
   Tags* cachedTags = _tagsCache[wordsKey];
-  if (cachedTags != 0)
+  if (cachedTags != nullptr)
   {
     LOG_TRACE("Found cached tags.");
     matchingWords = words;
@@ -477,9 +477,9 @@ Tags ImplicitTagRulesSqliteReader::_getTagsForWords(const QSet<long>& queriedWor
       if (matchingWords != inputWords)
       {
         //also cache the originally passed in words
-        Tags tagsToCache;
-        tagsToCache.insert("wordsInvolvedInMultipleRules", "true");
-        _cacheTags(inputWords, tagsToCache);
+        Tags moreTagsToCache;
+        moreTagsToCache.insert("wordsInvolvedInMultipleRules", "true");
+        _cacheTags(inputWords, moreTagsToCache);
       }
       LOG_TRACE(
         "Words: " << matchingWords << " involved in multiple rules due to tag sets not matching.");

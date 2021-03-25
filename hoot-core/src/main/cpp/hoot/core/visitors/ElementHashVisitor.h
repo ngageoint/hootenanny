@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef ELEMENT_HASH_VISITOR_H
 #define ELEMENT_HASH_VISITOR_H
@@ -54,9 +54,9 @@ public:
   static QString className() { return "hoot::ElementHashVisitor"; }
 
   ElementHashVisitor();
-  virtual ~ElementHashVisitor() = default;
+  ~ElementHashVisitor() = default;
 
-  virtual void visit(const ElementPtr& e);
+  void visit(const ElementPtr& e) override;
 
   /**
    * Inserts a hash tag into an element and/or records the hash mapping with the element for later
@@ -77,11 +77,11 @@ public:
 
   void clearHashes();
 
-  virtual QString getDescription() const { return "Calculates unique hash values for elements"; }
+  QString getDescription() const override { return "Calculates unique hash values for elements"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
   QMap<QString, ElementId> getHashesToElementIds() const { return _hashesToElementIds; }
   QMap<ElementId, QString> getElementIdsToHashes() const { return _elementIdsToHashes; }

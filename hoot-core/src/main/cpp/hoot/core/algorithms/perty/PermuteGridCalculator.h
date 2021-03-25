@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef PERMUTE_GRID_CALCULATOR_H
 #define PERMUTE_GRID_CALCULATOR_H
@@ -56,7 +56,7 @@ public:
    * Calculates a permutation grid and the values in that grid for a given envelope. The number of
    * rows and columns are returned in rows and cols.
    */
-  virtual cv::Mat permute(geos::geom::Envelope env, int& pointRows, int& pointCols) = 0;
+  virtual cv::Mat permute(const geos::geom::Envelope& env, int& pointRows, int& pointCols) = 0;
 
   /**
    * Seeds the permutation process. By default a seed is generated based on time. The seed should

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "OsmApiReaderTestServer.h"
@@ -35,7 +35,7 @@
 namespace hoot
 {
 
-bool SimpleReaderTestServer::respond(HttpConnection::HttpConnectionPtr& connection)
+bool SimpleReaderTestServer::respond(HttpConnectionPtr& connection)
 {
   //  Read the HTTP request
   parse_request(connection);
@@ -50,7 +50,7 @@ bool SimpleReaderTestServer::respond(HttpConnection::HttpConnectionPtr& connecti
   return false;
 }
 
-bool GeographicSplitReaderTestServer::respond(HttpConnection::HttpConnectionPtr& connection)
+bool GeographicSplitReaderTestServer::respond(HttpConnectionPtr& connection)
 {
   //  Stop processing by setting this to false
   bool continue_processing = true;
@@ -98,7 +98,7 @@ HttpResponsePtr GeographicSplitReaderTestServer::get_sequence_response(const std
   return response;
 }
 
-bool ElementSplitReaderTestServer::respond(HttpConnection::HttpConnectionPtr& connection)
+bool ElementSplitReaderTestServer::respond(HttpConnectionPtr& connection)
 {
   //  Stop processing by setting this to false
   bool continue_processing = true;

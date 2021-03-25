@@ -19,20 +19,20 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "MapComparator.h"
 
 // hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/geometry/GeometryUtils.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
 #include <hoot/core/visitors/CountUniqueReviewsVisitor.h>
-#include <hoot/core/util/ConfigOptions.h>
 
 // Standard
 #include <iomanip>
@@ -95,15 +95,15 @@ public:
       _errorLimit(errorLimit)
   {
   }
-  virtual ~CompareVisitor() = default;
+  ~CompareVisitor() = default;
 
   bool isMatch() { return _matches; }
 
-  virtual QString getDescription() const { return ""; }
-  virtual QString getName() const { return ""; }
-  virtual QString getClassName() const override { return ""; }
+  QString getDescription() const override { return ""; }
+  QString getName() const override { return ""; }
+  QString getClassName() const override { return ""; }
 
-  virtual void visit(const std::shared_ptr<const Element>& e)
+  void visit(const std::shared_ptr<const Element>& e) override
   {
     // e is the test element
 
@@ -340,7 +340,7 @@ void MapComparator::_printIdDiff(
 
   const bool printFullElements =
     ConfigOptions().getMapComparatorPrintFullMismatchElementsOnMapSizeDiff();
-  if (idsIn1AndNotIn2Limited.size() > 0)
+  if (!idsIn1AndNotIn2Limited.empty())
   {
     LOG_WARN(
       "\t" << elementType.toString() << "s in map 1 and not in map 2 (limit " << limit << "): " <<
@@ -354,7 +354,7 @@ void MapComparator::_printIdDiff(
       }
     }
   }
-  if (idsIn2AndNotIn1Limited.size() > 0)
+  if (!idsIn2AndNotIn1Limited.empty())
   {
     LOG_WARN(
       "\t" << elementType.toString() << "s in map 2 and not in map 1 (limit " << limit << "): " <<

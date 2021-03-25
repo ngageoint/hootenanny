@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef OSMMAPINDEX_H
@@ -50,7 +50,7 @@ class OsmMapIndex : public ElementListener
 public:
 
   OsmMapIndex(const OsmMap& map);
-  virtual ~OsmMapIndex() = default;
+  ~OsmMapIndex() = default;
 
   void addNode(const ConstNodePtr& n);
   void addRelation(const ConstRelationPtr& r);
@@ -119,8 +119,8 @@ public:
    * This gets called before an element changes. Between this call and the call to
    * postGeometryChange the index is in an inconsistent state.
    */
-  virtual void preGeometryChange(Element* element);
-  virtual void postGeometryChange(Element* element);
+  void preGeometryChange(Element* element) override;
+  void postGeometryChange(Element* element) override;
 
   void removeNode(ConstNodePtr n);
   void removeRelation(const ConstRelationPtr& r);

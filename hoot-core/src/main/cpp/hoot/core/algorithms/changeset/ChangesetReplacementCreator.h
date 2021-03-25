@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef CHANGESET_REPLACEMENT_CREATOR_H
 #define CHANGESET_REPLACEMENT_CREATOR_H
@@ -36,9 +36,7 @@ namespace hoot
 /**
  * Single geometry pass version of ChangesetReplacement, which solves the bug in handling relations
  * with children of mixed geometry types. This drops support for overlapping only replacement and
- * strict bounds handling, as they are not useful for replacements within a task grid. This
- * temporarily drops support for the additional filters (they were broken anyway), and they will be
- * restored as part of #4267.
+ * strict bounds handling, as they are not useful for replacements within a task grid.
  */
 class ChangesetReplacementCreator : public ChangesetReplacementCreatorAbstract
 {
@@ -60,8 +58,7 @@ public:
    * @param bounds the rectangular bounds over which features are to be replaced
    * @param output the changeset file output location
    */
-  virtual void create(
-    const QString& input1, const QString& input2, const geos::geom::Envelope& bounds,
+  void create(const QString& input1, const QString& input2, const geos::geom::Envelope& bounds,
     const QString& output) override;
 
   /**
@@ -75,28 +72,16 @@ public:
    * @param bounds the bounds over which features are to be replaced
    * @param output the changeset file output location
    */
-  virtual void create(
-    const QString& input1, const QString& input2,
+  void create(const QString& input1, const QString& input2,
     const std::shared_ptr<geos::geom::Polygon>& bounds, const QString& output) override;
 
-  // Currently, this only supports geometry filters (additional filters are broken right now
-  // anyway: #4267).
-  virtual void setGeometryFilters(const QStringList& filterClassNames) override;
-  virtual void setReplacementFilters(const QStringList& /*filterClassNames*/) override {}
-  virtual void setChainReplacementFilters(const bool /*chain*/) override {}
-  virtual void setReplacementFilterOptions(const QStringList& /*optionKvps*/) override {}
-  virtual void setRetainmentFilters(const QStringList& /*filterClassNames*/) override {}
-  virtual void setChainRetainmentFilters(const bool /*chain*/) override {}
-  virtual void setRetainmentFilterOptions(const QStringList& /*optionKvps*/) override {}
-
-  virtual QString toString() const override
-    { return className().remove("hoot::"); }
+  QString toString() const override { return className().remove("hoot::"); }
 
 protected:
 
   ElementCriterionPtr _geometryTypeFilter;
 
-  virtual void _setGlobalOpts() override;
+  void _setGlobalOpts() override;
 
 private:
 

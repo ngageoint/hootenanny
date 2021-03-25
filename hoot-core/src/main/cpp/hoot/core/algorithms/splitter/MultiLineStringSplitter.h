@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef MULTILINESTRINGSPLITTER_H
 #define MULTILINESTRINGSPLITTER_H
@@ -56,7 +56,7 @@ public:
    *  the subline way tags. Status and CE will be taken from the first matching subline.
    */
   ElementPtr createSublines(const OsmMapPtr& map, const WaySublineCollection& string,
-    const std::vector<bool>& reverse, GeometryToElementConverter::NodeFactory* nf = 0) const;
+    const std::vector<bool>& reverse, GeometryToElementConverter::NodeFactory* nf = nullptr) const;
 
   /**
    * Given a subline string, cut out all the bits that match the subline and put them into @a match
@@ -73,7 +73,7 @@ public:
    */
   void split(const OsmMapPtr& map, const WaySublineCollection& string,
              const std::vector<bool>& reverse, ElementPtr& match, ElementPtr& scraps,
-             GeometryToElementConverter::NodeFactory *nf = 0) const;
+             GeometryToElementConverter::NodeFactory *nf = nullptr) const;
 
   /**
    * Split a multi-line string at a given location and put the matching subline into @a match.

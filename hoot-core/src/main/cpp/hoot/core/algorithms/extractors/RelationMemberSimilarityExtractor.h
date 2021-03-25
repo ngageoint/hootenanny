@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef RELATION_MEMBER_SIMILARITY_EXTRACTOR_H
 #define RELATION_MEMBER_SIMILARITY_EXTRACTOR_H
@@ -50,19 +50,19 @@ class RelationMemberSimilarityExtractor : public FeatureExtractorBase
 public:
 
   RelationMemberSimilarityExtractor() = default;
-  virtual ~RelationMemberSimilarityExtractor() = default;
+  ~RelationMemberSimilarityExtractor() = default;
 
   static QString className() { return "hoot::RelationMemberSimilarityExtractor"; }
 
-  virtual QString getClassName() const { return className(); }
+  QString getClassName() const override { return className(); }
 
-  virtual double extract(const OsmMap& map, const std::shared_ptr<const Element>& target,
-    const std::shared_ptr<const Element>& candidate) const;
+  double extract(const OsmMap& map, const std::shared_ptr<const Element>& target,
+    const std::shared_ptr<const Element>& candidate) const override;
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Scores the similarity between two sets of relation members"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 };
 
 }

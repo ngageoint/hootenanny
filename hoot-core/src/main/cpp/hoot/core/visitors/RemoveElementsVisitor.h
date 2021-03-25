@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef REMOVEELEMENTSVISITOR_H
 #define REMOVEELEMENTSVISITOR_H
@@ -47,33 +47,33 @@ public:
   static QString className() { return "hoot::RemoveElementsVisitor"; }
 
   RemoveElementsVisitor(bool negateCriteria = false);
-  virtual ~RemoveElementsVisitor() = default;
+  ~RemoveElementsVisitor() = default;
 
-  virtual void visit(const ElementPtr& e);
+  void visit(const ElementPtr& e) override;
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
-  virtual void setOsmMap(OsmMap* map);
-  virtual void setOsmMap(const OsmMap* /*map*/) { assert(false); }
+  void setOsmMap(OsmMap* map) override;
+  void setOsmMap(const OsmMap* /*map*/) { assert(false); }
 
   void setRecursive(bool recursive) { _recursive = recursive; }
 
   static void removeWays(const std::shared_ptr<OsmMap>& pMap, const ElementCriterionPtr& pCrit);
 
-  virtual QString getDescription() const { return "Removes elements that satisfy a criterion"; }
+  QString getDescription() const override { return "Removes elements that satisfy a criterion"; }
 
-  virtual QString getInitStatusMessage() const { return "Removing elements..."; }
+  QString getInitStatusMessage() const override { return "Removing elements..."; }
 
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   {
     return
       "Removed " + StringUtils::formatLargeNumber(_numAffected) + " / " +
       StringUtils::formatLargeNumber(_numProcessed) + " elements.";
   }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

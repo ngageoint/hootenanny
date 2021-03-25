@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef __ELEMENT_ID_JS_H__
 #define __ELEMENT_ID_JS_H__
@@ -85,7 +85,7 @@ inline void toCpp(v8::Handle<v8::Value> v, ElementId& eid)
   v8::Handle<v8::Object> obj = v8::Handle<v8::Object>::Cast(v);
 
   QString className = str(obj->Get(PopulateConsumersJs::baseClass()));
-  ElementIdJs* eidj = 0;
+  ElementIdJs* eidj = nullptr;
   if (obj->InternalFieldCount() >= 1 && className == ElementId::className())
   {
     eidj = node::ObjectWrap::Unwrap<ElementIdJs>(obj);

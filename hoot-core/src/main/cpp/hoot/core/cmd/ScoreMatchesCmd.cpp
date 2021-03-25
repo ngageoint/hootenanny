@@ -19,29 +19,29 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/UnifyingConflator.h>
+#include <hoot/core/conflate/matching/MatchThreshold.h>
+#include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/io/IoUtils.h>
 #include <hoot/core/ops/BuildingOutlineUpdateOp.h>
-#include <hoot/core/ops/NamedOp.h>
+#include <hoot/core/ops/ManualMatchValidator.h>
+#include <hoot/core/ops/OpExecutor.h>
 #include <hoot/core/scoring/MatchComparator.h>
 #include <hoot/core/scoring/MatchScoringMapPreparer.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/schema/MetadataTags.h>
-#include <hoot/core/util/Settings.h>
-#include <hoot/core/io/IoUtils.h>
-#include <hoot/core/visitors/CountManualMatchesVisitor.h>
 #include <hoot/core/util/ConfigUtils.h>
-#include <hoot/core/ops/ManualMatchValidator.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/util/Settings.h>
+#include <hoot/core/visitors/CountManualMatchesVisitor.h>
 
 // tgs
 #include <tgs/Optimization/NelderMead.h>
@@ -65,12 +65,12 @@ public:
 
   ScoreMatchesCmd() = default;
 
-  virtual QString getName() const override { return "score-matches"; }
+  QString getName() const override { return "score-matches"; }
 
-  virtual QString getDescription() const override
+  QString getDescription() const override
   { return "Scores conflation performance against a manually matched map"; }
 
-  virtual int runSimple(QStringList& args) override
+  int runSimple(QStringList& args) override
   {
     QElapsedTimer timer;
     timer.start();
@@ -136,7 +136,8 @@ public:
     else
     {
       double score;
-      std::shared_ptr<MatchThreshold> mt;
+      std::shared_ptr<MatchThreshold> mt =
+        std::make_shared<MatchThreshold>(MatchThreshold(0.5, 0.5, 1.0, false));
       const QString result = evaluateThreshold(maps, output, mt, showConfusion, score);
       cout << result;
     }
@@ -151,10 +152,11 @@ public:
   {
   public:
 
-    virtual double f(Tgs::Vector v)
+    double f(Tgs::Vector v) override
     {
       double score;
-      std::shared_ptr<MatchThreshold> mt(new MatchThreshold(v[0], v[1], v[2]));
+      std::shared_ptr<MatchThreshold> mt =
+        std::make_shared<MatchThreshold>(MatchThreshold(v[0], v[1], v[2], false));
       _cmd->evaluateThreshold(_maps, "", mt, _showConfusion, score);
       return score;
     }
@@ -185,10 +187,10 @@ public:
 
       LOG_INFO("Applying pre conflation operations...");
       LOG_VART(ConfigOptions().getConflatePreOps());
-      NamedOp(ConfigOptions().getConflatePreOps()).apply(copy);
+      OpExecutor(ConfigOptions().getConflatePreOps()).apply(copy);
       UnifyingConflator(mt).apply(copy);
       LOG_INFO("Applying post conflation operations...");
-      NamedOp(ConfigOptions().getConflatePostOps()).apply(copy);
+      OpExecutor(ConfigOptions().getConflatePostOps()).apply(copy);
 
       comparator.evaluateMatches(maps[i], copy);
 

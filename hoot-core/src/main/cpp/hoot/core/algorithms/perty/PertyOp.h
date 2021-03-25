@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef PERTY_H
 #define PERTY_H
@@ -31,10 +31,10 @@
 #include <geos/geom/Envelope.h>
 
 // hoot
-#include <hoot/core/util/Units.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/OpenCv.h>
+#include <hoot/core/util/Units.h>
 
 // Qt
 #include <QString>
@@ -52,7 +52,7 @@ class PermuteGridCalculator;
  * The geometry permutations are done in accordance with [1].
  *
  * 1. Evaluating conflation methods using uncertainty modeling - Peter Doucette, et al. 2013
- *    https://insightcloud.digitalglobe.com/redmine/attachments/download/1667/2013%20Evaluating%20conflation%20methods%20using%20uncertainty%20modeling.pdf
+ *    https://github.com/ngageoint/hootenanny/files/609201/2013.Evaluating.conflation.methods.using.uncertainty.modeling.pdf
  *    http://proceedings.spiedigitallibrary.org/proceeding.aspx?articleid=1691369
  *
  * TODO: implement OperationStatus
@@ -64,14 +64,14 @@ public:
   static QString className() { return "hoot::PertyOp"; }
 
   PertyOp();
-  virtual ~PertyOp() = default;
+  ~PertyOp() = default;
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
   /**
    * Permute the map and then apply all "perty.ops" to the map as well.
    */
-  virtual void apply(std::shared_ptr<OsmMap>& map);
+  void apply(std::shared_ptr<OsmMap>& map) override;
 
   /**
    * Generates a map of all the grid offset vectors and permutes the given map.
@@ -101,11 +101,11 @@ public:
    */
   void setSystematicError(Meters sigmaX, Meters sigmaY) { _sigmaSx = sigmaX; _sigmaSy = sigmaY; }
 
-  virtual QString getDescription() const { return "Perturbs map data"; }
+  QString getDescription() const override { return "Perturbs map data"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 
@@ -128,7 +128,7 @@ private:
 
   void _configure();
 
-  cv::Mat _calculatePermuteGrid(geos::geom::Envelope env, int& rows, int& cols);
+  cv::Mat _calculatePermuteGrid(const geos::geom::Envelope& env, int& rows, int& cols);
 };
 
 }

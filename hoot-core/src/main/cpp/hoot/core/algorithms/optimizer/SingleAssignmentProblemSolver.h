@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef SINGLEASSIGNMENTPROBLEMSOLVER_H
@@ -65,7 +65,7 @@ public:
     virtual double cost(const Actor* a, const Task* t) const = 0;
   };
 
-  typedef struct ResultPair
+  struct ResultPair
   {
     const Actor* actor;
     const Task* task;
@@ -75,7 +75,7 @@ public:
       return (actor ? actor->toString() : QString("null")) + " " +
              (task ? task->toString() : QString("null"));
     }
-  } ResultPair;
+  };
 
   SingleAssignmentProblemSolver(CostFunction& costFunction) : _costFunction(costFunction) { }
 
@@ -121,7 +121,7 @@ public:
       {
         ResultPair r;
         r.actor = _actors[i];
-        r.task = 0;
+        r.task = nullptr;
         result.push_back(r);
       }
     }
@@ -131,7 +131,7 @@ public:
       if (usedTasks.find(_tasks[i]) == usedTasks.end())
       {
         ResultPair r;
-        r.actor = 0;
+        r.actor = nullptr;
         r.task = _tasks[i];
         result.push_back(r);
       }

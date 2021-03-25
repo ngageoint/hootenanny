@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2015, 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -103,7 +103,7 @@ public:
          it != pairs.end(); ++it)
     {
       SingleAssignmentProblemSolver<ActorTask, ActorTask>::ResultPair pair = *it;
-      if (pair.actor != NULL && pair.task != NULL)
+      if (pair.actor != nullptr && pair.task != nullptr)
       {
         totalCost += costFunction.cost(pair.actor, pair.task);
       }

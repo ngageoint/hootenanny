@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 Maxar (http://www.maxar.com/)
  */
 
 /*
@@ -538,7 +538,7 @@ dnc = {
   applyToOsmPreProcessing: function(attrs, layerName, geometryType)
   {
     // List of data values to drop/ignore
-    var ignoreList = { 'UNK':1, 'N/A':1, 'noinformation':1, '-32768':1, '-2147483648':1 };
+    var ignoreList = { 'UNK':1, 'N/A':1, 'noinformation':1, '-32768':1, '-2147483648':1, '-21474836':1};
 
     // This is a handy loop. We use it to:
     // 1) Remove all of the "No Information" and -999999 fields
@@ -606,10 +606,28 @@ dnc = {
       }
     } // End process attrs.OSM_TAGS
 
-    // DNC doesn't have a lot of info for land features
-    if (attrs.F_CODE == 'AP020') tags.junction = 'yes';
-    if (attrs.F_CODE == 'AP030') tags.highway = 'road';
-    if (attrs.F_CODE == 'BH140') tags.waterway = 'river';
+    // F_CODE specific tags
+    switch (attrs.F_CODE)
+    {
+      case undefined: // Should not break here...
+        break;
+
+      case 'AH050':
+        tags.building = 'bunker';
+        break;
+
+      case 'AP020':
+        tags.junction = 'yes';
+        break;
+
+      case 'AP030':
+        tags.highway = 'road';
+        break;
+
+      case 'BH140':
+        tags.waterway = 'river';
+        break;
+    }
 
     // The Data Quality layer doesn't have an F_CODE
     if (layerName.toLowerCase() == 'dqyarea_dqy') tags['source:metadata'] = 'dataset';
@@ -701,10 +719,10 @@ dnc = {
   applyToOgrPreProcessing: function(tags, attrs, geometryType)
   {
     // Remove Hoot assigned tags for the source of the data
-    if (tags['source:ingest:datetime']) delete tags['source:ingest:datetime'];
-    if (tags.area) delete tags.area;
-    if (tags['error:circular']) delete tags['error:circular'];
-    if (tags['hoot:status']) delete tags['hoot:status'];
+    delete tags['source:ingest:datetime'];
+    delete tags.area;
+    delete tags['error:circular'];
+    delete tags['hoot:status'];
 
     // If we use ogr2osm, the GDAL driver jams any tag it doesn't know about into an "other_tags" tag.
     // We need to unpack this before we can do anything.
@@ -829,6 +847,7 @@ dnc = {
       // Rules format:  ["test expression","output result"];
       // Note: t = tags, a = attrs and attrs can only be on the RHS
       var rulesList = [
+        ["t.military == 'bunker' && t.building == 'bunker'","delete t.building"],
         ['t["radar:use"] == "early_warning" && t.man_made == "radar_station"','delete t.man_made'],
         ['t.water == "tidal"','t.tidal = "yes";delete t.water']
       ];
@@ -1464,9 +1483,9 @@ dnc = {
     // not in v8 yet: // var tTags = Object.assign({},tags);
     var notUsedTags = (JSON.parse(JSON.stringify(tags)));
 
-    if (notUsedTags.hoot) delete notUsedTags.hoot; // Added by the UI
+    delete notUsedTags.hoot; // Added by the UI
     // Debug info. We use this in postprocessing via "tags"
-    if (notUsedTags['hoot:id']) delete notUsedTags['hoot:id'];
+    delete notUsedTags['hoot:id'];
 
 
     // Apply the simple number and text biased rules
@@ -1647,14 +1666,14 @@ dnc = {
       if (dnc.configOut.OgrFormat == 'shp')
       {
         // Throw a warning that text will get truncated.
-        if (str.length > 1012) hoot.logWarn('o2s tags truncated to fit in available space.');
+        if (str.length > 900) hoot.logWarn('o2s tags truncated to fit in available space.');
 
         // NOTE: if the start & end of the substring are grater than the length of the string, they get assigned to the length of the string
         // which means that it returns an empty string.
-        attrs = {tag1:str.substring(0,253),
-          tag2:str.substring(253,506),
-          tag3:str.substring(506,759),
-          tag4:str.substring(759,1012)};
+        attrs = {tag1:str.substring(0,225),
+          tag2:str.substring(225,450),
+          tag3:str.substring(450,675),
+          tag4:str.substring(675,900)};
       }
       else
       {

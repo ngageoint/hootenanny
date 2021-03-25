@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef TAGCONTAINSCRITERION_H
@@ -50,11 +50,11 @@ public:
   TagContainsCriterion();
   TagContainsCriterion(QString key, QString valueSubstring);
   TagContainsCriterion(QStringList keys, QStringList valueSubstrings);
-  virtual ~TagContainsCriterion() = default;
+  ~TagContainsCriterion() = default;
 
-  virtual bool isSatisfied(const ConstElementPtr& e) const override;
+  bool isSatisfied(const ConstElementPtr& e) const override;
 
-  void setConfiguration(const Settings& s);
+  void setConfiguration(const Settings& s) override;
 
  /**
    * Adds an additional pair to the search list. If any one of the pairs matches then it is
@@ -62,19 +62,19 @@ public:
    */
   void addPair(QString key, QString valueSubstring);
 
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new TagContainsCriterion()); }
+  ElementCriterionPtr clone() override { return ElementCriterionPtr(new TagContainsCriterion()); }
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Identifies elements having a particular tag key and tag value substring"; }
 
   void setKvps(const QStringList kvps);
   void setCaseSensitive(bool caseSens) { _caseSensitive = caseSens; }
 
-  virtual QString toString() const override;
+  QString toString() const override;
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

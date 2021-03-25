@@ -19,20 +19,20 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "RemoveElementsVisitor.h"
 
-#include <hoot/core/util/Factory.h>
+#include <hoot/core/elements/NodeToWayMap.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/index/OsmMapIndex.h>
-#include <hoot/core/elements/NodeToWayMap.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/ops/RemoveElementByEid.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 
 namespace hoot
@@ -71,7 +71,7 @@ void RemoveElementsVisitor::setConfiguration(const Settings& conf)
     {
       ElementCriterionPtr crit = *it;
       Configurable* c = dynamic_cast<Configurable*>(crit.get());
-      if (c != 0)
+      if (c != nullptr)
       {
         c->setConfiguration(conf);
       }
@@ -91,7 +91,7 @@ void RemoveElementsVisitor::setOsmMap(OsmMap* map)
   {
     ElementCriterionPtr crit = *it;
     OsmMapConsumer* consumer = dynamic_cast<OsmMapConsumer*>(crit.get());
-    if (consumer != 0)
+    if (consumer != nullptr)
       consumer->setOsmMap(map);
   }
 }
@@ -103,7 +103,7 @@ void RemoveElementsVisitor::visit(const ElementPtr& e)
     return;
   }
 
-  if (_criteria.size() == 0)
+  if (_criteria.empty())
   {
     throw IllegalArgumentException("No criteria specified for RemoveElementsVisitor.");
   }
@@ -119,12 +119,11 @@ void RemoveElementsVisitor::visit(const ElementPtr& e)
     }
     else
     {
-      // This originally called removeUnusedElementsOnly but was getting some unexpected results
-      // when using it with C&R and changed it over to removeElement, which solved the problem and
-      // didn't have any negative impact on the rest of the code...could still be worth looking
-      // into, though.
+      // This originally called RemoveElementByEid::removeUnusedElementsOnly but was getting some
+      // unexpected results when using it with C&R and changed it over to removeElement, which
+      // solved the problem and didn't have any negative impact on the rest of the code...could
+      // still be worth looking into, though.
       LOG_TRACE("Removing element: " << e->getElementId() << " non-recursively...");
-      //RemoveElementByEid::removeUnusedElementsOnly(_map->shared_from_this(), e->getElementId());
       RemoveElementByEid::removeElement(_map->shared_from_this(), e->getElementId());
     }
     _numAffected++;

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef BIGMAPSTXXL_H
 #define BIGMAPSTXXL_H
@@ -120,21 +120,22 @@ private:
     static long max_value() { return std::numeric_limits<A>::max(); }
   };
 
-  typedef stxxl::map<K, V, CompareLess<K>, 4096, 4096> MapType;
+  using MapType = stxxl::map<K, V, CompareLess<K>, 4096, 4096>;
 
   // scaled for ~100M entries and FPR of 0.001
   // http://hur.st/bloomfilter?n=100000000&p=0.001
-  typedef boost::bloom_filters::basic_bloom_filter<long, 1437 * 1000 * 1000, boost::mpl::vector<
-      boost::bloom_filters::boost_hash<size_t, 0x327B23C66B8B4567>,
-      boost::bloom_filters::boost_hash<size_t, 0x66334873643C9869>,
-      boost::bloom_filters::boost_hash<size_t, 0x19495CFF74B0DC51>,
-      boost::bloom_filters::boost_hash<size_t, 0x625558EC2AE8944A>,
-      boost::bloom_filters::boost_hash<size_t, 0x46E87CCD238E1F29>,
-      boost::bloom_filters::boost_hash<size_t, 0x507ED7AB3D1B58BA>,
-      boost::bloom_filters::boost_hash<size_t, 0x41B71EFB2EB141F2>,
-      boost::bloom_filters::boost_hash<size_t, 0x7545E14679E2A9E3>,
-      boost::bloom_filters::boost_hash<size_t, 0x5BD062C2515F007C>,
-      boost::bloom_filters::boost_hash<size_t, 0x4DB127F812200854>>> BloomFilter;
+  using BloomFilter =
+    boost::bloom_filters::basic_bloom_filter<long, 1437 * 1000 * 1000, boost::mpl::vector<
+    boost::bloom_filters::boost_hash<size_t, 0x327B23C66B8B4567>,
+    boost::bloom_filters::boost_hash<size_t, 0x66334873643C9869>,
+    boost::bloom_filters::boost_hash<size_t, 0x19495CFF74B0DC51>,
+    boost::bloom_filters::boost_hash<size_t, 0x625558EC2AE8944A>,
+    boost::bloom_filters::boost_hash<size_t, 0x46E87CCD238E1F29>,
+    boost::bloom_filters::boost_hash<size_t, 0x507ED7AB3D1B58BA>,
+    boost::bloom_filters::boost_hash<size_t, 0x41B71EFB2EB141F2>,
+    boost::bloom_filters::boost_hash<size_t, 0x7545E14679E2A9E3>,
+    boost::bloom_filters::boost_hash<size_t, 0x5BD062C2515F007C>,
+    boost::bloom_filters::boost_hash<size_t, 0x4DB127F812200854>>>;
 
   std::shared_ptr<MapType> _map;
   std::shared_ptr<BloomFilter> _bloom;

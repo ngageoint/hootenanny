@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #include "RelationData.h"
 
@@ -50,7 +50,7 @@ RelationData::RelationData(const RelationData& rd)
 
 void RelationData::addElement(const QString& role, ElementId eid)
 {
-  _members.push_back(Entry(role, eid));
+  _members.emplace_back(role, eid);
 }
 
 void RelationData::clear()
@@ -124,9 +124,9 @@ void RelationData::replaceElement(ElementId from, const QList<ElementId>& to)
     Entry& e = _members[i];
     if (e.getElementId() == from)
     {
-      for (int i = 0; i < to.size(); ++i)
+      for (int j = 0; j < to.size(); ++j)
       {
-        newCopy.push_back(Entry(e.role, to[i]));
+        newCopy.emplace_back(e.role, to[j]);
       }
     }
     else

@@ -19,21 +19,21 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "ApiDbReader.h"
 
 // Hoot
 #include <hoot/core/geometry/GeometryUtils.h>
-#include <hoot/core/schema/MetadataTags.h>
-#include <hoot/core/io/TableType.h>
 #include <hoot/core/io/ApiDb.h>
+#include <hoot/core/io/IoUtils.h>
+#include <hoot/core/io/TableType.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/io/IoUtils.h>
 
 // tgs
 #include <tgs/System/Time.h>
@@ -185,9 +185,8 @@ void ApiDbReader::_updateMetadataOnElement(ElementPtr element)
   if (tags.contains(MetadataTags::HootStatus()))
   {
     QString statusStr = tags.get(MetadataTags::HootStatus());
-    bool ok;
     const int statusInt = statusStr.toInt(&ok);
-    Status status = static_cast<Status::Type>(statusInt);
+    Status status = statusInt;
     if (ok && status.getEnum() >= Status::Invalid && status.getEnum() <= Status::Conflated)
     {
       element->setStatus(status);
@@ -287,7 +286,7 @@ void ApiDbReader::_readWaysByNodeIds(OsmMapPtr map, const QSet<QString>& nodeIds
   }
   LOG_VART(wayIds.size());
 
-  if (wayIds.size() > 0)
+  if (!wayIds.empty())
   {
     // If the appropriate option is enabled, here we'll add the IDs of all ways that fall outside
     // of the requested bounds but are directly connected to a way that is being returned by the
@@ -341,7 +340,7 @@ void ApiDbReader::_readWaysByNodeIds(OsmMapPtr map, const QSet<QString>& nodeIds
     additionalNodeIds = additionalNodeIds.subtract(nodeIds);
     LOG_VART(additionalNodeIds.size());
 
-    if (additionalNodeIds.size() > 0)
+    if (!additionalNodeIds.empty())
     {
       LOG_DEBUG(
         "Retrieving nodes falling outside of the query bounds but belonging to a selected way...");
@@ -399,7 +398,7 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
 
   if (!_returnNodesOnly)
   {
-    if (nodeIds.size() > 0)
+    if (!nodeIds.empty())
     {
       QSet<QString> wayIds;
       QSet<QString> additionalWayNodeIds;
@@ -420,7 +419,7 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
         LOG_VART(ElementId(ElementType::Relation, relationId));
         relationIds.insert(QString::number(relationId));
       }
-      if (wayIds.size() > 0)
+      if (!wayIds.empty())
       {
         relationIdItr = _getDatabase()->selectRelationIdsByMemberIds(wayIds, ElementType::Way);
         while (relationIdItr->next())
@@ -434,7 +433,7 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
 
       //  Iterate all relations (and sub-relations) that are "within" the bounds
       QSet<QString> completedRelationIds;
-      while (relationIds.size() > 0)
+      while (!relationIds.empty())
       {
         QSet<QString> newNodes;
         QSet<QString> newWays;
@@ -476,13 +475,13 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
 
         //  Iterate any new nodes that are members of relations that need to be queried
         newNodes = newNodes.subtract(nodeIds);
-        if (newNodes.size() > 0)
+        if (!newNodes.empty())
         {
-          std::shared_ptr<QSqlQuery> nodeItr =
+          std::shared_ptr<QSqlQuery> queryItr =
             _getDatabase()->selectElementsByElementIdList(newNodes, TableType::Node);
-          while (nodeItr->next())
+          while (queryItr->next())
           {
-            const QSqlQuery resultIterator = *nodeItr;
+            const QSqlQuery resultIterator = *queryItr;
             NodePtr node = _resultToNode(resultIterator, *map);
             LOG_VART(node);
             map->addElement(node);
@@ -495,7 +494,7 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
 
         //  Iterate any new ways that are members of relations that need to be queried
         newWays = newWays.subtract(wayIds);
-        if (newWays.size() > 0)
+        if (!newWays.empty())
         {
           QSet<QString> additionalNodeIds;
 
@@ -526,7 +525,7 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
           additionalNodeIds = additionalNodeIds.subtract(nodeIds);
           LOG_VART(additionalNodeIds.size());
 
-          if (additionalNodeIds.size() > 0)
+          if (!additionalNodeIds.empty())
           {
             LOG_DEBUG(
               "Retrieving nodes falling outside of the query bounds but belonging to a selected " <<

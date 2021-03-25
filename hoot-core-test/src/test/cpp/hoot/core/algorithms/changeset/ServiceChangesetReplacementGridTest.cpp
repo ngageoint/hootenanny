@@ -19,35 +19,35 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/util/Log.h>
-#include <hoot/core/io/OsmMapReaderFactory.h>
-#include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/io/HootApiDb.h>
-#include <hoot/core/geometry/GeometryUtils.h>
-#include <hoot/core/io/ServicesDbTestUtils.h>
-#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/ConfigUtils.h>
-#include <hoot/core/util/StringUtils.h>
-#include <hoot/core/ops/MapCropper.h>
-#include <hoot/core/algorithms/changeset/ChangesetTaskGridReplacer.h>
 #include <hoot/core/algorithms/changeset/BoundsFileTaskGridGenerator.h>
+#include <hoot/core/algorithms/changeset/BoundsStringTaskGridGenerator.h>
+#include <hoot/core/algorithms/changeset/ChangesetTaskGridReplacer.h>
 #include <hoot/core/algorithms/changeset/NodeDensityTaskGridGenerator.h>
 #include <hoot/core/algorithms/changeset/UniformTaskGridGenerator.h>
-#include <hoot/core/algorithms/changeset/BoundsStringTaskGridGenerator.h>
 #include <hoot/core/conflate/ConflateUtils.h>
-#include <hoot/core/visitors/SetTagValueVisitor.h>
-#include <hoot/core/criterion/WayNodeCriterion.h>
 #include <hoot/core/criterion/NotCriterion.h>
-#include <hoot/core/visitors/FilteredVisitor.h>
+#include <hoot/core/criterion/WayNodeCriterion.h>
+#include <hoot/core/geometry/GeometryUtils.h>
+#include <hoot/core/io/HootApiDb.h>
 #include <hoot/core/io/OsmApiDbSqlChangesetApplier.h>
+#include <hoot/core/io/OsmMapReaderFactory.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/io/ServicesDbTestUtils.h>
+#include <hoot/core/ops/MapCropper.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/ConfigUtils.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/util/StringUtils.h>
+#include <hoot/core/visitors/FilteredVisitor.h>
+#include <hoot/core/visitors/SetTagValueVisitor.h>
 
 namespace hoot
 {
@@ -236,7 +236,7 @@ public:
     else
     {
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodes());
-      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWays());
+      CPPUNIT_ASSERT_EQUAL(6, uut.getOutputMetrics().getNumDisconnectedWays());
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWays());
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDuplicateElementPairs());
       CPPUNIT_ASSERT_EQUAL(18, uut.getOutputMetrics().getNumWayEndNodes());
@@ -300,7 +300,7 @@ public:
     else
     {
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodes());
-      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWays());
+      CPPUNIT_ASSERT_EQUAL(11, uut.getOutputMetrics().getNumDisconnectedWays());
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWays());
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDuplicateElementPairs());
       CPPUNIT_ASSERT_EQUAL(27, uut.getOutputMetrics().getNumWayEndNodes());
@@ -439,7 +439,7 @@ public:
     else
     {
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodes());
-      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWays());
+      CPPUNIT_ASSERT_EQUAL(10, uut.getOutputMetrics().getNumDisconnectedWays());
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWays());
       CPPUNIT_ASSERT_EQUAL(1, uut.getOutputMetrics().getNumDuplicateElementPairs());
       CPPUNIT_ASSERT_EQUAL(101, uut.getOutputMetrics().getNumWayEndNodes());
@@ -512,7 +512,7 @@ public:
     else
     {
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodes());
-      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWays());
+      CPPUNIT_ASSERT_EQUAL(463, uut.getOutputMetrics().getNumDisconnectedWays());
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWays());
       CPPUNIT_ASSERT_EQUAL(8, uut.getOutputMetrics().getNumDuplicateElementPairs());
       CPPUNIT_ASSERT_EQUAL(986, uut.getOutputMetrics().getNumWayEndNodes());
@@ -652,7 +652,7 @@ public:
     else
     {
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodes());
-      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWays());
+      CPPUNIT_ASSERT_EQUAL(18, uut.getOutputMetrics().getNumDisconnectedWays());
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWays());
       CPPUNIT_ASSERT_EQUAL(1, uut.getOutputMetrics().getNumDuplicateElementPairs());
       CPPUNIT_ASSERT_EQUAL(228, uut.getOutputMetrics().getNumWayEndNodes());
@@ -740,7 +740,7 @@ public:
     else
     {
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodes());
-      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWays());
+      CPPUNIT_ASSERT_EQUAL(12, uut.getOutputMetrics().getNumDisconnectedWays());
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWays());
       CPPUNIT_ASSERT_EQUAL(1, uut.getOutputMetrics().getNumDuplicateElementPairs());
       CPPUNIT_ASSERT_EQUAL(73, uut.getOutputMetrics().getNumWayEndNodes());
@@ -948,7 +948,7 @@ public:
     else
     {
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodes());
-      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWays());
+      CPPUNIT_ASSERT_EQUAL(6, uut.getOutputMetrics().getNumDisconnectedWays());
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWays());
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDuplicateElementPairs());
       CPPUNIT_ASSERT_EQUAL(96, uut.getOutputMetrics().getNumWayEndNodes());
@@ -1081,7 +1081,7 @@ public:
     else
     {
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodes());
-      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWays());
+      CPPUNIT_ASSERT_EQUAL(7, uut.getOutputMetrics().getNumDisconnectedWays());
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWays());
       CPPUNIT_ASSERT_EQUAL(2, uut.getOutputMetrics().getNumDuplicateElementPairs());
       CPPUNIT_ASSERT_EQUAL(94, uut.getOutputMetrics().getNumWayEndNodes());
@@ -1388,7 +1388,7 @@ public:
     const QString outDir = rootDir + "/" + _testName;
     conf().set(ConfigOptions::getDebugMapsFilenameKey(), outDir + "/" + _testName + "-debug.osm");
     QDir(outDir).removeRecursively();
-    QDir().mkpath(outDir);;
+    QDir().mkpath(outDir);
     _prepInput(
       rootDir + "/NOME_14992d.osm",
       rootDir + "/OSM_14992d.osm"/*,

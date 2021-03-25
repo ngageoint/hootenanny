@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "MultiaryMatchComparator.h"
 
@@ -147,7 +147,7 @@ void MultiaryMatchComparator::_calculateNodeBasedStats(const ConstOsmMapPtr& con
       {
         std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature> translated =
             translator->translateToOgr(tags, e->getElementType(),
-              ec.getGeometryType(e, false));
+              ElementToGeometryConverter::getGeometryType(e, false));
 
         bool foundCategory = false;
         foreach (const ScriptToOgrSchemaTranslator::TranslatedFeature& tf, translated)
@@ -353,11 +353,11 @@ void MultiaryMatchComparator::_findActualMatches(const ConstOsmMapPtr& conflated
     {
     }
 
-    virtual QString getDescription() const { return ""; }
-    virtual QString getName() const { return ""; }
-    virtual QString getClassName() const override { return ""; }
+    QString getDescription() const override { return ""; }
+    QString getName() const override { return ""; }
+    QString getClassName() const override { return ""; }
 
-    virtual void visit(const ConstElementPtr& e)
+    void visit(const ConstElementPtr& e) override
     {
       QList<QString> ids = _getAllIds(e);
 
@@ -445,11 +445,11 @@ void MultiaryMatchComparator::_findExpectedMatches(const ConstOsmMapPtr& in)
     {
     }
 
-    virtual QString getDescription() const { return ""; }
-    virtual QString getName() const { return ""; }
-    virtual QString getClassName() const override { return ""; }
+    QString getDescription() const override { return ""; }
+    QString getName() const override { return ""; }
+    QString getClassName() const override { return ""; }
 
-    virtual void visit(const ConstElementPtr& e)
+    void visit(const ConstElementPtr& e) override
     {
       const Tags& t = e->getTags();
       QString id = MetadataTags::TrainingId();
@@ -525,11 +525,11 @@ void MultiaryMatchComparator::_findExpectedReviews(const ConstOsmMapPtr& in)
     {
     }
 
-    virtual QString getDescription() const { return ""; }
-    virtual QString getName() const { return ""; }
-    virtual QString getClassName() const override { return ""; }
+    QString getDescription() const override { return ""; }
+    QString getName() const override { return ""; }
+    QString getClassName() const override { return ""; }
 
-    virtual void visit(const ConstElementPtr& e)
+    void visit(const ConstElementPtr& e) override
     {
       if (e->getStatus().isInput())
       {

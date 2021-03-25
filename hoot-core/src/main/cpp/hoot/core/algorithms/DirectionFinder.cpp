@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "DirectionFinder.h"
@@ -31,34 +31,34 @@
 #include <geos/geom/CoordinateSequenceFactory.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/GeometryFactory.h>
-using namespace geos::geom;
 
 // Hoot
 #include <hoot/core/algorithms/Distance.h>
 #include <hoot/core/algorithms/WayDiscretizer.h>
-#include <hoot/core/elements/Way.h>
 #include <hoot/core/algorithms/WayHeading.h>
+#include <hoot/core/elements/Way.h>
 #include <hoot/core/util/Units.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 
 // Standard
 #include <iostream>
 #include <vector>
-using namespace std;
 
 // TGS
 #include <tgs/StreamUtils.h>
+
+using namespace geos::geom;
+using namespace std;
 using namespace Tgs;
 
 namespace hoot
 {
 
-bool DirectionFinder::isSimilarDirection(const ConstOsmMapPtr& map, ConstWayPtr w1, ConstWayPtr w2)
+bool DirectionFinder::isSimilarDirection(
+  const ConstOsmMapPtr& map, const ConstWayPtr& w1, const ConstWayPtr& w2)
 {
-  LOG_VART(w1->getNodeIds());
-  LOG_VART(w2->getNodeIds());
-
   // skip empty ways
-  if (w1->getNodeIds().size() == 0 || w2->getNodeIds().size() == 0)
+  if (w1->getNodeIds().empty() || w2->getNodeIds().empty())
   {
     LOG_TRACE("Skipping one or more empty ways...");
     return false;
@@ -67,13 +67,21 @@ bool DirectionFinder::isSimilarDirection(const ConstOsmMapPtr& map, ConstWayPtr 
   WayDiscretizer wd1(map, w1);
   WayDiscretizer wd2(map, w2);
   vector<Coordinate> cs1, cs2;
-  wd1.discretize(5.0, cs1);
-  wd2.discretize(5.0, cs2);
+  // Pick a spacing relevant to the size of the input, or it won't get cut up into enough pieces
+  // to properly make the direction comparison. We don't know that the map is in planar here before
+  // checking length, so may need to check that.
+  const double spacing1 =
+    std::min(5.0, ElementToGeometryConverter(map).convertToGeometry(w1)->getLength() / 5.0);
+  const double spacing2 =
+    std::min(5.0, ElementToGeometryConverter(map).convertToGeometry(w2)->getLength() / 5.0);
+  wd1.discretize(spacing1, cs1);
+  wd2.discretize(spacing2, cs2);
 
   double dSumSame = 0;
   double dSumReverse = 0;
 
   size_t pointCount = std::min(cs1.size(), cs2.size());
+  LOG_VART(pointCount);
   for (size_t i = 0; i < pointCount; i++)
   {
     dSumSame += Distance::euclidean(cs1[i], cs2[i]);
@@ -105,7 +113,7 @@ bool DirectionFinder::isSimilarDirection2(const ConstOsmMapPtr& map, ConstWayPtr
   LOG_VART(way2->getNodeIds());
 
   // skip empty ways
-  if (way1->getNodeIds().size() == 0 || way2->getNodeIds().size() == 0)
+  if (way1->getNodeIds().empty() || way2->getNodeIds().empty())
   {
     LOG_TRACE("Skipping one or more empty ways...");
     return false;

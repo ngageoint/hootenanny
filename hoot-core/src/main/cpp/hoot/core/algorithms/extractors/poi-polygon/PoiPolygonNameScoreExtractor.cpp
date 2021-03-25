@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "PoiPolygonNameScoreExtractor.h"
 
@@ -103,10 +103,10 @@ std::shared_ptr<NameExtractor> PoiPolygonNameScoreExtractor::_getNameExtractor()
   assert(_stringComp);
   if (_translateTagValuesToEnglish)
   {
-    ToEnglishTranslateStringDistance* translateStringDist =
-      new ToEnglishTranslateStringDistance(_stringComp, _translator);
+    std::shared_ptr<ToEnglishTranslateStringDistance> translateStringDist(
+      new ToEnglishTranslateStringDistance(_stringComp, _translator));
     translateStringDist->setTranslateAll(false);
-    return std::shared_ptr<NameExtractor>(new NameExtractor(StringDistancePtr(translateStringDist)));
+    return std::shared_ptr<NameExtractor>(new NameExtractor(translateStringDist));
   }
   else
   {

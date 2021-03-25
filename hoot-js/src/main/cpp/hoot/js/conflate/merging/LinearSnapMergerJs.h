@@ -19,23 +19,20 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef LINEAR_SNAP_MERGER_JS_H
 #define LINEAR_SNAP_MERGER_JS_H
 
 // hoot
-#include <hoot/core/conflate/linear/LinearSnapMerger.h>
+#include <hoot/core/conflate/merging/LinearSnapMerger.h>
 #include <hoot/js/io/DataConvertJs.h>
 
 // node.js
 #include <hoot/js/HootBaseJs.h>
-
-// Qt
-#include <QString>
 
 // Standard
 #include <memory>
@@ -43,8 +40,11 @@
 namespace hoot
 {
 
-class OsmMapOperation;
-
+/**
+ * Facade around linear features mergers in core
+ *
+ * @todo This class should be renamed to LinearMergerJs.
+ */
 class LinearSnapMergerJs : public HootBaseJs
 {
 public:

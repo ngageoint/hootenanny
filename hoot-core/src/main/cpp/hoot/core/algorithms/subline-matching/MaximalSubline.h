@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef MAXIMALSUBLINE_H
 #define MAXIMALSUBLINE_H
@@ -61,7 +61,7 @@ public:
   public:
 
     MatchCriteria() = default;
-    virtual ~MatchCriteria() = default;
+    ~MatchCriteria() = default;
 
     /**
      * Returns a match score for @a index1 way segment matches @a index2. The indexes refer to a
@@ -106,9 +106,9 @@ public:
 
     ThresholdMatchCriteria(Meters maxDistance, Radians maxAngleDiff);
 
-    virtual ~ThresholdMatchCriteria() = default;
+    ~ThresholdMatchCriteria() = default;
 
-    virtual double match(int index1, int index2) const;
+    double match(int index1, int index2) const override;
 
     void matchingSubline(geos::geom::LineSegment& a, geos::geom::LineSegment& b) const;
 
@@ -127,7 +127,7 @@ public:
    */
   MaximalSubline(MatchCriteria* criteria, Meters minSplitSize);
 
-  virtual ~MaximalSubline() = default;
+  ~MaximalSubline() = default;
 
   /**
    * This code is still experimental at best.

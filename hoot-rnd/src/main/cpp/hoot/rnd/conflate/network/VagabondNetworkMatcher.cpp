@@ -19,19 +19,19 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #include "VagabondNetworkMatcher.h"
 
 // hoot
 #include <hoot/core/algorithms/extractors/AngleHistogramExtractor.h>
 #include <hoot/core/algorithms/extractors/HausdorffDistanceExtractor.h>
+#include <hoot/core/conflate/network/EdgeMatchSetFinder.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/conflate/network/EdgeMatchSetFinder.h>
 
 using namespace geos::geom;
 using namespace std;
@@ -110,7 +110,7 @@ void VagabondNetworkMatcher::iteratePageRank()
     ConstEdgeMatchPtr from = it.key();
     QList<ConstEdgeMatchPtr> values = _links->values(from);
 
-    if (values.size() != 0)
+    if (!values.empty())
     {
       double contribution = (_pr->getScore(from) / (values.size())) * _dampen;
 
@@ -169,7 +169,7 @@ void VagabondNetworkMatcher::iteratePageRankBleeding()
     ConstEdgeMatchPtr from = it.key();
     QList<ConstEdgeMatchPtr> values = _links->values(from);
 
-    if (values.size() != 0)
+    if (!values.empty())
     {
       double contribution = (_pr->getScore(from) / (values.size())) * _dampen;
 
@@ -224,7 +224,7 @@ void VagabondNetworkMatcher::iterateVoting()
     ConstEdgeMatchPtr from = it.key();
     QList<ConstEdgeMatchPtr> values = _links->values(from);
 
-    if (values.size() != 0)
+    if (!values.empty())
     {
       double contribution = _pr->getScore(from) * _dampen;
 

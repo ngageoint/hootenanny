@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef VARIABLEDESCRIPTION_H
 #define VARIABLEDESCRIPTION_H
@@ -40,11 +40,11 @@ class VariableDescription
 {
 public:
 
-  typedef enum
+  enum VariableType
   {
     Real,
     Integer
-  } VariableType;
+  };
 
   VariableDescription(QString name, VariableType type, double min, double max);
 
@@ -71,8 +71,8 @@ private:
   VariableType _type;
 };
 
-typedef std::shared_ptr<VariableDescription> VariableDescriptionPtr;
-typedef std::shared_ptr<const VariableDescription> ConstVariableDescriptionPtr;
+using VariableDescriptionPtr = std::shared_ptr<VariableDescription>;
+using ConstVariableDescriptionPtr = std::shared_ptr<const VariableDescription>;
 
 }
 

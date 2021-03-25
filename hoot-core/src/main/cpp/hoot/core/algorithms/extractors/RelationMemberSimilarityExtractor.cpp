@@ -19,18 +19,18 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "RelationMemberSimilarityExtractor.h"
 
 // hoot
+#include <hoot/core/elements/RelationMemberComparison.h>
+#include <hoot/core/util/CollectionUtils.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/CollectionUtils.h>
-#include <hoot/core/elements/RelationMemberComparison.h>
 
 namespace hoot
 {
@@ -66,7 +66,7 @@ double RelationMemberSimilarityExtractor::extract(
     const int totalMembers = targetMemberIds.size() + candidateMemberIds.size();
     LOG_VART(totalMembers);
 
-    if (targetMemberIds.size() == 0 || candidateMemberIds.size() == 0)
+    if (targetMemberIds.empty() || candidateMemberIds.empty())
     {
       return 0.0;
     }

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "RdpWayGeneralizer.h"
@@ -31,15 +31,15 @@
 #include <cmath>
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/elements/Node.h>
+#include <hoot/core/elements/NodeUtils.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Way.h>
+#include <hoot/core/elements/WayUtils.h>
+#include <hoot/core/ops/RemoveNodeByEid.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/elements/NodeUtils.h>
-#include <hoot/core/elements/MapProjector.h>
-#include <hoot/core/ops/RemoveNodeByEid.h>
-#include <hoot/core/elements/WayUtils.h>
 
 using namespace std;
 
@@ -123,7 +123,7 @@ int RdpWayGeneralizer::generalize(const std::shared_ptr<Way>& way)
   LOG_VART(nodeIdsNotAllowedToBeRemoved);
 
   QList<long> updatedWayNodeIds = wayNodeIdsAfterGeneralization;
-  if (nodeIdsNotAllowedToBeRemoved.size() > 0)
+  if (!nodeIdsNotAllowedToBeRemoved.empty())
   {
     // If there were any nodes we removed during generalization but aren't allowed to remove, we
     // need to add those back in here using the pre-generalization node set. We could have tried to

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014 Maxar (http://www.maxar.com/)
  */
 
 /*
@@ -173,7 +173,7 @@ fcodeCommon = {
       ['F_CODE','AM080','man_made','water_tower'], // Water Tower
       ['F_CODE','AN010','railway','rail'], // Railway
       ['F_CODE','AN050','sidetrack','yes'], // Railway Sidetrack
-      ['F_CODE','AN060','service','yard'], // Railway Yard
+      ['F_CODE','AN060','landuse','railway'], // Railway Yard
       ['F_CODE','AN075','railway','turntable'], // Railway Turntable
       ['F_CODE','AN076','railway','roundhouse'], // Roundhouse
       ['F_CODE','AN080','railway','switch'], // Railway Signal

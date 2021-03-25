@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef __MOST_ENGLISH_NAME_JS_H__
@@ -73,7 +73,7 @@ inline void toCpp(v8::Handle<v8::Value> v, MostEnglishNamePtr& p)
   }
 
   v8::Handle<v8::Object> obj = v8::Handle<v8::Object>::Cast(v);
-  MostEnglishNameJs* js = 0;
+  MostEnglishNameJs* js = nullptr;
   js = node::ObjectWrap::Unwrap<MostEnglishNameJs>(obj);
   if (js)
   {

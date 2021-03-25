@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #include "AreaMergerJs.h"
 
@@ -84,7 +84,7 @@ void AreaMergerJs::mergeAreas(OsmMapPtr map, const ElementId& mergeTargetId, Iso
       LOG_TRACE("Merging way area: " << way << " into " << mergeTargetId);
 
       std::set<std::pair<ElementId, ElementId>> matches;
-      matches.insert(std::pair<ElementId,ElementId>(mergeTargetId, ElementId::way(way->getId())));
+      matches.emplace(mergeTargetId, ElementId::way(way->getId()));
       // apply script merging
       ScriptMerger merger(script, plugin, matches);
       std::vector<std::pair<ElementId, ElementId>> replacedWays;
@@ -106,8 +106,7 @@ void AreaMergerJs::mergeAreas(OsmMapPtr map, const ElementId& mergeTargetId, Iso
       LOG_TRACE("Merging relation area: " << relation << " into " << mergeTargetId);
 
       std::set<std::pair<ElementId, ElementId>> matches;
-      matches.insert(
-        std::pair<ElementId,ElementId>(mergeTargetId, ElementId::relation(relation->getId())));
+      matches.emplace(mergeTargetId, ElementId::relation(relation->getId()));
       // apply script merging
       ScriptMerger merger(script, plugin, matches);
       std::vector<std::pair<ElementId, ElementId>> replacedRelations;

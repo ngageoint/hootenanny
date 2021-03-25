@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "RandomWaySplitter.h"
 
@@ -192,7 +192,7 @@ vector<ElementPtr> RandomWaySplitter::_split(ElementPtr element)
       //_updateNewNodeProperties does not need to be called b/c the MultiLineStringSplitter has
       //already properly updated the new node's properties.  when a way is split, however, the
       //new node's properties must be updated by the call to _updateNewNodeProperties.
-      if (way != 0)
+      if (way != nullptr)
       {
         assert(nodeIdsBeforeSplit.size() > 0);
         //update properties on any nodes added as a result of the way splitting (new ways created as a

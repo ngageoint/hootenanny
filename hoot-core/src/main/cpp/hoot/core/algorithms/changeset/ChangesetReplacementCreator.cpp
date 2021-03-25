@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "ChangesetReplacementCreator.h"
 
@@ -31,7 +31,6 @@
 
 #include <hoot/core/algorithms/changeset/ChangesetCreator.h>
 
-#include <hoot/core/criterion/ConflatableElementCriterion.h>
 #include <hoot/core/criterion/ElementTypeCriterion.h>
 #include <hoot/core/criterion/LinearCriterion.h>
 #include <hoot/core/criterion/NotCriterion.h>
@@ -75,63 +74,6 @@ ChangesetReplacementCreatorAbstract()
   _fullReplacement = true;
 
   _setGlobalOpts();
-}
-
-void ChangesetReplacementCreator::setGeometryFilters(const QStringList& filterClassNames)
-{
-  LOG_VART(filterClassNames);
-  if (!filterClassNames.isEmpty())
-  {
-    _geometryFiltersSpecified = true;
-    _geometryTypeFilter.reset();
-    _linearFilterClassNames.clear();
-
-    for (int i = 0; i < filterClassNames.size(); i++)
-    {
-      const QString filterClassName = filterClassNames.at(i);
-      LOG_VART(filterClassName);
-
-      // Fail if the filter doesn't map to a geometry type.
-      std::shared_ptr<GeometryTypeCriterion> filter =
-        std::dynamic_pointer_cast<GeometryTypeCriterion>(
-          std::shared_ptr<ElementCriterion>(
-            Factory::getInstance().constructObject<ElementCriterion>(filterClassName)));
-      if (!filter)
-      {
-        throw IllegalArgumentException(
-          "Invalid feature geometry type filter: " + filterClassName +
-          ". Filter must be a GeometryTypeCriterion.");
-      }
-
-      if (!_geometryTypeFilter)
-      {
-        _geometryTypeFilter = filter;
-      }
-      else
-      {
-        _geometryTypeFilter = OrCriterionPtr(new OrCriterion(_geometryTypeFilter, filter));
-      }
-
-      if (filter->getGeometryType() == GeometryTypeCriterion::GeometryType::Line)
-      {
-        _linearFilterClassNames.append(filterClassName);
-      }
-    }
-  }
-
-  // have to call this method to keep filtering from erroring...shouldn't have to...should just init
-  // itself internally when no geometry filters are specified)
-  if (!_geometryTypeFilter)
-  {
-    _geometryFiltersSpecified = false;
-    _linearFilterClassNames =
-      ConflatableElementCriterion::getCriterionClassNamesByGeometryType(
-        GeometryTypeCriterion::GeometryType::Line);
-  }
-  _linearFilterClassNames.removeAll(LinearCriterion::className());
-
-  LOG_VARD(_geometryTypeFilters.size());
-  LOG_VART(_linearFilterClassNames);
 }
 
 void ChangesetReplacementCreator::create(
@@ -555,8 +497,7 @@ OsmMapPtr ChangesetReplacementCreator::_loadAndFilterSecMap()
   // up modifying anything else.
   if (_geometryTypeFilter)
   {
-    const Settings secFilterSettings =
-      _replacementFilterOptions.size() == 0 ? conf() : _replacementFilterOptions;
+    const Settings secFilterSettings = conf();
     _filterFeatures(
       secMap, _geometryTypeFilter, GeometryTypeCriterion::Unknown, secFilterSettings,
       _changesetId + "-sec-after-pruning");

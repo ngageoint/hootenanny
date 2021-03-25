@@ -19,31 +19,14 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef GEOMETRYUTILS_H
 #define GEOMETRYUTILS_H
-
-// GEOS
-#include <geos/geom/Envelope.h>
-#include <geos/geom/Polygon.h>
-
-namespace geos
-{
-  namespace geom
-  {
-    class Geometry;
-    class GeometryCollection;
-    class LinearRing;
-    class LineString;
-    class MultiLineString;
-    class MultiPolygon;
-  }
-}
 
 // GDAL
 #include <ogr_geometry.h>
@@ -53,6 +36,18 @@ namespace geos
 
 // Qt
 #include <QString>
+
+// GEOS
+#include <geos/geom/Envelope.h>
+#include <geos/geom/Polygon.h>
+
+namespace geos
+{
+  namespace geom
+  {
+    class GeometryCollection;
+  }
+}
 
 namespace hoot
 {
@@ -278,6 +273,14 @@ public:
    * tag
    */
   static QMap<int, geos::geom::Envelope> readBoundsFileWithIds(const QString& input);
+
+  /**
+   * Reads a file and returns the bounds of the nodes within the file
+   *
+   * @param input path to the file
+   * @return an envelope representing the bounds of the file
+   */
+  static std::shared_ptr<geos::geom::Geometry> readBoundsFromFile(const QString& input);
 
 };
 

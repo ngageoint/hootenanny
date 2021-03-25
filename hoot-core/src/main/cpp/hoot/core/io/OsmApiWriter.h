@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef OSM_API_WRITER_H
@@ -68,12 +68,12 @@ public:
   /** Constructors with one or multiple files consisting of one large changeset */
   OsmApiWriter(const QUrl& url, const QString& changeset);
   OsmApiWriter(const QUrl& url, const QList<QString>& changesets);
-  virtual ~OsmApiWriter() = default;
+  ~OsmApiWriter() = default;
   /**
    * @brief setConfiguration Update the configuration settings with new configuration
    * @param conf - Updated configurations
    */
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
   /**
    * @brief isSupported
    * @param url - Must be a valid, full HTTP[S] URL pointing to an OSM website
@@ -129,11 +129,11 @@ public:
   /**
    * @see ProgressReporter
    */
-  virtual void setProgress(Progress progress) { _progress = progress; }
+  void setProgress(const Progress& progress) override { _progress = progress; }
   /**
    * @see ProgressReporter
    */
-  virtual unsigned int getNumSteps() const { return 1; }
+  unsigned int getNumSteps() const override { return 1; }
   /**
    * @brief setErrorPathname Record the pathname of the error changeset
    * @param path Pathname
@@ -164,7 +164,7 @@ private:
     /** HTTP response body */
     QString response;
   };
-  typedef std::shared_ptr<OsmApiFailureInfo> OsmApiFailureInfoPtr;
+  using OsmApiFailureInfoPtr = std::shared_ptr<OsmApiFailureInfo>;
   /**
    * @brief _createChangeset Request a changeset ID from the API
    *  see: https://wiki.openstreetmap.org/wiki/API_v0.6#Create:_PUT_.2Fapi.2F0.6.2Fchangeset.2Fcreate
@@ -443,7 +443,7 @@ private:
   /** For white box testing */
   friend class OsmApiWriterTest;
   /** Default constructor for testing purposes only */
-  OsmApiWriter() {}
+  OsmApiWriter() = default;
 };
 
 }

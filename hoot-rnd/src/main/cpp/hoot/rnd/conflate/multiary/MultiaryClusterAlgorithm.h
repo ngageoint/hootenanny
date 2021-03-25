@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef MULTIARYCLUSTERALGORITHM_H
 #define MULTIARYCLUSTERALGORITHM_H
@@ -89,12 +89,12 @@ public:
     }
   };
 
-  typedef std::shared_ptr<ClusterLink> ClusterLinkPtr;
+  using ClusterLinkPtr = std::shared_ptr<ClusterLink>;
 
   /**
    * A list of clusters that represent a subgraph.
    */
-  typedef QList<MultiaryClusterPtr> ClusterList;
+  using ClusterList = QList<MultiaryClusterPtr>;
 
   /**
    * Comparison operation to determine if one link has a lower score than another. This is used
@@ -165,10 +165,8 @@ protected:
   ClusterList _clusters;
 
   /// Priority queue that is used to store cluster links. High scoring links are at the top.
-  typedef std::priority_queue<
-    ClusterLinkPtr,
-    std::vector<ClusterLinkPtr>,
-    ClusterLinkPtrLess> LinkPriorityQueue;
+  using LinkPriorityQueue =
+    std::priority_queue<ClusterLinkPtr, std::vector<ClusterLinkPtr>, ClusterLinkPtrLess>;
   LinkPriorityQueue _linkQueue;
 
   MultiaryPoiMergeCachePtr _mergeCache;

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "ElementIdsVisitor.h"
@@ -51,7 +51,7 @@ void ElementIdsVisitor::visit(const std::shared_ptr<const Element>& e)
 {
   if (e->getElementType() == ElementType::Unknown || e->getElementType() == _elementType)
   {
-    if (_pCrit == 0 || _pCrit->isSatisfied(e))
+    if (_pCrit == nullptr || _pCrit->isSatisfied(e))
     {
       _elementIds.push_back(e->getId());
     }

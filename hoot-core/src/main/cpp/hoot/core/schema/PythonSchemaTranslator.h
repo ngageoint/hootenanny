@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef PYTHON_SCHEMA_TRANSLATOR_H
 #define PYTHON_SCHEMA_TRANSLATOR_H
@@ -45,25 +45,25 @@ public:
   static QString className() { return "hoot::PythonSchemaTranslator"; }
 
   PythonSchemaTranslator() = default;
-  virtual ~PythonSchemaTranslator();
+  ~PythonSchemaTranslator();
 
-  virtual bool isValidScript();
+  bool isValidScript() override;
 
   /**
    * don't evaluate this first.
    */
-  virtual int order() const { return 100; }
+  int order() const override { return 100; }
 
 protected:
 
   // avoid including Python.h in this header file.
   void* _translateFunction;
 
-  virtual void _init();
+  void _init() override;
 
-  virtual void _finalize();
+  void _finalize() override;
 
-  virtual void _translateToOsm(Tags& t, const char *layerName, const char* geomType);
+  void _translateToOsm(Tags& t, const char *layerName, const char* geomType) override;
 };
 
 }

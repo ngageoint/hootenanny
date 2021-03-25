@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef ADDUSERIDVISITOR_H
 #define ADDUSERIDVISITOR_H
@@ -43,7 +43,7 @@ public:
 
   static QString className() { return "hoot::AddUserIdVisitor"; }
 
-  AddUserIdVisitor();
+  AddUserIdVisitor() = default;
 
   /**
    * Adds the user name and user id as tags to all valid elements.

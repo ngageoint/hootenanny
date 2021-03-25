@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "ServicesDbTestUtils.h"
@@ -56,7 +56,7 @@ namespace hoot
 void ServicesDbTestUtils::compareRecords(QString sql, QString expected, QString testName, QVariant v1, QVariant v2)
 {
   HootApiDb db;
-  QUrl url = (testName == NULL) ? ServicesDbTestUtils::getDbModifyUrl() : ServicesDbTestUtils::getDbModifyUrl(testName);
+  QUrl url = (testName == nullptr) ? ServicesDbTestUtils::getDbModifyUrl() : ServicesDbTestUtils::getDbModifyUrl(testName);
   db.open(url);
   QString result = db.execToString(sql, v1, v2);
   if (expected == "")

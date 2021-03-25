@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef ELEMENT_COMPARISON_H
 #define ELEMENT_COMPARISON_H
@@ -51,7 +51,7 @@ public:
 
   ElementPtr getElement() const { return _element; }
 
-  virtual bool operator==(const ElementComparison& elementComp) const;
+  bool operator==(const ElementComparison& elementComp) const;
 
   virtual QString toString() const;
 

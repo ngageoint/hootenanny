@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef MOSTENGLISHNAME_H
 #define MOSTENGLISHNAME_H
@@ -43,7 +43,7 @@ namespace hoot
 class MostEnglishName;
 class Tags;
 
-typedef std::shared_ptr<MostEnglishName> MostEnglishNamePtr;
+using MostEnglishNamePtr = std::shared_ptr<MostEnglishName>;
 
 /**
  * Return a best guess at the "most english" name in the list (Singleton). There are no guarantees.
@@ -68,7 +68,7 @@ public:
 
   static const MostEnglishNamePtr& getInstance();
 
-  virtual ~MostEnglishName() = default;
+  ~MostEnglishName() = default;
 
   /**
    * Returns the most English name tag value from a set of tags
@@ -87,7 +87,7 @@ public:
    */
   double scoreName(const QString& text);
 
-  void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
   /**
    * Determines if a single input is in the English dictionary

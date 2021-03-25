@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef SERVICESDBTESTUTILS_H
 #define SERVICESDBTESTUTILS_H
@@ -53,7 +53,7 @@ public:
   /**
    * Run a specified query and compare the results against the expected results.
    */
-  static void compareRecords(QString sql, QString expected, QString testName = NULL,
+  static void compareRecords(QString sql, QString expected, QString testName = nullptr,
                              QVariant v1 = QVariant(), QVariant v2 = QVariant());
 
   /**

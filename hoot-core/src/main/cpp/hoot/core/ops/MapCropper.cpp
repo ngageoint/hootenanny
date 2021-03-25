@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "MapCropper.h"
@@ -37,30 +37,30 @@
 #include <geos/util/GEOSException.h>
 
 // Hoot
+#include <hoot/core/algorithms/FindNodesInWayFactory.h>
+#include <hoot/core/elements/ElementIdUtils.h>
+#include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/elements/NodeToWayMap.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Way.h>
-#include <hoot/core/elements/NodeToWayMap.h>
-#include <hoot/core/index/OsmMapIndex.h>
-#include <hoot/core/ops/RemoveWayByEid.h>
-#include <hoot/core/ops/RemoveNodeByEid.h>
-#include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/elements/WayUtils.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/algorithms/FindNodesInWayFactory.h>
-#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/geometry/GeometryUtils.h>
+#include <hoot/core/index/OsmMapIndex.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/ops/RemoveEmptyRelationsOp.h>
+#include <hoot/core/ops/RemoveNodeByEid.h>
+#include <hoot/core/ops/RemoveWayByEid.h>
+#include <hoot/core/ops/SuperfluousNodeRemover.h>
+#include <hoot/core/ops/SuperfluousWayRemover.h>
+#include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/elements/MapProjector.h>
-#include <hoot/core/util/Validate.h>
-#include <hoot/core/ops/RemoveEmptyRelationsOp.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/elements/WayUtils.h>
-#include <hoot/core/elements/ElementIdUtils.h>
-#include <hoot/core/ops/SuperfluousWayRemover.h>
-#include <hoot/core/ops/SuperfluousNodeRemover.h>
+#include <hoot/core/util/Validate.h>
 #include <hoot/core/visitors/RemoveMissingElementsVisitor.h>
-#include <hoot/core/io/OsmMapWriterFactory.h>
 
 // Standard
 #include <limits>
@@ -218,7 +218,7 @@ void MapCropper::apply(OsmMapPtr& map)
   LOG_VARD(_invert);
   LOG_VARD(_keepEntireFeaturesCrossingBounds);
   LOG_VARD(_keepOnlyFeaturesInsideBounds);
-  LOG_VART(_bounds->toString());
+  LOG_VARD(_bounds->toString());
   LOG_VARD(_inclusionCrit.get());
 
   // go through all the ways
@@ -285,7 +285,7 @@ void MapCropper::apply(OsmMapPtr& map)
       _numWaysOutOfBounds++;
       _numAffected++;
     }
-    //  For whatever reason, the inside check against an envelope only causes no problems, but
+    // For whatever reason, the inside check against an envelope only causes no problems, but
     // checking against just the geometry yields test failures.
     else if (_isWhollyInside(wayEnv))
     {
@@ -328,6 +328,7 @@ void MapCropper::apply(OsmMapPtr& map)
     }
   }
   LOG_VARD(map->size());
+  OsmMapWriterFactory::writeDebugMap(map, "after-way-removal");
 
   std::shared_ptr<NodeToWayMap> n2w = map->getIndex().getNodeToWayMap();
 
@@ -346,17 +347,16 @@ void MapCropper::apply(OsmMapPtr& map)
     bool nodeInside = false;
 
     LOG_VART(_explicitlyIncludedWayIds.size());
-    if (_explicitlyIncludedWayIds.size() > 0)
+    if (!_explicitlyIncludedWayIds.empty())
     {
       LOG_VART(WayUtils::nodeContainedByAnyWay(node->getId(), _explicitlyIncludedWayIds, map));
     }
-    if (_inclusionCrit && _explicitlyIncludedWayIds.size() > 0 &&
+    if (!_inclusionCrit && _explicitlyIncludedWayIds.empty() &&
         WayUtils::nodeContainedByAnyWay(node->getId(), _explicitlyIncludedWayIds, map))
     {
       LOG_TRACE(
         "Skipping delete for: " << node->getElementId() <<
         " belonging to explicitly included way(s)...");
-      nodeInside = true;
     }
     else
     {
@@ -404,6 +404,7 @@ void MapCropper::apply(OsmMapPtr& map)
     }
   }
   LOG_VARD(map->size());
+  OsmMapWriterFactory::writeDebugMap(map, "after-node-removal");
 
   // Remove dangling features here now, which used to be done in CropCmd only.
   long numSuperfluousWaysRemoved = 0;
@@ -461,6 +462,10 @@ void MapCropper::_cropWay(const OsmMapPtr& map, long wid)
   std::shared_ptr<Geometry> fg =
     ElementToGeometryConverter(map, _logWarningsForMissingElements).convertToGeometry(way);
   LOG_VART(GeometryUtils::geometryTypeIdToString(fg));
+  if (!fg || fg->isEmpty())
+  {
+    return;
+  }
 
   // perform the intersection with the geometry
   std::shared_ptr<Geometry> g;
@@ -502,7 +507,7 @@ void MapCropper::_cropWay(const OsmMapPtr& map, long wid)
     return;
   }
 
-  if (e == 0)
+  if (e == nullptr)
   {
     LOG_TRACE("Removing way during crop check: " << way->getElementId() << "...");
     RemoveWayByEid::removeWayFully(map, way->getId());

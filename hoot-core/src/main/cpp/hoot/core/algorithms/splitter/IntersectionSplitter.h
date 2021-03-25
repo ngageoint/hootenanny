@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef INTERSECTIONSPLITTER_H
@@ -57,7 +57,7 @@ public:
 
   IntersectionSplitter() = default;
   IntersectionSplitter(const std::shared_ptr<OsmMap>& map) : _map(map) { }
-  virtual ~IntersectionSplitter() = default;
+  ~IntersectionSplitter() = default;
 
   void apply(std::shared_ptr<OsmMap>& map) override;
 
@@ -65,22 +65,22 @@ public:
 
   void splitIntersections();
 
-  virtual QString getInitStatusMessage() const { return "Splitting linear intersections..."; }
+  QString getInitStatusMessage() const override { return "Splitting linear intersections..."; }
 
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   { return "Split " + QString::number(_numAffected) + " linear intersections"; }
 
-  virtual QString getDescription() const override
+  QString getDescription() const override
   { return "Makes all linear intersections contain only way end nodes"; }
 
   /**
    * @see FilteredByGeometryTypeCriteria
    */
-  virtual QStringList getCriteria() const;
+  QStringList getCriteria() const override;
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

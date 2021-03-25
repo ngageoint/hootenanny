@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #define BUILDING_NODE_EXTENSION
 
@@ -150,7 +150,7 @@ void OsmMapJs::clone(const FunctionCallbackInfo<Value>& args)
 
 OsmMapPtr& OsmMapJs::getMap()
 {
-  if (_map.get() == 0 && _constMap.get())
+  if (_map.get() == nullptr && _constMap.get())
   {
     throw IllegalArgumentException("This map is const and may not be modified.");
   }

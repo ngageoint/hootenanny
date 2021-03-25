@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef CHANGESETPROVIDER_H
 #define CHANGESETPROVIDER_H
@@ -31,8 +31,8 @@
 #include <ogr_spatialref.h>
 
 // hoot
-#include <hoot/core/elements/Element.h>
 #include <hoot/core/algorithms/changeset/Change.h>
+#include <hoot/core/elements/Element.h>
 
 namespace hoot
 {
@@ -53,7 +53,7 @@ public:
    * If the stream is open when the destructor is called, closeStream must be called in the
    * destructor
    */
-  virtual ~ChangesetProvider() {}
+  virtual ~ChangesetProvider() = default;
 
   /**
    * @brief closeStream
@@ -122,7 +122,7 @@ public:
   virtual int getNumChanges() const { return 0; }
 };
 
-typedef std::shared_ptr<ChangesetProvider> ChangesetProviderPtr;
+using ChangesetProviderPtr = std::shared_ptr<ChangesetProvider>;
 
 }
 

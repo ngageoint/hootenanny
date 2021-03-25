@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -58,14 +58,14 @@ public:
 
   WriteNameCountsCmd() = default;
 
-  virtual QString getName() const override { return "write-name-counts"; }
+  QString getName() const override { return "write-name-counts"; }
 
-  virtual QString getDescription() const override
+  QString getDescription() const override
   { return "Writes name tag counts for a map"; }
 
-  virtual QString getType() const { return "rnd"; }
+  QString getType() const override { return "rnd"; }
 
-  virtual int runSimple(QStringList& args) override
+  int runSimple(QStringList& args) override
   {
     QElapsedTimer timer;
     timer.start();
@@ -77,7 +77,7 @@ public:
     }
 
     // adding the source datetime just makes things really slow.
-    conf().set(ConfigOptions().getReaderAddSourceDatetimeKey(), false);
+    conf().set(ConfigOptions::getReaderAddSourceDatetimeKey(), false);
 
     const QStringList inputs = args[0].split(";");
     const QString output = args[1];

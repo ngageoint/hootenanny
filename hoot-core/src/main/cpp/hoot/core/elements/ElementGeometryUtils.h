@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef ELEMENT_GEOMETRY_UTILS_H
@@ -57,8 +57,6 @@ public:
    * @param map map owning the input elements
    * @return true if the two elements have the specified geometric relationship; false otherwise or
    * if the relationship could not be calculated
-   * @todo should eventually back this with a cache, as is done in PoiPolygonInfoCache (or merge
-   * the two)
    */
   static bool haveGeometricRelationship(
     const ConstElementPtr& element1, const ConstElementPtr& element2,

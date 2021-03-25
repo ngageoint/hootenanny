@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Standard
@@ -55,8 +55,8 @@ namespace Tgs
   {
   public:
 
-    typedef int64_t bitmask_t;
-    typedef int64_t halfmask_t;
+    using bitmask_t = int64_t;
+    using halfmask_t = int64_t;
 
     HilbertCurve(int dimensions, int order)
     {

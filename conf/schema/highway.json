@@ -76,6 +76,7 @@
         "objectType": "tag"
     },
     {
+        "#": "TODO: deprecated; ford=* instead; keep this as an alias",
         "isA": "highway=road",
         "name": "highway=ford",
         "objectType": "tag",

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef BASECOMMAND_H
@@ -46,7 +46,7 @@ public:
 
   virtual ~BaseCommand() = default;
 
-  virtual QString getHelp() const;
+  QString getHelp() const override;
 
   /**
    * Parses a comma delimited envelope in the form minx,miny,maxx,maxy.
@@ -57,7 +57,7 @@ public:
    * This method will pull out common arguments (e.g. --conf), convert the args to a QStringList
    * and pass it to runSimple.
    */
-  virtual int run(char* argv[], int argc);
+  int run(char* argv[], int argc) override;
 
   /**
    * This is the preferred method to override.
@@ -71,7 +71,7 @@ protected:
   virtual QString _getHelpPath() const;
 };
 
-typedef std::shared_ptr<BaseCommand> BaseCommandPtr;
+using BaseCommandPtr = std::shared_ptr<BaseCommand>;
 
 }
 

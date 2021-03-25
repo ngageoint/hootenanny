@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014 Maxar (http://www.maxar.com/)
  */
 
 //
@@ -375,7 +375,7 @@ translate = {
             continue;
           }
 
-          hoot.logDebug('Lookup value not found for column:: (' + key + '=' + value + ')');
+          hoot.logDebug('Lookup value not found for column:: ' + key + '=' + value);
 
           // The following is used for export. If we have an attribute value that can't
           // find a rule for, we add it to the OTH Field.
@@ -414,7 +414,7 @@ translate = {
         }
         else
         {
-          if (config.getOgrDebugLookupcolumn() == 'true') hoot.logTrace('Column not found:: (' + key + '=' + value + ')');
+          if (config.getOgrDebugLookupcolumn() == 'true') hoot.logTrace('Column not found:: ' + key + '=' + value);
         }
       } // End !key in lookup
     } // End for key in inList
@@ -1217,8 +1217,8 @@ translate = {
   }, // End applyComplexRules
 
 
-  // makeAttrLookup - build a lookup table for layers and Attrs
-  makeTdsAttrLookup : function(schema)
+  // makeThematicAttrLookup - build a lookup table for layers and Attrs
+  makeThematicAttrLookup : function(schema)
   {
     var lookup = {};
 
@@ -1259,6 +1259,15 @@ translate = {
 
     schema.forEach( function (item) {lookup[item.geom.charAt(0) + item.fcode] = item.name;});
 
+    return lookup;
+  },
+
+
+  // makeLayerNameLookup - build a lookup table for FCODE to LayerName
+  makeFcodeList : function(schema)
+  {
+    var lookup = [];
+    schema.forEach( function (item) { if (lookup.indexOf(item.fcode) == -1) lookup.push(item.fcode); });
     return lookup;
   },
 
@@ -1545,6 +1554,9 @@ translate = {
         continue;
       }
 
+      // No need to look for this
+      if (col == 'F_CODE') continue
+
       // See if the tag is a valid TDS attribute
       if (~spec.rules.ignoreList.indexOf(col) ||
           col in spec.rules.numBiased ||
@@ -1566,6 +1578,7 @@ translate = {
       }
 
       // Not an Attribute so push it to the tags object
+      // print('Pushing: ' + col);
       tags[col] = attrs[col];
       delete attrs[col];
     }

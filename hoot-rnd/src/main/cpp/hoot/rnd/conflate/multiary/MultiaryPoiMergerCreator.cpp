@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "MultiaryPoiMergerCreator.h"
 
@@ -65,10 +65,9 @@ bool MultiaryPoiMergerCreator::createMergers(const MatchSet& matches, std::vecto
 std::vector<CreatorDescription> MultiaryPoiMergerCreator::getAllCreators() const
 {
   CreatorDescription d;
-  d.className = className();
-  d.description =
-    "Generates mergers that identify Multiary POI clusters within a match set and merges each cluster.";
-  d.experimental = true;
+  d.setClassName(className());
+  d.setDescription("Generates mergers that identify Multiary POI clusters within a match set and merges each cluster.");
+  d.setExperimental(true);
   vector<CreatorDescription> result;
   result.push_back(d);
 

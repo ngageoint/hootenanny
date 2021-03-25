@@ -19,119 +19,72 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "UnifyingConflator.h"
 
 // hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/MapProjector.h>
-#include <hoot/core/conflate/merging/Merger.h>
-#include <hoot/core/conflate/merging/MarkForReviewMergerCreator.h>
-#include <hoot/core/conflate/matching/MatchFactory.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/merging/MergerFactory.h>
-#include <hoot/core/conflate/matching/GreedyConstrainedMatches.h>
-#include <hoot/core/conflate/matching/OptimalConstrainedMatches.h>
-#include <hoot/core/conflate/polygon/BuildingMergerCreator.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/conflate/matching/MatchClassification.h>
-#include <hoot/core/elements/ElementId.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/criterion/NotCriterion.h>
-#include <hoot/core/ops/CopyMapSubsetOp.h>
 #include <hoot/core/util/MemoryUsageChecker.h>
 #include <hoot/core/schema/SchemaUtils.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonMergerCreator.h>
 #include <hoot/core/visitors/RemoveTagsVisitor.h>
 
-// standard
-#include <algorithm>
-
 // tgs
 #include <tgs/System/SystemInfo.h>
 #include <tgs/System/Time.h>
-#include <tgs/System/Timer.h>
 
 // Qt
 #include <QElapsedTimer>
 
-using namespace std;
-using namespace Tgs;
-
 namespace hoot
 {
-
-// ONLY ENABLE THIS DURING DEBUGGING; We don't want to tie it to debug.maps.write, as it may
-// a very large number of files.
-const bool UnifyingConflator::WRITE_DETAILED_DEBUG_MAPS = false;
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, UnifyingConflator)
 
 UnifyingConflator::UnifyingConflator() :
-_matchFactory(MatchFactory::getInstance()),
-_settings(Settings::getInstance()),
-_taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
+AbstractConflator()
 {
-  _reset();
 }
 
 UnifyingConflator::UnifyingConflator(const std::shared_ptr<MatchThreshold>& matchThreshold) :
-  _matchFactory(MatchFactory::getInstance()),
-  _settings(Settings::getInstance()),
-  _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
+AbstractConflator::AbstractConflator(matchThreshold)
 {
-  _matchThreshold = matchThreshold;
-  _reset();
 }
 
-UnifyingConflator::~UnifyingConflator()
+unsigned int UnifyingConflator::getNumSteps() const
 {
-  _reset();
-}
-
-void UnifyingConflator::setConfiguration(const Settings &conf)
-{
-  _settings = conf;
-
-  _matchThreshold.reset();
-  _mergerFactory.reset();
-  _reset();
-}
-
-void UnifyingConflator::_reset()
-{
-  if (_mergerFactory == 0)
+  if (!ConfigOptions().getConflateMatchOnly())
   {
-    _mergerFactory.reset(new MergerFactory());
-    // register the mark for review merger first so all reviews get tagged before another merger
-    // gets a chance.
-    _mergerFactory->registerCreator(MergerCreatorPtr(new MarkForReviewMergerCreator()));
-    _mergerFactory->registerDefaultCreators();
+    return 3;
   }
-
-  _e2m.clear();
-  _matches.clear();
-  _mergers.clear();
+  else
+  {
+    return 1;
+  }
 }
 
 void UnifyingConflator::apply(OsmMapPtr& map)
 {
-  Timer timer;
   _reset();
-  int currentStep = 1;  // tracks the current job task step for progress reporting
-
-  // ERROR CHECKING
+  _map = map;
+  _currentStep = 1;  // tracks the current job task step for progress reporting
 
   // Check to see if all the data is untyped. If so, log a warning so the user knows they may not
   // be getting the best conflate results in case types could be added to the input.
-  if (map->size() > 0 && !SchemaUtils::anyElementsHaveType(map))
+  if (_map->size() > 0 && !SchemaUtils::anyElementsHaveType(_map))
   {
     const QString msg =
       "No elements in the input map have a recognizable schema type. Generic conflation "
@@ -146,146 +99,48 @@ void UnifyingConflator::apply(OsmMapPtr& map)
     }
   }
 
-  // DATA PREP
+  // will reproject if necessary
+  MapProjector::projectToPlanar(_map);
+  _stats.append(SingleStat("Project to Planar Time (sec)", _timer.getElapsedAndRestart()));
 
-  // will reproject if necessary.
-  MapProjector::projectToPlanar(map);
-
-  _stats.append(SingleStat("Project to Planar Time (sec)", timer.getElapsedAndRestart()));
-
-  // This status progress reporting could get way more granular, but we'll go with this for now to
-  // avoid overloading users with status.
-
-  // MATCH FEATURES
-
-  _updateProgress(currentStep - 1, "Matching features...");
-
-  OsmMapWriterFactory::writeDebugMap(map, "before-matching");
-  // find all the matches in this map
-  if (_matchThreshold.get())
+  _updateProgress(_currentStep - 1, "Matching features...");
+  _createMatches();
+  if (ConfigOptions().getWriterIncludeConflateScoreTags())
   {
-    // Match scoring logic seems to be the only one that needs to pass in the match threshold now
-    // when the optimize param is activated.  Otherwise, we get the match threshold information from
-    // the config.
-    _matchFactory.createMatches(map, _matches, _bounds, _matchThreshold);
+    // Add score tags to all matches that have some score component.
+    _addConflateScoreTags();
   }
-  else
+  _currentStep++;
+
+  if (!ConfigOptions().getConflateMatchOnly())
   {
-    _matchFactory.createMatches(map, _matches, _bounds);
+    _updateProgress(_currentStep - 1, "Optimizing feature matches...");
+    MatchSetVector matchSets = _optimizeMatches();
+    _currentStep++;
+
+    _updateProgress(_currentStep - 1, "Merging feature matches...");
+
+    std::vector<MergerPtr> relationMergers;
+    _createMergers(matchSets, relationMergers);
+
+    _mergeFeatures(relationMergers);
+    _currentStep++;
   }
-  MemoryUsageChecker::getInstance().check();
-  LOG_DEBUG("Match count: " << StringUtils::formatLargeNumber(_matches.size()));
-  LOG_VART(_matches);
-  LOG_DEBUG(SystemInfo::getCurrentProcessMemoryUsageString());
-  OsmMapWriterFactory::writeDebugMap(map, "after-matching");
 
-  double findMatchesTime = timer.getElapsedAndRestart();
-  _stats.append(SingleStat("Find Matches Time (sec)", findMatchesTime));
-  _stats.append(SingleStat("Number of Matches Found", _matches.size()));
-  _stats.append(
-    SingleStat("Number of Matches Found per Second", (double)_matches.size() / findMatchesTime));
+  // cleanup
 
-  vector<ConstMatchPtr> allMatches = _matches;
-
-  // OPTIMIZE MATCHES
-
-  // add score tags to all matches that have some score component
-  _addReviewAndScoreTags(map, allMatches);
-
-  LOG_DEBUG("Pre-constraining match count: " << StringUtils::formatLargeNumber(allMatches.size()));
-  _stats.append(SingleStat("Number of Matches Before Whole Groups", _matches.size()));
-  LOG_DEBUG(
-    "Number of Matches Before Whole Groups: " << StringUtils::formatLargeNumber(_matches.size()));
-  // If there are groups of matches that should not be optimized, remove them before optimization.
-  MatchSetVector matchSets;
-  _removeWholeGroups(_matches, matchSets, map);
-  MemoryUsageChecker::getInstance().check();
-  _stats.append(SingleStat("Number of Whole Groups", matchSets.size()));
-  LOG_DEBUG("Number of Whole Groups: " << StringUtils::formatLargeNumber(matchSets.size()));
-  LOG_DEBUG(
-    "Number of Matches After Whole Groups: " << StringUtils::formatLargeNumber(_matches.size()));
-  LOG_VART(_matches);
-  OsmMapWriterFactory::writeDebugMap(map, "after-whole-group-removal");
-
-  currentStep++;
-
-  _updateProgress(currentStep - 1, "Optimizing feature matches...");
-
-  // Globally optimize the set of matches to maximize the conflation score.
+  if (!ConfigOptions().getWriterIncludeDebugTags())
   {
-    OptimalConstrainedMatches cm(map);
-    vector<ConstMatchPtr> cmMatches;
-
-    if (ConfigOptions(_settings).getUnifyEnableOptimalConstrainedMatches())
-    {
-      cm.addMatches(_matches.begin(), _matches.end());
-      cm.setTimeLimit(ConfigOptions(_settings).getUnifyOptimizerTimeLimit());
-      double cmStart = Time::getTime();
-      try
-      {
-        cmMatches = cm.calculateSubset();
-      }
-      catch (const Exception& exp)
-      {
-        LOG_WARN(exp.what());
-      }
-      MemoryUsageChecker::getInstance().check();
-      LOG_TRACE("CM took: " << Time::getTime() - cmStart << "s.");
-      LOG_DEBUG("CM Score: " << cm.getScore());
-      LOG_DEBUG(SystemInfo::getCurrentProcessMemoryUsageString());
-    }
-
-    GreedyConstrainedMatches gm(map);
-    gm.addMatches(_matches.begin(), _matches.end());
-    double gmStart = Time::getTime();
-    vector<ConstMatchPtr> gmMatches = gm.calculateSubset();
-    MemoryUsageChecker::getInstance().check();
-    LOG_TRACE("GM took: " << Time::getTime() - gmStart << "s.");
-    LOG_DEBUG("GM Score: " << gm.getScore());
-
-    if (gm.getScore() > cm.getScore())
-    {
-      _matches = gmMatches;
-      LOG_DEBUG("Using greedy matches with a higher score of: " << gm.getScore());
-    }
-    else
-    {
-      _matches = cmMatches;
-      LOG_DEBUG(
-        "Using matches obtained by the an Integer Programming solution with a higher score of: " <<
-        cm.getScore());
-    }
-
+    QStringList tagKeysToRemove;
+    tagKeysToRemove.append(MetadataTags::HootMultilineString());
+    RemoveTagsVisitor tagRemover(tagKeysToRemove);
+    _map->visitRw(tagRemover);
   }
-  double optimizeMatchesTime = timer.getElapsedAndRestart();
-  _stats.append(SingleStat("Optimize Matches Time (sec)", optimizeMatchesTime));
-  _stats.append(SingleStat("Number of Optimized Matches", _matches.size()));
-  _stats.append(SingleStat("Number of Matches Optimized per Second",
-    (double)allMatches.size() / optimizeMatchesTime));
-  LOG_DEBUG(SystemInfo::getCurrentProcessMemoryUsageString());
-  // TODO: this stat isn't right for Network
-  LOG_DEBUG("Post constraining match count: " << _matches.size());
-  LOG_VART(_matches);
-  OsmMapWriterFactory::writeDebugMap(map, "after-match-optimization");
+}
 
-  {
-    // Search the matches for groups (subgraphs) of matches. In other words, groups where all the
-    // matches are interrelated by element id
-    MatchGraph mg;
-    mg.addMatches(_matches.begin(), _matches.end());
-    vector<set<ConstMatchPtr, MatchPtrComparator>> tmpMatchSets = mg.findSubgraphs(map);
-    matchSets.insert(matchSets.end(), tmpMatchSets.begin(), tmpMatchSets.end());
-    LOG_DEBUG(SystemInfo::getCurrentProcessMemoryUsageString());
-  }
-  LOG_DEBUG("Match sets count: " << matchSets.size());
-  OsmMapWriterFactory::writeDebugMap(map, "after-match-optimization-2");
-
-  currentStep++;
-
-  // MERGE PREP
-
-  _updateProgress(currentStep - 1, "Merging feature matches...");
-
+void UnifyingConflator::_createMergers(
+  MatchSetVector& matchSets, std::vector<MergerPtr>& relationMergers)
+{
   // POI/Polygon matching is unique in that it is the only non-generic geometry type matcher that
   // can duplicate matches with other non-generic geometry type matchers (namely POI and Building).
   // For all intra-dataset matching, the default is to convert all matches for a feature to a review
@@ -298,7 +153,7 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   // a POI matcher, then mark all matches involved as reviews before having each MergerCreator
   // create Mergers (poi.polygon.match.takes.precedence.over.poi.to.poi.review=false). Note that
   // we're only doing this right now for POI matches and not Building matches, as it hasn't been
-  // seen as necessary for buildings so far.
+  // seen as necessary for building matches so far.
 
   if (!ConfigOptions().getPoiPolygonMatchTakesPrecedenceOverPoiToPoiReview())
   {
@@ -306,7 +161,7 @@ void UnifyingConflator::apply(OsmMapPtr& map)
     PoiPolygonMergerCreator::convertSharedMatchesToReviews(matchSets, _mergers, QStringList("POI"));
   }
 
-  // TODO: Would it help to sort the matches so the biggest or best ones get merged first? - #2912
+  // TODO: Would it help to sort the matches so the biggest or best ones get merged first? (#2912)
 
   LOG_DEBUG(
     "Converting " << StringUtils::formatLargeNumber(matchSets.size()) <<
@@ -317,7 +172,7 @@ void UnifyingConflator::apply(OsmMapPtr& map)
       "Converting match set " << StringUtils::formatLargeNumber(i + 1) << " / " <<
       StringUtils::formatLargeNumber(matchSets.size()) << " to a merger...");
 
-    _mergerFactory->createMergers(map, matchSets[i], _mergers);
+    _mergerFactory->createMergers(_map, matchSets[i], _mergers);
 
     LOG_TRACE(
       "Converted match set " << StringUtils::formatLargeNumber(i + 1) << " to " <<
@@ -326,18 +181,16 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   MemoryUsageChecker::getInstance().check();
   LOG_VART(_mergers.size());
 
-  LOG_DEBUG(SystemInfo::getCurrentProcessMemoryUsageString());
+  LOG_DEBUG(Tgs::SystemInfo::getCurrentProcessMemoryUsageString());
   // don't need the matches any more
-  allMatches.clear();
   _matches.clear();
 
-  LOG_DEBUG(SystemInfo::getCurrentProcessMemoryUsageString());
+  LOG_DEBUG(Tgs::SystemInfo::getCurrentProcessMemoryUsageString());
   _mapElementIdsToMergers();
-  LOG_DEBUG(SystemInfo::getCurrentProcessMemoryUsageString());
+  LOG_DEBUG(Tgs::SystemInfo::getCurrentProcessMemoryUsageString());
 
   // Separate mergers that merge relations from other mergers. We want to run them very last so that
   // they have the latest version of their members to work with.
-  std::vector<MergerPtr> relationMergers;
   std::vector<MergerPtr> nonRelationMergers;
   for (std::vector<MergerPtr>::const_iterator mergersItr = _mergers.begin();
        mergersItr != _mergers.end(); ++mergersItr)
@@ -357,257 +210,73 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   LOG_VARD(_mergers.size());
   LOG_VARD(relationMergers.size());
 
-  _stats.append(SingleStat("Create Mergers Time (sec)", timer.getElapsedAndRestart()));
+  _stats.append(SingleStat("Create Mergers Time (sec)", _timer.getElapsedAndRestart()));
+}
 
-  // MERGE FEATURES
-
+void UnifyingConflator::_mergeFeatures(const std::vector<MergerPtr>& relationMergers)
+{
   QElapsedTimer mergersTimer;
   mergersTimer.start();
 
   LOG_INFO(
     "Applying " << StringUtils::formatLargeNumber(_mergers.size() + relationMergers.size()) <<
     " mergers...");
-  _applyMergers(_mergers, map);
-  _applyMergers(relationMergers, map);
+  _applyMergers(_mergers, _map);
+  _applyMergers(relationMergers, _map);
 
   MemoryUsageChecker::getInstance().check();
-  OsmMapWriterFactory::writeDebugMap(map, "after-merging");
+  OsmMapWriterFactory::writeDebugMap(_map, "after-merging");
 
-  LOG_DEBUG(SystemInfo::getCurrentProcessMemoryUsageString());
+  LOG_DEBUG(Tgs::SystemInfo::getCurrentProcessMemoryUsageString());
   const size_t mergerCount = _mergers.size() + relationMergers.size();
   // free up any used resources
   _reset();
-  LOG_DEBUG(SystemInfo::getCurrentProcessMemoryUsageString());
-  double mergersTime = timer.getElapsedAndRestart();
+  LOG_DEBUG(Tgs::SystemInfo::getCurrentProcessMemoryUsageString());
+  double mergersTime = _timer.getElapsedAndRestart();
   _stats.append(SingleStat("Apply Mergers Time (sec)", mergersTime));
   _stats.append(SingleStat("Mergers Applied per Second", (double)mergerCount / mergersTime));
-
-  // CLEANUP
-
-  if (!ConfigOptions().getWriterIncludeDebugTags())
-  {
-    QStringList tagKeysToRemove;
-    tagKeysToRemove.append(MetadataTags::HootMultilineString());
-    RemoveTagsVisitor tagRemover(tagKeysToRemove);
-    map->visitRw(tagRemover);
-  }
 
   LOG_INFO(
     "Applied " << StringUtils::formatLargeNumber(mergerCount) << " mergers in " <<
     StringUtils::millisecondsToDhms(mergersTimer.elapsed()) << ".");
-
-  currentStep++;
 }
 
-void UnifyingConflator::_applyMergers(const std::vector<MergerPtr>& mergers, OsmMapPtr& map)
-{
-  vector<pair<ElementId, ElementId>> replaced;
-  for (size_t i = 0; i < mergers.size(); ++i)
-  {
-    MergerPtr merger = mergers[i];
-    const QString msg =
-      "Applying merger: " + merger->getName() + " " + StringUtils::formatLargeNumber(i + 1) +
-      " / " + StringUtils::formatLargeNumber(mergers.size());
-    // There are way more log statements generated from this than we normally want to see, so just
-    // info out a subset. If running in debug, then you'll see all of them which can be useful.
-    if (i != 0 && i % 10 == 0)
-    {
-      PROGRESS_INFO(msg);
-    }
-    else
-    {
-      LOG_DEBUG(msg);
-    }
-
-    // We require that each individual merger set the option to mark merge created relations, so
-    // disable this option as each merger is processed.
-    conf().set(ConfigOptions::getConflateMarkMergeCreatedMultilinestringRelationsKey(), false);
-
-    merger->apply(map, replaced);
-
-    LOG_VART(replaced);
-    LOG_VART(map->size());
-
-    // update any mergers that reference the replaced values
-    _replaceElementIds(replaced);
-    replaced.clear();
-    LOG_VART(merger->getImpactedElementIds());
-
-    if (WRITE_DETAILED_DEBUG_MAPS)
-    {
-      OsmMapWriterFactory::writeDebugMap(
-        map, "after-merge-" + merger->getName() + "-#" + StringUtils::formatLargeNumber(i + 1));
-    }
-  }
-}
-
-bool elementIdPairCompare(const pair<ElementId, ElementId>& pair1,
-                          const pair<ElementId, ElementId>& pair2)
-{
-  return pair1.first.getId() > pair2.first.getId();
-}
-
-void UnifyingConflator::_mapElementIdsToMergers()
-{
-  _e2m.clear();
-  for (size_t i = 0; i < _mergers.size(); ++i)
-  {
-    set<ElementId> impacted = _mergers[i]->getImpactedElementIds();
-    for (set<ElementId>::const_iterator it = impacted.begin(); it != impacted.end(); ++it)
-    {
-      _e2m[*it].push_back(_mergers[i]);
-    }
-  }
-}
-
-QString UnifyingConflator::_matchSetToString(const MatchSet& matchSet) const
-{
-  QString str;
-  for (std::set<ConstMatchPtr, MatchPtrComparator>::const_iterator itr = matchSet.begin();
-       itr != matchSet.end(); ++itr)
-  {
-    ConstMatchPtr match = *itr;
-    set<pair<ElementId, ElementId>> matchPairs = match->getMatchPairs();
-    for (std::set<pair<ElementId, ElementId>>::const_iterator itr2 = matchPairs.begin();
-         itr2 != matchPairs.end(); ++itr2)
-    {
-       pair<ElementId, ElementId> elementIdPair = *itr2;
-       str += elementIdPair.first.toString() + " " + elementIdPair.second.toString() + ", ";
-    }
-  }
-  str.chop(2);
-  return str;
-}
-
-void UnifyingConflator::_removeWholeGroups(std::vector<ConstMatchPtr>& matches,
-  MatchSetVector& matchSets, const OsmMapPtr& map)
-{
-  LOG_DEBUG("Removing whole group matches...");
-
-  // search the matches for groups (subgraphs) of matches. In other words, groups where all the
-  // matches are interrelated by element id
-  MatchGraph mg;
-  mg.setCheckForConflicts(false);
-  mg.addMatches(_matches.begin(), _matches.end());
-  MatchSetVector tmpMatchSets = mg.findSubgraphs(map);
-
-  matchSets.reserve(matchSets.size() + tmpMatchSets.size());
-  vector<ConstMatchPtr> leftovers;
-
-  for (size_t i = 0; i < tmpMatchSets.size(); i++)
-  {
-    bool wholeGroup = false;
-    for (MatchSet::const_iterator it = tmpMatchSets[i].begin(); it != tmpMatchSets[i].end(); ++it)
-    {
-      if ((*it)->isWholeGroup())
-      {
-        wholeGroup = true;
-      }
-    }
-
-    if (wholeGroup)
-    {
-      LOG_TRACE("Removing whole group: " << _matchSetToString(tmpMatchSets[i]));
-      matchSets.push_back(tmpMatchSets[i]);
-    }
-    else
-    {
-      leftovers.insert(leftovers.end(), tmpMatchSets[i].begin(), tmpMatchSets[i].end());
-    }
-  }
-
-  matches = leftovers;
-}
-
-void UnifyingConflator::_replaceElementIds(const vector<pair<ElementId, ElementId>>& replaced)
-{
-  for (size_t i = 0; i < replaced.size(); ++i)
-  {
-    HashMap<ElementId, vector<MergerPtr>>::const_iterator it = _e2m.find(replaced[i].first);
-    if (it != _e2m.end())
-    {
-      const vector<MergerPtr>& mergers = it->second;
-      // replace the element id in all mergers.
-      for (size_t i = 0; i < mergers.size(); ++i)
-      {
-        mergers[i]->replace(replaced[i].first, replaced[i].second);
-        _e2m[replaced[i].second].push_back(mergers[i]);
-      }
-      // don't need to hold on to the old reference any more.
-      _e2m.erase(it->first);
-    }
-  }
-}
-
-void UnifyingConflator::_printMatches(std::vector<ConstMatchPtr> matches)
-{
-  for (size_t i = 0; i < matches.size(); i++)
-  {
-    LOG_DEBUG(matches[i]->toString());
-  }
-}
-
-void UnifyingConflator::_printMatches(std::vector<ConstMatchPtr> matches,
-                                      const MatchType& typeFilter)
-{
-  for (size_t i = 0; i < matches.size(); i++)
-  {
-    ConstMatchPtr match = matches[i];
-    if (match->getType() == typeFilter)
-    {
-      LOG_DEBUG(match);
-    }
-  }
-}
-
-void UnifyingConflator::_addScoreTags(const ElementPtr& e, const MatchClassification& mc)
+void UnifyingConflator::_addConflateScoreTags(
+  const ElementPtr& e, const MatchClassification& matchClassification,
+  const MatchThreshold& matchThreshold) const
 {
   Tags& tags = e->getTags();
-  tags.appendValue(MetadataTags::HootScoreReview(), mc.getReviewP());
-  tags.appendValue(MetadataTags::HootScoreMatch(), mc.getMatchP());
-  tags.appendValue(MetadataTags::HootScoreMiss(), mc.getMissP());
+  tags.appendValue(MetadataTags::HootScoreMatch(), matchClassification.getMatchP());
+  tags.appendValue(MetadataTags::HootScoreMiss(), matchClassification.getMissP());
+  tags.appendValue(MetadataTags::HootScoreReview(), matchClassification.getReviewP());
+  // The thresholds are global, so don't append.
+  tags.set(MetadataTags::HootScoreMatchThreshold(), matchThreshold.getMatchThreshold());
+  tags.set(MetadataTags::HootScoreMissThreshold(), matchThreshold.getMissThreshold());
+  tags.set(MetadataTags::HootScoreReviewThreshold(), matchThreshold.getReviewThreshold());
 }
 
-void UnifyingConflator::_addReviewAndScoreTags(
-  const OsmMapPtr& map, const std::vector<ConstMatchPtr>& matches)
+void UnifyingConflator::_addConflateScoreTags()
 {
-  if (ConfigOptions(_settings).getWriterIncludeConflateScoreTags())
+  for (size_t i = 0; i < _matches.size(); i++)
   {
-    for (size_t i = 0; i < matches.size(); i++)
+    ConstMatchPtr match = _matches[i];
+    const MatchClassification& matchClassification = match->getClassification();
+    std::shared_ptr<const MatchThreshold> matchThreshold = match->getThreshold();
+    std::set<std::pair<ElementId, ElementId>> pairs = match->getMatchPairs();
+    for (std::set<std::pair<ElementId, ElementId>>::const_iterator it = pairs.begin();
+         it != pairs.end(); ++it)
     {
-      ConstMatchPtr m = matches[i];
-      const MatchClassification& mc = m->getClassification();
-      set<pair<ElementId, ElementId>> pairs = m->getMatchPairs();
-      for (set<pair<ElementId, ElementId>>::const_iterator it = pairs.begin();
-           it != pairs.end(); ++it)
-      {
-        if (mc.getReviewP() > 0.0)
-        {
-          ElementPtr e1 = map->getElement(it->first);
-          ElementPtr e2 = map->getElement(it->second);
+      ElementPtr e1 = _map->getElement(it->first);
+      ElementPtr e2 = _map->getElement(it->second);
 
-          LOG_TRACE(
-            "Adding score tags to " << e1->getElementId() << " and " << e2->getElementId() <<
-            "...");
+      LOG_TRACE(
+        "Adding score tags to " << e1->getElementId() << " and " << e2->getElementId() << "...");
 
-          _addScoreTags(e1, mc);
-          _addScoreTags(e2, mc);
-          e1->getTags().appendValue(MetadataTags::HootScoreUuid(), e2->getTags().getCreateUuid());
-          e2->getTags().appendValue(MetadataTags::HootScoreUuid(), e1->getTags().getCreateUuid());
-        }
-      }
+      _addConflateScoreTags(e1, matchClassification, *matchThreshold);
+      _addConflateScoreTags(e2, matchClassification, *matchThreshold);
+      e1->getTags().appendValue(MetadataTags::HootScoreUuid(), e2->getTags().getCreateUuid());
+      e2->getTags().appendValue(MetadataTags::HootScoreUuid(), e1->getTags().getCreateUuid());
     }
-  }
-}
-
-void UnifyingConflator::_updateProgress(const int currentStep, const QString message)
-{
-  // Always check for a valid task weight and that the job was set to running. Otherwise, this is
-  // just an empty progress object, and we shouldn't log progress.
-  if (_progress.getTaskWeight() != 0.0 && _progress.getState() == Progress::JobState::Running)
-  {
-    _progress.setFromRelative(
-      (float)currentStep / (float)getNumSteps(), Progress::JobState::Running, message);
   }
 }
 

@@ -19,17 +19,17 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "MultipleCriterionConsumerVisitor.h"
 
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/criterion/NotCriterion.h>
-#include <hoot/core/util/Log.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/util/Log.h>
 
 namespace hoot
 {
@@ -59,7 +59,7 @@ void MultipleCriterionConsumerVisitor::addCriterion(const ElementCriterionPtr& c
 void MultipleCriterionConsumerVisitor::_addCriteria(
   const QStringList& criteriaClassNames)
 {
-  if (criteriaClassNames.size() > 0)
+  if (!criteriaClassNames.empty())
   {
     _criteria.clear();
     for (int i = 0; i < criteriaClassNames.size(); i++)

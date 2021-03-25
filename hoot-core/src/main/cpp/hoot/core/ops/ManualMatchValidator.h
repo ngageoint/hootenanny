@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef MANUAL_MATCH_VALIDATOR_H
 #define MANUAL_MATCH_VALIDATOR_H
@@ -56,21 +56,21 @@ public:
   static QString className() { return "hoot::ManualMatchValidator"; }
 
   ManualMatchValidator();
-  virtual ~ManualMatchValidator() = default;
+  ~ManualMatchValidator() = default;
 
   /**
    * Validates all manual matches in the map and records the first error found for each element
    *
    * @param map
    */
-  virtual void apply(const OsmMapPtr& map);
+  void apply(const OsmMapPtr& map) override;
 
-  virtual QString getDescription() const { return "Validates manual matches"; }
+  QString getDescription() const override { return "Validates manual matches"; }
 
-  virtual QString getInitStatusMessage() const
+  QString getInitStatusMessage() const override
   { return "Validating manual matches..."; }
 
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   { return "Validated " + QString::number(_numAffected) + " manual matches"; }
 
   /**
@@ -92,22 +92,22 @@ public:
    *
    * @return true if any errors were found; false otherwise
    */
-  bool hasErrors() const { return _errors.size() > 0; }
+  bool hasErrors() const { return !_errors.empty(); }
 
   /**
    * Determines if any warnings were found by validation
    *
    * @return true if any errors were found; false otherwise
    */
-  bool hasWarnings() const { return _warnings.size() > 0; }
+  bool hasWarnings() const { return !_warnings.empty(); }
 
   void setRequireRef1(bool require) { _requireRef1 = require; }
   void setAllowUuidManualMatchIds(bool allow) { _allowUuidManualMatchIds = allow; }
   void setFullDebugOutput(bool fullDebugOutput) { _fullDebugOutput = fullDebugOutput; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

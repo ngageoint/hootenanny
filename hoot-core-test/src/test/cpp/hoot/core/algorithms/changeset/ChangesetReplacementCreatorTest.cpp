@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -52,14 +52,9 @@ namespace hoot
 class ChangesetReplacementCreatorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ChangesetReplacementCreatorTest);
-  CPPUNIT_TEST(runInvalidGeometryFilterTest);
-  CPPUNIT_TEST(runInvalidReplacementFilterTest);
-  CPPUNIT_TEST(runInvalidRetainmentFilterTest);
   CPPUNIT_TEST(runNonBoundableReaderTest);
   CPPUNIT_TEST(runGeoJsonTest);
-  CPPUNIT_TEST(runInvalidFilterConfigOptsTest);
   CPPUNIT_TEST(runConvertOpsTest);
-  CPPUNIT_TEST(runFullReplacmentWithRetainmentFilterTest);
   CPPUNIT_TEST(runInvalidBoundsTest);
   CPPUNIT_TEST_SUITE_END();
 
@@ -67,73 +62,6 @@ public:
 
   ChangesetReplacementCreatorTest()
   {
-  }
-
-  void runInvalidGeometryFilterTest()
-  {
-    QString exceptionMsg;
-    ChangesetCutOnlyCreator changesetCreator;
-    try
-    {
-      changesetCreator.setGeometryFilters(QStringList("hoot::TagCriterion"));
-    }
-    catch (const HootException& e)
-    {
-      exceptionMsg = e.what();
-    }
-    CPPUNIT_ASSERT(exceptionMsg.startsWith("Invalid feature geometry type filter"));
-  }
-
-  void runInvalidReplacementFilterTest()
-  {
-    QString exceptionMsg;
-    ChangesetCutOnlyCreator changesetCreator;
-
-    try
-    {
-      changesetCreator.setReplacementFilters(QStringList("hoot::AddAttributesVisitor"));
-    }
-    catch (const HootException& e)
-    {
-      exceptionMsg = e.what();
-    }
-    CPPUNIT_ASSERT(exceptionMsg.startsWith("Invalid additional input filter"));
-
-    try
-    {
-      changesetCreator.setReplacementFilters(QStringList("hoot::PoiCriterion"));
-    }
-    catch (const HootException& e)
-    {
-      exceptionMsg = e.what();
-    }
-    CPPUNIT_ASSERT(exceptionMsg.startsWith("Invalid additional input filter"));
-  }
-
-  void runInvalidRetainmentFilterTest()
-  {
-    QString exceptionMsg;
-    ChangesetCutOnlyCreator changesetCreator;
-
-    try
-    {
-      changesetCreator.setRetainmentFilters(QStringList("hoot::AddAttributesVisitor"));
-    }
-    catch (const HootException& e)
-    {
-      exceptionMsg = e.what();
-    }
-    CPPUNIT_ASSERT(exceptionMsg.startsWith("Invalid additional input filter"));
-
-    try
-    {
-      changesetCreator.setRetainmentFilters(QStringList("hoot::PoiCriterion"));
-    }
-    catch (const HootException& e)
-    {
-      exceptionMsg = e.what();
-    }
-    CPPUNIT_ASSERT(exceptionMsg.startsWith("Invalid additional input filter"));
   }
 
   void runNonBoundableReaderTest()
@@ -173,36 +101,6 @@ public:
       exceptionMsg.toStdString());
   }
 
-  void runInvalidFilterConfigOptsTest()
-  {
-    QString exceptionMsg;
-    ChangesetCutOnlyCreator changesetCreator;
-
-    // the filter can be any non-geometry crit here
-    changesetCreator.setReplacementFilters(QStringList(TagCriterion::className()));
-    try
-    {
-      changesetCreator.setReplacementFilterOptions(QStringList("blah"));
-    }
-    catch (const HootException& e)
-    {
-      exceptionMsg = e.what();
-    }
-    CPPUNIT_ASSERT(exceptionMsg.startsWith("Invalid filter configuration option"));
-
-    // the filter can be any non-geometry crit here
-    changesetCreator.setRetainmentFilters(QStringList(TagCriterion::className()));
-    try
-    {
-      changesetCreator.setRetainmentFilterOptions(QStringList("blah"));
-    }
-    catch (const HootException& e)
-    {
-      exceptionMsg = e.what();
-    }
-    CPPUNIT_ASSERT(exceptionMsg.startsWith("Invalid filter configuration option"));
-  }
-
   void runConvertOpsTest()
   {
     QString exceptionMsg;
@@ -221,28 +119,6 @@ public:
     }
     CPPUNIT_ASSERT_EQUAL(
       QString("Replacement changeset derivation does not support convert operations.").toStdString(),
-      exceptionMsg.toStdString());
-  }
-
-  void runFullReplacmentWithRetainmentFilterTest()
-  {
-    QString exceptionMsg;
-    ChangesetCutOnlyCreator changesetCreator;
-    changesetCreator.setFullReplacement(true);
-    // the filter can be any non-geometry crit here
-    changesetCreator.setRetainmentFilters(QStringList(TagCriterion::className()));
-    try
-    {
-      changesetCreator.create(
-        "test1.osm", "test2.osm", geos::geom::Envelope(0, 0, 0, 0), "out.osm");
-    }
-    catch (const HootException& e)
-    {
-      exceptionMsg = e.what();
-    }
-    CPPUNIT_ASSERT_EQUAL(
-      QString("Both full reference data replacement and a reference data retainment filter may not "
-              "be specified for replacement changeset derivation.").toStdString(),
       exceptionMsg.toStdString());
   }
 

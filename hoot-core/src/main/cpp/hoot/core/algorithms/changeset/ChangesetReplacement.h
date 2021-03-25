@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef CHANGESET_REPLACEMENT_H
 #define CHANGESET_REPLACEMENT_H
@@ -55,9 +55,9 @@ public:
 
   /**
    * The manner in which replacement boundary conditions are handled. See the
-   * changeset-derive-replacement CLI doc for more detail.
+   * changeset-derive CLI doc for more detail.
    *
-   * @todo remove Hybrid
+   * @todo remove Hybrid; not used anywhere
    */
   enum BoundsInterpretation
   {
@@ -94,13 +94,6 @@ public:
 
   virtual void setFullReplacement(const bool full) = 0;
   virtual void setBoundsInterpretation(const BoundsInterpretation& interpretation) = 0;
-  virtual void setGeometryFilters(const QStringList& filterClassNames) = 0;
-  virtual void setReplacementFilters(const QStringList& filterClassNames) = 0;
-  virtual void setChainReplacementFilters(const bool chain)  = 0;
-  virtual void setReplacementFilterOptions(const QStringList& optionKvps) = 0;
-  virtual void setRetainmentFilters(const QStringList& filterClassNames) = 0;
-  virtual void setChainRetainmentFilters(const bool chain) = 0;
-  virtual void setRetainmentFilterOptions(const QStringList& optionKvps) = 0;
   virtual void setEnableWaySnapping(const bool enable) = 0;
   virtual void setChangesetId(const QString& id) = 0;
 

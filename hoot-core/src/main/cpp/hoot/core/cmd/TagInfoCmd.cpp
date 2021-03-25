@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -49,11 +49,11 @@ public:
 
   TagInfoCmd() = default;
 
-  virtual QString getName() const override { return "tag-info"; }
+  QString getName() const override { return "tag-info"; }
 
-  virtual QString getDescription() const override { return "Displays tag information for a map"; }
+  QString getDescription() const override { return "Displays tag information for a map"; }
 
-  virtual int runSimple(QStringList& args) override
+  int runSimple(QStringList& args) override
   {
     QElapsedTimer timer;
     timer.start();
@@ -61,7 +61,7 @@ public:
     if (args.size() < 1)
     {
       cout << getHelp() << endl << endl;
-      throw HootException(QString("%1 takes at least one parameter.").arg(getName()));
+      throw IllegalArgumentException(QString("%1 takes at least one parameter.").arg(getName()));
     }
 
     int tagValuesPerKeyLimit = INT_MAX;
@@ -114,6 +114,20 @@ public:
       LOG_VART(args);
     }
 
+    bool delimitedTextOutput = false;
+    if (args.contains("--delimited-text"))
+    {
+      if (!keysOnly)
+      {
+        throw IllegalArgumentException(
+          QString("%1 --delimited-text option is only valid when used with --keys-only.")
+            .arg(getName()));
+      }
+      delimitedTextOutput = true;
+      args.removeAt(args.indexOf("--delimited-text"));
+      LOG_VART(args);
+    }
+
     // everything left is an input
     QStringList inputs;
     for (int i = 0; i < args.size(); i++)
@@ -121,7 +135,8 @@ public:
       inputs.append(args[i]);
     }
 
-    TagInfo tagInfo(tagValuesPerKeyLimit, keys, keysOnly, caseSensitive, exactKeyMatch);
+    TagInfo tagInfo(
+      tagValuesPerKeyLimit, keys, keysOnly, caseSensitive, exactKeyMatch, delimitedTextOutput);
     cout << tagInfo.getInfo(inputs) << endl;
 
     LOG_STATUS(

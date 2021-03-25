@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef RAILWAY_WAY_NODE_CRITERION_H
 #define RAILWAY_WAY_NODE_CRITERION_H
@@ -41,18 +41,16 @@ public:
 
   RailwayWayNodeCriterion();
   RailwayWayNodeCriterion(ConstOsmMapPtr map);
-  virtual ~RailwayWayNodeCriterion() = default;
+  ~RailwayWayNodeCriterion() = default;
 
-  virtual void setOsmMap(const OsmMap* map) override;
-
-  virtual ElementCriterionPtr clone() override
+  ElementCriterionPtr clone() override
   { return ElementCriterionPtr(new RailwayWayNodeCriterion(_map)); }
 
-  virtual QString getDescription() const override { return "Identifies railway nodes"; }
+  QString getDescription() const override { return "Identifies railway nodes"; }
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 };
 
 }

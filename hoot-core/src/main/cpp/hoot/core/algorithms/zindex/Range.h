@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef RANGE_H
 #define RANGE_H
@@ -45,21 +45,21 @@ public:
 
   static QString className() { return "hoot::Range"; }
 
-  Range() {}
+  Range() = default;
 
   Range(long int min, long int max);
 
-  virtual ~Range() {}
+  virtual ~Range() = default;
 
   bool hashCode();
 
-  bool operator>(Range r) const { return _min > r.getMin(); }
+  bool operator>(const Range& r) const { return _min > r.getMin(); }
 
-  bool operator<(Range r) const { return _min < r.getMin(); }
+  bool operator<(const Range& r) const { return _min < r.getMin(); }
 
-  bool operator<=(Range r) const { return operator <(r) || operator==(r); }
+  bool operator<=(const Range& r) const { return operator <(r) || operator==(r); }
 
-  bool operator==(Range r) const { return _min == r.getMin() && _max == r.getMax(); }
+  bool operator==(const Range& r) const { return _min == r.getMin() && _max == r.getMax(); }
 
   bool in(long int l);
 

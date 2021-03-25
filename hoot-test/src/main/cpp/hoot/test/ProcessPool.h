@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef PROCESS_POOL_H
 #define PROCESS_POOL_H
@@ -37,7 +37,7 @@
 #include <QProcess>
 #include <QThread>
 #include <QWaitCondition>
-typedef std::shared_ptr<QProcess> QProcessPtr;
+using QProcessPtr = std::shared_ptr<QProcess>;
 
 #define HOOT_TEST_FINISHED "HOOT_TEST_FINISHED"
 
@@ -101,10 +101,10 @@ public:
    * @param waitTime - number of seconds to wait before reporting that a test took too long
    * @param outMutex - mutex for preserving output ordering to standard out
    * @param parallelJobs - JobQueue object that contains a set of jobs that can all be run in parallel
-   * @param serialJobs - JobQueue object (NULL for all threads but one) that contains a set of all jobs
+   * @param serialJobs - JobQueue object (nullptr for all threads but one) that contains a set of all jobs
    *  that cannot be run in parallel but must be run serially
    */
-  ProcessThread(bool showTestName, bool suppressFailureDetail, bool printDiff, double waitTime, QMutex* outMutex, JobQueue* parallelJobs, JobQueue* serialJobs = NULL);
+  ProcessThread(bool showTestName, bool suppressFailureDetail, bool printDiff, double waitTime, QMutex* outMutex, JobQueue* parallelJobs, JobQueue* serialJobs = nullptr);
 
   /**
    * @brief run method for thread, called by ::start()
@@ -154,7 +154,8 @@ private:
   /** Shared pointer containing ownership of the process pointer from createProcess() */
   QProcessPtr _proc;
 };
-typedef std::shared_ptr<ProcessThread> ProcessThreadPtr;
+
+using ProcessThreadPtr = std::shared_ptr<ProcessThread>;
 
 /**
  * @brief The ProcessPool class that encapsulates the division of work amongs processes.  Tests

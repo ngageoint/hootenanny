@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef FQTREE_H
 #define FQTREE_H
@@ -57,10 +57,10 @@ public:
   {
     for (size_t i = 0; i < FQ_NODE_SIZE; ++i)
     {
-      _children[i] = 0;
+      _children[i] = nullptr;
       _childDistance[i] = 0;
     }
-    _next = 0;
+    _next = nullptr;
   }
 
   virtual ~FqNode()
@@ -74,9 +74,9 @@ public:
 
   void addChild(Node<KeyType, DataType>* n, short d)
   {
-    if (n != 0)
+    if (n != nullptr)
     {
-      if (_next != 0)
+      if (_next != nullptr)
       {
         _next->addChild(n, d);
       }
@@ -85,7 +85,7 @@ public:
         bool done = false;
         for (size_t i = 0; i < (FQ_NODE_SIZE) && !done; ++i)
         {
-          if (_children[i] == 0)
+          if (_children[i] == nullptr)
           {
             _children[i] = n;
             _childDistance[i] = d;
@@ -129,11 +129,11 @@ public:
   virtual size_t getChildCount() const
   {
     size_t result = 0;
-    if (_next == 0)
+    if (_next == nullptr)
     {
       for (size_t i = 0; i < FQ_NODE_SIZE; ++i)
       {
-        if (_children[i] != 0)
+        if (_children[i] != nullptr)
         {
           result++;
         }
@@ -181,9 +181,12 @@ public:
   FqTreeLayer(int bucketSize = 1, int depth = -1)
   {
     _bucketSize = bucketSize;
-    _callback = 0;
+    _callback = nullptr;
     _depth = depth;
     _distanceCount = 0;
+    _order = nullptr;
+    _values = nullptr;
+    _keys = nullptr;
   }
 
   virtual Leaf<KeyType, DataType>* buildLeaf(size_t start, size_t end)
@@ -210,7 +213,7 @@ public:
   {
     if (end - start == 0)
     {
-      return 0;
+      return nullptr;
     }
 
     while ((int)_q.size() <= depth)
@@ -263,9 +266,9 @@ public:
   void endBuild()
   {
     _distanceValues.clear();
-    _keys = 0;
-    _values = 0;
-    _order = 0;
+    _keys = nullptr;
+    _values = nullptr;
+    _order = nullptr;
   }
 
   /**
@@ -280,7 +283,7 @@ public:
     int di = _d[depth];
 
     const FqNode<KeyType, DataType>* fqn = dynamic_cast<const FqNode<KeyType, DataType>*>(n);
-    if (fqn != 0)
+    if (fqn != nullptr)
     {
       for (size_t i = 0; i < fqn->getChildCount(); ++i)
       {
@@ -295,7 +298,7 @@ public:
     else
     {
       const Leaf<KeyType, DataType>* leaf = dynamic_cast<const Leaf<KeyType, DataType>*>(n);
-      assert(leaf != 0);
+      assert(leaf != nullptr);
 
       _callback->findLeaf(leaf, result);
     }
@@ -429,7 +432,7 @@ public:
   FqTree(int depth = -1)
   {
     _depth = depth;
-    _root = 0;
+    _root = nullptr;
     _bucketSize = 2;
   }
 

@@ -19,19 +19,15 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2021 Maxar (http://www.maxar.com/)
  */
 #include "WayMatchStringMappingConverter.h"
 
 namespace hoot
 {
-
-WayMatchStringMappingConverter::WayMatchStringMappingConverter()
-{
-}
 
 WaySublineMatchStringPtr WayMatchStringMappingConverter::toWaySublineMatchString(
   WayMatchStringMappingPtr mapping)
@@ -76,7 +72,7 @@ WaySublineMatchStringPtr WayMatchStringMappingConverter::toWaySublineMatchString
     WaySubline tmp2 = sub2;
     tmp1.ensureForwards();
     tmp2.ensureForwards();
-    coll.push_back(WaySublineMatch(tmp1, tmp2, reversed));
+    coll.emplace_back(tmp1, tmp2, reversed);
 
     wl1 = sub1.getEnd();
     wl2 = sub2.getEnd();

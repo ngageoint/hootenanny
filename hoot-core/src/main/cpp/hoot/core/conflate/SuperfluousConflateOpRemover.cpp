@@ -19,23 +19,23 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "SuperfluousConflateOpRemover.h"
 
 // hoot
+#include <hoot/core/conflate/matching/MatchFactory.h>
+#include <hoot/core/criterion/LinearCriterion.h>
+#include <hoot/core/criterion/PointCriterion.h>
+#include <hoot/core/criterion/PolygonCriterion.h>
+#include <hoot/core/ops/MapCleaner.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/criterion/PointCriterion.h>
-#include <hoot/core/criterion/LinearCriterion.h>
-#include <hoot/core/criterion/PolygonCriterion.h>
-#include <hoot/core/conflate/matching/MatchFactory.h>
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/visitors/ElementVisitor.h>
-#include <hoot/core/ops/MapCleaner.h>
 
 namespace hoot
 {
@@ -45,13 +45,13 @@ QSet<QString> SuperfluousConflateOpRemover::_geometryTypeClassNameCache;
 void SuperfluousConflateOpRemover::removeSuperfluousOps()
 {
   // get all crits involved in the current matcher configuration
-  const QSet<QString> matcherCrits = _getMatchCreatorGeometryTypeCrits();
+  const QSet<QString> matcherCrits = getMatchCreatorGeometryTypeCrits();
 
   QSet<QString> removedOps;
 
-  // for each of the conflate pre/post and map cleaner transforms (if conflate pre/post specifies
-  // MapCleaner) filter out any that aren't associated with the same ElementCriterion as the ones
-  // associated with the matchers
+  // For each of the conflate pre/post and map cleaner transforms (if conflate pre/post specifies
+  // MapCleaner), filter out any that aren't associated with the same ElementCriterion as the ones
+  // associated with the matchers.
 
   const QStringList modifiedPreConflateOps =
     _filterOutUnneededOps(
@@ -82,7 +82,7 @@ void SuperfluousConflateOpRemover::removeSuperfluousOps()
     }
   }
 
-  if (removedOps.size() > 0)
+  if (!removedOps.empty())
   {
     QStringList removedOpsList = removedOps.values();
     qSort(removedOpsList);
@@ -185,11 +185,11 @@ QStringList SuperfluousConflateOpRemover::_filterOutUnneededOps(
   return modifiedOps;
 }
 
-QSet<QString> SuperfluousConflateOpRemover::_getMatchCreatorGeometryTypeCrits()
+QSet<QString> SuperfluousConflateOpRemover::getMatchCreatorGeometryTypeCrits(const bool addParents)
 {
   QSet<QString> matcherCrits;
 
-  // get all of the matchers from our current config
+  // Get all of the matchers from our current config.
   std::vector<std::shared_ptr<MatchCreator>> matchCreators =
       MatchFactory::getInstance().getCreators();
   for (std::vector<std::shared_ptr<MatchCreator>>::const_iterator it = matchCreators.begin();
@@ -202,7 +202,7 @@ QSet<QString> SuperfluousConflateOpRemover::_getMatchCreatorGeometryTypeCrits()
 
     // Technically not sure we'd have to error out here, but it will be good to know if any
     // matchers weren't configured with crits to keep conflate bugs from sneaking in over time.
-    if (crits.size() == 0)
+    if (crits.empty())
     {
       throw HootException(
         "Match creator: " + matchCreator->getName() +
@@ -230,33 +230,36 @@ QSet<QString> SuperfluousConflateOpRemover::_getMatchCreatorGeometryTypeCrits()
       // add the crit
       matcherCrits.insert(critStr);
 
-      // also add any generic geometry crits the crit inherits from
-
-      const QStringList pointCrits =
-        GeometryTypeCriterion::getCriterionClassNamesByGeometryType(
-          GeometryTypeCriterion::GeometryType::Point);
-      LOG_VART(pointCrits);
-      if (pointCrits.contains(critStr))
+      if (addParents)
       {
-        matcherCrits.insert(PointCriterion::className());
-      }
+        // also add any generic geometry crits the crit inherits from
 
-      const QStringList lineCrits =
-        GeometryTypeCriterion::getCriterionClassNamesByGeometryType(
-          GeometryTypeCriterion::GeometryType::Line);
-      LOG_VART(lineCrits);
-      if (lineCrits.contains(critStr))
-      {
-        matcherCrits.insert(LinearCriterion::className());
-      }
+        const QStringList pointCrits =
+          GeometryTypeCriterion::getCriterionClassNamesByGeometryType(
+            GeometryTypeCriterion::GeometryType::Point);
+        LOG_VART(pointCrits);
+        if (pointCrits.contains(critStr))
+        {
+          matcherCrits.insert(PointCriterion::className());
+        }
 
-      const QStringList polyCrits =
-        GeometryTypeCriterion::getCriterionClassNamesByGeometryType(
-          GeometryTypeCriterion::GeometryType::Polygon);
-      LOG_VART(polyCrits);
-      if (polyCrits.contains(critStr))
-      {
-        matcherCrits.insert(PolygonCriterion::className());
+        const QStringList lineCrits =
+          GeometryTypeCriterion::getCriterionClassNamesByGeometryType(
+            GeometryTypeCriterion::GeometryType::Line);
+        LOG_VART(lineCrits);
+        if (lineCrits.contains(critStr))
+        {
+          matcherCrits.insert(LinearCriterion::className());
+        }
+
+        const QStringList polyCrits =
+          GeometryTypeCriterion::getCriterionClassNamesByGeometryType(
+            GeometryTypeCriterion::GeometryType::Polygon);
+        LOG_VART(polyCrits);
+        if (polyCrits.contains(critStr))
+        {
+          matcherCrits.insert(PolygonCriterion::className());
+        }
       }
     }
   }

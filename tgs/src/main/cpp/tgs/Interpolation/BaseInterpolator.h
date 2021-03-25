@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef BASEINTERPOLATOR_H
 #define BASEINTERPOLATOR_H
@@ -41,24 +41,24 @@ public:
 
   BaseInterpolator();
 
-  virtual ~BaseInterpolator() {}
+  virtual ~BaseInterpolator() = default;
 
-  virtual double estimateError();
+  double estimateError() override;
 
-  virtual void readInterpolator(QIODevice& is);
+  void readInterpolator(QIODevice& is) override;
 
-  virtual void setData(const std::shared_ptr<const DataFrame>& df);
+  void setData(const std::shared_ptr<const DataFrame>& df) override;
 
-  virtual void setDependentColumns(const std::vector<std::string>& labels);
+  void setDependentColumns(const std::vector<std::string>& labels) override;
 
-  virtual void setIndependentColumns(const std::vector<std::string>& labels);
+  void setIndependentColumns(const std::vector<std::string>& labels) override;
 
-  virtual void writeInterpolator(QIODevice& os) const;
+  void writeInterpolator(QIODevice& os) const override;
 
-  virtual void setMaxAllowedPerLoopOptimizationIterations(int maxIterations)
+  void setMaxAllowedPerLoopOptimizationIterations(int maxIterations) override
   { _maxAllowedPerLoopOptimizationIterations = maxIterations; }
 
-  virtual int getMaxOptimizationLoopIterations() { return _iterations; }
+  int getMaxOptimizationLoopIterations() override { return _iterations; }
 
 protected:
 

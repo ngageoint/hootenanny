@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "RelationToMultiPolygonConverter.h"
 
@@ -39,11 +39,11 @@
 #include <geos/util/TopologyException.h>
 
 // hoot
+#include <hoot/core/criterion/AreaCriterion.h>
 #include <hoot/core/elements/ElementProvider.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/criterion/AreaCriterion.h>
 
 // tgs
 #include <tgs/DisjointSet/DisjointSetMap.h>
@@ -271,7 +271,7 @@ void RelationToMultiPolygonConverter::_classifyRings(
   std::vector<LinearRing*>& outers) const
 {
   // Empty == nothing else to do
-  if (noRole.size() == 0)
+  if (noRole.empty())
   {
     return;
   }
@@ -281,7 +281,7 @@ void RelationToMultiPolygonConverter::_classifyRings(
     inners.size());
 
   // One polygon, no inners or outers
-  if (noRole.size() == 1 && inners.size() == 0 && outers.size() == 0)
+  if (noRole.size() == 1 && inners.empty() && outers.empty())
   {
     outers.push_back(noRole[0]);
     return;
@@ -343,7 +343,7 @@ void RelationToMultiPolygonConverter::_classifyRings(
   }
 
   // Now go through the things we didn't find.
-  while (notFound.size() > 0)
+  while (!notFound.empty())
   {
     if (notFound.size() == 1)
     {
@@ -449,7 +449,7 @@ void RelationToMultiPolygonConverter::_createRings(
   }
   LOG_VART(partials.size());
 
-  if (partials.size() > 0)
+  if (!partials.empty())
   {
     _createRingsFromPartials(partials, rings);
   }

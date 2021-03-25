@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef SQLBULKDELETE_H
 #define SQLBULKDELETE_H
@@ -47,15 +47,15 @@ public:
 
   SqlBulkDelete(const QSqlDatabase& db, const QString& tableName);
 
-  virtual ~SqlBulkDelete();
+  ~SqlBulkDelete();
 
-  virtual void flush();
+  void flush() override;
 
-  virtual int getPendingCount() const { return _pending.size(); }
+  int getPendingCount() const override { return _pending.size(); }
 
-  virtual QString getTableName() const { return _tableName; }
+  QString getTableName() const override { return _tableName; }
 
-  virtual void deleteElement(const long id);
+  void deleteElement(const long id) override;
 
 private:
 

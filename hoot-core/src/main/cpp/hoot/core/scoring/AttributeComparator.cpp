@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "AttributeComparator.h"
@@ -138,9 +138,9 @@ double AttributeComparator::compareMaps()
     if (scores.size() > 1)
     {
       double v = 0;
-      for (size_t i = 0; i < scores.size(); i++)
+      for (size_t j = 0; j < scores.size(); j++)
       {
-        v += (scores[i] - _mean) * (scores[i] - _mean);
+        v += (scores[j] - _mean) * (scores[j] - _mean);
       }
       _s = sqrt(v / (scores.size() - 1));
 

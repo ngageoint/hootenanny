@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef HTTP_TEST_SERVER_H
@@ -79,7 +79,8 @@ private:
   std::map<std::string, std::string> _header_values;
 };
 
-typedef std::shared_ptr<HttpResponse> HttpResponsePtr;
+/** Type def for shared pointer */
+using HttpResponsePtr = std::shared_ptr<HttpResponse>;
 
 /**
  * @brief The HttpConnection class encapsulates an HTTP connection on a socket
@@ -87,8 +88,6 @@ typedef std::shared_ptr<HttpResponse> HttpResponsePtr;
 class HttpConnection : public std::enable_shared_from_this<HttpConnection>
 {
 public:
-  /** Type def for shared pointer */
-  typedef std::shared_ptr<HttpConnection> HttpConnectionPtr;
   /** Constructor */
   HttpConnection(boost::asio::io_service& io_service) : _socket(io_service) { }
   /** Socket accessor */
@@ -100,6 +99,9 @@ private:
   /** Socket for this HTTP connection */
   boost::asio::ip::tcp::socket _socket;
 };
+
+/** Type def for shared pointer */
+using HttpConnectionPtr = std::shared_ptr<HttpConnection>;
 
 /**
  * @brief The HttpTestServer class is a base class that provides simple HTTP server capabilites.
@@ -131,11 +133,11 @@ protected:
    * @param connection Current connection
    * @return True if the server should continue to listen for connections, false to stop
    */
-  virtual bool respond(HttpConnection::HttpConnectionPtr& connection);
+  virtual bool respond(HttpConnectionPtr& connection);
   /** Parset the headers and body of the HTTP request */
-  void parse_request(HttpConnection::HttpConnectionPtr& connection);
+  void parse_request(HttpConnectionPtr& connection);
   /** Write the response back to the requestor, called by the overridden respond() function */
-  void write_response(HttpConnection::HttpConnectionPtr& connection, const std::string& response);
+  void write_response(HttpConnectionPtr& connection, const std::string& response);
   /** Get the value of the interupt flag */
   bool get_interupt() { return _interupt; }
   /** Shutdown the thread but don't wait on it */
@@ -151,7 +153,7 @@ private:
   /** Begin the process of accepting an HTTP connection */
   void start_accept();
   /** Handle the HTTP connection and calls the overridden respond() function */
-  void handle_accept(HttpConnection::HttpConnectionPtr new_connection, const boost::system::error_code& error);
+  void handle_accept(HttpConnectionPtr new_connection, const boost::system::error_code& error);
   /** Parse out the value of the "Content-Length" HTTP header */
   long parse_content_length(const std::string& headers);
   /** IO Service object */

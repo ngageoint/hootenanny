@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016 Maxar (http://www.maxar.com/)
  */
 
 /*
@@ -39,7 +39,7 @@ gifd.rules = {
     ['F_CODE','AF010','raw:F_CODE','AF010'], // Chimney/Smokestack
     ['F_CODE','AH010','raw:F_CODE','AH010'], // Bastion/Rampart/Fortification
     ['F_CODE','AH020','raw:F_CODE','AH020'], // Trench
-    ['F_CODE','AH050','raw:F_CODE','AH050'], // Fortification
+    ['F_CODE','AH050','military','bunker'], // Fortification
     ['F_CODE','AK050','sport','tennis'], // Tennis Court - Valid NFDD but not in TDS Spec
     ['F_CODE','AK123','raw:F_CODE','AK123'], // Park Bench
     ['F_CODE','AK124','raw:F_CODE','AK124'], // Picnic Table
@@ -470,6 +470,7 @@ gifd.rules = {
     'LC4':'mlc:tracked', // Load Class Type 4
     'LEG':'length', // Length/Diameter in Meters With Greater Precision
     'LEN_':'length', // Length/Diameter
+    'LEN':'length', // Length/Diameter
     'LNU':'length:interior_useable', // Useable Length
     'LOG':'gradient:length', // Length of Gradient
     'LRP':'raw:LRP', // Length of Range With greater than 1 NM resolution

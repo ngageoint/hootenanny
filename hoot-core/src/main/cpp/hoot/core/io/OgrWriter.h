@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef OGRWRITER_H
@@ -63,7 +63,7 @@ public:
   static QString className() { return "hoot::OgrWriter"; }
 
   OgrWriter();
-  virtual ~OgrWriter() = default;
+  ~OgrWriter() = default;
 
   /**
    * @brief setCacheCapacity
@@ -77,9 +77,9 @@ public:
   void setCacheCapacity(const unsigned long maxNodes, const unsigned long maxWays,
                         const unsigned long maxRelations);
 
-  void close();
+  void close() override;
 
-  virtual bool isSupported(const QString& url) override;
+  bool isSupported(const QString& url) override;
 
   // Init the translator
   void initTranslator();
@@ -92,9 +92,9 @@ public:
 
   void setCache(ElementCachePtr cachePtr) { _elementCache = cachePtr; }
 
-  virtual void open(const QString& url) override;
+  void open(const QString& url) override;
 
-  virtual void setConfiguration(const Settings& conf) override;
+  void setConfiguration(const Settings& conf) override;
 
   void setCreateAllLayers(bool createAll) { _createAllLayers = createAll; }
 
@@ -118,22 +118,20 @@ public:
   void writeTranslatedFeature(const std::shared_ptr<geos::geom::Geometry>& g,
                               const std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature>& tf);
 
-  virtual void write(const ConstOsmMapPtr& map) override;
+  void write(const ConstOsmMapPtr& map) override;
 
-  virtual void finalizePartial() override;
+  void finalizePartial() override;
 
-  virtual void writePartial(const std::shared_ptr<const hoot::Node>&) override;
+  void writePartial(const ConstNodePtr& node) override;
 
-  virtual void writePartial(const std::shared_ptr<const hoot::Way>&) override;
+  void writePartial(const ConstWayPtr& way) override;
 
-  virtual void writePartial(const std::shared_ptr<const hoot::Relation>&) override;
+  void writePartial(const ConstRelationPtr& relation) override;
 
-  virtual void writeElement(ElementPtr& element) override;
-
-  virtual void writeElement(ElementPtr& element, bool debug);
+  void writeElement(ElementPtr& element) override;
 
   //leaving this empty for the time being
-  virtual QString supportedFormats() override { return ""; }
+  QString supportedFormats() override { return ""; }
 
 protected:
 

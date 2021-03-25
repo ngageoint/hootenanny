@@ -19,16 +19,16 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef WAYSUBLINE_H
 #define WAYSUBLINE_H
 
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/algorithms/linearreference/WayLocation.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/geometry/GeometryToElementConverter.h>
 
 namespace hoot
@@ -39,14 +39,14 @@ class ConstElementVisitor;
 /**
  * Represents a section of a way.
  *
- * If the start is after the end the WaySubline is considered to be backwards. This can be handy
+ * If the start is after the end, the WaySubline is considered to be backwards. This can be handy
  * when representing strings of ways.
  */
 class WaySubline
 {
 public:
 
-  WaySubline();
+  WaySubline() = default;
   WaySubline(const WayLocation& start, const WayLocation& end);
   WaySubline(const WaySubline& from);
   WaySubline(const WaySubline& from, const ConstOsmMapPtr &newMap);
@@ -114,18 +114,14 @@ public:
   QString toString() const;
 
   /**
-   * Create a new way that represents this subline and return it. This way will not be added to a
-   * map.
-   */
-  /**
    * @brief toWay - Create a new way that represents this subline and return it. This way will not
    *  be added to a map.
    * @param map - pointer to OsmMap object
    * @param nf - pointer (if available) to NodeFactory object
    * @param reuse - flag for reusing way id or getting a new one from the map
-   * @return
+   * @return the created way
    */
-  WayPtr toWay(const OsmMapPtr& map, GeometryToElementConverter::NodeFactory* nf = 0,
+  WayPtr toWay(const OsmMapPtr& map, GeometryToElementConverter::NodeFactory* nf = nullptr,
                bool reuse = false) const;
 
   /**

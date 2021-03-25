@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef MULTI_USE_CRITERION_H
 #define MULTI_USE_CRITERION_H
@@ -43,17 +43,17 @@ public:
   static QString className() { return "hoot::MultiUseCriterion"; }
 
   MultiUseCriterion() = default;
-  virtual ~MultiUseCriterion() = default;
+  ~MultiUseCriterion() = default;
 
-  virtual bool isSatisfied(const ConstElementPtr& e) const override;
+  bool isSatisfied(const ConstElementPtr& e) const override;
 
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new MultiUseCriterion()); }
+  ElementCriterionPtr clone() override { return ElementCriterionPtr(new MultiUseCriterion()); }
 
-  virtual QString getDescription() const { return "Identifies features with multiple purposes"; }
+  QString getDescription() const override { return "Identifies features with multiple purposes"; }
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 };
 
 }

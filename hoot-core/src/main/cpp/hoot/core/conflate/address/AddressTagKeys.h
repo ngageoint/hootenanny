@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef ADDRESS_TAG_KEYS_H
 #define ADDRESS_TAG_KEYS_H
@@ -39,7 +39,7 @@ namespace hoot
 
 class AddressTagKeys;
 
-typedef std::shared_ptr<AddressTagKeys> AddressTagKeysPtr;
+using AddressTagKeysPtr = std::shared_ptr<AddressTagKeys>;
 
 /**
  * Allows for mapping an address part type to a range of valid OSM tag keys

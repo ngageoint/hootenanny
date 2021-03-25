@@ -19,18 +19,18 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/elements/ElementIdSynchronizer.h>
-#include <hoot/core/util/StringUtils.h>
 #include <hoot/core/io/IoUtils.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -47,18 +47,16 @@ public:
 
   static QString className() { return "hoot::SynchronizeElementIdsCmd"; }
 
-  SynchronizeElementIdsCmd()
-  {
-  }
+  SynchronizeElementIdsCmd() = default;
 
-  virtual QString getName() const override { return "sync-element-ids"; }
+  QString getName() const override { return "sync-element-ids"; }
 
-  virtual QString getDescription() const override
-  { return "Copies element IDs from one map to another for identical elements (experimental)"; }
+  QString getDescription() const override
+  { return "Copies IDs for identical elements from one map to another (experimental)"; }
 
-  virtual QString getType() const { return "rnd"; }
+  QString getType() const override { return "rnd"; }
 
-  virtual int runSimple(QStringList& args) override
+  int runSimple(QStringList& args) override
   {
     QElapsedTimer timer;
     timer.start();

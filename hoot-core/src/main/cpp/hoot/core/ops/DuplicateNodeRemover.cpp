@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "DuplicateNodeRemover.h"
@@ -40,6 +40,7 @@
 #include <hoot/core/elements/TagUtils.h>
 #include <hoot/core/schema/ExactTagDifferencer.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
+#include <hoot/core/conflate/ConflateUtils.h>
 
 // Qt
 #include <QTime>
@@ -119,6 +120,7 @@ void DuplicateNodeRemover::apply(std::shared_ptr<OsmMap>& map)
     {
       continue;
     }
+
     // We don't need to check for existence of the nodes parent here, b/c if it ends up being a dupe
     // we'll replace it with another node instead of removing it from the map.
     cph.addPoint(n->getX(), n->getY(), n->getId());
@@ -169,12 +171,26 @@ void DuplicateNodeRemover::apply(std::shared_ptr<OsmMap>& map)
             LOG_VART(calcdDistanceSquared);
             if (distanceSquared > calcdDistanceSquared)
             {
-              // if the geographic bounds are not specified.
-              if (!_bounds)
+              // Since this class operates on elements with generic types, an additional check must
+              // be performed here during conflation to enure we don't modify any element not
+              // associated with and active conflate matcher in the current conflation
+              // configuration.
+              if (_conflateInfoCache &&
+                  (!_conflateInfoCache->elementCanBeConflatedByActiveMatcher(n1, className()) ||
+                   !_conflateInfoCache->elementCanBeConflatedByActiveMatcher(n2, className())))
+              {
+                LOG_TRACE(
+                  "Skipping processing of " << n1->getElementId() << " and " <<
+                  n2->getElementId() << " at least one of them cannot be conflated by any " <<
+                  "actively configured conflate matcher...");
+                replace = false;
+              }
+              // if the geographic bounds are not specified
+              else if (!_bounds)
               {
                 replace = true;
               }
-              // if the geographic bounds are specified, then make sure both points are inside.
+              // If the geographic bounds are specified, then make sure both points are inside.
               else
               {
                 ConstNodePtr node1 = wgs84->getNode(matchIdI);

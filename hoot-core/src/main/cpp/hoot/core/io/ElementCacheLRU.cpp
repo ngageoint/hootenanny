@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include <hoot/core/elements/Element.h>
@@ -150,25 +150,18 @@ bool ElementCacheLRU::hasMoreElements()
 
 ElementPtr ElementCacheLRU::readNextElement()
 {
-  ElementPtr returnElement;
+  ConstElementPtr returnElement;
 
   if ( hasMoreElements() == true )
   {
     if ( _nodesIter != _nodes.end() )
-    {
-      *returnElement = *getNextNode();
-    }
+      returnElement = std::dynamic_pointer_cast<const Element>(getNextNode());
     else if ( _waysIter != _ways.end() )
-    {
-      *returnElement = *getNextWay();
-    }
+      returnElement = std::dynamic_pointer_cast<const Element>(getNextWay());
     else
-    {
-      *returnElement = *getNextRelation();
-    }
+      returnElement = std::dynamic_pointer_cast<const Element>(getNextRelation());
   }
-
-  return returnElement;
+  return std::const_pointer_cast<Element>(returnElement);
 }
 
 void ElementCacheLRU::writeElement(ElementPtr& element)
@@ -352,12 +345,12 @@ ConstElementPtr ElementCacheLRU::getElement(const ElementId& eid) const
 // This const function kind of defeats the purpose of the LRU cache,
 // but it's necessary to conform to the interface. It should call
 // _updateNodeAccess(id) - but can't because of const
-const ConstNodePtr ElementCacheLRU::getNode(long id) const
+ConstNodePtr ElementCacheLRU::getNode(long id) const
 {
   return _nodes.find(id)->second.first;
 }
 
-const NodePtr ElementCacheLRU::getNode(long id)
+NodePtr ElementCacheLRU::getNode(long id)
 {
   _updateNodeAccess(id);
   return std::const_pointer_cast<Node>(_nodes.find(id)->second.first);
@@ -366,12 +359,12 @@ const NodePtr ElementCacheLRU::getNode(long id)
 // This const function kind of defeats the purpose of the LRU cache,
 // but it's necessary to conform to the interface. It should call
 // _updateWayAccess - but can't because of const
-const ConstWayPtr ElementCacheLRU::getWay(long id) const
+ConstWayPtr ElementCacheLRU::getWay(long id) const
 {
   return _ways.find(id)->second.first;
 }
 
-const WayPtr ElementCacheLRU::getWay(long id)
+WayPtr ElementCacheLRU::getWay(long id)
 {
   _updateWayAccess(id);
   return std::const_pointer_cast<Way>(_ways.find(id)->second.first);
@@ -380,12 +373,12 @@ const WayPtr ElementCacheLRU::getWay(long id)
 // This const function kind of defeats the purpose of the LRU cache,
 // but it's necessary to conform to the interface. It should call
 // _updateRelationAccess - but can't becuase of const
-const ConstRelationPtr ElementCacheLRU::getRelation(long id) const
+ConstRelationPtr ElementCacheLRU::getRelation(long id) const
 {
   return _relations.find(id)->second.first;
 }
 
-const RelationPtr ElementCacheLRU::getRelation(long id)
+RelationPtr ElementCacheLRU::getRelation(long id)
 {
   _updateRelationAccess(id);
   return std::const_pointer_cast<Relation>(_relations.find(id)->second.first);

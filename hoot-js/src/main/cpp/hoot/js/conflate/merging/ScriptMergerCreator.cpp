@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "ScriptMergerCreator.h"
 
@@ -63,7 +63,7 @@ bool ScriptMergerCreator::createMergers(const MatchSet& matches, vector<MergerPt
     //LOG_VART(m->toString());
     std::shared_ptr<const ScriptMatch> sm = dynamic_pointer_cast<const ScriptMatch>(m);
     // check to make sure all the input matches are script matches
-    if (sm == 0)
+    if (sm == nullptr)
     {
       // return an empty result
       LOG_TRACE("Match invalid; skipping merge: " << m->toString());
@@ -124,9 +124,9 @@ bool ScriptMergerCreator::createMergers(const MatchSet& matches, vector<MergerPt
 vector<CreatorDescription> ScriptMergerCreator::getAllCreators() const
 {
   CreatorDescription d;
-  d.className = className();
-  d.description = "Generates mergers used in Generic Conflation";
-  d.experimental = false;
+  d.setClassName(className());
+  d.setDescription("Generates mergers used in Generic Conflation");
+  d.setExperimental(false);
   vector<CreatorDescription> result;
   result.push_back(d);
 

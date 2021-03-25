@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "CalculateAreaForStatsVisitor.h"
 
@@ -52,8 +52,11 @@ Meters CalculateAreaForStatsVisitor::getArea(const OsmMapPtr& map, ElementPtr e)
 void CalculateAreaForStatsVisitor::visit(const ConstElementPtr& e)
 {
   std::shared_ptr<Geometry> g =
-    ElementToGeometryConverter(_map->shared_from_this()).convertToGeometry(e, true, true);
-  _total += g->getArea();
+    ElementToGeometryConverter(_map->shared_from_this()).convertToGeometry(e, false, true);
+  if (!g->isEmpty())
+  {
+    _total += g->getArea();
+  }
 }
 
 }

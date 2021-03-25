@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef HOOTEXCEPTION_H
@@ -46,19 +46,19 @@ public:
 
   static QString className() { return "hoot::HootException"; }
 
-  HootException() { }
+  HootException() = default;
   HootException(const char* str) { _what = QString::fromUtf8(str); }
   HootException(const std::string& str) { _what = QString::fromStdString(str); }
   HootException(QString str) { _what = str; }
   HootException(const HootException& e) { _what = e._what; }
-  virtual ~HootException() throw() {}
+  virtual ~HootException() throw() = default;
 
   virtual HootException* clone() const { return new HootException(*this); }
 
   virtual QString getName() const { return className(); }
 
   const QString& getWhat() const { return _what; }
-  virtual const char* what() const throw() { _tmp = _what.toLatin1(); return _tmp.constData(); }
+  const char* what() const throw() override { _tmp = _what.toLatin1(); return _tmp.constData(); }
 
 private:
 
@@ -95,7 +95,7 @@ class HootExceptionThrower
 {
 public:
 
-  typedef void (*ThrowMethod)(HootException* e);
+  using ThrowMethod = void(*)(HootException* e);
 
   static HootExceptionThrower& getInstance();
 
@@ -185,6 +185,7 @@ HOOT_DEFINE_EXCEPTION(NeedsReviewException)
 HOOT_DEFINE_EXCEPTION(UnsupportedException)
 HOOT_DEFINE_EXCEPTION_STR(RecursiveComplexityException, "RecursiveComplexityException")
 HOOT_DEFINE_EXCEPTION_STR(NotImplementedException, "Not Implemented")
+HOOT_DEFINE_EXCEPTION_STR(EmptyMapInputException, "Empty map input.")
 
 }
 

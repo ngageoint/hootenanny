@@ -19,11 +19,11 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef HAUSDORFFDISTANCEMATCHER_H
 #define HAUSDORFFDISTANCEMATCHER_H
@@ -48,16 +48,16 @@ public:
   static QString className() { return "hoot::HausdorffDistanceExtractor"; }
 
   HausdorffDistanceExtractor() = default;
-  virtual ~HausdorffDistanceExtractor() = default;
+  ~HausdorffDistanceExtractor() = default;
 
-  virtual double distance(const OsmMap& map, const std::shared_ptr<const Element>& target,
+  double distance(const OsmMap& map, const std::shared_ptr<const Element>& target,
     const std::shared_ptr<const Element>& candidate) const override;
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const { return HausdorffDistanceExtractor::className(); }
+  QString getClassName() const override { return HausdorffDistanceExtractor::className(); }
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Calculates the Hausdorff distance between two features"; }
 };
 

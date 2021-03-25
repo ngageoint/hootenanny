@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "FrechetDistance.h"
 
@@ -35,9 +35,9 @@
 #include <hoot/core/algorithms/DirectionFinder.h>
 #include <hoot/core/algorithms/WayHeading.h>
 #include <hoot/core/algorithms/linearreference/LocationOfPoint.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/ops/CopyMapSubsetOp.h>
 #include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/geometry/ElementToGeometryConverter.h>
 
 using namespace geos::geom;
 using namespace std;
@@ -248,7 +248,7 @@ Meters FrechetDistance::distance()
 frechet_subline FrechetDistance::maxSubline(Meters maxDistance)
 {
   vector<frechet_subline> frechet = matchingSublines(maxDistance);
-  if (frechet.size() > 0)
+  if (!frechet.empty())
     return frechet[0];
   return frechet_subline();
 }
@@ -307,22 +307,22 @@ vector<frechet_subline> FrechetDistance::matchingSublines(Meters maxDistance)
     //  Iterate through the matrix from the start position
     while (r != rows && c != cols)
     {
-      Meters max_frechet = 0.0;
+      Meters maximum = 0.0;
       //  Check for the next move
       if (r == rows - 1 && c == cols -1)
         break;
       else if (r == rows - 1)
-        advanceAndCheckColumn(rows, cols, r, c, max_frechet);
+        advanceAndCheckColumn(rows, cols, r, c, maximum);
       else if (c == cols - 1)
-        advanceAndCheckRow(rows, cols, r, c, max_frechet);
+        advanceAndCheckRow(rows, cols, r, c, maximum);
       else if (_matrix[r + 1][c + 1] <= _matrix[r + 1][c] && _matrix[r + 1][c + 1] <= _matrix[r][c + 1])
-        advanceAndCheckBoth(rows, cols, r, c, max_frechet);
+        advanceAndCheckBoth(rows, cols, r, c, maximum);
       else if (_matrix[r][c + 1] <= _matrix[r + 1][c] && _matrix[r][c + 1] <= _matrix[r + 1][c + 1])
-        advanceAndCheckColumn(rows, cols, r, c, max_frechet);
+        advanceAndCheckColumn(rows, cols, r, c, maximum);
       else if (_matrix[r + 1][c] <= _matrix[r][c + 1] && _matrix[r + 1][c] <= _matrix[r + 1][c + 1])
-        advanceAndCheckRow(rows, cols, r, c, max_frechet);
+        advanceAndCheckRow(rows, cols, r, c, maximum);
 
-      double value = (max_frechet > 0.0 ? min(_matrix[r][c], max_frechet) : _matrix[r][c]);
+      double value = (maximum > 0.0 ? min(_matrix[r][c], maximum) : _matrix[r][c]);
       //  Check that the distance is less than the max distance in order to include this node
       if (value < maxDistance)
       {
@@ -350,7 +350,7 @@ vector<frechet_subline> FrechetDistance::matchingSublines(Meters maxDistance)
       m = sub[sub.size() - 1];
     }
     if (sub.size() > 1)
-      results.push_back(frechet_subline(sub.size(), sub));
+      results.emplace_back(sub.size(), sub);
   }
 
   sort(results.begin(), results.end(), sort_sublines);

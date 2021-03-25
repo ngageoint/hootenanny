@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef SCRIPT_SCHEMA_TRANSLATOR_H
 #define SCRIPT_SCHEMA_TRANSLATOR_H
@@ -73,7 +73,7 @@ public:
   /**
    * String containing the regexp to use for filtering the layer names.
    */
-  virtual const QString getLayerNameFilter() { return "."; }
+  virtual QString getLayerNameFilter() { return "."; }
 
   /**
    * lower order values make the script engine get evaluated earlier.
@@ -129,7 +129,7 @@ protected:
   virtual void _translateToOsm(Tags& tags, const char *layerName, const char* geomType) = 0;
 };
 
-typedef std::shared_ptr<ScriptSchemaTranslator> ScriptSchemaTranslatorPtr;
+using ScriptSchemaTranslatorPtr = std::shared_ptr<ScriptSchemaTranslator>;
 
 }
 

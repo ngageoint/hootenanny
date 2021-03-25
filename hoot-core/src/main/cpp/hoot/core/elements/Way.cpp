@@ -19,20 +19,20 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "Way.h"
 
 // Hoot
-#include <hoot/core/elements/ConstElementVisitor.h>
-#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/elements/Node.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/util/CollectionUtils.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 
 // Geos
 #include <geos/geom/CoordinateSequenceFactory.h>
@@ -40,10 +40,10 @@
 #include <geos/geom/LinearRing.h>
 #include <geos/geom/LineString.h>
 #include <geos/geom/Polygon.h>
-using namespace geos::geom;
 
 #include <tgs/StreamUtils.h>
 
+using namespace geos::geom;
 using namespace std;
 
 namespace hoot
@@ -497,7 +497,7 @@ QSet<long> Way::sharedNodeIds(const Way& other) const
 
 bool Way::hasSharedNode(const Way& other) const
 {
-  return sharedNodeIds(other).size() > 0;
+  return !sharedNodeIds(other).empty();
 }
 
 }

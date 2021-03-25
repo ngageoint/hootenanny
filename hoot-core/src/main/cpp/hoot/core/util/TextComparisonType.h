@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef TEXT_COMPARISON_TYPE_H
 #define TEXT_COMPARISON_TYPE_H
@@ -44,13 +44,13 @@ class TextComparisonType
 
 public:
 
-  typedef enum Type
+  enum Type
   {
     EqualTo = 0,
     Contains,
     StartsWith,
     EndsWith
-  } Type;
+  };
 
   TextComparisonType() : _type(EqualTo) {}
   TextComparisonType(Type type) : _type(type) {}

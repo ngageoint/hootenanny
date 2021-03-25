@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef CHANGESET_REPLACEMENT_CREATOR_ABSTRACT_H
 #define CHANGESET_REPLACEMENT_CREATOR_ABSTRACT_H
@@ -128,19 +128,19 @@ public:
   /**
    * @see ChangesetReplacement
    */
-  virtual void setChangesetOptions(
-    const bool printStats, const QString& statsOutputFile, const QString osmApiDbUrl);
+  void setChangesetOptions(const bool printStats, const QString& statsOutputFile,
+                           const QString osmApiDbUrl) override;
 
-  virtual int getNumChanges() const { return _numChanges; }
+  int getNumChanges() const  override{ return _numChanges; }
 
-  virtual void setFullReplacement(const bool full) { _fullReplacement = full; }
-  virtual void setBoundsInterpretation(const BoundsInterpretation& interpretation)
+  void setFullReplacement(const bool full) override { _fullReplacement = full; }
+  void setBoundsInterpretation(const BoundsInterpretation& interpretation) override
   { _boundsInterpretation = interpretation; }
-  virtual void setEnableWaySnapping(const bool enable) { _enableWaySnapping = enable; }
-  virtual void setChangesetId(const QString& id) { _changesetId = id; }
+  void setEnableWaySnapping(const bool enable) override { _enableWaySnapping = enable; }
+  void setChangesetId(const QString& id) override { _changesetId = id; }
 
-  virtual QString toString() const override
-    { return className().remove("hoot::"); }
+  QString toString() const override
+  { return className().remove("hoot::"); }
 
 protected:
 
@@ -168,9 +168,6 @@ protected:
   // controls cropping
   BoundsOptions _boundsOpts;
 
-  // Configuration options to pass to the filters in _replacementFilter.
-  Settings _replacementFilterOptions;
-
   // determines if the current changeset map generation pass contains only linear features
   bool _currentChangeDerivationPassIsLinear;
 
@@ -189,25 +186,6 @@ protected:
 
   // A list of linear geometry criterion classes to apply way snapping to.
   QStringList _linearFilterClassNames;
-
-  // One or more non-geometry criteria to be combined with the geometry type filters for the
-  // secondary input. Allows for further restriction of the secondary data that makes it to output.
-  std::shared_ptr<ChainCriterion> _replacementFilter;
-
-  // If true, the filters specified in _replacementFilter are AND'd together. Otherwise, they're OR'd
-  // together.
-  bool _chainReplacementFilters;
-
-  // One or more non-geometry criteria to be combined with the geometry type filters for the
-  // reference input. Allows for further restriction of the ref data that gets replaced.
-  std::shared_ptr<ChainCriterion> _retainmentFilter;
-
-  // If true, the filters specified in _retainmentFilter are AND'd together. Otherwise, they're OR'd
-  // together.
-  bool _chainRetainmentFilters;
-
-  // Configuration options to pass to the filters in _retainmentFilter.
-  Settings _retainmentFilterOptions;
 
   bool _enableWaySnapping;
 

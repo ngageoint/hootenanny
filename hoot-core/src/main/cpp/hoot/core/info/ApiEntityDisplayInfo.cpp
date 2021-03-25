@@ -19,37 +19,37 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "ApiEntityDisplayInfo.h"
 
 // Hoot
-#include <hoot/core/util/Log.h>
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/info/SingleStatistic.h>
-#include <hoot/core/info/NumericStatistic.h>
-#include <hoot/core/ops/OsmMapOperation.h>
-#include <hoot/core/criterion/ElementCriterion.h>
-#include <hoot/core/visitors/ElementVisitor.h>
-#include <hoot/core/algorithms/extractors/FeatureExtractor.h>
-#include <hoot/core/conflate/matching/MatchCreator.h>
-#include <hoot/core/conflate/merging/MergerCreator.h>
-#include <hoot/core/schema/TagMerger.h>
-#include <hoot/core/algorithms/string/StringDistance.h>
+#include <hoot/core/algorithms/WayJoiner.h>
 #include <hoot/core/algorithms/aggregator/ValueAggregator.h>
-#include <hoot/core/info/ApiEntityInfo.h>
-#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/algorithms/extractors/FeatureExtractor.h>
+#include <hoot/core/algorithms/string/StringDistance.h>
 #include <hoot/core/algorithms/subline-matching/SublineMatcher.h>
 #include <hoot/core/algorithms/subline-matching/SublineStringMatcher.h>
 #include <hoot/core/conflate/matching/Match.h>
+#include <hoot/core/conflate/matching/MatchCreator.h>
 #include <hoot/core/conflate/merging/Merger.h>
-#include <hoot/core/algorithms/WayJoiner.h>
+#include <hoot/core/conflate/merging/MergerCreator.h>
 #include <hoot/core/criterion/ConflatableElementCriterion.h>
+#include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/criterion/ElementCriterionConsumer.h>
+#include <hoot/core/info/ApiEntityInfo.h>
+#include <hoot/core/info/NumericStatistic.h>
+#include <hoot/core/info/SingleStatistic.h>
+#include <hoot/core/ops/OsmMapOperation.h>
+#include <hoot/core/schema/TagMerger.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/visitors/ElementVisitor.h>
 
 //  Qt
 #include <QTextStream>
@@ -65,7 +65,7 @@ class ApiEntityNameComparator
 {
 public:
 
-  ApiEntityNameComparator() {}
+  ApiEntityNameComparator() = default;
 
   bool operator()(const QString& name1, const QString& name2)
   {
@@ -414,15 +414,15 @@ QString ApiEntityDisplayInfo::_getApiEntitiesForMatchMergerCreators(
     {
       CreatorDescription description = *itr;
       LOG_VARD(description);
-      const QString name = description.className.replace("hoot::", "");
+      const QString name = description.getClassName().replace("hoot::", "");
       LOG_VARD(name);
       //this suppresses test and auxiliary rules files
       if (!name.endsWith("Test.js") && !name.endsWith("Rules.js"))
       {
         const int indentAfterName = maxNameSize - name.size();
         QString line = "  " + name + QString(indentAfterName, ' ');
-        line += description.description;
-        if (description.experimental)
+        line += description.getDescription();
+        if (description.getExperimental())
           line += " (experimental)";
         LOG_VARD(line);
         output.append(line);

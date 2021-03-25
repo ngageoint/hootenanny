@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2021 Maxar (http://www.maxar.com/)
  */
 #include "BBox.h"
 
@@ -47,7 +47,7 @@ BBox::BBox(const vector<double>& min, const vector<double>& max)
   _check();
 }
 
-BBox::BBox(Envelope envelope)
+BBox::BBox(const Envelope& envelope)
 {
   _min.reserve(2);
   _max.reserve(2);
@@ -64,7 +64,7 @@ BBox::~BBox()
   _max.clear();
 }
 
-bool BBox::in(vector<double> p)
+bool BBox::in(const vector<double>& p) const
 {
   if (p.size() < _min.size() || p.size() < _max.size())
   {
@@ -79,7 +79,7 @@ bool BBox::in(vector<double> p)
   return result;
 }
 
-bool BBox::in(BBox container)
+bool BBox::in(const BBox& container) const
 {
   bool result = true;
   for (uint i = 0; i < _min.size(); i++)
@@ -91,7 +91,7 @@ bool BBox::in(BBox container)
   return result;
 }
 
-bool BBox::intersects(BBox b)
+bool BBox::intersects(const BBox& b) const
 {
   bool result = true;
   for (uint i = 0; i < _min.size(); i++)
@@ -103,7 +103,7 @@ bool BBox::intersects(BBox b)
   return result;
 }
 
-double BBox::manhattanDistance(BBox b)
+double BBox::manhattanDistance(const BBox& b) const
 {
   if (intersects(b))
   {
@@ -121,7 +121,7 @@ double BBox::manhattanDistance(BBox b)
   return d;
 }
 
-QString BBox::toString()
+QString BBox::toString() const
 {
   QString result = "{ ";
   for (uint i = 0; i < _min.size(); i++)
@@ -132,7 +132,7 @@ QString BBox::toString()
   return result;
 }
 
-double BBox::getWidth(int d)
+double BBox::getWidth(int d) const
 {
   if (d > (int)_min.size() || d > (int)_max.size())
   {
@@ -141,7 +141,7 @@ double BBox::getWidth(int d)
   return _max[d] - _min[d];
 }
 
-void BBox::_check()
+void BBox::_check() const
 {
   for (uint i = 0; i < _min.size(); i++)
   {

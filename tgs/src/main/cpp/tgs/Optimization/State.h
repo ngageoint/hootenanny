@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef STATE_H
 #define STATE_H
@@ -39,7 +39,7 @@ namespace Tgs
 class State
 {
 public:
-  State();
+  State() : _score(0.0) { }
 
   double get(QString name) const { return _values[name]; }
 
@@ -62,8 +62,8 @@ private:
   QMap<QString, double> _values;
 };
 
-typedef std::shared_ptr<State> StatePtr;
-typedef std::shared_ptr<const State> ConstStatePtr;
+using StatePtr = std::shared_ptr<State>;
+using ConstStatePtr = std::shared_ptr<const State>;
 
 inline uint qHash(const ConstStatePtr& s)
 {

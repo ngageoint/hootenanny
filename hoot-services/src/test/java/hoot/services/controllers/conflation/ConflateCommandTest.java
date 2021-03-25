@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 package hoot.services.controllers.conflation;
 
@@ -252,14 +252,14 @@ public class ConflateCommandTest {
 
         Map<String, String> hoot2Opts = new HashMap<>();
 
-        hoot2Opts.put("HighwayMergeTagsOnly", "true");
+        hoot2Opts.put("GeometryLinearMergerDefault", "hoot::LinearSnapMerger");
         hoot2Opts.put("AddressAdditionalTagKeys", "[foo=bar,blim=blam]");
         conflateParams.setHoot2AdvOptions(hoot2Opts);
 
         conflateCommand = new ConflateCommandFactory().build(jobId, conflateParams, debugLevel, this.getClass());
         options = conflateCommand.getSubstitutionMap().get("HOOT_OPTIONS").toString();
         assertTrue(options.contains("\"address.additional.tag.keys=foo=bar;blim=blam\""));
-        assertTrue(options.contains("\"highway.merge.tags.only=true\""));
+        assertTrue(options.contains("\"geometry.linear.merger.default=hoot::LinearSnapMerger\""));
 
         // handles cleaning options...
         conflateParams.setCleaningOpts(Arrays.asList("DualHighwaySplitter"));

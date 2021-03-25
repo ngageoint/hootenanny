@@ -19,24 +19,24 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "MapProjector.h"
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/algorithms/WayHeading.h>
 #include <hoot/core/elements/Node.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/geometry/GeometryUtils.h>
-#include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 
 // GEOS
 #include <geos/geom/CoordinateFilter.h>
@@ -296,7 +296,7 @@ std::shared_ptr<OGRSpatialReference> MapProjector::createPlanarProjection(const 
 
   QString deg = QChar(0x00B0);
 
-  if (projs.size() == 0)
+  if (projs.empty())
   {
     throw HootException("No candidate planar projections are available.");
   }
@@ -345,7 +345,7 @@ std::shared_ptr<OGRSpatialReference> MapProjector::createPlanarProjection(const 
   Log::WarningLevel level = Log::Trace;
   LOG_VART(passingResults.size());
   LOG_VART(testResults.size());
-  if (passingResults.size() > 0)
+  if (!passingResults.empty())
   {
     bestIndex = _findBestScore(passingResults);
     LOG_VART(bestIndex);
@@ -355,7 +355,7 @@ std::shared_ptr<OGRSpatialReference> MapProjector::createPlanarProjection(const 
   {
     level = Log::Warn;
   }
-  else if (testResults.size() > 0)
+  else if (!testResults.empty())
   {
     LOG_WARN(errorMessage);
     bestIndex = _findBestScore(testResults);
@@ -417,7 +417,7 @@ bool MapProjector::_evaluateProjection(const OGREnvelope& env,
 
   std::shared_ptr<OGRCoordinateTransformation> t(
     OGRCreateCoordinateTransformation(wgs84.get(), srs.get()));
-  if (t.get() == 0)
+  if (t.get() == nullptr)
   {
     return false;
   }
@@ -511,7 +511,7 @@ Coordinate MapProjector::project(const Coordinate& c,
 {
   OGRCoordinateTransformation* t(OGRCreateCoordinateTransformation(srs1.get(), srs2.get()));
 
-  if (t == 0)
+  if (t == nullptr)
   {
     throw HootException(QString("Error creating transformation object: ") + CPLGetLastErrorMsg());
   }
@@ -536,7 +536,7 @@ void MapProjector::project(const std::shared_ptr<OsmMap>& map,
   std::shared_ptr<OGRSpatialReference> sourceSrs = map->getProjection();
   OGRCoordinateTransformation* t(OGRCreateCoordinateTransformation(sourceSrs.get(), ref.get()));
 
-  if (t == 0)
+  if (t == nullptr)
   {
     throw HootException(QString("Error creating transformation object: ") + CPLGetLastErrorMsg());
   }
@@ -591,7 +591,7 @@ void MapProjector::project(const std::shared_ptr<Geometry>& g,
 {
   OGRCoordinateTransformation* t(OGRCreateCoordinateTransformation(srs1.get(), srs2.get()));
 
-  if (t == 0)
+  if (t == nullptr)
   {
     throw HootException(QString("Error creating transformation object: ") + CPLGetLastErrorMsg());
   }
@@ -678,7 +678,7 @@ bool MapProjector::_scoreLessThan(const MapProjector::PlanarTestResult& p1,
 
 QString MapProjector::toWkt(OGRSpatialReference* srs)
 {
-  char* wkt = 0;
+  char* wkt = nullptr;
   srs->exportToWkt(&wkt);
   QString result = QString::fromUtf8(wkt);
   OGRFree(wkt);

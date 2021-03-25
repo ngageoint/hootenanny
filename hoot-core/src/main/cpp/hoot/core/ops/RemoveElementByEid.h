@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef REMOVEELEMENTBYEID_H
 #define REMOVEELEMENTBYEID_H
@@ -81,7 +81,7 @@ public:
    */
   RemoveElementByEid(ElementId eId, bool doCheck, bool removeNodeFully);
 
-  virtual ~RemoveElementByEid() = default;
+  ~RemoveElementByEid() = default;
 
   /**
    * @brief apply performs the removal operation
@@ -93,9 +93,9 @@ public:
    * @brief getClassName gest the name of the class
    * @return class name string
    */
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
   /**
    * @brief setElementId sets the id of the element to remove
@@ -137,7 +137,7 @@ public:
    */
   static void removeUnusedElementsOnly(OsmMapPtr map, ElementId eId);
 
-  virtual QString getDescription() const override
+  QString getDescription() const override
   { return "Removes a single element by element ID"; }
 
   void setRemoveNodeFully(bool remove) { _removeNodeFully = remove; }

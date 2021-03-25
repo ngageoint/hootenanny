@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef COOKIECUTTEROP_H
 #define COOKIECUTTEROP_H
@@ -47,22 +47,22 @@ public:
   static QString className() { return "hoot::CookieCutterOp"; }
 
   CookieCutterOp();
-  virtual ~CookieCutterOp() = default;
+  ~CookieCutterOp() = default;
 
-  virtual void apply(std::shared_ptr<OsmMap>& map) override;
+  void apply(std::shared_ptr<OsmMap>& map) override;
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
   void setAlpha(double alpha) { _alpha = alpha; }
   void setAlphaShapeBuffer(double buffer) { _alphaShapeBuffer = buffer; }
   void setCrop(bool crop) { _crop = crop; }
 
-  virtual QString getDescription() const override
+  QString getDescription() const override
   { return "Cookie cuts one dataset out of another"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

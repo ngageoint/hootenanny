@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef CONFLICTSNETWORKMATCHER_H
 #define CONFLICTSNETWORKMATCHER_H
@@ -57,24 +57,24 @@ public:
    * Always construct with create() to make a shared pointer.
    */
   ConflictsNetworkMatcher();
-  virtual ~ConflictsNetworkMatcher() = default;
+  ~ConflictsNetworkMatcher() = default;
 
   /**
    * Use this instead of a constructor.
    */
   static std::shared_ptr<ConflictsNetworkMatcher> create();
 
-  virtual double getMatchThreshold() const { return _matchThreshold; }
+  double getMatchThreshold() const override { return _matchThreshold; }
 
-  virtual void iterate();
+  void iterate() override;
 
-  virtual void matchNetworks(ConstOsmMapPtr map, OsmNetworkPtr n1, OsmNetworkPtr n2);
+  void matchNetworks(ConstOsmMapPtr map, OsmNetworkPtr n1, OsmNetworkPtr n2) override;
 
-  virtual void finalize();
+  void finalize() override;
 
-  virtual QList<NetworkEdgeScorePtr> getAllEdgeScores() const;
+  QList<NetworkEdgeScorePtr> getAllEdgeScores() const override;
 
-  virtual QList<NetworkVertexScorePtr> getAllVertexScores() const;
+  QList<NetworkVertexScorePtr> getAllVertexScores() const override;
 
   virtual IndexedEdgeMatchSetPtr getMatches() { return _edgeMatches; }
 
@@ -83,9 +83,9 @@ private:
   // for white box testing.
   friend class ConflictsNetworkMatcherTest;
 
-  typedef SingleAssignmentProblemSolver<EdgeString, EdgeString> Saps;
+  using Saps = SingleAssignmentProblemSolver<EdgeString, EdgeString>;
 
-  typedef QHash<ConstEdgeMatchPtr, double> EdgeScoreMap;
+  using EdgeScoreMap = QHash<ConstEdgeMatchPtr, double>;
 
   class MatchRelationship
   {
@@ -111,10 +111,10 @@ private:
     bool _conflict;
     QSet<ConstEdgeMatchPtr> _throughStub;
   };
-  typedef std::shared_ptr<const MatchRelationship> ConstMatchRelationshipPtr;
-  typedef std::shared_ptr<MatchRelationship> MatchRelationshipPtr;
+  using MatchRelationshipPtr = std::shared_ptr<MatchRelationship>;
+  using ConstMatchRelationshipPtr = std::shared_ptr<const MatchRelationship>;
 
-  typedef QHash<ConstEdgeMatchPtr, QList<ConstMatchRelationshipPtr>> MatchRelationshipMap;
+  using MatchRelationshipMap = QHash<ConstEdgeMatchPtr, QList<ConstMatchRelationshipPtr>>;
 
   IndexedEdgeMatchSetPtr _edgeMatches;
   EdgeScoreMap _scores, _weights;
@@ -170,8 +170,8 @@ private:
   void _printEdgeMatches();
 };
 
-typedef std::shared_ptr<ConflictsNetworkMatcher> ConflictsNetworkMatcherPtr;
-typedef std::shared_ptr<const ConflictsNetworkMatcher> ConstConflictsNetworkMatcherPtr;
+using ConflictsNetworkMatcherPtr = std::shared_ptr<ConflictsNetworkMatcher>;
+using ConstConflictsNetworkMatcherPtr = std::shared_ptr<const ConflictsNetworkMatcher>;
 
 // not implemented
 bool operator<(ConstConflictsNetworkMatcherPtr, ConstConflictsNetworkMatcherPtr);

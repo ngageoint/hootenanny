@@ -19,29 +19,28 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "OsmJsonReader.h"
 
 // hoot
+#include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/io/HootNetworkRequest.h>
+#include <hoot/core/io/IoUtils.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/io/IoUtils.h>
 #include <hoot/core/visitors/RemoveMissingElementsVisitor.h>
 
 // Boost
 #include <boost/foreach.hpp>
 #include <boost/property_tree/json_parser.hpp>
-namespace pt = boost::property_tree;
 
 // Qt
 #include <QTextCodec>
@@ -54,6 +53,8 @@ namespace pt = boost::property_tree;
 #include <sstream>
 #include <thread>
 #include <unistd.h>
+
+namespace pt = boost::property_tree;
 using namespace std;
 
 namespace hoot

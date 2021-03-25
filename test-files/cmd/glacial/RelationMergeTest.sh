@@ -2,6 +2,8 @@
 set -e
 
 # This tests to see if collection relations (e.g. admin bounds, routes, etc.) get merged correctly during conflation.
+# Unfortunately the input is very large for this test, but it took input of that size to reproduce the original problem. When
+# examining changes in output, focus on the relations primarily.
 
 IN_DIR=test-files/cmd/glacial/RelationMergeTest
 OUT_DIR=test-output/cmd/glacial/RelationMergeTest

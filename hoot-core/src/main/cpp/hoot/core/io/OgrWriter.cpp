@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "OgrWriter.h"
 
@@ -177,7 +177,7 @@ void OgrWriter::_addFeature(OGRLayer* layer, const std::shared_ptr<Feature>& f,
 
   // convert the geometry.
   std::shared_ptr<GeometryCollection> gc = std::dynamic_pointer_cast<GeometryCollection>(g);
-  if (gc.get() != 0)
+  if (gc.get() != nullptr)
   {
     for (size_t i = 0; i < gc->getNumGeometries(); i++)
     {
@@ -299,7 +299,7 @@ void OgrWriter::_createLayer(const std::shared_ptr<const Layer>& layer)
   poLayer = _ds->GetLayerByName(layerName.toStdString().c_str());
 
   // We only want to add to a layer IFF the config option "ogr.append.data" set
-  if (poLayer != NULL && _appendData)
+  if (poLayer != nullptr && _appendData)
   {
     // Layer exists
     _layers[layer->getName()] = poLayer;
@@ -334,7 +334,7 @@ void OgrWriter::_createLayer(const std::shared_ptr<const Layer>& layer)
     poLayer = _ds->CreateLayer(layerName.toLatin1(), projection.get(),
                   gtype, options.getCrypticOptions());
 
-    if (poLayer == NULL)
+    if (poLayer == nullptr)
     {
       throw HootException(QString("Layer creation failed. %1").arg(layerName));
     }
@@ -379,7 +379,7 @@ OGRLayer* OgrWriter::_getLayer(const QString& layerName)
     if (!_schema->hasLayer(layerName))
     {
       strictError("Layer specified is not part of the schema. (" + layerName + ")");
-      return 0;
+      return nullptr;
     }
     else
     {
@@ -406,7 +406,7 @@ void OgrWriter::initTranslator()
     throw HootException("A script path must be set before the output data source is opened.");
   }
 
-  if (_translator == 0)
+  if (_translator == nullptr)
   {
     // Great bit of code taken from TranslatedTagDifferencer.cpp
     std::shared_ptr<ScriptSchemaTranslator> st(
@@ -590,7 +590,7 @@ void OgrWriter::write(const ConstOsmMapPtr& map)
           std::shared_ptr<Geometry> &g, // output
           std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature> &tf) // output
 {
-  if (_translator.get() == 0)
+  if (_translator.get() == nullptr)
   {
     throw HootException("You must call open before attempting to write.");
   }
@@ -619,7 +619,7 @@ void OgrWriter::write(const ConstOsmMapPtr& map)
       g.reset((GeometryFactory::getDefaultInstance()->createEmptyGeometry()));
     }
 
-    LOG_TRACE("After conversion to geometry, element is now a " << g->getGeometryType() );
+    LOG_TRACE("After conversion to geometry, element is now a " << g->getGeometryType());
 
     Tags t = e->getTags();
     for (Tags::const_iterator it = t.begin(); it != t.end(); ++it)
@@ -643,7 +643,7 @@ void OgrWriter::writeTranslatedFeature(
   {
     LOG_TRACE("Writing feature " + QString::number(i) + "  to " + QString(tf[i].tableName));
     OGRLayer* layer = _getLayer(tf[i].tableName);
-    if (layer != 0)
+    if (layer != nullptr)
     {
       _addFeature(layer, tf[i].feature, g);
     }
@@ -666,7 +666,7 @@ void OgrWriter::finalizePartial()
 {
 }
 
-void OgrWriter::writePartial(const std::shared_ptr<const hoot::Node>& newNode)
+void OgrWriter::writePartial(const ConstNodePtr& newNode)
 {
   LOG_TRACE("Writing node " << newNode->getId());
 
@@ -679,51 +679,51 @@ void OgrWriter::writePartial(const std::shared_ptr<const hoot::Node>& newNode)
   _writePartial(cacheProvider, newNode);
 }
 
-void OgrWriter::writePartial(const std::shared_ptr<const hoot::Way>& newWay)
+void OgrWriter::writePartial(const ConstWayPtr& way)
 {
-  LOG_TRACE("Writing way " << newWay->getId() );
+  LOG_TRACE("Writing way " << way->getId() );
 
   /*
    * Make sure this way has any hope of working (i.e., are there enough spots in the cache
    * for all its nodes?
    */
-  if ((unsigned long)newWay->getNodeCount() > _elementCache->getNodeCacheSize())
+  if (way->getNodeCount() > _elementCache->getNodeCacheSize())
   {
-    throw HootException("Cannot do partial write of Way ID " + QString::number(newWay->getId()) +
-      " as it contains " + QString::number(newWay->getNodeCount()) + " nodes, but our cache can " +
+    throw HootException("Cannot do partial write of Way ID " + QString::number(way->getId()) +
+      " as it contains " + QString::number(way->getNodeCount()) + " nodes, but our cache can " +
       " only hold " + QString::number(_elementCache->getNodeCacheSize()) + ".  If you have enough " +
       " memory to load this way, you can increase the element.cache.size.node setting to " +
-      " an appropriate value larger than " + QString::number(newWay->getNodeCount()) +
+      " an appropriate value larger than " + QString::number(way->getNodeCount()) +
       " to allow for loading it.");
   }
 
   // Make sure all the nodes in the way are in our cache
-  const std::vector<long> wayNodeIds = newWay->getNodeIds();
+  const std::vector<long> wayNodeIds = way->getNodeIds();
   std::vector<long>::const_iterator nodeIdIterator;
 
   for (nodeIdIterator = wayNodeIds.begin(); nodeIdIterator != wayNodeIds.end(); ++nodeIdIterator)
   {
     if (_elementCache->containsNode(*nodeIdIterator) == false)
     {
-      throw HootException("Way " + QString::number(newWay->getId()) + " contains node " +
+      throw HootException("Way " + QString::number(way->getId()) + " contains node " +
         QString::number(*nodeIdIterator) + ", which is not present in the cache.  If you have the " +
           "memory to support this number of nodes, you can increase the element.cache.size.node " +
           "setting above: " + QString::number(_elementCache->getNodeCacheSize()) + ".");
     }
-    LOG_TRACE("Way " << newWay->getId() << " contains node " << *nodeIdIterator <<
+    LOG_TRACE("Way " << way->getId() << " contains node " << *nodeIdIterator <<
                  ": " << _elementCache->getNode(*nodeIdIterator)->getX() << ", " <<
                 _elementCache->getNode(*nodeIdIterator)->getY() );
   }
 
   // Add to the element cache
-  ConstElementPtr constWay(newWay);
+  ConstElementPtr constWay(way);
   _elementCache->addElement(constWay);
 
   ElementProviderPtr cacheProvider(_elementCache);
-  _writePartial(cacheProvider, newWay);
+  _writePartial(cacheProvider, way);
 }
 
-void OgrWriter::writePartial(const std::shared_ptr<const hoot::Relation>& newRelation)
+void OgrWriter::writePartial(const ConstRelationPtr& newRelation)
 {
   LOG_TRACE("Writing relation " << newRelation->getId());
 
@@ -833,11 +833,6 @@ void OgrWriter::writePartial(const std::shared_ptr<const hoot::Relation>& newRel
 
 void OgrWriter::writeElement(ElementPtr &element)
 {
-  writeElement(element, false);
-}
-
-void OgrWriter::writeElement(ElementPtr &element, bool debug)
-{
   //  Do not attempt to write empty elements
   if (!element)
     return;
@@ -852,11 +847,6 @@ void OgrWriter::writeElement(ElementPtr &element, bool debug)
   }
   // Now that all the empties are gone, update our element
   element->setTags(destTags);
-
-  if (debug == true)
-  {
-    LOG_TRACE(element->toString());
-  }
 
   PartialOsmMapWriter::writePartial(element);
 }

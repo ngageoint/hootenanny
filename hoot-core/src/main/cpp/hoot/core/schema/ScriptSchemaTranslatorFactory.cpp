@@ -19,18 +19,18 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "ScriptSchemaTranslatorFactory.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/schema/ScriptSchemaTranslator.h>
-#include <hoot/core/util/Settings.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/Settings.h>
 
 using namespace std;
 
@@ -65,14 +65,14 @@ ScriptSchemaTranslator* ScriptSchemaTranslatorFactory::createTranslator(QString 
   sort(st.begin(), st.end(), CompareSt);
   LOG_VART(st);
 
-  ScriptSchemaTranslator* result = 0;
+  ScriptSchemaTranslator* result = nullptr;
   for (size_t i = 0; i < st.size(); ++i)
   {
     try
     {
       st[i]->setScript(scriptPath);
       LOG_VART(st[i]->isValidScript());
-      if (result == 0 && st[i]->isValidScript())
+      if (result == nullptr && st[i]->isValidScript())
       {
         result = st[i];
         LOG_TRACE("Found a valid translator: " + _translators[i]);
@@ -91,7 +91,7 @@ ScriptSchemaTranslator* ScriptSchemaTranslatorFactory::createTranslator(QString 
     }
   }
 
-  if (result == 0)
+  if (result == nullptr)
   {
     throw HootException("Unable to find an appropriate scripting language for: " + scriptPath);
   }
@@ -101,7 +101,7 @@ ScriptSchemaTranslator* ScriptSchemaTranslatorFactory::createTranslator(QString 
 
 void ScriptSchemaTranslatorFactory::_init()
 {
-  if (_translators.size() == 0)
+  if (_translators.empty())
   {
     _translators = Factory::getInstance().getObjectNamesByBase(ScriptSchemaTranslator::className());
   }

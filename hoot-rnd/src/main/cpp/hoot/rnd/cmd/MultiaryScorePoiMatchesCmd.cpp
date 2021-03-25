@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -33,7 +33,7 @@
 #include <hoot/core/io/IoUtils.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/io/OsmXmlWriter.h>
-#include <hoot/core/ops/NamedOp.h>
+#include <hoot/core/ops/OpExecutor.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/Factory.h>
@@ -72,11 +72,11 @@ public:
     OsmMapPtr copy(new OsmMap(map));
 
     // Apply any user specified operations.
-    NamedOp(ConfigOptions().getConflatePreOps()).apply(copy);
+    OpExecutor(ConfigOptions().getConflatePreOps()).apply(copy);
 
     MultiaryUtilities::conflate(copy);
     // Apply any user specified operations.
-    NamedOp(ConfigOptions().getConflatePostOps()).apply(copy);
+    OpExecutor(ConfigOptions().getConflatePostOps()).apply(copy);
 
     comparator.evaluateMatches(map, copy);
 
@@ -105,14 +105,14 @@ public:
     return result;
   }
 
-  virtual QString getName() const override { return "multiary-score-poi-matches"; }
+  QString getName() const override { return "multiary-score-poi-matches"; }
 
-  virtual QString getDescription() const override
-  { return "Scores the performance of multiary-conflate against a manually matched map (experimental) "; }
+  QString getDescription() const override
+  { return "Scores the performance of multiary-poi-conflate against a manually matched map (experimental) "; }
 
-  virtual QString getType() const override { return "rnd"; }
+  QString getType() const override { return "rnd"; }
 
-  virtual int runSimple(QStringList& args) override
+  int runSimple(QStringList& args) override
   {
     QElapsedTimer timer;
     timer.start();
@@ -181,7 +181,9 @@ public:
     OsmMapWriterFactory::write(map, ConfPath::getHootHome() + "/tmp/score-matches-after-prep.osm");
     MapProjector::projectToPlanar(map);
 
-    std::shared_ptr<MatchThreshold> mt;
+    // Apparently, multiary will allow with > 1.0 review thresholds.
+    std::shared_ptr<MatchThreshold> mt =
+      std::make_shared<MatchThreshold>(MatchThreshold(0.5, 0.5, 1.0, false));
     QString result = evaluateThreshold(map, output, mt, showConfusion);
 
     cout << result;

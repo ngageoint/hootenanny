@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "OsmGbdxXmlWriter.h"
 
@@ -167,9 +167,8 @@ void OsmGbdxXmlWriter::_newOutputFile()
 //    LOG_ERROR("Final name: " + url);
   }
 
-  QFile* f = new QFile();
-  _fp.reset(f);
-  f->setFileName(url);
+  _fp.reset(new QFile());
+  std::dynamic_pointer_cast<QFile>(_fp)->setFileName(url);
 
   if (!_fp->open(QIODevice::WriteOnly | QIODevice::Text))
   {
@@ -208,8 +207,8 @@ QString OsmGbdxXmlWriter::toString(const ConstOsmMapPtr& map, const bool formatX
   OsmGbdxXmlWriter writer;
   writer.setFormatXml(formatXml);
   // this will be deleted by the _fp std::shared_ptr
-  QBuffer* buf = new QBuffer();
-  writer._fp.reset(buf);
+  std::shared_ptr<QBuffer> buf(new QBuffer());
+  writer._fp = buf;
   if (!writer._fp->open(QIODevice::WriteOnly | QIODevice::Text))
   {
     throw InternalErrorException(QObject::tr("Error opening QBuffer for writing. Odd."));
@@ -368,12 +367,12 @@ void OsmGbdxXmlWriter::_writeWays(ConstOsmMapPtr map)
     ConstWayPtr w = it->second;
 
     // Skip if null
-    if (w.get() == NULL)
+    if (w.get() == nullptr)
       continue;
 
     //  Skip any ways that have parents
     set<ElementId> parents = map->getParents(w->getElementId());
-    if (parents.size() > 0)
+    if (!parents.empty())
       continue;
 
     // Make sure that building ways are "complete"
@@ -384,7 +383,7 @@ void OsmGbdxXmlWriter::_writeWays(ConstOsmMapPtr map)
       for (vector<long>::const_iterator nodeIt = nodes.begin(); nodeIt != nodes.end(); ++nodeIt)
       {
         ConstNodePtr node = map->getNode(*nodeIt);
-        if (node.get() == NULL)
+        if (node.get() == nullptr)
         {
           valid = false;
           break;
@@ -402,7 +401,7 @@ void OsmGbdxXmlWriter::_writeWays(ConstOsmMapPtr map)
       for (vector<long>::const_iterator nodeIt = nodes.begin(); nodeIt != nodes.end(); ++nodeIt)
       {
         ConstNodePtr node = map->getNode(*nodeIt);
-        if (node.get() != NULL)
+        if (node.get() != nullptr)
         {
           LOG_INFO("Writing Nodes XXX");
           _newOutputFile();
@@ -627,7 +626,7 @@ void OsmGbdxXmlWriter::_writeRelationWithPoints(const ConstRelationPtr& r,  Cons
   for (vector<RelationData::Entry>::const_iterator it = members.begin(); it != members.end(); ++it)
   {
     ConstElementPtr elm = map->getElement(it->getElementId());
-    if (elm.get() == NULL)
+    if (elm.get() == nullptr)
       continue;
 
     if (firstRel)

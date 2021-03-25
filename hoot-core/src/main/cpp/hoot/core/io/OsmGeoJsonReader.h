@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef OSM_GEOJSON_READER_H
@@ -48,7 +48,7 @@
 namespace hoot
 {
 
-typedef std::vector<geos::geom::Coordinate> JsonCoordinates;
+using JsonCoordinates = std::vector<geos::geom::Coordinate>;
 
 /**
  * This class is intended to create an OsmMap from a given GeoJSON string.
@@ -64,7 +64,7 @@ public:
   static QString className() { return "hoot::OsmGeoJsonReader"; }
 
   OsmGeoJsonReader() = default;
-  virtual ~OsmGeoJsonReader() = default;
+  ~OsmGeoJsonReader() = default;
 
   /**
    * @brief isSupported returns true if the URL is likely supported. This isn't
@@ -73,7 +73,7 @@ public:
    * @param url
    * @return
    */
-  virtual bool isSupported(const QString& url) override;
+  bool isSupported(const QString& url) override;
 
   /**
    * @brief read Reads the data specified by the last call to open(...)
@@ -81,7 +81,7 @@ public:
    *        will likely be closed after this call
    * @param map
    */
-  virtual void read(const OsmMapPtr& map) override;
+  void read(const OsmMapPtr& map) override;
 
   /**
    * @brief loadFromString - Builds a map from the JSON string. Throws a
@@ -90,7 +90,7 @@ public:
    * @param jsonStr - input string, map - the map to load the JSON into
    * @return
    */
-  virtual void loadFromString(const QString& jsonStr, const OsmMapPtr& map);
+  void loadFromString(const QString& jsonStr, const OsmMapPtr& map);
 
   /**
    * @brief loadFromFile - Reads the whole file as a string, passes it
@@ -98,9 +98,9 @@ public:
    * @param path - Path to file
    * @return Smart pointer to the OSM map
    */
-  virtual OsmMapPtr loadFromFile(const QString& path);
+  OsmMapPtr loadFromFile(const QString& path);
 
-  virtual QString supportedFormats() override { return ".geojson"; }
+  QString supportedFormats() override { return ".geojson"; }
 
 private:
 

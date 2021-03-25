@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef EXTERNAL_MERGE_ELEMENT_SORTER_H
@@ -68,8 +68,8 @@ struct ElementComparePq
   }
 };
 
-typedef std::priority_queue<PqElement,
-                            std::vector<PqElement>, ElementComparePq> ElementPriorityQueue;
+using ElementPriorityQueue =
+  std::priority_queue<PqElement, std::vector<PqElement>, ElementComparePq>;
 
 /**
   This performs element sorting outside of main memory on disk and serves the sorted results up
@@ -83,7 +83,7 @@ class ExternalMergeElementSorter : public ElementInputStream
 public:
 
   ExternalMergeElementSorter();
-  virtual ~ExternalMergeElementSorter();
+  ~ExternalMergeElementSorter();
 
   /**
    * Sorts elements first by type, then increasing by ID
@@ -95,22 +95,22 @@ public:
   /**
    * @see ElementInputStream
    */
-  virtual std::shared_ptr<OGRSpatialReference> getProjection() const override;
+  std::shared_ptr<OGRSpatialReference> getProjection() const override;
 
   /**
    * @see ElementInputStream
    */
-  virtual void close();
+  void close() override;
 
   /**
    * @see ElementInputStream
    */
-  virtual bool hasMoreElements();
+  bool hasMoreElements() override;
 
   /**
    * @see ElementInputStream
    */
-  virtual ElementPtr readNextElement() override;
+  ElementPtr readNextElement() override;
 
   void setMaxElementsPerFile(long max) { _maxElementsPerFile = max; }
   void setRetainTempFiles(bool retain) { _retainTempFiles = retain; }

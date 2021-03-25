@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "PartialNetworkMerger.h"
 
@@ -55,7 +55,7 @@ _needsReview(false)
 }
 
 PartialNetworkMerger::PartialNetworkMerger(const set<pair<ElementId, ElementId>>& pairs,
-  QSet<ConstEdgeMatchPtr> edgeMatches, ConstNetworkDetailsPtr details) :
+  const QSet<ConstEdgeMatchPtr>& edgeMatches, const ConstNetworkDetailsPtr& details) :
   _pairs(pairs),
   _edgeMatches(edgeMatches),
   _details(details)
@@ -103,13 +103,13 @@ void PartialNetworkMerger::_applyMerger(const OsmMapPtr& map, WayMatchStringMerg
 {
   LOG_DEBUG("Applying PartialNetworkMerger...");
 
-  // we changed the sublines so we must update the indices.
+  // We changed the sublines, so we must update the indices.
   merger->updateSublineMapping();
 
   WayStringPtr str2 = merger->getMapping()->getWayString2();
 
   merger->mergeTags();
-  // set the status on all keeper ways to conflated.
+  // Set the status on all keeper ways to conflated.
   merger->setKeeperStatus(Status::Conflated);
   ConfigOptions conf;
   if (conf.getWriterIncludeDebugTags() && conf.getWriterIncludeMatchedByTag())
@@ -140,14 +140,14 @@ void PartialNetworkMerger::_applyMerger(const OsmMapPtr& map, WayMatchStringMerg
     }
   }
 
-  // TODO: this will need to replace one scrap with possibly multiple keeper elements
-  // - think about the case when the way is part of an interstate or bus relation
-  // remove the duplicate element.
+  // TODO: This will need to replace one scrap with possibly multiple keeper elements. Think about
+  // the case when the way is part of an interstate or bus relation remove the duplicate element.
   merger->replaceScraps();
 }
 
-WayMatchStringMergerPtr PartialNetworkMerger::_createMatchStringMerger(const OsmMapPtr& map,
-  vector<pair<ElementId, ElementId>>& replaced, ConstEdgeMatchPtr edgeMatch) const
+WayMatchStringMergerPtr PartialNetworkMerger::_createMatchStringMerger(
+  const OsmMapPtr& map, vector<pair<ElementId, ElementId>>& replaced,
+  ConstEdgeMatchPtr edgeMatch) const
 {
   // convert the EdgeStrings into WaySublineStrings
   WayStringPtr str1;
@@ -238,7 +238,7 @@ void PartialNetworkMerger::_processFullMatch(const OsmMapPtr& map,
 
   try
   {
-    // split the ways in such a way that the mappings are updated appropriately.
+    // split the ways in such a way that the mappings are updated appropriately
     LOG_TRACE("Applying way splits...");
     WayMatchStringSplitter splitter;
     splitter.applySplits(map, replaced, _allSublineMappings);

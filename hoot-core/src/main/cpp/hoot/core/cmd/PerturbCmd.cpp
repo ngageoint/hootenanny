@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -47,6 +47,9 @@ using namespace std;
 namespace hoot
 {
 
+/**
+ * @see PertyOp
+ */
 class PerturbCmd : public BaseCommand
 {
 public:
@@ -55,11 +58,11 @@ public:
 
   PerturbCmd() = default;
 
-  virtual QString getName() const override { return "perturb"; }
+  QString getName() const override { return "perturb"; }
 
-  virtual QString getDescription() const override { return "Perturbs a map using PERTY"; }
+  QString getDescription() const override { return "Perturbs features in a map"; }
 
-  virtual int runSimple(QStringList& args) override
+  int runSimple(QStringList& args) override
   {
     QElapsedTimer timer;
     timer.start();

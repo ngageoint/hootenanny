@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Boost
@@ -66,12 +66,12 @@ public:
 
   EvalPointMovesCmd() = default;
 
-  virtual QString getName() const override { return "evaluate-point-moves"; }
+  QString getName() const override { return "evaluate-point-moves"; }
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Calculates the error introduced by various operations on random map points"; }
 
-  virtual QString getType() const override { return "rnd"; }
+  QString getType() const override { return "rnd"; }
 
   struct Comparison
   {
@@ -192,7 +192,7 @@ public:
     return result;
   }
 
-  virtual int runSimple(QStringList& args) override
+  int runSimple(QStringList& args) override
   {
     QElapsedTimer timer;
     timer.start();

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef SCRIPTMATCH_H
 #define SCRIPTMATCH_H
@@ -52,7 +52,7 @@ public:
   static int logWarnCount;
 
   ScriptMatch() = default;
-  virtual ~ScriptMatch() = default;
+  ~ScriptMatch() = default;
   /**
    * @param mapObj This could be derived from the map, but destructing an OsmMapJs object is quite
    *  expensive due to the amount of memory cleanup we must do in the general case.
@@ -61,36 +61,36 @@ public:
               const ConstOsmMapPtr& map, const v8::Handle<v8::Object>& mapObj,
               const ElementId& eid1, const ElementId& eid2, const ConstMatchThresholdPtr& mt);
 
-  virtual const MatchClassification& getClassification() const override { return _p; }
+  const MatchClassification& getClassification() const override { return _p; }
 
-  virtual QString explain() const override { return _explainText; }
+  QString explain() const override { return _explainText; }
 
-  virtual QString getName() const override { return _matchName; }
+  QString getName() const override { return _matchName; }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
-  virtual double getProbability() const override;
+  double getProbability() const override;
 
-  virtual bool isConflicting(
+  bool isConflicting(
     const ConstMatchPtr& other, const ConstOsmMapPtr& map,
     const QHash<QString, ConstMatchPtr>& matches = QHash<QString, ConstMatchPtr>()) const override;
 
-  virtual bool isWholeGroup() const override { return _isWholeGroup; }
+  bool isWholeGroup() const override { return _isWholeGroup; }
 
   /**
    * Simply returns the two elements that were matched.
    */
-  virtual std::set<std::pair<ElementId, ElementId>> getMatchPairs() const override;
+  std::set<std::pair<ElementId, ElementId>> getMatchPairs() const override;
 
   v8::Local<v8::Object> getPlugin() const { return ToLocal(&_plugin); }
 
   std::shared_ptr<PluginContext> getScript() const { return _script; }
 
-  virtual QString toString() const override;
+  QString toString() const override;
 
-  virtual std::map<QString, double> getFeatures(const ConstOsmMapPtr& map) const override;
+  std::map<QString, double> getFeatures(const ConstOsmMapPtr& map) const override;
 
-  virtual QString getDescription() const override
+  QString getDescription() const override
   { return "Matches elements with Generic Conflation"; }
 
 private:
@@ -106,7 +106,7 @@ private:
   std::shared_ptr<PluginContext> _script;
   QString _explainText;
 
-  typedef std::pair<ElementId, ElementId> ConflictKey;
+  using ConflictKey = std::pair<ElementId, ElementId>;
   mutable QHash<ConflictKey, bool> _conflicts;
 
   friend class ScriptMatchTest;

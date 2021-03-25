@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "SystemInfo.h"
@@ -115,19 +115,19 @@ namespace Tgs
     ss << std::setprecision(4);
     if (bytes >= 1024l * 1024l * 1024l * 1024l)
     {
-      ss << (double)(bytes / (1024.0 * 1024.0 * 1024.0 * 1024.0)) << "TB";
+      ss << (bytes / (1024.0 * 1024.0 * 1024.0 * 1024.0)) << "TB";
     }
     if (bytes >= 1024l * 1024l * 1024l)
     {
-      ss << (double)(bytes / (1024.0 * 1024.0 * 1024.0)) << "GB";
+      ss << (bytes / (1024.0 * 1024.0 * 1024.0)) << "GB";
     }
     else if (bytes >= 1024 * 1024)
     {
-      ss << (double)(bytes / (1024.0 * 1024.0)) << "MB";
+      ss << (bytes / (1024.0 * 1024.0)) << "MB";
     }
     else if (bytes >= 1024)
     {
-      ss << (double)(bytes / 1024.0) << "KB";
+      ss << (bytes / 1024.0) << "KB";
     }
     else
     {

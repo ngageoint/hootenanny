@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef __SINGLE_SIDED_NETWORK_MATCHER_H__
 #define __SINGLE_SIDED_NETWORK_MATCHER_H__
@@ -69,24 +69,24 @@ public:
    * Always construct with create() to make a shared pointer.
    */
   SingleSidedNetworkMatcher();
-  virtual ~SingleSidedNetworkMatcher() = default;
+  ~SingleSidedNetworkMatcher() = default;
 
   // Leaving this hardcoded for now, as we don't use this matcher in production conflation jobs.
   // If we ever do end up using it production, then add a config option for it.
-  virtual double getMatchThreshold() const { return 0.15; }
+  virtual double getMatchThreshold() const override { return 0.15; }
 
   /**
    * Use this instead of a constructor.
    */
   static std::shared_ptr<SingleSidedNetworkMatcher> create();
 
-  void iterate();
+  void iterate() override;
 
-  void matchNetworks(ConstOsmMapPtr map, OsmNetworkPtr n1, OsmNetworkPtr n2);
+  void matchNetworks(ConstOsmMapPtr map, OsmNetworkPtr n1, OsmNetworkPtr n2) override;
 
-  QList<NetworkEdgeScorePtr> getAllEdgeScores() const;
+  QList<NetworkEdgeScorePtr> getAllEdgeScores() const override;
 
-  QList<NetworkVertexScorePtr> getAllVertexScores() const;
+  QList<NetworkVertexScorePtr> getAllVertexScores() const override;
 
 protected:
   virtual double _scoreEdges(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2) const;
@@ -115,14 +115,14 @@ private:
     double score;
   };
 
-  typedef std::shared_ptr<EdgeLinkScore> EdgeLinkScorePtr;
+  using EdgeLinkScorePtr = std::shared_ptr<EdgeLinkScore>;
 
-  typedef SingleAssignmentProblemSolver<ConstNetworkEdgePtr, ConstNetworkEdgePtr> Saps;
+  using Saps = SingleAssignmentProblemSolver<ConstNetworkEdgePtr, ConstNetworkEdgePtr>;
 
   /// [v2]
-  typedef QHash<ConstNetworkEdgePtr, QList<EdgeLinkScorePtr>> EdgeMatchScoreMap;
+  using EdgeMatchScoreMap = QHash<ConstNetworkEdgePtr, QList<EdgeLinkScorePtr>>;
   /// [v2][v1]
-  typedef QHash<ConstNetworkVertexPtr, QHash<ConstNetworkVertexPtr, double>> VertexScoreMap;
+  using VertexScoreMap = QHash<ConstNetworkVertexPtr, QHash<ConstNetworkVertexPtr, double>>;
 
   IndexedEdgeMatchSetPtr _edgeMatches;
   EdgeMatchScoreMap _edge2Scores;
@@ -153,8 +153,8 @@ private:
 
 };
 
-typedef std::shared_ptr<SingleSidedNetworkMatcher> SingleSidedNetworkMatcherPtr;
-typedef std::shared_ptr<const SingleSidedNetworkMatcher> ConstSingleSidedNetworkMatcherPtr;
+using SingleSidedNetworkMatcherPtr = std::shared_ptr<SingleSidedNetworkMatcher>;
+using ConstSingleSidedNetworkMatcherPtr = std::shared_ptr<const SingleSidedNetworkMatcher>;
 
 // not implemented
 bool operator<(ConstSingleSidedNetworkMatcherPtr, ConstSingleSidedNetworkMatcherPtr);

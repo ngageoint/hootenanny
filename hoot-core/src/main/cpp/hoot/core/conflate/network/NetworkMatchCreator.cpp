@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "NetworkMatchCreator.h"
 
@@ -33,8 +33,9 @@
 #include <hoot/core/conflate/network/NetworkMatcher.h>
 #include <hoot/core/conflate/network/OsmNetworkExtractor.h>
 #include <hoot/core/criterion/ChainCriterion.h>
+#include <hoot/core/criterion/HighwayCriterion.h>
 #include <hoot/core/criterion/StatusCriterion.h>
-#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
@@ -42,10 +43,9 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/elements/MapProjector.h>
-#include <hoot/core/util/StringUtils.h>
 #include <hoot/core/util/NotImplementedException.h>
-#include <hoot/core/criterion/HighwayCriterion.h>
+#include <hoot/core/util/StringUtils.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 
 // Standard
 #include <fstream>
@@ -193,12 +193,11 @@ void NetworkMatchCreator::createMatches(
 vector<CreatorDescription> NetworkMatchCreator::getAllCreators() const
 {
   vector<CreatorDescription> result;
-  result.push_back(
-    CreatorDescription(
-      className(),
-      "Generates matchers that match roads with the Network Algorithm",
-      CreatorDescription::BaseFeatureType::Highway,
-      false));
+  result.emplace_back(
+    className(),
+    "Generates matchers that match roads with the Network Algorithm",
+    CreatorDescription::BaseFeatureType::Highway,
+    false);
   return result;
 }
 
@@ -218,10 +217,10 @@ std::shared_ptr<MatchThreshold> NetworkMatchCreator::getMatchThreshold()
 {
   if (!_matchThreshold.get())
   {
-    ConfigOptions config;
     _matchThreshold.reset(
-      new MatchThreshold(config.getNetworkMatchThreshold(), config.getNetworkMissThreshold(),
-                         config.getNetworkReviewThreshold()));
+      new MatchThreshold(
+        ConfigOptions().getNetworkMatchThreshold(), ConfigOptions().getNetworkMissThreshold(),
+        ConfigOptions().getNetworkReviewThreshold()));
   }
   return _matchThreshold;
 }

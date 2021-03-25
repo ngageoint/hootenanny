@@ -19,26 +19,26 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "AttributeCoOccurrence.h"
 
 // Hoot
-#include <hoot/core/elements/ConstOsmMapConsumer.h>
+#include <hoot/core/algorithms/extractors/NameExtractor.h>
 #include <hoot/core/algorithms/string/LevenshteinDistance.h>
 #include <hoot/core/algorithms/string/MeanWordSetDistance.h>
-#include <hoot/core/algorithms/extractors/NameExtractor.h>
-#include <hoot/core/elements/ConstElementVisitor.h>
-#include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/elements/ConstOsmMapConsumer.h>
 #include <hoot/core/language/ToEnglishTranslateStringDistance.h>
+#include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/scoring/TextTable.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 
 // tgs
 #include <tgs/HashMap.h>
@@ -55,15 +55,15 @@ class RefToEidVisitor : public ConstElementVisitor
 {
 public:
 
-  typedef map<QString, set<ElementId>> RefToEid;
+  using RefToEid = map<QString, set<ElementId>>;
 
-  explicit RefToEidVisitor(QString ref) : _ref(ref) {}
+  explicit RefToEidVisitor(QString ref) : _ref(ref) { }
 
-  virtual ~RefToEidVisitor() = default;
+  ~RefToEidVisitor() = default;
 
   const RefToEid& getRefToEid() const { return _ref2Eid; }
 
-  virtual void visit(const ConstElementPtr& e)
+  void visit(const ConstElementPtr& e) override
   {
     QStringList refs;
     if (e->getTags().contains(_ref))
@@ -73,7 +73,7 @@ public:
     refs.removeAll("todo");
     refs.removeAll("none");
 
-    if (refs.size() > 0)
+    if (!refs.empty())
     {
       for (int i = 0; i < refs.size(); i++)
       {
@@ -82,9 +82,9 @@ public:
     }
   }
 
-  virtual QString getDescription() const { return ""; }
-  virtual QString getName() const { return ""; }
-  virtual QString getClassName() const override { return ""; }
+  QString getDescription() const override { return ""; }
+  QString getName() const override { return ""; }
+  QString getClassName() const override { return ""; }
 
 private:
 
@@ -99,18 +99,18 @@ class CoOccurrenceVisitor : public ConstElementVisitor, public ConstOsmMapConsum
 {
 public:
 
-  CoOccurrenceVisitor(RefToEidVisitor::RefToEid refSet, AttributeCoOccurrence::CoOccurrenceHash& h) :
-  _refSet(refSet), _coOccurrence(h) {}
+  CoOccurrenceVisitor(const RefToEidVisitor::RefToEid& refSet, AttributeCoOccurrence::CoOccurrenceHash& h) :
+  _refSet(refSet), _coOccurrence(h) { }
 
-  virtual ~CoOccurrenceVisitor() = default;
+  ~CoOccurrenceVisitor() = default;
 
-  virtual void setOsmMap(const OsmMap* map) { _map = map; }
+  void setOsmMap(const OsmMap* map) override { _map = map; }
 
-  virtual QString getDescription() const { return ""; }
-  virtual QString getName() const { return ""; }
-  virtual QString getClassName() const override { return ""; }
+  QString getDescription() const override { return ""; }
+  QString getName() const override { return ""; }
+  QString getClassName() const override { return ""; }
 
-  virtual void visit(const ConstElementPtr& e)
+  void visit(const ConstElementPtr& e) override
   {
     QStringList refs;
     if (e->getTags().contains(MetadataTags::Ref1()))
@@ -120,7 +120,7 @@ public:
       refs.removeAll("todo");
       refs.removeAll("none");
 
-      if (refs.size() > 0)
+      if (!refs.empty())
       {
         // Find the REF1 id's in REF2.
         // NOTE: this blindly assumes that there is only ONE value in the REF1 tag list
@@ -136,14 +136,14 @@ public:
             for (Tags::const_iterator tag1 = e->getTags().begin(); tag1 != e->getTags().end();
                  ++tag1)
             {
-              QString kvp1 = OsmSchema::getInstance().toKvp(tag1.key(),tag1.value());
+              QString kvp1 = OsmSchema::toKvp(tag1.key(),tag1.value());
 
               // We are only looking at Enumerated tags
               if (OsmSchema::getInstance().getTagVertex(kvp1).valueType == hoot::Enumeration)
               {
                 // Get the value from the corresponding tag in REF2
                 QString kvp2 =
-                  OsmSchema::getInstance().toKvp(
+                  OsmSchema::toKvp(
                     tag1.key(), _map->getElement(*eid)->getTags()[tag1.key()]);
 
                 // LOG_INFO("Got Tags:" + kvp1 + " " + kvp2);
@@ -155,7 +155,7 @@ public:
             for (Tags::const_iterator tag2 = _map->getElement(*eid)->getTags().begin();
                  tag2 != _map->getElement(*eid)->getTags().end(); ++tag2 )
             {
-              QString kvp2 = OsmSchema::getInstance().toKvp(tag2.key(),tag2.value());
+              QString kvp2 = OsmSchema::toKvp(tag2.key(),tag2.value());
 
               // Skip the tags that are common
               if (e->getTags().contains(tag2.key())) continue;
@@ -163,7 +163,7 @@ public:
               if (OsmSchema::getInstance().getTagVertex(kvp2).valueType == hoot::Enumeration)
               {
                 // "Missing" == "" tag value
-                QString kvp1 = OsmSchema::getInstance().toKvp(tag2.key(),"");
+                QString kvp1 = OsmSchema::toKvp(tag2.key(),"");
 
                 // LOG_INFO("Got Tags:" + kvp1 + " " + kvp2);
                 _coOccurrence[kvp1][kvp2]++;
@@ -237,8 +237,6 @@ private:
 
 };
 
-
-AttributeCoOccurrence::AttributeCoOccurrence() {}
 
 void AttributeCoOccurrence::addToMatrix(const ConstOsmMapPtr& in)
 

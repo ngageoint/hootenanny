@@ -19,26 +19,26 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "ScoreMatchesDiff.h"
 
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/schema/MetadataTags.h>
-#include <hoot/core/io/IoUtils.h>
-#include <hoot/core/conflate/matching/MatchType.h>
-#include <hoot/core/visitors/ElementIdToTagValueMapper.h>
-#include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/conflate/matching/MatchStatusChange.h>
-#include <hoot/core/visitors/UniqueElementIdVisitor.h>
-#include <hoot/core/util/CollectionUtils.h>
+#include <hoot/core/conflate/matching/MatchType.h>
 #include <hoot/core/criterion/TagCriterion.h>
-#include <hoot/core/visitors/FilteredVisitor.h>
+#include <hoot/core/io/IoUtils.h>
+#include <hoot/core/io/OsmXmlReader.h>
+#include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/util/CollectionUtils.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/visitors/CountManualMatchesVisitor.h>
 #include <hoot/core/visitors/CountUniqueReviewsVisitor.h>
+#include <hoot/core/visitors/ElementIdToTagValueMapper.h>
+#include <hoot/core/visitors/UniqueElementIdVisitor.h>
+#include <hoot/core/visitors/FilteredVisitor.h>
 
 namespace hoot
 {
@@ -423,7 +423,7 @@ void ScoreMatchesDiff::_writeConflateStatusDetail(QTextStream& out)
   else
   {
     out << "\nNew Wrong Matches:\n\n";
-    if (_newlyWrongMatchSwitches.size() == 0)
+    if (_newlyWrongMatchSwitches.empty())
     {
       out << "none";
     }
@@ -445,7 +445,7 @@ void ScoreMatchesDiff::_writeConflateStatusDetail(QTextStream& out)
     }
 
     out << "\nNew Correct Matches:\n\n";
-    if (_newlyCorrectMatchSwitches.size() == 0)
+    if (_newlyCorrectMatchSwitches.empty())
     {
       out << "none";
     }
@@ -468,7 +468,7 @@ void ScoreMatchesDiff::_writeConflateStatusDetail(QTextStream& out)
   }
 
   out << "\n\nAdded Elements:\n\n";
-  if (_elementIdsAdded.size() == 0)
+  if (_elementIdsAdded.empty())
   {
     out << "none";
   }
@@ -485,7 +485,7 @@ void ScoreMatchesDiff::_writeConflateStatusDetail(QTextStream& out)
   }
 
   out << "\nRemoved Elements:\n\n";
-  if (_elementIdsRemoved.size() == 0)
+  if (_elementIdsRemoved.empty())
   {
      out << "none";
   }

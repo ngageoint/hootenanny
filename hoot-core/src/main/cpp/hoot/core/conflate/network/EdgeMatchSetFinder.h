@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef EDGEMATCHSETFINDER_H
 #define EDGEMATCHSETFINDER_H
@@ -40,7 +40,7 @@ struct EdgeMatchScore
 };
 
 // Stores a set of edge matches, keyed by a similarity string; see EdgeMatch::isVerySimilarTo
-typedef QHash<QString, EdgeMatchScore> EdgeMatchSimilarity;
+using EdgeMatchSimilarity = QHash<QString, EdgeMatchScore>;
 
 class EdgeMatchSetFinder
 {
@@ -129,8 +129,8 @@ private:
   void _resetEdgeMatchSimilarities();
 };
 
-typedef std::shared_ptr<EdgeMatchSetFinder> EdgeMatchSetFinderPtr;
-typedef std::shared_ptr<const EdgeMatchSetFinder> ConstEdgeMatchSetFinderPtr;
+using EdgeMatchSetFinderPtr = std::shared_ptr<EdgeMatchSetFinder>;
+using ConstEdgeMatchSetFinderPtr = std::shared_ptr<const EdgeMatchSetFinder>;
 
 }
 

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -43,14 +43,14 @@ public:
 
   static QString className() { return "hoot::MultiaryPoiIngestCmd"; }
 
-  virtual QString getName() const override { return "multiary-poi-ingest"; }
+  QString getName() const override { return "multiary-poi-ingest"; }
 
-  virtual QString getDescription() const override
-  { return "Ingests POIs for use by Multiary POI Conflation (experimental) "; }
+  QString getDescription() const override
+  { return "Ingests POIs for use by multiary-poi-conflate (experimental) "; }
 
-  virtual QString getType() const override { return "rnd"; }
+  QString getType() const override { return "rnd"; }
 
-  virtual int runSimple(QStringList& args) override
+  int runSimple(QStringList& args) override
   {
     QElapsedTimer timer;
     timer.start();

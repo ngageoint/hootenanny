@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "TagFilteredDifferencer.h"
 
@@ -33,11 +33,9 @@ using namespace std;
 namespace hoot
 {
 
-double TagFilteredDifferencer::diff(const ConstOsmMapPtr&, const ConstElementPtr& e1,
-  const ConstElementPtr& e2) const
+double TagFilteredDifferencer::diff(
+  const ConstOsmMapPtr&, const ConstElementPtr& e1, const ConstElementPtr& e2) const
 {
-  //const ElementId debugId = ElementId(ElementType::Way, -857);
-
   OsmSchema& schema = OsmSchema::getInstance();
 
   vector<SchemaVertex> v1 = schema.getUniqueSchemaVertices(e1->getTags());
@@ -54,24 +52,11 @@ double TagFilteredDifferencer::diff(const ConstOsmMapPtr&, const ConstElementPtr
         if (isValidTag(v2[j]))
         {
           const double score = 1 - schema.score(v1[i], v2[j]);
-
-//          if (e1->getElementId() == debugId || e2->getElementId() == debugId)
-//          {
-//            LOG_TRACE("Diff between: " << v1[i].name << " and " << v2[j].name << ": " << score);
-//          }
-
           result = min(score, result);
         }
       }
     }
   } 
-
-//  if (e1->getElementId() == debugId || e2->getElementId() == debugId)
-//  {
-//    LOG_TRACE(
-//      "Final diff between: " << e1->getElementId() << " and " << e2->getElementId() << ": " <<
-//      result);
-//  }
 
   return result;
 }

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -59,6 +59,7 @@ public:
     _forceToRndList.append("optimize-network-conf");
     _forceToRndList.append("perturb");
     _forceToRndList.append("score-matches");
+    _forceToRndList.append("sort");
     _forceToRndList.append("type-similarity");
   }
 
@@ -131,6 +132,14 @@ private:
 
   int _printSummary()
   {
+    cout << endl << "For detailed command help type: hoot help (command name)" << endl << endl;
+
+    // Please update the asciidoc user documentation if you change this usage.
+    cout << "Usage:" << endl << endl;
+    cout << "hoot <command> [--logLevel] [-C configFile ] [-D optionName=optionValue] \\" << endl <<
+            "  [-D optionName=\"<optionValueEntry 1>;<optionValueEntry 2>;...\"] [args]"
+         << endl << endl;
+
     const vector<QString> cmds = Factory::getInstance().getObjectNamesByBase(Command::className());
     vector<std::shared_ptr<Command>> coreCmds;
     vector<std::shared_ptr<Command>> rndCmds;
@@ -168,15 +177,7 @@ private:
     cout << endl << "Advanced Commands:" << endl << endl;
     _printCommands(rndCmds);
 
-    // Please update the asciidoc user documentation if you change this usage.
-    cout << endl << "Usage:" << endl << endl;
-    cout << "hoot <command> [--logLevel] [-C configFile ] [-D optionName=optionValue] " <<
-            "[-D optionName=\"<optionValueEntry 1>;<optionValueEntry 2>;...\"] [args]"
-         << endl << endl;
-
-    cout << "For detailed command help type: hoot help (command name)" << endl << endl;
-
-    cout << "Log Levels:" << endl;
+    cout << endl << "Log Levels:" << endl << endl;
     cout << "  --trace" << endl;
     cout << "  --debug" << endl;
     cout << "  --info" << endl;
@@ -185,11 +186,12 @@ private:
     cout << "  --error" << endl;
     cout << endl;
 
-    cout << "List Option Operations:" << endl;
-    cout << "  Append:  [-D optionName+=optionValueEntry]" << endl;
-    cout << "  Prepend: [-D optionName++=optionValueEntry]" << endl;
-    cout << "  Remove:  [-D optionName-=optionValueEntry]" << endl;
-    cout << "  Replace: [-D optionName=\"[old optionValueEntry 1]->[new optionValueEntry 1];[old optionValueEntry 2]->[new optionValueEntry 2]\"...]"
+    cout << "List Option Operations:" << endl << endl;
+    cout << "  Append:  [-D optionName+=optionValue]" << endl;
+    cout << "  Prepend: [-D optionName++=optionValue]" << endl;
+    cout << "  Remove:  [-D optionName-=optionValue]" << endl;
+    cout << "  Replace: [-D optionName=\"[old optionValue 1]->[new optionValue 1];\\"
+         << endl << "                           [old optionValue 2]->[new optionValue 2]\"...]"
          << endl;
 
     return 0;

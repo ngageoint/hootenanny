@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef MAXIMALSUBLINESTRINGMATCHER_H
 #define MAXIMALSUBLINESTRINGMATCHER_H
@@ -54,27 +54,27 @@ public:
    * @throws NeedsReviewException If the multilinestring situation is too complex to handle with
    *  a reasonable set of rules.
    */
-  virtual WaySublineMatchString findMatch(const ConstOsmMapPtr& map, const ConstElementPtr& e1,
-    const ConstElementPtr& e2, Meters maxRelevantDistance = -1) const;
+  WaySublineMatchString findMatch(const ConstOsmMapPtr& map, const ConstElementPtr& e1,
+    const ConstElementPtr& e2, Meters maxRelevantDistance = -1) const override;
 
-  virtual void setConfiguration(const Settings& s);
+  void setConfiguration(const Settings& s) override;
 
-  virtual void setMaxRelevantAngle(Radians r);
+  void setMaxRelevantAngle(Radians r) override;
   /**
    * minSplitSize is not supported at this time.
    */
-  virtual void setMinSplitSize(Meters minSplitSize);
-  virtual void setHeadingDelta(Meters headingDelta);
+  void setMinSplitSize(Meters minSplitSize) override;
+  void setHeadingDelta(Meters headingDelta) override;
   virtual void setSublineMatcher(const std::shared_ptr<SublineMatcher>& sm);
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Matches lines based on the maximal subline string found"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
-  virtual QString getSublineMatcherName() const { return _sublineMatcher->getName(); }
+  QString getSublineMatcherName() const override { return _sublineMatcher->getName(); }
 
 private:
 
@@ -92,8 +92,8 @@ private:
   {
   public:
 
-    ScoredMatch() : score(0.0) {}
-    ScoredMatch(double s, const std::vector<WaySublineMatch>& m) : score(s), matches(m) {}
+    ScoredMatch() : score(0.0) { }
+    ScoredMatch(double s, const std::vector<WaySublineMatch>& m) : score(s), matches(m) { }
 
     double score;
     std::vector<WaySublineMatch> matches;

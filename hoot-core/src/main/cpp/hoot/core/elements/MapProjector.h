@@ -19,18 +19,16 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef __MAP_PROJECTOR_H__
 #define __MAP_PROJECTOR_H__
 
 // GDAL
 #include <ogr_core.h>
-class OGRCoordinateTransformation;
-class OGRSpatialReference;
 
 // GEOS
 #include <geos/geom/Coordinate.h>
@@ -38,8 +36,8 @@ class OGRSpatialReference;
 #include <geos/geom/Geometry.h>
 
 // Hoot
-#include <hoot/core/util/Units.h>
 #include <hoot/core/elements/ElementProvider.h>
+#include <hoot/core/util/Units.h>
 
 // Qt
 #include <QString>
@@ -47,6 +45,9 @@ class OGRSpatialReference;
 // Standard
 #include <memory>
 #include <vector>
+
+class OGRCoordinateTransformation;
+class OGRSpatialReference;
 
 namespace hoot
 {
@@ -211,7 +212,7 @@ public:
 
   ReprojectCoordinateFilter(OGRCoordinateTransformation* t);
 
-  virtual void filter_rw(geos::geom::Coordinate* c) const;
+  void filter_rw(geos::geom::Coordinate* c) const override;
 
   void project(geos::geom::Coordinate* c) const;
 

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef MULTIPLE_CRITERION_CONSUMER_VISITOR_H
 #define MULTIPLE_CRITERION_CONSUMER_VISITOR_H
@@ -51,17 +51,17 @@ public:
   MultipleCriterionConsumerVisitor();
   virtual ~MultipleCriterionConsumerVisitor() = default;
 
-  virtual void addCriterion(const ElementCriterionPtr& crit) override;
+  void addCriterion(const ElementCriterionPtr& crit) override;
 
   void setChainCriteria(bool chain) { _chainCriteria = chain; }
   void setNegateCriteria(bool negate) { _negateCriteria = negate; }
   void setConfigureChildren(bool configure) { _configureChildren = configure; }
 
-  QString toString() const;
+  QString toString() const override;
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 protected:
 

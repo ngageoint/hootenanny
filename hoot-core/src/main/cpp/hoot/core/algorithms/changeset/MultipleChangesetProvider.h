@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef MULTIPLECHANGESETPROVIDER_H
 #define MULTIPLECHANGESETPROVIDER_H
@@ -44,24 +44,24 @@ public:
   explicit MultipleChangesetProvider(const std::shared_ptr<OGRSpatialReference>& pProjection)
     : _projection(pProjection) { }
 
-  virtual ~MultipleChangesetProvider() = default;
+  ~MultipleChangesetProvider() = default;
 
-  virtual std::shared_ptr<OGRSpatialReference> getProjection() const override;
-
-  /**
-   * @see ChangeSetProvider
-   */
-  virtual void close();
+  std::shared_ptr<OGRSpatialReference> getProjection() const override;
 
   /**
    * @see ChangeSetProvider
    */
-  virtual bool hasMoreChanges();
+  void close() override;
 
   /**
    * @see ChangeSetProvider
    */
-  virtual Change readNextChange() override;
+  bool hasMoreChanges() override;
+
+  /**
+   * @see ChangeSetProvider
+   */
+  Change readNextChange() override;
 
   void addChangesetProvider(ChangesetProviderPtr newChangeset);
 
@@ -73,7 +73,7 @@ private:
   std::list<ChangesetProviderPtr> _changesets;
 };
 
-typedef std::shared_ptr<MultipleChangesetProvider> MultipleChangesetProviderPtr;
+using MultipleChangesetProviderPtr = std::shared_ptr<MultipleChangesetProvider>;
 
 }
 

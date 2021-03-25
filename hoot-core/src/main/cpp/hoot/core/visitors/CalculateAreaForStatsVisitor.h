@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef CALCULATEAREAFORSTATSVISITOR_H
 #define CALCULATEAREAFORSTATSVISITOR_H
@@ -35,8 +35,8 @@ namespace hoot
 {
 
 /**
- * Sums the length of all the ways. The map projection is used so to get meters the map must be
- * first reprojected into meters.
+ * Sums the area of all the ways. The map projection is used so to get meters the map must be
+ * first reprojected into meters. This is meant for use in calculating map statistics only.
  */
 class CalculateAreaForStatsVisitor : public ElementConstOsmMapVisitor, public SingleStatistic
 {
@@ -45,7 +45,7 @@ public:
   static QString className() { return "hoot::CalculateAreaForStatsVisitor"; }
 
   CalculateAreaForStatsVisitor() : _total(0) { }
-  virtual ~CalculateAreaForStatsVisitor() = default;
+  ~CalculateAreaForStatsVisitor() = default;
 
   /**
    * Returns the area in meters squared.
@@ -54,16 +54,16 @@ public:
 
   double getArea() const { return _total; }
 
-  double getStat() const { return getArea(); }
+  double getStat() const override { return getArea(); }
 
-  virtual void visit(const ConstElementPtr& e) override;
+  void visit(const ConstElementPtr& e) override;
 
   // We don't use this outside of stats, so hide it from the info API.
-  virtual QString getDescription() const { return ""; }
+  QString getDescription() const override { return ""; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef DATACONVERTER_H
 #define DATACONVERTER_H
@@ -47,7 +47,7 @@ namespace hoot
 class elementTranslatorThread : public QThread
 {
   Q_OBJECT
-  void run();
+  void run() override;
 
 public:
 
@@ -64,7 +64,7 @@ public:
 class ogrWriterThread : public QThread
 {
   Q_OBJECT
-  void run();
+  void run() override;
 
 public:
 
@@ -92,9 +92,9 @@ public:
   static const QString JOB_SOURCE;
 
   DataConverter();
-  virtual ~DataConverter() = default;
+  ~DataConverter() = default;
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
   /**
    * Converts multiple datasets from format to a single output format
@@ -133,7 +133,12 @@ private:
   void _validateInput(const QStringList& inputs, const QString& output);
 
   // converts from any input to an OGR output; a translation is required
-  void _convertToOgr(const QString& input, const QString& output);
+  void _convertToOgr(const QStringList& inputs, const QString& output);
+
+  // _convertToOgr will call this to run the translator in a separate thread for a performance
+  // increase if certain pre-conditions are met.
+  void _transToOgrMT(const QStringList& inputs, const QString& output);
+
   // converts from an OGR input to any output; a translation is required
   void _convertFromOgr(const QStringList& inputs, const QString& output);
 
@@ -146,9 +151,6 @@ private:
 
   void _fillElementCache(const QString& inputUrl, ElementCachePtr cachePtr,
                          QQueue<ElementPtr>& workQ);
-  // _convertToOgr will call this to run the translator in a separate thread for a performance
-  // increase if certain pre-conditions are met.
-  void _transToOgrMT(const QString& input, const QString& output);
 
   /*
    * Attempts to determine the relative weighting of each layer in an OGR data source based on

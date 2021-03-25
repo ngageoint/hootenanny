@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2012, 2013, 2014, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -123,7 +123,7 @@ public:
     WayPtr way1(new Way(Status::Unknown1, 1, 15.0));
     way1->setTag("key1", "value1");
     way1->addNode(node1->getId());
-    way1->addNode(node2->getId());;
+    way1->addNode(node2->getId());
 
     WayPtr way2(new Way(Status::Unknown1, 2, 15.0));
     way2->setTag("key1", "value1");
@@ -210,7 +210,7 @@ public:
 
     RelationPtr relation1(new Relation(Status::Unknown1, 1, 15.0, "type1"));
     relation1->setTag("key1", "value1");
-    relation1->addElement("role1", way1);;
+    relation1->addElement("role1", way1);
 
     RelationPtr relation2(new Relation(Status::Unknown1, 1, 15.0, "type1"));
     relation2->setTag("key1", "value1");

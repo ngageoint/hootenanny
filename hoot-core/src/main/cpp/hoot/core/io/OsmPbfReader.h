@@ -19,17 +19,14 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef OSMPBFREADER_H
 #define OSMPBFREADER_H
-
-// GDAL
-class OGRSpatialReference;
 
 // Qt
 #include <QHash>
@@ -46,6 +43,9 @@ class OGRSpatialReference;
 
 // tgs
 #include <tgs/BigContainers/BigMap.h>
+
+// GDAL
+class OGRSpatialReference;
 
 namespace hoot
 {
@@ -92,12 +92,9 @@ public:
    */
   OsmPbfReader(const QString& urlString);
 
-  virtual ~OsmPbfReader();
+  ~OsmPbfReader();
 
-  /**
-   * @see ElementInputStream
-   */
-  virtual OsmPbfReader* clone() const { return new OsmPbfReader(*this); }
+  OsmPbfReader* clone() const { return new OsmPbfReader(*this); }
 
   /**
    * Scan through the file and calculate the offsets of every blob. This is handy when
@@ -108,14 +105,14 @@ public:
   /**
    * Determines the reader's default element status
    */
-  virtual void setDefaultStatus(Status status) override { _status = status; }
+  void setDefaultStatus(Status status) override { _status = status; }
 
   /**
    * Determines whether the reader should use the element id's from the file being read
    */
-  virtual void setUseDataSourceIds(bool useDataSourceIds) override { _useFileId = useDataSourceIds; }
+  void setUseDataSourceIds(bool useDataSourceIds) override { _useFileId = useDataSourceIds; }
 
-  virtual void setUseFileStatus(bool useFileStatus) override { _useFileStatus = useFileStatus; }
+  void setUseFileStatus(bool useFileStatus) override { _useFileStatus = useFileStatus; }
 
   /**
    * If the input is a directory then the underlying files are read in turn, otherwise readFile
@@ -143,27 +140,27 @@ public:
    */
   void setPermissive(bool permissive) { _permissive = permissive; }
 
-  virtual bool isSupported(const QString& urlStr) override;
+  bool isSupported(const QString& urlStr) override;
 
-  virtual void open(const QString& urlStr) override;
+  void open(const QString& urlStr) override;
 
-  virtual void initializePartial();
+  void initializePartial() override;
   /**
    * The read command called after open.
    */
-  virtual void read(const OsmMapPtr& map) override;
+  void read(const OsmMapPtr& map) override;
 
-  virtual bool hasMoreElements() override;
+  bool hasMoreElements() override;
 
-  virtual std::shared_ptr<Element> readNextElement() override;
+  std::shared_ptr<Element> readNextElement() override;
 
-  virtual void finalizePartial() override;
+  void finalizePartial() override;
 
-  void close();
+  void close() override;
 
-  virtual void setConfiguration(const Settings &conf) override;
+  void setConfiguration(const Settings &conf) override;
 
-  virtual std::shared_ptr<OGRSpatialReference> getProjection() const override;
+  std::shared_ptr<OGRSpatialReference> getProjection() const override;
 
   bool getSortedTypeThenId() { return _typeThenId; }
 
@@ -177,7 +174,7 @@ public:
    */
   bool isSorted(const QString& file);
 
-  virtual QString supportedFormats() { return ".osm.pbf"; }
+  QString supportedFormats() override { return ".osm.pbf"; }
 
 private:
 
@@ -204,7 +201,7 @@ private:
 
   std::string _inflated;
   // Bend over backwards to keep the PBF headers out of the normal build. They're quite large.
-  OsmPbfReaderData* _d;
+  std::shared_ptr<OsmPbfReaderData> _d;
   std::vector<QString> _strings;
 
   OsmMapPtr _map;

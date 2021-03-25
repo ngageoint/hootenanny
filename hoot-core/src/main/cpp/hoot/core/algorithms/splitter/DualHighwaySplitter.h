@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef DUALHIGHWAYSPLITTER_H
@@ -44,7 +44,7 @@ class OsmMap;
 class Way;
 
 /**
- * Splits all "divided=yes" highways into two oneway streets. All intersections should be split
+ * Splits all "divided=yes" highways into two one way streets. All intersections should be split
  * before this method is called. Failure to do so will result in undefined behavior. A number of
  * assumptions must be made to do this including assumptions about the direction of travel on
  * roads (right or left hand drivers).
@@ -55,31 +55,31 @@ public:
 
   static QString className() { return "hoot::DualHighwaySplitter"; }
 
-  typedef enum DrivingSide
+  enum DrivingSide
   {
     Left,
     Right
-  } DrivingSide;
+  };
 
   DualHighwaySplitter();
   DualHighwaySplitter(const std::shared_ptr<const OsmMap>& map, DrivingSide drivingSide,
                       Meters splitSize);
-  virtual ~DualHighwaySplitter() = default;
+  ~DualHighwaySplitter() = default;
 
   std::shared_ptr<OsmMap> splitAll();
 
   static std::shared_ptr<OsmMap> splitAll(const std::shared_ptr<const OsmMap>& map,
                                           DrivingSide drivingSide, Meters defaultSplitSize);
 
-  virtual void apply(std::shared_ptr<OsmMap>& map);
+  void apply(std::shared_ptr<OsmMap>& map) override;
 
-  virtual QString getInitStatusMessage() const
+  QString getInitStatusMessage() const override
   { return "Splitting divided highways into two one way streets..."; }
 
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   { return "Split " + QString::number(_numAffected) + " divided highways"; }
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Splits all 'divided=yes' highways into two one way streets"; }
 
   /**
@@ -88,11 +88,11 @@ public:
    * This isn't actually using HighwayCriterion in the filtering, but for the purposes of reducing
    * unnecessary conflate ops we don't need to run it unless we're running road conflation.
    */
-  virtual QStringList getCriteria() const;
+  QStringList getCriteria() const override;
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

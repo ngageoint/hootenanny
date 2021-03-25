@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef OSM_GBDX_JSON_WRITER
 #define OSM_GBDX_JSON_WRITER
@@ -49,28 +49,28 @@ public:
   static QString className() { return "hoot::OsmGbdxJsonWriter"; }
 
   OsmGbdxJsonWriter(int precision = ConfigOptions().getWriterPrecision());
-  virtual ~OsmGbdxJsonWriter() = default;
+  ~OsmGbdxJsonWriter() = default;
 
   /**
    * @brief Create a directory to hold all of the GeoJSON files
    * @param url
    */
-  virtual void open(const QString& path) override;
+  void open(const QString& path) override;
 
   /**
    * @brief write Write the OsmMap out in GeoJSON format with one feature per file, writer must be "open"
    * @param map
    */
-  virtual void write(const ConstOsmMapPtr& map) override;
+  void write(const ConstOsmMapPtr& map) override;
 
   /**
    * @brief isSupported returns true if the URL is likely supported
    * @param url Filename ending in ".gbdx"
    * @return
    */
-  virtual bool isSupported(const QString& url) override { return url.toLower().endsWith(".gbdx"); }
+  bool isSupported(const QString& url) override { return url.toLower().endsWith(".gbdx"); }
 
-  virtual QString supportedFormats() override { return ".gdbx"; }
+  QString supportedFormats() override { return ".gdbx"; }
 
 protected:
 
@@ -87,7 +87,7 @@ protected:
    * @brief _writeNodes Iterates all nodes that aren't part of another element and writes
    *   them out individual GeoJSON files
    */
-  virtual void _writeNodes();
+  void _writeNodes() override;
 
   /**
    * @brief _writeNode Writes a single node; metadata, tags, and geometry
@@ -99,7 +99,7 @@ protected:
    * @brief _writeWays Iterates all ways that aren't part of another element and writes
    *   them out individual GeoJSON files
    */
-  virtual void _writeWays();
+  void _writeWays() override;
 
   /**
    * @brief _writeWay Writes a single way; metadata, tags, and geometry
@@ -111,7 +111,7 @@ protected:
    * @brief _writeRelations Iterates all relations that aren't part of another element and writes
    *   them out individual GeoJSON files
    */
-  virtual void _writeRelations();
+  void _writeRelations() override;
   /**
    * @brief _writeRelationInfo Writes relation specific information, relation-type and roles
    * @param relation

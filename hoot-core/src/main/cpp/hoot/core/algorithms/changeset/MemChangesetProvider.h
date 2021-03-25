@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef MEMCHANGESETPROVIDER_H
 #define MEMCHANGESETPROVIDER_H
@@ -44,31 +44,34 @@ public:
   explicit MemChangesetProvider(const std::shared_ptr<OGRSpatialReference>& pProjection)
     : _projection(pProjection) { }
 
-  virtual ~MemChangesetProvider() = default;
+  ~MemChangesetProvider() = default;
 
   /**
    * @see ChangeSetProvider
    */
-  virtual std::shared_ptr<OGRSpatialReference> getProjection() const override;
+  std::shared_ptr<OGRSpatialReference> getProjection() const override;
 
   /**
    * @see ChangeSetProvider
    */
-  virtual void close();
+  void close() override;
 
   /**
    * @see ChangeSetProvider
    */
-  virtual bool hasMoreChanges();
+  bool hasMoreChanges() override;
 
   /**
    * @see ChangeSetProvider
    */
-  virtual Change readNextChange() override;
+  Change readNextChange() override;
 
-  void addChange(Change newChange);
+  /**
+   * @see ChangeSetProvider
+   */
+  int getNumChanges() const override;
 
-  size_t getNumChanges();
+  void addChange(const Change& newChange);
 
   bool containsChange(ElementId eID);
 
@@ -78,7 +81,7 @@ private:
   std::list<Change> _changes;
 };
 
-typedef std::shared_ptr<MemChangesetProvider> MemChangesetProviderPtr;
+using MemChangesetProviderPtr = std::shared_ptr<MemChangesetProvider>;
 
 }
 

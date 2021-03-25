@@ -19,14 +19,15 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2021 Maxar (http://www.maxar.com/)
  */
 #include "NeedsReviewCriterion.h"
 
 // Hoot
+#include <hoot/core/conflate/review/ReviewMarker.h>
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/util/Factory.h>
 
@@ -37,7 +38,7 @@ HOOT_FACTORY_REGISTER(ElementCriterion, NeedsReviewCriterion)
 
 bool NeedsReviewCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  return _reviewMarker.isNeedsReview(_map, e);
+  return ReviewMarker::isNeedsReview(_map, e);
 }
 
 }

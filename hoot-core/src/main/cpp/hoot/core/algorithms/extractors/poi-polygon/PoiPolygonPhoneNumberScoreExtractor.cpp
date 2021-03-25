@@ -19,19 +19,19 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "PoiPolygonPhoneNumberScoreExtractor.h"
 
 // hoot
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/elements/OsmMap.h>
 
 // libphonenumber
 #include <phonenumbers/phonenumberutil.h>
@@ -60,12 +60,12 @@ double PoiPolygonPhoneNumberScoreExtractor::extract(const OsmMap& /*map*/,
                                                     const ConstElementPtr& poly) const
 {
   const QList<ElementPhoneNumber> poiPhoneNumbers = _phoneNumberParser.parsePhoneNumbers(*poi);
-  if (poiPhoneNumbers.size() > 0)
+  if (!poiPhoneNumbers.empty())
   {
     LOG_VART(poiPhoneNumbers.size());
   }
   const QList<ElementPhoneNumber> polyPhoneNumbers = _phoneNumberParser.parsePhoneNumbers(*poly);
-  if (polyPhoneNumbers.size() > 0)
+  if (!polyPhoneNumbers.empty())
   {
     LOG_VART(polyPhoneNumbers.size());
   }

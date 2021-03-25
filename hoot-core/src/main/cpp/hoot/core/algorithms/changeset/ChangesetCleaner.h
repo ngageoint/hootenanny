@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef CHANGESET_CLEANER_H
 #define CHANGESET_CLEANER_H
@@ -58,57 +58,57 @@ public:
    */
   ChangesetCleaner(const QList<ChangesetProviderPtr>& changesetProviders);
 
-  virtual ~ChangesetCleaner();
+  ~ChangesetCleaner();
 
   /**
    * @see ChangeSetProvider
    */
-  virtual std::shared_ptr<OGRSpatialReference> getProjection() const override;
+  std::shared_ptr<OGRSpatialReference> getProjection() const override;
 
   /**
    * @see ChangeSetProvider
    */
-  virtual void close() override;
+  void close() override;
 
   /**
    * @see ChangeSetProvider
    */
-  virtual bool hasMoreChanges() override;
+  bool hasMoreChanges() override;
 
   /**
    * @see ChangeSetProvider
    */
-  virtual Change readNextChange() override;
+  Change readNextChange() override;
 
   /**
    * @see ChangeSetProvider
    */
-  virtual int getNumFromElementsParsed() const override;
+  int getNumFromElementsParsed() const override;
 
   /**
    * @see ChangeSetProvider
    */
-  virtual int getNumToElementsParsed() const override;
+  int getNumToElementsParsed() const override;
 
   /**
    * @see ChangeSetProvider
    */
-  virtual int getNumCreateChanges() const override;
+  int getNumCreateChanges() const override;
 
   /**
    * @see ChangeSetProvider
    */
-  virtual int getNumModifyChanges() const override;
+  int getNumModifyChanges() const override;
 
   /**
    * @see ChangeSetProvider
    */
-  virtual int getNumDeleteChanges() const override;
+  int getNumDeleteChanges() const override;
 
   /**
    * @see ChangeSetProvider
    */
-  virtual int getNumChanges() const override;
+  int getNumChanges() const override;
 
 private:
 

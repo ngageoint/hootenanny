@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef RECURSIVEELEMENTREMOVER_H
 #define RECURSIVEELEMENTREMOVER_H
@@ -70,32 +70,32 @@ public:
    * will be deleted. Even if isSatisfied returns false the children of that element will still
    * be searched.
    */
-  RecursiveElementRemover(ElementId eid, const ElementCriterion* criterion = NULL);
+  RecursiveElementRemover(ElementId eid, const ElementCriterion* criterion = nullptr);
 
   /**
    * It is expected that the eid will be populated with addElement after construction.
    */
-  RecursiveElementRemover() : _criterion(NULL) { }
-  virtual ~RecursiveElementRemover() = default;
+  RecursiveElementRemover() : _criterion(nullptr) { }
+  ~RecursiveElementRemover() = default;
 
-  virtual void addElement(const ConstElementPtr& e) { _eid = e->getElementId(); }
+  void addElement(const ConstElementPtr& e) override { _eid = e->getElementId(); }
 
   /**
    * Removes an element as defined by this object.
    */
-  virtual void apply(const std::shared_ptr<OsmMap>& map);
+  void apply(const std::shared_ptr<OsmMap>& map) override;
 
-  virtual QString getDescription() const { return "Recursively removes elements from a map"; }
+  QString getDescription() const override { return "Recursively removes elements from a map"; }
 
-  virtual QString getInitStatusMessage() const
+  QString getInitStatusMessage() const override
   { return "Recursively removing elements..."; }
 
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   { return "Removed " + QString::number(_numAffected) + " elements"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

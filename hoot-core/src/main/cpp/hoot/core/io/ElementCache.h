@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef ELEMENTCACHE_H
 #define ELEMENTCACHE_H
@@ -123,52 +123,6 @@ public:
    */
   virtual ConstRelationPtr getNextRelation() = 0;
 
-  // Functions for ElementInputStream
-  virtual void close() = 0;             // Also works for elementoutputstream
-  virtual bool hasMoreElements() = 0;
-
-  /**
-   * @brief readNextElement
-   *
-   * @note There is no guarantee of the order that items will be pulled from the cache when this
-   *      method is invoked. If ordering of elements (e.g., all nodes first, then all ways, and
-   *      finally all relations) is required, the getNext(Node/Way/Relation) methods should be
-   *      invoked
-   *
-   * @return Pointer to next element out of cache
-   */
-  virtual ElementPtr readNextElement() = 0;
-
-  // Functions for ElementOutputStream
-  virtual void writeElement(ElementPtr& element) = 0;
-
-  // Functions from ElementProvider
-
-  virtual std::shared_ptr<OGRSpatialReference> getProjection() const = 0;
-
-  virtual bool containsElement(const ElementId& eid) const = 0;
-
-  virtual ConstElementPtr getElement(const ElementId& id) const = 0;
-
-  virtual const ConstNodePtr getNode(long id) const = 0;
-
-  virtual const NodePtr getNode(long id) = 0;
-
-  virtual const ConstRelationPtr getRelation(long id) const = 0;
-
-  virtual const RelationPtr getRelation(long id) = 0;
-
-  virtual const ConstWayPtr getWay(long id) const = 0;
-
-  virtual const WayPtr getWay(long id) = 0;
-
-  virtual bool containsNode(long id) const = 0;
-
-  virtual bool containsRelation(long id) const = 0;
-
-  virtual bool containsWay(long id) const = 0;
-
-
   // Cache-specific items
   virtual void removeElement(const ElementId& eid) = 0;
 
@@ -182,7 +136,7 @@ public:
 
 };
 
-typedef std::shared_ptr<ElementCache> ElementCachePtr;
+using ElementCachePtr = std::shared_ptr<ElementCache>;
 
 }
 

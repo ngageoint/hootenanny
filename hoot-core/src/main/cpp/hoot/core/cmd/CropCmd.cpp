@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2012, 2013, 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -53,11 +53,11 @@ public:
 
   CropCmd() = default;
 
-  virtual QString getName() const override { return "crop"; }
+  QString getName() const override { return "crop"; }
 
-  virtual QString getDescription() const override { return "Crops a map to a bounds"; }
+  QString getDescription() const override { return "Crops a map to a bounds"; }
 
-  virtual int runSimple(QStringList& args) override
+  int runSimple(QStringList& args) override
   {
     if (args.size() < 3 || args.size() > 4)
     {
@@ -80,6 +80,7 @@ public:
     MapCropper cropper;
     cropper.setBounds(_env);
     cropper.setConfiguration(Settings::getInstance());
+    //cropper.setRemoveSuperflousFeatures(false);
     cropper.apply(map);
 
     IoUtils::saveMap(map, out);
@@ -93,7 +94,7 @@ protected:
 
   std::shared_ptr<geos::geom::Geometry> _env;
 
-  virtual void _writeBoundsFile() override
+  void _writeBoundsFile() override
   {
     OsmMapWriterFactory::write(
       GeometryUtils::createMapFromBounds(*(_env->getEnvelopeInternal())),

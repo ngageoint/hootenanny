@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -32,7 +32,7 @@
 #include <hoot/core/conflate/matching/MatchFactory.h>
 #include <hoot/core/conflate/merging/MergerFactory.h>
 #include <hoot/core/conflate/UnifyingConflator.h>
-#include <hoot/core/ops/NamedOp.h>
+#include <hoot/core/ops/OpExecutor.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/rnd/visitors/MultiaryPoiHashVisitor.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
@@ -65,14 +65,14 @@ public:
 
   MultiaryConflatePoiCmd() = default;
 
-  virtual QString getName() const override { return "multiary-poi-conflate"; }
+  QString getName() const override { return "multiary-poi-conflate"; }
 
-  virtual QString getDescription() const override
+  QString getDescription() const override
   { return "Conflates two or more POI maps into a single map (experimental) "; }
 
-  virtual QString getType() const override { return "rnd"; }
+  QString getType() const override { return "rnd"; }
 
-  virtual int runSimple(QStringList& args) override
+  int runSimple(QStringList& args) override
   {
     QElapsedTimer timer;
     timer.start();
@@ -107,13 +107,13 @@ public:
     map->visitRw(hashVisitor);
 
     LOG_INFO("Applying pre-conflation operations...");
-    NamedOp(ConfigOptions().getConflatePreOps()).apply(map);
+    OpExecutor(ConfigOptions().getConflatePreOps()).apply(map);
 
     MultiaryUtilities::conflate(map);
 
     // Apply any user specified operations.
     LOG_INFO("Applying post-conflation operations...");
-    NamedOp(ConfigOptions().getConflatePostOps()).apply(map);
+    OpExecutor(ConfigOptions().getConflatePostOps()).apply(map);
 
     MapProjector::projectToWgs84(map);
 

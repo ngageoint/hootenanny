@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2019, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef WAYSTRING_H
 #define WAYSTRING_H
@@ -52,7 +52,7 @@ public:
 
   static int logWarnCount;
 
-  WayString();
+  WayString() = default;
 
   void append(const WaySubline& subline);
 
@@ -105,8 +105,8 @@ private:
   WayLocation _changeToPreferred(int index, const WayLocation& wl, ElementId preferredEid) const;
 };
 
-typedef std::shared_ptr<WayString> WayStringPtr;
-typedef std::shared_ptr<const WayString> ConstWayStringPtr;
+using WayStringPtr = std::shared_ptr<WayString>;
+using ConstWayStringPtr = std::shared_ptr<const WayString>;
 
 }
 

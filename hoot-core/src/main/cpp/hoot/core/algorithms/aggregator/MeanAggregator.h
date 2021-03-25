@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef MEANAGGREGATOR_H
 #define MEANAGGREGATOR_H
@@ -39,18 +39,18 @@ public:
   static QString className() { return "hoot::MeanAggregator"; }
 
   MeanAggregator() = default;
-  virtual ~MeanAggregator() = default;
+  ~MeanAggregator() = default;
 
-  virtual double aggregate(std::vector<double>& d) const override;
+  double aggregate(std::vector<double>& d) const override;
 
-  virtual QString toString() const override { return "MeanAggregator"; }
+  QString toString() const override { return "MeanAggregator"; }
 
-  virtual QString getDescription() const override
+  QString getDescription() const override
   { return "Aggregates data based on the mean value"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 };
 
 }

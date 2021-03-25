@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "ParallelWayCriterion.h"
@@ -32,21 +32,21 @@
 #include <geos/geom/LineString.h>
 #include <geos/geom/Point.h>
 #include <geos/operation/distance/DistanceOp.h>
-using namespace geos::operation::distance;
 
 // Hoot
 #include <hoot/core/algorithms/WayDiscretizer.h>
 #include <hoot/core/algorithms/WayHeading.h>
 #include <hoot/core/algorithms/linearreference/LocationOfPoint.h>
-#include <hoot/core/elements/ElementGeometryUtils.h>
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/Element.h>
+#include <hoot/core/elements/ElementGeometryUtils.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
+#include <hoot/core/util/Factory.h>
 
 // Qt
 #include <QDebug>
 
 using namespace geos::geom;
+using namespace geos::operation::distance;
 
 namespace hoot
 {
@@ -101,7 +101,7 @@ Radians ParallelWayCriterion::calculateDifference(const ConstWayPtr& w) const
   for (size_t i = 0; i < _points.size(); i++)
   {
     // calculate the heading from point to the nearest point on the candidate way.
-    CoordinateSequence* seq = DistanceOp::closestPoints(_points[i], ls.get());
+    std::shared_ptr<CoordinateSequence> seq(DistanceOp::closestPoints(_points[i], ls.get()));
     double d = seq->getAt(0).distance(seq->getAt(1));
     if (d > 0.5)
     {
@@ -117,7 +117,6 @@ Radians ParallelWayCriterion::calculateDifference(const ConstWayPtr& w) const
       deltaSum += toRadians(90.0);
       count++;
     }
-    delete seq;
   }
 
   if (count == 0)
@@ -144,6 +143,22 @@ bool ParallelWayCriterion::isSatisfied(const ConstElementPtr& e) const
     return parallel == _isParallel;
   }
   return false;
+}
+
+bool ParallelWayCriterion::isParallel(const ConstOsmMapPtr& map, const ConstElementPtr& e1, const ConstElementPtr& e2)
+{
+  if (e1->getElementType() != ElementType::Way)
+    return false;
+  ConstWayPtr way = std::dynamic_pointer_cast<const Way>(e1);
+  return ParallelWayCriterion(map, way, true).isSatisfied(e2);
+}
+
+bool ParallelWayCriterion::notParallel(const ConstOsmMapPtr& map, const ConstElementPtr& e1, const ConstElementPtr& e2)
+{
+  if (e1->getElementType() != ElementType::Way)
+    return false;
+  ConstWayPtr way = std::dynamic_pointer_cast<const Way>(e1);
+  return ParallelWayCriterion(map, way, false).isSatisfied(e2);
 }
 
 }

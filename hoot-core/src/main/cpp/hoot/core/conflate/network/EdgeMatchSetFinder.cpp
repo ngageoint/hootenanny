@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #include "EdgeMatchSetFinder.h"
 
@@ -143,7 +143,7 @@ bool EdgeMatchSetFinder::_addEdgeMatches(ConstEdgeMatchPtr em)
         LOG_VART(neighbors1);
         LOG_VART(neighbors2);
 
-        if (neighbors1.size() > 0 || neighbors2.size() > 0)
+        if (!neighbors1.empty() || !neighbors2.empty())
         {
           foundSolution = _addEdgeNeighborsToEnd(em, neighbors1, neighbors2) || foundSolution;
         }
@@ -512,7 +512,7 @@ EdgeMatchPtr EdgeMatchSetFinder::_trimFromEdge(ConstEdgeMatchPtr em)
   QList<EdgeSublineMatchPtr> matches =
     _details->calculateMatchingSublines(em->getString1()->getEdge(0), em->getString2()->getEdge(0));
 
-  if (matches.size() == 0)
+  if (matches.empty())
   {
     return result;
   }
@@ -584,7 +584,7 @@ EdgeMatchPtr EdgeMatchSetFinder::_trimToEdge(ConstEdgeMatchPtr em)
     _details->calculateMatchingSublines(em->getString1()->getLastEdge(),
                                         em->getString2()->getLastEdge());
 
-  if (matches.size() == 0)
+  if (matches.empty())
   {
     return result;
   }

@@ -19,18 +19,17 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "MaxChannelCombiner.h"
 
-// Standard Includes
-using namespace std;
-
 #include <tgs/TgsException.h>
+
+using namespace std;
 
 namespace Tgs
 {
@@ -50,7 +49,7 @@ namespace Tgs
   Image<unsigned char> MaxChannelCombiner::combineChannels(
     const std::vector<const Image<unsigned char>* >& channels)
   {
-    if (channels.size() == 0 || channels.size() > 254)
+    if (channels.empty() || channels.size() > 254)
     {
       throw Tgs::Exception("There must be between 1 and 254 channels.");
     }

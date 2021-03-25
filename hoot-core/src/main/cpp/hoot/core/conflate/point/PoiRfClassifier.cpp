@@ -19,43 +19,43 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "PoiRfClassifier.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/algorithms/aggregator/MeanAggregator.h>
 #include <hoot/core/algorithms/aggregator/RmseAggregator.h>
 #include <hoot/core/algorithms/aggregator/SigmaAggregator.h>
 #include <hoot/core/algorithms/aggregator/QuantileAggregator.h>
-#include <hoot/core/algorithms/string/ExactStringDistance.h>
-#include <hoot/core/algorithms/string/MaxWordSetDistance.h>
-#include <hoot/core/algorithms/string/MeanWordSetDistance.h>
-#include <hoot/core/algorithms/splitter/MultiLineStringSplitter.h>
-#include <hoot/core/algorithms/string/LevenshteinDistance.h>
-#include <hoot/core/algorithms/string/Soundex.h>
-#include <hoot/core/conflate/matching/MatchType.h>
+#include <hoot/core/algorithms/extractors/AngleHistogramExtractor.h>
 #include <hoot/core/algorithms/extractors/AttributeScoreExtractor.h>
-#include <hoot/core/algorithms/extractors/DistanceScoreExtractor.h>
-#include <hoot/core/algorithms/extractors/LengthScoreExtractor.h>
-#include <hoot/core/algorithms/extractors/WeightedMetricDistanceExtractor.h>
-#include <hoot/core/algorithms/extractors/WeightedShapeDistanceExtractor.h>
 #include <hoot/core/algorithms/extractors/CentroidDistanceExtractor.h>
 #include <hoot/core/algorithms/extractors/CompactnessExtractor.h>
+#include <hoot/core/algorithms/extractors/DistanceScoreExtractor.h>
 #include <hoot/core/algorithms/extractors/EdgeDistanceExtractor.h>
+#include <hoot/core/algorithms/extractors/LengthScoreExtractor.h>
 #include <hoot/core/algorithms/extractors/NameExtractor.h>
 #include <hoot/core/algorithms/extractors/OverlapExtractor.h>
 #include <hoot/core/algorithms/extractors/SmallerOverlapExtractor.h>
-#include <hoot/core/algorithms/extractors/AngleHistogramExtractor.h>
-#include <hoot/core/ops/CopyMapSubsetOp.h>
+#include <hoot/core/algorithms/extractors/WeightedMetricDistanceExtractor.h>
+#include <hoot/core/algorithms/extractors/WeightedShapeDistanceExtractor.h>
+#include <hoot/core/algorithms/splitter/MultiLineStringSplitter.h>
+#include <hoot/core/algorithms/string/ExactStringDistance.h>
+#include <hoot/core/algorithms/string/LevenshteinDistance.h>
+#include <hoot/core/algorithms/string/MaxWordSetDistance.h>
+#include <hoot/core/algorithms/string/MeanWordSetDistance.h>
+#include <hoot/core/algorithms/string/Soundex.h>
+#include <hoot/core/conflate/matching/MatchClassification.h>
+#include <hoot/core/conflate/matching/MatchType.h>
 #include <hoot/core/language/ToEnglishTranslateStringDistance.h>
+#include <hoot/core/ops/CopyMapSubsetOp.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/conflate/matching/MatchClassification.h>
+#include <hoot/core/util/Factory.h>
 
 // Standard
 #include <fstream>
@@ -119,7 +119,7 @@ PoiRfClassifier::PoiRfClassifier()
   LOG_VART(missingExtractors);
   LOG_VART(_rfFactorLabels);
 
-  if (missingExtractors.size() > 0)
+  if (!missingExtractors.empty())
   {
     if (logWarnCount < Log::getWarnMessageLimit())
     {
@@ -143,7 +143,7 @@ MatchClassification PoiRfClassifier::classify(const ConstOsmMapPtr& map,
 
   std::map<QString, double> features = getFeatures(map, eid1, eid2);
 
-  if (features.size() == 0)
+  if (features.empty())
   {
     p.setMiss();
   }

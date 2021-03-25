@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "DualHighwaySplitter.h"
@@ -35,29 +35,27 @@
 #include <geos/geom/Point.h>
 #include <geos/operation/buffer/BufferParameters.h>
 #include <geos/operation/buffer/BufferBuilder.h>
-using namespace geos::geom;
-using namespace geos::operation::buffer;
 
 // Hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/algorithms/Distance.h>
 #include <hoot/core/algorithms/WayHeading.h>
 #include <hoot/core/algorithms/linearreference/LocationOfPoint.h>
-#include <hoot/core/elements/Way.h>
 #include <hoot/core/criterion/ChainCriterion.h>
 #include <hoot/core/criterion/DistanceNodeCriterion.h>
+#include <hoot/core/criterion/HighwayCriterion.h>
 #include <hoot/core/criterion/NotCriterion.h>
 #include <hoot/core/criterion/TagCriterion.h>
-#include <hoot/core/ops/RemoveNodeByEid.h>
-#include <hoot/core/ops/RemoveWayByEid.h>
-#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/elements/Way.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/geometry/GeometryUtils.h>
-#include <hoot/core/util/Log.h>
+#include <hoot/core/ops/RemoveNodeByEid.h>
+#include <hoot/core/ops/RemoveWayByEid.h>
 #include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/ElementIdsVisitor.h>
-#include <hoot/core/criterion/HighwayCriterion.h>
 
 // Qt
 #include <QDebug>
@@ -70,6 +68,7 @@ using namespace geos::operation::buffer;
 #include <tgs/StreamUtils.h>
 
 using namespace geos::geom;
+using namespace geos::operation::buffer;
 using namespace std;
 using namespace Tgs;
 
@@ -122,7 +121,7 @@ std::shared_ptr<Way> DualHighwaySplitter::_createOneWay(const std::shared_ptr<co
   result->setPid(w->getPid());
 
   // This sometimes happens if the buffer builder returns a multilinestring. See #2275
-  if (newLs == 0)
+  if (newLs == nullptr)
   {
     // TODO: MultiLineString not handled properly See r2275 (need to port issue to github)
 
@@ -217,11 +216,10 @@ bool DualHighwaySplitter::_onRight(long intersectionId, const std::shared_ptr<Wa
                                    long leftNn, long rightNn)
 {
   // calculate the normalized vector from nodeId to the nearest end point on left.
-  size_t inboundNodeIndex;
+  size_t inboundNodeIndex = 0;
   Coordinate vi;
   if (inbound->getNodeId(0) == intersectionId)
   {
-    inboundNodeIndex = 0;
     vi = WayHeading::calculateVector(_result->getNode(inbound->getNodeId(0))->toCoordinate(),
                                      _result->getNode(inbound->getNodeId(1))->toCoordinate());
   }
@@ -277,7 +275,7 @@ std::shared_ptr<OsmMap> DualHighwaySplitter::splitAll()
   bool todoLogged = false;
   for (size_t i = 0; i < wayIds.size(); i++)
   {
-    if (wayIds.size() % 1000 == 0 && wayIds.size() > 0)
+    if (wayIds.size() % 1000 == 0 && !wayIds.empty())
     {
       PROGRESS_DEBUG("  splitting " << i << " / " << wayIds.size());
       todoLogged = true;

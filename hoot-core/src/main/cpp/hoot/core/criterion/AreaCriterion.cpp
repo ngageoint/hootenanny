@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "AreaCriterion.h"
 
@@ -31,6 +31,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
 #include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/criterion/AreaWayNodeCriterion.h>
 
 namespace hoot
 {
@@ -66,7 +67,7 @@ bool AreaCriterion::isSatisfied(const Tags& tags, const ElementType& elementType
   // this to be an area feature.
   for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
   {
-    const QString kvp = OsmSchema::getInstance().toKvp(it.key(), it.value());
+    const QString kvp = OsmSchema::toKvp(it.key(), it.value());
     const SchemaVertex& tv = OsmSchema::getInstance().getTagVertex(kvp);
     uint16_t g = tv.geometries;
 
@@ -93,6 +94,13 @@ bool AreaCriterion::isSatisfied(const Tags& tags, const ElementType& elementType
 
   LOG_VART(result);
   return result;
+}
+
+QStringList AreaCriterion::getChildCriteria() const
+{
+  QStringList criteria;
+  criteria.append(AreaWayNodeCriterion::className());
+  return criteria;
 }
 
 }

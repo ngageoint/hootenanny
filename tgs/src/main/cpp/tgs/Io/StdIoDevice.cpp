@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2021 Maxar (http://www.maxar.com/)
  */
 #include "StdIoDevice.h"
 
@@ -38,10 +38,6 @@ StdIoDevice::StdIoDevice(istream& in) : _in(&in)
   open(QIODevice::ReadOnly);
 }
 
-StdIoDevice::~StdIoDevice()
-{
-}
-
 bool StdIoDevice::atEnd() const
 {
   return _in->eof();
@@ -49,7 +45,7 @@ bool StdIoDevice::atEnd() const
 
 qint64 StdIoDevice::readData(char* data, qint64 maxlen)
 {
-  if (_in == 0)
+  if (_in == nullptr)
   {
     return 0;
   }

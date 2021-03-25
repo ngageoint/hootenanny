@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef TAGS_JS_H
 #define TAGS_JS_H
@@ -88,7 +88,7 @@ inline void toCpp(v8::Handle<v8::Value> v, Tags& t)
   }
 
   v8::Handle<v8::Object> obj = v8::Handle<v8::Object>::Cast(v);
-  TagsJs* js = 0;
+  TagsJs* js = nullptr;
   if (obj->InternalFieldCount() > 0)
   {
     js = node::ObjectWrap::Unwrap<TagsJs>(obj);
@@ -101,7 +101,7 @@ inline void toCpp(v8::Handle<v8::Value> v, Tags& t)
   {
     QStringList keys = toCpp<QStringList>(obj->GetPropertyNames());
 
-    if (keys.size() == 0)
+    if (keys.empty())
     {
       throw IllegalArgumentException("Expected a MostEnglishNameJs, got: (" + toJson(v) + ")");
     }

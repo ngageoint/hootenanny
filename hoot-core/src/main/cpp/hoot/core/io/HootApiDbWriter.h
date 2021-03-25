@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef HOOTAPIDBWRITER_H
 #define HOOTAPIDBWRITER_H
@@ -46,21 +46,21 @@ public:
   static QString className() { return "hoot::HootApiDbWriter"; }
 
   HootApiDbWriter();
-  virtual ~HootApiDbWriter();
+  ~HootApiDbWriter();
 
-  void close();
+  void close() override;
 
-  virtual void finalizePartial();
+  void finalizePartial() override;
 
   long getMapId() const { return _hootdb.getMapId(); }
 
-  virtual bool isSupported(const QString& urlStr) override;
+  bool isSupported(const QString& urlStr) override;
 
-  virtual void open(const QString& urlStr) override;
+  void open(const QString& urlStr) override;
 
-  virtual void deleteMap(const QString& urlStr);
+  void deleteMap(const QString& urlStr);
 
-  virtual void setConfiguration(const Settings &conf) override;
+  void setConfiguration(const Settings &conf) override;
 
   void setCreateUser(bool createIfNotFound) { _createUserIfNotFound = createIfNotFound; }
   void setOverwriteMap(bool overwriteMap) { _overwriteMap = overwriteMap; }
@@ -77,23 +77,23 @@ public:
   void setJobId(const QString& id) { _jobId = id; }
   void setPreserveVersionOnInsert(bool preserve) { _preserveVersionOnInsert = preserve; }
 
-  virtual void writePartial(const ConstNodePtr& n) override;
-  virtual void writePartial(const ConstWayPtr& w) override;
-  virtual void writePartial(const ConstRelationPtr& r) override;
+  void writePartial(const ConstNodePtr& n) override;
+  void writePartial(const ConstWayPtr& w) override;
+  void writePartial(const ConstRelationPtr& r) override;
 
   /**
    * @see OsmChangeWriter
    */
-  virtual void writeChange(const Change& change) override;
-  virtual void setElementPayloadFormat(const QString& /*format*/) override {}
+  void writeChange(const Change& change) override;
+  void setElementPayloadFormat(const QString& /*format*/) override {}
 
   void setCopyBulkInsertActivated(bool activated) { _copyBulkInsertActivated = activated; }
 
-  virtual QString supportedFormats() override { return MetadataTags::HootApiDbScheme() + "://"; }
+  QString supportedFormats() override { return MetadataTags::HootApiDbScheme() + "://"; }
 
 protected:
 
-  typedef Tgs::BigMap<long, long> IdRemap;
+  using IdRemap = Tgs::BigMap<long, long>;
   IdRemap _nodeRemap;
   IdRemap _relationRemap;
   IdRemap _wayRemap;

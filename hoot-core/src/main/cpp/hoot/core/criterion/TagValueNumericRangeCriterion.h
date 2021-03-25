@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef TAGVALUENUMERICRANGECRITERION_H
 #define TAGVALUENUMERICRANGECRITERION_H
@@ -48,21 +48,21 @@ public:
   TagValueNumericRangeCriterion();
   TagValueNumericRangeCriterion(const QStringList tagKeys, const long rangeMin,
                                 const long rangeMax);
-  virtual ~TagValueNumericRangeCriterion() = default;
+  ~TagValueNumericRangeCriterion() = default;
 
-  virtual bool isSatisfied(const ConstElementPtr& e) const override;
+  bool isSatisfied(const ConstElementPtr& e) const override;
 
-  virtual ElementCriterionPtr clone()
+  ElementCriterionPtr clone() override
   { return ElementCriterionPtr(new TagValueNumericRangeCriterion()); }
 
-  void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Identifies elements having numeric tag values falling within a range"; }
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

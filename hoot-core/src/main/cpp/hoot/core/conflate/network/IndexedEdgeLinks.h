@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef INDEXEDEDGELINKS_H
 #define INDEXEDEDGELINKS_H
@@ -45,8 +45,8 @@ public:
   virtual ~IndexedEdgeLinks() = default;
 };
 
-typedef std::shared_ptr<IndexedEdgeLinks> IndexedEdgeLinksPtr;
-typedef std::shared_ptr<const IndexedEdgeLinks> ConstIndexedEdgeLinksPtr;
+using IndexedEdgeLinksPtr = std::shared_ptr<IndexedEdgeLinks>;
+using ConstIndexedEdgeLinksPtr = std::shared_ptr<const IndexedEdgeLinks>;
 
 // not implemented
 bool operator<(ConstIndexedEdgeLinksPtr, ConstIndexedEdgeLinksPtr);

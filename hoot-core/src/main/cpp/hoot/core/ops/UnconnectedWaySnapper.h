@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef UNCONNECTED_WAY_SNAPPER
@@ -56,6 +56,12 @@ namespace hoot
  * Additionally, this class can be configured to mark any snapped roads as needing review or mark
  * them for review without snapping them.
  *
+ * Not implementing ElementConflatableCheck here yet, since the only time this op is currently used
+ * in the conflate pipeline is for Differential Conflation when roads are configured to be snapped.
+ * DiffConflator already has a check to skip snapping if a road matcher isn't configured. If this
+ * class is ever added to the default conflate pipeline, then it would need to perform elemnt
+ * conflatable checks.
+ *
  * *Possible* future enhancements:
  *
  * - If a way is snapped to another way and the ways end up being parallel and overlap, snapping
@@ -79,12 +85,12 @@ public:
   static QString className() { return "hoot::UnconnectedWaySnapper"; }
 
   UnconnectedWaySnapper();
-  virtual ~UnconnectedWaySnapper() = default;
+  ~UnconnectedWaySnapper() = default;
 
   /**
    * Snaps unconnected ways in the input to each other
    */
-  virtual void apply(OsmMapPtr& map);
+  void apply(OsmMapPtr& map) override;
 
   /**
    * Finds the closest endpont on 'disconnected' and snaps it to the closest node in 'connectTo'
@@ -100,29 +106,29 @@ public:
   /**
    * @see OperationStatus
    */
-  virtual QString getInitStatusMessage() const
+  QString getInitStatusMessage() const override
   { return "Snapping unconnected ways to the nearest way..."; }
 
   /**
    * @see OperationStatus
    */
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   { return "Snapped " + QString::number(_numAffected) + " unconnected ways."; }
 
   /**
    * @see OperationStatus
    */
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Snaps unconnected ways to the nearest way."; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
   /**
    * @see Configurable
    */
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
   long getNumSnappedToWays() const { return _numSnappedToWays; }
   long getNumSnappedToWayNodes() const { return _numSnappedToWayNodes; }

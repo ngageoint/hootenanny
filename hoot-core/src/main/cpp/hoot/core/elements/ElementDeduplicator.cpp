@@ -19,24 +19,24 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "ElementDeduplicator.h"
 
 // Hoot
+#include <hoot/core/criterion/TagCriterion.h>
+#include <hoot/core/criterion/WayNodeCriterion.h>
+#include <hoot/core/elements/RelationMemberUtils.h>
+#include <hoot/core/elements/WayUtils.h>
+#include <hoot/core/ops/RemoveElementByEid.h>
+#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/ElementHashVisitor.h>
-#include <hoot/core/elements/WayUtils.h>
-#include <hoot/core/ops/RemoveElementByEid.h>
-#include <hoot/core/criterion/WayNodeCriterion.h>
-#include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/criterion/TagCriterion.h>
-#include <hoot/core/elements/RelationMemberUtils.h>
 
 namespace hoot
 {
@@ -365,7 +365,7 @@ bool ElementDeduplicator::_areWayNodesInWaysOfMismatchedType(
 
 void ElementDeduplicator::_removeElements(const QSet<ElementId>& elementsToRemove, OsmMapPtr map)
 {
-  if (elementsToRemove.size() == 0)
+  if (elementsToRemove.empty())
   {
     return;
   }

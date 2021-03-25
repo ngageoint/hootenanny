@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
 // CPP Unit Includes
@@ -97,10 +97,10 @@ public:
 ////    stxxl::config* cfg = stxxl::config::get_instance();
 ////    cfg->
 //    const int m = 1;
-//    typedef stxxl::map<long, long, CompareLess, 4096 * m, 4096 * m> MapType;
+//    using MayType = stxxl::map<long, long, CompareLess, 4096 * m, 4096 * m>;
 //    MapType foo(1024 * 1024 * 512, 1024 * 1024 * 256);
 
-//    typedef stxxl::VECTOR_GENERATOR<long>::result VectorType;
+//    using VectorType = stxxl::VECTOR_GENERATOR<long>::result;
 //    VectorType bar;
 
 //    size_t iterations = 10000000;
@@ -184,10 +184,10 @@ public:
 //    size_t iterations = 10000000;
 //    bool doReadTest = false;
 //    //BigMap<long, long> foo;
-//    typedef stxxl::map<long, long, CompareLess, 4096, 4096> MapType;
+//    using MapType = stxxl::map<long, long, CompareLess, 4096, 4096>;
 //    MapType bar(1024 * 1024 * 512, 1024 * 1024 * 256);
 
-//    typedef stxxl::VECTOR_GENERATOR<long>::result VectorType;
+//    using VectorType stxxl::VECTOR_GENERATOR<long>::result;
 //    VectorType v;
 
 //    vector<pair<long, long>> pairs;

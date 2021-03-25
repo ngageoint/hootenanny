@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "OsmMap.h"
@@ -33,7 +33,6 @@
 // Hoot
 #include <hoot/core/algorithms/rubber-sheet/RubberSheet.h>
 #include <hoot/core/conflate/IdSwap.h>
-#include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/elements/ConstOsmMapConsumer.h>
 #include <hoot/core/elements/ElementComparer.h>
 #include <hoot/core/elements/ElementId.h>
@@ -48,14 +47,15 @@
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/SignalCatcher.h>
-#include <hoot/core/util/Validate.h>
 #include <hoot/core/util/StringUtils.h>
-using namespace hoot::elements;
+#include <hoot/core/util/Validate.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 
 // Qt
 #include <QDebug>
 #include <QFileInfo>
 
+using namespace hoot::elements;
 using namespace std;
 
 namespace hoot
@@ -128,11 +128,11 @@ void OsmMap::append(const ConstOsmMapPtr& appendFromMap, const bool throwOutDupe
   }
   if (!getProjection()->IsSame(appendFromMap->getProjection().get()))
   {
-    char* wkt1 = 0;
+    char* wkt1 = nullptr;
     getProjection()->exportToPrettyWkt(&wkt1);
     QString proj1 = QString::fromLatin1(wkt1);
     CPLFree(wkt1);
-    char* wkt2 = 0;
+    char* wkt2 = nullptr;
     appendFromMap->getProjection()->exportToPrettyWkt(&wkt2);
     QString proj2 = QString::fromLatin1(wkt2);
     CPLFree(wkt2);
@@ -235,10 +235,10 @@ void OsmMap::append(const ConstOsmMapPtr& appendFromMap, const bool throwOutDupe
   }
 
   const RelationMap& allRelations = appendFromMap->getRelations();
-  for (RelationMap::const_iterator it = allRelations.begin(); it != allRelations.end(); ++it)
+  for (RelationMap::const_iterator r_it = allRelations.begin(); r_it != allRelations.end(); ++r_it)
   {
     bool appendElement = true;
-    RelationPtr relation = it->second;
+    RelationPtr relation = r_it->second;
     if (containsElement(ElementId(relation->getElementId())))
     {
       ElementPtr existingElement = getElement(relation->getElementId());
@@ -313,7 +313,7 @@ void OsmMap::addNode(const NodePtr& n)
 
 void OsmMap::addNodes(const std::vector<NodePtr>& nodes)
 {
-  if (nodes.size() > 0)
+  if (!nodes.empty())
   {
     long minId = nodes[0]->getId();
     long maxId = minId;
@@ -441,9 +441,9 @@ void OsmMap::_copy(const ConstOsmMapPtr& from)
     ++itn;
   }
 
-  for (size_t i = 0; i < from->getListeners().size(); i++)
+  for (size_t idx = 0; idx < from->getListeners().size(); idx++)
   {
-    std::shared_ptr<OsmMapListener> l = from->getListeners()[i];
+    std::shared_ptr<OsmMapListener> l = from->getListeners()[idx];
     _listeners.push_back(l->clone());
   }
 }
@@ -520,7 +520,7 @@ void OsmMap::replace(const std::shared_ptr<const Element>& from,
   // do some error checking before we add the new element.
   if (from->getElementType() == ElementType::Node && to->getElementType() != ElementType::Node)
   {
-    if (n2w->getWaysByNode(from->getId()).size() != 0)
+    if (!n2w->getWaysByNode(from->getId()).empty())
     {
       throw HootException(
         "Trying to replace a node with a non-node when the node is part of a way.");
@@ -558,7 +558,7 @@ void OsmMap::replace(const std::shared_ptr<const Element>& from, const QList<Ele
   if (from->getElementType() == ElementType::Node &&
     (_listContainsNode(to) == false || to.size() > 1))
   {
-    if (n2w->getWaysByNode(from->getId()).size() != 0)
+    if (!n2w->getWaysByNode(from->getId()).empty())
     {
       throw IllegalArgumentException(
         "Trying to replace a node with multiple nodes or a non-node when the node is part of a way.");
@@ -624,10 +624,10 @@ void OsmMap::replaceNode(long oldId, long newId)
     LOG_VART(w->getElementId());
 
 #   ifdef DEBUG
-      if (w.get() == NULL)
-      {
-        LOG_WARN("Way for way id: " << *it << " is null.");
-      }
+    if (w.get() == nullptr)
+    {
+      LOG_WARN("Way for way id: " << *it << " is null.");
+    }
 #   endif
 
     w->replaceNode(oldId, newId);
@@ -733,7 +733,7 @@ void OsmMap::visitRo(ConstElementVisitor& visitor) const
 void OsmMap::visitNodesRo(ConstElementVisitor& visitor) const
 {
   ConstOsmMapConsumer* consumer = dynamic_cast<ConstOsmMapConsumer*>(&visitor);
-  if (consumer != 0)
+  if (consumer != nullptr)
   {
     consumer->setOsmMap(this);
   }
@@ -766,7 +766,7 @@ void OsmMap::visitNodesRo(ConstElementVisitor& visitor) const
 void OsmMap::visitWaysRo(ConstElementVisitor& visitor) const
 {
   ConstOsmMapConsumer* consumer = dynamic_cast<ConstOsmMapConsumer*>(&visitor);
-  if (consumer != 0)
+  if (consumer != nullptr)
   {
     consumer->setOsmMap(this);
   }
@@ -799,7 +799,7 @@ void OsmMap::visitWaysRo(ConstElementVisitor& visitor) const
 void OsmMap::visitRelationsRo(ConstElementVisitor& visitor) const
 {
   ConstOsmMapConsumer* consumer = dynamic_cast<ConstOsmMapConsumer*>(&visitor);
-  if (consumer != 0)
+  if (consumer != nullptr)
   {
     consumer->setOsmMap(this);
   }
@@ -832,7 +832,7 @@ void OsmMap::visitRelationsRo(ConstElementVisitor& visitor) const
 void OsmMap::visitRw(ConstElementVisitor& visitor)
 {
   OsmMapConsumer* consumer = dynamic_cast<OsmMapConsumer*>(&visitor);
-  if (consumer != 0)
+  if (consumer != nullptr)
   {
     consumer->setOsmMap(this);
   }
@@ -913,7 +913,7 @@ void OsmMap::visitRw(ConstElementVisitor& visitor)
 void OsmMap::visitRw(ElementVisitor& visitor)
 {
   OsmMapConsumer* consumer = dynamic_cast<OsmMapConsumer*>(&visitor);
-  if (consumer != 0)
+  if (consumer != nullptr)
   {
     consumer->setOsmMap(this);
   }
@@ -1048,7 +1048,7 @@ void OsmMap::visitNodesRw(ConstElementVisitor& visitor)
 void OsmMap::visitWaysRw(ConstElementVisitor& visitor)
 {
   OsmMapConsumer* consumer = dynamic_cast<OsmMapConsumer*>(&visitor);
-  if (consumer != 0)
+  if (consumer != nullptr)
   {
     consumer->setOsmMap(this);
   }
@@ -1081,7 +1081,7 @@ void OsmMap::visitWaysRw(ConstElementVisitor& visitor)
 void OsmMap::visitWaysRw(ElementVisitor& visitor)
 {
   OsmMapConsumer* consumer = dynamic_cast<OsmMapConsumer*>(&visitor);
-  if (consumer != 0)
+  if (consumer != nullptr)
   {
     consumer->setOsmMap(this);
   }
@@ -1114,7 +1114,7 @@ void OsmMap::visitWaysRw(ElementVisitor& visitor)
 void OsmMap::visitRelationsRw(ConstElementVisitor& visitor)
 {
   OsmMapConsumer* consumer = dynamic_cast<OsmMapConsumer*>(&visitor);
-  if (consumer != 0)
+  if (consumer != nullptr)
   {
     consumer->setOsmMap(this);
   }
@@ -1147,7 +1147,7 @@ void OsmMap::visitRelationsRw(ConstElementVisitor& visitor)
 void OsmMap::visitRelationsRw(ElementVisitor& visitor)
 {
   OsmMapConsumer* consumer = dynamic_cast<OsmMapConsumer*>(&visitor);
-  if (consumer != 0)
+  if (consumer != nullptr)
   {
     consumer->setOsmMap(this);
   }
@@ -1205,9 +1205,9 @@ void OsmMap::_replaceNodeInRelations(long oldId, long newId)
   ConstElementPtr oldNode = getNode(oldId);
   ConstElementPtr newNode = getNode(newId);
 
-  for ( RelationMap::iterator it = allRelations.begin(); it != allRelations.end(); ++it)
+  for ( RelationMap::iterator r_it = allRelations.begin(); r_it != allRelations.end(); ++r_it)
   {
-    RelationPtr currRelation = it->second;
+    RelationPtr currRelation = r_it->second;
 
     if (currRelation->contains(oldNodeId) == true)
     {

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef _ELEMENTS_NODE_H_
 #define _ELEMENTS_NODE_H_
@@ -58,7 +58,7 @@ public:
        QString user = ElementData::USER_EMPTY, long uid = ElementData::UID_EMPTY,
        bool visible = ElementData::VISIBLE_EMPTY);
 
-  virtual ~Node() = default;
+  ~Node() = default;
 
   /**
    * Allocate a node as a shared pointer. At this time the allocated node will be allocated as
@@ -88,9 +88,9 @@ public:
    * Clears all tags. However, unlike the other elements the x/y data and circular error aren't
    * modified b/c there isn't a clear definition of "unset" for this value.
    */
-  virtual void clear();
+  void clear() override;
 
-  virtual Element* clone() const { return new Node(*this); }
+  Element* clone() const override { return new Node(*this); }
 
   /**
    * Clone this node as a shared pointer. At this time the allocated node will be allocated as
@@ -103,10 +103,10 @@ public:
    */
   std::shared_ptr<Node> cloneSp() const;
 
-  virtual geos::geom::Envelope* getEnvelope(
+  geos::geom::Envelope* getEnvelope(
     const std::shared_ptr<const ElementProvider>& ep) const override;
 
-  virtual const geos::geom::Envelope& getEnvelopeInternal(
+  const geos::geom::Envelope& getEnvelopeInternal(
     const std::shared_ptr<const ElementProvider>& ep) const override;
 
   double getX() const { return _nodeData.getX(); }
@@ -115,26 +115,26 @@ public:
   void setX(double y);
   void setY(double x);
 
-  virtual ElementType getElementType() const { return ElementType(ElementType::Node); }
+  ElementType getElementType() const override { return ElementType(ElementType::Node); }
 
   geos::geom::Coordinate toCoordinate() const
   { return geos::geom::Coordinate(_nodeData.getX(), _nodeData.getY()); }
 
   std::shared_ptr<geos::geom::Point> toPoint() const;
 
-  QString toString() const;
+  QString toString() const override;
 
   /**
    * @see Element
    */
-  virtual void visitRo(const ElementProvider& map, ConstElementVisitor& visitor,
-                       const bool recursive = false) const;
+  void visitRo(const ElementProvider& map, ConstElementVisitor& visitor,
+                       const bool recursive = false) const override;
 
   /**
    * @see Element
    */
-  virtual void visitRw(ElementProvider& map, ConstElementVisitor& visitor,
-                       const bool recursive = false);
+  void visitRw(ElementProvider& map, ConstElementVisitor& visitor,
+                       const bool recursive = false) override;
 
   /**
    * Determines if the coordinates from this node match with that of another given a configurable
@@ -158,13 +158,13 @@ protected:
 
   NodeData _nodeData;
 
-  virtual ElementData& _getElementData() { return _nodeData; }
+  ElementData& _getElementData() override { return _nodeData; }
 
-  virtual const ElementData& _getElementData() const { return _nodeData; }
+  const ElementData& _getElementData() const override { return _nodeData; }
 };
 
-typedef std::shared_ptr<Node> NodePtr;
-typedef std::shared_ptr<const Node> ConstNodePtr;
+using NodePtr = std::shared_ptr<Node>;
+using ConstNodePtr = std::shared_ptr<const Node>;
 
 inline NodePtr Node::newSp(Status s, long id, double x, double y, Meters circularError)
 {

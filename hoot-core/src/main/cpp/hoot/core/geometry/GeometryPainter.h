@@ -19,16 +19,22 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef __GEOMETRY_PAINTER_H__
 #define __GEOMETRY_PAINTER_H__
 
-//OGR Includes
+// Qt Includes
+#include <QMatrix>
+class QPainter;
+class QPolygonF;
+class QRect;
+
+// OGR
 class OGREnvelope;
 class OGRGeometry;
 class OGRGeometryCollection;
@@ -37,12 +43,6 @@ class OGRLineString;
 class OGRPoint;
 class OGRPolygon;
 class OGRMultiPoint;
-
-// Qt Includes
-#include <QMatrix>
-class QPainter;
-class QPolygonF;
-class QRect;
 
 namespace hoot
 {

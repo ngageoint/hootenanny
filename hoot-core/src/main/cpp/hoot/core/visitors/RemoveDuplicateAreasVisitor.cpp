@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "RemoveDuplicateAreasVisitor.h"
 
@@ -104,6 +104,10 @@ bool RemoveDuplicateAreasVisitor::_equals(const std::shared_ptr<Element>& e1,
   // convert to geometry and cache as relevant.
   std::shared_ptr<Geometry> g1 = _convertToGeometry(e1);
   std::shared_ptr<Geometry> g2 = _convertToGeometry(e2);
+  if (!g1 || g1->isEmpty() || !g2 || g2->isEmpty())
+  {
+    return false;
+  }
 
   double a1 = g1->getArea();
   double a2 = g2->getArea();
@@ -195,7 +199,7 @@ void RemoveDuplicateAreasVisitor::visit(const std::shared_ptr<Element>& e)
         // check to see if e2 is null, it is possible that we removed it w/ a previous call to
         // remove a parent. run _equals() first as it is much faster than isSatisfied() (which
         // ends up doing lots of regex matching)
-        if (e2 != 0 && _equals(e, e2) && areaCrit.isSatisfied(e2))
+        if (e2 != nullptr && _equals(e, e2) && areaCrit.isSatisfied(e2))
         {
           LOG_TRACE("e2 is area and e1/e2 equal.");
           // remove the crummier one.

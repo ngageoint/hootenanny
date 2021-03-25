@@ -19,29 +19,29 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "NodeMatcher.h"
 
 // Hoot
 #include <hoot/core/algorithms/WayHeading.h>
-#include <hoot/core/elements/NodeToWayMap.h>
-#include <hoot/core/index/OsmMapIndex.h>
-#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/algorithms/linearreference/WayLocation.h>
-#include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/util/Log.h>
-#include <hoot/core/io/IoUtils.h>
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/criterion/HighwayCriterion.h>
 #include <hoot/core/criterion/LinearWaterwayCriterion.h>
 #include <hoot/core/criterion/PowerLineCriterion.h>
 #include <hoot/core/criterion/RailwayCriterion.h>
+#include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/elements/NodeToWayMap.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/index/OsmMapIndex.h>
+#include <hoot/core/io/IoUtils.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/Log.h>
 
 // Tgs
 #include <tgs/Statistics/Normal.h>
@@ -158,7 +158,7 @@ vector<Radians> NodeMatcher::calculateAngles(const OsmMap* map, long nid,
 
   LOG_VART(badWayIds.size());
   LOG_VART(result.size());
-  if (result.size() > 0 && badWayIds.size() > 0)
+  if (!result.empty() && !badWayIds.empty())
   {
     LOG_TRACE(
       "Found " << badWayIds.size() << " bad spot(s) in NodeMatcher when calculating angles " <<
@@ -313,7 +313,7 @@ double NodeMatcher::scorePair(long nid1, long nid2)
   }
 
   // simple stupid heuristic. Replace w/ some cosine fanciness later.
-  int diff = abs((int)s1 - (int)s2);
+  int diff = abs(s1 - s2);
 
   double result = (min(s1, s2) - diff) * thetaScore * distanceScore;
 

@@ -19,17 +19,17 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "HootApiDbSqlStatementFormatter.h"
 
 // hoot
-#include <hoot/core/util/Log.h>
-#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/io/OsmApiDbSqlStatementFormatter.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Log.h>
 
 // Qt
 #include <QDateTime>
@@ -142,7 +142,7 @@ QString HootApiDbSqlStatementFormatter::nodeToSqlString(const ConstNodePtr& node
       .arg(_dateString)
       .arg(tileNumberString)
       .arg(ver);
-  if (node->getTags().size() > 0)
+  if (!node->getTags().empty())
   {
     nodeStr.replace(
       "\\N", OsmApiDbSqlStatementFormatter::escapeCopyToData(_toTagsString(node->getTags())));
@@ -161,7 +161,7 @@ QString HootApiDbSqlStatementFormatter::wayToSqlString(const long wayId, const l
       .arg(changesetId)
       .arg(_dateString)
       .arg(ver);
-  if (tags.size() > 0)
+  if (!tags.empty())
   {
     wayStr.replace("\\N", OsmApiDbSqlStatementFormatter::escapeCopyToData(_toTagsString(tags)));
   }
@@ -193,7 +193,7 @@ QString HootApiDbSqlStatementFormatter::relationToSqlString(const long relationI
       .arg(changesetId)
       .arg(_dateString)
       .arg(ver);
-  if (tags.size() > 0)
+  if (!tags.empty())
   {
     relationStr.replace("\\N", OsmApiDbSqlStatementFormatter::escapeCopyToData(_toTagsString(tags)));
   }

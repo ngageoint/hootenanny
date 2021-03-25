@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #include "ConflictsNetworkMatcher.h"
 
@@ -30,9 +30,9 @@
 #include <hoot/core/algorithms/FrechetDistance.h>
 #include <hoot/core/conflate/network/EdgeMatch.h>
 #include <hoot/core/conflate/network/EdgeMatchSetFinder.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/StringUtils.h>
 
 // Qt
@@ -65,6 +65,12 @@ ConflictsNetworkMatcher::ConflictsNetworkMatcher()
     conf.getNetworkConflictsSanityCheckSeparationDistanceMultiplier();
   _conflictingScoreThresholdModifier = conf.getNetworkConflictsConflictingScoreThresholdModifier();
   _matchThreshold = conf.getNetworkConflictsMatcherThreshold();
+  if (_matchThreshold <= 0.0 || _matchThreshold > 1.0)
+  {
+    throw IllegalArgumentException(
+      "Invalid conflicts match threshold: " + QString::number(_matchThreshold) +
+      ". Must be greater than 0.0 and less than 1.0.");
+  }
 }
 
 double ConflictsNetworkMatcher::_aggregateScores(QList<double> pairs)
@@ -310,7 +316,7 @@ void ConflictsNetworkMatcher::_createMatchRelationships()
       MatchRelationshipPtr mr(new MatchRelationship(other, false));
       QSet<ConstEdgeMatchPtr> connectingStubs = _edgeMatches->getConnectingStubs(em, other);
       QSet<ConstEdgeMatchPtr> nonConflictingStubs = connectingStubs - conflict;
-      if (connectingStubs.size() == 0 || nonConflictingStubs.size() >= 1)
+      if (connectingStubs.empty() || nonConflictingStubs.size() >= 1)
       {
         mr->setThroughStubs(_edgeMatches->getConnectingStubs(em, other));
         // if this edge supports through a stub, then record the stub that is used to support it.
@@ -449,6 +455,7 @@ void ConflictsNetworkMatcher::_iterateRank()
       relationCount = max(1, relationCount);
 
       //s = s / (double)supportCount;
+      LOG_VART(supportCount);
       s = s / (double)relationCount;
 
       if (r->isConflict() == false)
@@ -557,6 +564,8 @@ void ConflictsNetworkMatcher::_iterateSimple()
       }
       supportCount = max(1, supportCount);
       relationCount = max(1, relationCount);
+
+      LOG_VART(supportCount);
 
       s = s * _weights[r->getEdge()];
       LOG_VART(s);

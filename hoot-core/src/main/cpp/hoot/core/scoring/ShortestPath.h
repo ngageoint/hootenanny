@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef SHORTESTPATH_H
@@ -43,11 +43,12 @@ class DirectedGraph;
 class ShortestPath
 {
 public:
+
   ShortestPath(const std::shared_ptr<const DirectedGraph>& graph);
 
   void calculateCost();
 
-  double getNodeCost(long nodeId) { return _cost.contains(nodeId) ? _cost[nodeId] : -1; }
+  double getNodeCost(long nodeId) const { return _cost.contains(nodeId) ? _cost[nodeId] : -1; }
 
   /**
    * Set the cost for any starting nodes.
@@ -73,12 +74,11 @@ private:
   /**
    * Comparison struct for the priority queue. Puts the lowest scoring results on top.
    */
-  class LesserNode
-    : public std::binary_function<const Node&, const Node&, bool>
+  class LesserNode : public std::binary_function<const Node&, const Node&, bool>
   {
   public:
-    bool operator()(const Node& left,
-                    const Node& right) const
+
+    bool operator()(const Node& left, const Node& right) const
     {
       return left.cost > right.cost;
     }

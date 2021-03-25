@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef REMOVEREVIEWSBYEIDOP_H
 #define REMOVEREVIEWSBYEIDOP_H
@@ -56,28 +56,28 @@ public:
    * must be called exactly two times.
    */
   RemoveReviewsByEidOp() = default;
-  virtual ~RemoveReviewsByEidOp() = default;
+  ~RemoveReviewsByEidOp() = default;
 
   /**
    * If the elements aren't specified in the constructor this must be called exactly two times. Once
    * for 'from' and a second time for 'to'.
    */
-  virtual void addElement(const ConstElementPtr& e);
+  void addElement(const ConstElementPtr& e) override;
 
-  virtual void apply(const OsmMapPtr& map);
+  void apply(const OsmMapPtr& map) override;
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Removes conflation reviews associated with specified element IDs"; }
 
-  virtual QString getInitStatusMessage() const
+  QString getInitStatusMessage() const override
   { return "Removing conflation reviews..."; }
 
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   { return "Removed " + QString::number(_numAffected) + " conflation reviews"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

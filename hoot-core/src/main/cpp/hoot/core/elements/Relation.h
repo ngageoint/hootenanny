@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef RELATION_H
 #define RELATION_H
@@ -61,7 +61,7 @@ public:
            QString user = ElementData::USER_EMPTY, long uid = ElementData::UID_EMPTY,
            bool visible = ElementData::VISIBLE_EMPTY);
 
-  virtual ~Relation() = default;
+  ~Relation() = default;
 
   void addElement(const QString& role, const std::shared_ptr<const Element>& e);
   void addElement(const QString& role, ElementType t, long id);
@@ -70,9 +70,9 @@ public:
   /**
    * Removes members, tags, type and circularError.
    */
-  virtual void clear();
+  void clear() override;
 
-  Element* clone() const { return new Relation(*this); }
+  Element* clone() const override { return new Relation(*this); }
 
   /**
    * Returns true if this relation contains the specified ElementId. This does not recursively
@@ -111,7 +111,7 @@ public:
    * @param role role to search for
    * @return a collection of members
    */
-  const std::vector<RelationData::Entry> getElementsByRole(const QString& role);
+  std::vector<RelationData::Entry> getElementsByRole(const QString& role);
 
   const std::vector<RelationData::Entry>& getMembers() const
   { return _relationData->getElements(); }
@@ -126,12 +126,12 @@ public:
    */
   std::set<ElementId> getMemberIds(const ElementType& elementType = ElementType::Unknown) const;
 
-  virtual geos::geom::Envelope* getEnvelope(
+  geos::geom::Envelope* getEnvelope(
     const std::shared_ptr<const ElementProvider>& ep) const override;
-  virtual const geos::geom::Envelope& getEnvelopeInternal(
+  const geos::geom::Envelope& getEnvelopeInternal(
     const std::shared_ptr<const ElementProvider>& ep) const override;
 
-  virtual ElementType getElementType() const { return ElementType(ElementType::Relation); }
+  ElementType getElementType() const override { return ElementType(ElementType::Relation); }
 
   QString getType() const { return _relationData->getType(); }
 
@@ -191,19 +191,19 @@ public:
    */
   void setType(const QString& type);
 
-  QString toString() const;
+  QString toString() const override;
 
   /**
    * @see Element
    */
-  virtual void visitRo(const ElementProvider& map, ConstElementVisitor& filter,
-                       const bool recursive = true) const;
+  void visitRo(const ElementProvider& map, ConstElementVisitor& filter,
+               const bool recursive = true) const override;
 
   /**
    * @see Element
    */
-  virtual void visitRw(ElementProvider& map, ConstElementVisitor& filter,
-                       const bool recursive = true);
+  void visitRw(ElementProvider& map, ConstElementVisitor& filter,
+               const bool recursive = true) override;
 
 private:
 
@@ -211,8 +211,8 @@ private:
 
   std::shared_ptr<RelationData> _relationData;
 
-  virtual ElementData& _getElementData() { _makeWritable(); return *_relationData; }
-  virtual const ElementData& _getElementData() const { return *_relationData; }
+  ElementData& _getElementData() override { _makeWritable(); return *_relationData; }
+  const ElementData& _getElementData() const override { return *_relationData; }
 
   void _makeWritable();
 
@@ -231,8 +231,8 @@ void Relation::replaceElements(RelationData::Entry old, IT start, IT end)
   _postGeometryChange();
 }
 
-typedef std::shared_ptr<Relation> RelationPtr;
-typedef std::shared_ptr<const Relation> ConstRelationPtr;
+using RelationPtr = std::shared_ptr<Relation>;
+using ConstRelationPtr = std::shared_ptr<const Relation>;
 
 }
 

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef HOOT_SERVICES_LANGUAGE_INFO_MOCK_CLIENT_H
@@ -53,7 +53,7 @@ public:
   static QString className() { return "hoot::HootServicesLanguageInfoMockClient"; }
 
   HootServicesLanguageInfoMockClient();
-  virtual ~HootServicesLanguageInfoMockClient() = default;
+  ~HootServicesLanguageInfoMockClient() = default;
 
   /**
    * Retrieves available language apps
@@ -61,7 +61,7 @@ public:
    * @param type type of app to retrieve; "translator" or "detector"
    * @return a property tree containing the language app information
    */
-  virtual std::shared_ptr<boost::property_tree::ptree> getAvailableApps(const QString& type) override;
+  std::shared_ptr<boost::property_tree::ptree> getAvailableApps(const QString& type) override;
 
   /**
    * Retrieves translation available languages info
@@ -69,7 +69,7 @@ public:
    * @param type type of language information to retrieve; "translatable" or "detectable"
    * @return a property tree containing the language information
    */
-  virtual std::shared_ptr<boost::property_tree::ptree> getAvailableLanguages(const QString& type) override;
+  std::shared_ptr<boost::property_tree::ptree> getAvailableLanguages(const QString& type) override;
 };
 
 }

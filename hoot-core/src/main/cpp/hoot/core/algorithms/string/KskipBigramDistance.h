@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef KSKIPBIGRAMDISTANCE_H
@@ -81,7 +81,7 @@ public:
   static QString className() { return "hoot::KskipBigramDistance"; }
 
   KskipBigramDistance(int k = 2);
-  virtual ~KskipBigramDistance() = default;
+  ~KskipBigramDistance() = default;
 
   void setK(int k);
 
@@ -89,7 +89,7 @@ public:
    * Returns a value from 1 (very similar) to 0 (very dissimilar) describing the distance between
    * two strings based on their k-skip bi-grams
    */
-  virtual double compare(const QString& s1, const QString& s2) const override { return score(s1, s2); }
+  double compare(const QString& s1, const QString& s2) const override { return score(s1, s2); }
 
   QSet<QString> getBigrams(const QString& str) const;
 
@@ -97,12 +97,12 @@ public:
 
   QString toString() const override { return QString("%1-skip bi-gram").arg(_k); }
 
-  virtual QString getDescription() const override
-  { return "Returns a string comparison score derived using Skip-gram modelling"; }
+  QString getDescription() const override
+  { return "Returns a string comparison score derived using Skip-gram modeling"; }
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
   /**

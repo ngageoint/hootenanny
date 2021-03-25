@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef OSM_API_CHANGESET_H
@@ -54,14 +54,14 @@ namespace hoot
 //  Forward declaration
 class ChangesetInfo;
 /** Helpful typedefs for pointers and vectors of maps */
-typedef std::shared_ptr<ChangesetInfo> ChangesetInfoPtr;
-typedef std::map<long, ChangesetElementPtr, osm_id_sort> ChangesetElementMap;
-typedef std::vector<ChangesetElementMap> ChangesetTypeMap;
-typedef std::map<long, std::set<long>> NodeIdToWayIdMap;
-typedef std::map<long, std::set<long>> NodeIdToRelationIdMap;
-typedef std::map<long, std::set<long>> WayIdToRelationIdMap;
-typedef std::map<long, std::set<long>> RelationIdToRelationIdMap;
-typedef std::vector<std::set<long>> ElementCountSet;
+using ChangesetInfoPtr = std::shared_ptr<ChangesetInfo>;
+using ChangesetElementMap = std::map<long, ChangesetElementPtr, osm_id_sort>;
+using ChangesetTypeMap = std::vector<ChangesetElementMap>;
+using NodeIdToWayIdMap = std::map<long, std::set<long>>;
+using NodeIdToRelationIdMap = std::map<long, std::set<long>>;
+using WayIdToRelationIdMap = std::map<long, std::set<long>>;
+using RelationIdToRelationIdMap = std::map<long, std::set<long>>;
+using ElementCountSet = std::vector<std::set<long>>;
 
 /** Last element pushed in a ChangesetInfo object */
 struct LastElementInfo
@@ -569,9 +569,9 @@ class ChangesetInfo
 {
 public:
   /** Helpful typedefs for container and iterators */
-  typedef std::unordered_set<long> container;
-  typedef typename container::iterator iterator;
-  typedef typename container::const_iterator const_iterator;
+  using container = std::unordered_set<long>;
+  using iterator = container::iterator;
+  using const_iterator = container::const_iterator;
   /** Constructor */
   ChangesetInfo();
   /**

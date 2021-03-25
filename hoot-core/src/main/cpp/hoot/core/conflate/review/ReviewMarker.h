@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef REVIEWMARKER_H
 #define REVIEWMARKER_H
@@ -48,19 +48,21 @@ class ReviewMarker
 public:
 
   /// This definition may change over time.
-  typedef ElementId ReviewUid;
+  using ReviewUid = ElementId;
 
   ReviewMarker();
 
   static QString getBadGeometryType() { return _complexGeometryType; }
 
-  static std::set<ElementId> getReviewElements(const ConstOsmMapPtr &map, ReviewUid uid);
+  static std::set<ElementId> getReviewElements(const ConstOsmMapPtr& map, ReviewUid uid);
 
-  static std::set<ReviewUid> getReviewUids(const ConstOsmMapPtr &map, ConstElementPtr e1);
+  static std::set<ReviewUid> getReviewUids(const ConstOsmMapPtr& map, ConstElementPtr e1);
 
-  static QString getReviewType(const ConstOsmMapPtr &map, ReviewUid uid);
+  static std::set<ReviewUid> getReviewUids(const ConstOsmMapPtr& map, ReviewUid uid);
 
-  static std::set<ReviewUid> getReviewUids(const ConstOsmMapPtr &map);
+  static QString getReviewType(const ConstOsmMapPtr& map, ReviewUid uid);
+
+  static std::set<ReviewUid> getReviewUids(const ConstOsmMapPtr& map);
 
   /**
    * Returns true if the element is in at least one review.
@@ -83,12 +85,12 @@ public:
    * isReviewUid is preferred over this method. If we change the review mechanism in the future
    * this method may be broken. (unlikely)
    */
-  static bool isReview(const ConstElementPtr e);
+  static bool isReview(const ConstElementPtr& e);
 
   /**
    * Returns true if the specified UID is a review tag.
    */
-  static bool isReviewUid(const ConstOsmMapPtr &map, ReviewUid uid);
+  static bool isReviewUid(const ConstOsmMapPtr& map, ReviewUid uid);
 
   /**
    * Marks e1 and e2 as needing review and sets them to reference each other. If the score is
@@ -149,10 +151,10 @@ private:
   /**
    * Returns a hilbert value that represents the center of the bounds that covers e1 and e2.
    */
-  static int64_t _calculateHilbertValue(const ConstOsmMapPtr &map, ConstElementPtr e1,
+  static int64_t _calculateHilbertValue(const ConstOsmMapPtr& map, ConstElementPtr e1,
     ConstElementPtr e2 = ConstElementPtr());
 
-  static std::set<ElementId> _getReviewRelations(const ConstOsmMapPtr &map, ElementId eid);
+  static std::set<ElementId> _getReviewRelations(const ConstOsmMapPtr& map, ElementId eid);
 
   void _updateScore(Tags& t, double score);
 

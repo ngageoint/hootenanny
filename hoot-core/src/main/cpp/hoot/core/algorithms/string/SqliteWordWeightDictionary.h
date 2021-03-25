@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef SQLITEWORDWEIGHTDICTIONARY_H
@@ -46,11 +46,11 @@ class SqliteWordWeightDictionary : public WordWeightDictionary
 public:
 
   SqliteWordWeightDictionary(const QString& filePath);
-  virtual ~SqliteWordWeightDictionary() = default;
+  ~SqliteWordWeightDictionary() = default;
 
-  virtual double getMinWeight() const override { return 1.0 / (double)_count; }
+  double getMinWeight() const override { return 1.0 / (double)_count; }
 
-  virtual double getWeight(const QString& word) const override;
+  double getWeight(const QString& word) const override;
 
 private:
 
@@ -67,7 +67,7 @@ private:
   // ** Using this one, fast, low memory and I don't have to worry about int overflow **
   // HashMap<QString, long>   1.069GB   19.4sec
   // HashMap<QString, int>    1.069GB   19.2sec
-  typedef HashMap<QString, long> WeightHash;
+  using WeightHash = HashMap<QString, long>;
   mutable WeightHash _weights;
   long _count;
   QRegExp _nonWord;

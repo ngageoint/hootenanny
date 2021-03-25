@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef LONGBOX_H
 #define LONGBOX_H
@@ -45,11 +45,11 @@ public:
 
   static QString className() { return "hoot::LongBox"; }
 
-  LongBox() {}
+  LongBox() = default;
 
-  LongBox(std::vector<long int> min, std::vector<long int> max);
+  LongBox(const std::vector<long int>& min, const std::vector<long int>& max);
 
-  std::shared_ptr<LongBox> copy();
+  std::shared_ptr<LongBox> copy() const;
 
   virtual ~LongBox();
 
@@ -59,7 +59,7 @@ public:
     * Returns true if at least one edge overlaps with one of the other boxes
     * edges.
     */
-  bool edgeOverlaps(LongBox b);
+  bool edgeOverlaps(const LongBox& b);
 
   LongBox expand(int size);
 
@@ -69,13 +69,13 @@ public:
 
   std::vector<long int> getMin() const { return _min; }
 
-  void setMax(std::vector<long int> max) { _max = max; }
+  void setMax(const std::vector<long int>& max) { _max = max; }
 
-  void setMin(std::vector<long int> min) { _min = min; }
+  void setMin(const std::vector<long int>& min) { _min = min; }
 
-  bool in(std::vector<long int> p);
+  bool in(const std::vector<long int>& p);
 
-  bool intersects(LongBox b);
+  bool intersects(const LongBox& b);
 
   /**
    * @brief toString

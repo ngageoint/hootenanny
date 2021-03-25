@@ -19,26 +19,26 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "WayUtils.h"
 
 // Hoot
-#include <hoot/core/util/HootException.h>
-#include <hoot/core/util/Log.h>
-#include <hoot/core/elements/NodeUtils.h>
-#include <hoot/core/criterion/ChainCriterion.h>
 #include <hoot/core/algorithms/Distance.h>
 #include <hoot/core/algorithms/WayDiscretizer.h>
 #include <hoot/core/algorithms/linearreference/LocationOfPoint.h>
+#include <hoot/core/criterion/ChainCriterion.h>
 #include <hoot/core/elements/NodeToWayMap.h>
+#include <hoot/core/elements/NodeUtils.h>
 #include <hoot/core/index/OsmMapIndex.h>
-#include <hoot/core/util/CollectionUtils.h>
 #include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/util/CollectionUtils.h>
+#include <hoot/core/util/HootException.h>
+#include <hoot/core/util/Log.h>
 
 // GEOS
 #include <geos/geom/Coordinate.h>
@@ -149,16 +149,21 @@ QSet<long> WayUtils::getConnectedWays(const long wayId, const ConstOsmMapPtr& ma
   ConstWayPtr way = map->getWay(wayId);
   if (way)
   {
+    LOG_VART(way->getElementId());
     const std::vector<long>& wayNodeIds = way->getNodeIds();
     for (size_t i = 0; i < wayNodeIds.size(); i++)
     {
       const long wayNodeId = wayNodeIds.at(i);
+      LOG_VART(wayNodeId);
       const QSet<long>& idsOfWaysContainingNode =
         CollectionUtils::stdSetToQSet(map->getIndex().getNodeToWayMap()->getWaysByNode(wayNodeId));
-      connectedWayIds = connectedWayIds.unite(idsOfWaysContainingNode);
+      connectedWayIds.unite(idsOfWaysContainingNode);
     }
   }
 
+  // Don't include the way we're examining.
+  connectedWayIds.remove(wayId);
+  LOG_VART(connectedWayIds);
   return connectedWayIds;
 }
 
@@ -199,8 +204,8 @@ geos::geom::Coordinate WayUtils::closestWayCoordToNode(
     return geos::geom::Coordinate();
   }
 
-  // add the first and last coords in (one or both could already be there, but it won't hurt if
-  // they're duplicated)
+  // Add the first and last coords in. One or both could already be there, but it won't hurt if
+  // they're duplicated.
   ConstNodePtr firstNode = map->getNode(way->getFirstNodeId());
   ConstNodePtr lastNode = map->getNode(way->getLastNodeId());
   if (!firstNode || !lastNode)
@@ -347,15 +352,15 @@ bool WayUtils::nodesAreContainedInTheSameWay(const long nodeId1, const long node
     std::inserter(commonNodesBetweenWayGroups, commonNodesBetweenWayGroups.begin()));
   LOG_VART(commonNodesBetweenWayGroups);
 
-  return commonNodesBetweenWayGroups.size() != 0;
+  return !commonNodesBetweenWayGroups.empty();
 }
 
 bool WayUtils::nodeContainedByAnyWay(const long nodeId, const ConstOsmMapPtr& map)
 {
-  return map->getIndex().getNodeToWayMap()->getWaysByNode(nodeId).size() > 0;
+  return !map->getIndex().getNodeToWayMap()->getWaysByNode(nodeId).empty();
 }
 
-bool WayUtils::nodeContainedByAnyWay(const long nodeId, const std::set<long> wayIds,
+bool WayUtils::nodeContainedByAnyWay(const long nodeId, const std::set<long>& wayIds,
                                      const ConstOsmMapPtr& map)
 {
   std::set<long> waysContainingNode = map->getIndex().getNodeToWayMap()->getWaysByNode(nodeId);
@@ -363,7 +368,7 @@ bool WayUtils::nodeContainedByAnyWay(const long nodeId, const std::set<long> way
   std::set_intersection(
     waysContainingNode.begin(), waysContainingNode.end(), wayIds.begin(), wayIds.end(),
     std::inserter(commonWayIds, commonWayIds.begin()));
-  return commonWayIds.size() > 0;
+  return !commonWayIds.empty();
 }
 
 bool WayUtils::nodeContainedByMoreThanOneWay(const long nodeId, const ConstOsmMapPtr& map)

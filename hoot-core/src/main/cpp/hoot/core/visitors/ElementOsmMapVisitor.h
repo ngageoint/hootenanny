@@ -19,16 +19,16 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef ELEMENTOSMMAPVISITOR_H
 #define ELEMENTOSMMAPVISITOR_H
 
 // hoot
-#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 #include <hoot/core/elements/ConstOsmMapConsumer.h>
 
 namespace hoot
@@ -41,13 +41,15 @@ class ElementOsmMapVisitor : public ConstElementVisitor, public ConstOsmMapConsu
 {
 public:
 
-  ElementOsmMapVisitor() = default;
+  ElementOsmMapVisitor() : _map(nullptr) { }
   virtual ~ElementOsmMapVisitor() = default;
 
-  virtual void setOsmMap(OsmMap* map) { _map = map; }
-  virtual void setOsmMap(const OsmMap* /*map*/) { throw NotImplementedException(); }
+  void setOsmMap(OsmMap* map) override { _map = map; }
+  void setOsmMap(const OsmMap* /*map*/) override { throw NotImplementedException(); }
 
-  virtual void visit(const ConstElementPtr& e);
+  void visit(const ConstElementPtr& e) override; /**
+   * TODO: ElementVisitor already implements visit(const ElementPtr&)
+   */
   virtual void visit(const std::shared_ptr<Element>& e) = 0;
 
 protected:
@@ -55,7 +57,7 @@ protected:
   OsmMap* _map;
 };
 
-typedef std::shared_ptr<ElementOsmMapVisitor> ElementOsmMapVisitorPtr;
+using ElementOsmMapVisitorPtr = std::shared_ptr<ElementOsmMapVisitor>;
 }
 
 #endif // ELEMENTOSMMAPVISITOR_H

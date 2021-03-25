@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef __TGS__HILBERT_R_TREE_H__
@@ -44,7 +44,7 @@ namespace Tgs
 
     HilbertRTree(const std::shared_ptr<PageStore>& ps, int dimensions);
 
-    virtual ~HilbertRTree();
+    ~HilbertRTree() = default;
 
     /**
      * This method can only be called before the tree has been built. 
@@ -78,10 +78,10 @@ namespace Tgs
     };
 
     static const int ORDER = 8;
-    HilbertCurve* _hilbertCurve;
+    std::shared_ptr<HilbertCurve> _hilbertCurve;
     int _shuffleSize;
 
-    virtual int _splitBoxes(BoxVector& boxes);
+    int _splitBoxes(BoxVector& boxes) override;
 
     void _calculateHilbertValues(const std::vector<Box>& boxes, 
       const std::vector<int>& fids, std::vector<UserBoxHolder>& hilbertBoxes);
@@ -114,8 +114,8 @@ namespace Tgs
     double _swapGrandChildNodes(int parentId, const std::vector<double>& overlaps);
   };
 
-  typedef std::shared_ptr<HilbertRTree> HilbertRTreePtr;
-  typedef std::shared_ptr<const HilbertRTree> ConstHilbertRTreePtr;
+  using HilbertRTreePtr = std::shared_ptr<HilbertRTree>;
+  using ConstHilbertRTreePtr = std::shared_ptr<const HilbertRTree>;
 }
 
 

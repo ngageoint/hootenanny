@@ -19,27 +19,27 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "RelationMerger.h"
 
 // hoot
-#include <hoot/core/schema/TagMergerFactory.h>
-#include <hoot/core/ops/ReplaceElementOp.h>
+#include <hoot/core/criterion/InBoundsCriterion.h>
+#include <hoot/core/elements/RelationMemberComparison.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/ops/RemoveRelationByEid.h>
-#include <hoot/core/elements/RelationMemberComparison.h>
-#include <hoot/core/criterion/InBoundsCriterion.h>
+#include <hoot/core/ops/ReplaceElementOp.h>
+#include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/util/ConfigUtils.h>
 
 namespace hoot
 {
 
 // ONLY ENABLE THIS DURING DEBUGGING; We don't want to tie it to debug.maps.write, as it may
-// a very large number of files.
+// produce a very large number of output files.
 const bool RelationMerger::WRITE_DETAILED_DEBUG_MAPS = false;
 
 RelationMerger::RelationMerger() :
@@ -296,15 +296,14 @@ bool RelationMerger::_mergeMembers(RelationPtr replacingRelation, RelationPtr re
   {
     const RelationMemberComparison currentMemberFromReplaced = replacingRelationMemberComps[i];
     // Add the relation member to the relation we're keeping.
-    modifiedMembers.push_back(
-      RelationData::Entry(
+    modifiedMembers.emplace_back(
         currentMemberFromReplaced.getRole(),
-        currentMemberFromReplaced.getElement()->getElementId()));
+        currentMemberFromReplaced.getElement()->getElementId());
     // Remove the member from the relation we may or may not be keeping.
     relationBeingReplaced->removeElement(currentMemberFromReplaced.getElement()->getElementId());
     numMembersCopied++;
   }
-  if (modifiedMembers.size() > 0)
+  if (!modifiedMembers.empty())
   {
     replacingRelation->setMembers(modifiedMembers);
   }

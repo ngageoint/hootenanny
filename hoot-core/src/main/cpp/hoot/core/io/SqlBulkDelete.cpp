@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #include "SqlBulkDelete.h"
 
@@ -51,7 +51,7 @@ _tableName(tableName)
 SqlBulkDelete::~SqlBulkDelete()
 {
   LOG_DEBUG("(" << _tableName << ") Total time deleting: " << _time);
-  if (_pending.size() > 0)
+  if (!_pending.empty())
   {
     LOG_WARN("(" << _tableName << ") There are pending deletes in SqlBulkDelete. You should call "
              "flush before destruction.");
@@ -63,7 +63,7 @@ void SqlBulkDelete::flush()
   LOG_TRACE("Flushing bulk delete...");
   LOG_VART(_pending.size());
 
-  if (_pending.size() > 0)
+  if (!_pending.empty())
   {
     double start = Tgs::Time::getTime();
     QString sql;

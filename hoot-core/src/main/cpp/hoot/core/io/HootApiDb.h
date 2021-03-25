@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef HOOTAPIDB_H
 #define HOOTAPIDB_H
@@ -50,35 +50,38 @@ public:
 
   HootApiDb();
 
-  virtual ~HootApiDb();
+  ~HootApiDb();
 
   /**
    * Called after open. This will read the bounds of the specified layer in a relatively efficient
    * manner. (e.g. SELECT min(x)...)
    */
+  /**
+   * TODO: Implement EnvelopeProvider
+   */
   virtual geos::geom::Envelope calculateEnvelope() const;
 
-  virtual void close();
+  void close() override;
 
   virtual bool isCorrectHootDbVersion();
 
   virtual QString getHootDbVersion();
 
-  virtual bool isSupported(const QUrl& url) override;
+  bool isSupported(const QUrl& url) override;
 
-  virtual void open(const QUrl& url) override;
+  void open(const QUrl& url) override;
 
-  virtual void commit();
+  void commit() override;
 
   /**
    * @see ApiDb::elementTypeToElementTableName
    */
-  virtual QString elementTypeToElementTableName(const ElementType& elementType) const override;
+  QString elementTypeToElementTableName(const ElementType& elementType) const override;
 
   /**
    * Returns a vector with all the OSM node ID's for a given way
    */
-  virtual std::vector<long> selectNodeIdsForWay(long wayId) override;
+  std::vector<long> selectNodeIdsForWay(long wayId) override;
 
   /**
    * Returns a query results with node_id, lat, and long with all the OSM node ID's for a given way
@@ -163,7 +166,7 @@ public:
    */
   void deleteMap(long mapId);
 
-  virtual void deleteUser(long userId);
+  void deleteUser(long userId) override;
 
   /**
    * Start a new changeset
@@ -374,9 +377,9 @@ public:
   QString execToString(QString sql, QVariant v1 = QVariant(), QVariant v2 = QVariant(),
                        QVariant v3 = QVariant());
 
-  virtual QString tableTypeToTableName(const TableType& tableType) const override;
+  QString tableTypeToTableName(const TableType& tableType) const override;
 
-  virtual long getNextId(const ElementType& elementType);
+  long getNextId(const ElementType& elementType) override;
 
   static QUrl getBaseUrl();
 
@@ -575,7 +578,7 @@ public:
 
 protected:
 
-  virtual void _resetQueries();
+  void _resetQueries() override;
 
 private:
 

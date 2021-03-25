@@ -19,25 +19,25 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "HootServicesTranslatorClient.h"
 
 // hoot
-#include <hoot/rnd/auth/HootServicesLoginManager.h>
 #include <hoot/core/io/HootNetworkRequest.h>
 #include <hoot/core/io/NetworkIoUtils.h>
-#include <hoot/rnd/language/LanguageUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/HootNetworkUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/rnd/auth/HootServicesLoginManager.h>
+#include <hoot/rnd/language/LanguageUtils.h>
 
 // Qt
 #include <QByteArray>
@@ -251,7 +251,7 @@ void HootServicesTranslatorClient::_parseResponse(const std::shared_ptr<boost::p
 bool HootServicesTranslatorClient::_getTranslationFromCache(const QString& text)
 {
   TranslationResult* cachedTranslation = _cache->object(text.toLower());
-  if (cachedTranslation != 0)
+  if (cachedTranslation != nullptr)
   {
     _translatedText = cachedTranslation->translatedText;
     _detectedLang = cachedTranslation->detectedLang;
@@ -301,7 +301,7 @@ void HootServicesTranslatorClient::_insertTranslationIntoCache(const QString& te
 
 QString HootServicesTranslatorClient::translate(const QString& text)
 {
-  if (_sourceLangs.size() == 0)
+  if (_sourceLangs.empty())
   {
     throw HootException("Cannot determine source language.");
   }

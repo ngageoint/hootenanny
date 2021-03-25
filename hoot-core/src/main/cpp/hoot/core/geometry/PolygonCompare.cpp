@@ -19,21 +19,13 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "PolygonCompare.h"
-
-// Hoot
-#include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/util/Log.h>
-#include <hoot/core/geometry/GeometryToElementConverter.h>
-#include <hoot/core/geometry/GeometryUtils.h>
-#include <hoot/core/util/StringUtils.h>
 
 // GEOS
 #include <geos/geom/CoordinateSequenceFactory.h>
@@ -42,27 +34,29 @@
 #include <geos/geom/MultiPolygon.h>
 #include <geos/geom/Point.h>
 #include <geos/util/IllegalArgumentException.h>
-using namespace geos::geom;
 
 // TGS
 #include <tgs/RStarTree/HilbertCurve.h>
+
+// Hoot
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/geometry/GeometryToElementConverter.h>
+#include <hoot/core/geometry/GeometryUtils.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/util/StringUtils.h>
+
+using namespace geos::geom;
 using namespace Tgs;
 
 namespace hoot
 {
 
-PolygonCompare::PolygonCompare(Envelope e)
+PolygonCompare::PolygonCompare(const Envelope& e)
 {
   _curve.reset(new HilbertCurve(2, 8));
   _e = e;
   _size = (1 << 8) - 1;
-}
-
-PolygonCompare::PolygonCompare(const PolygonCompare& other)
-{
-  _curve = other._curve;
-  _e = other._e;
-  _size = other._size;
 }
 
 bool PolygonCompare::operator()(const std::shared_ptr<geos::geom::Geometry>& p1,

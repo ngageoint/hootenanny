@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2021 Maxar (http://www.maxar.com/)
  */
 #include "OgrOptions.h"
 
@@ -30,7 +30,7 @@ namespace hoot
 {
 
 OgrOptions::OgrOptions() :
-_cryptic(0)
+_cryptic(nullptr)
 {
 
 }
@@ -61,11 +61,11 @@ char** OgrOptions::getCrypticOptions()
 
   if (size() == 0)
   {
-    return 0;
+    return nullptr;
   }
 
   _cryptic = new char*[size() + 1];
-  _cryptic[size()] = 0;
+  _cryptic[size()] = nullptr;
   size_t i = 0;
   for (OgrOptions::const_iterator it = constBegin(); it != constEnd(); ++it)
   {

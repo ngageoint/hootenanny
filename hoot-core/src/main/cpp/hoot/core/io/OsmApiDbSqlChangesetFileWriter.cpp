@@ -19,21 +19,21 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "OsmApiDbSqlChangesetFileWriter.h"
 
 // hoot
+#include <hoot/core/criterion/InBoundsCriterion.h>
+#include <hoot/core/elements/ElementType.h>
 #include <hoot/core/io/ApiDb.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/Log.h>
-#include <hoot/core/elements/ElementType.h>
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/criterion/InBoundsCriterion.h>
 #include <hoot/core/util/ConfigUtils.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/util/Factory.h>
 
 // Qt
 #include <QSqlError>
@@ -114,11 +114,11 @@ void OsmApiDbSqlChangesetFileWriter::write(
     // each dataset, before changes and after.
     ConstOsmMapPtr map1;
     ConstOsmMapPtr map2;
-    if (_map1List.size() > 0)
+    if (!_map1List.empty())
     {
       map1 = _map1List.at(i);
     }
-    if (_map2List.size() > 0)
+    if (!_map2List.empty())
     {
       map2 = _map2List.at(i);
     }

@@ -19,11 +19,11 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2012 Sebastian Morr <sebastian@morr.cc>
- * @copyright Copyright (C) 2015, 2016, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef NELDERMEAD_H
 #define NELDERMEAD_H
@@ -55,16 +55,8 @@ namespace Tgs
 class Vector
 {
 public:
-    Vector()
-    {
-    }
-
-    ~Vector()
-    {
-      //cout << "~Vector()" << endl << flush;
-    }
-
-    Vector(const Vector& v) : coords(v.coords) { }
+    Vector() = default;
+    ~Vector() = default;
 
     Vector(double c0)
     {
@@ -81,12 +73,6 @@ public:
         coords.push_back(c0);
         coords.push_back(c1);
         coords.push_back(c2);
-    }
-
-    Vector& operator=(const Vector& v)
-    {
-      coords = v.coords;
-      return *this;
     }
 
     // add more constructors when N gets > 3
@@ -211,7 +197,7 @@ private:
 class ValueDB
 {
 public:
-  ValueDB() { }
+  ValueDB() = default;
 
   double lookup(Vector vec)
   {
@@ -251,7 +237,7 @@ public:
   class VectorSort
   {
   public:
-    VectorSort(NelderMead* nm) : _nm(nm) {}
+    VectorSort(NelderMead* nm) : _nm(nm) { }
 
     // used in `step` to sort the vectors
     bool operator()(const Vector& a, const Vector& b)
@@ -268,7 +254,7 @@ public:
   class Function
   {
   public:
-    virtual ~Function() {}
+    virtual ~Function() = default;
 
     virtual double f(Vector v) = 0;
   };
@@ -290,10 +276,7 @@ public:
     _maxNoChange = 4;
   }
 
-  ~NelderMead()
-  {
-    //cout << "~NelderMead()" << endl << flush;
-  }
+  ~NelderMead() = default;
 
   // termination criteria: each pair of vectors in the simplex has to
   // have a distance of at most `termination_distance`

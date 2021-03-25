@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "v8Engine.h"
 
@@ -39,8 +39,8 @@ v8Engine::v8Engine()
   //  Setup and initialize the platform
   if (v8Engine::_needPlatform)
   {
-    V8::InitializeICUDefaultLocation(NULL);
-    V8::InitializeExternalStartupData(NULL);
+    V8::InitializeICUDefaultLocation(nullptr);
+    V8::InitializeExternalStartupData(nullptr);
     _platform.reset(platform::CreateDefaultPlatform());
     V8::InitializePlatform(_platform.get());
     //  Initialize v8

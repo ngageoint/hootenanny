@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef POLYGON_CRITERION_H
@@ -47,26 +47,27 @@ public:
 
   PolygonCriterion() = default;
   PolygonCriterion(ConstOsmMapPtr map);
-  virtual ~PolygonCriterion() = default;
+  ~PolygonCriterion() = default;
 
-  virtual bool isSatisfied(const ConstElementPtr& e) const override;
+  bool isSatisfied(const ConstElementPtr& e) const override;
 
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new PolygonCriterion(_map)); }
+  ElementCriterionPtr clone() override { return ElementCriterionPtr(new PolygonCriterion(_map)); }
 
-  virtual QString getDescription() const { return "Identifies polygon features"; }
+  QString getDescription() const override { return "Identifies polygon features"; }
 
-  virtual GeometryType getGeometryType() const
-  { return GeometryType::Polygon; }
+  GeometryType getGeometryType() const override { return GeometryType::Polygon; }
 
-  virtual void setOsmMap(const OsmMap* map);
+  void setOsmMap(const OsmMap* map) override;
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
-  virtual bool supportsSpecificConflation() const { return false; }
+  bool supportsSpecificConflation() const override { return false; }
 
   void setAllowMixedChildren(bool allow) { _relationCrit.setAllowMixedChildren(allow); }
+
+  QStringList getChildCriteria() const override;
 
 private:
 

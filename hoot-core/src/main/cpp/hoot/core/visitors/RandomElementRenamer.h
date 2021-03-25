@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef RANDOM_ELEMENT_RENAMER_H
 #define RANDOM_ELEMENT_RENAMER_H
@@ -45,11 +45,11 @@ public:
   static QString className() { return "hoot::RandomElementRenamer"; }
 
   RandomElementRenamer();
-  virtual ~RandomElementRenamer() = default;
+  ~RandomElementRenamer() = default;
 
   QString permuteName(const QString& s);
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
   /**
    * The probability of a change to each character in the name. The expected number of changes is
@@ -62,21 +62,21 @@ public:
    */
   void setProbability(double p) { _p = p; }
 
-  virtual void setRng(boost::minstd_rand& rng) { _rng = &rng; }
+  void setRng(boost::minstd_rand& rng) override { _rng = &rng; }
 
-  virtual void visit(const std::shared_ptr<Element>& e) override;
+  void visit(const std::shared_ptr<Element>& e) override;
 
-  virtual QString getDescription() const { return "Randomly changes element names"; }
+  QString getDescription() const override { return "Randomly changes element names"; }
 
-  virtual QString getInitStatusMessage() const
+  QString getInitStatusMessage() const override
   { return "Randomly changing element names..."; }
 
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   { return "Randomly changed " + QString::number(_numAffected) + " element names"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 
