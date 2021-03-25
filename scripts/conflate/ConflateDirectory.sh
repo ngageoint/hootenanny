@@ -31,8 +31,7 @@ FILE_PATH=
 
 QUIET="--status"
 PARALLEL="no"
-# TODO: remove
-PARALLEL_DEBUG="--will-cite"
+PARALLEL_DEBUG= #"--will-cite"
 AVERAGE_MERGING="no"
 # REVERSE_INPUTS=yes may be useful when using --suppress-divided-roads if the files are default ordered from oldest to newest 
 # and the newest file has the best divided roads.
@@ -50,9 +49,11 @@ ATTRIBUTE_FILE=
 INPUT_TAG_KEYS=
 ATTRIBUTE_TRANSFER_OUTPUT_PATH=
 
+# for debugging only
+DEBUG_OPTS= #" -D debug.maps.write=true -D debug.maps.filename=/home/vagrant/hoot/tmp/debug.osm"
+
 # for debugging smaller AOIs only
-# TODO: remove
-AOI_OPTS=" -D bounds=36.7871,14.6496,36.7918,14.6545 -D bounds.keep.entire.features.crossing.bounds=false"
+AOI_OPTS= #" -D bounds=36.7871,14.6496,36.7918,14.6545 -D bounds.keep.entire.features.crossing.bounds=false"
 
 if [ $# -eq 0 ]
 then
@@ -258,9 +259,16 @@ then
     HOOT_CONFLATE_OPTS+=' -D map.cleaner.transforms+="hoot::DualHighwayMarker;hoot::RemoveElementsVisitor" -D remove.elements.visitor.element.criteria="hoot::TagCriterion;hoot::StatusCriterion" -D remove.elements.visitor.recursive=true -D remove.elements.visitor.chain.element.criteria=true -D tag.criterion.kvps="hoot:dual_highway=yes;hoot:dual_highway_crossing=yes" -D status.criterion.status=Unknown2'
   fi
 fi
+# MultilineStringMergeRelationCollapser must be run an additional time after ResolveReviewsOp.
+HOOT_CONFLATE_OPTS+=" -D conflate.post.ops+=hoot::MultilineStringMergeRelationCollapser"
+
+# These are for cleaning up so far unexplained changes to some of the output.
+HOOT_CONFLATE_OPTS+=" -D conflate.post.ops+=hoot::RemoveInvalidMultilineStringMembersVisitor"
+HOOT_CONFLATE_OPTS+=" -D conflate.post.ops+=hoot::RemoveEmptyRelationsOp"
+HOOT_CONFLATE_OPTS+=" -D conflate.post.ops+=hoot::SuperfluousNodeRemover"
+
 HOOT_CONFLATE_OPTS+=$AOI_OPTS
-# MultilineStringMergeRelationCollapser must run after ResolveReviewsOp.
-HOOT_CONFLATE_OPTS+=" -D conflate.mark.merge.created.multilinestring.relations=true -D conflate.post.ops+=hoot::MultilineStringMergeRelationCollapser -D multilinestring.relation.collapser.types=highway"
+HOOT_CONFLATE_OPTS+=$DEBUG_OPTS
 
 # Clean out previously conflated files.
 rm -f ${OUTPUT_PATH}/conflation_*
