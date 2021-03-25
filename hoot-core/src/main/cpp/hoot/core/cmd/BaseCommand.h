@@ -71,6 +71,8 @@ public:
 
 protected:
 
+  // This can be useful for debugging, or in some cases, getting around the fact that ConfigOptions
+  // is a Singleton when trying to run successive conflate jobs.
   QStringList _rawArgs;
 
   virtual QString _getHelpPath() const;
