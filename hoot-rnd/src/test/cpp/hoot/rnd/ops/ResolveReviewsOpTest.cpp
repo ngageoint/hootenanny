@@ -136,9 +136,9 @@ public:
 
   void runResolveMsTest()
   {
-    // When features are difficult to merge, LinearSnapMerger (ref conflate linear default)
-    // sometimes undesirably leaves multilinestring relations in output. This tests that all ms
-    // relations are removed. See notes in MultilineStringMergeRelationCollapser for more detail.
+    // This test is here to illustrate the fact that calling a linear merger may leave
+    // multilinestring relations in the output. Generally, this is not desirable and
+    // MultilineStringMergeRelationCollapser can be called to remove them.
 
     OsmXmlReader reader;
     OsmMapPtr map(new OsmMap());
@@ -149,14 +149,6 @@ public:
     reader.read(_inputPath + "runResolveMsTestInput.osm", map);
     // The input test data was already in planar, so make that happen.
     MapProjector::projectToPlanar(map);
-
-    // Setting this option ensure that the merger marks any ms relations it creates with a custom
-    // tag.
-    conf().set(ConfigOptions::getConflateMarkMergeCreatedMultilinestringRelationsKey(), true);
-    // Setting this option allows MultilineStringMergeRelationCollapser, called internally by
-    // ResolveReviewsOp, to remove ms relations involving roads.
-    conf().set(
-      ConfigOptions::getMultilinestringRelationCollapserTypesKey(), QStringList("highway"));
 
     ResolveReviewsOp uut;
     uut.setConfiguration(conf());

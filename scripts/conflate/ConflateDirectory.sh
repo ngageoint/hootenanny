@@ -31,7 +31,8 @@ FILE_PATH=
 
 QUIET="--status"
 PARALLEL="no"
-PARALLEL_DEBUG= #"--will-cite"
+# TODO: remove
+PARALLEL_DEBUG="--will-cite"
 AVERAGE_MERGING="no"
 # REVERSE_INPUTS=yes may be useful when using --suppress-divided-roads if the files are default ordered from oldest to newest 
 # and the newest file has the best divided roads.
@@ -50,7 +51,8 @@ INPUT_TAG_KEYS=
 ATTRIBUTE_TRANSFER_OUTPUT_PATH=
 
 # for debugging smaller AOIs only
-AOI_OPTS= #" -D bounds=8.4762,12.0504,8.4793,12.0526 -D bounds.keep.entire.features.crossing.bounds=false"
+# TODO: remove
+AOI_OPTS=" -D bounds=36.7871,14.6496,36.7918,14.6545 -D bounds.keep.entire.features.crossing.bounds=false"
 
 if [ $# -eq 0 ]
 then
@@ -83,7 +85,7 @@ do
     echo "Configured to reverse inputs."
   elif [ $ARGUMENT == "--resolve" ]
   then
-    RESOLVE_REVIEWS=" -D resolve.review.type=resolve -D conflate.post.ops+=hoot::ResolveReviewsOp -D multilinestring.relation.collapser.types=highway"
+    RESOLVE_REVIEWS=" -D resolve.review.type=resolve -D conflate.post.ops+=hoot::ResolveReviewsOp"
     echo "Configured to automatically resolve reviews."
   elif [ $ARGUMENT == "--snap-unconnected" ]
   then
@@ -257,6 +259,8 @@ then
   fi
 fi
 HOOT_CONFLATE_OPTS+=$AOI_OPTS
+# MultilineStringMergeRelationCollapser must run after ResolveReviewsOp.
+HOOT_CONFLATE_OPTS+=" -D conflate.mark.merge.created.multilinestring.relations=true -D conflate.post.ops+=hoot::MultilineStringMergeRelationCollapser -D multilinestring.relation.collapser.types=highway"
 
 # Clean out previously conflated files.
 rm -f ${OUTPUT_PATH}/conflation_*

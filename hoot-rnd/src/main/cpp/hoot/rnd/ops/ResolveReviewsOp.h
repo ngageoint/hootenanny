@@ -34,7 +34,6 @@
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/visitors/MultilineStringMergeRelationCollapser.h>
 
 namespace hoot
 {
@@ -98,9 +97,6 @@ public:
   void setConfiguration(const Settings& conf) override;
 
 private:
-
-  // Prevents ms relations in the auto-merged output.
-  MultilineStringMergeRelationCollapser _relationCollapser;
 
   /**
    * @brief _resolveReview

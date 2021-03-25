@@ -56,9 +56,9 @@ ResolveReviewsOp::ResolveReviewsOp()
 
 void ResolveReviewsOp::setConfiguration(const Settings& conf)
 {
-  _taskStatusUpdateInterval = ConfigOptions().getTaskStatusUpdateInterval();
-  _type = _resolveString(ConfigOptions().getResolveReviewType());
-  _relationCollapser.setConfiguration(conf);
+  ConfigOptions opts(conf);
+  _taskStatusUpdateInterval = opts.getTaskStatusUpdateInterval();
+  _type = _resolveString(opts.getResolveReviewType());
 }
 
 void ResolveReviewsOp::apply(std::shared_ptr<OsmMap>& map)
@@ -120,13 +120,6 @@ void ResolveReviewsOp::apply(std::shared_ptr<OsmMap>& map)
           _resolveMultipleReviews(map, rid, eids[0], eids[1]);
       }
     }
-  }
-
-  // If we're configured to collapse ms relations that may have been created by merging, do so here.
-  if (_relationCollapser.hasTypes())
-  {
-    LOG_INFO("Collapsing multilinestring relations in merged output...");
-    map->visitRelationsRw(_relationCollapser);
   }
 }
 
@@ -216,9 +209,10 @@ void ResolveReviewsOp::_resolveMatchReview(std::shared_ptr<Match>& match,
         MergerPtr merger = *it;
         // We require that each individual merger to set the option to mark merge created relations
         // in order to allow for subsets of mergers to mark them. So, this option needs to be set
-        // by each merger. Marking the ms relations here allows _relationCollapser to operate
-        // correctly on the output.  See related note in AbstractConflator::_applyMergers.
-        if (_relationCollapser.hasTypes())
+        // by each merger. Marking the ms relations here allows
+        // MultilineStringMergeRelationCollapser to operate correctly on the output.  See related
+        // note in AbstractConflator::_applyMergers.
+        if (!ConfigOptions().getMultilinestringRelationCollapserTypes().isEmpty())
         {
           conf().set(ConfigOptions::getConflateMarkMergeCreatedMultilinestringRelationsKey(), true);
         }

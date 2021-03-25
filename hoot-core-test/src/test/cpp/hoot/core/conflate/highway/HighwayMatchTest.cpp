@@ -278,8 +278,7 @@ public:
   void runRealWorld1Test()
   {
     OsmMapPtr map(new OsmMap());
-    OsmMapReaderFactory::read(map, _inputPath + "HighwayMatchRealWorld1Test.osm",
-      false);
+    OsmMapReaderFactory::read(map, _inputPath + "HighwayMatchRealWorld1Test.osm", false);
     MapProjector::projectToOrthographic(map);
 
     std::shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
@@ -305,8 +304,7 @@ public:
   void runRealWorld2Test()
   {
     OsmMapPtr map(new OsmMap());
-    OsmMapReaderFactory::read(map, _inputPath + "HighwayMatchRealWorld2Test.osm",
-      false);
+    OsmMapReaderFactory::read(map, _inputPath + "HighwayMatchRealWorld2Test.osm", false);
     MapProjector::projectToOrthographic(map);
 
     Settings conf;
