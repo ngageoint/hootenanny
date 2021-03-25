@@ -19,7 +19,6 @@ function usage() {
   echo "  --parallel                run conflation jobs in parallel"
   echo "  --quiet                   run Hootenanny in quiet mode"
   echo "  --remove-disconnected     remove small and completely disconnected roads"
-  echo "  --remove-merge-relations  remove any multilinestring relations created as a result of merging"
   echo "  --remove-unlikely         remove features that are unlikely to be roads"
   echo "  --resolve                 resolve reviews automatically"
   echo "  --reverse-inputs          process the inputs in reverse order"
@@ -84,7 +83,7 @@ do
     echo "Configured to reverse inputs."
   elif [ $ARGUMENT == "--resolve" ]
   then
-    RESOLVE_REVIEWS=" -D resolve.review.type=resolve -D conflate.post.ops+=hoot::ResolveReviewsOp"
+    RESOLVE_REVIEWS=" -D resolve.review.type=resolve -D conflate.post.ops+=hoot::ResolveReviewsOp -D multilinestring.relation.collapser.types=highway"
     echo "Configured to automatically resolve reviews."
   elif [ $ARGUMENT == "--snap-unconnected" ]
   then
@@ -106,10 +105,6 @@ do
   then
     AVERAGE_MERGING="yes"
     echo "Configured to merge features by averaging."
-  elif [ $ARGUMENT == "--remove-merge-relations" ]
-  then
-    REMOVE_MERGE_RELATIONS=" -D multilinestring.relation.collapser.types=highway"
-    echo "Configured to remove multilinestring relations created by merging."
   elif [ $ARGUMENT == "-h" ] || [ $ARGUMENT == "--help" ]
   then
     usage
@@ -151,6 +146,7 @@ TAG_SOURCES=`echo $TAG_LIST | sed 's/.osm//g' | sed 's/ /;/g'`
 
 # ATTRIBUTE TRANSFER
 
+# TODO: Technically, you could benefit from attribute transfer without suppressing divided road conflation, so those two options should be decoupled.
 if [ $SUPRESS_DIVIDED_ROADS == "yes" ]
 then
   if [ -z $ATTRIBUTE_FILE ]
