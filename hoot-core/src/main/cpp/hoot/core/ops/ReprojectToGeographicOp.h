@@ -47,15 +47,15 @@ public:
   static QString className() { return "hoot::ReprojectToGeographicOp"; }
 
   ReprojectToGeographicOp() = default;
-  virtual ~ReprojectToGeographicOp() = default;
+  ~ReprojectToGeographicOp() = default;
 
-  virtual void apply(std::shared_ptr<OsmMap>& map);
+  void apply(std::shared_ptr<OsmMap>& map) override;
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Reprojects to a geographic projection"; }
 };
 

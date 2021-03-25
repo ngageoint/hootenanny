@@ -76,26 +76,26 @@ public:
    * It is expected that the eid will be populated with addElement after construction.
    */
   RecursiveElementRemover() : _criterion(nullptr) { }
-  virtual ~RecursiveElementRemover() = default;
+  ~RecursiveElementRemover() = default;
 
-  virtual void addElement(const ConstElementPtr& e) { _eid = e->getElementId(); }
+  void addElement(const ConstElementPtr& e) override { _eid = e->getElementId(); }
 
   /**
    * Removes an element as defined by this object.
    */
-  virtual void apply(const std::shared_ptr<OsmMap>& map);
+  void apply(const std::shared_ptr<OsmMap>& map) override;
 
-  virtual QString getDescription() const { return "Recursively removes elements from a map"; }
+  QString getDescription() const override { return "Recursively removes elements from a map"; }
 
-  virtual QString getInitStatusMessage() const
+  QString getInitStatusMessage() const override
   { return "Recursively removing elements..."; }
 
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   { return "Removed " + QString::number(_numAffected) + " elements"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

@@ -45,7 +45,7 @@ class MultiaryHierarchicalClusterAlgorithm : public MultiaryClusterAlgorithm
 {
 public:
 
-  virtual ~MultiaryHierarchicalClusterAlgorithm() = default;
+  ~MultiaryHierarchicalClusterAlgorithm() = default;
 
   /**
    * Constructor.
@@ -59,13 +59,13 @@ public:
   /**
    * See parent class.
    */
-  virtual ClusterList calculateClusters(OsmMapPtr map,
-    std::set<std::pair<ElementId, ElementId>> &pairs);
+  ClusterList calculateClusters(OsmMapPtr map,
+    std::set<std::pair<ElementId, ElementId>> &pairs) override;
 
   /**
    * See parent class.
    */
-  virtual QList<ClusterLinkPtr> takeReviews();
+  QList<ClusterLinkPtr> takeReviews() override;
 
 protected:
   MatchThreshold _matchThreshold;

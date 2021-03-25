@@ -43,14 +43,14 @@ public:
 
   static QString className() { return "hoot::MultiaryPoiIngestCmd"; }
 
-  virtual QString getName() const override { return "multiary-poi-ingest"; }
+  QString getName() const override { return "multiary-poi-ingest"; }
 
-  virtual QString getDescription() const override
+  QString getDescription() const override
   { return "Ingests POIs for use by multiary-poi-conflate (experimental) "; }
 
-  virtual QString getType() const override { return "rnd"; }
+  QString getType() const override { return "rnd"; }
 
-  virtual int runSimple(QStringList& args) override
+  int runSimple(QStringList& args) override
   {
     QElapsedTimer timer;
     timer.start();

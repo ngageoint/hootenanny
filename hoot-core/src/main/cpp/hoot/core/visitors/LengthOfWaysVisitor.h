@@ -47,30 +47,30 @@ public:
   static QString className() { return "hoot::LengthOfWaysVisitor"; }
 
   LengthOfWaysVisitor();
-  virtual ~LengthOfWaysVisitor() = default;
+  ~LengthOfWaysVisitor() = default;
 
   static Meters getLengthOfWays(const OsmMapPtr& map, ElementPtr e);
 
   Meters getLengthOfWays() const { return _total; }
 
-  virtual double getStat() const { return getLengthOfWays(); }
+  double getStat() const override { return getLengthOfWays(); }
 
-  virtual void visit(const ConstElementPtr& e) override;
+  void visit(const ConstElementPtr& e) override;
 
-  virtual QString getDescription() const { return "Calculates the length of all ways"; }
+  QString getDescription() const override { return "Calculates the length of all ways"; }
 
-  virtual long numWithStat() const { return _numAffected; }
-  virtual double getMin() const { return _smallest; }
-  virtual double getMax() const { return _largest; }
-  virtual double getAverage() const
+  long numWithStat() const override { return _numAffected; }
+  double getMin() const override { return _smallest; }
+  double getMax() const override { return _largest; }
+  double getAverage() const override
   {
     const double average = _numAffected == 0 ? 0.0 : _total / _numAffected;
     return average;
   }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

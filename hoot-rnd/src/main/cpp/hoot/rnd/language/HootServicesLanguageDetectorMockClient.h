@@ -49,9 +49,9 @@ public:
   static QString className() { return "hoot::HootServicesLanguageDetectorMockClient"; }
 
   HootServicesLanguageDetectorMockClient();
-  virtual ~HootServicesLanguageDetectorMockClient() = default;
+  ~HootServicesLanguageDetectorMockClient() = default;
 
-  virtual QString detect(const QString& text) override;
+  QString detect(const QString& text) override;
 
 private:
 

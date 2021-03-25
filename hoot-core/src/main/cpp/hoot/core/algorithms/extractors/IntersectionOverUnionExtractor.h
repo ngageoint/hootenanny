@@ -50,7 +50,7 @@ public:
   static QString className() { return "hoot::IntersectionOverUnionExtractor"; }
 
   IntersectionOverUnionExtractor() = default;
-  virtual ~IntersectionOverUnionExtractor() = default;
+  ~IntersectionOverUnionExtractor() = default;
 
   /**
    * @see FeatureExtractor

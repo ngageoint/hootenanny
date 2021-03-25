@@ -42,7 +42,7 @@ class CheckRelationshipsVisitor : public ConstElementVisitor
 {
 public:
 
-  virtual void visit(const ConstElementPtr& e)
+  void visit(const ConstElementPtr& e) override
   {
     const Tags& t = e->getTags();
     const QString REV = MetadataTags::TrainingReview();
@@ -77,9 +77,9 @@ public:
     }
   }
 
-  virtual QString getDescription() const { return ""; }
-  virtual QString getName() const { return ""; }
-    virtual QString getClassName() const override { return ""; }
+  QString getDescription() const override { return ""; }
+  QString getName() const override { return ""; }
+  QString getClassName() const override { return ""; }
 };
 
 void MultiaryMatchTrainingValidator::apply(std::shared_ptr<OsmMap>& map)

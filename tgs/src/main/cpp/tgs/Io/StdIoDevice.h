@@ -47,21 +47,21 @@ public:
    */
   StdIoDevice(std::istream& in);
 
-  virtual ~StdIoDevice() = default;
+  ~StdIoDevice() = default;
 
-  virtual bool atEnd() const;
+  bool atEnd() const override;
 
-  virtual bool open(QIODevice::OpenMode mode) { QIODevice::open(mode); return true; }
+  bool open(QIODevice::OpenMode mode) override { QIODevice::open(mode); return true; }
 
-  virtual void close() { delete _in; _in = nullptr; }
+  void close() override { delete _in; _in = nullptr; }
 
-  virtual void flush() { }
+  void flush() { }
 
-  virtual qint64 readData(char* data, qint64 maxlen);
+  qint64 readData(char* data, qint64 maxlen) override;
 
-  virtual qint64 writeData(const char *data, qint64 len);
+  qint64 writeData(const char *data, qint64 len) override;
 
-  virtual bool getChar(char* c) { return readData(c, 1) == 1; }
+  bool getChar(char* c) { return readData(c, 1) == 1; }
 
 private:
   std::istream* _in;

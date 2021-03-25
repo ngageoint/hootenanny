@@ -47,14 +47,14 @@ public:
 
   ImplicitTypeTaggingRulesCmd()  = default;
 
-  virtual QString getName() const override { return "type-tagger-rules"; }
+  QString getName() const override { return "type-tagger-rules"; }
 
-  virtual QString getDescription() const override
+  QString getDescription() const override
   { return "Creates rules for adding missing type tags to a map"; }
 
-  virtual QString getType() const { return "rnd"; }
+  QString getType() const override { return "rnd"; }
 
-  virtual int runSimple(QStringList& args) override
+  int runSimple(QStringList& args) override
   {
     QElapsedTimer timer;
     timer.start();

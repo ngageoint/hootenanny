@@ -47,19 +47,19 @@ public:
   static QString className() { return "hoot::UnionPolygonsOp"; }
 
   UnionPolygonsOp();
-  virtual ~UnionPolygonsOp() = default;
+  ~UnionPolygonsOp() = default;
 
-  virtual void apply(std::shared_ptr<OsmMap>& map) override;
+  void apply(std::shared_ptr<OsmMap>& map) override;
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
-  virtual QString getDescription() const override { return _combiner->getDescription(); }
+  QString getDescription() const override { return _combiner->getDescription(); }
 
-  virtual QString getInitStatusMessage() const { return _combiner->getInitStatusMessage(); }
+  QString getInitStatusMessage() const override { return _combiner->getInitStatusMessage(); }
 
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   { return _combiner->getCompletedStatusMessage(); }
 
 private:

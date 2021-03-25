@@ -44,7 +44,7 @@ namespace Tgs
 
     HilbertRTree(const std::shared_ptr<PageStore>& ps, int dimensions);
 
-    virtual ~HilbertRTree() = default;
+    ~HilbertRTree() = default;
 
     /**
      * This method can only be called before the tree has been built. 
@@ -81,7 +81,7 @@ namespace Tgs
     std::shared_ptr<HilbertCurve> _hilbertCurve;
     int _shuffleSize;
 
-    virtual int _splitBoxes(BoxVector& boxes);
+    int _splitBoxes(BoxVector& boxes) override;
 
     void _calculateHilbertValues(const std::vector<Box>& boxes, 
       const std::vector<int>& fids, std::vector<UserBoxHolder>& hilbertBoxes);

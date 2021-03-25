@@ -49,18 +49,18 @@ public:
   static QString className() { return "hoot::IsSortedVisitor"; }
 
   IsSortedVisitor();
-  virtual ~IsSortedVisitor() = default;
+  ~IsSortedVisitor() = default;
 
-  virtual void visit(const ConstElementPtr& e);
+  void visit(const ConstElementPtr& e) override;
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Determines if elements are sorted to the OSM standard"; }
 
   bool getIsSorted() const { return _isSorted; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

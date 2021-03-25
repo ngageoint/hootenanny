@@ -41,19 +41,19 @@ public:
   static QString className() { return "hoot::LongestTagVisitor"; }
 
   LongestTagVisitor() : _longestTag(0) { }
-  virtual ~LongestTagVisitor() = default;
+  ~LongestTagVisitor() = default;
 
-  double getStat() const { return _longestTag; }
+  double getStat() const override { return _longestTag; }
 
   QString getLongestTag() const { return _tag; }
 
-  virtual void visit(const ConstElementPtr& e);
+  void visit(const ConstElementPtr& e) override;
 
-  virtual QString getDescription() const { return "Identifies the tag with the largest text size"; }
+  QString getDescription() const override { return "Identifies the tag with the largest text size"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

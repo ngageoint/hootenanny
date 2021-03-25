@@ -52,24 +52,24 @@ public:
   static int logWarnCount;
 
   DecomposeBuildingRelationsVisitor() = default;
-  virtual ~DecomposeBuildingRelationsVisitor() = default;
+  ~DecomposeBuildingRelationsVisitor() = default;
 
-  virtual void visit(const ConstElementPtr& e);
+  void visit(const ConstElementPtr& e) override;
 
-  virtual void setOsmMap(OsmMap* map) { _map = map; }
-  virtual void setOsmMap(const OsmMap* /*map*/) { assert(false); }
+  void setOsmMap(OsmMap* map) override { _map = map; }
+  void setOsmMap(const OsmMap* /*map*/) { assert(false); }
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Decomposes complex buildings into simpler elements"; }
 
-  virtual QString getInitStatusMessage() const { return "Decomposing complex buildings..."; }
+  QString getInitStatusMessage() const override { return "Decomposing complex buildings..."; }
 
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   { return "Decomposed " + QString::number(_numAffected) + " complex buildings"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

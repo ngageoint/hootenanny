@@ -48,21 +48,21 @@ public:
   static QString className() { return "hoot::RefRemoveOp"; }
 
   RefRemoveOp() = default;
-  virtual ~RefRemoveOp() = default;
+  ~RefRemoveOp() = default;
 
-  virtual void addCriterion(const ElementCriterionPtr &e) { assert(!_criterion); _criterion = e; }
+  void addCriterion(const ElementCriterionPtr &e) override { assert(!_criterion); _criterion = e; }
 
   /**
    * Remove all the ops that meet the given criterion.
    */
-  virtual void apply(std::shared_ptr<OsmMap>& map);
+  void apply(std::shared_ptr<OsmMap>& map) override;
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Removes elements meeting a criterion and updates REF tags"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

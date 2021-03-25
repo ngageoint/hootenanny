@@ -48,16 +48,16 @@ public:
   static QString className() { return "hoot::RemoveRef2VisitorMultipleCriterion"; }
 
   RemoveRef2VisitorMultipleCriterion() = default;
-  virtual ~RemoveRef2VisitorMultipleCriterion() = default;
+  ~RemoveRef2VisitorMultipleCriterion() = default;
 
-  virtual void addCriterion(const ElementCriterionPtr& e) override;
+  void addCriterion(const ElementCriterionPtr& e) override;
 
-  virtual void visit(const ElementPtr& e) override;
+  void visit(const ElementPtr& e) override;
 
-  virtual bool ref1CriterionSatisfied(const ConstElementPtr& e) const override;
-  virtual bool ref2CriterionSatisfied(const ConstElementPtr& e) const override;
+  bool ref1CriterionSatisfied(const ConstElementPtr& e) const override;
+  bool ref2CriterionSatisfied(const ConstElementPtr& e) const override;
 
-  virtual QString getDescription() const override
+  QString getDescription() const override
   { return "Removes REF2 tags when multiple criteria are met for both REF1 and REF2 elements"; }
 
 private:

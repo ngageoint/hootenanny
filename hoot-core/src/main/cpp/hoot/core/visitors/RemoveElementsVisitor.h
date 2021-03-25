@@ -47,33 +47,33 @@ public:
   static QString className() { return "hoot::RemoveElementsVisitor"; }
 
   RemoveElementsVisitor(bool negateCriteria = false);
-  virtual ~RemoveElementsVisitor() = default;
+  ~RemoveElementsVisitor() = default;
 
-  virtual void visit(const ElementPtr& e);
+  void visit(const ElementPtr& e) override;
 
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
-  virtual void setOsmMap(OsmMap* map);
-  virtual void setOsmMap(const OsmMap* /*map*/) { assert(false); }
+  void setOsmMap(OsmMap* map) override;
+  void setOsmMap(const OsmMap* /*map*/) { assert(false); }
 
   void setRecursive(bool recursive) { _recursive = recursive; }
 
   static void removeWays(const std::shared_ptr<OsmMap>& pMap, const ElementCriterionPtr& pCrit);
 
-  virtual QString getDescription() const { return "Removes elements that satisfy a criterion"; }
+  QString getDescription() const override { return "Removes elements that satisfy a criterion"; }
 
-  virtual QString getInitStatusMessage() const { return "Removing elements..."; }
+  QString getInitStatusMessage() const override { return "Removing elements..."; }
 
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   {
     return
       "Removed " + StringUtils::formatLargeNumber(_numAffected) + " / " +
       StringUtils::formatLargeNumber(_numProcessed) + " elements.";
   }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

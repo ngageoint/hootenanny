@@ -57,38 +57,38 @@ public:
 
   ScriptMatchCreator() = default;
 
-  virtual ~ScriptMatchCreator() = default;
+  ~ScriptMatchCreator() = default;
 
   /**
    * @see SearchRadiusProvider
    */
-  virtual void init(const ConstOsmMapPtr& map) override;
+  void init(const ConstOsmMapPtr& map) override;
 
   /**
    * @see SearchRadiusProvider
    */
-  virtual Meters calculateSearchRadius(const ConstOsmMapPtr& map, const ConstElementPtr& e) override;
+  Meters calculateSearchRadius(const ConstOsmMapPtr& map, const ConstElementPtr& e) override;
 
   /**
    * @see MatchCreator
    */
-  virtual MatchPtr createMatch(const ConstOsmMapPtr&, ElementId, ElementId) override;
+  MatchPtr createMatch(const ConstOsmMapPtr&, ElementId, ElementId) override;
 
   /**
    * Search the provided map for POI matches and add the matches to the matches vector.
    */
-  virtual void createMatches(const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& matches,
+  void createMatches(const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& matches,
     ConstMatchThresholdPtr threshold) override;
 
   /**
    * @see MatchCreator
    */
-  virtual std::vector<CreatorDescription> getAllCreators() const override;
+  std::vector<CreatorDescription> getAllCreators() const override;
 
   /**
    * @see MatchCreator
    */
-  virtual void setArguments(QStringList args) override;
+  void setArguments(QStringList args) override;
 
   /**
    * Determines whether an element is a candidate for matching for this match creator
@@ -97,22 +97,22 @@ public:
    * @param map the map the element whose candidacy is being determined belongs to
    * @return true if the element is a match candidate; false otherwise
    */
-  virtual bool isMatchCandidate(ConstElementPtr element, const ConstOsmMapPtr& map) override;
+  bool isMatchCandidate(ConstElementPtr element, const ConstOsmMapPtr& map) override;
 
   /**
    * @see MatchCreator
    */
-  virtual std::shared_ptr<MatchThreshold> getMatchThreshold() override;
+  std::shared_ptr<MatchThreshold> getMatchThreshold() override;
 
   /**
    * @see MatchCreator
    */
-  virtual QString getName() const override;
+  QString getName() const override;
 
   /**
    * @see FilteredByGeometryTypeCriteria
    */
-  virtual QStringList getCriteria() const;
+  QStringList getCriteria() const override;
 
 private:
 

@@ -111,7 +111,7 @@ namespace Tgs
     /** 
     * @returns the error string provided in the constructor
     */
-    virtual const char* what() const throw()
+    const char* what() const throw() override
     {
       return _errorStr.data();
     }

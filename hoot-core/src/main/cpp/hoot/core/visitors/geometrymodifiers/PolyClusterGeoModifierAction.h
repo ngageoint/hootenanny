@@ -71,16 +71,16 @@ public:
   static QString className() { return "hoot::PolyClusterGeoModifierAction"; }
 
   PolyClusterGeoModifierAction() = default;
-  virtual ~PolyClusterGeoModifierAction() = default;
+  ~PolyClusterGeoModifierAction() = default;
 
-  virtual QString getCommandName() const override { return "poly_cluster"; }
-  virtual QList<QString> getParameterNames() const override { return QList<QString>
+  QString getCommandName() const override { return "poly_cluster"; }
+  QList<QString> getParameterNames() const override { return QList<QString>
     { DISTANCE_PARAM, ALPHA_PARAM, REMOVE_POLYS_PARAM, CHECK_INTERSECTIONS_PARAM, CLUSTER_TAG_LIST_PARAM }; }
 
-  virtual void parseArguments(const QHash<QString, QString>& arguments) override;
-  virtual void processStart(OsmMapPtr& pMap) override;
-  virtual bool processElement(const ElementPtr& pElement, OsmMap* pMap) override;
-  virtual void processFinalize(OsmMapPtr& pMap) override;
+  void parseArguments(const QHash<QString, QString>& arguments) override;
+  void processStart(OsmMapPtr& pMap) override;
+  bool processElement(const ElementPtr& pElement, OsmMap* pMap) override;
+  void processFinalize(OsmMapPtr& pMap) override;
 
 private:
 

@@ -55,7 +55,7 @@ public:
   static QString className() { return "hoot::CompletelyContainedByMapElementVisitor"; }
 
   CompletelyContainedByMapElementVisitor();
-  virtual ~CompletelyContainedByMapElementVisitor() = default;
+  ~CompletelyContainedByMapElementVisitor() = default;
 
   /**
    * Returns true if all the children of this element are available within the specified map.
@@ -64,14 +64,14 @@ public:
 
   bool isComplete() const { return _complete; }
 
-  virtual void visit(const ConstElementPtr& e);
+  void visit(const ConstElementPtr& e) override;
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Determines if a element is completely contained within a map"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 protected:
 

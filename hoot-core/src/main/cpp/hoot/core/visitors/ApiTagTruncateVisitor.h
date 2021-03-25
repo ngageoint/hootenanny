@@ -57,7 +57,7 @@ public:
   static QString className() { return "hoot::ApiTagTruncateVisitor"; }
 
   ApiTagTruncateVisitor();
-  virtual ~ApiTagTruncateVisitor() = default;
+  ~ApiTagTruncateVisitor() = default;
 
   void visit(const ElementPtr& e) override;
 
@@ -74,9 +74,9 @@ public:
       " elements";
   }
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
   void setConfiguration(const Settings& conf) override;
 

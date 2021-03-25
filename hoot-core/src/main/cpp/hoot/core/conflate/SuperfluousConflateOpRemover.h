@@ -35,7 +35,8 @@ namespace hoot
 
 /**
  * This is used to weed down the list of conflate pre/post ops to only those needed given the
- * matchers being run for the conflate job.
+ * matchers being run for the conflate job, which helps with both runtime performance and conflated
+ * output quality.
  *
  * So for instance, you don't try to split road intersections if you're only conflating buildings.
  * Only GeometryTypeCriterion are checked via FilteredByGeometryTypeCriteria. Not sure if this can
@@ -50,6 +51,15 @@ public:
    * current conflate configuration
    */
   static void removeSuperfluousOps();
+
+  /**
+   * Determines GeometryTypeCriterion compatible with conflate matches for the current configuration
+   *
+   * @param addParents if true, ancestor geometry types are included in the output; e.g.
+   * PolygonCriterion will be included along with BuildingCriterion
+   * @return a list of GeometryTypeCriterion class names
+   */
+  static QSet<QString> getMatchCreatorGeometryTypeCrits(const bool addParents = true);
 
 private:
 
@@ -69,12 +79,6 @@ private:
    */
   static QStringList _filterOutUnneededOps(
     const QSet<QString>& geometryTypeCrits, const QStringList& ops, QSet<QString>& removedOps);
-
-  /*
-   * Returns a list of GeometryTypeCriterion class names that match up with those supported by the
-   * current matcher config
-   */
-  static QSet<QString> _getMatchCreatorGeometryTypeCrits();
 
   static bool _isGeometryTypeCrit(const QString& className);
 };

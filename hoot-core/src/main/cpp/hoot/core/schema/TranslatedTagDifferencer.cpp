@@ -107,14 +107,14 @@ double TranslatedTagDifferencer::diff(const ConstOsmMapPtr& map, const ConstElem
   {
   public:
     CostFunction() = default;
-    virtual ~CostFunction() = default;
+    ~CostFunction() = default;
 
     const TranslatedTagDifferencer* ttd;
     /**
      * Returns the cost associated with assigning actor a to task t.
      */
-    virtual double cost(const ScriptToOgrSchemaTranslator::TranslatedFeature* tf1,
-                        const ScriptToOgrSchemaTranslator::TranslatedFeature* tf2) const
+    double cost(const ScriptToOgrSchemaTranslator::TranslatedFeature* tf1,
+                const ScriptToOgrSchemaTranslator::TranslatedFeature* tf2) const override
     {
       Tags t1 = _toTags(tf1);
       Tags t2 = _toTags(tf2);

@@ -55,20 +55,20 @@ namespace Tgs
     /**
     *  Destructor
     */
-    virtual ~RandomForestManager() = default;
+    ~RandomForestManager() = default;
 
   protected:
     /**
      * @brief _initForests initializes the list of random forests
      * @param numForests the number of forests to create
      */
-    virtual void _initForests(int numForests);
+    void _initForests(int numForests) override;
 
     /**
      * @brief _parseXmlForestNodes loads the XML form of a fores
      * @param forestsNode the list of <RandomForest> DOM nodes
      */
-    virtual void _parseXmlForestNodes(QDomNodeList & forestNodes);
+    void _parseXmlForestNodes(QDomNodeList & forestNodes) override;
 
   };
 }

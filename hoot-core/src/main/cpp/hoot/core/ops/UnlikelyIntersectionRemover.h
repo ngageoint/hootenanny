@@ -57,7 +57,7 @@ public:
   static QString className() { return "hoot::UnlikelyIntersectionRemover"; }
 
   UnlikelyIntersectionRemover() = default;
-  virtual ~UnlikelyIntersectionRemover() = default;
+  ~UnlikelyIntersectionRemover() = default;
 
   void apply(std::shared_ptr<OsmMap>& map) override;
 
@@ -66,25 +66,25 @@ public:
    */
   static void removeIntersections(std::shared_ptr<OsmMap> map);
 
-  virtual QString getInitStatusMessage() const override
+  QString getInitStatusMessage() const override
   { return "Removing unlikely intersections..."; }
 
-  virtual QString getCompletedStatusMessage() const override
+  QString getCompletedStatusMessage() const override
   { return "Removed " + QString::number(_numAffected) + " unlikely intersections"; }
 
-  virtual QString getDescription() const override
+  QString getDescription() const override
   { return "Removes road intersections that are likely mistakes"; }
 
   /**
    * @see FilteredByGeometryTypeCriteria
    */
-  virtual QStringList getCriteria() const;
+  QStringList getCriteria() const override;
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
-  virtual void setConflateInfoCache(const std::shared_ptr<ConflateInfoCache>& cache)
+  void setConflateInfoCache(const std::shared_ptr<ConflateInfoCache>& cache) override
   { _conflateInfoCache = cache; }
 
 private:

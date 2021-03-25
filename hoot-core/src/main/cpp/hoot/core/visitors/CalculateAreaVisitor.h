@@ -45,7 +45,7 @@ public:
   static QString className() { return "hoot::CalculateAreaVisitor"; }
 
   CalculateAreaVisitor() : _total(0) { }
-  virtual ~CalculateAreaVisitor() = default;
+  ~CalculateAreaVisitor() = default;
 
   /**
    * Returns the area in meters squared.
@@ -54,15 +54,15 @@ public:
 
   double getArea() const { return _total; }
 
-  double getStat() const { return getArea(); }
+  double getStat() const override { return getArea(); }
 
-  virtual void visit(const ConstElementPtr& e) override;
+  void visit(const ConstElementPtr& e) override;
 
-  virtual QString getDescription() const { return "Calculates feature area totals"; }
+  QString getDescription() const override { return "Calculates feature area totals"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

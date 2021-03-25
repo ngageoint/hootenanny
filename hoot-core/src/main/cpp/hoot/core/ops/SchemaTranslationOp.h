@@ -51,9 +51,9 @@ public:
   static QString className() { return "hoot::SchemaTranslationOp"; }
 
   SchemaTranslationOp() = default;
-  virtual ~SchemaTranslationOp() = default;
+  ~SchemaTranslationOp() = default;
 
-  virtual void apply(std::shared_ptr<OsmMap>& map) override;
+  void apply(std::shared_ptr<OsmMap>& map) override;
 
   void setConfiguration(const Settings& conf);
 
@@ -62,17 +62,17 @@ public:
    */
   void setTranslationScript(QString path) { _translator.setTranslationScript(path); }
 
-  virtual QString getDescription() const { return _translator.getDescription(); }
+  QString getDescription() const override { return _translator.getDescription(); }
 
-  virtual QString getInitStatusMessage() const
+  QString getInitStatusMessage() const override
   { return _translator.getInitStatusMessage(); }
 
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   { return _translator.getCompletedStatusMessage(); }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

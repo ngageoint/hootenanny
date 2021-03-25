@@ -46,21 +46,21 @@ public:
   static QString className() { return "hoot::JsFunctionCriterion"; }
 
   JsFunctionCriterion() = default;
-  virtual ~JsFunctionCriterion() = default;
+  ~JsFunctionCriterion() = default;
 
-  virtual void addFunction(v8::Isolate* isolate, v8::Local<v8::Function>& func)
+  void addFunction(v8::Isolate* isolate, v8::Local<v8::Function>& func) override
   { _func.Reset(isolate, func); }
 
-  virtual bool isSatisfied(const ConstElementPtr& e) const override;
+  bool isSatisfied(const ConstElementPtr& e) const override;
 
-  virtual ElementCriterionPtr clone()
+  ElementCriterionPtr clone() override
   { return ElementCriterionPtr(new JsFunctionCriterion(_func)); }
 
-  virtual QString getDescription() const { return ""; }
+  QString getDescription() const override { return ""; }
 
-  virtual QString getName() const override { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

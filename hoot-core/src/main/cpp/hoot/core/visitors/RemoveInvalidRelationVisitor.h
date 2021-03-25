@@ -51,25 +51,25 @@ public:
   static QString className() { return "hoot::RemoveInvalidRelationVisitor"; }
 
   RemoveInvalidRelationVisitor();
-  virtual ~RemoveInvalidRelationVisitor() = default;
+  ~RemoveInvalidRelationVisitor() = default;
 
-  virtual void visit(const ElementPtr& e);
+  void visit(const ElementPtr& e) override;
 
-  virtual QString getInitStatusMessage() const
+  QString getInitStatusMessage() const override
   { return "Removing invalid and multiline string relations..."; }
 
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   { return "Removed " + QString::number(_numMembersRemoved) + " relation member(s) and " +
     QString::number(_numAffected) + " relation(s)"; }
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   {
     return "Removes duplicate ways in relations and invalid relations";
   }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
 private:
 

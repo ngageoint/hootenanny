@@ -48,7 +48,7 @@ public:
   QString getDescription() const override
   { return "Aggregates data based on the maximum value"; }
 
-  QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
   QString getClassName() const override { return className(); }
 };

@@ -300,8 +300,11 @@ void AbstractConflator::_applyMergers(const std::vector<MergerPtr>& mergers, Osm
       LOG_DEBUG(msg);
     }
 
-    // We require that each individual merger set the option to mark merge created relations, so
-    // disable this option as each merger is processed.
+    // We require that each individual merger set the option to mark merge created relations, to
+    // allow for subsets of mergers to mark them. So, disable this option as each merger is
+    // processed.
+    // TODO: It may be cleaner to add a setter for this property on the Merger base class and avoid
+    // setting this global option multiple times.
     conf().set(ConfigOptions::getConflateMarkMergeCreatedMultilinestringRelationsKey(), false);
 
     merger->apply(map, replaced);

@@ -69,24 +69,24 @@ public:
    * Always construct with create() to make a shared pointer.
    */
   SingleSidedNetworkMatcher();
-  virtual ~SingleSidedNetworkMatcher() = default;
+  ~SingleSidedNetworkMatcher() = default;
 
   // Leaving this hardcoded for now, as we don't use this matcher in production conflation jobs.
   // If we ever do end up using it production, then add a config option for it.
-  virtual double getMatchThreshold() const { return 0.15; }
+  virtual double getMatchThreshold() const override { return 0.15; }
 
   /**
    * Use this instead of a constructor.
    */
   static std::shared_ptr<SingleSidedNetworkMatcher> create();
 
-  void iterate();
+  void iterate() override;
 
-  void matchNetworks(ConstOsmMapPtr map, OsmNetworkPtr n1, OsmNetworkPtr n2);
+  void matchNetworks(ConstOsmMapPtr map, OsmNetworkPtr n1, OsmNetworkPtr n2) override;
 
-  QList<NetworkEdgeScorePtr> getAllEdgeScores() const;
+  QList<NetworkEdgeScorePtr> getAllEdgeScores() const override;
 
-  QList<NetworkVertexScorePtr> getAllVertexScores() const;
+  QList<NetworkVertexScorePtr> getAllVertexScores() const override;
 
 protected:
   virtual double _scoreEdges(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2) const;

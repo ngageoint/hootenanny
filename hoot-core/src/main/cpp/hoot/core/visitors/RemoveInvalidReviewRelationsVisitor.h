@@ -47,21 +47,21 @@ public:
   static QString className() { return "hoot::RemoveInvalidReviewRelationsVisitor"; }
 
   RemoveInvalidReviewRelationsVisitor() = default;
-  virtual ~RemoveInvalidReviewRelationsVisitor() = default;
+  ~RemoveInvalidReviewRelationsVisitor() = default;
 
-  virtual void visit(const ElementPtr& e);
+  void visit(const ElementPtr& e) override;
 
-  virtual QString getInitStatusMessage() const
+  QString getInitStatusMessage() const override
   { return "Removing review relations with no members..."; }
 
-  virtual QString getCompletedStatusMessage() const
+  QString getCompletedStatusMessage() const override
   { return "Removed " + QString::number(_numAffected) + " empty review relations"; }
 
-  virtual QString getDescription() const { return "Removes empty review relations"; }
+  QString getDescription() const override { return "Removes empty review relations"; }
 
-  virtual QString getName() const { return className(); }
+  QString getName() const override { return className(); }
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 };
 
 }
