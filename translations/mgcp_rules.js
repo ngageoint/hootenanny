@@ -796,6 +796,7 @@ mgcp.rules = {
     ['PPO','75','product','oil'],
     ['PPO','79','product','palm'],
     ['PPO','80','product','paper'],
+    ['PPO','83','product','petroleum'],
     ['PPO','84','product','plastic'],
     ['PPO','89','product','quartz'],
     ['PPO','90','product','radioactive_material'],
@@ -821,6 +822,10 @@ mgcp.rules = {
     ['PPO','137','product','petrochemical'],
     ['PPO','996','product','multiple'],
     ['PPO','999','product','other'],
+
+
+
+
 
     // PRM - Permanent
     //['PRM','0','permanent','unknown'], // Unknown
