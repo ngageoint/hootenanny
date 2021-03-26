@@ -5395,6 +5395,7 @@
         <nd ref="-543"/>
         <nd ref="-3883"/>
         <tag k="error:circular" v="15"/>
+        <tag k="highway" v="trunk"/>
     </way>
     <way visible="true" id="-655" timestamp="2020-02-14T16:18:35Z" version="1">
         <nd ref="-589"/>
@@ -5469,6 +5470,8 @@
         <nd ref="-4926"/>
         <nd ref="-5069"/>
         <tag k="error:circular" v="15"/>
+        <tag k="highway" v="trunk"/>
+        <tag k="hoot:hash" v="sha1sum:865c1397154520fdd1ec018092eb5f33ed9c0582"/>
     </way>
     <way visible="true" id="-649" timestamp="2020-02-14T16:18:36Z" version="1">
         <nd ref="-559"/>
@@ -12400,16 +12403,6 @@
         <tag k="source:datetime" v="2015-11-27T14:48:32.000Z"/>
         <tag k="surface" v="unpaved"/>
     </way>
-    <relation visible="true" id="-14" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-655" role=""/>
-        <member type="way" ref="-656" role=""/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="trunk"/>
-        <tag k="hoot:hash" v="sha1sum:9d25dd7eadc5f1312477c20dec824a1ac3382db4"/>
-        <tag k="ref" v="A12"/>
-        <tag k="source:datetime" v="2019-05-07T08:54:07Z"/>
-        <tag k="type" v="multilinestring"/>
-    </relation>
     <relation visible="true" id="7326624" timestamp="2020-02-14T16:24:59Z" version="1" changeset="39">
         <member type="way" ref="-669" role=""/>
         <member type="way" ref="-72" role=""/>
@@ -12488,7 +12481,6 @@
         <member type="way" ref="-40" role=""/>
         <member type="way" ref="-226" role=""/>
         <member type="way" ref="-225" role=""/>
-        <member type="relation" ref="-14" role=""/>
         <member type="way" ref="-228" role=""/>
         <member type="way" ref="-649" role=""/>
         <member type="way" ref="-632" role=""/>
@@ -12518,6 +12510,8 @@
         <member type="way" ref="-6" role="backward"/>
         <member type="way" ref="-11" role="backward"/>
         <member type="way" ref="-8" role="backward"/>
+        <member type="way" ref="-655" role=""/>
+        <member type="way" ref="-656" role=""/>
         <tag k="error:circular" v="15"/>
         <tag k="name" v="Trunk Road A12"/>
         <tag k="ref" v="A12"/>
