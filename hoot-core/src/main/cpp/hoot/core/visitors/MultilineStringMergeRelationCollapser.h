@@ -108,7 +108,7 @@ private:
   QStringList _typeKeys;
   // a list of type key/value pairs to be removed from the parent relation and copied to its members
   QStringList _typeKvps;
-  // TODO
+  // overrides use of _typesKeys/_typeKvps and allows relations of any type to be collapsed
   bool _mergeAllTypes;
 
   // merges the ms relation contained by other relation into them
