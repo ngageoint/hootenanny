@@ -1647,7 +1647,7 @@ mgcp = {
 
     // Surface vs Material
     // Deconflict based on F_CODE for Sports Ground, Beach, Soil Surface Region & Cut
-    if (tags.surface && ['AK040','BA050','DA010','DB070'].indexOf(attrs.F_CODE > -1))
+    if (tags.surface && ['AK040','BA050','DA010','DB070'].indexOf(attrs.F_CODE) > -1)
     {
       if (!tags.material) // Defensive
       {
@@ -2421,6 +2421,7 @@ mgcp = {
 
     // pre processing
     mgcp.applyToOgrPreProcessing(tags, attrs, geometryType);
+if (mgcp.configOut.OgrDebugDumptags == 'true') translate.debugOutput(tags,'',geometryType,elementType,'Tags after PreProc: ');
 
     // Make a copy of the input tags so we can remove them as they get translated. What is left is
     // the not used tags

@@ -567,6 +567,7 @@ mgcp.rules = {
     // ['HAF','0','helipad:facility','unknown'],
     ['HAF','0',undefined,undefined],
     ['HAF','1','helipad:facility','heliport'],
+    ['HAF','2','helipad:facility','land_aerodrome'],
     ['HAF','3','helipad:facility','hospital'],
     ['HAF','4','helipad:facility','non-hospital_building'],
     ['HAF','6','helipad:facility','rig'],
@@ -822,10 +823,6 @@ mgcp.rules = {
     ['PPO','137','product','petrochemical'],
     ['PPO','996','product','multiple'],
     ['PPO','999','product','other'],
-
-
-
-
 
     // PRM - Permanent
     //['PRM','0','permanent','unknown'], // Unknown
@@ -1463,8 +1460,7 @@ mgcp.rules = {
     ['GFC','999','amenity','government'],
 
     // HAF - Helipad Accociated Facilities
-    ['HAF','2','helipad:facility','land_aerodrome'],
-    ['HAF','5','helipad:facility','offshore_platform'],
+    ['HAF','5','helipad:facility','offshore_construction'], // Seems to have changed to '9' in TRD4
 
     // ICF - Manufacturing Facility Type - the rest of these are in biased rules
     ['ICF','0',undefined,undefined],
