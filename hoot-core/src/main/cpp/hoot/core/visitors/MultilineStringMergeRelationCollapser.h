@@ -43,9 +43,17 @@ namespace hoot
  * Collapses multilinestring relations created during conflate merging and passing a filter by
  * removing them and copying their type tags to members.
  *
+ * The option, conflate.mark.merge.created.multilinestring.relations, must be enabled in order for
+ * the merged output from Mergers to be properly processed by this visitor. Also the option,
+ * multilinestring.relation.collapser.types, must be populated with at least one type or key/value
+ * pair.
+ *
  * These relations can be unwanted byproducts of merging (see LinearSnapMerger) in certain
  * situations. In some cases, its easier to remove them using this as a conflate post op than it is
- * to not create them in the first place due to the complexity of the merging logic.
+ * to not create them in the first place due to the complexity of the merging logic. Currently, this
+ * is called by select conflate routines on an as-needed basis only and populated with only the
+ * minimal feature types to be operated on. Alternatively, use of this class could be made automatic
+ * and moved to LinearSnapMerger to be called directly from there.
  */
 class MultilineStringMergeRelationCollapser : public MultipleCriterionConsumerVisitor,
   public OsmMapConsumer, public Configurable
@@ -88,6 +96,9 @@ public:
    * @see Configurable
    */
   void setConfiguration(const Settings& conf) override;
+
+  bool hasTypes() const { return !_typeKeys.isEmpty() || !_typeKvps.isEmpty(); }
+  void setTypes(const QStringList& types);
 
 private:
 
