@@ -34,7 +34,7 @@
 #include <hoot/core/criterion/ChainCriterion.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/criterion/WayLengthCriterion.h>
-#include <hoot/rnd/criterion/WayHeadingVarianceCriterion.h>
+#include <hoot/core/criterion/WayHeadingVarianceCriterion.h>
 #include <hoot/core/criterion/RoundaboutCriterion.h>
 #include <hoot/core/criterion/NotCriterion.h>
 

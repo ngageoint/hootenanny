@@ -1002,6 +1002,7 @@ See also:
 * Data Type: list
 * Default Value:
 ** `hoot::RemoveMissingElementsVisitor`
+** `hoot::InvalidWayRemover`
 ** `hoot::PoiPolygonInvalidReviewNodeRemover`
 ** `hoot::SuperfluousNodeRemover`
 ** `hoot::SmallHighwayMerger`
@@ -2537,6 +2538,7 @@ trigger warning log messages.
 * Data Type: list
 * Default Value:
 ** `hoot::ReprojectToPlanarOp`
+** `hoot::InvalidWayRemover`
 ** `hoot::DuplicateNodeRemover`
 ** `hoot::RemoveDuplicateWayNodesVisitor`
 ** `hoot::OneWayRoadStandardizer`
