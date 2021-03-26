@@ -41,26 +41,24 @@ const objs = {
     },
 };
 
-function lookupType(geoms) {
-    var types = geoms.reduce((s, g) => {
-        switch(g) {
-            case 'Point':
-                s.add('node');
-                break;
-            case 'Line':
-                s.add('way');
-                s.add('closedway');
-                break;
-            case 'Area':
-                s.add('closedway');
-                s.add('multipolygon');
-                break;
-        }
-        return s;
+function lookupType(geom) {
+    let set = new Set();
 
-    }, new Set());
+    switch(geom) {
+        case 'Point':
+            set.add('node');
+            break;
+        case 'Line':
+            set.add('way');
+            set.add('closedway');
+            break;
+        case 'Area':
+            set.add('closedway');
+            set.add('multipolygon');
+            break;
+    }
 
-    return Array.from(types).join(',');
+    return Array.from(set).join(',');
 }
 
 Object.keys(objs).forEach(s => {
@@ -197,21 +195,29 @@ Object.keys(objs).forEach(s => {
         //Get the right subgroup (two-letter) element to append to
         let code = items[i].fcode.slice(0,2);
 
-        let it = subGroupCodeElements[code].ele('item', {name: i, type: lookupType(items[i].geoms), preset_name_label: true});
-
-        usedGroups.add(code); //Sub-group
-        usedGroups.add(code.charAt(0)); //Group
-
-        it.ele('key', {key: (s === 'mgcp') ? 'FCODE' : 'F_CODE', value: items[i].fcode}); //MGCP uses 'FCODE' as key
-
-        items[i].columns.forEach((col, j) => {
-            if (col.name !== 'FCODE' && col.name !== 'F_CODE') { //FCODE is set as a key above
-                it.ele('reference',
-                    {
-                        ref: items[i].hashes[j]
-                    });
+        items[i].geoms.forEach(geom => {
+            let itemInfo = {
+                name: i + ' - ' + geom,
+                type: lookupType(geom),
+                preset_name_label: true
             }
-        });
+            let it = subGroupCodeElements[code].ele('item', itemInfo);
+
+            usedGroups.add(code); //Sub-group
+            usedGroups.add(code.charAt(0)); //Group
+
+            it.ele('key', {key: (s === 'mgcp') ? 'FCODE' : 'F_CODE', value: items[i].fcode}); //MGCP uses 'FCODE' as key
+
+            items[i].columns.forEach((col, j) => {
+                if (col.name !== 'FCODE' && col.name !== 'F_CODE') { //FCODE is set as a key above
+                    it.ele('reference',
+                        {
+                            ref: items[i].hashes[j]
+                        });
+                }
+            });
+        })
+
     });
 
     //Remove empty groups

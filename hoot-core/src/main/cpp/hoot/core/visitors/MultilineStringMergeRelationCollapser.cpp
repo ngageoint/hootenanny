@@ -107,6 +107,8 @@ void MultilineStringMergeRelationCollapser::setConfiguration(const Settings& con
 
   ConfigOptions opts(conf);
 
+  ConfigOptions opts(conf);
+
   // Create a list of types to search for on the relations we process. Any types found will be
   // transferred to relation members.
   const QStringList types = opts.getMultilinestringRelationCollapserTypes();
