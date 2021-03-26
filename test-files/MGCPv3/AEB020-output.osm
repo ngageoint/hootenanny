@@ -15,20 +15,20 @@
         <nd ref="-7"/>
         <nd ref="-8"/>
         <nd ref="-5"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="feature_area" v="11599.8"/>
-        <tag k="source" v="mgcp:aeb020"/>
-        <tag k="undergrowth:density" v="40"/>
-        <tag k="source:ingest:datetime" v="2020-11-16T15:34:17.420Z"/>
-        <tag k="name" v="Scrub"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="uuid" v="{f5d18b0b-cdf3-418f-9392-23bb16d443ac}"/>
-        <tag k="natural" v="scrub"/>
-        <tag k="width" v="98.9"/>
         <tag k="angle" v="179.0"/>
-        <tag k="length" v="117.7"/>
         <tag k="error:circular" v="15"/>
+        <tag k="feature_area" v="11599.8"/>
+        <tag k="length" v="117.7"/>
+        <tag k="name" v="Scrub"/>
+        <tag k="natural" v="scrub"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="mgcp:aeb020"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="source:ingest:datetime" v="2021-03-26T09:31:23.028Z"/>
+        <tag k="undergrowth:density" v="40"/>
+        <tag k="uuid" v="{f5d18b0b-cdf3-418f-9392-23bb16d443ac}"/>
+        <tag k="width" v="98.9"/>
     </way>
     <way visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1"/>
@@ -36,19 +36,19 @@
         <nd ref="-3"/>
         <nd ref="-4"/>
         <nd ref="-1"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="feature_area" v="11599.8"/>
-        <tag k="source" v="mgcp:aeb020"/>
-        <tag k="undergrowth:density" v="40"/>
-        <tag k="source:ingest:datetime" v="2020-11-16T15:34:17.353Z"/>
-        <tag k="name" v="Heath"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="uuid" v="{dc04b9cd-a7a1-433a-8aec-19cdc6203e72}"/>
-        <tag k="natural" v="heath"/>
-        <tag k="width" v="98.9"/>
         <tag k="angle" v="179.0"/>
-        <tag k="length" v="117.7"/>
         <tag k="error:circular" v="15"/>
+        <tag k="feature_area" v="11599.8"/>
+        <tag k="length" v="117.7"/>
+        <tag k="name" v="Heath"/>
+        <tag k="natural" v="heath"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="mgcp:aeb020"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="source:ingest:datetime" v="2021-03-26T09:31:22.938Z"/>
+        <tag k="undergrowth:density" v="40"/>
+        <tag k="uuid" v="{dc04b9cd-a7a1-433a-8aec-19cdc6203e72}"/>
+        <tag k="width" v="98.9"/>
     </way>
 </osm>

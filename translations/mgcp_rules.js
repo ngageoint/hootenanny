@@ -1219,10 +1219,10 @@ mgcp.rules = {
     ['VSP','999','vegetation:type','other'], // Other
 
     // WCC - Watercourse Channel Type
-    ['WCC','0','waterway','yes'],
-    ['WCC','1','waterway','stream'],
-    ['WCC','2','waterway','braided_stream'],
-    ['WCC','3','waterway','gorge'],
+    // ['WCC','0','channel:type','yes'],
+    ['WCC','1','channel:type','channelized_stream'],
+    ['WCC','2','channel:type','braided_stream'],
+    ['WCC','3','channel:type','gorge'],
     ['WCC','4','wadi','yes'],
     ['WCC','7','waterway','river'],
 

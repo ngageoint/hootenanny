@@ -2,43 +2,43 @@
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="-25.44866660592" minlon="153.15813891014" maxlat="-25.44825580041" maxlon="153.17603353691"/>
     <node visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4482558004099992" lon="153.1581389101399964">
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source" v="mgcp:pam070"/>
-        <tag k="source:ingest:datetime" v="2020-11-16T15:34:21.462Z"/>
-        <tag k="content" v="silage"/>
-        <tag k="uuid" v="{10a5246e-415f-4b1d-9c12-4c15ab1c10b4}"/>
-        <tag k="man_made" v="storage_tank"/>
         <tag k="condition" v="functional"/>
+        <tag k="content" v="silage"/>
         <tag k="error:circular" v="15"/>
+        <tag k="man_made" v="storage_tank"/>
+        <tag k="source" v="mgcp:pam070"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:ingest:datetime" v="2021-03-26T09:31:28.091Z"/>
+        <tag k="uuid" v="{10a5246e-415f-4b1d-9c12-4c15ab1c10b4}"/>
     </node>
     <node visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4483927357299997" lon="153.1651147815900060">
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source" v="mgcp:pam070"/>
-        <tag k="source:ingest:datetime" v="2020-11-16T15:34:21.461Z"/>
-        <tag k="content" v="water"/>
-        <tag k="uuid" v="{11489fd2-31fe-40f1-9417-6c4e2fa2194f}"/>
-        <tag k="man_made" v="storage_tank"/>
         <tag k="condition" v="functional"/>
+        <tag k="content" v="water"/>
         <tag k="error:circular" v="15"/>
+        <tag k="man_made" v="storage_tank"/>
+        <tag k="source" v="mgcp:pam070"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:ingest:datetime" v="2021-03-26T09:31:28.090Z"/>
+        <tag k="uuid" v="{11489fd2-31fe-40f1-9417-6c4e2fa2194f}"/>
     </node>
     <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4485296709000011" lon="153.1710291073900123">
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source" v="mgcp:pam070"/>
-        <tag k="source:ingest:datetime" v="2020-11-16T15:34:21.461Z"/>
-        <tag k="content" v="fuel"/>
-        <tag k="uuid" v="{12449bc4-c059-4270-8d72-134fcf54291d}"/>
-        <tag k="man_made" v="storage_tank"/>
         <tag k="condition" v="functional"/>
+        <tag k="content" v="fuel"/>
         <tag k="error:circular" v="15"/>
+        <tag k="man_made" v="storage_tank"/>
+        <tag k="source" v="mgcp:pam070"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:ingest:datetime" v="2021-03-26T09:31:28.090Z"/>
+        <tag k="uuid" v="{12449bc4-c059-4270-8d72-134fcf54291d}"/>
     </node>
     <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4486666059199997" lon="153.1760335369100119">
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source" v="mgcp:pam070"/>
-        <tag k="source:ingest:datetime" v="2020-11-16T15:34:21.460Z"/>
-        <tag k="content" v="oil"/>
-        <tag k="uuid" v="{127b406c-964f-4403-a275-40f096adcabe}"/>
-        <tag k="man_made" v="storage_tank"/>
         <tag k="condition" v="functional"/>
+        <tag k="content" v="oil"/>
         <tag k="error:circular" v="15"/>
+        <tag k="man_made" v="storage_tank"/>
+        <tag k="source" v="mgcp:pam070"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:ingest:datetime" v="2021-03-26T09:31:28.089Z"/>
+        <tag k="uuid" v="{127b406c-964f-4403-a275-40f096adcabe}"/>
     </node>
 </osm>

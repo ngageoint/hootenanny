@@ -30,9 +30,9 @@ function checkMgcpV3 {
     IN=test-files/MGCPv3/$1.shp
     hoot convert --warn $CONFIG -D schema.translation.script=translations/MgcpTest.js $IN $OUT
     #echo $IN  $OUT
-    compareFiles $OUT test-files/MGCPv3/$1-output.osm
     # Uncomment this to update what we compare with.
     # cp $OUT test-files/MGCPv3/$1-outputX.osm
+    compareFiles $OUT test-files/MGCPv3/$1-output.osm
     # Export as TRDv4
     OUT4=test-output/cmd/slow/translation/$1
     rm -rf $OUT4

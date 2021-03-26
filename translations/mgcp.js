@@ -60,17 +60,18 @@ mgcp = {
   // Build the MGCP fcode/attrs lookup table
   mgcp.attrLookup = translate.makeAttrLookup(mgcp.rawSchema);
 
-  // Now add an o2s[A,L,P] feature to the mgcp.rawSchema
-  // We can drop features but this is a nice way to see what we would drop
+  // Now add an o2s[A,L,P] feature to the mgcp.rawSchema and an attribute to hold OSM tags
   if (config.getOgrOutputFormat() == 'shp')
   {
     // Add tag1, tag2, tag3 and tag4
-    mgcp.rawSchema = translate.addEmptyFeature(mgcp.rawSchema);
+    // As well as the OSMTAGS1-4 attributes
+    mgcp.rawSchema = translate.addO2sFeatures(translate.addTagFeatures(mgcp.rawSchema));
+    ;
   }
   else
   {
-    // Just add tag1
-    mgcp.rawSchema = translate.addSingleO2sFeature(mgcp.rawSchema);
+    // Just add tag1 && OSMTAGS
+    mgcp.rawSchema = translate.addSingleO2sFeature(translate.addSingleTagFeature(mgcp.rawSchema));
   }
 
   // Add empty Review layers
@@ -526,42 +527,74 @@ mgcp = {
   // Post Processing: Lots of cleanup
   applyToOsmPostProcessing : function (attrs, tags, layerName, geometryType)
   {
-    // Unpack the TXT field
-    if (tags.note)
+    // Unpack the TXT field or OSMTAGSX if needed
+    if (tags.note || attrs.OSMTAGS)
     {
+      var tTags = {};
       var tObj = translate.unpackMemo(tags.note);
 
       if (tObj.tags !== '')
       {
-        var tTags = JSON.parse(tObj.tags)
-        for (i in tTags)
+        try
         {
-          // Debug
-          // print('Memo: Add: ' + i + ' = ' + tTags[i]);
-          if (tags[tTags[i]]) hoot.logDebug('Unpacking TXT, overwriting ' + i + ' = ' + tags[i] + '  with ' + tTags[i]);
-          tags[i] = tTags[i];
+          tTags = JSON.parse(tObj.tags);
+        }
+        catch (error)
+        {
+          hoot.logError('Unable to parse OSM tags in TXT attribute: ' + tObj.tags);
+        }
+      }
 
-          // Now check if this is a synonym etc. If so, remove the other tag.
-          if (i in mgcp.fcodeLookupOut) // tag -> FCODE table
+      if (attrs.OSMTAGS)
+      {
+        ['OSMTAGS','OSMTAGS2','OSMTAGS3','OSMTAGS4'].forEach( item => {
+          if (attrs[item])
           {
-            if (tags[i] in mgcp.fcodeLookupOut[i])
+            try
             {
-              var row = mgcp.fcodeLookupOut[i][tags[i]];
-
-              // Now find the "real" tag that comes frm the FCode
-              if (row[1] in mgcp.fcodeLookup['F_CODE'])
+              var tmp = JSON.parse(attrs[item]);
+              for (var i in tmp)
               {
-                var row2 = mgcp.fcodeLookup['F_CODE'][row[1]];
-                // If the tags match, delete it
-                if (tags[row2[0]] && (tags[row2[0]] == row2[1]))
-                {
-                  delete tags[row2[0]];
-                }
+                if (tTags[i]) hoot.logWarn('Overwriting unpacked tag ' + i + '=' + tTags[i] + ' with ' + tmp[i]);
+                tTags[i] = tmp[i];
+              }
+            }
+            catch (error)
+            {
+              hoot.logError('Unable to parse OSM tags in ' + item + ' attribute: ' + attrs[item]);
+            }
+          }
+        });
+      }
+
+      // Now add the unpacked tags to the main list
+      for (var i in tTags)
+      {
+        // Debug
+        // print('Memo: Add: ' + i + ' = ' + tTags[i]);
+        if (tags[tTags[i]]) hoot.logDebug('Unpacking tags, overwriting ' + i + ' = ' + tags[i] + '  with ' + tTags[i]);
+        tags[i] = tTags[i];
+
+        // Now check if this is a synonym etc. If so, remove the other tag.
+        if (i in mgcp.fcodeLookupOut) // tag -> FCODE table
+        {
+          if (tags[i] in mgcp.fcodeLookupOut[i])
+          {
+            var row = mgcp.fcodeLookupOut[i][tags[i]];
+
+            // Now find the "real" tag that comes frm the FCode
+            if (row[1] in mgcp.fcodeLookup['F_CODE'])
+            {
+              var row2 = mgcp.fcodeLookup['F_CODE'][row[1]];
+              // If the tags match, delete it
+              if (tags[row2[0]] && (tags[row2[0]] == row2[1]))
+              {
+                delete tags[row2[0]];
               }
             }
           }
-        } // End nTags
-      }
+        }
+      } // End nTags
 
       if (tObj.text !== '')
       {
@@ -572,6 +605,10 @@ mgcp = {
         delete tags.note;
       }
     } // End process tags.note
+
+
+
+
 
     // Calculate accuracy: taken straight from facc.py
     // 1/30 inch * SCALE for standard
@@ -778,45 +815,8 @@ mgcp = {
         break;
     } // End switch condifion
 
-    // Add 'building = yes' to amenities if we don't already have one
-    // if (tags.amenity && !tags.building)
-    // {
-    //   // Debug:
-    //   // print('Added building');
-    //   // Don't add building=yes to built up areas!
-    //   if (!tags.place) tags.building = 'yes';
-    // }
-
     // if (tags.building == 'train_station' && !tags.railway) tags.railway = 'station';
     // if ('ford' in tags && !tags.highway) tags.highway = 'road';
-
-    // Sort out TRS (Transport Type)
-    // DONT add transportation features to Ferry Crossings or Transportation Stations
-    if (attrs.TRS && attrs.F_CODE !== 'AQ125' && attrs.F_CODE !== 'AQ070')
-    {
-      switch (attrs.TRS)
-      {
-        case '9': // Pedestrian
-          // NOTE: This _might_ be a path: AP050 (Trail)
-          if (!tags.highway) tags.highway = 'track';
-          break;
-
-        case '12': // Railway
-          if (!tags.railway) tags.railway = 'rail';
-          break;
-
-        case '3': // TRD3 'Automotive'
-        case '4': // Bus
-        case '13': // Road
-          if (!tags.highway) tags.highway = 'road';
-          break;
-
-        case '14': // Road and Railway. This might be ugly....
-          if (!tags.highway) tags.highway = 'road';
-          if (!tags.railway) tags.railway = 'rail';
-          break;
-      } // End switch TRS
-    }
 
     // Some FCODE specific rules
     switch (attrs.F_CODE)
@@ -983,11 +983,31 @@ mgcp = {
         tags.natural = 'water';
         break;
 
-      //
+      // BA040 - Tidal Water
+      case 'BD180':
+        if (!tags['seamark:type']) tags['seamark:type'] = 'wreck';
+        break;
+
       // case 'BH070': // Ford
       //   // Fords are also supposed to be roads
       //   if (geometryType == 'Line' && !tags.highway) tags.highway = 'road';
       //   break;
+
+      case 'BH140': // River
+        // Different translation for area rivers
+        if (geometryType == 'Area')
+        {
+          if (!tags.natural) tags.natural = 'water';
+          if (!tags.water) tags.water = 'river';
+          delete tags.waterway;
+          break;
+        }
+        if (geometryType == 'Line')
+        {
+          if (tags.natural == 'water') delete tags.natural;
+          if (tags.water == 'river') delete tags.water;
+        }
+        break;
 
       case 'ED030': // Mangrove Swamp
         if (! tags.tidal) tags.tidal = 'yes';
@@ -1224,8 +1244,6 @@ mgcp = {
       // ["(t.shop || t.office) && !(t.building)","a.F_CODE = 'AL015'"],
       ["t.tourism == 'information' && t.information","delete t.tourism"],
       ["t.tunnel == 'building_passage'","t.tunnel = 'yes'"],
-      ["t.water == 'pond'","a.F_CODE = 'BH170'; t.natural = 'other_pool_type'"],
-      ["t.water == 'river'","t.waterway = 'river'"],
       ["t.waterway == 'riverbank'","t.waterway = 'river'"],
       ["t.wetland && t.natural == 'wetland'","delete t.natural"]
       ];
@@ -1338,16 +1356,7 @@ mgcp = {
     // Fix up OSM 'walls' around facilities
     if ((tags.barrier == 'wall' || tags.barrier == 'fence') && geometryType == 'Area')
     {
-      if (tags.landuse == 'military' || tags.military)
-      {
-        attrs.F_CODE = 'SU001'; // Military Installation
-      }
-      else
-      {
-        attrs.F_CODE = 'AL010'; // Facility
-      }
-
-      delete tags.barrier; // Take away the walls...
+      if (tags.landuse == 'military' || tags.military) attrs.F_CODE = 'SU001'; // Military Installation
     }
 
     // Wind Turbines, Solar Panels etc  vs power plants
@@ -1441,6 +1450,28 @@ mgcp = {
       }
     }
   */
+
+    // Moved these out og the complex rules to help with BH090 vs other things
+    switch (tags.water)
+    {
+      case undefined:
+        break;
+
+      case 'intermittent':
+        attrs.F_CODE = 'BH090'; // Old tag for Land Subject to inundation
+        delete tags.water;
+        break;
+
+      case 'river':
+        tags.waterway = 'river';
+        delete tags.water;
+        break;
+
+      case 'pond':
+        attrs.F_CODE = 'BH170';
+        tags.natural = 'other_pool_type';
+        break;
+    } // End Water
 
     // Places, localities and regions
     switch (tags.place)
@@ -1999,12 +2030,6 @@ mgcp = {
           attrs.SEP = '1000';
           attrs.MES = '1000';
         }
-
-        // if (attrs.WID && !attrs.WD1)
-        // {
-        //   attrs.WD1 = attrs.WID;
-        //   delete attrs.WID;
-        // }
         break;
 
       case 'AP050': // Trail
@@ -2021,11 +2046,6 @@ mgcp = {
           attrs.MCC = convSurf[attrs.RST];
           delete attrs.RST;
         }
-        // if (attrs.HGT)
-        // {
-        //   attrs.OHB = attrs.HGT;
-        //   delete attrs.HGT;
-        // }
         break;
 
       case 'AQ140': // Vehicle Lot/Vehicle Storage area: Valid NFDD/NAS FCODE but not in the MGCP spec
@@ -2043,37 +2063,10 @@ mgcp = {
         delete attrs.TID;
         break;
 
-      // case 'BA050': // Beach
-      //   if (attrs.MCC)
-      //   {
-      //     attrs.SMC = attrs.MCC;
-      //     delete attrs.MCC;
-      //   }
-      //   break;
-
-      // case 'DA010': // Soil Surface Area
-      //   if (attrs.MCC)
-      //   {
-      //     attrs.SMC = attrs.MCC;
-      //     delete attrs.MCC;
-      //   }
-      //   break;
-
-      // case 'DB010': // Bluff/Cliff/Escarpment
-      //   if (attrs.MCC)
-      //   {
-      //     attrs.SMC = attrs.MCC;
-      //     delete attrs.MCC;
-      //   }
-      //   break;
-
-      // case 'DB070': // Cut
-      //   if (attrs.MCC)
-      //   {
-      //     attrs.SMC = attrs.MCC;
-      //     delete attrs.MCC;
-      //   }
-      //   break;
+      // BA040 - Tidal Water
+      case 'BD180':
+        if (notUsedTags['seamark:type'] == 'wreck') delete notUsedTags['seamark:type'];
+        break;
 
       case 'DB090': // Embankment
         // If the embankment supports a transportation feature
@@ -2488,14 +2481,25 @@ if (mgcp.configOut.OgrDebugDumptags == 'true') translate.debugOutput(notUsedTags
         {
           // Validate attrs: remove all that are not supposed to be part of a feature
           mgcp.validateAttrs(geometryType,returnData[i]['attrs'],notUsedTags,transMap);
-    if (mgcp.configOut.OgrDebugDumptags == 'true') translate.debugOutput(notUsedTags,'',geometryType,elementType,'Validate: Not used: ');
 
-          // If we have unused tags, add them to the TXT field
-          // NOTE: We are not checking if this is longer than 255 characters
+          // If we have unused tags, store them
           if (Object.keys(notUsedTags).length > 0 && mgcp.configOut.OgrNoteExtra == 'attribute')
           {
-            var tStr = '<OSM>' + JSON.stringify(notUsedTags) + '</OSM>';
-            returnData[i]['attrs']['TXT'] = translate.appendValue(returnData[i]['attrs']['TXT'],tStr,';');
+            // var tStr = '<OSM>' + JSON.stringify(notUsedTags) + '</OSM>';
+            // returnData[i]['attrs']['TXT'] = translate.appendValue(returnData[i]['attrs']['TXT'],tStr,';');
+
+            var str = JSON.stringify(notUsedTags,Object.keys(notUsedTags).sort());
+            if (mgcp.configOut.OgrFormat == 'shp')
+            {
+              returnData[i]['attrs']['OSMTAGS'] = str.substring(0,225);
+              returnData[i]['attrs']['OSMTAGS2'] = str.substring(225,450);
+              returnData[i]['attrs']['OSMTAGS3'] = str.substring(450,675);
+              returnData[i]['attrs']['OSMTAGS4'] = str.substring(675,900);
+            }
+            else
+            {
+              returnData[i]['attrs']['OSMTAGS'] = str;
+            }
           }
         // Change this back if we need to change the lookup table
           // returnData[i]['tableName'] = mgcp.rules.layerNameLookup[gFcode.toUpperCase()];

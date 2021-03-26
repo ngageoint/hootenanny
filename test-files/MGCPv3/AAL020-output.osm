@@ -58,19 +58,19 @@
         <nd ref="-49"/>
         <nd ref="-50"/>
         <nd ref="-46"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="source" v="mgcp:aal020"/>
-        <tag k="source:ingest:datetime" v="2020-11-16T15:33:59.768Z"/>
-        <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
-        <tag k="landuse" v="built_up_area"/>
         <tag k="building:density" v="sparse"/>
-        <tag k="uuid" v="{20e36268-9fa7-4f18-b8f3-d0cea7710455}"/>
-        <tag k="source:accuracy:horizontal" v="25"/>
-        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
         <tag k="condition" v="destroyed"/>
-        <tag k="place" v="yes"/>
         <tag k="error:circular" v="28.65"/>
+        <tag k="landuse" v="built_up_area"/>
+        <tag k="place" v="yes"/>
+        <tag k="source" v="mgcp:aal020"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
+        <tag k="source:ingest:datetime" v="2021-03-26T09:25:22.626Z"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="uuid" v="{20e36268-9fa7-4f18-b8f3-d0cea7710455}"/>
     </way>
     <way visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-41"/>
@@ -79,22 +79,22 @@
         <nd ref="-44"/>
         <nd ref="-45"/>
         <nd ref="-41"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="source" v="mgcp:aal020"/>
-        <tag k="capital" v="yes"/>
-        <tag k="source:ingest:datetime" v="2020-11-16T15:33:59.768Z"/>
-        <tag k="place:importance" v="first"/>
-        <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
-        <tag k="landuse" v="built_up_area"/>
         <tag k="building:density" v="dense"/>
-        <tag k="uuid" v="{20c1223a-4735-4f7f-95db-13362a07d216}"/>
-        <tag k="source:accuracy:horizontal" v="25"/>
-        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
-        <tag k="use" v="education"/>
+        <tag k="capital" v="yes"/>
         <tag k="condition" v="functional"/>
-        <tag k="place" v="city"/>
         <tag k="error:circular" v="28.65"/>
+        <tag k="landuse" v="built_up_area"/>
+        <tag k="place" v="city"/>
+        <tag k="place:importance" v="first"/>
+        <tag k="source" v="mgcp:aal020"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
+        <tag k="source:ingest:datetime" v="2021-03-26T09:25:22.625Z"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="use" v="education"/>
+        <tag k="uuid" v="{20c1223a-4735-4f7f-95db-13362a07d216}"/>
     </way>
     <way visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-36"/>
@@ -103,21 +103,21 @@
         <nd ref="-39"/>
         <nd ref="-40"/>
         <nd ref="-36"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="source" v="mgcp:aal020"/>
-        <tag k="capital" v="yes"/>
-        <tag k="source:ingest:datetime" v="2020-11-16T15:33:59.767Z"/>
-        <tag k="place:importance" v="first"/>
-        <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
-        <tag k="landuse" v="built_up_area"/>
         <tag k="building:density" v="dense"/>
-        <tag k="uuid" v="{20bba864-bc5f-47c5-97fc-eae9b4c60c67}"/>
-        <tag k="source:accuracy:horizontal" v="25"/>
-        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
-        <tag k="use" v="healthcare"/>
-        <tag k="place" v="city"/>
+        <tag k="capital" v="yes"/>
         <tag k="error:circular" v="28.65"/>
+        <tag k="landuse" v="built_up_area"/>
+        <tag k="place" v="city"/>
+        <tag k="place:importance" v="first"/>
+        <tag k="source" v="mgcp:aal020"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
+        <tag k="source:ingest:datetime" v="2021-03-26T09:25:22.625Z"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="use" v="healthcare"/>
+        <tag k="uuid" v="{20bba864-bc5f-47c5-97fc-eae9b4c60c67}"/>
     </way>
     <way visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-31"/>
@@ -126,21 +126,21 @@
         <nd ref="-34"/>
         <nd ref="-35"/>
         <nd ref="-31"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="source" v="mgcp:aal020"/>
-        <tag k="source:ingest:datetime" v="2020-11-16T15:33:59.767Z"/>
-        <tag k="place:importance" v="fifth"/>
-        <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
-        <tag k="landuse" v="built_up_area"/>
         <tag k="building:density" v="sparse"/>
-        <tag k="uuid" v="{20b02702-078b-4daa-a649-31c28a3d3086}"/>
-        <tag k="source:accuracy:horizontal" v="25"/>
-        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
-        <tag k="use" v="urbanised"/>
         <tag k="condition" v="functional"/>
-        <tag k="place" v="village"/>
         <tag k="error:circular" v="28.65"/>
+        <tag k="landuse" v="built_up_area"/>
+        <tag k="place" v="village"/>
+        <tag k="place:importance" v="fifth"/>
+        <tag k="source" v="mgcp:aal020"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
+        <tag k="source:ingest:datetime" v="2021-03-26T09:25:22.624Z"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="use" v="urbanised"/>
+        <tag k="uuid" v="{20b02702-078b-4daa-a649-31c28a3d3086}"/>
     </way>
     <way visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-26"/>
@@ -149,20 +149,20 @@
         <nd ref="-29"/>
         <nd ref="-30"/>
         <nd ref="-26"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="source" v="mgcp:aal020"/>
-        <tag k="source:ingest:datetime" v="2020-11-16T15:33:59.766Z"/>
-        <tag k="place:importance" v="fifth"/>
-        <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
-        <tag k="landuse" v="built_up_area"/>
-        <tag k="uuid" v="{206c3ef8-34ab-46cb-a9c8-6bab1c21be7e}"/>
-        <tag k="source:accuracy:horizontal" v="25"/>
-        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
-        <tag k="use" v="correctional"/>
         <tag k="condition" v="functional"/>
-        <tag k="place" v="village"/>
         <tag k="error:circular" v="28.65"/>
+        <tag k="landuse" v="built_up_area"/>
+        <tag k="place" v="village"/>
+        <tag k="place:importance" v="fifth"/>
+        <tag k="source" v="mgcp:aal020"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
+        <tag k="source:ingest:datetime" v="2021-03-26T09:25:22.624Z"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="use" v="correctional"/>
+        <tag k="uuid" v="{206c3ef8-34ab-46cb-a9c8-6bab1c21be7e}"/>
     </way>
     <way visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-21"/>
@@ -171,20 +171,20 @@
         <nd ref="-24"/>
         <nd ref="-25"/>
         <nd ref="-21"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="source" v="mgcp:aal020"/>
-        <tag k="source:ingest:datetime" v="2020-11-16T15:33:59.766Z"/>
-        <tag k="place:importance" v="fourth"/>
-        <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
-        <tag k="landuse" v="residential"/>
         <tag k="building:density" v="sparse"/>
-        <tag k="uuid" v="{200ee386-f54b-4188-9383-ea93a9b90d29}"/>
-        <tag k="source:accuracy:horizontal" v="25"/>
-        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
         <tag k="condition" v="damaged"/>
-        <tag k="place" v="town"/>
         <tag k="error:circular" v="28.65"/>
+        <tag k="landuse" v="residential"/>
+        <tag k="place" v="town"/>
+        <tag k="place:importance" v="fourth"/>
+        <tag k="source" v="mgcp:aal020"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
+        <tag k="source:ingest:datetime" v="2021-03-26T09:25:22.623Z"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="uuid" v="{200ee386-f54b-4188-9383-ea93a9b90d29}"/>
     </way>
     <way visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-16"/>
@@ -193,22 +193,22 @@
         <nd ref="-19"/>
         <nd ref="-20"/>
         <nd ref="-16"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="source" v="mgcp:aal020"/>
-        <tag k="source:ingest:datetime" v="2020-11-16T15:33:59.765Z"/>
-        <tag k="place:importance" v="third"/>
-        <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
+        <tag k="building:density" v="dense"/>
+        <tag k="condition" v="destroyed"/>
+        <tag k="error:circular" v="28.65"/>
         <tag k="landuse" v="built_up_area"/>
         <tag k="name" v="Yet Again"/>
-        <tag k="building:density" v="dense"/>
-        <tag k="uuid" v="{2005b758-e63c-41a3-8f91-ab84d8e0a149}"/>
-        <tag k="source:accuracy:horizontal" v="25"/>
-        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
-        <tag k="use" v="institute"/>
-        <tag k="condition" v="destroyed"/>
         <tag k="place" v="town"/>
-        <tag k="error:circular" v="28.65"/>
+        <tag k="place:importance" v="third"/>
+        <tag k="source" v="mgcp:aal020"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
+        <tag k="source:ingest:datetime" v="2021-03-26T09:25:22.622Z"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="use" v="institute"/>
+        <tag k="uuid" v="{2005b758-e63c-41a3-8f91-ab84d8e0a149}"/>
     </way>
     <way visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-11"/>
@@ -217,21 +217,21 @@
         <nd ref="-14"/>
         <nd ref="-15"/>
         <nd ref="-11"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="source" v="mgcp:aal020"/>
-        <tag k="source:ingest:datetime" v="2020-11-16T15:33:59.765Z"/>
-        <tag k="place:importance" v="second"/>
-        <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
+        <tag k="building:density" v="dense"/>
+        <tag k="condition" v="functional"/>
+        <tag k="error:circular" v="28.65"/>
         <tag k="landuse" v="commercial"/>
         <tag k="name" v="test1"/>
-        <tag k="building:density" v="dense"/>
-        <tag k="uuid" v="{1feb8ee5-b54a-46ce-b9c5-8b48b92e0cd5}"/>
-        <tag k="source:accuracy:horizontal" v="25"/>
-        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
-        <tag k="condition" v="functional"/>
         <tag k="place" v="city"/>
-        <tag k="error:circular" v="28.65"/>
+        <tag k="place:importance" v="second"/>
+        <tag k="source" v="mgcp:aal020"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
+        <tag k="source:ingest:datetime" v="2021-03-26T09:25:22.622Z"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="uuid" v="{1feb8ee5-b54a-46ce-b9c5-8b48b92e0cd5}"/>
     </way>
     <way visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-6"/>
@@ -240,22 +240,22 @@
         <nd ref="-9"/>
         <nd ref="-10"/>
         <nd ref="-6"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="source" v="mgcp:aal020"/>
+        <tag k="building:density" v="sparse"/>
         <tag k="capital" v="yes"/>
-        <tag k="source:ingest:datetime" v="2020-11-16T15:33:59.765Z"/>
-        <tag k="place:importance" v="first"/>
-        <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
+        <tag k="condition" v="functional"/>
+        <tag k="error:circular" v="28.65"/>
         <tag k="landuse" v="industrial"/>
         <tag k="name" v="bua02"/>
-        <tag k="building:density" v="sparse"/>
-        <tag k="uuid" v="{1fb8791d-2a98-4c2f-b5c2-01885e4d0b47}"/>
-        <tag k="source:accuracy:horizontal" v="25"/>
-        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
-        <tag k="condition" v="functional"/>
         <tag k="place" v="city"/>
-        <tag k="error:circular" v="28.65"/>
+        <tag k="place:importance" v="first"/>
+        <tag k="source" v="mgcp:aal020"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
+        <tag k="source:ingest:datetime" v="2021-03-26T09:25:22.621Z"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="uuid" v="{1fb8791d-2a98-4c2f-b5c2-01885e4d0b47}"/>
     </way>
     <way visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1"/>
@@ -264,17 +264,17 @@
         <nd ref="-4"/>
         <nd ref="-5"/>
         <nd ref="-1"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="source" v="mgcp:aal020"/>
-        <tag k="source:ingest:datetime" v="2020-11-16T15:33:59.706Z"/>
-        <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
+        <tag k="error:circular" v="28.65"/>
         <tag k="landuse" v="built_up_area"/>
         <tag k="name" v="BUA01"/>
-        <tag k="uuid" v="{1fb144c2-de51-4b5f-874b-b309a22afe0a}"/>
-        <tag k="source:accuracy:horizontal" v="25"/>
-        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
         <tag k="place" v="yes"/>
-        <tag k="error:circular" v="28.65"/>
+        <tag k="source" v="mgcp:aal020"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
+        <tag k="source:ingest:datetime" v="2021-03-26T09:25:22.535Z"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="uuid" v="{1fb144c2-de51-4b5f-874b-b309a22afe0a}"/>
     </way>
 </osm>

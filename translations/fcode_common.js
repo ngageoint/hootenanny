@@ -299,7 +299,7 @@ fcodeCommon = {
       ['F_CODE','BH075','amenity','fountain'], // Fountain
       ['F_CODE','BH077','natural','hummock'], // Hummock
       ['F_CODE','BH082','water','lake'], // Inland Waterbody
-      ['F_CODE','BH090','water','intermittent'], // Land Subject to Inundation
+      ['F_CODE','BH090','subject_to_inundation','yes'], // Land Subject to Inundation
       ['F_CODE','BH100','water','moat'], // Moat
       ['F_CODE','BH110','pipeline:type','penstock'], // Penstock
       ['F_CODE','BH116','natural','aquifer'], // Aquifer

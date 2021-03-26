@@ -1,305 +1,310 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
-    <bounds minlat="-25.39121568730733" minlon="153.0723617490377" maxlat="-25.37578325422032" maxlon="153.1332739411959"/>
-    <node visible="true" id="-30" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3908661194900560" lon="153.1170190376930691"/>
-    <node visible="true" id="-29" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3760454300832627" lon="153.1170190376930691"/>
-    <node visible="true" id="-28" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3908661194900560" lon="153.1126494399773321"/>
+    <bounds minlat="-25.39121568730732" minlon="153.0723617490377" maxlat="-25.37578325422032" maxlon="153.1332739411959"/>
+    <node visible="true" id="-30" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3908661194900596" lon="153.1170190376930975"/>
+    <node visible="true" id="-29" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3760454300832663" lon="153.1170190376930975"/>
+    <node visible="true" id="-28" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3908661194900596" lon="153.1126494399773321"/>
     <node visible="true" id="-27" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3760454300832663" lon="153.1126494399773321"/>
-    <node visible="true" id="-26" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3910409033986859" lon="153.1080176663985526"/>
+    <node visible="true" id="-26" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3910409033986895" lon="153.1080176663985526"/>
     <node visible="true" id="-25" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3762202139918962" lon="153.1080176663985526"/>
-    <node visible="true" id="-24" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3912156873073265" lon="153.1034732847741395"/>
+    <node visible="true" id="-24" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3912156873073229" lon="153.1034732847741395"/>
     <node visible="true" id="-23" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3763949979005297" lon="153.1034732847741395"/>
-    <node visible="true" id="-22" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3910409033986966" lon="153.0993658629212746"/>
+    <node visible="true" id="-22" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3910409033986930" lon="153.0993658629212746"/>
     <node visible="true" id="-21" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3762202139918998" lon="153.0993658629212746"/>
-    <node visible="true" id="-20" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3909535114443727" lon="153.0917627628958257"/>
-    <node visible="true" id="-19" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3761328220375830" lon="153.0917627628958257"/>
-    <node visible="true" id="-18" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3906913355814332" lon="153.0875679490886512"/>
+    <node visible="true" id="-20" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3909535114443727" lon="153.0917627628958542"/>
+    <node visible="true" id="-19" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3761328220375795" lon="153.0917627628958542"/>
+    <node visible="true" id="-18" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3906913355814297" lon="153.0875679490886512"/>
     <node visible="true" id="-17" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3758706461746364" lon="153.0875679490886512"/>
-    <node visible="true" id="-16" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3907787275357393" lon="153.0828487835555336"/>
-    <node visible="true" id="-15" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3759580381289567" lon="153.0828487835555336"/>
-    <node visible="true" id="-14" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3906039436271058" lon="153.0780422260681917"/>
+    <node visible="true" id="-16" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3907787275357428" lon="153.0828487835555620"/>
+    <node visible="true" id="-15" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3759580381289496" lon="153.0828487835555620"/>
+    <node visible="true" id="-14" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3906039436271094" lon="153.0780422260681917"/>
     <node visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3757832542203161" lon="153.0780422260681917"/>
     <node visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3906039436271129" lon="153.0723617490376682"/>
     <node visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3757832542203197" lon="153.0723617490376682"/>
-    <node visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3906913355814368" lon="153.1332739411958812"/>
+    <node visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3906913355814297" lon="153.1332739411958812"/>
     <node visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3758706461746364" lon="153.1332739411958812"/>
-    <node visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3908661194900560" lon="153.1290791273887066"/>
-    <node visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3760454300832627" lon="153.1290791273887066"/>
+    <node visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3908661194900596" lon="153.1290791273887066"/>
+    <node visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3760454300832663" lon="153.1290791273887066"/>
     <node visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3906913355814261" lon="153.1250590974901797"/>
-    <node visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3758706461746257" lon="153.1250590974901797"/>
-    <node visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3906913355814332" lon="153.1207768917286955"/>
+    <node visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3758706461746328" lon="153.1250590974901797"/>
+    <node visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3906913355814297" lon="153.1207768917286955"/>
     <node visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3758706461746364" lon="153.1207768917286955"/>
-    <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3907787275357393" lon="153.0956080088857050"/>
+    <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3907787275357428" lon="153.0956080088857050"/>
     <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3759580381289496" lon="153.0956080088857050"/>
     <way visible="true" id="-15" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-29"/>
         <nd ref="-30"/>
-        <tag k="width" v="3"/>
-        <tag k="source:ingest:datetime" v="2017-07-26T06:18:15.546Z"/>
-        <tag k="source:name" v="imagery_(other)"/>
-        <tag k="intermittent" v="no"/>
-        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
-        <tag k="tidal" v="no"/>
+        <tag k="channel:type" v="braided_stream"/>
         <tag k="covered" v="no"/>
-        <tag k="waterway" v="braided_stream"/>
-        <tag k="uuid" v="{17d4bdfa-4508-4a09-87c6-26be3a713130}"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="intermittent" v="no"/>
         <tag k="source" v="mgcp:lbh140"/>
         <tag k="source:accuracy:horizontal" v="25"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-03-26T09:24:30.320Z"/>
+        <tag k="source:name" v="imagery_(other)"/>
+        <tag k="tidal" v="no"/>
+        <tag k="uuid" v="{17d4bdfa-4508-4a09-87c6-26be3a713130}"/>
+        <tag k="waterway" v="river"/>
+        <tag k="width" v="3"/>
     </way>
     <way visible="true" id="-14" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-27"/>
         <nd ref="-28"/>
-        <tag k="width" v="3"/>
-        <tag k="source:ingest:datetime" v="2017-07-26T06:18:15.546Z"/>
-        <tag k="source:name" v="imagery_(other)"/>
-        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
-        <tag k="tidal" v="yes"/>
-        <tag k="water:sink:type" v="dissipating"/>
+        <tag k="channel:type" v="braided_stream"/>
         <tag k="covered" v="no"/>
-        <tag k="waterway" v="braided_stream"/>
-        <tag k="uuid" v="{17c10dcb-5bc0-4f3e-8fa2-b9666a3b8a2f}"/>
-        <tag k="source" v="mgcp:lbh140"/>
+        <tag k="error:circular" v="28.65"/>
         <tag k="name" v="Amazon"/>
+        <tag k="source" v="mgcp:lbh140"/>
         <tag k="source:accuracy:horizontal" v="25"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-03-26T09:24:30.320Z"/>
+        <tag k="source:name" v="imagery_(other)"/>
+        <tag k="tidal" v="yes"/>
+        <tag k="uuid" v="{17c10dcb-5bc0-4f3e-8fa2-b9666a3b8a2f}"/>
+        <tag k="water:sink:type" v="dissipating"/>
+        <tag k="waterway" v="river"/>
+        <tag k="width" v="3"/>
     </way>
     <way visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-25"/>
         <nd ref="-26"/>
-        <tag k="width" v="3"/>
-        <tag k="wadi" v="yes"/>
-        <tag k="source:ingest:datetime" v="2017-07-26T06:18:15.545Z"/>
-        <tag k="source:name" v="imagery_(other)"/>
-        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
-        <tag k="tidal" v="no"/>
-        <tag k="water:sink:type" v="dissipating"/>
         <tag k="covered" v="no"/>
-        <tag k="waterway" v="river"/>
-        <tag k="uuid" v="{17305d07-ec01-4a73-b77a-590a11ced055}"/>
+        <tag k="error:circular" v="28.65"/>
         <tag k="source" v="mgcp:lbh140"/>
         <tag k="source:accuracy:horizontal" v="25"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-03-26T09:24:30.319Z"/>
+        <tag k="source:name" v="imagery_(other)"/>
+        <tag k="tidal" v="no"/>
+        <tag k="uuid" v="{17305d07-ec01-4a73-b77a-590a11ced055}"/>
+        <tag k="wadi" v="yes"/>
+        <tag k="water:sink:type" v="dissipating"/>
+        <tag k="waterway" v="river"/>
+        <tag k="width" v="3"/>
     </way>
     <way visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-23"/>
         <nd ref="-24"/>
-        <tag k="width" v="3"/>
-        <tag k="source:ingest:datetime" v="2017-07-26T06:18:15.545Z"/>
-        <tag k="source:name" v="imagery_(other)"/>
-        <tag k="intermittent" v="no"/>
-        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
-        <tag k="tidal" v="yes"/>
         <tag k="covered" v="no"/>
-        <tag k="waterway" v="river"/>
-        <tag k="uuid" v="{1716f6b6-d17a-4dc7-b4a6-5864a1aafd66}"/>
-        <tag k="source" v="mgcp:lbh140"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="intermittent" v="no"/>
         <tag k="name" v="Murray"/>
+        <tag k="source" v="mgcp:lbh140"/>
         <tag k="source:accuracy:horizontal" v="25"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-03-26T09:24:30.319Z"/>
+        <tag k="source:name" v="imagery_(other)"/>
+        <tag k="tidal" v="yes"/>
+        <tag k="uuid" v="{1716f6b6-d17a-4dc7-b4a6-5864a1aafd66}"/>
+        <tag k="waterway" v="river"/>
+        <tag k="width" v="3"/>
     </way>
     <way visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-21"/>
         <nd ref="-22"/>
-        <tag k="width" v="3"/>
-        <tag k="source:ingest:datetime" v="2017-07-26T06:18:15.545Z"/>
-        <tag k="source:name" v="imagery_(other)"/>
-        <tag k="intermittent" v="no"/>
-        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
-        <tag k="tidal" v="no"/>
         <tag k="covered" v="no"/>
-        <tag k="waterway" v="river"/>
-        <tag k="uuid" v="{162abddf-bb8a-470a-8986-afdf5a171d45}"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="intermittent" v="no"/>
         <tag k="source" v="mgcp:lbh140"/>
         <tag k="source:accuracy:horizontal" v="25"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-03-26T09:24:30.318Z"/>
+        <tag k="source:name" v="imagery_(other)"/>
+        <tag k="tidal" v="no"/>
+        <tag k="uuid" v="{162abddf-bb8a-470a-8986-afdf5a171d45}"/>
+        <tag k="waterway" v="river"/>
+        <tag k="width" v="3"/>
     </way>
     <way visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-19"/>
         <nd ref="-20"/>
-        <tag k="width" v="3"/>
-        <tag k="source:ingest:datetime" v="2017-07-26T06:18:15.545Z"/>
-        <tag k="source:name" v="imagery_(other)"/>
-        <tag k="intermittent" v="no"/>
-        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
-        <tag k="tidal" v="no"/>
-        <tag k="waterway:bank1:cover" v="14"/>
-        <tag k="waterway:bank2:cover" v="14"/>
+        <tag k="channel:type" v="channelized_stream"/>
         <tag k="covered" v="no"/>
-        <tag k="waterway" v="stream"/>
-        <tag k="uuid" v="{16006a93-ad6c-451e-b5ae-b530e6c5427a}"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="intermittent" v="no"/>
         <tag k="source" v="mgcp:lbh140"/>
         <tag k="source:accuracy:horizontal" v="25"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-03-26T09:24:30.318Z"/>
+        <tag k="source:name" v="imagery_(other)"/>
+        <tag k="tidal" v="no"/>
+        <tag k="uuid" v="{16006a93-ad6c-451e-b5ae-b530e6c5427a}"/>
+        <tag k="waterway" v="river"/>
+        <tag k="waterway:bank1:cover" v="14"/>
+        <tag k="waterway:bank2:cover" v="14"/>
+        <tag k="width" v="3"/>
     </way>
     <way visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-17"/>
         <nd ref="-18"/>
-        <tag k="width" v="3"/>
-        <tag k="source:ingest:datetime" v="2017-07-26T06:18:15.545Z"/>
-        <tag k="source:name" v="imagery_(other)"/>
-        <tag k="intermittent" v="dry"/>
-        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
-        <tag k="tidal" v="yes"/>
-        <tag k="waterway:bank2:type" v="stony"/>
-        <tag k="waterway:bank1:type" v="stony"/>
+        <tag k="channel:type" v="channelized_stream"/>
         <tag k="covered" v="no"/>
-        <tag k="waterway" v="stream"/>
-        <tag k="uuid" v="{1514e475-0a8b-450d-8138-af8623cbdd56}"/>
-        <tag k="source" v="mgcp:lbh140"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="intermittent" v="dry"/>
         <tag k="name" v="Nile"/>
+        <tag k="source" v="mgcp:lbh140"/>
         <tag k="source:accuracy:horizontal" v="25"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-03-26T09:24:30.317Z"/>
+        <tag k="source:name" v="imagery_(other)"/>
+        <tag k="tidal" v="yes"/>
+        <tag k="uuid" v="{1514e475-0a8b-450d-8138-af8623cbdd56}"/>
+        <tag k="waterway" v="river"/>
+        <tag k="waterway:bank1:type" v="stony"/>
+        <tag k="waterway:bank2:type" v="stony"/>
+        <tag k="width" v="3"/>
     </way>
     <way visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-15"/>
         <nd ref="-16"/>
-        <tag k="width" v="3"/>
-        <tag k="source:ingest:datetime" v="2017-07-26T06:18:15.544Z"/>
-        <tag k="source:name" v="imagery_(other)"/>
-        <tag k="intermittent" v="yes"/>
-        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
-        <tag k="tidal" v="yes"/>
+        <tag k="channel:type" v="gorge"/>
         <tag k="covered" v="no"/>
-        <tag k="waterway" v="gorge"/>
-        <tag k="uuid" v="{149e733e-626f-45db-bfcc-56ad12de425a}"/>
-        <tag k="source" v="mgcp:lbh140"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="intermittent" v="yes"/>
         <tag k="name" v="Mighty"/>
+        <tag k="source" v="mgcp:lbh140"/>
         <tag k="source:accuracy:horizontal" v="25"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-03-26T09:24:30.317Z"/>
+        <tag k="source:name" v="imagery_(other)"/>
+        <tag k="tidal" v="yes"/>
+        <tag k="uuid" v="{149e733e-626f-45db-bfcc-56ad12de425a}"/>
+        <tag k="waterway" v="river"/>
+        <tag k="width" v="3"/>
     </way>
     <way visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-13"/>
         <nd ref="-14"/>
-        <tag k="width" v="3"/>
-        <tag k="wadi" v="yes"/>
-        <tag k="source:ingest:datetime" v="2017-07-26T06:18:15.544Z"/>
-        <tag k="source:name" v="imagery_(other)"/>
-        <tag k="intermittent" v="dry"/>
-        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
-        <tag k="tidal" v="yes"/>
         <tag k="covered" v="no"/>
-        <tag k="waterway" v="river"/>
-        <tag k="uuid" v="{143203aa-06b0-49b2-9fcd-98c0f89e2fcb}"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="intermittent" v="dry"/>
         <tag k="source" v="mgcp:lbh140"/>
         <tag k="source:accuracy:horizontal" v="25"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-03-26T09:24:30.316Z"/>
+        <tag k="source:name" v="imagery_(other)"/>
+        <tag k="tidal" v="yes"/>
+        <tag k="uuid" v="{143203aa-06b0-49b2-9fcd-98c0f89e2fcb}"/>
+        <tag k="wadi" v="yes"/>
+        <tag k="waterway" v="river"/>
+        <tag k="width" v="3"/>
     </way>
     <way visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-11"/>
         <nd ref="-12"/>
-        <tag k="width" v="3"/>
-        <tag k="wadi" v="yes"/>
-        <tag k="source:ingest:datetime" v="2017-07-26T06:18:15.544Z"/>
-        <tag k="source:name" v="imagery_(other)"/>
-        <tag k="intermittent" v="dry"/>
-        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
-        <tag k="tidal" v="no"/>
-        <tag k="water:sink:type" v="disappearing"/>
         <tag k="covered" v="no"/>
-        <tag k="waterway" v="river"/>
-        <tag k="uuid" v="{14093e3a-29da-41e5-a13f-e8e43ef5d9cc}"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="intermittent" v="dry"/>
         <tag k="source" v="mgcp:lbh140"/>
         <tag k="source:accuracy:horizontal" v="25"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-03-26T09:24:30.316Z"/>
+        <tag k="source:name" v="imagery_(other)"/>
+        <tag k="tidal" v="no"/>
+        <tag k="uuid" v="{14093e3a-29da-41e5-a13f-e8e43ef5d9cc}"/>
+        <tag k="wadi" v="yes"/>
+        <tag k="water:sink:type" v="disappearing"/>
+        <tag k="waterway" v="river"/>
+        <tag k="width" v="3"/>
     </way>
     <way visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-9"/>
         <nd ref="-10"/>
-        <tag k="width" v="3"/>
-        <tag k="source:ingest:datetime" v="2017-07-26T06:18:15.544Z"/>
-        <tag k="source:name" v="imagery_(other)"/>
-        <tag k="intermittent" v="yes"/>
-        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
-        <tag k="water:sink:type" v="disappearing"/>
-        <tag k="waterway:bank1:cover" v="6"/>
-        <tag k="waterway:bank2:cover" v="6"/>
         <tag k="covered" v="no"/>
-        <tag k="waterway" v="river"/>
-        <tag k="uuid" v="{1339103f-9a67-4dc1-aa67-b590b33b3000}"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="intermittent" v="yes"/>
         <tag k="source" v="mgcp:lbh140"/>
         <tag k="source:accuracy:horizontal" v="25"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-03-26T09:24:30.315Z"/>
+        <tag k="source:name" v="imagery_(other)"/>
+        <tag k="uuid" v="{1339103f-9a67-4dc1-aa67-b590b33b3000}"/>
+        <tag k="water:sink:type" v="disappearing"/>
+        <tag k="waterway" v="river"/>
+        <tag k="waterway:bank1:cover" v="6"/>
+        <tag k="waterway:bank2:cover" v="6"/>
+        <tag k="width" v="3"/>
     </way>
     <way visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-7"/>
         <nd ref="-8"/>
-        <tag k="width" v="3"/>
-        <tag k="source:ingest:datetime" v="2017-07-26T06:18:15.543Z"/>
-        <tag k="source:name" v="imagery_(other)"/>
-        <tag k="intermittent" v="yes"/>
-        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
-        <tag k="water:sink:type" v="dissipating"/>
         <tag k="covered" v="no"/>
-        <tag k="waterway" v="river"/>
-        <tag k="uuid" v="{13389c28-59ac-4d20-9c29-d34fe8f84cc6}"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="intermittent" v="yes"/>
         <tag k="source" v="mgcp:lbh140"/>
         <tag k="source:accuracy:horizontal" v="25"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-03-26T09:24:30.315Z"/>
+        <tag k="source:name" v="imagery_(other)"/>
+        <tag k="uuid" v="{13389c28-59ac-4d20-9c29-d34fe8f84cc6}"/>
+        <tag k="water:sink:type" v="dissipating"/>
+        <tag k="waterway" v="river"/>
+        <tag k="width" v="3"/>
     </way>
     <way visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-5"/>
         <nd ref="-6"/>
-        <tag k="width" v="3"/>
-        <tag k="source:ingest:datetime" v="2017-07-26T06:18:15.543Z"/>
-        <tag k="source:name" v="imagery_(other)"/>
+        <tag k="error:circular" v="28.65"/>
         <tag k="intermittent" v="no"/>
-        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
-        <tag k="water:sink:type" v="dissipating"/>
-        <tag k="waterway:bank1:cover" v="10"/>
-        <tag k="waterway:bank2:cover" v="10"/>
-        <tag k="waterway:bank2:type" v="mangrove"/>
-        <tag k="waterway:bank1:type" v="mangrove"/>
-        <tag k="waterway" v="river"/>
-        <tag k="uuid" v="{128252cc-d3f2-4bdb-ba3d-dbe2dc69fef2}"/>
         <tag k="source" v="mgcp:lbh140"/>
         <tag k="source:accuracy:horizontal" v="25"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-03-26T09:24:30.314Z"/>
+        <tag k="source:name" v="imagery_(other)"/>
+        <tag k="uuid" v="{128252cc-d3f2-4bdb-ba3d-dbe2dc69fef2}"/>
+        <tag k="water:sink:type" v="dissipating"/>
+        <tag k="waterway" v="river"/>
+        <tag k="waterway:bank1:cover" v="10"/>
+        <tag k="waterway:bank1:type" v="mangrove"/>
+        <tag k="waterway:bank2:cover" v="10"/>
+        <tag k="waterway:bank2:type" v="mangrove"/>
+        <tag k="width" v="3"/>
     </way>
     <way visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-3"/>
         <nd ref="-4"/>
-        <tag k="width" v="3"/>
-        <tag k="source:ingest:datetime" v="2017-07-26T06:18:15.543Z"/>
-        <tag k="source:name" v="imagery_(other)"/>
+        <tag k="error:circular" v="28.65"/>
         <tag k="intermittent" v="no"/>
-        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
-        <tag k="tidal" v="no"/>
-        <tag k="waterway" v="yes"/>
-        <tag k="uuid" v="{127b406c-964f-4403-a275-40f096adcabe}"/>
         <tag k="source" v="mgcp:lbh140"/>
         <tag k="source:accuracy:horizontal" v="25"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-03-26T09:24:30.313Z"/>
+        <tag k="source:name" v="imagery_(other)"/>
+        <tag k="tidal" v="no"/>
+        <tag k="uuid" v="{127b406c-964f-4403-a275-40f096adcabe}"/>
+        <tag k="waterway" v="river"/>
+        <tag k="width" v="3"/>
     </way>
     <way visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1"/>
         <nd ref="-2"/>
-        <tag k="width" v="3"/>
-        <tag k="source:ingest:datetime" v="2017-07-26T06:18:15.542Z"/>
-        <tag k="source:name" v="imagery_(other)"/>
-        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
-        <tag k="tidal" v="no"/>
         <tag k="covered" v="yes"/>
-        <tag k="waterway" v="yes"/>
-        <tag k="uuid" v="{6928c36d-69a3-43f4-ab53-4e1ac7e2ffba}"/>
-        <tag k="source" v="mgcp:lbh140"/>
+        <tag k="error:circular" v="28.65"/>
         <tag k="name" v="Covered Drain test"/>
+        <tag k="source" v="mgcp:lbh140"/>
         <tag k="source:accuracy:horizontal" v="25"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="error:circular" v="28.65"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-03-26T09:24:30.312Z"/>
+        <tag k="source:name" v="imagery_(other)"/>
+        <tag k="tidal" v="no"/>
+        <tag k="uuid" v="{6928c36d-69a3-43f4-ab53-4e1ac7e2ffba}"/>
+        <tag k="waterway" v="river"/>
+        <tag k="width" v="3"/>
     </way>
 </osm>

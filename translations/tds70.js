@@ -71,7 +71,7 @@ tds70 = {
       if (config.getOgrOutputFormat() == 'shp')
       {
         // Add tag1, tag2, tag3 and tag4
-        tds70.rawSchema = translate.addEmptyFeature(tds70.rawSchema);
+        tds70.rawSchema = translate.addO2sFeatures(tds70.rawSchema);
       }
       else
       {
@@ -213,7 +213,7 @@ tds70 = {
     if (config.getOgrOutputFormat() == 'shp')
     {
       // Add tag1, tag2, tag3 and tag4
-      newSchema = translate.addEmptyFeature(newSchema);
+      newSchema = translate.addO2sFeatures(newSchema);
     }
     else
     {
@@ -1094,9 +1094,22 @@ tds70 = {
       if (tags.water == 'undifferentiated_water_body') delete tags.water;
       break;
 
-    case 'BH140':
-      if (! tags.waterway) tags.waterway = 'river';
+    case 'BH140': // River
+      // Different translation for area rivers
+      if (geometryType == 'Area')
+      {
+        if (!tags.natural) tags.natural = 'water';
+        if (!tags.water) tags.water = 'river';
+        delete tags.waterway;
+        break;
+      }
+      if (geometryType == 'Line')
+      {
+        if (tags.natural == 'water') delete tags.natural;
+        if (tags.water == 'river') delete tags.water;
+      }
       break;
+
 
     case 'EA031': // Botanic Garden
       if (! tags.leisure) tags.leisure = 'garden';
@@ -1528,16 +1541,7 @@ tds70 = {
     // Fix up OSM 'walls' around facilities
     if ((tags.barrier == 'wall' || tags.barrier == 'fence') && geometryType == 'Area')
     {
-      if (tags.landuse == 'military' || tags.military)
-      {
-        attrs.F_CODE = 'SU001'; // Military Installation
-      }
-      else
-      {
-        attrs.F_CODE = 'AL010'; // Facility
-      }
-
-      delete tags.barrier; // Take away the walls...
+      if (tags.landuse == 'military' || tags.military) attrs.F_CODE = 'SU001'; // Military Installation
     }
 
     // Railways and other features

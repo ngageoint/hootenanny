@@ -2841,12 +2841,12 @@ tds70.rules = {
 
     // WCC - Watercourse Channel Type
     // ['WCC','-999999',undefined,undefined], // No Information
-    ['WCC','1','waterway','stream'], // Channelized Stream
-    ['WCC','2','waterway','braided_stream'], // Braided Stream
-    ['WCC','3','waterway','gorge'], // Gorge
+    ['WCC','1','channel:type','channelized_stream'], // Channelized Stream
+    ['WCC','2','channel:type','braided_stream'], // Braided Stream
+    ['WCC','3','channel:type','gorge'], // Gorge
     ['WCC','4','wadi','yes'], // Wadi
     ['WCC','7','waterway','river'], // Normal Channel
-    ['WCC','999','waterway','other'], // Other
+    ['WCC','999','channel:type','other'], // Other
 
     // WEQ - Well Equipment
     // ['WEQ','-999999',undefined,undefined], // No Information

@@ -28,7 +28,7 @@ hoot convert $HOOT_OPT \
   $inputDir/*.shp $outputDir/new_TDSv40.osm # > tmp/TDSv40_to_OSM.txt
 
 # When the translation changes, uncomment this to update the OSM file
-#cp $outputDir/new_TDSv40.osm $inputDir/TDSv40X.osm
+# cp $outputDir/new_TDSv40.osm $inputDir/TDSv40X.osm
 
 # compareFiles. Test taken from MGCP test
 hoot diff --error-limit 20 $outputDir/new_TDSv40.osm $inputDir/TDSv40.osm  || diff $outputDir/new_TDSv40.osm $inputDir/TDSv40.osm

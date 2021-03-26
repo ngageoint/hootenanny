@@ -21,7 +21,7 @@
         "similarTo": { "name": "building=transportation", "weight": 0.8 }
     },
     {
-        "geometries": [ "linestring", "area" ],
+        "geometries": [ "linestring" ],
         "isA": "barrier",
         "name": "barrier=wall",
         "objectType": "tag"
