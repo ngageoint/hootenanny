@@ -34,7 +34,8 @@ PARALLEL="no"
 PARALLEL_DEBUG= #"--will-cite"
 AVERAGE_MERGING="no"
 # REVERSE_INPUTS=yes may be useful when using --suppress-divided-roads if the files are default ordered from oldest to newest 
-# and the newest file has the best divided roads.
+# and the newest file has the best divided roads. It also may be useful when not using --suppress-divided-roads if the newer
+# data is more complete overall than older data.
 REVERSE_INPUTS="no"
 RESOLVE_REVIEWS=
 REMOVE_DISCONNECTED=
@@ -50,10 +51,9 @@ INPUT_TAG_KEYS=
 ATTRIBUTE_TRANSFER_OUTPUT_PATH=
 
 # for debugging only
-DEBUG_OPTS= #" -D debug.maps.write=true -D debug.maps.filename=/home/vagrant/hoot/tmp/debug.osm"
-
+DEBUG_OPTS= #" -D writer.include.debug.tags=true -D debug.maps.write=true -D debug.maps.filename=/home/vagrant/hoot/tmp/debug.osm"
 # for debugging smaller AOIs only
-AOI_OPTS= #" -D bounds=36.7871,14.6496,36.7918,14.6545 -D bounds.keep.entire.features.crossing.bounds=false"
+AOI_OPTS= #" -D bounds=36.8085,14.6559,36.7918,14.6545 -D bounds.keep.entire.features.crossing.bounds=false"
 
 if [ $# -eq 0 ]
 then
@@ -149,7 +149,8 @@ TAG_SOURCES=`echo $TAG_LIST | sed 's/.osm//g' | sed 's/ /;/g'`
 
 # ATTRIBUTE TRANSFER
 
-# TODO: Technically, you could benefit from attribute transfer without suppressing divided road conflation, so those two options should be decoupled.
+# TODO: Technically, overall conflation could benefit from attribute transfer without suppressing divided road 
+# conflation, so those two options should be decoupled.
 if [ $SUPRESS_DIVIDED_ROADS == "yes" ]
 then
   if [ -z $ATTRIBUTE_FILE ]
@@ -262,7 +263,8 @@ fi
 # MultilineStringMergeRelationCollapser must be run an additional time after ResolveReviewsOp.
 HOOT_CONFLATE_OPTS+=" -D conflate.post.ops+=hoot::MultilineStringMergeRelationCollapser"
 
-# These are for cleaning up so far unexplained changes to some of the output.
+# These are here for cleaning up what are so far unexplained changes to some of the output. Would like to know what
+# in the conflation is causing these to be needed.
 HOOT_CONFLATE_OPTS+=" -D conflate.post.ops+=hoot::RemoveInvalidMultilineStringMembersVisitor"
 HOOT_CONFLATE_OPTS+=" -D conflate.post.ops+=hoot::RemoveEmptyRelationsOp"
 HOOT_CONFLATE_OPTS+=" -D conflate.post.ops+=hoot::SuperfluousNodeRemover"
