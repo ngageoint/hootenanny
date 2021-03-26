@@ -43,13 +43,13 @@
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
 #include <hoot/core/criterion/StatusCriterion.h>
 #include <hoot/core/criterion/OneWayCriterion.h>
-#include <hoot/rnd/ops/DualHighwayMarker.h>
+#include <hoot/core/ops/DualHighwayMarker.h>
 #include <hoot/core/criterion/TagCriterion.h>
 #include <hoot/core/util/ConfigUtils.h>
-#include <hoot/rnd/ops/SmallDisconnectedWayRemover.h>
+#include <hoot/core/ops/SmallDisconnectedWayRemover.h>
 #include <hoot/core/algorithms/extractors/FeatureExtractor.h>
 #include <hoot/core/scoring/MapCompareUtils.h>
-#include <hoot/rnd/ops/UnlikelyRoadRemover.h>
+#include <hoot/core/ops/UnlikelyRoadRemover.h>
 
 // Qt
 #include <QElapsedTimer>

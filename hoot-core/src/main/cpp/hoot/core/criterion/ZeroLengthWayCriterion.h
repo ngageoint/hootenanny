@@ -22,10 +22,10 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
  */
-#ifndef EMPTY_WAY_CRITERION_H
-#define EMPTY_WAY_CRITERION_H
+#ifndef ZERO_LENGTH_WAY_CRITERION_H
+#define ZERO_LENGTH_WAY_CRITERION_H
 
 // hoot
 #include <hoot/core/criterion/WayNodeCountCriterion.h>
@@ -34,26 +34,23 @@ namespace hoot
 {
 
 /**
- * Identifies ways with no nodes. Convenience wrapper around WayNodeCountCriterion.
- *
- * This is seen from time to time as a result of cut and replace, since we allow element references
- * point to missing elements to persist.
+ * Identifies ways with no length (only one node). Convenience wrapper around WayNodeCountCriterion.
  *
  * @todo implement OperationStatus
  */
-class EmptyWayCriterion : public WayNodeCountCriterion
+class ZeroLengthWayCriterion : public WayNodeCountCriterion
 {
 public:
 
-  static QString className() { return "hoot::EmptyWayCriterion"; }
+  static QString className() { return "hoot::ZeroLengthWayCriterion"; }
 
-  EmptyWayCriterion();
-  ~EmptyWayCriterion() = default;
+  ZeroLengthWayCriterion();
+  ~ZeroLengthWayCriterion() = default;
 
   ElementCriterionPtr clone() override
-  { return ElementCriterionPtr(new EmptyWayCriterion()); }
+  { return ElementCriterionPtr(new ZeroLengthWayCriterion()); }
 
-  QString getDescription() const override { return "Identifies ways with no nodes"; }
+  QString getDescription() const override { return "Identifies ways with no length"; }
 
   QString getName() const override { return className(); }
 
@@ -62,4 +59,4 @@ public:
 
 }
 
-#endif // EMPTY_WAY_CRITERION_H
+#endif // ZERO_LENGTH_WAY_CRITERION_H

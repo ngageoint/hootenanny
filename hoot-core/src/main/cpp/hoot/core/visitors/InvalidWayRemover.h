@@ -24,48 +24,60 @@
  *
  * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
  */
-#ifndef WAY_NODE_COUNT_CRITERION_H
-#define WAY_NODE_COUNT_CRITERION_H
+
+#ifndef INVALID_WAY_REMOVER_H
+#define INVALID_WAY_REMOVER_H
 
 // hoot
-#include <hoot/core/criterion/ElementCriterion.h>
-#include <hoot/core/util/NumericComparisonType.h>
+#include <hoot/core/visitors/ElementOsmMapVisitor.h>
+#include <hoot/core/conflate/ConflateInfoCacheConsumer.h>
 
 namespace hoot
 {
 
-class WayNodeCountCriterion : public ElementCriterion
+/**
+ * Removes ways with no nodes and zero length ways (ways with one node).
+ */
+class InvalidWayRemover : public ElementOsmMapVisitor, public ConflateInfoCacheConsumer
 {
+
 public:
 
-  static QString className() { return "hoot::WayNodeCountCriterion"; }
+  static QString className() { return "hoot::InvalidWayRemover"; }
 
-  WayNodeCountCriterion();
-  WayNodeCountCriterion(
-    const int comparisonCount, const NumericComparisonType& numericComparisonType);
-  ~WayNodeCountCriterion() = default;
+  InvalidWayRemover() = default;
+  ~InvalidWayRemover() = default;
 
-  /**
-   * @see ElementCriterion
-   */
-  bool isSatisfied(const ConstElementPtr& e) const override;
+  void visit(const std::shared_ptr<Element>& e) override;
 
-  ElementCriterionPtr clone() override
-  { return ElementCriterionPtr(new WayNodeCountCriterion()); }
+  QString getInitStatusMessage() const override
+  { return "Removing invalid ways..."; }
+
+  QString getCompletedStatusMessage() const override
+  { return "Removed " + QString::number(_numAffected) + " invalid ways."; }
 
   QString getDescription() const override
-  { return "Identifies ways that meet a node count threshold"; }
+  { return "Removes ways with no nodes and zero length ways"; }
+
+  /**
+   * @see FilteredByGeometryTypeCriteria
+   */
+  QStringList getCriteria() const override;
 
   QString getName() const override { return className(); }
 
   QString getClassName() const override { return className(); }
 
-protected:
+  void setConflateInfoCache(const std::shared_ptr<ConflateInfoCache>& cache) override
+  { _conflateInfoCache = cache; }
 
-  int _comparisonCount;
-  NumericComparisonType _numericComparisonType;
+private:
+
+  // Existence of this cache tells us that elements must be individually checked to see that they
+  // are conflatable given the current configuration before modifying them.
+  std::shared_ptr<ConflateInfoCache> _conflateInfoCache;
 };
 
 }
 
-#endif // WAY_NODE_COUNT_CRITERION_H
+#endif // INVALID_WAY_REMOVER_H
