@@ -263,10 +263,7 @@ fi
 # MultilineStringMergeRelationCollapser must be run an additional time after ResolveReviewsOp.
 HOOT_CONFLATE_OPTS+=" -D conflate.post.ops+=hoot::MultilineStringMergeRelationCollapser"
 
-# These are here for cleaning up what are so far unexplained changes to some of the output. Would like to know what
-# in the conflation is causing these to be needed.
-HOOT_CONFLATE_OPTS+=" -D conflate.post.ops+=hoot::RemoveInvalidMultilineStringMembersVisitor"
-HOOT_CONFLATE_OPTS+=" -D conflate.post.ops+=hoot::RemoveEmptyRelationsOp"
+# This is here for some final clean up. Not sure yet what's causing orphaned nodes in some of the output.
 HOOT_CONFLATE_OPTS+=" -D conflate.post.ops+=hoot::SuperfluousNodeRemover"
 
 HOOT_CONFLATE_OPTS+=$AOI_OPTS
