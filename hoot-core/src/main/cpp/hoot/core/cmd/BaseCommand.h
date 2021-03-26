@@ -35,6 +35,9 @@
 #include <hoot/core/cmd/Command.h>
 #include <hoot/core/elements/Status.h>
 
+// Qt
+#include <QStringList>
+
 namespace hoot
 {
 
@@ -67,6 +70,10 @@ public:
   QStringList toQStringList(char* argv[], int argc);
 
 protected:
+
+  // This can be useful for debugging, or in some cases, getting around the fact that ConfigOptions
+  // is a Singleton when trying to run successive conflate jobs.
+  QStringList _rawArgs;
 
   virtual QString _getHelpPath() const;
 };
