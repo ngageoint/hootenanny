@@ -58,9 +58,7 @@ QString BaseCommand::getHelp() const
 
 QString BaseCommand::_getHelpPath() const
 {
-  QString result = ConfPath::getHootHome() + "/docs/commands/" + getName() + ".asciidoc";
-
-  return result;
+  return ConfPath::getHootHome() + "/docs/commands/" + getName() + ".asciidoc";
 }
 
 Envelope BaseCommand::parseEnvelope(QString envStr) const
@@ -93,9 +91,11 @@ Envelope BaseCommand::parseEnvelope(QString envStr) const
 int BaseCommand::run(char* argv[], int argc)
 {
   QStringList args = toQStringList(argv, argc);
-  LOG_VART(args)
+  LOG_VART(args);
+  LOG_VART(args.join(" "));
 
   args = args.mid(2);
+  _rawArgs = args;
 
   Settings::parseCommonArguments(args);
   LOG_VART(args);
