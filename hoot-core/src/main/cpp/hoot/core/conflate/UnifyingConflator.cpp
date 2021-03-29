@@ -40,7 +40,6 @@
 #include <hoot/core/util/MemoryUsageChecker.h>
 #include <hoot/core/schema/SchemaUtils.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonMergerCreator.h>
-#include <hoot/core/visitors/RemoveTagsVisitor.h>
 
 // tgs
 #include <tgs/System/SystemInfo.h>
@@ -125,16 +124,6 @@ void UnifyingConflator::apply(OsmMapPtr& map)
 
     _mergeFeatures(relationMergers);
     _currentStep++;
-  }
-
-  // cleanup
-
-  if (!ConfigOptions().getWriterIncludeDebugTags())
-  {
-    QStringList tagKeysToRemove;
-    tagKeysToRemove.append(MetadataTags::HootMultilineString());
-    RemoveTagsVisitor tagRemover(tagKeysToRemove);
-    _map->visitRw(tagRemover);
   }
 }
 

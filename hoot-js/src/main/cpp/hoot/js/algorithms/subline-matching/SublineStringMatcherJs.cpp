@@ -97,9 +97,9 @@ void SublineStringMatcherJs::extractMatchingSublines(const FunctionCallbackInfo<
       return;
     }
 
-    if (match.isEmpty())
+    if (match.isEmpty() || !match.isValid())
     {
-      LOG_TRACE("Empty match");
+      LOG_TRACE("Empty or invalid match");
       args.GetReturnValue().SetUndefined();
       return;
     }
