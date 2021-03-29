@@ -53,7 +53,7 @@ public:
 
   SmallDisconnectedWayRemover();
   SmallDisconnectedWayRemover(const int maxWayLength, const int maxWayNodeCount);
-  ~SmallDisconnectedWayRemover() = default;
+  ~SmallDisconnectedWayRemover() override = default;
 
   /**
    * @see OsmMapOperation
@@ -92,7 +92,7 @@ public:
   OsmMapPtr _map;
 
   // max length a way can have to be eligible for removal
-  int _maxWayLength;
+  double _maxWayLength;
   // max node count a way can have to be eligible for removal
   int _maxWayNodeCount;
 

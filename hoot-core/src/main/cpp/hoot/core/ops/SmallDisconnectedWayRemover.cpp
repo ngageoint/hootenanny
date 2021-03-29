@@ -45,7 +45,7 @@ namespace hoot
 HOOT_FACTORY_REGISTER(OsmMapOperation, SmallDisconnectedWayRemover)
 
 SmallDisconnectedWayRemover::SmallDisconnectedWayRemover() :
-_maxWayLength(2),
+_maxWayLength(2.0),
 _maxWayNodeCount(2)
 {
 }
@@ -75,15 +75,20 @@ void SmallDisconnectedWayRemover::apply(OsmMapPtr& map)
   MapProjector::projectToPlanar(_map);
 
   // remove ways at or below a certain size
-  std::shared_ptr<WayLengthCriterion> lengthCrit(
-    new WayLengthCriterion(_maxWayLength, NumericComparisonType::LessThanOrEqualTo, _map));
+  std::shared_ptr<WayLengthCriterion> lengthCrit =
+    std::make_shared<WayLengthCriterion>(
+      WayLengthCriterion(_maxWayLength, NumericComparisonType::LessThanOrEqualTo, _map));
   // remove ways having a node count at or below a certain amount
-  std::shared_ptr<WayNodeCountCriterion> nodeCountCrit(
-    new WayNodeCountCriterion(_maxWayNodeCount, NumericComparisonType::LessThanOrEqualTo));
-  ChainCriterionPtr wayCrit(new ChainCriterion(lengthCrit, nodeCountCrit));
+  std::shared_ptr<WayNodeCountCriterion> nodeCountCrit =
+    std::make_shared<WayNodeCountCriterion>(
+      WayNodeCountCriterion(_maxWayNodeCount, NumericComparisonType::LessThanOrEqualTo));
+  ChainCriterionPtr wayCrit =
+    std::make_shared<ChainCriterion>(ChainCriterion(lengthCrit, nodeCountCrit));
   // require that ways be disconnected from other ways to be removed
-  std::shared_ptr<DisconnectedWayCriterion> disconnectedCrit(new DisconnectedWayCriterion(_map));
-  ChainCriterionPtr crit(new ChainCriterion(wayCrit, disconnectedCrit));
+  std::shared_ptr<DisconnectedWayCriterion> disconnectedCrit =
+    std::make_shared<DisconnectedWayCriterion>(DisconnectedWayCriterion(_map));
+  ChainCriterionPtr crit =
+    std::make_shared<ChainCriterion>(ChainCriterion(wayCrit, disconnectedCrit));
 
   // Find the ways to remove.
   std::set<long> wayIdsToRemove;
