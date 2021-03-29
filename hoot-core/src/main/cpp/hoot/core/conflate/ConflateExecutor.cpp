@@ -56,6 +56,7 @@
 #include <hoot/core/conflate/merging/LinearAverageMerger.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/visitors/CountUniqueReviewsVisitor.h>
+#include <hoot/core/visitors/RemoveTagsVisitor.h>
 
 // Qt
 #include <QFileInfo>
@@ -276,6 +277,17 @@ void ConflateExecutor::conflate(const QString& input1, const QString& input2, QS
   if (!ConfigOptions().getConflatePostOps().empty())
   {
     _runConflateOps(map, false);
+  }
+
+  // cleanup
+
+  // Not sure yet why this tag isn't being cleaned up automatically...
+  if (!ConfigOptions().getWriterIncludeDebugTags())
+  {
+    QStringList tagKeysToRemove;
+    tagKeysToRemove.append(MetadataTags::HootMultilineString());
+    RemoveTagsVisitor tagRemover(tagKeysToRemove);
+    map->visitRw(tagRemover);
   }
 
   // Doing this after the conflate post ops run, since some invalid reviews are removed by them.

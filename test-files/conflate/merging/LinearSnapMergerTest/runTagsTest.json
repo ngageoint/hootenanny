@@ -13,7 +13,7 @@
 {"type":"way","id":-13,"nodes":[-3,-11],"tags":{"barrier":"wall","uuid":"wall","error:circular":"15"}},
 {"type":"way","id":-12,"nodes":[-1,-2],"tags":{"uuid":"w1","error:circular":"15"}},
 {"type":"relation","id":-2,"members":[
-{"type":"way","ref":-14,"role":""}],"tags":{"highway":"footway","uuid":"r","error:circular":"15"}},
+{"type":"way","ref":-14,"role":""}],"tags":{"hoot:multilinestring":"yes","highway":"footway","uuid":"r","error:circular":"15"}},
 {"type":"relation","id":-1,"members":[
 {"type":"way","ref":-12,"role":""},
 {"type":"way","ref":-13,"role":""}],"tags":{"highway":"footway","uuid":"r;w3","error:circular":"15"}}]

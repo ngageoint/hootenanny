@@ -60,7 +60,7 @@ public:
 
   QString getClassName() const override { return className(); }
 
-private:
+protected:
 
   int _comparisonCount;
   NumericComparisonType _numericComparisonType;

@@ -28,36 +28,32 @@
 #define EMPTY_WAY_CRITERION_H
 
 // hoot
-#include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/criterion/WayNodeCountCriterion.h>
 
 namespace hoot
 {
 
 /**
- * Ways with no nodes; will see this from time to time as a result of cut and replace, since we
- * allow element references point to missing elements to persist
+ * Identifies ways with no nodes. Convenience wrapper around WayNodeCountCriterion.
+ *
+ * This is seen from time to time as a result of cut and replace, since we allow element references
+ * point to missing elements to persist.
  *
  * @todo implement OperationStatus
  */
-class EmptyWayCriterion : public ElementCriterion
+class EmptyWayCriterion : public WayNodeCountCriterion
 {
 public:
 
   static QString className() { return "hoot::EmptyWayCriterion"; }
 
-  EmptyWayCriterion() = default;
+  EmptyWayCriterion();
   ~EmptyWayCriterion() = default;
-
-  /**
-   * @see ElementCriterion
-   */
-  bool isSatisfied(const ConstElementPtr& e) const override;
 
   ElementCriterionPtr clone() override
   { return ElementCriterionPtr(new EmptyWayCriterion()); }
 
-  QString getDescription() const override
-  { return "Identifies ways with no nodes"; }
+  QString getDescription() const override { return "Identifies ways with no nodes"; }
 
   QString getName() const override { return className(); }
 

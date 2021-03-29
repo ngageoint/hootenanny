@@ -137,7 +137,7 @@ private:
 
   void _configureSublineMatcher();
 
-  void _validateElement(const ConstOsmMapPtr& map, ElementId eid) const;
+  bool _isValid(const ConstOsmMapPtr& map, ElementId eid) const;
 };
 
 }

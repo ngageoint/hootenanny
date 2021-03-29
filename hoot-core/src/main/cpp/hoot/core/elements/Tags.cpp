@@ -922,7 +922,7 @@ void Tags::_valueRegexParser(const QString& str, QString& num, QString& units) c
   units = copyStr.replace(sRegExp, QString("")).trimmed();
 }
 
-QString Tags::getFirstKvp(const QStringList& kvps) const
+QString Tags::getFirstMatchingKvp(const QStringList& kvps) const
 {
   for (int i = 0; i < kvps.size(); i++)
   {
@@ -997,7 +997,7 @@ bool Tags::hasAnyKey(const QStringList& keys)
   return false;
 }
 
-QString Tags::getFirstKey(const QStringList& keys) const
+QString Tags::getFirstMatchingKey(const QStringList& keys) const
 {
   for (int i = 0; i < keys.size(); i++)
   {

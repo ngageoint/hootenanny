@@ -47,6 +47,8 @@ class RelationMergerTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(RelationMergerTest);
   CPPUNIT_TEST(runTest);
+  // TODO: add test for empty relation being replaced
+  // TODO: add test for relations referencing each other
   CPPUNIT_TEST_SUITE_END();
 
 public:

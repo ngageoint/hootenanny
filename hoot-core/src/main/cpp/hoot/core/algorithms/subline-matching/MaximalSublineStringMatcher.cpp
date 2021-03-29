@@ -151,10 +151,11 @@ WaySublineMatchString MaximalSublineStringMatcher::findMatch(const ConstOsmMapPt
   }
   LOG_VART(maxRelevantDistance);
 
-  // Make sure the inputs are legit. If either element isn't legit then throw a
-  // NeedsReviewException.
-  _validateElement(map, e1->getElementId());
-  _validateElement(map, e2->getElementId());
+  // Make sure the inputs are legit. If either element isn't legit then skip matching.
+  if (!_isValid(map, e1->getElementId()) || !_isValid(map, e2->getElementId()))
+  {
+    return WaySublineMatchString();
+  }
 
   // Extract the ways from the elements. In most cases it will return a vector of 1, but
   // multilinestrings may contain multiple ways.
@@ -361,7 +362,7 @@ void MaximalSublineStringMatcher::_reverseWays(const vector<WayPtr>& ways,
   }
 }
 
-void MaximalSublineStringMatcher::_validateElement(const ConstOsmMapPtr& map, ElementId eid) const
+bool MaximalSublineStringMatcher::_isValid(const ConstOsmMapPtr& map, ElementId eid) const
 {
   LOG_TRACE("Validating element " << eid << "...");
 
@@ -403,9 +404,11 @@ void MaximalSublineStringMatcher::_validateElement(const ConstOsmMapPtr& map, El
 
     if (w->getNodeCount() <= 1)
     {
-      throw NeedsReviewException("Internal Error: Attempting to match against a zero length way.");
+      return false;
     }
   }
+
+  return true;
 }
 
 }

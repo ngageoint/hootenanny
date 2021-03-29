@@ -45,8 +45,6 @@ var nameExtractor = new hoot.NameExtractor(
     { "translate.string.distance.tokenize": "false" },
     new hoot.LevenshteinDistance( { "levenshtein.distance.alpha": 1.15 } )));
 
-var mergeOptionsConfigured = false;
-
 /**
  * Runs before match creation occurs and provides an opportunity to perform custom initialization.
  */
@@ -274,22 +272,6 @@ exports.matchScore = function(map, e1, e2)
  */
 exports.mergeSets = function(map, pairs, replaced)
 {
-  if (!mergeOptionsConfigured)
-  {
-    // We add a conflate post op here which will remove conflate merge created multilinestring
-    // relations and add waterway type tags to their children. See
-    // MultilineStringMergeRelationCollapser for more details. Its possible we may need to replicate
-    // this logic for other matchers going forward or maybe MultilineStringMergeRelationCollapser
-    // should be made part of LinearSnapMerger?. This has to be done within this method, b/c its
-    // the only js entry point for conflate merging.
-    var markMergeMultiLineStringRelations =
-      (hoot.get("waterway.mark.merge.created.multilinestring.relations") === 'true');
-    hoot.set({'conflate.mark.merge.created.multilinestring.relations': markMergeMultiLineStringRelations});
-    hoot.prependToList({'conflate.post.ops': "hoot::MultilineStringMergeRelationCollapser"});
-    hoot.set({'multilinestring.relation.collapser.types': "waterway"});
-    mergeOptionsConfigured = true;
-  }
-
   // Snap the ways in the second input to the first input and use the default tag merge method. 
 
   // Feature matching also occurs during the merging phase. Since its not possible to know the 

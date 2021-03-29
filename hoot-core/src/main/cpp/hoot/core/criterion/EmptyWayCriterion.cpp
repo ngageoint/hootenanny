@@ -27,7 +27,6 @@
 #include "EmptyWayCriterion.h"
 
 // hoot
-#include <hoot/core/elements/Way.h>
 #include <hoot/core/util/Factory.h>
 
 namespace hoot
@@ -35,14 +34,9 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, EmptyWayCriterion)
 
-bool EmptyWayCriterion::isSatisfied(const ConstElementPtr& e) const
+EmptyWayCriterion::EmptyWayCriterion() :
+WayNodeCountCriterion(0, NumericComparisonType::EqualTo)
 {
-  if (e->getElementType() == ElementType::Way)
-  {
-    ConstWayPtr way = std::dynamic_pointer_cast<const Way>(e);
-    return way && way->getNodeCount() == 0;
-  }
-  return false;
 }
 
 }
