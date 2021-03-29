@@ -385,7 +385,7 @@ public:
    * @param kvps list of kvp string to match; value wildcards are supported using '*'
    * @return a kvp or an empty string if no matching kvp is found
    */
-  QString getFirstKvp(const QStringList& kvps) const;
+  QString getFirstMatchingKvp(const QStringList& kvps) const;
 
   /**
    * Returns true if the tags have any key in the input list
@@ -401,7 +401,7 @@ public:
    * @param keys tag keys to search for
    * @return a non-empty string if any key in the list was found; otherwise an empty string
    */
-  QString getFirstKey(const QStringList& keys) const;
+  QString getFirstMatchingKey(const QStringList& keys) const;
 
   /**
    * Converts a list of KVPs into tags

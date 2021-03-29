@@ -1656,6 +1656,7 @@
         <tag k="REF2" v="0010da"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-13399"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="6"/>
         <tag k="waterway" v="stream"/>
@@ -1667,6 +1668,7 @@
         <tag k="REF2" v="0010da"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-13398"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="2"/>
         <tag k="waterway" v="stream"/>
@@ -1696,6 +1698,7 @@
         <tag k="REF2" v="0010da"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-13394"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:way:node:count" v="19"/>
         <tag k="intermittent" v="yes"/>
@@ -1713,6 +1716,7 @@
         <tag k="REF2" v="001f4a"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-13391"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="3"/>
         <tag k="waterway" v="stream"/>
@@ -1724,6 +1728,7 @@
         <tag k="REF2" v="001f4a"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-13390"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="2"/>
         <tag k="waterway" v="stream"/>
@@ -1736,6 +1741,7 @@
         <tag k="REF2" v="001f4a"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-13389"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="3"/>
         <tag k="waterway" v="stream"/>
@@ -1748,6 +1754,7 @@
         <tag k="REF2" v="001f4a"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-13388"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="3"/>
         <tag k="waterway" v="stream"/>
@@ -1790,6 +1797,7 @@
         <tag k="REF2" v="001f4a"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-13375"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:way:node:count" v="32"/>
         <tag k="intermittent" v="yes"/>
@@ -1809,6 +1817,7 @@
         <tag k="REF2" v="002876"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-13373"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="6"/>
         <tag k="name" v="Ravine Christ"/>
@@ -1823,6 +1832,7 @@
         <tag k="REF2" v="002876"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-13372"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="4"/>
         <tag k="name" v="Ravine Christ"/>
@@ -1835,6 +1845,7 @@
         <tag k="REF2" v="002876"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-13371"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="2"/>
         <tag k="name" v="Ravine Christ"/>
@@ -1896,6 +1907,7 @@
         <tag k="hoot:id" v="-13356"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="3"/>
+        <tag k="waterway" v="stream"/>
     </way>
     <way visible="true" id="-13349" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-77216"/>
@@ -1905,6 +1917,7 @@
         <tag k="REF2" v="002876"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-13349"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="4"/>
         <tag k="name" v="Ravine Christ"/>
@@ -2002,6 +2015,7 @@
         <tag k="REF2" v="002876"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-13341"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:way:node:count" v="68"/>
         <tag k="intermittent" v="yes"/>
@@ -2072,6 +2086,7 @@
         <tag k="REF2" v="001f4e"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-13329"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="3"/>
         <tag k="waterway" v="stream"/>
@@ -2085,6 +2100,7 @@
         <tag k="REF2" v="001f4e"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-13328"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="4"/>
         <tag k="waterway" v="stream"/>
@@ -2099,6 +2115,7 @@
         <tag k="REF2" v="001f4e"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-13327"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="5"/>
         <tag k="waterway" v="stream"/>
@@ -2111,6 +2128,7 @@
         <tag k="REF2" v="001f4e"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-13326"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="3"/>
         <tag k="waterway" v="stream"/>
@@ -2156,6 +2174,7 @@
         <tag k="REF2" v="001f4e"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-13318"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:way:node:count" v="35"/>
         <tag k="intermittent" v="yes"/>
@@ -2176,6 +2195,7 @@
         <tag k="REF2" v="001f4b"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-13311"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="7"/>
         <tag k="waterway" v="stream"/>
@@ -2189,6 +2209,7 @@
         <tag k="REF2" v="001f4b"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-13310"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="4"/>
         <tag k="waterway" v="stream"/>
@@ -2200,6 +2221,7 @@
         <tag k="REF2" v="001f4b"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-13309"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="2"/>
         <tag k="waterway" v="stream"/>
@@ -2212,6 +2234,7 @@
         <tag k="REF2" v="001f4b"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-13308"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="3"/>
         <tag k="waterway" v="stream"/>
@@ -2266,6 +2289,7 @@
         <tag k="REF2" v="001f4b"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-13298"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="44"/>
         <tag k="intermittent" v="yes"/>
@@ -2362,6 +2386,7 @@
         <tag k="REF2" v="001952"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-13282"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="4"/>
         <tag k="name" v="Ravine Pichomblaise"/>
@@ -2376,6 +2401,7 @@
         <tag k="REF2" v="001952"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-13281"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="4"/>
         <tag k="name" v="Ravine Pichomblaise"/>
@@ -2408,6 +2434,7 @@
         <tag k="REF2" v="001952"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-13273"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:way:node:count" v="21"/>
         <tag k="intermittent" v="yes"/>
@@ -2424,6 +2451,7 @@
         <tag k="REF2" v="001952"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-13272"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="2"/>
         <tag k="name" v="Ravine Pichomblaise"/>
@@ -2436,6 +2464,7 @@
         <tag k="REF2" v="001952"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-13271"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="2"/>
         <tag k="name" v="Ravine Pichomblaise"/>
@@ -2469,6 +2498,7 @@
         <tag k="REF2" v="001952"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-13265"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:way:node:count" v="22"/>
         <tag k="intermittent" v="yes"/>
@@ -2502,6 +2532,7 @@
         <tag k="REF2" v="002a64"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-13261"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="3"/>
         <tag k="waterway" v="stream"/>
@@ -2514,6 +2545,7 @@
         <tag k="REF2" v="002a64"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-13260"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="3"/>
         <tag k="waterway" v="stream"/>
@@ -2526,6 +2558,7 @@
         <tag k="REF2" v="002a64"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-13259"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="3"/>
         <tag k="waterway" v="stream"/>
@@ -2537,6 +2570,7 @@
         <tag k="REF2" v="002a64"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-13258"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="2"/>
         <tag k="waterway" v="stream"/>
@@ -2549,6 +2583,7 @@
         <tag k="REF2" v="002a64"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-13257"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="3"/>
         <tag k="waterway" v="stream"/>
@@ -2561,6 +2596,7 @@
         <tag k="REF2" v="002a64"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-13256"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="3"/>
         <tag k="waterway" v="stream"/>
@@ -2573,6 +2609,7 @@
         <tag k="REF2" v="002a64"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-13255"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="3"/>
         <tag k="waterway" v="stream"/>
@@ -2585,6 +2622,7 @@
         <tag k="REF2" v="002a64"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-13254"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="3"/>
         <tag k="waterway" v="stream"/>
@@ -2633,6 +2671,7 @@
         <tag k="REF2" v="002a64"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-13228"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="38"/>
         <tag k="intermittent" v="yes"/>
@@ -2675,28 +2714,4 @@
         <tag k="waterway" v="stream"/>
         <tag k="z_order" v="0"/>
     </way>
-    <relation visible="true" id="-124" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-13356" role=""/>
-        <member type="way" ref="-13357" role=""/>
-        <tag k="REF2" v="001952"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-124"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="name" v="Ravine Pichomblaise"/>
-        <tag k="type" v="multilinestring"/>
-        <tag k="waterway" v="stream"/>
-        <tag k="z_order" v="0"/>
-    </relation>
-    <relation visible="true" id="-120" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-13347" role=""/>
-        <member type="way" ref="-13348" role=""/>
-        <member type="way" ref="-13349" role=""/>
-        <tag k="REF2" v="002876"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-120"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="type" v="multilinestring"/>
-        <tag k="waterway" v="stream"/>
-        <tag k="z_order" v="0"/>
-    </relation>
 </osm>
