@@ -48,7 +48,7 @@ public:
   ~ZeroLengthWayCriterion() = default;
 
   ElementCriterionPtr clone() override
-  { return ElementCriterionPtr(new ZeroLengthWayCriterion()); }
+  { return std::make_shared<ZeroLengthWayCriterion>(ZeroLengthWayCriterion()); }
 
   QString getDescription() const override { return "Identifies ways with no length"; }
 

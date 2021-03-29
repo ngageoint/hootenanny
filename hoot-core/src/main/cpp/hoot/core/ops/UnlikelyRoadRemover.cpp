@@ -62,29 +62,34 @@ void UnlikelyRoadRemover::setConfiguration(const Settings& conf)
   _maxHeadingVariance = confOpts.getUnlikelyRoadRemoverMaxHeadingVariance();
 }
 
-ElementCriterionPtr UnlikelyRoadRemover::_getRemovalCrit(const ConstOsmMapPtr& map)
+ElementCriterionPtr UnlikelyRoadRemover::_getRemovalCrit(const ConstOsmMapPtr& map) const
 {
   // remove ways at or below a certain size
-  std::shared_ptr<WayLengthCriterion> lengthCrit(
-    new WayLengthCriterion(_maxWayLength, NumericComparisonType::LessThanOrEqualTo, map));
-  // remove ways whose heading (in degrees) varies at or above a certain amount
-  std::shared_ptr<WayHeadingVarianceCriterion> headingCrit(
-    new WayHeadingVarianceCriterion(
-      _maxHeadingVariance, NumericComparisonType::GreaterThanOrEqualTo, map));
+  std::shared_ptr<WayLengthCriterion> lengthCrit =
+    std::make_shared<WayLengthCriterion>(
+      WayLengthCriterion(_maxWayLength, NumericComparisonType::LessThanOrEqualTo, map));
+  // remove ways whose heading (in degrees) varies at or above a certain amount 
+  std::shared_ptr<WayHeadingVarianceCriterion> headingCrit =
+    std::make_shared<WayHeadingVarianceCriterion>(
+      WayHeadingVarianceCriterion(
+        _maxHeadingVariance, NumericComparisonType::GreaterThanOrEqualTo, map));
   headingCrit->setNumHistogramBins(_numHistogramBins);
   headingCrit->setSampleDistance(_sampleDistance);
-  headingCrit->setHeadingDelta(_headingDelta);
-  ChainCriterionPtr chainedWayCrit(new ChainCriterion(lengthCrit, headingCrit));
+  headingCrit->setHeadingDelta(_headingDelta); 
+  ChainCriterionPtr chainedWayCrit =
+    std::make_shared<ChainCriterion>(ChainCriterion(lengthCrit, headingCrit));
 
   // make sure only roads are removed
-  std::shared_ptr<HighwayCriterion> roadCrit(new HighwayCriterion(map));
+  std::shared_ptr<HighwayCriterion> roadCrit =
+    std::make_shared<HighwayCriterion>(HighwayCriterion(map));
   // Don't consider roundabouts, since their headings will obviously vary quite a bit as you go
   // around them.
-  std::shared_ptr<NotCriterion> roundaboutCrit(
-    new NotCriterion(std::shared_ptr<RoundaboutCriterion>(new RoundaboutCriterion())));
-  ChainCriterionPtr chainedRoadCrit(new ChainCriterion(roadCrit, roundaboutCrit));
+  std::shared_ptr<NotCriterion> roundaboutCrit =
+    std::make_shared<NotCriterion>(std::make_shared<RoundaboutCriterion>(RoundaboutCriterion()));
+  ChainCriterionPtr chainedRoadCrit =
+    std::make_shared<ChainCriterion>(ChainCriterion(roadCrit, roundaboutCrit));
 
-  return ChainCriterionPtr(new ChainCriterion(chainedWayCrit, chainedRoadCrit));
+  return std::make_shared<ChainCriterion>(ChainCriterion(chainedWayCrit, chainedRoadCrit));
 }
 
 void UnlikelyRoadRemover::apply(OsmMapPtr& map)

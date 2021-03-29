@@ -46,7 +46,7 @@ public:
   static QString className() { return "hoot::InvalidWayRemover"; }
 
   InvalidWayRemover() = default;
-  ~InvalidWayRemover() = default;
+  ~InvalidWayRemover() override = default;
 
   void visit(const std::shared_ptr<Element>& e) override;
 

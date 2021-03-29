@@ -52,7 +52,7 @@ public:
   static QString className() { return "hoot::UnlikelyRoadRemover"; }
 
   UnlikelyRoadRemover();
-  ~UnlikelyRoadRemover() = default;
+  ~UnlikelyRoadRemover() override = default;
 
   /**
    * @see OsmMapOperation
@@ -84,7 +84,7 @@ public:
 private:
 
   // max length a way can have to be eligible for removal
-  int _maxWayLength;
+  double _maxWayLength;
   // number of histogram bins to use with the angle extractor used to calc heading variance
   int _numHistogramBins;
   // heading delta to use with the angle extractor used to calc heading variance; see
@@ -96,7 +96,7 @@ private:
   // heading variance at or above which a way may be eligible for removal
   double _maxHeadingVariance;
 
-  ElementCriterionPtr _getRemovalCrit(const ConstOsmMapPtr& map);
+  ElementCriterionPtr _getRemovalCrit(const ConstOsmMapPtr& map) const;
 };
 
 }

@@ -50,7 +50,7 @@ public:
   WayHeadingVarianceCriterion(
     const Degrees comparisonVariance, const NumericComparisonType& numericComparisonType,
     ConstOsmMapPtr map);
-  ~WayHeadingVarianceCriterion() = default;
+  ~WayHeadingVarianceCriterion() override = default;
 
   /**
    * @see ElementCriterion
@@ -58,7 +58,7 @@ public:
   bool isSatisfied(const ConstElementPtr& e) const override;
 
   ElementCriterionPtr clone() override
-  { return ElementCriterionPtr(new WayHeadingVarianceCriterion(_map)); }
+  { return std::make_shared<WayHeadingVarianceCriterion>(WayHeadingVarianceCriterion(_map)); }
 
   /**
    * Determines the largest single heading variance for a way

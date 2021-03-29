@@ -71,8 +71,6 @@ void RelationMerger::merge(
   }
 
   LOG_TRACE("Merging relations " << elementId1 << " and " << elementId2 << "...");
-  //LOG_VART(relation1);
-  //LOG_VART(relation2);
 
   if (relation1->contains(elementId2))
   {
@@ -107,11 +105,7 @@ void RelationMerger::merge(
   }
 
   LOG_TRACE("Merged relations " << elementId1 << " and " << elementId2);
-  //LOG_VART(relation1);
-//  if (!_deleteRelation2)
-//  {
-//    LOG_VART(relation2);
-//  }
+
   if (WRITE_DETAILED_DEBUG_MAPS)
   {
     OsmMapWriterFactory::writeDebugMap(

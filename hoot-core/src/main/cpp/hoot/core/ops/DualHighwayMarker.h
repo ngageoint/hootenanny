@@ -53,7 +53,7 @@ public:
   static QString className() { return "hoot::DualHighwayMarker"; }
 
   DualHighwayMarker();
-  ~DualHighwayMarker() = default;
+  ~DualHighwayMarker() override = default;
 
   /**
    * @see ConstOsmMapOperation
