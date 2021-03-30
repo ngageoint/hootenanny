@@ -824,6 +824,13 @@ void DataConverter::_convert(const QStringList& inputs, const QString& output)
   {
     _setToOgrOptions(output);
   }
+  else
+  {
+    if (!_translation.trimmed().isEmpty())
+    {
+      _handleNonOgrOutputTranslationOpts();
+    }
+  }
 
   LOG_VARD(_shapeFileColumnsSpecified());
 
@@ -914,6 +921,32 @@ void DataConverter::_convert(const QStringList& inputs, const QString& output)
     }
     currentTask++;
   }
+}
+
+void DataConverter::_handleNonOgrOutputTranslationOpts()
+{
+  //a previous check was done to make sure both a translation and export cols weren't specified
+  assert(!_shapeFileColumnsSpecified());
+
+  // For non OGR conversions, the translation must be passed in as an operator.
+
+  if (!_convertOps.contains(SchemaTranslationOp::className()) &&
+      !_convertOps.contains(SchemaTranslationVisitor::className()))
+  {
+    // If a translation script was specified but not the translation op, we'll add auto add the op
+    // as the first conversion operation. If the caller wants the translation done after some
+    // other op, then they need to explicitly add it to the op list. Always adding the visitor
+    // instead of the op, bc its streamable. However, if any other ops in the group aren't
+    // streamable it won't matter anyway.
+    _convertOps.prepend(SchemaTranslationVisitor::className());
+  }
+  else if (_convertOps.contains(SchemaTranslationOp::className()))
+  {
+    // replacing SchemaTranslationOp with SchemaTranslationVisitor for the reason mentioned above
+    _convertOps.replaceInStrings(
+      SchemaTranslationOp::className(), SchemaTranslationVisitor::className());
+  }
+  LOG_VARD(_convertOps);
 }
 
 void DataConverter::_exportToShapeWithCols(const QString& output, const QStringList& cols,

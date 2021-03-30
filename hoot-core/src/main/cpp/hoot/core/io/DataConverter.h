@@ -154,6 +154,8 @@ private:
   // sets ogr options only for _convert
   void _setFromOgrOptions();
   void _setToOgrOptions(const QString& output);
+  // This handles configures translations options correctly for non-OGR outputs.
+  void _handleNonOgrOutputTranslationOpts();
   QString _outputFormatToTranslationDirection(const QString& output) const;
   // If specific columns were specified for export to a shape file, then this is called.
   void _exportToShapeWithCols(const QString& output, const QStringList& cols, const OsmMapPtr& map);
