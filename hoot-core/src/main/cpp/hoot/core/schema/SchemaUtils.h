@@ -52,9 +52,11 @@ public:
   static bool anyElementsHaveType(const ConstOsmMapPtr& map);
 
   /**
-   * TODO
+   * Validates the path to a translation script.
    *
-   * @param url
+   * @param url URL pointing to a translation script
+   * @throws IllegalArgumentException if the script at the URL does not exist or is an unsupported
+   * format
    */
   static void validateTranslationUrl(const QString& url);
 };

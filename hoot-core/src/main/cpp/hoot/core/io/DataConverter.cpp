@@ -375,7 +375,6 @@ void DataConverter::_transToOgrMT(const QStringList& inputs, const QString& outp
     LOG_DEBUG("Reading: " << input);
 
     // Read all elements from an input
-    // TODO: We should figure out a way to make this not-memory bound in the future.
     _fillElementCache(input, pElementCache, elementQ);
   }
 
