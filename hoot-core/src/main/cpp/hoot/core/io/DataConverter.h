@@ -133,26 +133,30 @@ private:
 
   void _validateInput(const QStringList& inputs, const QString& output);
 
-  // converts from any input to an OGR output; a translation is required; operations are memory
-  // bound
+  // converts from any input to an OGR output; A translation is required, operations are memory
+  // bound, and if both input and output formats are OGR, this must be used.
   void _convertToOgr(const QStringList& inputs, const QString& output);
 
   // _convertToOgr will call this to run the translator in a separate thread for a performance
   // increase if certain pre-conditions are met.
   void _transToOgrMT(const QStringList& inputs, const QString& output);
+  void _fillElementCache(const QString& inputUrl, ElementCachePtr cachePtr,
+                         QQueue<ElementPtr>& workQ);
 
   // converts from an OGR input to any output; a translation is required
   void _convertFromOgr(const QStringList& inputs, const QString& output);
 
-  // This handles all conversions not done by _convertToOgr or _convertFromOgr.
+  /*
+   * This method handles all conversions including OGR conversions not done by _convertToOgr or
+   * _convertFromOgr. OGR conversions performed by this method will not be memory bound.
+   */
   void _convert(const QStringList& inputs, const QString& output);
+  // sets ogr options only for _convert
+  void _setFromOgrOptions();
   void _setToOgrOptions(const QString& output);
   QString _outputFormatToTranslationDirection(const QString& output) const;
   // If specific columns were specified for export to a shape file, then this is called.
   void _exportToShapeWithCols(const QString& output, const QStringList& cols, const OsmMapPtr& map);
-
-  void _fillElementCache(const QString& inputUrl, ElementCachePtr cachePtr,
-                         QQueue<ElementPtr>& workQ);
 
   /*
    * Attempts to determine the relative weighting of each layer in an OGR data source based on
@@ -164,8 +168,6 @@ private:
   QStringList _getOgrLayersFromPath(OgrReader& reader, QString& input);
 
   bool _shapeFileColumnsSpecified() { return !_shapeFileColumns.isEmpty(); }
-
-  void _setFromOgrOptions();
 };
 
 }
