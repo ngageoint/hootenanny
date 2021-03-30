@@ -123,6 +123,7 @@ private:
 
   QString _translation;
   QString _translationDirection;
+  bool _translateMultithreaded;
   QStringList _shapeFileColumns;
   int _ogrFeatureReadLimit;
   QStringList _convertOps;
@@ -132,7 +133,8 @@ private:
 
   void _validateInput(const QStringList& inputs, const QString& output);
 
-  // converts from any input to an OGR output; a translation is required
+  // converts from any input to an OGR output; a translation is required; operations are memory
+  // bound
   void _convertToOgr(const QStringList& inputs, const QString& output);
 
   // _convertToOgr will call this to run the translator in a separate thread for a performance
@@ -144,7 +146,7 @@ private:
 
   // This handles all conversions not done by _convertToOgr or _convertFromOgr.
   void _convert(const QStringList& inputs, const QString& output);
-  void _handleGeneralConvertTranslationOpts(const QString& output);
+  void _setToOgrOptions(const QString& output);
   QString _outputFormatToTranslationDirection(const QString& output) const;
   // If specific columns were specified for export to a shape file, then this is called.
   void _exportToShapeWithCols(const QString& output, const QStringList& cols, const OsmMapPtr& map);

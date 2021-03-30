@@ -172,11 +172,14 @@ protected:
 
 private:
 
-  //relations that weren't written on a first pass b/c they contained relations as a member which
-  //had not yet been written.
+  // relations that weren't written on a first pass b/c they contained relations as a member which
+  // had not yet been written.
   QList<long> _unwrittenFirstPassRelationIds;
   bool _failOnSkipRelation;
   int _maxFieldWidth;
+
+  int _numWritten;
+  int _statusUpdateInterval;
 };
 
 }

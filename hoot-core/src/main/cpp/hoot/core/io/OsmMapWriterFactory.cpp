@@ -29,8 +29,10 @@
 // hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/io/OsmMapWriter.h>
+#include <hoot/core/io/OgrWriter.h>
 #include <hoot/core/io/PartialOsmMapWriter.h>
 #include <hoot/core/io/ElementOutputStream.h>
+#include <hoot/core/schema/SchemaUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
@@ -65,8 +67,22 @@ std::shared_ptr<OsmMapWriter> OsmMapWriterFactory::createWriter(const QString& u
   vector<QString> names = Factory::getInstance().getObjectNamesByBase(OsmMapWriter::className());
   for (size_t i = 0; i < names.size() && !writer; ++i)
   {
-    LOG_VART(names[i]);
+    LOG_VARD(names[i]);
     writer.reset(Factory::getInstance().constructObject<OsmMapWriter>(names[i]));
+
+    // We may be able to make this a little more generic by referencing an interface instead.
+    // Currently, OgrWriter is the only writer that runs a schema translation inline.
+    std::shared_ptr<OgrWriter> ogrWriter = std::dynamic_pointer_cast<OgrWriter>(writer);
+    if (ogrWriter)
+    {
+      const QString translationScript = ConfigOptions().getSchemaTranslationScript();
+      if (!translationScript.isEmpty())
+      {
+        SchemaUtils::validateTranslationUrl(translationScript);
+        ogrWriter->setSchemaTranslationScript(translationScript);
+      }
+    }
+
     if (writer->isSupported(url))
     {
       LOG_DEBUG("Using output writer: " << names[i]);

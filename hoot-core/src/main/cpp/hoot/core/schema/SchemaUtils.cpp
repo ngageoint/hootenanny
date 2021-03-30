@@ -31,7 +31,9 @@
 #include <hoot/core/visitors/ElementCountVisitor.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/criterion/HasTypeCriterion.h>
-#include <hoot/core/criterion/NoInformationCriterion.h>
+
+// Qt
+#include <QFileInfo>
 
 namespace hoot
 {
@@ -42,6 +44,19 @@ bool SchemaUtils::anyElementsHaveType(const ConstOsmMapPtr& map)
     (int)FilteredVisitor::getStat(
       ElementCriterionPtr(new HasTypeCriterion()),
       ElementVisitorPtr(new ElementCountVisitor()), map) > 0;
+}
+
+void SchemaUtils::validateTranslationUrl(const QString& url)
+{
+  QFileInfo fileInfo(url);
+  if (!fileInfo.exists())
+  {
+    throw IllegalArgumentException("Translation file does not exist: " + url);
+  }
+  else if (!url.endsWith(".js") && !url.endsWith(".py"))
+  {
+    throw IllegalArgumentException("Invalid translation file format: " + url);
+  }
 }
 
 }

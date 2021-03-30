@@ -50,6 +50,13 @@ public:
    * @return true if at least one feature has a type recognized by the schema; false otherwise
    */
   static bool anyElementsHaveType(const ConstOsmMapPtr& map);
+
+  /**
+   * TODO
+   *
+   * @param url
+   */
+  static void validateTranslationUrl(const QString& url);
 };
 
 }

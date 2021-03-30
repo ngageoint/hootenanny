@@ -61,7 +61,8 @@ void SchemaTranslationVisitor::setConfiguration(const Settings& conf)
 
   LOG_VARD(conf.hasKey(c.getSchemaTranslationScriptKey()));
   LOG_VARD(c.getSchemaTranslationScript());
-  if (conf.hasKey(ConfigOptions::getSchemaTranslationScriptKey()) && c.getSchemaTranslationScript() != "")
+  if (conf.hasKey(ConfigOptions::getSchemaTranslationScriptKey()) &&
+      c.getSchemaTranslationScript() != "")
   {
     setTranslationDirection(c.getSchemaTranslationDirection());
     setTranslationScript(c.getSchemaTranslationScript());
