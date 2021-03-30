@@ -42,13 +42,9 @@ public:
 
   void runBasicTest()
   {
-    //OsmMapPtr map(new OsmMap());
-
     NodePtr node1(new Node(Status::Unknown1, 1, geos::geom::Coordinate(0.0, 0.0), 15.0));
-    //map->addNode(node1);
     CPPUNIT_ASSERT(!uut.isSatisfied(node1));
     NodePtr node2(new Node(Status::Unknown1, 2, geos::geom::Coordinate(0.0, 10.0), 15.0));
-    //map->addNode(node2);
     CPPUNIT_ASSERT(!uut.isSatisfied(node2));
     NodePtr node3(new Node(Status::Unknown1, 3, geos::geom::Coordinate(0.0, 20.0), 15.0));
     CPPUNIT_ASSERT(!uut.isSatisfied(node3));
@@ -56,7 +52,6 @@ public:
     ContainsNodeCriterion uut1(1);
 
     WayPtr way1(new Way(Status::Unknown1, 1, 15.0));
-    //way1->getTags().set("bridge", "yes");
     CPPUNIT_ASSERT(!uut.isSatisfied(way1));
     way1->addNode(node1->getId());
     way1->addNode(node2->getId());
@@ -66,7 +61,10 @@ public:
     CPPUNIT_ASSERT(!uut1.isSatisfied(node2));
     CPPUNIT_ASSERT(!uut1.isSatisfied(node3));
 
-    ContainsNodeCriterion uut2(3);
+    ContainsNodeCriterion uut2();
+    Settings settings;
+    settings.set(ConfigOptions::getContainsNodeCriterionIdKey(), 3);
+    uut2.setConfiguration(settings);
 
     RelationPtr relation1 = std::make_shared<Relation>(Relation(Status::Unknown1, 1));
     relation1->addElement("test", way1->getElementId());
