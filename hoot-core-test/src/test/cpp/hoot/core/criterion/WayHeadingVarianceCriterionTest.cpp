@@ -27,15 +27,16 @@
 
 // Hoot
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/criterion/WayLengthCriterion.h>
+#include <hoot/core/criterion/WayHeadingVarianceCriterion.h>
+#include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/elements/MapProjector.h>
 
 namespace hoot
 {
 
-class WayLengthCriterionTest : public HootTestFixture
+class WayHeadingVarianceCriterionTest : public HootTestFixture
 {
-  CPPUNIT_TEST_SUITE(WayLengthCriterionTest);
+  CPPUNIT_TEST_SUITE(WayHeadingVarianceCriterionTest);
   CPPUNIT_TEST(runPositiveTest);
   CPPUNIT_TEST(runNegativeTest);
   CPPUNIT_TEST(runBypassTest);
@@ -45,56 +46,50 @@ class WayLengthCriterionTest : public HootTestFixture
 
 public:
 
+  WayHeadingVarianceCriterionTest() :
+  HootTestFixture("test-files/", UNUSED_PATH)
+  {
+  }
+
   void runPositiveTest()
   {
     OsmMapPtr map = std::make_shared<OsmMap>();
+    OsmMapReaderFactory::read(map, _inputPath + "ToyTestA.osm");
     MapProjector::projectToPlanar(map);
-    NodePtr node1 =
-      std::make_shared<Node>(Status::Unknown1, 1, geos::geom::Coordinate(0.0, 0.0), 15.0);
-    map->addNode(node1);
-    NodePtr node2 =
-      std::make_shared<Node>(Status::Unknown1, 2, geos::geom::Coordinate(0.0, 10.0), 15.0);
-    map->addNode(node2);
-    WayPtr way = std::make_shared<Way>(Status::Unknown1, 1);
-    way->addNode(node1->getId());
-    way->addNode(node2->getId());
-    map->addWay(way);
 
-    std::shared_ptr<WayLengthCriterion> uut =
-      std::make_shared<WayLengthCriterion>(1.0, NumericComparisonType::GreaterThanOrEqualTo, map);
-    CPPUNIT_ASSERT(uut->isSatisfied(way));
+    std::shared_ptr<WayHeadingVarianceCriterion> uut =
+      std::make_shared<WayHeadingVarianceCriterion>(
+        WayHeadingVarianceCriterion(22.5, NumericComparisonType::EqualTo, map));
+    uut->setNumHistogramBins(16);
+    uut->setSampleDistance(1.0);
+    uut->setHeadingDelta(5.0);
+    CPPUNIT_ASSERT(uut->isSatisfied(TestUtils::getElementWithNote(map, "2")));
   }
 
   void runNegativeTest()
   {
     OsmMapPtr map = std::make_shared<OsmMap>();
+    OsmMapReaderFactory::read(map, _inputPath + "ToyTestA.osm");
     MapProjector::projectToPlanar(map);
-    NodePtr node1 =
-      std::make_shared<Node>(Status::Unknown1, 1, geos::geom::Coordinate(0.0, 0.0), 15.0);
-    map->addNode(node1);
-    NodePtr node2 =
-      std::make_shared<Node>(Status::Unknown1, 2, geos::geom::Coordinate(0.0, 10.0), 15.0);
-    map->addNode(node2);
-    WayPtr way = std::make_shared<Way>(Status::Unknown1, 1);
-    way->addNode(node1->getId());
-    way->addNode(node2->getId());
-    map->addWay(way);
 
-    std::shared_ptr<WayLengthCriterion> uut =
-      std::make_shared<WayLengthCriterion>(0.0, NumericComparisonType::EqualTo, map);
-    CPPUNIT_ASSERT(!uut->isSatisfied(way));
+    std::shared_ptr<WayHeadingVarianceCriterion> uut =
+      std::make_shared<WayHeadingVarianceCriterion>(
+        WayHeadingVarianceCriterion(60.0, NumericComparisonType::GreaterThanOrEqualTo, map));
+    uut->setNumHistogramBins(16);
+    uut->setSampleDistance(1.0);
+    uut->setHeadingDelta(5.0);
+    CPPUNIT_ASSERT(!uut->isSatisfied(TestUtils::getElementWithNote(map, "2")));
   }
 
   void runBypassTest()
   {
     OsmMapPtr map = std::make_shared<OsmMap>();
-    MapProjector::projectToPlanar(map);
     WayPtr way = std::make_shared<Way>(Status::Unknown1, 1);
     map->addWay(way);
 
     // -1.0 for the length bypasses the crit; any way will work here
-    std::shared_ptr<WayLengthCriterion> uut =
-      std::make_shared<WayLengthCriterion>(-1.0, NumericComparisonType::EqualTo, map);
+    std::shared_ptr<WayHeadingVarianceCriterion> uut =
+      std::make_shared<WayHeadingVarianceCriterion>(-1.0, NumericComparisonType::EqualTo, map);
     CPPUNIT_ASSERT(uut->isSatisfied(way));
   }
 
@@ -102,8 +97,8 @@ public:
   {
     WayPtr way = std::make_shared<Way>(Status::Unknown1, 1);
 
-    std::shared_ptr<WayLengthCriterion> uut =
-      std::make_shared<WayLengthCriterion>(1.0, NumericComparisonType::EqualTo, nullptr);
+    std::shared_ptr<WayHeadingVarianceCriterion> uut =
+      std::make_shared<WayHeadingVarianceCriterion>(1.0, NumericComparisonType::EqualTo, nullptr);
     QString exceptionMsg;
     try
     {
@@ -114,7 +109,8 @@ public:
       exceptionMsg = e.what();
     }
     CPPUNIT_ASSERT_EQUAL(
-      QString("WayLengthCriterion requires a map.").toStdString(), exceptionMsg.toStdString());
+      QString("WayHeadingVarianceCriterion requires a map.").toStdString(),
+      exceptionMsg.toStdString());
   }
 
   void runMapNotInPlanarTest()
@@ -123,8 +119,8 @@ public:
     WayPtr way = std::make_shared<Way>(Status::Unknown1, 1);
     map->addWay(way);
 
-    std::shared_ptr<WayLengthCriterion> uut =
-      std::make_shared<WayLengthCriterion>(1.0, NumericComparisonType::EqualTo, map);
+    std::shared_ptr<WayHeadingVarianceCriterion> uut =
+      std::make_shared<WayHeadingVarianceCriterion>(1.0, NumericComparisonType::EqualTo, map);
     QString exceptionMsg;
     try
     {
@@ -140,6 +136,6 @@ public:
   }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(WayLengthCriterionTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(WayHeadingVarianceCriterionTest, "quick");
 
 }
