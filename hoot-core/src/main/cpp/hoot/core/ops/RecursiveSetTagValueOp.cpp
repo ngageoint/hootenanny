@@ -63,42 +63,6 @@ _negateCriterion(false)
     new SetTagValueVisitor(key, value, appendToExistingValue, QStringList(), overwriteExistingTag));
 }
 
-RecursiveSetTagValueOp::RecursiveSetTagValueOp(
-  const QStringList& keys, const QStringList& values, const QString& criterionName,
-  bool appendToExistingValue, const bool overwriteExistingTag,
-  const bool negateCriterion) :
-_negateCriterion(negateCriterion)
-{
-  _tagger.reset(
-    new SetTagValueVisitor(
-      keys, values, appendToExistingValue, QStringList(), overwriteExistingTag));
-  _setCriterion(criterionName);
-}
-
-RecursiveSetTagValueOp::RecursiveSetTagValueOp(
-  const QString& key, const QString& value, const QString& criterionName,
-  bool appendToExistingValue, const bool overwriteExistingTag,
-  const bool negateCriterion) :
-_negateCriterion(negateCriterion)
-{
-  _tagger.reset(
-    new SetTagValueVisitor(key, value, appendToExistingValue, QStringList(), overwriteExistingTag));
-  _setCriterion(criterionName);
-}
-
-void RecursiveSetTagValueOp::setConfiguration(const Settings& conf)
-{
-  ConfigOptions configOptions(conf);
-  _tagger.reset(
-    new SetTagValueVisitor(
-      configOptions.getSetTagValueVisitorKeys(), configOptions.getSetTagValueVisitorValues(),
-      configOptions.getSetTagValueVisitorAppendToExistingValue(), QStringList(),
-      configOptions.getSetTagValueVisitorOverwrite()));
-  _negateCriterion = configOptions.getElementCriterionNegate();
-  // We're only supporting one crit here for now.
-  _setCriterion(configOptions.getSetTagValueVisitorElementCriteria().at(0));
-}
-
 void RecursiveSetTagValueOp::addCriterion(const ElementCriterionPtr& e)
 {
   if (!_negateCriterion)
