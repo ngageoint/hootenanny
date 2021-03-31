@@ -110,11 +110,9 @@ mgcp = {
           {
             notUsed[transMap[val][1]] = transMap[val][2];
             hoot.logDebug('Validate: Re-Adding ' + transMap[val][1] + ' = ' + transMap[val][2] + ' to notUsed');
-            print('Validate: Re-Adding ' + transMap[val][1] + ' = ' + transMap[val][2] + ' to notUsed');
           }
 
           hoot.logDebug('Validate: Dropping ' + val + ' from ' + attrs.FCODE);
-          print('Validate: Dropping ' + val + ' from ' + attrs.FCODE);
           delete attrs[val];
 
           // Since we deleted the attribute, Skip the text check
@@ -136,7 +134,6 @@ mgcp = {
             else
             {
               hoot.logDebug('Validate: Attribute ' + val + ' is ' + attrs[val].length + ' characters long. Truncating to ' + mgcp.rules.txtLength[val] + ' characters.');
-              print('Validate: Attribute ' + val + ' is ' + attrs[val].length + ' characters long. Truncating to ' + mgcp.rules.txtLength[val] + ' characters.');
               // Still too long. Chop to the maximum length
               attrs[val] = tStr[0].substring(0,mgcp.rules.txtLength[val]);
             }
@@ -147,7 +144,6 @@ mgcp = {
     else
     {
       hoot.logDebug('Validate: No attrList for ' + attrs.FCODE + ' ' + geometryType);
-      print('Validate: No attrList for ' + attrs.FCODE + ' ' + geometryType);
     }
 
     // No quick and easy way to do this unless we build yet another lookup table
@@ -184,7 +180,6 @@ mgcp = {
       if (enumValueList.indexOf(attrValue) == -1)
       {
         hoot.logDebug('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName);
-        print('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName);
 
         // Do we have an "Other" value?
         if (enumValueList.indexOf('999') == -1)
@@ -193,7 +188,6 @@ mgcp = {
           attrs[enumName] = feature.columns[i].defValue;
 
           hoot.logDebug('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName + ' Setting ' + enumName + ' to its default value (' + feature.columns[i].defValue + ')');
-          print('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName + ' Setting ' + enumName + ' to its default value (' + feature.columns[i].defValue + ')');
         }
         else
         {
@@ -201,7 +195,6 @@ mgcp = {
           attrs[enumName] = '999';
 
           hoot.logDebug('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName + ' Setting ' + enumName + ' to Other (999)');
-          print('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName + ' Setting ' + enumName + ' to Other (999)');
         }
       }
     } // End Validate Enumerations
