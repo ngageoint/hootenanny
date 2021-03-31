@@ -72,6 +72,18 @@
         "objectType": "tag"
     },
     {
+        "geometries": ["area", "linestring"],
+        "isA": "natural",
+        "name": "natural=crevice",
+        "objectType": "tag"
+    },
+    {
+        "geometries": ["area", "linestring"],
+        "isA": "natural",
+        "name": "natural=crevasse",
+        "objectType": "tag"
+    },
+    {
         "geometries": ["linestring"],
         "isA": "natural",
         "name": "natural=shear_wall",

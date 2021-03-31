@@ -1095,6 +1095,9 @@ tds70 = {
       break;
 
     case 'BH140': // River
+      if (tags['channel:type'] == 'normal') delete tags['channel:type']; // Default value
+      if (tags.tidal == 'no') delete tags.tidal; // Default value
+
       // Different translation for area rivers
       if (geometryType == 'Area')
       {
@@ -1123,10 +1126,18 @@ tds70 = {
       }
       break;
 
-      case 'FA012': // Contaminated Area
-      case 'AL065': // Minefield
-        if (! tags.boundary) tags.boundary = 'hazard';
-        break;
+    case 'ED020': // Swamp
+      if (tags['vegetation:type'] == 'mangrove')
+      {
+        tags.wetland = 'mangrove';
+        delete tags['vegetation:type'];
+      }
+      break;
+
+    case 'FA012': // Contaminated Area
+    case 'AL065': // Minefield
+      if (! tags.boundary) tags.boundary = 'hazard';
+      break;
     } // End switch F_CODE
 
     // Fix up lifestyle tags.
@@ -1635,7 +1646,7 @@ tds70 = {
     }
 
     // Fix up water features from OSM
-    if (tags.natural == 'water' && !(tags.water || tags.waterway))
+    if (tags.natural == 'water' && !(tags.water || tags.waterway || tags.wetland))
     {
       if (tags.tidal == 'yes')
       {
@@ -2415,19 +2426,30 @@ tds70 = {
       attrs.LOC = '44'; // On Surface
     }
 
-    // Clean up Cart Track attributes
-    if (attrs.F_CODE == 'AP010')
+    // Additional rules for particular FCODE's
+    switch (attrs.F_CODE)
     {
-      if (attrs.TRS && attrs.TRS == '13') attrs.TRS = '3';
+      // Amusement Parks
+      case 'AK030':
+      if (!attrs.FFN) attrs.FFN = '921'; // Recreation
+      break;
 
-      if (attrs.TRS && (['3','4','6','11','21','22','999'].indexOf(attrs.TRS) == -1))
-      {
-        var othVal = '(TRS:' + attrs.TRS + ')';
-        attrs.OTH = translate.appendValue(attrs.OTH,othVal,' ');
-        attrs.TRS = '999';
+      case 'AP010': // Cart Track
+        if (attrs.TRS && attrs.TRS == '13') attrs.TRS = '3';
 
-      }
-    }
+        if (attrs.TRS && (['3','4','6','11','21','22','999'].indexOf(attrs.TRS) == -1))
+        {
+          var othVal = '(TRS:' + attrs.TRS + ')';
+          attrs.OTH = translate.appendValue(attrs.OTH,othVal,' ');
+          attrs.TRS = '999';
+        }
+        break;
+
+      case 'BH140': // River
+        if (!attrs.WCC) attrs.WCC = '7'; // Normal Channel
+        if (!attrs.TID) attrs.TID = '1000'; // Not tidal
+        break;
+    } // Enf switch F_CODE
 
     // Fix HGT and LMC to keep GAIT happy
     // If things have a height greater than 46m, tags them as being a "Navigation Landmark"
@@ -2499,12 +2521,6 @@ tds70 = {
       delete notUsedTags['source.imagery.datetime'];
     }
 
-    // Amusement Parks
-    if (attrs.F_CODE == 'AK030' && !(attrs.FFN))
-    {
-      attrs.FFN = '921'; // Recreation
-    }
-
     // Wetlands
     // Normally, these go to Marsh
     switch(tags.wetland)
@@ -2515,6 +2531,7 @@ tds70 = {
     case 'mangrove':
       attrs.F_CODE = 'ED020'; // Swamp
       attrs.VSP = '19'; // Mangrove
+      delete notUsedTags.wetland;
       break;
     } // End Wetlands
 
@@ -2568,7 +2585,6 @@ tds70 = {
       case 'workshop':
         notUsedTags.railway = tags.railway; // Preserving this
         break;
-
     }
 
   }, // End applyToOgrPostProcessing

@@ -4979,7 +4979,7 @@ ggdm30.rules = {
     ['WCC','2','channel:type','braided_stream'], // Braided Stream
     ['WCC','3','channel:type','gorge'], // Gorge
     ['WCC','4','wadi','yes'], // Wadi
-    ['WCC','7','waterway','river'], // Normal Channel
+    ['WCC','7','channel:type','normal'], // Normal Channel
     ['WCC','999','channel:type','other'], // Other
 
     // WDAC - Average Water Depth <interval closure>

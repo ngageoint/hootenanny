@@ -1062,6 +1062,9 @@ tds61 = {
       break;
 
     case 'BH140': // River
+      if (tags['channel:type'] == 'normal') delete tags['channel:type']; // Default value
+      if (tags.tidal == 'no') delete tags.tidal; // Default value
+
       // Different translation for area rivers
       if (geometryType == 'Area')
       {
@@ -1089,14 +1092,22 @@ tds61 = {
       }
       break;
 
-      case 'FA015': // Firing Range
-        if (! tags.landuse) tags.landuse = 'military';
-        break;
+    case 'ED020': // Swamp
+      if (tags['vegetation:type'] == 'mangrove')
+      {
+        tags.wetland = 'mangrove';
+        delete tags['vegetation:type'];
+      }
+      break;
 
-      case 'FA012': // Contaminated Area
-      case 'AL065': // Minefield
-        if (! tags.boundary) tags.boundary = 'hazard';
-        break;
+    case 'FA012': // Contaminated Area
+    case 'AL065': // Minefield
+      if (! tags.boundary) tags.boundary = 'hazard';
+      break;
+
+    case 'FA015': // Firing Range
+      if (! tags.landuse) tags.landuse = 'military';
+      break;
     } // End switch F_CODE
 
     // Fix lifecycle tags
@@ -1645,7 +1656,7 @@ tds61 = {
     }
 
     // Sort out tidal features
-    if (tags.tidal && (tags.water || tags.waterway))
+    if (tags.tidal && (tags.water || tags.waterway || tags.wetland))
     {
       if (tags.tidal == 'yes') attrs.TID = '1001'; // Tidal
       if (tags.tidal == 'no') attrs.TID = '1000'; // non-Tidal
@@ -2339,105 +2350,109 @@ tds61 = {
     // Rules for specific F_CODES
     switch (attrs.F_CODE)
     {
-    case 'AP030': // Road
-    case 'AQ075': // Ice Road
-      // Preserveing a highway value
-      if (tags.highway == 'yes') notUsedTags.highway = 'road';
+      case 'AH025': // Engineered Earthwork
+        if (! attrs.EET) attrs.EET = '3';
+        break;
 
-      // Fix the "highway=" stuff that cant be done in the one2one rules
-      // If we havent fixed up the road type/class, have a go with the
-      // highway tag
-      if (!attrs.RTY && !attrs.RIN_ROI)
-      {
-        switch (tags.highway)
+      case 'AH055': // Fortified Building
+        if (attrs.FZR && !(attrs.FFN)) attrs.FFN = '835'; // Fortification type -> Defence Activities
+        break;
+
+      case 'AK030': // Amusement Parks
+        if (!attrs.FFN) attrs.FFN = '921'; // Recreation
+        break;
+
+      case 'AP010': // Clean up Cart Track attributes
+        if (attrs.TRS && attrs.TRS == '13') attrs.TRS = '3';
+
+        if (attrs.TRS && (['3','4','6','11','21','22','999'].indexOf(attrs.TRS) == -1))
         {
-        case 'motorway':
-        case 'motorway_link':
-          attrs.RIN_ROI = '2'; // National Motorway
-          attrs.RTY = '1'; // Motorway
-          break;
+          var othVal = '(TRS:' + attrs.TRS + ')';
+          attrs.OTH = translate.appendValue(attrs.OTH,othVal,' ');
+          attrs.TRS = '999';
+        }
+        break;
 
-        case 'trunk':
-        case 'trunk_link':
-          attrs.RIN_ROI = '3'; // National/Primary
-          attrs.RTY = '2'; // Limited Access Motorway
-          break;
+      case 'AP030': // Road
+      case 'AQ075': // Ice Road
+        // Preserveing a highway value
+        if (tags.highway == 'yes') notUsedTags.highway = 'road';
 
-        case 'primary':
-        case 'primary_link':
-          attrs.RIN_ROI = '3'; // National
-          attrs.RTY = '3'; // road: Road outside a BUA
-          break;
+        // Fix the "highway=" stuff that cant be done in the one2one rules
+        // If we havent fixed up the road type/class, have a go with the
+        // highway tag
+        if (!attrs.RTY && !attrs.RIN_ROI)
+        {
+          switch (tags.highway)
+          {
+          case 'motorway':
+          case 'motorway_link':
+            attrs.RIN_ROI = '2'; // National Motorway
+            attrs.RTY = '1'; // Motorway
+            break;
 
-        case 'secondary':
-        case 'secondary_link':
-          attrs.RIN_ROI = '4'; // Secondary
-          attrs.RTY = '3'; // road: Road outside a BUA
-          break;
+          case 'trunk':
+          case 'trunk_link':
+            attrs.RIN_ROI = '3'; // National/Primary
+            attrs.RTY = '2'; // Limited Access Motorway
+            break;
 
-        case 'tertiary':
-        case 'tertiary_link':
-          attrs.RIN_ROI = '5'; // Local
-          attrs.RTY = '3'; // road: Road outside a BUA
-          break;
+          case 'primary':
+          case 'primary_link':
+            attrs.RIN_ROI = '3'; // National
+            attrs.RTY = '3'; // road: Road outside a BUA
+            break;
 
-        case 'residential':
-        case 'unclassified':
-        case 'pedestrian':
-        case 'service':
-          attrs.RIN_ROI = '5'; // Local
-          attrs.RTY = '4'; // street: Road inside a BUA
-          break;
+          case 'secondary':
+          case 'secondary_link':
+            attrs.RIN_ROI = '4'; // Secondary
+            attrs.RTY = '3'; // road: Road outside a BUA
+            break;
 
-        case 'yes':
-        case 'road':
-          attrs.RIN_ROI = '5'; // Local. Customer requested this translation value
-          attrs.RTY = '-999999'; // No Information
-        } // End tags.highway switch
-      } // End ROI & RIN_ROI
+          case 'tertiary':
+          case 'tertiary_link':
+            attrs.RIN_ROI = '5'; // Local
+            attrs.RTY = '3'; // road: Road outside a BUA
+            break;
 
-      // Use the Width to populate the Minimum Travelled Way Width - Customer requested
-      if (attrs.WID && !(attrs.ZI016_WD1))
-      {
-        attrs.ZI016_WD1 = attrs.WID;
-        delete attrs.WID;
-      }
+          case 'residential':
+          case 'unclassified':
+          case 'pedestrian':
+          case 'service':
+            attrs.RIN_ROI = '5'; // Local
+            attrs.RTY = '4'; // street: Road inside a BUA
+            break;
 
-      // Private Access roads - Customer requested
-      if (tags.access == 'private' && !(attrs.CAA))
-      {
-        attrs.CAA = '3';
-        delete notUsedTags.access;
-      }
+          case 'yes':
+          case 'road':
+            attrs.RIN_ROI = '5'; // Local. Customer requested this translation value
+            attrs.RTY = '-999999'; // No Information
+          } // End tags.highway switch
+        } // End ROI & RIN_ROI
 
-      // Fix up RLE
-      // If Vertical Relative Location != Surface && Not on a Bridge, Relative Level == NA
-      if ((attrs.LOC && attrs.LOC !== '44') && (attrs.SBB && attrs.SBB == '1000')) attrs.RLE = '998';
-      break;
+        // Use the Width to populate the Minimum Travelled Way Width - Customer requested
+        if (attrs.WID && !(attrs.ZI016_WD1))
+        {
+          attrs.ZI016_WD1 = attrs.WID;
+          delete attrs.WID;
+        }
 
-    case 'AH055': // Fortified Building
-      if (attrs.FZR && !(attrs.FFN)) attrs.FFN = '835'; // Fortification type -> Defence Activities
-      break;
+        // Private Access roads - Customer requested
+        if (tags.access == 'private' && !(attrs.CAA))
+        {
+          attrs.CAA = '3';
+          delete notUsedTags.access;
+        }
 
-    case 'AP010': // Clean up Cart Track attributes
-      if (attrs.TRS && attrs.TRS == '13') attrs.TRS = '3';
+        // Fix up RLE
+        // If Vertical Relative Location != Surface && Not on a Bridge, Relative Level == NA
+        if ((attrs.LOC && attrs.LOC !== '44') && (attrs.SBB && attrs.SBB == '1000')) attrs.RLE = '998';
+        break;
 
-      if (attrs.TRS && (['3','4','6','11','21','22','999'].indexOf(attrs.TRS) == -1))
-      {
-        var othVal = '(TRS:' + attrs.TRS + ')';
-        attrs.OTH = translate.appendValue(attrs.OTH,othVal,' ');
-        attrs.TRS = '999';
-      }
-      break;
-
-    case 'AH025': // Engineered Earthwork
-      if (! attrs.EET) attrs.EET = '3';
-      break;
-
-    case 'AK030': // Amusement Parks
-      if (!attrs.FFN) attrs.FFN = '921'; // Recreation
-      break;
-
+      case 'BH140': // River
+        if (!attrs.WCC) attrs.WCC = '7'; // Normal Channel
+        if (!attrs.TID) attrs.TID = '1000'; // Not tidal
+        break;
     } // End switch F_CODE
 
     // RLE vs LOC: Need to deconflict this for various features
@@ -2545,6 +2560,7 @@ tds61 = {
     case 'mangrove':
       attrs.F_CODE = 'ED020'; // Swamp
       attrs.VSP = '19'; // Mangrove
+      delete notUsedTags.wetland;
       break;
     } // End Wetlands
 

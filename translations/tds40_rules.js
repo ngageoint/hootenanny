@@ -3052,7 +3052,7 @@ tds40.rules = {
     ['WCC','3','channel:type','gorge'], // Gorge
     ['WCC','4','wadi','yes'], // Wadi
     ['WCC','6','channel:type','split_stream'], // Split Stream
-    ['WCC','7','waterway','river'], // Normal Channel
+    ['WCC','7','channel:type','normal'], // Normal Channel
     ['WCC','8','channel:type','lost_watercourse'], // Lost Watercourse
     ['WCC','999','channel:type','other'], // Other
 

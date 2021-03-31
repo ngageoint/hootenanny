@@ -964,6 +964,9 @@ tds40 = {
       break;
 
     case 'BH140': // River
+      if (tags['channel:type'] == 'normal') delete tags['channel:type']; // Default value
+      if (tags.tidal == 'no') delete tags.tidal; // Default value
+
       // Different translation for area rivers
       if (geometryType == 'Area')
       {
@@ -988,6 +991,14 @@ tds40 = {
       {
         delete tags.landuse; // Default EC015 translation
         tags.natural = 'tree_row';
+      }
+      break;
+
+    case 'ED020': // Swamp
+      if (tags['vegetation:type'] == 'mangrove')
+      {
+        tags.wetland = 'mangrove';
+        delete tags['vegetation:type'];
       }
       break;
 
@@ -1618,7 +1629,7 @@ tds40 = {
     }
 
     // Sort out tidal features
-    if (tags.tidal && (tags.water || tags.waterway))
+    if (tags.tidal && (tags.water || tags.waterway || tags.wetland))
     {
       if (tags.tidal == 'yes') attrs.TID = '1001'; // Tidal
       if (tags.tidal == 'no') attrs.TID = '1000'; // non-Tidal
@@ -2276,104 +2287,109 @@ tds40 = {
     // Rules for specific F_CODES
     switch (attrs.F_CODE)
     {
-    case 'AP030': // Custom Road rules
-      // Tag preservation
-      if (tags.highway == 'yes') notUsedTags.highway = 'road';
+      case 'AH025': // Engineered Earthwork
+        if (!attrs.EET) attrs.EET = '3';
+        break;
 
-      // Fix the "highway=" stuff that cant be done in the one2one rules
-      // If we haven't sorted out the road type/class, have a try with the
-      // "highway" tag. If that doesn't work, we end up with default values
-      // These are pretty vague classifications
-      if (!attrs.TYP && !attrs.RTN_ROI)
-      {
-        switch (tags.highway)
+      case 'AH055': // Fortified Building
+        if (attrs.FZR && !(attrs.FFN)) attrs.FFN = '835'; // Fortification type -> Defence Activities
+        break;
+
+      case 'AK030': // Amusement Parks
+        if (!attrs.FFN) attrs.FFN = '921'; // Recreation
+        break;
+
+      case 'AL020': // AL020 Built-Up-Areas have ZI005_FNA1 instead of ZI005_FNA. Why???
+        if (attrs.ZI005_FNA)
         {
-        case 'motorway':
-        case 'motorway_link':
-          attrs.RTN_ROI = '2'; // National Motorway
-          attrs.TYP = '41'; // motorway
-          break;
+          attrs.ZI005_FNA1 = attrs.ZI005_FNA;
+          delete attrs.ZI005_FNA;
+        }
+        break;
 
-        case 'trunk':
-        case 'trunk_link':
-          attrs.RTN_ROI = '3'; // National/Primary
-          attrs.TYP = '47'; // Limited Access Motorway
-          break;
+      case 'AP010': // Clean up Cart Track attributes
+        if (attrs.TRS && (['3','4','6','11','21','22','999'].indexOf(attrs.TRS) == -1))
+        {
+          var othVal = '(TRS:' + attrs.TRS + ')';
+          attrs.OTH = translate.appendValue(attrs.OTH,othVal,' ');
+          attrs.TRS = '999';
+        }
+        break;
 
-        case 'primary':
-        case 'primary_link':
-          attrs.RTN_ROI = '4'; // Secondary
-          attrs.TYP = '1'; // road
-          break;
+      case 'AP030': // Custom Road rules
+        // Tag preservation
+        if (tags.highway == 'yes') notUsedTags.highway = 'road';
 
-        case 'secondary':
-        case 'secondary_link':
-        case 'tertiary':
-        case 'tertiary_link':
-          attrs.RTN_ROI = '5'; // Local
-          attrs.TYP = '1'; // road
-          break;
+        // Fix the "highway=" stuff that cant be done in the one2one rules
+        // If we haven't sorted out the road type/class, have a try with the
+        // "highway" tag. If that doesn't work, we end up with default values
+        // These are pretty vague classifications
+        if (!attrs.TYP && !attrs.RTN_ROI)
+        {
+          switch (tags.highway)
+          {
+          case 'motorway':
+          case 'motorway_link':
+            attrs.RTN_ROI = '2'; // National Motorway
+            attrs.TYP = '41'; // motorway
+            break;
 
-        case 'residential':
-        case 'unclassified':
-        case 'service':
-          attrs.RTN_ROI = '5'; // Local
-          attrs.TYP = '33'; // street
-          break;
+          case 'trunk':
+          case 'trunk_link':
+            attrs.RTN_ROI = '3'; // National/Primary
+            attrs.TYP = '47'; // Limited Access Motorway
+            break;
 
-        case 'yes':
-        case 'road':
-          attrs.RTN_ROI = '-999999'; // No Information
-          attrs.TYP = '-999999'; // No Information
-        } // End tags.highway switch}
-      } // End if TYP/RTN_ROISL
-      break;
+          case 'primary':
+          case 'primary_link':
+            attrs.RTN_ROI = '4'; // Secondary
+            attrs.TYP = '1'; // road
+            break;
 
-    case 'AH055': // Fortified Building
-      if (attrs.FZR && !(attrs.FFN)) attrs.FFN = '835'; // Fortification type -> Defence Activities
-      break;
+          case 'secondary':
+          case 'secondary_link':
+          case 'tertiary':
+          case 'tertiary_link':
+            attrs.RTN_ROI = '5'; // Local
+            attrs.TYP = '1'; // road
+            break;
 
-    case 'AL020': // AL020 Built-Up-Areas have ZI005_FNA1 instead of ZI005_FNA. Why???
-      if (attrs.ZI005_FNA)
-      {
-        attrs.ZI005_FNA1 = attrs.ZI005_FNA;
-        delete attrs.ZI005_FNA;
-      }
-      break;
+          case 'residential':
+          case 'unclassified':
+          case 'service':
+            attrs.RTN_ROI = '5'; // Local
+            attrs.TYP = '33'; // street
+            break;
 
-    case 'AP010': // Clean up Cart Track attributes
-      if (attrs.TRS && (['3','4','6','11','21','22','999'].indexOf(attrs.TRS) == -1))
-      {
-        var othVal = '(TRS:' + attrs.TRS + ')';
-        attrs.OTH = translate.appendValue(attrs.OTH,othVal,' ');
-        attrs.TRS = '999';
-      }
-      break;
+          case 'yes':
+          case 'road':
+            attrs.RTN_ROI = '-999999'; // No Information
+            attrs.TYP = '-999999'; // No Information
+          } // End tags.highway switch}
+        } // End if TYP/RTN_ROISL
+        break;
 
-    case 'ZI040': // Spatial Metadata Entity Collection
-      //Map alternate source date tags to ZI001_SSD in order of precedence
-      //default is 'source:datetime'
-      if (!attrs.ZI001_SSD)
-        attrs.ZI001_SSD = tags['source:imagery:datetime']
-                        || tags['source:date']
-                        || tags['source:geometry:date']
-                        || '';
+      case 'BH140': // River
+        if (!attrs.WCC) attrs.WCC = '7'; // Normal Channel
+        if (!attrs.TID) attrs.TID = '1000'; // Not tidal
+        break;
 
-      //Map alternate source tags to ZI001_SSN in order of precedence
-      //default is 'source'
-      if (!attrs.ZI001_SSN)
-        attrs.ZI001_SSN = tags['source:imagery']
-                        || tags['source:description']
-                        || '';
-      break;
+      case 'ZI040': // Spatial Metadata Entity Collection
+        //Map alternate source date tags to ZI001_SSD in order of precedence
+        //default is 'source:datetime'
+        if (!attrs.ZI001_SSD)
+          attrs.ZI001_SSD = tags['source:imagery:datetime']
+                          || tags['source:date']
+                          || tags['source:geometry:date']
+                          || '';
 
-    case 'AH025': // Engineered Earthwork
-      if (!attrs.EET) attrs.EET = '3';
-      break;
-
-    case 'AK030': // Amusement Parks
-      if (!attrs.FFN) attrs.FFN = '921'; // Recreation
-      break;
+        //Map alternate source tags to ZI001_SSN in order of precedence
+        //default is 'source'
+        if (!attrs.ZI001_SSN)
+          attrs.ZI001_SSN = tags['source:imagery']
+                          || tags['source:description']
+                          || '';
+        break;
 
     } // End switch F_CODE
 
@@ -2412,6 +2428,7 @@ tds40 = {
     case 'mangrove':
       attrs.F_CODE = 'ED020'; // Swamp
       attrs.VSP = '19'; // Mangrove
+      delete notUsedTags.wetland;
       break;
     } // End Wetlands
 

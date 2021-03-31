@@ -1087,6 +1087,9 @@ ggdm30 = {
       break;
 
     case 'BH140': // River
+      if (tags['channel:type'] == 'normal') delete tags['channel:type']; // Default value
+      if (tags.tidal == 'no') delete tags.tidal; // Default value
+
       // Different translation for area rivers
       if (geometryType == 'Area')
       {
@@ -1120,6 +1123,14 @@ ggdm30 = {
       {
         delete tags.landuse; // Default EC015 translation
         tags.natural = 'tree_row';
+      }
+      break;
+
+    case 'ED020': // Swamp
+      if (tags['vegetation:type'] == 'mangrove')
+      {
+        tags.wetland = 'mangrove';
+        delete tags['vegetation:type'];
       }
       break;
 
@@ -1727,7 +1738,7 @@ ggdm30 = {
     }
 
     // Sort out tidal features
-    if (tags.tidal && (tags.water || tags.waterway))
+    if (tags.tidal && (tags.water || tags.waterway || tags.wetland))
     {
       if (tags.tidal == 'yes') attrs.TID = '1001'; // Tidal
       if (tags.tidal == 'no') attrs.TID = '1000'; // non-Tidal
@@ -1741,7 +1752,7 @@ ggdm30 = {
     {
       if (tags.tidal == 'yes')
       {
-        attrs.F_CODE = 'BA040';
+        attrs.F_CODE = 'BA040'; // Tidal Water
       }
       else if (geometryType =='Line')
       {
@@ -2223,14 +2234,12 @@ ggdm30 = {
         delete tags.resource;
       }
     }
-
   }, // End applyToOgrPreProcessing
 
   // #####################################################################################################
 
   applyToOgrPostProcessing : function (tags, attrs, geometryType, notUsedTags)
   {
-
     // Sort out :2, :3 attributes
     for (var i in attrs)
     {
@@ -2426,34 +2435,9 @@ ggdm30 = {
       attrs.LOC = '44'; // On Surface
     }
 
-    // Clean up Cart Track attributes
-    if (attrs.F_CODE == 'AP010')
-    {
-      if (attrs.TRS && (['3','4','6','11','21','22','999'].indexOf(attrs.TRS) == -1))
-      {
-        var othVal = '(TRS:' + attrs.TRS + ')';
-        attrs.OTH = translate.appendValue(attrs.OTH,othVal,' ');
-        attrs.TRS = '999';
-
-      }
-    }
-
     // Fix HGT and LMC to keep GAIT happy
     // If things have a height greater than 46m, tags them as being a "Navigation Landmark"
     if (attrs.HGT > 46 && !(attrs.LMC)) attrs.LMC = '1001';
-
-    // The ZI001_SDV (source date time) field can only be 20 characters long. When we conflate features,
-    // we concatenate the tag values for this field
-    // We are getting guidance from the customer on what value they would like in this field:
-    // * The earliest date/time,
-    // * The first on in the list
-    // * etc
-    //
-    // Until we get an answer, we are going to take the first value in the list
-    if (attrs.ZI001_SDV)
-    {
-      attrs.ZI001_SDV = translate.chopDateTime(attrs.ZI001_SDV);
-    }
 
     // Fix the ZI020_GE4X Values
     // NOTE: This is the opposite to what is done in the toOSM post processing
@@ -2479,6 +2463,19 @@ ggdm30 = {
         }
       }
     } // End for GE4 loop
+
+    // The ZI001_SDV (source date time) field can only be 20 characters long. When we conflate features,
+    // we concatenate the tag values for this field
+    // We are getting guidance from the customer on what value they would like in this field:
+    // * The earliest date/time,
+    // * The first on in the list
+    // * etc
+    //
+    // Until we get an answer, we are going to take the first value in the list
+    if (attrs.ZI001_SDV)
+    {
+      attrs.ZI001_SDV = translate.chopDateTime(attrs.ZI001_SDV);
+    }
 
     // ZI039 Entity Collection Metadata is the only feature that has a ZI001_SDP attribute
     if (attrs.F_CODE == 'ZI039')
@@ -2517,23 +2514,45 @@ ggdm30 = {
     case 'mangrove':
       attrs.F_CODE = 'ED020'; // Swamp
       attrs.VSP = '19'; // Mangrove
+      delete notUsedTags.wetland;
       break;
     } // End Wetlands
 
+    // Additional rules for particular FCODE's
+    switch (attrs.F_CODE)
+    {
+      case 'AP010': // Clean up Cart Track attributes
+        if (attrs.TRS && (['3','4','6','11','21','22','999'].indexOf(attrs.TRS) == -1))
+        {
+          var othVal = '(TRS:' + attrs.TRS + ')';
+          attrs.OTH = translate.appendValue(attrs.OTH,othVal,' ');
+          attrs.TRS = '999';
+        }
+        break;
+
+      // Undergrowth Density in Thicket & Swamp
+      case 'EB020':
+      case 'ED020':
+        if (notUsedTags['undergrowth:density'] && !(attrs.DMBL || attrs.DMBU))
+        {
+          attrs.DMBU = notUsedTags['undergrowth:density'];
+          attrs.DMBL = notUsedTags['undergrowth:density'];
+          delete notUsedTags['undergrowth:density'];
+        }
+        break;
+
     // BA010 - Land Water Boundary has a different code for 'glacier' then the SLT list has
     // This gets swapped to "SHO" during export
-    if (attrs.F_CODE == 'BA010' && attrs.SLT == '17') attrs.SLT = '8';
+      case 'BA010':
+        if (attrs.SLT == '17') attrs.SLT = '8';
+        break;
 
-    // Undergrowth Density in Thicket & Swamp
-    if (attrs.F_CODE == 'EB020' || attrs.F_CODE =='ED020')
-    {
-      if (notUsedTags['undergrowth:density'] && !(attrs.DMBL || attrs.DMBU))
-      {
-        attrs.DMBU = notUsedTags['undergrowth:density'];
-        attrs.DMBL = notUsedTags['undergrowth:density'];
-        delete notUsedTags['undergrowth:density'];
-      }
-    }
+      case 'BH140': // River
+        if (!attrs.WCC) attrs.WCC = '7'; // Normal Channel
+        if (!attrs.TID) attrs.TID = '1000'; // Not tidal
+        break;
+    } // End switch F_CODE
+
 
   }, // End applyToOgrPostProcessing
 

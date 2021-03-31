@@ -57,21 +57,29 @@ mgcp = {
   // Quick lookup list for valid FCODES
   // mgcp.fcodeList = translate.makeFcodeList(mgcp.rawSchema);
 
+  // Add OSMTAGS1-4 attributes
   // Build the MGCP fcode/attrs lookup table
-  mgcp.attrLookup = translate.makeAttrLookup(mgcp.rawSchema);
+  mgcp.attrLookup = translate.makeAttrLookup(translate.addTagFeatures(mgcp.rawSchema));
 
   // Now add an o2s[A,L,P] feature to the mgcp.rawSchema and an attribute to hold OSM tags
   if (config.getOgrOutputFormat() == 'shp')
   {
+    // Add OSMTAGS1-4 attributes
+    // Build the MGCP fcode/attrs lookup table
+    mgcp.attrLookup = translate.makeAttrLookup(translate.addTagFeatures(mgcp.rawSchema));
+
     // Add tag1, tag2, tag3 and tag4
-    // As well as the OSMTAGS1-4 attributes
-    mgcp.rawSchema = translate.addO2sFeatures(translate.addTagFeatures(mgcp.rawSchema));
+    mgcp.rawSchema = translate.addO2sFeatures(mgcp.rawSchema);
     ;
   }
   else
   {
+    // Add a single OSMTAGS attributes
+    // Build the MGCP fcode/attrs lookup table
+    mgcp.attrLookup = translate.makeAttrLookup(translate.addSingleTagFeature(mgcp.rawSchema));
+
     // Just add tag1 && OSMTAGS
-    mgcp.rawSchema = translate.addSingleO2sFeature(translate.addSingleTagFeature(mgcp.rawSchema));
+    mgcp.rawSchema = translate.addSingleO2sFeature(mgcp.rawSchema);
   }
 
   // Add empty Review layers
@@ -102,9 +110,11 @@ mgcp = {
           {
             notUsed[transMap[val][1]] = transMap[val][2];
             hoot.logDebug('Validate: Re-Adding ' + transMap[val][1] + ' = ' + transMap[val][2] + ' to notUsed');
+            print('Validate: Re-Adding ' + transMap[val][1] + ' = ' + transMap[val][2] + ' to notUsed');
           }
 
           hoot.logDebug('Validate: Dropping ' + val + ' from ' + attrs.FCODE);
+          print('Validate: Dropping ' + val + ' from ' + attrs.FCODE);
           delete attrs[val];
 
           // Since we deleted the attribute, Skip the text check
@@ -126,6 +136,7 @@ mgcp = {
             else
             {
               hoot.logDebug('Validate: Attribute ' + val + ' is ' + attrs[val].length + ' characters long. Truncating to ' + mgcp.rules.txtLength[val] + ' characters.');
+              print('Validate: Attribute ' + val + ' is ' + attrs[val].length + ' characters long. Truncating to ' + mgcp.rules.txtLength[val] + ' characters.');
               // Still too long. Chop to the maximum length
               attrs[val] = tStr[0].substring(0,mgcp.rules.txtLength[val]);
             }
@@ -136,6 +147,7 @@ mgcp = {
     else
     {
       hoot.logDebug('Validate: No attrList for ' + attrs.FCODE + ' ' + geometryType);
+      print('Validate: No attrList for ' + attrs.FCODE + ' ' + geometryType);
     }
 
     // No quick and easy way to do this unless we build yet another lookup table
@@ -172,6 +184,7 @@ mgcp = {
       if (enumValueList.indexOf(attrValue) == -1)
       {
         hoot.logDebug('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName);
+        print('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName);
 
         // Do we have an "Other" value?
         if (enumValueList.indexOf('999') == -1)
@@ -180,6 +193,7 @@ mgcp = {
           attrs[enumName] = feature.columns[i].defValue;
 
           hoot.logDebug('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName + ' Setting ' + enumName + ' to its default value (' + feature.columns[i].defValue + ')');
+          print('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName + ' Setting ' + enumName + ' to its default value (' + feature.columns[i].defValue + ')');
         }
         else
         {
@@ -187,6 +201,7 @@ mgcp = {
           attrs[enumName] = '999';
 
           hoot.logDebug('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName + ' Setting ' + enumName + ' to Other (999)');
+          print('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName + ' Setting ' + enumName + ' to Other (999)');
         }
       }
     } // End Validate Enumerations
@@ -267,7 +282,7 @@ mgcp = {
 
       default:
         // Debug
-        hoot.logWarn('ManyFeatures: Should get to here');
+        hoot.logWarn('ManyFeatures: Should not get to here');
     } // end switch
 
     // Now make new features based on what tags are left
@@ -821,214 +836,217 @@ mgcp = {
     // Some FCODE specific rules
     switch (attrs.F_CODE)
     {
-      case undefined: // Break early if no value
-        break;
+    case undefined: // Break early if no value
+      break;
 
-      case 'AA050': // Well
-        if (tags.product)
+    case 'AA050': // Well
+      if (tags.product)
+      {
+        tags.substance = tags.product;
+        delete tags.product;
+
+        if (tags.substance == 'oil' || tags.substance == 'gas') tags.man_made = 'petroleum_well';
+        if (tags.substance == 'water' )
         {
-          tags.substance = tags.product;
-          delete tags.product;
-
-          if (tags.substance == 'oil' || tags.substance == 'gas') tags.man_made = 'petroleum_well';
-          if (tags.substance == 'water' )
-          {
-            tags.man_made = 'water_well';
-            delete tags.substance;
-          }
+          tags.man_made = 'water_well';
+          delete tags.substance;
         }
-        break;
+      }
+      break;
 
-      case 'AA052': // Hydrocarbons Field
-        tags.landuse = 'industrial';
-        break;
+    case 'AA052': // Hydrocarbons Field
+      tags.landuse = 'industrial';
+      break;
 
-      case 'AD010': // Electric Power Plant
-        if (!tags['plant:output:electricity']) tags['plant:output:electricity'] = 'yes';
-        if (!tags.landuse) tags.landuse = 'industrial';
+    case 'AD010': // Electric Power Plant
+      if (!tags['plant:output:electricity']) tags['plant:output:electricity'] = 'yes';
+      if (!tags.landuse) tags.landuse = 'industrial';
 
-        switch (attrs.PPC)
-        {
-          case undefined:
-            break;
-
-          case '2':
-            tags['plant:method'] = 'fission';
-            break;
-
-          case '5':
-            tags['plant:method'] = 'wind_turbine';
-            break;
-        }
-        break;
-
-
-      case 'AF030': // Cooling Tower
-        if (!tags['tower:type']) tags['tower:type'] = 'cooling';
-        break;
-
-      case 'AH050': // Fortification
-        // Castles are not Bunkers but they get stored in the same layer
-        if (tags.military == 'bunker' && tags.historic == 'castle')
-        {
-          delete tags.military;
-        }
-        else if (!tags.building)
-        {
-          tags.building = 'bunker';
-        }
-        break;
-
-      case 'AK040': // Athletic Field, Sports Ground
-      case 'BA050': // Beach
-      case 'DA010': // Soil Surface Region
-      case 'DB070': // Cut
-        if (tags.material && !tags.surface)
-        {
-          tags.surface = tags.material;
-          delete tags.material;
-        }
-        break;
-
-      case 'AL015': // Building
-        if (tags.surface == 'unknown') delete tags.surface;
-        break;
-
-      case 'AL020': // AL020 (Built-up Area) should become a Place. NOTE: This is a bit vague...
-        tags.place = 'yes'; // Catch All
-
-        switch (tags['place:importance'])
-        {
-          case undefined: // Break early if no value
-            break;
-
-          case 'first':
-            tags.place = 'city';
-            tags.capital = 'yes'
-            break;
-
-          case 'second':
-            tags.place = 'city';
-            break;
-
-          case 'third':
-          case 'fourth':
-            tags.place = 'town';
-            break;
-
-          case 'fifth':
-            tags.place = 'village';
-            break;
-
-          case 'sixth':
-            tags.place = 'hamlet';
-            break;
-        } // End switch
-
-        switch (tags.use) // Fixup the landuse tags
-        {
-          case undefined: // Break early if no value
-            break;
-
-          case 'industrial':
-            tags.landuse = 'industrial';
-            delete tags.use;
-            break;
-
-          case 'commercial':
-            tags.landuse = 'commercial';
-            delete tags.use;
-            break;
-
-          case 'residential':
-            tags.landuse = 'residential';
-            delete tags.use;
-            break;
-        } // End switch
-
-        break;
-
-      case 'AN010':
-        if (attrs.RGC == '6' && attrs.RRC == '0') tags.railway = 'monorail';
-        break;
-
-      // case 'AP010': // Track
-      // case 'AP050': // Trail
-      //     tags.seasonal = 'fair';
-      //     break;
-
-      case 'AP030': // Trail
-          if (tags.highway == 'yes') tags.highway = 'road';
+      switch (attrs.PPC)
+      {
+        case undefined:
           break;
 
-      case 'AQ075': // Ice Route
-        if (!tags.highway) tags.highway = 'road';
-        break;
-
-      case 'AQ125': // Transportation Station
-      //   if (tags.amenity == 'ferry_terminal')
-      //   {
-      //     tags['transport:type'] = 'maritime';
-      //     delete tags.bus;
-      //   }
-        if (!tags.amenity && tags['transport:type'] == 'bus')
-        {
-          tags.amenity = 'bus_station';
-          delete tags['transport:type'];
-        }
-        break;
-
-      // BA040 - Tidal Water
-      case 'BA040':
-        tags.natural = 'water';
-        break;
-
-      // BA040 - Tidal Water
-      case 'BD180':
-        if (!tags['seamark:type']) tags['seamark:type'] = 'wreck';
-        break;
-
-      // case 'BH070': // Ford
-      //   // Fords are also supposed to be roads
-      //   if (geometryType == 'Line' && !tags.highway) tags.highway = 'road';
-      //   break;
-
-      case 'BH140': // River
-        // Different translation for area rivers
-        if (geometryType == 'Area')
-        {
-          if (!tags.natural) tags.natural = 'water';
-          if (!tags.water) tags.water = 'river';
-          delete tags.waterway;
+        case '2':
+          tags['plant:method'] = 'fission';
           break;
-        }
-        if (geometryType == 'Line')
-        {
-          if (tags.natural == 'water') delete tags.natural;
-          if (tags.water == 'river') delete tags.water;
-        }
+
+        case '5':
+          tags['plant:method'] = 'wind_turbine';
+          break;
+      }
+      break;
+
+
+    case 'AF030': // Cooling Tower
+      if (!tags['tower:type']) tags['tower:type'] = 'cooling';
+      break;
+
+    case 'AH050': // Fortification
+      // Castles are not Bunkers but they get stored in the same layer
+      if (tags.military == 'bunker' && tags.historic == 'castle')
+      {
+        delete tags.military;
+      }
+      else if (!tags.building)
+      {
+        tags.building = 'bunker';
+      }
+      break;
+
+    case 'AK040': // Athletic Field, Sports Ground
+    case 'BA050': // Beach
+    case 'DA010': // Soil Surface Region
+    case 'DB070': // Cut
+      if (tags.material && !tags.surface)
+      {
+        tags.surface = tags.material;
+        delete tags.material;
+      }
+      break;
+
+    case 'AL015': // Building
+      if (tags.surface == 'unknown') delete tags.surface;
+      break;
+
+    case 'AL020': // AL020 (Built-up Area) should become a Place. NOTE: This is a bit vague...
+      tags.place = 'yes'; // Catch All
+
+      switch (tags['place:importance'])
+      {
+        case undefined: // Break early if no value
+          break;
+
+        case 'first':
+          tags.place = 'city';
+          tags.capital = 'yes'
+          break;
+
+        case 'second':
+          tags.place = 'city';
+          break;
+
+        case 'third':
+        case 'fourth':
+          tags.place = 'town';
+          break;
+
+        case 'fifth':
+          tags.place = 'village';
+          break;
+
+        case 'sixth':
+          tags.place = 'hamlet';
+          break;
+      } // End switch
+
+      switch (tags.use) // Fixup the landuse tags
+      {
+        case undefined: // Break early if no value
+          break;
+
+        case 'industrial':
+          tags.landuse = 'industrial';
+          delete tags.use;
+          break;
+
+        case 'commercial':
+          tags.landuse = 'commercial';
+          delete tags.use;
+          break;
+
+        case 'residential':
+          tags.landuse = 'residential';
+          delete tags.use;
+          break;
+      } // End switch
+
+      break;
+
+    case 'AN010':
+      if (attrs.RGC == '6' && attrs.RRC == '0') tags.railway = 'monorail';
+      break;
+
+    // case 'AP010': // Track
+    // case 'AP050': // Trail
+    //     tags.seasonal = 'fair';
+    //     break;
+
+    case 'AP030': // Trail
+        if (tags.highway == 'yes') tags.highway = 'road';
         break;
 
-      case 'ED030': // Mangrove Swamp
-        if (! tags.tidal) tags.tidal = 'yes';
-        break;
+    case 'AQ075': // Ice Route
+      if (!tags.highway) tags.highway = 'road';
+      break;
 
-      // EC030 - Wood
-      case 'EC030':
-        if (geometryType == 'Line')
-        {
-          delete tags.landuse; // Default EC030 translation
-          tags.natural = 'tree_row';
-        }
-        break;
+    case 'AQ125': // Transportation Station
+    //   if (tags.amenity == 'ferry_terminal')
+    //   {
+    //     tags['transport:type'] = 'maritime';
+    //     delete tags.bus;
+    //   }
+      if (!tags.amenity && tags['transport:type'] == 'bus')
+      {
+        tags.amenity = 'bus_station';
+        delete tags['transport:type'];
+      }
+      break;
 
-      case 'FA015': // Firing Range
-        if (! tags.landuse) tags.landuse = 'military';
-        break;
+    // BA040 - Tidal Water
+    case 'BA040':
+      tags.natural = 'water';
+      break;
 
-      case 'GB485': // Approach Lighting System
-        tags.navigationaid = 'als';
+    // BA040 - Tidal Water
+    case 'BD180':
+      if (!tags['seamark:type']) tags['seamark:type'] = 'wreck';
+      break;
+
+    // case 'BH070': // Ford
+    //   // Fords are also supposed to be roads
+    //   if (geometryType == 'Line' && !tags.highway) tags.highway = 'road';
+    //   break;
+
+    case 'BH140': // River
+      if (tags['channel:type'] == 'normal') delete tags['channel:type']; // Default value
+      if (tags.tidal == 'no') delete tags.tidal; // Default value
+
+      // Different translation for area rivers
+      if (geometryType == 'Area')
+      {
+        if (!tags.natural) tags.natural = 'water';
+        if (!tags.water) tags.water = 'river';
+        delete tags.waterway;
         break;
+      }
+      if (geometryType == 'Line')
+      {
+        if (tags.natural == 'water') delete tags.natural;
+        if (tags.water == 'river') delete tags.water;
+      }
+      break;
+
+    case 'ED030': // Mangrove Swamp
+      if (!tags.tidal) tags.tidal = 'yes';
+      break;
+
+    // EC030 - Wood
+    case 'EC030':
+      if (geometryType == 'Line')
+      {
+        delete tags.landuse; // Default EC030 translation
+        tags.natural = 'tree_row';
+      }
+      break;
+
+    case 'FA015': // Firing Range
+      if (! tags.landuse) tags.landuse = 'military';
+      break;
+
+    case 'GB485': // Approach Lighting System
+      tags.navigationaid = 'als';
+      break;
 
     } // End switch FCODE
 
@@ -1871,38 +1889,6 @@ mgcp = {
     // Mapping Senior Citizens home to Accomodation. Not great
     if (tags.amenity == 'social_facility' && tags['social_facility:for'] == 'senior') attrs.FFN = 550;
 
-    // These FCODES have "No prescribed attributes" in TRDv40
-    // Therefore:
-    // - clean up the the attrs
-    // - JSON the tags and stick them in a text field
-    var noAttrList = [ 'AJ010','AJ030','AK170','AL019','AL070','AL099','AN076',
-               'BD100','BD180','BH165','BI010','BJ020','BJ031','BJ110',
-               'DB061','DB071','DB100',
-               'EA020','EA055','EC010','EC040','EC060',
-               'FA090',
-               'GB050',
-               'ZD020',
-             ];
-
-    if (noAttrList.indexOf(attrs.F_CODE) !== -1)
-    {
-      // The metadata tags to skip
-      var skipTags = ['F_CODE','ACC','TXT','UID','SDV','SDP','CCN','SRT'];
-      var tmpAttrs = {};
-
-      for (var i in attrs)
-      {
-        // Skip the metadata tags, save the others, then delete them
-        // from the main list of attrs
-        if (skipTags.indexOf(i) == -1)
-        {
-          tmpAttrs[i] = attrs[i];
-          delete attrs[i];
-        }
-      }
-      attrs.TEXT = JSON.stringify(tmpAttrs);
-    }
-
     // Add Weather Restrictions to transportation features
     if (['AP010','AP030','AP050'].indexOf(attrs.FCODE > -1) && !attrs.WTC )
     {
@@ -2063,9 +2049,14 @@ mgcp = {
         delete attrs.TID;
         break;
 
-      // BA040 - Tidal Water
-      case 'BD180':
+      case 'BD180': // BA040 - Tidal Water
         if (notUsedTags['seamark:type'] == 'wreck') delete notUsedTags['seamark:type'];
+        break;
+
+      case 'BH140': // River
+        if (!attrs.WCC) attrs.WCC = '7'; // Normal Channel
+        if (!attrs.TID) attrs.TID = '1000'; // Not tidal
+        if (!attrs.WST) attrs.WST = '998'; // Vanishing point - Not Applicable
         break;
 
       case 'DB090': // Embankment
