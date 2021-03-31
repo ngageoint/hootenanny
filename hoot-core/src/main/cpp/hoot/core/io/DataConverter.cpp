@@ -45,6 +45,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/schema/SchemaUtils.h>
 #include <hoot/core/visitors/ElementVisitor.h>
 #include <hoot/core/visitors/ProjectToGeographicVisitor.h>
 #include <hoot/core/visitors/RemoveDuplicateWayNodesVisitor.h>
@@ -172,6 +173,7 @@ void ogrWriterThread::run()
 int DataConverter::logWarnCount = 0;
 
 DataConverter::DataConverter() :
+_translateMultithreaded(false),
 _ogrFeatureReadLimit(0),
 _printLengthMax(ConfigOptions().getProgressVarPrintLengthMax())
 {
@@ -179,17 +181,11 @@ _printLengthMax(ConfigOptions().getProgressVarPrintLengthMax())
 
 void DataConverter::setTranslation(const QString& translation)
 {
-  QFileInfo fileInfo(translation);
-  if (!fileInfo.exists())
+  if (!translation.isEmpty())
   {
-    throw IllegalArgumentException("Translation file does not exist: " + translation);
+    SchemaUtils::validateTranslationUrl(translation);
+    _translation = translation;
   }
-  else if (!translation.endsWith(".js") && !translation.endsWith(".py"))
-  {
-    throw IllegalArgumentException("Invalid translation file format: " + translation);
-  }
-
-  _translation = translation;
 }
 
 void DataConverter::setConfiguration(const Settings& conf)
@@ -206,7 +202,7 @@ void DataConverter::setConfiguration(const Settings& conf)
     setTranslation(config.getSchemaTranslationScript());
   }
   _translationDirection = config.getSchemaTranslationDirection().trimmed().toLower();
-  LOG_VARD(_convertOps);
+  _translateMultithreaded = config.getConvertTranslateMultithreaded();
 }
 
 void DataConverter::convert(const QString& input, const QString& output)
@@ -227,17 +223,12 @@ void DataConverter::convert(const QStringList& inputs, const QString& output)
     "Converting ..." + inputs.join(", ").right(_printLengthMax) + " to ..." +
     output.right(_printLengthMax) + "...");
 
-  // Due to the custom multithreading available for OGR reading, the fact that both OGR reading and
-  // writing do their translations inline (don't use SchemaTranslationOp or
-  // SchemaTranslationVisitor), and OGR reading support for layer names, conversions involving OGR
-  // data must follow a separate logic path from non-OGR data. It would be nice at some point to be
-  // able to do everything generically from within the _convert method.
-
-  // We require that a translation be present when converting to OGR, the translation direction be
-  // to OGR or unspecified, and that only one input is specified.
-  if (IoUtils::isSupportedOgrFormat(output, true) &&
-      !_translation.isEmpty() &&
-      (_translationDirection.isEmpty() || _translationDirection == "toogr"))
+  // There is a custom code path for converting to OGR formats where the schema translation runs
+  // in a separate thread. The code path is memory bound and configurable. Also if both input and
+  // output formats are OGR formats, a memory bound conversion must also be done.
+  if ((IoUtils::isSupportedOgrFormat(output, true) && _translateMultithreaded) ||
+      (IoUtils::areSupportedOgrFormats(inputs, true) &&
+       IoUtils::isSupportedOgrFormat(output, true)))
   {
     _convertToOgr(inputs, output);
   }
@@ -249,15 +240,11 @@ void DataConverter::convert(const QStringList& inputs, const QString& output)
   {
     _convertFromOgr(inputs, output);
   }
-  // If this wasn't a to/from OGR conversion, or no translation was specified, or a translation
-  // direction different than what was expected for the input/output formats was specified, just
-  // call the generic convert routine. If no translation direction was specified, we'll try to guess
-  // it and let the user know that we did.
-  //
-  // Note that it still is possible an OGR format can go in here, if you didn't specify a
-  // translation. That seems a little odd and maybe worth rethinking. Most the time you are going to
-  // be specifying a translation when dealing with OGR formats, but if you're doing an additional
-  // conversion on a data file after an initial one you might not specify a translation.
+  // If this wasn't a to/from OGR conversion, multi-threaded translation was disable, no translation
+  // was specified, or a translation direction different than what was expected for the input/output
+  // formats was specified, we'll call the generic convert routine. If no translation direction was
+  // specified, we'll try to guess it and let the user know that we did. Note that it still is
+  // possible an OGR format can go in here, if you didn't specify a translation.
   else
   {
     _convert(inputs, output);
@@ -388,7 +375,6 @@ void DataConverter::_transToOgrMT(const QStringList& inputs, const QString& outp
     LOG_DEBUG("Reading: " << input);
 
     // Read all elements from an input
-    // TODO: We should figure out a way to make this not-memory bound in the future
     _fillElementCache(input, pElementCache, elementQ);
   }
 
@@ -427,7 +413,7 @@ void DataConverter::_transToOgrMT(const QStringList& inputs, const QString& outp
 
 void DataConverter::_convertToOgr(const QStringList& inputs, const QString& output)
 {
-  LOG_DEBUG("_convertToOgr (formerly known as osm2ogr)");
+  LOG_DEBUG("_convertToOgr");
 
   // This code path has always assumed translation to OGR and never reads the direction, but let's
   // warn callers that the opposite direction they specified won't be used.
@@ -438,9 +424,9 @@ void DataConverter::_convertToOgr(const QStringList& inputs, const QString& outp
       "OGR output...");
   }
 
-  // Set a config option so the translation script knows what the output format is
-  // For this, output format == file extension
-  // We are going to grab everything after the last "." in the output file name and use it as the file extension
+  // Set a config option so the translation script knows what the output format is. For this,
+  // output format == file extension. We are going to grab everything after the last "." in the
+  // output file name and use it as the file extension.
   QString outputFormat = "";
   if (output.lastIndexOf(".") > -1)
   {
@@ -450,21 +436,16 @@ void DataConverter::_convertToOgr(const QStringList& inputs, const QString& outp
 
   LOG_DEBUG(conf().getString(ConfigOptions::getOgrOutputFormatKey()));
 
-
   // Translation for going to OGR is always required and happens in the writer itself. It is not to
   // be done with convert ops, so let's ignore any translation ops that were specified.
   _convertOps.removeAll(SchemaTranslationOp::className());
   _convertOps.removeAll(SchemaTranslationVisitor::className());
   LOG_VARD(_convertOps);
 
-  //check to see if all of the i/o can be streamed
+  // check to see if all of the i/o can be streamed
   LOG_VARD(OsmMapReaderFactory::hasElementInputStream(inputs));
-
   if (OsmMapReaderFactory::hasElementInputStream(inputs) &&
       // multithreaded code doesn't support conversion ops. could it?
-      // TODO: if we have a single convert op that is a SchemaTranslationOp or
-      // SchemaTranslationVisitor should we pop it off and then run multithreaded with that
-      // translation?...seems like we should
       _convertOps.empty() &&
       // multithreaded code doesn't support a bounds...not sure if it could be made to at some point
       !ConfigUtils::boundsOptionEnabled())
@@ -659,7 +640,7 @@ void DataConverter::_setFromOgrOptions()
 
 void DataConverter::_convertFromOgr(const QStringList& inputs, const QString& output)
 {
-  LOG_DEBUG("_convertFromOgr (formerly known as ogr2osm)");
+  LOG_DEBUG("_convertFromOgr");
 
   QElapsedTimer timer;
   timer.start();
@@ -692,7 +673,6 @@ void DataConverter::_convertFromOgr(const QStringList& inputs, const QString& ou
   _setFromOgrOptions();
   // Inclined to do this: _convertOps.removeDuplicates();, but there could be some workflows where
   // the same op needs to be called more than once.
-  //
   LOG_VARD(_convertOps);
 
   // The number of task steps here must be updated as you add/remove job steps in the logic.
@@ -769,40 +749,33 @@ void DataConverter::_convertFromOgr(const QStringList& inputs, const QString& ou
   currentTask++;
 }
 
-void DataConverter::_handleGeneralConvertTranslationOpts(const QString& output)
+void DataConverter::_setToOgrOptions(const QString& output)
 {
-  //For non OGR conversions, the translation must be passed in as an op.
-  if (!_translation.trimmed().isEmpty())
+  // This code path has always assumed translation to OGR and never reads the direction, but let's
+  // warn callers that the opposite direction they specified won't be used.
+  if (_translationDirection == "toosm")
   {
-    //a previous check was done to make sure both a translation and export cols weren't specified
-    assert(!_shapeFileColumnsSpecified());
-
-    if (!_convertOps.contains(SchemaTranslationOp::className()) &&
-        !_convertOps.contains(SchemaTranslationVisitor::className()))
-    {
-      // If a translation script was specified but not the translation op, we'll add auto add the op
-      // as the first conversion operation. If the caller wants the translation done after some
-      // other op, then they need to explicitly add it to the op list. Always adding the visitor
-      // instead of the op, bc its streamable. However, if any other ops in the group aren't
-      // streamable it won't matter anyway.
-      _convertOps.prepend(SchemaTranslationVisitor::className());
-    }
-    else if (_convertOps.contains(SchemaTranslationOp::className()))
-    {
-      // replacing SchemaTranslationOp with SchemaTranslationVisitor for the reason mentioned above
-      _convertOps.replaceInStrings(
-        SchemaTranslationOp::className(), SchemaTranslationVisitor::className());
-    }
-    LOG_VARD(_convertOps);
-
-    // If the translation direction wasn't specified, try to guess it.
-    if (_translationDirection.isEmpty())
-    {
-      _translationDirection = _outputFormatToTranslationDirection(output);
-      // This gets read by the TranslationVisitor and cannot be empty.
-      conf().set(ConfigOptions::getSchemaTranslationDirectionKey(), _translationDirection);
-    }
+    LOG_INFO(
+      "Ignoring specified schema.translation.direction=toosm and using toogr to write to " <<
+      "OGR output...");
   }
+
+  // Set a config option so the translation script knows what the output format is. For this,
+  // output format == file extension. We are going to grab everything after the last "." in the
+  // output file name and use it as the file extension.
+  QString outputFormat = "";
+  if (output.lastIndexOf(".") > -1)
+  {
+    outputFormat = output.right(output.size() - output.lastIndexOf(".") - 1).toLower();
+  }
+  conf().set(ConfigOptions::getOgrOutputFormatKey(), outputFormat);
+
+  LOG_DEBUG(conf().getString(ConfigOptions::getOgrOutputFormatKey()));
+
+  // Translation for going to OGR is always required and happens in the writer itself. It is not to
+  // be done with convert ops, so let's ignore any translation ops that were specified.
+  _convertOps.removeAll(SchemaTranslationOp::className());
+  _convertOps.removeAll(SchemaTranslationVisitor::className());
 }
 
 QString DataConverter::_outputFormatToTranslationDirection(const QString& output) const
@@ -838,9 +811,32 @@ void DataConverter::_convert(const QStringList& inputs, const QString& output)
     _setFromOgrOptions();
   }
 
-  _handleGeneralConvertTranslationOpts(output);
+  // If the translation direction wasn't specified, try to guess it.
+  if (!_translation.trimmed().isEmpty() && _translationDirection.isEmpty())
+  {
+    _translationDirection = _outputFormatToTranslationDirection(output);
+    // This gets read by the TranslationVisitor and cannot be empty.
+    conf().set(ConfigOptions::getSchemaTranslationDirectionKey(), _translationDirection);
+  }
+
+  LOG_VARD(IoUtils::isSupportedOgrFormat(output, true));
+  if (IoUtils::isSupportedOgrFormat(output, true))
+  {
+    _setToOgrOptions(output);
+  }
+  else
+  {
+    if (!_translation.trimmed().isEmpty())
+    {
+      _handleNonOgrOutputTranslationOpts();
+    }
+  }
+
+  LOG_VARD(_shapeFileColumnsSpecified());
 
   //check to see if all of the i/o can be streamed
+  LOG_VARD(ElementStreamer::areValidStreamingOps(_convertOps));
+  LOG_VARD(ElementStreamer::areStreamableIo(inputs, output));
   const bool isStreamable =
     ElementStreamer::areValidStreamingOps(_convertOps) &&
     ElementStreamer::areStreamableIo(inputs, output);
@@ -927,10 +923,36 @@ void DataConverter::_convert(const QStringList& inputs, const QString& output)
   }
 }
 
+void DataConverter::_handleNonOgrOutputTranslationOpts()
+{
+  //a previous check was done to make sure both a translation and export cols weren't specified
+  assert(!_shapeFileColumnsSpecified());
+
+  // For non OGR conversions, the translation must be passed in as an operator.
+
+  if (!_convertOps.contains(SchemaTranslationOp::className()) &&
+      !_convertOps.contains(SchemaTranslationVisitor::className()))
+  {
+    // If a translation script was specified but not the translation op, we'll add auto add the op
+    // as the first conversion operation. If the caller wants the translation done after some
+    // other op, then they need to explicitly add it to the op list. Always adding the visitor
+    // instead of the op, bc its streamable. However, if any other ops in the group aren't
+    // streamable it won't matter anyway.
+    _convertOps.prepend(SchemaTranslationVisitor::className());
+  }
+  else if (_convertOps.contains(SchemaTranslationOp::className()))
+  {
+    // replacing SchemaTranslationOp with SchemaTranslationVisitor for the reason mentioned above
+    _convertOps.replaceInStrings(
+      SchemaTranslationOp::className(), SchemaTranslationVisitor::className());
+  }
+  LOG_VARD(_convertOps);
+}
+
 void DataConverter::_exportToShapeWithCols(const QString& output, const QStringList& cols,
                                            const OsmMapPtr& map)
 {
-  LOG_DEBUG("_exportToShapeWithCols (formerly known as osm2shp)");
+  LOG_DEBUG("_exportToShapeWithCols");
 
   QElapsedTimer timer;
   timer.start();
