@@ -50,6 +50,15 @@ public:
    * @return true if at least one feature has a type recognized by the schema; false otherwise
    */
   static bool anyElementsHaveType(const ConstOsmMapPtr& map);
+
+  /**
+   * Validates the path to a translation script.
+   *
+   * @param url URL pointing to a translation script
+   * @throws IllegalArgumentException if the script at the URL does not exist or is an unsupported
+   * format
+   */
+  static void validateTranslationUrl(const QString& url);
 };
 
 }

@@ -597,7 +597,6 @@ void OsmPbfReader::_loadOsmData()
   _loadWays();
   _loadRelations();
   // we don't handle change sets
-  // _loadChangeSets();
 }
 
 vector<OsmPbfReader::BlobLocation> OsmPbfReader::loadOsmDataBlobOffsets(istream& strm)
@@ -630,13 +629,14 @@ vector<OsmPbfReader::BlobLocation> OsmPbfReader::loadOsmDataBlobOffsets(istream&
     }
     _in->seekg(_d->blobHeader.datasize(), ios_base::cur);
     t = Tgs::Time::getTime();
-    if (Log::getInstance().getLevel() <= Log::Info && t - start > 5 && t - last >= 2)
+    if (t - start > 5 && t - last >= 2)
     {
       long pos = _in->tellg();
-      PROGRESS_INFO(QString("%1 / %2 - %3 MB/s                  ")
-                    .arg(pos / 1.0e6, 0, 'g', 1)
-                    .arg(length / 1.0e6, 0, 'g', 1)
-                    .arg(((_in->tellg() - lastPos) / (t - last)) / 1.0e6, 0, 'g', 2));
+      PROGRESS_STATUS(
+        QString("%1 / %2 - %3 MB/s                  ")
+          .arg(pos / 1.0e6, 0, 'g', 1)
+          .arg(length / 1.0e6, 0, 'g', 1)
+          .arg(((_in->tellg() - lastPos) / (t - last)) / 1.0e6, 0, 'g', 2));
       last = t;
       lastPos = _in->tellg();
     }
@@ -646,10 +646,11 @@ vector<OsmPbfReader::BlobLocation> OsmPbfReader::loadOsmDataBlobOffsets(istream&
   if (t - start > 5)
   {
     // print the final summary
-    LOG_INFO(QString("%1 / %2 - %3 MB/s                  ")
-             .arg(length / 1.0e6, 0, 'g', 1)
-             .arg(length / 1.0e6, 0, 'g', 1)
-             .arg((length / (t - start)) / 1.0e6, 0, 'g', 2));
+    PROGRESS_STATUS(
+      QString("%1 / %2 - %3 MB/s                  ")
+        .arg(length / 1.0e6, 0, 'g', 1)
+        .arg(length / 1.0e6, 0, 'g', 1)
+        .arg((length / (t - start)) / 1.0e6, 0, 'g', 2));
   }
 
   return result;
