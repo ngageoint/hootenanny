@@ -59,12 +59,7 @@ void PartialOsmMapWriter::writePartial(const ConstOsmMapPtr& map)
     writePartial((ConstRelationPtr)it->second);
   }
 }
-/*
-void PartialOsmMapWriter::writePartial(const OsmMapPtr& map)
-{
-  writePartial((const ConstOsmMapPtr)map);
-}
-*/
+
 void PartialOsmMapWriter::writePartial(const ConstElementPtr& e)
 {
   switch (e->getElementType().getEnum())

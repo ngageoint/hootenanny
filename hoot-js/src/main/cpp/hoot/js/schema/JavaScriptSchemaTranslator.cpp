@@ -133,7 +133,7 @@ std::shared_ptr<Feature> JavaScriptSchemaTranslator::_createFeature(const QVaria
   tableName = vm["tableName"].toString();
   if (tableName.length() < 1)
   {
-    LOG_WARN("_createFeature: Empty tableName");
+    LOG_TRACE("_createFeature: Empty tableName");
     return std::shared_ptr<Feature>(); // Null feature
   }
 
@@ -285,22 +285,6 @@ void JavaScriptSchemaTranslator::_init()
   {
     _toOsmFunctionName = "translateAttributes";
   }
-//  else
-//  {
-//    throw HootException("A 'translateToOsm' function must be defined.");
-//  }
-
-  // Debug Stuff - Dump the object properties
-//  Handle<Object> hoot = tObj->Get(toV8("hoot"))->ToObject();
-
-//  cout << endl;
-//  cout << "JSTrans:" << endl;
-//  cout << "tObj Properties: " << tObj->GetPropertyNames() << endl;
-//  cout << endl;
-//  cout << "Hoot Properties: " << hoot->GetPropertyNames() << endl;
-//  cout << endl;
-//  cout << "End: JSTrans:" << endl;
-//  cout << endl;
 
   LOG_DEBUG("Translation script loaded.");
   _initialized = true;
@@ -373,9 +357,6 @@ bool JavaScriptSchemaTranslator::isValidScript()
 void JavaScriptSchemaTranslator::_featureWarn(const QString& message, const QString& fileName,
                                               const QString& functionName, int lineNumber)
 {
-//  stringstream ss;
-//  LOG_INFO(_tags);
-//  ss << message << " Input tags: " << *_tags;
   Log::getInstance().log(Log::Warn, message.toStdString(), fileName.toStdString(),
                          functionName.toStdString(), lineNumber);
 }

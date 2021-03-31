@@ -66,7 +66,8 @@ bool OsmMapReaderFactory::hasElementInputStream(const QStringList& inputs)
     if (!hasElementInputStream(inputs.at(i)))
     {
       LOG_INFO(
-        "Unable to stream Inputs due to input: " << inputs.at(i).right(25) << ". Loading entire map...");
+        "Unable to stream Inputs due to input: " << inputs.at(i).right(25) <<
+        ". Loading entire map into memory...");
       return false;
     }
   }

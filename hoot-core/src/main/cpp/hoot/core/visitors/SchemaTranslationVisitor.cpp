@@ -61,7 +61,8 @@ void SchemaTranslationVisitor::setConfiguration(const Settings& conf)
 
   LOG_VARD(conf.hasKey(c.getSchemaTranslationScriptKey()));
   LOG_VARD(c.getSchemaTranslationScript());
-  if (conf.hasKey(ConfigOptions::getSchemaTranslationScriptKey()) && c.getSchemaTranslationScript() != "")
+  if (conf.hasKey(ConfigOptions::getSchemaTranslationScriptKey()) &&
+      c.getSchemaTranslationScript() != "")
   {
     setTranslationDirection(c.getSchemaTranslationDirection());
     setTranslationScript(c.getSchemaTranslationScript());
@@ -168,7 +169,7 @@ void SchemaTranslationVisitor::visit(const ElementPtr& e)
 
       // Arbitrarily pick the first error tag found. If the element has both, the last one parsed
       // will be used. We're not expecting elements to have more than one CE tag.
-      const QString ceKey = tags.getFirstKey(_circularErrorTagKeys);
+      const QString ceKey = tags.getFirstMatchingKey(_circularErrorTagKeys);
       if (!ceKey.isEmpty())
       {
         e->setCircularError(tags.getDouble(ceKey));

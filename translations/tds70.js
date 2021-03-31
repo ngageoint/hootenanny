@@ -2485,7 +2485,7 @@ tds70 = {
         }
         else
         {
-          hoot.logWarn('Dropping invalid ' + ge4attr[i] + ' value: ' + attrs[ge4attr[i]]);
+          hoot.logTrace('Dropping invalid ' + ge4attr[i] + ' value: ' + attrs[ge4attr[i]]);
           delete attrs[ge4attr[i]];
         }
       }
