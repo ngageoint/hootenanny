@@ -543,7 +543,7 @@ be made explicit as described below.
 To generate a report for just the Hootenanny Core code:
 
 ----------------
-./configure --with-rnd --with-josm --with-services --with-coverage && make clean-coverage && make -j$(nproc) && make -j$(nproc) && HootTest --glacial --parallel && make -j$(nproc) coverage
+./configure --with-rnd --with-josm --with-services --with-coverage && make clean-coverage && make -j$(nproc) && HootTest --glacial --parallel && make -j$(nproc) coverage
 ----------------
 
 To generate a report for just the Hootenanny Java web services code:

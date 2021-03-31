@@ -43,25 +43,21 @@ public:
   void runBasicTest()
   {
     NodePtr node1(new Node(Status::Unknown1, 1, geos::geom::Coordinate(0.0, 0.0), 15.0));
-    CPPUNIT_ASSERT(!uut.isSatisfied(node1));
     NodePtr node2(new Node(Status::Unknown1, 2, geos::geom::Coordinate(0.0, 10.0), 15.0));
-    CPPUNIT_ASSERT(!uut.isSatisfied(node2));
     NodePtr node3(new Node(Status::Unknown1, 3, geos::geom::Coordinate(0.0, 20.0), 15.0));
-    CPPUNIT_ASSERT(!uut.isSatisfied(node3));
 
     ContainsNodeCriterion uut1(1);
 
     WayPtr way1(new Way(Status::Unknown1, 1, 15.0));
-    CPPUNIT_ASSERT(!uut.isSatisfied(way1));
+    CPPUNIT_ASSERT(!uut1.isSatisfied(way1));
     way1->addNode(node1->getId());
     way1->addNode(node2->getId());
-    map->addWay(way1);
     CPPUNIT_ASSERT(uut1.isSatisfied(way1));
-    CPPUNIT_ASSERT(!uut1.isSatisfied(node1));
+    CPPUNIT_ASSERT(uut1.isSatisfied(node1));
     CPPUNIT_ASSERT(!uut1.isSatisfied(node2));
     CPPUNIT_ASSERT(!uut1.isSatisfied(node3));
 
-    ContainsNodeCriterion uut2();
+    ContainsNodeCriterion uut2;
     Settings settings;
     settings.set(ConfigOptions::getContainsNodeCriterionIdKey(), 3);
     uut2.setConfiguration(settings);
@@ -71,12 +67,12 @@ public:
     relation1->addElement("test", node3->getElementId());
     CPPUNIT_ASSERT(uut1.isSatisfied(way1));
     CPPUNIT_ASSERT(!uut2.isSatisfied(way1));
-    CPPUNIT_ASSERT(!uut1.isSatisfied(node1));
+    CPPUNIT_ASSERT(uut1.isSatisfied(node1));
     CPPUNIT_ASSERT(!uut2.isSatisfied(node1));
     CPPUNIT_ASSERT(!uut1.isSatisfied(node2));
     CPPUNIT_ASSERT(!uut2.isSatisfied(node2));
     CPPUNIT_ASSERT(!uut1.isSatisfied(node3));
-    CPPUNIT_ASSERT(!uut2.isSatisfied(node3));
+    CPPUNIT_ASSERT(uut2.isSatisfied(node3));
     CPPUNIT_ASSERT(!uut1.isSatisfied(relation1));
     CPPUNIT_ASSERT(uut2.isSatisfied(relation1));
   }

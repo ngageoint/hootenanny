@@ -27,14 +27,14 @@
 
 // Hoot
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/criterion/ChildElementCriterion.h>
+#include <hoot/core/criterion/HighwayWayNodeCriterion.h>
 
 namespace hoot
 {
 
-class ChildElementCriterionTest : public HootTestFixture
+class HighwayWayNodeCriterionTest : public HootTestFixture
 {
-  CPPUNIT_TEST_SUITE(ChildElementCriterionTest);
+  CPPUNIT_TEST_SUITE(HighwayWayNodeCriterionTest);
   CPPUNIT_TEST(runBasicTest);
   CPPUNIT_TEST_SUITE_END();
 
@@ -43,10 +43,7 @@ public:
   void runBasicTest()
   {
     OsmMapPtr map(new OsmMap());
-    ChildElementCriterion uut(map);
-
-    // Unnecessary for this test but adds a line of test coverage.
-    uut.setOsmMap(map.get());
+    HighwayWayNodeCriterion uut(map);
 
     NodePtr node1(new Node(Status::Unknown1, 1, geos::geom::Coordinate(0.0, 0.0), 15.0));
     map->addNode(node1);
@@ -54,15 +51,9 @@ public:
     NodePtr node2(new Node(Status::Unknown1, 2, geos::geom::Coordinate(0.0, 10.0), 15.0));
     map->addNode(node2);
     CPPUNIT_ASSERT(!uut.isSatisfied(node2));
-    NodePtr node3(new Node(Status::Unknown1, 3, geos::geom::Coordinate(0.0, 15.0), 15.0));
-    map->addNode(node3);
-    CPPUNIT_ASSERT(!uut.isSatisfied(node2));
-    NodePtr node4(new Node(Status::Unknown1, 4, geos::geom::Coordinate(0.0, 20.0), 15.0));
-    map->addNode(node4);
-    CPPUNIT_ASSERT(!uut.isSatisfied(node4));
 
     WayPtr way1(new Way(Status::Unknown1, 1, 15.0));
-    way1->getTags().set("bridge", "yes");
+    way1->getTags().set("highway", "road");
     CPPUNIT_ASSERT(!uut.isSatisfied(way1));
     way1->addNode(node1->getId());
     way1->addNode(node2->getId());
@@ -71,19 +62,25 @@ public:
     CPPUNIT_ASSERT(uut.isSatisfied(node1));
     CPPUNIT_ASSERT(uut.isSatisfied(node2));
 
-    RelationPtr relation1 = std::make_shared<Relation>(Relation(Status::Unknown1, 1));
-    relation1->addElement("test", way1->getElementId());
-    relation1->addElement("test", node3->getElementId());
-    map->addRelation(relation1);
-    CPPUNIT_ASSERT(uut.isSatisfied(way1));
-    CPPUNIT_ASSERT(uut.isSatisfied(node1));
-    CPPUNIT_ASSERT(uut.isSatisfied(node2));
-    CPPUNIT_ASSERT(uut.isSatisfied(node3));
+    NodePtr node3(new Node(Status::Unknown1, 3, geos::geom::Coordinate(0.0, 0.0), 15.0));
+    map->addNode(node3);
+    CPPUNIT_ASSERT(!uut.isSatisfied(node3));
+    NodePtr node4(new Node(Status::Unknown1, 4, geos::geom::Coordinate(0.0, 10.0), 15.0));
+    map->addNode(node4);
     CPPUNIT_ASSERT(!uut.isSatisfied(node4));
-    CPPUNIT_ASSERT(!uut.isSatisfied(relation1));
+
+    WayPtr way2(new Way(Status::Unknown1, 2, 15.0));
+    CPPUNIT_ASSERT(!uut.isSatisfied(way2));
+    way2->addNode(node3->getId());
+    way2->addNode(node4->getId());
+    map->addWay(way2);
+    CPPUNIT_ASSERT(!uut.isSatisfied(way2));
+    CPPUNIT_ASSERT(!uut.isSatisfied(node3));
+    CPPUNIT_ASSERT(!uut.isSatisfied(node4));
   }
+
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ChildElementCriterionTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(HighwayWayNodeCriterionTest, "quick");
 
 }
