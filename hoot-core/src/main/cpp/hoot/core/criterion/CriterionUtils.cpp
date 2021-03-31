@@ -33,33 +33,4 @@
 namespace hoot
 {
 
-bool CriterionUtils::hasCriterion(const ConstElementPtr& element, const QString& criterionClassName)
-{
-  if (!element || criterionClassName.trimmed().isEmpty())
-  {
-    throw IllegalArgumentException(
-      "The input element is null or the criterion class name is empty.");
-  }
-
-  return _getCrit(criterionClassName)->isSatisfied(element);
-}
-
-ElementCriterionPtr CriterionUtils::_getCrit(const QString& criterionClassName)
-{
-  if (criterionClassName.trimmed().isEmpty())
-  {
-    throw IllegalArgumentException("The criterion class name is empty.");
-  }
-
-  ElementCriterionPtr crit =
-    ElementCriterionPtr(
-      Factory::getInstance().constructObject<ElementCriterion>(criterionClassName));
-  if (!crit)
-  {
-    throw IllegalArgumentException(
-      "Invalid criterion passed to CriterionUtils::hasCriterion: " + criterionClassName);
-  }
-  return crit;
-}
-
 }
