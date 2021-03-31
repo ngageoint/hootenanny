@@ -16,7 +16,7 @@ describe('TranslationServer', function () {
         // AP030: {highway: 'road'},
         AL013: {building: 'yes'},
         // BH070: {ford: 'yes'},
-        BH140: {waterway: 'riverbank'}
+        BH140: {water: 'river'}
     }
 
     Object.keys(cases).forEach(k => {
@@ -67,7 +67,7 @@ describe('TranslationServer', function () {
             });
 
             // console.log(tds_xml);
-            
+
             xml = parser.parseFromString(tds_xml);
             gj = osmtogeojson(xml);
 

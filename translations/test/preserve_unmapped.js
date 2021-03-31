@@ -36,6 +36,7 @@ describe('TranslationServer', function () {
         var xml = parser.parseFromString(mgcp_xml);
         var gj = osmtogeojson(xml);
 
+
         assert.equal(xml.getElementsByTagName("osm")[0].getAttribute("schema"), "MGCP");
 
         var tags = gj.features[0].properties;
@@ -43,7 +44,7 @@ describe('TranslationServer', function () {
         assert.equal(tags["FFN"], "931");
         assert.equal(tags["SDP"], "Tdh");
         assert.equal(tags["FCODE"], "AL015");
-        assert.equal(tags["TXT"], "<OSM>{\"denomination\":\"protestant\",\"source:date\":\"03/10/2014\",\"religion\":\"christian\"}</OSM>");
+        assert.equal(tags["OSMTAGS"],"{\"denomination\":\"protestant\",\"religion\":\"christian\",\"source:date\":\"03/10/2014\"}");
 
         var osm_xml = server.handleInputs({
             osm: mgcp_xml,
