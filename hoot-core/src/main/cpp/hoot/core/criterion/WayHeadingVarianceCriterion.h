@@ -46,7 +46,6 @@ public:
   static QString className() { return "hoot::WayHeadingVarianceCriterion"; }
 
   WayHeadingVarianceCriterion();
-  WayHeadingVarianceCriterion(ConstOsmMapPtr map);
   WayHeadingVarianceCriterion(
     const Degrees comparisonVariance, const NumericComparisonType& numericComparisonType,
     ConstOsmMapPtr map);
@@ -58,7 +57,11 @@ public:
   bool isSatisfied(const ConstElementPtr& e) const override;
 
   ElementCriterionPtr clone() override
-  { return std::make_shared<WayHeadingVarianceCriterion>(WayHeadingVarianceCriterion(_map)); }
+  {
+    return
+      std::make_shared<WayHeadingVarianceCriterion>(WayHeadingVarianceCriterion(
+        _comparisonVariance, _numericComparisonType, _map));
+  }
 
   /**
    * Determines the largest single heading variance for a way

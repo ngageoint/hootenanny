@@ -181,7 +181,7 @@ std::shared_ptr<geos::geom::Geometry> ElementGeometryUtils::_getGeometry(
 
   std::shared_ptr<geos::geom::Geometry> newGeom;
   QString errorMsg =
-    "Feature passed to OsmUtils caused topology exception on conversion to a geometry: ";
+    "Feature passed to ElementGeometryUtils caused topology exception on conversion to a geometry: ";
   try
   {
     newGeom = ElementToGeometryConverter(map).convertToGeometry(element);

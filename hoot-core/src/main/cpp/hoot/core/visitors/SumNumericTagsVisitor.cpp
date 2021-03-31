@@ -32,8 +32,6 @@
 namespace hoot
 {
 
-int SumNumericTagsVisitor::logWarnCount = 0;
-
 HOOT_FACTORY_REGISTER(ElementVisitor, SumNumericTagsVisitor)
 
 SumNumericTagsVisitor::SumNumericTagsVisitor() :
@@ -72,17 +70,9 @@ void SumNumericTagsVisitor::visit(const ConstElementPtr& e)
       }
       else
       {
-        if (logWarnCount < Log::getWarnMessageLimit())
-        {
-          LOG_WARN(
-            "Unsuccessfully attempted to convert tag with key: " << key << " and value: " <<
-            strValue << " to number.");
-        }
-        else if (logWarnCount == Log::getWarnMessageLimit())
-        {
-          LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
-        }
-        logWarnCount++;
+        LOG_TRACE(
+          "Unsuccessfully attempted to convert tag with key: " << key << " and value: " <<
+          strValue << " to number.");
       }
     }
   }

@@ -43,7 +43,6 @@ public:
   static QString className() { return "hoot::WayLengthCriterion"; }
 
   WayLengthCriterion();
-  WayLengthCriterion(ConstOsmMapPtr map);
   WayLengthCriterion(const double comparisonLength,
                      const NumericComparisonType& numericComparisonType, ConstOsmMapPtr map);
   ~WayLengthCriterion() = default;
@@ -54,7 +53,10 @@ public:
   bool isSatisfied(const ConstElementPtr& e) const override;
 
   ElementCriterionPtr clone() override
-  { return ElementCriterionPtr(new WayLengthCriterion(_map)); }
+  {
+    return
+      ElementCriterionPtr(new WayLengthCriterion(_comparisonLength, _numericComparisonType, _map));
+  }
 
   QString getDescription() const override
   { return "Identifies ways that meet a length threshold"; }

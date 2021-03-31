@@ -38,6 +38,8 @@ class TagContainsCriterionTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(TagContainsCriterionTest);
   CPPUNIT_TEST(runBasicTest);
+  CPPUNIT_TEST(runBasicTest2);
+  CPPUNIT_TEST(runConfigureTest);
   CPPUNIT_TEST(runCaseSensitivityTest);
   CPPUNIT_TEST_SUITE_END();
 
@@ -51,6 +53,56 @@ public:
 
     TagContainsCriterion uut;
     uut.setKvps(kvps);
+
+    NodePtr node(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+
+    node->getTags().set("key1", "val1");
+    node->getTags().set("key2", "val2");
+    CPPUNIT_ASSERT(uut.isSatisfied(node));
+
+    // only one match is required
+    node->getTags().clear();
+    node->getTags().set("key1", "val");
+    node->getTags().set("key2", "blah");
+    CPPUNIT_ASSERT(uut.isSatisfied(node));
+
+    node->getTags().clear();
+    node->getTags().set("key1", "blah");
+    node->getTags().set("key2", "blah");
+    CPPUNIT_ASSERT(!uut.isSatisfied(node));
+  }
+
+  void runBasicTest2()
+  {
+    TagContainsCriterion uut("key1", "val");
+
+    NodePtr node(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+
+    node->getTags().set("key1", "val1");
+    CPPUNIT_ASSERT(uut.isSatisfied(node));
+
+    // only one match is required
+    node->getTags().clear();
+    node->getTags().set("key1", "val");
+    node->getTags().set("key2", "blah");
+    CPPUNIT_ASSERT(uut.isSatisfied(node));
+
+    node->getTags().clear();
+    node->getTags().set("key1", "blah");
+    CPPUNIT_ASSERT(!uut.isSatisfied(node));
+  }
+
+  void runConfigureTest()
+  {
+    QStringList kvps;
+    kvps.append("key1=val");
+    kvps.append("key2=va2");
+
+    Settings settings;
+    settings.set(ConfigOptions::getTagContainsCriterionKvpsKey(), kvps);
+    settings.set(ConfigOptions::getTagContainsCriterionCaseSensitiveKey(), false);
+    TagContainsCriterion uut;
+    uut.setConfiguration(settings);
 
     NodePtr node(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
 
