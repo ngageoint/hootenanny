@@ -218,56 +218,6 @@ std::shared_ptr<geos::geom::Geometry> ElementGeometryUtils::_getGeometry(
   return newGeom;
 }
 
-GeometryTypeCriterion::GeometryType ElementGeometryUtils::geometryTypeForElement(
-  const ConstElementPtr& element, ConstOsmMapPtr map)
-{
-  const ElementType type = element->getElementType();
-  if (type == ElementType::Node)
-  {
-    return GeometryTypeCriterion::GeometryType::Point;
-  }
-  else if (type == ElementType::Way)
-  {
-    if (PolygonCriterion(map).isSatisfied(element))
-    {
-      return GeometryTypeCriterion::GeometryType::Polygon;
-    }
-    else
-    {
-      return GeometryTypeCriterion::GeometryType::Line;
-    }
-  }
-  else if (type == ElementType::Relation)
-  {
-    if (!map)
-    {
-      throw IllegalArgumentException(
-        "A map must be set when determining the geometry type of relations.");
-    }
-    // using the strict definition only here
-    if (RelationWithLinearMembersCriterion(map).isSatisfied(element))
-    {
-      return GeometryTypeCriterion::GeometryType::Point;
-    }
-    else if (RelationWithPolygonMembersCriterion(map).isSatisfied(element))
-    {
-      return GeometryTypeCriterion::GeometryType::Polygon;
-    }
-    else if (RelationWithLinearMembersCriterion(map).isSatisfied(element))
-    {
-      return GeometryTypeCriterion::GeometryType::Line;
-    }
-    else
-    {
-      return GeometryTypeCriterion::GeometryType::Unknown;
-    }
-  }
-  else
-  {
-    throw IllegalArgumentException("Invalid element type.");
-  }
-}
-
 Meters ElementGeometryUtils::calculateLength(const ConstElementPtr& e,
                                              const ConstElementProviderPtr& constProvider)
 {
