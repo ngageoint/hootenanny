@@ -45,12 +45,6 @@ _keyCount(0)
 {
 }
 
-//TagKeyCountVisitor::TagKeyCountVisitor(const QStringList& keys) :
-//_keys(keys),
-//_keyCount(0)
-//{
-//}
-
 void TagKeyCountVisitor::setConfiguration(const Settings& conf)
 {
   _keys = ConfigOptions(conf).getTagsVisitorKeys();
