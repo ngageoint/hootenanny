@@ -1143,14 +1143,6 @@ less confident matches.
 
 ID of the node that ContainsNodeCriterion should search for.
 
-=== convert.require.area.for.polygon
-
-* Data Type: bool
-* Default Value: `true`
-
-If true, an element must be classifiable as an area geometry in the Hootenanny schema in order to
-be converted to a GEOS polygon.
-
 === convert.ops
 
 * Data Type: list
@@ -1160,6 +1152,22 @@ be converted to a GEOS polygon.
 Specifies one or more semi-colon delimited map operations or visitors to apply before writing
 converted data.  This is only applicable to the convert command. 'hoot info --operators' displays
 information about the available operations.
+
+=== convert.require.area.for.polygon
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, an element must be classifiable as an area geometry in the Hootenanny schema in order to
+be converted to a GEOS polygon.
+
+=== convert.translate.multithreaded
+
+* Data Type: bool
+* Default Value: `false`
+
+If enabled calling the convert command with a translation script will run a separate thread for
+translating. Multi-threaded translation is memory bound.
 
 === cookie.cutter.alpha
 

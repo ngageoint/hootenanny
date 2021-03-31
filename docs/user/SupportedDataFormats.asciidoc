@@ -37,6 +37,7 @@
 
 * (M1) = format requires reading entire dataset into memory during processing
 * (M2) = format requires reading entire dataset into memory during processing only if element ID output needs to remain sorted
+* If both the input being read from and written to are OGR formats, the operation will be memory bound.
 * All data read with a specified bounding box filter requires reading the entire dataset into memory during processing.
 
 All Hootenanny commands can be passed any supported input/output format unless otherwise stated in the command's documentation. See the Hootenanny User Guide for details.

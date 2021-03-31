@@ -80,7 +80,7 @@ bool ElementStreamer::areStreamableIo(const QStringList& inputs, const QString& 
     {
       LOG_INFO(
         "Unable to stream I/O due to input: " << inputs.at(i).right(25) << " and/or output: " <<
-        output.right(25) << ". Loading entire map...");
+        output.right(25) << ". Loading entire map into memory...");
       return false;
     }
   }
