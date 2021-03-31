@@ -78,12 +78,14 @@ void WayString::append(const WaySubline& subline)
           "node.");
       }
       if (back().getEnd().getNode(WayLocation::SLOPPY_EPSILON) !=
-        subline.getStart().getNode(WayLocation::SLOPPY_EPSILON))
+          subline.getStart().getNode(WayLocation::SLOPPY_EPSILON))
       {
-        //The intent of this class is being violated.  So either change this back to an
-        //exception as part of the work to be done in #1312, or create a new class for the new
-        //behavior.
-        //throw IllegalArgumentException("Ways must connect at a node in the WayString.");
+        // TODO: The intent of this class is being violated.  So either change this back to an
+        // exception as part of the work to be done in #1312, or create a new class for the new
+        // behavior.
+
+        // throw IllegalArgumentException("Ways must connect at a node in the WayString.");
+
         if (logWarnCount < Log::getWarnMessageLimit())
         {
           LOG_WARN("Ways must connect at a node in the WayString.");

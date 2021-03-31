@@ -61,41 +61,6 @@ _category(category)
   }
 }
 
-void TagFilter::setKey(const QString& key)
-{
-  if (_category != OsmSchemaCategory::Empty && !key.trimmed().isEmpty())
-  {
-    throw IllegalArgumentException("Both a tag filter and a category filter cannot be specified.");
-  }
-  else if (_category == OsmSchemaCategory::Empty && key.trimmed().isEmpty())
-  {
-    throw IllegalArgumentException("Invalid tag filter tag key: " + _key);
-  }
-  _key = key.trimmed().toLower();
-}
-
-void TagFilter::setValue(const QString& val)
-{
-  if (_category != OsmSchemaCategory::Empty && !val.trimmed().isEmpty())
-  {
-    throw IllegalArgumentException("Both a tag filter and a category filter cannot be specified.");
-  }
-  else if (_category == OsmSchemaCategory::Empty && val.trimmed().isEmpty())
-  {
-    throw IllegalArgumentException("Invalid tag filter tag val: " + _value);
-  }
-  _value = val.trimmed().toLower();
-}
-
-void TagFilter::setCategory(OsmSchemaCategory category)
-{
-  if (category != OsmSchemaCategory::Empty && (!_key.isEmpty() || !_value.isEmpty()))
-  {
-    throw IllegalArgumentException("Both a tag filter and a category filter cannot be specified.");
-  }
-  _category = category;
-}
-
 void TagFilter::setSimilarityThreshold(double threshold)
 {
   if (threshold != -1.0 && (threshold < 0.001 || threshold > 1.0))

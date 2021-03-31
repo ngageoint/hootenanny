@@ -51,8 +51,6 @@ public:
 
   ElementPtr getElement() const { return _element; }
 
-  bool operator==(const ElementComparison& elementComp) const;
-
   virtual QString toString() const;
 
   bool isNull() const { return !_element.get(); }

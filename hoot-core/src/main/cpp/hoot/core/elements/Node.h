@@ -120,8 +120,6 @@ public:
   geos::geom::Coordinate toCoordinate() const
   { return geos::geom::Coordinate(_nodeData.getX(), _nodeData.getY()); }
 
-  std::shared_ptr<geos::geom::Point> toPoint() const;
-
   QString toString() const override;
 
   /**

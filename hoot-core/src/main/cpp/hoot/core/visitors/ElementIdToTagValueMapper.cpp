@@ -35,11 +35,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, ElementIdToTagValueMapper)
 
-void ElementIdToTagValueMapper::addCriterion(const ElementCriterionPtr& e)
-{
-  _crit = e;
-}
-
 void ElementIdToTagValueMapper::visit(const ConstElementPtr& e)
 {
   if (_tagKey.trimmed().isEmpty())
@@ -47,7 +42,7 @@ void ElementIdToTagValueMapper::visit(const ConstElementPtr& e)
     throw IllegalArgumentException("No keys specified for ElementIdToTagValueMapper.");
   }
 
-  if (e->getTags().contains(_tagKey) && (!_crit || _crit->isSatisfied(e)))
+  if (e->getTags().contains(_tagKey))
   {
     LOG_TRACE(e->getElementId() << ";" << e->getTags()[_tagKey]);
     _idToTagValueMappings[e->getElementId()] = e->getTags()[_tagKey];
