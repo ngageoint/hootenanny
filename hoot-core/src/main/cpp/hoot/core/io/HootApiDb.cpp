@@ -347,27 +347,6 @@ bool HootApiDb::hasTable(const QString& tableName)
   return q.next();
 }
 
-void HootApiDb::dropDatabase(const QString& databaseName)
-{
-  LOG_TRACE("Dropping database: " << databaseName << "...");
-
-  QString sql = QString("DROP DATABASE IF EXISTS \"%1\"").arg(databaseName);
-
-  // TRICKY: You are not allowed to drop a database within a transaction.
-  // If this is the case, we store the statement & execute it right after
-  // the current trans is successfully committed.
-  if (_inTransaction)
-  {
-    // Store for later
-    _postTransactionStatements.push_back(sql);
-  }
-  else
-  {
-    // Execute now
-    DbUtils::execNoPrepare(_db, sql);
-  }
-}
-
 void HootApiDb::dropTable(const QString& tableName)
 {
   LOG_TRACE("Dropping table: " << tableName << "...");
@@ -573,24 +552,6 @@ long HootApiDb::_getNextWayId()
     _wayIdReserver.reset(new InternalIdReserver(_db, getCurrentWaysSequenceName(mapId)));
   }
   return _wayIdReserver->getNextId();
-}
-
-long HootApiDb::getNextId(const ElementType& elementType)
-{
-  switch (elementType.getEnum())
-  {
-    case ElementType::Node:
-      return _getNextNodeId();
-
-    case ElementType::Way:
-      return _getNextWayId();
-
-    case ElementType::Relation:
-      return _getNextRelationId();
-
-    default:
-      throw HootException(QString("Unexpected element type: %1").arg(elementType.toString()));
-  }
 }
 
 void HootApiDb::beginChangeset()
@@ -1199,10 +1160,8 @@ void HootApiDb::_resetQueries()
   _insertFolderMapMapping.reset();
   _folderIdsAssociatedWithMap.reset();
   _deleteFolders.reset();
-  _selectMapIds.reset();
   _getMapPermissionsById.reset();
   _getMapPermissionsByName.reset();
-  _currentUserHasMapWithName.reset();
   _getMapIdByNameForCurrentUser.reset();
   _updateJobStatusResourceId.reset();
   _insertJob.reset();
@@ -1372,39 +1331,6 @@ bool HootApiDb::currentUserCanAccessMap(const long mapId, const bool write)
   {
     return isPublic || _currUserId == userId || isAdmin;
   }
-}
-
-set<long> HootApiDb::selectMapIds(QString name)
-{
-  set<long> result;
-  LOG_VART(name);
-
-  if (_selectMapIds == nullptr)
-  {
-    _selectMapIds.reset(new QSqlQuery(_db));
-    _selectMapIds->prepare(
-      "SELECT id FROM " + getMapsTableName() + " WHERE display_name = :name");
-  }
-  _selectMapIds->bindValue(":name", name);
-  LOG_VART(_selectMapIds->lastQuery());
-
-  if (_selectMapIds->exec() == false)
-  {
-    throw HootException(_selectMapIds->lastError().text());
-  }
-
-  while (_selectMapIds->next())
-  {
-    bool ok;
-    long id = _selectMapIds->value(0).toLongLong(&ok);
-    if (!ok)
-    {
-      throw HootException("Error selecting map IDs.");
-    }
-    result.insert(id);
-  }
-
-  return result;
 }
 
 set<long> HootApiDb::selectPublicMapIds(QString name)
@@ -1703,27 +1629,6 @@ QString HootApiDb::tableTypeToTableName(const TableType& tableType) const
   {
     throw HootException("Unsupported table type.");
   }
-}
-
-bool HootApiDb::currentUserHasMapWithName(const QString& mapName)
-{
-  LOG_VART(_currUserId);
-
-  if (_currentUserHasMapWithName == nullptr)
-  {
-    _currentUserHasMapWithName.reset(new QSqlQuery(_db));
-    _currentUserHasMapWithName->prepare(
-      "SELECT id FROM " + getMapsTableName() +
-      " WHERE display_name = :mapName AND user_id = :userId");
-  }
-  _currentUserHasMapWithName->bindValue(":mapName", mapName);
-  _currentUserHasMapWithName->bindValue(":userId", (qlonglong)_currUserId);
-  if (_currentUserHasMapWithName->exec() == false)
-  {
-    throw HootException(_currentUserHasMapWithName->lastError().text());
-  }
-
-  return _currentUserHasMapWithName->next();
 }
 
 bool HootApiDb::mapExists(const long id)
@@ -2118,15 +2023,6 @@ vector<long> HootApiDb::selectNodeIdsForWay(long wayId)
   QString sql = "SELECT node_id FROM " + getCurrentWayNodesTableName(mapId) +
       " WHERE way_id = :wayId ORDER BY sequence_id";
   return ApiDb::selectNodeIdsForWay(wayId, sql);
-}
-
-std::shared_ptr<QSqlQuery> HootApiDb::selectNodesForWay(long wayId)
-{
-  const long mapId = _currMapId;
-  _checkLastMapId(mapId);
-  QString sql = "SELECT node_id FROM " + getCurrentWayNodesTableName(mapId) +
-      " WHERE way_id = :wayId ORDER BY sequence_id";
-  return ApiDb::selectNodesForWay(wayId, sql);
 }
 
 vector<RelationData::Entry> HootApiDb::selectMembersForRelation(long relationId)
