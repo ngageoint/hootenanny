@@ -38,13 +38,13 @@ class SumNumericTagsVisitorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(SumNumericTagsVisitorTest);
   CPPUNIT_TEST(runBasicTest);
+  CPPUNIT_TEST(runConfigureTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  SumNumericTagsVisitorTest()
-    : HootTestFixture("test-files/visitors/",
-                      UNUSED_PATH)
+  SumNumericTagsVisitorTest() :
+  HootTestFixture("test-files/visitors/", UNUSED_PATH)
   {
   }
 
@@ -52,10 +52,7 @@ public:
   {
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(
-      map,
-      _inputPath + "SumNumericTagsVisitorTest.osm",
-      false,
-      Status::Unknown1);
+      map, _inputPath + "SumNumericTagsVisitorTest.osm", false, Status::Unknown1);
 
     SumNumericTagsVisitor uut(QStringList("test1"));
     map->visitRo(uut);
@@ -63,6 +60,20 @@ public:
     CPPUNIT_ASSERT_EQUAL(11, sum);
   }
 
+  void runConfigureTest()
+  {
+    OsmMapPtr map(new OsmMap());
+    OsmMapReaderFactory::read(
+      map, _inputPath + "SumNumericTagsVisitorTest.osm", false, Status::Unknown1);
+
+    Settings settings;
+    settings.set(ConfigOptions::getTagsVisitorKeysKey(), QStringList("test1"));
+    SumNumericTagsVisitor uut;
+    uut.setConfiguration(settings);
+    map->visitRo(uut);
+    const int sum = (int)uut.getStat();
+    CPPUNIT_ASSERT_EQUAL(11, sum);
+  }
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(SumNumericTagsVisitorTest, "quick");
