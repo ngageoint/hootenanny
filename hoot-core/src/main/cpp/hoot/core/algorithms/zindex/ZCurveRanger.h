@@ -70,13 +70,6 @@ public:
   static long int getSplitValue(long int v1, long int v2);
 
   /**
-   * Focuses the decomposition to the ares that intersect the focus box. The
-   * shows some promise with the dual space index.
-   */
-  std::vector<Range> decomposeRange(const BBox& box, const BBox& focusBox, int levels);
-
-
-  /**
    * Decomposes the z value ranges that cover box into an array of ranges.
    *
    * @param box - Must be a valid box within the ZValue.
@@ -95,8 +88,6 @@ public:
 
   std::vector<Range> decomposeRange(const LongBox& box, int levels);
 
-  std::vector<Range> decomposeRangeIterative(const BBox& box, int count);
-
   bool rangeCoversIdentity(const Range& r);
 
 private:
@@ -109,11 +100,7 @@ private:
 
   LongBox _toLongBox(const BBox& box);
 
-  std::vector<Range> _decomposeRange(const LongBox& box, const LongBox& focusBox, int levels);
-
   LongBox _clipBox(const LongBox& box);
-
-  std::vector<Range> _decomposeRangeIterative(const LongBox& box, int count);
 
   long int _slop;
   ZValue _zv;

@@ -78,7 +78,6 @@ public:
   static int logWarnCount;
 
   OgrReaderInternal();
-
   ~OgrReaderInternal();
 
   void close();
@@ -271,15 +270,6 @@ OgrReader::OgrReader(const QString& path)
   }
 }
 
-OgrReader::OgrReader(const QString& path, const QString& layer)
-  : _d(new OgrReaderInternal())
-{
-  if (isSupported(path) == true)
-  {
-    _d->open(path, layer);
-  }
-}
-
 void OgrReader::setProgress(const Progress& progress)
 {
   if (_d == nullptr)
@@ -367,27 +357,6 @@ std::shared_ptr<Envelope> OgrReader::getBoundingBoxFromConfig(const Settings& s,
 }
 
 /**
- * Returns a list of all layer names includeing those that don't have geometry.
- */
-QStringList OgrReader::getLayerNames(const QString& path)
-{
-  QStringList result;
-  std::shared_ptr<GDALDataset> ds = OgrUtilities::getInstance().openDataSource(path, true);
-  int count = ds->GetLayerCount();
-  for (int i = 0; i < count; i++)
-  {
-    OGRLayer* l = ds->GetLayer(i);
-    result.append(l->GetName());
-    l->Dereference();
-  }
-
-  // make the results consistent
-  result.sort();
-
-  return result;
-}
-
-/**
  * Returns a filtered list of layer names that have geometry.
  */
 QStringList OgrReader::getFilteredLayerNames(const QString& path)
@@ -432,11 +401,6 @@ void OgrReader::read(const QString& path, const QString& layer, const OsmMapPtr&
   _d->open(path, layer);
   _d->read(map);
   _d->close();
-}
-
-void OgrReader::setDefaultCircularError(Meters circularError)
-{
-  _d->setDefaultCircularError(circularError);
 }
 
 void OgrReader::setDefaultStatus(Status s)

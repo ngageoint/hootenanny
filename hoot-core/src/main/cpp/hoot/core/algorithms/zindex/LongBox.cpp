@@ -110,18 +110,6 @@ bool LongBox::in(const vector<long int>& p)
   return result;
 }
 
-bool LongBox::intersects(const LongBox& b)
-{
-  bool result = true;
-  for (uint i = 0; i < getMin().size(); i++)
-  {
-    result = result && (b.getMin()[i] <= getMax()[i]);
-    result = result && (b.getMax()[i] >= getMin()[i]);
-  }
-
-  return result;
-}
-
 QString LongBox::toString()
 {
   QString result = "{ ";
