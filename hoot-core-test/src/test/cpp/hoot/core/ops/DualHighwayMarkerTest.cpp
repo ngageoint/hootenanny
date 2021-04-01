@@ -50,17 +50,41 @@ public:
   HootTestFixture(
     "test-files/ops/DualHighwayMarkerTest/", "test-output/ops/DualHighwayMarkerTest/")
   {
-    //setResetType(ResetAll);
   }
 
   void runBasicTest()
   {
+    OsmMapPtr map(new OsmMap());
+    OsmMapReaderFactory::read(map, _inputPath + "runBasicTestInput.osm", true);
 
+    DualHighwayMarker uut;
+    uut.setMarkCrossingRoads(false);
+    uut.setMaxCrossingRoadsParallelScore(0.4);
+    uut.setMinParallelScore(0.9);
+    uut.apply(map);
+
+    MapProjector::projectToWgs84(map);
+    OsmMapWriterFactory::write(map, _outputPath + "runBasicTestOutput.osm");
+    HOOT_FILE_EQUALS(_inputPath + "runBasicTestOutput.osm", _outputPath + "runBasicTestOutput.osm");
   }
 
   void runConfigureTest()
   {
+    OsmMapPtr map(new OsmMap());
+    OsmMapReaderFactory::read(map, _inputPath + "runBasicTestInput.osm", true);
 
+    Settings settings;
+    settings.set(ConfigOptions::getDualHighwayMarkerCrossingRoadsParallelScoreThresholdKey(), 0.4);
+    settings.set(ConfigOptions::getDualHighwayMarkerMarkCrossingRoadsKey(), false);
+    settings.set(ConfigOptions::getDualHighwayMarkerParallelScoreThresholdKey(), 0.9);
+    DualHighwayMarker uut;
+    uut.setConfiguration(settings);
+    uut.apply(map);
+
+    MapProjector::projectToWgs84(map);
+    OsmMapWriterFactory::write(map, _outputPath + "runConfigureTestOutput.osm");
+    HOOT_FILE_EQUALS(
+      _inputPath + "runBasicTestOutput.osm", _outputPath + "runConfigureTestOutput.osm");
   }
 };
 

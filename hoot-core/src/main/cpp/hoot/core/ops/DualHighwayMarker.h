@@ -84,6 +84,11 @@ public:
    */
   QStringList getCriteria() const override;
 
+  void setMinParallelScore(const double score) { _minParallelScore = score; }
+  void setMarkCrossingRoads(const bool mark) { _markCrossingRoads = mark; }
+  void setMaxCrossingRoadsParallelScore(const double score)
+  { _maxCrossingRoadsParallelScore = score; }
+
  private:
 
   OsmMapPtr _map;
@@ -95,6 +100,7 @@ public:
   // how perpendicular a road intersecting a divided road must be to be considered as crossing
   // between it
   double _maxCrossingRoadsParallelScore;
+
   // the number of crossing roads detected
   int _numCrossing;
   // used to cache element distance vals

@@ -51,17 +51,37 @@ public:
     "test-files/ops/SmallDisconnectedWayRemoverTest/",
     "test-output/ops/SmallDisconnectedWayRemoverTest/")
   {
-    //setResetType(ResetAll);
   }
 
   void runBasicTest()
   {
+    OsmMapPtr map(new OsmMap());
+    OsmMapReaderFactory::read(map, _inputPath + "runBasicTestInput.osm", true);
 
+    SmallDisconnectedWayRemover uut(20.0, 3);
+    uut.apply(map);
+
+    MapProjector::projectToWgs84(map);
+    OsmMapWriterFactory::write(map, _outputPath + "runBasicTestOutput.osm");
+    HOOT_FILE_EQUALS(_inputPath + "runBasicTestOutput.osm", _outputPath + "runBasicTestOutput.osm");
   }
 
   void runConfigureTest()
   {
+    OsmMapPtr map(new OsmMap());
+    OsmMapReaderFactory::read(map, _inputPath + "runBasicTestInput.osm", true);
 
+    Settings settings;
+    settings.set(ConfigOptions::getSmallDisconnectedWayRemoverMaxNodeCountKey(), 3);
+    settings.set(ConfigOptions::getSmallDisconnectedWayRemoverMaxLengthKey(), 20.0);
+    SmallDisconnectedWayRemover uut;
+    uut.setConfiguration(settings);
+    uut.apply(map);
+
+    MapProjector::projectToWgs84(map);
+    OsmMapWriterFactory::write(map, _outputPath + "runConfigureTestOutput.osm");
+    HOOT_FILE_EQUALS(
+      _inputPath + "runBasicTestOutput.osm", _outputPath + "runConfigureTestOutput.osm");
   }
 };
 

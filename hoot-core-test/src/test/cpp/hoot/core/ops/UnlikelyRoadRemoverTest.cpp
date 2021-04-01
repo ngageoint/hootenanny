@@ -27,6 +27,7 @@
 
 // Hoot
 #include <hoot/core/TestUtils.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
@@ -50,17 +51,47 @@ public:
   HootTestFixture(
     "test-files/ops/UnlikelyRoadRemoverTest/", "test-output/ops/UnlikelyRoadRemoverTest/")
   {
-    //setResetType(ResetAll);
   }
 
   void runBasicTest()
   {
+    OsmMapPtr map(new OsmMap());
+    OsmMapReaderFactory::read(map, _inputPath + "runBasicTestInput.osm", true);
+    MapProjector::projectToPlanar(map);
 
+    UnlikelyRoadRemover uut;
+    uut.setHeadingDelta(5.0);
+    uut.setMaxHeadingVariance(60.0);
+    uut.setMaxWayLength(25.0);
+    uut.setNumHistogramBins(16);
+    uut.setSampleDistance(1.0);
+    uut.apply(map);
+
+    MapProjector::projectToWgs84(map);
+    OsmMapWriterFactory::write(map, _outputPath + "runBasicTestOutput.osm");
+    HOOT_FILE_EQUALS(_inputPath + "runBasicTestOutput.osm", _outputPath + "runBasicTestOutput.osm");
   }
 
   void runConfigureTest()
   {
+    OsmMapPtr map(new OsmMap());
+    OsmMapReaderFactory::read(map, _inputPath + "runBasicTestInput.osm", true);
+    MapProjector::projectToPlanar(map);
 
+    Settings settings;
+    settings.set(ConfigOptions::getUnlikelyRoadRemoverMaxLengthKey(), 25.0);
+    settings.set(ConfigOptions::getUnlikelyRoadRemoverNumBinsKey(), 16);
+    settings.set(ConfigOptions::getUnlikelyRoadRemoverHeadingDeltaKey(), 5.0);
+    settings.set(ConfigOptions::getUnlikelyRoadRemoverSampleDistanceKey(), 1.0);
+    settings.set(ConfigOptions::getUnlikelyRoadRemoverMaxHeadingVarianceKey(), 60.0);
+    UnlikelyRoadRemover uut;
+    uut.setConfiguration(settings);
+    uut.apply(map);
+
+    MapProjector::projectToWgs84(map);
+    OsmMapWriterFactory::write(map, _outputPath + "runConfigureTestOutput.osm");
+    HOOT_FILE_EQUALS(
+      _inputPath + "runBasicTestOutput.osm", _outputPath + "runConfigureTestOutput.osm");
   }
 };
 
