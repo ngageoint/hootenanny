@@ -56,6 +56,7 @@ public:
   {
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(map, _inputPath + "runBasicTestInput.osm", true);
+    MapProjector::projectToPlanar(map);
 
     DualHighwayMarker uut;
     uut.setMarkCrossingRoads(false);
@@ -72,6 +73,7 @@ public:
   {
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(map, _inputPath + "runBasicTestInput.osm", true);
+    MapProjector::projectToPlanar(map);
 
     Settings settings;
     settings.set(ConfigOptions::getDualHighwayMarkerCrossingRoadsParallelScoreThresholdKey(), 0.4);
