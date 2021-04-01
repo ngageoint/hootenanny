@@ -53,7 +53,8 @@ public:
   ElementCriterionPtr clone() override
   { return ElementCriterionPtr(new WayDirectionCriterion(_map, _baseWay, _similarDirection)); }
 
-  QString getDescription() const override { return "Identifies which direction a way is pointing"; }
+  QString getDescription() const override
+  { return "Determines if two ways point in a similar direction"; }
 
   QString getName() const override { return className(); }
 

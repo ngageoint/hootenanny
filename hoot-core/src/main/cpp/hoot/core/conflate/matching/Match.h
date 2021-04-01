@@ -143,14 +143,6 @@ public:
   virtual MatchType getType() const;
 
   /**
-   * Determines if this matches equals another match
-   *
-   * @param other the match being compared with
-   * @return true if this matches matches the comparision match; false otherwise
-   */
-  bool operator==(const Match& other) const;
-
-  /**
    * Returns a collection of matches indexed by the IDs of the elements involved
    *
    * @param matches the matches to index

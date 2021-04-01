@@ -29,7 +29,6 @@
 #define DUPLICATE_NODE_REMOVER_H
 
 // hoot
-#include <hoot/core/util/Boundable.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Units.h>
 #include <hoot/core/util/StringUtils.h>
@@ -48,15 +47,11 @@ namespace hoot
  * end up with some duplicate way nodes, so its best to put RemoveDuplicateWayNodesVisitor in the
  * cleaning chain immediately after this runs.
  *
- * This class works with four pass conflation (Hadoop), as long as distance is less than the four
- * pass buffer. The input map can be in either a planar or geographic projection.
- *
  * No point in implementing FilteredByGeometryTypeCriteria here, as there is no such thing as a map
  * with no nodes. ElementConflatableCheck does need to be implemented here to prevent removal of a
  * conflatable node or a node belonging to a conflatable way/relation.
  */
-class DuplicateNodeRemover : public OsmMapOperation, public Boundable,
-  public ConflateInfoCacheConsumer
+class DuplicateNodeRemover : public OsmMapOperation, public ConflateInfoCacheConsumer
 {
 public:
 

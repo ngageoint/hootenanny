@@ -79,10 +79,10 @@ public:
     Meters circularError = ElementData::CIRCULAR_ERROR_EMPTY);
 
   static std::shared_ptr<Node> newSp(Status s, long id, double x, double y, Meters circularError,
-                                       long changeset, long version, quint64 timestamp,
-                                       QString user = ElementData::USER_EMPTY,
-                                       long uid = ElementData::UID_EMPTY,
-                                       bool visible = ElementData::VISIBLE_EMPTY);
+                                     long changeset, long version, quint64 timestamp,
+                                     QString user = ElementData::USER_EMPTY,
+                                     long uid = ElementData::UID_EMPTY,
+                                     bool visible = ElementData::VISIBLE_EMPTY);
 
   /**
    * Clears all tags. However, unlike the other elements the x/y data and circular error aren't
@@ -119,8 +119,6 @@ public:
 
   geos::geom::Coordinate toCoordinate() const
   { return geos::geom::Coordinate(_nodeData.getX(), _nodeData.getY()); }
-
-  std::shared_ptr<geos::geom::Point> toPoint() const;
 
   QString toString() const override;
 

@@ -60,13 +60,6 @@ GeometryToElementConverter::GeometryToElementConverter(const OsmMapPtr& map) :
 _constMap(map),
 _map(map)
 {
-  assert(map.get());
-}
-
-GeometryToElementConverter::GeometryToElementConverter(const ConstOsmMapPtr& map) :
-_constMap(map)
-{
-  assert(map.get());
 }
 
 std::shared_ptr<Element> GeometryToElementConverter::convertGeometryCollection(

@@ -38,7 +38,6 @@
 
 // Hoot
 #include <hoot/core/algorithms/FindNodesInWayFactory.h>
-#include <hoot/core/elements/ElementIdUtils.h>
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/elements/NodeToWayMap.h>
 #include <hoot/core/elements/OsmMap.h>

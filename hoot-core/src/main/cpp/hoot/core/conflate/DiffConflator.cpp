@@ -674,8 +674,6 @@ void DiffConflator::_calcAndStoreTagChanges()
         // Make new change
         Change newChange = _getChange(pOldElement, pNewElement);
         LOG_VART(newChange);
-        //OsmUtils::logElementDetail(pOldElement, _map, Log::Trace, "Old element: ");
-        //OsmUtils::logElementDetail(pNewElement, _map, Log::Trace, "New element: ");
 
         // Add it to our list
         _tagChanges->addChange(newChange);

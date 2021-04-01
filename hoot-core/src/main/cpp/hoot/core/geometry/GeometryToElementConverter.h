@@ -68,7 +68,6 @@ public:
   static QString className() { return "hoot::GeometryToElementConverter"; }
 
   GeometryToElementConverter(const OsmMapPtr& map);
-  GeometryToElementConverter(const ConstOsmMapPtr& map);
   virtual ~GeometryToElementConverter() = default;
 
   class NodeFactory
@@ -91,8 +90,8 @@ public:
    * @param circularError circular error of the returned element
    * @return an OSM element
    */
-  std::shared_ptr<Element> convertGeometryCollection(const geos::geom::GeometryCollection* gc,
-    Status s, double circularError);
+  std::shared_ptr<Element> convertGeometryCollection(
+    const geos::geom::GeometryCollection* gc, Status s, double circularError);
 
   /**
    * Calls the appropriate convert* method based on the geometry passed in and adds the resulting

@@ -67,17 +67,15 @@ ElementCriterionPtr UnlikelyRoadRemover::_getRemovalCrit(const ConstOsmMapPtr& m
   // remove ways at or below a certain size
   std::shared_ptr<WayLengthCriterion> lengthCrit =
     std::make_shared<WayLengthCriterion>(
-      WayLengthCriterion(_maxWayLength, NumericComparisonType::LessThanOrEqualTo, map));
+      _maxWayLength, NumericComparisonType::LessThanOrEqualTo, map);
   // remove ways whose heading (in degrees) varies at or above a certain amount 
   std::shared_ptr<WayHeadingVarianceCriterion> headingCrit =
     std::make_shared<WayHeadingVarianceCriterion>(
-      WayHeadingVarianceCriterion(
-        _maxHeadingVariance, NumericComparisonType::GreaterThanOrEqualTo, map));
+      _maxHeadingVariance, NumericComparisonType::GreaterThanOrEqualTo, map);
   headingCrit->setNumHistogramBins(_numHistogramBins);
   headingCrit->setSampleDistance(_sampleDistance);
   headingCrit->setHeadingDelta(_headingDelta); 
-  ChainCriterionPtr chainedWayCrit =
-    std::make_shared<ChainCriterion>(ChainCriterion(lengthCrit, headingCrit));
+  ChainCriterionPtr chainedWayCrit = std::make_shared<ChainCriterion>(lengthCrit, headingCrit);
 
   // make sure only roads are removed
   std::shared_ptr<HighwayCriterion> roadCrit =
@@ -85,11 +83,10 @@ ElementCriterionPtr UnlikelyRoadRemover::_getRemovalCrit(const ConstOsmMapPtr& m
   // Don't consider roundabouts, since their headings will obviously vary quite a bit as you go
   // around them.
   std::shared_ptr<NotCriterion> roundaboutCrit =
-    std::make_shared<NotCriterion>(std::make_shared<RoundaboutCriterion>(RoundaboutCriterion()));
-  ChainCriterionPtr chainedRoadCrit =
-    std::make_shared<ChainCriterion>(ChainCriterion(roadCrit, roundaboutCrit));
+    std::make_shared<NotCriterion>(std::make_shared<RoundaboutCriterion>());
+  ChainCriterionPtr chainedRoadCrit = std::make_shared<ChainCriterion>(roadCrit, roundaboutCrit);
 
-  return std::make_shared<ChainCriterion>(ChainCriterion(chainedWayCrit, chainedRoadCrit));
+  return std::make_shared<ChainCriterion>(chainedWayCrit, chainedRoadCrit);
 }
 
 void UnlikelyRoadRemover::apply(OsmMapPtr& map)

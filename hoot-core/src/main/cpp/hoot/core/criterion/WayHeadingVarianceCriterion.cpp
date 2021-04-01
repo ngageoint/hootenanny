@@ -31,6 +31,7 @@
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/algorithms/extractors/Histogram.h>
+#include <hoot/core/elements/MapProjector.h>
 
 namespace hoot
 {
@@ -40,11 +41,6 @@ HOOT_FACTORY_REGISTER(ElementCriterion, WayHeadingVarianceCriterion)
 WayHeadingVarianceCriterion::WayHeadingVarianceCriterion() :
 _comparisonVariance(-1.0),
 _numericComparisonType(NumericComparisonType::EqualTo)
-{
-}
-
-WayHeadingVarianceCriterion::WayHeadingVarianceCriterion(ConstOsmMapPtr map) :
-_map(map)
 {
 }
 
@@ -76,12 +72,14 @@ Degrees WayHeadingVarianceCriterion::getLargestHeadingVariance(const ConstWayPtr
   std::shared_ptr<Histogram> hist = _sampledAngleHist.getNormalizedHistogram(*_map, way);
   const std::vector<double> bins = hist->getBins();
   Degrees lowestAngle = -1.0;
-  Degrees largestDiff = -1.0;
+  Degrees largestDiff = 0.0;
   for (size_t i = 0; i < bins.size(); ++i)
   {
+    LOG_VART(bins[i]);
     if (bins[i] > 0.0)
     {
       const Degrees heading = toDegrees(hist->getBinCenter(i));
+      LOG_VART(heading);
       if (lowestAngle == -1.0)
       {
         lowestAngle = heading;
@@ -106,6 +104,10 @@ bool WayHeadingVarianceCriterion::isSatisfied(const ConstElementPtr& e) const
   if (!_map)
   {
     throw IllegalArgumentException("WayHeadingVarianceCriterion requires a map.");
+  }
+  if (!MapProjector::isPlanar(_map))
+  {
+    throw IllegalArgumentException("Map must be in planar coordinate system.");
   }
 
   if (e && e->getElementType() == ElementType::Way)
