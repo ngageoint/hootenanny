@@ -75,8 +75,6 @@ public:
 
   bool in(const std::vector<long int>& p);
 
-  bool intersects(const LongBox& b);
-
   /**
    * @brief toString
    * @return QString

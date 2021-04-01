@@ -95,7 +95,6 @@ public:
   explicit OsmMap(const std::shared_ptr<const OsmMap>&);
   explicit OsmMap(const std::shared_ptr<OsmMap>&);
   explicit OsmMap(const std::shared_ptr<OGRSpatialReference>& srs);
-  OsmMap(const std::shared_ptr<const OsmMap>&, const std::shared_ptr<OGRSpatialReference>& srs);
 
   ~OsmMap() = default;
 
@@ -109,8 +108,6 @@ public:
   ConstElementPtr getElement(ElementType type, long id) const;
   ElementPtr getElement(const ElementId& id);
   ElementPtr getElement(ElementType type, long id);
-
-  QSet<ElementId> getElementIds() const;
 
   size_t getElementCount() const;
   size_t size() const { return getElementCount(); }
@@ -173,7 +170,6 @@ public:
   NodePtr getNode(const ElementId& eid) { return getNode(eid.getId()); }
   const NodeMap& getNodes() const { return _nodes; }
   QSet<long> getNodeIds() const;
-  QSet<ElementId> getNodeElementIds() const;
 
   long getNodeCount() const { return _nodes.size(); }
 
@@ -199,8 +195,6 @@ public:
   long createNextNodeId() const { return _idGen->createNodeId(); }
 
   void visitNodesRo(ConstElementVisitor& visitor) const;
-  void visitNodesRw(ConstElementVisitor& visitor);
-  void visitNodesRw(ElementVisitor& visitor);
 
   int numNodesAppended() const { return _numNodesAppended; }
   int numNodesSkippedForAppending() const { return _numNodesSkippedForAppending; }
@@ -223,7 +217,6 @@ public:
   ConstWayPtr getWay(ElementId eid) const;
   const WayMap& getWays() const { return _ways; }
   QSet<long> getWayIds() const;
-  QSet<ElementId> getWayElementIds() const;
   long getWayCount() const { return _ways.size(); }
 
   void addWay(const WayPtr& w);
@@ -233,7 +226,6 @@ public:
   long createNextWayId() const { return _idGen->createWayId(); }
 
   void visitWaysRo(ConstElementVisitor& visitor) const;
-  void visitWaysRw(ConstElementVisitor& visitor);
   void visitWaysRw(ElementVisitor& visitor);
 
   int numWaysAppended() const { return _numWaysAppended; }
@@ -246,7 +238,6 @@ public:
   ConstRelationPtr getRelation(ElementId eid) const;
   const RelationMap& getRelations() const { return _relations; }
   QSet<long> getRelationIds() const;
-  QSet<ElementId> getRelationElementIds() const;
   long getRelationCount() const { return _relations.size(); }
 
   void addRelation(const RelationPtr& r);
@@ -256,7 +247,6 @@ public:
   long createNextRelationId() const { return _idGen->createRelationId(); }
 
   void visitRelationsRo(ConstElementVisitor& visitor) const;
-  void visitRelationsRw(ConstElementVisitor& visitor);
   void visitRelationsRw(ElementVisitor& visitor);
 
   int numRelationsAppended() const { return _numRelationsAppended; }

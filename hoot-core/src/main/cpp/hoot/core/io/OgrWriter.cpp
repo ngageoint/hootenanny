@@ -837,43 +837,4 @@ void OgrWriter::_addFeatureToLayer(OGRLayer* layer, const std::shared_ptr<Featur
   }
 }
 
-std::shared_ptr<Geometry> OgrWriter::_toMulti(const std::shared_ptr<Geometry>& from)
-{
-  std::shared_ptr<Geometry> result;
-
-  switch (from->getGeometryTypeId())
-  {
-  case GEOS_POINT:
-  {
-    vector<Geometry*> v;
-    v.push_back(from.get());
-    result.reset(GeometryFactory::getDefaultInstance()->createMultiPoint(v));
-    break;
-  }
-  case GEOS_LINESTRING:
-  {
-    vector<Geometry*> v;
-    v.push_back(from.get());
-    result.reset(GeometryFactory::getDefaultInstance()->createMultiLineString(v));
-    break;
-  }
-  case GEOS_POLYGON:
-  {
-    vector<Geometry*> v;
-    v.push_back(from.get());
-    result.reset(GeometryFactory::getDefaultInstance()->createMultiPolygon(v));
-    break;
-  }
-  case GEOS_MULTIPOINT:
-  case GEOS_MULTILINESTRING:
-  case GEOS_MULTIPOLYGON:
-    result = from;
-    break;
-  default:
-    throw HootException("Unexpected geometry type: " + from->getGeometryType());
-  }
-
-  return result;
-}
-
 }

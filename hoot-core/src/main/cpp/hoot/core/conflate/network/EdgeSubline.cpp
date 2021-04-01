@@ -34,7 +34,6 @@ namespace hoot
 bool operator==(const ConstEdgeSublinePtr& es1, const ConstEdgeSublinePtr& es2)
 {
   bool result = false;
-
   if (es1.get() == es2.get())
   {
     result = true;
@@ -43,17 +42,6 @@ bool operator==(const ConstEdgeSublinePtr& es1, const ConstEdgeSublinePtr& es2)
   {
     result = true;
   }
-
-//  bool strResult = es1->toString() == es2->toString();
-//  if (result != strResult)
-//  {
-//    LOG_VARE(result);
-//    LOG_VARE(strResult);
-//    LOG_VARE(es1);
-//    LOG_VARE(es2);
-//    throw HootException();
-//  }
-
   return result;
 }
 
@@ -62,13 +50,6 @@ EdgeSubline::EdgeSubline(const ConstEdgeLocationPtr& start, const ConstEdgeLocat
   _end(end)
 {
   assert(_start->getEdge() == _end->getEdge());
-}
-
-EdgeSubline::EdgeSubline(const EdgeLocationPtr& start, const EdgeLocationPtr& end) :
-  _start(start),
-  _end(end)
-{
-  assert(start->getEdge() == _end->getEdge());
 }
 
 EdgeSubline::EdgeSubline(const ConstNetworkEdgePtr& e, double start, double end) :

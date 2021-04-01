@@ -166,8 +166,6 @@ protected:
 
   OGRLayer* _getLayerByName(const QString& layerName);
 
-  std::shared_ptr<geos::geom::Geometry> _toMulti(const std::shared_ptr<geos::geom::Geometry>& from);
-
   void strictError(const QString& warning);
 
   virtual void _writePartial(ElementProviderPtr& provider, const ConstElementPtr& e);
