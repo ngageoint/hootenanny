@@ -54,8 +54,7 @@ public:
 
   ElementCriterionPtr clone() override
   {
-    return
-      ElementCriterionPtr(new WayLengthCriterion(_comparisonLength, _numericComparisonType, _map));
+    return std::make_shared<WayLengthCriterion>(_comparisonLength, _numericComparisonType, _map);
   }
 
   QString getDescription() const override

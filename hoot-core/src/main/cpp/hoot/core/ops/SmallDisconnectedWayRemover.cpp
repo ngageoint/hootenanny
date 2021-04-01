@@ -77,18 +77,18 @@ void SmallDisconnectedWayRemover::apply(OsmMapPtr& map)
   // remove ways at or below a certain size
   std::shared_ptr<WayLengthCriterion> lengthCrit =
     std::make_shared<WayLengthCriterion>(
-      WayLengthCriterion(_maxWayLength, NumericComparisonType::LessThanOrEqualTo, _map));
+      _maxWayLength, NumericComparisonType::LessThanOrEqualTo, _map);
   // remove ways having a node count at or below a certain amount
   std::shared_ptr<WayNodeCountCriterion> nodeCountCrit =
     std::make_shared<WayNodeCountCriterion>(
-      WayNodeCountCriterion(_maxWayNodeCount, NumericComparisonType::LessThanOrEqualTo));
+      _maxWayNodeCount, NumericComparisonType::LessThanOrEqualTo);
   ChainCriterionPtr wayCrit =
-    std::make_shared<ChainCriterion>(ChainCriterion(lengthCrit, nodeCountCrit));
+    std::make_shared<ChainCriterion>(lengthCrit, nodeCountCrit);
   // require that ways be disconnected from other ways to be removed
   std::shared_ptr<DisconnectedWayCriterion> disconnectedCrit =
-    std::make_shared<DisconnectedWayCriterion>(DisconnectedWayCriterion(_map));
+    std::make_shared<DisconnectedWayCriterion>(_map);
   ChainCriterionPtr crit =
-    std::make_shared<ChainCriterion>(ChainCriterion(wayCrit, disconnectedCrit));
+    std::make_shared<ChainCriterion>(wayCrit, disconnectedCrit);
 
   // Find the ways to remove.
   std::set<long> wayIdsToRemove;

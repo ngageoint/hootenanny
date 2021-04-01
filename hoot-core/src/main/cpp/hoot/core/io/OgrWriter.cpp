@@ -277,7 +277,7 @@ void OgrWriter::write(const ConstOsmMapPtr& map)
 }
 
 void OgrWriter::translateToFeatures(
-  ElementProviderPtr& provider, const ConstElementPtr& e,
+  const ElementProviderPtr& provider, const ConstElementPtr& e,
   std::shared_ptr<Geometry> &g, // output
   std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature> &tf) // output
 {

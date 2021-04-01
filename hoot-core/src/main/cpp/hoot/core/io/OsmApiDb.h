@@ -74,11 +74,6 @@ public:
   std::vector<long> selectNodeIdsForWay(long wayId) override;
 
   /**
-   * Returns a query results with node_id, lat, and long with all the OSM node ID's for a given way
-   */
-  std::shared_ptr<QSqlQuery> selectNodesForWay(long wayId) override;
-
-  /**
    * Returns a vector with all the relation members for a given relation
    */
   std::vector<RelationData::Entry> selectMembersForRelation(long relationId) override;
@@ -114,7 +109,7 @@ public:
    * @param tableName element type associated with the sequence
    * @return the next sequence ID for the given type
    */
-  long getNextId(const ElementType& elementType) override;
+  long getNextId(const ElementType& elementType);
 
   /**
    * Increment the sequence ID for the given sequence and return it

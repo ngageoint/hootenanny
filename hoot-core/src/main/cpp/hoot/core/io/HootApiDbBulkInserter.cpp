@@ -132,14 +132,6 @@ void HootApiDbBulkInserter::_getOrCreateMap()
   const QString mapName = pList[2];
   LOG_VARD(mapName);
 
-//  LOG_VARD(_overwriteMap);
-//  if (!_overwriteMap && _database.currentUserHasMapWithName(mapName))
-//  {
-//    throw HootException(
-//      "User with ID: " + QString::number(_database.getCurrentUserId()) +
-//      " already has map with name: " + mapName);
-//  }
-
   const long mapId = _database.getMapIdByNameForCurrentUser(mapName);
   LOG_VART(mapId);
 

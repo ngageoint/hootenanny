@@ -473,27 +473,6 @@ vector<long> ApiDb::selectNodeIdsForWay(long wayId, const QString& sql)
   return result;
 }
 
-std::shared_ptr<QSqlQuery> ApiDb::selectNodesForWay(long wayId, const QString& sql)
-{
-  if (!_selectNodeIdsForWay)
-  {
-    _selectNodeIdsForWay.reset(new QSqlQuery(_db));
-    _selectNodeIdsForWay->setForwardOnly(true);
-    _selectNodeIdsForWay->prepare(sql);
-  }
-
-  _selectNodeIdsForWay->bindValue(":wayId", (qlonglong)wayId);
-  if (_selectNodeIdsForWay->exec() == false)
-  {
-    throw HootException("Error selecting node ID's for way with ID: " + QString::number(wayId) +
-      " Error: " + _selectNodeIdsForWay->lastError().text());
-  }
-  LOG_VART(_selectNodeIdsForWay->numRowsAffected());
-  LOG_VART(_selectNodeIdsForWay->executedQuery());
-
-  return _selectNodeIdsForWay;
-}
-
 Tags ApiDb::unescapeTags(const QVariant &v)
 {
   assert(v.type() == QVariant::String);
@@ -922,19 +901,6 @@ void ApiDb::execSqlFile(const QString& dbUrl, const QString& sqlFile)
     throw HootException(
       "Failed executing SQL file against the database.  Status: " + QString::number(retval));
   }
-}
-
-QString ApiDb::getPqString(const QString& url)
-{
-  const QMap<QString, QString> dbUrlParts = getDbUrlParts(url);
-  QString hostAddr = dbUrlParts["host"];
-  if (hostAddr == "localhost")
-  {
-    hostAddr = "127.0.0.1";
-  }
-  return
-    "dbname=" + dbUrlParts["database"] + " user=" + dbUrlParts["user"] + " password=" +
-    dbUrlParts["password"] + " hostaddr=" + hostAddr + " port=" + dbUrlParts["port"];
 }
 
 Settings ApiDb::readDbConfig()

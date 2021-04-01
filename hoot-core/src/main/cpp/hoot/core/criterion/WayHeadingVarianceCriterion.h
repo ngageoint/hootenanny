@@ -59,8 +59,8 @@ public:
   ElementCriterionPtr clone() override
   {
     return
-      std::make_shared<WayHeadingVarianceCriterion>(WayHeadingVarianceCriterion(
-        _comparisonVariance, _numericComparisonType, _map));
+      std::make_shared<WayHeadingVarianceCriterion>(
+        _comparisonVariance, _numericComparisonType, _map);
   }
 
   /**

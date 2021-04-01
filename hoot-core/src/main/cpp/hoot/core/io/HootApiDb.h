@@ -84,11 +84,6 @@ public:
   std::vector<long> selectNodeIdsForWay(long wayId) override;
 
   /**
-   * Returns a query results with node_id, lat, and long with all the OSM node ID's for a given way
-   */
-  std::shared_ptr<QSqlQuery> selectNodesForWay(long wayId) override;
-
-  /**
    * Returns a vector with all the relation members for a given relation
    */
   std::vector<RelationData::Entry> selectMembersForRelation(long relationId) override;
@@ -259,14 +254,6 @@ public:
    */
   QStringList selectMapNamesAvailableToCurrentUser();
 
-  /**
-   * Returns the IDs of all maps with the given name
-   *
-   * @param name map name
-   * @return a collection of map IDs
-   */
-  std::set<long> selectMapIds(QString name);
-
   void updateNode(const long id, const double lat, const double lon, const long version,
                   const Tags& tags);
 
@@ -291,15 +278,6 @@ public:
    *  and will never be reused
    */
   long reserveElementId(const ElementType::Type type);
-
-  /**
-   * Drops the specified database. No warning or error will be given if the DB doesn't exist.
-   *
-   * No validation is done on the DB name. In other words, don't pass in user provided strings.
-   *
-   * @param databaseName
-   */
-  void dropDatabase(const QString& databaseName);
 
   /**
    * Drops the specified table and cascades (removes dependants). No warning or error will be given
@@ -378,8 +356,6 @@ public:
                        QVariant v3 = QVariant());
 
   QString tableTypeToTableName(const TableType& tableType) const override;
-
-  long getNextId(const ElementType& elementType) override;
 
   static QUrl getBaseUrl();
 
@@ -530,14 +506,6 @@ public:
   void verifyCurrentUserMapUse(const long mapId, const bool write = false);
 
   /**
-   * Determines if the currently configured user owns a map with the given name
-   *
-   * @param mapName map name
-   * @return true if the current user owns a map with the input name; false othersie
-   */
-  bool currentUserHasMapWithName(const QString& mapName);
-
-  /**
    * Returns the ID of a map with given name if owned by the currently configured user
    *
    * @param name map name
@@ -619,7 +587,6 @@ private:
   std::shared_ptr<QSqlQuery> _insertFolderMapMapping;
   std::shared_ptr<QSqlQuery> _folderIdsAssociatedWithMap;
   std::shared_ptr<QSqlQuery> _deleteFolders;
-  std::shared_ptr<QSqlQuery> _selectMapIds;
   std::shared_ptr<QSqlQuery> _getMapPermissionsById;
   std::shared_ptr<QSqlQuery> _getMapPermissionsByName;
   std::shared_ptr<QSqlQuery> _currentUserHasMapWithName;

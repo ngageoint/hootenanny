@@ -257,14 +257,6 @@ std::vector<ConstRelationPtr> RelationMemberUtils::getContainingRelations(
   return relations;
 }
 
-QSet<long> RelationMemberUtils::getContainingRelationIds(
-  const ConstOsmMapPtr& map, const ElementId& childId)
-{
-  return
-    CollectionUtils::stdSetToQSet(
-      map->getIndex().getElementToRelationMap()->getRelationByElement(childId));
-}
-
 bool RelationMemberUtils::isMemberOfRelationSatisfyingCriterion(
   const ConstOsmMapPtr& map, const ElementId& childId, const ElementCriterion& criterion)
 {
@@ -283,26 +275,6 @@ bool RelationMemberUtils::isMemberOfRelationSatisfyingCriterion(
     }
   }
   return false;
-}
-
-int RelationMemberUtils::getMemberWayNodeCount(const ConstRelationPtr& relation,
-                                               const ConstOsmMapPtr& map)
-{
-  int count = 0;
-  const std::vector<RelationData::Entry>& relationMembers = relation->getMembers();
-  for (size_t i = 0; i < relationMembers.size(); i++)
-  {
-    ConstElementPtr member = map->getElement(relationMembers[i].getElementId());
-    if (member)
-    {
-      ConstWayPtr way = std::dynamic_pointer_cast<const Way>(member);
-      if (way)
-      {
-        count += (int)way->getNodeCount();
-      }
-    }
-  }
-  return count;
 }
 
 bool RelationMemberUtils::relationHasConflatableMember(

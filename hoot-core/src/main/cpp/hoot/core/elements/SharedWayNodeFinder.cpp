@@ -43,11 +43,6 @@ QSet<long> SharedWayNodeFinder::getSharedWayNodes(const ConstWayPtr& way1, const
   return nodeIdsSet1.intersect(nodeIdsSet2);
 }
 
-bool SharedWayNodeFinder::waysShareNode(const ConstWayPtr& way1, const ConstWayPtr& way2)
-{
-  return !getSharedWayNodes(way1, way2).empty();
-}
-
 bool SharedWayNodeFinder::waysShareEndNode(const ConstWayPtr& way1, const ConstWayPtr& way2,
                                            const bool sameDirection)
 {

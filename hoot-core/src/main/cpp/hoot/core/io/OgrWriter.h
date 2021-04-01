@@ -110,7 +110,7 @@ public:
    * @param g Geometry output
    * @param tf Vector of translated features output
    */
-  void translateToFeatures(ElementProviderPtr& provider,
+  void translateToFeatures(const ElementProviderPtr& provider,
                            const ConstElementPtr& e,
                            std::shared_ptr<geos::geom::Geometry>& g,
                            std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature>& tf);
@@ -152,7 +152,9 @@ protected:
   OGRSpatialReference _wgs84;
   AddExportTagsVisitor _addExportTagsVisitor;
 
-  void _addFeature(OGRLayer* layer, const std::shared_ptr<Feature>& f, const std::shared_ptr<geos::geom::Geometry>& g);
+  void _addFeature(
+    OGRLayer* layer, const std::shared_ptr<Feature>& f,
+    const std::shared_ptr<geos::geom::Geometry>& g);
 
   void _addFeatureToLayer(OGRLayer* layer, const std::shared_ptr<Feature>& f,
                           const geos::geom::Geometry* g,
