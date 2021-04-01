@@ -43,11 +43,6 @@ _numericComparisonType(NumericComparisonType::EqualTo)
 {
 }
 
-WayLengthCriterion::WayLengthCriterion(ConstOsmMapPtr map) :
-_map(map)
-{
-}
-
 WayLengthCriterion::WayLengthCriterion(
   const double comparisonLength, const NumericComparisonType& numericComparisonType,
   ConstOsmMapPtr map) :

@@ -48,8 +48,6 @@ public:
 
   static QString className() { return "hoot::SumNumericTagsVisitor"; }
 
-  static int logWarnCount;
-
   SumNumericTagsVisitor();
   explicit SumNumericTagsVisitor(const QStringList keys);
   ~SumNumericTagsVisitor() = default;

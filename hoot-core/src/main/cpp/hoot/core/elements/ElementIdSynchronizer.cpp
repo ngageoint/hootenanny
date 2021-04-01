@@ -38,7 +38,6 @@
 #include <hoot/core/criterion/TagCriterion.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/ops/ElementHashOp.h>
 
 namespace hoot
 {
@@ -354,19 +353,12 @@ void ElementIdSynchronizer::_calcElementHashes(
   LOG_DEBUG("Calculating " << map->getName() << " element hashes...");
 
   ElementHashVisitor hashVis;
-  // This exists as an option to use, since its capable of comparing way nodes better. However, it
-  // ends up preventing some id syncs against real world data.
-  //ElementHashOp hashVis;
-
   hashVis.setWriteHashes(false);
   hashVis.setCollectHashes(true);
   hashVis.setUseNodeTags(_useNodeTagsForHash);
   hashVis.setCoordinateComparisonSensitivity(_coordinateComparisonSensitivity);
-
   hashVis.setOsmMap(map.get());
   map->visitRw(hashVis);
-  //hashVis.setAddParentToWayNodes(true);
-  //hashVis.apply(map);
 
   hashesToElementIds = hashVis.getHashesToElementIds();
   elementIdsToHashes = hashVis.getElementIdsToHashes();

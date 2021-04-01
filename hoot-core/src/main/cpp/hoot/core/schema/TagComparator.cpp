@@ -759,7 +759,7 @@ Tags TagComparator::replaceMerge(const Tags& t1, const Tags& t2,
   // We're keeping t1, so start with them as the result.
   result = t1;
 
-  // Now see if there are any configurd exclusions we should keep from t2.
+  // Now see if there are any configured exclusions we should keep from t2.
   if (!overwriteExcludeTagKeys.empty())
   {
     const Qt::CaseSensitivity caseSensitivity =

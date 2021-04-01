@@ -139,8 +139,8 @@ private:
   int _encodingErrorCount;
   std::shared_ptr<QXmlStreamWriter> _writer;
   geos::geom::Envelope _bounds;
-  long _numWritten;
-  long _statusUpdateInterval;
+  int _numWritten;
+  int _statusUpdateInterval;
   AddExportTagsVisitor _addExportTagsVisitor;
   bool _sortSourceImageryTag;
 

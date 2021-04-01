@@ -22,34 +22,38 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
  */
-#include "RemoveMetadataTagsVisitor.h"
 
-// hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/Log.h>
-#include <hoot/core/criterion/NotCriterion.h>
+// Hoot
+#include <hoot/core/TestUtils.h>
+#include <hoot/core/criterion/MultiLineStringCriterion.h>
+#include <hoot/core/schema/MetadataTags.h>
 
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementVisitor, RemoveMetadataTagsVisitor)
-
-void RemoveMetadataTagsVisitor::visit(const std::shared_ptr<Element>& e)
+class MultiLineStringCriterionTest : public HootTestFixture
 {
-  // see if the element passes the filter (if there is one)
-  if (_criterion.get() && !_criterion->isSatisfied(e))
-  {
-    return;
-  }
-  _numAffected++;
+  CPPUNIT_TEST_SUITE(MultiLineStringCriterionTest);
+  CPPUNIT_TEST(runBasicTest);
+  CPPUNIT_TEST_SUITE_END();
 
-  Tags tags = e->getTags();
-  _numTagsRemoved += tags.removeMetadata();
-  e->setTags(tags);
-}
+public:
+
+  void runBasicTest()
+  {
+    RelationPtr relation = std::make_shared<Relation>(Status::Unknown1, 1);
+    MultiLineStringCriterion uut;
+
+    relation->setType(MetadataTags::RelationMultilineString());
+    CPPUNIT_ASSERT(uut.isSatisfied(relation));
+
+    relation->setType("");
+    CPPUNIT_ASSERT(!uut.isSatisfied(relation));
+  }
+};
+
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MultiLineStringCriterionTest, "quick");
 
 }

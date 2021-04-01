@@ -87,7 +87,8 @@ void AttributeValueCriterion::setConfiguration(const Settings& conf)
 {
   ConfigOptions configOptions(conf);
   _attributeType = ElementAttributeType::fromString(configOptions.getAttributeValueCriterionType());
-  QString comparisonTypeStr = configOptions.getAttributeValueCriterionComparisonType();
+  QString comparisonTypeStr =
+    configOptions.getAttributeValueCriterionComparisonType().trimmed().toLower();
   if (comparisonTypeStr.toLower().startsWith("text"))
   {
     _comparisonType =

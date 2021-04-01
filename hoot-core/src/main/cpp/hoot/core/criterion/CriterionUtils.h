@@ -155,21 +155,6 @@ public:
     map->visitRo(filteredVis);
     return idVis->getElementSet();
   }
-
-  /**
-   * Determines if an element has a given criterion
-   *
-   * @param element the element to examine
-   * @param criterionClassName class name of the ElementCriterion to determine membership of
-   * @return true if the element has the criterion; false otherwise
-   * @throws if the criterion class name is invalid
-   * @todo merge this with isSatisifed
-   */
-  static bool hasCriterion(const ConstElementPtr& element, const QString& criterionClassName);
-
-private:
-
-  static ElementCriterionPtr _getCrit(const QString& criterionClassName);
 };
 
 }

@@ -39,33 +39,23 @@ namespace hoot
 /**
  * Allows for setting tags on elements and their children (way nodes, relation members)
  */
-class RecursiveSetTagValueOp : public OsmMapOperation, public ElementCriterionConsumer,
-  public Configurable
+class RecursiveSetTagValueOp : public OsmMapOperation, public ElementCriterionConsumer
 {
 public:
 
   static QString className() { return "hoot::RecursiveSetTagValueOp"; }
 
   RecursiveSetTagValueOp() = default;
-  ~RecursiveSetTagValueOp() = default;
-
-  // We have the constructor signatures from SetTagValueVisitor here, as well as a signature that
-  // allows passing in an already configured, possibly complex, criterion. We may want to extend
-  // that capability to SetTagValueVisitor at some point.
+  // We have some of the constructor signatures from SetTagValueVisitor here, as well as a signature
+  // that allows passing in an already configured, possibly complex, criterion. We may want to
+  // extend that capability to SetTagValueVisitor at some point.
   RecursiveSetTagValueOp(
     const QStringList& keys, const QStringList& values, ElementCriterionPtr elementCriterion,
     bool appendToExistingValue = false, const bool overwriteExistingTag = true);
   RecursiveSetTagValueOp(
     const QString& key, const QString& value, ElementCriterionPtr elementCriterion,
     bool appendToExistingValue = false, const bool overwriteExistingTag = true);
-  RecursiveSetTagValueOp(
-    const QStringList& keys, const QStringList& values, const QString& criterionName,
-    bool appendToExistingValue = false, const bool overwriteExistingTag = true,
-    const bool negateCriterion = false);
-  RecursiveSetTagValueOp(
-    const QString& key, const QString& value, const QString& criterionName,
-    bool appendToExistingValue = false, const bool overwriteExistingTag = true,
-    const bool negateCriterion = false);
+    ~RecursiveSetTagValueOp() = default;
 
   /**
    * @see OsmMapOperation
@@ -76,11 +66,6 @@ public:
    * @see ElementCriterionConsumer
    */
   void addCriterion(const ElementCriterionPtr& e) override;
-
-  /**
-   * @see Configurable
-   */
-  void setConfiguration(const Settings& conf) override;
 
   void setNegateCriterion(bool negate) { _negateCriterion = negate; }
 

@@ -329,15 +329,6 @@ vector<long> OsmApiDb::selectNodeIdsForWay(long wayId)
   return ApiDb::selectNodeIdsForWay(wayId, sql);
 }
 
-std::shared_ptr<QSqlQuery> OsmApiDb::selectNodesForWay(long wayId)
-{
-  QString sql =  QString("SELECT node_id, latitude, longitude FROM %1 INNER JOIN %2 ON "
-                         "%1.node_id=%2.id AND way_id = :wayId ORDER BY sequence_id")
-                         .arg(ApiDb::getCurrentWayNodesTableName())
-                         .arg(ApiDb::getCurrentNodesTableName());
-  return ApiDb::selectNodesForWay(wayId, sql);
-}
-
 vector<RelationData::Entry> OsmApiDb::selectMembersForRelation(long relationId)
 {
   vector<RelationData::Entry> result;

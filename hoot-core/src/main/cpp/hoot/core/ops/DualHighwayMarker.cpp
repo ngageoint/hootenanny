@@ -89,15 +89,13 @@ void DualHighwayMarker::_createIndex()
   LOG_DEBUG("Creating spatial index...");
 
   // No tuning done - see #3054
-  std::shared_ptr<Tgs::MemoryPageStore> mps =
-    std::make_shared<Tgs::MemoryPageStore>(Tgs::MemoryPageStore(728));
+  std::shared_ptr<Tgs::MemoryPageStore> mps = std::make_shared<Tgs::MemoryPageStore>(728);
   _index.reset(new Tgs::HilbertRTree(mps, 2));
 
   // Only index elements that satisfy isMatchCandidate.
   std::function<bool (ConstElementPtr e)> f =
     std::bind(&DualHighwayMarker::_isMatchCandidate, this, std::placeholders::_1);
-  std::shared_ptr<ArbitraryCriterion> pCrit =
-    std::make_shared<ArbitraryCriterion>(ArbitraryCriterion(f));
+  std::shared_ptr<ArbitraryCriterion> pCrit = std::make_shared<ArbitraryCriterion>(f);
 
   SpatialIndexer v(
     _index, _indexToEid, pCrit,

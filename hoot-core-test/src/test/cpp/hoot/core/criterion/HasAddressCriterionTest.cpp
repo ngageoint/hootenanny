@@ -43,6 +43,7 @@ public:
   void runBasicTest()
   {
     HasAddressCriterion uut;
+    uut.setConfiguration(conf());
 
     NodePtr node1(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
     node1->getTags().set(AddressTagKeys::FULL_ADDRESS_TAG_NAME, "123 Main Street");

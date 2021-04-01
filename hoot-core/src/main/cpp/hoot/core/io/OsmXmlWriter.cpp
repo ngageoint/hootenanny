@@ -461,7 +461,8 @@ void OsmXmlWriter::writePartial(const ConstNodePtr& n)
   _numWritten++;
   if (_numWritten % _statusUpdateInterval == 0)
   {
-    PROGRESS_INFO("Wrote " << StringUtils::formatLargeNumber(_numWritten) << " elements to output.");
+    PROGRESS_STATUS(
+      "Wrote " << StringUtils::formatLargeNumber(_numWritten) << " elements to output.");
   }
 }
 
@@ -539,7 +540,8 @@ void OsmXmlWriter::writePartial(const ConstWayPtr& w)
   _numWritten++;
   if (_numWritten % _statusUpdateInterval == 0)
   {
-    PROGRESS_INFO("Wrote " << StringUtils::formatLargeNumber(_numWritten) << " elements to output.");
+    PROGRESS_STATUS(
+      "Wrote " << StringUtils::formatLargeNumber(_numWritten) << " elements to output.");
   }
 }
 
@@ -571,7 +573,8 @@ void OsmXmlWriter::writePartial(const ConstRelationPtr& r)
   _numWritten++;
   if (_numWritten % _statusUpdateInterval == 0)
   {
-    PROGRESS_INFO("Wrote " << StringUtils::formatLargeNumber(_numWritten) << " elements to output.");
+    PROGRESS_STATUS(
+      "Wrote " << StringUtils::formatLargeNumber(_numWritten) << " elements to output.");
   }
 }
 

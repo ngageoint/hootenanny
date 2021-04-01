@@ -170,13 +170,6 @@ public:
   std::vector<long> selectNodeIdsForWay(long wayId, const QString& sql);
 
   /**
-   * Returns a query results with node_id, lat, and long with all the OSM node ID's for a given way
-   */
-  virtual std::shared_ptr<QSqlQuery> selectNodesForWay(long wayId) = 0;
-
-  std::shared_ptr<QSqlQuery> selectNodesForWay(long wayId, const QString& sql);
-
-  /**
    * Returns a vector with all the relation members for a given relation
    */
   virtual std::vector<RelationData::Entry> selectMembersForRelation(long relationId) = 0;
@@ -282,14 +275,6 @@ public:
   std::shared_ptr<QSqlQuery> getChangesetsCreatedAfterTime(const QString& timeStr);
 
   /**
-   * Gets the next sequence ID for the given element type
-   *
-   * @param elementType element type
-   * @return an element ID
-   */
-  virtual long getNextId(const ElementType& elementType) = 0;
-
-  /**
    * Returns the number of elements of the given type in the database
    *
    * This can be slow for large tables if they haven't recently been analyzed.  If the most up to
@@ -385,14 +370,6 @@ public:
    * @param sqlFile path to the file containing SQL statements to execute
    */
   static void execSqlFile(const QString& dbUrl, const QString& sqlFile);
-
-  /**
-   * Converts an API database URL into the format needed by libpq
-   *
-   * @param url URL to convert
-   * @return a libpq command string
-   */
-  static QString getPqString(const QString& url);
 
   static Settings readDbConfig();
 
