@@ -100,7 +100,7 @@ void WayString::append(const WaySubline& subline)
         }
         else if (logWarnCount == Log::getWarnMessageLimit())
         {
-          LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+          LOG_TRACE(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
         }
         logWarnCount++;
       }
