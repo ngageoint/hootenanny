@@ -47,11 +47,6 @@ public:
   CalculateAreaForStatsVisitor() : _total(0) { }
   ~CalculateAreaForStatsVisitor() = default;
 
-  /**
-   * Returns the area in meters squared.
-   */
-  static double getArea(const OsmMapPtr& map, ElementPtr e);
-
   double getArea() const { return _total; }
 
   double getStat() const override { return getArea(); }

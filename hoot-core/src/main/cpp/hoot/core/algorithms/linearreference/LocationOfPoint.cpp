@@ -33,7 +33,6 @@
 #include <geos/geom/LineString.h>
 
 // Hoot
-#include <hoot/core/util/Assert.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/elements/OsmMap.h>
 
@@ -187,8 +186,8 @@ WayLocation LocationOfPoint::locateAfter(const Coordinate& inputPt, const WayLoc
       if (i == startIndex)
       {
         // recalculate the segFrac in terms of the whole line segment.
-        segFrac = minLocation.getSegmentFraction() +
-            (1 - minLocation.getSegmentFraction()) * segFrac;
+        segFrac =
+          minLocation.getSegmentFraction() + (1 - minLocation.getSegmentFraction()) * segFrac;
       }
       nextClosestLocation = WayLocation(_map, _way, i, segFrac);
       minDistance = segDistance;
@@ -196,8 +195,10 @@ WayLocation LocationOfPoint::locateAfter(const Coordinate& inputPt, const WayLoc
   }
   // Return the minDistanceLocation found.
   // This will not be null, since it was initialized to minLocation
-  Assert::isFalse(nextClosestLocation >= minLocation,
-                "computed location is before specified minimum location");
+  if (nextClosestLocation >= minLocation)
+  {
+    throw HootException("Computed location is before specified minimum location");
+  }
 
   return nextClosestLocation;
 }

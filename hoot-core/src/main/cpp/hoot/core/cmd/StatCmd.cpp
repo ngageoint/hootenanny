@@ -33,7 +33,6 @@
 #include <hoot/core/info/SingleStatistic.h>
 #include <hoot/core/info/NumericStatistic.h>
 #include <hoot/core/visitors/ElementVisitor.h>
-#include <hoot/core/util/Exception.h>
 #include <hoot/core/io/OsmMapReader.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Configurable.h>
