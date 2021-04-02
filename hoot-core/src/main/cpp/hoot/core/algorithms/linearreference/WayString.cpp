@@ -88,7 +88,8 @@ void WayString::append(const WaySubline& subline)
 
         if (logWarnCount < Log::getWarnMessageLimit())
         {
-          LOG_WARN("Ways must connect at a node in the WayString.");
+          // Decided to not make this a warning for the time being, since it pops up quite a bit.
+          LOG_TRACE("Ways must connect at a node in the WayString.");
           LOG_VART(back());
           LOG_VART(back().getWay());
           LOG_VART(subline);

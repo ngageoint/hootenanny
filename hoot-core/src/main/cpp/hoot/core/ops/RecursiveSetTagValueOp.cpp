@@ -42,6 +42,12 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, RecursiveSetTagValueOp)
 
+RecursiveSetTagValueOp::RecursiveSetTagValueOp()
+{
+  _tagger = std::make_shared<SetTagValueVisitor>();
+  _tagger->setConfiguration(conf());
+}
+
 RecursiveSetTagValueOp::RecursiveSetTagValueOp(
   const QStringList& keys, const QStringList& values, ElementCriterionPtr elementCriterion,
   bool appendToExistingValue, const bool overwriteExistingTag) :
@@ -88,6 +94,11 @@ void RecursiveSetTagValueOp::_setCriterion(const QString& criterionName)
 
 void RecursiveSetTagValueOp::apply(std::shared_ptr<OsmMap>& map)
 {
+  if (!_tagger->isValid())
+  {
+    throw IllegalArgumentException(SetTagValueVisitor::className() + " not configured properly.");
+  }
+
   const RelationMap& relations = map->getRelations();
   for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
   {

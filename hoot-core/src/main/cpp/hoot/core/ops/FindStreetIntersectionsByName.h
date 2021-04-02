@@ -78,14 +78,7 @@ public:
   /**
    * @see OperationStatus
    */
-  QString getCompletedStatusMessage() const override
-  {
-    return
-      "Located " + StringUtils::formatLargeNumber(_numAffected) +
-      " street intersections for inputs: " + _nameCrit->getNames()[0] + " and " +
-      _nameCrit->getNames()[1] + " out of " + StringUtils::formatLargeNumber(_numProcessed) +
-      " streets.";
-  }
+  QString getCompletedStatusMessage() const override;
 
 private:
 

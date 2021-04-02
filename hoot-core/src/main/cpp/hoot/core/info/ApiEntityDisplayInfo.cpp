@@ -309,8 +309,8 @@ template<typename ApiEntity, typename ApiEntityChild>
 QString ApiEntityDisplayInfo::_getApiEntities(
   const QString& apiEntityBaseClassName, const QString& apiEntityType,
   const bool displayType,
-  //the size of the longest names plus a 3 space buffer; the value passed in
-  //here by callers may have to be adjusted over time for some entity types
+  // the size of the longest names plus a 3 space buffer; the value passed in
+  // here by callers may have to be adjusted over time for some entity types
   const int maxNameSize)
 {
   LOG_VARD(apiEntityBaseClassName);
@@ -367,7 +367,7 @@ QString ApiEntityDisplayInfo::_getApiEntities(
       }
 
       QString name = className.replace("hoot::", "");
-      //append '*' to the names of visitors that support the SingleStatistic interface
+      // append '*' to the names of visitors that support the SingleStatistic interface
       if (supportsNumericStat)
       {
         name += "**";

@@ -56,7 +56,7 @@ public:
     {
       const QString className = classNames[i];
       LOG_VART(className);
-      // TODO: figure out what to do about these
+      // TODO: These crash the test. Need to figure out what to do about then.
       if (className == NotCriterion::className() || className == OrCriterion::className() ||
           className == ParallelWayCriterion::className() ||
           className == WayBufferCriterion::className())
@@ -66,13 +66,19 @@ public:
       ElementCriterionPtr crit(
         Factory::getInstance().constructObject<ElementCriterion>(className));
       LOG_VART(crit.get());
+
       std::shared_ptr<ConstOsmMapConsumer> mapConsumer =
         std::dynamic_pointer_cast<ConstOsmMapConsumer>(crit);
       if (mapConsumer)
       {
         mapConsumer->setOsmMap(map.get());
       }
-      const QString str = crit->toString();
+
+      QString str = crit->getName();
+      LOG_VART(str);
+      str = crit->getClassName();
+      LOG_VART(str);
+      str = crit->toString();
       LOG_VART(str);
       ElementCriterionPtr clone = crit->clone();
       CPPUNIT_ASSERT(clone != nullptr);
