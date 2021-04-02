@@ -193,9 +193,9 @@ WayLocation LocationOfPoint::locateAfter(const Coordinate& inputPt, const WayLoc
       minDistance = segDistance;
     }
   }
-  // Return the minDistanceLocation found.
-  // This will not be null, since it was initialized to minLocation
-  if (nextClosestLocation >= minLocation)
+  // Return the minDistanceLocation found. This will not be null, since it was initialized to
+  // minLocation.
+  if (!(nextClosestLocation >= minLocation))
   {
     throw HootException("Computed location is before specified minimum location");
   }
