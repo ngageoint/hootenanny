@@ -39,11 +39,13 @@ namespace  hoot
 class WordCountReader
 {
 public:
+
   WordCountReader(QString path);
 
   long readCount(QString word) const;
 
 private:
+
   QString _path;
   QSqlDatabase _db;
   mutable QSqlQuery _select;
