@@ -28,7 +28,6 @@
 #include "Factory.h"
 
 // Hoot Includes
-#include <hoot/core/util/Exception.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/SignalCatcher.h>
 
@@ -99,7 +98,7 @@ void Factory::registerCreator(const std::shared_ptr<ObjectCreator>& oc, bool bas
   }
   else
   {
-    throw Exception("A class got registered multiple times. " + oc->getName());
+    throw HootException("A class got registered multiple times. " + oc->getName());
   }
 }
 

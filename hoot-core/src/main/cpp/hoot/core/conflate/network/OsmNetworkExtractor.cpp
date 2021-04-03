@@ -253,17 +253,19 @@ void OsmNetworkExtractor::_visit(const ConstElementPtr& e)
       }
       else
       {
-        // if this is a bad multi-linestring then don't include it in the network.
+        // If this is a bad multi-linestring, then don't include it in the network.
         if (logWarnCount < Log::getWarnMessageLimit())
         {
-          LOG_WARN(
+          // Moving this to trace for now, since it happens a fair amount and as been going on
+          // awhile.
+          LOG_TRACE(
             "Found a non-contiguous relation when extracting a network. Ignoring: " <<
             e->getElementId());
           LOG_TRACE("Non-contiguous relation: " << e);
         }
         else if (logWarnCount == Log::getWarnMessageLimit())
         {
-          LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+          LOG_TRACE(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
         }
         logWarnCount++;
         return;

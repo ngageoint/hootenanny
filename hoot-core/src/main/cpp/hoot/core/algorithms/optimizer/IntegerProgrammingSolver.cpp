@@ -26,7 +26,7 @@
  */
 #include "IntegerProgrammingSolver.h"
 
-#include <hoot/core/util/Exception.h>
+#include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/SignalCatcher.h>
 
@@ -123,13 +123,13 @@ void IntegerProgrammingSolver::solveBranchAndCut()
   }
   catch (...)
   {
-    throw Exception(QString("Error solving integer programming problem in glp_intopt()."));
+    throw HootException(QString("Error solving integer programming problem in glp_intopt()."));
   }
 
   // if there was an error and the error was not a timeout or iteration limit error.
   if (result != 0 && result != GLP_EITLIM && result != GLP_ETMLIM)
   {
-    throw Exception(QString("Error solving integer programming problem. %1").arg(result));
+    throw HootException(QString("Error solving integer programming problem. %1").arg(result));
   }
 }
 
@@ -170,13 +170,13 @@ void IntegerProgrammingSolver::solveSimplex()
   }
   catch (...)
   {
-    throw Exception(QString("Error solving integer programming problem in glp_simplex()."));
+    throw HootException(QString("Error solving integer programming problem in glp_simplex()."));
   }
 
   // if there was an error and the error was not a timeout or iteration limit error.
   if (result != 0 && result != GLP_EITLIM && result != GLP_ETMLIM)
   {
-    throw Exception(QString("Error solving integer programming problem. %1").arg(result));
+    throw HootException(QString("Error solving integer programming problem. %1").arg(result));
   }
 }
 

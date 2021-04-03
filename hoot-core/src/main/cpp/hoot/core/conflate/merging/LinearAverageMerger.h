@@ -69,9 +69,6 @@ private:
   WayPtr _getMaximalNearestSubline(
     const ConstWayPtr& way1, const ConstWayPtr& way2, const double minSplitSize,
     std::vector<WayPtr>& splits) const;
-
-  void _mergeTags(
-    const WayPtr& averagedWay, const WayPtr& originalWay1, const WayPtr& originalWay2) const;
 };
 
 }
