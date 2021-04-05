@@ -26,12 +26,8 @@
  */
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/schema/ReplaceTagMerger.h>
-#include <hoot/core/io/OsmMapReaderFactory.h>
-#include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/elements/MapProjector.h>
 
 namespace hoot
 {
@@ -40,21 +36,47 @@ class ReplaceTagMergerTest : public HootTestFixture
 {
     CPPUNIT_TEST_SUITE(ReplaceTagMergerTest);
     CPPUNIT_TEST(runBasicTest);
+    CPPUNIT_TEST(runSwapTest);
     CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  ReplaceTagMergerTest() :
-  HootTestFixture(
-    "test-files/schema/ReplaceTagMergerTest/",
-    "test-output/schema/ReplaceTagMergerTest/")
-  {
-    //setResetType(ResetBasic);
-  }
+  ReplaceTagMergerTest() = default;
 
   void runBasicTest()
   {
+    ReplaceTagMerger uut;
 
+    Tags t1;
+    t1["foo"] = "bar";
+
+    Tags t2;
+    t2["bar"] = "baz";
+    t2["foo"] = "baz";
+
+    Tags expected;
+    expected["foo"] = "bar";
+
+    Tags merged = uut.mergeTags(t1, t2, ElementType::Way);
+    CPPUNIT_ASSERT_EQUAL(expected, merged);
+  }
+
+  void runSwapTest()
+  {
+    ReplaceTagMerger uut(true);
+
+    Tags t1;
+    t1["foo"] = "bar";
+    t1["bar"] = "foo";
+
+    Tags t2;
+    t2["bar"] = "baz";
+
+    Tags expected;
+    expected["bar"] = "baz";
+
+    Tags merged = uut.mergeTags(t1, t2, ElementType::Way);
+    CPPUNIT_ASSERT_EQUAL(expected, merged);
   }
 };
 
