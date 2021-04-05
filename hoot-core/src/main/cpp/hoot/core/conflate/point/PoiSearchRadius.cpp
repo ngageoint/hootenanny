@@ -43,11 +43,6 @@
 namespace hoot
 {
 
-PoiSearchRadius::PoiSearchRadius() :
-_distance(-1)
-{
-}
-
 PoiSearchRadius::PoiSearchRadius(QString key, QString val, int distance) :
 _key(key),
 _value(val),
@@ -112,7 +107,7 @@ QList<PoiSearchRadius> PoiSearchRadius::readSearchRadii(const QString& jsonStrin
     }
     LOG_VART(val);
 
-    const int distance = distProp.second.get<int>("distance");
+    const int distance = distProp.second.get<int>("distance", -1);
     LOG_VART(distance);
     if (distance < 0)
     {

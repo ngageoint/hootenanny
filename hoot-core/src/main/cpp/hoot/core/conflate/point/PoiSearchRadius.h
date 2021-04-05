@@ -44,7 +44,6 @@ class PoiSearchRadius
 {
 public:
 
-  PoiSearchRadius();
   PoiSearchRadius(QString key, QString val, int distance);
 
   /**

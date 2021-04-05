@@ -28,7 +28,7 @@
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/conflate/point/PoiSearchRadius.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonSchema.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/elements/MapProjector.h>
@@ -36,18 +36,18 @@
 namespace hoot
 {
 
-class PoiSearchRadiusTest : public HootTestFixture
+class PoiPolygonSchemaTest : public HootTestFixture
 {
-    CPPUNIT_TEST_SUITE(PoiSearchRadiusTest);
+    CPPUNIT_TEST_SUITE(PoiPolygonSchemaTest);
     CPPUNIT_TEST(runBasicTest);
     CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  PoiSearchRadiusTest() :
+  PoiPolygonSchemaTest() :
   HootTestFixture(
-    "test-files/conflate/point/PoiSearchRadiusTest/",
-    "test-output/conflate/point/PoiSearchRadiusTest/")
+    "test-files/conflate/poi-polygon/PoiPolygonSchemaTest/",
+    "test-output/conflate/poi-polygon/PoiPolygonSchemaTest/")
   {
     //setResetType(ResetBasic);
   }
@@ -58,6 +58,6 @@ public:
   }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(PoiSearchRadiusTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(PoiPolygonSchemaTest, "quick");
 
 }
