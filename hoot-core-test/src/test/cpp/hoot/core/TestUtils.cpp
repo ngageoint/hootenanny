@@ -290,7 +290,6 @@ void TestUtils::resetEnvironment(const QStringList confs)
     LOG_VART(confs[i]);
     conf().loadJson(confs[i]);
   }
-  //LOG_VART(conf());
   conf().set("HOOT_HOME", getenv("HOOT_HOME"));
 
   // Sometimes we add new projections to the MapProjector, when this happens it may pick a new

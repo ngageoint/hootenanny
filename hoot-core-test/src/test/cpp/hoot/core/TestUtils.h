@@ -259,8 +259,8 @@ protected:
   enum HootTestReset
   {
     ResetNone,
-    ResetBasic,
-    ResetAll
+    ResetBasic, // resets counters
+    ResetAll    // resets entire environment (config, etc.)
   };
 
   /** Constructor to set the paths to begin with $HOOT_HOME if used, default reset to none,
