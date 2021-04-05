@@ -26,12 +26,8 @@
  */
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/elements/TagUtils.h>
-#include <hoot/core/io/OsmMapReaderFactory.h>
-#include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/elements/MapProjector.h>
 
 namespace hoot
 {
@@ -39,22 +35,103 @@ namespace hoot
 class TagUtilsTest : public HootTestFixture
 {
     CPPUNIT_TEST_SUITE(TagUtilsTest);
-    CPPUNIT_TEST(runBasicTest);
+    CPPUNIT_TEST(runKvpTest);
+    CPPUNIT_TEST(runInvalidKvpTest);
+    CPPUNIT_TEST(runKeyTest);
     CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  TagUtilsTest() :
-  HootTestFixture(
-    "test-files/elements/TagUtilsTest/",
-    "test-output/elements/TagUtilsTest/")
+  TagUtilsTest() = default;
+
+  void runKvpTest()
   {
-    //setResetType(ResetBasic);
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    NodePtr node1 =
+      std::make_shared<Node>(Status::Unknown1, 1, geos::geom::Coordinate(0.0, 0.0), 15.0);
+    node1->setTag("foo", "bar");
+    map->addNode(node1);
+    NodePtr node2 =
+      std::make_shared<Node>(Status::Unknown1, 2, geos::geom::Coordinate(0.0, 0.0), 15.0);
+    node2->setTag("foo", "baz");
+    map->addNode(node2);
+
+    std::set<ElementId> elementIds;
+    elementIds.insert(ElementId::node(1));
+    elementIds.insert(ElementId::node(2));
+
+    QStringList kvps;
+    kvps.append("foo=bar");
+    kvps.append("blah=bleh");
+    CPPUNIT_ASSERT(TagUtils::anyElementsHaveAnyKvp(kvps, elementIds, map));
+
+    kvps.clear();
+    kvps.append("blah=bleh");
+    kvps.append("foo=baz");
+    CPPUNIT_ASSERT(TagUtils::anyElementsHaveAnyKvp(kvps, elementIds, map));
+
+    kvps.clear();
+    kvps.append("blah=blah");
+    kvps.append("blah=bleh");
+    CPPUNIT_ASSERT(!TagUtils::anyElementsHaveAnyKvp(kvps, elementIds, map));
   }
 
-  void runBasicTest()
+  void runInvalidKvpTest()
   {
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    NodePtr node1 =
+      std::make_shared<Node>(Status::Unknown1, 1, geos::geom::Coordinate(0.0, 0.0), 15.0);
+    node1->setTag("foo", "bar");
+    map->addNode(node1);
+    NodePtr node2 =
+      std::make_shared<Node>(Status::Unknown1, 2, geos::geom::Coordinate(0.0, 0.0), 15.0);
+    node2->setTag("foo", "baz");
+    map->addNode(node2);
 
+    std::set<ElementId> elementIds;
+    elementIds.insert(ElementId::node(1));
+    elementIds.insert(ElementId::node(2));
+
+    QStringList kvps;
+    kvps.append("foobar");
+    kvps.append("blah=bleh");
+
+    QString exceptionMsg;
+    try
+    {
+      TagUtils::anyElementsHaveAnyKvp(kvps, elementIds, map)  ;
+    }
+    catch (const IllegalArgumentException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT_EQUAL(
+      QString("Invalid kvp: foobar").toStdString(), exceptionMsg.toStdString());
+  }
+
+  void runKeyTest()
+  {
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    NodePtr node1 =
+      std::make_shared<Node>(Status::Unknown1, 1, geos::geom::Coordinate(0.0, 0.0), 15.0);
+    node1->setTag("foo", "bar");
+    map->addNode(node1);
+    NodePtr node2 =
+      std::make_shared<Node>(Status::Unknown1, 2, geos::geom::Coordinate(0.0, 0.0), 15.0);
+    node2->setTag("foo", "baz");
+    map->addNode(node2);
+
+    std::set<ElementId> elementIds;
+    elementIds.insert(ElementId::node(1));
+    elementIds.insert(ElementId::node(2));
+
+    QStringList keys;
+    keys.append("foo");
+    CPPUNIT_ASSERT(TagUtils::allElementsHaveAnyTagKey(keys, elementIds, map));
+
+    keys.clear();
+    keys.append("bar");
+    CPPUNIT_ASSERT(!TagUtils::allElementsHaveAnyTagKey(keys, elementIds, map));
   }
 };
 
