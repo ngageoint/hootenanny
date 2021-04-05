@@ -39,6 +39,12 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, DistanceNodeCriterion)
 
+DistanceNodeCriterion::DistanceNodeCriterion(Coordinate center, Meters distance):
+_center(center),
+_distance(distance)
+{
+}
+
 void DistanceNodeCriterion::setConfiguration(const Settings& s)
 {
   ConfigOptions opts(s);
@@ -71,12 +77,6 @@ void DistanceNodeCriterion::setConfiguration(const Settings& s)
      throw HootException(errorMsg);
   }
   _center.y = y;
-}
-
-DistanceNodeCriterion::DistanceNodeCriterion(Coordinate center, Meters distance):
-_center(center),
-_distance(distance)
-{
 }
 
 bool DistanceNodeCriterion::isSatisfied(const ConstElementPtr& e) const

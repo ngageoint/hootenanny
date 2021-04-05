@@ -346,7 +346,7 @@ void DualHighwaySplitter::_reconnectEnd(long centerNodeId, const std::shared_ptr
   // find all the nodes that are about the right distance from centerNodeId
   // Find nodes that are > _splitSize*.99 away, but less than _splitSize*1.01
   std::shared_ptr<DistanceNodeCriterion> outerCrit(
-    new DistanceNodeCriterion(centerNodeC, _splitSize*1.01));
+    new DistanceNodeCriterion(centerNodeC, _splitSize * 1.01));
   std::shared_ptr<NotCriterion> notInnerCrit(
     new NotCriterion(new DistanceNodeCriterion(centerNodeC, _splitSize * .99)));
   ChainCriterion chainCrit(outerCrit, notInnerCrit);

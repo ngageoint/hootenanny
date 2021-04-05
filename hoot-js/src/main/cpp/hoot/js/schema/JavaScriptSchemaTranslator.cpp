@@ -39,7 +39,6 @@
 #include <hoot/core/io/schema/Schema.h>
 #include <hoot/core/io/schema/StringFieldDefinition.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/Exception.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/UuidHelper.h>
@@ -400,7 +399,7 @@ std::shared_ptr<const Schema> JavaScriptSchemaTranslator::getOgrOutputSchema()
     }
     else
     {
-      throw Exception("Expected a valid schema array to be returned.");
+      throw HootException("Expected a valid schema array to be returned.");
     }
   }
 
@@ -930,7 +929,7 @@ QVariantList JavaScriptSchemaTranslator::_translateToOgrVariants(Tags& tags,
   }
   else
   {
-    throw Exception("convert: Expected either a null or an object as the result.");
+    throw HootException("convert: Expected either a null or an object as the result.");
   }
 
   return result;
@@ -1014,7 +1013,7 @@ void JavaScriptSchemaTranslator::_translateToOsm(Tags& t, const char* layerName,
   }
   else
   {
-    throw Exception("convert: Expected either a null or an object as the result.");
+    throw HootException("convert: Expected either a null or an object as the result.");
   }
 }
 

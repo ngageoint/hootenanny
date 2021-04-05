@@ -161,25 +161,6 @@ public:
     const ConstOsmMapPtr& map, const ElementId& childId);
 
   /**
-   * Returns IDs of all relation which contain the element with the input ID as a member
-   *
-   * @param map map owning the element identified by childId
-   * @param childId ID of the child element
-   * @return a list of element IDs
-   */
-  static QSet<long> getContainingRelationIds(
-    const ConstOsmMapPtr& map, const ElementId& childId);
-
-  /**
-   * Counts the number of way nodes in way members belonging to a relation
-   *
-   * @param relation the relation containing the way members
-   * @param map the map owning the relation
-   * @return a count
-   */
-  static int getMemberWayNodeCount(const ConstRelationPtr& relation, const ConstOsmMapPtr& map);
-
-  /**
    * Determines if a relation has a member conflatable by the current configuration of conflate
    * matchers
    *

@@ -33,6 +33,7 @@ namespace tbs
 class NegateFunction : public LineSearch::Function
 {
 public:
+
   NegateFunction(LineSearch::Function& f) : _f(f) { }
 
   ~NegateFunction() = default;
@@ -46,6 +47,7 @@ public:
   }
 
 private:
+
   LineSearch::Function& _f;
 };
 

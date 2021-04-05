@@ -79,18 +79,6 @@ bool BBox::in(const vector<double>& p) const
   return result;
 }
 
-bool BBox::in(const BBox& container) const
-{
-  bool result = true;
-  for (uint i = 0; i < _min.size(); i++)
-  {
-    result = result && (_min[i] >= container.getMin()[i]);
-    result = result && (_max[i] <= container.getMax()[i]);
-  }
-
-  return result;
-}
-
 bool BBox::intersects(const BBox& b) const
 {
   bool result = true;
@@ -101,24 +89,6 @@ bool BBox::intersects(const BBox& b) const
   }
 
   return result;
-}
-
-double BBox::manhattanDistance(const BBox& b) const
-{
-  if (intersects(b))
-  {
-    return 0.0;
-  }
-
-  double d = numeric_limits<double>::max();
-  for (uint i = 0; i < _min.size(); i++)
-  {
-    d = min(d, fabs(_min[i] - b.getMin()[i]));
-    d = min(d, fabs(_min[i] - b.getMax()[i]));
-    d = min(d, fabs(_max[i] - b.getMin()[i]));
-    d = min(d, fabs(_max[i] - b.getMax()[i]));
-  }
-  return d;
 }
 
 QString BBox::toString() const

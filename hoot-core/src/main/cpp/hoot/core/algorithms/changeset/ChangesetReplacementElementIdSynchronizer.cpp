@@ -45,9 +45,8 @@ void ChangesetReplacementElementIdSynchronizer::synchronize(
 {
   // This is convoluted, but we're going to run the ID synchronization in multiple stages. Its
   // possible eventually that it could be run in a single stage if improvements are made to
-  // ElementHashVisitor (also see ElementHashOp). Since we don't allow any single element ID to
-  // synchronize more than once, this allows for syncing the IDs at different levels of node
-  // coordinate precision granularity.
+  // ElementHashVisitor. Since we don't allow any single element ID to synchronize more than once,
+  // this allows for syncing the IDs at different levels of node coordinate precision granularity.
 
   // First run at a higher precision than what we're configured for with by default for C&R. This
   // will prevent some bad syncs, like for way nodes in completely different unconnected ways.

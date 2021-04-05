@@ -43,77 +43,6 @@ using namespace std;
 
 namespace hoot
 {
-/**
-* Used when experimenting with various range decomposition approaches.
-*/
-class LongBoxContainer
-{
-public:
-
-  LongBoxContainer() = default;
-
-  LongBoxContainer(const LongBox& box, long int excess)
-    : _box(box), _excess(excess)
-  {
-  }
-
-  bool operator==(const LongBoxContainer& bc) const
-  {
-    if (_excess != bc.getExcess())
-    {
-       return false;
-    }
-    if (_box.getMin().size() != bc.getBox().getMin().size() || _box.getMax().size() != bc.getBox().getMax().size())
-    {
-      return false;
-    }
-    vector<long int> bcMin = bc.getBox().getMin();
-    vector<long int> bcMax = bc.getBox().getMax();
-    for (uint i = 0; i < _box.getMin().size(); i++)
-    {
-      long int value = _box.getMin()[i];
-      if (std::find(bcMin.begin(), bcMin.end(), value) == bcMin.end() )
-      {
-        return false;
-      }
-    }
-    for (uint i = 0; i < _box.getMax().size(); i++)
-    {
-      long int value = _box.getMax()[i];
-      if (std::find(bcMax.begin(), bcMax.end(), value) == bcMax.end() )
-      {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  int hashCode()
-  {
-    return (int) (_excess ^ (_excess >> 32));
-  }
-
-  bool operator<(const LongBoxContainer& o) const
-  {
-    return getExcess() < o.getExcess();
-  }
-
-  LongBox getBox() const { return _box; }
-
-  long int getExcess() const { return _excess; }
-
-  bool isPerfectFit() { return getExcess() == 0; }
-
-  QString toString()
-  {
-    return QString::number(_excess) + _box.toString();
-  }
-
-private:
-  LongBox _box;
-  long int _excess;
-};
-
 
 struct range_sort
 {
@@ -244,11 +173,6 @@ long int ZCurveRanger::getSplitValue(long int v1, long int v2)
   return v2 & mask;
 }
 
-vector<Range> ZCurveRanger::decomposeRange(const BBox& box, const BBox& focusBox, int levels)
-{
-  return _decomposeRange(_toLongBox(box), _toLongBox(focusBox), levels);
-}
-
 vector<Range> ZCurveRanger::decomposeRange(const BBox& box, int levels)
 {
    return decomposeRange(_toLongBox(box), levels);
@@ -267,11 +191,6 @@ vector<Range> ZCurveRanger::decomposeRange(const LongBox& box, int levels)
   }
 
   return _condenseRanges(result);
-}
-
-vector<Range> ZCurveRanger::decomposeRangeIterative(const BBox& box, int count)
-{
-  return _decomposeRangeIterative(_toLongBox(box), count);
 }
 
 bool ZCurveRanger::rangeCoversIdentity(const Range& r)
@@ -295,90 +214,6 @@ bool ZCurveRanger::rangeCoversIdentity(const Range& r)
   }
 
   return int2 >= int1;
-}
-
-vector<Range> ZCurveRanger::_decomposeRange(const LongBox& box, const LongBox& focusBox, int levels)
-{
-  vector<std::shared_ptr<LongBox>> boxes = decomposeBox(std::make_shared<LongBox>(box), levels/2);
-
-  for (int i = 0; i < (levels * 2); i++)
-  {
-    vector<std::shared_ptr<LongBox>> newBoxes;
-    for (uint j = 0; j < boxes.size(); j++)
-    {
-      std::shared_ptr<LongBox> b = boxes[i];
-      if (b->intersects(focusBox) && (calculateExcess(b) > 0))
-      {
-        vector<std::shared_ptr<LongBox>> rv = decomposeBox(b, 0);
-        newBoxes.insert(newBoxes.end(), rv.begin(), rv.end());
-      }
-      else
-      {
-        newBoxes.push_back(b);
-      }
-    }
-    boxes = newBoxes;
-  }
-
-  vector<Range> result;
-  result.reserve(boxes.size());
-  for (uint i = 0; i < boxes.size(); i++)
-  {
-    result[i] = _toRange(boxes[i]);
-  }
-
-  return _condenseRanges(result);
-}
-
-vector<Range> ZCurveRanger::_decomposeRangeIterative(const LongBox& box, int count)
-{
-  priority_queue<LongBoxContainer> pq;
-  pq.emplace(box, calculateExcess(std::make_shared<LongBox>(box)));
-
-  vector<LongBox> completed;
-  while ((!pq.empty()) && (((int)pq.size() + (int)completed.size()) < count))
-  {
-    LongBoxContainer lbc = pq.top();
-    pq.pop();
-
-    if (lbc.isPerfectFit())
-    {
-      completed.push_back(lbc.getBox());
-    }
-    else
-    {
-      vector<std::shared_ptr<LongBox>> boxes = decomposeBox(std::make_shared<LongBox>(lbc.getBox()), 0);
-
-      if (boxes.size() == 1)
-      {
-        completed.push_back(*boxes[0].get());
-      }
-      else if (boxes.size() == 2)
-      {
-        pq.emplace(*boxes[0].get(), calculateExcess(boxes[0]));
-        pq.emplace(*boxes[1].get(), calculateExcess(boxes[1]));
-      }
-      else
-      {
-        throw HootException("Invalid boxes.size = " + boxes.size());
-      }
-    }
-  }
-
-  while (!pq.empty())
-  {
-    LongBoxContainer lbc = pq.top();
-    completed.push_back(lbc.getBox());
-  }
-
-  vector<Range> result;
-  result.reserve(completed.size());
-  for (uint i = 0; i < completed.size(); i++)
-  {
-    result[i] = _toRange(std::make_shared<LongBox>(completed[i]));
-  }
-
-  return _condenseRanges(result);
 }
 
 LongBox ZCurveRanger::_clipBox(const LongBox& box)

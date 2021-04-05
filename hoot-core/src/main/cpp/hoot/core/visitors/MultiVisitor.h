@@ -45,7 +45,7 @@ public:
 
   void visit(const std::shared_ptr<Element>& e) override;
 
-  void addVisitor(ElementOsmMapVisitor *v) { _visitors.push_back(v); }
+  void addVisitor(ElementOsmMapVisitor* v) { _visitors.push_back(v); }
 
   QString getDescription() const override { return "Allows for combining multiple visitors"; }
 
@@ -55,7 +55,7 @@ public:
 
 private:
 
-  std::vector<ElementOsmMapVisitor *> _visitors;
+  std::vector<ElementOsmMapVisitor*> _visitors;
 };
 
 }

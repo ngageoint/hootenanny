@@ -43,7 +43,6 @@
 #include <hoot/core/conflate/matching/MatchType.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/elements/ElementId.h>
-#include <hoot/core/elements/OsmUtils.h>
 #include <hoot/core/ops/CopyMapSubsetOp.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Factory.h>
@@ -77,8 +76,6 @@ HighwayMatch::HighwayMatch(const std::shared_ptr<HighwayClassifier>& classifier,
 
   LOG_VART(_eid1);
   LOG_VART(_eid2);
-  //OsmUtils::logElementDetail(e1, map, Log::Trace, "HighwayMatch: e1");
-  //OsmUtils::logElementDetail(e2, map, Log::Trace, "HighwayMatch: e2");
 
   try
   {

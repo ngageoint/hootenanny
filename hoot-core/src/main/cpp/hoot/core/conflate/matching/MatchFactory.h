@@ -85,14 +85,6 @@ public:
   std::vector<std::shared_ptr<MatchCreator>> getCreators() const { return _creators; }
 
   /**
-   * Returns a MatchCreator with the specified name
-   *
-   * @param name name of the match creator to return
-   * @return a match creator
-   */
-  std::shared_ptr<MatchCreator> getCreatorByName(const QString& name);
-
-  /**
    * Registers the specified creator with the MergeFactory and takes ownership of the creator.
    */
   void registerCreator(const std::shared_ptr<MatchCreator>& creator)
@@ -108,13 +100,6 @@ public:
    * Removes all the creators from the factory
    */
   void reset();
-
-  /**
-   * Returns a printable string with the names of all MatchCreators available from the factory
-   *
-   * @return a names string
-   */
-  QString getCreatorsStr() const;
 
 private:
 

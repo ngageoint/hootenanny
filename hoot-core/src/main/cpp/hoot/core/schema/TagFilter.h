@@ -53,10 +53,8 @@ public:
             const OsmSchemaCategory& category = OsmSchemaCategory::Empty);
 
   QString getKey() const { return _key; }
-  void setKey(const QString& key);
 
   QString getValue() const { return _value; }
-  void setValue(const QString& val);
 
   bool getAllowAliases() const { return _allowAliases; }
   void setAllowAliases(bool allow) { _allowAliases = allow; }
@@ -74,7 +72,6 @@ public:
   void setAllowAssociations(bool allow) { _allowAssociations = allow; }
 
   OsmSchemaCategory getCategory() const { return _category; }
-  void setCategory(OsmSchemaCategory category);
 
   /**
    * Creates a tag filter from a JSON node

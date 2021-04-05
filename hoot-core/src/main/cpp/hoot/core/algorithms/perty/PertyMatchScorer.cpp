@@ -45,7 +45,6 @@
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/visitors/AddRef1Visitor.h>
 #include <hoot/core/visitors/SetTagValueVisitor.h>
-#include <hoot/core/visitors/TagCountVisitor.h>
 #include <hoot/core/visitors/TagRenameKeyVisitor.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 
@@ -122,13 +121,6 @@ OsmMapPtr PertyMatchScorer::_loadReferenceMap(const QString& referenceMapInputPa
   referenceMap->visitRw(*setAccuracyVisitor);
   LOG_VARD(referenceMap->getNodes().size());
   LOG_VARD(referenceMap->getWays().size());
-  if (Log::getInstance().getLevel() <= Log::Debug)
-  {
-    TagCountVisitor tagCountVisitor;
-    referenceMap->visitRo(tagCountVisitor);
-    const long numTotalTags = (long)tagCountVisitor.getStat();
-    LOG_VARD(numTotalTags);
-  }
   OsmMapWriterFactory::writeDebugMap(referenceMap, "perty-tagged-ref-map");
 
   OsmMapPtr referenceMapCopy(referenceMap);
@@ -161,13 +153,6 @@ void PertyMatchScorer::_loadPerturbedMap(const QString& perturbedMapInputPath,
   perturbedMap->visitRw(*setAccuracyVisitor);
   LOG_VARD(perturbedMap->getNodes().size());
   LOG_VARD(perturbedMap->getWays().size());
-  if (Log::getInstance().getLevel() <= Log::Debug)
-  {
-    TagCountVisitor tagCountVisitor;
-    perturbedMap->visitRo(tagCountVisitor);
-    const long numTotalTags = (long)tagCountVisitor.getStat();
-    LOG_VARD(numTotalTags);
-  }
   OsmMapWriterFactory::writeDebugMap(perturbedMap, "perty-pre-perturbed-tagged-map");
 
   LOG_DEBUG("Perturbing the copied reference data and saving it to: " << perturbedMapOutputPath);
@@ -177,13 +162,6 @@ void PertyMatchScorer::_loadPerturbedMap(const QString& perturbedMapInputPath,
   pertyOp.apply(perturbedMap);
   LOG_VARD(perturbedMap->getNodes().size());
   LOG_VARD(perturbedMap->getWays().size());
-  if (Log::getInstance().getLevel() <= Log::Debug)
-  {
-    TagCountVisitor tagCountVisitor;
-    perturbedMap->visitRo(tagCountVisitor);
-    const long numTotalTags = (long)tagCountVisitor.getStat();
-    LOG_VARD(numTotalTags);
-  }
 
   MapProjector::projectToWgs84(perturbedMap);
   IoUtils::saveMap(perturbedMap, perturbedMapOutputPath);
@@ -200,13 +178,6 @@ OsmMapPtr PertyMatchScorer::_combineMapsAndPrepareForConflation(
   OsmMapWriterFactory::writeDebugMap(combinedMap, "perty-before-prepped-map");
   LOG_VARD(combinedMap->getNodes().size());
   LOG_VARD(combinedMap->getWays().size());
-  if (Log::getInstance().getLevel() <= Log::Debug)
-  {
-    TagCountVisitor tagCountVisitor;
-    combinedMap->visitRo(tagCountVisitor);
-    const long numTotalTags = (long)tagCountVisitor.getStat();
-    LOG_VARD(numTotalTags);
-  }
 
   // Not sure there is ever any reason to set score.matches.remove.nodes=true here, but leaving it '
   // configurable for now.
@@ -214,13 +185,6 @@ OsmMapPtr PertyMatchScorer::_combineMapsAndPrepareForConflation(
   OsmMapWriterFactory::writeDebugMap(combinedMap, "perty-after-prepped-map");
   LOG_VARD(combinedMap->getNodes().size());
   LOG_VARD(combinedMap->getWays().size());
-  if (Log::getInstance().getLevel() <= Log::Debug)
-  {
-    TagCountVisitor tagCountVisitor;
-    combinedMap->visitRo(tagCountVisitor);
-    const long numTotalTags = (long)tagCountVisitor.getStat();
-    LOG_VARD(numTotalTags);
-  }
 
   if (ConfigOptions().getConflatePreOps().contains(RubberSheet::className()))
   {
@@ -233,13 +197,6 @@ OsmMapPtr PertyMatchScorer::_combineMapsAndPrepareForConflation(
 
     LOG_VARD(combinedMap->getNodes().size());
     LOG_VARD(combinedMap->getWays().size());
-    if (Log::getInstance().getLevel() <= Log::Debug)
-    {
-      TagCountVisitor tagCountVisitor;
-      combinedMap->visitRo(tagCountVisitor);
-      const long numTotalTags = (long)tagCountVisitor.getStat();
-      LOG_VARD(numTotalTags);
-    }
   }
 
   return combinedMap;
@@ -284,13 +241,6 @@ void PertyMatchScorer::_saveMap(OsmMapPtr& map, const QString& path)
 
   LOG_VARD(map->getNodes().size());
   LOG_VARD(map->getWays().size());
-  if (Log::getInstance().getLevel() <= Log::Debug)
-  {
-    TagCountVisitor tagCountVisitor;
-    map->visitRo(tagCountVisitor);
-    const long numTotalTags = (long)tagCountVisitor.getStat();
-    LOG_VARD(numTotalTags);
-  }
 
   MapProjector::projectToWgs84(map);
   IoUtils::saveMap(map, path);

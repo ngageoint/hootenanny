@@ -67,20 +67,6 @@ public:
                     QString replaceKey, QString replaceValue);
 
   /**
-   * @brief setMatchTag - Set the tag to match
-   * @param k - tag key
-   * @param v - tag value
-   */
-  void setMatchTag(QString k, QString v);
-
-  /**
-   * @brief setReplaceTag -Set the tag to use as a replacement
-   * @param k - tag key
-   * @param v - tag value
-   */
-  void setReplaceTag(QString k, QString v);
-
-  /**
    * @brief visit - visit an element & perform check and replace
    * @param e - element to visit
    */

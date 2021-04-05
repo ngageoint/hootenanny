@@ -59,27 +59,10 @@ public:
 
   /**
    * @brief RemoveElementByEid removes an element from the map
-   * @param doCheck passed down to RemoveNode, RemoveWay, RemoveRelation
-   *                to indicate if we should check to see if the element
-   *                exists as a component of another element
-   */
-  RemoveElementByEid(bool doCheck = true);
-
-  /**
-   * @brief RemoveElementByEid removes an element from the map
    * @param eId ID of element to remove
    * @param doCheck check to see if element belongs to another element
    */
   RemoveElementByEid(ElementId eId, bool doCheck = true);
-
-  /**
-   * Constructor
-   *
-   * @param eId ID of element to remove
-   * @param doCheck check to see if element belongs to another element
-   * @param removeNodeFully ensures nodes are removed from all ways and relations in the map
-   */
-  RemoveElementByEid(ElementId eId, bool doCheck, bool removeNodeFully);
 
   ~RemoveElementByEid() = default;
 
@@ -101,7 +84,7 @@ public:
    * @brief setElementId sets the id of the element to remove
    * @param eId ElementId
    */
-  void setElementId(ElementId eId) {_eIdToRemove = eId; }
+  //void setElementId(ElementId eId) {_eIdToRemove = eId; }
 
   /**
    * @brief removeElement Removes an element from a map. If the element exists
@@ -125,17 +108,6 @@ public:
    * @param eId ID of the element to remove
    */
   static void removeElementNoCheck(OsmMapPtr map, ElementId eId);
-
-  /**
-   * @brief removeElement Removes an element from a map only if it does not have a parent element.
-   *
-   * If this element contains children (e.g. multipolygon) the children will not be removed from
-   * the map.
-   *
-   * @param map to operate on
-   * @param eId ID of the element to remove
-   */
-  static void removeUnusedElementsOnly(OsmMapPtr map, ElementId eId);
 
   QString getDescription() const override
   { return "Removes a single element by element ID"; }

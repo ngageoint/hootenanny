@@ -30,7 +30,6 @@
 // hoot
 #include <hoot/core/visitors/ConstElementVisitor.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/criterion/ElementCriterionConsumer.h>
 
 namespace hoot
 {
@@ -38,7 +37,7 @@ namespace hoot
 /**
  * Creates a mapping between an element ID and the value of the specified tag, if it has the tag
  */
-class ElementIdToTagValueMapper : public ConstElementVisitor, public ElementCriterionConsumer
+class ElementIdToTagValueMapper : public ConstElementVisitor
 {
 
 public:
@@ -49,8 +48,6 @@ public:
   ~ElementIdToTagValueMapper() = default;
 
   void visit(const ConstElementPtr& e) override;
-
-  void addCriterion(const ElementCriterionPtr& e) override;
 
   QString getDescription() const override
   { return "Maps element IDs to tag values for a given tag key"; }
@@ -71,7 +68,6 @@ public:
 private:
 
   QString _tagKey;
-  ElementCriterionPtr _crit;
   QMap<ElementId, QString> _idToTagValueMappings;
 };
 

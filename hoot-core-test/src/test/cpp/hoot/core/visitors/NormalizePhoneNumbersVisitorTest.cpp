@@ -39,6 +39,7 @@ class NormalizePhoneNumbersVisitorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(NormalizePhoneNumbersVisitorTest);
   CPPUNIT_TEST(runBasicTest);
+  CPPUNIT_TEST(runConfigureTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -71,6 +72,28 @@ public:
     HOOT_FILE_EQUALS(_inputPath + "gold.osm", outputFile);
   }
 
+  void runConfigureTest()
+  {
+    OsmMapPtr map(new OsmMap());
+    OsmMapReaderFactory::read(
+      map,
+      "test-files/cmd/glacial/PoiPolygonConflateStandaloneTest/PoiPolygon2.osm",
+      false,
+      Status::Unknown1);
+
+    Settings settings;
+    settings.set(ConfigOptions::getPhoneNumberRegionCodeKey(), "US");
+    settings.set(ConfigOptions::getPhoneNumberNormalizationFormatKey(), "NATIONAL");
+    NormalizePhoneNumbersVisitor uut;
+    uut.setConfiguration(settings);
+    map->visitRw(uut);
+
+    const QString outputFile = _outputPath + "out.osm";
+    OsmMapWriterFactory::write(map, outputFile);
+
+    CPPUNIT_ASSERT_EQUAL(12, uut._phoneNumberNormalizer.getNumNormalized());
+    HOOT_FILE_EQUALS(_inputPath + "gold.osm", outputFile);
+  }
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(NormalizePhoneNumbersVisitorTest, "quick");

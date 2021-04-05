@@ -79,14 +79,6 @@ public:
 
   static geos::geom::Envelope* toEnvelope(const OGREnvelope& e);
 
-  /**
-   * Converts the envelope into a hex representation. This preserves all double information but
-   * is likely platform dependent.
-   */
-  static geos::geom::Envelope* toEnvelopeFromHex(const QString& s);
-
-  static QString toHexString(const geos::geom::Envelope& e);
-
   static OGREnvelope* toOGREnvelope(const geos::geom::Envelope& e);
 
   /** Creates a bounds string in the format (minx,maxx,miny,maxy)
@@ -212,15 +204,6 @@ public:
   static OsmMapPtr createMapFromBounds(const std::shared_ptr<geos::geom::Polygon>& bounds);
 
   /**
-   * Creates a rectangular map representing multiple bounding boxes
-   *
-   * @param boundsCollection a collection of bounding boxes
-   * @return a bounding box map
-   */
-  static OsmMapPtr createMapFromBoundsCollection(
-    const QList<geos::geom::Envelope>& boundsCollection);
-
-  /**
    * Creates a rectangular map representing multiple bounding boxes with IDs
    *
    * @param boundsCollection a collection of bounding boxes keyed by ID
@@ -253,15 +236,6 @@ public:
    * @return a string
    */
   static QString geometryTypeIdToString(const std::shared_ptr<geos::geom::Geometry>& geometry);
-
-  /**
-   * Reads a file containing one or more rectangular AOIs
-   *
-   * @param input path to the bounds file
-   * @return a collection of bounds rectangles
-   * @throws IllegalArgumentException if the features in the input are not ways
-   */
-  static QList<geos::geom::Envelope> readBoundsFile(const QString& input);
 
   /**
    * Reads a file containing one or more rectangular AOIs where individual features have an

@@ -42,6 +42,12 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, RecursiveSetTagValueOp)
 
+RecursiveSetTagValueOp::RecursiveSetTagValueOp()
+{
+  _tagger = std::make_shared<SetTagValueVisitor>();
+  _tagger->setConfiguration(conf());
+}
+
 RecursiveSetTagValueOp::RecursiveSetTagValueOp(
   const QStringList& keys, const QStringList& values, ElementCriterionPtr elementCriterion,
   bool appendToExistingValue, const bool overwriteExistingTag) :
@@ -61,42 +67,6 @@ _negateCriterion(false)
 {
   _tagger.reset(
     new SetTagValueVisitor(key, value, appendToExistingValue, QStringList(), overwriteExistingTag));
-}
-
-RecursiveSetTagValueOp::RecursiveSetTagValueOp(
-  const QStringList& keys, const QStringList& values, const QString& criterionName,
-  bool appendToExistingValue, const bool overwriteExistingTag,
-  const bool negateCriterion) :
-_negateCriterion(negateCriterion)
-{
-  _tagger.reset(
-    new SetTagValueVisitor(
-      keys, values, appendToExistingValue, QStringList(), overwriteExistingTag));
-  _setCriterion(criterionName);
-}
-
-RecursiveSetTagValueOp::RecursiveSetTagValueOp(
-  const QString& key, const QString& value, const QString& criterionName,
-  bool appendToExistingValue, const bool overwriteExistingTag,
-  const bool negateCriterion) :
-_negateCriterion(negateCriterion)
-{
-  _tagger.reset(
-    new SetTagValueVisitor(key, value, appendToExistingValue, QStringList(), overwriteExistingTag));
-  _setCriterion(criterionName);
-}
-
-void RecursiveSetTagValueOp::setConfiguration(const Settings& conf)
-{
-  ConfigOptions configOptions(conf);
-  _tagger.reset(
-    new SetTagValueVisitor(
-      configOptions.getSetTagValueVisitorKeys(), configOptions.getSetTagValueVisitorValues(),
-      configOptions.getSetTagValueVisitorAppendToExistingValue(), QStringList(),
-      configOptions.getSetTagValueVisitorOverwrite()));
-  _negateCriterion = configOptions.getElementCriterionNegate();
-  // We're only supporting one crit here for now.
-  _setCriterion(configOptions.getSetTagValueVisitorElementCriteria().at(0));
 }
 
 void RecursiveSetTagValueOp::addCriterion(const ElementCriterionPtr& e)
@@ -124,6 +94,11 @@ void RecursiveSetTagValueOp::_setCriterion(const QString& criterionName)
 
 void RecursiveSetTagValueOp::apply(std::shared_ptr<OsmMap>& map)
 {
+  if (!_tagger->isValid())
+  {
+    throw IllegalArgumentException(SetTagValueVisitor::className() + " not configured properly.");
+  }
+
   const RelationMap& relations = map->getRelations();
   for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
   {

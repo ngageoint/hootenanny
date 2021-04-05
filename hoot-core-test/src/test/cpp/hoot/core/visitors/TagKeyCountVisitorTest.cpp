@@ -34,7 +34,7 @@
 // hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/io/OsmXmlReader.h>
+#include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/visitors/TagKeyCountVisitor.h>
 
 namespace hoot
@@ -43,39 +43,43 @@ namespace hoot
 class TagKeyCountVisitorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(TagKeyCountVisitorTest);
-  CPPUNIT_TEST(tagKeyCountTest);
+  CPPUNIT_TEST(runBasicTest);
+  CPPUNIT_TEST(runConfigureTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  TagKeyCountVisitorTest()
-    : HootTestFixture("test-files/visitors/",
-                      UNUSED_PATH)
+  TagKeyCountVisitorTest() :
+  HootTestFixture("test-files/visitors/", UNUSED_PATH)
   {
-    setResetType(ResetBasic);
   }
 
-  void tagKeyCountTest()
+  void runBasicTest()
   {
-    OsmMapPtr map = _loadMap();
-
-    std::shared_ptr<TagKeyCountVisitor> visitor(new TagKeyCountVisitor("source"));
-    map->visitRo(*visitor);
-
-    CPPUNIT_ASSERT_EQUAL((long)6, (long)visitor->getStat());
-  }
-
-private:
-
-  OsmMapPtr _loadMap()
-  {
-    OsmXmlReader reader;
     OsmMapPtr map(new OsmMap());
-    reader.setDefaultStatus(Status::Unknown1);
-    reader.read(_inputPath + "TagKeyCountVisitorTest.osm", map);
-    return map;
+    OsmMapReaderFactory::read(
+      map, _inputPath + "TagKeyCountVisitorTest.osm", false, Status::Unknown1);
+
+    TagKeyCountVisitor uut("source");
+    map->visitRo(uut);
+
+    CPPUNIT_ASSERT_EQUAL((long)6, (long)uut.getStat());
   }
 
+  void runConfigureTest()
+  {
+    OsmMapPtr map(new OsmMap());
+    OsmMapReaderFactory::read(
+      map, _inputPath + "TagKeyCountVisitorTest.osm", false, Status::Unknown1);
+
+    Settings settings;
+    settings.set(ConfigOptions::getTagsVisitorKeysKey(), QStringList("source"));
+    TagKeyCountVisitor uut;
+    uut.setConfiguration(settings);
+    map->visitRo(uut);
+
+    CPPUNIT_ASSERT_EQUAL((long)6, (long)uut.getStat());
+  }
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(TagKeyCountVisitorTest, "quick");

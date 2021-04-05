@@ -42,18 +42,6 @@ _element(element)
   _elementComparer.setOsmMap(map);
 }
 
-bool ElementComparison::operator==(const ElementComparison& elementComp) const
-{
-  const bool equals = _elementComparer.isSame(this->_element, elementComp.getElement());
-  if (equals)
-  {
-    LOG_TRACE(
-      "Elements equal: " << this->_element->getElementId() << " and " <<
-      elementComp.getElement()->getElementId())
-  }
-  return equals;
-}
-
 QString ElementComparison::toString() const
 {
   return _element->getElementId().toString();

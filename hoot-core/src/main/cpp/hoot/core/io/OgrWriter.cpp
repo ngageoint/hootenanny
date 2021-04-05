@@ -277,7 +277,7 @@ void OgrWriter::write(const ConstOsmMapPtr& map)
 }
 
 void OgrWriter::translateToFeatures(
-  ElementProviderPtr& provider, const ConstElementPtr& e,
+  const ElementProviderPtr& provider, const ConstElementPtr& e,
   std::shared_ptr<Geometry> &g, // output
   std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature> &tf) // output
 {
@@ -835,45 +835,6 @@ void OgrWriter::_addFeatureToLayer(OGRLayer* layer, const std::shared_ptr<Featur
       QString("Error creating feature - OGR Error Code: (%1) \nFeature causing error: (%2)")
         .arg(QString::number(errCode)).arg(f->toString()));
   }
-}
-
-std::shared_ptr<Geometry> OgrWriter::_toMulti(const std::shared_ptr<Geometry>& from)
-{
-  std::shared_ptr<Geometry> result;
-
-  switch (from->getGeometryTypeId())
-  {
-  case GEOS_POINT:
-  {
-    vector<Geometry*> v;
-    v.push_back(from.get());
-    result.reset(GeometryFactory::getDefaultInstance()->createMultiPoint(v));
-    break;
-  }
-  case GEOS_LINESTRING:
-  {
-    vector<Geometry*> v;
-    v.push_back(from.get());
-    result.reset(GeometryFactory::getDefaultInstance()->createMultiLineString(v));
-    break;
-  }
-  case GEOS_POLYGON:
-  {
-    vector<Geometry*> v;
-    v.push_back(from.get());
-    result.reset(GeometryFactory::getDefaultInstance()->createMultiPolygon(v));
-    break;
-  }
-  case GEOS_MULTIPOINT:
-  case GEOS_MULTILINESTRING:
-  case GEOS_MULTIPOLYGON:
-    result = from;
-    break;
-  default:
-    throw HootException("Unexpected geometry type: " + from->getGeometryType());
-  }
-
-  return result;
 }
 
 }

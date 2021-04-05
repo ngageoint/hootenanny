@@ -49,13 +49,6 @@ _caseSensitive(false)
   _valueSubstrings.append(valueSubstring);
 }
 
-TagContainsCriterion::TagContainsCriterion(QStringList keys, QStringList valueSubstrings) :
-_keys(keys),
-_valueSubstrings(valueSubstrings),
-_caseSensitive(false)
-{
-}
-
 void TagContainsCriterion::setConfiguration(const Settings &s)
 {
   ConfigOptions config = ConfigOptions(s);

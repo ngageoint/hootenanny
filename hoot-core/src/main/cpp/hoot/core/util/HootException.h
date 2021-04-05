@@ -40,6 +40,9 @@
 namespace hoot
 {
 
+/**
+ * This class is intended to be the base class for all exceptions thrown by Hootenanny.
+ */
 class HootException : public std::exception
 {
 public:

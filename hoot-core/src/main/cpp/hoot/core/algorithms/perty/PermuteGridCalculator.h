@@ -74,8 +74,6 @@ public:
 
   void setGridSpacing(Meters gridSpacing) { _gridSpacing = gridSpacing; }
 
-  virtual QString toString();
-
 protected:
 
   Meters _D;

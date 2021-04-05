@@ -32,7 +32,6 @@
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/elements/NodeToWayMap.h>
 #include <hoot/core/elements/NodeUtils.h>
-#include <hoot/core/elements/OsmUtils.h>
 #include <hoot/core/elements/WayUtils.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/index/OsmMapIndex.h>
@@ -398,9 +397,6 @@ void Roundabout::replaceRoundabout(OsmMapPtr pMap)
     pRoundabout->setNodes(nodeIds);
     LOG_VART(pRoundabout->getNodeIds());
     pMap->addWay(pRoundabout);
-//    OsmUtils::logElementDetail(
-//      pRoundabout, pMap, Log::Trace,
-//      "Roundabout::replaceRoundabout: roundabout after updating nodes");
     LOG_VART(WayUtils::getWayNodesDetailedString(pRoundabout, pMap));
 
     //  Convert the roundabout to a geometry for distance checking later

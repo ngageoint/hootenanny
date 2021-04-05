@@ -31,7 +31,6 @@
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/matching/MatchType.h>
 #include <hoot/core/elements/ElementId.h>
-#include <hoot/core/util/CollectionUtils.h>
 
 namespace hoot
 {
@@ -46,39 +45,6 @@ QString Match::explain() const
 MatchType Match::getType() const
 {
   return _threshold->getType(*this);
-}
-
-bool Match::operator==(const Match& other) const
-{
-  if (getType() != other.getType())
-  {
-    return false;
-  }
-
-  const std::set<std::pair<ElementId, ElementId>> matchPairs = getMatchPairs();
-  const std::set<std::pair<ElementId, ElementId>> otherMatchPairs = other.getMatchPairs();
-
-  if (matchPairs.size() != otherMatchPairs.size())
-  {
-    return false;
-  }
-
-  const QList<std::pair<ElementId, ElementId>> matchListQ =
-    CollectionUtils::stdSetToQSet(matchPairs).toList();
-  const QList<std::pair<ElementId, ElementId>> otherMatchListQ =
-    CollectionUtils::stdSetToQSet(otherMatchPairs).toList();
-  for (int i = 0; i < matchListQ.size(); i++)
-  {
-    const std::pair<ElementId, ElementId> matchPair = matchListQ.at(i);
-    const std::pair<ElementId, ElementId> otherMatchPair = otherMatchListQ.at(i);
-    // requiring order matches here as well...is that correct?
-    if (matchPair.first != otherMatchPair.first || matchPair.second != otherMatchPair.second)
-    {
-      return false;
-    }
-  }
-
-  return true;
 }
 
 QHash<QString, ConstMatchPtr> Match::getIdIndexedMatches(

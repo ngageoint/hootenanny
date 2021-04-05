@@ -63,25 +63,6 @@ public:
    */
   static void writeDiff(const QString& mapUrl1, const QString& mapUrl2,
                         const geos::geom::Envelope& bounds, const QString& output);
-
-  /**
-   * Determines whether an OsmMapOperation operates on generically typed elements exclusively (e.g.
-   * node or way)
-   *
-   * @param op the operation to examine
-   * @return true if the input operation only operates on generically typed elements; false
-   * otherwise
-   */
-  static bool operatesOnGenericElementsOnly(const std::shared_ptr<OsmMapOperation>& op);
-
-  /**
-   * Determines whether an ElementVisitor operates on generically typed elements exclusively (e.g.
-   * node or way)
-   *
-   * @param vis the visitor to examine
-   * @return true if the input visitor only operates on generically typed elements; false otherwise
-   */
-  static bool operatesOnGenericElementsOnly(const std::shared_ptr<ElementVisitor>& vis);
 };
 
 }

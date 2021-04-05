@@ -38,6 +38,7 @@ class PhoneNumberCountVisitorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(PhoneNumberCountVisitorTest);
   CPPUNIT_TEST(runBasicTest);
+  CPPUNIT_TEST(runConfigureTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -51,17 +52,23 @@ public:
   void runBasicTest()
   {
     OsmMapPtr map(new OsmMap());
-    OsmMapReaderFactory::read(
-      map,
-      _inputPath + "PoiPolygon2.osm",
-      false,
-      Status::Unknown1);
+    OsmMapReaderFactory::read(map, _inputPath + "PoiPolygon2.osm", false, Status::Unknown1);
 
     PhoneNumberCountVisitor uut;
     map->visitRo(uut);
     CPPUNIT_ASSERT_EQUAL(12, (int)uut.getStat());
   }
 
+  void runConfigureTest()
+  {
+    OsmMapPtr map(new OsmMap());
+    OsmMapReaderFactory::read(map, _inputPath + "PoiPolygon2.osm", false, Status::Unknown1);
+
+    PhoneNumberCountVisitor uut;
+    uut.setConfiguration(conf());
+    map->visitRo(uut);
+    CPPUNIT_ASSERT_EQUAL(12, (int)uut.getStat());
+  }
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(PhoneNumberCountVisitorTest, "quick");

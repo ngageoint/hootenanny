@@ -53,15 +53,7 @@ public:
 
   bool in(const std::vector<double>& p) const;
 
-  bool in(const BBox& container) const;
-
   bool intersects(const BBox& b) const;
-
-  /**
-  * Returns the minimum distance in any one dimension. This is not
-  * necessarily the Euclidean distance.
-  */
-  double manhattanDistance(const BBox& b) const;
 
   /**
    * @brief toString
