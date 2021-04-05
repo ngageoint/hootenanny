@@ -28,7 +28,7 @@
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/elements/CommonElementIdFinder.h>
+#include <hoot/core/elements/ElementIdUtils.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/elements/MapProjector.h>
@@ -44,17 +44,22 @@ class ElementIdUtilsTest : public HootTestFixture
 
 public:
 
-  ElementIdUtilsTest() :
-  HootTestFixture(
-    "test-files/elements/ElementIdUtilsTest/",
-    "test-output/elements/ElementIdUtilsTest/")
+  ElementIdUtilsTest()
   {
-    //setResetType(ResetBasic);
   }
 
   void runBasicTest()
   {
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    OsmMapReaderFactory::read(map, "test-files/ToyTestA.osm");
 
+    std::vector<ElementPtr> elements;
+    while (map->hasNext())
+    {
+      elements.push_back(map->next());
+    }
+
+    CPPUNIT_ASSERT_EQUAL(40, ElementIdUtils::elementsToElementIds(elements).size());
   }
 };
 
