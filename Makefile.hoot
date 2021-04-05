@@ -23,7 +23,7 @@ default: build
 all: build
 always:
 
-build: core #ui-build
+build: core ui-build
 
 core: makedirs js-make qt-make services-build model-build conf/dictionary/words.sqlite osmapidb \
 	conf/dictionary/WordsAbridged.sqlite hoot-services/src/main/resources/language-translation/langdetect-183.bin
@@ -151,7 +151,7 @@ tgs/src/main/cpp/tgs/TgsConfig.h: config.h
 	/bin/sed -r -e 's/^(#[ \t]*define) /\1 TGS_/' config.h >> tgs/src/main/cpp/tgs/TgsConfig.h
 	echo "#endif" >> tgs/src/main/cpp/tgs/TgsConfig.h
 
-# We now have different versions of the NFDD Schema that are built from Excel files:
+# We now have different versions of the TDS Schema that are built from Excel files:
 # LTDSv40.csv.gz - Local TDS v4.0
 # SUTDSv40.csv.gz - Specialized Urban TDS v4.0
 # TDSv40.csv.gz - Full TDS v4.0
