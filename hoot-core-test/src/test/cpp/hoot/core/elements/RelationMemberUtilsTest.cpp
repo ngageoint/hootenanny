@@ -29,9 +29,6 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/elements/RelationMemberUtils.h>
-#include <hoot/core/io/OsmMapReaderFactory.h>
-#include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/elements/MapProjector.h>
 
 namespace hoot
 {
@@ -39,22 +36,63 @@ namespace hoot
 class RelationMemberUtilsTest : public HootTestFixture
 {
     CPPUNIT_TEST_SUITE(RelationMemberUtilsTest);
-    CPPUNIT_TEST(runBasicTest);
+    CPPUNIT_TEST(runTypeTest);
+    CPPUNIT_TEST(runTagKeyTest);
     CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  RelationMemberUtilsTest() :
-  HootTestFixture(
-    "test-files/elements/RelationMemberUtilsTest/",
-    "test-output/elements/RelationMemberUtilsTest/")
+  RelationMemberUtilsTest() = default;
+
+  void runTypeTest()
   {
-    //setResetType(ResetBasic);
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    QList<ElementPtr> elements;
+    NodePtr node1 =
+      std::make_shared<Node>(Status::Unknown1, 1, geos::geom::Coordinate(0.0, 0.0), 15.0);
+    elements.append(node1);
+    // don't add the second node to the elements list
+    NodePtr node2 =
+      std::make_shared<Node>(Status::Unknown1, 2, geos::geom::Coordinate(0.0, 5.0), 15.0);
+    RelationPtr relation = TestUtils::createRelation(map, elements);
+
+    relation->setType("foo");
+    CPPUNIT_ASSERT(
+      RelationMemberUtils::isMemberOfRelationWithType(map, node1->getElementId(), "foo"));
+    CPPUNIT_ASSERT(
+      !RelationMemberUtils::isMemberOfRelationWithType(map, node2->getElementId(), "foo"));
+
+    relation->setType("bar");
+    CPPUNIT_ASSERT(
+      !RelationMemberUtils::isMemberOfRelationWithType(map, node1->getElementId(), "foo"));
+    CPPUNIT_ASSERT(
+      !RelationMemberUtils::isMemberOfRelationWithType(map, node2->getElementId(), "foo"));
   }
 
-  void runBasicTest()
+  void runTagKeyTest()
   {
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    QList<ElementPtr> elements;
+    NodePtr node1 =
+      std::make_shared<Node>(Status::Unknown1, 1, geos::geom::Coordinate(0.0, 0.0), 15.0);
+    elements.append(node1);
+    // don't add the second node to the elements list
+    NodePtr node2 =
+      std::make_shared<Node>(Status::Unknown1, 2, geos::geom::Coordinate(0.0, 5.0), 15.0);
+    RelationPtr relation = TestUtils::createRelation(map, elements);
 
+    relation->setTag("foo", "bar");
+    CPPUNIT_ASSERT(
+      RelationMemberUtils::isMemberOfRelationWithTagKey(map, node1->getElementId(), "foo"));
+    CPPUNIT_ASSERT(
+      !RelationMemberUtils::isMemberOfRelationWithTagKey(map, node2->getElementId(), "foo"));
+
+    relation->clear();
+    relation->setTag("bar", "baz");
+    CPPUNIT_ASSERT(
+      !RelationMemberUtils::isMemberOfRelationWithTagKey(map, node1->getElementId(), "foo"));
+    CPPUNIT_ASSERT(
+      !RelationMemberUtils::isMemberOfRelationWithTagKey(map, node2->getElementId(), "foo"));
   }
 };
 

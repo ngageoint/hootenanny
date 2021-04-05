@@ -42,14 +42,13 @@ public:
 
   virtual ~RelationMemberUtilsJs() = default;
 
-  static void isMemberOfRelationType(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void isMemberOfRelationWithType(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isMemberOfRelationInCategory(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isMemberOfRelationWithTagKey(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void getNumRelationMemberNodes(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void relationsHaveConnectedWayMembers(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isMemberOfRelationSatisfyingCriterion(
     const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void relationHasConflatableMember(const v8::FunctionCallbackInfo<v8::Value>& args);
 
 private:
 

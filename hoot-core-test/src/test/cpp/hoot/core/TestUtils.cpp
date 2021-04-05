@@ -185,6 +185,11 @@ WayPtr TestUtils::createWay(OsmMapPtr map, const QList<NodePtr>& nodes, Status s
   return way;
 }
 
+RelationPtr TestUtils::createDummyRelation(OsmMapPtr map, Status status)
+{
+  return createRelation(map, QList<ElementPtr>(), status);
+}
+
 RelationPtr TestUtils::createRelation(OsmMapPtr map, const QList<ElementPtr>& elements,
   Status status, Meters circularError, Tags tags)
 {

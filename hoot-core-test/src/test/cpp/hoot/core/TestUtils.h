@@ -130,10 +130,14 @@ public:
     Meters circularError = ConfigOptions().getCircularErrorDefaultValue(), Tags tags = Tags());
 
   /*
-   * For creating a way where you just need to operate on its tags and
-   * don't care about the geometric aspect of it.
+   * For creating an empty way that belongs to a map.
    */
   static WayPtr createDummyWay(OsmMapPtr map, Status status = Status::Unknown1);
+
+  /*
+   * For creating an empty relation that belongs to a map.
+   */
+  static RelationPtr createDummyRelation(OsmMapPtr map, Status status = Status::Unknown1);
 
   static RelationPtr createRelation(
     OsmMapPtr map, const QList<ElementPtr>& elements, Status status = Status::Unknown1,
