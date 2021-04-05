@@ -46,15 +46,21 @@ public:
 
   PointsToPolysConverterTest() :
   HootTestFixture(
-    "test-files/ops/PointsToPolysConverterTest/",
-    "test-output/ops/PointsToPolysConverterTest/")
+    "test-files/ops/PointsToPolysConverterTest/", "test-output/ops/PointsToPolysConverterTest/")
   {
-    //setResetType(ResetBasic);
   }
 
   void runBasicTest()
   {
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    OsmMapReaderFactory::read(map, "test-files/mapcruzinpoi_clip.osm");
 
+    PointsToPolysConverter uut(1.0);
+    uut.apply(map);
+
+    MapProjector::projectToWgs84(map);
+    OsmMapWriterFactory::write(map, _outputPath + "runBasicTest-out.osm");
+    HOOT_FILE_EQUALS(_inputPath + "runBasicTest-out.osm", _outputPath + "runBasicTest-out.osm");
   }
 };
 
