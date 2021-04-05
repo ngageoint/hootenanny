@@ -30,8 +30,6 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/elements/ElementIdUtils.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
-#include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/elements/MapProjector.h>
 
 namespace hoot
 {
@@ -44,9 +42,7 @@ class ElementIdUtilsTest : public HootTestFixture
 
 public:
 
-  ElementIdUtilsTest()
-  {
-  }
+  ElementIdUtilsTest() = default;
 
   void runBasicTest()
   {
