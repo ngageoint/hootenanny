@@ -46,12 +46,6 @@ _numLocated(0)
 {
 }
 
-PhoneNumberLocator::PhoneNumberLocator(const QString& regionCode) :
-_regionCode(regionCode),
-_numLocated(0)
-{
-}
-
 void PhoneNumberLocator::setConfiguration(const Settings& conf)
 {
   ConfigOptions config = ConfigOptions(conf);

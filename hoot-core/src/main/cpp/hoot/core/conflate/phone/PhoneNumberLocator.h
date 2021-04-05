@@ -49,7 +49,6 @@ class PhoneNumberLocator : public Configurable
 public:
 
   PhoneNumberLocator();
-  PhoneNumberLocator(const QString& regionCode);
   ~PhoneNumberLocator() = default;
 
   void setConfiguration(const Settings& conf) override;

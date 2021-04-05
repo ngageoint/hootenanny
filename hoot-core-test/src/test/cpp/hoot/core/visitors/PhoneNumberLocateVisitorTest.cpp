@@ -39,6 +39,7 @@ class PhoneNumberLocateVisitorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(PhoneNumberLocateVisitorTest);
   CPPUNIT_TEST(runBasicTest);
+  CPPUNIT_TEST(runConfigurationTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -70,6 +71,27 @@ public:
     HOOT_FILE_EQUALS(_inputPath + "gold.osm", outputFile);
   }
 
+  void runConfigurationTest()
+  {
+    OsmMapPtr map(new OsmMap());
+    OsmMapReaderFactory::read(
+      map,
+      "test-files/cmd/glacial/PoiPolygonConflateStandaloneTest/PoiPolygon2.osm",
+      false,
+      Status::Unknown1);
+
+    PhoneNumberLocateVisitor uut;
+    Settings settings;
+    settings.set(ConfigOptions::getPhoneNumberRegionCodeKey(), "US");
+    uut.setConfiguration(settings);
+    map->visitRw(uut);
+
+    const QString outputFile = _outputPath + "out.osm";
+    OsmMapWriterFactory::write(map, outputFile);
+
+    CPPUNIT_ASSERT_EQUAL(12, uut._phoneNumberLocator.getNumLocated());
+    HOOT_FILE_EQUALS(_inputPath + "gold.osm", outputFile);
+  }
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(PhoneNumberLocateVisitorTest, "quick");
