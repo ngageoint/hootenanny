@@ -38,8 +38,8 @@ using namespace std;
 namespace hoot
 {
 
-QString OsmUtils::getRelationDetailedString(const ConstRelationPtr& relation,
-                                            const ConstOsmMapPtr& map)
+QString OsmUtils::getRelationDetailString(const ConstRelationPtr& relation,
+                                          const ConstOsmMapPtr& map)
 {
   return
     relation->toString() + RelationMemberUtils::getRelationMembersDetailedString(relation, map);

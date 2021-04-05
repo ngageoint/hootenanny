@@ -30,8 +30,7 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/elements/OsmUtils.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
-#include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/util/FileUtils.h>
 
 namespace hoot
 {
@@ -39,22 +38,49 @@ namespace hoot
 class OsmUtilsTest : public HootTestFixture
 {
     CPPUNIT_TEST_SUITE(OsmUtilsTest);
-    CPPUNIT_TEST(runBasicTest);
+    CPPUNIT_TEST(runElementsDetailStringTest);
+    CPPUNIT_TEST(runRelationDetailStringTest);
     CPPUNIT_TEST_SUITE_END();
 
 public:
 
   OsmUtilsTest() :
-  HootTestFixture(
-    "test-files/elements/OsmUtilsTest/",
-    "test-output/elements/OsmUtilsTest/")
+  HootTestFixture("test-files/elements/OsmUtilsTest/", "test-output/elements/OsmUtilsTest/")
   {
-    //setResetType(ResetBasic);
   }
 
-  void runBasicTest()
+  void runElementsDetailStringTest()
   {
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    OsmMapReaderFactory::read(
+      map, "test-files/cmd/quick/BuildingOutlineUpdateOpTest/BuildingOutlineUpdateOpTest.osm");
 
+    std::vector<ElementPtr> elements;
+    NodePtr node = map->getNode(-13395959);
+    elements.push_back(node);
+    WayPtr way = map->getWay(-13396440);
+    elements.push_back(way);
+    RelationPtr relation = map->getRelation(-2);
+    elements.push_back(relation);
+
+    HOOT_STR_EQUALS(
+      FileUtils::readFully(
+        _inputPath + "OsmUtilsTest-runElementsDetailStringTest-out").trimmed().toStdString(),
+      OsmUtils::getElementsDetailString(elements, map).trimmed().toStdString());
+  }
+
+  void runRelationDetailStringTest()
+  {
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    OsmMapReaderFactory::read(
+      map, "test-files/cmd/quick/BuildingOutlineUpdateOpTest/BuildingOutlineUpdateOpTest.osm");
+
+    ConstRelationPtr relation = map->getRelation(-2);
+
+    HOOT_STR_EQUALS(
+      FileUtils::readFully(
+        _inputPath + "OsmUtilsTest-runRelationDetailStringTest-out").trimmed().toStdString(),
+      OsmUtils::getRelationDetailString(relation, map).trimmed().toStdString());
   }
 };
 
