@@ -49,9 +49,12 @@ public:
    *
    * @param map the map to examine
    * @param output the URL to write the data to
+   * @param ignoreGenericConflators if enabled, elements conflatable only by generic conflators
+   * (point, line, poly, etc.) are always considered not conflatable
    * @return the number of features written
    */
-  static int writeNonConflatable(const ConstOsmMapPtr& map, const QString& output);
+  static int writeNonConflatable(
+    const ConstOsmMapPtr& map, const QString& output, const bool ignoreGenericConflators = false);
 
   /**
    * Writes the differential between two maps

@@ -29,9 +29,9 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/conflate/ConflateUtils.h>
+#include <hoot/core/conflate/highway/HighwayMatchCreator.h>
+#include <hoot/core/conflate/highway/HighwayMergerCreator.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
-#include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/elements/MapProjector.h>
 
 namespace hoot
 {
@@ -39,22 +39,46 @@ namespace hoot
 class ConflateUtilsTest : public HootTestFixture
 {
     CPPUNIT_TEST_SUITE(ConflateUtilsTest);
-    CPPUNIT_TEST(runBasicTest);
+    CPPUNIT_TEST(runWriteUnconflatableTest);
     CPPUNIT_TEST_SUITE_END();
 
 public:
 
   ConflateUtilsTest() :
   HootTestFixture(
-    "test-files/conflate/ConflateUtilsTest/",
-    "test-output/conflate/ConflateUtilsTest/")
+    "test-files/conflate/ConflateUtilsTest/", "test-output/conflate/ConflateUtilsTest/")
   {
-    //setResetType(ResetBasic);
   }
 
-  void runBasicTest()
+  void runWriteUnconflatableTest()
   {
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    OsmMapReaderFactory::read(map, "test-files/ToyTestA.osm", true, Status::Unknown1);
+    LOG_VART(map->size());
 
+    // There should be nothing that can't be conflated in this map, therefore no map file will be
+    // output.
+    CPPUNIT_ASSERT_EQUAL(
+      0,
+      ConflateUtils::writeNonConflatable(
+        map, _outputPath + "runWriteUnconflatableTest-1-out.osm", true));
+
+    // Now, let's add a single node that can't be conflated if generic conflators are ignored.
+    const long nodeId = map->createNextNodeId();
+    LOG_VART(nodeId);
+    NodePtr unconflatableNode =
+      std::make_shared<Node>(Status::Unknown1, nodeId, geos::geom::Coordinate(0.0, 0.0), 15.0);
+    unconflatableNode->setTag("blah", "bleh");
+    map->addNode(unconflatableNode);
+    LOG_VART(map->size());
+
+    const int mapSize =
+      ConflateUtils::writeNonConflatable(
+        map, _outputPath + "runWriteUnconflatableTest-2-out.osm", true);
+    LOG_VART(mapSize);
+    HOOT_FILE_EQUALS(
+      _inputPath + "runWriteUnconflatableTest-2-out.osm",
+      _outputPath + "runWriteUnconflatableTest-2-out.osm");
   }
 };
 
