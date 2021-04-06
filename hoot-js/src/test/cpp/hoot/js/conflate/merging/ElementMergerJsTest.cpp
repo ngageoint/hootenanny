@@ -165,7 +165,7 @@ public:
     try
     {
       OsmMapPtr map(new OsmMap());
-      OsmMapReaderFactory::read(map, true, true, _inputPath + inFileName);
+      OsmMapReaderFactory::read(map, _inputPath + inFileName, true, true);
 
       ElementMergerJs::_mergeElements(map, v8::Isolate::GetCurrent());
 

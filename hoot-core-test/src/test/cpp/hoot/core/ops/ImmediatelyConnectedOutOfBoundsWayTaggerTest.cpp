@@ -67,7 +67,7 @@ public:
       GeometryUtils::createMapFromBounds(bounds), _outputPath + testName + "-bounds.osm");
 
     OsmMapPtr map(new OsmMap());
-    OsmMapReaderFactory::read(map, true, true,  _inputPath + "in.osm");
+    OsmMapReaderFactory::read(map, _inputPath + "in.osm", true, true);
 
     ImmediatelyConnectedOutOfBoundsWayTagger uut(true);
     uut.setBounds(bounds);
@@ -91,7 +91,7 @@ public:
       GeometryUtils::createMapFromBounds(bounds), _outputPath + testName + "-bounds.osm");
 
     OsmMapPtr map(new OsmMap());
-    OsmMapReaderFactory::read(map, true, true,  _inputPath + "in.osm");
+    OsmMapReaderFactory::read(map, _inputPath + "in.osm", true, true);
 
     ImmediatelyConnectedOutOfBoundsWayTagger uut(false);
     uut.setBounds(bounds);

@@ -67,7 +67,7 @@ public:
     OsmMapPtr map(new OsmMap());
     Settings conf;
 
-    OsmMapReaderFactory::read(map, true, Status::Unknown1, "test-files/DcTigerRoads.osm");
+    OsmMapReaderFactory::read(map, "test-files/DcTigerRoads.osm", true, Status::Unknown1);
 
     conf.set("name.criterion.names", "I St NW;19th St NW");
     conf.set("name.criterion.case.sensitive", true);
@@ -90,7 +90,7 @@ public:
     {
       // case sensitivity is turned on and no intersection node match should be found
 
-      OsmMapReaderFactory::read(map, true, Status::Unknown1, "test-files/DcTigerRoads.osm");
+      OsmMapReaderFactory::read(map, "test-files/DcTigerRoads.osm", true, Status::Unknown1);
       cachedMap.reset(new OsmMap(map));
 
       conf.set("name.criterion.names", "I ST NW;19th St NW");
@@ -135,7 +135,7 @@ public:
     {
       // partial matching is turned off and no intersection node match should be found
 
-      OsmMapReaderFactory::read(map, true, Status::Unknown1, "test-files/DcTigerRoads.osm");
+      OsmMapReaderFactory::read(map, "test-files/DcTigerRoads.osm", true, Status::Unknown1);
       cachedMap.reset(new OsmMap(map));
 
       conf.set("name.criterion.names", "I St;19th St");
@@ -179,7 +179,7 @@ public:
     Settings conf;
 
     OsmMapReaderFactory::read(
-      map, true, Status::Unknown1, _inputPath + "runSingleInputDupeRoadMatchesTest.osm");
+      map, _inputPath + "runSingleInputDupeRoadMatchesTest.osm", true, Status::Unknown1);
 
     conf.set("name.criterion.names", "Olive;Fremont");
     conf.set("name.criterion.case.sensitive", false);
