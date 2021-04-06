@@ -595,7 +595,7 @@ void DiffConflator::addChangesToMap(OsmMapPtr map, ChangesetProviderPtr pChanges
       {
         ConstRelationPtr relation = std::dynamic_pointer_cast<const Relation>(c.getElement());
         LOG_VART(relation->getElementId());
-        LOG_VART(OsmUtils::getRelationDetailedString(relation, _originalMap));
+        LOG_VART(OsmUtils::getRelationDetailString(relation, _originalMap));
       }
     }
   }

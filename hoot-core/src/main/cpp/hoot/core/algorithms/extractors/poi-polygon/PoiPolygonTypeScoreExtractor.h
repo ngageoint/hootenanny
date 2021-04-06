@@ -74,8 +74,8 @@ public:
   double getFeatureDistance() { return _featureDistance; }
   void setFeatureDistance(double distance) { _featureDistance = distance; }
 
-  bool getPrintMatchDistanceTruth() { return _printMatchDistanceTruth; }
-  void setPrintMatchDistanceTruth(bool print) { _printMatchDistanceTruth = print; }
+  bool getCalculateMatchDistanceTruth() { return _calculateMatchDistanceTruth; }
+  void setCalculateMatchDistanceTruth(bool calculate) { _calculateMatchDistanceTruth = calculate; }
 
   QString getDescription() const override
   { return "Scores element type similarity for POI/Polygon conflation"; }
@@ -87,7 +87,7 @@ private:
 
   double _typeScoreThreshold;
   double _featureDistance;
-  bool _printMatchDistanceTruth;
+  bool _calculateMatchDistanceTruth;
   static QMap<QString, QSet<QString>> _categoriesToSchemaTagValues;
 
   //when enabled, will scan through all tags and, for any tag keys recognized in the schema, will

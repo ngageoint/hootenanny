@@ -100,6 +100,17 @@ bool TagUtils::anyElementsHaveAnyKvp(const QStringList& kvps,
   return false;
 }
 
+bool TagUtils::anyElementsHaveAnyKvp(const QStringList& kvps,
+                                     const std::set<ElementId>& elementIds, OsmMapPtr& map)
+{
+  std::vector<ElementPtr> elements;
+  for (std::set<ElementId>::const_iterator it = elementIds.begin(); it != elementIds.end(); ++it)
+  {
+    elements.push_back(map->getElement(*it));
+  }
+  return anyElementsHaveAnyKvp(kvps, elements);
+}
+
 bool TagUtils::allElementsHaveAnyTagKey(const QStringList& tagKeys,
                                         const std::set<ElementId>& elementIds, OsmMapPtr& map)
 {
@@ -120,17 +131,6 @@ bool TagUtils::anyElementsHaveAnyTagKey(const QStringList& tagKeys,
     elements.push_back(map->getElement(*it));
   }
   return anyElementsHaveAnyTagKey(tagKeys, elements);
-}
-
-bool TagUtils::anyElementsHaveAnyKvp(const QStringList& kvps,
-                                     const std::set<ElementId>& elementIds, OsmMapPtr& map)
-{
-  std::vector<ElementPtr> elements;
-  for (std::set<ElementId>::const_iterator it = elementIds.begin(); it != elementIds.end(); ++it)
-  {
-    elements.push_back(map->getElement(*it));
-  }
-  return anyElementsHaveAnyKvp(kvps, elements);
 }
 
 bool TagUtils::nameConflictExists(const ConstElementPtr& element1, const ConstElementPtr& element2)

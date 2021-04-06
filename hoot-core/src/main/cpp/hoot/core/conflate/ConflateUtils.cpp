@@ -47,20 +47,27 @@
 namespace hoot
 {
 
-int ConflateUtils::writeNonConflatable(const ConstOsmMapPtr& map, const QString& output)
+int ConflateUtils::writeNonConflatable(
+  const ConstOsmMapPtr& map, const QString& output, const bool ignoreGenericConflators)
 {
   LOG_STATUS("Writing non-conflatable data to: ..." << output.right(25) << " ...");
+
   OsmMapPtr nonConflatableMap(new OsmMap(map));
+  LOG_VART(nonConflatableMap->size());
   std::shared_ptr<RemoveElementsVisitor> elementRemover(new RemoveElementsVisitor(true));
   elementRemover->setRecursive(true);
-  std::shared_ptr<ElementCriterion> nonConflatableCrit(
+  std::shared_ptr<NonConflatableCriterion> nonConflatableCrit(
     new NonConflatableCriterion(nonConflatableMap));
+  nonConflatableCrit->setIgnoreGenericConflators(ignoreGenericConflators);
   elementRemover->addCriterion(nonConflatableCrit);
   nonConflatableMap->visitRw(*elementRemover);
+
+  LOG_VART(nonConflatableMap->size());
   if (nonConflatableMap->size() > 0)
   {
     OsmMapWriterFactory::write(nonConflatableMap, output);
   }
+
   return nonConflatableMap->size();
 }
 

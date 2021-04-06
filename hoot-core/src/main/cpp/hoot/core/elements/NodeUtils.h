@@ -47,16 +47,6 @@ class NodeUtils
 public:
 
   /**
-    Prints a collection of nodes for debugging purposes (couldn't find a way to do this with the
-    debug logger).
-
-    @param nodeCollectionName
-    @param nodes
-    */
-  static void printNodes(const QString& nodeCollectionName,
-                         const QList<std::shared_ptr<const Node>>& nodes);
-
-  /**
     Retrieves a collection of node IDs for a collection of nodes
 
     @param nodes a collection of nodes
@@ -102,18 +92,6 @@ public:
    */
   static bool nodeCoordsMatch(std::vector<std::shared_ptr<const Node>> nodes1,
                               std::vector<std::shared_ptr<const Node>> nodes2);
-
-  /**
-   * Determines if the way node coordinates from two ways match, given a configurable
-   * tolerance
-   *
-   * @param way1 the first way with nodes to compare
-   * @param way2 the second way with nodes to compare
-   * @param map the map owning the ways
-   * @return true if the way node coordinates match; false otherwise
-   */
-  static bool nodeCoordsMatch(const ConstWayPtr& way1, const ConstWayPtr& way2,
-                              const ConstOsmMapPtr& map);
 
   /**
    * Returns a printable string for a collection of nodes

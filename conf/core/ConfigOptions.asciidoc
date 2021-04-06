@@ -3807,13 +3807,13 @@ will be skipped by POI to Polygon conflation.
 Path to a file containing a list of polygon feature ignore tags.  Any polygons containing tags in
 the file will be skipped by POI to Polygon conflation.
 
-=== poi.polygon.print.match.distance.truth
+=== poi.polygon.calculate.match.distance.truth
 
 * Data Type: bool
 * Default Value: `false`
 
-If true, debug match distance output will be obtained from manually matched source data and printed
-if running 'hoot score-matches' with POI to Polygon conflation.
+If true, debug match distance output will be obtained from manually matched source data if running
+'hoot score-matches' with POI to Polygon conflation.
 
 === poi.polygon.promote.points.with.addresses.to.pois
 

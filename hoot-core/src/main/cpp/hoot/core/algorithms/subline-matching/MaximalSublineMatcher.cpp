@@ -70,12 +70,4 @@ WaySublineMatchString MaximalSublineMatcher::findMatch(const ConstOsmMapPtr& map
   return WaySublineMatchString(matches);
 }
 
-void MaximalSublineMatcher::setConfiguration(const Settings &conf)
-{
-  ConfigOptions co(conf);
-  _maxAngle = toRadians(co.getWayMatcherMaxAngle());
-  _minSplitSize = co.getWayMergerMinSplitSize();
-  _maxRecursions = co.getMaximalSublineMaxRecursions();
-}
-
 }

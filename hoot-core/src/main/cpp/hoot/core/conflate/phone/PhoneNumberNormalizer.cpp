@@ -42,7 +42,7 @@ namespace hoot
 {
 
 PhoneNumberNormalizer::PhoneNumberNormalizer() :
-_regionCode(""),
+_regionCode("US"),
 _searchInText(false),
 _format(PhoneNumberUtil::PhoneNumberFormat::NATIONAL),
 _numNormalized(0)
@@ -51,10 +51,10 @@ _numNormalized(0)
 
 void PhoneNumberNormalizer::setSearchInText(bool search)
 {
-  if (search && _regionCode.isEmpty())
-  {
-    throw HootException("A region code must be set when searching for phone numbers in text.");
-  }
+//  if (search && _regionCode.isEmpty())
+//  {
+//    throw HootException("A region code must be set when searching for phone numbers in text.");
+//  }
   _searchInText = search;
 }
 
@@ -68,10 +68,14 @@ void PhoneNumberNormalizer::setRegionCode(QString code)
     std::set<std::string>::const_iterator it = regions.find(code.toStdString());
     if (it == regions.end())
     {
-      throw HootException("Invalid phone number region code: " + code);
+      throw IllegalArgumentException("Invalid phone number region code: " + code);
     }
+    _regionCode = code;
   }
-  _regionCode = code;
+  else
+  {
+    throw IllegalArgumentException("Empty phone number region code.");
+  }
 }
 
 void PhoneNumberNormalizer::setFormat(QString format)

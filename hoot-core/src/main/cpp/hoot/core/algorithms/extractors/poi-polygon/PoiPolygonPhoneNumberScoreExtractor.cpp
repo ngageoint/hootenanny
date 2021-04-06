@@ -35,8 +35,6 @@
 
 // libphonenumber
 #include <phonenumbers/phonenumberutil.h>
-//#include <phonenumbers/phonenumbermatcher.h>
-//#include <phonenumbers/phonenumbermatch.h>
 using namespace i18n::phonenumbers;
 
 namespace hoot

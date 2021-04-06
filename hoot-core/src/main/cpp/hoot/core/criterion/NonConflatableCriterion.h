@@ -41,7 +41,7 @@ namespace hoot
 {
 
 /**
- * A filter that will remove elements that aren't conflatable by Hootenanny. These are elements
+ * A filter that will remove elements that are not conflatable by Hootenanny. These are elements
  * for which we have no matchers defined.
  */
 class NonConflatableCriterion : public ElementCriterion, public ConstOsmMapConsumer,

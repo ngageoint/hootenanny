@@ -50,8 +50,6 @@ public:
   static QString className() { return "hoot::LinearTagOnlyMerger"; }
 
   LinearTagOnlyMerger() = default;
-  LinearTagOnlyMerger(const std::set<std::pair<ElementId, ElementId>>& pairs,
-                      const std::shared_ptr<SublineStringMatcher>& sublineMatcher);
   // This is definitely not ideal to be passing a Network Conflation merger in here like this to
   // deal with bridge merging. At the very least, passing in a MergerPtr would be less brittle.
   // Lots of refactoring would likely need to be done to avoid this, however.
@@ -82,7 +80,6 @@ private:
   bool _conflictExists(ConstElementPtr elementWithTagsToKeep,
                        ConstElementPtr elementWithTagsToRemove) const;
 
-  void _copyTagsToWayMembers(ElementPtr e1, ElementPtr e2, const OsmMapPtr& map);
   bool _mergeWays(ElementPtr elementWithTagsToKeep, ElementPtr elementWithTagsToRemove,
                   const bool removeSecondaryElement, const OsmMapPtr& map,
                   std::vector<std::pair<ElementId, ElementId>>& replaced);

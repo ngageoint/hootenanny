@@ -44,10 +44,12 @@ public:
   static QString className() { return "hoot::UniqueTagValuesVisitor"; }
 
   /**
+   * Constructor
+   *
    * @param split If split is set to true then the values in the tag are split before they're placed
-   *  in the bag.
+   * in the bag.
    */
-  UniqueTagValuesVisitor(QString key, std::set<QString>& bag, bool split=false)
+  UniqueTagValuesVisitor(QString key, std::set<QString>& bag, bool split = false)
     : _key(key), _bag(bag), _split(split)
   { }
   ~UniqueTagValuesVisitor() = default;

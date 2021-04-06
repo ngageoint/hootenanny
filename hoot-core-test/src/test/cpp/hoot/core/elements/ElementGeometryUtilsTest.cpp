@@ -44,6 +44,7 @@ class ElementGeometryUtilsTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ElementGeometryUtilsTest);
   CPPUNIT_TEST(calculateLengthTest);
+  CPPUNIT_TEST(haveRelationshipTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -72,6 +73,10 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, ElementGeometryUtils::calculateLength(way, map), 1e-3);
   }
 
+  void haveRelationshipTest()
+  {
+
+  }
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ElementGeometryUtilsTest, "quick");
