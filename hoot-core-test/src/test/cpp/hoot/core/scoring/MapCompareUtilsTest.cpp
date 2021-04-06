@@ -30,34 +30,78 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/scoring/MapCompareUtils.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
-#include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/elements/MapProjector.h>
 
 namespace hoot
 {
 
 class MapCompareUtilsTest : public HootTestFixture
 {
-    CPPUNIT_TEST_SUITE(MapCompareUtilsTest);
-    CPPUNIT_TEST(runBasicTest);
-    CPPUNIT_TEST_SUITE_END();
+  CPPUNIT_TEST_SUITE(MapCompareUtilsTest);
+  CPPUNIT_TEST(runBasicTest);
+  CPPUNIT_TEST(runEmptyMapTest);
+  CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  MapCompareUtilsTest() :
-  HootTestFixture(
-    "test-files/scoring/MapCompareUtilsTest/",
-    "test-output/scoring/MapCompareUtilsTest/")
-  {
-    //setResetType(ResetBasic);
-  }
+  MapCompareUtilsTest() = default;
 
   void runBasicTest()
   {
+    OsmMapPtr map1 = std::make_shared<OsmMap>();
+    OsmMapReaderFactory::read(map1, "test-files/ToyTestA.osm");
 
+    OsmMapPtr map2 = std::make_shared<OsmMap>();
+    OsmMapReaderFactory::read(map2, "test-files/ToyTestB.osm");
+
+    CPPUNIT_ASSERT_EQUAL(1000, MapCompareUtils::getAttributeComparisonFinalScore(map1, map2, 1));
+    CPPUNIT_ASSERT_EQUAL(974, MapCompareUtils::getGraphComparisonFinalScore(map1, map2));
+    CPPUNIT_ASSERT_EQUAL(886, MapCompareUtils::getRasterComparisonFinalScore(map1, map2));
+  }
+
+  void runEmptyMapTest()
+  {
+    OsmMapPtr map1 = std::make_shared<OsmMap>();
+    OsmMapReaderFactory::read(map1, "test-files/ToyTestA.osm");
+
+    // Leave this map empty.
+    OsmMapPtr map2 = std::make_shared<OsmMap>();
+
+    QString exceptionMsg;
+    try
+    {
+      CPPUNIT_ASSERT_EQUAL(0, MapCompareUtils::getAttributeComparisonFinalScore(map1, map2, 1));
+    }
+    catch (const EmptyMapInputException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT_EQUAL(
+      QString("Empty map input.").toStdString(), exceptionMsg.toStdString());
+
+    try
+    {
+      CPPUNIT_ASSERT_EQUAL(0, MapCompareUtils::getGraphComparisonFinalScore(map1, map2));
+    }
+    catch (const EmptyMapInputException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT_EQUAL(
+      QString("Empty map input.").toStdString(), exceptionMsg.toStdString());
+
+    try
+    {
+      CPPUNIT_ASSERT_EQUAL(0, MapCompareUtils::getRasterComparisonFinalScore(map1, map2));
+    }
+    catch (const EmptyMapInputException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT_EQUAL(
+      QString("Empty map input.").toStdString(), exceptionMsg.toStdString());
   }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MapCompareUtilsTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MapCompareUtilsTest, "slow");
 
 }
