@@ -91,12 +91,6 @@ private:
     QSet<ConstNetworkEdgePtr> neighbors2Set);
 
   /**
-   * Finds which subline match between e1 and e2 and then appends those sublines to em as
-   * appropriate.
-   */
-  void _appendMatch(EdgeMatchPtr em, ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2) const;
-
-  /**
    * Returns all the edges that intersect the given location. If the location isn't on a vertex
    * then an empty set is returned.
    */
@@ -107,22 +101,11 @@ private:
   bool _isCandidateMatch(ConstEdgeLocationPtr l1, ConstEdgeLocationPtr l2) const;
 
   /**
-   * Finds which subline match between e1 and e2 and then prepends those sublines to em as
-   * appropriate.
-   */
-  void _prependMatch(EdgeMatchPtr em, ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2) const;
-
-  /**
    * Record the match if the score threshold is met.
    */
   bool _recordMatch(ConstEdgeMatchPtr em);
 
   double _scoreMatch(ConstEdgeMatchPtr em) const;
-
-  ConstEdgeSublinePtr _snapSublineToString(ConstEdgeStringPtr str, ConstEdgeSublinePtr sub) const;
-
-  EdgeMatchPtr _trimFromEdge(ConstEdgeMatchPtr em);
-  EdgeMatchPtr _trimToEdge(ConstEdgeMatchPtr em);
 
   void _addReverseMatch(ConstEdgeMatchPtr edgeMatch, const double score);
 

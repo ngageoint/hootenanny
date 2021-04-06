@@ -41,14 +41,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, CalculateAreaForStatsVisitor)
 
-Meters CalculateAreaForStatsVisitor::getArea(const OsmMapPtr& map, ElementPtr e)
-{
-  CalculateAreaForStatsVisitor v;
-  v.setOsmMap(map.get());
-  e->visitRo(*map, v);
-  return v.getArea();
-}
-
 void CalculateAreaForStatsVisitor::visit(const ConstElementPtr& e)
 {
   std::shared_ptr<Geometry> g =

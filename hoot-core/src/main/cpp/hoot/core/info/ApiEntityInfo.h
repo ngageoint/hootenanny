@@ -34,6 +34,11 @@ namespace hoot
 
 /**
  * Interface to describe the functionality of various Hoot API entities.
+ *
+ * It would be nice to get rid of getClassName() and just keep getName() (the namespace could be
+ * added where needed). The problem with this is that FeatureExtractors use custom behavior for
+ * getName() which really should be in toString(). That forces the need for getClassName() in
+ * addition to getName(). It will take some fairly deep refactoring to change this.
  */
 class ApiEntityInfo
 {
@@ -51,7 +56,7 @@ public:
 
   /**
    * Returns a name for the entity; often this is just the full class name, but some implementors
-   * may need to extend the behavior
+   * may need to extend the behavior (FeatureExtractor)
    *
    * @return name string
    */

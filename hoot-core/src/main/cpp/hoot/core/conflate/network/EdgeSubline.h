@@ -40,10 +40,8 @@ namespace hoot
 class EdgeSubline
 {
 public:
+
   EdgeSubline(const ConstEdgeLocationPtr& start, const ConstEdgeLocationPtr& end);
-
-  EdgeSubline(const EdgeLocationPtr& start, const EdgeLocationPtr& end);
-
   EdgeSubline(const ConstNetworkEdgePtr& e, double start, double end);
 
   Meters calculateLength(const ConstElementProviderPtr& provider) const;
@@ -114,6 +112,7 @@ public:
   std::shared_ptr<EdgeSubline> unionSubline(const std::shared_ptr<const EdgeSubline>& other) const;
 
 private:
+
   ConstEdgeLocationPtr _start, _end;
 };
 
@@ -132,8 +131,6 @@ bool operator<(const ConstEdgeSublinePtr&, const ConstEdgeSublinePtr&);
 
 inline uint qHash(const ConstEdgeSublinePtr& es)
 {
-//  LOG_VARW(qHash(es->getStart()));
-//  LOG_VARW(qHash(es->getEnd()));
   return ::qHash(Tgs::cantorPairing(qHash(es->getStart()), qHash(es->getEnd())));
 }
 

@@ -68,16 +68,10 @@ public:
   static bool isReasonablePath(const QString& path);
 
   OgrReader();
-
   OgrReader(const QString& path);
-
-  OgrReader(const QString& path, const QString& layer);
-
   ~OgrReader() = default;
 
   ElementIterator* createIterator(const QString& path, const QString& layer) const;
-
-  QStringList getLayerNames(const QString& path);
 
   QStringList getFilteredLayerNames(const QString& path);
 
@@ -91,12 +85,8 @@ public:
    */
   void read(const QString& path, const QString& layer, const OsmMapPtr& map);
 
-  void setDefaultCircularError(Meters circularError);
-
   void setDefaultStatus(Status s) override;
-
   void setLimit(long limit);
-
   void setSchemaTranslationScript(const QString& translate);
 
   long getFeatureCount(const QString& path, const QString& layer);

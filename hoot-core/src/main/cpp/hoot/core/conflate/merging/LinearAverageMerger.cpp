@@ -187,19 +187,4 @@ WayPtr LinearAverageMerger::_getMaximalNearestSubline(
   return splits[index];
 }
 
-void LinearAverageMerger::_mergeTags(
-  const WayPtr& averagedWay, const WayPtr& originalWay1, const WayPtr& originalWay2) const
-{
-  LOG_VART(averagedWay->getTags().size());
-  Tags mergedTags =
-    TagMergerFactory::mergeTags(averagedWay->getTags(), originalWay1->getTags(), ElementType::Way);
-  averagedWay->setTags(mergedTags);
-  LOG_VART(averagedWay->getTags().size());
-  mergedTags =
-    TagMergerFactory::mergeTags(averagedWay->getTags(), originalWay2->getTags(), ElementType::Way);
-  averagedWay->setTags(mergedTags);
-  LOG_VART(averagedWay->getTags().size());
-  averagedWay->setStatus(Status::Conflated);
-}
-
 }

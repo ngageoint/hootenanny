@@ -33,8 +33,7 @@ namespace hoot
 {
 
 /**
- * Interface used to describe information about an operation performed on data.  e.g. OsmMapOperation,
- * ElementVisitor, etc.
+ * Interface used to describe information about an operation performed on data.
  *
  * Implementing this interface may not make sense on some operations. If desired, implementers
  * can force a subset of any of the status messages to not be displayed by returning an empty

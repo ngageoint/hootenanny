@@ -37,7 +37,6 @@
 #include <hoot/core/io/IoUtils.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/Exception.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/util/HootException.h>
@@ -392,7 +391,7 @@ double OsmXmlReader::_parseDouble(const QString& s)
 
   if (ok == false)
   {
-    throw Exception("Error parsing double: " + s);
+    throw HootException("Error parsing double: " + s);
   }
 
   return result;
@@ -405,7 +404,7 @@ long OsmXmlReader::_parseLong(const QString& s)
 
   if (ok == false)
   {
-    throw Exception("Error parsing long: " + s);
+    throw HootException("Error parsing long: " + s);
   }
 
   return result;
@@ -448,7 +447,7 @@ void OsmXmlReader::read(const OsmMapPtr& map)
   QFile file(_url);
   if (!file.open(QFile::ReadOnly | QFile::Text))
   {
-    throw Exception(QObject::tr("Error opening OSM file for parsing: %1").arg(_url));
+    throw HootException(QObject::tr("Error opening OSM file for parsing: %1").arg(_url));
   }
   LOG_DEBUG("File " << _url << " opened for read");
 
@@ -523,7 +522,7 @@ void OsmXmlReader::readFromString(const QString& xml, const OsmMapPtr& map)
   QXmlInputSource xmlInputSource(&buffer);
   if (reader.parse(xmlInputSource) == false)
   {
-    throw Exception(_errorString);
+    throw HootException(_errorString);
   }
 
   LOG_DEBUG("Parsed map from xml.");
@@ -567,14 +566,14 @@ bool OsmXmlReader::startElement(const QString& /*namespaceURI*/, const QString& 
     {
       if (qName != "osm")
       {
-        throw Exception("The file is not an OSM file.");
+        throw HootException("The file is not an OSM file.");
       }
       else
       {
         _osmFound = true;
         if (attributes.value("version") != "0.6")
         {
-          throw Exception("Only version 0.6 OSM files are supported.");
+          throw HootException("Only version 0.6 OSM files are supported.");
         }
       }
     }
@@ -867,7 +866,7 @@ bool OsmXmlReader::startElement(const QString& /*namespaceURI*/, const QString& 
       }
     }
   }
-  catch (const Exception& e)
+  catch (const HootException& e)
   {
     _errorString = e.what();
     return false;
@@ -1034,7 +1033,7 @@ bool OsmXmlReader::hasMoreElements()
     _inputFile.setFileName(_url);
     if (!_inputFile.open(QFile::ReadOnly | QFile::Text))
     {
-      throw Exception(QObject::tr("Error opening OSM file for parsing: %1").arg(_url));
+      throw HootException(QObject::tr("Error opening OSM file for parsing: %1").arg(_url));
     }
     _streamReader.setDevice(&_inputFile);
 
@@ -1074,7 +1073,7 @@ bool OsmXmlReader::_foundOsmHeaderXmlStartElement()
   if (_osmFound &&
       _streamAttributesToAttributes(_streamReader.attributes()).value("version") != "0.6")
   {
-    throw Exception("Only version 0.6 OSM files are supported.");
+    throw HootException("Only version 0.6 OSM files are supported.");
   }
   return _osmFound;
 }

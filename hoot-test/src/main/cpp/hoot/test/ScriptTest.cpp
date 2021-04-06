@@ -28,7 +28,7 @@
 #include "ScriptTest.h"
 
 // hoot
-#include <hoot/core/util/Exception.h>
+#include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/ConfigOptions.h>
 
@@ -60,7 +60,7 @@ QString ScriptTest::_readFile(QString path)
 
   if (!fp.open(QFile::ReadOnly))
   {
-    throw Exception("Error opening file for reading: " + path);
+    throw HootException("Error opening file for reading: " + path);
   }
 
   return QString::fromUtf8(fp.readAll());
@@ -74,7 +74,7 @@ void ScriptTest::_removeFile(QString path)
   {
     if (f.remove() == false)
     {
-      throw Exception("Error removing: " + path);
+      throw HootException("Error removing: " + path);
     }
   }
 }
@@ -337,13 +337,13 @@ void ScriptTest::_writeFile(QString path, QString content)
   {
     if (fp.remove() == false)
     {
-      throw Exception("Error removing file: " + path);
+      throw HootException("Error removing file: " + path);
     }
   }
 
   if (fp.open(QFile::WriteOnly) == false)
   {
-    throw Exception("Error opening file for writing: " + path);
+    throw HootException("Error opening file for writing: " + path);
   }
 
   fp.write(content.toUtf8());

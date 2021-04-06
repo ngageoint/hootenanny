@@ -30,7 +30,6 @@
 // Local Includes
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Way.h>
-#include <hoot/core/util/Exception.h>
 
 // GDAL Includes
 #include <ogrsf_frmts.h>
@@ -152,7 +151,7 @@ void GeometryPainter::drawElement(QPainter& pt, const OsmMap* map, const Element
   }
   else
   {
-    throw Exception("Internal Error: Geometry type is not supported.");
+    throw HootException("Internal Error: Geometry type is not supported.");
   }
 }
 
@@ -184,7 +183,7 @@ void GeometryPainter::drawGeometry(QPainter& pt, const OGRGeometry* geom, const 
       }
     default:
       {
-        throw Exception("Internal Error: Geometry type is not supported.");
+        throw HootException("Internal Error: Geometry type is not supported.");
       }
   }
 }
@@ -194,7 +193,7 @@ void GeometryPainter::drawGeometryCollection(QPainter& pt, const OGRGeometryColl
 {
   if (collection == nullptr)
   {
-    throw Exception("Internal Error: GeometryPainter::drawGeometryCollection - Null geometry");
+    throw HootException("Internal Error: GeometryPainter::drawGeometryCollection - Null geometry");
   }
   for (int i = 0; i < collection->getNumGeometries(); i++)
   {
@@ -260,8 +259,8 @@ void GeometryPainter::drawPolygon(QPainter& pt, const OGRPolygon* polygon, const
     std::shared_ptr<QImage> image(new QImage(pt.window().size(), QImage::Format_ARGB32));
     if (image->isNull() == true)
     {
-      throw Exception("Internal Error: GeometryPainter::drawPolygon "
-                      "Error allocating image.");
+      throw HootException("Internal Error: GeometryPainter::drawPolygon "
+                          "Error allocating image.");
     }
     image->fill(qRgba(0, 0, 0, 0));
     std::shared_ptr<QPainter> lpt(new QPainter(image.get()));

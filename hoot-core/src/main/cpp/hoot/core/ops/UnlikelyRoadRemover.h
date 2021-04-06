@@ -81,6 +81,12 @@ public:
    */
   QStringList getCriteria() const override;
 
+  void setMaxWayLength(const double length) { _maxWayLength = length; }
+  void setNumHistogramBins(const int numBins) { _numHistogramBins = numBins; }
+  void setHeadingDelta(const double delta) { _headingDelta = delta; }
+  void setSampleDistance(const double distance) { _sampleDistance = distance; }
+  void setMaxHeadingVariance(const double variance) { _maxHeadingVariance = variance; }
+
 private:
 
   // max length a way can have to be eligible for removal
@@ -92,7 +98,7 @@ private:
   double _headingDelta;
   // sample distance to use with the angle extractor used to calc heading variance; see
   // SampledAngleHistogramExtractor
-  Meters _sampleDistance;
+  double _sampleDistance;
   // heading variance at or above which a way may be eligible for removal
   double _maxHeadingVariance;
 
