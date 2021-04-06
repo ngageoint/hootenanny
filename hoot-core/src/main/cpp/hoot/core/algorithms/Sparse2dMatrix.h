@@ -99,6 +99,7 @@ public:
   long size() { return _map.size(); }
 
 private:
+
   HashMap<CellId, double> _map;
 };
 

@@ -45,7 +45,7 @@ public:
 
   static QString className() { return "hoot::RecursiveSetTagValueOp"; }
 
-  RecursiveSetTagValueOp() = default;
+  RecursiveSetTagValueOp();
   // We have some of the constructor signatures from SetTagValueVisitor here, as well as a signature
   // that allows passing in an already configured, possibly complex, criterion. We may want to
   // extend that capability to SetTagValueVisitor at some point.
@@ -83,7 +83,8 @@ public:
   /**
    * @see OperationStatus
    */
-  QString getCompletedStatusMessage() const override { return _tagger->getCompletedStatusMessage(); }
+  QString getCompletedStatusMessage() const override
+  { return _tagger->getCompletedStatusMessage(); }
 
   QString getName() const override { return className(); }
 

@@ -137,20 +137,15 @@ win32:HEADERS += \
 SOURCES += \
     src/main/cpp/tgs/StreamUtils.cpp \
     src/main/cpp/tgs/Version.cpp \
-    src/main/cpp/tgs/BigContainers/BigMap.cpp \
-    src/main/cpp/tgs/BigContainers/BasicBloomFilter.cpp \
     src/main/cpp/tgs/BigContainers/Stxxl.cpp \
     src/main/cpp/tgs/DelaunayTriangulation/DelaunayTriangulation.cpp \
-    src/main/cpp/tgs/DisjointSet/DisjointSet.cpp \
     src/main/cpp/tgs/Interpolation/BaseInterpolator.cpp \
     src/main/cpp/tgs/Interpolation/DelaunayInterpolator.cpp \
     src/main/cpp/tgs/Interpolation/IdwInterpolator.cpp \
     src/main/cpp/tgs/Interpolation/KernelEstimationInterpolator.cpp \
     src/main/cpp/tgs/Io/StdIoDevice.cpp \
-    src/main/cpp/tgs/Optimization/NelderMead.cpp \
     src/main/cpp/tgs/Optimization/SimulatedAnnealing.cpp \
     src/main/cpp/tgs/Optimization/State.cpp \
-    src/main/cpp/tgs/Optimization/StateDescription.cpp \
     src/main/cpp/tgs/Optimization/VariableDescription.cpp \
     src/main/cpp/tgs/ProbablePath/ProbablePathCalculator.cpp \
     src/main/cpp/tgs/RandomForest/DataFrame.cpp \

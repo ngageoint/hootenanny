@@ -72,6 +72,8 @@ public:
 
   QString getClassName() const override { return className(); }
 
+  bool isValid() const { return !_keys.isEmpty() && !_vals.isEmpty(); }
+
 private:
 
   QStringList _keys, _vals;

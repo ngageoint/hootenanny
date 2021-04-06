@@ -35,11 +35,6 @@
 namespace hoot
 {
 
-QStringList GeometryTypeCriterion::getCriterionClassNames()
-{
-  return getCriterionClassNamesByGeometryType(GeometryType::Unknown);
-}
-
 QStringList GeometryTypeCriterion::getCriterionClassNamesByGeometryType(const GeometryType& type)
 {
   QStringList classNamesByType;
@@ -97,22 +92,6 @@ GeometryTypeCriterion::GeometryType GeometryTypeCriterion::typeFromString(
   else
   {
     return GeometryType::Unknown;
-  }
-}
-
-ElementCriterionPtr GeometryTypeCriterion::getBaseGeometryCriterion(
-  const GeometryType& geometryType, const ConstOsmMapPtr& map)
-{
-  switch (geometryType)
-  {
-    case GeometryType::Point:
-      return ElementCriterionPtr(new PointCriterion(map));
-    case GeometryType::Line:
-      return ElementCriterionPtr(new LinearCriterion());
-    case GeometryType::Polygon:
-      return ElementCriterionPtr(new PolygonCriterion(map));
-    default:
-      return ElementCriterionPtr();
   }
 }
 

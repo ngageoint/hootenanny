@@ -87,18 +87,6 @@ void ReplaceTagVisitor::setConfiguration(const Settings& conf)
   }
 }
 
-void ReplaceTagVisitor::setMatchTag(QString k, QString v)
-{
-  _matchKey = k;
-  _matchValue = v;
-}
-
-void ReplaceTagVisitor::setReplaceTag(QString k, QString v)
-{
-  _replaceKey = k;
-  _replaceValue = v;
-}
-
 void ReplaceTagVisitor::visit(const std::shared_ptr<Element>& e)
 {
   // Key and Value must match exactly. Then we replace.

@@ -42,7 +42,6 @@
 // hoot
 #include <hoot/core/elements/Tags.h>
 #include <hoot/core/util/ConfPath.h>
-#include <hoot/core/util/Exception.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 
@@ -82,7 +81,7 @@ void PythonSchemaTranslator::_init()
     QFileInfo info(_scriptPath);
     if (info.exists() == false)
     {
-      throw Exception("Unable to find translation module: " + _scriptPath);
+      throw HootException("Unable to find translation module: " + _scriptPath);
     }
     moduleName = info.baseName();
     pythonPath.append(info.dir().absolutePath());
@@ -111,17 +110,17 @@ void PythonSchemaTranslator::_init()
   if (module == nullptr)
   {
     PyErr_Print();
-    throw Exception("Error loading module " + _scriptPath);
+    throw HootException("Error loading module " + _scriptPath);
   }
 
   _translateFunction = PyObject_GetAttrString(module, "translateToOsm");
   if (_translateFunction == nullptr)
   {
-    throw Exception("Error retrieving 'translateToOsm'");
+    throw HootException("Error retrieving 'translateToOsm'");
   }
   if (PyCallable_Check((PyObject*)_translateFunction) == 0)
   {
-    throw Exception("Error: 'translateToOsm' isn't callable");
+    throw HootException("Error: 'translateToOsm' isn't callable");
   }
   Py_DECREF(module);
 }
@@ -135,7 +134,7 @@ bool PythonSchemaTranslator::isValidScript()
       _init();
       _initialized = true;
     }
-    catch (const Exception&)
+    catch (const HootException&)
     {
       // pass
     }
@@ -182,7 +181,7 @@ void PythonSchemaTranslator::_translateToOsm(Tags& tags, const char* layerName, 
   if (pyResult == nullptr)
   {
     PyErr_Print();
-    throw Exception("Python call failed.");
+    throw HootException("Python call failed.");
   }
   else if (pyResult == Py_None)
   {
@@ -191,7 +190,7 @@ void PythonSchemaTranslator::_translateToOsm(Tags& tags, const char* layerName, 
   else if (PyDict_Check(pyResult) == 0)
   {
     Py_DECREF(pyResult);
-    throw Exception("Expected a dict as a return type.");
+    throw HootException("Expected a dict as a return type.");
   }
   // we got a valid result.
   else
@@ -205,7 +204,7 @@ void PythonSchemaTranslator::_translateToOsm(Tags& tags, const char* layerName, 
 
       if (keyUnicode == nullptr || valueUnicode == nullptr)
       {
-        throw Exception("Both the key and value in the return translation must be "
+        throw HootException("Both the key and value in the return translation must be "
                             "convertable to strings.");
       }
 

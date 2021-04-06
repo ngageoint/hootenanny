@@ -46,6 +46,8 @@ HOOT_FACTORY_REGISTER(OsmMapOperation, FindStreetIntersectionsByName)
 void FindStreetIntersectionsByName::setConfiguration(const Settings& conf)
 {
   ConfigOptions opts(conf);
+  _nameCrit.reset(new NameCriterion());
+  _nameCrit->setConfiguration(conf);
   const QStringList streetNames = opts.getNameCriterionNames();
   if (streetNames.size() != 2)
   {
@@ -53,8 +55,6 @@ void FindStreetIntersectionsByName::setConfiguration(const Settings& conf)
       QString("The name.criterion.names configuration option for FindStreetIntersectionsByName") +
       QString("must consist of exactly two names."));
   }
-  _nameCrit.reset(new NameCriterion());
-  _nameCrit->setConfiguration(conf);
 }
 
 void FindStreetIntersectionsByName::apply(OsmMapPtr& map)
@@ -163,6 +163,22 @@ OsmMapPtr FindStreetIntersectionsByName::_filterRoadsByStreetName(
   StatusUpdateVisitor statusUpdater(status);
   matchingRoadsMap->visitWaysRw(statusUpdater);
   return matchingRoadsMap;
+}
+
+QString FindStreetIntersectionsByName::getCompletedStatusMessage() const
+{
+  if (!_nameCrit->getNames().isEmpty())
+  {
+    return
+      "Located " + StringUtils::formatLargeNumber(_numAffected) +
+      " street intersections for inputs: " + _nameCrit->getNames()[0] + " and " +
+      _nameCrit->getNames()[1] + " out of " + StringUtils::formatLargeNumber(_numProcessed) +
+      " streets.";
+  }
+  else
+  {
+    return "Located no street intersections.";
+  }
 }
 
 }

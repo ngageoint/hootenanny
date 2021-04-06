@@ -31,7 +31,6 @@
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/Exception.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Units.h>
@@ -786,7 +785,7 @@ Meters Tags::readMeters(const QString& key) const
   Meters result = value(key).toDouble(&ok);
   if (ok == false)
   {
-    throw Exception("Invalid value in meters, key: " + key + " value: " + value(key));
+    throw HootException("Invalid value in meters, key: " + key + " value: " + value(key));
   }
   return result;
 }

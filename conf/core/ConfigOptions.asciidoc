@@ -1382,7 +1382,8 @@ the most perpendicular and 1.0 being the least.
 * Data Type: double
 * Default Value: `0.9`
 
-How parallel two
+How parallel two roads must to be considered as part of the same divided highway, with 0.0 being the
+least parallel and 1.0 being the most.
 
 === dual.highway.splitter.driving.side
 
