@@ -45,7 +45,7 @@ class PhoneNumberLocateVisitor : public ElementVisitor, public Configurable
 {
 public:
 
-  PhoneNumberLocateVisitor() = default;
+  PhoneNumberLocateVisitor();
   ~PhoneNumberLocateVisitor() = default;
 
   static QString className() { return "hoot::PhoneNumberLocateVisitor"; }

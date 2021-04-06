@@ -44,9 +44,10 @@ class PhoneNumberLocateVisitorTest : public HootTestFixture
 
 public:
 
-  PhoneNumberLocateVisitorTest()
-    : HootTestFixture("test-files/visitors/PhoneNumberLocateVisitorTest/",
-                      "test-output/visitors/PhoneNumberLocateVisitorTest/")
+  PhoneNumberLocateVisitorTest() :
+  HootTestFixture(
+    "test-files/visitors/PhoneNumberLocateVisitorTest/",
+    "test-output/visitors/PhoneNumberLocateVisitorTest/")
   {
     setResetType(ResetBasic);
   }

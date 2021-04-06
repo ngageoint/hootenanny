@@ -48,6 +48,7 @@ public:
   HootTestFixture(
     "test-files/ops/PointsToPolysConverterTest/", "test-output/ops/PointsToPolysConverterTest/")
   {
+    setResetType(ResetBasic);
   }
 
   void runBasicTest()
