@@ -45,7 +45,7 @@ class NormalizePhoneNumbersVisitorTest : public HootTestFixture
   CPPUNIT_TEST(runBasicTest);
   CPPUNIT_TEST(runSetFormatTest);
   CPPUNIT_TEST(runSearchInTextTest);
-  CPPUNIT_TEST(runSetSearchInTextEmptyRegionCodeTest);
+  CPPUNIT_TEST(runInvalidRegionCodeTest);
   CPPUNIT_TEST(runConfigureTest);
   CPPUNIT_TEST_SUITE_END();
 
@@ -140,24 +140,35 @@ public:
       QString("Invalid phone number format: blah").toStdString(), exceptionMsg.toStdString());
   }
 
-  void runSetSearchInTextEmptyRegionCodeTest()
+  void runInvalidRegionCodeTest()
   {
     // This test might be a better fit in a new PhoneNumberNormalizerTest.
 
     NormalizePhoneNumbersVisitor uut;
-    // skip setting the region code
 
     QString exceptionMsg;
     try
     {
-      uut._phoneNumberNormalizer.setSearchInText(true);
+      uut._phoneNumberNormalizer.setRegionCode("");
     }
-    catch (const HootException& e)
+    catch (const IllegalArgumentException& e)
     {
       exceptionMsg = e.what();
     }
     CPPUNIT_ASSERT_EQUAL(
-      QString("A region code must be set when searching for phone numbers in text.").toStdString(),
+      QString("Empty phone number region code.").toStdString(),
+      exceptionMsg.toStdString());
+
+    try
+    {
+      uut._phoneNumberNormalizer.setRegionCode("blah");
+    }
+    catch (const IllegalArgumentException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT_EQUAL(
+      QString("Invalid phone number region code: BLAH").toStdString(),
       exceptionMsg.toStdString());
   }
 
