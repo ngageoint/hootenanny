@@ -55,16 +55,6 @@ _networkMerger(networkMerger)
   _removeTagsFromWayMembers = false;
 }
 
-LinearTagOnlyMerger::LinearTagOnlyMerger(
-  const std::set<std::pair<ElementId, ElementId>>& pairs,
-  const std::shared_ptr<SublineStringMatcher>& sublineMatcher) :
-LinearSnapMerger(pairs, sublineMatcher),
-_performBridgeGeometryMerging(
-  ConfigOptions().getAttributeConflationAllowRefGeometryChangesForBridges())
-{
-  _removeTagsFromWayMembers = false;
-}
-
 void LinearTagOnlyMerger::_determineKeeperFeature(
   ElementPtr element1, ElementPtr element2, ElementPtr& keeper, ElementPtr& toRemove,
   bool& removeSecondaryElement)
@@ -87,11 +77,6 @@ void LinearTagOnlyMerger::_determineKeeperFeature(
   {
     keeper = element1;
     toRemove = element2;
-  }
-  else if (element1->getStatus() == Status::Unknown2 || element2->getStatus() == Status::Conflated)
-  {
-    keeper = element2;
-    toRemove = element1;
   }
 }
 
@@ -149,8 +134,8 @@ bool LinearTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Eleme
 
   // Otherwise, proceed with tag only merging.
 
-  // copy relation tags back to their way members
-  _copyTagsToWayMembers(e1, e2, map);
+  // Used to copy relation tags back to their way members here, but it doesn't actually seem to
+  // come up in any test cases so no longer doing it.;
 
   // Merge the ways, bringing the secondary feature's attributes over to the reference feature.
 
@@ -217,50 +202,6 @@ bool LinearTagOnlyMerger::_mergeWays(
   }
 
   return true;
-}
-
-void LinearTagOnlyMerger::_copyTagsToWayMembers(ElementPtr e1, ElementPtr e2, const OsmMapPtr& map)
-{
-  // hope this isn't happening
-  assert(!(e1->getElementType() == ElementType::Relation &&
-           e2->getElementType() == ElementType::Relation));
-
-  // handle relations coming from LinearSnapMerger's previous handling of bridges
-  if (e1->getElementType() == ElementType::Relation ||
-      e2->getElementType() == ElementType::Relation)
-  {
-    RelationPtr relation;
-    if (e1->getElementType() == ElementType::Relation)
-    {
-      relation = std::dynamic_pointer_cast<Relation>(e1);
-    }
-    else
-    {
-      relation = std::dynamic_pointer_cast<Relation>(e2);
-    }
-
-    const std::vector<RelationData::Entry>& relationMembers = relation->getMembers();
-    LOG_VART(relationMembers.size());
-    assert(relationMembers.size() >= 2);
-
-    // Simply copy the tags that were pushed up from the way members to the parent relation,
-    // presumably by the MultiLineStringSplitter.
-    for (size_t i = 0; i < relationMembers.size(); i++)
-    {
-      ElementPtr member = map->getElement(relationMembers[i].getElementId());
-      if (member && member->getElementType() == ElementType::Way)
-      {
-        WayPtr wayMember = std::dynamic_pointer_cast<Way>(member);
-        LOG_TRACE(
-          "Copying tags from: " << relation->getElementId() << " to member: " <<
-          wayMember->getElementId() << "...");
-        wayMember->setTags(
-          TagMergerFactory::mergeTags(wayMember->getTags(), relation->getTags(), ElementType::Way));
-        // safety check to make sure we didn't mark any ways as added multilinestring relations
-        wayMember->getTags().remove(MetadataTags::HootMultilineString());
-      }
-    }
-  }
 }
 
 bool LinearTagOnlyMerger::_conflictExists(
