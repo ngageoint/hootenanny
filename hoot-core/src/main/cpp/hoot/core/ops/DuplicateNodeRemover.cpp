@@ -101,12 +101,6 @@ void DuplicateNodeRemover::apply(std::shared_ptr<OsmMap>& map)
   else
   {
     planar = map;
-    // if we need to check for bounds containment
-    if (_bounds.get())
-    {
-      wgs84.reset(new OsmMap(map));
-      MapProjector::projectToWgs84(wgs84);
-    }
   }
 
   ClosePointHash cph(_distance);
@@ -185,24 +179,9 @@ void DuplicateNodeRemover::apply(std::shared_ptr<OsmMap>& map)
                   "actively configured conflate matcher...");
                 replace = false;
               }
-              // if the geographic bounds are not specified
-              else if (!_bounds)
-              {
-                replace = true;
-              }
-              // If the geographic bounds are specified, then make sure both points are inside.
               else
               {
-                ConstNodePtr node1 = wgs84->getNode(matchIdI);
-                std::shared_ptr<geos::geom::Geometry> geom1 =
-                  elementConverter.convertToGeometry(node1);
-                ConstNodePtr node2 = wgs84->getNode(matchIdJ);
-                std::shared_ptr<geos::geom::Geometry> geom2 =
-                  elementConverter.convertToGeometry(node2);
-                if (_bounds->contains(geom1.get()) && _bounds->contains(geom2.get()))
-                {
-                  replace = true;
-                }
+                replace = true;
               }
               LOG_VART(replace);
 

@@ -36,11 +36,6 @@ using namespace std;
 namespace hoot
 {
 
-ElementIdsVisitor::ElementIdsVisitor(const ElementType& elementType) :
-_elementType(elementType)
-{
-}
-
 ElementIdsVisitor::ElementIdsVisitor(const ElementType& elementType, ElementCriterion* pCrit) :
 _elementType(elementType),
 _pCrit(pCrit)
@@ -56,26 +51,6 @@ void ElementIdsVisitor::visit(const std::shared_ptr<const Element>& e)
       _elementIds.push_back(e->getId());
     }
   }
-}
-
-vector<long> ElementIdsVisitor::findElements(const ConstOsmMapPtr& map,
-                                             const ElementType& elementType)
-{
-  ElementIdsVisitor v(elementType);
-  if (elementType == ElementType::Node)
-  {
-    map->visitNodesRo(v);
-  }
-  else if (elementType == ElementType::Way)
-  {
-    map->visitWaysRo(v);
-  }
-  else
-  {
-    map->visitRelationsRo(v);
-  }
-  LOG_TRACE(v.getIds());
-  return v.getIds();
 }
 
 vector<long> ElementIdsVisitor::findElements(const ConstOsmMapPtr& map,
@@ -96,12 +71,6 @@ vector<long> ElementIdsVisitor::findElements(const ConstOsmMapPtr& map,
     map->visitRelationsRo(v);
   }
   return v.getIds();
-}
-
-vector<long> ElementIdsVisitor::_findCloseNodes(const ConstOsmMapPtr& map,
-                                                const Coordinate& refCoord, Meters maxDistance)
-{
-  return map->getIndex().findNodes(refCoord, maxDistance);
 }
 
 vector<long> ElementIdsVisitor::_findCloseWays(const ConstOsmMapPtr& map,
@@ -128,12 +97,6 @@ vector<long> ElementIdsVisitor::findNodes(const ConstOsmMapPtr& map, ElementCrit
                                           const Coordinate& refCoord, Meters maxDistance)
 {
   return _findElements(map, pCrit, map->getIndex().findNodes(refCoord, maxDistance));
-}
-
-vector<long> ElementIdsVisitor::findWays(const ConstOsmMapPtr& map, ElementCriterion* pCrit,
-                                         ConstWayPtr refWay, Meters maxDistance, bool addError)
-{
-  return _findElements(map, pCrit, map->getIndex().findWayNeighbors(refWay, maxDistance, addError));
 }
 
 vector<long> ElementIdsVisitor::findElementsByTag(const ConstOsmMapPtr& map,

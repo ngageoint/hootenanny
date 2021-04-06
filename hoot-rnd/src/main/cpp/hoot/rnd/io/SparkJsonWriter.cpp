@@ -33,7 +33,6 @@
 #include <hoot/core/conflate/matching/MatchFactory.h>
 #include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/Exception.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/rnd/visitors/MultiaryPoiHashVisitor.h>

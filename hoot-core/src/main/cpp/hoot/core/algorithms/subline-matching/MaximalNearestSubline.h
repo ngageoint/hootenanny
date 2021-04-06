@@ -120,14 +120,10 @@ private:
 
   void _expandInterval(WayLocation& loc);
 
-  void _findNearestOnA(const geos::geom::Coordinate& bPt);
-
   /**
    * Returns the end node in the MNS.
    */
   ConstNodePtr _getEndNode();
-
-  const std::vector<WayLocation>& _getInterval();
 
   /**
    * Returns the start node in the MNS

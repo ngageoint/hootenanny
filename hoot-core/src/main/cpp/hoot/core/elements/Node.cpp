@@ -97,13 +97,6 @@ void Node::setY(double y)
   _nodeData.setY(y);
 }
 
-std::shared_ptr<geos::geom::Point> Node::toPoint() const
-{
-  Coordinate c(getX(), getY());
-  std::shared_ptr<Point> result(GeometryFactory::getDefaultInstance()->createPoint(c));
-  return result;
-}
-
 QString Node::toString() const
 {
   stringstream ss(stringstream::out);

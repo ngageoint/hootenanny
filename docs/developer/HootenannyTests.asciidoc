@@ -540,6 +540,12 @@ via Maven.  Report coverage generation for Javascript code is currently in the w
 For the Java Web Services code, this is done automatically by Cobertura, but for the Hootenanny Core code, 'make test' must
 be made explicit as described below.
 
+To generate a report for just the Hootenanny Core code:
+
+----------------
+./configure --with-rnd --with-josm --with-services --with-coverage && make clean-coverage && make -j$(nproc) && HootTest --glacial --parallel && make -j$(nproc) core-coverage
+----------------
+
 To generate a report for just the Hootenanny Java web services code:
 
 ----------------
@@ -549,7 +555,7 @@ To generate a report for just the Hootenanny Java web services code:
 To generate a report for all Hootenanny Core code and the Hootenanny Java Web Services code together:
 
 -----------
-./configure --with-rnd --with-services --with-coverage && make clean-coverage && make -j$(nproc) && make -j$(nproc) test-all && make -j$(nproc) coverage
+./configure --with-rnd --with-josm --with-services --with-coverage && make clean-coverage && make -j$(nproc) && make -j$(nproc) test-all && make -j$(nproc) coverage
 -----------
 
 The test coverage reports will be output to _$HOOT_HOME/coverage_.

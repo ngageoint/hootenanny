@@ -77,16 +77,6 @@ public:
     const GeometricRelationship& relationship, ConstOsmMapPtr map);
 
   /**
-   * Determines an elements hoot geometry type (used by GeometryTypeCriterion)
-   *
-   * @param element the element to inspect
-   * @param map the map owning the element being inspected
-   * @return a valid geometry type or GeometryType::Unknown if one cannot be determined
-   */
-  static GeometryTypeCriterion::GeometryType geometryTypeForElement(
-    const ConstElementPtr& element, ConstOsmMapPtr map = OsmMapPtr());
-
-  /**
    * Calculate the length of the given way in meters. The projection must be planar.
    */
   static Meters calculateLength(const ConstElementPtr& e,

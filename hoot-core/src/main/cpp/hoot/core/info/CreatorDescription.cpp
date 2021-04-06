@@ -176,29 +176,29 @@ std::shared_ptr<GeometryTypeCriterion> CreatorDescription::getElementCriterion(
   switch (t)
   {
     case POI:
-      return std::make_shared<PoiCriterion>(PoiCriterion());
+      return std::make_shared<PoiCriterion>();
     case Highway:
-      return std::make_shared<HighwayCriterion>(HighwayCriterion(map));
+      return std::make_shared<HighwayCriterion>(map);
     case Building:
-      return std::make_shared<BuildingCriterion>(BuildingCriterion(map));
+      return std::make_shared<BuildingCriterion>(map);
     case Waterway:
-      return std::make_shared<LinearWaterwayCriterion>(LinearWaterwayCriterion());
+      return std::make_shared<LinearWaterwayCriterion>();
     case PoiPolygonPOI:
-      return std::make_shared<PoiPolygonPoiCriterion>(PoiPolygonPoiCriterion());
+      return std::make_shared<PoiPolygonPoiCriterion>();
     case Polygon:
-      return std::make_shared<PolygonCriterion>(PolygonCriterion(map));
+      return std::make_shared<PolygonCriterion>(map);
     case Area:
-      return std::make_shared<NonBuildingAreaCriterion>(NonBuildingAreaCriterion(map));
+      return std::make_shared<NonBuildingAreaCriterion>(map);
     case Railway:
-      return std::make_shared<RailwayCriterion>(RailwayCriterion());
+      return std::make_shared<RailwayCriterion>();
     case PowerLine:
-      return std::make_shared<PowerLineCriterion>(PowerLineCriterion());
+      return std::make_shared<PowerLineCriterion>();
     case Point:
-      return std::make_shared<PointCriterion>(PointCriterion(map));
+      return std::make_shared<PointCriterion>(map);
     case Line:
-      return std::make_shared<LinearCriterion>(LinearCriterion());
+      return std::make_shared<LinearCriterion>();
     case CollectionRelation:
-      return std::make_shared<CollectionRelationCriterion>(CollectionRelationCriterion());
+      return std::make_shared<CollectionRelationCriterion>();
     default:
       return std::shared_ptr<GeometryTypeCriterion>();
   }

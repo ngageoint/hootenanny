@@ -96,16 +96,6 @@ void MaximalNearestSubline::_expandInterval(WayLocation& loc)
   }
 }
 
-void MaximalNearestSubline::_findNearestOnA(const geos::geom::Coordinate& bPt)
-{
-  WayLocation nearestLocationOnA = _aPtLocator.locate(bPt);
-  if (_maxRelevantDistance < 0.0 ||
-      nearestLocationOnA.getCoordinate().distance(bPt) <= _maxRelevantDistance)
-  {
-    _expandInterval(nearestLocationOnA);
-  }
-}
-
 WayPtr MaximalNearestSubline::getMaximalNearestSubline(const OsmMapPtr& map,
     ConstWayPtr a, ConstWayPtr b, Meters minSplitSize, Meters maxRelevantDistance)
 {
@@ -205,78 +195,6 @@ const vector<WayLocation>& MaximalNearestSubline::getInterval()
     bestInterval = _maxInterval;
 
   _maxInterval = bestInterval;
-
-  return _maxInterval;
-}
-
-const vector<WayLocation>& MaximalNearestSubline::_getInterval()
-{
-  /**
-   * The basic strategy is to pick test points on B and find their nearest point on A.
-   * The interval containing these nearest points is approximately the MaximalNeareastSubline of A.
-   */
-
-  // Heuristic #1: use every vertex of B as a test point
-  for (size_t ib = 0; ib < _b->getNodeCount(); ib++)
-  {
-    Coordinate bPt = _map->getNode(_b->getNodeId(ib))->toCoordinate();
-    WayLocation nearestLocationOnA = _aPtLocator.locate(bPt);
-    Meters distance = nearestLocationOnA.getCoordinate().distance(bPt);
-    if (_maxRelevantDistance < 0.0)
-    {
-      _expandInterval(nearestLocationOnA);
-    }
-    else
-    {
-      if (distance <= _maxRelevantDistance)
-      {
-        _expandInterval(nearestLocationOnA);
-      }
-      else if (_maxInterval[0].isValid() == true)
-      {
-        break;
-      }
-    }
-  }
-
-  /**
-   * Heuristic #2:
-   *
-   * find the nearest point on B to all vertices of A and use those points of B as test points.
-   * For efficiency use only vertices of A outside current max interval.
-   */
-  LocationOfPoint bPtLocator(_map, _b);
-  bool foundOne = false;
-  for (size_t ia = 0; ia < _a->getNodeCount(); ia++)
-  {
-    if (_isOutsideInterval(ia))
-    {
-      WayLocation bLoc = bPtLocator.locate(_map->getNode(_a->getNodeId(ia))->toCoordinate());
-      Coordinate bPt = bLoc.getCoordinate();
-      WayLocation nearestLocationOnA = _aPtLocator.locate(bPt);
-      Meters distance = nearestLocationOnA.getCoordinate().distance(bPt);
-      if (_maxRelevantDistance < 0.0)
-      {
-        _expandInterval(nearestLocationOnA);
-      }
-      else
-      {
-        if (distance <= _maxRelevantDistance)
-        {
-          _expandInterval(nearestLocationOnA);
-          foundOne = true;
-        }
-        else if (foundOne == true)
-        {
-          break;
-        }
-      }
-    }
-    else
-    {
-      foundOne = true;
-    }
-  }
 
   return _maxInterval;
 }

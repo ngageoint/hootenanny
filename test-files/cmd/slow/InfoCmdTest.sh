@@ -190,3 +190,27 @@ echo "Listing filters..."
 echo ""
 hoot info $CONFIG --filters | grep "NonBuildingAreaCriterion"
 echo ""
+
+# CRITERION CONSUMERS
+echo "Listing criterion consumers..."
+echo ""
+hoot info $CONFIG --criterion-consumers | grep "CopyMapSubsetOp"
+echo ""
+
+# STRING COMPARATORS
+echo "Listing string comparators..."
+echo ""
+hoot info $CONFIG --string-comparators | grep "ExactStringDistance"
+echo ""
+
+# GEOMETRY TYPE CRITERIA
+echo "Listing geometry type criteria..."
+echo ""
+hoot info $CONFIG --geometry-type-criteria | grep "TunnelCriterion"
+echo ""
+
+# VALUE AGGREGATORS
+echo "Listing value aggregators..."
+echo ""
+hoot info $CONFIG --value-aggregators | grep "MinAggregator"
+echo ""

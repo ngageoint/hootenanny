@@ -37,7 +37,6 @@
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/DateTimeUtils.h>
-#include <hoot/core/util/Exception.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/StringUtils.h>
 
@@ -101,7 +100,7 @@ void OsmJsonWriter::open(const QString& url)
   _fp.setFileName(url);
   if (!_fp.open(QIODevice::WriteOnly | QIODevice::Text))
   {
-    throw Exception(QObject::tr("Error opening %1 for writing").arg(url));
+    throw HootException(QObject::tr("Error opening %1 for writing").arg(url));
   }
   _out = &_fp;
 }

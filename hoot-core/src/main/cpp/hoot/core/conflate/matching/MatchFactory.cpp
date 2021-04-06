@@ -127,21 +127,6 @@ vector<CreatorDescription> MatchFactory::getAllAvailableCreators() const
   return result;
 }
 
-std::shared_ptr<MatchCreator> MatchFactory::getCreatorByName(const QString& name)
-{
-  for (std::vector<std::shared_ptr<MatchCreator>>::const_iterator matchCreatorsItr =
-         _creators.begin();
-       matchCreatorsItr != _creators.end(); ++matchCreatorsItr)
-  {
-    std::shared_ptr<MatchCreator> matchCreator = *matchCreatorsItr;
-    if (matchCreator->getName() == name)
-    {
-      return matchCreator;
-    }
-  }
-  return std::shared_ptr<MatchCreator>();
-}
-
 void MatchFactory::registerCreator(const QString& c)
 {
   QStringList args = c.split(",");
@@ -263,18 +248,5 @@ void MatchFactory::reset()
   _critFilterClassName = "";
   _negateCritFilter = false;
 }
-
-QString MatchFactory::getCreatorsStr() const
-{
-  QString str;
-  for (size_t i = 0; i < _creators.size(); ++i)
-  {
-    const QString name = _creators[i]->getName();
-    str += name + ";";
-  }
-  str.chop(1);
-  return str;
-}
-
 
 }

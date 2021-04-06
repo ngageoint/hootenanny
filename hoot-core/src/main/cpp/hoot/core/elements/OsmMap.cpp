@@ -102,14 +102,6 @@ _idSwap(new IdSwap())
   _enableProgressLogging = true;
 }
 
-OsmMap::OsmMap(const ConstOsmMapPtr& map, const std::shared_ptr<OGRSpatialReference>& srs)
-{
-  _copy(map);
-  _srs = srs;
-  _initCounters();
-  _enableProgressLogging = true;
-}
-
 void OsmMap::_initCounters()
 {
   _numNodesAppended = 0;
@@ -991,93 +983,6 @@ void OsmMap::visitRw(ElementVisitor& visitor)
   }
 }
 
-void OsmMap::visitNodesRw(ElementVisitor& visitor)
-{
-  // make a copy so we can iterate through even if there are changes.
-  const NodeMap allNodes = getNodes();
-  int numVisited = 0;
-  const int taskStatusUpdateInterval = ConfigOptions().getTaskStatusUpdateInterval();
-  for (NodeMap::const_iterator it = allNodes.begin(); it != allNodes.end(); ++it)
-  {
-    if (containsNode(it->first))
-    {
-      NodePtr node = std::dynamic_pointer_cast<Node>(it->second);
-      if (node)
-      {
-        visitor.visit(node);
-      }
-    }
-
-    numVisited++;
-    if (_enableProgressLogging && numVisited % (taskStatusUpdateInterval * 10) == 0)
-    {
-      PROGRESS_INFO(
-        "\tProcessed " << StringUtils::formatLargeNumber(numVisited) << " / " <<
-        StringUtils::formatLargeNumber(allNodes.size()) << " nodes.");
-    }
-  }
-}
-
-void OsmMap::visitNodesRw(ConstElementVisitor& visitor)
-{
-  // make a copy so we can iterate through even if there are changes.
-  const NodeMap allNodes = getNodes();
-  int numVisited = 0;
-  const int taskStatusUpdateInterval = ConfigOptions().getTaskStatusUpdateInterval();
-  for (NodeMap::const_iterator it = allNodes.begin(); it != allNodes.end(); ++it)
-  {
-    if (containsNode(it->first))
-    {
-      ConstNodePtr node = std::dynamic_pointer_cast<const Node>(it->second);
-      if (node)
-      {
-        visitor.visit(node);
-      }
-    }
-
-    numVisited++;
-    if (_enableProgressLogging && numVisited % (taskStatusUpdateInterval * 10) == 0)
-    {
-      PROGRESS_INFO(
-        "\tProcessed " << StringUtils::formatLargeNumber(numVisited) << " / " <<
-        StringUtils::formatLargeNumber(allNodes.size()) << " nodes.");
-    }
-  }
-}
-
-void OsmMap::visitWaysRw(ConstElementVisitor& visitor)
-{
-  OsmMapConsumer* consumer = dynamic_cast<OsmMapConsumer*>(&visitor);
-  if (consumer != nullptr)
-  {
-    consumer->setOsmMap(this);
-  }
-
-  // make a copy so we can iterate through even if there are changes.
-  const WayMap allWays = getWays();
-  int numVisited = 0;
-  const int taskStatusUpdateInterval = ConfigOptions().getTaskStatusUpdateInterval();
-  for (WayMap::const_iterator it = allWays.begin(); it != allWays.end(); ++it)
-  {
-    if (containsWay(it->first))
-    {
-      ConstWayPtr way = std::dynamic_pointer_cast<const Way>(it->second);
-      if (way)
-      {
-        visitor.visit(way);
-      }
-    }
-
-    numVisited++;
-    if (_enableProgressLogging && numVisited % (taskStatusUpdateInterval * 10) == 0)
-    {
-      PROGRESS_INFO(
-        "\tProcessed " << StringUtils::formatLargeNumber(numVisited) << " / " <<
-        StringUtils::formatLargeNumber(allWays.size()) << " ways.");
-    }
-  }
-}
-
 void OsmMap::visitWaysRw(ElementVisitor& visitor)
 {
   OsmMapConsumer* consumer = dynamic_cast<OsmMapConsumer*>(&visitor);
@@ -1107,39 +1012,6 @@ void OsmMap::visitWaysRw(ElementVisitor& visitor)
       PROGRESS_INFO(
         "\tProcessed " << StringUtils::formatLargeNumber(numVisited) << " / " <<
         StringUtils::formatLargeNumber(allWays.size()) << " ways.");
-    }
-  }
-}
-
-void OsmMap::visitRelationsRw(ConstElementVisitor& visitor)
-{
-  OsmMapConsumer* consumer = dynamic_cast<OsmMapConsumer*>(&visitor);
-  if (consumer != nullptr)
-  {
-    consumer->setOsmMap(this);
-  }
-
-  // make a copy so we can iterate through even if there are changes.
-  const RelationMap allRs = getRelations();
-  int numVisited = 0;
-  const int taskStatusUpdateInterval = ConfigOptions().getTaskStatusUpdateInterval();
-  for (RelationMap::const_iterator it = allRs.begin(); it != allRs.end(); ++it)
-  {
-    if (containsRelation(it->first))
-    {
-      ConstRelationPtr relation = std::dynamic_pointer_cast<const Relation>(it->second);
-      if (relation)
-      {
-        visitor.visit(relation);
-      }
-    }
-
-    numVisited++;
-    if (_enableProgressLogging && numVisited % (taskStatusUpdateInterval * 10) == 0)
-    {
-      PROGRESS_INFO(
-        "\tProcessed " << StringUtils::formatLargeNumber(numVisited) << " / " <<
-        StringUtils::formatLargeNumber(allRs.size()) << " relations.");
     }
   }
 }
@@ -1261,31 +1133,12 @@ void OsmMap::replaceSource(const QString &url)
   appendSource(url);
 }
 
-QSet<ElementId> OsmMap::getElementIds() const
-{
-  QSet<ElementId> ids;
-  ids = ids.unite(getNodeElementIds());
-  ids = ids.unite(getWayElementIds());
-  ids = ids.unite(getRelationElementIds());
-  return ids;
-}
-
 QSet<long> OsmMap::getNodeIds() const
 {
   QSet<long> ids;
   for (NodeMap::const_iterator it = _nodes.begin(); it != _nodes.end(); ++it)
   {
     ids.insert(it->first);
-  }
-  return ids;
-}
-
-QSet<ElementId> OsmMap::getNodeElementIds() const
-{
-  QSet<ElementId> ids;
-  for (NodeMap::const_iterator it = _nodes.begin(); it != _nodes.end(); ++it)
-  {
-    ids.insert(ElementId(ElementType::Node, it->first));
   }
   return ids;
 }
@@ -1300,32 +1153,12 @@ QSet<long> OsmMap::getWayIds() const
   return ids;
 }
 
-QSet<ElementId> OsmMap::getWayElementIds() const
-{
-  QSet<ElementId> ids;
-  for (WayMap::const_iterator it = _ways.begin(); it != _ways.end(); ++it)
-  {
-    ids.insert(ElementId(ElementType::Way, it->first));
-  }
-  return ids;
-}
-
 QSet<long> OsmMap::getRelationIds() const
 {
   QSet<long> ids;
   for (RelationMap::const_iterator it = _relations.begin(); it != _relations.end(); ++it)
   {
     ids.insert(it->first);
-  }
-  return ids;
-}
-
-QSet<ElementId> OsmMap::getRelationElementIds() const
-{
-  QSet<ElementId> ids;
-  for (RelationMap::const_iterator it = _relations.begin(); it != _relations.end(); ++it)
-  {
-    ids.insert(ElementId(ElementType::Relation, it->first));
   }
   return ids;
 }

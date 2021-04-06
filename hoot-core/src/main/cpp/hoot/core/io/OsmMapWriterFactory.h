@@ -62,8 +62,6 @@ public:
 
   static QString getWriterName(const QString& url);
 
-  static bool isSupportedFormat(const QString& url);
-
   /**
    * Writes a map useful for debugging
    *

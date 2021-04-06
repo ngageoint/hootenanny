@@ -147,43 +147,4 @@ void ConflateUtils::writeDiff(const QString& mapUrl1, const QString& mapUrl2,
   timer.restart();
 }
 
-bool ConflateUtils::operatesOnGenericElementsOnly(const std::shared_ptr<OsmMapOperation>& op)
-{
-  // Tried to implement this and the one with the ElementVisitor input generically via templated
-  // code but was getting link errors...worth revisiting at some point.
-
-  const QStringList geometryTypeCriteriaClassNames = op->getCriteria();
-  if (geometryTypeCriteriaClassNames.size() == 0)
-  {
-    return true;
-  }
-  for (int i = 0; i < geometryTypeCriteriaClassNames.size(); i++)
-  {
-    if (ConflatableElementCriterion::supportsSpecificConflation(
-          geometryTypeCriteriaClassNames.at(i)))
-    {
-      return false;
-    }
-  }
-  return true;
-}
-
-bool ConflateUtils::operatesOnGenericElementsOnly(const std::shared_ptr<ElementVisitor>& vis)
-{
-  const QStringList geometryTypeCriteriaClassNames = vis->getCriteria();
-  if (geometryTypeCriteriaClassNames.empty())
-  {
-    return true;
-  }
-  for (int i = 0; i < geometryTypeCriteriaClassNames.size(); i++)
-  {
-    if (ConflatableElementCriterion::supportsSpecificConflation(
-          geometryTypeCriteriaClassNames.at(i)))
-    {
-      return false;
-    }
-  }
-  return true;
-}
-
 }

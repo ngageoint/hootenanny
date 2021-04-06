@@ -48,32 +48,6 @@ QMap<QString, ElementCriterionPtr> ConflatableElementCriterion::getConflatableCr
   return _conflatableCriteria;
 }
 
-QMap<QString, ElementCriterionPtr> ConflatableElementCriterion::getConflatableCriteria(
-  const GeometryType& geometryType)
-{
-  const QString geometryTypeStr = GeometryTypeCriterion::typeToString(geometryType);
-  if (!_conflatableCriteriaByGeometryType[geometryTypeStr].isEmpty())
-  {
-    return _conflatableCriteriaByGeometryType[geometryTypeStr];
-  }
-  else
-  {
-    const QMap<QString, ElementCriterionPtr> conflatableCriteria = getConflatableCriteria();
-    for (QMap<QString, ElementCriterionPtr>::const_iterator itr = conflatableCriteria.begin();
-         itr != conflatableCriteria.end(); ++itr)
-    {
-      ElementCriterionPtr crit = itr.value();
-      std::shared_ptr<GeometryTypeCriterion> geometryCrit =
-        std::dynamic_pointer_cast<GeometryTypeCriterion>(crit);
-      if (geometryCrit && geometryCrit->getGeometryType() == geometryType)
-      {
-        _conflatableCriteriaByGeometryType[geometryTypeStr][itr.key()] = itr.value();
-      }
-    }
-    return _conflatableCriteriaByGeometryType[geometryTypeStr];
-  }
-}
-
 void ConflatableElementCriterion::_createConflatableCriteria()
 {
   const std::vector<QString> criterionClassNames =

@@ -47,7 +47,7 @@ public:
     const std::shared_ptr<geos::geom::LineString>& l1,
     const std::shared_ptr<geos::geom::LineString>& l2);
 
-protected:
+private:
 
   std::shared_ptr<geos::geom::LineString> _l1;
   std::shared_ptr<geos::geom::LineString> _l2;

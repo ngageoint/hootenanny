@@ -37,7 +37,6 @@
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
-#include <hoot/core/geometry/GeometryPainter.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/util/OpenCv.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>

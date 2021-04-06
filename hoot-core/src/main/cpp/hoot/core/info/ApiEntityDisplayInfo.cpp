@@ -57,7 +57,7 @@
 namespace hoot
 {
 
-const int ApiEntityDisplayInfo::MAX_NAME_SIZE = 45;
+const int ApiEntityDisplayInfo::MAX_NAME_SIZE = 48;
 const int ApiEntityDisplayInfo::MAX_TYPE_SIZE = 18;
 
 template<typename ApiEntity>
@@ -148,7 +148,7 @@ QString ApiEntityDisplayInfo::getDisplayInfoOps(const QString& optName)
 
 QString ApiEntityDisplayInfo::getDisplayInfo(const QString& apiEntityType)
 {
-  DisableLog dl;
+  DisableLog dl; // Disable this for debugging.
   QString msg = " (prepend 'hoot::' before using";
   QString buffer;
   QTextStream ts(&buffer);
@@ -284,8 +284,14 @@ QString ApiEntityDisplayInfo::getDisplayInfo(const QString& apiEntityType)
     msg.prepend("Criterion Consumers");
     ts << msg << endl;
     ts <<
-      _getApiEntities<ElementCriterionConsumer, ElementCriterionConsumer>(
-        ElementCriterionConsumer::className(), "criterion consumer", false, MAX_NAME_SIZE - 10);
+      _getApiEntities<OsmMapOperation, ElementCriterionConsumer>(
+        OsmMapOperation::className(), "criterion consumer", false, MAX_NAME_SIZE - 10);
+    ts <<
+      _getApiEntities<ElementVisitor, ElementCriterionConsumer>(
+        ElementVisitor::className(), "criterion consumer", false, MAX_NAME_SIZE - 10);
+    ts <<
+      _getApiEntities<ElementCriterion, ElementCriterionConsumer>(
+        ElementCriterion::className(), "criterion consumer", false, MAX_NAME_SIZE - 10);
   }
   else if (apiEntityType == "geometry-type-criteria")
   {
@@ -303,8 +309,8 @@ template<typename ApiEntity, typename ApiEntityChild>
 QString ApiEntityDisplayInfo::_getApiEntities(
   const QString& apiEntityBaseClassName, const QString& apiEntityType,
   const bool displayType,
-  //the size of the longest names plus a 3 space buffer; the value passed in
-  //here by callers may have to be adjusted over time for some entity types
+  // the size of the longest names plus a 3 space buffer; the value passed in
+  // here by callers may have to be adjusted over time for some entity types
   const int maxNameSize)
 {
   LOG_VARD(apiEntityBaseClassName);
@@ -361,7 +367,7 @@ QString ApiEntityDisplayInfo::_getApiEntities(
       }
 
       QString name = className.replace("hoot::", "");
-      //append '*' to the names of visitors that support the SingleStatistic interface
+      // append '*' to the names of visitors that support the SingleStatistic interface
       if (supportsNumericStat)
       {
         name += "**";

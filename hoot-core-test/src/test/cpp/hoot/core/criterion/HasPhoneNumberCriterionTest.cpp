@@ -43,6 +43,7 @@ public:
   void runBasicTest()
   {
     HasPhoneNumberCriterion uut;
+    uut.setConfiguration(conf());
 
     NodePtr node1(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
     node1->getTags().set("phone", "(123) 456 7890");
