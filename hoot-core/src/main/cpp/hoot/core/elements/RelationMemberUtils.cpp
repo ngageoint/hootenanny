@@ -39,8 +39,8 @@
 namespace hoot
 {
 
-QString RelationMemberUtils::getRelationMembersDetailedString(const ConstRelationPtr& relation,
-                                                              const ConstOsmMapPtr& map)
+QString RelationMemberUtils::getRelationMembersDetailString(const ConstRelationPtr& relation,
+                                                            const ConstOsmMapPtr& map)
 {
   QString str = "\nMember Detail:\n\n";
   const std::vector<RelationData::Entry> relationMembers = relation->getMembers();
@@ -78,16 +78,11 @@ bool RelationMemberUtils::isMemberOfRelation(const ConstOsmMapPtr& map, const El
   return false;
 }
 
-bool RelationMemberUtils::isMemberOfRelationType(
+bool RelationMemberUtils::isMemberOfRelationWithType(
   const ConstOsmMapPtr& map, const ElementId& childId, const QString& relationType)
 {
   LOG_VART(childId);
   LOG_VART(relationType);
-
-  if (relationType.trimmed().isEmpty())
-  {
-    return isMemberOfRelation(map, childId);
-  }
 
   const std::set<ElementId> parentIds = map->getParents(childId);
   LOG_VART(parentIds.size());
@@ -116,11 +111,6 @@ bool RelationMemberUtils::isMemberOfRelationInCategory(
   LOG_VART(schemaCategory);
   LOG_VART(map.get());
 
-  if (schemaCategory.trimmed().isEmpty())
-  {
-    return isMemberOfRelation(map, childId);
-  }
-
   const std::set<ElementId> parentIds = map->getParents(childId);
   LOG_VART(parentIds.size());
   for (std::set<ElementId>::const_iterator it = parentIds.begin(); it != parentIds.end(); ++it)
@@ -146,11 +136,6 @@ bool RelationMemberUtils::isMemberOfRelationWithTagKey(
 {
   LOG_VART(childId);
   LOG_VART(tagKey);
-
-  if (tagKey.trimmed().isEmpty())
-  {
-    return isMemberOfRelation(map, childId);
-  }
 
   const std::set<ElementId> parentIds = map->getParents(childId);
   LOG_VART(parentIds.size());
@@ -272,32 +257,6 @@ bool RelationMemberUtils::isMemberOfRelationSatisfyingCriterion(
     if (criterion.isSatisfied(*it))
     {
       return true;
-    }
-  }
-  return false;
-}
-
-bool RelationMemberUtils::relationHasConflatableMember(
-  const ConstRelationPtr& relation, const ConstOsmMapPtr& map)
-{
-  if (!relation)
-  {
-    return false;
-  }
-
-  std::shared_ptr<ConflateInfoCache> conflateInfoCache(new ConflateInfoCache(map));
-
-  const std::vector<RelationData::Entry>& relationMembers = relation->getMembers();
-  for (size_t i = 0; i < relationMembers.size(); i++)
-  {
-    ConstElementPtr member = map->getElement(relationMembers[i].getElementId());
-    if (member)
-    {
-      LOG_VART(member->getElementId());
-      if (conflateInfoCache->elementCanBeConflatedByActiveMatcher(member))
-      {
-        return true;
-      }
     }
   }
   return false;

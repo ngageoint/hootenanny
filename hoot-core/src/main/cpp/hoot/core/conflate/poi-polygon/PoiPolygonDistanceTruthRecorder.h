@@ -68,7 +68,7 @@ public:
   /**
    * Prints all recorded information
    */
-  static void printMatchDistanceInfo();
+  static QString getMatchDistanceInfo();
 
 private:
 
@@ -77,8 +77,8 @@ private:
   static QMultiMap<QString, double> _polyMatchRefIdsToDistances;
   static QMultiMap<QString, double> _polyReviewRefIdsToDistances;
 
-  static void _printMatchDistanceInfo(const QString &matchType,
-                                      const QMultiMap<QString, double>& distanceInfo);
+  static QString _getMatchDistanceInfo(const QString &matchType,
+                                       const QMultiMap<QString, double>& distanceInfo);
 
 };
 

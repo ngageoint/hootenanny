@@ -47,6 +47,7 @@ public:
     : HootTestFixture("test-files/cmd/glacial/PoiPolygonConflateStandaloneTest/",
                       UNUSED_PATH)
   {
+    setResetType(ResetAll);
   }
 
   void runBasicTest()
@@ -56,6 +57,7 @@ public:
 
     PhoneNumberCountVisitor uut;
     map->visitRo(uut);
+
     CPPUNIT_ASSERT_EQUAL(12, (int)uut.getStat());
   }
 
@@ -65,8 +67,14 @@ public:
     OsmMapReaderFactory::read(map, _inputPath + "PoiPolygon2.osm", false, Status::Unknown1);
 
     PhoneNumberCountVisitor uut;
+    Settings settings;
+    settings.set(ConfigOptions::getPhoneNumberRegionCodeKey(), "US");
+    settings.set(ConfigOptions::getPhoneNumberAdditionalTagKeysKey(), QStringList());
+    settings.set(ConfigOptions::getPhoneNumberSearchInTextKey(), false);
     uut.setConfiguration(conf());
+
     map->visitRo(uut);
+
     CPPUNIT_ASSERT_EQUAL(12, (int)uut.getStat());
   }
 };

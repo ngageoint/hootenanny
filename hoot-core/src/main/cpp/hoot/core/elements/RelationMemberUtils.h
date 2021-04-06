@@ -54,8 +54,8 @@ public:
    * @param map map owning the relation
    * @return a detailed relations members string
    */
-  static QString getRelationMembersDetailedString(const ConstRelationPtr& relation,
-                                                  const ConstOsmMapPtr& map);
+  static QString getRelationMembersDetailString(const ConstRelationPtr& relation,
+                                                const ConstOsmMapPtr& map);
 
   /**
    * Determines if an element is a member of a relation
@@ -71,41 +71,36 @@ public:
    *
    * @param map map owning the input element
    * @param childId element ID of the input element
-   * @param relationType type of relation to search for; if left blank, relation types are not
-   * checked
-   * @return true if the element is a member of a relation of the specified type OR if the element
-   * is simply a member of a relation and the type is not specified; false otherwise
+   * @param relationType type of relation to search for
+   * @return true if the element is a member of a relation of the specified type; false otherwise
    */
-  static bool isMemberOfRelationType(const ConstOsmMapPtr& map, const ElementId& childId,
-                                     const QString& relationType = "");
+  static bool isMemberOfRelationWithType(const ConstOsmMapPtr& map, const ElementId& childId,
+                                         const QString& relationType);
 
   /**
    * Determines if an element is a member of a relation that is in a given schema category
    *
    * @param map map owning the input element
    * @param childId element ID of the input element
-   * @param schemaCategory schema category to search for relation membership in; if left blank,
-   * category membership for the relations is not checked
-   * @return true if the element is a member of a relation that is in the specified schema category
-   * OR if the element is simply a member of a relation and the category is not specified; false
-   * otherwise
+   * @param schemaCategory schema category to search for relation membership in
+   * @return true if the element is a member of a relation that is in the specified schema category;
+   * false otherwise
    */
   static bool isMemberOfRelationInCategory(const ConstOsmMapPtr& map, const ElementId& childId,
-                                           const QString& schemaCategory = "");
+                                           const QString& schemaCategory);
 
   /**
    * Determines if an element is a member of a relation that has a given tag key
    *
    * @param map map owning the input element
    * @param childId element ID of the input element
-   * @param tagKey tag key to search relations for; if left blank, tag keys on the relations are not
-   * checked
-   * @return true if the element is a member of a relation with the specified tag key OR if the
-   * element is simply a member of a relation and a tag key is not specified
+   * @param tagKey tag key to search relations for
+   * @return true if the element is a member of a relation with the specified tag key; false
+   * otherwise
    * @todo This is redundant with isMemberOfRelationSatisfyingCriterion using a TagKeyCriterion.
    */
   static bool isMemberOfRelationWithTagKey(const ConstOsmMapPtr& map, const ElementId& childId,
-                                           const QString& tagKey = "");
+                                           const QString& tagKey);
 
   /**
    * Determines if an element is contained by any relation in a map
@@ -159,18 +154,6 @@ public:
    */
   static std::vector<ConstRelationPtr> getContainingRelations(
     const ConstOsmMapPtr& map, const ElementId& childId);
-
-  /**
-   * Determines if a relation has a member conflatable by the current configuration of conflate
-   * matchers
-   *
-   * @param relation relation to examine
-   * @param map map owning the input relation
-   * @return true if the input relation contains at least one member element that can be conflated
-   * and optionally satisfies the bounds requirement; false otherwise
-   */
-  static bool relationHasConflatableMember(
-    const ConstRelationPtr& relation, const ConstOsmMapPtr& map);
 };
 
 }

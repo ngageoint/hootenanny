@@ -42,12 +42,7 @@ namespace hoot
 {
 
 PhoneNumberLocator::PhoneNumberLocator() :
-_numLocated(0)
-{
-}
-
-PhoneNumberLocator::PhoneNumberLocator(const QString& regionCode) :
-_regionCode(regionCode),
+_regionCode("US"),
 _numLocated(0)
 {
 }

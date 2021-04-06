@@ -41,6 +41,7 @@ class DualHighwayMarkerTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(DualHighwayMarkerTest);
   CPPUNIT_TEST(runBasicTest);
+  CPPUNIT_TEST(runCrossingRoadsTest);
   CPPUNIT_TEST(runConfigureTest);
   CPPUNIT_TEST_SUITE_END();
 
@@ -67,6 +68,25 @@ public:
     MapProjector::projectToWgs84(map);
     OsmMapWriterFactory::write(map, _outputPath + "runBasicTestOutput.osm");
     HOOT_FILE_EQUALS(_inputPath + "runBasicTestOutput.osm", _outputPath + "runBasicTestOutput.osm");
+  }
+
+  void runCrossingRoadsTest()
+  {
+    OsmMapPtr map(new OsmMap());
+    OsmMapReaderFactory::read(map, _inputPath + "runCrossingRoadsTestInput.osm", true);
+    MapProjector::projectToPlanar(map);
+
+    DualHighwayMarker uut;
+    uut.setMarkCrossingRoads(true);
+    uut.setMaxCrossingRoadsParallelScore(0.4);
+    uut.setMinParallelScore(0.9);
+    uut.apply(map);
+
+    MapProjector::projectToWgs84(map);
+    OsmMapWriterFactory::write(map, _outputPath + "runCrossingRoadsTestOutput.osm");
+    HOOT_FILE_EQUALS(
+      _inputPath + "runCrossingRoadsTestOutput.osm",
+      _outputPath + "runCrossingRoadsTestOutput.osm");
   }
 
   void runConfigureTest()
