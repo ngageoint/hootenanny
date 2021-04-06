@@ -67,12 +67,11 @@ public:
 
   static bool hasElementInputStream(const QStringList& inputs);
 
-  static void read(
-    const std::shared_ptr<OsmMap>& map, const QString& url, bool useFileId = true,
-    Status defaultStatus = Status::Invalid);
+  static void read(const std::shared_ptr<OsmMap>& map, const QString& url, bool useFileId = true,
+                   Status defaultStatus = Status::Invalid);
   // see note for createReader
-  static void read(
-    const std::shared_ptr<OsmMap>& map, const QString& url, bool useFileId, bool useFileStatus);
+  static void read(const std::shared_ptr<OsmMap>& map, bool useFileId, bool useFileStatus,
+                   const QString& url);
 
   static QString getReaderName(const QString& url);
 

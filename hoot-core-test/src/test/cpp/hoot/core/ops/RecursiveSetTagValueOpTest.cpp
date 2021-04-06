@@ -66,7 +66,7 @@ public:
   {
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(
-      map, "test-files/ops/ElementIdToVersionMapper/runBasicTest-in.osm", true, true);
+      map, true, true, "test-files/ops/ElementIdToVersionMapper/runBasicTest-in.osm");
 
     QStringList keys;
     keys.append("test_key");
@@ -90,7 +90,7 @@ public:
   {
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(
-      map, "test-files/ops/ElementIdToVersionMapper/runBasicTest-in.osm", true, true);
+      map, true, true, "test-files/ops/ElementIdToVersionMapper/runBasicTest-in.osm");
 
     QStringList keys;
     keys.append("test_key");

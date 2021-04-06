@@ -59,7 +59,7 @@ public:
   void runBasicTest()
   {
     OsmMapPtr map(new OsmMap());
-    OsmMapReaderFactory::read(map, _inputPath + "/runBasicTest-in.osm", true, true);
+    OsmMapReaderFactory::read(map, true, true, _inputPath + "/runBasicTest-in.osm");
 
     ElementIdToVersionMapper uut;
     uut.apply(map);
@@ -77,7 +77,7 @@ public:
   void runNoVerionsTest()
   {
     OsmMapPtr map(new OsmMap());
-    OsmMapReaderFactory::read(map, "test-files/ToyTestA.osm", true, true);
+    OsmMapReaderFactory::read(map, true, true, "test-files/ToyTestA.osm");
 
     ElementIdToVersionMapper uut;
     uut.apply(map);
