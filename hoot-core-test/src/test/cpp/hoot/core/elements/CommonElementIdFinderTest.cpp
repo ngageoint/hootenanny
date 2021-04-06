@@ -30,31 +30,41 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/elements/CommonElementIdFinder.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
-#include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/elements/MapProjector.h>
 
 namespace hoot
 {
 
 class CommonElementIdFinderTest : public HootTestFixture
 {
-    CPPUNIT_TEST_SUITE(CommonElementIdFinderTest);
-    CPPUNIT_TEST(runBasicTest);
-    CPPUNIT_TEST_SUITE_END();
+  CPPUNIT_TEST_SUITE(CommonElementIdFinderTest);
+  CPPUNIT_TEST(runBasicTest);
+  CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  CommonElementIdFinderTest() :
-  HootTestFixture(
-    "test-files/elements/CommonElementIdFinderTest/",
-    "test-output/elements/CommonElementIdFinderTest/")
+  CommonElementIdFinderTest() : HootTestFixture(UNUSED_PATH, UNUSED_PATH)
   {
-    //setResetType(ResetBasic);
+    setResetType(ResetBasic);
   }
 
   void runBasicTest()
   {
+    // Read both maps in with the default ID generator to ensure there is some ID overlap.
 
+    OsmMapPtr map1 = std::make_shared<OsmMap>();
+    OsmMapReaderFactory::read(map1, "test-files/ToyTestA.osm", false);
+
+    // Reset the map counter to ensure we start over with the IDs for the second map.
+    TestUtils::resetBasic();
+
+    OsmMapPtr map2 = std::make_shared<OsmMap>();
+    OsmMapReaderFactory::read(map2, "test-files/ToyTestB.osm", false);
+
+    CPPUNIT_ASSERT_EQUAL(40, CommonElementIdFinder::findCommonElementIds(map1, map2).size());
+    CPPUNIT_ASSERT_EQUAL(
+      29, CommonElementIdFinder::findElementIdsInFirstAndNotSecond(map1, map2).size());
+    CPPUNIT_ASSERT_EQUAL(
+      0, CommonElementIdFinder::findElementIdsInSecondAndNotFirst(map1, map2).size());
   }
 };
 
