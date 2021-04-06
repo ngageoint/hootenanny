@@ -40,22 +40,29 @@ QMultiMap<QString, double> PoiPolygonDistanceTruthRecorder::_polyMatchRefIdsToDi
 QMultiMap<QString, double> PoiPolygonDistanceTruthRecorder::_poiReviewRefIdsToDistances;
 QMultiMap<QString, double> PoiPolygonDistanceTruthRecorder::_polyReviewRefIdsToDistances;
 
-void PoiPolygonDistanceTruthRecorder::recordDistanceTruth(ConstElementPtr poi,
-                                                          ConstElementPtr poly,
-                                                          const QString& poiBestKvp,
-                                                          const QString& polyBestKvp,
-                                                          const double elementDistance)
+void PoiPolygonDistanceTruthRecorder::recordDistanceTruth(
+  ConstElementPtr poi, ConstElementPtr poly, const QString& poiBestKvp,
+  const QString& polyBestKvp, const double elementDistance)
 {
-  //output feature distances for all feature types which fell within the match threshold
+  QString infoStr =
+    "Recording distance truth for: " + poi->getElementId().toString() + " and " +
+    poly->getElementId().toString() +", POI KVP: " + poiBestKvp + ", poly kvp: " + polyBestKvp +
+    ", distance: " + QString::number(elementDistance) + "...";
+
+  // output feature distances for all feature types which fell within the match threshold
   const QString ref2 = poi->getTags().get(MetadataTags::Ref2());
   const QString review = poi->getTags().get("REVIEW");
   if (ref2 == poly->getTags().get(MetadataTags::Ref1()).split(";")[0])
   {
+    infoStr = infoStr.replace("Recording distance", "Recording match distance");
+    LOG_TRACE(infoStr);
     _poiMatchRefIdsToDistances.insert(poiBestKvp, elementDistance);
     _polyMatchRefIdsToDistances.insert(polyBestKvp, elementDistance);
   }
   else if (review == poly->getTags().get(MetadataTags::Ref1()).split(";")[0])
   {
+    infoStr = infoStr.replace("Recording distance", "Recording review distance");
+    LOG_TRACE(infoStr);
     _poiReviewRefIdsToDistances.insert(poiBestKvp, elementDistance);
     _polyReviewRefIdsToDistances.insert(polyBestKvp, elementDistance);
   }
@@ -69,20 +76,33 @@ void PoiPolygonDistanceTruthRecorder::resetMatchDistanceInfo()
   _polyReviewRefIdsToDistances.clear();
 }
 
-void PoiPolygonDistanceTruthRecorder::printMatchDistanceInfo()
+QString PoiPolygonDistanceTruthRecorder::getMatchDistanceInfo()
 {
-  _printMatchDistanceInfo("POI Match", _poiMatchRefIdsToDistances);
-  _printMatchDistanceInfo("Poly Match", _polyMatchRefIdsToDistances);
-  _printMatchDistanceInfo("POI Review", _poiReviewRefIdsToDistances);
-  _printMatchDistanceInfo("Poly Review", _polyReviewRefIdsToDistances);
+  LOG_VART(_poiMatchRefIdsToDistances.size());
+  LOG_VART(_polyMatchRefIdsToDistances.size());
+  LOG_VART(_poiReviewRefIdsToDistances.size());
+  LOG_VART(_polyReviewRefIdsToDistances.size());
+
+  QString info;
+  info += _getMatchDistanceInfo("POI Match", _poiMatchRefIdsToDistances);
+  info += _getMatchDistanceInfo("Poly Match", _polyMatchRefIdsToDistances);
+  info += _getMatchDistanceInfo("POI Review", _poiReviewRefIdsToDistances);
+  info += _getMatchDistanceInfo("Poly Review", _polyReviewRefIdsToDistances);
+  return info;
 }
 
-
-void PoiPolygonDistanceTruthRecorder::_printMatchDistanceInfo(const QString& matchType,
-  const QMultiMap<QString, double>& distanceInfo)
+QString PoiPolygonDistanceTruthRecorder::_getMatchDistanceInfo(
+  const QString& matchType, const QMultiMap<QString, double>& distanceInfo)
 {
+  if (distanceInfo.isEmpty())
+  {
+    return matchType.toUpper() + ": no matches\n";
+  }
+
+  QString info;
   foreach (QString type, distanceInfo.uniqueKeys())
   {
+    LOG_VART(type);
     if (!type.trimmed().isEmpty())
     {
       double maxDistance = 0.0;
@@ -92,6 +112,7 @@ void PoiPolygonDistanceTruthRecorder::_printMatchDistanceInfo(const QString& mat
 
       QList<double> distances = distanceInfo.values(type);
       qSort(distances.begin(), distances.end());
+      LOG_VART(distances);
       double sumDist = 0.0;
       QString distancesStr = "";
       for (QList<double>::const_iterator itr = distances.begin(); itr != distances.end(); ++itr)
@@ -104,17 +125,22 @@ void PoiPolygonDistanceTruthRecorder::_printMatchDistanceInfo(const QString& mat
         numberOfEntries++;
       }
       distancesStr.chop(2);
+      LOG_VART(maxDistance);
+      LOG_VART(minimumDistance);
       averageDistance = sumDist / (double)distances.size();
+      LOG_VART(averageDistance);
 
-      LOG_INFO(matchType.toUpper() << " distance info for type: " << type);
-      LOG_VAR(maxDistance);
-      LOG_VAR(minimumDistance);
-      LOG_VAR(averageDistance);
-      LOG_VAR(numberOfEntries);
-      LOG_VAR(distancesStr);
-      LOG_INFO("**************************");
+      info += matchType.toUpper() + " distance info for type: " + type + "\n";
+      info += "Maximum distance: " + QString::number(maxDistance) + "\n";
+      info += "Minimum distance: " + QString::number(minimumDistance) + "\n";
+      info += "Average distance: " + QString::number(averageDistance) + "\n";
+      info += "Number of matches: " + QString::number(numberOfEntries) + "\n";
+      info += "Distances: " + distancesStr + "\n";
+      info += "**************************\n";
+      LOG_VART(info);
     }
   }
+  return info;
 }
 
 }

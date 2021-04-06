@@ -309,8 +309,7 @@ public:
       exceptionMsg = e.what();
     }
     CPPUNIT_ASSERT_EQUAL(
-      QString("Invalid epsilon value: 0").toStdString(),
-      exceptionMsg.toStdString());
+      QString("Invalid epsilon value: 0").toStdString(), exceptionMsg.toStdString());
   }
 };
 

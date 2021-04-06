@@ -166,9 +166,9 @@ function bothElementsHaveName(e1, e2)
 /**
  * Determines if an element is a member of relation that has a specified type
  */
-function isMemberOfRelationType(map, childElementId, relationType)
+function isMemberOfRelationWithType(map, childElementId, relationType)
 {
-  return hoot.RelationMemberUtils.isMemberOfRelationType(childElementId, relationType, map);
+  return hoot.RelationMemberUtils.isMemberOfRelationWithType(childElementId, relationType, map);
 }
 
 /**
@@ -561,12 +561,4 @@ function getRiverMaxSublineRecursions(map)
 function haveGeometricRelationship(e, bounds, relationship, map)
 {
   return hoot.ElementGeometryUtils.haveGeometricRelationship(e, bounds, relationship, map);
-}
-
-/*
- * Determines if a relation has any member conflatable by the current conflation configuration
- */
-function relationHasConflatableMember(element, map)
-{
-  return hoot.RelationMemberUtils.relationHasConflatableMember(element, map);
 }

@@ -40,6 +40,7 @@
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/visitors/TagCountVisitor.h>
 
 // Tgs
 #include <tgs/HashMap.h>
@@ -53,6 +54,8 @@ class NodeTest : public HootTestFixture
   CPPUNIT_TEST_SUITE(NodeTest);
   CPPUNIT_TEST(runCopyTest);
   CPPUNIT_TEST(runSetTest);
+  CPPUNIT_TEST(runClearTest);
+  CPPUNIT_TEST(runVisitTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -106,9 +109,32 @@ public:
     HOOT_STR_EQUALS(QString("cheese"), n->getTags()["foo"]);
   }
 
+  void runClearTest()
+  {
+    NodePtr uut =
+      std::make_shared<Node>(Status::Unknown1, 1, geos::geom::Coordinate(0.0, 0.0), 15.0);
+    uut->setTag("foo", "bar");
+
+    uut->clear();
+
+    CPPUNIT_ASSERT_EQUAL(0, uut->getTagCount());
+  }
+
+  void runVisitTest()
+  {
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    NodePtr uut =
+      std::make_shared<Node>(Status::Unknown1, 1, geos::geom::Coordinate(0.0, 0.0), 15.0);
+    uut->setTag("foo", "bar");
+    map->addNode(uut);
+
+    TagCountVisitor vis;
+    uut->visitRw(*map, vis);
+
+    CPPUNIT_ASSERT_EQUAL(1.0, vis.getStat());
+  }
 };
 
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(NodeTest, "current");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(NodeTest, "quick");
 
 }

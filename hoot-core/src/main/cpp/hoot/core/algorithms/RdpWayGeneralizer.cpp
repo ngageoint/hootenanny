@@ -75,8 +75,8 @@ int RdpWayGeneralizer::generalize(const std::shared_ptr<Way>& way)
     QVector<long>::fromStdVector(way->getNodeIds()).toList();
   LOG_VART(wayNodeIdsBeforeFiltering);
 
-  //filter the nodes to be generalized to those in this way and those with no information tags;
-  //tried using hoot filters here at first, but it didn't end up making sense
+  // filter the nodes to be generalized to those in this way and those with no information tags;
+  // tried using hoot filters here at first, but it didn't end up making sense
   QList<long> wayNodeIdsAfterFiltering;
   for (QList<long>::const_iterator it = wayNodeIdsBeforeFiltering.begin();
        it != wayNodeIdsBeforeFiltering.end(); ++it)
@@ -88,10 +88,9 @@ int RdpWayGeneralizer::generalize(const std::shared_ptr<Way>& way)
   }
   LOG_VART(wayNodeIdsAfterFiltering);
 
-  //get the generalized points
+  // get the generalized points
   const QList<std::shared_ptr<const Node>>& generalizedPoints =
     _getGeneralizedPoints(NodeUtils::nodeIdsToNodes(wayNodeIdsAfterFiltering, _map));
-  NodeUtils::printNodes("generalizedPoints", generalizedPoints);
   QList<long> wayNodeIdsAfterGeneralization = NodeUtils::nodesToNodeIds(generalizedPoints);
 
   // The nodes we're going to remove is the difference between the node ids before and after
@@ -270,23 +269,18 @@ QList<std::shared_ptr<const Node>> RdpWayGeneralizer::_getGeneralizedPoints(
     //split the curve into two parts and recursively reduce the two lines
     const QList<std::shared_ptr<const Node>> splitLine1 =
       wayPoints.mid(0, indexOfLargestPerpendicularDistance + 1);
-    NodeUtils::printNodes("splitLine1", splitLine1);
     const QList<std::shared_ptr<const Node>> splitLine2 =
       wayPoints.mid(indexOfLargestPerpendicularDistance);
-    NodeUtils::printNodes("splitLine2", splitLine2);
 
     const QList<std::shared_ptr<const Node>> recursivelySplitLine1 =
       _getGeneralizedPoints(splitLine1);
-    NodeUtils::printNodes("recursivelySplitLine1", recursivelySplitLine1);
     const QList<std::shared_ptr<const Node>> recursivelySplitLine2 =
       _getGeneralizedPoints(splitLine2);
-    NodeUtils::printNodes("recursivelySplitLine2", recursivelySplitLine2);
 
     //concat r2 to r1 minus the end/start point that will be the same
     QList<std::shared_ptr<const Node>> combinedReducedLines =
       recursivelySplitLine1.mid(0, recursivelySplitLine1.size() - 1);
     combinedReducedLines.append(recursivelySplitLine2);
-    NodeUtils::printNodes("combinedReducedLines", combinedReducedLines);
     return combinedReducedLines;
   }
   else
@@ -295,7 +289,6 @@ QList<std::shared_ptr<const Node>> RdpWayGeneralizer::_getGeneralizedPoints(
     QList<std::shared_ptr<const Node>> reducedLine;
     reducedLine.append(firstPoint);
     reducedLine.append(lastPoint);
-    NodeUtils::printNodes("reducedLine", reducedLine);
     return reducedLine;
   }
 }

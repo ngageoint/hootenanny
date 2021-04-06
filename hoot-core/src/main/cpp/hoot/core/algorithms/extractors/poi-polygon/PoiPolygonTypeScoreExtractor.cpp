@@ -50,7 +50,7 @@ QMap<QString, QSet<QString>> PoiPolygonTypeScoreExtractor::_categoriesToSchemaTa
 PoiPolygonTypeScoreExtractor::PoiPolygonTypeScoreExtractor(PoiPolygonInfoCachePtr infoCache) :
 _typeScoreThreshold(-1.0),
 _featureDistance(-1.0),
-_printMatchDistanceTruth(false),
+_calculateMatchDistanceTruth(false),
 _translateTagValuesToEnglish(false),
 _noTypeFound(false),
 _infoCache(infoCache)
@@ -62,7 +62,7 @@ void PoiPolygonTypeScoreExtractor::setConfiguration(const Settings& conf)
   ConfigOptions config = ConfigOptions(conf);
 
   setTypeScoreThreshold(config.getPoiPolygonTypeScoreThreshold());
-  setPrintMatchDistanceTruth(config.getPoiPolygonPrintMatchDistanceTruth());
+  setCalculateMatchDistanceTruth(config.getPoiPolygonCalculateMatchDistanceTruth());
 
   _translateTagValuesToEnglish = config.getPoiPolygonTypeTranslateToEnglish();
   if (_translateTagValuesToEnglish && !_translator)
@@ -263,7 +263,7 @@ double PoiPolygonTypeScoreExtractor::_getTagScore(ConstElementPtr poi,
 
       if (result == 1.0)
       {
-        if (_printMatchDistanceTruth)
+        if (_calculateMatchDistanceTruth)
         {
           LOG_VART(_poiBestKvp);
           LOG_VART(_polyBestKvp);
@@ -277,7 +277,7 @@ double PoiPolygonTypeScoreExtractor::_getTagScore(ConstElementPtr poi,
   LOG_VART(_poiBestKvp);
   LOG_VART(_polyBestKvp);
 
-  if (_printMatchDistanceTruth)
+  if (_calculateMatchDistanceTruth)
   {
     PoiPolygonDistanceTruthRecorder::recordDistanceTruth(
       poi, poly, _poiBestKvp, _polyBestKvp, _featureDistance);

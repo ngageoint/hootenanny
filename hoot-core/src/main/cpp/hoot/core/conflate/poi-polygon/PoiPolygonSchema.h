@@ -50,8 +50,6 @@ class PoiPolygonSchema
 
 public:
 
-  PoiPolygonSchema();
-
   /**
    * Determines if an element is a park as definied by POI/Polygon conflation
    *
@@ -178,11 +176,12 @@ public:
 
 private:
 
-  //maps an OSM kvp to multiple possible strings such a feature's name might contain
+  // maps an OSM kvp to multiple possible strings such a feature's name might contain
   static QMultiHash<QString, QString> _typeToNames;
   static QSet<QString> _allTypeKeys;
 
-  static void _readTypeToNames();
+  static QMultiHash<QString, QString> _getTypeToNames();
+  static QMultiHash<QString, QString> _readTypeToNames();
   static bool _typeHasName(const QString& kvp, const QString& name);
   static QString _getMatchingTypeName(const QString& kvp, const QString& name);
   static bool _haveMatchingTypeNames(const QString& kvp, const QString& name1, const QString& name2);
