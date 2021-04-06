@@ -22,7 +22,7 @@
         <tag k="security:resource_owner" v="USA"/>
         <tag k="shelter:type" v="bomb"/>
         <tag k="source" v="tdsv61:transportation_station_p"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.555Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.539Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="source:vertical_source:type" v="stereoscopic_imagery"/>
@@ -49,7 +49,7 @@
         <tag k="security:resource_owner" v="USA"/>
         <tag k="shelter:type" v="bomb"/>
         <tag k="source" v="tdsv61:transportation_station_p"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.554Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.538Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="source:vertical_source:type" v="stereoscopic_imagery"/>
@@ -85,7 +85,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:tower_p"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.518Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.504Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -109,7 +109,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:tower_p"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.517Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.503Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -139,7 +139,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:tower_p"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.516Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.502Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -168,7 +168,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:tower_p"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.515Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.501Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -194,7 +194,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:tower_p"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.514Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.500Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -234,7 +234,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="man_made" v="storage_tank"/>
         <tag k="source" v="tdsv61:storage_tank_p"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.472Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.445Z"/>
         <tag k="uuid" v="{10a5246e-415f-4b1d-9c12-4c15ab1c10b4}"/>
     </node>
     <node visible="true" id="-333" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4483927357299997" lon="153.1651147815900060">
@@ -242,7 +242,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="man_made" v="storage_tank"/>
         <tag k="source" v="tdsv61:storage_tank_p"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.471Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.445Z"/>
         <tag k="uuid" v="{11489fd2-31fe-40f1-9417-6c4e2fa2194f}"/>
     </node>
     <node visible="true" id="-332" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4485296709000011" lon="153.1710291073900123">
@@ -250,7 +250,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="man_made" v="storage_tank"/>
         <tag k="source" v="tdsv61:storage_tank_p"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.471Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.444Z"/>
         <tag k="uuid" v="{12449bc4-c059-4270-8d72-134fcf54291d}"/>
     </node>
     <node visible="true" id="-331" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4486666059199997" lon="153.1760335369100119">
@@ -258,7 +258,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="man_made" v="storage_tank"/>
         <tag k="source" v="tdsv61:storage_tank_p"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.470Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.443Z"/>
         <tag k="uuid" v="{127b406c-964f-4403-a275-40f096adcabe}"/>
     </node>
     <node visible="true" id="-330" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4405766034000003" lon="153.1954981745099929"/>
@@ -291,7 +291,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:shed_p"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.424Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.384Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -318,7 +318,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:shed_p"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.423Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.383Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -432,7 +432,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:pylon_p"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.332Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.279Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -456,7 +456,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:pylon_p"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.331Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.278Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -474,7 +474,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:building_p"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.316Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.262Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="stereoscopic_imagery"/>
@@ -492,7 +492,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:hut_p"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.300Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.247Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -511,7 +511,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:hut_p"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.299Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.246Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -531,7 +531,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:hut_p"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.298Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.245Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -553,7 +553,7 @@
         <tag k="social_facility" v="shelter"/>
         <tag k="social_facility:for" v="refugee"/>
         <tag k="source" v="tdsv61:hut_p"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.298Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.244Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -644,7 +644,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:facility_p"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.246Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.188Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -666,7 +666,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:facility_p"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.245Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.187Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -687,7 +687,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:facility_p"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.244Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.186Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -712,7 +712,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:facility_p"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.243Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.186Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -738,7 +738,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:facility_p"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.242Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.185Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -755,7 +755,7 @@
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:crossing_p"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.229Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.172Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -774,7 +774,7 @@
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:crossing_p"/>
         <tag k="source:copyright" v="No copyright"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.228Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.171Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -787,7 +787,7 @@
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:crossing_p"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.227Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.170Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -805,7 +805,7 @@
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:crossing_p"/>
         <tag k="source:copyright" v="No copyright"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.227Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.170Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -832,7 +832,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:control_tower_p"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.216Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.156Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -856,7 +856,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:control_tower_p"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.215Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.156Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -879,7 +879,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:control_tower_p"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.214Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.155Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -943,7 +943,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="AUS"/>
         <tag k="source" v="tdsv61:built_up_area_p"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.158Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.101Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -964,7 +964,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:built_up_area_p"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.157Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.100Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -983,7 +983,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:built_up_area_p"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.154Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.099Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -1003,7 +1003,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:built_up_area_p"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.152Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.098Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -1022,7 +1022,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:building_superstructure_p"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.139Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.082Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -1042,7 +1042,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:building_superstructure_p"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.138Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.082Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -1062,7 +1062,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:building_superstructure_p"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.137Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.081Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -1117,7 +1117,7 @@
         <tag k="security:resource_owner" v="USA"/>
         <tag k="shelter:type" v="bomb"/>
         <tag k="source" v="tdsv61:building_p"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.094Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.035Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="stereoscopic_imagery"/>
@@ -1139,7 +1139,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:building_p"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.093Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.034Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="stereoscopic_imagery"/>
@@ -1161,7 +1161,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:building_p"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.092Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.033Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="stereoscopic_imagery"/>
@@ -1184,7 +1184,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:building_p"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.091Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.032Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="stereoscopic_imagery"/>
@@ -1209,7 +1209,7 @@
         <tag k="security:resource_owner" v="USA"/>
         <tag k="shelter:type" v="storm"/>
         <tag k="source" v="tdsv61:building_p"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.090Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.031Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="stereoscopic_imagery"/>
@@ -1230,7 +1230,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:building_p"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.089Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.030Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="stereoscopic_imagery"/>
@@ -1254,7 +1254,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:building_p"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.088Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.029Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="stereoscopic_imagery"/>
@@ -1277,7 +1277,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:building_p"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.088Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.028Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="stereoscopic_imagery"/>
@@ -1301,7 +1301,7 @@
         <tag k="security:resource_owner" v="USA"/>
         <tag k="shelter:type" v="storm"/>
         <tag k="source" v="tdsv61:building_p"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.087Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.027Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="stereoscopic_imagery"/>
@@ -1321,7 +1321,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:building_p"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.085Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.026Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="stereoscopic_imagery"/>
@@ -1347,7 +1347,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:building_p"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.085Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.025Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="stereoscopic_imagery"/>
@@ -1365,7 +1365,7 @@
         <tag k="security:resource_owner" v="USA"/>
         <tag k="shelter:type" v="storm"/>
         <tag k="source" v="tdsv61:building_p"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.084Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.024Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="stereoscopic_imagery"/>
@@ -1388,7 +1388,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:building_p"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.083Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.023Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="source:vertical_source:type" v="stereoscopic_imagery"/>
@@ -1411,7 +1411,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:building_p"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.082Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.022Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="stereoscopic_imagery"/>
@@ -1430,7 +1430,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:building_p"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.081Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.021Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="stereoscopic_imagery"/>
@@ -1453,7 +1453,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:building_p"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.080Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.020Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="stereoscopic_imagery"/>
@@ -1480,7 +1480,7 @@
         <tag k="security:resource_owner" v="USA"/>
         <tag k="shelter:type" v="fallout"/>
         <tag k="source" v="tdsv61:building_p"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.079Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.019Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="stereoscopic_imagery"/>
@@ -1500,7 +1500,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:building_p"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.079Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.018Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="stereoscopic_imagery"/>
@@ -1523,7 +1523,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:building_p"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.078Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.017Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="stereoscopic_imagery"/>
@@ -1542,7 +1542,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:building_p"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.077Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.016Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="source:vertical_source:type" v="stereoscopic_imagery"/>
@@ -1567,7 +1567,7 @@
         <tag k="security:resource_owner" v="USA"/>
         <tag k="shelter:type" v="fallout"/>
         <tag k="source" v="tdsv61:building_p"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.076Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.015Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="stereoscopic_imagery"/>
@@ -1590,7 +1590,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:building_p"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.075Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.014Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="stereoscopic_imagery"/>
@@ -1614,7 +1614,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:building_p"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.074Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.013Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="stereoscopic_imagery"/>
@@ -1633,7 +1633,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:building_p"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.073Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.012Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="stereoscopic_imagery"/>
@@ -1655,7 +1655,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:building_p"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.073Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.012Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="stereoscopic_imagery"/>
@@ -1679,7 +1679,7 @@
         <tag k="shelter:type" v="fallout"/>
         <tag k="shop" v="pet"/>
         <tag k="source" v="tdsv61:building_p"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.072Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.011Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="stereoscopic_imagery"/>
@@ -1699,7 +1699,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:building_p"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.071Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.010Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="stereoscopic_imagery"/>
@@ -1725,7 +1725,7 @@
         <tag k="security:resource_owner" v="USA"/>
         <tag k="shelter:type" v="storm"/>
         <tag k="source" v="tdsv61:building_p"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.070Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.009Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="stereoscopic_imagery"/>
@@ -1748,7 +1748,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:building_p"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.069Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.008Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="source:vertical_source:type" v="stereoscopic_imagery"/>
@@ -1772,7 +1772,7 @@
         <tag k="security:resource_owner" v="USA"/>
         <tag k="shelter:type" v="storm"/>
         <tag k="source" v="tdsv61:building_p"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.068Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.007Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="stereoscopic_imagery"/>
@@ -1791,7 +1791,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:building_p"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.067Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.005Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="stereoscopic_imagery"/>
@@ -1817,7 +1817,7 @@
         <tag k="security:resource_owner" v="USA"/>
         <tag k="shelter:type" v="bomb"/>
         <tag k="source" v="tdsv61:building_p"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.066Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.004Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="stereoscopic_imagery"/>
@@ -1843,7 +1843,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:building_p"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.065Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.003Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="stereoscopic_imagery"/>
@@ -1865,7 +1865,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:building_p"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.064Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.002Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="stereoscopic_imagery"/>
@@ -1890,7 +1890,7 @@
         <tag k="security:resource_owner" v="USA"/>
         <tag k="shelter:type" v="storm"/>
         <tag k="source" v="tdsv61:building_p"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.063Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.001Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="source:vertical_source:type" v="stereoscopic_imagery"/>
@@ -1914,7 +1914,7 @@
         <tag k="security:resource_owner" v="USA"/>
         <tag k="shelter:type" v="fallout"/>
         <tag k="source" v="tdsv61:building_p"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.061Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:23.999Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="source:vertical_source:type" v="stereoscopic_imagery"/>
@@ -1944,7 +1944,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:aircraft_hangar_p"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.016Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:23.949Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="source:vertical_source:type" v="stereoscopic_imagery"/>
@@ -1962,7 +1962,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:road_c"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.570Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.562Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -1980,7 +1980,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:road_c"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.569Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.562Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -1999,7 +1999,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:trail_c"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.569Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.561Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -2018,7 +2018,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:trail_c"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.568Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.560Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -2041,7 +2041,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:trail_c"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.541Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.524Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -2065,7 +2065,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:trail_c"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.540Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.523Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -2087,7 +2087,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:trail_c"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.539Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.522Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -2113,7 +2113,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:trail_c"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.538Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.521Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -2135,7 +2135,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:trail_c"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.536Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.520Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -2160,7 +2160,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:trail_c"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.535Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.519Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -2173,7 +2173,7 @@
         <tag k="highway" v="path"/>
         <tag k="seasonal" v="fair"/>
         <tag k="source" v="tdsv61:trail_c"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.533Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.518Z"/>
         <tag k="uuid" v="{93248830-b208-4dec-b4d5-971eec822645}"/>
     </way>
     <way visible="true" id="-94" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -2183,7 +2183,7 @@
         <tag k="highway" v="path"/>
         <tag k="seasonal" v="fair"/>
         <tag k="source" v="tdsv61:trail_c"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.532Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.518Z"/>
         <tag k="uuid" v="{21adaedc-37ce-4c2a-bb73-fe7ba76f4093}"/>
     </way>
     <way visible="true" id="-93" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -2201,7 +2201,7 @@
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source" v="Unknown"/>
         <tag k="source:imagery" v="Unknown"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.501Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.485Z"/>
         <tag k="undergrowth:density" v="40"/>
         <tag k="uuid" v="{c7575604-8e31-4f89-a83a-2c247279cae6}"/>
         <tag k="width" v="98.900000000000006"/>
@@ -2215,7 +2215,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="man_made" v="storage_tank"/>
         <tag k="source" v="tdsv61:storage_tank_s"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.488Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.472Z"/>
         <tag k="uuid" v="{128252cc-d3f2-4bdb-ba3d-dbe2dc69fef2}"/>
     </way>
     <way visible="true" id="-91" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -2227,7 +2227,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="man_made" v="storage_tank"/>
         <tag k="source" v="tdsv61:storage_tank_s"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.488Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.472Z"/>
         <tag k="uuid" v="{13389c28-59ac-4d20-9c29-d34fe8f84cc6}"/>
     </way>
     <way visible="true" id="-90" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -2240,7 +2240,7 @@
         <tag k="man_made" v="storage_tank"/>
         <tag k="name" v="with Building = storage_tank"/>
         <tag k="source" v="tdsv61:storage_tank_s"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.487Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.471Z"/>
         <tag k="uuid" v="{1514e475-0a8b-450d-8138-af8623cbdd56}"/>
     </way>
     <way visible="true" id="-89" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -2252,7 +2252,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="man_made" v="storage_tank"/>
         <tag k="source" v="tdsv61:storage_tank_s"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.487Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.471Z"/>
         <tag k="uuid" v="{1339103f-9a67-4dc1-aa67-b590b33b3000}"/>
     </way>
     <way visible="true" id="-88" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -2264,7 +2264,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="man_made" v="storage_tank"/>
         <tag k="source" v="tdsv61:storage_tank_s"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.486Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.470Z"/>
         <tag k="uuid" v="{14093e3a-29da-41e5-a13f-e8e43ef5d9cc}"/>
     </way>
     <way visible="true" id="-87" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -2276,7 +2276,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="man_made" v="storage_tank"/>
         <tag k="source" v="tdsv61:storage_tank_s"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.486Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.469Z"/>
         <tag k="uuid" v="{143203aa-06b0-49b2-9fcd-98c0f89e2fcb}"/>
     </way>
     <way visible="true" id="-86" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -2288,7 +2288,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="man_made" v="storage_tank"/>
         <tag k="source" v="tdsv61:storage_tank_s"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.485Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.468Z"/>
         <tag k="uuid" v="{149e733e-626f-45db-bfcc-56ad12de425a}"/>
     </way>
     <way visible="true" id="-85" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -2301,7 +2301,7 @@
         <tag k="man_made" v="storage_tank"/>
         <tag k="name" v="with Building = yes"/>
         <tag k="source" v="tdsv61:storage_tank_s"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.484Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.468Z"/>
         <tag k="uuid" v="{1514e475-0a8b-450d-8138-af8623cbdd56}"/>
     </way>
     <way visible="true" id="-84" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -2310,7 +2310,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="steps"/>
         <tag k="source" v="tdsv61:stair_c"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.458Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.426Z"/>
         <tag k="uuid" v="{74f5436e-997b-472d-8bb4-a5ae953d2e5c}"/>
     </way>
     <way visible="true" id="-83" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -2337,7 +2337,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:stadium_s"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.447Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.412Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -2374,7 +2374,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:shed_s"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.435Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.398Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -2404,7 +2404,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:road_c"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.411Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.369Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -2441,7 +2441,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:road_c"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.410Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.368Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -2469,7 +2469,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:road_c"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.409Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.367Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -2497,7 +2497,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:road_c"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.408Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.366Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -2529,7 +2529,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:road_c"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.407Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.365Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -2564,7 +2564,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:road_c"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.406Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.364Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -2588,7 +2588,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:road_c"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.405Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.363Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -2609,7 +2609,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:road_c"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.405Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.362Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -2631,7 +2631,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:road_c"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.404Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.361Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -2652,7 +2652,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:road_c"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.402Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.360Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -2673,7 +2673,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:road_c"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.402Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.360Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -2687,7 +2687,7 @@
         <tag k="ref:road:class" v="local"/>
         <tag k="seasonal" v="no"/>
         <tag k="source" v="tdsv61:road_c"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.401Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.359Z"/>
         <tag k="uuid" v="{0a51dd03-f3db-4b48-92e3-1f37a4e6cb16}"/>
     </way>
     <way visible="true" id="-69" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -2698,7 +2698,7 @@
         <tag k="ref:road:type" v="pedestrian"/>
         <tag k="seasonal" v="no"/>
         <tag k="source" v="tdsv61:road_c"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.400Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.358Z"/>
         <tag k="uuid" v="{72bf2b85-d371-48b2-a5ef-54f45b492373}"/>
     </way>
     <way visible="true" id="-68" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -2710,7 +2710,7 @@
         <tag k="ref:road:type" v="street"/>
         <tag k="seasonal" v="no"/>
         <tag k="source" v="tdsv61:road_c"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.399Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.357Z"/>
         <tag k="uuid" v="{0bcde809-cddc-4409-b0b9-91273d57e736}"/>
     </way>
     <way visible="true" id="-67" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -2722,7 +2722,7 @@
         <tag k="ref:road:type" v="road"/>
         <tag k="seasonal" v="no"/>
         <tag k="source" v="tdsv61:road_c"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.399Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.357Z"/>
         <tag k="uuid" v="{0a4336be-41d4-4732-b495-791e2bec9bcb}"/>
     </way>
     <way visible="true" id="-66" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -2734,7 +2734,7 @@
         <tag k="ref:road:type" v="motorway"/>
         <tag k="seasonal" v="no"/>
         <tag k="source" v="tdsv61:road_c"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.398Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.356Z"/>
         <tag k="uuid" v="{5d83c96d-0f75-4626-8663-3ba50d8faf1b}"/>
     </way>
     <way visible="true" id="-65" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -2746,7 +2746,7 @@
         <tag k="ref:road:type" v="road"/>
         <tag k="seasonal" v="no"/>
         <tag k="source" v="tdsv61:road_c"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.398Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.355Z"/>
         <tag k="uuid" v="{7f9b99dc-0c7a-4379-8010-c5fcd0e224f9}"/>
     </way>
     <way visible="true" id="-64" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -2758,7 +2758,7 @@
         <tag k="ref:road:type" v="street"/>
         <tag k="seasonal" v="no"/>
         <tag k="source" v="tdsv61:road_c"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.397Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.355Z"/>
         <tag k="uuid" v="{2bb9c4ae-def9-4fce-9ad2-f4f00bfc4537}"/>
     </way>
     <way visible="true" id="-63" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -2770,7 +2770,7 @@
         <tag k="ref:road:type" v="road"/>
         <tag k="seasonal" v="no"/>
         <tag k="source" v="tdsv61:road_c"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.396Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.354Z"/>
         <tag k="uuid" v="{d2a441d2-5080-4c6b-9e05-b40ed6569ffd}"/>
     </way>
     <way visible="true" id="-62" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -2782,7 +2782,7 @@
         <tag k="ref:road:type" v="limited_access_motorway"/>
         <tag k="seasonal" v="no"/>
         <tag k="source" v="tdsv61:road_c"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.396Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.353Z"/>
         <tag k="uuid" v="{e0d8b175-219b-4811-a59e-c44fd731de9b}"/>
     </way>
     <way visible="true" id="-61" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -2794,7 +2794,7 @@
         <tag k="ref:road:type" v="street"/>
         <tag k="seasonal" v="no"/>
         <tag k="source" v="tdsv61:road_c"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.395Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.353Z"/>
         <tag k="uuid" v="{5632cd0a-d533-45b5-a873-049e718c0013}"/>
     </way>
     <way visible="true" id="-60" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -2811,7 +2811,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:river_c"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.381Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.336Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -2833,7 +2833,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:river_c"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.380Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.335Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -2856,7 +2856,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:river_c"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.379Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.334Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -2877,11 +2877,10 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:river_c"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.379Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.333Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
-        <tag k="tidal" v="no"/>
         <tag k="uuid" v="{b710f27a-0366-4a3b-805d-e111a52c971c}"/>
         <tag k="wadi" v="yes"/>
         <tag k="waterway" v="river"/>
@@ -2900,11 +2899,10 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:river_c"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.376Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.332Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
-        <tag k="tidal" v="no"/>
         <tag k="uuid" v="{0cb16bc6-3c09-482f-b31a-8144b1fb7430}"/>
         <tag k="waterway" v="river"/>
         <tag k="width" v="3"/>
@@ -2923,11 +2921,10 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:river_c"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.375Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.328Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
-        <tag k="tidal" v="no"/>
         <tag k="uuid" v="{e0e597a8-f2fd-4982-b3f0-2dc6ffdea549}"/>
         <tag k="waterway" v="river"/>
         <tag k="waterway:bottom" v="sand_and_gravel"/>
@@ -2947,7 +2944,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:river_c"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.374Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.327Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -2969,11 +2966,10 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:river_c"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.373Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.325Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
-        <tag k="tidal" v="no"/>
         <tag k="uuid" v="{ec56c1bd-cd9c-482b-9a0d-95a24282e305}"/>
         <tag k="water:morphology" v="headwaters"/>
         <tag k="waterway" v="river"/>
@@ -2992,7 +2988,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:river_c"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.372Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.323Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -3013,11 +3009,10 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:river_c"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.371Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.322Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
-        <tag k="tidal" v="no"/>
         <tag k="uuid" v="{2e82fbdf-171f-4a1e-ae7a-6cbe5a0922c7}"/>
         <tag k="waterway" v="river"/>
         <tag k="width" v="3"/>
@@ -3033,11 +3028,10 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:river_c"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.369Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.321Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
-        <tag k="tidal" v="no"/>
         <tag k="uuid" v="{aea98498-70b6-4beb-9395-63f768f4f29e}"/>
         <tag k="wadi" v="yes"/>
         <tag k="waterway" v="river"/>
@@ -3056,7 +3050,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:river_c"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.368Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.319Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -3080,7 +3074,7 @@
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:river_c"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.366Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.317Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -3101,7 +3095,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:river_c"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.365Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.316Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -3123,11 +3117,10 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:river_c"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.364Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.315Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
-        <tag k="tidal" v="no"/>
         <tag k="uuid" v="{e3fe79cc-cd87-4e44-9d76-62086136bb95}"/>
         <tag k="waterway" v="river"/>
         <tag k="waterway:bottom" v="clay_and_silt"/>
@@ -3149,7 +3142,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:railway_c"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.350Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.300Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -3175,7 +3168,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:railway_c"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.348Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.299Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -3198,7 +3191,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:railway_c"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.347Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.298Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -3222,7 +3215,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:railway_c"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.346Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.297Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -3248,7 +3241,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:railway_c"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.345Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.296Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -3272,7 +3265,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:railway_c"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.344Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.295Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -3295,7 +3288,7 @@
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source" v="Unknown"/>
         <tag k="source:imagery" v="Unknown"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.282Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.229Z"/>
         <tag k="uuid" v="{0803aedc-8a51-4009-95e8-5f9a82869b72}"/>
         <tag k="width" v="98.900000000000006"/>
     </way>
@@ -3315,7 +3308,7 @@
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source" v="Unknown"/>
         <tag k="source:imagery" v="Unknown"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.281Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.228Z"/>
         <tag k="uuid" v="{23bc0c51-26fe-4ec3-9a5b-3cd4792fb840}"/>
         <tag k="width" v="98.900000000000006"/>
     </way>
@@ -3336,7 +3329,7 @@
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source" v="Unknown"/>
         <tag k="source:imagery" v="Unknown"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.280Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.228Z"/>
         <tag k="uuid" v="{433d3595-8958-477a-b978-6e29b258a43c}"/>
         <tag k="width" v="98.900000000000006"/>
     </way>
@@ -3357,7 +3350,7 @@
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source" v="Unknown"/>
         <tag k="source:imagery" v="Unknown"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.279Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.227Z"/>
         <tag k="uuid" v="{ced792bc-e484-494d-a019-602e72a43274}"/>
         <tag k="width" v="98.900000000000006"/>
     </way>
@@ -3378,7 +3371,7 @@
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source" v="Unknown"/>
         <tag k="source:imagery" v="Unknown"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.279Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.226Z"/>
         <tag k="uuid" v="{bf5e8938-4e6b-490d-94b5-df4a2da5ee76}"/>
         <tag k="width" v="98.900000000000006"/>
     </way>
@@ -3399,7 +3392,7 @@
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source" v="Unknown"/>
         <tag k="source:imagery" v="Unknown"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.278Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.225Z"/>
         <tag k="uuid" v="{3b2ed22c-0c03-43ea-9aef-c821705d007a}"/>
         <tag k="width" v="98.900000000000006"/>
     </way>
@@ -3420,7 +3413,7 @@
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source" v="Unknown"/>
         <tag k="source:imagery" v="Unknown"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.277Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.225Z"/>
         <tag k="uuid" v="{9c86570d-5dae-4ee4-a767-337c3f4e77f1}"/>
         <tag k="width" v="98.900000000000006"/>
     </way>
@@ -3441,7 +3434,7 @@
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source" v="Unknown"/>
         <tag k="source:imagery" v="Unknown"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.277Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.224Z"/>
         <tag k="uuid" v="{87b593e6-edd4-4556-9629-121cde24dd8b}"/>
         <tag k="width" v="98.900000000000006"/>
     </way>
@@ -3461,7 +3454,7 @@
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source" v="Unknown"/>
         <tag k="source:imagery" v="Unknown"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.276Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.223Z"/>
         <tag k="uuid" v="{da3a5344-74c3-451a-a3c9-70cb1b527149}"/>
         <tag k="width" v="98.900000000000006"/>
     </way>
@@ -3482,7 +3475,7 @@
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source" v="Unknown"/>
         <tag k="source:imagery" v="Unknown"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.275Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.222Z"/>
         <tag k="uuid" v="{8b026a81-1f4e-4c4c-a2b2-40e750426b9e}"/>
         <tag k="width" v="98.900000000000006"/>
     </way>
@@ -3502,7 +3495,7 @@
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source" v="Unknown"/>
         <tag k="source:imagery" v="Unknown"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.275Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.221Z"/>
         <tag k="uuid" v="{1811751e-7141-4ddc-884d-b17b26d4b9e5}"/>
         <tag k="width" v="98.900000000000006"/>
     </way>
@@ -3523,7 +3516,7 @@
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source" v="Unknown"/>
         <tag k="source:imagery" v="Unknown"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.274Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.221Z"/>
         <tag k="uuid" v="{0914d0cc-d696-485e-89bc-1d4e0edee797}"/>
         <tag k="width" v="98.900000000000006"/>
     </way>
@@ -3544,7 +3537,7 @@
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source" v="Unknown"/>
         <tag k="source:imagery" v="Unknown"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.273Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.220Z"/>
         <tag k="uuid" v="{5b3dcd21-281f-4f4a-8c94-9807837b0541}"/>
         <tag k="width" v="98.900000000000006"/>
     </way>
@@ -3564,7 +3557,7 @@
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source" v="Unknown"/>
         <tag k="source:imagery" v="Unknown"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.272Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.219Z"/>
         <tag k="uuid" v="{5a91aa90-f929-4441-9fa4-d16ce062fc98}"/>
         <tag k="width" v="98.900000000000006"/>
     </way>
@@ -3600,7 +3593,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:facility_s"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.260Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.204Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -3626,7 +3619,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:facility_s"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.259Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.203Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -3650,7 +3643,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:facility_s"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.257Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.201Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -3670,7 +3663,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:cart_track_c"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.202Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.141Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -3694,7 +3687,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:cart_track_c"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.201Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.140Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -3717,7 +3710,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:cart_track_c"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.200Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.139Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -3732,7 +3725,7 @@
         <tag k="highway" v="track"/>
         <tag k="seasonal" v="limited"/>
         <tag k="source" v="tdsv61:cart_track_c"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.199Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.139Z"/>
         <tag k="uuid" v="{bc8d301f-0e78-43a3-b6ea-0fd0230c82b8}"/>
     </way>
     <way visible="true" id="-18" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -3751,7 +3744,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:built_up_area_s"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.183Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.122Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -3776,7 +3769,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:built_up_area_s"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.182Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.122Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -3800,7 +3793,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:built_up_area_s"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.181Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.121Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -3826,7 +3819,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:built_up_area_s"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.180Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.120Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -3851,7 +3844,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:built_up_area_s"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.179Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.119Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -3875,7 +3868,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:built_up_area_s"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.178Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.118Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -3900,7 +3893,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:built_up_area_s"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.177Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.118Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -3926,7 +3919,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:building_s"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.121Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.064Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -3959,7 +3952,7 @@
         <tag k="security:resource_owner" v="USA"/>
         <tag k="shelter:type" v="storm"/>
         <tag k="source" v="tdsv61:building_s"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.120Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.063Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -3984,7 +3977,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:building_s"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.119Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.062Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -4015,7 +4008,7 @@
         <tag k="security:resource_owner" v="USA"/>
         <tag k="shelter:type" v="storm"/>
         <tag k="source" v="tdsv61:building_s"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.118Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.059Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -4041,7 +4034,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:building_s"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.113Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.055Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -4065,7 +4058,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:building_s"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.111Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.053Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -4090,7 +4083,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:building_s"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.110Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.052Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -4119,7 +4112,7 @@
         <tag k="security:resource_owner" v="USA"/>
         <tag k="shelter:type" v="bomb"/>
         <tag k="source" v="tdsv61:building_s"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.109Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:24.051Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -4141,7 +4134,7 @@
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source" v="Unknown"/>
         <tag k="source:imagery" v="Unknown"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.047Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:23.983Z"/>
         <tag k="undergrowth:density" v="40"/>
         <tag k="uuid" v="{79adc4f4-a754-4818-b0a3-3a225eae4ad8}"/>
         <tag k="width" v="98.900000000000006"/>
@@ -4159,7 +4152,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:road_c"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.032Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:23.966Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -4181,7 +4174,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="source" v="tdsv61:trail_c"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:07:43.031Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T19:13:23.965Z"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="source:vertical_source:type" v="dted_2"/>

@@ -42,9 +42,8 @@
         <tag k="source:accuracy:horizontal" v="25"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:24:30.320Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T18:57:00.681Z"/>
         <tag k="source:name" v="imagery_(other)"/>
-        <tag k="tidal" v="no"/>
         <tag k="uuid" v="{17d4bdfa-4508-4a09-87c6-26be3a713130}"/>
         <tag k="waterway" v="river"/>
         <tag k="width" v="3"/>
@@ -60,7 +59,7 @@
         <tag k="source:accuracy:horizontal" v="25"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:24:30.320Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T18:57:00.681Z"/>
         <tag k="source:name" v="imagery_(other)"/>
         <tag k="tidal" v="yes"/>
         <tag k="uuid" v="{17c10dcb-5bc0-4f3e-8fa2-b9666a3b8a2f}"/>
@@ -77,9 +76,8 @@
         <tag k="source:accuracy:horizontal" v="25"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:24:30.319Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T18:57:00.680Z"/>
         <tag k="source:name" v="imagery_(other)"/>
-        <tag k="tidal" v="no"/>
         <tag k="uuid" v="{17305d07-ec01-4a73-b77a-590a11ced055}"/>
         <tag k="wadi" v="yes"/>
         <tag k="water:sink:type" v="dissipating"/>
@@ -97,7 +95,7 @@
         <tag k="source:accuracy:horizontal" v="25"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:24:30.319Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T18:57:00.680Z"/>
         <tag k="source:name" v="imagery_(other)"/>
         <tag k="tidal" v="yes"/>
         <tag k="uuid" v="{1716f6b6-d17a-4dc7-b4a6-5864a1aafd66}"/>
@@ -114,9 +112,8 @@
         <tag k="source:accuracy:horizontal" v="25"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:24:30.318Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T18:57:00.679Z"/>
         <tag k="source:name" v="imagery_(other)"/>
-        <tag k="tidal" v="no"/>
         <tag k="uuid" v="{162abddf-bb8a-470a-8986-afdf5a171d45}"/>
         <tag k="waterway" v="river"/>
         <tag k="width" v="3"/>
@@ -132,9 +129,8 @@
         <tag k="source:accuracy:horizontal" v="25"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:24:30.318Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T18:57:00.679Z"/>
         <tag k="source:name" v="imagery_(other)"/>
-        <tag k="tidal" v="no"/>
         <tag k="uuid" v="{16006a93-ad6c-451e-b5ae-b530e6c5427a}"/>
         <tag k="waterway" v="river"/>
         <tag k="waterway:bank1:cover" v="14"/>
@@ -153,7 +149,7 @@
         <tag k="source:accuracy:horizontal" v="25"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:24:30.317Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T18:57:00.679Z"/>
         <tag k="source:name" v="imagery_(other)"/>
         <tag k="tidal" v="yes"/>
         <tag k="uuid" v="{1514e475-0a8b-450d-8138-af8623cbdd56}"/>
@@ -174,7 +170,7 @@
         <tag k="source:accuracy:horizontal" v="25"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:24:30.317Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T18:57:00.678Z"/>
         <tag k="source:name" v="imagery_(other)"/>
         <tag k="tidal" v="yes"/>
         <tag k="uuid" v="{149e733e-626f-45db-bfcc-56ad12de425a}"/>
@@ -191,7 +187,7 @@
         <tag k="source:accuracy:horizontal" v="25"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:24:30.316Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T18:57:00.678Z"/>
         <tag k="source:name" v="imagery_(other)"/>
         <tag k="tidal" v="yes"/>
         <tag k="uuid" v="{143203aa-06b0-49b2-9fcd-98c0f89e2fcb}"/>
@@ -209,9 +205,8 @@
         <tag k="source:accuracy:horizontal" v="25"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:24:30.316Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T18:57:00.677Z"/>
         <tag k="source:name" v="imagery_(other)"/>
-        <tag k="tidal" v="no"/>
         <tag k="uuid" v="{14093e3a-29da-41e5-a13f-e8e43ef5d9cc}"/>
         <tag k="wadi" v="yes"/>
         <tag k="water:sink:type" v="disappearing"/>
@@ -228,7 +223,7 @@
         <tag k="source:accuracy:horizontal" v="25"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:24:30.315Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T18:57:00.677Z"/>
         <tag k="source:name" v="imagery_(other)"/>
         <tag k="uuid" v="{1339103f-9a67-4dc1-aa67-b590b33b3000}"/>
         <tag k="water:sink:type" v="disappearing"/>
@@ -247,7 +242,7 @@
         <tag k="source:accuracy:horizontal" v="25"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:24:30.315Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T18:57:00.676Z"/>
         <tag k="source:name" v="imagery_(other)"/>
         <tag k="uuid" v="{13389c28-59ac-4d20-9c29-d34fe8f84cc6}"/>
         <tag k="water:sink:type" v="dissipating"/>
@@ -263,7 +258,7 @@
         <tag k="source:accuracy:horizontal" v="25"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:24:30.314Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T18:57:00.676Z"/>
         <tag k="source:name" v="imagery_(other)"/>
         <tag k="uuid" v="{128252cc-d3f2-4bdb-ba3d-dbe2dc69fef2}"/>
         <tag k="water:sink:type" v="dissipating"/>
@@ -283,9 +278,8 @@
         <tag k="source:accuracy:horizontal" v="25"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:24:30.313Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T18:57:00.675Z"/>
         <tag k="source:name" v="imagery_(other)"/>
-        <tag k="tidal" v="no"/>
         <tag k="uuid" v="{127b406c-964f-4403-a275-40f096adcabe}"/>
         <tag k="waterway" v="river"/>
         <tag k="width" v="3"/>
@@ -300,9 +294,8 @@
         <tag k="source:accuracy:horizontal" v="25"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
-        <tag k="source:ingest:datetime" v="2021-03-26T09:24:30.312Z"/>
+        <tag k="source:ingest:datetime" v="2021-04-06T18:57:00.674Z"/>
         <tag k="source:name" v="imagery_(other)"/>
-        <tag k="tidal" v="no"/>
         <tag k="uuid" v="{6928c36d-69a3-43f4-ab53-4e1ac7e2ffba}"/>
         <tag k="waterway" v="river"/>
         <tag k="width" v="3"/>

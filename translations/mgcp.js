@@ -57,10 +57,6 @@ mgcp = {
   // Quick lookup list for valid FCODES
   // mgcp.fcodeList = translate.makeFcodeList(mgcp.rawSchema);
 
-  // Add OSMTAGS1-4 attributes
-  // Build the MGCP fcode/attrs lookup table
-  mgcp.attrLookup = translate.makeAttrLookup(translate.addTagFeatures(mgcp.rawSchema));
-
   // Now add an o2s[A,L,P] feature to the mgcp.rawSchema and an attribute to hold OSM tags
   if (config.getOgrOutputFormat() == 'shp')
   {
@@ -682,37 +678,41 @@ mgcp = {
     {
       tags.amenity = 'place_of_worship';
 
-      if (tags.building)
+      switch (tags.building)
       {
-        switch (tags.building)
-        {
-          case 'cathedral':
-          case 'chapel':
-          case 'church':
-            tags.religion = 'christian';
-            break;
+        case undefined:
+          break;
 
-          case 'marabout':
-          case 'mosque':
-            tags.religion = 'muslim';
-            break;
+        case 'yes':
+          delete tags.building;
+          break;
 
-          case 'synagogue':
-            tags.religion = 'jewish';
-            break;
+        case 'cathedral':
+        case 'chapel':
+        case 'church':
+          tags.religion = 'christian';
+          break;
 
-          case 'stupa':
-            religion = 'buddhist';
-            break;
+        case 'marabout':
+        case 'mosque':
+          tags.religion = 'muslim';
+          break;
 
-          // In the spec, these don't specify a religion
-          // case 'religious_community':
-          // case 'pagoda':
-          // case 'shrine':
-          // case 'tabernacle':
-          // case 'temple':
-        } // End switch
-      }
+        case 'synagogue':
+          tags.religion = 'jewish';
+          break;
+
+        case 'stupa':
+          religion = 'buddhist';
+          break;
+
+        // In the spec, these don't specify a religion
+        // case 'religious_community':
+        // case 'pagoda':
+        // case 'shrine':
+        // case 'tabernacle':
+        // case 'temple':
+      } // End switch
 
       if (tags['tower:type'] == 'minaret')
       {

@@ -469,6 +469,7 @@ mgcp.rules = {
     ['FFN','894','tourism','opera_house'],
     ['FFN','902','amenity','library'],
     ['FFN','905','tourism','museum'],
+    ['FFN','907','use','botanical_and/or_zoological_reserve_activities'],
     ['FFN','912','leisure','sports_centre'],
     ['FFN','919','amenity','animal_boarding'],
     ['FFN','930','amenity','religious_activities'],
@@ -1170,7 +1171,7 @@ mgcp.rules = {
     ['TTC','10','tower:type','lookout'], // Lookout Tower
     ['TTC','12','tower:type','fire'], // Fire Tower
     // ['TTC','16','tower:type','control'], // Control Tower
-    ['TTC','16','control_tower','yes'], // Control Tower
+    ['TTC','16','service','aircraft_control'], // Control Tower
     ['TTC','18','tower:type','communication'], // Telecommunication Tower
     ['TTC','19','tower:type','cell'], // Cell Tower
     ['TTC','21','tower:type','guard'], // Guard Tower
