@@ -42,7 +42,7 @@ namespace hoot
 {
 
 PhoneNumberNormalizer::PhoneNumberNormalizer() :
-_regionCode(""),
+_regionCode("US"),
 _searchInText(false),
 _format(PhoneNumberUtil::PhoneNumberFormat::NATIONAL),
 _numNormalized(0)

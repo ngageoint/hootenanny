@@ -42,6 +42,7 @@ namespace hoot
 {
 
 PhoneNumberLocator::PhoneNumberLocator() :
+_regionCode("US"),
 _numLocated(0)
 {
 }
