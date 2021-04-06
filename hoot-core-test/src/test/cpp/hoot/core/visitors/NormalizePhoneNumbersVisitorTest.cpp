@@ -42,8 +42,7 @@ namespace hoot
 class NormalizePhoneNumbersVisitorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(NormalizePhoneNumbersVisitorTest);
-  // TODO: re-enable me
-  //CPPUNIT_TEST(runBasicTest);
+  CPPUNIT_TEST(runBasicTest);
   CPPUNIT_TEST(runSetFormatTest);
   CPPUNIT_TEST(runSearchInTextTest);
   CPPUNIT_TEST(runSetSearchInTextEmptyRegionCodeTest);
@@ -52,11 +51,12 @@ class NormalizePhoneNumbersVisitorTest : public HootTestFixture
 
 public:
 
-  NormalizePhoneNumbersVisitorTest()
-    : HootTestFixture("test-files/visitors/NormalizePhoneNumbersVisitorTest/",
-                      "test-output/visitors/NormalizePhoneNumbersVisitorTest/")
+  NormalizePhoneNumbersVisitorTest() :
+  HootTestFixture(
+    "test-files/visitors/NormalizePhoneNumbersVisitorTest/",
+    "test-output/visitors/NormalizePhoneNumbersVisitorTest/")
   {
-    setResetType(ResetBasic);
+    setResetType(ResetAll);
   }
 
   void runBasicTest()

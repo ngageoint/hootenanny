@@ -29,32 +29,62 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonSchema.h>
-#include <hoot/core/io/OsmMapReaderFactory.h>
-#include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/elements/MapProjector.h>
 
 namespace hoot
 {
 
+/*
+ * A lot of what's not in here gets tested by the poi/poly conflate tests. The rest that is in here
+ * isn't currently being triggered by the input data in the conflate tests.
+ */
 class PoiPolygonSchemaTest : public HootTestFixture
 {
     CPPUNIT_TEST_SUITE(PoiPolygonSchemaTest);
-    CPPUNIT_TEST(runBasicTest);
+    CPPUNIT_TEST(runSpecificSchoolMatchTest);
+    CPPUNIT_TEST(runIsPlaygroundTest);
+    CPPUNIT_TEST(runHasSpecificTypeTest);
     CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  PoiPolygonSchemaTest() :
-  HootTestFixture(
-    "test-files/conflate/poi-polygon/PoiPolygonSchemaTest/",
-    "test-output/conflate/poi-polygon/PoiPolygonSchemaTest/")
+  PoiPolygonSchemaTest() = default;
+
+  void runSpecificSchoolMatchTest()
   {
-    //setResetType(ResetBasic);
+    NodePtr node1 =
+      std::make_shared<Node>(Status::Unknown1, 1, geos::geom::Coordinate(0.0, 0.0), 15.0);
+    node1->setTag("amenity", "animal_shelter");
+    CPPUNIT_ASSERT(!PoiPolygonSchema::isSpecificSchool(node1));
+
+    node1->setTag("amenity", "school");
+    CPPUNIT_ASSERT(!PoiPolygonSchema::isSpecificSchool(node1));
+
+    node1->setTag("name", "North Clay Junior High");
+    CPPUNIT_ASSERT(PoiPolygonSchema::isSpecificSchool(node1));
   }
 
-  void runBasicTest()
+  void runIsPlaygroundTest()
   {
+    NodePtr node1 =
+      std::make_shared<Node>(Status::Unknown1, 1, geos::geom::Coordinate(0.0, 0.0), 15.0);
+    node1->setTag("amenity", "animal_shelter");
+    CPPUNIT_ASSERT(!PoiPolygonSchema::isPlayground(node1));
 
+    node1->clear();
+    node1->setTag("leisure", "playground");
+    CPPUNIT_ASSERT(PoiPolygonSchema::isPlayground(node1));
+  }
+
+  void runHasSpecificTypeTest()
+  {
+    NodePtr node1 =
+      std::make_shared<Node>(Status::Unknown1, 1, geos::geom::Coordinate(0.0, 0.0), 15.0);
+    node1->setTag("poi", "yes");
+    CPPUNIT_ASSERT(!PoiPolygonSchema::hasSpecificType(node1));
+
+    node1->clear();
+    node1->setTag("amenity", "school");
+    CPPUNIT_ASSERT(PoiPolygonSchema::hasSpecificType(node1));
   }
 };
 

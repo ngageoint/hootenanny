@@ -47,6 +47,7 @@ public:
     : HootTestFixture("test-files/cmd/glacial/PoiPolygonConflateStandaloneTest/",
                       UNUSED_PATH)
   {
+    setResetType(ResetAll);
   }
 
   void runBasicTest()

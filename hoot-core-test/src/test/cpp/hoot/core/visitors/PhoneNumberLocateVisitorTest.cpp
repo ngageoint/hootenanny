@@ -49,7 +49,7 @@ public:
     "test-files/visitors/PhoneNumberLocateVisitorTest/",
     "test-output/visitors/PhoneNumberLocateVisitorTest/")
   {
-    setResetType(ResetBasic);
+    setResetType(ResetAll);
   }
 
   void runBasicTest()
