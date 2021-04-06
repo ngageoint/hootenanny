@@ -94,18 +94,6 @@ public:
                               std::vector<std::shared_ptr<const Node>> nodes2);
 
   /**
-   * Determines if the way node coordinates from two ways match, given a configurable
-   * tolerance
-   *
-   * @param way1 the first way with nodes to compare
-   * @param way2 the second way with nodes to compare
-   * @param map the map owning the ways
-   * @return true if the way node coordinates match; false otherwise
-   */
-//  static bool nodeCoordsMatch(const ConstWayPtr& way1, const ConstWayPtr& way2,
-//                              const ConstOsmMapPtr& map);
-
-  /**
    * Returns a printable string for a collection of nodes
    *
    * @param nodes the nodes for which to create a string

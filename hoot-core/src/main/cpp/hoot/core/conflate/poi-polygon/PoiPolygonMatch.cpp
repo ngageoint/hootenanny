@@ -779,7 +779,7 @@ unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstEleme
 
 void PoiPolygonMatch::printMatchDistanceInfo()
 {
-  PoiPolygonDistanceTruthRecorder::printMatchDistanceInfo();
+  LOG_VAR(PoiPolygonDistanceTruthRecorder::getMatchDistanceInfo());
 }
 
 void PoiPolygonMatch::resetMatchDistanceInfo()

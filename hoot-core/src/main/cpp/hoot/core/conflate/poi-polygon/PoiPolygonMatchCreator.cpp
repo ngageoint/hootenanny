@@ -141,7 +141,7 @@ void PoiPolygonMatchCreator::createMatches(const ConstOsmMapPtr& map,
       " / total matches in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
   }
 
-  if (conf().getBool(ConfigOptions::getPoiPolygonPrintMatchDistanceTruthKey()))
+  if (conf().getBool(ConfigOptions::getPoiPolygonCalculateMatchDistanceTruthKey()))
   {
     PoiPolygonMatch::printMatchDistanceInfo();
   }

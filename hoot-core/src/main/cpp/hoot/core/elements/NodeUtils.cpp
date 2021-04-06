@@ -133,14 +133,6 @@ QString NodeUtils::nodeCoordsToString(const std::vector<ConstNodePtr>& nodes)
   return str;
 }
 
-//bool NodeUtils::nodeCoordsMatch(const ConstWayPtr& way1, const ConstWayPtr& way2,
-//                                const ConstOsmMapPtr& map)
-//{
-//  return
-//    nodeCoordsMatch(
-//      nodeIdsToNodes(way1->getNodeIds(), map), nodeIdsToNodes(way2->getNodeIds(), map));
-//}
-
 geos::geom::Coordinate NodeUtils::nodeToCoord(const std::shared_ptr<const Node>& node)
 {
   return geos::geom::Coordinate(node->getX(), node->getY());
