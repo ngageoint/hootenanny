@@ -1,8 +1,6 @@
 [
     {
-        "categories": [
-            "name"
-        ],
+        "categories": [ "name" ],
         "dataType": "text",
         "influence": 2,
         "name": "abstract_name",
@@ -49,9 +47,7 @@
         "objectType": "tag"
     },
     {
-        "categories": [
-            "pseudoname"
-        ],
+        "categories": [ "pseudoname" ],
         "dataType": "text",
         "influence": 1,
         "name": "pseudo_name",

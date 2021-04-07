@@ -310,7 +310,7 @@ public:
       "mismatchScore: -1\n"
       "valueType: 2\n"
       "aliases: [0]{}\n"
-      "geometries: 31\n"
+      "geometries: 23\n"
       "categories: [1]{poi}\n"
       ", name: bus_platform\n"
       "key: \n"
@@ -320,7 +320,7 @@ public:
       "mismatchScore: -1\n"
       "valueType: 2\n"
       "aliases: [0]{}\n"
-      "geometries: 31\n"
+      "geometries: 23\n"
       "categories: [1]{poi}\n"
       "tags: [2]{[2]{public_transport=platform, bus=yes}, [2]{public_transport=platform, highway=bus_stop}}\n"
       "}", toString(uut.getSchemaVertices(t)));
@@ -333,7 +333,7 @@ public:
       "mismatchScore: -1\n"
       "valueType: 2\n"
       "aliases: [0]{}\n"
-      "geometries: 31\n"
+      "geometries: 23\n"
       "categories: [1]{poi}\n"
       "tags: [2]{[2]{public_transport=platform, bus=yes}, [2]{public_transport=platform, highway=bus_stop}}\n"
       "}", toString(uut.getUniqueSchemaVertices(t)));

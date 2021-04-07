@@ -7,10 +7,7 @@
         "objectType": "tag"
     },
     {
-        "geometries": [
-            "node",
-            "area"
-        ],
+        "geometries": ["node", "area"],
         "aliases": [
             "aeroway=airport"
         ],
@@ -21,11 +18,7 @@
         "tagInfoDescription": "An airport"
     },
     {
-        "geometries": [
-            "node",
-            "linestring",
-            "area"
-        ],
+        "geometries": ["node", "linestring", "area"],
         "isA": "aeroway",
         "name": "aeroway=airstrip",
         "objectType": "tag",
@@ -33,9 +26,13 @@
         "tagInfoDescription": "A field or area where light aircraft can land and take off from."
     },
     {
-        "geometries": [
-            "node"
-        ],
+        "geometries": ["node","area"],
+        "isA": "aeroway",
+        "name": "aeroway=landing_zone",
+        "objectType": "tag"
+    },
+    {
+        "geometries": ["node"],
         "isA": "aeroway",
         "name": "aeroway=navigationaid",
         "objectType": "tag",
@@ -49,9 +46,7 @@
         "tagInfoCount": 286
     },
     {
-        "geometries": [
-            "area"
-        ],
+        "geometries": ["area"],
         "isA": "aeroway",
         "name": "aeroway=apron",
         "objectType": "tag",
@@ -59,10 +54,7 @@
         "tagInfoDescription": "An area of an airport where planes are parked, unloaded or loaded, refueled, or boarded"
     },
     {
-        "geometries": [
-            "node",
-            "area"
-        ],
+        "geometries": ["node", "area"],
         "isA": "aeroway",
         "name": "aeroway=fuel",
         "objectType": "tag",
@@ -70,9 +62,7 @@
         "tagInfoDescription": "An aviation fuel station."
     },
     {
-        "geometries": [
-            "node"
-        ],
+        "geometries": ["node"],
         "isA": "aeroway",
         "name": "aeroway=gate",
         "objectType": "tag",
@@ -80,9 +70,7 @@
         "tagInfoDescription": "A gate number at an airport where passengers wait before boarding their flight"
     },
     {
-        "geometries": [
-            "area"
-        ],
+        "geometries": ["area"],
         "isA": "aeroway",
         "name": "aeroway=hangar",
         "objectType": "tag",
@@ -90,10 +78,7 @@
         "tagInfoDescription": "A large airport building with extensive floor areas for housing aircraft or spacecraft"
     },
     {
-        "geometries": [
-            "node",
-            "area"
-        ],
+        "geometries": ["node", "area"],
         "isA": "aeroway",
         "name": "aeroway=helipad",
         "objectType": "tag",
@@ -101,10 +86,7 @@
         "tagInfoDescription": "A landing area or platform for helicopters"
     },
     {
-        "geometries": [
-            "node",
-            "area"
-        ],
+        "geometries": ["node", "area"],
         "isA": "aeroway",
         "name": "aeroway=heliport",
         "objectType": "tag",
@@ -112,9 +94,7 @@
         "tagInfoDescription": "A special aerodrome built for helicopters"
     },
     {
-        "geometries": [
-            "node"
-        ],
+        "geometries": ["node"],
         "isA": "aeroway",
         "name": "aeroway=holding_position",
         "objectType": "tag",
@@ -128,10 +108,7 @@
         "tagInfoCount": 1394
     },
     {
-        "geometries": [
-            "node",
-            "area"
-        ],
+        "geometries": ["node", "area"],
         "isA": "aeroway",
         "name": "aeroway=launchpad",
         "objectType": "tag",
@@ -150,10 +127,7 @@
         "tagInfoCount": 504
     },
     {
-        "geometries": [
-            "node",
-            "linestring"
-        ],
+        "geometries": ["node", "linestring"],
         "isA": "aeroway",
         "name": "aeroway=parking_position",
         "objectType": "tag",
@@ -161,10 +135,7 @@
         "tagInfoDescription": "A location where an airplane can park"
     },
     {
-        "geometries": [
-            "linestring",
-            "area"
-        ],
+        "geometries": ["linestring", "area"],
         "isA": "aeroway",
         "name": "aeroway=runway",
         "objectType": "tag",
@@ -172,10 +143,7 @@
         "tagInfoDescription": "Runway of an airfield"
     },
     {
-        "geometries": [
-            "linestring",
-            "area"
-        ],
+        "geometries": ["linestring", "area"],
         "isA": "aeroway",
         "name": "aeroway=stopway",
         "objectType": "tag",
@@ -183,10 +151,7 @@
         "tagInfoDescription": "Stopway of an airfield"
     },
     {
-        "geometries": [
-            "node",
-            "area"
-        ],
+        "geometries": ["node", "area"],
         "isA": "aeroway",
         "name": "aeroway=spaceport",
         "objectType": "tag",
@@ -194,9 +159,7 @@
         "tagInfoDescription": "A spaceport (other than airport / heliport)"
     },
     {
-        "geometries": [
-            "linestring"
-        ],
+        "geometries": ["linestring"],
         "isA": "aeroway",
         "name": "aeroway=taxilane",
         "objectType": "tag",
@@ -204,10 +167,7 @@
         "tagInfoDescription": "A path in an airport that is part of the aircraft parking area or apron"
     },
     {
-        "geometries": [
-            "linestring",
-            "area"
-        ],
+        "geometries": ["linestring", "area"],
         "isA": "aeroway",
         "name": "aeroway=taxiway",
         "objectType": "tag",
@@ -215,10 +175,7 @@
         "tagInfoDescription": "Taxiway of an airfield"
     },
     {
-        "geometries": [
-            "node",
-            "area"
-        ],
+        "geometries": ["node", "area"],
         "isA": "aeroway",
         "name": "aeroway=terminal",
         "objectType": "tag",
@@ -244,9 +201,7 @@
         "tagInfoCount": 625
     },
     {
-        "geometries": [
-            "node"
-        ],
+        "geometries": ["node"],
         "isA": "aeroway",
         "name": "aeroway=windsock",
         "objectType": "tag",

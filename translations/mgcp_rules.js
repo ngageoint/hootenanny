@@ -206,7 +206,7 @@ mgcp.rules = {
     'LEN':'length', // Length or Diameter
     'LTN':'lanes', // Track or Lane Count
     'NOS':'bridge:span_count', // Span Count
-    'OHB':'height', // Overall Bridge Height
+    // 'OHB':'height', // Overall Bridge Height - copy of HGT
     'SDO':'dune:orientation',  // Sand Dune Orientation
     'WD1':'width:minimum_traveled_way', // Route Minimum Travelled Way
     'WID':'width', // Width
@@ -432,7 +432,7 @@ mgcp.rules = {
     ['FFN','511','building','maritime_pilotage'],
     ['FFN','513','building','harbour_control'],
     ['FFN','530','building','warehouse'],
-    ['FFN','535','amenity','parking'],
+    ['FFN','535','building','parking'],
     ['FFN','540','amenity','post_office'],
     ['FFN','550','building','accomodation'],
     ['FFN','563','building','residence'],
@@ -469,6 +469,7 @@ mgcp.rules = {
     ['FFN','894','tourism','opera_house'],
     ['FFN','902','amenity','library'],
     ['FFN','905','tourism','museum'],
+    ['FFN','907','use','botanical_and/or_zoological_reserve_activities'],
     ['FFN','912','leisure','sports_centre'],
     ['FFN','919','amenity','animal_boarding'],
     ['FFN','930','amenity','religious_activities'],
@@ -567,6 +568,7 @@ mgcp.rules = {
     // ['HAF','0','helipad:facility','unknown'],
     ['HAF','0',undefined,undefined],
     ['HAF','1','helipad:facility','heliport'],
+    ['HAF','2','helipad:facility','land_aerodrome'],
     ['HAF','3','helipad:facility','hospital'],
     ['HAF','4','helipad:facility','non-hospital_building'],
     ['HAF','6','helipad:facility','rig'],
@@ -633,6 +635,7 @@ mgcp.rules = {
     ['MCC','5','material','asphalt'],
     ['MCC','9','material','brick'],
     ['MCC','8','material','boulders'], // From SMC
+    ['MCC','14','material','cinders'], // From SMC
     ['MCC','16','material','clay'],
     ['MCC','20','material','composition'],
     ['MCC','21','material','concrete'],
@@ -650,6 +653,7 @@ mgcp.rules = {
     ['MCC','77','material','prestressed_concrete'],
     ['MCC','83','material','reinforced_concrete'],
     ['MCC','84','material','rock'],
+    ['MCC','85','material','rubber'], // From SMC
     ['MCC','86','material','rubble'],
     ['MCC','87','material','salt'], // From SMC
     ['MCC','88','material','sand'],
@@ -746,16 +750,16 @@ mgcp.rules = {
     ['PBY','999','by_product','other'], // Other
 
     // PPC - Power Station Type
-    //['PPC','0','generator:source','unknown'], // Unknown
+    //['PPC','0','plant:source','unknown'], // Unknown
     ['PPC','0',undefined,undefined], // Unknown
-    ['PPC','1','generator:source','hydro'], // Hydro-electric
-    ['PPC','2','generator:source','nuclear'], // Nuclear
-    ['PPC','3','generator:source','solar'], // Solar
-    ['PPC','4','generator:source','geothermal'], // Geothermal
-    ['PPC','5','generator:source','wind'], // Wind
-    ['PPC','6','generator:source','tidal'], // Tidal
-    ['PPC','7','generator:source','thermal'], // Thermal
-    ['PPC','999','generator:source','other'], // Other
+    ['PPC','1','plant:source','hydro'], // Hydro-electric
+    ['PPC','2','plant:source','nuclear'], // Nuclear
+    ['PPC','3','plant:source','solar'], // Solar
+    ['PPC','4','plant:source','geothermal'], // Geothermal
+    ['PPC','5','plant:source','wind'], // Wind
+    ['PPC','6','plant:source','tidal'], // Tidal
+    ['PPC','7','plant:source','thermal'], // Thermal
+    ['PPC','999','plant:source','other'], // Other
 
     // PPO Product
     // ['PPO','0','product','unknown'],
@@ -794,6 +798,7 @@ mgcp.rules = {
     ['PPO','75','product','oil'],
     ['PPO','79','product','palm'],
     ['PPO','80','product','paper'],
+    ['PPO','83','product','petroleum'],
     ['PPO','84','product','plastic'],
     ['PPO','89','product','quartz'],
     ['PPO','90','product','radioactive_material'],
@@ -901,7 +906,7 @@ mgcp.rules = {
     ['RRC','8','railway','logging'],
     ['RRC','14','railway','tram'],
     ['RRC','15','railway','funicular'],
-    ['RRC','32','railway','automated_transit_system'],
+    ['RRC','32','automated_transit_system','yes'],
     ['RRC','33','railway','longhaul'],
     ['RRC','999','railway','Other'],
 
@@ -1107,7 +1112,7 @@ mgcp.rules = {
     ['SUC','1','man_made','snow_fence'],
     ['SUC','2','man_made','rock_shed'],
     ['SUC','4','man_made','rock_and_snow_fence'],
-    // ['SUC','999','building','shed'],
+    ['SUC','999','protection:type','other'],
 
     // SWT - Natural Pool Type
     // ['SWT','0','raw:SWT','unknown'], // Unknown
@@ -1166,7 +1171,7 @@ mgcp.rules = {
     ['TTC','10','tower:type','lookout'], // Lookout Tower
     ['TTC','12','tower:type','fire'], // Fire Tower
     // ['TTC','16','tower:type','control'], // Control Tower
-    ['TTC','16','control_tower','yes'], // Control Tower
+    ['TTC','16','service','aircraft_control'], // Control Tower
     ['TTC','18','tower:type','communication'], // Telecommunication Tower
     ['TTC','19','tower:type','cell'], // Cell Tower
     ['TTC','21','tower:type','guard'], // Guard Tower
@@ -1217,12 +1222,12 @@ mgcp.rules = {
     ['VSP','999','vegetation:type','other'], // Other
 
     // WCC - Watercourse Channel Type
-    ['WCC','0','waterway','yes'],
-    ['WCC','1','waterway','stream'],
-    ['WCC','2','waterway','braided_stream'],
-    ['WCC','3','waterway','gorge'],
+    // ['WCC','0','channel:type','yes'],
+    ['WCC','1','channel:type','channelized_stream'],
+    ['WCC','2','channel:type','braided_stream'],
+    ['WCC','3','channel:type','gorge'],
     ['WCC','4','wadi','yes'],
-    ['WCC','7','waterway','river'],
+    ['WCC','7','channel:type','normal'],
 
     // WFT - Well Type
     // ['WFT','0','water_well:type','unknown'],
@@ -1456,8 +1461,7 @@ mgcp.rules = {
     ['GFC','999','amenity','government'],
 
     // HAF - Helipad Accociated Facilities
-    ['HAF','2','helipad:facility','land_aerodrome'],
-    ['HAF','5','helipad:facility','offshore_platform'],
+    ['HAF','5','helipad:facility','offshore_construction'], // Seems to have changed to '9' in TRD4
 
     // ICF - Manufacturing Facility Type - the rest of these are in biased rules
     ['ICF','0',undefined,undefined],
@@ -2061,11 +2065,11 @@ mgcp.rules = {
     ['FIC','999','embankment','divider'], // TDS etc
     ['FIC','999','embankment:type','levee'], // TDS etc
     ['FIC','999','embankment:type','divider'], // TDS etc
-    ['FIC','999','embankment:type','other'], // Other
+    // ['FIC','999','embankment:type','other'], // Other
 
     // AFC - Agricultural Facility Type
     ['FFN','2','building','farm'],
-    ['FFN','2','building','greenhouse'],
+    // ['FFN','2','building','greenhouse'],
     ['FFN','2','building','farm_auxiliary'],
     ['FFN','2','building','barn'],
     ['FFN','999','building','agricultural'],
@@ -2121,7 +2125,7 @@ mgcp.rules = {
 
     // MFC - Military Facility Type
     ['FFN','835','military','administration'],
-    ['FFN','835','military','range'],
+    // ['FFN','835','military','range'],
     ['FFN','835','military','dormitory'],
     ['FFN','835','military','dependent_housing'],
     ['FFN','835','military','battery'],
@@ -2297,6 +2301,23 @@ mgcp.rules = {
     ignoreList : ['FCODE','error_circ','CPYRT_NOTE','SRC_INFO','SRC_DATE','SMC'],
     // ##### End of ignoreList #####
 
+    // Attribute names to swap on input. These are to avoid having copies of the same translation.
+    swapListIn : {'OHB':'HGT','CPYRT_NOTE':'CCN','SRC_INFO':'SDP','SRC_DATE':'SDV','SMC':'MCC'},
+
+    // Swap attribute values on export.
+    // Format is: <FCODE>:{<from>:<to>}
+    swapListOut : {
+      'AQ040':{'HGT':'OHB'},
+      'AK040':{'MCC':'SMC'},
+      'AP010':{'WID':'WD1'},
+      'AP030':{'WID':'WD1'},
+      'BA050':{'MCC':'SMC'},
+      'DA010':{'MCC':'SMC'},
+      'DB010':{'MCC':'SMC'},
+      'DB070':{'MCC':'SMC'},
+
+    },
+
     // ##### Start of txtLength #####
     // This list is for validateing the lengths of text attributes prior to export
     txtLength : {
@@ -2316,6 +2337,7 @@ mgcp.rules = {
 
     // layerNameLookup - List of all of the possibl;e geometry & F_CODES.
     // AKA the list of layer names
-    layerNameLookup : {"AAA010":"AAA010","AAA012":"AAA012","AAA052":"AAA052","AAB000":"AAB000","AAB010":"AAB010","AAC000":"AAC000","AAC030":"AAC030","AAD010":"AAD010","AAD030":"AAD030","AAD050":"AAD050","AAH050":"AAH050","AAI030":"AAI030","AAJ010":"AAJ010","AAJ030":"AAJ030","AAJ110":"AAJ110","AAK030":"AAK030","AAK040":"AAK040","AAK060":"AAK060","AAK090":"AAK090","AAK100":"AAK100","AAK120":"AAK120","AAK160":"AAK160","AAK170":"AAK170","AAK180":"AAK180","AAK190":"AAK190","AAL010":"AAL010","AAL012":"AAL012","AAL015":"AAL015","AAL019":"AAL019","AAL020":"AAL020","AAL030":"AAL030","AAL060":"AAL060","AAL105":"AAL105","AAL140":"AAL140","AAL170":"AAL170","AAL200":"AAL200","AAL208":"AAL208","AAM010":"AAM010","AAM020":"AAM020","AAM030":"AAM030","AAM040":"AAM040","AAM060":"AAM060","AAM070":"AAM070","AAN060":"AAN060","AAN076":"AAN076","AAQ040":"AAQ040","AAQ116":"AAQ116","AAQ125":"AAQ125","AAQ130":"AAQ130","AAQ135":"AAQ135","AAQ140":"AAQ140","AAT050":"AAT050","ABA030":"ABA030","ABA040":"ABA040","ABA050":"ABA050","ABB005":"ABB005","ABB041":"ABB041","ABB043":"ABB043","ABB090":"ABB090","ABB140":"ABB140","ABB190":"ABB190","ABB240":"ABB240","ABD100":"ABD100","ABD120":"ABD120","ABH010":"ABH010","ABH015":"ABH015","ABH020":"ABH020","ABH030":"ABH030","ABH040":"ABH040","ABH050":"ABH050","ABH051":"ABH051","ABH080":"ABH080","ABH090":"ABH090","ABH120":"ABH120","ABH130":"ABH130","ABH135":"ABH135","ABH140":"ABH140","ABH150":"ABH150","ABH155":"ABH155","ABH160":"ABH160","ABH165":"ABH165","ABI020":"ABI020","ABI030":"ABI030","ABJ020":"ABJ020","ABJ030":"ABJ030","ABJ031":"ABJ031","ABJ100":"ABJ100","ABJ110":"ABJ110","ADA010":"ADA010","ADB061":"ADB061","ADB090":"ADB090","ADB115":"ADB115","ADB160":"ADB160","ADB170":"ADB170","ADB180":"ADB180","ADB200":"ADB200","AEA010":"AEA010","AEA040":"AEA040","AEA050":"AEA050","AEA055":"AEA055","AEB010":"AEB010","AEB020":"AEB020","AEC010":"AEC010","AEC020":"AEC020","AEC030":"AEC030","AEC040":"AEC040","AEC060":"AEC060","AED010":"AED010","AED020":"AED020","AED030":"AED030","AFA015":"AFA015","AFA100":"AFA100","AGB005":"AGB005","AGB015":"AGB015","AGB035":"AGB035","AGB045":"AGB045","AGB055":"AGB055","AGB065":"AGB065","AGB075":"AGB075","AGB230":"AGB230","ASU001":"ASU001","AZD020":"AZD020","LAF020":"LAF020","LAH025":"LAH025","LAK130":"LAK130","LAK150":"LAK150","LAK190":"LAK190","LAL060":"LAL060","LAL070":"LAL070","LAL210":"LAL210","LAL260":"LAL260","LAN010":"LAN010","LAN050":"LAN050","LAP010":"LAP010","LAP030":"LAP030","LAP050":"LAP050","LAQ040":"LAQ040","LAQ063":"LAQ063","LAQ070":"LAQ070","LAQ075":"LAQ075","LAQ113":"LAQ113","LAQ130":"LAQ130","LAT030":"LAT030","LAT041":"LAT041","LAT060":"LAT060","LBA010":"LBA010","LBB041":"LBB041","LBB043":"LBB043","LBB140":"LBB140","LBB190":"LBB190","LBB230":"LBB230","LBD120":"LBD120","LBH010":"LBH010","LBH020":"LBH020","LBH030":"LBH030","LBH060":"LBH060","LBH070":"LBH070","LBH110":"LBH110","LBH120":"LBH120","LBH140":"LBH140","LBH165":"LBH165","LBH180":"LBH180","LBI020":"LBI020","LBI030":"LBI030","LBI040":"LBI040","LBI041":"LBI041","LBJ031":"LBJ031","LBJ040":"LBJ040","LDB010":"LDB010","LDB061":"LDB061","LDB070":"LDB070","LDB071":"LDB071","LDB090":"LDB090","LDB100":"LDB100","LDB110":"LDB110","LDB160":"LDB160","LDB200":"LDB200","LEA020":"LEA020","LEC030":"LEC030","LFA090":"LFA090","LGB050":"LGB050","PAA010":"PAA010","PAA012":"PAA012","PAA040":"PAA040","PAA050":"PAA050","PAC000":"PAC000","PAC020":"PAC020","PAC030":"PAC030","PAD010":"PAD010","PAD020":"PAD020","PAD030":"PAD030","PAD050":"PAD050","PAF010":"PAF010","PAF040":"PAF040","PAF070":"PAF070","PAH050":"PAH050","PAH070":"PAH070","PAJ030":"PAJ030","PAJ050":"PAJ050","PAJ051":"PAJ051","PAJ110":"PAJ110","PAK040":"PAK040","PAK150":"PAK150","PAK160":"PAK160","PAK170":"PAK170","PAL012":"PAL012","PAL015":"PAL015","PAL019":"PAL019","PAL020":"PAL020","PAL025":"PAL025","PAL030":"PAL030","PAL099":"PAL099","PAL105":"PAL105","PAL130":"PAL130","PAL210":"PAL210","PAL241":"PAL241","PAM020":"PAM020","PAM030":"PAM030","PAM040":"PAM040","PAM060":"PAM060","PAM070":"PAM070","PAN075":"PAN075","PAN076":"PAN076","PAQ065":"PAQ065","PAQ070":"PAQ070","PAQ090":"PAQ090","PAQ110":"PAQ110","PAQ116":"PAQ116","PAQ125":"PAQ125","PAT010":"PAT010","PAT042":"PAT042","PAT045":"PAT045","PBA050":"PBA050","PBB155":"PBB155","PBD100":"PBD100","PBD110":"PBD110","PBD130":"PBD130","PBD180":"PBD180","PBH010":"PBH010","PBH070":"PBH070","PBH120":"PBH120","PBH145":"PBH145","PBH170":"PBH170","PBH180":"PBH180","PBI010":"PBI010","PBI020":"PBI020","PBI030":"PBI030","PBI040":"PBI040","PBI041":"PBI041","PBI050":"PBI050","PBJ060":"PBJ060","PDB029":"PDB029","PDB115":"PDB115","PDB150":"PDB150","PDB160":"PDB160","PDB180":"PDB180","PEC030":"PEC030","PGA034":"PGA034","PGB030":"PGB030","PGB040":"PGB040","PGB050":"PGB050","PGB065":"PGB065","PGB220":"PGB220","PGB230":"PGB230","PGB485":"PGB485","PSU001":"PSU001","PZD040":"PZD040"},
+    // NOTE: This is just a list.  If the layer names change then this goes back to being an object
+    layerNameLookup : ["AAA010","AAA012","AAA052","AAB000","AAB010","AAC000","AAC030","AAD010","AAD030","AAD050","AAH050","AAI030","AAJ010","AAJ030","AAJ110","AAK030","AAK040","AAK060","AAK090","AAK100","AAK120","AAK160","AAK170","AAK180","AAK190","AAL010","AAL012","AAL015","AAL019","AAL020","AAL030","AAL060","AAL105","AAL140","AAL170","AAL200","AAL208","AAM010","AAM020","AAM030","AAM040","AAM060","AAM070","AAN060","AAN076","AAQ040","AAQ116","AAQ125","AAQ130","AAQ135","AAQ140","AAT050","ABA030","ABA040","ABA050","ABB005","ABB041","ABB043","ABB090","ABB140","ABB190","ABB240","ABD100","ABD120","ABH010","ABH015","ABH020","ABH030","ABH040","ABH050","ABH051","ABH080","ABH090","ABH120","ABH130","ABH135","ABH140","ABH150","ABH155","ABH160","ABH165","ABI020","ABI030","ABJ020","ABJ030","ABJ031","ABJ100","ABJ110","ADA010","ADB061","ADB090","ADB115","ADB160","ADB170","ADB180","ADB200","AEA010","AEA040","AEA050","AEA055","AEB010","AEB020","AEC010","AEC020","AEC030","AEC040","AEC060","AED010","AED020","AED030","AFA015","AFA100","AGB005","AGB015","AGB035","AGB045","AGB055","AGB065","AGB075","AGB230","ASU001","AZD020","LAF020","LAH025","LAK130","LAK150","LAK190","LAL060","LAL070","LAL210","LAL260","LAN010","LAN050","LAP010","LAP030","LAP050","LAQ040","LAQ063","LAQ070","LAQ075","LAQ113","LAQ130","LAT030","LAT041","LAT060","LBA010","LBB041","LBB043","LBB140","LBB190","LBB230","LBD120","LBH010","LBH020","LBH030","LBH060","LBH070","LBH110","LBH120","LBH140","LBH165","LBH180","LBI020","LBI030","LBI040","LBI041","LBJ031","LBJ040","LDB010","LDB061","LDB070","LDB071","LDB090","LDB100","LDB110","LDB160","LDB200","LEA020","LEC030","LFA090","LGB050","PAA010","PAA012","PAA040","PAA050","PAC000","PAC020","PAC030","PAD010","PAD020","PAD030","PAD050","PAF010","PAF040","PAF070","PAH050","PAH070","PAJ030","PAJ050","PAJ051","PAJ110","PAK040","PAK150","PAK160","PAK170","PAL012","PAL015","PAL019","PAL020","PAL025","PAL030","PAL099","PAL105","PAL130","PAL210","PAL241","PAM020","PAM030","PAM040","PAM060","PAM070","PAN075","PAN076","PAQ065","PAQ070","PAQ090","PAQ110","PAQ116","PAQ125","PAT010","PAT042","PAT045","PBA050","PBB155","PBD100","PBD110","PBD130","PBD180","PBH010","PBH070","PBH120","PBH145","PBH170","PBH180","PBI010","PBI020","PBI030","PBI040","PBI041","PBI050","PBJ060","PDB029","PDB115","PDB150","PDB160","PDB180","PEC030","PGA034","PGB030","PGB040","PGB050","PGB065","PGB220","PGB230","PGB485","PSU001","PZD040"],
 
 } // End of mgcp.rules

@@ -52,7 +52,7 @@ describe('TranslationServer', function () {
         });
 
         // console.log(tds_xml);
-        
+
         xml = parser.parseFromString(tds_xml);
         gj = osmtogeojson(xml);
 
@@ -60,10 +60,10 @@ describe('TranslationServer', function () {
 
         var tags = gj.features[0].properties;
         assert.equal(tags["F_CODE"], "AL010");
-        assert.equal(tags["ZI001_SDP"], "DigitalGlobe");
         assert.equal(tags["ZSAX_RS0"], "U");
         assert.equal(tags["UFI"], "0d8b2563-81cf-44d4-8ef7-52c0e862651f");
-        assert.equal(tags["ZI006_MEM"], "<OSM>{\"FOO\":\"1\"}</OSM>");
+        // assert.equal(tags["ZI006_MEM"], "<OSM>{\"FOO\":\"1\"}</OSM>");
+        assert.equal(tags["ZI006_MEM"], "<OSM>{\"FOO\":\"1\",\"source\":\"DigitalGlobe\"}</OSM>");
 
     });
 

@@ -1,13 +1,8 @@
 [
     {
-        "categories": [
-            "combination"
-        ],
+        "categories": [ "combination" ],
         "dataType": "enumeration",
-        "geometries": [
-            "linestring",
-            "area"
-        ],
+        "geometries": [ "linestring", "area" ],
         "influence": 2,
         "name": "oneway",
         "objectType": "tag"
@@ -21,10 +16,7 @@
         "isA": "oneway",
         "name": "oneway=no",
         "objectType": "tag",
-        "similarTo": {
-            "name": "oneway=yes",
-            "weight": 0.5
-        }
+        "similarTo": { "name": "oneway=yes", "weight": 0.5 }
     },
     {
         "aliases": [

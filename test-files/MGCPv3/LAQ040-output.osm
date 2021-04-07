@@ -1,63 +1,61 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
-    <bounds minlat="-25.39058758644857" minlon="153.1365095108274" maxlat="-25.37574366847918" maxlon="153.1412475549687"/>
-    <node visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3904649990361264" lon="153.1412475549686860"/>
-    <node visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3757598710388450" lon="153.1411066089687836"/>
-    <node visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3904487964764591" lon="153.1366504568273683"/>
+    <bounds minlat="-25.39058758644856" minlon="153.1365095108274" maxlat="-25.37574366847918" maxlon="153.1412475549687"/>
+    <node visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3904649990361229" lon="153.1412475549687144"/>
+    <node visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3757598710388486" lon="153.1411066089687836"/>
+    <node visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3904487964764556" lon="153.1366504568273683"/>
     <node visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3757436684791813" lon="153.1365095108274375"/>
-    <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3905875864485679" lon="153.1394262562695587"/>
-    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3758824584512830" lon="153.1392853102696279"/>
+    <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3905875864485644" lon="153.1394262562695587"/>
+    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3758824584512901" lon="153.1392853102696279"/>
     <way visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-5"/>
         <nd ref="-6"/>
-        <tag k="source:ingest:datetime" v="2019-02-28T07:17:50.813Z"/>
         <tag k="bridge" v="yes"/>
-        <tag k="uuid" v="{0d2eae0f-4e9f-4622-bedb-7550a298e0d3}"/>
-        <tag k="source" v="mgcp:laq040"/>
         <tag k="error:circular" v="15"/>
+        <tag k="source" v="mgcp:laq040"/>
+        <tag k="source:ingest:datetime" v="2021-03-26T09:25:39.575Z"/>
+        <tag k="uuid" v="{0d2eae0f-4e9f-4622-bedb-7550a298e0d3}"/>
     </way>
     <way visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-3"/>
         <nd ref="-4"/>
-        <tag k="width" v="5"/>
-        <tag k="source:ingest:datetime" v="2019-02-28T07:17:50.813Z"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="width:minimum_traveled_way" v="3"/>
-        <tag k="condition" v="functional"/>
         <tag k="bridge" v="yes"/>
-        <tag k="source:copyright" v="Copyright 2014 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
         <tag k="bridge:movable" v="no"/>
         <tag k="bridge:span_count" v="1"/>
-        <tag k="transport:type" v="road"/>
-        <tag k="source" v="Very High Resolution Commercial Monoscopic Imagery"/>
-        <tag k="uuid" v="{c287d07a-d796-4083-ae87-1451e24c2e96}"/>
         <tag k="bridge:structure" v="deck"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:datetime" v="2013-01-01T00:00:00Z"/>
-        <tag k="highway" v="road"/>
+        <tag k="condition" v="functional"/>
         <tag k="error:circular" v="15"/>
+        <tag k="source" v="Very High Resolution Commercial Monoscopic Imagery"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:copyright" v="Copyright 2014 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
+        <tag k="source:datetime" v="2013-01-01T00:00:00Z"/>
+        <tag k="source:ingest:datetime" v="2021-03-26T09:25:39.575Z"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="transport:type" v="road"/>
+        <tag k="uuid" v="{c287d07a-d796-4083-ae87-1451e24c2e96}"/>
+        <tag k="width" v="5"/>
+        <tag k="width:minimum_traveled_way" v="3"/>
     </way>
     <way visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1"/>
         <nd ref="-2"/>
-        <tag k="width:minimum_traveled_way" v="3"/>
         <tag k="bridge" v="construction"/>
-        <tag k="source" v="Very High Resolution Commercial Monoscopic Imagery"/>
-        <tag k="construction" v="movable"/>
-        <tag k="name" v="Troll"/>
-        <tag k="material" v="part_metal"/>
         <tag k="bridge:movable" v="lift"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="bridge:span_count" v="5"/>
-        <tag k="source:copyright" v="Copyright 2014 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
-        <tag k="transport:type" v="road"/>
-        <tag k="width" v="5"/>
-        <tag k="source:ingest:datetime" v="2019-02-28T07:17:50.812Z"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="bridge:structure" v="girder"/>
-        <tag k="highway" v="road"/>
-        <tag k="source:datetime" v="2013-01-01T00:00:00Z"/>
-        <tag k="uuid" v="{94b89763-543b-4b0e-967f-fecb55396e37}"/>
+        <tag k="construction" v="movable"/>
         <tag k="error:circular" v="15"/>
+        <tag k="material" v="part_metal"/>
+        <tag k="name" v="Troll"/>
+        <tag k="source" v="Very High Resolution Commercial Monoscopic Imagery"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:copyright" v="Copyright 2014 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
+        <tag k="source:datetime" v="2013-01-01T00:00:00Z"/>
+        <tag k="source:ingest:datetime" v="2021-03-26T09:25:39.574Z"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="transport:type" v="road"/>
+        <tag k="uuid" v="{94b89763-543b-4b0e-967f-fecb55396e37}"/>
+        <tag k="width" v="5"/>
+        <tag k="width:minimum_traveled_way" v="3"/>
     </way>
 </osm>

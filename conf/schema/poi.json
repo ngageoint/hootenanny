@@ -1,12 +1,8 @@
 [
     {
-        "categories": [
-            "poi"
-        ],
+        "categories": [ "poi" ],
         "dataType": "enumeration",
-        "geometries": [
-            "node"
-        ],
+        "geometries": [ "node" ],
         "influence": 1,
         "name": "poi",
         "objectType": "tag"

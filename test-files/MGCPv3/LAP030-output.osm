@@ -16,124 +16,124 @@
     <way visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-11"/>
         <nd ref="-12"/>
-        <tag k="width:minimum_traveled_way" v="4"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:name" v="imagery_(other)"/>
-        <tag k="source" v="mgcp:lap030"/>
+        <tag k="error:circular" v="28.65"/>
         <tag k="highway" v="tertiary"/>
-        <tag k="source:ingest:datetime" v="2020-11-16T15:34:05.402Z"/>
+        <tag k="lanes" v="1"/>
         <tag k="location" v="surface"/>
         <tag k="median" v="no"/>
-        <tag k="uuid" v="{1c214fc8-c843-44b0-b6f4-cdd8649bc5a0}"/>
-        <tag k="source:accuracy:horizontal" v="25"/>
-        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
-        <tag k="lanes" v="1"/>
         <tag k="seasonal" v="no"/>
+        <tag k="source" v="mgcp:lap030"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-03-26T09:31:07.679Z"/>
+        <tag k="source:name" v="imagery_(other)"/>
+        <tag k="uuid" v="{1c214fc8-c843-44b0-b6f4-cdd8649bc5a0}"/>
         <tag k="width" v="4"/>
-        <tag k="error:circular" v="28.65"/>
+        <tag k="width:minimum_traveled_way" v="4"/>
     </way>
     <way visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-9"/>
         <nd ref="-10"/>
-        <tag k="surface" v="paved"/>
-        <tag k="seasonal" v="not_winter"/>
-        <tag k="source:name" v="imagery_(other)"/>
-        <tag k="error:circular" v="28.65"/>
-        <tag k="name" v="back"/>
         <tag k="construction" v="tertiary"/>
-        <tag k="source:accuracy:horizontal" v="25"/>
-        <tag k="lanes" v="1"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="uuid" v="{1b54f920-9fd6-4247-9e4b-8081f12d8125}"/>
-        <tag k="width:minimum_traveled_way" v="4"/>
-        <tag k="width" v="4"/>
-        <tag k="median" v="yes"/>
-        <tag k="source:ingest:datetime" v="2020-11-16T15:34:05.401Z"/>
-        <tag k="location" v="surface"/>
-        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
-        <tag k="source" v="mgcp:lap030"/>
+        <tag k="error:circular" v="28.65"/>
         <tag k="highway" v="construction"/>
+        <tag k="lanes" v="1"/>
+        <tag k="location" v="surface"/>
+        <tag k="median" v="yes"/>
+        <tag k="name" v="back"/>
+        <tag k="seasonal" v="not_winter"/>
+        <tag k="source" v="mgcp:lap030"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-03-26T09:31:07.679Z"/>
+        <tag k="source:name" v="imagery_(other)"/>
+        <tag k="surface" v="paved"/>
+        <tag k="uuid" v="{1b54f920-9fd6-4247-9e4b-8081f12d8125}"/>
+        <tag k="width" v="4"/>
+        <tag k="width:minimum_traveled_way" v="4"/>
     </way>
     <way visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-7"/>
         <nd ref="-8"/>
-        <tag k="surface" v="earth"/>
-        <tag k="seasonal" v="winter"/>
         <tag k="condition" v="damaged"/>
-        <tag k="source:name" v="imagery_(other)"/>
         <tag k="error:circular" v="28.65"/>
-        <tag k="name" v="Beach"/>
-        <tag k="source:accuracy:horizontal" v="25"/>
-        <tag k="lanes" v="1"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="uuid" v="{1b39a7bf-7ac1-4ec8-b7ad-6c2db72e7cb4}"/>
-        <tag k="width:minimum_traveled_way" v="4"/>
-        <tag k="width" v="4"/>
-        <tag k="median" v="yes"/>
-        <tag k="source:ingest:datetime" v="2020-11-16T15:34:05.401Z"/>
-        <tag k="location" v="surface"/>
-        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
-        <tag k="source" v="mgcp:lap030"/>
         <tag k="highway" v="motorway"/>
+        <tag k="lanes" v="1"/>
+        <tag k="location" v="surface"/>
+        <tag k="median" v="yes"/>
+        <tag k="name" v="Beach"/>
+        <tag k="seasonal" v="winter"/>
+        <tag k="source" v="mgcp:lap030"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-03-26T09:31:07.678Z"/>
+        <tag k="source:name" v="imagery_(other)"/>
+        <tag k="surface" v="earth"/>
+        <tag k="uuid" v="{1b39a7bf-7ac1-4ec8-b7ad-6c2db72e7cb4}"/>
+        <tag k="width" v="4"/>
+        <tag k="width:minimum_traveled_way" v="4"/>
     </way>
     <way visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-5"/>
         <nd ref="-6"/>
-        <tag k="width:minimum_traveled_way" v="4"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:name" v="imagery_(other)"/>
-        <tag k="source" v="mgcp:lap030"/>
+        <tag k="error:circular" v="28.65"/>
         <tag k="highway" v="secondary"/>
-        <tag k="source:ingest:datetime" v="2020-11-16T15:34:05.401Z"/>
+        <tag k="lanes" v="2"/>
         <tag k="location" v="underground"/>
         <tag k="median" v="no"/>
-        <tag k="uuid" v="{1a9f676d-5ffa-4776-9712-2fa11078036e}"/>
-        <tag k="source:accuracy:horizontal" v="25"/>
-        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
-        <tag k="surface" v="unpaved"/>
-        <tag k="lanes" v="2"/>
         <tag k="seasonal" v="fair"/>
+        <tag k="source" v="mgcp:lap030"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-03-26T09:31:07.678Z"/>
+        <tag k="source:name" v="imagery_(other)"/>
+        <tag k="surface" v="unpaved"/>
+        <tag k="uuid" v="{1a9f676d-5ffa-4776-9712-2fa11078036e}"/>
         <tag k="width" v="4"/>
-        <tag k="error:circular" v="28.65"/>
+        <tag k="width:minimum_traveled_way" v="4"/>
     </way>
     <way visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-3"/>
         <nd ref="-4"/>
-        <tag k="width:minimum_traveled_way" v="4"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:name" v="imagery_(other)"/>
-        <tag k="source" v="mgcp:lap030"/>
+        <tag k="construction" v="primary"/>
+        <tag k="error:circular" v="28.65"/>
         <tag k="highway" v="construction"/>
-        <tag k="source:ingest:datetime" v="2020-11-16T15:34:05.400Z"/>
+        <tag k="lanes" v="2"/>
         <tag k="location" v="overground"/>
         <tag k="name" v="Main"/>
-        <tag k="uuid" v="{19ee9b5c-6011-4093-a2a7-a304d62381db}"/>
-        <tag k="source:accuracy:horizontal" v="25"/>
-        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
-        <tag k="surface" v="paved"/>
-        <tag k="lanes" v="2"/>
         <tag k="seasonal" v="no"/>
-        <tag k="construction" v="primary"/>
+        <tag k="source" v="mgcp:lap030"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-03-26T09:31:07.677Z"/>
+        <tag k="source:name" v="imagery_(other)"/>
+        <tag k="surface" v="paved"/>
+        <tag k="uuid" v="{19ee9b5c-6011-4093-a2a7-a304d62381db}"/>
         <tag k="width" v="4"/>
-        <tag k="error:circular" v="28.65"/>
+        <tag k="width:minimum_traveled_way" v="4"/>
     </way>
     <way visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1"/>
         <nd ref="-2"/>
-        <tag k="width:minimum_traveled_way" v="4"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:name" v="imagery_(other)"/>
-        <tag k="source" v="mgcp:lap030"/>
-        <tag k="highway" v="road"/>
-        <tag k="source:ingest:datetime" v="2020-11-16T15:34:05.399Z"/>
-        <tag k="location" v="surface"/>
-        <tag k="name" v="Sesame"/>
-        <tag k="uuid" v="{54698b56-a6c0-454d-a77f-fbc9a92cb6e6}"/>
-        <tag k="source:accuracy:horizontal" v="25"/>
-        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
-        <tag k="lanes" v="1"/>
-        <tag k="width" v="4"/>
         <tag k="condition" v="functional"/>
         <tag k="error:circular" v="28.65"/>
+        <tag k="highway" v="road"/>
+        <tag k="lanes" v="1"/>
+        <tag k="location" v="surface"/>
+        <tag k="name" v="Sesame"/>
+        <tag k="source" v="mgcp:lap030"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-03-26T09:31:07.676Z"/>
+        <tag k="source:name" v="imagery_(other)"/>
+        <tag k="uuid" v="{54698b56-a6c0-454d-a77f-fbc9a92cb6e6}"/>
+        <tag k="width" v="4"/>
+        <tag k="width:minimum_traveled_way" v="4"/>
     </way>
 </osm>

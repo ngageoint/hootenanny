@@ -1,29 +1,20 @@
 [
     {
         "dataType": "enumeration",
-        "geometries": [
-            "node",
-            "linestring"
-        ],
+        "geometries": ["node", "linestring"],
         "influence": 1,
         "isA": "poi",
         "name": "leisure",
         "objectType": "tag"
     },
     {
-        "geometries": [
-            "node",
-            "area"
-        ],
+        "geometries": ["node", "area"],
         "isA": "leisure",
         "name": "leisure=*",
         "objectType": "tag"
     },
     {
-        "geometries": [
-            "node",
-            "area"
-        ],
+        "geometries": ["node", "area"],
         "categories": [
             "use",
             "poi",
@@ -33,33 +24,15 @@
         "name": "leisure=park",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "leisure=playground",
-                "weight": 0.8
-            },
-            {
-                "name": "leisure=recreation_ground",
-                "weight": 0.6
-            },
-            {
-                "name": "amenity=fountain",
-                "weight": 0.2
-            },
-            {
-                "name": "leisure=garden",
-                "weight": 0.3
-            },
-            {
-                "name": "leisure=common",
-                "weight": 0.5
-            }
+            {"name": "leisure=playground", "weight": 0.8 },
+            {"name": "leisure=recreation_ground", "weight": 0.6 },
+            {"name": "amenity=fountain", "weight": 0.2 },
+            {"name": "leisure=garden", "weight": 0.3 },
+            {"name": "leisure=common", "weight": 0.5 }
         ]
     },
     {
-        "geometries": [
-            "node",
-            "area"
-        ],
+        "geometries": ["node", "area"],
         "categories": [
             "use",
             "poi",
@@ -69,51 +42,31 @@
         "name": "leisure=playground",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "tourism=picnic_site",
-                "weight": 0.4
-            }
+            {"name": "tourism=picnic_site", "weight": 0.4 }
         ]
     },
     {
-        "geometries": [
-            "area"
-        ],
-        "categories": [
-            "multiuse"
-        ],
+        "geometries": ["area"],
+        "categories": [ "multiuse" ],
         "isA": "leisure",
         "name": "leisure=common",
         "objectType": "tag"
     },
     {
-        "geometries": [
-            "node",
-            "area"
-        ],
+        "geometries": ["node", "area"],
         "isA": "leisure",
         "name": "leisure=recreation_ground",
         "objectType": "tag",
-        "similarTo": {
-            "name": "leisure=stadium",
-            "weight": 0.8
-        }
+        "similarTo": {"name": "leisure=stadium", "weight": 0.8 }
     },
     {
-        "geometries": [
-            "node",
-            "linestring",
-            "area"
-        ],
+        "geometries": ["node", "linestring", "area"],
         "isA": "leisure",
         "name": "leisure=slipway",
         "objectType": "tag"
     },
     {
-        "geometries": [
-            "node",
-            "area"
-        ],
+        "geometries": ["node", "area"],
         "categories": [
             "use",
             "poi"
@@ -126,53 +79,20 @@
         "name": "leisure=sports_centre",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "leisure=stadium",
-                "weight": 0.8
-            },
-            {
-                "name": "leisure=recreation_ground",
-                "weight": 0.8
-            },
-            {
-                "name": "amenity=swimming_pool",
-                "weight": 0.8
-            },
-            {
-                "name": "leisure=water_park",
-                "weight": 0.8
-            },
-            {
-                "name": "leisure=swimming_pool",
-                "weight": 0.8
-            },
-            {
-                "name": "sport=swimming",
-                "weight": 0.8
-            },
-            {
-                "name": "leisure=track",
-                "weight": 0.8
-            },
-            {
-                "name": "leisure=pitch",
-                "weight": 0.3
-            },
-            {
-                "name": "sport=*",
-                "weight": 0.1
-            },
-            {
-                "name": "sport=tennis",
-                "weight": 0.8
-            }
+            {"name": "leisure=stadium", "weight": 0.8 },
+            {"name": "leisure=recreation_ground", "weight": 0.8 },
+            {"name": "amenity=swimming_pool", "weight": 0.8 },
+            {"name": "leisure=water_park", "weight": 0.8 },
+            {"name": "leisure=swimming_pool", "weight": 0.8 },
+            {"name": "sport=swimming", "weight": 0.8 },
+            {"name": "leisure=track", "weight": 0.8 },
+            {"name": "leisure=pitch", "weight": 0.3 },
+            {"name": "sport=*", "weight": 0.1 },
+            {"name": "sport=tennis", "weight": 0.8 }
         ]
     },
     {
-        "geometries": [
-            "node",
-            "area"
-        ],
+        "geometries": ["node", "area"],
         "categories": [
             "use",
             "poi"
@@ -181,17 +101,11 @@
         "name": "leisure=swimming_pool",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "sport=swimming",
-                "weight": 0.9
-            }
+            {"name": "sport=swimming", "weight": 0.9 }
         ]
     },
     {
-        "geometries": [
-            "node",
-            "area"
-        ],
+        "geometries": ["node", "area"],
         "categories": [
             "use",
             "poi"
@@ -201,10 +115,7 @@
         "objectType": "tag"
     },
     {
-        "geometries": [
-            "node",
-            "area"
-        ],
+        "geometries": ["node", "area"],
         "categories": [
             "use",
             "poi"
@@ -213,35 +124,23 @@
         "name": "leisure=ice_rink",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "sport=ice_skating",
-                "weight": 0.9
-            }
+            {"name": "sport=ice_skating", "weight": 0.9 }
         ]
     },
     {
-        "geometries": [
-            "node",
-            "area"
-        ],
+        "geometries": ["node", "area"],
         "isA": "leisure",
         "name": "leisure=amusement_arcade",
         "objectType": "tag"
     },
     {
-        "geometries": [
-            "node",
-            "way"
-        ],
+        "geometries": ["node", "linestring"],
         "isA": "leisure",
         "name": "leisure=track",
         "objectType": "tag"
     },
     {
-        "geometries": [
-            "node",
-            "area"
-        ],
+        "geometries": ["node", "area"],
         "categories": [
             "multiuse"
         ],
@@ -250,10 +149,7 @@
         "objectType": "tag"
     },
     {
-        "geometries": [
-            "node",
-            "area"
-        ],
+        "geometries": ["node", "area"],
         "categories": [
             "use",
             "poi",
@@ -263,16 +159,11 @@
         "name": "leisure=golf_course",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "sport=golf",
-                "weight": 0.9
-            }
+            {"name": "sport=golf", "weight": 0.9 }
         ]
     },
     {
-        "geometries": [
-            "area"
-        ],
+        "geometries": ["area"],
         "categories": [
             "use",
             "multiuse"
@@ -282,10 +173,7 @@
         "objectType": "tag"
     },
     {
-        "geometries": [
-            "node",
-            "area"
-        ],
+        "geometries": ["node", "area"],
         "categories": [
             "use",
             "poi",
@@ -295,31 +183,18 @@
         "name": "leisure=garden",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "building=greenhouse",
-                "weight": 0.6
-            },
-            {
-                "name": "building=arboretum",
-                "weight": 0.4
-            }
+            {"name": "building=greenhouse", "weight": 0.6 },
+            {"name": "building=arboretum", "weight": 0.4 }
         ]
     },
     {
-        "geometries": [
-            "node",
-            "linestring",
-            "area"
-        ],
+        "geometries": ["node", "linestring", "area"],
         "isA": "leisure",
         "name": "leisure=fishing",
         "objectType": "tag"
     },
     {
-        "geometries": [
-            "node",
-            "area"
-        ],
+        "geometries": ["node", "area"],
         "categories": [
             "use",
             "poi"
@@ -327,9 +202,6 @@
         "isA": "leisure",
         "name": "leisure=pitch",
         "objectType": "tag",
-        "similarTo": {
-            "name": "leisure=stadium",
-            "weight": 0.8
-        }
+        "similarTo": {"name": "leisure=stadium", "weight": 0.8 }
     }
 ]

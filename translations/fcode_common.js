@@ -180,7 +180,7 @@ fcodeCommon = {
       ['F_CODE','AN085','railway','signal'], // Railway Signal
       ['F_CODE','AP010','highway','track'], // Cart Track
       ['F_CODE','AP020','junction','yes'], // Road Interchange - See RIT
-      ['F_CODE','AP030','highway','road'], // Road - See Custom rules
+      ['F_CODE','AP030','highway','yes'], // Road - See Custom rules
       ['F_CODE','AP033','highway','turning_circle'], // Engineered Turn Around Site
       ['F_CODE','AP040','barrier','gate'], // Gate
       ['F_CODE','AP041','barrier','yes'], // Vehicle Barrier
@@ -299,7 +299,7 @@ fcodeCommon = {
       ['F_CODE','BH075','amenity','fountain'], // Fountain
       ['F_CODE','BH077','natural','hummock'], // Hummock
       ['F_CODE','BH082','water','lake'], // Inland Waterbody
-      ['F_CODE','BH090','water','intermittent'], // Land Subject to Inundation
+      ['F_CODE','BH090','subject_to_inundation','yes'], // Land Subject to Inundation
       ['F_CODE','BH100','water','moat'], // Moat
       ['F_CODE','BH110','pipeline:type','penstock'], // Penstock
       ['F_CODE','BH116','natural','aquifer'], // Aquifer
@@ -384,7 +384,7 @@ fcodeCommon = {
       ['F_CODE','FA000','boundary','administrative'], // GGDM3/NAS7 Administrative Boundary
       ['F_CODE','FA002','place','geopolitical_entity'], // GGDM3/NAS7 GEOPOLITICAL_ENTITY
       ['F_CODE','FA003','place','administrative_subdivision'], // GGDM3/NAS7 ADMINISTRATIVE_SUBDIVISION
-      ['F_CODE','FA012','protect_class','16'], // Contaminated Region
+      ['F_CODE','FA012','hazard','contamination'], // Contaminated Region
       ['F_CODE','FA015','military','range'], // Firing Range/Gunnery Range
       ['F_CODE','FA100','landuse','test_area'], // Test Area, Test Site
       ['F_CODE','FA110','boundary','date_line'], // GGDM3/NAS7 International Date Line

@@ -1,12 +1,8 @@
 [
     {
-        "categories": [
-            "combination"
-        ],
+        "categories": [ "combination" ],
         "dataType": "enumeration",
-        "geometries": [
-            "linestring"
-        ],
+        "geometries": [ "linestring" ],
         "influence": 1,
         "name": "divider",
         "objectType": "tag"

@@ -1,13 +1,8 @@
 [
     {
-        "categories": [
-            "combination"
-        ],
+        "categories": [ "combination" ],
         "dataType": "enumeration",
-        "geometries": [
-            "node",
-            "area"
-        ],
+        "geometries": [ "node", "area" ],
         "influence": 1,
         "name": "religion",
         "objectType": "tag"
@@ -46,10 +41,7 @@
         "isA": "religion",
         "name": "religion=bon",
         "objectType": "tag",
-        "similarTo": {
-            "name": "religion=buddhist",
-            "weight": 0.3
-        }
+        "similarTo": { "name": "religion=buddhist", "weight": 0.3 }
     },
     {
         "isA": "religion",
@@ -72,9 +64,7 @@
         "objectType": "tag"
     },
     {
-        "aliases": [
-            "religion=chtistian"
-        ],
+        "aliases": [ "religion=chtistian" ],
         "isA": "religion",
         "name": "religion=christian",
         "objectType": "tag"
@@ -84,24 +74,15 @@
         "name": "religion=christian and muslim",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "religion=christian",
-                "weight": 0.5
-            },
-            {
-                "name": "religion=muslim",
-                "weight": 0.5
-            }
+            { "name": "religion=christian", "weight": 0.5 },
+            { "name": "religion=muslim", "weight": 0.5 }
         ]
     },
     {
         "isA": "religion",
         "name": "religion=confucian",
         "objectType": "tag",
-        "similarTo": {
-            "name": "religion=humanist",
-            "weight": 0.4
-        }
+        "similarTo": { "name": "religion=humanist", "weight": 0.4 }
     },
     {
         "isA": "religion=druze",
@@ -113,14 +94,8 @@
         "name": "religion=druze",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "religion=muslim",
-                "weight": 0.5
-            },
-            {
-                "name": "religion=unitarian",
-                "weight": 0.5
-            }
+            { "name": "religion=muslim", "weight": 0.5 },
+            { "name": "religion=unitarian", "weight": 0.5 }
         ]
     },
     {
@@ -138,24 +113,15 @@
         "name": "religion=gnostic",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "religion=christian",
-                "weight": 0.6
-            },
-            {
-                "name": "religion=buddhist",
-                "weight": 0.4
-            }
+            { "name": "religion=christian", "weight": 0.6 },
+            { "name": "religion=buddhist", "weight": 0.4 }
         ]
     },
     {
         "isA": "religion",
         "name": "religion=hare_krishna",
         "objectType": "tag",
-        "similarTo": {
-            "name": "religion=hindu",
-            "weight": 0.7
-        }
+        "similarTo": { "name": "religion=hindu", "weight": 0.7 }
     },
     {
         "isA": "religion",
@@ -167,18 +133,9 @@
         "name": "religion=humanist",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "religion=christian",
-                "weight": 0.5
-            },
-            {
-                "name": "religion=jewish",
-                "weight": 0.5
-            },
-            {
-                "name": "religion=buddhist",
-                "weight": 0.5
-            }
+            { "name": "religion=christian", "weight": 0.5 },
+            { "name": "religion=jewish", "weight": 0.5 },
+            { "name": "religion=buddhist", "weight": 0.5 }
         ]
     },
     {
@@ -195,10 +152,7 @@
         "isA": "religion",
         "name": "religion=konkokyo",
         "objectType": "tag",
-        "similarTo": {
-            "name": "religion=shinto",
-            "weight": 0.7
-        }
+        "similarTo": { "name": "religion=shinto", "weight": 0.7 }
     },
     {
         "isA": "religion",
@@ -209,10 +163,7 @@
         "isA": "religion",
         "name": "religion=masonic",
         "objectType": "tag",
-        "similarTo": {
-            "name": "religion=christian",
-            "weight": 0.9
-        }
+        "similarTo": { "name": "religion=christian", "weight": 0.9 }
     },
     {
         "isA": "religion=non-denominational",
@@ -248,10 +199,7 @@
         "isA": "religion",
         "name": "religion=norse_paganism",
         "objectType": "tag",
-        "similarTo": {
-            "name": "religion=pagan",
-            "weight": 0.8
-        }
+        "similarTo": { "name": "religion=pagan", "weight": 0.8 }
     },
     {
         "isA": "religion",
@@ -302,10 +250,7 @@
         "isA": "religion",
         "name": "religion=rosicrucian",
         "objectType": "tag",
-        "similarTo": {
-            "name": "religion=christian",
-            "weight": 0.7
-        }
+        "similarTo": { "name": "religion=christian", "weight": 0.7 }
     },
     {
         "isA": "religion",
@@ -321,19 +266,13 @@
         "isA": "religion",
         "name": "religion=shamanic",
         "objectType": "tag",
-        "similarTo": {
-            "name": "religion=animist",
-            "weight": 0.5
-        }
+        "similarTo": { "name": "religion=animist", "weight": 0.5 }
     },
     {
         "isA": "religion",
         "name": "religion=shinto",
         "objectType": "tag",
-        "similarTo": {
-            "name": "religion=shamanic",
-            "weight": 0.4
-        }
+        "similarTo": { "name": "religion=shamanic", "weight": 0.4 }
     },
     {
         "isA": "religion",
@@ -344,10 +283,7 @@
         "isA": "religion",
         "name": "religion=spiritualist",
         "objectType": "tag",
-        "similarTo": {
-            "name": "religion=christian",
-            "weight": 0.3
-        }
+        "similarTo": { "name": "religion=christian", "weight": 0.3 }
     },
     {
         "isA": "religion",
@@ -359,28 +295,16 @@
         "name": "religion=tamil",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "religion=hindu",
-                "weight": 0.4
-            },
-            {
-                "name": "religion=jain",
-                "weight": 0.4
-            },
-            {
-                "name": "religion=buddhist",
-                "weight": 0.4
-            }
+            { "name": "religion=hindu", "weight": 0.4 },
+            { "name": "religion=jain", "weight": 0.4 },
+            { "name": "religion=buddhist", "weight": 0.4 }
         ]
     },
     {
         "isA": "religion",
         "name": "religion=taoist",
         "objectType": "tag",
-        "similarTo": {
-            "name": "religion=buddhist",
-            "weight": 0.3
-        }
+        "similarTo": { "name": "religion=buddhist", "weight": 0.3 }
     },
     {
         "isA": "religion=tenrikyo",
@@ -391,10 +315,7 @@
         "isA": "religion",
         "name": "religion=tenrikyo",
         "objectType": "tag",
-        "similarTo": {
-            "name": "religion=shinto",
-            "weight": 0.7
-        }
+        "similarTo": { "name": "religion=shinto", "weight": 0.7 }
     },
     {
         "isA": "religion",
@@ -405,10 +326,7 @@
         "isA": "religion",
         "name": "religion=umbanda",
         "objectType": "tag",
-        "similarTo": {
-            "name": "religion=christian",
-            "weight": 0.4
-        }
+        "similarTo": { "name": "religion=christian", "weight": 0.4 }
     },
     {
         "isA": "religion=unitarian_universalist",
@@ -445,14 +363,8 @@
         "name": "religion=yazidi",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "religion=muslim",
-                "weight": 0.7
-            },
-            {
-                "name": "religion=zoroastrian",
-                "weight": 0.7
-            }
+            { "name": "religion=muslim", "weight": 0.7 },
+            { "name": "religion=zoroastrian", "weight": 0.7 }
         ]
     },
     {

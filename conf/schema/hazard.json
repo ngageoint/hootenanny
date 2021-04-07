@@ -3,19 +3,17 @@
         "dataType": "enumeration",
         "geometries": [ "node", "area" ],
         "influence": 1,
-        "isA": "poi",
-        "name": "transport",
+        "name": "hazard",
         "objectType": "tag"
     },
     {
-        "isA": "transport",
-        "name": "transport=*",
+        "isA": "hazard",
+        "name": "hazard=*",
         "objectType": "tag"
     },
     {
-        "categories": ["poi"],
-        "isA": "transport",
-        "name": "transport=station",
+        "isA": "hazard",
+        "name": "hazard=contamination",
         "objectType": "tag"
     }
 ]

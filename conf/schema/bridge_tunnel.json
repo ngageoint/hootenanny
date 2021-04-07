@@ -1,10 +1,7 @@
 [
     {
         "dataType": "enumeration",
-        "geometries": [
-            "linestring",
-            "relation"
-        ],
+        "geometries": [ "linestring", "relation" ],
         "influence": 1,
         "name": "bridge_tunnel=unknown",
         "objectType": "tag"
