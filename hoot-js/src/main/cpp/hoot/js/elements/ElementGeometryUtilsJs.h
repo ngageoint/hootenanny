@@ -46,7 +46,6 @@ private:
   ElementGeometryUtilsJs() = default;
 
   static void calculateLength(const v8::FunctionCallbackInfo<v8::Value>& args);
-  //static void haveGeometricRelationship(const v8::FunctionCallbackInfo<v8::Value>& args);
 };
 
 }

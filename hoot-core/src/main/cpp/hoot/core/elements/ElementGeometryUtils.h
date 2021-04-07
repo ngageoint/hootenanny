@@ -63,20 +63,6 @@ public:
     const GeometricRelationship& relationship, ConstOsmMapPtr map);
 
   /**
-   * Determines if an element has a geometric relationship with a boundary
-   *
-   * @param element the element to examine
-   * @param bounds the bounds geometry to examine
-   * @param relationship the geometric relationship to check for between the element and the bounds
-   * @param map map owning the input element
-   * @return true if the element and the bounds have the specified geometric relationship; false
-   * otherwise or if the relationship could not be calculated
-   */
-//  static bool haveGeometricRelationship(
-//    const ConstElementPtr& element, const std::shared_ptr<geos::geom::Geometry>& bounds,
-//    const GeometricRelationship& relationship, ConstOsmMapPtr map);
-
-  /**
    * Calculate the length of the given way in meters. The projection must be planar.
    */
   static Meters calculateLength(const ConstElementPtr& e,
