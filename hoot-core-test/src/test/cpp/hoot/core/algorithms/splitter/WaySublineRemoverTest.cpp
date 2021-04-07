@@ -53,7 +53,6 @@ public:
     "test-files/algorithms/splitter/WaySublineRemoverTest/",
     "test-output/algorithms/splitter/WaySublineRemoverTest/")
   {
-    setResetType(ResetAll);
   }
 
   void runSplitInTheMiddleTest()
