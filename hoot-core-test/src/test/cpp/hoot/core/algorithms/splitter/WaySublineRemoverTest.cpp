@@ -29,6 +29,7 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/splitter/WaySublineRemover.h>
+#include <hoot/core/elements/ElementGeometryUtils.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/elements/MapProjector.h>
@@ -38,9 +39,12 @@ namespace hoot
 
 class WaySublineRemoverTest : public HootTestFixture
 {
-    CPPUNIT_TEST_SUITE(WaySublineRemoverTest);
-    CPPUNIT_TEST(runBasicTest);
-    CPPUNIT_TEST_SUITE_END();
+  CPPUNIT_TEST_SUITE(WaySublineRemoverTest);
+  CPPUNIT_TEST(runSplitInTheMiddleTest);
+  CPPUNIT_TEST(runSplitAtStartTest);
+  CPPUNIT_TEST(runSplitAtEndTest);
+  CPPUNIT_TEST(runMapNotInPlanarTest);
+  CPPUNIT_TEST_SUITE_END();
 
 public:
 
@@ -49,11 +53,90 @@ public:
     "test-files/algorithms/splitter/WaySublineRemoverTest/",
     "test-output/algorithms/splitter/WaySublineRemoverTest/")
   {
+    setResetType(ResetAll);
   }
 
-  void runBasicTest()
+  void runSplitInTheMiddleTest()
   {
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    OsmMapReaderFactory::read(map, "test-files/ToyTestA.osm", false, Status::Unknown1);
+    MapProjector::projectToPlanar(map);
 
+    WayPtr way = std::dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "1"));
+
+    WayLocation start(map, way, 25.0);
+    WayLocation end(map, way, 50.0);
+    std::vector<ElementId> splitWayIds = WaySublineRemover::remove(way, start, end, map);
+    LOG_VART(splitWayIds.size());
+
+    CPPUNIT_ASSERT_EQUAL((size_t)2, splitWayIds.size());
+
+    MapProjector::projectToWgs84(map);
+    OsmMapWriterFactory::write(map, _outputPath + "runSplitInTheMiddleTest-out.osm", false, true);
+    HOOT_FILE_EQUALS(
+      _inputPath + "runSplitInTheMiddleTest-out.osm",
+      _outputPath + "runSplitInTheMiddleTest-out.osm")
+  }
+
+  void runSplitAtStartTest()
+  {
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    OsmMapReaderFactory::read(map, "test-files/ToyTestA.osm", false, Status::Unknown1);
+    MapProjector::projectToPlanar(map);
+
+    WayPtr way = std::dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "1"));
+
+    WayLocation start(map, way, 0.0);
+    WayLocation end(map, way, 50.0);
+    std::vector<ElementId> splitWayIds = WaySublineRemover::remove(way, start, end, map);
+    LOG_VART(splitWayIds.size());
+
+    CPPUNIT_ASSERT_EQUAL((size_t)1, splitWayIds.size());
+
+    MapProjector::projectToWgs84(map);
+    OsmMapWriterFactory::write(map, _outputPath + "runSplitAtStartTest-out.osm", false, true);
+    HOOT_FILE_EQUALS(
+      _inputPath + "runSplitAtStartTest-out.osm", _outputPath + "runSplitAtStartTest-out.osm")
+  }
+
+  void runSplitAtEndTest()
+  {
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    OsmMapReaderFactory::read(map, "test-files/ToyTestA.osm", false, Status::Unknown1);
+    MapProjector::projectToPlanar(map);
+
+    WayPtr way = std::dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "1"));
+
+    WayLocation start(map, way, 25.0);
+    WayLocation end(map, way, ElementGeometryUtils::calculateLength(way, map));
+    std::vector<ElementId> splitWayIds = WaySublineRemover::remove(way, start, end, map);
+    LOG_VART(splitWayIds.size());
+
+    CPPUNIT_ASSERT_EQUAL((size_t)1, splitWayIds.size());
+
+    MapProjector::projectToWgs84(map);
+    OsmMapWriterFactory::write(map, _outputPath + "runSplitAtEndTest-out.osm", false, true);
+    HOOT_FILE_EQUALS(
+      _inputPath + "runSplitAtEndTest-out.osm", _outputPath + "runSplitAtEndTest-out.osm")
+  }
+
+  void runMapNotInPlanarTest()
+  {
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    // empty map defaults to wgs84; don't reproject it to planar
+    WayPtr way;
+
+    QString exceptionMsg;
+    try
+    {
+      WaySublineRemover::remove(way, WayLocation(), WayLocation(), map);
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT_EQUAL(
+      QString("Map must be in a planar projection.").toStdString(), exceptionMsg.toStdString());
   }
 };
 

@@ -22,7 +22,6 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2021 DigitalGlobe (http://www.digitalglobe.com/)
  * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
  */
 
@@ -38,7 +37,7 @@ namespace hoot
 class WayLocation;
 
 /**
- * Removes sublines of ways
+ * Removes a subline from a way
  */
 class WaySublineRemover
 {
@@ -48,11 +47,22 @@ public:
    * Removes a subline from a way
    *
    * @param way the way to modify
-   * @param start the starting point at which to remove a subline
-   * @param end the ending point at which to remove a subline
-   * @param map the map owring the way
+   * @param start the starting point at which to remove a subline from the way
+   * @param end the ending point at which to remove a subline from the way
+   * @param map the map owning the way
+   * @return IDs of the ways created and added back to the map as a result of the subline removal
    */
-  static void remove(WayPtr way, WayLocation& start, WayLocation& end, const OsmMapPtr& map);
+  static std::vector<ElementId> remove(
+    WayPtr& way, const WayLocation& start, const WayLocation& end, const OsmMapPtr& map);
+
+private:
+
+  /*
+   * Splits a way at the specified split location and keeps either the first of the split segments
+   * or the second.
+   */
+  static std::vector<ElementId> _split(
+    WayPtr& way, WayLocation& splitLocation, const OsmMapPtr& map, const bool keepFirstSegment);
 };
 
 }
