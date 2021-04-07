@@ -246,7 +246,7 @@ tds61.rules = {
     'DPAU':'aquifer:depth:upper', // Aquifer Depth <upper value>
     'DZC':'deck_count', // Deck Count
     'DZP':'depth:maximum_below_surface', // Deepest Depth Below Surface Level
-    'EPW':'generator:output:electricity', // Electrical Power Generation Capacity
+    'EPW':'plant:output:electricity', // Electrical Power Generation Capacity
     'EVA':'source:accuracy:elevation', // Elevation Vertical Accuracy (90%)
     'FCL':'ferry:crossing_distance', // Ferry Crossing Distance
     //    'FCSUBTYPE':'etds:fcsubtype', // Very ESRI Specific. Ignored for now
@@ -2318,12 +2318,12 @@ tds61.rules = {
 
     // POS - Power Source
     // ['POS','-999999',undefined,undefined], // No Information
-    ['POS','1','generator:source','geothermal'], // Geothermal
-    ['POS','2','generator:source','hydro'], // Hydro-electric
-    ['POS','3','generator:source','nuclear'], // Nuclear
-    ['POS','4','generator:source','thermal'], // Thermal
-    ['POS','5','generator:source','tidal'], // Tidal
-    ['POS','999','generator:source','other'], // Other
+    ['POS','1','plant:source','geothermal'], // Geothermal
+    ['POS','2','plant:source','hydro'], // Hydro-electric
+    ['POS','3','plant:source','nuclear'], // Nuclear
+    ['POS','4','plant:source','thermal'], // Thermal
+    ['POS','5','plant:source','tidal'], // Tidal
+    ['POS','999','plant:source','other'], // Other
 
     // This attribute is handled in Pre and Post processing. See ZI014_PPO
     // PPO - Product
@@ -2484,7 +2484,7 @@ tds61.rules = {
     ['RRC','14','railway','tram'], // Tramway
     ['RRC','15','railway','funicular'], // Funicular
     ['RRC','24','railway','museum'], // Museum
-    ['RRC','32','railway','automated_transit_system'], // Automated Transit System
+    ['RRC','32','automated_transit_system','yes'], // Automated Transit System
     ['RRC','33','railway','longhaul'], // Long-haul
     ['RRC','999','railway','Other'], // Other
 
@@ -3159,13 +3159,13 @@ tds61.rules = {
 
     // WCC - Watercourse Channel Type
     // ['WCC','-999999',undefined,undefined], // No Information
-    ['WCC','1','waterway','stream'], // Channelized Stream
-    ['WCC','2','waterway','braided_stream'], // Braided Stream
-    ['WCC','3','waterway','gorge'], // Gorge
+    ['WCC','1','channel:type','channelized_stream'], // Channelized Stream
+    ['WCC','2','channel:type','braided_stream'], // Braided Stream
+    ['WCC','3','channel:type','gorge'], // Gorge
     ['WCC','4','wadi','yes'], // Wadi
     ['WCC','7','waterway','river'], // Normal Channel
-    ['WCC','8','waterway','lost_watercourse'], // Lost Watercourse
-    ['WCC','999','waterway','other'], // Other
+    ['WCC','8','channel:type','lost_watercourse'], // Lost Watercourse
+    ['WCC','999','channel:type','other'], // Other
 
     // WDAC - Average Water Depth <interval closure>
     ['WDAC','2','depth:average:closure','open_interval'], // Open Interval

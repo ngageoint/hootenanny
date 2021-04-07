@@ -11,31 +11,28 @@
         "objectType": "tag"
     },
     {
-        "geometries": [
-            "area"
-        ],
-        "categories": [
-            "poi"
-        ],
+        "#":"Flood prone areas",
+        "geometries": [ "area" ],
+        "isA": "water",
+        "name": "subject_to_inundation=yes",
+        "objectType": "tag"
+    },
+    {
+        "geometries": [ "area" ],
+        "categories": [ "poi" ],
         "isA": "water",
         "name": "water=pond",
         "objectType": "tag"
     },
     {
-        "geometries": [
-            "area"
-        ],
-        "categories": [
-            "poi"
-        ],
+        "geometries": [ "area" ],
+        "categories": [ "poi" ],
         "isA": "water",
         "name": "water=lake",
         "objectType": "tag"
     },
     {
-        "geometries": [
-            "area"
-        ],
+        "geometries": [ "area" ],
         "isA": "waterway=riverbank",
         "name": "water=river",
         "objectType": "tag"

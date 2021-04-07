@@ -4,14 +4,8 @@
         "name": "destroyed:place=populated",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "place=populated",
-                "weight": 0.4
-            },
-            {
-                "name": "historic=ruins",
-                "weight": 0.8
-            }
+            { "name": "place=populated", "weight": 0.4 },
+            { "name": "historic=ruins", "weight": 0.8 }
         ]
     }
 ]

@@ -1,11 +1,7 @@
 [
     {
         "dataType": "text",
-        "geometries": [
-            "node",
-            "linestring",
-            "relation"
-        ],
+        "geometries": [ "node", "linestring", "relation" ],
         "name": "network",
         "objectType": "tag"
     }

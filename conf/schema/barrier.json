@@ -1,10 +1,7 @@
 [
     {
         "dataType": "enumeration",
-        "geometries": [
-            "node",
-            "linestring"
-        ],
+        "geometries": [ "node", "linestring" ],
         "influence": 1,
         "name": "barrier",
         "objectType": "tag"
@@ -15,45 +12,29 @@
         "objectType": "tag"
     },
     {
-        "categories": [
-            "poi"
-        ],
+        "categories": [ "poi" ],
         "description": "Toll is a charge payable for permission to use a particular bridge or road. A toll booth is a place where such charge is collected, either manually or automatically.",
-        "geometries": [
-            "node"
-        ],
+        "geometries": [ "node" ],
         "isA": "barrier",
         "name": "barrier=toll_booth",
         "objectType": "tag",
-        "similarTo": {
-            "name": "building=transportation",
-            "weight": 0.8
-        }
+        "similarTo": { "name": "building=transportation", "weight": 0.8 }
     },
     {
-        "geometries": [
-            "linestring",
-            "area"
-        ],
+        "geometries": [ "linestring" ],
         "isA": "barrier",
         "name": "barrier=wall",
         "objectType": "tag"
     },
     {
-        "categories": [
-            "poi"
-        ],
-        "geometries": [
-            "node"
-        ],
+        "categories": [ "poi" ],
+        "geometries": [ "node" ],
         "isA": "barrier",
         "name": "barrier=border_control",
         "objectType": "tag"
     },
     {
-        "geometries": [
-            "linestring"
-        ],
+        "geometries": [ "linestring" ],
         "isA": "barrier",
         "name": "barrier=fence",
         "objectType": "tag"

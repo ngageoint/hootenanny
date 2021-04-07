@@ -1,8 +1,10 @@
-16:20:31.080 INFO   ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from ...d/slow/ConflateCmdStatsTest/generic-rivers-out.osm...
-16:20:31.083 INFO   .../hoot/core/io/OsmXmlReader.cpp( 915) Read 0 elements from input.        16:20:31.083 INFO   .../hoot/core/io/OsmXmlReader.cpp( 915) Read 0 elements from input.        16:20:31.100 INFO   ...ore/io/OsmMapReaderFactory.cpp( 227) Read 459 elements from input in: 00:00.
-16:20:31.100 INFO   ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from ...d/slow/ConflateCmdStatsTest/generic-rivers-out.osm...
-16:20:31.101 INFO   .../hoot/core/io/OsmXmlReader.cpp( 915) Read 0 elements from input.        16:20:31.101 INFO   .../hoot/core/io/OsmXmlReader.cpp( 915) Read 0 elements from input.        16:20:31.117 INFO   ...ore/io/OsmMapReaderFactory.cpp( 227) Read 459 elements from input in: 00:00.
-16:20:31.121 STATUS .../cpp/hoot/core/cmd/DiffCmd.cpp( 145) Map difference calculated in 00:00 total.
+11:08:51.889 INFO   ...ore/io/OsmMapReaderFactory.cpp( 184) Loading map from ...d/slow/ConflateCmdStatsTest/generic-rivers-out.osm...
+11:08:51.891 INFO   .../hoot/core/io/OsmXmlReader.cpp( 911) Read 0 elements from input.        11:08:51.891 INFO   .../hoot/core/io/OsmXmlReader.cpp( 911) Read 0 elements from input.        11:08:51.907 INFO   .../hoot/core/io/OsmXmlReader.cpp( 475) 	Reporting missing elements...
+11:08:51.907 INFO   ...ore/io/OsmMapReaderFactory.cpp( 228) Read 459 elements from input in: 00:00.
+11:08:51.907 INFO   ...ore/io/OsmMapReaderFactory.cpp( 184) Loading map from ...d/slow/ConflateCmdStatsTest/generic-rivers-out.osm...
+11:08:51.908 INFO   .../hoot/core/io/OsmXmlReader.cpp( 911) Read 0 elements from input.        11:08:51.908 INFO   .../hoot/core/io/OsmXmlReader.cpp( 911) Read 0 elements from input.        11:08:51.923 INFO   .../hoot/core/io/OsmXmlReader.cpp( 475) 	Reporting missing elements...
+11:08:51.923 INFO   ...ore/io/OsmMapReaderFactory.cpp( 228) Read 459 elements from input in: 00:00.
+11:08:51.927 STATUS .../cpp/hoot/core/cmd/DiffCmd.cpp( 145) Map difference calculated in 00:00 total.
 stats = (stat) OR (input map 1 stat) (input map 2 stat) (output map stat)
 Nodes	338	176	407	
 Ways	14	15	52	
@@ -63,7 +65,7 @@ Percentage of Waterways Marked for Review	0	0	0
 Percentage of Unmatched Waterways From Map 1	100	0	12	
 Percentage of Unmatched Waterways From Map 2	0	100	66	
 Percentage of Unmatched Waterways	100	100	78	
-Translated Populated Tags	14	107	381	
+Translated Populated Tags	14	92	332	
 Difference Between Total Features in Output and Total Features in Inputs			21	
 Percentage Difference Between Total Features in Output and Total Features in Inputs			72.41379310344827	
 Percentage of Number of Total Map 1 Features Matched With Map 2 Features			78.57142857142857	
@@ -72,10 +74,10 @@ Percentage of Number of Total Map 2 Features Not Matched With Map 1 Features			2
 Percentage of Length of Map 1 Waterways Matched With Map 2 Waterways			42.94802572003714	
 Percentage of Length of Map 1 Waterways Not Matched With Map 2 Waterways			57.05197427503207	
 Percentage of Length of Map 2 Waterways Not Matched With Map 1 Waterways			33.54172074979272	
-Calculate Stats for Input 1 Time (sec)				9.309667110443115
-Calculate Stats for Input 2 Time (sec)				0.9975359439849854
-Apply Pre-Conflate Ops Time (sec)				0.03124594688415527
-Apply Post-Conflate Ops Time (sec)				0.02791690826416016
-Calculate Stats for Output Time (sec)				1.162448883056641
+Calculate Stats for Input 1 Time (sec)				7.859056949615479
+Calculate Stats for Input 2 Time (sec)				0.8433070182800293
+Apply Pre-Conflate Ops Time (sec)				0.03192591667175293
+Apply Post-Conflate Ops Time (sec)				0.02587389945983887
+Calculate Stats for Output Time (sec)				0.8490250110626221
 
-16:20:30.454 STATUS ...pp/hoot/core/util/Progress.cpp(  86) Conflate (100%): Conflation job completed in 00:10 for reference map: ...NIGS_Rivers_REF1-cropped-2.osm and secondary map: ...waterway_ss_REF2-cropped-2.osm and written to output: ...atsTest/generic-rivers-out.osm
+11:08:51.573 STATUS ...pp/hoot/core/util/Progress.cpp(  86) Conflate (100%): Conflation job completed in 00:09 for reference map: ...NIGS_Rivers_REF1-cropped-2.osm and secondary map: ...waterway_ss_REF2-cropped-2.osm and written to output: ...atsTest/generic-rivers-out.osm

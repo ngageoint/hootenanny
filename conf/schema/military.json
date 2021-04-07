@@ -12,7 +12,7 @@
     },
     {
         "description": "TODO: can't find this in the OSM schema",
-        "geometries": ["way"],
+        "geometries": ["linestring"],
         "isA": "military",
         "name": "military=revetment",
         "objectType": "tag"
@@ -27,6 +27,18 @@
         "geometries": ["node","area"],
         "isA": "military",
         "name": "military=danger_area",
+        "objectType": "tag"
+    },
+    {
+        "geometries": ["node","area"],
+        "isA": "military",
+        "name": "military=range",
+        "objectType": "tag"
+    },
+    {
+        "geometries": ["node","area"],
+        "isA": "military",
+        "name": "military=anti_air_artillery",
         "objectType": "tag"
     },
     {
@@ -57,14 +69,8 @@
         "name": "military=cantonment",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "landuse=installation",
-                "weight": 0.9
-            },
-            {
-                "name": "landuse=residential",
-                "weight": 0.9
-            }
+            {"name": "landuse=installation", "weight": 0.9 },
+            {"name": "landuse=residential", "weight": 0.9 }
         ]
     }
 ]

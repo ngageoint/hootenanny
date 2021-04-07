@@ -4,14 +4,8 @@
         "name": "all_weather=fair",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "all_weather=no",
-                "weight": 0.7
-            },
-            {
-                "name": "all_weather=yes",
-                "weight": 0.3
-            }
+            { "name": "all_weather=no", "weight": 0.7 },
+            { "name": "all_weather=yes", "weight": 0.3 }
         ]
     },
     {
@@ -23,10 +17,7 @@
         "dataType": "enumeration",
         "influence": 1,
         "name": "all_weather=unknown",
-        "geometries": [
-            "node",
-            "linestring"
-        ],
+        "geometries": [ "node", "linestring" ],
         "objectType": "tag"
     },
     {
@@ -34,14 +25,8 @@
         "name": "all_weather=winter",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "all_weather=no",
-                "weight": 0.3
-            },
-            {
-                "name": "all_weather=yes",
-                "weight": 0.7
-            }
+            { "name": "all_weather=no", "weight": 0.3 },
+            { "name": "all_weather=yes", "weight": 0.7 }
         ]
     },
     {

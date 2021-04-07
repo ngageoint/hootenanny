@@ -5,11 +5,7 @@
             "combination"
         ],
         "dataType": "enumeration",
-        "geometries": [
-            "node",
-            "linestring",
-            "area"
-        ],
+        "geometries": [ "node", "linestring", "area" ],
         "influence": 1,
         "name": "use",
         "objectType": "tag"

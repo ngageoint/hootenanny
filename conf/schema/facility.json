@@ -1,23 +1,15 @@
 [
     {
-        "categories": [
-            "combination"
-        ],
+        "categories": [ "combination" ],
         "dataType": "enumeration",
-        "geometries": [
-            "node",
-            "area"
-        ],
+        "geometries": [ "node", "area" ],
         "influence": 1,
         "isA": "poi",
         "name": "facility",
         "objectType": "tag"
     },
     {
-        "geometries": [
-            "node",
-            "area"
-        ],
+        "geometries": [ "node", "area" ],
         "description" : "FCODE AL010: An area that has been developed to perform a specific principal function, consisting of one or more vertical constructions (for example: structures or buildings), horizontal constructions (for example: pavements, roads, rail tracks, or bridges), and/or supporting utilities (for example: power lines, water supply, or sewerage), plus the underlying land. ( For example, an industrial plant consisting of building(s), shipping dock(s), storage area(s), power transformer(s), heating and/or cooling equipment, vehicle parking, roads, railroad tracks, and perimeter fences and gates. )",
         "isA": "facility",
         "name": "facility=*",
@@ -28,10 +20,7 @@
         "name": "facility=yes",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "landuse=installation",
-                "weight": 0.9
-            }
+            { "name": "landuse=installation", "weight": 0.9 }
         ]
     }
 ]

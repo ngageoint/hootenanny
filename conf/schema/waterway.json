@@ -6,72 +6,47 @@
         "objectType": "tag"
     },
     {
-        "categories": [
-            "poi"
-        ],
-        "geometries": [
-            "node",
-            "area"
-        ],
+        "categories": [ "poi" ],
+        "geometries": [ "node", "area" ],
         "isA": "waterway",
         "name": "waterway=boatyard",
         "objectType": "tag"
     },
     {
-        "categories": [
-            "poi"
-        ],
-        "geometries": [
-            "linestring"
-        ],
+        "categories": [ "poi" ],
+        "geometries": [ "linestring" ],
         "isA": "waterway",
         "name": "waterway=canal",
         "objectType": "tag"
     },
     {
-        "categories": [
-            "poi"
-        ],
-        "geometries": [
-            "linestring",
-            "area"
-        ],
+        "categories": [ "poi" ],
+        "geometries": [ "linestring", "area" ],
         "isA": "waterway",
         "name": "waterway=dam",
         "objectType": "tag"
     },
     {
-        "geometries": [
-            "linestring"
-        ],
+        "geometries": [ "linestring" ],
         "isA": "waterway",
         "name": "waterway=ditch",
         "objectType": "tag"
     },
     {
-        "categories": [
-            "poi"
-        ],
-        "geometries": [
-            "node",
-            "area"
-        ],
+        "categories": [ "poi" ],
+        "geometries": [ "node", "area" ],
         "isA": "waterway",
         "name": "waterway=dock",
         "objectType": "tag"
     },
     {
-        "geometries": [
-            "linestring"
-        ],
+        "geometries": [ "linestring" ],
         "isA": "waterway",
         "name": "waterway=flow_control",
         "objectType": "tag"
     },
     {
-        "categories": [
-            "poi"
-        ],
+        "categories": [ "poi" ],
         "aliases": [
             "type=river",
             "river_type=*",
@@ -79,60 +54,40 @@
             "FlowDir=*",
             "waterway=wadi"  
         ],
-        "geometries": [
-            "linestring"
-        ],
+        "geometries": [ "linestring" ],
         "isA": "waterway",
         "name": "waterway=river",
         "objectType": "tag",
-        "similarTo": {
-            "name": "waterway=stream",
-            "weight": 0.7
-        }
+        "similarTo": { "name": "waterway=stream", "weight": 0.7 }
     },
     {
-        "geometries": [
-            "area"
-        ],
+        "geometries": [ "area" ],
         "isA": "waterway",
         "name": "waterway=riverbank",
         "objectType": "tag"
     },
     {
-        "categories": [
-            "poi"
-        ],
-        "geometries": [
-            "linestring"
-        ],
-        "aliases": [
-            "type=stream"
-        ],
+        "categories": [ "poi" ],
+        "geometries": [ "linestring" ],
+        "aliases": [ "type=stream" ],
         "isA": "waterway",
         "name": "waterway=stream",
         "objectType": "tag"
     },
     {
-        "geometries": [
-            "linestring"
-        ],
+        "geometries": [ "linestring" ],
         "isA": "waterway",
         "name": "waterway=tidal_channel",
         "objectType": "tag"
     },
     {
-        "geometries": [
-            "linestring"
-        ],
+        "geometries": [ "linestring" ],
         "isA": "waterway",
         "name": "waterway=drain",
         "objectType": "tag"
     },
     {
-        "geometries": [
-            "node",
-            "linestring"
-        ],
+        "geometries": [ "node", "linestring" ],
         "isA": "waterway",
         "name": "waterway=weir",
         "objectType": "tag"
