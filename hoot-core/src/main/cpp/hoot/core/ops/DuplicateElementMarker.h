@@ -52,18 +52,6 @@ public:
    */
   void apply(OsmMapPtr& map);
 
-  /**
-   * Marks elements within a map that are exact duplicates of each other
-   *
-   * @param map the map owning the elements
-   * @param coordinateComparisonSensitivity node coordinate decimal place comparison sensitivity
-   * @return the number of duplicates found
-   */
-  static int markDuplicates(
-    OsmMapPtr& map,
-    const int coordinateComparisonSensitivity =
-      ConfigOptions().getNodeComparisonCoordinateSensitivity());
-
   QString getInitStatusMessage() const override { return "Marking duplicate elements..."; }
 
   QString getCompletedStatusMessage() const override

@@ -855,28 +855,10 @@ hoot convert -D convert.ops="hoot::UnlikelyRoadRemover" input.osm output.osm
     hoot de-duplicate input1.osm input2.osm output1.osm output2.osm
 -----
 
-===== Remove only inter-map duplicates across two maps:
-
------
-    hoot de-duplicate input1.osm input2.osm output1.osm output2.osm --skip-intra-map
------
-
 ===== Copy element IDs from one map to another where identical elements are found between them:
 
 -----
     hoot sync-element-ids input1.osm input2.osm output.osm
------
-
-===== Remove intra-map exact duplicates within a single map but skip removing nodes:
-
------
-    hoot de-duplicate input.osm output.osm --skip-nodes
------
-
-===== Remove intra-map exact duplicates within a single map with a node filter:
-
------
-    hoot de-duplicate input.osm output.osm --node-filter "hoot::PoiCriterion"
 -----
 
 ===== Generate a grid with regular shaped cells across a subset of a map:

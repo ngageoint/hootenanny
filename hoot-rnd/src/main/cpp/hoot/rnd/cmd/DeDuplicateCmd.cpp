@@ -38,9 +38,6 @@
 namespace hoot
 {
 
-/*
- * @todo needs command line test
- */
 class DeDuplicateCmd : public BaseCommand
 {
 public:
@@ -61,38 +58,6 @@ public:
     QElapsedTimer timer;
     timer.start();
 
-    bool dedupeIntraMap = true;
-    if (args.contains("--skip-intra-map"))
-    {
-      dedupeIntraMap = false;
-      args.removeAll("--skip-intra-map");
-    }
-    LOG_VARD(dedupeIntraMap);
-
-    bool dedupeNodes = true;
-    if (args.contains("--skip-nodes"))
-    {
-      dedupeNodes = false;
-      args.removeAll("--skip-nodes");
-    }
-    LOG_VARD(dedupeNodes);
-
-    bool dedupeWays = true;
-    if (args.contains("--skip-ways"))
-    {
-      dedupeWays = false;
-      args.removeAll("--skip-ways");
-    }
-    LOG_VARD(dedupeWays);
-
-    bool dedupeRelations = true;
-    if (args.contains("--skip-relations"))
-    {
-      dedupeRelations = false;
-      args.removeAll("--skip-relations");
-    }
-    LOG_VARD(dedupeRelations);
-
     bool favorMoreConnectedWays = false;
     if (args.contains("--favor-connected-ways"))
     {
@@ -100,10 +65,6 @@ public:
       args.removeAll("--favor-connected-ways");
     }
     LOG_VARD(favorMoreConnectedWays);
-
-    ElementCriterionPtr nodeCrit = _parseFilter("--node-filter", args);
-    ElementCriterionPtr wayCrit = _parseFilter("--way-filter", args);
-    ElementCriterionPtr relationCrit = _parseFilter("--relation-filter", args);
 
     if (args.size() != 2 && args.size() != 4)
     {
@@ -118,11 +79,6 @@ public:
     QString output2;
     if (args.size() == 2)
     {
-      if (!dedupeIntraMap)
-      {
-        LOG_WARN("--skip-intra-map option ignored for single input map.");
-      }
-
       input1 = args[0].trimmed();
       output1 = args[1].trimmed();
       LOG_STATUS(
@@ -144,13 +100,6 @@ public:
     LOG_VARD(output2);
 
     ElementDeduplicator deduper;
-    deduper.setDedupeIntraMap(dedupeIntraMap);
-    deduper.setDedupeNodes(dedupeNodes);
-    deduper.setDedupeWays(dedupeWays);
-    deduper.setDedupeRelations(dedupeRelations);
-    deduper.setNodeCriterion(nodeCrit);
-    deduper.setWayCriterion(wayCrit);
-    deduper.setRelationCriterion(relationCrit);
     deduper.setFavorMoreConnectedWays(favorMoreConnectedWays);
 
     OsmMapPtr input1Map(new OsmMap());
@@ -204,34 +153,6 @@ public:
       "De-duplicated elements in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 
     return 0;
-  }
-
-private:
-
-  ElementCriterionPtr _parseFilter(const QString& optionName, QStringList& args)
-  {
-    ElementCriterionPtr crit;
-    if (args.contains(optionName))
-    {
-      const int optionNameIndex = args.indexOf(optionName);
-      QString critClassName = args.at(optionNameIndex + 1).trimmed();
-      args.removeAt(optionNameIndex + 1);
-      args.removeAt(optionNameIndex);
-
-      try
-      {
-        crit.reset(Factory::getInstance().constructObject<ElementCriterion>(critClassName));
-      }
-      catch (const boost::bad_any_cast&)
-      {
-        throw IllegalArgumentException("Invalid criterion: " + critClassName);
-      }
-    }
-    if (crit)
-    {
-      LOG_DEBUG(optionName << ": " << crit);
-    }
-    return crit;
   }
 };
 
