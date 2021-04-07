@@ -86,22 +86,22 @@ public:
     // this, feel free.
 
     CPPUNIT_ASSERT(
-      ElementGeometryUtils::haveGeometricRelationship(
+      !ElementGeometryUtils::haveGeometricRelationship(
          way1, node1, GeometricRelationship::Contains, map));
     CPPUNIT_ASSERT(
-      ElementGeometryUtils::haveGeometricRelationship(
+      !ElementGeometryUtils::haveGeometricRelationship(
          way1, node1, GeometricRelationship::Covers, map));
     CPPUNIT_ASSERT(
       !ElementGeometryUtils::haveGeometricRelationship(
          way1, node1, GeometricRelationship::Crosses, map));
     CPPUNIT_ASSERT(
-      !ElementGeometryUtils::haveGeometricRelationship(
+      ElementGeometryUtils::haveGeometricRelationship(
          way1, node1, GeometricRelationship::DisjointWith, map));
     CPPUNIT_ASSERT(
       !ElementGeometryUtils::haveGeometricRelationship(
          way1, node1, GeometricRelationship::Equals, map));
     CPPUNIT_ASSERT(
-      ElementGeometryUtils::haveGeometricRelationship(
+      !ElementGeometryUtils::haveGeometricRelationship(
          way1, node1, GeometricRelationship::Intersects, map));
     CPPUNIT_ASSERT(
       !ElementGeometryUtils::haveGeometricRelationship(
