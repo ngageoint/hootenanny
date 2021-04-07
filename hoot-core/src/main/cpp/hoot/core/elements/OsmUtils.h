@@ -52,8 +52,8 @@ public:
    * @param map map owning the relation
    * @return a detailed relation string
    */
-  static QString getRelationDetailedString(const ConstRelationPtr& relation,
-                                           const ConstOsmMapPtr& map);
+  static QString getRelationDetailString(const ConstRelationPtr& relation,
+                                         const ConstOsmMapPtr& map);
 
   /**
    * Constructs a detailed string for an element suitable for trace logging

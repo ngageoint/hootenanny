@@ -22,42 +22,43 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
  */
 
-#ifndef LINESTRINGAVERAGER_H
-#define LINESTRINGAVERAGER_H
-
-// GEOS
-#include <geos/geom/LineString.h>
+// Hoot
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/TestUtils.h>
+#include <hoot/core/elements/ElementIdUtils.h>
+#include <hoot/core/io/OsmMapReaderFactory.h>
 
 namespace hoot
 {
 
-class LineStringAverager
+class ElementIdUtilsTest : public HootTestFixture
 {
+    CPPUNIT_TEST_SUITE(ElementIdUtilsTest);
+    CPPUNIT_TEST(runBasicTest);
+    CPPUNIT_TEST_SUITE_END();
+
 public:
 
-  LineStringAverager(const std::shared_ptr<geos::geom::LineString>& l1,
-                     const std::shared_ptr<geos::geom::LineString>& l2);
+  ElementIdUtilsTest() = default;
 
-  std::shared_ptr<geos::geom::LineString> average();
+  void runBasicTest()
+  {
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    OsmMapReaderFactory::read(map, "test-files/ToyTestA.osm");
 
-  static std::shared_ptr<geos::geom::LineString> average(
-    const std::shared_ptr<geos::geom::LineString>& l1,
-    const std::shared_ptr<geos::geom::LineString>& l2);
+    std::vector<ElementPtr> elements;
+    while (map->hasNext())
+    {
+      elements.push_back(map->next());
+    }
 
-private:
-
-  std::shared_ptr<geos::geom::LineString> _l1;
-  std::shared_ptr<geos::geom::LineString> _l2;
-
-  geos::geom::Coordinate _merge(const geos::geom::Coordinate& c1, const geos::geom::Coordinate& c2);
-
-  geos::geom::Coordinate _moveToLine(
-    const geos::geom::Coordinate& c1, const geos::geom::LineString* ls);
+    CPPUNIT_ASSERT_EQUAL(40, ElementIdUtils::elementsToElementIds(elements).size());
+  }
 };
 
-}
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ElementIdUtilsTest, "quick");
 
-#endif // LINESTRINGAVERAGER_H
+}

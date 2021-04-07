@@ -54,8 +54,8 @@ void RelationMemberUtilsJs::Init(Handle<Object> exports)
   Handle<Object> obj = Object::New(current);
   exports->Set(String::NewFromUtf8(current, "RelationMemberUtils"), obj);
 
-  obj->Set(String::NewFromUtf8(current, "isMemberOfRelationType"),
-           FunctionTemplate::New(current, isMemberOfRelationType)->GetFunction());
+  obj->Set(String::NewFromUtf8(current, "isMemberOfRelationWithType"),
+           FunctionTemplate::New(current, isMemberOfRelationWithType)->GetFunction());
   obj->Set(String::NewFromUtf8(current, "isMemberOfRelationInCategory"),
            FunctionTemplate::New(current, isMemberOfRelationInCategory)->GetFunction());
   obj->Set(String::NewFromUtf8(current, "isMemberOfRelationWithTagKey"),
@@ -66,11 +66,9 @@ void RelationMemberUtilsJs::Init(Handle<Object> exports)
            FunctionTemplate::New(current, relationsHaveConnectedWayMembers)->GetFunction());
   obj->Set(String::NewFromUtf8(current, "isMemberOfRelationSatisfyingCriterion"),
            FunctionTemplate::New(current, isMemberOfRelationSatisfyingCriterion)->GetFunction());
-  obj->Set(String::NewFromUtf8(current, "relationHasConflatableMember"),
-           FunctionTemplate::New(current, relationHasConflatableMember)->GetFunction());
 }
 
-void RelationMemberUtilsJs::isMemberOfRelationType(const FunctionCallbackInfo<Value>& args)
+void RelationMemberUtilsJs::isMemberOfRelationWithType(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
@@ -80,7 +78,7 @@ void RelationMemberUtilsJs::isMemberOfRelationType(const FunctionCallbackInfo<Va
   QString relationType = toCpp<QString>(args[2]);
 
   const bool inRelationOfSpecifiedType =
-    RelationMemberUtils::isMemberOfRelationType(map, childId, relationType);
+    RelationMemberUtils::isMemberOfRelationWithType(map, childId, relationType);
 
   args.GetReturnValue().Set(Boolean::New(current, inRelationOfSpecifiedType));
 }
@@ -191,35 +189,6 @@ void RelationMemberUtilsJs::isMemberOfRelationSatisfyingCriterion(
     RelationMemberUtils::isMemberOfRelationSatisfyingCriterion(map, childId, *crit);
 
   args.GetReturnValue().Set(Boolean::New(current, isMember));
-}
-
-void RelationMemberUtilsJs::relationHasConflatableMember(const FunctionCallbackInfo<Value>& args)
-{
-  Isolate* current = args.GetIsolate();
-  HandleScope scope(current);
-
-  try
-  {
-    Context::Scope context_scope(current->GetCurrentContext());
-
-    ConstElementPtr element = toCpp<ConstElementPtr>(args[0]);
-    if (element->getElementType() != ElementType::Relation)
-    {
-      args.GetReturnValue().Set(
-        current->ThrowException(
-          Exception::TypeError(String::NewFromUtf8(current, "Expected a relation"))));
-    }
-    ConstRelationPtr relation = std::dynamic_pointer_cast<const Relation>(element);
-
-    ConstOsmMapPtr map = toCpp<ConstOsmMapPtr>(args[1]);
-
-    args.GetReturnValue().Set(
-      Boolean::New(current, RelationMemberUtils::relationHasConflatableMember(relation, map)));
-  }
-  catch (const HootException& err)
-  {
-    args.GetReturnValue().Set(current->ThrowException(HootExceptionJs::create(err)));
-  }
 }
 
 }

@@ -28,7 +28,6 @@
 #define MAXIMALSUBLINEMATCHER_H
 
 #include <hoot/core/algorithms/subline-matching/SublineMatcher.h>
-#include <hoot/core/util/Configurable.h>
 
 namespace hoot
 {
@@ -36,7 +35,7 @@ namespace hoot
 /**
  * A SublineMatcher facade for MaximalSubline.
  */
-class MaximalSublineMatcher : public SublineMatcher, public Configurable
+class MaximalSublineMatcher : public SublineMatcher
 {
 public:
 
@@ -52,8 +51,6 @@ public:
    */
   WaySublineMatchString findMatch(const ConstOsmMapPtr& map, const ConstWayPtr& way1,
     const ConstWayPtr& way2, double& score, Meters maxRelevantDistance = -1) const override;
-
-  void setConfiguration(const Settings &conf) override;
 
   void setMaxRelevantAngle(Radians r) override { _maxAngle = r; }
   void setMinSplitSize(Meters minSplitSize) override { _minSplitSize = minSplitSize; }

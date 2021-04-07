@@ -49,7 +49,6 @@ class PhoneNumberLocator : public Configurable
 public:
 
   PhoneNumberLocator();
-  PhoneNumberLocator(const QString& regionCode);
   ~PhoneNumberLocator() = default;
 
   void setConfiguration(const Settings& conf) override;
@@ -68,7 +67,7 @@ public:
 
 private:
 
-  //two digit location code required to validate phone numbers; see ConfigOptions
+  // two digit location code required to validate phone numbers; see ConfigOptions
   QString _regionCode;
   i18n::phonenumbers::PhoneNumberOfflineGeocoder _geocoder;
   mutable int _numLocated;

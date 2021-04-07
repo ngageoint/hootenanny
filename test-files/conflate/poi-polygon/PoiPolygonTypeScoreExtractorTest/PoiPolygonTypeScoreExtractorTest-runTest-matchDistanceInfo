@@ -1,0 +1,44 @@
+POI MATCH distance info for type: amenity=drinking_water
+Maximum distance: 5.1
+Minimum distance: 5.1
+Average distance: 5.1
+Number of matches: 1
+Distances: 5.1
+**************************
+POI MATCH distance info for type: amenity=hospital
+Maximum distance: 10.2
+Minimum distance: 10.2
+Average distance: 10.2
+Number of matches: 1
+Distances: 10.2
+**************************
+POI MATCH distance info for type: amenity=school
+Maximum distance: 20.5
+Minimum distance: 20.5
+Average distance: 20.5
+Number of matches: 1
+Distances: 20.5
+**************************
+POLY MATCH distance info for type: amenity=clinic
+Maximum distance: 10.2
+Minimum distance: 10.2
+Average distance: 10.2
+Number of matches: 1
+Distances: 10.2
+**************************
+POLY MATCH distance info for type: amenity=school
+Maximum distance: 20.5
+Minimum distance: 20.5
+Average distance: 20.5
+Number of matches: 1
+Distances: 20.5
+**************************
+POLY MATCH distance info for type: building=yes
+Maximum distance: 5.1
+Minimum distance: 5.1
+Average distance: 5.1
+Number of matches: 1
+Distances: 5.1
+**************************
+POI REVIEW: no matches
+POLY REVIEW: no matches

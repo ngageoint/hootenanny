@@ -185,6 +185,11 @@ WayPtr TestUtils::createWay(OsmMapPtr map, const QList<NodePtr>& nodes, Status s
   return way;
 }
 
+RelationPtr TestUtils::createDummyRelation(OsmMapPtr map, Status status)
+{
+  return createRelation(map, QList<ElementPtr>(), status);
+}
+
 RelationPtr TestUtils::createRelation(OsmMapPtr map, const QList<ElementPtr>& elements,
   Status status, Meters circularError, Tags tags)
 {
@@ -290,7 +295,6 @@ void TestUtils::resetEnvironment(const QStringList confs)
     LOG_VART(confs[i]);
     conf().loadJson(confs[i]);
   }
-  //LOG_VART(conf());
   conf().set("HOOT_HOME", getenv("HOOT_HOME"));
 
   // Sometimes we add new projections to the MapProjector, when this happens it may pick a new

@@ -30,7 +30,7 @@
 // hoot
 #include <hoot/rnd/auth/HootServicesLoginManager.h>
 #include <hoot/core/io/HootNetworkRequest.h>
-#include <hoot/core/io/NetworkIoUtils.h>
+#include <hoot/rnd/io/NetworkIoUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/HootException.h>

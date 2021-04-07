@@ -126,13 +126,13 @@ public:
    * @see Element
    */
   void visitRo(const ElementProvider& map, ConstElementVisitor& visitor,
-                       const bool recursive = false) const override;
+               const bool recursive = false) const override;
 
   /**
    * @see Element
    */
   void visitRw(ElementProvider& map, ConstElementVisitor& visitor,
-                       const bool recursive = false) override;
+               const bool recursive = false) override;
 
   /**
    * Determines if the coordinates from this node match with that of another given a configurable

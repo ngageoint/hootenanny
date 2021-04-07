@@ -38,11 +38,11 @@ using namespace std;
 namespace hoot
 {
 
-QString OsmUtils::getRelationDetailedString(const ConstRelationPtr& relation,
-                                            const ConstOsmMapPtr& map)
+QString OsmUtils::getRelationDetailString(const ConstRelationPtr& relation,
+                                          const ConstOsmMapPtr& map)
 {
   return
-    relation->toString() + RelationMemberUtils::getRelationMembersDetailedString(relation, map);
+    relation->toString() + RelationMemberUtils::getRelationMembersDetailString(relation, map);
 }
 
 QString OsmUtils::getElementDetailString(const ConstElementPtr& element, const ConstOsmMapPtr& map)
@@ -57,7 +57,7 @@ QString OsmUtils::getElementDetailString(const ConstElementPtr& element, const C
   else if (element->getElementType() == ElementType::Relation)
   {
     ConstRelationPtr relation = std::dynamic_pointer_cast<const Relation>(element);
-    str += RelationMemberUtils::getRelationMembersDetailedString(relation, map) + "\n";
+    str += RelationMemberUtils::getRelationMembersDetailString(relation, map) + "\n";
   }
   return str;
 }

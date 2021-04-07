@@ -56,6 +56,11 @@ class PoiPolygonPhoneNumberScoreExtractorTest : public HootTestFixture
 
 public:
 
+  PoiPolygonPhoneNumberScoreExtractorTest() : HootTestFixture(UNUSED_PATH, UNUSED_PATH)
+  {
+    setResetType(ResetAll);
+  }
+
   void basicTest()
   {
     PoiPolygonPhoneNumberScoreExtractor uut;
