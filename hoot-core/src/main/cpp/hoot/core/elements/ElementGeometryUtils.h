@@ -49,7 +49,7 @@ class ElementGeometryUtils
 public:
 
   /**
-   * Determines two elements have a geometric relationship
+   * Determines if two elements have a geometric relationship
    *
    * @param element1 the first element to examine
    * @param element2 the second element to examine
@@ -63,7 +63,7 @@ public:
     const GeometricRelationship& relationship, ConstOsmMapPtr map);
 
   /**
-   * Determines two elements have a geometric relationship
+   * Determines if an element has a geometric relationship with a boundary
    *
    * @param element the element to examine
    * @param bounds the bounds geometry to examine
@@ -72,9 +72,9 @@ public:
    * @return true if the element and the bounds have the specified geometric relationship; false
    * otherwise or if the relationship could not be calculated
    */
-  static bool haveGeometricRelationship(
-    const ConstElementPtr& element, const std::shared_ptr<geos::geom::Geometry>& bounds,
-    const GeometricRelationship& relationship, ConstOsmMapPtr map);
+//  static bool haveGeometricRelationship(
+//    const ConstElementPtr& element, const std::shared_ptr<geos::geom::Geometry>& bounds,
+//    const GeometricRelationship& relationship, ConstOsmMapPtr map);
 
   /**
    * Calculate the length of the given way in meters. The projection must be planar.

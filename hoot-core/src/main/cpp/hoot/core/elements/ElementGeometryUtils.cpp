@@ -102,74 +102,74 @@ bool ElementGeometryUtils::haveGeometricRelationship(
   return haveRelationship;
 }
 
-bool ElementGeometryUtils::haveGeometricRelationship(
-  const ConstElementPtr& element, const std::shared_ptr<geos::geom::Geometry>& bounds,
-  const GeometricRelationship& relationship, ConstOsmMapPtr map)
-{
-  if (!element)
-  {
-    throw IllegalArgumentException("The input element is null.");
-  }
-  if (!bounds)
-  {
-    throw IllegalArgumentException("The input bounds is null.");
-  }
-  if (!map)
-  {
-    throw IllegalArgumentException("The input map is null.");
-  }
-  LOG_VART(bounds->toString());
-  LOG_VART(relationship.toString())
+//bool ElementGeometryUtils::haveGeometricRelationship(
+//  const ConstElementPtr& element, const std::shared_ptr<geos::geom::Geometry>& bounds,
+//  const GeometricRelationship& relationship, ConstOsmMapPtr map)
+//{
+//  if (!element)
+//  {
+//    throw IllegalArgumentException("The input element is null.");
+//  }
+//  if (!bounds)
+//  {
+//    throw IllegalArgumentException("The input bounds is null.");
+//  }
+//  if (!map)
+//  {
+//    throw IllegalArgumentException("The input map is null.");
+//  }
+//  LOG_VART(bounds->toString());
+//  LOG_VART(relationship.toString())
 
-  std::shared_ptr<geos::geom::Geometry> elementGeom = _getGeometry(element, map);
-  LOG_VART(elementGeom.get());
-  bool haveRelationship = false;
-  if (elementGeom)
-  {
-    LOG_VART(elementGeom->toString());
-    switch (relationship.getEnum())
-    {
-      case GeometricRelationship::Contains:
-        haveRelationship = bounds->contains(elementGeom.get());
-        break;
-      case GeometricRelationship::Covers:
-        haveRelationship = bounds->covers(elementGeom.get());
-        break;
-      case GeometricRelationship::Crosses:
-        haveRelationship = elementGeom->crosses(bounds.get());
-        break;
-      case GeometricRelationship::DisjointWith:
-        haveRelationship = bounds->disjoint(elementGeom.get());
-        break;
-      case GeometricRelationship::Equals:
-        haveRelationship = bounds->equals(elementGeom.get());
-        break;
-      case GeometricRelationship::Intersects:
-        haveRelationship = elementGeom->intersects(bounds.get());
-        break;
-      case GeometricRelationship::IsWithin:
-        haveRelationship = elementGeom->within(bounds.get());
-        break;
-      case GeometricRelationship::Overlaps:
-        haveRelationship = elementGeom->overlaps(bounds.get());
-        break;
-      case GeometricRelationship::Touches:
-        haveRelationship = elementGeom->touches(bounds.get());
-        break;
-      default:
-        throw IllegalArgumentException("Unsupported geometry relationship type.");
-    }
-  }
-  else
-  {
-    LOG_TRACE(
-      "Unable to calculate geometric relationship: " << relationship.toString() << " for: " <<
-      element->getElementId() << " and: " << QString::fromStdString(bounds->toString()).right(50) <<
-      ".");
-  }
-  LOG_VART(haveRelationship);
-  return haveRelationship;
-}
+//  std::shared_ptr<geos::geom::Geometry> elementGeom = _getGeometry(element, map);
+//  LOG_VART(elementGeom.get());
+//  bool haveRelationship = false;
+//  if (elementGeom)
+//  {
+//    LOG_VART(elementGeom->toString());
+//    switch (relationship.getEnum())
+//    {
+//      case GeometricRelationship::Contains:
+//        haveRelationship = bounds->contains(elementGeom.get());
+//        break;
+//      case GeometricRelationship::Covers:
+//        haveRelationship = bounds->covers(elementGeom.get());
+//        break;
+//      case GeometricRelationship::Crosses:
+//        haveRelationship = elementGeom->crosses(bounds.get());
+//        break;
+//      case GeometricRelationship::DisjointWith:
+//        haveRelationship = bounds->disjoint(elementGeom.get());
+//        break;
+//      case GeometricRelationship::Equals:
+//        haveRelationship = bounds->equals(elementGeom.get());
+//        break;
+//      case GeometricRelationship::Intersects:
+//        haveRelationship = elementGeom->intersects(bounds.get());
+//        break;
+//      case GeometricRelationship::IsWithin:
+//        haveRelationship = elementGeom->within(bounds.get());
+//        break;
+//      case GeometricRelationship::Overlaps:
+//        haveRelationship = elementGeom->overlaps(bounds.get());
+//        break;
+//      case GeometricRelationship::Touches:
+//        haveRelationship = elementGeom->touches(bounds.get());
+//        break;
+//      default:
+//        throw IllegalArgumentException("Unsupported geometry relationship type.");
+//    }
+//  }
+//  else
+//  {
+//    LOG_TRACE(
+//      "Unable to calculate geometric relationship: " << relationship.toString() << " for: " <<
+//      element->getElementId() << " and: " << QString::fromStdString(bounds->toString()).right(50) <<
+//      ".");
+//  }
+//  LOG_VART(haveRelationship);
+//  return haveRelationship;
+//}
 
 std::shared_ptr<geos::geom::Geometry> ElementGeometryUtils::_getGeometry(
   const ConstElementPtr& element, ConstOsmMapPtr map)
