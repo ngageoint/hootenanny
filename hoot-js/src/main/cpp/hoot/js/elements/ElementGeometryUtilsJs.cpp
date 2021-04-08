@@ -55,8 +55,6 @@ void ElementGeometryUtilsJs::Init(Handle<Object> exports)
   exports->Set(String::NewFromUtf8(current, "ElementGeometryUtils"), thisObj);
   thisObj->Set(String::NewFromUtf8(current, "calculateLength"),
                FunctionTemplate::New(current, calculateLength)->GetFunction());
-  thisObj->Set(String::NewFromUtf8(current, "haveGeometricRelationship"),
-               FunctionTemplate::New(current, haveGeometricRelationship)->GetFunction());
 }
 
 void ElementGeometryUtilsJs::calculateLength(const FunctionCallbackInfo<Value>& args)
@@ -72,43 +70,6 @@ void ElementGeometryUtilsJs::calculateLength(const FunctionCallbackInfo<Value>& 
     ConstElementPtr e = toCpp<ConstElementPtr>(args[1]);
 
     args.GetReturnValue().Set(toV8(ElementGeometryUtils::calculateLength(e, m)));
-  }
-  catch (const HootException& err)
-  {
-    args.GetReturnValue().Set(current->ThrowException(HootExceptionJs::create(err)));
-  }
-}
-
-void ElementGeometryUtilsJs::haveGeometricRelationship(const FunctionCallbackInfo<Value>& args)
-{
-  Isolate* current = args.GetIsolate();
-  HandleScope scope(current);
-
-  try
-  {
-    Context::Scope context_scope(current->GetCurrentContext());
-
-    ConstElementPtr element = toCpp<ConstElementPtr>(args[0]);
-    std::shared_ptr<geos::geom::Geometry> bounds =
-      GeometryUtils::boundsFromString(toCpp<QString>(args[1]));
-    const GeometricRelationship relationship =
-      GeometricRelationship::fromString(toCpp<QString>(args[2]));
-    ConstOsmMapPtr map = toCpp<ConstOsmMapPtr>(args[3]);
-
-    if (!MapProjector::isGeographic(map))
-    {
-      // The bounds is always in WGS84, so if our map isn't currently in WGS84 we need to reproject
-      // the bounds.
-      std::shared_ptr<OGRSpatialReference> srs84(new OGRSpatialReference());
-      srs84->SetWellKnownGeogCS("WGS84");
-      MapProjector::project(bounds, srs84, map->getProjection());
-      LOG_VART(bounds);
-    }
-
-    args.GetReturnValue().Set(
-      Boolean::New(
-        current,
-        ElementGeometryUtils::haveGeometricRelationship(element, bounds, relationship, map)));
   }
   catch (const HootException& err)
   {

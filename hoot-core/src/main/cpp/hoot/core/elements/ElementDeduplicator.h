@@ -30,7 +30,6 @@
 
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/criterion/ElementCriterion.h>
 
 namespace hoot
 {
@@ -44,11 +43,6 @@ namespace hoot
  *
  * @todo This doesn't handle way nodes as well as it should. See
  * ChangesetReplacementElementIdSynchronizer.
- * @todo its convoluted to have both a boolean and a criterion for each element type; removal should
- * be able to all be done with a single criterion and all elements, regardless of type, can be
- * processed in one pass...will just take a decent amount of refactoring
- * @todo Is there some overlap here with ElementComparer?
- * @todo Is there any way this could replace DuplicateNodeRemover? I don't think so...
  */
 class ElementDeduplicator
 {
@@ -100,34 +94,12 @@ public:
   int getMap2DuplicateTotalFeaturesRemoved() const
   { return _map2DuplicateNodesRemoved + _map2DuplicateWaysRemoved + _map2DuplicateRelationsRemoved; }
 
-  void setDedupeIntraMap(bool dedupe) { _dedupeIntraMap = dedupe; }
-  void setDedupeNodes(bool dedupe) { _dedupeNodes = dedupe; }
-  void setDedupeWays(bool dedupe) { _dedupeWays = dedupe; }
-  void setDedupeRelations(bool dedupe) { _dedupeRelations = dedupe; }
-  void setNodeCriterion(ElementCriterionPtr crit) { _nodeCrit = crit; }
-  void setWayCriterion(ElementCriterionPtr crit) { _wayCrit = crit; }
-  void setRelationCriterion(ElementCriterionPtr crit) { _relationCrit = crit; }
   void setFavorMoreConnectedWays(bool favor) { _favorMoreConnectedWays = favor; }
 
 private:
 
-  // If true, and two maps are being de-duped duplicates within each single map are also removed.
-  // This setting is ignored when de-deuping one map as intra-map de-deduplication is always done
-  // in that case.
-  bool _dedupeIntraMap;
-
-  // allows for controlling the element types being de-duped
-  bool _dedupeNodes;
-  bool _dedupeWays;
-  bool _dedupeRelations;
-
-  // criterion for each element type to further restrict what gets replaced
-  ElementCriterionPtr _nodeCrit;
-  ElementCriterionPtr _wayCrit;
-  ElementCriterionPtr _relationCrit;
-
   // If true when ways are deduped, the way sharing more nodes with other ways is kept over the one
-  // with less shared nodes.
+  // with less shared nodes rather than arbitrarily removing the way from the second input map.
   bool _favorMoreConnectedWays;
 
   int _map1DuplicateNodesRemoved;
@@ -136,8 +108,6 @@ private:
   int _map2DuplicateNodesRemoved;
   int _map2DuplicateWaysRemoved;
   int _map2DuplicateRelationsRemoved;
-
-  void _validateInputs();
 
   /*
    * Converts pairs of duplicated features' element IDs to a collection of element IDs sorted by

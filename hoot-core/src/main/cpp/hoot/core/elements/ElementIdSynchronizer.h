@@ -61,11 +61,6 @@ public:
   virtual void synchronize(const OsmMapPtr& map1, const OsmMapPtr& map2,
                            const ElementType& elementType = ElementType::Unknown);
 
-  /**
-   * Clears the underlying hash and synchronized element ID data
-   */
-  void clear();
-
   int getNumNodeIdsSynchronized() const { return _updatedNodeCtr; }
   int getNumWayIdsSynchronized() const { return _updatedWayCtr; }
   int getNumRelationIdsSynchronized() const { return _updatedRelationCtr; }

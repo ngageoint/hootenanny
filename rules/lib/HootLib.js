@@ -554,11 +554,3 @@ function getRiverMaxSublineRecursions(map)
 {
   return hoot.RiverMaximalSublineSettingOptimizer.getFindBestMatchesMaxRecursions(map);
 }
-
-/*
- * Determines if an element has a particular geometric relationship with a bounds
- */
-function haveGeometricRelationship(e, bounds, relationship, map)
-{
-  return hoot.ElementGeometryUtils.haveGeometricRelationship(e, bounds, relationship, map);
-}

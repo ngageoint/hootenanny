@@ -40,7 +40,6 @@
 #include <hoot/core/conflate/poi-polygon/PoiPolygonSchema.h>
 
 // Qt
-#include <QElapsedTimer>
 #include <QStringBuilder>
 
 using namespace std;
@@ -388,7 +387,6 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
 //  const bool oneElementIsRelation =
 //    e1->getElementType() == ElementType::Relation ||
 //    e2->getElementType() == ElementType::Relation;
-  //QElapsedTimer timer;
   matchesProcessed++;
   _explainText = "";
   _class.setMiss();
@@ -712,11 +710,6 @@ unsigned int PoiPolygonMatch::_getPhoneNumberEvidence(ConstElementPtr poi, Const
 
 unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstElementPtr poly)
 {
-  //LOG_VART(poi);
-  //LOG_VART(poly);
-
-  //QElapsedTimer timer;
-
   unsigned int evidence = 0;
 
   evidence += _getDistanceEvidence(poi, poly);
@@ -736,25 +729,13 @@ unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstEleme
   // the review reducer, so have since disabled. It also causes some regression tests to fail.
 
   evidence += _getTypeEvidence(poi, poly);
-//  if (evidence >= _matchEvidenceThreshold)
-//  {
-//    return evidence;
-//  }
   if (_addressMatchEnabled)
   {
     evidence += _getAddressEvidence(poi, poly);
-//    if (evidence >= _matchEvidenceThreshold)
-//    {
-//      return evidence;
-//    }
   }
   if (_phoneNumberMatchEnabled)
   {
     evidence += _getPhoneNumberEvidence(poi, poly);
-//    if (evidence >= _matchEvidenceThreshold)
-//    {
-//      return evidence;
-//    }
   }
 
   // We only want to run this if the previous match distance calculation was too large.
@@ -767,10 +748,6 @@ unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstEleme
       _infoCache->hasCriterion(poly, BuildingCriterion::className()))
   {
     evidence += _getConvexPolyDistanceEvidence(poi, poly);
-//    if (evidence >= _matchEvidenceThreshold)
-//    {
-//      return evidence;
-//    }
   }
 
   LOG_VART(evidence);

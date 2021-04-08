@@ -75,23 +75,6 @@ public:
 protected:
 
   /*
-   * @see WayJoiner
-   */
-  bool _areJoinable(const WayPtr& w1, const WayPtr& w2) const override;
-
-  /*
-   * @see WayJoinerAdvanced
-   */
-  void _determineKeeperFeatureForTags(WayPtr parent, WayPtr child, WayPtr& keeper,
-                                      WayPtr& toRemove) const override;
-
-  /*
-   * @see WayJoinerAdvanced
-   */
-  void _determineKeeperFeatureForId(WayPtr parent, WayPtr child, WayPtr& keeper,
-                                    WayPtr& toRemove) const override;
-
-  /*
    * @see WayJoinerAdvanced
    */
   bool _hasPid(const ConstWayPtr& way) const override;

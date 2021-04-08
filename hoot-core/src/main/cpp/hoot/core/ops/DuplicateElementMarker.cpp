@@ -101,14 +101,4 @@ QString DuplicateElementMarker::_getUuidVal(const QString& newUuid, const ConstE
   return uuidVal;
 }
 
-int DuplicateElementMarker::markDuplicates(
-  OsmMapPtr& map, const int coordinateComparisonSensitivity)
-{
-  LOG_VARD(coordinateComparisonSensitivity);
-  DuplicateElementMarker marker;
-  marker.setCoordinateComparisonSensitivity(coordinateComparisonSensitivity);
-  marker.apply(map);
-  return marker.getNumFeaturesAffected();
-}
-
 }

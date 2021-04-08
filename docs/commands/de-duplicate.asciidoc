@@ -3,35 +3,26 @@
 
 === Description
 
-The +de-duplicate+ command removes intra-map duplicate elements from a single map or inter-map duplicate elements across two separate maps. For
-inter-map de-duplication, the first map's features are kept. Unlike cleaning operations, such as `DuplicateWayRemover`, this command will only 
-remove identical elements.
+The +de-duplicate+ command removes intra-map duplicate elements from a single map or inter-map duplicate elements across 
+two separate maps. For inter-map de-duplication, the first map's features are kept. Unlike cleaning operations, such as `DuplicateWayRemover`, this command will only remove completely identical elements and not just those that are very similar.
 
-* +input1+                 - First map with features to de-duplicate; may be any supported input format. If only one map input is specified, 
-                             only intra-map de-duplication is performed (--skip-intra-map is always ignored). When two input maps are specified
+* +input1+                 - First map with features to de-duplicate; may be any supported input format. If only one map input 
+                             is specified, only intra-map de-duplication is performed. When two input maps are specified 
                              and identical features are found between both maps, this map's features are retained.
-* +input2+                 - Optional second map with features to de-duplicate; may be any supported input format. When two input maps are 
-                             specified, both intra-map and inter-map de-duplicate is performed. When two input maps are specified
-                             and identical features are found between both maps, this map's features are removed.
+* +input2+                 - Optional second map with features to de-duplicate; may be any supported input format. When two 
+                             input maps are specified, both intra-map and inter-map de-duplicate is performed. When two 
+                             input maps are specified and identical features are found between both maps, this map's features 
+                             are removed.
 * +output1+                - The de-duplicated first map output; may be any supported output format.
-* +output2+                - The de-duplicated second map output; may be any supported output format; required if two inputs are specified.
-* +--skip-intra-map+       - Only inter-dataset de-duplication is performed; ignored if only one input is specified.
-* +--skip-nodes+           - Nodes are not de-duplicated.
-* +--skip-ways+            - Ways are not de-duplicated.
-* +--skip-relations+       - Relations are not de-duplicated.
-* +--node-filter+          - Restricts the nodes that are de-duplicated. Must be a single class name of a Hootenanny criterion inheriting from 
-                             ElementCriterion.
-* +--way-filter+           - Restricts the ways that are de-duplicated. Must be a single class name of a Hootenanny criterion inheriting from 
-                             ElementCriterion.
-* +--relation-filter+      - Restricts the relations that are de-duplicated. Must be a single class name of a Hootenanny criterion inheriting 
-                             from ElementCriterion.
-* +--favor-connected-ways+ - When two identical ways are found, favors the way with more connections with other ways, regardless of which input
-                             map its from.
+* +output2+                - The de-duplicated second map output; may be any supported output format; required if two inputs 
+                             are specified.
+* +--favor-connected-ways+ - When two identical ways are found, favors the way with more connections with other ways, 
+                             regardless of which input map its from.
 
 === Usage
 
 --------------------------------------
-hoot de-duplicate (input1) [input2] (output1) [output2] [--skip-intra-map] [--skip-nodes] [--skip-ways] [--skip-relations] [--node-filter] [--way-filter] [--relation-filter] [--favor-connected-ways]
+hoot de-duplicate (input1) [input2] (output1) [output2] [--favor-connected-ways]
 --------------------------------------
 
 === Examples

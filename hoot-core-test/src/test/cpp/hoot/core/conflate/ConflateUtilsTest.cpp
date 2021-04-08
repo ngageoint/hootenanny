@@ -40,6 +40,7 @@ class ConflateUtilsTest : public HootTestFixture
 {
     CPPUNIT_TEST_SUITE(ConflateUtilsTest);
     CPPUNIT_TEST(runWriteUnconflatableTest);
+    CPPUNIT_TEST(runWriteDiffTest);
     CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -79,6 +80,16 @@ public:
     HOOT_FILE_EQUALS(
       _inputPath + "runWriteUnconflatableTest-2-out.osm",
       _outputPath + "runWriteUnconflatableTest-2-out.osm");
+  }
+
+  void runWriteDiffTest()
+  {
+    ConflateUtils::writeDiff(
+      "test-files/ToyTestA.osm", "test-files/ToyTestB.osm",
+      geos::geom::Envelope(-104.9007, 38.8541, -104.8994, 38.8552),
+      _outputPath + "runWriteDiffTest-out.osm");
+    HOOT_FILE_EQUALS(
+      _inputPath + "runWriteDiffTest-out.osm", _outputPath + "runWriteDiffTest-out.osm");
   }
 };
 

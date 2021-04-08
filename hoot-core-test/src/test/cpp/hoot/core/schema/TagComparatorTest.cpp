@@ -135,30 +135,6 @@ public:
         compareTags(expected, avg);
     }
 
-    //    {
-    //      Tags t1;
-    //      t1["highway"] = "path";
-    //      t1["foot"] = "designated";
-    //      t1["name"] = "Intemann Trail";
-    //      t1["official_name"] = "Paul Intemann Memorial Nature Trail";
-
-    //      Tags t2;
-    //      t2["highway"] = "footway";
-    //      t2["name"] = "Intemann";
-
-    //      Tags expected;
-    //      expected["highway"] = "path";
-    //      expected["foot"] = "designated";
-    //      expected["name"] = "Intemann Trail";
-    //      expected["official_name"] = "Paul Intemann Memorial Nature Trail";
-    //      expected["alt_name"] = "Intemann";
-
-    //      Tags avg;
-    //      uut.averageTags(t1, t2, avg);
-    //      //LOG_WARN("average: \n" << avg.toString());
-    //      compareTags(expected, avg);
-    //    }
-
     {
         Tags t1;
         t1["highway"] = "road";
@@ -958,6 +934,5 @@ public:
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(TagComparatorTest, "quick");
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(TagComparatorTest, "current");
 
 }
