@@ -62,7 +62,7 @@ bool HighwayMergerCreator::createMergers(const MatchSet& matches, vector<MergerP
     LOG_VART(match->toString());
     const HighwayMatch* highwayMatch = dynamic_cast<const HighwayMatch*>(match.get());
     // Check to make sure all the input matches are highway matches.
-    if (hm == nullptr)
+    if (highwayMatch == nullptr)
     {
       // return an empty result
       LOG_TRACE(
