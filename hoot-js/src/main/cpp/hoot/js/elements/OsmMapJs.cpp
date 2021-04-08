@@ -54,11 +54,6 @@ OsmMapJs::OsmMapJs()
   _setMap(OsmMapPtr(new OsmMap()));
 }
 
-OsmMapJs::OsmMapJs(OsmMapPtr map)
-{
-  _setMap(map);
-}
-
 void OsmMapJs::Init(Handle<Object> target)
 {
   Isolate* current = target->GetIsolate();
@@ -70,20 +65,12 @@ void OsmMapJs::Init(Handle<Object> target)
   tpl->InstanceTemplate()->SetInternalFieldCount(1);
 
   // Prototype
-  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "clone"),
-      FunctionTemplate::New(current, clone));
   tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getElement"),
       FunctionTemplate::New(current, getElement));
-  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getElementCount"),
-      FunctionTemplate::New(current, getElementCount));
   tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getParents"),
       FunctionTemplate::New(current, getParents));
-  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "removeElement"),
-      FunctionTemplate::New(current, removeElement));
   tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "visit"),
       FunctionTemplate::New(current, visit));
-  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "setIdGenerator"),
-      FunctionTemplate::New(current, setIdGenerator));
   tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "copyProjection"),
       FunctionTemplate::New(current, copyProjection));
 
@@ -130,24 +117,6 @@ void OsmMapJs::New(const FunctionCallbackInfo<Value>& args)
   args.GetReturnValue().Set(args.This());
 }
 
-void OsmMapJs::clone(const FunctionCallbackInfo<Value>& args)
-{
-  Isolate* current = args.GetIsolate();
-  HandleScope scope(current);
-
-  OsmMapJs* from = ObjectWrap::Unwrap<OsmMapJs>(args.This());
-
-  OsmMapPtr newMap(new OsmMap(from->getMap()));
-
-  const unsigned argc = 1;
-  Handle<Value> argv[argc] = { args[0] };
-  Local<Object> result = ToLocal(&_constructor)->NewInstance(argc, argv);
-  OsmMapJs* obj = ObjectWrap::Unwrap<OsmMapJs>(result);
-  obj->_map = newMap;
-
-  args.GetReturnValue().Set(result);
-}
-
 OsmMapPtr& OsmMapJs::getMap()
 {
   if (_map.get() == nullptr && _constMap.get())
@@ -183,16 +152,6 @@ void OsmMapJs::getElement(const FunctionCallbackInfo<Value>& args)
   }
 }
 
-void OsmMapJs::getElementCount(const FunctionCallbackInfo<Value>& args)
-{
-  Isolate* current = args.GetIsolate();
-  HandleScope scope(current);
-
-  OsmMapJs* obj = ObjectWrap::Unwrap<OsmMapJs>(args.This());
-
-  args.GetReturnValue().Set(Number::New(current, obj->getConstMap()->getElementCount()));
-}
-
 void OsmMapJs::getParents(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
@@ -209,19 +168,6 @@ void OsmMapJs::getParents(const FunctionCallbackInfo<Value>& args)
   {
     args.GetReturnValue().Set(current->ThrowException(HootExceptionJs::create(e)));
   }
-}
-
-void OsmMapJs::removeElement(const FunctionCallbackInfo<Value>& args)
-{
-  Isolate* current = args.GetIsolate();
-  HandleScope scope(current);
-
-  OsmMapJs* obj = ObjectWrap::Unwrap<OsmMapJs>(args.This());
-  ElementId eid = toCpp<ElementId>(args[0]);
-
-  RemoveElementByEid::removeElement(obj->getMap(), eid);
-
-  args.GetReturnValue().SetUndefined();
 }
 
 void OsmMapJs::visit(const FunctionCallbackInfo<Value>& args)
@@ -256,20 +202,6 @@ void OsmMapJs::visit(const FunctionCallbackInfo<Value>& args)
     LOG_VARE(err.getWhat());
     args.GetReturnValue().Set(current->ThrowException(HootExceptionJs::create(err)));
   }
-}
-
-void OsmMapJs::setIdGenerator(const FunctionCallbackInfo<Value>& args)
-{
-  Isolate* current = args.GetIsolate();
-  HandleScope scope(current);
-
-  OsmMapJs* obj = ObjectWrap::Unwrap<OsmMapJs>(args.This());
-  if (obj->getMap())
-  {
-    obj->getMap()->setIdGenerator(toCpp<std::shared_ptr<IdGenerator>>(args[0]));
-  }
-
-  args.GetReturnValue().SetUndefined();
 }
 
 void OsmMapJs::copyProjection(const FunctionCallbackInfo<Value>& args)

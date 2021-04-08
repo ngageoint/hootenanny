@@ -62,8 +62,6 @@ void ValueAggregatorJs::Init(Handle<Object> target)
     tpl->SetClassName(String::NewFromUtf8(current, opNames[i].toStdString().data()));
     tpl->InstanceTemplate()->SetInternalFieldCount(2);
     // Prototype
-    tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "toString"),
-        FunctionTemplate::New(current, toString));
     tpl->PrototypeTemplate()->Set(
       PopulateConsumersJs::baseClass(),
       String::NewFromUtf8(current, ValueAggregator::className().toStdString().data()));
@@ -88,16 +86,6 @@ void ValueAggregatorJs::New(const FunctionCallbackInfo<Value>& args)
   PopulateConsumersJs::populateConsumers<ValueAggregator>(c, args);
 
   args.GetReturnValue().Set(args.This());
-}
-
-void ValueAggregatorJs::toString(const FunctionCallbackInfo<Value>& args)
-{
-  Isolate* current = args.GetIsolate();
-  HandleScope scope(current);
-
-  ValueAggregatorPtr sd = toCpp<ValueAggregatorPtr>(args.This());
-
-  args.GetReturnValue().Set(toV8(sd->toString()));
 }
 
 }

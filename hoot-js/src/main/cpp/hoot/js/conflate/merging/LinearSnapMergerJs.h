@@ -53,8 +53,6 @@ public:
 
   LinearSnapMergerPtr getLinearSnapMerger() { return _ptr; }
 
-  static v8::Handle<v8::Object> New(const LinearSnapMergerPtr& ptr);
-
   virtual ~LinearSnapMergerJs() = default;
 
 private:

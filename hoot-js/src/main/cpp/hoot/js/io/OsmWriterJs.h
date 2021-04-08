@@ -45,8 +45,6 @@ public:
 private:
 
   OsmWriterJs() = default;
-
-  static void toString(const v8::FunctionCallbackInfo<v8::Value>& args);
 };
 
 

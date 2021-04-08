@@ -70,8 +70,6 @@ void OsmSchemaJs::Init(Handle<Object> exports)
               FunctionTemplate::New(current, getChildTagsAsVertices)->GetFunction());
   schema->Set(String::NewFromUtf8(current, "getSimilarTagsAsVertices"),
               FunctionTemplate::New(current, getSimilarTagsAsVertices)->GetFunction());
-  schema->Set(String::NewFromUtf8(current, "getTagByCategory"),
-              FunctionTemplate::New(current, getTagByCategory)->GetFunction());
   schema->Set(String::NewFromUtf8(current, "getTagVertex"),
               FunctionTemplate::New(current, getTagVertex)->GetFunction());
   schema->Set(String::NewFromUtf8(current, "isAncestor"),
@@ -98,8 +96,6 @@ void OsmSchemaJs::Init(Handle<Object> exports)
               FunctionTemplate::New(current, isLinearWaterway)->GetFunction());
   schema->Set(String::NewFromUtf8(current, "isPowerLine"),
               FunctionTemplate::New(current, isPowerLine)->GetFunction());
-  schema->Set(String::NewFromUtf8(current, "isMetaData"),
-              FunctionTemplate::New(current, isMetaData)->GetFunction());
   schema->Set(String::NewFromUtf8(current, "isPoi"),
               FunctionTemplate::New(current, isPoi)->GetFunction());
   schema->Set(String::NewFromUtf8(current, "isRailway"),
@@ -155,16 +151,6 @@ void OsmSchemaJs::getSimilarTagsAsVertices(const FunctionCallbackInfo<Value>& ar
 
   args.GetReturnValue().Set(
     toV8(OsmSchema::getInstance().getSimilarTagsAsVertices(kvp, minimumScore)));
-}
-
-void OsmSchemaJs::getTagByCategory(const FunctionCallbackInfo<Value>& args)
-{
-  HandleScope scope(args.GetIsolate());
-
-  QString category = toCpp<QString>(args[0]);
-  OsmSchemaCategory c = OsmSchemaCategory::fromString(category);
-
-  args.GetReturnValue().Set(toV8(OsmSchema::getInstance().getTagByCategory(c)));
 }
 
 void OsmSchemaJs::getTagVertex(const FunctionCallbackInfo<Value>& args)
@@ -305,17 +291,6 @@ void OsmSchemaJs::isPowerLine(const FunctionCallbackInfo<Value>& args)
   ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
 
   args.GetReturnValue().Set(Boolean::New(current, PowerLineCriterion().isSatisfied(e)));
-}
-
-void OsmSchemaJs::isMetaData(const FunctionCallbackInfo<Value>& args)
-{
-  Isolate* current = args.GetIsolate();
-  HandleScope scope(current);
-
-  QString key = toCpp<QString>(args[0]);
-  QString value = toCpp<QString>(args[1]);
-
-  args.GetReturnValue().Set(Boolean::New(current, OsmSchema::getInstance().isMetaData(key, value)));
 }
 
 void OsmSchemaJs::isPoi(const FunctionCallbackInfo<Value>& args)

@@ -56,8 +56,6 @@ void MapIoJs::Init(Handle<Object> exports)
                FunctionTemplate::New(current, loadMap)->GetFunction());
   exports->Set(String::NewFromUtf8(current, "loadMapFromString"),
                FunctionTemplate::New(current, loadMapFromString)->GetFunction());
-  exports->Set(String::NewFromUtf8(current, "loadGeoJsonFromString"),
-               FunctionTemplate::New(current, loadGeoJsonFromString)->GetFunction());
   exports->Set(String::NewFromUtf8(current, "loadMapFromStringPreserveIdAndStatus"),
                FunctionTemplate::New(current, loadMapFromStringPreserveIdAndStatus)->GetFunction());
   exports->Set(String::NewFromUtf8(current, "saveMap"),
@@ -121,31 +119,6 @@ void MapIoJs::loadMapFromString(const FunctionCallbackInfo<Value>& args)
 
   args.GetReturnValue().SetUndefined();
 }
-
-void MapIoJs::loadGeoJsonFromString(const FunctionCallbackInfo<Value>& args)
-{
-  Isolate* current = args.GetIsolate();
-  HandleScope scope(current);
-
-  OsmMapJs* map = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject());
-  QString mapGeoJson = toCpp<QString>(args[1]);
-
-  OsmGeoJsonReader reader;
-  if (args.Length() >= 3)
-  {
-    reader.setUseDataSourceIds(toCpp<bool>(args[2]));
-  }
-  Status status = Status::Invalid;
-  if (args.Length() >= 4)
-  {
-    status = (Status::Type)args[3]->ToInteger()->Value();
-    reader.setDefaultStatus(status);
-  }
-  reader.loadFromString(mapGeoJson, map->getMap());
-
-  args.GetReturnValue().SetUndefined();
-}
-
 
 void MapIoJs::loadMapFromStringPreserveIdAndStatus(const FunctionCallbackInfo<Value>& args)
 {

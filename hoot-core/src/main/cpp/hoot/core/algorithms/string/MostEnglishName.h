@@ -117,12 +117,6 @@ private:
 
   static int logWarnCount;
 
-  // This class is unique in that it 1) is a Singleton, 2) is configurable, and 3) and gets called
-  // from hoot-js.  hoot-js isn't set up to treat treat configurable classes as Singletons, so
-  // so this is here to limit that calling behavior just to MostEnglishNameJs.  Possibly,
-  // MostEnglishNameJs could be changed to use it as a Singleton at some point.
-  friend class MostEnglishNameJs;
-
   MostEnglishName();
 
   static MostEnglishNamePtr _theInstance;

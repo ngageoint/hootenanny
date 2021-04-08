@@ -56,15 +56,10 @@ public:
 private:
 
   OsmMapJs();
-  OsmMapJs(OsmMapPtr map);
 
-  static void clone(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void getElement(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void getElementCount(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void getParents(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void removeElement(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void setIdGenerator(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void copyProjection(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void visit(const v8::FunctionCallbackInfo<v8::Value>& args); 
 

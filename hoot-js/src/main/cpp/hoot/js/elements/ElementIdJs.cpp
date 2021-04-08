@@ -61,8 +61,6 @@ void ElementIdJs::Init(Handle<Object> target)
       FunctionTemplate::New(current, getType));
   tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "toString"),
       FunctionTemplate::New(current, toString));
-  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "toJSON"),
-      FunctionTemplate::New(current, toJSON));
 
   _constructor.Reset(current, tpl->GetFunction());
   target->Set(String::NewFromUtf8(current, "ElementId"), ToLocal(&_constructor));
@@ -100,22 +98,6 @@ void ElementIdJs::getType(const FunctionCallbackInfo<Value>& args)
   ElementId eid = ObjectWrap::Unwrap<ElementIdJs>(args.This())->getElementId();
 
   args.GetReturnValue().Set(String::NewFromUtf8(current, eid.getType().toString().toUtf8().data()));
-}
-
-void ElementIdJs::toJSON(const FunctionCallbackInfo<Value>& args)
-{
-  Isolate* current = args.GetIsolate();
-  HandleScope scope(current);
-
-  ElementId eid = ObjectWrap::Unwrap<ElementIdJs>(args.This())->getElementId();
-
-  Handle<Object> result = Object::New(current);
-  result->Set(String::NewFromUtf8(current, "type"),
-              String::NewFromUtf8(current, eid.getType().toString().toUtf8().data()));
-  result->Set(String::NewFromUtf8(current, "id"),
-              Integer::New(current, eid.getId()));
-
-  args.GetReturnValue().Set(result);
 }
 
 void ElementIdJs::toString(const FunctionCallbackInfo<Value>& args)

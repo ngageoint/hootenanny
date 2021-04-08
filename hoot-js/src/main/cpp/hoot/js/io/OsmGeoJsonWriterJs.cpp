@@ -45,19 +45,6 @@ void OsmGeoJsonWriterJs::Init(Handle<Object> exports)
   HandleScope scope(current);
   Handle<Object> writer = Object::New(current);
   exports->Set(String::NewFromUtf8(current, "OsmGeoJsonWriter"), writer);
-  writer->Set(String::NewFromUtf8(current, "toString"),
-              FunctionTemplate::New(current, toString)->GetFunction());
-}
-
-void OsmGeoJsonWriterJs::toString(const FunctionCallbackInfo<Value>& args)
-{
-  HandleScope scope(args.GetIsolate());
-
-  ConstOsmMapPtr map = toCpp<ConstOsmMapPtr>(args[0]);
-
-  OsmGeoJsonWriter writer;
-
-  args.GetReturnValue().Set(toV8(writer.toString(map)));
 }
 
 }

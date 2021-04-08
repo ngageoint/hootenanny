@@ -52,7 +52,6 @@ private:
   static void getCategories(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void getChildTagsAsVertices(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void getSimilarTagsAsVertices(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void getTagByCategory(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void getTagVertex(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isAncestor(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isGeneric(const v8::FunctionCallbackInfo<v8::Value>& args);
@@ -75,7 +74,6 @@ private:
   static void isLinear(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isLinearWaterway(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isPowerLine(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void isMetaData(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isPoi(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isRailway(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isHighway(const v8::FunctionCallbackInfo<v8::Value>& args);
