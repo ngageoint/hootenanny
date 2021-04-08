@@ -32,7 +32,6 @@
 // hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/js/io/DataConvertJs.h>
-#include <hoot/js/util/IdGeneratorJs.h>
 
 namespace hoot
 {
