@@ -28,7 +28,7 @@
 #define LINEAR_KEEP_REF1_MERGER_H
 
 // Hoot
-#include <hoot/core/conflate/linear/LinearMergerAbstract.h>
+#include <hoot/core/conflate/merging/LinearMergerAbstract.h>
 #include <hoot/core/algorithms/subline-matching/SublineStringMatcher.h>
 
 namespace hoot

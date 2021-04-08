@@ -120,7 +120,7 @@ void UnifyingConflator::apply(OsmMapPtr& map)
     _updateProgress(_currentStep - 1, "Merging feature matches...");
 
     std::vector<MergerPtr> relationMergers;
-    _createMergers(matchSets, relationMergers);
+    _createMergers(relationMergers);
 
     _mergeFeatures(relationMergers);
     _currentStep++;

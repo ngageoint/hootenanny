@@ -31,6 +31,7 @@
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonMatch.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
+#include <hoot/core/criterion/HighwayCriterion.h>
 #include <hoot/core/criterion/PoiCriterion.h>
 #include <hoot/core/criterion/StatusCriterion.h>
 #include <hoot/core/criterion/TagKeyCriterion.h>
@@ -60,7 +61,7 @@
 #include <hoot/core/ops/WayJoinerOp.h>
 #include <hoot/core/util/ConfigUtils.h>
 #include <hoot/core/io/OsmChangesetFileWriter.h>
-#include <hoot/core/conflate/linear/LinearKeepRef1Merger.h>
+#include <hoot/core/conflate/merging/LinearKeepRef1Merger.h>
 #include <hoot/core/conflate/highway/HighwayMatch.h>
 #include <hoot/core/conflate/ConflateInfoCache.h>
 
