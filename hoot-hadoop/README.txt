@@ -1,6 +1,6 @@
 
-As of Hootenanny v0.2.39, this code is no longer supported or compiled. Conflation with Hadoop has been discontinued due lack of use and the
-involved maintenance costs.
+As of Hootenanny v0.2.39, this code is no longer supported or compiled. Conflation with Hadoop has been discontinued due lack 
+of use and the involved maintenance costs.
 
 -----------------------------------------------------------------------------------
 
