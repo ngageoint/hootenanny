@@ -228,7 +228,7 @@ public:
           new ScriptMatch(_script, plugin, map, mapJs, from, *it, _mt));
         m->setMatchMembers(
           ScriptMatch::geometryTypeToMatchMembers(
-            GeometryTypeCriterion::typeToString(_scriptInfo.geometryType)));
+            GeometryTypeCriterion::typeToString(_scriptInfo.getGeometryType())));
         // if we're confident this is not a miss
         if (m->getType() != MatchType::Miss)
         {
@@ -788,7 +788,7 @@ MatchPtr ScriptMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId ei
       new ScriptMatch(_script, plugin, map, mapJs, eid1, eid2, getMatchThreshold()));
     match->setMatchMembers(
       ScriptMatch::geometryTypeToMatchMembers(
-        GeometryTypeCriterion::typeToString(_scriptInfo.geometryType)));
+        GeometryTypeCriterion::typeToString(_scriptInfo.getGeometryType())));
     return match;
   }
 

@@ -61,7 +61,6 @@ public:
     const std::shared_ptr<PluginContext>& script, const v8::Persistent<v8::Object>& plugin,
     const ConstOsmMapPtr& map, const v8::Handle<v8::Object>& mapObj, const ElementId& eid1,
     const ElementId& eid2, const ConstMatchThresholdPtr& mt);
-  virtual ~ScriptMatch() = default;
   ~ScriptMatch() = default;
 
   const MatchClassification& getClassification() const override { return _p; }
