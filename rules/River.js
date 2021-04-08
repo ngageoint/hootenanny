@@ -140,8 +140,8 @@ function geometryMismatch(map, e1, e2)
   hoot.trace("Processing geometry...");
 
   var sublines;
-  // Try matching with our default subline matcher, which may be more accurate, but slower for complex 
-  // features.
+  // Try matching with our default subline matcher, which may be more accurate, but slower for
+  // complex features.
   hoot.trace("Extracting sublines with default...");
   sublines = sublineMatcher.extractMatchingSublines(map, e1, e2);
   hoot.trace(sublines);
@@ -277,7 +277,7 @@ exports.mergeSets = function(map, pairs, replaced)
   // Feature matching also occurs during the merging phase. Since its not possible to know the 
   // original subline matcher used during matching, pass in both of the possible subline matchers 
   // that could have been used and use the same internal core logic that was used during matching to 
-  // determine which one to use during merging.
+  // determine which one to use during merging. See related comment in LinearSnapMergerJs::apply.
   return snapWays2(sublineMatcher, map, pairs, replaced, exports.baseFeatureType, frechetSublineMatcher);
 };
 

@@ -121,8 +121,8 @@ bool LinearKeepRef1Merger::_mergePair(
     return false;
   }
 
-  LOG_VARD(eid1);
-  LOG_VARD(eid2);
+  LOG_VART(eid1);
+  LOG_VART(eid2);
 
   WaySublineMatchString match;
   try
@@ -142,18 +142,18 @@ bool LinearKeepRef1Merger::_mergePair(
   // TODO: explain
   // Remove only the portion of the way that matched.
   WaySublineMatchString::MatchCollection matches = match.getMatches();
-  LOG_VARD(matches.size());
+  LOG_VART(matches.size());
   WaySubline subline1 = matches.at(0).getSubline1();
-  LOG_VARD(subline1.getWay() == way1);
-  LOG_VARD(subline1.getWay()->getElementId() == way1->getElementId());
+  LOG_VART(subline1.getWay() == way1);
+  LOG_VART(subline1.getWay()->getElementId() == way1->getElementId());
   WaySubline subline2 = matches.at(0).getSubline2();
-  LOG_VARD(subline2.getWay() == way2);
-  LOG_VARD(subline2.getWay()->getElementId() == way2->getElementId());
+  LOG_VART(subline2.getWay() == way2);
+  LOG_VART(subline2.getWay()->getElementId() == way2->getElementId());
   //if (subline1.getWay() == way)
   std::vector<ElementId> newWayIds1;
   if (subline1.getWay()->getElementId() == way1->getElementId())
   {
-    LOG_DEBUG("Removing subline 1 from " << way1->getElementId() << "...");
+    LOG_TRACE("Removing subline 1 from " << way1->getElementId() << "...");
     WayLocation start(subline1.getStart());
     WayLocation end(subline1.getEnd());
     newWayIds1 = WaySublineRemover::remove(way1, start, end, map);
@@ -162,7 +162,7 @@ bool LinearKeepRef1Merger::_mergePair(
   std::vector<ElementId> newWayIds2;
   if (subline2.getWay()->getElementId() == way2->getElementId())
   {
-    LOG_DEBUG("Removing subline 2 from " << way2->getElementId() << "...");
+    LOG_TRACE("Removing subline 2 from " << way2->getElementId() << "...");
     WayLocation start(subline2.getStart());
     WayLocation end(subline2.getEnd());
     newWayIds2 = WaySublineRemover::remove(way2, start, end, map);
@@ -180,7 +180,7 @@ bool LinearKeepRef1Merger::_mergePair(
     replaced.push_back(
       std::pair<ElementId, ElementId>(way2->getElementId(), *newWayIdsItr));
   }
-  LOG_VARD(replaced);
+  LOG_VART(replaced);
 
   return false;
 }

@@ -78,19 +78,19 @@ void SublineStringMatcherJs::extractMatchingSublines(const FunctionCallbackInfo<
   Handle<Value> result;
   try
   {
-    // Some attempts were made to cache this match for performance reasons (could be used later
-    // during match conflict resolution), but the results were unstable. See branch 3969b.
+    // Some attempts were made to use cached subline matches here from SublineStringMatcherJs for
+    // performance reasons, but the results were unstable. Doing so could lead to a runtime
+    // performance boost, so worth revisiting. See branch 3969b.
     WaySublineMatchString match;
     try
     {
-      // We'll try matching with whatever matching we're given...
       match = sm->findMatch(m, e1, e2);
     }
     catch (const RecursiveComplexityException& e)
     {
       // If we receive this exception, we'll return a string with its exception name to the calling
-      // conflate script. This give it a change to retry the match with a different matcher. Kind
-      // of kludgy, but not sure ho to send exceptions back to the js scripts.
+      // conflate script. Doing so gives it a chance to retry the match with a different matcher.
+      // Kind of kludgy, but not sure exceptions can be sent back to the js conflate scripts.
       LOG_TRACE(e.getWhat());
       const QString msg = "RecursiveComplexityException: " + e.getWhat();
       args.GetReturnValue().Set(String::NewFromUtf8(current, msg.toUtf8().data()));
@@ -129,7 +129,6 @@ void SublineStringMatcherJs::extractMatchingSublines(const FunctionCallbackInfo<
     }
     catch (const IllegalArgumentException&)
     {
-      // this is unusual; print out some information useful to debugging.
       MapProjector::projectToWgs84(copiedMap);
       LOG_TRACE(OsmXmlWriter::toString(copiedMap));
       logWarnCount++;

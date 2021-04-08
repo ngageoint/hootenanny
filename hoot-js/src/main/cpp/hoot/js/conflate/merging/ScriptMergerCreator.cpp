@@ -59,44 +59,43 @@ bool ScriptMergerCreator::createMergers(const MatchSet& matches, vector<MergerPt
   // go through all the matches
   for (MatchSet::const_iterator it = matches.begin(); it != matches.end(); ++it)
   {
-    ConstMatchPtr m = *it;
-    //LOG_VART(m->toString());
-    std::shared_ptr<const ScriptMatch> sm = dynamic_pointer_cast<const ScriptMatch>(m);
+    ConstMatchPtr match = *it;;
+    std::shared_ptr<const ScriptMatch> scriptMatch = dynamic_pointer_cast<const ScriptMatch>(match);
     // check to make sure all the input matches are script matches
-    if (sm == nullptr)
+    if (scriptMatch == nullptr)
     {
       // return an empty result
-      LOG_TRACE("Match invalid; skipping merge: " << m->toString());
+      LOG_TRACE("Match invalid; skipping merge: " << match->toString());
       return false;
     }
     // add all the element to element pairs to a set
     else
     {
-      script = sm->getScript();
+      script = scriptMatch->getScript();
 
       Isolate* current = v8::Isolate::GetCurrent();
       HandleScope handleScope(current);
       Context::Scope context_scope(script->getContext(current));
 
-      plugin.Reset(current, sm->getPlugin());
-      set<pair<ElementId, ElementId>> s = sm->getMatchPairs();
+      plugin.Reset(current, scriptMatch->getPlugin());
+      set<pair<ElementId, ElementId>> s = scriptMatch->getMatchPairs();
       eids.insert(s.begin(), s.end());
-      if (matchType.contains(sm->getName()) == false)
+      if (matchType.contains(scriptMatch->getName()) == false)
       {
-        matchType.append(sm->getName());
+        matchType.append(scriptMatch->getName());
       }
     }
   }
   LOG_VART(eids);
 
-  std::shared_ptr<ScriptMerger> sm(new ScriptMerger(script, plugin, eids));
-  sm->setMatchType(matchType.join(";"));
+  std::shared_ptr<ScriptMerger> scriptMerger(new ScriptMerger(script, plugin, eids));
+  scriptMerger->setMatchType(matchType.join(";"));
   // only add the merger if there are elements to merge
-  if (sm->hasFunction("mergeSets"))
+  if (scriptMerger->hasFunction("mergeSets"))
   {
     if (eids.size() >= 1)
     {
-      mergers.push_back(sm);
+      mergers.push_back(scriptMerger);
       result = true;
     }
   }
@@ -104,7 +103,7 @@ bool ScriptMergerCreator::createMergers(const MatchSet& matches, vector<MergerPt
   {
     if (eids.size() == 1)
     {
-      mergers.push_back(sm);
+      mergers.push_back(scriptMerger);
       result = true;
     }
     else if (eids.size() > 1)

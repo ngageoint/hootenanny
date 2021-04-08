@@ -117,7 +117,7 @@ void DiffConflator::apply(OsmMapPtr& map)
   int currentStep = 1;  // tracks the current job task step for progress reporting
   _updateProgress(currentStep - 1, "Matching features...");
   _reset();
-  // Store the map, as we might need it for tag diff later.
+  // Store the map, as we might need it for a tag diff later.
   _map = map;
   std::shared_ptr<ConflateInfoCache> conflateInfoCache(new ConflateInfoCache(map));
 
@@ -139,6 +139,7 @@ void DiffConflator::apply(OsmMapPtr& map)
 
   _currentStep++;
 
+  // Ref conflate optimizes matches, but we aren't currently doing that for diff.
 //  _updateProgress(_currentStep - 1, "Optimizing feature matches...");
 //  MatchSetVector matchSets;
 //  MatchSetVector matchSets = _optimizeMatches();
@@ -153,9 +154,7 @@ void DiffConflator::apply(OsmMapPtr& map)
     _currentStep++;
   }
 
-  // Get rid of everything from the ref1 map that matched something in the ref2 map. Note, there is
-  // a deficiency here in that partial matches won't lead to only partial features in ref 1 being
-  // dropped...the entire feature will be dropped, including the parts that didn't match (#4311).
+  // Get rid of everything from the ref1 map that matched something in the ref2 map.
 
   QString message = "Dropping match conflicts";
   if (ConfigOptions().getDifferentialSnapUnconnectedRoads())
@@ -176,8 +175,8 @@ void DiffConflator::apply(OsmMapPtr& map)
     if (conflateInfoCache->elementCriterionInUseByActiveMatcher(HighwayCriterion::className()))
     {
       // Let's try to snap disconnected ref2 roads back to ref1 roads. This has to done before
-      // dumping the ref elements in the matches, or the roads we need to snap back to won't be there
-      // anymore.
+      // dumping the ref elements in the matches, or the roads we need to snap back to won't be
+      // there anymore.
       _numSnappedWays = _snapSecondaryRoadsBackToRef();
       MemoryUsageChecker::getInstance().check();
     }
@@ -382,12 +381,12 @@ void DiffConflator::_removeMatchElements(const Status& status, const bool forceC
 {
   size_t mapSizeBefore = _map->size();
   LOG_DEBUG(
-    "\tRemoving match elements completely with status: " << status.toString() <<
-    " from map of size: " << StringUtils::formatLargeNumber(mapSizeBefore) << "...");
+    "\tRemoving match elements with status: " << status.toString() << " from map of size: " <<
+    StringUtils::formatLargeNumber(mapSizeBefore) << "...");
 
   // TODO
   const bool treatReviewsAsMatches = ConfigOptions().getDifferentialTreatReviewsAsMatches();
-  LOG_VARD(treatReviewsAsMatches);
+  LOG_VART(treatReviewsAsMatches);
 
   if (!_intraDatasetElementIdsPopulated)
   {
@@ -404,13 +403,14 @@ void DiffConflator::_removeMatchElements(const Status& status, const bool forceC
     const MatchType matchType = match->getType();
     if (matchType == MatchType::Match || (treatReviewsAsMatches && matchType == MatchType::Review))
     {
-      LOG_VARD(match->getName());
-      LOG_VARD(match->getMatchMembers());
+      LOG_VART(match->getName());
+      LOG_VART(match->getMatchMembers());
 
       std::set<std::pair<ElementId, ElementId>> pairs = match->getMatchPairs();
       if (ConfigOptions().getDifferentialRemovePartialMatchesAsWhole() || forceComplete ||
           match->getMatchMembers() != MatchMembers::Polyline ||
-          // TODO: make this work for linear ScriptMatch instances
+          // TODO: make this work for all linear ScriptMatch instances; going to involve making
+          // ScriptMatch for linear conflation return the subline matcher it used
           match->getName() != HighwayMatch::MATCH_NAME)
       {
         for (std::set<std::pair<ElementId, ElementId>>::const_iterator pairItr = pairs.begin();
@@ -421,7 +421,7 @@ void DiffConflator::_removeMatchElements(const Status& status, const bool forceC
       }
       else
       {
-        LOG_DEBUG("Creating merger to remove match element pairs partially: " << pairs << "...");
+        LOG_TRACE("Creating merger to remove match element pairs partially: " << pairs << "...");
         std::shared_ptr<const HighwayMatch> highwayMatch =
           std::dynamic_pointer_cast<const HighwayMatch>(match);
         mergers.push_back(
@@ -442,7 +442,7 @@ void DiffConflator::_removeMatchElements(const Status& status, const bool forceC
       StringUtils::millisecondsToDhms(mergersTimer.elapsed()) << ".");
   }
 
-  LOG_DEBUG(
+  LOG_TRACE(
     "\tRemoved " << StringUtils::formatLargeNumber(mapSizeBefore -_map->size()) <<
     " match elements completely with status: " << status.toString() << "...");
   OsmMapWriterFactory::writeDebugMap(_map, "after-removing-" + status.toString() + "-matches");
@@ -452,12 +452,12 @@ void DiffConflator::_removeMatchElementPairCompletely(
   const ConstMatchPtr& match, const std::pair<ElementId, ElementId>& elementPair,
   const Status& status)
 {
-  LOG_DEBUG("Removing match element pair completely: " << elementPair << "...");
-  LOG_VARD(match->getName());
+  LOG_TRACE("Removing match element pair completely: " << elementPair << "...");
+  LOG_VART(match->getName());
   const MatchType matchType = match->getType();
-  LOG_VARD(matchType);
-  LOG_VARD(match->getClassification());
-  LOG_VARD(match->getMatchPairs().size());
+  LOG_VART(matchType);
+  LOG_VART(match->getClassification());
+  LOG_VART(match->getMatchPairs().size());
 
   if (!elementPair.first.isNull())
   {
@@ -466,7 +466,7 @@ void DiffConflator::_removeMatchElementPairCompletely(
     {
       if (_satisfiesElementRemovalCondition(e1, status, match))
       {
-        LOG_DEBUG(
+        LOG_TRACE(
           "Removing entire element: " << e1->getElementId() <<
           " involved in match of type: " << matchType << "...");
         RecursiveElementRemover(e1->getElementId()).apply(_map);
@@ -480,7 +480,7 @@ void DiffConflator::_removeMatchElementPairCompletely(
     {
       if (_satisfiesElementRemovalCondition(e2, status, match))
       {
-        LOG_DEBUG(
+        LOG_TRACE(
           "Removing entire element: " << e2->getElementId() <<
           " involved in match of type: " << matchType << "...");
         RecursiveElementRemover(e2->getElementId()).apply(_map);
@@ -493,11 +493,11 @@ std::set<std::pair<ElementId, ElementId>> DiffConflator::_getMatchElementIds(
   const ConstMatchPtr& match, const std::pair<ElementId, ElementId>& elementPair,
   const Status& status) const
 {
-  LOG_VARD(match->getName());
+  LOG_VART(match->getName());
   const MatchType matchType = match->getType();
-  LOG_VARD(matchType);
-  LOG_VARD(match->getClassification());
-  LOG_VARD(match->getMatchPairs().size());
+  LOG_VART(matchType);
+  LOG_VART(match->getClassification());
+  LOG_VART(match->getMatchPairs().size());
 
   std::set<std::pair<ElementId, ElementId>> eids;
   if (!elementPair.first.isNull())
@@ -851,7 +851,9 @@ void DiffConflator::writeChangeset(
 void DiffConflator::calculateStats(OsmMapPtr pResultMap, QList<SingleStat>& stats)
 {
   // Differential specific stats
-  // TODO: These should be rolled in with the other conflate stats.
+
+  // TODO: This should be moved to CalculateStatsOp, run with diff conflate only, and expanded to
+  // cover all conflatable features types (#4743).
 
   ElementCriterionPtr pPoiCrit(new PoiCriterion());
   CriterionCountVisitor poiCounter;
