@@ -67,12 +67,8 @@ void OsmMapJs::Init(Handle<Object> target)
   // Prototype
   tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getElement"),
       FunctionTemplate::New(current, getElement));
-  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getParents"),
-      FunctionTemplate::New(current, getParents));
   tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "visit"),
       FunctionTemplate::New(current, visit));
-  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "copyProjection"),
-      FunctionTemplate::New(current, copyProjection));
 
   tpl->PrototypeTemplate()->Set(
     PopulateConsumersJs::baseClass(),
@@ -152,24 +148,6 @@ void OsmMapJs::getElement(const FunctionCallbackInfo<Value>& args)
   }
 }
 
-void OsmMapJs::getParents(const FunctionCallbackInfo<Value>& args)
-{
-  Isolate* current = args.GetIsolate();
-  HandleScope scope(current);
-
-  try
-  {
-    OsmMapJs* obj = ObjectWrap::Unwrap<OsmMapJs>(args.This());
-    ElementId eid = toCpp<ElementId>(args[0]->ToObject());
-
-    args.GetReturnValue().Set(toV8(obj->getConstMap()->getParents(eid)));
-  }
-  catch (const HootException& e)
-  {
-    args.GetReturnValue().Set(current->ThrowException(HootExceptionJs::create(e)));
-  }
-}
-
 void OsmMapJs::visit(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
@@ -202,23 +180,6 @@ void OsmMapJs::visit(const FunctionCallbackInfo<Value>& args)
     LOG_VARE(err.getWhat());
     args.GetReturnValue().Set(current->ThrowException(HootExceptionJs::create(err)));
   }
-}
-
-void OsmMapJs::copyProjection(const FunctionCallbackInfo<Value>& args)
-{
-  Isolate* current = args.GetIsolate();
-  HandleScope scope(current);
-
-  OsmMapJs* obj = ObjectWrap::Unwrap<OsmMapJs>(args.This());
-  if (obj->getMap())
-  {
-    ConstOsmMapPtr mapToCopyFrom = toCpp<ConstOsmMapPtr>(args[0]);
-    obj->getMap()->setProjection(
-      std::shared_ptr<OGRSpatialReference>(
-        new OGRSpatialReference(*mapToCopyFrom->getProjection())));
-  }
-
-  args.GetReturnValue().SetUndefined();
 }
 
 }
