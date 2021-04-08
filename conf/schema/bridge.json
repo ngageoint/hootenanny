@@ -1,8 +1,6 @@
 [
     {
-        "categories": [
-            "poi"
-        ],
+        "categories": [ "poi" ],
         "isA": "waterway",
         "name": "bridge=aqueduct",
         "objectType": "tag"
@@ -13,21 +11,13 @@
         "objectType": "tag"
     },
     {
-        "categories": [
-            "poi"
-        ],
+        "categories": [ "poi" ],
         "isA": "bridge_tunnel=unknown",
         "name": "bridge=yes",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "bridge=no",
-                "weight": 0.5
-            },
-            {
-                "name": "tunnel=yes",
-                "weight": 0.01
-            }
+            { "name": "bridge=no", "weight": 0.5 },
+            { "name": "tunnel=yes", "weight": 0.01 }
         ]
     }
 ]

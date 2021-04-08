@@ -49,7 +49,7 @@ class ElementGeometryUtils
 public:
 
   /**
-   * Determines two elements have a geometric relationship
+   * Determines if two elements have a geometric relationship
    *
    * @param element1 the first element to examine
    * @param element2 the second element to examine
@@ -60,20 +60,6 @@ public:
    */
   static bool haveGeometricRelationship(
     const ConstElementPtr& element1, const ConstElementPtr& element2,
-    const GeometricRelationship& relationship, ConstOsmMapPtr map);
-
-  /**
-   * Determines two elements have a geometric relationship
-   *
-   * @param element the element to examine
-   * @param bounds the bounds geometry to examine
-   * @param relationship the geometric relationship to check for between the element and the bounds
-   * @param map map owning the input element
-   * @return true if the element and the bounds have the specified geometric relationship; false
-   * otherwise or if the relationship could not be calculated
-   */
-  static bool haveGeometricRelationship(
-    const ConstElementPtr& element, const std::shared_ptr<geos::geom::Geometry>& bounds,
     const GeometricRelationship& relationship, ConstOsmMapPtr map);
 
   /**

@@ -187,7 +187,7 @@ describe('TranslationServer', function () {
             xml2js.parseString(trans2ggdmv30, function(err, result) {
               if (err) console.log(err);
               assert.equal(result.osm.way[0].tag[0].$.k, "error");
-              assert.equal(result.osm.way[0].tag[0].$.v, "Line geometry is not valid for AQ111 in TDSv61");
+              assert.equal(result.osm.way[0].tag[0].$.v, "Line geometry is not valid for AQ111 in GGDMv30");
             })
         })
     })

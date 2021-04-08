@@ -521,16 +521,16 @@ describe('TranslationServer', function () {
                 assert.equal(result.osm.$.schema, "GGDMv30");
                 assert.equal(result.osm.way[0].tag[0].$.k, "LTN");
                 assert.equal(result.osm.way[0].tag[0].$.v, "2");
-                assert.equal(result.osm.way[0].tag[4].$.k, "RTY");
-                assert.equal(result.osm.way[0].tag[4].$.v, "-999999");
-                assert.equal(result.osm.way[0].tag[5].$.k, "UFI");
-                assert.equal(result.osm.way[0].tag[5].$.v, "8cd72087-a7a2-43a9-8dfb-7836f2ffea13");
-                assert.equal(result.osm.way[0].tag[3].$.k, "F_CODE");
-                assert.equal(result.osm.way[0].tag[3].$.v, "AP030");
                 assert.equal(result.osm.way[0].tag[1].$.k, "ZI016_WD1");
                 assert.equal(result.osm.way[0].tag[1].$.v, "20");
                 assert.equal(result.osm.way[0].tag[2].$.k, "RIN_ROI");
                 assert.equal(result.osm.way[0].tag[2].$.v, "5");
+                assert.equal(result.osm.way[0].tag[3].$.k, "F_CODE");
+                assert.equal(result.osm.way[0].tag[3].$.v, "AP030");
+                assert.equal(result.osm.way[0].tag[4].$.k, "RTY");
+                assert.equal(result.osm.way[0].tag[4].$.v, "-999999");
+                assert.equal(result.osm.way[0].tag[6].$.k, "UFI");
+                assert.equal(result.osm.way[0].tag[6].$.v, "8cd72087-a7a2-43a9-8dfb-7836f2ffea13");
             });
         });
 
@@ -633,7 +633,6 @@ describe('TranslationServer', function () {
             var tags = gj.features[0].properties;
             assert.equal(tags["FCODE"], "AL020");
             assert.equal(tags["NAM"], "Manitou Springs");
-            assert.equal(tags["FUC"], "999");
             assert.equal(tags["UID"], "4632d15b-7c44-4ba1-a0c4-8cfbb30e39d4");
         });
 
@@ -703,11 +702,11 @@ describe('TranslationServer', function () {
             assert.equal(tags["facility"], "yes");
             assert.equal(tags["note:oth"], "(FFN:foo)");
             assert.equal(tags["security:classification"], "UNCLASSIFIED");
-            assert.equal(tags["uuid"], "{0d8b2563-81cf-44d4-8ef7-52c0e862651f}");
             assert.equal(tags["source"], "DigitalGlobe");
-            assert.equal(tags["source:imagery:id"], "756b80e1f695fb591caca8e7ce0f9ef5");
             assert.equal(tags["source:imagery:datetime"], "2017-11-11 10:45:15");
+            assert.equal(tags["source:imagery:id"], "756b80e1f695fb591caca8e7ce0f9ef5");
             assert.equal(tags["source:imagery:sensor"], "WV02");
+            assert.equal(tags["uuid"], "{0d8b2563-81cf-44d4-8ef7-52c0e862651f}");
 
             var tds_xml = server.handleInputs({
                 osm: osm_xml,
@@ -723,10 +722,9 @@ describe('TranslationServer', function () {
 
             var tags = gj.features[0].properties;
             assert.equal(tags["F_CODE"], "AL010");
-            assert.equal(tags["ZI001_SDP"], "DigitalGlobe");
-            assert.equal(tags["ZSAX_RS0"], "U");
             assert.equal(tags["OTH"], "(FFN:foo)");
             assert.equal(tags["UFI"], "0d8b2563-81cf-44d4-8ef7-52c0e862651f");
+            assert.equal(tags["ZSAX_RS0"], "U");
 
         });
 

@@ -49,6 +49,7 @@ ggdm30.rules = {
     ['F_CODE','AA010','landuse','quarry'], // Extraction Mine
     ['F_CODE','AA054','man_made','petroleum_well'], // Non-Water Well
     ['F_CODE','AD010','power','station'], // Electric Power Station, Power Plant
+    ['F_CODE','AG040','landuse','retail'], // Electric Power Station, Power Plant
     ['F_CODE','AJ110','building','greenhouse_horticulture'], // Greenhouse
     ['F_CODE','AK030','leisure','water_park'], // Amusement Park
     ['F_CODE','AK120','landuse','recreation_ground'], // Park
@@ -316,7 +317,7 @@ ggdm30.rules = {
     'DZC':'deck_count', // Deck Count
     'DZP':'depth:maximum_below_surface', // Deepest Depth Below Surface Level
     // 'EOL':'raw:EOL', // Light Elevation - BC040_EOL
-    'EPW':'generator:output:electricity', // Electrical Power Generation Capacity
+    'EPW':'plant:output:electricity', // Electrical Power Generation Capacity
     'EQS':'density_equivalent_scale', // Density Equivalent Scale
     'EVA':'source:accuracy:elevation', // Elevation Vertical Accuracy (90%)
     'FCL':'ferry:crossing_distance', // Ferry Crossing Distance
@@ -3862,12 +3863,12 @@ ggdm30.rules = {
 
     // POS - Power Source
     // ['POS','-999999',undefined,undefined], // No Information
-    ['POS','1','generator:source','geothermal'], // Geothermal
-    ['POS','2','generator:source','hydro'], // Hydro-electric
-    ['POS','3','generator:source','nuclear'], // Nuclear
-    ['POS','4','generator:source','thermal'], // Thermal
-    ['POS','5','generator:source','tidal'], // Tidal
-    ['POS','999','generator:source','other'], // Other
+    ['POS','1','plant:source','geothermal'], // Geothermal
+    ['POS','2','plant:source','hydro'], // Hydro-electric
+    ['POS','3','plant:source','nuclear'], // Nuclear
+    ['POS','4','plant:source','thermal'], // Thermal
+    ['POS','5','plant:source','tidal'], // Tidal
+    ['POS','999','plant:source','other'], // Other
 
     // POS2 - Power Source [2]
     // POS3 - Power Source [3]
@@ -4064,12 +4065,12 @@ ggdm30.rules = {
     ['RRC','2','railway','carline'], // Carline
     ['RRC','6','railway','subway'], // Underground Railway
     ['RRC','8','railway','logging'], // Logging
-    ['RRC','11','railway','rapid_transit'], // Rail Rapid Transit
+    ['RRC','11','rapid_transit','yes'], // Rail Rapid Transit
     ['RRC','13','railway','marine_railway'], // Marine Railway
     ['RRC','14','railway','tram'], // Tramway
     ['RRC','15','railway','funicular'], // Funicular
     ['RRC','24','railway','museum'], // Museum
-    ['RRC','32','railway','automated_transit_system'], // Automated Transit System
+    ['RRC','32','automated_transit_system','yes'], // Automated Transit System
     ['RRC','33','railway','longhaul'], // Long-haul
     ['RRC','999','railway','Other'], // Other
 
@@ -4974,12 +4975,12 @@ ggdm30.rules = {
 
     // WCC - Watercourse Channel Type
     // ['WCC','-999999',undefined,undefined], // No Information
-    ['WCC','1','waterway','stream'], // Channelized Stream
-    ['WCC','2','waterway','braided_stream'], // Braided Stream
-    ['WCC','3','waterway','gorge'], // Gorge
+    ['WCC','1','channel:type','channelized_stream'], // Channelized Stream
+    ['WCC','2','channel:type','braided_stream'], // Braided Stream
+    ['WCC','3','channel:type','gorge'], // Gorge
     ['WCC','4','wadi','yes'], // Wadi
-    ['WCC','7','waterway','river'], // Normal Channel
-    ['WCC','999','waterway','other'], // Other
+    ['WCC','7','channel:type','normal'], // Normal Channel
+    ['WCC','999','channel:type','other'], // Other
 
     // WDAC - Average Water Depth <interval closure>
     ['WDAC','2','depth:average:closure','open_interval'], // Open Interval
@@ -6290,7 +6291,7 @@ ggdm30.rules = {
     ['RTY','4','ref:road:type','place'], // Place
     ['RTY','4','ref:road:type','terrace'], // Terrace
     ['RTY','4','ref:roadtype','roundabout'], // Roundabout
-    ['RTY','999','highway','other'],
+    // ['RTY','999','highway','other'],
 
     // ['TTC','999','tower:type','radar'], //  Radar Tower -> Other
 

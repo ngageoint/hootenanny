@@ -75,44 +75,38 @@ Object.keys(objs).forEach(s => {
     var presets = builder.create('presets');
 
     objs[s].schema.forEach(i => {
-        //Must de-dup the items and build up the geom array
-        if (items[i.desc]) {
-            items[i.desc].geoms.push(i.geom);
-        } else {
+        const itemKey = i.desc + ' - ' + i.geom;
 
-            items[i.desc] = {
-                fcode: i.fcode,
-                geoms: [i.geom],
-                columns: i.columns,
-                hashes: []
-            };
+        items[itemKey] = {
+            fcode: i.fcode,
+            geom: i.geom,
+            columns: i.columns,
+            hashes: []
+        };
 
-            //Build de-duped map of unique enumerations (list entry),
-            //combo and text elements keyed by hash
-            i.columns.forEach(col => {
-                let colHash = 'hash' + crypto.createHash('md5').update(JSON.stringify(col)).digest('hex').replace(/[0-9]/g, '');
-                items[i.desc].hashes.push(colHash);
+        //Build de-duped map of unique enumerations (list entry),
+        //combo and text elements keyed by hash
+        i.columns.forEach(col => {
+            let colHash = 'hash' + crypto.createHash('md5').update(JSON.stringify(col)).digest('hex').replace(/[0-9]/g, '');
+            items[itemKey].hashes.push(colHash);
 
-                if (col.type === 'enumeration') {
+            if (col.type === 'enumeration') {
 
-                    let key = 'hash' + crypto.createHash('md5').update(JSON.stringify(col.enumerations)).digest('hex').replace(/[0-9]/g, '');
+                let key = 'hash' + crypto.createHash('md5').update(JSON.stringify(col.enumerations)).digest('hex').replace(/[0-9]/g, '');
 
-                    if (!listEntries[key])
-                        listEntries[key] = col.enumerations;
+                if (!listEntries[key])
+                    listEntries[key] = col.enumerations;
 
-                    if (!combos[colHash]) {
-                        col.enumHash = key;
-                        combos[colHash] = col;
-                    }
-
-                } else {
-                    if (!texts[colHash])
-                        texts[colHash] = col;
+                if (!combos[colHash]) {
+                    col.enumHash = key;
+                    combos[colHash] = col;
                 }
-            });
 
-        }
-
+            } else {
+                if (!texts[colHash])
+                    texts[colHash] = col;
+            }
+        });
     });
 
     //Write the unique list entries out as chunks
@@ -195,29 +189,21 @@ Object.keys(objs).forEach(s => {
         //Get the right subgroup (two-letter) element to append to
         let code = items[i].fcode.slice(0,2);
 
-        items[i].geoms.forEach(geom => {
-            let itemInfo = {
-                name: i + ' - ' + geom,
-                type: lookupType(geom),
-                preset_name_label: true
+        let it = subGroupCodeElements[code].ele('item', {name: i, type: lookupType(items[i].geom), preset_name_label: true});
+
+        usedGroups.add(code); //Sub-group
+        usedGroups.add(code.charAt(0)); //Group
+
+        it.ele('key', {key: (s === 'mgcp') ? 'FCODE' : 'F_CODE', value: items[i].fcode}); //MGCP uses 'FCODE' as key
+
+        items[i].columns.forEach((col, j) => {
+            if (col.name !== 'FCODE' && col.name !== 'F_CODE') { //FCODE is set as a key above
+                it.ele('reference',
+                    {
+                        ref: items[i].hashes[j]
+                    });
             }
-            let it = subGroupCodeElements[code].ele('item', itemInfo);
-
-            usedGroups.add(code); //Sub-group
-            usedGroups.add(code.charAt(0)); //Group
-
-            it.ele('key', {key: (s === 'mgcp') ? 'FCODE' : 'F_CODE', value: items[i].fcode}); //MGCP uses 'FCODE' as key
-
-            items[i].columns.forEach((col, j) => {
-                if (col.name !== 'FCODE' && col.name !== 'F_CODE') { //FCODE is set as a key above
-                    it.ele('reference',
-                        {
-                            ref: items[i].hashes[j]
-                        });
-                }
-            });
-        })
-
+        });
     });
 
     //Remove empty groups

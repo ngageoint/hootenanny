@@ -213,7 +213,7 @@ translate = {
         if ((key in fCodeList) && (value in fCodeList[key]))
         {
           // Debug
-          // print('UsedFCode:' + key+ ' = ' + inList[col]);
+          // print('UsedFCode:' + key+ ' = ' + inList[key]);
           delete inList[key];
           continue;
         }
@@ -800,6 +800,8 @@ translate = {
   // Unpack <OSM>XXX</OSM> from TXT/MEMO fields
   unpackMemo : function(rawMemo)
   {
+    if (!rawMemo) return {tags:'',text:''};
+
     var tgs = '';
     var txt = '';
 
@@ -1301,7 +1303,7 @@ translate = {
   }, // End addReviewFeature
 
 
-  // addSingleO2sFeature - Add o2s features to a schema
+  // addSingleO2sFeature - Add a single o2s feature to a schema
   addSingleO2sFeature: function(schema)
   {
     // 8K of text should be enough
@@ -1312,8 +1314,9 @@ translate = {
     return schema;
   }, // End addSingleO2sFeature
 
-  // addEmptyFeature - Add split o2s features to a schema
-  addEmptyFeature: function(schema)
+
+  // addO2sFeatures - Add split o2s features to a schema
+  addO2sFeatures: function(schema)
   {
     schema.push({ name:'o2s_A',desc:'o2s',geom:'Area',
       columns:[ {name:'tag1',desc:'Tag List',type:'String',length:'8192'/*,length:'254'*/},
@@ -1338,7 +1341,32 @@ translate = {
     });
 
     return schema;
-  }, // End addEmptyFeature
+  }, // End addO2sFeatures
+
+
+  // addSingleTagFeature - Add a feature to hold OSM tags to a schema
+  // This is for any non-shapefile export
+  addSingleTagFeature: function(schema)
+  {
+    schema.forEach( function (item) {
+      item.columns.push({name:'OSMTAGS',desc:'Stored OSM tags and values',type:'String',defValue:'',length:'8192'});
+    });
+
+    return schema;
+  }, // End addSingleTagFeature
+
+  // addTagFeatures - Add a split tag attribute feature to a schema
+  addTagFeatures: function(schema)
+  {
+    schema.forEach( function (item) {
+      item.columns.push({name:'OSMTAGS',desc:'Stored OSM tags and values',type:'String',defValue:'',length:'253'});
+      item.columns.push({name:'OSMTAGS2',desc:'Stored OSM tags and values',type:'String',defValue:'',length:'253'});
+      item.columns.push({name:'OSMTAGS3',desc:'Stored OSM tags and values',type:'String',defValue:'',length:'253'});
+      item.columns.push({name:'OSMTAGS4',desc:'Stored OSM tags and values',type:'String',defValue:'',length:'253'});
+    });
+
+    return schema;
+  }, // End addTagFeatures
 
 
   // addExtraFeature - Add features to hold 'extra' tag values to a schema
@@ -1544,6 +1572,12 @@ translate = {
         continue;
       }
 
+      // No need to look for this
+      if (col == 'F_CODE') continue
+
+      // Skip stored tags
+      if (col.indexOf('OSMTAGS') == 0) continue;
+
       // Reuse tKey but don't remove spaces, underscores etc
       tKey = col.toUpperCase();
 
@@ -1553,9 +1587,6 @@ translate = {
         delete attrs[col];
         continue;
       }
-
-      // No need to look for this
-      if (col == 'F_CODE') continue
 
       // See if the tag is a valid TDS attribute
       if (~spec.rules.ignoreList.indexOf(col) ||

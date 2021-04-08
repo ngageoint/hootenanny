@@ -13,6 +13,7 @@ describe('TranslationServer', function () {
 
     it('should translate ZI001_SDP and ZI001_SDV from tdsv61 -> osm', function() {
 
+        // NOTE: ZI039 (Entity Collection Metadata) is the only feature with these attributes
         var data = '<osm version="0.6" upload="true" generator="hootenanny">\
                         <node id="-10" action="modify" visible="true" lat="0.68307256979" lon="18.45073925651" />\
                         <node id="-11" action="modify" visible="true" lat="0.68341620728" lon="18.45091527847" />\
@@ -24,7 +25,7 @@ describe('TranslationServer', function () {
                             <nd ref="-12" />\
                             <nd ref="-13" />\
                             <nd ref="-10" />\
-                            <tag k="F_CODE" v="AL013"/>\
+                            <tag k="F_CODE" v="ZI039"/>\
                             <tag k="ZI001_SDP" v="DigitalGlobe"/>\
                             <tag k="ZI001_SDV" v="2017-11-02 06:17:23"/>\
                         </way>\
@@ -45,7 +46,7 @@ describe('TranslationServer', function () {
         assert.equal(xml.getElementsByTagName("osm")[0].getAttribute("schema"), "OSM");
 
         var tags = gj.features[0].properties;
-        assert.equal(tags['building'], 'yes');
+        assert.equal(tags['source:metadata'], 'entity');
         assert.equal(tags['source'], 'DigitalGlobe');
         assert.equal(tags['source:datetime'], '2017-11-02 06:17:23');
 
@@ -65,7 +66,8 @@ describe('TranslationServer', function () {
                             <nd ref="-12" />\
                             <nd ref="-13" />\
                             <nd ref="-10" />\
-                            <tag k="building" v="yes"/>\
+                            <tag k="source:metadata" v="entity"/>\
+                            <tag k="area" v="yes"/>\
                             <tag k="source" v="DigitalGlobe"/>\
                             <tag k="source:datetime" v="2017-11-02 06:17:23"/>\
                         </way>\
@@ -78,14 +80,15 @@ describe('TranslationServer', function () {
         });
 
         // console.log(tds_xml);
-        
+
         xml = parser.parseFromString(tds_xml);
         gj = osmtogeojson(xml);
 
         assert.equal(xml.getElementsByTagName("osm")[0].getAttribute("schema"), "TDSv61");
 
         var tags = gj.features[0].properties;
-        assert.equal(tags["F_CODE"], 'AL013');
+
+        assert.equal(tags["F_CODE"], 'ZI039');
         assert.equal(tags["ZI001_SDP"], 'DigitalGlobe');
         assert.equal(tags["ZI001_SDV"], '2017-11-02 06:17:23');
 
@@ -104,7 +107,8 @@ describe('TranslationServer', function () {
                             <nd ref="-12" />\
                             <nd ref="-13" />\
                             <nd ref="-10" />\
-                            <tag k="building" v="yes"/>\
+                            <tag k="source:metadata" v="entity"/>\
+                            <tag k="area" v="yes"/>\
                             <tag k="source:imagery" v="DigitalGlobe"/>\
                             <tag k="source:imagery:datetime" v="2017-11-02 06:17:23"/>\
                         </way>\
@@ -117,14 +121,14 @@ describe('TranslationServer', function () {
         });
 
         // console.log(tds_xml);
-        
+
         xml = parser.parseFromString(tds_xml);
         gj = osmtogeojson(xml);
 
         assert.equal(xml.getElementsByTagName("osm")[0].getAttribute("schema"), "TDSv61");
 
         var tags = gj.features[0].properties;
-        assert.equal(tags["F_CODE"], 'AL013');
+        assert.equal(tags["F_CODE"], 'ZI039');
         assert.equal(tags["ZI001_SDP"], 'DigitalGlobe');
         assert.equal(tags["ZI001_SDV"], '2017-11-02 06:17:23');
 
@@ -143,7 +147,8 @@ describe('TranslationServer', function () {
                             <nd ref="-12" />\
                             <nd ref="-13" />\
                             <nd ref="-10" />\
-                            <tag k="building" v="yes"/>\
+                            <tag k="source:metadata" v="entity"/>\
+                            <tag k="area" v="yes"/>\
                             <tag k="source" v="OpenStreetMap"/>\
                             <tag k="source:imagery" v="DigitalGlobe"/>\
                         </way>\
@@ -156,14 +161,14 @@ describe('TranslationServer', function () {
         });
 
         // console.log(tds_xml);
-        
+
         xml = parser.parseFromString(tds_xml);
         gj = osmtogeojson(xml);
 
         assert.equal(xml.getElementsByTagName("osm")[0].getAttribute("schema"), "TDSv61");
 
         var tags = gj.features[0].properties;
-        assert.equal(tags["F_CODE"], 'AL013');
+        assert.equal(tags["F_CODE"], 'ZI039');
         assert.equal(tags["ZI001_SDP"], 'OpenStreetMap');
 
     });
@@ -181,7 +186,8 @@ describe('TranslationServer', function () {
                             <nd ref="-12" />\
                             <nd ref="-13" />\
                             <nd ref="-10" />\
-                            <tag k="building" v="yes"/>\
+                            <tag k="source:metadata" v="entity"/>\
+                            <tag k="area" v="yes"/>\
                             <tag k="source:datetime" v="2017-07-02"/>\
                             <tag k="source:imagery:datetime" v="2017-11-02 06:17:23"/>\
                         </way>\
@@ -194,13 +200,13 @@ describe('TranslationServer', function () {
         });
 
         // console.log(tds_xml);
-        
+
         xml = parser.parseFromString(tds_xml);
         gj = osmtogeojson(xml);
         assert.equal(xml.getElementsByTagName("osm")[0].getAttribute("schema"), "TDSv61");
 
         var tags = gj.features[0].properties;
-        assert.equal(tags["F_CODE"], 'AL013');
+        assert.equal(tags["F_CODE"], 'ZI039');
         assert.equal(tags["ZI001_SDV"], '2017-07-02');
 
     });
@@ -218,8 +224,8 @@ describe('TranslationServer', function () {
                             <nd ref="5416906822" />\
                             <nd ref="5416906824" />\
                             <nd ref="5416906829" />\
-                            <tag k="building" v="yes" />\
-                            <tag k="condition" v="functional" />\
+                            <tag k="source:metadata" v="entity" />\
+                            <tag k="area" v="yes"/>\
                             <tag k="security:classification" v="UNCLASSIFIED" />\
                             <tag k="source" v="DigitalGlobe" />\
                             <tag k="source:imagery" v="DigitalGlobe" />\
@@ -227,7 +233,6 @@ describe('TranslationServer', function () {
                             <tag k="source:imagery:id" v="6247f8c5bf2d66d9dbb458bce2c72078" />\
                             <tag k="source:imagery:layerName" v="2017-08-13 - WV02" />\
                             <tag k="source:imagery:sensor" v="WV02" />\
-                            <tag k="use" v="residential" />\
                             <tag k="uuid" v="{77c030c5-9d33-4775-94c4-d34fd3d9b8f8}" />\
                           </way>\
                         </osm>';

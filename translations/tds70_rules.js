@@ -187,7 +187,7 @@ tds70.rules = {
     'DMT':'canopy_cover', // Canopy Cover
     'DOF':'flow_direction', // Direction of Flow
     'DZC':'deck_count', // Deck Count
-    'EPW':'generator:output:electricity', // Electrical Power Generation Capacity
+    'EPW':'plant:output:electricity', // Electrical Power Generation Capacity
     'EVA':'source:accuracy:elevation', // Elevation Vertical Accuracy (90%)
     //    'FCSUBTYPE':'etds:fcsubtype', // Very ESRI Specific. Ignored for now
     'GSGCHL':'aeroway:runway_highend:slope:high_lowervalue', // Runway Direction (high end) : Surface Slope (high) (lower value)
@@ -2091,12 +2091,12 @@ tds70.rules = {
 
     // POS - Power Source
     // ['POS','-999999',undefined,undefined], // No Information
-    ['POS','1','generator:source','geothermal'], // Geothermal
-    ['POS','2','generator:source','hydro'], // Hydro-electric
-    ['POS','3','generator:source','nuclear'], // Nuclear
-    ['POS','4','generator:source','thermal'], // Thermal
-    ['POS','5','generator:source','tidal'], // Tidal
-    ['POS','999','generator:source','other'], // Other
+    ['POS','1','plant:source','geothermal'], // Geothermal
+    ['POS','2','plant:source','hydro'], // Hydro-electric
+    ['POS','3','plant:source','nuclear'], // Nuclear
+    ['POS','4','plant:source','thermal'], // Thermal
+    ['POS','5','plant:source','tidal'], // Tidal
+    ['POS','999','plant:source','other'], // Other
 
     // POS2 - Power Source [2]
     // POS3 - Power Source [3]
@@ -2267,12 +2267,12 @@ tds70.rules = {
     ['RRC','2','railway','carline'], // Carline
     ['RRC','6','railway','subway'], // Underground Railway
     ['RRC','8','railway','logging'], // Logging
-    ['RRC','11','railway','rapid_transit'], // Rail Rapid Transit
+    ['RRC','11','rapid_transit','yes'], // Rail Rapid Transit
     ['RRC','13','railway','marine_railway'], // Marine Railway
     ['RRC','14','railway','tram'], // Tramway
     ['RRC','15','railway','funicular'], // Funicular
     ['RRC','24','railway','museum'], // Museum
-    ['RRC','32','railway','automated_transit_system'], // Automated Transit System
+    ['RRC','32','automated_transit_system','yes'], // Automated Transit System
     ['RRC','33','railway','longhaul'], // Long-haul
     ['RRC','999','railway','Other'], // Other
 
@@ -2841,12 +2841,12 @@ tds70.rules = {
 
     // WCC - Watercourse Channel Type
     // ['WCC','-999999',undefined,undefined], // No Information
-    ['WCC','1','waterway','stream'], // Channelized Stream
-    ['WCC','2','waterway','braided_stream'], // Braided Stream
-    ['WCC','3','waterway','gorge'], // Gorge
+    ['WCC','1','channel:type','channelized_stream'], // Channelized Stream
+    ['WCC','2','channel:type','braided_stream'], // Braided Stream
+    ['WCC','3','channel:type','gorge'], // Gorge
     ['WCC','4','wadi','yes'], // Wadi
-    ['WCC','7','waterway','river'], // Normal Channel
-    ['WCC','999','waterway','other'], // Other
+    ['WCC','7','channel:type','normal'], // Normal Channel
+    ['WCC','999','channel:type','other'], // Other
 
     // WEQ - Well Equipment
     // ['WEQ','-999999',undefined,undefined], // No Information
@@ -4898,7 +4898,7 @@ tds70.rules = {
     'GB055':'100448','GB065':'100452','GB070':'100453','GB075':'100454','GB230':'100456',
     'GB250':'100457','SU001':'100462','ZB030':'100465','ZB050':'177997','ZC050':'800597',
     'ZD015':'100578','ZD020':'100473','ZD040':'100475','ZD045':'100476','ZI031':'121591',
-    'ZI039':'132721'
+    'ZI039':'132721','AQ062':'100168',
   }, // End of subtypeList
   // ##### End of ESRI FCSubtype Rules #####
 

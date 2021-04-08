@@ -37,6 +37,7 @@ class ReplaceTagMergerTest : public HootTestFixture
     CPPUNIT_TEST_SUITE(ReplaceTagMergerTest);
     CPPUNIT_TEST(runBasicTest);
     CPPUNIT_TEST(runSwapTest);
+    CPPUNIT_TEST(runConfigurationTest);
     CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -74,6 +75,27 @@ public:
 
     Tags expected;
     expected["bar"] = "baz";
+
+    Tags merged = uut.mergeTags(t1, t2, ElementType::Way);
+    CPPUNIT_ASSERT_EQUAL(expected, merged);
+  }
+
+  void runConfigurationTest()
+  {
+    Settings settings;
+    settings.set(ConfigOptions::getTagMergerOverwriteExcludeKey(), QStringList());
+    ReplaceTagMerger uut;
+    uut.setConfiguration(settings);
+
+    Tags t1;
+    t1["foo"] = "bar";
+
+    Tags t2;
+    t2["bar"] = "baz";
+    t2["foo"] = "baz";
+
+    Tags expected;
+    expected["foo"] = "bar";
 
     Tags merged = uut.mergeTags(t1, t2, ElementType::Way);
     CPPUNIT_ASSERT_EQUAL(expected, merged);
