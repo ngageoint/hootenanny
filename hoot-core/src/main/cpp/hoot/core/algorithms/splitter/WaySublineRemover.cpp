@@ -40,7 +40,7 @@ namespace hoot
 {
 
 std::vector<ElementId> WaySublineRemover::remove(
-  WayPtr& way, const WayLocation& start, const WayLocation& end, const OsmMapPtr& map)
+  const WayPtr& way, const WayLocation& start, const WayLocation& end, const OsmMapPtr& map)
 {
   if (!MapProjector::isPlanar(map))
   {
@@ -102,7 +102,7 @@ std::vector<ElementId> WaySublineRemover::remove(
 }
 
 std::vector<ElementId> WaySublineRemover::_split(
-  WayPtr& way, WayLocation& splitLocation, const OsmMapPtr& map, const bool keepFirstSegment)
+  const WayPtr& way, WayLocation& splitLocation, const OsmMapPtr& map, const bool keepFirstSegment)
 {
   std::vector<ElementId> newWayIds;
   // Don't split anything if we're splitting at the beginning or end of the way.

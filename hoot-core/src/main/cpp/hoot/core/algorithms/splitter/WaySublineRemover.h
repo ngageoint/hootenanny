@@ -53,7 +53,7 @@ public:
    * @return IDs of the ways created and added back to the map as a result of the subline removal
    */
   static std::vector<ElementId> remove(
-    WayPtr& way, const WayLocation& start, const WayLocation& end, const OsmMapPtr& map);
+    const WayPtr& way, const WayLocation& start, const WayLocation& end, const OsmMapPtr& map);
 
 private:
 
@@ -62,7 +62,8 @@ private:
    * or the second.
    */
   static std::vector<ElementId> _split(
-    WayPtr& way, WayLocation& splitLocation, const OsmMapPtr& map, const bool keepFirstSegment);
+    const WayPtr& way, WayLocation& splitLocation, const OsmMapPtr& map,
+    const bool keepFirstSegment);
 };
 
 }
