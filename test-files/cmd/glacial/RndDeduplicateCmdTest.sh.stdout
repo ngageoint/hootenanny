@@ -1,0 +1,16 @@
+20:41:08.343 STATUS ...oot/rnd/cmd/DeDuplicateCmd.cpp( 129) De-duplicating ...:eduplicateCmdTest/in1.osm to ...mdTest/out-single-map.osm...
+20:41:08.391 STATUS ...oot/rnd/cmd/DeDuplicateCmd.cpp( 181) De-duplicated 40 features from ...test-output/cmd/glacial/RndDeduplicateCmdTest/in1.osm and wrote them to: ...mdTest/out-single-map.osm.
+20:41:08.391 STATUS ...oot/rnd/cmd/DeDuplicateCmd.cpp( 183) 	36 nodes
+20:41:08.391 STATUS ...oot/rnd/cmd/DeDuplicateCmd.cpp( 185) 	4 ways
+20:41:08.391 STATUS ...oot/rnd/cmd/DeDuplicateCmd.cpp( 188) 	0 relations
+20:41:08.391 STATUS ...oot/rnd/cmd/DeDuplicateCmd.cpp( 204) De-duplicated elements in 00:00 total.
+20:41:09.049 STATUS ...oot/rnd/cmd/DeDuplicateCmd.cpp( 139) De-duplicating ...:test-files/ToyTestA.osm to ...mdTest/out-dual-map-1.osm and ...eduplicateCmdTest/in2.osm to ...mdTest/out-dual-map-2.osm...
+20:41:09.093 STATUS ...oot/rnd/cmd/DeDuplicateCmd.cpp( 181) De-duplicated 0 features from ...test-files/ToyTestA.osm and wrote them to: ...mdTest/out-dual-map-1.osm.
+20:41:09.093 STATUS ...oot/rnd/cmd/DeDuplicateCmd.cpp( 183) 	0 nodes
+20:41:09.093 STATUS ...oot/rnd/cmd/DeDuplicateCmd.cpp( 185) 	0 ways
+20:41:09.093 STATUS ...oot/rnd/cmd/DeDuplicateCmd.cpp( 188) 	0 relations
+20:41:09.093 STATUS ...oot/rnd/cmd/DeDuplicateCmd.cpp( 194) De-duplicated 40 features from ...test-output/cmd/glacial/RndDeduplicateCmdTest/in2.osm and wrote them to: ...mdTest/out-dual-map-2.osm.
+20:41:09.093 STATUS ...oot/rnd/cmd/DeDuplicateCmd.cpp( 196) 	36 nodes
+20:41:09.093 STATUS ...oot/rnd/cmd/DeDuplicateCmd.cpp( 198) 	0 ways
+20:41:09.093 STATUS ...oot/rnd/cmd/DeDuplicateCmd.cpp( 201) 	0 relations
+20:41:09.093 STATUS ...oot/rnd/cmd/DeDuplicateCmd.cpp( 204) De-duplicated elements in 00:00 total.

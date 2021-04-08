@@ -10,51 +10,51 @@
     <way visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-7"/>
         <nd ref="-9"/>
-        <tag k="width:minimum_traveled_way" v="3"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:name" v="imagery_(other)"/>
-        <tag k="source" v="mgcp:lap010"/>
-        <tag k="highway" v="track"/>
-        <tag k="source:ingest:datetime" v="2019-10-23T19:25:23.549Z"/>
-        <tag k="name" v="Dirt"/>
-        <tag k="uuid" v="{1d717c8a-7883-47a2-befe-7e18a2fe3a72}"/>
-        <tag k="source:accuracy:horizontal" v="25"/>
-        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
-        <tag k="seasonal" v="fair"/>
-        <tag k="width" v="3"/>
         <tag k="error:circular" v="28.65"/>
+        <tag k="highway" v="track"/>
+        <tag k="name" v="Dirt"/>
+        <tag k="seasonal" v="fair"/>
+        <tag k="source" v="mgcp:lap010"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-03-26T09:25:27.311Z"/>
+        <tag k="source:name" v="imagery_(other)"/>
+        <tag k="uuid" v="{1d717c8a-7883-47a2-befe-7e18a2fe3a72}"/>
+        <tag k="width" v="3"/>
+        <tag k="width:minimum_traveled_way" v="3"/>
     </way>
     <way visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-4"/>
         <nd ref="-6"/>
-        <tag k="width:minimum_traveled_way" v="4"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:name" v="imagery_(other)"/>
-        <tag k="source" v="mgcp:lap010"/>
-        <tag k="highway" v="track"/>
-        <tag k="source:ingest:datetime" v="2019-10-23T19:25:23.548Z"/>
-        <tag k="name" v="Kokoda"/>
-        <tag k="uuid" v="{1d1127be-1934-40af-9e2d-af265f9405ad}"/>
-        <tag k="source:accuracy:horizontal" v="25"/>
-        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
-        <tag k="seasonal" v="no"/>
-        <tag k="width" v="4"/>
         <tag k="error:circular" v="28.65"/>
+        <tag k="highway" v="track"/>
+        <tag k="name" v="Kokoda"/>
+        <tag k="seasonal" v="no"/>
+        <tag k="source" v="mgcp:lap010"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-03-26T09:25:27.311Z"/>
+        <tag k="source:name" v="imagery_(other)"/>
+        <tag k="uuid" v="{1d1127be-1934-40af-9e2d-af265f9405ad}"/>
+        <tag k="width" v="4"/>
+        <tag k="width:minimum_traveled_way" v="4"/>
     </way>
     <way visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1"/>
         <nd ref="-3"/>
-        <tag k="width:minimum_traveled_way" v="2.5"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:name" v="imagery_(other)"/>
-        <tag k="source" v="mgcp:lap010"/>
-        <tag k="highway" v="track"/>
-        <tag k="source:ingest:datetime" v="2019-10-23T19:25:23.548Z"/>
-        <tag k="name" v="Jinglemoney"/>
-        <tag k="uuid" v="{1c362077-a802-41f3-97e5-193db7df1a0b}"/>
-        <tag k="source:accuracy:horizontal" v="25"/>
-        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
-        <tag k="width" v="2.5"/>
         <tag k="error:circular" v="28.65"/>
+        <tag k="highway" v="track"/>
+        <tag k="name" v="Jinglemoney"/>
+        <tag k="source" v="mgcp:lap010"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:ingest:datetime" v="2021-03-26T09:25:27.309Z"/>
+        <tag k="source:name" v="imagery_(other)"/>
+        <tag k="uuid" v="{1c362077-a802-41f3-97e5-193db7df1a0b}"/>
+        <tag k="width" v="2.5"/>
+        <tag k="width:minimum_traveled_way" v="2.5"/>
     </way>
 </osm>

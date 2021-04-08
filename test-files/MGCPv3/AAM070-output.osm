@@ -30,112 +30,112 @@
         <nd ref="-23"/>
         <nd ref="-24"/>
         <nd ref="-22"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source" v="mgcp:aam070"/>
-        <tag k="source:ingest:datetime" v="2020-11-16T15:34:19.494Z"/>
-        <tag k="content" v="silage"/>
-        <tag k="uuid" v="{128252cc-d3f2-4bdb-ba3d-dbe2dc69fef2}"/>
-        <tag k="man_made" v="storage_tank"/>
         <tag k="condition" v="functional"/>
+        <tag k="content" v="silage"/>
         <tag k="error:circular" v="15"/>
+        <tag k="man_made" v="storage_tank"/>
+        <tag k="source" v="mgcp:aam070"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:ingest:datetime" v="2021-03-26T09:31:25.566Z"/>
+        <tag k="uuid" v="{128252cc-d3f2-4bdb-ba3d-dbe2dc69fef2}"/>
     </way>
     <way visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-19"/>
         <nd ref="-20"/>
         <nd ref="-21"/>
         <nd ref="-19"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source" v="mgcp:aam070"/>
-        <tag k="source:ingest:datetime" v="2020-11-16T15:34:19.494Z"/>
-        <tag k="content" v="water"/>
-        <tag k="uuid" v="{13389c28-59ac-4d20-9c29-d34fe8f84cc6}"/>
-        <tag k="man_made" v="storage_tank"/>
         <tag k="condition" v="functional"/>
+        <tag k="content" v="water"/>
         <tag k="error:circular" v="15"/>
+        <tag k="man_made" v="storage_tank"/>
+        <tag k="source" v="mgcp:aam070"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:ingest:datetime" v="2021-03-26T09:31:25.565Z"/>
+        <tag k="uuid" v="{13389c28-59ac-4d20-9c29-d34fe8f84cc6}"/>
     </way>
     <way visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-16"/>
         <nd ref="-17"/>
         <nd ref="-18"/>
         <nd ref="-16"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source" v="mgcp:aam070"/>
-        <tag k="source:ingest:datetime" v="2020-11-16T15:34:19.494Z"/>
-        <tag k="content" v="manure"/>
-        <tag k="uuid" v="{1514e475-0a8b-450d-8138-af8623cbdd56}"/>
-        <tag k="man_made" v="storage_tank"/>
         <tag k="building" v="storage_tank"/>
         <tag k="condition" v="functional"/>
+        <tag k="content" v="manure"/>
         <tag k="error:circular" v="15"/>
+        <tag k="man_made" v="storage_tank"/>
+        <tag k="source" v="mgcp:aam070"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:ingest:datetime" v="2021-03-26T09:31:25.565Z"/>
+        <tag k="uuid" v="{1514e475-0a8b-450d-8138-af8623cbdd56}"/>
     </way>
     <way visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-13"/>
         <nd ref="-14"/>
         <nd ref="-15"/>
         <nd ref="-13"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source" v="mgcp:aam070"/>
-        <tag k="source:ingest:datetime" v="2020-11-16T15:34:19.493Z"/>
-        <tag k="content" v="fuel"/>
-        <tag k="uuid" v="{1339103f-9a67-4dc1-aa67-b590b33b3000}"/>
-        <tag k="man_made" v="storage_tank"/>
         <tag k="condition" v="functional"/>
+        <tag k="content" v="fuel"/>
         <tag k="error:circular" v="15"/>
+        <tag k="man_made" v="storage_tank"/>
+        <tag k="source" v="mgcp:aam070"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:ingest:datetime" v="2021-03-26T09:31:25.564Z"/>
+        <tag k="uuid" v="{1339103f-9a67-4dc1-aa67-b590b33b3000}"/>
     </way>
     <way visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-10"/>
         <nd ref="-11"/>
         <nd ref="-12"/>
         <nd ref="-10"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source" v="mgcp:aam070"/>
-        <tag k="source:ingest:datetime" v="2020-11-16T15:34:19.493Z"/>
-        <tag k="content" v="oil"/>
-        <tag k="uuid" v="{14093e3a-29da-41e5-a13f-e8e43ef5d9cc}"/>
-        <tag k="man_made" v="storage_tank"/>
         <tag k="condition" v="functional"/>
+        <tag k="content" v="oil"/>
         <tag k="error:circular" v="15"/>
+        <tag k="man_made" v="storage_tank"/>
+        <tag k="source" v="mgcp:aam070"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:ingest:datetime" v="2021-03-26T09:31:25.564Z"/>
+        <tag k="uuid" v="{14093e3a-29da-41e5-a13f-e8e43ef5d9cc}"/>
     </way>
     <way visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-7"/>
         <nd ref="-8"/>
         <nd ref="-9"/>
         <nd ref="-7"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source" v="mgcp:aam070"/>
-        <tag k="source:ingest:datetime" v="2020-11-16T15:34:19.493Z"/>
-        <tag k="content" v="slurry"/>
-        <tag k="uuid" v="{143203aa-06b0-49b2-9fcd-98c0f89e2fcb}"/>
-        <tag k="man_made" v="storage_tank"/>
         <tag k="condition" v="functional"/>
+        <tag k="content" v="slurry"/>
         <tag k="error:circular" v="15"/>
+        <tag k="man_made" v="storage_tank"/>
+        <tag k="source" v="mgcp:aam070"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:ingest:datetime" v="2021-03-26T09:31:25.563Z"/>
+        <tag k="uuid" v="{143203aa-06b0-49b2-9fcd-98c0f89e2fcb}"/>
     </way>
     <way visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-4"/>
         <nd ref="-5"/>
         <nd ref="-6"/>
         <nd ref="-4"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source" v="mgcp:aam070"/>
-        <tag k="source:ingest:datetime" v="2020-11-16T15:34:19.492Z"/>
-        <tag k="content" v="manure"/>
-        <tag k="uuid" v="{149e733e-626f-45db-bfcc-56ad12de425a}"/>
-        <tag k="man_made" v="storage_tank"/>
         <tag k="condition" v="functional"/>
+        <tag k="content" v="manure"/>
         <tag k="error:circular" v="15"/>
+        <tag k="man_made" v="storage_tank"/>
+        <tag k="source" v="mgcp:aam070"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:ingest:datetime" v="2021-03-26T09:31:25.563Z"/>
+        <tag k="uuid" v="{149e733e-626f-45db-bfcc-56ad12de425a}"/>
     </way>
     <way visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1"/>
         <nd ref="-2"/>
         <nd ref="-3"/>
         <nd ref="-1"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source" v="mgcp:aam070"/>
-        <tag k="source:ingest:datetime" v="2020-11-16T15:34:19.431Z"/>
-        <tag k="content" v="silage"/>
-        <tag k="uuid" v="{1514e475-0a8b-450d-8138-af8623cbdd56}"/>
-        <tag k="man_made" v="storage_tank"/>
         <tag k="condition" v="functional"/>
+        <tag k="content" v="silage"/>
         <tag k="error:circular" v="15"/>
+        <tag k="man_made" v="storage_tank"/>
+        <tag k="source" v="mgcp:aam070"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:ingest:datetime" v="2021-03-26T09:31:25.470Z"/>
+        <tag k="uuid" v="{1514e475-0a8b-450d-8138-af8623cbdd56}"/>
     </way>
 </osm>

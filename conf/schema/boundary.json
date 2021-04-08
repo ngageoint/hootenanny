@@ -2,28 +2,28 @@
     {
         "dataType": "enumeration",
         "#": "TODO: Remove this geometry?.",
-        "geometries": [
-            "linestring"
-        ],
+        "geometries": ["linestring"],
         "influence": 1,
         "name": "boundary",
         "objectType": "tag"
     },
     {
         "#": "TODO: Think this should be an area geometry instead.",
-        "geometries": [
-            "linestring"
-        ],
+        "geometries": ["linestring"],
         "isA": "boundary",
         "name": "boundary=administrative",
         "objectType": "tag"
     },
     {
-        "geometries": [
-            "area"
-        ],
+        "geometries": ["area"],
         "isA": "boundary",
         "name": "boundary=protected_area",
+        "objectType": "tag"
+    },
+    {
+        "geometries": ["area"],
+        "isA": "boundary",
+        "name": "boundary=land_parcel",
         "objectType": "tag"
     }
 ]

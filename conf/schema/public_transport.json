@@ -1,25 +1,14 @@
 [
     {
         "#": "Any one of these tag combos can match, but all the tags in the sub-array must match.",
-        "categories": [
-            "poi"
-        ],
+        "categories": [ "poi" ],
         "isA": "public_transport=platform",
         "name": "bus_platform",
         "objectType": "compound",
-        "similarTo": {
-            "name": "highway=bus_stop",
-            "weight": 1
-        },
+        "similarTo": { "name": "highway=bus_stop", "weight": 1 },
         "tags": [
-            [
-                "public_transport=platform",
-                "bus=yes"
-            ],
-            [
-                "public_transport=platform",
-                "highway=bus_stop"
-            ]
+            ["public_transport=platform", "bus=yes"],
+            ["public_transport=platform", "highway=bus_stop"]
         ]
     },
     {
@@ -31,29 +20,15 @@
         "isA": "public_transport=station",
         "name": "bus_station",
         "objectType": "compound",
-        "similarTo": {
-            "name": "amenity=bus_station",
-            "weight": 1
-        },
+        "similarTo": {"name": "amenity=bus_station", "weight": 1 },
         "tags": [
-            [
-                "public_transport=station",
-                "bus=yes"
-            ],
-            [
-                "public_transport=station",
-                "amenity=bus_station"
-            ]
+            ["public_transport=station", "bus=yes"],
+            ["public_transport=station", "amenity=bus_station"]
         ]
     },
     {
         "dataType": "enumeration",
-        "geometries": [
-            "node",
-            "area",
-            "way",
-            "relation"
-        ],
+        "geometries": ["node", "area", "linestring", "relation"],
         "influence": 1,
         "isA": "poi",
         "name": "public_transport",
@@ -68,76 +43,44 @@
         "isA": "public_transport",
         "name": "public_transport=platform",
         "objectType": "tag",
-        "similarTo": {
-            "name": "transport=station",
-            "weight": 0.8
-        }
+        "similarTo": {"name": "transport=station", "weight": 0.8 }
     },
     {
-        "geometries": [
-            "node"
-        ],
+        "geometries": ["node","area"],
         "isA": "public_transport",
         "name": "public_transport=station",
         "objectType": "tag",
-        "similarTo": {
-            "name": "transport=station",
-            "weight": 0.9
-        }
+        "similarTo": {"name": "transport=station", "weight": 0.9 }
     },
     {
-        "geometries": [
-            "node"
-        ],
+        "geometries": [ "node" ],
         "isA": "public_transport",
         "name": "public_transport=stop_position",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "public_transport=platform",
-                "weight": 0.8
-            },
-            {
-                "name": "public_transport=station",
-                "weight": 0.7
-            }
+            {"name": "public_transport=platform", "weight": 0.8 },
+            {"name": "public_transport=station", "weight": 0.7 }
         ]
     },
     {
         "#": "Any one of these tag combos can match, but all the tags in the sub-array must match.",
-        "categories": [
-            "poi"
-        ],
+        "categories": [ "poi" ],
         "isA": "public_transport=platform",
         "name": "railway_platform",
         "objectType": "compound",
-        "similarTo": {
-            "name": "railway=platform",
-            "weight": 0.9
-        },
+        "similarTo": {"name": "railway=platform", "weight": 0.9 },
         "tags": [
-            [
-                "public_transport=platform",
-                "train=yes"
-            ]
+            ["public_transport=platform", "train=yes"]
         ]
     },
     {
-        "categories": [
-            "poi"
-        ],
+        "categories": [ "poi" ],
         "isA": "public_transport=station",
         "name": "railway_station",
         "objectType": "compound",
-        "similarTo": {
-            "name": "railway=station",
-            "weight": 1
-        },
+        "similarTo": {"name": "railway=station", "weight": 1 },
         "tags": [
-            [
-                "public_transport=station",
-                "train=yes"
-            ]
+            ["public_transport=station", "train=yes"]
         ]
     }
 ]

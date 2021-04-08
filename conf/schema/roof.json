@@ -1,39 +1,29 @@
 [
     {
-        "categories": [
-            "combination"
-        ],
+        "categories": [ "combination" ],
         "dataType": "enumeration",
-        "geometries": [
-            "area"
-        ],
+        "geometries": [ "area" ],
         "influence": 1,
         "name": "roof:material",
         "objectType": "tag"
     },
     {
         "dataType": "enumeration",
-        "geometries": [
-            "area"
-        ],
+        "geometries": [ "area" ],
         "influence": 1,
         "name": "roof:orientation",
         "objectType": "tag"
     },
     {
         "dataType": "real",
-        "geometries": [
-            "area"
-        ],
+        "geometries": [ "area" ],
         "influence": 1,
         "name": "roof:height",
         "objectType": "tag"
     },
     {
         "dataType": "real",
-        "geometries": [
-            "area"
-        ],
+        "geometries": [ "area" ],
 	"description": "Alternatively to roof:height=*, roof height can be indicated implicitly by providing the inclination of the sides (in degrees).",
         "influence": 1,
         "name": "roof:angle",
@@ -41,9 +31,7 @@
     },
     {
         "dataType": "int",
-        "geometries": [
-            "area"
-        ],
+        "geometries": [ "area" ],
 	"description": "Number of floors within the roof, which are not already counted in building:levels=*.",
         "influence": 1,
         "name": "roof:levels",
@@ -51,9 +39,7 @@
     },
     {
         "dataType": "text",
-        "geometries": [
-            "area"
-        ],
+        "geometries": [ "area" ],
 	"description": "Colour of the building roof. See colour=* for possible values.",
         "influence": 1,
         "name": "roof:colour",

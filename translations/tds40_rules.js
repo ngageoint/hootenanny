@@ -2184,12 +2184,12 @@ tds40.rules = {
 
     // POS - Power Source
     // ['POS','-999999',undefined,undefined], // No Information
-    ['POS','1','generator:source','geothermal'], // Geothermal
-    ['POS','2','generator:source','hydro'], // Hydro-electric
-    ['POS','3','generator:source','nuclear'], // Nuclear
-    ['POS','4','generator:source','thermal'], // Thermal
-    ['POS','5','generator:source','tidal'], // Tidal
-    ['POS','999','generator:source','other'], // Other
+    ['POS','1','plant:source','geothermal'], // Geothermal
+    ['POS','2','plant:source','hydro'], // Hydro-electric
+    ['POS','3','plant:source','nuclear'], // Nuclear
+    ['POS','4','plant:source','thermal'], // Thermal
+    ['POS','5','plant:source','tidal'], // Tidal
+    ['POS','999','plant:source','other'], // Other
 
     // This attribute is handled in Pre and Post processing. See ZI014_PPO
     // PPO - Product
@@ -2399,12 +2399,12 @@ tds40.rules = {
     ['RRC','2','railway','carline'], // Carline
     ['RRC','6','railway','subway'], // Underground Railway
     ['RRC','8','railway','logging'], // Logging
-    ['RRC','11','railway','rapid_transit'], // Rail Rapid Transit
+    ['RRC','11','rapid_transit','yes'], // Rail Rapid Transit
     ['RRC','13','railway','marine_railway'], // Marine Railway
     ['RRC','14','railway','tram'], // Tramway
     ['RRC','15','railway','funicular'], // Funicular
     ['RRC','24','railway','museum'], // Museum
-    ['RRC','32','railway','automated_transit_system'], // Automated Transit System
+    ['RRC','32','automated_transit_system','yes'], // Automated Transit System
     ['RRC','33','railway','longhaul'], // Long-haul
     ['RRC','999','railway','Other'], // Other
 
@@ -3047,14 +3047,14 @@ tds40.rules = {
     // WCC - Watercourse Channel Type
     // ['WCC','-999999',undefined,undefined], // No Information
     // ['WCC','0','waterway','river'],
-    ['WCC','1','waterway','stream'], // Channelized Stream
-    ['WCC','2','waterway','braided_stream'], // Braided Stream
-    ['WCC','3','waterway','gorge'], // Gorge
+    ['WCC','1','channel:type','channelized_stream'], // Channelized Stream
+    ['WCC','2','channel:type','braided_stream'], // Braided Stream
+    ['WCC','3','channel:type','gorge'], // Gorge
     ['WCC','4','wadi','yes'], // Wadi
-    ['WCC','6','waterway','split_stream'], // Split Stream
-    ['WCC','7','waterway','river'], // Normal Channel
-    ['WCC','8','waterway','lost_watercourse'], // Lost Watercourse
-    ['WCC','999','waterway','other'], // Other
+    ['WCC','6','channel:type','split_stream'], // Split Stream
+    ['WCC','7','channel:type','normal'], // Normal Channel
+    ['WCC','8','channel:type','lost_watercourse'], // Lost Watercourse
+    ['WCC','999','channel:type','other'], // Other
 
     // WEQ - Well Equipment
     // ['WEQ','-999999',undefined,undefined], // No Information
@@ -3968,12 +3968,12 @@ tds40.rules = {
 
     // PPC - Power Station Type TDSv30
     // ['PPC','-999999',undefined,undefined], // No Information
-    ['PPC','1','generator:source','hydro'], // Hydro-electric
-    ['PPC','2','generator:source','nuclear'], // Nuclear
-    ['PPC','4','generator:source','geothermal'], // Geothermal
-    ['PPC','6','generator:source','tidal'], // Tidal
-    ['PPC','7','generator:source','thermal'], // Thermal
-    ['PPC','999','generator:source','other'], // Other
+    ['PPC','1','plant:source','hydro'], // Hydro-electric
+    ['PPC','2','plant:source','nuclear'], // Nuclear
+    ['PPC','4','plant:source','geothermal'], // Geothermal
+    ['PPC','6','plant:source','tidal'], // Tidal
+    ['PPC','7','plant:source','thermal'], // Thermal
+    ['PPC','999','plant:source','other'], // Other
 
     // RPC - Boundary Representation Policy TDSv30
     // ['RPC','-999999',undefined,undefined], // No Information

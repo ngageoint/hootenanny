@@ -50,21 +50,19 @@ Coordinate c;
 
 const double WayLocation::SLOPPY_EPSILON = 1e-10;
 
-WayLocation::WayLocation()
+WayLocation::WayLocation() :
+_segmentIndex(-1),
+_segmentFraction(-1)
 {
-  _segmentIndex = -1;
-  _segmentFraction = -1;
 }
 
 WayLocation::WayLocation(ConstOsmMapPtr map, ConstWayPtr way, double distance) :
-_map(map)
+_map(map),
+_way(way),
+_segmentIndex(-1),
+_segmentFraction(-1)
 {
   double d = 0.0;
-
-  _segmentIndex = -1;
-  _segmentFraction = -1;
-
-  _way = way;
   double length = ElementToGeometryConverter(map).convertToLineString(way)->getLength();
 
   if (distance <= 0)
@@ -114,12 +112,11 @@ _map(map)
 
 WayLocation::WayLocation(
   ConstOsmMapPtr map, ConstWayPtr way, int segmentIndex, double segmentFraction) :
-_map(map)
+_map(map),
+_way(way),
+_segmentIndex(segmentIndex),
+_segmentFraction(segmentFraction)
 {
-  _way = way;
-  _segmentIndex = segmentIndex;
-  _segmentFraction = segmentFraction;
-
   if (_segmentFraction == 1.0)
   {
     _segmentIndex++;
@@ -144,10 +141,19 @@ _map(map)
   }
 }
 
+WayLocation::WayLocation(const WayLocation& other) :
+_map(other.getMap()),
+_way(other.getWay()),
+_segmentIndex(other.getSegmentIndex()),
+_segmentFraction(other.getSegmentFraction())
+{
+}
+
 Meters WayLocation::calculateDistanceFromEnd() const
 {
   return
-    ElementToGeometryConverter(getMap()).convertToLineString(getWay())->getLength() - calculateDistanceOnWay();
+    ElementToGeometryConverter(getMap()).convertToLineString(getWay())->getLength() -
+    calculateDistanceOnWay();
 }
 
 Meters WayLocation::calculateDistanceOnWay() const

@@ -1,19 +1,12 @@
 [
     {
-        "categories": [
-            "combination"
-        ],
+        "categories": [ "combination" ],
         "dataType": "enumeration",
-        "geometries": [
-            "node"
-        ],
+        "geometries": [ "node" ],
         "influence": 1,
         "isA": "poi=yes",
         "name": "capital=yes",
         "objectType": "tag",
-        "similarTo": {
-            "name": "place=city",
-            "weight": 0.8
-        }
+        "similarTo": { "name": "place=city", "weight": 0.8 }
     }
 ]

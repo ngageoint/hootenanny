@@ -1,12 +1,8 @@
 [
     {
-        "categories": [
-            "combination"
-        ],
+        "categories": [ "combination" ],
         "dataType": "enumeration",
-        "geometries": [
-            "node"
-        ],
+        "geometries": [ "node" ],
         "influence": 1,
         "isA": "poi",
         "name": "junction",
@@ -24,14 +20,8 @@
         "name": "junction=roundabout",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "highway=motorway_junction",
-                "weight": 0.4
-            },
-            {
-                "name": "highway=mini_roundabout",
-                "weight": 0.8
-            }
+            { "name": "highway=motorway_junction", "weight": 0.4 },
+            { "name": "highway=mini_roundabout", "weight": 0.8 }
         ]
     }
 ]

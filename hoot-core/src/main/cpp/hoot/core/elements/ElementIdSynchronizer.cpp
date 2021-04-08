@@ -51,15 +51,6 @@ _updatedRelationCtr(0)
 {
 }
 
-void ElementIdSynchronizer::clear()
-{
-  _map1HashesToElementIds.clear();
-  _map1ElementIdsToHashes.clear();
-  _map2HashesToElementIds.clear();
-  _map2ElementIdsToHashes.clear();
-  _syncedElementIds.clear();
-}
-
 void ElementIdSynchronizer::synchronize(const OsmMapPtr& map1, const OsmMapPtr& map2,
                                         const ElementType& elementType)
 {

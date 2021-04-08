@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="10.4953" minlon="-66.90266" maxlat="10.4986" maxlon="-66.89794699999999"/>
-    <node visible="true" id="-1078" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.4969636356541915" lon="-66.8980949216843896">
-        <tag k="hoot:id" v="-1078"/>
+    <node visible="true" id="-1070" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.4969636356541915" lon="-66.8980949216843896">
+        <tag k="hoot:id" v="-1070"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-1073" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.4974687384149661" lon="-66.8981546266176252">
-        <tag k="hoot:id" v="-1073"/>
+    <node visible="true" id="-1065" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.4974687384149661" lon="-66.8981546266176252">
+        <tag k="hoot:id" v="-1065"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-1069" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.4967224618547323" lon="-66.9000646465501063">
-        <tag k="hoot:id" v="-1069"/>
+    <node visible="true" id="-1061" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.4967224618547323" lon="-66.9000646465501063">
+        <tag k="hoot:id" v="-1061"/>
         <tag k="hoot:status" v="3"/>
     </node>
-    <node visible="true" id="-1066" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.4966020562270224" lon="-66.8989668999158056">
-        <tag k="hoot:id" v="-1066"/>
+    <node visible="true" id="-1058" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.4966020562270224" lon="-66.8989668999158056">
+        <tag k="hoot:id" v="-1058"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-294" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4965255552600016" lon="-66.9022163124700029">
@@ -1129,8 +1129,8 @@
         <tag k="hoot:id" v="725"/>
         <tag k="hoot:status" v="2"/>
     </node>
-    <way visible="true" id="-2184" timestamp="2019-01-17T19:50:06Z" version="1">
-        <nd ref="-1078"/>
+    <way visible="true" id="-2136" timestamp="2019-01-17T19:50:06Z" version="1">
+        <nd ref="-1070"/>
         <nd ref="-171"/>
         <nd ref="-170"/>
         <nd ref="-169"/>
@@ -1140,7 +1140,7 @@
         <tag k="destination:ref" v="A-01"/>
         <tag k="destination:symbol" v="motorway"/>
         <tag k="highway" v="motorway_link"/>
-        <tag k="hoot:id" v="-2184"/>
+        <tag k="hoot:id" v="-2136"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="5"/>
         <tag k="lanes" v="3"/>
@@ -1156,16 +1156,16 @@
         <tag k="way_area" v="-999999"/>
         <tag k="z_order" v="-999999"/>
     </way>
-    <way visible="true" id="-2183" timestamp="2019-01-17T19:50:06Z" version="1">
+    <way visible="true" id="-2135" timestamp="2019-01-17T19:50:06Z" version="1">
         <nd ref="-172"/>
-        <nd ref="-1078"/>
+        <nd ref="-1070"/>
         <tag k="attribution" v="osm"/>
         <tag k="bridge" v="yes"/>
         <tag k="destination" v="Plaza Venezuela;Petare"/>
         <tag k="destination:ref" v="A-01"/>
         <tag k="destination:symbol" v="motorway"/>
         <tag k="highway" v="motorway_link"/>
-        <tag k="hoot:id" v="-2183"/>
+        <tag k="hoot:id" v="-2135"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="2"/>
         <tag k="lanes" v="3"/>
@@ -1182,8 +1182,8 @@
         <tag k="way_area" v="-999999"/>
         <tag k="z_order" v="-999999"/>
     </way>
-    <way visible="true" id="-2182" timestamp="2019-01-17T19:50:06Z" version="1">
-        <nd ref="-1073"/>
+    <way visible="true" id="-2134" timestamp="2019-01-17T19:50:06Z" version="1">
+        <nd ref="-1065"/>
         <nd ref="-173"/>
         <tag k="attribution" v="osm"/>
         <tag k="bridge" v="yes"/>
@@ -1191,7 +1191,7 @@
         <tag k="destination:ref" v="A-01"/>
         <tag k="destination:symbol" v="motorway"/>
         <tag k="highway" v="motorway_link"/>
-        <tag k="hoot:id" v="-2182"/>
+        <tag k="hoot:id" v="-2134"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="2"/>
         <tag k="lanes" v="3"/>
@@ -1208,20 +1208,20 @@
         <tag k="way_area" v="-999999"/>
         <tag k="z_order" v="-999999"/>
     </way>
-    <way visible="true" id="-2181" timestamp="2019-01-17T19:50:06Z" version="1">
+    <way visible="true" id="-2133" timestamp="2019-01-17T19:50:06Z" version="1">
         <nd ref="-22"/>
         <nd ref="-165"/>
         <nd ref="-164"/>
         <nd ref="-176"/>
         <nd ref="-175"/>
         <nd ref="-174"/>
-        <nd ref="-1073"/>
+        <nd ref="-1065"/>
         <tag k="attribution" v="osm"/>
         <tag k="destination" v="Plaza Venezuela;Petare"/>
         <tag k="destination:ref" v="A-01"/>
         <tag k="destination:symbol" v="motorway"/>
         <tag k="highway" v="motorway_link"/>
-        <tag k="hoot:id" v="-2181"/>
+        <tag k="hoot:id" v="-2133"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="7"/>
         <tag k="lanes" v="3"/>
@@ -1238,8 +1238,8 @@
         <tag k="way_area" v="-999999"/>
         <tag k="z_order" v="-999999"/>
     </way>
-    <way visible="true" id="-2180" timestamp="2019-01-17T19:50:06Z" version="1">
-        <nd ref="-1069"/>
+    <way visible="true" id="-2132" timestamp="2019-01-17T19:50:06Z" version="1">
+        <nd ref="-1061"/>
         <nd ref="-105"/>
         <nd ref="-106"/>
         <nd ref="-107"/>
@@ -1259,7 +1259,7 @@
         <tag k="foot" v="no"/>
         <tag k="hgv:lanes" v="no|yes"/>
         <tag k="highway" v="motorway_link"/>
-        <tag k="hoot:id" v="-2180"/>
+        <tag k="hoot:id" v="-2132"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="10"/>
         <tag k="incline" v="10%"/>
@@ -1287,14 +1287,14 @@
         <tag k="way_area" v="-999999"/>
         <tag k="z_order" v="-999999"/>
     </way>
-    <way visible="true" id="-2179" timestamp="2019-01-17T19:50:06Z" version="1">
+    <way visible="true" id="-2131" timestamp="2019-01-17T19:50:06Z" version="1">
         <nd ref="-113"/>
         <nd ref="679"/>
         <nd ref="-104"/>
-        <nd ref="-1069"/>
+        <nd ref="-1061"/>
         <tag k="attribution" v="osm"/>
         <tag k="highway" v="tertiary"/>
-        <tag k="hoot:id" v="-2179"/>
+        <tag k="hoot:id" v="-2131"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="4"/>
         <tag k="lanes" v="2"/>
@@ -1310,8 +1310,8 @@
         <tag k="way_area" v="-999999"/>
         <tag k="z_order" v="-999999"/>
     </way>
-    <way visible="true" id="-2178" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-1066"/>
+    <way visible="true" id="-2130" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-1058"/>
         <nd ref="-285"/>
         <nd ref="-284"/>
         <nd ref="-283"/>
@@ -1328,7 +1328,7 @@
         <tag k="foot" v="no"/>
         <tag k="hgv:lanes" v="no|no|no|yes"/>
         <tag k="highway" v="motorway"/>
-        <tag k="hoot:id" v="-2178"/>
+        <tag k="hoot:id" v="-2130"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="9"/>
         <tag k="lanes" v="4"/>
@@ -1358,12 +1358,12 @@
         <tag k="wikipedia" v="es:Autopista Francisco Fajardo"/>
         <tag k="z_order" v="-999999"/>
     </way>
-    <way visible="true" id="-2177" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-2129" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-113"/>
         <nd ref="-288"/>
         <nd ref="-287"/>
         <nd ref="-286"/>
-        <nd ref="-1066"/>
+        <nd ref="-1058"/>
         <tag k="attribution" v="osm"/>
         <tag k="bicycle" v="no"/>
         <tag k="bridge" v="yes"/>
@@ -1373,7 +1373,7 @@
         <tag k="foot" v="no"/>
         <tag k="hgv:lanes" v="no|no|no|yes"/>
         <tag k="highway" v="motorway"/>
-        <tag k="hoot:id" v="-2177"/>
+        <tag k="hoot:id" v="-2129"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="5"/>
         <tag k="lanes" v="4"/>
@@ -1514,7 +1514,7 @@
         <tag k="hoot:id" v="-38"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="8"/>
-        <tag k="lanes" v="6"/>
+        <tag k="lanes" v="3"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="maxspeed" v="40"/>
         <tag k="name" v="Av. Lecuna"/>
@@ -1523,7 +1523,7 @@
         <tag k="service" v="drive-through"/>
         <tag k="sidewalk" v="both"/>
         <tag k="source" v="osm:line"/>
-        <tag k="source:datetime" v="2014-09-04T15:01:21.000Z;2019-01-17T19:50:06Z;2014-12-01T08:26:38.000Z"/>
+        <tag k="source:datetime" v="2014-12-01T08:26:38.000Z;2014-09-04T15:01:21.000Z;2019-01-17T19:50:06Z"/>
         <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.653Z"/>
         <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
         <tag k="turn:lanes" v="left;through|through;slight_right|slight_right"/>

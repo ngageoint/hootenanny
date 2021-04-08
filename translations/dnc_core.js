@@ -59,7 +59,7 @@ dnc = {
     if (config.getOgrOutputFormat() == 'shp')
     {
       // Add tag1, tag2, tag3 and tag4
-      dnc.rawSchema = translate.addEmptyFeature(dnc.rawSchema);
+      dnc.rawSchema = translate.addO2sFeatures(dnc.rawSchema);
     }
     else
     {

@@ -56,7 +56,7 @@ function getDbSchema()
   if (config.getOgrOutputFormat() == 'shp')
   {
     // Add tag1, tag2, tag3 and tag4
-    enc311.rawSchema = translate.addEmptyFeature(enc311.rawSchema);
+    enc311.rawSchema = translate.addO2sFeatures(enc311.rawSchema);
   }
   else
   {

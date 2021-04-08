@@ -63,21 +63,21 @@
         <nd ref="-55"/>
         <nd ref="-56"/>
         <nd ref="-53"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="feature_area" v="11600.6"/>
-        <tag k="source" v="mgcp:aec030"/>
-        <tag k="source:ingest:datetime" v="2020-11-16T15:34:15.354Z"/>
-        <tag k="leaf_cycle" v="mixed"/>
-        <tag k="name" v="Mixed 80%"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="uuid" v="{baa999b1-fa79-4c02-a1f4-f046fb0ecfe7}"/>
-        <tag k="canopy_cover" v="80"/>
-        <tag k="natural" v="wood"/>
-        <tag k="width" v="98.9"/>
         <tag k="angle" v="179.0"/>
-        <tag k="length" v="117.7"/>
+        <tag k="canopy_cover" v="80"/>
         <tag k="error:circular" v="15"/>
+        <tag k="feature_area" v="11600.6"/>
+        <tag k="leaf_cycle" v="mixed"/>
+        <tag k="length" v="117.7"/>
+        <tag k="name" v="Mixed 80%"/>
+        <tag k="natural" v="wood"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="mgcp:aec030"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="source:ingest:datetime" v="2021-03-26T09:31:20.407Z"/>
+        <tag k="uuid" v="{baa999b1-fa79-4c02-a1f4-f046fb0ecfe7}"/>
+        <tag k="width" v="98.9"/>
     </way>
     <way visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-49"/>
@@ -85,20 +85,20 @@
         <nd ref="-51"/>
         <nd ref="-52"/>
         <nd ref="-49"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="feature_area" v="11600.6"/>
-        <tag k="source" v="mgcp:aec030"/>
-        <tag k="source:ingest:datetime" v="2020-11-16T15:34:15.353Z"/>
-        <tag k="name" v="Wood 80%"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="uuid" v="{6236db9f-363c-4b42-891b-6cd126c3be91}"/>
-        <tag k="canopy_cover" v="80"/>
-        <tag k="natural" v="wood"/>
-        <tag k="width" v="98.9"/>
         <tag k="angle" v="179.0"/>
-        <tag k="length" v="117.7"/>
+        <tag k="canopy_cover" v="80"/>
         <tag k="error:circular" v="15"/>
+        <tag k="feature_area" v="11600.6"/>
+        <tag k="length" v="117.7"/>
+        <tag k="name" v="Wood 80%"/>
+        <tag k="natural" v="wood"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="mgcp:aec030"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="source:ingest:datetime" v="2021-03-26T09:31:20.407Z"/>
+        <tag k="uuid" v="{6236db9f-363c-4b42-891b-6cd126c3be91}"/>
+        <tag k="width" v="98.9"/>
     </way>
     <way visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-45"/>
@@ -106,21 +106,21 @@
         <nd ref="-47"/>
         <nd ref="-48"/>
         <nd ref="-45"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="feature_area" v="11600.6"/>
-        <tag k="source" v="mgcp:aec030"/>
-        <tag k="source:ingest:datetime" v="2020-11-16T15:34:15.353Z"/>
-        <tag k="leaf_cycle" v="semi_evergreen"/>
-        <tag k="name" v="Semi E 80%"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="uuid" v="{b3089d36-8096-46f0-884e-063e4b51fc71}"/>
-        <tag k="canopy_cover" v="80"/>
-        <tag k="natural" v="wood"/>
-        <tag k="width" v="98.9"/>
         <tag k="angle" v="179.0"/>
-        <tag k="length" v="117.7"/>
+        <tag k="canopy_cover" v="80"/>
         <tag k="error:circular" v="15"/>
+        <tag k="feature_area" v="11600.6"/>
+        <tag k="leaf_cycle" v="semi_evergreen"/>
+        <tag k="length" v="117.7"/>
+        <tag k="name" v="Semi E 80%"/>
+        <tag k="natural" v="wood"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="mgcp:aec030"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="source:ingest:datetime" v="2021-03-26T09:31:20.406Z"/>
+        <tag k="uuid" v="{b3089d36-8096-46f0-884e-063e4b51fc71}"/>
+        <tag k="width" v="98.9"/>
     </way>
     <way visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-41"/>
@@ -128,21 +128,21 @@
         <nd ref="-43"/>
         <nd ref="-44"/>
         <nd ref="-41"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="feature_area" v="11600.6"/>
-        <tag k="source" v="mgcp:aec030"/>
-        <tag k="source:ingest:datetime" v="2020-11-16T15:34:15.353Z"/>
-        <tag k="leaf_cycle" v="semi_deciduous"/>
-        <tag k="name" v="Semi D 80%"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="uuid" v="{bb2ccaaf-3937-46e6-9e0a-da88a1ddc6e9}"/>
-        <tag k="canopy_cover" v="80"/>
-        <tag k="natural" v="wood"/>
-        <tag k="width" v="98.9"/>
         <tag k="angle" v="179.0"/>
-        <tag k="length" v="117.7"/>
+        <tag k="canopy_cover" v="80"/>
         <tag k="error:circular" v="15"/>
+        <tag k="feature_area" v="11600.6"/>
+        <tag k="leaf_cycle" v="semi_deciduous"/>
+        <tag k="length" v="117.7"/>
+        <tag k="name" v="Semi D 80%"/>
+        <tag k="natural" v="wood"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="mgcp:aec030"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="source:ingest:datetime" v="2021-03-26T09:31:20.406Z"/>
+        <tag k="uuid" v="{bb2ccaaf-3937-46e6-9e0a-da88a1ddc6e9}"/>
+        <tag k="width" v="98.9"/>
     </way>
     <way visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-37"/>
@@ -150,21 +150,21 @@
         <nd ref="-39"/>
         <nd ref="-40"/>
         <nd ref="-37"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="feature_area" v="11599.8"/>
-        <tag k="source" v="mgcp:aec030"/>
-        <tag k="source:ingest:datetime" v="2020-11-16T15:34:15.352Z"/>
-        <tag k="leaf_cycle" v="evergreen"/>
-        <tag k="landuse" v="forest"/>
-        <tag k="name" v="EverG 80%"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="uuid" v="{52cfa9ad-19a5-4e7c-b77b-36b0021203d3}"/>
-        <tag k="canopy_cover" v="80"/>
-        <tag k="width" v="98.9"/>
         <tag k="angle" v="179.0"/>
-        <tag k="length" v="117.7"/>
+        <tag k="canopy_cover" v="80"/>
         <tag k="error:circular" v="15"/>
+        <tag k="feature_area" v="11599.8"/>
+        <tag k="landuse" v="forest"/>
+        <tag k="leaf_cycle" v="evergreen"/>
+        <tag k="length" v="117.7"/>
+        <tag k="name" v="EverG 80%"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="mgcp:aec030"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="source:ingest:datetime" v="2021-03-26T09:31:20.406Z"/>
+        <tag k="uuid" v="{52cfa9ad-19a5-4e7c-b77b-36b0021203d3}"/>
+        <tag k="width" v="98.9"/>
     </way>
     <way visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-33"/>
@@ -172,21 +172,21 @@
         <nd ref="-35"/>
         <nd ref="-36"/>
         <nd ref="-33"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="feature_area" v="11599.8"/>
-        <tag k="source" v="mgcp:aec030"/>
-        <tag k="source:ingest:datetime" v="2020-11-16T15:34:15.352Z"/>
-        <tag k="leaf_cycle" v="semi_evergreen"/>
-        <tag k="landuse" v="forest"/>
-        <tag k="name" v="Semi E 80%"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="uuid" v="{1b10f766-44bb-466d-97ee-a0557acd14a8}"/>
-        <tag k="canopy_cover" v="80"/>
-        <tag k="width" v="98.9"/>
         <tag k="angle" v="179.0"/>
-        <tag k="length" v="117.7"/>
+        <tag k="canopy_cover" v="80"/>
         <tag k="error:circular" v="15"/>
+        <tag k="feature_area" v="11599.8"/>
+        <tag k="landuse" v="forest"/>
+        <tag k="leaf_cycle" v="semi_evergreen"/>
+        <tag k="length" v="117.7"/>
+        <tag k="name" v="Semi E 80%"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="mgcp:aec030"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="source:ingest:datetime" v="2021-03-26T09:31:20.405Z"/>
+        <tag k="uuid" v="{1b10f766-44bb-466d-97ee-a0557acd14a8}"/>
+        <tag k="width" v="98.9"/>
     </way>
     <way visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-29"/>
@@ -194,21 +194,21 @@
         <nd ref="-31"/>
         <nd ref="-32"/>
         <nd ref="-29"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="feature_area" v="11599.8"/>
-        <tag k="source" v="mgcp:aec030"/>
-        <tag k="source:ingest:datetime" v="2020-11-16T15:34:15.352Z"/>
-        <tag k="leaf_cycle" v="mixed"/>
-        <tag k="landuse" v="forest"/>
-        <tag k="name" v="Mixed 80%"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="uuid" v="{6e15e51a-bf56-4b93-97b6-e66dbbb9ec93}"/>
-        <tag k="canopy_cover" v="80"/>
-        <tag k="width" v="98.9"/>
         <tag k="angle" v="179.0"/>
-        <tag k="length" v="117.7"/>
+        <tag k="canopy_cover" v="80"/>
         <tag k="error:circular" v="15"/>
+        <tag k="feature_area" v="11599.8"/>
+        <tag k="landuse" v="forest"/>
+        <tag k="leaf_cycle" v="mixed"/>
+        <tag k="length" v="117.7"/>
+        <tag k="name" v="Mixed 80%"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="mgcp:aec030"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="source:ingest:datetime" v="2021-03-26T09:31:20.405Z"/>
+        <tag k="uuid" v="{6e15e51a-bf56-4b93-97b6-e66dbbb9ec93}"/>
+        <tag k="width" v="98.9"/>
     </way>
     <way visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-25"/>
@@ -216,21 +216,21 @@
         <nd ref="-27"/>
         <nd ref="-28"/>
         <nd ref="-25"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="feature_area" v="11600.6"/>
-        <tag k="source" v="mgcp:aec030"/>
-        <tag k="source:ingest:datetime" v="2020-11-16T15:34:15.351Z"/>
-        <tag k="leaf_cycle" v="evergreen"/>
-        <tag k="name" v="EverG 80%"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="uuid" v="{a75d229a-075b-4532-becf-168c329e4310}"/>
-        <tag k="canopy_cover" v="80"/>
-        <tag k="natural" v="wood"/>
-        <tag k="width" v="98.9"/>
         <tag k="angle" v="179.0"/>
-        <tag k="length" v="117.7"/>
+        <tag k="canopy_cover" v="80"/>
         <tag k="error:circular" v="15"/>
+        <tag k="feature_area" v="11600.6"/>
+        <tag k="leaf_cycle" v="evergreen"/>
+        <tag k="length" v="117.7"/>
+        <tag k="name" v="EverG 80%"/>
+        <tag k="natural" v="wood"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="mgcp:aec030"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="source:ingest:datetime" v="2021-03-26T09:31:20.404Z"/>
+        <tag k="uuid" v="{a75d229a-075b-4532-becf-168c329e4310}"/>
+        <tag k="width" v="98.9"/>
     </way>
     <way visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-21"/>
@@ -238,20 +238,20 @@
         <nd ref="-23"/>
         <nd ref="-24"/>
         <nd ref="-21"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="feature_area" v="11600.6"/>
-        <tag k="source" v="mgcp:aec030"/>
-        <tag k="source:ingest:datetime" v="2020-11-16T15:34:15.351Z"/>
-        <tag k="name" v="Wood 40%"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="uuid" v="{4ba8cf79-ef94-4d7c-80c4-e09d5912168f}"/>
-        <tag k="canopy_cover" v="40"/>
-        <tag k="natural" v="wood"/>
-        <tag k="width" v="98.9"/>
         <tag k="angle" v="179.0"/>
-        <tag k="length" v="117.7"/>
+        <tag k="canopy_cover" v="40"/>
         <tag k="error:circular" v="15"/>
+        <tag k="feature_area" v="11600.6"/>
+        <tag k="length" v="117.7"/>
+        <tag k="name" v="Wood 40%"/>
+        <tag k="natural" v="wood"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="mgcp:aec030"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="source:ingest:datetime" v="2021-03-26T09:31:20.404Z"/>
+        <tag k="uuid" v="{4ba8cf79-ef94-4d7c-80c4-e09d5912168f}"/>
+        <tag k="width" v="98.9"/>
     </way>
     <way visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-17"/>
@@ -259,21 +259,21 @@
         <nd ref="-19"/>
         <nd ref="-20"/>
         <nd ref="-17"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="feature_area" v="11599.8"/>
-        <tag k="source" v="mgcp:aec030"/>
-        <tag k="source:ingest:datetime" v="2020-11-16T15:34:15.350Z"/>
-        <tag k="leaf_cycle" v="deciduous"/>
-        <tag k="landuse" v="forest"/>
-        <tag k="name" v="Decid 80%"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="uuid" v="{0e39d522-742d-486f-9247-c8e960054ded}"/>
-        <tag k="canopy_cover" v="80"/>
-        <tag k="width" v="98.9"/>
         <tag k="angle" v="179.0"/>
-        <tag k="length" v="117.7"/>
+        <tag k="canopy_cover" v="80"/>
         <tag k="error:circular" v="15"/>
+        <tag k="feature_area" v="11599.8"/>
+        <tag k="landuse" v="forest"/>
+        <tag k="leaf_cycle" v="deciduous"/>
+        <tag k="length" v="117.7"/>
+        <tag k="name" v="Decid 80%"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="mgcp:aec030"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="source:ingest:datetime" v="2021-03-26T09:31:20.404Z"/>
+        <tag k="uuid" v="{0e39d522-742d-486f-9247-c8e960054ded}"/>
+        <tag k="width" v="98.9"/>
     </way>
     <way visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-13"/>
@@ -281,20 +281,20 @@
         <nd ref="-15"/>
         <nd ref="-16"/>
         <nd ref="-13"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="feature_area" v="11599.8"/>
-        <tag k="source" v="mgcp:aec030"/>
-        <tag k="source:ingest:datetime" v="2020-11-16T15:34:15.350Z"/>
-        <tag k="landuse" v="forest"/>
-        <tag k="name" v="Forest 40%"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="uuid" v="{b74a3f2a-d4b7-40bb-9c12-c97c65ffe51b}"/>
-        <tag k="canopy_cover" v="40"/>
-        <tag k="width" v="98.9"/>
         <tag k="angle" v="179.0"/>
-        <tag k="length" v="117.7"/>
+        <tag k="canopy_cover" v="40"/>
         <tag k="error:circular" v="15"/>
+        <tag k="feature_area" v="11599.8"/>
+        <tag k="landuse" v="forest"/>
+        <tag k="length" v="117.7"/>
+        <tag k="name" v="Forest 40%"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="mgcp:aec030"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="source:ingest:datetime" v="2021-03-26T09:31:20.403Z"/>
+        <tag k="uuid" v="{b74a3f2a-d4b7-40bb-9c12-c97c65ffe51b}"/>
+        <tag k="width" v="98.9"/>
     </way>
     <way visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-9"/>
@@ -302,21 +302,21 @@
         <nd ref="-11"/>
         <nd ref="-12"/>
         <nd ref="-9"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="feature_area" v="11600.6"/>
-        <tag k="source" v="mgcp:aec030"/>
-        <tag k="source:ingest:datetime" v="2020-11-16T15:34:15.350Z"/>
-        <tag k="leaf_cycle" v="deciduous"/>
-        <tag k="name" v="Decid 80%"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="uuid" v="{7935f7e4-e2cd-4718-b659-626e391d00ad}"/>
-        <tag k="canopy_cover" v="80"/>
-        <tag k="natural" v="wood"/>
-        <tag k="width" v="98.9"/>
         <tag k="angle" v="179.0"/>
-        <tag k="length" v="117.7"/>
+        <tag k="canopy_cover" v="80"/>
         <tag k="error:circular" v="15"/>
+        <tag k="feature_area" v="11600.6"/>
+        <tag k="leaf_cycle" v="deciduous"/>
+        <tag k="length" v="117.7"/>
+        <tag k="name" v="Decid 80%"/>
+        <tag k="natural" v="wood"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="mgcp:aec030"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="source:ingest:datetime" v="2021-03-26T09:31:20.403Z"/>
+        <tag k="uuid" v="{7935f7e4-e2cd-4718-b659-626e391d00ad}"/>
+        <tag k="width" v="98.9"/>
     </way>
     <way visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-5"/>
@@ -324,21 +324,21 @@
         <nd ref="-7"/>
         <nd ref="-8"/>
         <nd ref="-5"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="feature_area" v="11599.8"/>
-        <tag k="source" v="mgcp:aec030"/>
-        <tag k="source:ingest:datetime" v="2020-11-16T15:34:15.349Z"/>
-        <tag k="leaf_cycle" v="semi_deciduous"/>
-        <tag k="landuse" v="forest"/>
-        <tag k="name" v="Semi D 80%"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="uuid" v="{c79f688a-9fb4-4240-972a-90f8e363c60f}"/>
-        <tag k="canopy_cover" v="80"/>
-        <tag k="width" v="98.9"/>
         <tag k="angle" v="179.0"/>
-        <tag k="length" v="117.7"/>
+        <tag k="canopy_cover" v="80"/>
         <tag k="error:circular" v="15"/>
+        <tag k="feature_area" v="11599.8"/>
+        <tag k="landuse" v="forest"/>
+        <tag k="leaf_cycle" v="semi_deciduous"/>
+        <tag k="length" v="117.7"/>
+        <tag k="name" v="Semi D 80%"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="mgcp:aec030"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="source:ingest:datetime" v="2021-03-26T09:31:20.402Z"/>
+        <tag k="uuid" v="{c79f688a-9fb4-4240-972a-90f8e363c60f}"/>
+        <tag k="width" v="98.9"/>
     </way>
     <way visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1"/>
@@ -346,19 +346,19 @@
         <nd ref="-3"/>
         <nd ref="-4"/>
         <nd ref="-1"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="feature_area" v="11599.8"/>
-        <tag k="source" v="mgcp:aec030"/>
-        <tag k="source:ingest:datetime" v="2020-11-16T15:34:15.289Z"/>
-        <tag k="landuse" v="forest"/>
-        <tag k="name" v="Forest 80%"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="uuid" v="{03d65d49-0955-48cf-ab0f-419604718d78}"/>
-        <tag k="canopy_cover" v="80"/>
-        <tag k="width" v="98.9"/>
         <tag k="angle" v="179.0"/>
-        <tag k="length" v="117.7"/>
+        <tag k="canopy_cover" v="80"/>
         <tag k="error:circular" v="15"/>
+        <tag k="feature_area" v="11599.8"/>
+        <tag k="landuse" v="forest"/>
+        <tag k="length" v="117.7"/>
+        <tag k="name" v="Forest 80%"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="mgcp:aec030"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="source:ingest:datetime" v="2021-03-26T09:31:20.303Z"/>
+        <tag k="uuid" v="{03d65d49-0955-48cf-ab0f-419604718d78}"/>
+        <tag k="width" v="98.9"/>
     </way>
 </osm>

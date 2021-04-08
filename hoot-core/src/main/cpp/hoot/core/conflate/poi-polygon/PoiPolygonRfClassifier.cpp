@@ -44,8 +44,8 @@ void PoiPolygonRfClassifier::_createExtractors()
   _extractors.clear();
 }
 
-map<QString, double> PoiPolygonRfClassifier::getFeatures(const ConstOsmMapPtr& m,
-  ElementId eid1, ElementId eid2) const
+map<QString, double> PoiPolygonRfClassifier::getFeatures(
+  const ConstOsmMapPtr& m, ElementId eid1, ElementId eid2) const
 {
   map<QString, double> result;
 
