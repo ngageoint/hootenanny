@@ -49,12 +49,14 @@ class DuplicateNodeRemoverTest : public HootTestFixture
     CPPUNIT_TEST_SUITE(DuplicateNodeRemoverTest);
     CPPUNIT_TEST(runBasicTest);
     CPPUNIT_TEST(runMetadataTest);
+    CPPUNIT_TEST(runInvalidDistanceTest);
     CPPUNIT_TEST_SUITE_END();
 
 public:
 
   DuplicateNodeRemoverTest() : HootTestFixture("test-files/", UNUSED_PATH)
   {
+    setResetType(ResetAll);
   }
 
   void runBasicTest()
@@ -120,6 +122,25 @@ public:
     DuplicateNodeRemover::removeNodes(map, 1.0);
 
     CPPUNIT_ASSERT_EQUAL(2, (int)map->getNodes().size());
+  }
+
+  void runInvalidDistanceTest()
+  {
+    conf().set(ConfigOptions::getDuplicateNodeRemoverDistanceThresholdKey(), -1.0);
+
+    QString exceptionMsg;
+    try
+    {
+      DuplicateNodeRemover uut(-1.0);
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT_EQUAL(
+      QString("Nearby node merging distance must be greater than zero. Distance specified: -1")
+        .toStdString(),
+      exceptionMsg.toStdString());
   }
 };
 

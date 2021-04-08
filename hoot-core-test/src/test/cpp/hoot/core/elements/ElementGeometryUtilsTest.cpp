@@ -40,6 +40,7 @@ class ElementGeometryUtilsTest : public HootTestFixture
   CPPUNIT_TEST_SUITE(ElementGeometryUtilsTest);
   CPPUNIT_TEST(calculateLengthTest);
   CPPUNIT_TEST(haveRelationshipTest);
+  CPPUNIT_TEST(haveRelationshipNullInputTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -112,6 +113,26 @@ public:
     CPPUNIT_ASSERT(
       !ElementGeometryUtils::haveGeometricRelationship(
          way1, node1, GeometricRelationship::Touches, map));
+  }
+
+  void haveRelationshipNullInputTest()
+  {
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    ElementPtr element1;
+    ElementPtr element2;
+
+    QString exceptionMsg;
+    try
+    {
+      ElementGeometryUtils::haveGeometricRelationship(
+        element1, element1, GeometricRelationship::Contains, map);
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT_EQUAL(
+      QString("One of the input elements is null.").toStdString(), exceptionMsg.toStdString());
   }
 };
 

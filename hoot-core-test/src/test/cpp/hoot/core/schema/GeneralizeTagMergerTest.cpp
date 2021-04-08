@@ -27,81 +27,71 @@
 
 // Hoot
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/schema/ReplaceTagMerger.h>
+#include <hoot/core/schema/GeneralizeTagMerger.h>
 
 namespace hoot
 {
 
-class ReplaceTagMergerTest : public HootTestFixture
+class GeneralizeTagMergerTest : public HootTestFixture
 {
-    CPPUNIT_TEST_SUITE(ReplaceTagMergerTest);
+    CPPUNIT_TEST_SUITE(GeneralizeTagMergerTest);
     CPPUNIT_TEST(runBasicTest);
-    CPPUNIT_TEST(runSwapTest);
-    CPPUNIT_TEST(runConfigurationTest);
     CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  ReplaceTagMergerTest() = default;
+  GeneralizeTagMergerTest() = default;
 
   void runBasicTest()
   {
-    ReplaceTagMerger uut;
+    GeneralizeTagMerger uut;
 
     Tags t1;
-    t1["foo"] = "bar";
+    t1["name"] = "foo";
+    t1["lala"] = "1;2";
+    t1["building"] = "yes";
+    t1["uid"] = "123";
 
     Tags t2;
-    t2["bar"] = "baz";
-    t2["foo"] = "baz";
+    t2["name"] = "bar";
+    t2["lala"] = "2;1";
+    t2["building"] = "yes";
+    t2["uid"] = "456";
 
     Tags expected;
-    expected["foo"] = "bar";
+    expected["name"] = "foo";
+    expected["alt_name"] = "bar";
+    expected["lala"] = "1;2";
+    expected["uid"] = "123;456";
+    expected["building"] = "yes";
 
     Tags merged = uut.mergeTags(t1, t2, ElementType::Way);
-    CPPUNIT_ASSERT_EQUAL(expected, merged);
+    _compareTags(expected, merged);
   }
 
-  void runSwapTest()
+private:
+
+  void _compareTags(const Tags& t1, const Tags& t2)
   {
-    ReplaceTagMerger uut(true);
+    if (t1.size() != t2.size())
+    {
+      LOG_WARN("t1: " << t1.toString());
+      LOG_WARN("t2: " << t2.toString());
+      CPPUNIT_ASSERT_EQUAL(t1.size(), t2.size());
+    }
 
-    Tags t1;
-    t1["foo"] = "bar";
-    t1["bar"] = "foo";
-
-    Tags t2;
-    t2["bar"] = "baz";
-
-    Tags expected;
-    expected["bar"] = "baz";
-
-    Tags merged = uut.mergeTags(t1, t2, ElementType::Way);
-    CPPUNIT_ASSERT_EQUAL(expected, merged);
-  }
-
-  void runConfigurationTest()
-  {
-    Settings settings;
-    settings.set(ConfigOptions::getTagMergerOverwriteExcludeKey(), QStringList());
-    ReplaceTagMerger uut;
-    uut.setConfiguration(settings);
-
-    Tags t1;
-    t1["foo"] = "bar";
-
-    Tags t2;
-    t2["bar"] = "baz";
-    t2["foo"] = "baz";
-
-    Tags expected;
-    expected["foo"] = "bar";
-
-    Tags merged = uut.mergeTags(t1, t2, ElementType::Way);
-    CPPUNIT_ASSERT_EQUAL(expected, merged);
+    for (Tags::const_iterator it = t1.begin(); it != t1.end(); ++it)
+    {
+      if (t1[it.key()] != t2[it.key()])
+      {
+        LOG_WARN("t1: " << t1.toString());
+        LOG_WARN("t2: " << t2.toString());
+        CPPUNIT_ASSERT_EQUAL(t1[it.key()].toStdString(), t2[it.key()].toStdString());
+      }
+    }
   }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ReplaceTagMergerTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(GeneralizeTagMergerTest, "quick");
 
 }

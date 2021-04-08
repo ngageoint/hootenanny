@@ -49,26 +49,8 @@ public:
 
   using Type = int;
 
-  ServicesJobStatus() { _type = Unknown; }
-  ServicesJobStatus(Type type) { _type = type; }
-
-  bool operator==(ServicesJobStatus t) const { return t._type == _type; }
-  bool operator!=(ServicesJobStatus t) const { return t._type != _type; }
-
-  Type getEnum() const { return _type; }
-
-  QString toString() const;
-
-  /**
-   * @brief fromString Parses type from either a human readable string or the numeric string.
-   * @param typeString The string to parse.
-   * @return The type parsed, or throws an exception if it is an invalid string.
-   */
-  static Type fromString(QString typeString);
-
-private:
-
-  ServicesJobStatus::Type _type;
+  ServicesJobStatus() = default;
+  ~ServicesJobStatus() = default;
 };
 
 }
