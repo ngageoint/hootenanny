@@ -22,42 +22,34 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
  */
-#ifndef TAGSIMILARITYSCORER_H
-#define TAGSIMILARITYSCORER_H
+#ifndef MAP_PROJECTOR_JS_H
+#define MAP_PROJECTOR_JS_H
 
-// hoot
-#include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/elements/Element.h>
+// Hoot
+#include <hoot/js/SystemNodeJs.h>
+#include <hoot/js/HootBaseJs.h>
 
 namespace hoot
 {
 
-class Tags;
-
-class TagDifferencer
+class MapProjectorJs : public HootBaseJs
 {
 public:
 
-  static QString className() { return "hoot::TagDifferencer"; }
+  static void Init(v8::Handle<v8::Object> target);
 
-  TagDifferencer() = default;
-  virtual ~TagDifferencer() = default;
+  virtual ~MapProjectorJs() = default;
 
-  /**
-   * Returns a value from 0 to 1. 0 means they're identical as far as this differencer is concerned
-   * and 1 means they're different. Each differencer may (will?) have a different definition of
-   * what difference means. Possibly just the difference in name tags, or only looks at highway
-   * related tags, etc.
-   *
-   * The score returned should not be considered linear. If a = 1 and b = 0.01, then all you can
-   * say is that a is more different than b, not that a is 100 times more different, etc.
-   */
-  virtual double diff(
-    const ConstOsmMapPtr& map, const ConstElementPtr& e1, const ConstElementPtr& e2) const = 0;
+  static void projectToPlanar(const v8::FunctionCallbackInfo<v8::Value>& args);
+
+private:
+
+  MapProjectorJs() = default;
 };
 
 }
 
-#endif // TAGSIMILARITYSCORER_H
+
+#endif // MAP_PROJECTOR_JS_H

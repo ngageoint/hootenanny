@@ -222,7 +222,6 @@ void ElementJs::setStatusString(const FunctionCallbackInfo<Value>& args)
   {
     args.GetReturnValue().Set(current->ThrowException(HootExceptionJs::create(e)));
   }
-
 }
 
 void ElementJs::setTags(const FunctionCallbackInfo<Value>& args)

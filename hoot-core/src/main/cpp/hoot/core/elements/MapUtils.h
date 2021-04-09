@@ -73,6 +73,32 @@ public:
    * @param throwOutDupes
    */
   static void combineMaps(OsmMapPtr& map1, OsmMapPtr& map2, const bool throwOutDupes);
+
+  /**
+   * TODO
+   *
+   * @param map
+   * @param note
+   * @param elementType
+   * @return
+   */
+  static ElementPtr getFirstElementWithNote(
+    const OsmMapPtr& map, const QString& note,
+    const ElementType& elementType = ElementType::Unknown);
+
+  /**
+   * Gets a single element by tag
+   *
+   * @param map map containing the element
+   * @param tagKey tag key to search for
+   * @param tagValue tag value to search for
+   * @param elementType TODO
+   * @return returns a single element with the intput tag key/value pair; fails if more than one
+   * element
+   */
+  static ElementPtr getFirstElementWithTag(
+    const OsmMapPtr& map, const QString& tagKey, const QString& tagValue,
+    const ElementType& elementType = ElementType::Unknown);
 };
 
 }

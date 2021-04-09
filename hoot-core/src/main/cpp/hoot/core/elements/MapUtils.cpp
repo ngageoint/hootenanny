@@ -37,6 +37,11 @@
 #include <hoot/core/visitors/RemoveUnknownVisitor.h>
 #include <hoot/core/visitors/RemoveTagsVisitor.h>
 #include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/criterion/TagCriterion.h>
+#include <hoot/core/visitors/UniqueElementIdVisitor.h>
+
+// Std
+#include <set>
 
 namespace hoot
 {
@@ -81,5 +86,44 @@ void MapUtils::combineMaps(OsmMapPtr& map1, OsmMapPtr& map2, const bool throwOut
   LOG_DEBUG("Combined map size: " << map1->size());
 }
 
+ElementPtr MapUtils::getFirstElementWithNote(
+  const OsmMapPtr& map, const QString& note, const ElementType& elementType)
+{
+  return getFirstElementWithTag(map, "note", note, elementType);
+}
+
+ElementPtr MapUtils::getFirstElementWithTag(
+  const OsmMapPtr& map, const QString& tagKey, const QString& tagValue,
+  const ElementType& elementType)
+{
+  TagCriterion tc(tagKey, tagValue);
+  UniqueElementIdVisitor v;
+  FilteredVisitor fv(tc, v);
+  map->visitRo(fv);
+  const std::set<ElementId> elementIds = v.getElementSet();
+
+  if (elementIds.size() == 0)
+  {
+    return ElementPtr();
+  }
+
+  if (elementType == ElementType::Unknown)
+  {
+    return map->getElement(*elementIds.begin());
+  }
+  else
+  {
+    for (std::set<ElementId>::const_iterator itr = elementIds.begin(); itr != elementIds.end();
+         ++itr)
+    {
+      ElementPtr element = map->getElement(*itr);
+      if (element->getElementType() == elementType)
+      {
+        return element;
+      }
+    }
+  }
+  return ElementPtr();
+}
 
 }
