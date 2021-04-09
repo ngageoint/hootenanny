@@ -62,6 +62,7 @@ void OsmSchemaJs::Init(Handle<Object> exports)
   HandleScope scope(current);
   Handle<Object> schema = Object::New(current);
   exports->Set(String::NewFromUtf8(current, "OsmSchema"), schema);
+
   schema->Set(String::NewFromUtf8(current, "getAllTags"),
               FunctionTemplate::New(current, getAllTags)->GetFunction());
   schema->Set(String::NewFromUtf8(current, "getCategories"),
@@ -82,30 +83,6 @@ void OsmSchemaJs::Init(Handle<Object> exports)
               FunctionTemplate::New(current, explicitTypeMismatch)->GetFunction());
   schema->Set(String::NewFromUtf8(current, "mostSpecificType"),
               FunctionTemplate::New(current, mostSpecificType)->GetFunction());
-  schema->Set(String::NewFromUtf8(current, "isArea"),
-              FunctionTemplate::New(current, isArea)->GetFunction());
-  schema->Set(String::NewFromUtf8(current, "isPolygon"),
-              FunctionTemplate::New(current, isPolygon)->GetFunction());
-  schema->Set(String::NewFromUtf8(current, "isPoint"),
-              FunctionTemplate::New(current, isPoint)->GetFunction());
-  schema->Set(String::NewFromUtf8(current, "isBuilding"),
-              FunctionTemplate::New(current, isBuilding)->GetFunction());
-  schema->Set(String::NewFromUtf8(current, "isLinear"),
-              FunctionTemplate::New(current, isLinear)->GetFunction());
-  schema->Set(String::NewFromUtf8(current, "isLinearWaterway"),
-              FunctionTemplate::New(current, isLinearWaterway)->GetFunction());
-  schema->Set(String::NewFromUtf8(current, "isPowerLine"),
-              FunctionTemplate::New(current, isPowerLine)->GetFunction());
-  schema->Set(String::NewFromUtf8(current, "isPoi"),
-              FunctionTemplate::New(current, isPoi)->GetFunction());
-  schema->Set(String::NewFromUtf8(current, "isRailway"),
-              FunctionTemplate::New(current, isRailway)->GetFunction());
-  schema->Set(String::NewFromUtf8(current, "isHighway"),
-              FunctionTemplate::New(current, isHighway)->GetFunction());
-  schema->Set(String::NewFromUtf8(current, "isNonBuildingArea"),
-              FunctionTemplate::New(current, isNonBuildingArea)->GetFunction());
-  schema->Set(String::NewFromUtf8(current, "isCollectionRelation"),
-              FunctionTemplate::New(current, isCollectionRelation)->GetFunction());
   schema->Set(String::NewFromUtf8(current, "score"),
               FunctionTemplate::New(current, score)->GetFunction());
   schema->Set(String::NewFromUtf8(current, "scoreTypes"),
@@ -116,6 +93,25 @@ void OsmSchemaJs::Init(Handle<Object> exports)
               FunctionTemplate::New(current, hasName)->GetFunction());
   schema->Set(String::NewFromUtf8(current, "isSpecificallyConflatable"),
               FunctionTemplate::New(current, isSpecificallyConflatable)->GetFunction());
+
+  schema->Set(String::NewFromUtf8(current, "isPolygon"),
+              FunctionTemplate::New(current, isPolygon)->GetFunction());
+  schema->Set(String::NewFromUtf8(current, "isPoint"),
+              FunctionTemplate::New(current, isPoint)->GetFunction());
+  schema->Set(String::NewFromUtf8(current, "isLinear"),
+              FunctionTemplate::New(current, isLinear)->GetFunction());
+  schema->Set(String::NewFromUtf8(current, "isLinearWaterway"),
+              FunctionTemplate::New(current, isLinearWaterway)->GetFunction());
+  schema->Set(String::NewFromUtf8(current, "isPowerLine"),
+              FunctionTemplate::New(current, isPowerLine)->GetFunction());
+  schema->Set(String::NewFromUtf8(current, "isPoi"),
+              FunctionTemplate::New(current, isPoi)->GetFunction());
+  schema->Set(String::NewFromUtf8(current, "isRailway"),
+              FunctionTemplate::New(current, isRailway)->GetFunction());
+  schema->Set(String::NewFromUtf8(current, "isNonBuildingArea"),
+              FunctionTemplate::New(current, isNonBuildingArea)->GetFunction());
+  schema->Set(String::NewFromUtf8(current, "isCollectionRelation"),
+              FunctionTemplate::New(current, isCollectionRelation)->GetFunction());
 }
 
 void OsmSchemaJs::getAllTags(const FunctionCallbackInfo<Value>& args)
@@ -215,18 +211,6 @@ void OsmSchemaJs::explicitTypeMismatch(const FunctionCallbackInfo<Value>& args)
   args.GetReturnValue().Set(Boolean::New(current, hasExplicitTypeMismatch));
 }
 
-void OsmSchemaJs::isArea(const FunctionCallbackInfo<Value>& args)
-{
-  Isolate* current = args.GetIsolate();
-  HandleScope scope(current);
-
-  OsmMapJs* mapJs = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject());
-  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[1]->ToObject())->getConstElement();
-
-  args.GetReturnValue().Set(
-    Boolean::New(current, AreaCriterion(mapJs->getConstMap()).isSatisfied(e)));
-}
-
 void OsmSchemaJs::isPoint(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
@@ -259,18 +243,6 @@ void OsmSchemaJs::isPolygon(const FunctionCallbackInfo<Value>& args)
 
   args.GetReturnValue().Set(
     Boolean::New(current, PolygonCriterion(mapJs->getConstMap()).isSatisfied(e)));
-}
-
-void OsmSchemaJs::isBuilding(const FunctionCallbackInfo<Value>& args)
-{
-  Isolate* current = args.GetIsolate();
-  HandleScope scope(current);
-
-  OsmMapJs* mapJs = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject());
-  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[1]->ToObject())->getConstElement();
-
-  args.GetReturnValue().Set(
-    Boolean::New(current, BuildingCriterion(mapJs->getConstMap()).isSatisfied(e)));
 }
 
 void OsmSchemaJs::isLinearWaterway(const FunctionCallbackInfo<Value>& args)
@@ -311,18 +283,6 @@ void OsmSchemaJs::isRailway(const FunctionCallbackInfo<Value>& args)
   ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
 
   args.GetReturnValue().Set(Boolean::New(current, RailwayCriterion().isSatisfied(e)));
-}
-
-void OsmSchemaJs::isHighway(const FunctionCallbackInfo<Value>& args)
-{
-  Isolate* current = args.GetIsolate();
-  HandleScope scope(current);
-
-  OsmMapJs* mapJs = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject());
-  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[1]->ToObject())->getConstElement();
-
-  args.GetReturnValue().Set(
-    Boolean::New(current, HighwayCriterion(mapJs->getConstMap()).isSatisfied(e)));
 }
 
 void OsmSchemaJs::isNonBuildingArea(const FunctionCallbackInfo<Value>& args)
