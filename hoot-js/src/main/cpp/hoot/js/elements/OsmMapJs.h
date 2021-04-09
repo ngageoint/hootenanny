@@ -58,6 +58,7 @@ private:
 
   static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void getElement(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void getElementCount(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void visit(const v8::FunctionCallbackInfo<v8::Value>& args); 
 
   OsmMapPtr _map;

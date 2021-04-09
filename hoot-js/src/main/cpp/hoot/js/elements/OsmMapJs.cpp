@@ -67,6 +67,8 @@ void OsmMapJs::Init(Handle<Object> target)
   // Prototype
   tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getElement"),
       FunctionTemplate::New(current, getElement));
+  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getElementCount"),
+        FunctionTemplate::New(current, getElementCount));
   tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "visit"),
       FunctionTemplate::New(current, visit));
 
@@ -146,6 +148,16 @@ void OsmMapJs::getElement(const FunctionCallbackInfo<Value>& args)
   {
     args.GetReturnValue().Set(current->ThrowException(HootExceptionJs::create(e)));
   }
+}
+
+void OsmMapJs::getElementCount(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
+
+  OsmMapJs* obj = ObjectWrap::Unwrap<OsmMapJs>(args.This());
+
+  args.GetReturnValue().Set(Number::New(current, obj->getConstMap()->getElementCount()));
 }
 
 void OsmMapJs::visit(const FunctionCallbackInfo<Value>& args)
