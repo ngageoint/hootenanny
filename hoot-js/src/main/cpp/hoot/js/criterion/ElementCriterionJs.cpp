@@ -69,6 +69,8 @@ void ElementCriterionJs::Init(Handle<Object> target)
     tpl->PrototypeTemplate()->Set(
       PopulateConsumersJs::baseClass(),
       String::NewFromUtf8(current, ElementCriterion::className().toStdString().data()));
+    tpl->PrototypeTemplate()->Set(
+      String::NewFromUtf8(current, "isSatisfied"), FunctionTemplate::New(current, isSatisfied));
 
     _constructor.Reset(current, tpl->GetFunction());
     target->Set(String::NewFromUtf8(current, n), ToLocal(&_constructor));
@@ -90,6 +92,17 @@ void ElementCriterionJs::New(const FunctionCallbackInfo<Value>& args)
   PopulateConsumersJs::populateConsumers<ElementCriterion>(c, args);
 
   args.GetReturnValue().Set(args.This());
+}
+
+void ElementCriterionJs::isSatisfied(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
+
+  ElementCriterionPtr ec = ObjectWrap::Unwrap<ElementCriterionJs>(args.This())->getCriterion();
+  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
+
+  args.GetReturnValue().Set(Boolean::New(current, ec->isSatisfied(e)));
 }
 
 }

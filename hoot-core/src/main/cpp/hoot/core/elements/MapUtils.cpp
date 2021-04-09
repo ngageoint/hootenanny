@@ -74,7 +74,7 @@ void MapUtils::combineMaps(OsmMapPtr& map1, OsmMapPtr& map2, const bool throwOut
   MapProjector::projectToWgs84(map1);
   MapProjector::projectToWgs84(map2);   // not exactly sure yet why this needs to be done
 
-  if (map2->size() == 0)
+  if (map2->isEmpty())
   {
     LOG_DEBUG("Combined map size: " << map1->size());
     return;
@@ -102,7 +102,7 @@ ElementPtr MapUtils::getFirstElementWithTag(
   map->visitRo(fv);
   const std::set<ElementId> elementIds = v.getElementSet();
 
-  if (elementIds.size() == 0)
+  if (elementIds.empty())
   {
     return ElementPtr();
   }

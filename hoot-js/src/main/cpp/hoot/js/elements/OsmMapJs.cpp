@@ -65,6 +65,8 @@ void OsmMapJs::Init(Handle<Object> target)
   tpl->InstanceTemplate()->SetInternalFieldCount(1);
 
   // Prototype
+  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "clone"),
+        FunctionTemplate::New(current, clone));
   tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getElement"),
       FunctionTemplate::New(current, getElement));
   tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getElementCount"),
@@ -113,6 +115,24 @@ void OsmMapJs::New(const FunctionCallbackInfo<Value>& args)
   obj->Wrap(args.This());
 
   args.GetReturnValue().Set(args.This());
+}
+
+void OsmMapJs::clone(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
+
+  OsmMapJs* from = ObjectWrap::Unwrap<OsmMapJs>(args.This());
+
+  OsmMapPtr newMap(new OsmMap(from->getMap()));
+
+  const unsigned argc = 1;
+  Handle<Value> argv[argc] = { args[0] };
+  Local<Object> result = ToLocal(&_constructor)->NewInstance(argc, argv);
+  OsmMapJs* obj = ObjectWrap::Unwrap<OsmMapJs>(result);
+  obj->_map = newMap;
+
+  args.GetReturnValue().Set(result);
 }
 
 OsmMapPtr& OsmMapJs::getMap()

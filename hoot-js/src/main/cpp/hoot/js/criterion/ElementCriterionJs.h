@@ -53,6 +53,7 @@ private:
   ElementCriterionJs(ElementCriterion* c) : _c(c) {}
 
   static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void isSatisfied(const v8::FunctionCallbackInfo<v8::Value>& args);
 
   ElementCriterionPtr _c;
   static v8::Persistent<v8::Function> _constructor;
