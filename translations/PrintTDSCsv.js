@@ -83,7 +83,7 @@ function initialize()
 // The finalize function gets called once AFTER the translateToXXX functions
 function finalize()
 {
-  // print('In the finalize function');
+  // hoot.print('In the finalize function');
 }
 
 
@@ -113,27 +113,27 @@ function dumpHtmlTags(tagList)
   shortKeys.sort();
 
   // Start the HTML document
-  print('<html>');
-  print('<head>');
-  print('<title>Hootennanny OSM+ Tags</title>');
-  print('</head>');
-  print('<style>');
-  print('table,th,td { border:1px solid black; border-collapse:collapse; padding-left:5px; padding-right:5px; }');
-  print('caption { text-align:left; font-weight:bold;}');
-  print('</style>');
-  print('<body>');
-  print('<h2 align=center>Hootennanny OSM+ Tags</h2>');
-  print('<p>Generated: ' + Date() + '</p>');
+  hoot.print('<html>');
+  hoot.print('<head>');
+  hoot.print('<title>Hootennanny OSM+ Tags</title>');
+  hoot.print('</head>');
+  hoot.print('<style>');
+  hoot.print('table,th,td { border:1px solid black; border-collapse:collapse; padding-left:5px; padding-right:5px; }');
+  hoot.print('caption { text-align:left; font-weight:bold;}');
+  hoot.print('</style>');
+  hoot.print('<body>');
+  hoot.print('<h2 align=center>Hootennanny OSM+ Tags</h2>');
+  hoot.print('<p>Generated: ' + Date() + '</p>');
 
   for (var i = 0, tlen = shortKeys.length; i < tlen; i++)
   {
     shortTag = shortKeys[i];
 
-    print('<table>');
-    print('<caption>' + shortTag + '<caption>');
-    print('<tr>');
-    print('<th>Key</th><th>Value</th><th>Comment</th><th>Source</th>');
-    print('</tr>');
+    hoot.print('<table>');
+    hoot.print('<caption>' + shortTag + '<caption>');
+    hoot.print('<tr>');
+    hoot.print('<th>Key</th><th>Value</th><th>Comment</th><th>Source</th>');
+    hoot.print('</tr>');
 
     var extraKeys = Object.keys(tagList[shortTag]);
     extraKeys.sort();
@@ -148,18 +148,18 @@ function dumpHtmlTags(tagList)
       tag = tagList[shortTag][val]['tag'];
       value = tagList[shortTag][val]['value'];
 
-      print('<tr>');
-      print('<td>' + tag + '</td><td>' + value + '</td><td>' + desc + '</td><td>' + source + '</td>');
-      print('</tr>');
+      hoot.print('<tr>');
+      hoot.print('<td>' + tag + '</td><td>' + value + '</td><td>' + desc + '</td><td>' + source + '</td>');
+      hoot.print('</tr>');
     }
-    print('</table>');
-    print('<br>');
-    print('<br>');
+    hoot.print('</table>');
+    hoot.print('<br>');
+    hoot.print('<br>');
   }
 
   // End the HTML document
-  print('</body>');
-  print('</html>');
+  hoot.print('</body>');
+  hoot.print('</html>');
 
 } // End dumpHtmlTags
 
@@ -177,20 +177,20 @@ function dumpAsciidocTags(tagList)
   var shortKeys = Object.keys(tagList);
   shortKeys.sort();
 
-  print('Hootennanny OSM+ Tags');
-  print('=====================');
-  print('Generated: ' + Date());
-  print('');
+  hoot.print('Hootennanny OSM+ Tags');
+  hoot.print('=====================');
+  hoot.print('Generated: ' + Date());
+  hoot.print('');
 
   for (var i = 0, tlen = shortKeys.length; i < tlen; i++)
   {
     shortTag = shortKeys[i];
 
-    // print('.An ' + shortTag);
-    print('.' + shortTag);
-    print('[options="header"]');
-    print('|==========');
-    print('| Key | Value | Comment | Source');
+    // hoot.print('.An ' + shortTag);
+    hoot.print('.' + shortTag);
+    hoot.print('[options="header"]');
+    hoot.print('|==========');
+    hoot.print('| Key | Value | Comment | Source');
 
     var extraKeys = Object.keys(tagList[shortTag]);
     extraKeys.sort();
@@ -205,12 +205,12 @@ function dumpAsciidocTags(tagList)
       tag = tagList[shortTag][val]['tag'];
       value = tagList[shortTag][val]['value'];
 
-      print('| ' + tag + ' | ' + value + ' | ' + desc + ' | ' + source);
+      hoot.print('| ' + tag + ' | ' + value + ' | ' + desc + ' | ' + source);
     }
 
-    print('|==========');
-    print('');
-    print('');
+    hoot.print('|==========');
+    hoot.print('');
+    hoot.print('');
   }
 
 } // End dumpAsciidocTags
@@ -229,20 +229,20 @@ function dumpRedmineTags(tagList)
   var shortKeys = Object.keys(tagList);
   shortKeys.sort();
 
-  print('h1. Hootennanny OSM+ Tags');
-  print('');
-  print('Generated: ' + Date());
-  print('');
-  print('----');
-  print('');
+  hoot.print('h1. Hootennanny OSM+ Tags');
+  hoot.print('');
+  hoot.print('Generated: ' + Date());
+  hoot.print('');
+  hoot.print('----');
+  hoot.print('');
 
   for (var i = 0, tlen = shortKeys.length; i < tlen; i++)
   {
     shortTag = shortKeys[i];
 
-    print('h2. ' + shortTag);
-    print('');
-    print('|_.Key| _.Value|_.Comment|_.Source|');
+    hoot.print('h2. ' + shortTag);
+    hoot.print('');
+    hoot.print('|_.Key| _.Value|_.Comment|_.Source|');
 
     var extraKeys = Object.keys(tagList[shortTag]);
     extraKeys.sort();
@@ -257,12 +257,12 @@ function dumpRedmineTags(tagList)
       tag = tagList[shortTag][val]['tag'];
       value = tagList[shortTag][val]['value'];
 
-      print('| ' + tag + ' | ' + value + ' | ' + desc + ' | ' + source + ' |');
+      hoot.print('| ' + tag + ' | ' + value + ' | ' + desc + ' | ' + source + ' |');
     }
 
-    print('');
-    print('----');
-    print('');
+    hoot.print('');
+    hoot.print('----');
+    hoot.print('');
   }
 } // End dumpRedmineTags
 
@@ -270,15 +270,15 @@ function dumpRedmineTags(tagList)
 // Dump the tagList out as a Large Ugly JSON Blob.
 function dumpJsonTags(tagList)
 {
-  print('JSON format is not working yet');
-  print(tagList.toString());
+  hoot.print('JSON format is not working yet');
+  hoot.print(tagList.toString());
 } // End dumpJsonTags
 
 
 // Dump the schema out in CSV format.
 function dumpCsvTags(schema)
 {
-  print('"Feature","Tag","Value"');
+  hoot.print('"Feature","Tag","Value"');
         
   for (var i = 0, iLen = schema.length; i < iLen; i++)
   {
@@ -292,13 +292,13 @@ function dumpCsvTags(schema)
             
       if (schema[i].columns[j].type !== 'enumeration')
       {
-        print('"' + fName + '","' + cName + '","Value"');
+        hoot.print('"' + fName + '","' + cName + '","Value"');
       }
       else
       {
         for (var k = 0, kLen = schema[i].columns[j].enumerations.length; k < kLen; k++)
         {
-          print('"' + fName + '","' + cName + '","' + schema[i].columns[j].enumerations[k].name + '"');
+          hoot.print('"' + fName + '","' + cName + '","' + schema[i].columns[j].enumerations[k].name + '"');
         }
       } 
     } // End for j

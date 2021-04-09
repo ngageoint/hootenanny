@@ -3,10 +3,13 @@
  * @file
  * @par Hoot JavaScript API
  *
- * The HootLib contains a number of convenience functions for wrapping internal Hootenanny
- * operations. This makes the code a little easier for the non-developer and adds sugar coating,
- * although a little naughty wrapping for the more experienced developer.  The comments within this
- * file are used to generate user documentation. Please keep this in mind while adding comments.
+ * HootLib allows for quickly adding reusable logic useful to multiple Javascript hoot clients.
+ * If you are core developer, determine if all or some of your added logic would be more
+ * appropriately placed in the hoot-core C++ code before adding it here in order to reduce code
+ * duplication.
+
+ * The comments within this file are used to generate user documentation. Please keep this in mind
+ * when adding comments.
  */
 
 /**
@@ -18,68 +21,7 @@ function testAdd(v1, v2)
   return v1 + v2;
 }
 
-///////////////LOGGING///////////
-
-/**
- * Wrapper for logWarn for backward compatibility.
- */
-function logWarn(e)
-{
-  return hoot.logWarn(e);
-}
-
-/**
- * Wrapper for logError for backward compatibility.
- */
-function logError(e)
-{
-  return hoot.logError(e);
-}
-
-/**
- * Wrapper for print for backward compatibility.
- */
-function print(e)
-{
-  hoot.print(e);
-}
-
-/**
- * Log a string using Hootenanny's logging mechanism. By default this will
- * print the script location and the JSON version of the argument.
- *
- * @param s String to log.
- */
-function log(s)
-{
-  hoot.log(s);
-}
-
-/**
- * Log a debug string using Hootenanny's logging mechanism. By default this will
- * print the script location and the JSON version of the argument.
- *
- * @param s String to log.
- */
-function debug(s)
-{
-  hoot.debug(s);
-}
-
 /////////////////MERGING////////////////
-
-/**
- * Merge the tags in the two elements into a resulting set of tags using the
- * default mechanism. Depending on the default mechanism order may matter.
- *
- * @param e1 First element
- * @param e2 Second element
- * @return Returns a merged set of tags
- */
-function mergeTags(e1, e2)
-{
-  return hoot.TagMergerFactory.mergeTags(e1.getTags(), e2.getTags());
-}
 
 /**
  * This will merge elements 1 and 2. The geometry of 1 will be kept and 2
@@ -89,7 +31,7 @@ function mergeTags(e1, e2)
 function mergeElements(map, e1, e2) 
 {
   // merge tags from e2 into e1 using default tag merging
-  var newTags = mergeTags(e1, e2);
+  var newTags = hoot.TagMergerFactory.mergeTags(e1.getTags(), e2.getTags());
   e1.setTags(newTags);
 
   new hoot.ReplaceElementOp(e2, e1).apply(map);
@@ -98,77 +40,6 @@ function mergeElements(map, e1, e2)
   // try to delete e2. This may silently fail if it is still part of another
   // element. Failure in this case isn't necessarily bad.
   new hoot.RecursiveElementRemover(e2).apply(map);
-}
-
-/**
- * Merges two relations
- */
-function mergeRelations(map, elementId1, elementId2)
-{
-  return hoot.RelationMerger.mergeRelations(map, elementId1, elementId2);
-}
-
-/**
- * Snaps the ways in the second input to the first input. The replaced array will
- * be updated appropriately to reflect the elements that were replaced.
- */
-function snapWays(sublineMatcher, map, pairs, replaced, matchedBy)
-{
-  return new hoot.LinearSnapMerger().apply(sublineMatcher, map, pairs, replaced, matchedBy);
-}
-
-/**
- * Another approach to snapping ways, which allows for using multiple subline matchers. See related
-   notes in the mergeSets method of River.js.
- */
-function snapWays2(sublineMatcher, map, pairs, replaced, matchedBy, sublineMatcher2)
-{
-  return new hoot.LinearSnapMerger().apply(sublineMatcher, map, pairs, replaced, matchedBy, sublineMatcher2);
-}
-
-//////////////RELATION//////////////////
-
-/**
- * Determines if an element is a member of relation that is in a specified schema category
- */
-function isMemberOfRelationInCategory(map, childElementId, schemaCategory)
-{
-  return hoot.RelationMemberUtils.isMemberOfRelationInCategory(map, childElementId, schemaCategory);
-}
-
-/*
- * Determines if an element is a member of a relation that satisifies specified criteria
- */
-function isMemberOfRelationSatisfyingCriterion(map, childElementId, criterionClassName)
-{
-  return hoot.RelationMemberUtils.isMemberOfRelationSatisfyingCriterion(map, childElementId, criterionClassName);
-}
-
-/**
- * Recursively returns the total number of nodes contained with a relation
- */
-function getNumRelationMemberNodes(map, relationId)
-{
-  return hoot.RelationMemberUtils.getNumRelationMemberNodes(map, relationId);
-}
-
-/**
- * Determines if two relations have at least one connected way member
- */
-function relationsHaveConnectedWayMembers(map, relationId1, relationId2)
-{
-  return hoot.RelationMemberUtils.relationsHaveConnectedWayMembers(map, relationId1, relationId2);
-}
-
-///////////////////RIVER//////////////////
-
-/*
- * Returns the maximum amount of match method recursions that should be allowed for river 
- * conflation based on the input data
- */
-function getRiverMaxSublineRecursions(map)
-{
-  return hoot.RiverMaximalSublineSettingOptimizer.getFindBestMatchesMaxRecursions(map);
 }
 
 ///////////////SCHEMA///////////////////////
@@ -302,142 +173,6 @@ function bothElementsHaveName(e1, e2)
   return bothHaveName;
 }
 
-/**
- * Determines if two features mismatch on non-generic types
- */
-function explicitTypeMismatch(e1, e2, minTypeScore)
-{
-  return hoot.OsmSchema.explicitTypeMismatch(e1, e2, minTypeScore);
-}
-
-/**
- * Returns the most specific type tag found as determined by the hoot schema. 
-   If the element has more than one specific type, only the first will be returned.
- */
-function mostSpecificType(e)
-{
-  return hoot.OsmSchema.mostSpecificType(e);
-}
-
-/**
- * Scores the similarity between two feature types
- */
-function getTypeScore(e1, e2, ignoreGenericTypes)
-{
-  return hoot.OsmSchema.scoreTypes(e1.getTags(), e2.getTags(), ignoreGenericTypes);
-}
-
-/**
- * Determines if a feature has a specific type
- */
-function hasType(e)
-{
-  return hoot.OsmSchema.hasType(e);
-}
-
-/**
- * Returns true if the specified element has a name
- */
-function hasName(e)
-{
-  return hoot.OsmSchema.hasName(e);
-}
-
-/**
- * Returns true if the feature is conflatable by any geometry non-generic conflation algorithm .
- */
-function isSpecificallyConflatable(map, e, geometryTypeFilter)
-{
-  return hoot.OsmSchema.isSpecificallyConflatable(map, e, geometryTypeFilter);
-}
-
-// All of these 'is*' methods can go away if #3047 is completed.
-
-function isNonBuildingArea(map, e)
-{
-  return hoot.OsmSchema.isNonBuildingArea(map, e);
-}
-
-/**
- * Returns true if the specified element is a collection relation.
- */
-function isCollectionRelation(e)
-{
-  return hoot.OsmSchema.isCollectionRelation(e);
-}
-
-/**
- * Returns true if the specified element is a polygon element.
- */
-function isPolygon(map, e)
-{
-  return hoot.OsmSchema.isPolygon(map, e);
-}
-
-/**
- * Returns true if the specified element is a point element.
- */
-function isPoint(map, e)
-{
-  return hoot.OsmSchema.isPoint(map, e);
-}
-
-/**
- * Returns true if the specified element is an linear element. The approach used
- * to determine area vs. linear is quite complex, but some example are below.
- * - highway=road
- * - waterway=river
- *
- * See the OSM wiki for more information:
- * http://wiki.openstreetmap.org/wiki/Key:area
- */
-function isLinear(d)
-{
-  return hoot.OsmSchema.isLinear(d);
-}
-
-/**
- * Returns true if the specified element is an linear waterway element.
- *
- * See the OSM wiki for more information:
- * http://wiki.openstreetmap.org/wiki/River
- */
-function isLinearWaterway(e)
-{
-  return hoot.OsmSchema.isLinearWaterway(e);
-}
-
-/**
- * Returns true if the specified element is in the poi category in `schema.json` and the element is
- * a node type.
- */
-function isPoi(e)
-{
-  return hoot.OsmSchema.isPoi(e);
-}
-
-/**
- * Returns true if the specified element is an railway element.
- *
- * See the OSM wiki for more information:
- * http://wiki.openstreetmap.org/wiki/Railway
- */
-function isRailway(e)
-{
-  return hoot.OsmSchema.isRailway(e);
-}
-
-/**
- * Returns true if the specified element is an power line.
- *
- * See the OSM wiki for more information:
- * https://wiki.openstreetmap.org/wiki/Power
- */
-function isPowerLine(e)
-{
-  return hoot.OsmSchema.isPowerLine(e);
-}
-
 /////////////////SEARCH RADIUS//////////////
 
 /**
@@ -458,30 +193,4 @@ function calculateSearchRadiusUsingRubberSheeting(map, rubberSheetRef, rubberShe
       { "rubber.sheet.minimum.ties" : rubberSheetMinTies },
       { "search.radius.calculator.element.criterion" : matchCandidateCriterion })
       .applyAndGetResult(map);
-}
-
-/*
- * Returns the POI match/review distances used by POI to POI Conflation
- */
-function getPoiSearchRadii()
-{
-  return hoot.PoiSearchRadius.getSearchRadii();
-}
-
-/////////////UTILITIES////////////////////
-
-/**
- * Wrapper for createUuid for backward compatibility.
- */
-function createUuid()
-{
-  return hoot.UuidHelper.createUuid();
-}
-
-/**
- * Wrapper for getHootConfig for backward compatibility.
- */
-function getHootConfig(e)
-{
-  return hoot.get(e);
 }

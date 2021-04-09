@@ -41,7 +41,7 @@ function initialize()
 function translateToOsm(attrs, layerName, geometryType)
 {
   // Add UUID
-  if (!(attrs.uuid)) attrs.uuid = createUuid();
+  if (!(attrs.uuid)) attrs.uuid = hoot.UuidHelper.createUuid();
 
   // Say where the data came from
   // NOTE: layerName will be empty if using a SchemaTranslationVisitor to convert the OSM file.

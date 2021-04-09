@@ -226,7 +226,7 @@ gifd = {
     }
     else
     {
-      if (gifd.configIn.OgrAddUuid == 'true') tags.uuid = createUuid();
+      if (gifd.configIn.OgrAddUuid == 'true') tags.uuid = hoot.UuidHelper.createUuid();
     }
 
 
@@ -310,7 +310,7 @@ gifd = {
     // if (tags.amenity && !tags.building)
     // {
     //     // Debug:
-    //     // print('Added building');
+    //     // hoot.print('Added building');
     //     // Don't add building=yes to built up areas!
     //     if (!tags.place) tags.building = 'yes';
     // }
@@ -319,7 +319,7 @@ gifd = {
     if (tags.military && !tags.building)
     {
       // Debug:
-      // print('Added building to military');
+      // hoot.print('Added building to military');
       if (tags.military !== 'range' && tags.military !== 'installation' ) tags.building = 'yes';
     }
 
@@ -524,7 +524,7 @@ gifd = {
       {
         tags[ftag[0]] = ftag[1];
         // Debug: Dump out the tags from the FCODE
-        // print('FCODE: ' + attrs.F_CODE + ' tag=' + ftag[0] + '  value=' + ftag[1]);
+        // hoot.print('FCODE: ' + attrs.F_CODE + ' tag=' + ftag[0] + '  value=' + ftag[1]);
       }
       else
       {
@@ -553,7 +553,7 @@ gifd = {
     gifd.applyToOsmPostProcessing(attrs, tags, layerName, geometryType);
 
     // Debug
-    for (var i in notUsedAttrs) print('NotUsed: ' + i + ': :' + notUsedAttrs[i] + ':');
+    for (var i in notUsedAttrs) hoot.print('NotUsed: ' + i + ': :' + notUsedAttrs[i] + ':');
 
     // Debug: Add the FCODE to the tags
     if (gifd.configIn.OgrDebugAddfcode == 'true') tags['raw:debugFcode'] = attrs.F_CODE;
@@ -565,7 +565,7 @@ gifd = {
     if (gifd.configIn.OgrDebugDumptags == 'true')
     {
       translate.debugOutput(tags,layerName,geometryType,'','Out tags: ');
-      print('');
+      hoot.print('');
     }
 
     return tags;

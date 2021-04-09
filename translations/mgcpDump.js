@@ -72,8 +72,8 @@ function initialize()
     });
 
     // Debug
-    // for (var i in nameList) print('nameList: ' + i + ' = ' + nameList[i]);
-    // print('#####');
+    // for (var i in nameList) hoot.print('nameList: ' + i + ' = ' + nameList[i]);
+    // hoot.print('#####');
 
     if (mgcp.fcodeLookup == undefined)
     {
@@ -122,7 +122,7 @@ function initialize()
 // The finalize function gets called once AFTER the translateToXXX functions
 function finalize()
 {
-    // print('In the finalize function');
+    // hoot.print('In the finalize function');
 }
 
 
@@ -136,7 +136,7 @@ function translateToOsm(attrs, layerName, geometryType)
 
 function dumpCsvHeader()
 {
-    print('"Attribute","AttributeDescription","AttributeValue","AttributeValueDescription","OSMTag","OSMValue"');
+    hoot.print('"Attribute","AttributeDescription","AttributeValue","AttributeValueDescription","OSMTag","OSMValue"');
 }
 
 
@@ -148,11 +148,11 @@ function dumpCsvTags(nameList,lookup)
     {
         for (var i = 0, fLen = iList.length; i < fLen; i++)
         {
-            // print(iList[i] + ':');
+            // hoot.print(iList[i] + ':');
             var iDesc = nameList[iList[i]];
             if (iDesc == undefined)
             {
-                // print('## Skipping: ' + iList[i]);
+                // hoot.print('## Skipping: ' + iList[i]);
                 continue
             }
 
@@ -178,10 +178,10 @@ function dumpCsvTags(nameList,lookup)
             {
                 if (jList.length == 1)
                 {
-                    // print('YY' + iList[i]);
+                    // hoot.print('YY' + iList[i]);
                     if (nameList[iList[i]])
                     {
-                        print(iList[i] + ',' + iDesc + ',,,' + lookup[iList[i]][jList[0]]);
+                        hoot.print(iList[i] + ',' + iDesc + ',,,' + lookup[iList[i]][jList[0]]);
                     }
 
                     continue;
@@ -191,18 +191,18 @@ function dumpCsvTags(nameList,lookup)
                 {
                     if (nameList[jList[j]])
                     {
-                        print(iList[i] + ',' + iDesc + ',' + jList[j] + ',' + nameList[jList[j]] + ',' + lookup[iList[i]][jList[j]]);
+                        hoot.print(iList[i] + ',' + iDesc + ',' + jList[j] + ',' + nameList[jList[j]] + ',' + lookup[iList[i]][jList[j]]);
                     }
                     else
                     {
                         jDesc = nameList[iList[i] + ':' + jList[j]];
                         if (jDesc == undefined)
                         {
-                            // print('## Missing jDesc for ' + jList[j]);
+                            // hoot.print('## Missing jDesc for ' + jList[j]);
                             continue;
                         }
 
-                        print(iList[i] + ',' + iDesc + ',' + jList[j] + ',' + jDesc + ',' + lookup[iList[i]][jList[j]]);
+                        hoot.print(iList[i] + ',' + iDesc + ',' + jList[j] + ',' + jDesc + ',' + lookup[iList[i]][jList[j]]);
                     }
                 }
             }

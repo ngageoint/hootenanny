@@ -54,9 +54,9 @@ ggdm30 = {
     ggdm30.ggdmAttrLookup = translate.makeAttrLookup(ggdm30.rawSchema);
 
     // Debug:
-    // print("ggdm30.ggdmAttrLookup: Start");
+    // hoot.print("ggdm30.ggdmAttrLookup: Start");
     // translate.dumpLookup(ggdm30.ggdmAttrLookup);
-    // print("ggdm30.ggdmAttrLookup: End");
+    // hoot.print("ggdm30.ggdmAttrLookup: End");
 
     // Decide if we are going to use the Thematic structure or 1 FCODE / File
     // if we DON't want the new structure, just return the ggdm30.rawSchema
@@ -200,9 +200,9 @@ ggdm30 = {
     ggdm30.thematicLookup = translate.makeThematicAttrLookup(newSchema);
 
     // Debug:
-    //print("ggdm30.thematicLookup: Start");
+    //hoot.print("ggdm30.thematicLookup: Start");
     //translate.dumpLookup(ggdm30.thematicLookup);
-    //print("ggdm30.thematicLookup: End");
+    //hoot.print("ggdm30.thematicLookup: End");
 
     // Add the ESRI Feature Dataset name to the schema
     if (config.getOgrEsriFdname() !== '') newSchema = translate.addFdName(newSchema,config.getOgrEsriFdname());
@@ -226,9 +226,9 @@ ggdm30 = {
     newSchema = translate.addReviewFeature(newSchema);
 
     // Debug:
-    // print("newSchema: Start");
+    // hoot.print("newSchema: Start");
     // translate.dumpSchema(newSchema);
-    // print("newSchema: End");
+    // hoot.print("newSchema: End");
 
     return newSchema;
 
@@ -258,7 +258,7 @@ ggdm30 = {
           if (val in othList)
           {
             //Debug:
-            // print('Validate: Dropping OTH: ' + val + '  (' + othList[val] + ')');
+            // hoot.print('Validate: Dropping OTH: ' + val + '  (' + othList[val] + ')');
             delete othList[val];
           }
 
@@ -311,7 +311,7 @@ ggdm30 = {
     {
       attrs.OTH = translate.packOTH(othList);
       // Debug:
-      // print('New OTH: ' + attrs.OTH);
+      // hoot.print('New OTH: ' + attrs.OTH);
     }
 
     // No quick and easy way to do this unless we build yet another lookup table
@@ -612,7 +612,7 @@ ggdm30 = {
       // Now see if we need to swap attr names
       if (col in ggdm30.rules.swapListIn)
       {
-        // print('Swapped: ' + ggdm30.rules.swapListIn[i]); // debug
+        // hoot.print('Swapped: ' + ggdm30.rules.swapListIn[i]); // debug
         attrs[ggdm30.rules.swapListIn[col]] = attrs[col];
         delete attrs[col];
         continue;
@@ -811,7 +811,7 @@ ggdm30 = {
     }
     else
     {
-      if (ggdm30.config.OgrAddUuid == 'true') tags.uuid = createUuid();
+      if (ggdm30.config.OgrAddUuid == 'true') tags.uuid = hoot.UuidHelper.createUuid();
     }
 
 
@@ -1229,7 +1229,7 @@ ggdm30 = {
     if (geometryType == 'Area' && ! translate.isOsmArea(tags))
     {
       // Debug
-      // print('Adding area=yes');
+      // hoot.print('Adding area=yes');
       tags.area = 'yes';
     }
 
@@ -1286,7 +1286,7 @@ ggdm30 = {
         tags[vList[0].replace('"','')] = vList[1].replace('"','');
 
         // Debug
-        // print('val: ' + tList[val] + '  vList[0] = ' + vList[0] + '  vList[1] = ' + vList[1]);
+        // hoot.print('val: ' + tList[val] + '  vList[0] = ' + vList[0] + '  vList[1] = ' + vList[1]);
       }
     }
 
@@ -1499,7 +1499,7 @@ ggdm30 = {
       {
         case 'minaret':
           // Debug
-          // print('Got Minaret');
+          // hoot.print('Got Minaret');
           delete tags.man_made;
           break;
 
@@ -1694,7 +1694,7 @@ ggdm30 = {
         if (!(tags.facility = 'yes'))
         {
           // Debug
-          // print('Making a building: ' + tags.facility);
+          // hoot.print('Making a building: ' + tags.facility);
           attrs.F_CODE = 'AL013'; // Building
         }
       }
@@ -1704,7 +1704,7 @@ ggdm30 = {
       {
         // attrs.FFN = facilityList[tags.amenity];
         // Debug
-        // print('PreDropped: amenity = ' + tags.amenity);
+        // hoot.print('PreDropped: amenity = ' + tags.amenity);
         delete tags.amenity;
       }
     }
@@ -1963,14 +1963,14 @@ ggdm30 = {
           var row = ggdm30.fcodeLookup[col][value];
           attrs.F_CODE = row[1];
           // Debug
-          //print('FCODE: Got ' + attrs.F_CODE);
+          //hoot.print('FCODE: Got ' + attrs.F_CODE);
         }
         else if (col in ggdm30.fcodeLookupOut && (value in ggdm30.fcodeLookupOut[col]))
         {
           var row = ggdm30.fcodeLookupOut[col][value];
           attrs.F_CODE = row[1];
           // Debug
-          //print('FCODE: Got ' + attrs.F_CODE);
+          //hoot.print('FCODE: Got ' + attrs.F_CODE);
         }
       }
     } // End find F_CODE
@@ -2119,7 +2119,7 @@ ggdm30 = {
     } // End if highway || railway
 
     // Debug
-    // for (var i in tags) print('End PreProc Tags: ' + i + ': :' + tags[i] + ':');
+    // for (var i in tags) hoot.print('End PreProc Tags: ' + i + ': :' + tags[i] + ':');
 
     // Tag changed
     if (tags.vertical_obstruction_identifier)
@@ -2283,7 +2283,7 @@ ggdm30 = {
     }
     else
     {
-      if (ggdm30.config.OgrAddUuid == 'true') attrs.UFI = createUuid().replace('{','').replace('}','');
+      if (ggdm30.config.OgrAddUuid == 'true') attrs.UFI = hoot.UuidHelper.createUuid().replace('{','').replace('}','');
     }
 
     // Add Weather Restrictions to transportation features
@@ -2588,14 +2588,14 @@ ggdm30 = {
       tags = translate.parseO2S(attrs);
 
       // Add some metadata
-      if (!tags.uuid && ggdm30.config.OgrAddUuid == 'true') tags.uuid = createUuid();
+      if (!tags.uuid && ggdm30.config.OgrAddUuid == 'true') tags.uuid = hoot.UuidHelper.createUuid();
       if (!tags.source) tags.source = 'ggdmv30:' + layerName.toLowerCase();
 
       // Debug:
       if (ggdm30.config.OgrDebugDumptags == 'true')
       {
         translate.debugOutput(tags,layerName,geometryType,'','Out tags: ');
-        print('');
+        hoot.print('');
       }
 
       return tags;
@@ -2643,7 +2643,7 @@ ggdm30 = {
       {
         tags[ftag[0]] = ftag[1];
         // Debug: Dump out the tags from the FCODE
-        // print('FCODE: ' + attrs.F_CODE + ' tag=' + ftag[0] + '  value=' + ftag[1]);
+        // hoot.print('FCODE: ' + attrs.F_CODE + ' tag=' + ftag[0] + '  value=' + ftag[1]);
       }
       else
       {
@@ -2686,7 +2686,7 @@ ggdm30 = {
     {
       translate.debugOutput(notUsedAttrs,layerName,geometryType,'','Not used: ');
       translate.debugOutput(tags,layerName,geometryType,'','Out tags: ');
-      print('');
+      hoot.print('');
     }
 
     return tags;
@@ -2772,7 +2772,7 @@ ggdm30 = {
       //             {
       //                 for (var v1 in ggdm30.fuzzy[k1])
       //                 {
-      //                     print(JSON.stringify([k1, v1, ggdm30.fuzzy[k1][v1][0], ggdm30.fuzzy[k1][v1][1], ggdm30.fuzzy[k1][v1][2]]));
+      //                     hoot.print(JSON.stringify([k1, v1, ggdm30.fuzzy[k1][v1][0], ggdm30.fuzzy[k1][v1][1], ggdm30.fuzzy[k1][v1][2]]));
       //                 }
       //             }
     } // End ggdm30.lookup Undefined
@@ -2882,7 +2882,7 @@ ggdm30 = {
         {
           // If the feature is not valid, just drop it
           // Debug
-          // print('## Skipping: ' + gFcode);
+          // hoot.print('## Skipping: ' + gFcode);
           returnData.splice(i,1);
         }
       } // End returnData loop
@@ -2979,10 +2979,10 @@ ggdm30 = {
     {
       for (var i = 0, fLen = returnData.length; i < fLen; i++)
       {
-        print('TableName ' + i + ': ' + returnData[i]['tableName'] + '  FCode: ' + returnData[i]['attrs']['F_CODE'] + '  Geom: ' + geometryType);
+        hoot.print('TableName ' + i + ': ' + returnData[i]['tableName'] + '  FCode: ' + returnData[i]['attrs']['F_CODE'] + '  Geom: ' + geometryType);
         translate.debugOutput(returnData[i]['attrs'],'',geometryType,elementType,'Out attrs: ');
       }
-      print('');
+      hoot.print('');
     }
 
     return returnData;

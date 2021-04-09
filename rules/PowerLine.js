@@ -63,7 +63,7 @@ exports.calculateSearchRadius = function(map)
  */
 exports.isMatchCandidate = function(map, e)
 {
-  return isPowerLine(e);
+  return hoot.OsmSchema.isPowerLine(e);
 };
 
 /**
@@ -192,7 +192,7 @@ exports.mergeSets = function(map, pairs, replaced)
 {
   // snap the ways in the second input to the first input. Use the default tag
   // merge method.
-  return snapWays(sublineMatcher, map, pairs, replaced, exports.baseFeatureType);
+  return hoot.LinearSnapMerger().apply(sublineMatcher, map, pairs, replaced, exports.baseFeatureType);
 };
 
 exports.getMatchFeatureDetails = function(map, e1, e2)

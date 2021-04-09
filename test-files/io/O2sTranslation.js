@@ -46,15 +46,15 @@ function translateToOgr(tags, elementType, geometryType)
     if (geometryType == 'Point') {
         tableName = 'o2s_p';
         attrs.tags = JSON.stringify(tags);
-        log(tags);
+        hoot.log(tags);
     } else if (geometryType == 'Line') {
         tableName = 'o2s_l';
         attrs.tags = JSON.stringify(tags);
-        log(tags);
+        hoot.log(tags);
     } else if (geometryType == 'Area') {
         tableName = 'o2s_a';
         attrs.tags = JSON.stringify(tags);
-        log(tags);
+        hoot.log(tags);
     } else {
         throw "Unexpected geometry type or bad table name.";
     }

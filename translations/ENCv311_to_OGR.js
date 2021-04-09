@@ -494,7 +494,6 @@ enc311 = {
   applyToOgrPostProcessing : function (tags, attrs, geometryType, notUsedTags)
   {
     // Add a uuid/FIDN value. NOTE: it is 10 char long
-    // if (!attrs.FIDN) attrs.FIDN = createUuid().replace('-','').replace('{','').replace('}','').substring(0,10);
     if (!attrs.FIDN)
     {
       attrs.FIDN = enc311.FIDN;

@@ -64,7 +64,7 @@ function translateToOsm(attrs, layerName, geometryType)
 // translateToOgr - takes 'tags' + geometry and returns 'attrs' + tableName
 function translateToOgr(tags, elementType, geometryType)
 {
-  // print('Going to OGR: eType:' + elementType + '  gType:' + geometryType);
+  // hoot.print('Going to OGR: eType:' + elementType + '  gType:' + geometryType);
 
   if (tags.tags)
   {

@@ -154,7 +154,7 @@ enc311 = {
     }
 
     // We could use LNAM for this but it isn't in the UUID structure
-    if (!tags.uuid) tags.uuid = createUuid();
+    if (!tags.uuid) tags.uuid = hoot.UuidHelper.createUuid();
 
     // Repack the StringList attributes from the list
     for (var tag in tags)
@@ -372,7 +372,7 @@ enc311 = {
       tags = translate.parseO2S(attrs);
 
       // Add some metadata
-      if (! tags.uuid) tags.uuid = createUuid();
+      if (! tags.uuid) tags.uuid = hoot.UuidHelper.createUuid();
       if (! tags.source) tags.source = 'encv311:' + layerName.toLowerCase();
 
       // Debug:

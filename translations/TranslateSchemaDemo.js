@@ -65,7 +65,7 @@ function getToOgrTable()
 
         for (var k1 in t) {
             for (var v1 in t[k1]) {
-                print(JSON.stringify([k1, v1, t[k1][v1][0], t[k1][v1][1], t[k1][v1][2]]));
+                hoot.print(JSON.stringify([k1, v1, t[k1][v1][0], t[k1][v1][1], t[k1][v1][2]]));
             }
         }
     }
@@ -77,13 +77,13 @@ function getToOsmTable()
 {
     if (!toOsmTable)
     {
-        print("Ingest:");
+        hoot.print("Ingest:");
         var t = schemaTools.generateToOsmTable(one2one);
         toOsmTable = t;
 
         for (var k1 in t) {
             for (var v1 in t[k1]) {
-                print(JSON.stringify([k1, v1, t[k1][v1][0], t[k1][v1][1]]));
+                hoot.print(JSON.stringify([k1, v1, t[k1][v1][0], t[k1][v1][1]]));
             }
         }
     }
@@ -96,7 +96,7 @@ function getToOsmTable()
 function initialize()
 {
     // The print method simply prints the string representation to stdout
-    //print("Initializing.");
+    //hoot.print("Initializing.");
 }
 
 // an optional finalize function that gets called once after all
@@ -105,7 +105,7 @@ function finalize()
 {
     // the debug method prints to stdout when --debug has been specified on
     // the hoot command line. (DEBUG log level)
-    debug("Finalizing.");
+    hoot.debug("Finalizing.");
 }
 
 //

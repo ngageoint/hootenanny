@@ -258,7 +258,7 @@ MassNh = {
         }
 
         tags.source = 'MassNh_GIS';
-        if (MassNh.configIn.OgrAddUuid == 'true') tags.uuid = createUuid();
+        if (MassNh.configIn.OgrAddUuid == 'true') tags.uuid = hoot.UuidHelper.createUuid();
 
         // Medians
         if (attrs.MEDIANTYPE && attrs.MEDIANTYPE !== '0') tags.median = 'yes';
@@ -530,7 +530,7 @@ MassNh = {
         if (geometryType == 'Area' && ! translate.isOsmArea(tags))
         {
             // Debug
-            // print('Adding area=yes');
+            // hoot.print('Adding area=yes');
             tags.area = 'yes';
         }
 
@@ -559,9 +559,9 @@ MassNh = {
         // Debug:
         if (MassNh.configIn.OgrDebugDumptags == 'true')
         {
-            print('In Layername: ' + layerName + '  Geometry: ' + geometryType);
+            hoot.print('In Layername: ' + layerName + '  Geometry: ' + geometryType);
             var kList = Object.keys(attrs).sort()
-            for (var i = 0, fLen = kList.length; i < fLen; i++) print('In Attrs: ' + kList[i] + ': :' + attrs[kList[i]] + ':');
+            for (var i = 0, fLen = kList.length; i < fLen; i++) hoot.print('In Attrs: ' + kList[i] + ': :' + attrs[kList[i]] + ':');
         }
 
         if (MassNh.lookup == undefined)
@@ -602,8 +602,8 @@ MassNh = {
         if (MassNh.configIn.OgrDebugDumptags == 'true')
         {
             var kList = Object.keys(tags).sort()
-            for (var i = 0, fLen = kList.length; i < fLen; i++) print('Out Tags: ' + kList[i] + ': :' + tags[kList[i]] + ':');
-            print('');
+            for (var i = 0, fLen = kList.length; i < fLen; i++) hoot.print('Out Tags: ' + kList[i] + ': :' + tags[kList[i]] + ':');
+            hoot.print('');
         }
 
         return tags;

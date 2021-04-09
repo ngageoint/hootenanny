@@ -53,7 +53,7 @@ translate = {
           if (lookup[item[0]][item[1]] != ('' + item[2] + ',' + item[3]))
           {
             // Debug
-            // print('Fwd Clash: ' + item[0] + ' ' + item[1] + '  is ' + lookup[item[0]][item[1]] + ' tried to change to ' + [item[2],item[3]]);
+            // hoot.print('Fwd Clash: ' + item[0] + ' ' + item[1] + '  is ' + lookup[item[0]][item[1]] + ' tried to change to ' + [item[2],item[3]]);
           }
         }
       }
@@ -146,7 +146,7 @@ translate = {
         }
         else
         {
-          if (config.getOgrDebugLookupclash() == 'true') print('Bkwd Clash: ' + item[2] + ' ' + item[3] + '  is ' + lookup[item[2]][item[3]] + '  tried to change to ' + [item[0], item[1]]);
+          if (config.getOgrDebugLookupclash() == 'true') hoot.print('Bkwd Clash: ' + item[2] + ' ' + item[3] + '  is ' + lookup[item[2]][item[3]] + '  tried to change to ' + [item[0], item[1]]);
         }
       }
     } );
@@ -179,14 +179,14 @@ translate = {
             outList[row[0]] = row[1];
             transMap[row[0]] = [row[1],key,value];
             // Debug
-            // print('One2One: row[0]=' + row[0] + ' Map:' + transMap[row[0] ]);
-            // print('Used:' + key + ' = ' + inList[key] + ' - ' + row[0] + ' = ' + row[1]);
+            // hoot.print('One2One: row[0]=' + row[0] + ' Map:' + transMap[row[0] ]);
+            // hoot.print('Used:' + key + ' = ' + inList[key] + ' - ' + row[0] + ' = ' + row[1]);
             delete inList[key];
           }
           else
           {
             // Debug
-            // print('UsedUndef:' + key + ' = ' + inList[key]);
+            // hoot.print('UsedUndef:' + key + ' = ' + inList[key]);
             delete inList[key];
           }
         }
@@ -199,7 +199,7 @@ translate = {
           if ((key in fCodeList) && (value in fCodeList[key]))
           {
             // Debug
-            // print('UsedFCode:' + key + ' = ' + inList[key]);
+            // hoot.print('UsedFCode:' + key + ' = ' + inList[key]);
             delete inList[key];
             continue;
           }
@@ -213,13 +213,13 @@ translate = {
         if ((key in fCodeList) && (value in fCodeList[key]))
         {
           // Debug
-          // print('UsedFCode:' + key+ ' = ' + inList[key]);
+          // hoot.print('UsedFCode:' + key+ ' = ' + inList[key]);
           delete inList[key];
           continue;
         }
 
         // Debug:
-        // print('Col::  :' + key + ':  Value :' + value + ':');
+        // hoot.print('Col::  :' + key + ':  Value :' + value + ':');
 
         endChar = key.charAt(key.length - 1); // Going to look for a 2 or a 3
         tAttrib = key.slice(0,-1);
@@ -274,13 +274,13 @@ translate = {
             outList[row[0]] = row[1];
             transMap[row[0]] = [row[1],key,value];
             // Debug
-            // print('Fuzzy: ' + key);
+            // hoot.print('Fuzzy: ' + key);
             delete inList[key];
           }
           else
           {
             // Debug
-            // print('UsedUndef:' + key + ' = ' + inList[key]);
+            // hoot.print('UsedUndef:' + key + ' = ' + inList[key]);
             delete inList[key];
           }
         }
@@ -306,18 +306,18 @@ translate = {
       var value = inList[key];
 
       // Debug
-      // print('key: ' + key + '  value: ' + value);
+      // hoot.print('key: ' + key + '  value: ' + value);
 
       if (key in lookup)
       {
         //Debug
-        // print('key in Lookup');
+        // hoot.print('key in Lookup');
         if (value in lookup[key])
         {
           var row = lookup[key][value];
 
           // Debug:
-          // print('row[0]=' + row[0] + '  row[0]+endChar=' + row[0] + endChar);
+          // hoot.print('row[0]=' + row[0] + '  row[0]+endChar=' + row[0] + endChar);
 
           // Drop all of the undefined values and only continue if we have a value
           if (row[0])
@@ -331,21 +331,21 @@ translate = {
             {
               outList[row[0]] = this.getMaxAsString(outList[row[0]], row[1]);
               // Debug
-              // print('Used:' + key + ' = ' + inList[key]);
+              // hoot.print('Used:' + key + ' = ' + inList[key]);
               delete inList[key];
             }
             else if (! outList[row[0] + '2'] || outList[row[0] + '2'].slice(0, -1) === row[1].slice(0, -1))
             {
               outList[row[0] + '2'] = this.getMaxAsString(outList[row[0] + '2'], row[1]);
               // Debug
-              // print('Used:' + key + ' = ' + inList[key] + ' as 2nd');
+              // hoot.print('Used:' + key + ' = ' + inList[key] + ' as 2nd');
               delete inList[key];
             }
             else if (! outList[row[0] + '3'] || outList[row[0] + '3'].slice(0, -1) === row[1].slice(0, -1))
             {
               outList[row[0] + '3'] = this.getMaxAsString(outList[row[0] + '3'], row[1]);
               // Debug
-              // print('Used:' + key + ' = ' + inList[key] + ' as 3rd');
+              // hoot.print('Used:' + key + ' = ' + inList[key] + ' as 3rd');
               delete inList[key];
             }
             else
@@ -356,7 +356,7 @@ translate = {
           else
           {
             // Debug
-            // print('UsedUndef:' + key + ' = ' + inList[key]);
+            // hoot.print('UsedUndef:' + key + ' = ' + inList[key]);
             delete inList[key];
           }
 
@@ -370,7 +370,7 @@ translate = {
           if ((key in fCodeList) && (value in fCodeList[key]))
           {
             // Debug
-            // print('UsedFCode:' + key + ' = ' + inList[key]);
+            // hoot.print('UsedFCode:' + key + ' = ' + inList[key]);
             delete inList[key];
             continue;
           }
@@ -393,7 +393,7 @@ translate = {
             outList[otherVal[0]] = otherVal[1];
 
             // Debug
-            // print('UsedOTH:' + key + ' = ' + inList[key]);
+            // hoot.print('UsedOTH:' + key + ' = ' + inList[key]);
             delete inList[key];
 
           } // End if otherVal
@@ -409,7 +409,7 @@ translate = {
         if ((key in fCodeList) && (value in fCodeList[key]))
         {
           // Debug
-          // print('UsedX:' + key + ' = ' + inList[key]);
+          // hoot.print('UsedX:' + key + ' = ' + inList[key]);
           delete inList[key];
         }
         else
@@ -479,7 +479,7 @@ translate = {
               }
             }
             // Debug
-            //print('New Tag:' + row[0] + ':' + endChar+ ' = ' + outTags[row[0] + ':' + endChar] );
+            //hoot.print('New Tag:' + row[0] + ':' + endChar+ ' = ' + outTags[row[0] + ':' + endChar] );
             delete inAttrs[col];
           }
         }
@@ -518,7 +518,7 @@ translate = {
         if (inTags[tAttrib] && (inTags[tAttrib] == inTags[col]))
         {
           // Debug
-          // print('Got same tag values for ' + tAttrib + ' and ' + col);
+          // hoot.print('Got same tag values for ' + tAttrib + ' and ' + col);
           delete inTags[col];
           continue;
         }
@@ -534,7 +534,7 @@ translate = {
               outAttrs[row[0] + endChar] = row[1];
               delete inTags[col];
               // Debug
-              // print('New Attr:' + row[0] + endChar+ ' = ' + outAttrs[row[0] + endChar] );
+              // hoot.print('New Attr:' + row[0] + endChar+ ' = ' + outAttrs[row[0] + endChar] );
             }
           } // End value in lookup
           else if (value !== '') // Being defensive...
@@ -553,7 +553,7 @@ translate = {
               outAttrs[otherVal[0] + endChar] = otherVal[1];
 
               // Debug
-              // print('UsedOTH:' + col + ' = ' + inTags[col]);
+              // hoot.print('UsedOTH:' + col + ' = ' + inTags[col]);
               delete inTags[col];
             }
             else
@@ -674,7 +674,7 @@ translate = {
     });
 
     // Debug:
-    // for (var j in outList) print('parseOTH: k=  :' + j + ':  v= :' + outList[j] + ':');
+    // for (var j in outList) hoot.print('parseOTH: k=  :' + j + ':  v= :' + outList[j] + ':');
 
     return outList;
   },
@@ -709,7 +709,7 @@ translate = {
     for (var i in othList)
     {
       // Debug:
-      // print('processOTH i: ' + i + '  atr= :' + attrs[i] + ':');
+      // hoot.print('processOTH i: ' + i + '  atr= :' + attrs[i] + ':');
 
       if (attrs[i])
       {
@@ -734,7 +734,7 @@ translate = {
 
 
       // Debug:
-      // print('OTH::  tAttrib:' + tAttrib + ':  tValue:' + tValue + ':  endChar:' + endChar + ':');
+      // hoot.print('OTH::  tAttrib:' + tAttrib + ':  tValue:' + tValue + ':  endChar:' + endChar + ':');
 
       if (tValue !== '999')
       {
@@ -751,7 +751,7 @@ translate = {
         if (key)
         {
           // Debug:
-          // print('OTH:: Std adding :' + othList[i] + ': to tag :' + key[0] + ': (From ' + i + ')');
+          // hoot.print('OTH:: Std adding :' + othList[i] + ': to tag :' + key[0] + ': (From ' + i + ')');
           tags[key[0]] = othList[i];
           delete othList[i];
         }
@@ -771,7 +771,7 @@ translate = {
           // Add a 2 or a 3 to the "key"
           tags[key[0] + ':' + endChar] = othList[i];
           // Debug:
-          // print('OTH:: adding :' + othList[i] + ': to tag :' + key[0] + endChar + ': (From ' + i + ')');
+          // hoot.print('OTH:: adding :' + othList[i] + ': to tag :' + key[0] + endChar + ': (From ' + i + ')');
           delete othList[i];
         }
         else
@@ -982,7 +982,7 @@ translate = {
     }
 
     // Debug
-    // print('### isOK: ' + v + ' : ' + result);
+    // hoot.print('### isOK: ' + v + ' : ' + result);
     return result;
   },
 
@@ -1012,7 +1012,7 @@ translate = {
     else if (v in  dropList) result = true;
 
     // Debug
-    // print('## isUnknown: ' + v + ' : ' + result);
+    // hoot.print('## isUnknown: ' + v + ' : ' + result);
     return result;
   },
 
@@ -1069,7 +1069,7 @@ translate = {
       {
         tags[rules[i]] = attrs[i];
         // Debug
-        // print('UsedTxt: ' + attrs[i]);
+        // hoot.print('UsedTxt: ' + attrs[i]);
         delete attrs[i];
       }
     }
@@ -1086,8 +1086,8 @@ translate = {
       {
         attrs[i] = tags[rules[i]];
         // Debug
-        // print('Txt Bwd: i=' + i + ' rules=' + rules[i] + ' attrs=' + tags[rules[i]] + ' tMap:' + transMap + ':');
-        // print('UsedTxt: ' + rules[i]);
+        // hoot.print('Txt Bwd: i=' + i + ' rules=' + rules[i] + ' attrs=' + tags[rules[i]] + ' tMap:' + transMap + ':');
+        // hoot.print('UsedTxt: ' + rules[i]);
         transMap[i] = ['',rules[i],tags[rules[i]]];
         delete tags[rules[i]];
       }
@@ -1122,7 +1122,7 @@ translate = {
         {
           tags[rules[i]] = attrs[i];
           // Debug
-          // print('UsedNum: ' + attrs[i]);
+          // hoot.print('UsedNum: ' + attrs[i]);
           delete attrs[i];
         }
         else
@@ -1163,7 +1163,7 @@ translate = {
           attrs[i] = tNum;
           transMap[i] = ['',rules[i],tags[rules[i]]];
           // Debug
-          // print('Num Ogr: i=' + i + ' rules=' + rules[i] + ' tags=' + tags[rules[i]]);
+          // hoot.print('Num Ogr: i=' + i + ' rules=' + rules[i] + ' tags=' + tags[rules[i]]);
           // print ('UsedNum: ' + rules[i]);
           delete tags[rules[i]];
         }
@@ -1184,7 +1184,7 @@ translate = {
 
     rawList.forEach( function (item) {
       rulesFunction.push([new Function('t', 'return ' + item[0]), new Function('t','a', item[1])]);
-      // print('Rules: Added ' + item[0]);
+      // hoot.print('Rules: Added ' + item[0]);
     });
 
     return rulesFunction;
@@ -1432,8 +1432,8 @@ translate = {
     var kList = Object.keys(values).sort();
     if (kList.length > 0)
     {
-      print('LayerName: ' + layerName + '  Geometry: ' + geometryType + '  Element Type: ' + elementType);
-      for (var i = 0, fLen = kList.length; i < fLen; i++) if (values[kList[i]]) print(text + kList[i] + ': :' + values[kList[i]] + ':');
+      hoot.print('LayerName: ' + layerName + '  Geometry: ' + geometryType + '  Element Type: ' + elementType);
+      for (var i = 0, fLen = kList.length; i < fLen; i++) if (values[kList[i]]) hoot.print(text + kList[i] + ': :' + values[kList[i]] + ':');
     }
   }, // End debugOutput
 
@@ -1443,7 +1443,7 @@ translate = {
   {
     for (var i in lookupTable)
     {
-      print('Key: ' + i + '  Value: ' + lookupTable[i]);
+      hoot.print('Key: ' + i + '  Value: ' + lookupTable[i]);
     }
   }, // End dumpLookup
 
@@ -1454,7 +1454,7 @@ translate = {
     for (var i in lookupTable)
       for (var j in lookupTable[i])
       {
-        print('I:' + i + '  J:' + j + '  ' + lookupTable[i][j][0] + ' = ' + lookupTable[i][j][1]);
+        hoot.print('I:' + i + '  J:' + j + '  ' + lookupTable[i][j][0] + ' = ' + lookupTable[i][j][1]);
       }
   }, // End dumpOne2OneLookup
 
@@ -1463,17 +1463,17 @@ translate = {
   dumpSchema : function(schema)
   {
     schema.forEach( function(item) {
-      print('Feature: ' + item.name + '  Geom: ' + item.geom + '  FdName: ' + item.fdname);
+      hoot.print('Feature: ' + item.name + '  Geom: ' + item.geom + '  FdName: ' + item.fdname);
 
       item.columns.forEach( function (column) {
-        print('    Attr: ' + column.name + '  Desc: ' + column.desc + '  Type: ' + column.type + '  Default: ' + column.defValue);
+        hoot.print('    Attr: ' + column.name + '  Desc: ' + column.desc + '  Type: ' + column.type + '  Default: ' + column.defValue);
         if (column.type == 'enumeration')
         {
-          column.enumerations.forEach( function (eValue) {print('        Value: ' + eValue.value + '  Name: ' + eValue.name); });
+          column.enumerations.forEach( function (eValue) {hoot.print('        Value: ' + eValue.value + '  Name: ' + eValue.name); });
         }
       });
 
-      print(''); // just to get one blank line
+      hoot.print(''); // just to get one blank line
     });
 
   }, // End dumpSchema
@@ -1547,7 +1547,7 @@ translate = {
         attrs[vList[0].replace('"','')] = vList[1].replace('"','');
 
         // Debug
-        //print('val: ' + tList[val] + '  vList[0] = ' + vList[0] + '  vList[1] = ' + vList[1]);
+        //hoot.print('val: ' + tList[val] + '  vList[0] = ' + vList[0] + '  vList[1] = ' + vList[1]);
       }
     }
 
@@ -1609,7 +1609,7 @@ translate = {
       }
 
       // Not an Attribute so push it to the tags object
-      // print('Pushing: ' + col);
+      // hoot.print('Pushing: ' + col);
       tags[col] = attrs[col];
       delete attrs[col];
     }

@@ -42,11 +42,11 @@ emgcp = {
 //         {
 //             for (var i = 0, fLen = mgcpData.length; i < fLen; i++)
 //             {
-//                 print('eTableName ' + i + ': ' + mgcpData[i]['tableName'] + '  FCode: ' + mgcpData[i]['attrs']['FCODE'] + '  Geom: ' + geometryType);
+//                 hoot.print('eTableName ' + i + ': ' + mgcpData[i]['tableName'] + '  FCode: ' + mgcpData[i]['attrs']['FCODE'] + '  Geom: ' + geometryType);
 //                 var kList = Object.keys(mgcpData[i]['attrs']).sort()
-//                 for (var j = 0, kLen = kList.length; j < kLen; j++) print('eOut Attrs:' + kList[j] + ': :' + mgcpData[i]['attrs'][kList[j]] + ':');
+//                 for (var j = 0, kLen = kList.length; j < kLen; j++) hoot.print('eOut Attrs:' + kList[j] + ': :' + mgcpData[i]['attrs'][kList[j]] + ':');
 //             }
-//             print('');
+//             hoot.print('');
 //         }
 
         var eAttrs = {}; // The final English output
@@ -98,8 +98,8 @@ emgcp = {
 //         if (config.getOgrDebugDumptags() == 'true')
 //         {
 //             var kList = Object.keys(eAttrs).sort()
-//             for (var j = 0, kLen = kList.length; j < kLen; j++) print('Final Attrs:' + kList[j] + ': :' + eAttrs[kList[j]] + ':');
-//             print('');
+//             for (var j = 0, kLen = kList.length; j < kLen; j++) hoot.print('Final Attrs:' + kList[j] + ': :' + eAttrs[kList[j]] + ':');
+//             hoot.print('');
 //         }
 
         // Return the English results. The "tableName" is not set

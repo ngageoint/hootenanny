@@ -68,7 +68,7 @@ etds40_osm = {
 //         if (config.getOgrDebugDumptags() == 'true')
 //         {
 //             var kList = Object.keys(attrs).sort()
-//             for (var i = 0, fLen = kList.length; i < fLen; i++) print('In Attrs: ' + kList[i] + ': :' + attrs[kList[i]] + ':');
+//             for (var i = 0, fLen = kList.length; i < fLen; i++) hoot.print('In Attrs: ' + kList[i] + ': :' + attrs[kList[i]] + ':');
 //         }
 
         // Go through the attrs and turn them back into TDS
@@ -109,7 +109,7 @@ etds40_osm = {
             {
                 nAttrs[etds40_osm_rules.singleValues[val]] = attrs[val];
                 // Debug
-                // print('Single: ' + etds40_osm_rules.singleValues[val] + ' = ' + attrs[val])
+                // hoot.print('Single: ' + etds40_osm_rules.singleValues[val] + ' = ' + attrs[val])
 
                 // Cleanup used attrs
                 delete attrs[val];
@@ -154,8 +154,8 @@ etds40_osm = {
 //         if (config.getOgrDebugDumptags() == 'true')
 //         {
 //             var kList = Object.keys(tags).sort()
-//             for (var j = 0, kLen = kList.length; j < kLen; j++) print('eOut Tags:' + kList[j] + ': :' + tags[kList[j]] + ':');
-//             print('');
+//             for (var j = 0, kLen = kList.length; j < kLen; j++) hoot.print('eOut Tags:' + kList[j] + ': :' + tags[kList[j]] + ':');
+//             hoot.print('');
 //         }
 
         return {attrs: tags, tableName: ''};

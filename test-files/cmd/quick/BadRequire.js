@@ -35,12 +35,12 @@ hoot.require('BadSyntaxTest');
 // translateToOsm calls.
 function initialize()
 {
-    print("Initialize works!");
+    hoot.print("Initialize works!");
     // log("TestAdd: " + testAdd(2,5));
-    // print("TimeNow = " + timeNow());
-    // print("HootConfig = " + getHootConfig("smurf"));
-    // print("HootConfig = " + getHootConfig("ogr.debug.dumptags"));
-    // print("GetTest = " + hoot.get("ogr.debug.dumptags"));
+    // hoot.print("TimeNow = " + timeNow());
+    // hoot.print("HootConfig = " + getHootConfig("smurf"));
+    // hoot.print("HootConfig = " + getHootConfig("ogr.debug.dumptags"));
+    // hoot.print("GetTest = " + hoot.get("ogr.debug.dumptags"));
 
     // hoot.debug("Debug.");
     // hoot.logDebug("LogDebug.");
@@ -51,17 +51,17 @@ function initialize()
 
     /*
     // Script test
-    print('t1: ' + smurf());;
-    print('t1: ' + rules.smurf2("Yippee"));;
-    print('t2: ' + rules.fcode1);;
-    print('t2: ' + rules.fcode1[2]);;
-    print('t3: ' + rules.tList['name']);;
+    hoot.print('t1: ' + smurf());;
+    hoot.print('t1: ' + rules.smurf2("Yippee"));;
+    hoot.print('t2: ' + rules.fcode1);;
+    hoot.print('t2: ' + rules.fcode1[2]);;
+    hoot.print('t3: ' + rules.tList['name']);;
     */
 
     // Translate Test
     var t1 = 'papa';
     if (translate !== undefined)
     {
-        print('appendValue: ' + translate.appendValue(t1,'smurf',';'));
+        hoot.print('appendValue: ' + translate.appendValue(t1,'smurf',';'));
     }
 }

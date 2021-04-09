@@ -1,9 +1,3 @@
-/**
- * This is used by ScriptMatchTest. 
- *
- * TODO: Could we use Line.js instead?
- */
-
 "use strict";
 
 exports.candidateDistanceSigma = 1.0; // 1.0 * (CE95 + Worst CE95);
@@ -33,7 +27,7 @@ var sublineMatcher = new hoot.MaximalSublineStringMatcher({
  */
 exports.isMatchCandidate = function(map, e)
 {
-  return isLinear(e);
+  return hoot.OsmSchema.isLinear(e);
 };
 
 /**
@@ -101,7 +95,7 @@ exports.mergeSets = function(map, pairs, replaced)
 {
   // snap the ways in the second input to the first input. Use the default tag
   // merge method.
-  var result = snapWays(sublineMatcher, map, pairs, replaced, exports.baseFeatureType);
+  var result = new hoot.LinearSnapMerger().apply(sublineMatcher, map, pairs, replaced, exports.baseFeatureType);
   return result;
 };
 

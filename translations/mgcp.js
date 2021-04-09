@@ -50,9 +50,9 @@ mgcp = {
   // Quick list generator
   // mgcp.layerNameLookup = [];
   // mgcp.rawSchema.forEach( function (item) {mgcp.layerNameLookup.push(item.geom.charAt(0) + item.fcode);});
-  // print('###');
-  // print(mgcp.layerNameLookup);
-  // print('###');
+  // hoot.print('###');
+  // hoot.print(mgcp.layerNameLookup);
+  // hoot.print('###');
 
   // Quick lookup list for valid FCODES
   // mgcp.fcodeList = translate.makeFcodeList(mgcp.rawSchema);
@@ -387,7 +387,7 @@ mgcp = {
       // Now see if we need to swap attr names
       if (col in mgcp.rules.swapListIn)
       {
-        // print('Swapped: ' + swapList[i]); // debug
+        // hoot.print('Swapped: ' + swapList[i]); // debug
         attrs[mgcp.rules.swapListIn[col]] = attrs[col];
         delete attrs[col];
         continue
@@ -575,7 +575,7 @@ mgcp = {
       for (var i in tTags)
       {
         // Debug
-        // print('Memo: Add: ' + i + ' = ' + tTags[i]);
+        // hoot.print('Memo: Add: ' + i + ' = ' + tTags[i]);
         if (tags[tTags[i]]) hoot.logDebug('Unpacking tags, overwriting ' + i + ' = ' + tags[i] + '  with ' + tTags[i]);
         tags[i] = tTags[i];
 
@@ -730,7 +730,7 @@ mgcp = {
     }
     else
     {
-      if (mgcp.configIn.OgrAddUuid == 'true') tags.uuid = createUuid();
+      if (mgcp.configIn.OgrAddUuid == 'true') tags.uuid = hoot.UuidHelper.createUuid();
     }
 
     // Railway Yard
@@ -1071,7 +1071,7 @@ mgcp = {
     if (geometryType == 'Area' && ! translate.isOsmArea(tags))
     {
       // Debug
-      // print('Adding area=yes');
+      // hoot.print('Adding area=yes');
       tags.area = 'yes';
     }
   }, // End of applyToOsmPostProcessing
@@ -1101,7 +1101,7 @@ mgcp = {
         tags[vList[0].replace('"','')] = vList[1].replace('"','');
 
         // Debug
-        // print('val: ' + tList[val] + '  vList[0] = ' + vList[0] + '  vList[1] = ' + vList[1]);
+        // hoot.print('val: ' + tList[val] + '  vList[0] = ' + vList[0] + '  vList[1] = ' + vList[1]);
       }
     }
 
@@ -1837,7 +1837,7 @@ mgcp = {
         if (i in tags)
         {
           // Debug
-          // print('Added FCODE from Map: ' + fcodeMap[i]);
+          // hoot.print('Added FCODE from Map: ' + fcodeMap[i]);
           attrs.F_CODE = fcodeMap[i];
           break;
         }
@@ -1856,7 +1856,7 @@ mgcp = {
     }
     else
     {
-      if (mgcp.configOut.OgrAddUuid == 'true') attrs.UID = createUuid().replace('{','').replace('}','');
+      if (mgcp.configOut.OgrAddUuid == 'true') attrs.UID = hoot.UuidHelper.createUuid().replace('{','').replace('}','');
     }
 
     // The follwing bit of ugly code is to account for the specs haveing two different attributes
@@ -1958,7 +1958,7 @@ mgcp = {
         if (attrs.FFN && (attrs.FFN !== '930' && attrs.FFN !== '931'))
         {
           // Debug
-          //print('AL015: Setting HWT 998');
+          //hoot.print('AL015: Setting HWT 998');
           attrs.HWT = '998';
         }
 
@@ -2193,7 +2193,7 @@ mgcp = {
       // Add some metadata
       if (! tags.uuid)
       {
-        if (mgcp.configIn.OgrAddUuid == 'true') tags.uuid = createUuid();
+        if (mgcp.configIn.OgrAddUuid == 'true') tags.uuid = hoot.UuidHelper.createUuid();
       }
 
       if (! tags.source) tags.source = 'mgcp:' + layerName.toLowerCase();
@@ -2202,7 +2202,7 @@ mgcp = {
       if (mgcp.configIn.OgrDebugDumptags == 'true')
       {
         translate.debugOutput(tags,layerName,geometryType,'','Out tags: ');
-        print('');
+        hoot.print('');
       }
 
       return tags;
@@ -2286,7 +2286,7 @@ mgcp = {
           hoot.logWarn('Tried to replace: ' + ftag[0] + '=' + tags[ftag[0]] + '  with ' + ftag[1]);
         }
         // Debug: Dump out the tags from the FCODE
-        // print('FCODE: ' + attrs.F_CODE + ' tag=' + ftag[0] + '  value=' + ftag[1]);
+        // hoot.print('FCODE: ' + attrs.F_CODE + ' tag=' + ftag[0] + '  value=' + ftag[1]);
       }
       else
       {
@@ -2322,7 +2322,7 @@ mgcp = {
     {
       translate.debugOutput(notUsedAttrs,layerName,geometryType,'','Not used: ');
       translate.debugOutput(tags,layerName,geometryType,'','Out tags: ');
-      print('');
+      hoot.print('');
     }
 
     return tags;
@@ -2493,7 +2493,7 @@ if (mgcp.configOut.OgrDebugDumptags == 'true') translate.debugOutput(notUsedTags
         else
         {
           // Debug
-          // print('## Skipping: ' + gFcode);
+          // hoot.print('## Skipping: ' + gFcode);
           returnData.splice(i,1);
         }
       } // End returnData loop
@@ -2594,10 +2594,10 @@ if (mgcp.configOut.OgrDebugDumptags == 'true') translate.debugOutput(notUsedTags
     {
       for (var i = 0, fLen = returnData.length; i < fLen; i++)
       {
-        print('TableName ' + i + ': ' + returnData[i]['tableName'] + '  FCode: ' + returnData[i]['attrs']['F_CODE'] + '  Geom: ' + geometryType);
+        hoot.print('TableName ' + i + ': ' + returnData[i]['tableName'] + '  FCode: ' + returnData[i]['attrs']['F_CODE'] + '  Geom: ' + geometryType);
         translate.debugOutput(returnData[i]['attrs'],'',geometryType,elementType,'Out attrs: ');
       }
-      print('');
+      hoot.print('');
     }
 
     return returnData;
