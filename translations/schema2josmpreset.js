@@ -185,7 +185,7 @@ Object.keys(objs).forEach(s => {
     });
 
     let usedGroups = new Set(); //Keep a list of used sub groups
-    Object.keys(items).forEach(i => {
+    Object.keys(items).sort().forEach(i => {
         //Get the right subgroup (two-letter) element to append to
         let code = items[i].fcode.slice(0,2);
 
