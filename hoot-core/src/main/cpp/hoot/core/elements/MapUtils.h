@@ -75,12 +75,13 @@ public:
   static void combineMaps(OsmMapPtr& map1, OsmMapPtr& map2, const bool throwOutDupes);
 
   /**
-   * TODO
+   * Gets a single element by the "note" tag
    *
-   * @param map
-   * @param note
-   * @param elementType
-   * @return
+   * @param map map containing the element
+   * @param note note tag value to search for
+   * @param elementType optional element type for additional filtering
+   * @return returns the first element found with the intput tag key/value pair and element type, if
+   * specified; returns a null element otherwise
    */
   static ElementPtr getFirstElementWithNote(
     const OsmMapPtr& map, const QString& note,
@@ -92,9 +93,9 @@ public:
    * @param map map containing the element
    * @param tagKey tag key to search for
    * @param tagValue tag value to search for
-   * @param elementType TODO
-   * @return returns a single element with the intput tag key/value pair; fails if more than one
-   * element
+   * @param elementType optional element type for additional filtering
+   * @return returns the first element found with the intput tag key/value pair and element type, if
+   * specified; returns a null element otherwise
    */
   static ElementPtr getFirstElementWithTag(
     const OsmMapPtr& map, const QString& tagKey, const QString& tagValue,
