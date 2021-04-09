@@ -10,7 +10,7 @@ describe('TagsJs', function() {
    it('Should determine the number of informational tags', function() {
     
         var map = new hoot.OsmMap();
-        hoot.loadMap(map, "test-files/ToyTestA.osm", true, 1);
+        hoot.loadMap(map, HOOT_HOME + "/test-files/ToyTestA.osm", true, 1);
         var element = hoot.MapUtils.getFirstElementWithNote(map, "0");
         var tags = element.getTags();
         assert.equal(2, tags.getInformationCount());
