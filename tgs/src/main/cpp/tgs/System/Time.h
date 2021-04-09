@@ -34,6 +34,7 @@ namespace Tgs
   class TGS_EXPORT Time
   {
   public:
+
     static double getTime();
   };
 }

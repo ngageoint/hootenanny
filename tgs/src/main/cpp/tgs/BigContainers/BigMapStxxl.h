@@ -63,7 +63,6 @@ public:
       _map.reset(new MapType(nodeSize, leafSize));
     }
     _bloom.reset(new BloomFilter());
-    //_map.reset(new MapType(nodeSize, leafSize));
   }
 
   const V& at(const K& k) const
