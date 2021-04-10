@@ -30,6 +30,7 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/splitter/WaySublineRemover.h>
 #include <hoot/core/elements/ElementGeometryUtils.h>
+#include <hoot/core/elements/MapUtils.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/elements/MapProjector.h>
@@ -62,7 +63,7 @@ public:
     OsmMapReaderFactory::read(map, "test-files/ToyTestA.osm", false, Status::Unknown1);
     MapProjector::projectToPlanar(map);
 
-    WayPtr way = std::dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "1"));
+    WayPtr way = std::dynamic_pointer_cast<Way>(MapUtils::getFirstElementWithNote(map, "1"));
 
     WayLocation start(map, way, 25.0);
     WayLocation end(map, way, 50.0);
@@ -84,7 +85,7 @@ public:
     OsmMapReaderFactory::read(map, "test-files/ToyTestA.osm", false, Status::Unknown1);
     MapProjector::projectToPlanar(map);
 
-    WayPtr way = std::dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "1"));
+    WayPtr way = std::dynamic_pointer_cast<Way>(MapUtils::getFirstElementWithNote(map, "1"));
 
     WayLocation start(map, way, 0.0);
     WayLocation end(map, way, 50.0);
@@ -105,7 +106,7 @@ public:
     OsmMapReaderFactory::read(map, "test-files/ToyTestA.osm", false, Status::Unknown1);
     MapProjector::projectToPlanar(map);
 
-    WayPtr way = std::dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "1"));
+    WayPtr way = std::dynamic_pointer_cast<Way>(MapUtils::getFirstElementWithNote(map, "1"));
 
     WayLocation start(map, way, 25.0);
     WayLocation end(map, way, ElementGeometryUtils::calculateLength(way, map));

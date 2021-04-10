@@ -46,6 +46,7 @@ namespace Tgs
   class TGS_EXPORT RStarTreeWrapper
   {
   public:
+
     /**
     *  Constructor
     */
@@ -89,6 +90,7 @@ namespace Tgs
       const std::vector<double>& maxBounds);
 
   private:
+
     std::shared_ptr<InternalRStarTreeWrapper> _irtw;
   };
 }

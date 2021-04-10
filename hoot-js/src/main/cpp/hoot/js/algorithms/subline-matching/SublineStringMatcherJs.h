@@ -57,7 +57,6 @@ private:
   SublineStringMatcherJs(SublineStringMatcherPtr sm) : _sm(sm) { }
 
   static void extractMatchingSublines(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void findMatch(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
 
   QString _className;

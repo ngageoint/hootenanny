@@ -82,8 +82,7 @@ public:
     QVariant v = toCpp<QVariant>(fromJson(fixQ("[1,2]")));
     HOOT_STR_EQUALS(QVariant::List, v.type());
 
-    // todo continue here.
-    // Finish QVariantList tests
+    // TODO: finish QVariantList tests
 
     QVariantMap m;
     m.insert("one",fixQ("[3,4,5]"));

@@ -22,46 +22,35 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
  */
-#ifndef __WAY_SUBLINE_MATCH_STRING_JS_H__
-#define __WAY_SUBLINE_MATCH_STRING_JS_H__
+#ifndef MAP_UTILS_JS_H
+#define MAP_UTILS_JS_H
 
-// hoot
-#include <hoot/core/algorithms/linearreference/WaySublineMatchString.h>
+// Hoot
+#include <hoot/js/SystemNodeJs.h>
 #include <hoot/js/HootBaseJs.h>
-
-// Qt
-#include <QString>
 
 namespace hoot
 {
 
-/**
- *
- */
-class WaySublineMatchStringJs : public HootBaseJs
+class MapUtilsJs : public HootBaseJs
 {
 public:
 
   static void Init(v8::Handle<v8::Object> target);
 
-  WaySublineMatchStringPtr getWaySublineMatchString() { return _sm; }
+  virtual ~MapUtilsJs() = default;
 
-  static v8::Handle<v8::Object> New(WaySublineMatchStringPtr sm);
-
-  virtual ~WaySublineMatchStringJs() = default;
+  static void getFirstElementWithTag(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void getFirstElementWithNote(const v8::FunctionCallbackInfo<v8::Value>& args);
 
 private:
 
-  WaySublineMatchStringJs() = default;
-
-  static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void toString(const v8::FunctionCallbackInfo<v8::Value>& args);
-
-  WaySublineMatchStringPtr _sm;
-  static v8::Persistent<v8::Function> _constructor;
+  MapUtilsJs() = default;
 };
 
 }
-#endif // __WAY_SUBLINE_MATCH_STRING_JS_H__
+
+
+#endif // MAP_UTILS_JS_H

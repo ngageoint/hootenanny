@@ -42,7 +42,6 @@ public:
   static void Init(v8::Handle<v8::Object> exports);
 
   static void loadMap(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void loadGeoJsonFromString(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void loadMapFromString(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void loadMapFromStringPreserveIdAndStatus(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void saveMap(const v8::FunctionCallbackInfo<v8::Value>& args);

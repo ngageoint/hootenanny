@@ -72,16 +72,10 @@ void TagsJs::Init(Handle<Object> target)
       FunctionTemplate::New(current, contains));
   tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "get"),
       FunctionTemplate::New(current, get));
-  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getCreateUuid"),
-      FunctionTemplate::New(current, getCreateUuid));
   tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getInformationCount"),
       FunctionTemplate::New(current, getInformationCount));
-  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getLengthInMeters"),
-      FunctionTemplate::New(current, getLengthInMeters));
   tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getNames"),
       FunctionTemplate::New(current, getNames));
-  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getVelocityInMeters"),
-      FunctionTemplate::New(current, getVelocityInMeters));
   tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "set"),
       FunctionTemplate::New(current, set));
   tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "toDict"),
@@ -134,37 +128,6 @@ void TagsJs::get(const FunctionCallbackInfo<Value>& args)
   }
 }
 
-void TagsJs::getCreateUuid(const FunctionCallbackInfo<Value>& args)
-{
-  HandleScope scope(args.GetIsolate());
-
-  Tags& t = ObjectWrap::Unwrap<TagsJs>(args.This())->getTags();
-
-  args.GetReturnValue().Set(toV8(t.getCreateUuid()));
-}
-
-void TagsJs::getLengthInMeters(const FunctionCallbackInfo<Value>& args)
-{
-  HandleScope scope(args.GetIsolate());
-
-  Tags& t = ObjectWrap::Unwrap<TagsJs>(args.This())->getTags();
-
-  QString key = str(args[0]->ToString());
-
-  args.GetReturnValue().Set(toV8(t.getLength(key).value()));
-}
-
-void TagsJs::getVelocityInMeters(const FunctionCallbackInfo<Value>& args)
-{
-  HandleScope scope(args.GetIsolate());
-
-  Tags& t = ObjectWrap::Unwrap<TagsJs>(args.This())->getTags();
-
-  QString key = str(args[0]->ToString());
-
-  args.GetReturnValue().Set(toV8(t.getVelocity(key).value()));
-}
-
 void TagsJs::getInformationCount(const FunctionCallbackInfo<Value>& args)
 {
   HandleScope scope(args.GetIsolate());
@@ -204,7 +167,6 @@ void TagsJs::toDict(const FunctionCallbackInfo<Value>& args)
 
   args.GetReturnValue().Set(toV8(t));
 }
-
 
 void TagsJs::toString(const FunctionCallbackInfo<Value>& args)
 {

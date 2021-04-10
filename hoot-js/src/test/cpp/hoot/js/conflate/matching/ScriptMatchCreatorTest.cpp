@@ -54,9 +54,8 @@ class ScriptMatchCreatorTest : public HootTestFixture
 
 public:
 
-  ScriptMatchCreatorTest()
-    : HootTestFixture("test-files/algorithms/js/",
-                      UNUSED_PATH)
+  ScriptMatchCreatorTest() :
+  HootTestFixture("test-files/js/conflate/matching/", UNUSED_PATH)
   {
   }
 

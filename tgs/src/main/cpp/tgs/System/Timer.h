@@ -37,6 +37,7 @@ namespace Tgs
   class TGS_EXPORT Timer
   {
   public:
+
     Timer() { _start = Tgs::Time::getTime(); }
 
     double getElapsed() { return Tgs::Time::getTime() - _start; }
@@ -52,6 +53,7 @@ namespace Tgs
     void reset() { _start = Tgs::Time::getTime(); }
 
   private:
+
     double _start;
   };
 }

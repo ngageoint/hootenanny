@@ -84,11 +84,6 @@ public:
    */
   void _checkError();
 
-  /**
-   * Returns the number of times that this log message has been emitted.
-   */
-  int getLogCount(const QString& log);
-
   std::shared_ptr<const Schema> getOgrOutputSchema() override;
 
   // Filter for file names
@@ -127,15 +122,7 @@ protected:
 
   void _init() override;
 
-  /**
-   * Warn the user about the feature currently being processed.
-   */
-  void _featureWarn(const QString& message, const QString& fileName, const QString& functionName,
-                    int lineNumber);
-
   void _finalize() override;
-
-  QVariant& _getMapValue(QVariantMap& map, const QString& key);
 
   void _parseEnumerations(DoubleFieldDefinition* fd, QVariant& enumerations) const;
 

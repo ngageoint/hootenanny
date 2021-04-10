@@ -28,6 +28,7 @@
 //  Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/WayAverager.h>
+#include <hoot/core/elements/MapUtils.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/ops/CopyMapSubsetOp.h>
@@ -75,10 +76,10 @@ private:
     OsmMapPtr& targetMap)
   {
     WayPtr way1 =
-      std::dynamic_pointer_cast<Way>(TestUtils::getElementWithTag(sourceMap, "uuid", input1Uuid));
+      std::dynamic_pointer_cast<Way>(MapUtils::getFirstElementWithTag(sourceMap, "uuid", input1Uuid));
     way1->setTag("note", "average input 1");
     WayPtr way2 =
-      std::dynamic_pointer_cast<Way>(TestUtils::getElementWithTag(sourceMap, "uuid", input2Uuid));
+      std::dynamic_pointer_cast<Way>(MapUtils::getFirstElementWithTag(sourceMap, "uuid", input2Uuid));
     way2->setTag("note", "average input 2");
     std::set<ElementId> elementIds;
     elementIds.insert(way1->getElementId());

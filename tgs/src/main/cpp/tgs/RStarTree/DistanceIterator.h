@@ -47,8 +47,8 @@ class RStarTree;
 class TGS_EXPORT DistanceIterator : public Iterator
 {
 public:
-  DistanceIterator(RStarTree* tree, const std::vector<double>& point, double distance);
 
+  DistanceIterator(RStarTree* tree, const std::vector<double>& point, double distance);
   ~DistanceIterator() = default;
 
   const Box& getBox() const override;

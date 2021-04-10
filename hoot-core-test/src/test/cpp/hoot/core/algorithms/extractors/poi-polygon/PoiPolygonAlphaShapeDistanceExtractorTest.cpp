@@ -29,6 +29,7 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/extractors//poi-polygon/PoiPolygonAlphaShapeDistanceExtractor.h>
+#include <hoot/core/elements/MapUtils.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 
 // CPP Unit
@@ -73,8 +74,8 @@ public:
       0.0,
       uut.extract(
         *map,
-        TestUtils::getElementWithTag(map, "name", "test1"), //poly
-        TestUtils::getElementWithTag(map, "name", "test2")), //poi
+        MapUtils::getFirstElementWithTag(map, "name", "test1"), //poly
+        MapUtils::getFirstElementWithTag(map, "name", "test2")), //poi
       0.0001);
   }
 };

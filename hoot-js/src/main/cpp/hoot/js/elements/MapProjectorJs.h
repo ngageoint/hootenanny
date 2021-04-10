@@ -22,44 +22,34 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
  */
+#ifndef MAP_PROJECTOR_JS_H
+#define MAP_PROJECTOR_JS_H
 
-#ifndef MERGERFACTORYJS_H
-#define MERGERFACTORYJS_H
-
-// node.js
-#include <hoot/core/conflate/merging/MergerCreator.h>
+// Hoot
+#include <hoot/js/SystemNodeJs.h>
 #include <hoot/js/HootBaseJs.h>
-#include <hoot/js/io/DataConvertJs.h>
 
 namespace hoot
 {
 
-class MergerFactoryJs : public HootBaseJs
+class MapProjectorJs : public HootBaseJs
 {
 public:
 
- static void Init(v8::Handle<v8::Object> target);
+  static void Init(v8::Handle<v8::Object> target);
 
- virtual ~MergerFactoryJs() = default;
+  virtual ~MapProjectorJs() = default;
+
+  static void projectToPlanar(const v8::FunctionCallbackInfo<v8::Value>& args);
 
 private:
 
-  MergerFactoryJs() = default;
-
-  static void getAllAvailableCreators(const v8::FunctionCallbackInfo<v8::Value>& args);
+  MapProjectorJs() = default;
 };
 
-inline v8::Handle<v8::Value> toV8(const CreatorDescription& d)
-{
-  v8::Handle<v8::Object> result = v8::Object::New(v8::Isolate::GetCurrent());
-  result->Set(toV8("className"), toV8(d.getClassName()));
-  result->Set(toV8("description"), toV8(d.getDescription()));
-  result->Set(toV8("experimental"), toV8(d.getExperimental()));
-  return result;
 }
 
-}
 
-#endif // MERGERFACTORYJS_H
+#endif // MAP_PROJECTOR_JS_H

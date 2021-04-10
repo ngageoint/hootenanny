@@ -98,8 +98,6 @@ void FeatureExtractorJs::Init(Handle<Object> target)
     // Prototype
     tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "extract"),
         FunctionTemplate::New(current, extract));
-    tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getName"),
-        FunctionTemplate::New(current, getName));
 
     Persistent<Function> constructor(current, tpl->GetFunction());
     target->Set(String::NewFromUtf8(current, n), ToLocal(&constructor));
@@ -120,13 +118,6 @@ void FeatureExtractorJs::New(const FunctionCallbackInfo<Value>& args)
   PopulateConsumersJs::populateConsumers<FeatureExtractor>(fe.get(), args);
 
   args.GetReturnValue().Set(args.This());
-}
-
-void FeatureExtractorJs::getName(const FunctionCallbackInfo<Value>& args)
-{
-  HandleScope scope(args.GetIsolate());
-
-  args.GetReturnValue().Set(toV8(toCpp<FeatureExtractorPtr>(args.This())->getName()));
 }
 
 }

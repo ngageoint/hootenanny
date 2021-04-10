@@ -47,8 +47,6 @@ public:
 private:
 
   MatchFactoryJs() = default;
-
-  static void getAllAvailableCreators(const v8::FunctionCallbackInfo<v8::Value>& args);
 };
 
 inline v8::Handle<v8::Value> toV8(const CreatorDescription& d)

@@ -386,34 +386,6 @@ std::shared_ptr<const ScriptMatch> ScriptMatch::_getMatch(
   return match;
 }
 
-bool ScriptMatch::_isMatchCandidate(ConstElementPtr e, const ConstOsmMapPtr& map) const
-{
-  // This code is a little redundant with that in ScriptMatchVisitor::isMatchCandidate. See related
-  // notes in that method.
-
-  Isolate* current = v8::Isolate::GetCurrent();
-  HandleScope handleScope(current);
-  Context::Scope context_scope(_script->getContext(current));
-  Handle<Object> plugin =
-    Handle<Object>::Cast(
-      _script->getContext(current)->Global()->Get(String::NewFromUtf8(current, "plugin")));
-
-  Handle<Value> value = plugin->Get(String::NewFromUtf8(current, "isMatchCandidate"));
-  Handle<Function> func = Handle<Function>::Cast(value);
-  Handle<Value> jsArgs[2];
-
-  int argc = 0;
-  Handle<Object> mapObj = OsmMapJs::create(map);
-  jsArgs[argc++] = mapObj;
-  jsArgs[argc++] = ElementJs::New(e);
-
-  TryCatch trycatch;
-  Handle<Value> result = func->Call(plugin, argc, jsArgs);
-  HootExceptionJs::checkV8Exception(result, trycatch);
-
-  return result->BooleanValue();
-}
-
 Handle<Value> ScriptMatch::_call(
   const ConstOsmMapPtr& map, Handle<Object> mapObj, Handle<Object> plugin)
 {
