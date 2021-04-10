@@ -55,7 +55,7 @@ tds40 = {
     tds40.attrLookup = translate.makeAttrLookup(tds40.rawSchema);
 
     // Debug
-    // hoot.print("tds40.attrLookup");
+    // print("tds40.attrLookup");
     // translate.dumpLookup(tds40.attrLookup);
 
     // Decide if we are going to use TDS structure or 1 FCODE / File
@@ -200,7 +200,7 @@ tds40 = {
     tds40.thematicLookup = translate.makeThematicAttrLookup(newSchema);
 
     // Debug:
-    // hoot.print("tds40.thematicLookup");
+    // print("tds40.thematicLookup");
     // translate.dumpLookup(tds40.thematicLookup);
 
     // Add the ESRI Feature Dataset name to the schema
@@ -257,7 +257,7 @@ tds40 = {
           if (val in othList)
           {
             //Debug:
-            // hoot.print('Validate: Dropping OTH: ' + val + '  (' + othList[val] + ')');
+            // print('Validate: Dropping OTH: ' + val + '  (' + othList[val] + ')');
             delete othList[val];
           }
 
@@ -307,7 +307,7 @@ tds40 = {
     {
       attrs.OTH = translate.packOTH(othList);
       // Debug:
-      // hoot.print('New OTH: ' + attrs.OTH);
+      // print('New OTH: ' + attrs.OTH);
     }
 
     // No quick and easy way to do this unless we build yet another lookup table
@@ -599,7 +599,7 @@ tds40 = {
       if (col in tds40.rules.swapListIn)
       {
         // Debug:
-        // hoot.print('Swapped: ' + tds40.rules.swapList[i]);
+        // print('Swapped: ' + tds40.rules.swapList[i]);
         attrs[tds40.rules.swapListIn[col]] = attrs[col];
         delete attrs[col];
         continue;
@@ -613,7 +613,7 @@ tds40 = {
       {
         attrs[col.slice(0,-1)] = attrs[col];
         // Debug:
-        // hoot.print('Swapped: ' + col);
+        // print('Swapped: ' + col);
         delete attrs[col];
         continue;
       }
@@ -706,7 +706,7 @@ tds40 = {
         for (i in tTags)
         {
           // Debug
-          // hoot.print('Memo: Add: ' + i + ' = ' + tTags[i]);
+          // print('Memo: Add: ' + i + ' = ' + tTags[i]);
           if (tags[tTags[i]]) hoot.logWarn('Unpacking ZI006_MEM, overwriting ' + i + ' = ' + tags[i] + '  with ' + tTags[i]);
           tags[i] = tTags[i];
 
@@ -752,7 +752,7 @@ tds40 = {
     }
     else
     {
-      if (tds40.configIn.OgrAddUuid == 'true') tags.uuid = hoot.UuidHelper.createUuid();
+      if (tds40.configIn.OgrAddUuid == 'true') tags.uuid = createUuid();
     }
 
     if (tds40.osmPostRules == undefined)
@@ -1198,7 +1198,7 @@ tds40 = {
     if (geometryType == 'Area' && ! translate.isOsmArea(tags))
     {
       // Debug
-      // hoot.print('Adding area=yes');
+      // print('Adding area=yes');
       tags.area = 'yes';
     }
 
@@ -1208,13 +1208,13 @@ tds40 = {
         {
             abandonedList = ['amenity','shop','highway','tourism','leisure','building'];
 
-            hoot.print('XX In Abandoned');
+            print('XX In Abandoned');
 
             for (var i = 0, len = abandonedList.length; i < len; i++)
             {
                 if (tags[abandonedList[i]])
                 {
-                    hoot.print('Tags: ' + abandonedList[i]);
+                    print('Tags: ' + abandonedList[i]);
                     tags['abandoned:' + abandonedList[i]] = tags[abandonedList[i]];
                     delete tags[abandonedList[i]];
                     delete tags.condition;
@@ -1230,7 +1230,7 @@ tds40 = {
       if (tags.operator == 'military' || tags.operator == '')
       {
         // Debug
-        // hoot.print('Bunker: drop man_made. military = ' + tags.military);
+        // print('Bunker: drop man_made. military = ' + tags.military);
         tags.military = 'bunker';
         delete tags.man_made;
       }
@@ -1279,7 +1279,7 @@ tds40 = {
         tags[vList[0].replace('"','')] = vList[1].replace('"','');
 
         // Debug
-        // hoot.print('val: ' + tList[val] + '  vList[0] = ' + vList[0] + '  vList[1] = ' + vList[1]);
+        // print('val: ' + tList[val] + '  vList[0] = ' + vList[0] + '  vList[1] = ' + vList[1]);
       }
     }
 
@@ -1524,7 +1524,7 @@ tds40 = {
       {
         case 'minaret':
           // Debug
-          // hoot.print('Got Minaret');
+          // print('Got Minaret');
           delete tags.man_made;
           break;
 
@@ -1585,7 +1585,7 @@ tds40 = {
         if (tags.facility !== 'yes')
         {
           // Debug
-          // hoot.print('Making a building: ' + tags.facility);
+          // print('Making a building: ' + tags.facility);
           attrs.F_CODE = 'AL013'; // Building
         }
       }
@@ -1595,7 +1595,7 @@ tds40 = {
       {
         attrs.FFN = facilityList[tags.amenity];
         // Debug
-        // hoot.print('PreDropped: amenity = ' + tags.amenity);
+        // print('PreDropped: amenity = ' + tags.amenity);
         delete tags.amenity;
       }
     }
@@ -1956,7 +1956,7 @@ tds40 = {
             var row = tds40.fcodeLookup[col][value];
             attrs.F_CODE = row[1];
             // Debug
-            // hoot.print('FCODE: Got ' + attrs.F_CODE);
+            // print('FCODE: Got ' + attrs.F_CODE);
         }
         else if (col in tds40.fcodeLookupOut && (value in tds40.fcodeLookupOut[col]))
         {
@@ -2222,7 +2222,7 @@ tds40 = {
     }
     else
     {
-      if (tds40.configOut.OgrAddUuid == 'true') attrs.UFI = hoot.UuidHelper.createUuid().replace('{','').replace('}','');
+      if (tds40.configOut.OgrAddUuid == 'true') attrs.UFI = createUuid().replace('{','').replace('}','');
     }
 
     // Add Weather Restrictions to transportation features
@@ -2479,7 +2479,7 @@ tds40 = {
       // Add some metadata
       if (! tags.uuid)
       {
-        if (tds40.configIn.OgrAddUuid == 'true') tags.uuid = hoot.UuidHelper.createUuid();
+        if (tds40.configIn.OgrAddUuid == 'true') tags.uuid = createUuid();
       }
 
       if (! tags.source) tags.source = 'tdsv40:' + layerName.toLowerCase();
@@ -2488,7 +2488,7 @@ tds40 = {
       if (tds40.configIn.OgrDebugDumptags == 'true')
       {
         translate.debugOutput(tags,layerName,geometryType,'','Out tags: ');
-        hoot.print('');
+        print('');
       }
 
       return tags;
@@ -2545,7 +2545,7 @@ tds40 = {
       {
         tags[ftag[0]] = ftag[1];
         // Debug: Dump out the tags from the FCODE
-        // hoot.print('FCODE: ' + attrs.F_CODE + ' tag=' + ftag[0] + '  value=' + ftag[1]);
+        // print('FCODE: ' + attrs.F_CODE + ' tag=' + ftag[0] + '  value=' + ftag[1]);
       }
       else
       {
@@ -2590,7 +2590,7 @@ tds40 = {
     {
       translate.debugOutput(notUsedAttrs,layerName,geometryType,'','Not used: ');
       translate.debugOutput(tags,layerName,geometryType,'','Out tags: ');
-      hoot.print('');
+      print('');
     }
 
     return tags;
@@ -2759,7 +2759,7 @@ tds40 = {
         {
           // If the feature is not valid, just drop it
           // Debug
-          // hoot.print('## Skipping: ' + gFcode);
+          // print('## Skipping: ' + gFcode);
           returnData.splice(i,1);
           fLen = returnData.length;
         }
@@ -2857,10 +2857,10 @@ tds40 = {
     {
       for (var i = 0, fLen = returnData.length; i < fLen; i++)
       {
-        hoot.print('TableName ' + i + ': ' + returnData[i]['tableName'] + '  FCode: ' + returnData[i]['attrs']['F_CODE'] + '  Geom: ' + geometryType);
+        print('TableName ' + i + ': ' + returnData[i]['tableName'] + '  FCode: ' + returnData[i]['attrs']['F_CODE'] + '  Geom: ' + geometryType);
         translate.debugOutput(returnData[i]['attrs'],'',geometryType,elementType,'Out attrs: ');
       }
-      hoot.print('');
+      print('');
     }
 
     return returnData;

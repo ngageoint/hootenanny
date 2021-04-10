@@ -3241,7 +3241,7 @@ ufd = {
         if (llayerName.match(ufd.fCodeMap[row][1][val]))
         {
           // Debug
-          // hoot.print('Match: ' + llayerName + ' with ' + ufd.fCodeMap[row][1][val])
+          // print('Match: ' + llayerName + ' with ' + ufd.fCodeMap[row][1][val])
           return ufd.fCodeMap[row][0];
         }
       }
@@ -3291,7 +3291,7 @@ ufd = {
       if (col in ufd.swapList)
       {
         // Debug
-        // hoot.print('Swapped: ' + ufd.swapList[col]); // debug
+        // print('Swapped: ' + ufd.swapList[col]); // debug
         attrs[ufd.swapList[col]] = attrs[col];
         delete attrs[col];
         continue;
@@ -3459,7 +3459,7 @@ ufd = {
     }
     else
     {
-      if (ufd.configIn.OgrAddUuid == 'true') tags.uuid = hoot.UuidHelper.createUuid();
+      if (ufd.configIn.OgrAddUuid == 'true') tags.uuid = createUuid();
     }
 
     // If we have a House of Worship type then tag it
@@ -3505,7 +3505,7 @@ ufd = {
     // Add 'building = yes' to amenities if we don't already have one
     // if (tags.amenity && !(tags.building))
     // {
-    //     // hoot.print('Added building'); // debug
+    //     // print('Added building'); // debug
     //     // Don't add building=yes to built up areas!
     //     if (!(tags.place)) tags.building = 'yes';
     // }
@@ -3513,7 +3513,7 @@ ufd = {
     // Add 'building = yes' to military if it isn't a range
     if (tags.military && !(tags.building))
     {
-      // hoot.print('Added building to military'); // debug
+      // print('Added building to military'); // debug
       if (tags.military !== 'range' && tags.military !== 'installation' ) tags.building = 'yes';
     }
 
@@ -3756,7 +3756,7 @@ ufd = {
 function initialize()
 {
   // The print method simply prints the string representation to stdout
-  //hoot.print("Initializing.");
+  //print("Initializing.");
 
   if (ufd.configIn == undefined)
   {
@@ -3811,7 +3811,7 @@ function translateToOsm(attrs, layerName, geometryType)
     {
       tags[ftag[0]] = ftag[1];
       // Debug: Dump out the tags from the FCODE
-      // hoot.print('FCODE: ' + attrs.F_CODE + ' tag=' + ftag[0] + '  value=' + ftag[1]);
+      // print('FCODE: ' + attrs.F_CODE + ' tag=' + ftag[0] + '  value=' + ftag[1]);
     }
     else
     {
@@ -3853,11 +3853,11 @@ function translateToOsm(attrs, layerName, geometryType)
 
     if (tags.name == ' ')
     {
-      hoot.print('Name = space');
+      print('Name = space');
     }
 
     translate.debugOutput(tags,layerName,geometryType,'','Out tags: ');
-    hoot.print('');
+    print('');
   }
 
   // Override tag values if appropriate

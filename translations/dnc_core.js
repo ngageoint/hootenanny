@@ -225,7 +225,7 @@ dnc = {
       translate.txtToOgr(newFeatures[i]['attrs'], notUsedTags, dnc.rules.txtBiased,transMap);
 
       // one 2 one
-      // hoot.print('manyFeatures applyOne2One');
+      // print('manyFeatures applyOne2One');
       translate.applyOne2One(notUsedTags, newFeatures[i]['attrs'], dnc.lookup, dnc.fcodeLookup,transMap);
 
       // post processing
@@ -243,7 +243,7 @@ dnc = {
   validateAttrs: function(layerName,geometryType,attrs,notUsed,transMap) {
 
     // Debug:
-    // hoot.print('Validate: ' + attrs.F_CODE + ' Geom:' + geometryType + ' LayerName:' + layerName);
+    // print('Validate: ' + attrs.F_CODE + ' Geom:' + geometryType + ' LayerName:' + layerName);
 
     // No quick and easy way to do this unless we build yet another lookup table
     var feature = {};
@@ -267,7 +267,7 @@ dnc = {
     // else
     // {
     // Debug:
-    // hoot.print('FeatureName: ' + feature.name);
+    // print('FeatureName: ' + feature.name);
     // }
 
 
@@ -283,12 +283,12 @@ dnc = {
       if (attrArray.indexOf(val) == -1)
       {
         // Debug:
-        // hoot.print('Validate: Dropping ' + val + ' from ' + layerName);
+        // print('Validate: Dropping ' + val + ' from ' + layerName);
         if (val in transMap)
         {
           notUsed[transMap[val][1]] = transMap[val][2];
           // Debug:
-          // hoot.print('Validate: Re-Adding ' + transMap[val][1] + ' = ' + transMap[val][2] + ' to notUsed');
+          // print('Validate: Re-Adding ' + transMap[val][1] + ' = ' + transMap[val][2] + ' to notUsed');
         }
         // else
         // {
@@ -337,12 +337,12 @@ dnc = {
       if (dnc.rules.defaultList[gFcode])
       {
         // Debug:
-        // hoot.print('Found: ' + gFcode + ' in the default list');
+        // print('Found: ' + gFcode + ' in the default list');
         // if (dnc.rules.defaultList[gFcode][attrs[colName]])
         if (dnc.rules.defaultList[gFcode][colName])
         {
           // Debug:
-          // hoot.print('Setting: ' + colName + ' to ' + dnc.rules.defaultList[gFcode][colName]);
+          // print('Setting: ' + colName + ' to ' + dnc.rules.defaultList[gFcode][colName]);
           attrs[colName] = dnc.rules.defaultList[gFcode][colName];
 
           // We wiped the value so try to restore the tags for it
@@ -351,7 +351,7 @@ dnc = {
           {
             notUsed[transMap[colName][1]] = transMap[colName][2];
             // Debug:
-            // hoot.print('Validate: re-adding enumeration ' + transMap[colName][1] + ' = ' + transMap[colName][2] + ' to notUsed');
+            // print('Validate: re-adding enumeration ' + transMap[colName][1] + ' = ' + transMap[colName][2] + ' to notUsed');
           }
 
           // Since we eddited the attribute, no point checking if it is enumerated.
@@ -379,7 +379,7 @@ dnc = {
             attrs[colName] = feature.columns[i].defValue;
 
             // Debug:
-            // hoot.print('Validate: 2: Enumerated Value: ' + attrValue + ' not found in ' + colName + ' Setting ' + colName + ' to its default value (' + feature.columns[i].defValue + ')');
+            // print('Validate: 2: Enumerated Value: ' + attrValue + ' not found in ' + colName + ' Setting ' + colName + ' to its default value (' + feature.columns[i].defValue + ')');
           }
           else
           {
@@ -387,7 +387,7 @@ dnc = {
             attrs[colName] = '999';
 
             // Debug:
-            // hoot.print('Validate: 2: Enumerated Value: ' + attrValue + ' not found in ' + colName + ' Setting ' + colName + ' to Other (999)');
+            // print('Validate: 2: Enumerated Value: ' + attrValue + ' not found in ' + colName + ' Setting ' + colName + ' to Other (999)');
           }
 
           // Since we either wiped the value or set it to '999', try to restore the tags for it
@@ -395,7 +395,7 @@ dnc = {
           {
             notUsed[transMap[colName][1]] = transMap[colName][2];
             // Debug:
-            // hoot.print('Validate: 2: re-adding enumeration ' + transMap[colName][1] + ' = ' + transMap[colName][2] + ' to notUsed');
+            // print('Validate: 2: re-adding enumeration ' + transMap[colName][1] + ' = ' + transMap[colName][2] + ' to notUsed');
           }
         }
 
@@ -431,7 +431,7 @@ dnc = {
             transMap[row[0]] = [row[1],col,value];
 
             // Debug:
-            // hoot.print('Adding: ' + row[0] + ' as ' + transMap[row[0]]);
+            // print('Adding: ' + row[0] + ' as ' + transMap[row[0]]);
 
             delete inList[col];
           }
@@ -453,7 +453,7 @@ dnc = {
         attrs[i] = tags[rules[i]];
         transMap[i] = ['',rules[i],tags[rules[i]]];
         // Debug:
-        // hoot.print('Txt Adding: ' + i + ' as ' + transMap[attrs[i]]);
+        // print('Txt Adding: ' + i + ' as ' + transMap[attrs[i]]);
 
         delete tags[rules[i]];
       }
@@ -493,7 +493,7 @@ dnc = {
           attrs[i] = tNum;
           transMap[i] = ['',rules[i],tags[rules[i]]];
           // Debug:
-          // hoot.print('Num Adding: ' + i + ' as ' + transMap[attrs[i]]);
+          // print('Num Adding: ' + i + ' as ' + transMap[attrs[i]]);
 
           delete tags[rules[i]];
         }
@@ -510,7 +510,7 @@ dnc = {
   appendToOsmTags : function (rawTagObj, tag, value)
   {
     // Debug:
-    // hoot.print('appendToOsmTags: in: ' + rawTagObj);
+    // print('appendToOsmTags: in: ' + rawTagObj);
 
     var tTags = {};
 
@@ -527,7 +527,7 @@ dnc = {
 
     tTags[tag] = value;
     // Debug:
-    // hoot.print('appendToOsmTags: out: ' + JSON.stringify(tTags));
+    // print('appendToOsmTags: out: ' + JSON.stringify(tTags));
 
     var tStr = '<OSM>' + JSON.stringify(tTags) + '</OSM>';
     return tStr;
@@ -590,7 +590,7 @@ dnc = {
         for (i in tTags)
         {
           // Debug
-          // hoot.print('Memo: Add: ' + i + ' = ' + tTags[i]);
+          // print('Memo: Add: ' + i + ' = ' + tTags[i]);
           if (tags[tTags[i]]) hoot.logWarn('Unpacking OSM_TAGS, overwriting ' + i + ' = ' + tags[i] + '  with ' + tTags[i]);
           tags[i] = tTags[i];
         }
@@ -640,7 +640,7 @@ dnc = {
     }
     else
     {
-      tags.uuid = hoot.UuidHelper.createUuid();
+      tags.uuid = createUuid();
     }
 
     if (dnc.osmPostRules == undefined)
@@ -740,7 +740,7 @@ dnc = {
         tags[vList[0].replace('"','')] = vList[1].replace('"','');
 
         // Debug
-        // hoot.print('val: ' + tList[val] + '  vList[0] = ' + vList[0] + '  vList[1] = ' + vList[1]);
+        // print('val: ' + tList[val] + '  vList[0] = ' + vList[0] + '  vList[1] = ' + vList[1]);
       }
     }
 
@@ -1059,7 +1059,7 @@ dnc = {
             attrs.F_CODE = row[1];
 
             // Debug:
-            // hoot.print('F_CODE: ' + col + ' = ' + value + ' makes ' + row[1]);
+            // print('F_CODE: ' + col + ' = ' + value + ' makes ' + row[1]);
           }
         }
       }
@@ -1182,7 +1182,7 @@ dnc = {
         if (i in tags)
         {
           // Debug
-          // hoot.print('Added FCODE from Map: ' + fcodeMap[i]);
+          // print('Added FCODE from Map: ' + fcodeMap[i]);
           attrs.F_CODE = fcodeMap[i];
           break;
         }
@@ -1202,7 +1202,7 @@ dnc = {
     }
     else
     {
-      if (dnc.configOut.OgrAddUuid == 'true') attrs.OSM_UUID = hoot.UuidHelper.createUuid().replace('{','').replace('}','');
+      if (dnc.configOut.OgrAddUuid == 'true') attrs.OSM_UUID = createUuid().replace('{','').replace('}','');
     }
 
     // Fix some of the default values
@@ -1311,7 +1311,7 @@ dnc = {
       // Add some metadata
       if (! tags.uuid)
       {
-        if (dnc.configIn.OgrAddUuid == 'true') tags.uuid = hoot.UuidHelper.createUuid();
+        if (dnc.configIn.OgrAddUuid == 'true') tags.uuid = createUuid();
       }
 
       if (! tags.source) tags.source = 'dnc:' + layerName.toLowerCase();
@@ -1320,7 +1320,7 @@ dnc = {
       if (dnc.configIn.OgrDebugDumptags == 'true')
       {
         translate.debugOutput(tags,layerName,geometryType,'','Out tags: ');
-        hoot.print('');
+        print('');
       }
 
       return tags;
@@ -1364,7 +1364,7 @@ dnc = {
       {
         tags[ftag[0]] = ftag[1];
         // Debug: Dump out the tags from the FCODE
-        // hoot.print('FCODE: ' + attrs.F_CODE + ' tag=' + ftag[0] + '  value=' + ftag[1]);
+        // print('FCODE: ' + attrs.F_CODE + ' tag=' + ftag[0] + '  value=' + ftag[1]);
       }
       else
       {
@@ -1390,7 +1390,7 @@ dnc = {
     dnc.applyToOsmPostProcessing(attrs, tags, layerName, geometryType);
 
     // Debug
-    // for (var i in notUsedAttrs) hoot.print('NotUsed: ' + i + ': :' + notUsedAttrs[i] + ':');
+    // for (var i in notUsedAttrs) print('NotUsed: ' + i + ': :' + notUsedAttrs[i] + ':');
 
     // Debug: Add the FCODE to the tags
     if (dnc.configIn.OgrDebugAddfcode == 'true') tags['raw:debugFcode'] = attrs.F_CODE;
@@ -1400,7 +1400,7 @@ dnc = {
     {
       translate.debugOutput(notUsedAttrs,layerName,geometryType,'','Not used: ');
       translate.debugOutput(tags,layerName,geometryType,'','Out tags: ');
-      hoot.print('');
+      print('');
     }
 
     return tags;
@@ -1522,7 +1522,7 @@ dnc = {
           if (attrs.F_CODE == row[1])
           {
             // Debug:
-            // hoot.print('F_CODE: Dropping ' + col + '=' + value + ' from notUsedTags');
+            // print('F_CODE: Dropping ' + col + '=' + value + ' from notUsedTags');
             delete notUsedTags[col];
             break;
           }
@@ -1539,7 +1539,7 @@ dnc = {
     var gFcode = attrs.F_CODE + geometryType.toString().charAt(0);
 
     // Debug:
-    // hoot.print('gFcode: ' + gFcode + '  layerName: ' + dnc.rules.layerList[gFcode]);
+    // print('gFcode: ' + gFcode + '  layerName: ' + dnc.rules.layerList[gFcode]);
 
     if (gFcode in dnc.rules.layerList)
     {
@@ -1549,7 +1549,7 @@ dnc = {
 
       // Debug: Add the first feature
       //returnData.push({attrs: attrs, tableName: ''});
-      // hoot.print('ReturnData.length = ' + returnData.length);
+      // print('ReturnData.length = ' + returnData.length);
 
       // Now go through the features and clean them up
       var gType = geometryType.toString().charAt(0);
@@ -1585,7 +1585,7 @@ dnc = {
         {
           // If the feature is not valid, just drop it
           // Debug
-          // hoot.print('## Skipping: ' + gFcode);
+          // print('## Skipping: ' + gFcode);
           returnData.splice(i,1);
         }
       } // End returnData loop
@@ -1649,7 +1649,7 @@ dnc = {
           for (var tg in tTags)
           {
             // Debug:
-            // if (tags[tg]) hoot.print('## Overwriteing tag: ' + tg + ' = ' + tags[tg] + '  with: ' + tTags[tg]);
+            // if (tags[tg]) print('## Overwriteing tag: ' + tg + ' = ' + tags[tg] + '  with: ' + tTags[tg]);
 
             tags[tg] = tTags[tg];
           }
@@ -1688,10 +1688,10 @@ dnc = {
     {
       for (var i = 0, fLen = returnData.length; i < fLen; i++)
       {
-        hoot.print('TableName ' + i + ': ' + returnData[i]['tableName'] + '  FCode: ' + returnData[i]['attrs']['F_CODE'] + '  Geom: ' + geometryType);
+        print('TableName ' + i + ': ' + returnData[i]['tableName'] + '  FCode: ' + returnData[i]['attrs']['F_CODE'] + '  Geom: ' + geometryType);
         translate.debugOutput(returnData[i]['attrs'],'',geometryType,elementType,'Out attrs: ');
       }
-      hoot.print('');
+      print('');
     }
 
     return returnData;

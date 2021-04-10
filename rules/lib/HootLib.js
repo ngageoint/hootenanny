@@ -194,3 +194,35 @@ function calculateSearchRadiusUsingRubberSheeting(map, rubberSheetRef, rubberShe
       { "search.radius.calculator.element.criterion" : matchCandidateCriterion })
       .applyAndGetResult(map);
 }
+
+/////////////////UTILITIES////////////////
+
+// Would like to try to remove these one-liners but have been unable to make the translations
+// in translations-local work with the "hoot." prefix.
+
+/**
+ * Wrapper for createUuid for backward compatibility.
+ */
+function createUuid()
+{
+  return hoot.UuidHelper.createUuid();
+}
+
+/**
+ * Wrapper for print for backward compatibility.
+ */
+function print(e)
+{
+  hoot.print(e);
+}
+
+/**
+ * Log a string using Hootenanny's logging mechanism. By default this will
+ * print the script location and the JSON version of the argument.
+ *
+ * @param s String to log.
+ */
+function log(s)
+{
+  hoot.log(s);
+}

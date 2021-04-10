@@ -138,7 +138,7 @@ function translateToOsm(attrs, layerName, geometryType)
   //       attrs[vList[0].toString().replace('"','')] = vList[1].toString().replace('"','');
 
   //       // Debug
-  //       // hoot.print('val :' + tList[val] + ':  vList[0] :' + vList[0] + ':  vList[1] :' + vList[1] + ':');
+  //       // print('val :' + tList[val] + ':  vList[0] :' + vList[0] + ':  vList[1] :' + vList[1] + ':');
   //     }
   //   }
   // }
@@ -156,7 +156,7 @@ function translateToOsm(attrs, layerName, geometryType)
         attrs[vList[0].toString().replace('"','')] = vList[1].toString().replace('"','');
 
         // Debug
-        // hoot.print('val :' + tList[val] + ':  vList[0] :' + vList[0] + ':  vList[1] :' + vList[1] + ':');
+        // print('val :' + tList[val] + ':  vList[0] :' + vList[0] + ':  vList[1] :' + vList[1] + ':');
       }
     }
   });
@@ -175,7 +175,7 @@ function translateToOsm(attrs, layerName, geometryType)
   if (renderDb.config.OgrDebugDumptags == 'true')
   {
     translate.debugOutput(attrs,layerName,geometryType,'','Out tags: ');
-    hoot.print('');
+    print('');
   }
 
   return attrs;
@@ -247,7 +247,7 @@ function translateToOgr(tags, elementType, geometryType)
   for (var i = 0; i < tagsList.length; i++)
   {
     // Debug
-    // hoot.print('len: ' + tagsList[i].length + '  tag: ' + tagsList[i]);
+    // print('len: ' + tagsList[i].length + '  tag: ' + tagsList[i]);
     if (tagsList[i].length > 254)
     {
       hoot.logError('Tag : ' + tagsList[i] + ' : is too long to be stored (' + tagsList[i].length + ' characters). Dropping the tag');
@@ -271,7 +271,7 @@ function translateToOgr(tags, elementType, geometryType)
     {
       var tName = nameList[nam];
       // Debug
-      // hoot.print('tName: ' + tName + '  len:' + tagsList.length);
+      // print('tName: ' + tName + '  len:' + tagsList.length);
 
       if (tagsList.length == 0) break;
 
@@ -297,7 +297,7 @@ function translateToOgr(tags, elementType, geometryType)
   if (renderDb.config.OgrDebugDumptags == 'true')
   {
     translate.debugOutput(tags,'',geometryType,elementType,'Out attrs: ');
-    hoot.print('');
+    print('');
   }
 
   return [{attrs:tags, tableName: geometryType}];
@@ -395,7 +395,7 @@ function getDbSchema()
   var schema = [];
 
   // Debug
-  // hoot.print('OutputFormat = :' + config.getOgrOutputFormat() + ':')
+  // print('OutputFormat = :' + config.getOgrOutputFormat() + ':')
 
   // Shapefiles can only have 10 character attribute names
   // This is Ugly and is repeated since getDbSchema gets used before initialise() and the translation functions

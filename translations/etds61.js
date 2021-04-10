@@ -44,11 +44,11 @@ etds61 = {
 //         {
 //             for (var i = 0, fLen = tdsData.length; i < fLen; i++)
 //             {
-//                 hoot.print('eTableName ' + i + ': ' + tdsData[i]['tableName'] + '  FCode: ' + tdsData[i]['attrs']['F_CODE'] + '  Geom: ' + geometryType);
+//                 print('eTableName ' + i + ': ' + tdsData[i]['tableName'] + '  FCode: ' + tdsData[i]['attrs']['F_CODE'] + '  Geom: ' + geometryType);
 //                 var kList = Object.keys(tdsData[i]['attrs']).sort()
-//                 for (var j = 0, kLen = kList.length; j < kLen; j++) hoot.print('eOut Attrs:' + kList[j] + ': :' + tdsData[i]['attrs'][kList[j]] + ':');
+//                 for (var j = 0, kLen = kList.length; j < kLen; j++) print('eOut Attrs:' + kList[j] + ': :' + tdsData[i]['attrs'][kList[j]] + ':');
 //             }
-//             hoot.print('');
+//             print('');
 //         }
 
         var eAttrs = {}; // The final English output
@@ -100,8 +100,8 @@ etds61 = {
 //         if (config.getOgrDebugDumptags() == 'true')
 //         {
 //             var kList = Object.keys(eAttrs).sort()
-//             for (var j = 0, kLen = kList.length; j < kLen; j++) hoot.print('Final Attrs:' + kList[j] + ': :' + eAttrs[kList[j]] + ':');
-//             hoot.print('');
+//             for (var j = 0, kLen = kList.length; j < kLen; j++) print('Final Attrs:' + kList[j] + ': :' + eAttrs[kList[j]] + ':');
+//             print('');
 //         }
 
         // Return the English results. The "tableName" is not set

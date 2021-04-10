@@ -105,7 +105,7 @@ function translateToOgr(tags, elementType, geometryType)
     }
     else
     {
-        attrs.UFI = hoot.UuidHelper.createUuid().replace('{','').replace('}','');
+        attrs.UFI = createUuid().replace('{','').replace('}','');
     }
 
     // Set the F_CODE

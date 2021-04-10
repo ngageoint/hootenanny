@@ -34,7 +34,7 @@ hoot.require("example")
 function initialize()
 {
     // The print method simply prints the string representation to stdout
-    //hoot.print("Initializing.")
+    //print("Initializing.")
 }
 
 // an optional finalize function that gets called once after all
@@ -43,7 +43,7 @@ function finalize()
 {
     // the debug method prints to stdout when --debug has been specified on
     // the hoot command line. (DEBUG log level)
-    hoot.debug("Finalizing.");
+    debug("Finalizing.");
 }
 
 // A translateToOsm method that is very similar to the python translate
@@ -51,11 +51,11 @@ function finalize()
 function translateToOsm(attrs, layerName, geometryType)
 {
     tags = {};
-    //hoot.print(layerName);
+    //print(layerName);
     for (var key in attrs)
     {
         k = key.toLowerCase()
-        //hoot.print(k + ": " + attrs[key]);
+        //print(k + ": " + attrs[key]);
         tags[k] = attrs[key]
     }
     return tags;

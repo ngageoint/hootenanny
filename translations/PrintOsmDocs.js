@@ -179,7 +179,7 @@ function initialize()
 // The finalize function gets called once AFTER the translateToXXX functions
 function finalize()
 {
-  // hoot.print('In the finalize function');
+  // print('In the finalize function');
 }
 
 
@@ -326,27 +326,27 @@ function dumpHtmlTags(tagList)
   shortKeys.sort();
 
   // Start the HTML document
-  hoot.print('<html>');
-  hoot.print('<head>');
-  hoot.print('<title>Hootennanny OSM+ Tags</title>');
-  hoot.print('</head>');
-  hoot.print('<style>');
-  hoot.print('table,th,td { border:1px solid black; border-collapse:collapse; padding-left:5px; padding-right:5px; }');
-  hoot.print('caption { text-align:left; font-weight:bold;}');
-  hoot.print('</style>');
-  hoot.print('<body>');
-  hoot.print('<h2 align=center>Hootennanny OSM+ Tags</h2>');
-  hoot.print('<p>Generated: ' + Date() + '</p>');
+  print('<html>');
+  print('<head>');
+  print('<title>Hootennanny OSM+ Tags</title>');
+  print('</head>');
+  print('<style>');
+  print('table,th,td { border:1px solid black; border-collapse:collapse; padding-left:5px; padding-right:5px; }');
+  print('caption { text-align:left; font-weight:bold;}');
+  print('</style>');
+  print('<body>');
+  print('<h2 align=center>Hootennanny OSM+ Tags</h2>');
+  print('<p>Generated: ' + Date() + '</p>');
 
   for (var i = 0, tlen = shortKeys.length; i < tlen; i++)
   {
     shortTag = shortKeys[i];
 
-    hoot.print('<table>');
-    hoot.print('<caption>' + shortTag + '<caption>');
-    hoot.print('<tr>');
-    hoot.print('<th>Key</th><th>Value</th><th>Comment</th><th>Source</th>');
-    hoot.print('</tr>');
+    print('<table>');
+    print('<caption>' + shortTag + '<caption>');
+    print('<tr>');
+    print('<th>Key</th><th>Value</th><th>Comment</th><th>Source</th>');
+    print('</tr>');
 
     var extraKeys = Object.keys(tagList[shortTag]);
     extraKeys.sort();
@@ -361,18 +361,18 @@ function dumpHtmlTags(tagList)
       tag = tagList[shortTag][val]['tag'];
       value = tagList[shortTag][val]['value'];
 
-      hoot.print('<tr>');
-      hoot.print('<td>' + tag + '</td><td>' + value + '</td><td>' + desc + '</td><td>' + source + '</td>');
-      hoot.print('</tr>');
+      print('<tr>');
+      print('<td>' + tag + '</td><td>' + value + '</td><td>' + desc + '</td><td>' + source + '</td>');
+      print('</tr>');
     }
-    hoot.print('</table>');
-    hoot.print('<br>');
-    hoot.print('<br>');
+    print('</table>');
+    print('<br>');
+    print('<br>');
   }
 
   // End the HTML document
-  hoot.print('</body>');
-  hoot.print('</html>');
+  print('</body>');
+  print('</html>');
 
 } // End dumpHtmlTags
 
@@ -390,20 +390,20 @@ function dumpAsciidocTags(tagList)
   var shortKeys = Object.keys(tagList);
   shortKeys.sort();
 
-  hoot.print('Hootennanny OSM+ Tags');
-  hoot.print('=====================');
-  hoot.print('Generated: ' + Date());
-  hoot.print('');
+  print('Hootennanny OSM+ Tags');
+  print('=====================');
+  print('Generated: ' + Date());
+  print('');
 
   for (var i = 0, tlen = shortKeys.length; i < tlen; i++)
   {
     shortTag = shortKeys[i];
 
-    // hoot.print('.An ' + shortTag);
-    hoot.print('.' + shortTag);
-    hoot.print('[options="header"]');
-    hoot.print('|==========');
-    hoot.print('| Key | Value | Comment | Source');
+    // print('.An ' + shortTag);
+    print('.' + shortTag);
+    print('[options="header"]');
+    print('|==========');
+    print('| Key | Value | Comment | Source');
 
     var extraKeys = Object.keys(tagList[shortTag]);
     extraKeys.sort();
@@ -418,12 +418,12 @@ function dumpAsciidocTags(tagList)
       tag = tagList[shortTag][val]['tag'];
       value = tagList[shortTag][val]['value'];
 
-      hoot.print('| ' + tag + ' | ' + value + ' | ' + desc + ' | ' + source);
+      print('| ' + tag + ' | ' + value + ' | ' + desc + ' | ' + source);
     }
 
-    hoot.print('|==========');
-    hoot.print('');
-    hoot.print('');
+    print('|==========');
+    print('');
+    print('');
   }
 
 } // End dumpAsciidocTags
@@ -442,20 +442,20 @@ function dumpRedmineTags(tagList)
   var shortKeys = Object.keys(tagList);
   shortKeys.sort();
 
-  hoot.print('h1. Hootennanny OSM+ Tags');
-  hoot.print('');
-  hoot.print('Generated: ' + Date());
-  hoot.print('');
-  hoot.print('----');
-  hoot.print('');
+  print('h1. Hootennanny OSM+ Tags');
+  print('');
+  print('Generated: ' + Date());
+  print('');
+  print('----');
+  print('');
 
   for (var i = 0, tlen = shortKeys.length; i < tlen; i++)
   {
     shortTag = shortKeys[i];
 
-    hoot.print('h2. ' + shortTag);
-    hoot.print('');
-    hoot.print('|_.Key| _.Value|_.Comment|_.Source|');
+    print('h2. ' + shortTag);
+    print('');
+    print('|_.Key| _.Value|_.Comment|_.Source|');
 
     var extraKeys = Object.keys(tagList[shortTag]);
     extraKeys.sort();
@@ -470,12 +470,12 @@ function dumpRedmineTags(tagList)
       tag = tagList[shortTag][val]['tag'];
       value = tagList[shortTag][val]['value'];
 
-      hoot.print('| ' + tag + ' | ' + value + ' | ' + desc + ' | ' + source + ' |');
+      print('| ' + tag + ' | ' + value + ' | ' + desc + ' | ' + source + ' |');
     }
 
-    hoot.print('');
-    hoot.print('----');
-    hoot.print('');
+    print('');
+    print('----');
+    print('');
   }
 } // End dumpRedmineTags
 
@@ -483,8 +483,8 @@ function dumpRedmineTags(tagList)
 // Dump the tagList out as a Large Ugly JSON Blob.
 function dumpJsonTags(tagList)
 {
-  hoot.print('JSON format is not working yet');
-  hoot.print(tagList.toString());
+  print('JSON format is not working yet');
+  print(tagList.toString());
 } // End dumpJsonTags
 
 
@@ -500,7 +500,7 @@ function dumpCsvTags(tagList)
   var shortKeys = Object.keys(tagList);
   shortKeys.sort();
 
-  hoot.print('"Tag","Value","Tag_Description","Tag_Source"');
+  print('"Tag","Value","Tag_Description","Tag_Source"');
 
   for (var i = 0, tlen = shortKeys.length; i < tlen; i++)
   {
@@ -519,7 +519,7 @@ function dumpCsvTags(tagList)
       desc = tagList[shortTag][val]['desc'];
       source = tagList[shortTag][val]['src'].replace(/,/g,';');
 
-      hoot.print('"' + tag + '","' + value + '","' + desc + '","' + source + '"');
+      print('"' + tag + '","' + value + '","' + desc + '","' + source + '"');
     }
   }
 } // End dumpCsvTags

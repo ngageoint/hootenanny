@@ -52,9 +52,9 @@ tds70 = {
     tds70.attrLookup = translate.makeAttrLookup(tds70.rawSchema);
 
     // Debug:
-    // hoot.print("tds70.attrLookup");
+    // print("tds70.attrLookup");
     // translate.dumpLookup(tds70.attrLookup);
-    // hoot.print("##########");
+    // print("##########");
 
     // Decide if we are going to use TDS structure or 1 FCODE / File
     // if we DON't want the new structure, just return the tds70.rawSchema
@@ -198,9 +198,9 @@ tds70 = {
     tds70.thematicLookup = translate.makeThematicAttrLookup(newSchema);
 
     // Debug:
-    // hoot.print("thematicLookup");
+    // print("thematicLookup");
     // translate.dumpLookup(tds70.thematicLookup);
-    // hoot.print('##########');
+    // print('##########');
 
     // Add the ESRI Feature Dataset name to the schema
     //  newSchema = translate.addFdName(newSchema,'TDS');
@@ -225,9 +225,9 @@ tds70 = {
     newSchema = translate.addReviewFeature(newSchema);
 
     // Debug:
-    // hoot.print('New Schema:');
+    // print('New Schema:');
     // translate.dumpSchema(newSchema);
-    // hoot.print('##########');
+    // print('##########');
 
     return newSchema;
   }, // End getDbSchema
@@ -256,7 +256,7 @@ tds70 = {
           if (val in othList)
           {
             //Debug:
-            // hoot.print('Validate: Dropping OTH: ' + val + '  (' + othList[val] + ')');
+            // print('Validate: Dropping OTH: ' + val + '  (' + othList[val] + ')');
             delete othList[val];
           }
 
@@ -304,7 +304,7 @@ tds70 = {
     {
       attrs.OTH = translate.packOTH(othList);
       // Debug:
-      // hoot.print('New OTH: ' + attrs.OTH);
+      // print('New OTH: ' + attrs.OTH);
     }
 
     // No quick and easy way to do this unless we build yet another lookup table
@@ -314,7 +314,7 @@ tds70 = {
     {
       if (tds70.rawSchema[i].fcode == attrs.F_CODE && tds70.rawSchema[i].geom == geometryType)
       {
-        // hoot.print('Got Feature:' + tds70.rawSchema[i].name);
+        // print('Got Feature:' + tds70.rawSchema[i].name);
         feature = tds70.rawSchema[i];
         break;
       }
@@ -614,7 +614,7 @@ tds70 = {
       // Now see if we need to swap attr names
       if (col in tds70.rules.swapListIn)
       {
-        // hoot.print('Swapped: ' + tds70.rules.swapListIn[i]); // debug
+        // print('Swapped: ' + tds70.rules.swapListIn[i]); // debug
         attrs[tds70.rules.swapListIn[col]] = attrs[col];
         delete attrs[col];
         continue;
@@ -701,7 +701,7 @@ tds70 = {
         for (i in tTags)
         {
           // Debug
-          // hoot.print('Memo: Add: ' + i + ' = ' + tTags[i]);
+          // print('Memo: Add: ' + i + ' = ' + tTags[i]);
           if (tags[tTags[i]]) hoot.logWarn('Unpacking ZI006_MEM, overwriting ' + i + ' = ' + tags[i] + '  with ' + tTags[i]);
           tags[i] = tTags[i];
         }
@@ -815,7 +815,7 @@ tds70 = {
     }
     else
     {
-      if (tds70.configIn.OgrAddUuid == 'true') tags.uuid = hoot.UuidHelper.createUuid();
+      if (tds70.configIn.OgrAddUuid == 'true') tags.uuid = createUuid();
     }
 
     if (tds70.osmPostRules == undefined)
@@ -1208,7 +1208,7 @@ tds70 = {
     if (geometryType == 'Area' && ! translate.isOsmArea(tags))
     {
       // Debug
-      // hoot.print('Adding area=yes');
+      // print('Adding area=yes');
       tags.area = 'yes';
     }
 
@@ -1264,7 +1264,7 @@ tds70 = {
         tags[vList[0].replace('"','')] = vList[1].replace('"','');
 
         // Debug
-        // hoot.print('val: ' + tList[val] + '  vList[0] = ' + vList[0] + '  vList[1] = ' + vList[1]);
+        // print('val: ' + tList[val] + '  vList[0] = ' + vList[0] + '  vList[1] = ' + vList[1]);
       }
     }
 
@@ -1506,7 +1506,7 @@ tds70 = {
       {
         case 'minaret':
           // Debug
-          // hoot.print('Got Minaret');
+          // print('Got Minaret');
           delete tags.man_made;
           break;
 
@@ -1592,7 +1592,7 @@ tds70 = {
         if (!(tags.facility = 'yes'))
         {
           // Debug
-          // hoot.print('Making a building: ' + tags.facility);
+          // print('Making a building: ' + tags.facility);
           attrs.F_CODE = 'AL013'; // Building
         }
       }
@@ -1602,7 +1602,7 @@ tds70 = {
       {
         attrs.FFN = facilityList[tags.amenity];
         // Debug
-        // hoot.print('PreDropped: amenity = ' + tags.amenity);
+        // print('PreDropped: amenity = ' + tags.amenity);
         delete tags.amenity;
       }
     }
@@ -2129,7 +2129,7 @@ tds70 = {
     } // End if highway || railway
 
     // Debug
-    // for (var i in tags) hoot.print('End PreProc Tags: ' + i + ': :' + tags[i] + ':');
+    // for (var i in tags) print('End PreProc Tags: ' + i + ': :' + tags[i] + ':');
     // Tag changed
 
     if (tags.vertical_obstruction_identifier)
@@ -2275,7 +2275,7 @@ tds70 = {
     }
     else
     {
-      if (tds70.configOut.OgrAddUuid == 'true') attrs.UFI = hoot.UuidHelper.createUuid().replace('{','').replace('}','');
+      if (tds70.configOut.OgrAddUuid == 'true') attrs.UFI = createUuid().replace('{','').replace('}','');
     }
 
     // Add Weather Restrictions to transportation features
@@ -2621,14 +2621,14 @@ tds70 = {
       tags = translate.parseO2S(attrs);
 
       // Add some metadata
-      if (!tags.uuid && tds70.configIn.OgrAddUuid == 'true') tags.uuid = hoot.UuidHelper.createUuid();
+      if (!tags.uuid && tds70.configIn.OgrAddUuid == 'true') tags.uuid = createUuid();
       if (!tags.source) tags.source = 'tdsv70:' + layerName.toLowerCase();
 
       // Debug:
       if (tds70.configIn.OgrDebugDumptags == 'true')
       {
         translate.debugOutput(tags,layerName,geometryType,'','Out tags: ');
-        hoot.print('');
+        print('');
       }
 
       return tags;
@@ -2682,13 +2682,13 @@ tds70 = {
     // Use the FCODE to add some tags
     if (attrs.F_CODE)
     {
-      // hoot.print('F_CODE: ' + attrs.F_CODE);
+      // print('F_CODE: ' + attrs.F_CODE);
       var ftag = tds70.fcodeLookup['F_CODE'][attrs.F_CODE];
       if (ftag)
       {
         tags[ftag[0]] = ftag[1];
         // Debug: Dump out the tags from the FCODE
-        // hoot.print('FCODE: ' + attrs.F_CODE + ' tag=' + ftag[0] + '  value=' + ftag[1]);
+        // print('FCODE: ' + attrs.F_CODE + ' tag=' + ftag[0] + '  value=' + ftag[1]);
       }
       else
       {
@@ -2729,7 +2729,7 @@ tds70 = {
     {
       translate.debugOutput(notUsedAttrs,layerName,geometryType,'','Not used: ');
       translate.debugOutput(tags,layerName,geometryType,'','Out tags: ');
-      hoot.print('');
+      print('');
     }
 
     // Override tag values if appropriate
@@ -2819,7 +2819,7 @@ tds70 = {
       //             {
       //                 for (var v1 in tds70.fuzzy[k1])
       //                 {
-      //                     hoot.print(JSON.stringify([k1, v1, tds70.fuzzy[k1][v1][0], tds70.fuzzy[k1][v1][1], tds70.fuzzy[k1][v1][2]]));
+      //                     print(JSON.stringify([k1, v1, tds70.fuzzy[k1][v1][0], tds70.fuzzy[k1][v1][1], tds70.fuzzy[k1][v1][2]]));
       //                 }
       //             }
     } // End tds70.lookup Undefined
@@ -2985,7 +2985,7 @@ tds70 = {
         {
           // If the feature is not valid, just drop it
           // Debug
-          // hoot.print('## Skipping: ' + gFcode);
+          // print('## Skipping: ' + gFcode);
           returnData.splice(i,1);
           fLen = returnData.length;
         }
@@ -3024,10 +3024,10 @@ tds70 = {
     {
       for (var i = 0, fLen = returnData.length; i < fLen; i++)
       {
-        hoot.print('TableName ' + i + ': ' + returnData[i]['tableName'] + '  FCode: ' + returnData[i]['attrs']['F_CODE'] + '  Geom: ' + geometryType);
+        print('TableName ' + i + ': ' + returnData[i]['tableName'] + '  FCode: ' + returnData[i]['attrs']['F_CODE'] + '  Geom: ' + geometryType);
         translate.debugOutput(returnData[i]['attrs'],'',geometryType,elementType,'Out attrs: ');
       }
-      hoot.print('');
+      print('');
     }
 
     return returnData;

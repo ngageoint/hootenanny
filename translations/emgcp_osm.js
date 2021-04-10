@@ -76,7 +76,7 @@ emgcp_osm = {
             if (attrs[col] == undefined)
             {
                 // Debug
-                // hoot.print('## ' + attrs[col] + ' is undefined');
+                // print('## ' + attrs[col] + ' is undefined');
                 delete attrs[col];
             }
         }
@@ -85,7 +85,7 @@ emgcp_osm = {
 //         if (config.getOgrDebugDumptags() == 'true')
 //         {
 //             var kList = Object.keys(attrs).sort()
-//             for (var i = 0, fLen = kList.length; i < fLen; i++) hoot.print('In Attrs: ' + kList[i] + ': :' + attrs[kList[i]] + ':');
+//             for (var i = 0, fLen = kList.length; i < fLen; i++) print('In Attrs: ' + kList[i] + ': :' + attrs[kList[i]] + ':');
 //         }
 
         // Go through the attrs and turn them back into TDS
@@ -126,7 +126,7 @@ emgcp_osm = {
             {
                 nAttrs[emgcp_osm_rules.singleValues[val]] = attrs[val];
                 // Debug
-                // hoot.print('Single: ' + emgcp_osm_rules.singleValues[val] + ' = ' + attrs[val])
+                // print('Single: ' + emgcp_osm_rules.singleValues[val] + ' = ' + attrs[val])
 
                 // Cleanup used attrs
                 delete attrs[val];
@@ -183,8 +183,8 @@ emgcp_osm = {
 //         if (config.getOgrDebugDumptags() == 'true')
 //         {
 //             var kList = Object.keys(tags).sort()
-//             for (var j = 0, kLen = kList.length; j < kLen; j++) hoot.print('eOut Tags:' + kList[j] + ': :' + tags[kList[j]] + ':');
-//             hoot.print('');
+//             for (var j = 0, kLen = kList.length; j < kLen; j++) print('eOut Tags:' + kList[j] + ': :' + tags[kList[j]] + ':');
+//             print('');
 //         }
 
         return {attrs: tags, tableName: ''};

@@ -35,7 +35,7 @@ hoot.require('example');
 // translateToOsm calls.
 function initialize()
 {
-    hoot.print("Initialize works!");
+    print("Initialize works!");
     // log("TestAdd: " + testAdd(2,5));
     // print("TimeNow = " + timeNow());
     // print("HootConfig = " + getHootConfig("smurf"));
@@ -62,6 +62,6 @@ function initialize()
     var t1 = 'papa';
     if (translate !== undefined)
     {
-        hoot.print('appendValue: ' + translate.appendValue(t1,'smurf',';'));
+        print('appendValue: ' + translate.appendValue(t1,'smurf',';'));
     }
 }

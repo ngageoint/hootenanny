@@ -52,13 +52,13 @@ function translateToOsm(attrs, layerName, geometryType)
   tags.source = 'worldportindex';
 
   // Add a UUID
-  tags.uuid = hoot.UuidHelper.createUuid();
+  tags.uuid = createUuid();
 
   // Debug:
   if (config.getOgrDebugDumptags() == 'true')
   {
     translate.debugOutput(tags,layerName,geometryType,'','Out tags: ');
-    hoot.print('');
+    print('');
   }
   return tags;
 } // End of Translate Attributes

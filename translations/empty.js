@@ -25,4 +25,4 @@
  * @copyright Copyright (C) 2013 Maxar (http://www.maxar.com/)
  */
 
-hoot.debug("Hello world.");
+debug("Hello world.");
