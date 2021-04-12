@@ -202,6 +202,35 @@ function calculateSearchRadiusUsingRubberSheeting(map, rubberSheetRef, rubberShe
 
 /**
  * Wrapper for createUuid for backward compatibility.
+<<<<<<< HEAD
+ */
+function createUuid()
+{
+  return hoot.UuidHelper.createUuid();
+}
+
+/**
+ * Wrapper for print for backward compatibility.
+ */
+function print(e)
+{
+  hoot.print(e);
+}
+
+/**
+ * Log a string using Hootenanny's logging mechanism. By default this will
+ * print the script location and the JSON version of the argument.
+ *
+ * @param s String to log.
+ */
+function log(s)
+{
+  hoot.log(s);
+}
+
+/**
+ * Log a debug string using Hootenanny's logging mechanism. By default this will
+=======
  */
 function createUuid()
 {
