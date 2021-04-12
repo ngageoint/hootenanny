@@ -214,7 +214,7 @@ public:
 
     if (c != nullptr && ecc != nullptr)
     {
-      // At the time of this writing this isn't possible. Give a good hard think about how the code
+      // At the time of this writing, this isn't possible. Give a good hard think about how the code
       // should respond before you change it.
       throw IllegalArgumentException(
         "Ambiguous consumption of both a function and an ElementCriterionConsumer.");

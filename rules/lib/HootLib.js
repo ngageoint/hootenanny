@@ -226,3 +226,14 @@ function log(s)
 {
   hoot.log(s);
 }
+
+/**
+ * Log a debug string using Hootenanny's logging mechanism. By default this will
+ * print the script location and the JSON version of the argument.
+ *
+ * @param s String to log.
+ */
+function debug(s)
+{
+  hoot.debug(s);
+}

@@ -124,13 +124,31 @@ void OsmMapJs::clone(const FunctionCallbackInfo<Value>& args)
 
   OsmMapJs* from = ObjectWrap::Unwrap<OsmMapJs>(args.This());
 
-  OsmMapPtr newMap(new OsmMap(from->getMap()));
+  // The const map always takes precedence over the non-const map. If we have a const map populated
+  // on our js object, then the map is treated as const.
+  ConstOsmMapPtr newConstMap;
+  OsmMapPtr newMap;
+  if (from->getConstMap())
+  {
+    newConstMap.reset(new OsmMap(from->getConstMap()));
+  }
+  else
+  {
+    newMap.reset(new OsmMap(from->getMap()));
+  }
 
   const unsigned argc = 1;
   Handle<Value> argv[argc] = { args[0] };
   Local<Object> result = ToLocal(&_constructor)->NewInstance(argc, argv);
   OsmMapJs* obj = ObjectWrap::Unwrap<OsmMapJs>(result);
-  obj->_map = newMap;
+  if (newConstMap)
+  {
+    obj->_constMap = newConstMap;
+  }
+  else
+  {
+    obj->_map = newMap;
+  }
 
   args.GetReturnValue().Set(result);
 }
