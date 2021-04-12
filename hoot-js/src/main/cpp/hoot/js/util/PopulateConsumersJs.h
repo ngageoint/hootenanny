@@ -41,9 +41,7 @@
 #include <hoot/js/algorithms/string/StringDistanceJs.h>
 #include <hoot/js/algorithms/aggregator/ValueAggregatorJs.h>
 #include <hoot/js/criterion/ElementCriterionJs.h>
-#include <hoot/js/criterion/JsFunctionCriterion.h>
 #include <hoot/js/elements/ElementJs.h>
-#include <hoot/js/util/JsFunctionConsumer.h>
 #include <hoot/js/util/StringUtilsJs.h>
 #include <hoot/js/visitors/ElementVisitorJs.h>
 #include <hoot/core/visitors/MultipleCriterionConsumerVisitor.h>
@@ -73,11 +71,15 @@ public:
   template <typename T>
   static void populateConsumers(T* consumer, const v8::Local<v8::Value>& v)
   {
-    if (v->IsFunction())
-    {
-      populateFunctionConsumer<T>(consumer, v);
-    }
-    else if (v->IsObject())
+    // We used to allow populating functions here, in addition to objects. The functions were used
+    // by JsFunctionCriterion. There was nowhere in unit or regression tests that
+    // JsFunctionCriterion was being used, so it was removed along with the function handling here.
+    // It can be added back in if determined its needed in the future. JsFunctionVisitor, however,
+    // is an active FunctionConsumer and is populated by OsmMapJs::visit.
+
+    assert(!v->IsFunction());
+
+    if (v->IsObject())
     {
       v8::Local<v8::Object> obj = v->ToObject();
 
@@ -194,44 +196,6 @@ public:
     else
     {
       c->addElement(obj->getElement());
-    }
-  }
-
-  template <typename T>
-  static void populateFunctionConsumer(T* consumer, const v8::Local<v8::Value>& v)
-  {
-    if (v.IsEmpty() || v->IsFunction() == false)
-    {
-      throw IllegalArgumentException("Expected the argument to be a valid function.");
-    }
-
-    LOG_TRACE("Populating function consumer...");
-
-    v8::Isolate* current = v8::Isolate::GetCurrent();
-    v8::Local<v8::Function> func(v8::Local<v8::Function>::Cast(v));
-    JsFunctionConsumer* c = dynamic_cast<JsFunctionConsumer*>(consumer);
-    ElementCriterionConsumer* ecc = dynamic_cast<ElementCriterionConsumer*>(consumer);
-
-    if (c != nullptr && ecc != nullptr)
-    {
-      // At the time of this writing this isn't possible. Give a good hard think about how the code
-      // should respond before you change it.
-      throw IllegalArgumentException(
-        "Ambiguous consumption of both a function and an ElementCriterionConsumer.");
-    }
-    else if (c != nullptr)
-    {
-      c->addFunction(current, func);
-    }
-    else if (ecc != nullptr)
-    {
-      std::shared_ptr<JsFunctionCriterion> ecp(new JsFunctionCriterion());
-      ecp->addFunction(current, func);
-      ecc->addCriterion(ecp);
-    }
-    else
-    {
-      throw IllegalArgumentException("Object does not accept a function as an argument.");
     }
   }
 
