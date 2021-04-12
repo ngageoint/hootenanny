@@ -35,7 +35,6 @@
 #include <hoot/js/util/HootExceptionJs.h>
 #include <hoot/js/util/PopulateConsumersJs.h>
 #include <hoot/js/io/StreamUtilsJs.h>
-#include <hoot/js/visitors/JsFunctionVisitor.h>
 
 using namespace std;
 using namespace v8;
