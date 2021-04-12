@@ -12,6 +12,7 @@ if [ ! -d gcov ]; then
 else
     rm -f gcov/*
 fi
+
 # hoot-core coverage
 pushd hoot-core
 gcov -o $HOOT_HOME/hoot-core/tmp/debug/ $HOOT_HOME/hoot-core/tmp/debug/*.gcda
@@ -19,6 +20,7 @@ gcov -o $HOOT_HOME/hoot-core/tmp/debug/ $HOOT_HOME/hoot-core/tmp/debug/*.gcda
 sed -i "s|0:Source:src|0:Source:$HOOT_HOME/hoot-core/src|g" *.gcov
 mv *.gcov $HOOT_HOME/gcov
 popd
+
 # tbs coverage
 pushd tbs
 gcov -o $HOOT_HOME/tbs/tmp/debug/ $HOOT_HOME/tbs/tmp/debug/*.gcda
@@ -26,13 +28,31 @@ gcov -o $HOOT_HOME/tbs/tmp/debug/ $HOOT_HOME/tbs/tmp/debug/*.gcda
 sed -i "s|0:Source:src|0:Source:$HOOT_HOME/tbs/src|g" *.gcov
 mv *.gcov $HOOT_HOME/gcov
 popd
+
 # tgs coverage
 pushd tgs
-gcov -o $HOOT_HOME/tgs/tmp/obj/debug/ $HOOT_HOME/tgs/tmp/obj/debug/*.gcda
+gcov -o $HOOT_HOME/tgs/tmp/debug/ $HOOT_HOME/tgs/tmp/debug/*.gcda
 # fix path
 sed -i "s|0:Source:src|0:Source:$HOOT_HOME/tgs/src|g" *.gcov
 mv *.gcov $HOOT_HOME/gcov
 popd
+
+# hoot-cmd coverage
+pushd tgs
+gcov -o $HOOT_HOME/hoot-cmd/tmp/debug/ $HOOT_HOME/hoot-cmd/tmp/debug/*.gcda
+# fix path
+sed -i "s|0:Source:src|0:Source:$HOOT_HOME/hoot-cmd/src|g" *.gcov
+mv *.gcov $HOOT_HOME/gcov
+popd
+
+# hoot-js coverage
+pushd tgs
+gcov -o $HOOT_HOME/hoot-js/tmp/debug/ $HOOT_HOME/hoot-js/tmp/debug/*.gcda
+# fix path
+sed -i "s|0:Source:src|0:Source:$HOOT_HOME/hoot-js/src|g" *.gcov
+mv *.gcov $HOOT_HOME/gcov
+popd
+
 # hoot-rnd coverage
 pushd hoot-rnd
 gcov -o $HOOT_HOME/hoot-rnd/tmp/debug/ $HOOT_HOME/hoot-rnd/tmp/debug/*.gcda
@@ -40,6 +60,15 @@ gcov -o $HOOT_HOME/hoot-rnd/tmp/debug/ $HOOT_HOME/hoot-rnd/tmp/debug/*.gcda
 sed -i "s|0:Source:src|0:Source:$HOOT_HOME/hoot-rnd/src|g" *.gcov
 mv *.gcov $HOOT_HOME/gcov
 popd
+
+# hoot-josm coverage
+pushd hoot-josm
+gcov -o $HOOT_HOME/hoot-josm/tmp/debug/ $HOOT_HOME/hoot-josm/tmp/debug/*.gcda
+# fix path
+sed -i "s|0:Source:src|0:Source:$HOOT_HOME/hoot-josm/src|g" *.gcov
+mv *.gcov $HOOT_HOME/gcov
+popd
+
 # fix final paths
 sed -i "s|0:Source:../|0:Source:|g" gcov/*.gcov
 sed -i '/0:Source:\//!s/0:Source:/0:Source:HOOT_HOME\//g' gcov/*.gcov
