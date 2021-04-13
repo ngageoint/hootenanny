@@ -121,13 +121,14 @@ void ScoreMatchesDiff::calculateDiff(const QString& input1, const QString& input
   LOG_VARD(numManualMatches1);
   LOG_VARD(numManualMatches2);
 
-  if (numManualMatches1 != numManualMatches2)
-  {
-    throw HootException(
-      QString("The two input datasets have a different number of manual matches (") +
-      QString::number(numManualMatches1) + " and " + QString::number(numManualMatches2) +
-      QString(") and, therefore, must not been derived from the same input data."));
-  }
+  // TODO: This ends up being true a lot, so maybe not a good check?
+//  if (numManualMatches1 != numManualMatches2)
+//  {
+//    throw HootException(
+//      QString("The two input datasets have a different number of manual matches (") +
+//      QString::number(numManualMatches1) + " and " + QString::number(numManualMatches2) +
+//      QString(") and, therefore, must not been derived from the same input data."));
+//  }
   _numManualMatches = numManualMatches1;
 
   // get all expected/actual match types
@@ -294,13 +295,17 @@ QMap<QString, QSet<ElementId>> ScoreMatchesDiff::_getMatchScoringDiff(
     const ElementId id = *itr;
     if (!expectedTagMappings.contains(id))
     {
-      throw HootException("Can't find ID: " + id.toString() + " for expected.");
+      // TODO: This ends up happening a lot, so maybe not a good reason to throw an error?
+      //throw HootException("Can't find ID: " + id.toString() + " for expected.");
+      continue;
     }
     QString expectedMatchTypeStr = expectedTagMappings[id];
     MatchType expectedMatchType = MatchType(expectedMatchTypeStr);
     if (!actualTagMappings.contains(id))
     {
-      throw HootException("Can't find ID: " + id.toString() + " for actual.");
+      // See note above.
+      //throw HootException("Can't find ID: " + id.toString() + " for actual.");
+      continue;
     }
     QString actualMatchTypeStr = actualTagMappings[id];
     MatchType actualMatchType = MatchType(actualMatchTypeStr);
@@ -415,7 +420,7 @@ void ScoreMatchesDiff::_writeConflateStatusDetail(QTextStream& out)
 {
   LOG_DEBUG("Printing conflate status detail...");
 
-  out << "\nMatch Type Changes\n";
+  out << "\nMatch Type Changes\n\n";
   if (_newlyWrongMatchSwitches.size() + _newlyCorrectMatchSwitches.size() == 0)
   {
     out << "none";
@@ -484,7 +489,7 @@ void ScoreMatchesDiff::_writeConflateStatusDetail(QTextStream& out)
     }
   }
 
-  out << "\nRemoved Elements:\n\n";
+  out << "\n\nRemoved Elements:\n\n";
   if (_elementIdsRemoved.empty())
   {
      out << "none";
