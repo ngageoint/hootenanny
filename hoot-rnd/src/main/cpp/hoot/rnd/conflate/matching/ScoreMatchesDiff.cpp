@@ -410,6 +410,7 @@ void ScoreMatchesDiff::_writeConflateStatusSummary(QTextStream& out)
     summary += QString::number(abs(_reviewDifferential)) + " reviews were lost.\n";
   }
 
+  summary = summary.trimmed();
   std::cout << summary << std::endl;
   std::cout << "Detailed information available in: " << _output << "." << std::endl;
 
