@@ -227,7 +227,7 @@ private:
   void _removeRefData();
   bool _satisfiesElementRemovalCondition(
     const ConstElementPtr& element, const Status& status, const ConstMatchPtr& match) const;
-  void _removeMatches(const Status& status);
+  //void _removeMatches(const Status& status);
   void _removeMatchElements(const Status& status, const bool forceComplete = false);
   void _removeMatchElementPairCompletely(
     const ConstMatchPtr& match, const std::pair<ElementId, ElementId>& elementPair,

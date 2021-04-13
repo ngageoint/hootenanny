@@ -27,13 +27,14 @@
 #include "LinearKeepRef1Merger.h"
 
 // hoot
+#include <hoot/core/algorithms/splitter/WaySublineRemover.h>
 #include <hoot/core/conflate/highway/HighwayMatch.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/ops/RecursiveElementRemover.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/elements/MapProjector.h>
-#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/algorithms/splitter/WaySublineRemover.h>
 
 namespace hoot
 {
@@ -109,20 +110,16 @@ bool LinearKeepRef1Merger::_mergePair(
 {
   ElementPtr e1 = map->getElement(eid1);
   ElementPtr e2 = map->getElement(eid2);
-
   if (!e1 || !e2)
   {
     return false;
   }
-
   WayPtr way1 = std::dynamic_pointer_cast<Way>(e1);
   WayPtr way2 = std::dynamic_pointer_cast<Way>(e2);
-
   if (!way1 || !way2)
   {
     return false;
   }
-
   LOG_VART(eid1);
   LOG_VART(eid2);
 
@@ -133,16 +130,17 @@ bool LinearKeepRef1Merger::_mergePair(
   }
   catch (const NeedsReviewException& e)
   {
+    // TODO: Do something here?
     LOG_VART(e.getWhat());
   }
-
+  LOG_VART(match.isValid());
   if (!match.isValid())
   {
     return false;
   }
 
   // TODO: explain
-  // Remove only the portion of the way that matched.
+  // Get the portion of the way that matched.
   WaySublineMatchString::MatchCollection matches = match.getMatches();
   LOG_VART(matches.size());
   WaySubline subline1 = matches.at(0).getSubline1();
@@ -150,20 +148,34 @@ bool LinearKeepRef1Merger::_mergePair(
   LOG_VART(subline1);
   LOG_VART(subline1.getWay() == way1);
   LOG_VART(subline1.getWay()->getElementId() == way1->getElementId());
-  WaySubline subline2 = matches.at(0).getSubline2();
-  LOG_VART(subline2.getWay()->getElementId());
-  LOG_VART(subline2);
-  LOG_VART(subline2.getWay() == way2);
-  LOG_VART(subline2.getWay()->getElementId() == way2->getElementId());
 
-  std::vector<ElementId> newWayIds1;
+  std::vector<ElementId> newWayIds;
   if (subline1.getWay()->getElementId() == way1->getElementId())
   {
-    LOG_TRACE("Removing subline 1 from " << way1->getElementId() << "...");
+
+
     WayLocation start(subline1.getStart());
     WayLocation end(subline1.getEnd());
-    newWayIds1 = WaySublineRemover::remove(way1, start, end, map);
-    LOG_VART(newWayIds1);
+    if (start.isExtreme() || end.isExtreme())
+    {
+      LOG_TRACE(
+        "Subline matches covers entire ref way; keeping entire ref way: " << way1->getElementId());
+    }
+    else
+    {
+      // Remove the portion of the way that matched.
+
+      LOG_TRACE("Removing subline 1 from " << way1->getElementId() << "...");
+
+      newWayIds = WaySublineRemover::remove(way1, start, end, map);
+      LOG_VART(newWayIds);
+      for (std::vector<ElementId>::const_iterator newWayIdsItr = newWayIds.begin();
+           newWayIdsItr != newWayIds.end(); ++newWayIdsItr)
+      {
+        replaced.push_back(
+          std::pair<ElementId, ElementId>(way1->getElementId(), *newWayIdsItr));
+      }
+    }
     if (WRITE_DETAILED_DEBUG_MAPS)
     {
       OsmMapWriterFactory::writeDebugMap(
@@ -171,35 +183,9 @@ bool LinearKeepRef1Merger::_mergePair(
     }
   }
 
-  std::vector<ElementId> newWayIds2;
-  if (subline2.getWay()->getElementId() == way2->getElementId())
-  {
-    LOG_TRACE("Removing subline 2 from " << way2->getElementId() << "...");
-    WayLocation start(subline2.getStart());
-    WayLocation end(subline2.getEnd());
-    newWayIds2 = WaySublineRemover::remove(way2, start, end, map);
-    LOG_VART(newWayIds2);
-    if (WRITE_DETAILED_DEBUG_MAPS)
-    {
-      OsmMapWriterFactory::writeDebugMap(
-        map, "after-subline-2-removal-" + way2->getElementId().toString());
-    }
-  }
+  RecursiveElementRemover(way2->getElementId()).apply(map);
 
-  for (std::vector<ElementId>::const_iterator newWayIdsItr = newWayIds1.begin();
-       newWayIdsItr != newWayIds1.end(); ++newWayIdsItr)
-  {
-    replaced.push_back(
-      std::pair<ElementId, ElementId>(way1->getElementId(), *newWayIdsItr));
-  }
-  for (std::vector<ElementId>::const_iterator newWayIdsItr = newWayIds2.begin();
-       newWayIdsItr != newWayIds2.end(); ++newWayIdsItr)
-  {
-    replaced.push_back(
-      std::pair<ElementId, ElementId>(way2->getElementId(), *newWayIdsItr));
-  }
   LOG_VART(replaced);
-
   return false;
 }
 
