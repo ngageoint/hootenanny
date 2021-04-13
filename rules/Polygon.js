@@ -37,16 +37,12 @@ exports.isMatchCandidate = function(map, e)
 {
   // If the poly is generic but part of a building relation we want Building Conflation to handle 
   // it instead.
-  if (isMemberOfRelationInCategory(map, e.getElementId(), "building"))
+  if (hoot.RelationMemberUtils.isMemberOfRelationInCategory(map, e.getElementId(), "building"))
   {
     return false;
   }
 
-  hoot.trace("e: " + e.getId());
-  hoot.trace("isPolygon: " + isPolygon(map, e));
-  hoot.trace("isSpecificallyConflatable: " + isSpecificallyConflatable(map, e, exports.geometryType));
-
-  return isPolygon(map, e) && !isSpecificallyConflatable(map, e, exports.geometryType);
+  return hoot.OsmSchema.isPolygon(map, e) && !hoot.OsmSchema.isSpecificallyConflatable(map, e, exports.geometryType);
 };
 
 /**
@@ -93,7 +89,7 @@ exports.matchScore = function(map, e1, e2)
 
   // If both features have types and they aren't just generic types, let's do a detailed type comparison and 
   // look for an explicit type mismatch. Otherwise, move on to the geometry comparison.
-  var typeScorePassesThreshold = !explicitTypeMismatch(e1, e2, exports.typeThreshold);
+  var typeScorePassesThreshold = !hoot.OsmSchema.explicitTypeMismatch(e1, e2, exports.typeThreshold);
   hoot.trace("typeScorePassesThreshold: " + typeScorePassesThreshold);
   if (!typeScorePassesThreshold)
   {

@@ -75,18 +75,6 @@ void LinearSnapMergerJs::Init(Handle<Object> target)
   target->Set(String::NewFromUtf8(current, "LinearSnapMerger"), ToLocal(&_constructor));
 }
 
-Handle<Object> LinearSnapMergerJs::New(const LinearSnapMergerPtr& ptr)
-{
-  Isolate* current = v8::Isolate::GetCurrent();
-  EscapableHandleScope scope(current);
-
-  Handle<Object> result = ToLocal(&_constructor)->NewInstance();
-  LinearSnapMergerJs* from = ObjectWrap::Unwrap<LinearSnapMergerJs>(result);
-  from->_ptr = ptr;
-
-  return scope.Escape(result);
-}
-
 void LinearSnapMergerJs::New(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();

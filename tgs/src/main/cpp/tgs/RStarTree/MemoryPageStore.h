@@ -44,6 +44,7 @@ namespace Tgs
   class TGS_EXPORT MemoryPageStore : public PageStore
   {
   public:
+
     MemoryPageStore(int pageSize);
 
     ~MemoryPageStore() = default;

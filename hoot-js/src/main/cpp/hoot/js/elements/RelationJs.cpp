@@ -58,8 +58,6 @@ void RelationJs::Init(Handle<Object> target)
   tpl->InstanceTemplate()->SetInternalFieldCount(1);
   // Prototype
   ElementJs::_addBaseFunctions(tpl);
-  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "replaceElement"),
-      FunctionTemplate::New(current, replaceElement));
   tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getType"),
       FunctionTemplate::New(current, getType));
 
@@ -101,28 +99,6 @@ void RelationJs::New(const FunctionCallbackInfo<Value>& args)
   obj->Wrap(args.This());
 
   args.GetReturnValue().Set(args.This());
-}
-
-void RelationJs::replaceElement(const FunctionCallbackInfo<Value>& args)
-{
-  Isolate* current = args.GetIsolate();
-  HandleScope scope(current);
-
-  try
-  {
-    RelationJs* obj = ObjectWrap::Unwrap<RelationJs>(args.This());
-
-    ConstElementPtr e1 = toCpp<ConstElementPtr>(args[0]->ToObject());
-    ConstElementPtr e2 = toCpp<ConstElementPtr>(args[1]->ToObject());
-
-    obj->getRelation()->replaceElement(e1, e2);
-
-    args.GetReturnValue().SetUndefined();
-  }
-  catch (const HootException& e)
-  {
-    args.GetReturnValue().Set(current->ThrowException(HootExceptionJs::create(e)));
-  }
 }
 
 void RelationJs::getType(const FunctionCallbackInfo<Value>& args)

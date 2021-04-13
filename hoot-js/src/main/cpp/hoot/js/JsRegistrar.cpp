@@ -58,10 +58,7 @@ void JsRegistrar::Init(Handle<Object> exports)
 void JsRegistrar::initAll(Handle<Object> exports)
 {
   // Got this from the NodeJS docs. Seems to be a bit simpler than what we were doing.
-  NODE_SET_METHOD(exports,"hello",Method);
-//  Isolate* current = exports->GetIsolate();
-//  exports->Set(String::NewFromUtf8("hello"),
-//      FunctionTemplate::New(Method)->GetFunction());
+  NODE_SET_METHOD(exports, "hello", Method);
 
   for (size_t i = 0; i < _initializers.size(); i++)
   {

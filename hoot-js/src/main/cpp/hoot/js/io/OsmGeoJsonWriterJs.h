@@ -44,8 +44,6 @@ public:
 private:
 
   OsmGeoJsonWriterJs() = default;
-
-  static void toString(const v8::FunctionCallbackInfo<v8::Value>& args);
 };
 
 }

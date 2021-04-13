@@ -22,36 +22,48 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
  */
-#include "MergerFactoryJs.h"
+#include "MapProjectorJs.h"
 
 // hoot
-#include <hoot/core/conflate/merging/MergerFactory.h>
+#include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/util/Factory.h>
+
 #include <hoot/js/JsRegistrar.h>
+#include <hoot/js/elements/ElementJs.h>
+#include <hoot/js/elements/OsmMapJs.h>
+#include <hoot/js/util/HootExceptionJs.h>
+#include <hoot/js/io/DataConvertJs.h>
 
 using namespace v8;
 
 namespace hoot
 {
 
-HOOT_JS_REGISTER(MergerFactoryJs)
+HOOT_JS_REGISTER(MapProjectorJs)
 
-void MergerFactoryJs::Init(Handle<Object> exports)
+void MapProjectorJs::Init(Handle<Object> exports)
 {
   Isolate* current = exports->GetIsolate();
   HandleScope scope(current);
-  Handle<Object> schema = Object::New(current);
-  exports->Set(String::NewFromUtf8(current, "MergerFactory"), schema);
-  schema->Set(String::NewFromUtf8(current, "getAllAvailableCreators"),
-    FunctionTemplate::New(current, getAllAvailableCreators)->GetFunction());
+  Handle<Object> obj = Object::New(current);
+  exports->Set(String::NewFromUtf8(current, "MapProjector"), obj);
+
+  obj->Set(String::NewFromUtf8(current, "projectToPlanar"),
+           FunctionTemplate::New(current, projectToPlanar)->GetFunction());
 }
 
-void MergerFactoryJs::getAllAvailableCreators(const FunctionCallbackInfo<Value>& args)
+void MapProjectorJs::projectToPlanar(const FunctionCallbackInfo<Value>& args)
 {
-  HandleScope scope(args.GetIsolate());
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
 
-  args.GetReturnValue().Set(toV8(MergerFactory::getInstance().getAllAvailableCreators()));
+  OsmMapPtr map = toCpp<OsmMapPtr>(args[0]);
+
+  MapProjector::projectToPlanar(map);
+
+  args.GetReturnValue().SetUndefined();
 }
 
 }

@@ -72,12 +72,6 @@ int JavaScriptSchemaTranslator::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(ScriptSchemaTranslator, JavaScriptSchemaTranslator)
 
-// Return the current time
-void jsGetTimeNow(const FunctionCallbackInfo<Value>& args)
-{
-  args.GetReturnValue().Set(toV8(Tgs::Time::getTime()));
-}
-
 JavaScriptSchemaTranslator::JavaScriptSchemaTranslator()
 {
   setConfiguration(conf());
@@ -214,24 +208,6 @@ void JavaScriptSchemaTranslator::_finalize()
   _initialized = false;
 }
 
-int JavaScriptSchemaTranslator::getLogCount(const QString& log)
-{
-  int result;
-
-  if (_logs.contains(log) == false)
-  {
-    _logs[log] = 1;
-    result = 1;
-  }
-  else
-  {
-    result = _logs[log] + 1;
-    _logs[log] = result;
-  }
-
-  return result;
-}
-
 void JavaScriptSchemaTranslator::_init()
 {
   //This can be a costly operation, hence putting it at INFO for runtime awareness purposes.
@@ -261,11 +237,6 @@ void JavaScriptSchemaTranslator::_init()
 
   // Less typing
   Handle<Object> tObj = _gContext->getContext(current)->Global();
-
-  // Set up a small function
-  tObj->Set(
-    String::NewFromUtf8(current, "timeNow"),
-    FunctionTemplate::New(current, jsGetTimeNow)->GetFunction());
 
   // Run Initialize, if it exists
   if (tObj->Has(String::NewFromUtf8(current, "initialize")))
@@ -315,15 +286,6 @@ QString JavaScriptSchemaTranslator::getLayerNameFilter()
   }
 }
 
-QVariant& JavaScriptSchemaTranslator::_getMapValue(QVariantMap& map, const QString& key)
-{
-  if (map.contains(key) == false)
-  {
-    throw HootException("Expected to find key: " + key);
-  }
-  return map[key];
-}
-
 bool JavaScriptSchemaTranslator::isValidScript()
 {
   bool result = false;
@@ -351,13 +313,6 @@ bool JavaScriptSchemaTranslator::isValidScript()
     }
   }
   return result;
-}
-
-void JavaScriptSchemaTranslator::_featureWarn(const QString& message, const QString& fileName,
-                                              const QString& functionName, int lineNumber)
-{
-  Log::getInstance().log(Log::Warn, message.toStdString(), fileName.toStdString(),
-                         functionName.toStdString(), lineNumber);
 }
 
 std::shared_ptr<const Schema> JavaScriptSchemaTranslator::getOgrOutputSchema()

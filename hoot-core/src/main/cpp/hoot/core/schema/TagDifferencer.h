@@ -39,6 +39,7 @@ class Tags;
 class TagDifferencer
 {
 public:
+
   static QString className() { return "hoot::TagDifferencer"; }
 
   TagDifferencer() = default;

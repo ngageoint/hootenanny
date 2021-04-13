@@ -60,8 +60,6 @@ private:
 
   ValueAggregatorPtr _va;
   static v8::Persistent<v8::Function> _constructor;
-
-  static void toString(const v8::FunctionCallbackInfo<v8::Value>& args);
 };
 
 inline void toCpp(v8::Handle<v8::Value> v, ValueAggregatorPtr& p)

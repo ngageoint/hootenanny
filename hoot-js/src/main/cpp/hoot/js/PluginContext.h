@@ -66,11 +66,6 @@ public:
 
   bool hasFunction(QString name);
 
-  /**
-   * Returns true if the object v contains the key specified.
-   */
-  bool hasKey(v8::Handle<v8::Value> v, QString key);
-
   v8::Local<v8::Object> loadScript(QString filename, QString loadInto = "");
 
   v8::Local<v8::Object> loadText(

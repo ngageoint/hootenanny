@@ -59,32 +59,10 @@ private:
 
   static void extract(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void getName(const v8::FunctionCallbackInfo<v8::Value>& args);
 
   QString _className;
   FeatureExtractorPtr _fe;
 };
-
-inline void toCpp(v8::Handle<v8::Value> v, FeatureExtractorPtr& p)
-{
-  if (!v->IsObject())
-  {
-    throw IllegalArgumentException("Expected an object, got: (" + toJson(v) + ")");
-  }
-
-  v8::Handle<v8::Object> obj = v8::Handle<v8::Object>::Cast(v);
-  FeatureExtractorJs* fej = nullptr;
-  fej = node::ObjectWrap::Unwrap<FeatureExtractorJs>(obj);
-  if (fej)
-  {
-    p = fej->getFeatureExtractor();
-  }
-  else
-  {
-    throw IllegalArgumentException("Expected a FeatureExtractorJs, got: (" + toJson(v) + ")");
-  }
-}
-
 
 }
 

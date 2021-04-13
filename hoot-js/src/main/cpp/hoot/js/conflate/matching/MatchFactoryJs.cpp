@@ -43,15 +43,6 @@ void MatchFactoryJs::Init(Handle<Object> exports)
   HandleScope scope(current);
   Handle<Object> schema = Object::New(current);
   exports->Set(String::NewFromUtf8(current, "MatchFactory"), schema);
-  schema->Set(String::NewFromUtf8(current, "getAllAvailableCreators"),
-    FunctionTemplate::New(current, getAllAvailableCreators)->GetFunction());
-}
-
-void MatchFactoryJs::getAllAvailableCreators(const FunctionCallbackInfo<Value>& args)
-{
-  HandleScope scope(args.GetIsolate());
-
-  args.GetReturnValue().Set(toV8(MatchFactory::getInstance().getAllAvailableCreators()));
 }
 
 }

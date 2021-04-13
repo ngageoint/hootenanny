@@ -40,11 +40,13 @@ namespace Tgs
 class DisableCout
 {
 public:
+
   DisableCout();
 
   ~DisableCout();
 
 private:
+
   std::ostream _nullStream;
   std::streambuf* _oldBuf;
 };
