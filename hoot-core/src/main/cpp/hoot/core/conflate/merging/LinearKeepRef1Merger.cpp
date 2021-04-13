@@ -31,6 +31,7 @@
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/algorithms/splitter/WaySublineRemover.h>
 
@@ -39,7 +40,7 @@ namespace hoot
 
 // ONLY ENABLE THIS DURING DEBUGGING; We don't want to tie it to debug.maps.write, as it may
 // produce a very large number of output files.
-const bool LinearKeepRef1Merger::WRITE_DETAILED_DEBUG_MAPS = false;
+const bool LinearKeepRef1Merger::WRITE_DETAILED_DEBUG_MAPS = true;
 
 HOOT_FACTORY_REGISTER(Merger, LinearKeepRef1Merger)
 
@@ -65,6 +66,7 @@ void LinearKeepRef1Merger::apply(
   LOG_TRACE("Applying LinearKeepRef1Merger...");
   LOG_VART(hoot::toString(_pairs));
   LOG_VART(hoot::toString(replaced));
+  LOG_VART(MapProjector::isPlanar(map));
 
   for (std::set<std::pair<ElementId, ElementId>>::const_iterator it = _pairs.begin();
        it != _pairs.end(); ++it)
@@ -144,12 +146,16 @@ bool LinearKeepRef1Merger::_mergePair(
   WaySublineMatchString::MatchCollection matches = match.getMatches();
   LOG_VART(matches.size());
   WaySubline subline1 = matches.at(0).getSubline1();
+  LOG_VART(subline1.getWay()->getElementId());
+  LOG_VART(subline1);
   LOG_VART(subline1.getWay() == way1);
   LOG_VART(subline1.getWay()->getElementId() == way1->getElementId());
   WaySubline subline2 = matches.at(0).getSubline2();
+  LOG_VART(subline2.getWay()->getElementId());
+  LOG_VART(subline2);
   LOG_VART(subline2.getWay() == way2);
   LOG_VART(subline2.getWay()->getElementId() == way2->getElementId());
-  //if (subline1.getWay() == way)
+
   std::vector<ElementId> newWayIds1;
   if (subline1.getWay()->getElementId() == way1->getElementId())
   {
@@ -157,8 +163,14 @@ bool LinearKeepRef1Merger::_mergePair(
     WayLocation start(subline1.getStart());
     WayLocation end(subline1.getEnd());
     newWayIds1 = WaySublineRemover::remove(way1, start, end, map);
+    LOG_VART(newWayIds1);
+    if (WRITE_DETAILED_DEBUG_MAPS)
+    {
+      OsmMapWriterFactory::writeDebugMap(
+        map, "after-subline-1-removal-" + way1->getElementId().toString());
+    }
   }
-  //if (subline2.getWay() == way)
+
   std::vector<ElementId> newWayIds2;
   if (subline2.getWay()->getElementId() == way2->getElementId())
   {
@@ -166,6 +178,12 @@ bool LinearKeepRef1Merger::_mergePair(
     WayLocation start(subline2.getStart());
     WayLocation end(subline2.getEnd());
     newWayIds2 = WaySublineRemover::remove(way2, start, end, map);
+    LOG_VART(newWayIds2);
+    if (WRITE_DETAILED_DEBUG_MAPS)
+    {
+      OsmMapWriterFactory::writeDebugMap(
+        map, "after-subline-2-removal-" + way2->getElementId().toString());
+    }
   }
 
   for (std::vector<ElementId>::const_iterator newWayIdsItr = newWayIds1.begin();

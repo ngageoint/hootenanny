@@ -53,9 +53,7 @@ public:
   virtual void apply(const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced);
 
   virtual QString getDescription() const { return "TODO"; }
-
   virtual QString getName() const override { return className(); }
-
   virtual QString getClassName() const override { return className(); }
 
 protected:

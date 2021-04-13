@@ -28,10 +28,11 @@
 #include "WaySublineRemover.h"
 
 // Hoot
+#include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/elements/ElementGeometryUtils.h>
 #include <hoot/core/algorithms/linearreference/WayLocation.h>
 #include <hoot/core/algorithms/splitter/WaySplitter.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
-#include <hoot/core/elements/MapProjector.h>
 
 // Standard
 #include <vector>
@@ -50,6 +51,7 @@ std::vector<ElementId> WaySublineRemover::remove(
   LOG_TRACE(
     "Removing subline for: " << way->getElementId() << " starting at: " << start <<
     " and ending at: " << end << "...");
+  LOG_TRACE("Input way length: " << ElementGeometryUtils::calculateLength(way, map));
 
   // Make a copy of the input way so that the first split doesn't affect calculation of the second
   // one.
@@ -88,6 +90,7 @@ std::vector<ElementId> WaySublineRemover::remove(
   }
   std::vector<ElementId> newWayIds = newWayIds1;
   newWayIds.insert(newWayIds.end(), newWayIds2.begin(), newWayIds2.end());
+  LOG_VART(newWayIds.size());
 
   // Remove the original way from the map to avoid duplication, but only if any splitting was
   // actually done.
@@ -95,9 +98,17 @@ std::vector<ElementId> WaySublineRemover::remove(
   {
     LOG_TRACE("Removing " << way->getElementId() << "...");
     RecursiveElementRemover(way->getElementId()).apply(map);
+    QString outputLengthsStr =
+      QString::number(ElementGeometryUtils::calculateLength(map->getElement(newWayIds.at(0)), map));
+    if (newWayIds.size() > 1)
+    {
+      outputLengthsStr +=
+        QString::number(
+          ElementGeometryUtils::calculateLength(map->getElement(newWayIds.at(1)), map));
+    }
+    LOG_TRACE("Output way length(s): " << outputLengthsStr);
   }
 
-  LOG_VART(newWayIds.size());
   return newWayIds;
 }
 
