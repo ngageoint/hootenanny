@@ -224,7 +224,7 @@
     },
     {
         "aliases": [ "highway=escalator" ],
-        "geometries": ["linestring"],
+        "geometries": ["linestring", "area"],
         "isA": "highway=path",
         "name": "highway=steps",
         "objectType": "tag",
