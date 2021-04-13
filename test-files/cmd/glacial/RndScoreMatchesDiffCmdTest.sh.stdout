@@ -9,4 +9,5 @@ Match Scoring Differential Summary:
 1 new wrong matches switched from MatchToReview.
 1 new wrong matches switched from MissToReview.
 59 reviews were lost.
+
 Detailed information available in: test-output/cmd/glacial/RndScoreMatchesDiffCmdTest/output.

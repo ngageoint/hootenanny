@@ -235,7 +235,7 @@ bool ScoreMatchesDiff::printDiff(const QString& output)
   _outputFile = _getOutputFile(_output);
   QTextStream out(_outputFile.get());
 
-  out << "Input files: " << _input1.right(25) << " and " << _input2.right(25) << "\n\n";
+  out << "Input files: ..." << _input1.right(25) << " and ..." << _input2.right(25) << "\n\n";
   _writeConflateStatusSummary(out);
   _writeConflateStatusDetail(out);
 
@@ -412,7 +412,7 @@ void ScoreMatchesDiff::_writeConflateStatusSummary(QTextStream& out)
 
   summary = summary.trimmed();
   std::cout << summary << std::endl;
-  std::cout << "Detailed information available in: " << _output << "." << std::endl;
+  std::cout << "\nDetailed information available in: " << _output << "." << std::endl;
 
   out << summary;
 }
@@ -421,17 +421,18 @@ void ScoreMatchesDiff::_writeConflateStatusDetail(QTextStream& out)
 {
   LOG_DEBUG("Printing conflate status detail...");
 
-  out << "\nMatch Type Changes\n\n";
+  QString detail;
+  detail += "\n\nMatch Type Changes\n";
   if (_newlyWrongMatchSwitches.size() + _newlyCorrectMatchSwitches.size() == 0)
   {
-    out << "none";
+    detail += "none";
   }
   else
   {
-    out << "\nNew Wrong Matches:\n\n";
+    detail += "\nNew Wrong Matches:\n";
     if (_newlyWrongMatchSwitches.empty())
     {
-      out << "none";
+      detail += "none";
     }
     else
     {
@@ -439,21 +440,22 @@ void ScoreMatchesDiff::_writeConflateStatusDetail(QTextStream& out)
            itr != _newlyWrongMatchSwitches.end(); ++itr)
       {
         const QString matchSwitchTypeStr = itr.key();
-        out << "\n" << matchSwitchTypeStr << "\n\n";
+        detail += "\n" + matchSwitchTypeStr + ":\n\n";
         QList<ElementId> ids = itr.value().toList();
         qSort(ids);
         for (QList<ElementId>::const_iterator itr2 = ids.begin(); itr2 != ids.end(); ++itr2)
         {
           const ElementId id = *itr2;
-          out << id.toString() << "\n";
+          detail += id.toString() + "\n";
         }
       }
+      detail = detail.trimmed();
     }
 
-    out << "\nNew Correct Matches:\n\n";
+    detail += "\n\nNew Correct Matches:\n\n";
     if (_newlyCorrectMatchSwitches.empty())
     {
-      out << "none";
+      detail += "none";
     }
     else
     {
@@ -461,22 +463,23 @@ void ScoreMatchesDiff::_writeConflateStatusDetail(QTextStream& out)
            itr != _newlyCorrectMatchSwitches.end(); ++itr)
       {
         const QString matchSwitchTypeStr = itr.key();
-        out << "\n" << matchSwitchTypeStr << "\n\n";
+        detail += "\n" + matchSwitchTypeStr + "\n\n";
         QList<ElementId> ids = itr.value().toList();
         qSort(ids);
         for (QList<ElementId>::const_iterator itr2 = ids.begin(); itr2 != ids.end(); ++itr2)
         {
           const ElementId id = *itr2;
-          out << id.toString() << "\n";
+          detail += id.toString() + "\n";
         }
       }
     }
+    detail = detail.trimmed();
   }
 
-  out << "\n\nAdded Elements:\n\n";
+  detail +="\n\nAdded Elements:\n\n";
   if (_elementIdsAdded.empty())
   {
-    out << "none";
+    detail += "none";
   }
   else
   {
@@ -486,14 +489,15 @@ void ScoreMatchesDiff::_writeConflateStatusDetail(QTextStream& out)
          itr != elementIdsAdded.end(); ++itr)
     {
       const ElementId id = *itr;
-      out << id.toString() << "\n";
+      detail += id.toString() + "\n";
     }
+    detail = detail.trimmed();
   }
 
-  out << "\n\nRemoved Elements:\n\n";
+  detail += "\n\nRemoved Elements:\n\n";
   if (_elementIdsRemoved.empty())
   {
-     out << "none";
+     detail += "none";
   }
   else
   {
@@ -503,9 +507,12 @@ void ScoreMatchesDiff::_writeConflateStatusDetail(QTextStream& out)
          itr != elementIdsRemoved.end(); ++itr)
     {
       const ElementId id = *itr;
-      out << id.toString() << "\n";
+      detail += id.toString() + "\n";
     }
+    detail = detail.trimmed();
   }
+
+  out << detail;
 }
 
 }

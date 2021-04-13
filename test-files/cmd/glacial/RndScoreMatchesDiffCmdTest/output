@@ -1,4 +1,4 @@
-Input files: hesDiffCmdTest/input1.osm and hesDiffCmdTest/input2.osm
+Input files: ...hesDiffCmdTest/input1.osm and ...hesDiffCmdTest/input2.osm
 
 Match Scoring Differential Summary:
 
@@ -10,24 +10,22 @@ Match Scoring Differential Summary:
 4 new wrong matches switched from MatchToMiss.
 1 new wrong matches switched from MatchToReview.
 1 new wrong matches switched from MissToReview.
-59 reviews were lost.
-Match Type Changes
+59 reviews were lost.Match Type Changes
 
 New Wrong Matches:
 
-
-MatchToMiss
+MatchToMiss:
 
 Node(-1915)
 Node(-1882)
 Way(-215)
 Way(-71)
 
-MatchToReview
+MatchToReview:
 
 Way(-126)
 
-MissToReview
+MissToReview:
 
 Node(-1927)
 
