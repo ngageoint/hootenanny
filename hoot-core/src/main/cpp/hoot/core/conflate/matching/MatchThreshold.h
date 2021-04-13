@@ -54,8 +54,8 @@ public:
    * @param missThreshold the score threshold at which a match object is considered a miss
    * @param reviewThreshold the score threshold at which a match object is considered a review
    * @param validateRange if true, the range (0.0, 1.0] will be honored. For conflate usage we
-   * generally want to honor the range (0.0, 1.0] for thresholds. In some instances, though, we
-   * don't e.g. match feature extraction or Multiary Conflation.
+   * generally want to honor that range for thresholds. In some instances, though, we don't want to.
+   * e.g. match feature extraction or Multiary Conflation
    */
   MatchThreshold(double matchThreshold = 0.5, double missThreshold = 0.5,
                  double reviewThreshold = 1.0, bool validateRange = true);
