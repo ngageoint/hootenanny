@@ -29,6 +29,7 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/elements/ElementGeometryUtils.h>
+#include <hoot/core/elements/MapUtils.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/elements/MapProjector.h>
 
@@ -79,8 +80,8 @@ public:
       map, "test-files/cases/reference/unifying/geometry-generic-1/Input2.osm", false,
       Status::Unknown2);
 
-    ConstElementPtr node1 = TestUtils::getElementWithNote(map, "J");
-    ConstElementPtr way1 = TestUtils::getElementWithNote(map, "I");
+    ConstElementPtr node1 = MapUtils::getFirstElementWithNote(map, "J");
+    ConstElementPtr way1 = MapUtils::getFirstElementWithNote(map, "I");
 
     // Not really that concerned with testing how well GEOS actually works, just want to exercise
     // all of the code in the relationship enum. If you want to try out better input test data with

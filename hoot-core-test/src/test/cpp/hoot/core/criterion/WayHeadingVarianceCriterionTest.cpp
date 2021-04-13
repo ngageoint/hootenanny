@@ -28,6 +28,7 @@
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/criterion/WayHeadingVarianceCriterion.h>
+#include <hoot/core/elements/MapUtils.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/elements/MapProjector.h>
 
@@ -63,7 +64,7 @@ public:
     uut->setNumHistogramBins(16);
     uut->setSampleDistance(1.0);
     uut->setHeadingDelta(5.0);
-    CPPUNIT_ASSERT(uut->isSatisfied(TestUtils::getElementWithNote(map, "2")));
+    CPPUNIT_ASSERT(uut->isSatisfied(MapUtils::getFirstElementWithNote(map, "2")));
   }
 
   void runNegativeTest()
@@ -78,7 +79,7 @@ public:
     uut->setNumHistogramBins(16);
     uut->setSampleDistance(1.0);
     uut->setHeadingDelta(5.0);
-    CPPUNIT_ASSERT(!uut->isSatisfied(TestUtils::getElementWithNote(map, "2")));
+    CPPUNIT_ASSERT(!uut->isSatisfied(MapUtils::getFirstElementWithNote(map, "2")));
   }
 
   void runBypassTest()

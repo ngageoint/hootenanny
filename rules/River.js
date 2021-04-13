@@ -76,7 +76,7 @@ exports.calculateSearchRadius = function(map)
     // This isn't the best place to put this logic, but there really isn't anywhere convenient in 
     // the C++ to do it, and this is the only exported method that takes in a map and runs before 
     // the matching.
-    maxRecursions = getRiverMaxSublineRecursions(map);
+    maxRecursions = hoot.RiverMaximalSublineSettingOptimizer.getFindBestMatchesMaxRecursions(map);
   }
   hoot.debug("maxRecursions: " + maxRecursions);
   sublineMatcher =
@@ -93,9 +93,7 @@ exports.calculateSearchRadius = function(map)
  */
 exports.isMatchCandidate = function(map, e)
 {
-  hoot.trace("e: " + e.getElementId());
-  hoot.trace("isLinearWaterway: " + isLinearWaterway(e));
-  return isLinearWaterway(e);
+  return hoot.OsmSchema.isLinearWaterway(e);
 };
 
 /**
@@ -229,19 +227,19 @@ exports.matchScore = function(map, e1, e2)
   {
     hoot.trace("e2 note: " + tags2.get("note"));
   }  
-  hoot.trace("mostSpecificType 1: " + mostSpecificType(e1));
-  hoot.trace("mostSpecificType 2: " + mostSpecificType(e2));
+  hoot.trace("mostSpecificType 1: " + hoot.OsmSchema.mostSpecificType(e1));
+  hoot.trace("mostSpecificType 2: " + hoot.OsmSchema.mostSpecificType(e2));
   
   // If both features have types and they aren't just generic types, let's do a detailed type comparison and 
   // look for an explicit type mismatch.
-  var typeScorePassesThreshold = !explicitTypeMismatch(e1, e2, exports.typeThreshold);
+  var typeScorePassesThreshold = !hoot.OsmSchema.explicitTypeMismatch(e1, e2, exports.typeThreshold);
   hoot.trace("typeScorePassesThreshold: " + typeScorePassesThreshold);
   if (!typeScorePassesThreshold)
   {
     return result;
   }
-  hoot.trace("mostSpecificType(e1): " + mostSpecificType(e1));
-  hoot.trace("mostSpecificType(e2): " + mostSpecificType(e2));
+  hoot.trace("mostSpecificType(e1): " + hoot.OsmSchema.mostSpecificType(e1));
+  hoot.trace("mostSpecificType(e2): " + hoot.OsmSchema.mostSpecificType(e2));
   if (nameMismatch(map, e1, e2))
   {
     return result;
@@ -278,7 +276,7 @@ exports.mergeSets = function(map, pairs, replaced)
   // original subline matcher used during matching, pass in both of the possible subline matchers 
   // that could have been used and use the same internal core logic that was used during matching to 
   // determine which one to use during merging.
-  return snapWays2(sublineMatcher, map, pairs, replaced, exports.baseFeatureType, frechetSublineMatcher);
+  return new hoot.LinearSnapMerger().apply(sublineMatcher, map, pairs, replaced, exports.baseFeatureType, frechetSublineMatcher);
 };
 
 exports.getMatchFeatureDetails = function(map, e1, e2)

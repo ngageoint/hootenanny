@@ -118,21 +118,6 @@ Local<Context> PluginContext::getContext(Isolate* isolate)
   return escapableHandleScope.Escape(ToLocal(&_context));
 }
 
-
-bool PluginContext::hasKey(Handle<Value> v, QString key)
-{
-  Isolate* current = v8::Isolate::GetCurrent();
-  HandleScope handleScope(current);
-  if (v->IsObject() == false)
-  {
-    throw IllegalArgumentException("Expected value to be an object.");
-  }
-  Handle<Object> obj = Handle<Object>::Cast(v);
-
-  Handle<String> keyStr = String::NewFromUtf8(current, key.toUtf8());
-  return obj->Has(keyStr) == false;
-}
-
 Local<Object> PluginContext::loadScript(QString filename, QString loadInto)
 {
   Isolate* current = v8::Isolate::GetCurrent();

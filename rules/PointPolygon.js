@@ -40,12 +40,7 @@ exports.isMatchCandidate = function(map, e)
   // We follow the same convention as POI/Polygon conflation here where all the match candidates are just points (not polys) and
   // we find polygon neighbors to match with inside of ScriptMatchCreator. We're not getting the geometry type from 
   // exports.geometryType for the reason described above.
-
-  hoot.trace("e: " + e.getId());
-  hoot.trace("isPoint: " + isPoint(map, e));
-  hoot.trace("isSpecificallyConflatable: " + isSpecificallyConflatable(map, e, "point"));
-
-  return isPoint(map, e) && !isSpecificallyConflatable(map, e, "point");
+  return hoot.OsmSchema.isPoint(map, e) && !hoot.OsmSchema.isSpecificallyConflatable(map, e, "point");
 };
 
 /**
@@ -79,16 +74,6 @@ exports.matchScore = function(map, e1, e2)
     hoot.trace("same statuses: miss");
     return result;
   }
-  /*else if (isPoint(map, e1) && isPoint(map, e2))
-  {
-    hoot.trace("both points: miss");
-    return result;
-  }
-  else if (isPolygon(e1) && isPolygon(e2))
-  {
-    hoot.trace("both polys: miss");
-    return result;
-  }*/
 
   hoot.trace("e1: " + e1.getElementId() + ", " + e1.getTags().get("name"));
   if (e1.getTags().get("note"))
@@ -103,7 +88,7 @@ exports.matchScore = function(map, e1, e2)
 
   // If both features have types and they aren't just generic types, let's do a detailed type comparison and 
   // look for an explicit type mismatch. Otherwise, move on to the geometry comparison.
-  var typeScorePassesThreshold = !explicitTypeMismatch(e1, e2, exports.typeThreshold);
+  var typeScorePassesThreshold = !hoot.OsmSchema.explicitTypeMismatch(e1, e2, exports.typeThreshold);
   hoot.trace("typeScorePassesThreshold: " + typeScorePassesThreshold);
   if (!typeScorePassesThreshold)
   {
@@ -149,7 +134,7 @@ exports.mergePair = function(map, e1, e2)
   // We always want to keep the poly and lose the point geometry.
   var keeper;
   var toReplace;
-  if (isPolygon(map, e1))
+  if (hoot.OsmSchema.isPolygon(map, e1))
   {
     keeper = e1;
     toReplace = e2;

@@ -98,11 +98,11 @@ void IntegerProgrammingSolver::solveBranchAndCut()
     iocp.tm_lim = _timeLimit * 1000.0 + 0.5;
   }
   //  Setup message level
-  if (Log::getInstance().getLevel() <= Log::Debug)
+  if (Log::getInstance().getLevel() <= Log::Trace)
   {
     iocp.msg_lev = GLP_MSG_ON;
   }
-  else if (Log::getInstance().getLevel() <= Log::Warn)
+  else if (Log::getInstance().getLevel() <= Log::Debug)
   {
     iocp.msg_lev = GLP_MSG_ERR;
   }
@@ -145,11 +145,11 @@ void IntegerProgrammingSolver::solveSimplex()
     smcp.tm_lim = _timeLimit * 1000.0 + 0.5;
   }
   //  Setup message level
-  if (Log::getInstance().getLevel() <= Log::Debug)
+  if (Log::getInstance().getLevel() <= Log::Trace)
   {
     smcp.msg_lev = GLP_MSG_ON;
   }
-  else if (Log::getInstance().getLevel() <= Log::Warn)
+  else if (Log::getInstance().getLevel() <= Log::Debug)
   {
     smcp.msg_lev = GLP_MSG_ERR;
   }

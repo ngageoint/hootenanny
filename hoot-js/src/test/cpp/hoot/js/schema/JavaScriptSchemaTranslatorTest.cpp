@@ -75,7 +75,6 @@ public:
 
     std::shared_ptr<const Schema> schema = uut->getOgrOutputSchema();
 
-//    JavaScriptSchemaTranslator::TranslatedFeature tf;
     ScriptToOgrSchemaTranslator::TranslatedFeature tf;
     QString layer;
 

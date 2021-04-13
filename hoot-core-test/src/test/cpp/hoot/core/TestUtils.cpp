@@ -31,7 +31,6 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/conflate/matching/MatchFactory.h>
 #include <hoot/core/conflate/merging/MergerFactory.h>
-#include <hoot/core/criterion/TagCriterion.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/scoring/MapComparator.h>
@@ -40,7 +39,6 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/UuidHelper.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
-#include <hoot/core/visitors/UniqueElementIdVisitor.h>
 #include <hoot/core/conflate/SuperfluousConflateOpRemover.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
@@ -221,28 +219,6 @@ void TestUtils::dumpString(const string& str)
   }
   cout << "};" << endl;
   cout << "size_t dataSize = " << str.size() << ";" << endl;
-}
-
-ElementPtr TestUtils::getElementWithNote(OsmMapPtr map, QString note)
-{
-  return getElementWithTag(map, "note", note);
-}
-
-ElementPtr TestUtils::getElementWithTag(OsmMapPtr map, const QString& tagKey,
-                                        const QString& tagValue)
-{
-  TagCriterion tc(tagKey, tagValue);
-  UniqueElementIdVisitor v;
-  FilteredVisitor fv(tc, v);
-  map->visitRo(fv);
-  const set<ElementId> bag = v.getElementSet();
-
-  if (bag.size() != 1)
-  {
-    throw HootException("Could not find an expected element with tag: " + tagKey + "=" + tagValue);
-  }
-
-  return map->getElement(*bag.begin());
 }
 
 TestUtils& TestUtils::getInstance()

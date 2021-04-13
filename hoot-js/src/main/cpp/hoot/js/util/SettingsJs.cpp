@@ -52,22 +52,10 @@ void SettingsJs::Init(Handle<Object> exports)
                FunctionTemplate::New(current, get)->GetFunction());
   settings->Set(String::NewFromUtf8(current, "get"),
                 FunctionTemplate::New(current, get)->GetFunction());
-  exports->Set(String::NewFromUtf8(current, "getAll"),
-               FunctionTemplate::New(current, getAll)->GetFunction());
-  settings->Set(String::NewFromUtf8(current, "getAll"),
-                FunctionTemplate::New(current, getAll)->GetFunction());
-  exports->Set(String::NewFromUtf8(current, "getValue"),
-               FunctionTemplate::New(current, getValue)->GetFunction());
-  settings->Set(String::NewFromUtf8(current, "getValue"),
-                FunctionTemplate::New(current, getValue)->GetFunction());
   exports->Set(String::NewFromUtf8(current, "set"),
                FunctionTemplate::New(current, set)->GetFunction());
   settings->Set(String::NewFromUtf8(current, "set"),
                 FunctionTemplate::New(current, set)->GetFunction());
-  exports->Set(String::NewFromUtf8(current, "loadJson"),
-               FunctionTemplate::New(current, loadJson)->GetFunction());
-  settings->Set(String::NewFromUtf8(current, "loadJson"),
-                FunctionTemplate::New(current, loadJson)->GetFunction());
   exports->Set(String::NewFromUtf8(current, "appendToList"),
                FunctionTemplate::New(current, appendToList)->GetFunction());
   settings->Set(String::NewFromUtf8(current, "appendToList"),
@@ -103,37 +91,6 @@ void SettingsJs::get(const FunctionCallbackInfo<Value>& args)
   {
     args.GetReturnValue().SetUndefined();
   }
-}
-
-void SettingsJs::getAll(const FunctionCallbackInfo<Value>& args)
-{
-  HandleScope scope(args.GetIsolate());
-
-  Settings* settings = &conf();
-
-  args.GetReturnValue().Set(toV8(settings->getAll()));
-}
-
-void SettingsJs::getValue(const FunctionCallbackInfo<Value>& args)
-{
-  HandleScope scope(args.GetIsolate());
-
-  Settings* settings = &conf();
-
-  QString value = toCpp<QString>(args[0]);
-  args.GetReturnValue().Set(toV8(settings->getValue(value)));
-}
-
-void SettingsJs::loadJson(const FunctionCallbackInfo<Value>& args)
-{
-  HandleScope scope(args.GetIsolate());
-
-  Settings* settings = &conf();
-
-  QString url = str(args[0]->ToString());
-  settings->loadJson(url);
-
-  args.GetReturnValue().SetUndefined();
 }
 
 void SettingsJs::set(const FunctionCallbackInfo<Value>& args)

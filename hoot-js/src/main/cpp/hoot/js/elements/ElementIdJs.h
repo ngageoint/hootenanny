@@ -61,7 +61,6 @@ private:
   static v8::Persistent<v8::Function> _constructor;
 
   static void getType(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void toJSON(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void toString(const v8::FunctionCallbackInfo<v8::Value>& args);
 };
 

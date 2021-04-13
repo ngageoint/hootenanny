@@ -68,11 +68,8 @@ private:
 
   static void contains(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void get(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void getCreateUuid(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void getInformationCount(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void getLengthInMeters(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void getNames(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void getVelocityInMeters(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void set(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void toDict(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void toString(const v8::FunctionCallbackInfo<v8::Value>& args);
@@ -96,24 +93,6 @@ inline void toCpp(v8::Handle<v8::Value> v, Tags& t)
   if (js)
   {
     t = js->getTags();
-  }
-  else
-  {
-    QStringList keys = toCpp<QStringList>(obj->GetPropertyNames());
-
-    if (keys.empty())
-    {
-      throw IllegalArgumentException("Expected a MostEnglishNameJs, got: (" + toJson(v) + ")");
-    }
-    else
-    {
-      t.clear();
-      for (int i = 0; i < keys.size(); i++)
-      {
-        QString value = toCpp<QString>(obj->Get(toV8(keys[i])));
-        t[keys[i]] = value;
-      }
-    }
   }
 }
 

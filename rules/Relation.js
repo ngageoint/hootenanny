@@ -43,7 +43,7 @@ exports.isMatchCandidate = function(map, e)
 {
   // TODO: Think the collection relation part is too strict and should be changed to all relations
   // at some point.
-  return isCollectionRelation(e);
+  return hoot.OsmSchema.isCollectionRelation(e);
 };
 
 /**
@@ -68,8 +68,8 @@ function typeMismatch(e1, e2)
 
   hoot.trace("type1: " + type1);
   hoot.trace("type2: " + type2);
-  hoot.trace("mostSpecificType(e1): " + mostSpecificType(e1));
-  hoot.trace("mostSpecificType(e2): " + mostSpecificType(e2));
+  hoot.trace("mostSpecificType(e1): " + hoot.OsmSchema.mostSpecificType(e1));
+  hoot.trace("mostSpecificType(e2): " + hoot.OsmSchema.mostSpecificType(e2));
 
   // If the collection relations aren't filtered out properly by type beforehand the
   // geometry checks afterward can become very expensive.
@@ -77,8 +77,8 @@ function typeMismatch(e1, e2)
   if (type1 != type2)
   {
     hoot.trace("type mismatch; type1: " + type1 + "; type2: " + type2);
-    hoot.trace("mostSpecificType 1: " + mostSpecificType(e1));
-    hoot.trace("mostSpecificType 2: " + mostSpecificType(e2));
+    hoot.trace("mostSpecificType 1: " + hoot.OsmSchema.mostSpecificType(e1));
+    hoot.trace("mostSpecificType 2: " + hoot.OsmSchema.mostSpecificType(e2));
     return true;
   }
   else if (type1 == "boundary" && tags1.get("boundary") == "administrative" && tags2.get("boundary") == "administrative" && tags1.get("admin_level") != tags2.get("admin_level"))
@@ -86,7 +86,7 @@ function typeMismatch(e1, e2)
     hoot.trace("admin_level mismatch");
     return true;
   }
-  else if ((type1 == "multipolygon" || type1 == "multilineString") && explicitTypeMismatch(e1, e2, exports.typeThreshold))
+  else if ((type1 == "multipolygon" || type1 == "multilineString") && hoot.OsmSchema.explicitTypeMismatch(e1, e2, exports.typeThreshold))
   {
     hoot.trace("multipoly/multilinestring type mismatch");
     return true;
@@ -152,7 +152,7 @@ function geometryMismatch(map, e1, e2)
 
   // Should we be extracting sublines first and passing those to the extractors?
 
-  var numRelationMemberNodes = getNumRelationMemberNodes(map, e1.getElementId()) + getNumRelationMemberNodes(map, e2.getElementId());
+  var numRelationMemberNodes = hoot.RelationMemberUtils.getNumRelationMemberNodes(map, e1.getElementId()) + hoot.RelationMemberUtils.getNumRelationMemberNodes(map, e2.getElementId());
   hoot.trace("numRelationMemberNodes: " + numRelationMemberNodes);
   // This threshold was determined from one test dataset...may need tweaking.
   if (numRelationMemberNodes < 2000)
@@ -172,7 +172,7 @@ function geometryMismatch(map, e1, e2)
     hoot.trace("angleHist: " + angleHist);
     if (angleHist < 0.73)
     {
-      if (relationsHaveConnectedWayMembers(map, e1.getElementId(), e2.getElementId()))
+      if (hoot.RelationMemberUtils.relationsHaveConnectedWayMembers(map, e1.getElementId(), e2.getElementId()))
       {
         hoot.trace("match failed on angleHist: " + angleHist + ", but there are connected ways.");
       }
@@ -265,7 +265,7 @@ exports.mergePair = function(map, e1, e2)
 {
   hoot.trace("Merging " + e1.getElementId() + " and " + e2.getElementId() + "...");
 
-  mergeRelations(map, e1.getElementId(), e2.getElementId());
+  hoot.RelationMerger.mergeRelations(map, e1.getElementId(), e2.getElementId());
 
   e1.setStatusString("conflated");
   if (exports.writeMatchedBy == "true")

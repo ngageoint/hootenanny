@@ -48,10 +48,7 @@ nodes and polygons or a school polygon which encloses school buildings on the ca
  */
 exports.isMatchCandidate = function(map, e)
 {
-  hoot.trace("e: " + e.getElementId());
-  hoot.trace("isNonBuildingArea: " + isNonBuildingArea(map, e));
-
-  return isNonBuildingArea(map, e);
+  return hoot.OsmSchema.isNonBuildingArea(map, e);
 };
 
 /**
@@ -107,7 +104,7 @@ exports.matchScore = function(map, e1, e2)
 
   // If both features have types and they aren't just generic types, let's do a detailed type comparison and 
   // look for an explicit type mismatch. Otherwise, move on to the geometry comparison.
-  var typeScorePassesThreshold = !explicitTypeMismatch(e1, e2, exports.typeThreshold);
+  var typeScorePassesThreshold = !hoot.OsmSchema.explicitTypeMismatch(e1, e2, exports.typeThreshold);
   hoot.trace("typeScorePassesThreshold: " + typeScorePassesThreshold);
   if (!typeScorePassesThreshold)
   {
@@ -195,7 +192,7 @@ exports.matchScore = function(map, e1, e2)
   // Here, we're attempting to handle the many to one scenario for diff conflate and will mark 
   // this as a review which will cause these features to drop out of the diff in the default 
   // config. See tests area-3978-1 and area-4379-1.
-  var typeScore = getTypeScore(e1, e2, true);
+  var typeScore = hoot.OsmSchema.scoreTypes(e1.getTags(), e2.getTags(), true);
   if (typeScore >= overlapReviewTypeThreshold)
   {
     if (smallerOverlap == -1) // don't calc it if it already has been
