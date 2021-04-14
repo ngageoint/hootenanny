@@ -13,7 +13,7 @@ describe('ElementGeometryUtilsJs', function() {
         hoot.loadMap(map, HOOT_HOME + "/test-files/ToyTestA.osm", true, 1);
         hoot.MapProjector.projectToPlanar(map);
         var element = hoot.MapUtils.getFirstElementWithNote(map, "0");
-        var length = hoot.ElementGeometryUtils.calculateLength(map, element)
+        var length = hoot.ElementGeometryUtils.calculateLength(map, element);
         assert.equal(881.3103894391232, length);
 
     }).timeout(5000);
