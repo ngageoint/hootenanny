@@ -32,6 +32,7 @@
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
+#include <hoot/core/ops/ReplaceElementOp.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
@@ -77,13 +78,13 @@ void LinearKeepRef1Merger::apply(
 
     for (size_t i = 0; i < replaced.size(); i++)
     {
-      LOG_VART(eid1);
-      LOG_VART(eid2);
-      LOG_VART(replaced[i].first);
-      LOG_VART(replaced[i].second);
+      //LOG_VART(eid1);
+      //LOG_VART(eid2);
+      //LOG_VART(replaced[i].first);
+      //LOG_VART(replaced[i].second);
 
-      LOG_TRACE("e1 before replacement check: " << map->getElement(eid1));
-      LOG_TRACE("e2 before replacement check: " << map->getElement(eid2));
+      //LOG_TRACE("e1 before replacement check: " << map->getElement(eid1));
+      //LOG_TRACE("e2 before replacement check: " << map->getElement(eid2));
 
       if (eid1 == replaced[i].first)
       {
@@ -96,8 +97,8 @@ void LinearKeepRef1Merger::apply(
         eid2 = replaced[i].second;
       }
 
-      LOG_TRACE("e1 after replacement check: " << map->getElement(eid1));
-      LOG_TRACE("e2 after replacement check: " << map->getElement(eid2));
+      //LOG_TRACE("e1 after replacement check: " << map->getElement(eid1));
+      //LOG_TRACE("e2 after replacement check: " << map->getElement(eid2));
     }
 
     _mergePair(map, eid1, eid2, replaced);
@@ -110,12 +111,16 @@ bool LinearKeepRef1Merger::_mergePair(
 {
   ElementPtr e1 = map->getElement(eid1);
   ElementPtr e2 = map->getElement(eid2);
+  LOG_VART(e1.get());
+  LOG_VART(e2.get());
   if (!e1 || !e2)
   {
     return false;
   }
   WayPtr way1 = std::dynamic_pointer_cast<Way>(e1);
   WayPtr way2 = std::dynamic_pointer_cast<Way>(e2);
+  LOG_VART(way1.get());
+  LOG_VART(way2.get());
   if (!way1 || !way2)
   {
     return false;
@@ -139,8 +144,7 @@ bool LinearKeepRef1Merger::_mergePair(
     return false;
   }
 
-  // TODO: explain
-  // Get the portion of the way that matched.
+  // Get the portion of the ref way that matched.
   WaySublineMatchString::MatchCollection matches = match.getMatches();
   LOG_VART(matches.size());
   WaySubline subline1 = matches.at(0).getSubline1();
@@ -150,39 +154,46 @@ bool LinearKeepRef1Merger::_mergePair(
   LOG_VART(subline1.getWay()->getElementId() == way1->getElementId());
 
   std::vector<ElementId> newWayIds;
-  if (subline1.getWay()->getElementId() == way1->getElementId())
+  if (subline1.getWay()->getElementId() == way1->getElementId()) // TODO: necessary?
   {
-
-
     WayLocation start(subline1.getStart());
     WayLocation end(subline1.getEnd());
-    if (start.isExtreme() || end.isExtreme())
+    // If the matching subline runs the entire length of the ref way, just remove the entire ref
+    // way.
+    if (start.isExtreme() && end.isExtreme())
     {
       LOG_TRACE(
-        "Subline matches covers entire ref way; keeping entire ref way: " << way1->getElementId());
+        "Subline matches covers entire ref way; removing entire ref way: " << way1->getElementId());
+      RecursiveElementRemover(way1->getElementId()).apply(map);
     }
     else
     {
-      // Remove the portion of the way that matched.
+      // Otherwise, remove only the portion of the ref way that matched with the sec way.
 
       LOG_TRACE("Removing subline 1 from " << way1->getElementId() << "...");
 
       newWayIds = WaySublineRemover::remove(way1, start, end, map);
       LOG_VART(newWayIds);
-      for (std::vector<ElementId>::const_iterator newWayIdsItr = newWayIds.begin();
-           newWayIdsItr != newWayIds.end(); ++newWayIdsItr)
+      // Do bookkeeping to show the new ways that replaced the old ref way.
+      if (!newWayIds.empty())
       {
-        replaced.push_back(
-          std::pair<ElementId, ElementId>(way1->getElementId(), *newWayIdsItr));
+        replaced.emplace_back(way1->getElementId(), newWayIds.at(0));
+        ReplaceElementOp(way1->getElementId(), newWayIds.at(0), true).apply(map);
+      }
+      else
+      {
+        LOG_TRACE("No subline removed for " << way1->getElementId() << ".");
       }
     }
     if (WRITE_DETAILED_DEBUG_MAPS)
     {
       OsmMapWriterFactory::writeDebugMap(
-        map, "after-subline-1-removal-" + way1->getElementId().toString());
+        map, "after-merge-" + eid1.toString() + "-" + eid2.toString());
     }
   }
 
+  // Remove the sec way.
+  LOG_TRACE("Removing sec way: " << way2->getElementId() << "...");
   RecursiveElementRemover(way2->getElementId()).apply(map);
 
   LOG_VART(replaced);

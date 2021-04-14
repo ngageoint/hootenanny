@@ -36,6 +36,8 @@ namespace hoot
 
 /**
  * TODO
+ *
+ * TODO: rename this class: LinearRefPartialMatchMerger
  */
 class LinearKeepRef1Merger : public LinearMergerAbstract
 {

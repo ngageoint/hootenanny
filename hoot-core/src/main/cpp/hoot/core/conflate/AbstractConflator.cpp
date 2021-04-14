@@ -108,7 +108,7 @@ void AbstractConflator::_createMatches()
   }
   MemoryUsageChecker::getInstance().check();
   LOG_DEBUG("Match count: " << StringUtils::formatLargeNumber(_matches.size()));
-  LOG_VART(_matches);
+  //LOG_VART(_matches);
   LOG_DEBUG(Tgs::SystemInfo::getCurrentProcessMemoryUsageString());
   OsmMapWriterFactory::writeDebugMap(_map, "after-matching");
 
@@ -257,11 +257,14 @@ void AbstractConflator::_mapElementIdsToMergers()
       _e2m[*it].push_back(_mergers[i]);
     }
   }
+  LOG_VART(_e2m.size());
 }
 
 void AbstractConflator::_replaceElementIds(
   const std::vector<std::pair<ElementId, ElementId>>& replaced)
 {
+  LOG_VART(replaced);
+  LOG_VART(_e2m.size());
   for (size_t i = 0; i < replaced.size(); ++i)
   {
     HashMap<ElementId, std::vector<MergerPtr>>::const_iterator it = _e2m.find(replaced[i].first);
@@ -269,6 +272,7 @@ void AbstractConflator::_replaceElementIds(
     {
       const std::vector<MergerPtr>& mergers = it->second;
       // Replace the element id in all mergers.
+      LOG_VART(mergers.size());
       for (size_t j = 0; j < mergers.size(); ++j)
       {
         mergers[j]->replace(replaced[j].first, replaced[j].second);
@@ -283,6 +287,7 @@ void AbstractConflator::_replaceElementIds(
 void AbstractConflator::_applyMergers(const std::vector<MergerPtr>& mergers, OsmMapPtr& map)
 {
   std::vector<std::pair<ElementId, ElementId>> replaced;
+  LOG_VART(mergers.size());
   for (size_t i = 0; i < mergers.size(); ++i)
   {
     MergerPtr merger = mergers[i];
@@ -307,7 +312,10 @@ void AbstractConflator::_applyMergers(const std::vector<MergerPtr>& mergers, Osm
 
     // update any mergers that reference the replaced values
     _replaceElementIds(replaced);
-    replaced.clear();
+    if (merger->getClassName() != "hoot::LinearKeepRef1Merger")
+    {
+      replaced.clear();
+    }
     LOG_VART(merger->getImpactedElementIds());
 
     if (WRITE_DETAILED_DEBUG_MAPS)

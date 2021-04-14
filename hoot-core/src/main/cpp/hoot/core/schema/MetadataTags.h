@@ -39,17 +39,18 @@ namespace hoot
  * into one place in the code base.  This class also includes a couple of key values too.
  *
  * These static methods cause the QString to be recreated from the ASCII version every time
- * the method is called. This does two things.
+ * the method is called. This does two things:
  * 1. The QString is recreated and duplicate RAM is allocated, used then freed
  * 2. The QString must parse the ASCII which takes time.
  *
- * In some non-critical places this isn't a big deal, however in other spots it can significantly
- * impact the code. If this is the case, please entertain creating a static variable and returning
+ * In some non-critical places this isn't a big deal, however, in other spots it can significantly
+ * impact the code. For those cases, please entertain creating a static variable and returning
  * a reference to that variable. @sa ErrorCircular() and ERROR_CIRCULAR
  */
 class MetadataTags
 {
 public:
+
   inline static QString HootTagPrefix()                 { return "hoot:"; }
 
   static const QString ACCURACY;
