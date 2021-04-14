@@ -136,8 +136,9 @@ public:
     else
     {
       double score;
-      std::shared_ptr<MatchThreshold> mt =
-        std::make_shared<MatchThreshold>(MatchThreshold(0.5, 0.5, 1.0, false));
+      // We *don't* want to init the match threshold here, as that will send us down the wrong code
+      // path. Found that out the hard way.
+      std::shared_ptr<MatchThreshold> mt;
       const QString result = evaluateThreshold(maps, output, mt, showConfusion, score);
       cout << result;
     }
