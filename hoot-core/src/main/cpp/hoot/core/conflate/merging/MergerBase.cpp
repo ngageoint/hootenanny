@@ -81,25 +81,18 @@ bool MergerBase::isValid(const ConstOsmMapPtr& map) const
 
 void MergerBase::replace(ElementId oldEid, ElementId newEid)
 {
-  LOG_TRACE("Replacing " << oldEid << " with " << newEid << "...");
-  LOG_VART(oldEid.isNull());
-  LOG_VART(newEid.isNull());
-
   PairsSet& pairs = _getPairs();
-  LOG_VART(pairs);
-
   set<pair<ElementId, ElementId>>::iterator it = pairs.begin();
   while (it != pairs.end())
   {
     ElementId eid1 = it->first;
     ElementId eid2 = it->second;
     LOG_VART(eid1);
-    LOG_VART(eid1.isNull());
     LOG_VART(eid2);
-    LOG_VART(eid2.isNull());
 
     if (it->first == oldEid)
     {
+      LOG_TRACE("Replacing " << oldEid << " with " << newEid << "...");
       pair<ElementId, ElementId> newP = *it;
       newP.first = newEid;
       LOG_VART(newP);
@@ -108,6 +101,7 @@ void MergerBase::replace(ElementId oldEid, ElementId newEid)
     }
     else if (it->second == oldEid)
     {
+      LOG_TRACE("Replacing " << oldEid << " with " << newEid << "...");
       pair<ElementId, ElementId> newP = *it;
       newP.second = newEid;
       LOG_VART(newP);
@@ -119,8 +113,6 @@ void MergerBase::replace(ElementId oldEid, ElementId newEid)
       ++it;
     }
   }
-
-  LOG_VART(pairs);
 }
 
 }

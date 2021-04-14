@@ -31,6 +31,7 @@
 #include <hoot/core/conflate/matching/MatchFactory.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/matching/OptimalConstrainedMatches.h>
+#include <hoot/core/conflate/merging/LinearDiffMerger.h>
 #include <hoot/core/conflate/merging/MarkForReviewMergerCreator.h>
 #include <hoot/core/conflate/merging/MergerFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
@@ -263,8 +264,6 @@ void AbstractConflator::_mapElementIdsToMergers()
 void AbstractConflator::_replaceElementIds(
   const std::vector<std::pair<ElementId, ElementId>>& replaced)
 {
-  LOG_VART(replaced);
-  LOG_VART(_e2m.size());
   for (size_t i = 0; i < replaced.size(); ++i)
   {
     HashMap<ElementId, std::vector<MergerPtr>>::const_iterator it = _e2m.find(replaced[i].first);
@@ -272,7 +271,6 @@ void AbstractConflator::_replaceElementIds(
     {
       const std::vector<MergerPtr>& mergers = it->second;
       // Replace the element id in all mergers.
-      LOG_VART(mergers.size());
       for (size_t j = 0; j < mergers.size(); ++j)
       {
         mergers[j]->replace(replaced[j].first, replaced[j].second);
@@ -312,7 +310,9 @@ void AbstractConflator::_applyMergers(const std::vector<MergerPtr>& mergers, Osm
 
     // update any mergers that reference the replaced values
     _replaceElementIds(replaced);
-    if (merger->getClassName() != "hoot::LinearKeepRef1Merger")
+    // Not sure why the replaced IDs get cleared out each time here. That causes problems for
+    // LinearDiffMerger, so skipping clearing when its being used.
+    if (merger->getClassName() != LinearDiffMerger::className())
     {
       replaced.clear();
     }

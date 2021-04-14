@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef LINEAR_KEEP_REF1_MERGER_H
-#define LINEAR_KEEP_REF1_MERGER_H
+#ifndef LINEAR_DIFF_MERGER_H
+#define LINEAR_DIFF_MERGER_H
 
 // Hoot
 #include <hoot/core/conflate/merging/LinearMergerAbstract.h>
@@ -36,21 +36,19 @@ namespace hoot
 
 /**
  * TODO
- *
- * TODO: rename this class: LinearRefPartialMatchMerger
  */
-class LinearKeepRef1Merger : public LinearMergerAbstract
+class LinearDiffMerger : public LinearMergerAbstract
 {
 
 public:
 
-  static QString className() { return "hoot::LinearKeepRef1Merger"; }
+  static QString className() { return "hoot::LinearDiffMerger"; }
 
-  LinearKeepRef1Merger();
-  LinearKeepRef1Merger(
+  LinearDiffMerger();
+  LinearDiffMerger(
     const std::set<std::pair<ElementId, ElementId>>& pairs,
     const std::shared_ptr<SublineStringMatcher>& sublineMatcher);
-  virtual ~LinearKeepRef1Merger() = default;
+  virtual ~LinearDiffMerger() = default;
 
   virtual void apply(const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced);
 
@@ -72,8 +70,6 @@ private:
   static const bool WRITE_DETAILED_DEBUG_MAPS;
 };
 
-typedef std::shared_ptr<LinearKeepRef1Merger> LinearKeepRef1MergerPtr;
-
 }
 
-#endif // LINEAR_KEEP_REF1_MERGER_H
+#endif // LINEAR_DIFF_MERGER_H

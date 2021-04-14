@@ -61,7 +61,7 @@
 #include <hoot/core/ops/WayJoinerOp.h>
 #include <hoot/core/util/ConfigUtils.h>
 #include <hoot/core/io/OsmChangesetFileWriter.h>
-#include <hoot/core/conflate/merging/LinearKeepRef1Merger.h>
+#include <hoot/core/conflate/merging/LinearDiffMerger.h>
 #include <hoot/core/conflate/highway/HighwayMatch.h>
 #include <hoot/core/conflate/ConflateInfoCache.h>
 
@@ -413,7 +413,7 @@ void DiffConflator::_removeMatchElements(const Status& status, const bool forceC
           std::dynamic_pointer_cast<const HighwayMatch>(match);
         LOG_VART(highwayMatch->getSublineMatcher()->getSublineMatcherName());
         _mergers.push_back(
-          MergerPtr(new LinearKeepRef1Merger(singleMatchPairs, highwayMatch->getSublineMatcher())));
+          MergerPtr(new LinearDiffMerger(singleMatchPairs, highwayMatch->getSublineMatcher())));
       }
     }
   }
