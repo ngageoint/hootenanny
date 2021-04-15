@@ -109,7 +109,6 @@ bool LinearSnapMerger::_mergePair(
 {
   LOG_VART(eid1);
   LOG_VART(eid2);
-  bool swapWayIds = false;
 
   if (LinearMergerAbstract::_mergePair(eid1, eid2, replaced))
   {
@@ -173,29 +172,30 @@ bool LinearSnapMerger::_mergePair(
   // Merge the attributes appropriately.
   _mergeTags(e1->getTags(), e2->getTags(), e1Match);
 
+  bool swapWayIds = false;
   if (e1Match->getElementType() == ElementType::Way && e1->getElementType() == ElementType::Way &&
       e2->getElementType() == ElementType::Way)
   {
-      WayPtr w1 = std::dynamic_pointer_cast<Way>(e1);
-      WayPtr w2 = std::dynamic_pointer_cast<Way>(e2);
-      WayPtr wMatch = std::dynamic_pointer_cast<Way>(e1Match);
-      LOG_VART(w1->getId());
-      LOG_VART(w2->getId());
-      LOG_VART(wMatch->getId());
+    WayPtr w1 = std::dynamic_pointer_cast<Way>(e1);
+    WayPtr w2 = std::dynamic_pointer_cast<Way>(e2);
+    WayPtr wMatch = std::dynamic_pointer_cast<Way>(e1Match);
+    LOG_VART(w1->getId());
+    LOG_VART(w2->getId());
+    LOG_VART(wMatch->getId());
 
-      //  Keep the original ID from e1 for e1Match
-      swapWayIds = true;
+    //  Keep the original ID from e1 for e1Match
+    swapWayIds = true;
 
-      // Handle necessary ID and parent ID updates.
-      _manageElementIds(w1, w2, wMatch, scraps1, scraps2);
+    // Handle necessary ID and parent ID updates.
+    _manageElementIds(w1, w2, wMatch, scraps1, scraps2);
 
-      // Reverse the way if w2 is one way and w1 isn't the similar direction as w2.
-      if (OneWayCriterion().isSatisfied(w2) &&
-          !DirectionFinder::isSimilarDirection(_map->shared_from_this(), w1, w2))
-      {
-        LOG_TRACE("Reversing " << wMatch->getElementId() << "...");
-        wMatch->reverseOrder();
-      }
+    // Reverse the way if w2 is one way and w1 isn't the similar direction as w2.
+    if (OneWayCriterion().isSatisfied(w2) &&
+        !DirectionFinder::isSimilarDirection(_map->shared_from_this(), w1, w2))
+    {
+      LOG_TRACE("Reversing " << wMatch->getElementId() << "...");
+      wMatch->reverseOrder();
+    }
   }
 
   // Remove the old way that was split and snapped.
@@ -225,112 +225,6 @@ bool LinearSnapMerger::_mergePair(
   LOG_VART(replaced);
 
   return false;
-}
-
-void LinearSnapMerger::_dropSecondaryElements(
-  const ElementId& eid1, const ElementId& eidMatch1, const ElementId& eid2,
-  const ElementId& eidMatch2)
-{
-  LOG_TRACE("Removing e2 match: " << eidMatch2 << " and e2: " << eid2 << "...");
-
-  // Add any informational nodes from the ways being replaced to the merged output before deleting
-  // them.
-  WayNodeCopier nodeCopier;
-  nodeCopier.setOsmMap(_map.get());
-  nodeCopier.addCriterion(NotCriterionPtr(new NotCriterion(new NoInformationCriterion())));
-
-  if (eid1.getType() == ElementType::Way && eidMatch2.getType() == ElementType::Way)
-  {
-    LOG_TRACE(
-      "Copying information nodes from e2 match: " << eidMatch2 << " to e1: " << eid1 << "...");
-    nodeCopier.copy(eidMatch2, eid1);
-  }
-
-  if (eidMatch1.getType() == ElementType::Way && eidMatch2.getType() == ElementType::Way)
-  {
-    LOG_TRACE(
-      "Copying information nodes from e2 match: " << eidMatch2 << " to e1 match: " << eidMatch1 <<
-      "...");
-    nodeCopier.copy(eidMatch2, eidMatch1);
-  }
-
-  // Remove reviews e2Match is involved in.
-  RemoveReviewsByEidOp(eidMatch2, true).apply(_map);
-
-  // Make the way that we're keeping have membership in whatever relations the way we're removing
-  // was in. I *think* this makes sense. This logic may also need to be replicated elsewhere
-  // during merging.
-  RelationMemberSwapper::swap(eid2, eid1, _map, false);
-
-  // Remove reviews e2 is involved in.
-  RemoveReviewsByEidOp(eid2, true).apply(_map);
-
-  if (WRITE_DETAILED_DEBUG_MAPS)
-  {
-    OsmMapWriterFactory::writeDebugMap(
-      _map, "LinearSnapMerger-after-dropping-secondary-elements" + _eidLogString);
-  }
-}
-
-void LinearSnapMerger::_swapSecondaryElementWithScraps(
-  const ElementId& secElementId, const ElementPtr& matchElement, const ElementPtr& scraps)
-{
-  LOG_TRACE(
-    "Replacing e2 match: " << matchElement->getElementId() << " and e2: " << secElementId <<
-    " with scraps2: " << scraps->getElementId() << "...");
-  _map->addElement(scraps);
-  ReplaceElementOp(matchElement->getElementId(), scraps->getElementId(), true).apply(_map);
-  ReplaceElementOp(secElementId, scraps->getElementId(), true).apply(_map);
-
-  if (WRITE_DETAILED_DEBUG_MAPS)
-  {
-    OsmMapWriterFactory::writeDebugMap(
-      _map, "LinearSnapMerger-after-swap-secondary-elements-with-scraps" + _eidLogString);
-  }
-}
-
-void LinearSnapMerger::_removeSplitWay(
-  const ElementPtr& e1, const ElementPtr& scraps1, const ElementPtr& e1Match, const bool swapWayIds)
-{
-  const ElementId eid1 = e1->getElementId();
-  if (e1 != e1Match && scraps1)
-  {
-    if (swapWayIds)
-    {
-      ElementId eidm1 = e1Match->getElementId();
-      LOG_TRACE("Swapping e1 match ID: " << eidm1 << " with e1 ID: " << eid1 << "...");
-      //  Swap the old way ID back into the match element.
-      IdSwapOp(eid1, eidm1).apply(_map);
-      //  Remove the old way with a new swapped out ID.
-      RemoveElementByEid(eidm1).apply(_map);
-      //  Add the scraps element to all the relations that the match is in.
-      if (scraps1)
-      {
-        QList<ElementPtr> list;
-        list.append(e1Match);
-        list.append(scraps1);
-        _map->replace(e1Match, list);
-        //  Update the scraps
-        _updateScrapParent(e1Match->getId(), scraps1);
-      }
-    }
-    else if (scraps1)
-    {
-      LOG_TRACE("Replacing e1: " << eid1 << " with scraps1: " << scraps1->getElementId() << "...");
-      ReplaceElementOp(eid1, scraps1->getElementId(), true).apply(_map);
-    }
-  }
-  else
-  {
-    // Remove any reviews that contain this element.
-    LOG_TRACE("Removing e1: " << eid1 << "...");
-    RemoveReviewsByEidOp(eid1, true).apply(_map);
-  }
-  if (WRITE_DETAILED_DEBUG_MAPS)
-  {
-    OsmMapWriterFactory::writeDebugMap(
-      _map, "LinearSnapMerger-after-split-way-removal" + _eidLogString);
-  }
 }
 
 bool LinearSnapMerger::_checkForIdenticalElements(const ElementPtr& e1, const ElementPtr& e2)
@@ -381,54 +275,6 @@ void LinearSnapMerger::_mergeTags(const Tags& e1Tags, const Tags& e2Tags, const 
   if (WRITE_DETAILED_DEBUG_MAPS)
   {
     OsmMapWriterFactory::writeDebugMap(_map, "LinearSnapMerger-after-tag-merging" + _eidLogString);
-  }
-}
-
-void LinearSnapMerger::_manageElementIds(
-  const WayPtr& w1, const WayPtr& w2, const WayPtr& wMatch, const ElementPtr& scraps1,
-  const ElementPtr& scraps2)
-{
-  const long pid = Way::getPid(w1, w2);
-  // If the the parent IDs for both matched ways are empty, we won't write the empty ID to the
-  // match portion to possibly avoid overwriting a pre-existing valid parent ID.
-  if (pid != WayData::PID_EMPTY)
-  {
-    wMatch->setPid(pid);
-    LOG_TRACE("Set PID: " << pid << " on: " << wMatch->getElementId() << " (e1Match).");
-  }
-
-  if (scraps1)
-  {
-    _handleScrapsIds(scraps1, w1);
-  }
-
-  if (scraps2)
-  {
-    _handleScrapsIds(scraps2, w2);
-  }
-}
-
-void LinearSnapMerger::_handleScrapsIds(const ElementPtr& scraps, const WayPtr& way)
-{
-  if (scraps->getElementType() == ElementType::Way)
-  {
-    std::dynamic_pointer_cast<Way>(scraps)->setPid(way->getPid());
-    LOG_TRACE(
-      "Set PID: " << way->getPid() << " on: " << scraps->getElementId() << " (scraps).");
-  }
-  else if (scraps->getElementType() == ElementType::Relation)
-  {
-    RelationPtr r = std::dynamic_pointer_cast<Relation>(scraps);
-    for (size_t i = 0; i < r->getMembers().size(); ++i)
-    {
-      ElementId eid = r->getMembers()[i].getElementId();
-      if (eid.getType() == ElementType::Way)
-      {
-        _map->getWay(eid)->setPid(way->getPid());
-        LOG_TRACE(
-          "Set PID: " << way->getPid() << " on: " << eid << " (scraps).");
-      }
-    }
   }
 }
 
@@ -724,6 +570,54 @@ void LinearSnapMerger::_splitElement(
   }
 }
 
+void LinearSnapMerger::_manageElementIds(
+  const WayPtr& w1, const WayPtr& w2, const WayPtr& wMatch, const ElementPtr& scraps1,
+  const ElementPtr& scraps2)
+{
+  const long pid = Way::getPid(w1, w2);
+  // If the the parent IDs for both matched ways are empty, we won't write the empty ID to the
+  // match portion to possibly avoid overwriting a pre-existing valid parent ID.
+  if (pid != WayData::PID_EMPTY)
+  {
+    wMatch->setPid(pid);
+    LOG_TRACE("Set PID: " << pid << " on: " << wMatch->getElementId() << " (e1Match).");
+  }
+
+  if (scraps1)
+  {
+    _handleScrapsIds(scraps1, w1);
+  }
+
+  if (scraps2)
+  {
+    _handleScrapsIds(scraps2, w2);
+  }
+}
+
+void LinearSnapMerger::_handleScrapsIds(const ElementPtr& scraps, const WayPtr& way)
+{
+  if (scraps->getElementType() == ElementType::Way)
+  {
+    std::dynamic_pointer_cast<Way>(scraps)->setPid(way->getPid());
+    LOG_TRACE(
+      "Set PID: " << way->getPid() << " on: " << scraps->getElementId() << " (scraps).");
+  }
+  else if (scraps->getElementType() == ElementType::Relation)
+  {
+    RelationPtr r = std::dynamic_pointer_cast<Relation>(scraps);
+    for (size_t i = 0; i < r->getMembers().size(); ++i)
+    {
+      ElementId eid = r->getMembers()[i].getElementId();
+      if (eid.getType() == ElementType::Way)
+      {
+        _map->getWay(eid)->setPid(way->getPid());
+        LOG_TRACE(
+          "Set PID: " << way->getPid() << " on: " << eid << " (scraps).");
+      }
+    }
+  }
+}
+
 void LinearSnapMerger::_updateScrapParent(long id, const ElementPtr& scrap)
 {
   if (!scrap)
@@ -741,6 +635,112 @@ void LinearSnapMerger::_updateScrapParent(long id, const ElementPtr& scrap)
     //  Iterate all of the members and update the parent id recursively
     for (size_t i = 0; i < members.size(); ++i)
       _updateScrapParent(id, _map->getElement(members[i].getElementId()));
+  }
+}
+
+void LinearSnapMerger::_dropSecondaryElements(
+  const ElementId& eid1, const ElementId& eidMatch1, const ElementId& eid2,
+  const ElementId& eidMatch2)
+{
+  LOG_TRACE("Removing e2 match: " << eidMatch2 << " and e2: " << eid2 << "...");
+
+  // Add any informational nodes from the ways being replaced to the merged output before deleting
+  // them.
+  WayNodeCopier nodeCopier;
+  nodeCopier.setOsmMap(_map.get());
+  nodeCopier.addCriterion(NotCriterionPtr(new NotCriterion(new NoInformationCriterion())));
+
+  if (eid1.getType() == ElementType::Way && eidMatch2.getType() == ElementType::Way)
+  {
+    LOG_TRACE(
+      "Copying information nodes from e2 match: " << eidMatch2 << " to e1: " << eid1 << "...");
+    nodeCopier.copy(eidMatch2, eid1);
+  }
+
+  if (eidMatch1.getType() == ElementType::Way && eidMatch2.getType() == ElementType::Way)
+  {
+    LOG_TRACE(
+      "Copying information nodes from e2 match: " << eidMatch2 << " to e1 match: " << eidMatch1 <<
+      "...");
+    nodeCopier.copy(eidMatch2, eidMatch1);
+  }
+
+  // Remove reviews e2Match is involved in.
+  RemoveReviewsByEidOp(eidMatch2, true).apply(_map);
+
+  // Make the way that we're keeping have membership in whatever relations the way we're removing
+  // was in. I *think* this makes sense. This logic may also need to be replicated elsewhere
+  // during merging.
+  RelationMemberSwapper::swap(eid2, eid1, _map, false);
+
+  // Remove reviews e2 is involved in.
+  RemoveReviewsByEidOp(eid2, true).apply(_map);
+
+  if (WRITE_DETAILED_DEBUG_MAPS)
+  {
+    OsmMapWriterFactory::writeDebugMap(
+      _map, "LinearSnapMerger-after-dropping-secondary-elements" + _eidLogString);
+  }
+}
+
+void LinearSnapMerger::_swapSecondaryElementWithScraps(
+  const ElementId& secElementId, const ElementPtr& matchElement, const ElementPtr& scraps)
+{
+  LOG_TRACE(
+    "Replacing e2 match: " << matchElement->getElementId() << " and e2: " << secElementId <<
+    " with scraps2: " << scraps->getElementId() << "...");
+  _map->addElement(scraps);
+  ReplaceElementOp(matchElement->getElementId(), scraps->getElementId(), true).apply(_map);
+  ReplaceElementOp(secElementId, scraps->getElementId(), true).apply(_map);
+
+  if (WRITE_DETAILED_DEBUG_MAPS)
+  {
+    OsmMapWriterFactory::writeDebugMap(
+      _map, "LinearSnapMerger-after-swap-secondary-elements-with-scraps" + _eidLogString);
+  }
+}
+
+void LinearSnapMerger::_removeSplitWay(
+  const ElementPtr& e1, const ElementPtr& scraps1, const ElementPtr& e1Match, const bool swapWayIds)
+{
+  const ElementId eid1 = e1->getElementId();
+  if (e1 != e1Match && scraps1)
+  {
+    if (swapWayIds)
+    {
+      ElementId eidm1 = e1Match->getElementId();
+      LOG_TRACE("Swapping e1 match ID: " << eidm1 << " with e1 ID: " << eid1 << "...");
+      //  Swap the old way ID back into the match element.
+      IdSwapOp(eid1, eidm1).apply(_map);
+      //  Remove the old way with a new swapped out ID.
+      RemoveElementByEid(eidm1).apply(_map);
+      //  Add the scraps element to all the relations that the match is in.
+      if (scraps1)
+      {
+        QList<ElementPtr> list;
+        list.append(e1Match);
+        list.append(scraps1);
+        _map->replace(e1Match, list);
+        //  Update the scraps
+        _updateScrapParent(e1Match->getId(), scraps1);
+      }
+    }
+    else if (scraps1)
+    {
+      LOG_TRACE("Replacing e1: " << eid1 << " with scraps1: " << scraps1->getElementId() << "...");
+      ReplaceElementOp(eid1, scraps1->getElementId(), true).apply(_map);
+    }
+  }
+  else
+  {
+    // Remove any reviews that contain this element.
+    LOG_TRACE("Removing e1: " << eid1 << "...");
+    RemoveReviewsByEidOp(eid1, true).apply(_map);
+  }
+  if (WRITE_DETAILED_DEBUG_MAPS)
+  {
+    OsmMapWriterFactory::writeDebugMap(
+      _map, "LinearSnapMerger-after-split-way-removal" + _eidLogString);
   }
 }
 

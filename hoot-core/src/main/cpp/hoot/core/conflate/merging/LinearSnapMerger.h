@@ -90,15 +90,30 @@ private:
 
   static const bool WRITE_DETAILED_DEBUG_MAPS;
 
-  /*
-   * TODO
-   */
   bool _checkForIdenticalElements(const ElementPtr& e1, const ElementPtr& e2);
+
+  /*
+   * Snap the ends of snapee that match with either end point of middle to snapTo's end points.
+   */
+  void _snapEnds(ElementPtr snapee, ElementPtr snapTo) const;
+  void _snapEnds(WayPtr snapee, WayPtr middle, WayPtr snapTo) const;
+  void _snapEnd(WayPtr snapee, NodePtr replacedNode, NodePtr replacementNode) const;
+  /*
+   * Splits the splitee up into a match element and a scrap element. All the tags are assigned
+   * appropriately and the match and scrap are added to the replaced list and added to the map.
+   * The original elements are deleted.
+   */
+  void _splitElement(
+    const WaySublineCollection& s, const std::vector<bool>& reverse,
+    std::vector<std::pair<ElementId, ElementId>>& replaced,
+    const ConstElementPtr& splitee, ElementPtr& match, ElementPtr& scrap) const;
 
   void _mergeTags(const Tags& e1Tags, const Tags& e2Tags, const ElementPtr& e1Match);
 
-  void _markMultilineStringRelations(const ElementPtr& element);
-
+  void _removeSplitWay(
+    const ElementPtr& e1, const ElementPtr& scraps1, const ElementPtr& e1Match,
+    const bool swapWayIds);
+  void _updateScrapParent(long id, const ElementPtr& scrap);
   void _manageElementIds(
     const WayPtr& w1, const WayPtr& w2, const WayPtr& wMatch, const ElementPtr& scraps1,
     const ElementPtr& scraps2);
@@ -109,26 +124,7 @@ private:
     const ElementId& eid1, const ElementId& eidMatch1, const ElementId& eid2,
     const ElementId& eidMatch2);
 
-  /*
-   * Snap the ends of snapee that match with either end point of middle to snapTo's end points.
-   */
-  void _snapEnds(ElementPtr snapee, ElementPtr snapTo) const;
-  void _snapEnds(WayPtr snapee, WayPtr middle, WayPtr snapTo) const;
-  void _snapEnd(WayPtr snapee, NodePtr replacedNode, NodePtr replacementNode) const;
-
-  /*
-   * Splits the splitee up into a match element and a scrap element. All the tags are assigned
-   * appropriately and the match and scrap are added to the replaced list and added to the map.
-   * The original elements are deleted.
-   */
-  void _splitElement(
-    const WaySublineCollection& s, const std::vector<bool>& reverse,
-    std::vector<std::pair<ElementId, ElementId>>& replaced,
-    const ConstElementPtr& splitee, ElementPtr& match, ElementPtr& scrap) const;
-  void _removeSplitWay(
-    const ElementPtr& e1, const ElementPtr& scraps1, const ElementPtr& e1Match,
-    const bool swapWayIds);
-  void _updateScrapParent(long id, const ElementPtr& scrap);
+  void _markMultilineStringRelations(const ElementPtr& element);
 };
 
 using LinearSnapMergerPtr = std::shared_ptr<LinearSnapMerger>;
