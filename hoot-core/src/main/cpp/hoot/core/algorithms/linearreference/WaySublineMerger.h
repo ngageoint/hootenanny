@@ -24,48 +24,34 @@
  *
  * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
  */
-
-#ifndef WAY_SUBLINE_REMOVER_H
-#define WAY_SUBLINE_REMOVER_H
+#ifndef WAY_SUBLINE_MERGER_H
+#define WAY_SUBLINE_MERGER_H
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/algorithms/linearreference/WaySubline.h>
 
 namespace hoot
 {
 
-class WayLocation;
+class WaySubline;
 
 /**
- * Removes a subline from a way
+ * TODO
  */
-class WaySublineRemover
+class WaySublineMerger
 {
+
 public:
 
   /**
-   * Removes a subline from a way
+   * TODO
    *
-   * @param way the way to modify
-   * @param start the starting point at which to remove a subline from the way
-   * @param end the ending point at which to remove a subline from the way
-   * @param map the map owning the way
-   * @return IDs of the ways created and added back to the map as a result of the subline removal
+   * @param subline1
+   * @param subline2
    */
-  static std::vector<ElementId> remove(
-    const WayPtr& way, const WayLocation& start, const WayLocation& end, const OsmMapPtr& map);
-
-private:
-
-  /*
-   * Splits a way at the specified split location and keeps either the first of the split segments
-   * or the second.
-   */
-  static std::vector<ElementId> _split(
-    const WayPtr& way, WayLocation& splitLocation, const OsmMapPtr& map,
-    const bool keepFirstSegment);
+  static WaySubline mergeSublines(const WaySubline& subline1, const WaySubline& subline2);
 };
 
 }
 
-#endif // WAY_SUBLINE_REMOVER_H
+#endif // WAY_SUBLINE_MERGER_H

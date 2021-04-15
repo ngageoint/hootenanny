@@ -27,12 +27,8 @@
 #include "LinearDiffMerger.h"
 
 // hoot
-#include <hoot/core/algorithms/splitter/WaySublineRemover.h>
-#include <hoot/core/conflate/highway/HighwayMatch.h>
-#include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/algorithms/linearreference//WaySublineRemover.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/ops/RecursiveElementRemover.h>
-#include <hoot/core/ops/ReplaceElementOp.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
@@ -82,16 +78,6 @@ bool LinearDiffMerger::_mergePair(
   LOG_VART(eid1);
   LOG_VART(eid2);
 
-//  WayPtr secWay;
-//  if (_originalWays.contains(eid2))
-//  {
-//    secWay = _originalWays[eid2];
-//  }
-//  else
-//  {
-//    secWay = way2;
-//  }
-
   WaySublineMatchString match;
   try
   {
@@ -117,9 +103,11 @@ bool LinearDiffMerger::_mergePair(
   LOG_VART(subline2.getWay() == way2);
   LOG_VART(subline2.getWay()->getElementId() == way2->getElementId());
 
-  std::vector<ElementId> newWayIds = removeSubline(way2, subline2, _map);
+  std::vector<ElementId> newWayIds = WaySublineRemover::removeSubline(way2, subline2, _map);
   if (!newWayIds.empty())
   {
+    // Do bookkeeping to show the new ways that replaced the old ref way. Arbitrarily use the
+    // first ID, since we can't map the modified sec way to more than one new way.
     replaced.emplace_back(way2->getElementId(), newWayIds.at(0));
   }
   if (WRITE_DETAILED_DEBUG_MAPS)
@@ -130,51 +118,6 @@ bool LinearDiffMerger::_mergePair(
 
   //LOG_VART(replaced);
   return false;
-}
-
-std::vector<ElementId> LinearDiffMerger::removeSubline(
-  const WayPtr& way, const WaySubline& subline, const OsmMapPtr& map)
-{
-  if (!way)
-  {
-    return std::vector<ElementId>();
-  }
-
-  std::vector<ElementId> newWayIds;
-  WayLocation start(subline.getStart());
-  WayLocation end(subline.getEnd());
-
-  // If the sec matching subline runs the entire length of the sec way, just remove the entire sec
-  // way.
-  if (start.isExtreme() && end.isExtreme())
-  {
-    LOG_TRACE(
-      "Subline matches covers entire sec way; removing entire sec way: " << way->getElementId());
-    RecursiveElementRemover(way->getElementId()).apply(map);
-  }
-  else
-  {
-    // Otherwise, remove only the portion of the sec way that matched with the ref way.
-
-    LOG_TRACE("Removing subline from " << way->getElementId() << "...");
-
-    newWayIds = WaySublineRemover::remove(way, start, end, map);
-    LOG_VART(newWayIds);
-    if (!newWayIds.empty())
-    {
-      // Do bookkeeping to show the new ways that replaced the old ref way. Arbitrarily use the
-      // first ID, since we can't map the modified sec way to more than one new way.
-      //replaced.emplace_back(way2->getElementId(), newWayIds.at(0));
-      // Update references to the sec way.
-      ReplaceElementOp(way->getElementId(), newWayIds.at(0), true).apply(map);
-    }
-    else
-    {
-      LOG_TRACE("No subline removed for " << way->getElementId() << ".");
-    }
-  }
-
-  return newWayIds;
 }
 
 }

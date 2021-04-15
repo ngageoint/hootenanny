@@ -33,12 +33,55 @@
 #include <hoot/core/algorithms/linearreference/WayLocation.h>
 #include <hoot/core/algorithms/splitter/WaySplitter.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
+#include <hoot/core/ops/ReplaceElementOp.h>
+#include <hoot/core/algorithms/linearreference/WaySubline.h>
 
 // Standard
 #include <vector>
 
 namespace hoot
 {
+
+std::vector<ElementId> WaySublineRemover::removeSubline(
+  const WayPtr& way, const WaySubline& subline, const OsmMapPtr& map)
+{
+  if (!way)
+  {
+    return std::vector<ElementId>();
+  }
+
+  std::vector<ElementId> newWayIds;
+  WayLocation start(subline.getStart());
+  WayLocation end(subline.getEnd());
+
+  // If the matching subline runs the entire length of the way, just remove the entire way.
+  if (start.isExtreme() && end.isExtreme())
+  {
+    LOG_TRACE(
+      "Subline matches covers entire way; removing entire way: " << way->getElementId());
+    RecursiveElementRemover(way->getElementId()).apply(map);
+  }
+  else
+  {
+    // Otherwise, remove only the portion of the way that overlaps.
+
+    LOG_TRACE("Removing subline from " << way->getElementId() << "...");
+
+    newWayIds = WaySublineRemover::remove(way, start, end, map);
+    LOG_VART(newWayIds);
+    if (!newWayIds.empty())
+    {
+      // Update references to the modified way.
+      ReplaceElementOp(way->getElementId(), newWayIds.at(0), true).apply(map);
+    }
+    else
+    {
+      LOG_TRACE("No subline removed for " << way->getElementId() << ".");
+    }
+  }
+
+  return newWayIds;
+}
 
 std::vector<ElementId> WaySublineRemover::remove(
   const WayPtr& way, const WayLocation& start, const WayLocation& end, const OsmMapPtr& map)

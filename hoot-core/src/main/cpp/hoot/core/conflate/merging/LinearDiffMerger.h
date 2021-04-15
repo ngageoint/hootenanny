@@ -50,17 +50,6 @@ public:
     const std::shared_ptr<SublineStringMatcher>& sublineMatcher);
   virtual ~LinearDiffMerger() = default;
 
-  /**
-   * TODO
-   *
-   * @param way
-   * @param subline
-   * @param map
-   * @return
-   */
-  static std::vector<ElementId> removeSubline(
-    const WayPtr& way, const WaySubline& subline, const OsmMapPtr& map);
-
   virtual QString getDescription() const { return "TODO"; }
   virtual QString getName() const override { return className(); }
   virtual QString getClassName() const override { return className(); }
@@ -74,7 +63,6 @@ protected:
 private:
 
   std::shared_ptr<SublineStringMatcher> _sublineMatcher;
-  //static QHash<ElementId, WayPtr> _originalWays;
 
   static const bool WRITE_DETAILED_DEBUG_MAPS;
 };

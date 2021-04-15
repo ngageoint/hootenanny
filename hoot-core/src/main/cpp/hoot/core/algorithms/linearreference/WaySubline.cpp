@@ -30,8 +30,8 @@
 #include <geos/geom/LineString.h>
 
 // hoot
-#include <hoot/core/algorithms/Distance.h>
 #include <hoot/core/algorithms/FindNodesInWayFactory.h>
+#include <hoot/core/elements/ElementGeometryUtils.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/visitors/ConstElementVisitor.h>
 
@@ -68,6 +68,12 @@ _end(end)
 {
 }
 
+WaySubline::WaySubline(const ConstWayPtr& way, const ConstOsmMapPtr& map) :
+_start(WayLocation(map, way, 0.0)),
+_end(WayLocation(map, way, ElementGeometryUtils::calculateLength(way, map)))
+{
+}
+
 WaySubline& WaySubline::operator=(const WaySubline& from)
 {
   if (this != &from)
@@ -81,67 +87,6 @@ WaySubline& WaySubline::operator=(const WaySubline& from)
 bool operator==(const WaySubline& a, const WaySubline& b)
 {
   return a.getStart() == b.getStart() && a.getEnd() == b.getEnd();
-}
-
-WaySubline WaySubline::operator+(const WaySubline& other)
-{
-  // Create the smallest subline that contains both this subline and the other subline.
-
-  if (this == &other || *this == other)
-  {
-    return WaySubline(*this);
-  }
-  else if (other.getStart() == this->getStart())
-  {
-    Meters lengthOther = other.calculateLength();
-    Meters lengthThis = this->calculateLength();
-    WayLocation end;
-    if (lengthOther > lengthThis)
-    {
-      end = other.getEnd();
-    }
-    else
-    {
-      end = this->getEnd();
-    }
-    return WaySubline(this->getStart(), end);
-  }
-  else if (other.getEnd() == this->getEnd())
-  {
-    Meters lengthOther = other.calculateLength();
-    Meters lengthThis = this->calculateLength();
-    WayLocation start;
-    if (lengthOther > lengthThis)
-    {
-      start = other.getStart();
-    }
-    else
-    {
-      start = this->getStart();
-    }
-    return WaySubline(start, this->getEnd());
-  }
-  else if (this->overlaps(other))
-  {
-
-
-    return *this;
-  }
-  else
-  {
-//    const double thisStartToOtherEndDistance =
-//      Distance::euclidean(this->getStart().getNode(), other.getEnd().getNode());
-//    const double thisStartToOtherStartDistance =
-//      Distance::euclidean(this->getStart().getNode(), other.getStart().getNode());
-//    const double thisEndToOtherStartDistance =
-//      Distance::euclidean(this->getEnd().getNode(), other.getStart().getNode());
-//    const double thisEndToOtherEndDistance =
-//      Distance::euclidean(this->getEnd().getNode(), other.getEnd().getNode());
-
-
-
-    return *this;
-  }
 }
 
 Meters WaySubline::calculateLength() const
@@ -201,8 +146,8 @@ QString WaySubline::toString() const
   return "start: " + getStart().toString() + " end: " + getEnd().toString();
 }
 
-WayPtr WaySubline::toWay(const OsmMapPtr& map, GeometryToElementConverter::NodeFactory* nf,
-                         bool reuse) const
+WayPtr WaySubline::toWay(
+  const OsmMapPtr& map, GeometryToElementConverter::NodeFactory* nf, bool reuse) const
 {
   ConstWayPtr way = _start.getWay();
 

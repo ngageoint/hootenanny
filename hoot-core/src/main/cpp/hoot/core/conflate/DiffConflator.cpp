@@ -61,9 +61,11 @@
 #include <hoot/core/ops/WayJoinerOp.h>
 #include <hoot/core/util/ConfigUtils.h>
 #include <hoot/core/io/OsmChangesetFileWriter.h>
-#include <hoot/core/conflate/merging/LinearDiffMerger.h>
+//#include <hoot/core/conflate/merging/LinearDiffMerger.h>
 #include <hoot/core/conflate/highway/HighwayMatch.h>
 #include <hoot/core/conflate/ConflateInfoCache.h>
+#include <hoot/core/algorithms/linearreference/WaySublineMerger.h>
+#include <hoot/core/algorithms/linearreference/WaySublineRemover.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -432,7 +434,8 @@ void DiffConflator::_removeMatchElements(const Status& status, const bool forceC
           WaySubline subline = highwayMatch->getSublineMatch().getMatches().at(0).getSubline2();
           if (sublines.contains(eid2))
           {
-            sublines[eid2] = sublines[eid2] + subline;
+            //sublines[eid2] = sublines[eid2] + subline;
+            sublines[eid2] = WaySublineMerger::mergeSublines(sublines[eid2], subline);
           }
           else
           {
@@ -461,7 +464,8 @@ void DiffConflator::_removeMatchElements(const Status& status, const bool forceC
          ++it)
     {
       /*std::vector<ElementId> newWayIds = */
-        LinearDiffMerger::removeSubline(
+        // TODO: move to a WaySublineRemover class
+        WaySublineRemover::removeSubline(
           std::dynamic_pointer_cast<Way>(_map->getElement(it.key())), it.value(), _map);
     }
 

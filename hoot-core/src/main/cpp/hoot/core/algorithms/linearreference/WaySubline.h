@@ -50,14 +50,11 @@ public:
   WaySubline(const WayLocation& start, const WayLocation& end);
   WaySubline(const WaySubline& from);
   WaySubline(const WaySubline& from, const ConstOsmMapPtr& newMap);
+  WaySubline(const ConstWayPtr& way, const ConstOsmMapPtr& map);
 
   WaySubline& operator=(const WaySubline& from);
-  WaySubline operator+(const WaySubline& other);
-
-  Meters calculateLength() const;
 
   bool contains(const WayLocation& wl) const;
-
   /**
    * Returns true if all the points in other overlap with this.
    */
@@ -66,6 +63,7 @@ public:
   WaySubline expand(Meters d) const;
 
   Meters getLength() const;
+  Meters calculateLength() const;
 
   /**
    * Returns true if the two sublines have interior points in common. If they only touch at one
@@ -88,8 +86,9 @@ public:
    * @param reuse - flag for reusing way id or getting a new one from the map
    * @return the created way
    */
-  WayPtr toWay(const OsmMapPtr& map, GeometryToElementConverter::NodeFactory* nf = nullptr,
-               bool reuse = false) const;
+  WayPtr toWay(
+    const OsmMapPtr& map, GeometryToElementConverter::NodeFactory* nf = nullptr,
+    bool reuse = false) const;
 
   /**
    * Returns true if the two sublines have any points in common.
