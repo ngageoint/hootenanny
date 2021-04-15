@@ -69,9 +69,6 @@ protected:
   // This is useful for getting rid of them later, if necessary.
   bool _markAddedMultilineStringRelations;
 
-  /*
-   * @todo This monster method needs to be refactored into smaller parts where possible.
-   */
   bool _mergePair(
     ElementId eid1, ElementId eid2,
     std::vector<std::pair<ElementId, ElementId>>& replaced) override;

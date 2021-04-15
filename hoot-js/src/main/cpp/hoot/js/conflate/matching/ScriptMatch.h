@@ -96,10 +96,10 @@ public:
   std::map<QString, double> getFeatures(const ConstOsmMapPtr& map) const override;
 
   /**
-   * TODO
+   * Given a geometry type from a conflate script, returns the corresponding MatchMembers value.
    *
-   * @param geometryType
-   * @return
+   * @param geometryType a geometry type string
+   * @return a MatchMebers enumeration value
    */
   static MatchMembers geometryTypeToMatchMembers(const QString& geometryType);
 
