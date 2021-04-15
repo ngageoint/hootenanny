@@ -53,6 +53,7 @@ void LinearMergerAbstract::apply(const OsmMapPtr& map, vector<pair<ElementId, El
   LOG_TRACE("Applying LinearSnapMerger...");
   LOG_VART(hoot::toString(_pairs));
   LOG_VART(hoot::toString(replaced));
+  _map = map;
 
   vector<pair<ElementId, ElementId>> pairs;
   pairs.reserve(_pairs.size());
@@ -63,7 +64,7 @@ void LinearMergerAbstract::apply(const OsmMapPtr& map, vector<pair<ElementId, El
     ElementId eid1 = it->first;
     ElementId eid2 = it->second;
 
-    if (map->containsElement(eid1) && map->containsElement(eid2))
+    if (_map->containsElement(eid1) && _map->containsElement(eid2))
     {
       pairs.push_back(pair<ElementId, ElementId>(eid1, eid2));
     }
@@ -76,7 +77,7 @@ void LinearMergerAbstract::apply(const OsmMapPtr& map, vector<pair<ElementId, El
   LOG_VART(hoot::toString(pairs));
 
   ShortestFirstComparator shortestFirst;
-  shortestFirst.map = map;
+  shortestFirst.map = _map;
   sort(pairs.begin(), pairs.end(), shortestFirst);
   for (vector<pair<ElementId, ElementId>>::const_iterator it = pairs.begin();
        it != pairs.end(); ++it)
@@ -86,16 +87,6 @@ void LinearMergerAbstract::apply(const OsmMapPtr& map, vector<pair<ElementId, El
 
     for (size_t i = 0; i < replaced.size(); i++)
     {
-      LOG_VART(eid1);
-      LOG_VART(eid2);
-      LOG_VART(replaced[i].first);
-      LOG_VART(replaced[i].second);
-
-      //LOG_TRACE("eid1 before replacement check: " << eid1);
-      //LOG_TRACE("eid2 before replacement check: " << eid2);
-      LOG_TRACE("e1 before replacement check: " << map->getElement(eid1));
-      LOG_TRACE("e2 before replacement check: " << map->getElement(eid2));
-
       if (eid1 == replaced[i].first)
       {
         LOG_TRACE("Changing " << eid1 << " to " << replaced[i].second << "...");
@@ -107,18 +98,14 @@ void LinearMergerAbstract::apply(const OsmMapPtr& map, vector<pair<ElementId, El
         eid2 = replaced[i].second;
       }
 
-      //LOG_TRACE("eid1 after replacement check: " << eid1);
-      //LOG_TRACE("eid2 after replacement check: " << eid2);
-      LOG_TRACE("e1 after replacement check: " << map->getElement(eid1));
-      LOG_TRACE("e2 after replacement check: " << map->getElement(eid2));
     }
 
-    _mergePair(map, eid1, eid2, replaced);
+    _mergePair(eid1, eid2, replaced);
   }
 }
 
 void LinearMergerAbstract::_markNeedsReview(
-  const OsmMapPtr &map, ElementPtr e1, ElementPtr e2, QString note, QString reviewType)
+  ElementPtr e1, ElementPtr e2, QString note, QString reviewType)
 {
   if (!e1 && !e2)
   {
@@ -134,26 +121,23 @@ void LinearMergerAbstract::_markNeedsReview(
   }
   else if (e1 && e2)
   {
-    _reviewMarker.mark(map, e1, e2, note, reviewType);
+    _reviewMarker.mark(_map, e1, e2, note, reviewType);
   }
   else if (e1)
   {
-    _reviewMarker.mark(map, e1, note, reviewType);
+    _reviewMarker.mark(_map, e1, note, reviewType);
   }
   else if (e2)
   {
-    _reviewMarker.mark(map, e2, note, reviewType);
+    _reviewMarker.mark(_map, e2, note, reviewType);
   }
 }
 
 bool LinearMergerAbstract::_mergePair(
-  const OsmMapPtr& map, ElementId eid1, ElementId eid2,
-  vector<pair<ElementId, ElementId>>& /*replaced*/)
+  ElementId eid1, ElementId eid2, vector<pair<ElementId, ElementId>>& /*replaced*/)
 {
-  OsmMapPtr result = map;
-
-  ElementPtr e1 = result->getElement(eid1);
-  ElementPtr e2 = result->getElement(eid2);
+  ElementPtr e1 = _map->getElement(eid1);
+  ElementPtr e2 = _map->getElement(eid2);
 
   // if the element is no longer part of the map. This can happen in rare cases where a match may
   // not conflict with any one match in the set, but may conflict with multiple matches in the
@@ -166,37 +150,13 @@ bool LinearMergerAbstract::_mergePair(
   // this in the conflict code at this time, so we'll ignore the merge.
   if (!e1 || !e2)
   {
-    if (!e1)
-    {
-      LOG_TRACE(eid1 << " is missing.");
-    }
-    if (!e2)
-    {
-      LOG_TRACE(eid2 << " is missing.");
-    }
-    if (e1 || e2)
-    {
-      QString msg = "Marking review for ";
-      if (e1)
-      {
-        msg += e1->getElementId().toString();
-      }
-      if (e2)
-      {
-        msg += " and " + e2->getElementId().toString();
-      }
-      msg += "...";
-      LOG_TRACE(msg);
-    }
-
-    _markNeedsReview(result, e1, e2, "Missing match pair", HighwayMatch::getHighwayMatchName());
+    _markNeedsReview(e1, e2, "Missing match pair", HighwayMatch::getHighwayMatchName());
     return true;
   }
   return false;
 }
 
-void LinearMergerAbstract::_removeSpans(OsmMapPtr map, const ElementPtr& e1,
-                                        const ElementPtr& e2) const
+void LinearMergerAbstract::_removeSpans(const ElementPtr& e1, const ElementPtr& e2) const
 {
   if (e1->getElementType() != e2->getElementType())
   {
@@ -209,7 +169,7 @@ void LinearMergerAbstract::_removeSpans(OsmMapPtr map, const ElementPtr& e1,
     WayPtr w1 = std::dynamic_pointer_cast<Way>(e1);
     WayPtr w2 = std::dynamic_pointer_cast<Way>(e2);
 
-    _removeSpans(map, w1, w2);
+    _removeSpans(w1, w2);
   }
   else
   {
@@ -227,16 +187,16 @@ void LinearMergerAbstract::_removeSpans(OsmMapPtr map, const ElementPtr& e1,
       ElementId m1 = r1->getMembers()[i].getElementId();
       ElementId m2 = r2->getMembers()[i].getElementId();
       assert(m1.getType() == ElementType::Way && m2.getType() == ElementType::Way);
-      _removeSpans(map, map->getWay(m1), map->getWay(m2));
+      _removeSpans(_map->getWay(m1), _map->getWay(m2));
     }
   }
 }
 
-void LinearMergerAbstract::_removeSpans(OsmMapPtr map, const WayPtr& w1, const WayPtr& w2) const
+void LinearMergerAbstract::_removeSpans(const WayPtr& w1, const WayPtr& w2) const
 {
   LOG_TRACE("Removing spans...");
 
-  std::shared_ptr<NodeToWayMap> n2w = map->getIndex().getNodeToWayMap();
+  std::shared_ptr<NodeToWayMap> n2w = _map->getIndex().getNodeToWayMap();
 
   // find all the ways that connect to the beginning or end of w1. There shouldn't be any that
   // connect in the middle.
@@ -248,7 +208,7 @@ void LinearMergerAbstract::_removeSpans(OsmMapPtr map, const WayPtr& w1, const W
   {
     if (*it != w1->getId() && *it != w2->getId())
     {
-      const WayPtr& w = map->getWay(*it);
+      const WayPtr& w = _map->getWay(*it);
       // if this isn't one of the ways we're evaluating for a connection between and it is part of
       // the data set we're conflating in
       if (w->getElementId() != w1->getElementId() &&
@@ -261,10 +221,10 @@ void LinearMergerAbstract::_removeSpans(OsmMapPtr map, const WayPtr& w1, const W
         {
           // if the connection is more or less a straight shot. Don't want to worry about round
           // about connections (e.g. lollipop style).
-          if (_directConnect(map, w))
+          if (_directConnect(w))
           {
             // This should likely remove the way even if it is part of another relation - #2938
-            RecursiveElementRemover(w->getElementId()).apply(map);
+            RecursiveElementRemover(w->getElementId()).apply(_map);
           }
         }
       }
@@ -272,15 +232,15 @@ void LinearMergerAbstract::_removeSpans(OsmMapPtr map, const WayPtr& w1, const W
   }
 }
 
-bool LinearMergerAbstract::_directConnect(const ConstOsmMapPtr& map, WayPtr w) const
+bool LinearMergerAbstract::_directConnect(WayPtr w) const
 {
-  std::shared_ptr<LineString> ls = ElementToGeometryConverter(map).convertToLineString(w);
+  std::shared_ptr<LineString> ls = ElementToGeometryConverter(_map).convertToLineString(w);
 
   CoordinateSequence* cs = GeometryFactory::getDefaultInstance()->getCoordinateSequenceFactory()->
     create(2, 2);
 
-  cs->setAt(map->getNode(w->getNodeId(0))->toCoordinate(), 0);
-  cs->setAt(map->getNode(w->getLastNodeId())->toCoordinate(), 1);
+  cs->setAt(_map->getNode(w->getNodeId(0))->toCoordinate(), 0);
+  cs->setAt(_map->getNode(w->getLastNodeId())->toCoordinate(), 1);
 
   // create a straight line and buffer it
   std::shared_ptr<LineString> straight(GeometryFactory::getDefaultInstance()->createLineString(cs));

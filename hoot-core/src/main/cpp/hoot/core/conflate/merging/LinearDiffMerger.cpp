@@ -43,10 +43,9 @@ namespace hoot
 // ONLY ENABLE THIS DURING DEBUGGING; We don't want to tie it to debug.maps.write, as it may
 // produce a very large number of output files.
 const bool LinearDiffMerger::WRITE_DETAILED_DEBUG_MAPS = true;
+//QHash<ElementId, WayPtr> LinearDiffMerger::_originalWays;
 
 HOOT_FACTORY_REGISTER(Merger, LinearDiffMerger)
-
-int LinearDiffMerger::logWarnCount = 0;
 
 LinearDiffMerger::LinearDiffMerger() :
 LinearMergerAbstract()
@@ -59,47 +58,13 @@ LinearDiffMerger::LinearDiffMerger(
 _sublineMatcher(sublineMatcher)
 {
   _pairs = pairs;
-  LOG_VART(_pairs);
-}
-
-void LinearDiffMerger::apply(
-  const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced)
-{
-  LOG_TRACE("Applying LinearDiffMerger...");
-  LOG_VART(hoot::toString(_pairs));
-  LOG_VART(hoot::toString(replaced));
-  LOG_VART(MapProjector::isPlanar(map));
-
-  for (std::set<std::pair<ElementId, ElementId>>::const_iterator it = _pairs.begin();
-       it != _pairs.end(); ++it)
-  {
-    ElementId eid1 = it->first;
-    ElementId eid2 = it->second;
-
-    for (size_t i = 0; i < replaced.size(); i++)
-    {
-      if (eid1 == replaced[i].first)
-      {
-        LOG_TRACE("Changing " << eid1 << " to " << replaced[i].second << "...");
-        eid1 = replaced[i].second;
-      }
-      if (eid2 == replaced[i].first)
-      {
-        LOG_TRACE("Changing " << eid2 << " to " << replaced[i].second << "...");
-        eid2 = replaced[i].second;
-      }
-    }
-
-    _mergePair(map, eid1, eid2, replaced);
-  }
 }
 
 bool LinearDiffMerger::_mergePair(
-  const OsmMapPtr& map, ElementId eid1, ElementId eid2,
-  std::vector<std::pair<ElementId, ElementId>>& replaced)
+  ElementId eid1, ElementId eid2, std::vector<std::pair<ElementId, ElementId>>& replaced)
 {
-  ElementPtr e1 = map->getElement(eid1);
-  ElementPtr e2 = map->getElement(eid2);
+  ElementPtr e1 = _map->getElement(eid1);
+  ElementPtr e2 = _map->getElement(eid2);
   LOG_VART(e1.get());
   LOG_VART(e2.get());
   if (!e1 || !e2)
@@ -117,10 +82,20 @@ bool LinearDiffMerger::_mergePair(
   LOG_VART(eid1);
   LOG_VART(eid2);
 
+//  WayPtr secWay;
+//  if (_originalWays.contains(eid2))
+//  {
+//    secWay = _originalWays[eid2];
+//  }
+//  else
+//  {
+//    secWay = way2;
+//  }
+
   WaySublineMatchString match;
   try
   {
-    match = _sublineMatcher->findMatch(map, way1, way2);
+    match = _sublineMatcher->findMatch(_map, way1, way2);
   }
   catch (const NeedsReviewException& e)
   {
@@ -133,7 +108,7 @@ bool LinearDiffMerger::_mergePair(
     return false;
   }
 
-  // Get the portion of the ref way that matched.
+  // Get the portion of the sec way that matched the ref way.
   WaySublineMatchString::MatchCollection matches = match.getMatches();
   LOG_VART(matches.size());
   WaySubline subline2 = matches.at(0).getSubline2();
@@ -142,47 +117,64 @@ bool LinearDiffMerger::_mergePair(
   LOG_VART(subline2.getWay() == way2);
   LOG_VART(subline2.getWay()->getElementId() == way2->getElementId());
 
-  std::vector<ElementId> newWayIds;
-  WayLocation start(subline2.getStart());
-  WayLocation end(subline2.getEnd());
+  std::vector<ElementId> newWayIds = removeSubline(way2, subline2, _map);
+  if (!newWayIds.empty())
+  {
+    replaced.emplace_back(way2->getElementId(), newWayIds.at(0));
+  }
+  if (WRITE_DETAILED_DEBUG_MAPS)
+  {
+    OsmMapWriterFactory::writeDebugMap(
+      _map, "after-merge-" + eid1.toString() + "-" + eid2.toString());
+  }
 
-  // If the matching subline runs the entire length of the sec way, just remove the entire sec
+  //LOG_VART(replaced);
+  return false;
+}
+
+std::vector<ElementId> LinearDiffMerger::removeSubline(
+  const WayPtr& way, const WaySubline& subline, const OsmMapPtr& map)
+{
+  if (!way)
+  {
+    return std::vector<ElementId>();
+  }
+
+  std::vector<ElementId> newWayIds;
+  WayLocation start(subline.getStart());
+  WayLocation end(subline.getEnd());
+
+  // If the sec matching subline runs the entire length of the sec way, just remove the entire sec
   // way.
   if (start.isExtreme() && end.isExtreme())
   {
     LOG_TRACE(
-      "Subline matches covers entire sec way; removing entire sec way: " << way2->getElementId());
-    RecursiveElementRemover(way2->getElementId()).apply(map);
+      "Subline matches covers entire sec way; removing entire sec way: " << way->getElementId());
+    RecursiveElementRemover(way->getElementId()).apply(map);
   }
   else
   {
     // Otherwise, remove only the portion of the sec way that matched with the ref way.
 
-    LOG_TRACE("Removing subline from " << way2->getElementId() << "...");
+    LOG_TRACE("Removing subline from " << way->getElementId() << "...");
 
-    newWayIds = WaySublineRemover::remove(way2, start, end, map);
+    newWayIds = WaySublineRemover::remove(way, start, end, map);
     LOG_VART(newWayIds);
     if (!newWayIds.empty())
     {
       // Do bookkeeping to show the new ways that replaced the old ref way. Arbitrarily use the
       // first ID, since we can't map the modified sec way to more than one new way.
-      replaced.emplace_back(way2->getElementId(), newWayIds.at(0));
+      //replaced.emplace_back(way2->getElementId(), newWayIds.at(0));
       // Update references to the sec way.
-      ReplaceElementOp(way2->getElementId(), newWayIds.at(0), true).apply(map);
+      ReplaceElementOp(way->getElementId(), newWayIds.at(0), true).apply(map);
     }
     else
     {
-      LOG_TRACE("No subline removed for " << way2->getElementId() << ".");
+      LOG_TRACE("No subline removed for " << way->getElementId() << ".");
     }
   }
-  if (WRITE_DETAILED_DEBUG_MAPS)
-  {
-    OsmMapWriterFactory::writeDebugMap(
-      map, "after-merge-" + eid1.toString() + "-" + eid2.toString());
-  }
 
-  LOG_VART(replaced);
-  return false;
+  return newWayIds;
 }
 
 }

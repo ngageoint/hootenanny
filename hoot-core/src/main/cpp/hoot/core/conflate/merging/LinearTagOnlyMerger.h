@@ -49,7 +49,7 @@ public:
 
   static QString className() { return "hoot::LinearTagOnlyMerger"; }
 
-  LinearTagOnlyMerger() = default;
+  LinearTagOnlyMerger();
   // This is definitely not ideal to be passing a Network Conflation merger in here like this to
   // deal with bridge merging. At the very least, passing in a MergerPtr would be less brittle.
   // Lots of refactoring would likely need to be done to avoid this, however.
@@ -64,7 +64,8 @@ public:
 
 protected:
 
-  bool _mergePair(const OsmMapPtr& map, ElementId eid1, ElementId eid2,
+  bool _mergePair(
+    ElementId eid1, ElementId eid2,
     std::vector<std::pair<ElementId, ElementId>>& replaced) override;
 
 private:
@@ -72,17 +73,19 @@ private:
   bool _performBridgeGeometryMerging;
   std::shared_ptr<PartialNetworkMerger> _networkMerger;
 
-  void _determineKeeperFeature(ElementPtr element1, ElementPtr element2, ElementPtr& keeper,
-                               ElementPtr& toRemove, bool& removeSecondaryElement);
+  void _determineKeeperFeature(
+    ElementPtr element1, ElementPtr element2, ElementPtr& keeper, ElementPtr& toRemove,
+    bool& removeSecondaryElement);
 
-  void _handleOneWayStreetReversal(ElementPtr elementWithTagsToKeep,
-                                   ConstElementPtr elementWithTagsToRemove, const OsmMapPtr& map);
-  bool _conflictExists(ConstElementPtr elementWithTagsToKeep,
-                       ConstElementPtr elementWithTagsToRemove) const;
+  void _handleOneWayStreetReversal(
+    ElementPtr elementWithTagsToKeep, ConstElementPtr elementWithTagsToRemove);
 
-  bool _mergeWays(ElementPtr elementWithTagsToKeep, ElementPtr elementWithTagsToRemove,
-                  const bool removeSecondaryElement, const OsmMapPtr& map,
-                  std::vector<std::pair<ElementId, ElementId>>& replaced);
+  bool _conflictExists(
+    ConstElementPtr elementWithTagsToKeep, ConstElementPtr elementWithTagsToRemove) const;
+
+  bool _mergeWays(
+    ElementPtr elementWithTagsToKeep, ElementPtr elementWithTagsToRemove,
+    const bool removeSecondaryElement, std::vector<std::pair<ElementId, ElementId>>& replaced);
 };
 
 using LinearTagOnlyMergerPtr = std::shared_ptr<LinearTagOnlyMerger>;

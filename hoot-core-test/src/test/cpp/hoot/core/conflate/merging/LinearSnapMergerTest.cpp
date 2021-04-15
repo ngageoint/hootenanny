@@ -452,7 +452,7 @@ public:
     vector<pair<ElementId, ElementId>> replaced;
     merger.apply(map, replaced);
 
-    merger._markNeedsReview(map, w1, w2, "a review note", "a review type");
+    merger._markNeedsReview(w1, w2, "a review note", "a review type");
 
     CPPUNIT_ASSERT_EQUAL((size_t)1, map->getRelations().size());
     // will throw an exception on failure
