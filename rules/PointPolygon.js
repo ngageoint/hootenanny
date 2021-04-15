@@ -18,6 +18,7 @@ exports.reviewThreshold = parseFloat(hoot.get("conflate.review.threshold.default
 exports.searchRadius = parseFloat(hoot.get("search.radius.generic.point.polygon"));
 exports.typeThreshold = parseFloat(hoot.get("generic.point.polygon.type.threshold"));
 exports.writeDebugTags = hoot.get("writer.include.debug.tags");
+exports.writeMatchedBy = hoot.get("writer.include.matched.by.tag");
 // The baseFeatureType and geometryType vars don't work for Point/Polygon with stats due to it
 // conflating different geometry types. Logic has been added to ScriptMatchCreator to handle this,
 // so they can remain empty.
@@ -151,11 +152,10 @@ exports.mergePair = function(map, e1, e2)
   mergeElements(map, keeper, toReplace);
 
   keeper.setStatusString("conflated");
-  if (exports.writeDebugTags == "true")
+  if (exports.writeDebugTags == "true" && exports.writeMatchedBy == "true")
   {
     // Technically, we should get this key from MetadataTags, but that's not integrated with hoot yet.
     keeper.setTag("hoot:matchedBy", "PointPolygon");
-    hoot.trace("keeper: " + keeper.getId() + ", " + keeper.getTags().get("hoot:matchedBy"));
   }
 
   return keeper;

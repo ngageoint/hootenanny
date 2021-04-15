@@ -20,6 +20,7 @@ exports.typeThreshold = parseFloat(hoot.get("relation.type.threshold"));
 exports.nameThreshold = parseFloat(hoot.get("relation.name.threshold"));
 exports.experimental = false;
 exports.baseFeatureType = "CollectionRelation";
+exports.writeDebugTags = hoot.get("writer.include.debug.tags");
 exports.writeMatchedBy = hoot.get("writer.include.matched.by.tag");
 // TODO: should this be line?
 exports.geometryType = "polygon";
@@ -268,7 +269,7 @@ exports.mergePair = function(map, e1, e2)
   hoot.RelationMerger.mergeRelations(map, e1.getElementId(), e2.getElementId());
 
   e1.setStatusString("conflated");
-  if (exports.writeMatchedBy == "true")
+  if (exports.writeDebugTags == "true" && exports.writeMatchedBy == "true")
   {
     // Technically we should get this key from MetadataTags, but that's not integrated with hoot
     // yet.

@@ -57,7 +57,7 @@ bool PoiPolygonPoiCriterion::isSatisfied(const ConstElementPtr& e) const
     return false;
   }
 
-  //see note in PoiPolygonPolyCriterion::isSatisified
+  // see note in PoiPolygonPolyCriterion::isSatisified
   if (OsmSchema::getInstance().containsTagFromList(tags, _tagIgnoreList))
   {
     LOG_TRACE("Contains tag from tag ignore list");
@@ -90,8 +90,6 @@ bool PoiPolygonPoiCriterion::isSatisfied(const ConstElementPtr& e) const
     }
   }
 
-  //LOG_VART(e);
-  //LOG_VART(isPoi);
   return isPoi;
 }
 
