@@ -95,6 +95,10 @@ private:
    */
   bool _checkForIdenticalElements(const ElementPtr& e1, const ElementPtr& e2);
 
+  void _mergeTags(const Tags& e1Tags, const Tags& e2Tags, const ElementPtr& e1Match);
+
+  void _markMultilineStringRelations(const ElementPtr& element);
+
   /*
    * Snap the ends of snapee that match with either end point of middle to snapTo's end points.
    */

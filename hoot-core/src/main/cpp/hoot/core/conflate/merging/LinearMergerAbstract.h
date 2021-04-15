@@ -106,7 +106,7 @@ protected:
   OsmMapPtr _map;
   ReviewMarker _reviewMarker;
 
-  static int logWarnCount;
+  QString _eidLogString;
 
   std::set<std::pair<ElementId, ElementId>> _pairs;
 
@@ -131,6 +131,10 @@ protected:
   void _removeSpans(const WayPtr& w1, const WayPtr& w2) const;
 
 private:
+
+  static int logWarnCount;
+
+  static const bool WRITE_DETAILED_DEBUG_MAPS;
 
   /*
    * Returns true if the way directly connects the left and right ways. There is some tolerance

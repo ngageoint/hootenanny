@@ -109,7 +109,6 @@ bool LinearSnapMerger::_mergePair(
 {
   LOG_VART(eid1);
   LOG_VART(eid2);
-  const QString eidLogString = "-" + eid1.toString() + "-" + eid2.toString();
 
   if (LinearMergerAbstract::_mergePair(eid1, eid2, replaced))
   {
@@ -159,46 +158,19 @@ bool LinearSnapMerger::_mergePair(
   // Split the first element and don't reverse any of the geometries.
   _splitElement(
     match.getSublineString1(), match.getReverseVector1(), replaced, e1, e1Match, scraps1);
-  if (WRITE_DETAILED_DEBUG_MAPS)
-  {
-    OsmMapWriterFactory::writeDebugMap(_map, "LinearSnapMerger-after-split-1" + eidLogString);
-  }
 
   // Split the second element and reverse any geometries to make the matches work.
   _splitElement(
     match.getSublineString2(), match.getReverseVector2(), replaced, e2, e2Match, scraps2);
-  if (WRITE_DETAILED_DEBUG_MAPS)
-  {
-    OsmMapWriterFactory::writeDebugMap(_map, "LinearSnapMerger-after-split-2" + eidLogString);
-  }
 
   // Remove any ways that directly connect from e1Match to e2Match.
   _removeSpans(e1Match, e2Match);
-  if (WRITE_DETAILED_DEBUG_MAPS)
-  {
-    OsmMapWriterFactory::writeDebugMap(_map, "LinearSnapMerger-after-remove-spans" + eidLogString);
-  }
 
   // Snap the ends together.
   _snapEnds(e2Match, e1Match);
-  if (WRITE_DETAILED_DEBUG_MAPS)
-  {
-    OsmMapWriterFactory::writeDebugMap(_map, "LinearSnapMerger-after-snap-ends" + eidLogString);
-  }
 
-  // Mrge the attributes appropriately.
-  Tags newTags = TagMergerFactory::mergeTags(e1->getTags(), e2->getTags(), ElementType::Way);
-  e1Match->setTags(newTags);
-  e1Match->setStatus(Status::Conflated);
-  ConfigOptions conf;
-  if (conf.getWriterIncludeDebugTags() && conf.getWriterIncludeMatchedByTag())
-  {
-    e1Match->setTag(MetadataTags::HootMatchedBy(), _matchedBy);
-  }
-  if (WRITE_DETAILED_DEBUG_MAPS)
-  {
-    OsmMapWriterFactory::writeDebugMap(_map, "LinearSnapMerger-after-tag-merging" + eidLogString);
-  }
+  // Merge the attributes appropriately.
+  _mergeTags(e1->getTags(), e2->getTags(), e1Match);
 
   bool swapWayIds = false;
 
@@ -283,27 +255,6 @@ bool LinearSnapMerger::_mergePair(
     }
   }
 
-  if (_markAddedMultilineStringRelations)
-  {
-    // sanity check to make sure elements other than relations aren't marked incorrectly
-    if (e1Match && e1Match->getElementType() != ElementType::Relation)
-    {
-      e1Match->getTags().remove(MetadataTags::HootMultilineString());
-    }
-    if (scraps1 && scraps1->getElementType() != ElementType::Relation)
-    {
-      scraps1->getTags().remove(MetadataTags::HootMultilineString());
-    }
-    if (e2Match && e2Match->getElementType() != ElementType::Relation)
-    {
-      e2Match->getTags().remove(MetadataTags::HootMultilineString());
-    }
-    if (scraps2 && scraps2->getElementType() != ElementType::Relation)
-    {
-      scraps2->getTags().remove(MetadataTags::HootMultilineString());
-    }
-  }
-
   // Remove the old way that was split and snapped.
   if (e1 != e1Match && scraps1)
   {
@@ -341,7 +292,7 @@ bool LinearSnapMerger::_mergePair(
   if (WRITE_DETAILED_DEBUG_MAPS)
   {
     OsmMapWriterFactory::writeDebugMap(
-      _map, "LinearSnapMerger-after-old-way-removal-1" + eidLogString);
+      _map, "LinearSnapMerger-after-old-way-removal-1" + _eidLogString);
   }
 
   // If there is something left to review against,
@@ -397,7 +348,16 @@ bool LinearSnapMerger::_mergePair(
   if (WRITE_DETAILED_DEBUG_MAPS)
   {
     OsmMapWriterFactory::writeDebugMap(
-      _map, "LinearSnapMerger-after-old-way-removal-2" + eidLogString);
+      _map, "LinearSnapMerger-after-old-way-removal-2" + _eidLogString);
+  }
+
+  if (_markAddedMultilineStringRelations)
+  {
+    // sanity check to make sure elements other than relations aren't marked incorrectly
+    _markMultilineStringRelations(e1Match);
+    _markMultilineStringRelations(scraps1);
+    _markMultilineStringRelations(e2Match);
+    _markMultilineStringRelations(scraps2);
   }
 
   LOG_VART(replaced);
@@ -407,8 +367,6 @@ bool LinearSnapMerger::_mergePair(
 
 bool LinearSnapMerger::_checkForIdenticalElements(const ElementPtr& e1, const ElementPtr& e2)
 {
-  const QString eidLogString =
-    "-" + e1->getElementId().toString() + "-" + e2->getElementId().toString();
   ElementComparer elementComparer;
   elementComparer.setIgnoreElementId(true);
   elementComparer.setOsmMap(_map.get());
@@ -433,13 +391,37 @@ bool LinearSnapMerger::_checkForIdenticalElements(const ElementPtr& e1, const El
     if (WRITE_DETAILED_DEBUG_MAPS)
     {
       OsmMapWriterFactory::writeDebugMap(
-       _map, "LinearSnapMerger-merged-identical-elements" + eidLogString);
+       _map, "LinearSnapMerger-merged-identical-elements" + _eidLogString);
     }
 
     return true;
   }
 
   return false;
+}
+
+void LinearSnapMerger::_mergeTags(const Tags& e1Tags, const Tags& e2Tags, const ElementPtr& e1Match)
+{
+  Tags newTags = TagMergerFactory::mergeTags(e1Tags, e2Tags, ElementType::Way);
+  e1Match->setTags(newTags);
+  e1Match->setStatus(Status::Conflated);
+  ConfigOptions conf;
+  if (conf.getWriterIncludeDebugTags() && conf.getWriterIncludeMatchedByTag())
+  {
+    e1Match->setTag(MetadataTags::HootMatchedBy(), _matchedBy);
+  }
+  if (WRITE_DETAILED_DEBUG_MAPS)
+  {
+    OsmMapWriterFactory::writeDebugMap(_map, "LinearSnapMerger-after-tag-merging" + _eidLogString);
+  }
+}
+
+void LinearSnapMerger::_markMultilineStringRelations(const ElementPtr& element)
+{
+  if (element && element->getElementType() != ElementType::Relation)
+  {
+    element->getTags().remove(MetadataTags::HootMultilineString());
+  }
 }
 
 void LinearSnapMerger::_snapEnds(ElementPtr snapee, ElementPtr snapTo) const
@@ -520,6 +502,11 @@ void LinearSnapMerger::_snapEnds(ElementPtr snapee, ElementPtr snapTo) const
       }
     }
     _snapEnds(snapeeWays[i], snapeeWays[i], snapToWays[i]);
+  }
+
+  if (WRITE_DETAILED_DEBUG_MAPS)
+  {
+    OsmMapWriterFactory::writeDebugMap(_map, "LinearSnapMerger-after-snap-ends" + _eidLogString);
   }
 }
 
@@ -721,6 +708,11 @@ void LinearSnapMerger::_splitElement(
 
     replaced.emplace_back(splitee->getElementId(), scrap->getElementId());
     LOG_VART(replaced);
+  }
+
+  if (WRITE_DETAILED_DEBUG_MAPS)
+  {
+    OsmMapWriterFactory::writeDebugMap(_map, "LinearSnapMerger-after-split" + _eidLogString);
   }
 }
 

@@ -37,6 +37,7 @@
 #include <hoot/core/elements/NodeToWayMap.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/index/OsmMapIndex.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/util/Log.h>
 
@@ -47,6 +48,9 @@ namespace hoot
 {
 
 int LinearMergerAbstract::logWarnCount = 0;
+// ONLY ENABLE THIS DURING DEBUGGING; We don't want to tie it to debug.maps.write, as it may
+// produce a very large number of files.
+const bool LinearMergerAbstract::WRITE_DETAILED_DEBUG_MAPS = false;
 
 void LinearMergerAbstract::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementId>>& replaced)
 {
@@ -100,6 +104,7 @@ void LinearMergerAbstract::apply(const OsmMapPtr& map, vector<pair<ElementId, El
 
     }
 
+    _eidLogString = "-" + eid1.toString() + "-" + eid2.toString();
     _mergePair(eid1, eid2, replaced);
   }
 }
@@ -189,6 +194,12 @@ void LinearMergerAbstract::_removeSpans(const ElementPtr& e1, const ElementPtr& 
       assert(m1.getType() == ElementType::Way && m2.getType() == ElementType::Way);
       _removeSpans(_map->getWay(m1), _map->getWay(m2));
     }
+  }
+
+  if (WRITE_DETAILED_DEBUG_MAPS)
+  {
+    OsmMapWriterFactory::writeDebugMap(
+      _map, "LinearMergerAbstract-after-remove-spans" + _eidLogString);
   }
 }
 
