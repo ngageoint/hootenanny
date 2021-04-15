@@ -28,7 +28,7 @@
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/algorithms/linearreference//WaySublineRemover.h>
+#include <hoot/core/algorithms/linearreference/WaySublineRemover.h>
 #include <hoot/core/elements/ElementGeometryUtils.h>
 #include <hoot/core/elements/MapUtils.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
@@ -51,8 +51,8 @@ public:
 
   WaySublineRemoverTest() :
   HootTestFixture(
-    "test-files/algorithms/splitter/WaySublineRemoverTest/",
-    "test-output/algorithms/splitter/WaySublineRemoverTest/")
+    "test-files/algorithms/linearreference/WaySublineRemoverTest/",
+    "test-output/algorithms/linearreference/WaySublineRemoverTest/")
   {
     setResetType(ResetBasic);
   }
@@ -76,7 +76,7 @@ public:
     OsmMapWriterFactory::write(map, _outputPath + "runSplitInTheMiddleTest-out.osm", false, true);
     HOOT_FILE_EQUALS(
       _inputPath + "runSplitInTheMiddleTest-out.osm",
-      _outputPath + "runSplitInTheMiddleTest-out.osm")
+      _outputPath + "runSplitInTheMiddleTest-out.osm");
   }
 
   void runSplitAtStartTest()
@@ -97,7 +97,7 @@ public:
     MapProjector::projectToWgs84(map);
     OsmMapWriterFactory::write(map, _outputPath + "runSplitAtStartTest-out.osm", false, true);
     HOOT_FILE_EQUALS(
-      _inputPath + "runSplitAtStartTest-out.osm", _outputPath + "runSplitAtStartTest-out.osm")
+      _inputPath + "runSplitAtStartTest-out.osm", _outputPath + "runSplitAtStartTest-out.osm");
   }
 
   void runSplitAtEndTest()
@@ -118,7 +118,7 @@ public:
     MapProjector::projectToWgs84(map);
     OsmMapWriterFactory::write(map, _outputPath + "runSplitAtEndTest-out.osm", false, true);
     HOOT_FILE_EQUALS(
-      _inputPath + "runSplitAtEndTest-out.osm", _outputPath + "runSplitAtEndTest-out.osm")
+      _inputPath + "runSplitAtEndTest-out.osm", _outputPath + "runSplitAtEndTest-out.osm");
   }
 
   void runMapNotInPlanarTest()
