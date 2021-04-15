@@ -461,8 +461,8 @@ void DiffConflator::_removeMatchElements(const Status& status, const bool forceC
          ++it)
     {
       /*std::vector<ElementId> newWayIds = */
-        LinearDiffMerger::removeSubline(
-          std::dynamic_pointer_cast<Way>(_map->getElement(it.key())), it.value(), _map);
+//        LinearDiffMerger::removeSubline(
+//          std::dynamic_pointer_cast<Way>(_map->getElement(it.key())), it.value(), _map);
     }
 
     LOG_INFO(
