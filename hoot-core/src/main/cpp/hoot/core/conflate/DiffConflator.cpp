@@ -368,22 +368,27 @@ void DiffConflator::_removeMatchElements(const Status& status, const bool forceC
     "\tRemoving match elements with status: " << status.toString() << " from map of size: " <<
     StringUtils::formatLargeNumber(mapSizeBefore) << "...");
 
-  // TODO
+  // If we're treating reviews as matches, elements involved in reviews will be removed as well.
   const bool treatReviewsAsMatches = ConfigOptions().getDifferentialTreatReviewsAsMatches();
   LOG_VART(treatReviewsAsMatches);
 
+  // We don't want remove elements involved in intra-dataset matches, so record those now.
   if (!_intraDatasetElementIdsPopulated)
   {
     _intraDatasetMatchOnlyElementIds = _getElementIdsInvolvedInOnlyIntraDatasetMatches(_matches);
     _intraDatasetElementIdsPopulated = true;
   }
 
-  // TODO: explain
+  QHash<ElementId, WaySubline> sublines;
+
+  // Go through all the matches.
   for (std::vector<ConstMatchPtr>::const_iterator mit = _matches.begin(); mit != _matches.end();
        ++mit)
   {
     ConstMatchPtr match = *mit;
     const MatchType matchType = match->getType();
+
+    // Make sure its not a miss.
     if (matchType == MatchType::Match || (treatReviewsAsMatches && matchType == MatchType::Review))
     {
       LOG_VART(match->getName());
@@ -391,6 +396,7 @@ void DiffConflator::_removeMatchElements(const Status& status, const bool forceC
       LOG_VART(ConfigOptions().getDifferentialRemovePartialMatchesAsWhole());
       LOG_VART(forceComplete);
 
+      // Get the element IDs involved in the match and ...
       std::set<std::pair<ElementId, ElementId>> singleMatchPairs = match->getMatchPairs();
       if (ConfigOptions().getDifferentialRemovePartialMatchesAsWhole() || forceComplete ||
           match->getMatchMembers() != MatchMembers::Polyline ||
@@ -398,6 +404,7 @@ void DiffConflator::_removeMatchElements(const Status& status, const bool forceC
           // ScriptMatch for linear conflation return the subline matcher it used
           match->getName() != HighwayMatch::MATCH_NAME)
       {
+        // ...either remove the elements involved in the match completely...
         for (std::set<std::pair<ElementId, ElementId>>::const_iterator pairItr =
                singleMatchPairs.begin();
              pairItr != singleMatchPairs.end(); ++pairItr)
@@ -407,26 +414,59 @@ void DiffConflator::_removeMatchElements(const Status& status, const bool forceC
       }
       else
       {
+        // ...or record the portions of the elements that matched together to be removed in the next
+        // step.
         LOG_TRACE(
           "Creating merger to remove match element pairs partially: " << singleMatchPairs << "...");
         std::shared_ptr<const HighwayMatch> highwayMatch =
           std::dynamic_pointer_cast<const HighwayMatch>(match);
-        LOG_VART(highwayMatch->getSublineMatcher()->getSublineMatcherName());
-        _mergers.push_back(
-          MergerPtr(new LinearDiffMerger(singleMatchPairs, highwayMatch->getSublineMatcher())));
+        //LOG_VART(highwayMatch->getSublineMatcher()->getSublineMatcherName());
+//        _mergers.push_back(
+//          MergerPtr(new LinearDiffMerger(singleMatchPairs, highwayMatch->getSublineMatcher())));
+        for (std::set<std::pair<ElementId, ElementId>>::const_iterator it =
+               singleMatchPairs.begin();
+             it != singleMatchPairs.end(); ++it)
+        {
+          //ElementId eid1 = it->first;
+          ElementId eid2 = it->second;
+          WaySubline subline = highwayMatch->getSublineMatch().getMatches().at(0).getSubline2();
+          if (sublines.contains(eid2))
+          {
+            sublines[eid2] = sublines[eid2] + subline;
+          }
+          else
+          {
+            sublines[eid2] = subline;
+          }
+        }
       }
     }
   }
 
-  if (!ConfigOptions().getDifferentialRemovePartialMatchesAsWhole() && _mergers.size() > 0)
+  if (!ConfigOptions().getDifferentialRemovePartialMatchesAsWhole() && /*_mergers*/sublines.size() > 0)
   {
+    // Remove the partial portions of elements that matched.
+
     QElapsedTimer mergersTimer;
     mergersTimer.start();
-    _mapElementIdsToMergers(); // TODO: move to _applyMergers?
-    LOG_STATUS("Applying " << StringUtils::formatLargeNumber(_mergers.size()) << " mergers...");
-    _applyMergers(_mergers, _map);
+//    _mapElementIdsToMergers(); // TODO: move to _applyMergers?
+//    LOG_STATUS("Applying " << StringUtils::formatLargeNumber(_mergers.size()) << " mergers...");
+//    _applyMergers(_mergers, _map);
+//    LOG_INFO(
+//      "Applied " << StringUtils::formatLargeNumber(_mergers.size()) << " mergers in " <<
+//      StringUtils::millisecondsToDhms(mergersTimer.elapsed()) << ".");
+    LOG_STATUS("Removing " << StringUtils::formatLargeNumber(sublines.size()) << " sublines...");
+
+    for (QHash<ElementId, WaySubline>::const_iterator it = sublines.begin(); it != sublines.end();
+         ++it)
+    {
+      /*std::vector<ElementId> newWayIds = */
+        LinearDiffMerger::removeSubline(
+          std::dynamic_pointer_cast<Way>(_map->getElement(it.key())), it.value(), _map);
+    }
+
     LOG_INFO(
-      "Applied " << StringUtils::formatLargeNumber(_mergers.size()) << " mergers in " <<
+      "Removed " << StringUtils::formatLargeNumber(sublines.size()) << " sublines in " <<
       StringUtils::millisecondsToDhms(mergersTimer.elapsed()) << ".");
   }
 

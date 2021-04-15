@@ -49,8 +49,10 @@ public:
   WaySubline() = default;
   WaySubline(const WayLocation& start, const WayLocation& end);
   WaySubline(const WaySubline& from);
-  WaySubline(const WaySubline& from, const ConstOsmMapPtr &newMap);
+  WaySubline(const WaySubline& from, const ConstOsmMapPtr& newMap);
+
   WaySubline& operator=(const WaySubline& from);
+  WaySubline operator+(const WaySubline& other);
 
   Meters calculateLength() const;
 
@@ -61,46 +63,13 @@ public:
    */
   bool contains(const WaySubline& other) const;
 
-  /**
-   * Ensures that start <= end by swapping start/end if necessary.
-   */
-  void ensureForwards() { if (isBackwards()) { WayLocation s = _end; _end = _start; _start = s; } }
-
   WaySubline expand(Meters d) const;
-
-  ElementId getElementId() const { return _start.getWay()->getElementId(); }
-
-  const WayLocation& getEnd() const { return _end; }
-
-  /**
-   * Returns the way location that is closer to the beginning of the way regardless of the
-   * isBackwards() result.
-   */
-  const WayLocation& getFormer() const { return isBackwards() ? _end : _start; }
 
   Meters getLength() const;
 
-  const ConstOsmMapPtr& getMap() const { return _start.getMap(); }
-
-  /**
-   * Returns the way location that is closer to the end of the way regardless of the
-   * isBackwards() result.
-   */
-  const WayLocation& getLatter() const { return isBackwards() ? _start : _end; }
-
-  const WayLocation& getStart() const { return _start; }
-
-  const ConstWayPtr& getWay() const { return _start.getWay(); }
-
-  bool isBackwards() const { return _end < _start; }
-
-  bool isValid() const { return _start.isValid() && _end.isValid(); }
-
-  bool isZeroLength() const { return _start == _end; }
-
   /**
    * Returns true if the two sublines have interior points in common. If they only touch at one
-   * point then they do not overlap.
+   * point, then they do not overlap.
    */
   bool overlaps(const WaySubline& other) const;
 
@@ -110,8 +79,6 @@ public:
    * keep the WaySubline correct.
    */
   WaySubline reverse(const ConstWayPtr& reversedWay) const;
-
-  QString toString() const;
 
   /**
    * @brief toWay - Create a new way that represents this subline and return it. This way will not
@@ -133,6 +100,36 @@ public:
    * Visit the way and all nodes on the way that intersect the WaySubline.
    */
   void visitRo(const ElementProvider& ep, ConstElementVisitor& visitor) const;
+
+  /**
+   * Ensures that start <= end by swapping start/end if necessary.
+   */
+  void ensureForwards() { if (isBackwards()) { WayLocation s = _end; _end = _start; _start = s; } }
+
+  const ConstOsmMapPtr& getMap() const { return _start.getMap(); }
+  const ConstWayPtr& getWay() const { return _start.getWay(); }
+  ElementId getElementId() const { return _start.getWay()->getElementId(); }
+
+  const WayLocation& getStart() const { return _start; }
+  const WayLocation& getEnd() const { return _end; }
+
+  /**
+   * Returns the way location that is closer to the beginning of the way regardless of the
+   * isBackwards() result.
+   */
+  const WayLocation& getFormer() const { return isBackwards() ? _end : _start; }
+
+  /**
+   * Returns the way location that is closer to the end of the way regardless of the
+   * isBackwards() result.
+   */
+  const WayLocation& getLatter() const { return isBackwards() ? _start : _end; }
+
+  bool isBackwards() const { return _end < _start; }
+  bool isValid() const { return _start.isValid() && _end.isValid(); }
+  bool isZeroLength() const { return _start == _end; }
+
+  QString toString() const;
 
 private:
 

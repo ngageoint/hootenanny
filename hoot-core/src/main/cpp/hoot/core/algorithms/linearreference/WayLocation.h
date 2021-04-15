@@ -68,9 +68,7 @@ public:
    * will not be reported.
    */
   WayLocation(ConstOsmMapPtr map, ConstWayPtr way, double distance);
-
   WayLocation(ConstOsmMapPtr map, ConstWayPtr way, int segmentIndex, double segmentFraction);
-
   WayLocation(const WayLocation& other);
 
   virtual ~WayLocation() = default;
