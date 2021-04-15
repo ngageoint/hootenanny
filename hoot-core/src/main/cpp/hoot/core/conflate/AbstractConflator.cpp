@@ -31,7 +31,6 @@
 #include <hoot/core/conflate/matching/MatchFactory.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/matching/OptimalConstrainedMatches.h>
-#include <hoot/core/conflate/merging/LinearDiffMerger.h>
 #include <hoot/core/conflate/merging/MarkForReviewMergerCreator.h>
 #include <hoot/core/conflate/merging/MergerFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
