@@ -120,7 +120,9 @@ private:
     const WaySublineCollection& s, const std::vector<bool>& reverse,
     std::vector<std::pair<ElementId, ElementId>>& replaced,
     const ConstElementPtr& splitee, ElementPtr& match, ElementPtr& scrap) const;
-
+  void _removeSplitWay(
+    const ElementPtr& e1, const ElementPtr& scraps1, const ElementPtr& e1Match,
+    const bool swapWayIds);
   void _updateScrapParent(long id, const ElementPtr& scrap);
 };
 

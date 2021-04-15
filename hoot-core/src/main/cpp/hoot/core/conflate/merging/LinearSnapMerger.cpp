@@ -200,44 +200,7 @@ bool LinearSnapMerger::_mergePair(
   }
 
   // Remove the old way that was split and snapped.
-  if (e1 != e1Match && scraps1)
-  {
-    if (swapWayIds)
-    {
-      ElementId eidm1 = e1Match->getElementId();
-      LOG_TRACE("Swapping e1 match ID: " << eidm1 << " with e1 ID: " << eid1 << "...");
-      //  Swap the old way ID back into the match element.
-      IdSwapOp(eid1, eidm1).apply(_map);
-      //  Remove the old way with a new swapped out ID.
-      RemoveElementByEid(eidm1).apply(_map);
-      //  Add the scraps element to all the relations that the match is in.
-      if (scraps1)
-      {
-        QList<ElementPtr> list;
-        list.append(e1Match);
-        list.append(scraps1);
-        _map->replace(e1Match, list);
-        //  Update the scraps
-        _updateScrapParent(e1Match->getId(), scraps1);
-      }
-    }
-    else if (scraps1)
-    {
-      LOG_TRACE("Replacing e1: " << eid1 << " with scraps1: " << scraps1->getElementId() << "...");
-      ReplaceElementOp(eid1, scraps1->getElementId(), true).apply(_map);
-    }
-  }
-  else
-  {
-    // Remove any reviews that contain this element.
-    LOG_TRACE("Removing e1: " << eid1 << "...");
-    RemoveReviewsByEidOp(eid1, true).apply(_map);
-  }
-  if (WRITE_DETAILED_DEBUG_MAPS)
-  {
-    OsmMapWriterFactory::writeDebugMap(
-      _map, "LinearSnapMerger-after-old-way-removal-1" + _eidLogString);
-  }
+  _removeSplitWay(e1, scraps1, e1Match, swapWayIds);
 
   // If there is something left to review against,
   if (scraps2)
@@ -307,6 +270,50 @@ bool LinearSnapMerger::_mergePair(
   LOG_VART(replaced);
 
   return false;
+}
+
+void LinearSnapMerger::_removeSplitWay(
+  const ElementPtr& e1, const ElementPtr& scraps1, const ElementPtr& e1Match, const bool swapWayIds)
+{
+  const ElementId eid1 = e1->getElementId();
+  if (e1 != e1Match && scraps1)
+  {
+    if (swapWayIds)
+    {
+      ElementId eidm1 = e1Match->getElementId();
+      LOG_TRACE("Swapping e1 match ID: " << eidm1 << " with e1 ID: " << eid1 << "...");
+      //  Swap the old way ID back into the match element.
+      IdSwapOp(eid1, eidm1).apply(_map);
+      //  Remove the old way with a new swapped out ID.
+      RemoveElementByEid(eidm1).apply(_map);
+      //  Add the scraps element to all the relations that the match is in.
+      if (scraps1)
+      {
+        QList<ElementPtr> list;
+        list.append(e1Match);
+        list.append(scraps1);
+        _map->replace(e1Match, list);
+        //  Update the scraps
+        _updateScrapParent(e1Match->getId(), scraps1);
+      }
+    }
+    else if (scraps1)
+    {
+      LOG_TRACE("Replacing e1: " << eid1 << " with scraps1: " << scraps1->getElementId() << "...");
+      ReplaceElementOp(eid1, scraps1->getElementId(), true).apply(_map);
+    }
+  }
+  else
+  {
+    // Remove any reviews that contain this element.
+    LOG_TRACE("Removing e1: " << eid1 << "...");
+    RemoveReviewsByEidOp(eid1, true).apply(_map);
+  }
+  if (WRITE_DETAILED_DEBUG_MAPS)
+  {
+    OsmMapWriterFactory::writeDebugMap(
+      _map, "LinearSnapMerger-after-old-way-removal-1" + _eidLogString);
+  }
 }
 
 bool LinearSnapMerger::_checkForIdenticalElements(const ElementPtr& e1, const ElementPtr& e2)
