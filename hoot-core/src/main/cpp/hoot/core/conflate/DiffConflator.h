@@ -141,11 +141,11 @@ public:
   void markInputElements(OsmMapPtr map);
 
   /**
-   * @brief addChangesToMap - Adds the changes to a map, as regular elements. This is useful for
-   * visualizing tag-diff output in JOSM and the hoot UI.
-   * @param map - Map to add the changes to
-   * @param pChanges - Changeset provider
-   */
+    * @brief addChangesToMap - Adds the changes to a map, as regular elements. This is useful for
+    * visualizing tag-diff output in JOSM and the hoot UI.
+    * @param map - Map to add the changes to
+    * @param pChanges - Changeset provider
+    */
   void addChangesToMap(OsmMapPtr map, ChangesetProviderPtr pChanges);
 
   /**
@@ -225,12 +225,7 @@ private:
     const std::vector<ConstMatchPtr>& matches);
 
   void _removeRefData();
-  bool _satisfiesElementRemovalCondition(
-    const ConstElementPtr& element, const Status& status, const ConstMatchPtr& match) const;
-  void _removeMatchElements(const Status& status, const bool forceComplete = false);
-  void _removeMatchElementPairCompletely(
-    const ConstMatchPtr& match, const std::pair<ElementId, ElementId>& elementPair,
-    const Status& status);
+  void _removeMatches(const Status& status);
   void _removeMetadataTags();
 };
 

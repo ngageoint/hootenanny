@@ -31,7 +31,6 @@
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonMatch.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
-#include <hoot/core/criterion/HighwayCriterion.h>
 #include <hoot/core/criterion/PoiCriterion.h>
 #include <hoot/core/criterion/StatusCriterion.h>
 #include <hoot/core/criterion/TagKeyCriterion.h>
@@ -61,8 +60,7 @@
 #include <hoot/core/ops/WayJoinerOp.h>
 #include <hoot/core/util/ConfigUtils.h>
 #include <hoot/core/io/OsmChangesetFileWriter.h>
-#include <hoot/core/conflate/merging/LinearDiffMerger.h>
-#include <hoot/core/conflate/highway/HighwayMatch.h>
+#include <hoot/core/criterion/HighwayCriterion.h>
 #include <hoot/core/conflate/ConflateInfoCache.h>
 
 // Qt
@@ -139,12 +137,6 @@ void DiffConflator::apply(OsmMapPtr& map)
 
   _currentStep++;
 
-  // Ref conflate optimizes matches, but we aren't currently doing that for diff.
-//  _updateProgress(_currentStep - 1, "Optimizing feature matches...");
-//  MatchSetVector matchSets;
-//  MatchSetVector matchSets = _optimizeMatches();
-//  _currentStep++;
-
   if (_conflateTags)
   {
     // Use matches to calculate and store tag diff. We must do this before we create the map diff,
@@ -154,7 +146,9 @@ void DiffConflator::apply(OsmMapPtr& map)
     _currentStep++;
   }
 
-  // Get rid of everything from the ref1 map that matched something in the ref2 map.
+  // Get rid of everything from the ref1 map that matched something in the ref2 map. Note, there is
+  // a deficiency here in that partial matches won't lead to only partial features in ref 1 being
+  // dropped...the entire feature will be dropped, including the parts that didn't match (#4311).
 
   QString message = "Dropping match conflicts";
   if (ConfigOptions().getDifferentialSnapUnconnectedRoads())
@@ -166,7 +160,7 @@ void DiffConflator::apply(OsmMapPtr& map)
 
   // We're eventually getting rid of all matches from the output, but in order to make the road
   // snapping work correctly we'll get rid of secondary elements in matches first.
-  _removeMatchElements(Status::Unknown2);
+  _removeMatches(Status::Unknown2);
   MemoryUsageChecker::getInstance().check();
 
   // Eventually, we could extend this snapping to all linear feature types.
@@ -361,176 +355,80 @@ long DiffConflator::_snapSecondaryRoadsBackToRef()
   return roadSnapper.getNumFeaturesAffected();
 }
 
-void DiffConflator::_removeMatchElements(const Status& status, const bool forceComplete)
+void DiffConflator::_removeMatches(const Status& status)
 {
-  size_t mapSizeBefore = _map->size();
-  LOG_DEBUG(
-    "\tRemoving match elements with status: " << status.toString() << " from map of size: " <<
-    StringUtils::formatLargeNumber(mapSizeBefore) << "...");
+  LOG_DEBUG("\tRemoving match elements with status: " << status.toString() << "...");
 
-  // If we're treating reviews as matches, elements involved in reviews will be removed as well.
   const bool treatReviewsAsMatches = ConfigOptions().getDifferentialTreatReviewsAsMatches();
-  LOG_VART(treatReviewsAsMatches);
+  LOG_VARD(treatReviewsAsMatches);
 
-  // We don't want remove elements involved in intra-dataset matches, so record those now.
   if (!_intraDatasetElementIdsPopulated)
   {
     _intraDatasetMatchOnlyElementIds = _getElementIdsInvolvedInOnlyIntraDatasetMatches(_matches);
     _intraDatasetElementIdsPopulated = true;
   }
 
-  QHash<ElementId, WaySubline> sublines;
-
-  // Go through all the matches.
-  for (std::vector<ConstMatchPtr>::const_iterator mit = _matches.begin(); mit != _matches.end();
-       ++mit)
-  {
-    ConstMatchPtr match = *mit;
-    const MatchType matchType = match->getType();
-
-    // Make sure its not a miss.
-    if (matchType == MatchType::Match || (treatReviewsAsMatches && matchType == MatchType::Review))
-    {
-      LOG_VART(match->getName());
-      LOG_VART(match->getMatchMembers());
-      LOG_VART(ConfigOptions().getDifferentialRemovePartialMatchesAsWhole());
-      LOG_VART(forceComplete);
-
-      // Get the element IDs involved in the match and ...
-      std::set<std::pair<ElementId, ElementId>> singleMatchPairs = match->getMatchPairs();
-      if (ConfigOptions().getDifferentialRemovePartialMatchesAsWhole() || forceComplete ||
-          match->getMatchMembers() != MatchMembers::Polyline ||
-          // TODO: make this work for all linear ScriptMatch instances; going to involve making
-          // ScriptMatch for linear conflation return the subline matcher it used
-          match->getName() != HighwayMatch::MATCH_NAME)
-      {
-        // ...either remove the elements involved in the match completely...
-        for (std::set<std::pair<ElementId, ElementId>>::const_iterator pairItr =
-               singleMatchPairs.begin();
-             pairItr != singleMatchPairs.end(); ++pairItr)
-        {
-          _removeMatchElementPairCompletely(match, *pairItr, status);
-        }
-      }
-      else
-      {
-        // ...or record the portions of the elements that matched together to be removed in the next
-        // step.
-        LOG_TRACE(
-          "Creating merger to remove match element pairs partially: " << singleMatchPairs << "...");
-        std::shared_ptr<const HighwayMatch> highwayMatch =
-          std::dynamic_pointer_cast<const HighwayMatch>(match);
-        //LOG_VART(highwayMatch->getSublineMatcher()->getSublineMatcherName());
-//        _mergers.push_back(
-//          MergerPtr(new LinearDiffMerger(singleMatchPairs, highwayMatch->getSublineMatcher())));
-        for (std::set<std::pair<ElementId, ElementId>>::const_iterator it =
-               singleMatchPairs.begin();
-             it != singleMatchPairs.end(); ++it)
-        {
-          //ElementId eid1 = it->first;
-          ElementId eid2 = it->second;
-          WaySubline subline = highwayMatch->getSublineMatch().getMatches().at(0).getSubline2();
-          if (sublines.contains(eid2))
-          {
-            sublines[eid2] = sublines[eid2] + subline;
-          }
-          else
-          {
-            sublines[eid2] = subline;
-          }
-        }
-      }
-    }
-  }
-
-  if (!ConfigOptions().getDifferentialRemovePartialMatchesAsWhole() && /*_mergers*/sublines.size() > 0)
-  {
-    // Remove the partial portions of elements that matched.
-
-    QElapsedTimer mergersTimer;
-    mergersTimer.start();
-//    _mapElementIdsToMergers(); // TODO: move to _applyMergers?
-//    LOG_STATUS("Applying " << StringUtils::formatLargeNumber(_mergers.size()) << " mergers...");
-//    _applyMergers(_mergers, _map);
-//    LOG_INFO(
-//      "Applied " << StringUtils::formatLargeNumber(_mergers.size()) << " mergers in " <<
-//      StringUtils::millisecondsToDhms(mergersTimer.elapsed()) << ".");
-    LOG_STATUS("Removing " << StringUtils::formatLargeNumber(sublines.size()) << " sublines...");
-
-    for (QHash<ElementId, WaySubline>::const_iterator it = sublines.begin(); it != sublines.end();
-         ++it)
-    {
-      /*std::vector<ElementId> newWayIds = */
-        LinearDiffMerger::removeSubline(
-          std::dynamic_pointer_cast<Way>(_map->getElement(it.key())), it.value(), _map);
-    }
-
-    LOG_INFO(
-      "Removed " << StringUtils::formatLargeNumber(sublines.size()) << " sublines in " <<
-      StringUtils::millisecondsToDhms(mergersTimer.elapsed()) << ".");
-  }
-
-  LOG_TRACE(
-    "\tRemoved " << StringUtils::formatLargeNumber(mapSizeBefore -_map->size()) <<
-    " match elements completely with status: " << status.toString() << "...");
-  OsmMapWriterFactory::writeDebugMap(_map, "after-removing-" + status.toString() + "-matches");
-}
-
-bool DiffConflator::_satisfiesElementRemovalCondition(
-  const ConstElementPtr& element, const Status& status, const ConstMatchPtr& match) const
-{
   ElementCriterionPtr notSnappedCrit(
     NotCriterionPtr(new NotCriterion(new TagKeyCriterion(MetadataTags::HootSnapped()))));
-  return
-    element->getStatus() == status &&
-    // We don't want to remove any ref snapped ways here. They need to be included in the
-    // resulting diff in order to be properly updated in the final output.
-    (status != Status::Unknown1 || notSnappedCrit->isSatisfied(element)) &&
-    // poi/poly is the only conflation type that allows intra-dataset matches. We don't want
-    // these to be removed from the diff output.
-    !(match->getName() == PoiPolygonMatch::MATCH_NAME &&
-     _intraDatasetMatchOnlyElementIds.contains(element->getElementId()));
-}
 
-void DiffConflator::_removeMatchElementPairCompletely(
-  const ConstMatchPtr& match, const std::pair<ElementId, ElementId>& elementPair,
-  const Status& status)
-{
-  LOG_TRACE("Removing match element pair completely: " << elementPair << "...");
-  LOG_VART(match->getName());
-  const MatchType matchType = match->getType();
-  LOG_VART(matchType);
-  LOG_VART(match->getClassification());
-  LOG_VART(match->getMatchPairs().size());
-
-  if (!elementPair.first.isNull())
+  for (std::vector<ConstMatchPtr>::iterator mit = _matches.begin(); mit != _matches.end(); ++mit)
   {
-    ElementPtr e1 = _map->getElement(elementPair.first);
-    if (e1)
+    ConstMatchPtr match = *mit;
+    if (match->getType() == MatchType::Match ||
+       (treatReviewsAsMatches && match->getType() == MatchType::Review))
     {
-      if (_satisfiesElementRemovalCondition(e1, status, match))
+      LOG_VART(match);
+      LOG_VART(match->getClassification().getMissP());
+      LOG_VART(match->getClassification().getReviewP());
+
+      std::set<std::pair<ElementId, ElementId>> pairs = match->getMatchPairs();
+      for (std::set<std::pair<ElementId, ElementId>>::iterator pit = pairs.begin();
+           pit != pairs.end(); ++pit)
       {
-        LOG_TRACE(
-          "Removing entire element: " << e1->getElementId() <<
-          " involved in match of type: " << matchType << "...");
-        RecursiveElementRemover(e1->getElementId()).apply(_map);
+        ElementPtr e1;
+        ElementPtr e2;
+
+        if (!pit->first.isNull())
+        {
+          LOG_VART(pit->first);
+          e1 = _map->getElement(pit->first);
+
+        }
+        if (!pit->second.isNull())
+        {
+          LOG_VART(pit->second);
+          e2 = _map->getElement(pit->second);
+        }
+
+        if (e1 &&
+            e1->getStatus() == status &&
+            // We don't want to remove any ref snapped ways here. They need to be included in the
+            // resulting diff in order to be properly updated in the final output.
+            (status != Status::Unknown1 || notSnappedCrit->isSatisfied(e1)) &&
+            // poi/poly is the only conflation type that allows intra-dataset matches. We don't want
+            // these to be removed from the diff output.
+            !(match->getName() == PoiPolygonMatch::MATCH_NAME &&
+              _intraDatasetMatchOnlyElementIds.contains(pit->first)))
+        {
+          LOG_TRACE("Removing element involved in match: " << pit->first << "...");
+          RecursiveElementRemover(pit->first).apply(_map);
+        }
+        if (e2 &&
+            e2->getStatus() == status &&
+            // see related comment above
+            (status != Status::Unknown1 || notSnappedCrit->isSatisfied(e2)) &&
+            // see related comment above
+            !(match->getName() == PoiPolygonMatch::MATCH_NAME &&
+             _intraDatasetMatchOnlyElementIds.contains(pit->second)))
+        {
+          LOG_TRACE("Removing element involved in match: " << pit->second << "...");
+          RecursiveElementRemover(pit->second).apply(_map);
+        }
       }
     }
   }
-  if (!elementPair.second.isNull())
-  {
-    ElementPtr e2 = _map->getElement(elementPair.second);
-    if (e2)
-    {
-      if (_satisfiesElementRemovalCondition(e2, status, match))
-      {
-        LOG_TRACE(
-          "Removing entire element: " << e2->getElementId() <<
-          " involved in match of type: " << matchType << "...");
-        RecursiveElementRemover(e2->getElementId()).apply(_map);
-      }
-    }
-  }
+
+  OsmMapWriterFactory::writeDebugMap(_map, "after-removing-" + status.toString() + "-matches");
 }
 
 void DiffConflator::_removeRefData()
@@ -540,7 +438,7 @@ void DiffConflator::_removeRefData()
   // _map at this point contains all of input1, we are going to delete everything left that
   // belongs to a match pair. Then we will delete all remaining input1 items...leaving us with the
   // differential that we want.
-  _removeMatchElements(Status::Unknown1, true);
+  _removeMatches(Status::Unknown1);
   MemoryUsageChecker::getInstance().check();
 
   // Now remove input1 elements. Don't remove any features involved in a snap, as they are needed

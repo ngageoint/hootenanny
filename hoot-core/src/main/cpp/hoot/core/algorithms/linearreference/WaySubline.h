@@ -52,7 +52,6 @@ public:
   WaySubline(const WaySubline& from, const ConstOsmMapPtr& newMap);
 
   WaySubline& operator=(const WaySubline& from);
-  WaySubline operator+(const WaySubline& other);
 
   Meters calculateLength() const;
 
