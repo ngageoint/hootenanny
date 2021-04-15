@@ -87,7 +87,7 @@ private:
 
   static const bool WRITE_DETAILED_DEBUG_MAPS;
 
-  bool _checkForIdenticalElements(const ElementPtr& e1, const ElementPtr& e2);
+  bool _checkForIdenticalElements(const ElementPtr& e1, const ElementPtr& e2) const;
 
   /*
    * Snap the ends of snapee that match with either end point of middle to snapTo's end points.
@@ -105,7 +105,7 @@ private:
     std::vector<std::pair<ElementId, ElementId>>& replaced,
     const ConstElementPtr& splitee, ElementPtr& match, ElementPtr& scrap) const;
 
-  void _mergeTags(const Tags& e1Tags, const Tags& e2Tags, const ElementPtr& e1Match);
+  void _mergeTags(const Tags& e1Tags, const Tags& e2Tags, const ElementPtr& e1Match) const;
 
   void _removeSplitWay(
     const ElementPtr& e1, const ElementPtr& scraps1, const ElementPtr& e1Match,
@@ -114,14 +114,14 @@ private:
   void _manageElementIds(
     const WayPtr& w1, const WayPtr& w2, const WayPtr& wMatch, const ElementPtr& scraps1,
     const ElementPtr& scraps2);
-  void _handleScrapsIds(const ElementPtr& scraps, const WayPtr& way);
+  void _handleScrapsIds(const ElementPtr& scraps, const WayPtr& way) const;
   void _swapSecondaryElementWithScraps(
-    const ElementId& secElementId, const ElementPtr& matchElement, const ElementPtr& scraps);
+    const ElementId& secElementId, const ElementPtr& matchElement, const ElementPtr& scraps) const;
   void _dropSecondaryElements(
     const ElementId& eid1, const ElementId& eidMatch1, const ElementId& eid2,
-    const ElementId& eidMatch2);
+    const ElementId& eidMatch2) const;
 
-  void _markMultilineStringRelations(const ElementPtr& element);
+  void _markMultilineStringRelations(const ElementPtr& element) const;
 };
 
 using LinearSnapMergerPtr = std::shared_ptr<LinearSnapMerger>;

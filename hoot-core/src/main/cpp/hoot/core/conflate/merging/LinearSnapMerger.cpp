@@ -227,7 +227,7 @@ bool LinearSnapMerger::_mergePair(
   return false;
 }
 
-bool LinearSnapMerger::_checkForIdenticalElements(const ElementPtr& e1, const ElementPtr& e2)
+bool LinearSnapMerger::_checkForIdenticalElements(const ElementPtr& e1, const ElementPtr& e2) const
 {
   ElementComparer elementComparer;
   elementComparer.setIgnoreElementId(true);
@@ -262,7 +262,8 @@ bool LinearSnapMerger::_checkForIdenticalElements(const ElementPtr& e1, const El
   return false;
 }
 
-void LinearSnapMerger::_mergeTags(const Tags& e1Tags, const Tags& e2Tags, const ElementPtr& e1Match)
+void LinearSnapMerger::_mergeTags(
+  const Tags& e1Tags, const Tags& e2Tags, const ElementPtr& e1Match) const
 {
   Tags newTags = TagMergerFactory::mergeTags(e1Tags, e2Tags, ElementType::Way);
   e1Match->setTags(newTags);
@@ -594,7 +595,7 @@ void LinearSnapMerger::_manageElementIds(
   }
 }
 
-void LinearSnapMerger::_handleScrapsIds(const ElementPtr& scraps, const WayPtr& way)
+void LinearSnapMerger::_handleScrapsIds(const ElementPtr& scraps, const WayPtr& way) const
 {
   if (scraps->getElementType() == ElementType::Way)
   {
@@ -640,7 +641,7 @@ void LinearSnapMerger::_updateScrapParent(long id, const ElementPtr& scrap)
 
 void LinearSnapMerger::_dropSecondaryElements(
   const ElementId& eid1, const ElementId& eidMatch1, const ElementId& eid2,
-  const ElementId& eidMatch2)
+  const ElementId& eidMatch2) const
 {
   LOG_TRACE("Removing e2 match: " << eidMatch2 << " and e2: " << eid2 << "...");
 
@@ -684,7 +685,7 @@ void LinearSnapMerger::_dropSecondaryElements(
 }
 
 void LinearSnapMerger::_swapSecondaryElementWithScraps(
-  const ElementId& secElementId, const ElementPtr& matchElement, const ElementPtr& scraps)
+  const ElementId& secElementId, const ElementPtr& matchElement, const ElementPtr& scraps) const
 {
   LOG_TRACE(
     "Replacing e2 match: " << matchElement->getElementId() << " and e2: " << secElementId <<
@@ -744,7 +745,7 @@ void LinearSnapMerger::_removeSplitWay(
   }
 }
 
-void LinearSnapMerger::_markMultilineStringRelations(const ElementPtr& element)
+void LinearSnapMerger::_markMultilineStringRelations(const ElementPtr& element) const
 {
   if (element && element->getElementType() != ElementType::Relation)
   {

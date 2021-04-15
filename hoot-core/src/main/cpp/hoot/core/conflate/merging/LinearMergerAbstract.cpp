@@ -227,16 +227,14 @@ void LinearMergerAbstract::_removeSpans(const WayPtr& w1, const WayPtr& w2) cons
           w->getStatus() == Status::Unknown2)
       {
         // if this way connects w1 to w2 at the beginning or the end
-        if (_doesWayConnect(w1->getNodeId(0), w2->getNodeId(0), w) ||
-            _doesWayConnect(w1->getLastNodeId(), w2->getLastNodeId(), w))
+        if ((_doesWayConnect(w1->getNodeId(0), w2->getNodeId(0), w) ||
+             _doesWayConnect(w1->getLastNodeId(), w2->getLastNodeId(), w)) &&
+            // if the connection is more or less a straight shot. Don't want to worry about round
+            // about connections (e.g. lollipop style).
+            _directConnect(w))
         {
-          // if the connection is more or less a straight shot. Don't want to worry about round
-          // about connections (e.g. lollipop style).
-          if (_directConnect(w))
-          {
-            // This should likely remove the way even if it is part of another relation - #2938
-            RecursiveElementRemover(w->getElementId()).apply(_map);
-          }
+          // This should likely remove the way even if it is part of another relation - #2938
+          RecursiveElementRemover(w->getElementId()).apply(_map);
         }
       }
     }

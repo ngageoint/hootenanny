@@ -784,8 +784,8 @@ MatchPtr ScriptMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId ei
     Handle<Object> mapJs = OsmMapJs::create(map);
     Persistent<Object> plugin(current, ScriptMatchVisitor::getPlugin(_script));
 
-    std::shared_ptr<ScriptMatch> match(
-      new ScriptMatch(_script, plugin, map, mapJs, eid1, eid2, getMatchThreshold()));
+    std::shared_ptr<ScriptMatch> match =
+      std::make_shared<ScriptMatch>(_script, plugin, map, mapJs, eid1, eid2, getMatchThreshold());
     match->setMatchMembers(
       ScriptMatch::geometryTypeToMatchMembers(
         GeometryTypeCriterion::typeToString(_scriptInfo.getGeometryType())));

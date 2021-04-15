@@ -67,7 +67,7 @@ public:
 
   const MatchClassification& getClassification() const override { return _c; }
 
-  virtual MatchMembers getMatchMembers() const override { return MatchMembers::Polyline; }
+  MatchMembers getMatchMembers() const override { return MatchMembers::Polyline; }
 
   std::map<QString, double> getFeatures(const ConstOsmMapPtr& m) const override;
 
