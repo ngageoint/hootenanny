@@ -89,7 +89,7 @@ void SublineStringMatcherJs::extractMatchingSublines(const FunctionCallbackInfo<
     {
       // If we receive this exception, we'll return a string with its exception name to the calling
       // conflate script. Doing so gives it a chance to retry the match with a different matcher.
-      // Kind of kludgy, but not sure exceptions can be sent back to the js conflate scripts.
+      // Kind of kludgy, but not sure if exceptions can be sent back to the js conflate scripts.
       LOG_TRACE(e.getWhat());
       const QString msg = "RecursiveComplexityException: " + e.getWhat();
       args.GetReturnValue().Set(String::NewFromUtf8(current, msg.toUtf8().data()));
