@@ -52,7 +52,7 @@ namespace hoot
 
 // ONLY ENABLE THIS DURING DEBUGGING; We don't want to tie it to debug.maps.write, as it may
 // produce a very large number of output files.
-const bool AbstractConflator::WRITE_DETAILED_DEBUG_MAPS = true;
+const bool AbstractConflator::WRITE_DETAILED_DEBUG_MAPS = false;
 
 AbstractConflator::AbstractConflator() :
 _matchFactory(MatchFactory::getInstance()),
