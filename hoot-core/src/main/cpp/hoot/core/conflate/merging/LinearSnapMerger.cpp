@@ -174,10 +174,9 @@ bool LinearSnapMerger::_mergePair(
 
   bool swapWayIds = false;
 
-  if (e1Match->getElementType() == ElementType::Way)
+  if (e1Match->getElementType() == ElementType::Way && e1->getElementType() == ElementType::Way &&
+      e2->getElementType() == ElementType::Way)
   {
-    if (e1->getElementType() == ElementType::Way && e2->getElementType() == ElementType::Way)
-    {
       WayPtr w1 = std::dynamic_pointer_cast<Way>(e1);
       WayPtr w2 = std::dynamic_pointer_cast<Way>(e2);
       WayPtr wMatch = std::dynamic_pointer_cast<Way>(e1Match);
@@ -185,65 +184,11 @@ bool LinearSnapMerger::_mergePair(
       LOG_VART(w2->getId());
       LOG_VART(wMatch->getId());
 
-      const long pid = Way::getPid(w1, w2);
-      // If the the parent IDs for both matched ways are empty, we won't write the empty ID to the
-      // match portion to possibly avoid overwriting a pre-existing valid parent ID.
-      if (pid != WayData::PID_EMPTY)
-      {
-        wMatch->setPid(pid);
-        LOG_TRACE("Set PID: " << pid << " on: " << wMatch->getElementId() << " (e1Match).");
-      }
-
       //  Keep the original ID from e1 for e1Match
       swapWayIds = true;
 
-      if (scraps1)
-      {
-        if (scraps1->getElementType() == ElementType::Way)
-        {
-          std::dynamic_pointer_cast<Way>(scraps1)->setPid(w1->getPid());
-          LOG_TRACE(
-            "Set PID: " << w1->getPid() << " on: " << scraps1->getElementId() << " (scraps1).");
-        }
-        else if (scraps1->getElementType() == ElementType::Relation)
-        {
-          RelationPtr r = std::dynamic_pointer_cast<Relation>(scraps1);
-          for (size_t i = 0; i < r->getMembers().size(); ++i)
-          {
-            ElementId eid = r->getMembers()[i].getElementId();
-            if (eid.getType() == ElementType::Way)
-            {
-              _map->getWay(eid)->setPid(w1->getPid());
-              LOG_TRACE(
-                "Set PID: " << w1->getPid() << " on: " << eid << " (scraps1).");
-            }
-          }
-        }
-      }
-
-      if (scraps2)
-      {
-        if (scraps2->getElementType() == ElementType::Way)
-        {
-          std::dynamic_pointer_cast<Way>(scraps2)->setPid(w2->getPid());
-          LOG_TRACE(
-            "Set PID: " << w2->getPid() << " on: " << scraps2->getElementId() << " (scraps2).");
-        }
-        else if (scraps2->getElementType() == ElementType::Relation)
-        {
-          RelationPtr r = std::dynamic_pointer_cast<Relation>(scraps2);
-          for (size_t i = 0; i < r->getMembers().size(); ++i)
-          {
-            ElementId eid = r->getMembers()[i].getElementId();
-            if (eid.getType() == ElementType::Way)
-            {
-              _map->getWay(eid)->setPid(w2->getPid());
-              LOG_TRACE(
-                "Set PID: " << w2->getPid() << " on: " << eid << " (scraps2).");
-            }
-          }
-        }
-      }
+      // Handle necessary ID and parent ID updates.
+      _manageElementIds(w1, w2, wMatch, scraps1, scraps2);
 
       // Reverse the way if w2 is one way and w1 isn't the similar direction as w2.
       if (OneWayCriterion().isSatisfied(w2) &&
@@ -252,7 +197,6 @@ bool LinearSnapMerger::_mergePair(
         LOG_TRACE("Reversing " << wMatch->getElementId() << "...");
         wMatch->reverseOrder();
       }
-    }
   }
 
   // Remove the old way that was split and snapped.
@@ -416,11 +360,51 @@ void LinearSnapMerger::_mergeTags(const Tags& e1Tags, const Tags& e2Tags, const 
   }
 }
 
-void LinearSnapMerger::_markMultilineStringRelations(const ElementPtr& element)
+void LinearSnapMerger::_manageElementIds(
+  const WayPtr& w1, const WayPtr& w2, const WayPtr& wMatch, const ElementPtr& scraps1,
+  const ElementPtr& scraps2)
 {
-  if (element && element->getElementType() != ElementType::Relation)
+  const long pid = Way::getPid(w1, w2);
+  // If the the parent IDs for both matched ways are empty, we won't write the empty ID to the
+  // match portion to possibly avoid overwriting a pre-existing valid parent ID.
+  if (pid != WayData::PID_EMPTY)
   {
-    element->getTags().remove(MetadataTags::HootMultilineString());
+    wMatch->setPid(pid);
+    LOG_TRACE("Set PID: " << pid << " on: " << wMatch->getElementId() << " (e1Match).");
+  }
+
+  if (scraps1)
+  {
+    _handleScrapsIds(scraps1, w1);
+  }
+
+  if (scraps2)
+  {
+    _handleScrapsIds(scraps2, w2);
+  }
+}
+
+void LinearSnapMerger::_handleScrapsIds(const ElementPtr& scraps, const WayPtr& way)
+{
+  if (scraps->getElementType() == ElementType::Way)
+  {
+    std::dynamic_pointer_cast<Way>(scraps)->setPid(way->getPid());
+    LOG_TRACE(
+      "Set PID: " << way->getPid() << " on: " << scraps->getElementId() << " (scraps).");
+  }
+  else if (scraps->getElementType() == ElementType::Relation)
+  {
+    RelationPtr r = std::dynamic_pointer_cast<Relation>(scraps);
+    for (size_t i = 0; i < r->getMembers().size(); ++i)
+    {
+      ElementId eid = r->getMembers()[i].getElementId();
+      if (eid.getType() == ElementType::Way)
+      {
+        _map->getWay(eid)->setPid(way->getPid());
+        LOG_TRACE(
+          "Set PID: " << way->getPid() << " on: " << eid << " (scraps).");
+      }
+    }
   }
 }
 
@@ -733,6 +717,14 @@ void LinearSnapMerger::_updateScrapParent(long id, const ElementPtr& scrap)
     //  Iterate all of the members and update the parent id recursively
     for (size_t i = 0; i < members.size(); ++i)
       _updateScrapParent(id, _map->getElement(members[i].getElementId()));
+  }
+}
+
+void LinearSnapMerger::_markMultilineStringRelations(const ElementPtr& element)
+{
+  if (element && element->getElementType() != ElementType::Relation)
+  {
+    element->getTags().remove(MetadataTags::HootMultilineString());
   }
 }
 

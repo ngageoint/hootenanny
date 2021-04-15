@@ -99,6 +99,11 @@ private:
 
   void _markMultilineStringRelations(const ElementPtr& element);
 
+  void _manageElementIds(
+    const WayPtr& w1, const WayPtr& w2, const WayPtr& wMatch, const ElementPtr& scraps1,
+    const ElementPtr& scraps2);
+  void _handleScrapsIds(const ElementPtr& scraps, const WayPtr& way);
+
   /*
    * Snap the ends of snapee that match with either end point of middle to snapTo's end points.
    */
