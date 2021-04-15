@@ -103,6 +103,11 @@ private:
     const WayPtr& w1, const WayPtr& w2, const WayPtr& wMatch, const ElementPtr& scraps1,
     const ElementPtr& scraps2);
   void _handleScrapsIds(const ElementPtr& scraps, const WayPtr& way);
+  void _swapSecondaryElementWithScraps(
+    const ElementId& secElementId, const ElementPtr& matchElement, const ElementPtr& scraps);
+  void _dropSecondaryElements(
+    const ElementId& eid1, const ElementId& eidMatch1, const ElementId& eid2,
+    const ElementId& eidMatch2);
 
   /*
    * Snap the ends of snapee that match with either end point of middle to snapTo's end points.

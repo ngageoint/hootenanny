@@ -109,6 +109,7 @@ bool LinearSnapMerger::_mergePair(
 {
   LOG_VART(eid1);
   LOG_VART(eid2);
+  bool swapWayIds = false;
 
   if (LinearMergerAbstract::_mergePair(eid1, eid2, replaced))
   {
@@ -172,8 +173,6 @@ bool LinearSnapMerger::_mergePair(
   // Merge the attributes appropriately.
   _mergeTags(e1->getTags(), e2->getTags(), e1Match);
 
-  bool swapWayIds = false;
-
   if (e1Match->getElementType() == ElementType::Way && e1->getElementType() == ElementType::Way &&
       e2->getElementType() == ElementType::Way)
   {
@@ -206,56 +205,12 @@ bool LinearSnapMerger::_mergePair(
   if (scraps2)
   {
     // swap the elements with the scraps.
-    LOG_TRACE(
-      "Replacing e2 match: " << e2Match->getElementId() << " and e2: " << eid2 <<
-      " with scraps2: " << scraps2->getElementId() << "...");
-    _map->addElement(scraps2);
-    ReplaceElementOp(e2Match->getElementId(), scraps2->getElementId(), true).apply(_map);
-    ReplaceElementOp(eid2, scraps2->getElementId(), true).apply(_map);
+    _swapSecondaryElementWithScraps(eid2, e2Match, scraps2);
   }
-  // Otherwise, drop the element and any reviews its in.
   else
   {
-    LOG_TRACE("Removing e2 match: " << e2Match->getElementId() << " and e2: " << eid2 << "...");
-
-    // Add any informational nodes from the ways being replaced to the merged output before deleting
-    // them.
-    WayNodeCopier nodeCopier;
-    nodeCopier.setOsmMap(_map.get());
-    nodeCopier.addCriterion(NotCriterionPtr(new NotCriterion(new NoInformationCriterion())));
-
-    if (e2Match->getElementId().getType() == ElementType::Way && eid1.getType() == ElementType::Way)
-    {
-      LOG_TRACE(
-        "Copying information nodes from e2 match: " << e2Match->getElementId() << " to e1: " <<
-        eid1 << "...");
-      nodeCopier.copy(e2Match->getElementId(), eid1);
-    }
-
-    if (e2Match->getElementId().getType() == ElementType::Way &&
-        e1Match->getElementId().getType() == ElementType::Way)
-    {
-      LOG_TRACE(
-        "Copying information nodes from e2 match: " << e2Match->getElementId() <<
-        " to e1 match: " << e1Match->getElementId() << "...");
-      nodeCopier.copy(e2Match->getElementId(), e1Match->getElementId());
-    }
-
-    // Remove reviews e2Match is involved in.
-    RemoveReviewsByEidOp(e2Match->getElementId(), true).apply(_map);
-
-    // Make the way that we're keeping have membership in whatever relations the way we're removing
-    // was in. I *think* this makes sense. This logic may also need to be replicated elsewhere
-    // during merging.
-    RelationMemberSwapper::swap(eid2, eid1, _map, false);
-
-    // Remove reviews e2 is involved in.
-    RemoveReviewsByEidOp(eid2, true).apply(_map);
-  }
-  if (WRITE_DETAILED_DEBUG_MAPS)
-  {
-    OsmMapWriterFactory::writeDebugMap(
-      _map, "LinearSnapMerger-after-old-way-removal-2" + _eidLogString);
+    // Otherwise, drop the element and any reviews its in.
+    _dropSecondaryElements(eid1, e1Match->getElementId(), eid2, e2Match->getElementId());
   }
 
   if (_markAddedMultilineStringRelations)
@@ -270,6 +225,68 @@ bool LinearSnapMerger::_mergePair(
   LOG_VART(replaced);
 
   return false;
+}
+
+void LinearSnapMerger::_dropSecondaryElements(
+  const ElementId& eid1, const ElementId& eidMatch1, const ElementId& eid2,
+  const ElementId& eidMatch2)
+{
+  LOG_TRACE("Removing e2 match: " << eidMatch2 << " and e2: " << eid2 << "...");
+
+  // Add any informational nodes from the ways being replaced to the merged output before deleting
+  // them.
+  WayNodeCopier nodeCopier;
+  nodeCopier.setOsmMap(_map.get());
+  nodeCopier.addCriterion(NotCriterionPtr(new NotCriterion(new NoInformationCriterion())));
+
+  if (eid1.getType() == ElementType::Way && eidMatch2.getType() == ElementType::Way)
+  {
+    LOG_TRACE(
+      "Copying information nodes from e2 match: " << eidMatch2 << " to e1: " << eid1 << "...");
+    nodeCopier.copy(eidMatch2, eid1);
+  }
+
+  if (eidMatch1.getType() == ElementType::Way && eidMatch2.getType() == ElementType::Way)
+  {
+    LOG_TRACE(
+      "Copying information nodes from e2 match: " << eidMatch2 << " to e1 match: " << eidMatch1 <<
+      "...");
+    nodeCopier.copy(eidMatch2, eidMatch1);
+  }
+
+  // Remove reviews e2Match is involved in.
+  RemoveReviewsByEidOp(eidMatch2, true).apply(_map);
+
+  // Make the way that we're keeping have membership in whatever relations the way we're removing
+  // was in. I *think* this makes sense. This logic may also need to be replicated elsewhere
+  // during merging.
+  RelationMemberSwapper::swap(eid2, eid1, _map, false);
+
+  // Remove reviews e2 is involved in.
+  RemoveReviewsByEidOp(eid2, true).apply(_map);
+
+  if (WRITE_DETAILED_DEBUG_MAPS)
+  {
+    OsmMapWriterFactory::writeDebugMap(
+      _map, "LinearSnapMerger-after-dropping-secondary-elements" + _eidLogString);
+  }
+}
+
+void LinearSnapMerger::_swapSecondaryElementWithScraps(
+  const ElementId& secElementId, const ElementPtr& matchElement, const ElementPtr& scraps)
+{
+  LOG_TRACE(
+    "Replacing e2 match: " << matchElement->getElementId() << " and e2: " << secElementId <<
+    " with scraps2: " << scraps->getElementId() << "...");
+  _map->addElement(scraps);
+  ReplaceElementOp(matchElement->getElementId(), scraps->getElementId(), true).apply(_map);
+  ReplaceElementOp(secElementId, scraps->getElementId(), true).apply(_map);
+
+  if (WRITE_DETAILED_DEBUG_MAPS)
+  {
+    OsmMapWriterFactory::writeDebugMap(
+      _map, "LinearSnapMerger-after-swap-secondary-elements-with-scraps" + _eidLogString);
+  }
 }
 
 void LinearSnapMerger::_removeSplitWay(
@@ -312,7 +329,7 @@ void LinearSnapMerger::_removeSplitWay(
   if (WRITE_DETAILED_DEBUG_MAPS)
   {
     OsmMapWriterFactory::writeDebugMap(
-      _map, "LinearSnapMerger-after-old-way-removal-1" + _eidLogString);
+      _map, "LinearSnapMerger-after-split-way-removal" + _eidLogString);
   }
 }
 
@@ -703,7 +720,7 @@ void LinearSnapMerger::_splitElement(
 
   if (WRITE_DETAILED_DEBUG_MAPS)
   {
-    OsmMapWriterFactory::writeDebugMap(_map, "LinearSnapMerger-after-split" + _eidLogString);
+    OsmMapWriterFactory::writeDebugMap(_map, "LinearSnapMerger-after-way-split" + _eidLogString);
   }
 }
 
