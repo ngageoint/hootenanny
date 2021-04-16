@@ -67,7 +67,7 @@ std::shared_ptr<OsmMapWriter> OsmMapWriterFactory::createWriter(const QString& u
   vector<QString> names = Factory::getInstance().getObjectNamesByBase(OsmMapWriter::className());
   for (size_t i = 0; i < names.size() && !writer; ++i)
   {
-    LOG_VARD(names[i]);
+    LOG_VART(names[i]);
     writer.reset(Factory::getInstance().constructObject<OsmMapWriter>(names[i]));
 
     // We may be able to make this a little more generic by referencing an interface instead.
