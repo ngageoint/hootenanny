@@ -103,9 +103,10 @@ public:
 
 protected:
 
+  OsmMapPtr _map;
   ReviewMarker _reviewMarker;
 
-  static int logWarnCount;
+  QString _eidLogString;
 
   std::set<std::pair<ElementId, ElementId>> _pairs;
 
@@ -120,22 +121,26 @@ protected:
   /*
    * Return true if pair needs review.
    */
-  virtual bool _mergePair(const OsmMapPtr& map, ElementId eid1, ElementId eid2,
+  virtual bool _mergePair(ElementId eid1, ElementId eid2,
     std::vector<std::pair<ElementId, ElementId>>& replaced);
 
-  virtual void _markNeedsReview(const OsmMapPtr& map, ElementPtr e1, ElementPtr e2, QString note,
-                                QString reviewType);
+  virtual void _markNeedsReview(
+    ElementPtr e1, ElementPtr e2, QString note, QString reviewType);
 
-  void _removeSpans(OsmMapPtr map, const ElementPtr& w1, const ElementPtr& w2) const;
-  void _removeSpans(OsmMapPtr map, const WayPtr& w1, const WayPtr& w2) const;
+  void _removeSpans(const ElementPtr& w1, const ElementPtr& w2) const;
+  void _removeSpans(const WayPtr& w1, const WayPtr& w2) const;
 
 private:
+
+  static int logWarnCount;
+
+  static const bool WRITE_DETAILED_DEBUG_MAPS;
 
   /*
    * Returns true if the way directly connects the left and right ways. There is some tolerance
    * for "directly". See Redmine ticket #951 for details.
    */
-  bool _directConnect(const ConstOsmMapPtr &map, WayPtr w) const;
+  bool _directConnect(WayPtr w) const;
 
   bool _doesWayConnect(long node1, long node2, const ConstWayPtr& w) const;
 };

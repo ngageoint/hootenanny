@@ -282,12 +282,12 @@ void PoiPolygonMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, Elemen
       MetadataTags::HootPoiPolygonPoisMerged1(), QString::number(poisMergedFromMap1));
     finalBuildingTags.set(
       MetadataTags::HootPoiPolygonPoisMerged2(), QString::number(poisMergedFromMap2));
-    finalBuilding->setStatus(Status::Conflated);
     ConfigOptions conf;
     if (conf.getWriterIncludeDebugTags() && conf.getWriterIncludeMatchedByTag())
     {
-      finalBuilding->setTag(MetadataTags::HootMatchedBy(), PoiPolygonMatch::MATCH_NAME);
+      finalBuildingTags.set(MetadataTags::HootMatchedBy(), PoiPolygonMatch::MATCH_NAME);
     }
+    finalBuilding->setStatus(Status::Conflated);
   }
 
   finalBuilding->setTags(finalBuildingTags);

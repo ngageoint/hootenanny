@@ -226,7 +226,10 @@ public:
         // score each candidate and push it on the result vector
         std::shared_ptr<ScriptMatch> m(
           new ScriptMatch(_script, plugin, map, mapJs, from, *it, _mt));
-        // if we're confident this is a miss
+        m->setMatchMembers(
+          ScriptMatch::geometryTypeToMatchMembers(
+            GeometryTypeCriterion::typeToString(_scriptInfo.getGeometryType())));
+        // if we're confident this is not a miss
         if (m->getType() != MatchType::Miss)
         {
           _result.push_back(m);
@@ -781,7 +784,12 @@ MatchPtr ScriptMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId ei
     Handle<Object> mapJs = OsmMapJs::create(map);
     Persistent<Object> plugin(current, ScriptMatchVisitor::getPlugin(_script));
 
-    return MatchPtr(new ScriptMatch(_script, plugin, map, mapJs, eid1, eid2, getMatchThreshold()));
+    std::shared_ptr<ScriptMatch> match =
+      std::make_shared<ScriptMatch>(_script, plugin, map, mapJs, eid1, eid2, getMatchThreshold());
+    match->setMatchMembers(
+      ScriptMatch::geometryTypeToMatchMembers(
+        GeometryTypeCriterion::typeToString(_scriptInfo.getGeometryType())));
+    return match;
   }
 
   return MatchPtr();

@@ -67,6 +67,8 @@ public:
 
   const MatchClassification& getClassification() const override { return _c; }
 
+  MatchMembers getMatchMembers() const override { return MatchMembers::Polyline; }
+
   std::map<QString, double> getFeatures(const ConstOsmMapPtr& m) const override;
 
   QString getName() const override { return getHighwayMatchName(); }
@@ -110,13 +112,12 @@ private:
 
   double _calculateExpertProbability(const ConstOsmMapPtr& map) const;
 
-  bool _isOrderedConflicting(const ConstOsmMapPtr& map, ElementId sharedEid,
-    ElementId other1, ElementId other2) const;
+  bool _isOrderedConflicting(
+    const ConstOsmMapPtr& map, ElementId sharedEid, ElementId other1, ElementId other2) const;
 
-  void _updateNonMatchDescriptionBasedOnGeometricProperties(QStringList& description,
-                                                            const ConstOsmMapPtr& map,
-                                                            const ConstElementPtr e1,
-                                                            const ConstElementPtr e2);
+  void _updateNonMatchDescriptionBasedOnGeometricProperties(
+    QStringList& description, const ConstOsmMapPtr& map, const ConstElementPtr e1,
+    const ConstElementPtr e2);
 };
 
 }

@@ -37,7 +37,7 @@ set<ElementId> MergerBase::getImpactedElementIds() const
 
   const PairsSet& pairs = _getPairs();
   LOG_VART(hoot::toString(pairs));
-  // make sure the map contains all our elements and they aren't conflated.
+  // Make sure the map contains all our elements and they aren't conflated.
   for (set<pair<ElementId, ElementId>>::const_iterator it = pairs.begin();
        it != pairs.end(); ++it)
   {
@@ -81,19 +81,18 @@ bool MergerBase::isValid(const ConstOsmMapPtr& map) const
 
 void MergerBase::replace(ElementId oldEid, ElementId newEid)
 {
-  LOG_TRACE("Replacing " << oldEid << " with " << newEid << "...");
-
   PairsSet& pairs = _getPairs();
-  LOG_VART(hoot::toString(pairs));
-
   set<pair<ElementId, ElementId>>::iterator it = pairs.begin();
   while (it != pairs.end())
   {
-    LOG_VART(it->first);
-    LOG_VART(it->second);
+    ElementId eid1 = it->first;
+    ElementId eid2 = it->second;
+    LOG_VART(eid1);
+    LOG_VART(eid2);
 
     if (it->first == oldEid)
     {
+      LOG_TRACE("Replacing " << oldEid << " with " << newEid << "...");
       pair<ElementId, ElementId> newP = *it;
       newP.first = newEid;
       LOG_VART(newP);
@@ -102,6 +101,7 @@ void MergerBase::replace(ElementId oldEid, ElementId newEid)
     }
     else if (it->second == oldEid)
     {
+      LOG_TRACE("Replacing " << oldEid << " with " << newEid << "...");
       pair<ElementId, ElementId> newP = *it;
       newP.second = newEid;
       LOG_VART(newP);
@@ -113,8 +113,6 @@ void MergerBase::replace(ElementId oldEid, ElementId newEid)
       ++it;
     }
   }
-
-  LOG_VART(hoot::toString(pairs));
 }
 
 }

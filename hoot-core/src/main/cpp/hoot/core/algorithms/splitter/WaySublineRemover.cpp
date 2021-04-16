@@ -28,10 +28,11 @@
 #include "WaySublineRemover.h"
 
 // Hoot
+#include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/elements/ElementGeometryUtils.h>
 #include <hoot/core/algorithms/linearreference/WayLocation.h>
 #include <hoot/core/algorithms/splitter/WaySplitter.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
-#include <hoot/core/elements/MapProjector.h>
 
 // Standard
 #include <vector>
@@ -50,6 +51,7 @@ std::vector<ElementId> WaySublineRemover::remove(
   LOG_TRACE(
     "Removing subline for: " << way->getElementId() << " starting at: " << start <<
     " and ending at: " << end << "...");
+  LOG_TRACE("Input way length: " << ElementGeometryUtils::calculateLength(way, map));
 
   // Make a copy of the input way so that the first split doesn't affect calculation of the second
   // one.
@@ -72,6 +74,8 @@ std::vector<ElementId> WaySublineRemover::remove(
   // input is automatically removed from the map and resulting newly created segments are
   // automatically added to the map.
   std::vector<ElementId> newWayIds1 = _split(wayCopy1, startCopy, map, true);
+  const bool split1Performed = !newWayIds1.empty();
+  LOG_VART(split1Performed);
   if (newWayIds1.empty())
   {
     // If no split was actually made, then we need to remove the copied way to avoid duplication in
@@ -81,6 +85,8 @@ std::vector<ElementId> WaySublineRemover::remove(
   }
   // Split the way at the end of the section we want to remove.
   std::vector<ElementId> newWayIds2 = _split(wayCopy2, endCopy, map, false);
+  const bool split2Performed = !newWayIds2.empty();
+  LOG_VART(split2Performed);
   if (newWayIds2.empty())
   {
     LOG_TRACE("Removing " << wayCopy2->getElementId() << "...");
@@ -88,6 +94,7 @@ std::vector<ElementId> WaySublineRemover::remove(
   }
   std::vector<ElementId> newWayIds = newWayIds1;
   newWayIds.insert(newWayIds.end(), newWayIds2.begin(), newWayIds2.end());
+  LOG_VART(newWayIds.size());
 
   // Remove the original way from the map to avoid duplication, but only if any splitting was
   // actually done.
@@ -95,9 +102,17 @@ std::vector<ElementId> WaySublineRemover::remove(
   {
     LOG_TRACE("Removing " << way->getElementId() << "...");
     RecursiveElementRemover(way->getElementId()).apply(map);
+    QString outputLengthsStr =
+      QString::number(ElementGeometryUtils::calculateLength(map->getElement(newWayIds.at(0)), map));
+    if (newWayIds.size() > 1)
+    {
+      outputLengthsStr +=
+        QString::number(
+          ElementGeometryUtils::calculateLength(map->getElement(newWayIds.at(1)), map));
+    }
+    LOG_TRACE("Output way length(s): " << outputLengthsStr);
   }
 
-  LOG_VART(newWayIds.size());
   return newWayIds;
 }
 
@@ -105,8 +120,9 @@ std::vector<ElementId> WaySublineRemover::_split(
   const WayPtr& way, WayLocation& splitLocation, const OsmMapPtr& map, const bool keepFirstSegment)
 {
   std::vector<ElementId> newWayIds;
+  LOG_VART(splitLocation.isExtreme());
   // Don't split anything if we're splitting at the beginning or end of the way.
-  if (!splitLocation.isFirst() && !splitLocation.isLast())
+  if (!splitLocation.isExtreme())
   {
     WaySplitter splitter(map, way);
     // split the way

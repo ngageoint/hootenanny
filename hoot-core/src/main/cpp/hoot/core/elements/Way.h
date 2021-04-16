@@ -233,13 +233,13 @@ public:
    * @see Element
    */
   void visitRo(const ElementProvider& map, ConstElementVisitor& filter,
-                       const bool recursive = true) const override;
+               const bool recursive = true) const override;
 
   /**
    * @see Element
    */
   void visitRw(ElementProvider& map, ConstElementVisitor& filter,
-                       const bool recursive = true) override;
+               const bool recursive = true) override;
 
   /**
    * Functions for getting/setting/resetting the parent ID, i.e. the ID of the way

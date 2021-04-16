@@ -45,6 +45,14 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(Merger, LinearTagOnlyMerger)
 
+LinearTagOnlyMerger::LinearTagOnlyMerger() :
+LinearSnapMerger(),
+_performBridgeGeometryMerging(
+  ConfigOptions().getAttributeConflationAllowRefGeometryChangesForBridges())
+{
+  _removeTagsFromWayMembers = false;
+}
+
 LinearTagOnlyMerger::LinearTagOnlyMerger(const std::set<std::pair<ElementId, ElementId>>& pairs,
                                          std::shared_ptr<PartialNetworkMerger> networkMerger) :
 LinearSnapMerger(pairs, std::shared_ptr<SublineStringMatcher>()),
@@ -53,6 +61,76 @@ _performBridgeGeometryMerging(
 _networkMerger(networkMerger)
 {
   _removeTagsFromWayMembers = false;
+}
+
+bool LinearTagOnlyMerger::_mergePair(
+  ElementId eid1, ElementId eid2, std::vector<std::pair<ElementId, ElementId>>& replaced)
+{
+  ElementPtr e1 = _map->getElement(eid1);
+  ElementPtr e2 = _map->getElement(eid2);
+
+  if (!e1 || !e2)
+  {
+    LOG_TRACE("One element missing.  Marking for review...");
+    return LinearMergerAbstract::_mergePair(eid1, eid2, replaced);
+  }
+
+  LOG_TRACE("LinearTagOnlyMerger: e1\n" << OsmUtils::getElementDetailString(e1, _map));
+  LOG_TRACE("LinearTagOnlyMerger: e2\n" << OsmUtils::getElementDetailString(e2, _map));
+
+  // If just one of the features is a bridge and we allow bridge geometry merging, we want the
+  // bridge feature to separate from the road feature its being merged with. So, in that case use a
+  // geometry merger AND a tag merger.
+
+  if (_performBridgeGeometryMerging)
+  {
+    std::vector<ConstElementPtr> elements;
+    elements.push_back(e1);
+    elements.push_back(e2);
+    const bool onlyOneIsABridge =
+      CriterionUtils::containsSatisfyingElements<BridgeCriterion>(elements, OsmMapPtr(), 1, true);
+    if (onlyOneIsABridge)
+    {
+      LOG_TRACE("Using tag and geometry merger, since just one of the features is a bridge...");
+
+      bool needsReview = false;
+      QString mergerName;
+      if (!_networkMerger)
+      {
+        mergerName = LinearSnapMerger::className();
+        needsReview = LinearSnapMerger::_mergePair(eid1, eid2, replaced);
+      }
+      else
+      {
+        mergerName = PartialNetworkMerger::className();
+        _networkMerger->apply(_map, replaced);
+      }
+      if (needsReview)
+      {
+        LOG_TRACE(mergerName << " returned review.");
+      }
+      return needsReview;
+    }
+  }
+
+  // Otherwise, proceed with tag only merging.
+
+  // Used to copy relation tags back to their way members here, but it doesn't actually seem to
+  // come up in any test cases so no longer doing it.;
+
+  // Merge the ways, bringing the secondary feature's attributes over to the reference feature.
+
+  ElementPtr elementWithTagsToKeep;
+  ElementPtr elementWithTagsToRemove;
+  bool removeSecondaryElement;
+  _determineKeeperFeature(
+    e1, e2, elementWithTagsToKeep, elementWithTagsToRemove, removeSecondaryElement);
+  LOG_VART(elementWithTagsToKeep->getElementId());
+  LOG_VART(elementWithTagsToRemove->getElementId());
+
+  return
+    _mergeWays(
+      elementWithTagsToKeep, elementWithTagsToRemove, removeSecondaryElement, replaced);
 }
 
 void LinearTagOnlyMerger::_determineKeeperFeature(
@@ -80,82 +158,9 @@ void LinearTagOnlyMerger::_determineKeeperFeature(
   }
 }
 
-bool LinearTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, ElementId eid2,
-  std::vector<std::pair<ElementId, ElementId>>& replaced)
-{
-  ElementPtr e1 = map->getElement(eid1);
-  ElementPtr e2 = map->getElement(eid2);
-
-  if (!e1 || !e2)
-  {
-    LOG_TRACE("One element missing.  Marking for review...");
-    return LinearMergerAbstract::_mergePair(map, eid1, eid2, replaced);
-  }
-
-  LOG_TRACE("LinearTagOnlyMerger: e1\n" << OsmUtils::getElementDetailString(e1, map));
-  LOG_TRACE("LinearTagOnlyMerger: e2\n" << OsmUtils::getElementDetailString(e2, map));
-
-  // If just one of the features is a bridge and we allow bridge geometry merging, we want the
-  // bridge feature to separate from the road feature its being merged with. So, in that case use a
-  // geometry merger AND a tag merger.
-
-  if (_performBridgeGeometryMerging)
-  {
-    std::vector<ConstElementPtr> elements;
-    elements.push_back(e1);
-    elements.push_back(e2);
-    const bool onlyOneIsABridge =
-      CriterionUtils::containsSatisfyingElements<BridgeCriterion>(elements, OsmMapPtr(), 1, true);
-    if (onlyOneIsABridge)
-    {
-      LOG_TRACE("Using tag and geometry merger, since just one of the features is a bridge...");
-
-      bool needsReview = false;
-      QString mergerName;
-      if (!_networkMerger)
-      {
-        mergerName = LinearSnapMerger::className();
-        needsReview = LinearSnapMerger::_mergePair(map, eid1, eid2, replaced);
-      }
-      else
-      {
-        mergerName = PartialNetworkMerger::className();
-        _networkMerger->apply(map, replaced);
-      }
-      if (needsReview)
-      {
-        LOG_TRACE(mergerName << " returned review.");
-      }
-      LOG_VART(map->getElement(eid1));
-      LOG_VART(map->getElement(eid2));
-      return needsReview;
-    }
-  }
-
-  // Otherwise, proceed with tag only merging.
-
-  // Used to copy relation tags back to their way members here, but it doesn't actually seem to
-  // come up in any test cases so no longer doing it.;
-
-  // Merge the ways, bringing the secondary feature's attributes over to the reference feature.
-
-  ElementPtr elementWithTagsToKeep;
-  ElementPtr elementWithTagsToRemove;
-  bool removeSecondaryElement;
-  _determineKeeperFeature(
-    e1, e2, elementWithTagsToKeep, elementWithTagsToRemove, removeSecondaryElement);
-  LOG_VART(elementWithTagsToKeep->getElementId());
-  LOG_VART(elementWithTagsToRemove->getElementId());
-
-  return
-    _mergeWays(
-      elementWithTagsToKeep, elementWithTagsToRemove, removeSecondaryElement, map, replaced);
-}
-
 bool LinearTagOnlyMerger::_mergeWays(
   ElementPtr elementWithTagsToKeep, ElementPtr elementWithTagsToRemove,
-  const bool removeSecondaryElement, const OsmMapPtr& map,
-  std::vector<std::pair<ElementId, ElementId>>& replaced)
+  const bool removeSecondaryElement, std::vector<std::pair<ElementId, ElementId>>& replaced)
 {
   if (_conflictExists(elementWithTagsToKeep, elementWithTagsToRemove))
   {
@@ -163,7 +168,7 @@ bool LinearTagOnlyMerger::_mergeWays(
   }
 
   // Reverse the way if way to remove is one way and the two ways aren't in similar directions
-  _handleOneWayStreetReversal(elementWithTagsToKeep, elementWithTagsToRemove, map);
+  _handleOneWayStreetReversal(elementWithTagsToKeep, elementWithTagsToRemove);
 
   // TODO: This is ignoring the contents of multilinestring relations.
   // TODO: I think we need to bring information nodes from secondary ways here like we do in ref
@@ -189,16 +194,17 @@ bool LinearTagOnlyMerger::_mergeWays(
   }
   LOG_TRACE(
     "LinearTagOnlyMerger: keeper element\n" <<
-    OsmUtils::getElementDetailString(elementWithTagsToKeep, map));
+    OsmUtils::getElementDetailString(elementWithTagsToKeep, _map));
 
-  map->getIdSwap()->add(
+  _map->getIdSwap()->add(
     elementWithTagsToRemove->getElementId(), elementWithTagsToKeep->getElementId());
   // mark element for replacement
   // TODO: The multilinestring relations marked for replacement aren't being removed.
   if (removeSecondaryElement)
   {
     LOG_TRACE("Marking " << elementWithTagsToRemove->getElementId() << " for replacement...");
-    replaced.emplace_back(elementWithTagsToRemove->getElementId(), elementWithTagsToKeep->getElementId());
+    replaced.emplace_back(
+      elementWithTagsToRemove->getElementId(), elementWithTagsToKeep->getElementId());
   }
 
   return true;
@@ -232,7 +238,7 @@ bool LinearTagOnlyMerger::_conflictExists(
 }
 
 void LinearTagOnlyMerger::_handleOneWayStreetReversal(
-  ElementPtr elementWithTagsToKeep, ConstElementPtr elementWithTagsToRemove, const OsmMapPtr& map)
+  ElementPtr elementWithTagsToKeep, ConstElementPtr elementWithTagsToRemove)
 {
   // TODO: This is ignoring the contents of multilinestring relations.
   OneWayCriterion isAOneWayStreet;
@@ -245,7 +251,7 @@ void LinearTagOnlyMerger::_handleOneWayStreetReversal(
     if (isAOneWayStreet.isSatisfied(wayWithTagsToRemove) &&
         // note the use of an alternative isSimilarDirection method
         !DirectionFinder::isSimilarDirection2(
-           map->shared_from_this(), wayWithTagsToKeep, wayWithTagsToRemove))
+           _map->shared_from_this(), wayWithTagsToKeep, wayWithTagsToRemove))
     {
       LOG_TRACE("Reversing " << wayWithTagsToKeep->getElementId() << "...");
       wayWithTagsToKeep->reverseOrder();

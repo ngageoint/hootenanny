@@ -66,15 +66,14 @@ public:
 
   unsigned int getNumSteps() const override;
 
-protected:
-
-  void _createMergers(
-    MatchSetVector& matchSets, std::vector<MergerPtr>& relationMergers) override;
-  void _mergeFeatures(const std::vector<MergerPtr>& relationMergers) override;
-
 private:
 
+  MatchSetVector _matchSets;
+
   static const bool WRITE_DETAILED_DEBUG_MAPS;
+
+  void _createMergers(std::vector<MergerPtr>& relationMergers);
+  void _mergeFeatures(const std::vector<MergerPtr>& relationMergers);
 
   void _addConflateScoreTags();
   void _addConflateScoreTags(

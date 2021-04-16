@@ -20,6 +20,7 @@ var overlapReviewThreshold = parseFloat(hoot.get("area.overlap.review.threshold"
 var overlapReviewTypeThreshold = parseFloat(hoot.get("area.type.overlap.review.threshold"));
 exports.experimental = true;
 exports.baseFeatureType = "Area";
+exports.writeDebugTags = hoot.get("writer.include.debug.tags");
 exports.writeMatchedBy = hoot.get("writer.include.matched.by.tag");
 exports.geometryType = "polygon";
 
@@ -216,7 +217,7 @@ exports.mergePair = function(map, e1, e2)
   // replace instances of e2 with e1 and merge tags
   mergeElements(map, e1, e2);
   e1.setStatusString("conflated");
-  if (exports.writeMatchedBy == "true")
+  if (exports.writeDebugTags == "true" && exports.writeMatchedBy == "true")
   {
     // Technically, we should get this key from MetadataTags, but that's not integrated with hoot yet.
     e1.setTag("hoot:matchedBy", exports.baseFeatureType);
