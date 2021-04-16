@@ -88,7 +88,7 @@ bool ScriptMergerCreator::createMergers(const MatchSet& matches, vector<MergerPt
   }
   LOG_VART(eids);
 
-  std::shared_ptr<ScriptMerger> scriptMerger(new ScriptMerger(script, plugin, eids));
+  std::shared_ptr<ScriptMerger> scriptMerger = std::make_shared<ScriptMerger>(script, plugin, eids);
   scriptMerger->setMatchType(matchType.join(";"));
   // only add the merger if there are elements to merge
   if (scriptMerger->hasFunction("mergeSets"))

@@ -65,7 +65,7 @@ public:
 
   const MatchClassification& getClassification() const override { return _p; }
 
-  virtual MatchMembers getMatchMembers() const override { return _matchMembers; }
+  MatchMembers getMatchMembers() const override { return _matchMembers; }
   void setMatchMembers(const MatchMembers& matchMembers) { _matchMembers = matchMembers; }
 
   QString explain() const override { return _explainText; }
