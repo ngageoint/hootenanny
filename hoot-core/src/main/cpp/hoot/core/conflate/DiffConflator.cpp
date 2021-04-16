@@ -382,6 +382,7 @@ void DiffConflator::_removeMatchElements(const Status& status, const bool forceC
   }
 
   QHash<ElementId, WaySubline> sublines;
+  int invalidSublineCtr = 0;
 
   // Go through all the matches.
   for (std::vector<ConstMatchPtr>::const_iterator mit = _matches.begin(); mit != _matches.end();
@@ -398,7 +399,7 @@ void DiffConflator::_removeMatchElements(const Status& status, const bool forceC
       LOG_VART(ConfigOptions().getDifferentialRemovePartialMatchesAsWhole());
       LOG_VART(forceComplete);
 
-      // Get the element IDs involved in the match and ...
+      // Get the element IDs involved in the match and...
       std::set<std::pair<ElementId, ElementId>> singleMatchPairs = match->getMatchPairs();
       if (ConfigOptions().getDifferentialRemovePartialMatchesAsWhole() || forceComplete ||
           match->getMatchMembers() != MatchMembers::Polyline ||
@@ -432,10 +433,22 @@ void DiffConflator::_removeMatchElements(const Status& status, const bool forceC
           //ElementId eid1 = it->first;
           ElementId eid2 = it->second;
           WaySubline subline = highwayMatch->getSublineMatch().getMatches().at(0).getSubline2();
+          LOG_VARD(subline);
           if (sublines.contains(eid2))
           {
-            //sublines[eid2] = sublines[eid2] + subline;
-            sublines[eid2] = WaySublineMerger::mergeSublines(sublines[eid2], subline);
+            WaySubline mergedSubline = WaySublineMerger::mergeSublines(sublines[eid2], subline);
+            LOG_VARD(mergedSubline.isValid());
+            LOG_VARD(mergedSubline.isZeroLength());
+            if (mergedSubline.isValid() && !mergedSubline.isZeroLength())
+            {
+              LOG_VARD(mergedSubline);
+              sublines[eid2] = mergedSubline;
+            }
+            else
+            {
+              LOG_DEBUG("Invalid merged subline.");
+              invalidSublineCtr++;
+            }
           }
           else
           {
@@ -445,6 +458,7 @@ void DiffConflator::_removeMatchElements(const Status& status, const bool forceC
       }
     }
   }
+  LOG_VARS(invalidSublineCtr);
 
   if (!ConfigOptions().getDifferentialRemovePartialMatchesAsWhole() && /*_mergers*/sublines.size() > 0)
   {
@@ -463,10 +477,15 @@ void DiffConflator::_removeMatchElements(const Status& status, const bool forceC
     for (QHash<ElementId, WaySubline>::const_iterator it = sublines.begin(); it != sublines.end();
          ++it)
     {
-      /*std::vector<ElementId> newWayIds = */
-        // TODO: move to a WaySublineRemover class
-        WaySublineRemover::removeSubline(
-          std::dynamic_pointer_cast<Way>(_map->getElement(it.key())), it.value(), _map);
+      ElementPtr element = _map->getElement(it.key());
+      if (element)
+      {
+        LOG_VARD(element->getElementId());
+        std::vector<ElementId> newWayIds =
+          WaySublineRemover::removeSubline(
+            std::dynamic_pointer_cast<Way>(element), it.value(), _map);
+        LOG_VARD(newWayIds.size());
+      }
     }
 
     LOG_INFO(

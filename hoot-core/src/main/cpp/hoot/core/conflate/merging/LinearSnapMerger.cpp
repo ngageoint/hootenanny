@@ -99,6 +99,8 @@ _markAddedMultilineStringRelations
 
 WaySublineMatchString LinearSnapMerger::_matchSubline(ElementPtr e1, ElementPtr e2)
 {
+  LOG_TRACE(
+    "Matching sublines for: " << e1->getElementId() << " and " << e2->getElementId() << "...");
   // Some attempts were made to use cached subline matches pased in from LinearSnapMergerJs for
   // performance reasons, but the results were unstable. See branch 3969b.
   return _sublineMatcher->findMatch(_map, e1, e2);
@@ -107,13 +109,13 @@ WaySublineMatchString LinearSnapMerger::_matchSubline(ElementPtr e1, ElementPtr 
 bool LinearSnapMerger::_mergePair(
   ElementId eid1, ElementId eid2, vector<pair<ElementId, ElementId>>& replaced)
 {
-  LOG_VART(eid1);
-  LOG_VART(eid2);
-
+  // An element null check is performed by this call.
   if (LinearMergerAbstract::_mergePair(eid1, eid2, replaced))
   {
     return true;
   }
+
+  LOG_TRACE("Snap merging " << eid1 << " and " << eid2 << "...");
 
   ElementPtr e1 = _map->getElement(eid1);
   ElementPtr e2 = _map->getElement(eid2);
@@ -229,6 +231,10 @@ bool LinearSnapMerger::_mergePair(
 
 bool LinearSnapMerger::_checkForIdenticalElements(const ElementPtr& e1, const ElementPtr& e2) const
 {
+  LOG_TRACE(
+    "Checking " << e1->getElementId() << " and " << e2->getElementId() <<
+    " to see if they are identical...");
+
   ElementComparer elementComparer;
   elementComparer.setIgnoreElementId(true);
   elementComparer.setOsmMap(_map.get());
@@ -236,6 +242,8 @@ bool LinearSnapMerger::_checkForIdenticalElements(const ElementPtr& e1, const El
   {
     ElementPtr keep = e1;
     ElementPtr remove = e2;
+    LOG_VART(keep->getElementId());
+    LOG_VART(remove->getElementId());
     //  Favor positive IDs, swap the keeper when e2 has a positive ID and e1 doesn't.
     if (e2->getId() > 0 && e1->getId() < 0)
     {
@@ -258,13 +266,14 @@ bool LinearSnapMerger::_checkForIdenticalElements(const ElementPtr& e1, const El
 
     return true;
   }
-
   return false;
 }
 
 void LinearSnapMerger::_mergeTags(
   const Tags& e1Tags, const Tags& e2Tags, const ElementPtr& e1Match) const
 {
+  LOG_TRACE("Merging tags...");
+
   Tags newTags = TagMergerFactory::mergeTags(e1Tags, e2Tags, ElementType::Way);
   e1Match->setTags(newTags);
   e1Match->setStatus(Status::Conflated);
@@ -367,6 +376,8 @@ void LinearSnapMerger::_snapEnds(ElementPtr snapee, ElementPtr snapTo) const
 
 void LinearSnapMerger::_snapEnds(WayPtr snapee, WayPtr middle, WayPtr snapTo) const
 {
+  LOG_TRACE("Snapping ends...");
+
   NodePtr replacedNode = _map->getNode(middle->getNodeId(0));
   NodePtr replacementNode = _map->getNode(snapTo->getNodeId(0));
   _snapEnd(snapee, replacedNode, replacementNode);
@@ -575,6 +586,8 @@ void LinearSnapMerger::_manageElementIds(
   const WayPtr& w1, const WayPtr& w2, const WayPtr& wMatch, const ElementPtr& scraps1,
   const ElementPtr& scraps2)
 {
+  LOG_TRACE("Managing element IDs...");
+
   const long pid = Way::getPid(w1, w2);
   // If the the parent IDs for both matched ways are empty, we won't write the empty ID to the
   // match portion to possibly avoid overwriting a pre-existing valid parent ID.
@@ -597,6 +610,8 @@ void LinearSnapMerger::_manageElementIds(
 
 void LinearSnapMerger::_handleScrapsIds(const ElementPtr& scraps, const WayPtr& way) const
 {
+  LOG_TRACE("Handling scrap IDs...");
+
   if (scraps->getElementType() == ElementType::Way)
   {
     std::dynamic_pointer_cast<Way>(scraps)->setPid(way->getPid());
@@ -704,6 +719,8 @@ void LinearSnapMerger::_swapSecondaryElementWithScraps(
 void LinearSnapMerger::_removeSplitWay(
   const ElementPtr& e1, const ElementPtr& scraps1, const ElementPtr& e1Match, const bool swapWayIds)
 {
+  LOG_TRACE("Removing split way...");
+
   const ElementId eid1 = e1->getElementId();
   if (e1 != e1Match && scraps1)
   {

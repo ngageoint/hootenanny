@@ -109,6 +109,8 @@ WayLocation LocationOfPoint::locate(const ConstOsmMapPtr& map, ConstWayPtr way,
 
 WayLocation LocationOfPoint::locate(const Coordinate& inputPt) const
 {
+  LOG_TRACE("Locating coordinate location: " << inputPt << "...");
+
   double minDistance = std::numeric_limits<double>::max();
   int minIndex = 0;
   double minFrac = -1.0;
@@ -117,8 +119,19 @@ WayLocation LocationOfPoint::locate(const Coordinate& inputPt) const
 
   if (_length == -1)
   {
-    _length = ElementToGeometryConverter(_map).convertToLineString(_way)->getLength();
+    std::shared_ptr<geos::geom::LineString> lineString =
+      ElementToGeometryConverter(_map).convertToLineString(_way);
+    if (lineString)
+    {
+      _length = lineString->getLength();
+    }
+    else
+    {
+      LOG_TRACE("Invalid line string. Returning empty way location...");
+      return WayLocation();
+    }
   }
+  LOG_VART(_length);
 
   if (_length <= 0.0)
   {
@@ -131,7 +144,12 @@ WayLocation LocationOfPoint::locate(const Coordinate& inputPt) const
     Coordinate lastCoord = _map->getNode(_way->getNodeId(0))->toCoordinate();
     for (size_t i = 0; i < _way->getNodeCount() - 1; i++)
     {
-      Coordinate nextCoord = _map->getNode(_way->getNodeId(i + 1))->toCoordinate();
+      ConstNodePtr node = _map->getNode(_way->getNodeId(i + 1));
+      if (!node)
+      {
+        LOG_TRACE("null node");
+      }
+      Coordinate nextCoord = node->toCoordinate();
       seg.p0 = lastCoord;
       seg.p1 = nextCoord;
       lastCoord = nextCoord;

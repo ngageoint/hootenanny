@@ -63,51 +63,56 @@ _segmentIndex(-1),
 _segmentFraction(-1)
 {
   double d = 0.0;
-  double length = ElementToGeometryConverter(map).convertToLineString(way)->getLength();
-
-  if (distance <= 0)
+  std::shared_ptr<geos::geom::LineString> lineString =
+    ElementToGeometryConverter(map).convertToLineString(way);
+  if (lineString)
   {
-    _segmentIndex = 0.0;
-    _segmentFraction = 0;
-  }
-  else if (distance >= length)
-  {
-    _segmentIndex = _way->getNodeCount() - 1;
-    _segmentFraction = 0.0;
-  }
-  else
-  {
-    ConstNodePtr lastNode = _map->getNode(way->getNodeId(0));
-    Coordinate last = lastNode->toCoordinate();
+    const double length = lineString->getLength();
 
-    _segmentIndex = way->getNodeCount() - 1;
-    _segmentFraction = 0;
-
-    for (size_t i = 1; i < way->getNodeCount(); i++)
+    if (distance <= 0)
     {
-      ConstNodePtr n = _map->getNode(_way->getNodeId(i));
-      Coordinate next = n->toCoordinate();
-      double delta = next.distance(last);
-      last = next;
-
-      if (d <= distance && d + delta > distance)
-      {
-        _segmentIndex = i - 1;
-        _segmentFraction = (distance - d) / delta;
-        // this can sometimes happen due to rounding errors.
-        if (_segmentFraction >= 1.0)
-        {
-          _segmentFraction = 0.0;
-          _segmentIndex++;
-        }
-        _way = way;
-        break;
-      }
-      d += delta;
+      _segmentIndex = 0.0;
+      _segmentFraction = 0;
     }
+    else if (distance >= length)
+    {
+      _segmentIndex = _way->getNodeCount() - 1;
+      _segmentFraction = 0.0;
+    }
+    else
+    {
+      ConstNodePtr lastNode = _map->getNode(way->getNodeId(0));
+      Coordinate last = lastNode->toCoordinate();
+
+      _segmentIndex = way->getNodeCount() - 1;
+      _segmentFraction = 0;
+
+      for (size_t i = 1; i < way->getNodeCount(); i++)
+      {
+        ConstNodePtr n = _map->getNode(_way->getNodeId(i));
+        Coordinate next = n->toCoordinate();
+        double delta = next.distance(last);
+        last = next;
+
+        if (d <= distance && d + delta > distance)
+        {
+          _segmentIndex = i - 1;
+          _segmentFraction = (distance - d) / delta;
+          // this can sometimes happen due to rounding errors.
+          if (_segmentFraction >= 1.0)
+          {
+            _segmentFraction = 0.0;
+            _segmentIndex++;
+          }
+          _way = way;
+          break;
+        }
+        d += delta;
+      }
+    }
+    assert(_segmentFraction < 1.0);
+    assert((size_t)_segmentIndex <= _way->getNodeCount() - 1);
   }
-  assert(_segmentFraction < 1.0);
-  assert((size_t)_segmentIndex <= _way->getNodeCount() - 1);
 }
 
 WayLocation::WayLocation(
@@ -206,6 +211,11 @@ int WayLocation::compareLocationValues(int segmentIndex0, double segmentFraction
 
 int WayLocation::compareTo(const WayLocation& other) const
 {
+  if (!isValid() || !other.isValid())
+  {
+    return 1;
+  }
+
   if (!(_segmentFraction < 1.0 && other._segmentFraction < 1.0))
   {
     if (logWarnCount < Log::getWarnMessageLimit())

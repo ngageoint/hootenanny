@@ -29,6 +29,7 @@
 // hoot
 #include <hoot/core/algorithms/subline-matching/SublineStringMatcher.h>
 #include <hoot/core/conflate/merging/LinearMergerFactory.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/algorithms/linearreference/WaySubline.h>
@@ -38,12 +39,23 @@ namespace hoot
 
 WaySubline WaySublineMerger::mergeSublines(const WaySubline& subline1, const WaySubline& subline2)
 {
+  if (!subline1.isValid() || !subline2.isValid())
+  {
+    LOG_WARN("Invalid subline.");
+    return WaySubline();
+  }
+
+  LOG_DEBUG("Merging sublines: " << subline1 << " and " << subline2 << "...");
+
   OsmMapPtr map = std::make_shared<OsmMap>();
+  MapProjector::projectToPlanar(map);
   WayPtr way1 = subline1.toWay(map);
+  LOG_VARD(way1->getElementId());
   map->addWay(way1);
   WayPtr way2 = subline2.toWay(map);
+  LOG_VARD(way2->getElementId());
   map->addWay(way2);
-  LOG_TRACE(map->getWayCount());
+  LOG_VARD(map->getWayCount());
 
   std::set<std::pair<ElementId, ElementId>> pairs;
   pairs.insert(std::pair<ElementId, ElementId>(way1->getElementId(), way2->getElementId()));
@@ -52,6 +64,8 @@ WaySubline WaySublineMerger::mergeSublines(const WaySubline& subline1, const Way
   sublineMatcher.reset(
     Factory::getInstance().constructObject<SublineStringMatcher>(
       ConfigOptions().getWaySublineStringMatcher()));
+  LOG_VARD(sublineMatcher->getName());
+  LOG_VARD(sublineMatcher->getSublineMatcherName());
   Settings settings = conf();
   settings.set("way.matcher.max.angle", ConfigOptions().getHighwayMatcherMaxAngle());
   settings.set("way.subline.matcher", ConfigOptions().getHighwaySublineMatcher());
@@ -59,15 +73,18 @@ WaySubline WaySublineMerger::mergeSublines(const WaySubline& subline1, const Way
   sublineMatcher->setConfiguration(settings);
 
   MergerPtr merger = LinearMergerFactory::getMerger(pairs, sublineMatcher);
+  LOG_VARD(merger->getName());
   std::vector<std::pair<ElementId, ElementId>> replaced;
   merger->apply(map, replaced);
-  LOG_TRACE(map->getWayCount());
+  LOG_VARD(map->getWayCount());
 
   WayPtr mergedWay;
   const WayMap& ways = map->getWays();
   for (WayMap::const_iterator itr = ways.begin(); itr != ways.end(); ++itr)
   {
     mergedWay = itr->second;
+    LOG_VARD(mergedWay.get());
+    LOG_VARD(mergedWay->getElementId());
   }
 
   return WaySubline(mergedWay, map);

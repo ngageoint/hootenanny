@@ -54,7 +54,7 @@ const bool LinearMergerAbstract::WRITE_DETAILED_DEBUG_MAPS = false;
 
 void LinearMergerAbstract::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementId>>& replaced)
 {
-  LOG_TRACE("Applying LinearSnapMerger...");
+  LOG_TRACE("Applying linear merger...");
   LOG_VART(hoot::toString(_pairs));
   LOG_VART(hoot::toString(replaced));
   _map = map;
@@ -244,9 +244,13 @@ void LinearMergerAbstract::_removeSpans(const WayPtr& w1, const WayPtr& w2) cons
 bool LinearMergerAbstract::_directConnect(WayPtr w) const
 {
   std::shared_ptr<LineString> ls = ElementToGeometryConverter(_map).convertToLineString(w);
+  if (!ls)
+  {
+    return false;
+  }
 
-  CoordinateSequence* cs = GeometryFactory::getDefaultInstance()->getCoordinateSequenceFactory()->
-    create(2, 2);
+  CoordinateSequence* cs =
+    GeometryFactory::getDefaultInstance()->getCoordinateSequenceFactory()->create(2, 2);
 
   cs->setAt(_map->getNode(w->getNodeId(0))->toCoordinate(), 0);
   cs->setAt(_map->getNode(w->getLastNodeId())->toCoordinate(), 1);

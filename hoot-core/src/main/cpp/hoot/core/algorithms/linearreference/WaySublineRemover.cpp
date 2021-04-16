@@ -45,19 +45,20 @@ namespace hoot
 std::vector<ElementId> WaySublineRemover::removeSubline(
   const WayPtr& way, const WaySubline& subline, const OsmMapPtr& map)
 {
-  if (!way)
+  if (!way || !subline.isValid())
   {
+    LOG_WARN("Invalid way or subline.");
     return std::vector<ElementId>();
   }
 
+  LOG_DEBUG("Removing subline: " << subline << " from: " << way->getElementId() << "...");
+
   std::vector<ElementId> newWayIds;
-  WayLocation start(subline.getStart());
-  WayLocation end(subline.getEnd());
 
   // If the matching subline runs the entire length of the way, just remove the entire way.
-  if (start.isExtreme() && end.isExtreme())
+  if (subline.getStart().isExtreme() && subline.getEnd().isExtreme())
   {
-    LOG_TRACE(
+    LOG_DEBUG(
       "Subline matches covers entire way; removing entire way: " << way->getElementId());
     RecursiveElementRemover(way->getElementId()).apply(map);
   }
@@ -65,10 +66,10 @@ std::vector<ElementId> WaySublineRemover::removeSubline(
   {
     // Otherwise, remove only the portion of the way that overlaps.
 
-    LOG_TRACE("Removing subline from " << way->getElementId() << "...");
+    LOG_DEBUG("Removing subline from " << way->getElementId() << "...");
 
-    newWayIds = WaySublineRemover::remove(way, start, end, map);
-    LOG_VART(newWayIds);
+    newWayIds = removeSubline(way, subline.getStart(), subline.getEnd(), map);
+    LOG_VARD(newWayIds);
     if (!newWayIds.empty())
     {
       // Update references to the modified way.
@@ -76,25 +77,29 @@ std::vector<ElementId> WaySublineRemover::removeSubline(
     }
     else
     {
-      LOG_TRACE("No subline removed for " << way->getElementId() << ".");
+      LOG_DEBUG("No subline removed for " << way->getElementId() << ".");
     }
   }
 
   return newWayIds;
 }
 
-std::vector<ElementId> WaySublineRemover::remove(
+std::vector<ElementId> WaySublineRemover::removeSubline(
   const WayPtr& way, const WayLocation& start, const WayLocation& end, const OsmMapPtr& map)
 {
   if (!MapProjector::isPlanar(map))
   {
     throw IllegalArgumentException("Map must be in a planar projection.");
   }
+  if (!start.isValid() || !end.isValid())
+  {
+    return std::vector<ElementId>();
+  }
 
-  LOG_TRACE(
+  LOG_DEBUG(
     "Removing subline for: " << way->getElementId() << " starting at: " << start <<
     " and ending at: " << end << "...");
-  LOG_TRACE("Input way length: " << ElementGeometryUtils::calculateLength(way, map));
+  LOG_DEBUG("Input way length: " << ElementGeometryUtils::calculateLength(way, map));
 
   // Make a copy of the input way so that the first split doesn't affect calculation of the second
   // one.
@@ -102,14 +107,14 @@ std::vector<ElementId> WaySublineRemover::remove(
   // Thought about trying to preserve the original way ID on the first segment here but had problems
   // making it work.
   wayCopy1->setId(map->createNextWayId());
-  LOG_VART(wayCopy1->getElementId());
+  LOG_VARD(wayCopy1->getElementId());
   map->addWay(wayCopy1);
   // We copied the way, so we need to also copy the loc.
   WayLocation startCopy(map, wayCopy1, start.getSegmentIndex(), start.getSegmentFraction());
 
   WayPtr wayCopy2 = std::dynamic_pointer_cast<Way>(ElementPtr(way->clone()));
   wayCopy2->setId(map->createNextWayId());
-  LOG_VART(wayCopy2->getElementId());
+  LOG_VARD(wayCopy2->getElementId());
   map->addWay(wayCopy2);
   WayLocation endCopy(map, wayCopy2, end.getSegmentIndex(), end.getSegmentFraction());
 
@@ -118,7 +123,7 @@ std::vector<ElementId> WaySublineRemover::remove(
   // automatically added to the map.
   std::vector<ElementId> newWayIds1 = _split(wayCopy1, startCopy, map, true);
   const bool split1Performed = !newWayIds1.empty();
-  LOG_VART(split1Performed);
+  LOG_VARD(split1Performed);
   if (newWayIds1.empty())
   {
     // If no split was actually made, then we need to remove the copied way to avoid duplication in
@@ -129,21 +134,21 @@ std::vector<ElementId> WaySublineRemover::remove(
   // Split the way at the end of the section we want to remove.
   std::vector<ElementId> newWayIds2 = _split(wayCopy2, endCopy, map, false);
   const bool split2Performed = !newWayIds2.empty();
-  LOG_VART(split2Performed);
+  LOG_VARD(split2Performed);
   if (newWayIds2.empty())
   {
-    LOG_TRACE("Removing " << wayCopy2->getElementId() << "...");
+    LOG_DEBUG("Removing " << wayCopy2->getElementId() << "...");
     RecursiveElementRemover(wayCopy2->getElementId()).apply(map);
   }
   std::vector<ElementId> newWayIds = newWayIds1;
   newWayIds.insert(newWayIds.end(), newWayIds2.begin(), newWayIds2.end());
-  LOG_VART(newWayIds.size());
+  LOG_VARD(newWayIds.size());
 
   // Remove the original way from the map to avoid duplication, but only if any splitting was
   // actually done.
   if (!newWayIds.empty())
   {
-    LOG_TRACE("Removing " << way->getElementId() << "...");
+    LOG_DEBUG("Removing " << way->getElementId() << "...");
     RecursiveElementRemover(way->getElementId()).apply(map);
     QString outputLengthsStr =
       QString::number(ElementGeometryUtils::calculateLength(map->getElement(newWayIds.at(0)), map));
@@ -153,7 +158,7 @@ std::vector<ElementId> WaySublineRemover::remove(
         QString::number(
           ElementGeometryUtils::calculateLength(map->getElement(newWayIds.at(1)), map));
     }
-    LOG_TRACE("Output way length(s): " << outputLengthsStr);
+    LOG_DEBUG("Output way length(s): " << outputLengthsStr);
   }
 
   return newWayIds;

@@ -69,9 +69,18 @@ _end(end)
 }
 
 WaySubline::WaySubline(const ConstWayPtr& way, const ConstOsmMapPtr& map) :
-_start(WayLocation(map, way, 0.0)),
-_end(WayLocation(map, way, ElementGeometryUtils::calculateLength(way, map)))
+_start(WayLocation(map, way, 0.0))
 {
+  if (_start.isValid())
+  {
+    LOG_VARD(_start);
+    const double length = ElementGeometryUtils::calculateLength(way, map);
+    if (length != 0.0)
+    {
+      _end = WayLocation(map, way, length);
+      LOG_VARD(_end);
+    }
+  }
 }
 
 WaySubline& WaySubline::operator=(const WaySubline& from)
@@ -150,6 +159,7 @@ WayPtr WaySubline::toWay(
   const OsmMapPtr& map, GeometryToElementConverter::NodeFactory* nf, bool reuse) const
 {
   ConstWayPtr way = _start.getWay();
+  LOG_VART(way->getElementId());
 
   std::shared_ptr<GeometryToElementConverter::NodeFactory> nfPtr;
   if (nf == nullptr)
@@ -164,11 +174,13 @@ WayPtr WaySubline::toWay(
   long way_id = way->getId();
   if (!reuse)
     way_id = map->createNextWayId();
+  LOG_VART(way_id);
   WayPtr result(new Way(way->getStatus(), way_id, ce));
   result->setPid(way->getPid());
   result->setVersion(way->getVersion());
   result->setTimestamp(way->getTimestamp());
   result->setTags(way->getTags());
+  LOG_VART(result->getElementId());
 
   int includedStartIndex = _start.getSegmentIndex();
   if (_start.getSegmentFraction() > 0.0)
@@ -194,14 +206,18 @@ WayPtr WaySubline::toWay(
     result->addNode(way->getNodeId(i));
   }
 
+  LOG_VART(_end.isNode());
   if (!_end.isNode())
   {
     Coordinate c = _end.getCoordinate();
+    LOG_VART(c);
     NodePtr n = nf->createNode(map, c, way->getStatus(), ce);
+    LOG_VART(n->getElementId());
     map->addNode(n);
     result->addNode(n->getId());
   }
 
+  LOG_VART(result);
   return result;
 }
 

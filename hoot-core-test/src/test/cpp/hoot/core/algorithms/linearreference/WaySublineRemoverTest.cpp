@@ -67,7 +67,7 @@ public:
 
     WayLocation start(map, way, 25.0);
     WayLocation end(map, way, 50.0);
-    std::vector<ElementId> splitWayIds = WaySublineRemover::remove(way, start, end, map);
+    std::vector<ElementId> splitWayIds = WaySublineRemover::removeSubline(way, start, end, map);
     LOG_VART(splitWayIds.size());
 
     CPPUNIT_ASSERT_EQUAL((size_t)2, splitWayIds.size());
@@ -89,7 +89,7 @@ public:
 
     WayLocation start(map, way, 0.0);
     WayLocation end(map, way, 50.0);
-    std::vector<ElementId> splitWayIds = WaySublineRemover::remove(way, start, end, map);
+    std::vector<ElementId> splitWayIds = WaySublineRemover::removeSubline(way, start, end, map);
     LOG_VART(splitWayIds.size());
 
     CPPUNIT_ASSERT_EQUAL((size_t)1, splitWayIds.size());
@@ -110,7 +110,7 @@ public:
 
     WayLocation start(map, way, 25.0);
     WayLocation end(map, way, ElementGeometryUtils::calculateLength(way, map));
-    std::vector<ElementId> splitWayIds = WaySublineRemover::remove(way, start, end, map);
+    std::vector<ElementId> splitWayIds = WaySublineRemover::removeSubline(way, start, end, map);
     LOG_VART(splitWayIds.size());
 
     CPPUNIT_ASSERT_EQUAL((size_t)1, splitWayIds.size());
@@ -130,7 +130,7 @@ public:
     QString exceptionMsg;
     try
     {
-      WaySublineRemover::remove(way, WayLocation(), WayLocation(), map);
+      WaySublineRemover::removeSubline(way, WayLocation(), WayLocation(), map);
     }
     catch (const HootException& e)
     {
