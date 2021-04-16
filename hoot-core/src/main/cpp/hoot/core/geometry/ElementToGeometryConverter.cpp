@@ -161,6 +161,8 @@ std::shared_ptr<Geometry> ElementToGeometryConverter::convertToGeometry(const Re
 std::shared_ptr<LineString> ElementToGeometryConverter::convertToLineString(
   const ConstWayPtr& w) const
 {
+  LOG_TRACE("Converting " << w->getElementId() << " to line string...");
+
   const std::vector<long>& ids = w->getNodeIds();
   int size = ids.size();
   if (size == 1)
@@ -187,6 +189,7 @@ std::shared_ptr<LineString> ElementToGeometryConverter::convertToLineString(
         }
         logWarnCount++;
       }
+      LOG_TRACE("Missing node: " << ids[i] << ". Not creating line string...");
       return std::shared_ptr<LineString>();
     }
     cs->setAt(n->toCoordinate(), i);
