@@ -76,7 +76,7 @@ namespace hoot
 int DiffConflator::logWarnCount = 0;
 // ONLY ENABLE THIS DURING DEBUGGING; We don't want to tie it to debug.maps.write, as it may
 // produce a very large number of output files.
-const bool DiffConflator::WRITE_DETAILED_DEBUG_MAPS = false;
+const bool DiffConflator::WRITE_DETAILED_DEBUG_MAPS = true;
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, DiffConflator)
 
@@ -433,20 +433,20 @@ void DiffConflator::_removeMatchElements(const Status& status, const bool forceC
           //ElementId eid1 = it->first;
           ElementId eid2 = it->second;
           WaySubline subline = highwayMatch->getSublineMatch().getMatches().at(0).getSubline2();
-          LOG_VARD(subline);
+          //LOG_VART(subline);
           if (sublines.contains(eid2))
           {
             WaySubline mergedSubline = WaySublineMerger::mergeSublines(sublines[eid2], subline);
-            LOG_VARD(mergedSubline.isValid());
-            LOG_VARD(mergedSubline.isZeroLength());
+            LOG_VART(mergedSubline.isValid());
+            LOG_VART(mergedSubline.isZeroLength());
             if (mergedSubline.isValid() && !mergedSubline.isZeroLength())
             {
-              LOG_VARD(mergedSubline);
+              LOG_VART(mergedSubline);
               sublines[eid2] = mergedSubline;
             }
             else
             {
-              LOG_DEBUG("Invalid merged subline.");
+              LOG_TRACE("Invalid merged subline: " << mergedSubline);
               invalidSublineCtr++;
             }
           }
@@ -458,7 +458,7 @@ void DiffConflator::_removeMatchElements(const Status& status, const bool forceC
       }
     }
   }
-  LOG_VARS(invalidSublineCtr);
+  LOG_VART(invalidSublineCtr);
 
   if (!ConfigOptions().getDifferentialRemovePartialMatchesAsWhole() && /*_mergers*/sublines.size() > 0)
   {
@@ -466,12 +466,14 @@ void DiffConflator::_removeMatchElements(const Status& status, const bool forceC
 
     QElapsedTimer mergersTimer;
     mergersTimer.start();
+
 //    _mapElementIdsToMergers(); // TODO: move to _applyMergers?
 //    LOG_STATUS("Applying " << StringUtils::formatLargeNumber(_mergers.size()) << " mergers...");
 //    _applyMergers(_mergers, _map);
 //    LOG_INFO(
 //      "Applied " << StringUtils::formatLargeNumber(_mergers.size()) << " mergers in " <<
 //      StringUtils::millisecondsToDhms(mergersTimer.elapsed()) << ".");
+
     LOG_STATUS("Removing " << StringUtils::formatLargeNumber(sublines.size()) << " sublines...");
 
     for (QHash<ElementId, WaySubline>::const_iterator it = sublines.begin(); it != sublines.end();
@@ -480,11 +482,16 @@ void DiffConflator::_removeMatchElements(const Status& status, const bool forceC
       ElementPtr element = _map->getElement(it.key());
       if (element)
       {
-        LOG_VARD(element->getElementId());
+        LOG_VART(element->getElementId());
         std::vector<ElementId> newWayIds =
           WaySublineRemover::removeSubline(
             std::dynamic_pointer_cast<Way>(element), it.value(), _map);
-        LOG_VARD(newWayIds.size());
+        LOG_VART(newWayIds.size());
+        if (WRITE_DETAILED_DEBUG_MAPS)
+        {
+          OsmMapWriterFactory::writeDebugMap(
+            _map, "after-subline-removal-" + element->getElementId().toString());
+        }
       }
     }
 
