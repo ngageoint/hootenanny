@@ -22,33 +22,50 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
  */
-package hoot.services.controllers.osm.map;
+package hoot.services.models.db;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import javax.annotation.Generated;
 
 /**
- * Model class for a set of Hootenanny map layers
+ * TranslationFolderMappings is a Querydsl bean type
  */
+@Generated("com.querydsl.codegen.BeanSerializer")
+public class TranslationFolderMappings {
 
-public class FolderRecords {
-    private FolderRecord[] folders;
+    private Long id;
 
-    public FolderRecords() {}
+    @JsonProperty("name")
+    private String displayName;
 
-    public FolderRecord[] getFolders() {
-        return folders;
+    private Long folderId;
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public void setFolders(FolderRecord[] folders) {
-        this.folders = folders;
+    public Long getId() {
+        return id;
     }
 
-    public FolderRecord getFolderById(Long folderId) {
-        for(FolderRecord f : this.folders) {
-            if(f.getId() == folderId) {
-                return f;
-            }
-        }
-        return null;
+    public void setFolderId(Long folderId) {
+        this.folderId = folderId;
     }
+
+    public Long getFolderId() {
+        return folderId;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
 }
+

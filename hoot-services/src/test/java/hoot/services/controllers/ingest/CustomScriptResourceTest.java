@@ -113,7 +113,7 @@ public class CustomScriptResourceTest {
     @Category(UnitTest.class)
     public void testProcessSave() throws Exception {
         CustomScriptResource res = new CustomScriptResource();
-        Response resp = res.processSave("test", "testName", "Test Description");
+        Response resp = res.processSave("test", "testName", "Test Description", null);
 
         JSONParser parser = new JSONParser();
         JSONArray actualObj = (JSONArray) parser.parse(resp.getEntity().toString());
@@ -136,7 +136,7 @@ public class CustomScriptResourceTest {
     public void testSaveBadSyntax() throws Exception {
         CustomScriptResource res = new CustomScriptResource();
         try {
-            res.processSave("{ test", "testName", "Test Description");
+            res.processSave("{ test", "testName", "Test Description", null);
         }
         catch (WebApplicationException e) {
             Response response = e.getResponse();
@@ -340,10 +340,10 @@ public class CustomScriptResourceTest {
     public void testGetScriptsList() throws Exception {
         CustomScriptResource customScriptResource = new CustomScriptResource();
 
-        Response response = customScriptResource.processSave("test3", "testName3", "Test3 Description");
+        Response response = customScriptResource.processSave("test3", "testName3", "Test3 Description", null);
         assertEquals(200, response.getStatus());
 
-        response = customScriptResource.processSave("test1", "testName4", "Test4 Description");
+        response = customScriptResource.processSave("test1", "testName4", "Test4 Description", null);
         assertEquals(200, response.getStatus());
 
         File file = new File(customScriptFolder, "testName3.js");
@@ -375,10 +375,10 @@ public class CustomScriptResourceTest {
     @Category(UnitTest.class)
     public void testGetScript() throws Exception {
         CustomScriptResource res = new CustomScriptResource();
-        Response resp = res.processSave("test5", "testName5", "Test5 Description");
+        Response resp = res.processSave("test5", "testName5", "Test5 Description", null);
 
         assertEquals(200, resp.getStatus());
-        resp = res.processSave("test6", "testName6", "Test6 Description");
+        resp = res.processSave("test6", "testName6", "Test6 Description", null);
         assertEquals(200, resp.getStatus());
 
         File file = new File(customScriptFolder, "testName5.js");
@@ -402,7 +402,7 @@ public class CustomScriptResourceTest {
     @Category(UnitTest.class)
     public void testDeleteScript() throws Exception {
         CustomScriptResource res = new CustomScriptResource();
-        Response resp = res.processSave("test9", "testName9", "Test9 Description");
+        Response resp = res.processSave("test9", "testName9", "Test9 Description", null);
         assertEquals(200, resp.getStatus());
 
         File file = new File(customScriptFolder, "testName9.js");
@@ -422,12 +422,12 @@ public class CustomScriptResourceTest {
     @Category(UnitTest.class)
     public void testDeleteMultiple() {
         CustomScriptResource res = new CustomScriptResource();
-        Response saveResponse = res.processSave("test9", "testName9", "Test9 Description");
+        Response saveResponse = res.processSave("test9", "testName9", "Test9 Description", null);
         assertEquals(200, saveResponse.getStatus());
         File file = new File(customScriptFolder, "testName9.js");
         assertTrue(file.exists());
 
-        saveResponse = res.processSave("test10", "testName10", "Test10 Description");
+        saveResponse = res.processSave("test10", "testName10", "Test10 Description", null);
         assertEquals(200, saveResponse.getStatus());
         file = new File(customScriptFolder, "testName10.js");
         assertTrue(file.exists());
@@ -481,12 +481,12 @@ public class CustomScriptResourceTest {
          * See explanation in testSaveMultipleEmptyName why no failure occurs here
          */
         CustomScriptResource res = new CustomScriptResource();
-        Response saveResponse = res.processSave("test9", "testName9", "Test9 Description");
+        Response saveResponse = res.processSave("test9", "testName9", "Test9 Description", null);
         assertEquals(200, saveResponse.getStatus());
         File file = new File(customScriptFolder, "testName9.js");
         assertTrue(file.exists());
 
-        saveResponse = res.processSave("test10", "testName10", "Test10 Description");
+        saveResponse = res.processSave("test10", "testName10", "Test10 Description", null);
         assertEquals(200, saveResponse.getStatus());
         file = new File(customScriptFolder + "/" + "testName10.js");
         assertTrue(file.exists());
@@ -536,12 +536,12 @@ public class CustomScriptResourceTest {
     @Category(UnitTest.class)
     public void testDeleteMultipleScriptToBeDeletedHasNoHeader() throws Exception {
         CustomScriptResource res = new CustomScriptResource();
-        Response saveResponse = res.processSave("test9", "testName9", "Test9 Description");
+        Response saveResponse = res.processSave("test9", "testName9", "Test9 Description", null);
         assertEquals(200, saveResponse.getStatus());
         File file = new File(customScriptFolder, "testName9.js");
         assertTrue(file.exists());
 
-        saveResponse = res.processSave("test10", "testName10", "Test10 Description");
+        saveResponse = res.processSave("test10", "testName10", "Test10 Description", null);
         assertEquals(200, saveResponse.getStatus());
         file = new File(customScriptFolder, "testName10.js");
         assertTrue(file.exists());

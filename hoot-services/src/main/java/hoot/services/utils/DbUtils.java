@@ -28,12 +28,13 @@ package hoot.services.utils;
 
 
 import static hoot.services.HootProperties.CHANGESETS_FOLDER;
+import static hoot.services.models.db.QCommandStatus.commandStatus;
 import static hoot.services.models.db.QFolderMapMappings.folderMapMappings;
 import static hoot.services.models.db.QFolders.folders;
 import static hoot.services.models.db.QJobStatus.jobStatus;
 import static hoot.services.models.db.QMaps.maps;
-import static hoot.services.models.db.QCommandStatus.commandStatus;
 import static hoot.services.models.db.QReviewBookmarks.reviewBookmarks;
+import static hoot.services.models.db.QTranslationFolders.translationFolders;
 import static hoot.services.models.db.QUsers.users;
 
 import java.io.File;
@@ -1134,6 +1135,21 @@ public class DbUtils {
         }
 
         return elementInfo;
+    }
+
+    public static List<Folders> getTranslationFoldersForUser(Long userId) {
+        SQLQuery<Folders> sql = createQuery()
+                .select(translationFolders)
+                .from(translationFolders)
+                .where(translationFolders.id.ne(0L));
+        if (userId != null && !UserResource.adminUserCheck(getUser(userId))) {
+            sql.where(
+                    translationFolders.userId.eq(userId).or(translationFolders.publicCol.isTrue())
+            );
+        }
+        List<Folders> folderRecordSet = sql.orderBy(translationFolders.displayName.asc()).fetch();
+
+        return folderRecordSet;
     }
 
 }
