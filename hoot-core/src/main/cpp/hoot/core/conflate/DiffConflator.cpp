@@ -67,6 +67,7 @@
 #include <hoot/core/algorithms/linearreference/WaySublineMerger.h>
 #include <hoot/core/algorithms/linearreference/WaySublineRemover.h>
 #include <hoot/core/algorithms/subline-matching/SublineStringMatcher.h>
+#include <hoot/core/ops/SuperfluousNodeRemover.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -430,35 +431,6 @@ void DiffConflator::_removeMatchElements(const Status& status, const bool forceC
 //        _mergers.push_back(
 //          MergerPtr(new LinearDiffMerger(singleMatchPairs, highwayMatch->getSublineMatcher())));
 
-//        for (std::set<std::pair<ElementId, ElementId>>::const_iterator it =
-//               singleMatchPairs.begin();
-//             it != singleMatchPairs.end(); ++it)
-//        {
-//          ElementId eid2 = it->second;
-//          WaySubline subline = highwayMatch->getSublineMatch().getMatches().at(0).getSubline2();
-//          //LOG_VART(subline);
-//          if (sublines.contains(eid2))
-//          {
-//            WaySubline mergedSubline = WaySublineMerger::mergeSublines(sublines[eid2], subline);
-//            LOG_VART(mergedSubline.isValid());
-//            LOG_VART(mergedSubline.isZeroLength());
-//            if (mergedSubline.isValid() && !mergedSubline.isZeroLength())
-//            {
-//              LOG_VART(mergedSubline);
-//              sublines[eid2] = mergedSubline;
-//            }
-//            else
-//            {
-//              LOG_TRACE("Invalid merged subline: " << mergedSubline);
-//              invalidSublineCtr++;
-//            }
-//          }
-//          else
-//          {
-//            sublines[eid2] = subline;
-//          }
-//        }
-
         for (std::set<std::pair<ElementId, ElementId>>::const_iterator it =
                singleMatchPairs.begin();
              it != singleMatchPairs.end(); ++it)
@@ -503,7 +475,7 @@ void DiffConflator::_removeMatchElements(const Status& status, const bool forceC
       }
       else
       {
-        mergedSubline = WaySublineMerger::mergeSublines(mergedSubline, sublineToMerge);
+        mergedSubline = WaySublineMerger::mergeSublines(mergedSubline, sublineToMerge, _map);
       }
       WayPtr mergedWay =
         std::dynamic_pointer_cast<Way>(ElementPtr(mergedSubline.getWay()->clone()));
@@ -511,6 +483,7 @@ void DiffConflator::_removeMatchElements(const Status& status, const bool forceC
       mergedSublines[elementId] = mergedSubline;
     }
   }
+  SuperfluousNodeRemover::removeNodes(_map);
 
   //if (!ConfigOptions().getDifferentialRemovePartialMatchesAsWhole() && _mergers.size() > 0)
   //if (!ConfigOptions().getDifferentialRemovePartialMatchesAsWhole() && sublines.size() > 0)
@@ -526,29 +499,6 @@ void DiffConflator::_removeMatchElements(const Status& status, const bool forceC
 //    _applyMergers(_mergers, _map);
 //    LOG_INFO(
 //      "Applied " << StringUtils::formatLargeNumber(_mergers.size()) << " mergers in " <<
-//      StringUtils::millisecondsToDhms(mergersTimer.elapsed()) << ".");
-
-//    LOG_STATUS("Removing " << StringUtils::formatLargeNumber(sublines.size()) << " sublines...");
-//    for (QHash<ElementId, WaySubline>::const_iterator it = sublines.begin(); it != sublines.end();
-//         ++it)
-//    {
-//      ElementPtr element = _map->getElement(it.key());
-//      if (element)
-//      {
-//        LOG_VART(element->getElementId());
-//        std::vector<ElementId> newWayIds =
-//          WaySublineRemover::removeSubline(
-//            std::dynamic_pointer_cast<Way>(element), it.value(), _map);
-//        LOG_VART(newWayIds.size());
-//        if (WRITE_DETAILED_DEBUG_MAPS)
-//        {
-//          OsmMapWriterFactory::writeDebugMap(
-//            _map, "after-subline-removal-" + element->getElementId().toString());
-//        }
-//      }
-//    }
-//    LOG_INFO(
-//      "Removed " << StringUtils::formatLargeNumber(sublines.size()) << " sublines in " <<
 //      StringUtils::millisecondsToDhms(mergersTimer.elapsed()) << ".");
 
     LOG_STATUS(

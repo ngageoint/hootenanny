@@ -29,6 +29,7 @@
 
 // Hoot
 #include <hoot/core/algorithms/linearreference/WaySubline.h>
+#include <hoot/core/elements/OsmMap.h>
 
 namespace hoot
 {
@@ -48,8 +49,10 @@ public:
    *
    * @param subline1
    * @param subline2
+   * @param map
    */
-  static WaySubline mergeSublines(const WaySubline& subline1, const WaySubline& subline2);
+  static WaySubline mergeSublines(
+    const WaySubline& subline1, const WaySubline& subline2, const ConstOsmMapPtr& map);
 };
 
 }

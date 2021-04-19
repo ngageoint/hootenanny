@@ -34,6 +34,7 @@
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/ops/SuperfluousNodeRemover.h>
 
 namespace hoot
 {
@@ -61,21 +62,44 @@ public:
       map, _inputPath + "WaySublineMergerTest-runBasicTest.osm", false, Status::Unknown1);
     MapProjector::projectToPlanar(map);
 
-    WayPtr way1 = std::dynamic_pointer_cast<Way>(MapUtils::getFirstElementWithNote(map, "1"));
-    WaySubline subline1(way1, map);
-    WayPtr way2 = std::dynamic_pointer_cast<Way>(MapUtils::getFirstElementWithNote(map, "2"));
-    WaySubline subline2(way2, map);
-
-    WaySubline mergedSubline = WaySublineMerger::mergeSublines(subline1, subline2);
-    OsmMapPtr outMap = std::make_shared<OsmMap>();
-    WayPtr mergedWay = mergedSubline.toWay(outMap, nullptr, true);
-    outMap->addWay(mergedWay);
+    _mergeWaysAsSublines("1", "2", map);
+    _mergeWaysAsSublines("3", "4", map);
+    _mergeWaysAsSublines("5", "6", map);
+    _mergeWaysAsSublines("7", "8", map);
+    _mergeWaysAsSublines("9", "10", map);
 
     OsmMapWriterFactory::write(
-      outMap, _outputPath + "WaySublineMergerTest-runBasicTest-out.osm", false, true);
+      map, _outputPath + "WaySublineMergerTest-runBasicTest-out.osm", false, true);
 //    HOOT_FILE_EQUALS(
 //      _inputPath + "runSplitInTheMiddleTest-out.osm",
 //      _outputPath + "runSplitInTheMiddleTest-out.osm");
+  }
+
+private:
+
+  void _mergeWaysAsSublines(const QString& noteVal1, const QString& noteVal2, OsmMapPtr& map)
+  {
+    LOG_TRACE("Merging ways with notes: " << noteVal1 << " and " << noteVal2 << " as sublines...");
+
+    WayPtr way1 = std::dynamic_pointer_cast<Way>(MapUtils::getFirstElementWithNote(map, noteVal1));
+    WaySubline subline1(way1, map);
+    WayPtr way2 = std::dynamic_pointer_cast<Way>(MapUtils::getFirstElementWithNote(map, noteVal2));
+    WaySubline subline2(way2, map);
+
+    WaySubline mergedSubline = WaySublineMerger::mergeSublines(subline1, subline2, map);
+    if (mergedSubline.isValid())
+    {
+      LOG_TRACE("Ways " << noteVal1 << " and " << noteVal2 << " merged.");
+    }
+    else
+    {
+      LOG_TRACE("Ways " << noteVal1 << " and " << noteVal2 << " did not merge.");
+    }
+
+    WayPtr mergedWay =
+      std::dynamic_pointer_cast<Way>(ElementPtr(mergedSubline.getWay()->clone()));
+    map->replace(subline2.getWay(), mergedWay);
+    SuperfluousNodeRemover::removeNodes(map);
   }
 };
 

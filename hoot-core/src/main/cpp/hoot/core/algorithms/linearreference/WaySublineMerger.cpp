@@ -27,54 +27,43 @@
 #include "WaySublineMerger.h"
 
 // hoot
+#include <hoot/core/algorithms/linearreference/WaySubline.h>
 #include <hoot/core/algorithms/subline-matching/SublineStringMatcher.h>
 #include <hoot/core/conflate/merging/LinearMergerFactory.h>
 #include <hoot/core/elements/MapProjector.h>
-#include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/ops/CopyMapSubsetOp.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/algorithms/linearreference/WaySubline.h>
 
 namespace hoot
 {
 
-WaySubline WaySublineMerger::mergeSublines(const WaySubline& subline1, const WaySubline& subline2)
+WaySubline WaySublineMerger::mergeSublines(
+  const WaySubline& subline1, const WaySubline& subline2, const ConstOsmMapPtr& map)
 {
   if (!subline1.isValid() || !subline2.isValid())
   {
-    LOG_WARN("Invalid subline.");
+    LOG_WARN("Invalid subline(s).");
     return WaySubline();
   }
-
-  LOG_TRACE("Merging sublines: " << subline1 << " and " << subline2 << "...");
-  LOG_VART(subline1.getWay()->getId() == subline2.getWay()->getId());
 
   const long cachedId = subline1.getWay()->getId();
   LOG_VART(cachedId);
 
-  OsmMapPtr map = std::make_shared<OsmMap>();
-  MapProjector::projectToPlanar(map);
-  WayPtr way1 = subline1.toWay(map, nullptr, true);
-  //WayPtr way1 = std::dynamic_pointer_cast<Way>(ElementPtr(subline1.getWay()->clone()));
-  //way1->setId(map->createNextWayId());
+  LOG_TRACE("Cloning sublines: " << subline1 << " and " << subline2 << " to temp map...");
+  OsmMapPtr tempMap = std::make_shared<OsmMap>();
+  CopyMapSubsetOp mapCopier(
+    map, subline1.getWay()->getElementId(), subline2.getWay()->getElementId());
+  mapCopier.apply(tempMap);
+  MapProjector::projectToPlanar(tempMap);
+  WayPtr way1 = tempMap->getWay(subline1.getWay()->getElementId());
+  way1->setStatus(Status::Unknown1);
   LOG_VART(way1->getElementId());
   LOG_VART(way1->getNodeCount());
-  map->addWay(way1);
-  WayPtr way2 = subline2.toWay(map, nullptr, true);
-  //WayPtr way2 = std::dynamic_pointer_cast<Way>(ElementPtr(subline2.getWay()->clone()));
-  //way2->setId(map->createNextWayId());
+  WayPtr way2 = tempMap->getWay(subline2.getWay()->getElementId());
+  way2->setStatus(Status::Unknown2);
   LOG_VART(way2->getElementId());
-  LOG_VART(way2->getNodeCount());
-  map->addWay(way2);
-  LOG_VART(map->getWayCount());
-  //MapProjector::projectToPlanar(map);
-  OsmMapWriterFactory::writeDebugMap(
-    map,
-    "merge-sublines-temp-map-" + way1->getElementId().toString() + "-" +
-      way2->getElementId().toString());
-
-  std::set<std::pair<ElementId, ElementId>> pairs;
-  pairs.insert(std::pair<ElementId, ElementId>(way1->getElementId(), way2->getElementId()));
+  LOG_VART(way2->getNodeCount());;
+  LOG_VART(tempMap->getWayCount());
 
   std::shared_ptr<SublineStringMatcher> sublineMatcher;
   sublineMatcher.reset(
@@ -88,18 +77,21 @@ WaySubline WaySublineMerger::mergeSublines(const WaySubline& subline1, const Way
   settings.set("way.matcher.heading.delta", ConfigOptions().getHighwayMatcherHeadingDelta());
   sublineMatcher->setConfiguration(settings);
 
+  LOG_TRACE("Merging ways: " << way1->getElementId() << " and " << way2->getElementId() << "...");
+  std::set<std::pair<ElementId, ElementId>> pairs;
+  pairs.insert(std::pair<ElementId, ElementId>(way1->getElementId(), way2->getElementId()));
   MergerPtr merger = LinearMergerFactory::getMerger(pairs, sublineMatcher);
   LOG_VART(merger->getName());
   std::vector<std::pair<ElementId, ElementId>> replaced;
-  merger->apply(map, replaced);
-  LOG_VART(map->getWayCount());
-  if (map->getWayCount() == 0)
+  merger->apply(tempMap, replaced);
+  LOG_VART(tempMap->getWayCount());
+  if (tempMap->getWayCount() == 0)
   {
     return WaySubline();
   }
 
   WayPtr mergedWay;
-  const WayMap& ways = map->getWays();
+  const WayMap& ways = tempMap->getWays();
   for (WayMap::const_iterator itr = ways.begin(); itr != ways.end(); ++itr)
   {
     mergedWay = itr->second;
@@ -109,7 +101,8 @@ WaySubline WaySublineMerger::mergeSublines(const WaySubline& subline1, const Way
     LOG_VART(mergedWay->getNodeCount());
   }
 
-  return WaySubline(mergedWay, map);
+  LOG_TRACE("Returning subline for merged way: " << mergedWay->getElementId() << "...");
+  return WaySubline(mergedWay, tempMap);
 }
 
 }
