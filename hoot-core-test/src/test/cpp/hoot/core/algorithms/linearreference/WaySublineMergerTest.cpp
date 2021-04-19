@@ -56,7 +56,26 @@ public:
 
   void runBasicTest()
   {
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    OsmMapReaderFactory::read(
+      map, _inputPath + "WaySublineMergerTest-runBasicTest.osm", false, Status::Unknown1);
+    MapProjector::projectToPlanar(map);
 
+    WayPtr way1 = std::dynamic_pointer_cast<Way>(MapUtils::getFirstElementWithNote(map, "1"));
+    WaySubline subline1(way1, map);
+    WayPtr way2 = std::dynamic_pointer_cast<Way>(MapUtils::getFirstElementWithNote(map, "2"));
+    WaySubline subline2(way2, map);
+
+    WaySubline mergedSubline = WaySublineMerger::mergeSublines(subline1, subline2);
+    OsmMapPtr outMap = std::make_shared<OsmMap>();
+    WayPtr mergedWay = mergedSubline.toWay(outMap, nullptr, true);
+    outMap->addWay(mergedWay);
+
+    OsmMapWriterFactory::write(
+      outMap, _outputPath + "WaySublineMergerTest-runBasicTest-out.osm", false, true);
+//    HOOT_FILE_EQUALS(
+//      _inputPath + "runSplitInTheMiddleTest-out.osm",
+//      _outputPath + "runSplitInTheMiddleTest-out.osm");
   }
 };
 

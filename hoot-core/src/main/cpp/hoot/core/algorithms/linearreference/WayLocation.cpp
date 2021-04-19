@@ -113,6 +113,10 @@ _segmentFraction(-1)
     assert(_segmentFraction < 1.0);
     assert((size_t)_segmentIndex <= _way->getNodeCount() - 1);
   }
+  else
+  {
+    LOG_TRACE("Empty line string.");
+  }
 }
 
 WayLocation::WayLocation(

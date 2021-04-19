@@ -47,7 +47,6 @@ WaySubline WaySublineMerger::mergeSublines(const WaySubline& subline1, const Way
   }
 
   LOG_TRACE("Merging sublines: " << subline1 << " and " << subline2 << "...");
-
   LOG_VART(subline1.getWay()->getId() == subline2.getWay()->getId());
 
   const long cachedId = subline1.getWay()->getId();
@@ -55,20 +54,20 @@ WaySubline WaySublineMerger::mergeSublines(const WaySubline& subline1, const Way
 
   OsmMapPtr map = std::make_shared<OsmMap>();
   MapProjector::projectToPlanar(map);
-  WayPtr way1 = subline1.toWay(map/*, nullptr, true*/);
+  WayPtr way1 = subline1.toWay(map, nullptr, true);
   //WayPtr way1 = std::dynamic_pointer_cast<Way>(ElementPtr(subline1.getWay()->clone()));
   //way1->setId(map->createNextWayId());
   LOG_VART(way1->getElementId());
   LOG_VART(way1->getNodeCount());
   map->addWay(way1);
-  WayPtr way2 = subline2.toWay(map/*, nullptr, true*/);
+  WayPtr way2 = subline2.toWay(map, nullptr, true);
   //WayPtr way2 = std::dynamic_pointer_cast<Way>(ElementPtr(subline2.getWay()->clone()));
   //way2->setId(map->createNextWayId());
   LOG_VART(way2->getElementId());
   LOG_VART(way2->getNodeCount());
   map->addWay(way2);
   LOG_VART(map->getWayCount());
-  MapProjector::projectToPlanar(map);
+  //MapProjector::projectToPlanar(map);
   OsmMapWriterFactory::writeDebugMap(
     map,
     "merge-sublines-temp-map-" + way1->getElementId().toString() + "-" +

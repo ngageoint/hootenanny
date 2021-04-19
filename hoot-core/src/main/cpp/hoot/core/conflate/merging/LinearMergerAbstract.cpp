@@ -88,6 +88,8 @@ void LinearMergerAbstract::apply(const OsmMapPtr& map, vector<pair<ElementId, El
   {
     ElementId eid1 = it->first;
     ElementId eid2 = it->second;
+    LOG_VART(eid1);
+    LOG_VART(eid2);
 
     for (size_t i = 0; i < replaced.size(); i++)
     {
@@ -101,7 +103,6 @@ void LinearMergerAbstract::apply(const OsmMapPtr& map, vector<pair<ElementId, El
         LOG_TRACE("Changing " << eid2 << " to " << replaced[i].second << "...");
         eid2 = replaced[i].second;
       }
-
     }
 
     _eidLogString = "-" + eid1.toString() + "-" + eid2.toString();

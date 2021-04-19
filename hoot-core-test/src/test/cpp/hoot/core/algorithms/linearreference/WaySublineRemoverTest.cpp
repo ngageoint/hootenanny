@@ -72,7 +72,6 @@ public:
 
     CPPUNIT_ASSERT_EQUAL((size_t)2, splitWayIds.size());
 
-    MapProjector::projectToWgs84(map);
     OsmMapWriterFactory::write(map, _outputPath + "runSplitInTheMiddleTest-out.osm", false, true);
     HOOT_FILE_EQUALS(
       _inputPath + "runSplitInTheMiddleTest-out.osm",
@@ -94,7 +93,6 @@ public:
 
     CPPUNIT_ASSERT_EQUAL((size_t)1, splitWayIds.size());
 
-    MapProjector::projectToWgs84(map);
     OsmMapWriterFactory::write(map, _outputPath + "runSplitAtStartTest-out.osm", false, true);
     HOOT_FILE_EQUALS(
       _inputPath + "runSplitAtStartTest-out.osm", _outputPath + "runSplitAtStartTest-out.osm");
@@ -115,7 +113,6 @@ public:
 
     CPPUNIT_ASSERT_EQUAL((size_t)1, splitWayIds.size());
 
-    MapProjector::projectToWgs84(map);
     OsmMapWriterFactory::write(map, _outputPath + "runSplitAtEndTest-out.osm", false, true);
     HOOT_FILE_EQUALS(
       _inputPath + "runSplitAtEndTest-out.osm", _outputPath + "runSplitAtEndTest-out.osm");

@@ -38,7 +38,7 @@ namespace hoot
 
 // ONLY ENABLE THIS DURING DEBUGGING; We don't want to tie it to debug.maps.write, as it may
 // produce a very large number of output files.
-const bool LinearDiffMerger::WRITE_DETAILED_DEBUG_MAPS = false;
+const bool LinearDiffMerger::WRITE_DETAILED_DEBUG_MAPS = true;
 
 HOOT_FACTORY_REGISTER(Merger, LinearDiffMerger)
 
@@ -114,8 +114,8 @@ bool LinearDiffMerger::_mergePair(
     OsmMapWriterFactory::writeDebugMap(
       _map, "after-merge-" + eid1.toString() + "-" + eid2.toString());
   }
+  LOG_VART(replaced);
 
-  //LOG_VART(replaced);
   return false;
 }
 

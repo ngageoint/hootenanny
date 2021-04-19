@@ -213,6 +213,7 @@ std::shared_ptr<LineString> ElementToGeometryConverter::convertToLineString(
         }
         logWarnCount++;
       }
+      LOG_TRACE("Missing node: " << ids[0] << ". Not creating line string...");
       return std::shared_ptr<LineString>();
     }
     cs->setAt(n->toCoordinate(), 1);

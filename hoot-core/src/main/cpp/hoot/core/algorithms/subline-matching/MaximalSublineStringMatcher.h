@@ -69,9 +69,7 @@ public:
 
   QString getDescription() const override
   { return "Matches lines based on the maximal subline string found"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 
   QString getSublineMatcherName() const override { return _sublineMatcher->getName(); }

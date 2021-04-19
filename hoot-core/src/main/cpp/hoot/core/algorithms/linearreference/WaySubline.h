@@ -53,6 +53,7 @@ public:
   WaySubline(const ConstWayPtr& way, const ConstOsmMapPtr& map);
 
   WaySubline& operator=(const WaySubline& from);
+  bool operator<(const WaySubline& from) const;
 
   bool contains(const WayLocation& wl) const;
   /**
@@ -117,7 +118,6 @@ public:
    * isBackwards() result.
    */
   const WayLocation& getFormer() const { return isBackwards() ? _end : _start; }
-
   /**
    * Returns the way location that is closer to the end of the way regardless of the
    * isBackwards() result.
