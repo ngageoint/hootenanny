@@ -161,7 +161,7 @@ public class CustomScriptResource {
         JSONArray saveArr = new JSONArray();
 
         // get full directory path for file being deleted
-        String path = getFolderPath(folderId);
+        String path = folderId != null ? getFolderPath(folderId) : null;
 
         try {
             saveArr.add(saveScript(scriptName, scriptDescription, script, path));
