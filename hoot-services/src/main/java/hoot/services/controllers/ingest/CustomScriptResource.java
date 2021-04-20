@@ -679,6 +679,7 @@ public class CustomScriptResource {
             userid = user.getId();
         }
 
+        // get folder path
         String folderPath = createQuery()
                 .select(translationFolders.path)
                 .from(translationFolders)
@@ -698,16 +699,13 @@ public class CustomScriptResource {
                 throw new WebApplicationException(exc, Response.serverError().entity(msg).build());
             }
         } else {
-            resp.put("success", false);
-            return Response.ok().entity(resp).build();
+            return Response.status(Response.Status.CONFLICT).entity("Unable to create folder because it already exists").build();
         }
 
         Long newId = createQuery()
                 .select(Expressions.numberTemplate(Long.class, "nextval('translation_folders_id_seq')"))
                 .from()
                 .fetchOne();
-
-
 
         Timestamp now = new Timestamp(System.currentTimeMillis());
 
