@@ -67,6 +67,7 @@ public:
     _mergeWaysAsSublines("5", "6", map);
     _mergeWaysAsSublines("7", "8", map);
     _mergeWaysAsSublines("9", "10", map);
+    _mergeWaysAsSublines("11", "12", map);
 
     OsmMapWriterFactory::write(
       map, _outputPath + "WaySublineMergerTest-runBasicTest-out.osm", false, true);

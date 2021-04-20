@@ -384,7 +384,7 @@ void DiffConflator::_removeMatchElements(const Status& status, const bool forceC
   }
 
   //QHash<ElementId, WaySubline> sublines;
-  QHash<ElementId, QList<WaySubline>> rawSublines;
+  //QHash<ElementId, QList<WaySubline>> rawSublines;
   //int invalidSublineCtr = 0;
 
   // Go through all the matches.
@@ -428,104 +428,104 @@ void DiffConflator::_removeMatchElements(const Status& status, const bool forceC
           std::dynamic_pointer_cast<const HighwayMatch>(match);
         LOG_VART(highwayMatch->getSublineMatcher()->getSublineMatcherName());
 
-//        _mergers.push_back(
-//          MergerPtr(new LinearDiffMerger(singleMatchPairs, highwayMatch->getSublineMatcher())));
+        _mergers.push_back(
+          MergerPtr(new LinearDiffMerger(singleMatchPairs, highwayMatch->getSublineMatcher())));
 
-        for (std::set<std::pair<ElementId, ElementId>>::const_iterator it =
-               singleMatchPairs.begin();
-             it != singleMatchPairs.end(); ++it)
-        {
-          ElementId eid2 = it->second;
-          rawSublines[eid2].append(
-            highwayMatch->getSublineMatch().getMatches().at(0).getSubline2());
-        }
+//        for (std::set<std::pair<ElementId, ElementId>>::const_iterator it =
+//               singleMatchPairs.begin();
+//             it != singleMatchPairs.end(); ++it)
+//        {
+//          ElementId eid2 = it->second;
+//          rawSublines[eid2].append(
+//            highwayMatch->getSublineMatch().getMatches().at(0).getSubline2());
+//        }
       }
     }
   }
   //LOG_VART(invalidSublineCtr);
 
-  // Sort the sublines by their starting way locations.
-  QHash<ElementId, QList<WaySubline>> sortedSublines;
-  for (QHash<ElementId, QList<WaySubline>>::const_iterator it = rawSublines.begin();
-       it != rawSublines.end(); ++it)
-  {
-    const ElementId elementId = it.key();
-    QList<WaySubline> rawElementSublines = it.value();
-    QList<WaySubline> sortedElementSublines = rawElementSublines;
-    qSort(sortedElementSublines);
-    sortedSublines[elementId] = sortedElementSublines;
-  }
+//  // Sort the sublines by their starting way locations.
+//  QHash<ElementId, QList<WaySubline>> sortedSublines;
+//  for (QHash<ElementId, QList<WaySubline>>::const_iterator it = rawSublines.begin();
+//       it != rawSublines.end(); ++it)
+//  {
+//    const ElementId elementId = it.key();
+//    QList<WaySubline> rawElementSublines = it.value();
+//    QList<WaySubline> sortedElementSublines = rawElementSublines;
+//    qSort(sortedElementSublines);
+//    sortedSublines[elementId] = sortedElementSublines;
+//  }
+//
+//  // Merge the sublines into a single subline per match.
+//  QHash<ElementId, WaySubline> mergedSublines;
+//  for (QHash<ElementId, QList<WaySubline>>::const_iterator sortedSublinesItr =
+//         sortedSublines.begin();
+//       sortedSublinesItr != sortedSublines.end(); ++sortedSublinesItr)
+//  {
+//    ElementId elementId = sortedSublinesItr.key();
+//    QList<WaySubline> sublinesToMerge = sortedSublinesItr.value();
+//    WaySubline mergedSubline;
+//    for (QList<WaySubline>::const_iterator sublinesToMergeItr = sublinesToMerge.begin();
+//         sublinesToMergeItr != sublinesToMerge.end(); ++sublinesToMergeItr)
+//    {
+//      WaySubline sublineToMerge = *sublinesToMergeItr;
+//      if (!mergedSubline.isValid())
+//      {
+//        mergedSubline = sublineToMerge;
+//      }
+//      else
+//      {
+//        mergedSubline = WaySublineMerger::mergeSublines(mergedSubline, sublineToMerge, _map);
+//      }
+//      WayPtr mergedWay =
+//        std::dynamic_pointer_cast<Way>(ElementPtr(mergedSubline.getWay()->clone()));
+//      _map->replace(sublineToMerge.getWay(), mergedWay);
+//      mergedSublines[elementId] = mergedSubline;
+//    }
+//  }
+//  SuperfluousNodeRemover::removeNodes(_map);
 
-  // Merge the sublines into a single subline per match.
-  QHash<ElementId, WaySubline> mergedSublines;
-  for (QHash<ElementId, QList<WaySubline>>::const_iterator sortedSublinesItr =
-         sortedSublines.begin();
-       sortedSublinesItr != sortedSublines.end(); ++sortedSublinesItr)
-  {
-    ElementId elementId = sortedSublinesItr.key();
-    QList<WaySubline> sublinesToMerge = sortedSublinesItr.value();
-    WaySubline mergedSubline;
-    for (QList<WaySubline>::const_iterator sublinesToMergeItr = sublinesToMerge.begin();
-         sublinesToMergeItr != sublinesToMerge.end(); ++sublinesToMergeItr)
-    {
-      WaySubline sublineToMerge = *sublinesToMergeItr;
-      if (!mergedSubline.isValid())
-      {
-        mergedSubline = sublineToMerge;
-      }
-      else
-      {
-        mergedSubline = WaySublineMerger::mergeSublines(mergedSubline, sublineToMerge, _map);
-      }
-      WayPtr mergedWay =
-        std::dynamic_pointer_cast<Way>(ElementPtr(mergedSubline.getWay()->clone()));
-      _map->replace(sublineToMerge.getWay(), mergedWay);
-      mergedSublines[elementId] = mergedSubline;
-    }
-  }
-  SuperfluousNodeRemover::removeNodes(_map);
-
-  //if (!ConfigOptions().getDifferentialRemovePartialMatchesAsWhole() && _mergers.size() > 0)
+  if (!ConfigOptions().getDifferentialRemovePartialMatchesAsWhole() && _mergers.size() > 0)
   //if (!ConfigOptions().getDifferentialRemovePartialMatchesAsWhole() && sublines.size() > 0)
-  if (!ConfigOptions().getDifferentialRemovePartialMatchesAsWhole() && mergedSublines.size() > 0)
+  //if (!ConfigOptions().getDifferentialRemovePartialMatchesAsWhole() && mergedSublines.size() > 0)
   {
     // Remove the single merged subline from the way.
 
     QElapsedTimer mergersTimer;
     mergersTimer.start();
 
-//    _mapElementIdsToMergers(); // TODO: move to _applyMergers?
-//    LOG_STATUS("Applying " << StringUtils::formatLargeNumber(_mergers.size()) << " mergers...");
-//    _applyMergers(_mergers, _map);
-//    LOG_INFO(
-//      "Applied " << StringUtils::formatLargeNumber(_mergers.size()) << " mergers in " <<
-//      StringUtils::millisecondsToDhms(mergersTimer.elapsed()) << ".");
-
-    LOG_STATUS(
-      "Removing " << StringUtils::formatLargeNumber(mergedSublines.size()) << " sublines...");
-    for (QHash<ElementId, WaySubline>::const_iterator mergedSublinesItr = mergedSublines.begin();
-         mergedSublinesItr != mergedSublines.end(); ++mergedSublinesItr)
-    {
-      ElementPtr element = _map->getElement(mergedSublinesItr.key());
-      if (element)
-      {
-        LOG_VART(element->getElementId());
-
-        WaySubline sublineToRemove = mergedSublinesItr.value();
-        std::vector<ElementId> newWayIds =
-          WaySublineRemover::removeSubline(
-            std::dynamic_pointer_cast<Way>(element), sublineToRemove, _map);
-        LOG_VART(newWayIds.size());
-        if (WRITE_DETAILED_DEBUG_MAPS)
-        {
-          OsmMapWriterFactory::writeDebugMap(
-            _map, "after-subline-removal-" + element->getElementId().toString());
-        }
-      }
-    }
+    _mapElementIdsToMergers(); // TODO: move to _applyMergers?
+    LOG_STATUS("Applying " << StringUtils::formatLargeNumber(_mergers.size()) << " mergers...");
+    _applyMergers(_mergers, _map);
     LOG_INFO(
-      "Removed " << StringUtils::formatLargeNumber(mergedSublines.size()) << " sublines in " <<
+      "Applied " << StringUtils::formatLargeNumber(_mergers.size()) << " mergers in " <<
       StringUtils::millisecondsToDhms(mergersTimer.elapsed()) << ".");
+
+//    LOG_STATUS(
+//      "Removing " << StringUtils::formatLargeNumber(mergedSublines.size()) << " sublines...");
+//    for (QHash<ElementId, WaySubline>::const_iterator mergedSublinesItr = mergedSublines.begin();
+//         mergedSublinesItr != mergedSublines.end(); ++mergedSublinesItr)
+//    {
+//      ElementPtr element = _map->getElement(mergedSublinesItr.key());
+//      if (element)
+//      {
+//        LOG_VART(element->getElementId());
+
+//        WaySubline sublineToRemove = mergedSublinesItr.value();
+//        std::vector<ElementId> newWayIds =
+//          WaySublineRemover::removeSubline(
+//            std::dynamic_pointer_cast<Way>(element), sublineToRemove, _map);
+//        LOG_VART(newWayIds.size());
+//        if (WRITE_DETAILED_DEBUG_MAPS)
+//        {
+//          OsmMapWriterFactory::writeDebugMap(
+//            _map, "after-subline-removal-" + element->getElementId().toString());
+//        }
+//      }
+//    }
+//    LOG_INFO(
+//      "Removed " << StringUtils::formatLargeNumber(mergedSublines.size()) << " sublines in " <<
+//      StringUtils::millisecondsToDhms(mergersTimer.elapsed()) << ".");
   }
 
   LOG_TRACE(

@@ -135,7 +135,7 @@ bool LinearSnapMerger::_mergePair(
   {
     match = _matchSubline(e1, e2);
   }
-  // TODO: These exceptions can involve other types of reviews as well. river, railway, etc. So,
+  // TODO: These exceptions can involve other types of reviews as well (river, railway, etc). So,
   // don't just use the highway match name.
   catch (const NeedsReviewException& e)
   {
@@ -173,7 +173,8 @@ bool LinearSnapMerger::_mergePair(
 
   // Merge the attributes appropriately.
   _mergeTags(e1->getTags(), e2->getTags(), e1Match);
-
+\
+  // Do some ID handling for ways.
   bool swapWayIds = false;
   if (e1Match->getElementType() == ElementType::Way && e1->getElementType() == ElementType::Way &&
       e2->getElementType() == ElementType::Way)
@@ -206,7 +207,7 @@ bool LinearSnapMerger::_mergePair(
   // If there is something left to review against,
   if (scraps2)
   {
-    // swap the elements with the scraps.
+    // ...swap the elements with the scraps.
     _swapSecondaryElementWithScraps(eid2, e2Match, scraps2);
   }
   else
@@ -217,7 +218,7 @@ bool LinearSnapMerger::_mergePair(
 
   if (_markAddedMultilineStringRelations)
   {
-    // sanity check to make sure elements other than relations aren't marked incorrectly
+    // This is a sanity check to make sure elements other than relations aren't marked incorrectly.
     _markMultilineStringRelations(e1Match);
     _markMultilineStringRelations(scraps1);
     _markMultilineStringRelations(e2Match);
@@ -449,7 +450,7 @@ void LinearSnapMerger::_splitElement(
   // If there are ways that aren't part of the way subline string,
   if (!ways.empty())
   {
-    // add the ways to the scrap relation.
+    // ...add the ways to the scrap relation.
     RelationPtr r;
     if (!scrap || scrap->getElementType() == ElementType::Way)
     {

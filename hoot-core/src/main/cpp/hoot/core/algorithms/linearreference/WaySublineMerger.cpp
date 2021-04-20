@@ -56,13 +56,13 @@ WaySubline WaySublineMerger::mergeSublines(
   mapCopier.apply(tempMap);
   MapProjector::projectToPlanar(tempMap);
   WayPtr way1 = tempMap->getWay(subline1.getWay()->getElementId());
-  way1->setStatus(Status::Unknown1);
+  way1->setStatus(Status::Unknown2);
   LOG_VART(way1->getElementId());
   LOG_VART(way1->getNodeCount());
   WayPtr way2 = tempMap->getWay(subline2.getWay()->getElementId());
-  way2->setStatus(Status::Unknown2);
+  way2->setStatus(Status::Unknown1);
   LOG_VART(way2->getElementId());
-  LOG_VART(way2->getNodeCount());;
+  LOG_VART(way2->getNodeCount());
   LOG_VART(tempMap->getWayCount());
 
   std::shared_ptr<SublineStringMatcher> sublineMatcher;
