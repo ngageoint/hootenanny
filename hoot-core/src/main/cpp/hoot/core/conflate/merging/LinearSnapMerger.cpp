@@ -88,13 +88,11 @@ _markAddedMultilineStringRelations
 LinearSnapMerger::LinearSnapMerger(
   const set<pair<ElementId, ElementId>>& pairs,
   const std::shared_ptr<SublineStringMatcher>& sublineMatcher) :
-LinearMergerAbstract(),
+LinearMergerAbstract(pairs, sublineMatcher),
 _removeTagsFromWayMembers(true),
 _markAddedMultilineStringRelations
   (ConfigOptions().getConflateMarkMergeCreatedMultilinestringRelations())
 {
-  _pairs = pairs;
-  _sublineMatcher = sublineMatcher;
 }
 
 WaySublineMatchString LinearSnapMerger::_matchSubline(ElementPtr e1, ElementPtr e2)

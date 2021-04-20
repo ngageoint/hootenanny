@@ -305,14 +305,14 @@ void AbstractConflator::_applyMergers(const std::vector<MergerPtr>& mergers, Osm
 
     merger->apply(map, replaced);
 
-    LOG_VART(replaced);
+    //LOG_VART(replaced);
     LOG_VART(map->size());
 
     // update any mergers that reference the replaced values
     _replaceElementIds(replaced);
     // Not sure why the replaced IDs get cleared out each time here. That causes problems for
     // LinearDiffMerger, so skipping clearing when its being used.
-    if (merger->getClassName() != LinearDiffMerger::className())
+    if (merger->getName() != LinearDiffMerger::className())
     {
       replaced.clear();
     }

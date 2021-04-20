@@ -52,16 +52,25 @@ int LinearMergerAbstract::logWarnCount = 0;
 // produce a very large number of files.
 const bool LinearMergerAbstract::WRITE_DETAILED_DEBUG_MAPS = false;
 
+LinearMergerAbstract::LinearMergerAbstract(
+  const std::set<std::pair<ElementId, ElementId>>& pairs,
+  const std::shared_ptr<SublineStringMatcher>& sublineMatcher) :
+_pairs(pairs),
+_sublineMatcher(sublineMatcher)
+{
+  LOG_VART(_sublineMatcher->getName());
+  LOG_VART(_sublineMatcher->getSublineMatcherName())
+}
+
 void LinearMergerAbstract::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementId>>& replaced)
 {
   LOG_TRACE("Applying linear merger...");
-  LOG_VART(hoot::toString(_pairs));
-  LOG_VART(hoot::toString(replaced));
+  LOG_VART(_pairs);
+  //LOG_VART(replaced);
   _map = map;
 
   vector<pair<ElementId, ElementId>> pairs;
   pairs.reserve(_pairs.size());
-
   for (set<pair<ElementId, ElementId>>::const_iterator it = _pairs.begin(); it != _pairs.end();
        ++it)
   {
@@ -78,18 +87,18 @@ void LinearMergerAbstract::apply(const OsmMapPtr& map, vector<pair<ElementId, El
         "Map doesn't contain one or more of the following elements: " << eid1 << ", " << eid2);
     }
   }
-  LOG_VART(hoot::toString(pairs));
 
   ShortestFirstComparator shortestFirst;
   shortestFirst.map = _map;
   sort(pairs.begin(), pairs.end(), shortestFirst);
-  for (vector<pair<ElementId, ElementId>>::const_iterator it = pairs.begin();
-       it != pairs.end(); ++it)
+  LOG_VART(pairs);
+  for (vector<pair<ElementId, ElementId>>::const_iterator it = pairs.begin(); it != pairs.end();
+       ++it)
   {
     ElementId eid1 = it->first;
     ElementId eid2 = it->second;
-    LOG_VART(eid1);
-    LOG_VART(eid2);
+    //LOG_VART(eid1);
+    //LOG_VART(eid2);
 
     for (size_t i = 0; i < replaced.size(); i++)
     {

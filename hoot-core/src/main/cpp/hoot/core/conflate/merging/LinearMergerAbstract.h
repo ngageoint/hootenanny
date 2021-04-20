@@ -36,6 +36,7 @@
 namespace hoot
 {
 
+// TODO: move this to its own class
 class ShortestFirstComparator
 {
 public:
@@ -90,6 +91,9 @@ public:
   static QString className() { return "hoot::LinearMergerAbstract"; }
 
   LinearMergerAbstract() = default;
+  LinearMergerAbstract(
+    const std::set<std::pair<ElementId, ElementId>>& pairs,
+    const std::shared_ptr<SublineStringMatcher>& sublineMatcher);
   virtual ~LinearMergerAbstract() = default;
 
   void apply(const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced) override;

@@ -33,6 +33,7 @@
 #include <hoot/core/algorithms/linearreference/WayLocation.h>
 #include <hoot/core/algorithms/splitter/WaySplitter.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
+#include <hoot/core/ops/RemoveElementByEid.h>
 #include <hoot/core/ops/ReplaceElementOp.h>
 #include <hoot/core/algorithms/linearreference/WaySubline.h>
 
@@ -43,7 +44,7 @@ namespace hoot
 {
 
 std::vector<ElementId> WaySublineRemover::removeSubline(
-  const WayPtr& way, const WaySubline& subline, const OsmMapPtr& map)
+  const WayPtr& way, const WaySubline& subline, OsmMapPtr& map)
 {
   if (!way || !subline.isValid())
   {
@@ -60,7 +61,9 @@ std::vector<ElementId> WaySublineRemover::removeSubline(
   {
     LOG_TRACE(
       "Subline matches covers entire way; removing entire way: " << way->getElementId());
-    RecursiveElementRemover(way->getElementId()).apply(map);
+    //RecursiveElementRemover(way->getElementId()).apply(map);
+    // TODO
+    RemoveElementByEid(way->getElementId()).apply(map);
   }
   else
   {
@@ -85,7 +88,7 @@ std::vector<ElementId> WaySublineRemover::removeSubline(
 }
 
 std::vector<ElementId> WaySublineRemover::removeSubline(
-  const WayPtr& way, const WayLocation& start, const WayLocation& end, const OsmMapPtr& map)
+  const WayPtr& way, const WayLocation& start, const WayLocation& end, OsmMapPtr& map)
 {
   if (!MapProjector::isPlanar(map))
   {
@@ -165,7 +168,7 @@ std::vector<ElementId> WaySublineRemover::removeSubline(
 }
 
 std::vector<ElementId> WaySublineRemover::_split(
-  const WayPtr& way, WayLocation& splitLocation, const OsmMapPtr& map, const bool keepFirstSegment)
+  const WayPtr& way, WayLocation& splitLocation, OsmMapPtr& map, const bool keepFirstSegment)
 {
   std::vector<ElementId> newWayIds;
   LOG_VART(splitLocation.isExtreme());

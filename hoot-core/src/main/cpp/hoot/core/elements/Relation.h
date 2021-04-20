@@ -54,13 +54,11 @@ public:
 
   explicit Relation(const Relation& from);
 
-  Relation(Status s, long id, Meters circularError = ElementData::CIRCULAR_ERROR_EMPTY,
-           QString type = "", long changeset = ElementData::CHANGESET_EMPTY,
-           long version = ElementData::VERSION_EMPTY,
-           quint64 timestamp = ElementData::TIMESTAMP_EMPTY,
-           QString user = ElementData::USER_EMPTY, long uid = ElementData::UID_EMPTY,
-           bool visible = ElementData::VISIBLE_EMPTY);
-
+  Relation(
+    Status s, long id, Meters circularError = ElementData::CIRCULAR_ERROR_EMPTY, QString type = "",
+    long changeset = ElementData::CHANGESET_EMPTY, long version = ElementData::VERSION_EMPTY,
+    quint64 timestamp = ElementData::TIMESTAMP_EMPTY, QString user = ElementData::USER_EMPTY,
+    long uid = ElementData::UID_EMPTY, bool visible = ElementData::VISIBLE_EMPTY);
   ~Relation() = default;
 
   void addElement(const QString& role, const std::shared_ptr<const Element>& e);

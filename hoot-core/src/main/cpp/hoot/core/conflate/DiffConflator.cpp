@@ -428,8 +428,11 @@ void DiffConflator::_removeMatchElements(const Status& status, const bool forceC
           std::dynamic_pointer_cast<const HighwayMatch>(match);
         LOG_VART(highwayMatch->getSublineMatcher()->getSublineMatcherName());
 
-        _mergers.push_back(
-          MergerPtr(new LinearDiffMerger(singleMatchPairs, highwayMatch->getSublineMatcher())));
+        // TODO: use factory here instead?
+        std::shared_ptr<LinearDiffMerger> merger =
+          std::make_shared<LinearDiffMerger>(singleMatchPairs, highwayMatch->getSublineMatcher());
+        merger->setTreatReviewsAsMatches(treatReviewsAsMatches);
+        _mergers.push_back(merger);
 
 //        for (std::set<std::pair<ElementId, ElementId>>::const_iterator it =
 //               singleMatchPairs.begin();

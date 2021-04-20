@@ -29,7 +29,6 @@
 
 // Hoot
 #include <hoot/core/conflate/merging/LinearMergerAbstract.h>
-#include <hoot/core/algorithms/subline-matching/SublineStringMatcher.h>
 
 namespace hoot
 {
@@ -50,9 +49,14 @@ public:
     const std::shared_ptr<SublineStringMatcher>& sublineMatcher);
   virtual ~LinearDiffMerger() = default;
 
+  void apply(const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced) override;
+
   virtual QString getDescription() const { return "TODO"; }
   virtual QString getName() const override { return className(); }
   virtual QString getClassName() const override { return className(); }
+
+  void setTreatReviewsAsMatches(bool treatReviewsAsMatches)
+  { _treatReviewsAsMatches = treatReviewsAsMatches; }
 
 protected:
 
@@ -62,9 +66,16 @@ protected:
 
 private:
 
-  std::shared_ptr<SublineStringMatcher> _sublineMatcher;
+  bool _treatReviewsAsMatches;
 
   static const bool WRITE_DETAILED_DEBUG_MAPS;
+
+  /*
+   * TODO
+   */
+  bool _findAndProcessMatch(
+    const WayPtr& way1, const WayPtr& way2, std::vector<std::pair<ElementId, ElementId>>& replaced,
+    bool& matched);
 };
 
 }

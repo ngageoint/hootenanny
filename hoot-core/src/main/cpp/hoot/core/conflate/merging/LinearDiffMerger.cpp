@@ -27,8 +27,10 @@
 #include "LinearDiffMerger.h"
 
 // hoot
-#include <hoot/core/algorithms/linearreference//WaySublineRemover.h>
+#include <hoot/core/algorithms/linearreference/WaySublineRemover.h>
+#include <hoot/core/conflate/highway/HighwayMatch.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/ops/RemoveElementByEid.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
@@ -43,21 +45,73 @@ const bool LinearDiffMerger::WRITE_DETAILED_DEBUG_MAPS = true;
 HOOT_FACTORY_REGISTER(Merger, LinearDiffMerger)
 
 LinearDiffMerger::LinearDiffMerger() :
-LinearMergerAbstract()
+LinearMergerAbstract(),
+_treatReviewsAsMatches(false)
 {
 }
 
 LinearDiffMerger::LinearDiffMerger(
   const std::set<std::pair<ElementId, ElementId>>& pairs,
   const std::shared_ptr<SublineStringMatcher>& sublineMatcher) :
-_sublineMatcher(sublineMatcher)
+LinearMergerAbstract(pairs, sublineMatcher),
+_treatReviewsAsMatches(false)
 {
-  _pairs = pairs;
+}
+
+void LinearDiffMerger::apply(
+  const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced)
+{
+  LOG_TRACE("Applying LinearDiffMerger...");
+  LOG_VART(_pairs);
+  //LOG_VART(replaced);
+  _map = map;
+
+  // TODO: explain
+  std::vector<std::pair<ElementId, ElementId>> pairs;
+  pairs.reserve(_pairs.size());
+  for (std::set<std::pair<ElementId, ElementId>>::const_iterator it = _pairs.begin();
+       it != _pairs.end(); ++it)
+  {
+    ElementId eid1 = it->first;
+    ElementId eid2 = it->second;
+    pairs.push_back(std::pair<ElementId, ElementId>(eid1, eid2));
+  }
+
+  ShortestFirstComparator shortestFirst;
+  shortestFirst.map = _map;
+  std::sort(pairs.begin(), pairs.end(), shortestFirst);
+  LOG_VART(pairs);
+  for (std::vector<std::pair<ElementId, ElementId>>::const_iterator it = pairs.begin();
+       it != pairs.end(); ++it)
+  {
+    ElementId eid1 = it->first;
+    ElementId eid2 = it->second;
+    //LOG_VART(eid1);
+    //LOG_VART(eid2);
+
+    for (size_t i = 0; i < replaced.size(); i++)
+    {
+      if (eid1 == replaced[i].first && _map->containsElement(replaced[i].second))
+      {
+        LOG_TRACE("Changing " << eid1 << " to " << replaced[i].second << "...");
+        eid1 = replaced[i].second;
+      }
+      if (eid2 == replaced[i].first && _map->containsElement(replaced[i].second))
+      {
+        LOG_TRACE("Changing " << eid2 << " to " << replaced[i].second << "...");
+        eid2 = replaced[i].second;
+      }
+    }
+
+    _eidLogString = "-" + eid1.toString() + "-" + eid2.toString();
+    _mergePair(eid1, eid2, replaced);
+  }
 }
 
 bool LinearDiffMerger::_mergePair(
   ElementId eid1, ElementId eid2, std::vector<std::pair<ElementId, ElementId>>& replaced)
 {
+  // Check for missing elements.
   ElementPtr e1 = _map->getElement(eid1);
   ElementPtr e2 = _map->getElement(eid2);
   LOG_VART(e1.get());
@@ -66,17 +120,72 @@ bool LinearDiffMerger::_mergePair(
   {
     return false;
   }
-  WayPtr way1 = std::dynamic_pointer_cast<Way>(e1);
-  WayPtr way2 = std::dynamic_pointer_cast<Way>(e2);
-  LOG_VART(way1.get());
-  LOG_VART(way2.get());
-  if (!way1 || !way2)
-  {
-    return false;
-  }
   LOG_VART(eid1);
   LOG_VART(eid2);
 
+  bool needsReview = false;
+  assert(e1->getElementType() == ElementType::Way);
+  WayPtr way1 = std::dynamic_pointer_cast<Way>(e1);
+  LOG_VART(way1.get());
+  // Find the match between the ref and sec way, and remove the section from the sec way that
+  // matches the ref way.
+  if (e2->getElementType() == ElementType::Way)
+  {
+    WayPtr way2 = std::dynamic_pointer_cast<Way>(e2);
+    LOG_VART(way2.get());
+    LOG_TRACE("Processing match for way sec: " << way2->getElementId() << "...");
+    bool matched = false;
+    needsReview = _findAndProcessMatch(way1, way2, replaced, matched);
+    LOG_VART(matched);
+  }
+  // For each relation member sec way, find the match between the ref and sec way, and remove the
+  // section from the sec way that matches the ref way.
+  else
+  {
+    assert(e2->getElementType() == ElementType::Relation);
+    RelationPtr relation2 = std::dynamic_pointer_cast<Relation>(e2);
+    LOG_VART(relation2->getMemberCount());
+    assert(relation2->getMemberCount() == 2);
+
+    const std::vector<RelationData::Entry> members = relation2->getMembers();
+    for (std::vector<RelationData::Entry>::const_iterator it = members.begin();
+         it != members.end(); ++it)
+    {
+      RelationData::Entry member = *it;
+      LOG_VART(member.getElementId().getType());
+      assert(member.getElementId().getType() == ElementType::Way);
+      ElementPtr memberElement = _map->getElement(member.getElementId());
+      WayPtr way2 = std::dynamic_pointer_cast<Way>(memberElement);
+      LOG_TRACE("Processing match for relation member sec: " << way2->getElementId() << "...");
+      bool matched = false;
+      if (_findAndProcessMatch(way1, way2, replaced, matched))
+      {
+        needsReview = true;
+      }
+      LOG_VART(matched);
+      if (matched)
+      {
+        relation2->removeElement(member.getElementId());
+      }
+    }
+
+    if (relation2->getMemberCount() == 0)
+    {
+      RemoveElementByEid(relation2->getElementId()).apply(_map);
+    }
+  }
+
+  return needsReview;
+}
+
+bool LinearDiffMerger::_findAndProcessMatch(
+  const WayPtr& way1, const WayPtr& way2,
+  std::vector<std::pair<ElementId, ElementId>>& replaced, bool& matched)
+{
+  LOG_TRACE(
+    "Finding matching subline between: " << way1->getElementId() << " and " <<
+    way2->getElementId() << "...");
+  matched = false;
   WaySublineMatchString match;
   try
   {
@@ -84,14 +193,20 @@ bool LinearDiffMerger::_mergePair(
   }
   catch (const NeedsReviewException& e)
   {
-    // TODO: Do something here?
     LOG_VART(e.getWhat());
+    if (!_treatReviewsAsMatches)
+    {
+      // See similar note in LinearSnapMerger.
+      _markNeedsReview(way1, way2, e.getWhat(), HighwayMatch::getHighwayMatchName());
+      return true;
+    }
   }
   LOG_VART(match.isValid());
   if (!match.isValid())
   {
     return false;
   }
+  matched = true;
 
   // Get the portion of the sec way that matched the ref way.
   WaySublineMatchString::MatchCollection matches = match.getMatches();
@@ -102,19 +217,42 @@ bool LinearDiffMerger::_mergePair(
   LOG_VART(subline2.getWay() == way2);
   LOG_VART(subline2.getWay()->getElementId() == way2->getElementId());
 
-  std::vector<ElementId> newWayIds = WaySublineRemover::removeSubline(way2, subline2, _map);
-  if (!newWayIds.empty())
+  const std::vector<ElementId> newWayIds = WaySublineRemover::removeSubline(way2, subline2, _map);
+  LOG_VART(newWayIds.size());
+  if (newWayIds.size() == 1)
   {
-    // Do bookkeeping to show the new ways that replaced the old ref way. Arbitrarily use the
-    // first ID, since we can't map the modified sec way to more than one new way.
+    // Do bookkeeping to show the new way that replaced the old sec way.
+    LOG_TRACE("Replacing " << way2->getElementId() << " with " << newWayIds.at(0) << "...");
     replaced.emplace_back(way2->getElementId(), newWayIds.at(0));
+  }
+  else if (newWayIds.size() == 2)
+  {
+    // If the split resulted in multiple way, put them temporarily into a relation, which we'll
+    // collapse later.
+    RelationPtr relation =
+      std::make_shared<Relation>(Status::Unknown2, _map->createNextRelationId());
+    relation->setTag(MetadataTags::HootMultilineString(), "yes");
+    for (std::vector<ElementId>::const_iterator it = newWayIds.begin(); it != newWayIds.end();
+         ++it)
+    {
+      const ElementId elementId = *it;
+      LOG_TRACE("Adding " << elementId << " to " << relation->getElementId() << "...");
+      relation->addElement("", elementId);
+    }
+    LOG_VART(relation->getMemberIds());
+    _map->addRelation(relation);
+    // Do bookkeeping to show the new relation that replaced the old sec way.
+    LOG_TRACE(
+      "Replacing " << way2->getElementId() << " with " << relation->getElementId() << "...");
+    replaced.emplace_back(way2->getElementId(), relation->getElementId());
   }
   if (WRITE_DETAILED_DEBUG_MAPS)
   {
     OsmMapWriterFactory::writeDebugMap(
-      _map, "after-merge-" + eid1.toString() + "-" + eid2.toString());
+      _map,
+      "after-merge-" + way1->getElementId().toString() + "-" + way2->getElementId().toString());
   }
-  LOG_VART(replaced);
+  //LOG_VART(replaced);
 
   return false;
 }
