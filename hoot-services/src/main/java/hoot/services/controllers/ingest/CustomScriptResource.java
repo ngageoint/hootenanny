@@ -161,16 +161,13 @@ public class CustomScriptResource {
         JSONArray saveArr = new JSONArray();
 
         // get full directory path for file being deleted
-        String getPath = getFolderPath(folderId);
-
-        String translationPath = "/" + scriptName;
-        translationPath = getPath != null ? getPath + translationPath : translationPath;
+        String path = getFolderPath(folderId);
 
         try {
-            saveArr.add(saveScript(scriptName, scriptDescription, script, translationPath));
+            saveArr.add(saveScript(scriptName, scriptDescription, script, path));
         }
         catch (Exception e) {
-            String msg = "Error processing script save for: " + translationPath + ".  Cause: " + e.getMessage();
+            String msg = "Error processing script save for: " + scriptName + ".  Cause: " + e.getMessage();
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
@@ -822,7 +819,10 @@ public class CustomScriptResource {
             FileUtils.forceMkdir(getUploadDir());
         }
 
-        File fScript = new File(SCRIPT_FOLDER, scriptPath + ".js");
+        String translationPath = "/" + name;
+        translationPath = scriptPath != null ? scriptPath + translationPath : translationPath;
+
+        File fScript = new File(SCRIPT_FOLDER, translationPath + ".js");
         if (!fScript.exists()) {
             if (!fScript.createNewFile()) {
                 logger.error("File {} should not have existed before we tried to create it!", fScript.getAbsolutePath());
