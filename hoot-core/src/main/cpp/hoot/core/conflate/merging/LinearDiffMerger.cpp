@@ -62,7 +62,7 @@ void LinearDiffMerger::apply(
   const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced)
 {
   LOG_TRACE("Applying LinearDiffMerger...");
-  LOG_VART(_pairs);
+  //LOG_VART(_pairs);
   //LOG_VART(replaced);
   _map = map;
 
@@ -80,7 +80,7 @@ void LinearDiffMerger::apply(
   ShortestFirstComparator shortestFirst;
   shortestFirst.map = _map;
   std::sort(pairs.begin(), pairs.end(), shortestFirst);
-  LOG_VART(pairs);
+  //LOG_VART(pairs);
   for (std::vector<std::pair<ElementId, ElementId>>::const_iterator it = pairs.begin();
        it != pairs.end(); ++it)
   {
@@ -120,19 +120,15 @@ bool LinearDiffMerger::_mergePair(
   {
     return false;
   }
-  LOG_VART(eid1);
-  LOG_VART(eid2);
 
   bool needsReview = false;
   assert(e1->getElementType() == ElementType::Way);
   WayPtr way1 = std::dynamic_pointer_cast<Way>(e1);
-  LOG_VART(way1.get());
   // Find the match between the ref and sec way, and remove the section from the sec way that
   // matches the ref way.
   if (e2->getElementType() == ElementType::Way)
   {
     WayPtr way2 = std::dynamic_pointer_cast<Way>(e2);
-    LOG_VART(way2.get());
     LOG_TRACE("Processing match for way sec: " << way2->getElementId() << "...");
     bool matched = false;
     needsReview = _findAndProcessMatch(way1, way2, replaced, matched);

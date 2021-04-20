@@ -37,7 +37,7 @@ namespace hoot
 class WaySubline;
 
 /**
- * TODO
+ * TODO: remove this class (?)
  */
 class WaySublineMerger
 {

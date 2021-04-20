@@ -61,7 +61,7 @@ class MatchThreshold;
  * - Remove unconflatable elements (optional; enabled by default; only turned off for debugging)
  * - Find matches
  * - Calc tag diff against the matches (optional; used when --separate-output is specified)
- * - Remove secondary match elements
+ * - Remove secondary match elements; TODO: update description
  * - Snap secondary roads back to ref roads (optional; not enabled by default)
  * - Remove ref match elements
  * - Remove some metadata tags

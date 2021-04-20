@@ -61,8 +61,8 @@ std::vector<ElementId> WaySublineRemover::removeSubline(
   {
     LOG_TRACE(
       "Subline matches covers entire way; removing entire way: " << way->getElementId());
-    //RecursiveElementRemover(way->getElementId()).apply(map);
-    // TODO
+    // Use RemoveElementByEid here instead of RecursiveElementRemover so that the way is removed
+    // from its parent before its removal.
     RemoveElementByEid(way->getElementId()).apply(map);
   }
   else
