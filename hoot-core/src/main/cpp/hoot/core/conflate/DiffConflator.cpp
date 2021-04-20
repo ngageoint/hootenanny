@@ -412,15 +412,14 @@ void DiffConflator::_removeMatchElements(const Status& status, const bool forceC
       }
       else
       {
-        // ...or record the portions of the elements that matched together to be removed in the next
-        // step.
+        // ...or create a merger to remove the portions of the elements that matched together to be
+        // actually removed in the next step.
         LOG_TRACE(
           "Creating merger to remove match element pairs partially: " << singleMatchPairs << "...");
         std::shared_ptr<const HighwayMatch> highwayMatch =
           std::dynamic_pointer_cast<const HighwayMatch>(match);
         LOG_VART(highwayMatch->getSublineMatcher()->getSublineMatcherName());
 
-        // TODO: use factory here instead?
         std::shared_ptr<LinearDiffMerger> merger =
           std::make_shared<LinearDiffMerger>(singleMatchPairs, highwayMatch->getSublineMatcher());
         merger->setTreatReviewsAsMatches(treatReviewsAsMatches);
@@ -435,8 +434,7 @@ void DiffConflator::_removeMatchElements(const Status& status, const bool forceC
 
     QElapsedTimer mergersTimer;
     mergersTimer.start();
-
-    _mapElementIdsToMergers(); // TODO: move to _applyMergers?
+    _mapElementIdsToMergers();
     LOG_STATUS("Applying " << StringUtils::formatLargeNumber(_mergers.size()) << " mergers...");
     _applyMergers(_mergers, _map);
     LOG_INFO(
