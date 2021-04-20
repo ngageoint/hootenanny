@@ -220,7 +220,7 @@ bool RelationMemberUtils::containsOnlyMembersWithCriterion(
 }
 
 std::vector<ConstRelationPtr> RelationMemberUtils::getContainingRelations(
-  const ConstOsmMapPtr& map, const ElementId& childId)
+  const ElementId& childId, const ConstOsmMapPtr& map)
 {
   LOG_VART(map.get());
   LOG_VART(childId);
@@ -242,14 +242,20 @@ std::vector<ConstRelationPtr> RelationMemberUtils::getContainingRelations(
   return relations;
 }
 
+int RelationMemberUtils::getContainingRelationCount(
+  const ElementId& childId, const ConstOsmMapPtr& map)
+{
+  return getContainingRelations(childId, map).size();
+}
+
 bool RelationMemberUtils::isMemberOfRelationSatisfyingCriterion(
-  const ConstOsmMapPtr& map, const ElementId& childId, const ElementCriterion& criterion)
+  const ElementId& childId, const ElementCriterion& criterion, const ConstOsmMapPtr& map)
 {
   LOG_VART(map.get());
   LOG_VART(childId);
   LOG_VART(criterion.toString());
 
-  std::vector<ConstRelationPtr> containingRelations = getContainingRelations(map, childId);
+  std::vector<ConstRelationPtr> containingRelations = getContainingRelations(childId, map);
   LOG_VART(containingRelations.size());
   for (std::vector<ConstRelationPtr>::const_iterator it = containingRelations.begin();
        it != containingRelations.end(); ++it)

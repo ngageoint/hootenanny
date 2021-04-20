@@ -29,6 +29,7 @@
 // hoot
 #include <hoot/core/algorithms/linearreference/WaySublineRemover.h>
 #include <hoot/core/conflate/highway/HighwayMatch.h>
+#include <hoot/core/elements/RelationMemberUtils.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/ops/RemoveElementByEid.h>
 #include <hoot/core/util/ConfigOptions.h>
@@ -152,6 +153,7 @@ bool LinearDiffMerger::_mergePair(
       assert(member.getElementId().getType() == ElementType::Way);
       ElementPtr memberElement = _map->getElement(member.getElementId());
       WayPtr way2 = std::dynamic_pointer_cast<Way>(memberElement);
+      LOG_VART(RelationMemberUtils::getContainingRelationCount(way2->getElementId(), _map));
       LOG_TRACE("Processing match for relation member sec: " << way2->getElementId() << "...");
       bool matched = false;
       if (_findAndProcessMatch(way1, way2, replaced, matched))
@@ -163,6 +165,7 @@ bool LinearDiffMerger::_mergePair(
       {
         relation2->removeElement(member.getElementId());
       }
+      LOG_VART(RelationMemberUtils::getContainingRelationCount(way2->getElementId(), _map));
     }
 
     if (relation2->getMemberCount() == 0)

@@ -186,7 +186,7 @@ void RelationMemberUtilsJs::isMemberOfRelationSatisfyingCriterion(
   }
 
   const bool isMember =
-    RelationMemberUtils::isMemberOfRelationSatisfyingCriterion(map, childId, *crit);
+    RelationMemberUtils::isMemberOfRelationSatisfyingCriterion(childId, *crit, map);
 
   args.GetReturnValue().Set(Boolean::New(current, isMember));
 }

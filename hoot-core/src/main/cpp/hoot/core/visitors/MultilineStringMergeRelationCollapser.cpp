@@ -182,7 +182,7 @@ void MultilineStringMergeRelationCollapser::visit(const ElementPtr& e)
 
       // Get any relations which may own our relation being collapsed.
       const std::vector<ConstRelationPtr> relationsOwningMsRelation =
-        RelationMemberUtils::getContainingRelations(_map, relation->getElementId());
+        RelationMemberUtils::getContainingRelations(relation->getElementId(), _map);
       LOG_VART(relationsOwningMsRelation.size());
 
       // For all the members of our relation being collapsed,
