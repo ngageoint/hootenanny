@@ -112,15 +112,10 @@ protected:
 
   QString _eidLogString;
 
-  std::set<std::pair<ElementId, ElementId>> _pairs;
-
   std::shared_ptr<SublineStringMatcher> _sublineMatcher;
 
   // indicates which matcher matched the elements being processed by this merger
   QString _matchedBy;
-
-  PairsSet& _getPairs() override { return _pairs; }
-  const PairsSet& _getPairs() const override { return _pairs; }
 
   /*
    * Return true if pair needs review.

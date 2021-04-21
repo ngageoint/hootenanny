@@ -55,9 +55,9 @@ const bool LinearMergerAbstract::WRITE_DETAILED_DEBUG_MAPS = false;
 LinearMergerAbstract::LinearMergerAbstract(
   const std::set<std::pair<ElementId, ElementId>>& pairs,
   const std::shared_ptr<SublineStringMatcher>& sublineMatcher) :
-_pairs(pairs),
 _sublineMatcher(sublineMatcher)
 {
+  _pairs = pairs;
   LOG_VART(_sublineMatcher->getName());
   LOG_VART(_sublineMatcher->getSublineMatcherName())
 }

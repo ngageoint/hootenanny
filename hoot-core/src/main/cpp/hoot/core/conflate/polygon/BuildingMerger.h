@@ -107,11 +107,6 @@ public:
   void setChangedReviewIouThreshold(double threshold) { _changedReviewIouThreshold = threshold; }
   QString getMarkedReviewText() const { return _markedReviewText; }
 
-protected:
-
-  PairsSet& _getPairs() override { return _pairs; }
-  const PairsSet& _getPairs() const override { return _pairs; }
-
 private:
 
   static int logWarnCount;

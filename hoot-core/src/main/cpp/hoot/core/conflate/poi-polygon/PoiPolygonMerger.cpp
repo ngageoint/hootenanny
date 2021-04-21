@@ -521,7 +521,7 @@ ElementId PoiPolygonMerger::mergeOnePoiAndOnePolygon(OsmMapPtr map)
 
 QString PoiPolygonMerger::toString() const
 {
-  return QString("PoiPolygonMerger %1").arg(hoot::toString(_getPairs()));
+  return QString("PoiPolygonMerger %1").arg(hoot::toString(_pairs));
 }
 
 }

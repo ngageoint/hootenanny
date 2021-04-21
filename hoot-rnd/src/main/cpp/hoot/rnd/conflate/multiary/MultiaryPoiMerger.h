@@ -69,11 +69,6 @@ public:
 
   QString getClassName() const override { return className(); }
 
-protected:
-
-  PairsSet& _getPairs() override { return _pairs; }
-  const PairsSet& _getPairs() const override { return _pairs; }
-
 private:
 
   std::shared_ptr<MatchCreator> _matchCreator;

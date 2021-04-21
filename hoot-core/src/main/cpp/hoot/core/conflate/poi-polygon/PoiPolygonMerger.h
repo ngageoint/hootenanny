@@ -91,11 +91,6 @@ public:
 
   QString getClassName() const override { return className(); }
 
-protected:
-
-  PairsSet& _getPairs() override { return _pairs; }
-  const PairsSet& _getPairs() const override { return _pairs; }
-
 private:
 
   static int logWarnCount;

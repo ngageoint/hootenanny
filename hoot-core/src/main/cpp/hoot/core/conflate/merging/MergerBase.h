@@ -57,9 +57,7 @@ public:
 
 protected:
 
-  // TODO: Is any inheriting class actually implementing this in a custom fashion?
-  virtual PairsSet& _getPairs() = 0;
-  virtual const PairsSet& _getPairs() const = 0;
+  std::set<std::pair<ElementId, ElementId>> _pairs;
 };
 
 }

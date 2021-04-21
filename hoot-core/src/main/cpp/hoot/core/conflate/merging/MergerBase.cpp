@@ -35,11 +35,9 @@ set<ElementId> MergerBase::getImpactedElementIds() const
 {
   set<ElementId> result;
 
-  const PairsSet& pairs = _getPairs();
-  LOG_VART(hoot::toString(pairs));
   // Make sure the map contains all our elements and they aren't conflated.
-  for (set<pair<ElementId, ElementId>>::const_iterator it = pairs.begin();
-       it != pairs.end(); ++it)
+  for (set<pair<ElementId, ElementId>>::const_iterator it = _pairs.begin();
+       it != _pairs.end(); ++it)
   {
     LOG_VART(it->first);
     LOG_VART(it->second);
@@ -56,11 +54,9 @@ bool MergerBase::isValid(const ConstOsmMapPtr& map) const
 {
   bool result = true;
 
-  const PairsSet& pairs = _getPairs();
-  LOG_VART(hoot::toString(pairs));
   // make sure the map contains all our elements and they aren't conflated.
-  for (set<pair<ElementId, ElementId>>::const_iterator it = pairs.begin();
-       it != pairs.end() && result; ++it)
+  for (set<pair<ElementId, ElementId>>::const_iterator it = _pairs.begin();
+       it != _pairs.end() && result; ++it)
   {
     LOG_VART(it->first);
     LOG_VART(it->second);
@@ -81,9 +77,8 @@ bool MergerBase::isValid(const ConstOsmMapPtr& map) const
 
 void MergerBase::replace(ElementId oldEid, ElementId newEid)
 {
-  PairsSet& pairs = _getPairs();
-  set<pair<ElementId, ElementId>>::iterator it = pairs.begin();
-  while (it != pairs.end())
+  set<pair<ElementId, ElementId>>::iterator it = _pairs.begin();
+  while (it != _pairs.end())
   {
     ElementId eid1 = it->first;
     ElementId eid2 = it->second;
@@ -96,8 +91,8 @@ void MergerBase::replace(ElementId oldEid, ElementId newEid)
       pair<ElementId, ElementId> newP = *it;
       newP.first = newEid;
       LOG_VART(newP);
-      pairs.insert(newP);
-      pairs.erase(it++);
+      _pairs.insert(newP);
+      _pairs.erase(it++);
     }
     else if (it->second == oldEid)
     {
@@ -105,8 +100,8 @@ void MergerBase::replace(ElementId oldEid, ElementId newEid)
       pair<ElementId, ElementId> newP = *it;
       newP.second = newEid;
       LOG_VART(newP);
-      pairs.insert(newP);
-      pairs.erase(it++);
+      _pairs.insert(newP);
+      _pairs.erase(it++);
     }
     else
     {

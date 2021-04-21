@@ -40,6 +40,9 @@
 #include <hoot/core/util/MemoryUsageChecker.h>
 #include <hoot/core/util/StringUtils.h>
 
+// Qt
+#include <QElapsedTimer>
+
 // standard
 #include <algorithm>
 
@@ -284,6 +287,11 @@ void AbstractConflator::_replaceElementIds(
 
 void AbstractConflator::_applyMergers(const std::vector<MergerPtr>& mergers, OsmMapPtr& map)
 {
+  QElapsedTimer mergersTimer;
+  mergersTimer.start();
+
+  LOG_STATUS("Applying " << StringUtils::formatLargeNumber(mergers.size()) << " mergers...");
+
   std::vector<std::pair<ElementId, ElementId>> replaced;
   LOG_VART(mergers.size());
   for (size_t i = 0; i < mergers.size(); ++i)
@@ -324,6 +332,10 @@ void AbstractConflator::_applyMergers(const std::vector<MergerPtr>& mergers, Osm
         map, "after-merge-" + merger->getName() + "-#" + StringUtils::formatLargeNumber(i + 1));
     }
   }
+
+  LOG_INFO(
+    "Applied " << StringUtils::formatLargeNumber(mergers.size()) << " mergers in " <<
+    StringUtils::millisecondsToDhms(mergersTimer.elapsed()) << ".");
 }
 
 QString AbstractConflator::_matchSetToString(const MatchSet& matchSet) const

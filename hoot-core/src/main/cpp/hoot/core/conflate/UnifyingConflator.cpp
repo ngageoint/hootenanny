@@ -204,12 +204,6 @@ void UnifyingConflator::_createMergers(std::vector<MergerPtr>& relationMergers)
 
 void UnifyingConflator::_mergeFeatures(const std::vector<MergerPtr>& relationMergers)
 {
-  QElapsedTimer mergersTimer;
-  mergersTimer.start();
-
-  LOG_STATUS(
-    "Applying " << StringUtils::formatLargeNumber(_mergers.size() + relationMergers.size()) <<
-    " mergers...");
   _applyMergers(_mergers, _map);
   _applyMergers(relationMergers, _map);
 
@@ -224,10 +218,6 @@ void UnifyingConflator::_mergeFeatures(const std::vector<MergerPtr>& relationMer
   double mergersTime = _timer.getElapsedAndRestart();
   _stats.append(SingleStat("Apply Mergers Time (sec)", mergersTime));
   _stats.append(SingleStat("Mergers Applied per Second", (double)mergerCount / mergersTime));
-
-  LOG_INFO(
-    "Applied " << StringUtils::formatLargeNumber(mergerCount) << " mergers in " <<
-    StringUtils::millisecondsToDhms(mergersTimer.elapsed()) << ".");
 }
 
 void UnifyingConflator::_addConflateScoreTags(

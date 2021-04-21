@@ -47,6 +47,12 @@ MatchType Match::getType() const
   return _threshold->getType(*this);
 }
 
+bool Match::operator<(const Match& from) const
+{
+  return this->_order < from._order;
+}
+
+
 QHash<QString, ConstMatchPtr> Match::getIdIndexedMatches(
   const std::vector<ConstMatchPtr>& matches)
 {

@@ -92,8 +92,6 @@ protected:
   v8::Handle<v8::Value> _callMergePair(const OsmMapPtr& map) const;
   void _callMergeSets(const OsmMapPtr& map,
                       std::vector<std::pair<ElementId, ElementId>>& replaced) const;
-  PairsSet& _getPairs() override { return _pairs; }
-  const PairsSet& _getPairs() const override { return _pairs; }
 };
 
 }

@@ -59,6 +59,7 @@ public:
     {
       return getElementId() == other.getElementId() && getRole() == other.getRole();
     }
+    bool operator<(const Entry& other) const { return getElementId() < other.getElementId(); }
 
     bool isNull() const { return _eid.isNull(); }
 

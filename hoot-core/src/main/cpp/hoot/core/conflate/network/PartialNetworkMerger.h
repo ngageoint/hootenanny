@@ -76,11 +76,6 @@ public:
 
   bool getNeedsReview() const { return _needsReview; }
 
-protected:
-
-  PairsSet& _getPairs() override { return _pairs; }
-  const PairsSet& _getPairs() const override { return _pairs; }
-
 private:
 
   PairsSet _pairs;
