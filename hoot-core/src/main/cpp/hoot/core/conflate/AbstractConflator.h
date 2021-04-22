@@ -126,7 +126,7 @@ private:
 
   Progress _progress;
 
-  void _removeWholeGroups(std::vector<ConstMatchPtr>& matches);
+  void _removeWholeGroups(std::vector<ConstMatchPtr>& matches, MatchSetVector& matchSets);
 
   QString _matchSetToString(const MatchSet& matchSet) const;
 };

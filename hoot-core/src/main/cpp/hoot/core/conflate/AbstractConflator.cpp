@@ -129,7 +129,7 @@ MatchSetVector AbstractConflator::_optimizeMatches(std::vector<ConstMatchPtr>& m
     "Number of Matches Before Whole Groups: " << StringUtils::formatLargeNumber(matches.size()));
   // If there are groups of matches that should not be optimized, remove them before optimization.
   MatchSetVector matchSets;
-  _removeWholeGroups(matches);
+  _removeWholeGroups(matches, matchSets);
   MemoryUsageChecker::getInstance().check();
   _stats.append(SingleStat("Number of Whole Groups", matchSets.size()));
   LOG_DEBUG("Number of Whole Groups: " << StringUtils::formatLargeNumber(matchSets.size()));
@@ -209,7 +209,8 @@ MatchSetVector AbstractConflator::_optimizeMatches(std::vector<ConstMatchPtr>& m
   return matchSets;
 }
 
-void AbstractConflator::_removeWholeGroups(std::vector<ConstMatchPtr>& matches)
+void AbstractConflator::_removeWholeGroups(
+  std::vector<ConstMatchPtr>& matches, MatchSetVector& matchSets)
 {
   LOG_DEBUG("Removing whole group matches...");
 
@@ -220,7 +221,7 @@ void AbstractConflator::_removeWholeGroups(std::vector<ConstMatchPtr>& matches)
   mg.addMatches(matches.begin(), matches.end());
   MatchSetVector tmpMatchSets = mg.findSubgraphs(_map);
 
-  _matchSets.reserve(_matchSets.size() + tmpMatchSets.size());
+  matchSets.reserve(matchSets.size() + tmpMatchSets.size());
   std::vector<ConstMatchPtr> leftovers;
 
   for (size_t i = 0; i < tmpMatchSets.size(); i++)
@@ -237,7 +238,7 @@ void AbstractConflator::_removeWholeGroups(std::vector<ConstMatchPtr>& matches)
     if (wholeGroup)
     {
       LOG_TRACE("Removing whole group: " << _matchSetToString(tmpMatchSets[i]));
-      _matchSets.push_back(tmpMatchSets[i]);
+      matchSets.push_back(tmpMatchSets[i]);
     }
     else
     {
