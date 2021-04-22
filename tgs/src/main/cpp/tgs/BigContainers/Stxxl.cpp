@@ -104,9 +104,9 @@ void Stxxl::setConfig(QString configFile)
 
   if (_configFileTmp.write(s.toUtf8()) == 0)
   {
-    QString err("Error writing data to %1 (%2)");
-    err.arg(_configFileTmp.fileName()).arg(_configFileTmp.errorString());
-    throw Tgs::Exception(err.toStdString());
+    throw QString("Error writing data to %1 (%2)")
+            .arg(_configFileTmp.fileName())
+            .arg(_configFileTmp.errorString());
   }
 
   _configFileTmp.close();

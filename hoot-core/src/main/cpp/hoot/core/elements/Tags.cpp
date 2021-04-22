@@ -927,20 +927,14 @@ QString Tags::getFirstMatchingKvp(const QStringList& kvps) const
   {
     const QString kvp = kvps.at(i);
     if (!kvp.contains("="))
-    {
       throw IllegalArgumentException("Invalid kvp: " + kvp);
-    }
     const QStringList kvpParts = kvp.split("=");
-    if (!kvpParts.size() == 2)
-    {
+    if (kvpParts.size() != 2)
       throw IllegalArgumentException("Invalid kvp: " + kvp);
-    }
     const QString key = kvpParts[0];
     const QString value = kvpParts[1];
     if ((value != "*" && get(key) == value) || (value == "*" && contains(key)))
-    {
       return key + "=" + value;
-    }
   }
   return "";
 }
@@ -956,20 +950,14 @@ bool Tags::hasAnyKvp(const QStringList& kvps) const
   {
     const QString kvp = kvps.at(i);
     if (!kvp.contains("="))
-    {
       throw IllegalArgumentException("Invalid kvp: " + kvp);
-    }
     const QStringList kvpParts = kvp.split("=");
-    if (!kvpParts.size() == 2)
-    {
+    if (kvpParts.size() != 2)
       throw IllegalArgumentException("Invalid kvp: " + kvp);
-    }
     const QString key = kvpParts[0];
     const QString value = kvpParts[1];
     if ((value != "*" && get(key) == value) || (value == "*" && contains(key)))
-    {
       return true;
-    }
   }
   return false;
 }
@@ -1016,14 +1004,10 @@ Tags Tags::kvpListToTags(const QStringList& kvps)
   {
     const QString tagStr = kvps.at(i);
     if (!tagStr.contains("="))
-    {
       throw IllegalArgumentException("Invalid tag: " + tagStr);
-    }
     const QStringList tagStrParts = tagStr.split("=");
-    if (!tagStrParts.size() == 2)
-    {
+    if (tagStrParts.size() != 2)
       throw IllegalArgumentException("Invalid tag: " + tagStr);
-    }
     tagsToReturn.appendValue(tagStrParts[0], tagStrParts[1]);
   }
   return tagsToReturn;

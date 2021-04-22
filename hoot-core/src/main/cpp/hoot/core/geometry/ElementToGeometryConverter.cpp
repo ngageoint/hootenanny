@@ -419,6 +419,7 @@ geos::geom::GeometryTypeId ElementToGeometryConverter::getGeometryType(
         }
         logWarnCount++;
       }
+      break;
     }
 
   default:
