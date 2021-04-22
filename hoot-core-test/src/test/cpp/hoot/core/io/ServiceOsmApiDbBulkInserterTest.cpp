@@ -654,10 +654,10 @@ public:
                  StringUtils::formatLargeNumber(std::numeric_limits<unsigned long>::max()) << std::endl;
     std::cout << "size of float: " << sizeof(float) << std::endl;
     std::cout << "max size of float : " <<
-                 StringUtils::formatLargeNumber(std::numeric_limits<float>::max()) << std::endl;
+                 StringUtils::formatLargeNumber(static_cast<unsigned long>(std::numeric_limits<float>::max())) << std::endl;
     std::cout << "size of double: " << sizeof(double) << std::endl;
     std::cout << "max size of double : " <<
-                 StringUtils::formatLargeNumber(std::numeric_limits<double>::max()) << std::endl;
+                 StringUtils::formatLargeNumber(static_cast<unsigned long>(std::numeric_limits<double>::max())) << std::endl;
   }
 };
 
