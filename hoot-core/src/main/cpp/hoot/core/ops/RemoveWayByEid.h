@@ -51,16 +51,16 @@ public:
 
   /**
    * @brief RemoveWayByEid is used to remove ways from maps
-   * @param removeFully if true, way is removed from all relations in the map, then
-   *                    removed from the map's way collection.
+   * @param removeFully if true, way is removed from all relations in the map, then removed from the
+   * map's way collection.
    */
   RemoveWayByEid(bool removeFully = false);
 
   /**
    * @brief RemoveWayByEid is used to remove ways from maps
    * @param wId ID of the way to remove
-   * @param removeFully if true, way is removed from all relations in the map, then
-   *                    removed from the map's way collection.
+   * @param removeFully if true, way is removed from all relations in the map, then removed from the
+   * map's way collection.
    */
   RemoveWayByEid(long wId, bool removeFully = false);
 

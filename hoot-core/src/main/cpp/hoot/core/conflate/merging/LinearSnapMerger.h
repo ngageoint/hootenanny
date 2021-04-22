@@ -85,8 +85,6 @@ private:
 
   static int logWarnCount;
 
-  static const bool WRITE_DETAILED_DEBUG_MAPS;
-
   bool _checkForIdenticalElements(const ElementPtr& e1, const ElementPtr& e2) const;
 
   /*

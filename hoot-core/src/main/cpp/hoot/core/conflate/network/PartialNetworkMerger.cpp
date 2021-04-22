@@ -74,9 +74,10 @@ void PartialNetworkMerger::_appendSublineMappings(
       if (other->getSubline1().overlaps(sm->getSubline1()))
       {
         // We punt on this review, so no point in updating _needsReview.
-        throw NeedsReviewException("Internal Error: Overlapping partial matches were found. To "
-          "resolve please make the logical conflation operations manually. Please report this as "
-          "an error and include sample data to recreate.");
+        throw NeedsReviewException(
+          "Internal Error: Overlapping partial matches were found. To resolve please make the "
+          "logical conflation operations manually. Please report this as an error and include "
+          "sample data to recreate.");
       }
     }
     _allSublineMappings.append(sm);
@@ -204,7 +205,6 @@ void PartialNetworkMerger::_processFullMatch(const OsmMapPtr& map,
   }
   LOG_VART(_edgeMatches);
 
-  ///
   /// This approach may seem a little odd at first. We need to accomodate the following problems:
   ///
   /// - Merging while using relations to keep track of scraps is a no-go. This becomes horribly
@@ -220,7 +220,6 @@ void PartialNetworkMerger::_processFullMatch(const OsmMapPtr& map,
   /// 2. Split all the ways at one time so we don't have to keep track of scraps with relations or
   ///    similar.
   /// 3. Merge the matched sublines in turn.
-  ///
 
   // calculate all the mappings and split points for all matches.
   LOG_TRACE("Calculating mappings and split points for matches...");
@@ -344,7 +343,7 @@ void PartialNetworkMerger::replace(ElementId oldEid, ElementId newEid)
 
 QString PartialNetworkMerger::toString() const
 {
-  QString s = hoot::toString(_getPairs());
+  QString s = hoot::toString(_pairs);
   return QString("PartialNetworkMerger %1").arg(s);
 }
 

@@ -117,7 +117,6 @@ void MaximalSublineStringMatcher::setSublineMatcher(const std::shared_ptr<Sublin
 vector<WayPtr> MaximalSublineStringMatcher::_changeMap(const vector<ConstWayPtr>& ways,
   OsmMapPtr map) const
 {
-  LOG_TRACE("Changing map...");
   vector<WayPtr> result;
   result.reserve(ways.size());
   for (size_t i = 0; i < ways.size(); ++i)
@@ -182,8 +181,7 @@ WaySublineMatchString MaximalSublineStringMatcher::findMatch(const ConstOsmMapPt
   try
   {
     WaySublineMatchString result = scoredResult.matches;
-    // TODO: This likely shouldn't be necessary. See
-    // https://github.com/ngageoint/hootenanny/issues/157.
+    // TODO: This likely shouldn't be necessary. See issue #157.
     result.removeEmptyMatches();
     LOG_VART(result);
     return result;
@@ -407,7 +405,6 @@ bool MaximalSublineStringMatcher::_isValid(const ConstOsmMapPtr& map, ElementId 
       return false;
     }
   }
-
   return true;
 }
 

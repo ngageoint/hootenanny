@@ -863,7 +863,7 @@ void BuildingMerger::mergeBuildings(OsmMapPtr map, const ElementId& mergeTargetI
 
 QString BuildingMerger::toString() const
 {
-  return QString("BuildingMerger %1").arg(hoot::toString(_getPairs()));
+  return QString("BuildingMerger %1").arg(hoot::toString(_pairs));
 }
 
 }

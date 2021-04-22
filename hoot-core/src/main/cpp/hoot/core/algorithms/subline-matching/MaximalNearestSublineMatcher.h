@@ -45,9 +45,7 @@ public:
     const ConstWayPtr& way2, double& score, Meters maxRelevantDistance) const override;
 
   void setMaxRelevantAngle(Radians r) override { _maxRelevantAngle = r; }
-
   void setMinSplitSize(Meters minSplitSize) override { _minSplitSize = minSplitSize; }
-
   void setHeadingDelta(Meters headingDelta) override { _headingDelta = headingDelta; }
 
   QString getDescription() const override

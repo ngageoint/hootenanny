@@ -1287,6 +1287,15 @@ If true, multiple debug maps will be generated during a conflation job.  The out
 is controlled by debug.maps.filename.  The maps can be large and slow things down
 significantly.
 
+=== debug.maps.write.detailed
+
+* Data Type: bool
+* Default Value: `false`
+
+If enabled, debug maps are written from inside loops where enabled. debug.maps.write must already
+be enabled for this option to be used. Enabling this option can create a lot of debug maps and slow
+down debugging significantly, so use with caution.
+
 === differential.remove.reference.data
 
 * Data Type: bool

@@ -53,6 +53,10 @@ public:
 
   inline static QString HootTagPrefix()                 { return "hoot:"; }
 
+  inline static QString BuildingPart()                  { return "building:part"; }
+  inline static QString BuildingHeight()                { return "height"; }
+  inline static QString BuildingLevels()                { return "building:levels"; }
+
   static const QString ACCURACY;
   inline static const QString& Accuracy()               { return ACCURACY; }
   static const QString ERROR_CIRCULAR;
@@ -152,50 +156,6 @@ public:
   inline static QString HootMaxConsecutiveStart()       { return "hoot:max_consecutive_start"; }
   inline static QString HootHistogram()                 { return "hoot:histogram"; }
 
-  inline static QString Ref1()                          { return "REF1"; }
-  inline static QString Ref2()                          { return "REF2"; }
-  inline static QString Review()                        { return "REVIEW"; }
-  inline static QString Uuid()                          { return "uuid"; }
-
-  inline static QString Unknown1()                      { return "Unknown1"; }
-  inline static QString Unknown2()                      { return "Unknown2"; }
-
-  inline static QString BuildingPart()                  { return "building:part"; }
-  inline static QString BuildingHeight()                { return "height"; }
-  inline static QString BuildingLevels()                { return "building:levels"; }
-
-  inline static QString RelationBoundary()              { return "boundary"; }
-  inline static QString RelationBuilding()              { return "building"; }
-  inline static QString RelationCollection()            { return "collection"; }
-  inline static QString RelationInner()                 { return "inner"; }
-  inline static QString RelationMultilineString()       { return "multilinestring"; }
-  inline static QString RelationMultiPolygon()          { return "multipolygon"; }
-  inline static QString RelationMultiPoint()            { return "multipoint"; }
-  inline static QString RelationNetwork()               { return "network"; }
-  inline static QString RelationOuter()                 { return "outer"; }
-  inline static QString RelationRestriction()           { return "restriction"; }
-  inline static QString RelationReview()                { return "review"; }
-  inline static QString RelationRoute()                 { return "route"; }
-  inline static QString RelationRouteMaster()           { return "route_master"; }
-  inline static QString RelationSite()                  { return "site"; }
-  inline static QString RelationSuperRoute()            { return "superroute"; }
-  inline static QString RelationWaterway()              { return "waterway"; }
-  inline static QString RelationType()                  { return "type"; }
-
-  inline static QString RoleInner()                     { return RelationInner(); }
-  inline static QString RoleOuter()                     { return RelationOuter(); }
-  inline static QString RoleOutline()                   { return "outline"; }
-  inline static QString RolePart()                      { return "part"; }
-  inline static QString RoleReviewee()                  { return "reviewee"; }
-  // temp tag used by BuildingMerger
-  inline static QString HootMultiPolyRole()             { return "hoot:multi_poly:role"; }
-
-  inline static QString Length()                        { return "length"; }
-
-  inline static QString Source()                        { return "source"; }
-  inline static QString OsmApiDbScheme()                { return "osmapidb"; }
-  inline static QString HootApiDbScheme()               { return "hootapidb"; }
-
   /**
    * This is used by ChangesetReplacementCreator to focus attention on input elements with missing
    * child references so that they may later be cleaned up.
@@ -274,6 +234,55 @@ public:
    */
   inline static QString HootConflatableCriteria()       { return "hoot:conflatable:criteria"; }
 
+  // used by FindIntersectionsVisitor
+  inline static QString HootIntersectionWayCount()      { return "hoot:intersection:way_count"; }
+  inline static QString HootIntersectionMinAngle()      { return "hoot:intersection:min_angle"; }
+  inline static QString HootIntersectionMaxAngle()      { return "hoot:intersection:max_angle"; }
+
+  // used by FindStreetIntersectionsByName
+  inline static QString HootIntersectionStreet1()       { return "hoot:intersection:street1"; }
+  inline static QString HootIntersectionStreet2()       { return "hoot:intersection:street2"; }
+
+  inline static QString HootWayNodeCount()              { return "hoot:way:node:count"; }
+
+  // temp tag used by BuildingMerger
+  inline static QString HootMultiPolyRole()             { return "hoot:multi_poly:role"; }
+
+  inline static QString Length()                        { return "length"; }
+
+  inline static QString Source()                        { return "source"; }
+  inline static QString OsmApiDbScheme()                { return "osmapidb"; }
+  inline static QString HootApiDbScheme()               { return "hootapidb"; }
+
+  inline static QString Ref1()                          { return "REF1"; }
+  inline static QString Ref2()                          { return "REF2"; }
+  inline static QString Review()                        { return "REVIEW"; }
+  inline static QString Uuid()                          { return "uuid"; }
+
+  inline static QString RelationBoundary()              { return "boundary"; }
+  inline static QString RelationBuilding()              { return "building"; }
+  inline static QString RelationCollection()            { return "collection"; }
+  inline static QString RelationInner()                 { return "inner"; }
+  inline static QString RelationMultilineString()       { return "multilinestring"; }
+  inline static QString RelationMultiPolygon()          { return "multipolygon"; }
+  inline static QString RelationMultiPoint()            { return "multipoint"; }
+  inline static QString RelationNetwork()               { return "network"; }
+  inline static QString RelationOuter()                 { return "outer"; }
+  inline static QString RelationRestriction()           { return "restriction"; }
+  inline static QString RelationReview()                { return "review"; }
+  inline static QString RelationRoute()                 { return "route"; }
+  inline static QString RelationRouteMaster()           { return "route_master"; }
+  inline static QString RelationSite()                  { return "site"; }
+  inline static QString RelationSuperRoute()            { return "superroute"; }
+  inline static QString RelationWaterway()              { return "waterway"; }
+  inline static QString RelationType()                  { return "type"; }
+
+  inline static QString RoleInner()                     { return RelationInner(); }
+  inline static QString RoleOuter()                     { return RelationOuter(); }
+  inline static QString RoleOutline()                   { return "outline"; }
+  inline static QString RolePart()                      { return "part"; }
+  inline static QString RoleReviewee()                  { return "reviewee"; }
+
   /**
    * ID Unique to a training data set with multiary training data.
    * @sa MultiaryMatchComparator
@@ -290,16 +299,8 @@ public:
    */
   inline static QString TrainingReview()                { return "REVIEW"; }
 
-  // used by FindIntersectionsVisitor
-  inline static QString HootIntersectionWayCount()      { return "hoot:intersection:way_count"; }
-  inline static QString HootIntersectionMinAngle()      { return "hoot:intersection:min_angle"; }
-  inline static QString HootIntersectionMaxAngle()      { return "hoot:intersection:max_angle"; }
-
-  // used by FindStreetIntersectionsByName
-  inline static QString HootIntersectionStreet1()       { return "hoot:intersection:street1"; }
-  inline static QString HootIntersectionStreet2()       { return "hoot:intersection:street2"; }
-
-  inline static QString HootWayNodeCount()              { return "hoot:way:node:count"; }
+  inline static QString Unknown1()                      { return "Unknown1"; }
+  inline static QString Unknown2()                      { return "Unknown2"; }
 
 private:
 
