@@ -190,6 +190,9 @@ private:
   QSet<ElementId> _intraDatasetMatchOnlyElementIds;
   bool _intraDatasetElementIdsPopulated;
 
+  std::vector<ConstMatchPtr> _linearMatches;
+  std::vector<ConstMatchPtr> _nonLinearMatches;
+
   long _numSnappedWays;
   long _numUnconflatableElementsDiscarded;
 
@@ -206,6 +209,8 @@ private:
   void _reset() override;
 
   void _discardUnconflatableElements();
+
+  void separateLinearMatches();
 
   // Calculates and stores the tag differential as a set of change objects
   void _calcAndStoreTagChanges();

@@ -59,8 +59,7 @@ void LinearDiffMerger::apply(
   const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced)
 {
   LOG_TRACE("Applying LinearDiffMerger...");
-  //LOG_VART(_pairs);
-  //LOG_VART(replaced);
+
   _map = map;
 
   // TODO: explain
@@ -77,14 +76,11 @@ void LinearDiffMerger::apply(
   ShortestFirstComparator shortestFirst;
   shortestFirst.map = _map;
   std::sort(pairs.begin(), pairs.end(), shortestFirst);
-  //LOG_VART(pairs);
   for (std::vector<std::pair<ElementId, ElementId>>::const_iterator it = pairs.begin();
        it != pairs.end(); ++it)
   {
     ElementId eid1 = it->first;
     ElementId eid2 = it->second;
-    //LOG_VART(eid1);
-    //LOG_VART(eid2);
 
     for (size_t i = 0; i < replaced.size(); i++)
     {
@@ -249,7 +245,6 @@ bool LinearDiffMerger::_findAndProcessMatch(
       _map,
       "after-merge-" + way1->getElementId().toString() + "-" + way2->getElementId().toString());
   }
-  //LOG_VART(replaced);
 
   return false;
 }

@@ -62,7 +62,7 @@
 #include <hoot/core/ops/WayJoinerOp.h>
 #include <hoot/core/util/ConfigUtils.h>
 #include <hoot/core/io/OsmChangesetFileWriter.h>
-//#include <hoot/core/conflate/highway/HighwayMatch.h>
+#include <hoot/core/conflate/highway/HighwayMatch.h>
 #include <hoot/core/conflate/ConflateInfoCache.h>
 
 // Qt
@@ -212,11 +212,34 @@ void DiffConflator::apply(OsmMapPtr& map)
       _removeMetadataTags();
     }
 
+    // TODO: fix orphaned nodes in output
+    //SuperfluousNodeRemover::removeNodes(_map);
+
     _currentStep++;
   }
 
-  // free up any used resources
+  // Free up any used resources.
   AbstractConflator::_reset();
+}
+
+void DiffConflator::_separateLinearMatches()
+{
+  for (std::vector<ConstMatchPtr>::const_iterator mit = _matches.begin(); mit != _matches.end();
+       ++mit)
+  {
+    // TODO: make this work with non-highway linear matches
+
+     ConstMatchPtr match = *mit;
+     if (match->getName() != HighwayMatch::MATCH_NAME ||
+         match->getMatchMembers() != MatchMembers::Polyline)
+     {
+       _nonLinearMatches.push_back(match);
+     }
+     else
+     {
+       _linearMatches.push_back(match);
+     }
+  }
 }
 
 void DiffConflator::_discardUnconflatableElements()
@@ -415,22 +438,15 @@ void DiffConflator::_removeMatchElementsCompletely(const Status& status)
       LOG_VART(match->getMatchMembers());
       LOG_VART(ConfigOptions().getDifferentialRemovePartialMatchesAsWhole());
 
-      // Get the element IDs involved in the match and...
-      std::set<std::pair<ElementId, ElementId>> singleMatchPairs = match->getMatchPairs();
-//      if (ConfigOptions().getDifferentialRemovePartialMatchesAsWhole() || forceComplete ||
-//          match->getMatchMembers() != MatchMembers::Polyline ||
-//          // TODO: make this work for all linear ScriptMatch instances; going to involve making
-//          // ScriptMatch for linear conflation return the subline matcher it used
-//          match->getName() != HighwayMatch::MATCH_NAME)
-//      {
-        // ...either remove the elements involved in the match completely...
-        for (std::set<std::pair<ElementId, ElementId>>::const_iterator pairItr =
-               singleMatchPairs.begin();
-             pairItr != singleMatchPairs.end(); ++pairItr)
-        {
-          _removeMatchElementPairCompletely(match, *pairItr, status);
-        }
-      //}
+      // Get the element IDs involved in the match and remove the elements involved in the match
+      // completely.
+      const std::set<std::pair<ElementId, ElementId>> singleMatchPairs = match->getMatchPairs();
+      for (std::set<std::pair<ElementId, ElementId>>::const_iterator pairItr =
+             singleMatchPairs.begin();
+           pairItr != singleMatchPairs.end(); ++pairItr)
+      {
+        _removeMatchElementPairCompletely(match, *pairItr, status);
+      }
     }
   }
 
