@@ -1297,7 +1297,7 @@ TODO
 === differential.remove.partial.matches.as.whole
 
 * Data Type: bool
-* Default Value: `true`
+* Default Value: `false`
 
 TODO
 
