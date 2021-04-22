@@ -121,21 +121,21 @@ void AbstractConflator::_createMatches()
     SingleStat("Number of Matches Found per Second", (double)_matches.size() / findMatchesTime));
 }
 
-MatchSetVector AbstractConflator::_optimizeMatches()
+MatchSetVector AbstractConflator::_optimizeMatches(std::vector<ConstMatchPtr>& matches)
 {
-  LOG_DEBUG("Pre-constraining match count: " << StringUtils::formatLargeNumber(_matches.size()));
-  _stats.append(SingleStat("Number of Matches Before Whole Groups", _matches.size()));
+  LOG_DEBUG("Pre-constraining match count: " << StringUtils::formatLargeNumber(matches.size()));
+  _stats.append(SingleStat("Number of Matches Before Whole Groups", matches.size()));
   LOG_DEBUG(
-    "Number of Matches Before Whole Groups: " << StringUtils::formatLargeNumber(_matches.size()));
+    "Number of Matches Before Whole Groups: " << StringUtils::formatLargeNumber(matches.size()));
   // If there are groups of matches that should not be optimized, remove them before optimization.
   MatchSetVector matchSets;
-  _removeWholeGroups(matchSets);
+  _removeWholeGroups(matches);
   MemoryUsageChecker::getInstance().check();
   _stats.append(SingleStat("Number of Whole Groups", matchSets.size()));
   LOG_DEBUG("Number of Whole Groups: " << StringUtils::formatLargeNumber(matchSets.size()));
   LOG_DEBUG(
-    "Number of Matches After Whole Groups: " << StringUtils::formatLargeNumber(_matches.size()));
-  LOG_VART(_matches);
+    "Number of Matches After Whole Groups: " << StringUtils::formatLargeNumber(matches.size()));
+  //LOG_VART(_matches);
   OsmMapWriterFactory::writeDebugMap(_map, "after-whole-group-removal");
 
   // Globally optimize the set of matches to maximize the conflation score.
@@ -145,7 +145,7 @@ MatchSetVector AbstractConflator::_optimizeMatches()
 
     if (ConfigOptions().getUnifyEnableOptimalConstrainedMatches())
     {
-      cm.addMatches(_matches.begin(), _matches.end());
+      cm.addMatches(matches.begin(), matches.end());
       cm.setTimeLimit(ConfigOptions().getUnifyOptimizerTimeLimit());
       double cmStart = Tgs::Time::getTime();
       try
@@ -163,7 +163,7 @@ MatchSetVector AbstractConflator::_optimizeMatches()
     }
 
     GreedyConstrainedMatches gm(_map);
-    gm.addMatches(_matches.begin(), _matches.end());
+    gm.addMatches(matches.begin(), matches.end());
     double gmStart = Tgs::Time::getTime();
     std::vector<ConstMatchPtr> gmMatches = gm.calculateSubset();
     MemoryUsageChecker::getInstance().check();
@@ -172,12 +172,12 @@ MatchSetVector AbstractConflator::_optimizeMatches()
 
     if (gm.getScore() > cm.getScore())
     {
-      _matches = gmMatches;
+      matches = gmMatches;
       LOG_DEBUG("Using greedy matches with a higher score of: " << gm.getScore());
     }
     else
     {
-      _matches = cmMatches;
+      matches = cmMatches;
       LOG_DEBUG(
         "Using matches obtained by the an Integer Programming solution with a higher score of: " <<
         cm.getScore());
@@ -185,20 +185,20 @@ MatchSetVector AbstractConflator::_optimizeMatches()
   }
   double optimizeMatchesTime = _timer.getElapsedAndRestart();
   _stats.append(SingleStat("Optimize Matches Time (sec)", optimizeMatchesTime));
-  _stats.append(SingleStat("Number of Optimized Matches", _matches.size()));
+  _stats.append(SingleStat("Number of Optimized Matches", matches.size()));
   _stats.append(SingleStat("Number of Matches Optimized per Second",
-    (double)_matches.size() / optimizeMatchesTime));
+    (double)matches.size() / optimizeMatchesTime));
   LOG_DEBUG(Tgs::SystemInfo::getCurrentProcessMemoryUsageString());
   // TODO: this stat isn't right for Network
-  LOG_DEBUG("Post constraining match count: " << _matches.size());
-  LOG_VART(_matches);
+  LOG_DEBUG("Post constraining match count: " << matches.size());
+  //LOG_VART(_matches);
   OsmMapWriterFactory::writeDebugMap(_map, "after-match-optimization");
 
   {
     // Search the matches for groups (subgraphs) of matches. In other words, groups where all the
     // matches are interrelated by element id
     MatchGraph mg;
-    mg.addMatches(_matches.begin(), _matches.end());
+    mg.addMatches(matches.begin(), matches.end());
     std::vector<std::set<ConstMatchPtr, MatchPtrComparator>> tmpMatchSets = mg.findSubgraphs(_map);
     matchSets.insert(matchSets.end(), tmpMatchSets.begin(), tmpMatchSets.end());
     LOG_DEBUG(Tgs::SystemInfo::getCurrentProcessMemoryUsageString());
@@ -209,7 +209,7 @@ MatchSetVector AbstractConflator::_optimizeMatches()
   return matchSets;
 }
 
-void AbstractConflator::_removeWholeGroups(MatchSetVector& matchSets)
+void AbstractConflator::_removeWholeGroups(std::vector<ConstMatchPtr>& matches)
 {
   LOG_DEBUG("Removing whole group matches...");
 
@@ -217,10 +217,10 @@ void AbstractConflator::_removeWholeGroups(MatchSetVector& matchSets)
   // matches are interrelated by element id
   MatchGraph mg;
   mg.setCheckForConflicts(false);
-  mg.addMatches(_matches.begin(), _matches.end());
+  mg.addMatches(matches.begin(), matches.end());
   MatchSetVector tmpMatchSets = mg.findSubgraphs(_map);
 
-  matchSets.reserve(matchSets.size() + tmpMatchSets.size());
+  _matchSets.reserve(_matchSets.size() + tmpMatchSets.size());
   std::vector<ConstMatchPtr> leftovers;
 
   for (size_t i = 0; i < tmpMatchSets.size(); i++)
@@ -237,7 +237,7 @@ void AbstractConflator::_removeWholeGroups(MatchSetVector& matchSets)
     if (wholeGroup)
     {
       LOG_TRACE("Removing whole group: " << _matchSetToString(tmpMatchSets[i]));
-      matchSets.push_back(tmpMatchSets[i]);
+      _matchSets.push_back(tmpMatchSets[i]);
     }
     else
     {
@@ -245,7 +245,7 @@ void AbstractConflator::_removeWholeGroups(MatchSetVector& matchSets)
     }
   }
 
-  _matches = leftovers;
+  matches = leftovers;
 }
 
 void AbstractConflator::_mapElementIdsToMergers()
@@ -321,8 +321,9 @@ void AbstractConflator::_applyMergers(const std::vector<MergerPtr>& mergers, Osm
 
     // update any mergers that reference the replaced values
     _replaceElementIds(replaced);
-    // Not sure why the replaced IDs get cleared out each time here. That causes problems for
-    // LinearDiffMerger, so skipping clearing when its being used.
+    // Not completely sure why the replaced IDs get cleared out each time here by default. That
+    // causes problems so far for LinearDiffMerger, so skipping clearing them out when its being
+    // used.
     if (merger->getName() != LinearDiffMerger::className())
     {
       replaced.clear();

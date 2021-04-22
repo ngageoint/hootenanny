@@ -64,6 +64,7 @@
 #include <hoot/core/io/OsmChangesetFileWriter.h>
 #include <hoot/core/conflate/highway/HighwayMatch.h>
 #include <hoot/core/conflate/ConflateInfoCache.h>
+#include <hoot/core/ops/SuperfluousNodeRemover.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -142,14 +143,14 @@ void DiffConflator::apply(OsmMapPtr& map)
   _currentStep++;
 
   if (!ConfigOptions().getConflateMatchOnly())
-  {
-
+  {  
     // TODO:
     if (!ConfigOptions().getDifferentialRemovePartialMatchesAsWhole() &&
         SuperfluousConflateOpRemover::linearConflatorPresent())
     {
       _updateProgress(_currentStep - 1, "Optimizing feature matches...");
-      _matchSets = _optimizeMatches();
+      _separateLinearMatches();
+      _matchSets = _optimizeMatches(_linearMatches);
       _currentStep++;
     }
 
@@ -417,15 +418,26 @@ void DiffConflator::_removeMatchElementsCompletely(const Status& status)
   const bool treatReviewsAsMatches = ConfigOptions().getDifferentialTreatReviewsAsMatches();
   LOG_VART(treatReviewsAsMatches);
 
+  std::vector<ConstMatchPtr> matches;
+  if (!ConfigOptions().getDifferentialRemovePartialMatchesAsWhole() &&
+      SuperfluousConflateOpRemover::linearConflatorPresent())
+  {
+    matches = _nonLinearMatches;
+  }
+  else
+  {
+    matches = _matches;
+  }
+
   // We don't want remove elements involved in intra-dataset matches, so record those now.
   if (!_intraDatasetElementIdsPopulated)
   {
-    _intraDatasetMatchOnlyElementIds = _getElementIdsInvolvedInOnlyIntraDatasetMatches(_matches);
+    _intraDatasetMatchOnlyElementIds = _getElementIdsInvolvedInOnlyIntraDatasetMatches(matches);
     _intraDatasetElementIdsPopulated = true;
   }
 
   // Go through all the matches.
-  for (std::vector<ConstMatchPtr>::const_iterator mit = _matches.begin(); mit != _matches.end();
+  for (std::vector<ConstMatchPtr>::const_iterator mit = matches.begin(); mit != matches.end();
        ++mit)
   {
     ConstMatchPtr match = *mit;

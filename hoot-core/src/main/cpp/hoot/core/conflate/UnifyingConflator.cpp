@@ -101,7 +101,7 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   if (!ConfigOptions().getConflateMatchOnly())
   {
     _updateProgress(_currentStep - 1, "Optimizing feature matches...");
-    _matchSets = _optimizeMatches();
+    _matchSets = _optimizeMatches(_matches);
     _currentStep++;
 
     _updateProgress(_currentStep - 1, "Merging feature matches...");

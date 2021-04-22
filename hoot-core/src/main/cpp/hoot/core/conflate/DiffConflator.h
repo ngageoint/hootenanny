@@ -210,7 +210,7 @@ private:
 
   void _discardUnconflatableElements();
 
-  void separateLinearMatches();
+  void _separateLinearMatches();
 
   // Calculates and stores the tag differential as a set of change objects
   void _calcAndStoreTagChanges();

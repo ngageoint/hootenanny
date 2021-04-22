@@ -67,6 +67,9 @@ public:
    */
   void setMergerFactory(const std::shared_ptr<MergerFactory>& mf) { _mergerFactory = mf; }
 
+  /**
+   * @see ProgressReporter
+   */
   void setProgress(const Progress& progress) override { _progress = progress; }
 
 protected:
@@ -95,7 +98,7 @@ protected:
   virtual void _reset();
 
   void _createMatches();
-  MatchSetVector _optimizeMatches();
+  MatchSetVector _optimizeMatches(std::vector<ConstMatchPtr>& matches);
 
   /*
    * Populates the _e2m map with a mapping of ElementIds to their respective Merger objects. This
@@ -123,7 +126,7 @@ private:
 
   Progress _progress;
 
-  void _removeWholeGroups(MatchSetVector& matchSets);
+  void _removeWholeGroups(std::vector<ConstMatchPtr>& matches);
 
   QString _matchSetToString(const MatchSet& matchSet) const;
 };
