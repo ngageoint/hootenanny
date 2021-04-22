@@ -38,7 +38,7 @@ class WayLocation;
 class WaySubline;
 
 /**
- * Removes a subline from a way
+ * Removes a sublines from ways
  */
 class WaySublineRemover
 {
@@ -57,12 +57,12 @@ public:
     const WayPtr& way, const WayLocation& start, const WayLocation& end, OsmMapPtr& map);
 
   /**
-   * TODO
+   * Removes a subline from a way
    *
-   * @param way
-   * @param subline
-   * @param map
-   * @return
+   * @param way the way to modify
+   * @param subline the subline in the way to remove
+   * @param map the map owning the way
+   * @return IDs of the ways created and added back to the map as a result of the subline removal
    */
   static std::vector<ElementId> removeSubline(
     const WayPtr& way, const WaySubline& subline, OsmMapPtr& map);
