@@ -107,7 +107,7 @@ void NetworkMatchCreator::createMatches(
     searchRadiusStr =
       "within a search radius of " + QString::number(searchRadius, 'g', 2) + " meters";
   }
-  LOG_STATUS("Looking for matches with: " << className() << " " << searchRadiusStr << "...");
+  LOG_INFO("Looking for matches with: " << className() << " " << searchRadiusStr << "...");
   LOG_VART(threshold);
   const int matchesSizeBefore = matches.size();
 

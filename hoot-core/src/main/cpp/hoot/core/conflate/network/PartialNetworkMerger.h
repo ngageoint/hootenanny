@@ -68,10 +68,9 @@ public:
 
   QString toString() const override;
 
-  QString getDescription() const override { return "Merges roads matched by the Network Algorithm"; }
-
+  QString getDescription() const override
+  { return "Merges roads matched by the Network Algorithm"; }
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 
   bool getNeedsReview() const { return _needsReview; }

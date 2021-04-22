@@ -55,10 +55,6 @@
 namespace hoot
 {
 
-// ONLY ENABLE THIS DURING DEBUGGING; We don't want to tie it to debug.maps.write, as it may
-// produce a very large number of output files.
-const bool AbstractConflator::WRITE_DETAILED_DEBUG_MAPS = false;
-
 AbstractConflator::AbstractConflator() :
 _matchFactory(MatchFactory::getInstance()),
 _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
@@ -333,7 +329,7 @@ void AbstractConflator::_applyMergers(const std::vector<MergerPtr>& mergers, Osm
     }
     LOG_VART(merger->getImpactedElementIds());
 
-    if (WRITE_DETAILED_DEBUG_MAPS)
+    if (ConfigOptions().getDebugMapsWrite() && ConfigOptions().getDebugMapsWriteDetailed())
     {
       OsmMapWriterFactory::writeDebugMap(
         map, "after-merge-" + merger->getName() + "-#" + StringUtils::formatLargeNumber(i + 1));

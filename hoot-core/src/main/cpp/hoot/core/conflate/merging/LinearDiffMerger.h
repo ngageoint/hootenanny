@@ -68,8 +68,6 @@ private:
 
   bool _treatReviewsAsMatches;
 
-  static const bool WRITE_DETAILED_DEBUG_MAPS;
-
   /*
    * TODO
    */

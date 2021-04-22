@@ -35,7 +35,7 @@
 #include <hoot/core/conflate/merging/LinearTagOnlyMerger.h>
 #include <hoot/core/conflate/merging/MultipleSublineMatcherSnapMerger.h>
 #include <hoot/core/conflate/merging/LinearAverageMerger.h>
-#include <hoot/core/conflate/merging/LinearDiffMerger.h>
+//#include <hoot/core/conflate/merging/LinearDiffMerger.h>
 
 namespace hoot
 {
@@ -73,8 +73,9 @@ MergerPtr LinearMergerFactory::getMerger(
   // Use of LinearAverageMerger for geometries signifies that we're doing Average Conflation.
   const bool isAverageConflate =
     ConfigOptions().getGeometryLinearMergerDefault() == LinearAverageMerger::className();
-  const bool isDiffConflate =
-    ConfigOptions().getGeometryLinearMergerDefault() == LinearDiffMerger::className();
+  // Use of LinearDiffMerger for geometries signifies that we're doing Differential Conflation.
+//  const bool isDiffConflate =
+//    ConfigOptions().getGeometryLinearMergerDefault() == LinearDiffMerger::className();
   if (isAttributeConflate)
   {
     merger.reset(
@@ -86,10 +87,12 @@ MergerPtr LinearMergerFactory::getMerger(
       std::dynamic_pointer_cast<LinearMergerAbstract>(merger);
     linearMerger->setMatchedBy(matchedBy);
   }
-  else if (isAverageConflate || isDiffConflate)
+  else if (isAverageConflate)
   {
     return getMerger(eids, std::shared_ptr<SublineStringMatcher>(), matchedBy);
   }
+  // ref conflate default
+  // TODO: How can we use LinearDiffMerger with Network alg?
   else
   {
     merger.reset(new PartialNetworkMerger(eids, edgeMatches, details));
@@ -116,6 +119,9 @@ MergerPtr LinearMergerFactory::getMerger(
     ConfigOptions().getGeometryLinearMergerDefault() == LinearAverageMerger::className();
   if (isAttributeConflate || isAverageConflate)
   {
+    // For Attribute Conflation we do no subline matching at all during merging, so passing in
+    // multiple subline matchers shouldn't ever happen. For Average Conflation we do custom merging
+    // and don't use a subline matcher at all.
     throw IllegalArgumentException(
       "MultipleSublineMatcherSnapMerger may not be used with Attribute or Average Conflation.");
   }

@@ -133,8 +133,6 @@ private:
 
   static int logWarnCount;
 
-  static const bool WRITE_DETAILED_DEBUG_MAPS;
-
   /*
    * Returns true if the way directly connects the left and right ways. There is some tolerance
    * for "directly". See Redmine ticket #951 for details.

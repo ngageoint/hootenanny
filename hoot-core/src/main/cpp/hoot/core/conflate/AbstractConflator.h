@@ -123,8 +123,6 @@ private:
 
   Progress _progress;
 
-  static const bool WRITE_DETAILED_DEBUG_MAPS;
-
   void _removeWholeGroups(MatchSetVector& matchSets);
 
   QString _matchSetToString(const MatchSet& matchSet) const;

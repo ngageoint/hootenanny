@@ -41,6 +41,8 @@ namespace hoot
  * So for instance, you don't try to split road intersections if you're only conflating buildings.
  * Only GeometryTypeCriterion are checked via FilteredByGeometryTypeCriteria. Not sure if this can
  * be extended to check supported matchers for given other types of criteria.
+ *
+ * The match creator related methods here may more appropriately reside in ConflateUtils.
  */
 class SuperfluousConflateOpRemover
 {
@@ -60,6 +62,27 @@ public:
    * @return a list of GeometryTypeCriterion class names
    */
   static QSet<QString> getMatchCreatorGeometryTypeCrits(const bool addParents = true);
+
+  /**
+   * TODO
+   *
+   * @return
+   */
+  static bool pointConflatorPresent();
+
+  /**
+   * TODO
+   *
+   * @return
+   */
+  static bool linearConflatorPresent();
+
+  /**
+   * TODO
+   *
+   * @return
+   */
+  static bool polygonConflatorPresent();
 
 private:
 

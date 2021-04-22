@@ -39,10 +39,6 @@
 namespace hoot
 {
 
-// ONLY ENABLE THIS DURING DEBUGGING; We don't want to tie it to debug.maps.write, as it may
-// produce a very large number of output files.
-const bool LinearDiffMerger::WRITE_DETAILED_DEBUG_MAPS = true;
-
 HOOT_FACTORY_REGISTER(Merger, LinearDiffMerger)
 
 LinearDiffMerger::LinearDiffMerger() :
@@ -184,6 +180,9 @@ bool LinearDiffMerger::_findAndProcessMatch(
   LOG_TRACE(
     "Finding matching subline between: " << way1->getElementId() << " and " <<
     way2->getElementId() << "...");
+  LOG_VART(_sublineMatcher.get());
+  LOG_VART(_sublineMatcher->getClassName());
+  LOG_VART(_sublineMatcher->getSublineMatcherName());
   matched = false;
   WaySublineMatchString match;
   try
@@ -227,9 +226,11 @@ bool LinearDiffMerger::_findAndProcessMatch(
   else if (newWayIds.size() == 2)
   {
     // If the split resulted in multiple way, put them temporarily into a relation, which we'll
-    // collapse later.
+    // collapse later. Be sure to give this relation a type, or it won't get collapsed.
     RelationPtr relation =
-      std::make_shared<Relation>(Status::Unknown2, _map->createNextRelationId());
+      std::make_shared<Relation>(
+        Status::Unknown2, _map->createNextRelationId(), way2->getCircularError(),
+        MetadataTags::RelationMultilineString());
     relation->setTag(MetadataTags::HootMultilineString(), "yes");
     for (std::vector<ElementId>::const_iterator it = newWayIds.begin(); it != newWayIds.end();
          ++it)
@@ -245,7 +246,7 @@ bool LinearDiffMerger::_findAndProcessMatch(
       "Replacing " << way2->getElementId() << " with " << relation->getElementId() << "...");
     replaced.emplace_back(way2->getElementId(), relation->getElementId());
   }
-  if (WRITE_DETAILED_DEBUG_MAPS)
+  if (ConfigOptions().getDebugMapsWrite() && ConfigOptions().getDebugMapsWriteDetailed())
   {
     OsmMapWriterFactory::writeDebugMap(
       _map,

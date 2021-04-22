@@ -29,6 +29,7 @@
 // hoot
 #include <hoot/core/algorithms/changeset/MultipleChangesetProvider.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
+#include <hoot/core/conflate/SuperfluousConflateOpRemover.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonMatch.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
 #include <hoot/core/criterion/HighwayCriterion.h>
@@ -71,9 +72,6 @@ namespace hoot
 {
 
 int DiffConflator::logWarnCount = 0;
-// ONLY ENABLE THIS DURING DEBUGGING; We don't want to tie it to debug.maps.write, as it may
-// produce a very large number of output files.
-const bool DiffConflator::WRITE_DETAILED_DEBUG_MAPS = false;
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, DiffConflator)
 
@@ -145,8 +143,10 @@ void DiffConflator::apply(OsmMapPtr& map)
 
   if (!ConfigOptions().getConflateMatchOnly())
   {
-    // TODO: optimizing matches breaks a bunch of non-linear element tests
-    if (!ConfigOptions().getDifferentialRemovePartialMatchesAsWhole())
+
+    // TODO:
+    if (!ConfigOptions().getDifferentialRemovePartialMatchesAsWhole() &&
+        SuperfluousConflateOpRemover::linearConflatorPresent())
     {
       _updateProgress(_currentStep - 1, "Optimizing feature matches...");
       _matchSets = _optimizeMatches();
@@ -174,7 +174,8 @@ void DiffConflator::apply(OsmMapPtr& map)
 
     // We're eventually getting rid of all matches from the output, but in order to make the road
     // snapping work correctly we'll get rid of secondary elements in matches first.
-    if (!ConfigOptions().getDifferentialRemovePartialMatchesAsWhole())
+    if (!ConfigOptions().getDifferentialRemovePartialMatchesAsWhole() &&
+        SuperfluousConflateOpRemover::linearConflatorPresent())
     {
       _removePartialSecondaryMatchElements();
     }

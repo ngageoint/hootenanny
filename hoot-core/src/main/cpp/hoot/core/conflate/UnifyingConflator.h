@@ -63,10 +63,6 @@ public:
   { return "Conflates two inputs maps into one with Unifying Conflation"; }
 
   unsigned int getNumSteps() const override;
-
-private:
-
-  static const bool WRITE_DETAILED_DEBUG_MAPS;
 };
 
 }

@@ -72,9 +72,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(Merger, LinearSnapMerger)
 
-// ONLY ENABLE THIS DURING DEBUGGING; We don't want to tie it to debug.maps.write, as it may
-// produce a very large number of files.
-const bool LinearSnapMerger::WRITE_DETAILED_DEBUG_MAPS = true;
 int LinearSnapMerger::logWarnCount = 0;
 
 LinearSnapMerger::LinearSnapMerger() :
@@ -257,7 +254,7 @@ bool LinearSnapMerger::_checkForIdenticalElements(const ElementPtr& e1, const El
     // remove the second element and any reviews that contain the element
     RemoveReviewsByEidOp(remove->getElementId(), true).apply(_map);
 
-    if (WRITE_DETAILED_DEBUG_MAPS)
+    if (ConfigOptions().getDebugMapsWrite() && ConfigOptions().getDebugMapsWriteDetailed())
     {
       OsmMapWriterFactory::writeDebugMap(
        _map, "LinearSnapMerger-merged-identical-elements" + _eidLogString);
@@ -281,7 +278,7 @@ void LinearSnapMerger::_mergeTags(
   {
     e1Match->setTag(MetadataTags::HootMatchedBy(), _matchedBy);
   }
-  if (WRITE_DETAILED_DEBUG_MAPS)
+  if (ConfigOptions().getDebugMapsWrite() && ConfigOptions().getDebugMapsWriteDetailed())
   {
     OsmMapWriterFactory::writeDebugMap(_map, "LinearSnapMerger-after-tag-merging" + _eidLogString);
   }
@@ -367,7 +364,7 @@ void LinearSnapMerger::_snapEnds(ElementPtr snapee, ElementPtr snapTo) const
     _snapEnds(snapeeWays[i], snapeeWays[i], snapToWays[i]);
   }
 
-  if (WRITE_DETAILED_DEBUG_MAPS)
+  if (ConfigOptions().getDebugMapsWrite() && ConfigOptions().getDebugMapsWriteDetailed())
   {
     OsmMapWriterFactory::writeDebugMap(_map, "LinearSnapMerger-after-snap-ends" + _eidLogString);
   }
@@ -575,7 +572,7 @@ void LinearSnapMerger::_splitElement(
     LOG_VART(replaced);
   }
 
-  if (WRITE_DETAILED_DEBUG_MAPS)
+  if (ConfigOptions().getDebugMapsWrite() && ConfigOptions().getDebugMapsWriteDetailed())
   {
     OsmMapWriterFactory::writeDebugMap(_map, "LinearSnapMerger-after-way-split" + _eidLogString);
   }
@@ -691,7 +688,7 @@ void LinearSnapMerger::_dropSecondaryElements(
   // Remove reviews e2 is involved in.
   RemoveReviewsByEidOp(eid2, true).apply(_map);
 
-  if (WRITE_DETAILED_DEBUG_MAPS)
+  if (ConfigOptions().getDebugMapsWrite() && ConfigOptions().getDebugMapsWriteDetailed())
   {
     OsmMapWriterFactory::writeDebugMap(
       _map, "LinearSnapMerger-after-dropping-secondary-elements" + _eidLogString);
@@ -708,7 +705,7 @@ void LinearSnapMerger::_swapSecondaryElementWithScraps(
   ReplaceElementOp(matchElement->getElementId(), scraps->getElementId(), true).apply(_map);
   ReplaceElementOp(secElementId, scraps->getElementId(), true).apply(_map);
 
-  if (WRITE_DETAILED_DEBUG_MAPS)
+  if (ConfigOptions().getDebugMapsWrite() && ConfigOptions().getDebugMapsWriteDetailed())
   {
     OsmMapWriterFactory::writeDebugMap(
       _map, "LinearSnapMerger-after-swap-secondary-elements-with-scraps" + _eidLogString);
@@ -754,7 +751,7 @@ void LinearSnapMerger::_removeSplitWay(
     LOG_TRACE("Removing e1: " << eid1 << "...");
     RemoveReviewsByEidOp(eid1, true).apply(_map);
   }
-  if (WRITE_DETAILED_DEBUG_MAPS)
+  if (ConfigOptions().getDebugMapsWrite() && ConfigOptions().getDebugMapsWriteDetailed())
   {
     OsmMapWriterFactory::writeDebugMap(
       _map, "LinearSnapMerger-after-split-way-removal" + _eidLogString);

@@ -48,9 +48,6 @@ namespace hoot
 {
 
 int LinearMergerAbstract::logWarnCount = 0;
-// ONLY ENABLE THIS DURING DEBUGGING; We don't want to tie it to debug.maps.write, as it may
-// produce a very large number of files.
-const bool LinearMergerAbstract::WRITE_DETAILED_DEBUG_MAPS = false;
 
 LinearMergerAbstract::LinearMergerAbstract(
   const std::set<std::pair<ElementId, ElementId>>& pairs,
@@ -206,7 +203,7 @@ void LinearMergerAbstract::_removeSpans(const ElementPtr& e1, const ElementPtr& 
     }
   }
 
-  if (WRITE_DETAILED_DEBUG_MAPS)
+  if (ConfigOptions().getDebugMapsWrite() && ConfigOptions().getDebugMapsWriteDetailed())
   {
     OsmMapWriterFactory::writeDebugMap(
       _map, "LinearMergerAbstract-after-remove-spans" + _eidLogString);

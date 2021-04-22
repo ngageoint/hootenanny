@@ -29,6 +29,7 @@
 
 // Hoot
 #include <hoot/core/conflate/DiffConflator.h>
+#include <hoot/core/conflate/network/NetworkMatchCreator.h>
 #include <hoot/core/criterion/ConflatableElementCriterion.h>
 #include <hoot/core/criterion/NonConflatableCriterion.h>
 #include <hoot/core/io/IoUtils.h>
@@ -152,6 +153,12 @@ void ConflateUtils::writeDiff(const QString& mapUrl1, const QString& mapUrl2,
     "Wrote the diff output of size: " << StringUtils::formatLargeNumber(diffMap->size()) <<
     " in: " << StringUtils::millisecondsToDhms(timer.elapsed()));
   timer.restart();
+}
+
+bool ConflateUtils::isNetworkConflate()
+{
+  return
+    conf().getList(ConfigOptions::getMatchCreatorsKey()).contains(NetworkMatchCreator::className());
 }
 
 }

@@ -290,4 +290,19 @@ bool SuperfluousConflateOpRemover::_isGeometryTypeCrit(const QString& className)
   return false;
 }
 
+bool SuperfluousConflateOpRemover::pointConflatorPresent()
+{
+  return getMatchCreatorGeometryTypeCrits().contains(PointCriterion::className());
+}
+
+bool SuperfluousConflateOpRemover::linearConflatorPresent()
+{
+  return getMatchCreatorGeometryTypeCrits().contains(LinearCriterion::className());
+}
+
+bool SuperfluousConflateOpRemover::polygonConflatorPresent()
+{
+  return getMatchCreatorGeometryTypeCrits().contains(PolygonCriterion::className());
+}
+
 }

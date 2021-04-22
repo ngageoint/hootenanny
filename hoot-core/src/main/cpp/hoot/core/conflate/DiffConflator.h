@@ -198,7 +198,6 @@ private:
   QString _unifiedChangesetStats;
 
   static int logWarnCount;
-  static const bool WRITE_DETAILED_DEBUG_MAPS;
 
   /*
    * Cleans up any resources used by the object during conflation. This also makes exceptions that
