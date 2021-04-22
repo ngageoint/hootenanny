@@ -50,10 +50,8 @@ public:
   WaySubline(const WayLocation& start, const WayLocation& end);
   WaySubline(const WaySubline& from);
   WaySubline(const WaySubline& from, const ConstOsmMapPtr& newMap);
-  WaySubline(const ConstWayPtr& way, const ConstOsmMapPtr& map);
 
   WaySubline& operator=(const WaySubline& from);
-  bool operator<(const WaySubline& from) const;
 
   bool contains(const WayLocation& wl) const;
   /**

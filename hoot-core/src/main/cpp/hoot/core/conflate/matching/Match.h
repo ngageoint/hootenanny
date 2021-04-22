@@ -62,8 +62,6 @@ public:
   Match() = default;
   virtual ~Match() = default;
 
-  bool operator<(const Match& from) const;
-
   virtual QString explain() const;
   virtual void setExplain(const QString& /*explainText*/) {}
 

@@ -180,9 +180,6 @@ bool LinearDiffMerger::_findAndProcessMatch(
   LOG_TRACE(
     "Finding matching subline between: " << way1->getElementId() << " and " <<
     way2->getElementId() << "...");
-  LOG_VART(_sublineMatcher.get());
-  LOG_VART(_sublineMatcher->getClassName());
-  LOG_VART(_sublineMatcher->getSublineMatcherName());
   matched = false;
   WaySublineMatchString match;
   try

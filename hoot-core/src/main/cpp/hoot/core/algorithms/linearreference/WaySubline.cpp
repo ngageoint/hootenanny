@@ -68,26 +68,6 @@ _end(end)
 {
 }
 
-WaySubline::WaySubline(const ConstWayPtr& way, const ConstOsmMapPtr& map)
-{
-  _start = WayLocation(map, way, 0.0);
-  if (_start.isValid())
-  {
-    LOG_VART(_start);
-    const double length = ElementGeometryUtils::calculateLength(way, map);
-    LOG_VART(length);
-    if (length != 0.0)
-    {
-      _end = WayLocation(map, way, length);
-      LOG_VART(_end);
-    }
-  }
-  else
-  {
-    _start = WayLocation();
-  }
-}
-
 WaySubline& WaySubline::operator=(const WaySubline& from)
 {
   if (this != &from)
@@ -96,11 +76,6 @@ WaySubline& WaySubline::operator=(const WaySubline& from)
     _end = from.getEnd();
   }
   return *this;
-}
-
-bool WaySubline::operator<(const WaySubline& from) const
-{
-  return this->getStart() < from.getStart() && this->getEnd() < from.getEnd();
 }
 
 bool operator==(const WaySubline& a, const WaySubline& b)

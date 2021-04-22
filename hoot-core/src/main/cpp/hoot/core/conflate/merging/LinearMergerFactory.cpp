@@ -35,7 +35,6 @@
 #include <hoot/core/conflate/merging/LinearTagOnlyMerger.h>
 #include <hoot/core/conflate/merging/MultipleSublineMatcherSnapMerger.h>
 #include <hoot/core/conflate/merging/LinearAverageMerger.h>
-//#include <hoot/core/conflate/merging/LinearDiffMerger.h>
 
 namespace hoot
 {
@@ -73,9 +72,6 @@ MergerPtr LinearMergerFactory::getMerger(
   // Use of LinearAverageMerger for geometries signifies that we're doing Average Conflation.
   const bool isAverageConflate =
     ConfigOptions().getGeometryLinearMergerDefault() == LinearAverageMerger::className();
-  // Use of LinearDiffMerger for geometries signifies that we're doing Differential Conflation.
-//  const bool isDiffConflate =
-//    ConfigOptions().getGeometryLinearMergerDefault() == LinearDiffMerger::className();
   if (isAttributeConflate)
   {
     merger.reset(
@@ -91,8 +87,6 @@ MergerPtr LinearMergerFactory::getMerger(
   {
     return getMerger(eids, std::shared_ptr<SublineStringMatcher>(), matchedBy);
   }
-  // ref conflate default
-  // TODO: How can we use LinearDiffMerger with Network alg?
   else
   {
     merger.reset(new PartialNetworkMerger(eids, edgeMatches, details));
