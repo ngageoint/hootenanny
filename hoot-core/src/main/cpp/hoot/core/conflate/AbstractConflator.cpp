@@ -39,6 +39,8 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MemoryUsageChecker.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonMergerCreator.h>
+#include <hoot/core/conflate/matching/MatchClassification.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -287,6 +289,11 @@ void AbstractConflator::_replaceElementIds(
 
 void AbstractConflator::_applyMergers(const std::vector<MergerPtr>& mergers, OsmMapPtr& map)
 {
+  if (mergers.empty())
+  {
+    return;
+  }
+
   QElapsedTimer mergersTimer;
   mergersTimer.start();
 
@@ -365,6 +372,132 @@ void AbstractConflator::_updateProgress(const int currentStep, const QString mes
   {
     _progress.setFromRelative(
       (float)currentStep / (float)getNumSteps(), Progress::JobState::Running, message);
+  }
+}
+
+void AbstractConflator::_createMergers(std::vector<MergerPtr>& relationMergers)
+{
+  // POI/Polygon matching is unique in that it is the only non-generic geometry type matcher that
+  // can duplicate matches with other non-generic geometry type matchers (namely POI and Building).
+  // For all intra-dataset matching, the default is to convert all matches for a feature to a review
+  // if it is also involved in another match. It has been found that POI/Polygon Conflation performs
+  // better if these matches are kept when they have features that overlap with a POI/POI
+  // match/review, as the overall number of reviews can increase too substantially otherwise (see
+  // poi.polygon.match.takes.precedence.over.poi.to.poi.review).
+
+  // An alternative way to deal with this is if there are POI/Polygon matches sharing elements with
+  // a POI matcher, then mark all matches involved as reviews before having each MergerCreator
+  // create Mergers (poi.polygon.match.takes.precedence.over.poi.to.poi.review=false). Note that
+  // we're only doing this right now for POI matches and not Building matches, as it hasn't been
+  // seen as necessary for building matches so far.
+
+  if (!ConfigOptions().getPoiPolygonMatchTakesPrecedenceOverPoiToPoiReview())
+  {
+    // TODO: need a way to not hardcode the POI match name...get it from ScriptMatch somehow?
+    PoiPolygonMergerCreator::convertSharedMatchesToReviews(
+      _matchSets, _mergers, QStringList("POI"));
+  }
+
+  // TODO: Would it help to sort the matches so the biggest or best ones get merged first? (#2912)
+
+  LOG_DEBUG(
+    "Converting " << StringUtils::formatLargeNumber(_matchSets.size()) <<
+    " match sets to mergers...");
+  for (size_t i = 0; i < _matchSets.size(); ++i)
+  {
+    PROGRESS_INFO(
+      "Converting match set " << StringUtils::formatLargeNumber(i + 1) << " / " <<
+      StringUtils::formatLargeNumber(_matchSets.size()) << " to a merger...");
+
+    _mergerFactory->createMergers(_map, _matchSets[i], _mergers);
+
+    LOG_TRACE(
+      "Converted match set " << StringUtils::formatLargeNumber(i + 1) << " to " <<
+      StringUtils::formatLargeNumber(_mergers.size()) << " merger(s).")
+  }
+  MemoryUsageChecker::getInstance().check();
+  LOG_VART(_mergers.size());
+
+  LOG_DEBUG(Tgs::SystemInfo::getCurrentProcessMemoryUsageString());
+  _mapElementIdsToMergers();
+  LOG_DEBUG(Tgs::SystemInfo::getCurrentProcessMemoryUsageString());
+
+  // Separate mergers that merge relations from other mergers. We want to run them very last so that
+  // they have the latest version of their members to work with.
+  std::vector<MergerPtr> nonRelationMergers;
+  for (std::vector<MergerPtr>::const_iterator mergersItr = _mergers.begin();
+       mergersItr != _mergers.end(); ++mergersItr)
+  {
+    MergerPtr merger = *mergersItr;
+    LOG_VART(merger->getName());
+    if (merger->getName().contains("CollectionRelation"))
+    {
+      relationMergers.push_back(merger);
+    }
+    else
+    {
+      nonRelationMergers.push_back(merger);
+    }
+  }
+  _mergers = nonRelationMergers;
+  LOG_VARD(_mergers.size());
+  LOG_VARD(relationMergers.size());
+
+  _stats.append(SingleStat("Create Mergers Time (sec)", _timer.getElapsedAndRestart()));
+}
+
+void AbstractConflator::_mergeFeatures(const std::vector<MergerPtr>& relationMergers)
+{
+  _applyMergers(_mergers, _map);
+  _applyMergers(relationMergers, _map);
+
+  MemoryUsageChecker::getInstance().check();
+  OsmMapWriterFactory::writeDebugMap(_map, "after-merging");
+
+  LOG_DEBUG(Tgs::SystemInfo::getCurrentProcessMemoryUsageString());
+  const size_t mergerCount = _mergers.size() + relationMergers.size();
+  LOG_DEBUG(Tgs::SystemInfo::getCurrentProcessMemoryUsageString());
+  double mergersTime = _timer.getElapsedAndRestart();
+  _stats.append(SingleStat("Apply Mergers Time (sec)", mergersTime));
+  _stats.append(SingleStat("Mergers Applied per Second", (double)mergerCount / mergersTime));
+}
+
+void AbstractConflator::_addConflateScoreTags(
+  const ElementPtr& e, const MatchClassification& matchClassification,
+  const MatchThreshold& matchThreshold) const
+{
+  Tags& tags = e->getTags();
+  tags.appendValue(MetadataTags::HootScoreMatch(), matchClassification.getMatchP());
+  tags.appendValue(MetadataTags::HootScoreMiss(), matchClassification.getMissP());
+  tags.appendValue(MetadataTags::HootScoreReview(), matchClassification.getReviewP());
+  // The thresholds are global, so don't append.
+  tags.set(MetadataTags::HootScoreMatchThreshold(), matchThreshold.getMatchThreshold());
+  tags.set(MetadataTags::HootScoreMissThreshold(), matchThreshold.getMissThreshold());
+  tags.set(MetadataTags::HootScoreReviewThreshold(), matchThreshold.getReviewThreshold());
+}
+
+void AbstractConflator::_addConflateScoreTags()
+{
+  for (size_t i = 0; i < _matches.size(); i++)
+  {
+    ConstMatchPtr match = _matches[i];
+    const MatchClassification& matchClassification = match->getClassification();
+    std::shared_ptr<const MatchThreshold> matchThreshold = match->getThreshold();
+    std::set<std::pair<ElementId, ElementId>> pairs = match->getMatchPairs();
+    for (std::set<std::pair<ElementId, ElementId>>::const_iterator it = pairs.begin();
+         it != pairs.end(); ++it)
+    {
+      ElementPtr e1 = _map->getElement(it->first);
+      ElementPtr e2 = _map->getElement(it->second);
+
+      LOG_TRACE(
+        "Adding score tags to " << e1->getElementId() << " and " << e2->getElementId() << "...");
+
+      _addConflateScoreTags(e1, matchClassification, *matchThreshold);
+      _addConflateScoreTags(e2, matchClassification, *matchThreshold);
+      e1->getTags().appendValue(MetadataTags::HootScoreUuid(), e2->getTags().getCreateUuid());
+      e2->getTags().appendValue(MetadataTags::HootScoreUuid(), e1->getTags().getCreateUuid());
+    }
   }
 }
 

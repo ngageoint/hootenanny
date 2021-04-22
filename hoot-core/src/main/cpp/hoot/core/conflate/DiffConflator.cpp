@@ -61,8 +61,7 @@
 #include <hoot/core/ops/WayJoinerOp.h>
 #include <hoot/core/util/ConfigUtils.h>
 #include <hoot/core/io/OsmChangesetFileWriter.h>
-#include <hoot/core/conflate/merging/LinearDiffMerger.h>
-#include <hoot/core/conflate/highway/HighwayMatch.h>
+//#include <hoot/core/conflate/highway/HighwayMatch.h>
 #include <hoot/core/conflate/ConflateInfoCache.h>
 
 // Qt
@@ -74,7 +73,7 @@ namespace hoot
 int DiffConflator::logWarnCount = 0;
 // ONLY ENABLE THIS DURING DEBUGGING; We don't want to tie it to debug.maps.write, as it may
 // produce a very large number of output files.
-const bool DiffConflator::WRITE_DETAILED_DEBUG_MAPS = true;
+const bool DiffConflator::WRITE_DETAILED_DEBUG_MAPS = false;
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, DiffConflator)
 
@@ -136,65 +135,87 @@ void DiffConflator::apply(OsmMapPtr& map)
   _intraDatasetMatchOnlyElementIds.clear();
   _intraDatasetElementIdsPopulated = false;
   _createMatches();
+  if (ConfigOptions().getWriterIncludeConflateScoreTags())
+  {
+    // Add score tags to all matches that have some score component.
+    _addConflateScoreTags();
+  }
 
   _currentStep++;
 
-  // Ref conflate optimizes matches, but we aren't currently doing that for diff.
-//  _updateProgress(_currentStep - 1, "Optimizing feature matches...");
-//  MatchSetVector matchSets;
-//  MatchSetVector matchSets = _optimizeMatches();
-//  _currentStep++;
-
-  if (_conflateTags)
+  if (!ConfigOptions().getConflateMatchOnly())
   {
-    // Use matches to calculate and store tag diff. We must do this before we create the map diff,
-    // because that operation deletes all of the info needed for calculating the tag diff.
-    _updateProgress(currentStep - 1, "Storing tag differentials...");
-    _calcAndStoreTagChanges();
-    _currentStep++;
-  }
-
-  // Get rid of everything from the ref1 map that matched something in the ref2 map.
-
-  QString message = "Dropping match conflicts";
-  if (ConfigOptions().getDifferentialSnapUnconnectedRoads())
-  {
-    message += " and snapping roads";
-  }
-  message += "...";
-  _updateProgress(currentStep - 1, message);
-
-  // We're eventually getting rid of all matches from the output, but in order to make the road
-  // snapping work correctly we'll get rid of secondary elements in matches first.
-  _removeMatchElements(Status::Unknown2);
-  MemoryUsageChecker::getInstance().check();
-
-  // Eventually, we could extend this snapping to all linear feature types.
-  if (ConfigOptions().getDifferentialSnapUnconnectedRoads())
-  {
-    if (conflateInfoCache->elementCriterionInUseByActiveMatcher(HighwayCriterion::className()))
+    // TODO: optimizing matches breaks a bunch of non-linear element tests
+    if (!ConfigOptions().getDifferentialRemovePartialMatchesAsWhole())
     {
-      // Let's try to snap disconnected ref2 roads back to ref1 roads. This has to done before
-      // dumping the ref elements in the matches, or the roads we need to snap back to won't be
-      // there anymore.
-      _numSnappedWays = _snapSecondaryRoadsBackToRef();
-      MemoryUsageChecker::getInstance().check();
+      _updateProgress(_currentStep - 1, "Optimizing feature matches...");
+      _matchSets = _optimizeMatches();
+      _currentStep++;
+    }
+
+    if (_conflateTags)
+    {
+      // Use matches to calculate and store tag diff. We must do this before we create the map diff,
+      // because that operation deletes all of the info needed for calculating the tag diff.
+      _updateProgress(currentStep - 1, "Storing tag differentials...");
+      _calcAndStoreTagChanges();
+      _currentStep++;
+    }
+
+    // Get rid of everything from the ref1 map that matched something in the ref2 map.
+
+    QString message = "Dropping match conflicts";
+    if (ConfigOptions().getDifferentialSnapUnconnectedRoads())
+    {
+      message += " and snapping roads";
+    }
+    message += "...";
+    _updateProgress(currentStep - 1, message);
+
+    // We're eventually getting rid of all matches from the output, but in order to make the road
+    // snapping work correctly we'll get rid of secondary elements in matches first.
+    if (!ConfigOptions().getDifferentialRemovePartialMatchesAsWhole())
+    {
+      _removePartialSecondaryMatchElements();
     }
     else
     {
-      LOG_TRACE("Skipping road snapping as conflation is not configured for road features.")
+      _removeMatchElementsCompletely(Status::Unknown2);
     }
+    MemoryUsageChecker::getInstance().check();
+
+    // Eventually, we could extend this snapping to all linear feature types.
+    if (ConfigOptions().getDifferentialSnapUnconnectedRoads())
+    {
+      if (conflateInfoCache->elementCriterionInUseByActiveMatcher(HighwayCriterion::className()))
+      {
+        // Let's try to snap disconnected ref2 roads back to ref1 roads. This has to done before
+        // dumping the ref elements in the matches, or the roads we need to snap back to won't be
+        // there anymore.
+        _numSnappedWays = _snapSecondaryRoadsBackToRef();
+        MemoryUsageChecker::getInstance().check();
+      }
+      else
+      {
+        LOG_TRACE("Skipping road snapping as conflation is not configured for road features.")
+      }
+    }
+
+    if (ConfigOptions().getDifferentialRemoveReferenceData())
+    {
+      _removeRefData();
+    }
+
+    if (!ConfigOptions().getWriterIncludeDebugTags())
+    {
+      _removeMetadataTags();
+    }
+
+    _currentStep++;
   }
 
-  if (ConfigOptions().getDifferentialRemoveReferenceData())
-  {
-    _removeRefData();
-  }
-
-  if (!ConfigOptions().getWriterIncludeDebugTags())
-  {
-    _removeMetadataTags();
-  }
+  // free up any used resources
+  AbstractConflator::_reset();
 }
 
 void DiffConflator::_discardUnconflatableElements()
@@ -361,7 +382,7 @@ long DiffConflator::_snapSecondaryRoadsBackToRef()
   return roadSnapper.getNumFeaturesAffected();
 }
 
-void DiffConflator::_removeMatchElements(const Status& status, const bool forceComplete)
+void DiffConflator::_removeMatchElementsCompletely(const Status& status)
 {
   size_t mapSizeBefore = _map->size();
   LOG_DEBUG(
@@ -392,16 +413,15 @@ void DiffConflator::_removeMatchElements(const Status& status, const bool forceC
       LOG_VART(match->getName());
       LOG_VART(match->getMatchMembers());
       LOG_VART(ConfigOptions().getDifferentialRemovePartialMatchesAsWhole());
-      LOG_VART(forceComplete);
 
       // Get the element IDs involved in the match and...
       std::set<std::pair<ElementId, ElementId>> singleMatchPairs = match->getMatchPairs();
-      if (ConfigOptions().getDifferentialRemovePartialMatchesAsWhole() || forceComplete ||
-          match->getMatchMembers() != MatchMembers::Polyline ||
-          // TODO: make this work for all linear ScriptMatch instances; going to involve making
-          // ScriptMatch for linear conflation return the subline matcher it used
-          match->getName() != HighwayMatch::MATCH_NAME)
-      {
+//      if (ConfigOptions().getDifferentialRemovePartialMatchesAsWhole() || forceComplete ||
+//          match->getMatchMembers() != MatchMembers::Polyline ||
+//          // TODO: make this work for all linear ScriptMatch instances; going to involve making
+//          // ScriptMatch for linear conflation return the subline matcher it used
+//          match->getName() != HighwayMatch::MATCH_NAME)
+//      {
         // ...either remove the elements involved in the match completely...
         for (std::set<std::pair<ElementId, ElementId>>::const_iterator pairItr =
                singleMatchPairs.begin();
@@ -409,37 +429,8 @@ void DiffConflator::_removeMatchElements(const Status& status, const bool forceC
         {
           _removeMatchElementPairCompletely(match, *pairItr, status);
         }
-      }
-      else
-      {
-        // ...or create a merger to remove the portions of the elements that matched together to be
-        // actually removed in the next step.
-        LOG_TRACE(
-          "Creating merger to remove match element pairs partially: " << singleMatchPairs << "...");
-        std::shared_ptr<const HighwayMatch> highwayMatch =
-          std::dynamic_pointer_cast<const HighwayMatch>(match);
-        LOG_VART(highwayMatch->getSublineMatcher()->getSublineMatcherName());
-
-        std::shared_ptr<LinearDiffMerger> merger =
-          std::make_shared<LinearDiffMerger>(singleMatchPairs, highwayMatch->getSublineMatcher());
-        merger->setTreatReviewsAsMatches(treatReviewsAsMatches);
-        _mergers.push_back(merger);
-      }
+      //}
     }
-  }
-
-  if (!ConfigOptions().getDifferentialRemovePartialMatchesAsWhole() && _mergers.size() > 0)
-  {
-    // Remove the single merged subline from the way.
-
-    QElapsedTimer mergersTimer;
-    mergersTimer.start();
-    _mapElementIdsToMergers();
-    LOG_STATUS("Applying " << StringUtils::formatLargeNumber(_mergers.size()) << " mergers...");
-    _applyMergers(_mergers, _map);
-    LOG_INFO(
-      "Applied " << StringUtils::formatLargeNumber(_mergers.size()) << " mergers in " <<
-      StringUtils::millisecondsToDhms(mergersTimer.elapsed()) << ".");
   }
 
   LOG_TRACE(
@@ -448,7 +439,7 @@ void DiffConflator::_removeMatchElements(const Status& status, const bool forceC
   OsmMapWriterFactory::writeDebugMap(_map, "after-removing-" + status.toString() + "-matches");
 }
 
-bool DiffConflator::_satisfiesElementRemovalCondition(
+bool DiffConflator::_satisfiesCompleteElementRemovalCondition(
   const ConstElementPtr& element, const Status& status, const ConstMatchPtr& match) const
 {
   ElementCriterionPtr notSnappedCrit(
@@ -480,7 +471,7 @@ void DiffConflator::_removeMatchElementPairCompletely(
     ElementPtr e1 = _map->getElement(elementPair.first);
     if (e1)
     {
-      if (_satisfiesElementRemovalCondition(e1, status, match))
+      if (_satisfiesCompleteElementRemovalCondition(e1, status, match))
       {
         LOG_TRACE(
           "Removing entire element: " << e1->getElementId() <<
@@ -494,7 +485,7 @@ void DiffConflator::_removeMatchElementPairCompletely(
     ElementPtr e2 = _map->getElement(elementPair.second);
     if (e2)
     {
-      if (_satisfiesElementRemovalCondition(e2, status, match))
+      if (_satisfiesCompleteElementRemovalCondition(e2, status, match))
       {
         LOG_TRACE(
           "Removing entire element: " << e2->getElementId() <<
@@ -505,6 +496,13 @@ void DiffConflator::_removeMatchElementPairCompletely(
   }
 }
 
+void DiffConflator::_removePartialSecondaryMatchElements()
+{
+  std::vector<MergerPtr> relationMergers;
+  _createMergers(relationMergers);
+  _mergeFeatures(relationMergers);
+}
+
 void DiffConflator::_removeRefData()
 {
   LOG_INFO("\tRemoving all reference elements...");
@@ -512,7 +510,7 @@ void DiffConflator::_removeRefData()
   // _map at this point contains all of input1, we are going to delete everything left that
   // belongs to a match pair. Then we will delete all remaining input1 items...leaving us with the
   // differential that we want.
-  _removeMatchElements(Status::Unknown1, true);
+  _removeMatchElementsCompletely(Status::Unknown1);
   MemoryUsageChecker::getInstance().check();
 
   // Now remove input1 elements. Don't remove any features involved in a snap, as they are needed
@@ -537,6 +535,8 @@ void DiffConflator::_removeRefData()
 
 void DiffConflator::addChangesToMap(OsmMapPtr map, ChangesetProviderPtr pChanges)
 {
+  LOG_TRACE("Adding changes to map...");
+
   while (pChanges->hasMoreChanges())
   {
     Change c = pChanges->readNextChange();
@@ -744,6 +744,8 @@ void DiffConflator::writeChangeset(
   OsmMapPtr pResultMap, QString& output, bool separateOutput,
   const ChangesetStatsFormat& changesetStatsFormat, const QString& osmApiDbUrl)
 {
+  LOG_DEBUG("Writing changeset: " << output << "...");
+
   if (output.endsWith(".osc.sql") && osmApiDbUrl.trimmed().isEmpty())
   {
     throw IllegalArgumentException(
@@ -860,6 +862,24 @@ void DiffConflator::_removeMetadataTags()
   tagKeysToRemove.append(MetadataTags::HootSnapped());
   RemoveTagsVisitor tagRemover(tagKeysToRemove);
   _map->visitRw(tagRemover);
+}
+
+unsigned int DiffConflator::getNumSteps() const
+{
+  unsigned int numSteps = 4;
+  if (!_conflateTags)
+  {
+    numSteps--;
+  }
+  if (!ConfigOptions().getConflateMatchOnly())
+  {
+    numSteps--;
+  }
+  if (!ConfigOptions().getDifferentialRemovePartialMatchesAsWhole())
+  {
+    numSteps--;
+  }
+  return numSteps;
 }
 
 }

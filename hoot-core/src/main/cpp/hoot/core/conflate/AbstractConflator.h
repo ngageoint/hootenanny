@@ -76,6 +76,7 @@ protected:
   const MatchFactory& _matchFactory;
   std::shared_ptr<MatchThreshold> _matchThreshold;
   std::vector<ConstMatchPtr> _matches;
+  MatchSetVector _matchSets;
 
   std::shared_ptr<MergerFactory> _mergerFactory;
   HashMap<ElementId, std::vector<MergerPtr>> _e2m;
@@ -93,8 +94,8 @@ protected:
    */
   virtual void _reset();
 
-  virtual void _createMatches();
-  virtual MatchSetVector _optimizeMatches();
+  void _createMatches();
+  MatchSetVector _optimizeMatches();
 
   /*
    * Populates the _e2m map with a mapping of ElementIds to their respective Merger objects. This
@@ -104,9 +105,17 @@ protected:
    * for an example:
    * http://stackoverflow.com/questions/10064422/java-on-memory-efficient-key-value-store
    */
+  // TODO:
+  void _createMergers(std::vector<MergerPtr>& relationMergers);
+  void _mergeFeatures(const std::vector<MergerPtr>& relationMergers);
+  void _applyMergers(const std::vector<MergerPtr>& mergers, OsmMapPtr& map);
   void _mapElementIdsToMergers();
   void _replaceElementIds(const std::vector<std::pair<ElementId, ElementId>>& replaced);
-  void _applyMergers(const std::vector<MergerPtr>& mergers, OsmMapPtr& map);
+
+  void _addConflateScoreTags();
+  void _addConflateScoreTags(
+    const ElementPtr& e, const MatchClassification& matchClassification,
+    const MatchThreshold& matchThreshold) const;
 
   void _updateProgress(const int currentStep, const QString message);
 

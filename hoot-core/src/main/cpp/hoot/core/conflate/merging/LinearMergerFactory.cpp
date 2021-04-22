@@ -35,6 +35,7 @@
 #include <hoot/core/conflate/merging/LinearTagOnlyMerger.h>
 #include <hoot/core/conflate/merging/MultipleSublineMatcherSnapMerger.h>
 #include <hoot/core/conflate/merging/LinearAverageMerger.h>
+#include <hoot/core/conflate/merging/LinearDiffMerger.h>
 
 namespace hoot
 {
@@ -72,6 +73,8 @@ MergerPtr LinearMergerFactory::getMerger(
   // Use of LinearAverageMerger for geometries signifies that we're doing Average Conflation.
   const bool isAverageConflate =
     ConfigOptions().getGeometryLinearMergerDefault() == LinearAverageMerger::className();
+  const bool isDiffConflate =
+    ConfigOptions().getGeometryLinearMergerDefault() == LinearDiffMerger::className();
   if (isAttributeConflate)
   {
     merger.reset(
@@ -83,7 +86,7 @@ MergerPtr LinearMergerFactory::getMerger(
       std::dynamic_pointer_cast<LinearMergerAbstract>(merger);
     linearMerger->setMatchedBy(matchedBy);
   }
-  else if (isAverageConflate)
+  else if (isAverageConflate || isDiffConflate)
   {
     return getMerger(eids, std::shared_ptr<SublineStringMatcher>(), matchedBy);
   }

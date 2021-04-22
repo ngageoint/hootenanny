@@ -54,7 +54,7 @@ class MatchThreshold;
  * element replace the tags from the input1 element. The output from the tag-differencing
  * will always be an osm changeset (*.osc).
  *
- * Workflow Steps:
+ * Workflow Steps: TODO: update
  *
  * - Store off original map and ref1
  * - Mark ref1 inputs
@@ -165,7 +165,7 @@ public:
 
   void calculateStats(OsmMapPtr pResultMap, QList<SingleStat>& stats);
 
-  unsigned int getNumSteps() const override { return 3; }
+  unsigned int getNumSteps() const override;
 
   QString getGeometryChangesetStats() const { return _geometryChangesetStats; }
   QString getTagChangesetStats() const { return _tagChangesetStats; }
@@ -224,13 +224,16 @@ private:
   QSet<ElementId> _getElementIdsInvolvedInOnlyIntraDatasetMatches(
     const std::vector<ConstMatchPtr>& matches);
 
+  // TODO:
+
   void _removeRefData();
-  bool _satisfiesElementRemovalCondition(
+  bool _satisfiesCompleteElementRemovalCondition(
     const ConstElementPtr& element, const Status& status, const ConstMatchPtr& match) const;
-  void _removeMatchElements(const Status& status, const bool forceComplete = false);
+  void _removeMatchElementsCompletely(const Status& status);
   void _removeMatchElementPairCompletely(
     const ConstMatchPtr& match, const std::pair<ElementId, ElementId>& elementPair,
     const Status& status);
+  void _removePartialSecondaryMatchElements();
   void _removeMetadataTags();
 };
 

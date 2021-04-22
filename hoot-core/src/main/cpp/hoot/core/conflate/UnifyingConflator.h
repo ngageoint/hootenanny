@@ -58,9 +58,7 @@ public:
   void apply(OsmMapPtr& map) override;
 
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
-
   QString getDescription() const override
   { return "Conflates two inputs maps into one with Unifying Conflation"; }
 
@@ -68,17 +66,7 @@ public:
 
 private:
 
-  MatchSetVector _matchSets;
-
   static const bool WRITE_DETAILED_DEBUG_MAPS;
-
-  void _createMergers(std::vector<MergerPtr>& relationMergers);
-  void _mergeFeatures(const std::vector<MergerPtr>& relationMergers);
-
-  void _addConflateScoreTags();
-  void _addConflateScoreTags(
-    const ElementPtr& e, const MatchClassification& matchClassification,
-    const MatchThreshold& matchThreshold) const;
 };
 
 }
