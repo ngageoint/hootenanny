@@ -546,7 +546,7 @@ void OsmMap::replace(const std::shared_ptr<const Element>& from, const QList<Ele
 { 
   const std::shared_ptr<NodeToWayMap>& n2w = getIndex().getNodeToWayMap();
 
-  // do some error checking before we add the new element.
+  // Do some error checking before we add the new element.
   if (from->getElementType() == ElementType::Node &&
     (_listContainsNode(to) == false || to.size() > 1))
   {

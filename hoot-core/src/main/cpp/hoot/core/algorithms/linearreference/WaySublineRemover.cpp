@@ -33,6 +33,9 @@
 #include <hoot/core/algorithms/linearreference/WayLocation.h>
 #include <hoot/core/algorithms/splitter/WaySplitter.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
+#include <hoot/core/ops/RemoveElementByEid.h>
+#include <hoot/core/ops/ReplaceElementOp.h>
+#include <hoot/core/algorithms/linearreference/WaySubline.h>
 
 // Standard
 #include <vector>
@@ -40,12 +43,60 @@
 namespace hoot
 {
 
-std::vector<ElementId> WaySublineRemover::remove(
-  const WayPtr& way, const WayLocation& start, const WayLocation& end, const OsmMapPtr& map)
+std::vector<ElementId> WaySublineRemover::removeSubline(
+  const WayPtr& way, const WaySubline& subline, OsmMapPtr& map)
+{
+  if (!way || !subline.isValid())
+  {
+    LOG_WARN("Invalid way or subline.");
+    return std::vector<ElementId>();
+  }
+
+  LOG_TRACE("Removing subline: " << subline << " from: " << way->getElementId() << "...");
+
+  std::vector<ElementId> newWayIds;
+
+  // If the matching subline runs the entire length of the way, just remove the entire way.
+  if (subline.getStart().isExtreme() && subline.getEnd().isExtreme())
+  {
+    LOG_TRACE(
+      "Subline matches covers entire way; removing entire way: " << way->getElementId());
+    // Use RemoveElementByEid here instead of RecursiveElementRemover so that the way is removed
+    // from its parent before its removal.
+    RemoveElementByEid(way->getElementId()).apply(map);
+  }
+  else
+  {
+    // Otherwise, remove only the portion of the way that overlaps.
+
+    LOG_TRACE("Removing subline from " << way->getElementId() << "...");
+
+    newWayIds = removeSubline(way, subline.getStart(), subline.getEnd(), map);
+    LOG_VART(newWayIds);
+    if (!newWayIds.empty())
+    {
+      // Update references to the modified way.
+      ReplaceElementOp(way->getElementId(), newWayIds.at(0), true).apply(map);
+    }
+    else
+    {
+      LOG_TRACE("No subline removed for " << way->getElementId() << ".");
+    }
+  }
+
+  return newWayIds;
+}
+
+std::vector<ElementId> WaySublineRemover::removeSubline(
+  const WayPtr& way, const WayLocation& start, const WayLocation& end, OsmMapPtr& map)
 {
   if (!MapProjector::isPlanar(map))
   {
     throw IllegalArgumentException("Map must be in a planar projection.");
+  }
+  if (!start.isValid() || !end.isValid())
+  {
+    return std::vector<ElementId>();
   }
 
   LOG_TRACE(

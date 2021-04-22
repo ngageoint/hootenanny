@@ -113,6 +113,9 @@ MergerPtr LinearMergerFactory::getMerger(
     ConfigOptions().getGeometryLinearMergerDefault() == LinearAverageMerger::className();
   if (isAttributeConflate || isAverageConflate)
   {
+    // For Attribute Conflation we do no subline matching at all during merging, so passing in
+    // multiple subline matchers shouldn't ever happen. For Average Conflation we do custom merging
+    // and don't use a subline matcher at all.
     throw IllegalArgumentException(
       "MultipleSublineMatcherSnapMerger may not be used with Attribute or Average Conflation.");
   }

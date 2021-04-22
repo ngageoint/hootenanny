@@ -110,8 +110,6 @@ private:
 
   friend class ScriptMatchTest;
 
-  ElementId _eid1, _eid2;
-
   bool _isWholeGroup;
   QString _matchName;
   bool _neverCausesConflict;

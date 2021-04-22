@@ -35,17 +35,13 @@ namespace hoot
 {
 
 /**
- * @brief The RemoveElementByEid class removes an element from a map.
+ * The RemoveElementByEid class removes an element from a map.
  *
- * Removes an element from a map. First, we will check to see if the
- * element exists as part of other elements in the map. If it does, the
- * element is removed from those others, then removed from the map.
+ * First, we will check to see if the element exists as part of other elements in the map. If it
+ * does, the element is removed from those others and then be removed from the map. If this element
+ * contains children (e.g. multipolygon), the children will not be removed from the map.
  *
- * If this element contains children (e.g. multipolygon) the children will not be
- * removed from the map.
- *
- * If you would like to remove an element and all its children then
- * see RecursiveElementRemover.
+ * If you would like to remove an element and all its children then see RecursiveElementRemover.
  */
 class RemoveElementByEid : public OsmMapOperation
 {
@@ -79,12 +75,6 @@ public:
   QString getName() const override { return className(); }
 
   QString getClassName() const override { return className(); }
-
-  /**
-   * @brief setElementId sets the id of the element to remove
-   * @param eId ElementId
-   */
-  //void setElementId(ElementId eId) {_eIdToRemove = eId; }
 
   /**
    * @brief removeElement Removes an element from a map. If the element exists

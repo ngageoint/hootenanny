@@ -46,16 +46,12 @@ namespace hoot
 {
 
 /**
- * Computes the Maximal Nearest Subline of a given linestring relative
- * to another linestring.
- * The Maximal Nearest Subline of A relative to B is the shortest subline
- * of A which contains all the points of A which are the nearest points to
- * the points in B.
- * This effectively "trims" the ends of A which are not near to B.
- * <p>
- * An exact computation of the MNS would require computing a line Voronoi.
- * For this reason, the algorithm used in this class is heuristic-based.
- * It may compute a geometry which is shorter than the actual MNS.
+ * Computes the Maximal Nearest Subline of a given linestring relative to another linestring. The
+ * Maximal Nearest Subline of A relative to B is the shortest subline of A which contains all the
+ * points of A which are the nearest points to the points in B. This effectively "trims" the ends of
+ * A which are not near to B. An exact computation of the MNS would require computing a line
+ * Voronoi. For this reason, the algorithm used in this class is heuristic-based. It may compute a
+ * geometry which is shorter than the actual MNS.
  *
  * @author RoadMatcher
  * @copyright GPL
@@ -70,10 +66,10 @@ public:
   /**
    * Find the subline in a based on b
    */
-  MaximalNearestSubline(const ConstOsmMapPtr& map, ConstWayPtr a, ConstWayPtr b,
-                        Meters minSplitSize, Meters maxRelevantDistance,
-                        Radians maxRelevantAngle = -1,
-                        Meters headingDelta = ConfigOptions().getWayMatcherHeadingDelta());
+  MaximalNearestSubline(
+    const ConstOsmMapPtr& map, ConstWayPtr a, ConstWayPtr b, Meters minSplitSize,
+    Meters maxRelevantDistance, Radians maxRelevantAngle = -1,
+    Meters headingDelta = ConfigOptions().getWayMatcherHeadingDelta());
 
   /**
    * Computes the interval (range) containing the Maximal Nearest Subline.
@@ -84,7 +80,7 @@ public:
    */
   const std::vector<WayLocation>& getInterval();
 
-  static WayPtr getMaximalNearestSubline(const OsmMapPtr &map, ConstWayPtr a,
+  static WayPtr getMaximalNearestSubline(const OsmMapPtr& map, ConstWayPtr a,
     ConstWayPtr b, Meters minSplitSize, Meters maxRelevantDistance);
 
   /**

@@ -66,8 +66,8 @@ MatchClassification HighwayExpertClassifier::classify(const ConstOsmMapPtr& map,
   return result;
 }
 
-MatchClassification HighwayExpertClassifier::classify(const ConstOsmMapPtr& map,
-  const WaySublineMatch& match)
+MatchClassification HighwayExpertClassifier::classify(
+  const ConstOsmMapPtr& map, const WaySublineMatch& match)
 {
   MatchClassification result;
 
@@ -88,12 +88,32 @@ MatchClassification HighwayExpertClassifier::classify(const ConstOsmMapPtr& map,
   WayPtr sl2 = match.getSubline2().toWay(mapCopy);
 
   ElementToGeometryConverter ec(mapCopy);
-  Meters l1 = ec.convertToLineString(match.getSubline1().getWay())->getLength();
-  Meters l2 = ec.convertToLineString(match.getSubline2().getWay())->getLength();
+  std::shared_ptr<geos::geom::LineString> ls1 =
+    ec.convertToLineString(match.getSubline1().getWay());
+  std::shared_ptr<geos::geom::LineString> ls2 =
+    ec.convertToLineString(match.getSubline2().getWay());
+  if (!ls1 || !ls2)
+  {
+    result.setMissP(1.0);
+    result.setMatchP(0.0);
+    result.setReviewP(0.0);
+    return result;
+  }
+  Meters l1 = ls1->getLength();
+  Meters l2 = ls2->getLength();
 
   // what portion of the original lines is the MNS
   double po1 = ec.convertToLineString(sl1)->getLength() / l1;
   double po2 = ec.convertToLineString(sl2)->getLength() / l2;
+  std::shared_ptr<geos::geom::LineString> sls1 = ec.convertToLineString(sl1);
+  std::shared_ptr<geos::geom::LineString> sls2 = ec.convertToLineString(sl2);
+  if (!sls1 || !sls2)
+  {
+    result.setMissP(1.0);
+    result.setMatchP(0.0);
+    result.setReviewP(0.0);
+    return result;
+  }
 
   // give it a score
   double ps = std::min(po1, po2) / 2.0 + 0.5;

@@ -145,6 +145,10 @@ void MultilineStringMergeRelationCollapser::visit(const ElementPtr& e)
   }
 
   LOG_VART(e->getElementId());
+//  LOG_VART(e);
+//  LOG_VART(
+//    RelationMemberUtils::getRelationMembersDetailString(
+//      std::dynamic_pointer_cast<const Relation>(e), _map));
 
   // Check the relation for any type tags matching the ones we added during configuration. This
   // doesn't handle multiple matching types. It only grabs the first one. No checking is done here
@@ -167,6 +171,7 @@ void MultilineStringMergeRelationCollapser::visit(const ElementPtr& e)
       matchingTypeIsKey = true;
     }
   }
+  LOG_VART(matchingType);
 
   if (!matchingType.isEmpty())
   {
@@ -182,7 +187,7 @@ void MultilineStringMergeRelationCollapser::visit(const ElementPtr& e)
 
       // Get any relations which may own our relation being collapsed.
       const std::vector<ConstRelationPtr> relationsOwningMsRelation =
-        RelationMemberUtils::getContainingRelations(_map, relation->getElementId());
+        RelationMemberUtils::getContainingRelations(relation->getElementId(), _map);
       LOG_VART(relationsOwningMsRelation.size());
 
       // For all the members of our relation being collapsed,

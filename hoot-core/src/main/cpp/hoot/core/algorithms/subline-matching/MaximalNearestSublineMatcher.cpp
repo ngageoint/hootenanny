@@ -100,8 +100,9 @@ WaySublineMatchString MaximalNearestSublineMatcher::findMatch(const ConstOsmMapP
 
   if (subline1->getNodeCount() > 1)
   {
-    std::shared_ptr<LineString> ls = ElementToGeometryConverter(mapCopy).convertToLineString(subline1);
-    if (ls->isValid())
+    std::shared_ptr<LineString> ls =
+      ElementToGeometryConverter(mapCopy).convertToLineString(subline1);
+    if (ls && ls->isValid())
     {
       score = ls->getLength();
     }

@@ -54,8 +54,8 @@ public:
    * @param map map owning the relation
    * @return a detailed relations members string
    */
-  static QString getRelationMembersDetailString(const ConstRelationPtr& relation,
-                                                const ConstOsmMapPtr& map);
+  static QString getRelationMembersDetailString(
+    const ConstRelationPtr& relation, const ConstOsmMapPtr& map);
 
   /**
    * Determines if an element is a member of a relation
@@ -74,8 +74,8 @@ public:
    * @param relationType type of relation to search for
    * @return true if the element is a member of a relation of the specified type; false otherwise
    */
-  static bool isMemberOfRelationWithType(const ConstOsmMapPtr& map, const ElementId& childId,
-                                         const QString& relationType);
+  static bool isMemberOfRelationWithType(
+    const ConstOsmMapPtr& map, const ElementId& childId, const QString& relationType);
 
   /**
    * Determines if an element is a member of a relation that is in a given schema category
@@ -86,8 +86,8 @@ public:
    * @return true if the element is a member of a relation that is in the specified schema category;
    * false otherwise
    */
-  static bool isMemberOfRelationInCategory(const ConstOsmMapPtr& map, const ElementId& childId,
-                                           const QString& schemaCategory);
+  static bool isMemberOfRelationInCategory(
+    const ConstOsmMapPtr& map, const ElementId& childId, const QString& schemaCategory);
 
   /**
    * Determines if an element is a member of a relation that has a given tag key
@@ -99,8 +99,8 @@ public:
    * otherwise
    * @todo This is redundant with isMemberOfRelationSatisfyingCriterion using a TagKeyCriterion.
    */
-  static bool isMemberOfRelationWithTagKey(const ConstOsmMapPtr& map, const ElementId& childId,
-                                           const QString& tagKey);
+  static bool isMemberOfRelationWithTagKey(
+    const ConstOsmMapPtr& map, const ElementId& childId, const QString& tagKey);
 
   /**
    * Determines if an element is contained by any relation in a map
@@ -136,24 +136,33 @@ public:
   /**
    * Determines if an element is a member of a relation that satisfies a specified criterion
    *
-   * @param map map owning the relation and element possessing the input ID
    * @param childId ID of the element child
    * @param criterion criteria which the relation must satisfy
+   * @param map map owning the relation and element possessing the input ID
    * @return true if the element is a member of any relation satisfying the specified criterion;
    * false otherwise
    */
   static bool isMemberOfRelationSatisfyingCriterion(
-    const ConstOsmMapPtr& map, const ElementId& childId, const ElementCriterion& criterion);
+    const ElementId& childId, const ElementCriterion& criterion, const ConstOsmMapPtr& map);
 
   /**
-   * Retrieves all relations containing a child element as const
+   * Retrieves all relations containing a child element
    *
-   * @param map map the child element belongs to
    * @param childId ID of the child element
+   * @param map map the child element belongs to
    * @return a collection of const relations
    */
   static std::vector<ConstRelationPtr> getContainingRelations(
-    const ConstOsmMapPtr& map, const ElementId& childId);
+    const ElementId& childId, const ConstOsmMapPtr& map);
+
+  /**
+   * Retrieves the number of relations containing a child element
+   *
+   * @param childId ID of the child element
+   * @param map map the child element belongs to
+   * @return a relation count
+   */
+  static int getContainingRelationCount(const ElementId& childId, const ConstOsmMapPtr& map);
 };
 
 }

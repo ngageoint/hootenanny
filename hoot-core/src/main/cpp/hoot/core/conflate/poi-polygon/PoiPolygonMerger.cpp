@@ -63,7 +63,7 @@ _writeDebugMaps(false)
 }
 
 PoiPolygonMerger::PoiPolygonMerger(const set<pair<ElementId, ElementId>>& pairs) :
-_pairs(pairs),
+MergerBase(pairs),
 _autoMergeManyPoiToOnePolyMatches(ConfigOptions().getPoiPolygonAutoMergeManyPoiToOnePolyMatches()),
 _tagMergerClass(""),
 _writeDebugMaps(false)
@@ -521,7 +521,7 @@ ElementId PoiPolygonMerger::mergeOnePoiAndOnePolygon(OsmMapPtr map)
 
 QString PoiPolygonMerger::toString() const
 {
-  return QString("PoiPolygonMerger %1").arg(hoot::toString(_getPairs()));
+  return QString("PoiPolygonMerger %1").arg(hoot::toString(_pairs));
 }
 
 }

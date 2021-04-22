@@ -94,9 +94,7 @@ public:
   }
 
   QString getDescription() const override { return ""; }
-
   QString getName() const override { return ""; }
-
   QString getClassName() const override { return ""; }
 
   ElementCriterionPtr clone() override
@@ -113,7 +111,7 @@ private:
 int BuildingMerger::logWarnCount = 0;
 
 BuildingMerger::BuildingMerger(const set<pair<ElementId, ElementId>>& pairs) :
-_pairs(pairs),
+MergerBase(pairs),
 _keepMoreComplexGeometryWhenAutoMerging(
   ConfigOptions().getBuildingKeepMoreComplexGeometryWhenAutoMerging()),
 _mergeManyToManyMatches(ConfigOptions().getBuildingMergeManyToManyMatches()),
@@ -863,7 +861,7 @@ void BuildingMerger::mergeBuildings(OsmMapPtr map, const ElementId& mergeTargetI
 
 QString BuildingMerger::toString() const
 {
-  return QString("BuildingMerger %1").arg(hoot::toString(_getPairs()));
+  return QString("BuildingMerger %1").arg(hoot::toString(_pairs));
 }
 
 }

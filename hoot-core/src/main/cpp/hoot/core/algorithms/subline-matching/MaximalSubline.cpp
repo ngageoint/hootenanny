@@ -236,8 +236,14 @@ vector<pair<WayLocation, WayLocation>> MaximalSubline::_discretizePointPairs(
 
   Meters w1Offset = max(0.0, diff);
   Meters w2Offset = max(0.0, -diff);
-  Meters w1Length = ElementToGeometryConverter(map).convertToLineString(w1)->getLength();
-  Meters w2Length = ElementToGeometryConverter(map).convertToLineString(w2)->getLength();
+  std::shared_ptr<LineString> ls1 = ElementToGeometryConverter(map).convertToLineString(w1);
+  std::shared_ptr<LineString> ls2 = ElementToGeometryConverter(map).convertToLineString(w2);
+  if (!ls1 || !ls2)
+  {
+    return vector<pair<WayLocation, WayLocation>>();
+  }
+  Meters w1Length = ls1->getLength();
+  Meters w2Length = ls2->getLength();
 
   const int count = min((w1Length - w1Offset) / _spacing, (w2Length - w2Offset) / _spacing) + 1;
   LOG_VART(count);

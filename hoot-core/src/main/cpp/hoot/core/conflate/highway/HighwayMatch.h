@@ -100,7 +100,6 @@ public:
 private:
 
   std::shared_ptr<HighwayClassifier> _classifier;
-  ElementId _eid1, _eid2;
   std::shared_ptr<SublineStringMatcher> _sublineMatcher;
   MatchClassification _c;
   double _minSplitSize;

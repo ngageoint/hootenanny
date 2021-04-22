@@ -84,23 +84,14 @@ public:
   static ElementId mergeOnePoiAndOnePolygon(OsmMapPtr map);
 
   QString getDescription() const override { return "Merges POIs into polygons"; }
-
-  void setTagMergerClass(const QString& className) { _tagMergerClass = className; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 
-protected:
-
-  PairsSet& _getPairs() override { return _pairs; }
-  const PairsSet& _getPairs() const override { return _pairs; }
+  void setTagMergerClass(const QString& className) { _tagMergerClass = className; }
 
 private:
 
   static int logWarnCount;
-
-  std::set<std::pair<ElementId, ElementId>> _pairs;
 
   // This will cause multiple poi matches to get auto-merged vs being reviewed against the poly.
   bool _autoMergeManyPoiToOnePolyMatches;

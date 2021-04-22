@@ -53,10 +53,10 @@ class OsmMap;
  *    b. If any of the direct parents are not also a child, remove this child from the delete list
  * 3. Delete the element and all children that may still be referenced.
  *
- * This method assumes there are no cyclical relation links.
+ * This method assumes there are no cyclical relation links. This approach is very thorough and
+ * effective, but there may be much more efficient approaches on a case by case basis.
  *
- * This approach is very thorough and effective, but there may be much more efficient approaches on
- * a case by case basis.
+ * If you want to remove an element that has parents, use RemoveElementByEid;
  */
 class RecursiveElementRemover : public ConstOsmMapOperation, public ConstElementConsumer
 {
@@ -85,16 +85,13 @@ public:
    */
   void apply(const std::shared_ptr<OsmMap>& map) override;
 
-  QString getDescription() const override { return "Recursively removes elements from a map"; }
-
   QString getInitStatusMessage() const override
   { return "Recursively removing elements..."; }
-
   QString getCompletedStatusMessage() const override
   { return "Removed " + QString::number(_numAffected) + " elements"; }
 
+  QString getDescription() const override { return "Recursively removes elements from a map"; }
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 
 private:
@@ -102,8 +99,8 @@ private:
   ElementId _eid;
   const ElementCriterion* _criterion;
 
-  void _remove(const std::shared_ptr<OsmMap>& map, ElementId eid,
-               const std::set<ElementId>& removeSet);
+  void _remove(
+    const std::shared_ptr<OsmMap>& map, ElementId eid, const std::set<ElementId>& removeSet);
 };
 
 }

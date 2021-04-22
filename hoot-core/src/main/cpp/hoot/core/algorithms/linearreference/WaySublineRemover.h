@@ -35,9 +35,10 @@ namespace hoot
 {
 
 class WayLocation;
+class WaySubline;
 
 /**
- * Removes a subline from a way
+ * Removes a sublines from ways
  */
 class WaySublineRemover
 {
@@ -52,8 +53,19 @@ public:
    * @param map the map owning the way
    * @return IDs of the ways created and added back to the map as a result of the subline removal
    */
-  static std::vector<ElementId> remove(
-    const WayPtr& way, const WayLocation& start, const WayLocation& end, const OsmMapPtr& map);
+  static std::vector<ElementId> removeSubline(
+    const WayPtr& way, const WayLocation& start, const WayLocation& end, OsmMapPtr& map);
+
+  /**
+   * Removes a subline from a way
+   *
+   * @param way the way to modify
+   * @param subline the subline in the way to remove
+   * @param map the map owning the way
+   * @return IDs of the ways created and added back to the map as a result of the subline removal
+   */
+  static std::vector<ElementId> removeSubline(
+    const WayPtr& way, const WaySubline& subline, OsmMapPtr& map);
 
 private:
 
