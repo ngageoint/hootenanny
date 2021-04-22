@@ -79,9 +79,10 @@ int ConflateCmd::runSimple(QStringList& args)
     if (ConflateUtils::isNetworkConflate() &&
         !ConfigOptions().getDifferentialRemovePartialMatchesAsWhole())
     {
-      throw IllegalArgumentException(
-        "Removing partially matched elements only when using Differential Conflation is not allowed "
-        "when running the Network Algorithm.");
+      LOG_WARN(
+        "Removing elements partially from partial matches when using Differential Conflation is "
+        "not allowed when running the Network Algorithm.");
+      conf().set(ConfigOptions::getDifferentialRemovePartialMatchesAsWholeKey(), true);
     }
 
     isDiffConflate = true;
