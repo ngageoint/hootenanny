@@ -360,17 +360,6 @@ QString AbstractConflator::_matchSetToString(const MatchSet& matchSet) const
   return str;
 }
 
-void AbstractConflator::_updateProgress(const int currentStep, const QString message)
-{
-  // Always check for a valid task weight and that the job was set to running. Otherwise, this is
-  // just an empty progress object, and we shouldn't log progress.
-  if (_progress.getTaskWeight() != 0.0 && _progress.getState() == Progress::JobState::Running)
-  {
-    _progress.setFromRelative(
-      (float)currentStep / (float)getNumSteps(), Progress::JobState::Running, message);
-  }
-}
-
 void AbstractConflator::_createMergers(std::vector<MergerPtr>& relationMergers)
 {
   // POI/Polygon matching is unique in that it is the only non-generic geometry type matcher that
@@ -494,6 +483,17 @@ void AbstractConflator::_addConflateScoreTags()
       e1->getTags().appendValue(MetadataTags::HootScoreUuid(), e2->getTags().getCreateUuid());
       e2->getTags().appendValue(MetadataTags::HootScoreUuid(), e1->getTags().getCreateUuid());
     }
+  }
+}
+
+void AbstractConflator::_updateProgress(const int currentStep, const QString message)
+{
+  // Always check for a valid task weight and that the job was set to running. Otherwise, this is
+  // just an empty progress object, and we shouldn't log progress.
+  if (_progress.getTaskWeight() != 0.0 && _progress.getState() == Progress::JobState::Running)
+  {
+    _progress.setFromRelative(
+      (float)currentStep / (float)getNumSteps(), Progress::JobState::Running, message);
   }
 }
 
