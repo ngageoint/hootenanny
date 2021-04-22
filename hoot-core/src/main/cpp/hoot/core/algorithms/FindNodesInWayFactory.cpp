@@ -90,7 +90,7 @@ NodePtr FindNodesInWayFactory::createNode(
 
   if (result == std::numeric_limits<long>::max())
   {
-    NodePtr n = NodePtr(new Node(s, map->createNextNodeId(), c, circularError));
+    NodePtr n = std::make_shared<Node>(s, map->createNextNodeId(), c, circularError);
     LOG_VART(n->getElementId());
     map->addNode(n);
     result = n->getId();

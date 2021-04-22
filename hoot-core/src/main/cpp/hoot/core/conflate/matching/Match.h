@@ -169,19 +169,19 @@ public:
 
 protected:
 
-  /*
-   * All of this order silliness maintains a consistent ordering of matches when they're placed
-   * into a set as pointers.
-   */
-  Match(const std::shared_ptr<const MatchThreshold>& threshold) :
-    _order(_orderCount++), _threshold(threshold) {}
-
   friend class MatchPtrComparator;
 
   static long _orderCount;
   long _order;
 
   const std::shared_ptr<const MatchThreshold> _threshold;
+
+  ElementId _eid1, _eid2;
+
+  Match(const std::shared_ptr<const MatchThreshold>& threshold);
+  Match(
+    const std::shared_ptr<const MatchThreshold>& threshold, const ElementId& eid1,
+    const ElementId& eid2);
 };
 
 inline std::ostream& operator<<(std::ostream & o, ConstMatchPtr m)

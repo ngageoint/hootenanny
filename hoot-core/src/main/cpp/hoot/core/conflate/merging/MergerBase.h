@@ -41,6 +41,7 @@ public:
   using PairsSet = std::set<std::pair<ElementId, ElementId>>;
 
   MergerBase() = default;
+  MergerBase(const std::set<std::pair<ElementId, ElementId>>& pairs);
   virtual ~MergerBase() = default;
 
   std::set<ElementId> getImpactedElementIds() const override;

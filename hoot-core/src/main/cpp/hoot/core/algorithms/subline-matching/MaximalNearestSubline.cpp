@@ -127,7 +127,7 @@ const vector<WayLocation>& MaximalNearestSubline::getInterval()
   // Heuristic #1: use every vertex of B as a test point
   for (size_t ib = 0; ib < _b->getNodeCount(); ib++)
   {
-    ConstNodePtr node = _map->getNode(_b->getNodeId(ib));
+    ConstNodePtr node = _map->getNode(_b->getNodeId((long)ib));
     LOG_VART(node.get());
     if (node)
     {
@@ -151,7 +151,7 @@ const vector<WayLocation>& MaximalNearestSubline::getInterval()
   LocationOfPoint bPtLocator(_map, _b);
   for (size_t ia = 0; ia < _a->getNodeCount(); ia++)
   {
-    ConstNodePtr node = _map->getNode(_a->getNodeId(ia));
+    ConstNodePtr node = _map->getNode(_a->getNodeId((long)ia));
     LOG_VART(node.get());
     if (node)
     {

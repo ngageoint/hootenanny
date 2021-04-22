@@ -74,7 +74,8 @@ private:
    * or the second.
    */
   static std::vector<ElementId> _split(
-    const WayPtr& way, WayLocation& splitLocation, OsmMapPtr& map, const bool keepFirstSegment);
+    const WayPtr& way, WayLocation& splitLocation, const OsmMapPtr& map,
+    const bool keepFirstSegment);
 };
 
 }

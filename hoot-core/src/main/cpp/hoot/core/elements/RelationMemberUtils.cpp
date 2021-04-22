@@ -245,7 +245,7 @@ std::vector<ConstRelationPtr> RelationMemberUtils::getContainingRelations(
 int RelationMemberUtils::getContainingRelationCount(
   const ElementId& childId, const ConstOsmMapPtr& map)
 {
-  return getContainingRelations(childId, map).size();
+  return (int)getContainingRelations(childId, map).size();
 }
 
 bool RelationMemberUtils::isMemberOfRelationSatisfyingCriterion(

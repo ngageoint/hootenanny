@@ -56,9 +56,9 @@ _needsReview(false)
 
 PartialNetworkMerger::PartialNetworkMerger(const set<pair<ElementId, ElementId>>& pairs,
   const QSet<ConstEdgeMatchPtr>& edgeMatches, const ConstNetworkDetailsPtr& details) :
-  _pairs(pairs),
-  _edgeMatches(edgeMatches),
-  _details(details)
+MergerBase(pairs),
+_edgeMatches(edgeMatches),
+_details(details)
 {
   assert(_pairs.size() >= 1);
 }

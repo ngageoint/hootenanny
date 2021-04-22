@@ -52,11 +52,9 @@ int LinearMergerAbstract::logWarnCount = 0;
 LinearMergerAbstract::LinearMergerAbstract(
   const std::set<std::pair<ElementId, ElementId>>& pairs,
   const std::shared_ptr<SublineStringMatcher>& sublineMatcher) :
+MergerBase(pairs),
 _sublineMatcher(sublineMatcher)
 {
-  _pairs = pairs;
-  LOG_VART(_sublineMatcher->getName());
-  LOG_VART(_sublineMatcher->getSublineMatcherName())
 }
 
 void LinearMergerAbstract::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementId>>& replaced)
