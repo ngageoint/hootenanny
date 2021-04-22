@@ -203,7 +203,7 @@ void ScoreMatrix<_type>::resize(size_t rows, size_t cols)
 {
   _v.resize(rows);
 
-  for (int i = 0; i < rows; i++)
+  for (size_t i = 0; i < rows; i++)
   {
     _v[i].resize(cols, (_type)0.0);
   }
