@@ -230,16 +230,16 @@ void DiffConflator::_separateLinearMatches()
   {
     // TODO: make this work with non-highway linear matches
 
-     ConstMatchPtr match = *mit;
-     if (match->getName() != HighwayMatch::MATCH_NAME ||
-         match->getMatchMembers() != MatchMembers::Polyline)
-     {
-       _nonLinearMatches.push_back(match);
-     }
-     else
-     {
-       _linearMatches.push_back(match);
-     }
+    ConstMatchPtr match = *mit;
+    if (match->getName() != HighwayMatch::MATCH_NAME ||
+        match->getMatchMembers() != MatchMembers::Polyline)
+    {
+      _nonLinearMatches.push_back(match);
+    }
+    else
+    {
+      _linearMatches.push_back(match);
+    }
   }
 }
 
