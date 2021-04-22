@@ -146,7 +146,7 @@ public:
     const ElementId& childId, const ElementCriterion& criterion, const ConstOsmMapPtr& map);
 
   /**
-   * Retrieves all relations containing a child element as const
+   * Retrieves all relations containing a child element
    *
    * @param childId ID of the child element
    * @param map map the child element belongs to
@@ -156,11 +156,11 @@ public:
     const ElementId& childId, const ConstOsmMapPtr& map);
 
   /**
-   * TODO
+   * Retrieves the number of relations containing a child element
    *
-   * @param childId
-   * @param map
-   * @return
+   * @param childId ID of the child element
+   * @param map map the child element belongs to
+   * @return a relation count
    */
   static int getContainingRelationCount(const ElementId& childId, const ConstOsmMapPtr& map);
 };

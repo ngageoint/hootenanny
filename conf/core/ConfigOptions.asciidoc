@@ -1292,7 +1292,9 @@ significantly.
 * Data Type: bool
 * Default Value: `false`
 
-TODO
+If enabled, debug maps are written from inside loops where enabled. debug.maps.write must already
+be enabled for this option to be used. Enabling this option can create a lot of debug maps and slow
+down debugging significantly, so use with caution.
 
 === differential.remove.partial.matches.as.whole
 

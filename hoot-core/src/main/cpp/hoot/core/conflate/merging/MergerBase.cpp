@@ -31,6 +31,11 @@ using namespace std;
 namespace hoot
 {
 
+MergerBase::MergerBase(const std::set<std::pair<ElementId, ElementId>>& pairs) :
+_pairs(pairs)
+{
+}
+
 set<ElementId> MergerBase::getImpactedElementIds() const
 {
   set<ElementId> result;

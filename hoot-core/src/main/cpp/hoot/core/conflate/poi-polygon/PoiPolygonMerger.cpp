@@ -63,7 +63,7 @@ _writeDebugMaps(false)
 }
 
 PoiPolygonMerger::PoiPolygonMerger(const set<pair<ElementId, ElementId>>& pairs) :
-_pairs(pairs),
+MergerBase(pairs),
 _autoMergeManyPoiToOnePolyMatches(ConfigOptions().getPoiPolygonAutoMergeManyPoiToOnePolyMatches()),
 _tagMergerClass(""),
 _writeDebugMaps(false)

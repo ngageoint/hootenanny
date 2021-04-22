@@ -113,8 +113,6 @@ private:
 
   friend class BuildingMergerTest;
 
-  std::set<std::pair<ElementId, ElementId>> _pairs;
-
   //If true, merging always keeps the more complex of the two building geometries.  If false,
   //merging keeps the geometry of the reference building.
   bool _keepMoreComplexGeometryWhenAutoMerging;

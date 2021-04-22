@@ -41,12 +41,13 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(Match, NetworkMatch)
 
-NetworkMatch::NetworkMatch(const ConstNetworkDetailsPtr& details, ConstEdgeMatchPtr edgeMatch,
-  double score, ConstMatchThresholdPtr mt, double scoringFunctionMax,
-  double scoringFunctionCurveMidpointX, double scoringFunctionCurveSteepness) :
-  Match(mt),
-  _details(details),
-  _edgeMatch(edgeMatch)
+NetworkMatch::NetworkMatch(
+  const ConstNetworkDetailsPtr& details, ConstEdgeMatchPtr edgeMatch, double score,
+  ConstMatchThresholdPtr mt, double scoringFunctionMax, double scoringFunctionCurveMidpointX,
+  double scoringFunctionCurveSteepness) :
+Match(mt),
+_details(details),
+_edgeMatch(edgeMatch)
 {
   double p;
 

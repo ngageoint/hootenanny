@@ -52,7 +52,7 @@ int ScriptMerger::logWarnCount = 0;
 
 ScriptMerger::ScriptMerger(const std::shared_ptr<PluginContext>& script, Persistent<Object>& plugin,
                            const set<pair<ElementId, ElementId>>& pairs) :
-_pairs(pairs),
+MergerBase(pairs),
 _script(script)
 {
   Isolate* current = v8::Isolate::GetCurrent();

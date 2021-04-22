@@ -63,16 +63,13 @@ public:
 
   QString getDescription() const override
   { return "Merges elements matched with Generic Conflation"; }
-
   QString getName() const override { return className() + "-" + _matchType; }
-
   QString getClassName() const override { return className(); }
 
   void setMatchType(const QString& matchType) { _matchType = matchType; }
 
 protected:
 
-  PairsSet _pairs;
   v8::Persistent<v8::Object> _plugin;
   std::shared_ptr<PluginContext> _script;
   ElementId _eid1, _eid2;

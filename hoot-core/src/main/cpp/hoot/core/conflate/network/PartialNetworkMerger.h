@@ -77,7 +77,6 @@ public:
 
 private:
 
-  PairsSet _pairs;
   QSet<ConstEdgeMatchPtr> _edgeMatches;
   ConstNetworkDetailsPtr _details;
   QHash<ElementId, ElementId> _substitions;

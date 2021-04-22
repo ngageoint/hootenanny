@@ -144,11 +144,7 @@ WayLocation LocationOfPoint::locate(const Coordinate& inputPt) const
     Coordinate lastCoord = _map->getNode(_way->getNodeId(0))->toCoordinate();
     for (size_t i = 0; i < _way->getNodeCount() - 1; i++)
     {
-      ConstNodePtr node = _map->getNode(_way->getNodeId(i + 1));
-      if (!node)
-      {
-        LOG_TRACE("null node");
-      }
+      ConstNodePtr node = _map->getNode(_way->getNodeId((long)(i + 1)));
       Coordinate nextCoord = node->toCoordinate();
       seg.p0 = lastCoord;
       seg.p1 = nextCoord;

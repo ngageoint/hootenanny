@@ -64,17 +64,13 @@ public:
 
   QString getDescription() const override
   { return "Merges POIs matched with Multiary Conflation (experimental)"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 
 private:
 
   std::shared_ptr<MatchCreator> _matchCreator;
   std::shared_ptr<MergerCreator> _mergerCreator;
-
-  std::set<std::pair<ElementId, ElementId>> _pairs;
 
   /**
    * @brief _createReviews Create review entries for each cluster review in the review list.

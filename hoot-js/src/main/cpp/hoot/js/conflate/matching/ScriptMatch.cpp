@@ -60,9 +60,7 @@ int ScriptMatch::logWarnCount = 0;
 ScriptMatch::ScriptMatch(const std::shared_ptr<PluginContext>& script,
   const Persistent<Object>& plugin, const ConstOsmMapPtr& map, const v8::Handle<Object>& mapObj,
   const ElementId& eid1, const ElementId& eid2, const ConstMatchThresholdPtr& mt) :
-  Match(mt),
-  _eid1(eid1),
-  _eid2(eid2),
+  Match(mt, eid1, eid2),
   _isWholeGroup(false),
   _neverCausesConflict(false),
   _script(script)
