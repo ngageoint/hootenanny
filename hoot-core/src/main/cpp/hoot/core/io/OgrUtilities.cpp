@@ -200,7 +200,6 @@ std::shared_ptr<GDALDataset> OgrUtilities::openDataSource(const QString& url, bo
   {
     options["X_POSSIBLE_NAMES"] = ConfigOptions().getOgrReaderCsvLonfield();
     options["Y_POSSIBLE_NAMES"] = ConfigOptions().getOgrReaderCsvLatfield();
-//    options["Z_POSSIBLE_NAMES"] = ConfigOptions().getOgrReaderCsvZfield();
     options["KEEP_GEOM_COLUMNS"] = ConfigOptions().getOgrReaderCsvKeepGeomFields();
   }
   else if (QString(driverInfo._driverName) == "OGR_OGDI")

@@ -263,7 +263,7 @@ private:
   long _countMemoryBound(const QStringList& inputs, const bool countFeaturesOnly,
                          const ElementCriterionPtr& criterion)
   {
-    LOG_STATUS("Counting features in: " << inputs << "...");
+    LOG_STATUS("Counting features in " << inputs.size() << " inputs...");
 
     OsmMapPtr map(new OsmMap());
     IoUtils::loadMaps(map, inputs, true);
