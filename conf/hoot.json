@@ -1,6 +1,5 @@
 {
   "#": "Use this file for temporary testing of configuration option changes. Make permanent changes ",
   "#": "in conf/ConfigOptions.asciidoc",
-  "differential.remove.partial.matches.as.whole": "false",
   "#" : "end"
 }
