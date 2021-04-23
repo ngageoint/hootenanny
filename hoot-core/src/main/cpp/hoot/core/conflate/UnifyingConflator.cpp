@@ -33,7 +33,6 @@
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/schema/SchemaUtils.h>
 
 namespace hoot
 {
@@ -50,40 +49,11 @@ AbstractConflator::AbstractConflator(matchThreshold)
 {
 }
 
-unsigned int UnifyingConflator::getNumSteps() const
-{
-  if (!ConfigOptions().getConflateMatchOnly())
-  {
-    return 3;
-  }
-  else
-  {
-    return 1;
-  }
-}
-
 void UnifyingConflator::apply(OsmMapPtr& map)
 {
   _reset();
   _map = map;
   _currentStep = 1;  // tracks the current job task step for progress reporting
-
-  // Check to see if all the data is untyped. If so, log a warning so the user knows they may not
-  // be getting the best conflate results in case types could be added to the input.
-  if (_map->size() > 0 && !SchemaUtils::anyElementsHaveType(_map))
-  {
-    const QString msg =
-      "No elements in the input map have a recognizable schema type. Generic conflation "
-      "routines will be used.";
-    if (ConfigOptions().getLogWarningsForCompletelyUntypedInputMaps())
-    {
-      LOG_WARN(msg);
-    }
-    else
-    {
-      LOG_INFO(msg);
-    }
-  }
 
   // will reproject if necessary
   MapProjector::projectToPlanar(_map);
@@ -108,7 +78,6 @@ void UnifyingConflator::apply(OsmMapPtr& map)
 
     std::vector<MergerPtr> relationMergers;
     _createMergers(relationMergers);
-
     _mergeFeatures(relationMergers);
 
     _currentStep++;
@@ -116,6 +85,18 @@ void UnifyingConflator::apply(OsmMapPtr& map)
 
   // free up any used resources
   _reset();
+}
+
+unsigned int UnifyingConflator::getNumSteps() const
+{
+  if (!ConfigOptions().getConflateMatchOnly())
+  {
+    return 3;
+  }
+  else
+  {
+    return 1;
+  }
 }
 
 }

@@ -130,7 +130,7 @@ void DiffConflator::apply(OsmMapPtr& map)
   _stats.append(SingleStat("Project to Planar Time (sec)", _timer.getElapsedAndRestart()));
   OsmMapWriterFactory::writeDebugMap(_map, "after-projecting-to-planar");
 
-  // find all the matches in this map
+  // Find all the matches in this map.
   _intraDatasetMatchOnlyElementIds.clear();
   _intraDatasetElementIdsPopulated = false;
   _createMatches();
@@ -144,11 +144,14 @@ void DiffConflator::apply(OsmMapPtr& map)
 
   if (!ConfigOptions().getConflateMatchOnly())
   {  
-    // TODO:
+    // We only need to optimize linear matches if we aren't removing them completely and a linear
+    // matcher was specified in the first place.
     if (!ConfigOptions().getDifferentialRemoveLinearPartialMatchesAsWhole() &&
         SuperfluousConflateOpRemover::linearConflatorPresent())
     {
       _updateProgress(_currentStep - 1, "Optimizing feature matches...");
+      // If removing linear match elements partially, matches need to be separated into linear and
+      // non-linear to avoid corrupting the non-linear matches.
       _separateLinearMatches();
       _matchSets = _optimizeMatches(_linearMatches);
       _currentStep++;
@@ -178,10 +181,14 @@ void DiffConflator::apply(OsmMapPtr& map)
     if (!ConfigOptions().getDifferentialRemoveLinearPartialMatchesAsWhole() &&
         SuperfluousConflateOpRemover::linearConflatorPresent())
     {
+      // Use the MergerCreator framework and only remove the sections of linear features that match.
+      // All other feature types are removed completely.
       _removePartialSecondaryMatchElements();
     }
     else
     {
+      // Use a naive approach and remove all elements involved in a match completely, despite
+      // possible partial subline matches.
       _removeMatchElementsCompletely(Status::Unknown2);
     }
     MemoryUsageChecker::getInstance().check();
@@ -418,7 +425,8 @@ void DiffConflator::_removeMatchElementsCompletely(const Status& status)
   const bool treatReviewsAsMatches = ConfigOptions().getDifferentialTreatReviewsAsMatches();
   LOG_VART(treatReviewsAsMatches);
 
-  // TODO:
+  // If we're removing linear feature partial matches in a partial manner, we need to skip
+  // processing them here. Otherwise, remove everything.
   std::vector<ConstMatchPtr> matches;
   if (!ConfigOptions().getDifferentialRemoveLinearPartialMatchesAsWhole() &&
       SuperfluousConflateOpRemover::linearConflatorPresent())

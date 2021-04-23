@@ -63,7 +63,7 @@ public:
   QList<SingleStat> getStats() const { return _stats; }
 
   /**
-   * Set the factory to use when creating mergers. This method is likely only useful when testing.
+   * Sets the factory to use when creating mergers. This method is likely only useful when testing.
    */
   void setMergerFactory(const std::shared_ptr<MergerFactory>& mf) { _mergerFactory = mf; }
 
@@ -97,13 +97,24 @@ protected:
    */
   virtual void _reset();
 
+  /*
+   * Creates feature matches using match creators
+   */
   void _createMatches();
+  /*
+   * Optimizes the matches in preparation for merging; optional in some workflows
+   */
   MatchSetVector _optimizeMatches(std::vector<ConstMatchPtr>& matches);
 
-  // TODO:
+  /*
+   * Creates the feature mergers using merger creators; mergers for relations are run separately
+   * so populated explicitly by this method
+   */
   void _createMergers(std::vector<MergerPtr>& relationMergers);
+  /*
+   * Merges features; first non-relation features, then relations
+   */
   void _mergeFeatures(const std::vector<MergerPtr>& relationMergers);
-  void _applyMergers(const std::vector<MergerPtr>& mergers, OsmMapPtr& map);
   /*
    * Populates the _e2m map with a mapping of ElementIds to their respective Merger objects. This
    * is helpful when replacing element ids with new ids.
@@ -113,8 +124,14 @@ protected:
    * http://stackoverflow.com/questions/10064422/java-on-memory-efficient-key-value-store
    */
   void _mapElementIdsToMergers();
+  /*
+   * Updates mergers with element ID mapping changes occurring during feature merging
+   */
   void _replaceElementIds(const std::vector<std::pair<ElementId, ElementId>>& replaced);
 
+  /*
+   * Adds tags describing the match scores computed during matching
+   */
   void _addConflateScoreTags();
   void _addConflateScoreTags(
     const ElementPtr& e, const MatchClassification& matchClassification,
@@ -126,9 +143,14 @@ private:
 
   Progress _progress;
 
+  QString _matchSetToString(const MatchSet& matchSet) const;
+
+  /*
+   *  Removes groups (subgraphs) of matches where all the matches are interrelated by element id
+   */
   void _removeWholeGroups(std::vector<ConstMatchPtr>& matches, MatchSetVector& matchSets);
 
-  QString _matchSetToString(const MatchSet& matchSet) const;
+  void _applyMergers(const std::vector<MergerPtr>& mergers, OsmMapPtr& map);
 };
 
 }

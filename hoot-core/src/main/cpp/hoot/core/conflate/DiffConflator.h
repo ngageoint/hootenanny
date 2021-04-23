@@ -58,10 +58,13 @@ class MatchThreshold;
  *
  * - Store off original map and ref1
  * - Mark ref1 inputs
- * - Remove unconflatable elements (optional; enabled by default; only turned off for debugging)
+ * - Remove unconflatable elements (optional and enabled by default; generally only turned off for
+ * debugging)
  * - Find matches
  * - Calc tag diff against the matches (optional; used when --separate-output is specified)
- * - Remove secondary match elements; TODO: update description
+ * - Optimize linear matches (only happens when differential.remove.linear.partial.matches.as.whole
+ * is disabled and a linear feature matcher has been specified in the configuration)
+ * - Remove secondary match elements
  * - Snap secondary roads back to ref roads (optional; not enabled by default)
  * - Remove ref match elements
  * - Remove some metadata tags
@@ -77,72 +80,52 @@ class DiffConflator : public AbstractConflator
 public:
 
   /**
-   * @brief className - Get a string that represents this class name
+   * Returns a string that represents this class name
+   *
    * @return class name
    */
   static QString className() { return "hoot::DiffConflator"; }
 
   /**
-   * @brief DiffConflator - Default constructor
+   * Default constructor
    */
   DiffConflator();
 
   /**
-   * @brief DiffConflator - Construct & set a match threshold
+   * Construct & set a match threshold
+   *
    * @param matchThreshold - Match threshold
    */
   DiffConflator(const std::shared_ptr<MatchThreshold>& matchThreshold);
 
   /**
-   * @brief apply - Applies the differential conflation operation to the supplied
+   * Applies the differential conflation operation to the supplied
    * map. If the map is not in a planar projection it is reprojected. The map
    * is not reprojected back to the original projection when conflation is complete.
+   *
    * @param map - The map to operate on
    */
   void apply(OsmMapPtr& map) override;
 
   /**
-   * @brief getClassName - Gets the class name
-   * @return The class name string
-   */
-  QString getName() const override { return className(); }
-
-  QString getClassName() const override { return className(); }
-
-  void enableTags() { _conflateTags = true; }
-  bool conflatingTags() const { return _conflateTags;}
-
-  QString getDescription() const override
-  { return "Creates a map with features from the second input which are not in the first"; }
-
-  /**
-   * @brief getTagDiff - Gets the tag differential that was calculated during the conflation. This
-   * will be a list of 'modify' changes that contain tag updates for elements that matched between
-   * the input maps.
+   * Stores the original map. This is necessary for calculating the tag differential, and it's
+   * important to call this after loading the Input1 map, and before loading the Input2 map.
    *
-   * To calculate these changes we look through all of the matches, and compare tags. A set of newer
-   * tags is returned as a changeset (because updating the tags requires a modify operation).
-   * @return - A changeset provider that can be used with ChangesetWriter classes
-   */
-  MemChangesetProviderPtr getTagDiff() { return _tagChanges; }
-
-  /**
-   * @brief storeOriginalMap - Stores the original map. This is necessary for calculating the tag
-   * differential, and it's important to call this after loading the Input1 map, and before loading
-   * the Input2 map.
    * @param map - Map that should be holding only the original "Input1" elements
    */
   void storeOriginalMap(OsmMapPtr& map);
 
   /**
-   * @brief storeOriginalMap - Mark input1 elements
+   * Uniquely mark input1 elements
+   *
    * @param map - Map to add the changes to
    */
   void markInputElements(OsmMapPtr map);
 
   /**
-   * @brief addChangesToMap - Adds the changes to a map, as regular elements. This is useful for
-   * visualizing tag-diff output in JOSM and the hoot UI.
+   * Adds the changes to a map, as regular elements. This is useful for visualizing tag-diff output
+   * in JOSM and the hoot UI.
+   *
    * @param map - Map to add the changes to
    * @param pChanges - Changeset provider
    */
@@ -163,9 +146,37 @@ public:
       ChangesetStatsFormat(ChangesetStatsFormat::Unknown),
     const QString& osmApiDbUrl = "");
 
+  /**
+   * Calculates statistics unique to Differential Conflation
+   *
+   * @param pResultMap map containing the features to calculate the statistics from
+   * @param stats the statistics to populate
+   */
   void calculateStats(OsmMapPtr pResultMap, QList<SingleStat>& stats);
 
+  /**
+   * @see ProgressReporter
+   */
   unsigned int getNumSteps() const override;
+
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
+  QString getDescription() const override
+  { return "Creates a map with features from the second input which are not in the first"; }
+
+  void enableTags() { _conflateTags = true; }
+  bool conflatingTags() const { return _conflateTags;}
+
+  /**
+   * Returns the tag differential that was calculated during the conflation. This will be a list of
+   * 'modify' changes that contain tag updates for elements that matched between the input maps.
+   *
+   * To calculate these changes we look through all of the matches, and compare tags. A set of newer
+   * tags is returned as a changeset (because updating the tags requires a modify operation).
+   *
+   * @return - A changeset provider that can be used with ChangesetWriter classes
+   */
+  MemChangesetProviderPtr getTagDiff() { return _tagChanges; }
 
   QString getGeometryChangesetStats() const { return _geometryChangesetStats; }
   QString getTagChangesetStats() const { return _tagChangesetStats; }
@@ -190,6 +201,7 @@ private:
   QSet<ElementId> _intraDatasetMatchOnlyElementIds;
   bool _intraDatasetElementIdsPopulated;
 
+  // These are only used when differential.remove.linear.partial.matches.as.whole=false.
   std::vector<ConstMatchPtr> _linearMatches;
   std::vector<ConstMatchPtr> _nonLinearMatches;
 
@@ -210,6 +222,9 @@ private:
 
   void _discardUnconflatableElements();
 
+  /*
+   * Separates matches with linear features from those without them
+   */
   void _separateLinearMatches();
 
   // Calculates and stores the tag differential as a set of change objects
@@ -228,15 +243,24 @@ private:
   QSet<ElementId> _getElementIdsInvolvedInOnlyIntraDatasetMatches(
     const std::vector<ConstMatchPtr>& matches);
 
-  // TODO:
-
   void _removeRefData();
+  /*
+   * The element criteria that must be met in order for an element involved in a match to be
+   * completely removed
+   */
   bool _satisfiesCompleteElementRemovalCondition(
     const ConstElementPtr& element, const Status& status, const ConstMatchPtr& match) const;
+  /*
+   * Removes match elements from a match completely regardless of whether only part of their
+   * geometry is involved in a match (if linear).
+   */
   void _removeMatchElementsCompletely(const Status& status);
   void _removeMatchElementPairCompletely(
     const ConstMatchPtr& match, const std::pair<ElementId, ElementId>& elementPair,
     const Status& status);
+  /*
+   * Removes only the geometric portions of linear match elements that were involved in a match.
+   */
   void _removePartialSecondaryMatchElements();
   void _removeMetadataTags();
 };

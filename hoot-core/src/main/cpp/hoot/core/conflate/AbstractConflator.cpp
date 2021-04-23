@@ -93,6 +93,25 @@ void AbstractConflator::_reset()
   _mergers.clear();
 }
 
+QString AbstractConflator::_matchSetToString(const MatchSet& matchSet) const
+{
+  QString str;
+  for (std::set<ConstMatchPtr, MatchPtrComparator>::const_iterator itr = matchSet.begin();
+       itr != matchSet.end(); ++itr)
+  {
+    ConstMatchPtr match = *itr;
+    std::set<std::pair<ElementId, ElementId>> matchPairs = match->getMatchPairs();
+    for (std::set<std::pair<ElementId, ElementId>>::const_iterator itr2 = matchPairs.begin();
+         itr2 != matchPairs.end(); ++itr2)
+    {
+       std::pair<ElementId, ElementId> elementIdPair = *itr2;
+       str += elementIdPair.first.toString() + " " + elementIdPair.second.toString() + ", ";
+    }
+  }
+  str.chop(2);
+  return str;
+}
+
 void AbstractConflator::_createMatches()
 {
   OsmMapWriterFactory::writeDebugMap(_map, "before-matching");
@@ -316,15 +335,13 @@ void AbstractConflator::_applyMergers(const std::vector<MergerPtr>& mergers, Osm
     }
 
     merger->apply(map, replaced);
-
-    //LOG_VART(replaced);
     LOG_VART(map->size());
 
     // update any mergers that reference the replaced values
     _replaceElementIds(replaced);
     // Not completely sure why the replaced IDs get cleared out each time here by default. That
-    // causes problems so far for LinearDiffMerger, so skipping clearing them out when its being
-    // used.
+    // causes problems at this time for LinearDiffMerger, so skipping clearing them out only when
+    // its being used.
     if (merger->getName() != LinearDiffMerger::className())
     {
       replaced.clear();
@@ -341,25 +358,6 @@ void AbstractConflator::_applyMergers(const std::vector<MergerPtr>& mergers, Osm
   LOG_INFO(
     "Applied " << StringUtils::formatLargeNumber(mergers.size()) << " mergers in " <<
     StringUtils::millisecondsToDhms(mergersTimer.elapsed()) << ".");
-}
-
-QString AbstractConflator::_matchSetToString(const MatchSet& matchSet) const
-{
-  QString str;
-  for (std::set<ConstMatchPtr, MatchPtrComparator>::const_iterator itr = matchSet.begin();
-       itr != matchSet.end(); ++itr)
-  {
-    ConstMatchPtr match = *itr;
-    std::set<std::pair<ElementId, ElementId>> matchPairs = match->getMatchPairs();
-    for (std::set<std::pair<ElementId, ElementId>>::const_iterator itr2 = matchPairs.begin();
-         itr2 != matchPairs.end(); ++itr2)
-    {
-       std::pair<ElementId, ElementId> elementIdPair = *itr2;
-       str += elementIdPair.first.toString() + " " + elementIdPair.second.toString() + ", ";
-    }
-  }
-  str.chop(2);
-  return str;
 }
 
 void AbstractConflator::_createMergers(std::vector<MergerPtr>& relationMergers)
@@ -435,6 +433,7 @@ void AbstractConflator::_createMergers(std::vector<MergerPtr>& relationMergers)
 
 void AbstractConflator::_mergeFeatures(const std::vector<MergerPtr>& relationMergers)
 {
+  // Apply all non-relation mergers first, then apply relation mergers.
   _applyMergers(_mergers, _map);
   _applyMergers(relationMergers, _map);
 

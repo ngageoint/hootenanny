@@ -62,6 +62,9 @@ public:
   QString getDescription() const override
   { return "Conflates two inputs maps into one with Unifying Conflation"; }
 
+  /**
+   * @see ProgressReporter
+   */
   unsigned int getNumSteps() const override;
 };
 
