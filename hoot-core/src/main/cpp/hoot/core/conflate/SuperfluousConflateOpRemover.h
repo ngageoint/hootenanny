@@ -64,25 +64,12 @@ public:
   static QSet<QString> getMatchCreatorGeometryTypeCrits(const bool addParents = true);
 
   /**
-   * TODO
+   * Determines if a matcher capable of matching a linear feature is present in the current
+   * configuration
    *
-   * @return
+   * @return true if a linear matcher has been configured; false otherwise
    */
-  static bool pointConflatorPresent();
-
-  /**
-   * TODO
-   *
-   * @return
-   */
-  static bool linearConflatorPresent();
-
-  /**
-   * TODO
-   *
-   * @return
-   */
-  static bool polygonConflatorPresent();
+  static bool linearMatcherPresent();
 
 private:
 

@@ -61,7 +61,6 @@ void LinearMergerAbstract::apply(const OsmMapPtr& map, vector<pair<ElementId, El
 {
   LOG_TRACE("Applying linear merger...");
   LOG_VART(_pairs);
-  //LOG_VART(replaced);
   _map = map;
 
   vector<pair<ElementId, ElementId>> pairs;
@@ -83,35 +82,40 @@ void LinearMergerAbstract::apply(const OsmMapPtr& map, vector<pair<ElementId, El
     }
   }
 
-  ShortestFirstComparator shortestFirst;
-  shortestFirst.map = _map;
-  sort(pairs.begin(), pairs.end(), shortestFirst);
-  LOG_VART(pairs);
-  for (vector<pair<ElementId, ElementId>>::const_iterator it = pairs.begin(); it != pairs.end();
-       ++it)
-  {
-    ElementId eid1 = it->first;
-    ElementId eid2 = it->second;
-    //LOG_VART(eid1);
-    //LOG_VART(eid2);
+  _mergeShortestPairsFirst(pairs, replaced);
+}
 
-    for (size_t i = 0; i < replaced.size(); i++)
+void LinearMergerAbstract::_mergeShortestPairsFirst(
+  std::vector<std::pair<ElementId, ElementId>>& pairs,
+  std::vector<std::pair<ElementId, ElementId>>& replaced)
+{
+    ShortestFirstComparator shortestFirst;
+    shortestFirst.map = _map;
+    sort(pairs.begin(), pairs.end(), shortestFirst);
+    LOG_VART(pairs);
+    for (vector<pair<ElementId, ElementId>>::const_iterator it = pairs.begin(); it != pairs.end();
+         ++it)
     {
-      if (eid1 == replaced[i].first)
-      {
-        LOG_TRACE("Changing " << eid1 << " to " << replaced[i].second << "...");
-        eid1 = replaced[i].second;
-      }
-      if (eid2 == replaced[i].first)
-      {
-        LOG_TRACE("Changing " << eid2 << " to " << replaced[i].second << "...");
-        eid2 = replaced[i].second;
-      }
-    }
+      ElementId eid1 = it->first;
+      ElementId eid2 = it->second;
 
-    _eidLogString = "-" + eid1.toString() + "-" + eid2.toString();
-    _mergePair(eid1, eid2, replaced);
-  }
+      for (size_t i = 0; i < replaced.size(); i++)
+      {
+        if (eid1 == replaced[i].first)
+        {
+          LOG_TRACE("Changing " << eid1 << " to " << replaced[i].second << "...");
+          eid1 = replaced[i].second;
+        }
+        if (eid2 == replaced[i].first)
+        {
+          LOG_TRACE("Changing " << eid2 << " to " << replaced[i].second << "...");
+          eid2 = replaced[i].second;
+        }
+      }
+
+      _eidLogString = "-" + eid1.toString() + "-" + eid2.toString();
+      _mergePair(eid1, eid2, replaced);
+    }
 }
 
 void LinearMergerAbstract::_markNeedsReview(

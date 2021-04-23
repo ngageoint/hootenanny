@@ -147,7 +147,7 @@ void DiffConflator::apply(OsmMapPtr& map)
     // We only need to optimize linear matches if we aren't removing them completely and a linear
     // matcher was specified in the first place.
     if (!ConfigOptions().getDifferentialRemoveLinearPartialMatchesAsWhole() &&
-        SuperfluousConflateOpRemover::linearConflatorPresent())
+        SuperfluousConflateOpRemover::linearMatcherPresent())
     {
       _updateProgress(_currentStep - 1, "Optimizing feature matches...");
       // If removing linear match elements partially, matches need to be separated into linear and
@@ -179,7 +179,7 @@ void DiffConflator::apply(OsmMapPtr& map)
     // We're eventually getting rid of all matches from the output, but in order to make the road
     // snapping work correctly we'll get rid of secondary elements in matches first.
     if (!ConfigOptions().getDifferentialRemoveLinearPartialMatchesAsWhole() &&
-        SuperfluousConflateOpRemover::linearConflatorPresent())
+        SuperfluousConflateOpRemover::linearMatcherPresent())
     {
       // Use the MergerCreator framework and only remove the sections of linear features that match.
       // All other feature types are removed completely.
@@ -429,7 +429,7 @@ void DiffConflator::_removeMatchElementsCompletely(const Status& status)
   // processing them here. Otherwise, remove everything.
   std::vector<ConstMatchPtr> matches;
   if (!ConfigOptions().getDifferentialRemoveLinearPartialMatchesAsWhole() &&
-      SuperfluousConflateOpRemover::linearConflatorPresent())
+      SuperfluousConflateOpRemover::linearMatcherPresent())
   {
     matches = _nonLinearMatches;
   }

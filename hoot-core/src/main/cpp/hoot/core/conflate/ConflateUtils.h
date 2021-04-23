@@ -68,9 +68,9 @@ public:
                         const geos::geom::Envelope& bounds, const QString& output);
 
   /**
-   * TODO
+   * Determines if the Network road conflate algorithm is activated
    *
-   * @return
+   * @return true if Network road conflation is enabled; false otherwise
    */
   static bool isNetworkConflate();
 };

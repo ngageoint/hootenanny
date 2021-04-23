@@ -62,7 +62,10 @@ void LinearDiffMerger::apply(
 
   _map = map;
 
-  // TODO: explain
+  // We're overriding some of LinearMergerAbstract's behavior here for diff purposes.
+
+  // This is the same as LinearMergerAbstract, except we don't require the associated element be
+  // part of the map in order to be merged (why?).
   std::vector<std::pair<ElementId, ElementId>> pairs;
   pairs.reserve(_pairs.size());
   for (std::set<std::pair<ElementId, ElementId>>::const_iterator it = _pairs.begin();
@@ -73,32 +76,8 @@ void LinearDiffMerger::apply(
     pairs.push_back(std::pair<ElementId, ElementId>(eid1, eid2));
   }
 
-  ShortestFirstComparator shortestFirst;
-  shortestFirst.map = _map;
-  std::sort(pairs.begin(), pairs.end(), shortestFirst);
-  for (std::vector<std::pair<ElementId, ElementId>>::const_iterator it = pairs.begin();
-       it != pairs.end(); ++it)
-  {
-    ElementId eid1 = it->first;
-    ElementId eid2 = it->second;
-
-    for (size_t i = 0; i < replaced.size(); i++)
-    {
-      if (eid1 == replaced[i].first && _map->containsElement(replaced[i].second))
-      {
-        LOG_TRACE("Changing " << eid1 << " to " << replaced[i].second << "...");
-        eid1 = replaced[i].second;
-      }
-      if (eid2 == replaced[i].first && _map->containsElement(replaced[i].second))
-      {
-        LOG_TRACE("Changing " << eid2 << " to " << replaced[i].second << "...");
-        eid2 = replaced[i].second;
-      }
-    }
-
-    _eidLogString = "-" + eid1.toString() + "-" + eid2.toString();
-    _mergePair(eid1, eid2, replaced);
-  }
+  // This has the same behavior as LinearMergerAbstract.
+  _mergeShortestPairsFirst(pairs, replaced);
 }
 
 bool LinearDiffMerger::_mergePair(

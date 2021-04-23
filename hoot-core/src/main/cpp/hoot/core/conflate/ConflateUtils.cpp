@@ -157,6 +157,7 @@ void ConflateUtils::writeDiff(const QString& mapUrl1, const QString& mapUrl2,
 
 bool ConflateUtils::isNetworkConflate()
 {
+  // This could be brittle to future changes to how the Network alg is applied.
   return
     conf().getList(ConfigOptions::getMatchCreatorsKey()).contains(NetworkMatchCreator::className());
 }

@@ -34,7 +34,7 @@ namespace hoot
 {
 
 /**
- * TODO
+ * A merger for Differential Conflation
  */
 class LinearDiffMerger : public LinearMergerAbstract
 {
@@ -49,9 +49,13 @@ public:
     const std::shared_ptr<SublineStringMatcher>& sublineMatcher);
   virtual ~LinearDiffMerger() = default;
 
+  /**
+   * @see OsmMapOperation
+   */
   void apply(const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced) override;
 
-  virtual QString getDescription() const { return "TODO"; }
+  virtual QString getDescription() const
+  { return "Merges linear features by keeping only matching portions from secondary elements"; }
   virtual QString getName() const override { return className(); }
   virtual QString getClassName() const override { return className(); }
 
@@ -62,14 +66,22 @@ protected:
 
   virtual bool _mergePair(
     ElementId eid1, ElementId eid2,
-    std::vector<std::pair<ElementId, ElementId>>& replaced);
+    std::vector<std::pair<ElementId, ElementId>>& replaced) override;
 
 private:
 
+  // see differential.treat.reviews.as.matches
   bool _treatReviewsAsMatches;
 
   /*
-   * TODO
+   * Matches the ways together and creates a new merged way with only the non-matching portions from
+   * way2 and adds it to the map. way1 and the matching portions of way2 are removed from the map.
+   *
+   * @param way1 reference feature
+   * @param way2 secondary feature
+   * @param replaced element ID mapping for replaced features
+   * @param matched determines whether a match was found between way1 and way2
+   * @return true if a review is required between the two features; false otherwise
    */
   bool _findAndProcessMatch(
     const WayPtr& way1, const WayPtr& way2, std::vector<std::pair<ElementId, ElementId>>& replaced,

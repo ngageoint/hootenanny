@@ -126,6 +126,10 @@ protected:
   virtual void _markNeedsReview(
     ElementPtr e1, ElementPtr e2, QString note, QString reviewType);
 
+  void _mergeShortestPairsFirst(
+    std::vector<std::pair<ElementId, ElementId>>& pairs,
+    std::vector<std::pair<ElementId, ElementId>>& replaced);
+
   void _removeSpans(const ElementPtr& w1, const ElementPtr& w2) const;
   void _removeSpans(const WayPtr& w1, const WayPtr& w2) const;
 

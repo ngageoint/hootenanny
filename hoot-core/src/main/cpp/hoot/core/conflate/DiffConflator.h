@@ -54,7 +54,7 @@ class MatchThreshold;
  * element replace the tags from the input1 element. The output from the tag-differencing
  * will always be an osm changeset (*.osc).
  *
- * Workflow Steps: TODO: update
+ * Workflow Steps:
  *
  * - Store off original map and ref1
  * - Mark ref1 inputs
