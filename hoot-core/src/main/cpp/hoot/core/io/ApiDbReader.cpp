@@ -93,10 +93,10 @@ void ApiDbReader::initializePartial()
   _firstPartialReadCompleted = false;
   _elementsRead = 0;
   _selectElementType = ElementType::Node;
-  _lastId = 0;
-  _maxNodeId = 0;
-  _maxWayId = 0;
-  _maxRelationId = 0;
+  _lastId = std::numeric_limits<long>::min();
+  _maxNodeId = std::numeric_limits<long>::min();
+  _maxWayId = std::numeric_limits<long>::min();
+  _maxRelationId = std::numeric_limits<long>::min();
   _totalNumMapNodes = 0;
   _totalNumMapWays = 0;
   _totalNumMapRelations = 0;
