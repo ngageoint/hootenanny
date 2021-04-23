@@ -219,7 +219,7 @@ void ConflateExecutor::conflate(const QString& input1, const QString& input2, QS
 
   // Check to see if all the data is untyped. If so, log a warning so the user knows they may not
   // be getting the best conflate results in case types could be added to the input.
-  if (map->size() > 0 && !SchemaUtils::anyElementsHaveType(_ap))
+  if (map->size() > 0 && !SchemaUtils::anyElementsHaveType(map))
   {
     const QString msg =
       "No elements in the input map have a recognizable schema type. Generic conflation "

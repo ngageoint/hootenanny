@@ -188,7 +188,7 @@ void DiffConflator::apply(OsmMapPtr& map)
     else
     {
       // Use a naive approach and remove all elements involved in a match completely, despite
-      // possible partial subline matches.
+      // possible partial subline matches (if linear features are present).
       _removeMatchElementsCompletely(Status::Unknown2);
     }
     MemoryUsageChecker::getInstance().check();
@@ -220,7 +220,7 @@ void DiffConflator::apply(OsmMapPtr& map)
       _removeMetadataTags();
     }
 
-    // TODO: fix orphaned nodes in output
+    // TODO: fix orphaned nodes in the diff test output
     //SuperfluousNodeRemover::removeNodes(_map);
 
     _currentStep++;
@@ -457,7 +457,6 @@ void DiffConflator::_removeMatchElementsCompletely(const Status& status)
     {
       LOG_VART(match->getName());
       LOG_VART(match->getMatchMembers());
-      LOG_VART(ConfigOptions().getDifferentialRemovePartialMatchesAsWhole());
 
       // Get the element IDs involved in the match and remove the elements involved in the match
       // completely.
@@ -913,7 +912,7 @@ unsigned int DiffConflator::getNumSteps() const
   {
     numSteps--;
   }
-  if (!ConfigOptions().getDifferentialRemovePartialMatchesAsWhole())
+  if (!ConfigOptions().getDifferentialRemoveLinearPartialMatchesAsWhole())
   {
     numSteps--;
   }
