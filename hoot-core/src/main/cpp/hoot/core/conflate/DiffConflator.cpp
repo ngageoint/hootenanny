@@ -145,7 +145,7 @@ void DiffConflator::apply(OsmMapPtr& map)
   if (!ConfigOptions().getConflateMatchOnly())
   {  
     // TODO:
-    if (!ConfigOptions().getDifferentialRemovePartialMatchesAsWhole() &&
+    if (!ConfigOptions().getDifferentialRemoveLinearPartialMatchesAsWhole() &&
         SuperfluousConflateOpRemover::linearConflatorPresent())
     {
       _updateProgress(_currentStep - 1, "Optimizing feature matches...");
@@ -175,7 +175,7 @@ void DiffConflator::apply(OsmMapPtr& map)
 
     // We're eventually getting rid of all matches from the output, but in order to make the road
     // snapping work correctly we'll get rid of secondary elements in matches first.
-    if (!ConfigOptions().getDifferentialRemovePartialMatchesAsWhole() &&
+    if (!ConfigOptions().getDifferentialRemoveLinearPartialMatchesAsWhole() &&
         SuperfluousConflateOpRemover::linearConflatorPresent())
     {
       _removePartialSecondaryMatchElements();
@@ -418,8 +418,9 @@ void DiffConflator::_removeMatchElementsCompletely(const Status& status)
   const bool treatReviewsAsMatches = ConfigOptions().getDifferentialTreatReviewsAsMatches();
   LOG_VART(treatReviewsAsMatches);
 
+  // TODO:
   std::vector<ConstMatchPtr> matches;
-  if (!ConfigOptions().getDifferentialRemovePartialMatchesAsWhole() &&
+  if (!ConfigOptions().getDifferentialRemoveLinearPartialMatchesAsWhole() &&
       SuperfluousConflateOpRemover::linearConflatorPresent())
   {
     matches = _nonLinearMatches;

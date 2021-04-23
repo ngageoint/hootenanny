@@ -100,6 +100,10 @@ protected:
   void _createMatches();
   MatchSetVector _optimizeMatches(std::vector<ConstMatchPtr>& matches);
 
+  // TODO:
+  void _createMergers(std::vector<MergerPtr>& relationMergers);
+  void _mergeFeatures(const std::vector<MergerPtr>& relationMergers);
+  void _applyMergers(const std::vector<MergerPtr>& mergers, OsmMapPtr& map);
   /*
    * Populates the _e2m map with a mapping of ElementIds to their respective Merger objects. This
    * is helpful when replacing element ids with new ids.
@@ -108,10 +112,6 @@ protected:
    * for an example:
    * http://stackoverflow.com/questions/10064422/java-on-memory-efficient-key-value-store
    */
-  // TODO:
-  void _createMergers(std::vector<MergerPtr>& relationMergers);
-  void _mergeFeatures(const std::vector<MergerPtr>& relationMergers);
-  void _applyMergers(const std::vector<MergerPtr>& mergers, OsmMapPtr& map);
   void _mapElementIdsToMergers();
   void _replaceElementIds(const std::vector<std::pair<ElementId, ElementId>>& replaced);
 

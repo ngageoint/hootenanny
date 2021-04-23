@@ -38,9 +38,6 @@
 namespace hoot
 {
 
-/**
- * TODO: remove test
- */
 class WaySublineRemoverTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(WaySublineRemoverTest);

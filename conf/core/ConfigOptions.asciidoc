@@ -1296,12 +1296,16 @@ If enabled, debug maps are written from inside loops where enabled. debug.maps.w
 be enabled for this option to be used. Enabling this option can create a lot of debug maps and slow
 down debugging significantly, so use with caution.
 
-=== differential.remove.partial.matches.as.whole
+=== differential.remove.linear.partial.matches.as.whole
 
 * Data Type: bool
 * Default Value: `false`
 
-TODO
+When disabled, Differential Conflation only removes the element geometric portions of linear matches
+involved in the match from the differential output. Otherwise, elements are removed completely from
+the differential, even if they are only partially involved in a match. Disabling this setting may
+yield more accurate linear feature differentials. This setting may only be disabled when using the
+Unifying Algorithm.
 
 === differential.remove.reference.data
 

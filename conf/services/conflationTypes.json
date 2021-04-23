@@ -11,11 +11,13 @@
             "overwrite.tag.merger.exclude": "Tag overwrite exclude list"
         }
     },
-    "RubberSheeting": {
+    "Areas": {
+        "matcher": "hoot::ScriptMatchCreator,Area.js",
+        "merger": "hoot::ScriptMergerCreator",
         "members": {
-            "rubber.sheet.max.allowed.ways": "Maximum number of ways allowed",
-            "rubber.sheet.minimum.ties": "Minimum number of tie points required.",
-	    "rubber.sheet.log.missing.requirements.as.warning": "Log a warning if enough tie points are not found."
+            "area.overlap.review.threshold": "Overlap review threshold; 0.0 to 1.0",
+            "search.radius.area": "Search radius (m); -1 for default",
+            "area.tag.threshold": "Tag match threshold; 0.0 to 1.0"
         }
     },
     "Attribute": {
@@ -24,27 +26,6 @@
             "attribute.conflation.allow.reviews.by.score": "Allow reviews by score",
             "attribute.conflation.ref.tag.overwrite.exclude": "Reference feature tags not to be overwritten",
             "attribute.conflation.suppress.building.tag.on.multipoly.relation.constituents": "Suppress building tags on multi-polygon relation building members"
-        }
-    },
-    "Differential": {
-        "matcher": "",
-        "merger": "",
-        "members": {
-            "snap.unconnected.ways.snap.tolerance": "Maximum distance (m) over which to allow snapping roads to existing roads",
-            "snap.unconnected.ways.existing.way.node.tolerance": "Maximum distance (m) to allow snapping roads to existing road nodes",
-            "differential.remove.unconflatable.data": "Remove unconflatable data in the secondary layer from the output",
-            "snap.unconnected.ways.use.existing.way.nodes": "Reuse existing road nodes when snapping unconnected roads",
-            "differential.snap.unconnected.roads": "Snap unconnected secondary roads to reference roads",
-            "differential.treat.reviews.as.matches": "Treat reviews as matches and remove from the output"
-        }
-    },
-    "Areas": {
-        "matcher": "hoot::ScriptMatchCreator,Area.js",
-        "merger": "hoot::ScriptMergerCreator",
-        "members": {
-            "area.overlap.review.threshold": "Overlap review threshold; 0.0 to 1.0",
-            "search.radius.area": "Search radius (m); -1 for default",
-            "area.tag.threshold": "Tag match threshold; 0.0 to 1.0"
         }
     },
     "Buildings": {
@@ -64,13 +45,17 @@
             "building.review.matches.other.than.one.to.one": "Review matches that are not one to one"
         }
     },
-    "Relations": {
-        "matcher": "hoot::ScriptMatchCreator,Relation.js",
-        "merger": "hoot::ScriptMergerCreator",
+    "Differential": {
+        "matcher": "",
+        "merger": "",
         "members": {
-            "relation.name.threshold": "Name match threshold; 0.0 to 1.0",
-            "search.radius.relation": "Search radius (m); -1 for default",
-            "relation.tag.threshold": "Tag match threshold; 0.0 to 1.0"
+            "snap.unconnected.ways.snap.tolerance": "Maximum distance (m) over which to allow snapping roads to existing roads",
+            "snap.unconnected.ways.existing.way.node.tolerance": "Maximum distance (m) to allow snapping roads to existing road nodes",
+            "differential.remove.linear.partial.matches.as.whole": "Remove linear partial matches as whole",
+            "differential.remove.unconflatable.data": "Remove unconflatable data in the secondary layer from the output",
+            "snap.unconnected.ways.use.existing.way.nodes": "Reuse existing road nodes when snapping unconnected roads",
+            "differential.snap.unconnected.roads": "Snap unconnected secondary roads to reference roads",
+            "differential.treat.reviews.as.matches": "Treat reviews as matches and remove from the output"
         }
     },
     "GenericLines": {
@@ -154,6 +139,15 @@
             "search.radius.railway": "Search radius (m); -1 for default"
         }
     },
+    "Relations": {
+        "matcher": "hoot::ScriptMatchCreator,Relation.js",
+        "merger": "hoot::ScriptMergerCreator",
+        "members": {
+            "relation.name.threshold": "Name match threshold; 0.0 to 1.0",
+            "search.radius.relation": "Search radius (m); -1 for default",
+            "relation.tag.threshold": "Tag match threshold; 0.0 to 1.0"
+        }
+    },
     "Rivers": {
         "matcher": "hoot::ScriptMatchCreator,River.js",
         "merger": "hoot::ScriptMergerCreator",
@@ -176,6 +170,13 @@
         "merger": "hoot::NetworkMergerCreator",
         "members": {
              "network.match.threshold": "Match threshold; 0.0 to 1.0"
+        }
+    },
+    "RubberSheeting": {
+        "members": {
+            "rubber.sheet.max.allowed.ways": "Maximum number of ways allowed",
+            "rubber.sheet.minimum.ties": "Minimum number of tie points required.",
+	    "rubber.sheet.log.missing.requirements.as.warning": "Log a warning if enough tie points are not found."
         }
     }
 }
