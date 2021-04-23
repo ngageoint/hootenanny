@@ -94,7 +94,7 @@ public:
     for (int i = 0; i < inputs.size(); i++)
     {
       const QString input = inputs.at(i);
-      if (!DbUtils::isDbUrl(input)) // TODO: make this work for db urls
+      if (!DbUtils::isDbUrl(input))
       {
         QFileInfo fileInfo(input);
         if (!fileInfo.exists())
@@ -117,6 +117,7 @@ public:
     ElementCriterionPtr crit =
       _getCriterion(
         criterionClassName, ConfigOptions().getElementCriterionNegate(), isStreamableCrit);
+    LOG_VARD(isStreamableCrit);
 
     const QString dataType = countFeaturesOnly ? "features" : "elements";
     if (isStreamableCrit)
@@ -156,7 +157,6 @@ private:
 
   std::shared_ptr<PartialOsmMapReader> _getStreamingReader(const QString& input)
   {
-    LOG_STATUS("Counting features in: " << input << "...");
     std::shared_ptr<PartialOsmMapReader> reader =
       std::dynamic_pointer_cast<PartialOsmMapReader>(
         OsmMapReaderFactory::createReader(input));
@@ -263,6 +263,8 @@ private:
   long _countMemoryBound(const QStringList& inputs, const bool countFeaturesOnly,
                          const ElementCriterionPtr& criterion)
   {
+    LOG_STATUS("Counting features in: " << inputs << "...");
+
     OsmMapPtr map(new OsmMap());
     IoUtils::loadMaps(map, inputs, true);
 
