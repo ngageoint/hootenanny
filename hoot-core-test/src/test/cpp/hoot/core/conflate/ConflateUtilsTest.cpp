@@ -49,6 +49,7 @@ public:
   HootTestFixture(
     "test-files/conflate/ConflateUtilsTest/", "test-output/conflate/ConflateUtilsTest/")
   {
+    //setResetType(ResetAll);
   }
 
   void runWriteUnconflatableTest()

@@ -15,7 +15,7 @@ LOG_LEVEL=--warn
 # allowed to remove partial match elements in a partial fashion at this time, so change the default setting to avoid a warning.
 echo "Running diff changeset with tags, separate outputs..."
 hoot conflate $LOG_LEVEL -C DifferentialConflation.conf -C NetworkAlgorithm.conf -C Testing.conf \
- -D differential.remove.partial.matches.as.whole=true $INPUT_DIR/Input1.osm $INPUT_DIR/Input2.osm \
+ -D differential.remove.linear.partial.matches.as.whole=true $INPUT_DIR/Input1.osm $INPUT_DIR/Input2.osm \
  $OUTPUT_DIR/output.osc --differential --include-tags --separate-output
 
 # Check tag output

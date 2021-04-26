@@ -8408,6 +8408,17 @@
         <tag k="hoot:review:type" v="Highway"/>
         <tag k="type" v="review"/>
     </relation>
+    <relation visible="true" id="-1886" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="node" ref="-49480" role="reviewee"/>
+        <member type="way" ref="-5008" role="reviewee"/>
+        <tag k="hoot:review:members" v="2"/>
+        <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:note" v="Ambiguous intersection match. Possible dogleg? Very short segment? Please verify merge and fix as needed."/>
+        <tag k="hoot:review:score" v="-1"/>
+        <tag k="hoot:review:sort_order" v="31"/>
+        <tag k="hoot:review:type" v="Highway"/>
+        <tag k="type" v="review"/>
+    </relation>
     <relation visible="true" id="-1884" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-70733" role="reviewee"/>
         <member type="way" ref="-657" role="reviewee"/>
@@ -8486,7 +8497,7 @@
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:note" v="A complex road situation was found with multiple plausible solutions. Please reference input data/imagery and manually merge or modify as needed."/>
         <tag k="hoot:review:score" v="0.718488"/>
-        <tag k="hoot:review:sort_order" v="31"/>
+        <tag k="hoot:review:sort_order" v="32"/>
         <tag k="hoot:review:type" v="Highway"/>
         <tag k="type" v="review"/>
     </relation>

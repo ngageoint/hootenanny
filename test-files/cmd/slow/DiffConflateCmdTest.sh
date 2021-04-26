@@ -10,7 +10,7 @@ CONFIG="-C DifferentialConflation.conf -C NetworkAlgorithm.conf -C Testing.conf"
 # When using Diff conflate w/ Network (everything in here is using Network), we're not allowed to 
 # remove partial match elements in a partial fashion at this time, so change the default setting to 
 # avoid a warning.
-GENERAL_OPTS="-D differential.remove.partial.matches.as.whole=true"
+GENERAL_OPTS="-D differential.remove.linear.partial.matches.as.whole=true"
 
 # Run differential conflation to produce a map output
 echo ""

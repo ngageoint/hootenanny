@@ -42,7 +42,7 @@ GENERAL_OPTS=$CONFIG" -C "$ALG_CONFIG" -C DifferentialConflation.conf -C Testing
 # When using Diff conflate w/ Network, we're not allowed to remove partial match elements in a partial fashion at this 
 # time, so change the default setting to avoid a warning.
 if [ "$ALG_CONFIG" == "NetworkAlgorithm.conf" ]; then
-  GENERAL_OPTS+=" -D differential.remove.partial.matches.as.whole=true"
+  GENERAL_OPTS+=" -D differential.remove.linear.partial.matches.as.whole=true"
 fi
 DB_OPTS="-D api.db.email=$HOOT_EMAIL -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true -D changeset.user.id=1 -D changeset.max.size=999999"
 CONFLATE_OPTS="$MATCHERS $MERGERS -D snap.unconnected.ways.mark.snapped.nodes=true -D snap.unconnected.ways.mark.snapped.ways=true"
