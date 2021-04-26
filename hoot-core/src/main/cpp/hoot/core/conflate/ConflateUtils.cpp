@@ -72,7 +72,6 @@ void ConflateUtils::writeDiff(const QString& mapUrl1, const QString& mapUrl2,
 
   ConflateExecutor conflator;
   conflator.setIsDiffConflate(true);
-  conflator.setDiffRemoveLinearPartialMatchesAsWhole(false);
   conflator.conflate(mapUrl1, mapUrl2, output);
 
   conf().set(ConfigOptions::getBoundsKey(), "");
