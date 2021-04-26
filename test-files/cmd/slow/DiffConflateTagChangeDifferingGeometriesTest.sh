@@ -7,9 +7,9 @@ OUTPUT_DIR=test-output/cmd/slow/DiffConflateTagChangeDifferingGeometriesTest
 mkdir -p $OUTPUT_DIR
 LOG_LEVEL=--warn
 
-# We run with the Network alg, which can generate node/way match pairs. Then we check to make sure tag changes based on node/way match pairs
-# don't exist in the tags changeset. Particularly, you should not see any highway nodes in the output with the following tags transferred to
-# them from ways: access=permissive, highway=service, and surface=asphalt.
+# We run with the Network alg, which can generate node/way match pairs. Then we check to make sure tag changes based on 
+# node/way match pairs don't exist in the tags changeset. Particularly, you should not see any highway nodes in the output 
+# with the following tags transferred to them from ways: access=permissive, highway=service, and surface=asphalt.
 
 # Run changeset w/tags to produce separate outputs for geometry and tags. When using Diff conflate w/ Network, we're not 
 # allowed to remove partial match elements in a partial fashion at this time, so change the default setting to avoid a warning.

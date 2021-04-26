@@ -66,7 +66,7 @@ public:
    */
   static void writeDiff(
     const QString& mapUrl1, const QString& mapUrl2, const geos::geom::Envelope& bounds,
-    const QString& output);
+    QString& output);
 
   /**
    * Determines if the Network road conflate algorithm is activated

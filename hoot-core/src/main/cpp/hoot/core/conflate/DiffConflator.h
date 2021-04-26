@@ -174,7 +174,7 @@ public:
    * To calculate these changes we look through all of the matches, and compare tags. A set of newer
    * tags is returned as a changeset (because updating the tags requires a modify operation).
    *
-   * @return - A changeset provider that can be used with ChangesetWriter classes
+   * @return A changeset provider that can be used with ChangesetWriter classes
    */
   MemChangesetProviderPtr getTagDiff() { return _tagChanges; }
 
@@ -182,6 +182,9 @@ public:
   QString getTagChangesetStats() const { return _tagChangesetStats; }
   QString getUnifiedChangesetStats() const { return _unifiedChangesetStats; }
   long getNumUnconflatableElementsDiscarded() const { return _numUnconflatableElementsDiscarded; }
+
+  void setRemoveLinearPartialMatchesAsWhole(bool remove)
+  { _removeLinearPartialMatchesAsWhole = remove; }
 
 private:
 
@@ -201,7 +204,11 @@ private:
   QSet<ElementId> _intraDatasetMatchOnlyElementIds;
   bool _intraDatasetElementIdsPopulated;
 
-  // These are only used when differential.remove.linear.partial.matches.as.whole=false.
+  // Determines whether matching linear portions from the secondary are partially removed (just
+  // portions that matched) or completely removed (entire element); see
+  // differential.remove.linear.partial.matches.as.whole
+  bool _removeLinearPartialMatchesAsWhole;
+  // These are only used when _removeLinearPartialMatchesAsWhole=false.
   std::vector<ConstMatchPtr> _linearMatches;
   std::vector<ConstMatchPtr> _nonLinearMatches;
 
@@ -226,6 +233,7 @@ private:
    * Separates matches with linear features from those without them
    */
   void _separateLinearMatches();
+  int _countLinearMatches() const;
 
   // Calculates and stores the tag differential as a set of change objects
   void _calcAndStoreTagChanges();

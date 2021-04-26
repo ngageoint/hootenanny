@@ -49,7 +49,7 @@ public:
   HootTestFixture(
     "test-files/conflate/ConflateUtilsTest/", "test-output/conflate/ConflateUtilsTest/")
   {
-    //setResetType(ResetAll);
+    setResetType(ResetAll);
   }
 
   void runWriteUnconflatableTest()
@@ -85,12 +85,11 @@ public:
 
   void runWriteDiffTest()
   {
+    QString out = _outputPath + "runWriteDiffTest-out.osm";
     ConflateUtils::writeDiff(
-      "test-files/ToyTestA.osm", "test-files/ToyTestB.osm",
-      geos::geom::Envelope(-104.9007, 38.8541, -104.8994, 38.8552),
-      _outputPath + "runWriteDiffTest-out.osm");
-    HOOT_FILE_EQUALS(
-      _inputPath + "runWriteDiffTest-out.osm", _outputPath + "runWriteDiffTest-out.osm");
+      "test-files/ToyTestB.osm", "test-files/ToyTestA.osm",
+      geos::geom::Envelope(-104.9007, -104.8994, 38.8541, 38.8552), out);
+    HOOT_FILE_EQUALS(_inputPath + "runWriteDiffTest-out.osm", out);
   }
 };
 

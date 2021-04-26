@@ -79,6 +79,7 @@ HOOT_FACTORY_REGISTER(OsmMapOperation, DiffConflator)
 DiffConflator::DiffConflator() :
 AbstractConflator(),
 _intraDatasetElementIdsPopulated(false),
+_removeLinearPartialMatchesAsWhole(false),
 _numSnappedWays(0),
 _numUnconflatableElementsDiscarded(0)
 {
@@ -87,6 +88,7 @@ _numUnconflatableElementsDiscarded(0)
 DiffConflator::DiffConflator(const std::shared_ptr<MatchThreshold>& matchThreshold) :
 AbstractConflator(matchThreshold),
 _intraDatasetElementIdsPopulated(false),
+_removeLinearPartialMatchesAsWhole(false),
 _numSnappedWays(0),
 _numUnconflatableElementsDiscarded(0)
 {
@@ -144,10 +146,11 @@ void DiffConflator::apply(OsmMapPtr& map)
 
   if (!ConfigOptions().getConflateMatchOnly())
   {  
+    LOG_VART(_removeLinearPartialMatchesAsWhole);
     // We only need to optimize linear matches if we aren't removing them completely and a linear
     // matcher was specified in the first place.
-    if (!ConfigOptions().getDifferentialRemoveLinearPartialMatchesAsWhole() &&
-        SuperfluousConflateOpRemover::linearMatcherPresent())
+    if (!_removeLinearPartialMatchesAsWhole &&
+        SuperfluousConflateOpRemover::linearMatcherPresent() /*&& _countLinearMatches() > 0*/)
     {
       _updateProgress(_currentStep - 1, "Optimizing feature matches...");
       // If removing linear match elements partially, matches need to be separated into linear and
@@ -178,8 +181,8 @@ void DiffConflator::apply(OsmMapPtr& map)
 
     // We're eventually getting rid of all matches from the output, but in order to make the road
     // snapping work correctly we'll get rid of secondary elements in matches first.
-    if (!ConfigOptions().getDifferentialRemoveLinearPartialMatchesAsWhole() &&
-        SuperfluousConflateOpRemover::linearMatcherPresent())
+    if (!_removeLinearPartialMatchesAsWhole &&
+        SuperfluousConflateOpRemover::linearMatcherPresent() /*&& _countLinearMatches() > 0*/)
     {
       // Use the MergerCreator framework and only remove the sections of linear features that match.
       // All other feature types are removed completely.
@@ -248,6 +251,21 @@ void DiffConflator::_separateLinearMatches()
       _linearMatches.push_back(match);
     }
   }
+}
+
+int DiffConflator::_countLinearMatches() const
+{
+  int numLinearMatches = 0;
+  for (std::vector<ConstMatchPtr>::const_iterator mit = _matches.begin(); mit != _matches.end();
+       ++mit)
+  {
+    ConstMatchPtr match = *mit;
+    if (match->getMatchMembers() == MatchMembers::Polyline)
+    {
+      numLinearMatches++;
+    }
+  }
+  return numLinearMatches;
 }
 
 void DiffConflator::_discardUnconflatableElements()
