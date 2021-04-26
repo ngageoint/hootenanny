@@ -63,51 +63,46 @@ public:
                ConstMatchThresholdPtr mt);
   ~HighwayMatch() = default;
 
-  QString explain() const override;
-
-  const MatchClassification& getClassification() const override { return _c; }
-
-  MatchMembers getMatchMembers() const override { return MatchMembers::Polyline; }
-
-  std::map<QString, double> getFeatures(const ConstOsmMapPtr& m) const override;
-
-  QString getName() const override { return getHighwayMatchName(); }
-  static QString getHighwayMatchName() { return MATCH_NAME; }
-  QString getClassName() const override { return className(); }
-
-  double getProbability() const override;
-
-  double getScore() const override { return _score; }
-
-  const std::shared_ptr<SublineStringMatcher>& getSublineMatcher() const
-  { return _sublineMatcher; }
-
-  bool isConflicting(const ConstMatchPtr& other, const ConstOsmMapPtr& map,
-    const QHash<QString, ConstMatchPtr>& matches = QHash<QString, ConstMatchPtr>()) const override;
-
   /**
    * Simply returns the two elements that were matched.
    */
   std::set<std::pair<ElementId, ElementId>> getMatchPairs() const override;
+  double getProbability() const override;
+  double getScore() const override { return _score; }
+  QString explain() const override;
+  const MatchClassification& getClassification() const override { return _c; }
+  MatchMembers getMatchMembers() const override { return MatchMembers::Polyline; }
+
+  bool isConflicting(const ConstMatchPtr& other, const ConstOsmMapPtr& map,
+    const QHash<QString, ConstMatchPtr>& matches = QHash<QString, ConstMatchPtr>()) const override;
+
+  std::map<QString, double> getFeatures(const ConstOsmMapPtr& m) const override;
 
   const WaySublineMatchString& getSublineMatch() const { return _sublineMatch; }
+  const std::shared_ptr<SublineStringMatcher>& getSublineMatcher() const
+  { return _sublineMatcher; }
 
   QString toString() const override;
 
+  QString getName() const override { return getHighwayMatchName(); }
+  static QString getHighwayMatchName() { return MATCH_NAME; }
+  QString getClassName() const override { return className(); }
   QString getDescription() const override
   { return "Matches roads with the 2nd Generation (Unifying) Algorithm"; }
 
 private:
 
   std::shared_ptr<HighwayClassifier> _classifier;
-  std::shared_ptr<SublineStringMatcher> _sublineMatcher;
   MatchClassification _c;
-  double _minSplitSize;
   double _score;
-  WaySublineMatchString _sublineMatch;
-  mutable QHash<ElementId, bool> _conflicts;
   QString _explainText;
+
+  std::shared_ptr<SublineStringMatcher> _sublineMatcher;
+  double _minSplitSize;
+  WaySublineMatchString _sublineMatch;
   static QString _noMatchingSubline;
+
+  mutable QHash<ElementId, bool> _conflicts;
 
   double _calculateExpertProbability(const ConstOsmMapPtr& map) const;
 

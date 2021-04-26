@@ -241,7 +241,8 @@ void DiffConflator::_separateLinearMatches()
   for (std::vector<ConstMatchPtr>::const_iterator mit = _matches.begin(); mit != _matches.end();
        ++mit)
   {
-    // TODO: make this work with non-highway linear matches
+    // TODO: make this work with non-highway linear matches: add a subline matcher to script match;
+    // add diff tests for river, railway, power line, and generic line
 
     ConstMatchPtr match = *mit;
     if (match->getName() != HighwayMatch::MATCH_NAME ||
