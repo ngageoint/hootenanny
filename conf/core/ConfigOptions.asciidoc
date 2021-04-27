@@ -1002,7 +1002,6 @@ See also:
 * Data Type: list
 * Default Value:
 ** `hoot::RemoveMissingElementsVisitor`
-** `hoot::InvalidWayRemover`
 ** `hoot::PoiPolygonInvalidReviewNodeRemover`
 ** `hoot::SuperfluousNodeRemover`
 ** `hoot::SmallHighwayMerger`
@@ -1016,6 +1015,7 @@ See also:
 ** `hoot::RemoveInvalidMultilineStringMembersVisitor`
 ** `hoot::SuperfluousWayRemover`
 ** `hoot::RemoveDuplicateWayNodesVisitor`
+** `hoot::InvalidWayRemover`
 ** `hoot::DuplicateWayRemover`
 ** `hoot::RemoveDuplicateRelationMembersVisitor`
 ** `hoot::RemoveEmptyRelationsOp`
@@ -1025,8 +1025,9 @@ See also:
 ** `hoot::ApiTagTruncateVisitor`
 ** `hoot::AddHilbertReviewSortOrderOp`
 
-List of operations to run in the conflate command after data is conflated, but before exporting.
-'hoot info --operators' displays information about the available operations.
+Runs during conflation just after the data is conflated, but before it is saved. The ordering here
+is sensitive and addition of new operations may take experimentation to produce optimal conflated
+output. 'hoot info --operators' displays information about the available operations.
 
 === conflate.pre.ops
 
@@ -1040,7 +1041,9 @@ List of operations to run in the conflate command after data is conflated, but b
 ** `hoot::RemoveInvalidReviewRelationsVisitor`
 ** `hoot::RubberSheet`
 
-Runs in the conflate command after data is loaded. 'hoot info --operators' displays information
+Runs during conflation just after data is loaded. The ordering here is sensitive (although
+generally not as sensitive as with conflate.post.ops) and addition of new operations may take
+experimentation to produce optimal conflated output. 'hoot info --operators' displays information
 about the available operations.
 
 See also: <<MapCleanerTransforms,map.cleaner.transforms>>

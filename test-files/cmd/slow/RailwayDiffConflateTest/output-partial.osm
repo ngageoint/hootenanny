@@ -22,7 +22,6 @@
     <node visible="true" id="-3236" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.6982706835003540" lon="125.8892308517732630"/>
     <node visible="true" id="-3235" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.6999421492923332" lon="125.8883674901667860"/>
     <node visible="true" id="-3234" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.6990789834971238" lon="125.8888237092874363"/>
-    <node visible="true" id="-3233" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.7201778585497536" lon="126.0627793676308812"/>
     <node visible="true" id="-3227" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.7097185550000091" lon="126.0621820329999991"/>
     <node visible="true" id="-3225" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.6943195559027586" lon="126.0145121357694080"/>
     <node visible="true" id="-3224" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.6936160256096073" lon="126.0131855390169875"/>
@@ -36,7 +35,6 @@
     <node visible="true" id="-2017" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6499647049999950" lon="125.9045844550000055"/>
     <node visible="true" id="-2016" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6499239649999993" lon="125.9045561089999978"/>
     <node visible="true" id="-2015" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6498834940000080" lon="125.9045279510000057"/>
-    <node visible="true" id="-1984" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6918658550000032" lon="125.8892608299999978"/>
     <node visible="true" id="-1965" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5894414589999997" lon="125.8688064469999972"/>
     <node visible="true" id="-1964" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5893606409999990" lon="125.8687821740000032"/>
     <node visible="true" id="-1963" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.5892560289999977" lon="125.8687507559999830"/>
@@ -109,7 +107,6 @@
     <node visible="true" id="-1570" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6062846150000070" lon="125.8682880780000062"/>
     <node visible="true" id="-1569" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6062696310000035" lon="125.8682607909999973"/>
     <node visible="true" id="-1568" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6062461369999994" lon="125.8682180060000064"/>
-    <node visible="true" id="-1521" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6968482950000023" lon="125.8900254920000066"/>
     <node visible="true" id="-1517" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6759632970000027" lon="125.8070651679999798"/>
     <node visible="true" id="-1516" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6759625799999966" lon="125.8070098459999997"/>
     <node visible="true" id="-1515" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6759621820000064" lon="125.8069791049999964"/>
@@ -166,7 +163,6 @@
     <node visible="true" id="-1430" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7317982970000045" lon="125.8650401459999841"/>
     <node visible="true" id="-1406" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7202964530000173" lon="125.8717879729999964"/>
     <node visible="true" id="-1405" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7202507620000063" lon="125.8718328729999882"/>
-    <node visible="true" id="-1404" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7224563030000084" lon="125.8699025269999936"/>
     <node visible="true" id="-1394" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7203481350000160" lon="125.8717371860000043"/>
     <node visible="true" id="-1363" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7431875079999983" lon="125.9094392599999850"/>
     <node visible="true" id="-1362" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7433899529999977" lon="125.9096723749999853"/>

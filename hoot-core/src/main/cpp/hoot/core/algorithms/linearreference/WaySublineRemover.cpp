@@ -32,8 +32,10 @@
 #include <hoot/core/elements/ElementGeometryUtils.h>
 #include <hoot/core/algorithms/linearreference/WayLocation.h>
 #include <hoot/core/algorithms/splitter/WaySplitter.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/ops/RemoveElementByEid.h>
+//#include <hoot/core/ops/RemoveNodeByEid.h>
 #include <hoot/core/ops/ReplaceElementOp.h>
 #include <hoot/core/algorithms/linearreference/WaySubline.h>
 
@@ -60,10 +62,25 @@ std::vector<ElementId> WaySublineRemover::removeSubline(
   if (subline.getStart().isExtreme() && subline.getEnd().isExtreme())
   {
     LOG_TRACE(
-      "Subline matches covers entire way; removing entire way: " << way->getElementId());
+      "Subline matches covers entire way. Removing entire way: " << way->getElementId() << "...");
+
     // Use RemoveElementByEid here instead of RecursiveElementRemover so that the way is removed
-    // from its parent before its removal.
+    // from its parent before its removal. We also don't want to remove RecursiveElementRemover here
+    // b/c the way's nodes may still belong to one the temp relations we created during splitting.
+    // TODO: add option to remove orphaned nodes?
+    //const std::vector<long> nodeIds = way->getNodeIds();
     RemoveElementByEid(way->getElementId()).apply(map);
+    //for (std::vector<long>::const_iterator it = nodeIds.begin(); it != nodeIds.end(); ++it)
+    //{
+      //RemoveElementByEid(ElementId::node(*it)).apply(map);
+      //RemoveNodeByEid(*it, true, false, true).apply(map);
+    //}
+
+    if (ConfigOptions().getDebugMapsWrite() && ConfigOptions().getDebugMapsWriteDetailed())
+    {
+      OsmMapWriterFactory::writeDebugMap(
+        map, "WaySublineRemover-after-entire-way-removal-" + way->getElementId().toString());
+    }
   }
   else
   {
@@ -77,6 +94,12 @@ std::vector<ElementId> WaySublineRemover::removeSubline(
     {
       // Update references to the modified way.
       ReplaceElementOp(way->getElementId(), newWayIds.at(0), true).apply(map);
+
+      if (ConfigOptions().getDebugMapsWrite() && ConfigOptions().getDebugMapsWriteDetailed())
+      {
+        OsmMapWriterFactory::writeDebugMap(
+          map, "WaySublineRemover-after-way-ref-update-" + way->getElementId().toString());
+      }
     }
     else
     {
@@ -121,8 +144,13 @@ std::vector<ElementId> WaySublineRemover::removeSubline(
   map->addWay(wayCopy2);
   WayLocation endCopy(map, wayCopy2, end.getSegmentIndex(), end.getSegmentFraction());
 
+  if (ConfigOptions().getDebugMapsWrite() && ConfigOptions().getDebugMapsWriteDetailed())
+  {
+    OsmMapWriterFactory::writeDebugMap(map, "WaySublineRemover-after-copied-ways-added");
+  }
+
   // Split the way at the beginning of the section we want to remove. If a split is performed, the
-  // input is automatically removed from the map and resulting newly created segments are
+  // copied input is automatically removed from the map and resulting newly created segments are
   // automatically added to the map.
   std::vector<ElementId> newWayIds1 = _split(wayCopy1, startCopy, map, true);
   const bool split1Performed = !newWayIds1.empty();
@@ -134,6 +162,11 @@ std::vector<ElementId> WaySublineRemover::removeSubline(
     LOG_TRACE("Removing " << wayCopy1->getElementId() << "...");
     RecursiveElementRemover(wayCopy1->getElementId()).apply(map);
   }
+  if (ConfigOptions().getDebugMapsWrite() && ConfigOptions().getDebugMapsWriteDetailed())
+  {
+    OsmMapWriterFactory::writeDebugMap(map, "WaySublineRemover-after-split-1-performed");
+  }
+
   // Split the way at the end of the section we want to remove.
   std::vector<ElementId> newWayIds2 = _split(wayCopy2, endCopy, map, false);
   const bool split2Performed = !newWayIds2.empty();
@@ -143,6 +176,11 @@ std::vector<ElementId> WaySublineRemover::removeSubline(
     LOG_TRACE("Removing " << wayCopy2->getElementId() << "...");
     RecursiveElementRemover(wayCopy2->getElementId()).apply(map);
   }
+  if (ConfigOptions().getDebugMapsWrite() && ConfigOptions().getDebugMapsWriteDetailed())
+  {
+    OsmMapWriterFactory::writeDebugMap(map, "WaySublineRemover-after-split-2-performed");
+  }
+
   std::vector<ElementId> newWayIds = newWayIds1;
   newWayIds.insert(newWayIds.end(), newWayIds2.begin(), newWayIds2.end());
   LOG_VART(newWayIds.size());
@@ -162,7 +200,21 @@ std::vector<ElementId> WaySublineRemover::removeSubline(
           ElementGeometryUtils::calculateLength(map->getElement(newWayIds.at(1)), map));
     }
     LOG_TRACE("Output way length(s): " << outputLengthsStr);
+
+    if (ConfigOptions().getDebugMapsWrite() && ConfigOptions().getDebugMapsWriteDetailed())
+    {
+      OsmMapWriterFactory::writeDebugMap(
+        map, "WaySublineRemover-after-original-way-removed-" + way->getElementId().toString());
+    }
   }
+  else
+  {
+    LOG_TRACE(way->getElementId() << " was not split.")
+  }
+
+  LOG_TRACE(map->containsElement(way->getElementId()));
+  LOG_TRACE(map->containsElement(wayCopy1->getElementId()));
+  LOG_TRACE(map->containsElement(wayCopy2->getElementId()));
 
   return newWayIds;
 }

@@ -39,6 +39,9 @@ class WaySubline;
 
 /**
  * Removes a sublines from ways
+ *
+ * @todo Its possible we're ending up with some way output that is invalid under certain
+ * circumstances from this. Possibly, we could integrate InvalidWayRemover here to help out.
  */
 class WaySublineRemover
 {

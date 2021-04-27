@@ -81,7 +81,7 @@ public:
   void addElement(const ConstElementPtr& e) override { _eid = e->getElementId(); }
 
   /**
-   * Removes an element as defined by this object.
+   * @see OsmMapOperation
    */
   void apply(const std::shared_ptr<OsmMap>& map) override;
 

@@ -69,21 +69,18 @@ public:
    */
   static void removeDuplicates(const WayPtr& way);
 
-  QString getInitStatusMessage() const override { return "Removing duplicate way nodes..."; }
-
-  QString getCompletedStatusMessage() const override
-  { return "Removed " + QString::number(_numAffected) + " duplicate way nodes"; }
-
-  QString getDescription() const override { return "Removes duplicate way nodes"; }
-
   /**
    * @see FilteredByGeometryTypeCriteria
    */
   QStringList getCriteria() const override;
 
-  QString getName() const override { return className(); }
+  QString getInitStatusMessage() const override { return "Removing duplicate way nodes..."; }
+  QString getCompletedStatusMessage() const override
+  { return "Removed " + QString::number(_numAffected) + " duplicate way nodes"; }
 
+  QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }
+  QString getDescription() const override { return "Removes duplicate way nodes"; }
 
   void setConflateInfoCache(const std::shared_ptr<ConflateInfoCache>& cache) override
   { _conflateInfoCache = cache; }

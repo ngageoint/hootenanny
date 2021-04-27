@@ -145,7 +145,7 @@ void RecursiveElementRemover::_remove(const std::shared_ptr<OsmMap>& map, Elemen
   {
     const RelationPtr& r = map->getRelation(eid.getId());
 
-    // make a copy so we can traverse it after this element is cleared.
+    // Make a copy so we can traverse it after this element is cleared.
     vector<RelationData::Entry> e = r->getMembers();
     r->clear();
     for (size_t i = 0; i < e.size(); i++)
@@ -170,7 +170,6 @@ void RecursiveElementRemover::_remove(const std::shared_ptr<OsmMap>& map, Elemen
     }
 
     RemoveWayByEid::removeWay(map, w->getId());
-    //RemoveWayByEid::removeWayFully(map, w->getId());
     LOG_VART(map->getWay(w->getId()));
     _numAffected++;
   }

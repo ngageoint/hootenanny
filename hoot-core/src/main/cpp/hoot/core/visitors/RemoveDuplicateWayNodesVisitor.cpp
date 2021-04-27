@@ -64,12 +64,12 @@ void RemoveDuplicateWayNodesVisitor::visit(const ElementPtr& e)
 
     // Since this class operates on elements with generic types, an additional check must be
     // performed here during conflation to enure we don't modify any element not associated with
-    // and active conflate matcher in the current conflation configuration.
+    // an active conflate matcher in the current conflation configuration.
     if (_conflateInfoCache &&
         !_conflateInfoCache->elementCanBeConflatedByActiveMatcher(way, className()))
     {
       LOG_TRACE(
-        "Skipping processing of " << way->getElementId() << " as it cannot be conflated by any " <<
+        "Skipping processing of " << way->getElementId() << ", as it cannot be conflated by any " <<
         "actively configured conflate matcher...");
       return;
     }

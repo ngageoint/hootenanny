@@ -65,6 +65,8 @@
 #include <hoot/core/conflate/highway/HighwayMatch.h>
 #include <hoot/core/conflate/ConflateInfoCache.h>
 #include <hoot/core/ops/SuperfluousNodeRemover.h>
+#include <hoot/core/visitors/InvalidWayRemover.h>
+#include <hoot/core/visitors/RemoveDuplicateWayNodesVisitor.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -119,7 +121,7 @@ void DiffConflator::apply(OsmMapPtr& map)
   _reset();
   // Store the map, as we might need it for a tag diff later.
   _map = map;
-  std::shared_ptr<ConflateInfoCache> conflateInfoCache(new ConflateInfoCache(map));
+  std::shared_ptr<ConflateInfoCache> conflateInfoCache = std::make_shared<ConflateInfoCache>(_map);
 
   // If we skip this part, then any unmatchable data will simply pass through to output, which can
   // be useful during debugging.
@@ -151,9 +153,10 @@ void DiffConflator::apply(OsmMapPtr& map)
     // matches here where linear and non-linear features are mixed, we specify all matches, and we
     // have no tests yet to catch the particular situation. If so, will have to deal with that on a
     // case by case basis.
-    if (!_removeLinearPartialMatchesAsWhole &&
-        SuperfluousConflateOpRemover::linearMatcherPresent() &&
-        _countMatchesToRemoveAsPartial() > 0)
+    const bool removePartialLinearMatchesPartially =
+      !_removeLinearPartialMatchesAsWhole && SuperfluousConflateOpRemover::linearMatcherPresent() &&
+      _countMatchesToRemoveAsPartial() > 0;
+    if (removePartialLinearMatchesPartially)
     {
       _updateProgress(_currentStep - 1, "Optimizing feature matches...");
       // If removing linear match elements partially, matches need to be separated into linear and
@@ -184,13 +187,12 @@ void DiffConflator::apply(OsmMapPtr& map)
 
     // We're eventually getting rid of all matches from the output, but in order to make the road
     // snapping work correctly we'll get rid of secondary elements in matches first.
-    if (!_removeLinearPartialMatchesAsWhole &&
-        SuperfluousConflateOpRemover::linearMatcherPresent() &&
-        _countMatchesToRemoveAsPartial() > 0)
+    if (removePartialLinearMatchesPartially)
     {
       // Use the MergerCreator framework and only remove the sections of linear features that match.
       // All other feature types are removed completely.
       _removePartialSecondaryMatchElements();
+      _partialMatchRemovalCleanup(conflateInfoCache);
     }
     else
     {
@@ -226,9 +228,6 @@ void DiffConflator::apply(OsmMapPtr& map)
     {
       _removeMetadataTags();
     }
-
-    // TODO: fix orphaned nodes in the diff test output
-    //SuperfluousNodeRemover::removeNodes(_map);
 
     _currentStep++;
   }
@@ -570,6 +569,26 @@ void DiffConflator::_removePartialSecondaryMatchElements()
   std::vector<MergerPtr> relationMergers;
   _createMergers(relationMergers);
   _mergeFeatures(relationMergers);
+}
+
+void DiffConflator::_partialMatchRemovalCleanup(
+  const std::shared_ptr<ConflateInfoCache>& conflateInfoCache)
+{
+  // Due to a potential bug in WaySublineRemover (called by LinearDiffMerger), we end up with
+  // orphaned nodes in the output after partial element removal. Oddly, the same cleaning steps as
+  // used here run as part of the post conflate ops but don't solve the problem. So, running them
+  // as part of diff conflate.
+
+  // Remove the dupe way nodes before the invalid ways in order to expose more invalid ways.
+  RemoveDuplicateWayNodesVisitor dupeWayNodeRemover;
+  dupeWayNodeRemover.setConflateInfoCache(conflateInfoCache);
+  _map->visitWaysRw(dupeWayNodeRemover);
+
+  InvalidWayRemover wayRemover;
+  wayRemover.setConflateInfoCache(conflateInfoCache);
+  _map->visitWaysRw(wayRemover);
+
+  SuperfluousNodeRemover::removeNodes(_map);
 }
 
 void DiffConflator::_removeRefData()
