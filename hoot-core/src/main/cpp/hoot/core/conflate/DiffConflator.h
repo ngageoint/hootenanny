@@ -231,7 +231,8 @@ private:
 
   static bool _isMatchToRemovePartially(const ConstMatchPtr& match);
   /*
-   * Separates matches with linear features from those without them
+   * Separates matches with linear features that we are removing partially from other matches that
+   * we're removing completely
    */
   void _separateMatchesToRemoveAsPartial();
   int _countMatchesToRemoveAsPartial() const;
