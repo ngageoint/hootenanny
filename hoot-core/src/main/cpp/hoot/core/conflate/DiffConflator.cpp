@@ -307,7 +307,7 @@ void DiffConflator::markInputElements(OsmMapPtr map)
 
 bool DiffConflator::_isMatchToRemovePartially(const ConstMatchPtr& match)
 {
-  bool isMatchToRemovePartially = match->getMatchMembers() != MatchMembers::Polyline;
+  bool isMatchToRemovePartially = match->getMatchMembers() == MatchMembers::Polyline;
   const bool removeRiverPartialMatchesAsWhole =
     ConfigOptions().getDifferentialRemoveRiverPartialMatchesAsWhole();
   if (!removeRiverPartialMatchesAsWhole && match->getName().toLower() == "waterway")
