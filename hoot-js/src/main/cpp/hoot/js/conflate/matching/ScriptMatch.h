@@ -70,7 +70,6 @@ public:
 
   QString explain() const override { return _explainText; }
   QString getName() const override { return _matchName; }
-  QString getClassName() const override { return className(); }
 
   double getProbability() const override;
 
@@ -100,6 +99,7 @@ public:
    */
   static MatchMembers geometryTypeToMatchMembers(const QString& geometryType);
 
+  QString getClassName() const override { return className(); }
   QString getDescription() const override
   { return "Matches elements using Generic Conflation via Javascript"; }
 

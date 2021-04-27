@@ -209,8 +209,8 @@ private:
   // differential.remove.linear.partial.matches.as.whole
   bool _removeLinearPartialMatchesAsWhole;
   // These are only used when _removeLinearPartialMatchesAsWhole=false.
-  std::vector<ConstMatchPtr> _linearMatches;
-  std::vector<ConstMatchPtr> _nonLinearMatches;
+  std::vector<ConstMatchPtr> _matchesToRemoveAsPartial;
+  std::vector<ConstMatchPtr> _matchesToRemoveAsWhole;
 
   long _numSnappedWays;
   long _numUnconflatableElementsDiscarded;
@@ -229,11 +229,12 @@ private:
 
   void _discardUnconflatableElements();
 
+  static bool _isMatchToRemovePartially(const ConstMatchPtr& match);
   /*
    * Separates matches with linear features from those without them
    */
-  void _separateLinearMatches();
-  int _countLinearMatches() const;
+  void _separateMatchesToRemoveAsPartial();
+  int _countMatchesToRemoveAsPartial() const;
 
   // Calculates and stores the tag differential as a set of change objects
   void _calcAndStoreTagChanges();

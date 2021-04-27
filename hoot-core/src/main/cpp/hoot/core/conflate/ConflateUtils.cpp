@@ -65,8 +65,9 @@ int ConflateUtils::writeNonConflatable(
   return nonConflatableMap->size();
 }
 
-void ConflateUtils::writeDiff(const QString& mapUrl1, const QString& mapUrl2,
-                              const geos::geom::Envelope& bounds, QString& output)
+void ConflateUtils::writeDiff(
+  const QString& mapUrl1, const QString& mapUrl2, const geos::geom::Envelope& bounds,
+  QString& output)
 {
   conf().set(ConfigOptions::getBoundsKey(), GeometryUtils::toConfigString(bounds));
 

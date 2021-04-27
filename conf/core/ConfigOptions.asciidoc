@@ -1315,6 +1315,13 @@ Unifying Algorithm.
 If false, when running Differential Conflation the reference elements will not be dropped from the
 output. Setting this to false is primarily useful when debugging unconnected way snapping issues.
 
+=== differential.remove.river.partial.matches.as.whole
+
+* Data Type: bool
+* Default Value: `true`
+
+TODO
+
 === differential.remove.unconflatable.data
 
 * Data Type: bool

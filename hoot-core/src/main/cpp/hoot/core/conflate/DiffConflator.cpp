@@ -153,13 +153,14 @@ void DiffConflator::apply(OsmMapPtr& map)
     // have no tests yet to catch the particular situation. If so, will have to deal with that on a
     // case by case basis.
     if (!_removeLinearPartialMatchesAsWhole &&
-        SuperfluousConflateOpRemover::linearMatcherPresent() && _countLinearMatches() > 0)
+        SuperfluousConflateOpRemover::linearMatcherPresent() &&
+        _countMatchesToRemoveAsPartial() > 0)
     {
       _updateProgress(_currentStep - 1, "Optimizing feature matches...");
       // If removing linear match elements partially, matches need to be separated into linear and
       // non-linear to avoid corrupting the non-linear matches.
-      _separateLinearMatches();
-      _matchSets = _optimizeMatches(_linearMatches);
+      _separateMatchesToRemoveAsPartial();
+      _matchSets = _optimizeMatches(_matchesToRemoveAsPartial);
       _currentStep++;
     }
 
@@ -185,7 +186,8 @@ void DiffConflator::apply(OsmMapPtr& map)
     // We're eventually getting rid of all matches from the output, but in order to make the road
     // snapping work correctly we'll get rid of secondary elements in matches first.
     if (!_removeLinearPartialMatchesAsWhole &&
-        SuperfluousConflateOpRemover::linearMatcherPresent() && _countLinearMatches() > 0)
+        SuperfluousConflateOpRemover::linearMatcherPresent() &&
+        _countMatchesToRemoveAsPartial() > 0)
     {
       // Use the MergerCreator framework and only remove the sections of linear features that match.
       // All other feature types are removed completely.
@@ -234,42 +236,6 @@ void DiffConflator::apply(OsmMapPtr& map)
 
   // Free up any used resources.
   AbstractConflator::_reset();
-}
-
-void DiffConflator::_separateLinearMatches()
-{
-  for (std::vector<ConstMatchPtr>::const_iterator mit = _matches.begin(); mit != _matches.end();
-       ++mit)
-  {
-    // TODO: make this work with non-highway linear matches: add a subline matcher to script match;
-    // add diff tests for river, railway, power line, and generic line
-
-    ConstMatchPtr match = *mit;
-    if (match->getName() != HighwayMatch::MATCH_NAME ||
-        match->getMatchMembers() != MatchMembers::Polyline)
-    {
-      _nonLinearMatches.push_back(match);
-    }
-    else
-    {
-      _linearMatches.push_back(match);
-    }
-  }
-}
-
-int DiffConflator::_countLinearMatches() const
-{
-  int numLinearMatches = 0;
-  for (std::vector<ConstMatchPtr>::const_iterator mit = _matches.begin(); mit != _matches.end();
-       ++mit)
-  {
-    ConstMatchPtr match = *mit;
-    if (match->getMatchMembers() == MatchMembers::Polyline)
-    {
-      numLinearMatches++;
-    }
-  }
-  return numLinearMatches;
 }
 
 void DiffConflator::_discardUnconflatableElements()
@@ -337,6 +303,50 @@ void DiffConflator::markInputElements(OsmMapPtr map)
   std::shared_ptr<AddRef1Visitor> pRef1v(new AddRef1Visitor());
   pRef1v->setConfiguration(visitorConf);
   map->visitRw(*pRef1v);
+}
+
+bool DiffConflator::_isMatchToRemovePartially(const ConstMatchPtr& match)
+{
+  bool isMatchToRemovePartially = match->getMatchMembers() != MatchMembers::Polyline;
+  const bool removeRiverPartialMatchesAsWhole =
+    ConfigOptions().getDifferentialRemoveRiverPartialMatchesAsWhole();
+  if (!removeRiverPartialMatchesAsWhole && match->getName().toLower() == "waterway")
+  {
+    isMatchToRemovePartially = false;
+  }
+  return isMatchToRemovePartially;
+}
+
+void DiffConflator::_separateMatchesToRemoveAsPartial()
+{
+  for (std::vector<ConstMatchPtr>::const_iterator mit = _matches.begin(); mit != _matches.end();
+       ++mit)
+  {
+    ConstMatchPtr match = *mit;
+    if (!_isMatchToRemovePartially(match))
+    {
+      _matchesToRemoveAsWhole.push_back(match);
+    }
+    else
+    {
+      _matchesToRemoveAsPartial.push_back(match);
+    }
+  }
+}
+
+int DiffConflator::_countMatchesToRemoveAsPartial() const
+{
+  int numMatchesToRemovePartially = 0;
+  for (std::vector<ConstMatchPtr>::const_iterator mit = _matches.begin(); mit != _matches.end();
+       ++mit)
+  {
+    ConstMatchPtr match = *mit;
+    if (_isMatchToRemovePartially(match))
+    {
+      numMatchesToRemovePartially++;
+    }
+  }
+  return numMatchesToRemovePartially;
 }
 
 QSet<ElementId> DiffConflator::_getElementIdsInvolvedInOnlyIntraDatasetMatches(
@@ -453,7 +463,7 @@ void DiffConflator::_removeMatchElementsCompletely(const Status& status)
   if (!ConfigOptions().getDifferentialRemoveLinearPartialMatchesAsWhole() &&
       SuperfluousConflateOpRemover::linearMatcherPresent())
   {
-    matches = _nonLinearMatches;
+    matches = _matchesToRemoveAsWhole;
   }
   else
   {
