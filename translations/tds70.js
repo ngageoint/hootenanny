@@ -2515,10 +2515,10 @@ tds70 = {
 
     // Fix ZI001_SDV
     // NOTE: We are going to override the normal source:datetime with what we get from JOSM
-    if (notUsedTags['source.imagery.datetime'])
+    if (notUsedTags['source:imagery:datetime'])
     {
-      attrs.ZI001_SDV = notUsedTags['source.imagery.datetime'];
-      delete notUsedTags['source.imagery.datetime'];
+      attrs.ZI001_SDV = notUsedTags['source:imagery:datetime'];
+      delete notUsedTags['source:imagery:datetime'];
     }
 
     // Wetlands
