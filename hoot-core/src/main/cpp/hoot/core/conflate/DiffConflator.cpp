@@ -146,7 +146,6 @@ void DiffConflator::apply(OsmMapPtr& map)
 
   if (!ConfigOptions().getConflateMatchOnly())
   {  
-    LOG_VART(_removeLinearPartialMatchesAsWhole);
     // We only need to optimize linear matches if we aren't removing them completely and a linear
     // matcher was specified in the first place. There still may be some issues with optimizing
     // matches here where linear and non-linear features are mixed, we specify all matches, and we
@@ -311,7 +310,7 @@ bool DiffConflator::_isMatchToRemovePartially(const ConstMatchPtr& match)
   // River matches are handled by their own config option, since they can be expensive to optimize.
   const bool removeRiverPartialMatchesAsWhole =
     ConfigOptions().getDifferentialRemoveRiverPartialMatchesAsWhole();
-  if (!removeRiverPartialMatchesAsWhole && match->getName().toLower() == "waterway")
+  if (removeRiverPartialMatchesAsWhole && match->getName().toLower() == "waterway")
   {
     isMatchToRemovePartially = false;
   }
