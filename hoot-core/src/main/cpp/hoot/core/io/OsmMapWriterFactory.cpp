@@ -151,6 +151,8 @@ void OsmMapWriterFactory::write(const std::shared_ptr<OsmMap>& map, const QStrin
 
     MapProjector::projectToWgs84(map);
 
+    // TODO: For debug maps, we don't want to log the progress of the writing to cut down on log
+    // statements.
     std::shared_ptr<OsmMapWriter> writer = createWriter(url);
     writer->setIsDebugMap(is_debug);
     writer->open(url);
