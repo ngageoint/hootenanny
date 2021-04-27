@@ -1320,7 +1320,7 @@ output. Setting this to false is primarily useful when debugging unconnected way
 * Data Type: bool
 * Default Value: `true`
 
-TODO
+Overrides differential.remove.linear.partial.matches.as.whole when dealing with river data.
 
 === differential.remove.unconflatable.data
 
