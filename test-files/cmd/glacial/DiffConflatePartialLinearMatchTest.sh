@@ -2,8 +2,8 @@
 set -e
 
 mkdir -p $HOOT_HOME/tmp/
-INPUT_DIR=test-files/cmd/slow/DiffConflatePartialLinearMatchTest
-OUTPUT_DIR=test-output/cmd/slow/DiffConflatePartialLinearMatchTest
+INPUT_DIR=test-files/cmd/glacial/DiffConflatePartialLinearMatchTest
+OUTPUT_DIR=test-output/cmd/glacial/DiffConflatePartialLinearMatchTest
 mkdir -p $OUTPUT_DIR
 LOG_LEVEL=--warn
 CONFIG="-C UnifyingAlgorithm.conf -C DifferentialConflation.conf -C Testing.conf -D match.creators=hoot::HighwayMatchCreator -D merger.creators=hoot::HighwayMergerCreator -D writer.include.debug.tags=true -D uuid.helper.repeatable=true"

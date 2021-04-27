@@ -2,8 +2,8 @@
 set -e
 
 mkdir -p $HOOT_HOME/tmp/
-INPUT_DIR=test-files/cmd/slow/DiffConflateCmdTest
-OUTPUT_DIR=test-output/cmd/slow/DiffConflateCmdTest
+INPUT_DIR=test-files/cmd/glacial/DiffConflateCmdTest
+OUTPUT_DIR=test-output/cmd/glacial/DiffConflateCmdTest
 mkdir -p $OUTPUT_DIR
 LOG_LEVEL=--warn
 CONFIG="-C DifferentialConflation.conf -C NetworkAlgorithm.conf -C Testing.conf"
