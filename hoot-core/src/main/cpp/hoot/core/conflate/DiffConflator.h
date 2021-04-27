@@ -40,20 +40,19 @@ class MatchThreshold;
 class ConflateInfoCache;
 
 /**
- * The idea behind the Differential Conflator is to do the "easy" conflation - to essentially
- * ignore anything that would be a possible conflict. The proposed conops are to conflate
- * input1 and input2, and spit out everything from input2, with anything that would conflict with
- * input1 removed. Is it really a conflation operation? No, because nothing gets merged. It's not a
- * true diff, either, because it won't tell you stuff that was in input1, but not input2. It's
- * basically answering the question: what can I super-easily merge from dataset2 into dataset1?
+ * This conflator calculates the difference between two inputs and adds to the output only features
+ * from the second output which match with nothing in the first input. The diff can be set up to
+ * only exclude the partial matching portions of linear features involved in a partial match
+ * (default) or remove all portions of the feature.
  *
- * The diff conflator also supports calculating a tag differential, but again this is approached
- * from a, "What updates are in the second dataset?" perspective. To this end, the conflator
- * iterates through all of the match pairs, looking for new or different tags in the input2
- * elements. If a difference is found, the input2 element tag set is presumed to be an update, and
- * a change is recorded, in which no element geometry is changed, but the tags from the input2
- * element replace the tags from the input1 element. The output from the tag-differencing
- * will always be an osm changeset (*.osc).
+ * This conflator also supports calculating a tag differential, The conflator iterates through all
+ * of the match pairs, looking for new or different tags in the input2 elements. If a difference is
+ * found, the input2 element tag set is presumed to be an update, and a change is recorded, in which
+ * no element geometry is changed, but the tags from the input2 element replace the tags from the
+ * input1 element. The output from the tag-differencing will always be an osm changeset (*.osc).
+ *
+ * This is re-entrant but not thread safe. While this object is serializable, it doesn't maintain
+ * state across serialization. It simply uses the default configuration.
  *
  * Workflow Steps:
  *
@@ -72,9 +71,8 @@ class ConflateInfoCache;
  * - Get the tag diff (optional; used when --separate-output is specified)
  * - Add tag changes to back to the map (optional; used when --separate-output is specified)
  *
- * Re-entrant but not thread safe. While this object is serializable, it doesn't maintain state
- * across serialization. It simply uses the default configuration. This should probably be made
- * more robust in the future, but works fine for now.
+ * @todo We may end up wanting to add step at the end to remove tiny ways. Sometimes these happen
+ * when linear matches are removed partially.
  */
 class DiffConflator : public AbstractConflator
 {
