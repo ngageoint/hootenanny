@@ -54,7 +54,6 @@ hoot convert \
 echo
 echo "Cleanup database"
 hoot db-delete -D api.db.email=$DB_EMAIL $DATABASE
-
 # Delete the user
-PGPASSWORD=$DB_PASSWORD psql $PSQL_DB_AUTH -d $DB_NAME  -c "DELETE FROM users WHERE email='${TEST_EMAIL}';" > /dev/null
+PGPASSWORD=$DB_PASSWORD psql -h $DB_HOST -p $DB_PORT -U $DB_USER $PSQL_DB_AUTH -d $DB_NAME -c "DELETE FROM users WHERE email='${DB_EMAIL}';" > /dev/null
 
