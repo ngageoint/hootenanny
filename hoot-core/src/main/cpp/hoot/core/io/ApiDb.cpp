@@ -958,7 +958,7 @@ long ApiDb::maxId(const ElementType& elementType)
     throw HootException(_maxIdQueries[elementTableName]->lastError().text());
   }
 
-  long result = -1;
+  long result = std::numeric_limits<long>::min();
   if (_maxIdQueries[elementTableName]->next())
   {
     bool ok;

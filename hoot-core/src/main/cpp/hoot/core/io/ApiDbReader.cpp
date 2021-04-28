@@ -93,10 +93,10 @@ void ApiDbReader::initializePartial()
   _firstPartialReadCompleted = false;
   _elementsRead = 0;
   _selectElementType = ElementType::Node;
-  _lastId = 0;
-  _maxNodeId = 0;
-  _maxWayId = 0;
-  _maxRelationId = 0;
+  _lastId = std::numeric_limits<long>::min();
+  _maxNodeId = std::numeric_limits<long>::min();
+  _maxWayId = std::numeric_limits<long>::min();
+  _maxRelationId = std::numeric_limits<long>::min();
   _totalNumMapNodes = 0;
   _totalNumMapWays = 0;
   _totalNumMapRelations = 0;
@@ -810,7 +810,7 @@ ElementType ApiDbReader::_getCurrentSelectElementType()
   }
   else if (_selectElementType == ElementType::Node && _lastId == _maxNodeId)
   {
-    _lastId = 0;
+    _lastId = std::numeric_limits<long>::min();
     //calling finish/clear as the underlying query would have changed here to the query for the
     //next element type; this may not be necessary
     _elementResultIterator->finish();
@@ -823,7 +823,7 @@ ElementType ApiDbReader::_getCurrentSelectElementType()
   }
   else if (_selectElementType == ElementType::Way && _lastId == _maxWayId)
   {
-    _lastId = 0;
+    _lastId = std::numeric_limits<long>::min();
     //see comment above
     _elementResultIterator->finish();
     _elementResultIterator->clear();
