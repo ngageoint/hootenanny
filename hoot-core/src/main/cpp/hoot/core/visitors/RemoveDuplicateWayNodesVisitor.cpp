@@ -82,6 +82,7 @@ void RemoveDuplicateWayNodesVisitor::visit(const ElementPtr& e)
     // else but removing it anyway.
     if (wayNodeIds.size() == 2 && way->isSimpleLoop())
     {
+      LOG_TRACE("Removing invalid way: " << way->getElementId() << "...");
       RecursiveElementRemover(way->getElementId()).apply(_map);
       return;
     }
@@ -97,13 +98,11 @@ void RemoveDuplicateWayNodesVisitor::visit(const ElementPtr& e)
       // valid loop feature.
       if (nodeId != lastNodeId)
       {
-        LOG_TRACE("Valid way node: " << ElementId(ElementType::Node, nodeId));
         parsedNodeIds.append(nodeId);
       }
       else
       {
-        // we've found a duplicate where both nodes aren't start and end nodes...not allowed
-        LOG_TRACE("Found duplicate way node: " << ElementId(ElementType::Node, nodeId));
+        // We've found a duplicate where both nodes aren't start and end nodes...not allowed.
         duplicateWayNodeIds.append(nodeId);
         foundDuplicateWayNode = true;
         _numAffected++;

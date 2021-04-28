@@ -46,6 +46,8 @@ class OsmMap;
  * - The child element is only contained by this element or one of its children.
  * - The element being deleted isn't contained by another element.
  *
+ * If you want to remove an element that has parents, use RemoveElementByEid.
+ *
  * To perform the operation two steps are taken.
  * 1. Determine all the children of the provided element
  * 2. For each child
@@ -55,8 +57,6 @@ class OsmMap;
  *
  * This method assumes there are no cyclical relation links. This approach is very thorough and
  * effective, but there may be much more efficient approaches on a case by case basis.
- *
- * If you want to remove an element that has parents, use RemoveElementByEid;
  */
 class RecursiveElementRemover : public ConstOsmMapOperation, public ConstElementConsumer
 {
@@ -65,17 +65,21 @@ public:
   static QString className() { return "hoot::RecursiveElementRemover"; }
 
   /**
+   * Constructor
+   *
+   * When using this constructor, it is expected that the eid will be populated with addElement
+   * after construction.
+   */
+  RecursiveElementRemover();
+  /**
+   * Constructor
+   *
    * @param eid The element to recursively delete.
    * @param criterion If this is specified then only elements that return true to "isSatisfied"
    * will be deleted. Even if isSatisfied returns false the children of that element will still
    * be searched.
    */
   RecursiveElementRemover(ElementId eid, const ElementCriterion* criterion = nullptr);
-
-  /**
-   * It is expected that the eid will be populated with addElement after construction.
-   */
-  RecursiveElementRemover() : _criterion(nullptr) { }
   ~RecursiveElementRemover() = default;
 
   void addElement(const ConstElementPtr& e) override { _eid = e->getElementId(); }

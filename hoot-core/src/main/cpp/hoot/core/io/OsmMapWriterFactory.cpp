@@ -180,7 +180,7 @@ void OsmMapWriterFactory::writeDebugMap(const ConstOsmMapPtr& map, const QString
     LOG_VART(StringUtils::formatLargeNumber(map->getWayCount()));
     LOG_VART(StringUtils::formatLargeNumber(map->getRelationCount()));
 
-    const QString fileNumberStr = StringUtils::padFrontOfNumberStringWithZeroes(_debugMapCount, 3);
+    const QString fileNumberStr = StringUtils::padFrontOfNumberStringWithZeroes(_debugMapCount, 4);
     if (!title.isEmpty())
     {
       debugMapFileName =

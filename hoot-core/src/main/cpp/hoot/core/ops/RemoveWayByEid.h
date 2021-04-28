@@ -35,48 +35,35 @@ namespace hoot
 {
 
 /**
- * @brief The RemoveWayByEid class is used to remove ways from an OsmMap
+ * Remove ways from an map
  */
 class RemoveWayByEid : public OsmMapOperation
 {
 public:
 
-  /**
-   * @brief className gets the name of the class as a string
-   * @return class name
-   */
   static QString className() { return "hoot::RemoveWayByEid"; }
-  QString getName() const override { return className(); }
-  QString getClassName() const override { return className(); }
 
   /**
-   * @brief RemoveWayByEid is used to remove ways from maps
+   * Constructor
+   *
    * @param removeFully if true, way is removed from all relations in the map, then removed from the
    * map's way collection.
    */
   RemoveWayByEid(bool removeFully = false);
-
   /**
-   * @brief RemoveWayByEid is used to remove ways from maps
+   * Constructor
+   *
    * @param wId ID of the way to remove
    * @param removeFully if true, way is removed from all relations in the map, then removed from the
    * map's way collection.
    */
   RemoveWayByEid(long wId, bool removeFully = false);
-
   ~RemoveWayByEid() = default;
 
   /**
-   * @brief apply Apply the operation to the given map
-   * @param map the map to operate on
+   * see OsmMapOperation
    */
   void apply(OsmMapPtr& map) override;
-
-  /**
-   * @brief setWayId set the ID of the way to remove on the apply() call
-   * @param wId ID of the way to remove
-   */
-  void setWayId(long wId) { _wayIdToRemove = wId; }
 
   /**
    * @brief removeWay Remove the given way from the given map
@@ -84,6 +71,7 @@ public:
    * @param wId ID of way to remove
    */
   static void removeWay(OsmMapPtr map, long wId);
+
   /**
    * @brief removeWayFully Removes the way from all relations and
    *                       then removes the way from the map.
@@ -92,7 +80,11 @@ public:
    */
   static void removeWayFully(OsmMapPtr map, long wId);
 
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
   QString getDescription() const override { return "Removes a single way by element ID"; }
+
+  void setWayId(long wId) { _wayIdToRemove = wId; }
 
 private:
 

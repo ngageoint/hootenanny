@@ -46,7 +46,8 @@ namespace hoot
 {
 
 std::vector<ElementId> WaySublineRemover::removeSubline(
-  const WayPtr& way, const WaySubline& subline, OsmMapPtr& map)
+  const WayPtr& way, const WaySubline& subline, OsmMapPtr& map,
+  const bool removeWholeWayRecursively)
 {
   if (!way || !subline.isValid())
   {
@@ -64,17 +65,20 @@ std::vector<ElementId> WaySublineRemover::removeSubline(
     LOG_TRACE(
       "Subline matches covers entire way. Removing entire way: " << way->getElementId() << "...");
 
-    // Use RemoveElementByEid here instead of RecursiveElementRemover so that the way is removed
-    // from its parent before its removal. We also don't want to remove RecursiveElementRemover here
-    // b/c the way's nodes may still belong to one the temp relations we created during splitting.
-    // TODO: add option to remove orphaned nodes?
-    //const std::vector<long> nodeIds = way->getNodeIds();
-    RemoveElementByEid(way->getElementId()).apply(map);
-    //for (std::vector<long>::const_iterator it = nodeIds.begin(); it != nodeIds.end(); ++it)
-    //{
-      //RemoveElementByEid(ElementId::node(*it)).apply(map);
-      //RemoveNodeByEid(*it, true, false, true).apply(map);
-    //}
+    if (removeWholeWayRecursively)
+    {
+      // remove it from parents and the map
+      RemoveElementByEid(way->getElementId()).apply(map);
+      // remove its children
+      RecursiveElementRemover(way->getElementId()).apply(map);
+    }
+    else
+    {
+      // Use RemoveElementByEid here instead of RecursiveElementRemover so that the way is removed
+      // from its parent before its removal. We also don't want to remove RecursiveElementRemover here
+      // b/c the way's nodes may still belong to one the temp relations we created during splitting.
+      RemoveElementByEid(way->getElementId()).apply(map);
+    }
 
     if (ConfigOptions().getDebugMapsWrite() && ConfigOptions().getDebugMapsWriteDetailed())
     {
@@ -121,6 +125,8 @@ std::vector<ElementId> WaySublineRemover::removeSubline(
   {
     return std::vector<ElementId>();
   }
+  // TODO: We may be able to use the same optimization in the other removeSubline method here where
+  // we just remove the whole way if the start/end points are the ends.
 
   LOG_TRACE(
     "Removing subline for: " << way->getElementId() << " starting at: " << start <<

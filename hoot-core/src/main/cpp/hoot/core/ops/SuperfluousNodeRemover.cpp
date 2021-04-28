@@ -136,7 +136,7 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
       continue;
     }
     const vector<long>& nodeIds = w->getNodeIds();
-    LOG_TRACE("Nodes belong to " << w->getElementId() << ": " << nodeIds);
+    LOG_TRACE("Nodes belonging to " << w->getElementId() << ": " << nodeIds);
     _usedNodeIds.insert(nodeIds.begin(), nodeIds.end());
     _numProcessed += nodeIds.size();
 
@@ -229,7 +229,7 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
   // if the map is not in WGS84
   if (MapProjector::isGeographic(map) == false)
   {
-    // create a new copy of the map and reproject it. This way we can be sure we do the bounds
+    // Create a new copy of the map and reproject it. This way we can be sure we do the bounds
     // calculation correctly.
     reprojected.reset(new OsmMap(map));
     MapProjector::projectToWgs84(reprojected);
@@ -265,7 +265,7 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
       }
       else
       {
-        LOG_TRACE("node not in bounds. " << n->getElementId());
+        LOG_TRACE("Node not in bounds: " << n->getElementId());
         LOG_VART(_bounds);
       }
     }

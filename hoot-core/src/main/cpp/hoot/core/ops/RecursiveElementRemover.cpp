@@ -43,6 +43,11 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, RecursiveElementRemover)
 
+RecursiveElementRemover::RecursiveElementRemover() :
+_criterion(nullptr)
+{
+}
+
 RecursiveElementRemover::RecursiveElementRemover(ElementId eid, const ElementCriterion* criterion) :
 _eid(eid),
 _criterion(criterion)
@@ -85,7 +90,7 @@ void RecursiveElementRemover::apply(const std::shared_ptr<OsmMap>& map)
         LOG_TRACE("Checking parent: " << *jt << " of child: " << *it << "...");
         if (toErase.find(*jt) == toErase.end())
         {
-          // remove the child b/c it is owned by an element outside _eid.
+          // Remove the child b/c it is owned by an element outside _eid.
           LOG_TRACE("Removing child: " << *it);
           toErase.erase(it++);
           erased = true;
@@ -98,7 +103,7 @@ void RecursiveElementRemover::apply(const std::shared_ptr<OsmMap>& map)
         }
       }
 
-      // if we didn't erase the element then move the iterator forward
+      // If we didn't erase the element, then move the iterator forward.
       if (!erased)
       {
         ++it;

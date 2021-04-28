@@ -187,7 +187,11 @@ bool LinearDiffMerger::_findAndProcessMatch(
   LOG_VART(subline2.getWay() == way2);
   LOG_VART(subline2.getWay()->getElementId() == way2->getElementId());
 
-  const std::vector<ElementId> newWayIds = WaySublineRemover::removeSubline(way2, subline2, _map);
+  // We don't want to remove the nodes in this way's sublines, since they may belong to other
+  // portions of the way or other ways. The caller of this class will be responsible for cleaning
+  // them up, or they may be handled by conflate post ops.
+  const std::vector<ElementId> newWayIds =
+    WaySublineRemover::removeSubline(way2, subline2, _map, false);
   LOG_VART(newWayIds.size());
   if (newWayIds.size() == 1)
   {

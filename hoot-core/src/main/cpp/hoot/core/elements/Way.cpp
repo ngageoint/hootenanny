@@ -300,7 +300,6 @@ bool Way::isSimpleLoop() const
   {
     return false;
   }
-
   return (getFirstNodeId() == getLastNodeId());
 }
 
