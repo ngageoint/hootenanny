@@ -3297,32 +3297,8 @@
         <nd ref="-266"/>
         <nd ref="-265"/>
         <nd ref="491"/>
-        <tag k="FCSubtype" v="0"/>
-        <tag k="GFID" v="874803D2-9CB4-4461-9A4A-D3A85DA354F8"/>
-        <tag k="REF2" v="00005b;00004a"/>
-        <tag k="SHAPE_Leng" v="0.0155755425742"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="condition" v="functional"/>
-        <tag k="electrified" v="contact_line"/>
         <tag k="error:circular" v="15"/>
-        <tag k="gauge" v="144"/>
-        <tag k="gauge:type" v="standard"/>
-        <tag k="gndb_id" v="6183466"/>
-        <tag k="gndb_id:2" v="6171468"/>
-        <tag k="lanes" v="1"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="location" v="surface"/>
-        <tag k="name" v="Manp'o-son"/>
-        <tag k="note" v="Single"/>
         <tag k="railway" v="Other"/>
-        <tag k="railway:in_road" v="separated"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="source" v="mgcp:railrdl_rail;osm"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:datetime" v="2018-02-16T13:57:43Z"/>
-        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.902Z"/>
-        <tag k="usage" v="high_speed_rail"/>
-        <tag k="uuid" v="{cb84b01d-3161-44be-8ee6-db1604553333}"/>
     </way>
     <way visible="true" id="-5632" timestamp="2018-02-15T20:56:52Z" version="1">
         <nd ref="123"/>
@@ -4356,28 +4332,8 @@
         <nd ref="807"/>
         <nd ref="-51"/>
         <nd ref="-6"/>
-        <tag k="FCSubtype" v="0"/>
-        <tag k="GFID" v="F1E58184-26DB-4689-8468-79C12AAD3EB2"/>
-        <tag k="REF2" v="todo"/>
-        <tag k="SHAPE_Leng" v="0.0065427624618700003"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="condition" v="functional"/>
-        <tag k="electrified" v="contact_line"/>
         <tag k="error:circular" v="15"/>
-        <tag k="gauge" v="144"/>
-        <tag k="gauge:type" v="standard"/>
-        <tag k="lanes" v="1"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="location" v="surface"/>
-        <tag k="note" v="Single"/>
         <tag k="railway" v="Other"/>
-        <tag k="railway:in_road" v="separated"/>
-        <tag k="source" v="mgcp:railrdl_rail;osm"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:datetime" v="2018-02-16T13:57:43Z"/>
-        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.962Z"/>
-        <tag k="usage" v="high_speed_rail"/>
-        <tag k="uuid" v="{d7d4ba79-5452-4ceb-9869-336b33a55595}"/>
     </way>
     <way visible="true" id="-5517" timestamp="2018-02-15T20:56:52Z" version="1">
         <nd ref="807"/>
@@ -4437,30 +4393,8 @@
         <nd ref="-1909"/>
         <nd ref="-1908"/>
         <nd ref="539"/>
-        <tag k="FCSubtype" v="0"/>
-        <tag k="GFID" v="45FA327E-47D7-4C7B-BFB2-BD377EF95E9F"/>
-        <tag k="REF2" v="000046;00005b;000091"/>
-        <tag k="SHAPE_Leng" v="0.029715494970199999"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="condition" v="functional"/>
-        <tag k="electrified" v="contact_line"/>
         <tag k="error:circular" v="15"/>
-        <tag k="gauge" v="144"/>
-        <tag k="gauge:type" v="standard"/>
-        <tag k="hoot:hash" v="sha1sum:8e1dd0adbdc9cc805fa8e512caab4c533b155791"/>
-        <tag k="lanes" v="1"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="location" v="surface"/>
-        <tag k="note" v="Single"/>
         <tag k="railway" v="Other"/>
-        <tag k="railway:in_road" v="separated"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="source" v="mgcp:railrdl_rail;osm"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:datetime" v="2018-02-16T13:57:43Z"/>
-        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.863Z"/>
-        <tag k="usage" v="high_speed_rail"/>
-        <tag k="uuid" v="{0cf4ea9f-d066-4a91-a5f0-8fffac7776b2}"/>
     </way>
     <way visible="true" id="-5509" timestamp="2018-02-15T20:56:52Z" version="1">
         <nd ref="539"/>
@@ -4592,7 +4526,6 @@
         <tag k="error:circular" v="15"/>
         <tag k="gauge" v="144"/>
         <tag k="gauge:type" v="standard"/>
-        <tag k="hoot:hash" v="sha1sum:9af69a89d3e811ec1810cfee3ddbd4af7163330b"/>
         <tag k="lanes" v="1"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="location" v="surface"/>
@@ -4643,30 +4576,8 @@
         <nd ref="-1935"/>
         <nd ref="-1934"/>
         <nd ref="590"/>
-        <tag k="FCSubtype" v="0"/>
-        <tag k="GFID" v="45FA327E-47D7-4C7B-BFB2-BD377EF95E9F"/>
-        <tag k="REF2" v="000046;00005b;000091"/>
-        <tag k="SHAPE_Leng" v="0.029715494970199999"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="condition" v="functional"/>
-        <tag k="electrified" v="contact_line"/>
         <tag k="error:circular" v="15"/>
-        <tag k="gauge" v="144"/>
-        <tag k="gauge:type" v="standard"/>
-        <tag k="hoot:hash" v="sha1sum:8e1dd0adbdc9cc805fa8e512caab4c533b155791"/>
-        <tag k="lanes" v="1"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="location" v="surface"/>
-        <tag k="note" v="Single"/>
         <tag k="railway" v="Other"/>
-        <tag k="railway:in_road" v="separated"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="source" v="mgcp:railrdl_rail;osm"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:datetime" v="2018-02-16T13:57:43Z"/>
-        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.863Z"/>
-        <tag k="usage" v="high_speed_rail"/>
-        <tag k="uuid" v="{0cf4ea9f-d066-4a91-a5f0-8fffac7776b2}"/>
     </way>
     <way visible="true" id="-5493" timestamp="2018-02-15T20:56:52Z" version="1">
         <nd ref="328"/>
@@ -5348,28 +5259,8 @@
         <nd ref="-209"/>
         <nd ref="-208"/>
         <nd ref="826"/>
-        <tag k="FCSubtype" v="0"/>
-        <tag k="GFID" v="F77EA7D0-7840-4273-B57B-C52AB69B7E85"/>
-        <tag k="REF2" v="todo"/>
-        <tag k="SHAPE_Leng" v="0.018886577265199999"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="condition" v="functional"/>
-        <tag k="electrified" v="contact_line"/>
         <tag k="error:circular" v="15"/>
-        <tag k="gauge" v="144"/>
-        <tag k="gauge:type" v="standard"/>
-        <tag k="lanes" v="1"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="location" v="surface"/>
-        <tag k="note" v="Single"/>
         <tag k="railway" v="Other"/>
-        <tag k="railway:in_road" v="separated"/>
-        <tag k="source" v="mgcp:railrdl_rail;osm"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:datetime" v="2018-02-16T13:57:43Z"/>
-        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.960Z"/>
-        <tag k="usage" v="high_speed_rail"/>
-        <tag k="uuid" v="{2154ca17-2a83-4a8a-b425-07cff4f5c4b2}"/>
     </way>
     <way visible="true" id="-5413" timestamp="2018-02-15T20:56:52Z" version="1">
         <nd ref="826"/>
@@ -5415,28 +5306,8 @@
         <nd ref="-213"/>
         <nd ref="-212"/>
         <nd ref="153"/>
-        <tag k="FCSubtype" v="0"/>
-        <tag k="GFID" v="F77EA7D0-7840-4273-B57B-C52AB69B7E85"/>
-        <tag k="REF2" v="todo"/>
-        <tag k="SHAPE_Leng" v="0.018886577265199999"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="condition" v="functional"/>
-        <tag k="electrified" v="contact_line"/>
         <tag k="error:circular" v="15"/>
-        <tag k="gauge" v="144"/>
-        <tag k="gauge:type" v="standard"/>
-        <tag k="lanes" v="1"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="location" v="surface"/>
-        <tag k="note" v="Single"/>
         <tag k="railway" v="Other"/>
-        <tag k="railway:in_road" v="separated"/>
-        <tag k="source" v="mgcp:railrdl_rail;osm"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:datetime" v="2018-02-16T13:57:43Z"/>
-        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.960Z"/>
-        <tag k="usage" v="high_speed_rail"/>
-        <tag k="uuid" v="{2154ca17-2a83-4a8a-b425-07cff4f5c4b2}"/>
     </way>
     <way visible="true" id="-5409" timestamp="2018-02-15T20:56:52Z" version="1">
         <nd ref="153"/>

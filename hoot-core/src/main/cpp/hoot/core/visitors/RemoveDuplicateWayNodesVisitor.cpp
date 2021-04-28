@@ -78,8 +78,8 @@ void RemoveDuplicateWayNodesVisitor::visit(const ElementPtr& e)
     const std::vector<long>& wayNodeIds = way->getNodeIds();
     LOG_VART(wayNodeIds);
 
-    // This is invalid. Not even sure if it would get loaded or if it is being cleaned somewhere
-    // else but removing it anyway.
+    // Technically InvalidWayRemover handles this situation, so this is arguably redundant in the
+    // conflate pipeline. However, outside of the pipeline we'd want it removed.
     if (wayNodeIds.size() == 2 && way->isSimpleLoop())
     {
       LOG_TRACE("Removing invalid way: " << way->getElementId() << "...");

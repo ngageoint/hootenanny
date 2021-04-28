@@ -1001,6 +1001,9 @@ See also:
 
 * Data Type: list
 * Default Value:
+** `hoot::MultilineStringMergeRelationCollapser`
+** `hoot::RemoveDuplicateWayNodesVisitor`
+** `hoot::InvalidWayRemover`
 ** `hoot::RemoveMissingElementsVisitor`
 ** `hoot::PoiPolygonInvalidReviewNodeRemover`
 ** `hoot::SuperfluousNodeRemover`
@@ -1014,13 +1017,10 @@ See also:
 ** `hoot::RemoveInvalidRelationVisitor`
 ** `hoot::RemoveInvalidMultilineStringMembersVisitor`
 ** `hoot::SuperfluousWayRemover`
-** `hoot::RemoveDuplicateWayNodesVisitor`
-** `hoot::InvalidWayRemover`
 ** `hoot::DuplicateWayRemover`
 ** `hoot::RemoveDuplicateRelationMembersVisitor`
 ** `hoot::RemoveEmptyRelationsOp`
 ** `hoot::RelationCircularRefRemover`
-** `hoot::MultilineStringMergeRelationCollapser`
 ** `hoot::RoadCrossingPolyReviewMarker`
 ** `hoot::ApiTagTruncateVisitor`
 ** `hoot::AddHilbertReviewSortOrderOp`

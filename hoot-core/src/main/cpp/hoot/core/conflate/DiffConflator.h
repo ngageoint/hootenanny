@@ -271,7 +271,6 @@ private:
    * Removes only the geometric portions of linear match elements that were involved in a match.
    */
   void _removePartialSecondaryMatchElements();
-  void _partialMatchRemovalCleanup(const std::shared_ptr<ConflateInfoCache>& conflateInfoCache);
   void _removeMetadataTags();
 };
 

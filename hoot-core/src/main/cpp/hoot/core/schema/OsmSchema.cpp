@@ -1864,10 +1864,13 @@ QString OsmSchema::getFirstType(const Tags& tags, const bool allowGeneric)
   {
     const QString key = keys.at(i);
     const QString val = tags[key];
-    const QString kvp = toKvp(key, val);
-    if (isTypeKey(key) && (allowGeneric || !isGenericKvp(kvp)))
+    if (!val.trimmed().isEmpty())
     {
-      return kvp;
+      const QString kvp = toKvp(key, val);
+      if (isTypeKey(key) && (allowGeneric || !isGenericKvp(kvp)))
+      {
+        return kvp;
+      }
     }
   }
   return "";

@@ -5084,6 +5084,43 @@
         <tag k="name" v="24th St NW"/>
     </way>
     <way visible="true" id="-4995" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-88992"/>
+        <nd ref="-38667"/>
+        <nd ref="-38668"/>
+        <nd ref="-27654"/>
+        <nd ref="-38669"/>
+        <nd ref="-38670"/>
+        <nd ref="-38671"/>
+        <nd ref="-38672"/>
+        <nd ref="-38673"/>
+        <nd ref="-38674"/>
+        <nd ref="-38675"/>
+        <nd ref="-15096"/>
+        <nd ref="-38676"/>
+        <nd ref="-38677"/>
+        <nd ref="-38678"/>
+        <nd ref="-38679"/>
+        <nd ref="-38680"/>
+        <nd ref="-38681"/>
+        <nd ref="-38682"/>
+        <nd ref="-38683"/>
+        <nd ref="-38684"/>
+        <nd ref="-38685"/>
+        <nd ref="-38686"/>
+        <nd ref="-38687"/>
+        <nd ref="-38688"/>
+        <nd ref="-38689"/>
+        <nd ref="-1226"/>
+        <nd ref="-38690"/>
+        <nd ref="-38691"/>
+        <nd ref="-38692"/>
+        <nd ref="-38693"/>
+        <nd ref="-38694"/>
+        <nd ref="-38695"/>
+        <nd ref="-38696"/>
+        <nd ref="-38697"/>
+        <nd ref="-38698"/>
+        <nd ref="-38699"/>
         <nd ref="-1022"/>
         <nd ref="-36948"/>
         <nd ref="-36949"/>
@@ -5395,43 +5432,6 @@
         <tag k="name" v="18th St NW"/>
     </way>
     <way visible="true" id="-4977" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-88992"/>
-        <nd ref="-38667"/>
-        <nd ref="-38668"/>
-        <nd ref="-27654"/>
-        <nd ref="-38669"/>
-        <nd ref="-38670"/>
-        <nd ref="-38671"/>
-        <nd ref="-38672"/>
-        <nd ref="-38673"/>
-        <nd ref="-38674"/>
-        <nd ref="-38675"/>
-        <nd ref="-15096"/>
-        <nd ref="-38676"/>
-        <nd ref="-38677"/>
-        <nd ref="-38678"/>
-        <nd ref="-38679"/>
-        <nd ref="-38680"/>
-        <nd ref="-38681"/>
-        <nd ref="-38682"/>
-        <nd ref="-38683"/>
-        <nd ref="-38684"/>
-        <nd ref="-38685"/>
-        <nd ref="-38686"/>
-        <nd ref="-38687"/>
-        <nd ref="-38688"/>
-        <nd ref="-38689"/>
-        <nd ref="-1226"/>
-        <nd ref="-38690"/>
-        <nd ref="-38691"/>
-        <nd ref="-38692"/>
-        <nd ref="-38693"/>
-        <nd ref="-38694"/>
-        <nd ref="-38695"/>
-        <nd ref="-38696"/>
-        <nd ref="-38697"/>
-        <nd ref="-38698"/>
-        <nd ref="-38699"/>
         <nd ref="-1022"/>
         <nd ref="-1023"/>
         <nd ref="-1024"/>

@@ -54,8 +54,9 @@ void InvalidWayRemover::visit(const ElementPtr& e)
     return;
   }
 
-  // Technically, we could run the dupe way node remover on these ways beforehand here to weed out
-  // some additional bad ways. That would make parts of the conflate op pipeline redundant, though.
+  // Technically, we could also run the dupe way node remover on these ways beforehand here to weed
+  // out some additional bad ways. That would make parts of the conflate op pipeline redundant,
+  // though.
   if (EmptyWayCriterion().isSatisfied(e) || ZeroLengthWayCriterion().isSatisfied(e))
   {
     LOG_TRACE("Removing invalid way: " << e->getElementId() << "...");

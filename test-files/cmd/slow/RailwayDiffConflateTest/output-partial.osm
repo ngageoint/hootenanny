@@ -3,7 +3,6 @@
     <bounds minlat="39.569728" minlon="125.780683" maxlat="39.75273500000001" maxlon="126.079206"/>
     <node visible="true" id="-3270" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.6101161266143436" lon="125.8751710028695641"/>
     <node visible="true" id="-3266" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.6025853130936838" lon="125.9879181664627055"/>
-    <node visible="true" id="-3264" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.6907371132740465" lon="125.8874063696169117"/>
     <node visible="true" id="-3263" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.6668074649999909" lon="125.7826792829999931"/>
     <node visible="true" id="-3262" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.6146810269322316" lon="125.9645338731521633"/>
     <node visible="true" id="-3260" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.7069006989799220" lon="125.8848913667325178"/>
@@ -67,7 +66,6 @@
     <node visible="true" id="-1908" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.7069583440000002" lon="125.8848239529999944"/>
     <node visible="true" id="-1792" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6993691499999954" lon="125.8887921019999823"/>
     <node visible="true" id="-1791" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6998800209999843" lon="125.8885377789999893"/>
-    <node visible="true" id="-1790" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6897993159999984" lon="125.8828308380000038"/>
     <node visible="true" id="-1734" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6447928870000013" lon="125.9067586460000001"/>
     <node visible="true" id="-1733" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6447438399999967" lon="125.9067796329999851"/>
     <node visible="true" id="-1732" timestamp="2018-02-16T13:57:43Z" version="1" lat="39.6447269940000027" lon="125.9067868420000025"/>
@@ -441,62 +439,6 @@
         <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.859Z"/>
         <tag k="usage" v="high_speed_rail"/>
         <tag k="uuid" v="{7496465e-e9d7-4184-a426-c9b738781922}"/>
-    </way>
-    <way visible="true" id="-3362" timestamp="2018-02-16T13:57:43Z" version="1">
-        <nd ref="-3264"/>
-        <tag k="FCSubtype" v="0"/>
-        <tag k="GFID" v="2808A595-6E71-4522-B748-091D5572EA4D"/>
-        <tag k="SHAPE_Leng" v="0.0068675554462999996"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="condition" v="functional"/>
-        <tag k="electrified" v="contact_line"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="gauge" v="144"/>
-        <tag k="gauge:type" v="standard"/>
-        <tag k="gndb_id" v="6282826"/>
-        <tag k="gndb_id:2" v="6253325"/>
-        <tag k="lanes" v="1"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="location" v="surface"/>
-        <tag k="name" v="Kaech'on-son"/>
-        <tag k="note" v="Single"/>
-        <tag k="railway" v="Other"/>
-        <tag k="railway:in_road" v="separated"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="source" v="mgcp:railrdl_rail;osm"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:datetime" v="2018-02-16T13:57:43Z"/>
-        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.862Z"/>
-        <tag k="usage" v="high_speed_rail"/>
-        <tag k="uuid" v="{b5c0ed93-dc45-412b-94e9-eae90f89488c}"/>
-    </way>
-    <way visible="true" id="-3359" timestamp="2018-02-16T13:57:43Z" version="1">
-        <nd ref="-1790"/>
-        <tag k="FCSubtype" v="0"/>
-        <tag k="GFID" v="2808A595-6E71-4522-B748-091D5572EA4D"/>
-        <tag k="SHAPE_Leng" v="0.0068675554462999996"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="condition" v="functional"/>
-        <tag k="electrified" v="contact_line"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="gauge" v="144"/>
-        <tag k="gauge:type" v="standard"/>
-        <tag k="gndb_id" v="6282826"/>
-        <tag k="gndb_id:2" v="6253325"/>
-        <tag k="lanes" v="1"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="location" v="surface"/>
-        <tag k="name" v="Kaech'on-son"/>
-        <tag k="note" v="Single"/>
-        <tag k="railway" v="Other"/>
-        <tag k="railway:in_road" v="separated"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="source" v="mgcp:railrdl_rail;osm"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:datetime" v="2018-02-16T13:57:43Z"/>
-        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.862Z"/>
-        <tag k="usage" v="high_speed_rail"/>
-        <tag k="uuid" v="{b5c0ed93-dc45-412b-94e9-eae90f89488c}"/>
     </way>
     <way visible="true" id="-3349" timestamp="2018-02-16T13:57:43Z" version="1">
         <nd ref="-3263"/>
@@ -2147,28 +2089,4 @@
         <tag k="usage" v="high_speed_rail"/>
         <tag k="uuid" v="{15c1bcf5-8ecc-4f99-b5a0-13de360bc2fe}"/>
     </way>
-    <relation visible="true" id="-342" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-3362" role=""/>
-        <member type="way" ref="-3359" role=""/>
-        <tag k="error:circular" v="15"/>
-        <tag k="type" v="multilinestring"/>
-    </relation>
-    <relation visible="true" id="-335" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-3262" role=""/>
-        <member type="way" ref="-3284" role=""/>
-        <tag k="error:circular" v="15"/>
-        <tag k="type" v="multilinestring"/>
-    </relation>
-    <relation visible="true" id="-331" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-3228" role=""/>
-        <member type="way" ref="-3231" role=""/>
-        <tag k="error:circular" v="15"/>
-        <tag k="type" v="multilinestring"/>
-    </relation>
-    <relation visible="true" id="-330" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-3224" role=""/>
-        <member type="way" ref="-3228" role=""/>
-        <tag k="error:circular" v="15"/>
-        <tag k="type" v="multilinestring"/>
-    </relation>
 </osm>

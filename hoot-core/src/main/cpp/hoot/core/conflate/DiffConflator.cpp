@@ -1,4 +1,4 @@
-/*
+﻿/*
  * This file is part of Hootenanny.
  *
  * Hootenanny is free software: you can redistribute it and/or modify
@@ -32,6 +32,7 @@
 #include <hoot/core/conflate/SuperfluousConflateOpRemover.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonMatch.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
+#include <hoot/core/criterion/ElementTypeCriterion.h>
 #include <hoot/core/criterion/HighwayCriterion.h>
 #include <hoot/core/criterion/PoiCriterion.h>
 #include <hoot/core/criterion/StatusCriterion.h>
@@ -64,9 +65,6 @@
 #include <hoot/core/io/OsmChangesetFileWriter.h>
 #include <hoot/core/conflate/highway/HighwayMatch.h>
 #include <hoot/core/conflate/ConflateInfoCache.h>
-#include <hoot/core/ops/SuperfluousNodeRemover.h>
-#include <hoot/core/visitors/InvalidWayRemover.h>
-#include <hoot/core/visitors/RemoveDuplicateWayNodesVisitor.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -192,7 +190,6 @@ void DiffConflator::apply(OsmMapPtr& map)
       // Use the MergerCreator framework and only remove the sections of linear features that match.
       // All other feature types are removed completely.
       _removePartialSecondaryMatchElements();
-      _partialMatchRemovalCleanup(conflateInfoCache);
     }
     else
     {
@@ -569,26 +566,6 @@ void DiffConflator::_removePartialSecondaryMatchElements()
   std::vector<MergerPtr> relationMergers;
   _createMergers(relationMergers);
   _mergeFeatures(relationMergers);
-}
-
-void DiffConflator::_partialMatchRemovalCleanup(
-  const std::shared_ptr<ConflateInfoCache>& conflateInfoCache)
-{
-  // Due to a potential bug in WaySublineRemover (called by LinearDiffMerger), we end up with
-  // orphaned nodes in the output after partial element removal. Oddly, the same cleaning steps as
-  // used here run as part of the post conflate ops but don't solve the problem. So, running them
-  // as part of diff conflate.
-
-  // Remove the dupe way nodes before the invalid ways in order to expose more invalid ways.
-  RemoveDuplicateWayNodesVisitor dupeWayNodeRemover;
-  dupeWayNodeRemover.setConflateInfoCache(conflateInfoCache);
-  _map->visitWaysRw(dupeWayNodeRemover);
-
-  InvalidWayRemover wayRemover;
-  wayRemover.setConflateInfoCache(conflateInfoCache);
-  _map->visitWaysRw(wayRemover);
-
-  SuperfluousNodeRemover::removeNodes(_map);
 }
 
 void DiffConflator::_removeRefData()
