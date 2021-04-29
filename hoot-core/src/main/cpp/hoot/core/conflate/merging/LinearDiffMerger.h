@@ -22,7 +22,6 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2021 DigitalGlobe (http://www.digitalglobe.com/)
  * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef LINEAR_DIFF_MERGER_H
