@@ -48,6 +48,7 @@ public:
     Polyline = 4
   };
 
+  MatchMembers() : _type(Type::None) {}
   MatchMembers(Type t) : _type(t) {}
 
   bool operator==(MatchMembers t) const { return t._type == _type; }

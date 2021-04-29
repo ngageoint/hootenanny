@@ -42,11 +42,11 @@ namespace Tgs
 class StdIoDevice : public QIODevice
 {
 public:
+
   /**
    * Constructs the device and assume ownership of in.
    */
   StdIoDevice(std::istream& in);
-
   ~StdIoDevice() = default;
 
   bool atEnd() const override;
@@ -64,6 +64,7 @@ public:
   bool getChar(char* c) { return readData(c, 1) == 1; }
 
 private:
+
   std::istream* _in;
 };
 

@@ -75,18 +75,6 @@ void LinearSnapMergerJs::Init(Handle<Object> target)
   target->Set(String::NewFromUtf8(current, "LinearSnapMerger"), ToLocal(&_constructor));
 }
 
-Handle<Object> LinearSnapMergerJs::New(const LinearSnapMergerPtr& ptr)
-{
-  Isolate* current = v8::Isolate::GetCurrent();
-  EscapableHandleScope scope(current);
-
-  Handle<Object> result = ToLocal(&_constructor)->NewInstance();
-  LinearSnapMergerJs* from = ObjectWrap::Unwrap<LinearSnapMergerJs>(result);
-  from->_ptr = ptr;
-
-  return scope.Escape(result);
-}
-
 void LinearSnapMergerJs::New(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
@@ -114,9 +102,11 @@ void LinearSnapMergerJs::apply(const FunctionCallbackInfo<Value>& args)
   SublineStringMatcherPtr sublineMatcher2;
   if (args.Length() > 5)
   {
-    // This is little unusual, but we're allowing an extra subline matcher to be passed info for
-    // certain conflation types, and the actual one used will be determined based how the matcher
-    // performs against the input data. See WaySnapMerger for more info.
+    // This is little unusual, but we're allowing an extra subline matcher to be passed in for
+    // certain conflation types. The general idea is that one matcher may be more accurate but
+    // slower (e.g. maximal subline) and the other may be slightly less accurate but much
+    // quicker (Frechet). The actual one used here will be determined based how the matcher
+    // performs against the input data.
     if (matchedBy != "Waterway" && matchedBy != "Line")
     {
       throw IllegalArgumentException(
@@ -140,9 +130,6 @@ void LinearSnapMergerJs::apply(const FunctionCallbackInfo<Value>& args)
   {
     merger = LinearMergerFactory::getMerger(pairs, sublineMatcher, sublineMatcher2, matchedBy);
   }
-  // Some attempts were made to use cached subline matches from SublineStringMatcherJs for
-  // performance reasons, but the results were unstable. Doing so could lead to a runtime
-  // performance boost, so worth revisiting. See branch 3969b.
   merger->apply(map, replaced);
 
   // modify the parameter that was passed in

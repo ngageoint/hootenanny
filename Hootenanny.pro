@@ -18,10 +18,11 @@ SUBDIRS += \
     hoot-js
 }
 
-swig {
-SUBDIRS += \
-    hoot-swig
-}
+# hoot-swig is not currently in active use
+#swig {
+#SUBDIRS += \
+#    hoot-swig
+#}
 
 rnd {
 SUBDIRS += hoot-rnd

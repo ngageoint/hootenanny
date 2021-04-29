@@ -52,8 +52,8 @@ int ScriptMerger::logWarnCount = 0;
 
 ScriptMerger::ScriptMerger(const std::shared_ptr<PluginContext>& script, Persistent<Object>& plugin,
                            const set<pair<ElementId, ElementId>>& pairs) :
-  _pairs(pairs),
-  _script(script)
+MergerBase(pairs),
+_script(script)
 {
   Isolate* current = v8::Isolate::GetCurrent();
   HandleScope scope(current);
@@ -128,9 +128,9 @@ void ScriptMerger::_applyMergePair(const OsmMapPtr& map,
   }
   else if (_pairs.size() > 1)
   {
-    throw HootException("A set of elements was specified, but only mergePairs is implemented. "
-                        "See the _Supplemental User Documentation_, _Conflating Sets_ for "
-                        "details.");
+    throw HootException(
+      "A set of elements was specified, but only mergePairs is implemented. See the _Supplemental "
+      "User Documentation_, _Conflating Sets_ for details.");
   }
 
   Isolate* current = v8::Isolate::GetCurrent();

@@ -52,7 +52,7 @@ QString WayMatchStringMerger::SublineMapping::toString() const
 }
 
 WayMatchStringMerger::WayMatchStringMerger(const OsmMapPtr& map,
-  WayMatchStringMappingPtr mapping, vector<pair<ElementId, ElementId>> &replaced) :
+  WayMatchStringMappingPtr mapping, vector<pair<ElementId, ElementId>>& replaced) :
   _map(map),
   _mapping(mapping),
   _replaced(replaced)
@@ -77,7 +77,7 @@ WaySublineMatchStringPtr WayMatchStringMerger::createMatchString() const
   {
     WaySubline ws1(sm->getStart1(), sm->getEnd1());
     WaySubline ws2(_mapping->map1To2(sm->getStart1()), _mapping->map1To2(sm->getEnd1()));
-    // they're reversed if they aren't both in the same orientation.
+    // They're reversed if they aren't both in the same orientation.
     bool reversed = ws1.isBackwards() != ws2.isBackwards();
 
     ws1.ensureForwards();

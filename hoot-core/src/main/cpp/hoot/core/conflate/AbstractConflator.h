@@ -96,8 +96,6 @@ protected:
   virtual void _createMatches();
   virtual MatchSetVector _optimizeMatches();
 
-  virtual void _createMergers(
-    MatchSetVector& matchSets, std::vector<MergerPtr>& relationMergers) = 0;
   /*
    * Populates the _e2m map with a mapping of ElementIds to their respective Merger objects. This
    * is helpful when replacing element ids with new ids.
@@ -109,7 +107,6 @@ protected:
   void _mapElementIdsToMergers();
   void _replaceElementIds(const std::vector<std::pair<ElementId, ElementId>>& replaced);
   void _applyMergers(const std::vector<MergerPtr>& mergers, OsmMapPtr& map);
-  virtual void _mergeFeatures(const std::vector<MergerPtr>& relationMergers) = 0;
 
   void _updateProgress(const int currentStep, const QString message);
 

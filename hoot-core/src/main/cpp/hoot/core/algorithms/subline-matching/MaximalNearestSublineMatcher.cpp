@@ -72,11 +72,11 @@ WaySublineMatchString MaximalNearestSublineMatcher::findMatch(const ConstOsmMapP
   MaximalNearestSubline mns1(
     mapCopy, way1NonConst, way2NonConst, _minSplitSize, mrd, _maxRelevantAngle, _headingDelta);
 
-  // use the maximal nearest subline code to find the best subline
+  // Use the maximal nearest subline code to find the best subline.
   std::vector<WayLocation> interval1 = mns1.getInterval();
   if (!interval1[0].isValid() || !interval1[1].isValid() || interval1[0] == interval1[1])
   {
-    // if the interval isn't valid then return an invalid result.
+    // If the interval isn't valid, then return an invalid result.
     LOG_TRACE("Returning invalid result...");
     return WaySublineMatchString();
   }
@@ -100,8 +100,9 @@ WaySublineMatchString MaximalNearestSublineMatcher::findMatch(const ConstOsmMapP
 
   if (subline1->getNodeCount() > 1)
   {
-    std::shared_ptr<LineString> ls = ElementToGeometryConverter(mapCopy).convertToLineString(subline1);
-    if (ls->isValid())
+    std::shared_ptr<LineString> ls =
+      ElementToGeometryConverter(mapCopy).convertToLineString(subline1);
+    if (ls && ls->isValid())
     {
       score = ls->getLength();
     }
@@ -109,7 +110,7 @@ WaySublineMatchString MaximalNearestSublineMatcher::findMatch(const ConstOsmMapP
   LOG_VART(score);
 
   vector<WaySublineMatch> v;
-  // switch the subline match to reference a different map.
+  // Switch the subline match to reference a different map.
   v.emplace_back(match, map);
 
   return WaySublineMatchString(v);

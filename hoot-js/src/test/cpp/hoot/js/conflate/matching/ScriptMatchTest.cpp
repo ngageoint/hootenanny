@@ -57,9 +57,8 @@ class ScriptMatchTest : public HootTestFixture
 
 public:
 
-  ScriptMatchTest()
-    : HootTestFixture("test-files/algorithms/js/",
-                      UNUSED_PATH)
+  ScriptMatchTest() :
+  HootTestFixture("test-files/js/conflate/matching/", UNUSED_PATH)
   {
   }
 
@@ -78,7 +77,7 @@ public:
     std::shared_ptr<const MatchThreshold> mt(new MatchThreshold(0.6, 0.6, 0.6));
 
     ScriptMatchCreator smc;
-    smc.setArguments(QStringList() << "test/LineTest.js");
+    smc.setArguments(QStringList() << "LineTest.js");
     vector<ConstMatchPtr> matches;
     smc.createMatches(map, matches, mt);
     HOOT_STR_EQUALS(2, matches.size());
@@ -95,7 +94,6 @@ public:
 
     HOOT_STR_EQUALS(false, (bool)(conflicts.find(key2) == conflicts.end()));
   }
-
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ScriptMatchTest, "quick");

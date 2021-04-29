@@ -41,8 +41,8 @@ namespace hoot
 {
 
 WaySubline::WaySubline(const WaySubline& from) :
-  _start(from.getStart()),
-  _end(from.getEnd())
+_start(from.getStart()),
+_end(from.getEnd())
 {
 }
 
@@ -52,16 +52,18 @@ WaySubline::WaySubline(const WaySubline& from, const ConstOsmMapPtr& newMap)
   {
     ConstWayPtr oldWay = from.getStart().getWay();
     ConstWayPtr newWay = newMap->getWay(oldWay->getId());
-    _start = WayLocation(newMap, newWay,
-      from.getStart().getSegmentIndex(), from.getStart().getSegmentFraction());
-    _end = WayLocation(newMap, newWay,
-      from.getEnd().getSegmentIndex(), from.getEnd().getSegmentFraction());
+    _start =
+      WayLocation(
+        newMap, newWay, from.getStart().getSegmentIndex(), from.getStart().getSegmentFraction());
+    _end =
+      WayLocation(
+        newMap, newWay, from.getEnd().getSegmentIndex(), from.getEnd().getSegmentFraction());
   }
 }
 
 WaySubline::WaySubline(const WayLocation& start, const WayLocation& end) :
-  _start(start),
-  _end(end)
+_start(start),
+_end(end)
 {
 }
 
@@ -73,6 +75,11 @@ WaySubline& WaySubline::operator=(const WaySubline& from)
     _end = from.getEnd();
   }
   return *this;
+}
+
+bool operator==(const WaySubline& a, const WaySubline& b)
+{
+  return a.getStart() == b.getStart() && a.getEnd() == b.getEnd();
 }
 
 Meters WaySubline::calculateLength() const
@@ -101,22 +108,13 @@ Meters WaySubline::getLength() const
   return fabs(_end.calculateDistanceOnWay() - _start.calculateDistanceOnWay());
 }
 
-bool operator==(const WaySubline& a, const WaySubline& b)
-{
-  return a.getStart() == b.getStart() && a.getEnd() == b.getEnd();
-}
-
 bool WaySubline::overlaps(const WaySubline& other) const
 {
   bool overlaps = true;
-
-  if (other.getWay() != getWay() ||
-      getStart() >= other.getEnd() ||
-      other.getStart() >= getEnd())
+  if (other.getWay() != getWay() || getStart() >= other.getEnd() || other.getStart() >= getEnd())
   {
     overlaps = false;
   }
-
   return overlaps;
 }
 
@@ -127,7 +125,6 @@ WaySubline WaySubline::reverse(const ConstWayPtr& reversedWay) const
   // sanity check to make sure they're actually reversed, this isn't conclusive but should help
   // if there is a major goof.
   assert(reversedWay->getNodeCount() == getWay()->getNodeCount());
-  //assert(reversedWay->getNodeId(0) == getWay()->getLastNodeId());
 
   double l = ElementToGeometryConverter(getMap()).convertToLineString(getWay())->getLength();
 
@@ -204,14 +201,10 @@ WayPtr WaySubline::toWay(const OsmMapPtr& map, GeometryToElementConverter::NodeF
 bool WaySubline::touches(const WaySubline& other) const
 {
   bool touches = true;
-
-  if (other.getWay() != getWay() ||
-      getStart() > other.getEnd() ||
-      other.getStart() > getEnd())
+  if (other.getWay() != getWay() || getStart() > other.getEnd() || other.getStart() > getEnd())
   {
     touches = false;
   }
-
   return touches;
 }
 

@@ -41,6 +41,7 @@
 #include <hoot/core/conflate/highway/HighwayMatch.h>
 #include <hoot/core/conflate/merging/LinearSnapMerger.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
+#include <hoot/core/elements/MapUtils.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Way.h>
@@ -451,13 +452,13 @@ public:
     vector<pair<ElementId, ElementId>> replaced;
     merger.apply(map, replaced);
 
-    merger._markNeedsReview(map, w1, w2, "a review note", "a review type");
+    merger._markNeedsReview(w1, w2, "a review note", "a review type");
 
     CPPUNIT_ASSERT_EQUAL((size_t)1, map->getRelations().size());
     // will throw an exception on failure
     ConstRelationPtr reviewRelation =
       std::dynamic_pointer_cast<Relation>(
-        TestUtils::getElementWithTag(map, MetadataTags::HootReviewNote(), "a review note"));
+        MapUtils::getFirstElementWithTag(map, MetadataTags::HootReviewNote(), "a review note"));
     HOOT_STR_EQUALS("a review type", reviewRelation->getTags().get(MetadataTags::HootReviewType()));
   }
 };

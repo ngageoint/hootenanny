@@ -61,10 +61,10 @@ public:
   /**
    * @param from Replace this element.
    * @param to Use this to replace the specified element.
-   * @param clearAndRemove If set to true then the element will be cleared of attributes and then
-   *    a removal will be attempted. In some cases (e.g. replace can't be complete if you're
-   *    replacing a node with a way and the node is in a way) the element won't be removed, if this
-   *    happens then all tags will be cleared.
+   * @param clearAndRemove If set to true, then the element will be cleared of all attributes and a
+   * removal will be attempted. In some cases (e.g. replace can't be complete if you're replacing a
+   * node with a way and the node is in a way), the element won't be removed. If this happens, then
+   * all tags will be cleared.
    */
   ReplaceElementOp(ElementId from, ElementId to, bool clearAndRemove = false);
 

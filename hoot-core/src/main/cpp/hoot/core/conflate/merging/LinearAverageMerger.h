@@ -57,12 +57,10 @@ public:
 protected:
 
   bool _mergePair(
-    const OsmMapPtr& map, ElementId eid1, ElementId eid2,
+    ElementId eid1, ElementId eid2,
     std::vector<std::pair<ElementId, ElementId>>& replaced) override;
 
 private:
-
-  OsmMapPtr _map;
 
   double _getMinSplitSize(const ConstWayPtr& way1, const ConstWayPtr& way2) const;
 

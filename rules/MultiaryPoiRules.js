@@ -128,7 +128,7 @@ exports.getSearchRadius = function(e) {
  */
 exports.isMatchCandidate = function(map, e)
 {
-  return isPoi(e);
+  return hoot.OsmSchema.isPoi(e);
 };
 
 /**
@@ -181,9 +181,9 @@ function additiveScore(map, e1, e2) {
     var reason = result.reasons;
 
     var ignoreType = false;
-    hoot.trace("hasName(e1): " + hasName(e1));
-    hoot.trace("hasName(e2): " + hasName(e2));
-    if (hoot.get("poi.ignore.type.if.name.present") == 'true' && hasName(e1) && hasName(e2))
+    hoot.trace("hasName(e1): " + hoot.OsmSchema.hasName(e1));
+    hoot.trace("hasName(e2): " + hoot.OsmSchema.hasName(e2));
+    if (hoot.get("poi.ignore.type.if.name.present") == 'true' && hoot.OsmSchema.hasName(e1) && hoot.OsmSchema.hasName(e2))
     {
       ignoreType = true;
     }

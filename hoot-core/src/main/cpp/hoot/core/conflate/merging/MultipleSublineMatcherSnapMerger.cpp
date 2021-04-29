@@ -51,8 +51,7 @@ _sublineMatcher2(sublineMatcher2)
   // The subline matchers have already been initialized by the conflate script by this point.
 }
 
-WaySublineMatchString MultipleSublineMatcherSnapMerger::_matchSubline(
-  OsmMapPtr map, ElementPtr e1, ElementPtr e2)
+WaySublineMatchString MultipleSublineMatcherSnapMerger::_matchSubline(ElementPtr e1, ElementPtr e2)
 {
   WaySublineMatchString match;
   if (e1->getElementType() != ElementType::Node && e2->getElementType() != ElementType::Node)
@@ -63,7 +62,7 @@ WaySublineMatchString MultipleSublineMatcherSnapMerger::_matchSubline(
       _sublineMatcher->getSublineMatcherName() << "...");
     try
     {
-      match = _sublineMatcher->findMatch(map, e1, e2);
+      match = _sublineMatcher->findMatch(_map, e1, e2);
     }
     catch (const RecursiveComplexityException& e)
     {
@@ -76,7 +75,7 @@ WaySublineMatchString MultipleSublineMatcherSnapMerger::_matchSubline(
         e1->getElementId() << ", " <<  e2->getElementId() << " with " <<
         _sublineMatcher2->getName() << " and " << _sublineMatcher2->getSublineMatcherName() <<
         "...");
-      match = _sublineMatcher2->findMatch(map, e1, e2);
+      match = _sublineMatcher2->findMatch(_map, e1, e2);
     }
   }
   return match;

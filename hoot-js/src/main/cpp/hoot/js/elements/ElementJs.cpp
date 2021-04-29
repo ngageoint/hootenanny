@@ -77,8 +77,6 @@ void ElementJs::_addBaseFunctions(Local<FunctionTemplate> tpl)
       FunctionTemplate::New(current, toString));
   tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "toString"),
       FunctionTemplate::New(current, toString));
-  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "removeTag"),
-      FunctionTemplate::New(current, removeTag));
 }
 
 void ElementJs::getCircularError(const FunctionCallbackInfo<Value>& args)
@@ -224,7 +222,6 @@ void ElementJs::setStatusString(const FunctionCallbackInfo<Value>& args)
   {
     args.GetReturnValue().Set(current->ThrowException(HootExceptionJs::create(e)));
   }
-
 }
 
 void ElementJs::setTags(const FunctionCallbackInfo<Value>& args)
@@ -266,27 +263,6 @@ void ElementJs::setTag(const FunctionCallbackInfo<Value>& args)
     const QString tagKey = toCpp<QString>(args[0]);
     const QString tagVal = toCpp<QString>(args[1]);
     e->setTag(tagKey, tagVal);
-    args.GetReturnValue().SetUndefined();
-  }
-}
-
-void ElementJs::removeTag(const FunctionCallbackInfo<Value>& args)
-{
-  Isolate* current = args.GetIsolate();
-  HandleScope scope(current);
-
-  ElementPtr e = ObjectWrap::Unwrap<ElementJs>(args.This())->getElement();
-  if (!e)
-  {
-    args.GetReturnValue().Set(
-      current->ThrowException(
-        HootExceptionJs::create(
-          IllegalArgumentException("Unable to remove tag on a const Element."))));
-  }
-  else
-  {
-    const QString tagKey = toCpp<QString>(args[0]);
-    e->removeTag(tagKey);
     args.GetReturnValue().SetUndefined();
   }
 }

@@ -46,9 +46,6 @@ private:
   SettingsJs() = default;
 
   static void get(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void getAll(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void getValue(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void loadJson(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void set(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void appendToList(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void prependToList(const v8::FunctionCallbackInfo<v8::Value>& args);

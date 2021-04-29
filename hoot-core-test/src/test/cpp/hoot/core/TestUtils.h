@@ -143,20 +143,6 @@ public:
     OsmMapPtr map, const QList<ElementPtr>& elements, Status status = Status::Unknown1,
     Meters circularError = ConfigOptions().getCircularErrorDefaultValue(), Tags tags = Tags());
 
-  static ElementPtr getElementWithNote(OsmMapPtr map, QString note);
-
-  /**
-   * Gets a single element by tag
-   *
-   * @param map map containing the element
-   * @param tagKey tag key to search for
-   * @param tagValue tag value to search for
-   * @return Returns a single element with the intput tag key/value pair; fails if more than one
-   * element
-   */
-  static ElementPtr getElementWithTag(
-    OsmMapPtr map, const QString& tagKey, const QString& tagValue);
-
   /**
    * Return the singleton instance.
    */

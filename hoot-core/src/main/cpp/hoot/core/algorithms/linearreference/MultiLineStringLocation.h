@@ -45,10 +45,7 @@ class MultiLineStringLocation
 {
 public:
 
-  // Don't like having a default constructor here, but its needed by PertyWaySplitVisitor
-  // for now.
   MultiLineStringLocation() = default;
-
   /**
    * Creates a location along the multi-line string
    *

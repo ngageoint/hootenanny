@@ -68,22 +68,15 @@ public:
 
   QString toString() const override;
 
-  QString getDescription() const override { return "Merges roads matched by the Network Algorithm"; }
-
+  QString getDescription() const override
+  { return "Merges roads matched by the Network Algorithm"; }
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 
   bool getNeedsReview() const { return _needsReview; }
 
-protected:
-
-  PairsSet& _getPairs() override { return _pairs; }
-  const PairsSet& _getPairs() const override { return _pairs; }
-
 private:
 
-  PairsSet _pairs;
   QSet<ConstEdgeMatchPtr> _edgeMatches;
   ConstNetworkDetailsPtr _details;
   QHash<ElementId, ElementId> _substitions;

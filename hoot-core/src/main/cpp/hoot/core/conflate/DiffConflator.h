@@ -54,7 +54,7 @@ class MatchThreshold;
  * element replace the tags from the input1 element. The output from the tag-differencing
  * will always be an osm changeset (*.osc).
  *
- * Workflow Steps as of 2/5/21:
+ * Workflow Steps:
  *
  * - Store off original map and ref1
  * - Mark ref1 inputs
@@ -116,9 +116,9 @@ public:
   { return "Creates a map with features from the second input which are not in the first"; }
 
   /**
-   * @brief getTagDiff - Gets the tag differential that was calculated during the
-   * conflation. This will be a list of 'modify' changes that contain tag updates
-   * for elements that matched between the input maps.
+   * @brief getTagDiff - Gets the tag differential that was calculated during the conflation. This
+   * will be a list of 'modify' changes that contain tag updates for elements that matched between
+   * the input maps.
    *
    * To calculate these changes we look through all of the matches, and compare tags. A set of newer
    * tags is returned as a changeset (because updating the tags requires a modify operation).
@@ -127,9 +127,9 @@ public:
   MemChangesetProviderPtr getTagDiff() { return _tagChanges; }
 
   /**
-   * @brief storeOriginalMap - Stores the original map. This is necessary
-   * for calculating the tag differential, and it's important to call this
-   * after loading the Input1 map, and before loading the Input2 map.
+   * @brief storeOriginalMap - Stores the original map. This is necessary for calculating the tag
+   * differential, and it's important to call this after loading the Input1 map, and before loading
+   * the Input2 map.
    * @param map - Map that should be holding only the original "Input1" elements
    */
   void storeOriginalMap(OsmMapPtr& map);
@@ -141,12 +141,11 @@ public:
   void markInputElements(OsmMapPtr map);
 
   /**
-   * @brief addChangesToMap - Adds the changes to a map, as regular elements.
-   *                          This is useful for visualizing tag-diff output
-   *                          in JOSM and the hoot UI
-   * @param map - Map to add the changes to
-   * @param pChanges - Changeset provider
-   */
+    * @brief addChangesToMap - Adds the changes to a map, as regular elements. This is useful for
+    * visualizing tag-diff output in JOSM and the hoot UI.
+    * @param map - Map to add the changes to
+    * @param pChanges - Changeset provider
+    */
   void addChangesToMap(OsmMapPtr map, ChangesetProviderPtr pChanges);
 
   /**
@@ -172,13 +171,6 @@ public:
   QString getTagChangesetStats() const { return _tagChangesetStats; }
   QString getUnifiedChangesetStats() const { return _unifiedChangesetStats; }
   long getNumUnconflatableElementsDiscarded() const { return _numUnconflatableElementsDiscarded; }
-
-protected:
-
-  // TODO: implement
-  void _createMergers(
-    MatchSetVector& /*matchSets*/, std::vector<MergerPtr>& /*relationMergers*/) override { }
-  void _mergeFeatures(const std::vector<MergerPtr>& /*relationMergers*/) override { }
 
 private:
 

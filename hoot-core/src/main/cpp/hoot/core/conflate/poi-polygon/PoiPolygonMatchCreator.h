@@ -91,13 +91,13 @@ private:
 
   /*
    * For any 2:1 matches/reviews, will only keep the match with the smallest distance between
-   * matched features
+   * matched features; returns the number of matches removed
    */
   int _retainClosestDistanceMatchesOnly(
     std::vector<ConstMatchPtr>& matches, const ConstOsmMapPtr& map);
   /*
    * Called by _retainClosestDistanceMatchesOnly; 2:1 POI to poly and 2:1 polyl to POI matches are
-   * processed separately
+   * processed separately; returns the number of matches removed
    */
   int _retainClosestDistanceMatchesOnlyByType(
     std::vector<ConstMatchPtr>& matches, const ConstOsmMapPtr& map, const bool processPois);
@@ -111,7 +111,8 @@ private:
 
   /*
    * Finds all instances where an element is involved in more than one match; returns a collection
-   * with the element's ID and all the matches its involved with
+   * with the element's ID and all the matches its involved with; one element may be involved in
+   * more than one math
    */
   QMap<ElementId, QList<ConstMatchPtr>> _getOverlappingMatches(
     const QMultiMap<ElementId, ConstMatchPtr>& matchesById, const QString& matchTypeStr);
@@ -125,7 +126,7 @@ private:
     const std::vector<ConstMatchPtr>& allMatches, const ConstOsmMapPtr& map,
     const QString& matchTypeStr);
 
-  //debugging only methods
+  // debugging only methods
   bool _containsMatch(
     const ElementId& elementId1, const ElementId& elementId2,
     const std::vector<ConstMatchPtr>& matches) const;

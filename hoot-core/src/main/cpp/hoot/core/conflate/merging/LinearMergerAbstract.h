@@ -36,6 +36,7 @@
 namespace hoot
 {
 
+// TODO: move this to its own class
 class ShortestFirstComparator
 {
 public:
@@ -90,6 +91,9 @@ public:
   static QString className() { return "hoot::LinearMergerAbstract"; }
 
   LinearMergerAbstract() = default;
+  LinearMergerAbstract(
+    const std::set<std::pair<ElementId, ElementId>>& pairs,
+    const std::shared_ptr<SublineStringMatcher>& sublineMatcher);
   virtual ~LinearMergerAbstract() = default;
 
   void apply(const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced) override;
@@ -103,39 +107,37 @@ public:
 
 protected:
 
+  OsmMapPtr _map;
   ReviewMarker _reviewMarker;
 
-  static int logWarnCount;
-
-  std::set<std::pair<ElementId, ElementId>> _pairs;
+  QString _eidLogString;
 
   std::shared_ptr<SublineStringMatcher> _sublineMatcher;
 
   // indicates which matcher matched the elements being processed by this merger
   QString _matchedBy;
 
-  PairsSet& _getPairs() override { return _pairs; }
-  const PairsSet& _getPairs() const override { return _pairs; }
-
   /*
    * Return true if pair needs review.
    */
-  virtual bool _mergePair(const OsmMapPtr& map, ElementId eid1, ElementId eid2,
+  virtual bool _mergePair(ElementId eid1, ElementId eid2,
     std::vector<std::pair<ElementId, ElementId>>& replaced);
 
-  virtual void _markNeedsReview(const OsmMapPtr& map, ElementPtr e1, ElementPtr e2, QString note,
-                                QString reviewType);
+  virtual void _markNeedsReview(
+    ElementPtr e1, ElementPtr e2, QString note, QString reviewType);
 
-  void _removeSpans(OsmMapPtr map, const ElementPtr& w1, const ElementPtr& w2) const;
-  void _removeSpans(OsmMapPtr map, const WayPtr& w1, const WayPtr& w2) const;
+  void _removeSpans(const ElementPtr& w1, const ElementPtr& w2) const;
+  void _removeSpans(const WayPtr& w1, const WayPtr& w2) const;
 
 private:
+
+  static int logWarnCount;
 
   /*
    * Returns true if the way directly connects the left and right ways. There is some tolerance
    * for "directly". See Redmine ticket #951 for details.
    */
-  bool _directConnect(const ConstOsmMapPtr &map, WayPtr w) const;
+  bool _directConnect(WayPtr w) const;
 
   bool _doesWayConnect(long node1, long node2, const ConstWayPtr& w) const;
 };

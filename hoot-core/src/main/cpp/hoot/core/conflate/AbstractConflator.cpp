@@ -108,7 +108,7 @@ void AbstractConflator::_createMatches()
   }
   MemoryUsageChecker::getInstance().check();
   LOG_DEBUG("Match count: " << StringUtils::formatLargeNumber(_matches.size()));
-  LOG_VART(_matches);
+  //LOG_VART(_matches);
   LOG_DEBUG(Tgs::SystemInfo::getCurrentProcessMemoryUsageString());
   OsmMapWriterFactory::writeDebugMap(_map, "after-matching");
 
@@ -257,6 +257,7 @@ void AbstractConflator::_mapElementIdsToMergers()
       _e2m[*it].push_back(_mergers[i]);
     }
   }
+  LOG_VART(_e2m.size());
 }
 
 void AbstractConflator::_replaceElementIds(
@@ -283,6 +284,7 @@ void AbstractConflator::_replaceElementIds(
 void AbstractConflator::_applyMergers(const std::vector<MergerPtr>& mergers, OsmMapPtr& map)
 {
   std::vector<std::pair<ElementId, ElementId>> replaced;
+  LOG_VART(mergers.size());
   for (size_t i = 0; i < mergers.size(); ++i)
   {
     MergerPtr merger = mergers[i];

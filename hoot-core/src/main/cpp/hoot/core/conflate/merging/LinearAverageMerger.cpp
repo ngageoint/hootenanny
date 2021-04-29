@@ -52,23 +52,18 @@ LinearMergerAbstract()
 
 LinearAverageMerger::LinearAverageMerger(
   const std::set<std::pair<ElementId, ElementId>>& pairs) :
-LinearMergerAbstract()
+LinearMergerAbstract(pairs, nullptr)
 {
-  _pairs = pairs;
-  LOG_VART(_pairs);
   _matchedBy = HighwayMatch::MATCH_NAME;
 }
 
 bool LinearAverageMerger::_mergePair(
-  const OsmMapPtr& map, ElementId eid1, ElementId eid2,
-  std::vector<std::pair<ElementId, ElementId>>& replaced)
+  ElementId eid1, ElementId eid2, std::vector<std::pair<ElementId, ElementId>>& replaced)
 {
-  if (LinearMergerAbstract::_mergePair(map, eid1, eid2, replaced))
+  if (LinearMergerAbstract::_mergePair(eid1, eid2, replaced))
   {
     return true;
   }
-
-  _map = map;
 
   WayPtr way1 = std::dynamic_pointer_cast<Way>(_map->getElement(eid1));
   WayPtr way2 = std::dynamic_pointer_cast<Way>(_map->getElement(eid2));
@@ -80,7 +75,7 @@ bool LinearAverageMerger::_mergePair(
   }
 
   // Remove any ways that span both inputs.
-  _removeSpans(_map, way1, way2);
+  _removeSpans(way1, way2);
 
   // Determine the split size.
   const double minSplitSize = _getMinSplitSize(way1, way2);

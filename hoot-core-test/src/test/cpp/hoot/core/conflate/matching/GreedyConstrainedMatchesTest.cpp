@@ -61,9 +61,7 @@ public:
   GreedyConstrainedFakeMatch() : Match(MatchThresholdPtr()) {}
   GreedyConstrainedFakeMatch(ElementId eid1, ElementId eid2, double p,
     ConstMatchThresholdPtr threshold) :
-    Match(threshold),
-    _eid1(eid1),
-    _eid2(eid2),
+    Match(threshold, eid1, eid2),
     _p(p)
   {}
 
@@ -117,7 +115,6 @@ public:
 private:
 
   mutable MatchClassification _c;
-  ElementId _eid1, _eid2;
   double _p;
   MatchSet _conflicts;
 };

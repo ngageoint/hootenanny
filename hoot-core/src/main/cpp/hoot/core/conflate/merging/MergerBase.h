@@ -41,6 +41,7 @@ public:
   using PairsSet = std::set<std::pair<ElementId, ElementId>>;
 
   MergerBase() = default;
+  MergerBase(const std::set<std::pair<ElementId, ElementId>>& pairs);
   virtual ~MergerBase() = default;
 
   std::set<ElementId> getImpactedElementIds() const override;
@@ -57,9 +58,7 @@ public:
 
 protected:
 
-  // TODO: Is any inheriting class actually implementing this in a custom fashion?
-  virtual PairsSet& _getPairs() = 0;
-  virtual const PairsSet& _getPairs() const = 0;
+  std::set<std::pair<ElementId, ElementId>> _pairs;
 };
 
 }

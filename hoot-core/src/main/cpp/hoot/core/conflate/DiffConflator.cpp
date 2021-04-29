@@ -115,7 +115,7 @@ void DiffConflator::apply(OsmMapPtr& map)
   int currentStep = 1;  // tracks the current job task step for progress reporting
   _updateProgress(currentStep - 1, "Matching features...");
   _reset();
-  // Store the map, as we might need it for tag diff later.
+  // Store the map, as we might need it for a tag diff later.
   _map = map;
   std::shared_ptr<ConflateInfoCache> conflateInfoCache(new ConflateInfoCache(map));
 
@@ -169,8 +169,8 @@ void DiffConflator::apply(OsmMapPtr& map)
     if (conflateInfoCache->elementCriterionInUseByActiveMatcher(HighwayCriterion::className()))
     {
       // Let's try to snap disconnected ref2 roads back to ref1 roads. This has to done before
-      // dumping the ref elements in the matches, or the roads we need to snap back to won't be there
-      // anymore.
+      // dumping the ref elements in the matches, or the roads we need to snap back to won't be
+      // there anymore.
       _numSnappedWays = _snapSecondaryRoadsBackToRef();
       MemoryUsageChecker::getInstance().check();
     }
@@ -757,7 +757,9 @@ void DiffConflator::writeChangeset(
 void DiffConflator::calculateStats(OsmMapPtr pResultMap, QList<SingleStat>& stats)
 {
   // Differential specific stats
-  // TODO: These should be rolled in with the other conflate stats.
+
+  // TODO: This should be moved to CalculateStatsOp, run with diff conflate only, and expanded to
+  // cover all conflatable features types (#4743).
 
   ElementCriterionPtr pPoiCrit(new PoiCriterion());
   CriterionCountVisitor poiCounter;

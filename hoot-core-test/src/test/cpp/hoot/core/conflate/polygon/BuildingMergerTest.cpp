@@ -30,6 +30,7 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/conflate/polygon/BuildingMerger.h>
 #include <hoot/core/visitors/ConstElementVisitor.h>
+#include <hoot/core/elements/MapUtils.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
@@ -260,8 +261,8 @@ public:
 
     pairs.clear();
     replaced.clear();
-    ConstElementPtr building7 = TestUtils::getElementWithTag(map, "name", "Building 7");
-    ConstElementPtr building8 = TestUtils::getElementWithTag(map, "name", "Building 8");
+    ConstElementPtr building7 = MapUtils::getFirstElementWithTag(map, "name", "Building 7");
+    ConstElementPtr building8 = MapUtils::getFirstElementWithTag(map, "name", "Building 8");
     pairs.insert(pair<ElementId, ElementId>(building7->getElementId(), building8->getElementId()));
     uut._pairs = pairs;
     uut.apply(map, replaced);
@@ -270,8 +271,8 @@ public:
 
     pairs.clear();
     replaced.clear();
-    ConstElementPtr building3 = TestUtils::getElementWithTag(map, "name", "Building 3");
-    ConstElementPtr building4 = TestUtils::getElementWithTag(map, "name", "Building 4");
+    ConstElementPtr building3 = MapUtils::getFirstElementWithTag(map, "name", "Building 3");
+    ConstElementPtr building4 = MapUtils::getFirstElementWithTag(map, "name", "Building 4");
     pairs.insert(pair<ElementId, ElementId>(building3->getElementId(), building4->getElementId()));
     uut._pairs = pairs;
     uut.apply(map, replaced);
@@ -282,8 +283,8 @@ public:
     // wouldn't be passed to the merger. However, using them to test the IoU = 0 case.
     pairs.clear();
     replaced.clear();
-    ConstElementPtr building9 = TestUtils::getElementWithTag(map, "name", "Building 9");
-    ConstElementPtr building10 = TestUtils::getElementWithTag(map, "name", "Building 10");
+    ConstElementPtr building9 = MapUtils::getFirstElementWithTag(map, "name", "Building 9");
+    ConstElementPtr building10 = MapUtils::getFirstElementWithTag(map, "name", "Building 10");
     pairs.insert(pair<ElementId, ElementId>(building9->getElementId(), building10->getElementId()));
     uut._pairs = pairs;
     uut.apply(map, replaced);

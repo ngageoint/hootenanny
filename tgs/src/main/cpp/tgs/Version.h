@@ -41,6 +41,7 @@ namespace Tgs
   class TGS_EXPORT Version
   {
   public:
+
     static const char* getVersion();
   };
 }

@@ -62,8 +62,6 @@ void StringDistanceJs::Init(Handle<Object> target)
     tpl->SetClassName(String::NewFromUtf8(current, opNames[i].toStdString().data()));
     tpl->InstanceTemplate()->SetInternalFieldCount(2);
     // Prototype
-    tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "toString"),
-        FunctionTemplate::New(current, toString));
     tpl->PrototypeTemplate()->Set(
       PopulateConsumersJs::baseClass(),
       String::NewFromUtf8(current, StringDistance::className().toStdString().data()));
@@ -87,15 +85,6 @@ void StringDistanceJs::New(const FunctionCallbackInfo<Value>& args)
   PopulateConsumersJs::populateConsumers<StringDistance>(c, args);
 
   args.GetReturnValue().Set(args.This());
-}
-
-void StringDistanceJs::toString(const FunctionCallbackInfo<Value>& args)
-{
-  HandleScope scope(args.GetIsolate());
-
-  StringDistancePtr sd = toCpp<StringDistancePtr>(args.This());
-
-  args.GetReturnValue().Set(toV8(sd->toString()));
 }
 
 }

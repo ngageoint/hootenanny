@@ -18,6 +18,7 @@ exports.searchRadius = parseFloat(hoot.get("search.radius.generic.polygon"));
 exports.typeThreshold = parseFloat(hoot.get("generic.polygon.type.threshold"));
 exports.experimental = false;
 exports.baseFeatureType = "Polygon";
+exports.writeDebugTags = hoot.get("writer.include.debug.tags");
 exports.writeMatchedBy = hoot.get("writer.include.matched.by.tag");
 exports.geometryType = "polygon";
 
@@ -37,16 +38,12 @@ exports.isMatchCandidate = function(map, e)
 {
   // If the poly is generic but part of a building relation we want Building Conflation to handle 
   // it instead.
-  if (isMemberOfRelationInCategory(map, e.getElementId(), "building"))
+  if (hoot.RelationMemberUtils.isMemberOfRelationInCategory(map, e.getElementId(), "building"))
   {
     return false;
   }
 
-  hoot.trace("e: " + e.getId());
-  hoot.trace("isPolygon: " + isPolygon(map, e));
-  hoot.trace("isSpecificallyConflatable: " + isSpecificallyConflatable(map, e, exports.geometryType));
-
-  return isPolygon(map, e) && !isSpecificallyConflatable(map, e, exports.geometryType);
+  return hoot.OsmSchema.isPolygon(map, e) && !hoot.OsmSchema.isSpecificallyConflatable(map, e, exports.geometryType);
 };
 
 /**
@@ -93,7 +90,7 @@ exports.matchScore = function(map, e1, e2)
 
   // If both features have types and they aren't just generic types, let's do a detailed type comparison and 
   // look for an explicit type mismatch. Otherwise, move on to the geometry comparison.
-  var typeScorePassesThreshold = !explicitTypeMismatch(e1, e2, exports.typeThreshold);
+  var typeScorePassesThreshold = !hoot.OsmSchema.explicitTypeMismatch(e1, e2, exports.typeThreshold);
   hoot.trace("typeScorePassesThreshold: " + typeScorePassesThreshold);
   if (!typeScorePassesThreshold)
   {
@@ -164,7 +161,7 @@ exports.mergePair = function(map, e1, e2)
   mergeElements(map, e1, e2);
 
   e1.setStatusString("conflated");
-  if (exports.writeMatchedBy == "true")
+  if (exports.writeDebugTags == "true" && exports.writeMatchedBy == "true")
   {
     // Technically, we should get this key from MetadataTags, but that's not integrated with hoot yet.
     e1.setTag("hoot:matchedBy", exports.baseFeatureType);

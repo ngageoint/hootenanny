@@ -77,6 +77,12 @@ bool PoiPolygonMergerCreator::createMergers(
   {
     ConstMatchPtr m = *it;
     LOG_VART(m->toString());
+    LOG_VART(m->getName());
+    // This could be a generic PointPolygon match, which we don't process here.
+    if (m->getName() != PoiPolygonMatch::getPoiPolygonMatchName())
+    {
+      continue;
+    }
     if (m->getMatchMembers() & MatchMembers::Poi)
     {
       foundAPoi = true;

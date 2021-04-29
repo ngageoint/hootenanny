@@ -47,6 +47,7 @@ public:
   virtual void Init(v8::Handle<v8::Object> exports) = 0;
 
 private:
+
   ClassInitializer(const ClassInitializer& oc);
   ClassInitializer& operator=(const ClassInitializer& oc);
 };
@@ -109,7 +110,6 @@ public:
 
 #define HOOT_JS_REGISTER(ClassName)      \
   static hoot::AutoJsRegister<ClassName> ClassName##AutoJsRegister;
-
 
 }
 

@@ -121,13 +121,14 @@ void ScoreMatchesDiff::calculateDiff(const QString& input1, const QString& input
   LOG_VARD(numManualMatches1);
   LOG_VARD(numManualMatches2);
 
-  if (numManualMatches1 != numManualMatches2)
-  {
-    throw HootException(
-      QString("The two input datasets have a different number of manual matches (") +
-      QString::number(numManualMatches1) + " and " + QString::number(numManualMatches2) +
-      QString(") and, therefore, must not been derived from the same input data."));
-  }
+  // TODO: This ends up being true a lot, so maybe not a good check?
+//  if (numManualMatches1 != numManualMatches2)
+//  {
+//    throw HootException(
+//      QString("The two input datasets have a different number of manual matches (") +
+//      QString::number(numManualMatches1) + " and " + QString::number(numManualMatches2) +
+//      QString(") and, therefore, must not been derived from the same input data."));
+//  }
   _numManualMatches = numManualMatches1;
 
   // get all expected/actual match types
@@ -234,7 +235,7 @@ bool ScoreMatchesDiff::printDiff(const QString& output)
   _outputFile = _getOutputFile(_output);
   QTextStream out(_outputFile.get());
 
-  out << "Input files: " << _input1.right(25) << " and " << _input2.right(25) << "\n\n";
+  out << "Input files: ..." << _input1.right(25) << " and ..." << _input2.right(25) << "\n\n";
   _writeConflateStatusSummary(out);
   _writeConflateStatusDetail(out);
 
@@ -294,13 +295,17 @@ QMap<QString, QSet<ElementId>> ScoreMatchesDiff::_getMatchScoringDiff(
     const ElementId id = *itr;
     if (!expectedTagMappings.contains(id))
     {
-      throw HootException("Can't find ID: " + id.toString() + " for expected.");
+      // TODO: This ends up happening a lot, so maybe not a good reason to throw an error?
+      //throw HootException("Can't find ID: " + id.toString() + " for expected.");
+      continue;
     }
     QString expectedMatchTypeStr = expectedTagMappings[id];
     MatchType expectedMatchType = MatchType(expectedMatchTypeStr);
     if (!actualTagMappings.contains(id))
     {
-      throw HootException("Can't find ID: " + id.toString() + " for actual.");
+      // See note above.
+      //throw HootException("Can't find ID: " + id.toString() + " for actual.");
+      continue;
     }
     QString actualMatchTypeStr = actualTagMappings[id];
     MatchType actualMatchType = MatchType(actualMatchTypeStr);
@@ -405,8 +410,9 @@ void ScoreMatchesDiff::_writeConflateStatusSummary(QTextStream& out)
     summary += QString::number(abs(_reviewDifferential)) + " reviews were lost.\n";
   }
 
+  summary = summary.trimmed();
   std::cout << summary << std::endl;
-  std::cout << "Detailed information available in: " << _output << "." << std::endl;
+  std::cout << "\nDetailed information available in: " << _output << "." << std::endl;
 
   out << summary;
 }
@@ -415,17 +421,18 @@ void ScoreMatchesDiff::_writeConflateStatusDetail(QTextStream& out)
 {
   LOG_DEBUG("Printing conflate status detail...");
 
-  out << "\nMatch Type Changes\n";
+  QString detail;
+  detail += "\n\nMatch Type Changes\n";
   if (_newlyWrongMatchSwitches.size() + _newlyCorrectMatchSwitches.size() == 0)
   {
-    out << "none";
+    detail += "none";
   }
   else
   {
-    out << "\nNew Wrong Matches:\n\n";
+    detail += "\nNew Wrong Matches:\n";
     if (_newlyWrongMatchSwitches.empty())
     {
-      out << "none";
+      detail += "none";
     }
     else
     {
@@ -433,21 +440,22 @@ void ScoreMatchesDiff::_writeConflateStatusDetail(QTextStream& out)
            itr != _newlyWrongMatchSwitches.end(); ++itr)
       {
         const QString matchSwitchTypeStr = itr.key();
-        out << "\n" << matchSwitchTypeStr << "\n\n";
+        detail += "\n" + matchSwitchTypeStr + ":\n\n";
         QList<ElementId> ids = itr.value().toList();
         qSort(ids);
         for (QList<ElementId>::const_iterator itr2 = ids.begin(); itr2 != ids.end(); ++itr2)
         {
           const ElementId id = *itr2;
-          out << id.toString() << "\n";
+          detail += id.toString() + "\n";
         }
       }
+      detail = detail.trimmed();
     }
 
-    out << "\nNew Correct Matches:\n\n";
+    detail += "\n\nNew Correct Matches:\n\n";
     if (_newlyCorrectMatchSwitches.empty())
     {
-      out << "none";
+      detail += "none";
     }
     else
     {
@@ -455,22 +463,23 @@ void ScoreMatchesDiff::_writeConflateStatusDetail(QTextStream& out)
            itr != _newlyCorrectMatchSwitches.end(); ++itr)
       {
         const QString matchSwitchTypeStr = itr.key();
-        out << "\n" << matchSwitchTypeStr << "\n\n";
+        detail += "\n" + matchSwitchTypeStr + "\n\n";
         QList<ElementId> ids = itr.value().toList();
         qSort(ids);
         for (QList<ElementId>::const_iterator itr2 = ids.begin(); itr2 != ids.end(); ++itr2)
         {
           const ElementId id = *itr2;
-          out << id.toString() << "\n";
+          detail += id.toString() + "\n";
         }
       }
     }
+    detail = detail.trimmed();
   }
 
-  out << "\n\nAdded Elements:\n\n";
+  detail +="\n\nAdded Elements:\n\n";
   if (_elementIdsAdded.empty())
   {
-    out << "none";
+    detail += "none";
   }
   else
   {
@@ -480,14 +489,15 @@ void ScoreMatchesDiff::_writeConflateStatusDetail(QTextStream& out)
          itr != elementIdsAdded.end(); ++itr)
     {
       const ElementId id = *itr;
-      out << id.toString() << "\n";
+      detail += id.toString() + "\n";
     }
+    detail = detail.trimmed();
   }
 
-  out << "\nRemoved Elements:\n\n";
+  detail += "\n\nRemoved Elements:\n\n";
   if (_elementIdsRemoved.empty())
   {
-     out << "none";
+     detail += "none";
   }
   else
   {
@@ -497,9 +507,12 @@ void ScoreMatchesDiff::_writeConflateStatusDetail(QTextStream& out)
          itr != elementIdsRemoved.end(); ++itr)
     {
       const ElementId id = *itr;
-      out << id.toString() << "\n";
+      detail += id.toString() + "\n";
     }
+    detail = detail.trimmed();
   }
+
+  out << detail;
 }
 
 }

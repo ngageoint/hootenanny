@@ -37,7 +37,7 @@ namespace hoot
 {
 
 /**
- * A criterion that will either keep or remove matches.
+ * A criterion that uses a JS function to evaluate elements.
  */
 class JsFunctionCriterion : public ElementCriterion, public JsFunctionConsumer
 {
@@ -57,9 +57,7 @@ public:
   { return ElementCriterionPtr(new JsFunctionCriterion(_func)); }
 
   QString getDescription() const override { return ""; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 
 private:

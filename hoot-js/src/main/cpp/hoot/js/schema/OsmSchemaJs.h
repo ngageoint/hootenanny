@@ -52,7 +52,6 @@ private:
   static void getCategories(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void getChildTagsAsVertices(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void getSimilarTagsAsVertices(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void getTagByCategory(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void getTagVertex(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isAncestor(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isGeneric(const v8::FunctionCallbackInfo<v8::Value>& args);
@@ -64,21 +63,18 @@ private:
   static void scoreTypes(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void scoreOneWay(const v8::FunctionCallbackInfo<v8::Value>& args);
 
-  // Even thoughthe logic for some of these methods have been moved from OsmSchema to criterion,
-  // decided to leave this interface intact, as it will be simpler to access from js.
+  // Even though the logic for all of these is* methods has been moved from OsmSchema to individual
+  // ElementCriterion classes, decided to leave this interface intact as it will be simpler to
+  // access from js.
 
   // All of these methods can go away if #3047 is completed.
-  static void isArea(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isPoint(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isPolygon(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void isBuilding(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isLinear(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isLinearWaterway(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isPowerLine(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void isMetaData(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isPoi(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isRailway(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void isHighway(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isNonBuildingArea(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isCollectionRelation(const v8::FunctionCallbackInfo<v8::Value>& args);
 

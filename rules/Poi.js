@@ -16,6 +16,7 @@ exports.missThreshold = parseFloat(hoot.get("conflate.miss.threshold.default"));
 exports.reviewThreshold = parseFloat(hoot.get("conflate.review.threshold.default"));
 
 exports.searchRadius = parseFloat(hoot.get("search.radius.poi"));
+exports.writeDebugTags = hoot.get("writer.include.debug.tags");
 exports.writeMatchedBy = hoot.get("writer.include.matched.by.tag");
 exports.geometryType = "point";
 
@@ -54,7 +55,7 @@ var weightedWordDistance = new hoot.NameExtractor(
             new hoot.LevenshteinDistance(
                 {"levenshtein.distance.alpha": 1.5}))));
 
-var searchRadii = getPoiSearchRadii();
+var searchRadii = hoot.PoiSearchRadius.getSearchRadii();
 
 function distance(e1, e2) {
     return Math.sqrt(Math.pow(e1.getX() - e2.getX(), 2) +
@@ -116,7 +117,7 @@ exports.getSearchRadius = function(e)
  */
 exports.isMatchCandidate = function(map, e)
 {
-  return isPoi(e);
+  return hoot.OsmSchema.isPoi(e);
 };
 
 /**
@@ -169,9 +170,9 @@ function additiveScore(map, e1, e2) {
     var reason = result.reasons;
 
     var ignoreType = false;
-    hoot.trace("hasName(e1): " + hasName(e1));
-    hoot.trace("hasName(e2): " + hasName(e2));
-    if (hoot.get("poi.ignore.type.if.name.present") == 'true' && hasName(e1) && hasName(e2))
+    hoot.trace("hasName(e1): " + hoot.OsmSchema.hasName(e1));
+    hoot.trace("hasName(e2): " + hoot.OsmSchema.hasName(e2));
+    if (hoot.get("poi.ignore.type.if.name.present") == 'true' && hoot.OsmSchema.hasName(e1) && hoot.OsmSchema.hasName(e2))
     {
       ignoreType = true;
     }
@@ -421,7 +422,7 @@ exports.mergePair = function(map, e1, e2)
   // replace instances of e2 with e1 and merge tags
   mergeElements(map, e1, e2);
   e1.setStatusString("conflated");
-  if (exports.writeDebugTags == "true")
+  if (exports.writeDebugTags == "true" && exports.writeMatchedBy == "true")
   {
     // Technically, we should get this key from MetadataTags, but that's not integrated with hoot yet.
     e1.setTag("hoot:matchedBy", exports.baseFeatureType);

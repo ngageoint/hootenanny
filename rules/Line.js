@@ -55,15 +55,13 @@ exports.isMatchCandidate = function(map, e)
     return false;
   }
   // This prevents some of the problems seen in #4149. It should be removed after that issue is fixed.
-  else if (e.getElementId().getType() == "Way" && !hasType(e) &&
-           isMemberOfRelationSatisfyingCriterion(map, e.getElementId(), "hoot::CollectionRelationCriterion"))
+  else if (e.getElementId().getType() == "Way" && !hoot.OsmSchema.hasType(e) &&
+           hoot.RelationMemberUtils.isMemberOfRelationSatisfyingCriterion(map, e.getElementId(), "hoot::CollectionRelationCriterion"))
   {
     return false;
   }
 
-  hoot.trace("isLinear: " + isLinear(e));
-  hoot.trace("isSpecificallyConflatable: " + isSpecificallyConflatable(map, e, exports.geometryType));
-  return isLinear(e) && !isSpecificallyConflatable(map, e, exports.geometryType);
+  return hoot.OsmSchema.isLinear(e) && !hoot.OsmSchema.isSpecificallyConflatable(map, e, exports.geometryType);
 };
 
 /**
@@ -112,14 +110,14 @@ exports.matchScore = function(map, e1, e2)
 
   // If both features have types and they aren't just generic types, let's do a detailed type comparison and 
   // look for an explicit type mismatch. Otherwise, move on to the geometry comparison.
-  var typeScorePassesThreshold = !explicitTypeMismatch(e1, e2, exports.typeThreshold);
+  var typeScorePassesThreshold = !hoot.OsmSchema.explicitTypeMismatch(e1, e2, exports.typeThreshold);
   hoot.trace("typeScorePassesThreshold: " + typeScorePassesThreshold);
   if (!typeScorePassesThreshold)
   {
     return result;
   }
-  hoot.trace("mostSpecificType(e1): " + mostSpecificType(e1));
-  hoot.trace("mostSpecificType(e2): " + mostSpecificType(e2));
+  hoot.trace("mostSpecificType(e1): " + hoot.OsmSchema.mostSpecificType(e1));
+  hoot.trace("mostSpecificType(e2): " + hoot.OsmSchema.mostSpecificType(e2));
 
   // extract the sublines needed for matching - Note that some of this was taken from Highway.js and other parts 
   // from River.js. See notes on the dual subline matcher approach in River.js.
@@ -187,7 +185,7 @@ exports.mergeSets = function(map, pairs, replaced)
 {
   // Snap the ways in the second input to the first input. Use the default tag 
   // merge method. See related notes in exports.mergeSets in River.js.
-  return snapWays2(sublineMatcher, map, pairs, replaced, exports.baseFeatureType, frechetSublineMatcher);
+  return new hoot.LinearSnapMerger().apply(sublineMatcher, map, pairs, replaced, exports.baseFeatureType, frechetSublineMatcher);
 };
 
 exports.getMatchFeatureDetails = function(map, e1, e2)

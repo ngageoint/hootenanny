@@ -31,6 +31,7 @@
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/polygon/BuildingMatch.h>
 #include <hoot/core/conflate/polygon/BuildingMatchCreator.h>
+#include <hoot/core/elements/MapUtils.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
@@ -183,10 +184,10 @@ public:
     //set date tags on a primary and ref feature that will match, making the date on the secondary
     //feature newer - should trigger a review
     //ref feature
-    TestUtils::getElementWithTag(map, "name", "Target")->getTags()
+    MapUtils::getFirstElementWithTag(map, "name", "Target")->getTags()
       .appendValue("source:date", "2018-02-14T10:55");
     //secondary feature
-    TestUtils::getElementWithTag(map, "name", "Target Pharmacy")->getTags()
+    MapUtils::getFirstElementWithTag(map, "name", "Target Pharmacy")->getTags()
       .appendValue("source:date", "2018-02-14T10:56");
 
     conf().set("building.date.format", "yyyy-MM-ddTHH:mm");
@@ -244,10 +245,10 @@ public:
     //set date tags on a primary and ref feature that will match, making the date on the ref
     //feature newer - should not trigger a review
     //ref feature
-    TestUtils::getElementWithTag(map, "name", "Target")->getTags()
+    MapUtils::getFirstElementWithTag(map, "name", "Target")->getTags()
       .appendValue("source:date", "2018-02-14T10:56");
     //secondary feature
-    TestUtils::getElementWithTag(map, "name", "Target Pharmacy")->getTags()
+    MapUtils::getFirstElementWithTag(map, "name", "Target Pharmacy")->getTags()
       .appendValue("source:date", "2018-02-14T10:55");
 
     conf().set("building.address.match.enabled", "false");
@@ -273,10 +274,10 @@ public:
     //make the date tag added to one of the features have a different key than what is expected -
     //should not trigger a review
     //ref feature
-    TestUtils::getElementWithTag(map, "name", "Target")->getTags()
+    MapUtils::getFirstElementWithTag(map, "name", "Target")->getTags()
       .appendValue("source:date", "2018-02-14T10:56");
     //secondary feature
-    TestUtils::getElementWithTag(map, "name", "Target Pharmacy")->getTags()
+    MapUtils::getFirstElementWithTag(map, "name", "Target Pharmacy")->getTags()
       .appendValue("date", "2018-02-14T10:55");
 
     conf().set("building.address.match.enabled", "false");
@@ -301,10 +302,10 @@ public:
 
     //make the date tag added to one of the features have a date format that is unexpected
     //ref feature
-    TestUtils::getElementWithTag(map, "name", "Target")->getTags()
+    MapUtils::getFirstElementWithTag(map, "name", "Target")->getTags()
       .appendValue("source:date", "2018-02-14T10:56:00");
     //secondary feature
-    TestUtils::getElementWithTag(map, "name", "Target Pharmacy")->getTags()
+    MapUtils::getFirstElementWithTag(map, "name", "Target Pharmacy")->getTags()
       .appendValue("source:date", "2018-02-14T10:55");
 
     conf().set("building.address.match.enabled", "false");

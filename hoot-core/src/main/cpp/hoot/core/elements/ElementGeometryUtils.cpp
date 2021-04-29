@@ -149,8 +149,8 @@ std::shared_ptr<geos::geom::Geometry> ElementGeometryUtils::_getGeometry(
   return newGeom;
 }
 
-Meters ElementGeometryUtils::calculateLength(const ConstElementPtr& e,
-                                             const ConstElementProviderPtr& constProvider)
+Meters ElementGeometryUtils::calculateLength(
+  const ConstElementPtr& e, const ConstElementProviderPtr& constProvider)
 {
   // Doing length/distance calcs only make sense if we've projected down onto a flat surface
   if (!MapProjector::isPlanar(constProvider))
@@ -166,7 +166,13 @@ Meters ElementGeometryUtils::calculateLength(const ConstElementPtr& e,
   {
     // TODO: optimize - we don't really need to convert first, we can just loop through the nodes
     // and sum up the distance.
-    return ElementToGeometryConverter(constProvider).convertToGeometry(e)->getLength();
+    std::shared_ptr<geos::geom::Geometry> geom =
+      ElementToGeometryConverter(constProvider).convertToGeometry(e);
+    if (!geom || !geom->isValid())
+    {
+      return 0;
+    }
+    return geom->getLength();
   }
   else
   {

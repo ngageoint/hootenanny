@@ -217,7 +217,7 @@ void OsmXmlWriter::write(const ConstOsmMapPtr& map)
   }
 
   //  Debug maps get a bunch of debug settings setup here
-  LOG_VARD(getIsDebugMap());
+  LOG_VART(getIsDebugMap());
   if (getIsDebugMap())
     _overrideDebugSettings();
 

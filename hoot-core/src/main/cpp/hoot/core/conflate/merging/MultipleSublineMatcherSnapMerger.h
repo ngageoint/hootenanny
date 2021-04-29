@@ -57,9 +57,7 @@ public:
 
   QString getDescription() const override
   { return "Merges ways using snapping with one or more subline matchers"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 
 protected:
@@ -67,7 +65,7 @@ protected:
   /*
    * @see LinearSnapMerger
    */
-  WaySublineMatchString _matchSubline(OsmMapPtr map, ElementPtr e1, ElementPtr e2) override;
+  WaySublineMatchString _matchSubline(ElementPtr e1, ElementPtr e2) override;
 
 private:
 

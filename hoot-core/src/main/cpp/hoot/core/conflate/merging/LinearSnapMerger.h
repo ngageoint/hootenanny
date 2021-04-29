@@ -39,7 +39,7 @@ class WaySublineCollection;
  * Merges linear geometries and tags by snapping the secondary geometry to the reference geometry
  *
  * Note that this was originally written specifically for roads, but now is used by several linear
- * script routines, including railway and river.
+ * script conflate routines.
  */
 class LinearSnapMerger : public LinearMergerAbstract
 {
@@ -56,9 +56,7 @@ public:
 
   QString getDescription() const override
   { return "Merges linear features by snapping geometries"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 
 protected:
@@ -71,13 +69,14 @@ protected:
   // This is useful for getting rid of them later, if necessary.
   bool _markAddedMultilineStringRelations;
 
-  bool _mergePair(const OsmMapPtr& map, ElementId eid1, ElementId eid2,
-                  std::vector<std::pair<ElementId, ElementId>>& replaced) override;
+  bool _mergePair(
+    ElementId eid1, ElementId eid2,
+    std::vector<std::pair<ElementId, ElementId>>& replaced) override;
 
   /*
    * Finds a matching subline between two elements with the configured subline matcher
    */
-  virtual WaySublineMatchString _matchSubline(OsmMapPtr map, ElementPtr e1, ElementPtr e2);
+  virtual WaySublineMatchString _matchSubline(ElementPtr e1, ElementPtr e2);
 
 private:
 
@@ -86,27 +85,41 @@ private:
 
   static int logWarnCount;
 
-  static const bool WRITE_DETAILED_DEBUG_MAPS;
+  bool _checkForIdenticalElements(const ElementPtr& e1, const ElementPtr& e2) const;
 
   /*
    * Snap the ends of snapee that match with either end point of middle to snapTo's end points.
    */
-  void _snapEnds(const OsmMapPtr& map, ElementPtr snapee, ElementPtr snapTo) const;
-  void _snapEnds(const OsmMapPtr& map, WayPtr snapee, WayPtr middle, WayPtr snapTo) const;
-  void _snapEnd(const OsmMapPtr& map, WayPtr snapee, NodePtr replacedNode,
-                NodePtr replacementNode) const;
-
+  void _snapEnds(ElementPtr snapee, ElementPtr snapTo) const;
+  void _snapEnds(WayPtr snapee, WayPtr middle, WayPtr snapTo) const;
+  void _snapEnd(WayPtr snapee, NodePtr replacedNode, NodePtr replacementNode) const;
   /*
    * Splits the splitee up into a match element and a scrap element. All the tags are assigned
    * appropriately and the match and scrap are added to the replaced list and added to the map.
    * The original elements are deleted.
    */
-  void _splitElement(const OsmMapPtr& map, const WaySublineCollection& s,
-                     const std::vector<bool>& reverse,
-                     std::vector<std::pair<ElementId, ElementId>>& replaced,
-                     const ConstElementPtr& splitee, ElementPtr& match, ElementPtr& scrap) const;
+  void _splitElement(
+    const WaySublineCollection& s, const std::vector<bool>& reverse,
+    std::vector<std::pair<ElementId, ElementId>>& replaced,
+    const ConstElementPtr& splitee, ElementPtr& match, ElementPtr& scrap) const;
 
-  void _updateScrapParent(const OsmMapPtr& map, long id, const ElementPtr& scrap);
+  void _mergeTags(const Tags& e1Tags, const Tags& e2Tags, const ElementPtr& e1Match) const;
+
+  void _removeSplitWay(
+    const ElementPtr& e1, const ElementPtr& scraps1, const ElementPtr& e1Match,
+    const bool swapWayIds);
+  void _updateScrapParent(long id, const ElementPtr& scrap);
+  void _manageElementIds(
+    const WayPtr& w1, const WayPtr& w2, const WayPtr& wMatch, const ElementPtr& scraps1,
+    const ElementPtr& scraps2);
+  void _handleScrapsIds(const ElementPtr& scraps, const WayPtr& way) const;
+  void _swapSecondaryElementWithScraps(
+    const ElementId& secElementId, const ElementPtr& matchElement, const ElementPtr& scraps) const;
+  void _dropSecondaryElements(
+    const ElementId& eid1, const ElementId& eidMatch1, const ElementId& eid2,
+    const ElementId& eidMatch2) const;
+
+  void _markMultilineStringRelations(const ElementPtr& element) const;
 };
 
 using LinearSnapMergerPtr = std::shared_ptr<LinearSnapMerger>;

@@ -37,7 +37,6 @@
 #include <hoot/core/util/Settings.h>
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/elements/OsmMapJs.h>
-#include <hoot/js/algorithms/linearreference/WaySublineMatchStringJs.h>
 #include <hoot/js/elements/ElementJs.h>
 #include <hoot/js/util/HootExceptionJs.h>
 #include <hoot/js/util/PopulateConsumersJs.h>
@@ -78,19 +77,19 @@ void SublineStringMatcherJs::extractMatchingSublines(const FunctionCallbackInfo<
   Handle<Value> result;
   try
   {
-    // Some attempts were made to cache this match for performance reasons (could be used later
-    // during match conflict resolution), but the results were unstable. See branch 3969b.
+    // Some attempts were made to use cached subline matches here from SublineStringMatcherJs for
+    // performance reasons, but the results were unstable. Doing so could lead to a runtime
+    // performance boost, so worth revisiting. See branch 3969b.
     WaySublineMatchString match;
     try
     {
-      // We'll try matching with whatever matching we're given...
       match = sm->findMatch(m, e1, e2);
     }
     catch (const RecursiveComplexityException& e)
     {
       // If we receive this exception, we'll return a string with its exception name to the calling
-      // conflate script. This give it a change to retry the match with a different matcher. Kind
-      // of kludgy, but not sure ho to send exceptions back to the js scripts.
+      // conflate script. Doing so gives it a chance to retry the match with a different matcher.
+      // Kind of kludgy, but not sure if exceptions can be sent back to the js conflate scripts.
       LOG_TRACE(e.getWhat());
       const QString msg = "RecursiveComplexityException: " + e.getWhat();
       args.GetReturnValue().Set(String::NewFromUtf8(current, msg.toUtf8().data()));
@@ -129,7 +128,6 @@ void SublineStringMatcherJs::extractMatchingSublines(const FunctionCallbackInfo<
     }
     catch (const IllegalArgumentException&)
     {
-      // this is unusual; print out some information useful to debugging.
       MapProjector::projectToWgs84(copiedMap);
       LOG_TRACE(OsmXmlWriter::toString(copiedMap));
       logWarnCount++;
@@ -158,31 +156,6 @@ void SublineStringMatcherJs::extractMatchingSublines(const FunctionCallbackInfo<
   }
 }
 
-void SublineStringMatcherJs::findMatch(const FunctionCallbackInfo<Value>& args)
-{
-  // Is this used anywhere?
-
-  HandleScope scope(args.GetIsolate());
-
-  SublineStringMatcherJs* smJs = ObjectWrap::Unwrap<SublineStringMatcherJs>(args.This());
-
-  if (args.Length() != 3)
-  {
-    throw IllegalArgumentException("Expected exactly three argument in findMatch (map, e1, e2)");
-  }
-
-  OsmMapJs* mapJs = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject());
-  ElementJs* e1Js = ObjectWrap::Unwrap<ElementJs>(args[1]->ToObject());
-  ElementJs* e2Js = ObjectWrap::Unwrap<ElementJs>(args[2]->ToObject());
-
-  WaySublineMatchString match =
-    smJs->getSublineStringMatcher()->findMatch(
-      mapJs->getConstMap(), e1Js->getConstElement(), e2Js->getConstElement());
-  WaySublineMatchStringPtr result(new WaySublineMatchString(match));
-
-  args.GetReturnValue().Set(WaySublineMatchStringJs::New(result));
-}
-
 void SublineStringMatcherJs::Init(Handle<Object> target)
 {
   Isolate* current = target->GetIsolate();
@@ -202,8 +175,6 @@ void SublineStringMatcherJs::Init(Handle<Object> target)
     // Prototype
     tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "extractMatchingSublines"),
         FunctionTemplate::New(current, extractMatchingSublines));
-    tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "findMatch"),
-        FunctionTemplate::New(current, findMatch));
 
     Persistent<Function> constructor(current, tpl->GetFunction());
     target->Set(String::NewFromUtf8(current, n), ToLocal(&constructor));

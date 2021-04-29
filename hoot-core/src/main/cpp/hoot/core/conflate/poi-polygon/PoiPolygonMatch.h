@@ -52,7 +52,7 @@ namespace hoot
  * This is an additive, rule based mechanism for matching POIs to polygons. See "POI to
  * Polygon Conflation" in the Hootenanny Algorithms document for more details.
  *
- * This class could use some refactoring.
+ * This class could definitely use some refactoring.
  */
 class PoiPolygonMatch : public Match, public MatchDetails, public Configurable
 {
@@ -64,8 +64,6 @@ public:
   static const QString MATCH_NAME;
 
   PoiPolygonMatch() = default;
-  // this constructor added primarily for testing purposes
-  PoiPolygonMatch(ConstMatchThresholdPtr threshold);
   PoiPolygonMatch(const ConstOsmMapPtr& map, ConstMatchThresholdPtr threshold,
     std::shared_ptr<const PoiPolygonRfClassifier> rf,
     PoiPolygonInfoCachePtr infoCache = PoiPolygonInfoCachePtr(),
@@ -137,8 +135,8 @@ public:
   void setReviewMultiUseBuildings(const bool review) { _reviewMultiUseBuildings = review; }
   void setAddressMatchingEnabled(const bool enabled) { _addressMatchEnabled = enabled; }
 
-  //summary of match types found; assumes one invocation of this class per executed process; would
-  //like to handle these in a different way
+  // summary of match types found; assumes one invocation of this class per executed process; would
+  // like to handle these in a different way
   static long matchesProcessed;
   static long distanceMatches;
   static long typeMatches;
@@ -162,8 +160,6 @@ private:
 
   ConstOsmMapPtr _map;
 
-  ElementId _eid1;
-  ElementId _eid2;
   ConstNodePtr _poi;
   ConstElementPtr _poly;
   std::shared_ptr<geos::geom::Geometry> _poiGeom;
@@ -238,6 +234,9 @@ private:
   PoiPolygonInfoCachePtr _infoCache;
 
   int _timingThreshold;
+
+  // this constructor added primarily for testing purposes
+  PoiPolygonMatch(ConstMatchThresholdPtr threshold);
 
   void _categorizeElementsByGeometryType();
 

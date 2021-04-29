@@ -48,8 +48,8 @@ using MatchPtr = std::shared_ptr<Match>;
 using ConstMatchPtr = std::shared_ptr<const Match>;
 
 /**
- * Describes a specific match between two sets of elements. For example the match between two
- * buildings, or the match between an intersection and a round-a-bout.
+ * Describes a specific match between two sets of elements. e.g. the match between two
+ * buildings or the match between an intersection and a round-a-bout.
  *
  * This class is not re-entrant or thread safe.
  */
@@ -63,7 +63,7 @@ public:
   virtual ~Match() = default;
 
   virtual QString explain() const;
-  virtual void setExplain(const QString& /*explainText*/) { }
+  virtual void setExplain(const QString& /*explainText*/) {}
 
   /**
    * Classifies the match and returns a classification object.
@@ -115,8 +115,8 @@ public:
    * in the whole group will be taken together and not optimized.
    *
    * This is most handy when defining features that should be reviewed if a conflict exists. This
-   * is not a good idea with highly connecte features such as roads. Current experimentation with
-   * this is occuring in POIs and buildings. #3003
+   * is not a good idea with highly connected features such as roads. Experimentation with
+   * this has occurred with POIs and buildings (redmine #3003).
    */
   virtual bool isWholeGroup() const { return false; }
 
@@ -169,19 +169,19 @@ public:
 
 protected:
 
-  /*
-   * All of this order silliness maintains a consistent ordering of matches when they're placed
-   * into a set as pointers.
-   */
-  Match(const std::shared_ptr<const MatchThreshold>& threshold) :
-    _order(_orderCount++), _threshold(threshold) {}
-
   friend class MatchPtrComparator;
 
   static long _orderCount;
   long _order;
 
   const std::shared_ptr<const MatchThreshold> _threshold;
+
+  ElementId _eid1, _eid2;
+
+  Match(const std::shared_ptr<const MatchThreshold>& threshold);
+  Match(
+    const std::shared_ptr<const MatchThreshold>& threshold, const ElementId& eid1,
+    const ElementId& eid2);
 };
 
 inline std::ostream& operator<<(std::ostream & o, ConstMatchPtr m)

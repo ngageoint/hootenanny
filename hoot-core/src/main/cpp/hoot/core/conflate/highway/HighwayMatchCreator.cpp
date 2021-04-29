@@ -335,17 +335,17 @@ HighwayMatchCreator::HighwayMatchCreator()
   _classifier.reset(
     Factory::getInstance().constructObject<HighwayClassifier>(
       ConfigOptions().getConflateMatchHighwayClassifier()));
+
   _sublineMatcher.reset(
     Factory::getInstance().constructObject<SublineStringMatcher>(
       ConfigOptions().getHighwaySublineStringMatcher()));
-
-  _tagAncestorDiff = std::shared_ptr<TagAncestorDifferencer>(new TagAncestorDifferencer("highway"));
-
   Settings settings = conf();
   settings.set("way.matcher.max.angle", ConfigOptions().getHighwayMatcherMaxAngle());
   settings.set("way.subline.matcher", ConfigOptions().getHighwaySublineMatcher());
   settings.set("way.matcher.heading.delta", ConfigOptions().getHighwayMatcherHeadingDelta());
   _sublineMatcher->setConfiguration(settings);
+
+  _tagAncestorDiff = std::shared_ptr<TagAncestorDifferencer>(new TagAncestorDifferencer("highway"));
 }
 
 MatchPtr HighwayMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2)

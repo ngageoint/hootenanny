@@ -18548,7 +18548,7 @@
         <tag k="hoot:review:note" v="Conflicting information: multiple features have been matched to the same feature and require review."/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:sort_order" v="518"/>
-        <tag k="hoot:review:type" v="POI to Polygon;Area"/>
+        <tag k="hoot:review:type" v="POI to Polygon"/>
         <tag k="type" v="review"/>
     </relation>
     <relation visible="true" id="-556" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -18559,7 +18559,7 @@
         <tag k="hoot:review:note" v="Conflicting information: multiple features have been matched to the same feature and require review."/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:sort_order" v="519"/>
-        <tag k="hoot:review:type" v="POI to Polygon;Area"/>
+        <tag k="hoot:review:type" v="POI to Polygon"/>
         <tag k="type" v="review"/>
     </relation>
     <relation visible="true" id="-555" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -18570,7 +18570,7 @@
         <tag k="hoot:review:note" v="Conflicting information: multiple features have been matched to the same feature and require review."/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:sort_order" v="520"/>
-        <tag k="hoot:review:type" v="POI to Polygon;Area"/>
+        <tag k="hoot:review:type" v="POI to Polygon"/>
         <tag k="type" v="review"/>
     </relation>
     <relation visible="true" id="-554" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -18581,7 +18581,7 @@
         <tag k="hoot:review:note" v="Conflicting information: multiple features have been matched to the same feature and require review."/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:sort_order" v="95"/>
-        <tag k="hoot:review:type" v="POI to Polygon;Area"/>
+        <tag k="hoot:review:type" v="POI to Polygon"/>
         <tag k="type" v="review"/>
     </relation>
     <relation visible="true" id="-553" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -18592,7 +18592,7 @@
         <tag k="hoot:review:note" v="Conflicting information: multiple features have been matched to the same feature and require review."/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:sort_order" v="96"/>
-        <tag k="hoot:review:type" v="POI to Polygon;Area"/>
+        <tag k="hoot:review:type" v="POI to Polygon"/>
         <tag k="type" v="review"/>
     </relation>
     <relation visible="true" id="-552" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -18603,7 +18603,7 @@
         <tag k="hoot:review:note" v="Conflicting information: multiple features have been matched to the same feature and require review."/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:sort_order" v="97"/>
-        <tag k="hoot:review:type" v="POI to Polygon;Area"/>
+        <tag k="hoot:review:type" v="POI to Polygon"/>
         <tag k="type" v="review"/>
     </relation>
     <relation visible="true" id="-551" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -18614,7 +18614,7 @@
         <tag k="hoot:review:note" v="Conflicting information: multiple features have been matched to the same feature and require review."/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:sort_order" v="306"/>
-        <tag k="hoot:review:type" v="POI to Polygon;Area"/>
+        <tag k="hoot:review:type" v="POI to Polygon"/>
         <tag k="type" v="review"/>
     </relation>
     <relation visible="true" id="-550" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -18625,7 +18625,7 @@
         <tag k="hoot:review:note" v="Conflicting information: multiple features have been matched to the same feature and require review."/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:sort_order" v="307"/>
-        <tag k="hoot:review:type" v="POI to Polygon;Area"/>
+        <tag k="hoot:review:type" v="POI to Polygon"/>
         <tag k="type" v="review"/>
     </relation>
     <relation visible="true" id="-549" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -18636,7 +18636,7 @@
         <tag k="hoot:review:note" v="Conflicting information: multiple features have been matched to the same feature and require review."/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:sort_order" v="308"/>
-        <tag k="hoot:review:type" v="POI to Polygon;Area"/>
+        <tag k="hoot:review:type" v="POI to Polygon"/>
         <tag k="type" v="review"/>
     </relation>
     <relation visible="true" id="-548" timestamp="1970-01-01T00:00:00Z" version="1">
