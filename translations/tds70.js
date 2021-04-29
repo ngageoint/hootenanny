@@ -778,52 +778,6 @@ tds70 = {
       }
     } // End process tags.note
 
-    // Unpack the ZI006_MEM field
-    // if (tags.note)
-    // {
-    //   var tObj = translate.unpackMemo(tags.note);
-
-    //   if (tObj.tags !== '')
-    //   {
-    //     var tTags = JSON.parse(tObj.tags);
-    //     for (i in tTags)
-    //     {
-    //       // Debug
-    //       // print('Memo: Add: ' + i + ' = ' + tTags[i]);
-    //       if (tags[tTags[i]]) hoot.logWarn('Unpacking ZI006_MEM, overwriting ' + i + ' = ' + tags[i] + '  with ' + tTags[i]);
-    //       tags[i] = tTags[i];
-    //     }
-    //     // Now check if this is a synonym etc. If so, remove the other tag.
-    //     if (i in tds70.fcodeLookupOut) // tag -> FCODE table
-    //     {
-    //       if (tags[i] in tds70.fcodeLookupOut[i])
-    //       {
-    //         var row = tds70.fcodeLookupOut[i][tags[i]];
-
-    //         // Now find the "real" tag that comes frm the FCode
-    //         if (row[1] in tds70.fcodeLookup['F_CODE'])
-    //         {
-    //           var row2 = tds70.fcodeLookup['F_CODE'][row[1]];
-    //           // If the tags match, delete it
-    //           if (tags[row2[0]] && (tags[row2[0]] == row2[1]))
-    //           {
-    //             delete tags[row2[0]];
-    //           }
-    //         }
-    //       }
-    //     }
-    //   }
-
-    //   if (tObj.text && tObj.text !== '')
-    //   {
-    //     tags.note = tObj.text;
-    //   }
-    //   else
-    //   {
-    //     delete tags.note;
-    //   }
-    // } // End process tags.note
-
     // Ice roads vs highways
     if (attrs.F_CODE == 'AQ075' && !tags.highway) tags.highway = 'road';
 
