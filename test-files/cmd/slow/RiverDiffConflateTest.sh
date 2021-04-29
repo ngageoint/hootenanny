@@ -10,10 +10,10 @@ CONFIG="-C UnifyingAlgorithm.conf -C DifferentialConflation.conf -C Testing.conf
 # See related notes in DiffConflatePartialLinearMatchTest.
 
 # remove partial matches partially
-hoot conflate $LOG_LEVEL $CONFIG -D differential.remove.river.partial.matches.as.whole=false test-files/conflate/generic/rivers/Haiti_CNIGS_Rivers_REF1-cropped-2.osm test-files/conflate/generic/rivers/Haiti_osm_waterway_ss_REF2-cropped-2.osm $OUT_DIR/output-partial.osm --differential
+hoot conflate $LOG_LEVEL $CONFIG -D differential.remove.linear.partial.matches.as.whole=false -D differential.remove.river.partial.matches.as.whole=false test-files/conflate/generic/rivers/Haiti_CNIGS_Rivers_REF1-cropped-2.osm test-files/conflate/generic/rivers/Haiti_osm_waterway_ss_REF2-cropped-2.osm $OUT_DIR/output-partial.osm --differential
 hoot diff $LOG_LEVEL -C Testing.conf $IN_DIR/output-partial.osm $OUT_DIR/output-partial.osm || diff $IN_DIR/output-partial.osm $OUT_DIR/output-partial.osm
 
 # remove partial matches completely
-hoot conflate $LOG_LEVEL $CONFIG -D differential.remove.river.partial.matches.as.whole=true test-files/conflate/generic/rivers/Haiti_CNIGS_Rivers_REF1-cropped-2.osm test-files/conflate/generic/rivers/Haiti_osm_waterway_ss_REF2-cropped-2.osm $OUT_DIR/output-complete.osm --differential
+hoot conflate $LOG_LEVEL $CONFIG -D differential.remove.linear.partial.matches.as.whole=true -D differential.remove.river.partial.matches.as.whole=true test-files/conflate/generic/rivers/Haiti_CNIGS_Rivers_REF1-cropped-2.osm test-files/conflate/generic/rivers/Haiti_osm_waterway_ss_REF2-cropped-2.osm $OUT_DIR/output-complete.osm --differential
 hoot diff $LOG_LEVEL -C Testing.conf $IN_DIR/output-complete.osm $OUT_DIR/output-complete.osm || diff $IN_DIR/output-complete.osm $OUT_DIR/output-complete.osm
 

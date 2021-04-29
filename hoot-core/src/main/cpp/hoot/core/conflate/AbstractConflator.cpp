@@ -142,6 +142,8 @@ void AbstractConflator::_createMatches()
 
 MatchSetVector AbstractConflator::_optimizeMatches(std::vector<ConstMatchPtr>& matches)
 {
+  LOG_DEBUG("Optimizing matches...");
+
   LOG_DEBUG("Pre-constraining match count: " << StringUtils::formatLargeNumber(matches.size()));
   _stats.append(SingleStat("Number of Matches Before Whole Groups", matches.size()));
   LOG_DEBUG(

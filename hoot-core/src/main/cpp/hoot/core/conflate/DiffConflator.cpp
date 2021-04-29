@@ -151,9 +151,7 @@ void DiffConflator::apply(OsmMapPtr& map)
     // matches here where linear and non-linear features are mixed, we specify all matches, and we
     // have no tests yet to catch the particular situation. If so, will have to deal with that on a
     // case by case basis.
-    const bool removePartialLinearMatchesPartially =
-      !_removeLinearPartialMatchesAsWhole && SuperfluousConflateOpRemover::linearMatcherPresent() &&
-      _countMatchesToRemoveAsPartial() > 0;
+    const bool removePartialLinearMatchesPartially = _removeLinearMatchesPartially();
     if (removePartialLinearMatchesPartially)
     {
       _updateProgress(_currentStep - 1, "Optimizing feature matches...");
@@ -191,12 +189,11 @@ void DiffConflator::apply(OsmMapPtr& map)
       // All other feature types are removed completely.
       _removePartialSecondaryMatchElements();
     }
-    else
-    {
-      // Use a naive approach and remove all elements involved in a match completely, despite
-      // possible partial subline matches (if linear features are present).
-      _removeMatchElementsCompletely(Status::Unknown2);
-    }
+    // This uses a naive approach and remove all elements involved in a match completely, despite
+    // possible partial subline matches (if linear features are present). If we're removing partial
+    // linear matches partially, then _separateMatchesToRemoveAsPartial has already been run and the
+    // logic in this method is smart enough to only completely remove non-linear Unknown2 matches.
+    _removeMatchElementsCompletely(Status::Unknown2);
     MemoryUsageChecker::getInstance().check();
 
     // Eventually, we could extend this snapping to all linear feature types.
@@ -300,8 +297,20 @@ void DiffConflator::markInputElements(OsmMapPtr map)
   map->visitRw(*pRef1v);
 }
 
+bool DiffConflator::_removeLinearMatchesPartially() const
+{
+  LOG_VART(_removeLinearPartialMatchesAsWhole);
+  LOG_VART(SuperfluousConflateOpRemover::linearMatcherPresent());
+  const int numMatchesToRemoveAsPartial = _countMatchesToRemoveAsPartial();
+  LOG_VART(_countMatchesToRemoveAsPartial());
+  return
+    !_removeLinearPartialMatchesAsWhole && SuperfluousConflateOpRemover::linearMatcherPresent() &&
+    numMatchesToRemoveAsPartial > 0;
+}
+
 bool DiffConflator::_isMatchToRemovePartially(const ConstMatchPtr& match)
 {
+  LOG_VART(match);
   bool isMatchToRemovePartially = match->getMatchMembers() == MatchMembers::Polyline;
   // River matches are handled by their own config option, since they can be expensive to optimize.
   const bool removeRiverPartialMatchesAsWhole =
@@ -310,6 +319,7 @@ bool DiffConflator::_isMatchToRemovePartially(const ConstMatchPtr& match)
   {
     isMatchToRemovePartially = false;
   }
+  LOG_VART(isMatchToRemovePartially);
   return isMatchToRemovePartially;
 }
 
@@ -446,8 +456,8 @@ void DiffConflator::_removeMatchElementsCompletely(const Status& status)
 {
   size_t mapSizeBefore = _map->size();
   LOG_DEBUG(
-    "\tRemoving match elements with status: " << status.toString() << " from map of size: " <<
-    StringUtils::formatLargeNumber(mapSizeBefore) << "...");
+    "\tRemoving match elements completely with status: " << status.toString() <<
+    " from map of size: " << StringUtils::formatLargeNumber(mapSizeBefore) << "...");
 
   // If we're treating reviews as matches, elements involved in reviews will be removed as well.
   const bool treatReviewsAsMatches = ConfigOptions().getDifferentialTreatReviewsAsMatches();
@@ -455,27 +465,29 @@ void DiffConflator::_removeMatchElementsCompletely(const Status& status)
 
   // If we're removing linear feature partial matches in a partial manner, we need to skip
   // processing them here. Otherwise, remove everything.
-  std::vector<ConstMatchPtr> matches;
-  if (!ConfigOptions().getDifferentialRemoveLinearPartialMatchesAsWhole() &&
-      SuperfluousConflateOpRemover::linearMatcherPresent())
+  std::vector<ConstMatchPtr> matchesToRemoveCompletely;
+  if (_removeLinearMatchesPartially())
   {
-    matches = _matchesToRemoveAsWhole;
+    matchesToRemoveCompletely = _matchesToRemoveAsWhole;
   }
   else
   {
-    matches = _matches;
+    matchesToRemoveCompletely = _matches;
   }
+  LOG_VART(matchesToRemoveCompletely.size());
+  //LOG_VART(matchesToRemoveCompletely);
 
   // We don't want remove elements involved in intra-dataset matches, so record those now.
   if (!_intraDatasetElementIdsPopulated)
   {
-    _intraDatasetMatchOnlyElementIds = _getElementIdsInvolvedInOnlyIntraDatasetMatches(matches);
+    _intraDatasetMatchOnlyElementIds =
+      _getElementIdsInvolvedInOnlyIntraDatasetMatches(matchesToRemoveCompletely);
     _intraDatasetElementIdsPopulated = true;
   }
 
   // Go through all the matches.
-  for (std::vector<ConstMatchPtr>::const_iterator mit = matches.begin(); mit != matches.end();
-       ++mit)
+  for (std::vector<ConstMatchPtr>::const_iterator mit = matchesToRemoveCompletely.begin();
+       mit != matchesToRemoveCompletely.end(); ++mit)
   {
     ConstMatchPtr match = *mit;
     const MatchType matchType = match->getType();
@@ -510,7 +522,7 @@ bool DiffConflator::_satisfiesCompleteElementRemovalCondition(
   ElementCriterionPtr notSnappedCrit(
     NotCriterionPtr(new NotCriterion(new TagKeyCriterion(MetadataTags::HootSnapped()))));
   return
-    element->getStatus() == status &&
+    element->getStatus() == status  &&
     // We don't want to remove any ref snapped ways here. They need to be included in the
     // resulting diff in order to be properly updated in the final output.
     (status != Status::Unknown1 || notSnappedCrit->isSatisfied(element)) &&
@@ -524,7 +536,9 @@ void DiffConflator::_removeMatchElementPairCompletely(
   const ConstMatchPtr& match, const std::pair<ElementId, ElementId>& elementPair,
   const Status& status)
 {
-  LOG_TRACE("Removing match element pair completely: " << elementPair << "...");
+  LOG_TRACE(
+    "Removing match element pair completely: " << elementPair << " for elements with status: " <<
+    status << "...");
   LOG_VART(match->getName());
   const MatchType matchType = match->getType();
   LOG_VART(matchType);
@@ -536,13 +550,18 @@ void DiffConflator::_removeMatchElementPairCompletely(
     ElementPtr e1 = _map->getElement(elementPair.first);
     if (e1)
     {
+      QString msg =
+        "Removed entire element: " + e1->getElementId().toString() + " with status: " +
+        e1->getStatus().toString() + ", involved in match of type: " + matchType.toString() + "...";
       if (_satisfiesCompleteElementRemovalCondition(e1, status, match))
       {
-        LOG_TRACE(
-          "Removing entire element: " << e1->getElementId() <<
-          " involved in match of type: " << matchType << "...");
         RecursiveElementRemover(e1->getElementId()).apply(_map);
       }
+      else
+      {
+        msg = msg.replace("Removed", "Did not remove");
+      }
+      LOG_TRACE(msg);
     }
   }
   if (!elementPair.second.isNull())
@@ -550,13 +569,18 @@ void DiffConflator::_removeMatchElementPairCompletely(
     ElementPtr e2 = _map->getElement(elementPair.second);
     if (e2)
     {
+      QString msg =
+        "Removed entire element: " + e2->getElementId().toString() + " with status: " +
+        e2->getStatus().toString() + ", involved in match of type: " + matchType.toString() + "...";
       if (_satisfiesCompleteElementRemovalCondition(e2, status, match))
       {
-        LOG_TRACE(
-          "Removing entire element: " << e2->getElementId() <<
-          " involved in match of type: " << matchType << "...");
         RecursiveElementRemover(e2->getElementId()).apply(_map);
       }
+      else
+      {
+        msg = msg.replace("Removed", "Did not remove");
+      }
+      LOG_TRACE(msg);
     }
   }
 }

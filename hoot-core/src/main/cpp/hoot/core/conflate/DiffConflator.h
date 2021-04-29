@@ -207,7 +207,7 @@ private:
   // portions that matched) or completely removed (entire element); see
   // differential.remove.linear.partial.matches.as.whole
   bool _removeLinearPartialMatchesAsWhole;
-  // These are only used when _removeLinearPartialMatchesAsWhole=false.
+  // These are only used when _removeLinearMatchesPartially returns true.
   std::vector<ConstMatchPtr> _matchesToRemoveAsPartial;
   std::vector<ConstMatchPtr> _matchesToRemoveAsWhole;
 
@@ -226,8 +226,17 @@ private:
    */
   void _reset() override;
 
+  /*
+   * If its not recognized by the schema or we don't have a matcher for it, we don't want to
+   * consider it for being in the output. After recent changes, there should be very few elements
+   * that can't be conflated.
+   */
   void _discardUnconflatableElements();
 
+  /*
+   * Should we remove linear partial matches partially?
+   */
+  bool _removeLinearMatchesPartially() const;
   static bool _isMatchToRemovePartially(const ConstMatchPtr& match);
   /*
    * Separates matches with linear features that we are removing partially from other matches that
