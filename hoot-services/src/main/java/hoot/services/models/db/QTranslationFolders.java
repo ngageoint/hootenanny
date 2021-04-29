@@ -42,7 +42,7 @@ import java.sql.Types;
  * QTranslationFolders is a Querydsl query type for Folders
  */
 @Generated("com.querydsl.sql.codegen.MetaDataSerializer")
-public class QTranslationFolders extends com.querydsl.sql.RelationalPathBase<Folders> {
+public class QTranslationFolders extends com.querydsl.sql.RelationalPathBase<TranslationFolder> {
 
     private static final long serialVersionUID = -268403029;
 
@@ -62,25 +62,25 @@ public class QTranslationFolders extends com.querydsl.sql.RelationalPathBase<Fol
 
     public final StringPath path = createString("path");
 
-    public final com.querydsl.sql.PrimaryKey<Folders> foldersPk = createPrimaryKey(id);
+    public final com.querydsl.sql.PrimaryKey<TranslationFolder> foldersPk = createPrimaryKey(id);
 
     public QTranslationFolders(String variable) {
-        super(Folders.class, forVariable(variable), "public", "translation_folders");
+        super(TranslationFolder.class, forVariable(variable), "public", "translation_folders");
         addMetadata();
     }
 
     public QTranslationFolders(String variable, String schema, String table) {
-        super(Folders.class, forVariable(variable), schema, table);
+        super(TranslationFolder.class, forVariable(variable), schema, table);
         addMetadata();
     }
 
-    public QTranslationFolders(Path<? extends Folders> path) {
+    public QTranslationFolders(Path<? extends TranslationFolder> path) {
         super(path.getType(), path.getMetadata(), "public", "translation_folders");
         addMetadata();
     }
 
     public QTranslationFolders(PathMetadata metadata) {
-        super(Folders.class, metadata, "public", "translation_folders");
+        super(TranslationFolder.class, metadata, "public", "translation_folders");
         addMetadata();
     }
 

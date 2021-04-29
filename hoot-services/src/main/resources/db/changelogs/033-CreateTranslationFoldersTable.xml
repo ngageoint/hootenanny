@@ -52,11 +52,20 @@
             )
         </sql>
 
-        <createTable tableName="translation_folder_mappings">
+        <createTable tableName="translations">
             <column name="id" type="bigserial" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="display_name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="public" type="boolean" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="timestamp">
                 <constraints nullable="false"/>
             </column>
             <column name="folder_id" type="bigint">

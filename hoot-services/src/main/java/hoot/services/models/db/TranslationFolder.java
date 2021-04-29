@@ -28,20 +28,29 @@ package hoot.services.models.db;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import javax.annotation.Generated;
+import java.sql.Timestamp;
+
 
 /**
- * TranslationFolderMappings is a Querydsl bean type
+ * Represent a Translation Folder
  */
-@Generated("com.querydsl.codegen.BeanSerializer")
-public class TranslationFolderMappings {
+public class TranslationFolder {
 
     private Long id;
 
     @JsonProperty("name")
     private String displayName;
 
-    private Long folderId;
+    private Long parentId;
+
+    private Long userId;
+
+    @JsonProperty("public")
+    private Boolean publicCol;
+
+    private Timestamp createdAt;
+
+    private String path;
 
     public void setId(Long id) {
         this.id = id;
@@ -49,14 +58,6 @@ public class TranslationFolderMappings {
 
     public Long getId() {
         return id;
-    }
-
-    public void setFolderId(Long folderId) {
-        this.folderId = folderId;
-    }
-
-    public Long getFolderId() {
-        return folderId;
     }
 
     public void setDisplayName(String displayName) {
@@ -67,5 +68,44 @@ public class TranslationFolderMappings {
         return displayName;
     }
 
-}
+    public void setParentId(Long parentId) {
+        this.parentId = parentId;
+    }
 
+    public Long getParentId() {
+        return parentId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setPublicCol(Boolean publicCol) {
+        this.publicCol = publicCol;
+    }
+
+    public Boolean getPublicCol() {
+        return publicCol;
+    }
+
+    public void setCreatedAt(Timestamp createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Timestamp getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+}

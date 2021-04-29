@@ -34,6 +34,7 @@ import static hoot.services.models.db.QFolders.folders;
 import static hoot.services.models.db.QJobStatus.jobStatus;
 import static hoot.services.models.db.QMaps.maps;
 import static hoot.services.models.db.QReviewBookmarks.reviewBookmarks;
+import static hoot.services.models.db.QTranslations.translations;
 import static hoot.services.models.db.QTranslationFolders.translationFolders;
 import static hoot.services.models.db.QUsers.users;
 
@@ -90,11 +91,13 @@ import com.querydsl.sql.types.EnumAsObjectType;
 import hoot.services.ApplicationContextUtils;
 import hoot.services.command.CommandResult;
 import hoot.services.controllers.osm.user.UserResource;
+import hoot.services.models.db.TranslationFolder;
 import hoot.services.models.db.Folders;
 import hoot.services.models.db.JobStatus;
 import hoot.services.models.db.Maps;
 import hoot.services.models.db.QFolders;
 import hoot.services.models.db.QUsers;
+import hoot.services.models.db.Translations;
 import hoot.services.models.db.Users;
 
 
@@ -1137,19 +1140,73 @@ public class DbUtils {
         return elementInfo;
     }
 
-    public static List<Folders> getTranslationFoldersForUser(Long userId) {
-        SQLQuery<Folders> sql = createQuery()
+    public static List<TranslationFolder> getTranslationFoldersForUser(Long userId) {
+        SQLQuery<TranslationFolder> sql = createQuery()
                 .select(translationFolders)
                 .from(translationFolders)
                 .where(translationFolders.id.ne(0L));
+
         if (userId != null && !UserResource.adminUserCheck(getUser(userId))) {
             sql.where(
                     translationFolders.userId.eq(userId).or(translationFolders.publicCol.isTrue())
             );
         }
-        List<Folders> folderRecordSet = sql.orderBy(translationFolders.displayName.asc()).fetch();
+
+        List<TranslationFolder> folderRecordSet = sql.orderBy(translationFolders.displayName.asc()).fetch();
 
         return folderRecordSet;
+    }
+
+    public static void addTranslation(String scriptName, Long userId, Long folderId) {
+        Boolean isPublic = createQuery()
+            .select(translationFolders.publicCol)
+            .from(translationFolders)
+            .where(translationFolders.id.eq(folderId))
+            .fetchOne();
+
+        Timestamp created = new Timestamp(System.currentTimeMillis());
+
+        createQuery()
+                .insert(translations)
+                .columns(translations.displayName, translations.userId, translations.publicCol, translations.createdAt, translations.folderId)
+                .values(scriptName, userId, isPublic, created, folderId)
+                .execute();
+    }
+
+    public static Translations getTranslation(Long translationId) {
+        return createQuery().select(translations)
+                .from(translations)
+                .where(translations.id.eq(translationId))
+                .fetchFirst();
+    }
+
+    public static TranslationFolder getTranslationFolder(Long folderId) {
+        return createQuery()
+            .select(translationFolders)
+            .from(translationFolders)
+            .where(translationFolders.id.eq(folderId))
+            .fetchFirst();
+    }
+
+    public static void changeTranslationFoldersPath(Long folderId, String newPath) {
+        // Set new path for folderId
+        createQuery()
+            .update(translationFolders)
+            .where(translationFolders.id.eq(folderId))
+            .set(translationFolders.path, newPath)
+            .execute();
+
+        List<TranslationFolder> folders = createQuery()
+            .select(translationFolders)
+            .from(translationFolders)
+            .where(translationFolders.parentId.eq(folderId))
+            .fetch();
+
+        for (TranslationFolder folder : folders) {
+            String path = newPath + File.separator + folder.getDisplayName();
+
+            changeTranslationFoldersPath(folder.getId(), path);
+        }
     }
 
 }
