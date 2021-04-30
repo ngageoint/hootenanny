@@ -103,10 +103,6 @@ public:
       QUrl osm;
       osm.setUrl(args[args.size() - 1]);
 
-      //  Create a URL without IP and user info for logging
-      QString printableUrl = osm.toString(QUrl::RemoveUserInfo);
-      HootNetworkRequest::removeIpFromUrlString(printableUrl, osm);
-
       const int maxFilePrintLength = ConfigOptions().getProgressVarPrintLengthMax();
 
       //  Grab all the changeset files
@@ -115,8 +111,8 @@ public:
       {
         progress.set(
           0.0,
-          "Adding changeset: ..." + args[i].right(maxFilePrintLength) + " for application to: " +
-          printableUrl.left(maxFilePrintLength) + "...", true);
+          "Adding changeset: ..." + FileUtils::toLogFormat(args[i], maxFilePrintLength) + " for application to: " +
+          FileUtils::toLogFormat(osm.toString(), maxFilePrintLength) + "...", true);
         changesets.append(args[i]);
       }
 
@@ -140,7 +136,7 @@ public:
 
       progress.set(
         1.0, writer.containsFailed() ? Progress::JobState::Failed : Progress::JobState::Successful,
-        "Changeset(s) applied to: " + printableUrl.left(maxFilePrintLength) + "...");
+        "Changeset(s) applied to: " + FileUtils::toLogFormat(osm.toString(), maxFilePrintLength) + "...");
 
       //  Output the last changeset ID in a status message
       LastElementInfo last = writer.getLastElementInfo();

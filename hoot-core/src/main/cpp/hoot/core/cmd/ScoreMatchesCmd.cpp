@@ -39,6 +39,7 @@
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/ConfigUtils.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/visitors/CountManualMatchesVisitor.h>
@@ -258,8 +259,8 @@ private:
       QFileInfo fileInfo2(map2Path);
       cout << "There are " << StringUtils::formatLargeNumber(issues.size()) <<
               " manual match " << type << " for inputs " <<
-              fileInfo1.completeBaseName().right(30) <<
-              " and " << fileInfo2.completeBaseName().right(30) << ":\n\n";
+              FileUtils::toLogFormat(fileInfo1.completeBaseName(), 30) <<
+              " and " << FileUtils::toLogFormat(fileInfo2.completeBaseName(), 30) << ":\n\n";
       int issueCount = 0;
       for (QMap<ElementId, QString>::const_iterator itr = issues.begin();
            itr != issues.end(); ++itr)

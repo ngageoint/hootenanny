@@ -41,6 +41,7 @@
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Float.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Units.h>
 #include <hoot/core/util/StringUtils.h>
@@ -567,7 +568,7 @@ QMap<int, geos::geom::Envelope> GeometryUtils::readBoundsFileWithIds(const QStri
 std::shared_ptr<geos::geom::Geometry> GeometryUtils::readBoundsFromFile(const QString& input)
 {
   OsmMapPtr map(new OsmMap());
-  LOG_INFO("Loading map bounds from ..." << input.right(50) << "...");
+  LOG_INFO("Loading map bounds from ..." << FileUtils::toLogFormat(input, 50) << "...");
   OsmMapReaderFactory::read(map, input);
   const NodeMap nodes = map->getNodes();
   double min_x =  180.0,

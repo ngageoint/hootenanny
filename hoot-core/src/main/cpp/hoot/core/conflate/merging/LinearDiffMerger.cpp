@@ -113,7 +113,6 @@ bool LinearDiffMerger::_mergePair(
     assert(e2->getElementType() == ElementType::Relation);
     RelationPtr relation2 = std::dynamic_pointer_cast<Relation>(e2);
     LOG_VART(relation2->getMemberCount());
-    assert(relation2->getMemberCount() == 2);
 
     const std::vector<RelationData::Entry> members = relation2->getMembers();
     for (std::vector<RelationData::Entry>::const_iterator it = members.begin();

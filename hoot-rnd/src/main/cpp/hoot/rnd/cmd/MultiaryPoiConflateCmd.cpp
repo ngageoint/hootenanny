@@ -27,21 +27,21 @@
 
 // Hoot
 #include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/conflate/matching/MatchFactory.h>
 #include <hoot/core/conflate/merging/MergerFactory.h>
 #include <hoot/core/conflate/UnifyingConflator.h>
-#include <hoot/core/ops/OpExecutor.h>
-#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/rnd/visitors/MultiaryPoiHashVisitor.h>
+#include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/io/IoUtils.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/io/OsmXmlWriter.h>
+#include <hoot/core/ops/OpExecutor.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/rnd/conflate/multiary/MultiaryUtilities.h>
-#include <hoot/core/io/IoUtils.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/rnd/conflate/multiary/MultiaryUtilities.h>
+#include <hoot/rnd/visitors/MultiaryPoiHashVisitor.h>
 
 // Qt
 #include <QFileInfo>
@@ -90,8 +90,8 @@ public:
     output = args.last();
 
     LOG_INFO(
-      "Conflating " << inputs.join(", ") <<
-      " and writing the output to " << output.right(50));
+      "Conflating " << FileUtils::toLogFormat(inputs) <<
+      " and writing the output to " << FileUtils::toLogFormat(output, 50));
 
     // read input 1
     OsmMapPtr map(new OsmMap());

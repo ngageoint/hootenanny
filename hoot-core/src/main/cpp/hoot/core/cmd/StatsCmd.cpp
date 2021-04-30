@@ -27,16 +27,17 @@
 
 // Hoot
 #include <hoot/core/cmd/BaseCommand.h>
+#include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/io/IoUtils.h>
 #include <hoot/core/io/MapStatsWriter.h>
+#include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/ops/CalculateStatsOp.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/elements/MapProjector.h>
-#include <hoot/core/visitors/LengthOfWaysVisitor.h>
-#include <hoot/core/io/IoUtils.h>
-#include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/visitors/LengthOfWaysVisitor.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -129,7 +130,7 @@ public:
 
     if (toFile)
     {
-      LOG_STATUS("Writing statistics output to: " << outputFilename.right(25) << "...");
+      LOG_STATUS("Writing statistics output to: " << FileUtils::toLogFormat(outputFilename, 25) << "...");
       if (outputFilename.endsWith(".json", Qt::CaseInsensitive))
         MapStatsWriter().writeStatsToJson(allStats, outputFilename);
       else

@@ -107,6 +107,17 @@ public:
    * @return a list of strings
    */
   static QStringList readFileToList(const QString& inputPath);
+
+  /**
+   * Convert a URL (file path, database URL, or other resource location) to a loggable format
+   * Removes usernames, passwords, ip addresses, etc. and truncates the filename if needed
+   *
+   * @param url - file URL to inspect (passed by copy to be modified)
+   * @param characters - number of right-hand characters to preserve
+   * @return modified URL ready to output in logs
+   */
+  static QString toLogFormat(QString url, int characters = -1);
+  static QString toLogFormat(QStringList urls, int characters = -1);
 };
 
 }

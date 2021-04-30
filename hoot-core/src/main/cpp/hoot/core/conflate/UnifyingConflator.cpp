@@ -27,11 +27,11 @@
 #include "UnifyingConflator.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 
 namespace hoot

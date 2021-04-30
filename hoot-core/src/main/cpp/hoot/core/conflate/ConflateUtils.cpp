@@ -33,6 +33,7 @@
 #include <hoot/core/criterion/NonConflatableCriterion.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
 
 // Qt
@@ -44,7 +45,7 @@ namespace hoot
 int ConflateUtils::writeNonConflatable(
   const ConstOsmMapPtr& map, const QString& output, const bool ignoreGenericConflators)
 {
-  LOG_STATUS("Writing non-conflatable data to: ..." << output.right(25) << " ...");
+  LOG_STATUS("Writing non-conflatable data to: ..." << FileUtils::toLogFormat(output, 25) << " ...");
 
   OsmMapPtr nonConflatableMap(new OsmMap(map));
   LOG_VART(nonConflatableMap->size());

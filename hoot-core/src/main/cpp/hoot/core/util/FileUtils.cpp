@@ -36,7 +36,10 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QFileInfoList>
+#include <QHostAddress>
+#include <QRegularExpression>
 #include <QTextStream>
+#include <QUrl>
 
 // Std
 #include <algorithm>
@@ -168,8 +171,15 @@ void FileUtils::writeFully(const QString& path, const QString& text)
 long FileUtils::getNumberOfLinesInFile(const QString& file)
 {
   std::ifstream inFile(file.toStdString().c_str());
+  //  Count the number of new lines in the file
   size_t lineCount =
     std::count(std::istreambuf_iterator<char>(inFile), std::istreambuf_iterator<char>(), '\n');
+  //  If the file doesn't end in a new line, then add one to the total
+  inFile.seekg(-1, inFile.end);
+  char last;
+  inFile.get(last);
+  if (last != '\n')
+    lineCount++;
   return lineCount;
 }
 
@@ -210,6 +220,34 @@ QStringList FileUtils::readFileToList(const QString& inputPath)
   }
   LOG_VART(outputList);
   return outputList;
+}
+
+QString FileUtils::toLogFormat(QString url, int characters)
+{
+  //  Remove username/password from URLs
+  QUrl tempUrl(url);
+  url = tempUrl.toString(QUrl::RemoveUserInfo);
+  tempUrl.setUrl(url);
+  //  Remove port from URLs
+  url = tempUrl.toString(QUrl::RemovePort);
+  tempUrl.setUrl(url);
+  //  Remove IP addresses from URLs
+  QHostAddress host(tempUrl.host());
+  if (!host.isNull())
+    url.replace(tempUrl.host(), "<host-ip>");
+  //  Truncate the URL if desired
+  return url.right((characters >= 0) ? characters : url.length());
+}
+
+QString FileUtils::toLogFormat(QStringList urls, int characters)
+{
+  QStringList files;
+  //  Format each url individually
+  for (int i = 0; i < urls.size(); ++i)
+    files.push_back(FileUtils::toLogFormat(urls[i]));
+  //  Make a comma separated list before truncating if desired
+  QString result = files.join(", ");
+  return result.right((characters >= 0) ? characters : result.length());
 }
 
 }

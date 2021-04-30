@@ -27,19 +27,20 @@
 #include "OsmMapWriterFactory.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
+#include <hoot/core/conflate/network/DebugNetworkMapCreator.h>
+#include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/geometry/GeometryToElementConverter.h>
 #include <hoot/core/io/OsmMapWriter.h>
 #include <hoot/core/io/OgrWriter.h>
 #include <hoot/core/io/PartialOsmMapWriter.h>
 #include <hoot/core/io/ElementOutputStream.h>
 #include <hoot/core/schema/SchemaUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/elements/MapProjector.h>
-#include <hoot/core/conflate/network/DebugNetworkMapCreator.h>
 #include <hoot/core/visitors/RemoveMissingElementsVisitor.h>
-#include <hoot/core/geometry/GeometryToElementConverter.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -190,7 +191,7 @@ void OsmMapWriterFactory::writeDebugMap(const ConstOsmMapPtr& map, const QString
     {
       debugMapFileName = debugMapFileName.replace(".osm", "-" + fileNumberStr + ".osm");
     }
-    LOG_INFO("Writing debug output to: ..." << debugMapFileName.right(30));
+    LOG_INFO("Writing debug output to: ..." << FileUtils::toLogFormat(debugMapFileName, 30));
     OsmMapPtr copy(new OsmMap(map));
 
     if (matcher)

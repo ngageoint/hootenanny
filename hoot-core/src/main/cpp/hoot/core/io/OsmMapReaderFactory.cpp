@@ -27,15 +27,16 @@
 #include "OsmMapReaderFactory.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
+#include <hoot/core/io/ElementInputStream.h>
 #include <hoot/core/io/OsmMapReader.h>
 #include <hoot/core/io/PartialOsmMapReader.h>
-#include <hoot/core/io/ElementInputStream.h>
-#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/Validate.h>
 #include <hoot/core/util/Boundable.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/util/Validate.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -181,7 +182,7 @@ bool OsmMapReaderFactory::isSupportedFormat(const QString& url)
 void OsmMapReaderFactory::read(const OsmMapPtr& map, const QString& url, bool useDataSourceIds,
                                Status defaultStatus)
 {
-  LOG_INFO("Loading map from ..." << url.right(50) << "...");
+  LOG_INFO("Loading map from ..." << FileUtils::toLogFormat(url, 50) << "...");
   std::shared_ptr<OsmMapReader> reader = createReader(url, useDataSourceIds, defaultStatus);
   _read(map, reader, url);
 }
@@ -189,7 +190,7 @@ void OsmMapReaderFactory::read(const OsmMapPtr& map, const QString& url, bool us
 void OsmMapReaderFactory::read(const OsmMapPtr& map, bool useDataSourceIds,
                                bool useFileStatus, const QString& url)
 {
-  LOG_INFO("Loading map from " << url.right(50) << "...");
+  LOG_INFO("Loading map from " << FileUtils::toLogFormat(url, 50) << "...");
   std::shared_ptr<OsmMapReader> reader = createReader(url, useDataSourceIds, useFileStatus);
   _read(map, reader, url);
 }

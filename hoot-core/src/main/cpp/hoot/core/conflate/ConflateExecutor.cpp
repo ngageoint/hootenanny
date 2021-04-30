@@ -31,6 +31,7 @@
 #include <hoot/core/conflate/SuperfluousConflateOpRemover.h>
 #include <hoot/core/conflate/UnifyingConflator.h>
 #include <hoot/core/conflate/merging/LinearTagOnlyMerger.h>
+#include <hoot/core/conflate/merging/LinearAverageMerger.h>
 #include <hoot/core/conflate/stats/ConflateStatsHelper.h>
 #include <hoot/core/criterion/ReviewRelationCriterion.h>
 #include <hoot/core/criterion/ReviewScoreCriterion.h>
@@ -45,16 +46,12 @@
 #include <hoot/core/ops/RemoveRoundabouts.h>
 #include <hoot/core/ops/ReplaceRoundabouts.h>
 #include <hoot/core/ops/RoadCrossingPolyReviewMarker.h>
+#include <hoot/core/schema/SchemaUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ConfigUtils.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MemoryUsageChecker.h>
-#include <hoot/core/ops/RoadCrossingPolyReviewMarker.h>
-#include <hoot/core/elements/MapProjector.h>
-#include <hoot/core/conflate/merging/LinearTagOnlyMerger.h>
-#include <hoot/core/conflate/merging/LinearAverageMerger.h>
-#include <hoot/core/schema/SchemaUtils.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/visitors/CountUniqueReviewsVisitor.h>
 #include <hoot/core/visitors/RemoveTagsVisitor.h>
@@ -188,13 +185,13 @@ void ConflateExecutor::conflate(const QString& input1, const QString& input2, QS
   }
 
   QString msg =
-    "Conflating ..." + input1.right(_maxFilePrintLength) + " with ..." +
-    input2.right(_maxFilePrintLength);
+    "Conflating ..." + FileUtils::toLogFormat(input1, _maxFilePrintLength) + " with ..." +
+    FileUtils::toLogFormat(input2, _maxFilePrintLength);
   if (ConfigUtils::boundsOptionEnabled())
   {
     msg += " over bounds: ..." + ConfigUtils::getBoundsString().right(_maxFilePrintLength);
   }
-  msg += " and writing the output to ..." + output.right(_maxFilePrintLength) + "...";
+  msg += " and writing the output to ..." + FileUtils::toLogFormat(output, _maxFilePrintLength) + "...";
   if (_isDiffConflate)
   {
     if (_diffConflator.conflatingTags())
@@ -263,7 +260,7 @@ void ConflateExecutor::conflate(const QString& input1, const QString& input2, QS
   {
     _progress->set(
       _getJobPercentComplete(_currentTask - 1),
-      "Calculating reference statistics for: ..." + input1.right(_maxFilePrintLength) + "...");
+      "Calculating reference statistics for: ..." + FileUtils::toLogFormat(input1, _maxFilePrintLength) + "...");
     input1Cso.apply(map);
     _allStats.append(input1Cso.getStats());
     _stats.append(
@@ -272,7 +269,7 @@ void ConflateExecutor::conflate(const QString& input1, const QString& input2, QS
 
     _progress->set(
       _getJobPercentComplete(_currentTask - 1),
-      "Calculating secondary data statistics for: ..." + input2.right(_maxFilePrintLength) + "...");
+      "Calculating secondary data statistics for: ..." + FileUtils::toLogFormat(input2, _maxFilePrintLength) + "...");
     input2Cso.apply(map);
     _allStats.append(input2Cso.getStats());
     _stats.append(
@@ -354,9 +351,9 @@ void ConflateExecutor::conflate(const QString& input1, const QString& input2, QS
     1.0, Progress::JobState::Successful,
     "Conflation job completed in " +
     StringUtils::millisecondsToDhms((qint64)(totalElapsed * 1000)) + " for reference map: ..." +
-    input1.right(_maxFilePrintLength) + " and secondary map: ..." +
-    input2.right(_maxFilePrintLength) + " and written to output: ..." +
-    output.right(_maxFilePrintLength));
+    FileUtils::toLogFormat(input1, _maxFilePrintLength) + " and secondary map: ..." +
+    FileUtils::toLogFormat(input2, _maxFilePrintLength) + " and written to output: ..." +
+    FileUtils::toLogFormat(output, _maxFilePrintLength));
 }
 
 void ConflateExecutor::_load(const QString& input1, const QString& input2, OsmMapPtr& map,
@@ -373,7 +370,7 @@ void ConflateExecutor::_load(const QString& input1, const QString& input2, OsmMa
     //  is loaded with negative IDs
     _progress->set(
       _getJobPercentComplete(_currentTask - 1),
-      "Loading secondary map: ..." + input2.right(_maxFilePrintLength) + "...");
+      "Loading secondary map: ..." + FileUtils::toLogFormat(input2, _maxFilePrintLength) + "...");
     IoUtils::loadMap(
       map, input2, ConfigOptions().getConflateUseDataSourceIds2(), Status::Unknown2);
     _currentTask++;
@@ -381,7 +378,7 @@ void ConflateExecutor::_load(const QString& input1, const QString& input2, OsmMa
     // read input 1
     _progress->set(
       _getJobPercentComplete(_currentTask - 1),
-      "Loading reference map: ..." + input1.right(_maxFilePrintLength) + "...");
+      "Loading reference map: ..." + FileUtils::toLogFormat(input1, _maxFilePrintLength) + "...");
     IoUtils::loadMap(map, input1, ConfigOptions().getConflateUseDataSourceIds1(),
                      Status::Unknown1);
      _currentTask++;
@@ -391,7 +388,7 @@ void ConflateExecutor::_load(const QString& input1, const QString& input2, OsmMa
     // read input 1
     _progress->set(
       _getJobPercentComplete(_currentTask - 1),
-      "Loading reference map: ..." + input1.right(_maxFilePrintLength) + "...");
+      "Loading reference map: ..." + FileUtils::toLogFormat(input1, _maxFilePrintLength) + "...");
     IoUtils::loadMap(map, input1, ConfigOptions().getConflateUseDataSourceIds1(), Status::Unknown1);
     _currentTask++;
 
@@ -413,7 +410,7 @@ void ConflateExecutor::_load(const QString& input1, const QString& input2, OsmMa
 
     _progress->set(
       _getJobPercentComplete(_currentTask - 1),
-      "Loading secondary map: ..." + input2.right(_maxFilePrintLength) + "...");
+      "Loading secondary map: ..." + FileUtils::toLogFormat(input2, _maxFilePrintLength) + "...");
     IoUtils::loadMap(
       map, input2, ConfigOptions().getConflateUseDataSourceIds2(), Status::Unknown2);
     _currentTask++;
@@ -503,7 +500,7 @@ void ConflateExecutor::_writeOutput(OsmMapPtr& map, QString& output, const bool 
   // Figure out what to write
   _progress->set(
     _getJobPercentComplete(_currentTask - 1),
-    "Writing conflated output: ..." + output.right(_maxFilePrintLength) + "...");
+    "Writing conflated output: ..." + FileUtils::toLogFormat(output, _maxFilePrintLength) + "...");
   if (_isDiffConflate && isChangesetOutput)
   {
     // Get the changeset stats output format from the changeset stats file extension, or if no
@@ -546,7 +543,7 @@ void ConflateExecutor::_writeStats(
 {
   _progress->set(
     _getJobPercentComplete(_currentTask - 1),
-    "Calculating output data statistics for: ..." + outputFileName.right(_maxFilePrintLength) +
+    "Calculating output data statistics for: ..." + FileUtils::toLogFormat(outputFileName, _maxFilePrintLength) +
     "...");
   CalculateStatsOp outputCso("output map", true);
   // We only want statistics generated that correspond to the feature types being conflated.
@@ -567,7 +564,7 @@ void ConflateExecutor::_writeStats(
     _progress->set(
       _getJobPercentComplete(_currentTask - 1),
       "Calculating differential output statistics for: ..." +
-      outputFileName.right(_maxFilePrintLength) + "...");
+      FileUtils::toLogFormat(outputFileName, _maxFilePrintLength) + "...");
     _diffConflator.calculateStats(map, _stats);
     _currentTask++;
   }
