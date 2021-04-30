@@ -37,6 +37,7 @@
 #include <hoot/core/ops/RemoveRoundabouts.h>
 #include <hoot/core/ops/ReplaceRoundabouts.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
 #include <hoot/core/visitors/RemoveMissingElementsVisitor.h>
@@ -50,7 +51,7 @@ namespace hoot
 int ConflateUtils::writeNonConflatable(
   const ConstOsmMapPtr& map, const QString& output, const bool ignoreGenericConflators)
 {
-  LOG_STATUS("Writing non-conflatable data to: ..." << output.right(25) << " ...");
+  LOG_STATUS("Writing non-conflatable data to: ..." << FileUtils::toLogFormat(output, 25) << " ...");
 
   OsmMapPtr nonConflatableMap(new OsmMap(map));
   LOG_VART(nonConflatableMap->size());
@@ -98,7 +99,7 @@ void ConflateUtils::writeDiff(const QString& mapUrl1, const QString& mapUrl2,
     conf().set(ConfigOptions::getConflatePostOpsKey(), postConflateOps);
   }
 
-  LOG_STATUS("Loading data for diff calc from: ..." << mapUrl1.right(25) << "...");
+  LOG_STATUS("Loading data for diff calc from: ..." << FileUtils::toLogFormat(mapUrl1, 25) << "...");
   OsmMapPtr diffMap(new OsmMap());
   IoUtils::loadMap(diffMap, mapUrl1, true, Status::Unknown1);
   if (!bounds.isNull())
@@ -107,18 +108,18 @@ void ConflateUtils::writeDiff(const QString& mapUrl1, const QString& mapUrl2,
   }
   const int replacementMapSize = diffMap->size();
   LOG_STATUS(
-    "Data from ..." << mapUrl1.right(25) << " for diff calc loaded in: " <<
+    "Data from ..." << FileUtils::toLogFormat(mapUrl1, 25) << " for diff calc loaded in: " <<
     StringUtils::millisecondsToDhms(timer.elapsed()));
   timer.restart();
 
-  LOG_STATUS("Loading data for diff calc from: ..." << mapUrl2.right(25) << "...");
+  LOG_STATUS("Loading data for diff calc from: ..." << FileUtils::toLogFormat(mapUrl2, 25) << "...");
   IoUtils::loadMap(diffMap, mapUrl2, false, Status::Unknown2);
   if (!bounds.isNull())
   {
     IoUtils::cropToBounds(diffMap, bounds);
   }
   LOG_STATUS(
-    "Data from ..." << mapUrl2.right(25) << " for diff calc loaded in: " <<
+    "Data from ..." << FileUtils::toLogFormat(mapUrl2, 25) << " for diff calc loaded in: " <<
     StringUtils::millisecondsToDhms(timer.elapsed()));
   timer.restart();
 
@@ -146,7 +147,7 @@ void ConflateUtils::writeDiff(const QString& mapUrl1, const QString& mapUrl2,
 
   LOG_STATUS(
     "Writing the diff output of size: " << StringUtils::formatLargeNumber(diffMap->size()) <<
-    " to: ..." << output.right(25) << "...");
+    " to: ..." << FileUtils::toLogFormat(output, 25) << "...");
   IoUtils::saveMap(diffMap, output);
   LOG_STATUS(
     "Wrote the diff output of size: " << StringUtils::formatLargeNumber(diffMap->size()) <<

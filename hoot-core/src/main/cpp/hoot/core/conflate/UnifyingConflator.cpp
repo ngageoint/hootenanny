@@ -27,19 +27,19 @@
 #include "UnifyingConflator.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/conflate/matching/MatchClassification.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/merging/MergerFactory.h>
-#include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/schema/MetadataTags.h>
-#include <hoot/core/conflate/matching/MatchClassification.h>
-#include <hoot/core/util/Log.h>
-#include <hoot/core/util/StringUtils.h>
-#include <hoot/core/util/MemoryUsageChecker.h>
-#include <hoot/core/schema/SchemaUtils.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonMergerCreator.h>
+#include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/schema/SchemaUtils.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/util/MemoryUsageChecker.h>
+#include <hoot/core/util/StringUtils.h>
 
 // tgs
 #include <tgs/System/SystemInfo.h>

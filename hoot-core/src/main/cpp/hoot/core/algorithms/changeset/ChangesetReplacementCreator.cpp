@@ -54,6 +54,7 @@
 
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/MemoryUsageChecker.h>
 
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
@@ -325,7 +326,7 @@ void ChangesetReplacementCreator::create(
 
   _progress->set(
     1.0, Progress::JobState::Successful,
-    "Derived replacement changeset: ..." + _output.right(_maxFilePrintLength) + " with " +
+    "Derived replacement changeset: ..." + FileUtils::toLogFormat(_output, _maxFilePrintLength) + " with " +
     StringUtils::formatLargeNumber(_numChanges) + " changes for " +
     StringUtils::formatLargeNumber(refMapSize) + " features to replace and " +
     StringUtils::formatLargeNumber(secMapSize)  + " replacement features in " +

@@ -35,6 +35,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/StringUtils.h>
 
 #include <QTextStream>
@@ -211,7 +212,7 @@ void TagDistribution::_countTags(const QString& input, std::map<QString, int>& t
   {
     LOG_INFO(
       "Processed " << StringUtils::formatLargeNumber(_total) << " elements from " <<
-      input.right(25) << ".");
+      FileUtils::toLogFormat(input, 25) << ".");
   }
 
   LOG_VART(inputTotal);

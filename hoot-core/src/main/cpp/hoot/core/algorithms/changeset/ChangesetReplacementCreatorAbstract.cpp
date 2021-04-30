@@ -63,6 +63,7 @@
 #include <hoot/core/util/Boundable.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/DbUtils.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/MemoryUsageChecker.h>
 
 #include <hoot/core/visitors/FilteredVisitor.h>
@@ -142,13 +143,13 @@ void ChangesetReplacementCreatorAbstract::_printJobDescription() const
 
   QString str;
   str += "Deriving replacement output changeset:";
-  str += "\nBeing replaced: ..." + _input1.right(_maxFilePrintLength);
-  str += "\nReplacing with ..." + _input2.right(_maxFilePrintLength);
+  str += "\nBeing replaced: ..." + FileUtils::toLogFormat(_input1, _maxFilePrintLength);
+  str += "\nReplacing with ..." + FileUtils::toLogFormat(_input2, _maxFilePrintLength);
   str +=
     "\nAt Bounds: ..." +
     GeometryUtils::polygonToString(_replacementBounds)
       .right(ConfigOptions().getProgressVarPrintLengthMax() * 2);
-  str += "\nOutput Changeset: ..." + _output.right(_maxFilePrintLength);
+  str += "\nOutput Changeset: ..." + FileUtils::toLogFormat(_output, _maxFilePrintLength);
   LOG_STATUS(str);
 
   str = "";
@@ -248,7 +249,7 @@ OsmMapPtr ChangesetReplacementCreatorAbstract::_loadInputMap(
     // to the potential size, so skip caching if the source is a db. Our db query crops
     // automatically for us without reading all of the source data in.
     LOG_STATUS(
-      "Loading " << mapName << " map from: ..." << inputUrl.right(_maxFilePrintLength) << "...");
+      "Loading " << mapName << " map from: ..." << FileUtils::toLogFormat(inputUrl, _maxFilePrintLength) << "...");
     map.reset(new OsmMap());
     IoUtils::loadMap(map, inputUrl, useFileIds, status);
   }
@@ -266,7 +267,7 @@ OsmMapPtr ChangesetReplacementCreatorAbstract::_loadInputMap(
       const QString bbox = conf().getString(ConfigOptions::getBoundsKey());
       conf().set(ConfigOptions::getBoundsKey(), "");
 
-      LOG_STATUS("Loading map from: ..." << inputUrl.right(_maxFilePrintLength) << "...");
+      LOG_STATUS("Loading map from: ..." << FileUtils::toLogFormat(inputUrl, _maxFilePrintLength) << "...");
       cachedMap.reset(new OsmMap());
       cachedMap->setName(mapName);
       IoUtils::loadMap(cachedMap, inputUrl, useFileIds, status);
@@ -287,7 +288,7 @@ OsmMapPtr ChangesetReplacementCreatorAbstract::_loadInputMap(
   // rethinking of how this is implemented.
   IoUtils::cropToBounds(map, _replacementBounds, keepImmediatelyConnectedWaysOutsideBounds);
   LOG_STATUS(
-    "Loaded " << mapName << " map from: ..." << inputUrl.right(_maxFilePrintLength) << " with " <<
+    "Loaded " << mapName << " map from: ..." << FileUtils::toLogFormat(inputUrl, _maxFilePrintLength) << " with " <<
     StringUtils::formatLargeNumber(map->size()) << " features...");
 
   if (warnOnZeroVersions)
