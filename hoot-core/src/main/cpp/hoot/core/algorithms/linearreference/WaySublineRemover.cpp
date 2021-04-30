@@ -226,7 +226,7 @@ std::vector<ElementId> WaySublineRemover::removeSubline(
 }
 
 std::vector<ElementId> WaySublineRemover::_split(
-  const WayPtr& way, WayLocation& splitLocation, OsmMapPtr& map, const bool keepFirstSegment)
+  const WayPtr& way, WayLocation& splitLocation, const OsmMapPtr& map, const bool keepFirstSegment)
 {
   std::vector<ElementId> newWayIds;
   LOG_VART(splitLocation.isExtreme());

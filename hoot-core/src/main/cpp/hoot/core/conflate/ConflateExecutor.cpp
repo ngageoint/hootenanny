@@ -222,7 +222,7 @@ void ConflateExecutor::conflate(const QString& input1, const QString& input2, QS
   // be getting the best conflate results in case types could be added to the input.
   if (map->size() > 0 && !SchemaUtils::anyElementsHaveType(map))
   {
-    const QString msg =
+    msg =
       "No elements in the input map have a recognizable schema type. Generic conflation "
       "routines will be used.";
     if (ConfigOptions().getLogWarningsForCompletelyUntypedInputMaps())
@@ -328,9 +328,9 @@ void ConflateExecutor::conflate(const QString& input1, const QString& input2, QS
   _stats.append(SingleStat("(Dubious) Initial Elements Processed per Second",
                           initialElementCount / totalElapsed));
   _stats.append(SingleStat("(Dubious) Final Elements Processed per Second",
-                          map->getElementCount() / totalElapsed));
+                          (double)map->getElementCount() / totalElapsed));
   _stats.append(SingleStat("Write Output Time (sec)", timingOutput));
-  _stats.append(SingleStat("Final Element Count", map->getElementCount()));
+  _stats.append(SingleStat("Final Element Count", (double)map->getElementCount()));
   _stats.append(SingleStat("Total Time Elapsed (sec)", totalElapsed));
   _stats.append(IoSingleStat(IoSingleStat::RChar));
   _stats.append(IoSingleStat(IoSingleStat::WChar));

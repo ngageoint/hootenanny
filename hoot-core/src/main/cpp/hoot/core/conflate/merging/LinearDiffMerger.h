@@ -58,17 +58,17 @@ public:
    */
   void apply(const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced) override;
 
-  virtual QString getDescription() const
+  QString getDescription() const override
   { return "Merges linear features by keeping only matching portions from secondary elements"; }
-  virtual QString getName() const override { return className(); }
-  virtual QString getClassName() const override { return className(); }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
   void setTreatReviewsAsMatches(bool treatReviewsAsMatches)
   { _treatReviewsAsMatches = treatReviewsAsMatches; }
 
 protected:
 
-  virtual bool _mergePair(
+  bool _mergePair(
     ElementId eid1, ElementId eid2,
     std::vector<std::pair<ElementId, ElementId>>& replaced) override;
 

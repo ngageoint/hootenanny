@@ -73,7 +73,7 @@ void LinearDiffMerger::apply(
   {
     ElementId eid1 = it->first;
     ElementId eid2 = it->second;
-    pairs.push_back(std::pair<ElementId, ElementId>(eid1, eid2));
+    pairs.emplace_back(eid1, eid2);
   }
 
   // This has the same behavior as LinearMergerAbstract.

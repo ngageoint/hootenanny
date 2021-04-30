@@ -145,7 +145,7 @@ MatchSetVector AbstractConflator::_optimizeMatches(std::vector<ConstMatchPtr>& m
   LOG_DEBUG("Optimizing matches...");
 
   LOG_DEBUG("Pre-constraining match count: " << StringUtils::formatLargeNumber(matches.size()));
-  _stats.append(SingleStat("Number of Matches Before Whole Groups", matches.size()));
+  _stats.append(SingleStat("Number of Matches Before Whole Groups", (double)matches.size()));
   LOG_DEBUG(
     "Number of Matches Before Whole Groups: " << StringUtils::formatLargeNumber(matches.size()));
   // If there are groups of matches that should not be optimized, remove them before optimization.
@@ -206,7 +206,7 @@ MatchSetVector AbstractConflator::_optimizeMatches(std::vector<ConstMatchPtr>& m
   }
   double optimizeMatchesTime = _timer.getElapsedAndRestart();
   _stats.append(SingleStat("Optimize Matches Time (sec)", optimizeMatchesTime));
-  _stats.append(SingleStat("Number of Optimized Matches", matches.size()));
+  _stats.append(SingleStat("Number of Optimized Matches", (double)matches.size()));
   _stats.append(SingleStat("Number of Matches Optimized per Second",
     (double)matches.size() / optimizeMatchesTime));
   LOG_DEBUG(Tgs::SystemInfo::getCurrentProcessMemoryUsageString());
@@ -231,7 +231,7 @@ MatchSetVector AbstractConflator::_optimizeMatches(std::vector<ConstMatchPtr>& m
 }
 
 void AbstractConflator::_removeWholeGroups(
-  std::vector<ConstMatchPtr>& matches, MatchSetVector& matchSets)
+  std::vector<ConstMatchPtr>& matches, MatchSetVector& matchSets) const
 {
   LOG_DEBUG("Removing whole group matches...");
 

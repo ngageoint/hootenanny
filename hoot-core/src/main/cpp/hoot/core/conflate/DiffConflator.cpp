@@ -533,7 +533,7 @@ bool DiffConflator::_satisfiesCompleteElementRemovalCondition(
 
 void DiffConflator::_removeMatchElementPairCompletely(
   const ConstMatchPtr& match, const std::pair<ElementId, ElementId>& elementPair,
-  const Status& status)
+  const Status& status) const
 {
   LOG_TRACE(
     "Removing match element pair completely: " << elementPair << " for elements with status: " <<

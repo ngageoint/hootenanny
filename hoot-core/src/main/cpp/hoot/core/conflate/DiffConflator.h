@@ -275,7 +275,7 @@ private:
   void _removeMatchElementsCompletely(const Status& status);
   void _removeMatchElementPairCompletely(
     const ConstMatchPtr& match, const std::pair<ElementId, ElementId>& elementPair,
-    const Status& status);
+    const Status& status) const;
   /*
    * Removes only the geometric portions of linear match elements that were involved in a match.
    */

@@ -148,7 +148,7 @@ private:
   /*
    *  Removes groups (subgraphs) of matches where all the matches are interrelated by element id
    */
-  void _removeWholeGroups(std::vector<ConstMatchPtr>& matches, MatchSetVector& matchSets);
+  void _removeWholeGroups(std::vector<ConstMatchPtr>& matches, MatchSetVector& matchSets) const;
 
   void _applyMergers(const std::vector<MergerPtr>& mergers, OsmMapPtr& map);
 };
