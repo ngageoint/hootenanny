@@ -95,7 +95,7 @@ exports.mergeSets = function(map, pairs, replaced)
 {
   // snap the ways in the second input to the first input. Use the default tag
   // merge method.
-  var result = new hoot.LinearSnapMerger().apply(sublineMatcher, map, pairs, replaced, exports.baseFeatureType);
+  var result = new hoot.LinearMerger().apply(sublineMatcher, map, pairs, replaced, exports.baseFeatureType);
   return result;
 };
 

@@ -48,6 +48,20 @@ public:
    * Removes a subline from a way
    *
    * @param way the way to modify
+   * @param subline the subline in the way to remove
+   * @param map the map owning the way
+   * @param removeWholeWayRecursively removes the way's node children when the input subline covers
+   * the entire way
+   * @return IDs of the ways created and added back to the map as a result of the subline removal
+   */
+  static std::vector<ElementId> removeSubline(
+    const WayPtr& way, const WaySubline& subline, OsmMapPtr& map,
+    const bool removeWholeWayRecursively = true);
+
+  /**
+   * Removes a subline from a way
+   *
+   * @param way the way to modify
    * @param start the starting point at which to remove a subline from the way
    * @param end the ending point at which to remove a subline from the way
    * @param map the map owning the way
@@ -55,17 +69,6 @@ public:
    */
   static std::vector<ElementId> removeSubline(
     const WayPtr& way, const WayLocation& start, const WayLocation& end, OsmMapPtr& map);
-
-  /**
-   * Removes a subline from a way
-   *
-   * @param way the way to modify
-   * @param subline the subline in the way to remove
-   * @param map the map owning the way
-   * @return IDs of the ways created and added back to the map as a result of the subline removal
-   */
-  static std::vector<ElementId> removeSubline(
-    const WayPtr& way, const WaySubline& subline, OsmMapPtr& map);
 
 private:
 

@@ -98,6 +98,6 @@ public:
   }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmMapSplitterTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmMapSplitterTest, "slow");
 
 }

@@ -1001,8 +1001,10 @@ See also:
 
 * Data Type: list
 * Default Value:
-** `hoot::RemoveMissingElementsVisitor`
+** `hoot::MultilineStringMergeRelationCollapser`
+** `hoot::RemoveDuplicateWayNodesVisitor`
 ** `hoot::InvalidWayRemover`
+** `hoot::RemoveMissingElementsVisitor`
 ** `hoot::PoiPolygonInvalidReviewNodeRemover`
 ** `hoot::SuperfluousNodeRemover`
 ** `hoot::SmallHighwayMerger`
@@ -1015,18 +1017,17 @@ See also:
 ** `hoot::RemoveInvalidRelationVisitor`
 ** `hoot::RemoveInvalidMultilineStringMembersVisitor`
 ** `hoot::SuperfluousWayRemover`
-** `hoot::RemoveDuplicateWayNodesVisitor`
 ** `hoot::DuplicateWayRemover`
 ** `hoot::RemoveDuplicateRelationMembersVisitor`
 ** `hoot::RemoveEmptyRelationsOp`
 ** `hoot::RelationCircularRefRemover`
-** `hoot::MultilineStringMergeRelationCollapser`
 ** `hoot::RoadCrossingPolyReviewMarker`
 ** `hoot::ApiTagTruncateVisitor`
 ** `hoot::AddHilbertReviewSortOrderOp`
 
-List of operations to run in the conflate command after data is conflated, but before exporting.
-'hoot info --operators' displays information about the available operations.
+Runs during conflation just after the data is conflated, but before it is saved. The ordering here
+is sensitive and addition of new operations may take experimentation to produce optimal conflated
+output. 'hoot info --operators' displays information about the available operations.
 
 === conflate.pre.ops
 
@@ -1040,7 +1041,9 @@ List of operations to run in the conflate command after data is conflated, but b
 ** `hoot::RemoveInvalidReviewRelationsVisitor`
 ** `hoot::RubberSheet`
 
-Runs in the conflate command after data is loaded. 'hoot info --operators' displays information
+Runs during conflation just after data is loaded. The ordering here is sensitive (although
+generally not as sensitive as with conflate.post.ops) and addition of new operations may take
+experimentation to produce optimal conflated output. 'hoot info --operators' displays information
 about the available operations.
 
 See also: <<MapCleanerTransforms,map.cleaner.transforms>>
@@ -1296,6 +1299,17 @@ If enabled, debug maps are written from inside loops where enabled. debug.maps.w
 be enabled for this option to be used. Enabling this option can create a lot of debug maps and slow
 down debugging significantly, so use with caution.
 
+=== differential.remove.linear.partial.matches.as.whole
+
+* Data Type: bool
+* Default Value: `false`
+
+When disabled, Differential Conflation only removes the element geometric portions of linear matches
+involved in the match from the differential output. Otherwise, elements are removed completely from
+the differential, even if they are only partially involved in a match. Disabling this setting may
+yield more accurate linear feature differentials. This setting may only be disabled when using the
+Unifying Algorithm.
+
 === differential.remove.reference.data
 
 * Data Type: bool
@@ -1303,6 +1317,13 @@ down debugging significantly, so use with caution.
 
 If false, when running Differential Conflation the reference elements will not be dropped from the
 output. Setting this to false is primarily useful when debugging unconnected way snapping issues.
+
+=== differential.remove.river.partial.matches.as.whole
+
+* Data Type: bool
+* Default Value: `true`
+
+Overrides differential.remove.linear.partial.matches.as.whole when dealing with river data.
 
 === differential.remove.unconflatable.data
 

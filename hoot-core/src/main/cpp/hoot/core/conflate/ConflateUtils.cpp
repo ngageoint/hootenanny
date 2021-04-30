@@ -28,19 +28,13 @@
 #include "ConflateUtils.h"
 
 // Hoot
-#include <hoot/core/conflate/DiffConflator.h>
-#include <hoot/core/criterion/ConflatableElementCriterion.h>
+#include <hoot/core/conflate/ConflateExecutor.h>
+#include <hoot/core/conflate/network/NetworkMatchCreator.h>
 #include <hoot/core/criterion/NonConflatableCriterion.h>
-#include <hoot/core/io/IoUtils.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/ops/OpExecutor.h>
-#include <hoot/core/ops/RemoveRoundabouts.h>
-#include <hoot/core/ops/ReplaceRoundabouts.h>
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
-#include <hoot/core/visitors/RemoveMissingElementsVisitor.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -72,87 +66,24 @@ int ConflateUtils::writeNonConflatable(
   return nonConflatableMap->size();
 }
 
-void ConflateUtils::writeDiff(const QString& mapUrl1, const QString& mapUrl2,
-                              const geos::geom::Envelope& bounds, const QString& output)
+void ConflateUtils::writeDiff(
+  const QString& mapUrl1, const QString& mapUrl2, const geos::geom::Envelope& bounds,
+  QString& output)
 {
-  QElapsedTimer timer;
-  timer.start();
+  conf().set(ConfigOptions::getBoundsKey(), GeometryUtils::toConfigString(bounds));
 
-  // By default rubbersheeting has no filters. When conflating, we need to add the ones from the
-  // config.
-  conf().set(
-    ConfigOptions::getRubberSheetElementCriteriaKey(),
-    ConfigOptions().getConflateRubberSheetElementCriteria());
-  // don't remove/replace roundabouts during diff conflate
-  QStringList preConflateOps = ConfigOptions().getConflatePreOps();
-  const QString removeRoundaboutsClassName = RemoveRoundabouts::className();
-  if (preConflateOps.contains(removeRoundaboutsClassName))
-  {
-    preConflateOps.removeAll(removeRoundaboutsClassName);
-    conf().set(ConfigOptions::getConflatePreOpsKey(), preConflateOps);
-  }
-  QStringList postConflateOps = ConfigOptions().getConflatePostOps();
-  const QString replaceRoundaboutsClassName = ReplaceRoundabouts::className();
-  if (postConflateOps.contains(replaceRoundaboutsClassName))
-  {
-    postConflateOps.removeAll(replaceRoundaboutsClassName);
-    conf().set(ConfigOptions::getConflatePostOpsKey(), postConflateOps);
-  }
+  ConflateExecutor conflator;
+  conflator.setIsDiffConflate(true);
+  conflator.conflate(mapUrl1, mapUrl2, output);
 
-  LOG_STATUS("Loading data for diff calc from: ..." << FileUtils::toLogFormat(mapUrl1, 25) << "...");
-  OsmMapPtr diffMap(new OsmMap());
-  IoUtils::loadMap(diffMap, mapUrl1, true, Status::Unknown1);
-  if (!bounds.isNull())
-  {
-    IoUtils::cropToBounds(diffMap, bounds);
-  }
-  const int replacementMapSize = diffMap->size();
-  LOG_STATUS(
-    "Data from ..." << FileUtils::toLogFormat(mapUrl1, 25) << " for diff calc loaded in: " <<
-    StringUtils::millisecondsToDhms(timer.elapsed()));
-  timer.restart();
+  conf().set(ConfigOptions::getBoundsKey(), "");
+}
 
-  LOG_STATUS("Loading data for diff calc from: ..." << FileUtils::toLogFormat(mapUrl2, 25) << "...");
-  IoUtils::loadMap(diffMap, mapUrl2, false, Status::Unknown2);
-  if (!bounds.isNull())
-  {
-    IoUtils::cropToBounds(diffMap, bounds);
-  }
-  LOG_STATUS(
-    "Data from ..." << FileUtils::toLogFormat(mapUrl2, 25) << " for diff calc loaded in: " <<
-    StringUtils::millisecondsToDhms(timer.elapsed()));
-  timer.restart();
-
-  // had to do this cleaning to get the relations to behave
-  RemoveMissingElementsVisitor missingElementRemover;
-  diffMap->visitRw(missingElementRemover);
-  LOG_STATUS(missingElementRemover.getCompletedStatusMessage());
-  OsmMapWriterFactory::writeDebugMap(diffMap, "task-grid-replacer-diff-input");
-
-  LOG_STATUS(
-    "Calculating the diff between replaced data of size: " <<
-    StringUtils::formatLargeNumber(diffMap->size() - replacementMapSize) <<
-    " and replacement data of size: " << StringUtils::formatLargeNumber(replacementMapSize)  <<
-    "...");
-  OpExecutor(ConfigOptions().getConflatePreOps()).apply(diffMap);
-  DiffConflator diffGen;
-  diffGen.apply(diffMap);
-  OpExecutor(ConfigOptions().getConflatePostOps()).apply(diffMap);
-  LOG_STATUS(
-    "Calculated a diff with: " << StringUtils::formatLargeNumber(diffMap->size()) <<
-    " features in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << " (skipped " <<
-    StringUtils::formatLargeNumber(diffGen.getNumUnconflatableElementsDiscarded()) <<
-    " unconflatable)");
-  timer.restart();
-
-  LOG_STATUS(
-    "Writing the diff output of size: " << StringUtils::formatLargeNumber(diffMap->size()) <<
-    " to: ..." << FileUtils::toLogFormat(output, 25) << "...");
-  IoUtils::saveMap(diffMap, output);
-  LOG_STATUS(
-    "Wrote the diff output of size: " << StringUtils::formatLargeNumber(diffMap->size()) <<
-    " in: " << StringUtils::millisecondsToDhms(timer.elapsed()));
-  timer.restart();
+bool ConflateUtils::isNetworkConflate()
+{
+  // This could be brittle to future changes to how the Network alg is applied.
+  return
+    conf().getList(ConfigOptions::getMatchCreatorsKey()).contains(NetworkMatchCreator::className());
 }
 
 }

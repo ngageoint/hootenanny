@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
-#include "LinearSnapMergerJs.h"
+#include "LinearMergerJs.h"
 
 // hoot
 #include <hoot/core/util/Factory.h>
@@ -52,18 +52,18 @@ using namespace v8;
 namespace hoot
 {
 
-HOOT_JS_REGISTER(LinearSnapMergerJs)
+HOOT_JS_REGISTER(LinearMergerJs)
 
-Persistent<Function> LinearSnapMergerJs::_constructor;
+Persistent<Function> LinearMergerJs::_constructor;
 
-void LinearSnapMergerJs::Init(Handle<Object> target)
+void LinearMergerJs::Init(Handle<Object> target)
 {
   Isolate* current = target->GetIsolate();
   HandleScope scope(current);
   // Prepare constructor template
   Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
-  tpl->SetClassName(
-     String::NewFromUtf8(current, LinearSnapMerger::className().toStdString().data()));
+  const QString name = "LinearMerger";
+  tpl->SetClassName(String::NewFromUtf8(current, name.toStdString().data()));
   tpl->InstanceTemplate()->SetInternalFieldCount(1);
   // Prototype
   tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(),
@@ -72,22 +72,22 @@ void LinearSnapMergerJs::Init(Handle<Object> target)
       FunctionTemplate::New(current, apply));
 
   _constructor.Reset(current, tpl->GetFunction());
-  target->Set(String::NewFromUtf8(current, "LinearSnapMerger"), ToLocal(&_constructor));
+  target->Set(String::NewFromUtf8(current, name.toStdString().data()), ToLocal(&_constructor));
 }
 
-void LinearSnapMergerJs::New(const FunctionCallbackInfo<Value>& args)
+void LinearMergerJs::New(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
 
-  LinearSnapMergerJs* obj = new LinearSnapMergerJs();
+  LinearMergerJs* obj = new LinearMergerJs();
   // node::ObjectWrap::Wrap takes ownership of the pointer in a v8::Persistent<v8::Object>
   obj->Wrap(args.This());
 
   args.GetReturnValue().Set(args.This());
 }
 
-void LinearSnapMergerJs::apply(const FunctionCallbackInfo<Value>& args)
+void LinearMergerJs::apply(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);

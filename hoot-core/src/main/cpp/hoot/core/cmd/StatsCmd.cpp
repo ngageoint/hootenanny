@@ -110,6 +110,7 @@ public:
       // Tried using IoUtils::loadMap here, but it has extra logic beyond OsmMapReaderFactory::read
       // for reading in OGR layers. Using it causes the last part of Osm2OgrTranslationTest to fail.
       // Need to determine why either strictly use one reading method or the other.
+      LOG_STATUS("Reading from: ..." << inputs[i].right(25) << "...");
       OsmMapReaderFactory::read(map, inputs[i], true, Status::Invalid);
       MapProjector::projectToPlanar(map);
 

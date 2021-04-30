@@ -46,6 +46,7 @@
 #include <hoot/core/ops/RemoveRoundabouts.h>
 #include <hoot/core/ops/ReplaceRoundabouts.h>
 #include <hoot/core/ops/RoadCrossingPolyReviewMarker.h>
+#include <hoot/core/schema/SchemaUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ConfigUtils.h>
 #include <hoot/core/util/FileUtils.h>
@@ -71,6 +72,7 @@ const QString ConflateExecutor::JOB_SOURCE = "Conflate";
 ConflateExecutor::ConflateExecutor() :
 _isDiffConflate(false),
 _diffConflateSeparateOutput(false),
+_diffRemoveLinearPartialMatchesAsWhole(false),
 _isAttributeConflate(false),
 _isAverageConflate(false),
 _displayStats(false),
@@ -213,6 +215,23 @@ void ConflateExecutor::conflate(const QString& input1, const QString& input2, QS
 
   _load(input1, input2, map, isChangesetOutput);
 
+  // Check to see if all the data is untyped. If so, log a warning so the user knows they may not
+  // be getting the best conflate results in case types could be added to the input.
+  if (map->size() > 0 && !SchemaUtils::anyElementsHaveType(map))
+  {
+    msg =
+      "No elements in the input map have a recognizable schema type. Generic conflation "
+      "routines will be used.";
+    if (ConfigOptions().getLogWarningsForCompletelyUntypedInputMaps())
+    {
+      LOG_WARN(msg);
+    }
+    else
+    {
+      LOG_INFO(msg);
+    }
+  }
+
   msg = "Conflating map with " + StringUtils::formatLargeNumber(map->size()) + " elements";
   if (ConfigUtils::boundsOptionEnabled())
   {
@@ -268,8 +287,7 @@ void ConflateExecutor::conflate(const QString& input1, const QString& input2, QS
     _runConflateOps(map, true);
   }
 
-  OsmMapPtr result = map;
-  _runConflate(result);
+  _runConflate(map);
 
   if (!ConfigOptions().getConflatePostOps().empty())
   {
@@ -290,26 +308,26 @@ void ConflateExecutor::conflate(const QString& input1, const QString& input2, QS
   // Doing this after the conflate post ops run, since some invalid reviews are removed by them.
   _progress->set(_getJobPercentComplete(_currentTask - 1), "Counting feature reviews...");
   CountUniqueReviewsVisitor countReviewsVis;
-  result->visitRo(countReviewsVis);
+  map->visitRo(countReviewsVis);
   LOG_INFO(
     "Generated " << StringUtils::formatLargeNumber(countReviewsVis.getStat()) <<
     " feature reviews.");
   _currentTask++;
 
-  MapProjector::projectToWgs84(result);
+  MapProjector::projectToWgs84(map);
   _stats.append(SingleStat("Project to WGS84 Time (sec)", _taskTimer.getElapsedAndRestart()));
-  OsmMapWriterFactory::writeDebugMap(result, "after-wgs84-projection");
+  OsmMapWriterFactory::writeDebugMap(map, "after-wgs84-projection");
 
-  _writeOutput(result, output, isChangesetOutput);
+  _writeOutput(map, output, isChangesetOutput);
 
   double timingOutput = _taskTimer.getElapsedAndRestart();
   double totalElapsed = totalTime.getElapsed();
   _stats.append(SingleStat("(Dubious) Initial Elements Processed per Second",
                           initialElementCount / totalElapsed));
   _stats.append(SingleStat("(Dubious) Final Elements Processed per Second",
-                          result->getElementCount() / totalElapsed));
+                          (double)map->getElementCount() / totalElapsed));
   _stats.append(SingleStat("Write Output Time (sec)", timingOutput));
-  _stats.append(SingleStat("Final Element Count", result->getElementCount()));
+  _stats.append(SingleStat("Final Element Count", (double)map->getElementCount()));
   _stats.append(SingleStat("Total Time Elapsed (sec)", totalElapsed));
   _stats.append(IoSingleStat(IoSingleStat::RChar));
   _stats.append(IoSingleStat(IoSingleStat::WChar));
@@ -322,7 +340,7 @@ void ConflateExecutor::conflate(const QString& input1, const QString& input2, QS
 
   if (_displayStats)
   {
-    _writeStats(result, input1Cso, input2Cso, output);
+    _writeStats(map, input1Cso, input2Cso, output);
   }
   if (_displayChangesetStats)
   {

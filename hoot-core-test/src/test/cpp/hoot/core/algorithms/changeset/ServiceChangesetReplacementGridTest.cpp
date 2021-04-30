@@ -1601,12 +1601,11 @@ private:
   }
 
   void _writeDiffBetweenReplacedAndReplacement(
-    const geos::geom::Envelope& bounds, const QString& output)
+    const geos::geom::Envelope& bounds, QString& output)
   {
     // Calculate a diff between the data we just replaced and the original replacement data to
     // aid in finding any errors during the replacement process. We only want to calculate the
     // diff out to the task grid bounds, b/c that's the data that was actually replaced.
-    //conf().set(ConfigOptions::getBoundsKey(), GeometryUtils::envelopeToString(bounds));
     // use a lenient bounds
     conf().set(ConfigOptions::getBoundsKeepEntireFeaturesCrossingBoundsKey(), true);
     conf().set(

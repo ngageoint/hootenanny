@@ -1177,18 +1177,8 @@
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-1817"/>
-        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="2"/>
-        <tag k="name" v="Seabury Avenue"/>
-        <tag k="source:datetime" v="2019-03-29T01:33:27Z"/>
-        <tag k="tiger:cfcc" v="A41"/>
-        <tag k="tiger:county" v="Sussex, DE"/>
-        <tag k="tiger:name_base" v="Seabury"/>
-        <tag k="tiger:name_type" v="Ave"/>
-        <tag k="tiger:reviewed" v="no"/>
-        <tag k="tiger:zip_left" v="19963"/>
-        <tag k="tiger:zip_right" v="19963"/>
     </way>
     <way visible="true" id="-1812" timestamp="2020-02-28T16:47:47Z" version="1">
         <nd ref="-911"/>

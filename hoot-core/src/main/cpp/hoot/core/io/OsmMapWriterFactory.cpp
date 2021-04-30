@@ -68,7 +68,7 @@ std::shared_ptr<OsmMapWriter> OsmMapWriterFactory::createWriter(const QString& u
   vector<QString> names = Factory::getInstance().getObjectNamesByBase(OsmMapWriter::className());
   for (size_t i = 0; i < names.size() && !writer; ++i)
   {
-    LOG_VARD(names[i]);
+    LOG_VART(names[i]);
     writer.reset(Factory::getInstance().constructObject<OsmMapWriter>(names[i]));
 
     // We may be able to make this a little more generic by referencing an interface instead.
@@ -152,6 +152,8 @@ void OsmMapWriterFactory::write(const std::shared_ptr<OsmMap>& map, const QStrin
 
     MapProjector::projectToWgs84(map);
 
+    // TODO: For debug maps, we don't want to log the progress of the writing to cut down on log
+    // statements.
     std::shared_ptr<OsmMapWriter> writer = createWriter(url);
     writer->setIsDebugMap(is_debug);
     writer->open(url);
@@ -179,7 +181,7 @@ void OsmMapWriterFactory::writeDebugMap(const ConstOsmMapPtr& map, const QString
     LOG_VART(StringUtils::formatLargeNumber(map->getWayCount()));
     LOG_VART(StringUtils::formatLargeNumber(map->getRelationCount()));
 
-    const QString fileNumberStr = StringUtils::padFrontOfNumberStringWithZeroes(_debugMapCount, 3);
+    const QString fileNumberStr = StringUtils::padFrontOfNumberStringWithZeroes(_debugMapCount, 4);
     if (!title.isEmpty())
     {
       debugMapFileName =

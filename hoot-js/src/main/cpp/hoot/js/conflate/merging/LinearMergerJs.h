@@ -24,11 +24,10 @@
  *
  * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
-#ifndef LINEAR_SNAP_MERGER_JS_H
-#define LINEAR_SNAP_MERGER_JS_H
+#ifndef LINEAR_MERGER_JS_H
+#define LINEAR_MERGER_JS_H
 
 // hoot
-#include <hoot/core/conflate/merging/LinearSnapMerger.h>
 #include <hoot/js/io/DataConvertJs.h>
 
 // node.js
@@ -42,42 +41,25 @@ namespace hoot
 
 /**
  * Facade around linear features mergers in core
- *
- * @todo This class should be renamed to LinearMergerJs.
  */
-class LinearSnapMergerJs : public HootBaseJs
+class LinearMergerJs : public HootBaseJs
 {
 public:
 
   static void Init(v8::Handle<v8::Object> target);
 
-  LinearSnapMergerPtr getLinearSnapMerger() { return _ptr; }
-
-  virtual ~LinearSnapMergerJs() = default;
+  virtual ~LinearMergerJs() = default;
 
 private:
 
-  LinearSnapMergerJs() = default;
+  LinearMergerJs() = default;
 
   static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void apply(const v8::FunctionCallbackInfo<v8::Value>& args);
 
-  LinearSnapMergerPtr _ptr;
   static v8::Persistent<v8::Function> _constructor;
 };
 
-inline void toCpp(v8::Handle<v8::Value> v, LinearSnapMergerPtr& ptr)
-{
-  if (!v->IsObject())
-  {
-    throw IllegalArgumentException("Expected an object, got: (" + toJson(v) + ")");
-  }
-
-  v8::Handle<v8::Object> obj = v8::Handle<v8::Object>::Cast(v);
-  LinearSnapMergerJs* ptrj = node::ObjectWrap::Unwrap<LinearSnapMergerJs>(obj);
-  ptr = ptrj->getLinearSnapMerger();
 }
 
-}
-
-#endif // LINEAR_SNAP_MERGER_JS_H
+#endif // LINEAR_MERGER_JS_H

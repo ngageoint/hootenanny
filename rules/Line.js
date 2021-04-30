@@ -185,7 +185,7 @@ exports.mergeSets = function(map, pairs, replaced)
 {
   // Snap the ways in the second input to the first input. Use the default tag 
   // merge method. See related notes in exports.mergeSets in River.js.
-  return new hoot.LinearSnapMerger().apply(sublineMatcher, map, pairs, replaced, exports.baseFeatureType, frechetSublineMatcher);
+  return new hoot.LinearMerger().apply(sublineMatcher, map, pairs, replaced, exports.baseFeatureType, frechetSublineMatcher);
 };
 
 exports.getMatchFeatureDetails = function(map, e1, e2)

@@ -61,11 +61,11 @@ QString HighwayMatch::_noMatchingSubline = "No valid matching subline found.";
 HighwayMatch::HighwayMatch(const std::shared_ptr<HighwayClassifier>& classifier,
   const std::shared_ptr<SublineStringMatcher>& sublineMatcher, const ConstOsmMapPtr& map,
   const ElementId& eid1, const ElementId& eid2, ConstMatchThresholdPtr mt) :
-  Match(mt, eid1, eid2),
-  _classifier(classifier),
-  _sublineMatcher(sublineMatcher),
-  _minSplitSize(0.0),
-  _score(0.0)
+Match(mt, eid1, eid2),
+_classifier(classifier),
+_score(0.0),
+_sublineMatcher(sublineMatcher),
+_minSplitSize(0.0)
 {
   assert(_eid1 != _eid2);
 
