@@ -1,10 +1,10 @@
-11:08:51.889 INFO   ...ore/io/OsmMapReaderFactory.cpp( 184) Loading map from ...d/slow/ConflateCmdStatsTest/generic-rivers-out.osm...
-11:08:51.891 INFO   .../hoot/core/io/OsmXmlReader.cpp( 911) Read 0 elements from input.        11:08:51.891 INFO   .../hoot/core/io/OsmXmlReader.cpp( 911) Read 0 elements from input.        11:08:51.907 INFO   .../hoot/core/io/OsmXmlReader.cpp( 475) 	Reporting missing elements...
-11:08:51.907 INFO   ...ore/io/OsmMapReaderFactory.cpp( 228) Read 459 elements from input in: 00:00.
-11:08:51.907 INFO   ...ore/io/OsmMapReaderFactory.cpp( 184) Loading map from ...d/slow/ConflateCmdStatsTest/generic-rivers-out.osm...
-11:08:51.908 INFO   .../hoot/core/io/OsmXmlReader.cpp( 911) Read 0 elements from input.        11:08:51.908 INFO   .../hoot/core/io/OsmXmlReader.cpp( 911) Read 0 elements from input.        11:08:51.923 INFO   .../hoot/core/io/OsmXmlReader.cpp( 475) 	Reporting missing elements...
-11:08:51.923 INFO   ...ore/io/OsmMapReaderFactory.cpp( 228) Read 459 elements from input in: 00:00.
-11:08:51.927 STATUS .../cpp/hoot/core/cmd/DiffCmd.cpp( 145) Map difference calculated in 00:00 total.
+19:01:59.019 INFO   ...ore/io/OsmMapReaderFactory.cpp( 184) Loading map from ...d/slow/ConflateCmdStatsTest/generic-rivers-out.osm...
+19:01:59.020 INFO   .../hoot/core/io/OsmXmlReader.cpp( 911) Read 0 elements from input.        19:01:59.020 INFO   .../hoot/core/io/OsmXmlReader.cpp( 911) Read 0 elements from input.        19:01:59.027 INFO   .../hoot/core/io/OsmXmlReader.cpp( 475) 	Reporting missing elements...
+19:01:59.027 INFO   ...ore/io/OsmMapReaderFactory.cpp( 228) Read 459 elements from input in: 00:00.
+19:01:59.027 INFO   ...ore/io/OsmMapReaderFactory.cpp( 184) Loading map from ...d/slow/ConflateCmdStatsTest/generic-rivers-out.osm...
+19:01:59.028 INFO   .../hoot/core/io/OsmXmlReader.cpp( 911) Read 0 elements from input.        19:01:59.028 INFO   .../hoot/core/io/OsmXmlReader.cpp( 911) Read 0 elements from input.        19:01:59.034 INFO   .../hoot/core/io/OsmXmlReader.cpp( 475) 	Reporting missing elements...
+19:01:59.034 INFO   ...ore/io/OsmMapReaderFactory.cpp( 228) Read 459 elements from input in: 00:00.
+19:01:59.036 STATUS .../cpp/hoot/core/cmd/DiffCmd.cpp( 145) Map difference calculated in 00:00 total.
 stats = (stat) OR (input map 1 stat) (input map 2 stat) (output map stat)
 Nodes	338	176	407	
 Ways	14	15	52	
@@ -17,19 +17,19 @@ Least Members in a Relation	0	0	0
 Most Members in a Relation	0	0	0	
 Average Members Per Relation	0	0	0	
 Total Relation Members	0	0	0	
-Least Tags on a Feature	4	3	3	
+Least Tags on a Feature	4	3	1	
 Most Tags on a Feature	6	4	9	
-Average Tags Per Feature	5	3	4	
-Least Information Tags on a Feature	3	3	3	
+Average Tags Per Feature	5	3	3	
+Least Information Tags on a Feature	3	3	1	
 Most Information Tags on a Feature	5	4	8	
-Average Information Tags Per Feature	4.142857142857143	3.133333333333333	4.6	
-Features with Names	4	2	16	
+Average Information Tags Per Feature	4.142857142857143	3.133333333333333	3.153846153846154	
+Features with Names	4	2	8	
 Multi-Use Features	0	0	0	
 Features with Addresses	0	0	0	
 Total Addresses	0	0	0	
 Features with Phone Numbers	0	0	0	
 Total Phone Numbers	0	0	0	
-Total Features	14	15	50	
+Total Features	14	15	52	
 Total Conflatable Features	14	15	0	
 Percentage of Total Features Conflatable	100	100	0	
 Untagged Features	0	0	0	
@@ -38,46 +38,46 @@ Percentage of Total Features Unconflatable	0	0	0
 Match Creators	1	1	1	
 Features Conflatable by: hoot::ScriptMatchCreator,River.js	14	15	0	
 Total Conflated Features	0	0	11	
-Percentage of Total Features Conflated	0	0	22	
+Percentage of Total Features Conflated	0	0	21.15384615384615	
 Total Features Marked for Review	0	0	0	
 Percentage of Total Features Marked for Review	0	0	0	
 Total Reviews to be Made	0	0	0	
-Total Unmatched Features	14	15	39	
-Percentage of Total Features Unmatched	100	100	78	
+Total Unmatched Features	14	15	41	
+Percentage of Total Features Unmatched	100	100	78.84615384615384	
 Total Unmatched Features From Map 1	14	0	6	
-Percentage of Total Features Unmatched From Map 1	100	0	12	
-Total Unmatched Features From Map 2	0	15	33	
-Percentage of Total Features Unmatched From Map 2	0	100	66	
-Waterways	14	15	50	
+Percentage of Total Features Unmatched From Map 1	100	0	11.53846153846154	
+Total Unmatched Features From Map 2	0	15	35	
+Percentage of Total Features Unmatched From Map 2	0	100	67.30769230769231	
+Waterways	14	15	52	
 Conflatable Waterways	14	15	0	
 Conflated Waterways	0	0	11	
 Waterways Marked for Review	0	0	0	
 Waterway Reviews to be Made	0	0	0	
-Unmatched Waterways	14	15	39	
+Unmatched Waterways	14	15	41	
 Unmatched Waterways From Map 1	14	0	6	
-Unmatched Waterways From Map 2	0	15	33	
-Total Meters of Waterways	26027.07173885541	25763.06593050528	34668.44736856713	
+Unmatched Waterways From Map 2	0	15	35	
+Total Meters of Waterways	26027.07173885541	25763.06593050528	35077.21074569128	
 Meters of Conflated Waterways	0	0	11178.11346457614	
 Meters of Unmatched Waterways From Map 1	26027.07173885541	0	14848.95827299593	
-Meters of Unmatched Waterways From Map 2	0	25763.06593050528	8641.375630995066	
-Percentage of Waterways Conflated	0	0	22	
+Meters of Unmatched Waterways From Map 2	0	25763.06593050528	9050.139008119211	
+Percentage of Waterways Conflated	0	0	21.15384615384615	
 Percentage of Waterways Marked for Review	0	0	0	
-Percentage of Unmatched Waterways From Map 1	100	0	12	
-Percentage of Unmatched Waterways From Map 2	0	100	66	
-Percentage of Unmatched Waterways	100	100	78	
-Translated Populated Tags	14	92	332	
-Difference Between Total Features in Output and Total Features in Inputs			21	
-Percentage Difference Between Total Features in Output and Total Features in Inputs			72.41379310344827	
+Percentage of Unmatched Waterways From Map 1	100	0	11.53846153846154	
+Percentage of Unmatched Waterways From Map 2	0	100	67.30769230769231	
+Percentage of Unmatched Waterways	100	100	78.84615384615384	
+Translated Populated Tags	14	92	336	
+Difference Between Total Features in Output and Total Features in Inputs			23	
+Percentage Difference Between Total Features in Output and Total Features in Inputs			79.31034482758621	
 Percentage of Number of Total Map 1 Features Matched With Map 2 Features			78.57142857142857	
 Percentage of Number of Total Map 1 Features Not Matched With Map 2 Features			42.85714285714285	
-Percentage of Number of Total Map 2 Features Not Matched With Map 1 Features			220	
+Percentage of Number of Total Map 2 Features Not Matched With Map 1 Features			233.3333333333333	
 Percentage of Length of Map 1 Waterways Matched With Map 2 Waterways			42.94802572003714	
 Percentage of Length of Map 1 Waterways Not Matched With Map 2 Waterways			57.05197427503207	
-Percentage of Length of Map 2 Waterways Not Matched With Map 1 Waterways			33.54172074979272	
-Calculate Stats for Input 1 Time (sec)				7.859056949615479
-Calculate Stats for Input 2 Time (sec)				0.8433070182800293
-Apply Pre-Conflate Ops Time (sec)				0.03192591667175293
-Apply Post-Conflate Ops Time (sec)				0.02587389945983887
-Calculate Stats for Output Time (sec)				0.8490250110626221
+Percentage of Length of Map 2 Waterways Not Matched With Map 1 Waterways			35.12834626333511	
+Calculate Stats for Input 1 Time (sec)				4.156236886978149
+Calculate Stats for Input 2 Time (sec)				0.4339160919189453
+Apply Pre-Conflate Ops Time (sec)				0.01716089248657227
+Apply Post-Conflate Ops Time (sec)				0.01054716110229492
+Calculate Stats for Output Time (sec)				0.4274530410766602
 
-11:08:51.573 STATUS ...pp/hoot/core/util/Progress.cpp(  86) Conflate (100%): Conflation job completed in 00:09 for reference map: ...NIGS_Rivers_REF1-cropped-2.osm and secondary map: ...waterway_ss_REF2-cropped-2.osm and written to output: ...atsTest/generic-rivers-out.osm
+19:01:58.719 STATUS ...pp/hoot/core/util/Progress.cpp(  86) Conflate (100%): Conflation job completed in 00:04 for reference map: ...NIGS_Rivers_REF1-cropped-2.osm and secondary map: ...waterway_ss_REF2-cropped-2.osm and written to output: ...atsTest/generic-rivers-out.osm

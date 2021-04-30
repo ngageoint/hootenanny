@@ -62,6 +62,9 @@ class OsmMap;
  * No point in implementing FilteredByGeometryTypeCriteria here, as there is no such thing as a map
  * with no nodes. ElementConflatableCheck does need to be implemented here to handle the case when
  * _ignoreInformationTags = true.
+ *
+ * @todo Do we really need to implement ConflateInfoCacheConsumer here? A superfluous node should
+ * always be removed, right?
  */
 class SuperfluousNodeRemover : public OsmMapOperation, public Boundable, public Configurable,
   public ConflateInfoCacheConsumer
@@ -77,10 +80,6 @@ public:
    * @see OsmMapOperation
    */
   void apply(std::shared_ptr<OsmMap>& map) override;
-
-  QString getName() const override { return className(); }
-
-  QString getClassName() const override { return className(); }
 
   /**
    * Removes superfluous nodes from a map
@@ -123,10 +122,11 @@ public:
    */
   void setConfiguration(const Settings& conf) override;
 
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
   QString getDescription() const override { return "Removes all nodes not part of a way"; }
 
   QString getInitStatusMessage() const override { return "Removing superfluous nodes..."; }
-
   QString getCompletedStatusMessage() const override
   { return "Removed " + StringUtils::formatLargeNumber(_numAffected) + " superfluous nodes"; }
 

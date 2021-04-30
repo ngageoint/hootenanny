@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-mkdir -p test-output/cmd/slow/translation/
+mkdir -p test-output/cmd/glacial/translation/
 
 function compareFiles {
     hoot diff --error-limit 20 $1 $2 || diff $1 $2
@@ -9,13 +9,13 @@ function compareFiles {
 
 CONFIG="-C Testing.conf"
 
-hoot convert $CONFIG -D shape.file.writer.cols="LTN;WTC;HCT;UID" test-files/translation/MgcpTest.osm test-output/cmd/slow/translation/MgcpTest.shp
-hoot convert --warn $CONFIG -D schema.translation.script=translations/MgcpTest.js test-output/cmd/slow/translation/MgcpTestLines.shp test-output/cmd/slow/translation/MgcpTranslated.osm
+hoot convert $CONFIG -D shape.file.writer.cols="LTN;WTC;HCT;UID" test-files/translation/MgcpTest.osm test-output/cmd/glacial/translation/MgcpTest.shp
+hoot convert --warn $CONFIG -D schema.translation.script=translations/MgcpTest.js test-output/cmd/glacial/translation/MgcpTestLines.shp test-output/cmd/glacial/translation/MgcpTranslated.osm
 
 # Un-comment this to update the OSM file
-#cp test-output/cmd/slow/translation/MgcpTranslated.osm test-files/translation/MgcpTranslated.osm
+#cp test-output/cmd/glacial/translation/MgcpTranslated.osm test-files/translation/MgcpTranslated.osm
 
-compareFiles test-output/cmd/slow/translation/MgcpTranslated.osm test-files/translation/MgcpTranslated.osm
+compareFiles test-output/cmd/glacial/translation/MgcpTranslated.osm test-files/translation/MgcpTranslated.osm
 
 #
 # Added commands to build the MGCPv3 OSM test files
@@ -26,7 +26,7 @@ compareFiles test-output/cmd/slow/translation/MgcpTranslated.osm test-files/tran
 # CONFIG="--debug -C Testing.conf -D ogr.debug.dumptags=true -D ogr.debug.lookupcolumn=true -D ogr.debug.lookupclash=true -D ogr.debug.dumpvalidate=true"
 
 function checkMgcpV3 {
-    OUT=test-output/cmd/slow/translation/Mgcpv3_$1.osm
+    OUT=test-output/cmd/glacial/translation/Mgcpv3_$1.osm
     IN=test-files/MGCPv3/$1.shp
     hoot convert --warn $CONFIG -D schema.translation.script=translations/MgcpTest.js $IN $OUT
     #echo $IN  $OUT
@@ -34,7 +34,7 @@ function checkMgcpV3 {
     # cp $OUT test-files/MGCPv3/$1-outputX.osm
     compareFiles $OUT test-files/MGCPv3/$1-output.osm
     # Export as TRDv4
-    OUT4=test-output/cmd/slow/translation/$1
+    OUT4=test-output/cmd/glacial/translation/$1
     rm -rf $OUT4
     hoot convert --info $CONFIG -D schema.translation.script=translations/MGCP_TRD4.js $OUT $OUT4.shp
 }

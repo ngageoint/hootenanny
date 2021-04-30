@@ -95,10 +95,10 @@ void ReprojectCoordinateFilter::project(Coordinate* c) const
     if (MapProjector::logWarnCount < logWarnMessageLimit)
     {
       LOG_WARN(err);
-      LOG_TRACE("Source Point, x:" << inx << " y: " << iny);
-      LOG_TRACE("Source SRS: " << MapProjector::toWkt(_transform->GetSourceCS()));
-      LOG_TRACE("Target Point, x:" << c->x << " y: " << c->y);
-      LOG_TRACE("Target SRS: " << MapProjector::toWkt(_transform->GetTargetCS()));
+      LOG_WARN("Source Point, x:" << inx << " y: " << iny);
+      LOG_WARN("Source SRS: " << MapProjector::toWkt(_transform->GetSourceCS()));
+      LOG_WARN("Target Point, x:" << c->x << " y: " << c->y);
+      LOG_WARN("Target SRS: " << MapProjector::toWkt(_transform->GetTargetCS()));
       MapProjector::logWarnCount++;
     }
     else if (MapProjector::logWarnCount == logWarnMessageLimit)

@@ -63,10 +63,13 @@ public:
   QList<SingleStat> getStats() const { return _stats; }
 
   /**
-   * Set the factory to use when creating mergers. This method is likely only useful when testing.
+   * Sets the factory to use when creating mergers. This method is likely only useful when testing.
    */
   void setMergerFactory(const std::shared_ptr<MergerFactory>& mf) { _mergerFactory = mf; }
 
+  /**
+   * @see ProgressReporter
+   */
   void setProgress(const Progress& progress) override { _progress = progress; }
 
 protected:
@@ -76,6 +79,7 @@ protected:
   const MatchFactory& _matchFactory;
   std::shared_ptr<MatchThreshold> _matchThreshold;
   std::vector<ConstMatchPtr> _matches;
+  MatchSetVector _matchSets;
 
   std::shared_ptr<MergerFactory> _mergerFactory;
   HashMap<ElementId, std::vector<MergerPtr>> _e2m;
@@ -93,9 +97,24 @@ protected:
    */
   virtual void _reset();
 
-  virtual void _createMatches();
-  virtual MatchSetVector _optimizeMatches();
+  /*
+   * Creates feature matches using match creators
+   */
+  void _createMatches();
+  /*
+   * Optimizes the matches in preparation for merging; optional in some workflows
+   */
+  MatchSetVector _optimizeMatches(std::vector<ConstMatchPtr>& matches);
 
+  /*
+   * Creates the feature mergers using merger creators; mergers for relations are run separately
+   * so populated explicitly by this method
+   */
+  void _createMergers(std::vector<MergerPtr>& relationMergers);
+  /*
+   * Merges features; first non-relation features, then relations
+   */
+  void _mergeFeatures(const std::vector<MergerPtr>& relationMergers);
   /*
    * Populates the _e2m map with a mapping of ElementIds to their respective Merger objects. This
    * is helpful when replacing element ids with new ids.
@@ -105,8 +124,18 @@ protected:
    * http://stackoverflow.com/questions/10064422/java-on-memory-efficient-key-value-store
    */
   void _mapElementIdsToMergers();
+  /*
+   * Updates mergers with element ID mapping changes occurring during feature merging
+   */
   void _replaceElementIds(const std::vector<std::pair<ElementId, ElementId>>& replaced);
-  void _applyMergers(const std::vector<MergerPtr>& mergers, OsmMapPtr& map);
+
+  /*
+   * Adds tags describing the match scores computed during matching
+   */
+  void _addConflateScoreTags();
+  void _addConflateScoreTags(
+    const ElementPtr& e, const MatchClassification& matchClassification,
+    const MatchThreshold& matchThreshold) const;
 
   void _updateProgress(const int currentStep, const QString message);
 
@@ -114,11 +143,14 @@ private:
 
   Progress _progress;
 
-  static const bool WRITE_DETAILED_DEBUG_MAPS;
-
-  void _removeWholeGroups(MatchSetVector& matchSets);
-
   QString _matchSetToString(const MatchSet& matchSet) const;
+
+  /*
+   *  Removes groups (subgraphs) of matches where all the matches are interrelated by element id
+   */
+  void _removeWholeGroups(std::vector<ConstMatchPtr>& matches, MatchSetVector& matchSets) const;
+
+  void _applyMergers(const std::vector<MergerPtr>& mergers, OsmMapPtr& map);
 };
 
 }

@@ -31,6 +31,7 @@
 #include <hoot/core/conflate/matching/MatchFactory.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/matching/OptimalConstrainedMatches.h>
+#include <hoot/core/conflate/merging/LinearDiffMerger.h>
 #include <hoot/core/conflate/merging/MarkForReviewMergerCreator.h>
 #include <hoot/core/conflate/merging/MergerFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
@@ -38,6 +39,11 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MemoryUsageChecker.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonMergerCreator.h>
+#include <hoot/core/conflate/matching/MatchClassification.h>
+
+// Qt
+#include <QElapsedTimer>
 
 // standard
 #include <algorithm>
@@ -48,10 +54,6 @@
 
 namespace hoot
 {
-
-// ONLY ENABLE THIS DURING DEBUGGING; We don't want to tie it to debug.maps.write, as it may
-// produce a very large number of output files.
-const bool AbstractConflator::WRITE_DETAILED_DEBUG_MAPS = false;
 
 AbstractConflator::AbstractConflator() :
 _matchFactory(MatchFactory::getInstance()),
@@ -91,6 +93,25 @@ void AbstractConflator::_reset()
   _mergers.clear();
 }
 
+QString AbstractConflator::_matchSetToString(const MatchSet& matchSet) const
+{
+  QString str;
+  for (std::set<ConstMatchPtr, MatchPtrComparator>::const_iterator itr = matchSet.begin();
+       itr != matchSet.end(); ++itr)
+  {
+    ConstMatchPtr match = *itr;
+    std::set<std::pair<ElementId, ElementId>> matchPairs = match->getMatchPairs();
+    for (std::set<std::pair<ElementId, ElementId>>::const_iterator itr2 = matchPairs.begin();
+         itr2 != matchPairs.end(); ++itr2)
+    {
+       std::pair<ElementId, ElementId> elementIdPair = *itr2;
+       str += elementIdPair.first.toString() + " " + elementIdPair.second.toString() + ", ";
+    }
+  }
+  str.chop(2);
+  return str;
+}
+
 void AbstractConflator::_createMatches()
 {
   OsmMapWriterFactory::writeDebugMap(_map, "before-matching");
@@ -119,21 +140,23 @@ void AbstractConflator::_createMatches()
     SingleStat("Number of Matches Found per Second", (double)_matches.size() / findMatchesTime));
 }
 
-MatchSetVector AbstractConflator::_optimizeMatches()
+MatchSetVector AbstractConflator::_optimizeMatches(std::vector<ConstMatchPtr>& matches)
 {
-  LOG_DEBUG("Pre-constraining match count: " << StringUtils::formatLargeNumber(_matches.size()));
-  _stats.append(SingleStat("Number of Matches Before Whole Groups", _matches.size()));
+  LOG_DEBUG("Optimizing matches...");
+
+  LOG_DEBUG("Pre-constraining match count: " << StringUtils::formatLargeNumber(matches.size()));
+  _stats.append(SingleStat("Number of Matches Before Whole Groups", (double)matches.size()));
   LOG_DEBUG(
-    "Number of Matches Before Whole Groups: " << StringUtils::formatLargeNumber(_matches.size()));
+    "Number of Matches Before Whole Groups: " << StringUtils::formatLargeNumber(matches.size()));
   // If there are groups of matches that should not be optimized, remove them before optimization.
   MatchSetVector matchSets;
-  _removeWholeGroups(matchSets);
+  _removeWholeGroups(matches, matchSets);
   MemoryUsageChecker::getInstance().check();
   _stats.append(SingleStat("Number of Whole Groups", matchSets.size()));
   LOG_DEBUG("Number of Whole Groups: " << StringUtils::formatLargeNumber(matchSets.size()));
   LOG_DEBUG(
-    "Number of Matches After Whole Groups: " << StringUtils::formatLargeNumber(_matches.size()));
-  LOG_VART(_matches);
+    "Number of Matches After Whole Groups: " << StringUtils::formatLargeNumber(matches.size()));
+  //LOG_VART(_matches);
   OsmMapWriterFactory::writeDebugMap(_map, "after-whole-group-removal");
 
   // Globally optimize the set of matches to maximize the conflation score.
@@ -143,7 +166,7 @@ MatchSetVector AbstractConflator::_optimizeMatches()
 
     if (ConfigOptions().getUnifyEnableOptimalConstrainedMatches())
     {
-      cm.addMatches(_matches.begin(), _matches.end());
+      cm.addMatches(matches.begin(), matches.end());
       cm.setTimeLimit(ConfigOptions().getUnifyOptimizerTimeLimit());
       double cmStart = Tgs::Time::getTime();
       try
@@ -161,7 +184,7 @@ MatchSetVector AbstractConflator::_optimizeMatches()
     }
 
     GreedyConstrainedMatches gm(_map);
-    gm.addMatches(_matches.begin(), _matches.end());
+    gm.addMatches(matches.begin(), matches.end());
     double gmStart = Tgs::Time::getTime();
     std::vector<ConstMatchPtr> gmMatches = gm.calculateSubset();
     MemoryUsageChecker::getInstance().check();
@@ -170,12 +193,12 @@ MatchSetVector AbstractConflator::_optimizeMatches()
 
     if (gm.getScore() > cm.getScore())
     {
-      _matches = gmMatches;
+      matches = gmMatches;
       LOG_DEBUG("Using greedy matches with a higher score of: " << gm.getScore());
     }
     else
     {
-      _matches = cmMatches;
+      matches = cmMatches;
       LOG_DEBUG(
         "Using matches obtained by the an Integer Programming solution with a higher score of: " <<
         cm.getScore());
@@ -183,20 +206,20 @@ MatchSetVector AbstractConflator::_optimizeMatches()
   }
   double optimizeMatchesTime = _timer.getElapsedAndRestart();
   _stats.append(SingleStat("Optimize Matches Time (sec)", optimizeMatchesTime));
-  _stats.append(SingleStat("Number of Optimized Matches", _matches.size()));
+  _stats.append(SingleStat("Number of Optimized Matches", (double)matches.size()));
   _stats.append(SingleStat("Number of Matches Optimized per Second",
-    (double)_matches.size() / optimizeMatchesTime));
+    (double)matches.size() / optimizeMatchesTime));
   LOG_DEBUG(Tgs::SystemInfo::getCurrentProcessMemoryUsageString());
   // TODO: this stat isn't right for Network
-  LOG_DEBUG("Post constraining match count: " << _matches.size());
-  LOG_VART(_matches);
+  LOG_DEBUG("Post constraining match count: " << matches.size());
+  //LOG_VART(_matches);
   OsmMapWriterFactory::writeDebugMap(_map, "after-match-optimization");
 
   {
     // Search the matches for groups (subgraphs) of matches. In other words, groups where all the
     // matches are interrelated by element id
     MatchGraph mg;
-    mg.addMatches(_matches.begin(), _matches.end());
+    mg.addMatches(matches.begin(), matches.end());
     std::vector<std::set<ConstMatchPtr, MatchPtrComparator>> tmpMatchSets = mg.findSubgraphs(_map);
     matchSets.insert(matchSets.end(), tmpMatchSets.begin(), tmpMatchSets.end());
     LOG_DEBUG(Tgs::SystemInfo::getCurrentProcessMemoryUsageString());
@@ -207,7 +230,8 @@ MatchSetVector AbstractConflator::_optimizeMatches()
   return matchSets;
 }
 
-void AbstractConflator::_removeWholeGroups(MatchSetVector& matchSets)
+void AbstractConflator::_removeWholeGroups(
+  std::vector<ConstMatchPtr>& matches, MatchSetVector& matchSets) const
 {
   LOG_DEBUG("Removing whole group matches...");
 
@@ -215,7 +239,7 @@ void AbstractConflator::_removeWholeGroups(MatchSetVector& matchSets)
   // matches are interrelated by element id
   MatchGraph mg;
   mg.setCheckForConflicts(false);
-  mg.addMatches(_matches.begin(), _matches.end());
+  mg.addMatches(matches.begin(), matches.end());
   MatchSetVector tmpMatchSets = mg.findSubgraphs(_map);
 
   matchSets.reserve(matchSets.size() + tmpMatchSets.size());
@@ -243,7 +267,7 @@ void AbstractConflator::_removeWholeGroups(MatchSetVector& matchSets)
     }
   }
 
-  _matches = leftovers;
+  matches = leftovers;
 }
 
 void AbstractConflator::_mapElementIdsToMergers()
@@ -283,6 +307,16 @@ void AbstractConflator::_replaceElementIds(
 
 void AbstractConflator::_applyMergers(const std::vector<MergerPtr>& mergers, OsmMapPtr& map)
 {
+  if (mergers.empty())
+  {
+    return;
+  }
+
+  QElapsedTimer mergersTimer;
+  mergersTimer.start();
+
+  LOG_STATUS("Applying " << StringUtils::formatLargeNumber(mergers.size()) << " mergers...");
+
   std::vector<std::pair<ElementId, ElementId>> replaced;
   LOG_VART(mergers.size());
   for (size_t i = 0; i < mergers.size(); ++i)
@@ -292,10 +326,10 @@ void AbstractConflator::_applyMergers(const std::vector<MergerPtr>& mergers, Osm
       "Applying merger: " + merger->getName() + " " + StringUtils::formatLargeNumber(i + 1) +
       " / " + StringUtils::formatLargeNumber(mergers.size());
     // There are way more log statements generated from this than we normally want to see, so just
-    // info out a subset. If running in debug, then you'll see all of them which can be useful.
+    // write out a subset. If running in debug, then you'll see all of them which can be useful.
     if (i != 0 && i % 10 == 0)
     {
-      PROGRESS_INFO(msg);
+      PROGRESS_STATUS(msg);
     }
     else
     {
@@ -303,40 +337,156 @@ void AbstractConflator::_applyMergers(const std::vector<MergerPtr>& mergers, Osm
     }
 
     merger->apply(map, replaced);
-
-    LOG_VART(replaced);
     LOG_VART(map->size());
 
     // update any mergers that reference the replaced values
     _replaceElementIds(replaced);
-    replaced.clear();
+    // Not completely sure why the replaced IDs get cleared out each time here by default. That
+    // causes problems at this time for LinearDiffMerger, so skipping clearing them out only when
+    // its being used.
+    if (merger->getName() != LinearDiffMerger::className())
+    {
+      replaced.clear();
+    }
     LOG_VART(merger->getImpactedElementIds());
 
-    if (WRITE_DETAILED_DEBUG_MAPS)
+    if (ConfigOptions().getDebugMapsWrite() && ConfigOptions().getDebugMapsWriteDetailed())
     {
       OsmMapWriterFactory::writeDebugMap(
         map, "after-merge-" + merger->getName() + "-#" + StringUtils::formatLargeNumber(i + 1));
     }
   }
+
+  LOG_INFO(
+    "Applied " << StringUtils::formatLargeNumber(mergers.size()) << " mergers in " <<
+    StringUtils::millisecondsToDhms(mergersTimer.elapsed()) << ".");
 }
 
-QString AbstractConflator::_matchSetToString(const MatchSet& matchSet) const
+void AbstractConflator::_createMergers(std::vector<MergerPtr>& relationMergers)
 {
-  QString str;
-  for (std::set<ConstMatchPtr, MatchPtrComparator>::const_iterator itr = matchSet.begin();
-       itr != matchSet.end(); ++itr)
+  // POI/Polygon matching is unique in that it is the only non-generic geometry type matcher that
+  // can duplicate matches with other non-generic geometry type matchers (namely POI and Building).
+  // For all intra-dataset matching, the default is to convert all matches for a feature to a review
+  // if it is also involved in another match. It has been found that POI/Polygon Conflation performs
+  // better if these matches are kept when they have features that overlap with a POI/POI
+  // match/review, as the overall number of reviews can increase too substantially otherwise (see
+  // poi.polygon.match.takes.precedence.over.poi.to.poi.review).
+
+  // An alternative way to deal with this is if there are POI/Polygon matches sharing elements with
+  // a POI matcher, then mark all matches involved as reviews before having each MergerCreator
+  // create Mergers (poi.polygon.match.takes.precedence.over.poi.to.poi.review=false). Note that
+  // we're only doing this right now for POI matches and not Building matches, as it hasn't been
+  // seen as necessary for building matches so far.
+
+  if (!ConfigOptions().getPoiPolygonMatchTakesPrecedenceOverPoiToPoiReview())
   {
-    ConstMatchPtr match = *itr;
-    std::set<std::pair<ElementId, ElementId>> matchPairs = match->getMatchPairs();
-    for (std::set<std::pair<ElementId, ElementId>>::const_iterator itr2 = matchPairs.begin();
-         itr2 != matchPairs.end(); ++itr2)
+    // TODO: need a way to not hardcode the POI match name...get it from ScriptMatch somehow?
+    PoiPolygonMergerCreator::convertSharedMatchesToReviews(
+      _matchSets, _mergers, QStringList("POI"));
+  }
+
+  // TODO: Would it help to sort the matches so the biggest or best ones get merged first? (#2912)
+
+  LOG_DEBUG(
+    "Converting " << StringUtils::formatLargeNumber(_matchSets.size()) <<
+    " match sets to mergers...");
+  for (size_t i = 0; i < _matchSets.size(); ++i)
+  {
+    PROGRESS_INFO(
+      "Converting match set " << StringUtils::formatLargeNumber(i + 1) << " / " <<
+      StringUtils::formatLargeNumber(_matchSets.size()) << " to a merger...");
+
+    _mergerFactory->createMergers(_map, _matchSets[i], _mergers);
+
+    LOG_TRACE(
+      "Converted match set " << StringUtils::formatLargeNumber(i + 1) << " to " <<
+      StringUtils::formatLargeNumber(_mergers.size()) << " merger(s).")
+  }
+  MemoryUsageChecker::getInstance().check();
+  LOG_VART(_mergers.size());
+
+  LOG_DEBUG(Tgs::SystemInfo::getCurrentProcessMemoryUsageString());
+  _mapElementIdsToMergers();
+  LOG_DEBUG(Tgs::SystemInfo::getCurrentProcessMemoryUsageString());
+
+  // Separate mergers that merge relations from other mergers. We want to run them very last so that
+  // they have the latest version of their members to work with.
+  std::vector<MergerPtr> nonRelationMergers;
+  for (std::vector<MergerPtr>::const_iterator mergersItr = _mergers.begin();
+       mergersItr != _mergers.end(); ++mergersItr)
+  {
+    MergerPtr merger = *mergersItr;
+    LOG_VART(merger->getName());
+    if (merger->getName().contains("CollectionRelation"))
     {
-       std::pair<ElementId, ElementId> elementIdPair = *itr2;
-       str += elementIdPair.first.toString() + " " + elementIdPair.second.toString() + ", ";
+      relationMergers.push_back(merger);
+    }
+    else
+    {
+      nonRelationMergers.push_back(merger);
     }
   }
-  str.chop(2);
-  return str;
+  _mergers = nonRelationMergers;
+  LOG_VARD(_mergers.size());
+  LOG_VARD(relationMergers.size());
+
+  _stats.append(SingleStat("Create Mergers Time (sec)", _timer.getElapsedAndRestart()));
+}
+
+void AbstractConflator::_mergeFeatures(const std::vector<MergerPtr>& relationMergers)
+{
+  // Apply all non-relation mergers first, then apply relation mergers.
+  _applyMergers(_mergers, _map);
+  _applyMergers(relationMergers, _map);
+
+  MemoryUsageChecker::getInstance().check();
+  OsmMapWriterFactory::writeDebugMap(_map, "after-merging");
+
+  LOG_DEBUG(Tgs::SystemInfo::getCurrentProcessMemoryUsageString());
+  const size_t mergerCount = _mergers.size() + relationMergers.size();
+  LOG_DEBUG(Tgs::SystemInfo::getCurrentProcessMemoryUsageString());
+  double mergersTime = _timer.getElapsedAndRestart();
+  _stats.append(SingleStat("Apply Mergers Time (sec)", mergersTime));
+  _stats.append(SingleStat("Mergers Applied per Second", (double)mergerCount / mergersTime));
+}
+
+void AbstractConflator::_addConflateScoreTags(
+  const ElementPtr& e, const MatchClassification& matchClassification,
+  const MatchThreshold& matchThreshold) const
+{
+  Tags& tags = e->getTags();
+  tags.appendValue(MetadataTags::HootScoreMatch(), matchClassification.getMatchP());
+  tags.appendValue(MetadataTags::HootScoreMiss(), matchClassification.getMissP());
+  tags.appendValue(MetadataTags::HootScoreReview(), matchClassification.getReviewP());
+  // The thresholds are global, so don't append.
+  tags.set(MetadataTags::HootScoreMatchThreshold(), matchThreshold.getMatchThreshold());
+  tags.set(MetadataTags::HootScoreMissThreshold(), matchThreshold.getMissThreshold());
+  tags.set(MetadataTags::HootScoreReviewThreshold(), matchThreshold.getReviewThreshold());
+}
+
+void AbstractConflator::_addConflateScoreTags()
+{
+  for (size_t i = 0; i < _matches.size(); i++)
+  {
+    ConstMatchPtr match = _matches[i];
+    const MatchClassification& matchClassification = match->getClassification();
+    std::shared_ptr<const MatchThreshold> matchThreshold = match->getThreshold();
+    std::set<std::pair<ElementId, ElementId>> pairs = match->getMatchPairs();
+    for (std::set<std::pair<ElementId, ElementId>>::const_iterator it = pairs.begin();
+         it != pairs.end(); ++it)
+    {
+      ElementPtr e1 = _map->getElement(it->first);
+      ElementPtr e2 = _map->getElement(it->second);
+
+      LOG_TRACE(
+        "Adding score tags to " << e1->getElementId() << " and " << e2->getElementId() << "...");
+
+      _addConflateScoreTags(e1, matchClassification, *matchThreshold);
+      _addConflateScoreTags(e2, matchClassification, *matchThreshold);
+      e1->getTags().appendValue(MetadataTags::HootScoreUuid(), e2->getTags().getCreateUuid());
+      e2->getTags().appendValue(MetadataTags::HootScoreUuid(), e1->getTags().getCreateUuid());
+    }
+  }
 }
 
 void AbstractConflator::_updateProgress(const int currentStep, const QString message)

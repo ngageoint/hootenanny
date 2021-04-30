@@ -290,4 +290,9 @@ bool SuperfluousConflateOpRemover::_isGeometryTypeCrit(const QString& className)
   return false;
 }
 
+bool SuperfluousConflateOpRemover::linearMatcherPresent()
+{
+  return getMatchCreatorGeometryTypeCrits().contains(LinearCriterion::className());
+}
+
 }

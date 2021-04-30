@@ -68,7 +68,7 @@ public:
   /**
    * @see ElementVisitor
    */
-  void visit(const ElementPtr& e) override;
+  void visit(const ElementPtr& element) override;
 
   /**
    * @see OsmMapConsumer
@@ -77,7 +77,6 @@ public:
 
   QString getInitStatusMessage() const override
   { return "Collapsing multilinestring merge relations..."; }
-
   QString getCompletedStatusMessage() const override
   {
     return
@@ -87,9 +86,7 @@ public:
 
   QString getDescription() const override
   { return "Collapses multilinestring relations created during conflation merging"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 
   /**
@@ -116,6 +113,10 @@ private:
 
   // total number of relation members which had tags transferred to them
   int _numRelationMembersModified;
+
+  QString _getMatchingTypeTag(const ConstElementPtr& element, bool& matchingTypeTagIsKey) const;
+  bool _hasValidType(
+    const ConstRelationPtr& relation, QString& matchingTypeTag, bool& matchingTypeTagIsKey) const;
 };
 
 }

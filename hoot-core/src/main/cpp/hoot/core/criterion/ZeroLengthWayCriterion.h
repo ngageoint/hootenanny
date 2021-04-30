@@ -50,9 +50,7 @@ public:
   ElementCriterionPtr clone() override { return std::make_shared<ZeroLengthWayCriterion>(); }
 
   QString getDescription() const override { return "Identifies ways with no length"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 };
 

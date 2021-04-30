@@ -39,6 +39,11 @@ HOOT_DB_URL="hootapidb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME"
 HOOT_EMAIL="$TEST_NAME@hoottestcpp.org"
 
 GENERAL_OPTS=$CONFIG" -C "$ALG_CONFIG" -C DifferentialConflation.conf -C Testing.conf -D uuid.helper.repeatable=true -D writer.include.debug.tags=true -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false"
+# When using Diff conflate w/ Network, we're not allowed to remove partial match elements in a partial fashion at this 
+# time, so change the default setting to avoid a warning.
+if [ "$ALG_CONFIG" == "NetworkAlgorithm.conf" ]; then
+  GENERAL_OPTS+=" -D differential.remove.linear.partial.matches.as.whole=true"
+fi
 DB_OPTS="-D api.db.email=$HOOT_EMAIL -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true -D changeset.user.id=1 -D changeset.max.size=999999"
 CONFLATE_OPTS="$MATCHERS $MERGERS -D snap.unconnected.ways.mark.snapped.nodes=true -D snap.unconnected.ways.mark.snapped.ways=true"
 CHANGESET_DERIVE_OPTS="-D changeset.user.id=1 -D changeset.allow.deleting.reference.features=false"

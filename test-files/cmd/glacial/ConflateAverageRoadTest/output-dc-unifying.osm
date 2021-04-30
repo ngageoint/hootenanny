@@ -6022,6 +6022,53 @@
         <tag k="highway" v="unclassified"/>
         <tag k="name" v="25TH ST NW"/>
     </way>
+    <way visible="true" id="-24886" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-179084"/>
+        <nd ref="-102594"/>
+        <nd ref="-171357"/>
+        <nd ref="-102593"/>
+        <nd ref="-102592"/>
+        <nd ref="-102591"/>
+        <nd ref="-171358"/>
+        <nd ref="-102590"/>
+        <nd ref="-102589"/>
+        <nd ref="-171359"/>
+        <nd ref="-102588"/>
+        <nd ref="-171360"/>
+        <nd ref="-102587"/>
+        <nd ref="-102586"/>
+        <nd ref="-171361"/>
+        <nd ref="-102585"/>
+        <nd ref="-102584"/>
+        <nd ref="-171362"/>
+        <nd ref="-102583"/>
+        <nd ref="-102582"/>
+        <nd ref="-102581"/>
+        <nd ref="-171363"/>
+        <nd ref="-102580"/>
+        <nd ref="-171364"/>
+        <nd ref="-102579"/>
+        <nd ref="-102578"/>
+        <nd ref="-171365"/>
+        <nd ref="-102577"/>
+        <nd ref="-102576"/>
+        <nd ref="-102575"/>
+        <nd ref="-102574"/>
+        <nd ref="-171366"/>
+        <nd ref="-102573"/>
+        <nd ref="-102572"/>
+        <nd ref="-102571"/>
+        <nd ref="-171368"/>
+        <nd ref="-102570"/>
+        <nd ref="-102569"/>
+        <nd ref="-102568"/>
+        <nd ref="-102567"/>
+        <nd ref="-171370"/>
+        <nd ref="-179085"/>
+        <tag k="error:circular" v="3.53553"/>
+        <tag k="highway" v="road"/>
+        <tag k="name" v="LINCOLN MEMORIAL CIR SW"/>
+    </way>
     <way visible="true" id="-24880" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-179085"/>
         <nd ref="-102565"/>
@@ -13113,53 +13160,6 @@
         <tag k="error:circular" v="3.53553"/>
         <tag k="highway" v="unclassified"/>
         <tag k="name" v="15TH ST SW"/>
-    </way>
-    <way visible="true" id="-5136" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-179084"/>
-        <nd ref="-102594"/>
-        <nd ref="-171357"/>
-        <nd ref="-102593"/>
-        <nd ref="-102592"/>
-        <nd ref="-102591"/>
-        <nd ref="-171358"/>
-        <nd ref="-102590"/>
-        <nd ref="-102589"/>
-        <nd ref="-171359"/>
-        <nd ref="-102588"/>
-        <nd ref="-171360"/>
-        <nd ref="-102587"/>
-        <nd ref="-102586"/>
-        <nd ref="-171361"/>
-        <nd ref="-102585"/>
-        <nd ref="-102584"/>
-        <nd ref="-171362"/>
-        <nd ref="-102583"/>
-        <nd ref="-102582"/>
-        <nd ref="-102581"/>
-        <nd ref="-171363"/>
-        <nd ref="-102580"/>
-        <nd ref="-171364"/>
-        <nd ref="-102579"/>
-        <nd ref="-102578"/>
-        <nd ref="-171365"/>
-        <nd ref="-102577"/>
-        <nd ref="-102576"/>
-        <nd ref="-102575"/>
-        <nd ref="-102574"/>
-        <nd ref="-171366"/>
-        <nd ref="-102573"/>
-        <nd ref="-102572"/>
-        <nd ref="-102571"/>
-        <nd ref="-171368"/>
-        <nd ref="-102570"/>
-        <nd ref="-102569"/>
-        <nd ref="-102568"/>
-        <nd ref="-102567"/>
-        <nd ref="-171370"/>
-        <nd ref="-179085"/>
-        <tag k="error:circular" v="5"/>
-        <tag k="highway" v="road"/>
-        <tag k="name" v="LINCOLN MEMORIAL CIR SW"/>
     </way>
     <way visible="true" id="-4316" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-179321"/>

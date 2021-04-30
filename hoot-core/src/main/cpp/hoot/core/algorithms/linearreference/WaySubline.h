@@ -53,10 +53,7 @@ public:
 
   WaySubline& operator=(const WaySubline& from);
 
-  Meters calculateLength() const;
-
   bool contains(const WayLocation& wl) const;
-
   /**
    * Returns true if all the points in other overlap with this.
    */
@@ -65,6 +62,7 @@ public:
   WaySubline expand(Meters d) const;
 
   Meters getLength() const;
+  Meters calculateLength() const;
 
   /**
    * Returns true if the two sublines have interior points in common. If they only touch at one
@@ -87,8 +85,9 @@ public:
    * @param reuse - flag for reusing way id or getting a new one from the map
    * @return the created way
    */
-  WayPtr toWay(const OsmMapPtr& map, GeometryToElementConverter::NodeFactory* nf = nullptr,
-               bool reuse = false) const;
+  WayPtr toWay(
+    const OsmMapPtr& map, GeometryToElementConverter::NodeFactory* nf = nullptr,
+    bool reuse = false) const;
 
   /**
    * Returns true if the two sublines have any points in common.
@@ -117,7 +116,6 @@ public:
    * isBackwards() result.
    */
   const WayLocation& getFormer() const { return isBackwards() ? _end : _start; }
-
   /**
    * Returns the way location that is closer to the end of the way regardless of the
    * isBackwards() result.
