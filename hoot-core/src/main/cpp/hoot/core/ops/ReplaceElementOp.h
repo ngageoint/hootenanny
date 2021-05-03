@@ -59,6 +59,8 @@ public:
   static QString className() { return "hoot::ReplaceElementOp"; }
 
   /**
+   * Constructor
+   *
    * @param from Replace this element.
    * @param to Use this to replace the specified element.
    * @param clearAndRemove If set to true, then the element will be cleared of all attributes and a
@@ -67,8 +69,9 @@ public:
    * all tags will be cleared.
    */
   ReplaceElementOp(ElementId from, ElementId to, bool clearAndRemove = false);
-
   /**
+   * Constructor
+   *
    * It is expected that the eid will be populated with addElement after construction. addElement
    * must be called exactly two times.
    */
@@ -81,12 +84,13 @@ public:
    */
   void addElement(const ConstElementPtr& e) override;
 
+  /**
+   * @see ConstOsmMapOperation
+   */
   void apply(const OsmMapPtr& map) override;
 
   QString getDescription() const override { return "Replaces one element with another"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 
 private:

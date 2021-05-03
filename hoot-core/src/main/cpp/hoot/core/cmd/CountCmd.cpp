@@ -39,6 +39,7 @@
 #include <hoot/core/io/PartialOsmMapReader.h>
 #include <hoot/core/io/ElementCriterionVisitorInputStream.h>
 #include <hoot/core/io/ElementVisitorInputStream.h>
+#include <hoot/core/util/DbUtils.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/io/IoUtils.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
@@ -93,10 +94,13 @@ public:
     for (int i = 0; i < inputs.size(); i++)
     {
       const QString input = inputs.at(i);
-      QFileInfo fileInfo(input);
-      if (!fileInfo.exists())
+      if (!DbUtils::isDbUrl(input))
       {
-        throw IllegalArgumentException("Input file does not exist: " + input);
+        QFileInfo fileInfo(input);
+        if (!fileInfo.exists())
+        {
+          throw IllegalArgumentException("Input file does not exist: " + input);
+        }
       }
     }
 
@@ -113,13 +117,14 @@ public:
     ElementCriterionPtr crit =
       _getCriterion(
         criterionClassName, ConfigOptions().getElementCriterionNegate(), isStreamableCrit);
+    LOG_VARD(isStreamableCrit);
 
     const QString dataType = countFeaturesOnly ? "features" : "elements";
     if (isStreamableCrit)
     {
       for (int i = 0; i < inputs.size(); i++)
       {
-        LOG_INFO(
+        LOG_STATUS(
           "Counting " << dataType << " satisfying " << criterionClassName << " from ..." <<
           inputs.at(i).right(25) << "...");
         _total += _countStreaming(inputs.at(i), countFeaturesOnly, crit);
@@ -152,8 +157,6 @@ private:
 
   std::shared_ptr<PartialOsmMapReader> _getStreamingReader(const QString& input)
   {
-    LOG_TRACE("Getting reader...");
-
     std::shared_ptr<PartialOsmMapReader> reader =
       std::dynamic_pointer_cast<PartialOsmMapReader>(
         OsmMapReaderFactory::createReader(input));
@@ -260,6 +263,8 @@ private:
   long _countMemoryBound(const QStringList& inputs, const bool countFeaturesOnly,
                          const ElementCriterionPtr& criterion)
   {
+    LOG_STATUS("Counting features in " << inputs.size() << " inputs...");
+
     OsmMapPtr map(new OsmMap());
     IoUtils::loadMaps(map, inputs, true);
 
@@ -328,7 +333,7 @@ private:
         msg += " total.";
         // TODO: We could do a sliding interval here, like we do for poi/poly match counting. Would
         // help give better status for datasets with sparser number of features satisfying the crit.
-        PROGRESS_INFO(msg);
+        PROGRESS_STATUS(msg);
       }
     }
     LOG_VART(inputTotal);

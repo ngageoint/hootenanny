@@ -34,6 +34,7 @@
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/CollectionUtils.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/visitors/CountManualMatchesVisitor.h>
 #include <hoot/core/visitors/CountUniqueReviewsVisitor.h>
 #include <hoot/core/visitors/ElementIdToTagValueMapper.h>
@@ -91,8 +92,8 @@ void ScoreMatchesDiff::calculateDiff(const QString& input1, const QString& input
   _input1 = input1;
   _input2 = input2;
   LOG_INFO(
-    "Calculating match scoring differential for " << _input1.right(25) << " and " <<
-    _input2.right(25) << "...");
+    "Calculating match scoring differential for " << FileUtils::toLogFormat(_input1, 25) << " and " <<
+    FileUtils::toLogFormat(_input2, 25) << "...");
 
   // Considered making this not memory bound, but our scoring data outputs aren't ever humongous
   // and the inputs had to be conflated at some point where they were read completely into
@@ -229,13 +230,13 @@ bool ScoreMatchesDiff::printDiff(const QString& output)
   }
 
   LOG_INFO(
-    "Writing match scoring differential for " << _input1.right(25) << " and " <<
-     _input2.right(25) << " to " << _output.right(25) << "...");
+    "Writing match scoring differential for " << FileUtils::toLogFormat(_input1, 25) << " and " <<
+     FileUtils::toLogFormat(_input2, 25) << " to " << FileUtils::toLogFormat(_output, 25) << "...");
 
   _outputFile = _getOutputFile(_output);
   QTextStream out(_outputFile.get());
 
-  out << "Input files: ..." << _input1.right(25) << " and ..." << _input2.right(25) << "\n\n";
+  out << "Input files: ..." << FileUtils::toLogFormat(_input1, 25) << " and ..." << FileUtils::toLogFormat(_input2, 25) << "\n\n";
   _writeConflateStatusSummary(out);
   _writeConflateStatusDetail(out);
 

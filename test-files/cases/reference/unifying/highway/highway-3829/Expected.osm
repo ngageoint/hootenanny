@@ -766,8 +766,7 @@
         <tag k="highway" v="tertiary"/>
         <tag k="horse" v="no"/>
         <tag k="name" v="Unyama Pageya Road"/>
-        <tag k="note" v="check_me"/>
-        <tag k="source:datetime" v="2019-01-22T08:57:24Z;2020-02-20T19:51:47Z;2019-01-16T08:36:40Z"/>
+        <tag k="source:datetime" v="2019-01-22T08:57:24Z;2020-02-20T19:51:47Z"/>
         <tag k="surface" v="paved"/>
     </way>
     <way visible="true" id="-17082" timestamp="2019-01-16T08:36:40Z" version="3">
@@ -779,8 +778,6 @@
         <nd ref="-265959"/>
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
-        <tag k="note" v="check_me"/>
-        <tag k="source:datetime" v="2019-01-16T08:36:40Z"/>
     </way>
     <way visible="true" id="-17080" timestamp="2020-02-20T19:51:48Z" version="1">
         <nd ref="-232479"/>

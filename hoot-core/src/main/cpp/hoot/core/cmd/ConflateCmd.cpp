@@ -31,6 +31,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/conflate/ConflateExecutor.h>
+#include <hoot/core/conflate/ConflateUtils.h>
 
 // Qt
 #include <QFileInfo>
@@ -75,8 +76,22 @@ int ConflateCmd::runSimple(QStringList& args)
 
   if (args.contains("--differential"))
   {
+    // Setting these diff specific properties here on ConflateExecutor feels a little kludgy. May
+    // need some refactoring.
+
+    bool removeDiffLinearPartialMatchesAsWhole =
+      ConfigOptions().getDifferentialRemoveLinearPartialMatchesAsWhole();
+    if (ConflateUtils::isNetworkConflate() && !removeDiffLinearPartialMatchesAsWhole)
+    {
+      LOG_WARN(
+        "Removing elements partially from partial matches when using Differential Conflation is "
+        "not allowed when running the Network Algorithm.");
+      removeDiffLinearPartialMatchesAsWhole = true;
+    }
+
     isDiffConflate = true;
     conflator.setIsDiffConflate(true);
+    conflator.setDiffRemoveLinearPartialMatchesAsWhole(removeDiffLinearPartialMatchesAsWhole);
     args.removeAt(args.indexOf("--differential"));
 
     if (args.contains("--include-tags"))

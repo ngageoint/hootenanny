@@ -27,13 +27,14 @@
 #include "NodeDensityTaskGridGenerator.h"
 
 // Hoot
-#include <hoot/core/util/Log.h>
-#include <hoot/core/io/OsmMapReaderFactory.h>
-#include <hoot/core/io/NodeDensityTaskGridWriter.h>
-#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/StringUtils.h>
-#include <hoot/core/io/HootApiDbReader.h>
 #include <hoot/core/geometry/GeometryUtils.h>
+#include <hoot/core/io/HootApiDbReader.h>
+#include <hoot/core/io/NodeDensityTaskGridWriter.h>
+#include <hoot/core/io/OsmMapReaderFactory.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/FileUtils.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/util/StringUtils.h>
 
 namespace hoot
 {
@@ -76,7 +77,7 @@ OsmMapPtr NodeDensityTaskGridGenerator::_getNodeDensityTaskGridInput()
 
   // TODO: replace the string truncation lengths with getProgressVarPrintLengthMax
   QString msg =
-    "Preparing input data for task grid cell calculation from: ..." + _output.right(25);
+    "Preparing input data for task grid cell calculation from: ..." + FileUtils::toLogFormat(_output, 25);
   if (!_bounds.trimmed().isEmpty())
   {
     msg += ", across bounds: " + _bounds;
@@ -126,7 +127,7 @@ OsmMapPtr NodeDensityTaskGridGenerator::_getNodeDensityTaskGridInput()
 TaskGrid NodeDensityTaskGridGenerator::_calcNodeDensityTaskGrid(OsmMapPtr map)
 {
   LOG_STATUS(
-    "Calculating task grid cells for replacement data to: ..." << _output.right(25) << "...");
+    "Calculating task grid cells for replacement data to: ..." << FileUtils::toLogFormat(_output, 25) << "...");
 
   _boundsCalc.calculateTiles(map);
 

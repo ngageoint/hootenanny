@@ -206,6 +206,9 @@ void OpExecutor::apply(OsmMapPtr& map)
         }
       }
 
+      // TODO: Somehow we should add an opt here to only process elements of the element type
+      // specific to the vis, for those who don't process all element types. e.g. use visitWaysRw
+      // instead of visitRw where appropriate
       map->visitRw(*vis);
 
       _appliedVis[vis->getName()] = vis;

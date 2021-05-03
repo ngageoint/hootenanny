@@ -29,6 +29,7 @@
 
 // Hoot
 #include <hoot/core/conflate/matching/MatchType.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
 
 // Qt
@@ -68,7 +69,7 @@ void ArffWriter::write(const vector<Sample> &samples)
   QString msg = "Writing attribute-relation model file";
   if (!_path.isEmpty())
   {
-    msg += " to " + _path.right(50);
+    msg += " to " + FileUtils::toLogFormat(_path, 50);
   }
   msg += "...";
   LOG_INFO(msg);

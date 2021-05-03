@@ -64,12 +64,12 @@ void RemoveDuplicateWayNodesVisitor::visit(const ElementPtr& e)
 
     // Since this class operates on elements with generic types, an additional check must be
     // performed here during conflation to enure we don't modify any element not associated with
-    // and active conflate matcher in the current conflation configuration.
+    // an active conflate matcher in the current conflation configuration.
     if (_conflateInfoCache &&
         !_conflateInfoCache->elementCanBeConflatedByActiveMatcher(way, className()))
     {
       LOG_TRACE(
-        "Skipping processing of " << way->getElementId() << " as it cannot be conflated by any " <<
+        "Skipping processing of " << way->getElementId() << ", as it cannot be conflated by any " <<
         "actively configured conflate matcher...");
       return;
     }
@@ -78,10 +78,11 @@ void RemoveDuplicateWayNodesVisitor::visit(const ElementPtr& e)
     const std::vector<long>& wayNodeIds = way->getNodeIds();
     LOG_VART(wayNodeIds);
 
-    // This is invalid. Not even sure if it would get loaded or if it is being cleaned somewhere
-    // else but removing it anyway.
+    // Technically InvalidWayRemover handles this situation, so this is arguably redundant in the
+    // conflate pipeline. However, outside of the pipeline we'd want it removed.
     if (wayNodeIds.size() == 2 && way->isSimpleLoop())
     {
+      LOG_TRACE("Removing invalid way: " << way->getElementId() << "...");
       RecursiveElementRemover(way->getElementId()).apply(_map);
       return;
     }
@@ -97,13 +98,11 @@ void RemoveDuplicateWayNodesVisitor::visit(const ElementPtr& e)
       // valid loop feature.
       if (nodeId != lastNodeId)
       {
-        LOG_TRACE("Valid way node: " << ElementId(ElementType::Node, nodeId));
         parsedNodeIds.append(nodeId);
       }
       else
       {
-        // we've found a duplicate where both nodes aren't start and end nodes...not allowed
-        LOG_TRACE("Found duplicate way node: " << ElementId(ElementType::Node, nodeId));
+        // We've found a duplicate where both nodes aren't start and end nodes...not allowed.
         duplicateWayNodeIds.append(nodeId);
         foundDuplicateWayNode = true;
         _numAffected++;

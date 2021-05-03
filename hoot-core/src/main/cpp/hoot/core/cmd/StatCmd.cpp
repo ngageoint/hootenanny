@@ -26,19 +26,20 @@
  */
 
 // Hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/info/SingleStatistic.h>
 #include <hoot/core/info/NumericStatistic.h>
-#include <hoot/core/visitors/ElementVisitor.h>
+#include <hoot/core/io/ElementVisitorInputStream.h>
 #include <hoot/core/io/OsmMapReader.h>
+#include <hoot/core/io/OsmMapReaderFactory.h>
+#include <hoot/core/io/PartialOsmMapReader.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/io/PartialOsmMapReader.h>
-#include <hoot/core/io/ElementVisitorInputStream.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/visitors/ElementVisitor.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -93,7 +94,7 @@ public:
 
     LOG_INFO(
       "Calculating statistic of type: " << statType << ", with visitor: " << visClassName <<
-      ", for input: " << input.right(25) << "...")
+      ", for input: " << FileUtils::toLogFormat(input, 25) << "...")
     const double stat = _calcStat(input, visClassName, statType);
     LOG_VART(stat);
 

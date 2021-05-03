@@ -27,16 +27,17 @@
 
 // Hoot
 #include <hoot/core/cmd/BaseCommand.h>
+#include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/io/IoUtils.h>
 #include <hoot/core/io/MapStatsWriter.h>
+#include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/ops/CalculateStatsOp.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/elements/MapProjector.h>
-#include <hoot/core/visitors/LengthOfWaysVisitor.h>
-#include <hoot/core/io/IoUtils.h>
-#include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/visitors/LengthOfWaysVisitor.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -109,6 +110,7 @@ public:
       // Tried using IoUtils::loadMap here, but it has extra logic beyond OsmMapReaderFactory::read
       // for reading in OGR layers. Using it causes the last part of Osm2OgrTranslationTest to fail.
       // Need to determine why either strictly use one reading method or the other.
+      LOG_STATUS("Reading from: ..." << inputs[i].right(25) << "...");
       OsmMapReaderFactory::read(map, inputs[i], true, Status::Invalid);
       MapProjector::projectToPlanar(map);
 
@@ -128,7 +130,7 @@ public:
 
     if (toFile)
     {
-      LOG_STATUS("Writing statistics output to: " << outputFilename.right(25) << "...");
+      LOG_STATUS("Writing statistics output to: " << FileUtils::toLogFormat(outputFilename, 25) << "...");
       if (outputFilename.endsWith(".json", Qt::CaseInsensitive))
         MapStatsWriter().writeStatsToJson(allStats, outputFilename);
       else

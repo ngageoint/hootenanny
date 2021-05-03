@@ -54,8 +54,8 @@ public:
   ScriptMatch() = default;
 
   /**
-   * @param mapObj This could be derived from the map, but destructing an OsmMapJs object is quite
-   *  expensive due to the amount of memory cleanup we must do in the general case.
+   * mapObj could be derived from the map, but destructing an OsmMapJs object is quite expensive
+   * due to the amount of memory cleanup we must do in the general case.
    */
   ScriptMatch(
     const std::shared_ptr<PluginContext>& script, const v8::Persistent<v8::Object>& plugin,
@@ -69,10 +69,7 @@ public:
   void setMatchMembers(const MatchMembers& matchMembers) { _matchMembers = matchMembers; }
 
   QString explain() const override { return _explainText; }
-
   QString getName() const override { return _matchName; }
-
-  QString getClassName() const override { return className(); }
 
   double getProbability() const override;
 
@@ -88,7 +85,6 @@ public:
   std::set<std::pair<ElementId, ElementId>> getMatchPairs() const override;
 
   v8::Local<v8::Object> getPlugin() const { return ToLocal(&_plugin); }
-
   std::shared_ptr<PluginContext> getScript() const { return _script; }
 
   QString toString() const override;
@@ -103,6 +99,7 @@ public:
    */
   static MatchMembers geometryTypeToMatchMembers(const QString& geometryType);
 
+  QString getClassName() const override { return className(); }
   QString getDescription() const override
   { return "Matches elements using Generic Conflation via Javascript"; }
 

@@ -40,12 +40,13 @@
 #include <hoot/core/ops/DuplicateNodeRemover.h>
 #include <hoot/core/ops/OpExecutor.h>
 #include <hoot/core/ops/SchemaTranslationOp.h>
+#include <hoot/core/schema/SchemaUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ConfigUtils.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/schema/SchemaUtils.h>
 #include <hoot/core/visitors/ElementVisitor.h>
 #include <hoot/core/visitors/ProjectToGeographicVisitor.h>
 #include <hoot/core/visitors/RemoveDuplicateWayNodesVisitor.h>
@@ -220,8 +221,8 @@ void DataConverter::convert(const QStringList& inputs, const QString& output)
 
   _progress.set(
     0.0,
-    "Converting ..." + inputs.join(", ").right(_printLengthMax) + " to ..." +
-    output.right(_printLengthMax) + "...");
+    "Converting ..." + FileUtils::toLogFormat(inputs, _printLengthMax) + " to ..." +
+    FileUtils::toLogFormat(output, _printLengthMax) + "...");
 
   // There is a custom code path for converting to OGR formats where the schema translation runs
   // in a separate thread. The code path is memory bound and configurable. Also if both input and
@@ -252,8 +253,8 @@ void DataConverter::convert(const QStringList& inputs, const QString& output)
 
   _progress.set(
     1.0, Progress::JobState::Successful,
-    "Converted ..." + inputs.join(", ").right(_printLengthMax) + " to: ..." +
-    output.right(_printLengthMax));
+    "Converted ..." + FileUtils::toLogFormat(inputs, _printLengthMax) + " to: ..." +
+    FileUtils::toLogFormat(output, _printLengthMax));
 }
 
 void DataConverter::_validateInput(const QStringList& inputs, const QString& output)
@@ -471,7 +472,7 @@ void DataConverter::_convertToOgr(const QStringList& inputs, const QString& outp
     {
       inputLoadProgress.setFromRelative(
         (float)i / (float)inputs.size(), Progress::JobState::Running,
-        "Loading map: ..." + inputs.at(i).right(_printLengthMax) + "...");
+        "Loading map: ..." + FileUtils::toLogFormat(inputs.at(i), _printLengthMax) + "...");
       IoUtils::loadMap(
         map, inputs.at(i), ConfigOptions().getReaderUseDataSourceIds(),
         Status::fromString(ConfigOptions().getReaderSetDefaultStatus()));
@@ -498,7 +499,7 @@ void DataConverter::_convertToOgr(const QStringList& inputs, const QString& outp
     timer.start();
     _progress.set(
       (float)(currentTask - 1) / (float)numTasks,
-      "Writing map: ..." + output.right(_printLengthMax) + "...");
+      "Writing map: ..." + FileUtils::toLogFormat(output, _printLengthMax) + "...");
     MapProjector::projectToWgs84(map);
     std::shared_ptr<OgrWriter> writer(new OgrWriter());
     writer->setSchemaTranslationScript(_translation);
@@ -654,7 +655,7 @@ void DataConverter::_convertFromOgr(const QStringList& inputs, const QString& ou
       "OSM output...");
   }
 
-  _progress.set(0.0, "Loading maps: ..." + inputs.join(",").right(_printLengthMax) + "...");
+  _progress.set(0.0, "Loading maps: ..." + FileUtils::toLogFormat(inputs, _printLengthMax) + "...");
 
   OsmMapPtr map(new OsmMap());
   OgrReader reader;
@@ -743,7 +744,7 @@ void DataConverter::_convertFromOgr(const QStringList& inputs, const QString& ou
 
   _progress.set(
     (float)(currentTask - 1) / (float)numTasks,
-    "Writing map: ..." + output.right(_printLengthMax) + "...");
+    "Writing map: ..." + FileUtils::toLogFormat(output, _printLengthMax) + "...");
   MapProjector::projectToWgs84(map);
   IoUtils::saveMap(map, output);
   currentTask++;
@@ -881,7 +882,7 @@ void DataConverter::_convert(const QStringList& inputs, const QString& output)
     {
       inputLoadProgress.setFromRelative(
         (float)i / (float)inputs.size(), Progress::JobState::Running,
-        "Loading map: ..." + inputs.at(i).right(_printLengthMax) + "...");
+        "Loading map: ..." + FileUtils::toLogFormat(inputs.at(i), _printLengthMax) + "...");
       IoUtils::loadMap(
         map, inputs.at(i), ConfigOptions().getReaderUseDataSourceIds(),
         Status::fromString(ConfigOptions().getReaderSetDefaultStatus()));
@@ -906,7 +907,7 @@ void DataConverter::_convert(const QStringList& inputs, const QString& output)
 
     _progress.set(
       (float)(currentTask - 1) / (float)numTasks,
-      "Writing map: ..." + output.right(_printLengthMax) + "...");
+      "Writing map: ..." + FileUtils::toLogFormat(output, _printLengthMax) + "...");
     MapProjector::projectToWgs84(map);
     if (output.toLower().endsWith(".shp") && _shapeFileColumnsSpecified())
     {

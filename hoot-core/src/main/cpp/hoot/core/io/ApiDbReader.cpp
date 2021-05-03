@@ -32,6 +32,7 @@
 #include <hoot/core/io/IoUtils.h>
 #include <hoot/core/io/TableType.h>
 #include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
 
@@ -93,10 +94,10 @@ void ApiDbReader::initializePartial()
   _firstPartialReadCompleted = false;
   _elementsRead = 0;
   _selectElementType = ElementType::Node;
-  _lastId = 0;
-  _maxNodeId = 0;
-  _maxWayId = 0;
-  _maxRelationId = 0;
+  _lastId = std::numeric_limits<long>::min();
+  _maxNodeId = std::numeric_limits<long>::min();
+  _maxWayId = std::numeric_limits<long>::min();
+  _maxRelationId = std::numeric_limits<long>::min();
   _totalNumMapNodes = 0;
   _totalNumMapWays = 0;
   _totalNumMapRelations = 0;
@@ -671,7 +672,7 @@ bool ApiDbReader::hasMoreElements()
     //we'll just grab the estimated count and expect it to be wrong from time to time.
 
     const double start = Tgs::Time::getTime();
-    LOG_DEBUG("Retrieving element counts and max IDs for: " << _url.right(25) << "...");
+    LOG_DEBUG("Retrieving element counts and max IDs for: " << FileUtils::toLogFormat(_url, 25) << "...");
 
     _totalNumMapNodes = _getDatabase()->numEstimatedElements(ElementType::Node);
     _totalNumMapWays = 0;
@@ -726,7 +727,7 @@ std::shared_ptr<Element> ApiDbReader::_getElementUsingIterator()
   {
     //no results are available, so request some more results
     LOG_DEBUG(
-      "Requesting more query results from: " << _url.right(50) << ", for element type: " <<
+      "Requesting more query results from: " << FileUtils::toLogFormat(_url, 50) << ", for element type: " <<
        _selectElementType.toString() << ", starting with ID: " << _lastId << "...");
     const double start = Tgs::Time::getTime();
     //NEVER remove the _lastId input from the call to selectElements here.  Doing that will
@@ -810,7 +811,7 @@ ElementType ApiDbReader::_getCurrentSelectElementType()
   }
   else if (_selectElementType == ElementType::Node && _lastId == _maxNodeId)
   {
-    _lastId = 0;
+    _lastId = std::numeric_limits<long>::min();
     //calling finish/clear as the underlying query would have changed here to the query for the
     //next element type; this may not be necessary
     _elementResultIterator->finish();
@@ -823,7 +824,7 @@ ElementType ApiDbReader::_getCurrentSelectElementType()
   }
   else if (_selectElementType == ElementType::Way && _lastId == _maxWayId)
   {
-    _lastId = 0;
+    _lastId = std::numeric_limits<long>::min();
     //see comment above
     _elementResultIterator->finish();
     _elementResultIterator->clear();

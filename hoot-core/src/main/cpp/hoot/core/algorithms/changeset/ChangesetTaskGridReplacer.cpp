@@ -27,20 +27,21 @@
 #include "ChangesetTaskGridReplacer.h"
 
 // Hoot
-#include <hoot/core/util/Log.h>
+#include <hoot/core/algorithms/changeset/ChangesetReplacement.h>
+#include <hoot/core/geometry/GeometryUtils.h>
+#include <hoot/core/io/OsmApiDbSqlChangesetApplier.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/geometry/GeometryUtils.h>
+#include <hoot/core/ops/RemoveEmptyRelationsOp.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/StringUtils.h>
+#include <hoot/core/util/ConfigUtils.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/algorithms/changeset/ChangesetReplacement.h>
-#include <hoot/core/io/OsmApiDbSqlChangesetApplier.h>
+#include <hoot/core/util/FileUtils.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/util/StringUtils.h>
+#include <hoot/core/util/UuidHelper.h>
 #include <hoot/core/visitors/RemoveMissingElementsVisitor.h>
 #include <hoot/core/visitors/RemoveInvalidRelationVisitor.h>
-#include <hoot/core/ops/RemoveEmptyRelationsOp.h>
-#include <hoot/core/util/ConfigUtils.h>
-#include <hoot/core/util/UuidHelper.h>
 
 namespace hoot
 {
@@ -254,7 +255,7 @@ void ChangesetTaskGridReplacer::_replaceTaskGridCell(
     StringUtils::formatLargeNumber(taskGridSize) << " with " <<
     StringUtils::formatLargeNumber(numChanges) << " changes for task grid cell: " <<
     taskGridCell.id << ", over bounds: " << GeometryUtils::envelopeToString(taskGridCell.bounds) <<
-    ", from file: ..." << changesetFile.fileName().right(25) << "...");
+    ", from file: ..." << FileUtils::toLogFormat(changesetFile.fileName(), 25) << "...");
 
   _changesetApplier->write(changesetFile);
   _printChangesetStats();
@@ -369,7 +370,7 @@ OsmMapPtr ChangesetTaskGridReplacer::_writeUpdatedData(const QString& outputFile
   // clear this out so we get all the data back
   conf().set(ConfigOptions::getBoundsKey(), "");
 
-  LOG_STATUS("Reading the modified data out of: ..." << _dataToReplaceUrl.right(25) << "...");
+  LOG_STATUS("Reading the modified data out of: ..." << FileUtils::toLogFormat(_dataToReplaceUrl, 25) << "...");
   OsmMapPtr map(new OsmMap());
   OsmMapReaderFactory::read(map, _dataToReplaceUrl, true, Status::Unknown1);
 
@@ -395,7 +396,7 @@ OsmMapPtr ChangesetTaskGridReplacer::_writeUpdatedData(const QString& outputFile
   if (!outputFile.isEmpty())
   {
     // write the full map out
-    LOG_STATUS("Writing the modified data to: ..." << outputFile.right(25) << "...");
+    LOG_STATUS("Writing the modified data to: ..." << FileUtils::toLogFormat(outputFile, 25) << "...");
     OsmMapWriterFactory::write(map, outputFile);
   }
 
