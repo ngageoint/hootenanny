@@ -576,25 +576,31 @@ public class CustomScriptResource {
             translationId = Long.parseLong(identifier);
         } catch (NumberFormatException exc) {}
 
-        if (translationId > -1) {
-            // get the display name because that's the file to delete. folder id is to get path for the file
-            Translations folderMapInfo = DbUtils.getTranslation(translationId);
-            String translationName = folderMapInfo.getDisplayName();
+        try {
+            if (translationId > -1) {
+                // get the display name because that's the file to delete. folder id is to get path for the file
+                Translations folderMapInfo = DbUtils.getTranslation(translationId);
+                String translationName = folderMapInfo.getDisplayName();
 
-            // get full directory path for file being deleted
-            TranslationFolder folder = getTranslationFolderForUser(user, folderMapInfo.getFolderId());
-            String getPath = folder.getPath();
+                // get full directory path for file being deleted
+                TranslationFolder folder = getTranslationFolderForUser(user, folderMapInfo.getFolderId());
+                String getPath = folder.getPath();
 
-            String translationPath = File.separator + translationName;
-            translationPath = getPath != null ? getPath + translationPath : translationPath;
-            File translationFile = new File(SCRIPT_FOLDER, translationPath + ".js");
-            translationFile.delete();
+                String translationPath = File.separator + translationName;
+                translationPath = getPath != null ? getPath + translationPath : translationPath;
+                File translationFile = new File(SCRIPT_FOLDER, translationPath + ".js");
 
-            createQuery().delete(translations)
-                .where(translations.id.eq(translationId))
-                .execute();
-        } else {
-            try {
+                String content = FileUtils.readFileToString(translationFile, "UTF-8");
+                JSONObject oScript = getScriptObject(content);
+                delArr.add((JSONObject) oScript.get("HEADER"));
+
+                translationFile.delete();
+
+                createQuery().delete(translations)
+                    .where(translations.id.eq(translationId))
+                    .execute();
+            } else {
+
                 List<File> files = getFilesInScriptDir();
                 if (files == null) {
                     throw new IOException("Script directory does not exist.");
@@ -616,10 +622,10 @@ public class CustomScriptResource {
                     }
                 }
             }
-            catch (Exception ex) {
-                String msg = "Error deleting script: " + identifier;
-                throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
-            }
+        }
+        catch (Exception ex) {
+            String msg = "Error deleting script: " + identifier;
+            throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
         }
 
         return Response.ok(delArr.toString()).build();
