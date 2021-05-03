@@ -58,9 +58,7 @@ public:
   { return ElementCriterionPtr(new ChildElementCriterion(_map)); }
 
   QString getDescription() const override { return "Identifies way nodes and relation members"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 
   void setOsmMap(const OsmMap* map) override { _map = map->shared_from_this(); }

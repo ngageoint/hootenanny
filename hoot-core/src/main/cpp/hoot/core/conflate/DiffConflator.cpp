@@ -63,7 +63,6 @@
 #include <hoot/core/ops/WayJoinerOp.h>
 #include <hoot/core/util/ConfigUtils.h>
 #include <hoot/core/io/OsmChangesetFileWriter.h>
-#include <hoot/core/conflate/ConflateInfoCache.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -118,7 +117,6 @@ void DiffConflator::apply(OsmMapPtr& map)
   _reset();
   // Store the map, as we might need it for a tag diff later.
   _map = map;
-  std::shared_ptr<ConflateInfoCache> conflateInfoCache = std::make_shared<ConflateInfoCache>(_map);
 
   // If we skip this part, then any unmatchable data will simply pass through to output, which can
   // be useful during debugging.
@@ -173,7 +171,7 @@ void DiffConflator::apply(OsmMapPtr& map)
     // Get rid of everything from the ref1 map that matched something in the ref2 map.
 
     QString message = "Dropping match conflicts";
-    if (ConfigOptions().getDifferentialSnapUnconnectedRoads())
+    if (ConfigOptions().getDifferentialSnapUnconnectedFeatures())
     {
       message += " and snapping roads";
     }
@@ -196,20 +194,13 @@ void DiffConflator::apply(OsmMapPtr& map)
     MemoryUsageChecker::getInstance().check();
 
     // Eventually, we could extend this snapping to all linear feature types.
-    if (ConfigOptions().getDifferentialSnapUnconnectedRoads())
+    if (ConfigOptions().getDifferentialSnapUnconnectedFeatures())
     {
-      if (conflateInfoCache->elementCriterionInUseByActiveMatcher(HighwayCriterion::className()))
-      {
-        // Let's try to snap disconnected ref2 roads back to ref1 roads. This has to done before
-        // dumping the ref elements in the matches, or the roads we need to snap back to won't be
-        // there anymore.
-        _numSnappedWays = _snapSecondaryRoadsBackToRef();
-        MemoryUsageChecker::getInstance().check();
-      }
-      else
-      {
-        LOG_TRACE("Skipping road snapping as conflation is not configured for road features.")
-      }
+      // Let's try to snap disconnected ref2 roads back to ref1 roads. This has to done before
+      // dumping the ref elements in the matches, or the roads we need to snap back to won't be
+      // there anymore.
+      _numSnappedWays = _snapSecondaryLinearFeaturesBackToRef();
+      MemoryUsageChecker::getInstance().check();
     }
 
     if (ConfigOptions().getDifferentialRemoveReferenceData())
@@ -420,35 +411,38 @@ QSet<ElementId> DiffConflator::_getElementIdsInvolvedInOnlyIntraDatasetMatches(
   return elementIds;
 }
 
-long DiffConflator::_snapSecondaryRoadsBackToRef()
+long DiffConflator::_snapSecondaryLinearFeaturesBackToRef()
 {
-  UnconnectedWaySnapper roadSnapper;
-  roadSnapper.setConfiguration(conf());
+  UnconnectedWaySnapper linearFeatureSnapper;
+  linearFeatureSnapper.setConfiguration(conf());
   // The ref snapped features must be marked to prevent their removal before changeset generation
   // later on.
-  roadSnapper.setMarkSnappedNodes(true);
-  roadSnapper.setMarkSnappedWays(true);
-  LOG_INFO("\t" << roadSnapper.getInitStatusMessage());
-  roadSnapper.apply(_map);
-  LOG_DEBUG("\t" << roadSnapper.getCompletedStatusMessage());
+  linearFeatureSnapper.setMarkSnappedNodes(true);
+  linearFeatureSnapper.setMarkSnappedWays(true);
+  LOG_INFO("\t" << linearFeatureSnapper.getInitStatusMessage());
+  linearFeatureSnapper.apply(_map);
+  LOG_DEBUG("\t" << linearFeatureSnapper.getCompletedStatusMessage());
   OsmMapWriterFactory::writeDebugMap(_map, "after-road-snapping");
 
-  // Since way splitting was done as part of the conflate pre ops previously run and we've now
-  // snapped unconnected ways, we need to rejoin any split ways *before* we remove reference data.
-  // If not, some ref linear data may incorrectly drop out of the diff.
-  WayJoinerOp wayJoiner;
-  wayJoiner.setConfiguration(conf());
-  LOG_INFO("\t" << wayJoiner.getInitStatusMessage());
-  wayJoiner.apply(_map);
-  LOG_DEBUG("\t" << wayJoiner.getCompletedStatusMessage());
-  OsmMapWriterFactory::writeDebugMap(_map, "after-way-joining");
+  const long numFeaturesSnapped = linearFeatureSnapper.getNumFeaturesAffected();
+  if (numFeaturesSnapped > 0)
+  {
+    // Since way splitting was done as part of the conflate pre ops previously run and we've now
+    // snapped unconnected ways, we need to rejoin any split ways *before* we remove reference data.
+    // If not, some ref linear data may incorrectly drop out of the diff.
+    WayJoinerOp wayJoiner;
+    wayJoiner.setConfiguration(conf());
+    LOG_INFO("\t" << wayJoiner.getInitStatusMessage());
+    wayJoiner.apply(_map);
+    LOG_DEBUG("\t" << wayJoiner.getCompletedStatusMessage());
+    OsmMapWriterFactory::writeDebugMap(_map, "after-way-joining");
 
-  // No point in running way joining a second time in post conflate ops since we already did it here
-  // (its configured in post ops by default), so let's remove it.
-  ConfigUtils::removeListOpEntry(
-    ConfigOptions::getConflatePostOpsKey(), WayJoinerOp::className());
-
-  return roadSnapper.getNumFeaturesAffected();
+    // No point in running way joining a second time in post conflate ops since we already did it here
+    // (its configured in post ops by default), so let's remove it.
+    ConfigUtils::removeListOpEntry(
+      ConfigOptions::getConflatePostOpsKey(), WayJoinerOp::className());
+  }
+  return numFeaturesSnapped;
 }
 
 void DiffConflator::_removeMatchElementsCompletely(const Status& status)

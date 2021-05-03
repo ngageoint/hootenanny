@@ -34,6 +34,7 @@
 #include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/conflate/review/ReviewMarker.h>
+#include <hoot/core/conflate/ConflateInfoCacheConsumer.h>
 
 // Tgs
 #include <tgs/RStarTree/HilbertRTree.h>
@@ -42,43 +43,38 @@ namespace hoot
 {
 
 /**
- * This class is set up to snap an unconnected way endpoint node to another way, using custom
+ * This class is set up to snap an unconnected way endpoint node to another way using custom
  * element input criteria to determine which types of ways should be snapped and what type of ways
- * they should be snapped to.
+ * they should be snapped to. The way may be either snapped to a way node on another way or the
+ * closest non-node point on it.
  *
  * The main impetus in creating this class was to make the road output of Differential Conflation
- * using the Network Algorithm (with rubber sheeting as a pre conflate op) better by snapping
- * unconnected secondary roads to the nearest road in the reference dataset.  However, this op
- * could also be used as a cleanup op after other types of conflation.  Future efforts, if possible,
- * should focus on trying to fix the lack of snapping in the conflation routines themselves rather
- * than relying on this as a cleanup utility.
+ * better by snapping unconnected secondary roads to the nearest road in the reference dataset.
+ * However, this op can also be used as a cleanup op after other types of conflation. Before using
+ * this class in conflation, effort should be made, where possible, to try to fix the lack of
+ * feature snapping in the conflation routines themselves rather than relying on this as a cleanup
+ * utility.
  *
  * Additionally, this class can be configured to mark any snapped roads as needing review or mark
- * them for review without snapping them.
- *
- * Not implementing ElementConflatableCheck here yet, since the only time this op is currently used
- * in the conflate pipeline is for Differential Conflation when roads are configured to be snapped.
- * DiffConflator already has a check to skip snapping if a road matcher isn't configured. If this
- * class is ever added to the default conflate pipeline, then it would need to perform elemnt
- * conflatable checks.
+ * them for review without actually snapping them.
  *
  * *Possible* future enhancements:
  *
  * - If a way is snapped to another way and the ways end up being parallel and overlap, snapping
- * them may not make sense.  I've seen bad snaps like that in a couple of datasets so far. This may
+ * them may not make sense. Have seen bad snaps like that in a couple of datasets so far. This may
  * not be an easy change to make, since the snapped node in question may belong to multiple ways.
- * One way to go about it could be to use CopyMapSubsetOp to make a temp copy of the snap and snap
- * to ways, perform the snap, do the parallel/overlap checks, and back out of the actual snap if
- * needed.
+ * One manner in which to go about it could be to use CopyMapSubsetOp to make a temp copy of the
+ * snap source and target ways, perform the snap, do the parallel/overlap checks, and then back out
+ * of the actual snap if needed.
  * - If there ends up being a way node fairly close to the selected snap point on the way and that
  * way node was skipped over due to being outside of the way snap threshold, it still might make
- * sense to snap to it instead.  Have only seen one instance of this so far...
- *
- * TODO: This class doesn't pay attention to the direction of the ways being snapped. Not sure
- * yet if/whether that can be addressed or not. Technically, the way joiner (I think) run later on
- * could fix the problem.
+ * sense to snap to it instead. Have only seen one instance of this so far...
+ * - This class doesn't pay attention to the direction of the ways being snapped. Not sure yet
+ * if that can be addressed or not. Technically, the way joiner (maybe) run later on could fix the
+ * problem.
  */
-class UnconnectedWaySnapper : public OsmMapOperation, public Configurable
+class UnconnectedWaySnapper : public OsmMapOperation, public Configurable,
+  public ConflateInfoCacheConsumer
 {
 public:
 
@@ -88,7 +84,7 @@ public:
   ~UnconnectedWaySnapper() = default;
 
   /**
-   * Snaps unconnected ways in the input to each other
+   * @see OsmMapOperation
    */
   void apply(OsmMapPtr& map) override;
 
@@ -100,8 +96,8 @@ public:
    * @param connectTo Way to connect the disconnected way to
    * @returns True if the ways were successfully snapped together
    */
-  static bool snapClosestEndpointToWay(OsmMapPtr map, const WayPtr& disconnected,
-                                       const WayPtr& connectTo);
+  static bool snapClosestEndpointToWay(
+    OsmMapPtr map, const WayPtr& disconnected, const WayPtr& connectTo);
 
   /**
    * @see OperationStatus
@@ -116,19 +112,26 @@ public:
   { return "Snapped " + QString::number(_numAffected) + " unconnected ways."; }
 
   /**
-   * @see OperationStatus
-   */
-  QString getDescription() const override
-  { return "Snaps unconnected ways to the nearest way."; }
-
-  QString getName() const override { return className(); }
-
-  QString getClassName() const override { return className(); }
-
-  /**
    * @see Configurable
    */
   void setConfiguration(const Settings& conf) override;
+
+  /**
+   * @see ApiEntityInfo
+   */
+  QString getDescription() const override
+  { return "Snaps unconnected ways to the nearest way."; }
+  /**
+   * @see ApiEntityInfo
+   */
+  QString getName() const override { return className(); }
+  /**
+   * @see ApiEntityInfo
+   */
+  QString getClassName() const override { return className(); }
+
+  void setConflateInfoCache(const std::shared_ptr<ConflateInfoCache>& cache) override
+  { _conflateInfoCache = cache; }
 
   long getNumSnappedToWays() const { return _numSnappedToWays; }
   long getNumSnappedToWayNodes() const { return _numSnappedToWayNodes; }
@@ -139,9 +142,8 @@ public:
   void setWayDiscretizationSpacing(double spacing);
   void setAddCeToSearchDistance(bool add) { _addCeToSearchDistance = add; }
   void setMarkSnappedNodes(bool mark) { _markSnappedNodes = mark; }
-  void setWayToSnapToCriterionClassName(const QString& name);
-  void setWayToSnapCriterionClassName(const QString& name);
-  void setWayNodeToSnapToCriterionClassName(const QString& name);
+  void setWayToSnapToCriteria(const QStringList& criteria);
+  void setWayToSnapCriteria(const QStringList& criteria);
   void setSnapWayStatuses(const QStringList& statuses);
   void setSnapToWayStatuses(const QStringList& statuses);
   void setMarkSnappedWays(bool mark) { _markSnappedWays = mark; }
@@ -176,12 +178,12 @@ private:
   // don't actually snap ways; this allows for marking w/o snapping
   bool _markOnly;
 
-  // the feature criterion to be used for way snap target candidates
-  QString _wayToSnapToCriterionClassName;
-  // the feature criterion to be used for way snap source candidates
-  QString _wayToSnapCriterionClassName;
-  // the feature criterion to be used for way snap target candidates
-  QString _wayNodeToSnapToCriterionClassName;
+  // the feature criteria to be used for way snap target candidates
+  QStringList _wayToSnapToCriteria;
+  // the feature criteria to be used for way snap source candidates
+  QStringList _wayToSnapCriteria;
+  // the feature criteria to be used for way snap target candidates
+  QStringList _wayNodeToSnapToCriteria;
   // the status criteria to be used for the snap source way
   QStringList _snapWayStatuses;
   // the status criteria to be used for the snap target way or way node
@@ -208,11 +210,17 @@ private:
   long _numSnappedToWayNodes;
   WayPtr _snappedToWay;
 
+  // Existence of this cache tells us that elements must be individually checked to see that they
+  // are conflatable given the current configuration before modifying them.
+  std::shared_ptr<ConflateInfoCache> _conflateInfoCache;
+
   int _taskStatusUpdateInterval;
+
   OsmMapPtr _map;
+
   Settings _conf;
+
   ReviewMarker _reviewMarker;
-  bool _writePerSnapDebugMap;
 
   /*
    * The radius around the end node to look for ways to snap to.
@@ -227,12 +235,18 @@ private:
   /*
    * Creates the criterion used to determine via filtering which features we want to snap or snap to
    *
-   * @param criterionClassName the name of a hoot ElementCriterion class
+   * @param typeCriteria the names of one or more hoot ConflatableElementCriterion classes
    * @param statuses one or more hoot status strings
+   * @param isNode TODO
    * @return an element criterion
    */
-  ElementCriterionPtr _createFeatureCriterion(const QString& criterionClassName,
-                                              const QStringList& statuses);
+  ElementCriterionPtr _createFeatureCriteria(
+    const QStringList& typeCriteria, const QStringList& statuses, const bool isNode = false);
+  ElementCriterionPtr _getTypeCriteria(
+    const QStringList& typeCriteria, const bool isNode = false) const;
+  ElementCriterionPtr _getTypeCriterion(
+    const QString& typeCriterion, const bool isNode = false) const;
+  ElementCriterionPtr _getStatusCriteria(const QStringList& statuses) const;
   /*
    * Creates an index needed when searching for features to snap to
    *
@@ -241,10 +255,9 @@ private:
    * @param featureIndexToEid a pointer to the element ID index being created
    * @param elementType the element type of the criterion class; either Way or Node
    */
-  void _createFeatureIndex(const ElementCriterionPtr& featureCrit,
-                           std::shared_ptr<Tgs::HilbertRTree>& featureIndex,
-                           std::deque<ElementId>& featureIndexToEid,
-                           const ElementType& elementType);
+  void _createFeatureIndex(
+    const ElementCriterionPtr& featureCrit, std::shared_ptr<Tgs::HilbertRTree>& featureIndex,
+    std::deque<ElementId>& featureIndexToEid, const ElementType& elementType);
 
   /*
    * Identifies unconnected way nodes
@@ -253,9 +266,8 @@ private:
    * @param wayCrit an optional element criterion to restrict the types of ways being examined
    * @return a collection of node IDs
    */
-  std::set<long> _getUnconnectedEndNodeIds(const ConstWayPtr& way,
-                                           const ElementCriterionPtr& wayCrit =
-                                             ElementCriterionPtr()) const;
+  std::set<long> _getUnconnectedEndNodeIds(
+    const ConstWayPtr& way, const ElementCriterionPtr& wayCrit = ElementCriterionPtr()) const;
   /*
    * Return feature candidates to snap to
    *
@@ -263,8 +275,8 @@ private:
    * @param elementType the element type of the feature being snapped to; either Way or Node
    * @return a collection of element IDs
    */
-  QList<ElementId> _getNearbyFeaturesToSnapTo(const ConstNodePtr& node,
-                                              const ElementType& elementType) const;
+  QList<ElementId> _getNearbyFeaturesToSnapTo(
+    const ConstNodePtr& node, const ElementType& elementType) const;
 
   /*
    * Attempts to snap an unconnected way end node to another way node

@@ -151,7 +151,7 @@ echo ""
 echo "Checking conflation with road snapping..."
 echo ""
 hoot conflate $LOG_LEVEL $CONFIG $GENERAL_OPTS \
- -D match.creators=hoot::NetworkMatchCreator -D merger.creators=hoot::NetworkMergerCreator -D differential.snap.unconnected.roads=true \
+ -D match.creators=hoot::NetworkMatchCreator -D merger.creators=hoot::NetworkMergerCreator -D differential.snap.unconnected.features=true -D snap.unconnected.ways.snap.criteria=hoot::HighwayCriterion \
  $INPUT_DIR/input3.osm $INPUT_DIR/input4.osm \
  $OUTPUT_DIR/snapped-output.osm --differential
 hoot diff --warn -C Testing.conf $OUTPUT_DIR/snapped-output.osm $INPUT_DIR/snapped-output.osm || \
@@ -162,7 +162,7 @@ echo ""
 echo "Checking conflation with road snapping and keeping ref data..."
 echo ""
 hoot conflate $LOG_LEVEL $CONFIG $GENERAL_OPTS \
- -D match.creators=hoot::NetworkMatchCreator -D merger.creators=hoot::NetworkMergerCreator -D differential.snap.unconnected.roads=true \
+ -D match.creators=hoot::NetworkMatchCreator -D merger.creators=hoot::NetworkMergerCreator -D differential.snap.unconnected.features=true -D snap.unconnected.ways.snap.criteria=hoot::HighwayCriterion \
  -D differential.remove.reference.data=false \
  $INPUT_DIR/input3.osm $INPUT_DIR/input4.osm \
  $OUTPUT_DIR/snapped-with-ref-output.osm --differential

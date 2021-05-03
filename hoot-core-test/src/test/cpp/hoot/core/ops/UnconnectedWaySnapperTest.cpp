@@ -54,6 +54,7 @@ class UnconnectedWaySnapperTest : public HootTestFixture
   CPPUNIT_TEST(runMarkOnlyTest);
   CPPUNIT_TEST(runTypeMatchTest);
   CPPUNIT_TEST(runTypeExcludeTest);
+  // TODO: multiple criterion test
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -86,9 +87,8 @@ public:
     uut.setWayDiscretizationSpacing(1.0);
     uut.setSnapToWayStatuses(QStringList(Status(Status::Unknown1).toString()));
     uut.setSnapWayStatuses(QStringList(Status(Status::Unknown2).toString()));
-    uut.setWayNodeToSnapToCriterionClassName("hoot::HighwayWayNodeCriterion");
-    uut.setWayToSnapCriterionClassName("hoot::HighwayCriterion");
-    uut.setWayToSnapToCriterionClassName("hoot::HighwayCriterion");
+    uut.setWayToSnapCriteria(QStringList("hoot::HighwayCriterion"));
+    uut.setWayToSnapToCriteria(QStringList("hoot::HighwayCriterion"));
     uut.setMarkOnly(false);
     uut.setReviewSnappedWays(false);
     uut.apply(map);
@@ -126,9 +126,8 @@ public:
     uut.setWayDiscretizationSpacing(1.0);
     uut.setSnapToWayStatuses(QStringList(Status(Status::Unknown1).toString()));
     uut.setSnapWayStatuses(QStringList(Status(Status::Unknown2).toString()));
-    uut.setWayNodeToSnapToCriterionClassName("hoot::HighwayWayNodeCriterion");
-    uut.setWayToSnapCriterionClassName("hoot::HighwayCriterion");
-    uut.setWayToSnapToCriterionClassName("hoot::HighwayCriterion");
+    uut.setWayToSnapCriteria(QStringList("hoot::HighwayCriterion"));
+    uut.setWayToSnapToCriteria(QStringList("hoot::HighwayCriterion"));
     uut.setMarkOnly(false);
     uut.setReviewSnappedWays(true);
     uut.apply(map);
@@ -166,9 +165,8 @@ public:
     uut.setWayDiscretizationSpacing(1.0);
     uut.setSnapToWayStatuses(QStringList(Status(Status::Unknown1).toString()));
     uut.setSnapWayStatuses(QStringList(Status(Status::Unknown2).toString()));
-    uut.setWayNodeToSnapToCriterionClassName("hoot::HighwayWayNodeCriterion");
-    uut.setWayToSnapCriterionClassName("hoot::HighwayCriterion");
-    uut.setWayToSnapToCriterionClassName("hoot::HighwayCriterion");
+    uut.setWayToSnapCriteria(QStringList("hoot::HighwayCriterion"));
+    uut.setWayToSnapToCriteria(QStringList("hoot::HighwayCriterion"));
     uut.setMarkOnly(true);
     uut.setReviewSnappedWays(true);
     uut.apply(map);
@@ -228,14 +226,13 @@ public:
       exceptionMsg.startsWith(
         "Invalid " + ConfigOptions::getSnapUnconnectedWaysDiscretizationSpacingKey() + " value:"));
 
-    uut.setWayToSnapToCriterionClassName("");
-    HOOT_STR_EQUALS("hoot::WayCriterion", uut._wayToSnapToCriterionClassName);
+    uut.setWayToSnapToCriteria(QStringList(""));
+    CPPUNIT_ASSERT_EQUAL(1, uut._wayToSnapToCriteria.size());
+    HOOT_STR_EQUALS("hoot::WayCriterion", uut._wayToSnapToCriteria.at(0));
 
-    uut.setWayToSnapCriterionClassName(" ");
-    HOOT_STR_EQUALS("hoot::WayCriterion", uut._wayToSnapCriterionClassName);
-
-    uut.setWayNodeToSnapToCriterionClassName(" ");
-    HOOT_STR_EQUALS("hoot::WayNodeCriterion", uut._wayNodeToSnapToCriterionClassName);
+    uut.setWayToSnapCriteria(QStringList(" "));
+    CPPUNIT_ASSERT_EQUAL(1, uut._wayToSnapCriteria.size());
+    HOOT_STR_EQUALS("hoot::WayCriterion", uut._wayToSnapCriteria.at(0));
   }
 
   void runStaticSnapTest()
@@ -294,9 +291,9 @@ public:
     uut.setWayDiscretizationSpacing(1.0);
     uut.setSnapToWayStatuses(QStringList(Status(Status::Unknown1).toString()));
     uut.setSnapWayStatuses(QStringList(Status(Status::Unknown2).toString()));
-    uut.setWayNodeToSnapToCriterionClassName("hoot::WayNodeCriterion");
-    uut.setWayToSnapCriterionClassName("hoot::WayCriterion");
-    uut.setWayToSnapToCriterionClassName("hoot::WayCriterion");
+    // Not setting a type will default this to snapping all ways.
+    //uut.setWayToSnapCriteria(QStringList("hoot::WayCriterion"));
+    //uut.setWayToSnapToCriteria(QStringList("hoot::WayCriterion"));
     uut.setMarkOnly(false);
     uut.setReviewSnappedWays(false);
     // By default, way type comparison are turned off and only the snap criteria influence what
@@ -343,9 +340,9 @@ public:
     uut.setWayDiscretizationSpacing(1.0);
     uut.setSnapToWayStatuses(QStringList(Status(Status::Unknown1).toString()));
     uut.setSnapWayStatuses(QStringList(Status(Status::Unknown2).toString()));
-    uut.setWayNodeToSnapToCriterionClassName("hoot::WayNodeCriterion");
-    uut.setWayToSnapCriterionClassName("hoot::WayCriterion");
-    uut.setWayToSnapToCriterionClassName("hoot::WayCriterion");
+    // Not setting a type will default this to snapping all ways.
+//    uut.setWayToSnapCriteria(QStringList("hoot::WayCriterion"));
+//    uut.setWayToSnapToCriteria(QStringList("hoot::WayCriterion"));
     uut.setMarkOnly(false);
     uut.setReviewSnappedWays(false);
     // Ensure that road_marking=solid_stop_line's can't be snapped at all.
