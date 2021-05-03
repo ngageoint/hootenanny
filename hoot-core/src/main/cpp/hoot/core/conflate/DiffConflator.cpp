@@ -109,15 +109,10 @@ void DiffConflator::_reset()
 
 void DiffConflator::apply(OsmMapPtr& map)
 {
-  _reset();
-  // Store the map, as we might need it for a tag diff later.
-  _map = map;
-  std::shared_ptr<ConflateInfoCache> conflateInfoCache = std::make_shared<ConflateInfoCache>(_map);
-
-  const bool removePartialLinearMatchesPartially = _removeLinearMatchesPartially();
+  // Can't use _removeLinearMatchesPartially() here, b/c we haven't performed matching yet.
   QString msg =
-    "Generating differential output. Partially matched linear features are being removed ";
-  if (removePartialLinearMatchesPartially)
+    "Generating differential output. Attempting to remove partially matched linear features ";
+  if (_removeLinearPartialMatchesAsWhole)
   {
     msg += "partially.";
   }
@@ -126,6 +121,11 @@ void DiffConflator::apply(OsmMapPtr& map)
     msg += "completely.";
   }
   LOG_INFO(msg);
+
+  _reset();
+  // Store the map, as we might need it for a tag diff later.
+  _map = map;
+  std::shared_ptr<ConflateInfoCache> conflateInfoCache = std::make_shared<ConflateInfoCache>(_map);
 
   // This status progress reporting could get way more granular, but we'll go with this for now to
   // avoid overloading users with status.
@@ -162,6 +162,9 @@ void DiffConflator::apply(OsmMapPtr& map)
     // matches here where linear and non-linear features are mixed, we specify all matches, and we
     // have no tests yet to catch the particular situation. If so, will have to deal with that on a
     // case by case basis.
+
+    // Result of _removeLinearMatchesPartially is only valid after we've performed matching.
+    const bool removePartialLinearMatchesPartially = _removeLinearMatchesPartially();
     if (removePartialLinearMatchesPartially)
     {
       _updateProgress(_currentStep - 1, "Optimizing feature matches...");
