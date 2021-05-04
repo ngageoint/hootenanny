@@ -289,7 +289,7 @@ void UnconnectedWaySnapper::apply(OsmMapPtr& map)
         // as part of the snapping criteria, but will go with this for now.
         !wayToSnap->getTags().hasAnyKvp(_typeExcludeKvps))
     {
-      _snapUnconnectedNodes(wayToSnap);
+      _snapUnconnectedEndNodes(wayToSnap);
     }
 
     waysProcessed++;
@@ -302,10 +302,11 @@ void UnconnectedWaySnapper::apply(OsmMapPtr& map)
   }
 
   // Seeing dupe nodes created in certain situations. We may be able to fix that in the snapping
-  // alg itself, but for now doing it after the fact. It had probably gone unnoticed for while, b/c
-  // we mainly run way snapping as part of the conflate chain where dupe node removal already
-  // happens post conflate.
-  DuplicateNodeRemover::removeNodes(_map);
+  // alg itself (see class notes), but for now doing it with DuplicateNodeRemover after the fact. It
+  // had probably gone unnoticed for while, b/c we mainly run way snapping as part of the conflate
+  // chain where dupe node removal already happens post conflate.
+  DuplicateNodeRemover::removeNodes(
+    _map, ConfigOptions().getDuplicateNodeRemoverDistanceThreshold()/*, true*/);
 
   LOG_DEBUG(_numSnappedToWays << " ways snapped to the closest point on other ways");
   LOG_DEBUG(_numSnappedToWayNodes << " ways snapped directly to way nodes");
@@ -539,7 +540,40 @@ void UnconnectedWaySnapper::_createFeatureIndex(
   LOG_VARD(_map->getIndex().getElementToRelationMap()->size());
 }
 
-bool UnconnectedWaySnapper::snapUnconnectedNode(
+void UnconnectedWaySnapper::_snapUnconnectedEndNodes(const WayPtr& wayToSnap)
+{
+  // find unconnected endpoints on the way, if the way satisfies the specified crit
+  const std::set<long> unconnectedEndNodeIds =
+    _getUnconnectedEndNodeIds(wayToSnap, _unconnectedWayNodeCrit);
+  for (std::set<long>::const_iterator unconnectedEndNodeIdItr = unconnectedEndNodeIds.begin();
+       unconnectedEndNodeIdItr != unconnectedEndNodeIds.end(); ++unconnectedEndNodeIdItr)
+  {
+    bool snapOccurred = false;
+
+    // for each unconnected endpoint
+    const long unconnectedEndNodeId = *unconnectedEndNodeIdItr;
+    // don't snap the same node more than once
+    if (!_snappedWayNodeIds.contains(unconnectedEndNodeId))
+    {
+      NodePtr unconnectedEndNode = _map->getNode(unconnectedEndNodeId);
+      snapOccurred = _snapUnconnectedEndNode(unconnectedEndNode, wayToSnap);
+    }
+
+    if (!snapOccurred)
+    {
+      LOG_TRACE(
+        "No snap occurred for " << wayToSnap->getElementId() << " with unconnected end node " <<
+        ElementId(ElementType::Node, unconnectedEndNodeId));
+    }
+  }
+
+  if (unconnectedEndNodeIds.empty())
+  {
+    LOG_TRACE("No unconnected end nodes to snap for " << wayToSnap->getElementId());
+  }
+}
+
+bool UnconnectedWaySnapper::_snapUnconnectedEndNode(
   const NodePtr& unconnectedEndNode, const WayPtr& wayToSnap)
 {
   // For way snapping, pass in the tags of the way being snapped during comparison. They
@@ -552,7 +586,7 @@ bool UnconnectedWaySnapper::snapUnconnectedNode(
   bool snapOccurred = false;
   if (_snapToExistingWayNodes)
   {
-    snapOccurred = _snapUnconnectedNodeToWayNode(unconnectedEndNode, wayToSnap->getTags());
+    snapOccurred = _snapUnconnectedEndNodeToWayNode(unconnectedEndNode, wayToSnap->getTags());
   }
 
   if (!snapOccurred)
@@ -560,7 +594,7 @@ bool UnconnectedWaySnapper::snapUnconnectedNode(
     // If we weren't able to snap to a nearby way node or the snapping directly to way nodes
     // option was turned off, we're going to try to find a nearby way and snap onto the
     // closest location on it.
-    snapOccurred = _snapUnconnectedNodeToWay(unconnectedEndNode, wayToSnap->getTags());
+    snapOccurred = _snapUnconnectedEndNodeToWay(unconnectedEndNode, wayToSnap->getTags());
   }
 
   if (snapOccurred)
@@ -604,39 +638,6 @@ bool UnconnectedWaySnapper::snapUnconnectedNode(
     }
   }
   return snapOccurred;
-}
-
-void UnconnectedWaySnapper::_snapUnconnectedNodes(const WayPtr& wayToSnap)
-{
-  // find unconnected endpoints on the way, if the way satisfies the specified crit
-  const std::set<long> unconnectedEndNodeIds =
-    _getUnconnectedEndNodeIds(wayToSnap, _unconnectedWayNodeCrit);
-  for (std::set<long>::const_iterator unconnectedEndNodeIdItr = unconnectedEndNodeIds.begin();
-       unconnectedEndNodeIdItr != unconnectedEndNodeIds.end(); ++unconnectedEndNodeIdItr)
-  {
-    bool snapOccurred = false;
-
-    // for each unconnected endpoint
-    const long unconnectedEndNodeId = *unconnectedEndNodeIdItr;
-    // don't snap the same node more than once
-    if (!_snappedWayNodeIds.contains(unconnectedEndNodeId))
-    {
-      NodePtr unconnectedEndNode = _map->getNode(unconnectedEndNodeId);
-      snapOccurred = snapUnconnectedNode(unconnectedEndNode, wayToSnap);
-    }
-
-    if (!snapOccurred)
-    {
-      LOG_TRACE(
-        "No snap occurred for " << wayToSnap->getElementId() << " with unconnected end node " <<
-        ElementId(ElementType::Node, unconnectedEndNodeId));
-    }
-  }
-
-  if (unconnectedEndNodeIds.empty())
-  {
-    LOG_TRACE("No unconnected end nodes to snap for " << wayToSnap->getElementId());
-  }
 }
 
 std::set<long> UnconnectedWaySnapper::_getUnconnectedEndNodeIds(
@@ -717,7 +718,7 @@ QList<ElementId> UnconnectedWaySnapper::_getNearbyFeaturesToSnapTo(
   return neighborIds;
 }
 
-bool UnconnectedWaySnapper::_snapUnconnectedNodeToWayNode(
+bool UnconnectedWaySnapper::_snapUnconnectedEndNodeToWayNode(
   const NodePtr& nodeToSnap, const Tags& wayToSnapTags)
 {
   if (!nodeToSnap)
@@ -895,7 +896,7 @@ void UnconnectedWaySnapper::_reviewSnappedWay(const long idOfNodeBeingSnapped)
     className(), 1.0);
 }
 
-bool UnconnectedWaySnapper::_snapUnconnectedNodeToWay(
+bool UnconnectedWaySnapper::_snapUnconnectedEndNodeToWay(
   const NodePtr& nodeToSnap, const Tags& wayToSnapTags)
 {
   if (!nodeToSnap)
@@ -965,7 +966,7 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWay(
       continue;
     }
 
-    if (_snapUnconnectedNodeToWay(nodeToSnap, wayToSnapTo))
+    if (_snapUnconnectedEndNodeToWay(nodeToSnap, wayToSnapTo))
     {
       _snappedWayNodeIds.append(nodeToSnap->getId());
       _numAffected++;
@@ -979,50 +980,7 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWay(
   return false;
 }
 
-bool UnconnectedWaySnapper::snapClosestEndpointToWay(
-  OsmMapPtr map, const WayPtr& disconnected, const WayPtr& connectTo)
-{
-  LOG_TRACE(
-    "Attempting to snap " << disconnected->getElementId() << " to " << connectTo->getElementId() <<
-    "...");
-
-  //  Create object for static call
-  UnconnectedWaySnapper uws;
-  uws._map = map;
-  //  Call protected function to snap closest endpoint to way
-  return uws._snapClosestEndpointToWay(disconnected, connectTo);
-}
-
-bool UnconnectedWaySnapper::_snapClosestEndpointToWay(
-  const WayPtr& disconnected, const WayPtr& connectTo)
-{
-  //  Validate the parameters
-  if (!disconnected || !connectTo || disconnected->getId() == connectTo->getId())
-    return false;
-  //  Get the endpoint closest to the way to connect to it
-  const std::vector<long> nodeIds = disconnected->getNodeIds();
-  ElementToGeometryConverter converter(_map);
-  std::shared_ptr<geos::geom::Geometry> geometry = converter.convertToGeometry(connectTo);
-  if (!geometry || geometry->isEmpty())
-  {
-    return false;
-  }
-
-  NodePtr endpoint1 = _map->getNode(nodeIds[0]);
-  std::shared_ptr<geos::geom::Geometry> ep1 = converter.convertToGeometry(ConstNodePtr(endpoint1));
-  NodePtr endpoint2 = _map->getNode(nodeIds[nodeIds.size() - 1]);
-  std::shared_ptr<geos::geom::Geometry> ep2 = converter.convertToGeometry(ConstNodePtr(endpoint2));
-
-  NodePtr endpoint;
-  if (geometry->distance(ep1.get()) < geometry->distance(ep2.get()))
-    endpoint = endpoint1;
-  else
-    endpoint = endpoint2;
-
-  return _snapUnconnectedNodeToWay(endpoint, connectTo);
-}
-
-bool UnconnectedWaySnapper::_snapUnconnectedNodeToWay(
+bool UnconnectedWaySnapper::_snapUnconnectedEndNodeToWay(
   const NodePtr& nodeToSnap, const WayPtr& wayToSnapTo)
 {
   //  Validate the parameters
@@ -1126,6 +1084,49 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWay(
       nodeToSnap->getElementId())
   }
   return false;
+}
+
+bool UnconnectedWaySnapper::snapClosestEndpointToWay(
+  OsmMapPtr map, const WayPtr& disconnected, const WayPtr& connectTo)
+{
+  LOG_TRACE(
+    "Attempting to snap " << disconnected->getElementId() << " to " << connectTo->getElementId() <<
+    "...");
+
+  //  Create object for static call
+  UnconnectedWaySnapper uws;
+  uws._map = map;
+  //  Call protected function to snap closest endpoint to way
+  return uws._snapClosestEndpointToWay(disconnected, connectTo);
+}
+
+bool UnconnectedWaySnapper::_snapClosestEndpointToWay(
+  const WayPtr& disconnected, const WayPtr& connectTo)
+{
+  //  Validate the parameters
+  if (!disconnected || !connectTo || disconnected->getId() == connectTo->getId())
+    return false;
+  //  Get the endpoint closest to the way to connect to it
+  const std::vector<long> nodeIds = disconnected->getNodeIds();
+  ElementToGeometryConverter converter(_map);
+  std::shared_ptr<geos::geom::Geometry> geometry = converter.convertToGeometry(connectTo);
+  if (!geometry || geometry->isEmpty())
+  {
+    return false;
+  }
+
+  NodePtr endpoint1 = _map->getNode(nodeIds[0]);
+  std::shared_ptr<geos::geom::Geometry> ep1 = converter.convertToGeometry(ConstNodePtr(endpoint1));
+  NodePtr endpoint2 = _map->getNode(nodeIds[nodeIds.size() - 1]);
+  std::shared_ptr<geos::geom::Geometry> ep2 = converter.convertToGeometry(ConstNodePtr(endpoint2));
+
+  NodePtr endpoint;
+  if (geometry->distance(ep1.get()) < geometry->distance(ep2.get()))
+    endpoint = endpoint1;
+  else
+    endpoint = endpoint2;
+
+  return _snapUnconnectedEndNodeToWay(endpoint, connectTo);
 }
 
 }

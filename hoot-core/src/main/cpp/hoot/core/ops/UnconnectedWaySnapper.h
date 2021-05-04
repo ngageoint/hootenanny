@@ -72,6 +72,15 @@ namespace hoot
  * - This class doesn't pay attention to the direction of the ways being snapped. Not sure yet
  * if that can be addressed or not. Technically, the way joiner (maybe) run later on could fix the
  * problem.
+ *
+ * @todo *Believe* the following change should be made to prevent creating duplicated nodes
+ * (currently removing them with DuplicateNodeRemover): If a way is snapped to another way where the
+ * nearest way node to snap to was outside of the configured distance threshold so it got skipped
+ * over, its possible the point we pick to snap to on the way ends up being very close to the way
+ * node that was skipped over. Add an additional check that looks for nearby way nodes after picking
+ * a point during snapping to a way. If the point selected on the way is within the configured way
+ * node distance threshold to another way node, then just snap to that way node instead of creating
+ * a new node on the way being snapped to.
  */
 class UnconnectedWaySnapper : public OsmMapOperation, public Configurable,
   public ConflateInfoCacheConsumer
@@ -267,8 +276,8 @@ private:
     const ElementCriterionPtr& featureCrit, std::shared_ptr<Tgs::HilbertRTree>& featureIndex,
     std::deque<ElementId>& featureIndexToEid, const ElementType& elementType);
 
-  void _snapUnconnectedNodes(const WayPtr& wayToSnap);
-  bool snapUnconnectedNode(const NodePtr& unconnectedEndNode, const WayPtr& wayToSnap);
+  void _snapUnconnectedEndNodes(const WayPtr& wayToSnap);
+  bool _snapUnconnectedEndNode(const NodePtr& unconnectedEndNode, const WayPtr& wayToSnap);
 
   /*
    * Identifies unconnected way nodes
@@ -297,7 +306,7 @@ private:
    * requirement between the two ways being snapped based on the value of _minTypeMatchScore
    * @return true if the node was snapped; false otherwise
    */
-  bool _snapUnconnectedNodeToWayNode(const NodePtr& nodeToSnap, const Tags& wayToSnapTags);
+  bool _snapUnconnectedEndNodeToWayNode(const NodePtr& nodeToSnap, const Tags& wayToSnapTags);
 
   /*
    * Attempts to snap an unconnected way end node to another way
@@ -307,7 +316,7 @@ private:
    * requirement between the two ways being snapped based on the value of _minTypeMatchScore
    * @return true if the node was snapped; false otherwise
    */
-  bool _snapUnconnectedNodeToWay(const NodePtr& nodeToSnap, const Tags& wayToSnapTags);
+  bool _snapUnconnectedEndNodeToWay(const NodePtr& nodeToSnap, const Tags& wayToSnapTags);
 
   /*
    * Snap a particular node into a way at its closest intersecting point
@@ -316,7 +325,7 @@ private:
    * @param wayToSnapTo Way to connect/add the node into
    * @return True if successful
    */
-  bool _snapUnconnectedNodeToWay(const NodePtr& nodeToSnap, const WayPtr& wayToSnapTo);
+  bool _snapUnconnectedEndNodeToWay(const NodePtr& nodeToSnap, const WayPtr& wayToSnapTo);
 
   /*
    * Finds the closest endpont on 'disconnected' and snaps it to the closest node in 'connectTo'

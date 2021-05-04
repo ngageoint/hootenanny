@@ -132,7 +132,7 @@ public:
 
     MapProjector::projectToWgs84(map);
 
-    OsmMapWriterFactory::write(map, _outputPath + testName +  + "Out.osm");
+    OsmMapWriterFactory::write(map, _outputPath + testName +  + "Out.osm", true, true);
 
     CPPUNIT_ASSERT_EQUAL(2L, uut.getNumFeaturesAffected());
     CPPUNIT_ASSERT_EQUAL(0L, uut.getNumSnappedToWayNodes());
@@ -179,7 +179,7 @@ public:
   void runSnapToDifferentTypeTest()
   {
     // This tests that different types of features may be snapped together. This isn't commonly
-    // done, but in some cases you could have untagged data that needs to be snapped.
+    // done, but in some cases you could have untyped data that needs to be snapped to typed data.
 
     const QString testName = "runSnapToDifferentTypeTest";
 
