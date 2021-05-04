@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' generator='JOSM'>
+  <node id='-253045472' action='modify' visible='true' lat='0.04249030904' lon='-0.02313161857' />
+  <node id='-253045473' action='modify' visible='true' lat='0.01122894098' lon='-0.00714160651' />
+  <node id='-253045475' action='modify' visible='true' lat='0.01119525416' lon='-0.00712195586' />
+  <node id='-253045476' action='modify' visible='true' lat='-0.00650155685' lon='0.00958670842' />
+  <node id='-253045490' action='modify' visible='true' lat='0.04264470694' lon='-0.02262912345' />
+  <node id='-253045491' action='modify' visible='true' lat='0.01138333892' lon='-0.0066391114' />
+  <node id='-253045492' action='modify' visible='true' lat='0.01135245933' lon='-0.00661384628' />
+  <node id='-253045493' action='modify' visible='true' lat='-0.00634435168' lon='0.01009481801' />
+  <way id='-251370911' action='modify' visible='true'>
+    <nd ref='-253045472' />
+    <nd ref='-253045473' />
+    <tag k='hoot:status' v='1' />
+    <tag k='railway' v='rail' />
+  </way>
+  <way id='-251370912' action='modify' visible='true'>
+    <nd ref='-253045475' />
+    <nd ref='-253045476' />
+    <tag k='hoot:status' v='2' />
+    <tag k='railway' v='rail' />
+  </way>
+  <way id='-251370948' action='modify' visible='true'>
+    <nd ref='-253045490' />
+    <nd ref='-253045491' />
+    <tag k='highway' v='road' />
+    <tag k='hoot:status' v='1' />
+  </way>
+  <way id='-251370949' action='modify' visible='true'>
+    <nd ref='-253045492' />
+    <nd ref='-253045493' />
+    <tag k='highway' v='road' />
+    <tag k='hoot:status' v='2' />
+  </way>
+</osm>

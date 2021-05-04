@@ -57,7 +57,7 @@ public:
   QString getDescription() const override { return "Identifies elements with a particular status"; }
   QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }
-  QString toString() const override { return className(); }
+  QString toString() const override;
 
 private:
 

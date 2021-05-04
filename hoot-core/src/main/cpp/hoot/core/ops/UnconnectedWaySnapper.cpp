@@ -245,20 +245,24 @@ void UnconnectedWaySnapper::apply(OsmMapPtr& map)
 
   // create feature crits for filtering what things we snap and snap to (will default to just
   // plain ways and way nodes if nothing was specified)
+  LOG_TRACE("Creating way to snap criteria...");
   ElementCriterionPtr wayToSnapCrit =
     _createFeatureCriteria(_wayToSnapCriteria, _snapWayStatuses);
+  LOG_TRACE("Creating way to snap to criteria...");
   ElementCriterionPtr wayToSnapToCrit =
     _createFeatureCriteria(_wayToSnapToCriteria, _snapToWayStatuses);
   ElementCriterionPtr wayNodeToSnapToCrit;
   if (_snapToExistingWayNodes)
   {
+   LOG_TRACE("Creating way node to snap to criteria...");
     wayNodeToSnapToCrit =
       _createFeatureCriteria(_wayToSnapToCriteria, _snapToWayStatuses, true);
   }
   // The status of what contains an unconnected way node doesn't matter, so we don't filter by
   // status.
-  ElementCriterionPtr unnconnectedWayNodeCrit =
-    _createFeatureCriteria(_wayToSnapToCriteria, QStringList());
+  LOG_TRACE("Creating unconnected way node criteria...");
+  ElementCriterionPtr unconnectedWayNodeCrit =
+    _createFeatureCriteria(_wayToSnapToCriteria, QStringList()/*, true*/);
 
   // Create needed geospatial indexes for surrounding feature searches. If the way node reuse option
   // was turned off, then no need to index way nodes.
@@ -285,8 +289,6 @@ void UnconnectedWaySnapper::apply(OsmMapPtr& map)
       continue;
     }
     LOG_VART(wayToSnap->getElementId());
-    LOG_VART(wayToSnapCrit->isSatisfied(wayToSnap));
-    LOG_VART(wayToSnap->getTags().hasAnyKvp(_typeExcludeKvps));
 
     // Its possible an additional check like this may need to be made against the way or way node
     // being snapped to. Note that this only kicks in if _conflateInfoCache has been populated which
@@ -301,6 +303,8 @@ void UnconnectedWaySnapper::apply(OsmMapPtr& map)
       continue;
     }
 
+    LOG_VART(wayToSnapCrit->isSatisfied(wayToSnap));
+    LOG_VART(wayToSnap->getTags().hasAnyKvp(_typeExcludeKvps));
     // ensure the way has the status we require for snapping
     if (wayToSnapCrit->isSatisfied(wayToSnap) &&
         // This allows for type exclusion. It may make more sense to pass these exclude types in
@@ -309,7 +313,7 @@ void UnconnectedWaySnapper::apply(OsmMapPtr& map)
     {
       // find unconnected endpoints on the way, if the way satisfies the specified crit
       const std::set<long> unconnectedEndNodeIds =
-        _getUnconnectedEndNodeIds(wayToSnap, unnconnectedWayNodeCrit);
+        _getUnconnectedEndNodeIds(wayToSnap, unconnectedWayNodeCrit);
       for (std::set<long>::const_iterator unconnectedEndNodeIdItr = unconnectedEndNodeIds.begin();
            unconnectedEndNodeIdItr != unconnectedEndNodeIds.end(); ++unconnectedEndNodeIdItr)
       {
@@ -429,26 +433,29 @@ long UnconnectedWaySnapper::_getPid(const ConstWayPtr& way) const
 ElementCriterionPtr UnconnectedWaySnapper::_createFeatureCriteria(
   const QStringList& typeCriteria, const QStringList& statuses, const bool isNode)
 {
+  ElementCriterionPtr crit = ElementCriterionPtr();
   if (!typeCriteria.isEmpty())
   {
+    const QString type = !isNode ? "way" : "node";
     LOG_TRACE(
-      "Creating feature filtering criteria: " << typeCriteria << " having statuses: " <<
-      statuses << "...");
+      "Creating feature filtering criteria for " << type << ": " << typeCriteria <<
+      " having statuses: " << statuses << "...");
 
     ElementCriterionPtr typeCrit = _getTypeCriteria(typeCriteria, isNode);
     if (!statuses.isEmpty())
     {
       ElementCriterionPtr statusCrit = _getStatusCriteria(statuses);
       // combine our element type and status crits into a single crit
-      return std::shared_ptr<ChainCriterion>(new ChainCriterion(statusCrit, typeCrit));
+      crit = std::shared_ptr<ChainCriterion>(new ChainCriterion(statusCrit, typeCrit));
     }
     else
     {
-      return typeCrit;
+      crit = typeCrit;
     }
   }
 
-  return ElementCriterionPtr();
+  LOG_VART(crit);
+  return crit;
 }
 
 ElementCriterionPtr UnconnectedWaySnapper::_getTypeCriteria(
@@ -459,35 +466,36 @@ ElementCriterionPtr UnconnectedWaySnapper::_getTypeCriteria(
     throw IllegalArgumentException("Way snapping type criteria is empty.");
   }
 
-  ElementCriterionPtr typeCrit;
+  ElementCriterionPtr typeCrit = ElementCriterionPtr();
   if (typeCriteria.size() == 1)
   {
     typeCrit = _getTypeCriterion(typeCriteria.at(0), isNode);
   }
   else
   {
-    QList<ElementCriterionPtr> typeCrits;
+    std::shared_ptr<OrCriterion> orCrit(new OrCriterion());
     for (int i = 0; i < typeCriteria.size(); i++)
     {
-      typeCrits.append(_getTypeCriterion(typeCriteria.at(i)));
+      orCrit->addCriterion(_getTypeCriterion(typeCriteria.at(i), isNode));
     }
-    std::shared_ptr<OrCriterion> orCrit(new OrCriterion());
-    for (int i = 0; i < typeCrits.size(); i++)
-    {
-      orCrit->addCriterion(typeCrits.at(i));
-    }
+    LOG_VART(orCrit->criteriaSize());
     typeCrit = orCrit;
   }
+  LOG_VART(typeCrit);
   return typeCrit;
 }
 
 ElementCriterionPtr UnconnectedWaySnapper::_getTypeCriterion(
   const QString& typeCriterion, const bool isNode) const
 {
+  LOG_VART(typeCriterion);
+  LOG_VART(isNode);
+  ElementCriterionPtr typeCrit = ElementCriterionPtr();
   if (!typeCriterion.trimmed().isEmpty())
   {
-    ElementCriterionPtr typeCrit(
+    typeCrit.reset(
       Factory::getInstance().constructObject<ElementCriterion>(typeCriterion));
+    LOG_VART(typeCrit);
 
     ElementCriterionPtr nodeChildCrit;
     if (typeCriterion != WayCriterion::className())
@@ -509,7 +517,7 @@ ElementCriterionPtr UnconnectedWaySnapper::_getTypeCriterion(
             conflatableCrit->getChildCriteria().at(0)));
       }
     }
-    else
+    else if (isNode)
     {
       nodeChildCrit.reset(
         Factory::getInstance().constructObject<ElementCriterion>(WayNodeCriterion::className()));
@@ -532,36 +540,31 @@ ElementCriterionPtr UnconnectedWaySnapper::_getTypeCriterion(
     {
       mapConsumer->setOsmMap(_map.get());
     }
-
-    return typeCrit;
   }
-  return ElementCriterionPtr();
+  LOG_VART(typeCrit);
+  return typeCrit;
 }
 
 ElementCriterionPtr UnconnectedWaySnapper::_getStatusCriteria(const QStringList& statuses) const
 {
   // create our criterion for the feature status
-  ElementCriterionPtr statusCrit;
+  ElementCriterionPtr statusCrit = ElementCriterionPtr();
   if (statuses.size() == 1)
   {
     statusCrit.reset(new StatusCriterion(Status::fromString(statuses.at(0))));
   }
   else
   {
-    QList<std::shared_ptr<StatusCriterion>> statusCrits;
+    std::shared_ptr<OrCriterion> orCrit(new OrCriterion());
     for (int i = 0; i < statuses.size(); i++)
     {
-      statusCrits.append(
+      orCrit->addCriterion(
         std::shared_ptr<StatusCriterion>(
           new StatusCriterion(Status::fromString(statuses.at(i)))));
     }
-    std::shared_ptr<OrCriterion> orCrit(new OrCriterion());
-    for (int i = 0; i < statusCrits.size(); i++)
-    {
-      orCrit->addCriterion(statusCrits.at(i));
-    }
     statusCrit = orCrit;
   }
+  LOG_VART(statusCrit);
   return statusCrit;
 }
 

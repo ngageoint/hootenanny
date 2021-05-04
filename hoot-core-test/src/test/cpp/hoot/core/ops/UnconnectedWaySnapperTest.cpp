@@ -28,6 +28,8 @@
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/io/OsmMapReaderFactory.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/ops/UnconnectedWaySnapper.h>
@@ -36,10 +38,10 @@
 #include <hoot/core/visitors/ElementIdsVisitor.h>
 
 // CPP Unit
-#include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/extensions/TestFactoryRegistry.h>
+//#include <cppunit/TestAssert.h>
+//#include <cppunit/TestFixture.h>
+//#include <cppunit/extensions/HelperMacros.h>
+//#include <cppunit/extensions/TestFactoryRegistry.h>
 
 namespace hoot
 {
@@ -47,21 +49,22 @@ namespace hoot
 class UnconnectedWaySnapperTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(UnconnectedWaySnapperTest);
-  CPPUNIT_TEST(runSnapTest);
-  CPPUNIT_TEST(runConfigOptionsValidationTest);
-  CPPUNIT_TEST(runStaticSnapTest);
-  CPPUNIT_TEST(runReviewSnappedTest);
-  CPPUNIT_TEST(runMarkOnlyTest);
-  CPPUNIT_TEST(runTypeMatchTest);
-  CPPUNIT_TEST(runTypeExcludeTest);
-  // TODO: multiple criterion test
+//  CPPUNIT_TEST(runSnapTest);
+//  CPPUNIT_TEST(runConfigOptionsValidationTest);
+//  CPPUNIT_TEST(runStaticSnapTest);
+//  CPPUNIT_TEST(runReviewSnappedTest);
+//  CPPUNIT_TEST(runMarkOnlyTest);
+//  CPPUNIT_TEST(runTypeMatchTest);
+//  CPPUNIT_TEST(runTypeExcludeTest);
+  CPPUNIT_TEST(runSnapMultipleTypesTest);
+  CPPUNIT_TEST(runSnapOneOfMultipleTypesTest);
+  CPPUNIT_TEST(runSnapToDifferentTypeTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  UnconnectedWaySnapperTest()
-    : HootTestFixture("test-files/ops/UnconnectedWaySnapper/",
-                      "test-output/ops/UnconnectedWaySnapper/")
+  UnconnectedWaySnapperTest() :
+  HootTestFixture("test-files/ops/UnconnectedWaySnapper/", "test-output/ops/UnconnectedWaySnapper/")
   {
     setResetType(ResetAll);
   }
@@ -98,6 +101,118 @@ public:
     OsmXmlWriter writer;
     writer.setIsDebugMap(true);
     writer.write(map, _outputPath + testName +  + "Out.osm");
+
+    CPPUNIT_ASSERT_EQUAL(42L, uut.getNumFeaturesAffected());
+    CPPUNIT_ASSERT_EQUAL(5L, uut.getNumSnappedToWayNodes());
+    CPPUNIT_ASSERT_EQUAL(37L, uut.getNumSnappedToWays());
+    HOOT_FILE_EQUALS(_inputPath + testName +  + "Out.osm", _outputPath + testName +  + "Out.osm");
+  }
+
+  void runSnapMultipleTypesTest()
+  {
+    // test against very simple data to ensure more than one type of data gets snapped
+
+    const QString testName = "runSnapMultipleTypesTest";
+
+    OsmMapPtr map(new OsmMap());
+    OsmMapReaderFactory::read(map, false, true, _inputPath + testName + "In.osm");
+
+    UnconnectedWaySnapper uut;
+    uut.setAddCeToSearchDistance(false);
+    uut.setMaxNodeReuseDistance(0.5);
+    uut.setMaxSnapDistance(5.0);
+    uut.setMarkSnappedNodes(true);
+    uut.setMarkSnappedWays(true);
+    uut.setSnapToExistingWayNodes(true);
+    uut.setWayDiscretizationSpacing(1.0);
+    uut.setSnapToWayStatuses(QStringList(Status(Status::Unknown1).toString()));
+    uut.setSnapWayStatuses(QStringList(Status(Status::Unknown2).toString()));
+    QStringList types("hoot::HighwayCriterion");
+    types.append("hoot::RailwayCriterion");
+    uut.setWayToSnapCriteria(types);
+    uut.setWayToSnapToCriteria(types);
+    uut.setMarkOnly(false);
+    uut.setReviewSnappedWays(false);
+    uut.apply(map);
+
+    MapProjector::projectToWgs84(map);
+
+    OsmMapWriterFactory::write(map, _outputPath + testName +  + "Out.osm");
+
+    CPPUNIT_ASSERT_EQUAL(2L, uut.getNumFeaturesAffected());
+    CPPUNIT_ASSERT_EQUAL(0L, uut.getNumSnappedToWayNodes());
+    CPPUNIT_ASSERT_EQUAL(2L, uut.getNumSnappedToWays());
+    HOOT_FILE_EQUALS(_inputPath + testName +  + "Out.osm", _outputPath + testName +  + "Out.osm");
+  }
+
+  void runSnapOneOfMultipleTypesTest()
+  {
+    // test against very simple data to ensure that when data has multiple types, only the types
+    // specified get snapped
+
+    const QString testName = "runSnapOneOfMultipleTypesTest";
+
+    OsmMapPtr map(new OsmMap());
+    OsmMapReaderFactory::read(map, false, true, _inputPath + "runSnapMultipleTypesTestIn.osm");
+
+    UnconnectedWaySnapper uut;
+    uut.setAddCeToSearchDistance(false);
+    uut.setMaxNodeReuseDistance(0.5);
+    uut.setMaxSnapDistance(5.0);
+    uut.setMarkSnappedNodes(true);
+    uut.setMarkSnappedWays(true);
+    uut.setSnapToExistingWayNodes(true);
+    uut.setWayDiscretizationSpacing(1.0);
+    uut.setSnapToWayStatuses(QStringList(Status(Status::Unknown1).toString()));
+    uut.setSnapWayStatuses(QStringList(Status(Status::Unknown2).toString()));
+    uut.setWayToSnapCriteria(QStringList("hoot::RailwayCriterion"));
+    uut.setWayToSnapToCriteria(QStringList("hoot::RailwayCriterion"));
+    uut.setMarkOnly(false);
+    uut.setReviewSnappedWays(false);
+    uut.apply(map);
+
+    MapProjector::projectToWgs84(map);
+
+    OsmMapWriterFactory::write(map, _outputPath + testName +  + "Out.osm");
+
+    CPPUNIT_ASSERT_EQUAL(1L, uut.getNumFeaturesAffected());
+    CPPUNIT_ASSERT_EQUAL(0L, uut.getNumSnappedToWayNodes());
+    CPPUNIT_ASSERT_EQUAL(1L, uut.getNumSnappedToWays());
+    HOOT_FILE_EQUALS(_inputPath + testName +  + "Out.osm", _outputPath + testName +  + "Out.osm");
+  }
+
+  void runSnapToDifferentTypeTest()
+  {
+    // This tests that different types of features may be snapped together. This isn't commonly
+    // done, but in some cases you could have untagged data that needs to be snapped.
+
+    const QString testName = "runSnapToDifferentTypeTest";
+
+    OsmMapPtr map(new OsmMap());
+    OsmMapReaderFactory::read(map, false, true, _inputPath + testName + "In.osm");
+
+    UnconnectedWaySnapper uut;
+    uut.setAddCeToSearchDistance(false);
+    uut.setMaxNodeReuseDistance(0.5);
+    uut.setMaxSnapDistance(5.0);
+    uut.setMarkSnappedNodes(true);
+    uut.setMarkSnappedWays(true);
+    uut.setSnapToExistingWayNodes(true);
+    uut.setWayDiscretizationSpacing(1.0);
+    uut.setSnapToWayStatuses(QStringList(Status(Status::Unknown1).toString()));
+    uut.setSnapWayStatuses(QStringList(Status(Status::Unknown2).toString()));
+    // Setting this to empty allows untyped sec ways to be snapped back to the ref.
+    uut.setWayToSnapCriteria(QStringList());
+    QStringList snapToTypes("hoot::HighwayCriterion");
+    snapToTypes.append("hoot::RailwayCriterion");
+    uut.setWayToSnapToCriteria(snapToTypes);
+    uut.setMarkOnly(false);
+    uut.setReviewSnappedWays(false);
+    uut.apply(map);
+
+    MapProjector::projectToWgs84(map);
+
+    OsmMapWriterFactory::write(map, _outputPath + testName +  + "Out.osm");
 
     CPPUNIT_ASSERT_EQUAL(42L, uut.getNumFeaturesAffected());
     CPPUNIT_ASSERT_EQUAL(5L, uut.getNumSnappedToWayNodes());
@@ -292,8 +407,6 @@ public:
     uut.setSnapToWayStatuses(QStringList(Status(Status::Unknown1).toString()));
     uut.setSnapWayStatuses(QStringList(Status(Status::Unknown2).toString()));
     // Not setting a type will default this to snapping all ways.
-    //uut.setWayToSnapCriteria(QStringList("hoot::WayCriterion"));
-    //uut.setWayToSnapToCriteria(QStringList("hoot::WayCriterion"));
     uut.setMarkOnly(false);
     uut.setReviewSnappedWays(false);
     // By default, way type comparison are turned off and only the snap criteria influence what
@@ -341,8 +454,6 @@ public:
     uut.setSnapToWayStatuses(QStringList(Status(Status::Unknown1).toString()));
     uut.setSnapWayStatuses(QStringList(Status(Status::Unknown2).toString()));
     // Not setting a type will default this to snapping all ways.
-//    uut.setWayToSnapCriteria(QStringList("hoot::WayCriterion"));
-//    uut.setWayToSnapToCriteria(QStringList("hoot::WayCriterion"));
     uut.setMarkOnly(false);
     uut.setReviewSnappedWays(false);
     // Ensure that road_marking=solid_stop_line's can't be snapped at all.

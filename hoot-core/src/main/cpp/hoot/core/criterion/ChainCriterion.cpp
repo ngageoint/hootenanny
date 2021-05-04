@@ -107,15 +107,17 @@ bool ChainCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   for (size_t i = 0; i < _criteria.size(); i++)
   {
-    if (!_criteria[i]->isSatisfied(e))
+    ElementCriterionPtr crit = _criteria[i];
+    if (!crit->isSatisfied(e))
     {
       LOG_TRACE(
-        "One chained criterion not satisfied in: " << toString() << ". Filter not satisfied " <<
-        "for: " << e);
+        "One chained criterion not satisfied in: " << toString() << ". Filter: " << crit <<
+        " not satisfied for: " << e);
+      LOG_VART(e->getStatus());
       return false;
     }
   }
-  LOG_TRACE("One chained criteria satisfied in: " << toString() << ". Filter satisfied for: " << e);
+  LOG_TRACE("Chained criteria satisfied: " << toString() << " for: " << e);
   return true;
 }
 
