@@ -27,6 +27,7 @@
 
 // Hoot
 #include <hoot/core/TestUtils.h>
+#include <hoot/core/criterion/LinearCriterion.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
@@ -337,11 +338,11 @@ public:
 
     uut.setWayToSnapToCriteria(QStringList(""));
     CPPUNIT_ASSERT_EQUAL(1, uut._wayToSnapToCriteria.size());
-    HOOT_STR_EQUALS("hoot::WayCriterion", uut._wayToSnapToCriteria.at(0));
+    HOOT_STR_EQUALS(LinearCriterion::className(), uut._wayToSnapToCriteria.at(0));
 
     uut.setWayToSnapCriteria(QStringList(" "));
     CPPUNIT_ASSERT_EQUAL(1, uut._wayToSnapCriteria.size());
-    HOOT_STR_EQUALS("hoot::WayCriterion", uut._wayToSnapCriteria.at(0));
+    HOOT_STR_EQUALS(LinearCriterion::className(), uut._wayToSnapCriteria.at(0));
   }
 
   void runStaticSnapTest()
@@ -415,9 +416,9 @@ public:
     writer.setIsDebugMap(true);
     writer.write(map, _outputPath + testName +  + "Out.osm");
 
-    CPPUNIT_ASSERT_EQUAL(131L, uut.getNumFeaturesAffected());
+    CPPUNIT_ASSERT_EQUAL(125L, uut.getNumFeaturesAffected());
     CPPUNIT_ASSERT_EQUAL(118L, uut.getNumSnappedToWayNodes());
-    CPPUNIT_ASSERT_EQUAL(13L, uut.getNumSnappedToWays());
+    CPPUNIT_ASSERT_EQUAL(7L, uut.getNumSnappedToWays());
     HOOT_FILE_EQUALS(_inputPath + testName +  + "Out.osm", _outputPath + testName +  + "Out.osm");
   }
 
@@ -460,9 +461,9 @@ public:
     writer.setIsDebugMap(true);
     writer.write(map, _outputPath + testName +  + "Out.osm");
 
-    CPPUNIT_ASSERT_EQUAL(160L, uut.getNumFeaturesAffected());
-    CPPUNIT_ASSERT_EQUAL(123L, uut.getNumSnappedToWayNodes());
-    CPPUNIT_ASSERT_EQUAL(37L, uut.getNumSnappedToWays());
+    CPPUNIT_ASSERT_EQUAL(139L, uut.getNumFeaturesAffected());
+    CPPUNIT_ASSERT_EQUAL(119L, uut.getNumSnappedToWayNodes());
+    CPPUNIT_ASSERT_EQUAL(20L, uut.getNumSnappedToWays());
     HOOT_FILE_EQUALS(_inputPath + testName +  + "Out.osm", _outputPath + testName +  + "Out.osm");
   }
 };

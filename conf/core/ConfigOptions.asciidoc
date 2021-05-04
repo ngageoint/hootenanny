@@ -4836,15 +4836,14 @@ correct any snaps made.
 
 * Data Type: list
 * Default Value:
-** `hoot::WayCriterion`
+** ``
 
 Optional criterion class list used to filter both the types of ways being snapped (sources) and
 the types of ways being snapped to (targets). The classes specified must inherit from
-`ConflatableElementCriterion`. An example is: `hoot::HighwayCriterion`. The default  value of
-`hoot::WayCriterion` allows for snapping any type of linear feature. This option is overridden by
-the options: `snap.unconnected.ways.snap.way.criteria` and/or
-`snap.unconnected.ways.snap.to.way.criteria` to allow for more granularity in selecting the types
-to snap.
+`ConflatableElementCriterion`. An example is: `hoot::HighwayCriterion`. The default value of an
+empty list allows for snapping any type of linear feature. This option is overridden by the options:
+`snap.unconnected.ways.snap.way.criteria` and/or `snap.unconnected.ways.snap.to.way.criteria` to
+allow for more granularity in selecting the types to snap.
 
 === snap.unconnected.ways.snap.to.way.criteria
 

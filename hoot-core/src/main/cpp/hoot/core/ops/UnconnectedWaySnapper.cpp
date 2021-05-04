@@ -32,9 +32,10 @@
 #include <hoot/core/criterion/ChainCriterion.h>
 #include <hoot/core/criterion/ConflatableElementCriterion.h>
 #include <hoot/core/criterion/ElementTypeCriterion.h>
+#include <hoot/core/criterion/LinearCriterion.h>
+#include <hoot/core/criterion/LinearWayNodeCriterion.h>
 #include <hoot/core/criterion/OrCriterion.h>
 #include <hoot/core/criterion/StatusCriterion.h>
-#include <hoot/core/criterion/WayNodeCriterion.h>
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/elements/NodeToWayMap.h>
 #include <hoot/core/elements/WayUtils.h>
@@ -76,9 +77,9 @@ _markSnappedNodes(false),
 _markSnappedWays(false),
 _reviewSnappedWays(false),
 _markOnly(false),
-_wayToSnapToCriteria(QStringList("hoot::WayCriterion")),
-_wayToSnapCriteria(QStringList("hoot::WayCriterion")),
-_wayNodeToSnapToCriteria(QStringList("hoot::WayNodeCriterion")),
+_wayToSnapToCriteria(QStringList("hoot::LinearCriterion")),
+_wayToSnapCriteria(QStringList("hoot::LinearCriterion")),
+_wayNodeToSnapToCriteria(QStringList("hoot::LinearWayNodeCriterion")),
 _snapWayStatuses(QStringList(Status(Status::Unknown2).toString())),
 _snapToWayStatuses(QStringList(Status(Status::Unknown1).toString())),
 _minTypeMatchScore(-1.0),
@@ -505,7 +506,7 @@ ElementCriterionPtr UnconnectedWaySnapper::_getTypeCriterion(
     LOG_VART(typeCrit);
 
     ElementCriterionPtr nodeChildCrit;
-    if (typeCriterion != WayCriterion::className())
+    if (typeCriterion != LinearCriterion::className())
     {
       std::shared_ptr<ConflatableElementCriterion> conflatableCrit =
         std::dynamic_pointer_cast<ConflatableElementCriterion>(typeCrit);
@@ -527,7 +528,8 @@ ElementCriterionPtr UnconnectedWaySnapper::_getTypeCriterion(
     else if (isNode)
     {
       nodeChildCrit.reset(
-        Factory::getInstance().constructObject<ElementCriterion>(WayNodeCriterion::className()));
+        Factory::getInstance().constructObject<ElementCriterion>(
+          LinearWayNodeCriterion::className()));
     }
     if (isNode)
     {
