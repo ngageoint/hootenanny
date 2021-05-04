@@ -37,25 +37,19 @@
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/visitors/ElementIdsVisitor.h>
 
-// CPP Unit
-//#include <cppunit/TestAssert.h>
-//#include <cppunit/TestFixture.h>
-//#include <cppunit/extensions/HelperMacros.h>
-//#include <cppunit/extensions/TestFactoryRegistry.h>
-
 namespace hoot
 {
 
 class UnconnectedWaySnapperTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(UnconnectedWaySnapperTest);
-//  CPPUNIT_TEST(runSnapTest);
-//  CPPUNIT_TEST(runConfigOptionsValidationTest);
-//  CPPUNIT_TEST(runStaticSnapTest);
-//  CPPUNIT_TEST(runReviewSnappedTest);
-//  CPPUNIT_TEST(runMarkOnlyTest);
-//  CPPUNIT_TEST(runTypeMatchTest);
-//  CPPUNIT_TEST(runTypeExcludeTest);
+  CPPUNIT_TEST(runSnapTest);
+  CPPUNIT_TEST(runConfigOptionsValidationTest);
+  CPPUNIT_TEST(runStaticSnapTest);
+  CPPUNIT_TEST(runReviewSnappedTest);
+  CPPUNIT_TEST(runMarkOnlyTest);
+  CPPUNIT_TEST(runTypeMatchTest);
+  CPPUNIT_TEST(runTypeExcludeTest);
   CPPUNIT_TEST(runSnapMultipleTypesTest);
   CPPUNIT_TEST(runSnapOneOfMultipleTypesTest);
   CPPUNIT_TEST(runSnapToDifferentTypeTest);

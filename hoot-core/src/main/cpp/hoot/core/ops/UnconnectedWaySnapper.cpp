@@ -48,6 +48,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/visitors/SpatialIndexer.h>
+#include <hoot/core/ops/DuplicateNodeRemover.h>
 
 // tgs
 #include <tgs/RStarTree/MemoryPageStore.h>
@@ -410,6 +411,12 @@ void UnconnectedWaySnapper::apply(OsmMapPtr& map)
         StringUtils::formatLargeNumber(ways.size()) << " ways for unconnected snapping.");
     }
   }
+
+  // Seeing dupe nodes created in certain situations. We may be able to fix that in the snapping
+  // alg itself, but for now doing it after the fact. It had probably gone unnoticed for while, b/c
+  // we mainly run way snapping as part of the conflate chain where dupe node removal already
+  // happens post conflate.
+  DuplicateNodeRemover::removeNodes(_map);
 
   LOG_DEBUG(_numSnappedToWays << " ways snapped to the closest point on other ways");
   LOG_DEBUG(_numSnappedToWayNodes << " ways snapped directly to way nodes");
