@@ -307,6 +307,7 @@ private:
    * @return true if the node was snapped; false otherwise
    */
   bool _snapUnconnectedEndNodeToWayNode(const NodePtr& nodeToSnap, const Tags& wayToSnapTags);
+  void _snap(const NodePtr& nodeToSnap, const NodePtr& wayNodeToSnapTo);
 
   /*
    * Attempts to snap an unconnected way end node to another way
