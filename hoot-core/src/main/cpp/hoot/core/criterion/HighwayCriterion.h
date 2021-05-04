@@ -55,17 +55,16 @@ public:
 
   ElementCriterionPtr clone() override { return ElementCriterionPtr(new HighwayCriterion()); }
 
-  QString getDescription() const override { return "Identifies roads"; }
-
   void setOsmMap(const OsmMap* map) override { _map = map->shared_from_this(); }
-
-  QString getName() const override { return className(); }
-
-  QString getClassName() const override { return className(); }
 
   bool supportsSpecificConflation() const override { return true; }
 
   QStringList getChildCriteria() const override;
+
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
+  QString getDescription() const override { return "Identifies roads"; }
+  QString toString() const override { return className(); }
 
 private:
 

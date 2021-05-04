@@ -50,13 +50,12 @@ public:
   ElementCriterionPtr clone() override
   { return ElementCriterionPtr(new MultiUseBuildingCriterion()); }
 
-  QString getDescription() const override { return "Identifies buildings with multiple purposes"; }
-
   GeometryType getGeometryType() const override { return GeometryType::Polygon; }
 
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+  QString toString() const override { return className(); }
+  QString getDescription() const override { return "Identifies buildings with multiple purposes"; }
 };
 
 }

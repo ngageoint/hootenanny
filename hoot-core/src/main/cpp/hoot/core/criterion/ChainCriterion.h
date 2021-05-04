@@ -58,18 +58,15 @@ public:
 
   ElementCriterionPtr clone() override { return ElementCriterionPtr(new ChainCriterion(_criteria)); }
 
-  QString getDescription() const override
-  { return "Allows for chaining criteria together (logical AND)"; }
-
-  QString toString() const override;
-
-  QString getName() const override { return className(); }
-
-  QString getClassName() const override { return className(); }
-
   void setOsmMap(const OsmMap* map) override;
 
   void setConfiguration(const Settings& conf) override;
+
+  QString getDescription() const override
+  { return "Allows for chaining criteria together (logical AND)"; }
+  QString toString() const override;
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
   int criteriaSize() const { return _criteria.size(); }
 

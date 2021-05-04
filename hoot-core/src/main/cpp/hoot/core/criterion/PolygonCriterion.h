@@ -53,21 +53,20 @@ public:
 
   ElementCriterionPtr clone() override { return ElementCriterionPtr(new PolygonCriterion(_map)); }
 
-  QString getDescription() const override { return "Identifies polygon features"; }
-
   GeometryType getGeometryType() const override { return GeometryType::Polygon; }
 
   void setOsmMap(const OsmMap* map) override;
-
-  QString getName() const override { return className(); }
-
-  QString getClassName() const override { return className(); }
 
   bool supportsSpecificConflation() const override { return false; }
 
   void setAllowMixedChildren(bool allow) { _relationCrit.setAllowMixedChildren(allow); }
 
   QStringList getChildCriteria() const override;
+
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
+  QString toString() const override { return className(); }
+  QString getDescription() const override { return "Identifies polygon features"; }
 
 private:
 

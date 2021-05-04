@@ -55,6 +55,7 @@ public:
   { return "Identifies elements based on the specified type"; }
   QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }
+  QString toString() const override { return className(); }
 
 protected:
 
@@ -73,6 +74,7 @@ public:
   QString getDescription() const override { return "Identifies nodes"; }
   QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }
+  QString toString() const override { return className(); }
 };
 
 class WayCriterion : public ElementTypeCriterion
@@ -87,6 +89,7 @@ public:
   QString getDescription() const override { return "Identifies ways"; }
   QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }
+  QString toString() const override { return className(); }
 };
 
 class RelationCriterion : public ElementTypeCriterion, public Configurable

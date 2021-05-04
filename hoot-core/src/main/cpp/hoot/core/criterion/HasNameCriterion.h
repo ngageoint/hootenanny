@@ -49,10 +49,9 @@ public:
   ElementCriterionPtr clone() override { return ElementCriterionPtr(new HasNameCriterion()); }
 
   QString getDescription() const override { return ""; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+  QString toString() const override { return className(); }
 };
 
 }

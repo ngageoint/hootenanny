@@ -65,6 +65,7 @@ public:
   QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }
   QString getDescription() const override { return "Identifies way nodes"; }
+  QString toString() const override { return className(); }
 
 protected:
 

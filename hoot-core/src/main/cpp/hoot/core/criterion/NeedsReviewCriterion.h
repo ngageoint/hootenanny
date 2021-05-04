@@ -56,10 +56,9 @@ public:
   void setOsmMap(const OsmMap* map) override { _map = map->shared_from_this(); }
 
   QString getDescription() const override { return "Identifies features that need to be reviewed"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+  QString toString() const override { return className(); }
 
 private:
 

@@ -55,6 +55,7 @@ public:
   QString getDescription() const override { return "Identifies linear bodies of water"; }
   QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }
+  QString toString() const override { return className(); }
 
   bool supportsSpecificConflation() const override { return true; }
 

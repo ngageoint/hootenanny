@@ -54,10 +54,9 @@ public:
   ElementCriterionPtr clone() override { return ElementCriterionPtr(new HasAddressCriterion()); }
 
   QString getDescription() const override { return "Identifies features with addresses"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+  QString toString() const override { return className(); }
 
 private:
 
