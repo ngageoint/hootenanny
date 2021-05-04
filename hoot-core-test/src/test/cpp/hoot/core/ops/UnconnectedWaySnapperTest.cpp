@@ -209,9 +209,9 @@ public:
 
     OsmMapWriterFactory::write(map, _outputPath + testName +  + "Out.osm");
 
-    CPPUNIT_ASSERT_EQUAL(42L, uut.getNumFeaturesAffected());
-    CPPUNIT_ASSERT_EQUAL(5L, uut.getNumSnappedToWayNodes());
-    CPPUNIT_ASSERT_EQUAL(37L, uut.getNumSnappedToWays());
+    CPPUNIT_ASSERT_EQUAL(2L, uut.getNumFeaturesAffected());
+    CPPUNIT_ASSERT_EQUAL(0L, uut.getNumSnappedToWayNodes());
+    CPPUNIT_ASSERT_EQUAL(2L, uut.getNumSnappedToWays());
     HOOT_FILE_EQUALS(_inputPath + testName +  + "Out.osm", _outputPath + testName +  + "Out.osm");
   }
 

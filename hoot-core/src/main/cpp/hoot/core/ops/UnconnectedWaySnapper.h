@@ -180,14 +180,19 @@ private:
 
   // the feature criteria to be used for way snap target candidates
   QStringList _wayToSnapToCriteria;
+  ElementCriterionPtr _wayToSnapCrit;
   // the feature criteria to be used for way snap source candidates
   QStringList _wayToSnapCriteria;
+  ElementCriterionPtr _wayToSnapToCrit;
   // the feature criteria to be used for way snap target candidates
   QStringList _wayNodeToSnapToCriteria;
+  ElementCriterionPtr _wayNodeToSnapToCrit;
   // the status criteria to be used for the snap source way
   QStringList _snapWayStatuses;
   // the status criteria to be used for the snap target way or way node
   QStringList _snapToWayStatuses;
+  // TODO
+  ElementCriterionPtr _unconnectedWayNodeCrit;
 
   // feature indexes used for way nodes being snapped to
   std::shared_ptr<Tgs::HilbertRTree> _snapToWayNodeIndex;
@@ -232,6 +237,7 @@ private:
    */
   Meters _getWayNodeSearchRadius(const ConstElementPtr& e) const;
 
+  void _createAllFeatureCriteria();
   /*
    * Creates the criterion used to determine via filtering which features we want to snap or snap to
    *
@@ -247,6 +253,8 @@ private:
   ElementCriterionPtr _getTypeCriterion(
     const QString& typeCriterion, const bool isNode = false) const;
   ElementCriterionPtr _getStatusCriteria(const QStringList& statuses) const;
+
+  void _createFeatureIndexes();
   /*
    * Creates an index needed when searching for features to snap to
    *
@@ -258,6 +266,9 @@ private:
   void _createFeatureIndex(
     const ElementCriterionPtr& featureCrit, std::shared_ptr<Tgs::HilbertRTree>& featureIndex,
     std::deque<ElementId>& featureIndexToEid, const ElementType& elementType);
+
+  void _snapUnconnectedNodes(const WayPtr& wayToSnap);
+  bool snapUnconnectedNode(const NodePtr& unconnectedEndNode, const WayPtr& wayToSnap);
 
   /*
    * Identifies unconnected way nodes
