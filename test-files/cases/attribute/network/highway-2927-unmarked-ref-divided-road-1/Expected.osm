@@ -299,37 +299,6 @@
         <tag k="way_area" v="-999999"/>
         <tag k="z_order" v="-999999"/>
     </way>
-    <way visible="true" id="-60" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-60"/>
-        <nd ref="-59"/>
-        <nd ref="-80"/>
-        <nd ref="-45"/>
-        <nd ref="-79"/>
-        <nd ref="-31"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="bicycle" v="yes"/>
-        <tag k="cycleway" v="no"/>
-        <tag k="foot" v="yes"/>
-        <tag k="highway" v="primary"/>
-        <tag k="hoot:id" v="-60"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="hoot:way:node:count" v="6"/>
-        <tag k="lanes" v="4"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="maxspeed" v="40"/>
-        <tag k="name" v="Av. Lecuna"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="osm_id" v="-999999"/>
-        <tag k="sidewalk" v="both"/>
-        <tag k="source" v="osm:line"/>
-        <tag k="source:datetime" v="2015-05-11T03:32:46.000Z;2019-01-17T19:50:06Z"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.665Z;2019-01-17T19:50:05.668Z"/>
-        <tag k="surface" v="asphalt"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
-        <tag k="uuid" v="{d420f044-9a4d-4dae-8ab3-3dec2959e07c};{7c809bd2-1b65-4e0e-9713-1e7ddc4f43a7}"/>
-        <tag k="way_area" v="-999999"/>
-        <tag k="z_order" v="-999999"/>
-    </way>
     <way visible="true" id="-47" timestamp="2019-01-17T19:50:06Z" version="1">
         <nd ref="-70"/>
         <nd ref="-67"/>
@@ -645,6 +614,37 @@
         <tag k="surface" v="asphalt"/>
         <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
         <tag k="uuid" v="{40a71cf9-24ff-42b7-af9f-a80a93b7a29e}"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="z_order" v="-999999"/>
+    </way>
+    <way visible="true" id="-7" timestamp="2019-01-17T19:50:06Z" version="1">
+        <nd ref="-60"/>
+        <nd ref="-59"/>
+        <nd ref="-80"/>
+        <nd ref="-45"/>
+        <nd ref="-79"/>
+        <nd ref="-31"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="bicycle" v="yes"/>
+        <tag k="cycleway" v="no"/>
+        <tag k="foot" v="yes"/>
+        <tag k="highway" v="primary"/>
+        <tag k="hoot:id" v="-7"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="6"/>
+        <tag k="lanes" v="4"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="maxspeed" v="40"/>
+        <tag k="name" v="Av. Lecuna"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="sidewalk" v="both"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="source:datetime" v="2015-05-11T03:32:46.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.665Z;2019-01-17T19:50:05.668Z"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="uuid" v="{d420f044-9a4d-4dae-8ab3-3dec2959e07c};{7c809bd2-1b65-4e0e-9713-1e7ddc4f43a7}"/>
         <tag k="way_area" v="-999999"/>
         <tag k="z_order" v="-999999"/>
     </way>
