@@ -326,12 +326,12 @@ void UnconnectedWaySnapper::_createAllFeatureCriteria()
     _wayNodeToSnapToCrit =
       _createFeatureCriteria(_wayToSnapToCriteria, _snapToWayStatuses, true);
   }
-  // The status of what contains an unconnected way node doesn't matter, so we don't filter by
-  // status.
+  // This node crit is derived from the corresponding way crit, so don't set isNode=true. Use the
+  // way to snap criteria to derive it since we always snap unconnected way end nodes from the way
+  // being snapped. The status of what contains an unconnected way node doesn't matter, so we don't
+  // filter by status.
   LOG_DEBUG("Creating unconnected way node criteria...");
-  _unconnectedWayNodeCrit =
-    _createFeatureCriteria(
-      /*_wayToSnapToCriteria*/_wayToSnapCriteria, QStringList()/*, true*/); // TODO
+  _unconnectedWayNodeCrit = _createFeatureCriteria(_wayToSnapCriteria, QStringList());
 }
 
 void UnconnectedWaySnapper::_createFeatureIndexes()
@@ -430,35 +430,23 @@ ElementCriterionPtr UnconnectedWaySnapper::_getTypeCriterion(
       Factory::getInstance().constructObject<ElementCriterion>(typeCriterion));
     LOG_VART(typeCrit);
 
-    ElementCriterionPtr nodeChildCrit;
-    if (typeCriterion != LinearCriterion::className())
+    std::shared_ptr<ConflatableElementCriterion> conflatableCrit =
+      std::dynamic_pointer_cast<ConflatableElementCriterion>(typeCrit);
+    if (!conflatableCrit)
     {
-      std::shared_ptr<ConflatableElementCriterion> conflatableCrit =
-        std::dynamic_pointer_cast<ConflatableElementCriterion>(typeCrit);
-      if (!conflatableCrit)
-      {
-        throw IllegalArgumentException(
-          "Only classes inheriting from ConflatableElementCriterion are valid as way snapping "
-          "criteria.");
-      }
+      throw IllegalArgumentException(
+        "Only classes inheriting from ConflatableElementCriterion are valid as way snapping "
+        "criteria.");
+    }
 
-      // TODO
-      if (isNode)
-      {
-        nodeChildCrit.reset(
-          Factory::getInstance().constructObject<ElementCriterion>(
-            conflatableCrit->getChildCriteria().at(0)));
-      }
-    }
-    else if (isNode)
-    {
-      nodeChildCrit.reset(
-        Factory::getInstance().constructObject<ElementCriterion>(
-          LinearWayNodeCriterion::className()));
-    }
+    // If we're creating a node index, get the corresponding way node type from the conflatable
+    // crit we just created. Assuming a single criterion returned here, which *should( be true for
+    // all linear crits.
     if (isNode)
     {
-      typeCrit = nodeChildCrit;
+      typeCrit.reset(
+        Factory::getInstance().constructObject<ElementCriterion>(
+          conflatableCrit->getChildCriteria().at(0)));
     }
 
     // configure our element criterion, in case it needs it
@@ -545,7 +533,7 @@ void UnconnectedWaySnapper::_snapUnconnectedWayEndNodes(const WayPtr& wayToSnap)
 {
   // Find unconnected endpoints on the way, if the way satisfies the specified crit.
   const std::set<long> unconnectedEndNodeIds =
-    _getUnconnectedEndNodeIds(wayToSnap, _unconnectedWayNodeCrit);
+    _getUnconnectedWayEndNodeIds(wayToSnap, _unconnectedWayNodeCrit);
   for (std::set<long>::const_iterator unconnectedEndNodeIdItr = unconnectedEndNodeIds.begin();
        unconnectedEndNodeIdItr != unconnectedEndNodeIds.end(); ++unconnectedEndNodeIdItr)
   {
@@ -1119,7 +1107,7 @@ bool UnconnectedWaySnapper::snapClosestWayEndpointToWay(
   UnconnectedWaySnapper uws;
   uws._map = map;
   //  Call protected function to snap closest endpoint to way
-  return uws.snapClosestWayEndpointToWay(disconnected, connectTo);
+  return uws._snapClosestWayEndpointToWay(disconnected, connectTo);
 }
 
 bool UnconnectedWaySnapper::_snapClosestWayEndpointToWay(
