@@ -143,9 +143,9 @@ class ElementMergerJsTest : public HootTestFixture
 
 public:
 
-  ElementMergerJsTest()
-    : HootTestFixture("test-files/js/conflate/ElementMergerJsTest/",
-                      "test-output/js/conflate/ElementMergerJsTest/")
+  ElementMergerJsTest() :
+  HootTestFixture(
+    "test-files/js/conflate/ElementMergerJsTest/", "test-output/js/conflate/ElementMergerJsTest/")
   {
     setResetType(ResetAll);
   }
@@ -178,13 +178,20 @@ public:
     }
     LOG_VART(exceptionMsg);
 
-    if (expectedExceptionMsgContains.isEmpty())
+    if (!exceptionMsg.isEmpty())
     {
-      HOOT_FILE_EQUALS(_inputPath + outFileName, _outputPath + outFileName);
+      if (!expectedExceptionMsgContains.isEmpty())
+      {
+        CPPUNIT_ASSERT(exceptionMsg.contains(expectedExceptionMsgContains));
+      }
+      else
+      {
+        throw HootException(exceptionMsg);
+      }
     }
     else
     {
-      CPPUNIT_ASSERT(exceptionMsg.contains(expectedExceptionMsgContains));
+      HOOT_FILE_EQUALS(_inputPath + outFileName, _outputPath + outFileName);
     }
   }
 
@@ -260,13 +267,13 @@ public:
 
   void poiToPolyPolyInputWithConflatedStatusTest()
   {
-    testMerge("poi-poly-way-poly-conflated-1-in.osm", "poi-poly-way-poly-out.osm");
+    testMerge("poi-poly-way-poly-conflated-1-in.osm", "poi-poly-poly-input-conflated-out.osm");
   }
 
   void poiToPolyPoiInputWithConflatedStatusTest()
   {
     testMerge(
-      "poi-poly-way-poly-conflated-2-in.osm", "poi-poly-way-poly-out.osm");
+      "poi-poly-way-poly-conflated-2-in.osm", "poi-poly-poi-input-conflated-out.osm");
   }
 
   //POI TO POI
@@ -518,7 +525,9 @@ public:
 
   void buildingToBuildingInputWithConflatedStatusTest()
   {
-    testMerge("building-two-ways-conflated-in.osm", "building-two-ways-out.osm");
+    testMerge(
+      "building-two-ways-conflated-in.osm", "building-two-ways-out.osm",
+      "Elements being merged must have an Unknown1 or Unknown2 status.");
   }
 
   //MISC
@@ -554,5 +563,7 @@ public:
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ElementMergerJsTest, "quick");
+// This needs to be run serially since output file names are shared across tests.
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ElementMergerJsTest, "serial");
 
 }
