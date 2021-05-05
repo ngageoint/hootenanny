@@ -169,8 +169,9 @@ hoot conflate $LOG_LEVEL $CONFIG $GENERAL_OPTS \
 hoot diff --warn -C Testing.conf $OUTPUT_DIR/snapped-with-ref-output.osm $INPUT_DIR/snapped-with-ref-output.osm || \
      diff $OUTPUT_DIR/snapped-with-ref-output.osm $INPUT_DIR/snapped-with-ref-output.osm
 
-# Run differential conflation and keep unconflatable features - The only difference you'll see here between this and the first diff
-# conflate execution is that the retaining wall from the second dataset, which hoot is unable to conflate, will pass through to output.
+# Run differential conflation and keep unconflatable features - The only difference you'll see here between this and the 
+# first diff conflate execution is that the retaining wall from the second dataset, which hoot is unable to conflate, 
+# will pass through to output.
 echo ""
 echo "Running diff and passing unconflatable data through to output..."
 echo ""

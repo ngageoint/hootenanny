@@ -373,7 +373,6 @@
     <node visible="true" id="-145" timestamp="2019-01-28T17:16:50Z" version="1" lat="15.3511466780785568" lon="38.9443132507770073"/>
     <node visible="true" id="-144" timestamp="2019-01-28T17:16:50Z" version="1" lat="15.3511554925331453" lon="38.9442448362085614"/>
     <node visible="true" id="-143" timestamp="2019-01-28T17:16:50Z" version="1" lat="15.3511584754668391" lon="38.9441787736525242"/>
-    <node visible="true" id="-142" timestamp="2019-01-28T17:16:50Z" version="1" lat="15.3511659868542978" lon="38.9440758000000002"/>
     <node visible="true" id="-140" timestamp="2019-01-28T17:16:50Z" version="1" lat="15.3508416868544284" lon="38.9438421999999917"/>
     <node visible="true" id="-138" timestamp="2019-01-28T17:16:50Z" version="1" lat="15.3526663884027084" lon="38.9454408919955881"/>
     <node visible="true" id="-137" timestamp="2019-01-28T17:16:50Z" version="1" lat="15.3525351394145932" lon="38.9455699525733081"/>
@@ -423,7 +422,6 @@
     <node visible="true" id="-68" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3529463358492624" lon="38.9431195273733906"/>
     <node visible="true" id="-67" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3526635826394706" lon="38.9427911902087089"/>
     <node visible="true" id="-66" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3502120432173772" lon="38.9427944437382791"/>
-    <node visible="true" id="-65" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3519308187564683" lon="38.9427999999999912"/>
     <node visible="true" id="-64" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3497906339581665" lon="38.9427979720531994"/>
     <node visible="true" id="-61" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3520112014273806" lon="38.9427814106560817"/>
     <node visible="true" id="-60" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3514299672228294" lon="38.9471788624449005"/>
@@ -552,39 +550,10 @@
         <nd ref="-485"/>
         <nd ref="-486"/>
         <nd ref="-487"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:split_parent_id" v="1112"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-284" timestamp="2019-01-28T17:16:07Z" version="1">
-        <nd ref="1160"/>
-        <nd ref="971"/>
-        <nd ref="-177"/>
-        <nd ref="4312"/>
-        <nd ref="4311"/>
-        <nd ref="-142"/>
-        <nd ref="-143"/>
-        <nd ref="-144"/>
-        <nd ref="-145"/>
-        <nd ref="-146"/>
-        <nd ref="-147"/>
-        <nd ref="-148"/>
-        <nd ref="-149"/>
-        <nd ref="-150"/>
-        <nd ref="-151"/>
-        <nd ref="-152"/>
-        <nd ref="-153"/>
-        <nd ref="-154"/>
-        <nd ref="-155"/>
-        <nd ref="-156"/>
-        <nd ref="-157"/>
-        <nd ref="-158"/>
-        <nd ref="-159"/>
-        <tag k="highway" v="unclassified"/>
-        <tag k="hoot:split_parent_id" v="-281"/>
-        <tag k="source:datetime" v="2015-12-01T23:04:35.000Z;2019-01-28T17:16:51Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-282" timestamp="2019-01-28T17:16:52Z" version="1">
         <nd ref="-199"/>
@@ -595,10 +564,10 @@
         <nd ref="-212"/>
         <nd ref="-213"/>
         <nd ref="-214"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:split_parent_id" v="-235"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-274" timestamp="2019-01-28T17:16:52Z" version="1">
         <nd ref="-450"/>
@@ -613,17 +582,17 @@
         <nd ref="-459"/>
         <nd ref="-438"/>
         <nd ref="-155"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-258" timestamp="2019-01-28T17:16:51Z" version="1">
         <nd ref="-175"/>
         <nd ref="4312"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="unclassified"/>
         <tag k="hoot:split_parent_id" v="-281"/>
         <tag k="source:datetime" v="2019-01-28T17:16:51Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-247" timestamp="2019-01-28T17:16:52Z" version="1">
         <nd ref="-411"/>
@@ -632,17 +601,17 @@
         <nd ref="-414"/>
         <nd ref="-415"/>
         <nd ref="6345"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:split_parent_id" v="-188"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-224" timestamp="2019-01-28T17:16:52Z" version="1">
         <nd ref="-110"/>
         <nd ref="-329"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-220" timestamp="2019-01-28T17:16:52Z" version="1">
         <nd ref="-103"/>
@@ -654,17 +623,17 @@
         <nd ref="-337"/>
         <nd ref="-338"/>
         <nd ref="-339"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-207" timestamp="2019-01-28T17:16:52Z" version="1">
         <nd ref="-345"/>
         <nd ref="-346"/>
         <nd ref="-347"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-206" timestamp="2019-01-28T17:16:52Z" version="1">
         <nd ref="-86"/>
@@ -674,19 +643,19 @@
         <nd ref="-395"/>
         <nd ref="-396"/>
         <nd ref="-397"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:split_parent_id" v="1112"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-189" timestamp="2019-01-28T17:16:52Z" version="1">
         <nd ref="-315"/>
         <nd ref="-550"/>
         <nd ref="-551"/>
         <nd ref="-231"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="unclassified"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-188" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="9819"/>
@@ -697,16 +666,16 @@
         <nd ref="6358"/>
         <nd ref="6119"/>
         <nd ref="-28"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="secondary"/>
         <tag k="source:datetime" v="2015-12-01T21:43:46.000Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-162" timestamp="2019-01-28T17:16:52Z" version="1">
         <nd ref="-527"/>
         <nd ref="-250"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-153" timestamp="2019-01-28T17:16:52Z" version="1">
         <nd ref="-564"/>
@@ -721,9 +690,9 @@
         <nd ref="-570"/>
         <nd ref="-571"/>
         <nd ref="-38"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-150" timestamp="2019-01-28T17:16:52Z" version="1">
         <nd ref="-529"/>
@@ -741,25 +710,25 @@
         <nd ref="-515"/>
         <nd ref="-541"/>
         <nd ref="-483"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-149" timestamp="2019-01-28T17:16:52Z" version="1">
         <nd ref="-528"/>
         <nd ref="-388"/>
         <nd ref="-529"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:split_parent_id" v="1112"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-148" timestamp="2019-01-28T17:16:52Z" version="1">
         <nd ref="-527"/>
         <nd ref="-280"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-146" timestamp="2019-01-28T17:16:52Z" version="1">
         <nd ref="-450"/>
@@ -772,9 +741,9 @@
         <nd ref="-525"/>
         <nd ref="-526"/>
         <nd ref="-527"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-145" timestamp="2019-01-28T17:16:52Z" version="1">
         <nd ref="-515"/>
@@ -782,10 +751,10 @@
         <nd ref="-517"/>
         <nd ref="-518"/>
         <nd ref="6122"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:split_parent_id" v="1112"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-144" timestamp="2019-01-28T17:16:52Z" version="1">
         <nd ref="-498"/>
@@ -802,16 +771,16 @@
         <nd ref="-508"/>
         <nd ref="-509"/>
         <nd ref="-172"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-143" timestamp="2019-01-28T17:16:52Z" version="1">
         <nd ref="-495"/>
         <nd ref="-148"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-142" timestamp="2019-01-28T17:16:52Z" version="1">
         <nd ref="-473"/>
@@ -824,9 +793,9 @@
         <nd ref="-367"/>
         <nd ref="-496"/>
         <nd ref="-497"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-141" timestamp="2019-01-28T17:16:52Z" version="1">
         <nd ref="-159"/>
@@ -834,9 +803,9 @@
         <nd ref="-489"/>
         <nd ref="-490"/>
         <nd ref="-473"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-140" timestamp="2019-01-28T17:16:52Z" version="1">
         <nd ref="-473"/>
@@ -850,16 +819,16 @@
         <nd ref="-481"/>
         <nd ref="-482"/>
         <nd ref="-483"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-139" timestamp="2019-01-28T17:16:52Z" version="1">
         <nd ref="-466"/>
         <nd ref="-472"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-138" timestamp="2019-01-28T17:16:52Z" version="1">
         <nd ref="-465"/>
@@ -869,9 +838,9 @@
         <nd ref="-469"/>
         <nd ref="-470"/>
         <nd ref="-471"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-137" timestamp="2019-01-28T17:16:52Z" version="1">
         <nd ref="-460"/>
@@ -881,9 +850,9 @@
         <nd ref="-464"/>
         <nd ref="-449"/>
         <nd ref="-450"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-135" timestamp="2019-01-28T17:16:52Z" version="1">
         <nd ref="-438"/>
@@ -899,9 +868,9 @@
         <nd ref="-447"/>
         <nd ref="-448"/>
         <nd ref="-269"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-134" timestamp="2019-01-28T17:16:52Z" version="1">
         <nd ref="-345"/>
@@ -913,9 +882,9 @@
         <nd ref="-436"/>
         <nd ref="-437"/>
         <nd ref="-421"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-133" timestamp="2019-01-28T17:16:52Z" version="1">
         <nd ref="-421"/>
@@ -924,26 +893,26 @@
         <nd ref="-430"/>
         <nd ref="-431"/>
         <nd ref="-427"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-132" timestamp="2019-01-28T17:16:52Z" version="1">
         <nd ref="-404"/>
         <nd ref="-427"/>
         <nd ref="-411"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-131" timestamp="2019-01-28T17:16:52Z" version="1">
         <nd ref="-421"/>
         <nd ref="-422"/>
         <nd ref="-423"/>
         <nd ref="-398"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-130" timestamp="2019-01-28T17:16:52Z" version="1">
         <nd ref="-407"/>
@@ -951,9 +920,9 @@
         <nd ref="-409"/>
         <nd ref="-410"/>
         <nd ref="-411"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-129" timestamp="2019-01-28T17:16:52Z" version="1">
         <nd ref="-398"/>
@@ -970,9 +939,9 @@
         <nd ref="-327"/>
         <nd ref="-328"/>
         <nd ref="-110"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-128" timestamp="2019-01-28T17:16:52Z" version="1">
         <nd ref="-388"/>
@@ -980,17 +949,17 @@
         <nd ref="-390"/>
         <nd ref="-391"/>
         <nd ref="-86"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-127" timestamp="2019-01-28T17:16:52Z" version="1">
         <nd ref="-202"/>
         <nd ref="-387"/>
         <nd ref="-384"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-126" timestamp="2019-01-28T17:16:52Z" version="1">
         <nd ref="-384"/>
@@ -1005,18 +974,18 @@
         <nd ref="-359"/>
         <nd ref="-358"/>
         <nd ref="-357"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-124" timestamp="2019-01-28T17:16:52Z" version="1">
         <nd ref="-378"/>
         <nd ref="-379"/>
         <nd ref="-362"/>
         <nd ref="-380"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-123" timestamp="2019-01-28T17:16:52Z" version="1">
         <nd ref="-367"/>
@@ -1030,9 +999,9 @@
         <nd ref="-375"/>
         <nd ref="-376"/>
         <nd ref="-377"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-122" timestamp="2019-01-28T17:16:52Z" version="1">
         <nd ref="-362"/>
@@ -1041,9 +1010,9 @@
         <nd ref="-365"/>
         <nd ref="-366"/>
         <nd ref="-357"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-120" timestamp="2019-01-28T17:16:52Z" version="1">
         <nd ref="-318"/>
@@ -1063,9 +1032,9 @@
         <nd ref="-343"/>
         <nd ref="-344"/>
         <nd ref="-345"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-116" timestamp="2019-01-28T17:16:52Z" version="1">
         <nd ref="-316"/>
@@ -1080,66 +1049,66 @@
         <nd ref="-324"/>
         <nd ref="-325"/>
         <nd ref="-116"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-114" timestamp="2019-01-28T17:16:52Z" version="1">
         <nd ref="-303"/>
         <nd ref="-308"/>
         <nd ref="-309"/>
         <nd ref="-304"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-112" timestamp="2019-01-28T17:16:52Z" version="1">
         <nd ref="-304"/>
         <nd ref="-305"/>
         <nd ref="-177"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:split_parent_id" v="-281"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-111" timestamp="2019-01-28T17:16:52Z" version="1">
         <nd ref="-175"/>
         <nd ref="-160"/>
         <nd ref="-302"/>
         <nd ref="-303"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-109" timestamp="2019-01-28T17:16:52Z" version="1">
         <nd ref="-271"/>
         <nd ref="-284"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-108" timestamp="2019-01-28T17:16:52Z" version="1">
         <nd ref="-272"/>
         <nd ref="-282"/>
         <nd ref="-283"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-107" timestamp="2019-01-28T17:16:52Z" version="1">
         <nd ref="-249"/>
         <nd ref="-281"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-106" timestamp="2019-01-28T17:16:52Z" version="1">
         <nd ref="-272"/>
         <nd ref="-280"/>
         <nd ref="-249"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-105" timestamp="2019-01-28T17:16:52Z" version="1">
         <nd ref="-159"/>
@@ -1151,9 +1120,9 @@
         <nd ref="-278"/>
         <nd ref="-279"/>
         <nd ref="-263"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-104" timestamp="2019-01-28T17:16:52Z" version="1">
         <nd ref="-265"/>
@@ -1162,33 +1131,33 @@
         <nd ref="-252"/>
         <nd ref="-271"/>
         <nd ref="-272"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-103" timestamp="2019-01-28T17:16:52Z" version="1">
         <nd ref="-263"/>
         <nd ref="-268"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-102" timestamp="2019-01-28T17:16:52Z" version="1">
         <nd ref="-265"/>
         <nd ref="-266"/>
         <nd ref="-267"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:split_parent_id" v="1112"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-101" timestamp="2019-01-28T17:16:52Z" version="1">
         <nd ref="-263"/>
         <nd ref="-264"/>
         <nd ref="-265"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-100" timestamp="2019-01-28T17:16:52Z" version="1">
         <nd ref="-257"/>
@@ -1197,16 +1166,16 @@
         <nd ref="-260"/>
         <nd ref="-261"/>
         <nd ref="-262"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-98" timestamp="2019-01-28T17:16:52Z" version="1">
         <nd ref="-252"/>
         <nd ref="-253"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-97" timestamp="2019-01-28T17:16:52Z" version="1">
         <nd ref="-249"/>
@@ -1216,17 +1185,17 @@
         <nd ref="-255"/>
         <nd ref="-256"/>
         <nd ref="-257"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-95" timestamp="2019-01-28T17:16:52Z" version="1">
         <nd ref="-229"/>
         <nd ref="-230"/>
         <nd ref="-224"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-94" timestamp="2019-01-28T17:16:52Z" version="1">
         <nd ref="-224"/>
@@ -1234,43 +1203,43 @@
         <nd ref="-226"/>
         <nd ref="-227"/>
         <nd ref="-228"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-93" timestamp="2019-01-28T17:16:52Z" version="1">
         <nd ref="-219"/>
         <nd ref="-221"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:split_parent_id" v="1112"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-92" timestamp="2019-01-28T17:16:52Z" version="1">
         <nd ref="-219"/>
         <nd ref="-220"/>
         <nd ref="-95"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-91" timestamp="2019-01-28T17:16:52Z" version="1">
         <nd ref="-201"/>
         <nd ref="-217"/>
         <nd ref="-218"/>
         <nd ref="-219"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-90" timestamp="2019-01-28T17:16:52Z" version="1">
         <nd ref="-95"/>
         <nd ref="-215"/>
         <nd ref="-216"/>
         <nd ref="-202"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-89" timestamp="2019-01-28T17:16:52Z" version="1">
         <nd ref="-202"/>
@@ -1280,25 +1249,25 @@
         <nd ref="-206"/>
         <nd ref="-207"/>
         <nd ref="-199"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-88" timestamp="2019-01-28T17:16:52Z" version="1">
         <nd ref="-199"/>
         <nd ref="-200"/>
         <nd ref="-201"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-87" timestamp="2019-01-28T17:16:52Z" version="1">
         <nd ref="-197"/>
         <nd ref="-198"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:split_parent_id" v="1112"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-85" timestamp="2019-01-28T17:16:51Z" version="1">
         <nd ref="4308"/>
@@ -1309,10 +1278,10 @@
         <nd ref="-140"/>
         <nd ref="-174"/>
         <nd ref="-175"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="unclassified"/>
         <tag k="hoot:split_parent_id" v="-175"/>
         <tag k="source:datetime" v="2019-01-28T17:16:51Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-84" timestamp="2019-01-28T17:16:51Z" version="1">
         <nd ref="-165"/>
@@ -1320,19 +1289,43 @@
         <nd ref="-167"/>
         <nd ref="-168"/>
         <nd ref="-66"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:split_parent_id" v="-175"/>
         <tag k="source:datetime" v="2019-01-28T17:16:51Z"/>
+    </way>
+    <way visible="true" id="-82" timestamp="2019-01-28T17:16:51Z" version="1">
+        <nd ref="4311"/>
+        <nd ref="-143"/>
+        <nd ref="-144"/>
+        <nd ref="-145"/>
+        <nd ref="-146"/>
+        <nd ref="-147"/>
+        <nd ref="-148"/>
+        <nd ref="-149"/>
+        <nd ref="-150"/>
+        <nd ref="-151"/>
+        <nd ref="-152"/>
+        <nd ref="-153"/>
+        <nd ref="-154"/>
+        <nd ref="-155"/>
+        <nd ref="-156"/>
+        <nd ref="-157"/>
+        <nd ref="-158"/>
+        <nd ref="-159"/>
         <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:split_parent_id" v="-281"/>
+        <tag k="source:datetime" v="2019-01-28T17:16:51Z"/>
     </way>
     <way visible="true" id="-80" timestamp="2019-01-28T17:16:51Z" version="1">
         <nd ref="-134"/>
         <nd ref="-135"/>
         <nd ref="-136"/>
         <nd ref="-113"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2019-01-28T17:16:51Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-78" timestamp="2019-01-28T17:16:51Z" version="1">
         <nd ref="-116"/>
@@ -1343,25 +1336,25 @@
         <nd ref="-121"/>
         <nd ref="-122"/>
         <nd ref="-123"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2019-01-28T17:16:51Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-77" timestamp="2019-01-28T17:16:51Z" version="1">
         <nd ref="-112"/>
         <nd ref="-113"/>
         <nd ref="-114"/>
         <nd ref="-115"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2019-01-28T17:16:51Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-76" timestamp="2019-01-28T17:16:51Z" version="1">
         <nd ref="-109"/>
         <nd ref="-111"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2019-01-28T17:16:51Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-75" timestamp="2019-01-28T17:16:51Z" version="1">
         <nd ref="-103"/>
@@ -1372,9 +1365,9 @@
         <nd ref="-108"/>
         <nd ref="-109"/>
         <nd ref="-110"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2019-01-28T17:16:51Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-74" timestamp="2019-01-28T17:16:51Z" version="1">
         <nd ref="-86"/>
@@ -1387,9 +1380,9 @@
         <nd ref="-93"/>
         <nd ref="-94"/>
         <nd ref="-95"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2019-01-28T17:16:51Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-69" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-74"/>
@@ -1397,83 +1390,83 @@
         <nd ref="-97"/>
         <nd ref="-98"/>
         <nd ref="-99"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:split_parent_id" v="-158"/>
         <tag k="source:datetime" v="2019-01-28T17:16:51Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-68" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-73"/>
         <nd ref="-100"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:split_parent_id" v="-172"/>
         <tag k="source:datetime" v="2019-01-28T17:16:51Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-66" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-137"/>
         <nd ref="-138"/>
         <nd ref="-71"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:split_parent_id" v="-235"/>
         <tag k="source:datetime" v="2019-01-28T17:16:51Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-64" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-161"/>
         <nd ref="-162"/>
         <nd ref="-163"/>
         <nd ref="-69"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:split_parent_id" v="-158"/>
         <tag k="source:datetime" v="2019-01-28T17:16:51Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-63" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-68"/>
         <nd ref="-164"/>
         <nd ref="-67"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2019-01-28T17:16:51Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-61" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-179"/>
-        <nd ref="-65"/>
+        <nd ref="-15"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="unclassified"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-60" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="6187"/>
         <nd ref="-64"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:split_parent_id" v="-158"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-57" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-61"/>
         <nd ref="-179"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-56" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-222"/>
         <nd ref="-223"/>
         <nd ref="-197"/>
         <nd ref="-60"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-55" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-231"/>
         <nd ref="-59"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-54" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-58"/>
@@ -1489,18 +1482,18 @@
         <nd ref="-241"/>
         <nd ref="-242"/>
         <nd ref="-243"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-53" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-247"/>
         <nd ref="-164"/>
         <nd ref="-57"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="unclassified"/>
         <tag k="hoot:split_parent_id" v="-18"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-50" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-54"/>
@@ -1509,18 +1502,18 @@
         <nd ref="-312"/>
         <nd ref="-313"/>
         <nd ref="-194"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:split_parent_id" v="-15"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-49" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-53"/>
         <nd ref="-314"/>
         <nd ref="-315"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-48" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-52"/>
@@ -1528,18 +1521,18 @@
         <nd ref="-418"/>
         <nd ref="-419"/>
         <nd ref="7997"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:split_parent_id" v="-16"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-47" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-510"/>
         <nd ref="-511"/>
         <nd ref="-51"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-46" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-512"/>
@@ -1547,24 +1540,24 @@
         <nd ref="-514"/>
         <nd ref="-511"/>
         <nd ref="-50"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:split_parent_id" v="-188"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-45" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-223"/>
         <nd ref="-49"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-36" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-40"/>
         <nd ref="-138"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-35" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-549"/>
@@ -1574,19 +1567,19 @@
         <nd ref="-567"/>
         <nd ref="-568"/>
         <nd ref="-39"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:split_parent_id" v="1112"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-33" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-565"/>
         <nd ref="-575"/>
         <nd ref="-576"/>
         <nd ref="-37"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-26" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-27"/>
@@ -1594,64 +1587,64 @@
         <nd ref="-613"/>
         <nd ref="-614"/>
         <nd ref="-36"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="secondary"/>
         <tag k="hoot:split_parent_id" v="-26"/>
         <tag k="source:datetime" v="2015-12-01T21:43:46.000Z;2019-01-28T17:16:52Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-25" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-26"/>
         <nd ref="1162"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2015-12-01T23:04:35.000Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-24" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-25"/>
         <nd ref="5716"/>
         <nd ref="11002"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2014-06-29T14:38:05.000Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-23" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="11002"/>
         <nd ref="-24"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2014-06-29T14:37:50.000Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-22" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-23"/>
         <nd ref="10992"/>
         <nd ref="-36"/>
         <nd ref="6347"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="living_street"/>
         <tag k="source:datetime" v="2014-06-29T14:37:34.000Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-21" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-22"/>
         <nd ref="6348"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="living_street"/>
         <tag k="source:datetime" v="2012-01-21T23:43:37.000Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-20" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-21"/>
         <nd ref="10963"/>
         <nd ref="6346"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="living_street"/>
         <tag k="source:datetime" v="2014-06-29T14:38:22.000Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-19" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-19"/>
         <nd ref="6349"/>
         <nd ref="-20"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="living_street"/>
         <tag k="source:datetime" v="2014-01-09T20:36:19.000Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-18" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-18"/>
@@ -1660,17 +1653,17 @@
         <nd ref="1160"/>
         <nd ref="-247"/>
         <nd ref="5716"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2015-12-01T17:18:39.000Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-17" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-17"/>
         <nd ref="-222"/>
         <nd ref="6122"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2014-06-29T14:37:44.000Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-16" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-16"/>
@@ -1694,28 +1687,27 @@
         <nd ref="8002"/>
         <nd ref="7039"/>
         <nd ref="4312"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2015-12-01T21:43:47.000Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-15" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-65"/>
         <nd ref="-15"/>
         <nd ref="1785"/>
         <nd ref="972"/>
         <nd ref="-194"/>
         <nd ref="7039"/>
         <nd ref="4310"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2015-12-01T21:43:47.000Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-14" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-14"/>
         <nd ref="6358"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2014-06-29T14:38:24.000Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="6345"/>
@@ -1724,98 +1716,98 @@
         <nd ref="6348"/>
         <nd ref="6349"/>
         <nd ref="-13"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="living_street"/>
         <tag k="source:datetime" v="2012-01-21T23:43:57.000Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="6317"/>
         <nd ref="-510"/>
         <nd ref="-12"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="living_street"/>
         <tag k="source:datetime" v="2012-01-21T23:43:56.000Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="6239"/>
         <nd ref="6240"/>
         <nd ref="-11"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="living_street"/>
         <tag k="source:datetime" v="2015-12-01T17:33:35.000Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="6200"/>
         <nd ref="-10"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="living_street"/>
         <tag k="source:datetime" v="2015-12-01T17:33:34.000Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="6187"/>
         <nd ref="-9"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="living_street"/>
         <tag k="source:datetime" v="2015-12-01T17:33:34.000Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="6119"/>
         <nd ref="-8"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="living_street"/>
         <tag k="source:datetime" v="2012-01-21T23:43:57.000Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-7"/>
         <nd ref="6152"/>
         <nd ref="1161"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2014-06-29T14:38:13.000Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="5723"/>
         <nd ref="-6"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="living_street"/>
         <tag k="source:datetime" v="2012-01-21T23:43:57.000Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-5"/>
         <nd ref="5716"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2014-06-29T14:38:20.000Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="1805"/>
         <nd ref="-4"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="living_street"/>
         <tag k="source:datetime" v="2015-12-01T21:43:46.000Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="1801"/>
         <nd ref="-3"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="living_street"/>
         <tag k="source:datetime" v="2015-12-01T21:43:46.000Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2"/>
         <nd ref="1785"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="living_street"/>
         <tag k="source:datetime" v="2015-12-01T21:43:45.000Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="970"/>
         <nd ref="971"/>
         <nd ref="972"/>
         <nd ref="-1"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="living_street"/>
         <tag k="source:datetime" v="2015-12-01T23:04:36.000Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="162" timestamp="2019-01-28T17:16:07Z" version="1">
         <nd ref="1160"/>
@@ -1829,18 +1821,22 @@
         <nd ref="-137"/>
         <nd ref="-214"/>
         <nd ref="1167"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="living_street"/>
         <tag k="source:datetime" v="2015-12-01T20:35:32.000Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="752" timestamp="2019-01-28T17:16:07Z" version="1">
         <nd ref="4308"/>
         <nd ref="4309"/>
         <nd ref="4310"/>
         <nd ref="4311"/>
+        <nd ref="4312"/>
+        <nd ref="-177"/>
+        <nd ref="971"/>
+        <nd ref="1160"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="unclassified"/>
         <tag k="source:datetime" v="2015-12-01T23:04:35.000Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="1112" timestamp="2019-01-28T17:16:07Z" version="1">
         <nd ref="6119"/>
@@ -1857,9 +1853,9 @@
         <nd ref="-549"/>
         <nd ref="-221"/>
         <nd ref="1167"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="living_street"/>
         <tag k="source:datetime" v="2012-01-21T23:43:57.000Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="1137" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829">
         <nd ref="6247"/>
@@ -1870,9 +1866,9 @@
         <nd ref="6251"/>
         <nd ref="6252"/>
         <nd ref="6253"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="living_street"/>
         <tag k="source:datetime" v="2015-12-01T17:33:35.000Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="1714" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829">
         <nd ref="5723"/>
@@ -1896,10 +1892,10 @@
         <nd ref="8931"/>
         <nd ref="8932"/>
         <nd ref="8000"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2014-12-29T16:09:27.000Z"/>
         <tag k="surface" v="ground"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="1927" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829">
         <nd ref="7997"/>
@@ -1912,8 +1908,8 @@
         <nd ref="9817"/>
         <nd ref="9818"/>
         <nd ref="9819"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2015-12-01T01:19:13.000Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
 </osm>

@@ -49,7 +49,6 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/visitors/SpatialIndexer.h>
-#include <hoot/core/ops/DuplicateNodeRemover.h>
 
 // tgs
 #include <tgs/RStarTree/MemoryPageStore.h>
@@ -141,6 +140,8 @@ void UnconnectedWaySnapper::setConfiguration(const Settings& conf)
   setMarkOnly(confOpts.getSnapUnconnectedWaysMarkOnly());
 
   setMinTypeMatchScore(confOpts.getSnapUnconnectedWaysMinimumTypeMatchScore());
+
+  setTypeExcludeKvps(confOpts.getSnapUnconnectedWaysExcludeTypes());
 
   _conf = conf;
 }
@@ -281,15 +282,22 @@ void UnconnectedWaySnapper::apply(OsmMapPtr& map)
       continue;
     }
 
-    LOG_VART(_wayToSnapCrit->isSatisfied(wayToSnap));
+    // This allows for type exclusion. It may make more sense to pass these exclude types in as part
+    // of the snapping criteria, but will go with this for now.
     LOG_VART(wayToSnap->getTags().hasAnyKvp(_typeExcludeKvps));
-    // ensure the way has the status we require for snapping
-    if (_wayToSnapCrit->isSatisfied(wayToSnap) &&
-        // This allows for type exclusion. It may make more sense to pass these exclude types in
-        // as part of the snapping criteria, but will go with this for now.
-        !wayToSnap->getTags().hasAnyKvp(_typeExcludeKvps))
+    if (wayToSnap->getTags().hasAnyKvp(_typeExcludeKvps))
     {
-      _snapUnconnectedEndNodes(wayToSnap);
+      LOG_TRACE(
+        "Skipping processing of " << wayToSnap->getElementId() <<
+        ", as it is of an explicitly excluded type.");
+      continue;
+    }
+
+    LOG_VART(_wayToSnapCrit->isSatisfied(wayToSnap));
+    // Ensure the way has the status we require for snapping.
+    if (_wayToSnapCrit->isSatisfied(wayToSnap))
+    {
+      _snapUnconnectedWayEndNodes(wayToSnap);
     }
 
     waysProcessed++;
@@ -300,13 +308,6 @@ void UnconnectedWaySnapper::apply(OsmMapPtr& map)
         StringUtils::formatLargeNumber(ways.size()) << " ways for unconnected snapping.");
     }
   }
-
-  // Seeing dupe nodes created in certain situations. We may be able to fix that in the snapping
-  // alg itself (see class notes), but for now doing it with DuplicateNodeRemover after the fact. It
-  // had probably gone unnoticed for while, b/c we mainly run way snapping as part of the conflate
-  // chain where dupe node removal already happens post conflate.
-  DuplicateNodeRemover::removeNodes(
-    _map, ConfigOptions().getDuplicateNodeRemoverDistanceThreshold()/*, true*/);
 
   LOG_DEBUG(_numSnappedToWays << " ways snapped to the closest point on other ways");
   LOG_DEBUG(_numSnappedToWayNodes << " ways snapped directly to way nodes");
@@ -540,9 +541,9 @@ void UnconnectedWaySnapper::_createFeatureIndex(
   LOG_VARD(_map->getIndex().getElementToRelationMap()->size());
 }
 
-void UnconnectedWaySnapper::_snapUnconnectedEndNodes(const WayPtr& wayToSnap)
+void UnconnectedWaySnapper::_snapUnconnectedWayEndNodes(const WayPtr& wayToSnap)
 {
-  // find unconnected endpoints on the way, if the way satisfies the specified crit
+  // Find unconnected endpoints on the way, if the way satisfies the specified crit.
   const std::set<long> unconnectedEndNodeIds =
     _getUnconnectedEndNodeIds(wayToSnap, _unconnectedWayNodeCrit);
   for (std::set<long>::const_iterator unconnectedEndNodeIdItr = unconnectedEndNodeIds.begin();
@@ -556,7 +557,15 @@ void UnconnectedWaySnapper::_snapUnconnectedEndNodes(const WayPtr& wayToSnap)
     if (!_snappedWayNodeIds.contains(unconnectedEndNodeId))
     {
       NodePtr unconnectedEndNode = _map->getNode(unconnectedEndNodeId);
-      snapOccurred = _snapUnconnectedEndNode(unconnectedEndNode, wayToSnap);
+      LOG_VART(unconnectedEndNode->getTags().hasAnyKvp(_typeExcludeKvps));
+      if (unconnectedEndNode->getTags().hasAnyKvp(_typeExcludeKvps))
+      {
+        LOG_TRACE(
+          "Skipping processing of " << unconnectedEndNode->getElementId() <<
+          ", as it is of an explicitly excluded type.");
+        continue;
+      }
+      snapOccurred = _snapUnconnectedWayEndNode(unconnectedEndNode, wayToSnap);
     }
 
     if (!snapOccurred)
@@ -573,7 +582,7 @@ void UnconnectedWaySnapper::_snapUnconnectedEndNodes(const WayPtr& wayToSnap)
   }
 }
 
-bool UnconnectedWaySnapper::_snapUnconnectedEndNode(
+bool UnconnectedWaySnapper::_snapUnconnectedWayEndNode(
   const NodePtr& unconnectedEndNode, const WayPtr& wayToSnap)
 {
   // For way snapping, pass in the tags of the way being snapped during comparison. They
@@ -586,7 +595,7 @@ bool UnconnectedWaySnapper::_snapUnconnectedEndNode(
   bool snapOccurred = false;
   if (_snapToExistingWayNodes)
   {
-    snapOccurred = _snapUnconnectedEndNodeToWayNode(unconnectedEndNode, wayToSnap->getTags());
+    snapOccurred = _snapUnconnectedWayEndNodeToWayNode(unconnectedEndNode, wayToSnap->getTags());
   }
 
   if (!snapOccurred)
@@ -594,7 +603,7 @@ bool UnconnectedWaySnapper::_snapUnconnectedEndNode(
     // If we weren't able to snap to a nearby way node or the snapping directly to way nodes
     // option was turned off, we're going to try to find a nearby way and snap onto the
     // closest location on it.
-    snapOccurred = _snapUnconnectedEndNodeToWay(unconnectedEndNode, wayToSnap->getTags());
+    snapOccurred = _snapUnconnectedWayEndNodeToWay(unconnectedEndNode, wayToSnap->getTags());
   }
 
   if (snapOccurred)
@@ -651,7 +660,7 @@ Meters UnconnectedWaySnapper::_getWayNodeSearchRadius(const ConstElementPtr& e) 
     _addCeToSearchDistance ? _maxNodeReuseDistance + e->getCircularError() : _maxNodeReuseDistance;
 }
 
-std::set<long> UnconnectedWaySnapper::_getUnconnectedEndNodeIds(
+std::set<long> UnconnectedWaySnapper::_getUnconnectedWayEndNodeIds(
   const ConstWayPtr& way, const ElementCriterionPtr& wayCrit) const
 {
   LOG_TRACE("Getting unconnected end nodes for: " << way->getElementId() << "...");
@@ -718,7 +727,7 @@ QList<ElementId> UnconnectedWaySnapper::_getNearbyFeaturesToSnapTo(
   return neighborIds;
 }
 
-bool UnconnectedWaySnapper::_snapUnconnectedEndNodeToWayNode(
+bool UnconnectedWaySnapper::_snapUnconnectedWayEndNodeToWayNode(
   const NodePtr& nodeToSnap, const Tags& wayToSnapTags)
 {
   if (!nodeToSnap)
@@ -883,7 +892,7 @@ void UnconnectedWaySnapper::_snap(const NodePtr& nodeToSnap, const NodePtr& wayN
   _numSnappedToWayNodes++;
 }
 
-bool UnconnectedWaySnapper::_snapUnconnectedEndNodeToWay(
+bool UnconnectedWaySnapper::_snapUnconnectedWayEndNodeToWay(
   const NodePtr& nodeToSnap, const Tags& wayToSnapTags)
 {
   if (!nodeToSnap)
@@ -903,7 +912,7 @@ bool UnconnectedWaySnapper::_snapUnconnectedEndNodeToWay(
   {
     // for each neighboring way
     WayPtr wayToSnapTo = _map->getWay((*waysToSnapToItr).getId());
-    LOG_VART(wayToSnapTo);
+    LOG_VART(wayToSnapTo->getElementId());
 
     // If the tags of the way being snapped were passed in, we need to do a type comparison.
     // If the type similarity falls below the configured score, don't snap the ways together.
@@ -953,12 +962,19 @@ bool UnconnectedWaySnapper::_snapUnconnectedEndNodeToWay(
       continue;
     }
 
-    if (_snapUnconnectedEndNodeToWay(nodeToSnap, wayToSnapTo))
+    // The attempt to snap to a way coord may end up snapping to an existing way node instead, if
+    // its deemed more efficient (existing way node very close to the selected coord), so we want
+    // to take note of that in order to do bookkeeping here correctly.
+    bool snappedToNode = false;
+    const bool snapped = _snapUnconnectedWayEndNodeToWay(nodeToSnap, wayToSnapTo, snappedToNode);
+    if (snapped)
     {
-      _snappedWayNodeIds.append(nodeToSnap->getId());
-      _numAffected++;
-      _numSnappedToWays++;
-
+      if (!snappedToNode)
+      {
+        _snappedWayNodeIds.append(nodeToSnap->getId());
+        _numAffected++;
+        _numSnappedToWays++;
+      }
       // Don't snap the node more than once.
       return true;
     }
@@ -967,8 +983,8 @@ bool UnconnectedWaySnapper::_snapUnconnectedEndNodeToWay(
   return false;
 }
 
-bool UnconnectedWaySnapper::_snapUnconnectedEndNodeToWay(
-  const NodePtr& nodeToSnap, const WayPtr& wayToSnapTo)
+bool UnconnectedWaySnapper::_snapUnconnectedWayEndNodeToWay(
+  const NodePtr& nodeToSnap, const WayPtr& wayToSnapTo, bool& snappedToNode)
 {
   //  Validate the parameters
   if (!nodeToSnap || !wayToSnapTo)
@@ -1000,7 +1016,26 @@ bool UnconnectedWaySnapper::_snapUnconnectedEndNodeToWay(
     // SpatialIndexer...check.
     if (shortestDistanceFromNodeToSnapToWayCoord <= _maxSnapDistance)
     {
-      // Snap the node to the way.
+      // Do a check here to see if the coordinate we've selected to snap to on the way is very close
+      // to one of its way nodes. If it is, let's just snap to the way node instead to avoid
+      // duplication of way nodes. It may be possible to combine this with the previous step as an
+      // optimization.
+      NodePtr closestWayNode =
+        _map->getNode(WayUtils::closestWayNodeIdToNode(nodeToSnap, wayToSnapTo, _map));
+      const geos::geom::Coordinate closestWayCoordinate = closestWayNode->toCoordinate();
+      const double distanceBetweenWaySnapCoordAndClosestWayNode =
+        Distance::euclidean(closestWayToSnapToCoord, closestWayCoordinate);
+      LOG_VART(distanceBetweenWaySnapCoordAndClosestWayNode);
+      if (distanceBetweenWaySnapCoordAndClosestWayNode <=
+          ConfigOptions().getDuplicateNodeRemoverDistanceThreshold())
+      {
+        LOG_TRACE("Way has way node very close to node to snap. Snapping to node instead...");
+        _snap(nodeToSnap, closestWayNode);
+        snappedToNode = true;
+        return true;
+      }
+
+      // Snap the node to the coord on the way.
 
       // Figure out where on the target way to insert our node being snapped.
       const long nodeToSnapInsertIndex =
@@ -1073,7 +1108,7 @@ bool UnconnectedWaySnapper::_snapUnconnectedEndNodeToWay(
   return false;
 }
 
-bool UnconnectedWaySnapper::snapClosestEndpointToWay(
+bool UnconnectedWaySnapper::snapClosestWayEndpointToWay(
   OsmMapPtr map, const WayPtr& disconnected, const WayPtr& connectTo)
 {
   LOG_TRACE(
@@ -1084,10 +1119,10 @@ bool UnconnectedWaySnapper::snapClosestEndpointToWay(
   UnconnectedWaySnapper uws;
   uws._map = map;
   //  Call protected function to snap closest endpoint to way
-  return uws._snapClosestEndpointToWay(disconnected, connectTo);
+  return uws.snapClosestWayEndpointToWay(disconnected, connectTo);
 }
 
-bool UnconnectedWaySnapper::_snapClosestEndpointToWay(
+bool UnconnectedWaySnapper::_snapClosestWayEndpointToWay(
   const WayPtr& disconnected, const WayPtr& connectTo)
 {
   //  Validate the parameters
@@ -1113,7 +1148,8 @@ bool UnconnectedWaySnapper::_snapClosestEndpointToWay(
   else
     endpoint = endpoint2;
 
-  return _snapUnconnectedEndNodeToWay(endpoint, connectTo);
+  bool snappedToNode = false;
+  return _snapUnconnectedWayEndNodeToWay(endpoint, connectTo, snappedToNode);
 }
 
 void UnconnectedWaySnapper::_markSnappedWay(const long idOfNodeBeingSnapped, const bool toWayNode)

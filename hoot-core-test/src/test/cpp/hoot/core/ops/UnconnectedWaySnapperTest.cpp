@@ -89,6 +89,7 @@ public:
     uut.setWayToSnapToCriteria(QStringList("hoot::HighwayCriterion"));
     uut.setMarkOnly(false);
     uut.setReviewSnappedWays(false);
+    uut.setTypeExcludeKvps(ConfigOptions().getSnapUnconnectedWaysExcludeTypes());
     uut.apply(map);
 
     MapProjector::projectToWgs84(map);
@@ -128,6 +129,7 @@ public:
     uut.setWayToSnapToCriteria(types);
     uut.setMarkOnly(false);
     uut.setReviewSnappedWays(false);
+    uut.setTypeExcludeKvps(ConfigOptions().getSnapUnconnectedWaysExcludeTypes());
     uut.apply(map);
 
     MapProjector::projectToWgs84(map);
@@ -135,8 +137,8 @@ public:
     OsmMapWriterFactory::write(map, _outputPath + testName +  + "Out.osm", true, true);
 
     CPPUNIT_ASSERT_EQUAL(2L, uut.getNumFeaturesAffected());
-    CPPUNIT_ASSERT_EQUAL(0L, uut.getNumSnappedToWayNodes());
-    CPPUNIT_ASSERT_EQUAL(2L, uut.getNumSnappedToWays());
+    CPPUNIT_ASSERT_EQUAL(2L, uut.getNumSnappedToWayNodes());
+    CPPUNIT_ASSERT_EQUAL(0L, uut.getNumSnappedToWays());
     HOOT_FILE_EQUALS(_inputPath + testName +  + "Out.osm", _outputPath + testName +  + "Out.osm");
   }
 
@@ -164,15 +166,16 @@ public:
     uut.setWayToSnapToCriteria(QStringList("hoot::RailwayCriterion"));
     uut.setMarkOnly(false);
     uut.setReviewSnappedWays(false);
+    uut.setTypeExcludeKvps(ConfigOptions().getSnapUnconnectedWaysExcludeTypes());
     uut.apply(map);
 
     MapProjector::projectToWgs84(map);
 
-    OsmMapWriterFactory::write(map, _outputPath + testName +  + "Out.osm");
+    OsmMapWriterFactory::write(map, _outputPath + testName +  + "Out.osm", true, true);
 
     CPPUNIT_ASSERT_EQUAL(1L, uut.getNumFeaturesAffected());
-    CPPUNIT_ASSERT_EQUAL(0L, uut.getNumSnappedToWayNodes());
-    CPPUNIT_ASSERT_EQUAL(1L, uut.getNumSnappedToWays());
+    CPPUNIT_ASSERT_EQUAL(1L, uut.getNumSnappedToWayNodes());
+    CPPUNIT_ASSERT_EQUAL(0L, uut.getNumSnappedToWays());
     HOOT_FILE_EQUALS(_inputPath + testName +  + "Out.osm", _outputPath + testName +  + "Out.osm");
   }
 
@@ -203,15 +206,16 @@ public:
     uut.setWayToSnapToCriteria(snapToTypes);
     uut.setMarkOnly(false);
     uut.setReviewSnappedWays(false);
+    uut.setTypeExcludeKvps(ConfigOptions().getSnapUnconnectedWaysExcludeTypes());
     uut.apply(map);
 
     MapProjector::projectToWgs84(map);
 
-    OsmMapWriterFactory::write(map, _outputPath + testName +  + "Out.osm");
+    OsmMapWriterFactory::write(map, _outputPath + testName +  + "Out.osm", true, true);
 
     CPPUNIT_ASSERT_EQUAL(2L, uut.getNumFeaturesAffected());
-    CPPUNIT_ASSERT_EQUAL(0L, uut.getNumSnappedToWayNodes());
-    CPPUNIT_ASSERT_EQUAL(2L, uut.getNumSnappedToWays());
+    CPPUNIT_ASSERT_EQUAL(2L, uut.getNumSnappedToWayNodes());
+    CPPUNIT_ASSERT_EQUAL(0L, uut.getNumSnappedToWays());
     HOOT_FILE_EQUALS(_inputPath + testName +  + "Out.osm", _outputPath + testName +  + "Out.osm");
   }
 
@@ -240,6 +244,7 @@ public:
     uut.setWayToSnapToCriteria(QStringList("hoot::HighwayCriterion"));
     uut.setMarkOnly(false);
     uut.setReviewSnappedWays(true);
+    uut.setTypeExcludeKvps(ConfigOptions().getSnapUnconnectedWaysExcludeTypes());
     uut.apply(map);
 
     MapProjector::projectToWgs84(map);
@@ -279,6 +284,7 @@ public:
     uut.setWayToSnapToCriteria(QStringList("hoot::HighwayCriterion"));
     uut.setMarkOnly(true);
     uut.setReviewSnappedWays(true);
+    uut.setTypeExcludeKvps(ConfigOptions().getSnapUnconnectedWaysExcludeTypes());
     uut.apply(map);
 
     MapProjector::projectToWgs84(map);
@@ -366,8 +372,8 @@ public:
     WayPtr way3 =
       map->getWay(ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "note", "way3")[0]);
 
-    UnconnectedWaySnapper::snapClosestEndpointToWay(map, way2, way1);
-    UnconnectedWaySnapper::snapClosestEndpointToWay(map, way3, way1);
+    UnconnectedWaySnapper::snapClosestWayEndpointToWay(map, way2, way1);
+    UnconnectedWaySnapper::snapClosestWayEndpointToWay(map, way3, way1);
 
     MapProjector::projectToWgs84(map);
     OsmXmlWriter writer;
@@ -408,6 +414,7 @@ public:
     // may be snapped together (score == -1.0). This adds the requirement that the two ways being
     // snapped together must have at a minimum a type similarity as defined by the schema.
     uut.setMinTypeMatchScore(0.8);
+    uut.setTypeExcludeKvps(ConfigOptions().getSnapUnconnectedWaysExcludeTypes());
     uut.apply(map);
 
     MapProjector::projectToWgs84(map);
@@ -416,9 +423,9 @@ public:
     writer.setIsDebugMap(true);
     writer.write(map, _outputPath + testName +  + "Out.osm");
 
-    CPPUNIT_ASSERT_EQUAL(125L, uut.getNumFeaturesAffected());
-    CPPUNIT_ASSERT_EQUAL(118L, uut.getNumSnappedToWayNodes());
-    CPPUNIT_ASSERT_EQUAL(7L, uut.getNumSnappedToWays());
+    CPPUNIT_ASSERT_EQUAL(117L, uut.getNumFeaturesAffected());
+    CPPUNIT_ASSERT_EQUAL(115L, uut.getNumSnappedToWayNodes());
+    CPPUNIT_ASSERT_EQUAL(2L, uut.getNumSnappedToWays());
     HOOT_FILE_EQUALS(_inputPath + testName +  + "Out.osm", _outputPath + testName +  + "Out.osm");
   }
 
@@ -452,7 +459,10 @@ public:
     uut.setMarkOnly(false);
     uut.setReviewSnappedWays(false);
     // Ensure that road_marking=solid_stop_line's can't be snapped at all.
-    uut.setTypeExcludeKvps(QStringList("road_marking=solid_stop_line"));
+    uut.setTypeExcludeKvps(ConfigOptions().getSnapUnconnectedWaysExcludeTypes());
+    QStringList typeExcludeKvps = ConfigOptions().getSnapUnconnectedWaysExcludeTypes();
+    typeExcludeKvps.append("road_marking=solid_stop_line");
+    uut.setTypeExcludeKvps(typeExcludeKvps);
     uut.apply(map);
 
     MapProjector::projectToWgs84(map);
@@ -461,9 +471,9 @@ public:
     writer.setIsDebugMap(true);
     writer.write(map, _outputPath + testName +  + "Out.osm");
 
-    CPPUNIT_ASSERT_EQUAL(139L, uut.getNumFeaturesAffected());
-    CPPUNIT_ASSERT_EQUAL(119L, uut.getNumSnappedToWayNodes());
-    CPPUNIT_ASSERT_EQUAL(20L, uut.getNumSnappedToWays());
+    CPPUNIT_ASSERT_EQUAL(131L, uut.getNumFeaturesAffected());
+    CPPUNIT_ASSERT_EQUAL(126L, uut.getNumSnappedToWayNodes());
+    CPPUNIT_ASSERT_EQUAL(5L, uut.getNumSnappedToWays());
     HOOT_FILE_EQUALS(_inputPath + testName +  + "Out.osm", _outputPath + testName +  + "Out.osm");
   }
 };

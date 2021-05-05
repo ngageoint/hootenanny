@@ -848,9 +848,10 @@ may be desirable.
 * Default Value:
 ** `road_marking=solid_stop_line`
 ** `highway=steps`
+** `noexit=yes`
 
 Feature types that should never be snapped by `ChangesetReplacementCreator` when using
-`UnconnectedWaySnapper`.
+`UnconnectedWaySnapper`. Overrides +snap.unconnected.ways.exclude.types+.
 
 === changeset.source
 
@@ -4779,6 +4780,14 @@ snap node candidate added to them.
 The spacing granularity to which a unconnected way node is snapped back to a way with the
 Unconnected Way Snapper.  Setting this too low could result in lower algorithm performance, and
 setting it too high may result in less accurate way snapping.
+
+=== snap.unconnected.ways.exclude.types
+
+* Data Type: list
+* Default Value:
+** `noexit=yes`
+
+Feature types that should never be snapped.
 
 === snap.unconnected.ways.existing.way.node.tolerance
 
