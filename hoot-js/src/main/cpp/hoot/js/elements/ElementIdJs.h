@@ -67,6 +67,8 @@ private:
 inline void toCpp(v8::Handle<v8::Value> v, ElementId& eid)
 {
   v8::Isolate* current = v8::Isolate::GetCurrent();
+  v8::HandleScope scope(current);
+  v8::Local<v8::Context> context = current->GetCurrentContext();
 
   // try as string first
   if (v->IsString())
@@ -94,8 +96,8 @@ inline void toCpp(v8::Handle<v8::Value> v, ElementId& eid)
   {
     eid = eidj->getElementId();
   }
-  else if (obj->Has(v8::String::NewFromUtf8(current, "id")) &&
-           obj->Has(v8::String::NewFromUtf8(current, "type")))
+  else if (obj->Has(context, v8::String::NewFromUtf8(current, "id")).ToChecked() &&
+           obj->Has(context, v8::String::NewFromUtf8(current, "type")).ToChecked())
   {
     long id;
     QString type;

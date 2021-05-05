@@ -51,10 +51,11 @@ void ElementGeometryUtilsJs::Init(Handle<Object> exports)
 {
   Isolate* current = exports->GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
   Handle<Object> thisObj = Object::New(current);
   exports->Set(String::NewFromUtf8(current, "ElementGeometryUtils"), thisObj);
   thisObj->Set(String::NewFromUtf8(current, "calculateLength"),
-               FunctionTemplate::New(current, calculateLength)->GetFunction());
+               FunctionTemplate::New(current, calculateLength)->GetFunction(context).ToLocalChecked());
 }
 
 void ElementGeometryUtilsJs::calculateLength(const FunctionCallbackInfo<Value>& args)

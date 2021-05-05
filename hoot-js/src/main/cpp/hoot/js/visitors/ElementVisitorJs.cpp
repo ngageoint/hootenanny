@@ -51,6 +51,7 @@ void ElementVisitorJs::Init(Handle<Object> target)
 {
   Isolate* current = target->GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
   vector<QString> opNames =
     Factory::getInstance().getObjectNamesByBase(ElementVisitor::className());
 
@@ -68,7 +69,7 @@ void ElementVisitorJs::Init(Handle<Object> target)
        PopulateConsumersJs::baseClass(),
        String::NewFromUtf8(current, ElementVisitor::className().toStdString().data()));
 
-    Persistent<Function> constructor(current, tpl->GetFunction());
+    Persistent<Function> constructor(current, tpl->GetFunction(context).ToLocalChecked());
     target->Set(String::NewFromUtf8(current, n), ToLocal(&constructor));
   }
 }

@@ -67,7 +67,10 @@ inline void toCpp(v8::Handle<v8::Value> v, int& o)
   {
     throw IllegalArgumentException("Expected an integer. Got: (" + toJson(v) + ")");
   }
-  o = v->Int32Value();
+  v8::Isolate* current = v8::Isolate::GetCurrent();
+  v8::HandleScope scope(current);
+  v8::Local<v8::Context> context = current->GetCurrentContext();
+  o = v->Int32Value(context).ToChecked();
 }
 
 inline void toCpp(v8::Handle<v8::Value> v, long& o)
@@ -76,7 +79,10 @@ inline void toCpp(v8::Handle<v8::Value> v, long& o)
   {
     throw IllegalArgumentException("Expected an integer. Got: (" + toJson(v) + ")");
   }
-  o = v->Int32Value();
+  v8::Isolate* current = v8::Isolate::GetCurrent();
+  v8::HandleScope scope(current);
+  v8::Local<v8::Context> context = current->GetCurrentContext();
+  o = v->Int32Value(context).ToChecked();
 }
 
 inline void toCpp(v8::Handle<v8::Value> v, Meters& o)
@@ -85,7 +91,10 @@ inline void toCpp(v8::Handle<v8::Value> v, Meters& o)
   {
     throw IllegalArgumentException("Expected Meters (Number). Got: (" + toJson(v) + ")");
   }
-  o = v->NumberValue();
+  v8::Isolate* current = v8::Isolate::GetCurrent();
+  v8::HandleScope scope(current);
+  v8::Local<v8::Context> context = current->GetCurrentContext();
+  o = v->NumberValue(context).ToChecked();
 }
 
 template<typename T, typename U>
@@ -119,7 +128,8 @@ inline void toCpp(v8::Handle<v8::Value> v, QString& s)
   }
   if (v->IsString() || v->IsNumber() || v->IsBoolean())
   {
-    v8::String::Utf8Value param(v->ToString());
+    v8::Isolate* current = v8::Isolate::GetCurrent();
+    v8::String::Utf8Value param(current, v->ToString(current));
     s = QString::fromUtf8(*param);
   }
   else
@@ -165,9 +175,13 @@ inline void toCpp(v8::Handle<v8::Value> v, QVariantMap& m)
   {
     throw IllegalArgumentException("Expected to get an object. Got: (" + toJson(v) + ")");
   }
+  v8::Isolate* current = v8::Isolate::GetCurrent();
+  v8::HandleScope scope(current);
+  v8::Local<v8::Context> context = current->GetCurrentContext();
+
   v8::Handle<v8::Object> obj = v8::Handle<v8::Object>::Cast(v);
 
-  v8::Local<v8::Array> arr = obj->GetPropertyNames();
+  v8::Local<v8::Array> arr = obj->GetPropertyNames(context).ToLocalChecked();
   for (uint32_t i = 0; i < arr->Length(); i++)
   {
     QString k = toCpp<QString>(arr->Get(i));
@@ -179,6 +193,9 @@ inline void toCpp(v8::Handle<v8::Value> v, QVariantMap& m)
 
 inline void toCpp(v8::Handle<v8::Value> v, QVariant& qv)
 {
+  v8::Isolate* current = v8::Isolate::GetCurrent();
+  v8::HandleScope scope(current);
+  v8::Local<v8::Context> context = current->GetCurrentContext();
   if (v.IsEmpty() || v->IsUndefined() || v->IsNull())
   {
     qv = QVariant();
@@ -192,11 +209,11 @@ inline void toCpp(v8::Handle<v8::Value> v, QVariant& qv)
     // Changed this since OGR is expecting Int and this makes a Long
     // It throws an error in OgrWriter.cpp:_addFeature
 //    qv.setValue(v->IntegerValue());
-    qv.setValue(v->Int32Value());
+    qv.setValue(v->Int32Value(context).ToChecked());
   }
   else if (v->IsNumber())
   {
-    qv.setValue(v->NumberValue());
+    qv.setValue(v->NumberValue(context).ToChecked());
   }
   else if (v->IsArray())
   {

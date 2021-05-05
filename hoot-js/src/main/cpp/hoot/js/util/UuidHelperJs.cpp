@@ -46,12 +46,14 @@ void UuidHelperJs::Init(Handle<Object> exports)
 {
   Isolate* current = exports->GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
+
   Handle<Object> helpUuid = Object::New(current);
   exports->Set(String::NewFromUtf8(current, "UuidHelper"), helpUuid);
   helpUuid->Set(String::NewFromUtf8(current, "createUuid"),
-                FunctionTemplate::New(current, createUuid)->GetFunction());
+                FunctionTemplate::New(current, createUuid)->GetFunction(context).ToLocalChecked());
   helpUuid->Set(String::NewFromUtf8(current, "createUuid5"),
-                FunctionTemplate::New(current, createUuid5)->GetFunction());
+                FunctionTemplate::New(current, createUuid5)->GetFunction(context).ToLocalChecked());
 }
 
 void UuidHelperJs::createUuid(const FunctionCallbackInfo<Value>& args)

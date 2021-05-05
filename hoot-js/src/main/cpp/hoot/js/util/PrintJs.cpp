@@ -44,8 +44,9 @@ void PrintJs::Init(Handle<Object> exports)
 {
   Isolate* current = exports->GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
   exports->Set(String::NewFromUtf8(current, "print"),
-               FunctionTemplate::New(current, jsPrint)->GetFunction());
+               FunctionTemplate::New(current, jsPrint)->GetFunction(context).ToLocalChecked());
 }
 
 void PrintJs::jsPrint(const FunctionCallbackInfo<Value>& args)

@@ -194,12 +194,13 @@ void JavaScriptSchemaTranslator::_finalize()
     Isolate* current = v8::Isolate::GetCurrent();
     HandleScope handleScope(current);
     Context::Scope context_scope(_gContext->getContext(current));
+    Local<Context> context = current->GetCurrentContext();
 
     Handle<Object> tObj = _gContext->getContext(current)->Global();
 
-    if (tObj->Has(String::NewFromUtf8(current, "finalize")))
+    if (tObj->Has(context, String::NewFromUtf8(current, "finalize")).ToChecked())
     {
-      TryCatch trycatch;
+      TryCatch trycatch(current);
       Handle<Value> finalize = _gContext->call(tObj,"finalize");
       HootExceptionJs::checkV8Exception(finalize, trycatch);
     }
@@ -218,6 +219,7 @@ void JavaScriptSchemaTranslator::_init()
   Isolate* current = v8::Isolate::GetCurrent();
   HandleScope handleScope(current);
   Context::Scope context_scope(_gContext->getContext(current));
+  Local<Context> context = current->GetCurrentContext();
 
   if (_scriptPath.isEmpty())
   {
@@ -239,19 +241,19 @@ void JavaScriptSchemaTranslator::_init()
   Handle<Object> tObj = _gContext->getContext(current)->Global();
 
   // Run Initialize, if it exists
-  if (tObj->Has(String::NewFromUtf8(current, "initialize")))
+  if (tObj->Has(context, String::NewFromUtf8(current, "initialize")).ToChecked())
   {
-    TryCatch trycatch;
+    TryCatch trycatch(current);
     Handle<Value> initial = _gContext->call(tObj,"initialize");
     HootExceptionJs::checkV8Exception(initial, trycatch);
   }
 
   // Sort out what the toOsm function is called
-  if (tObj->Has(String::NewFromUtf8(current, "translateToOsm")))
+  if (tObj->Has(context, String::NewFromUtf8(current, "translateToOsm")).ToChecked())
   {
     _toOsmFunctionName = "translateToOsm";
   }
-  else if (tObj->Has(String::NewFromUtf8(current, "translateAttributes")))
+  else if (tObj->Has(context, String::NewFromUtf8(current, "translateAttributes")).ToChecked())
   {
     _toOsmFunctionName = "translateAttributes";
   }
@@ -272,11 +274,12 @@ QString JavaScriptSchemaTranslator::getLayerNameFilter()
   Isolate* current = v8::Isolate::GetCurrent();
   HandleScope handleScope(current);
   Context::Scope context_scope(_gContext->getContext(current));
+  Local<Context> context = current->GetCurrentContext();
 
   Handle<Object> tObj = _gContext->getContext(current)->Global();
 
   LOG_TRACE("Getting layer name filter...");
-  if (tObj->Has(String::NewFromUtf8(current, "layerNameFilter")))
+  if (tObj->Has(context, String::NewFromUtf8(current, "layerNameFilter")).ToChecked())
   {
     return toCpp<QString>(_gContext->call(tObj,"layerNameFilter"));
   }
@@ -329,10 +332,11 @@ std::shared_ptr<const Schema> JavaScriptSchemaTranslator::getOgrOutputSchema()
     Isolate* current = v8::Isolate::GetCurrent();
     HandleScope handleScope(current);
     Context::Scope context_scope(_gContext->getContext(current));
+    Local<Context> context = current->GetCurrentContext();
 
     Handle<Object> tObj = _gContext->getContext(current)->Global();
 
-    if (!tObj->Has(String::NewFromUtf8(current, "getDbSchema")))
+    if (!tObj->Has(context, String::NewFromUtf8(current, "getDbSchema")).ToChecked())
     {
       throw HootException("This translation file does not support converting to OGR. "
                           "(Missing schema)");
@@ -800,6 +804,7 @@ QVariantList JavaScriptSchemaTranslator::_translateToOgrVariants(Tags& tags,
   Isolate* current = v8::Isolate::GetCurrent();
   HandleScope handleScope(current);
   Context::Scope context_scope(_gContext->getContext(current));
+  Local<Context> context = current->GetCurrentContext();
 
   Handle<Object> v8tags = Object::New(current);
   for (Tags::const_iterator it = tags.begin(); it != tags.end(); ++it)
@@ -854,9 +859,15 @@ QVariantList JavaScriptSchemaTranslator::_translateToOgrVariants(Tags& tags,
                         "(Missing translateToOgr)");
   }
 
-  TryCatch trycatch;
+  TryCatch trycatch(current);
   // Hardcoded to 3 arguments
-  Handle<Value> translated = tFunc->Call(tObj, 3, args);
+  MaybeLocal<Value> maybe_translated = tFunc->Call(context, tObj, 3, args);
+
+  if (maybe_translated.IsEmpty())
+    HootExceptionJs::throwAsHootException(trycatch);
+
+  Local<Value> translated = maybe_translated.ToLocalChecked();
+
   HootExceptionJs::checkV8Exception(translated, trycatch);
 
   if (Log::getInstance().getLevel() <= Log::Debug)
@@ -902,6 +913,7 @@ void JavaScriptSchemaTranslator::_translateToOsm(Tags& t, const char* layerName,
   Isolate* current = v8::Isolate::GetCurrent();
   HandleScope handleScope(current);
   Context::Scope context_scope(_gContext->getContext(current));
+  Local<Context> context = current->GetCurrentContext();
 
   Handle<Object> tags = Object::New(current);
   for (Tags::const_iterator it = t.begin(); it != t.end(); ++it)
@@ -920,10 +932,14 @@ void JavaScriptSchemaTranslator::_translateToOsm(Tags& t, const char* layerName,
 
   // This has a variable since we don't know if it will be "translateToOsm" or "translateAttributes"
   Handle<Function> tFunc = Handle<Function>::Cast(tObj->Get(toV8(_toOsmFunctionName)));
-  TryCatch trycatch;
+  TryCatch trycatch(current);
 
   // NOTE: the "3" here is the number of arguments
-  Handle<Value> newTags = tFunc->Call(tObj, 3, args);
+  MaybeLocal<Value> maybe_newTags = tFunc->Call(context, tObj, 3, args);
+  if (maybe_newTags.IsEmpty())
+    HootExceptionJs::throwAsHootException(trycatch);
+
+  Local<Value> newTags = maybe_newTags.ToLocalChecked();
   HootExceptionJs::checkV8Exception(newTags, trycatch);
 
   double start = 0.00; // to stop warnings
@@ -950,9 +966,9 @@ void JavaScriptSchemaTranslator::_translateToOsm(Tags& t, const char* layerName,
   {
     // Either do this or a cast. Not sure what is better/faster
     // Handle<Object> obj = Handle<Object>::Cast(newTags);
-    Handle<Object> obj = newTags->ToObject();
+    Handle<Object> obj = newTags->ToObject(context).ToLocalChecked();
 
-    Local<Array> arr = obj->GetPropertyNames();
+    Local<Array> arr = obj->GetPropertyNames(context).ToLocalChecked();
 
     for (uint32_t i = 0; i < arr->Length(); i++)
     {

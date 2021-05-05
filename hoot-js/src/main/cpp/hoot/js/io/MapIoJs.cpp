@@ -52,38 +52,40 @@ void MapIoJs::Init(Handle<Object> exports)
 {
   Isolate* current = exports->GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
   exports->Set(String::NewFromUtf8(current, "loadMap"),
-               FunctionTemplate::New(current, loadMap)->GetFunction());
+               FunctionTemplate::New(current, loadMap)->GetFunction(context).ToLocalChecked());
   exports->Set(String::NewFromUtf8(current, "loadMapFromString"),
-               FunctionTemplate::New(current, loadMapFromString)->GetFunction());
+               FunctionTemplate::New(current, loadMapFromString)->GetFunction(context).ToLocalChecked());
   exports->Set(String::NewFromUtf8(current, "loadMapFromStringPreserveIdAndStatus"),
-               FunctionTemplate::New(current, loadMapFromStringPreserveIdAndStatus)->GetFunction());
+               FunctionTemplate::New(current, loadMapFromStringPreserveIdAndStatus)->GetFunction(context).ToLocalChecked());
   exports->Set(String::NewFromUtf8(current, "saveMap"),
-               FunctionTemplate::New(current, saveMap)->GetFunction());
+               FunctionTemplate::New(current, saveMap)->GetFunction(context).ToLocalChecked());
 }
 
 void MapIoJs::loadMap(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
 
   try
   {
-    OsmMapJs* map = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject());
+    OsmMapJs* map = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject(context).ToLocalChecked());
 
-    String::Utf8Value param1(args[1]->ToString());
+    String::Utf8Value param1(current, args[1]->ToString(context).ToLocalChecked());
     QString url = QString::fromUtf8(*param1);
 
     bool useFileId = true;
     if (args.Length() >= 3)
     {
-      useFileId = args[2]->ToBoolean()->Value();
+      useFileId = args[2]->ToBoolean(context).ToLocalChecked()->Value();
     }
 
     Status status = Status::Invalid;
     if (args.Length() >= 4)
     {
-      status = (Status::Type)args[3]->ToInteger()->Value();
+      status = (Status::Type)args[3]->ToInteger(context).ToLocalChecked()->Value();
     }
 
     OsmMapReaderFactory::read(map->getMap(), url, useFileId, status);
@@ -100,8 +102,9 @@ void MapIoJs::loadMapFromString(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
 
-  OsmMapJs* map = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject());
+  OsmMapJs* map = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject(context).ToLocalChecked());
   QString mapXml = toCpp<QString>(args[1]);
 
   OsmXmlReader reader;
@@ -112,7 +115,7 @@ void MapIoJs::loadMapFromString(const FunctionCallbackInfo<Value>& args)
   Status status = Status::Invalid;
   if (args.Length() >= 4)
   {
-    status = (Status::Type)args[3]->ToInteger()->Value();
+    status = (Status::Type)args[3]->ToInteger(context).ToLocalChecked()->Value();
     reader.setDefaultStatus(status);
   }
   reader.readFromString(mapXml, map->getMap());
@@ -124,8 +127,9 @@ void MapIoJs::loadMapFromStringPreserveIdAndStatus(const FunctionCallbackInfo<Va
 {
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
 
-  OsmMapJs* map = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject());
+  OsmMapJs* map = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject(context).ToLocalChecked());
   QString mapXml = toCpp<QString>(args[1]);
 
   OsmXmlReader reader;
@@ -140,12 +144,13 @@ void MapIoJs::saveMap(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
 
-  OsmMapPtr map = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject())->getMap();
+  OsmMapPtr map = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject(context).ToLocalChecked())->getMap();
 
   MapProjector::projectToWgs84(map);
 
-  String::Utf8Value param1(args[1]->ToString());
+  String::Utf8Value param1(current, args[1]->ToString(context).ToLocalChecked());
   QString url = QString::fromUtf8(*param1);
 
   OsmMapWriterFactory::write(map, url);

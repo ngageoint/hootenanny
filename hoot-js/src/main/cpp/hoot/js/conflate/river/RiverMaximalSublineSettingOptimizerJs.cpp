@@ -45,10 +45,11 @@ void RiverMaximalSublineSettingOptimizerJs::Init(Handle<Object> exports)
 {
   Isolate* current = exports->GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
   Handle<Object> thisObj = Object::New(current);
   exports->Set(String::NewFromUtf8(current, "RiverMaximalSublineSettingOptimizer"), thisObj);
   thisObj->Set(String::NewFromUtf8(current, "getFindBestMatchesMaxRecursions"),
-               FunctionTemplate::New(current, getFindBestMatchesMaxRecursions)->GetFunction());
+               FunctionTemplate::New(current, getFindBestMatchesMaxRecursions)->GetFunction(context).ToLocalChecked());
 }
 
 void RiverMaximalSublineSettingOptimizerJs::getFindBestMatchesMaxRecursions(
@@ -56,8 +57,9 @@ void RiverMaximalSublineSettingOptimizerJs::getFindBestMatchesMaxRecursions(
 {
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
 
-  OsmMapJs* mapJs = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject());
+  OsmMapJs* mapJs = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject(context).ToLocalChecked());
   const int maxRecursions =
     RiverMaximalSublineSettingOptimizer().getFindBestMatchesMaxRecursions(mapJs->getConstMap());
   LOG_VARD(maxRecursions);

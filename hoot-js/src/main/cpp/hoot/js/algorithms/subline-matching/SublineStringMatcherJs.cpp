@@ -63,13 +63,14 @@ void SublineStringMatcherJs::extractMatchingSublines(const FunctionCallbackInfo<
 {
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
 
   SublineStringMatcherJs* smJs = ObjectWrap::Unwrap<SublineStringMatcherJs>(args.This());
   SublineStringMatcherPtr sm = smJs->getSublineStringMatcher();
 
-  OsmMapJs* mapJs = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject());
-  ElementJs* e1Js = ObjectWrap::Unwrap<ElementJs>(args[1]->ToObject());
-  ElementJs* e2Js = ObjectWrap::Unwrap<ElementJs>(args[2]->ToObject());
+  OsmMapJs* mapJs = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject(context).ToLocalChecked());
+  ElementJs* e1Js = ObjectWrap::Unwrap<ElementJs>(args[1]->ToObject(context).ToLocalChecked());
+  ElementJs* e2Js = ObjectWrap::Unwrap<ElementJs>(args[2]->ToObject(context).ToLocalChecked());
   ConstOsmMapPtr m = mapJs->getConstMap();
   ConstElementPtr e1 = e1Js->getConstElement();
   ConstElementPtr e2 = e2Js->getConstElement();
@@ -160,6 +161,7 @@ void SublineStringMatcherJs::Init(Handle<Object> target)
 {
   Isolate* current = target->GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
   vector<QString> opNames =
     Factory::getInstance().getObjectNamesByBase(SublineStringMatcher::className());
 
@@ -176,7 +178,7 @@ void SublineStringMatcherJs::Init(Handle<Object> target)
     tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "extractMatchingSublines"),
         FunctionTemplate::New(current, extractMatchingSublines));
 
-    Persistent<Function> constructor(current, tpl->GetFunction());
+    Persistent<Function> constructor(current, tpl->GetFunction(context).ToLocalChecked());
     target->Set(String::NewFromUtf8(current, n), ToLocal(&constructor));
   }
 }

@@ -70,8 +70,9 @@ void ElementMergerJs::Init(Handle<Object> exports)
 {
   Isolate* current = exports->GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
   exports->Set(String::NewFromUtf8(current, "mergeElements"),
-               FunctionTemplate::New(current, mergeElements)->GetFunction());
+               FunctionTemplate::New(current, mergeElements)->GetFunction(context).ToLocalChecked());
 }
 
 void ElementMergerJs::mergeElements(const FunctionCallbackInfo<Value>& args)
@@ -82,6 +83,7 @@ void ElementMergerJs::mergeElements(const FunctionCallbackInfo<Value>& args)
   try
   {
     HandleScope scope(current);
+    Local<Context> context = current->GetCurrentContext();
     if (args.Length() != 1)
     {
       args.GetReturnValue().Set(
@@ -91,7 +93,7 @@ void ElementMergerJs::mergeElements(const FunctionCallbackInfo<Value>& args)
       return;
     }
 
-    OsmMapPtr map(node::ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject())->getMap());
+    OsmMapPtr map(node::ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject(context).ToLocalChecked())->getMap());
     LOG_VART(map->getElementCount());
     _mergeElements(map, current);
     LOG_VART(map->getElementCount());

@@ -35,7 +35,9 @@ namespace hoot
 
 inline QString str(v8::Handle<v8::Value> ls)
 {
-  v8::String::Utf8Value param(ls->ToString());
+  v8::Isolate* current = v8::Isolate::GetCurrent();
+
+  v8::String::Utf8Value param(current, ls->ToString(current));
   return QString::fromUtf8(*param);
 }
 

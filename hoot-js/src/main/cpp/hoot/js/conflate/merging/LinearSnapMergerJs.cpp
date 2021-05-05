@@ -60,6 +60,8 @@ void LinearSnapMergerJs::Init(Handle<Object> target)
 {
   Isolate* current = target->GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
+
   // Prepare constructor template
   Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
   tpl->SetClassName(
@@ -71,7 +73,7 @@ void LinearSnapMergerJs::Init(Handle<Object> target)
   tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "apply"),
       FunctionTemplate::New(current, apply));
 
-  _constructor.Reset(current, tpl->GetFunction());
+  _constructor.Reset(current, tpl->GetFunction(context).ToLocalChecked());
   target->Set(String::NewFromUtf8(current, "LinearSnapMerger"), ToLocal(&_constructor));
 }
 
