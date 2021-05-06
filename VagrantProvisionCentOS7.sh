@@ -40,7 +40,17 @@ if [ "${ADDREPOS:-yes}" = "yes" ]; then
     # configure PGDG repository for PostgreSQL 9.5.
     echo "### Add pgdg repo ###" >> CentOS_upgrade.txt
     sudo $HOOT_HOME/scripts/yum/pgdg-repo.sh 9.5
+
+    # configure the devtoolset repository
+#    echo "### Add devtoolset repo ###"
+#    sudo yum install -y centos-release-scl
+#    sudo yum-config-manager --enable rhel-server-rhscl-7-rpms
 fi
+
+# configure the devtoolset repository
+echo "### Add devtoolset repo ###"
+sudo yum install -y centos-release-scl yum-utils
+sudo yum-config-manager --enable rhel-server-rhscl-7-rpms
 
 if [ "${YUMUPDATE:-yes}" = "yes" ]; then
     echo "Updating OS..."
@@ -135,10 +145,8 @@ sudo yum -y install \
     cmake \
     cppunit-devel \
     dblatex \
+    devtoolset-8 \
     doxygen \
-    gcc \
-    gcc-c++ \
-    gdb \
     git \
     git-core \
     gnuplot \
@@ -353,6 +361,12 @@ rm -rf $HOOT_HOME/userfiles/tmp
 # This is defensive!
 # We do this so that Tomcat doesnt. If it does, it screws the permissions up
 mkdir -p $HOOT_HOME/userfiles/tmp
+
+# Update the gcc location to devtoolset-8
+if ! grep --quiet devtoolset-8 ~/.bash_profile; then
+    echo "Adding devtoolset-8 to profile..."
+    echo "source /opt/rh/devtoolset-8/enable" >> ~/.bash_profile
+fi
 
 # OK, this is seriously UGLY but it fixes an NFS problem
 #chmod -R 777 $HOOT_HOME/userfiles
