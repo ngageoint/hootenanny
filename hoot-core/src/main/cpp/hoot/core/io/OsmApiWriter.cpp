@@ -469,9 +469,26 @@ void OsmApiWriter::_changesetThreadFunc(int index)
             //  Loop back around to work on the next changeset
             continue;
           }
-          //  Fall through here to split the changeset and retry
-          //  This includes when the changeset is too big, i.e.:
-          //    The changeset <id> was closed at <dtg> UTC
+          //  Split the changeset and retry
+          if (!_splitChangeset(workInfo, info->response))
+          {
+            if (!workInfo->getAttemptedResolveChangesetIssues())
+            {
+              //  Set the attempt issues resolved flag
+              workInfo->setAttemptedResolveChangesetIssues(true);
+              //  Try to automatically resolve certain issues, like out of date version
+              if (_resolveIssues(request, workInfo))
+              {
+                _pushChangesets(workInfo);
+              }
+              else
+              {
+                //  Set the element in the changeset to failed because the issues couldn't be resolved
+                _changeset.updateFailedChangeset(workInfo);
+              }
+            }
+          }
+          break;
         case HttpResponseCode::HTTP_BAD_REQUEST:          //  Placeholder ID is missing or not unique
         case HttpResponseCode::HTTP_NOT_FOUND:            //  Diff contains elements where the given ID could not be found
         case HttpResponseCode::HTTP_PRECONDITION_FAILED:  //  Precondition Failed, Relation with id cannot be saved due to other member

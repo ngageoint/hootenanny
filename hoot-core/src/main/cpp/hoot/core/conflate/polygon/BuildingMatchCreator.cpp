@@ -183,7 +183,7 @@ public:
 
   static bool isRelated(ConstElementPtr e1, ConstElementPtr e2)
   {
-    BuildingCriterion buildingCrit(false);
+    BuildingCriterion buildingCrit;
     if (e1->getStatus() != e2->getStatus() && e1->isUnknown() && e2->isUnknown() &&
         buildingCrit.isSatisfied(e1) && buildingCrit.isSatisfied(e2))
     {
