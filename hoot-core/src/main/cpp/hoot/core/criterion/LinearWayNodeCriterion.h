@@ -40,10 +40,10 @@ public:
   static QString className() { return "hoot::LinearWayNodeCriterion"; }
 
   LinearWayNodeCriterion();
-  ~LinearWayNodeCriterion() = default;
+  ~LinearWayNodeCriterion() override = default;
 
   ElementCriterionPtr clone() override
-  { return ElementCriterionPtr(new LinearWayNodeCriterion()); }
+  { return std::make_shared<LinearWayNodeCriterion>(); }
 
   QString getDescription() const override
   { return "Identifies nodes belonging to linear features"; }

@@ -100,7 +100,7 @@ protected:
 
   void _logMergeResult(
     const long nodeId1, const long nodeId2, OsmMapPtr& map, const bool replaced,
-    const double distance = -1.0, const double calcdDistance = -1.0);
+    const double distance = -1.0, const double calcdDistance = -1.0) const;
   bool _passesLogMergeFilter(const long nodeId1, const long nodeId2, OsmMapPtr& map) const;
 };
 
