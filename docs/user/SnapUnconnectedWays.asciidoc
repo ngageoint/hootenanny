@@ -2,30 +2,22 @@
 [[SnapUnconnectedWays]]
 == Snap Unconnected Ways
 
-If you want to snap unconnected linear features (e.g. roads) within a single dataset or in two different datasets back to neighboring linear 
-features without running full conflation, Hootenanny allows for that.
+If you want to snap unconnected linear features (e.g. roads) within a single dataset or in two
+different datasets back to neighboring linear features without running full conflation, Hootenanny
+allows for that. You can control the types of features snapped, which direction they snap in (to
+reference or to secondary), and whether they snap to existing way nodes or generate new ones.
 
-basic example:
-
---------------
-# Snap unconnected roads in the second dataset back to neighboring roads in the first dataset
-hoot convert -D convert.ops="hoot::UnconnectedWaySnapper" \
-  -D snap.unconnected.ways.snap.way.criterion=hoot::HighwayCriterion \
-  -D snap.unconnected.ways.snap.to.way.criterion=hoot::HighwayCriterion \
-  -D snap.unconnected.ways.snap.to.way.node.criterion=hoot::HighwayWayNodeCriterion \
-  -D snap.unconnected.ways.snap.to.way.status=Input1 -D snap.unconnected.ways.snap.way.status=Input2 \
-  input1.osm input2.osm output.osm
--------------
-
-See additional examples in the "Command Line Examples" section of the User Documentation.
+See examples in the "Command Line Examples" section of the User Documentation.
 
 === Reviewing
 
-The +snap.unconnected.ways.review.snapped.ways+ option can be enabled to flag any snapped way for review. This allows you to manually correct 
-any poorly snapped ways.
+The +snap.unconnected.ways.review.snapped.ways+ option can be enabled to flag any snapped way for
+review. This allows you to manually correct any poorly snapped ways.
 
-The +snap.unconnected.ways.mark.only+ option bypasses way snapping completely, and when used in conjunction with the 
-+snap.unconnected.ways.review.snapped.ways+ option, marks any ways that would have been snapped withthe current configuration as needing review. This allows you to have complete manual control over way snapping.
+The +snap.unconnected.ways.mark.only+ option bypasses way snapping completely, and when used in
+conjunction with the +snap.unconnected.ways.review.snapped.ways+ option, marks any ways that would
+have been snapped withthe current configuration as needing review. This allows you to have complete
+manual control over way snapping.
 
 === Configuration
 

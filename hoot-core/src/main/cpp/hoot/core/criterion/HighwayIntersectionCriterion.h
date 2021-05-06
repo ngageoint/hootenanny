@@ -59,10 +59,9 @@ public:
   void setOsmMap(const OsmMap* map) override;
 
   QString getDescription() const override { return "Identifies highway intersections"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+  QString toString() const override { return className(); }
 
 private:
 

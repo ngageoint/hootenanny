@@ -50,6 +50,7 @@ class DuplicateNodeRemoverTest : public HootTestFixture
     CPPUNIT_TEST(runBasicTest);
     CPPUNIT_TEST(runMetadataTest);
     CPPUNIT_TEST(runInvalidDistanceTest);
+    CPPUNIT_TEST(runIgnoreStatusTest);
     CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -141,6 +142,20 @@ public:
       QString("Nearby node merging distance must be greater than zero. Distance specified: -1")
         .toStdString(),
       exceptionMsg.toStdString());
+  }
+
+  void runIgnoreStatusTest()
+  {
+    OsmMapPtr map(new OsmMap());
+
+    // Statuses are different, so won't be considered dupes unless we explicitly ignore status.
+    /*NodePtr node1 =*/ TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0);
+    /*NodePtr node2 =*/ TestUtils::createNode(map, Status::Unknown2, 0.0, 0.0);
+    MapProjector::projectToOrthographic(map);
+
+    DuplicateNodeRemover::removeNodes(map, 1.0, true);
+
+    CPPUNIT_ASSERT_EQUAL(1, (int)map->getNodes().size());
   }
 };
 

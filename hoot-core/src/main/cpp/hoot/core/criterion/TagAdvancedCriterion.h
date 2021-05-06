@@ -73,10 +73,9 @@ public:
 
   QString getDescription() const override
   { return "Identifies elements by tag using a set of advanced schema functionality"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+  QString toString() const override { return className(); }
 
 private:
 

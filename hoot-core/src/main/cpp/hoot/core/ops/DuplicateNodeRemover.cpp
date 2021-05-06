@@ -39,7 +39,6 @@
 #include <hoot/core/elements/WayUtils.h>
 #include <hoot/core/elements/TagUtils.h>
 #include <hoot/core/schema/ExactTagDifferencer.h>
-#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/conflate/ConflateUtils.h>
 
 // Qt
@@ -66,7 +65,8 @@ double calcDistanceSquared(const NodePtr& n1, const NodePtr& n2)
   return dx * dx + dy * dy;
 }
 
-DuplicateNodeRemover::DuplicateNodeRemover(Meters distanceThreshold)
+DuplicateNodeRemover::DuplicateNodeRemover(Meters distanceThreshold) :
+_ignoreStatus(false)
 {
   _distance = distanceThreshold;
   if (_distance < 0.0)
@@ -134,7 +134,6 @@ void DuplicateNodeRemover::apply(std::shared_ptr<OsmMap>& map)
   cph.resetIterator();
   ExactTagDifferencer tagDiff;
 
-  ElementToGeometryConverter elementConverter(map);
   while (cph.next())
   {
     const std::vector<long>& v = cph.getMatch();
@@ -158,7 +157,7 @@ void DuplicateNodeRemover::apply(std::shared_ptr<OsmMap>& map)
           LOG_VART(n1);
           LOG_VART(n2);
 
-          if (n1->getStatus() == n2->getStatus())
+          if ((n1->getStatus() == n2->getStatus()) || _ignoreStatus)
           {
             calcdDistanceSquared = calcDistanceSquared(n1, n2);
             LOG_VART(distanceSquared);
@@ -234,8 +233,8 @@ void DuplicateNodeRemover::apply(std::shared_ptr<OsmMap>& map)
   }
 }
 
-bool DuplicateNodeRemover::_passesLogMergeFilter(const long nodeId1, const long nodeId2,
-                                                 OsmMapPtr& map) const
+bool DuplicateNodeRemover::_passesLogMergeFilter(
+  const long nodeId1, const long nodeId2, OsmMapPtr& map) const
 {
   // can add various filtering criteria here for debugging purposes...
 
@@ -268,9 +267,9 @@ bool DuplicateNodeRemover::_passesLogMergeFilter(const long nodeId1, const long 
   return false;
 }
 
-void DuplicateNodeRemover::_logMergeResult(const long nodeId1, const long nodeId2, OsmMapPtr& map,
-                                           const bool replaced, const double distance,
-                                           const double calcdDistance)
+void DuplicateNodeRemover::_logMergeResult(
+  const long nodeId1, const long nodeId2, OsmMapPtr& map, const bool replaced,
+  const double distance, const double calcdDistance)
 {
   if (_passesLogMergeFilter(nodeId1, nodeId2, map))
   {
@@ -298,10 +297,12 @@ void DuplicateNodeRemover::_logMergeResult(const long nodeId1, const long nodeId
   }
 }
 
-void DuplicateNodeRemover::removeNodes(std::shared_ptr<OsmMap> map, Meters distanceThreshold)
+void DuplicateNodeRemover::removeNodes(
+  std::shared_ptr<OsmMap> map, Meters distanceThreshold, const bool ignoreStatus)
 {
-  DuplicateNodeRemover mnn(distanceThreshold);
-  mnn.apply(map);
+  DuplicateNodeRemover dupeRemover(distanceThreshold);
+  dupeRemover.setIgnoreStatus(ignoreStatus);
+  dupeRemover.apply(map);
 }
 
 }

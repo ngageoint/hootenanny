@@ -50,10 +50,9 @@ public:
   ElementCriterionPtr clone() override { return ElementCriterionPtr(new StatsAreaCriterion()); }
 
   QString getDescription() const override { return "Identifies areas for use by statistics"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+  QString toString() const override { return className(); }
 };
 
 }

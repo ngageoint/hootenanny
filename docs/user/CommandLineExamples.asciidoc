@@ -181,9 +181,7 @@ See the User Guide for more details on command usage. Most examples use .osm fil
 
 -----
     hoot convert -D convert.ops="hoot::UnconnectedWaySnapper" \
-      -D snap.unconnected.ways.snap.way.criterion=hoot::HighwayCriterion \
-      -D snap.unconnected.ways.snap.to.way.criterion=hoot::HighwayCriterion \
-      -D snap.unconnected.ways.snap.to.way.node.criterion=hoot::HighwayWayNodeCriterion \
+      -D snap.unconnected.ways.snap.criteria=hoot::HighwayCriterion \
       -D snap.unconnected.ways.snap.to.way.status=Input1 \
       -D snap.unconnected.ways.snap.way.status=Input2 \
       input1.osm input2.osm output.osm
@@ -797,14 +795,23 @@ hoot convert -D convert.ops="hoot::UnlikelyRoadRemover" input.osm output.osm
     hoot convert -D convert.ops="hoot::PhoneNumberLocateVisitor" input.osm output.osm
 -----
 
+===== Snap unconnected secondary roads in one dataset back to any type of linear feature in another dataset:
+
+-----
+    hoot convert -D convert.ops="hoot::UnconnectedWaySnapper" \
+      -D snap.unconnected.ways.snap.way.criteria=hoot::HighwayCriterion \
+      -D snap.unconnected.ways.snap.to.way.criteria=hoot::LinearCriterion \
+      -D snap.unconnected.ways.snap.to.way.status=Input1 \
+      -D snap.unconnected.ways.snap.way.status=Input2 \
+      input1.osm input2.osm output.osm
+-----
+
 ===== Snap unconnected roads in one dataset back to neighboring roads in another dataset using a stricter feature type matching requirement:
 
 -----
     hoot convert -D convert.ops="hoot::UnconnectedWaySnapper" \
       -D snap.unconnected.ways.minimum.type.match.score=0.8 \
-      -D snap.unconnected.ways.snap.way.criterion=hoot::HighwayCriterion \
-      -D snap.unconnected.ways.snap.to.way.criterion=hoot::HighwayCriterion \
-      -D snap.unconnected.ways.snap.to.way.node.criterion=hoot::HighwayWayNodeCriterion \
+      -D snap.unconnected.ways.snap.criterion=hoot::HighwayCriterion \
       -D snap.unconnected.ways.snap.to.way.status=Input1 \
       -D snap.unconnected.ways.snap.way.status=Input2 \
       input1.osm input2.osm output.osm
@@ -814,9 +821,7 @@ hoot convert -D convert.ops="hoot::UnlikelyRoadRemover" input.osm output.osm
 
 -----
     hoot convert -D convert.ops="hoot::UnconnectedWaySnapper" \
-      -D snap.unconnected.ways.snap.way.criterion=hoot::HighwayCriterion \
-      -D snap.unconnected.ways.snap.to.way.criterion=hoot::HighwayCriterion \
-      -D snap.unconnected.ways.snap.to.way.node.criterion=hoot::HighwayWayNodeCriterion \
+      -D snap.unconnected.ways.snap.criterion=hoot::HighwayCriterion \
       -D snap.unconnected.ways.snap.to.way.status=Input1 \
       -D snap.unconnected.ways.snap.way.status=Input2 \
       -D snap.unconnected.ways.review.snapped=true \
@@ -828,8 +833,6 @@ hoot convert -D convert.ops="hoot::UnlikelyRoadRemover" input.osm output.osm
 -----
     hoot convert -D convert.ops="hoot::UnconnectedWaySnapper" \
       -D snap.unconnected.ways.snap.way.criterion=hoot::HighwayCriterion \
-      -D snap.unconnected.ways.snap.to.way.criterion=hoot::HighwayCriterion \
-      -D snap.unconnected.ways.snap.to.way.node.criterion=hoot::HighwayWayNodeCriterion \
       -D snap.unconnected.ways.snap.to.way.status=Input1 \
       -D snap.unconnected.ways.snap.way.status=Input2 \
       -D snap.unconnected.ways.review.snapped=true \

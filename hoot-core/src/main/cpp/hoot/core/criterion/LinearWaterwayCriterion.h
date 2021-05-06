@@ -39,6 +39,7 @@ namespace hoot
 class LinearWaterwayCriterion : public ConflatableElementCriterion
 {
 public:
+
   static QString className() { return "hoot::LinearWaterwayCriterion"; }
 
   LinearWaterwayCriterion() = default;
@@ -48,13 +49,13 @@ public:
 
   GeometryType getGeometryType() const override { return GeometryType::Line; }
 
-  ElementCriterionPtr clone() override { return ElementCriterionPtr(new LinearWaterwayCriterion()); }
+  ElementCriterionPtr clone() override
+  { return ElementCriterionPtr(new LinearWaterwayCriterion()); }
 
   QString getDescription() const override { return "Identifies linear bodies of water"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+  QString toString() const override { return className(); }
 
   bool supportsSpecificConflation() const override { return true; }
 

@@ -60,19 +60,18 @@ public:
   ElementCriterionPtr clone() override
   { return ElementCriterionPtr(new ParallelWayCriterion(_map, _baseWay, _isParallel)); }
 
-  QString getDescription() const override
-  { return "Identifies ways that are parallel to each other"; }
-
   GeometryType getGeometryType() const override { return GeometryType::Line; }
-
-  QString getName() const override { return className(); }
-
-  QString getClassName() const override { return className(); }
 
   static bool isParallel(
     const ConstOsmMapPtr& map, const ConstElementPtr& e1, const ConstElementPtr& e2);
   static bool notParallel(
     const ConstOsmMapPtr& map, const ConstElementPtr& e1, const ConstElementPtr& e2);
+
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
+  QString toString() const override { return className(); }
+  QString getDescription() const override
+  { return "Identifies ways that are parallel to each other"; }
 
 private:
 

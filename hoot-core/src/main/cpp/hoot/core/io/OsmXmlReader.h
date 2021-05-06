@@ -60,29 +60,6 @@ public:
   OsmXmlReader();
   ~OsmXmlReader();
 
-  void close() override;
-
-  QString errorString() const override { return _errorString; }
-
-  bool endElement(const QString& namespaceURI, const QString& localName,
-                  const QString& qName) override;
-
-  bool fatalError(const QXmlParseException &exception) override;
-
-  void initializePartial() override { }
-
-  void finalizePartial() override;
-
-  std::shared_ptr<OGRSpatialReference> getProjection() const override;
-
-  bool hasMoreElements() override;
-
-  bool isSupported(const QString& url) override;
-
-  void read(const OsmMapPtr& map) override;
-
-  void readFromString(const QString& xml, const OsmMapPtr& map);
-
   /**
    * Converts OSM XML to a map
    *
@@ -93,27 +70,41 @@ public:
    * @param addChildRefsWhenMissing add referenced children when they are missing from the input
    * @return a map
    */
-  static OsmMapPtr fromXml(const QString& xml, const bool useDataSourceId = false,
-                           const bool useDataSourceStatus = false,
-                           const bool keepStatusTag = false,
-                           const bool addChildRefsWhenMissing = false);
+  static OsmMapPtr fromXml(
+    const QString& xml, const bool useDataSourceId = false, const bool useDataSourceStatus = false,
+    const bool keepStatusTag = false, const bool addChildRefsWhenMissing = false);
 
   void read(const QString& path, const OsmMapPtr& map);
-
-  ElementPtr readNextElement() override;
-
-  void setDefaultStatus(Status s) override { _status = s; }
-  void setUseFileStatus(bool useFileStatus) override { _useFileStatus = useFileStatus; }
+  void readFromString(const QString& xml, const OsmMapPtr& map);
 
   bool startElement(const QString& namespaceURI, const QString& localName,
                     const QString& qName, const QXmlAttributes& attributes) override;
+  bool endElement(const QString& namespaceURI, const QString& localName,
+                  const QString& qName) override;
+  bool fatalError(const QXmlParseException &exception) override;
+  QString errorString() const override { return _errorString; }
 
+  void initializePartial() override {}
+  void finalizePartial() override;
+  bool hasMoreElements() override;
+  bool isSupported(const QString& url) override;
+  void read(const OsmMapPtr& map) override;
+  void close() override;
+  ElementPtr readNextElement() override;
+  void setDefaultStatus(Status s) override { _status = s; }
+  void setUseFileStatus(bool useFileStatus) override { _useFileStatus = useFileStatus; }
   void setUseDataSourceIds(bool useDataSourceIds) override { _useDataSourceId = useDataSourceIds; }
+  QString supportedFormats() override { return ".osm;.osm.bz2;.osm.gz"; }
+
+  void setConfiguration(const Settings& conf) override;
+
+  std::shared_ptr<OGRSpatialReference> getProjection() const override;
+
   void setKeepStatusTag(bool keepStatusTag) { _keepStatusTag = keepStatusTag; }
   void setDefaultAccuracy(Meters circularError) { _defaultCircularError = circularError; }
   void setAddSourceDateTime(bool add) { _addSourceDateTime = add; }
   void setPreserveAllTags(bool preserve) { _preserveAllTags = preserve; }
-  void setStatusUpdateInterval(long interval) { _statusUpdateInterval = interval; }
+  void setStatusUpdateInterval(long interval) { _statusUpdateInterval = interval; } 
   /**
    * This will adds child refs to elements when they aren't present in the source data.  This is
    * only useful when dealing with disconnected chunks of map data, as in external sorting, and
@@ -124,10 +115,6 @@ public:
   void setAddChildRefsWhenMissing(bool addChildRefsWhenMissing)
   { _addChildRefsWhenMissing = addChildRefsWhenMissing; }
   void setCircularErrorTagKeys(const QStringList& keys) { _circularErrorTagKeys = keys; }
-
-  QString supportedFormats() override { return ".osm;.osm.bz2;.osm.gz"; }
-
-  void setConfiguration(const Settings& conf) override;
 
   // Its possible we may want to move this method and the ones for all other classes using it up
   // to OsmMapReader.
@@ -141,7 +128,7 @@ protected:
 
   bool _osmFound;
 
-  /// Maps from old node ids to new node ids.
+  // Maps from old node ids to new node ids.
   QHash<long, long> _nodeIdMap;
   QHash<long, long> _relationIdMap;
   QHash<long, long> _wayIdMap;
@@ -164,7 +151,7 @@ protected:
   bool _keepStatusTag;
   bool _useFileStatus;
   bool _useDataSourceId;
-  bool _addSourceDateTime;      ///< Should reader add source:datetime attribute to values read in?
+  bool _addSourceDateTime;
 
   long _wayId;
   long _relationId;
@@ -175,8 +162,8 @@ protected:
 
   bool _preserveAllTags;
 
-  QFile _inputFile;  //used for partial reading
-  QXmlStreamReader _streamReader; //used for partial reading
+  QFile _inputFile;  // used for partial reading
+  QXmlStreamReader _streamReader; // used for partial reading
 
   // store all key/value strings in this QHash, this promotes implicit sharing of string data. The
   // QHash goes away when the reading is done, but the memory sharing remains.
@@ -203,7 +190,7 @@ protected:
 
   void _parseTimeStamp(const QXmlAttributes& attributes);
 
-  /**
+  /*
    * Given the file ID return a relation ID. If the ID has already been mapped it will simply
    * return the mapped ID. If the ID has not been mapped a new ID will be created, mapped and
    * returned.

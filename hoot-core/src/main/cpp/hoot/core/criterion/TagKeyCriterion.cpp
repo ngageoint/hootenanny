@@ -59,7 +59,6 @@ void TagKeyCriterion::setConfiguration(const Settings& conf)
   _keys = confOpts.getTagKeyCriterionKeys();
 }
 
-
 TagKeyCriterion::TagKeyCriterion(QStringList keys)
 {
   _keys = keys;
