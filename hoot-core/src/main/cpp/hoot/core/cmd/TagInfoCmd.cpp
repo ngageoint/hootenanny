@@ -50,7 +50,6 @@ public:
   TagInfoCmd() = default;
 
   QString getName() const override { return "tag-info"; }
-
   QString getDescription() const override { return "Displays tag information for a map"; }
 
   int runSimple(QStringList& args) override
@@ -77,7 +76,6 @@ public:
       }
       args.removeAt(limitIndex + 1);
       args.removeAt(limitIndex);
-      LOG_VART(args);
     }
 
     QStringList keys;
@@ -87,7 +85,6 @@ public:
       keys = args.at(keysIndex + 1).trimmed().split(";");
       args.removeAt(keysIndex + 1);
       args.removeAt(keysIndex);
-      LOG_VART(args);
     }
 
     bool keysOnly = false;
@@ -95,7 +92,6 @@ public:
     {
       keysOnly = true;
       args.removeAt(args.indexOf("--keys-only"));
-      LOG_VART(args);
     }
 
     bool caseSensitive = true;
@@ -103,7 +99,6 @@ public:
     {
       caseSensitive = false;
       args.removeAt(args.indexOf("--case-insensitive"));
-      LOG_VART(args);
     }
 
     bool exactKeyMatch = true;
@@ -111,7 +106,6 @@ public:
     {
       exactKeyMatch = false;
       args.removeAt(args.indexOf("--partial-key-match"));
-      LOG_VART(args);
     }
 
     bool delimitedTextOutput = false;
@@ -125,7 +119,6 @@ public:
       }
       delimitedTextOutput = true;
       args.removeAt(args.indexOf("--delimited-text"));
-      LOG_VART(args);
     }
 
     // everything left is an input
@@ -134,6 +127,8 @@ public:
     {
       inputs.append(args[i]);
     }
+
+    LOG_STATUS("Displaying tag information for " << inputs.size() << "inputs...");
 
     TagInfo tagInfo(
       tagValuesPerKeyLimit, keys, keysOnly, caseSensitive, exactKeyMatch, delimitedTextOutput);

@@ -52,7 +52,6 @@ void Log::log(WarningLevel level, const string& str)
 void Log::log(WarningLevel level, const string& str, const string& filename,
   const string& prettyFunction, int lineNumber)
 {  
-
   if (level >= _level && notFiltered(prettyFunction))
   {
     QDateTime dt = QDateTime::currentDateTime();

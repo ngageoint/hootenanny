@@ -34,6 +34,7 @@
 #include <hoot/core/ops/DuplicateNodeRemover.h>
 #include <hoot/core/scoring/MapComparator.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/StringUtils.h>
@@ -57,7 +58,6 @@ public:
   DiffCmd() = default;
 
   QString getName() const override { return "diff"; }
-
   QString getDescription() const override
   { return "Calculates the difference between two maps or changesets"; }
 
@@ -108,6 +108,10 @@ public:
 
     QString pathname1 = args[0];
     QString pathname2 = args[1];
+
+    LOG_STATUS(
+      "Comparing ..." << FileUtils::toLogFormat(pathname1, 25) << " and ..." <<
+      FileUtils::toLogFormat(pathname2, 25) << "...");
 
     int result = 1;
     //  Compare changesets differently than all other types

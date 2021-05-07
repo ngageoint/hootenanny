@@ -37,6 +37,7 @@
 #include <hoot/core/scoring/MapMatchScoringUtils.h>
 #include <hoot/core/algorithms/perty/PertyTestRunner.h>
 #include <hoot/core/algorithms/perty/PertyTestRunResult.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/StringUtils.h>
 
 // Qt
@@ -59,7 +60,6 @@ public:
   PerturbCmd() = default;
 
   QString getName() const override { return "perturb"; }
-
   QString getDescription() const override { return "Perturbs features in a map"; }
 
   int runSimple(QStringList& args) override
@@ -94,31 +94,38 @@ public:
       throw HootException("Cannot specify both the --score and --test options.");
     }
 
-    const QString msg = "PERTY operation ran in %1 total.";
+    const QString input = args[0];
+    const QString output = args[1];
+
+    LOG_STATUS(
+      "Perturbing map ..." << FileUtils::toLogFormat(input, 25) << " and writing output to ..." <<
+      FileUtils::toLogFormat(output, 25) << "...");
+
+    const QString msg = "Perturbation operation ran in %1 total.";
     if (!scoreOptionSpecified && !testOptionSpecified)
     {
       OsmMapPtr map(new OsmMap());
-      IoUtils::loadMap(map, args[0], true, Status::Unknown1);
+      IoUtils::loadMap(map, input, true, Status::Unknown1);
 
       PertyOp perty;
       perty.apply(map);
 
       MapProjector::projectToWgs84(map);
-      IoUtils::saveMap(map, args[1]);
+      IoUtils::saveMap(map, output);
 
       LOG_STATUS(msg.arg(StringUtils::millisecondsToDhms(timer.elapsed())));
     }
     else if (scoreOptionSpecified)
     {
       std::shared_ptr<const MatchComparator> matchComparator =
-        PertyMatchScorer().scoreMatches(args[0], args[1]);
+        PertyMatchScorer().scoreMatches(input, output);
       LOG_STATUS(msg.arg(StringUtils::millisecondsToDhms(timer.elapsed())));
       cout << MapMatchScoringUtils::getMatchScoringString(matchComparator);
     }
     else if (testOptionSpecified)
     {
       QList<std::shared_ptr<const PertyTestRunResult>> results =
-      PertyTestRunner().runTest(args[0], args[1]);
+      PertyTestRunner().runTest(input, output);
 
       LOG_STATUS("\n\nPERTY Test Results");
       LOG_STATUS("\n\nNumber of Test Runs: " << results.size());

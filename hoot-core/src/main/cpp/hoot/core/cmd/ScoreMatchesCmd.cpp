@@ -67,7 +67,6 @@ public:
   ScoreMatchesCmd() = default;
 
   QString getName() const override { return "score-matches"; }
-
   QString getDescription() const override
   { return "Scores conflation performance against a manually matched map"; }
 
@@ -111,11 +110,17 @@ public:
 
     vector<OsmMapPtr> maps;
     QString output = args.last();
+
     for (int i = 0; i < args.size() - 1; i += 2)
     {
       OsmMapPtr map(new OsmMap());
       const QString map1Path = args[i];
       const QString map2Path = args[i + 1];
+
+      LOG_STATUS(
+        "Scoring matches for ..." << FileUtils::toLogFormat(map1Path, 25) << " and ..." <<
+        FileUtils::toLogFormat(map2Path, 25) << "...");
+
       IoUtils::loadMap(map, map1Path, false, Status::Unknown1);
       IoUtils::loadMap(map, map2Path, false, Status::Unknown2);
 

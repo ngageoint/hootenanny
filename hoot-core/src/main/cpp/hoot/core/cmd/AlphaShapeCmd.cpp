@@ -35,6 +35,7 @@
 #include <hoot/core/io/OsmGeoJsonWriter.h>
 #include <hoot/core/io/ShapefileWriter.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/util/StringUtils.h>
@@ -55,7 +56,6 @@ public:
   AlphaShapeCmd() = default;
 
   QString getName() const override { return "alpha-shape"; }
-
   QString getDescription() const override
   { return "Generates a shape that covers a set of features in a map"; }
 
@@ -111,11 +111,14 @@ public:
     QString pointsPath = args[0];
     QString outputPath = args[1];
 
+    LOG_STATUS(
+      "Deriving alpha shape for input ..." << FileUtils::toLogFormat(pointsPath, 25) <<
+      " and writing output to " << FileUtils::toLogFormat(outputPath, 25) << "...");
+
     OsmMapPtr pointsMap(new OsmMap());
     IoUtils::loadMap(pointsMap, pointsPath, false, Status::Unknown1);
 
     AlphaShapeGenerator generator(alpha, buffer);
-    //generator.setManuallyCoverSmallPointClusters(false);
     OsmMapPtr result = generator.generateMap(pointsMap);
 
     // reproject back into lat/lng
