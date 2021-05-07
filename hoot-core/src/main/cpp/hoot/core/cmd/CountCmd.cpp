@@ -40,6 +40,7 @@
 #include <hoot/core/io/ElementCriterionVisitorInputStream.h>
 #include <hoot/core/io/ElementVisitorInputStream.h>
 #include <hoot/core/util/DbUtils.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/io/IoUtils.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
@@ -64,7 +65,6 @@ public:
   }
 
   QString getName() const override { return "count"; }
-
   QString getDescription() const override
   { return "Counts the number of features in a map that meet specified criteria"; }
 
@@ -119,19 +119,18 @@ public:
         criterionClassName, ConfigOptions().getElementCriterionNegate(), isStreamableCrit);
     LOG_VARD(isStreamableCrit);
 
-    const QString dataType = countFeaturesOnly ? "features" : "elements";
     if (isStreamableCrit)
     {
       for (int i = 0; i < inputs.size(); i++)
       {
-        LOG_STATUS(
-          "Counting " << dataType << " satisfying " << criterionClassName << " from ..." <<
-          inputs.at(i).right(25) << "...");
+        LOG_STATUS(_getStatusMessage(inputs.at(i), countFeaturesOnly, criterionClassName));
         _total += _countStreaming(inputs.at(i), countFeaturesOnly, crit);
       }
     }
     else
     {
+
+      LOG_STATUS(_getStatusMessage(inputs.size(), countFeaturesOnly, criterionClassName));
       _total += _countMemoryBound(inputs, countFeaturesOnly, crit);
     }
 
@@ -154,6 +153,32 @@ private:
 
   long _total;
   int _taskStatusUpdateInterval;
+
+  QString _getStatusMessage(
+    const QString& input, const bool countFeaturesOnly, const QString& criterionClassName) const
+  {
+    const QString dataType = countFeaturesOnly ? "features" : "elements";
+    QString msg = "Counting " + dataType;
+    if (!criterionClassName.isEmpty())
+    {
+      msg += " satisfying " + criterionClassName;
+    }
+    msg += " from " + FileUtils::toLogFormat(input, 25) + "...";
+    return msg;
+  }
+
+  QString _getStatusMessage(
+    const int inputsSize, const bool countFeaturesOnly, const QString& criterionClassName) const
+  {
+    const QString dataType = countFeaturesOnly ? "features" : "elements";
+    QString msg = "Counting " + dataType;
+    if (!criterionClassName.isEmpty())
+    {
+      msg += " satisfying " + criterionClassName;
+    }
+    msg += " from " + QString::number(inputsSize) + " inputs...";
+    return msg;
+  }
 
   std::shared_ptr<PartialOsmMapReader> _getStreamingReader(const QString& input)
   {
@@ -263,8 +288,6 @@ private:
   long _countMemoryBound(const QStringList& inputs, const bool countFeaturesOnly,
                          const ElementCriterionPtr& criterion)
   {
-    LOG_STATUS("Counting features in " << inputs.size() << " inputs...");
-
     OsmMapPtr map(new OsmMap());
     IoUtils::loadMaps(map, inputs, true);
 

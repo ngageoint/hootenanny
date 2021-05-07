@@ -100,39 +100,32 @@ public:
 
   static Log& getInstance();
 
-  WarningLevel getLevel() const { return _level; }
-
-  static WarningLevel levelFromString(QString l);
-
-  static QString levelToString(WarningLevel l);
-
-  QString getLevelAsString() const;
-
   /**
    * May get called multiple times (e.g. before and after config settings are finalized).
    */
   void init();
 
-  bool isDebugEnabled() const { return _level <= Debug; }
+  static WarningLevel levelFromString(QString l);
+  static QString levelToString(WarningLevel l);
+  QString getLevelAsString() const;
 
+  bool isDebugEnabled() const { return _level <= Debug; }
   bool isInfoEnabled() const { return _level <= Info; }
 
   void log(WarningLevel level, const std::string& str);
-
   void log(WarningLevel level, const std::string& str, const std::string& filename,
     const std::string& prettyFunction, int lineNumber);
-
   void log(WarningLevel level, const QString& str, const QString& filename,
     const QString& prettyFunction, int lineNumber);
-
   void progress(WarningLevel level, const std::string& str, const std::string& filename,
     const std::string& functionName, int lineNumber);
-
-  void setLevel(WarningLevel l);
 
   static int getWarnMessageLimit();
 
   static std::string ellipsisStr(const std::string& str, uint count = 33);
+
+  WarningLevel getLevel() const { return _level; }
+  void setLevel(WarningLevel l);
 
 private:
 

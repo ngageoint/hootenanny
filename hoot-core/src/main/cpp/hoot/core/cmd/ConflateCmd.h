@@ -52,9 +52,7 @@ public:
   ConflateCmd() = default;
 
   QString getName() const override { return "conflate"; }
-
-  QString getDescription() const override
-  { return "Conflates two maps into a single map"; }
+  QString getDescription() const override { return "Conflates two maps into a single map"; }
 
   int runSimple(QStringList& args) override;
 

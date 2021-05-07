@@ -61,6 +61,12 @@ public:
 
   MultiaryScorePoiMatchesCmd() = default;
 
+  QString getName() const override { return "multiary-score-poi-matches"; }
+  QString getDescription() const override
+  { return "Scores the performance of multiary-poi-conflate against a manually matched map (experimental) "; }
+  QString getType() const override { return "rnd"; }
+
+
   QString evaluateThreshold(OsmMapPtr map, QString output,
     std::shared_ptr<MatchThreshold> mt, bool showConfusion)
   {
@@ -105,13 +111,6 @@ public:
     return result;
   }
 
-  QString getName() const override { return "multiary-score-poi-matches"; }
-
-  QString getDescription() const override
-  { return "Scores the performance of multiary-poi-conflate against a manually matched map (experimental) "; }
-
-  QString getType() const override { return "rnd"; }
-
   int runSimple(QStringList& args) override
   {
     QElapsedTimer timer;
@@ -145,6 +144,8 @@ public:
         QString("%1 takes at least two parameters: two or more input maps")
           .arg(getName()));
     }
+
+    LOG_STATUS("Scoring multiary conflate matches from ..." << args.size() << " inputs...");
 
     // modifying the schema is necessary to ensure the conflation concatenates values.
     SchemaVertex id;

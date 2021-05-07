@@ -55,7 +55,6 @@ public:
   ChangesetDeriveCmd() = default;
 
   QString getName() const override { return "changeset-derive"; }
-
   QString getDescription() const override
   { return "Creates a changeset representing the difference between two maps"; }
 
@@ -171,8 +170,9 @@ private:
   {
     const int maxFilePrintLength = ConfigOptions().getProgressVarPrintLengthMax();
     LOG_STATUS(
-      "Generating standard changeset for inputs: ..." << FileUtils::toLogFormat(input1, maxFilePrintLength) <<
-      " and ..." << FileUtils::toLogFormat(input2, maxFilePrintLength) << " and output: ..." <<
+      "Generating standard changeset for inputs: ..." <<
+      FileUtils::toLogFormat(input1, maxFilePrintLength) << " and ..." <<
+      FileUtils::toLogFormat(input2, maxFilePrintLength) << " and output: ..." <<
       FileUtils::toLogFormat(output, maxFilePrintLength));
 
     // Note that we may need to eventually further restrict this to only data with relation having

@@ -59,9 +59,7 @@ public:
   }
 
   QString getName() const override { return "stat"; }
-
-  QString getDescription() const override
-  { return "Calculates a single statistic for a map"; }
+  QString getDescription() const override { return "Calculates a single statistic for a map"; }
 
   int runSimple(QStringList& args) override
   {
@@ -76,25 +74,21 @@ public:
     }
 
     const QString input = args[0].trimmed();
-    LOG_VART(input);
-
     const QString visClassName = args[1].trimmed();
-    LOG_VARD(visClassName);
 
     QString statType = "total";
     if (args.size() == 3)
     {
       statType = args[2].trimmed();
     }
-    LOG_VARD(statType);
     if (!_isValidStatType(statType))
     {
       throw IllegalArgumentException("Invalid statistic type: " + statType);
     }
 
-    LOG_INFO(
+    LOG_STATUS(
       "Calculating statistic of type: " << statType << ", with visitor: " << visClassName <<
-      ", for input: " << FileUtils::toLogFormat(input, 25) << "...")
+      ", for " << FileUtils::toLogFormat(input, 25) << "...")
     const double stat = _calcStat(input, visClassName, statType);
     LOG_VART(stat);
 

@@ -48,10 +48,8 @@ public:
   DeDuplicateCmd() = default;
 
   QString getName() const override { return "de-duplicate"; }
-
   QString getDescription() const override
   { return "Removes duplicate features within a single map or between two maps (experimental)"; }
-
   QString getType() const override { return "rnd"; }
 
   int runSimple(QStringList& args) override
@@ -83,7 +81,8 @@ public:
       input1 = args[0].trimmed();
       output1 = args[1].trimmed();
       LOG_STATUS(
-        "De-duplicating ...:" << FileUtils::toLogFormat(input1, 25) << " to ..." << FileUtils::toLogFormat(output1, 25) << "...");
+        "De-duplicating ...:" << FileUtils::toLogFormat(input1, 25) << " to ..." <<
+        FileUtils::toLogFormat(output1, 25) << "...");
     }
     else
     {
@@ -92,8 +91,10 @@ public:
       output1 = args[2].trimmed();
       output2 = args[3].trimmed();
       LOG_STATUS(
-        "De-duplicating ...:" << FileUtils::toLogFormat(input1, 25) << " to ..." << FileUtils::toLogFormat(output1, 25) << " and ..." <<
-        FileUtils::toLogFormat(input2, 25) << " to ..." << FileUtils::toLogFormat(output2, 25) << "...");
+        "De-duplicating ...:" << FileUtils::toLogFormat(input1, 25) << " to ..." <<
+        FileUtils::toLogFormat(output1, 25) << " and ..." <<
+        FileUtils::toLogFormat(input2, 25) << " to ..." << FileUtils::toLogFormat(output2, 25) <<
+        "...");
     }
     LOG_VARD(input1);
     LOG_VARD(input2);

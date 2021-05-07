@@ -29,6 +29,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/rnd/conflate/matching/ScoreMatchesDiff.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/StringUtils.h>
 
 // Qt
@@ -47,9 +48,7 @@ public:
   ScoreMatchesDiffCmd() = default;
 
   QString getName() const override { return "score-matches-diff"; }
-
   QString getType() const override { return "rnd"; }
-
   QString getDescription() const override
   { return "Compares conflate performance between score-matches outputs (experimental)"; }
 
@@ -64,11 +63,20 @@ public:
       throw HootException(QString("%1 takes three parameters.").arg(getName()));
     }
 
+    const QString input1 = args[0].trimmed();
+    const QString input2 = args[1].trimmed();
+    const QString output = args[2].trimmed();
+
+    LOG_STATUS(
+      "Calculating conflate match difference between ..." << FileUtils::toLogFormat(input1, 25) <<
+      " and ..." << FileUtils::toLogFormat(input2, 25) << "; writing output to ..." <<
+      FileUtils::toLogFormat(output, 25) << "...");
+
     try
     {
       ScoreMatchesDiff diffGen;
-      diffGen.calculateDiff(args[0].trimmed(), args[1].trimmed());
-      diffGen.printDiff(args[2].trimmed());
+      diffGen.calculateDiff(input1, input2);
+      diffGen.printDiff(output);
     }
     catch (const HootException& e)
     {

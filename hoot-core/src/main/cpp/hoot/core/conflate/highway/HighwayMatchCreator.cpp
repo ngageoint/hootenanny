@@ -245,7 +245,7 @@ public:
     _numElementsVisited++;
     if (_numElementsVisited % (_taskStatusUpdateInterval /* 10*/) == 0)
     {
-      PROGRESS_INFO(
+      PROGRESS_STATUS(
         "Processed " << StringUtils::formatLargeNumber(_numElementsVisited) << " / " <<
         StringUtils::formatLargeNumber(_map->getWayCount() + _map->getRelationCount()) <<
         " elements.");

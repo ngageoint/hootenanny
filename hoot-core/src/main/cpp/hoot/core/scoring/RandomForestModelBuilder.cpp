@@ -36,6 +36,7 @@
 #include <hoot/core/scoring/MatchFeatureExtractor.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
 
@@ -51,13 +52,15 @@
 namespace hoot
 {
 
-void RandomForestModelBuilder::build(const QStringList trainingData, QString output,
-                                     const bool exportArffOnly)
+void RandomForestModelBuilder::build(
+  const QStringList trainingData, QString output, const bool exportArffOnly)
 {
   if (output.endsWith(".rf"))
   {
     output = output.remove(output.size() - 3, 3);
   }
+
+  LOG_STATUS("Building RF model ..." << FileUtils::toLogFormat(output, 25) << "...");
 
   MatchFeatureExtractor mfe;
   QStringList creators = ConfigOptions().getMatchCreators();
