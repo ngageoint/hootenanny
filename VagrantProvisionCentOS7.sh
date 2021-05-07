@@ -365,6 +365,9 @@ mkdir -p $HOOT_HOME/userfiles/tmp
 # Update the gcc location to devtoolset-8
 if ! grep --quiet devtoolset-8 ~/.bash_profile; then
     echo "Adding devtoolset-8 to profile..."
+    # Devtoolset <= 8 has a sudo issue, fix it here
+    echo "sudo chmod -x /opt/rh/devtoolset-8/root/usr/bin/sudo" >> ~/.bash_profile
+    # Enable devtoolset
     echo "source /opt/rh/devtoolset-8/enable" >> ~/.bash_profile
 fi
 
