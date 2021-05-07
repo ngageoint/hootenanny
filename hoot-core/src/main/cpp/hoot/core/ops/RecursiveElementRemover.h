@@ -47,6 +47,7 @@ class OsmMap;
  * - The element being deleted isn't contained by another element.
  *
  * If you want to remove an element that has parents, use RemoveElementByEid.
+ * TODO: update this comment
  *
  * To perform the operation two steps are taken.
  * 1. Determine all the children of the provided element
