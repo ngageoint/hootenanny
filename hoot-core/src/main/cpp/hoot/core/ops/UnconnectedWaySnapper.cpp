@@ -319,7 +319,6 @@ void UnconnectedWaySnapper::_createAllFeatureCriteria()
   _wayToSnapCrit = _createFeatureCriteria(_wayToSnapCriteria, _snapWayStatuses);
   LOG_DEBUG("Creating way to snap to criteria...");
   _wayToSnapToCrit = _createFeatureCriteria(_wayToSnapToCriteria, _snapToWayStatuses);
-  ElementCriterionPtr wayNodeToSnapToCrit;
   if (_snapToExistingWayNodes)
   {
    LOG_DEBUG("Creating way node to snap to criteria...");
@@ -526,6 +525,7 @@ void UnconnectedWaySnapper::_createFeatureIndex(
   spatialIndexer->finalizeIndex();
   LOG_DEBUG(spatialIndexer->getCompletedStatusMessage());
   LOG_VARD(featureIndexToEid.size());
+  //LOG_VARD(featureIndexToEid);
   LOG_VARD(_map->getIndex().getElementToRelationMap()->size());
 }
 
