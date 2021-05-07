@@ -364,7 +364,7 @@ long UnconnectedWaySnapper::_getPid(const ConstWayPtr& way) const
 }
 
 ElementCriterionPtr UnconnectedWaySnapper::_createFeatureCriteria(
-  const QStringList& typeCriteria, const QStringList& statuses, const bool isNode)
+  const QStringList& typeCriteria, const QStringList& statuses, const bool isNode) const
 {
   ElementCriterionPtr crit = ElementCriterionPtr();
   if (!typeCriteria.isEmpty())
@@ -379,7 +379,7 @@ ElementCriterionPtr UnconnectedWaySnapper::_createFeatureCriteria(
     {
       ElementCriterionPtr statusCrit = _getStatusCriteria(statuses);
       // combine our element type and status crits into a single crit
-      crit = std::shared_ptr<ChainCriterion>(new ChainCriterion(statusCrit, typeCrit));
+      crit = std::make_shared<ChainCriterion>(statusCrit, typeCrit);
     }
     else
     {
@@ -406,7 +406,7 @@ ElementCriterionPtr UnconnectedWaySnapper::_getTypeCriteria(
   }
   else
   {
-    std::shared_ptr<OrCriterion> orCrit(new OrCriterion());
+    std::shared_ptr<OrCriterion> orCrit = std::make_shared<OrCriterion>();
     for (int i = 0; i < typeCriteria.size(); i++)
     {
       orCrit->addCriterion(_getTypeCriterion(typeCriteria.at(i), isNode));

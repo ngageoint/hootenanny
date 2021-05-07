@@ -50,7 +50,7 @@ public:
   GeometryType getGeometryType() const override { return GeometryType::Line; }
 
   ElementCriterionPtr clone() override
-  { return ElementCriterionPtr(new LinearWaterwayCriterion()); }
+  { return std::make_shared<LinearWaterwayCriterion>(); }
 
   QString getDescription() const override { return "Identifies linear bodies of water"; }
   QString getName() const override { return className(); }

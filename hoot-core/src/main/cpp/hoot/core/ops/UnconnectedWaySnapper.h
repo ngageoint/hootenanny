@@ -254,7 +254,7 @@ private:
    * @return an element criterion
    */
   ElementCriterionPtr _createFeatureCriteria(
-    const QStringList& typeCriteria, const QStringList& statuses, const bool isNode = false);
+    const QStringList& typeCriteria, const QStringList& statuses, const bool isNode = false) const;
   ElementCriterionPtr _getTypeCriteria(
     const QStringList& typeCriteria, const bool isNode = false) const;
   ElementCriterionPtr _getTypeCriterion(
