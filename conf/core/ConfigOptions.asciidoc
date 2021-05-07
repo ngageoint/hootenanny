@@ -4873,7 +4873,8 @@ classes specified must inherit from `ConflatableElementCriterion`. An example is
 Statuses of ways or way nodes being snapped to. Valid values are 'Input1', 'Input2', or 'Conflated'.
 Specify 'Input1' to snap secondary ways to reference ways or 'Input2' to snap reference ways to
 secondary ways. You may add multiple statuses and separate them with a semicolon. For example, to
-snap to both reference and conflated ways use: 'Input1;Conflated'.
+snap to both reference and conflated ways use: 'Input1;Conflated'. If no statuses are specified,
+then feature status is ignored for ways or way nodes being snapped to.
 
 === snap.unconnected.ways.snap.tolerance
 
@@ -4903,7 +4904,8 @@ This option overrides `snap.unconnected.ways.snap.criteria`.
 Statuses of ways being snapped.  Valid values are 'Input1', 'Input2', or 'Conflated'. Specify
 'Input1' to snap reference ways to secondary ways or 'Input2' to snap secondary ways to reference
 ways. You may add multiple statuses and separate them with a semicolon. For example, to snap both
-reference and conflated ways use: 'Input1;Conflated'.
+reference and conflated ways use: 'Input1;Conflated'. If no statuses are specified, then feature
+status is ignored for ways or way nodes being snapped.
 
 === snap.unconnected.ways.use.existing.way.nodes
 
