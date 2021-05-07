@@ -644,7 +644,7 @@ int main(int argc, char* argv[])
 
       listener.reset(new HootTestListener(false, suppressFailureDetail, -1));
       result.addListener(listener.get());
-      Log::getInstance().setLevel(Log::Info);
+      Log::getInstance().setLevel(Log::Status);
       populateTests(ALL, vAllTests, printDiff, suppressFailureDetail, true);
       CppUnit::Test* t = findTest(vAllTests, testName.toStdString());
       if (t == nullptr)
@@ -695,7 +695,7 @@ int main(int argc, char* argv[])
       if (type == CURRENT)
       {
         listener.reset(new HootTestListener(true, suppressFailureDetail, timeout));
-        Log::getInstance().setLevel(Log::Info);
+        Log::getInstance().setLevel(Log::Status);
       }
       else
         listener.reset(new HootTestListener(false, suppressFailureDetail, timeout));

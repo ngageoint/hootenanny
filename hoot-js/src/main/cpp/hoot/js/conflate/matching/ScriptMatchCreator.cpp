@@ -589,7 +589,7 @@ public:
     _numElementsVisited++;
     if (_numElementsVisited % _taskStatusUpdateInterval == 0)
     {
-      PROGRESS_INFO(
+      PROGRESS_STATUS(
         "Processed " << StringUtils::formatLargeNumber(_numElementsVisited) << " / " <<
         StringUtils::formatLargeNumber(_totalElementsToProcess) << " elements.");
        _timer.restart();

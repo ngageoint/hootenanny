@@ -51,10 +51,8 @@ public:
   SynchronizeElementIdsCmd() = default;
 
   QString getName() const override { return "sync-element-ids"; }
-
   QString getDescription() const override
   { return "Copies IDs for identical elements from one map to another (experimental)"; }
-
   QString getType() const override { return "rnd"; }
 
   int runSimple(QStringList& args) override

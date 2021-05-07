@@ -213,7 +213,7 @@ void PoiPolygonMatchVisitor::visit(const ConstElementPtr& e)
   _numElementsVisited++;
   if (_numElementsVisited % _taskStatusUpdateInterval == 0)
   {
-    PROGRESS_INFO(
+    PROGRESS_STATUS(
       "Processed " << StringUtils::formatLargeNumber(_numElementsVisited) << " / " <<
       StringUtils::formatLargeNumber(_map->getNodeCount()) << " nodes.");
     _timer.restart();

@@ -55,7 +55,6 @@ public:
   ConvertCmd() = default;
 
   QString getName() const override { return "convert"; }
-
   QString getDescription() const override { return "Converts between map formats"; }
 
   int runSimple(QStringList& args) override

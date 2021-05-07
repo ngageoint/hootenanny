@@ -31,6 +31,7 @@
 #include <hoot/rnd/schema/ImplicitTagRawRulesDeriver.h>
 #include <hoot/rnd/schema/ImplicitTagRulesDatabaseDeriver.h>
 #include <hoot/rnd/io/ImplicitTagRulesSqliteReader.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/StringUtils.h>
 
 // Qt
@@ -48,10 +49,8 @@ public:
   ImplicitTypeTaggingRulesCmd()  = default;
 
   QString getName() const override { return "type-tagger-rules"; }
-
   QString getDescription() const override
   { return "Creates rules for adding missing type tags to a map"; }
-
   QString getType() const override { return "rnd"; }
 
   int runSimple(QStringList& args) override
@@ -69,10 +68,17 @@ public:
           QString("%1 with the --create-raw option takes three parameters.").arg(getName()));
       }
 
+      const QStringList inputs = args[0].trimmed().split(";");
+      const QStringList translations = args[1].trimmed().split(";");
+      const QString output = args[2].trimmed();
+
+      LOG_STATUS(
+        "Generating raw implicit type tag rules for " << inputs.size() <<
+        " inputs and writing output to ..." << FileUtils::toLogFormat(output, 25) << "...");
+
       ImplicitTagRawRulesDeriver rawRulesDeriver;
       rawRulesDeriver.setConfiguration(conf());
-      rawRulesDeriver.deriveRawRules(
-        args[0].trimmed().split(";"), args[1].trimmed().split(";"), args[2].trimmed());
+      rawRulesDeriver.deriveRawRules(inputs, translations, output);
     }
     else if (args.contains("--create-db"))
     {
@@ -84,9 +90,16 @@ public:
           QString("%1 with the --create-db option takes two parameters.").arg(getName()));
       }
 
+      const QString input = args[0].trimmed();
+      const QString output = args[1].trimmed();
+
+      LOG_STATUS(
+        "Generating implicit type tag database for ..." << FileUtils::toLogFormat(input, 25) <<
+        " writing output to ..." << FileUtils::toLogFormat(output, 25) << "...");
+
       ImplicitTagRulesDatabaseDeriver rulesDatabaseDeriver;
       rulesDatabaseDeriver.setConfiguration(conf());
-      rulesDatabaseDeriver.deriveRulesDatabase(args[0].trimmed(), args[1].trimmed());
+      rulesDatabaseDeriver.deriveRulesDatabase(input, output);
     }
     else if (args.contains("--db-stats"))
     {
@@ -97,6 +110,12 @@ public:
         throw HootException(
           QString("%1 with the --db-stats option takes one parameter.").arg(getName()));
       }
+
+      const QString input = args[0].trimmed();
+
+      LOG_STATUS(
+        "Calculating implicit type tag database statistics for ..." <<
+        FileUtils::toLogFormat(input, 25) << "...");
 
       ImplicitTagRulesSqliteReader dbReader;
       dbReader.open(args[0].trimmed());
@@ -112,7 +131,7 @@ public:
     }
 
     LOG_STATUS(
-      "Implicit type tagging rules generated in " <<
+      "Implicit type tag operation complated in " <<
        StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 
     return 0;

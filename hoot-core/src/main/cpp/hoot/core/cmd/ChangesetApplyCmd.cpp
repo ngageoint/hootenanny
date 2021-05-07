@@ -53,9 +53,7 @@ public:
   ChangesetApplyCmd() = default;
 
   QString getName() const override { return "changeset-apply"; }
-
-  QString getDescription() const override
-  { return "Writes an OSM changeset to an OSM data store"; }
+  QString getDescription() const override { return "Writes an OSM changeset to an OSM data store"; }
 
   int runSimple(QStringList& args) override
   {
