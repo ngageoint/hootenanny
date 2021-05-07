@@ -29,6 +29,7 @@
 // hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/elements/ParentMembershipRemover.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/ops/RemoveWayByEid.h>
 #include <hoot/core/ops/RemoveNodeByEid.h>
@@ -44,13 +45,16 @@ namespace hoot
 HOOT_FACTORY_REGISTER(OsmMapOperation, RecursiveElementRemover)
 
 RecursiveElementRemover::RecursiveElementRemover() :
-_criterion(nullptr)
+_criterion(nullptr),
+_removeRefsFromParents(false)
 {
 }
 
-RecursiveElementRemover::RecursiveElementRemover(ElementId eid, const ElementCriterion* criterion) :
+RecursiveElementRemover::RecursiveElementRemover(
+  ElementId eid, const bool removeRefsFromParents, const ElementCriterionPtr& criterion) :
 _eid(eid),
-_criterion(criterion)
+_criterion(criterion),
+_removeRefsFromParents(removeRefsFromParents)
 {
 }
 
@@ -60,12 +64,22 @@ void RecursiveElementRemover::apply(const std::shared_ptr<OsmMap>& map)
 
   assert(_eid.isNull() == false);
   LOG_VART(map->containsElement(_eid));
-  if (map->containsElement(_eid) == false)
+  if (!map->containsElement(_eid))
+  {
+    return;
+  }
+  const ConstElementPtr& e = map->getElement(_eid);
+  if (!e)
   {
     return;
   }
 
-  const ConstElementPtr& e = map->getElement(_eid);
+  if (_removeRefsFromParents)
+  {
+    const int numRemoved = ParentMembershipRemover::removeMemberships(_eid, map);
+    LOG_VART(numRemoved);
+  }
+
   UniqueElementIdVisitor sv;
   e->visitRo(*map, sv);
 

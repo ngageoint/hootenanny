@@ -67,8 +67,10 @@ public:
    * removal will be attempted. In some cases (e.g. replace can't be complete if you're replacing a
    * node with a way and the node is in a way), the element won't be removed. If this happens, then
    * all tags will be cleared.
+   * @param removeParentRefs TODO
    */
-  ReplaceElementOp(ElementId from, ElementId to, bool clearAndRemove = false);
+  ReplaceElementOp(
+    ElementId from, ElementId to, bool clearAndRemove = false, bool removeParentRefs = false);
   /**
    * Constructor
    *
@@ -79,7 +81,7 @@ public:
   ~ReplaceElementOp() = default;
 
   /**
-   * If the elements aren't specified in the constructor this must be called exactly two times. Once
+   * If the elements aren't specified in the constructor this must be called exactly two times, once
    * for 'from' and a second time for 'to'.
    */
   void addElement(const ConstElementPtr& e) override;
@@ -98,6 +100,8 @@ private:
   ElementId _from;
   ElementId _to;
   bool _clearAndRemove;
+  // TODO
+  bool _removeParentRefs;
 };
 
 }

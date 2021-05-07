@@ -48,41 +48,50 @@ public:
   static QString className() { return "hoot::RemoveReviewsByEidOp"; }
 
   /**
-   */
-  RemoveReviewsByEidOp(ElementId eid, bool clearAndRemoveElement = false);
-
-  /**
+   * Constructor
+   *
    * It is expected that the eid will be populated with addElement after construction. addElement
    * must be called exactly two times.
    */
   RemoveReviewsByEidOp() = default;
+  /**
+    Constructor
+
+    @param eid TODO
+    @param clearAndRemoveElement TODO
+    @param removeParentRefs TODO
+   */
+  RemoveReviewsByEidOp(
+    ElementId eid, bool clearAndRemoveElement = false, bool removeParentRefs = false);
   ~RemoveReviewsByEidOp() = default;
 
   /**
-   * If the elements aren't specified in the constructor this must be called exactly two times. Once
-   * for 'from' and a second time for 'to'.
+   * If the elements aren't specified in the constructor, this must be called exactly two times.
+   * Once for 'from' and a second time for 'to'.
    */
   void addElement(const ConstElementPtr& e) override;
 
+  /**
+   * @see ConstOsmMapOperation
+   */
   void apply(const OsmMapPtr& map) override;
-
-  QString getDescription() const override
-  { return "Removes conflation reviews associated with specified element IDs"; }
 
   QString getInitStatusMessage() const override
   { return "Removing conflation reviews..."; }
-
   QString getCompletedStatusMessage() const override
   { return "Removed " + QString::number(_numAffected) + " conflation reviews"; }
 
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+  QString getDescription() const override
+  { return "Removes conflation reviews associated with specified element IDs"; }
 
 private:
 
   ElementId _eid;
   bool _clearAndRemove;
+  // TODO
+  bool _removeParentRefs;
 };
 
 }

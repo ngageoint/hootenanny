@@ -92,7 +92,7 @@ std::set<long> WayUtils::getContainingWayIdsByNodeId(const long nodeId,
   return containingWayIds;
 }
 
-std::vector<ConstWayPtr> WayUtils::getContainingWaysByNodeId(
+std::vector<ConstWayPtr> WayUtils::getContainingWaysByNodeIdConst(
   const long nodeId, const ConstOsmMapPtr& map,
   const ElementCriterionPtr& wayCriterion)
 {
@@ -110,11 +110,24 @@ std::vector<ConstWayPtr> WayUtils::getContainingWaysByNodeId(
   return containingWays;
 }
 
+std::vector<WayPtr> WayUtils::getContainingWaysByNodeId(
+  const long nodeId, const ConstOsmMapPtr& map,
+  const ElementCriterionPtr& wayCriterion)
+{
+  std::vector<WayPtr> waysToReturn;
+  std::vector<ConstWayPtr> ways = getContainingWaysByNodeIdConst(nodeId, map, wayCriterion);
+  for (std::vector<ConstWayPtr>::const_iterator itr = ways.begin(); itr != ways.end(); ++itr)
+  {
+    waysToReturn.push_back(std::const_pointer_cast<Way>(*itr));
+  }
+  return waysToReturn;
+}
+
 std::set<QString> WayUtils::getContainingWaysMostSpecificTypesByNodeId(
   const long nodeId, const ConstOsmMapPtr& map)
 {
   std::set<QString> uniqueTypes;
-  std::vector<ConstWayPtr> containingWays = getContainingWaysByNodeId(nodeId, map);
+  std::vector<ConstWayPtr> containingWays = getContainingWaysByNodeIdConst(nodeId, map);
   std::sort(containingWays.begin(), containingWays.end());
   OsmSchema& schema = OsmSchema::getInstance();
   for (std::vector<ConstWayPtr>::const_iterator containingWaysItr = containingWays.begin();
@@ -406,7 +419,7 @@ bool WayUtils::nodeContainedByWaySharingNodesWithAnotherWay(
   }
 
   const std::vector<ConstWayPtr> waysContainingNode =
-    getContainingWaysByNodeId(nodeId, map);
+    getContainingWaysByNodeIdConst(nodeId, map);
   for (std::vector<ConstWayPtr>::const_iterator containingWayItr = waysContainingNode.begin();
        containingWayItr != waysContainingNode.end(); ++containingWayItr)
   {

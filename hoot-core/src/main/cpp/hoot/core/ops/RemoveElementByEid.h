@@ -70,7 +70,7 @@ public:
   static void removeElement(OsmMapPtr map, ElementId eId);
 
   /**
-   * Removes an element from the map. No check is made before the removal, so removingan element
+   * Removes an element from the map. No check is made before the removal, so removing an element
    * used by another Way or Relation will result in undefined behaviour.
    * @param map map to operate on
    * @param eId element ID of the element to remove

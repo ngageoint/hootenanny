@@ -46,6 +46,7 @@ class RecursiveElementRemoverTest : public HootTestFixture
   CPPUNIT_TEST_SUITE(RecursiveElementRemoverTest);
   CPPUNIT_TEST(removeRelationTest);
   CPPUNIT_TEST(removeWayTest);
+  // TODO: add remove parent refs test
   CPPUNIT_TEST_SUITE_END();
 
 public:

@@ -259,10 +259,10 @@ bool ElementDeduplicator::_areWayNodesInWaysOfMismatchedType(
 
   // get the ways that contain each.
   const std::vector<ConstWayPtr> containingWays1 =
-    WayUtils::getContainingWaysByNodeId(element1->getId(), map);
+    WayUtils::getContainingWaysByNodeIdConst(element1->getId(), map);
   LOG_VART(containingWays1.size());
   const std::vector<ConstWayPtr> containingWays2 =
-    WayUtils::getContainingWaysByNodeId(element2->getId(), map);
+    WayUtils::getContainingWaysByNodeIdConst(element2->getId(), map);
   LOG_VART(containingWays2.size())
 
   // See if any of the ways between the two have a matching type.

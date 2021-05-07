@@ -502,8 +502,8 @@ bool OsmMap::_listContainsNode(const QList<ElementPtr> l) const
   return false;
 }
 
-void OsmMap::replace(const std::shared_ptr<const Element>& from,
-                     const std::shared_ptr<Element>& to)
+void OsmMap::replace(
+  const std::shared_ptr<const Element>& from, const std::shared_ptr<Element>& to)
 {
   LOG_TRACE("Replacing: " << from->getElementId() << " with: " << to->getElementId() << "...");
 
@@ -548,7 +548,7 @@ void OsmMap::replace(const std::shared_ptr<const Element>& from, const QList<Ele
 
   // Do some error checking before we add the new element.
   if (from->getElementType() == ElementType::Node &&
-    (_listContainsNode(to) == false || to.size() > 1))
+      (_listContainsNode(to) == false || to.size() > 1))
   {
     if (!n2w->getWaysByNode(from->getId()).empty())
     {
