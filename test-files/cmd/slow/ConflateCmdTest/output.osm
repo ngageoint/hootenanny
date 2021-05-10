@@ -27,37 +27,37 @@
     <node visible="true" id="-1559991" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5918286709262048" lon="-104.8037526728646895"/>
     <node visible="true" id="-1559910" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8887008885513055" lon="-104.7187703222333823">
         <tag k="amenity" v="cafe"/>
+        <tag k="error:circular" v="1000"/>
         <tag k="name" v="Starbucks"/>
         <tag k="note" v="2-c"/>
         <tag k="poi" v="yes"/>
-        <tag k="error:circular" v="1000"/>
     </node>
     <node visible="true" id="-1559907" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8942750169005791" lon="-104.7187096307715564">
         <tag k="amenity" v="cafe"/>
+        <tag k="error:circular" v="1000"/>
         <tag k="name" v="Starbucks"/>
         <tag k="note" v="2-b"/>
         <tag k="poi" v="yes"/>
-        <tag k="error:circular" v="1000"/>
     </node>
     <node visible="true" id="-1559906" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8747831409683329" lon="-104.7208597111928725">
         <tag k="amenity" v="cafe"/>
+        <tag k="error:circular" v="150"/>
         <tag k="name" v="Starbucks"/>
         <tag k="note" v="2-e"/>
         <tag k="poi" v="yes"/>
-        <tag k="error:circular" v="150"/>
     </node>
     <node visible="true" id="-1559904" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8753845261677995" lon="-104.7191538262594008">
         <tag k="amenity" v="cafe"/>
+        <tag k="error:circular" v="1000"/>
         <tag k="name" v="Starbucks"/>
         <tag k="note" v="2-d"/>
         <tag k="poi" v="yes"/>
-        <tag k="error:circular" v="1000"/>
     </node>
     <node visible="true" id="-1559903" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8578321389392443" lon="-104.9125488383814826">
-        <tag k="name" v="Manitou Springs"/>
-        <tag k="poi" v="yes"/>
-        <tag k="place" v="city"/>
         <tag k="error:circular" v="1000"/>
+        <tag k="name" v="Manitou Springs"/>
+        <tag k="place" v="city"/>
+        <tag k="poi" v="yes"/>
     </node>
     <node visible="true" id="-1559901" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8543319201230304" lon="-104.9017876860593788"/>
     <node visible="true" id="-1559900" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8536194225014810" lon="-104.8987070428940598"/>
@@ -97,75 +97,75 @@
     <node visible="true" id="-1559866" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8542599687747270" lon="-104.9005795104799432"/>
     <node visible="true" id="-1559825" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9109692767935371" lon="-104.7145693652068132">
         <tag k="amenity" v="cafe"/>
+        <tag k="error:circular" v="100"/>
         <tag k="name" v="Starbucks"/>
         <tag k="note" v="1-a;2-a"/>
         <tag k="poi" v="yes"/>
-        <tag k="error:circular" v="100"/>
     </node>
     <node visible="true" id="-1559824" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8467218120797426" lon="-104.8852148410949496">
-        <tag k="name" v="Red Rock Canyon"/>
         <tag k="alt_name" v="Red Rock Canyons"/>
-        <tag k="leisure" v="park"/>
-        <tag k="poi" v="yes"/>
         <tag k="error:circular" v="1000"/>
+        <tag k="leisure" v="park"/>
+        <tag k="name" v="Red Rock Canyon"/>
+        <tag k="poi" v="yes"/>
     </node>
     <node visible="true" id="-1559823" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9239774040227218" lon="-104.8439481192893368">
         <tag k="amenity" v="cafe"/>
+        <tag k="error:circular" v="50"/>
         <tag k="name" v="Starbucks"/>
         <tag k="poi" v="yes"/>
-        <tag k="error:circular" v="50"/>
     </node>
     <node visible="true" id="-1559822" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8580512412840164" lon="-104.7869287551585984">
-        <tag k="name" v="Colorado Springs"/>
-        <tag k="poi" v="yes"/>
-        <tag k="place" v="city"/>
         <tag k="error:circular" v="20000"/>
+        <tag k="name" v="Colorado Springs"/>
+        <tag k="place" v="city"/>
+        <tag k="poi" v="yes"/>
     </node>
     <node visible="true" id="-1559821" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8745941427828825" lon="-104.7196458819557705">
         <tag k="amenity" v="cafe"/>
+        <tag k="error:circular" v="1000"/>
         <tag k="name" v="Starbucks"/>
         <tag k="note" v="1-e"/>
         <tag k="poi" v="yes"/>
-        <tag k="error:circular" v="1000"/>
     </node>
     <node visible="true" id="-1559820" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8618557942462957" lon="-104.8786905089453967">
-        <tag k="name" v="Garden of the Gods"/>
-        <tag k="leisure" v="park"/>
-        <tag k="poi" v="yes"/>
         <tag k="error:circular" v="1000"/>
+        <tag k="leisure" v="park"/>
+        <tag k="name" v="Garden of the Gods"/>
+        <tag k="poi" v="yes"/>
     </node>
     <node visible="true" id="-1559819" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8940860705601636" lon="-104.7174958015344259">
         <tag k="amenity" v="cafe"/>
+        <tag k="error:circular" v="200"/>
         <tag k="name" v="Starbucks"/>
         <tag k="note" v="1-b"/>
         <tag k="poi" v="yes"/>
-        <tag k="error:circular" v="200"/>
     </node>
     <node visible="true" id="-1559818" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8571566428667410" lon="-104.9070371581716046">
-        <tag k="name" v="Manitou Springs"/>
-        <tag k="poi" v="yes"/>
-        <tag k="place" v="town"/>
         <tag k="error:circular" v="1500"/>
+        <tag k="name" v="Manitou Springs"/>
+        <tag k="place" v="town"/>
+        <tag k="poi" v="yes"/>
     </node>
     <node visible="true" id="-1559817" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8751955295816245" lon="-104.7179399970222704">
         <tag k="amenity" v="cafe"/>
+        <tag k="error:circular" v="1000"/>
         <tag k="name" v="Starbucks"/>
         <tag k="note" v="1-d"/>
         <tag k="poi" v="yes"/>
-        <tag k="error:circular" v="1000"/>
     </node>
     <node visible="true" id="-1559816" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8885119273824245" lon="-104.7175564929962519">
         <tag k="amenity" v="cafe"/>
+        <tag k="error:circular" v="1000"/>
         <tag k="name" v="Starbucks"/>
         <tag k="note" v="1-c"/>
         <tag k="poi" v="yes"/>
-        <tag k="error:circular" v="1000"/>
     </node>
     <node visible="true" id="-1559815" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8593025332214523" lon="-104.9197586162135423">
-        <tag k="name" v="Manitou Springs"/>
-        <tag k="poi" v="yes"/>
-        <tag k="place" v="town"/>
         <tag k="error:circular" v="2000"/>
+        <tag k="name" v="Manitou Springs"/>
+        <tag k="place" v="town"/>
+        <tag k="poi" v="yes"/>
     </node>
     <node visible="true" id="-1559685" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5942139571476091" lon="-104.8043781711758697"/>
     <node visible="true" id="-1559683" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5944194033784811" lon="-104.8041559931055815"/>
@@ -233,7 +233,14 @@
     <node visible="true" id="-1559551" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5918855541102488" lon="-104.8048623136804309"/>
     <node visible="true" id="-1559549" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5918839666917890" lon="-104.8049694320074394"/>
     <node visible="true" id="-1559547" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5918538057342460" lon="-104.8049653120718006"/>
-    <way visible="true" id="-1560093" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-1560084" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-1559897"/>
+        <nd ref="-1559881"/>
+        <nd ref="-1559901"/>
+        <nd ref="-1559885"/>
+        <nd ref="-1559871"/>
+        <nd ref="-1559889"/>
+        <nd ref="-1559868"/>
         <nd ref="-1559882"/>
         <nd ref="-1559893"/>
         <nd ref="-1559898"/>
@@ -257,41 +264,28 @@
         <nd ref="-1559874"/>
         <nd ref="-1559888"/>
         <nd ref="-1559867"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:hash" v="sha1sum:2e910c53a5e14608bc55ab0d19a5a432e30e4ccd;sha1sum:2c97c18fe31731001d2b09ccb4df52bb5fac08ad"/>
         <tag k="note" v="0"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-1560084" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-1559897"/>
-        <nd ref="-1559881"/>
-        <nd ref="-1559901"/>
-        <nd ref="-1559885"/>
-        <nd ref="-1559871"/>
-        <nd ref="-1559889"/>
-        <nd ref="-1559868"/>
-        <nd ref="-1559882"/>
-        <tag k="highway" v="road"/>
-        <tag k="note" v="0"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-1560077" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1559889"/>
         <nd ref="-1559876"/>
         <nd ref="-1559890"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="road"/>
         <tag k="note" v="1"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-1560074" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1559872"/>
         <nd ref="-1559886"/>
         <nd ref="-1559866"/>
         <nd ref="-1559882"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:hash" v="sha1sum:0492f9551aec03a615e994189fd36ceaf68d0fa4;sha1sum:544390570faec8689c28039c73dab6d4ea5300af"/>
         <tag k="note" v="2"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-1559917" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1560008"/>
@@ -331,17 +325,17 @@
         <nd ref="-1560000"/>
         <nd ref="-1560001"/>
         <nd ref="-1559991"/>
-        <tag k="name" v="Best Buy"/>
         <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
+        <tag k="name" v="Best Buy"/>
     </way>
     <way visible="true" id="-1559905" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1559866"/>
         <nd ref="-1559892"/>
         <nd ref="-1559871"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="road"/>
         <tag k="note" v="3"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-1559705" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1559685"/>
@@ -349,14 +343,14 @@
         <nd ref="-1559681"/>
         <nd ref="-1559679"/>
         <nd ref="-1559685"/>
-        <tag k="amenity" v="restaurant"/>
-        <tag k="name" v="Cheddar's Casual Cafe"/>
-        <tag k="alt_name" v="Cheddars"/>
-        <tag k="hoot:building:match" v="true"/>
-        <tag k="building" v="yes"/>
         <tag k="REF1" v="Cheddar's"/>
         <tag k="REF2" v="Cheddar's"/>
+        <tag k="alt_name" v="Cheddars"/>
+        <tag k="amenity" v="restaurant"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
+        <tag k="hoot:building:match" v="true"/>
+        <tag k="name" v="Cheddar's Casual Cafe"/>
     </way>
     <way visible="true" id="-1559703" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1559677"/>
@@ -364,11 +358,11 @@
         <nd ref="-1559673"/>
         <nd ref="-1559671"/>
         <nd ref="-1559677"/>
-        <tag k="hoot:building:match" v="true"/>
-        <tag k="building" v="yes"/>
         <tag k="REF1" v="Biondi"/>
         <tag k="REF2" v="Biondi"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
+        <tag k="hoot:building:match" v="true"/>
     </way>
     <way visible="true" id="-1559701" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1559669"/>
@@ -378,10 +372,10 @@
         <nd ref="-1559661"/>
         <nd ref="-1559659"/>
         <nd ref="-1559669"/>
-        <tag k="name" v="Freddy's"/>
-        <tag k="building" v="yes"/>
         <tag k="REF1" v="Freddy's"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
+        <tag k="name" v="Freddy's"/>
     </way>
     <way visible="true" id="-1559699" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1559657"/>
@@ -417,13 +411,13 @@
         <nd ref="-1559637"/>
         <nd ref="-1559635"/>
         <nd ref="-1559657"/>
-        <tag k="name" v="Target"/>
-        <tag k="alt_name" v="Target - Aurora South;Target Grocery;Target Pharmacy"/>
-        <tag k="hoot:building:match" v="true"/>
-        <tag k="building" v="yes"/>
         <tag k="REF1" v="Target"/>
         <tag k="REF2" v="Target"/>
+        <tag k="alt_name" v="Target - Aurora South;Target Grocery;Target Pharmacy"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
+        <tag k="hoot:building:match" v="true"/>
+        <tag k="name" v="Target"/>
     </way>
     <way visible="true" id="-1559697" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1559633"/>
@@ -432,10 +426,10 @@
         <nd ref="-1559623"/>
         <nd ref="-1559627"/>
         <nd ref="-1559633"/>
-        <tag k="name" v="Convoluted Example"/>
-        <tag k="building" v="yes"/>
         <tag k="REF1" v="Convoluted No Match 1"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
+        <tag k="name" v="Convoluted Example"/>
     </way>
     <way visible="true" id="-1559695" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1559625"/>
@@ -443,10 +437,10 @@
         <nd ref="-1559621"/>
         <nd ref="-1559619"/>
         <nd ref="-1559625"/>
-        <tag k="name" v="Bad Pair"/>
-        <tag k="building" v="yes"/>
         <tag k="REF2" v="Convoluted No Match 2"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
+        <tag k="name" v="Bad Pair"/>
     </way>
     <way visible="true" id="-1559693" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1559617"/>
@@ -454,10 +448,10 @@
         <nd ref="-1559613"/>
         <nd ref="-1559611"/>
         <nd ref="-1559617"/>
-        <tag k="name" v="Bad Pair"/>
-        <tag k="building" v="yes"/>
         <tag k="REF2" v="Convoluted No Match 2"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
+        <tag k="name" v="Bad Pair"/>
     </way>
     <way visible="true" id="-1559691" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1559609"/>
@@ -465,10 +459,10 @@
         <nd ref="-1559605"/>
         <nd ref="-1559603"/>
         <nd ref="-1559609"/>
-        <tag k="name" v="Bad Pair"/>
-        <tag k="building" v="yes"/>
         <tag k="REF2" v="Convoluted No Match 2"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
+        <tag k="name" v="Bad Pair"/>
     </way>
     <way visible="true" id="-1559689" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1559601"/>
@@ -476,109 +470,109 @@
         <nd ref="-1559597"/>
         <nd ref="-1559595"/>
         <nd ref="-1559601"/>
-        <tag k="name" v="Bad Pair"/>
-        <tag k="building" v="yes"/>
         <tag k="REF2" v="Convoluted No Match 2"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
+        <tag k="name" v="Bad Pair"/>
     </way>
     <relation visible="true" id="-14" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-1559917" role="outer"/>
         <member type="way" ref="-1559916" role="outer"/>
-        <tag k="name" v="Maid-Rite"/>
-        <tag k="alt_name" v="Maid-Rite Diner;Panera Bread"/>
-        <tag k="hoot:building:match" v="true"/>
-        <tag k="building" v="yes"/>
         <tag k="REF1" v="Panera"/>
         <tag k="REF2" v="Panera"/>
+        <tag k="alt_name" v="Maid-Rite Diner;Panera Bread"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
+        <tag k="hoot:building:match" v="true"/>
+        <tag k="name" v="Maid-Rite"/>
         <tag k="type" v="multipolygon"/>
     </relation>
     <relation visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-1559815" role="reviewee"/>
         <member type="node" ref="-1559903" role="reviewee"/>
-        <tag k="hoot:review:type" v="POI"/>
-        <tag k="hoot:review:sort_order" v="1"/>
-        <tag k="hoot:review:note" v="Overlapping matches"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:note" v="Overlapping matches"/>
         <tag k="hoot:review:score" v="1"/>
+        <tag k="hoot:review:sort_order" v="1"/>
+        <tag k="hoot:review:type" v="POI"/>
         <tag k="type" v="review"/>
     </relation>
     <relation visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-1559818" role="reviewee"/>
         <member type="node" ref="-1559903" role="reviewee"/>
-        <tag k="hoot:review:type" v="POI"/>
-        <tag k="hoot:review:sort_order" v="0"/>
-        <tag k="hoot:review:note" v="Overlapping matches"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:note" v="Overlapping matches"/>
         <tag k="hoot:review:score" v="1"/>
+        <tag k="hoot:review:sort_order" v="0"/>
+        <tag k="hoot:review:type" v="POI"/>
         <tag k="type" v="review"/>
     </relation>
     <relation visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-1559816" role="reviewee"/>
         <member type="node" ref="-1559907" role="reviewee"/>
-        <tag k="hoot:review:type" v="POI"/>
-        <tag k="hoot:review:sort_order" v="3"/>
-        <tag k="hoot:review:note" v="Overlapping matches"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:note" v="Overlapping matches"/>
         <tag k="hoot:review:score" v="1"/>
+        <tag k="hoot:review:sort_order" v="3"/>
+        <tag k="hoot:review:type" v="POI"/>
         <tag k="type" v="review"/>
     </relation>
     <relation visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-1559816" role="reviewee"/>
         <member type="node" ref="-1559910" role="reviewee"/>
-        <tag k="hoot:review:type" v="POI"/>
-        <tag k="hoot:review:sort_order" v="2"/>
-        <tag k="hoot:review:note" v="Overlapping matches"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:note" v="Overlapping matches"/>
         <tag k="hoot:review:score" v="1"/>
+        <tag k="hoot:review:sort_order" v="2"/>
+        <tag k="hoot:review:type" v="POI"/>
         <tag k="type" v="review"/>
     </relation>
     <relation visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-1559819" role="reviewee"/>
         <member type="node" ref="-1559907" role="reviewee"/>
-        <tag k="hoot:review:type" v="POI"/>
-        <tag k="hoot:review:sort_order" v="7"/>
-        <tag k="hoot:review:note" v="Overlapping matches"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:note" v="Overlapping matches"/>
         <tag k="hoot:review:score" v="1"/>
+        <tag k="hoot:review:sort_order" v="7"/>
+        <tag k="hoot:review:type" v="POI"/>
         <tag k="type" v="review"/>
     </relation>
     <relation visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-1559817" role="reviewee"/>
         <member type="node" ref="-1559904" role="reviewee"/>
-        <tag k="hoot:review:type" v="POI"/>
-        <tag k="hoot:review:sort_order" v="4"/>
-        <tag k="hoot:review:note" v="Overlapping matches"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:note" v="Overlapping matches"/>
         <tag k="hoot:review:score" v="1"/>
+        <tag k="hoot:review:sort_order" v="4"/>
+        <tag k="hoot:review:type" v="POI"/>
         <tag k="type" v="review"/>
     </relation>
     <relation visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-1559821" role="reviewee"/>
         <member type="node" ref="-1559904" role="reviewee"/>
-        <tag k="hoot:review:type" v="POI"/>
-        <tag k="hoot:review:sort_order" v="5"/>
-        <tag k="hoot:review:note" v="Overlapping matches"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:note" v="Overlapping matches"/>
         <tag k="hoot:review:score" v="1"/>
+        <tag k="hoot:review:sort_order" v="5"/>
+        <tag k="hoot:review:type" v="POI"/>
         <tag k="type" v="review"/>
     </relation>
     <relation visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-1559821" role="reviewee"/>
         <member type="node" ref="-1559906" role="reviewee"/>
-        <tag k="hoot:review:type" v="POI"/>
-        <tag k="hoot:review:sort_order" v="6"/>
-        <tag k="hoot:review:note" v="Overlapping matches"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:note" v="Overlapping matches"/>
         <tag k="hoot:review:score" v="1"/>
+        <tag k="hoot:review:sort_order" v="6"/>
+        <tag k="hoot:review:type" v="POI"/>
         <tag k="type" v="review"/>
     </relation>
 </osm>

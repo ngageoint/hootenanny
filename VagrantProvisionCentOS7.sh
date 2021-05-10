@@ -145,7 +145,7 @@ sudo yum -y install \
     cmake \
     cppunit-devel \
     dblatex \
-    devtoolset-8 \
+    devtoolset-$DEVTOOLSET_VERSION \
     doxygen \
     git \
     git-core \
@@ -362,13 +362,15 @@ rm -rf $HOOT_HOME/userfiles/tmp
 # We do this so that Tomcat doesnt. If it does, it screws the permissions up
 mkdir -p $HOOT_HOME/userfiles/tmp
 
-# Update the gcc location to devtoolset-8
-if ! grep --quiet devtoolset-8 ~/.bash_profile; then
-    echo "Adding devtoolset-8 to profile..."
+# Update the gcc location to devtoolset
+if ! grep --quiet "devtoolset-$DEVTOOLSET_VERSION" ~/.bash_profile; then
+    echo "Adding devtoolset-$DEVTOOLSET_VERSION to profile..."
     # Devtoolset <= 8 has a sudo issue, fix it here
-    echo "sudo chmod -x /opt/rh/devtoolset-8/root/usr/bin/sudo" >> ~/.bash_profile
+    if [ $(($DEVTOOLSET_VERSION)) -le 8 ]; then
+        echo "sudo chmod -x /opt/rh/devtoolset-$DEVTOOLSET_VERSION/root/usr/bin/sudo" >> ~/.bash_profile
+    fi
     # Enable devtoolset
-    echo "source /opt/rh/devtoolset-8/enable" >> ~/.bash_profile
+    echo "source /opt/rh/devtoolset-$DEVTOOLSET_VERSION/enable" >> ~/.bash_profile
 fi
 
 # OK, this is seriously UGLY but it fixes an NFS problem

@@ -883,9 +883,9 @@
         <tag k="z_order" v="-999999"/>
     </way>
     <way visible="true" id="-41" timestamp="2019-01-17T19:50:06Z" version="1">
-        <nd ref="-131"/>
-        <nd ref="-130"/>
         <nd ref="-129"/>
+        <nd ref="-130"/>
+        <nd ref="-131"/>
         <tag k="attribution" v="osm"/>
         <tag k="highway" v="crossing"/>
         <tag k="hoot:id" v="-41"/>
