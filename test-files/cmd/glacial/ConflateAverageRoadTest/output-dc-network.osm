@@ -14947,8 +14947,8 @@
         <member type="way" ref="-10656" role="reviewee"/>
         <member type="way" ref="-10745" role="reviewee"/>
         <member type="way" ref="-10587" role="reviewee"/>
-        <member type="way" ref="-14039" role="reviewee"/>
         <member type="way" ref="-10316" role="reviewee"/>
+        <member type="way" ref="-14039" role="reviewee"/>
         <member type="way" ref="-13660" role="reviewee"/>
         <tag k="hoot:review:members" v="6"/>
         <tag k="hoot:review:needs" v="yes"/>
