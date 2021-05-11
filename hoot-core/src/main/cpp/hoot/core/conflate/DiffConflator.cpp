@@ -202,7 +202,9 @@ void DiffConflator::apply(OsmMapPtr& map)
       // Use the MergerCreator framework and only remove the sections of linear features that match.
       // All other feature types are removed completely.
       _removePartialSecondaryMatchElements();
-      // TODO
+      // Originally tried doing this cleanup as part of conflate.post.ops, which required re-order
+      // some of the ops. Unfortunately, that breaks some ref conflate regression tests. So, opting
+      // to do it inside DiffConflator instead.
       _cleanupAfterPartialMatchRemoval();
     }
     // This uses a naive approach and remove all elements involved in a match completely, despite
