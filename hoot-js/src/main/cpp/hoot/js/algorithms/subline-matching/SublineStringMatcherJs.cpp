@@ -69,8 +69,8 @@ void SublineStringMatcherJs::extractMatchingSublines(const FunctionCallbackInfo<
   SublineStringMatcherPtr sm = smJs->getSublineStringMatcher();
 
   OsmMapJs* mapJs = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject(context).ToLocalChecked());
-  ElementJs* e1Js = ObjectWrap::Unwrap<ElementJs>(args[1]->ToObject(context).ToLocalChecked());
-  ElementJs* e2Js = ObjectWrap::Unwrap<ElementJs>(args[2]->ToObject(context).ToLocalChecked());
+  const ElementJs* e1Js = ObjectWrap::Unwrap<ElementJs>(args[1]->ToObject(context).ToLocalChecked());
+  const ElementJs* e2Js = ObjectWrap::Unwrap<ElementJs>(args[2]->ToObject(context).ToLocalChecked());
   ConstOsmMapPtr m = mapJs->getConstMap();
   ConstElementPtr e1 = e1Js->getConstElement();
   ConstElementPtr e2 = e2Js->getConstElement();

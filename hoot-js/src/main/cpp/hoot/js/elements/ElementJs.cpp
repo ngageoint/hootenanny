@@ -240,7 +240,7 @@ void ElementJs::setTags(const FunctionCallbackInfo<Value>& args)
   }
   else
   {
-    Tags& tags = ObjectWrap::Unwrap<TagsJs>(args[0]->ToObject(context).ToLocalChecked())->getTags();
+    const Tags& tags = ObjectWrap::Unwrap<TagsJs>(args[0]->ToObject(context).ToLocalChecked())->getTags();
     e->setTags(tags);
     args.GetReturnValue().SetUndefined();
   }

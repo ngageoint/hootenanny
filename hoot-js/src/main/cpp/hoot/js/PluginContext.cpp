@@ -180,7 +180,7 @@ Local<Object> PluginContext::loadText(QString text, QString loadInto, QString sc
 }
 
 
-double PluginContext::toNumber(Local<Value> v, QString key, double defaultValue)
+double PluginContext::toNumber(Local<Value> v, QString key, double defaultValue) const
 {
   Isolate* current = v8::Isolate::GetCurrent();
   HandleScope handleScope(current);
@@ -208,7 +208,7 @@ double PluginContext::toNumber(Local<Value> v, QString key, double defaultValue)
   return result;
 }
 
-Local<Value> PluginContext::toValue(QVariant v)
+Local<Value> PluginContext::toValue(QVariant v) const
 {
   Isolate* current = v8::Isolate::GetCurrent();
   EscapableHandleScope handleScope(current);

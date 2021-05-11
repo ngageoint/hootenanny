@@ -76,9 +76,9 @@ public:
    * the key doesn't exist. If you need to use UNSPECIFIED_DEFAULT as the default value, use
    * another method :P.
    */
-  double toNumber(v8::Local<v8::Value> v, QString key, double defaultValue = UNSPECIFIED_DEFAULT);
+  double toNumber(v8::Local<v8::Value> v, QString key, double defaultValue = UNSPECIFIED_DEFAULT) const;
 
-  v8::Local<v8::Value> toValue(QVariant v);
+  v8::Local<v8::Value> toValue(QVariant v) const;
 
 private:
 
