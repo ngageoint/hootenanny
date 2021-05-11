@@ -1177,8 +1177,18 @@
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-1817"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="2"/>
+        <tag k="name" v="Seabury Avenue"/>
+        <tag k="source:datetime" v="2019-03-29T01:33:27Z"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+        <tag k="tiger:name_base" v="Seabury"/>
+        <tag k="tiger:name_type" v="Ave"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:zip_right" v="19963"/>
     </way>
     <way visible="true" id="-1812" timestamp="2020-02-28T16:47:47Z" version="1">
         <nd ref="-911"/>
@@ -1310,35 +1320,6 @@
         <tag k="tiger:name_direction_prefix_2" v="S"/>
         <tag k="tiger:name_type" v="Blvd"/>
         <tag k="tiger:name_type_2" v="Blvd"/>
-    </way>
-    <way visible="true" id="-113" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-898"/>
-        <tag k="NHS" v="yes"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hgv" v="designated"/>
-        <tag k="hgv:national_network" v="yes"/>
-        <tag k="highway" v="trunk"/>
-        <tag k="hoot:hash" v="sha1sum:b1854453fb1d24d7e7117a42b2d463a0612df8ac"/>
-        <tag k="hoot:id" v="-113"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:way:node:count" v="1"/>
-        <tag k="lanes" v="2"/>
-        <tag k="maxspeed" v="55 mph"/>
-        <tag k="name" v="Dupont Boulevard"/>
-        <tag k="name_1" v="S Dupont Blvd"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="ref" v="US 113"/>
-        <tag k="source:datetime" v="2019-04-03T10:48:51Z"/>
-        <tag k="source:hgv:national_network" v="Title 23: Highways Part 658 http://ecfr.gpoaccess.gov/cgi/t/text/text-idx?c=ecfr&amp;rgn=div5&amp;view=text&amp;node=23:1.0.1.7.33&amp;idno=23"/>
-        <tag k="tiger:cfcc" v="A25"/>
-        <tag k="tiger:county" v="Sussex, DE"/>
-        <tag k="tiger:name_base" v="Dupont"/>
-        <tag k="tiger:name_base_1" v="United States Highway 113"/>
-        <tag k="tiger:name_base_2" v="Dupont"/>
-        <tag k="tiger:name_direction_prefix_2" v="S"/>
-        <tag k="tiger:name_type" v="Blvd"/>
-        <tag k="tiger:name_type_2" v="Blvd"/>
-        <tag k="tiger:reviewed" v="no"/>
     </way>
     <way visible="true" id="-112" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="4881727996"/>
@@ -2170,7 +2151,6 @@
     </way>
     <relation visible="true" id="-4" timestamp="2020-02-28T16:47:47Z" version="1">
         <member type="way" ref="-15" role="forward"/>
-        <member type="way" ref="-113" role="forward"/>
         <tag k="error:circular" v="15"/>
         <tag k="fixme" v="verify route in Dover, Ellendale, Georgetown, Milford"/>
         <tag k="hoot:id" v="-4"/>
@@ -2204,7 +2184,6 @@
     </relation>
     <relation visible="true" id="7387466" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
         <member type="way" ref="-15" role="forward"/>
-        <member type="way" ref="-113" role="forward"/>
         <member type="way" ref="-14" role="forward"/>
         <member type="way" ref="-1748" role="forward"/>
         <member type="way" ref="-112" role="forward"/>

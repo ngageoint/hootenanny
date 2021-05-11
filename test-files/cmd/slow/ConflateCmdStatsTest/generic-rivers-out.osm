@@ -1653,20 +1653,26 @@
         <nd ref="-479615"/>
         <nd ref="-479716"/>
         <nd ref="-479741"/>
+        <tag k="REF2" v="0010da"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-13399"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="6"/>
         <tag k="waterway" v="stream"/>
+        <tag k="z_order" v="0"/>
     </way>
     <way visible="true" id="-13398" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-391141"/>
         <nd ref="-480066"/>
+        <tag k="REF2" v="0010da"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-13398"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="2"/>
         <tag k="waterway" v="stream"/>
+        <tag k="z_order" v="0"/>
     </way>
     <way visible="true" id="-13394" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-479563"/>
@@ -1692,6 +1698,7 @@
         <tag k="REF2" v="0010da"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-13394"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:way:node:count" v="19"/>
         <tag k="intermittent" v="yes"/>
@@ -1706,40 +1713,52 @@
         <nd ref="-185983"/>
         <nd ref="-479717"/>
         <nd ref="-185986"/>
+        <tag k="REF2" v="001f4a"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-13391"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="3"/>
         <tag k="waterway" v="stream"/>
+        <tag k="z_order" v="0"/>
     </way>
     <way visible="true" id="-13390" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-480058"/>
         <nd ref="-185982"/>
+        <tag k="REF2" v="001f4a"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-13390"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="2"/>
         <tag k="waterway" v="stream"/>
+        <tag k="z_order" v="0"/>
     </way>
     <way visible="true" id="-13389" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-185968"/>
         <nd ref="-479675"/>
         <nd ref="-185969"/>
+        <tag k="REF2" v="001f4a"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-13389"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="3"/>
         <tag k="waterway" v="stream"/>
+        <tag k="z_order" v="0"/>
     </way>
     <way visible="true" id="-13388" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-185966"/>
         <nd ref="-479574"/>
         <nd ref="-185967"/>
+        <tag k="REF2" v="001f4a"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-13388"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="3"/>
         <tag k="waterway" v="stream"/>
+        <tag k="z_order" v="0"/>
     </way>
     <way visible="true" id="-13375" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-479566"/>
@@ -1778,6 +1797,7 @@
         <tag k="REF2" v="001f4a"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-13375"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:way:node:count" v="32"/>
         <tag k="intermittent" v="yes"/>
@@ -1794,31 +1814,43 @@
         <nd ref="-479611"/>
         <nd ref="-479713"/>
         <nd ref="-479743"/>
+        <tag k="REF2" v="002876"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-13373"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="6"/>
+        <tag k="name" v="Ravine Christ"/>
         <tag k="waterway" v="stream"/>
+        <tag k="z_order" v="0"/>
     </way>
     <way visible="true" id="-13372" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-77203"/>
         <nd ref="-479684"/>
         <nd ref="-479618"/>
         <nd ref="-77199"/>
+        <tag k="REF2" v="002876"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-13372"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="4"/>
+        <tag k="name" v="Ravine Christ"/>
         <tag k="waterway" v="stream"/>
+        <tag k="z_order" v="0"/>
     </way>
     <way visible="true" id="-13371" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-480052"/>
         <nd ref="-77204"/>
+        <tag k="REF2" v="002876"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-13371"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="2"/>
+        <tag k="name" v="Ravine Christ"/>
         <tag k="waterway" v="stream"/>
+        <tag k="z_order" v="0"/>
     </way>
     <way visible="true" id="-13358" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-170479"/>
@@ -1882,11 +1914,15 @@
         <nd ref="-480027"/>
         <nd ref="-479609"/>
         <nd ref="-77213"/>
+        <tag k="REF2" v="002876"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-13349"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="4"/>
+        <tag k="name" v="Ravine Christ"/>
         <tag k="waterway" v="stream"/>
+        <tag k="z_order" v="0"/>
     </way>
     <way visible="true" id="-13348" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-77237"/>
@@ -1981,6 +2017,7 @@
         <tag k="REF2" v="002876"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-13341"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:way:node:count" v="68"/>
         <tag k="intermittent" v="yes"/>
@@ -2048,22 +2085,28 @@
         <nd ref="-480036"/>
         <nd ref="-479733"/>
         <nd ref="-479697"/>
+        <tag k="REF2" v="001f4e"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-13329"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="3"/>
         <tag k="waterway" v="stream"/>
+        <tag k="z_order" v="0"/>
     </way>
     <way visible="true" id="-13328" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-185819"/>
         <nd ref="-479593"/>
         <nd ref="-479597"/>
         <nd ref="-185817"/>
+        <tag k="REF2" v="001f4e"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-13328"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="4"/>
         <tag k="waterway" v="stream"/>
+        <tag k="z_order" v="0"/>
     </way>
     <way visible="true" id="-13327" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-185830"/>
@@ -2071,21 +2114,27 @@
         <nd ref="-479629"/>
         <nd ref="-479728"/>
         <nd ref="-185826"/>
+        <tag k="REF2" v="001f4e"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-13327"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="5"/>
         <tag k="waterway" v="stream"/>
+        <tag k="z_order" v="0"/>
     </way>
     <way visible="true" id="-13326" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-185839"/>
         <nd ref="-479646"/>
         <nd ref="-185837"/>
+        <tag k="REF2" v="001f4e"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-13326"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="3"/>
         <tag k="waterway" v="stream"/>
+        <tag k="z_order" v="0"/>
     </way>
     <way visible="true" id="-13318" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-185814"/>
@@ -2127,6 +2176,7 @@
         <tag k="REF2" v="001f4e"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-13318"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:way:node:count" v="35"/>
         <tag k="intermittent" v="yes"/>
@@ -2144,41 +2194,53 @@
         <nd ref="-479649"/>
         <nd ref="-479583"/>
         <nd ref="-185910"/>
+        <tag k="REF2" v="001f4b"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-13311"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="7"/>
         <tag k="waterway" v="stream"/>
+        <tag k="z_order" v="0"/>
     </way>
     <way visible="true" id="-13310" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-185919"/>
         <nd ref="-479643"/>
         <nd ref="-479603"/>
         <nd ref="-480028"/>
+        <tag k="REF2" v="001f4b"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-13310"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="4"/>
         <tag k="waterway" v="stream"/>
+        <tag k="z_order" v="0"/>
     </way>
     <way visible="true" id="-13309" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-185922"/>
         <nd ref="-185920"/>
+        <tag k="REF2" v="001f4b"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-13309"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="2"/>
         <tag k="waterway" v="stream"/>
+        <tag k="z_order" v="0"/>
     </way>
     <way visible="true" id="-13308" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-185928"/>
         <nd ref="-479669"/>
         <nd ref="-185926"/>
+        <tag k="REF2" v="001f4b"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-13308"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="3"/>
         <tag k="waterway" v="stream"/>
+        <tag k="z_order" v="0"/>
     </way>
     <way visible="true" id="-13298" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-77215"/>
@@ -2229,6 +2291,7 @@
         <tag k="REF2" v="001f4b"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-13298"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="44"/>
         <tag k="intermittent" v="yes"/>
@@ -2322,22 +2385,30 @@
         <nd ref="-479731"/>
         <nd ref="-479668"/>
         <nd ref="-480020"/>
+        <tag k="REF2" v="001952"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-13282"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="4"/>
+        <tag k="name" v="Ravine Pichomblaise"/>
         <tag k="waterway" v="stream"/>
+        <tag k="z_order" v="0"/>
     </way>
     <way visible="true" id="-13281" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-170466"/>
         <nd ref="-479624"/>
         <nd ref="-479582"/>
         <nd ref="-480022"/>
+        <tag k="REF2" v="001952"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-13281"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="4"/>
+        <tag k="name" v="Ravine Pichomblaise"/>
         <tag k="waterway" v="stream"/>
+        <tag k="z_order" v="0"/>
     </way>
     <way visible="true" id="-13273" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-53419"/>
@@ -2365,6 +2436,7 @@
         <tag k="REF2" v="001952"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-13273"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:way:node:count" v="21"/>
         <tag k="intermittent" v="yes"/>
@@ -2378,20 +2450,28 @@
     <way visible="true" id="-13272" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-480018"/>
         <nd ref="-185987"/>
+        <tag k="REF2" v="001952"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-13272"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="2"/>
+        <tag k="name" v="Ravine Pichomblaise"/>
         <tag k="waterway" v="stream"/>
+        <tag k="z_order" v="0"/>
     </way>
     <way visible="true" id="-13271" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-480017"/>
         <nd ref="-302243"/>
+        <tag k="REF2" v="001952"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-13271"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="2"/>
+        <tag k="name" v="Ravine Pichomblaise"/>
         <tag k="waterway" v="stream"/>
+        <tag k="z_order" v="0"/>
     </way>
     <way visible="true" id="-13265" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-170454"/>
@@ -2420,6 +2500,7 @@
         <tag k="REF2" v="001952"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-13265"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:way:node:count" v="22"/>
         <tag k="intermittent" v="yes"/>
@@ -2450,80 +2531,104 @@
         <nd ref="-479997"/>
         <nd ref="-479619"/>
         <nd ref="-53422"/>
+        <tag k="REF2" v="002a64"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-13261"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="3"/>
         <tag k="waterway" v="stream"/>
+        <tag k="z_order" v="0"/>
     </way>
     <way visible="true" id="-13260" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-53426"/>
         <nd ref="-479726"/>
         <nd ref="-53424"/>
+        <tag k="REF2" v="002a64"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-13260"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="3"/>
         <tag k="waterway" v="stream"/>
+        <tag k="z_order" v="0"/>
     </way>
     <way visible="true" id="-13259" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-53429"/>
         <nd ref="-479693"/>
         <nd ref="-479998"/>
+        <tag k="REF2" v="002a64"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-13259"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="3"/>
         <tag k="waterway" v="stream"/>
+        <tag k="z_order" v="0"/>
     </way>
     <way visible="true" id="-13258" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-53432"/>
         <nd ref="-53430"/>
+        <tag k="REF2" v="002a64"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-13258"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="2"/>
         <tag k="waterway" v="stream"/>
+        <tag k="z_order" v="0"/>
     </way>
     <way visible="true" id="-13257" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-53434"/>
         <nd ref="-479612"/>
         <nd ref="-53433"/>
+        <tag k="REF2" v="002a64"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-13257"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="3"/>
         <tag k="waterway" v="stream"/>
+        <tag k="z_order" v="0"/>
     </way>
     <way visible="true" id="-13256" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-480000"/>
         <nd ref="-479678"/>
         <nd ref="-53435"/>
+        <tag k="REF2" v="002a64"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-13256"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="3"/>
         <tag k="waterway" v="stream"/>
+        <tag k="z_order" v="0"/>
     </way>
     <way visible="true" id="-13255" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-53439"/>
         <nd ref="-479644"/>
         <nd ref="-53437"/>
+        <tag k="REF2" v="002a64"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-13255"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="3"/>
         <tag k="waterway" v="stream"/>
+        <tag k="z_order" v="0"/>
     </way>
     <way visible="true" id="-13254" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-53444"/>
         <nd ref="-479685"/>
         <nd ref="-479999"/>
+        <tag k="REF2" v="002a64"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-13254"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="3"/>
         <tag k="waterway" v="stream"/>
+        <tag k="z_order" v="0"/>
     </way>
     <way visible="true" id="-13228" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-53419"/>
@@ -2568,6 +2673,7 @@
         <tag k="REF2" v="002a64"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-13228"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="38"/>
         <tag k="intermittent" v="yes"/>
