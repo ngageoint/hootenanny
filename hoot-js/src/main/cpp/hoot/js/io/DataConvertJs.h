@@ -43,9 +43,9 @@ namespace hoot
 {
 
 template<typename T>
-T toCpp(v8::Handle<v8::Value> v);
+T toCpp(v8::Local<v8::Value> v);
 
-inline void toCpp(v8::Handle<v8::Value> v, bool& o)
+inline void toCpp(v8::Local<v8::Value> v, bool& o)
 {
   if (v->IsTrue())
   {
@@ -61,42 +61,51 @@ inline void toCpp(v8::Handle<v8::Value> v, bool& o)
   }
 }
 
-inline void toCpp(v8::Handle<v8::Value> v, int& o)
+inline void toCpp(v8::Local<v8::Value> v, int& o)
 {
   if (!v->IsInt32())
   {
     throw IllegalArgumentException("Expected an integer. Got: (" + toJson(v) + ")");
   }
-  o = v->Int32Value();
+  v8::Isolate* current = v8::Isolate::GetCurrent();
+  v8::HandleScope scope(current);
+  v8::Local<v8::Context> context = current->GetCurrentContext();
+  o = v->Int32Value(context).ToChecked();
 }
 
-inline void toCpp(v8::Handle<v8::Value> v, long& o)
+inline void toCpp(v8::Local<v8::Value> v, long& o)
 {
   if (!v->IsInt32())
   {
     throw IllegalArgumentException("Expected an integer. Got: (" + toJson(v) + ")");
   }
-  o = v->Int32Value();
+  v8::Isolate* current = v8::Isolate::GetCurrent();
+  v8::HandleScope scope(current);
+  v8::Local<v8::Context> context = current->GetCurrentContext();
+  o = v->Int32Value(context).ToChecked();
 }
 
-inline void toCpp(v8::Handle<v8::Value> v, Meters& o)
+inline void toCpp(v8::Local<v8::Value> v, Meters& o)
 {
   if (!v->IsNumber())
   {
     throw IllegalArgumentException("Expected Meters (Number). Got: (" + toJson(v) + ")");
   }
-  o = v->NumberValue();
+  v8::Isolate* current = v8::Isolate::GetCurrent();
+  v8::HandleScope scope(current);
+  v8::Local<v8::Context> context = current->GetCurrentContext();
+  o = v->NumberValue(context).ToChecked();
 }
 
 template<typename T, typename U>
-void toCpp(v8::Handle<v8::Value> v, std::pair<T, U>& o)
+void toCpp(v8::Local<v8::Value> v, std::pair<T, U>& o)
 {
   if (!v->IsArray())
   {
     throw IllegalArgumentException("While converting a pair, expected an array. Got: (" +
                                    toJson(v) + ")");
   }
-  v8::Handle<v8::Array> arr = v8::Handle<v8::Array>::Cast(v);
+  v8::Local<v8::Array> arr = v8::Local<v8::Array>::Cast(v);
   if (arr->Length() != 2)
   {
     throw IllegalArgumentException("Expected an array of length 2, but got (" + toJson(v) + ")");
@@ -111,7 +120,7 @@ void toCpp(v8::Handle<v8::Value> v, std::pair<T, U>& o)
  * strings (e.g. number, string, bool), but not object types. This is simply because strings
  * may be automagically converted to primitive types. E.g. '1' may be turned into a number.
  */
-inline void toCpp(v8::Handle<v8::Value> v, QString& s)
+inline void toCpp(v8::Local<v8::Value> v, QString& s)
 {
   if (v.IsEmpty() || v->IsUndefined() || v->IsNull())
   {
@@ -128,13 +137,13 @@ inline void toCpp(v8::Handle<v8::Value> v, QString& s)
   }
 }
 
-inline void toCpp(v8::Handle<v8::Value> v, QStringList& o)
+inline void toCpp(v8::Local<v8::Value> v, QStringList& o)
 {
   if (!v->IsArray())
   {
     throw IllegalArgumentException("Expected an array. Got: (" + toJson(v) + ")");
   }
-  v8::Handle<v8::Array> arr = v8::Handle<v8::Array>::Cast(v);
+  v8::Local<v8::Array> arr = v8::Local<v8::Array>::Cast(v);
 
   o.reserve(arr->Length());
   for (uint32_t i = 0; i < arr->Length(); i++)
@@ -143,13 +152,13 @@ inline void toCpp(v8::Handle<v8::Value> v, QStringList& o)
   }
 }
 
-inline void toCpp(v8::Handle<v8::Value> v, QVariantList& l)
+inline void toCpp(v8::Local<v8::Value> v, QVariantList& l)
 {
   if (v.IsEmpty() || v->IsArray() == false)
   {
     throw IllegalArgumentException("Expected to get an array. Got: (" + toJson(v) + ")");
   }
-  v8::Handle<v8::Array> arr = v8::Handle<v8::Array>::Cast(v);
+  v8::Local<v8::Array> arr = v8::Local<v8::Array>::Cast(v);
 
   l.clear();
   l.reserve(arr->Length());
@@ -159,15 +168,19 @@ inline void toCpp(v8::Handle<v8::Value> v, QVariantList& l)
   }
 }
 
-inline void toCpp(v8::Handle<v8::Value> v, QVariantMap& m)
+inline void toCpp(v8::Local<v8::Value> v, QVariantMap& m)
 {
   if (v.IsEmpty() || v->IsObject() == false)
   {
     throw IllegalArgumentException("Expected to get an object. Got: (" + toJson(v) + ")");
   }
-  v8::Handle<v8::Object> obj = v8::Handle<v8::Object>::Cast(v);
+  v8::Isolate* current = v8::Isolate::GetCurrent();
+  v8::HandleScope scope(current);
+  v8::Local<v8::Context> context = current->GetCurrentContext();
 
-  v8::Local<v8::Array> arr = obj->GetPropertyNames();
+  v8::Local<v8::Object> obj = v8::Local<v8::Object>::Cast(v);
+
+  v8::Local<v8::Array> arr = obj->GetPropertyNames(context).ToLocalChecked();
   for (uint32_t i = 0; i < arr->Length(); i++)
   {
     QString k = toCpp<QString>(arr->Get(i));
@@ -177,8 +190,11 @@ inline void toCpp(v8::Handle<v8::Value> v, QVariantMap& m)
   }
 }
 
-inline void toCpp(v8::Handle<v8::Value> v, QVariant& qv)
+inline void toCpp(v8::Local<v8::Value> v, QVariant& qv)
 {
+  v8::Isolate* current = v8::Isolate::GetCurrent();
+  v8::HandleScope scope(current);
+  v8::Local<v8::Context> context = current->GetCurrentContext();
   if (v.IsEmpty() || v->IsUndefined() || v->IsNull())
   {
     qv = QVariant();
@@ -192,11 +208,11 @@ inline void toCpp(v8::Handle<v8::Value> v, QVariant& qv)
     // Changed this since OGR is expecting Int and this makes a Long
     // It throws an error in OgrWriter.cpp:_addFeature
 //    qv.setValue(v->IntegerValue());
-    qv.setValue(v->Int32Value());
+    qv.setValue(v->Int32Value(context).ToChecked());
   }
   else if (v->IsNumber())
   {
-    qv.setValue(v->NumberValue());
+    qv.setValue(v->NumberValue(context).ToChecked());
   }
   else if (v->IsArray())
   {
@@ -215,13 +231,13 @@ inline void toCpp(v8::Handle<v8::Value> v, QVariant& qv)
 }
 
 template<typename T>
-void toCpp(v8::Handle<v8::Value> v, std::vector<T>& o)
+void toCpp(v8::Local<v8::Value> v, std::vector<T>& o)
 {
   if (!v->IsArray())
   {
     throw IllegalArgumentException("Expected an array. Got: (" + toJson(v) + ")");
   }
-  v8::Handle<v8::Array> arr = v8::Handle<v8::Array>::Cast(v);
+  v8::Local<v8::Array> arr = v8::Local<v8::Array>::Cast(v);
 
   o.resize(arr->Length());
   for (uint32_t i = 0; i < arr->Length(); i++)
@@ -236,13 +252,13 @@ void toCpp(v8::Handle<v8::Value> v, std::vector<T>& o)
  * std::set is converted to a JavaScript Array. Using objects coerces all the keys into strings.
  */
 template<typename T>
-void toCpp(v8::Handle<v8::Value> v, std::set<T>& o)
+void toCpp(v8::Local<v8::Value> v, std::set<T>& o)
 {
   if (!v->IsArray())
   {
     throw IllegalArgumentException("Expected an array. Got: (" + toJson(v) + ")");
   }
-  v8::Handle<v8::Array> arr = v8::Handle<v8::Array>::Cast(v);
+  v8::Local<v8::Array> arr = v8::Local<v8::Array>::Cast(v);
   for (uint32_t i = 0; i < arr->Length(); i++)
   {
     T t;
@@ -252,29 +268,29 @@ void toCpp(v8::Handle<v8::Value> v, std::set<T>& o)
 }
 
 template<typename T>
-inline T toCpp(v8::Handle<v8::Value> v)
+inline T toCpp(v8::Local<v8::Value> v)
 {
   T t;
   toCpp(v, t);
   return t;
 }
 
-inline v8::Handle<v8::Value> toV8(bool v)
+inline v8::Local<v8::Value> toV8(bool v)
 {
   return v8::Boolean::New(v8::Isolate::GetCurrent(), v);
 }
 
-inline v8::Handle<v8::Value> toV8(int i)
+inline v8::Local<v8::Value> toV8(int i)
 {
   return v8::Integer::New(v8::Isolate::GetCurrent(), i);
 }
 
-inline v8::Handle<v8::Value> toV8(double v)
+inline v8::Local<v8::Value> toV8(double v)
 {
   return v8::Number::New(v8::Isolate::GetCurrent(),v);
 }
 
-inline v8::Handle<v8::Value> toV8(const std::string& s)
+inline v8::Local<v8::Value> toV8(const std::string& s)
 {
   return
     v8::String::NewFromUtf8(
@@ -282,18 +298,18 @@ inline v8::Handle<v8::Value> toV8(const std::string& s)
 }
 
 template<typename T, typename U>
-v8::Handle<v8::Value> toV8(const std::pair<T, U>& p)
+v8::Local<v8::Value> toV8(const std::pair<T, U>& p)
 {
-  v8::Handle<v8::Array> result = v8::Array::New(v8::Isolate::GetCurrent(), 2);
+  v8::Local<v8::Array> result = v8::Array::New(v8::Isolate::GetCurrent(), 2);
   result->Set(0, toV8(p.first));
   result->Set(1, toV8(p.second));
   return result;
 }
 
 template<typename T>
-v8::Handle<v8::Value> toV8(const std::vector<T>& v)
+v8::Local<v8::Value> toV8(const std::vector<T>& v)
 {
-  v8::Handle<v8::Array> result = v8::Array::New(v8::Isolate::GetCurrent(), v.size());
+  v8::Local<v8::Array> result = v8::Array::New(v8::Isolate::GetCurrent(), v.size());
   for (uint32_t i = 0; i < v.size(); i++)
   {
     result->Set(i, toV8(v[i]));
@@ -305,9 +321,9 @@ v8::Handle<v8::Value> toV8(const std::vector<T>& v)
  * std::set is converted to a JavaScript Array. Using objects coerces all the keys into strings.
  */
 template<typename T>
-v8::Handle<v8::Value> toV8(const std::set<T>& v)
+v8::Local<v8::Value> toV8(const std::set<T>& v)
 {
-  v8::Handle<v8::Array> result = v8::Array::New(v8::Isolate::GetCurrent(), v.size());
+  v8::Local<v8::Array> result = v8::Array::New(v8::Isolate::GetCurrent(), v.size());
   uint32_t i = 0;
   for (typename std::set<T>::const_iterator it = v.begin(); it != v.end(); ++it)
   {
@@ -316,12 +332,12 @@ v8::Handle<v8::Value> toV8(const std::set<T>& v)
   return result;
 }
 
-inline v8::Handle<v8::Value> toV8(const char* s)
+inline v8::Local<v8::Value> toV8(const char* s)
 {
   return v8::String::NewFromUtf8(v8::Isolate::GetCurrent(), s);
 }
 
-inline v8::Handle<v8::Value> toV8(const QString& s)
+inline v8::Local<v8::Value> toV8(const QString& s)
 {
   QByteArray utf8 = s.toUtf8();
   return
@@ -330,9 +346,9 @@ inline v8::Handle<v8::Value> toV8(const QString& s)
       utf8.length()).ToLocalChecked();
 }
 
-inline v8::Handle<v8::Value> toV8(const QStringList& v)
+inline v8::Local<v8::Value> toV8(const QStringList& v)
 {
-  v8::Handle<v8::Array> result = v8::Array::New(v8::Isolate::GetCurrent(), v.size());
+  v8::Local<v8::Array> result = v8::Array::New(v8::Isolate::GetCurrent(), v.size());
   for (int i = 0; i < v.size(); i++)
   {
     result->Set(i, toV8(v[i]));
@@ -340,7 +356,7 @@ inline v8::Handle<v8::Value> toV8(const QStringList& v)
   return result;
 }
 
-inline v8::Handle<v8::Value> toV8(const QVariant& v)
+inline v8::Local<v8::Value> toV8(const QVariant& v)
 {
   v8::Isolate* current = v8::Isolate::GetCurrent();
   switch (v.type())
@@ -360,7 +376,7 @@ inline v8::Handle<v8::Value> toV8(const QVariant& v)
   case QVariant::List:
   {
     QVariantList l = v.toList();
-    v8::Handle<v8::Array> result = v8::Array::New(current, l.size());
+    v8::Local<v8::Array> result = v8::Array::New(current, l.size());
     for (int i = 0; i < l.size(); i++)
     {
       result->Set(i, toV8(l[i]));
@@ -369,7 +385,7 @@ inline v8::Handle<v8::Value> toV8(const QVariant& v)
   }
   case QVariant::Hash:
   {
-    v8::Handle<v8::Object> result = v8::Object::New(current);
+    v8::Local<v8::Object> result = v8::Object::New(current);
     QVariantHash m = v.toHash();
     for (QVariantHash::const_iterator i = m.begin(); i != m.end(); i++)
     {
@@ -379,7 +395,7 @@ inline v8::Handle<v8::Value> toV8(const QVariant& v)
   }
   case QVariant::Map:
   {
-    v8::Handle<v8::Object> result = v8::Object::New(current);
+    v8::Local<v8::Object> result = v8::Object::New(current);
     QVariantMap m = v.toMap();
     for (QVariantMap::const_iterator i = m.begin(); i != m.end(); i++)
     {
@@ -394,9 +410,9 @@ inline v8::Handle<v8::Value> toV8(const QVariant& v)
 }
 
 template<typename T, typename U>
-inline v8::Handle<v8::Value> toV8(const QHash<T, U>& m)
+inline v8::Local<v8::Value> toV8(const QHash<T, U>& m)
 {
-  v8::Handle<v8::Object> result = v8::Object::New(v8::Isolate::GetCurrent());
+  v8::Local<v8::Object> result = v8::Object::New(v8::Isolate::GetCurrent());
   typename QHash<T, U>::const_iterator i;
   for (i = m.begin(); i != m.end(); i++)
   {

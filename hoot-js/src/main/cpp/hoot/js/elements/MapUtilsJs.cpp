@@ -43,17 +43,18 @@ namespace hoot
 
 HOOT_JS_REGISTER(MapUtilsJs)
 
-void MapUtilsJs::Init(Handle<Object> exports)
+void MapUtilsJs::Init(Local<Object> exports)
 {
   Isolate* current = exports->GetIsolate();
   HandleScope scope(current);
-  Handle<Object> obj = Object::New(current);
+  Local<Context> context = current->GetCurrentContext();
+  Local<Object> obj = Object::New(current);
   exports->Set(String::NewFromUtf8(current, "MapUtils"), obj);
 
   obj->Set(String::NewFromUtf8(current, "getFirstElementWithTag"),
-           FunctionTemplate::New(current, getFirstElementWithTag)->GetFunction());
+           FunctionTemplate::New(current, getFirstElementWithTag)->GetFunction(context).ToLocalChecked());
   obj->Set(String::NewFromUtf8(current, "getFirstElementWithNote"),
-           FunctionTemplate::New(current, getFirstElementWithNote)->GetFunction());
+           FunctionTemplate::New(current, getFirstElementWithNote)->GetFunction(context).ToLocalChecked());
 }
 
 void MapUtilsJs::getFirstElementWithTag(const FunctionCallbackInfo<Value>& args)

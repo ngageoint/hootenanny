@@ -40,7 +40,7 @@ class OsmSchemaJs : public HootBaseJs
 {
 public:
 
-  static void Init(v8::Handle<v8::Object> target);
+  static void Init(v8::Local<v8::Object> target);
 
   virtual ~OsmSchemaJs() = default;
 
@@ -86,10 +86,10 @@ private:
   static void hasName(const v8::FunctionCallbackInfo<v8::Value>& args);
 };
 
-inline v8::Handle<v8::Value> toV8(const SchemaVertex& tv)
+inline v8::Local<v8::Value> toV8(const SchemaVertex& tv)
 {
   v8::Isolate* current = v8::Isolate::GetCurrent();
-  v8::Handle<v8::Object> result = v8::Object::New(current);
+  v8::Local<v8::Object> result = v8::Object::New(current);
 
   if (tv.isEmpty())
   {
