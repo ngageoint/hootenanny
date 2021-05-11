@@ -85,15 +85,14 @@ Local<Value> PluginContext::call(Handle<Object> obj, QString name, QList<QVarian
 {
   Isolate* current = obj->GetIsolate();
   EscapableHandleScope handleScope(current);
-  if (obj->Has(String::NewFromUtf8(current, name.toUtf8().data())) == false)
-  {
+  Local<Context> context = current->GetCurrentContext();
+  if (obj->Has(context, String::NewFromUtf8(current, name.toUtf8().data())).ToChecked() == false)
     throw InternalErrorException("Unable to find method in JS: " + name);
-  }
+
   Handle<Value> value = obj->Get(String::NewFromUtf8(current, name.toUtf8().data()));
   if (value->IsFunction() == false)
-  {
     throw InternalErrorException("The specified object is not a function: " + name);
-  }
+
   Handle<Function> func = Handle<Function>::Cast(value);
   vector<Handle<Value>> jsArgs(args.size());
 
@@ -102,7 +101,12 @@ Local<Value> PluginContext::call(Handle<Object> obj, QString name, QList<QVarian
     jsArgs[i] = toValue(args[i]);
   }
 
-  return handleScope.Escape(func->Call(obj, args.size(), jsArgs.data()));
+  MaybeLocal<Value> result = func->Call(context, obj, args.size(), jsArgs.data());
+
+  if (result.IsEmpty())
+    throw InternalErrorException("Function call '" + name + "' returned an error.");
+
+  return handleScope.Escape(result.ToLocalChecked());
 }
 
 Local<Value> PluginContext::eval(QString e)
@@ -146,30 +150,31 @@ Local<Object> PluginContext::loadText(QString text, QString loadInto, QString sc
   Isolate* current = v8::Isolate::GetCurrent();
   EscapableHandleScope handleScope(current);
   Context::Scope context_scope(ToLocal(&_context));
+  Local<Context> context = current->GetCurrentContext();
 
-  Local<Script> script;
+  MaybeLocal<Script> script;
 
   Local<Object> exports(Object::New(current));
   ToLocal(&_context)->Global()->Set(String::NewFromUtf8(current, "exports"), exports);
 
-  TryCatch try_catch;
+  TryCatch try_catch(current);
 
   // Compile the source code.
   ScriptOrigin origin(toV8(scriptName));
-  script = Script::Compile(String::NewFromUtf8(current, text.toUtf8().data()), &origin);
+  script = Script::Compile(context, String::NewFromUtf8(current, text.toUtf8().data()), &origin);
 
   if (script.IsEmpty())
-  {
     HootExceptionJs::throwAsHootException(try_catch);
-  }
 
   // Run the script to get the result.
-  HootExceptionJs::checkV8Exception(script->Run(), try_catch);
+  MaybeLocal<Value> result = script.ToLocalChecked()->Run(context);
+  if (result.IsEmpty())
+    HootExceptionJs::throwAsHootException(try_catch);
+
+  HootExceptionJs::checkV8Exception(result.ToLocalChecked(), try_catch);
 
   if (loadInto != "")
-  {
     ToLocal(&_context)->Global()->Set(String::NewFromUtf8(current, loadInto.toUtf8()), exports);
-  }
 
   return handleScope.Escape(exports);
 }
@@ -178,6 +183,8 @@ Local<Object> PluginContext::loadText(QString text, QString loadInto, QString sc
 double PluginContext::toNumber(Handle<Value> v, QString key, double defaultValue)
 {
   Isolate* current = v8::Isolate::GetCurrent();
+  HandleScope handleScope(current);
+  Local<Context> context = current->GetCurrentContext();
   if (v->IsObject() == false)
   {
     throw IllegalArgumentException("Expected value to be an object.");
@@ -186,7 +193,7 @@ double PluginContext::toNumber(Handle<Value> v, QString key, double defaultValue
 
   Handle<String> keyStr = String::NewFromUtf8(current, key.toUtf8());
   double result = defaultValue;
-  if (obj->Has(keyStr) == false)
+  if (obj->Has(context, keyStr).ToChecked() == false)
   {
     if (defaultValue == UNSPECIFIED_DEFAULT)
     {
@@ -195,7 +202,7 @@ double PluginContext::toNumber(Handle<Value> v, QString key, double defaultValue
   }
   else
   {
-    result = obj->Get(keyStr)->NumberValue();
+    result = obj->Get(keyStr)->NumberValue(context).ToChecked();
   }
 
   return result;

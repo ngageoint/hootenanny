@@ -53,6 +53,7 @@ void FeatureExtractorJs::extract(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
 
   FeatureExtractorJs* feJs = ObjectWrap::Unwrap<FeatureExtractorJs>(args.This());
 
@@ -61,9 +62,9 @@ void FeatureExtractorJs::extract(const FunctionCallbackInfo<Value>& args)
     throw IllegalArgumentException("Expected exactly three argument in extract (map, e1, e2)");
   }
 
-  OsmMapJs* mapJs = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject());
-  ElementJs* e1Js = ObjectWrap::Unwrap<ElementJs>(args[1]->ToObject());
-  ElementJs* e2Js = ObjectWrap::Unwrap<ElementJs>(args[2]->ToObject());
+  OsmMapJs* mapJs = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject(context).ToLocalChecked());
+  ElementJs* e1Js = ObjectWrap::Unwrap<ElementJs>(args[1]->ToObject(context).ToLocalChecked());
+  ElementJs* e2Js = ObjectWrap::Unwrap<ElementJs>(args[2]->ToObject(context).ToLocalChecked());
 
   double result =
     feJs->getFeatureExtractor()->extract(
@@ -83,6 +84,7 @@ void FeatureExtractorJs::Init(Handle<Object> target)
 {
   Isolate* current = target->GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
   vector<QString> opNames =
     Factory::getInstance().getObjectNamesByBase(FeatureExtractor::className());
 
@@ -99,7 +101,7 @@ void FeatureExtractorJs::Init(Handle<Object> target)
     tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "extract"),
         FunctionTemplate::New(current, extract));
 
-    Persistent<Function> constructor(current, tpl->GetFunction());
+    Persistent<Function> constructor(current, tpl->GetFunction(context).ToLocalChecked());
     target->Set(String::NewFromUtf8(current, n), ToLocal(&constructor));
   }
 }

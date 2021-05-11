@@ -42,18 +42,21 @@ void TagMergerFactoryJs::Init(Handle<Object> exports)
 {
   Isolate* current = exports->GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
   Handle<Object> tagMergerFactory = Object::New(current);
   exports->Set(String::NewFromUtf8(current, "TagMergerFactory"), tagMergerFactory);
   tagMergerFactory->Set(String::NewFromUtf8(current, "mergeTags"),
-    FunctionTemplate::New(current, mergeTags)->GetFunction());
+    FunctionTemplate::New(current, mergeTags)->GetFunction(context).ToLocalChecked());
 }
 
 void TagMergerFactoryJs::mergeTags(const FunctionCallbackInfo<Value>& args)
 {
-  HandleScope scope(args.GetIsolate());
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
 
-  Tags t1 = toCpp<Tags>(args[0]->ToObject());
-  Tags t2 = toCpp<Tags>(args[1]->ToObject());
+  Tags t1 = toCpp<Tags>(args[0]->ToObject(context).ToLocalChecked());
+  Tags t2 = toCpp<Tags>(args[1]->ToObject(context).ToLocalChecked());
 
   args.GetReturnValue().Set(TagsJs::New(TagMergerFactory::mergeTags(t1, t2, ElementType::Unknown)));
 }

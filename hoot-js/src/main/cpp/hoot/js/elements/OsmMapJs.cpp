@@ -58,6 +58,7 @@ void OsmMapJs::Init(Handle<Object> target)
 {
   Isolate* current = target->GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
 
   // Prepare constructor template
   Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
@@ -78,7 +79,7 @@ void OsmMapJs::Init(Handle<Object> target)
     PopulateConsumersJs::baseClass(),
     String::NewFromUtf8(current, OsmMap::className().toStdString().data()));
 
-  _constructor.Reset(current, tpl->GetFunction());
+  _constructor.Reset(current, tpl->GetFunction(context).ToLocalChecked());
   target->Set(String::NewFromUtf8(current, "OsmMap"), ToLocal(&_constructor));
 }
 
@@ -86,8 +87,9 @@ Handle<Object> OsmMapJs::create(ConstOsmMapPtr map)
 {
   Isolate* current = v8::Isolate::GetCurrent();
   EscapableHandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
 
-  Handle<Object> result = ToLocal(&_constructor)->NewInstance();
+  Handle<Object> result = ToLocal(&_constructor)->NewInstance(context).ToLocalChecked();
   OsmMapJs* from = ObjectWrap::Unwrap<OsmMapJs>(result);
   from->_setMap(map);
 
@@ -98,8 +100,9 @@ Handle<Object> OsmMapJs::create(OsmMapPtr map)
 {
   Isolate* current = v8::Isolate::GetCurrent();
   EscapableHandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
 
-  Handle<Object> result = ToLocal(&_constructor)->NewInstance();
+  Handle<Object> result = ToLocal(&_constructor)->NewInstance(context).ToLocalChecked();
   OsmMapJs* from = ObjectWrap::Unwrap<OsmMapJs>(result);
   from->_setMap(map);
 
@@ -121,6 +124,7 @@ void OsmMapJs::clone(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
 
   OsmMapJs* from = ObjectWrap::Unwrap<OsmMapJs>(args.This());
 
@@ -139,7 +143,7 @@ void OsmMapJs::clone(const FunctionCallbackInfo<Value>& args)
 
   const unsigned argc = 1;
   Handle<Value> argv[argc] = { args[0] };
-  Local<Object> result = ToLocal(&_constructor)->NewInstance(argc, argv);
+  Local<Object> result = ToLocal(&_constructor)->NewInstance(context, argc, argv).ToLocalChecked();
   OsmMapJs* obj = ObjectWrap::Unwrap<OsmMapJs>(result);
   if (newConstMap)
   {
@@ -202,6 +206,7 @@ void OsmMapJs::visit(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
 
   try
   {
@@ -219,7 +224,7 @@ void OsmMapJs::visit(const FunctionCallbackInfo<Value>& args)
     else
     {
       std::shared_ptr<ElementVisitor> v =
-        ObjectWrap::Unwrap<ElementVisitorJs>(args[0]->ToObject())->getVisitor();
+        ObjectWrap::Unwrap<ElementVisitorJs>(args[0]->ToObject(context).ToLocalChecked())->getVisitor();
 
       map->getMap()->visitRw(*v);
     }

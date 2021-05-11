@@ -60,6 +60,8 @@ void LinearMergerJs::Init(Handle<Object> target)
 {
   Isolate* current = target->GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
+
   // Prepare constructor template
   Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
   const QString name = "LinearMerger";
@@ -71,7 +73,7 @@ void LinearMergerJs::Init(Handle<Object> target)
   tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "apply"),
       FunctionTemplate::New(current, apply));
 
-  _constructor.Reset(current, tpl->GetFunction());
+  _constructor.Reset(current, tpl->GetFunction(context).ToLocalChecked());
   target->Set(String::NewFromUtf8(current, name.toStdString().data()), ToLocal(&_constructor));
 }
 

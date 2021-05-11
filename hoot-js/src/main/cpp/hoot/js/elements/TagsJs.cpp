@@ -61,6 +61,7 @@ void TagsJs::Init(Handle<Object> target)
 {
   Isolate* current = v8::Isolate::GetCurrent();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
   // Prepare constructor template
   Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
   tpl->SetClassName(String::NewFromUtf8(current, Tags::className().toStdString().data()));
@@ -83,15 +84,17 @@ void TagsJs::Init(Handle<Object> target)
   tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "toString"),
       FunctionTemplate::New(current, toString));
 
-  _constructor.Reset(current, tpl->GetFunction());
+  _constructor.Reset(current, tpl->GetFunction(context).ToLocalChecked());
   target->Set(String::NewFromUtf8(current, "Tags"), ToLocal(&_constructor));
 }
 
 Handle<Object> TagsJs::New(const Tags& t)
 {
-  EscapableHandleScope scope(v8::Isolate::GetCurrent());
+  Isolate* current = v8::Isolate::GetCurrent();
+  EscapableHandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
 
-  Handle<Object> result = ToLocal(&_constructor)->NewInstance();
+  Handle<Object> result = ToLocal(&_constructor)->NewInstance(context).ToLocalChecked();
   TagsJs* from = ObjectWrap::Unwrap<TagsJs>(result);
   from->_setTags(t);
 
@@ -113,10 +116,11 @@ void TagsJs::get(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
 
   Tags& t = ObjectWrap::Unwrap<TagsJs>(args.This())->getTags();
 
-  QString key = str(args[0]->ToString());
+  QString key = str(args[0]->ToString(context).ToLocalChecked());
   if (t.contains(key))
   {
     QString value = t.get(key);

@@ -48,10 +48,11 @@ void ReviewMarkerJs::Init(Handle<Object> exports)
 {
   Isolate* current = exports->GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
   Handle<Object> reviewMarker = Object::New(current);
   exports->Set(String::NewFromUtf8(current, "ReviewMarker"), reviewMarker);
   reviewMarker->Set(String::NewFromUtf8(current, "mark"),
-                    FunctionTemplate::New(current, mark)->GetFunction());
+                    FunctionTemplate::New(current, mark)->GetFunction(context).ToLocalChecked());
 }
 
 void ReviewMarkerJs::mark(const FunctionCallbackInfo<Value>& args)

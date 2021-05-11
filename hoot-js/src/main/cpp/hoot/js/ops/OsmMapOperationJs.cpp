@@ -57,6 +57,7 @@ void OsmMapOperationJs::Init(Handle<Object> target)
 {
   Isolate* current = target->GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
   vector<QString> opNames =
     Factory::getInstance().getObjectNamesByBase(OsmMapOperation::className());
 
@@ -77,7 +78,7 @@ void OsmMapOperationJs::Init(Handle<Object> target)
       PopulateConsumersJs::baseClass(),
       String::NewFromUtf8(current, OsmMapOperation::className().toStdString().data()));
 
-    Persistent<Function> constructor(current, tpl->GetFunction());
+    Persistent<Function> constructor(current, tpl->GetFunction(context).ToLocalChecked());
     target->Set(String::NewFromUtf8(current, n), ToLocal(&constructor));
   }
 }
@@ -109,9 +110,10 @@ void OsmMapOperationJs::apply(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
 
   OsmMapOperationJs* op = ObjectWrap::Unwrap<OsmMapOperationJs>(args.This());
-  OsmMapPtr& map = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject())->getMap();
+  OsmMapPtr& map = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject(context).ToLocalChecked())->getMap();
 
   op->getMapOp()->apply(map);
 
@@ -122,9 +124,10 @@ void OsmMapOperationJs::applyAndGetResult(const FunctionCallbackInfo<Value>& arg
 {
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
 
   OsmMapOperationJs* op = ObjectWrap::Unwrap<OsmMapOperationJs>(args.This());
-  OsmMapPtr& map = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject())->getMap();
+  OsmMapPtr& map = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject(context).ToLocalChecked())->getMap();
   op->getMapOp()->apply(map);
   boost::any result = op->getMapOp()->getResult();
 

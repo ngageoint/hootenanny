@@ -46,8 +46,9 @@ Handle<Object> HootExceptionJs::create(const std::shared_ptr<HootException>& e)
 {
   Isolate* current = v8::Isolate::GetCurrent();
   EscapableHandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
 
-  Handle<Object> result = ToLocal(&_constructor)->NewInstance();
+  Handle<Object> result = ToLocal(&_constructor)->NewInstance(context).ToLocalChecked();
   HootExceptionJs* from = ObjectWrap::Unwrap<HootExceptionJs>(result);
   from->_e = e;
 
@@ -58,6 +59,7 @@ void HootExceptionJs::Init(Handle<Object> target)
 {
   Isolate* current = target->GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
   vector<QString> opNames =
     Factory::getInstance().getObjectNamesByBase(HootException::className());
 
@@ -75,7 +77,7 @@ void HootExceptionJs::Init(Handle<Object> target)
     tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(),
                                   toV8(HootException::className()));
 
-    _constructor.Reset(current, tpl->GetFunction());
+    _constructor.Reset(current, tpl->GetFunction(context).ToLocalChecked());
     target->Set(toV8(noNamespace), ToLocal(&_constructor));
   }
 }
@@ -123,6 +125,9 @@ void HootExceptionJs::checkV8Exception(Handle<Value> result, TryCatch& tc)
 
 void HootExceptionJs::throwAsHootException(TryCatch& tc)
 {
+  v8::Isolate* current = v8::Isolate::GetCurrent();
+  v8::HandleScope scope(current);
+  v8::Local<v8::Context> context = current->GetCurrentContext();
   Local<Value> exception = tc.Exception();
 
   if (isHootException(exception))
@@ -146,9 +151,9 @@ void HootExceptionJs::throwAsHootException(TryCatch& tc)
     }
     // if this is a generic error (e.g. throw Error("blah");) then just report the string.
     else if (exception->IsNativeError() &&
-      str(exception->ToObject()->GetConstructorName()) == "Error")
+      str(exception->ToObject(context).ToLocalChecked()->GetConstructorName()) == "Error")
     {
-      throw HootException(str(exception->ToDetailString()));
+      throw HootException(str(exception->ToDetailString(context).ToLocalChecked()));
     }
     else if (exception->IsString())
     {
@@ -158,9 +163,9 @@ void HootExceptionJs::throwAsHootException(TryCatch& tc)
     {
       // See ReportException in http://v8.googlecode.com/svn/trunk/samples/shell.cc
       QString fileName = toCpp<QString>(msg->GetScriptResourceName());
-      int lineNumber = msg->GetLineNumber();
+      int lineNumber = msg->GetLineNumber(context).ToChecked();
 
-      QString sourceLine = toCpp<QString>(msg->GetSourceLine());
+      QString sourceLine = toCpp<QString>(msg->GetSourceLine(context).ToLocalChecked());
 
       // Put a cool wavy line under the error
       int start = msg->GetStartColumn();
@@ -168,7 +173,7 @@ void HootExceptionJs::throwAsHootException(TryCatch& tc)
       QString blank(start,' ');
       QString wave(end - start,'^');
 
-      throw HootException(QString("%1 (%2) \n%3\n%4 \n%5").arg(fileName).arg(lineNumber).arg(sourceLine).arg(blank + wave).arg(str(exception->ToString())));
+      throw HootException(QString("%1 (%2) \n%3\n%4 \n%5").arg(fileName).arg(lineNumber).arg(sourceLine).arg(blank + wave).arg(str(exception->ToString(context).ToLocalChecked())));
     }
   }
 }

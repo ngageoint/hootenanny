@@ -75,27 +75,27 @@ void ScriptMatch::_calculateClassification(
   Isolate* current = v8::Isolate::GetCurrent();
   HandleScope handleScope(current);
   Context::Scope context_scope(_script->getContext(current));
+  Local<Context> context = current->GetCurrentContext();
 
   // removing these two lines causes a crash when checking for conflicts. WTF?
   Handle<Object> global = _script->getContext(current)->Global();
   global->Get(String::NewFromUtf8(current, "plugin"));
-
-  if (ToLocal(&_plugin)->Has(String::NewFromUtf8(current, "isWholeGroup")))
+  if (plugin->Has(context, String::NewFromUtf8(current, "isWholeGroup")).ToChecked())
   {
-    Handle<Value> v = _script->call(ToLocal(&_plugin), "isWholeGroup");
-    _isWholeGroup = v->BooleanValue();
+    Handle<Value> v = _script->call(plugin, "isWholeGroup");
+    _isWholeGroup = v->BooleanValue(context).ToChecked();
   }
 
-  if (ToLocal(&_plugin)->Has(String::NewFromUtf8(current, "neverCausesConflict")))
+  if (plugin->Has(context, String::NewFromUtf8(current, "neverCausesConflict")).ToChecked())
   {
-    Handle<Value> v = _script->call(ToLocal(&_plugin), "neverCausesConflict");
-    _neverCausesConflict = v->BooleanValue();
+    Handle<Value> v = _script->call(plugin, "neverCausesConflict");
+    _neverCausesConflict = v->BooleanValue(context).ToChecked();
   }
 
   Handle<String> featureTypeStr = String::NewFromUtf8(current, "baseFeatureType");
-  if (ToLocal(&_plugin)->Has(featureTypeStr))
+  if (plugin->Has(context, featureTypeStr).ToChecked())
   {
-    Handle<Value> value = ToLocal(&_plugin)->Get(featureTypeStr);
+    Handle<Value> value = plugin->Get(featureTypeStr);
     _matchName = toCpp<QString>(value);
   }
 
@@ -390,18 +390,14 @@ Handle<Value> ScriptMatch::_call(
   Isolate* current = v8::Isolate::GetCurrent();
   EscapableHandleScope handleScope(current);
   Context::Scope context_scope(_script->getContext(current));
+  Local<Context> context = current->GetCurrentContext();
 
-  plugin =
-    Handle<Object>::Cast(
-      _script->getContext(current)->Global()->Get(String::NewFromUtf8(current, "plugin")));
   Handle<Value> value = plugin->Get(String::NewFromUtf8(current, "matchScore"));
   Handle<Function> func = Handle<Function>::Cast(value);
   Handle<Value> jsArgs[3];
 
   if (func.IsEmpty() || func->IsFunction() == false)
-  {
     throw IllegalArgumentException("matchScore must be a valid function.");
-  }
 
   int argc = 0;
   jsArgs[argc++] = mapObj;
@@ -412,8 +408,12 @@ Handle<Value> ScriptMatch::_call(
   LOG_VART(map->getElement(_eid2).get());
   LOG_TRACE("Calling script matcher...");
 
-  TryCatch trycatch;
-  Handle<Value> result = func->Call(plugin, argc, jsArgs);
+  TryCatch trycatch(current);
+  MaybeLocal<Value> maybe_result = func->Call(context, plugin, argc, jsArgs);
+  if (maybe_result.IsEmpty())
+    HootExceptionJs::throwAsHootException(trycatch);
+
+  Handle<Value> result = maybe_result.ToLocalChecked();
   HootExceptionJs::checkV8Exception(result, trycatch);
 
   return handleScope.Escape(result);
@@ -424,6 +424,7 @@ Handle<Value> ScriptMatch::_callGetMatchFeatureDetails(const ConstOsmMapPtr& map
   Isolate* current = v8::Isolate::GetCurrent();
   EscapableHandleScope handleScope(current);
   Context::Scope context_scope(_script->getContext(current));
+  Local<Context> context = current->GetCurrentContext();
 
   Handle<Object> plugin =
     Handle<Object>::Cast(
@@ -433,10 +434,8 @@ Handle<Value> ScriptMatch::_callGetMatchFeatureDetails(const ConstOsmMapPtr& map
   Handle<Value> jsArgs[3];
 
   if (func.IsEmpty() || func->IsFunction() == false)
-  {
     throw IllegalArgumentException(
       "getMatchFeatureDetails must be a valid function for match from: " + _matchName);
-  }
 
   Handle<Object> mapObj = OsmMapJs::create(map);
 
@@ -445,8 +444,12 @@ Handle<Value> ScriptMatch::_callGetMatchFeatureDetails(const ConstOsmMapPtr& map
   jsArgs[argc++] = ElementJs::New(map->getElement(_eid1));
   jsArgs[argc++] = ElementJs::New(map->getElement(_eid2));
 
-  TryCatch trycatch;
-  Handle<Value> result = func->Call(plugin, argc, jsArgs);
+  TryCatch trycatch(current);
+  MaybeLocal<Value> maybe_result = func->Call(context, plugin, argc, jsArgs);
+  if (maybe_result.IsEmpty())
+      HootExceptionJs::throwAsHootException(trycatch);
+
+  Handle<Value> result = maybe_result.ToLocalChecked();
   HootExceptionJs::checkV8Exception(result, trycatch);
 
   return handleScope.Escape(result);

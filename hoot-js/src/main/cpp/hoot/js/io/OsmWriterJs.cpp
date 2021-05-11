@@ -43,10 +43,11 @@ void OsmWriterJs::Init(Handle<Object> exports)
 {
   Isolate* current = exports->GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
   Handle<Object> writer = Object::New(current);
   exports->Set(String::NewFromUtf8(current, "OsmWriter"), writer);
   writer->Set(String::NewFromUtf8(current, "toString"),
-              FunctionTemplate::New(current, toString)->GetFunction());
+              FunctionTemplate::New(current, toString)->GetFunction(context).ToLocalChecked());
 }
 
 void OsmWriterJs::toString(const FunctionCallbackInfo<Value>& args)

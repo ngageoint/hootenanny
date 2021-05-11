@@ -172,6 +172,7 @@ Handle<Value> ScriptMerger::_callMergePair(const OsmMapPtr& map) const
 {
   Isolate* current = v8::Isolate::GetCurrent();
   EscapableHandleScope handleScope(current);
+  Local<Context> context = current->GetCurrentContext();
   Handle<Object> plugin =
     Handle<Object>::Cast(
       _script->getContext(current)->Global()->Get(String::NewFromUtf8(current, "plugin")));
@@ -192,8 +193,8 @@ Handle<Value> ScriptMerger::_callMergePair(const OsmMapPtr& map) const
   jsArgs[argc++] = ElementJs::New(map->getElement(_eid1));
   jsArgs[argc++] = ElementJs::New(map->getElement(_eid2));
 
-  TryCatch trycatch;
-  Handle<Value> result = func->Call(ToLocal(&_plugin), argc, jsArgs);
+  TryCatch trycatch(current);
+  Handle<Value> result = func->Call(context, ToLocal(&_plugin), argc, jsArgs).ToLocalChecked();
   HootExceptionJs::checkV8Exception(result, trycatch);
 
   if (result.IsEmpty() || result == Undefined(current))
@@ -210,6 +211,8 @@ void ScriptMerger::_callMergeSets(const OsmMapPtr& map,
   Isolate* current = v8::Isolate::GetCurrent();
   HandleScope handleScope(current);
   Context::Scope context_scope(_script->getContext(current));
+  Local<Context> context = current->GetCurrentContext();
+
   Handle<Object> plugin =
     Handle<Object>::Cast(
       _script->getContext(current)->Global()->Get(String::NewFromUtf8(current, "plugin")));
@@ -228,8 +231,8 @@ void ScriptMerger::_callMergeSets(const OsmMapPtr& map,
   jsArgs[argc++] = toV8(_pairs);
   jsArgs[argc++] = toV8(replaced);
 
-  TryCatch trycatch;
-  Handle<Value> result = func->Call(ToLocal(&_plugin), argc, jsArgs);
+  TryCatch trycatch(current);
+  Handle<Value> result = func->Call(context, ToLocal(&_plugin), argc, jsArgs).ToLocalChecked();
   HootExceptionJs::checkV8Exception(result, trycatch);
 
   // read the replaced values back out

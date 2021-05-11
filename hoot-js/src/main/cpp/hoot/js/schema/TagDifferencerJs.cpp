@@ -54,14 +54,15 @@ void TagDifferencerJs::diff(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = v8::Isolate::GetCurrent();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
 
   try
   {
     TagDifferencerJs* op = ObjectWrap::Unwrap<TagDifferencerJs>(args.This());
 
-    ConstOsmMapPtr& map = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject())->getConstMap();
-    ConstElementPtr e1 = ObjectWrap::Unwrap<ElementJs>(args[1]->ToObject())->getConstElement();
-    ConstElementPtr e2 = ObjectWrap::Unwrap<ElementJs>(args[2]->ToObject())->getConstElement();
+    ConstOsmMapPtr& map = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject(context).ToLocalChecked())->getConstMap();
+    ConstElementPtr e1 = ObjectWrap::Unwrap<ElementJs>(args[1]->ToObject(context).ToLocalChecked())->getConstElement();
+    ConstElementPtr e2 = ObjectWrap::Unwrap<ElementJs>(args[2]->ToObject(context).ToLocalChecked())->getConstElement();
 
     if (!map || !e1 || !e2)
     {
@@ -85,6 +86,7 @@ void TagDifferencerJs::Init(Handle<Object> target)
 {
   Isolate* current = target->GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
   vector<QString> opNames =
     Factory::getInstance().getObjectNamesByBase(TagDifferencer::className());
 
@@ -103,7 +105,7 @@ void TagDifferencerJs::Init(Handle<Object> target)
       PopulateConsumersJs::baseClass(),
       String::NewFromUtf8(current, TagDifferencer::className().toStdString().data()));
 
-    Persistent<Function> constructor(current, tpl->GetFunction());
+    Persistent<Function> constructor(current, tpl->GetFunction(context).ToLocalChecked());
     target->Set(String::NewFromUtf8(current, n), ToLocal(&constructor));
   }
 }

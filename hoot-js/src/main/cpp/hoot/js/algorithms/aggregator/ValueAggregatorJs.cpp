@@ -49,6 +49,8 @@ void ValueAggregatorJs::Init(Handle<Object> target)
 {
   Isolate* current = target->GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
+
   vector<QString> opNames =
     Factory::getInstance().getObjectNamesByBase(ValueAggregator::className());
 
@@ -66,7 +68,7 @@ void ValueAggregatorJs::Init(Handle<Object> target)
       PopulateConsumersJs::baseClass(),
       String::NewFromUtf8(current, ValueAggregator::className().toStdString().data()));
 
-    Persistent<Function> constructor(current, tpl->GetFunction());
+    Persistent<Function> constructor(current, tpl->GetFunction(context).ToLocalChecked());
     target->Set(String::NewFromUtf8(current, n), ToLocal(&constructor));
   }
 }

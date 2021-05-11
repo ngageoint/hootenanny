@@ -228,6 +228,7 @@ void ElementJs::setTags(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
 
   ElementPtr e = ObjectWrap::Unwrap<ElementJs>(args.This())->getElement();
 
@@ -239,7 +240,7 @@ void ElementJs::setTags(const FunctionCallbackInfo<Value>& args)
   }
   else
   {
-    Tags& tags = ObjectWrap::Unwrap<TagsJs>(args[0]->ToObject())->getTags();
+    Tags& tags = ObjectWrap::Unwrap<TagsJs>(args[0]->ToObject(context).ToLocalChecked())->getTags();
     e->setTags(tags);
     args.GetReturnValue().SetUndefined();
   }
