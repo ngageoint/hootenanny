@@ -42,7 +42,6 @@ public:
   DbListCmd() = default;
 
   QString getName() const override { return "db-list"; }
-
   QString getDescription() const override
   { return "Lists maps in the Hootenanny Web Services database"; }
 
@@ -53,6 +52,8 @@ public:
       std::cout << getHelp() << std::endl << std::endl;
       throw HootException(QString("%1 takes one parameter.").arg(getName()));
     }
+
+    LOG_STATUS("Retrieving available maps...");
 
     HootApiDb mapReader;
     mapReader.open(args[0]);

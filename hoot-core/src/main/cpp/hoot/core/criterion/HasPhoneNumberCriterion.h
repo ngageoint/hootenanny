@@ -53,10 +53,9 @@ public:
   ElementCriterionPtr clone() override { return ElementCriterionPtr(new HasPhoneNumberCriterion()); }
 
   QString getDescription() const override { return "Identifies features with phone numbers"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+  QString toString() const override { return className(); }
 
 private:
 

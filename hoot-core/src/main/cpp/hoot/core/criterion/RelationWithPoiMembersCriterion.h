@@ -51,14 +51,12 @@ public:
 
   QString getCriterion() const override;
 
-  QString getDescription() const override
-  { return "Identifies relations with POI members"; }
-
   GeometryType getGeometryType() const override;
 
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+  QString toString() const override { return className(); }
+  QString getDescription() const override { return "Identifies relations with POI members"; }
 };
 
 }

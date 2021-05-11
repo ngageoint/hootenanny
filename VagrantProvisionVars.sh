@@ -31,3 +31,6 @@ export RVM_BASE_URL=https://github.com/rvm/rvm
 export RVM_BINARIES_URL="${RUBY_BASE_URL}/binaries"
 export RVM_HOME="${RVM_HOME:-${HOME}/.rvm}"
 export RVM_VERSION=1.29.4
+
+# Devtoolset
+export DEVTOOLSET_VERSION=8

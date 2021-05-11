@@ -48,7 +48,7 @@ namespace hoot
  * cleaning chain immediately after this runs.
  *
  * No point in implementing FilteredByGeometryTypeCriteria here, as there is no such thing as a map
- * with no nodes. ElementConflatableCheck does need to be implemented here to prevent removal of a
+ * with no nodes. ConflateInfoCacheConsumer does need to be implemented here to prevent removal of a
  * conflatable node or a node belonging to a conflatable way/relation.
  */
 class DuplicateNodeRemover : public OsmMapOperation, public ConflateInfoCacheConsumer
@@ -62,10 +62,6 @@ public:
 
   void apply(std::shared_ptr<OsmMap>& map) override;
 
-  QString getName() const override { return className(); }
-
-  QString getClassName() const override { return className(); }
-
   /**
    * Removes duplicate nodes from a map
    *
@@ -73,30 +69,38 @@ public:
    * @param distanceThreshold the distance threshold under which nodes are considered duplicates
    * based on proximity
    */
-  static void removeNodes(std::shared_ptr<OsmMap> map, Meters distanceThreshold = -1);
+  static void removeNodes(
+    std::shared_ptr<OsmMap> map, Meters distanceThreshold = -1, const bool ignoreStatus = false);
 
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
   QString getDescription() const override { return "Removes duplicate nodes"; }
 
   QString getInitStatusMessage() const override { return "Removing duplicate nodes..."; }
-
   QString getCompletedStatusMessage() const override
   { return "Merged " + StringUtils::formatLargeNumber(_numAffected) + " node pairs."; }
 
   void setConflateInfoCache(const std::shared_ptr<ConflateInfoCache>& cache) override
   { _conflateInfoCache = cache; }
 
+  void setIgnoreStatus(bool ignore) { _ignoreStatus = ignore; }
+
 protected:
 
   std::shared_ptr<OsmMap> _map;
 
+  // the maximum distance allowed between removed nodes
   Meters _distance;
+  // allows for removing nodes with different statuses
+  bool _ignoreStatus;
 
   // Existence of this cache tells us that elements must be individually checked to see that they
   // are conflatable given the current configuration before modifying them.
   std::shared_ptr<ConflateInfoCache> _conflateInfoCache;
 
-  void _logMergeResult(const long nodeId1, const long nodeId2, OsmMapPtr& map, const bool replaced,
-                       const double distance = -1.0, const double calcdDistance = -1.0);
+  void _logMergeResult(
+    const long nodeId1, const long nodeId2, OsmMapPtr& map, const bool replaced,
+    const double distance = -1.0, const double calcdDistance = -1.0) const;
   bool _passesLogMergeFilter(const long nodeId1, const long nodeId2, OsmMapPtr& map) const;
 };
 

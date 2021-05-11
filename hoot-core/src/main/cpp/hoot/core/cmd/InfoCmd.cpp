@@ -53,9 +53,7 @@ public:
   InfoCmd() = default;
 
   QString getName() const override { return "info"; }
-
-  QString getDescription() const override
-  { return "Displays information about capabilities"; }
+  QString getDescription() const override { return "Displays information about capabilities"; }
 
   int runSimple(QStringList& args) override
   {

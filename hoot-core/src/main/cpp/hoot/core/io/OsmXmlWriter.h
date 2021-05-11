@@ -125,17 +125,23 @@ private:
   static int logWarnCount;
 
   bool _formatXml;
+
   bool _includeDebug;
   bool _includePointInWays;
   bool _includeCompatibilityTags;
   bool _includePid;
+
   bool _sortTags;
   QString _osmSchema;
+
   int _precision;
   std::shared_ptr<QIODevice> _fp;
   int _encodingErrorCount;
+
   std::shared_ptr<QXmlStreamWriter> _writer;
+
   geos::geom::Envelope _bounds;
+
   int _numWritten;
   int _statusUpdateInterval;
   AddExportTagsVisitor _addExportTagsVisitor;

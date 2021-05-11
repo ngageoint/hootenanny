@@ -66,10 +66,8 @@ public:
   MultiaryConflatePoiCmd() = default;
 
   QString getName() const override { return "multiary-poi-conflate"; }
-
   QString getDescription() const override
   { return "Conflates two or more POI maps into a single map (experimental) "; }
-
   QString getType() const override { return "rnd"; }
 
   int runSimple(QStringList& args) override
@@ -89,9 +87,9 @@ public:
     inputs = args.mid(0, args.length() - 1);
     output = args.last();
 
-    LOG_INFO(
+    LOG_STATUS(
       "Conflating " << FileUtils::toLogFormat(inputs) <<
-      " and writing the output to " << FileUtils::toLogFormat(output, 50));
+      " and writing the output to " << FileUtils::toLogFormat(output, 50) << "...");
 
     // read input 1
     OsmMapPtr map(new OsmMap());

@@ -69,6 +69,7 @@ public:
   QString getDescription() const override { return "Identifies features that are not conflatable"; }
   QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }
+  QString toString() const override { return className(); }
 
   void setGeometryTypeFilter(const GeometryTypeCriterion::GeometryType& filter)
   { _geometryTypeFilter = filter; }

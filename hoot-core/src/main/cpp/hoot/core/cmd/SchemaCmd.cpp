@@ -46,7 +46,6 @@ public:
   SchemaCmd() = default;
 
   QString getName() const override { return "schema"; }
-
   QString getDescription() const override { return "Displays the tag schema in use"; }
 
   int runSimple(QStringList& args) override
@@ -63,7 +62,8 @@ public:
       throw HootException(QString("%1 takes one optional parameter.").arg(getName()));
     }
 
-    // Great bit of code taken from TranslatedTagDifferencer
+    LOG_STATUS("Printing schema...");
+
     std::shared_ptr<ScriptSchemaTranslator> schemaPrinter(
       ScriptSchemaTranslatorFactory::getInstance().createTranslator(printScript));
 

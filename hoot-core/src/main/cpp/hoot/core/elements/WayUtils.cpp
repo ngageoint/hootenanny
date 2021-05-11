@@ -177,9 +177,8 @@ bool WayUtils::hasConnectedWays(const long wayId, const ConstOsmMapPtr& map)
   return getNumberOfConnectedWays(wayId, map) > 0;
 }
 
-bool WayUtils::endWayNodeIsCloserToNodeThanStart(const ConstNodePtr& node,
-                                                 const ConstWayPtr& way,
-                                                 const ConstOsmMapPtr& map)
+bool WayUtils::endWayNodeIsCloserToNodeThanStart(
+  const ConstNodePtr& node, const ConstWayPtr& way, const ConstOsmMapPtr& map)
 {
   if (way->isSimpleLoop())
   {
@@ -253,8 +252,8 @@ geos::geom::Coordinate WayUtils::closestWayCoordToNode(
   return closestWayCoordToNode;
 }
 
-long WayUtils::closestWayNodeIdToNode(const ConstNodePtr& node, const ConstWayPtr& way,
-                                      const ConstOsmMapPtr& map)
+long WayUtils::closestWayNodeIdToNode(
+  const ConstNodePtr& node, const ConstWayPtr& way, const ConstOsmMapPtr& map)
 {
   double shortestDistance = DBL_MAX;
   long closestWayNodeId = 0;

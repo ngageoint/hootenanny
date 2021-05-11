@@ -585,10 +585,8 @@ void ChangesetReplacementCreator::_snapUnconnectedWays(
   lineSnapper.setSnapToWayStatuses(snapToWayStatuses);
   lineSnapper.setSnapWayStatuses(snapWayStatuses);
   lineSnapper.setMarkSnappedWays(markSnappedWays);
-  // TODO: Do we need a way to derive the way node crit from the input feature filter crit?
-  lineSnapper.setWayNodeToSnapToCriterionClassName(WayNodeCriterion::className());
-  lineSnapper.setWayToSnapCriterionClassName(typeCriterionClassName);
-  lineSnapper.setWayToSnapToCriterionClassName(typeCriterionClassName);
+  lineSnapper.setWayToSnapCriteria(QStringList(typeCriterionClassName));
+  lineSnapper.setWayToSnapToCriteria(QStringList(typeCriterionClassName));
   // This prevents features of different types snapping to each other that shouldn't do so.
   // Arbitrarily picking a score here...may require further tweaking.
   lineSnapper.setMinTypeMatchScore(0.8);

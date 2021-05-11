@@ -36,12 +36,19 @@ HOOT_FACTORY_REGISTER(ElementCriterion, StatusCriterion)
 
 bool StatusCriterion::isSatisfied(const ConstElementPtr& e) const
 {
+  LOG_VART(_status);
+  LOG_VART(e->getStatus());
   return _status == e->getStatus();
 }
 
 void StatusCriterion::setConfiguration(const Settings& conf)
 {
   _status = Status::fromString(ConfigOptions(conf).getStatusCriterionStatus());
+}
+
+QString StatusCriterion::toString() const
+{
+  return className() + " status: " + _status.toString();
 }
 
 }

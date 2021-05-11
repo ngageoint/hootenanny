@@ -59,10 +59,9 @@ public:
 
   QString getDescription() const override
   { return "Identifies elements having numeric tag values falling within a range"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+  QString toString() const override { return className(); }
 
 private:
 

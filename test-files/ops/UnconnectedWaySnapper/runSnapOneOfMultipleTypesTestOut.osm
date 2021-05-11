@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="-0.006501556850000001" minlon="-0.02313161857000001" maxlat="0.04264470693999999" maxlon="0.01009481801"/>
+    <node visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.0063443516800000" lon="0.0100948180100000">
+        <tag k="hoot:id" v="-8"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0113524593300000" lon="-0.0066138462800000">
+        <tag k="hoot:id" v="-7"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0113833389200000" lon="-0.0066391114000000">
+        <tag k="hoot:id" v="-6"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0426447069400000" lon="-0.0226291234500000">
+        <tag k="hoot:id" v="-5"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.0065015568500000" lon="0.0095867084200000">
+        <tag k="hoot:id" v="-4"/>
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0112289409800000" lon="-0.0071416065100000">
+        <tag k="hoot:id" v="-2"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0424903090400000" lon="-0.0231316185700000">
+        <tag k="hoot:id" v="-1"/>
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <way visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-7"/>
+        <nd ref="-8"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:id" v="-4"/>
+        <tag k="hoot:status" v="2"/>
+    </way>
+    <way visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-5"/>
+        <nd ref="-6"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:id" v="-3"/>
+        <tag k="hoot:status" v="1"/>
+    </way>
+    <way visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-2"/>
+        <nd ref="-4"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="hoot:id" v="-2"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="railway" v="rail"/>
+    </way>
+    <way visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-1"/>
+        <nd ref="-2"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="hoot:id" v="-1"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="railway" v="rail"/>
+    </way>
+</osm>

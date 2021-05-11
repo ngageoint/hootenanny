@@ -34,6 +34,7 @@
 #include <hoot/core/io/IoUtils.h>
 #include <hoot/core/ops/MapCleaner.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Settings.h>
@@ -44,10 +45,14 @@
 namespace hoot
 {
 
-void RubberSheetDeriver::derive(const QString& input1, const QString& input2,
-                                const QString& transform2To1, const QString& transform1To2,
-                                const bool ref)
+void RubberSheetDeriver::derive(
+  const QString& input1, const QString& input2, const QString& transform2To1,
+  const QString& transform1To2, const bool ref)
 {
+  LOG_STATUS(
+    "Deriving alignment transform for inputs ..." << FileUtils::toLogFormat(input1, 25) <<
+    " and " << FileUtils::toLogFormat(input2, 25) << "...");
+
   OsmMapPtr map(new OsmMap());
   IoUtils::loadMap(map, input1, false, Status::Unknown1);
   IoUtils::loadMap(map, input2, false, Status::Unknown2);

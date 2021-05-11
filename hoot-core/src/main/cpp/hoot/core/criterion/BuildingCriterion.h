@@ -60,15 +60,14 @@ public:
 
   ElementCriterionPtr clone() override { return ElementCriterionPtr(new BuildingCriterion(_map)); }
 
-  QString getDescription() const override { return "Identifies buildings"; }
-
-  QString getName() const override { return className(); }
-
   bool supportsSpecificConflation() const override { return true; }
 
-  QString getClassName() const override { return className(); }
-
   QStringList getChildCriteria() const override;
+
+  QString getClassName() const override { return className(); }
+  QString getDescription() const override { return "Identifies buildings"; }
+  QString getName() const override { return className(); }
+  QString toString() const override { return className(); }
 
 private:
 

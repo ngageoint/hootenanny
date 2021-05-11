@@ -56,16 +56,15 @@ public:
   ElementCriterionPtr clone() override
   { return ElementCriterionPtr(new NonBuildingAreaCriterion()); }
 
-  QString getDescription() const override
-  { return "Identifies features that are areas but not buildings"; }
-
   GeometryType getGeometryType() const override { return GeometryType::Polygon; }
 
-  QString getName() const override { return className(); }
-
-  QString getClassName() const override { return className(); }
-
   void setOsmMap(const OsmMap* map) override { _map = map->shared_from_this(); }
+
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
+  QString toString() const override { return className(); }
+  QString getDescription() const override
+  { return "Identifies features that are areas but not buildings"; }
 
 private:
 

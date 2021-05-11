@@ -32,6 +32,7 @@
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/conflate/CookieCutter.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/io/IoUtils.h>
@@ -53,7 +54,6 @@ public:
   CutCmd() = default;
 
   QString getName() const override { return "cut"; }
-
   QString getDescription() const override { return "Cuts out a portion from a map"; }
 
   int runSimple(QStringList& args) override
@@ -95,6 +95,11 @@ public:
             arg(args[i - 1]));
       }
     }
+
+    LOG_STATUS(
+      "Cutting ..." << FileUtils::toLogFormat(cutterShapePath, 25) << " out of ..." <<
+      FileUtils::toLogFormat(doughPath, 25) << " and writing output to ..." <<
+      FileUtils::toLogFormat(outputPath, 25) << "...");
 
     // load up the shape being cut out
     OsmMapPtr cutterShapeMap(new OsmMap());

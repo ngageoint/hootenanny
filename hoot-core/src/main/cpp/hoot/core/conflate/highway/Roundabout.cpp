@@ -466,7 +466,7 @@ void Roundabout::replaceRoundabout(OsmMapPtr pMap)
           pRoundabout->containsNodeId(endpoint2->getId()))
         continue;
       //  Snap the closest
-      UnconnectedWaySnapper::snapClosestEndpointToWay(pMap, way, pRoundabout);
+      UnconnectedWaySnapper::snapClosestWayEndpointToWay(pMap, way, pRoundabout);
       numAttemptedSnaps++;
     }
     LOG_VART(numAttemptedSnaps);

@@ -34,6 +34,7 @@
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/FileUtils.h>
 
 // Qt
 #include <QStringList>
@@ -54,7 +55,6 @@ public:
   CropCmd() = default;
 
   QString getName() const override { return "crop"; }
-
   QString getDescription() const override { return "Crops a map to a bounds"; }
 
   int runSimple(QStringList& args) override
@@ -70,6 +70,10 @@ public:
     QString in = args[0];
     QString out = args[1];
 
+    LOG_STATUS(
+      "Cropping ..." << FileUtils::toLogFormat(in, 25) << " and writing output to ..." <<
+      FileUtils::toLogFormat(out, 25) << "...");
+
     BoundedCommand::runSimple(args);
 
     _env = GeometryUtils::boundsFromString(args[2]);
@@ -80,7 +84,6 @@ public:
     MapCropper cropper;
     cropper.setBounds(_env);
     cropper.setConfiguration(Settings::getInstance());
-    //cropper.setRemoveSuperflousFeatures(false);
     cropper.apply(map);
 
     IoUtils::saveMap(map, out);

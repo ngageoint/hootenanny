@@ -56,6 +56,7 @@ public:
   ElementCriterionPtr clone() override { return ElementCriterionPtr(new WayEndNodeCriterion(_map)); }
 
   QString getDescription() const override { return "Identifies way end nodes"; }
+  QString toString() const override { return className(); }
 
 private:
 

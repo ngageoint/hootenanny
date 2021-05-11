@@ -46,7 +46,6 @@ public:
   TagDistributionCmd() = default;
 
   QString getName() const override { return "tag-distribution"; }
-
   QString getDescription() const override
   { return "Calculates the distribution of values for specified tags in a map"; }
 
@@ -95,9 +94,7 @@ public:
       args.removeAt(limitIndex + 1);
       args.removeAt(limitIndex);
     }
-    LOG_VARD(sortByFrequency);
 
-    LOG_VARD(args.size());
     if (!nameKeysOnly && (args.size() < 2 || args.size() > 3))
     {
       std::cout << getHelp() << std::endl << std::endl;
@@ -112,7 +109,6 @@ public:
     }
 
     const QStringList inputs = args[0].split(";");
-    LOG_VART(inputs.size());
     QStringList tagKeys;
     if (nameKeysOnly)
     {
@@ -127,6 +123,8 @@ public:
     {
       criterionClassName = args[2];
     }
+
+    LOG_STATUS("Calculating tag distribution for ..." << inputs.size() << " inputs...");
 
     TagDistribution tagDist;
     tagDist.setCriterionClassName(criterionClassName);

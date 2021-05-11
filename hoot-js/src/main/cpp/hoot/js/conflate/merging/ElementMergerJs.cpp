@@ -257,7 +257,6 @@ ElementMergerJs::MergeType ElementMergerJs::_determineMergeType(ConstOsmMapPtr m
       QString("Invalid inputs passed to the element merger.  Inputs must contain only one ") +
       QString("combination of the following:  1) two or more POIs, 2) two or more buildings, 3)") +
       QString("two or more areas, or 4) one POI and one polygon");
-    //LOG_ERROR(errorMsg);
     throw IllegalArgumentException(errorMsg);
   }
 

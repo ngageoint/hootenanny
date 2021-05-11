@@ -610,10 +610,6 @@ mgcp = {
       }
     } // End process tags.note
 
-
-
-
-
     // Calculate accuracy: taken straight from facc.py
     // 1/30 inch * SCALE for standard
     // NGA standard is +/-25m 90% circular error (CE) for vector data

@@ -125,9 +125,8 @@ std::shared_ptr<OsmMapReader> OsmMapReaderFactory::_createReader(const QString& 
   return reader;
 }
 
-std::shared_ptr<OsmMapReader> OsmMapReaderFactory::createReader(const QString& url,
-                                                                bool useDataSourceIds,
-                                                                Status defaultStatus)
+std::shared_ptr<OsmMapReader> OsmMapReaderFactory::createReader(
+  const QString& url, bool useDataSourceIds, Status defaultStatus)
 {
   LOG_VART(url);
   LOG_VART(useDataSourceIds);
@@ -139,9 +138,8 @@ std::shared_ptr<OsmMapReader> OsmMapReaderFactory::createReader(const QString& u
   return reader;
 }
 
-std::shared_ptr<OsmMapReader> OsmMapReaderFactory::createReader(bool useDataSourceIds,
-                                                                bool useFileStatus,
-                                                                const QString& url)
+std::shared_ptr<OsmMapReader> OsmMapReaderFactory::createReader(
+  bool useDataSourceIds, bool useFileStatus, const QString& url)
 {
   LOG_VART(url);
   LOG_VART(useDataSourceIds);
@@ -179,19 +177,20 @@ bool OsmMapReaderFactory::isSupportedFormat(const QString& url)
   return !getReaderName(url).trimmed().isEmpty();
 }
 
-void OsmMapReaderFactory::read(const OsmMapPtr& map, const QString& url, bool useDataSourceIds,
-                               Status defaultStatus)
+void OsmMapReaderFactory::read(
+  const OsmMapPtr& map, const QString& url, bool useDataSourceIds, Status defaultStatus)
 {
   LOG_INFO("Loading map from ..." << FileUtils::toLogFormat(url, 50) << "...");
   std::shared_ptr<OsmMapReader> reader = createReader(url, useDataSourceIds, defaultStatus);
   _read(map, reader, url);
 }
 
-void OsmMapReaderFactory::read(const OsmMapPtr& map, bool useDataSourceIds,
-                               bool useFileStatus, const QString& url)
+void OsmMapReaderFactory::read(
+  const OsmMapPtr& map, bool useDataSourceIds, bool useFileStatus, const QString& url)
 {
   LOG_INFO("Loading map from " << FileUtils::toLogFormat(url, 50) << "...");
-  std::shared_ptr<OsmMapReader> reader = createReader(url, useDataSourceIds, useFileStatus);
+  LOG_VART(useFileStatus);
+  std::shared_ptr<OsmMapReader> reader = createReader(useDataSourceIds, useFileStatus, url);
   _read(map, reader, url);
 }
 
