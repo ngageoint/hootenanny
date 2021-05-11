@@ -108,6 +108,7 @@ private:
   void _removeSplitWay(
     const ElementPtr& e1, const ElementPtr& scraps1, const ElementPtr& e1Match,
     const bool swapWayIds);
+  void _removeSplitWay(const ElementId& eid1, const ElementPtr& scraps1, const ElementPtr& e1Match);
   void _updateScrapParent(long id, const ElementPtr& scrap);
   void _manageElementIds(
     const WayPtr& w1, const WayPtr& w2, const WayPtr& wMatch, const ElementPtr& scraps1,
@@ -119,7 +120,7 @@ private:
     const ElementId& eid1, const ElementId& eidMatch1, const ElementId& eid2,
     const ElementId& eidMatch2) const;
 
-  void _markMultilineStringRelations(const ElementPtr& element) const;
+  void _validateMarkedMultilineStringRelations(const ElementPtr& element) const;
 };
 
 using LinearSnapMergerPtr = std::shared_ptr<LinearSnapMerger>;

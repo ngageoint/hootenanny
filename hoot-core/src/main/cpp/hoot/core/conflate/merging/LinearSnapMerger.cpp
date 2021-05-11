@@ -49,6 +49,7 @@
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/ops/IdSwapOp.h>
+#include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/ops/ReplaceElementOp.h>
 #include <hoot/core/ops/RemoveElementByEid.h>
 #include <hoot/core/ops/RemoveReviewsByEidOp.h>
@@ -113,7 +114,9 @@ bool LinearSnapMerger::_mergePair(
   LOG_TRACE("Snap merging " << eid1 << " and " << eid2 << "...");
 
   ElementPtr e1 = _map->getElement(eid1);
+  LOG_VART(e1->getStatus());
   ElementPtr e2 = _map->getElement(eid2);
+  LOG_VART(e2->getStatus());
 
   // If the two elements being merged are identical, then there's no point of going through
   // splitting and trying to match sections of them together. Just set the match equal to the
@@ -159,6 +162,17 @@ bool LinearSnapMerger::_mergePair(
   // Split the second element and reverse any geometries to make the matches work.
   _splitElement(
     match.getSublineString2(), match.getReverseVector2(), replaced, e2, e2Match, scraps2);
+
+  LOG_VART(e1Match->getElementId());
+  LOG_VART(e2Match->getElementId());
+  if (scraps1)
+  {
+    LOG_VART(scraps1->getElementId());
+  }
+  if (scraps2)
+  {
+    LOG_VART(scraps2->getElementId());
+  }
 
   // Remove any ways that directly connect from e1Match to e2Match.
   _removeSpans(e1Match, e2Match);
@@ -209,15 +223,16 @@ bool LinearSnapMerger::_mergePair(
   {
     // Otherwise, drop the element and any reviews its in.
     _dropSecondaryElements(eid1, e1Match->getElementId(), eid2, e2Match->getElementId());
+    _removeSplitWay(eid1, scraps1, e1Match);
   }
 
   if (_markAddedMultilineStringRelations)
   {
     // This is a sanity check to make sure elements other than relations aren't marked incorrectly.
-    _markMultilineStringRelations(e1Match);
-    _markMultilineStringRelations(scraps1);
-    _markMultilineStringRelations(e2Match);
-    _markMultilineStringRelations(scraps2);
+    _validateMarkedMultilineStringRelations(e1Match);
+    _validateMarkedMultilineStringRelations(scraps1);
+    _validateMarkedMultilineStringRelations(e2Match);
+    _validateMarkedMultilineStringRelations(scraps2);
   }
 
   LOG_VART(replaced);
@@ -678,15 +693,21 @@ void LinearSnapMerger::_dropSecondaryElements(
   }
 
   // Remove reviews e2Match is involved in.
-  RemoveReviewsByEidOp(eidMatch2, true).apply(_map);
+  LOG_TRACE("Removing reviews " << eidMatch2 << " is involved in and itself...");
+  RemoveReviewsByEidOp(eidMatch2, true, false).apply(_map);
 
   // Make the way that we're keeping have membership in whatever relations the way we're removing
   // was in. I *think* this makes sense. This logic may also need to be replicated elsewhere
   // during merging.
+  LOG_TRACE(
+    "Swapping relation membership. Adding " << eid1 << " to all relations " << eid2 <<
+    " belongs in...");
   RelationMemberSwapper::swap(eid2, eid1, _map, false);
+  //RelationMemberSwapper::swap(eid2, eidMatch1, _map, false);
 
   // Remove reviews e2 is involved in.
-  RemoveReviewsByEidOp(eid2, true).apply(_map);
+  LOG_TRACE("Removing reviews " << eid2 << " is involved in and itself...");
+  RemoveReviewsByEidOp(eid2, true, false).apply(_map);
 
   if (ConfigOptions().getDebugMapsWrite() && ConfigOptions().getDebugMapsWriteDetailed())
   {
@@ -748,9 +769,10 @@ void LinearSnapMerger::_removeSplitWay(
   else
   {
     // Remove any reviews that contain this element.
-    LOG_TRACE("Removing e1: " << eid1 << "...");
-    RemoveReviewsByEidOp(eid1, true).apply(_map);
+    LOG_TRACE("Removing reviews for e1: " << eid1 << "...");
+    RemoveReviewsByEidOp(eid1, true, false).apply(_map);
   }
+
   if (ConfigOptions().getDebugMapsWrite() && ConfigOptions().getDebugMapsWriteDetailed())
   {
     OsmMapWriterFactory::writeDebugMap(
@@ -758,7 +780,25 @@ void LinearSnapMerger::_removeSplitWay(
   }
 }
 
-void LinearSnapMerger::_markMultilineStringRelations(const ElementPtr& element) const
+void LinearSnapMerger::_removeSplitWay(
+  const ElementId& /*eid1*/, const ElementPtr& scraps1, const ElementPtr& /*e1Match*/)
+{
+  if (!scraps1)
+  {
+    //IdSwapOp(eid1, e1Match->getElementId()).apply(_map);
+    //ReplaceElementOp(e1Match->getElementId(), eid1, true, true).apply(_map);
+
+//    LOG_TRACE(
+//      "Removing " << eid1 << " and giving " << e1Match->getElementId() << " its element ID...");
+//    RemoveElementByEid(eid1).apply(_map);
+//    ElementPtr newElement(e1Match->clone());
+//    newElement->setId(eid1.getId());
+//    _map->addElement(newElement);
+//    _map->replace(e1Match, newElement);
+  }
+}
+
+void LinearSnapMerger::_validateMarkedMultilineStringRelations(const ElementPtr& element) const
 {
   if (element && element->getElementType() != ElementType::Relation)
   {
