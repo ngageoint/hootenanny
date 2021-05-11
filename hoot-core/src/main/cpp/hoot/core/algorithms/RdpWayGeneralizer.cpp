@@ -160,7 +160,7 @@ int RdpWayGeneralizer::generalize(const std::shared_ptr<Way>& way)
 
 QList<long> RdpWayGeneralizer::_getUpdatedWayNodeIdsForThoseNotAllowedToBeRemoved(
   const QSet<long>& nodeIdsNotAllowedToBeRemoved, const QList<long>& nodeIdsBeforeGeneralization,
-  const QList<long>& generalizedNodeIds)
+  const QList<long>& generalizedNodeIds) const
 {
   LOG_VART(nodeIdsBeforeGeneralization);
   LOG_VART(generalizedNodeIds);

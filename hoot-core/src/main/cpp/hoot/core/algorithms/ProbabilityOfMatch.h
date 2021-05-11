@@ -47,7 +47,7 @@ public:
   static ProbabilityOfMatch& getInstance();
 
   double attributeScore(const ConstOsmMapPtr &map, const ConstWayPtr& w1,
-    const ConstWayPtr &w2);
+    const ConstWayPtr &w2) const;
 
   double distanceScore(const ConstOsmMapPtr& map, const ConstWayPtr& w1,
     const ConstWayPtr& w2);
@@ -56,15 +56,15 @@ public:
     const std::shared_ptr<const geos::geom::LineString> &ls2, Meters circularError);
 
   double lengthScore(const ConstOsmMapPtr& map, const ConstWayPtr& w1,
-    const ConstWayPtr& w2);
+    const ConstWayPtr& w2) const;
 
   double parallelScore(const ConstOsmMapPtr& map, const ConstWayPtr& w1,
-    const ConstWayPtr& w2);
+    const ConstWayPtr& w2) const;
 
   double expertProbability(const ConstOsmMapPtr &map, const ConstWayPtr& w1,
     const ConstWayPtr &w2);
 
-  double zipperScore(const ConstWayPtr& w1, const ConstWayPtr& w2);
+  double zipperScore(const ConstWayPtr& w1, const ConstWayPtr& w2) const;
 
 private:
 
