@@ -39,12 +39,12 @@ namespace hoot
 
 HOOT_JS_REGISTER(OsmWriterJs)
 
-void OsmWriterJs::Init(Handle<Object> exports)
+void OsmWriterJs::Init(Local<Object> exports)
 {
   Isolate* current = exports->GetIsolate();
   HandleScope scope(current);
   Local<Context> context = current->GetCurrentContext();
-  Handle<Object> writer = Object::New(current);
+  Local<Object> writer = Object::New(current);
   exports->Set(String::NewFromUtf8(current, "OsmWriter"), writer);
   writer->Set(String::NewFromUtf8(current, "toString"),
               FunctionTemplate::New(current, toString)->GetFunction(context).ToLocalChecked());

@@ -46,7 +46,7 @@ namespace hoot
 
 HOOT_JS_REGISTER(RequireJs)
 
-void RequireJs::Init(Handle<Object> exports)
+void RequireJs::Init(Local<Object> exports)
 {
   Isolate* current = exports->GetIsolate();
   HandleScope scope(current);
@@ -108,7 +108,7 @@ void RequireJs::jsRequire(const FunctionCallbackInfo<Value>& args)
     if (fp.open(QFile::ReadOnly) == false)
       throw HootException("Error opening script: " + fullPath);
 
-    Handle<String> source;
+    Local<String> source;
     MaybeLocal<Script> maybeScript;
 
     LOG_TRACE("Loading script: " << fullPath);
@@ -126,7 +126,7 @@ void RequireJs::jsRequire(const FunctionCallbackInfo<Value>& args)
 
     Local<Value> oldExports = current->GetCurrentContext()->Global()->Get(String::NewFromUtf8(current, "exports"));
 
-    Handle<Object> exports(Object::New(current));
+    Local<Object> exports(Object::New(current));
     current->GetCurrentContext()->Global()->Set(String::NewFromUtf8(current, "exports"), exports);
 
     MaybeLocal<Value> result = jsScript->Run(context);
@@ -140,7 +140,7 @@ void RequireJs::jsRequire(const FunctionCallbackInfo<Value>& args)
     HootExceptionJs::checkV8Exception(result.ToLocalChecked(), try_catch);
 
     // Debug: Dump the Object
-    //  Handle<Object> tObj = current->GetCurrentContext()->Global();
+    //  Local<Object> tObj = current->GetCurrentContext()->Global();
     //  cout << "jsRequire" << endl;
     //  cout << "tObj Properties: " << tObj->GetPropertyNames() << endl;
     //  cout << endl;

@@ -47,14 +47,14 @@ bool JsFunctionCriterion::isSatisfied(const ConstElementPtr& e) const
   Context::Scope context_scope(current->GetCurrentContext());
   Local<Context> context = current->GetCurrentContext();
 
-  Handle<Value> jsArgs[3];
+  Local<Value> jsArgs[3];
 
   if (_func.IsEmpty())
   {
     throw IllegalArgumentException("JsFunctionCriterion must have a valid function.");
   }
 
-  Handle<Object> elementObj = ElementJs::New(e);
+  Local<Object> elementObj = ElementJs::New(e);
 
   int argc = 0;
   jsArgs[argc++] = elementObj;

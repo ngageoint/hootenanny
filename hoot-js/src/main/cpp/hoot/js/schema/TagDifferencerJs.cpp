@@ -82,7 +82,7 @@ void TagDifferencerJs::diff(const FunctionCallbackInfo<Value>& args)
   }
 }
 
-void TagDifferencerJs::Init(Handle<Object> target)
+void TagDifferencerJs::Init(Local<Object> target)
 {
   Isolate* current = target->GetIsolate();
   HandleScope scope(current);

@@ -67,7 +67,7 @@ void NodeJs::getY(const FunctionCallbackInfo<Value>& args)
   args.GetReturnValue().Set(Number::New(current, n->getY()));
 }
 
-void NodeJs::Init(Handle<Object> target)
+void NodeJs::Init(Local<Object> target)
 {
   Isolate* current = target->GetIsolate();
   HandleScope scope(current);
@@ -87,26 +87,26 @@ void NodeJs::Init(Handle<Object> target)
   target->Set(String::NewFromUtf8(current, "Node"), ToLocal(&_constructor));
 }
 
-Handle<Object> NodeJs::New(ConstNodePtr node)
+Local<Object> NodeJs::New(ConstNodePtr node)
 {
   Isolate* current = v8::Isolate::GetCurrent();
   EscapableHandleScope scope(current);
   Local<Context> context = current->GetCurrentContext();
 
-  Handle<Object> result = ToLocal(&_constructor)->NewInstance(context).ToLocalChecked();
+  Local<Object> result = ToLocal(&_constructor)->NewInstance(context).ToLocalChecked();
   NodeJs* from = ObjectWrap::Unwrap<NodeJs>(result);
   from->_setNode(node);
 
   return scope.Escape(result);
 }
 
-Handle<Object> NodeJs::New(NodePtr node)
+Local<Object> NodeJs::New(NodePtr node)
 {
   Isolate* current = v8::Isolate::GetCurrent();
   EscapableHandleScope scope(current);
   Local<Context> context = current->GetCurrentContext();
 
-  Handle<Object> result = ToLocal(&_constructor)->NewInstance(context).ToLocalChecked();
+  Local<Object> result = ToLocal(&_constructor)->NewInstance(context).ToLocalChecked();
   NodeJs* from = ObjectWrap::Unwrap<NodeJs>(result);
   from->_setNode(node);
 

@@ -44,7 +44,7 @@ HOOT_JS_REGISTER(ElementIdJs)
 
 Persistent<Function> ElementIdJs::_constructor;
 
-void ElementIdJs::Init(Handle<Object> target)
+void ElementIdJs::Init(Local<Object> target)
 {
   Isolate* current = target->GetIsolate();
   HandleScope scope(current);
@@ -67,13 +67,13 @@ void ElementIdJs::Init(Handle<Object> target)
   target->Set(String::NewFromUtf8(current, "ElementId"), ToLocal(&_constructor));
 }
 
-Handle<Object> ElementIdJs::New(ElementId eid)
+Local<Object> ElementIdJs::New(ElementId eid)
 {
   Isolate* current = v8::Isolate::GetCurrent();
   EscapableHandleScope scope(current);
   Local<Context> context = current->GetCurrentContext();
 
-  Handle<Object> result = ToLocal(&_constructor)->NewInstance(context).ToLocalChecked();
+  Local<Object> result = ToLocal(&_constructor)->NewInstance(context).ToLocalChecked();
   ElementIdJs* from = ObjectWrap::Unwrap<ElementIdJs>(result);
   from->_eid = eid;
 

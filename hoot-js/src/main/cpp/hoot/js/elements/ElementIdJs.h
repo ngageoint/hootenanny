@@ -43,11 +43,11 @@ class ElementIdJs : public HootBaseJs
 {
 public:
 
-  static void Init(v8::Handle<v8::Object> target);
+  static void Init(v8::Local<v8::Object> target);
 
   ElementId& getElementId() { return _eid; }
 
-  static v8::Handle<v8::Object> New(ElementId eid);
+  static v8::Local<v8::Object> New(ElementId eid);
 
   virtual ~ElementIdJs() = default;
 
@@ -64,7 +64,7 @@ private:
   static void toString(const v8::FunctionCallbackInfo<v8::Value>& args);
 };
 
-inline void toCpp(v8::Handle<v8::Value> v, ElementId& eid)
+inline void toCpp(v8::Local<v8::Value> v, ElementId& eid)
 {
   v8::Isolate* current = v8::Isolate::GetCurrent();
   v8::HandleScope scope(current);
@@ -83,7 +83,7 @@ inline void toCpp(v8::Handle<v8::Value> v, ElementId& eid)
     throw IllegalArgumentException("Expected an object, got: (" + toString(v) + ")");
   }
 
-  v8::Handle<v8::Object> obj = v8::Handle<v8::Object>::Cast(v);
+  v8::Local<v8::Object> obj = v8::Local<v8::Object>::Cast(v);
 
   QString className = str(obj->Get(PopulateConsumersJs::baseClass()));
   ElementIdJs* eidj = nullptr;
@@ -111,7 +111,7 @@ inline void toCpp(v8::Handle<v8::Value> v, ElementId& eid)
   }
 }
 
-inline v8::Handle<v8::Value> toV8(const ElementId& eid)
+inline v8::Local<v8::Value> toV8(const ElementId& eid)
 {
   return ElementIdJs::New(eid);
 }

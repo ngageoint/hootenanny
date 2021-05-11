@@ -49,7 +49,7 @@ HOOT_JS_REGISTER(ElementCriterionJs)
 
 Persistent<Function> ElementCriterionJs::_constructor;
 
-void ElementCriterionJs::Init(Handle<Object> target)
+void ElementCriterionJs::Init(Local<Object> target)
 {
   Isolate* current = target->GetIsolate();
   HandleScope scope(current);

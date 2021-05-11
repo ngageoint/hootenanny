@@ -42,20 +42,20 @@ HOOT_JS_REGISTER(HootExceptionJs)
 
 Persistent<Function> HootExceptionJs::_constructor;
 
-Handle<Object> HootExceptionJs::create(const std::shared_ptr<HootException>& e)
+Local<Object> HootExceptionJs::create(const std::shared_ptr<HootException>& e)
 {
   Isolate* current = v8::Isolate::GetCurrent();
   EscapableHandleScope scope(current);
   Local<Context> context = current->GetCurrentContext();
 
-  Handle<Object> result = ToLocal(&_constructor)->NewInstance(context).ToLocalChecked();
+  Local<Object> result = ToLocal(&_constructor)->NewInstance(context).ToLocalChecked();
   HootExceptionJs* from = ObjectWrap::Unwrap<HootExceptionJs>(result);
   from->_e = e;
 
   return scope.Escape(result);
 }
 
-void HootExceptionJs::Init(Handle<Object> target)
+void HootExceptionJs::Init(Local<Object> target)
 {
   Isolate* current = target->GetIsolate();
   HandleScope scope(current);
@@ -69,7 +69,7 @@ void HootExceptionJs::Init(Handle<Object> target)
 
     // Prepare constructor template
     Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
-    tpl->SetClassName(Handle<String>::Cast(toV8(opNames[i])));
+    tpl->SetClassName(Local<String>::Cast(toV8(opNames[i])));
     tpl->InstanceTemplate()->SetInternalFieldCount(2);
     // Prototype
     tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "toString"),
@@ -82,13 +82,13 @@ void HootExceptionJs::Init(Handle<Object> target)
   }
 }
 
-bool HootExceptionJs::isHootException(Handle<Value> v)
+bool HootExceptionJs::isHootException(Local<Value> v)
 {
   bool result = false;
 
   if (v->IsObject())
   {
-    Handle<Object> obj = Handle<Object>::Cast(v);
+    Local<Object> obj = Local<Object>::Cast(v);
     HootExceptionJs* e = nullptr;
     if (obj->InternalFieldCount() >= 1)
     {
@@ -115,7 +115,7 @@ void HootExceptionJs::New(const FunctionCallbackInfo<Value>& args)
   args.GetReturnValue().Set(args.This());
 }
 
-void HootExceptionJs::checkV8Exception(Handle<Value> result, TryCatch& tc)
+void HootExceptionJs::checkV8Exception(Local<Value> result, TryCatch& tc)
 {
   if (result.IsEmpty())
   {
@@ -137,7 +137,7 @@ void HootExceptionJs::throwAsHootException(TryCatch& tc)
   }
   else
   {
-    Handle<Message> msg = tc.Message();
+    Local<Message> msg = tc.Message();
     if (msg.IsEmpty())
     {
       if (exception.IsEmpty())

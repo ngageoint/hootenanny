@@ -47,12 +47,12 @@ namespace hoot
 
 HOOT_JS_REGISTER(RelationMemberUtilsJs)
 
-void RelationMemberUtilsJs::Init(Handle<Object> exports)
+void RelationMemberUtilsJs::Init(Local<Object> exports)
 {
   Isolate* current = exports->GetIsolate();
   HandleScope scope(current);
   Local<Context> context = current->GetCurrentContext();
-  Handle<Object> obj = Object::New(current);
+  Local<Object> obj = Object::New(current);
   exports->Set(String::NewFromUtf8(current, "RelationMemberUtils"), obj);
 
   obj->Set(String::NewFromUtf8(current, "isMemberOfRelationWithType"),

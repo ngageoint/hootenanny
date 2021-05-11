@@ -48,14 +48,14 @@ void JsFunctionVisitor::visit(const ConstElementPtr& e)
   Context::Scope context_scope(current->GetCurrentContext());
   Local<Context> context = current->GetCurrentContext();
 
-  Handle<Value> jsArgs[3];
+  Local<Value> jsArgs[3];
 
   if (_func.IsEmpty())
   {
     throw IllegalArgumentException("JsFunctionVisitor must have a valid function.");
   }
 
-  Handle<Object> elementObj;
+  Local<Object> elementObj;
   if (_map)
   {
     ElementPtr nonConst = _map->getElement(e->getElementId());

@@ -75,7 +75,7 @@ void SublineStringMatcherJs::extractMatchingSublines(const FunctionCallbackInfo<
   ConstElementPtr e1 = e1Js->getConstElement();
   ConstElementPtr e2 = e2Js->getConstElement();
 
-  Handle<Value> result;
+  Local<Value> result;
   try
   {
     // Some attempts were made to use cached subline matches here from SublineStringMatcherJs for
@@ -143,7 +143,7 @@ void SublineStringMatcherJs::extractMatchingSublines(const FunctionCallbackInfo<
     else
     {
       LOG_TRACE("match");
-      Handle<Object> obj = Object::New(current);
+      Local<Object> obj = Object::New(current);
       obj->Set(String::NewFromUtf8(current, "map"), OsmMapJs::create(copiedMap));
       obj->Set(String::NewFromUtf8(current, "match1"), ElementJs::New(match1));
       obj->Set(String::NewFromUtf8(current, "match2"), ElementJs::New(match2));
@@ -157,7 +157,7 @@ void SublineStringMatcherJs::extractMatchingSublines(const FunctionCallbackInfo<
   }
 }
 
-void SublineStringMatcherJs::Init(Handle<Object> target)
+void SublineStringMatcherJs::Init(Local<Object> target)
 {
   Isolate* current = target->GetIsolate();
   HandleScope scope(current);

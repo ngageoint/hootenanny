@@ -48,7 +48,7 @@ namespace hoot
 
 HOOT_JS_REGISTER(MapIoJs)
 
-void MapIoJs::Init(Handle<Object> exports)
+void MapIoJs::Init(Local<Object> exports)
 {
   Isolate* current = exports->GetIsolate();
   HandleScope scope(current);

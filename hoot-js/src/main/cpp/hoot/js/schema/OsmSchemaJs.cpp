@@ -56,12 +56,12 @@ namespace hoot
 
 HOOT_JS_REGISTER(OsmSchemaJs)
 
-void OsmSchemaJs::Init(Handle<Object> exports)
+void OsmSchemaJs::Init(Local<Object> exports)
 {
   Isolate* current = exports->GetIsolate();
   HandleScope scope(current);
   Local<Context> context = current->GetCurrentContext();
-  Handle<Object> schema = Object::New(current);
+  Local<Object> schema = Object::New(current);
   exports->Set(String::NewFromUtf8(current, "OsmSchema"), schema);
 
   schema->Set(String::NewFromUtf8(current, "getAllTags"),

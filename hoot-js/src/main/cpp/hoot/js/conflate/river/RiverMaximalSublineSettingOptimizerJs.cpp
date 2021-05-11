@@ -41,12 +41,12 @@ namespace hoot
 
 HOOT_JS_REGISTER(RiverMaximalSublineSettingOptimizerJs)
 
-void RiverMaximalSublineSettingOptimizerJs::Init(Handle<Object> exports)
+void RiverMaximalSublineSettingOptimizerJs::Init(Local<Object> exports)
 {
   Isolate* current = exports->GetIsolate();
   HandleScope scope(current);
   Local<Context> context = current->GetCurrentContext();
-  Handle<Object> thisObj = Object::New(current);
+  Local<Object> thisObj = Object::New(current);
   exports->Set(String::NewFromUtf8(current, "RiverMaximalSublineSettingOptimizer"), thisObj);
   thisObj->Set(String::NewFromUtf8(current, "getFindBestMatchesMaxRecursions"),
                FunctionTemplate::New(current, getFindBestMatchesMaxRecursions)->GetFunction(context).ToLocalChecked());

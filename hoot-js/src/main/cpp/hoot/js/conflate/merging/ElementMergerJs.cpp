@@ -66,7 +66,7 @@ namespace hoot
 
 HOOT_JS_REGISTER(ElementMergerJs)
 
-void ElementMergerJs::Init(Handle<Object> exports)
+void ElementMergerJs::Init(Local<Object> exports)
 {
   Isolate* current = exports->GetIsolate();
   HandleScope scope(current);
@@ -98,7 +98,7 @@ void ElementMergerJs::mergeElements(const FunctionCallbackInfo<Value>& args)
     _mergeElements(map, current);
     LOG_VART(map->getElementCount());
 
-    Handle<Object> returnMap = OsmMapJs::create(map);
+    Local<Object> returnMap = OsmMapJs::create(map);
     args.GetReturnValue().Set(returnMap);
   }
   // This error handling has been proven to not work as it never returns the error message to the

@@ -54,7 +54,7 @@ OsmMapJs::OsmMapJs()
   _setMap(OsmMapPtr(new OsmMap()));
 }
 
-void OsmMapJs::Init(Handle<Object> target)
+void OsmMapJs::Init(Local<Object> target)
 {
   Isolate* current = target->GetIsolate();
   HandleScope scope(current);
@@ -83,26 +83,26 @@ void OsmMapJs::Init(Handle<Object> target)
   target->Set(String::NewFromUtf8(current, "OsmMap"), ToLocal(&_constructor));
 }
 
-Handle<Object> OsmMapJs::create(ConstOsmMapPtr map)
+Local<Object> OsmMapJs::create(ConstOsmMapPtr map)
 {
   Isolate* current = v8::Isolate::GetCurrent();
   EscapableHandleScope scope(current);
   Local<Context> context = current->GetCurrentContext();
 
-  Handle<Object> result = ToLocal(&_constructor)->NewInstance(context).ToLocalChecked();
+  Local<Object> result = ToLocal(&_constructor)->NewInstance(context).ToLocalChecked();
   OsmMapJs* from = ObjectWrap::Unwrap<OsmMapJs>(result);
   from->_setMap(map);
 
   return scope.Escape(result);
 }
 
-Handle<Object> OsmMapJs::create(OsmMapPtr map)
+Local<Object> OsmMapJs::create(OsmMapPtr map)
 {
   Isolate* current = v8::Isolate::GetCurrent();
   EscapableHandleScope scope(current);
   Local<Context> context = current->GetCurrentContext();
 
-  Handle<Object> result = ToLocal(&_constructor)->NewInstance(context).ToLocalChecked();
+  Local<Object> result = ToLocal(&_constructor)->NewInstance(context).ToLocalChecked();
   OsmMapJs* from = ObjectWrap::Unwrap<OsmMapJs>(result);
   from->_setMap(map);
 
@@ -142,7 +142,7 @@ void OsmMapJs::clone(const FunctionCallbackInfo<Value>& args)
   }
 
   const unsigned argc = 1;
-  Handle<Value> argv[argc] = { args[0] };
+  Local<Value> argv[argc] = { args[0] };
   Local<Object> result = ToLocal(&_constructor)->NewInstance(context, argc, argv).ToLocalChecked();
   OsmMapJs* obj = ObjectWrap::Unwrap<OsmMapJs>(result);
   if (newConstMap)
@@ -214,7 +214,7 @@ void OsmMapJs::visit(const FunctionCallbackInfo<Value>& args)
 
     if (args[0]->IsFunction())
     {
-      Local<Function> func(Handle<Function>::Cast(args[0]));
+      Local<Function> func(Local<Function>::Cast(args[0]));
 
       JsFunctionVisitor v;
       v.addFunction(current, func);

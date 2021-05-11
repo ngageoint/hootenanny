@@ -48,7 +48,7 @@ HOOT_JS_REGISTER(RelationJs)
 
 Persistent<Function> RelationJs::_constructor;
 
-void RelationJs::Init(Handle<Object> target)
+void RelationJs::Init(Local<Object> target)
 {
   Isolate* current = target->GetIsolate();
   HandleScope scope(current);
@@ -66,26 +66,26 @@ void RelationJs::Init(Handle<Object> target)
   target->Set(String::NewFromUtf8(current, "Relation"), ToLocal(&_constructor));
 }
 
-Handle<Object> RelationJs::New(ConstRelationPtr relation)
+Local<Object> RelationJs::New(ConstRelationPtr relation)
 {
   Isolate* current = v8::Isolate::GetCurrent();
   EscapableHandleScope scope(current);
   Local<Context> context = current->GetCurrentContext();
 
-  Handle<Object> result = ToLocal(&_constructor)->NewInstance(context).ToLocalChecked();
+  Local<Object> result = ToLocal(&_constructor)->NewInstance(context).ToLocalChecked();
   RelationJs* from = ObjectWrap::Unwrap<RelationJs>(result);
   from->_setRelation(relation);
 
   return scope.Escape(result);
 }
 
-Handle<Object> RelationJs::New(RelationPtr relation)
+Local<Object> RelationJs::New(RelationPtr relation)
 {
   Isolate* current = v8::Isolate::GetCurrent();
   EscapableHandleScope scope(current);
   Local<Context> context = current->GetCurrentContext();
 
-  Handle<Object> result = ToLocal(&_constructor)->NewInstance(context).ToLocalChecked();
+  Local<Object> result = ToLocal(&_constructor)->NewInstance(context).ToLocalChecked();
   RelationJs* from = ObjectWrap::Unwrap<RelationJs>(result);
   from->_setRelation(relation);
 

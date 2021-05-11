@@ -43,12 +43,12 @@ namespace hoot
 
 HOOT_JS_REGISTER(MapProjectorJs)
 
-void MapProjectorJs::Init(Handle<Object> exports)
+void MapProjectorJs::Init(Local<Object> exports)
 {
   Isolate* current = exports->GetIsolate();
   HandleScope scope(current);
   Local<Context> context = current->GetCurrentContext();
-  Handle<Object> obj = Object::New(current);
+  Local<Object> obj = Object::New(current);
   exports->Set(String::NewFromUtf8(current, "MapProjector"), obj);
 
   obj->Set(String::NewFromUtf8(current, "projectToPlanar"),

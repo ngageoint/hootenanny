@@ -45,12 +45,12 @@ HOOT_JS_REGISTER(LogJs)
 
 QHash<QString, int> LogJs::_logs;
 
-void LogJs::Init(Handle<Object> exports)
+void LogJs::Init(Local<Object> exports)
 {
   Isolate* current = exports->GetIsolate();
   HandleScope scope(current);
   Local<Context> context = current->GetCurrentContext();
-  Handle<Object> log = Object::New(current);
+  Local<Object> log = Object::New(current);
   exports->Set(String::NewFromUtf8(current, "Log"), log);
   log->Set(String::NewFromUtf8(current, "setLogLevel"), FunctionTemplate::New(current, setLogLevel)->GetFunction(context).ToLocalChecked());
   log->Set(String::NewFromUtf8(current, "init"), FunctionTemplate::New(current, init)->GetFunction(context).ToLocalChecked());

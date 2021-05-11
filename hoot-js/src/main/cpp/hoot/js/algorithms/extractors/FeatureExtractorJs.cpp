@@ -80,7 +80,7 @@ void FeatureExtractorJs::extract(const FunctionCallbackInfo<Value>& args)
   }
 }
 
-void FeatureExtractorJs::Init(Handle<Object> target)
+void FeatureExtractorJs::Init(Local<Object> target)
 {
   Isolate* current = target->GetIsolate();
   HandleScope scope(current);

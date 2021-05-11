@@ -53,7 +53,7 @@ namespace hoot
 
 HOOT_JS_REGISTER(OsmMapOperationJs)
 
-void OsmMapOperationJs::Init(Handle<Object> target)
+void OsmMapOperationJs::Init(Local<Object> target)
 {
   Isolate* current = target->GetIsolate();
   HandleScope scope(current);

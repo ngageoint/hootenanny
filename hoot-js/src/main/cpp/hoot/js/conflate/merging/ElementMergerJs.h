@@ -72,7 +72,7 @@ public:
    BuildingToBuilding   // supports multiple
   };
 
- static void Init(v8::Handle<v8::Object> target);
+ static void Init(v8::Local<v8::Object> target);
  static void mergeElements(const v8::FunctionCallbackInfo<v8::Value>& args);
 
  virtual ~ElementMergerJs() = default;

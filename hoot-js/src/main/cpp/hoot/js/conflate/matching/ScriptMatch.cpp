@@ -58,7 +58,7 @@ HOOT_FACTORY_REGISTER(Match, ScriptMatch)
 int ScriptMatch::logWarnCount = 0;
 
 ScriptMatch::ScriptMatch(const std::shared_ptr<PluginContext>& script,
-  const Persistent<Object>& plugin, const ConstOsmMapPtr& map, const v8::Handle<Object>& mapObj,
+  const Persistent<Object>& plugin, const ConstOsmMapPtr& map, const v8::Local<Object>& mapObj,
   const ElementId& eid1, const ElementId& eid2, const ConstMatchThresholdPtr& mt) :
   Match(mt, eid1, eid2),
   _isWholeGroup(false),
@@ -70,7 +70,7 @@ ScriptMatch::ScriptMatch(const std::shared_ptr<PluginContext>& script,
 }
 
 void ScriptMatch::_calculateClassification(
-  const ConstOsmMapPtr& map, Handle<Object> mapObj, Handle<Object> plugin)
+  const ConstOsmMapPtr& map, Local<Object> mapObj, Local<Object> plugin)
 {
   Isolate* current = v8::Isolate::GetCurrent();
   HandleScope handleScope(current);
@@ -78,30 +78,30 @@ void ScriptMatch::_calculateClassification(
   Local<Context> context = current->GetCurrentContext();
 
   // removing these two lines causes a crash when checking for conflicts. WTF?
-  Handle<Object> global = _script->getContext(current)->Global();
+  Local<Object> global = _script->getContext(current)->Global();
   global->Get(String::NewFromUtf8(current, "plugin"));
   if (plugin->Has(context, String::NewFromUtf8(current, "isWholeGroup")).ToChecked())
   {
-    Handle<Value> v = _script->call(plugin, "isWholeGroup");
+    Local<Value> v = _script->call(plugin, "isWholeGroup");
     _isWholeGroup = v->BooleanValue(context).ToChecked();
   }
 
   if (plugin->Has(context, String::NewFromUtf8(current, "neverCausesConflict")).ToChecked())
   {
-    Handle<Value> v = _script->call(plugin, "neverCausesConflict");
+    Local<Value> v = _script->call(plugin, "neverCausesConflict");
     _neverCausesConflict = v->BooleanValue(context).ToChecked();
   }
 
-  Handle<String> featureTypeStr = String::NewFromUtf8(current, "baseFeatureType");
+  Local<String> featureTypeStr = String::NewFromUtf8(current, "baseFeatureType");
   if (plugin->Has(context, featureTypeStr).ToChecked())
   {
-    Handle<Value> value = plugin->Get(featureTypeStr);
+    Local<Value> value = plugin->Get(featureTypeStr);
     _matchName = toCpp<QString>(value);
   }
 
   try
   {
-    Handle<Value> v = _call(map, mapObj, plugin);
+    Local<Value> v = _call(map, mapObj, plugin);
 
     if (v.IsEmpty() || v->IsObject() == false)
     {
@@ -266,7 +266,7 @@ bool ScriptMatch::_isOrderedConflicting(
 
   OsmMapPtr copiedMap(new OsmMap(map->getProjection()));
   CopyMapSubsetOp(map, eids).apply(copiedMap);
-  Handle<Object> copiedMapJs = OsmMapJs::create(copiedMap);
+  Local<Object> copiedMapJs = OsmMapJs::create(copiedMap);
 
   // make sure unknown1 is always first
   ElementId eid11, eid12, eid21, eid22;
@@ -350,7 +350,7 @@ bool ScriptMatch::_isOrderedConflicting(
 }
 
 std::shared_ptr<const ScriptMatch> ScriptMatch::_getMatch(
-  OsmMapPtr map, Handle<Object> mapJs, const ElementId& eid1, const ElementId& eid2,
+  OsmMapPtr map, Local<Object> mapJs, const ElementId& eid1, const ElementId& eid2,
   const QHash<QString, ConstMatchPtr>& matches) const
 {
   std::shared_ptr<const ScriptMatch> match;
@@ -384,17 +384,17 @@ std::shared_ptr<const ScriptMatch> ScriptMatch::_getMatch(
   return match;
 }
 
-Handle<Value> ScriptMatch::_call(
-  const ConstOsmMapPtr& map, Handle<Object> mapObj, Handle<Object> plugin)
+Local<Value> ScriptMatch::_call(
+  const ConstOsmMapPtr& map, Local<Object> mapObj, Local<Object> plugin)
 {
   Isolate* current = v8::Isolate::GetCurrent();
   EscapableHandleScope handleScope(current);
   Context::Scope context_scope(_script->getContext(current));
   Local<Context> context = current->GetCurrentContext();
 
-  Handle<Value> value = plugin->Get(String::NewFromUtf8(current, "matchScore"));
-  Handle<Function> func = Handle<Function>::Cast(value);
-  Handle<Value> jsArgs[3];
+  Local<Value> value = plugin->Get(String::NewFromUtf8(current, "matchScore"));
+  Local<Function> func = Local<Function>::Cast(value);
+  Local<Value> jsArgs[3];
 
   if (func.IsEmpty() || func->IsFunction() == false)
     throw IllegalArgumentException("matchScore must be a valid function.");
@@ -413,31 +413,31 @@ Handle<Value> ScriptMatch::_call(
   if (maybe_result.IsEmpty())
     HootExceptionJs::throwAsHootException(trycatch);
 
-  Handle<Value> result = maybe_result.ToLocalChecked();
+  Local<Value> result = maybe_result.ToLocalChecked();
   HootExceptionJs::checkV8Exception(result, trycatch);
 
   return handleScope.Escape(result);
 }
 
-Handle<Value> ScriptMatch::_callGetMatchFeatureDetails(const ConstOsmMapPtr& map) const
+Local<Value> ScriptMatch::_callGetMatchFeatureDetails(const ConstOsmMapPtr& map) const
 {
   Isolate* current = v8::Isolate::GetCurrent();
   EscapableHandleScope handleScope(current);
   Context::Scope context_scope(_script->getContext(current));
   Local<Context> context = current->GetCurrentContext();
 
-  Handle<Object> plugin =
-    Handle<Object>::Cast(
+  Local<Object> plugin =
+    Local<Object>::Cast(
       _script->getContext(current)->Global()->Get(String::NewFromUtf8(current, "plugin")));
-  Handle<Value> value = plugin->Get(String::NewFromUtf8(current, "getMatchFeatureDetails"));
-  Handle<Function> func = Handle<Function>::Cast(value);
-  Handle<Value> jsArgs[3];
+  Local<Value> value = plugin->Get(String::NewFromUtf8(current, "getMatchFeatureDetails"));
+  Local<Function> func = Local<Function>::Cast(value);
+  Local<Value> jsArgs[3];
 
   if (func.IsEmpty() || func->IsFunction() == false)
     throw IllegalArgumentException(
       "getMatchFeatureDetails must be a valid function for match from: " + _matchName);
 
-  Handle<Object> mapObj = OsmMapJs::create(map);
+  Local<Object> mapObj = OsmMapJs::create(map);
 
   int argc = 0;
   jsArgs[argc++] = mapObj;
@@ -449,7 +449,7 @@ Handle<Value> ScriptMatch::_callGetMatchFeatureDetails(const ConstOsmMapPtr& map
   if (maybe_result.IsEmpty())
       HootExceptionJs::throwAsHootException(trycatch);
 
-  Handle<Value> result = maybe_result.ToLocalChecked();
+  Local<Value> result = maybe_result.ToLocalChecked();
   HootExceptionJs::checkV8Exception(result, trycatch);
 
   return handleScope.Escape(result);
@@ -462,12 +462,12 @@ std::map<QString, double> ScriptMatch::getFeatures(const ConstOsmMapPtr& map) co
   Context::Scope context_scope(_script->getContext(current));
 
   // removing these two lines causes a crash when checking for conflicts. WTF?
-  Handle<Object> global = _script->getContext(current)->Global();
+  Local<Object> global = _script->getContext(current)->Global();
   global->Get(String::NewFromUtf8(current, "plugin"));
 
   std::map<QString, double> result;
   LOG_TRACE("Calling getMatchFeatureDetails...");
-  Handle<Value> v = _callGetMatchFeatureDetails(map);
+  Local<Value> v = _callGetMatchFeatureDetails(map);
 
   if (v.IsEmpty() || v->IsObject() == false)
   {

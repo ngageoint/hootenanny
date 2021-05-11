@@ -72,7 +72,7 @@ void JsonOsmSchemaLoader::load(QString path, OsmSchema& s)
   Context::Scope context_scope(ToLocal(&_context));
 
   // If needed, this will throw an exception with user readable(ish) error message.
-  Handle<Value> result = fromJson(QString::fromUtf8(ba.data(), ba.size()), path);
+  Local<Value> result = fromJson(QString::fromUtf8(ba.data(), ba.size()), path);
 
   QVariantList l = toCpp<QVariantList>(result);
 

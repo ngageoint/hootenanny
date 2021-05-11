@@ -44,15 +44,15 @@ class WayJs : public ElementJs
 {
 public:
 
-  static void Init(v8::Handle<v8::Object> target);
+  static void Init(v8::Local<v8::Object> target);
 
   ConstElementPtr getConstElement() const override { return getConstWay(); }
   ConstWayPtr getConstWay() const { return _constWay; }
   ElementPtr getElement() override { return getWay(); }
   WayPtr getWay() { assert(_way); return _way; }
 
-  static v8::Handle<v8::Object> New(ConstWayPtr way);
-  static v8::Handle<v8::Object> New(WayPtr way);
+  static v8::Local<v8::Object> New(ConstWayPtr way);
+  static v8::Local<v8::Object> New(WayPtr way);
 
 private:
 

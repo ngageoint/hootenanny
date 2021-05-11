@@ -40,10 +40,10 @@ class OsmMapJs : public HootBaseJs
 {
 public:
 
-  static void Init(v8::Handle<v8::Object> target);
+  static void Init(v8::Local<v8::Object> target);
 
-  static v8::Handle<v8::Object> create(ConstOsmMapPtr map);
-  static v8::Handle<v8::Object> create(OsmMapPtr map);
+  static v8::Local<v8::Object> create(ConstOsmMapPtr map);
+  static v8::Local<v8::Object> create(OsmMapPtr map);
 
   OsmMapPtr& getMap();
   ConstOsmMapPtr& getConstMap() { return _constMap; }
@@ -70,26 +70,26 @@ private:
   void _setMap(ConstOsmMapPtr map) { _map.reset(); _constMap = map; }
 };
 
-inline void toCpp(v8::Handle<v8::Value> v, ConstOsmMapPtr& ptr)
+inline void toCpp(v8::Local<v8::Value> v, ConstOsmMapPtr& ptr)
 {
   if (!v->IsObject())
   {
     throw IllegalArgumentException("Expected an object, got: (" + toJson(v) + ")");
   }
 
-  v8::Handle<v8::Object> obj = v8::Handle<v8::Object>::Cast(v);
+  v8::Local<v8::Object> obj = v8::Local<v8::Object>::Cast(v);
   OsmMapJs* ptrj = node::ObjectWrap::Unwrap<OsmMapJs>(obj);
   ptr = ptrj->getConstMap();
 }
 
-inline void toCpp(v8::Handle<v8::Value> v, OsmMapPtr& ptr)
+inline void toCpp(v8::Local<v8::Value> v, OsmMapPtr& ptr)
 {
   if (!v->IsObject())
   {
     throw IllegalArgumentException("Expected an object, got: (" + toJson(v) + ")");
   }
 
-  v8::Handle<v8::Object> obj = v8::Handle<v8::Object>::Cast(v);
+  v8::Local<v8::Object> obj = v8::Local<v8::Object>::Cast(v);
   OsmMapJs* ptrj = node::ObjectWrap::Unwrap<OsmMapJs>(obj);
   ptr = ptrj->getMap();
 }
