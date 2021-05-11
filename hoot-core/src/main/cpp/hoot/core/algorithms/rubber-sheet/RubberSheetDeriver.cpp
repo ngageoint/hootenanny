@@ -46,7 +46,7 @@ namespace hoot
 
 void RubberSheetDeriver::derive(const QString& input1, const QString& input2,
                                 const QString& transform2To1, const QString& transform1To2,
-                                const bool ref)
+                                const bool ref) const
 {
   OsmMapPtr map(new OsmMap());
   IoUtils::loadMap(map, input1, false, Status::Unknown1);

@@ -50,7 +50,7 @@ public:
    * @param input input to apply the transform to
    * @param output path to write the transformed output
    */
-  void apply(const QString& transform, const QString& input, const QString& output);
+  void apply(const QString& transform, const QString& input, const QString& output) const;
 };
 
 }

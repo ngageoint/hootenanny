@@ -53,12 +53,12 @@ public:
   /**
    * Load the specified library if it exists using QLibrary.
    */
-  void loadLibrary(const QString& name);
+  void loadLibrary(const QString& name) const;
 
   /**
    * Reinitialize hootenanny based on configuration changes.
    */
-  void reinit();
+  void reinit() const;
 
 private:
 

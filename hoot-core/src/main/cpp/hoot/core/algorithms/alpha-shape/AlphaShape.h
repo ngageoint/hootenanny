@@ -106,7 +106,7 @@ public:
    *
    * @return a string
    */
-  QString toString();
+  QString toString() const;
 
   /**
    * Returns the length of the longest face edge used to create the shape
@@ -154,7 +154,7 @@ private:
    * @param e Envelope containing all faces
    * @return Sum of the area of all faces
    */
-  double _collectValidFaces(const double alpha, std::vector<GeometryPtr>& faces, geos::geom::Envelope& e);
+  double _collectValidFaces(const double alpha, std::vector<GeometryPtr>& faces, geos::geom::Envelope& e) const;
 
   /**
    * @brief _searchAlpha Run a binary search to find the alpha value that create a "complete" alpha shape
