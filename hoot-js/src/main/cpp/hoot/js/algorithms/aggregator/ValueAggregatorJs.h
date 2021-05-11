@@ -82,7 +82,7 @@ inline void toCpp(v8::Local<v8::Value> v, ValueAggregatorPtr& p)
   }
 }
 
-inline v8::Handle<v8::Value> toV8(const ValueAggregatorPtr& va)
+inline v8::Local<v8::Value> toV8(const ValueAggregatorPtr& va)
 {
   return ValueAggregatorJs::New(va);
 }
