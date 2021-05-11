@@ -32643,6 +32643,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="secondary"/>
         <tag k="hoot:id" v="-1017375"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="4"/>
         <tag k="lanes" v="1"/>
@@ -32665,6 +32666,7 @@
         <tag k="highway" v="primary"/>
         <tag k="highway:through_route" v="yes"/>
         <tag k="hoot:id" v="-1017316"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="2"/>
         <tag k="lanes" v="3"/>
@@ -32837,6 +32839,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="secondary"/>
         <tag k="hoot:id" v="-1017118"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="3"/>
         <tag k="lanes" v="1"/>
@@ -33119,6 +33122,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="secondary"/>
         <tag k="hoot:id" v="-1016929"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="2"/>
         <tag k="lanes" v="1"/>
@@ -33383,6 +33387,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="secondary"/>
         <tag k="hoot:id" v="-1016643"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="4"/>
         <tag k="lanes" v="2"/>
@@ -33738,6 +33743,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="secondary"/>
         <tag k="hoot:id" v="-1016361"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="2"/>
         <tag k="lanes" v="2"/>
@@ -33875,6 +33881,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="secondary"/>
         <tag k="hoot:id" v="-1016161"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="2"/>
         <tag k="lanes" v="1"/>
@@ -34183,6 +34190,15 @@
         <tag k="uuid" v="{1f924d70-73f1-4cc2-a58c-70a1fed7fdb4}"/>
         <tag k="width:minimum_traveled_way" v="2.5"/>
     </way>
+    <way visible="true" id="-1015935" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-1466164"/>
+        <nd ref="-1477268"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="hoot:id" v="-1015935"/>
+        <tag k="hoot:multilinestring" v="yes"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:way:node:count" v="2"/>
+    </way>
     <way visible="true" id="-1015918" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1463825"/>
         <nd ref="-1477255"/>
@@ -34234,6 +34250,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="secondary"/>
         <tag k="hoot:id" v="-1015901"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="2"/>
         <tag k="lanes" v="1"/>
@@ -34277,6 +34294,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="secondary"/>
         <tag k="hoot:id" v="-1015881"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="3"/>
         <tag k="lanes" v="1"/>
@@ -34447,6 +34465,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="secondary"/>
         <tag k="hoot:id" v="-1015757"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="4"/>
         <tag k="lanes" v="1"/>
@@ -34629,6 +34648,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="secondary"/>
         <tag k="hoot:id" v="-1015704"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="3"/>
         <tag k="lanes" v="1"/>
@@ -34788,6 +34808,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="secondary"/>
         <tag k="hoot:id" v="-1015623"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="5"/>
         <tag k="lanes" v="1"/>
@@ -34809,6 +34830,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="secondary"/>
         <tag k="hoot:id" v="-1015596"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="2"/>
         <tag k="lanes" v="1"/>
@@ -34900,6 +34922,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="secondary"/>
         <tag k="hoot:id" v="-1015520"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="6"/>
         <tag k="lanes" v="1"/>
@@ -34987,6 +35010,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="secondary"/>
         <tag k="hoot:id" v="-1015484"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="3"/>
         <tag k="lanes" v="2"/>
@@ -35115,6 +35139,16 @@
         <tag k="uuid" v="{3b3d5491-6b41-482a-bba2-a63e06acee45}"/>
         <tag k="width:minimum_traveled_way" v="6.5"/>
     </way>
+    <way visible="true" id="-1015368" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-1466285"/>
+        <nd ref="-1466134"/>
+        <nd ref="-1477051"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="hoot:id" v="-1015368"/>
+        <tag k="hoot:multilinestring" v="yes"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:way:node:count" v="3"/>
+    </way>
     <way visible="true" id="-1015358" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1477043"/>
         <nd ref="-1465135"/>
@@ -35194,6 +35228,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="secondary"/>
         <tag k="hoot:id" v="-1015341"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="2"/>
         <tag k="lanes" v="1"/>
@@ -35238,6 +35273,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="secondary"/>
         <tag k="hoot:id" v="-1015327"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="3"/>
         <tag k="lanes" v="2"/>
@@ -35262,6 +35298,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="secondary"/>
         <tag k="hoot:id" v="-1015297"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="5"/>
         <tag k="lanes" v="1"/>
@@ -35284,6 +35321,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="secondary"/>
         <tag k="hoot:id" v="-1015228"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="3"/>
         <tag k="lanes" v="2"/>
@@ -35349,6 +35387,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="secondary"/>
         <tag k="hoot:id" v="-1015136"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="2"/>
         <tag k="lanes" v="2"/>
@@ -35749,6 +35788,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="secondary"/>
         <tag k="hoot:id" v="-1014966"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="3"/>
         <tag k="lanes" v="1"/>
@@ -35927,6 +35967,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="secondary"/>
         <tag k="hoot:id" v="-1014796"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="2"/>
         <tag k="lanes" v="1"/>
@@ -35949,6 +35990,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="secondary"/>
         <tag k="hoot:id" v="-1014781"/>
+        <tag k="hoot:multilinestring" v="yes"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="3"/>
         <tag k="lanes" v="1"/>

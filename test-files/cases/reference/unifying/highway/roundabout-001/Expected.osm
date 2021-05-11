@@ -148,78 +148,108 @@
     <way visible="true" id="-939" timestamp="2017-06-07T15:16:56Z" version="1">
         <nd ref="134"/>
         <nd ref="74"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="condition" v="functional"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="fixme" v="survey if oneway continues one/both directions"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="hoot:hash" v="sha1sum:43e198ad545a7b6970b78654691346f5414ee2d4;sha1sum:98d3b99af410c8bb0da3e25678ed7c83b8dac0b1"/>
-        <tag k="lanes" v="2"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="location" v="surface"/>
-        <tag k="median" v="no"/>
-        <tag k="name" v="Rue Pavée"/>
-        <tag k="note" v="oneway very possibly continues both(?) directions"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="operational_status" v="open"/>
-        <tag k="operational_status_quality" v="confirmed"/>
-        <tag k="practicability" v="heavy_truck_less_than_20mt"/>
-        <tag k="seasonal" v="no"/>
-        <tag k="smoothness" v="intermediate"/>
-        <tag k="source" v="CNIGS/OIM/ FOCS;osm;mgcp"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
         <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="source:haiti" v="CNIGS and CartONG"/>
-        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.133Z"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="source:oneway" v="survey"/>
         <tag k="surface" v="paved"/>
+        <tag k="operational_status_quality" v="confirmed"/>
+        <tag k="source:oneway" v="survey"/>
+        <tag k="seasonal" v="no"/>
+        <tag k="condition" v="functional"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="Rue Pavée"/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
+        <tag k="smoothness" v="intermediate"/>
+        <tag k="lanes" v="2"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="type:haiti" v="Autre Route"/>
         <tag k="uuid" v="{287bf291-fb97-4c17-9ebf-0246029b4f53};{{6b828d43-7973-4098-a098-d10430882622}}"/>
+        <tag k="operational_status" v="open"/>
         <tag k="width:minimum_traveled_way" v="8"/>
+        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
+        <tag k="fixme" v="survey if oneway continues one/both directions"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="median" v="no"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="source:haiti" v="CNIGS and CartONG"/>
+        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.133Z"/>
+        <tag k="location" v="surface"/>
+        <tag k="note" v="oneway very possibly continues both(?) directions"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="source" v="CNIGS/OIM/ FOCS;osm;mgcp"/>
+        <tag k="practicability" v="heavy_truck_less_than_20mt"/>
+        <tag k="hoot:hash" v="sha1sum:43e198ad545a7b6970b78654691346f5414ee2d4;sha1sum:98d3b99af410c8bb0da3e25678ed7c83b8dac0b1"/>
+        <tag k="highway" v="secondary"/>
     </way>
     <way visible="true" id="-937" timestamp="2017-06-07T15:16:55Z" version="1">
         <nd ref="84"/>
         <nd ref="4"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="width:minimum_traveled_way" v="8"/>
+        <tag k="source" v="mgcp"/>
+        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.133Z"/>
         <tag k="highway" v="road"/>
+        <tag k="median" v="no"/>
+        <tag k="location" v="surface"/>
+        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
+        <tag k="uuid" v="{{5cfcb674-fbc6-4c61-ac3f-e29f68dd8bf9}}"/>
+        <tag k="source:description" v="IKONOS Imagery"/>
+        <tag k="surface" v="paved"/>
+        <tag k="source:datetime" v="2010-01-13"/>
+        <tag k="seasonal" v="no"/>
+        <tag k="lanes" v="2"/>
+        <tag k="condition" v="functional"/>
+        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-935" timestamp="2017-06-07T15:16:56Z" version="1">
         <nd ref="4"/>
         <nd ref="79"/>
         <nd ref="133"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="condition" v="functional"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="unclassified"/>
-        <tag k="lanes" v="2"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="location" v="surface"/>
-        <tag k="median" v="no"/>
-        <tag k="name" v="Rue du Champ de Mars"/>
-        <tag k="operational_status" v="open"/>
-        <tag k="operational_status_quality" v="confirmed"/>
-        <tag k="practicability" v="truck_+_trailer_greater_than_20mt"/>
-        <tag k="seasonal" v="no"/>
-        <tag k="smoothness" v="intermediate"/>
-        <tag k="source" v="CNIGS/GIS /DTM;osm;mgcp"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
         <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.133Z"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="surface" v="paved"/>
+        <tag k="operational_status_quality" v="confirmed"/>
+        <tag k="seasonal" v="no"/>
+        <tag k="condition" v="functional"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="Rue du Champ de Mars"/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
+        <tag k="smoothness" v="intermediate"/>
+        <tag k="lanes" v="2"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="uuid" v="{c869fdc4-8a7d-45c7-a47a-09611507cf41};{{5cfcb674-fbc6-4c61-ac3f-e29f68dd8bf9}}"/>
+        <tag k="operational_status" v="open"/>
         <tag k="width:minimum_traveled_way" v="8"/>
+        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
+        <tag k="attribution" v="osm"/>
+        <tag k="median" v="no"/>
+        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.133Z"/>
+        <tag k="location" v="surface"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="source" v="CNIGS/GIS /DTM;osm;mgcp"/>
+        <tag k="practicability" v="truck_+_trailer_greater_than_20mt"/>
+        <tag k="highway" v="unclassified"/>
     </way>
     <way visible="true" id="-932" timestamp="2017-06-07T15:16:55Z" version="1">
         <nd ref="133"/>
         <nd ref="-31"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="width:minimum_traveled_way" v="8"/>
+        <tag k="source" v="mgcp"/>
+        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.133Z"/>
         <tag k="highway" v="road"/>
+        <tag k="median" v="no"/>
+        <tag k="location" v="surface"/>
+        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
+        <tag k="uuid" v="{{5cfcb674-fbc6-4c61-ac3f-e29f68dd8bf9}}"/>
+        <tag k="source:description" v="IKONOS Imagery"/>
+        <tag k="surface" v="paved"/>
+        <tag k="source:datetime" v="2010-01-13"/>
+        <tag k="seasonal" v="no"/>
+        <tag k="lanes" v="2"/>
+        <tag k="condition" v="functional"/>
+        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-912" timestamp="2017-06-07T15:16:56Z" version="1">
         <nd ref="22"/>
@@ -227,125 +257,125 @@
         <nd ref="110"/>
         <nd ref="84"/>
         <nd ref="132"/>
-        <tag k="attribution" v="osm"/>
+        <tag k="source:description" v="IKONOS Imagery"/>
+        <tag k="surface" v="paved"/>
+        <tag k="operational_status_quality" v="confirmed"/>
+        <tag k="seasonal" v="no"/>
         <tag k="condition" v="functional"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="error:circular" v="15"/>
+        <tag k="name" v="Boulevard Harry Truman"/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
+        <tag k="smoothness" v="intermediate"/>
+        <tag k="lanes" v="4"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="uuid" v="{e2ee93da-504b-403b-8f6b-5d53482020e6};{{6a141b6c-44bb-41e8-b52e-6ec8a5602ed5}}"/>
+        <tag k="operational_status" v="open"/>
+        <tag k="width:minimum_traveled_way" v="8"/>
+        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
+        <tag k="attribution" v="osm"/>
+        <tag k="median" v="yes"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.136Z"/>
+        <tag k="location" v="surface"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="source" v="CNIGS/GIS /DTM;osm;mgcp"/>
+        <tag k="practicability" v="truck_+_trailer_greater_than_20mt"/>
         <tag k="highway" v="secondary"/>
         <tag k="hoot:hash" v="sha1sum:71ff660fc5b4ff4f30f1348a748f2075fdf858f7;sha1sum:d50fdc650701c8911a7bfc25329c846b47b01be5;sha1sum:23229f75e7249109e1557b6aaae3e6779495dadc"/>
-        <tag k="lanes" v="4"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="location" v="surface"/>
-        <tag k="median" v="yes"/>
-        <tag k="name" v="Boulevard Harry Truman"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="operational_status" v="open"/>
-        <tag k="operational_status_quality" v="confirmed"/>
-        <tag k="practicability" v="truck_+_trailer_greater_than_20mt"/>
-        <tag k="seasonal" v="no"/>
-        <tag k="smoothness" v="intermediate"/>
-        <tag k="source" v="CNIGS/GIS /DTM;osm;mgcp"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
-        <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.136Z"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="surface" v="paved"/>
-        <tag k="uuid" v="{e2ee93da-504b-403b-8f6b-5d53482020e6};{{6a141b6c-44bb-41e8-b52e-6ec8a5602ed5}}"/>
-        <tag k="width:minimum_traveled_way" v="8"/>
     </way>
     <way visible="true" id="-909" timestamp="2017-06-07T15:16:56Z" version="1">
         <nd ref="130"/>
         <nd ref="83"/>
         <nd ref="59"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="condition" v="functional"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="primary"/>
-        <tag k="hoot:hash" v="sha1sum:3aad1520e160a2366b8aa8b01b9077f387d420cc;sha1sum:e74fb05c686a261f82842bf068ee31267a9f6414"/>
-        <tag k="lanes" v="4"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="loc_name" v="Grand Rue"/>
-        <tag k="location" v="surface"/>
-        <tag k="median" v="no"/>
-        <tag k="name" v="Boulevard Jean-Jacques Dessalines"/>
-        <tag k="operational_status" v="open"/>
-        <tag k="operational_status_quality" v="confirmed"/>
-        <tag k="practicability" v="truck_+_trailer_greater_than_20mt"/>
-        <tag k="ref" v="RN 2"/>
-        <tag k="seasonal" v="no"/>
-        <tag k="smoothness" v="intermediate"/>
-        <tag k="source" v="CNIGS/GIS /DTM;osm;mgcp"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
         <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.137Z"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="surface" v="paved"/>
+        <tag k="operational_status_quality" v="confirmed"/>
+        <tag k="seasonal" v="no"/>
+        <tag k="condition" v="functional"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="Boulevard Jean-Jacques Dessalines"/>
+        <tag k="ref" v="RN 2"/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
+        <tag k="smoothness" v="intermediate"/>
+        <tag k="lanes" v="4"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="uuid" v="{72466a5c-1197-4004-80ab-1965beeb6d89};{{57700a2f-b508-4758-bd8c-a156feade7b9}}"/>
+        <tag k="operational_status" v="open"/>
         <tag k="width:minimum_traveled_way" v="10"/>
+        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
+        <tag k="attribution" v="osm"/>
+        <tag k="median" v="no"/>
+        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.137Z"/>
+        <tag k="location" v="surface"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="source" v="CNIGS/GIS /DTM;osm;mgcp"/>
+        <tag k="practicability" v="truck_+_trailer_greater_than_20mt"/>
+        <tag k="hoot:hash" v="sha1sum:3aad1520e160a2366b8aa8b01b9077f387d420cc;sha1sum:e74fb05c686a261f82842bf068ee31267a9f6414"/>
+        <tag k="highway" v="primary"/>
     </way>
     <way visible="true" id="-900" timestamp="2017-06-07T15:16:56Z" version="1">
         <nd ref="124"/>
         <nd ref="81"/>
         <nd ref="74"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="condition" v="functional"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="unclassified"/>
-        <tag k="lanes" v="2"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="location" v="surface"/>
-        <tag k="median" v="no"/>
-        <tag k="name" v="Rue Enterrement"/>
-        <tag k="operational_status" v="open"/>
-        <tag k="operational_status_quality" v="confirmed"/>
-        <tag k="practicability" v="truck_+_trailer_greater_than_20mt"/>
-        <tag k="seasonal" v="no"/>
-        <tag k="smoothness" v="bad"/>
-        <tag k="source" v="CNIGS/GIS /DTM;osm;mgcp"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
         <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.137Z"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="surface" v="paved"/>
+        <tag k="operational_status_quality" v="confirmed"/>
+        <tag k="seasonal" v="no"/>
+        <tag k="condition" v="functional"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="Rue Enterrement"/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
+        <tag k="smoothness" v="bad"/>
+        <tag k="lanes" v="2"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="uuid" v="{5ad58b3e-9d34-4f27-932d-510055c97ad4};{{bf4e75b9-d448-4509-a41f-d254d704fef9}}"/>
+        <tag k="operational_status" v="open"/>
         <tag k="width:minimum_traveled_way" v="8"/>
+        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
+        <tag k="attribution" v="osm"/>
+        <tag k="median" v="no"/>
+        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.137Z"/>
+        <tag k="location" v="surface"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="source" v="CNIGS/GIS /DTM;osm;mgcp"/>
+        <tag k="practicability" v="truck_+_trailer_greater_than_20mt"/>
+        <tag k="highway" v="unclassified"/>
     </way>
     <way visible="true" id="-893" timestamp="2017-06-07T15:16:56Z" version="1">
         <nd ref="59"/>
         <nd ref="87"/>
         <nd ref="137"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="condition" v="functional"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="primary"/>
-        <tag k="hoot:hash" v="sha1sum:26b729f61770fa590ce227fc467d2f4b7dd68353;sha1sum:4aa2b1ce538adde8988cb4d92efa1ba77b45e0ee;sha1sum:19fd5d92d7072f4a73f8b2b051855f76c768f9f7"/>
-        <tag k="lanes" v="4"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="loc_name" v="Grand Rue"/>
-        <tag k="location" v="surface"/>
-        <tag k="median" v="no"/>
-        <tag k="name" v="Boulevard Jean-Jacques Dessalines"/>
-        <tag k="operational_status" v="open"/>
-        <tag k="operational_status_quality" v="confirmed"/>
-        <tag k="practicability" v="truck_+_trailer_greater_than_20mt"/>
-        <tag k="ref" v="RN 1"/>
-        <tag k="seasonal" v="no"/>
-        <tag k="smoothness" v="intermediate"/>
-        <tag k="source" v="CNIGS/GIS /DTM;osm;mgcp"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
         <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.137Z"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="surface" v="paved"/>
+        <tag k="operational_status_quality" v="confirmed"/>
+        <tag k="seasonal" v="no"/>
+        <tag k="condition" v="functional"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="Boulevard Jean-Jacques Dessalines"/>
+        <tag k="ref" v="RN 1"/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
+        <tag k="smoothness" v="intermediate"/>
+        <tag k="lanes" v="4"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="uuid" v="{9c7f2d0f-e445-447c-b5d3-97a8db294eae};{{57700a2f-b508-4758-bd8c-a156feade7b9}}"/>
+        <tag k="operational_status" v="open"/>
         <tag k="width:minimum_traveled_way" v="10"/>
+        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
+        <tag k="attribution" v="osm"/>
+        <tag k="median" v="no"/>
+        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.137Z"/>
+        <tag k="location" v="surface"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="source" v="CNIGS/GIS /DTM;osm;mgcp"/>
+        <tag k="practicability" v="truck_+_trailer_greater_than_20mt"/>
+        <tag k="hoot:hash" v="sha1sum:26b729f61770fa590ce227fc467d2f4b7dd68353;sha1sum:4aa2b1ce538adde8988cb4d92efa1ba77b45e0ee;sha1sum:19fd5d92d7072f4a73f8b2b051855f76c768f9f7"/>
+        <tag k="highway" v="primary"/>
     </way>
     <way visible="true" id="-860" timestamp="2017-06-07T15:16:56Z" version="1">
         <nd ref="74"/>
@@ -356,33 +386,33 @@
         <nd ref="77"/>
         <nd ref="140"/>
         <nd ref="58"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="condition" v="functional"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="lanes" v="2"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="location" v="surface"/>
-        <tag k="median" v="no"/>
-        <tag k="name" v="Rue Pavée"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="operational_status" v="open"/>
-        <tag k="operational_status_quality" v="confirmed"/>
-        <tag k="practicability" v="heavy_truck_less_than_20mt"/>
-        <tag k="seasonal" v="no"/>
-        <tag k="smoothness" v="intermediate"/>
-        <tag k="source" v="CNIGS/OIM/ FOCS;osm;mgcp"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
         <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="source:haiti" v="CNIGS and CartONG"/>
-        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.133Z"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="surface" v="paved"/>
+        <tag k="operational_status_quality" v="confirmed"/>
+        <tag k="seasonal" v="no"/>
+        <tag k="condition" v="functional"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="Rue Pavée"/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
+        <tag k="smoothness" v="intermediate"/>
+        <tag k="lanes" v="2"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="type:haiti" v="Autre Route"/>
         <tag k="uuid" v="{586bbde5-a2b1-4dc8-85e0-c0ca6892cb25};{{6b828d43-7973-4098-a098-d10430882622}}"/>
+        <tag k="operational_status" v="open"/>
         <tag k="width:minimum_traveled_way" v="8"/>
+        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
+        <tag k="attribution" v="osm"/>
+        <tag k="median" v="no"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="source:haiti" v="CNIGS and CartONG"/>
+        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.133Z"/>
+        <tag k="location" v="surface"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="source" v="CNIGS/OIM/ FOCS;osm;mgcp"/>
+        <tag k="practicability" v="heavy_truck_less_than_20mt"/>
+        <tag k="highway" v="secondary"/>
     </way>
     <way visible="true" id="-854" timestamp="2017-06-07T15:16:56Z" version="1">
         <nd ref="100"/>
@@ -392,33 +422,33 @@
         <nd ref="81"/>
         <nd ref="118"/>
         <tag k="alt_name" v="Rue Paul VI"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="condition" v="functional"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="tertiary"/>
-        <tag k="hoot:hash" v="sha1sum:9b60668f4520069eca4d9f48ff45c4e3eecd5a9e;sha1sum:de6b7ff7c97187ac56f786be376ad10104261c1a;sha1sum:7cc6e250e6d76ebf9fe7ee49c8903c0e10af713d;sha1sum:80d2aa2727e2d05a21109f0e7d9499ef41215466"/>
-        <tag k="lanes" v="2"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="location" v="surface"/>
-        <tag k="median" v="no"/>
-        <tag k="name" v="Rue des Casernes"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="operational_status" v="open"/>
-        <tag k="operational_status_quality" v="confirmed"/>
-        <tag k="practicability" v="truck_+_trailer_greater_than_20mt"/>
-        <tag k="seasonal" v="no"/>
-        <tag k="smoothness" v="intermediate"/>
-        <tag k="source" v="CNIGS/GIS /DTM;osm;mgcp"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
         <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.133Z"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="source:oneway" v="survey"/>
         <tag k="surface" v="paved"/>
+        <tag k="operational_status_quality" v="confirmed"/>
+        <tag k="source:oneway" v="survey"/>
+        <tag k="seasonal" v="no"/>
+        <tag k="condition" v="functional"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="Rue des Casernes"/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
+        <tag k="smoothness" v="intermediate"/>
+        <tag k="lanes" v="2"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="uuid" v="{aa585538-f526-4588-90bb-1ecb75f6e4c7};{{c6d3e710-ade5-42b6-b935-f17a2a510c96}}"/>
+        <tag k="operational_status" v="open"/>
         <tag k="width:minimum_traveled_way" v="8"/>
+        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
+        <tag k="attribution" v="osm"/>
+        <tag k="median" v="no"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.133Z"/>
+        <tag k="location" v="surface"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="source" v="CNIGS/GIS /DTM;osm;mgcp"/>
+        <tag k="practicability" v="truck_+_trailer_greater_than_20mt"/>
+        <tag k="hoot:hash" v="sha1sum:9b60668f4520069eca4d9f48ff45c4e3eecd5a9e;sha1sum:de6b7ff7c97187ac56f786be376ad10104261c1a;sha1sum:7cc6e250e6d76ebf9fe7ee49c8903c0e10af713d;sha1sum:80d2aa2727e2d05a21109f0e7d9499ef41215466"/>
+        <tag k="highway" v="tertiary"/>
     </way>
     <way visible="true" id="-836" timestamp="2017-06-07T15:16:56Z" version="1">
         <nd ref="18"/>
@@ -427,32 +457,32 @@
         <nd ref="78"/>
         <nd ref="100"/>
         <tag k="alt_name" v="Rue Paul VI"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="condition" v="functional"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="tertiary"/>
-        <tag k="hoot:hash" v="sha1sum:94adcc394a5ea455a2b687409e6491a199747caa;sha1sum:de6b7ff7c97187ac56f786be376ad10104261c1a"/>
-        <tag k="lanes" v="2"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="location" v="surface"/>
-        <tag k="median" v="no"/>
-        <tag k="name" v="Rue des Casernes"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="operational_status" v="open"/>
-        <tag k="operational_status_quality" v="confirmed"/>
-        <tag k="practicability" v="truck_+_trailer_greater_than_20mt"/>
-        <tag k="seasonal" v="no"/>
-        <tag k="smoothness" v="intermediate"/>
-        <tag k="source" v="CNIGS/GIS /DTM;osm;mgcp"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
         <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.133Z"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="surface" v="paved"/>
+        <tag k="operational_status_quality" v="confirmed"/>
+        <tag k="seasonal" v="no"/>
+        <tag k="condition" v="functional"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="Rue des Casernes"/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
+        <tag k="smoothness" v="intermediate"/>
+        <tag k="lanes" v="2"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="uuid" v="{bedb912f-331a-4271-8595-0731b4a42bc0};{{c6d3e710-ade5-42b6-b935-f17a2a510c96}}"/>
+        <tag k="operational_status" v="open"/>
         <tag k="width:minimum_traveled_way" v="8"/>
+        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
+        <tag k="attribution" v="osm"/>
+        <tag k="median" v="no"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.133Z"/>
+        <tag k="location" v="surface"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="source" v="CNIGS/GIS /DTM;osm;mgcp"/>
+        <tag k="practicability" v="truck_+_trailer_greater_than_20mt"/>
+        <tag k="hoot:hash" v="sha1sum:94adcc394a5ea455a2b687409e6491a199747caa;sha1sum:de6b7ff7c97187ac56f786be376ad10104261c1a"/>
+        <tag k="highway" v="tertiary"/>
     </way>
     <way visible="true" id="-39" timestamp="2017-06-07T15:16:56Z" version="1">
         <nd ref="135"/>
@@ -460,50 +490,50 @@
         <nd ref="58"/>
         <nd ref="8"/>
         <nd ref="13"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="condition" v="functional"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="tertiary"/>
-        <tag k="hoot:hash" v="sha1sum:2292adea6dd60f786ac90515562b995af19e4d51;sha1sum:f3fdcd09b807472b729f3a3eb2badefea4ed259e"/>
-        <tag k="lanes" v="4"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="location" v="surface"/>
-        <tag k="median" v="yes"/>
-        <tag k="name" v="Avenue Marie Jeanne"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="seasonal" v="no"/>
-        <tag k="source" v="survey; OSM-adjusted Bing;osm;mgcp"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
         <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.132Z"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="surface" v="paved"/>
+        <tag k="seasonal" v="no"/>
+        <tag k="condition" v="functional"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="Avenue Marie Jeanne"/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
+        <tag k="lanes" v="4"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="uuid" v="{b211a83c-4c16-49e1-82db-f9c74b3aef73};{{4c6565c4-9ac3-4175-a398-7633e498309d}}"/>
         <tag k="width:minimum_traveled_way" v="8"/>
+        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
+        <tag k="attribution" v="osm"/>
+        <tag k="median" v="yes"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.132Z"/>
+        <tag k="location" v="surface"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="source" v="survey; OSM-adjusted Bing;osm;mgcp"/>
+        <tag k="hoot:hash" v="sha1sum:2292adea6dd60f786ac90515562b995af19e4d51;sha1sum:f3fdcd09b807472b729f3a3eb2badefea4ed259e"/>
+        <tag k="highway" v="tertiary"/>
     </way>
     <way visible="true" id="2" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117">
         <nd ref="139"/>
         <nd ref="7"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="source" v="survey; OSM-adjusted Bing;osm"/>
         <tag k="highway" v="service"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="source" v="survey; OSM-adjusted Bing;osm"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
         <tag k="uuid" v="{19d7e8e8-2ddf-4aaf-ba23-d79480c07ed0}"/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="3" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117">
         <nd ref="141"/>
         <nd ref="8"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="source" v="survey; OSM-adjusted Bing;osm"/>
         <tag k="highway" v="service"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="source" v="survey; OSM-adjusted Bing;osm"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
         <tag k="uuid" v="{80416c3c-d608-4d6a-a59a-346ada5f1e6d}"/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="4" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117">
         <nd ref="110"/>
@@ -511,24 +541,24 @@
         <nd ref="11"/>
         <nd ref="10"/>
         <nd ref="9"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="source" v="geoeye;osm"/>
         <tag k="highway" v="unclassified"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="source" v="geoeye;osm"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
         <tag k="uuid" v="{c7acd2eb-accb-4b34-ae66-4463e5c8f664}"/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="5" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117">
         <nd ref="89"/>
         <nd ref="104"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="source" v="osm"/>
         <tag k="highway" v="secondary_link"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="source" v="osm"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
         <tag k="uuid" v="{4aa747a3-768b-43c2-a7c2-188ce187a200}"/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="6" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117">
         <nd ref="31"/>
@@ -550,25 +580,25 @@
         <nd ref="14"/>
         <nd ref="13"/>
         <nd ref="31"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="junction" v="roundabout"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="source" v="GeoEye;osm"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="uuid" v="{6d02aaea-648c-4b09-8acf-8cf0b4fd4124}"/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="junction" v="roundabout"/>
+        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="7" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117">
         <nd ref="32"/>
         <nd ref="35"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="source" v="osm"/>
         <tag k="highway" v="footway"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="source" v="osm"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
         <tag k="uuid" v="{83dbfc5a-f894-4fe3-9d14-63fdb4425af6}"/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="8" timestamp="2017-06-07T15:16:56Z" version="1">
         <nd ref="95"/>
@@ -579,52 +609,52 @@
         <nd ref="37"/>
         <nd ref="36"/>
         <nd ref="61"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="source" v="osm"/>
         <tag k="highway" v="footway"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="source" v="osm"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
         <tag k="uuid" v="{1b094678-4e70-4726-9c60-efc6c19f6588}"/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="9" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117">
         <nd ref="47"/>
         <nd ref="46"/>
         <nd ref="45"/>
         <nd ref="94"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="source" v="osm"/>
         <tag k="highway" v="footway"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="source" v="osm"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
         <tag k="uuid" v="{9095d65f-b9d2-425b-a4e0-fb8b61eada23}"/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="10" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117">
         <nd ref="57"/>
         <nd ref="56"/>
         <nd ref="55"/>
         <nd ref="97"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="source" v="osm"/>
         <tag k="highway" v="footway"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="source" v="osm"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
         <tag k="uuid" v="{83455e56-898e-4fa5-8e16-7b62ddefa087}"/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="12" timestamp="2017-06-07T15:16:56Z" version="1">
         <nd ref="96"/>
         <nd ref="62"/>
         <nd ref="61"/>
         <nd ref="60"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="source" v="osm"/>
         <tag k="highway" v="footway"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="source" v="osm"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
         <tag k="uuid" v="{fd518d81-26c8-4bbf-8604-3538476bea30}"/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="13" timestamp="2017-06-07T15:16:56Z" version="1">
         <nd ref="73"/>
@@ -638,29 +668,29 @@
         <nd ref="65"/>
         <nd ref="64"/>
         <nd ref="63"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="source" v="osm"/>
         <tag k="highway" v="service"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="source" v="osm"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
         <tag k="uuid" v="{4007d710-d32a-4585-8483-8c2e146ebfdf}"/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="14" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117">
         <nd ref="84"/>
         <nd ref="4"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="secondary_link"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="operational_status" v="open"/>
-        <tag k="operational_status_quality" v="confirmed"/>
-        <tag k="practicability" v="truck_+_trailer_greater_than_20mt"/>
         <tag k="smoothness" v="intermediate"/>
         <tag k="source" v="CNIGS/GIS /DTM;osm"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="surface" v="paved"/>
+        <tag k="highway" v="secondary_link"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="uuid" v="{eafea4a7-3c57-45c7-8ffa-4d82e99dfca8}"/>
+        <tag k="practicability" v="truck_+_trailer_greater_than_20mt"/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
+        <tag k="operational_status" v="open"/>
+        <tag k="surface" v="paved"/>
+        <tag k="operational_status_quality" v="confirmed"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="15" timestamp="2017-06-07T15:16:56Z" version="1">
         <nd ref="108"/>
@@ -671,25 +701,25 @@
         <nd ref="95"/>
         <nd ref="94"/>
         <nd ref="93"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="source" v="osm"/>
         <tag k="highway" v="residential"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="name" v="Rue Antonio Macéo"/>
-        <tag k="source" v="osm"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
         <tag k="uuid" v="{3d5251db-486f-4dde-b1ab-46bab5cdeecc}"/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="16" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117">
         <nd ref="3"/>
         <nd ref="110"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="source" v="geoeye;osm"/>
         <tag k="highway" v="secondary_link"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="source" v="geoeye;osm"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
         <tag k="uuid" v="{cdea7081-4c1c-4220-9bc9-50b3cf92b5d9}"/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="17" timestamp="2017-06-07T15:16:56Z" version="1">
         <nd ref="142"/>
@@ -697,28 +727,28 @@
         <nd ref="140"/>
         <nd ref="139"/>
         <nd ref="111"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="condition" v="functional"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="tertiary"/>
-        <tag k="hoot:hash" v="sha1sum:42df0d492e92b6986f7ff8cfe588cea7c4f9a2b0;sha1sum:f3fdcd09b807472b729f3a3eb2badefea4ed259e"/>
-        <tag k="lanes" v="4"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="location" v="surface"/>
-        <tag k="median" v="yes"/>
-        <tag k="name" v="Avenue Marie Jeanne"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="seasonal" v="no"/>
-        <tag k="source" v="survey; OSM-adjusted Bing;osm;mgcp"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
         <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.132Z"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="surface" v="paved"/>
+        <tag k="seasonal" v="no"/>
+        <tag k="condition" v="functional"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="Avenue Marie Jeanne"/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
+        <tag k="lanes" v="4"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="uuid" v="{04371857-9646-4a0a-a3a2-84792edc3095};{{4c6565c4-9ac3-4175-a398-7633e498309d}}"/>
         <tag k="width:minimum_traveled_way" v="8"/>
+        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
+        <tag k="attribution" v="osm"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="median" v="yes"/>
+        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.132Z"/>
+        <tag k="location" v="surface"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="source" v="survey; OSM-adjusted Bing;osm;mgcp"/>
+        <tag k="highway" v="tertiary"/>
+        <tag k="hoot:hash" v="sha1sum:42df0d492e92b6986f7ff8cfe588cea7c4f9a2b0;sha1sum:f3fdcd09b807472b729f3a3eb2badefea4ed259e"/>
     </way>
     <way visible="true" id="18" timestamp="2017-06-07T15:16:56Z" version="1">
         <nd ref="112"/>
@@ -729,28 +759,28 @@
         <nd ref="105"/>
         <nd ref="104"/>
         <nd ref="103"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="condition" v="functional"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="lanes" v="4"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="loc_name" v="Bicentenaire"/>
-        <tag k="location" v="surface"/>
-        <tag k="median" v="yes"/>
-        <tag k="name" v="Boulevard Harry Truman"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="seasonal" v="no"/>
-        <tag k="source" v="GRU/COSMHA;osm;mgcp"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
         <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.136Z"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="surface" v="paved"/>
+        <tag k="seasonal" v="no"/>
+        <tag k="condition" v="functional"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="Boulevard Harry Truman"/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
+        <tag k="lanes" v="4"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="uuid" v="{f049a1aa-7af3-4d05-9ab6-dd06f0ac1735};{{6a141b6c-44bb-41e8-b52e-6ec8a5602ed5}}"/>
         <tag k="width:minimum_traveled_way" v="8"/>
+        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
+        <tag k="attribution" v="osm"/>
+        <tag k="median" v="yes"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.136Z"/>
+        <tag k="location" v="surface"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="source" v="GRU/COSMHA;osm;mgcp"/>
+        <tag k="highway" v="secondary"/>
     </way>
     <way visible="true" id="19" timestamp="2017-06-07T15:16:56Z" version="1">
         <nd ref="114"/>
@@ -758,19 +788,19 @@
         <nd ref="101"/>
         <nd ref="100"/>
         <nd ref="113"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="smoothness" v="bad"/>
+        <tag k="source" v="CNIGS/GIS /DTM;osm"/>
         <tag k="highway" v="unclassified"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="name" v="Rue du Magasin de l'État"/>
-        <tag k="operational_status" v="open"/>
-        <tag k="operational_status_quality" v="confirmed"/>
-        <tag k="practicability" v="heavy_truck_less_than_20mt"/>
-        <tag k="smoothness" v="bad"/>
-        <tag k="source" v="CNIGS/GIS /DTM;osm"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="surface" v="paved"/>
         <tag k="uuid" v="{542f83fc-7015-49f8-b3c0-3266c7dcb0e8}"/>
+        <tag k="practicability" v="heavy_truck_less_than_20mt"/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
+        <tag k="operational_status" v="open"/>
+        <tag k="surface" v="paved"/>
+        <tag k="operational_status_quality" v="confirmed"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="20" timestamp="2017-06-07T15:16:56Z" version="1">
         <nd ref="115"/>
@@ -779,14 +809,14 @@
         <nd ref="93"/>
         <nd ref="90"/>
         <nd ref="89"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="source" v="osm"/>
         <tag k="highway" v="residential"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="name" v="Avenue Pie XII"/>
-        <tag k="source" v="osm"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
         <tag k="uuid" v="{dc81339f-b308-4492-80e5-c71e2c93ea82}"/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="21" timestamp="2017-06-07T15:16:56Z" version="1">
         <nd ref="117"/>
@@ -796,38 +826,38 @@
         <nd ref="86"/>
         <nd ref="85"/>
         <nd ref="116"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="smoothness" v="intermediate"/>
+        <tag k="source" v="CNIGS/OIM/ FOCS;osm"/>
+        <tag k="oneway" v="yes"/>
         <tag k="highway" v="unclassified"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="name" v="Rue des Miracles"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="operational_status" v="open"/>
-        <tag k="operational_status_quality" v="confirmed"/>
-        <tag k="practicability" v="heavy_truck_less_than_20mt"/>
-        <tag k="smoothness" v="intermediate"/>
-        <tag k="source" v="CNIGS/OIM/ FOCS;osm"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="surface" v="paved"/>
         <tag k="uuid" v="{048f14df-927e-46eb-bf4c-5b4a8e9878a0}"/>
+        <tag k="practicability" v="heavy_truck_less_than_20mt"/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
+        <tag k="operational_status" v="open"/>
+        <tag k="surface" v="paved"/>
+        <tag k="operational_status_quality" v="confirmed"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="23" timestamp="2017-06-07T15:16:56Z" version="1">
         <nd ref="119"/>
         <nd ref="85"/>
         <nd ref="80"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="smoothness" v="bad"/>
+        <tag k="source" v="hot_iom_cosmha;osm"/>
         <tag k="highway" v="residential"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="name" v="Rue du Peuple"/>
-        <tag k="operational_status" v="open"/>
-        <tag k="operational_status_quality" v="confirmed"/>
-        <tag k="practicability" v="heavy_truck_less_than_20mt"/>
-        <tag k="smoothness" v="bad"/>
-        <tag k="source" v="hot_iom_cosmha;osm"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="surface" v="paved"/>
         <tag k="uuid" v="{f96525ff-be49-4bbf-a3a1-408d7b62e749}"/>
+        <tag k="practicability" v="heavy_truck_less_than_20mt"/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
+        <tag k="operational_status" v="open"/>
+        <tag k="surface" v="paved"/>
+        <tag k="operational_status_quality" v="confirmed"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="24" timestamp="2017-06-07T15:16:56Z" version="1">
         <nd ref="121"/>
@@ -835,19 +865,19 @@
         <nd ref="78"/>
         <nd ref="77"/>
         <nd ref="120"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="smoothness" v="intermediate"/>
+        <tag k="source" v="CNIGS/GIS /DTM;osm"/>
         <tag k="highway" v="unclassified"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="name" v="Rue du Quai"/>
-        <tag k="operational_status" v="open"/>
-        <tag k="operational_status_quality" v="confirmed"/>
-        <tag k="practicability" v="heavy_truck_less_than_20mt"/>
-        <tag k="smoothness" v="intermediate"/>
-        <tag k="source" v="CNIGS/GIS /DTM;osm"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="surface" v="paved"/>
         <tag k="uuid" v="{b1f70967-a5f1-4674-8456-98670a0b0151}"/>
+        <tag k="practicability" v="heavy_truck_less_than_20mt"/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
+        <tag k="operational_status" v="open"/>
+        <tag k="surface" v="paved"/>
+        <tag k="operational_status_quality" v="confirmed"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="25" timestamp="2017-06-07T15:16:56Z" version="1">
         <nd ref="123"/>
@@ -856,20 +886,20 @@
         <nd ref="75"/>
         <nd ref="82"/>
         <nd ref="122"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="residential"/>
+        <tag k="source" v="hot_iom_cosmha;osm"/>
         <tag k="history" v="Retrieved from v20"/>
+        <tag k="highway" v="residential"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="name" v="Rue du Centre"/>
-        <tag k="operational_status" v="open"/>
-        <tag k="operational_status_quality" v="confirmed"/>
-        <tag k="practicability" v="truck_+_trailer_greater_than_20mt"/>
-        <tag k="source" v="hot_iom_cosmha;osm"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="surface" v="paved"/>
-        <tag k="surface_condition" v="Smooth_greater_than_40kph"/>
         <tag k="uuid" v="{bda03ea6-9749-4b9d-8656-7a75688fd3e0}"/>
+        <tag k="practicability" v="truck_+_trailer_greater_than_20mt"/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
+        <tag k="operational_status" v="open"/>
+        <tag k="surface" v="paved"/>
+        <tag k="operational_status_quality" v="confirmed"/>
+        <tag k="surface_condition" v="Smooth_greater_than_40kph"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="27" timestamp="2017-06-07T15:16:56Z" version="1">
         <nd ref="98"/>
@@ -881,13 +911,13 @@
         <nd ref="49"/>
         <nd ref="48"/>
         <nd ref="125"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="source" v="osm"/>
         <tag k="highway" v="footway"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="source" v="osm"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
         <tag k="uuid" v="{67d71af3-7f1a-447a-b664-c4a747b7277b}"/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="28" timestamp="2017-06-07T15:16:56Z" version="1">
         <nd ref="44"/>
@@ -896,13 +926,13 @@
         <nd ref="42"/>
         <nd ref="41"/>
         <nd ref="126"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="source" v="osm"/>
         <tag k="highway" v="footway"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="source" v="osm"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
         <tag k="uuid" v="{6a07b25b-60a7-4944-8e1d-361936b2eb89}"/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="29" timestamp="2017-06-07T15:16:56Z" version="1">
         <nd ref="128"/>
@@ -910,19 +940,19 @@
         <nd ref="34"/>
         <nd ref="33"/>
         <nd ref="127"/>
-        <tag k="access" v="no"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="bicycle" v="no"/>
-        <tag k="error:circular" v="15"/>
         <tag k="foot" v="yes"/>
-        <tag k="highway" v="cycleway"/>
-        <tag k="horse" v="permissive"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="motor_vehicle" v="permissive"/>
-        <tag k="segregated" v="no"/>
         <tag k="source" v="osm"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
+        <tag k="highway" v="cycleway"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="bicycle" v="no"/>
+        <tag k="horse" v="permissive"/>
         <tag k="uuid" v="{a81c2324-a892-4bb5-be79-558818935ceb}"/>
+        <tag k="segregated" v="no"/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="access" v="no"/>
+        <tag k="motor_vehicle" v="permissive"/>
+        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="30" timestamp="2017-06-07T15:16:56Z" version="1">
         <nd ref="129"/>
@@ -932,13 +962,13 @@
         <nd ref="60"/>
         <nd ref="42"/>
         <nd ref="92"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="source" v="osm"/>
         <tag k="highway" v="footway"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="source" v="osm"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
         <tag k="uuid" v="{0c8279b7-71f3-4f70-be9d-1b40a954cd69}"/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="32" timestamp="2017-06-07T15:16:56Z" version="1">
         <nd ref="31"/>
@@ -949,40 +979,40 @@
         <nd ref="99"/>
         <nd ref="27"/>
         <nd ref="131"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="condition" v="functional"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="lanes" v="4"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="loc_name" v="Bicentenaire"/>
-        <tag k="location" v="surface"/>
-        <tag k="median" v="yes"/>
-        <tag k="name" v="Boulevard Harry Truman"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="seasonal" v="no"/>
-        <tag k="source" v="GRU/COSMHA;osm;mgcp"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
         <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.136Z"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="surface" v="paved"/>
+        <tag k="seasonal" v="no"/>
+        <tag k="condition" v="functional"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="Boulevard Harry Truman"/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
+        <tag k="lanes" v="4"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="uuid" v="{d0f92e87-96d4-482e-8081-3c0a61e78517};{{6a141b6c-44bb-41e8-b52e-6ec8a5602ed5}}"/>
         <tag k="width:minimum_traveled_way" v="8"/>
+        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
+        <tag k="attribution" v="osm"/>
+        <tag k="median" v="yes"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.136Z"/>
+        <tag k="location" v="surface"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="source" v="GRU/COSMHA;osm;mgcp"/>
+        <tag k="highway" v="secondary"/>
     </way>
     <way visible="true" id="37" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117">
         <nd ref="136"/>
         <nd ref="88"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="source" v="osm"/>
         <tag k="highway" v="residential"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="name" v="Rue Courbe"/>
-        <tag k="source" v="osm"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
         <tag k="uuid" v="{3ba8056c-2b4e-4105-a2ad-5809a6047816}"/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="39" timestamp="2017-06-07T15:16:56Z" version="1">
         <nd ref="138"/>
@@ -990,19 +1020,19 @@
         <nd ref="3"/>
         <nd ref="2"/>
         <nd ref="1"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="smoothness" v="intermediate"/>
+        <tag k="source" v="CNIGS/GIS /DTM;osm"/>
+        <tag k="oneway" v="yes"/>
         <tag k="highway" v="secondary"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="name" v="Boulevard Harry Truman"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="operational_status" v="open"/>
-        <tag k="operational_status_quality" v="confirmed"/>
-        <tag k="practicability" v="truck_+_trailer_greater_than_20mt"/>
-        <tag k="smoothness" v="intermediate"/>
-        <tag k="source" v="CNIGS/GIS /DTM;osm"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="surface" v="paved"/>
         <tag k="uuid" v="{7b8fd54a-7dd5-4d7d-8f2a-2d864b49ba7c}"/>
+        <tag k="practicability" v="truck_+_trailer_greater_than_20mt"/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
+        <tag k="operational_status" v="open"/>
+        <tag k="surface" v="paved"/>
+        <tag k="operational_status_quality" v="confirmed"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="error:circular" v="15"/>
     </way>
 </osm>
