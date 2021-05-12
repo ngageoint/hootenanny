@@ -47,10 +47,11 @@ HOOT_JS_REGISTER(WayJs)
 
 Persistent<Function> WayJs::_constructor;
 
-void WayJs::Init(Handle<Object> target)
+void WayJs::Init(Local<Object> target)
 {
   Isolate* current = target->GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
   // Prepare constructor template
   Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
   tpl->SetClassName(String::NewFromUtf8(current, Way::className().toStdString().data()));
@@ -60,28 +61,30 @@ void WayJs::Init(Handle<Object> target)
   tpl->PrototypeTemplate()->Set(
     String::NewFromUtf8(current, "getNodeCount"), FunctionTemplate::New(current, getNodeCount));
 
-  _constructor.Reset(current, tpl->GetFunction());
+  _constructor.Reset(current, tpl->GetFunction(context).ToLocalChecked());
   target->Set(String::NewFromUtf8(current, "Way"), ToLocal(&_constructor));
 }
 
-Handle<Object> WayJs::New(ConstWayPtr way)
+Local<Object> WayJs::New(ConstWayPtr way)
 {
   Isolate* current = v8::Isolate::GetCurrent();
   EscapableHandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
 
-  Handle<Object> result = ToLocal(&_constructor)->NewInstance();
+  Local<Object> result = ToLocal(&_constructor)->NewInstance(context).ToLocalChecked();
   WayJs* from = ObjectWrap::Unwrap<WayJs>(result);
   from->_setWay(way);
 
   return scope.Escape(result);
 }
 
-Handle<Object> WayJs::New(WayPtr way)
+Local<Object> WayJs::New(WayPtr way)
 {
   Isolate* current = v8::Isolate::GetCurrent();
   EscapableHandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
 
-  Handle<Object> result = ToLocal(&_constructor)->NewInstance();
+  Local<Object> result = ToLocal(&_constructor)->NewInstance(context).ToLocalChecked();
   WayJs* from = ObjectWrap::Unwrap<WayJs>(result);
   from->_setWay(way);
 

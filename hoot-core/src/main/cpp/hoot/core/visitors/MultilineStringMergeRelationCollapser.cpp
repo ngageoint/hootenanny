@@ -206,7 +206,7 @@ void MultilineStringMergeRelationCollapser::visit(const ElementPtr& element)
         !parsedOwningRelationIds.contains(relationOwningMsRelation->getElementId()))
     {
       LOG_VART(relationOwningMsRelation->getElementId());
-      // Use relation merger here, as will make the member insert indexes be correct. Prevent
+      // Use relation merger here, as it will make the member insert indexes be correct. Prevent
       // the merger from deleting the merged ms relation, as we may need to merge it with
       // multiple parent relations within this loop. It will be deleted at the end.
       _relationMerger.merge(

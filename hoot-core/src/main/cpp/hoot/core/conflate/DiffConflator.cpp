@@ -63,6 +63,9 @@
 #include <hoot/core/ops/WayJoinerOp.h>
 #include <hoot/core/util/ConfigUtils.h>
 #include <hoot/core/io/OsmChangesetFileWriter.h>
+#include <hoot/core/ops/SuperfluousNodeRemover.h>
+#include <hoot/core/visitors/RemoveDuplicateWayNodesVisitor.h>
+#include <hoot/core/visitors/InvalidWayRemover.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -199,6 +202,10 @@ void DiffConflator::apply(OsmMapPtr& map)
       // Use the MergerCreator framework and only remove the sections of linear features that match.
       // All other feature types are removed completely.
       _removePartialSecondaryMatchElements();
+      // Originally tried doing this cleanup as part of conflate.post.ops, which required re-order
+      // some of the ops. Unfortunately, that breaks some ref conflate regression tests. So, opting
+      // to do it inside DiffConflator instead.
+      _cleanupAfterPartialMatchRemoval();
     }
     // This uses a naive approach and remove all elements involved in a match completely, despite
     // possible partial subline matches (if linear features are present). If we're removing partial
@@ -227,6 +234,17 @@ void DiffConflator::apply(OsmMapPtr& map)
       _removeMetadataTags();
     }
 
+//    if (removePartialLinearMatchesPartially)
+//    {
+//      // TODO
+//      RemoveDuplicateWayNodesVisitor dupeWayNodeRemover;
+//      _map->visitRw(dupeWayNodeRemover);
+//      InvalidWayRemover invalidWayRemover;
+//      _map->visitRw(invalidWayRemover);
+//      SuperfluousNodeRemover::removeNodes(_map);
+//      OsmMapWriterFactory::writeDebugMap(_map, "after-superfluous-node-removal");
+//    }
+
     _currentStep++;
   }
 
@@ -242,7 +260,7 @@ void DiffConflator::_discardUnconflatableElements()
   MemoryUsageChecker::getInstance().check();
   _stats.append(
     SingleStat("Remove Non-conflatable Elements Time (sec)", _timer.getElapsedAndRestart()));
-  OsmMapWriterFactory::writeDebugMap(_map, "after-removing non-conflatable");
+  OsmMapWriterFactory::writeDebugMap(_map, "after-removing-non-conflatable");
   _numUnconflatableElementsDiscarded = mapSizeBefore - _map->size();
   LOG_INFO(
     "Discarded " << StringUtils::formatLargeNumber(_numUnconflatableElementsDiscarded) <<
@@ -597,6 +615,26 @@ void DiffConflator::_removePartialSecondaryMatchElements()
   std::vector<MergerPtr> relationMergers;
   _createMergers(relationMergers);
   _mergeFeatures(relationMergers);
+}
+
+void DiffConflator::_cleanupAfterPartialMatchRemoval()
+{
+  std::shared_ptr<ConflateInfoCache> conflateInfoCache =
+    std::make_shared<ConflateInfoCache>(_map);
+
+  RemoveDuplicateWayNodesVisitor dupeWayNodeRemover;
+  dupeWayNodeRemover.setConflateInfoCache(conflateInfoCache);
+  LOG_INFO(dupeWayNodeRemover.getInitStatusMessage());
+  _map->visitWaysRw(dupeWayNodeRemover);
+  LOG_DEBUG(dupeWayNodeRemover.getCompletedStatusMessage());
+
+  InvalidWayRemover invalidWayRemover;
+  invalidWayRemover.setConflateInfoCache(conflateInfoCache);
+  LOG_INFO(invalidWayRemover.getInitStatusMessage());
+  _map->visitWaysRw(invalidWayRemover);
+  LOG_DEBUG(invalidWayRemover.getCompletedStatusMessage());
+
+  SuperfluousNodeRemover::removeNodes(_map);
 }
 
 void DiffConflator::_removeRefData()

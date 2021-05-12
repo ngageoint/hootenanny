@@ -129,12 +129,14 @@
         <nd ref="-479741"/>
         <tag k="error:circular" v="15"/>
         <tag k="waterway" v="stream"/>
+        <tag k="z_order" v="0"/>
     </way>
     <way visible="true" id="-13398" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-391141"/>
         <nd ref="-480066"/>
         <tag k="error:circular" v="15"/>
         <tag k="waterway" v="stream"/>
+        <tag k="z_order" v="0"/>
     </way>
     <way visible="true" id="-13391" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-185983"/>
@@ -142,12 +144,14 @@
         <nd ref="-185986"/>
         <tag k="error:circular" v="15"/>
         <tag k="waterway" v="stream"/>
+        <tag k="z_order" v="0"/>
     </way>
     <way visible="true" id="-13390" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-480058"/>
         <nd ref="-185982"/>
         <tag k="error:circular" v="15"/>
         <tag k="waterway" v="stream"/>
+        <tag k="z_order" v="0"/>
     </way>
     <way visible="true" id="-13389" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-185968"/>
@@ -155,6 +159,7 @@
         <nd ref="-185969"/>
         <tag k="error:circular" v="15"/>
         <tag k="waterway" v="stream"/>
+        <tag k="z_order" v="0"/>
     </way>
     <way visible="true" id="-13388" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-185966"/>
@@ -162,6 +167,7 @@
         <nd ref="-185967"/>
         <tag k="error:circular" v="15"/>
         <tag k="waterway" v="stream"/>
+        <tag k="z_order" v="0"/>
     </way>
     <way visible="true" id="-13373" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-77198"/>
@@ -171,7 +177,9 @@
         <nd ref="-479713"/>
         <nd ref="-479743"/>
         <tag k="error:circular" v="15"/>
+        <tag k="name" v="Ravine Christ"/>
         <tag k="waterway" v="stream"/>
+        <tag k="z_order" v="0"/>
     </way>
     <way visible="true" id="-13372" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-77203"/>
@@ -179,13 +187,17 @@
         <nd ref="-479618"/>
         <nd ref="-77199"/>
         <tag k="error:circular" v="15"/>
+        <tag k="name" v="Ravine Christ"/>
         <tag k="waterway" v="stream"/>
+        <tag k="z_order" v="0"/>
     </way>
     <way visible="true" id="-13371" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-480052"/>
         <nd ref="-77204"/>
         <tag k="error:circular" v="15"/>
+        <tag k="name" v="Ravine Christ"/>
         <tag k="waterway" v="stream"/>
+        <tag k="z_order" v="0"/>
     </way>
     <way visible="true" id="-13357" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-302250"/>
@@ -214,7 +226,9 @@
         <nd ref="-479609"/>
         <nd ref="-77213"/>
         <tag k="error:circular" v="15"/>
+        <tag k="name" v="Ravine Christ"/>
         <tag k="waterway" v="stream"/>
+        <tag k="z_order" v="0"/>
     </way>
     <way visible="true" id="-13348" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-77237"/>
@@ -243,6 +257,7 @@
         <nd ref="-479697"/>
         <tag k="error:circular" v="15"/>
         <tag k="waterway" v="stream"/>
+        <tag k="z_order" v="0"/>
     </way>
     <way visible="true" id="-13328" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-185819"/>
@@ -251,6 +266,7 @@
         <nd ref="-185817"/>
         <tag k="error:circular" v="15"/>
         <tag k="waterway" v="stream"/>
+        <tag k="z_order" v="0"/>
     </way>
     <way visible="true" id="-13327" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-185830"/>
@@ -260,6 +276,7 @@
         <nd ref="-185826"/>
         <tag k="error:circular" v="15"/>
         <tag k="waterway" v="stream"/>
+        <tag k="z_order" v="0"/>
     </way>
     <way visible="true" id="-13326" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-185839"/>
@@ -267,6 +284,7 @@
         <nd ref="-185837"/>
         <tag k="error:circular" v="15"/>
         <tag k="waterway" v="stream"/>
+        <tag k="z_order" v="0"/>
     </way>
     <way visible="true" id="-13311" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-185915"/>
@@ -278,6 +296,7 @@
         <nd ref="-185910"/>
         <tag k="error:circular" v="15"/>
         <tag k="waterway" v="stream"/>
+        <tag k="z_order" v="0"/>
     </way>
     <way visible="true" id="-13310" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-185919"/>
@@ -286,12 +305,14 @@
         <nd ref="-480028"/>
         <tag k="error:circular" v="15"/>
         <tag k="waterway" v="stream"/>
+        <tag k="z_order" v="0"/>
     </way>
     <way visible="true" id="-13309" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-185922"/>
         <nd ref="-185920"/>
         <tag k="error:circular" v="15"/>
         <tag k="waterway" v="stream"/>
+        <tag k="z_order" v="0"/>
     </way>
     <way visible="true" id="-13308" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-185928"/>
@@ -299,6 +320,7 @@
         <nd ref="-185926"/>
         <tag k="error:circular" v="15"/>
         <tag k="waterway" v="stream"/>
+        <tag k="z_order" v="0"/>
     </way>
     <way visible="true" id="-13282" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-480021"/>
@@ -306,7 +328,9 @@
         <nd ref="-479668"/>
         <nd ref="-480020"/>
         <tag k="error:circular" v="15"/>
+        <tag k="name" v="Ravine Pichomblaise"/>
         <tag k="waterway" v="stream"/>
+        <tag k="z_order" v="0"/>
     </way>
     <way visible="true" id="-13281" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-170466"/>
@@ -314,19 +338,25 @@
         <nd ref="-479582"/>
         <nd ref="-480022"/>
         <tag k="error:circular" v="15"/>
+        <tag k="name" v="Ravine Pichomblaise"/>
         <tag k="waterway" v="stream"/>
+        <tag k="z_order" v="0"/>
     </way>
     <way visible="true" id="-13272" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-480018"/>
         <nd ref="-185987"/>
         <tag k="error:circular" v="15"/>
+        <tag k="name" v="Ravine Pichomblaise"/>
         <tag k="waterway" v="stream"/>
+        <tag k="z_order" v="0"/>
     </way>
     <way visible="true" id="-13271" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-480017"/>
         <nd ref="-302243"/>
         <tag k="error:circular" v="15"/>
+        <tag k="name" v="Ravine Pichomblaise"/>
         <tag k="waterway" v="stream"/>
+        <tag k="z_order" v="0"/>
     </way>
     <way visible="true" id="-13261" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-479997"/>
@@ -334,6 +364,7 @@
         <nd ref="-53422"/>
         <tag k="error:circular" v="15"/>
         <tag k="waterway" v="stream"/>
+        <tag k="z_order" v="0"/>
     </way>
     <way visible="true" id="-13260" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-53426"/>
@@ -341,6 +372,7 @@
         <nd ref="-53424"/>
         <tag k="error:circular" v="15"/>
         <tag k="waterway" v="stream"/>
+        <tag k="z_order" v="0"/>
     </way>
     <way visible="true" id="-13259" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-53429"/>
@@ -348,12 +380,14 @@
         <nd ref="-479998"/>
         <tag k="error:circular" v="15"/>
         <tag k="waterway" v="stream"/>
+        <tag k="z_order" v="0"/>
     </way>
     <way visible="true" id="-13258" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-53432"/>
         <nd ref="-53430"/>
         <tag k="error:circular" v="15"/>
         <tag k="waterway" v="stream"/>
+        <tag k="z_order" v="0"/>
     </way>
     <way visible="true" id="-13257" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-53434"/>
@@ -361,6 +395,7 @@
         <nd ref="-53433"/>
         <tag k="error:circular" v="15"/>
         <tag k="waterway" v="stream"/>
+        <tag k="z_order" v="0"/>
     </way>
     <way visible="true" id="-13256" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-480000"/>
@@ -368,6 +403,7 @@
         <nd ref="-53435"/>
         <tag k="error:circular" v="15"/>
         <tag k="waterway" v="stream"/>
+        <tag k="z_order" v="0"/>
     </way>
     <way visible="true" id="-13255" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-53439"/>
@@ -375,6 +411,7 @@
         <nd ref="-53437"/>
         <tag k="error:circular" v="15"/>
         <tag k="waterway" v="stream"/>
+        <tag k="z_order" v="0"/>
     </way>
     <way visible="true" id="-13254" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-53444"/>
@@ -382,5 +419,6 @@
         <nd ref="-479999"/>
         <tag k="error:circular" v="15"/>
         <tag k="waterway" v="stream"/>
+        <tag k="z_order" v="0"/>
     </way>
 </osm>

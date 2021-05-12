@@ -86,7 +86,7 @@ protected:
   virtual void _applyMergeSets(
     const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced) const;
 
-  v8::Handle<v8::Value> _callMergePair(const OsmMapPtr& map) const;
+  v8::Local<v8::Value> _callMergePair(const OsmMapPtr& map) const;
   void _callMergeSets(const OsmMapPtr& map,
                       std::vector<std::pair<ElementId, ElementId>>& replaced) const;
 };

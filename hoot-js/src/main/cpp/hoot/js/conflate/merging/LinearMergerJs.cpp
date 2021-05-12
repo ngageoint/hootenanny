@@ -56,10 +56,12 @@ HOOT_JS_REGISTER(LinearMergerJs)
 
 Persistent<Function> LinearMergerJs::_constructor;
 
-void LinearMergerJs::Init(Handle<Object> target)
+void LinearMergerJs::Init(Local<Object> target)
 {
   Isolate* current = target->GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
+
   // Prepare constructor template
   Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
   const QString name = "LinearMerger";
@@ -71,7 +73,7 @@ void LinearMergerJs::Init(Handle<Object> target)
   tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "apply"),
       FunctionTemplate::New(current, apply));
 
-  _constructor.Reset(current, tpl->GetFunction());
+  _constructor.Reset(current, tpl->GetFunction(context).ToLocalChecked());
   target->Set(String::NewFromUtf8(current, name.toStdString().data()), ToLocal(&_constructor));
 }
 
@@ -133,8 +135,8 @@ void LinearMergerJs::apply(const FunctionCallbackInfo<Value>& args)
   merger->apply(map, replaced);
 
   // modify the parameter that was passed in
-  Handle<Array> newArr = Handle<Array>::Cast(toV8(replaced));
-  Handle<Array> arr = Handle<Array>::Cast(args[3]);
+  Local<Array> newArr = Local<Array>::Cast(toV8(replaced));
+  Local<Array> arr = Local<Array>::Cast(args[3]);
   arr->Set(String::NewFromUtf8(current, "length"), Integer::New(current, newArr->Length()));
   for (uint32_t i = 0; i < newArr->Length(); i++)
   {

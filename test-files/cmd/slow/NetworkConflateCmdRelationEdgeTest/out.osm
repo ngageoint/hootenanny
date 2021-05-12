@@ -1201,8 +1201,34 @@
     <node visible="true" id="6517545920" timestamp="2019-06-03T05:49:37Z" version="1" changeset="70872680" user="LakeComo" uid="9446673" lat="15.2798059999999953" lon="-16.5237392000000014"/>
     <node visible="true" id="6517545921" timestamp="2019-06-03T05:49:37Z" version="1" changeset="70872680" user="LakeComo" uid="9446673" lat="15.2797399999999968" lon="-16.5237406000000000"/>
     <node visible="true" id="6517545922" timestamp="2019-06-03T05:49:37Z" version="1" changeset="70872680" user="LakeComo" uid="9446673" lat="15.2812692999999946" lon="-16.5258931999999987"/>
-    <way visible="true" id="-3071" timestamp="2016-02-03T10:44:27Z" version="1">
+    <way visible="true" id="-3078" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="3668939756"/>
+        <nd ref="5189643477"/>
+        <nd ref="5189643479"/>
+        <nd ref="5189643480"/>
         <nd ref="3668857771"/>
+        <tag k="electrified" v="no"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="1000"/>
+        <tag k="railway" v="disused"/>
+        <tag k="source:datetime" v="2017-11-05T19:13:24Z"/>
+        <tag k="usage" v="main"/>
+    </way>
+    <way visible="true" id="-3077" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="1977199753"/>
+        <nd ref="5192494444"/>
+        <nd ref="5192493418"/>
+        <nd ref="5189643518"/>
+        <nd ref="5194372193"/>
+        <nd ref="3668939754"/>
+        <tag k="electrified" v="no"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="1000"/>
+        <tag k="railway" v="disused"/>
+        <tag k="source:datetime" v="2017-11-05T19:13:24Z"/>
+        <tag k="usage" v="main"/>
+    </way>
+    <way visible="true" id="-3071" timestamp="2016-02-03T10:44:27Z" version="1">
         <nd ref="1977199753"/>
         <nd ref="-1421"/>
         <tag k="electrified" v="no"/>
@@ -1302,26 +1328,6 @@
         <tag k="source" v="Microsoft Bing orbital imagery"/>
         <tag k="source:datetime" v="2015-09-11T12:28:29.000Z"/>
         <tag k="surface" v="asphalt"/>
-    </way>
-    <way visible="true" id="-266" timestamp="2019-06-03T05:49:37Z" version="5">
-        <nd ref="281183768"/>
-        <nd ref="4748830827"/>
-        <nd ref="5189643539"/>
-        <nd ref="4748830826"/>
-        <nd ref="4748830825"/>
-        <nd ref="3668874738"/>
-        <nd ref="4748830824"/>
-        <nd ref="4748830823"/>
-        <nd ref="4748830822"/>
-        <nd ref="5192494447"/>
-        <nd ref="4748830821"/>
-        <nd ref="4748830820"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="residential"/>
-        <tag k="noname" v="yes"/>
-        <tag k="oneway" v="no"/>
-        <tag k="source:datetime" v="2019-06-03T05:49:37Z;2015-07-27T15:27:55.000Z"/>
-        <tag k="surface" v="sand"/>
     </way>
     <way visible="true" id="-49" timestamp="2016-02-03T10:44:27Z" version="1">
         <nd ref="-120"/>
@@ -1981,22 +1987,13 @@
         <tag k="surface" v="unpaved"/>
     </way>
     <way visible="true" id="362621588" timestamp="2017-11-05T19:13:24Z" version="5">
-        <nd ref="3668939756"/>
-        <nd ref="5189643477"/>
-        <nd ref="5189643479"/>
-        <nd ref="5189643480"/>
         <nd ref="3668857771"/>
         <nd ref="1977199753"/>
-        <nd ref="5192494444"/>
-        <nd ref="5192493418"/>
-        <nd ref="5189643518"/>
-        <nd ref="5194372193"/>
-        <nd ref="3668939754"/>
         <tag k="electrified" v="no"/>
         <tag k="error:circular" v="15"/>
         <tag k="gauge" v="1000"/>
         <tag k="railway" v="disused"/>
-        <tag k="source:datetime" v="2017-11-05T19:13:24Z"/>
+        <tag k="source:datetime" v="2017-11-05T19:13:24Z;2015-07-27T16:17:42.000Z"/>
         <tag k="usage" v="main"/>
     </way>
     <way visible="true" id="362621591" timestamp="2015-07-27T16:17:43Z" version="1" changeset="32910570" user="ulilu" uid="16881">
@@ -2103,6 +2100,26 @@
         <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
         <tag k="source:datetime" v="2016-03-14T16:25:27Z"/>
+    </way>
+    <way visible="true" id="491378940" timestamp="2019-06-03T05:49:37Z" version="5">
+        <nd ref="281183768"/>
+        <nd ref="4748830827"/>
+        <nd ref="5189643539"/>
+        <nd ref="4748830826"/>
+        <nd ref="4748830825"/>
+        <nd ref="3668874738"/>
+        <nd ref="4748830824"/>
+        <nd ref="4748830823"/>
+        <nd ref="4748830822"/>
+        <nd ref="5192494447"/>
+        <nd ref="4748830821"/>
+        <nd ref="4748830820"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="noname" v="yes"/>
+        <tag k="oneway" v="no"/>
+        <tag k="source:datetime" v="2019-06-03T05:49:37Z;2015-07-27T15:27:55.000Z"/>
+        <tag k="surface" v="sand"/>
     </way>
     <way visible="true" id="535221795" timestamp="2018-11-27T20:53:42Z" version="2" changeset="64951158" user="FvGordon" uid="161619">
         <nd ref="5188444997"/>
