@@ -53,7 +53,7 @@ public:
    * @param ref if true, input 1 is treated as the reference input and held constant
    */
   void derive(const QString& input1, const QString& input2, const QString& transform2To1,
-              const QString& transform1To2 = "", const bool ref = false);
+              const QString& transform1To2 = "", const bool ref = false) const;
 };
 
 }

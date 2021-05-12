@@ -140,7 +140,7 @@ OsmMapPtr ChangesetTaskGridReplacer::replace(
   return OsmMapPtr();
 }
 
-void ChangesetTaskGridReplacer::_initConfig()
+void ChangesetTaskGridReplacer::_initConfig() const
 {
   conf().set(ConfigOptions::getOsmapidbBulkInserterReserveRecordIdsBeforeWritingDataKey(), true);
   conf().set(ConfigOptions::getApidbBulkInserterValidateDataKey(), true);

@@ -121,7 +121,7 @@ private:
    */
   void _joinUnsplitWaysAtNode();
 
-  bool _handleOneWayStreetReversal(WayPtr wayWithTagsToKeep, ConstWayPtr wayWithTagsToLose);
+  bool _handleOneWayStreetReversal(WayPtr wayWithTagsToKeep, ConstWayPtr wayWithTagsToLose) const;
 
   double _getTotalLengthFromTags(const Tags& tags1, const Tags& tags2) const;
 };

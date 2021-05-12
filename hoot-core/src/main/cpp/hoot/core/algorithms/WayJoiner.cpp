@@ -257,7 +257,7 @@ bool WayJoiner::_areJoinable(const WayPtr& w1, const WayPtr& w2) const
     //  What isn't joinable is one is UNKNOWN1 and the other is UNKNOWN2 or vice-a-versa
 }
 
-void WayJoiner::_writeParentIdsToChildIds()
+void WayJoiner::_writeParentIdsToChildIds() const
 {
   WayMap ways = _map->getWays();
   QSet<long> pidsUsed;
@@ -284,7 +284,7 @@ void WayJoiner::_writeParentIdsToChildIds()
   }
 }
 
-void WayJoiner::_resetParents()
+void WayJoiner::_resetParents() const
 {
   WayMap ways = _map->getWays();
   //  Find all ways that have a split parent id and reset them

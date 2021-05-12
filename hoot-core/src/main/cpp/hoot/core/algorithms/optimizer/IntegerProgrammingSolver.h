@@ -141,7 +141,7 @@ private:
   mutable glp_prob* _lp;
   double _timeLimit;
 
-  const char* toUtf8(const QString& s) { return s.toUtf8().data(); }
+  const char* toUtf8(const QString& s) const { return s.toUtf8().data(); }
 };
 
 }

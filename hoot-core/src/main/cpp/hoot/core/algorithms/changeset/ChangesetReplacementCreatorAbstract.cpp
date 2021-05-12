@@ -165,7 +165,7 @@ float ChangesetReplacementCreatorAbstract::_getJobPercentComplete() const
   return (float)(_currentTask - 1) / (float)_numTotalTasks;
 }
 
-void ChangesetReplacementCreatorAbstract::_validateInputs()
+void ChangesetReplacementCreatorAbstract::_validateInputs() const
 {
   if (!_replacementBounds)
   {
@@ -221,7 +221,7 @@ OsmMapPtr ChangesetReplacementCreatorAbstract::_loadInputMap(
   const QString& mapName, const QString& inputUrl, const bool useFileIds, const Status& status,
   const bool keepEntireFeaturesCrossingBounds, const bool keepOnlyFeaturesInsideBounds,
   const bool keepImmediatelyConnectedWaysOutsideBounds, const bool warnOnZeroVersions,
-  OsmMapPtr& cachedMap)
+  OsmMapPtr& cachedMap) const
 {
   conf().set(
     ConfigOptions::getBoundsKeepEntireFeaturesCrossingBoundsKey(),
@@ -307,7 +307,7 @@ OsmMapPtr ChangesetReplacementCreatorAbstract::_loadInputMap(
   return map;
 }
 
-void ChangesetReplacementCreatorAbstract::_removeMetadataTags(const OsmMapPtr& map)
+void ChangesetReplacementCreatorAbstract::_removeMetadataTags(const OsmMapPtr& map) const
 {
   QStringList changesetReplacementMetadataTags;
   changesetReplacementMetadataTags.append(MetadataTags::HootChangeExcludeDelete());
@@ -319,7 +319,7 @@ void ChangesetReplacementCreatorAbstract::_removeMetadataTags(const OsmMapPtr& m
   LOG_DEBUG(tagRemover.getCompletedStatusMessage());
 }
 
-void ChangesetReplacementCreatorAbstract::_markElementsWithMissingChildren(OsmMapPtr& map)
+void ChangesetReplacementCreatorAbstract::_markElementsWithMissingChildren(OsmMapPtr& map) const
 {
   ReportMissingElementsVisitor elementMarker;
   // Originally, this was going to add reviews for this rather than tagging elements, but there was
@@ -341,7 +341,7 @@ void ChangesetReplacementCreatorAbstract::_markElementsWithMissingChildren(OsmMa
 void ChangesetReplacementCreatorAbstract::_filterFeatures(
   OsmMapPtr& map, const ElementCriterionPtr& featureFilter,
   const GeometryTypeCriterion::GeometryType& /*geometryType*/, const Settings& config,
-  const QString& debugFileName)
+  const QString& debugFileName) const
 {
   LOG_STATUS(
     "Filtering " << StringUtils::formatLargeNumber(map->size()) << " features for: " <<
@@ -365,7 +365,7 @@ void ChangesetReplacementCreatorAbstract::_filterFeatures(
 }
 
 OsmMapPtr ChangesetReplacementCreatorAbstract::_getCookieCutMap(
-  OsmMapPtr doughMap, OsmMapPtr cutterMap, const GeometryTypeCriterion::GeometryType& geometryType)
+  OsmMapPtr doughMap, OsmMapPtr cutterMap, const GeometryTypeCriterion::GeometryType& geometryType) const
 {
   // This logic has become extremely complicated over time to handle all the different cut
   // and replace use cases. There may be way to simplify some of this logic related to
@@ -650,7 +650,7 @@ OsmMapPtr ChangesetReplacementCreatorAbstract::_getCookieCutMap(
   return cookieCutMap;
 }
 
-void ChangesetReplacementCreatorAbstract::_clean(OsmMapPtr& map)
+void ChangesetReplacementCreatorAbstract::_clean(OsmMapPtr& map) const
 {
   LOG_STATUS("Cleaning map: " << map->getName() << "...");
 
@@ -677,7 +677,7 @@ QMap<ElementId, long> ChangesetReplacementCreatorAbstract::_getIdToVersionMappin
   return idToVersionMappings;
 }
 
-void ChangesetReplacementCreatorAbstract::_addChangesetDeleteExclusionTags(OsmMapPtr& map)
+void ChangesetReplacementCreatorAbstract::_addChangesetDeleteExclusionTags(OsmMapPtr& map) const
 {
   LOG_INFO(
     "Setting connected way features outside of bounds to be excluded from deletion for: " <<
@@ -711,7 +711,7 @@ void ChangesetReplacementCreatorAbstract::_addChangesetDeleteExclusionTags(OsmMa
     map, _changesetId + "-" + map->getName() + "-after-delete-exclusion-tagging-1");
 }
 
-void ChangesetReplacementCreatorAbstract::_excludeFeaturesFromChangesetDeletion(OsmMapPtr& map)
+void ChangesetReplacementCreatorAbstract::_excludeFeaturesFromChangesetDeletion(OsmMapPtr& map) const
 {
   if (map->size() == 0)
   {
@@ -741,7 +741,7 @@ void ChangesetReplacementCreatorAbstract::_excludeFeaturesFromChangesetDeletion(
     map, _changesetId + "-" + map->getName() + "-after-delete-exclusion-tagging-2");
 }
 
-void ChangesetReplacementCreatorAbstract::_cleanup(OsmMapPtr& map)
+void ChangesetReplacementCreatorAbstract::_cleanup(OsmMapPtr& map) const
 {
   LOG_INFO("Cleaning up changeset derivation input " << map->getName() << "...");
 
@@ -781,7 +781,7 @@ void ChangesetReplacementCreatorAbstract::_synchronizeIds(
 }
 
 void ChangesetReplacementCreatorAbstract::_synchronizeIds(
-  OsmMapPtr mapBeingReplaced, OsmMapPtr replacementMap)
+  OsmMapPtr mapBeingReplaced, OsmMapPtr replacementMap) const
 {
   // When replacing data, we always load the replacement data without its original IDs in case there
   // are overlapping IDs in the reference data. If you were only replacing unmodified data from one

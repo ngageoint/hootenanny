@@ -66,7 +66,7 @@ protected:
 
   double _threshold;
 
-  void _divideWay(const std::shared_ptr<Way>& way, int numPieces);
+  void _divideWay(const std::shared_ptr<Way>& way, int numPieces) const;
 };
 
 }

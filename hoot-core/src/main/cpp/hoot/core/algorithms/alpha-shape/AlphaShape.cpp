@@ -81,7 +81,7 @@ public:
     _children.insert(child);
   }
 
-  int getId() { return _id; }
+  int getId() const { return _id; }
 
 private:
 
@@ -256,7 +256,7 @@ OsmMapPtr AlphaShape::_toOsmMap()
   return result;
 }
 
-double AlphaShape::_collectValidFaces(const double alpha, std::vector<GeometryPtr>& faces, Envelope& e)
+double AlphaShape::_collectValidFaces(const double alpha, std::vector<GeometryPtr>& faces, Envelope& e) const
 {
   double preUnionArea = 0.0;
   for (FaceIterator fi = _pDelauneyTriangles->getFaceIterator();
@@ -429,7 +429,7 @@ GeometryPtr AlphaShape::toGeometry()
   return result;
 }
 
-QString AlphaShape::toString()
+QString AlphaShape::toString() const
 {
   QString result;
   Edge start = _pDelauneyTriangles->getStartingEdge();
