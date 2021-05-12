@@ -79,7 +79,7 @@ public:
    * @return true if the operation was successful; false otherwise
    * @optimize make this more efficient by using the _lengthNodes array.
    */
-  bool discretize(double spacing, std::vector<WayLocation>& result);
+  bool discretize(double spacing, std::vector<WayLocation>& result) const;
 
   /**
    * Interpolates the coordinate at the given distance d.

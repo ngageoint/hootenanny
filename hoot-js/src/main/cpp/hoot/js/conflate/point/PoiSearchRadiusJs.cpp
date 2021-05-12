@@ -43,14 +43,15 @@ namespace hoot
 
 HOOT_JS_REGISTER(PoiSearchRadiusJs)
 
-void PoiSearchRadiusJs::Init(Handle<Object> exports)
+void PoiSearchRadiusJs::Init(Local<Object> exports)
 {
   Isolate* current = exports->GetIsolate();
   HandleScope scope(current);
-  Handle<Object> thisObj = Object::New(current);
+  Local<Context> context = current->GetCurrentContext();
+  Local<Object> thisObj = Object::New(current);
   exports->Set(String::NewFromUtf8(current, "PoiSearchRadius"), thisObj);
   thisObj->Set(String::NewFromUtf8(current, "getSearchRadii"),
-               FunctionTemplate::New(current, getSearchRadii)->GetFunction());
+               FunctionTemplate::New(current, getSearchRadii)->GetFunction(context).ToLocalChecked());
 }
 
 bool PoiSearchRadiusJs::_searchRadiiOptionIsConfigFile(const QString data)

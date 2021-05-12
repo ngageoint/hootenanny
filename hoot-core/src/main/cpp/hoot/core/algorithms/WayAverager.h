@@ -81,24 +81,24 @@ public:
   /**
    * Returns the maximum distance that w1 moved.
    */
-  Meters getMaxMovement1() { return _maxMovement1; }
+  Meters getMaxMovement1() const { return _maxMovement1; }
 
   /**
    * Returns the maximum distance that w1 moved.
    */
-  Meters getMaxMovement2() { return _maxMovement2; }
+  Meters getMaxMovement2() const { return _maxMovement2; }
 
   /**
    * Returns the mean of the distance that the nodes in way 1 moved during the last average
    * operation.
    */
-  Meters getMeanMovement1() { return _meanMovement1; }
+  Meters getMeanMovement1() const { return _meanMovement1; }
 
   /**
    * Returns the mean of the distance that the nodes in way 2 moved during the last average
    * operation.
    */
-  Meters getMeanMovement2() { return _meanMovement2; }
+  Meters getMeanMovement2() const { return _meanMovement2; }
 
 private:
 

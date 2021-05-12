@@ -43,11 +43,11 @@ class ValueAggregatorJs : public HootBaseJs
 {
 public:
 
-  static void Init(v8::Handle<v8::Object> target);
+  static void Init(v8::Local<v8::Object> target);
 
   ValueAggregatorPtr getValueAggregator() { return _va; }
 
-  static v8::Handle<v8::Object> New(const ValueAggregatorPtr& va);
+  static v8::Local<v8::Object> New(const ValueAggregatorPtr& va);
 
   virtual ~ValueAggregatorJs() = default;
 
@@ -62,14 +62,14 @@ private:
   static v8::Persistent<v8::Function> _constructor;
 };
 
-inline void toCpp(v8::Handle<v8::Value> v, ValueAggregatorPtr& p)
+inline void toCpp(v8::Local<v8::Value> v, ValueAggregatorPtr& p)
 {
   if (!v->IsObject())
   {
     throw IllegalArgumentException("Expected an object, got: (" + toJson(v) + ")");
   }
 
-  v8::Handle<v8::Object> obj = v8::Handle<v8::Object>::Cast(v);
+  v8::Local<v8::Object> obj = v8::Local<v8::Object>::Cast(v);
   ValueAggregatorJs* vaj = nullptr;
   vaj = node::ObjectWrap::Unwrap<ValueAggregatorJs>(obj);
   if (vaj)
@@ -82,7 +82,7 @@ inline void toCpp(v8::Handle<v8::Value> v, ValueAggregatorPtr& p)
   }
 }
 
-inline v8::Handle<v8::Value> toV8(const ValueAggregatorPtr& va)
+inline v8::Local<v8::Value> toV8(const ValueAggregatorPtr& va)
 {
   return ValueAggregatorJs::New(va);
 }

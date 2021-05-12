@@ -191,9 +191,9 @@ private:
 
   std::shared_ptr<PertyMatchScorer> _matchScorer;
 
-  void _writeStatsForOutputFiles(const QString& inputMapPath, const QString& sep);
+  void _writeStatsForOutputFiles(const QString& inputMapPath, const QString& sep) const;
   void _writePlotFile(const QString& outputPath,
-                      const QList<std::shared_ptr<const PertyTestRunResult>>& testRunResults);
+                      const QList<std::shared_ptr<const PertyTestRunResult>>& testRunResults) const;
 
   //for testing purposes only
   friend class PertyTestRunnerTest;

@@ -73,7 +73,7 @@ double Histogram::diff(Histogram& other)
   return diff / 2.0;
 }
 
-size_t Histogram::getBin(Radians theta)
+size_t Histogram::getBin(Radians theta) const
 {
   while (theta < 0.0)
   {
@@ -82,7 +82,7 @@ size_t Histogram::getBin(Radians theta)
   return (theta / (2 * M_PI)) * _bins.size();
 }
 
-Radians Histogram::_getBinAngle(size_t i)
+Radians Histogram::_getBinAngle(size_t i) const
 {
   return 2 * M_PI / _bins.size() * i + M_PI / _bins.size();
 }

@@ -96,7 +96,7 @@ public:
 
   QString toString() const;
 
-  long size() { return _map.size(); }
+  long size() const { return _map.size(); }
 
 private:
 

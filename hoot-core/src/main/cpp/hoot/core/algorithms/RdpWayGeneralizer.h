@@ -143,7 +143,7 @@ private:
    */
   QList<long> _getUpdatedWayNodeIdsForThoseNotAllowedToBeRemoved(
     const QSet<long>& nodeIdsNotAllowedToBeRemoved, const QList<long>& nodeIdsBeforeGeneralization,
-    const QList<long>& generalizedNodeIds);
+    const QList<long>& generalizedNodeIds) const;
 };
 
 }

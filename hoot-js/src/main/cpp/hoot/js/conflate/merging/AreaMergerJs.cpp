@@ -56,14 +56,15 @@ void AreaMergerJs::mergeAreas(OsmMapPtr map, const ElementId& mergeTargetId, Iso
   std::shared_ptr<PluginContext> script(new PluginContext());
   v8::HandleScope handleScope(current);
   v8::Context::Scope context_scope(script->getContext(current));
+  v8::Local<v8::Context> context = current->GetCurrentContext();
   script->loadScript(ConfPath::search("Area.js", "rules"), "plugin");
-  v8::Handle<v8::Object> global = script->getContext(current)->Global();
-  if (global->Has(String::NewFromUtf8(current, "plugin")) == false)
+  v8::Local<v8::Object> global = script->getContext(current)->Global();
+  if (global->Has(context, String::NewFromUtf8(current, "plugin")).ToChecked() == false)
   {
     throw IllegalArgumentException("Expected the script to have exports.");
   }
-  Handle<Value> pluginValue = global->Get(String::NewFromUtf8(current, "plugin"));
-  Persistent<Object> plugin(current, Handle<Object>::Cast(pluginValue));
+  Local<Value> pluginValue = global->Get(String::NewFromUtf8(current, "plugin"));
+  Persistent<Object> plugin(current, Local<Object>::Cast(pluginValue));
   if (plugin.IsEmpty() || ToLocal(&plugin)->IsObject() == false)
   {
     throw IllegalArgumentException("Expected plugin to be a valid object.");

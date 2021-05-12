@@ -68,13 +68,13 @@ public:
 
   void setConfiguration(const Settings& conf) override;
 
-  double getTypeScoreThreshold() { return _typeScoreThreshold; }
+  double getTypeScoreThreshold() const { return _typeScoreThreshold; }
   void setTypeScoreThreshold(double threshold) { _typeScoreThreshold = threshold; }
 
-  double getFeatureDistance() { return _featureDistance; }
+  double getFeatureDistance() const { return _featureDistance; }
   void setFeatureDistance(double distance) { _featureDistance = distance; }
 
-  bool getCalculateMatchDistanceTruth() { return _calculateMatchDistanceTruth; }
+  bool getCalculateMatchDistanceTruth() const { return _calculateMatchDistanceTruth; }
   void setCalculateMatchDistanceTruth(bool calculate) { _calculateMatchDistanceTruth = calculate; }
 
   QString getDescription() const override

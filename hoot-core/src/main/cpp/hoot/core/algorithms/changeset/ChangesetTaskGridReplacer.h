@@ -134,7 +134,7 @@ private:
   bool _tagQualityIssues;
   DataQualityMetricTagger _metricTagger;
 
-  void _initConfig();
+  void _initConfig() const;
 
   void _replaceEntireTaskGrid(const TaskGrid& taskGrid);
   void _replaceTaskGridCell(

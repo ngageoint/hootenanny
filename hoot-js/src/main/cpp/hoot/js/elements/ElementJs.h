@@ -52,8 +52,8 @@ public:
   virtual ConstElementPtr getConstElement() const = 0;
   virtual ElementPtr getElement() = 0;
 
-  static v8::Handle<v8::Object> New(ConstElementPtr e);
-  static v8::Handle<v8::Object> New(ElementPtr e);
+  static v8::Local<v8::Object> New(ConstElementPtr e);
+  static v8::Local<v8::Object> New(ElementPtr e);
 
   virtual ~ElementJs() = default;
 
@@ -82,32 +82,32 @@ private:
   static v8::Persistent<v8::Function> _constructor;
 };
 
-inline void toCpp(v8::Handle<v8::Value> v, ConstElementPtr& e)
+inline void toCpp(v8::Local<v8::Value> v, ConstElementPtr& e)
 {
   if (v.IsEmpty() || !v->IsObject())
   {
     throw IllegalArgumentException("Expected input to be an ElementJs object type.");
   }
-  v8::Handle<v8::Object> obj = v8::Handle<v8::Object>::Cast(v);
+  v8::Local<v8::Object> obj = v8::Local<v8::Object>::Cast(v);
   e = node::ObjectWrap::Unwrap<ElementJs>(obj)->getConstElement();
 }
 
-inline void toCpp(v8::Handle<v8::Value> v, ElementPtr& e)
+inline void toCpp(v8::Local<v8::Value> v, ElementPtr& e)
 {
   if (v.IsEmpty() || !v->IsObject())
   {
     throw IllegalArgumentException("Expected input to be an ElementJs object type.");
   }
-  v8::Handle<v8::Object> obj = v8::Handle<v8::Object>::Cast(v);
+  v8::Local<v8::Object> obj = v8::Local<v8::Object>::Cast(v);
   e = node::ObjectWrap::Unwrap<ElementJs>(obj)->getElement();
 }
 
-inline v8::Handle<v8::Value> toV8(const ConstElementPtr& e)
+inline v8::Local<v8::Value> toV8(const ConstElementPtr& e)
 {
   return ElementJs::New(e);
 }
 
-inline v8::Handle<v8::Value> toV8(const ElementPtr& e)
+inline v8::Local<v8::Value> toV8(const ElementPtr& e)
 {
   return ElementJs::New(e);
 }

@@ -56,11 +56,11 @@ public:
 
     WayLocation getEnd1() const { return _end; }
     WayLocation getEnd2() const { return _subline2.getEnd(); }
-    WayLocation getEnd(WayNumber way) { return (way == WayNumber::Way1) ? getEnd1() : getEnd2(); }
+    WayLocation getEnd(WayNumber way) const{ return (way == WayNumber::Way1) ? getEnd1() : getEnd2(); }
 
     WayPtr getNewWay1() const { return _newWay1; }
     WayPtr getNewWay2() const { return _newWay2; }
-    WayPtr getNewWay(WayNumber way)
+    WayPtr getNewWay(WayNumber way) const
     { return (way == WayNumber::Way1) ? getNewWay1() : getNewWay2(); }
 
     WayLocation getStart1() const { return _start; }
@@ -129,7 +129,7 @@ public:
    */
   WaySublineMatchStringPtr createMatchString() const;
 
-  QList<SublineMappingPtr> getAllSublineMappings() { return _sublineMappingOrder; }
+  QList<SublineMappingPtr> getAllSublineMappings() const { return _sublineMappingOrder; }
 
   WayMatchStringMappingPtr getMapping() const { return _mapping; }
 

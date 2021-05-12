@@ -62,7 +62,7 @@ _settings(conf())
   setSearchDistance(configOptions.getPertySearchDistance());
 }
 
-QString PertyMatchScorer::toString()
+QString PertyMatchScorer::toString() const
 {
   return "_searchDistance: " + QString::number(_searchDistance);
 }
@@ -101,7 +101,7 @@ std::shared_ptr<MatchComparator> PertyMatchScorer::scoreMatches(const QString& r
 }
 
 OsmMapPtr PertyMatchScorer::_loadReferenceMap(const QString& referenceMapInputPath,
-                                              const QString& referenceMapOutputPath)
+                                              const QString& referenceMapOutputPath) const
 {
   LOG_DEBUG(
     "Loading the reference data with status " << MetadataTags::Unknown1() << " and adding " <<
@@ -131,7 +131,7 @@ OsmMapPtr PertyMatchScorer::_loadReferenceMap(const QString& referenceMapInputPa
 }
 
 void PertyMatchScorer::_loadPerturbedMap(const QString& perturbedMapInputPath,
-                                         const QString& perturbedMapOutputPath)
+                                         const QString& perturbedMapOutputPath) const
 {
   LOG_DEBUG("Loading the reference data to be used by the data to be perturbed; renaming " <<
             MetadataTags::Ref1() << " tags to " << MetadataTags::Ref2() << "...");
@@ -169,7 +169,7 @@ void PertyMatchScorer::_loadPerturbedMap(const QString& perturbedMapInputPath,
 }
 
 OsmMapPtr PertyMatchScorer::_combineMapsAndPrepareForConflation(
-  const OsmMapPtr& referenceMap, const QString& perturbedMapInputPath)
+  const OsmMapPtr& referenceMap, const QString& perturbedMapInputPath) const
 {
   LOG_DEBUG("Combining the reference and perturbed data into a single file ...");
 
@@ -235,7 +235,7 @@ std::shared_ptr<MatchComparator> PertyMatchScorer::_conflateAndScoreMatches(
   return comparator;
 }
 
-void PertyMatchScorer::_saveMap(OsmMapPtr& map, const QString& path)
+void PertyMatchScorer::_saveMap(OsmMapPtr& map, const QString& path) const
 {
   BuildingOutlineUpdateOp().apply(map);
 
