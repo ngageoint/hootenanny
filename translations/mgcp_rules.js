@@ -2249,11 +2249,11 @@ mgcp.rules = {
     ['FUN','6','condition','not_isolated'], // Changed to Fully Functional
 
     // Highway
-    ['HCT','3','highway','motorway_link'],
     ['HCT','1','highway','trunk'],
     ['HCT','1','highway','trunk_link'],
     ['HCT','1','highway','primary_link'],
     ['HCT','2','highway','secondary_link'],
+    ['HCT','3','highway','motorway_link'],
     ['HCT','4','highway','tertiary_link'],
     ['HCT','4','highway','living_street'],
     ['HCT','4','highway','residential'],
