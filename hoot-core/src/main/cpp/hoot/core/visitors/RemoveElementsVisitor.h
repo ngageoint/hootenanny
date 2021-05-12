@@ -37,7 +37,7 @@ namespace hoot
 {
 
 /**
- * Removes any elements where that satisfy a criterion
+ * Removes any elements that satisfy a criterion
  */
 class RemoveElementsVisitor : public MultipleCriterionConsumerVisitor, public OsmMapConsumer,
   public Configurable

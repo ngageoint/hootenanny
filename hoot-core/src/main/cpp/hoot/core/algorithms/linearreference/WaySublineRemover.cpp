@@ -28,16 +28,17 @@
 #include "WaySublineRemover.h"
 
 // Hoot
-#include <hoot/core/elements/MapProjector.h>
-#include <hoot/core/elements/ElementGeometryUtils.h>
+#include <hoot/core/algorithms/linearreference/WaySubline.h>
 #include <hoot/core/algorithms/linearreference/WayLocation.h>
 #include <hoot/core/algorithms/splitter/WaySplitter.h>
+#include <hoot/core/elements/ElementGeometryUtils.h>
+#include <hoot/core/elements/RelationMemberUtils.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/ops/RemoveElementByEid.h>
-//#include <hoot/core/ops/RemoveNodeByEid.h>
 #include <hoot/core/ops/ReplaceElementOp.h>
-#include <hoot/core/algorithms/linearreference/WaySubline.h>
+#include <hoot/core/schema/MetadataTags.h>
 
 // Standard
 #include <vector>
@@ -46,8 +47,8 @@ namespace hoot
 {
 
 std::vector<ElementId> WaySublineRemover::removeSubline(
-  const WayPtr& way, const WaySubline& subline, OsmMapPtr& map,
-  const bool removeWholeWayRecursively)
+  const WayPtr& way, const WaySubline& subline, OsmMapPtr& map/*,
+  const bool removeWholeWayRecursively*/)
 {
   if (!way || !subline.isValid())
   {
@@ -65,20 +66,39 @@ std::vector<ElementId> WaySublineRemover::removeSubline(
     LOG_TRACE(
       "Subline matches covers entire way. Removing entire way: " << way->getElementId() << "...");
 
-    if (removeWholeWayRecursively)
-    {
+//    if (removeWholeWayRecursively)
+//    {
+//      // remove it from parents and the map
+//      RemoveElementByEid(way->getElementId()).apply(map);
+//      // remove its children
+//      RecursiveElementRemover(way->getElementId()).apply(map); // TODO: change this
+//    }
+//    else
+//    {
+//      // Use RemoveElementByEid here instead of RecursiveElementRemover so that the way is removed
+//      // from its parent before its removal. We also don't want to remove RecursiveElementRemover
+//      // here b/c the way's nodes may still belong to one the temp relations we created during
+//      // splitting.
+//      RemoveElementByEid(way->getElementId()).apply(map);
+//    }
+
+    // TODO: change this to take in a criterion
+//    if (RelationMemberUtils::isMemberOfRelationWithTagKey(
+//          map, way->getElementId(), MetadataTags::HootMultilineString()))
+//    {
+//      // Use RemoveElementByEid here instead of RecursiveElementRemover so that the way is removed
+//      // from its parent before its removal. We also don't want to remove RecursiveElementRemover
+//      // here b/c the way's nodes may still belong to one the temp relations we created during
+//      // splitting.
+//      RemoveElementByEid(way->getElementId()).apply(map);
+//    }
+//    else
+//    {
       // remove it from parents and the map
-      RemoveElementByEid(way->getElementId()).apply(map);
+      //RemoveElementByEid(way->getElementId()).apply(map);
       // remove its children
-      RecursiveElementRemover(way->getElementId()).apply(map);
-    }
-    else
-    {
-      // Use RemoveElementByEid here instead of RecursiveElementRemover so that the way is removed
-      // from its parent before its removal. We also don't want to remove RecursiveElementRemover here
-      // b/c the way's nodes may still belong to one the temp relations we created during splitting.
-      RemoveElementByEid(way->getElementId()).apply(map);
-    }
+      RecursiveElementRemover(way->getElementId(), true).apply(map);
+    //}
 
     if (ConfigOptions().getDebugMapsWrite() && ConfigOptions().getDebugMapsWriteDetailed())
     {

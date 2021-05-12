@@ -34,6 +34,7 @@
 #include <hoot/core/criterion/LinearCriterion.h>
 #include <hoot/core/criterion/PolygonCriterion.h>
 #include <hoot/core/ops/RemoveWayByEid.h>
+#include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/conflate/ConflateUtils.h>
 
 // Qt
@@ -83,10 +84,9 @@ void RemoveDuplicateWayNodesVisitor::visit(const ElementPtr& e)
     if (wayNodeIds.size() == 2 && way->isSimpleLoop())
     {
       LOG_TRACE("Removing invalid way: " << way->getElementId() << "...");
-      // TODO: This most recent change prevents invalid ways from being skipped over from removal
-      // when they belong to a relation. As part of #4465, update RecursiveElementRemover with the
-      // option to remove ways from parent relations beforehand and use that option here.
-      RemoveWayByEid::removeWayFully(_map->shared_from_this(), e->getId());
+      // TODO
+      //RemoveWayByEid::removeWayFully(_map->shared_from_this(), e->getId());
+      RecursiveElementRemover(way->getElementId(), true).apply(_map);
       return;
     }
 

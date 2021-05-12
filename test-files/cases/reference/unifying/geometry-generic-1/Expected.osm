@@ -336,38 +336,6 @@
         <tag k="hoot:id" v="-88652627"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <way visible="true" id="-88652745" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-88652627"/>
-        <nd ref="-88652629"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:hash" v="sha1sum:e569f633f91c8a4b2c2dd13cb8724c48f93d4011;sha1sum:f9a518e5e9a32f24c7efc667067b62dc086ad612"/>
-        <tag k="hoot:id" v="-88652745"/>
-        <tag k="hoot:matchedBy" v="Line"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="hoot:way:node:count" v="2"/>
-        <tag k="length" v="94765.7"/>
-        <tag k="natural" v="cliff"/>
-        <tag k="note" v="C;D"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="source:imagery" v="Unknown"/>
-    </way>
-    <way visible="true" id="-88652743" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-88652655"/>
-        <nd ref="-88652657"/>
-        <tag k="alt_name" v="highway2"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="road"/>
-        <tag k="hoot:hash" v="sha1sum:870f0024933ba8ce0a645845e12b3a537565eb87;sha1sum:3f4139005b549099030e308c07b586ffda7139dd"/>
-        <tag k="hoot:id" v="-88652743"/>
-        <tag k="hoot:matchedBy" v="Highway"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="hoot:way:node:count" v="2"/>
-        <tag k="length" v="86433.3"/>
-        <tag k="name" v="highway1"/>
-        <tag k="note" v="A;B"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="source:imagery" v="Unknown"/>
-    </way>
     <way visible="true" id="-88652735" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-88654019"/>
         <nd ref="-88654020"/>
@@ -608,6 +576,23 @@
         <tag k="source:imagery" v="Unknown"/>
         <tag k="width" v="60606.2"/>
     </way>
+    <way visible="true" id="-88652718" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-88652655"/>
+        <nd ref="-88652657"/>
+        <tag k="alt_name" v="highway2"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:hash" v="sha1sum:870f0024933ba8ce0a645845e12b3a537565eb87;sha1sum:3f4139005b549099030e308c07b586ffda7139dd"/>
+        <tag k="hoot:id" v="-88652718"/>
+        <tag k="hoot:matchedBy" v="Highway"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="2"/>
+        <tag k="length" v="86433.3"/>
+        <tag k="name" v="highway1"/>
+        <tag k="note" v="A;B"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="Unknown"/>
+    </way>
     <way visible="true" id="-88652717" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-88652643"/>
         <nd ref="-88652645"/>
@@ -657,6 +642,21 @@
         <tag k="length" v="89030.0"/>
         <tag k="natural" v="hedgerow"/>
         <tag k="note" v="G"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="Unknown"/>
+    </way>
+    <way visible="true" id="-88652714" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-88652627"/>
+        <nd ref="-88652629"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="hoot:hash" v="sha1sum:e569f633f91c8a4b2c2dd13cb8724c48f93d4011;sha1sum:f9a518e5e9a32f24c7efc667067b62dc086ad612"/>
+        <tag k="hoot:id" v="-88652714"/>
+        <tag k="hoot:matchedBy" v="Line"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="2"/>
+        <tag k="length" v="94765.7"/>
+        <tag k="natural" v="cliff"/>
+        <tag k="note" v="C;D"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:imagery" v="Unknown"/>
     </way>

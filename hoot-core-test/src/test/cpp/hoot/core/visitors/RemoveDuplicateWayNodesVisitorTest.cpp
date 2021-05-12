@@ -39,8 +39,7 @@ class RemoveDuplicateWayNodesVisitorTest : public HootTestFixture
   CPPUNIT_TEST_SUITE(RemoveDuplicateWayNodesVisitorTest);
   CPPUNIT_TEST(runInvalidWayTest1);
   CPPUNIT_TEST(runInvalidWayTest2);
-  // TODO: fix this as part of #4465
-  //CPPUNIT_TEST(runInvalidWayTest3);
+  CPPUNIT_TEST(runInvalidWayTest3);
   CPPUNIT_TEST(runValidStartAndEndNodeSameTest);
   CPPUNIT_TEST(runValidUnclosedWayTest);
   CPPUNIT_TEST(runValidLoopTest);

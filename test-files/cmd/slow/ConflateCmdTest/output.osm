@@ -233,60 +233,6 @@
     <node visible="true" id="-1559551" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5918855541102488" lon="-104.8048623136804309"/>
     <node visible="true" id="-1559549" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5918839666917890" lon="-104.8049694320074394"/>
     <node visible="true" id="-1559547" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5918538057342460" lon="-104.8049653120718006"/>
-    <way visible="true" id="-1560084" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-1559897"/>
-        <nd ref="-1559881"/>
-        <nd ref="-1559901"/>
-        <nd ref="-1559885"/>
-        <nd ref="-1559871"/>
-        <nd ref="-1559889"/>
-        <nd ref="-1559868"/>
-        <nd ref="-1559882"/>
-        <nd ref="-1559893"/>
-        <nd ref="-1559898"/>
-        <nd ref="-1559878"/>
-        <nd ref="-1559894"/>
-        <nd ref="-1559873"/>
-        <nd ref="-1559887"/>
-        <nd ref="-1559877"/>
-        <nd ref="-1559891"/>
-        <nd ref="-1559870"/>
-        <nd ref="-1559884"/>
-        <nd ref="-1559900"/>
-        <nd ref="-1559880"/>
-        <nd ref="-1559896"/>
-        <nd ref="-1559875"/>
-        <nd ref="-1559869"/>
-        <nd ref="-1559883"/>
-        <nd ref="-1559899"/>
-        <nd ref="-1559879"/>
-        <nd ref="-1559895"/>
-        <nd ref="-1559874"/>
-        <nd ref="-1559888"/>
-        <nd ref="-1559867"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="road"/>
-        <tag k="hoot:hash" v="sha1sum:2e910c53a5e14608bc55ab0d19a5a432e30e4ccd;sha1sum:2c97c18fe31731001d2b09ccb4df52bb5fac08ad"/>
-        <tag k="note" v="0"/>
-    </way>
-    <way visible="true" id="-1560077" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-1559889"/>
-        <nd ref="-1559876"/>
-        <nd ref="-1559890"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="road"/>
-        <tag k="note" v="1"/>
-    </way>
-    <way visible="true" id="-1560074" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-1559872"/>
-        <nd ref="-1559886"/>
-        <nd ref="-1559866"/>
-        <nd ref="-1559882"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="road"/>
-        <tag k="hoot:hash" v="sha1sum:0492f9551aec03a615e994189fd36ceaf68d0fa4;sha1sum:544390570faec8689c28039c73dab6d4ea5300af"/>
-        <tag k="note" v="2"/>
-    </way>
     <way visible="true" id="-1559917" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1560008"/>
         <nd ref="-1560011"/>
@@ -336,6 +282,60 @@
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="road"/>
         <tag k="note" v="3"/>
+    </way>
+    <way visible="true" id="-1559904" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-1559872"/>
+        <nd ref="-1559886"/>
+        <nd ref="-1559866"/>
+        <nd ref="-1559882"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:hash" v="sha1sum:0492f9551aec03a615e994189fd36ceaf68d0fa4;sha1sum:544390570faec8689c28039c73dab6d4ea5300af"/>
+        <tag k="note" v="2"/>
+    </way>
+    <way visible="true" id="-1559903" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-1559889"/>
+        <nd ref="-1559876"/>
+        <nd ref="-1559890"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="road"/>
+        <tag k="note" v="1"/>
+    </way>
+    <way visible="true" id="-1559902" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-1559897"/>
+        <nd ref="-1559881"/>
+        <nd ref="-1559901"/>
+        <nd ref="-1559885"/>
+        <nd ref="-1559871"/>
+        <nd ref="-1559889"/>
+        <nd ref="-1559868"/>
+        <nd ref="-1559882"/>
+        <nd ref="-1559893"/>
+        <nd ref="-1559898"/>
+        <nd ref="-1559878"/>
+        <nd ref="-1559894"/>
+        <nd ref="-1559873"/>
+        <nd ref="-1559887"/>
+        <nd ref="-1559877"/>
+        <nd ref="-1559891"/>
+        <nd ref="-1559870"/>
+        <nd ref="-1559884"/>
+        <nd ref="-1559900"/>
+        <nd ref="-1559880"/>
+        <nd ref="-1559896"/>
+        <nd ref="-1559875"/>
+        <nd ref="-1559869"/>
+        <nd ref="-1559883"/>
+        <nd ref="-1559899"/>
+        <nd ref="-1559879"/>
+        <nd ref="-1559895"/>
+        <nd ref="-1559874"/>
+        <nd ref="-1559888"/>
+        <nd ref="-1559867"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:hash" v="sha1sum:2e910c53a5e14608bc55ab0d19a5a432e30e4ccd;sha1sum:2c97c18fe31731001d2b09ccb4df52bb5fac08ad"/>
+        <tag k="note" v="0"/>
     </way>
     <way visible="true" id="-1559705" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1559685"/>

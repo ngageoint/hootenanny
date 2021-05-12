@@ -190,7 +190,7 @@ bool LinearDiffMerger::_findAndProcessMatch(
   // portions of the way or other ways. The caller of this class will be responsible for cleaning
   // them up, or they may be handled by conflate post ops.
   const std::vector<ElementId> newWayIds =
-    WaySublineRemover::removeSubline(way2, subline2, _map, false);
+    WaySublineRemover::removeSubline(way2, subline2, _map/*, false*/);
   LOG_VART(newWayIds.size());
   if (newWayIds.size() == 1)
   {

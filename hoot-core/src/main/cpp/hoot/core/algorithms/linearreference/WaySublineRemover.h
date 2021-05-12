@@ -55,8 +55,8 @@ public:
    * @return IDs of the ways created and added back to the map as a result of the subline removal
    */
   static std::vector<ElementId> removeSubline(
-    const WayPtr& way, const WaySubline& subline, OsmMapPtr& map,
-    const bool removeWholeWayRecursively = true);
+    const WayPtr& way, const WaySubline& subline, OsmMapPtr& map/*,
+    const bool removeWholeWayRecursively = true*/);
 
   /**
    * Removes a subline from a way
