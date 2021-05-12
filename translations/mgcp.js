@@ -551,24 +551,22 @@ mgcp = {
 
       if (attrs.OSMTAGS)
       {
-        ['OSMTAGS','OSMTAGS2','OSMTAGS3','OSMTAGS4'].forEach( item => {
-          if (attrs[item])
+        try
+        {
+          var tStr = attrs.OSMTAGS;
+          ['OSMTAGS2','OSMTAGS3','OSMTAGS4'].forEach( item => { if (attrs[item]) tStr = tStr.concat(attrs[item]); });
+
+          var tmp = JSON.parse(tStr);
+          for (var i in tmp)
           {
-            try
-            {
-              var tmp = JSON.parse(attrs[item]);
-              for (var i in tmp)
-              {
-                if (tTags[i]) hoot.logWarn('Overwriting unpacked tag ' + i + '=' + tTags[i] + ' with ' + tmp[i]);
-                tTags[i] = tmp[i];
-              }
-            }
-            catch (error)
-            {
-              hoot.logError('Unable to parse OSM tags in ' + item + ' attribute: ' + attrs[item]);
-            }
+            if (tTags[i]) hoot.logWarn('Overwriting unpacked tag ' + i + '=' + tTags[i] + ' with ' + tmp[i]);
+            tTags[i] = tmp[i];
           }
-        });
+        }
+        catch (error)
+        {
+          hoot.logError('Unable to parse OSM tags from one of the OSMTAGS attributes');
+        }
       }
 
       // Now add the unpacked tags to the main list
