@@ -39,7 +39,7 @@ public:
 
   MapIoJs();
 
-  static void Init(v8::Handle<v8::Object> exports);
+  static void Init(v8::Local<v8::Object> exports);
 
   static void loadMap(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void loadMapFromString(const v8::FunctionCallbackInfo<v8::Value>& args);

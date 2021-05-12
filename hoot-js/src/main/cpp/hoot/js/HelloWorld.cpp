@@ -54,7 +54,7 @@ public:
 
 HOOT_FACTORY_REGISTER_BASE(HootJsLoaded)
 
-void init(Handle<Object> exports)
+void init(Local<Object> exports)
 {
   JsRegistrar::Init(exports);
 }

@@ -53,6 +53,9 @@ void InvalidWayRemover::visit(const ElementPtr& e)
       "actively configured conflate matcher.");
     return;
   }
+  LOG_VART(e->getElementId());
+  LOG_VART(EmptyWayCriterion().isSatisfied(e));
+  LOG_VART(ZeroLengthWayCriterion().isSatisfied(e));
 
   // Technically, we could also run the dupe way node remover on these ways beforehand here to weed
   // out some additional bad ways. That would make parts of the conflate op pipeline redundant,

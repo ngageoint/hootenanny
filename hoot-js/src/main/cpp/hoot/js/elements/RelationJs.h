@@ -44,15 +44,15 @@ class RelationJs : public ElementJs
 {
 public:
 
-  static void Init(v8::Handle<v8::Object> target);
+  static void Init(v8::Local<v8::Object> target);
 
   ConstElementPtr getConstElement() const override { return getConstRelation(); }
   ConstRelationPtr getConstRelation() const { return _constRelation; }
   ElementPtr getElement() override { return getRelation(); }
   RelationPtr getRelation() { assert(_relation); return _relation; }
 
-  static v8::Handle<v8::Object> New(ConstRelationPtr relation);
-  static v8::Handle<v8::Object> New(RelationPtr relation);
+  static v8::Local<v8::Object> New(ConstRelationPtr relation);
+  static v8::Local<v8::Object> New(RelationPtr relation);
 
 private:
 

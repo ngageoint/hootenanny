@@ -46,11 +46,13 @@ namespace hoot
 
 HOOT_JS_REGISTER(RequireJs)
 
-void RequireJs::Init(Handle<Object> exports)
+void RequireJs::Init(Local<Object> exports)
 {
   Isolate* current = exports->GetIsolate();
+  HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
   exports->Set(String::NewFromUtf8(current, "require"),
-               FunctionTemplate::New(current, jsRequire)->GetFunction());
+               FunctionTemplate::New(current, jsRequire)->GetFunction(context).ToLocalChecked());
 }
 
 void RequireJs::jsRequire(const FunctionCallbackInfo<Value>& args)
@@ -58,13 +60,12 @@ void RequireJs::jsRequire(const FunctionCallbackInfo<Value>& args)
   Isolate* current = v8::Isolate::GetCurrent();
   HandleScope scope(current);
   Context::Scope context_scope(current->GetCurrentContext());
+  Local<Context> context = current->GetCurrentContext();
   try
   {
 
     if (args.Length() != 1)
-    {
       throw IllegalArgumentException("Expected exactly one argument to 'require'.");
-    }
 
     /*
     The new Hoot "include" files are all under $HOOT_HOME/translations & $HOOT_HOME/translations_local
@@ -72,9 +73,7 @@ void RequireJs::jsRequire(const FunctionCallbackInfo<Value>& args)
 
     const QString hootHome = ConfPath::getHootHome();
     if (hootHome.isEmpty())
-    {
       throw HootException("$HOOT_HOME is empty.");
-    }
 
     Settings conf;
     QStringList libPath = ConfigOptions(conf).getJavascriptSchemaTranslatorPath();
@@ -84,10 +83,7 @@ void RequireJs::jsRequire(const FunctionCallbackInfo<Value>& args)
 
     // Check for things like "/home/smurf" or "smurf.js"
     if (scriptName != QFileInfo(scriptName).baseName())
-    {
       throw HootException("Error: Script name is a path: " + scriptName);
-    }
-
 
     for (int i = 0; i < libPath.size(); i++)
     {
@@ -99,56 +95,52 @@ void RequireJs::jsRequire(const FunctionCallbackInfo<Value>& args)
 
         QFileInfo info(fullPath);
         if (info.exists())
-        {
           break;
-        }
 
         fullPath = "";
       }
     }
 
     if (fullPath.isEmpty())
-    {
       throw IllegalArgumentException("Unable to load required file: " + scriptName);
-    }
 
     QFile fp(fullPath);
     if (fp.open(QFile::ReadOnly) == false)
-    {
-      //      throw HootException("Error opening script: " + fullPath);
       throw HootException("Error opening script: " + fullPath);
-    }
 
-    Handle<String> source;
-    Handle<Script> jsScript;
+    Local<String> source;
+    MaybeLocal<Script> maybeScript;
 
     LOG_TRACE("Loading script: " << fullPath);
 
     source = String::NewFromUtf8(current, fp.readAll().data());
 
-    TryCatch try_catch;
+    TryCatch try_catch(current);
     // Compile the source code.
-    jsScript = Script::Compile(source, String::NewFromUtf8(current, fullPath.toUtf8().data()));
+    maybeScript = Script::Compile(context, source);
 
-    if (jsScript.IsEmpty())
-    {
+    if (maybeScript.IsEmpty())
       HootExceptionJs::throwAsHootException(try_catch);
-    }
+
+    Local<Script> jsScript = maybeScript.ToLocalChecked();
 
     Local<Value> oldExports = current->GetCurrentContext()->Global()->Get(String::NewFromUtf8(current, "exports"));
 
-    Handle<Object> exports(Object::New(current));
+    Local<Object> exports(Object::New(current));
     current->GetCurrentContext()->Global()->Set(String::NewFromUtf8(current, "exports"), exports);
 
-    Handle<Value> result = jsScript->Run();
+    MaybeLocal<Value> result = jsScript->Run(context);
 
     current->GetCurrentContext()->Global()->Set(String::NewFromUtf8(current, "exports"), oldExports);
 
+    if (result.IsEmpty())
+      HootExceptionJs::throwAsHootException(try_catch);
+
     // Run the script to get the result.
-    HootExceptionJs::checkV8Exception(result, try_catch);
+    HootExceptionJs::checkV8Exception(result.ToLocalChecked(), try_catch);
 
     // Debug: Dump the Object
-    //  Handle<Object> tObj = current->GetCurrentContext()->Global();
+    //  Local<Object> tObj = current->GetCurrentContext()->Global();
     //  cout << "jsRequire" << endl;
     //  cout << "tObj Properties: " << tObj->GetPropertyNames() << endl;
     //  cout << endl;

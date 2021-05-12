@@ -1,22 +1,19 @@
-20:26:27.831 INFO  ...ot/js/JavaScriptTranslator.cpp( 232) Loading script: test-files/cmd/slow/tSimple.js
+14:34:53.187 STATUS ...pp/hoot/core/util/Progress.cpp(  86) Convert (0%): Converting ...les/jakarta_raya_coastline.shp to ...k/BadJavaScriptTranslation.osm...
+14:34:53.193 STATUS ...pp/hoot/core/util/Progress.cpp(  86) Convert (0%): Loading maps: ...les/jakarta_raya_coastline.shp...
+14:34:53.195 INFO   ...JavaScriptSchemaTranslator.cpp( 215) Loading translation script: test-files/cmd/quick/tSimple.js...
 Initialize works!
-20:26:27.859 ERROR ...ot/js/JavaScriptTranslator.cpp( 353) Error initializing JavaScript: test-files/cmd/slow/tSimple.js (63) 
-    if (translate !== undefined)
-    ^ 
-ReferenceError: translate is not defined
-20:26:27.859 INFO  ...t/core/io/PythonTranslator.cpp(  68) Initializing Python
-20:26:27.859 INFO  ...t/core/io/PythonTranslator.cpp(  99) Python path: translations:PYTHONPATH:/home/vagrant/hoot/translations
-20:26:28.864 INFO  ...ot/js/JavaScriptTranslator.cpp( 232) Loading script: translations/BadSyntaxTest.js
-20:26:28.889 ERROR ...ot/js/JavaScriptTranslator.cpp( 353) Error initializing JavaScript: translations/BadSyntaxTest.js (4) 
+14:34:53.217 ERROR  ...JavaScriptSchemaTranslator.cpp( 309) Error initializing JavaScript: Function call 'initialize' returned an error.
+14:34:53.217 INFO   ...ema/PythonSchemaTranslator.cpp( 101) Using translation script: test-files/cmd/quick/tSimple.js
+14:34:53.795 STATUS ...pp/hoot/core/util/Progress.cpp(  86) Convert (0%): Converting ...les/jakarta_raya_coastline.shp to ...k/BadJavaScriptTranslation.osm...
+14:34:53.802 STATUS ...pp/hoot/core/util/Progress.cpp(  86) Convert (0%): Loading maps: ...les/jakarta_raya_coastline.shp...
+14:34:53.804 INFO   ...JavaScriptSchemaTranslator.cpp( 215) Loading translation script: translations/BadSyntaxTest.js...
+14:34:53.825 ERROR  ...JavaScriptSchemaTranslator.cpp( 309) Error initializing JavaScript: translations/BadSyntaxTest.js (4) 
 foo is bad.
     ^^ 
 SyntaxError: Unexpected identifier
-20:26:28.889 INFO  ...t/core/io/PythonTranslator.cpp(  68) Initializing Python
-20:26:28.889 INFO  ...t/core/io/PythonTranslator.cpp(  99) Python path: translations:PYTHONPATH:/home/vagrant/hoot/translations
-20:26:29.863 INFO  ...ot/js/JavaScriptTranslator.cpp( 232) Loading script: test-files/cmd/slow/BadRequire.js
-20:26:29.890 ERROR ...ot/js/JavaScriptTranslator.cpp( 353) Error initializing JavaScript: /home/vagrant/hoot/translations/BadSyntaxTest.js (4) 
-foo is bad.
-    ^^ 
-SyntaxError: Unexpected identifier
-20:26:29.891 INFO  ...t/core/io/PythonTranslator.cpp(  68) Initializing Python
-20:26:29.891 INFO  ...t/core/io/PythonTranslator.cpp(  99) Python path: translations:PYTHONPATH:/home/vagrant/hoot/translations
+14:34:53.825 INFO   ...ema/PythonSchemaTranslator.cpp( 101) Using translation script: translations/BadSyntaxTest.js
+14:34:54.348 STATUS ...pp/hoot/core/util/Progress.cpp(  86) Convert (0%): Converting ...les/jakarta_raya_coastline.shp to ...k/BadJavaScriptTranslation.osm...
+14:34:54.353 STATUS ...pp/hoot/core/util/Progress.cpp(  86) Convert (0%): Loading maps: ...les/jakarta_raya_coastline.shp...
+14:34:54.356 INFO   ...JavaScriptSchemaTranslator.cpp( 215) Loading translation script: test-files/cmd/quick/BadRequire.js...
+14:34:54.377 ERROR  ...JavaScriptSchemaTranslator.cpp( 309) Error initializing JavaScript: Expected a string. Got an empty value.
+14:34:54.377 INFO   ...ema/PythonSchemaTranslator.cpp( 101) Using translation script: test-files/cmd/quick/BadRequire.js
