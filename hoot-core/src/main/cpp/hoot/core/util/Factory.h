@@ -85,12 +85,12 @@ public:
   }
 
   QString getBaseName() const override { return _baseName; }
-
   QString getName() const override { return _name; }
 
 private:
 
-  QString _name, _baseName;
+  QString _name;
+  QString _baseName;
 };
 
 /**
@@ -149,6 +149,16 @@ public:
   }
 
   std::vector<QString> getObjectNamesByBase(const QString& baseName);
+
+  /**
+   * TODO
+   *
+   * @param baseName
+   * @param childName
+   * @return
+   */
+//  template<typename BaseClass, typename ChildClass>
+//  std::vector<QString> getChildObjectNames(/*const QString& baseName, const QString& childName*/);
 
   bool hasClass(const QString& name);
 

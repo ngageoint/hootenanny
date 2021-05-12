@@ -76,6 +76,41 @@ vector<QString> Factory::getObjectNamesByBase(const QString& baseName)
   return result;
 }
 
+//template<typename BaseClass, typename ChildClass>
+//std::vector<QString> Factory::getChildObjectNames(/*const QString& baseName, const QString& childName*/)
+//{
+//  // TODO: This is a little redundant with code in ApiEntityDisplayInfo::_getApiEntities... can
+//  // probably be refactored to remove the duplication.
+
+//  // This could end up being an expensive call if repeated, so implement caching if needed.
+
+//  std::vector<QString> childClassNames;
+
+//  const std::vector<QString> baseClassNames = getObjectNamesByBase(baseName);
+//  for (size_t i = 0; i < baseClassNames.size(); i++)
+//  {
+//    QString baseClassName = baseClassNames[i];
+//    LOG_VARD(baseClassName);
+
+//    std::shared_ptr<BaseClass> baseImpl(
+//      Factory::getInstance().constructObject<BaseClass>(BaseClass::className()));
+
+//    std::shared_ptr<ChildClass> childImpl =
+//      std::dynamic_pointer_cast<ChildClass>(baseImpl);
+//    if (!childImpl.get())
+//    {
+//      throw IllegalArgumentException(childName + " is not a child of " + baseName);
+//    }
+
+//    //if (BaseClass::className() != ChildClass::className())
+//    //{
+//      childClassNames.push_back(childName);
+//    //}
+//  }
+
+//  return childClassNames;
+//}
+
 bool Factory::hasClass(const QString& name)
 {
   return _creators.find(name) != _creators.end();
