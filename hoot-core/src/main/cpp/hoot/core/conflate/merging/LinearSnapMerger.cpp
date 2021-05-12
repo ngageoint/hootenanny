@@ -695,6 +695,11 @@ void LinearSnapMerger::_dropSecondaryElements(
   // Remove reviews e2Match is involved in.
   LOG_TRACE("Removing reviews " << eidMatch2 << " is involved in and itself...");
   RemoveReviewsByEidOp(eidMatch2, true, false).apply(_map);
+  if (ConfigOptions().getDebugMapsWrite() && ConfigOptions().getDebugMapsWriteDetailed())
+  {
+    OsmMapWriterFactory::writeDebugMap(
+      _map, "LinearSnapMerger-after-removing-eidMatch2-reviews-" + _eidLogString);
+  }
 
   // Make the way that we're keeping have membership in whatever relations the way we're removing
   // was in. I *think* this makes sense. This logic may also need to be replicated elsewhere
@@ -704,6 +709,11 @@ void LinearSnapMerger::_dropSecondaryElements(
     " belongs in...");
   //RelationMemberSwapper::swap(eid2, eid1, _map, false);
   RelationMemberSwapper::swap(eid2, eidMatch1, _map, false);
+  if (ConfigOptions().getDebugMapsWrite() && ConfigOptions().getDebugMapsWriteDetailed())
+  {
+    OsmMapWriterFactory::writeDebugMap(
+      _map, "LinearSnapMerger-after-relation-member-swap-" + _eidLogString);
+  }
 
   // Remove reviews e2 is involved in.
   LOG_TRACE("Removing reviews " << eid2 << " is involved in and itself...");

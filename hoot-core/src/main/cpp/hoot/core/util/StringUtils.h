@@ -294,6 +294,26 @@ public:
    */
   static void reverse(QStringList& strList);
 
+  /**
+   * TODO
+   *
+   * @param set
+   * @return
+   * @todo need to genericize this to work for all container types
+   */
+  template<typename T>
+  static QString setToString(const std::set<T>& set)
+  {
+    // need to make this work for all container types
+    QString out;
+    for (typename std::set<T>::const_iterator itr = set.begin(); itr != set.end(); ++itr)
+    {
+      out += (*itr).toString() + ",";
+    }
+    out.chop(1);
+    return out;
+  }
+
 private:
 
   static QString _splitAndRemoveAtIndex(

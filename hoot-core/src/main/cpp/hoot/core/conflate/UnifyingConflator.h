@@ -40,7 +40,7 @@ class MatchThreshold;
  * Unifying because it unifies different feature type conflation approaches (building, road, etc.)
  * that were originally separated from each other.
  *
- * Re-entrant but not thread safe.
+ * This class is re-entrant but not thread safe.
  */
 class UnifyingConflator : public AbstractConflator
 {

@@ -100,8 +100,6 @@ public:
 
   QString toString() const override;
 
-  void setPairs(const std::set<std::pair<ElementId, ElementId>>& pairs) { _pairs = pairs; }
-  void setMatchedBy(const QString& matchedBy) { _matchedBy = matchedBy; }
   void setSublineMatcher(const std::shared_ptr<SublineStringMatcher>& sublineMatcher)
   { _sublineMatcher = sublineMatcher; }
 
@@ -113,9 +111,6 @@ protected:
   QString _eidLogString;
 
   std::shared_ptr<SublineStringMatcher> _sublineMatcher;
-
-  // indicates which matcher matched the elements being processed by this merger
-  QString _matchedBy;
 
   /*
    * Return true if pair needs review.

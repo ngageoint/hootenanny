@@ -115,6 +115,8 @@ void LinearMergerJs::apply(const FunctionCallbackInfo<Value>& args)
     sublineMatcher2 = toCpp<SublineStringMatcherPtr>(args[5]);
   }
 
+  // See related note about Diff Conflate in the class description of LinearMergerFactory.
+  LOG_VART(ConfigOptions().getGeometryLinearMergerDefault());
   // Use of LinearTagOnlyMerger for geometries signifies that we're doing Attribute Conflation.
   const bool isAttributeConflate =
     ConfigOptions().getGeometryLinearMergerDefault() == LinearTagOnlyMerger::className();
@@ -130,6 +132,7 @@ void LinearMergerJs::apply(const FunctionCallbackInfo<Value>& args)
   {
     merger = LinearMergerFactory::getMerger(pairs, sublineMatcher, sublineMatcher2, matchedBy);
   }
+  LOG_VART(merger->getClassName());
   merger->apply(map, replaced);
 
   // modify the parameter that was passed in
