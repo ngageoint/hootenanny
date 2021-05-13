@@ -34,6 +34,8 @@
 #include <hoot/core/conflate/merging/LinearDiffMerger.h>
 #include <hoot/core/conflate/merging/MarkForReviewMergerCreator.h>
 #include <hoot/core/conflate/merging/MergerFactory.h>
+#include <hoot/core/conflate/merging/MultipleSublineMatcherDiffMerger.h>
+#include <hoot/core/conflate/merging/MultipleSublineMatcherSnapMerger.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
@@ -362,6 +364,8 @@ void AbstractConflator::_applyMergers(const std::vector<MergerPtr>& mergers, Osm
   LOG_INFO(
     "Applied " << StringUtils::formatLargeNumber(mergers.size()) << " mergers in " <<
     StringUtils::millisecondsToDhms(mergersTimer.elapsed()) << ".");
+  LOG_VARD(MultipleSublineMatcherSnapMerger::getNumTimesBackupMatcherUsed());
+  LOG_VARD(MultipleSublineMatcherDiffMerger::getNumTimesBackupMatcherUsed());
 }
 
 void AbstractConflator::_createMergers(std::vector<MergerPtr>& relationMergers)
