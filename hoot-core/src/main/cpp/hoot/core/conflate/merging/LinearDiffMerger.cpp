@@ -158,7 +158,8 @@ bool LinearDiffMerger::_findAndProcessMatch(
   WaySublineMatchString match;
   try
   {
-    match = _sublineMatcher->findMatch(_map, way1, way2);
+    //match = _sublineMatcher->findMatch(_map, way1, way2);
+    match = _matchSubline(way1, way2);
   }
   catch (const NeedsReviewException& e)
   {
@@ -229,6 +230,15 @@ bool LinearDiffMerger::_findAndProcessMatch(
   }
 
   return false;
+}
+
+WaySublineMatchString LinearDiffMerger::_matchSubline(ElementPtr e1, ElementPtr e2)
+{
+  LOG_TRACE(
+    "Matching sublines for: " << e1->getElementId() << " and " << e2->getElementId() << "...");
+  // Some attempts were made to use cached subline matches pased in from LinearSnapMergerJs for
+  // performance reasons, but the results were unstable. See branch 3969b.
+  return _sublineMatcher->findMatch(_map, e1, e2);
 }
 
 }

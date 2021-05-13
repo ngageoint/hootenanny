@@ -137,7 +137,7 @@ void LinearMergerJs::apply(const FunctionCallbackInfo<Value>& args)
   LOG_VART(merger->getClassName());
   merger->apply(map, replaced);
 
-  // modify the parameter that was passed in
+  // Modify the parameter that was passed in.
   Local<Array> newArr = Local<Array>::Cast(toV8(replaced));
   Local<Array> arr = Local<Array>::Cast(args[3]);
   arr->Set(String::NewFromUtf8(current, "length"), Integer::New(current, newArr->Length()));

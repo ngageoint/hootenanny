@@ -43,11 +43,6 @@ namespace hoot
  * that complexity from callers. This class should not be confused with Mergerfactory which
  * generates MergerCreators. MergerCreators dealing with linear features call this class to
  * determine which Merger to use.
- *
- * We don't need to worry about handling diff conflate specifically in this factory, as diff
- * conflate will handle creating its own LinearDiffMerger for merging partial matches internally and
- * won't use this class at all to determine the merger for merging complete matches, as it doesn't
- * merge them at all.
  */
 class LinearMergerFactory
 {

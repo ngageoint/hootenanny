@@ -38,8 +38,6 @@ namespace hoot
  * Removes an element from a map without removing their children after its references are first
  * removed from parents. If you would like to remove an element and all its children, then see
  * RecursiveElementRemover.
- *
- * @todo rename to NonRecursiveElementRemover and update comment
  */
 class RemoveElementByEid : public OsmMapOperation
 {

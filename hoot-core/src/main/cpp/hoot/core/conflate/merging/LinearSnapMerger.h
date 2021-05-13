@@ -74,9 +74,9 @@ protected:
     std::vector<std::pair<ElementId, ElementId>>& replaced) override;
 
   /*
-   * Finds a matching subline between two elements with the configured subline matcher
+   * @see LinearMergerAbstract
    */
-  virtual WaySublineMatchString _matchSubline(ElementPtr e1, ElementPtr e2);
+  WaySublineMatchString _matchSubline(ElementPtr e1, ElementPtr e2) override;
 
 private:
 

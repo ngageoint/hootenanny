@@ -362,6 +362,8 @@ void DiffConflator::_separateMatchesToRemoveAsPartial()
       _matchesToRemoveAsPartial.push_back(match);
     }
   }
+  LOG_VART(_matchesToRemoveAsWhole);
+  LOG_VART(_matchesToRemoveAsPartial);
 }
 
 int DiffConflator::_countMatchesToRemoveAsPartial() const
@@ -501,8 +503,8 @@ void DiffConflator::_removeMatchElementsCompletely(const Status& status)
   {
     matchesToRemoveCompletely = _matches;
   }
-  LOG_VART(matchesToRemoveCompletely.size());
-  //LOG_VART(matchesToRemoveCompletely);
+  //LOG_VART(matchesToRemoveCompletely.size());
+  LOG_VART(matchesToRemoveCompletely);
 
   // We don't want remove elements involved in intra-dataset matches, so record those now.
   if (!_intraDatasetElementIdsPopulated)

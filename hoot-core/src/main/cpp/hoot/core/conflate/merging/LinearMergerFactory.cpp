@@ -32,7 +32,9 @@
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/conflate/network/PartialNetworkMerger.h>
+#include <hoot/core/conflate/merging/LinearDiffMerger.h>
 #include <hoot/core/conflate/merging/LinearTagOnlyMerger.h>
+#include <hoot/core/conflate/merging/MultipleSublineMatcherDiffMerger.h>
 #include <hoot/core/conflate/merging/MultipleSublineMatcherSnapMerger.h>
 #include <hoot/core/conflate/merging/LinearAverageMerger.h>
 
@@ -65,6 +67,9 @@ MergerPtr LinearMergerFactory::getMerger(
   const QString matchedBy)
 {
   MergerPtr merger;
+
+  // The Network algorithm doesn't support Differential Conflation partial match merging yet, so we
+  // don't check here to see if we're running diff.
 
   // Use of LinearTagOnlyMerger for geometries signifies that we're doing Attribute Conflation.
   const bool isAttributeConflate =
@@ -103,7 +108,7 @@ MergerPtr LinearMergerFactory::getMerger(
   if (matchedBy != "Waterway" && matchedBy != "Line")
   {
     throw IllegalArgumentException(
-      "Invalid matcher for MultipleSublineMatcherSnapMerger: " + matchedBy);
+      "Invalid matcher for multiple subline matcher merging: " + matchedBy);
   }
   // Use of LinearTagOnlyMerger for geometries signifies that we're doing Attribute Conflation.
   const bool isAttributeConflate =
@@ -117,11 +122,22 @@ MergerPtr LinearMergerFactory::getMerger(
     // multiple subline matchers shouldn't ever happen. For Average Conflation we do custom merging
     // and don't use a subline matcher at all.
     throw IllegalArgumentException(
-      "MultipleSublineMatcherSnapMerger may not be used with Attribute or Average Conflation.");
+      "Multiple subline matcher merging may not be used with Attribute or Average Conflation.");
   }
 
-  std::shared_ptr<LinearMergerAbstract> merger(
-    new MultipleSublineMatcherSnapMerger(eids, sublineMatcher1, sublineMatcher2));
+  std::shared_ptr<LinearMergerAbstract> merger;
+  const bool isDiffConflate =
+    ConfigOptions().getGeometryLinearMergerDefault() == LinearDiffMerger::className();
+  if (isDiffConflate)
+  {
+    merger =
+      std::make_shared<MultipleSublineMatcherDiffMerger>(eids, sublineMatcher1, sublineMatcher2);
+  }
+  else
+  {
+    merger =
+      std::make_shared<MultipleSublineMatcherSnapMerger>(eids, sublineMatcher1, sublineMatcher2);
+  }
   merger->setMatchedBy(matchedBy);
   return merger;
 }

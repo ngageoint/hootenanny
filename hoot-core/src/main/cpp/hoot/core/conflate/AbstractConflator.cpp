@@ -324,8 +324,7 @@ void AbstractConflator::_applyMergers(const std::vector<MergerPtr>& mergers, Osm
     MergerPtr merger = mergers[i];
     const QString msg =
       "Applying merger: " + merger->getName() + " " + StringUtils::formatLargeNumber(i + 1) +
-      " / " + StringUtils::formatLargeNumber(mergers.size()) + "-" +
-      StringUtils::setToString<ElementId>(merger->getImpactedElementIds());
+      " / " + StringUtils::formatLargeNumber(mergers.size());
     // There are way more log statements generated from this than we normally want to see, so just
     // write out a subset. If running in debug, then you'll see all of them which can be useful.
     if (i != 0 && i % 10 == 0)
@@ -336,6 +335,7 @@ void AbstractConflator::_applyMergers(const std::vector<MergerPtr>& mergers, Osm
     {
       LOG_DEBUG(msg);
     }
+    LOG_VART(merger->getImpactedElementIds());
 
     merger->apply(map, replaced);
     LOG_VART(map->size());

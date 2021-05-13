@@ -264,7 +264,6 @@ bool LinearSnapMerger::_checkForIdenticalElements(const ElementPtr& e1, const El
     LOG_TRACE(
       "Merging identical elements: " << keep->getElementId() << " and " << remove->getElementId() <<
       "...");
-    //e1->setStatus(Status::Conflated);
     keep->setStatus(Status::Conflated);
     // remove the second element and any reviews that contain the element
     RemoveReviewsByEidOp(remove->getElementId(), true, true).apply(_map);
@@ -659,7 +658,7 @@ void LinearSnapMerger::_updateScrapParent(long id, const ElementPtr& scrap)
   {
     RelationPtr relation = std::dynamic_pointer_cast<Relation>(scrap);
     const vector<RelationData::Entry>& members = relation->getMembers();
-    //  Iterate all of the members and update the parent id recursively
+    //  Iterate all of the members and update the parent id recursively.
     for (size_t i = 0; i < members.size(); ++i)
       _updateScrapParent(id, _map->getElement(members[i].getElementId()));
   }
@@ -693,30 +692,19 @@ void LinearSnapMerger::_dropSecondaryElements(
   }
 
   // Remove reviews e2Match is involved in.
-  LOG_TRACE("Removing reviews " << eidMatch2 << " is involved in and itself...");
+  LOG_TRACE("Removing reviews " << eidMatch2 << " is involved in...");
   RemoveReviewsByEidOp(eidMatch2, true, false).apply(_map);
-  if (ConfigOptions().getDebugMapsWrite() && ConfigOptions().getDebugMapsWriteDetailed())
-  {
-    OsmMapWriterFactory::writeDebugMap(
-      _map, "LinearSnapMerger-after-removing-eidMatch2-reviews-" + _eidLogString);
-  }
 
   // Make the way that we're keeping have membership in whatever relations the way we're removing
   // was in. I *think* this makes sense. This logic may also need to be replicated elsewhere
   // during merging.
   LOG_TRACE(
-    "Swapping relation membership. Adding " << eid1 << " to all relations " << eid2 <<
+    "Swapping relation membership. Adding " << eidMatch1 << " to all relations " << eid2 <<
     " belongs in...");
-  //RelationMemberSwapper::swap(eid2, eid1, _map, false);
   RelationMemberSwapper::swap(eid2, eidMatch1, _map, false);
-  if (ConfigOptions().getDebugMapsWrite() && ConfigOptions().getDebugMapsWriteDetailed())
-  {
-    OsmMapWriterFactory::writeDebugMap(
-      _map, "LinearSnapMerger-after-relation-member-swap-" + _eidLogString);
-  }
 
   // Remove reviews e2 is involved in.
-  LOG_TRACE("Removing reviews " << eid2 << " is involved in and itself...");
+  LOG_TRACE("Removing reviews " << eid2 << " is involved...");
   RemoveReviewsByEidOp(eid2, true, false).apply(_map);
 
   if (ConfigOptions().getDebugMapsWrite() && ConfigOptions().getDebugMapsWriteDetailed())
@@ -778,7 +766,7 @@ void LinearSnapMerger::_removeSplitWay(
   }
   else
   {
-    // Remove any reviews that contain this element.
+    // Remove any reviews that contain this element. Don't remove the element itself yet.
     LOG_TRACE("Removing reviews for e1: " << eid1 << "...");
     RemoveReviewsByEidOp(eid1, true, false).apply(_map);
   }

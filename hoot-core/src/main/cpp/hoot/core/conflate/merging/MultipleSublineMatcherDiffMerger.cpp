@@ -22,9 +22,9 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 22021 Maxar (http://www.maxar.com/)
  */
-#include "MultipleSublineMatcherSnapMerger.h"
+#include "MultipleSublineMatcherDiffMerger.h"
 
 // hoot
 #include <hoot/core/algorithms/subline-matching/SublineStringMatcher.h>
@@ -34,26 +34,26 @@
 namespace hoot
 {
 
-int MultipleSublineMatcherSnapMerger::_numTimesBackupMatcherUsed = 0;
+int MultipleSublineMatcherDiffMerger::_numTimesBackupMatcherUsed = 0;
 
-HOOT_FACTORY_REGISTER(Merger, MultipleSublineMatcherSnapMerger)
+HOOT_FACTORY_REGISTER(Merger, MultipleSublineMatcherDiffMerger)
 
-MultipleSublineMatcherSnapMerger::MultipleSublineMatcherSnapMerger() :
-LinearSnapMerger()
+MultipleSublineMatcherDiffMerger::MultipleSublineMatcherDiffMerger() :
+LinearDiffMerger()
 {
 }
 
-MultipleSublineMatcherSnapMerger::MultipleSublineMatcherSnapMerger(
+MultipleSublineMatcherDiffMerger::MultipleSublineMatcherDiffMerger(
   const std::set<std::pair<ElementId, ElementId>>& pairs,
   const std::shared_ptr<SublineStringMatcher>& sublineMatcher,
   const std::shared_ptr<SublineStringMatcher>& sublineMatcher2) :
-LinearSnapMerger(pairs, sublineMatcher),
+LinearDiffMerger(pairs, sublineMatcher),
 _sublineMatcher2(sublineMatcher2)
 {
   // The subline matchers have already been initialized by the conflate script by this point.
 }
 
-WaySublineMatchString MultipleSublineMatcherSnapMerger::_matchSubline(ElementPtr e1, ElementPtr e2)
+WaySublineMatchString MultipleSublineMatcherDiffMerger::_matchSubline(ElementPtr e1, ElementPtr e2)
 {
   WaySublineMatchString match;
   if (e1->getElementType() != ElementType::Node && e2->getElementType() != ElementType::Node)
@@ -68,10 +68,7 @@ WaySublineMatchString MultipleSublineMatcherSnapMerger::_matchSubline(ElementPtr
     }
     catch (const RecursiveComplexityException& e)
     {
-      // If we receive this exception with the more accurate but sometimes slower maximal subline
-      // matcher (assuming _sublineMatcher was configured to be Maximal), we'll try again with the
-      // Frechet matcher, which is sometimes less accurate but usually much faster (assuming
-      // _sublineMatcher2 was configured to be Frechet).
+      // See related note in MultipleSublineMatcherSnapMerger.
       LOG_TRACE(
         e.getWhat() << " Re-matching river sublines for merging: " <<
         e1->getElementId() << ", " <<  e2->getElementId() << " with " <<

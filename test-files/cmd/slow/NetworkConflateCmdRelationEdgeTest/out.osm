@@ -1981,7 +1981,6 @@
         <tag k="admin_level" v="3"/>
         <tag k="boundary" v="administrative"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:hash" v="sha1sum:a5c7281b2395b9ccb69c9cb9505512e8819b953e"/>
         <tag k="source" v="estimated"/>
         <tag k="source:datetime" v="2015-07-27T16:17:43Z"/>
     </way>

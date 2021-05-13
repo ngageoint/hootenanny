@@ -46,8 +46,9 @@ class OsmMap;
  * - The child element is only contained by this element or one of its children.
  * - The element being deleted isn't contained by another element.
  *
- * If you want to remove an element that has parents, use RemoveElementByEid.
- * TODO: update this comment
+ * Optionally, the references to the parent element may be removed before removal of an element
+ * itself. If you want to remove an element that has parents non-recursively, use
+ * RemoveElementByEid.
  *
  * To perform the operation two steps are taken.
  * 1. Determine all the children of the provided element
@@ -58,6 +59,8 @@ class OsmMap;
  *
  * This method assumes there are no cyclical relation links. This approach is very thorough and
  * effective, but there may be much more efficient approaches on a case by case basis.
+ *
+ * @todo This class has some redundancy with RemoveElementsVisitor.
  */
 class RecursiveElementRemover : public ConstOsmMapOperation, public ConstElementConsumer,
   public ElementCriterionConsumer

@@ -57,6 +57,9 @@ public:
   WaySublineMatchString findMatch(const ConstOsmMapPtr& map, const ConstElementPtr& e1,
     const ConstElementPtr& e2, Meters maxRelevantDistance = -1) const override;
 
+  /**
+   * @see Configurable
+   */
   void setConfiguration(const Settings& s) override;
 
   void setMaxRelevantAngle(Radians r) override;

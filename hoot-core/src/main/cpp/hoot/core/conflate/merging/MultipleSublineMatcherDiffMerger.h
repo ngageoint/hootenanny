@@ -22,13 +22,13 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
  */
-#ifndef MULTIPLE_SUBLINE_MATCHER_SNAP_MERGER_H
-#define MULTIPLE_SUBLINE_MATCHER_SNAP_MERGER_H
+#ifndef MULTIPLE_SUBLINE_MATCHER_DIFF_MERGER_H
+#define MULTIPLE_SUBLINE_MATCHER_DIFF_MERGER_H
 
 // Hoot
-#include <hoot/core/conflate/merging/LinearSnapMerger.h>
+#include <hoot/core/conflate/merging/LinearDiffMerger.h>
 
 namespace hoot
 {
@@ -36,27 +36,32 @@ namespace hoot
 class WaySublineMatchString;
 
 /**
- * Merges way features potentially using multiple subline matchers
+ * TODO
  *
- * This class primarily exists so that we can select a subline matcher based on properties of the
- * input data for runtime performance reasons.
+ * @todo This inheritance causes duplicated code. To fix:
+ *
+ * 1) Get rid of this class.
+ * 2) Change MultipleSublineMatcherSnapMerger to inherit SublineStringMatcher and rename it to
+ *    MultipleSublineMatcher (?).
+ * 3) Set up LinearMergerFactory to populate the subline matcher on any LinearMergerAbstract as
+ *    MultipleSublineMatcher when river or line conflation is being done.
  */
-class MultipleSublineMatcherSnapMerger : public LinearSnapMerger
+class MultipleSublineMatcherDiffMerger : public LinearDiffMerger
 {
 
 public:
 
-  static QString className() { return "hoot::MultipleSublineMatcherSnapMerger"; }
+  static QString className() { return "hoot::MultipleSublineMatcherDiffMerger"; }
 
-  MultipleSublineMatcherSnapMerger();
-  MultipleSublineMatcherSnapMerger(
+  MultipleSublineMatcherDiffMerger();
+  MultipleSublineMatcherDiffMerger(
     const std::set<std::pair<ElementId, ElementId>>& pairs,
     const std::shared_ptr<SublineStringMatcher>& sublineMatcher,
     const std::shared_ptr<SublineStringMatcher>& sublineMatcher2);
-  ~MultipleSublineMatcherSnapMerger() = default;
+  ~MultipleSublineMatcherDiffMerger() = default;
 
   QString getDescription() const override
-  { return "Merges ways using snapping with one or more subline matchers"; }
+  { return "Merges ways using differencing with one or more subline matchers"; }
   QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }
 
@@ -65,7 +70,7 @@ public:
 protected:
 
   /*
-   * @see LinearSnapMerger
+   * @see LinearMergerAbstract
    */
   WaySublineMatchString _matchSubline(ElementPtr e1, ElementPtr e2) override;
 
@@ -78,8 +83,8 @@ private:
   static int _numTimesBackupMatcherUsed;
 };
 
-using MultipleSublineMatcherSnapMergerPtr = std::shared_ptr<MultipleSublineMatcherSnapMerger>;
+using MultipleSublineMatcherDiffMergerPtr = std::shared_ptr<MultipleSublineMatcherDiffMerger>;
 
 }
 
-#endif // MULTIPLE_SUBLINE_MATCHER_SNAP_MERGER_H
+#endif // MULTIPLE_SUBLINE_MATCHER_DIFF_MERGER_H
