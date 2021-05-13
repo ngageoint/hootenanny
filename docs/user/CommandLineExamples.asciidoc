@@ -1328,6 +1328,19 @@ Requires a language translation server installation.  See the Hootenanny Install
     hoot info --way-joiners
 -----
 
+===== List all way snap criteria for the current conflate configuration:
+
+-----
+    hoot info --way-snap-critera
+-----
+
+===== List all way snap criteria for a specific set of conflate matchers:
+
+-----
+    hoot info -D match.creators="hoot::HighwayMatchCreator;hoot::ScriptMatchCreator,River.js" \
+      --way-snap-critera
+-----
+
 ===== List the available JOSM validators:
 
 -----

@@ -76,9 +76,9 @@ _markSnappedNodes(false),
 _markSnappedWays(false),
 _reviewSnappedWays(false),
 _markOnly(false),
-_wayToSnapToCriteria(QStringList("hoot::LinearCriterion")),
-_wayToSnapCriteria(QStringList("hoot::LinearCriterion")),
-_wayNodeToSnapToCriteria(QStringList("hoot::LinearWayNodeCriterion")),
+_wayToSnapToCriteria(QStringList(LinearCriterion::className())),
+_wayToSnapCriteria(QStringList(LinearCriterion::className())),
+_wayNodeToSnapToCriteria(QStringList(LinearWayNodeCriterion::className())),
 _snapWayStatuses(QStringList(Status(Status::Unknown2).toString())),
 _snapToWayStatuses(QStringList(Status(Status::Unknown1).toString())),
 _minTypeMatchScore(-1.0),
@@ -429,6 +429,9 @@ ElementCriterionPtr UnconnectedWaySnapper::_getTypeCriterion(
       Factory::getInstance().constructObject<ElementCriterion>(typeCriterion));
     LOG_VART(typeCrit);
 
+    // TODO: I think requiring that the criteria be ConflatableElementCriterion is a little kludy,
+    // as they don't necessary have to be conflatable. Doing so is needed for now, though, so that
+    // we can call getChildCriteria when isNode=true.
     std::shared_ptr<ConflatableElementCriterion> conflatableCrit =
       std::dynamic_pointer_cast<ConflatableElementCriterion>(typeCrit);
     if (!conflatableCrit)
@@ -437,9 +440,14 @@ ElementCriterionPtr UnconnectedWaySnapper::_getTypeCriterion(
         "Only classes inheriting from ConflatableElementCriterion are valid as way snapping "
         "criteria.");
     }
+    if (conflatableCrit->getGeometryType() != GeometryTypeCriterion::GeometryType::Line)
+    {
+      throw IllegalArgumentException(
+        "Only classes capable of conflating linear features are valid as way snapping criteria.");
+    }
 
     // If we're creating a node index, get the corresponding way node type from the conflatable
-    // crit we just created. Assuming a single criterion returned here, which *should( be true for
+    // crit we just created. Assuming a single criterion returned here, which *should* be true for
     // all linear crits.
     if (isNode)
     {

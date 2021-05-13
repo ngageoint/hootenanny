@@ -85,12 +85,12 @@ public:
   }
 
   QString getBaseName() const override { return _baseName; }
-
   QString getName() const override { return _name; }
 
 private:
 
-  QString _name, _baseName;
+  QString _name;
+  QString _baseName;
 };
 
 /**
