@@ -72,8 +72,7 @@ public:
       StringUtils::jsonStringToPropTree(jsonInput);
     std::stringstream outputStrStream;
     boost::property_tree::json_parser::write_json(outputStrStream, *propTree);
-    QString outputStr = QString::fromStdString(outputStrStream.str()).simplified();
-    outputStr.replace("\\/", "/").trimmed();
+    QString outputStr = QString::fromStdString(outputStrStream.str()).simplified().replace("\\/", "/").trimmed();
     HOOT_STR_EQUALS(jsonInput, outputStr);
   }
 };

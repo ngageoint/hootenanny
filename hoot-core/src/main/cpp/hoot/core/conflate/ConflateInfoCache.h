@@ -58,20 +58,21 @@ class MatchCreator;
  * instances of the cache which would result in a conflicted cache state if the cache was shared by
  * different threads (different elements with the same ID could have different info; @todo We may be
  * able to use thread_local storage for this purpose with static member vars and avoid using
- * separate instances). Currently, this cache is only used in a few places and not by all match
- * creators.
+ * separate instances).
  *
- * The caches used in this class were determined on 9/30/18 running POI/Polygon conflation against
- * the regression test unifying-tests.child/somalia.child/somalia-test3.child and also on 1/7/20
- * against the data in africom/somalia/229_Mogadishu_SOM_Translated. Further caching enhancements
- * may be deemed necessary for conflation against other feature types.
+ * The element property caches used within this class were determined on 9/30/18 running POI/Polygon
+ * conflation against the regression test unifying-tests.child/somalia.child/somalia-test3.child and
+ * also on 1/7/20 against the data in africom/somalia/229_Mogadishu_SOM_Translated. Caching is only
+ * used where it has been proven in enhancing conflate runtime performance against real world data.
+ * Further caching enhancements may be deemed necessary for conflation against other feature types.
  *
  * Its worth noting that if you are doing cache performance tweaks on a Vagrant VM, the runtimes may
  * vary somewhat widely with subsequent executions of the exact same conflate job. So in that case,
- * its best to look for tweaks with fairly large improvements and ignore the smaller performance
- * improvements.
+ * its best to look for tweaks with fairly large improvements and ignore those that show smaller
+ * performance improvements.
  *
- * WARNING: This class can get very memory hungry depending on how the cache size is configured.
+ * WARNING: This class can get extremely memory hungry depending on how the cache size is
+ * configured.
  */
 class ConflateInfoCache : public Configurable
 {

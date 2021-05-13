@@ -58,14 +58,13 @@ public:
 
   ElementCriterionPtr clone() override { return ElementCriterionPtr(new TagKeyCriterion(_keys)); }
 
-  QString getDescription() const override
-  { return "Identifies elements that contain a specified tag key"; }
-
   void setConfiguration(const Settings& conf) override;
 
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+  QString toString() const override { return className(); }
+  QString getDescription() const override
+  { return "Identifies elements that contain a specified tag key"; }
 
 protected:
 

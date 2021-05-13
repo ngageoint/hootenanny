@@ -62,10 +62,9 @@ public:
   ElementCriterionPtr clone() override { return ElementCriterionPtr(new ElementIdCriterion()); }
 
   QString getDescription() const override { return "Identifies elements by type and ID"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+  QString toString() const override { return className(); }
 
 private:
 

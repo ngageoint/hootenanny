@@ -54,15 +54,14 @@ public:
   ElementCriterionPtr clone() override
   { return ElementCriterionPtr(new ReviewScoreCriterion()); }
 
-  QString getDescription() const override { return "Allows for filtering reviews by score"; }
-
   void setMinScoreThreshold(const double threshold);
   void setMaxScoreThreshold(const double threshold);
   void setInvertThresholding(const bool invert) { _invertThresholding = invert; }
 
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+  QString toString() const override { return className(); }
+  QString getDescription() const override { return "Allows for filtering reviews by score"; }
 
 private:
 

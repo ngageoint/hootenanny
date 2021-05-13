@@ -48,10 +48,9 @@ public:
 
   QString getDescription() const override
   { return "Identifies nodes belonging to polygons as identified by POI/Polygon Conflation"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+  QString toString() const override { return className(); }
 };
 
 }

@@ -56,7 +56,6 @@ public:
   StatsCmd() = default;
 
   QString getName() const override { return "stats"; }
-
   QString getDescription() const override
   { return "Calculates a pre-configured set of statistics for a map"; }
 

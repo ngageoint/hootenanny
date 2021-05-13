@@ -1,6 +1,7 @@
 
 SHELL=/bin/bash
 
+HOOT_OPTS=--status
 # If the silent flag is passed to make then make hoot quiet too.
 ifneq (,$(findstring s,$(MAKEFLAGS)))
   HOOT_OPTS=--warn

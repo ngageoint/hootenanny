@@ -57,7 +57,6 @@ public:
   CleanCmd() = default;
 
   QString getName() const override { return "clean"; }
-
   QString getDescription() const override { return "Corrects erroneous map data"; }
 
   int runSimple(QStringList& args) override

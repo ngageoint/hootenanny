@@ -55,10 +55,9 @@ public:
   ElementCriterionPtr clone() override { return ElementCriterionPtr(new StatusCriterion(_status)); }
 
   QString getDescription() const override { return "Identifies elements with a particular status"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+  QString toString() const override;
 
 private:
 

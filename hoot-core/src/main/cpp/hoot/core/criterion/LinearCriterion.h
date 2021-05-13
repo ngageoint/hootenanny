@@ -50,19 +50,18 @@ public:
 
   ElementCriterionPtr clone() override { return ElementCriterionPtr(new LinearCriterion()); }
 
-  QString getDescription() const override { return "Identifies linear features"; }
-
   GeometryType getGeometryType() const override { return GeometryType::Line; }
-
-  QString getName() const override { return className(); }
-
-  QString getClassName() const override { return className(); }
 
   bool supportsSpecificConflation() const override { return false; }
 
   static bool isLinearRelation(const ConstRelationPtr& relation);
 
   QStringList getChildCriteria() const override;
+
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
+  QString toString() const override { return className(); }
+  QString getDescription() const override { return "Identifies linear features"; }
 };
 
 }

@@ -50,15 +50,14 @@ public:
 
   ElementCriterionPtr clone() override { return ElementCriterionPtr(new PowerLineCriterion()); }
 
-  QString getDescription() const override { return "Identifies power line utilities"; }
-
-  QString getName() const override { return className(); }
-
-  QString getClassName() const override { return className(); }
-
   bool supportsSpecificConflation() const override { return true; }
 
   QStringList getChildCriteria() const override;
+
+  QString getDescription() const override { return "Identifies power line utilities"; }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
+  QString toString() const override { return className(); }
 };
 
 }

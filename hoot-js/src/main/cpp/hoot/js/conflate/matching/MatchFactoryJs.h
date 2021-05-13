@@ -40,7 +40,7 @@ class MatchFactoryJs : public HootBaseJs
 {
 public:
 
-  static void Init(v8::Handle<v8::Object> target);
+  static void Init(v8::Local<v8::Object> target);
 
   virtual ~MatchFactoryJs() = default;
 
@@ -49,9 +49,9 @@ private:
   MatchFactoryJs() = default;
 };
 
-inline v8::Handle<v8::Value> toV8(const CreatorDescription& d)
+inline v8::Local<v8::Value> toV8(const CreatorDescription& d)
 {
-  v8::Handle<v8::Object> result = v8::Object::New(v8::Isolate::GetCurrent());
+  v8::Local<v8::Object> result = v8::Object::New(v8::Isolate::GetCurrent());
   result->Set(toV8("className"), toV8(d.getClassName()));
   result->Set(toV8("description"), toV8(d.getDescription()));
   result->Set(toV8("experimental"), toV8(d.getExperimental()));

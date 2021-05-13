@@ -29,6 +29,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/rnd/io/MultiaryIngester.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/StringUtils.h>
 
 // Qt
@@ -44,10 +45,8 @@ public:
   static QString className() { return "hoot::MultiaryPoiIngestCmd"; }
 
   QString getName() const override { return "multiary-poi-ingest"; }
-
   QString getDescription() const override
   { return "Ingests POIs for use by multiary-poi-conflate (experimental) "; }
-
   QString getType() const override { return "rnd"; }
 
   int runSimple(QStringList& args) override
@@ -61,7 +60,18 @@ public:
       throw HootException(QString("%1 takes four parameters.").arg(getName()));
     }
 
-    MultiaryIngester().ingest(args[0], args[1], args[2], args[3]);
+    const QString input = args[0];
+    const QString translation = args[1];
+    const QString output = args[2];
+    const QString changesetOutput = args[3];
+
+    LOG_STATUS(
+      "Ingesting multiary POI data from ..." << FileUtils::toLogFormat(input, 25) <<
+      " using translation ..." << FileUtils::toLogFormat(translation, 25) <<
+      " and writing output to ..." << FileUtils::toLogFormat(output, 25) <<
+      " and changeset output to ..." << FileUtils::toLogFormat(changesetOutput, 25) << "...");
+
+    MultiaryIngester().ingest(input, translation, output, changesetOutput);
 
     LOG_STATUS(
       "Ingest completed in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");

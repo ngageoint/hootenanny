@@ -34,6 +34,7 @@
 #include <hoot/core/io/PartialOsmMapReader.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/OpenCv.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 
@@ -60,10 +61,7 @@ class PlotNodeDensityCmd : public BaseCommand
     PlotNodeDensityCmd() = default;
 
     QString getName() const override { return "plot-node-density"; }
-
-    QString getDescription() const override
-    { return "Creates a node density plot for a map"; }
-
+    QString getDescription() const override { return "Creates a node density plot for a map"; }
     QString getType() const { return "rnd"; }
 
     Envelope getEnvelope(const std::shared_ptr<OsmMapReader>& reader)
@@ -190,6 +188,10 @@ class PlotNodeDensityCmd : public BaseCommand
       {
         throw HootException("Expected a number > 0 for max size.");
       }
+
+      LOG_STATUS(
+        "Plotting node density for ..." << FileUtils::toLogFormat(input, 25) <<
+        " and writing output to ..." << FileUtils::toLogFormat(output, 25) << "...");
 
       // initialize to black
       QRgb baseColors = qRgba(0, 0, 0, 255);

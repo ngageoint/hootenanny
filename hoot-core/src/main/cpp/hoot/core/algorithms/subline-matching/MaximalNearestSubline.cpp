@@ -217,7 +217,7 @@ const vector<WayLocation>& MaximalNearestSubline::getInterval()
 }
 
 bool MaximalNearestSubline::_isInBounds(const WayLocation& wl,
-                                        const std::shared_ptr<LineString>& ls)
+                                        const std::shared_ptr<LineString>& ls) const
 {
   // calculate the distance from the test point to b
   std::shared_ptr<Point> tp(GeometryFactory::getDefaultInstance()->createPoint(

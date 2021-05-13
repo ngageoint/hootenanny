@@ -256,7 +256,7 @@ private:
   std::shared_ptr<ChangesetDeriver> _sortInputs(OsmMapPtr map1, OsmMapPtr map2);
   ChangesetProviderPtr _getChangesetFromMap(OsmMapPtr map);
 
-  long _snapSecondaryRoadsBackToRef();
+  long _snapSecondaryLinearFeaturesBackToRef();
 
   QSet<ElementId> _getElementIdsInvolvedInOnlyIntraDatasetMatches(
     const std::vector<ConstMatchPtr>& matches);
@@ -280,6 +280,7 @@ private:
    * Removes only the geometric portions of linear match elements that were involved in a match.
    */
   void _removePartialSecondaryMatchElements();
+  void _cleanupAfterPartialMatchRemoval();
   void _removeMetadataTags();
 };
 

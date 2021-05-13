@@ -848,9 +848,10 @@ may be desirable.
 * Default Value:
 ** `road_marking=solid_stop_line`
 ** `highway=steps`
+** `noexit=yes`
 
 Feature types that should never be snapped by `ChangesetReplacementCreator` when using
-`UnconnectedWaySnapper`.
+`UnconnectedWaySnapper`. Overrides +snap.unconnected.ways.exclude.types+.
 
 === changeset.source
 
@@ -1001,10 +1002,8 @@ See also:
 
 * Data Type: list
 * Default Value:
-** `hoot::MultilineStringMergeRelationCollapser`
-** `hoot::RemoveDuplicateWayNodesVisitor`
-** `hoot::InvalidWayRemover`
 ** `hoot::RemoveMissingElementsVisitor`
+** `hoot::InvalidWayRemover`
 ** `hoot::PoiPolygonInvalidReviewNodeRemover`
 ** `hoot::SuperfluousNodeRemover`
 ** `hoot::SmallHighwayMerger`
@@ -1017,10 +1016,12 @@ See also:
 ** `hoot::RemoveInvalidRelationVisitor`
 ** `hoot::RemoveInvalidMultilineStringMembersVisitor`
 ** `hoot::SuperfluousWayRemover`
+** `hoot::RemoveDuplicateWayNodesVisitor`
 ** `hoot::DuplicateWayRemover`
 ** `hoot::RemoveDuplicateRelationMembersVisitor`
 ** `hoot::RemoveEmptyRelationsOp`
 ** `hoot::RelationCircularRefRemover`
+** `hoot::MultilineStringMergeRelationCollapser`
 ** `hoot::RoadCrossingPolyReviewMarker`
 ** `hoot::ApiTagTruncateVisitor`
 ** `hoot::AddHilbertReviewSortOrderOp`
@@ -1323,7 +1324,7 @@ output. Setting this to false is primarily useful when debugging unconnected way
 * Data Type: bool
 * Default Value: `true`
 
-Overrides differential.remove.linear.partial.matches.as.whole when dealing with river data.
+Overrides +differential.remove.linear.partial.matches.as.whole+ when dealing with river data.
 
 === differential.remove.unconflatable.data
 
@@ -1333,13 +1334,13 @@ Overrides differential.remove.linear.partial.matches.as.whole when dealing with 
 If true Differential Conflation will remove all elements from output which Hootenanny is unable to
 match. If false, the unconflatable data will pass through to the output.
 
-=== differential.snap.unconnected.roads
+=== differential.snap.unconnected.features
 
 * Data Type: bool
 * Default Value: `false`
 
 If true, when running Differential Conflation the Unconnected Way Snapper will snap unconnected
-secondary road endpoint nodes to the nearest reference road.
+features to the nearest feature. See snap.unconnected.ways.* options for configurability.
 
 === differential.tag.ignore.list
 
@@ -1356,7 +1357,7 @@ are always ignored.
 * Default Value: `true`
 
 If true, reviews are treated as matches by Differential Conflation and removed from the output if
-differential.remove.reference.data is enabled. If set to false, reviews are not treated as matches
++differential.remove.reference.data+ is enabled. If set to false, reviews are not treated as matches
 and will pass through to the differential output.
 
 === direction.finder.angle.threshold
@@ -1365,8 +1366,7 @@ and will pass through to the differential output.
 * Default Value: `45.0`
 
 Maximum angle different in degrees that two line features can have and still be considered as
-going in the same direction by DirectionFinder::isSimilarDirection2. Used by Attribute Conflation
-only.
+going in the same direction by Attribute Conflation.
 
 === distance.node.criterion.center
 
@@ -4781,6 +4781,14 @@ The spacing granularity to which a unconnected way node is snapped back to a way
 Unconnected Way Snapper.  Setting this too low could result in lower algorithm performance, and
 setting it too high may result in less accurate way snapping.
 
+=== snap.unconnected.ways.exclude.types
+
+* Data Type: list
+* Default Value:
+** `noexit=yes`
+
+Feature types that should never be snapped.
+
 === snap.unconnected.ways.existing.way.node.tolerance
 
 * Data Type: double
@@ -4833,24 +4841,28 @@ completely and only the snap criterions will influence the snapping.
 If true, any snapped way will be marked for review. Useful if you want the opportunity to manually
 correct any snaps made.
 
-=== snap.unconnected.ways.snap.to.way.criterion
+=== snap.unconnected.ways.snap.criteria
 
-* Data Type: string
-* Default Value: `hoot::WayCriterion`
+* Data Type: list
+* Default Value:
+** ``
 
-Optional criterion class to filter the types of ways being snapped to.  An example would be:
-hoot::HighwayCriterion. If no criterion is specified, then all ways are considered as targets for
-way snapping.
+Optional criterion class list used to filter both the types of ways being snapped (sources) and
+the types of ways being snapped to (targets). The classes specified must inherit from
+`ConflatableElementCriterion`. An example is: `hoot::HighwayCriterion`. The default value of an
+empty list allows for snapping any type of linear feature. This option is overridden by the options:
+`snap.unconnected.ways.snap.way.criteria` and/or `snap.unconnected.ways.snap.to.way.criteria` to
+allow for more granularity in selecting the types to snap.
 
-=== snap.unconnected.ways.snap.to.way.node.criterion
+=== snap.unconnected.ways.snap.to.way.criteria
 
-* Data Type: string
-* Default Value: `hoot::WayNodeCriterion`
+* Data Type: list
+* Default Value:
+** ``
 
-Optional criterion class to filter the types of way nodes being snapped to.  An example would be:
-hoot::HighwayWayNodeCriterion. If no criterion is specified, then all ways are considered as
-targets for way snapping. This option is only used if snap.unconnected.ways.reuse.way.nodes is
-enabled.
+Optional criterion class list used to filter the types of ways being snapped to (targets). The
+classes specified must inherit from `ConflatableElementCriterion`. An example is:
+`hoot::HighwayCriterion`. This option overrides `snap.unconnected.ways.snap.criteria`.
 
 === snap.unconnected.ways.snap.to.way.statuses
 
@@ -4861,7 +4873,8 @@ enabled.
 Statuses of ways or way nodes being snapped to. Valid values are 'Input1', 'Input2', or 'Conflated'.
 Specify 'Input1' to snap secondary ways to reference ways or 'Input2' to snap reference ways to
 secondary ways. You may add multiple statuses and separate them with a semicolon. For example, to
-snap to both reference and conflated ways use: 'Input1;Conflated'.
+snap to both reference and conflated ways use: 'Input1;Conflated'. If no statuses are specified,
+then feature status is ignored for ways or way nodes being snapped to.
 
 === snap.unconnected.ways.snap.tolerance
 
@@ -4872,14 +4885,15 @@ Maximum distance used by the Unconnected Way Snapper, in meters, allowed between
 way endpoint node and a neighboring way for the way endpoint node to be snapped to the closest
 section of the neighboring way.
 
-=== snap.unconnected.ways.snap.way.criterion
+=== snap.unconnected.ways.snap.way.criteria
 
-* Data Type: string
-* Default Value: `hoot::WayCriterion`
+* Data Type: list
+* Default Value:
+** ```
 
-Optional criterion class to filter the types of ways being snapped. An example would be:
-hoot::HighwayCriterion. If no criterion is specified, then all ways are considered as sources for
-way snapping.
+Optional criterion class list used to filter the types of ways being snapped (sources). The classes
+specified must inherit from `ConflatableElementCriterion`. An example is: `hoot::HighwayCriterion`.
+This option overrides `snap.unconnected.ways.snap.criteria`.
 
 === snap.unconnected.ways.snap.way.statuses
 
@@ -4890,7 +4904,8 @@ way snapping.
 Statuses of ways being snapped.  Valid values are 'Input1', 'Input2', or 'Conflated'. Specify
 'Input1' to snap reference ways to secondary ways or 'Input2' to snap secondary ways to reference
 ways. You may add multiple statuses and separate them with a semicolon. For example, to snap both
-reference and conflated ways use: 'Input1;Conflated'.
+reference and conflated ways use: 'Input1;Conflated'. If no statuses are specified, then feature
+status is ignored for ways or way nodes being snapped.
 
 === snap.unconnected.ways.use.existing.way.nodes
 

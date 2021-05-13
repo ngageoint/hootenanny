@@ -59,7 +59,7 @@ public:
    */
   ScriptMatch(
     const std::shared_ptr<PluginContext>& script, const v8::Persistent<v8::Object>& plugin,
-    const ConstOsmMapPtr& map, const v8::Handle<v8::Object>& mapObj, const ElementId& eid1,
+    const ConstOsmMapPtr& map, const v8::Local<v8::Object>& mapObj, const ElementId& eid1,
     const ElementId& eid2, const ConstMatchThresholdPtr& mt);
   ~ScriptMatch() = default;
 
@@ -121,10 +121,10 @@ private:
   mutable QHash<ConflictKey, bool> _conflicts;
 
   void _calculateClassification(
-    const ConstOsmMapPtr& map, v8::Handle<v8::Object> mapObj, v8::Handle<v8::Object> plugin);
+    const ConstOsmMapPtr& map, v8::Local<v8::Object> mapObj, v8::Local<v8::Object> plugin);
 
-  v8::Handle<v8::Value> _call(
-    const ConstOsmMapPtr& map, v8::Handle<v8::Object> mapObj, v8::Handle<v8::Object> plugin);
+  v8::Local<v8::Value> _call(
+    const ConstOsmMapPtr& map, v8::Local<v8::Object> mapObj, v8::Local<v8::Object> plugin);
 
   ConflictKey _getConflictKey() const { return ConflictKey(_eid1, _eid2); }
 
@@ -136,10 +136,10 @@ private:
    * Either creates a new match or retrieves an existing one from the global set of matches
    */
   std::shared_ptr<const ScriptMatch> _getMatch(
-    OsmMapPtr map, v8::Handle<v8::Object> mapJs, const ElementId& eid1, const ElementId& eid2,
+    OsmMapPtr map, v8::Local<v8::Object> mapJs, const ElementId& eid1, const ElementId& eid2,
     const QHash<QString, ConstMatchPtr>& matches) const;
 
-  v8::Handle<v8::Value> _callGetMatchFeatureDetails(const ConstOsmMapPtr& map) const;
+  v8::Local<v8::Value> _callGetMatchFeatureDetails(const ConstOsmMapPtr& map) const;
 };
 
 }

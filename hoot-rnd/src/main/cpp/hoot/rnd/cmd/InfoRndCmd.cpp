@@ -48,10 +48,8 @@ public:
   InfoRndCmd() = default;
 
   QString getName() const override { return "info-rnd"; }
-
   QString getDescription() const override
   { return "Displays information about capabilities specific to the hoot-rnd module"; }
-
   QString getType() const override { return "rnd"; }
 
   int runSimple(QStringList& args) override

@@ -66,12 +66,13 @@ namespace hoot
 
 HOOT_JS_REGISTER(ElementMergerJs)
 
-void ElementMergerJs::Init(Handle<Object> exports)
+void ElementMergerJs::Init(Local<Object> exports)
 {
   Isolate* current = exports->GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
   exports->Set(String::NewFromUtf8(current, "mergeElements"),
-               FunctionTemplate::New(current, mergeElements)->GetFunction());
+               FunctionTemplate::New(current, mergeElements)->GetFunction(context).ToLocalChecked());
 }
 
 void ElementMergerJs::mergeElements(const FunctionCallbackInfo<Value>& args)
@@ -82,6 +83,7 @@ void ElementMergerJs::mergeElements(const FunctionCallbackInfo<Value>& args)
   try
   {
     HandleScope scope(current);
+    Local<Context> context = current->GetCurrentContext();
     if (args.Length() != 1)
     {
       args.GetReturnValue().Set(
@@ -91,12 +93,12 @@ void ElementMergerJs::mergeElements(const FunctionCallbackInfo<Value>& args)
       return;
     }
 
-    OsmMapPtr map(node::ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject())->getMap());
+    OsmMapPtr map(node::ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject(context).ToLocalChecked())->getMap());
     LOG_VART(map->getElementCount());
     _mergeElements(map, current);
     LOG_VART(map->getElementCount());
 
-    Handle<Object> returnMap = OsmMapJs::create(map);
+    Local<Object> returnMap = OsmMapJs::create(map);
     args.GetReturnValue().Set(returnMap);
   }
   // This error handling has been proven to not work as it never returns the error message to the
@@ -257,7 +259,6 @@ ElementMergerJs::MergeType ElementMergerJs::_determineMergeType(ConstOsmMapPtr m
       QString("Invalid inputs passed to the element merger.  Inputs must contain only one ") +
       QString("combination of the following:  1) two or more POIs, 2) two or more buildings, 3)") +
       QString("two or more areas, or 4) one POI and one polygon");
-    //LOG_ERROR(errorMsg);
     throw IllegalArgumentException(errorMsg);
   }
 

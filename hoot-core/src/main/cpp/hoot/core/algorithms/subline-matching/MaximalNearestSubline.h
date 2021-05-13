@@ -126,7 +126,7 @@ private:
    */
   ConstNodePtr _getStartNode();
 
-  bool _isInBounds(const WayLocation& wl, const std::shared_ptr<geos::geom::LineString>& ls);
+  bool _isInBounds(const WayLocation& wl, const std::shared_ptr<geos::geom::LineString>& ls) const;
 
   bool _isOutsideInterval(int ia);
 };

@@ -69,6 +69,7 @@ public:
    */
   virtual std::shared_ptr<ElementCriterion> clone() = 0;
 
+  // If this isn't here compilation fails for calls to log crit objects.
   QString toString() const override { return ""; }
 };
 

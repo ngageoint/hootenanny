@@ -30,6 +30,7 @@
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/schema/AttributeCoOccurrence.h>
 #include <hoot/core/io/IoUtils.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/StringUtils.h>
 
 // Qt
@@ -49,9 +50,7 @@ public:
   TagCompareCmd() = default;
 
   QString getName() const override { return "tag-compare"; }
-
-  QString getDescription() const override
-  { return "Compares tags between two maps"; }
+  QString getDescription() const override { return "Compares tags between two maps"; }
 
   int runSimple(QStringList& args) override
   {
@@ -76,9 +75,16 @@ public:
                           arg(getName()));
     }
 
+    const QString input1 = args[0];
+    const QString input2 = args[1];
+
+    LOG_STATUS(
+      "Comparing tags for ..." << FileUtils::toLogFormat(input1, 25) << " and ..." <<
+      FileUtils::toLogFormat(input2, 25) << "...");
+
     OsmMapPtr map(new OsmMap());
-    IoUtils::loadMap(map, args[0], false, Status::Unknown1);
-    IoUtils::loadMap(map, args[1], false, Status::Unknown2);
+    IoUtils::loadMap(map, input1, false, Status::Unknown1);
+    IoUtils::loadMap(map, input2, false, Status::Unknown2);
 
     cooccurrence.addToMatrix(map);
 

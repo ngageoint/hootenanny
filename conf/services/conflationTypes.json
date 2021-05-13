@@ -49,13 +49,14 @@
         "matcher": "",
         "merger": "",
         "members": {
-            "snap.unconnected.ways.snap.tolerance": "Maximum distance (m) over which to allow snapping roads to existing roads",
-            "snap.unconnected.ways.existing.way.node.tolerance": "Maximum distance (m) to allow snapping roads to existing road nodes",
-            "differential.remove.linear.partial.matches.as.whole": "Remove linear partial matches as whole",
-            "differential.remove.river.partial.matches.as.whole": "Remove river partial matches as whole (overrides linear match setting)",
+            "differential.remove.linear.partial.matches.as.whole": "Remove features involved in linear partial matches completely",
+            "differential.remove.river.partial.matches.as.whole": "Remove rivers involved in linear partial matches completely",
             "differential.remove.unconflatable.data": "Remove unconflatable data in the secondary layer from the output",
-            "snap.unconnected.ways.use.existing.way.nodes": "Reuse existing road nodes when snapping unconnected roads",
-            "differential.snap.unconnected.roads": "Snap unconnected secondary roads to reference roads",
+            "differential.snap.unconnected.features": "Snap unconnected secondary linear features to reference linear features",
+            "snap.unconnected.ways.snap.criteria": "Linear feature types to snap",
+            "snap.unconnected.ways.snap.tolerance": "Maximum distance (m) over which to allow snapping linear features to other linear features without snapping to a node",
+            "snap.unconnected.ways.use.existing.way.nodes": "Reuse existing linear feature nodes when snapping unconnected linear features",
+            "snap.unconnected.ways.existing.way.node.tolerance": "Maximum distance (m) to allow snapping linear features to linear feature nodes",
             "differential.treat.reviews.as.matches": "Treat reviews as matches and remove from the output"
         }
     },

@@ -47,10 +47,9 @@ public:
   { return ElementCriterionPtr(new TunnelWayNodeCriterion()); }
 
   QString getDescription() const override { return "Identifies tunnel nodes"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+  QString toString() const override { return className(); }
 };
 
 }

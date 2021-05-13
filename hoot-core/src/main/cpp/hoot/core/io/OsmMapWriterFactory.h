@@ -57,8 +57,9 @@ public:
 
   static bool hasElementOutputStream(const QString& url);
 
-  static void write(const std::shared_ptr<OsmMap>& map, const QString& url,
-                    const bool silent = false, const bool is_debug = false);
+  static void write(
+    const std::shared_ptr<OsmMap>& map, const QString& url, const bool silent = false,
+    const bool is_debug = false);
 
   static QString getWriterName(const QString& url);
 
@@ -70,8 +71,9 @@ public:
    * @param matcher If the Network conflation algorithm was used to generate the input data, pass
    * in the matcher used to write additional debugging information.
    */
-  static void writeDebugMap(const std::shared_ptr<const OsmMap>& map, const QString& title = "",
-                            NetworkMatcherPtr matcher = NetworkMatcherPtr());
+  static void writeDebugMap(
+    const std::shared_ptr<const OsmMap>& map, const QString& title = "",
+    NetworkMatcherPtr matcher = NetworkMatcherPtr());
 
   /**
    * Writes a feature geometry useful for debugging
@@ -81,9 +83,10 @@ public:
    * @param matcher If the Network conflation algorithm was used to generate the input data, pass
    * in the matcher used to write additional debugging information.
    */
-  static void writeDebugMap(const std::shared_ptr<geos::geom::Geometry>& geometry,
-                            std::shared_ptr<OGRSpatialReference> spatRef, const QString& title = "",
-                            NetworkMatcherPtr matcher = NetworkMatcherPtr());
+  static void writeDebugMap(
+    const std::shared_ptr<geos::geom::Geometry>& geometry,
+    std::shared_ptr<OGRSpatialReference> spatRef, const QString& title = "",
+    NetworkMatcherPtr matcher = NetworkMatcherPtr());
 
   /**
    * Reset the debug map count for output file naming purposes; useful in unit tests that

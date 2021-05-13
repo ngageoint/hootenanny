@@ -410,7 +410,7 @@ void ChangesetReplacementCreator::_setGlobalOpts()
 }
 
 void ChangesetReplacementCreator::_syncInputVersions(const OsmMapPtr& refMap,
-                                                     const OsmMapPtr& secMap)
+                                                     const OsmMapPtr& secMap) const
 {
   LOG_STATUS("Synchronizing elements...");
 
@@ -572,7 +572,7 @@ void ChangesetReplacementCreator::_snapUnconnectedPostChangesetMapCropping(
 
 void ChangesetReplacementCreator::_snapUnconnectedWays(
   OsmMapPtr& map, const QStringList& snapWayStatuses, const QStringList& snapToWayStatuses,
-  const QString& typeCriterionClassName, const bool markSnappedWays, const QString& debugFileName)
+  const QString& typeCriterionClassName, const bool markSnappedWays, const QString& debugFileName) const
 {
   LOG_DEBUG(
     "Snapping ways for map: " << map->getName() << ", with filter type: " <<
@@ -585,10 +585,8 @@ void ChangesetReplacementCreator::_snapUnconnectedWays(
   lineSnapper.setSnapToWayStatuses(snapToWayStatuses);
   lineSnapper.setSnapWayStatuses(snapWayStatuses);
   lineSnapper.setMarkSnappedWays(markSnappedWays);
-  // TODO: Do we need a way to derive the way node crit from the input feature filter crit?
-  lineSnapper.setWayNodeToSnapToCriterionClassName(WayNodeCriterion::className());
-  lineSnapper.setWayToSnapCriterionClassName(typeCriterionClassName);
-  lineSnapper.setWayToSnapToCriterionClassName(typeCriterionClassName);
+  lineSnapper.setWayToSnapCriteria(QStringList(typeCriterionClassName));
+  lineSnapper.setWayToSnapToCriteria(QStringList(typeCriterionClassName));
   // This prevents features of different types snapping to each other that shouldn't do so.
   // Arbitrarily picking a score here...may require further tweaking.
   lineSnapper.setMinTypeMatchScore(0.8);
@@ -626,7 +624,7 @@ OsmMapPtr ChangesetReplacementCreator::_getImmediatelyConnectedOutOfBoundsWays(
 }
 
 void ChangesetReplacementCreator::_removeUnsnappedImmediatelyConnectedOutOfBoundsWays(
-  OsmMapPtr& map)
+  OsmMapPtr& map) const
 {
   LOG_INFO(
     "Removing any immediately connected ways that were not previously snapped in: " <<
@@ -653,7 +651,7 @@ void ChangesetReplacementCreator::_removeUnsnappedImmediatelyConnectedOutOfBound
 
 void ChangesetReplacementCreator::_cropMapForChangesetDerivation(
   OsmMapPtr& map, const bool keepEntireFeaturesCrossingBounds,
-  const bool keepOnlyFeaturesInsideBounds, const QString& debugFileName)
+  const bool keepOnlyFeaturesInsideBounds, const QString& debugFileName) const
 {
   if (map->size() == 0)
   {

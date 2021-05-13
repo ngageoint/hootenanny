@@ -648,12 +648,12 @@
         "name":"Differential Conflation Options",
         "members":[
             {
-            	"id":"differential_snap_unconnected_roads",
+            	"id":"differential_snap_unconnected_features",
                 "elem_type":"bool",
                 "defaultvalue":"false",
-                "description":"If true, when running Differential Conflation the Unconnected Way Snapper will snap unconnected secondary road endpoint nodes to the nearest reference road.",
+                "description":"If true, when running Differential Conflation the Unconnected Way Snapper will snap unconnected secondary feature endpoint nodes to the nearest reference feature.",
                 "name":"Snap Unconnected Roads",
-                "hoot_key":"differential.snap.unconnected.roads"
+                "hoot_key":"differential.snap.unconnected.features"
             },
             {
             	"id":"differential_road_remove_reference_data",
@@ -664,9 +664,9 @@
                 "hoot_key":"differential.remove.reference.data"
             },
             {
-            	"id":"differential_road_snap_tolerance",
+            	"id":"differential_feature_snap_tolerance",
                 "elem_type":"double",
-                "description":"Maximum distance, in meters, allowed between an unconnected road and a neighboring road for the unconnected road to be snapped to the closest section of the neighboring road.",
+                "description":"Maximum distance, in meters, allowed between an unconnected linear feature and a neighboring linear feature for the unconnected feature to be snapped to the closest section of the neighboring linear feature.",
                 "name":"Road Snap Tolerance",
                 "defaultvalue":"5.0",
                 "minvalue":"0.01",
@@ -674,17 +674,17 @@
                 "hoot_key":"snap.unconnected.ways.snap.tolerance"
             },
             {
-            	"id":"differential_road_snap_use_existing_road_nodes",
+            	"id":"differential_feature_snap_use_existing_feature_nodes",
                 "elem_type":"bool",
                 "defaultvalue":"true",
-                "description":"If true, when road nodes are snapped to neighboring roads, Hootenanny will attempt to snap to existing road nodes on instead of adding new ones.",
+                "description":"If true, when feature nodes are snapped to neighboring features, Hootenanny will attempt to snap to existing feature nodes on instead of adding new ones.",
                 "name":"Use Existing Road Nodes When Snapping Roads",
                 "hoot_key":"snap.unconnected.ways.use.existing.way.nodes"
             },
             {
-            	"id":"differential_road_snap_existing_road_node_tolerance",
+            	"id":"differential_feature_snap_existing_feature_node_tolerance",
                 "elem_type":"double",
-                "description":"Maximum distance, in meters, allowed between an unconnected road and a neighboring road for the road node to be snapped directly to the existing road node.",
+                "description":"Maximum distance, in meters, allowed between an unconnected feature and a neighboring feature for the feature node to be snapped directly to the existing feature node.",
                 "name":"Name Score Threshold",
                 "defaultvalue":"0.5",
                 "minvalue":"0.01",

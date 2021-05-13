@@ -179,6 +179,15 @@ echo ""
 hoot info $CONFIG --way-joiners | grep "WayJoinerAdvanced"
 echo ""
 
+# WAY SNAP CRITERIA
+echo "Listing way snap criteria..."
+echo ""
+# Check against the default conflate config.
+hoot info $CONFIG --way-snap-criteria
+# Check against a custom conflate config. Note that the config option goes before --way-snap-criteria.
+hoot info $CONFIG -D match.creators="hoot::HighwayMatchCreator;hoot::ScriptMatchCreator,River.js" --way-snap-criteria
+echo ""
+
 # CONFLATABLE CRITERIA
 echo "Listing conflatable criteria..."
 echo ""

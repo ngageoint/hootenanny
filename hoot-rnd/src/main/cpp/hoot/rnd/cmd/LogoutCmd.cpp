@@ -45,10 +45,8 @@ public:
   LogoutCmd() = default;
 
   QString getName() const override { return "logout"; }
-
   QString getDescription() const override
   { return "Logs a user out of the Hootenanny Web Services"; }
-
   QString getType() const override { return "rnd"; }
 
   int runSimple(QStringList& args) override

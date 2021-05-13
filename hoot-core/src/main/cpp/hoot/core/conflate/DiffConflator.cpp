@@ -63,7 +63,9 @@
 #include <hoot/core/ops/WayJoinerOp.h>
 #include <hoot/core/util/ConfigUtils.h>
 #include <hoot/core/io/OsmChangesetFileWriter.h>
-#include <hoot/core/conflate/ConflateInfoCache.h>
+#include <hoot/core/ops/SuperfluousNodeRemover.h>
+#include <hoot/core/visitors/RemoveDuplicateWayNodesVisitor.h>
+#include <hoot/core/visitors/InvalidWayRemover.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -109,16 +111,27 @@ void DiffConflator::_reset()
 
 void DiffConflator::apply(OsmMapPtr& map)
 {
-  LOG_INFO("Calculating differential output...");
+  // Can't use _removeLinearMatchesPartially() here, b/c we haven't performed matching yet.
+  QString msg =
+    "Generating differential output. Attempting to remove partially matched linear features ";
+  if (_removeLinearPartialMatchesAsWhole)
+  {
+    msg += "partially.";
+  }
+  else
+  {
+    msg += "completely.";
+  }
+  LOG_INFO(msg);
+
+  _reset();
+  // Store the map, as we might need it for a tag diff later.
+  _map = map;
 
   // This status progress reporting could get way more granular, but we'll go with this for now to
   // avoid overloading users with status.
   int currentStep = 1;  // tracks the current job task step for progress reporting
   _updateProgress(currentStep - 1, "Matching features...");
-  _reset();
-  // Store the map, as we might need it for a tag diff later.
-  _map = map;
-  std::shared_ptr<ConflateInfoCache> conflateInfoCache = std::make_shared<ConflateInfoCache>(_map);
 
   // If we skip this part, then any unmatchable data will simply pass through to output, which can
   // be useful during debugging.
@@ -150,6 +163,8 @@ void DiffConflator::apply(OsmMapPtr& map)
     // matches here where linear and non-linear features are mixed, we specify all matches, and we
     // have no tests yet to catch the particular situation. If so, will have to deal with that on a
     // case by case basis.
+
+    // Result of _removeLinearMatchesPartially is only valid after we've performed matching.
     const bool removePartialLinearMatchesPartially = _removeLinearMatchesPartially();
     if (removePartialLinearMatchesPartially)
     {
@@ -173,7 +188,7 @@ void DiffConflator::apply(OsmMapPtr& map)
     // Get rid of everything from the ref1 map that matched something in the ref2 map.
 
     QString message = "Dropping match conflicts";
-    if (ConfigOptions().getDifferentialSnapUnconnectedRoads())
+    if (ConfigOptions().getDifferentialSnapUnconnectedFeatures())
     {
       message += " and snapping roads";
     }
@@ -187,6 +202,10 @@ void DiffConflator::apply(OsmMapPtr& map)
       // Use the MergerCreator framework and only remove the sections of linear features that match.
       // All other feature types are removed completely.
       _removePartialSecondaryMatchElements();
+      // Originally tried doing this cleanup as part of conflate.post.ops, which required re-order
+      // some of the ops. Unfortunately, that breaks some ref conflate regression tests. So, opting
+      // to do it inside DiffConflator instead.
+      _cleanupAfterPartialMatchRemoval();
     }
     // This uses a naive approach and remove all elements involved in a match completely, despite
     // possible partial subline matches (if linear features are present). If we're removing partial
@@ -196,20 +215,13 @@ void DiffConflator::apply(OsmMapPtr& map)
     MemoryUsageChecker::getInstance().check();
 
     // Eventually, we could extend this snapping to all linear feature types.
-    if (ConfigOptions().getDifferentialSnapUnconnectedRoads())
+    if (ConfigOptions().getDifferentialSnapUnconnectedFeatures())
     {
-      if (conflateInfoCache->elementCriterionInUseByActiveMatcher(HighwayCriterion::className()))
-      {
-        // Let's try to snap disconnected ref2 roads back to ref1 roads. This has to done before
-        // dumping the ref elements in the matches, or the roads we need to snap back to won't be
-        // there anymore.
-        _numSnappedWays = _snapSecondaryRoadsBackToRef();
-        MemoryUsageChecker::getInstance().check();
-      }
-      else
-      {
-        LOG_TRACE("Skipping road snapping as conflation is not configured for road features.")
-      }
+      // Let's try to snap disconnected ref2 roads back to ref1 roads. This has to done before
+      // dumping the ref elements in the matches, or the roads we need to snap back to won't be
+      // there anymore.
+      _numSnappedWays = _snapSecondaryLinearFeaturesBackToRef();
+      MemoryUsageChecker::getInstance().check();
     }
 
     if (ConfigOptions().getDifferentialRemoveReferenceData())
@@ -221,6 +233,17 @@ void DiffConflator::apply(OsmMapPtr& map)
     {
       _removeMetadataTags();
     }
+
+//    if (removePartialLinearMatchesPartially)
+//    {
+//      // TODO
+//      RemoveDuplicateWayNodesVisitor dupeWayNodeRemover;
+//      _map->visitRw(dupeWayNodeRemover);
+//      InvalidWayRemover invalidWayRemover;
+//      _map->visitRw(invalidWayRemover);
+//      SuperfluousNodeRemover::removeNodes(_map);
+//      OsmMapWriterFactory::writeDebugMap(_map, "after-superfluous-node-removal");
+//    }
 
     _currentStep++;
   }
@@ -237,7 +260,7 @@ void DiffConflator::_discardUnconflatableElements()
   MemoryUsageChecker::getInstance().check();
   _stats.append(
     SingleStat("Remove Non-conflatable Elements Time (sec)", _timer.getElapsedAndRestart()));
-  OsmMapWriterFactory::writeDebugMap(_map, "after-removing non-conflatable");
+  OsmMapWriterFactory::writeDebugMap(_map, "after-removing-non-conflatable");
   _numUnconflatableElementsDiscarded = mapSizeBefore - _map->size();
   LOG_INFO(
     "Discarded " << StringUtils::formatLargeNumber(_numUnconflatableElementsDiscarded) <<
@@ -420,35 +443,38 @@ QSet<ElementId> DiffConflator::_getElementIdsInvolvedInOnlyIntraDatasetMatches(
   return elementIds;
 }
 
-long DiffConflator::_snapSecondaryRoadsBackToRef()
+long DiffConflator::_snapSecondaryLinearFeaturesBackToRef()
 {
-  UnconnectedWaySnapper roadSnapper;
-  roadSnapper.setConfiguration(conf());
+  UnconnectedWaySnapper linearFeatureSnapper;
+  linearFeatureSnapper.setConfiguration(conf());
   // The ref snapped features must be marked to prevent their removal before changeset generation
   // later on.
-  roadSnapper.setMarkSnappedNodes(true);
-  roadSnapper.setMarkSnappedWays(true);
-  LOG_INFO("\t" << roadSnapper.getInitStatusMessage());
-  roadSnapper.apply(_map);
-  LOG_DEBUG("\t" << roadSnapper.getCompletedStatusMessage());
+  linearFeatureSnapper.setMarkSnappedNodes(true);
+  linearFeatureSnapper.setMarkSnappedWays(true);
+  LOG_INFO("\t" << linearFeatureSnapper.getInitStatusMessage());
+  linearFeatureSnapper.apply(_map);
+  LOG_DEBUG("\t" << linearFeatureSnapper.getCompletedStatusMessage());
   OsmMapWriterFactory::writeDebugMap(_map, "after-road-snapping");
 
-  // Since way splitting was done as part of the conflate pre ops previously run and we've now
-  // snapped unconnected ways, we need to rejoin any split ways *before* we remove reference data.
-  // If not, some ref linear data may incorrectly drop out of the diff.
-  WayJoinerOp wayJoiner;
-  wayJoiner.setConfiguration(conf());
-  LOG_INFO("\t" << wayJoiner.getInitStatusMessage());
-  wayJoiner.apply(_map);
-  LOG_DEBUG("\t" << wayJoiner.getCompletedStatusMessage());
-  OsmMapWriterFactory::writeDebugMap(_map, "after-way-joining");
+  const long numFeaturesSnapped = linearFeatureSnapper.getNumFeaturesAffected();
+  if (numFeaturesSnapped > 0)
+  {
+    // Since way splitting was done as part of the conflate pre ops previously run and we've now
+    // snapped unconnected ways, we need to rejoin any split ways *before* we remove reference data.
+    // If not, some ref linear data may incorrectly drop out of the diff.
+    WayJoinerOp wayJoiner;
+    wayJoiner.setConfiguration(conf());
+    LOG_INFO("\t" << wayJoiner.getInitStatusMessage());
+    wayJoiner.apply(_map);
+    LOG_DEBUG("\t" << wayJoiner.getCompletedStatusMessage());
+    OsmMapWriterFactory::writeDebugMap(_map, "after-way-joining");
 
-  // No point in running way joining a second time in post conflate ops since we already did it here
-  // (its configured in post ops by default), so let's remove it.
-  ConfigUtils::removeListOpEntry(
-    ConfigOptions::getConflatePostOpsKey(), WayJoinerOp::className());
-
-  return roadSnapper.getNumFeaturesAffected();
+    // No point in running way joining a second time in post conflate ops since we already did it here
+    // (its configured in post ops by default), so let's remove it.
+    ConfigUtils::removeListOpEntry(
+      ConfigOptions::getConflatePostOpsKey(), WayJoinerOp::className());
+  }
+  return numFeaturesSnapped;
 }
 
 void DiffConflator::_removeMatchElementsCompletely(const Status& status)
@@ -589,6 +615,26 @@ void DiffConflator::_removePartialSecondaryMatchElements()
   std::vector<MergerPtr> relationMergers;
   _createMergers(relationMergers);
   _mergeFeatures(relationMergers);
+}
+
+void DiffConflator::_cleanupAfterPartialMatchRemoval()
+{
+  std::shared_ptr<ConflateInfoCache> conflateInfoCache =
+    std::make_shared<ConflateInfoCache>(_map);
+
+  RemoveDuplicateWayNodesVisitor dupeWayNodeRemover;
+  dupeWayNodeRemover.setConflateInfoCache(conflateInfoCache);
+  LOG_INFO(dupeWayNodeRemover.getInitStatusMessage());
+  _map->visitWaysRw(dupeWayNodeRemover);
+  LOG_DEBUG(dupeWayNodeRemover.getCompletedStatusMessage());
+
+  InvalidWayRemover invalidWayRemover;
+  invalidWayRemover.setConflateInfoCache(conflateInfoCache);
+  LOG_INFO(invalidWayRemover.getInitStatusMessage());
+  _map->visitWaysRw(invalidWayRemover);
+  LOG_DEBUG(invalidWayRemover.getCompletedStatusMessage());
+
+  SuperfluousNodeRemover::removeNodes(_map);
 }
 
 void DiffConflator::_removeRefData()
