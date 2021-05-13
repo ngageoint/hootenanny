@@ -3729,6 +3729,11 @@ Listing way joiners...
 
   WayJoinerAdvanced                     Extends WayJoinerBasic with additional join pre-conditions.
 
+Listing way snap criteria...
+
+hoot::HighwayCriterion;hoot::LinearCriterion;hoot::LinearWaterwayCriterion;hoot::PowerLineCriterion;hoot::RailwayCriterion
+hoot::HighwayCriterion;hoot::LinearCriterion;hoot::LinearWaterwayCriterion
+
 Listing conflatable criteria...
 
   BuildingCriterion                     Identifies buildings

@@ -97,8 +97,8 @@ public:
    * Returns a description for the match creator
    *
    * This is actually being done in order to track the script name in ScriptMatchCreator, so we
-   * need to do some refactoring to get rid of this.  Could be redundant with the CreatorDescription
-   * class.
+   * may need to do some refactoring to get rid of this. Could be redundant with the
+   * CreatorDescription class.
    *
    * @return a descriptive string
    */
