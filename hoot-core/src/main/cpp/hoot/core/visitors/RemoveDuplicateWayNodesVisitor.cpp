@@ -84,8 +84,6 @@ void RemoveDuplicateWayNodesVisitor::visit(const ElementPtr& e)
     if (wayNodeIds.size() == 2 && way->isSimpleLoop())
     {
       LOG_TRACE("Removing invalid way: " << way->getElementId() << "...");
-      // TODO
-      //RemoveWayByEid::removeWayFully(_map->shared_from_this(), e->getId());
       RecursiveElementRemover(way->getElementId(), true).apply(_map);
       return;
     }

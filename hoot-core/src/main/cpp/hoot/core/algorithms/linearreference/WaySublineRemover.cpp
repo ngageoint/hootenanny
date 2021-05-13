@@ -47,8 +47,7 @@ namespace hoot
 {
 
 std::vector<ElementId> WaySublineRemover::removeSubline(
-  const WayPtr& way, const WaySubline& subline, OsmMapPtr& map/*,
-  const bool removeWholeWayRecursively*/)
+  const WayPtr& way, const WaySubline& subline, OsmMapPtr& map)
 {
   if (!way || !subline.isValid())
   {
@@ -65,40 +64,7 @@ std::vector<ElementId> WaySublineRemover::removeSubline(
   {
     LOG_TRACE(
       "Subline matches covers entire way. Removing entire way: " << way->getElementId() << "...");
-
-//    if (removeWholeWayRecursively)
-//    {
-//      // remove it from parents and the map
-//      RemoveElementByEid(way->getElementId()).apply(map);
-//      // remove its children
-//      RecursiveElementRemover(way->getElementId()).apply(map); // TODO: change this
-//    }
-//    else
-//    {
-//      // Use RemoveElementByEid here instead of RecursiveElementRemover so that the way is removed
-//      // from its parent before its removal. We also don't want to remove RecursiveElementRemover
-//      // here b/c the way's nodes may still belong to one the temp relations we created during
-//      // splitting.
-//      RemoveElementByEid(way->getElementId()).apply(map);
-//    }
-
-    // TODO: change this to take in a criterion
-//    if (RelationMemberUtils::isMemberOfRelationWithTagKey(
-//          map, way->getElementId(), MetadataTags::HootMultilineString()))
-//    {
-//      // Use RemoveElementByEid here instead of RecursiveElementRemover so that the way is removed
-//      // from its parent before its removal. We also don't want to remove RecursiveElementRemover
-//      // here b/c the way's nodes may still belong to one the temp relations we created during
-//      // splitting.
-//      RemoveElementByEid(way->getElementId()).apply(map);
-//    }
-//    else
-//    {
-      // remove it from parents and the map
-      //RemoveElementByEid(way->getElementId()).apply(map);
-      // remove its children
-      RecursiveElementRemover(way->getElementId(), true).apply(map);
-    //}
+    RecursiveElementRemover(way->getElementId(), true).apply(map);
 
     if (ConfigOptions().getDebugMapsWrite() && ConfigOptions().getDebugMapsWriteDetailed())
     {

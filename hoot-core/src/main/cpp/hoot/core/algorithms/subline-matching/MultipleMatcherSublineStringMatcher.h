@@ -78,7 +78,7 @@ public:
   QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }
 
-  //void setSublineMatcher(const std::shared_ptr<SublineMatcher>& sm);
+  static int getNumTimesBackupMatcherUsed() { return _numTimesBackupMatcherUsed; }
 
 private:
 
