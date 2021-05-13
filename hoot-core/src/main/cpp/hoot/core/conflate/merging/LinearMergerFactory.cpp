@@ -27,15 +27,15 @@
 #include "LinearMergerFactory.h"
 
 // hoot
+#include <hoot/core/algorithms/subline-matching/MultipleMatcherSublineStringMatcher.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/conflate/network/PartialNetworkMerger.h>
 #include <hoot/core/conflate/merging/LinearDiffMerger.h>
+#include <hoot/core/conflate/merging/LinearSnapMerger.h>
 #include <hoot/core/conflate/merging/LinearTagOnlyMerger.h>
-#include <hoot/core/conflate/merging/MultipleSublineMatcherDiffMerger.h>
-#include <hoot/core/conflate/merging/MultipleSublineMatcherSnapMerger.h>
 #include <hoot/core/conflate/merging/LinearAverageMerger.h>
 
 namespace hoot
@@ -113,9 +113,11 @@ MergerPtr LinearMergerFactory::getMerger(
   // Use of LinearTagOnlyMerger for geometries signifies that we're doing Attribute Conflation.
   const bool isAttributeConflate =
     ConfigOptions().getGeometryLinearMergerDefault() == LinearTagOnlyMerger::className();
+  LOG_VART(isAttributeConflate);
   // Use of LinearAverageMerger for geometries signifies that we're doing Average Conflation.
   const bool isAverageConflate =
     ConfigOptions().getGeometryLinearMergerDefault() == LinearAverageMerger::className();
+  LOG_VART(isAverageConflate);
   if (isAttributeConflate || isAverageConflate)
   {
     // For Attribute Conflation we do no subline matching at all during merging, so passing in
@@ -125,20 +127,23 @@ MergerPtr LinearMergerFactory::getMerger(
       "Multiple subline matcher merging may not be used with Attribute or Average Conflation.");
   }
 
+  std::shared_ptr<SublineStringMatcher> sublineMatcherWrapper =
+    std::make_shared<MultipleMatcherSublineStringMatcher>(sublineMatcher1, sublineMatcher2);
+
   std::shared_ptr<LinearMergerAbstract> merger;
   const bool isDiffConflate =
     ConfigOptions().getGeometryLinearMergerDefault() == LinearDiffMerger::className();
+  LOG_VART(isDiffConflate);
   if (isDiffConflate)
   {
-    merger =
-      std::make_shared<MultipleSublineMatcherDiffMerger>(eids, sublineMatcher1, sublineMatcher2);
+    merger = std::make_shared<LinearDiffMerger>(eids, sublineMatcherWrapper);
   }
   else
   {
-    merger =
-      std::make_shared<MultipleSublineMatcherSnapMerger>(eids, sublineMatcher1, sublineMatcher2);
+    merger = std::make_shared<LinearSnapMerger>(eids, sublineMatcherWrapper);
   }
   merger->setMatchedBy(matchedBy);
+  LOG_VART(merger->getName());
   return merger;
 }
 
