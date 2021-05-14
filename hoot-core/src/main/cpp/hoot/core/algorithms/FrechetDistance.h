@@ -90,7 +90,7 @@ protected:
    * @brief calculateMatrix - calculate the matrix of distances between any two given points in the ways
    * @return distinct Frechet matrix of distances calculated
    */
-  frechet_matrix calculateMatrix();
+  frechet_matrix calculateMatrix() const;
   /**
    * @brief advanceAndCheck - advances the current position (r, c) in the Frechet matrix and modifies the
    *  max_frechet with the maximum distance from the current and next positions to the closest point on the
@@ -146,7 +146,7 @@ protected:
    * @param index - index of the node to check the heading at
    * @return heading of the way at the given point
    */
-  Radians getHeadingAvg(WayPtr way, int index);
+  Radians getHeadingAvg(WayPtr way, int index) const;
   /**
    * @brief getHeadingSimple - get the heading of the way at the current way segment defined between node
    *  index and index + 1
@@ -154,7 +154,7 @@ protected:
    * @param index - index of the node to check the heading at
    * @return heading of the way at the given point
    */
-  Radians getHeadingSimple(WayPtr way, int index);
+  Radians getHeadingSimple(WayPtr way, int index) const;
   //  Allow test class to access protected members for white box testing
   friend class FrechetDistanceTest;
   //  Copies of the map and both ways

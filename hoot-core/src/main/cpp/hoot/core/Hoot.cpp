@@ -134,7 +134,7 @@ void Hoot::_init()
   qRegisterMetaType<QSharedPointer<QNetworkSession>>();
 }
 
-void Hoot::loadLibrary(const QString& name)
+void Hoot::loadLibrary(const QString& name) const
 {
   // this library sticks around in ram even after the object is destroyed.
   QLibrary lib(name);
@@ -153,7 +153,7 @@ void Hoot::loadLibrary(const QString& name)
   }
 }
 
-void Hoot::reinit()
+void Hoot::reinit() const
 {
   LOG_TRACE("Hoot instance reinit...");
 

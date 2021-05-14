@@ -48,12 +48,12 @@ public:
   /**
    * Returns the start index of the match in w1.
    */
-  int getW1Index() { return _i1; }
+  int getW1Index() const{ return _i1; }
 
   /**
    * Returns the start index of the match in w2.
    */
-  int getW2Index() { return _i2; }
+  int getW2Index() const{ return _i2; }
 
 private:
   std::shared_ptr<Way> _w1, _w2;

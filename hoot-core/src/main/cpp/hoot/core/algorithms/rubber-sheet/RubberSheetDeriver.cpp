@@ -47,7 +47,7 @@ namespace hoot
 
 void RubberSheetDeriver::derive(
   const QString& input1, const QString& input2, const QString& transform2To1,
-  const QString& transform1To2, const bool ref)
+  const QString& transform1To2, const bool ref) const
 {
   LOG_STATUS(
     "Deriving alignment transform for inputs ..." << FileUtils::toLogFormat(input1, 25) <<

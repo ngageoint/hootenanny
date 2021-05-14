@@ -6,16 +6,17 @@ set -e
 IMGNAME=hoot_core
 IMGVER=0.1
 
-# Uncoment this to re-use the same id
-# echo "Removing the old image"
-# docker images | grep ${IMGNAME}:latest | awk '{print $1":"$2}' | xargs --no-run-if-empty docker rmi
+BASEDIR=$(dirname "$0")
 
-echo "Build the image"
-docker build \
-	--build-arg DEV_UID=$(id -u) \
-	--build-arg DEV_GID=$(id -g) \
-	-t ${IMGNAME}:${IMGVER} .
+if [[ "$(docker images -q ${IMGNAME}:latest)" == "" ]]; then
+  echo "Building the image"
+  docker build \
+  	--build-arg DEV_UID=$(id -u) \
+  	--build-arg DEV_GID=$(id -g) \
+  	-t ${IMGNAME}:${IMGVER} ${BASEDIR}
 
-echo "Tagging the new image"
-docker tag ${IMGNAME}:${IMGVER} ${IMGNAME}:latest
-
+  echo "Tagging the new image"
+  docker tag ${IMGNAME}:${IMGVER} ${IMGNAME}:latest
+else
+  echo "Image exists: ${IMGNAME}:latest"
+fi

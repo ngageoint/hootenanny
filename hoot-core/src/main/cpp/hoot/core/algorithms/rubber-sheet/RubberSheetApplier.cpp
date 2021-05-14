@@ -46,7 +46,7 @@ namespace hoot
 {
 
 void RubberSheetApplier::apply(
-  const QString& transform, const QString& input, const QString& output)
+  const QString& transform, const QString& input, const QString& output) const
 {
   LOG_STATUS(
     "Applying alignment transform from ..." << FileUtils::toLogFormat(input, 25) << " to " <<
