@@ -51,11 +51,11 @@ public:
     OsmMapPtr map(new OsmMap());
     MapProjector::projectToPlanar(map);
     QList<NodePtr> nodes;
-    nodes.push_back(TestUtils::createNode(map, Status::Unknown1,  0.0,  0.0));
-    nodes.push_back(TestUtils::createNode(map, Status::Unknown1, 10.0,  0.0));
-    nodes.push_back(TestUtils::createNode(map, Status::Unknown1, 10.0, 10.0));
-    nodes.push_back(TestUtils::createNode(map, Status::Unknown1,  0.0, 10.0));
-    WayPtr way = TestUtils::createWay(map, nodes);
+    nodes.push_back(TestUtils::createNode(map, "", Status::Unknown1,  0.0,  0.0));
+    nodes.push_back(TestUtils::createNode(map, "", Status::Unknown1, 10.0,  0.0));
+    nodes.push_back(TestUtils::createNode(map, "", Status::Unknown1, 10.0, 10.0));
+    nodes.push_back(TestUtils::createNode(map, "", Status::Unknown1,  0.0, 10.0));
+    WayPtr way = TestUtils::createWay(map, nodes, "", Status::Unknown1);
 
     //  Check the length of a way
     CPPUNIT_ASSERT_DOUBLES_EQUAL(30.0, ElementGeometryUtils::calculateLength(way, map), 1e-3);

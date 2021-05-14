@@ -57,10 +57,10 @@ private:
                         Coordinate(20.0, 20.0), Coordinate(0.0, 20.0),
                         Coordinate(0.0, 0.0),
                         Coordinate::getNull() };
-    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w1");
+    WayPtr w1 = TestUtils::createWay(map, c1, "w1", Status::Unknown1, 5);
     w1->getTags().set("building", true);
     w1->getTags().set("name", "foo");
-    WayPtr w2 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w2");
+    WayPtr w2 = TestUtils::createWay(map, c1, "w2", Status::Unknown1, 5);
     w2->getTags().set("area", true);
 
     NodePtr n1(new Node(Status::Unknown1, 1, 10, 10, 5));
@@ -77,9 +77,7 @@ private:
 
 public:
 
-  PoiPolygonMatchVisitorTest()
-    : HootTestFixture("test-files/",
-                      UNUSED_PATH)
+  PoiPolygonMatchVisitorTest() : HootTestFixture("test-files/", UNUSED_PATH)
   {
     setResetType(ResetBasic);
   }

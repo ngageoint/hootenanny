@@ -46,7 +46,7 @@ namespace hoot
 class RelationMergerTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(RelationMergerTest);
-  CPPUNIT_TEST(runTest);
+  CPPUNIT_TEST(runBasicTest);
   // TODO: add test for empty relation being replaced
   // TODO: add test for relations referencing each other
   CPPUNIT_TEST_SUITE_END();
@@ -63,10 +63,8 @@ public:
     //setResetType(ResetAll);
   }
 
-  void runTest()
+  void runBasicTest()
   {
-    LOG_DEBUG("runTest");
-
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(map, _inputPath + "runTestInput.osm", true);
 

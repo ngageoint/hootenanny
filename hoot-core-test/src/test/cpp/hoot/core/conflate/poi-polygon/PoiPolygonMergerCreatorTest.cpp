@@ -83,7 +83,7 @@ public:
                         Coordinate(20.0, 20.0), Coordinate(0.0, 20.0),
                         Coordinate(0.0, 0.0),
                         Coordinate::getNull() };
-    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w1");
+    WayPtr w1 = TestUtils::createWay(map, c1, "w1", Status::Unknown1, 5);
     w1->getTags().set("area", true);
     w1->getTags()["name"] = "foo";
     w1->getTags()["amenity"] = "bar";
@@ -121,7 +121,7 @@ public:
                         Coordinate(20.0, 20.0), Coordinate(0.0, 20.0),
                         Coordinate(0.0, 0.0),
                         Coordinate::getNull() };
-    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w1");
+    WayPtr w1 = TestUtils::createWay(map, c1, "w1", Status::Unknown1, 5);
     w1->getTags().set("building", true);
     w1->getTags()["name"] = "foo";
     w1->getTags()["amenity"] = "bar";
@@ -130,7 +130,7 @@ public:
                         Coordinate(5.0, 5.0), Coordinate(0.0, 5.0),
                         Coordinate(0.0, 0.0),
                         Coordinate::getNull() };
-    WayPtr w2 = TestUtils::createWay(map, Status::Unknown2, c2, 5, "w2");
+    WayPtr w2 = TestUtils::createWay(map, c2, "w2", Status::Unknown2, 5);
     w2->getTags().set("building", true);
     w2->getTags()["name"] = "goofie";
 

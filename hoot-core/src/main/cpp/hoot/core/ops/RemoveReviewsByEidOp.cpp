@@ -42,9 +42,11 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, RemoveReviewsByEidOp)
 
-RemoveReviewsByEidOp::RemoveReviewsByEidOp(ElementId eid, bool clearAndRemoveElement) :
-  _eid(eid),
-  _clearAndRemove(clearAndRemoveElement)
+RemoveReviewsByEidOp::RemoveReviewsByEidOp(
+  ElementId eid, bool clearAndRemoveElement, bool removeParentRefs) :
+_eid(eid),
+_clearAndRemove(clearAndRemoveElement),
+_removeParentRefs(removeParentRefs)
 {
 }
 
@@ -78,6 +80,10 @@ void RemoveReviewsByEidOp::apply(const OsmMapPtr &map)
 
   LOG_TRACE("Removing reviews for " << _eid << " from map...");
   ElementPtr from = map->getElement(_eid);
+  if (!from)
+  {
+    return;
+  }
   set<ReviewMarker::ReviewUid> reviews = ReviewMarker::getReviewUids(map, from);
   for (set<ReviewMarker::ReviewUid>::const_iterator it = reviews.begin(); it != reviews.end();
     ++it)
@@ -94,7 +100,7 @@ void RemoveReviewsByEidOp::apply(const OsmMapPtr &map)
     // just in case it is still part of an element (e.g. part of another relation)
     LOG_TRACE("Removing " << _eid << "...");
     from->getTags().clear();
-    RecursiveElementRemover(_eid).apply(map);
+    RecursiveElementRemover(_eid, _removeParentRefs).apply(map);
   }
 }
 

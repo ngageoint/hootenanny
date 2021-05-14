@@ -776,7 +776,7 @@ bool UnconnectedWaySnapper::_snapUnconnectedWayEndNodeToWayNode(
         if (_minTypeMatchScore != -1.0)
         {
           const std::vector<ConstWayPtr> containingWays =
-            WayUtils::getContainingWaysByNodeId(wayNodeToSnapToId, _map);
+            WayUtils::getContainingWaysByNodeIdConst(wayNodeToSnapToId, _map);
           LOG_VART(containingWays.size());
           bool typeMatchFound = false;
           for (std::vector<ConstWayPtr>::const_iterator containingWaysItr = containingWays.begin();

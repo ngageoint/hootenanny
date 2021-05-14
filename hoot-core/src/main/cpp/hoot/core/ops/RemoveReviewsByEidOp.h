@@ -48,41 +48,56 @@ public:
   static QString className() { return "hoot::RemoveReviewsByEidOp"; }
 
   /**
-   */
-  RemoveReviewsByEidOp(ElementId eid, bool clearAndRemoveElement = false);
-
-  /**
+   * Constructor
+   *
    * It is expected that the eid will be populated with addElement after construction. addElement
    * must be called exactly two times.
    */
   RemoveReviewsByEidOp() = default;
+  /**
+    Constructor
+
+    @param eid ID of the element being removed from reviews
+    @param clearAndRemoveElement If set to true, then the element will be cleared of all attributes and a
+   * removal will be attempted. In some cases (e.g. replace can't be complete if you're replacing a
+   * node with a way and the node is in a way), the element won't be removed. If this happens, then
+   * all tags will be cleared.
+    @param removeParentRefs If true, removes all references in parent relations or ways to the
+   * element being removed before trying to remove it. If false and clearAndRemoveElement=true, and
+   * the element being removed has memberships in a relation or way, the element will not be removed.
+   */
+  RemoveReviewsByEidOp(
+    ElementId eid, bool clearAndRemoveElement = false, bool removeParentRefs = false);
   ~RemoveReviewsByEidOp() = default;
 
   /**
-   * If the elements aren't specified in the constructor this must be called exactly two times. Once
-   * for 'from' and a second time for 'to'.
+   * If the elements aren't specified in the constructor, this must be called exactly two times.
+   * Once for 'from' and a second time for 'to'.
    */
   void addElement(const ConstElementPtr& e) override;
 
+  /**
+   * @see ConstOsmMapOperation
+   */
   void apply(const OsmMapPtr& map) override;
-
-  QString getDescription() const override
-  { return "Removes conflation reviews associated with specified element IDs"; }
 
   QString getInitStatusMessage() const override
   { return "Removing conflation reviews..."; }
-
   QString getCompletedStatusMessage() const override
   { return "Removed " + QString::number(_numAffected) + " conflation reviews"; }
 
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+  QString getDescription() const override
+  { return "Removes conflation reviews associated with specified element IDs"; }
 
 private:
 
   ElementId _eid;
+  // removes an element after it has been removed from reviews
   bool _clearAndRemove;
+  // removes all references in parent elements to the element being removed from reviews
+  bool _removeParentRefs;
 };
 
 }
