@@ -1123,14 +1123,438 @@
     <node visible="true" id="-3" timestamp="2018-02-15T20:56:52Z" version="1" lat="39.6318742999999998" lon="125.8983422000000019"/>
     <node visible="true" id="-2" timestamp="2018-02-15T20:56:52Z" version="1" lat="39.6350596000000053" lon="125.9030145999999917"/>
     <node visible="true" id="-1" timestamp="2018-02-15T20:56:52Z" version="1" lat="39.6350843999999896" lon="125.9030951000000016"/>
-    <way visible="true" id="-1607" timestamp="2018-02-15T20:56:52Z" version="1">
+    <way visible="true" id="-1637" timestamp="2018-02-15T20:56:52Z" version="1">
+        <nd ref="-38"/>
+        <nd ref="-39"/>
+        <tag k="FCSubtype" v="0"/>
+        <tag k="GFID" v="E4607943-453D-4270-835D-9DDBA792C752"/>
+        <tag k="REF1" v="000014"/>
+        <tag k="REF2" v="todo"/>
+        <tag k="SHAPE_Leng" v="0.00052589965508399999"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="bridge" v="yes"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="gauge" v="144"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="lanes" v="1"/>
+        <tag k="layer" v="1"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="location" v="overground"/>
+        <tag k="note" v="Single"/>
+        <tag k="railway" v="Other"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="source" v="osm"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2018-02-16T13:57:43Z;2013-09-15T14:40:19.000Z"/>
+        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.897Z"/>
+        <tag k="usage" v="high_speed_rail"/>
+        <tag k="uuid" v="{7aa51969-242a-424c-9049-46da45bbd6d8};{2d02ea64-a2b9-44f9-bc2b-f456ccd1c7df}"/>
+    </way>
+    <way visible="true" id="-1635" timestamp="2018-02-15T20:56:52Z" version="1">
+        <nd ref="-123"/>
+        <nd ref="-163"/>
+        <tag k="FCSubtype" v="0"/>
+        <tag k="GFID" v="CA9C33AC-8622-4C4E-A49E-FFC5FA2F6F93"/>
+        <tag k="REF1" v="00002b"/>
+        <tag k="REF2" v="todo"/>
+        <tag k="SHAPE_Leng" v="0.0012889988149700001"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="bridge" v="yes"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="gauge" v="144"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="lanes" v="1"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="location" v="overground"/>
+        <tag k="note" v="Single"/>
+        <tag k="railway" v="Other"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="source" v="osm"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2018-02-16T13:57:43Z;2012-09-09T14:10:28.000Z"/>
+        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.898Z"/>
+        <tag k="usage" v="high_speed_rail"/>
+        <tag k="uuid" v="{f8b23bcb-cfb7-4c74-b2fa-97cb5b929382};{21bb637b-e73a-4421-80a6-222d6365cc54}"/>
+    </way>
+    <way visible="true" id="-1633" timestamp="2018-02-15T20:56:52Z" version="1">
+        <nd ref="-12"/>
+        <nd ref="-467"/>
+        <tag k="FCSubtype" v="0"/>
+        <tag k="GFID" v="437166AC-EE6C-458F-966C-DA4C714A8A15"/>
+        <tag k="REF1" v="00004f"/>
+        <tag k="REF2" v="00004f"/>
+        <tag k="SHAPE_Leng" v="0.000639832665136"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="bridge" v="yes"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="gauge" v="144"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="gndb_id" v="6183466"/>
+        <tag k="gndb_id:2" v="6171468"/>
+        <tag k="lanes" v="1"/>
+        <tag k="layer" v="1"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="location" v="overground"/>
+        <tag k="name" v="Manp'o-son"/>
+        <tag k="note" v="Single"/>
+        <tag k="railway" v="Other"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="osm"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2018-02-16T13:57:43Z;2012-09-06T18:57:23.000Z"/>
+        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.884Z"/>
+        <tag k="usage" v="high_speed_rail"/>
+        <tag k="uuid" v="{a4915a46-b9a3-44e1-8e2c-7d29f0a2080c};{08af4d1f-dfbe-4c33-90f7-dc88ca6e5807}"/>
+    </way>
+    <way visible="true" id="-1631" timestamp="2018-02-15T20:56:52Z" version="1">
+        <nd ref="-141"/>
+        <nd ref="-142"/>
+        <tag k="FCSubtype" v="0"/>
+        <tag k="GFID" v="FC04864B-16FF-402C-AB53-5B47F8B56C72"/>
+        <tag k="REF1" v="000024"/>
+        <tag k="REF2" v="000024"/>
+        <tag k="SHAPE_Leng" v="0.0012365014542499999"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="bridge" v="yes"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="gauge" v="144"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="gndb_id" v="6183466"/>
+        <tag k="gndb_id:2" v="6171468"/>
+        <tag k="lanes" v="1"/>
+        <tag k="layer" v="1"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="location" v="overground"/>
+        <tag k="name" v="Manp'o-son"/>
+        <tag k="note" v="Single"/>
+        <tag k="railway" v="Other"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="osm"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2018-02-16T13:57:43Z;2012-09-06T18:57:18.000Z"/>
+        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.884Z"/>
+        <tag k="usage" v="high_speed_rail"/>
+        <tag k="uuid" v="{88e2319e-e3c4-4d97-91fb-39835b024283};{7ee8145a-25c3-4dcb-bf9f-465ee7d86ae5}"/>
+    </way>
+    <way visible="true" id="-1629" timestamp="2018-02-15T20:56:52Z" version="1">
+        <nd ref="-531"/>
+        <nd ref="-272"/>
+        <tag k="FCSubtype" v="0"/>
+        <tag k="GFID" v="5ABF4578-44C6-4DF1-8707-4801217715A2"/>
+        <tag k="REF1" v="00005c"/>
+        <tag k="REF2" v="todo"/>
+        <tag k="SHAPE_Leng" v="0.000121136109754"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="bridge" v="yes"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="gauge" v="144"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="lanes" v="1"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="location" v="overground"/>
+        <tag k="note" v="Single"/>
+        <tag k="railway" v="Other"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="source" v="osm"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2018-02-16T13:57:43Z;2014-01-20T23:08:43.000Z"/>
+        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.892Z"/>
+        <tag k="usage" v="high_speed_rail"/>
+        <tag k="uuid" v="{88e1f975-2d23-4d22-8835-9d2674006aa0};{8681b06c-91ee-46e2-b417-8c31ebb3831d}"/>
+    </way>
+    <way visible="true" id="-1627" timestamp="2018-02-15T20:56:52Z" version="1">
+        <nd ref="-453"/>
+        <nd ref="-60"/>
+        <tag k="FCSubtype" v="0"/>
+        <tag k="GFID" v="4F029ED4-C8B3-4A79-BCA8-755A1B4DA80D"/>
+        <tag k="REF1" v="000061"/>
+        <tag k="REF2" v="000061"/>
+        <tag k="SHAPE_Leng" v="0.00086792759557299999"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="bridge" v="yes"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="gauge" v="144"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="gndb_id" v="6282826"/>
+        <tag k="gndb_id:2" v="6253325"/>
+        <tag k="lanes" v="1"/>
+        <tag k="layer" v="1"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="location" v="overground"/>
+        <tag k="name" v="Kaech'on-son"/>
+        <tag k="note" v="Single"/>
+        <tag k="railway" v="Other"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="osm"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2018-02-16T13:57:43Z;2012-09-05T16:27:16.000Z"/>
+        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.866Z"/>
+        <tag k="usage" v="high_speed_rail"/>
+        <tag k="uuid" v="{7156dd33-941b-44bf-9220-07415b1de2dc};{a6667db0-47ed-49a4-a7b6-a547ce7f4947}"/>
+    </way>
+    <way visible="true" id="-1625" timestamp="2018-02-15T20:56:52Z" version="1">
+        <nd ref="-484"/>
+        <nd ref="-15"/>
+        <tag k="FCSubtype" v="0"/>
+        <tag k="GFID" v="3191AA51-7D11-4DB0-A244-710D7CC59190"/>
+        <tag k="REF1" v="000064"/>
+        <tag k="REF2" v="000064"/>
+        <tag k="SHAPE_Leng" v="0.00050439291931700001"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="bridge" v="yes"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="gauge" v="144"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="gndb_id" v="6183466"/>
+        <tag k="gndb_id:2" v="6171468"/>
+        <tag k="lanes" v="1"/>
+        <tag k="layer" v="1"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="location" v="overground"/>
+        <tag k="name" v="Manp'o-son"/>
+        <tag k="note" v="Single"/>
+        <tag k="railway" v="Other"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="osm"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2018-02-16T13:57:43Z;2012-09-06T18:57:22.000Z"/>
+        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.898Z"/>
+        <tag k="usage" v="high_speed_rail"/>
+        <tag k="uuid" v="{d86b419c-cfc1-4bca-8af1-eb8ebd4d5de1};{cd3bd5b1-d7fe-4a3c-b9ec-07e93e17a8ed}"/>
+    </way>
+    <way visible="true" id="-1623" timestamp="2018-02-15T20:56:52Z" version="1">
+        <nd ref="-290"/>
+        <nd ref="-5"/>
+        <tag k="FCSubtype" v="0"/>
+        <tag k="GFID" v="4C75649C-B581-4788-8DF7-A30FD0D49549"/>
+        <tag k="REF1" v="000066"/>
+        <tag k="REF2" v="000066"/>
+        <tag k="SHAPE_Leng" v="0.000111457068982"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="bridge" v="yes"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="gauge" v="144"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="gndb_id" v="6183466"/>
+        <tag k="gndb_id:2" v="6171468"/>
+        <tag k="lanes" v="1"/>
+        <tag k="layer" v="1"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="location" v="overground"/>
+        <tag k="name" v="Manp'o-son"/>
+        <tag k="note" v="Single"/>
+        <tag k="railway" v="Other"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="osm"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2018-02-16T13:57:43Z;2012-09-06T18:57:21.000Z"/>
+        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.883Z"/>
+        <tag k="usage" v="high_speed_rail"/>
+        <tag k="uuid" v="{0e7b66c7-c9a3-4848-9049-14616c584ff5};{0d2f2625-15c4-47cf-b2d4-d1b1498684e7}"/>
+    </way>
+    <way visible="true" id="-1621" timestamp="2018-02-15T20:56:52Z" version="1">
+        <nd ref="-719"/>
+        <nd ref="-720"/>
+        <tag k="FCSubtype" v="0"/>
+        <tag k="GFID" v="B64366C9-C1FE-496C-B705-C500370D329B"/>
+        <tag k="REF1" v="00006b"/>
+        <tag k="REF2" v="todo"/>
+        <tag k="SHAPE_Leng" v="0.00018284125017899999"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="bridge" v="yes"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="gauge" v="144"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="lanes" v="1"/>
+        <tag k="layer" v="1"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="location" v="overground"/>
+        <tag k="note" v="Single"/>
+        <tag k="railway" v="Other"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="service" v="spur"/>
+        <tag k="source" v="osm"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2018-02-16T13:57:43Z;2013-09-15T15:31:44.000Z"/>
+        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.963Z"/>
+        <tag k="usage" v="high_speed_rail"/>
+        <tag k="uuid" v="{c4580f50-6ce7-4580-8e5f-ee924ecff7e8};{823b9844-de80-4b95-973e-f572f8784c16}"/>
+    </way>
+    <way visible="true" id="-1619" timestamp="2018-02-15T20:56:52Z" version="1">
+        <nd ref="-718"/>
+        <nd ref="-785"/>
+        <tag k="FCSubtype" v="0"/>
+        <tag k="GFID" v="A4A74FA5-5C74-4D18-8E2A-410106EFCE34"/>
+        <tag k="REF1" v="000075"/>
+        <tag k="REF2" v="todo"/>
+        <tag k="SHAPE_Leng" v="0.00016497851856999999"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="bridge" v="yes"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="gauge" v="144"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="highway" v="primary"/>
+        <tag k="hoot:hash" v="sha1sum:881448f8b7abd3ff1a81bbdcd7dc420b436cb3f5;sha1sum:1c3fdaefda7a76321bf819e4274683aeaf3e041a"/>
+        <tag k="lanes" v="1"/>
+        <tag k="layer" v="1"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="location" v="overground"/>
+        <tag k="note" v="Single"/>
+        <tag k="railway" v="Other"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="service" v="spur"/>
+        <tag k="source" v="osm"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2018-02-16T13:57:43Z;2013-09-15T15:31:43.000Z"/>
+        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.963Z"/>
+        <tag k="usage" v="high_speed_rail"/>
+        <tag k="uuid" v="{7eaf829c-4b09-4bef-b3b5-40c9f6b4b358};{ec1f8089-9b4f-4d65-a0f2-fa646679d9e2}"/>
+    </way>
+    <way visible="true" id="-1617" timestamp="2018-02-15T20:56:52Z" version="1">
+        <nd ref="-777"/>
+        <nd ref="-697"/>
+        <tag k="FCSubtype" v="0"/>
+        <tag k="GFID" v="3782E787-B0AC-4194-8530-3F2062D92E2D"/>
+        <tag k="REF1" v="000078"/>
+        <tag k="REF2" v="todo"/>
+        <tag k="SHAPE_Leng" v="0.000145561713133"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="bridge" v="yes"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="gauge" v="144"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="lanes" v="1"/>
+        <tag k="layer" v="1"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="location" v="overground"/>
+        <tag k="note" v="Single"/>
+        <tag k="railway" v="Other"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="service" v="spur"/>
+        <tag k="source" v="osm"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2018-02-16T13:57:43Z;2013-09-15T15:31:44.000Z"/>
+        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.963Z"/>
+        <tag k="usage" v="high_speed_rail"/>
+        <tag k="uuid" v="{7e6ab770-8e64-47b2-ba39-e698de655fb8};{238a441e-98a8-4383-b2a4-8f83d9ad3797}"/>
+    </way>
+    <way visible="true" id="-1615" timestamp="2018-02-15T20:56:52Z" version="1">
+        <nd ref="-792"/>
+        <nd ref="-793"/>
+        <tag k="FCSubtype" v="0"/>
+        <tag k="GFID" v="CEDEE478-8B52-40DD-A8FB-4F68597F686C"/>
+        <tag k="REF1" v="00007a"/>
+        <tag k="REF2" v="todo"/>
+        <tag k="SHAPE_Leng" v="0.00020187111899399999"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="bridge" v="yes"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="gauge" v="144"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="lanes" v="1"/>
+        <tag k="layer" v="1"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="location" v="overground"/>
+        <tag k="note" v="Single"/>
+        <tag k="railway" v="Other"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="service" v="spur"/>
+        <tag k="source" v="osm"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2018-02-16T13:57:43Z;2013-09-15T15:31:44.000Z"/>
+        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.963Z"/>
+        <tag k="usage" v="high_speed_rail"/>
+        <tag k="uuid" v="{e1d70a4b-bd24-4ca8-91b4-2ea57d57b5e2};{6b6b2225-4a1b-4f37-817e-50d70a903a60}"/>
+    </way>
+    <way visible="true" id="-1613" timestamp="2018-02-15T20:56:52Z" version="1">
+        <nd ref="-327"/>
+        <nd ref="-328"/>
+        <tag k="FCSubtype" v="0"/>
+        <tag k="GFID" v="4723E439-0AF3-414B-A982-AC8F2F5D02EE"/>
+        <tag k="REF1" v="00003c"/>
+        <tag k="REF2" v="00003c"/>
+        <tag k="SHAPE_Leng" v="0.00026790124595799997"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="bridge" v="yes"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="gauge" v="144"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="gndb_id" v="6282826"/>
+        <tag k="gndb_id:2" v="6253325"/>
+        <tag k="lanes" v="1"/>
+        <tag k="layer" v="1"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="location" v="overground"/>
+        <tag k="name" v="Kaech'on-son"/>
+        <tag k="note" v="Single"/>
+        <tag k="railway" v="Other"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="osm"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2018-02-16T13:57:43Z;2012-09-06T20:46:11.000Z"/>
+        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.866Z"/>
+        <tag k="usage" v="high_speed_rail"/>
+        <tag k="uuid" v="{b38f1856-cc10-45a8-be85-f16fc7f99abe};{33c630e0-ba67-4efd-96a1-fd7e98ce3e11}"/>
+    </way>
+    <way visible="true" id="-1611" timestamp="2018-02-15T20:56:52Z" version="1">
+        <nd ref="-394"/>
+        <nd ref="-283"/>
+        <tag k="FCSubtype" v="0"/>
+        <tag k="GFID" v="25DBE2D9-CB86-4DD5-835B-E0F6262C8497"/>
+        <tag k="REF1" v="000085"/>
+        <tag k="REF2" v="000085"/>
+        <tag k="SHAPE_Leng" v="0.00027842719605599998"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="bridge" v="yes"/>
+        <tag k="condition" v="functional"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="gauge" v="144"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="gndb_id" v="6183466"/>
+        <tag k="gndb_id:2" v="6171468"/>
+        <tag k="lanes" v="1"/>
+        <tag k="layer" v="1"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="location" v="overground"/>
+        <tag k="name" v="Manp'o-son"/>
+        <tag k="note" v="Single"/>
+        <tag k="railway" v="Other"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="osm"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2018-02-16T13:57:43Z;2012-09-06T20:46:15.000Z"/>
+        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.870Z"/>
+        <tag k="usage" v="high_speed_rail"/>
+        <tag k="uuid" v="{92e1c92c-4846-469f-b408-c32bc00c5bf1};{b911fb54-f7aa-45ca-ad97-851c90344b7f}"/>
+    </way>
+    <way visible="true" id="-1609" timestamp="2018-02-15T20:56:52Z" version="1">
         <nd ref="-920"/>
         <nd ref="-821"/>
         <nd ref="-281"/>
         <nd ref="-282"/>
         <tag k="FCSubtype" v="0"/>
         <tag k="GFID" v="45988C0A-1262-4188-BAE5-1DE5FCD925F0"/>
-        <tag k="REF1" v="00008e;00007f;000038"/>
+        <tag k="REF1" v="00007f;00008e;000038"/>
         <tag k="REF2" v="000093;00007f"/>
         <tag k="SHAPE_Leng" v="0.0057939975463299999"/>
         <tag k="attribution" v="osm"/>
@@ -1152,12 +1576,12 @@
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source" v="osm"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:datetime" v="2018-02-16T13:57:43Z;2012-09-06T19:20:33.000Z;2012-09-06T19:20:35.000Z;2012-09-06T19:20:31.000Z"/>
+        <tag k="source:datetime" v="2018-02-16T13:57:43Z;2012-09-06T19:20:35.000Z;2012-09-06T19:20:33.000Z;2012-09-06T19:20:31.000Z"/>
         <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.860Z"/>
         <tag k="usage" v="high_speed_rail"/>
-        <tag k="uuid" v="{7c1f2ac9-78fe-4037-8f5b-d879f6f7c846};{ff459033-3209-49f5-970e-451a705a9e0e};{04da109f-9c58-4372-b621-222405a9861e};{befd5aa7-889e-4bfc-a898-818bdc36a454}"/>
+        <tag k="uuid" v="{7c1f2ac9-78fe-4037-8f5b-d879f6f7c846};{04da109f-9c58-4372-b621-222405a9861e};{ff459033-3209-49f5-970e-451a705a9e0e};{befd5aa7-889e-4bfc-a898-818bdc36a454}"/>
     </way>
-    <way visible="true" id="-1603" timestamp="2018-02-15T20:56:52Z" version="1">
+    <way visible="true" id="-1601" timestamp="2018-02-15T20:56:52Z" version="1">
         <nd ref="-892"/>
         <nd ref="-893"/>
         <tag k="FCSubtype" v="0"/>
@@ -1189,7 +1613,7 @@
         <tag k="usage" v="high_speed_rail"/>
         <tag k="uuid" v="{92cb72af-9207-4072-830d-6bfbbbc2ce28};{140d45f3-8040-40f2-bdb1-87ede657812d}"/>
     </way>
-    <way visible="true" id="-1599" timestamp="2018-02-15T20:56:52Z" version="1">
+    <way visible="true" id="-1597" timestamp="2018-02-15T20:56:52Z" version="1">
         <nd ref="-816"/>
         <nd ref="-817"/>
         <tag k="FCSubtype" v="0"/>
@@ -1221,7 +1645,7 @@
         <tag k="usage" v="high_speed_rail"/>
         <tag k="uuid" v="{92cb72af-9207-4072-830d-6bfbbbc2ce28};{5d6eaf32-1bcb-44b3-88a4-affd416c3882}"/>
     </way>
-    <way visible="true" id="-1595" timestamp="2018-02-15T20:56:52Z" version="1">
+    <way visible="true" id="-1593" timestamp="2018-02-15T20:56:52Z" version="1">
         <nd ref="-3"/>
         <nd ref="-4"/>
         <tag k="FCSubtype" v="0"/>
@@ -1253,7 +1677,7 @@
         <tag k="usage" v="high_speed_rail"/>
         <tag k="uuid" v="{93f3e200-8a80-48c6-8295-52655354fea7};{7bb5177e-2b1c-4d85-85eb-3ec07f389e3e}"/>
     </way>
-    <way visible="true" id="-1591" timestamp="2018-02-15T20:56:52Z" version="1">
+    <way visible="true" id="-1589" timestamp="2018-02-15T20:56:52Z" version="1">
         <nd ref="-13"/>
         <nd ref="-14"/>
         <tag k="FCSubtype" v="0"/>
@@ -1566,38 +1990,6 @@
         <tag k="source:datetime" v="2012-09-06T19:20:34.000Z"/>
         <tag k="uuid" v="{fe033ac2-0ce5-4d82-ae33-ecf7a55dc26d}"/>
     </way>
-    <way visible="true" id="-120" timestamp="2018-02-15T20:56:52Z" version="1">
-        <nd ref="-394"/>
-        <nd ref="-283"/>
-        <tag k="FCSubtype" v="0"/>
-        <tag k="GFID" v="25DBE2D9-CB86-4DD5-835B-E0F6262C8497"/>
-        <tag k="REF1" v="000085"/>
-        <tag k="REF2" v="000085"/>
-        <tag k="SHAPE_Leng" v="0.00027842719605599998"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="bridge" v="yes"/>
-        <tag k="condition" v="functional"/>
-        <tag k="electrified" v="contact_line"/>
-        <tag k="gauge" v="144"/>
-        <tag k="gauge:type" v="standard"/>
-        <tag k="gndb_id" v="6183466"/>
-        <tag k="gndb_id:2" v="6171468"/>
-        <tag k="lanes" v="1"/>
-        <tag k="layer" v="1"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="location" v="overground"/>
-        <tag k="name" v="Manp'o-son"/>
-        <tag k="note" v="Single"/>
-        <tag k="railway" v="Other"/>
-        <tag k="railway:in_road" v="separated"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="source" v="osm"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:datetime" v="2018-02-16T13:57:43Z;2012-09-06T20:46:15.000Z"/>
-        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.870Z"/>
-        <tag k="usage" v="high_speed_rail"/>
-        <tag k="uuid" v="{92e1c92c-4846-469f-b408-c32bc00c5bf1};{b911fb54-f7aa-45ca-ad97-851c90344b7f}"/>
-    </way>
     <way visible="true" id="-119" timestamp="2018-02-15T20:56:52Z" version="1">
         <nd ref="-206"/>
         <nd ref="-861"/>
@@ -1726,35 +2118,6 @@
         <tag k="source:datetime" v="2014-01-20T23:08:39.000Z"/>
         <tag k="uuid" v="{9c80edad-4e61-43d0-97bf-bfad7c346a1f}"/>
     </way>
-    <way visible="true" id="-109" timestamp="2018-02-15T20:56:52Z" version="1">
-        <nd ref="-792"/>
-        <nd ref="-793"/>
-        <tag k="FCSubtype" v="0"/>
-        <tag k="GFID" v="CEDEE478-8B52-40DD-A8FB-4F68597F686C"/>
-        <tag k="REF1" v="00007a"/>
-        <tag k="REF2" v="todo"/>
-        <tag k="SHAPE_Leng" v="0.00020187111899399999"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="bridge" v="yes"/>
-        <tag k="condition" v="functional"/>
-        <tag k="electrified" v="contact_line"/>
-        <tag k="gauge" v="144"/>
-        <tag k="gauge:type" v="standard"/>
-        <tag k="lanes" v="1"/>
-        <tag k="layer" v="1"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="location" v="overground"/>
-        <tag k="note" v="Single"/>
-        <tag k="railway" v="Other"/>
-        <tag k="railway:in_road" v="separated"/>
-        <tag k="service" v="spur"/>
-        <tag k="source" v="osm"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:datetime" v="2018-02-16T13:57:43Z;2013-09-15T15:31:44.000Z"/>
-        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.963Z"/>
-        <tag k="usage" v="high_speed_rail"/>
-        <tag k="uuid" v="{e1d70a4b-bd24-4ca8-91b4-2ea57d57b5e2};{6b6b2225-4a1b-4f37-817e-50d70a903a60}"/>
-    </way>
     <way visible="true" id="-108" timestamp="2018-02-15T20:56:52Z" version="1">
         <nd ref="-807"/>
         <nd ref="-721"/>
@@ -1786,35 +2149,6 @@
         <tag k="usage" v="high_speed_rail"/>
         <tag k="uuid" v="{d7d4ba79-5452-4ceb-9869-336b33a55595};{ec1f595f-ed98-482c-a259-30e7107143ea}"/>
     </way>
-    <way visible="true" id="-107" timestamp="2018-02-15T20:56:52Z" version="1">
-        <nd ref="-777"/>
-        <nd ref="-697"/>
-        <tag k="FCSubtype" v="0"/>
-        <tag k="GFID" v="3782E787-B0AC-4194-8530-3F2062D92E2D"/>
-        <tag k="REF1" v="000078"/>
-        <tag k="REF2" v="todo"/>
-        <tag k="SHAPE_Leng" v="0.000145561713133"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="bridge" v="yes"/>
-        <tag k="condition" v="functional"/>
-        <tag k="electrified" v="contact_line"/>
-        <tag k="gauge" v="144"/>
-        <tag k="gauge:type" v="standard"/>
-        <tag k="lanes" v="1"/>
-        <tag k="layer" v="1"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="location" v="overground"/>
-        <tag k="note" v="Single"/>
-        <tag k="railway" v="Other"/>
-        <tag k="railway:in_road" v="separated"/>
-        <tag k="service" v="spur"/>
-        <tag k="source" v="osm"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:datetime" v="2018-02-16T13:57:43Z;2013-09-15T15:31:44.000Z"/>
-        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.963Z"/>
-        <tag k="usage" v="high_speed_rail"/>
-        <tag k="uuid" v="{7e6ab770-8e64-47b2-ba39-e698de655fb8};{238a441e-98a8-4383-b2a4-8f83d9ad3797}"/>
-    </way>
     <way visible="true" id="-106" timestamp="2018-02-15T20:56:52Z" version="1">
         <nd ref="-776"/>
         <nd ref="-778"/>
@@ -1829,37 +2163,6 @@
         <tag k="source" v="osm"/>
         <tag k="source:datetime" v="2013-09-15T15:31:44.000Z"/>
         <tag k="uuid" v="{9f42d6de-3f33-4b2e-9602-adc82dd2503b}"/>
-    </way>
-    <way visible="true" id="-104" timestamp="2018-02-15T20:56:52Z" version="1">
-        <nd ref="-718"/>
-        <nd ref="-785"/>
-        <tag k="FCSubtype" v="0"/>
-        <tag k="GFID" v="A4A74FA5-5C74-4D18-8E2A-410106EFCE34"/>
-        <tag k="REF1" v="000075"/>
-        <tag k="REF2" v="todo"/>
-        <tag k="SHAPE_Leng" v="0.00016497851856999999"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="bridge" v="yes"/>
-        <tag k="condition" v="functional"/>
-        <tag k="electrified" v="contact_line"/>
-        <tag k="gauge" v="144"/>
-        <tag k="gauge:type" v="standard"/>
-        <tag k="highway" v="primary"/>
-        <tag k="hoot:hash" v="sha1sum:881448f8b7abd3ff1a81bbdcd7dc420b436cb3f5;sha1sum:1c3fdaefda7a76321bf819e4274683aeaf3e041a"/>
-        <tag k="lanes" v="1"/>
-        <tag k="layer" v="1"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="location" v="overground"/>
-        <tag k="note" v="Single"/>
-        <tag k="railway" v="Other"/>
-        <tag k="railway:in_road" v="separated"/>
-        <tag k="service" v="spur"/>
-        <tag k="source" v="osm"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:datetime" v="2018-02-16T13:57:43Z;2013-09-15T15:31:43.000Z"/>
-        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.963Z"/>
-        <tag k="usage" v="high_speed_rail"/>
-        <tag k="uuid" v="{7eaf829c-4b09-4bef-b3b5-40c9f6b4b358};{ec1f8089-9b4f-4d65-a0f2-fa646679d9e2}"/>
     </way>
     <way visible="true" id="-102" timestamp="2018-02-15T20:56:52Z" version="1">
         <nd ref="-783"/>
@@ -2016,35 +2319,6 @@
         <tag k="source:datetime" v="2013-09-15T15:31:44.000Z"/>
         <tag k="uuid" v="{f98f0b0b-6eb3-4458-b46d-88d7cddbd79b}"/>
     </way>
-    <way visible="true" id="-94" timestamp="2018-02-15T20:56:52Z" version="1">
-        <nd ref="-719"/>
-        <nd ref="-720"/>
-        <tag k="FCSubtype" v="0"/>
-        <tag k="GFID" v="B64366C9-C1FE-496C-B705-C500370D329B"/>
-        <tag k="REF1" v="00006b"/>
-        <tag k="REF2" v="todo"/>
-        <tag k="SHAPE_Leng" v="0.00018284125017899999"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="bridge" v="yes"/>
-        <tag k="condition" v="functional"/>
-        <tag k="electrified" v="contact_line"/>
-        <tag k="gauge" v="144"/>
-        <tag k="gauge:type" v="standard"/>
-        <tag k="lanes" v="1"/>
-        <tag k="layer" v="1"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="location" v="overground"/>
-        <tag k="note" v="Single"/>
-        <tag k="railway" v="Other"/>
-        <tag k="railway:in_road" v="separated"/>
-        <tag k="service" v="spur"/>
-        <tag k="source" v="osm"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:datetime" v="2018-02-16T13:57:43Z;2013-09-15T15:31:44.000Z"/>
-        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.963Z"/>
-        <tag k="usage" v="high_speed_rail"/>
-        <tag k="uuid" v="{c4580f50-6ce7-4580-8e5f-ee924ecff7e8};{823b9844-de80-4b95-973e-f572f8784c16}"/>
-    </way>
     <way visible="true" id="-91" timestamp="2018-02-15T20:56:52Z" version="1">
         <nd ref="-607"/>
         <nd ref="-676"/>
@@ -2082,70 +2356,6 @@
         <tag k="source" v="osm"/>
         <tag k="source:datetime" v="2014-01-20T23:08:43.000Z"/>
         <tag k="uuid" v="{8cc13747-c867-4641-ae5b-0a647ab3547c}"/>
-    </way>
-    <way visible="true" id="-89" timestamp="2018-02-15T20:56:52Z" version="1">
-        <nd ref="-290"/>
-        <nd ref="-5"/>
-        <tag k="FCSubtype" v="0"/>
-        <tag k="GFID" v="4C75649C-B581-4788-8DF7-A30FD0D49549"/>
-        <tag k="REF1" v="000066"/>
-        <tag k="REF2" v="000066"/>
-        <tag k="SHAPE_Leng" v="0.000111457068982"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="bridge" v="yes"/>
-        <tag k="condition" v="functional"/>
-        <tag k="electrified" v="contact_line"/>
-        <tag k="gauge" v="144"/>
-        <tag k="gauge:type" v="standard"/>
-        <tag k="gndb_id" v="6183466"/>
-        <tag k="gndb_id:2" v="6171468"/>
-        <tag k="lanes" v="1"/>
-        <tag k="layer" v="1"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="location" v="overground"/>
-        <tag k="name" v="Manp'o-son"/>
-        <tag k="note" v="Single"/>
-        <tag k="railway" v="Other"/>
-        <tag k="railway:in_road" v="separated"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="source" v="osm"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:datetime" v="2018-02-16T13:57:43Z;2012-09-06T18:57:21.000Z"/>
-        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.883Z"/>
-        <tag k="usage" v="high_speed_rail"/>
-        <tag k="uuid" v="{0e7b66c7-c9a3-4848-9049-14616c584ff5};{0d2f2625-15c4-47cf-b2d4-d1b1498684e7}"/>
-    </way>
-    <way visible="true" id="-87" timestamp="2018-02-15T20:56:52Z" version="1">
-        <nd ref="-484"/>
-        <nd ref="-15"/>
-        <tag k="FCSubtype" v="0"/>
-        <tag k="GFID" v="3191AA51-7D11-4DB0-A244-710D7CC59190"/>
-        <tag k="REF1" v="000064"/>
-        <tag k="REF2" v="000064"/>
-        <tag k="SHAPE_Leng" v="0.00050439291931700001"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="bridge" v="yes"/>
-        <tag k="condition" v="functional"/>
-        <tag k="electrified" v="contact_line"/>
-        <tag k="gauge" v="144"/>
-        <tag k="gauge:type" v="standard"/>
-        <tag k="gndb_id" v="6183466"/>
-        <tag k="gndb_id:2" v="6171468"/>
-        <tag k="lanes" v="1"/>
-        <tag k="layer" v="1"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="location" v="overground"/>
-        <tag k="name" v="Manp'o-son"/>
-        <tag k="note" v="Single"/>
-        <tag k="railway" v="Other"/>
-        <tag k="railway:in_road" v="separated"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="source" v="osm"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:datetime" v="2018-02-16T13:57:43Z;2012-09-06T18:57:22.000Z"/>
-        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.898Z"/>
-        <tag k="usage" v="high_speed_rail"/>
-        <tag k="uuid" v="{d86b419c-cfc1-4bca-8af1-eb8ebd4d5de1};{cd3bd5b1-d7fe-4a3c-b9ec-07e93e17a8ed}"/>
     </way>
     <way visible="true" id="-86" timestamp="2018-02-15T20:56:52Z" version="1">
         <nd ref="-617"/>
@@ -2191,38 +2401,6 @@
         <tag k="source" v="osm"/>
         <tag k="source:datetime" v="2014-01-20T23:08:43.000Z"/>
         <tag k="uuid" v="{fb1f76ac-a02c-4fc6-a2c3-d229c033df8b}"/>
-    </way>
-    <way visible="true" id="-84" timestamp="2018-02-15T20:56:52Z" version="1">
-        <nd ref="-453"/>
-        <nd ref="-60"/>
-        <tag k="FCSubtype" v="0"/>
-        <tag k="GFID" v="4F029ED4-C8B3-4A79-BCA8-755A1B4DA80D"/>
-        <tag k="REF1" v="000061"/>
-        <tag k="REF2" v="000061"/>
-        <tag k="SHAPE_Leng" v="0.00086792759557299999"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="bridge" v="yes"/>
-        <tag k="condition" v="functional"/>
-        <tag k="electrified" v="contact_line"/>
-        <tag k="gauge" v="144"/>
-        <tag k="gauge:type" v="standard"/>
-        <tag k="gndb_id" v="6282826"/>
-        <tag k="gndb_id:2" v="6253325"/>
-        <tag k="lanes" v="1"/>
-        <tag k="layer" v="1"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="location" v="overground"/>
-        <tag k="name" v="Kaech'on-son"/>
-        <tag k="note" v="Single"/>
-        <tag k="railway" v="Other"/>
-        <tag k="railway:in_road" v="separated"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="source" v="osm"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:datetime" v="2018-02-16T13:57:43Z;2012-09-05T16:27:16.000Z"/>
-        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.866Z"/>
-        <tag k="usage" v="high_speed_rail"/>
-        <tag k="uuid" v="{7156dd33-941b-44bf-9220-07415b1de2dc};{a6667db0-47ed-49a4-a7b6-a547ce7f4947}"/>
     </way>
     <way visible="true" id="-83" timestamp="2018-02-15T20:56:52Z" version="1">
         <nd ref="-590"/>
@@ -2347,33 +2525,6 @@
         <tag k="source" v="osm"/>
         <tag k="source:datetime" v="2012-09-05T16:27:17.000Z"/>
         <tag k="uuid" v="{87986129-56b4-45de-be3f-707719acdf82}"/>
-    </way>
-    <way visible="true" id="-79" timestamp="2018-02-15T20:56:52Z" version="1">
-        <nd ref="-531"/>
-        <nd ref="-272"/>
-        <tag k="FCSubtype" v="0"/>
-        <tag k="GFID" v="5ABF4578-44C6-4DF1-8707-4801217715A2"/>
-        <tag k="REF1" v="00005c"/>
-        <tag k="REF2" v="todo"/>
-        <tag k="SHAPE_Leng" v="0.000121136109754"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="bridge" v="yes"/>
-        <tag k="condition" v="functional"/>
-        <tag k="electrified" v="contact_line"/>
-        <tag k="gauge" v="144"/>
-        <tag k="gauge:type" v="standard"/>
-        <tag k="lanes" v="1"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="location" v="overground"/>
-        <tag k="note" v="Single"/>
-        <tag k="railway" v="Other"/>
-        <tag k="railway:in_road" v="separated"/>
-        <tag k="source" v="osm"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:datetime" v="2018-02-16T13:57:43Z;2014-01-20T23:08:43.000Z"/>
-        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.892Z"/>
-        <tag k="usage" v="high_speed_rail"/>
-        <tag k="uuid" v="{88e1f975-2d23-4d22-8835-9d2674006aa0};{8681b06c-91ee-46e2-b417-8c31ebb3831d}"/>
     </way>
     <way visible="true" id="-78" timestamp="2018-02-15T20:56:52Z" version="1">
         <nd ref="-385"/>
@@ -2569,38 +2720,6 @@
         <tag k="source" v="osm"/>
         <tag k="source:datetime" v="2014-01-20T23:08:40.000Z"/>
         <tag k="uuid" v="{1f28de9d-5798-4690-ab2c-416d0dc93527}"/>
-    </way>
-    <way visible="true" id="-66" timestamp="2018-02-15T20:56:52Z" version="1">
-        <nd ref="-12"/>
-        <nd ref="-467"/>
-        <tag k="FCSubtype" v="0"/>
-        <tag k="GFID" v="437166AC-EE6C-458F-966C-DA4C714A8A15"/>
-        <tag k="REF1" v="00004f"/>
-        <tag k="REF2" v="00004f"/>
-        <tag k="SHAPE_Leng" v="0.000639832665136"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="bridge" v="yes"/>
-        <tag k="condition" v="functional"/>
-        <tag k="electrified" v="contact_line"/>
-        <tag k="gauge" v="144"/>
-        <tag k="gauge:type" v="standard"/>
-        <tag k="gndb_id" v="6183466"/>
-        <tag k="gndb_id:2" v="6171468"/>
-        <tag k="lanes" v="1"/>
-        <tag k="layer" v="1"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="location" v="overground"/>
-        <tag k="name" v="Manp'o-son"/>
-        <tag k="note" v="Single"/>
-        <tag k="railway" v="Other"/>
-        <tag k="railway:in_road" v="separated"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="source" v="osm"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:datetime" v="2018-02-16T13:57:43Z;2012-09-06T18:57:23.000Z"/>
-        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.884Z"/>
-        <tag k="usage" v="high_speed_rail"/>
-        <tag k="uuid" v="{a4915a46-b9a3-44e1-8e2c-7d29f0a2080c};{08af4d1f-dfbe-4c33-90f7-dc88ca6e5807}"/>
     </way>
     <way visible="true" id="-63" timestamp="2018-02-15T20:56:52Z" version="1">
         <nd ref="-400"/>
@@ -2886,38 +3005,6 @@
         <tag k="tunnel" v="yes"/>
         <tag k="uuid" v="{349ff5a0-4a8d-4d25-ae97-a2b31937e17c}"/>
     </way>
-    <way visible="true" id="-47" timestamp="2018-02-15T20:56:52Z" version="1">
-        <nd ref="-327"/>
-        <nd ref="-328"/>
-        <tag k="FCSubtype" v="0"/>
-        <tag k="GFID" v="4723E439-0AF3-414B-A982-AC8F2F5D02EE"/>
-        <tag k="REF1" v="00003c"/>
-        <tag k="REF2" v="00003c"/>
-        <tag k="SHAPE_Leng" v="0.00026790124595799997"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="bridge" v="yes"/>
-        <tag k="condition" v="functional"/>
-        <tag k="electrified" v="contact_line"/>
-        <tag k="gauge" v="144"/>
-        <tag k="gauge:type" v="standard"/>
-        <tag k="gndb_id" v="6282826"/>
-        <tag k="gndb_id:2" v="6253325"/>
-        <tag k="lanes" v="1"/>
-        <tag k="layer" v="1"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="location" v="overground"/>
-        <tag k="name" v="Kaech'on-son"/>
-        <tag k="note" v="Single"/>
-        <tag k="railway" v="Other"/>
-        <tag k="railway:in_road" v="separated"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="source" v="osm"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:datetime" v="2018-02-16T13:57:43Z;2012-09-06T20:46:11.000Z"/>
-        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.866Z"/>
-        <tag k="usage" v="high_speed_rail"/>
-        <tag k="uuid" v="{b38f1856-cc10-45a8-be85-f16fc7f99abe};{33c630e0-ba67-4efd-96a1-fd7e98ce3e11}"/>
-    </way>
     <way visible="true" id="-45" timestamp="2018-02-15T20:56:52Z" version="1">
         <nd ref="-291"/>
         <nd ref="-292"/>
@@ -3155,33 +3242,6 @@
         <tag k="source:datetime" v="2013-09-15T15:05:25.000Z"/>
         <tag k="uuid" v="{79e69860-2ce5-456e-be2f-7a239f944a46}"/>
     </way>
-    <way visible="true" id="-30" timestamp="2018-02-15T20:56:52Z" version="1">
-        <nd ref="-123"/>
-        <nd ref="-163"/>
-        <tag k="FCSubtype" v="0"/>
-        <tag k="GFID" v="CA9C33AC-8622-4C4E-A49E-FFC5FA2F6F93"/>
-        <tag k="REF1" v="00002b"/>
-        <tag k="REF2" v="todo"/>
-        <tag k="SHAPE_Leng" v="0.0012889988149700001"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="bridge" v="yes"/>
-        <tag k="condition" v="functional"/>
-        <tag k="electrified" v="contact_line"/>
-        <tag k="gauge" v="144"/>
-        <tag k="gauge:type" v="standard"/>
-        <tag k="lanes" v="1"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="location" v="overground"/>
-        <tag k="note" v="Single"/>
-        <tag k="railway" v="Other"/>
-        <tag k="railway:in_road" v="separated"/>
-        <tag k="source" v="osm"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:datetime" v="2018-02-16T13:57:43Z;2012-09-09T14:10:28.000Z"/>
-        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.898Z"/>
-        <tag k="usage" v="high_speed_rail"/>
-        <tag k="uuid" v="{f8b23bcb-cfb7-4c74-b2fa-97cb5b929382};{21bb637b-e73a-4421-80a6-222d6365cc54}"/>
-    </way>
     <way visible="true" id="-29" timestamp="2018-02-15T20:56:52Z" version="1">
         <nd ref="-160"/>
         <nd ref="-161"/>
@@ -3207,38 +3267,6 @@
         <tag k="source" v="osm"/>
         <tag k="source:datetime" v="2012-09-05T16:27:13.000Z"/>
         <tag k="uuid" v="{90d716a1-dee9-45e7-af22-f318f59c374f}"/>
-    </way>
-    <way visible="true" id="-23" timestamp="2018-02-15T20:56:52Z" version="1">
-        <nd ref="-141"/>
-        <nd ref="-142"/>
-        <tag k="FCSubtype" v="0"/>
-        <tag k="GFID" v="FC04864B-16FF-402C-AB53-5B47F8B56C72"/>
-        <tag k="REF1" v="000024"/>
-        <tag k="REF2" v="000024"/>
-        <tag k="SHAPE_Leng" v="0.0012365014542499999"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="bridge" v="yes"/>
-        <tag k="condition" v="functional"/>
-        <tag k="electrified" v="contact_line"/>
-        <tag k="gauge" v="144"/>
-        <tag k="gauge:type" v="standard"/>
-        <tag k="gndb_id" v="6183466"/>
-        <tag k="gndb_id:2" v="6171468"/>
-        <tag k="lanes" v="1"/>
-        <tag k="layer" v="1"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="location" v="overground"/>
-        <tag k="name" v="Manp'o-son"/>
-        <tag k="note" v="Single"/>
-        <tag k="railway" v="Other"/>
-        <tag k="railway:in_road" v="separated"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="source" v="osm"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:datetime" v="2018-02-16T13:57:43Z;2012-09-06T18:57:18.000Z"/>
-        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.884Z"/>
-        <tag k="usage" v="high_speed_rail"/>
-        <tag k="uuid" v="{88e2319e-e3c4-4d97-91fb-39835b024283};{7ee8145a-25c3-4dcb-bf9f-465ee7d86ae5}"/>
     </way>
     <way visible="true" id="-22" timestamp="2018-02-15T20:56:52Z" version="1">
         <nd ref="-136"/>
@@ -3412,34 +3440,6 @@
         <tag k="source" v="osm"/>
         <tag k="source:datetime" v="2012-09-06T18:57:19.000Z"/>
         <tag k="uuid" v="{3d74512c-6d4b-42fa-9365-c6939ea11c6e}"/>
-    </way>
-    <way visible="true" id="-7" timestamp="2018-02-15T20:56:52Z" version="1">
-        <nd ref="-38"/>
-        <nd ref="-39"/>
-        <tag k="FCSubtype" v="0"/>
-        <tag k="GFID" v="E4607943-453D-4270-835D-9DDBA792C752"/>
-        <tag k="REF1" v="000014"/>
-        <tag k="REF2" v="todo"/>
-        <tag k="SHAPE_Leng" v="0.00052589965508399999"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="bridge" v="yes"/>
-        <tag k="condition" v="functional"/>
-        <tag k="electrified" v="contact_line"/>
-        <tag k="gauge" v="144"/>
-        <tag k="gauge:type" v="standard"/>
-        <tag k="lanes" v="1"/>
-        <tag k="layer" v="1"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="location" v="overground"/>
-        <tag k="note" v="Single"/>
-        <tag k="railway" v="Other"/>
-        <tag k="railway:in_road" v="separated"/>
-        <tag k="source" v="osm"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:datetime" v="2018-02-16T13:57:43Z;2013-09-15T14:40:19.000Z"/>
-        <tag k="source:ingest:datetime" v="2018-02-13T20:09:15.897Z"/>
-        <tag k="usage" v="high_speed_rail"/>
-        <tag k="uuid" v="{7aa51969-242a-424c-9049-46da45bbd6d8};{2d02ea64-a2b9-44f9-bc2b-f456ccd1c7df}"/>
     </way>
     <way visible="true" id="-6" timestamp="2018-02-15T20:56:52Z" version="1">
         <nd ref="-35"/>

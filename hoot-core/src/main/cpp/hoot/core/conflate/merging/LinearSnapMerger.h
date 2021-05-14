@@ -108,7 +108,9 @@ private:
   void _removeSplitWay(
     const ElementPtr& e1, const ElementPtr& scraps1, const ElementPtr& e1Match,
     const bool swapWayIds);
-  void _removeSplitWay(const ElementId& eid1, const ElementPtr& scraps1, const ElementPtr& e1Match);
+  void _removeSplitWay(
+    const ElementId& eid1, const ElementPtr& scraps1, const ElementPtr& e1Match,
+    std::vector<std::pair<ElementId, ElementId>>& replaced);
   void _updateScrapParent(long id, const ElementPtr& scrap);
   void _manageElementIds(
     const WayPtr& w1, const WayPtr& w2, const WayPtr& wMatch, const ElementPtr& scraps1,

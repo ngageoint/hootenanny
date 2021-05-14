@@ -3,7 +3,7 @@
     <bounds minlat="8.888389965999998" minlon="-12.036892302" maxlat="8.889239380999999" maxlon="-12.0356509"/>
     <node visible="true" id="-2786412" timestamp="1970-01-01T00:00:00Z" version="1" lat="8.8892393809999994" lon="-12.0356509000000003"/>
     <node visible="true" id="-2786411" timestamp="1970-01-01T00:00:00Z" version="1" lat="8.8883899659999983" lon="-12.0368923020000000"/>
-    <way visible="true" id="-2786410" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-2786416" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2786411"/>
         <nd ref="-2786412"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga);usNationalGeoIntelAgency"/>
