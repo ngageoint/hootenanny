@@ -83,7 +83,7 @@ void RecursiveElementRemover::apply(const std::shared_ptr<OsmMap>& map)
   UniqueElementIdVisitor sv;
   e->visitRo(*map, sv);
 
-  // find all potential candidates for erasure. We'll whittle away any invalid candidates.
+  // Find all potential candidates for erasure. We'll whittle away any invalid candidates.
   set<ElementId> toErase = sv.getElementSet();
 
   bool foundOne = true;
@@ -98,7 +98,7 @@ void RecursiveElementRemover::apply(const std::shared_ptr<OsmMap>& map)
       bool erased = false;
       set<ElementId> parents = map->getIndex().getParents(*it);
 
-      // go through each of the child's direct parents
+      // Go through each of the child's direct parents.
       for (set<ElementId>::const_iterator jt = parents.begin(); jt != parents.end(); ++jt)
       {
         LOG_TRACE("Checking parent: " << *jt << " of child: " << *it << "...");
@@ -127,13 +127,13 @@ void RecursiveElementRemover::apply(const std::shared_ptr<OsmMap>& map)
 
   if (_criterion)
   {
-    // go through all remaining delete candidates
+    // Go through all remaining delete candidates.
     for (set<ElementId>::iterator it = toErase.begin(); it != toErase.end();)
     {
       ConstElementPtr child = map->getElement(*it);
       if (_criterion->isSatisfied(child))
       {
-        // remove the child
+        // Remove the child.
         toErase.erase(it++);
       }
       else
@@ -147,8 +147,8 @@ void RecursiveElementRemover::apply(const std::shared_ptr<OsmMap>& map)
   _remove(map, _eid, toErase);
 }
 
-void RecursiveElementRemover::_remove(const std::shared_ptr<OsmMap>& map, ElementId eid,
-  const set<ElementId>& removeSet)
+void RecursiveElementRemover::_remove(
+  const std::shared_ptr<OsmMap>& map, ElementId eid, const set<ElementId>& removeSet)
 {
   // if this element isn't being removed
   if (removeSet.find(eid) == removeSet.end() || map->containsElement(eid) == false)
@@ -171,6 +171,7 @@ void RecursiveElementRemover::_remove(const std::shared_ptr<OsmMap>& map, Elemen
     {
       _remove(map, e[i].getElementId(), removeSet);
     }
+
 
     RemoveRelationByEid::removeRelation(map, eid.getId());
     LOG_VART(map->getRelation(eid.getId()));

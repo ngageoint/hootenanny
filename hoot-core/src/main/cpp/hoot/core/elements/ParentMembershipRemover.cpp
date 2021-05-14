@@ -53,6 +53,7 @@ int ParentMembershipRemover::removeMemberships(
     if (relation->contains(elementId))
     {
       relation->removeElement(elementId);
+      LOG_VART(relation->contains(elementId));
       numRemoved++;
     }
   }
@@ -68,6 +69,7 @@ int ParentMembershipRemover::removeMemberships(
       if (way->containsNodeId(elementId.getId()))
       {
         way->removeNode(elementId.getId());
+        LOG_VART(way->containsNodeId(elementId.getId()));
         numRemoved++;
       }
     }

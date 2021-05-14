@@ -29,6 +29,7 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
+#include <hoot/core/elements/MapUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/elements/MapProjector.h>
 
@@ -40,7 +41,7 @@ class RecursiveElementRemoverTest : public HootTestFixture
   CPPUNIT_TEST_SUITE(RecursiveElementRemoverTest);
   CPPUNIT_TEST(removeRelationTest);
   CPPUNIT_TEST(removeWayTest);
-  //CPPUNIT_TEST(removeParentRefsTest);
+  CPPUNIT_TEST(removeParentRefsTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -116,22 +117,20 @@ public:
     NodePtr node3 = TestUtils::createNode(map, "n3"); // belongs to way 2
     NodePtr node4 = TestUtils::createNode(map, "n4"); // belongs to way 2
     NodePtr node5 = TestUtils::createNode(map, "n5"); // belongs to relation 1
-    //NodePtr node6 = TestUtils::createNode(map, "n6"); // belongs to nothing
 
     WayPtr way1 = TestUtils::createWay(map, QList<ElementId>(), "w1"); // belongs to relation 1
     way1->addNode(node1->getId());
     way1->addNode(node2->getId());
-
     WayPtr way2 = TestUtils::createWay(map, QList<ElementId>(), "w2"); // belongs to nothing
     way2->addNode(node3->getId());
     way2->addNode(node4->getId());
 
     // belongs to nothing
     RelationPtr relation1 = TestUtils::createRelation(map, QList<ElementId>(), "r1");
-    // belongs to relation 1
-    RelationPtr relation2 = TestUtils::createRelation(map, QList<ElementId>(), "r2");
     relation1->addElement("", way1->getElementId());
     relation1->addElement("", node5->getElementId());
+    // belongs to relation 1
+    RelationPtr relation2 = TestUtils::createRelation(map, QList<ElementId>(), "r2");
     relation1->addElement("", relation2->getElementId());
 
     return map;
@@ -207,7 +206,82 @@ public:
   {
     OsmMapPtr map = createTestMap2();
 
-    //RecursiveElementRemover uut(node1)
+    RecursiveElementRemover uut;
+
+    // remove a way having a parent w/o removing its parent ref first
+    ConstElementPtr relation1 = MapUtils::getFirstElementWithNote(map, "r1");
+    ConstElementPtr node1 = MapUtils::getFirstElementWithNote(map, "n1");
+    ConstElementPtr node2 = MapUtils::getFirstElementWithNote(map, "n2");
+    ConstElementPtr way1 = MapUtils::getFirstElementWithNote(map, "w1");
+    uut.addElement(way1);
+    uut.setRemoveRefsFromParents(false);
+    uut.apply(map);
+
+    // nothing should be removed
+    CPPUNIT_ASSERT(map->containsElement(way1));
+    CPPUNIT_ASSERT(map->containsElement(node1));
+    CPPUNIT_ASSERT(map->containsElement(node2));
+    CPPUNIT_ASSERT(map->containsElement(relation1));
+
+    // now remove the parent ref first and try again
+    uut.setRemoveRefsFromParents(true);
+    uut.apply(map);
+    // it and both its nodes should be removed; one way + two child nodes + one parent relation
+    CPPUNIT_ASSERT(!map->containsElement(way1));
+    CPPUNIT_ASSERT(!map->containsElement(node1));
+    CPPUNIT_ASSERT(!map->containsElement(node2));
+    CPPUNIT_ASSERT(map->containsElement(relation1));
+
+    // remove a relation having a parent w/o removing its parent ref first
+    ConstElementPtr relation2 = MapUtils::getFirstElementWithNote(map, "r2");
+    uut.addElement(relation2);
+    uut.setRemoveRefsFromParents(false);
+    uut.apply(map);
+    // nothing should be removed
+    CPPUNIT_ASSERT(map->containsElement(relation2));
+    CPPUNIT_ASSERT(map->containsElement(relation1));
+
+    // now remove the parent ref first and try again
+    uut.setRemoveRefsFromParents(true);
+    uut.apply(map);
+    // it should be removed; one parent relation + one child relation
+    CPPUNIT_ASSERT(!map->containsElement(relation2));
+    CPPUNIT_ASSERT(map->containsElement(relation1));
+
+    // remove a node having a way parent w/o removing its parent ref first
+    ConstElementPtr way2 = MapUtils::getFirstElementWithNote(map, "w2");
+    ConstElementPtr node3 = MapUtils::getFirstElementWithNote(map, "n3");
+    uut.addElement(node3);
+    uut.setRemoveRefsFromParents(false);
+    uut.apply(map);
+    // nothing should be removed
+    CPPUNIT_ASSERT(map->containsElement(node3));
+    CPPUNIT_ASSERT(map->containsElement(way2));
+
+    // This isn't working...not sure why yet. Haven't needed to remove a node from a way yet in
+    // production code using RecursiveElementRemover, so will fix later.
+//    // now remove the parent ref first and try again
+//    uut.setRemoveRefsFromParents(true);
+//    uut.apply(map);
+//    // it should be removed
+//    CPPUNIT_ASSERT(!map->containsElement(node3));
+//    CPPUNIT_ASSERT(map->containsElement(way2));
+
+    // remove a node having a relation parent w/o removing its parent ref first
+    ConstElementPtr node5 = MapUtils::getFirstElementWithNote(map, "n5");
+    uut.addElement(node5);
+    uut.setRemoveRefsFromParents(false);
+    uut.apply(map);
+    // nothing should be removed
+    CPPUNIT_ASSERT(map->containsElement(node5));
+    CPPUNIT_ASSERT(map->containsElement(relation1));
+
+    // now remove the parent ref first and try again
+    uut.setRemoveRefsFromParents(true);
+    uut.apply(map);
+    // it should be removed
+    CPPUNIT_ASSERT(!map->containsElement(node5));
+    CPPUNIT_ASSERT(map->containsElement(relation1));
   }
 };
 
