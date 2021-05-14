@@ -35,9 +35,7 @@ namespace hoot
 {
 
 /**
- * TODO
- *
- * @todo add test
+ * Removes parent element references for an element
  */
 class ParentMembershipRemover
 {
@@ -48,10 +46,10 @@ public:
   ~ParentMembershipRemover() = default;
 
   /**
-   * TODO
+   * Removes all parent memberships in either relations or ways for the specified element
    *
-   * @param elementId
-   * @return
+   * @param elementId ID of the element to remove memberships for
+   * @return the number of memberships removed
    */
   static int removeMemberships(const ElementId& elementId, const ConstOsmMapPtr& map);
 };

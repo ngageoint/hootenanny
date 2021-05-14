@@ -38,7 +38,13 @@ namespace hoot
 class WaySublineMatchString;
 
 /**
- * TODO
+ * This subline string matcher is a facade that wraps usage of multiple subline string matchers. The
+ * general idea being that the first matcher is possibly more accurate but expensive to run on some
+ * features (e.g. maximal subline matching) and the second matcher is possibly slightly less
+ * accurate but less expensive to run (e.g. Frechet subline matching). So, you can run the first one
+ * and then back out at a certain point in the processing to run the second. Currently, this is use
+ * by River Conflation only due to potentially explosive runtimes when using maximal matching on
+ * very long river features..
  */
 class MultipleMatcherSublineStringMatcher : public SublineStringMatcher
 {
@@ -82,11 +88,12 @@ public:
 
 private:
 
-  // TODO
+  // The first matcher to run.
   std::shared_ptr<SublineStringMatcher> _sublineMatcher1;
 
-  // This is our backup matcher to use for long ways for runtime performance reasons. It may be
-  // a little less accurate but prevents extremely long ways from slowing things down too much.
+  // The second matcher to run. This is our backup matcher to use for long ways for runtime
+  // performance reasons. It may be a little less accurate but prevents extremely long ways from
+  // slowing things down too much.
   std::shared_ptr<SublineStringMatcher> _sublineMatcher2;
 
   static int _numTimesBackupMatcherUsed;

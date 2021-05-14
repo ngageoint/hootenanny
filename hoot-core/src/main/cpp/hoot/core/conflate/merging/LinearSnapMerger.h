@@ -105,10 +105,10 @@ private:
 
   void _mergeTags(const Tags& e1Tags, const Tags& e2Tags, const ElementPtr& e1Match) const;
 
-  void _removeSplitWay(
+  void _handleSplitWay(
     const ElementPtr& e1, const ElementPtr& scraps1, const ElementPtr& e1Match,
     const bool swapWayIds);
-  void _removeSplitWay(
+  void _handleSplitWay(
     const ElementId& eid1, const ElementPtr& scraps1, const ElementPtr& e1Match,
     std::vector<std::pair<ElementId, ElementId>>& replaced);
   void _updateScrapParent(long id, const ElementPtr& scrap);

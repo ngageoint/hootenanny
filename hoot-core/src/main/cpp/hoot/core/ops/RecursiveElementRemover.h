@@ -46,7 +46,7 @@ class OsmMap;
  * - The child element is only contained by this element or one of its children.
  * - The element being deleted isn't contained by another element.
  *
- * Optionally, the references to the parent element may be removed before removal of an element
+ * Optionally, the references to the parent element may be removed before removal of the element
  * itself. If you want to remove an element that has parents non-recursively, use
  * RemoveElementByEid.
  *
@@ -80,7 +80,9 @@ public:
    * Constructor
    *
    * @param eid The element to recursively delete.
-   * @param removeRefsFromParents TODO
+   * @param removeRefsFromParents If true, removes all references in parent relations or ways to the
+   * element being removed before trying to remove it. If false and the element being removed has
+   * memberships in a relation or way, the element will not be removed.
    * @param criterion If this is specified then only elements that return true to "isSatisfied"
    * will be deleted. Even if isSatisfied returns false the children of that element will still
    * be searched.
@@ -112,10 +114,8 @@ public:
 private:
 
   ElementId _eid;
-
   ElementCriterionPtr _criterion;
-
-  // TODO
+  // removes all references in parent elements to the element being removed before removing it
   bool _removeRefsFromParents;
 
   void _remove(

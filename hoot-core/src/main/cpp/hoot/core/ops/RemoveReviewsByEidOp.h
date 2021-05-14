@@ -57,9 +57,14 @@ public:
   /**
     Constructor
 
-    @param eid TODO
-    @param clearAndRemoveElement TODO
-    @param removeParentRefs TODO
+    @param eid ID of the element being removed from reviews
+    @param clearAndRemoveElement If set to true, then the element will be cleared of all attributes and a
+   * removal will be attempted. In some cases (e.g. replace can't be complete if you're replacing a
+   * node with a way and the node is in a way), the element won't be removed. If this happens, then
+   * all tags will be cleared.
+    @param removeParentRefs If true, removes all references in parent relations or ways to the
+   * element being removed before trying to remove it. If false and clearAndRemoveElement=true, and
+   * the element being removed has memberships in a relation or way, the element will not be removed.
    */
   RemoveReviewsByEidOp(
     ElementId eid, bool clearAndRemoveElement = false, bool removeParentRefs = false);
@@ -89,8 +94,9 @@ public:
 private:
 
   ElementId _eid;
+  // removes an element after it has been removed from reviews
   bool _clearAndRemove;
-  // TODO
+  // removes all references in parent elements to the element being removed from reviews
   bool _removeParentRefs;
 };
 

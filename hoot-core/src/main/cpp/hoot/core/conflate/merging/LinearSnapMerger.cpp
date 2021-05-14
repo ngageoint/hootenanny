@@ -49,7 +49,6 @@
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/ops/IdSwapOp.h>
-#include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/ops/ReplaceElementOp.h>
 #include <hoot/core/ops/RemoveElementByEid.h>
 #include <hoot/core/ops/RemoveReviewsByEidOp.h>
@@ -206,8 +205,8 @@ bool LinearSnapMerger::_mergePair(
     }
   }
 
-  // Remove the old way that was split and snapped.
-  _removeSplitWay(e1, scraps1, e1Match, swapWayIds);
+  // Deal with the old way that was split and snapped.
+  _handleSplitWay(e1, scraps1, e1Match, swapWayIds);
 
   // If there is something left to review against,
   if (scraps2)
@@ -219,8 +218,8 @@ bool LinearSnapMerger::_mergePair(
   {
     // Otherwise, drop the element and any reviews its in.
     _dropSecondaryElements(eid1, e1Match->getElementId(), eid2, e2Match->getElementId());
-    // TODO
-    _removeSplitWay(eid1, scraps1, e1Match, replaced);
+    // Do some additional processing on the way that was split and snapped.
+    _handleSplitWay(eid1, scraps1, e1Match, replaced);
   }
 
   if (_markAddedMultilineStringRelations)
@@ -261,10 +260,8 @@ bool LinearSnapMerger::_checkForIdenticalElements(const ElementPtr& e1, const El
     LOG_TRACE(
       "Merging identical elements: " << keep->getElementId() << " and " << remove->getElementId() <<
       "...");
-    //e1->setStatus(Status::Conflated);
     keep->setStatus(Status::Conflated);
     // remove the second element and any reviews that contain the element
-    //RemoveReviewsByEidOp(remove->getElementId(), true).apply(_map);
     RemoveReviewsByEidOp(remove->getElementId(), true, true).apply(_map);
 
     if (ConfigOptions().getDebugMapsWrite() && ConfigOptions().getDebugMapsWriteDetailed())
@@ -709,7 +706,6 @@ void LinearSnapMerger::_dropSecondaryElements(
   LOG_TRACE(
     "Swapping relation membership. Adding " << eidMatch1 << " to all relations " << eid2 <<
     " belongs in...");
-  //RelationMemberSwapper::swap(eid2, eid1, _map, false);
   RelationMemberSwapper::swap(eid2, eidMatch1, _map, false);
 
   // Remove reviews e2 is involved in.
@@ -740,10 +736,10 @@ void LinearSnapMerger::_swapSecondaryElementWithScraps(
   }
 }
 
-void LinearSnapMerger::_removeSplitWay(
+void LinearSnapMerger::_handleSplitWay(
   const ElementPtr& e1, const ElementPtr& scraps1, const ElementPtr& e1Match, const bool swapWayIds)
 {
-  LOG_TRACE("Removing split way...");
+  LOG_TRACE("Handling split way...");
 
   const ElementId eid1 = e1->getElementId();
   if (e1 != e1Match && scraps1)
@@ -775,7 +771,8 @@ void LinearSnapMerger::_removeSplitWay(
   }
   else
   {
-    // Remove any reviews that contain this element. Don't remove the element itself yet.
+    // Remove any reviews that contain this element. Don't remove the element itself yet. That may
+    // be done later.
     LOG_TRACE("Removing reviews for e1: " << eid1 << "...");
     RemoveReviewsByEidOp(eid1, true, false).apply(_map);
   }
@@ -787,13 +784,13 @@ void LinearSnapMerger::_removeSplitWay(
   }
 }
 
-void LinearSnapMerger::_removeSplitWay(
+void LinearSnapMerger::_handleSplitWay(
   const ElementId& eid1, const ElementPtr& scraps1, const ElementPtr& e1Match,
   std::vector<std::pair<ElementId, ElementId>>& replaced)
 {
   if (!scraps1)
   {
-    LOG_TRACE("Removing " << eid1 << " and replacing it with " << e1Match->getElementId() << "...");
+    LOG_TRACE("Replacing " << eid1 << " with " << e1Match->getElementId() << "...");
     RemoveElementByEid(eid1).apply(_map);
     replaced.emplace_back(eid1, e1Match->getElementId());
 
