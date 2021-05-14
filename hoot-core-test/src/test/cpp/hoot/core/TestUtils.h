@@ -103,46 +103,6 @@ public:
       virtual void reset() = 0;
   };
 
-  TestUtils();
-
-  static void dumpString(const std::string& str);
-
-  static std::string readFile(QString f1);
-
-  static bool compareMaps(OsmMapPtr map1, OsmMapPtr map2);
-
-  static bool compareMaps(const QString& map1, const QString& map2);
-
-  static NodePtr createNode(OsmMapPtr map, Status status, double x, double y,
-    Meters circularError = ConfigOptions().getCircularErrorDefaultValue(), Tags tags = Tags());
-
-  static WayPtr createWay(
-    OsmMapPtr map, Status s, geos::geom::Coordinate c[],
-    Meters circularError = ConfigOptions().getCircularErrorDefaultValue(),
-    const QString& note = "");
-
-  static WayPtr createWay(
-    OsmMapPtr map, geos::geom::Coordinate c[], Status status = Status::Unknown1,
-    Meters circularError = ConfigOptions().getCircularErrorDefaultValue(), Tags tags = Tags());
-
-  static WayPtr createWay(
-    OsmMapPtr map, const QList<NodePtr>& nodes, Status status = Status::Unknown1,
-    Meters circularError = ConfigOptions().getCircularErrorDefaultValue(), Tags tags = Tags());
-
-  /*
-   * For creating an empty way that belongs to a map.
-   */
-  static WayPtr createDummyWay(OsmMapPtr map, Status status = Status::Unknown1);
-
-  /*
-   * For creating an empty relation that belongs to a map.
-   */
-  static RelationPtr createDummyRelation(OsmMapPtr map, Status status = Status::Unknown1);
-
-  static RelationPtr createRelation(
-    OsmMapPtr map, const QList<ElementPtr>& elements, Status status = Status::Unknown1,
-    Meters circularError = ConfigOptions().getCircularErrorDefaultValue(), Tags tags = Tags());
-
   /**
    * Return the singleton instance.
    */
@@ -153,12 +113,10 @@ public:
    * references.
    */
   void registerReset(RegisteredReset* r) { _resets.append(r); }
-
   /**
    * Resets the test environment including counters, keys, and seeds
    */
   static void resetBasic();
-
   /**
    * Resets the test environment to a known state.
    *
@@ -167,13 +125,43 @@ public:
    */
   static void resetEnvironment(const QStringList confs = QStringList());
 
+  static bool compareMaps(OsmMapPtr map1, OsmMapPtr map2);
+  static bool compareMaps(const QString& map1, const QString& map2);
+
+  static void dumpString(const std::string& str);
+  static std::string readFile(QString f1);
   /**
    * Converts a string into a format that can be cut/paste into c++ code.
    */
   static QString toQuotedString(QString str);
-
   static void verifyStdMatchesOutputIgnoreDate(
     const QString& stdFilePath, const QString& outFilePath);
+
+  static NodePtr createNode(OsmMapPtr map, Status status, double x, double y,
+    Meters circularError = ConfigOptions().getCircularErrorDefaultValue(), Tags tags = Tags());
+
+  static WayPtr createWay(
+    OsmMapPtr map, Status s, geos::geom::Coordinate c[],
+    Meters circularError = ConfigOptions().getCircularErrorDefaultValue(),
+    const QString& note = "");
+  static WayPtr createWay(
+    OsmMapPtr map, geos::geom::Coordinate c[], Status status = Status::Unknown1,
+    Meters circularError = ConfigOptions().getCircularErrorDefaultValue(), Tags tags = Tags());
+  static WayPtr createWay(
+    OsmMapPtr map, const QList<NodePtr>& nodes, Status status = Status::Unknown1,
+    Meters circularError = ConfigOptions().getCircularErrorDefaultValue(), Tags tags = Tags());
+  /*
+   * For creating an empty way that belongs to a map.
+   */
+  static WayPtr createDummyWay(OsmMapPtr map, Status status = Status::Unknown1);
+
+  /*
+   * For creating an empty relation that belongs to a map.
+   */
+  static RelationPtr createDummyRelation(OsmMapPtr map, Status status = Status::Unknown1);
+  static RelationPtr createRelation(
+    OsmMapPtr map, const QList<ElementPtr>& elements, Status status = Status::Unknown1,
+    Meters circularError = ConfigOptions().getCircularErrorDefaultValue(), Tags tags = Tags());
 
   /**
    * This is a snapshot of the option, conflate.pre.ops (circa 2/12/20), for testing purposes.
@@ -181,21 +169,18 @@ public:
    * @return a list of operator class names
    */
   static QStringList getConflateCmdSnapshotPreOps();
-
   /**
    * This is a snapshot of the option, conflate.post.ops (circa 2/12/20), for testing purposes.
    *
    * @return a list of operator class names
    */
   static QStringList getConflateCmdSnapshotPostOps();
-
   /**
    * This is a snapshot of the option, map.cleaner.transforms (circa 2/12/20), for testing purposes.
    *
    * @return a list of operator class names
    */
   static QStringList getConflateCmdSnapshotCleaningOps();
-
   /**
    * Runs a conflate op reduction test which tests for which superfluous conflate pre/post/cleaning
    * ops are removed by SuperfluousConflateOpRemover. This is in TestUtils b/c it is shared by
@@ -213,8 +198,9 @@ public:
 
 private:
 
-  QList<RegisteredReset*> _resets;
+  TestUtils();
 
+  QList<RegisteredReset*> _resets;
   static std::shared_ptr<TestUtils> _theInstance;
 };
 
@@ -238,9 +224,6 @@ public:
     T::reset();
   }
 };
-
-#define TEST_UTILS_REGISTER_RESET(ClassName)      \
-  static hoot::AutoRegisterResetInstance<ClassName> ClassName##AutoRegisterReset;
 
 class HootTestFixture : public CppUnit::TestFixture
 {
@@ -310,6 +293,9 @@ private:
   /** Reset flag on setup to reset nothing, basic IDs, or everything */
   HootTestReset _reset;
 };
+
+#define TEST_UTILS_REGISTER_RESET(ClassName)      \
+  static hoot::AutoRegisterResetInstance<ClassName> ClassName##AutoRegisterReset;
 
 }
 
