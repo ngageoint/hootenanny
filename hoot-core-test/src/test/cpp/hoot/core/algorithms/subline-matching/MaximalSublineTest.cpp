@@ -198,10 +198,10 @@ public:
      * w1 ---------
      */
     Coordinate c1[] = { Coordinate(0.0, 0.0), Coordinate(20.0, 0.0), Coordinate::getNull() };
-    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 10.0, "w1");
+    WayPtr w1 = TestUtils::createWay(map, c1, "w1", Status::Unknown1, 10.0);
 
     Coordinate c2[] = { Coordinate(10.0, 10.0), Coordinate(30.0, 10.0), Coordinate::getNull() };
-    WayPtr w2 = TestUtils::createWay(map, Status::Unknown2, c2, 10.0, "w2");
+    WayPtr w2 = TestUtils::createWay(map, c2, "w2", Status::Unknown2, 10.0);
 
     MaximalSubline uut(new MaximalSubline::ThresholdMatchCriteria(40.0, M_PI / 1.0), 40.0);
 
@@ -226,10 +226,10 @@ public:
      *      \/
      */
     Coordinate c1[] = { Coordinate(0.0, 0.0), Coordinate(-15.0, 50.0), Coordinate::getNull() };
-    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 10.0, "w1");
+    WayPtr w1 = TestUtils::createWay(map, c1, "w1", Status::Unknown1, 10.0);
 
     Coordinate c2[] = { Coordinate(0.0, 0.0), Coordinate(15.0, 50.0), Coordinate::getNull() };
-    WayPtr w2 = TestUtils::createWay(map, Status::Unknown2, c2, 10.0, "w2");
+    WayPtr w2 = TestUtils::createWay(map, c2, "w2", Status::Unknown2, 10.0);
 
     MaximalSubline uut(new MaximalSubline::ThresholdMatchCriteria(40.0, M_PI / 1.0), 40.0);
 
@@ -301,10 +301,10 @@ public:
        * w1 ---------
        */
       Coordinate c1[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0), Coordinate::getNull() };
-      WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 10.0, "w1");
+      WayPtr w1 = TestUtils::createWay(map, c1, "w1", Status::Unknown1, 10.0);
 
       Coordinate c2[] = { Coordinate(2.1, 0.0), Coordinate(100.0, 0.0), Coordinate::getNull() };
-      WayPtr w2 = TestUtils::createWay(map, Status::Unknown2, c2, 10.0, "w2");
+      WayPtr w2 = TestUtils::createWay(map, c2, "w2", Status::Unknown2, 10.0);
 
       MaximalSubline uut(new MaximalSubline::ThresholdMatchCriteria(0.5, M_PI / 1.0), 0.5);
 
@@ -327,10 +327,10 @@ public:
        * w1 ---------
        */
       Coordinate c1[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0), Coordinate::getNull() };
-      WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 10.0, "w1");
+      WayPtr w1 = TestUtils::createWay(map, c1, "w1", Status::Unknown1, 10.0);
 
       Coordinate c2[] = { Coordinate(0.0, 0.0), Coordinate(97.9, 0.0), Coordinate::getNull() };
-      WayPtr w2 = TestUtils::createWay(map, Status::Unknown2, c2, 10.0, "w2");
+      WayPtr w2 = TestUtils::createWay(map, c2, "w2", Status::Unknown2, 10.0);
 
       MaximalSubline uut(new MaximalSubline::ThresholdMatchCriteria(0.5, M_PI / 1.0), 0.5);
 
@@ -353,13 +353,13 @@ public:
        * w1 ---------
        */
       Coordinate c1[] = { Coordinate(60.0, 5.0), Coordinate(100.0, 5.0), Coordinate::getNull() };
-      WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 10.0, "w1");
+      WayPtr w1 = TestUtils::createWay(map, c1, "w1", Status::Unknown1, 10.0);
 
       Coordinate c2[] = { Coordinate(0.0, 0.0),
                           Coordinate(50, 0.0),
                           Coordinate(100, 0.0),
                           Coordinate::getNull() };
-      WayPtr w2 = TestUtils::createWay(map, Status::Unknown2, c2, 10.0, "w2");
+      WayPtr w2 = TestUtils::createWay(map, c2, "w2", Status::Unknown2, 10.0);
 
       MaximalSubline uut(new MaximalSubline::ThresholdMatchCriteria(10, M_PI / 1.0), 10);
 
@@ -387,13 +387,13 @@ public:
                           Coordinate(120.0, 5.0),
                           Coordinate(180.0, 5.0),
                           Coordinate::getNull() };
-      WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 10.0, "w1");
+      WayPtr w1 = TestUtils::createWay(map, c1, "w1", Status::Unknown1, 10.0);
 
       Coordinate c2[] = { Coordinate(0.0, 0.0),
                           Coordinate(50, 0.0),
                           Coordinate(100, 0.0),
                           Coordinate::getNull() };
-      WayPtr w2 = TestUtils::createWay(map, Status::Unknown2, c2, 10.0, "w2");
+      WayPtr w2 = TestUtils::createWay(map, c2, "w2", Status::Unknown2, 10.0);
 
       MaximalSubline uut(new MaximalSubline::ThresholdMatchCriteria(10, M_PI / 1.0), 10);
 
@@ -468,13 +468,13 @@ public:
       Coordinate c1[] = { Coordinate(0 + err, 0 + err), Coordinate(100 + err, 0 + err),
                           Coordinate(100 + err, 10 + err), Coordinate(0 + err, 10 + err),
                           Coordinate::getNull() };
-      WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 20.0, "w1");
+      WayPtr w1 = TestUtils::createWay(map, c1, "w1", Status::Unknown1, 20.0);
 
       err = 20;
       Coordinate c2[] = { Coordinate(0 + err, 0 + err), Coordinate(100 + err, 0 + err),
                           Coordinate(100 + err, 10 + err), Coordinate(0 + err, 10 + err),
                           Coordinate::getNull() };
-      WayPtr w2 = TestUtils::createWay(map, Status::Unknown2, c2, 20.0, "w2");
+      WayPtr w2 = TestUtils::createWay(map, c2, "w2", Status::Unknown2, 20.0);
 
       MaximalSubline uut(new MaximalSubline::ThresholdMatchCriteria(40, M_PI / 1.0), 40);
 
@@ -504,12 +504,12 @@ public:
       Coordinate c1[] = { Coordinate(0 + err, 0 + err), Coordinate(100 + err, 0 + err),
                           Coordinate(100 + err, 10 + err), Coordinate(0 + err, 10 + err),
                           Coordinate::getNull() };
-      WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 20.0, "w1");
+      WayPtr w1 = TestUtils::createWay(map, c1, "w1", Status::Unknown1, 20.0);
 
       err = 0;
       Coordinate c2[] = { Coordinate(100 + err, 10 + err), Coordinate(0 + err, 10 + err),
                           Coordinate::getNull() };
-      WayPtr w2 = TestUtils::createWay(map, Status::Unknown2, c2, 20.0, "w2");
+      WayPtr w2 = TestUtils::createWay(map, c2, "w2", Status::Unknown2, 20.0);
 
       MaximalSubline uut(new MaximalSubline::ThresholdMatchCriteria(40, M_PI / 1.0), 40);
 

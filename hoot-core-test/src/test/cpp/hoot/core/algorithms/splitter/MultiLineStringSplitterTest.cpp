@@ -89,7 +89,7 @@ public:
     OsmMapPtr map = createMap();
 
     Coordinate w1c[] = { Coordinate(0, 0), Coordinate(100, 0), Coordinate::getNull() };
-    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, w1c);
+    WayPtr w1 = TestUtils::createWay(map, w1c);
 
     WaySublineCollection string;
     string.addSubline(WaySubline(WayLocation(map, w1, 30), WayLocation(map, w1, 70)));
@@ -112,7 +112,7 @@ public:
     OsmMapPtr map = createMap();
 
     Coordinate w1c[] = { Coordinate(0, 0), Coordinate(100, 0), Coordinate::getNull() };
-    WayPtr way1 = TestUtils::createWay(map, Status::Unknown1, w1c);
+    WayPtr way1 = TestUtils::createWay(map, w1c);
     RelationPtr relation(new Relation(way1->getStatus(), map->createNextRelationId(),
       way1->getCircularError(), MetadataTags::RelationMultilineString()));
     relation->addElement("", way1->getElementId());

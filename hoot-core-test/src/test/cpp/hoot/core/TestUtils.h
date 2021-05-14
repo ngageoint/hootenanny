@@ -137,31 +137,38 @@ public:
   static void verifyStdMatchesOutputIgnoreDate(
     const QString& stdFilePath, const QString& outFilePath);
 
-  static NodePtr createNode(OsmMapPtr map, Status status, double x, double y,
-    Meters circularError = ConfigOptions().getCircularErrorDefaultValue(), Tags tags = Tags());
+  static NodePtr createNode(
+    const OsmMapPtr& map, const QString& note = "", const Status& status = Status::Unknown1,
+    const double x = 0.0, const double y = 0.0,
+    const Meters circularError = ConfigOptions().getCircularErrorDefaultValue(),
+    const Tags& tags = Tags());
 
   static WayPtr createWay(
-    OsmMapPtr map, Status s, geos::geom::Coordinate c[],
-    Meters circularError = ConfigOptions().getCircularErrorDefaultValue(),
-    const QString& note = "");
+    const OsmMapPtr& map, const geos::geom::Coordinate c[] = nullptr,
+    const QString& note = "", const Status& s = Status::Unknown1,
+    const Meters circularError = ConfigOptions().getCircularErrorDefaultValue(),
+    const Tags& tags = Tags());
   static WayPtr createWay(
-    OsmMapPtr map, geos::geom::Coordinate c[], Status status = Status::Unknown1,
-    Meters circularError = ConfigOptions().getCircularErrorDefaultValue(), Tags tags = Tags());
+    const OsmMapPtr& map, const QList<NodePtr>& nodes = QList<NodePtr>(),
+    const QString& note = "", const Status& status = Status::Unknown1,
+    const Meters circularError = ConfigOptions().getCircularErrorDefaultValue(),
+    const Tags& tags = Tags());
   static WayPtr createWay(
-    OsmMapPtr map, const QList<NodePtr>& nodes, Status status = Status::Unknown1,
-    Meters circularError = ConfigOptions().getCircularErrorDefaultValue(), Tags tags = Tags());
-  /*
-   * For creating an empty way that belongs to a map.
-   */
-  static WayPtr createDummyWay(OsmMapPtr map, Status status = Status::Unknown1);
+    const OsmMapPtr& map, const QList<ElementId>& nodeIds = QList<ElementId>(),
+    const QString& note = "", const Status& status = Status::Unknown1,
+    const Meters circularError = ConfigOptions().getCircularErrorDefaultValue(),
+    const Tags& tags = Tags());
 
-  /*
-   * For creating an empty relation that belongs to a map.
-   */
-  static RelationPtr createDummyRelation(OsmMapPtr map, Status status = Status::Unknown1);
   static RelationPtr createRelation(
-    OsmMapPtr map, const QList<ElementPtr>& elements, Status status = Status::Unknown1,
-    Meters circularError = ConfigOptions().getCircularErrorDefaultValue(), Tags tags = Tags());
+    const OsmMapPtr& map, const QList<ElementPtr>& elements = QList<ElementPtr>(),
+    const QString& note = "", const Status& status = Status::Unknown1,
+    const Meters circularError = ConfigOptions().getCircularErrorDefaultValue(),
+    const Tags& tags = Tags());
+  static RelationPtr createRelation(
+    const OsmMapPtr& map, const QList<ElementId>& elementIds = QList<ElementId>(),
+    const QString& note = "", const Status& status = Status::Unknown1,
+    const Meters circularError = ConfigOptions().getCircularErrorDefaultValue(),
+    const Tags& tags = Tags());
 
   /**
    * This is a snapshot of the option, conflate.pre.ops (circa 2/12/20), for testing purposes.

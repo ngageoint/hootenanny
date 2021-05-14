@@ -32,12 +32,6 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/elements/MapProjector.h>
 
-// CPP Unit
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/extensions/TestFactoryRegistry.h>
-#include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
-
 namespace hoot
 {
 
@@ -46,12 +40,12 @@ class RecursiveElementRemoverTest : public HootTestFixture
   CPPUNIT_TEST_SUITE(RecursiveElementRemoverTest);
   CPPUNIT_TEST(removeRelationTest);
   CPPUNIT_TEST(removeWayTest);
-  // TODO: add remove parent refs test
+  //CPPUNIT_TEST(removeParentRefsTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  OsmMapPtr createTestMap()
+  OsmMapPtr createTestMap1()
   {
     OsmMapPtr result(new OsmMap());
 
@@ -113,11 +107,41 @@ public:
     return result;
   }
 
+  OsmMapPtr createTestMap2()
+  {
+    OsmMapPtr map = std::make_shared<OsmMap>();
+
+    NodePtr node1 = TestUtils::createNode(map, "n1"); // belongs to way 1
+    NodePtr node2 = TestUtils::createNode(map, "n2"); // belongs to way 1
+    NodePtr node3 = TestUtils::createNode(map, "n3"); // belongs to way 2
+    NodePtr node4 = TestUtils::createNode(map, "n4"); // belongs to way 2
+    NodePtr node5 = TestUtils::createNode(map, "n5"); // belongs to relation 1
+    //NodePtr node6 = TestUtils::createNode(map, "n6"); // belongs to nothing
+
+    WayPtr way1 = TestUtils::createWay(map, QList<ElementId>(), "w1"); // belongs to relation 1
+    way1->addNode(node1->getId());
+    way1->addNode(node2->getId());
+
+    WayPtr way2 = TestUtils::createWay(map, QList<ElementId>(), "w2"); // belongs to nothing
+    way2->addNode(node3->getId());
+    way2->addNode(node4->getId());
+
+    // belongs to nothing
+    RelationPtr relation1 = TestUtils::createRelation(map, QList<ElementId>(), "r1");
+    // belongs to relation 1
+    RelationPtr relation2 = TestUtils::createRelation(map, QList<ElementId>(), "r2");
+    relation1->addElement("", way1->getElementId());
+    relation1->addElement("", node5->getElementId());
+    relation1->addElement("", relation2->getElementId());
+
+    return map;
+  }
+
   void removeRelationTest()
   {
-    OsmMapPtr base = createTestMap();
+    OsmMapPtr base = createTestMap1();
     OsmMapPtr map;
-    map = createTestMap();
+    map = createTestMap1();
 
     RecursiveElementRemover uut(ElementId::relation(1));
     uut.apply(map);
@@ -133,7 +157,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(false, map->containsWay(3));
     CPPUNIT_ASSERT_EQUAL(false, map->containsRelation(1));
 
-    map = createTestMap();
+    map = createTestMap1();
 
     RecursiveElementRemover uut2(ElementId::relation(3));
     uut2.apply(map);
@@ -152,9 +176,9 @@ public:
 
   void removeWayTest()
   {
-    OsmMapPtr base = createTestMap();
+    OsmMapPtr base = createTestMap1();
     OsmMapPtr map;
-    map = createTestMap();
+    map = createTestMap1();
 
     RecursiveElementRemover uut(ElementId::way(1));
     uut.apply(map);
@@ -166,8 +190,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(false, map->containsNode(2));
     CPPUNIT_ASSERT_EQUAL(false, map->containsWay(1));
 
-
-    map = createTestMap();
+    map = createTestMap1();
 
     RecursiveElementRemover uut2(ElementId::way(2));
     uut2.apply(map);
@@ -180,9 +203,14 @@ public:
     CPPUNIT_ASSERT_EQUAL(true, map->containsWay(2));
   }
 
+  void removeParentRefsTest()
+  {
+    OsmMapPtr map = createTestMap2();
+
+    //RecursiveElementRemover uut(node1)
+  }
 };
 
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(RecursiveElementRemoverTest, "current");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(RecursiveElementRemoverTest, "quick");
 
 }

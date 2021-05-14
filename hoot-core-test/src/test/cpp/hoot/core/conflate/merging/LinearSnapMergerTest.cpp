@@ -112,10 +112,10 @@ public:
     OsmMapPtr map = createMap();
 
     Coordinate w1c[] = { Coordinate(50, 0), Coordinate(150, 0), Coordinate::getNull() };
-    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, w1c);
+    WayPtr w1 = TestUtils::createWay(map, w1c, "", Status::Unknown1);
 
     Coordinate w2c[] = { Coordinate(100, 0), Coordinate(0, 0), Coordinate::getNull() };
-    WayPtr w2 = TestUtils::createWay(map, Status::Unknown2, w2c);
+    WayPtr w2 = TestUtils::createWay(map, w2c, "", Status::Unknown2);
 
     std::shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
     sublineMatcher->setMinSplitSize(5.0);
@@ -182,10 +182,10 @@ public:
     OsmMapPtr map = createMap();
 
     Coordinate w1c[] = { Coordinate(0, 0), Coordinate(100, 0), Coordinate::getNull() };
-    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, w1c);
+    WayPtr w1 = TestUtils::createWay(map, w1c, "", Status::Unknown1);
 
     Coordinate w2c[] = { Coordinate(0, 0), Coordinate(100, 0), Coordinate::getNull() };
-    WayPtr w2 = TestUtils::createWay(map, Status::Unknown2, w2c);
+    WayPtr w2 = TestUtils::createWay(map, w2c, "", Status::Unknown2);
 
     std::shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
     sublineMatcher->setMinSplitSize(5.0);
@@ -229,10 +229,10 @@ public:
     OsmMapPtr map = createMap();
 
     Coordinate w1c[] = { Coordinate(0, 5), Coordinate(60, 5), Coordinate::getNull() };
-    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, w1c);
+    WayPtr w1 = TestUtils::createWay(map, w1c, "", Status::Unknown1);
 
     Coordinate w2c[] = { Coordinate(0, 0), Coordinate(100, 0), Coordinate::getNull() };
-    WayPtr w2 = TestUtils::createWay(map, Status::Unknown2, w2c);
+    WayPtr w2 = TestUtils::createWay(map, w2c, "", Status::Unknown2);
 
     std::shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
     sublineMatcher->setMinSplitSize(5.0);
@@ -280,16 +280,16 @@ public:
     OsmMapPtr map = createMap();
 
     Coordinate w1c[] = { Coordinate(20, 5), Coordinate(60, 5), Coordinate::getNull() };
-    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, w1c);
+    WayPtr w1 = TestUtils::createWay(map, w1c, "", Status::Unknown1);
     w1->getTags()["uuid"] = "w1";
 
     Coordinate w2c[] = { Coordinate(60, 5), Coordinate(150, 5), Coordinate::getNull() };
-    WayPtr w2 = TestUtils::createWay(map, Status::Unknown1, w2c);
+    WayPtr w2 = TestUtils::createWay(map, w2c, "", Status::Unknown1);
     w2->getTags()["barrier"] = "wall";
     w2->getTags()["uuid"] = "wall";
 
     Coordinate w3c[] = { Coordinate(-30, 0), Coordinate(100, 0), Coordinate::getNull() };
-    WayPtr w3 = TestUtils::createWay(map, Status::Unknown2, w3c);
+    WayPtr w3 = TestUtils::createWay(map, w3c, "", Status::Unknown2);
     w3->getTags()["highway"] = "path";
     w3->getTags()["uuid"] = "w3";
 
@@ -340,12 +340,12 @@ public:
     OsmMapPtr map = createMap();
 
     Coordinate w1c[] = { Coordinate(0, 5), Coordinate(100, 5), Coordinate::getNull() };
-    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, w1c);
+    WayPtr w1 = TestUtils::createWay(map, w1c, "", Status::Unknown1);
     w1->getTags()["highway"] = "road";
     w1->getTags()["uuid"] = "w1";
 
     Coordinate w2c[] = { Coordinate(40, 0), Coordinate(60, 0), Coordinate::getNull() };
-    WayPtr w2 = TestUtils::createWay(map, Status::Unknown2, w2c);
+    WayPtr w2 = TestUtils::createWay(map, w2c, "", Status::Unknown2);
     w2->getTags()["highway"] = "path";
     w2->getTags()["uuid"] = "w2";
 
@@ -393,12 +393,12 @@ public:
     OsmMapPtr map = createMap();
 
     Coordinate w1c[] = { Coordinate(0, 5), Coordinate(50, 5), Coordinate::getNull() };
-    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, w1c);
+    WayPtr w1 = TestUtils::createWay(map, w1c, "", Status::Unknown1);
     w1->getTags()["highway"] = "road";
     w1->getTags()["uuid"] = "w1";
 
     Coordinate w2c[] = { Coordinate(0, 0), Coordinate(100, 0), Coordinate::getNull() };
-    WayPtr w2 = TestUtils::createWay(map, Status::Unknown2, w2c);
+    WayPtr w2 = TestUtils::createWay(map, w2c, "", Status::Unknown2);
 
     RelationPtr r(new Relation(Status::Unknown2, 0, 15, MetadataTags::RelationMultilineString()));
     r->addElement("", w2);
@@ -435,10 +435,10 @@ public:
     OsmMapPtr map = createMap();
 
     Coordinate w1c[] = { Coordinate(0, 0), Coordinate(100, 0), Coordinate::getNull() };
-    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, w1c);
+    WayPtr w1 = TestUtils::createWay(map, w1c, "", Status::Unknown1);
 
     Coordinate w2c[] = { Coordinate(0, 0), Coordinate(100, 0), Coordinate::getNull() };
-    WayPtr w2 = TestUtils::createWay(map, Status::Unknown2, w2c);
+    WayPtr w2 = TestUtils::createWay(map, w2c, "", Status::Unknown2);
 
     std::shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
     sublineMatcher->setMinSplitSize(5.0);

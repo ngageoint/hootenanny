@@ -52,9 +52,9 @@ public:
     OsmMapPtr map(new OsmMap());
 
     ConstNetworkVertexPtr vertex1(
-      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 0, 0)));
+      new NetworkVertex(TestUtils::createNode(map, "", Status::Unknown1, 0, 0)));
     ConstNetworkVertexPtr vertex2(
-      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 10, 0)));
+      new NetworkVertex(TestUtils::createNode(map, "", Status::Unknown1, 10, 0)));
     ConstNetworkEdgePtr edge(new NetworkEdge(vertex1, vertex2, true));
     ConstEdgeLocationPtr edgeLocStart(new EdgeLocation(edge, 0.0));
     ConstEdgeLocationPtr edgeLocEnd(new EdgeLocation(edge, 0.7));
@@ -80,9 +80,9 @@ public:
     OsmMapPtr map(new OsmMap());
 
     ConstNetworkVertexPtr vertex1(
-      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 0, 0)));
+      new NetworkVertex(TestUtils::createNode(map, "", Status::Unknown1, 0, 0)));
     ConstNetworkVertexPtr vertex2(
-      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 10, 0)));
+      new NetworkVertex(TestUtils::createNode(map, "", Status::Unknown1, 10, 0)));
     ConstNetworkEdgePtr edge(new NetworkEdge(vertex1, vertex2, true));
     ConstEdgeLocationPtr edgeLocStart(new EdgeLocation(edge, -0.1));
     ConstEdgeLocationPtr edgeLocEnd(new EdgeLocation(edge, 0.7));
@@ -97,9 +97,9 @@ public:
     OsmMapPtr map(new OsmMap());
 
     ConstNetworkVertexPtr vertex1(
-      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 0, 0)));
+      new NetworkVertex(TestUtils::createNode(map, "", Status::Unknown1, 0, 0)));
     ConstNetworkVertexPtr vertex2(
-      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 10, 0)));
+      new NetworkVertex(TestUtils::createNode(map, "", Status::Unknown1, 10, 0)));
     ConstNetworkEdgePtr edge1(new NetworkEdge(vertex1, vertex2, true));
     ConstEdgeLocationPtr edgeLocStart(new EdgeLocation(edge1, 0.0));
 
@@ -113,9 +113,9 @@ public:
     OsmMapPtr map(new OsmMap());
 
     ConstNetworkVertexPtr vertex1(
-      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 0, 0)));
+      new NetworkVertex(TestUtils::createNode(map, "", Status::Unknown1, 0, 0)));
     ConstNetworkVertexPtr vertex2(
-      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 10, 0)));
+      new NetworkVertex(TestUtils::createNode(map, "", Status::Unknown1, 10, 0)));
     ConstNetworkEdgePtr edge(new NetworkEdge(vertex1, vertex2, true));
     ConstEdgeLocationPtr edgeLocStart(new EdgeLocation(edge, 0.7));
     ConstEdgeLocationPtr edgeLocEnd(new EdgeLocation(edge, 0.0));
@@ -130,9 +130,9 @@ public:
     OsmMapPtr map(new OsmMap());
 
     ConstNetworkVertexPtr vertex1(
-          new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 0, 0)));
+          new NetworkVertex(TestUtils::createNode(map, "", Status::Unknown1, 0, 0)));
     ConstNetworkVertexPtr vertex2(
-          new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 10, 0)));
+          new NetworkVertex(TestUtils::createNode(map, "", Status::Unknown1, 10, 0)));
     ConstNetworkEdgePtr edge1(new NetworkEdge(vertex1, vertex2, true));
 
     ConstEdgeLocationPtr edgeLoc1(new EdgeLocation(edge1, 0.0));
@@ -153,9 +153,9 @@ public:
     OsmMapPtr map(new OsmMap());
 
     ConstNetworkVertexPtr vertex1(
-      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 0, 0)));
+      new NetworkVertex(TestUtils::createNode(map, "", Status::Unknown1, 0, 0)));
     ConstNetworkVertexPtr vertex2(
-      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 10, 0)));
+      new NetworkVertex(TestUtils::createNode(map, "", Status::Unknown1, 10, 0)));
     ConstNetworkEdgePtr edge1(new NetworkEdge(vertex1, vertex2, true));
     ConstEdgeLocationPtr edgeLocStart(new EdgeLocation(edge1, 0.0));
     ConstEdgeLocationPtr edgeLocEnd(new EdgeLocation(edge1, 0.7));
@@ -179,9 +179,9 @@ public:
     OsmMapPtr map(new OsmMap());
 
     ConstNetworkVertexPtr vertex1(
-      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 0, 0)));
+      new NetworkVertex(TestUtils::createNode(map, "", Status::Unknown1, 0, 0)));
     ConstNetworkVertexPtr vertex2(
-      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 10, 0)));
+      new NetworkVertex(TestUtils::createNode(map, "", Status::Unknown1, 10, 0)));
     ConstNetworkEdgePtr edge1(new NetworkEdge(vertex1, vertex2, true));
 
     EdgeSublinePtr edgeSubline = EdgeSubline::createFullSubline(edge1);
@@ -209,9 +209,9 @@ public:
     OsmMapPtr map(new OsmMap());
 
     ConstNetworkVertexPtr vertex1(
-      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 0, 0)));
+      new NetworkVertex(TestUtils::createNode(map, "", Status::Unknown1, 0, 0)));
     ConstNetworkVertexPtr vertex2(
-      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 10, 0)));
+      new NetworkVertex(TestUtils::createNode(map, "", Status::Unknown1, 10, 0)));
     ConstNetworkEdgePtr edge(new NetworkEdge(vertex1, vertex2, true));
     ConstEdgeLocationPtr edgeLocStart(new EdgeLocation(edge, 0.0));
     ConstEdgeLocationPtr edgeLocEnd(new EdgeLocation(edge, 0.7));

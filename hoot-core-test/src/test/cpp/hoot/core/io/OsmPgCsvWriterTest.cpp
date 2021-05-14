@@ -102,7 +102,7 @@ public:
     tags.set("aerialway", "t-bar");
     tags.set("first name", "first name goes here");
     tags.set("full_name", "\"Hacksaw\" Jim Duggan");
-    WayPtr way = TestUtils::createWay(map, Status::Unknown1, coords);
+    WayPtr way = TestUtils::createWay(map, coords);
     way->setTags(tags);
 
     QList<ElementPtr> nodes;
