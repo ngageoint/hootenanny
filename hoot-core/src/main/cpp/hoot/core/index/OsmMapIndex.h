@@ -53,7 +53,7 @@ public:
   ~OsmMapIndex() = default;
 
   void addNode(const ConstNodePtr& n);
-  void addRelation(const ConstRelationPtr& r);
+  void addRelation(const ConstRelationPtr& r) const;
   void addWay(ConstWayPtr w);
 
   /**
@@ -123,7 +123,7 @@ public:
   void postGeometryChange(Element* element) override;
 
   void removeNode(ConstNodePtr n);
-  void removeRelation(const ConstRelationPtr& r);
+  void removeRelation(const ConstRelationPtr& r) const;
   void removeWay(ConstWayPtr w);
 
   void reset();
@@ -163,8 +163,8 @@ private:
   int _createTreeNid(long nid) const;
   int _createTreeWid(long wid) const;
 
-  void _insertNode(long nid);
-  void _insertWay(long wid);
+  void _insertNode(long nid) const;
+  void _insertWay(long wid) const;
 
   long _mapToWayId(int treeId) const { return _treeIdToWid[treeId]; }
   long _mapToNodeId(int treeId) const { return _treeIdToNid[treeId]; }

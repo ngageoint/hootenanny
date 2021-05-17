@@ -290,7 +290,7 @@ int PoiPolygonMatchCreator::_numMatchesContainingElement(
 }
 
 QMultiMap<ElementId, ConstMatchPtr> PoiPolygonMatchCreator::_indexMatchesById(
-  const std::vector<ConstMatchPtr>& matches, const QString& matchTypeStr)
+  const std::vector<ConstMatchPtr>& matches, const QString& matchTypeStr) const
 {
   LOG_DEBUG(
     "Indexing " << StringUtils::formatLargeNumber(matches.size()) << " " << matchTypeStr <<
@@ -341,7 +341,7 @@ QMultiMap<ElementId, ConstMatchPtr> PoiPolygonMatchCreator::_indexMatchesById(
 }
 
 QMap<ElementId, QList<ConstMatchPtr>> PoiPolygonMatchCreator::_getOverlappingMatches(
-  const QMultiMap<ElementId, ConstMatchPtr>& matchesById, const QString& matchTypeStr)
+  const QMultiMap<ElementId, ConstMatchPtr>& matchesById, const QString& matchTypeStr) const
 {
   LOG_DEBUG(
     "Finding overlapping " << matchTypeStr << " matches out of " <<
@@ -368,7 +368,7 @@ QMap<ElementId, QList<ConstMatchPtr>> PoiPolygonMatchCreator::_getOverlappingMat
 std::vector<ConstMatchPtr> PoiPolygonMatchCreator::_filterOutNonClosestMatches(
   const QMap<ElementId, QList<ConstMatchPtr>>& overlappingMatches,
   const std::vector<ConstMatchPtr>& allMatches, const ConstOsmMapPtr& map,
-  const QString& matchTypeStr)
+  const QString& matchTypeStr) const
 {
   LOG_DEBUG(
     "Filtering out non-closest " << matchTypeStr << " matches out of " <<

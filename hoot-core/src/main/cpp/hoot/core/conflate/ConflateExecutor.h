@@ -109,10 +109,10 @@ private:
   Tgs::Timer _taskTimer;
 
   void _initConfig();
-  void _updateConfigOptionsForAttributeConflation();
-  void _updateConfigOptionsForDifferentialConflation();
-  void _updateConfigOptionsForBounds();
-  void _disableRoundaboutRemoval();
+  void _updateConfigOptionsForAttributeConflation() const;
+  void _updateConfigOptionsForDifferentialConflation() const;
+  void _updateConfigOptionsForBounds() const;
+  void _disableRoundaboutRemoval() const;
   void _checkForTagValueTruncationOverride();
 
   void _initTaskCount();

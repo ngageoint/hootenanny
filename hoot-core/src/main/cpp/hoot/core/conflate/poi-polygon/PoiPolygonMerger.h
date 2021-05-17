@@ -105,7 +105,7 @@ private:
 
   ElementId _mergeBuildings(const OsmMapPtr& map, std::vector<ElementId>& buildings1,
                             std::vector<ElementId>& buildings2,
-                            std::vector<std::pair<ElementId, ElementId>>& replaced);
+                            std::vector<std::pair<ElementId, ElementId>>& replaced) const;
 
   Tags _mergePoiTags(const OsmMapPtr& map, Status s);
   std::shared_ptr<TagMerger> _getTagMerger();

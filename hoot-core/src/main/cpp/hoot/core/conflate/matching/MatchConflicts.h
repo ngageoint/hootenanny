@@ -63,7 +63,7 @@ private:
 
   void _calculateSubsetConflicts(
     const std::vector<ConstMatchPtr>& matches, ConflictMap& conflicts,
-    const std::vector<int>& matchSet, const QHash<QString, ConstMatchPtr>& idIndexedMatches);
+    const std::vector<int>& matchSet, const QHash<QString, ConstMatchPtr>& idIndexedMatches) const;
 
   EidIndexMap _calculateEidIndexMap(const std::vector<ConstMatchPtr>& matches) const;
 };

@@ -73,7 +73,7 @@ void HootApiDbSqlStatementFormatter::_initOutputFormatStrings(const QString& del
     formatString.replace("\t", delimiter);
 }
 
-QString HootApiDbSqlStatementFormatter::_toTagsString(const Tags& tags)
+QString HootApiDbSqlStatementFormatter::_toTagsString(const Tags& tags) const
 {
   QString tagsStr;
   for (Tags::const_iterator it = tags.begin(); it != tags.end(); ++it)

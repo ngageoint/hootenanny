@@ -297,7 +297,7 @@ void DiffConflator::storeOriginalMap(OsmMapPtr& map)
   mapCopier.apply(_originalRef1Map);
 }
 
-std::shared_ptr<ChangesetDeriver> DiffConflator::_sortInputs(OsmMapPtr map1, OsmMapPtr map2)
+std::shared_ptr<ChangesetDeriver> DiffConflator::_sortInputs(OsmMapPtr map1, OsmMapPtr map2) const
 {
   // Conflation requires all data to be in memory, so no point in adding support for the
   // ExternalMergeElementSorter here.
@@ -309,7 +309,7 @@ std::shared_ptr<ChangesetDeriver> DiffConflator::_sortInputs(OsmMapPtr map1, Osm
   return delta;
 }
 
-void DiffConflator::markInputElements(OsmMapPtr map)
+void DiffConflator::markInputElements(OsmMapPtr map) const
 {
   // Mark input1 elements
   Settings visitorConf;
@@ -667,7 +667,7 @@ void DiffConflator::_removeRefData()
     " reference elements...");
 }
 
-void DiffConflator::addChangesToMap(OsmMapPtr map, ChangesetProviderPtr pChanges)
+void DiffConflator::addChangesToMap(OsmMapPtr map, ChangesetProviderPtr pChanges) const
 {
   LOG_TRACE("Adding changes to map...");
 
@@ -832,7 +832,7 @@ bool DiffConflator::_tagsAreDifferent(const Tags& oldTags, const Tags& newTags) 
   return false;
 }
 
-Change DiffConflator::_getChange(ConstElementPtr pOldElement, ConstElementPtr pNewElement)
+Change DiffConflator::_getChange(ConstElementPtr pOldElement, ConstElementPtr pNewElement) const
 {
   // Create a new change object based on the original element, with new tags. This may seem a
   // little weird, but we want something very specific here. We want the old element as it was...
@@ -964,7 +964,7 @@ void DiffConflator::writeChangeset(
   }
 }
 
-void DiffConflator::calculateStats(OsmMapPtr pResultMap, QList<SingleStat>& stats)
+void DiffConflator::calculateStats(OsmMapPtr pResultMap, QList<SingleStat>& stats) const
 {
   // Differential specific stats
 
@@ -988,7 +988,7 @@ void DiffConflator::calculateStats(OsmMapPtr pResultMap, QList<SingleStat>& stat
   stats.append((SingleStat("Km of New Roads", lengthVisitor.getStat() / 1000.0)));
 }
 
-void DiffConflator::_removeMetadataTags()
+void DiffConflator::_removeMetadataTags() const
 {
   QStringList tagKeysToRemove;
   tagKeysToRemove.append(MetadataTags::Ref1());

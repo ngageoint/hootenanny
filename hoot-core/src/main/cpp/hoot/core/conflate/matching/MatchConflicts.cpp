@@ -128,7 +128,7 @@ void MatchConflicts::calculateMatchConflicts(
 
 void MatchConflicts::_calculateSubsetConflicts(
   const std::vector<ConstMatchPtr>& matches, ConflictMap& conflicts, const vector<int>& matchSet,
-  const QHash<QString, ConstMatchPtr>& idIndexedMatches)
+  const QHash<QString, ConstMatchPtr>& idIndexedMatches) const
 {
   LOG_TRACE("Calculating subset conflicts...");
   LOG_VART(matches.size());

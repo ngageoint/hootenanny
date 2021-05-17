@@ -111,7 +111,7 @@ private:
   void _updateScrapParent(long id, const ElementPtr& scrap);
   void _manageElementIds(
     const WayPtr& w1, const WayPtr& w2, const WayPtr& wMatch, const ElementPtr& scraps1,
-    const ElementPtr& scraps2);
+    const ElementPtr& scraps2) const;
   void _handleScrapsIds(const ElementPtr& scraps, const WayPtr& way) const;
   void _swapSecondaryElementWithScraps(
     const ElementId& secElementId, const ElementPtr& matchElement, const ElementPtr& scraps) const;

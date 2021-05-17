@@ -122,7 +122,7 @@ bool MapProjector::_angleLessThan(const MapProjector::PlanarTestResult& p1,
   return p1.angleError < p2.angleError;
 }
 
-Radians MapProjector::_calculateAngle(Coordinate p1, Coordinate p2, Coordinate p3)
+Radians MapProjector::_calculateAngle(Coordinate p1, Coordinate p2, Coordinate p3) const
 {
   Radians theta1 = atan2(p2.y - p1.y, p2.x - p1.x);
   Radians theta2 = atan2(p3.y - p1.y, p3.x - p1.x);
@@ -152,7 +152,7 @@ std::shared_ptr<OGRSpatialReference> MapProjector::createAeacProjection(const OG
 }
 
 vector<std::shared_ptr<OGRSpatialReference>> MapProjector::createAllPlanarProjections(
-  const OGREnvelope& env)
+  const OGREnvelope& env) const
 {
   vector<std::shared_ptr<OGRSpatialReference>> result;
 
@@ -493,7 +493,7 @@ bool MapProjector::_distanceLessThan(const MapProjector::PlanarTestResult& p1,
   return p1.distanceError < p2.distanceError;
 }
 
-size_t MapProjector::_findBestScore(vector<PlanarTestResult>& results)
+size_t MapProjector::_findBestScore(vector<PlanarTestResult>& results) const
 {
   vector<PlanarTestResult> orderByScore = results;
   sort(orderByScore.begin(), orderByScore.end(), _scoreLessThan);

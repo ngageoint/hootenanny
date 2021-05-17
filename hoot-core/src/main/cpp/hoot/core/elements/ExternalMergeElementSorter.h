@@ -164,15 +164,15 @@ private:
    * Adds the first member from each temp file to the priority queue
    */
   ElementPriorityQueue _getInitializedPriorityQueue(
-    QList<std::shared_ptr<PartialOsmMapReader>>& readers);
+    QList<std::shared_ptr<PartialOsmMapReader>>& readers) const;
 
   void _mergeSortedElements(ElementPriorityQueue& priorityQueue,
                             std::shared_ptr<PartialOsmMapWriter> writer,
-                            QList<std::shared_ptr<PartialOsmMapReader>> readers);
+                            QList<std::shared_ptr<PartialOsmMapReader>> readers) const;
 
   std::shared_ptr<PartialOsmMapWriter> _getFinalOutputWriter();
 
-  void _printPriorityQueue(ElementPriorityQueue priorityQueue);
+  void _printPriorityQueue(ElementPriorityQueue priorityQueue) const;
 };
 
 }

@@ -133,7 +133,7 @@ public:
    */
   void mark(const OsmMapPtr& map, const std::vector<ElementId>& ids, const QString& note,
             const QString& reviewType, double score = -1,
-            std::vector<QString> choices = std::vector<QString>());
+            std::vector<QString> choices = std::vector<QString>()) const;
 
   /**
    * Removes a single element.

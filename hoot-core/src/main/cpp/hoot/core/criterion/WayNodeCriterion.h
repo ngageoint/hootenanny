@@ -60,7 +60,7 @@ public:
    * @return the first way ID found that contains the node
    * @todo move to WayUtils
    */
-  long getFirstOwningWayId(const ConstNodePtr& node);
+  long getFirstOwningWayId(const ConstNodePtr& node) const;
 
   QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }

@@ -79,7 +79,7 @@ public:
    * @param element the element to examine
    * @return true if the element has a poi/poly related type; false otherwise
    */
-  bool hasRelatedType(const ConstElementPtr& element);
+  bool hasRelatedType(const ConstElementPtr& element) const;
 
   /**
    * Determines the max distance to use for generating reviews during poi/polygon matching; backed

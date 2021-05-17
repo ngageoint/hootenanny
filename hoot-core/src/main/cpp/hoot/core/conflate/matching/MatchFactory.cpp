@@ -148,7 +148,7 @@ void MatchFactory::registerCreator(const QString& c)
   }
 }
 
-ElementCriterionPtr MatchFactory::_createFilter()
+ElementCriterionPtr MatchFactory::_createFilter() const
 {
   ElementCriterionPtr filter;
 

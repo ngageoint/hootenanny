@@ -213,7 +213,7 @@ bool HootNetworkRequest::_networkRequest(const QUrl& url, int timeout,
   return true;
 }
 
-int HootNetworkRequest::_getHttpResponseCode(QNetworkReply* reply)
+int HootNetworkRequest::_getHttpResponseCode(QNetworkReply* reply) const
 {
   if (reply != nullptr)
   {
@@ -226,7 +226,7 @@ int HootNetworkRequest::_getHttpResponseCode(QNetworkReply* reply)
   return 0;
 }
 
-void HootNetworkRequest::_setOAuthHeader(QNetworkAccessManager::Operation http_op, QNetworkRequest& request)
+void HootNetworkRequest::_setOAuthHeader(QNetworkAccessManager::Operation http_op, QNetworkRequest& request) const
 {
   //  Convert the operation format
   OAuth::Http::RequestType op;

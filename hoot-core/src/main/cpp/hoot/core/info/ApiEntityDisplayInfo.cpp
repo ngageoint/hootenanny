@@ -67,7 +67,7 @@ public:
 
   ApiEntityNameComparator() = default;
 
-  bool operator()(const QString& name1, const QString& name2)
+  bool operator()(const QString& name1, const QString& name2) const
   {
     QString name1Temp = name1;
     QString name2Temp = name2;

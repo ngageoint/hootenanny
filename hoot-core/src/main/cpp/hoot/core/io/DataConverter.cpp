@@ -317,7 +317,7 @@ void DataConverter::_validateInput(const QStringList& inputs, const QString& out
 }
 
 void DataConverter::_fillElementCache(const QString& inputUrl, ElementCachePtr cachePtr,
-                                      QQueue<ElementPtr>& workQ)
+                                      QQueue<ElementPtr>& workQ) const
 {
   // Setup reader
   std::shared_ptr<OsmMapReader> reader =
@@ -516,7 +516,7 @@ void DataConverter::_convertToOgr(const QStringList& inputs, const QString& outp
 
 std::vector<float> DataConverter::_getOgrInputProgressWeights(OgrReader& reader,
                                                               const QString& input,
-                                                              const QStringList& layers)
+                                                              const QStringList& layers) const
 {
   std::vector<float> progressWeights;
   LOG_VART(layers.size());
@@ -570,7 +570,7 @@ std::vector<float> DataConverter::_getOgrInputProgressWeights(OgrReader& reader,
   return progressWeights;
 }
 
-QStringList DataConverter::_getOgrLayersFromPath(OgrReader& reader, QString& input)
+QStringList DataConverter::_getOgrLayersFromPath(OgrReader& reader, QString& input) const
 {
   QStringList layers;
 
@@ -951,7 +951,7 @@ void DataConverter::_handleNonOgrOutputTranslationOpts()
 }
 
 void DataConverter::_exportToShapeWithCols(const QString& output, const QStringList& cols,
-                                           const OsmMapPtr& map)
+                                           const OsmMapPtr& map) const
 {
   LOG_DEBUG("_exportToShapeWithCols");
 

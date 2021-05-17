@@ -445,7 +445,7 @@ bool EdgeMatchSetFinder::_recordMatch(ConstEdgeMatchPtr em)
   return false;
 }
 
-void EdgeMatchSetFinder::_addReverseMatch(ConstEdgeMatchPtr edgeMatch, const double score)
+void EdgeMatchSetFinder::_addReverseMatch(ConstEdgeMatchPtr edgeMatch, const double score) const
 {
   EdgeStringPtr rev1 = edgeMatch->getString1()->clone();
   rev1->reverse();

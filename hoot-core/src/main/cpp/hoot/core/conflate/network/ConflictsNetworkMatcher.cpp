@@ -73,7 +73,7 @@ ConflictsNetworkMatcher::ConflictsNetworkMatcher()
   }
 }
 
-double ConflictsNetworkMatcher::_aggregateScores(QList<double> pairs)
+double ConflictsNetworkMatcher::_aggregateScores(QList<double> pairs) const
 {
   //qSort(pairs.begin(), pairs.end(), greaterThan);
   qSort(pairs);
@@ -104,7 +104,7 @@ std::shared_ptr<ConflictsNetworkMatcher> ConflictsNetworkMatcher::create()
   return std::shared_ptr<ConflictsNetworkMatcher>(new ConflictsNetworkMatcher());
 }
 
-void ConflictsNetworkMatcher::_createEmptyStubEdges(OsmNetworkPtr na, OsmNetworkPtr nb)
+void ConflictsNetworkMatcher::_createEmptyStubEdges(OsmNetworkPtr na, OsmNetworkPtr nb) const
 {
   LOG_TRACE("Creating stub edges...");
 
@@ -152,7 +152,7 @@ void ConflictsNetworkMatcher::_createEmptyStubEdges(OsmNetworkPtr na, OsmNetwork
   }
 }
 
-Meters ConflictsNetworkMatcher::_getMatchSeparation(ConstEdgeMatchPtr pMatch)
+Meters ConflictsNetworkMatcher::_getMatchSeparation(ConstEdgeMatchPtr pMatch) const
 {
   // convert the EdgeStrings into WaySublineStrings
   WayStringPtr str1 = _details->toWayString(pMatch->getString1());
@@ -358,7 +358,7 @@ QList<NetworkEdgeScorePtr> ConflictsNetworkMatcher::getAllEdgeScores() const
   return result;
 }
 
-QList<ConstNetworkEdgePtr> ConflictsNetworkMatcher::_getEdgesOnVertex(ConstNetworkVertexPtr v)
+QList<ConstNetworkEdgePtr> ConflictsNetworkMatcher::_getEdgesOnVertex(ConstNetworkVertexPtr v) const
 {
   QList<ConstNetworkEdgePtr> r1 = _n1->getEdgesFromVertex(v);
   QList<ConstNetworkEdgePtr> r2 = _n2->getEdgesFromVertex(v);
@@ -739,7 +739,7 @@ void ConflictsNetworkMatcher::_seedEdgeScores()
   _printEdgeMatches();
 }
 
-void ConflictsNetworkMatcher::_printEdgeMatches()
+void ConflictsNetworkMatcher::_printEdgeMatches() const
 {
   if (Log::getInstance().getLevel() <= Log::Trace)
   {

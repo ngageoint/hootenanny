@@ -146,7 +146,7 @@ private:
   int _precision;
   long _mapId;
 
-  QString _toTagsString(const Tags& tags);
+  QString _toTagsString(const Tags& tags) const;
 };
 
 }

@@ -93,7 +93,7 @@ private:
    * These are useful stats if the reference map (map 1) is being treated as ground truth.
    * Eventually, may want to add the option to turn this on/off.
    */
-  void _addRefAsGroundTruthStats(QList<SingleStat>& statsToUpdate, long insertIndex);
+  void _addRefAsGroundTruthStats(QList<SingleStat>& statsToUpdate, long insertIndex) const;
 };
 
 }

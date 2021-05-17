@@ -76,7 +76,7 @@ private:
   double _matchScoringFunctionCurveSteepness;
 
   ConstMatchPtr _createMatch(
-    const NetworkDetailsPtr &map, NetworkEdgeScorePtr e, ConstMatchThresholdPtr mt);
+    const NetworkDetailsPtr &map, NetworkEdgeScorePtr e, ConstMatchThresholdPtr mt) const;
 };
 
 }

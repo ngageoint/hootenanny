@@ -143,7 +143,7 @@ public:
     return 0;
   }
 
-  OsmMapPtr loadMap(QString p)
+  OsmMapPtr loadMap(QString p) const
   {
     OsmMapPtr result(new OsmMap());
     IoUtils::loadMap(result, p, false);

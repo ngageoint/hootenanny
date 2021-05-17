@@ -73,7 +73,7 @@ public:
 
   ElementIterator* createIterator(const QString& path, const QString& layer) const;
 
-  QStringList getFilteredLayerNames(const QString& path);
+  QStringList getFilteredLayerNames(const QString& path) const;
 
   /**
    * Read all geometry data from the specified path.
@@ -83,13 +83,13 @@ public:
    *  layers.
    * @param map Put what we read in this map.
    */
-  void read(const QString& path, const QString& layer, const OsmMapPtr& map);
+  void read(const QString& path, const QString& layer, const OsmMapPtr& map) const;
 
   void setDefaultStatus(Status s) override;
-  void setLimit(long limit);
-  void setSchemaTranslationScript(const QString& translate);
+  void setLimit(long limit) const;
+  void setSchemaTranslationScript(const QString& translate) const;
 
-  long getFeatureCount(const QString& path, const QString& layer);
+  long getFeatureCount(const QString& path, const QString& layer) const;
 
   void initializePartial() override;
 

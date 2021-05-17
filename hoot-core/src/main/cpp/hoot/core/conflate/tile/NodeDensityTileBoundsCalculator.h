@@ -244,12 +244,12 @@ private:
 
   bool _isDone(std::vector<PixelBox>& boxes);
 
-  long _sumPixels(const PixelBox& pb, cv::Mat& r);
+  long _sumPixels(const PixelBox& pb, cv::Mat& r) const;
   long _sumPixels(const PixelBox& pb);
 
-  geos::geom::Envelope _toEnvelope(const PixelBox& pb);
+  geos::geom::Envelope _toEnvelope(const PixelBox& pb) const;
 
-  void _checkForTimeout();
+  void _checkForTimeout() const;
 };
 
 }
