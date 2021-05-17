@@ -63,10 +63,9 @@ public:
 
   QString getDescription() const override
   { return "Identifies ways that are connected to no other ways"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+  QString toString() const override { return className(); }
 
 private:
 

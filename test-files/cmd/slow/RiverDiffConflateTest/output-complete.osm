@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="19.73150239729403" minlon="-73.40350973160261" maxlat="19.73796707204734" maxlon="-73.40103172587098"/>
+    <node visible="true" id="-479744" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7379670720473399" lon="-73.4010317258709790"/>
+    <node visible="true" id="-479736" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7377845325795391" lon="-73.4013276320347217"/>
+    <node visible="true" id="-479697" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7315023972940295" lon="-73.4035097316026111"/>
+    <node visible="true" id="-479673" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7352079027823599" lon="-73.4020465543655547"/>
+    <node visible="true" id="-479638" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7322930047853475" lon="-73.4034152287734400"/>
+    <node visible="true" id="-479607" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7360148110154796" lon="-73.4016456358886984"/>
+    <node visible="true" id="-479571" timestamp="1970-01-01T00:00:00Z" version="1" lat="19.7340498305720971" lon="-73.4025027192727748"/>
+    <way visible="true" id="-12670" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-479697"/>
+        <nd ref="-479638"/>
+        <nd ref="-479571"/>
+        <nd ref="-479673"/>
+        <nd ref="-479607"/>
+        <nd ref="-479736"/>
+        <nd ref="-479744"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="Ravine Pichomblaise"/>
+        <tag k="waterway" v="stream"/>
+        <tag k="z_order" v="0"/>
+    </way>
+</osm>

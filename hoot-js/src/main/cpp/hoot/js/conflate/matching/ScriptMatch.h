@@ -54,12 +54,12 @@ public:
   ScriptMatch() = default;
 
   /**
-   * @param mapObj This could be derived from the map, but destructing an OsmMapJs object is quite
-   *  expensive due to the amount of memory cleanup we must do in the general case.
+   * mapObj could be derived from the map, but destructing an OsmMapJs object is quite expensive
+   * due to the amount of memory cleanup we must do in the general case.
    */
   ScriptMatch(
     const std::shared_ptr<PluginContext>& script, const v8::Persistent<v8::Object>& plugin,
-    const ConstOsmMapPtr& map, const v8::Handle<v8::Object>& mapObj, const ElementId& eid1,
+    const ConstOsmMapPtr& map, const v8::Local<v8::Object>& mapObj, const ElementId& eid1,
     const ElementId& eid2, const ConstMatchThresholdPtr& mt);
   ~ScriptMatch() = default;
 
@@ -69,10 +69,7 @@ public:
   void setMatchMembers(const MatchMembers& matchMembers) { _matchMembers = matchMembers; }
 
   QString explain() const override { return _explainText; }
-
   QString getName() const override { return _matchName; }
-
-  QString getClassName() const override { return className(); }
 
   double getProbability() const override;
 
@@ -88,7 +85,6 @@ public:
   std::set<std::pair<ElementId, ElementId>> getMatchPairs() const override;
 
   v8::Local<v8::Object> getPlugin() const { return ToLocal(&_plugin); }
-
   std::shared_ptr<PluginContext> getScript() const { return _script; }
 
   QString toString() const override;
@@ -103,14 +99,13 @@ public:
    */
   static MatchMembers geometryTypeToMatchMembers(const QString& geometryType);
 
+  QString getClassName() const override { return className(); }
   QString getDescription() const override
   { return "Matches elements using Generic Conflation via Javascript"; }
 
 private:
 
   friend class ScriptMatchTest;
-
-  ElementId _eid1, _eid2;
 
   bool _isWholeGroup;
   QString _matchName;
@@ -126,10 +121,10 @@ private:
   mutable QHash<ConflictKey, bool> _conflicts;
 
   void _calculateClassification(
-    const ConstOsmMapPtr& map, v8::Handle<v8::Object> mapObj, v8::Handle<v8::Object> plugin);
+    const ConstOsmMapPtr& map, v8::Local<v8::Object> mapObj, v8::Local<v8::Object> plugin);
 
-  v8::Handle<v8::Value> _call(
-    const ConstOsmMapPtr& map, v8::Handle<v8::Object> mapObj, v8::Handle<v8::Object> plugin);
+  v8::Local<v8::Value> _call(
+    const ConstOsmMapPtr& map, v8::Local<v8::Object> mapObj, v8::Local<v8::Object> plugin);
 
   ConflictKey _getConflictKey() const { return ConflictKey(_eid1, _eid2); }
 
@@ -141,10 +136,10 @@ private:
    * Either creates a new match or retrieves an existing one from the global set of matches
    */
   std::shared_ptr<const ScriptMatch> _getMatch(
-    OsmMapPtr map, v8::Handle<v8::Object> mapJs, const ElementId& eid1, const ElementId& eid2,
+    OsmMapPtr map, v8::Local<v8::Object> mapJs, const ElementId& eid1, const ElementId& eid2,
     const QHash<QString, ConstMatchPtr>& matches) const;
 
-  v8::Handle<v8::Value> _callGetMatchFeatureDetails(const ConstOsmMapPtr& map) const;
+  v8::Local<v8::Value> _callGetMatchFeatureDetails(const ConstOsmMapPtr& map) const;
 };
 
 }

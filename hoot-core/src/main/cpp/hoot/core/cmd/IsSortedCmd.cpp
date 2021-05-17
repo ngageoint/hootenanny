@@ -31,6 +31,7 @@
 #include <hoot/core/io/OsmPbfReader.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/visitors/IsSortedVisitor.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/StringUtils.h>
 
 // Qt
@@ -50,7 +51,6 @@ public:
   IsSortedCmd() = default;
 
   QString getName() const override { return "is-sorted"; }
-
   QString getDescription() const override
   { return "Determines if a map is sorted to the OSM standard"; }
 
@@ -71,6 +71,8 @@ public:
     {
       throw HootException("Specified input: " + input + " does not exist.");
     }
+
+    LOG_STATUS("Determining if ..." << FileUtils::toLogFormat(input, 25) << " is sorted...");
 
     bool result = true;
     if (OsmPbfReader().isSupported(input))

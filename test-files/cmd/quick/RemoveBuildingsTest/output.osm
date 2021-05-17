@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="-0.0007404387418182172" minlon="-0.002866568719483995" maxlat="0.001579720861679731" maxlon="0.002889935378394261"/>
+    <node visible="true" id="-4224811" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.0007404387418182" lon="-0.0028665687194840">
+        <tag k="alt_name" v="bar"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="G"/>
+        <tag k="note" v="Toy Scenario 4"/>
+        <tag k="poi" v="yes"/>
+    </node>
+    <node visible="true" id="-4224532" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0015797208616797" lon="0.0028899353783943">
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="G"/>
+        <tag k="note" v="Toy Scenario 3"/>
+        <tag k="poi" v="yes"/>
+    </node>
+</osm>

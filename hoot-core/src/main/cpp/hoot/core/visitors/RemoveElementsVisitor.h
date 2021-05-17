@@ -37,7 +37,9 @@ namespace hoot
 {
 
 /**
- * Removes any elements where that satisfy a criterion
+ * Removes any elements that satisfy a criterion
+ *
+ * @todo This class has some redundancy with RecursiveElementRemover.
  */
 class RemoveElementsVisitor : public MultipleCriterionConsumerVisitor, public OsmMapConsumer,
   public Configurable
@@ -56,14 +58,9 @@ public:
   void setOsmMap(OsmMap* map) override;
   void setOsmMap(const OsmMap* /*map*/) { assert(false); }
 
-  void setRecursive(bool recursive) { _recursive = recursive; }
-
   static void removeWays(const std::shared_ptr<OsmMap>& pMap, const ElementCriterionPtr& pCrit);
 
-  QString getDescription() const override { return "Removes elements that satisfy a criterion"; }
-
   QString getInitStatusMessage() const override { return "Removing elements..."; }
-
   QString getCompletedStatusMessage() const override
   {
     return
@@ -72,8 +69,10 @@ public:
   }
 
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+  QString getDescription() const override { return "Removes elements that satisfy a criterion"; }
+
+  void setRecursive(bool recursive) { _recursive = recursive; }
 
 private:
 

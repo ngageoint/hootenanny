@@ -45,12 +45,12 @@ HOOT_JS_REGISTER(LogJs)
 
 QHash<QString, int> LogJs::_logs;
 
-void LogJs::Init(Handle<Object> exports)
+void LogJs::Init(Local<Object> exports)
 {
   Isolate* current = exports->GetIsolate();
   HandleScope scope(current);
   Local<Context> context = current->GetCurrentContext();
-  Handle<Object> log = Object::New(current);
+  Local<Object> log = Object::New(current);
   exports->Set(String::NewFromUtf8(current, "Log"), log);
   log->Set(String::NewFromUtf8(current, "setLogLevel"), FunctionTemplate::New(current, setLogLevel)->GetFunction(context).ToLocalChecked());
   log->Set(String::NewFromUtf8(current, "init"), FunctionTemplate::New(current, init)->GetFunction(context).ToLocalChecked());
@@ -96,7 +96,7 @@ void LogJs::log(const FunctionCallbackInfo<Value>& args, Log::WarningLevel level
   if (level >= Log::getInstance().getLevel())
   {
     Local<StackTrace> stack = StackTrace::CurrentStackTrace(current, 1);
-    Local<StackFrame> frame = stack->GetFrame(current, 0);
+    Local<StackFrame> frame = stack->GetFrame(0);
     int lineNumber = -1;
     QString script("<unknown>");
     QString functionName("<unknown>");

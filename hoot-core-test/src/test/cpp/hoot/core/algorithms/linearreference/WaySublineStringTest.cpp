@@ -60,11 +60,11 @@ public:
 
     Coordinate c1[] = { Coordinate(0, 0), Coordinate(10, 0), Coordinate(20, 0), Coordinate(30, 0),
                        Coordinate::getNull() };
-    TestUtils::createWay(map, Status::Unknown1, c1, 5, "w1");
+    TestUtils::createWay(map, c1, "w1", Status::Unknown1, 5);
 
     Coordinate c2[] = { Coordinate(0, 10), Coordinate(10, 10), Coordinate(20, 10),
                         Coordinate(30, 10), Coordinate::getNull() };
-    TestUtils::createWay(map, Status::Unknown1, c2, 5, "w2");
+    TestUtils::createWay(map, c2, "w2", Status::Unknown1, 5);
 
     return map;
   }

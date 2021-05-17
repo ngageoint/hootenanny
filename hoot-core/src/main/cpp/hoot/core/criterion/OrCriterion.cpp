@@ -55,15 +55,16 @@ bool OrCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   for (size_t i = 0; i < _criteria.size(); i++)
   {
-    if (_criteria[i]->isSatisfied(e))
+    ElementCriterionPtr crit = _criteria[i];
+    if (crit->isSatisfied(e))
     {
       LOG_TRACE(
-        "One OR'd criterion satisfied in: " << toString() << ". Filter satisfied for: " << e);
+        "One OR'd criterion satisfied in: " << toString() << ". Filter: " << crit <<
+        " satisfied for: " << e);
       return true;
     }
   }
-  LOG_TRACE(
-    "No OR'd criterion satisfied in: " << toString() << ". Filter not satisfied for: " << e);
+  LOG_TRACE("No OR'd criterion satisfied in: " << toString() << " for: " << e);
   return false;
 }
 

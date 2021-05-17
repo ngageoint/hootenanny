@@ -73,10 +73,10 @@ Match(threshold)
 {
 }
 
-PoiPolygonMatch::PoiPolygonMatch(const ConstOsmMapPtr& map, ConstMatchThresholdPtr threshold,
-                                 std::shared_ptr<const PoiPolygonRfClassifier> rf,
-                                 PoiPolygonInfoCachePtr infoCache,
-                                 const set<ElementId>& polyNeighborIds) :
+PoiPolygonMatch::PoiPolygonMatch(
+  const ConstOsmMapPtr& map, ConstMatchThresholdPtr threshold,
+  std::shared_ptr<const PoiPolygonRfClassifier> rf, PoiPolygonInfoCachePtr infoCache,
+  const set<ElementId>& polyNeighborIds) :
 Match(threshold),
 _map(map),
 _e1IsPoi(false),

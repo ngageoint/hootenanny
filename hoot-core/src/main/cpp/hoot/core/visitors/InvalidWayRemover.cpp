@@ -41,7 +41,7 @@ HOOT_FACTORY_REGISTER(ElementVisitor, InvalidWayRemover)
 
 void InvalidWayRemover::visit(const ElementPtr& e)
 {
-  if (!e)
+  if (!e || e->getElementType() != ElementType::Way)
   {
     return;
   }
@@ -49,13 +49,20 @@ void InvalidWayRemover::visit(const ElementPtr& e)
            !_conflateInfoCache->elementCanBeConflatedByActiveMatcher(e, className()))
   {
     LOG_TRACE(
-      "Skipping processing of " << e->getElementId() << " as it cannot be conflated by any " <<
+      "Skipping processing of " << e->getElementId() << ", as it cannot be conflated by any " <<
       "actively configured conflate matcher.");
     return;
   }
+  LOG_VART(e->getElementId());
+  LOG_VART(EmptyWayCriterion().isSatisfied(e));
+  LOG_VART(ZeroLengthWayCriterion().isSatisfied(e));
 
+  // Technically, we could also run the dupe way node remover on these ways beforehand here to weed
+  // out some additional bad ways. That would make parts of the conflate op pipeline redundant,
+  // though.
   if (EmptyWayCriterion().isSatisfied(e) || ZeroLengthWayCriterion().isSatisfied(e))
   {
+    LOG_TRACE("Removing invalid way: " << e->getElementId() << "...");
     RemoveWayByEid::removeWayFully(_map->shared_from_this(), e->getId());
   }
 }

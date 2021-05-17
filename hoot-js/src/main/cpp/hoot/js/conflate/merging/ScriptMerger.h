@@ -63,16 +63,13 @@ public:
 
   QString getDescription() const override
   { return "Merges elements matched with Generic Conflation"; }
-
   QString getName() const override { return className() + "-" + _matchType; }
-
   QString getClassName() const override { return className(); }
 
   void setMatchType(const QString& matchType) { _matchType = matchType; }
 
 protected:
 
-  PairsSet _pairs;
   v8::Persistent<v8::Object> _plugin;
   std::shared_ptr<PluginContext> _script;
   ElementId _eid1, _eid2;
@@ -89,11 +86,9 @@ protected:
   virtual void _applyMergeSets(
     const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced) const;
 
-  v8::Handle<v8::Value> _callMergePair(const OsmMapPtr& map) const;
+  v8::Local<v8::Value> _callMergePair(const OsmMapPtr& map) const;
   void _callMergeSets(const OsmMapPtr& map,
                       std::vector<std::pair<ElementId, ElementId>>& replaced) const;
-  PairsSet& _getPairs() override { return _pairs; }
-  const PairsSet& _getPairs() const override { return _pairs; }
 };
 
 }

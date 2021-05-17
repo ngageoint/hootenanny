@@ -64,10 +64,10 @@ public:
     OsmMapPtr map(new OsmMap());
     ElementToGeometryConverter ec(map);
     QList<NodePtr> nodes;
-    nodes.push_back(TestUtils::createNode(map, Status::Unknown1,  0.0,  0.0));
-    nodes.push_back(TestUtils::createNode(map, Status::Unknown1, 10.0,  0.0));
-    nodes.push_back(TestUtils::createNode(map, Status::Unknown1, 10.0, 10.0));
-    nodes.push_back(TestUtils::createNode(map, Status::Unknown1,  0.0, 10.0));
+    nodes.push_back(TestUtils::createNode(map, "", Status::Unknown1,  0.0,  0.0));
+    nodes.push_back(TestUtils::createNode(map, "", Status::Unknown1, 10.0,  0.0));
+    nodes.push_back(TestUtils::createNode(map, "", Status::Unknown1, 10.0, 10.0));
+    nodes.push_back(TestUtils::createNode(map, "", Status::Unknown1,  0.0, 10.0));
 
     //  Check the geometry of a node
     std::shared_ptr<Geometry> geometry = ec.convertToGeometry(ElementPtr(nodes[0]));
@@ -89,14 +89,15 @@ public:
 
     //  Check the geometry of a relation
     QList<NodePtr> nodes2;
-    nodes2.push_back(TestUtils::createNode(map, Status::Unknown1, 2.5, 2.5));
-    nodes2.push_back(TestUtils::createNode(map, Status::Unknown1, 7.5, 2.5));
-    nodes2.push_back(TestUtils::createNode(map, Status::Unknown1, 7.5, 7.5));
-    nodes2.push_back(TestUtils::createNode(map, Status::Unknown1, 2.5, 7.5));
+    nodes2.push_back(TestUtils::createNode(map, "", Status::Unknown1, 2.5, 2.5));
+    nodes2.push_back(TestUtils::createNode(map, "", Status::Unknown1, 7.5, 2.5));
+    nodes2.push_back(TestUtils::createNode(map, "", Status::Unknown1, 7.5, 7.5));
+    nodes2.push_back(TestUtils::createNode(map, "", Status::Unknown1, 2.5, 7.5));
     nodes2.push_back(nodes2[0]);
     WayPtr way2 = TestUtils::createWay(map, nodes2);
     way2->setTag("building", "yes");
-    RelationPtr relation = TestUtils::createRelation(map, QList<ElementPtr>());
+    RelationPtr relation =
+      TestUtils::createRelation(map, QList<ElementPtr>(), "", Status::Unknown1);
     relation->setType(MetadataTags::RelationMultiPolygon());
     relation->addElement(MetadataTags::RelationOuter(), way);
     relation->addElement(MetadataTags::RelationInner(), way2);
@@ -109,10 +110,10 @@ public:
     OsmMapPtr map(new OsmMap());
     ElementToGeometryConverter ec(map);
     QList<NodePtr> nodes;
-    nodes.push_back(TestUtils::createNode(map, Status::Unknown1,  0.0,  0.0));
-    nodes.push_back(TestUtils::createNode(map, Status::Unknown1, 10.0,  0.0));
-    nodes.push_back(TestUtils::createNode(map, Status::Unknown1, 10.0, 10.0));
-    nodes.push_back(TestUtils::createNode(map, Status::Unknown1,  0.0, 10.0));
+    nodes.push_back(TestUtils::createNode(map, "", Status::Unknown1,  0.0,  0.0));
+    nodes.push_back(TestUtils::createNode(map, "", Status::Unknown1, 10.0,  0.0));
+    nodes.push_back(TestUtils::createNode(map, "", Status::Unknown1, 10.0, 10.0));
+    nodes.push_back(TestUtils::createNode(map, "", Status::Unknown1,  0.0, 10.0));
     WayPtr way = TestUtils::createWay(map, nodes);
     //  Check the convert to linestring method
     std::shared_ptr<LineString> ls = ec.convertToLineString(way);
@@ -126,10 +127,10 @@ public:
     OsmMapPtr map(new OsmMap());
     ElementToGeometryConverter ec(map);
     QList<NodePtr> nodes;
-    nodes.push_back(TestUtils::createNode(map, Status::Unknown1,  0.0,  0.0));
-    nodes.push_back(TestUtils::createNode(map, Status::Unknown1, 10.0,  0.0));
-    nodes.push_back(TestUtils::createNode(map, Status::Unknown1, 10.0, 10.0));
-    nodes.push_back(TestUtils::createNode(map, Status::Unknown1,  0.0, 10.0));
+    nodes.push_back(TestUtils::createNode(map, "", Status::Unknown1,  0.0,  0.0));
+    nodes.push_back(TestUtils::createNode(map, "", Status::Unknown1, 10.0,  0.0));
+    nodes.push_back(TestUtils::createNode(map, "", Status::Unknown1, 10.0, 10.0));
+    nodes.push_back(TestUtils::createNode(map, "", Status::Unknown1,  0.0, 10.0));
     nodes.push_back(nodes[0]);
     WayPtr way = TestUtils::createWay(map, nodes);
     //  Check the covert to polygon method
@@ -144,10 +145,10 @@ public:
     OsmMapPtr map(new OsmMap());
     ElementToGeometryConverter ec(map);
     QList<NodePtr> nodes;
-    nodes.push_back(TestUtils::createNode(map, Status::Unknown1,  0.0,  0.0));
-    nodes.push_back(TestUtils::createNode(map, Status::Unknown1, 10.0,  0.0));
-    nodes.push_back(TestUtils::createNode(map, Status::Unknown1, 10.0, 10.0));
-    nodes.push_back(TestUtils::createNode(map, Status::Unknown1,  0.0, 10.0));
+    nodes.push_back(TestUtils::createNode(map, "", Status::Unknown1,  0.0,  0.0));
+    nodes.push_back(TestUtils::createNode(map, "", Status::Unknown1, 10.0,  0.0));
+    nodes.push_back(TestUtils::createNode(map, "", Status::Unknown1, 10.0, 10.0));
+    nodes.push_back(TestUtils::createNode(map, "", Status::Unknown1,  0.0, 10.0));
     WayPtr way = TestUtils::createWay(map, nodes);
     //  non-closed linestring
     CPPUNIT_ASSERT_EQUAL(ec.getGeometryType(way), GEOS_LINESTRING);
@@ -199,7 +200,6 @@ public:
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ElementToGeometryConverterTest, "quick");
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ElementToGeometryConverterTest, "current");
 
 }
 

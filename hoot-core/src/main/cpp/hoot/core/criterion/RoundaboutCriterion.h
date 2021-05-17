@@ -51,14 +51,12 @@ public:
 
   ElementCriterionPtr clone() override { return ElementCriterionPtr(new RoundaboutCriterion()); }
 
-  QString getDescription() const override { return "Identifies road roundabout junctions"; }
-
-  GeometryType getGeometryType() const override
-  { return GeometryType::Line; }
+  GeometryType getGeometryType() const override { return GeometryType::Line; }
 
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+  QString toString() const override { return className(); }
+  QString getDescription() const override { return "Identifies road roundabout junctions"; }
 };
 
 }

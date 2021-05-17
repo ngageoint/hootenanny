@@ -39,6 +39,7 @@
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/ConfigUtils.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/visitors/CountManualMatchesVisitor.h>
@@ -66,7 +67,6 @@ public:
   ScoreMatchesCmd() = default;
 
   QString getName() const override { return "score-matches"; }
-
   QString getDescription() const override
   { return "Scores conflation performance against a manually matched map"; }
 
@@ -110,11 +110,17 @@ public:
 
     vector<OsmMapPtr> maps;
     QString output = args.last();
+
     for (int i = 0; i < args.size() - 1; i += 2)
     {
       OsmMapPtr map(new OsmMap());
       const QString map1Path = args[i];
       const QString map2Path = args[i + 1];
+
+      LOG_STATUS(
+        "Scoring matches for ..." << FileUtils::toLogFormat(map1Path, 25) << " and ..." <<
+        FileUtils::toLogFormat(map2Path, 25) << "...");
+
       IoUtils::loadMap(map, map1Path, false, Status::Unknown1);
       IoUtils::loadMap(map, map2Path, false, Status::Unknown2);
 
@@ -258,8 +264,8 @@ private:
       QFileInfo fileInfo2(map2Path);
       cout << "There are " << StringUtils::formatLargeNumber(issues.size()) <<
               " manual match " << type << " for inputs " <<
-              fileInfo1.completeBaseName().right(30) <<
-              " and " << fileInfo2.completeBaseName().right(30) << ":\n\n";
+              FileUtils::toLogFormat(fileInfo1.completeBaseName(), 30) <<
+              " and " << FileUtils::toLogFormat(fileInfo2.completeBaseName(), 30) << ":\n\n";
       int issueCount = 0;
       for (QMap<ElementId, QString>::const_iterator itr = issues.begin();
            itr != issues.end(); ++itr)

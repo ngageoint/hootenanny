@@ -103,7 +103,7 @@ _map(map)
 }
 
 std::shared_ptr<Way> DualHighwaySplitter::_createOneWay(const std::shared_ptr<const Way>& w,
-                                                        Meters bufferSize, bool left)
+                                                        Meters bufferSize, bool left) const
 {
   std::shared_ptr<const LineString> ls = ElementToGeometryConverter(_result).convertToLineString(w);
 
@@ -175,7 +175,7 @@ double DualHighwaySplitter::_dotProduct(const Coordinate& c1, const Coordinate& 
   return c1.x * c2.x + c1.y * c2.y;
 }
 
-long DualHighwaySplitter::_nearestNode(long nid, const std::shared_ptr<const Way>& w)
+long DualHighwaySplitter::_nearestNode(long nid, const std::shared_ptr<const Way>& w) const
 {
   std::shared_ptr<Node> src = _result->getNode(nid);
   const vector<long>& nids = w->getNodeIds();
@@ -195,7 +195,7 @@ long DualHighwaySplitter::_nearestNode(long nid, const std::shared_ptr<const Way
   return bestNid;
 }
 
-Coordinate DualHighwaySplitter::_normalizedVector(long nid1, long nid2)
+Coordinate DualHighwaySplitter::_normalizedVector(long nid1, long nid2) const
 {
   Coordinate c1 = _result->getNode(nid1)->toCoordinate();
   Coordinate c2 = _result->getNode(nid2)->toCoordinate();
@@ -297,7 +297,7 @@ std::shared_ptr<OsmMap> DualHighwaySplitter::splitAll()
   return result;
 }
 
-void DualHighwaySplitter::_fixLanes(const std::shared_ptr<Way>& w)
+void DualHighwaySplitter::_fixLanes(const std::shared_ptr<Way>& w) const
 {
   QString lanesStr = w->getTags()["lanes"];
 
@@ -322,7 +322,7 @@ void DualHighwaySplitter::_fixLanes(const std::shared_ptr<Way>& w)
   }
 }
 
-void DualHighwaySplitter::_reconnectEnd(long centerNodeId, const std::shared_ptr<Way>& edge)
+void DualHighwaySplitter::_reconnectEnd(long centerNodeId, const std::shared_ptr<Way>& edge) const
 {
   Coordinate centerNodeC = _result->getNode(centerNodeId)->toCoordinate();
   // determine which end of edge we're operating on

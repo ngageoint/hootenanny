@@ -43,10 +43,8 @@ public:
   LoginCmd() = default;
 
   QString getName() const override { return "login"; }
-
   QString getDescription() const override
   { return "Logs a user into the Hootenanny Web Services"; }
-
   QString getType() const override { return "rnd"; }
 
   int runSimple(QStringList& args) override

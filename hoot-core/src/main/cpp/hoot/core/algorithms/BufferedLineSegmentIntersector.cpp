@@ -51,7 +51,7 @@ public:
   {
   }
 
-  double d2(const Coordinate& c1, const Coordinate& c2)
+  double d2(const Coordinate& c1, const Coordinate& c2) const
   {
     double dx = c1.x - c2.x;
     double dy = c1.y - c2.y;
@@ -125,7 +125,7 @@ inline double sgn(double x)
   }
 }
 
-bool BufferedLineSegmentIntersector::isWithinLineSegment(const LineSegment& ls, const Coordinate& c)
+bool BufferedLineSegmentIntersector::isWithinLineSegment(const LineSegment& ls, const Coordinate& c) const
 {
   const Coordinate& a = ls.p0;
   const Coordinate& b = ls.p1;

@@ -105,8 +105,8 @@ public:
    * @param map the map containing the input node and way
    * @return a way node ID
    */
-  static long closestWayNodeIdToNode(const ConstNodePtr& node, const ConstWayPtr& way,
-                                     const ConstOsmMapPtr& map);
+  static long closestWayNodeIdToNode(
+    const ConstNodePtr& node, const ConstWayPtr& way, const ConstOsmMapPtr& map);
 
   /**
    * Finds the closest way node index in a way to a specified node
@@ -128,8 +128,8 @@ public:
    * @param map map owning the node and way
    * @return closest insert index on the way to node or -1 if no index is found
    */
-  static long closestWayNodeInsertIndex(const ConstNodePtr& node, const ConstWayPtr& way,
-                                        const ConstOsmMapPtr& map);
+  static long closestWayNodeInsertIndex(
+    const ConstNodePtr& node, const ConstWayPtr& way, const ConstOsmMapPtr& map);
 
   /**
    * Determines whether the start or end of a way is closer to a specified node
@@ -139,8 +139,8 @@ public:
    * @param map map containing the inputs way and node
    * @return true if the node is closer to the end of the way; false otherwise
    */
-  static bool endWayNodeIsCloserToNodeThanStart(const ConstNodePtr& node, const ConstWayPtr& way,
-                                                const ConstOsmMapPtr& map);
+  static bool endWayNodeIsCloserToNodeThanStart(
+    const ConstNodePtr& node, const ConstWayPtr& way, const ConstOsmMapPtr& map);
 
   /**
    * Determines if two nodes belong to the same way
@@ -150,8 +150,9 @@ public:
    * @param map the map containing the nodes
    * @return true if there is at least one way that contains both nodes; false otherwise
    */
-  static bool nodesAreContainedInTheSameWay(const long nodeId1, const long nodeId2,
-                                            const ConstOsmMapPtr& map);
+  static bool nodesAreContainedInTheSameWay(
+    const long nodeId1, const long nodeId2, const ConstOsmMapPtr& map);
+
   /**
    * Returns the IDs of all ways containing an input node
    *
@@ -170,9 +171,21 @@ public:
    * @param nodeId ID of the node to return containing ways for
    * @param map map which owns the input node
    * @param wayCriterion an optional ElementCriterion to further filter the containing ways
+   * @return a collection of const ways
+   */
+  static std::vector<ConstWayPtr> getContainingWaysByNodeIdConst(
+    const long nodeId, const ConstOsmMapPtr& map,
+    const ElementCriterionPtr& wayCriterion = ElementCriterionPtr());
+
+  /**
+   * Returns all ways containing an input node
+   *
+   * @param nodeId ID of the node to return containing ways for
+   * @param map map which owns the input node
+   * @param wayCriterion an optional ElementCriterion to further filter the containing ways
    * @return a collection of ways
    */
-  static std::vector<ConstWayPtr> getContainingWaysByNodeId(
+  static std::vector<WayPtr> getContainingWaysByNodeId(
     const long nodeId, const ConstOsmMapPtr& map,
     const ElementCriterionPtr& wayCriterion = ElementCriterionPtr());
 
@@ -206,8 +219,8 @@ public:
    * @param map the map containing the nodes/ways
    * @return true if any way in the ID list contains the node; false otherwise
    */
-  static bool nodeContainedByAnyWay(const long nodeId, const std::set<long>& wayIds,
-                                    const ConstOsmMapPtr& map);
+  static bool nodeContainedByAnyWay(
+    const long nodeId, const std::set<long>& wayIds, const ConstOsmMapPtr& map);
 
   /**
    * Determines if a node is contained by any way in a map

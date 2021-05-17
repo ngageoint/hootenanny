@@ -39,7 +39,23 @@ namespace hoot
  * the export/write operation (to avoid modifying the input element), but I think it is likely
  * worth the cost.
  *
- * @todo refactor all existing writers to use this visitor.
+ * @todo Refactor all existing writers to use this visitor.
+ * @todo in 3076 branch:
+   - decide on universal status include rules:
+      - as discussed, we are considering these options:
+        - removal of TextStatus config altogether
+        - no longer using the includeDebug flag
+        - instead individual specific -D flags for each: status, id and circ.error
+        - keep the special cases of (!isNode || (isNode && hasMappingTags))
+          and (isRelation || (!isRelation && validStatus)) when deciding
+          whether we add the tag even when the status flag is on
+        - consider an additional verbose flag to turn everything on always,
+          no matter node type, etc.
+   - later (on hold):
+      - set includeCircularError default to false
+      - fix all tests
+      - remove stringcompat and use string status enum always
+      - fix all tests if possible
  */
 class AddExportTagsVisitor : public ElementVisitor
 {
@@ -52,8 +68,6 @@ public:
 
   void visit(const ElementPtr& pElement) override;
 
-  QString getDescription() const override { return "Adds tags needed for exporting"; }
-
   void setIncludeHootInfo(bool includeInfo) { _includeDebug = includeInfo; }
   void setIncludeIds(bool includeIds) { _includeIds = includeIds; }
   void setIncludeCircularError(bool includeCircularError)
@@ -61,8 +75,8 @@ public:
   void overrideDebugSettings();
 
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+  QString getDescription() const override { return "Adds tags needed for exporting"; }
 
 private:
 

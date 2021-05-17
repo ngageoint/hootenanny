@@ -55,15 +55,14 @@ public:
   ElementCriterionPtr clone() override
   { return ElementCriterionPtr(new RailwayCriterion()); }
 
-  QString getDescription() const override { return "Identifies linear railways"; }
-
-  QString getName() const override { return className(); }
-
-  QString getClassName() const override { return className(); }
-
   bool supportsSpecificConflation() const override { return true; }
 
   QStringList getChildCriteria() const override;
+
+  QString getDescription() const override { return "Identifies linear railways"; }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
+  QString toString() const override { return className(); }
 };
 
 }

@@ -41,6 +41,7 @@ public:
   using PairsSet = std::set<std::pair<ElementId, ElementId>>;
 
   MergerBase() = default;
+  MergerBase(const std::set<std::pair<ElementId, ElementId>>& pairs);
   virtual ~MergerBase() = default;
 
   std::set<ElementId> getImpactedElementIds() const override;
@@ -55,11 +56,14 @@ public:
    */
   void replace(ElementId oldEid, ElementId newEid) override;
 
+  void setPairs(const std::set<std::pair<ElementId, ElementId>>& pairs) { _pairs = pairs; }
+  void setMatchedBy(const QString& matchedBy) { _matchedBy = matchedBy; }
+
 protected:
 
-  // TODO: Is any inheriting class actually implementing this in a custom fashion?
-  virtual PairsSet& _getPairs() = 0;
-  virtual const PairsSet& _getPairs() const = 0;
+  std::set<std::pair<ElementId, ElementId>> _pairs;
+  // indicates which matcher matched the elements being processed by this merger
+  QString _matchedBy;
 };
 
 }

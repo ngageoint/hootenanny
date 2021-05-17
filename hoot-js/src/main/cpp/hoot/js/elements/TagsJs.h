@@ -49,11 +49,11 @@ class TagsJs : public HootBaseJs
 {
 public:
 
-  static void Init(v8::Handle<v8::Object> target);
+  static void Init(v8::Local<v8::Object> target);
 
   Tags& getTags() { return _tags; }
 
-  static v8::Handle<v8::Object> New(const Tags& t);
+  static v8::Local<v8::Object> New(const Tags& t);
 
   virtual ~TagsJs() = default;
 
@@ -77,14 +77,14 @@ private:
   void _setTags(const Tags& t) { _tags = t; }
 };
 
-inline void toCpp(v8::Handle<v8::Value> v, Tags& t)
+inline void toCpp(v8::Local<v8::Value> v, Tags& t)
 {
   if (!v->IsObject())
   {
     throw IllegalArgumentException("Expected an object, got: (" + toJson(v) + ")");
   }
 
-  v8::Handle<v8::Object> obj = v8::Handle<v8::Object>::Cast(v);
+  v8::Local<v8::Object> obj = v8::Local<v8::Object>::Cast(v);
   TagsJs* js = nullptr;
   if (obj->InternalFieldCount() > 0)
   {

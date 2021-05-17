@@ -50,13 +50,12 @@ public:
 
   ElementCriterionPtr clone() override { return ElementCriterionPtr(new TunnelCriterion()); }
 
-  QString getDescription() const override { return "Identifies tunnels"; }
-
   GeometryType getGeometryType() const override { return GeometryType::Line; }
 
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+  QString toString() const override { return className(); }
+  QString getDescription() const override { return "Identifies tunnels"; }
 };
 
 }

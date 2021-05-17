@@ -259,10 +259,10 @@ bool ElementDeduplicator::_areWayNodesInWaysOfMismatchedType(
 
   // get the ways that contain each.
   const std::vector<ConstWayPtr> containingWays1 =
-    WayUtils::getContainingWaysByNodeId(element1->getId(), map);
+    WayUtils::getContainingWaysByNodeIdConst(element1->getId(), map);
   LOG_VART(containingWays1.size());
   const std::vector<ConstWayPtr> containingWays2 =
-    WayUtils::getContainingWaysByNodeId(element2->getId(), map);
+    WayUtils::getContainingWaysByNodeIdConst(element2->getId(), map);
   LOG_VART(containingWays2.size())
 
   // See if any of the ways between the two have a matching type.
@@ -280,7 +280,7 @@ bool ElementDeduplicator::_areWayNodesInWaysOfMismatchedType(
       // type comparison, since many different types of ways could be part of an admin boundary.
       // This may not end up being the best way to deal with this.
       if (RelationMemberUtils::isMemberOfRelationSatisfyingCriterion(
-            map, way1->getElementId(), adminBoundsCrit))
+            way1->getElementId(), adminBoundsCrit, map))
       {
         return false;
       }
@@ -294,7 +294,7 @@ bool ElementDeduplicator::_areWayNodesInWaysOfMismatchedType(
           LOG_VART(way2->getElementId());
 
           if (RelationMemberUtils::isMemberOfRelationSatisfyingCriterion(
-                map, way2->getElementId(), adminBoundsCrit))
+                way2->getElementId(), adminBoundsCrit, map))
           {
             return false;
           }

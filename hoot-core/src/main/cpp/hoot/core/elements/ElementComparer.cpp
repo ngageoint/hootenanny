@@ -66,21 +66,21 @@ bool ElementComparer::isSame(ElementPtr e1, ElementPtr e2) const
   // different types?
   if (e1->getElementType() != e2->getElementType())
   {
-    LOG_TRACE("compare failed on type: " << e1->getElementId() << ", " << e2->getElementId());
+    LOG_TRACE("Compare failed on type: " << e1->getElementId() << ", " << e2->getElementId());
     return false;
   }
 
   // different IDs?
   if (!_ignoreElementId && (e1->getElementId() != e2->getElementId()))
   {
-    LOG_TRACE("compare failed on ID: " << e1->getElementId() << ", " << e2->getElementId());
+    LOG_TRACE("Compare failed on ID: " << e1->getElementId() << ", " << e2->getElementId());
     return false;
   }
 
   // different versions?
   if (!_ignoreVersion && (e1->getVersion() != e2->getVersion()))
   {
-    LOG_TRACE("compare failed on version: " << e1->getElementId() << ", " << e2->getElementId());
+    LOG_TRACE("Compare failed on version: " << e1->getElementId() << ", " << e2->getElementId());
     return false;
   }
 

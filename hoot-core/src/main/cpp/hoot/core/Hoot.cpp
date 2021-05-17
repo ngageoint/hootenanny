@@ -76,10 +76,10 @@ Hoot& Hoot::getInstance()
 
 void Hoot::_init()
 {
-  //lower this log level temporarily *only* for debugging init issues; some hoot services
-  //functionality that parses log output is sensitive to extra logged statements and will fail
-  //when this is lowered
-  Log::getInstance().setLevel(Log::Info);
+  // Lower this log level temporarily *only* for debugging init issues. Some hoot services
+  // functionality that parses log output is sensitive to extra logged statements and will fail
+  // when this is lowered.
+  Log::getInstance().setLevel(Log::Status);
 
   LOG_DEBUG("Hoot instance init...");
 
@@ -125,7 +125,7 @@ void Hoot::_init()
   loadLibrary("HootJosm");
 # endif
 
-  Log::getInstance().setLevel(Log::Info);
+  Log::getInstance().setLevel(Log::Status);
   //  Registering these metatypes here removes warning messages
   //  in threads that use QNetworkAccessManager whose initialization
   //  routine isn't thread safe
@@ -134,7 +134,7 @@ void Hoot::_init()
   qRegisterMetaType<QSharedPointer<QNetworkSession>>();
 }
 
-void Hoot::loadLibrary(const QString& name)
+void Hoot::loadLibrary(const QString& name) const
 {
   // this library sticks around in ram even after the object is destroyed.
   QLibrary lib(name);
@@ -153,7 +153,7 @@ void Hoot::loadLibrary(const QString& name)
   }
 }
 
-void Hoot::reinit()
+void Hoot::reinit() const
 {
   LOG_TRACE("Hoot instance reinit...");
 

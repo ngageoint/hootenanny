@@ -59,9 +59,6 @@ public:
   ElementCriterionPtr clone() override
   { return ElementCriterionPtr(new NameCriterion(_names, _caseSensitive)); }
 
-  QString getDescription() const override
-  { return "Identifies elements that contain a specified name"; }
-
   void setConfiguration(const Settings& conf) override;
 
   QStringList getNames() const { return _names; }
@@ -72,8 +69,10 @@ public:
   void setPartialMatch(bool partialMatch) { _partialMatch = partialMatch; }
 
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+  QString toString() const override { return className(); }
+  QString getDescription() const override
+  { return "Identifies elements that contain a specified name"; }
 
 private:
 

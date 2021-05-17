@@ -91,7 +91,6 @@ private:
 
   friend class PoiPolygonMergerCreatorTest;
 
-  ElementId _eid1, _eid2;
   MatchClassification _p;
   std::shared_ptr<const BuildingRfClassifier> _rf;
   QString _explainText;

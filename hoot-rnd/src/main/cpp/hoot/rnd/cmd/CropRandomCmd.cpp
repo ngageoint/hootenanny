@@ -34,6 +34,7 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/rnd/ops/RandomMapCropper.h>
 #include <hoot/core/geometry/GeometryUtils.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/StringUtils.h>
 
 // Qt
@@ -52,10 +53,8 @@ public:
   CropRandomCmd() = default;
 
   QString getName() const override { return "crop-random"; }
-
   QString getDescription() const override
   { return "Crops out a random section of a map (experimental)"; }
-
   QString getType() const override { return "rnd"; }
 
   int runSimple(QStringList& args) override
@@ -75,7 +74,6 @@ public:
       writeTileFootprints = true;
       args.removeAll("--write-tiles");
     }
-    LOG_VARD(writeTileFootprints);
 
     QStringList inputs;
     const QString input = args[0].trimmed();
@@ -89,10 +87,8 @@ public:
       //multiple inputs
       inputs = input.split(";");
     }
-    LOG_VARD(inputs);
 
     const QString output = args[1].trimmed();
-    LOG_VARD(output);
 
     bool ok = false;
     const int maxNodes = args[2].toLong(&ok);
@@ -100,7 +96,6 @@ public:
     {
       throw HootException("Invalid maximum node count: " + args[2]);
     }
-    LOG_VARD(maxNodes);
 
     ok = false;
     double pixelSize = args[3].toDouble(&ok);
@@ -108,7 +103,6 @@ public:
     {
       throw HootException("Invalid pixel size value: " + args[3]);
     }
-    LOG_VARD(pixelSize);
 
     int randomSeed = -1;
     if (args.size() > 4)
@@ -120,7 +114,6 @@ public:
         throw HootException("Invalid random seed: " + args[4]);
       }
     }
-    LOG_VARD(randomSeed);
 
     QString tileOutputFootprintPath;
     if (writeTileFootprints)
@@ -132,7 +125,6 @@ public:
           outputFileInfo.baseName() + "." + outputFileInfo.completeSuffix(),
           outputFileInfo.baseName() + "-tiles.osm");
     }
-    LOG_VARD(tileOutputFootprintPath);
 
     if (!ConfigOptions().getCropBounds().trimmed().isEmpty())
     {
@@ -145,6 +137,10 @@ public:
       throw IllegalArgumentException(
         "The crop.invert configuration option is not supported by " + getName() + ".");
     }
+
+    LOG_STATUS(
+      "Randomly cropping " << inputs.size() << " inputs and writing output to ..." <<
+      FileUtils::toLogFormat(output, 25) << "...");
 
     OsmMapPtr map = _readInputs(inputs);
 
@@ -173,7 +169,6 @@ private:
     for (int i = 0; i < inputs.size(); i++)
     {
       const QString input = inputs.at(i);
-      LOG_INFO("Reading " << input << "...");
       // tile alg expects inputs read in as Unknown1
       std::shared_ptr<OsmMapReader> reader =
         OsmMapReaderFactory::createReader(input, true, Status::Unknown1);

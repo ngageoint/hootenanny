@@ -56,16 +56,15 @@ public:
 
   ElementCriterionPtr clone() override { return ElementCriterionPtr(new PoiPolygonPolyCriterion()); }
 
-  QString getDescription() const override
-  { return "Identifies polygons as defined by POI/Polygon Conflation"; }
-
-  QString getName() const override { return className(); }
-
-  QString getClassName() const override { return className(); }
-
   bool supportsSpecificConflation() const override { return true; }
 
   QStringList getChildCriteria() const override;
+
+  QString getDescription() const override
+  { return "Identifies polygons as defined by POI/Polygon Conflation"; }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
+  QString toString() const override { return className(); }
 
 private:
 

@@ -57,14 +57,15 @@ public:
 
     const QStringList poiConflatableCriteria =
       ConflatableElementCriterion::getConflatableCriteriaForElement(
-        TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0, 15.0, Tags("poi", "yes")), map);
+        TestUtils::createNode(map, "", Status::Unknown1, 0.0, 0.0, 15.0, Tags("poi", "yes")), map);
     CPPUNIT_ASSERT_EQUAL(2, poiConflatableCriteria.size());
     CPPUNIT_ASSERT(poiConflatableCriteria.contains("hoot::PoiCriterion"));
     CPPUNIT_ASSERT(poiConflatableCriteria.contains("hoot::PoiPolygonPoiCriterion"));
 
     const QStringList buildingConflatableCriteria =
       ConflatableElementCriterion::getConflatableCriteriaForElement(
-        TestUtils::createWay(map, wayCoords, Status::Unknown1, 15.0, Tags("building", "yes")), map);
+        TestUtils::createWay(map, wayCoords, "", Status::Unknown1, 15.0, Tags("building", "yes")),
+        map);
     CPPUNIT_ASSERT_EQUAL(3, buildingConflatableCriteria.size());
     CPPUNIT_ASSERT(buildingConflatableCriteria.contains("hoot::AreaCriterion"));
     CPPUNIT_ASSERT(buildingConflatableCriteria.contains("hoot::BuildingCriterion"));
@@ -74,7 +75,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(
       1,
       ConflatableElementCriterion::getConflatableCriteriaForElement(
-        TestUtils::createWay(map, wayCoords, Status::Unknown1, 15.0, Tags("blah", "blah")), map)
+        TestUtils::createWay(map, wayCoords, "", Status::Unknown1, 15.0, Tags("blah", "blah")), map)
       .size());
   }
 };

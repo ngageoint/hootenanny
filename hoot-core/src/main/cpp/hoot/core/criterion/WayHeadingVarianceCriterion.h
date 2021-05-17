@@ -73,10 +73,9 @@ public:
 
   QString getDescription() const override
   { return "Identifies ways that meet a heading variance threshold"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+  QString toString() const override { return className(); }
 
   void setOsmMap(const OsmMap* map) override { _map = map->shared_from_this(); }
 

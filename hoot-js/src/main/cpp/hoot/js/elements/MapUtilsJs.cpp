@@ -43,12 +43,12 @@ namespace hoot
 
 HOOT_JS_REGISTER(MapUtilsJs)
 
-void MapUtilsJs::Init(Handle<Object> exports)
+void MapUtilsJs::Init(Local<Object> exports)
 {
   Isolate* current = exports->GetIsolate();
   HandleScope scope(current);
   Local<Context> context = current->GetCurrentContext();
-  Handle<Object> obj = Object::New(current);
+  Local<Object> obj = Object::New(current);
   exports->Set(String::NewFromUtf8(current, "MapUtils"), obj);
 
   obj->Set(String::NewFromUtf8(current, "getFirstElementWithTag"),

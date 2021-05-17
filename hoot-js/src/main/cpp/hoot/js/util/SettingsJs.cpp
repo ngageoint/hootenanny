@@ -42,12 +42,12 @@ namespace hoot
 
 HOOT_JS_REGISTER(SettingsJs)
 
-void SettingsJs::Init(Handle<Object> exports)
+void SettingsJs::Init(Local<Object> exports)
 {
   Isolate* current = exports->GetIsolate();
   HandleScope scope(current);
   Local<Context> context = current->GetCurrentContext();
-  Handle<Object> settings = Object::New(current);
+  Local<Object> settings = Object::New(current);
   exports->Set(String::NewFromUtf8(current, "Settings"), settings);
   exports->Set(String::NewFromUtf8(current, "get"),
                FunctionTemplate::New(current, get)->GetFunction(context).ToLocalChecked());

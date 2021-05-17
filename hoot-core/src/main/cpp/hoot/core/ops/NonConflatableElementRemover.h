@@ -51,17 +51,14 @@ public:
   */
   void apply(std::shared_ptr<OsmMap>& map) override;
 
-  QString getDescription() const override { return "Removes elements that are not conflatable"; }
-
   QString getInitStatusMessage() const override
   { return "Removing unconfaltable elements..."; }
-
   QString getCompletedStatusMessage() const override
   { return "Removed " + QString::number(_numAffected) + " unconflatable elements"; }
 
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+  QString getDescription() const override { return "Removes elements that are not conflatable"; }
 
 private:
 

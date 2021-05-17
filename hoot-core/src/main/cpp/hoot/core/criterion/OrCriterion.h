@@ -51,11 +51,8 @@ public:
   ElementCriterionPtr clone() override;
 
   QString getDescription() const override { return "Allows for combining criteria (logical OR)"; }
-
   QString toString() const override;
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 };
 

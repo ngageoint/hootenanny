@@ -51,10 +51,9 @@ public:
   ElementCriterionPtr clone() override { return ElementCriterionPtr(new BridgeCriterion()); }
 
   QString getDescription() const override { return "Identifies bridges"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+  QString toString() const override { return className(); }
 };
 
 }

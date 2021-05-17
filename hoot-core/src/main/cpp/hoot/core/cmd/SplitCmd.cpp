@@ -30,6 +30,7 @@
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/io/IoUtils.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/StringUtils.h>
 
 // Qt
@@ -49,7 +50,6 @@ public:
   SplitCmd() = default;
 
   QString getName() const override { return "split"; }
-
   QString getDescription() const override { return "Splits a map into tiles"; }
 
   int runSimple(QStringList& args) override
@@ -65,21 +65,30 @@ public:
                           arg(getName()));
     }
 
+    const QString input1 = args[0];
+    const QString input2 = args[1];
+    const QString output = args[2];
+
+    LOG_STATUS(
+      "Splitting ..." << FileUtils::toLogFormat(input1, 25) << " and ..." <<
+      FileUtils::toLogFormat(input2, 25) << " and writing output to ..." <<
+      FileUtils::toLogFormat(output, 25) << "...");
+
     //  Load the tile map ignoring the file IDs
     OsmMapPtr tile_map(new OsmMap());
-    IoUtils::loadMap(tile_map, args[0], false);
+    IoUtils::loadMap(tile_map, input1, false);
     //  Don't introduce source:datetime or source:ingest:datetime
     conf().set(ConfigOptions::getReaderAddSourceDatetimeKey(), false);
     //  Load the actual map and use the file IDs
     OsmMapPtr map(new OsmMap());
-    IoUtils::loadMap(map, args[1], true, Status::Unknown1);
+    IoUtils::loadMap(map, input2, true, Status::Unknown1);
     //  Split the map up into smaller maps
     OsmMapSplitter mapSplitter(map, tile_map);
     mapSplitter.apply();
     //  Don't include error:circular
     conf().set(ConfigOptions::getWriterIncludeCircularErrorTagsKey(), false);
     //  Write the maps out to disk
-    mapSplitter.writeMaps(args[2]);
+    mapSplitter.writeMaps(output);
 
     LOG_STATUS("Map split in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 

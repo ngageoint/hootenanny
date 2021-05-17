@@ -217,10 +217,10 @@ bool ElementIdSynchronizer::_areWayNodesInWaysOfMismatchedType(
 
   // get the ways that contain each.
   const std::vector<ConstWayPtr> containingWays1 =
-    WayUtils::getContainingWaysByNodeId(element1->getId(), _map1);
+    WayUtils::getContainingWaysByNodeIdConst(element1->getId(), _map1);
   LOG_VART(containingWays1.size());
   const std::vector<ConstWayPtr> containingWays2 =
-    WayUtils::getContainingWaysByNodeId(element2->getId(), _map2);
+    WayUtils::getContainingWaysByNodeIdConst(element2->getId(), _map2);
   LOG_VART(containingWays2.size())
 
   // See if any of the ways between the two have a matching type.
@@ -238,7 +238,7 @@ bool ElementIdSynchronizer::_areWayNodesInWaysOfMismatchedType(
       // type comparison, since many different types of ways could be part of an admin boundary.
       // This may not end up being the best way to deal with this.
       if (RelationMemberUtils::isMemberOfRelationSatisfyingCriterion(
-            _map1, way1->getElementId(), adminBoundsCrit))
+            way1->getElementId(), adminBoundsCrit, _map1))
       {
         return false;
       }
@@ -252,7 +252,7 @@ bool ElementIdSynchronizer::_areWayNodesInWaysOfMismatchedType(
           LOG_VART(way2->getElementId());
 
           if (RelationMemberUtils::isMemberOfRelationSatisfyingCriterion(
-                _map2, way2->getElementId(), adminBoundsCrit))
+                way2->getElementId(), adminBoundsCrit, _map2))
           {
             return false;
           }

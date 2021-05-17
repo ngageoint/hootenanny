@@ -52,10 +52,9 @@ public:
   { return ElementCriterionPtr(new BuildingWayNodeCriterion(_map)); }
 
   QString getDescription() const override { return "Identifies way nodes in buildings"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+  QString toString() const override { return className(); }
 };
 
 }

@@ -28,12 +28,12 @@
 #include "OsmApiWriter.h"
 
 //  Hootenanny
+#include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/info/VersionDefines.h>
 #include <hoot/core/io/OsmApiChangeset.h>
 #include <hoot/core/io/OsmApiChangesetElement.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/FileUtils.h>
-#include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/HootNetworkUtils.h>
 #include <hoot/core/util/Log.h>
@@ -470,44 +470,40 @@ void OsmApiWriter::_changesetThreadFunc(int index)
             continue;
           }
           //  Split the changeset and retry
-          if (!_splitChangeset(workInfo, info->response))
+          if (!_splitChangeset(workInfo, info->response) &&
+              !workInfo->getAttemptedResolveChangesetIssues())
           {
-            if (!workInfo->getAttemptedResolveChangesetIssues())
+            //  Set the attempt issues resolved flag
+            workInfo->setAttemptedResolveChangesetIssues(true);
+            //  Try to automatically resolve certain issues, like out of date version
+            if (_resolveIssues(request, workInfo))
             {
-              //  Set the attempt issues resolved flag
-              workInfo->setAttemptedResolveChangesetIssues(true);
-              //  Try to automatically resolve certain issues, like out of date version
-              if (_resolveIssues(request, workInfo))
-              {
-                _pushChangesets(workInfo);
-              }
-              else
-              {
-                //  Set the element in the changeset to failed because the issues couldn't be resolved
-                _changeset.updateFailedChangeset(workInfo);
-              }
+              _pushChangesets(workInfo);
+            }
+            else
+            {
+              //  Set the element in the changeset to failed because the issues couldn't be resolved
+              _changeset.updateFailedChangeset(workInfo);
             }
           }
           break;
         case HttpResponseCode::HTTP_BAD_REQUEST:          //  Placeholder ID is missing or not unique
         case HttpResponseCode::HTTP_NOT_FOUND:            //  Diff contains elements where the given ID could not be found
         case HttpResponseCode::HTTP_PRECONDITION_FAILED:  //  Precondition Failed, Relation with id cannot be saved due to other member
-          if (!_splitChangeset(workInfo, info->response))
+          if (!_splitChangeset(workInfo, info->response) &&
+              !workInfo->getAttemptedResolveChangesetIssues())
           {
-            if (!workInfo->getAttemptedResolveChangesetIssues())
+            //  Set the attempt issues resolved flag
+            workInfo->setAttemptedResolveChangesetIssues(true);
+            //  Try to automatically resolve certain issues, like out of date version
+            if (_resolveIssues(request, workInfo))
             {
-              //  Set the attempt issues resolved flag
-              workInfo->setAttemptedResolveChangesetIssues(true);
-              //  Try to automatically resolve certain issues, like out of date version
-              if (_resolveIssues(request, workInfo))
-              {
-                _pushChangesets(workInfo);
-              }
-              else
-              {
-                //  Set the element in the changeset to failed because the issues couldn't be resolved
-                _changeset.updateFailedChangeset(workInfo);
-              }
+              _pushChangesets(workInfo);
+            }
+            else
+            {
+              //  Set the element in the changeset to failed because the issues couldn't be resolved
+              _changeset.updateFailedChangeset(workInfo);
             }
           }
           break;

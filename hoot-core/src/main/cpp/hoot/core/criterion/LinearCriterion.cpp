@@ -33,7 +33,7 @@
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/elements/Way.h>
-#include <hoot/core/criterion/WayNodeCriterion.h>
+#include <hoot/core/criterion/LinearWayNodeCriterion.h>
 
 namespace hoot
 {
@@ -113,7 +113,7 @@ bool LinearCriterion::isLinearRelation(const ConstRelationPtr& relation)
 QStringList LinearCriterion::getChildCriteria() const
 {
   QStringList criteria;
-  criteria.append(WayNodeCriterion::className());
+  criteria.append(LinearWayNodeCriterion::className());
   return criteria;
 }
 

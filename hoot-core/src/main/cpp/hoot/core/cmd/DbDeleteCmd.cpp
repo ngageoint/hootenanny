@@ -29,6 +29,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/io/HootApiDbWriter.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/StringUtils.h>
 
 // Qt
@@ -48,7 +49,6 @@ public:
   DbDeleteCmd() = default;
 
   QString getName() const override { return "db-delete"; }
-
   QString getDescription() const override
   { return "Deletes a map from the Hootenanny Web Services database"; }
 
@@ -62,6 +62,8 @@ public:
       cout << getHelp() << endl << endl;
       throw HootException(QString("%1 takes one parameter.").arg(getName()));
     }
+
+    LOG_STATUS("Deleting ..." << FileUtils::toLogFormat(args[0], 25) << "...");
 
     HootApiDbWriter().deleteMap(args[0]);
 

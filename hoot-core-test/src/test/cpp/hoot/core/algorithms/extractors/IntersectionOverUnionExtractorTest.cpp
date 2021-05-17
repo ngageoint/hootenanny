@@ -104,9 +104,9 @@ public:
       IntersectionOverUnionExtractor::nullValue(), uut.extract(*map, way3, way4));
 
     map->clear();
-    NodePtr point1 = TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0);
+    NodePtr point1 = TestUtils::createNode(map, "", Status::Unknown1, 0.0, 0.0);
     map->addNode(point1);
-    NodePtr point2 = TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0);
+    NodePtr point2 = TestUtils::createNode(map, "", Status::Unknown1, 0.0, 0.0);
     map->addNode(point2);
     CPPUNIT_ASSERT_EQUAL(
       IntersectionOverUnionExtractor::nullValue(), uut.extract(*map, point1, point2));

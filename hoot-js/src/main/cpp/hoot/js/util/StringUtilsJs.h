@@ -33,7 +33,7 @@
 namespace hoot
 {
 
-inline QString str(v8::Handle<v8::Value> ls)
+inline QString str(v8::Local<v8::Value> ls)
 {
   v8::Isolate* current = v8::Isolate::GetCurrent();
 

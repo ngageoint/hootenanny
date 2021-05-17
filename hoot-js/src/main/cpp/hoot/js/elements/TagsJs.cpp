@@ -57,7 +57,7 @@ void TagsJs::contains(const FunctionCallbackInfo<Value>& args)
   args.GetReturnValue().Set(toV8(t.contains(key)));
 }
 
-void TagsJs::Init(Handle<Object> target)
+void TagsJs::Init(Local<Object> target)
 {
   Isolate* current = v8::Isolate::GetCurrent();
   HandleScope scope(current);
@@ -88,13 +88,13 @@ void TagsJs::Init(Handle<Object> target)
   target->Set(String::NewFromUtf8(current, "Tags"), ToLocal(&_constructor));
 }
 
-Handle<Object> TagsJs::New(const Tags& t)
+Local<Object> TagsJs::New(const Tags& t)
 {
   Isolate* current = v8::Isolate::GetCurrent();
   EscapableHandleScope scope(current);
   Local<Context> context = current->GetCurrentContext();
 
-  Handle<Object> result = ToLocal(&_constructor)->NewInstance(context).ToLocalChecked();
+  Local<Object> result = ToLocal(&_constructor)->NewInstance(context).ToLocalChecked();
   TagsJs* from = ObjectWrap::Unwrap<TagsJs>(result);
   from->_setTags(t);
 

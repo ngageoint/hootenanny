@@ -36,6 +36,7 @@
 namespace hoot
 {
 
+// TODO: move this to its own class
 class ShortestFirstComparator
 {
 public:
@@ -90,14 +91,15 @@ public:
   static QString className() { return "hoot::LinearMergerAbstract"; }
 
   LinearMergerAbstract() = default;
+  LinearMergerAbstract(
+    const std::set<std::pair<ElementId, ElementId>>& pairs,
+    const std::shared_ptr<SublineStringMatcher>& sublineMatcher);
   virtual ~LinearMergerAbstract() = default;
 
   void apply(const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced) override;
 
   QString toString() const override;
 
-  void setPairs(const std::set<std::pair<ElementId, ElementId>>& pairs) { _pairs = pairs; }
-  void setMatchedBy(const QString& matchedBy) { _matchedBy = matchedBy; }
   void setSublineMatcher(const std::shared_ptr<SublineStringMatcher>& sublineMatcher)
   { _sublineMatcher = sublineMatcher; }
 
@@ -108,15 +110,7 @@ protected:
 
   QString _eidLogString;
 
-  std::set<std::pair<ElementId, ElementId>> _pairs;
-
   std::shared_ptr<SublineStringMatcher> _sublineMatcher;
-
-  // indicates which matcher matched the elements being processed by this merger
-  QString _matchedBy;
-
-  PairsSet& _getPairs() override { return _pairs; }
-  const PairsSet& _getPairs() const override { return _pairs; }
 
   /*
    * Return true if pair needs review.
@@ -127,14 +121,21 @@ protected:
   virtual void _markNeedsReview(
     ElementPtr e1, ElementPtr e2, QString note, QString reviewType);
 
+  void _mergeShortestPairsFirst(
+    std::vector<std::pair<ElementId, ElementId>>& pairs,
+    std::vector<std::pair<ElementId, ElementId>>& replaced);
+
+  /*
+   * Finds a matching subline between two elements with the configured subline matcher
+   */
+  virtual WaySublineMatchString _matchSubline(ElementPtr e1, ElementPtr e2) = 0;
+
   void _removeSpans(const ElementPtr& w1, const ElementPtr& w2) const;
   void _removeSpans(const WayPtr& w1, const WayPtr& w2) const;
 
 private:
 
   static int logWarnCount;
-
-  static const bool WRITE_DETAILED_DEBUG_MAPS;
 
   /*
    * Returns true if the way directly connects the left and right ways. There is some tolerance

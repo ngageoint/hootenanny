@@ -48,14 +48,14 @@ JsRegistrar& JsRegistrar::getInstance()
   return instance;
 }
 
-void JsRegistrar::Init(Handle<Object> exports)
+void JsRegistrar::Init(Local<Object> exports)
 {
   LOG_DEBUG("JS registrar init...");
   Hoot::getInstance().init();
   getInstance().initAll(exports);
 }
 
-void JsRegistrar::initAll(Handle<Object> exports)
+void JsRegistrar::initAll(Local<Object> exports)
 {
   // Got this from the NodeJS docs. Seems to be a bit simpler than what we were doing.
   NODE_SET_METHOD(exports, "hello", Method);

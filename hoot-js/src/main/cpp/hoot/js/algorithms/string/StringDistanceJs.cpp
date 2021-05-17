@@ -45,7 +45,7 @@ HOOT_JS_REGISTER(StringDistanceJs)
 
 Persistent<Function> StringDistanceJs::_constructor;
 
-void StringDistanceJs::Init(Handle<Object> target)
+void StringDistanceJs::Init(Local<Object> target)
 {
   Isolate* current = target->GetIsolate();
   HandleScope scope(current);

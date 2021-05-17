@@ -27,19 +27,20 @@
 #include "OsmMapWriterFactory.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
+#include <hoot/core/conflate/network/DebugNetworkMapCreator.h>
+#include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/geometry/GeometryToElementConverter.h>
 #include <hoot/core/io/OsmMapWriter.h>
 #include <hoot/core/io/OgrWriter.h>
 #include <hoot/core/io/PartialOsmMapWriter.h>
 #include <hoot/core/io/ElementOutputStream.h>
 #include <hoot/core/schema/SchemaUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/elements/MapProjector.h>
-#include <hoot/core/conflate/network/DebugNetworkMapCreator.h>
 #include <hoot/core/visitors/RemoveMissingElementsVisitor.h>
-#include <hoot/core/geometry/GeometryToElementConverter.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -67,7 +68,7 @@ std::shared_ptr<OsmMapWriter> OsmMapWriterFactory::createWriter(const QString& u
   vector<QString> names = Factory::getInstance().getObjectNamesByBase(OsmMapWriter::className());
   for (size_t i = 0; i < names.size() && !writer; ++i)
   {
-    LOG_VARD(names[i]);
+    LOG_VART(names[i]);
     writer.reset(Factory::getInstance().constructObject<OsmMapWriter>(names[i]));
 
     // We may be able to make this a little more generic by referencing an interface instead.
@@ -151,6 +152,8 @@ void OsmMapWriterFactory::write(const std::shared_ptr<OsmMap>& map, const QStrin
 
     MapProjector::projectToWgs84(map);
 
+    // TODO: For debug maps, we don't want to log the progress of the writing to cut down on log
+    // statements.
     std::shared_ptr<OsmMapWriter> writer = createWriter(url);
     writer->setIsDebugMap(is_debug);
     writer->open(url);
@@ -178,7 +181,7 @@ void OsmMapWriterFactory::writeDebugMap(const ConstOsmMapPtr& map, const QString
     LOG_VART(StringUtils::formatLargeNumber(map->getWayCount()));
     LOG_VART(StringUtils::formatLargeNumber(map->getRelationCount()));
 
-    const QString fileNumberStr = StringUtils::padFrontOfNumberStringWithZeroes(_debugMapCount, 3);
+    const QString fileNumberStr = StringUtils::padFrontOfNumberStringWithZeroes(_debugMapCount, 4);
     if (!title.isEmpty())
     {
       debugMapFileName =
@@ -188,7 +191,7 @@ void OsmMapWriterFactory::writeDebugMap(const ConstOsmMapPtr& map, const QString
     {
       debugMapFileName = debugMapFileName.replace(".osm", "-" + fileNumberStr + ".osm");
     }
-    LOG_INFO("Writing debug output to: ..." << debugMapFileName.right(30));
+    LOG_INFO("Writing debug output to: ..." << FileUtils::toLogFormat(debugMapFileName, 30));
     OsmMapPtr copy(new OsmMap(map));
 
     if (matcher)

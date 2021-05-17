@@ -40,7 +40,7 @@ namespace hoot
 
 HOOT_JS_REGISTER(PrintJs)
 
-void PrintJs::Init(Handle<Object> exports)
+void PrintJs::Init(Local<Object> exports)
 {
   Isolate* current = exports->GetIsolate();
   HandleScope scope(current);

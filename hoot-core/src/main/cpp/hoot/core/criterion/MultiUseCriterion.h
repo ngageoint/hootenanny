@@ -50,10 +50,9 @@ public:
   ElementCriterionPtr clone() override { return ElementCriterionPtr(new MultiUseCriterion()); }
 
   QString getDescription() const override { return "Identifies features with multiple purposes"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+  QString toString() const override { return className(); }
 };
 
 }

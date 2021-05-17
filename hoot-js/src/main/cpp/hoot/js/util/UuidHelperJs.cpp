@@ -42,13 +42,13 @@ namespace hoot
 
 HOOT_JS_REGISTER(UuidHelperJs)
 
-void UuidHelperJs::Init(Handle<Object> exports)
+void UuidHelperJs::Init(Local<Object> exports)
 {
   Isolate* current = exports->GetIsolate();
   HandleScope scope(current);
   Local<Context> context = current->GetCurrentContext();
 
-  Handle<Object> helpUuid = Object::New(current);
+  Local<Object> helpUuid = Object::New(current);
   exports->Set(String::NewFromUtf8(current, "UuidHelper"), helpUuid);
   helpUuid->Set(String::NewFromUtf8(current, "createUuid"),
                 FunctionTemplate::New(current, createUuid)->GetFunction(context).ToLocalChecked());

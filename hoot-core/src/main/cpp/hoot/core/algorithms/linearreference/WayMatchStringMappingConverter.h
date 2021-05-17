@@ -41,7 +41,7 @@ class WayMatchStringMappingConverter
 public:
   WayMatchStringMappingConverter() = default;
 
-  WaySublineMatchStringPtr toWaySublineMatchString(WayMatchStringMappingPtr mapping);
+  WaySublineMatchStringPtr toWaySublineMatchString(WayMatchStringMappingPtr mapping) const;
 };
 
 }

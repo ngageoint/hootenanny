@@ -96,7 +96,7 @@ void SuperfluousWayRemover::_removeWays(std::shared_ptr<OsmMap>& map)
              !_conflateInfoCache->elementCanBeConflatedByActiveMatcher(w, className()))
     {
       LOG_TRACE(
-        "Skipping processing of " << w->getElementId() << " as it cannot be conflated by any " <<
+        "Skipping processing of " << w->getElementId() << ", as it cannot be conflated by any " <<
         "actively configured conflate matcher...");
       continue;
     }

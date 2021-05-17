@@ -35,6 +35,9 @@
 #include <hoot/core/algorithms/changeset/UniformTaskGridGenerator.h>
 #include <hoot/core/geometry/GeometryUtils.h>
 
+// Qt
+#include <QElapsedTimer>
+
 namespace hoot
 {
 
@@ -48,7 +51,6 @@ public:
   TaskGridCmd() = default;
 
   QString getName() const override { return "task-grid"; }
-
   QString getDescription() const override { return "Creates a task grid covering a map"; }
 
   int runSimple(QStringList& args) override
@@ -91,7 +93,6 @@ public:
     QStringList inputs;
     QString bounds;
     const QString input = args[0];
-    LOG_VARD(input);
     if (!isUniformGrid)
     {
       if (!input.contains(";"))
@@ -120,8 +121,6 @@ public:
         inputs = input.split(";");
       }
     }
-    LOG_VARD(inputs);
-    LOG_VARD(bounds);
 
     const QString output = args[1];
     if (!output.toLower().endsWith(".geojson") && !output.toLower().endsWith(".osm"))
@@ -130,7 +129,6 @@ public:
         "Invalid output file format: " + output + ". Only the GeoJSON (.geojson) and OSM " +
         "(.osm) output formats are supported.");
     }
-    LOG_VARD(output);
 
     int gridDimensionSize = 2;
     if (isUniformGrid)
@@ -257,8 +255,15 @@ public:
       LOG_VARD(randomSeed);
     }
 
+    QElapsedTimer timer;
+    timer.start();
+
     if (!isUniformGrid)
     {
+      LOG_STATUS(
+        "Generating node density based task grid for " << inputs.size() << " inputs and " <<
+        "writing output to ..." << output << "...");
+
       NodeDensityTaskGridGenerator taskGridGen(inputs, maxNodesPerCell, bounds, output);
       taskGridGen.setReadInputFullThenCrop(false); //??
       taskGridGen.setPixelSize(pixelSize);
@@ -273,15 +278,26 @@ public:
     {
       if (!bounds.trimmed().isEmpty())
       {
+        LOG_STATUS(
+          "Generating uniform task grid over " << bounds << " and writing output to ..." <<
+          output << "...");
+
         /*TaskGrid taskGrid =*/
           UniformTaskGridGenerator(bounds, gridDimensionSize, output).generateTaskGrid();
       }
       else
       {
+        LOG_STATUS(
+          "Generating uniform task grid for " << inputs.size() <<
+          " inputs and writing output to ..." << output << "...");
+
         /*TaskGrid taskGrid =*/
           UniformTaskGridGenerator(inputs, gridDimensionSize, output).generateTaskGrid();
       }
     }
+
+    LOG_STATUS(
+      "Task grid generated in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 
     return 0;
   }

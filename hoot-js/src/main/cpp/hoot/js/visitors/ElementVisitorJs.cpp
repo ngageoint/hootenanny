@@ -47,7 +47,7 @@ namespace hoot
 
 HOOT_JS_REGISTER(ElementVisitorJs)
 
-void ElementVisitorJs::Init(Handle<Object> target)
+void ElementVisitorJs::Init(Local<Object> target)
 {
   Isolate* current = target->GetIsolate();
   HandleScope scope(current);

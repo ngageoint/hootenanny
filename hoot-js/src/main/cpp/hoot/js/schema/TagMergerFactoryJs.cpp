@@ -38,12 +38,12 @@ namespace hoot
 
 HOOT_JS_REGISTER(TagMergerFactoryJs)
 
-void TagMergerFactoryJs::Init(Handle<Object> exports)
+void TagMergerFactoryJs::Init(Local<Object> exports)
 {
   Isolate* current = exports->GetIsolate();
   HandleScope scope(current);
   Local<Context> context = current->GetCurrentContext();
-  Handle<Object> tagMergerFactory = Object::New(current);
+  Local<Object> tagMergerFactory = Object::New(current);
   exports->Set(String::NewFromUtf8(current, "TagMergerFactory"), tagMergerFactory);
   tagMergerFactory->Set(String::NewFromUtf8(current, "mergeTags"),
     FunctionTemplate::New(current, mergeTags)->GetFunction(context).ToLocalChecked());

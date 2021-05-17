@@ -78,18 +78,17 @@ public:
   void setTreatWayNodesAsPartOfWays(const bool treatAsPartOfWays)
   { _treatWayNodesAsPartOfWays = treatAsPartOfWays; }
 
+  void setMustCompletelyContain(bool mustCompletelyContain)
+  { _mustCompletelyContain = mustCompletelyContain; }
+
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
+  QString toString() const override { return className(); }
   /**
    * @see ApiEntityInfo
    */
   QString getDescription() const override
   { return "Determines whether an element is within a specified geospatial bounds"; }
-
-  void setMustCompletelyContain(bool mustCompletelyContain)
-  { _mustCompletelyContain = mustCompletelyContain; }
-
-  QString getName() const override { return className(); }
-
-  QString getClassName() const override { return className(); }
 
 private:
 

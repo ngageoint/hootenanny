@@ -276,8 +276,8 @@ exports.mergeSets = function(map, pairs, replaced)
   // original subline matcher used during matching by this script, pass in both of the possible
   // subline matchers that could have been used and use the same internal core logic that was used
   // during matching to determine which one to use during merging. See related comment in
-  // LinearSnapMergerJs::apply.
-  return new hoot.LinearSnapMerger().apply(sublineMatcher, map, pairs, replaced, exports.baseFeatureType, frechetSublineMatcher);
+  // LinearMergerJs::apply.
+  return new hoot.LinearMerger().apply(sublineMatcher, map, pairs, replaced, exports.baseFeatureType, frechetSublineMatcher);
 };
 
 exports.getMatchFeatureDetails = function(map, e1, e2)

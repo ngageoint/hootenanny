@@ -191,7 +191,7 @@ private:
       double dx() const { return c1.x - c2.x; }
       double dy() const { return c1.y - c2.y; }
 
-      QString toString()
+      QString toString() const
       { return "dx: " + QString::number(dx()) + ", dy: " + QString::number(dy()); }
   };
 

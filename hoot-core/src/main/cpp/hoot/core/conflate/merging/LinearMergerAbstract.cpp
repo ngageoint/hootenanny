@@ -48,20 +48,23 @@ namespace hoot
 {
 
 int LinearMergerAbstract::logWarnCount = 0;
-// ONLY ENABLE THIS DURING DEBUGGING; We don't want to tie it to debug.maps.write, as it may
-// produce a very large number of files.
-const bool LinearMergerAbstract::WRITE_DETAILED_DEBUG_MAPS = false;
+
+LinearMergerAbstract::LinearMergerAbstract(
+  const std::set<std::pair<ElementId, ElementId>>& pairs,
+  const std::shared_ptr<SublineStringMatcher>& sublineMatcher) :
+MergerBase(pairs),
+_sublineMatcher(sublineMatcher)
+{
+}
 
 void LinearMergerAbstract::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementId>>& replaced)
 {
-  LOG_TRACE("Applying LinearSnapMerger...");
-  LOG_VART(hoot::toString(_pairs));
-  LOG_VART(hoot::toString(replaced));
+  LOG_TRACE("Applying linear merger...");
+  LOG_VART(_pairs);
   _map = map;
 
   vector<pair<ElementId, ElementId>> pairs;
   pairs.reserve(_pairs.size());
-
   for (set<pair<ElementId, ElementId>>::const_iterator it = _pairs.begin(); it != _pairs.end();
        ++it)
   {
@@ -78,35 +81,41 @@ void LinearMergerAbstract::apply(const OsmMapPtr& map, vector<pair<ElementId, El
         "Map doesn't contain one or more of the following elements: " << eid1 << ", " << eid2);
     }
   }
-  LOG_VART(hoot::toString(pairs));
 
-  ShortestFirstComparator shortestFirst;
-  shortestFirst.map = _map;
-  sort(pairs.begin(), pairs.end(), shortestFirst);
-  for (vector<pair<ElementId, ElementId>>::const_iterator it = pairs.begin();
-       it != pairs.end(); ++it)
-  {
-    ElementId eid1 = it->first;
-    ElementId eid2 = it->second;
+  _mergeShortestPairsFirst(pairs, replaced);
+}
 
-    for (size_t i = 0; i < replaced.size(); i++)
+void LinearMergerAbstract::_mergeShortestPairsFirst(
+  std::vector<std::pair<ElementId, ElementId>>& pairs,
+  std::vector<std::pair<ElementId, ElementId>>& replaced)
+{
+    ShortestFirstComparator shortestFirst;
+    shortestFirst.map = _map;
+    sort(pairs.begin(), pairs.end(), shortestFirst);
+    LOG_VART(pairs);
+    for (vector<pair<ElementId, ElementId>>::const_iterator it = pairs.begin(); it != pairs.end();
+         ++it)
     {
-      if (eid1 == replaced[i].first)
+      ElementId eid1 = it->first;
+      ElementId eid2 = it->second;
+
+      for (size_t i = 0; i < replaced.size(); i++)
       {
-        LOG_TRACE("Changing " << eid1 << " to " << replaced[i].second << "...");
-        eid1 = replaced[i].second;
-      }
-      if (eid2 == replaced[i].first)
-      {
-        LOG_TRACE("Changing " << eid2 << " to " << replaced[i].second << "...");
-        eid2 = replaced[i].second;
+        if (eid1 == replaced[i].first)
+        {
+          LOG_TRACE("Changing " << eid1 << " to " << replaced[i].second << "...");
+          eid1 = replaced[i].second;
+        }
+        if (eid2 == replaced[i].first)
+        {
+          LOG_TRACE("Changing " << eid2 << " to " << replaced[i].second << "...");
+          eid2 = replaced[i].second;
+        }
       }
 
+      _eidLogString = "-" + eid1.toString() + "-" + eid2.toString();
+      _mergePair(eid1, eid2, replaced);
     }
-
-    _eidLogString = "-" + eid1.toString() + "-" + eid2.toString();
-    _mergePair(eid1, eid2, replaced);
-  }
 }
 
 void LinearMergerAbstract::_markNeedsReview(
@@ -196,7 +205,7 @@ void LinearMergerAbstract::_removeSpans(const ElementPtr& e1, const ElementPtr& 
     }
   }
 
-  if (WRITE_DETAILED_DEBUG_MAPS)
+  if (ConfigOptions().getDebugMapsWrite() && ConfigOptions().getDebugMapsWriteDetailed())
   {
     OsmMapWriterFactory::writeDebugMap(
       _map, "LinearMergerAbstract-after-remove-spans" + _eidLogString);
@@ -244,9 +253,13 @@ void LinearMergerAbstract::_removeSpans(const WayPtr& w1, const WayPtr& w2) cons
 bool LinearMergerAbstract::_directConnect(WayPtr w) const
 {
   std::shared_ptr<LineString> ls = ElementToGeometryConverter(_map).convertToLineString(w);
+  if (!ls)
+  {
+    return false;
+  }
 
-  CoordinateSequence* cs = GeometryFactory::getDefaultInstance()->getCoordinateSequenceFactory()->
-    create(2, 2);
+  CoordinateSequence* cs =
+    GeometryFactory::getDefaultInstance()->getCoordinateSequenceFactory()->create(2, 2);
 
   cs->setAt(_map->getNode(w->getNodeId(0))->toCoordinate(), 0);
   cs->setAt(_map->getNode(w->getLastNodeId())->toCoordinate(), 1);

@@ -135,11 +135,11 @@ void ElementJs::getTags(const FunctionCallbackInfo<Value>& args)
   args.GetReturnValue().Set(TagsJs::New(e->getTags()));
 }
 
-Handle<Object> ElementJs::New(ConstElementPtr e)
+Local<Object> ElementJs::New(ConstElementPtr e)
 {
   EscapableHandleScope scope(v8::Isolate::GetCurrent());
 
-  Handle<Object> result;
+  Local<Object> result;
 
   switch (e->getElementType().getEnum())
   {
@@ -168,11 +168,11 @@ Handle<Object> ElementJs::New(ConstElementPtr e)
   return scope.Escape(result);
 }
 
-Handle<Object> ElementJs::New(ElementPtr e)
+Local<Object> ElementJs::New(ElementPtr e)
 {
   EscapableHandleScope scope(v8::Isolate::GetCurrent());
 
-  Handle<Object> result;
+  Local<Object> result;
 
   switch (e->getElementType().getEnum())
   {
@@ -240,7 +240,7 @@ void ElementJs::setTags(const FunctionCallbackInfo<Value>& args)
   }
   else
   {
-    Tags& tags = ObjectWrap::Unwrap<TagsJs>(args[0]->ToObject(context).ToLocalChecked())->getTags();
+    const Tags& tags = ObjectWrap::Unwrap<TagsJs>(args[0]->ToObject(context).ToLocalChecked())->getTags();
     e->setTags(tags);
     args.GetReturnValue().SetUndefined();
   }

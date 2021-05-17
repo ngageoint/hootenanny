@@ -37,6 +37,26 @@ namespace hoot
 
 long Match::_orderCount = 0;
 
+/*
+ * All of this order silliness maintains a consistent ordering of matches when they're placed
+ * into a set as pointers.
+ */
+Match::Match(const std::shared_ptr<const MatchThreshold>& threshold) :
+_order(_orderCount++),
+_threshold(threshold)
+{
+}
+
+Match::Match(
+  const std::shared_ptr<const MatchThreshold>& threshold, const ElementId& eid1,
+  const ElementId& eid2) :
+_order(_orderCount++),
+_threshold(threshold),
+_eid1(eid1),
+_eid2(eid2)
+{
+}
+
 QString Match::explain() const
 {
   return toString();

@@ -47,12 +47,12 @@ namespace hoot
 
 HOOT_JS_REGISTER(RelationMemberUtilsJs)
 
-void RelationMemberUtilsJs::Init(Handle<Object> exports)
+void RelationMemberUtilsJs::Init(Local<Object> exports)
 {
   Isolate* current = exports->GetIsolate();
   HandleScope scope(current);
   Local<Context> context = current->GetCurrentContext();
-  Handle<Object> obj = Object::New(current);
+  Local<Object> obj = Object::New(current);
   exports->Set(String::NewFromUtf8(current, "RelationMemberUtils"), obj);
 
   obj->Set(String::NewFromUtf8(current, "isMemberOfRelationWithType"),
@@ -187,7 +187,7 @@ void RelationMemberUtilsJs::isMemberOfRelationSatisfyingCriterion(
   }
 
   const bool isMember =
-    RelationMemberUtils::isMemberOfRelationSatisfyingCriterion(map, childId, *crit);
+    RelationMemberUtils::isMemberOfRelationSatisfyingCriterion(childId, *crit, map);
 
   args.GetReturnValue().Set(Boolean::New(current, isMember));
 }

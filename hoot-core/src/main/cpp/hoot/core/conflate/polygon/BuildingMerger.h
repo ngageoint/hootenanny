@@ -107,18 +107,11 @@ public:
   void setChangedReviewIouThreshold(double threshold) { _changedReviewIouThreshold = threshold; }
   QString getMarkedReviewText() const { return _markedReviewText; }
 
-protected:
-
-  PairsSet& _getPairs() override { return _pairs; }
-  const PairsSet& _getPairs() const override { return _pairs; }
-
 private:
 
   static int logWarnCount;
 
   friend class BuildingMergerTest;
-
-  std::set<std::pair<ElementId, ElementId>> _pairs;
 
   //If true, merging always keeps the more complex of the two building geometries.  If false,
   //merging keeps the geometry of the reference building.

@@ -63,8 +63,8 @@ void FeatureExtractorJs::extract(const FunctionCallbackInfo<Value>& args)
   }
 
   OsmMapJs* mapJs = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject(context).ToLocalChecked());
-  ElementJs* e1Js = ObjectWrap::Unwrap<ElementJs>(args[1]->ToObject(context).ToLocalChecked());
-  ElementJs* e2Js = ObjectWrap::Unwrap<ElementJs>(args[2]->ToObject(context).ToLocalChecked());
+  const ElementJs* e1Js = ObjectWrap::Unwrap<ElementJs>(args[1]->ToObject(context).ToLocalChecked());
+  const ElementJs* e2Js = ObjectWrap::Unwrap<ElementJs>(args[2]->ToObject(context).ToLocalChecked());
 
   double result =
     feJs->getFeatureExtractor()->extract(
@@ -80,7 +80,7 @@ void FeatureExtractorJs::extract(const FunctionCallbackInfo<Value>& args)
   }
 }
 
-void FeatureExtractorJs::Init(Handle<Object> target)
+void FeatureExtractorJs::Init(Local<Object> target)
 {
   Isolate* current = target->GetIsolate();
   HandleScope scope(current);

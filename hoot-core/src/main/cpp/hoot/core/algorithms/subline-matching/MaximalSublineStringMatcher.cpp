@@ -84,8 +84,9 @@ void MaximalSublineStringMatcher::setMaxRelevantAngle(Radians r)
   {
     if (logWarnCount < Log::getWarnMessageLimit())
     {
-      LOG_WARN("Max relevant angle is greaer than PI, did you specify the value in degrees instead "
-               "of radians?");
+      LOG_WARN(
+        "Max relevant angle is greaer than PI, did you specify the value in degrees instead "
+        "of radians?");
     }
     else if (logWarnCount == Log::getWarnMessageLimit())
     {
@@ -117,7 +118,6 @@ void MaximalSublineStringMatcher::setSublineMatcher(const std::shared_ptr<Sublin
 vector<WayPtr> MaximalSublineStringMatcher::_changeMap(const vector<ConstWayPtr>& ways,
   OsmMapPtr map) const
 {
-  LOG_TRACE("Changing map...");
   vector<WayPtr> result;
   result.reserve(ways.size());
   for (size_t i = 0; i < ways.size(); ++i)
@@ -138,8 +138,9 @@ void MaximalSublineStringMatcher::_configureSublineMatcher()
   _sublineMatcher->setHeadingDelta(_headingDelta);
 }
 
-WaySublineMatchString MaximalSublineStringMatcher::findMatch(const ConstOsmMapPtr& map,
-  const ConstElementPtr& e1, const ConstElementPtr& e2, Meters maxRelevantDistance) const
+WaySublineMatchString MaximalSublineStringMatcher::findMatch(
+  const ConstOsmMapPtr& map, const ConstElementPtr& e1, const ConstElementPtr& e2,
+  Meters maxRelevantDistance) const
 {
   LOG_VART(e1->getElementId());
   LOG_VART(e2->getElementId());
@@ -182,8 +183,7 @@ WaySublineMatchString MaximalSublineStringMatcher::findMatch(const ConstOsmMapPt
   try
   {
     WaySublineMatchString result = scoredResult.matches;
-    // TODO: This likely shouldn't be necessary. See
-    // https://github.com/ngageoint/hootenanny/issues/157.
+    // TODO: This likely shouldn't be necessary. See issue #157.
     result.removeEmptyMatches();
     LOG_VART(result);
     return result;
@@ -407,7 +407,6 @@ bool MaximalSublineStringMatcher::_isValid(const ConstOsmMapPtr& map, ElementId 
       return false;
     }
   }
-
   return true;
 }
 

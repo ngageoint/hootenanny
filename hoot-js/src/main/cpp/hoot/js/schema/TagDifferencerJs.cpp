@@ -60,7 +60,7 @@ void TagDifferencerJs::diff(const FunctionCallbackInfo<Value>& args)
   {
     TagDifferencerJs* op = ObjectWrap::Unwrap<TagDifferencerJs>(args.This());
 
-    ConstOsmMapPtr& map = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject(context).ToLocalChecked())->getConstMap();
+    const ConstOsmMapPtr& map = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject(context).ToLocalChecked())->getConstMap();
     ConstElementPtr e1 = ObjectWrap::Unwrap<ElementJs>(args[1]->ToObject(context).ToLocalChecked())->getConstElement();
     ConstElementPtr e2 = ObjectWrap::Unwrap<ElementJs>(args[2]->ToObject(context).ToLocalChecked())->getConstElement();
 
@@ -82,7 +82,7 @@ void TagDifferencerJs::diff(const FunctionCallbackInfo<Value>& args)
   }
 }
 
-void TagDifferencerJs::Init(Handle<Object> target)
+void TagDifferencerJs::Init(Local<Object> target)
 {
   Isolate* current = target->GetIsolate();
   HandleScope scope(current);

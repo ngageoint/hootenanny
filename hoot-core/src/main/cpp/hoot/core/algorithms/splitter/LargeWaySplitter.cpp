@@ -75,7 +75,7 @@ void LargeWaySplitter::apply(const std::shared_ptr<OsmMap>& map)
   }
 }
 
-void LargeWaySplitter::_divideWay(const std::shared_ptr<Way>& way, int numPieces)
+void LargeWaySplitter::_divideWay(const std::shared_ptr<Way>& way, int numPieces) const
 {
   double startLength = ElementToGeometryConverter(_map).convertToLineString(way)->getLength();
   double pieceLength = startLength / (double)numPieces;

@@ -56,19 +56,19 @@ bool ScriptMergerCreator::createMergers(const MatchSet& matches, vector<MergerPt
   Persistent<Object> plugin;
   QStringList matchType;
 
-  // go through all the matches
+  // Go through all the matches.
   for (MatchSet::const_iterator it = matches.begin(); it != matches.end(); ++it)
   {
     ConstMatchPtr match = *it;;
     std::shared_ptr<const ScriptMatch> scriptMatch = dynamic_pointer_cast<const ScriptMatch>(match);
-    // check to make sure all the input matches are script matches
+    // Check to make sure all the input matches are script matches.
     if (scriptMatch == nullptr)
     {
-      // return an empty result
+      // Return an empty result.
       LOG_TRACE("Match invalid; skipping merge: " << match->toString());
       return false;
     }
-    // add all the element to element pairs to a set
+    // Add all the element to element pairs to a set.
     else
     {
       script = scriptMatch->getScript();
@@ -90,7 +90,7 @@ bool ScriptMergerCreator::createMergers(const MatchSet& matches, vector<MergerPt
 
   std::shared_ptr<ScriptMerger> scriptMerger = std::make_shared<ScriptMerger>(script, plugin, eids);
   scriptMerger->setMatchType(matchType.join(";"));
-  // only add the merger if there are elements to merge
+  // Only add the merger if there are elements to merge.
   if (scriptMerger->hasFunction("mergeSets"))
   {
     if (eids.size() >= 1)

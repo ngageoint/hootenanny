@@ -26,19 +26,20 @@
  */
 
 // Hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/info/SingleStatistic.h>
 #include <hoot/core/info/NumericStatistic.h>
-#include <hoot/core/visitors/ElementVisitor.h>
+#include <hoot/core/io/ElementVisitorInputStream.h>
 #include <hoot/core/io/OsmMapReader.h>
+#include <hoot/core/io/OsmMapReaderFactory.h>
+#include <hoot/core/io/PartialOsmMapReader.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/io/PartialOsmMapReader.h>
-#include <hoot/core/io/ElementVisitorInputStream.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/visitors/ElementVisitor.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -58,9 +59,7 @@ public:
   }
 
   QString getName() const override { return "stat"; }
-
-  QString getDescription() const override
-  { return "Calculates a single statistic for a map"; }
+  QString getDescription() const override { return "Calculates a single statistic for a map"; }
 
   int runSimple(QStringList& args) override
   {
@@ -75,25 +74,21 @@ public:
     }
 
     const QString input = args[0].trimmed();
-    LOG_VART(input);
-
     const QString visClassName = args[1].trimmed();
-    LOG_VARD(visClassName);
 
     QString statType = "total";
     if (args.size() == 3)
     {
       statType = args[2].trimmed();
     }
-    LOG_VARD(statType);
     if (!_isValidStatType(statType))
     {
       throw IllegalArgumentException("Invalid statistic type: " + statType);
     }
 
-    LOG_INFO(
+    LOG_STATUS(
       "Calculating statistic of type: " << statType << ", with visitor: " << visClassName <<
-      ", for input: " << input.right(25) << "...")
+      ", for " << FileUtils::toLogFormat(input, 25) << "...")
     const double stat = _calcStat(input, visClassName, statType);
     LOG_VART(stat);
 

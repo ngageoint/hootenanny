@@ -52,9 +52,8 @@ LinearMergerAbstract()
 
 LinearAverageMerger::LinearAverageMerger(
   const std::set<std::pair<ElementId, ElementId>>& pairs) :
-LinearMergerAbstract()
+LinearMergerAbstract(pairs, nullptr)
 {
-  _pairs = pairs;
   _matchedBy = HighwayMatch::MATCH_NAME;
 }
 
