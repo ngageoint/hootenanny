@@ -618,6 +618,7 @@ void DiffConflator::_removePartialSecondaryMatchElements()
 {
   std::vector<MergerPtr> relationMergers;
   _createMergers(relationMergers);
+  MapProjector::projectToPlanar(_map);
   _mergeFeatures(relationMergers);
 }
 
