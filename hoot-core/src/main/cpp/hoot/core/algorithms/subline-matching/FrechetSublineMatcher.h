@@ -61,9 +61,7 @@ public:
 
   QString getDescription() const override
   { return "Matches lines based on the Frechet Distance algorithm"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 
 private:

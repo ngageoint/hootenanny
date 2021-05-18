@@ -62,7 +62,7 @@ public:
     settings.set(ConfigOptions::getContainsNodeCriterionIdKey(), 3);
     uut2.setConfiguration(settings);
 
-    RelationPtr relation1 = std::make_shared<Relation>(Relation(Status::Unknown1, 1));
+    RelationPtr relation1 = std::make_shared<Relation>(Status::Unknown1, 1);
     relation1->addElement("test", way1->getElementId());
     relation1->addElement("test", node3->getElementId());
     CPPUNIT_ASSERT(uut1.isSatisfied(way1));

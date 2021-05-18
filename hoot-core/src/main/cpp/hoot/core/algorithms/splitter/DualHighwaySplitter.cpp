@@ -277,7 +277,7 @@ std::shared_ptr<OsmMap> DualHighwaySplitter::splitAll()
   {
     if (wayIds.size() % 1000 == 0 && !wayIds.empty())
     {
-      PROGRESS_DEBUG("  splitting " << i << " / " << wayIds.size());
+      PROGRESS_DEBUG("  splitting " << i << " of " << wayIds.size());
       todoLogged = true;
     }
     _splitWay(wayIds[i]);
@@ -286,7 +286,7 @@ std::shared_ptr<OsmMap> DualHighwaySplitter::splitAll()
 
   if (todoLogged)
   {
-    LOG_DEBUG("  splitting " << wayIds.size() << " / " << wayIds.size());
+    LOG_DEBUG("  splitting " << wayIds.size() << " of " << wayIds.size());
   }
 
   //  Remove the un-needed nodes from the original way that aren't part of any other way now

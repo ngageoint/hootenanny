@@ -61,6 +61,11 @@ public:
   NetworkDetails(ConstOsmMapPtr map, ConstOsmNetworkPtr n1, ConstOsmNetworkPtr n2);
   ~NetworkDetails() = default;
 
+  /**
+   * @see Configurable
+   */
+  void setConfiguration(const Settings& conf) override;
+
   Meters calculateDistance(ConstEdgeLocationPtr el) const;
   /**
    * Returns the distance from el to s.
@@ -78,8 +83,8 @@ public:
    */
   Radians calculateHeadingAtVertex(ConstNetworkEdgePtr e, ConstNetworkVertexPtr v) const;
 
-  QList<EdgeSublineMatchPtr> calculateMatchingSublines(ConstNetworkEdgePtr e1,
-    ConstNetworkEdgePtr e2);
+  QList<EdgeSublineMatchPtr> calculateMatchingSublines(
+    ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2);
 
   /**
    * calculate the distance relative to the string start. This may be negative. An attempt will
@@ -94,9 +99,8 @@ public:
    * Run an experiment to see if a valid match is created by adding esm onto em. If a valid match
    * is created it will be returned. Otherwise a null is returned.
    */
-  EdgeMatchPtr extendEdgeMatch(ConstEdgeMatchPtr em, ConstNetworkEdgePtr e1,
-    ConstNetworkEdgePtr e2) const;
-
+  EdgeMatchPtr extendEdgeMatch(
+    ConstEdgeMatchPtr em, ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2) const;
   /**
    * Extend edge string 'es' with 'e'. 'es' will be enlarged as necessary to include e. If e
    * cannot extend 'es' an exception will be thrown.
@@ -116,8 +120,13 @@ public:
     ConstEdgeLocationPtr &elString, ConstEdgeLocationPtr &elSubline) const;
 
   double getEdgeMatchScore(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2);
-
   double getEdgeStringMatchScore(ConstEdgeStringPtr e1, ConstEdgeStringPtr e2);
+  double getPartialEdgeMatchScore(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2);
+  /**
+   * Returns a score matching v1 to v2. This does not consider any neighboring vertices. 0 means
+   * no match and larger scores are better.
+   */
+  double getVertexMatchScore(ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2);
 
   geos::geom::Envelope getEnvelope(ConstNetworkEdgePtr e) const override;
   geos::geom::Envelope getEnvelope(ConstNetworkVertexPtr v) const override;
@@ -126,20 +135,12 @@ public:
 
   ConstOsmNetworkPtr getNetwork1() const { return _n1; }
 
-  double getPartialEdgeMatchScore(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2);
-
   Meters getSearchRadius(ConstNetworkEdgePtr e1) const override;
   Meters getSearchRadius(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2) const override;
   Meters getSearchRadius(ConstNetworkVertexPtr v1) const override;
   Meters getSearchRadius(ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2) const override;
   Meters getSearchRadius(ConstWayStringPtr ws1, ConstWayStringPtr ws2) const;
   Meters getSearchRadius(ConstWayPtr w1, ConstWayPtr w2) const;
-
-  /**
-   * Returns a score matching v1 to v2. This does not consider any neighboring vertices. 0 means
-   * no match and larger scores are better.
-   */
-  double getVertexMatchScore(ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2);
 
   bool hasConfidentTiePoint(ConstNetworkVertexPtr v);
 
@@ -174,8 +175,6 @@ public:
   ConstWayPtr toWay(ConstNetworkEdgePtr e) const;
 
   WayStringPtr toWayString(ConstEdgeStringPtr e, const EidMapper& mapper = EidMapper()) const;
-
-  void setConfiguration(const Settings& conf) override;
 
 private:
 
@@ -212,8 +211,9 @@ private:
    * @param v2 - vertex in e2
    * @return
    */
-  double _getEdgeAngleScore(ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2,
-    ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2);
+  double _getEdgeAngleScore(
+    ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2, ConstNetworkEdgePtr e1,
+    ConstNetworkEdgePtr e2);
 
   const SublineCache& _getSublineCache(ConstWayPtr w1, ConstWayPtr w2);
 
@@ -221,7 +221,8 @@ private:
 
   EdgeSublinePtr _toEdgeSubline(const WaySubline& ws, ConstNetworkEdgePtr);
 
-  void _trimEdgeString(ConstElementProviderPtr provider, EdgeStringPtr es, WayPtr w,
+  void _trimEdgeString(
+    ConstElementProviderPtr provider, EdgeStringPtr es, WayPtr w,
     const WaySublineCollection& ws) const;
 };
 

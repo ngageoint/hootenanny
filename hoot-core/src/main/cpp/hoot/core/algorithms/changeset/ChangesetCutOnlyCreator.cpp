@@ -150,7 +150,7 @@ void ChangesetCutOnlyCreator::create(
     LOG_INFO("******************************************");
     LOG_STATUS(
       "Generating " << GeometryTypeCriterion::typeToString(itr.key()) << " diff maps for " <<
-      "changeset derivation with ID: " << _changesetId << ". Pass: " << passCtr << " / " <<
+      "changeset derivation with ID: " << _changesetId << ". Pass: " << passCtr << " of " <<
       refFilters.size() << "...");
 
     OsmMapPtr refMap;

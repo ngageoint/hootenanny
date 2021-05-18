@@ -113,7 +113,7 @@ void MatchConflicts::calculateMatchConflicts(
       // TODO: would like this to be status, but it logs a separate line for each statement
       // for some reason unfortunately.
       PROGRESS_INFO(
-        "Processed matches for " << StringUtils::formatLargeNumber(eidToMatchCount) << " / " <<
+        "Processed matches for " << StringUtils::formatLargeNumber(eidToMatchCount) << " of " <<
         StringUtils::formatLargeNumber(eidToMatches.size()) << " elements. Found " <<
         StringUtils::formatLargeNumber(conflicts.size()) << " match conflicts.");
     }

@@ -52,8 +52,7 @@ void MultiaryUtilities::conflate(OsmMapPtr map)
   mergerFactory->registerCreator(MergerCreatorPtr(new MultiaryPoiMergerCreator()));
 
   // Apparently, multiary will allow with > 1.0 review thresholds.
-  std::shared_ptr<MatchThreshold> mt =
-    std::make_shared<MatchThreshold>(MatchThreshold(0.39, 0.61, 1.1, false));
+  std::shared_ptr<MatchThreshold> mt = std::make_shared<MatchThreshold>(0.39, 0.61, 1.1, false);
 
   // call new conflation routine
   UnifyingConflator conflator(mt);
@@ -68,7 +67,6 @@ QByteArray MultiaryUtilities::convertElementToPbf(ConstNodePtr n)
   writer.writePb(n, &ss);
 
   QByteArray result(ss.str().data(), ss.str().size());
-
   return result;
 }
 

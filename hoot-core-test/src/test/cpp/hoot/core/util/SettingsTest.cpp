@@ -137,7 +137,8 @@ public:
       "hoot::LinearSnapMerger", uut.getString("geometry.linear.merger.default"));
     //  Default value before change in NetworkAlgorithm.conf
     HOOT_STR_EQUALS("hoot::HighwayRfClassifier", uut.getString("conflate.match.highway.classifier"));
-    HOOT_STR_EQUALS("hoot::MaximalNearestSublineMatcher", uut.getString("way.subline.matcher"));
+    HOOT_STR_EQUALS(
+      "hoot::MaximalNearestSublineMatcher", uut.getString("way.subline.matcher"));
 
     uut.loadFromString("{ \"base.config\": \"AttributeConflation.conf,NetworkAlgorithm.conf\", \"uuid.helper.repeatable\": \"true\" }");
     //  From the JSON

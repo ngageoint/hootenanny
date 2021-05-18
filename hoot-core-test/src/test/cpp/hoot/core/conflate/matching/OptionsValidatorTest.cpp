@@ -264,7 +264,8 @@ public:
     conf().set("merger.creators", mergers.join(";"));
     conf().set("way.subline.matcher", "hoot::MaximalNearestSublineMatcher");
     OptionsValidator::fixMisc();
-    HOOT_STR_EQUALS("hoot::MaximalNearestSublineMatcher", conf().get("way.subline.matcher"));
+    HOOT_STR_EQUALS(
+      "hoot::MaximalNearestSublineMatcher", conf().get("way.subline.matcher"));
 
     TestUtils::resetEnvironment();
     matchers.clear();
@@ -275,7 +276,8 @@ public:
     conf().set("merger.creators", mergers.join(";"));
     conf().set("way.subline.matcher", "blah");
     OptionsValidator::fixMisc();
-    HOOT_STR_EQUALS("hoot::MaximalNearestSublineMatcher", conf().get("way.subline.matcher"));
+    HOOT_STR_EQUALS(
+      "hoot::MaximalNearestSublineMatcher", conf().get("way.subline.matcher"));
   }
 
   void runAutoCorrectClassifierTest()

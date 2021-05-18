@@ -392,7 +392,7 @@ double MatchComparator::evaluateMatches(const ConstOsmMapPtr& in, const OsmMapPt
     numPairsParsed++;
     if (numPairsParsed % _statusUpdateInterval == 0)
     {
-      PROGRESS_INFO("Processed " << numPairsParsed << " / " << allPairs.size() << " match pairs.");
+      PROGRESS_INFO("Processed " << numPairsParsed << " of " << allPairs.size() << " match pairs.");
     }
   }
 
