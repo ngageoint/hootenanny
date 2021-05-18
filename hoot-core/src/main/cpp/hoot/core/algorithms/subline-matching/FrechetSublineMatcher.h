@@ -40,6 +40,7 @@ namespace hoot
 class FrechetSublineMatcher : public SublineMatcher, public Configurable
 {
 public:
+
   static QString className() { return "hoot::FrechetSublineMatcher"; }
 
   FrechetSublineMatcher() = default;
