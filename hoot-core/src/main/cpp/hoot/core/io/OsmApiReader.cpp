@@ -199,7 +199,7 @@ void OsmApiReader::close()
   _map.reset();
 }
 
-std::shared_ptr<geos::geom::Geometry> OsmApiReader::_getBoundsEnvelope()
+std::shared_ptr<geos::geom::Geometry> OsmApiReader::_getBoundsEnvelope() const
 {
   //  Try to read the bounds from the `bounds` string
   if (_boundsString != ConfigOptions::getBoundsDefaultValue())

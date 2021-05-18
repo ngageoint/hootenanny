@@ -122,7 +122,7 @@ void OsmApiDbBulkInserter::_verifyChangesetUserId()
   }
 }
 
-void OsmApiDbBulkInserter::_verifyFileOutputs()
+void OsmApiDbBulkInserter::_verifyFileOutputs() const
 {
   QString finalOutput = _outputUrl;
   if (_destinationIsDatabase() && !_outputFilesCopyLocation.isEmpty())
@@ -184,7 +184,7 @@ void OsmApiDbBulkInserter::_verifyStartingIds()
   }
 }
 
-void OsmApiDbBulkInserter::_verifyDependencies()
+void OsmApiDbBulkInserter::_verifyDependencies() const
 {
   if (system(QString("psql --version > /dev/null").toStdString().c_str()) != 0)
   {
@@ -192,7 +192,7 @@ void OsmApiDbBulkInserter::_verifyDependencies()
   }
 }
 
-void OsmApiDbBulkInserter::_verifyOutputCopySettings()
+void OsmApiDbBulkInserter::_verifyOutputCopySettings() const
 {
   if (_destinationIsDatabase() && !_outputFilesCopyLocation.isEmpty())
   {
@@ -244,7 +244,7 @@ void OsmApiDbBulkInserter::_closeOutputFiles()
   }
 }
 
-void OsmApiDbBulkInserter::_logStats(const bool debug)
+void OsmApiDbBulkInserter::_logStats(const bool debug) const
 {
   QStringList messages;
   messages.append(
@@ -643,7 +643,7 @@ void OsmApiDbBulkInserter::_writeCombinedSqlFile()
 }
 
 void OsmApiDbBulkInserter::_updateRecordLineWithIdOffset(const QString& tableName,
-                                                         QString& recordLine)
+                                                         QString& recordLine) const
 {
   LOG_TRACE("Updating ID offset for line: " << recordLine.left(25));
   LOG_VART(tableName);
@@ -1419,7 +1419,7 @@ void OsmApiDbBulkInserter::_writeChangeset()
 
 void OsmApiDbBulkInserter::_writeSequenceUpdates(long changesetId, const unsigned long nodeId,
                                                  const unsigned long wayId,
-                                                 const unsigned long relationId, QString& outputStr)
+                                                 const unsigned long relationId, QString& outputStr) const
 {
   LOG_DEBUG("Writing sequence updates stream...");
 

@@ -237,7 +237,7 @@ void OsmApiDbSqlChangesetFileWriter::_createChangeSet()
     .toUtf8());
 }
 
-ElementPtr OsmApiDbSqlChangesetFileWriter::_getChangeElement(ConstElementPtr element)
+ElementPtr OsmApiDbSqlChangesetFileWriter::_getChangeElement(ConstElementPtr element) const
 {
   ElementPtr changeElement;
   switch (element->getElementType().getEnum())

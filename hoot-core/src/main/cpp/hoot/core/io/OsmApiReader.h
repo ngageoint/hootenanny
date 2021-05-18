@@ -99,7 +99,7 @@ private:
    *  or the bounds of a file listed in `bounds.file` parameter
    * @return The bounds for the read
    */
-  std::shared_ptr<geos::geom::Geometry> _getBoundsEnvelope();
+  std::shared_ptr<geos::geom::Geometry> _getBoundsEnvelope() const;
 
   /** Value of the bounds envelope string */
   QString _boundsString;
