@@ -47,7 +47,7 @@ public:
   WorstCircularErrorVisitor() : _worst(ElementData::CIRCULAR_ERROR_EMPTY) {}
   ~WorstCircularErrorVisitor() = default;
 
-  Meters getWorstCircularError() { return _worst; }
+  Meters getWorstCircularError() const { return _worst; }
 
   double getStat() const override { return _worst; }
 

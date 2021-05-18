@@ -112,7 +112,7 @@ public:
   void setMaxGridSize(double maxSize)
   { if (maxSize >= _coordGridSize) _maxGridSize = maxSize; }
 
-  bool isError() { return _fatalError; }
+  bool isError() const { return _fatalError; }
 
 protected:
   /**
@@ -123,7 +123,7 @@ protected:
   /**
    * @brief _sleep Sleep the current thread
    */
-  void _sleep();
+  void _sleep() const;
   /**
    * @brief writeDebugMap Write out the reponse from the API to a file for
    *  debugging purposes

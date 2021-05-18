@@ -48,7 +48,7 @@ public:
   CalculateMapBoundsVisitor() = default;
   ~CalculateMapBoundsVisitor() = default;
 
-  OGREnvelope getBounds() { return _envelope; }
+  OGREnvelope getBounds() const { return _envelope; }
 
   // Note: should only visit nodes when calculating bounds
   void visit(const std::shared_ptr<const Element>& e) override;

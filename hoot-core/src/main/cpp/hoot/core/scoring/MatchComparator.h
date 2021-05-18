@@ -151,10 +151,10 @@ private:
 
   void _clearCache();
   void _createMatches(const std::set<QString>& uuids1, const std::set<QString>& uuids2,
-                      std::set<UuidPair>& matches, Tgs::DisjointSetMap<QString>& groups);
+                      std::set<UuidPair>& matches, Tgs::DisjointSetMap<QString>& groups) const;
 
   bool _debugLog(const QString& uuid1, const QString& uuid2, const ConstOsmMapPtr& in,
-    const ConstOsmMapPtr& conflated);
+    const ConstOsmMapPtr& conflated) const;
 
   void _findActualMatches(const ConstOsmMapPtr& in, const ConstOsmMapPtr& conflated);
   void _findExpectedMatches(const ConstOsmMapPtr& in);
@@ -162,7 +162,7 @@ private:
   /**
    * Returns true if both these uuids are marked with needs review.
    */
-  bool _isNeedsReview(const QString& uuid1, const QString& uuid2, const ConstOsmMapPtr& conflated);
+  bool _isNeedsReview(const QString& uuid1, const QString& uuid2, const ConstOsmMapPtr& conflated) const;
 
   void _tagError(const OsmMapPtr& map, const QString &uuid, const QString& value);
   void _tagWrong(const OsmMapPtr &map, const QString &uuid);

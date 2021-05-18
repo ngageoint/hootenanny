@@ -314,7 +314,7 @@ vector<WayPtr> DuplicateWayRemover::_splitWay(WayPtr w, int start, int length, b
   return results;
 }
 
-WayPtr DuplicateWayRemover::_getUpdatedWay(WayPtr way, const vector<long>& nodes, bool newIds)
+WayPtr DuplicateWayRemover::_getUpdatedWay(WayPtr way, const vector<long>& nodes, bool newIds) const
 {
   if (newIds)
   {

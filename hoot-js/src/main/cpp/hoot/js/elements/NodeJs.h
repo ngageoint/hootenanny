@@ -49,7 +49,7 @@ public:
   ConstElementPtr getConstElement() const override { return getConstNode(); }
   ConstNodePtr getConstNode() const { return _constNode; }
   ElementPtr getElement() override { return getNode(); }
-  NodePtr getNode() { assert(_node); return _node; }
+  NodePtr getNode() const { assert(_node); return _node; }
 
   static v8::Local<v8::Object> New(ConstNodePtr n);
   static v8::Local<v8::Object> New(NodePtr n);

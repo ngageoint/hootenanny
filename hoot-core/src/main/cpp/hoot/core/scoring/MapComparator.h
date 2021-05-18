@@ -62,7 +62,7 @@ private:
 
   void _printIdDiff(
     const std::shared_ptr<OsmMap>& map1, const std::shared_ptr<OsmMap>& map2,
-    const ElementType& elementType, const int limit = 5);
+    const ElementType& elementType, const int limit = 5) const;
 };
 
 }

@@ -85,12 +85,12 @@ private:
 
   QString _elementCriterion;
 
-  OsmMapPtr _getFilteredMap(const ConstOsmMapPtr& map);
+  OsmMapPtr _getFilteredMap(const ConstOsmMapPtr& map) const;
 
-  std::vector<double> _getTiePointDistances(OsmMapPtr& map);
+  std::vector<double> _getTiePointDistances(OsmMapPtr& map) const;
 
   void _calculateSearchRadius(const std::vector<double>& tiePointDistances);
-  double _calculateStandardDeviation(const std::vector<double>& samples);
+  double _calculateStandardDeviation(const std::vector<double>& samples) const;
 };
 
 }

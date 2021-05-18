@@ -101,7 +101,7 @@ private:
    */
   bool _dividerSandwich(const std::shared_ptr<Way>& w);
 
-  bool _hasDividerConnected(long nodeId, long excludedWayId);
+  bool _hasDividerConnected(long nodeId, long excludedWayId) const;
 };
 
 }

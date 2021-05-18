@@ -117,7 +117,7 @@ int BoxInternalData::getDimensions() const
   return _dimensions;
 }
 
-void BoxInternalData::setBounds(int d, double lower, double upper) 
+void BoxInternalData::setBounds(int d, double lower, double upper) const
 {
   double* v = (double*)_data;
   v[d * 2] = lower;

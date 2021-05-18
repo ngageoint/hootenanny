@@ -177,7 +177,7 @@ void CalculateStatsOp::_readGenericStatsConfiguration()
 
 shared_ptr<MatchCreator> CalculateStatsOp::getMatchCreator(
   const vector<shared_ptr<MatchCreator>>& matchCreators, const QString& matchCreatorName,
-  CreatorDescription::BaseFeatureType& featureType)
+  CreatorDescription::BaseFeatureType& featureType) const
 {
   for (vector<shared_ptr<MatchCreator>>::const_iterator matchIt = matchCreators.begin();
        matchIt != matchCreators.end(); ++matchIt)
@@ -897,7 +897,7 @@ long CalculateStatsOp::indexOfSingleStat(const QString& n) const
 }
 
 ConstElementVisitorPtr CalculateStatsOp::_getElementVisitorForFeatureType(
-  const CreatorDescription::BaseFeatureType& featureType)
+  const CreatorDescription::BaseFeatureType& featureType) const
 {
   if (featureType == CreatorDescription::PoiPolygonPOI ||
       featureType == CreatorDescription::Polygon)

@@ -42,8 +42,8 @@ namespace hoot
 struct ElementOrder
 {
 public:
-  bool operator()(const ConstElementPtr& e1, const ConstElementPtr& e2)
-  {
+  bool operator()(const ConstElementPtr& e1, const ConstElementPtr& e2) const
+  { 
     if (e1->getStatus().getInput() < e2->getStatus().getInput())
     {
       return true;
@@ -64,7 +64,7 @@ MultiaryPoiMergeCache::MultiaryPoiMergeCache(const ConstOsmMapPtr& map,
 {
 }
 
-MultiaryClusterPtr MultiaryPoiMergeCache::merge(const MultiaryClusterPtr& c1, const MultiaryClusterPtr& c2)
+MultiaryClusterPtr MultiaryPoiMergeCache::merge(const MultiaryClusterPtr& c1, const MultiaryClusterPtr& c2) const
 {
   MultiaryClusterPtr result(new MultiaryCluster);
 

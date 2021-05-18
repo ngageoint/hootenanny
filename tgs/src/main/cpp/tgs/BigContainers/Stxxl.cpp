@@ -56,11 +56,11 @@ Stxxl& Stxxl::getInstance()
   return instance;
 }
 
-void Stxxl::_init()
+void Stxxl::_init() const
 {
 }
 
-QString Stxxl::_removeComments(QString s)
+QString Stxxl::_removeComments(QString s) const
 {
   QStringList l = s.split("\n");
   QStringList result;

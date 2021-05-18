@@ -52,7 +52,7 @@ private:
 
   int _indent;
 
-  std::string _indentStr(int i);
+  std::string _indentStr(int i) const;
 };
 
 }

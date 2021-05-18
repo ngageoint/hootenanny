@@ -354,7 +354,7 @@ std::set<long> BuildingPartMergeOp::_calculateNeighbors(const ConstWayPtr& way, 
   return neighborIds;
 }
 
-bool BuildingPartMergeOp::_compareTags(Tags t1, Tags t2)
+bool BuildingPartMergeOp::_compareTags(Tags t1, Tags t2) const
 {
   // remove all the building tags that are building:part=yes specific.
   const QSet<QString> buildingPartTagNames =

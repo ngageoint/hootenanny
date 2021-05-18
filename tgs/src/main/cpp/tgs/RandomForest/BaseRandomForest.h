@@ -170,7 +170,7 @@ namespace Tgs
     /**
     *  @return true if the forest has been trained
     */
-    bool isTrained(){return _forestCreated;}
+    bool isTrained() const {return _forestCreated;}
 
     /**
      * @brief replaceMissingTrainingValues

@@ -89,7 +89,7 @@ void DuplicateElementMarker::apply(OsmMapPtr& map)
   _numProcessed = map->size();
 }
 
-QString DuplicateElementMarker::_getUuidVal(const QString& newUuid, const ConstElementPtr& element)
+QString DuplicateElementMarker::_getUuidVal(const QString& newUuid, const ConstElementPtr& element) const
 {
   QString uuidVal;
   QString existingUuid = element->getTag(MetadataTags::HootDuplicate()).trimmed();

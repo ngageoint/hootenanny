@@ -647,7 +647,7 @@ void XmlChangeset::moveOrRemoveNode(const ChangesetInfoPtr& source, const Change
   }
 }
 
-bool XmlChangeset::moveNode(const ChangesetInfoPtr& source, const ChangesetInfoPtr& destination, ChangesetType type, ChangesetNode* node, bool /*failing*/)
+bool XmlChangeset::moveNode(const ChangesetInfoPtr& source, const ChangesetInfoPtr& destination, ChangesetType type, ChangesetNode* node, bool /*failing*/) const
 {
   //  Add the node to the destination and remove from the source
   destination->add(ElementType::Node, type, node->id());
@@ -1105,7 +1105,7 @@ size_t XmlChangeset::getObjectCount(ChangesetRelation* relation, ElementCountSet
   return getObjectCount(empty, relation, elements, countSent);
 }
 
-size_t XmlChangeset::getObjectCount(const ChangesetInfoPtr& /*changeset*/, ChangesetNode* node, ElementCountSet& elements, bool countSent)
+size_t XmlChangeset::getObjectCount(const ChangesetInfoPtr& /*changeset*/, ChangesetNode* node, ElementCountSet& elements, bool countSent) const
 {
   //  Cannot count NULL nodes
   if (node == nullptr)
@@ -1225,7 +1225,7 @@ size_t XmlChangeset::getObjectCount(const ChangesetInfoPtr& changeset, Changeset
   return count;
 }
 
-bool XmlChangeset::isSent(ChangesetElement* element)
+bool XmlChangeset::isSent(ChangesetElement* element) const
 {
   if (element == nullptr)
     return false;
@@ -1236,7 +1236,7 @@ bool XmlChangeset::isSent(ChangesetElement* element)
            element->getStatus() == ChangesetElement::ElementStatus::Finalized;
 }
 
-bool XmlChangeset::canSend(ChangesetNode* node)
+bool XmlChangeset::canSend(ChangesetNode* node) const
 {
   //  Able to send means Available
   if (node == nullptr)
@@ -1718,7 +1718,7 @@ void XmlChangeset::updateLastElement(LastElementInfo& last)
   }
 }
 
-bool XmlChangeset::fixElement(ChangesetTypeMap& map, long id, long version, QMap<QString, QString> tags)
+bool XmlChangeset::fixElement(ChangesetTypeMap& map, long id, long version, QMap<QString, QString> tags) const
 {
   bool success = false;
   //  Negative IDs should never be fixed
@@ -2189,7 +2189,7 @@ void XmlChangeset::failRemainingElements(const ChangesetElementMap& elements)
   }
 }
 
-QString XmlChangeset::getRemainingFilename()
+QString XmlChangeset::getRemainingFilename() const
 {
   //  Replace error with remaining in the error pathname
   QString pathname = _errorPathname;
@@ -2261,7 +2261,7 @@ void XmlChangeset::clearCleanupElements()
   _cleanup.reset();
 }
 
-void XmlChangeset::insertElement(const ChangesetElementPtr& element, ChangesetType type, ChangesetTypeMap& elementMap, ChangesetElementMap& all)
+void XmlChangeset::insertElement(const ChangesetElementPtr& element, ChangesetType type, ChangesetTypeMap& elementMap, ChangesetElementMap& all) const
 {
   if (type == ChangesetType::TypeDelete && elementMap[ChangesetType::TypeModify].find(element->id()) != elementMap[ChangesetType::TypeModify].end())
   {
@@ -2641,7 +2641,7 @@ size_t ChangesetInfo::size()
   return s;
 }
 
-bool ChangesetInfo::getAttemptedResolveChangesetIssues()
+bool ChangesetInfo::getAttemptedResolveChangesetIssues() const
 {
   return _attemptedResolveChangesetIssues;
 }
@@ -2651,7 +2651,7 @@ void ChangesetInfo::setAttemptedResolveChangesetIssues(bool attempted)
   _attemptedResolveChangesetIssues = attempted;
 }
 
-bool ChangesetInfo::canRetryFailure()
+bool ChangesetInfo::canRetryFailure() const
 {
   return _numFailureRetries < MAX_FAILURE_RETRIES;
 }
@@ -2664,7 +2664,7 @@ void ChangesetInfo::retryFailure()
   _attemptedResolveChangesetIssues = true;
 }
 
-bool ChangesetInfo::canRetryVersion()
+bool ChangesetInfo::canRetryVersion() const
 {
   return _numVersionRetries < MAX_VERSION_RETRIES;
 }

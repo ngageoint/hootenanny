@@ -43,7 +43,7 @@ public:
 
   static void Init(v8::Local<v8::Object> target);
 
-  ElementCriterionPtr getCriterion() { return _c; }
+  ElementCriterionPtr getCriterion() const { return _c; }
 
   virtual ~ElementCriterionJs() = default;
 

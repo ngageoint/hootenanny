@@ -72,7 +72,7 @@ private:
 
   void _addExtraNames(Tags& t, const QStringList& extraNames);
 
-  int _getNextNameId(const Tags& t, int lastId);
+  int _getNextNameId(const Tags& t, int lastId) const;
 
   /**
    * Given a name list greater than a certain character size, split the names up so that the result
@@ -81,7 +81,7 @@ private:
    * If a name is greater than the character max size, it is cropped down to the max size minus
    * three plus "..." at the end.
    */
-  QStringList _splitNames(const QString& v, QStringList& extras);
+  QStringList _splitNames(const QString& v, QStringList& extras) const;
 };
 
 }

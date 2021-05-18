@@ -82,7 +82,7 @@ public:
    * Gets flag indicating the writer is writing a debug map so that extra debugging metadata can
    * be included in each implementation of the output formats
    */
-  bool getIsDebugMap() { return _debug; }
+  bool getIsDebugMap() const { return _debug; }
 
 private:
 

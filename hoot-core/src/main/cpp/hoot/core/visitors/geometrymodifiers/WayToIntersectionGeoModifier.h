@@ -69,7 +69,7 @@ private:
 
   void processIntersections(OsmMap* pMap, const WayPtr pWay, std::vector<IntersectionInfo>& inters);
   bool assignToAdjacentWay(OsmMap* pMap, const std::shared_ptr<NodeToWayMap>& n2w, long myWayId,
-                           const std::vector<long>& nodesToAttach);
+                           const std::vector<long>& nodesToAttach) const;
 };
 
 }

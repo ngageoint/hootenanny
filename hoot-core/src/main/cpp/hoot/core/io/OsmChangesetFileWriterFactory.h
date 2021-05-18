@@ -52,7 +52,7 @@ public:
    * @return an OsmChangesetFileWriter
    */
   std::shared_ptr<OsmChangesetFileWriter> createWriter(const QString& url,
-                                                       const QString& osmApiDbUrl = "");
+                                                       const QString& osmApiDbUrl = "") const;
 
   /**
    * Returns a Singleton instance of the factory

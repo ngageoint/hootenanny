@@ -45,7 +45,7 @@ public:
   static void Init(v8::Local<v8::Object> target);
   virtual ~StringDistanceJs() = default;
 
-  StringDistancePtr getStringDistance() { return _sd; }
+  StringDistancePtr getStringDistance() const { return _sd; }
 
 private:
 

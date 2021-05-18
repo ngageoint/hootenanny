@@ -240,7 +240,7 @@ WayPtr MetadataOp::_assignToDataset( ElementPtr pElement )
   return datasetWayWithMostNodes;
 }
 
-void MetadataOp::_removeDatasetWay(WayPtr pDataset)
+void MetadataOp::_removeDatasetWay(WayPtr pDataset) const
 {
   // store way nodes for deletion
   vector<long> nodes = pDataset->getNodeIds();

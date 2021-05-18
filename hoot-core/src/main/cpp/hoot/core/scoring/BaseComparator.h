@@ -81,7 +81,7 @@ protected:
   OGREnvelope _projectedBounds;
   Meters _sigma;
 
-  double _calculateError(const cv::Mat& image1, const cv::Mat& image2);
+  double _calculateError(const cv::Mat& image1, const cv::Mat& image2) const;
 
   geos::geom::Coordinate _findNearestPointOnFeature(
     const std::shared_ptr<OsmMap>& map, const geos::geom::Coordinate& c);
@@ -92,12 +92,12 @@ protected:
 
   void _updateBounds();
 
-  void _calculateColor(double v, double max, QRgb& c);
+  void _calculateColor(double v, double max, QRgb& c) const;
 
   /**
    * Calculates rings on 10min intervals.
    */
-  void _calculateRingColor(double v, double max, QRgb& c);
+  void _calculateRingColor(double v, double max, QRgb& c) const;
 };
 
 }

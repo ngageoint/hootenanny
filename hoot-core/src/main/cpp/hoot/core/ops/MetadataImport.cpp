@@ -1,8 +1,8 @@
 /*
  * This file is part of Hootenanny.
  *
- * Hootenanny is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
+ * Hony is free software: you can redistribute it and/or modify
+ * it underotenan the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
@@ -125,7 +125,7 @@ void MetadataImport::_importMetadataToElements()
   }
 }
 
-bool MetadataImport::_areMetadataTagsEqual(ElementPtr p1, ElementPtr p2)
+bool MetadataImport::_areMetadataTagsEqual(ElementPtr p1, ElementPtr p2) const
 {
   Tags t1 = p1->getTags();
   Tags t2 = p2->getTags();

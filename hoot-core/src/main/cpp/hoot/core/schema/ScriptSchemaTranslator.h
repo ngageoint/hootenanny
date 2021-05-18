@@ -121,7 +121,7 @@ protected:
 
   const QString& _saveMemory(const QString& s);
 
-  void strictError(const QString& s);
+  void strictError(const QString& s) const;
 
   /**
    * Wrapped by translateToOsm().

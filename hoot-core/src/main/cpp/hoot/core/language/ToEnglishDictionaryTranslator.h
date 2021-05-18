@@ -85,9 +85,9 @@ public:
    */
   QStringList toEnglishAll(const QStringList& l);
 
-  QString toTitleCase(const QString& input);
+  QString toTitleCase(const QString& input) const;
 
-  QString transliterateToLatin(const QString& input);
+  QString transliterateToLatin(const QString& input) const;
 
   QString translateStreet(const QString& input);
 

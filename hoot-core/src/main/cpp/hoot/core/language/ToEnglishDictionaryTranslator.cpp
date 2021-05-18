@@ -198,7 +198,7 @@ QStringList ToEnglishDictionaryTranslator::toEnglishAll(const QStringList& l)
   return result;
 }
 
-QString ToEnglishDictionaryTranslator::toTitleCase(const QString& input)
+QString ToEnglishDictionaryTranslator::toTitleCase(const QString& input) const
 {
   return _transform(ToEnglishTranslateDictionary::getInstance().getTitler(), input);
 }
@@ -234,7 +234,7 @@ QString ToEnglishDictionaryTranslator::translateStreet(const QString& input)
   return toTitleCase(result);
 }
 
-QString ToEnglishDictionaryTranslator::transliterateToLatin(const QString& input)
+QString ToEnglishDictionaryTranslator::transliterateToLatin(const QString& input) const
 {
   // cache incoming requests -- we sometimes get a lot of duplicates.
   QString result;
