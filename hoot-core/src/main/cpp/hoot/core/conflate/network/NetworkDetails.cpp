@@ -78,14 +78,18 @@ void NetworkDetails::setConfiguration(const Settings& conf)
   std::shared_ptr<SublineStringMatcher> primaryMatcher(
     Factory::getInstance().constructObject<SublineStringMatcher>(
       opts.getHighwaySublineStringMatcher()));
-  primaryMatcher->setConfiguration(conf);
+  Settings settings = conf;
+  settings.set("way.matcher.max.angle", ConfigOptions().getHighwayMatcherMaxAngle());
+  settings.set("way.subline.matcher", ConfigOptions().getHighwaySublineMatcher());
+  settings.set("way.matcher.heading.delta", ConfigOptions().getHighwayMatcherHeadingDelta());
+  primaryMatcher->setConfiguration(settings);
 
   // Bring in Frechet as a backup matcher for complex roads (similar approach to river
   // conflation...see details there).
   std::shared_ptr<SublineStringMatcher> secondaryMatcher(
     Factory::getInstance().constructObject<SublineStringMatcher>(
       opts.getHighwaySublineStringMatcher()));
-  Settings secondarySettings = conf;
+  Settings secondarySettings = settings;
   secondarySettings.set("way.subline.matcher", FrechetSublineMatcher::className());
   secondaryMatcher->setConfiguration(secondarySettings);
 
