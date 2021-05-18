@@ -56,6 +56,10 @@ public:
 
   static QString className() { return "hoot::MaximalSubline"; }
 
+  // hard stop at this value; This was determined empirically based on real world data...may still
+  // need some tweaking. Obviously, if it gets too high conflate jobs may get really slow.
+  static const int MAX_RECURSIONS_UPPER_LIMIT = 1e7;
+
   class MatchCriteria
   {
   public:
@@ -180,9 +184,6 @@ private:
   // exception once that limit has been reached; only used in select places in the code
   int _maxRecursions;
   int _findBestMatchesRecursionCount;
-  // hard stop at this value; This was determined empirically based on real world data...may still
-  // need some tweaking. Obviously, if it gets too high conflate jobs may get really slow.
-  static const int MAX_RECURSIONS_UPPER_LIMIT = 1e7;
 
   struct SublineScore
   {

@@ -42,9 +42,7 @@ class WaySublineMatchString;
  * general idea being that the first matcher is possibly more accurate but expensive to run on some
  * features (e.g. maximal subline matching) and the second matcher is possibly slightly less
  * accurate but less expensive to run (e.g. Frechet subline matching). So, you can run the first one
- * and then back out at a certain point in the processing to run the second. Currently, this is use
- * by River Conflation only due to potentially explosive runtimes when using maximal matching on
- * very long river features..
+ * and then back out at a certain point in the processing to run the second.
  */
 class MultipleMatcherSublineStringMatcher : public SublineStringMatcher
 {
