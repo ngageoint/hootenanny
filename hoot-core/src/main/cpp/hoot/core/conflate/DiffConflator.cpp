@@ -618,6 +618,8 @@ void DiffConflator::_removePartialSecondaryMatchElements()
 {
   std::vector<MergerPtr> relationMergers;
   _createMergers(relationMergers);
+  // We already projected the map to planar earlier, so its strange that it should need to be done
+  // again. Discovered this was needed to be run again for some input data.
   MapProjector::projectToPlanar(_map);
   _mergeFeatures(relationMergers);
 }
@@ -804,7 +806,7 @@ void DiffConflator::_calcAndStoreTagChanges()
     if (numMatchesProcessed % (_taskStatusUpdateInterval * 10) == 0)
     {
       PROGRESS_INFO(
-        "\tStored " << StringUtils::formatLargeNumber(numMatchesProcessed) << " / " <<
+        "\tStored " << StringUtils::formatLargeNumber(numMatchesProcessed) << " of " <<
             StringUtils::formatLargeNumber(_matches.size()) << " match tag changes.");
     }
   }
