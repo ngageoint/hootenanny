@@ -579,7 +579,7 @@ public class CustomScriptResource {
         try {
             if (translationId > -1) {
                 // get the display name because that's the file to delete. folder id is to get path for the file
-                Translations folderMapInfo = DbUtils.getTranslation(translationId);
+                Translations folderMapInfo = getTranslationForUser(user, translationId);
                 String translationName = folderMapInfo.getDisplayName();
 
                 // get full directory path for file being deleted
