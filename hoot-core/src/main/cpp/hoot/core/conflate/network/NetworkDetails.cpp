@@ -389,22 +389,7 @@ NetworkDetails::SublineCache NetworkDetails::_calculateSublineScore(
   LOG_VART(searchRadius);
 
   // Calculate the shared sublines.
-  WaySublineMatchString sublineMatch;
-  //QElapsedTimer timer;
-  //timer.start();
-  //try
-  //{
-    sublineMatch = _sublineMatcher->findMatch(map, w1, w2, searchRadius);
-//  }
-//  catch (const RecursiveComplexityException& e)
-//  {
-//    LOG_WARN(
-//      "NetworkDetails RecursiveComplexityException for: " << w1->getElementId() << " and " <<
-//      w2->getElementId() << ". Subline string matcher: " << _sublineMatcher->getName() <<
-//      ", subline matcher: " << _sublineMatcher->getSublineMatcherName() << ", Match took " <<
-//      StringUtils::millisecondsToDhms(timer.elapsed()));
-//    throw e;
-//  }
+  WaySublineMatchString sublineMatch = _sublineMatcher->findMatch(map, w1, w2, searchRadius);
   LOG_VART(sublineMatch);
 
   MatchClassification c;
