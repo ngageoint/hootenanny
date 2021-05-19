@@ -114,8 +114,7 @@ SublineStringMatcherPtr SublineStringMatcherFactory::_getMatcher(
   const QString& sublineStringMatcherName, const QString& sublineMatcherName,
   const double maxAngle, const double headingDelta, const int maxRecursions)
 {
-  // Create the default matcher. We're just using the default max recursions here for
-  // MaximalSubline. May need to come up with a custom value via empirical testing.
+  // Create the primary matcher. This one will always be used.
   std::shared_ptr<SublineStringMatcher> primaryMatcher(
     Factory::getInstance().constructObject<SublineStringMatcher>(sublineStringMatcherName));
   Settings settings = conf();
@@ -128,21 +127,23 @@ SublineStringMatcherPtr SublineStringMatcherFactory::_getMatcher(
   const QString secondarySublineMatcher = ConfigOptions().getSublineMatcherSecondary();
   if (sublineMatcherName != secondarySublineMatcher)
   {
-    // Bring in Frechet as a backup matcher for complex roads (similar approach to river
-    // conflation...see details there).
+    // Create a secondary, more performant matcher as a backup. This one may not end up being used.
     std::shared_ptr<SublineStringMatcher> secondaryMatcher(
       Factory::getInstance().constructObject<SublineStringMatcher>(sublineStringMatcherName));
     Settings secondarySettings = settings;
     secondarySettings.set(ConfigOptions::getWaySublineMatcherKey(), secondarySublineMatcher);
     secondaryMatcher->setConfiguration(secondarySettings);
 
-    // Wrap use of the matchers with MultipleMatcherSublineStringMatcher. Don't call setConfiguration
-    // here, as we've already set a separate configuration on each matcher passed in here.
+    // Wrap use of the two matchers with MultipleMatcherSublineStringMatcher. Don't call
+    // setConfiguration here, as we've already set a separate configuration on each of the matchers
+    // being passed in.
     return
       std::make_shared<MultipleMatcherSublineStringMatcher>(primaryMatcher, secondaryMatcher);
   }
   else
   {
+    // No point in creating a secondary matcher, if the primary matcher specified matches the
+    // default secondary matcher.
     return primaryMatcher;
   }
 }
