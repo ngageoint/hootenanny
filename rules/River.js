@@ -24,8 +24,6 @@ exports.typeThreshold = parseFloat(hoot.get("waterway.type.threshold"));
 // be used to replace exports.isMatchCandidate (see #3047). 
 exports.matchCandidateCriterion = "hoot::LinearWaterwayCriterion";
 
-//hoot.SublineStringMatcherFactory.getMatcher(type, map);
-
 // used during subline matching
 var sublineStringMatcher; // gets set up in calculateSearchRadius function
 
@@ -65,24 +63,6 @@ exports.calculateSearchRadius = function(map)
     hoot.debug("Using specified search radius for waterway conflation: " + exports.searchRadius);
   }
 
-//  var maxRecursions = -1;
-//  if (hoot.get("waterway.maximal.subline.auto.optimize") === 'true')
-//  {
-//    // We need to configure the maximal subline matcher to not have runaway recursion when
-//    // matching sublines. This is done based on the total length of all rivers in the input data.
-//    // This isn't the best place to put this logic, but there really isn't anywhere convenient in
-//    // the C++ to do it, and this is the only exported method that takes in a map and runs before
-//    // the matching.
-//    maxRecursions = hoot.RiverMaximalSublineSettingOptimizer.getFindBestMatchesMaxRecursions(map);
-//  }
-//  hoot.debug("maxRecursions: " + maxRecursions);
-//  sublineStringMatcher =
-//    new hoot.MaximalSublineStringMatcher(
-//      {
-//        "way.matcher.max.angle": hoot.get("waterway.matcher.max.angle"),
-//        "way.subline.matcher": sublineMatcherName,
-//        "maximal.subline.max.recursions": maxRecursions
-//      });
   sublineStringMatcher = hoot.SublineStringMatcherFactory.getMatcher(exports.baseFeatureType, map);
 }
 

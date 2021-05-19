@@ -886,7 +886,7 @@ vector<WaySublineMatch> MaximalSubline::_snapIntersections(const ConstOsmMapPtr&
   pairs = _discretizePointPairs(map, w1, w2, rawSublineMatches);
   LOG_VART(pairs.size());
   assert(pairs.size() > 0);
-  LOG_VART(pairs);
+  //LOG_VART(pairs);
 
   vector<int> starts(rawSublineMatches.size(), numeric_limits<int>::max());
   vector<int> ends(rawSublineMatches.size(), 0);
