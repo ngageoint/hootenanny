@@ -158,7 +158,6 @@ bool LinearDiffMerger::_findAndProcessMatch(
   WaySublineMatchString match;
   try
   {
-    //match = _sublineMatcher->findMatch(_map, way1, way2);
     match = _matchSubline(way1, way2);
   }
   catch (const NeedsReviewException& e)

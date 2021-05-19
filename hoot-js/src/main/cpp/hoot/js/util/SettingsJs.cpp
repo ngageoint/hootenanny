@@ -84,13 +84,14 @@ void SettingsJs::get(const FunctionCallbackInfo<Value>& args)
   Settings* settings = &conf();
 
   QString key = str(args[0]->ToString(context).ToLocalChecked());
-  if (settings->hasKey(key))
+  try
   {
     QString value = settings->getString(key);
     args.GetReturnValue().Set(String::NewFromUtf8(current, value.toUtf8().data()));
   }
-  else
+  catch (const IllegalArgumentException& e)
   {
+    LOG_ERROR(e.what());
     args.GetReturnValue().SetUndefined();
   }
 }

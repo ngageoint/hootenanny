@@ -433,7 +433,7 @@ void ImplicitTagRulesDatabaseDeriver::_applyFiltering(const QString& input)
   _writeCustomRules(linesWrittenCount);
 
   LOG_INFO(
-    "Wrote " << StringUtils::formatLargeNumber(linesWrittenCount) << " / " <<
+    "Wrote " << StringUtils::formatLargeNumber(linesWrittenCount) << " of " <<
      StringUtils::formatLargeNumber(linesParsedCount) << " lines to filtered file.");
 
   _filteredCountFile->close();

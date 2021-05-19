@@ -93,7 +93,7 @@ ImplicitTypeTaggerBase::~ImplicitTypeTaggerBase()
 
   LOG_INFO(
     "Added " << StringUtils::formatLargeNumber(_numTagsAdded) << " tags to " <<
-    StringUtils::formatLargeNumber(_numFeaturesModified) << " / " <<
+    StringUtils::formatLargeNumber(_numFeaturesModified) << " of " <<
     StringUtils::formatLargeNumber(_numFeaturesParsed)  << " total features.");
   LOG_INFO(
     StringUtils::formatLargeNumber(_numFeaturesInvolvedInMultipleRules) <<

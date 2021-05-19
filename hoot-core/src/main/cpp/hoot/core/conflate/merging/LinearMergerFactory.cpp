@@ -129,6 +129,7 @@ MergerPtr LinearMergerFactory::getMerger(
 
   std::shared_ptr<SublineStringMatcher> sublineMatcherWrapper =
     std::make_shared<MultipleMatcherSublineStringMatcher>(sublineMatcher1, sublineMatcher2);
+  sublineMatcherWrapper->setConfiguration(conf());
 
   std::shared_ptr<LinearMergerAbstract> merger;
   const bool isDiffConflate =

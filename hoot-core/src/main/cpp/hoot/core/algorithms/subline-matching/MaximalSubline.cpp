@@ -115,15 +115,12 @@ double MaximalSubline::ThresholdMatchCriteria::match(int index1, int index2) con
   double maxD;
 
   // Treat this as a variation of Frechet's Distance. This means that we're looking for the longest
-  // subline that is within _maxDistance of the other linestring.
-
-  // find the subline that is within _maxDistance. Ultimately we'll need to integrate a proper
-  // implementation of Frechet's distance.
+  // subline that is within _maxDistance of the other linestring. Previously, we found the
+  // maximalNearest subline with maximalNearestSubline, but that causes issues when there is a large
+  // offset between the two datasets. Ultimately we'll need to integrate a proper implementation of
+  // Frechet's distance. Note that hoot's implementation of Frechet doesn't necessarily perform as
+  // well as maximal subline matching for some inputs, so the change should be made judiciously.
   matchingSubline(ls1, ls2);
-
-  // previously I found the maximalNearest subline, but that causes issues when there is a large
-  // offset between the two datasets.
-  //maximalNearestSubline(ls1, ls2);
 
   maxD = max(ls1.p0.distance(ls2.p0), ls1.p1.distance(ls2.p1));
   double mns = min(ls1.getLength(), ls2.getLength());

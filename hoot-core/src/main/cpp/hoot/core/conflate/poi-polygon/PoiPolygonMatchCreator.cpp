@@ -163,14 +163,14 @@ void PoiPolygonMatchCreator::createMatches(const ConstOsmMapPtr& map,
     " total names processed.");
   LOG_DEBUG(
     "POI/Polygon address matches: " <<
-    StringUtils::formatLargeNumber(PoiPolygonMatch::addressMatches) << " / " <<
+    StringUtils::formatLargeNumber(PoiPolygonMatch::addressMatches) << " of " <<
     StringUtils::formatLargeNumber(PoiPolygonMatch::addressMatchCandidates) <<
     " candidate matches.  " <<
     StringUtils::formatLargeNumber(PoiPolygonMatch::addressesProcessed) <<
     " total addresses processed.");
   LOG_DEBUG(
     "POI/Polygon phone number matches: " <<
-    StringUtils::formatLargeNumber(PoiPolygonMatch::phoneNumberMatches) << " / " <<
+    StringUtils::formatLargeNumber(PoiPolygonMatch::phoneNumberMatches) << " of " <<
     StringUtils::formatLargeNumber(PoiPolygonMatch::phoneNumberMatchCandidates) <<
     " candidate matches.  " <<
     StringUtils::formatLargeNumber(PoiPolygonMatch::phoneNumbersProcesed) <<

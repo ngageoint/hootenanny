@@ -599,7 +599,7 @@ void OsmApiDbBulkInserter::_writeCombinedSqlFile()
             //care that much right now, since the changeset count is far outnumbered by the
             //size of the rest of the data
             PROGRESS_INFO(
-              "Parsed " << StringUtils::formatLargeNumber(recordCtr) << " / " <<
+              "Parsed " << StringUtils::formatLargeNumber(recordCtr) << " of " <<
               StringUtils::formatLargeNumber(
                 _getTotalRecordsWritten() - _changesetData.changesetsWritten) <<
               " SQL file lines.");

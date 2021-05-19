@@ -109,10 +109,17 @@ void LinearMergerJs::apply(const FunctionCallbackInfo<Value>& args)
     // slower (e.g. maximal subline) and the other may be slightly less accurate but much
     // quicker (Frechet). The actual one used here will be determined based how the matcher
     // performs against the input data.
-    if (matchedBy != "Waterway" && matchedBy != "Line")
+    // TODO: make this configurable
+    QStringList allowedMultipleSublineGenericMatchers;
+    allowedMultipleSublineGenericMatchers.append("Waterway");
+    allowedMultipleSublineGenericMatchers.append("Line");
+    allowedMultipleSublineGenericMatchers.append("Railway");
+    allowedMultipleSublineGenericMatchers.append("PowerLine");
+    if (!allowedMultipleSublineGenericMatchers.contains(matchedBy))
     {
       throw IllegalArgumentException(
-        "Only river or generic line merging allows passing in multiple subline matchers.");
+        "Matches matched with: " + matchedBy +
+        " cannot specify multiple subline matchers during merging.");
     }
     sublineMatcher2 = toCpp<SublineStringMatcherPtr>(args[5]);
   }

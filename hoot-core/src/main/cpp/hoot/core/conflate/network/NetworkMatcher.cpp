@@ -76,7 +76,7 @@ void NetworkMatcher::_createEdge2Index()
     if (ctr % 10 == 0)
     {
       PROGRESS_INFO(
-        "Created " << StringUtils::formatLargeNumber(ctr) << " / " <<
+        "Created " << StringUtils::formatLargeNumber(ctr) << " of " <<
         StringUtils::formatLargeNumber(em.size()) << " edge mappings.");
     }
   }

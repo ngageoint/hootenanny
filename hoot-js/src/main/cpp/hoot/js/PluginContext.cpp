@@ -94,6 +94,7 @@ Local<Value> PluginContext::call(Local<Object> obj, QString name, QList<QVariant
     throw InternalErrorException("The specified object is not a function: " + name);
 
   Local<Function> func = Local<Function>::Cast(value);
+  LOG_VART(args);
   vector<Local<Value>> jsArgs(args.size());
 
   for (int i = 0; i < args.size(); i++)

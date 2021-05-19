@@ -131,7 +131,7 @@ OsmMapPtr ChangesetTaskGridReplacer::replace(
     LOG_ERROR(
       "Entire task grid cell replacement operation partially completed with error while " <<
       "replacing task grid cell number: " << _currentTaskGridCellId << ", " <<
-      _numChangesetsDerived << " / " << taskGrid.size() <<
+      _numChangesetsDerived << " of " << taskGrid.size() <<
       " cells replaced, time elapsed: " << StringUtils::millisecondsToDhms(_opTimer.elapsed()) <<
       "; Error: " << e.getWhat());
   }
@@ -251,7 +251,7 @@ void ChangesetTaskGridReplacer::_replaceTaskGridCell(
   LOG_STATUS("Average changeset derive time: " << _averageChangesetDeriveTime << " seconds.");
 
   LOG_STATUS(
-    "Applying changeset: " << changesetNum << " / " <<
+    "Applying changeset: " << changesetNum << " of " <<
     StringUtils::formatLargeNumber(taskGridSize) << " with " <<
     StringUtils::formatLargeNumber(numChanges) << " changes for task grid cell: " <<
     taskGridCell.id << ", over bounds: " << GeometryUtils::envelopeToString(taskGridCell.bounds) <<

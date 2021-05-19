@@ -109,24 +109,24 @@ void OptionsValidator::fixMisc()
   LOG_VART(matchCreators);
   LOG_VART(mergerCreators);
 
-  //fix way subline matcher options - https://github.com/ngageoint/hootenanny-ui/issues/970
+  // fix way subline matcher options - https://github.com/ngageoint/hootenanny-ui/issues/970
   if (matchCreators.contains("hoot::NetworkMatchCreator") &&
-      ConfigOptions().getWaySublineMatcher() != "hoot::FrechetSublineMatcher" &&
-      ConfigOptions().getWaySublineMatcher() != "hoot::MaximalSublineMatcher")
+      ConfigOptions().getHighwaySublineMatcher() != "hoot::FrechetSublineMatcher" &&
+      ConfigOptions().getHighwaySublineMatcher() != "hoot::MaximalSublineMatcher")
   {
-    LOG_TRACE("Temp fixing way.subline.matcher...");
-    conf().set("way.subline.matcher", "hoot::MaximalSublineMatcher");
+    LOG_TRACE("Temp fixing highway.subline.matcher...");
+    conf().set("highway.subline.matcher", "hoot::MaximalSublineMatcher");
   }
   else if (matchCreators.contains("hoot::HighwayMatchCreator") &&
-           ConfigOptions().getWaySublineMatcher() != "hoot::FrechetSublineMatcher" &&
-           ConfigOptions().getWaySublineMatcher() != "hoot::MaximalNearestSublineMatcher")
+           ConfigOptions().getHighwaySublineMatcher() != "hoot::FrechetSublineMatcher" &&
+           ConfigOptions().getHighwaySublineMatcher() != "hoot::MaximalNearestSublineMatcher")
   {
-    LOG_TRACE("Temp fixing way.subline.matcher...");
-    conf().set("way.subline.matcher", "hoot::MaximalNearestSublineMatcher");
+    LOG_TRACE("Temp fixing highway.subline.matcher...");
+    conf().set("highway.subline.matcher", "hoot::MaximalNearestSublineMatcher");
   }
-  LOG_VART(ConfigOptions().getWaySublineMatcher());
+  LOG_VART(ConfigOptions().getHighwaySublineMatcher());
 
-  //fix highway classifier - https://github.com/ngageoint/hootenanny-ui/issues/971
+  // fix highway classifier - https://github.com/ngageoint/hootenanny-ui/issues/971
   if (matchCreators.contains("hoot::NetworkMatchCreator") &&
       ConfigOptions().getConflateMatchHighwayClassifier() != "hoot::HighwayExpertClassifier")
   {

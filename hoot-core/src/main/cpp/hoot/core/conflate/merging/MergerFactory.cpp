@@ -64,7 +64,7 @@ void MergerFactory::createMergers(
   for (size_t i = 0; i < _creators.size(); i++)
   {
     PROGRESS_DEBUG(
-      "Creating merger group " << i + 1 << " / " << _creators.size() << " for " <<
+      "Creating merger group " << i + 1 << " of " << _creators.size() << " for " <<
       StringUtils::formatLargeNumber(matches.size()) << " match(es)...");
 
     OsmMapConsumer* omc = dynamic_cast<OsmMapConsumer*>(_creators[i].get());

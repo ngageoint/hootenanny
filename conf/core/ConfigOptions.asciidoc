@@ -2728,9 +2728,9 @@ RAM usage of applications in a shared server environment.
 * Data Type: int
 * Default Value: `-1`
 
-Maximum recursive calls allowed in MaximalSubline as it looks for line matches. Too low of a number
-may degrade Unifying algorithm line matching conflate performance. Too high of a number may result
-in runaway line matching processing times. -1 indicates an internally determined limit.
+Maximum recursive calls allowed in when using maximal subline matching during conflation. A value of
+-1 indicates an internally determined limit. Setting this too low may degrade linear conflate
+performance. Setting it too high may result in runaway line matching processing times.
 
 === maximal.subline.spacing
 

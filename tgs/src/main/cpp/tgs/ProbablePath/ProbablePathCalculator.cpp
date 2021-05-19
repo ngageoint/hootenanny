@@ -237,7 +237,7 @@ namespace Tgs
             _randomizeCurrentValues();
           }
 
-          _v() << i + 1 << " / " << iterations << " (" << (i + 1) * 100 / iterations << "%)   \r";
+          _v() << i + 1 << " of " << iterations << " (" << (i + 1) * 100 / iterations << "%)   \r";
         }
       }
     }

@@ -397,7 +397,7 @@ void AbstractConflator::_createMergers(std::vector<MergerPtr>& relationMergers)
   for (size_t i = 0; i < _matchSets.size(); ++i)
   {
     PROGRESS_INFO(
-      "Converting match set " << StringUtils::formatLargeNumber(i + 1) << " / " <<
+      "Converting match set " << StringUtils::formatLargeNumber(i + 1) << " of " <<
       StringUtils::formatLargeNumber(_matchSets.size()) << " to a merger...");
 
     _mergerFactory->createMergers(_map, _matchSets[i], _mergers);

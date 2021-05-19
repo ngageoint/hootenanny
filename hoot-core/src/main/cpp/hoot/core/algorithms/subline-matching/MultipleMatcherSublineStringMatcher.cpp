@@ -69,8 +69,6 @@ _sublineMatcher2(sublineMatcher2)
   // The subline matchers have already been initialized by the conflate script by this point.
   LOG_VART(_sublineMatcher1.get());
   LOG_VART(_sublineMatcher2.get());
-
-  setConfiguration(conf());
 }
 
 void MultipleMatcherSublineStringMatcher::setConfiguration(const Settings& conf)
@@ -106,8 +104,7 @@ WaySublineMatchString MultipleMatcherSublineStringMatcher::findMatch(
   {
     LOG_TRACE(
       "Matching elements for merging: " << e1->getElementId() << ", " <<
-      e2->getElementId() << " with " << _sublineMatcher1->getSublineMatcherName() << " and " <<
-      _sublineMatcher2->getSublineMatcherName() << "...");
+      e2->getElementId() << " with " << _sublineMatcher1->getSublineMatcherName() << "...");
     try
     {
       match = _sublineMatcher1->findMatch(map, e1, e2, maxRelevantDistance);
@@ -121,7 +118,6 @@ WaySublineMatchString MultipleMatcherSublineStringMatcher::findMatch(
       LOG_TRACE(
         e.getWhat() << " Re-matching sublines for merging: " <<
         e1->getElementId() << ", " <<  e2->getElementId() << " with " <<
-        _sublineMatcher2->getSublineMatcherName() << " and " <<
         _sublineMatcher2->getSublineMatcherName() << "...");
       match = _sublineMatcher2->findMatch(map, e1, e2, maxRelevantDistance);
       _numTimesBackupMatcherUsed++;
