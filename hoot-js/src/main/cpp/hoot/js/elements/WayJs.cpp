@@ -54,15 +54,14 @@ void WayJs::Init(Local<Object> target)
   Local<Context> context = current->GetCurrentContext();
   // Prepare constructor template
   Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
-  tpl->SetClassName(String::NewFromUtf8(current, Way::className().toStdString().data()));
+  tpl->SetClassName(String::NewFromUtf8(current, Way::className().toStdString().data()).ToLocalChecked());
   tpl->InstanceTemplate()->SetInternalFieldCount(1);
   // Prototype
   ElementJs::_addBaseFunctions(tpl);
-  tpl->PrototypeTemplate()->Set(
-    String::NewFromUtf8(current, "getNodeCount"), FunctionTemplate::New(current, getNodeCount));
+  tpl->PrototypeTemplate()->Set(current, "getNodeCount", FunctionTemplate::New(current, getNodeCount));
 
   _constructor.Reset(current, tpl->GetFunction(context).ToLocalChecked());
-  target->Set(String::NewFromUtf8(current, "Way"), ToLocal(&_constructor));
+  target->Set(context, toV8("Way"), ToLocal(&_constructor));
 }
 
 Local<Object> WayJs::New(ConstWayPtr way)

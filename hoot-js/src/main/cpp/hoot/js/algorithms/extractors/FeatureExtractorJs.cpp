@@ -95,14 +95,13 @@ void FeatureExtractorJs::Init(Local<Object> target)
 
     // Prepare constructor template
     Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
-    tpl->SetClassName(String::NewFromUtf8(current, opNames[i].toStdString().data()));
+    tpl->SetClassName(String::NewFromUtf8(current, opNames[i].toStdString().data()).ToLocalChecked());
     tpl->InstanceTemplate()->SetInternalFieldCount(1);
     // Prototype
-    tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "extract"),
-        FunctionTemplate::New(current, extract));
+    tpl->PrototypeTemplate()->Set(current, "extract", FunctionTemplate::New(current, extract));
 
     Persistent<Function> constructor(current, tpl->GetFunction(context).ToLocalChecked());
-    target->Set(String::NewFromUtf8(current, n), ToLocal(&constructor));
+    target->Set(context, toV8(n), ToLocal(&constructor));
   }
 }
 

@@ -54,9 +54,9 @@ void RelationMergerJs::Init(Local<Object> exports)
   Local<Context> context = current->GetCurrentContext();
 
   Local<Object> thisObj = Object::New(current);
-  exports->Set(String::NewFromUtf8(current, "RelationMerger"), thisObj);
+  exports->Set(context, toV8("RelationMerger"), thisObj);
 
-  thisObj->Set(String::NewFromUtf8(current, "mergeRelations"),
+  thisObj->Set(context, toV8("mergeRelations"),
                FunctionTemplate::New(current, mergeRelations)->GetFunction(context).ToLocalChecked());
 }
 

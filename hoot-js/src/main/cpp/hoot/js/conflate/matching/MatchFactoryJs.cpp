@@ -41,8 +41,9 @@ void MatchFactoryJs::Init(Local<Object> exports)
 {
   Isolate* current = exports->GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
   Local<Object> schema = Object::New(current);
-  exports->Set(String::NewFromUtf8(current, "MatchFactory"), schema);
+  exports->Set(context, toV8("MatchFactory"), schema);
 }
 
 }

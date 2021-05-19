@@ -85,7 +85,7 @@ bool JsFunctionCriterion::isSatisfied(const ConstElementPtr& e) const
   }
   else
   {
-    result = maybe_funcResult.ToLocalChecked()->BooleanValue(context).ToChecked();
+    result = maybe_funcResult.ToLocalChecked()->BooleanValue(current);
   }
 
   return result;

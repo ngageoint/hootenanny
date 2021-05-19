@@ -74,17 +74,15 @@ void NodeJs::Init(Local<Object> target)
   Local<Context> context = current->GetCurrentContext();
   // Prepare constructor template
   Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
-  tpl->SetClassName(String::NewFromUtf8(current, Node::className().toStdString().data()));
+  tpl->SetClassName(String::NewFromUtf8(current, Node::className().toStdString().data()).ToLocalChecked());
   tpl->InstanceTemplate()->SetInternalFieldCount(1);
   // Prototype
-  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getX"),
-      FunctionTemplate::New(current, getX));
-  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getY"),
-      FunctionTemplate::New(current, getY));
+  tpl->PrototypeTemplate()->Set(current, "getX", FunctionTemplate::New(current, getX));
+  tpl->PrototypeTemplate()->Set(current, "getY", FunctionTemplate::New(current, getY));
   ElementJs::_addBaseFunctions(tpl);
 
   _constructor.Reset(current, tpl->GetFunction(context).ToLocalChecked());
-  target->Set(String::NewFromUtf8(current, "Node"), ToLocal(&_constructor));
+  target->Set(context, toV8("Node"), ToLocal(&_constructor));
 }
 
 Local<Object> NodeJs::New(ConstNodePtr node)

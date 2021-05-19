@@ -53,13 +53,13 @@ void MapIoJs::Init(Local<Object> exports)
   Isolate* current = exports->GetIsolate();
   HandleScope scope(current);
   Local<Context> context = current->GetCurrentContext();
-  exports->Set(String::NewFromUtf8(current, "loadMap"),
+  exports->Set(context, toV8("loadMap"),
                FunctionTemplate::New(current, loadMap)->GetFunction(context).ToLocalChecked());
-  exports->Set(String::NewFromUtf8(current, "loadMapFromString"),
+  exports->Set(context, toV8("loadMapFromString"),
                FunctionTemplate::New(current, loadMapFromString)->GetFunction(context).ToLocalChecked());
-  exports->Set(String::NewFromUtf8(current, "loadMapFromStringPreserveIdAndStatus"),
+  exports->Set(context, toV8("loadMapFromStringPreserveIdAndStatus"),
                FunctionTemplate::New(current, loadMapFromStringPreserveIdAndStatus)->GetFunction(context).ToLocalChecked());
-  exports->Set(String::NewFromUtf8(current, "saveMap"),
+  exports->Set(context, toV8("saveMap"),
                FunctionTemplate::New(current, saveMap)->GetFunction(context).ToLocalChecked());
 }
 
@@ -79,7 +79,7 @@ void MapIoJs::loadMap(const FunctionCallbackInfo<Value>& args)
     bool useFileId = true;
     if (args.Length() >= 3)
     {
-      useFileId = args[2]->ToBoolean(context).ToLocalChecked()->Value();
+      useFileId = args[2]->BooleanValue(current);
     }
 
     Status status = Status::Invalid;

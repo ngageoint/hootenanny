@@ -51,10 +51,13 @@ private:
 
 inline v8::Local<v8::Value> toV8(const CreatorDescription& d)
 {
+  v8::Isolate* current = v8::Isolate::GetCurrent();
+  v8::HandleScope scope(current);
+  v8::Local<v8::Context> context = current->GetCurrentContext();
   v8::Local<v8::Object> result = v8::Object::New(v8::Isolate::GetCurrent());
-  result->Set(toV8("className"), toV8(d.getClassName()));
-  result->Set(toV8("description"), toV8(d.getDescription()));
-  result->Set(toV8("experimental"), toV8(d.getExperimental()));
+  result->Set(context, toV8("className"), toV8(d.getClassName()));
+  result->Set(context, toV8("description"), toV8(d.getDescription()));
+  result->Set(context, toV8("experimental"), toV8(d.getExperimental()));
   return result;
 }
 

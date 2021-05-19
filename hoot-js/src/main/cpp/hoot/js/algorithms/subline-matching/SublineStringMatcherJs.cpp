@@ -93,7 +93,7 @@ void SublineStringMatcherJs::extractMatchingSublines(const FunctionCallbackInfo<
       // Kind of kludgy, but not sure if exceptions can be sent back to the js conflate scripts.
       LOG_TRACE(e.getWhat());
       const QString msg = "RecursiveComplexityException: " + e.getWhat();
-      args.GetReturnValue().Set(String::NewFromUtf8(current, msg.toUtf8().data()));
+      args.GetReturnValue().Set(toV8(msg));
       return;
     }
 
@@ -144,9 +144,9 @@ void SublineStringMatcherJs::extractMatchingSublines(const FunctionCallbackInfo<
     {
       LOG_TRACE("match");
       Local<Object> obj = Object::New(current);
-      obj->Set(String::NewFromUtf8(current, "map"), OsmMapJs::create(copiedMap));
-      obj->Set(String::NewFromUtf8(current, "match1"), ElementJs::New(match1));
-      obj->Set(String::NewFromUtf8(current, "match2"), ElementJs::New(match2));
+      obj->Set(context, toV8("map"), OsmMapJs::create(copiedMap));
+      obj->Set(context, toV8("match1"), ElementJs::New(match1));
+      obj->Set(context, toV8("match2"), ElementJs::New(match2));
       result = obj;
     }
     args.GetReturnValue().Set(result);
@@ -172,14 +172,14 @@ void SublineStringMatcherJs::Init(Local<Object> target)
 
     // Prepare constructor template
     Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
-    tpl->SetClassName(String::NewFromUtf8(current, opNames[i].toStdString().data()));
+    tpl->SetClassName(String::NewFromUtf8(current, opNames[i].toStdString().data()).ToLocalChecked());
     tpl->InstanceTemplate()->SetInternalFieldCount(1);
     // Prototype
-    tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "extractMatchingSublines"),
+    tpl->PrototypeTemplate()->Set(current, "extractMatchingSublines",
         FunctionTemplate::New(current, extractMatchingSublines));
 
     Persistent<Function> constructor(current, tpl->GetFunction(context).ToLocalChecked());
-    target->Set(String::NewFromUtf8(current, n), ToLocal(&constructor));
+    target->Set(context, toV8(n), ToLocal(&constructor));
   }
 }
 

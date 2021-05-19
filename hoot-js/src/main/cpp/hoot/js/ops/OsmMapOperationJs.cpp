@@ -67,19 +67,17 @@ void OsmMapOperationJs::Init(Local<Object> target)
     const char* n = utf8.data();
     // Prepare constructor template
     Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
-    tpl->SetClassName(String::NewFromUtf8(current, opNames[i].toStdString().data()));
+    tpl->SetClassName(String::NewFromUtf8(current, opNames[i].toStdString().data()).ToLocalChecked());
     tpl->InstanceTemplate()->SetInternalFieldCount(2);
     // Prototype
-    tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "apply"),
-        FunctionTemplate::New(current, apply));
-    tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "applyAndGetResult"),
-        FunctionTemplate::New(current, applyAndGetResult));
+    tpl->PrototypeTemplate()->Set(current, "apply", FunctionTemplate::New(current, apply));
+    tpl->PrototypeTemplate()->Set(current, "applyAndGetResult", FunctionTemplate::New(current, applyAndGetResult));
     tpl->PrototypeTemplate()->Set(
       PopulateConsumersJs::baseClass(),
-      String::NewFromUtf8(current, OsmMapOperation::className().toStdString().data()));
+      String::NewFromUtf8(current, OsmMapOperation::className().toStdString().data()).ToLocalChecked());
 
     Persistent<Function> constructor(current, tpl->GetFunction(context).ToLocalChecked());
-    target->Set(String::NewFromUtf8(current, n), ToLocal(&constructor));
+    target->Set(context, toV8(n), ToLocal(&constructor));
   }
 }
 
@@ -143,7 +141,7 @@ void OsmMapOperationJs::applyAndGetResult(const FunctionCallbackInfo<Value>& arg
   }
   else if (result.type() == typeid(QString))
   {
-    args.GetReturnValue().Set(String::NewFromUtf8(current, boost::any_cast<QString>(result).toLatin1().data()));
+    args.GetReturnValue().Set(String::NewFromUtf8(current, boost::any_cast<QString>(result).toLatin1().data()).ToLocalChecked());
   }
   else
   {

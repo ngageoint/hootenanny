@@ -59,11 +59,11 @@ void AreaMergerJs::mergeAreas(OsmMapPtr map, const ElementId& mergeTargetId, Iso
   v8::Local<v8::Context> context = current->GetCurrentContext();
   script->loadScript(ConfPath::search("Area.js", "rules"), "plugin");
   v8::Local<v8::Object> global = script->getContext(current)->Global();
-  if (global->Has(context, String::NewFromUtf8(current, "plugin")).ToChecked() == false)
+  if (global->Has(context, toV8("plugin")).ToChecked() == false)
   {
     throw IllegalArgumentException("Expected the script to have exports.");
   }
-  Local<Value> pluginValue = global->Get(String::NewFromUtf8(current, "plugin"));
+  Local<Value> pluginValue = global->Get(context, toV8("plugin")).ToLocalChecked();
   Persistent<Object> plugin(current, Local<Object>::Cast(pluginValue));
   if (plugin.IsEmpty() || ToLocal(&plugin)->IsObject() == false)
   {

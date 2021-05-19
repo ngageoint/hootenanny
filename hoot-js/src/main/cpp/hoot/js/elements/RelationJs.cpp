@@ -55,15 +55,14 @@ void RelationJs::Init(Local<Object> target)
   Local<Context> context = current->GetCurrentContext();
   // Prepare constructor template
   Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
-  tpl->SetClassName(String::NewFromUtf8(current, Relation::className().toStdString().data()));
+  tpl->SetClassName(String::NewFromUtf8(current, Relation::className().toStdString().data()).ToLocalChecked());
   tpl->InstanceTemplate()->SetInternalFieldCount(1);
   // Prototype
   ElementJs::_addBaseFunctions(tpl);
-  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getType"),
-      FunctionTemplate::New(current, getType));
+  tpl->PrototypeTemplate()->Set(current, "getType", FunctionTemplate::New(current, getType));
 
   _constructor.Reset(current, tpl->GetFunction(context).ToLocalChecked());
-  target->Set(String::NewFromUtf8(current, "Relation"), ToLocal(&_constructor));
+  target->Set(context, toV8("Relation"), ToLocal(&_constructor));
 }
 
 Local<Object> RelationJs::New(ConstRelationPtr relation)
@@ -111,7 +110,7 @@ void RelationJs::getType(const FunctionCallbackInfo<Value>& args)
 
   ConstRelationPtr relation = ObjectWrap::Unwrap<RelationJs>(args.This())->getConstRelation();
 
-  args.GetReturnValue().Set(String::NewFromUtf8(current, relation->getType().toUtf8().data()));
+  args.GetReturnValue().Set(String::NewFromUtf8(current, relation->getType().toUtf8().data()).ToLocalChecked());
 }
 
 }

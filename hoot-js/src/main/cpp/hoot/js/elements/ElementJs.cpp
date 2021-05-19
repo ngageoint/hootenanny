@@ -53,29 +53,28 @@ void ElementJs::_addBaseFunctions(Local<FunctionTemplate> tpl)
 {
   Isolate* current = v8::Isolate::GetCurrent();
   HandleScope scope(current);
-  tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(),
-      String::NewFromUtf8(current, Element::className().toStdString().data()));
-  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getCircularError"),
+  tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(), toV8(Element::className()));
+  tpl->PrototypeTemplate()->Set(current, "getCircularError",
       FunctionTemplate::New(current, getCircularError));
-  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getElementId"),
+  tpl->PrototypeTemplate()->Set(current, "getElementId",
       FunctionTemplate::New(current, getElementId));
-  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getId"),
+  tpl->PrototypeTemplate()->Set(current, "getId",
       FunctionTemplate::New(current, getId));
-  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getStatusInput"),
+  tpl->PrototypeTemplate()->Set(current, "getStatusInput",
       FunctionTemplate::New(current, getStatusString));
-  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getStatusString"),
+  tpl->PrototypeTemplate()->Set(current, "getStatusString",
       FunctionTemplate::New(current, getStatusString));
-  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getTags"),
+  tpl->PrototypeTemplate()->Set(current, "getTags",
       FunctionTemplate::New(current, getTags));
-  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "setStatusString"),
+  tpl->PrototypeTemplate()->Set(current, "setStatusString",
       FunctionTemplate::New(current, setStatusString));
-  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "setTags"),
+  tpl->PrototypeTemplate()->Set(current, "setTags",
       FunctionTemplate::New(current, setTags));
-  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "setTag"),
+  tpl->PrototypeTemplate()->Set(current, "setTag",
       FunctionTemplate::New(current, setTag));
-  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "toJSON"),
+  tpl->PrototypeTemplate()->Set(current, "toJSON",
       FunctionTemplate::New(current, toString));
-  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "toString"),
+  tpl->PrototypeTemplate()->Set(current, "toString",
       FunctionTemplate::New(current, toString));
 }
 
@@ -275,7 +274,7 @@ void ElementJs::toString(const FunctionCallbackInfo<Value>& args)
 
   ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args.This())->getConstElement();
 
-  args.GetReturnValue().Set(String::NewFromUtf8(current, e->toString().toUtf8().data()));
+  args.GetReturnValue().Set(String::NewFromUtf8(current, e->toString().toUtf8().data()).ToLocalChecked());
 }
 
 }

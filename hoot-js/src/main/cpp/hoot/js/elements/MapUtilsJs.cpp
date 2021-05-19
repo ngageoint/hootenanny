@@ -49,11 +49,11 @@ void MapUtilsJs::Init(Local<Object> exports)
   HandleScope scope(current);
   Local<Context> context = current->GetCurrentContext();
   Local<Object> obj = Object::New(current);
-  exports->Set(String::NewFromUtf8(current, "MapUtils"), obj);
+  exports->Set(context, toV8("MapUtils"), obj);
 
-  obj->Set(String::NewFromUtf8(current, "getFirstElementWithTag"),
+  obj->Set(context, toV8("getFirstElementWithTag"),
            FunctionTemplate::New(current, getFirstElementWithTag)->GetFunction(context).ToLocalChecked());
-  obj->Set(String::NewFromUtf8(current, "getFirstElementWithNote"),
+  obj->Set(context, toV8("getFirstElementWithNote"),
            FunctionTemplate::New(current, getFirstElementWithNote)->GetFunction(context).ToLocalChecked());
 }
 

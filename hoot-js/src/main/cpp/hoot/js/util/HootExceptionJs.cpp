@@ -72,13 +72,12 @@ void HootExceptionJs::Init(Local<Object> target)
     tpl->SetClassName(Local<String>::Cast(toV8(opNames[i])));
     tpl->InstanceTemplate()->SetInternalFieldCount(2);
     // Prototype
-    tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "toString"),
-        FunctionTemplate::New(current, toString));
+    tpl->PrototypeTemplate()->Set(current, "toString", FunctionTemplate::New(current, toString));
     tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(),
                                   toV8(HootException::className()));
 
     _constructor.Reset(current, tpl->GetFunction(context).ToLocalChecked());
-    target->Set(toV8(noNamespace), ToLocal(&_constructor));
+    target->Set(context, toV8(noNamespace), ToLocal(&_constructor));
   }
 }
 

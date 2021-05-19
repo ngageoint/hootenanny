@@ -58,7 +58,8 @@ PluginContext::PluginContext()
 
   // Create a new context.
   _context.Reset(current, Context::New(current));
-  ToLocal(&_context)->AllowCodeGenerationFromStrings(true);
+  Local<Context> context = ToLocal(&_context);
+  context->AllowCodeGenerationFromStrings(true);
 
   // Create a template for the global object where we set the
   // built-in global functions.
@@ -69,7 +70,7 @@ PluginContext::PluginContext()
   Context::Scope context_scope(ToLocal(&_context));
 
   Local<Object> hns = Object::New(current);
-  global->Set(String::NewFromUtf8(current, "hoot"), hns);
+  global->Set(context, toV8("hoot"), hns);
   JsRegistrar::getInstance().initAll(hns);
 
   QStringList includes = ConfigOptions().getPluginContextIncludes();
@@ -86,10 +87,10 @@ Local<Value> PluginContext::call(Local<Object> obj, QString name, QList<QVariant
   Isolate* current = obj->GetIsolate();
   EscapableHandleScope handleScope(current);
   Local<Context> context = current->GetCurrentContext();
-  if (obj->Has(context, String::NewFromUtf8(current, name.toUtf8().data())).ToChecked() == false)
+  if (obj->Has(context, toV8(name)).ToChecked() == false)
     throw InternalErrorException("Unable to find method in JS: " + name);
 
-  Local<Value> value = obj->Get(String::NewFromUtf8(current, name.toUtf8().data()));
+  Local<Value> value = obj->Get(context, toV8(name)).ToLocalChecked();
   if (value->IsFunction() == false)
     throw InternalErrorException("The specified object is not a function: " + name);
 
@@ -97,9 +98,7 @@ Local<Value> PluginContext::call(Local<Object> obj, QString name, QList<QVariant
   vector<Local<Value>> jsArgs(args.size());
 
   for (int i = 0; i < args.size(); i++)
-  {
     jsArgs[i] = toValue(args[i]);
-  }
 
   MaybeLocal<Value> result = func->Call(context, obj, args.size(), jsArgs.data());
 
@@ -133,9 +132,7 @@ Local<Object> PluginContext::loadScript(QString filename, QString loadInto)
   QFile fp(filename);
   LOG_TRACE("Loading script " << filename << "...");
   if (fp.open(QFile::ReadOnly) == false)
-  {
     throw HootException("Error opening script: " + filename);
-  }
 
   QString text = QString::fromUtf8(fp.readAll());
 
@@ -155,13 +152,13 @@ Local<Object> PluginContext::loadText(QString text, QString loadInto, QString sc
   MaybeLocal<Script> script;
 
   Local<Object> exports(Object::New(current));
-  ToLocal(&_context)->Global()->Set(String::NewFromUtf8(current, "exports"), exports);
+  ToLocal(&_context)->Global()->Set(context, toV8("exports"), exports);
 
   TryCatch try_catch(current);
 
   // Compile the source code.
   ScriptOrigin origin(toV8(scriptName));
-  script = Script::Compile(context, String::NewFromUtf8(current, text.toUtf8().data()), &origin);
+  script = Script::Compile(context, v8::String::NewFromUtf8(current, text.toUtf8().data()).ToLocalChecked());
 
   if (script.IsEmpty())
     HootExceptionJs::throwAsHootException(try_catch);
@@ -174,7 +171,7 @@ Local<Object> PluginContext::loadText(QString text, QString loadInto, QString sc
   HootExceptionJs::checkV8Exception(result.ToLocalChecked(), try_catch);
 
   if (loadInto != "")
-    ToLocal(&_context)->Global()->Set(String::NewFromUtf8(current, loadInto.toUtf8()), exports);
+    ToLocal(&_context)->Global()->Set(context, toV8(loadInto), exports);
 
   return handleScope.Escape(exports);
 }
@@ -186,24 +183,19 @@ double PluginContext::toNumber(Local<Value> v, QString key, double defaultValue)
   HandleScope handleScope(current);
   Local<Context> context = current->GetCurrentContext();
   if (v->IsObject() == false)
-  {
     throw IllegalArgumentException("Expected value to be an object.");
-  }
-  Local<Object> obj = Local<Object>::Cast(v);
 
-  Local<String> keyStr = String::NewFromUtf8(current, key.toUtf8());
+  Local<Object> obj = Local<Object>::Cast(v);
+  Local<String> keyStr = v8::String::NewFromUtf8(current, key.toUtf8().data()).ToLocalChecked();
   double result = defaultValue;
+
   if (obj->Has(context, keyStr).ToChecked() == false)
   {
     if (defaultValue == UNSPECIFIED_DEFAULT)
-    {
       throw IllegalArgumentException("Expected object to have attribute " + key);
-    }
   }
   else
-  {
-    result = obj->Get(keyStr)->NumberValue(context).ToChecked();
-  }
+    result = obj->Get(context, keyStr).ToLocalChecked()->NumberValue(context).ToChecked();
 
   return result;
 }
@@ -223,7 +215,7 @@ Local<Value> PluginContext::toValue(QVariant v) const
     result = Number::New(current, v.toDouble());
     break;
   default:
-    result = String::NewFromUtf8(current, v.toString().toUtf8().data());
+    result = toV8(v.toString());
   }
 
   return handleScope.Escape(result);

@@ -51,7 +51,7 @@ void RequireJs::Init(Local<Object> exports)
   Isolate* current = exports->GetIsolate();
   HandleScope scope(current);
   Local<Context> context = current->GetCurrentContext();
-  exports->Set(String::NewFromUtf8(current, "require"),
+  exports->Set(context, toV8("require"),
                FunctionTemplate::New(current, jsRequire)->GetFunction(context).ToLocalChecked());
 }
 
@@ -113,7 +113,7 @@ void RequireJs::jsRequire(const FunctionCallbackInfo<Value>& args)
 
     LOG_TRACE("Loading script: " << fullPath);
 
-    source = String::NewFromUtf8(current, fp.readAll().data());
+    source = String::NewFromUtf8(current, fp.readAll().data()).ToLocalChecked();
 
     TryCatch try_catch(current);
     // Compile the source code.
@@ -124,14 +124,14 @@ void RequireJs::jsRequire(const FunctionCallbackInfo<Value>& args)
 
     Local<Script> jsScript = maybeScript.ToLocalChecked();
 
-    Local<Value> oldExports = current->GetCurrentContext()->Global()->Get(String::NewFromUtf8(current, "exports"));
+    Local<Value> oldExports = context->Global()->Get(context, toV8("exports")).ToLocalChecked();
 
     Local<Object> exports(Object::New(current));
-    current->GetCurrentContext()->Global()->Set(String::NewFromUtf8(current, "exports"), exports);
+    context->Global()->Set(context, toV8("exports"), exports);
 
     MaybeLocal<Value> result = jsScript->Run(context);
 
-    current->GetCurrentContext()->Global()->Set(String::NewFromUtf8(current, "exports"), oldExports);
+    current->GetCurrentContext()->Global()->Set(context, toV8("exports"), oldExports);
 
     if (result.IsEmpty())
       HootExceptionJs::throwAsHootException(try_catch);
