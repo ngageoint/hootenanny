@@ -27,8 +27,7 @@
 #include "HighwayMatchCreator.h"
 
 // hoot
-#include <hoot/core/algorithms/subline-matching/FrechetSublineMatcher.h>
-#include <hoot/core/algorithms/subline-matching/MultipleMatcherSublineStringMatcher.h>
+#include <hoot/core/algorithms/subline-matching/SublineStringMatcherFactory.h>
 #include <hoot/core/conflate/highway/HighwayClassifier.h>
 #include <hoot/core/conflate/highway/HighwayExpertClassifier.h>
 #include <hoot/core/conflate/highway/HighwayMatch.h>
@@ -334,32 +333,8 @@ HighwayMatchCreator::HighwayMatchCreator()
   _classifier.reset(
     Factory::getInstance().constructObject<HighwayClassifier>(
       ConfigOptions().getConflateMatchHighwayClassifier()));
-
-  // Create the default matcher. We're just using the default max recursions here for
-  // MaximalSubline. May need to come up with a custom value via empirical testing.
-  std::shared_ptr<SublineStringMatcher> primaryMatcher(
-    Factory::getInstance().constructObject<SublineStringMatcher>(
-      ConfigOptions().getHighwaySublineStringMatcher()));
-  Settings settings = conf();
-  settings.set("way.matcher.max.angle", ConfigOptions().getHighwayMatcherMaxAngle());
-  settings.set("way.subline.matcher", ConfigOptions().getHighwaySublineMatcher());
-  settings.set("way.matcher.heading.delta", ConfigOptions().getHighwayMatcherHeadingDelta());
-  primaryMatcher->setConfiguration(settings);
-
-  // Bring in Frechet as a backup matcher for complex roads (similar approach to river
-  // conflation...see details there).
-  std::shared_ptr<SublineStringMatcher> secondaryMatcher(
-    Factory::getInstance().constructObject<SublineStringMatcher>(
-      ConfigOptions().getHighwaySublineStringMatcher()));
-  Settings secondarySettings = settings;
-  secondarySettings.set("way.subline.matcher", FrechetSublineMatcher::className());
-  secondaryMatcher->setConfiguration(secondarySettings);
-
-  // Wrap use of the matchers with MultipleMatcherSublineStringMatcher. Don't call setConfiguration
-  // here, as we've already set a separate configuration on each matcher passed in here.
   _sublineMatcher =
-    std::make_shared<MultipleMatcherSublineStringMatcher>(primaryMatcher, secondaryMatcher);
-
+    SublineStringMatcherFactory::getMatcher(CreatorDescription::BaseFeatureType::Highway);
   _tagAncestorDiff = std::shared_ptr<TagAncestorDifferencer>(new TagAncestorDifferencer("highway"));
 }
 

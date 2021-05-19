@@ -24,13 +24,10 @@ exports.typeThreshold = parseFloat(hoot.get("waterway.type.threshold"));
 // be used to replace exports.isMatchCandidate (see #3047). 
 exports.matchCandidateCriterion = "hoot::LinearWaterwayCriterion";
 
+//hoot.SublineStringMatcherFactory.getMatcher(type, map);
+
 // used during subline matching
-var sublineMatcherName = hoot.get("waterway.subline.matcher");
-var sublineMatcher; // default subline matcher; gets set up in calculateSearchRadius function
-var frechetSublineMatcher = // we'll switch over to this one if the default matcher runs too slowly
-  new hoot.MaximalSublineStringMatcher(
-    { "way.matcher.max.angle": hoot.get("waterway.matcher.max.angle"),
-      "way.subline.matcher": "hoot::FrechetSublineMatcher" }); 
+var sublineStringMatcher; // gets set up in calculateSearchRadius function
 
 var sampledAngleHistogramExtractor =
   new hoot.SampledAngleHistogramExtractor(
@@ -68,24 +65,25 @@ exports.calculateSearchRadius = function(map)
     hoot.debug("Using specified search radius for waterway conflation: " + exports.searchRadius);
   }
 
-  var maxRecursions = -1;
-  if (hoot.get("waterway.maximal.subline.auto.optimize") === 'true')
-  {
-    // We need to configure the maximal subline matcher to not have runaway recursion when 
-    // matching sublines. This is done based on the total length of all rivers in the input data.
-    // This isn't the best place to put this logic, but there really isn't anywhere convenient in 
-    // the C++ to do it, and this is the only exported method that takes in a map and runs before 
-    // the matching.
-    maxRecursions = hoot.RiverMaximalSublineSettingOptimizer.getFindBestMatchesMaxRecursions(map);
-  }
-  hoot.debug("maxRecursions: " + maxRecursions);
-  sublineMatcher =
-    new hoot.MaximalSublineStringMatcher(
-      {
-        "way.matcher.max.angle": hoot.get("waterway.matcher.max.angle"),
-        "way.subline.matcher": sublineMatcherName,
-        "maximal.subline.max.recursions": maxRecursions
-      });
+//  var maxRecursions = -1;
+//  if (hoot.get("waterway.maximal.subline.auto.optimize") === 'true')
+//  {
+//    // We need to configure the maximal subline matcher to not have runaway recursion when
+//    // matching sublines. This is done based on the total length of all rivers in the input data.
+//    // This isn't the best place to put this logic, but there really isn't anywhere convenient in
+//    // the C++ to do it, and this is the only exported method that takes in a map and runs before
+//    // the matching.
+//    maxRecursions = hoot.RiverMaximalSublineSettingOptimizer.getFindBestMatchesMaxRecursions(map);
+//  }
+//  hoot.debug("maxRecursions: " + maxRecursions);
+//  sublineStringMatcher =
+//    new hoot.MaximalSublineStringMatcher(
+//      {
+//        "way.matcher.max.angle": hoot.get("waterway.matcher.max.angle"),
+//        "way.subline.matcher": sublineMatcherName,
+//        "maximal.subline.max.recursions": maxRecursions
+//      });
+  sublineStringMatcher = hoot.SublineStringMatcherFactory.getMatcher(exports.baseFeatureType, map);
 }
 
 /**
@@ -143,20 +141,8 @@ function geometryMismatch(map, e1, e2)
   // Try matching with our default subline matcher, which may be more accurate, but slower for
   // complex features.
   hoot.trace("Extracting sublines with default...");
-  sublines = sublineMatcher.extractMatchingSublines(map, e1, e2);
+  sublines = sublineStringMatcher.extractMatchingSublines(map, e1, e2);
   hoot.trace(sublines);
-  if (sublines && String(sublines).includes("maximum recursion complexity"))
-  {
-    // If we receive an error message with "RecursiveComplexityException" from the matching routine, we 
-    // know our subline matcher hit the cap on the number of recursive calls we allow for it (A little 
-    // kludgy, but not sure how to handle hoot exceptions in a js script at this point). So, now we'll 
-    // try a backup matcher that may be a little less accurate but much faster. Previously tried 
-    // tweaking the configuration of MaximalSublineMatcher for performance instead of using this 
-    // approach, but it didn't increase performance.
-    hoot.trace("Extracting sublines with Frechet...");
-    sublines = frechetSublineMatcher.extractMatchingSublines(map, e1, e2);
-  }
-
   if (sublines)
   {
     var m = sublines.map;
@@ -279,7 +265,7 @@ exports.mergeSets = function(map, pairs, replaced)
   // subline matchers that could have been used and use the same internal core logic that was used
   // during matching to determine which one to use during merging. See related comment in
   // LinearMergerJs::apply.
-  return new hoot.LinearMerger().apply(sublineMatcher, map, pairs, replaced, exports.baseFeatureType, frechetSublineMatcher);
+  return new hoot.LinearMerger().apply(sublineStringMatcher, map, pairs, replaced, exports.baseFeatureType);
 };
 
 exports.getMatchFeatureDetails = function(map, e1, e2)

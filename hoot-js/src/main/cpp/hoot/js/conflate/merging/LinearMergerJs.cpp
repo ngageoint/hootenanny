@@ -95,52 +95,16 @@ void LinearMergerJs::apply(const FunctionCallbackInfo<Value>& args)
   HandleScope scope(current);
 
   SublineStringMatcherPtr sublineMatcher = toCpp<SublineStringMatcherPtr>(args[0]);
+  LOG_VART(sublineMatcher->getName());
+  LOG_VART(sublineMatcher->getSublineMatcherName());
   OsmMapPtr map = toCpp<OsmMapPtr>(args[1]);
   MergerBase::PairsSet pairs = toCpp<MergerBase::PairsSet>(args[2]);
   vector<pair<ElementId, ElementId>> replaced =
     toCpp<vector<pair<ElementId, ElementId>>>(args[3]);
   const QString matchedBy = toCpp<QString>(args[4]);
   LOG_VART(matchedBy);
-  SublineStringMatcherPtr sublineMatcher2;
-  if (args.Length() > 5)
-  {
-    // This is little unusual, but we're allowing an extra subline matcher to be passed in for
-    // certain conflation types. The general idea is that one matcher may be more accurate but
-    // slower (e.g. maximal subline) and the other may be slightly less accurate but much
-    // quicker (Frechet). The actual one used here will be determined based how the matcher
-    // performs against the input data.
-    // TODO: make this configurable
-    QStringList allowedMultipleSublineGenericMatchers;
-    allowedMultipleSublineGenericMatchers.append("Waterway");
-    allowedMultipleSublineGenericMatchers.append("Line");
-    allowedMultipleSublineGenericMatchers.append("Railway");
-    allowedMultipleSublineGenericMatchers.append("PowerLine");
-    if (!allowedMultipleSublineGenericMatchers.contains(matchedBy))
-    {
-      throw IllegalArgumentException(
-        "Matches matched with: " + matchedBy +
-        " cannot specify multiple subline matchers during merging.");
-    }
-    sublineMatcher2 = toCpp<SublineStringMatcherPtr>(args[5]);
-  }
 
-  LOG_VART(ConfigOptions().getGeometryLinearMergerDefault());
-  // Use of LinearTagOnlyMerger for geometries signifies that we're doing Attribute Conflation.
-  const bool isAttributeConflate =
-    ConfigOptions().getGeometryLinearMergerDefault() == LinearTagOnlyMerger::className();
-  // Use of LinearAverageMerger for geometries signifies that we're doing Average Conflation.
-  const bool isAverageConflate =
-    ConfigOptions().getGeometryLinearMergerDefault() == LinearAverageMerger::className();
-  MergerPtr merger;
-  if (isAttributeConflate || isAverageConflate ||
-      (matchedBy != "Waterway" && matchedBy != "Line") || !sublineMatcher2)
-  {
-    merger = LinearMergerFactory::getMerger(pairs, sublineMatcher, matchedBy);
-  }
-  else
-  {
-    merger = LinearMergerFactory::getMerger(pairs, sublineMatcher, sublineMatcher2, matchedBy);
-  }
+  MergerPtr merger = LinearMergerFactory::getMerger(pairs, sublineMatcher, matchedBy);
   LOG_VART(merger->getClassName());
   merger->apply(map, replaced);
 
