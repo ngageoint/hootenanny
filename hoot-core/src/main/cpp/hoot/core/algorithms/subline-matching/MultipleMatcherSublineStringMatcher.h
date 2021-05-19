@@ -75,7 +75,11 @@ public:
   void setMinSplitSize(Meters minSplitSize) override;
   void setHeadingDelta(Meters headingDelta) override;
   QString getSublineMatcherName() const override
-  { return _sublineMatcher1->getName(); + ";" + _sublineMatcher2->getName(); }
+  {
+    return
+      _sublineMatcher1->getName() + "," + _sublineMatcher1->getSublineMatcherName() + ";" +
+      _sublineMatcher2->getName() + "," + _sublineMatcher2->getSublineMatcherName();
+  }
 
   QString getDescription() const override
   { return "Matches lines based on the maximal subline string found"; }
