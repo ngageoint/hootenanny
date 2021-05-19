@@ -66,7 +66,7 @@ public:
       geos::geom::Coordinate(100.0, 10.0), geos::geom::Coordinate(0.0, 10.0),
       geos::geom::Coordinate::getNull()
     };
-    WayPtr w = TestUtils::createWay(map, Status::Unknown1, c, 1, "");
+    WayPtr w = TestUtils::createWay(map, c, "", Status::Unknown1, 1);
     WayLocation wl(map, w, 0, 0);
 
     HOOT_STR_EQUALS("way(-1) index: 0 fraction: 0",

@@ -27,6 +27,7 @@
 #include "AbstractConflator.h"
 
 // hoot
+#include <hoot/core/algorithms/subline-matching/MultipleMatcherSublineStringMatcher.h>
 #include <hoot/core/conflate/matching/GreedyConstrainedMatches.h>
 #include <hoot/core/conflate/matching/MatchFactory.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
@@ -335,6 +336,7 @@ void AbstractConflator::_applyMergers(const std::vector<MergerPtr>& mergers, Osm
     {
       LOG_DEBUG(msg);
     }
+    LOG_VART(merger->getImpactedElementIds());
 
     merger->apply(map, replaced);
     LOG_VART(map->size());
@@ -353,13 +355,15 @@ void AbstractConflator::_applyMergers(const std::vector<MergerPtr>& mergers, Osm
     if (ConfigOptions().getDebugMapsWrite() && ConfigOptions().getDebugMapsWriteDetailed())
     {
       OsmMapWriterFactory::writeDebugMap(
-        map, "after-merge-" + merger->getName() + "-#" + StringUtils::formatLargeNumber(i + 1));
+        map, "after-merge-" + merger->getName() + "-#" + StringUtils::formatLargeNumber(i + 1) +
+        "-" + StringUtils::setToString<ElementId>(merger->getImpactedElementIds()));
     }
   }
 
   LOG_INFO(
     "Applied " << StringUtils::formatLargeNumber(mergers.size()) << " mergers in " <<
     StringUtils::millisecondsToDhms(mergersTimer.elapsed()) << ".");
+  LOG_VARD(MultipleMatcherSublineStringMatcher::getNumTimesBackupMatcherUsed());
 }
 
 void AbstractConflator::_createMergers(std::vector<MergerPtr>& relationMergers)

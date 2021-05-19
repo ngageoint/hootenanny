@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
-    <bounds minlat="37.75900190000001" minlon="-122.338" maxlat="38.046" maxlon="-122.077"/>
+    <bounds minlat="37.76237849999999" minlon="-122.338" maxlat="38.046" maxlon="-122.077"/>
     <node visible="true" id="-2367996" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9067998042463756" lon="-122.2088336508763291"/>
     <node visible="true" id="-2367995" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9084096347628190" lon="-122.2097335225179791"/>
     <node visible="true" id="-2367994" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8617957999999888" lon="-122.1936527000000012"/>
@@ -225,19 +225,7 @@
     <node visible="true" id="-2367494" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8750781000000032" lon="-122.2707713000000069"/>
     <node visible="true" id="-2367493" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8750534999999928" lon="-122.2707146000000051"/>
     <node visible="true" id="-2367492" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8750400999999925" lon="-122.2708178000000032"/>
-    <node visible="true" id="-2367490" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8634920999999949" lon="-122.0799771999999876">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2367489" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8600214000000008" lon="-122.0790733000000046">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
     <node visible="true" id="-2367488" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8573827000000023" lon="-122.0779252999999898">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2367487" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9848117000000016" lon="-122.3367839000000004">
         <tag k="error:circular" v="15"/>
         <tag k="power" v="tower"/>
     </node>
@@ -246,54 +234,6 @@
         <tag k="power" v="tower"/>
     </node>
     <node visible="true" id="-2367485" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9849808999999894" lon="-122.3374893999999813">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2367483" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9656534999999948" lon="-122.2783359999999817">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2367482" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9646891999999951" lon="-122.2772496999999987">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2367481" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9627119999999962" lon="-122.2779927000000129">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2367479" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9603773999999987" lon="-122.2770699999999948">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2367478" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9600368999999915" lon="-122.2755438999999882">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2367477" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9593873315287880" lon="-122.2734897304845134">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2367476" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9582855306856075" lon="-122.2707968323724401">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2367472" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7630017999999907" lon="-122.2130898000000059">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2367471" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7628766999999996" lon="-122.2131729999999976">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2367470" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7614008999999982" lon="-122.2111023000000074">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2367469" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7613034000000027" lon="-122.2112311000000062">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2367467" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7600225999999921" lon="-122.2099812000000014">
         <tag k="error:circular" v="15"/>
         <tag k="power" v="tower"/>
     </node>
@@ -347,10 +287,6 @@
     <node visible="true" id="-2367385" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9952090000000027" lon="-122.2294803999999999"/>
     <node visible="true" id="-2367384" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0108500999999990" lon="-122.1996695999999787"/>
     <node visible="true" id="-2367378" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0370771397838112" lon="-122.2335537876713119"/>
-    <node visible="true" id="-2367368" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7962283000000028" lon="-122.1285030999999890">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
     <node visible="true" id="-2367367" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0441970999999839" lon="-122.1713549999999913"/>
     <node visible="true" id="-2367366" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0373020999999980" lon="-122.1310146000000145"/>
     <node visible="true" id="-2367365" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0362881000000002" lon="-122.1663769000000030"/>
@@ -373,23 +309,11 @@
         <tag k="error:circular" v="15"/>
         <tag k="power" v="tower"/>
     </node>
-    <node visible="true" id="-2367330" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8500301573388782" lon="-122.1586604854326197">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2367329" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8494228575691452" lon="-122.1598625858027702">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
     <node visible="true" id="-2367324" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8515054000000006" lon="-122.2629100999999991"/>
     <node visible="true" id="-2367323" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8511992000000035" lon="-122.2628099999999876"/>
     <node visible="true" id="-2367322" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8507931999999983" lon="-122.2626879999999971"/>
     <node visible="true" id="-2367321" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8504825999999994" lon="-122.2625869000000023"/>
     <node visible="true" id="-2367320" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8501154000000000" lon="-122.2624770999999981"/>
-    <node visible="true" id="-2367319" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0385064399270831" lon="-122.2341306871633861">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
     <node visible="true" id="-2367318" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7962587999999826" lon="-122.2820107999999948"/>
     <node visible="true" id="-2367317" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7973610000000022" lon="-122.2813189000000023"/>
     <node visible="true" id="-2367316" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7977313999999893" lon="-122.2814069999999873"/>
@@ -506,10 +430,6 @@
     <node visible="true" id="-2367223" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7961862999999951" lon="-122.2810022000000174"/>
     <node visible="true" id="-2367222" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7970517999999842" lon="-122.2815126999999791"/>
     <node visible="true" id="-2367221" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7965202000000033" lon="-122.2818510999999830"/>
-    <node visible="true" id="-2367220" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8760039999999947" lon="-122.2452935000000025">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
     <node visible="true" id="-2367218" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8476782999999912" lon="-122.2283909000000079"/>
     <node visible="true" id="-2367215" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8469410000000011" lon="-122.2278138999999868"/>
     <node visible="true" id="-2367214" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8483607000000006" lon="-122.2294329000000062"/>
@@ -534,90 +454,6 @@
         <tag k="power" v="tower"/>
     </node>
     <node visible="true" id="-2367198" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0232027999999929" lon="-122.1298800999999941"/>
-    <node visible="true" id="-2367196" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8237981999999988" lon="-122.1144426000000038">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2367195" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8085951999999921" lon="-122.1070106000000095">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2367194" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7764158000000094" lon="-122.0904019999999974">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2367193" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7873650000000012" lon="-122.0906702000000053">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2367192" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7900060999999923" lon="-122.0923250999999823">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2367191" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7620215000000030" lon="-122.0827254999999809">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2367190" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8262387999999987" lon="-122.1156952000000047">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2367189" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7963922999999937" lon="-122.0999158000000051">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2367188" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7590019000000083" lon="-122.0811108000000047">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2367187" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7981069000000005" lon="-122.1019783999999788">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2367186" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7636689999999930" lon="-122.0835971999999998">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2367185" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7678502999999992" lon="-122.0858260999999914">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2367184" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7739267999999910" lon="-122.0891332999999861">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2367183" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8043991999999989" lon="-122.1049770999999851">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2367182" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8132971999999938" lon="-122.1092015999999916">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2367181" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8012223999999932" lon="-122.1034831000000054">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2367180" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7847703999999993" lon="-122.0905790000000053">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2367179" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8172722999999849" lon="-122.1111059000000125">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2367178" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7926958999999840" lon="-122.0955304000000154">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2367177" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7784615999999858" lon="-122.0903643999999844">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2367176" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8312978999999956" lon="-122.1182754999999958">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
     <node visible="true" id="-2367173" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8051751999999937" lon="-122.2315439999999995"/>
     <node visible="true" id="-2367170" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8058328999999986" lon="-122.2302563999999876">
         <tag k="error:circular" v="15"/>
@@ -634,96 +470,12 @@
         <tag k="power" v="substation"/>
     </node>
     <node visible="true" id="-2367150" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8056344999999894" lon="-122.2310075999999981"/>
-    <node visible="true" id="-2367144" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0130872999999880" lon="-122.1800494000000157">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="pole"/>
-    </node>
-    <node visible="true" id="-2367143" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0096764999999905" lon="-122.1857411000000013">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="pole"/>
-    </node>
-    <node visible="true" id="-2367142" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0113946000000098" lon="-122.1829757000000001">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="pole"/>
-    </node>
-    <node visible="true" id="-2367138" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0121216000000004" lon="-122.1816935999999885">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="pole"/>
-    </node>
-    <node visible="true" id="-2367136" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0029489707196291" lon="-122.1994038189536980">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="pole"/>
-    </node>
-    <node visible="true" id="-2367135" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0047706709593385" lon="-122.1957211167334378">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="pole"/>
-    </node>
-    <node visible="true" id="-2367134" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0060160999999965" lon="-122.1930741999999839">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="pole"/>
-    </node>
-    <node visible="true" id="-2367133" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0083683000000008" lon="-122.1884689000000037">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="pole"/>
-    </node>
-    <node visible="true" id="-2367132" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0035998708056937" lon="-122.1980815181562150">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="pole"/>
-    </node>
-    <node visible="true" id="-2367129" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0063436999999880" lon="-122.1923795000000155">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="pole"/>
-    </node>
     <node visible="true" id="-2367124" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9161464999999893" lon="-122.3043644999999913"/>
-    <node visible="true" id="-2367123" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9196632000000022" lon="-122.2862568999999837">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
     <node visible="true" id="-2367122" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9166512000000111" lon="-122.3008414000000101">
         <tag k="error:circular" v="15"/>
         <tag k="power" v="tower"/>
     </node>
-    <node visible="true" id="-2367121" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9185311000000027" lon="-122.2914789000000013">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2367120" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9169844999999981" lon="-122.3013040999999816">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2367119" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9172238999999962" lon="-122.2988143000000036">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2367118" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9267638999999832" lon="-122.2792642999999799">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2367117" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9249040999999920" lon="-122.2801306999999866">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2367116" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9189779000000016" lon="-122.2889320000000026">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
     <node visible="true" id="-2367114" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9163094999999970" lon="-122.3041525999999948">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2367111" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9181947999999949" lon="-122.2945449000000053">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2367110" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9296961999999951" lon="-122.2779044999999911">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2367109" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9187108999999936" lon="-122.2915639999999939">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2367108" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9174203999999904" lon="-122.2988284000000050">
         <tag k="error:circular" v="15"/>
         <tag k="power" v="tower"/>
     </node>
@@ -732,66 +484,6 @@
         <tag k="power" v="tower"/>
     </node>
     <node visible="true" id="-2367106" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9162480999999971" lon="-122.3044396000000091"/>
-    <node visible="true" id="-2367104" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0365611398999945" lon="-122.2340238879299790">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2367103" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9198726999999991" lon="-122.2839407999999821">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2367101" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9206829999999826" lon="-122.2835316999999975">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2367100" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9194293999999985" lon="-122.2864004000000051">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2367099" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9169303999999912" lon="-122.3004471999999794">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2367097" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9193362999999906" lon="-122.2815937999999960">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2367094" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9224540000000019" lon="-122.2812732999999810">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2367093" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9174882999999880" lon="-122.2973433999999884">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2367091" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9187478999999925" lon="-122.2902310999999855">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2367090" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9179960000000023" lon="-122.2944752000000079">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2367089" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9191679999999849" lon="-122.2889792999999941">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2367088" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9199826999999914" lon="-122.2844276000000150">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2367087" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9177419999999827" lon="-122.2959100000000063">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2367085" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9165971999999911" lon="-122.3022615999999942">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2367084" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9196652999999841" lon="-122.2850873999999948">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
     <node visible="true" id="-2367083" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0160802999999987" lon="-122.1160770999999841"/>
     <node visible="true" id="-2367082" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0160850999999909" lon="-122.1159455999999892"/>
     <node visible="true" id="-2367081" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0151694999999918" lon="-122.1166284999999903"/>
@@ -810,30 +502,10 @@
     <node visible="true" id="-2367068" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0158365999999930" lon="-122.1165034999999790"/>
     <node visible="true" id="-2367067" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0150197999999904" lon="-122.1166285999999985"/>
     <node visible="true" id="-2367066" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0163263999999970" lon="-122.1161146999999971"/>
-    <node visible="true" id="-2367065" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9163983999999985" lon="-122.3021109999999965">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2367064" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9168136999999987" lon="-122.3010965999999939">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2367063" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9182309999999916" lon="-122.2930016999999907">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2367062" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9192046999999874" lon="-122.2876525999999870">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
     <node visible="true" id="-2367061" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0120483999999976" lon="-122.2647127999999839"/>
     <node visible="true" id="-2367060" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0118156999999854" lon="-122.2641730999999794"/>
     <node visible="true" id="-2367059" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0121870999999985" lon="-122.2639151999999996"/>
     <node visible="true" id="-2367058" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0124197999999893" lon="-122.2644549000000040"/>
-    <node visible="true" id="-2367054" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0059702999999942" lon="-122.2500597999999883">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="pole"/>
-    </node>
     <node visible="true" id="-2367052" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9935253790897391" lon="-122.1297867900641592">
         <tag k="error:circular" v="15"/>
         <tag k="power" v="tower"/>
@@ -854,76 +526,20 @@
         <tag k="error:circular" v="15"/>
         <tag k="power" v="pole"/>
     </node>
-    <node visible="true" id="-2367043" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9047769444901874" lon="-122.2089407323887542">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2367042" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0034716999999915" lon="-122.2426842999999934">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="pole"/>
-    </node>
     <node visible="true" id="-2367041" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0139818999999974" lon="-122.1160503000000119"/>
     <node visible="true" id="-2367039" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8492504999999966" lon="-122.1661730999999804">
         <tag k="error:circular" v="15"/>
         <tag k="power" v="tower"/>
     </node>
-    <node visible="true" id="-2367038" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0432222000000024" lon="-122.2562302000000045">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2367036" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0056634000000031" lon="-122.2512488999999789">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="pole"/>
-    </node>
-    <node visible="true" id="-2367035" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8601639000000034" lon="-122.1171030000000002">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
     <node visible="true" id="-2367030" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0451046000000019" lon="-122.2570560999999856"/>
-    <node visible="true" id="-2367029" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0035762999999918" lon="-122.2425046999999836">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="pole"/>
-    </node>
-    <node visible="true" id="-2367027" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0043124972609689" lon="-122.2321739799394464">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="pole"/>
-    </node>
-    <node visible="true" id="-2367026" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0412271999999874" lon="-122.2492416999999847">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2367025" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0045196000000018" lon="-122.2465236999999973">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="pole"/>
-    </node>
-    <node visible="true" id="-2367024" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0076377952879412" lon="-122.2344764979163614">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="pole"/>
-    </node>
     <node visible="true" id="-2367022" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0138936999999970" lon="-122.1156016000000051"/>
     <node visible="true" id="-2367020" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9057925613537279" lon="-122.2071670244670543"/>
-    <node visible="true" id="-2367019" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0055327000000034" lon="-122.2491966999999846">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="pole"/>
-    </node>
-    <node visible="true" id="-2367018" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0045392062609935" lon="-122.2356167040644692">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="pole"/>
-    </node>
     <node visible="true" id="-2367017" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9936660790419509" lon="-122.1296519900129880">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2367015" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0384685398927616" lon="-122.2339920871631591">
         <tag k="error:circular" v="15"/>
         <tag k="power" v="tower"/>
     </node>
     <node visible="true" id="-2367013" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8482567576176194" lon="-122.1601146861991225"/>
     <node visible="true" id="-2367011" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8514492577339468" lon="-122.1607252853128216">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2367010" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9066031723489942" lon="-122.2072136260748891">
         <tag k="error:circular" v="15"/>
         <tag k="power" v="tower"/>
     </node>
@@ -935,19 +551,11 @@
         <tag k="error:circular" v="15"/>
         <tag k="power" v="tower"/>
     </node>
-    <node visible="true" id="-2367005" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8519343570726576" lon="-122.1572717846358671">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
     <node visible="true" id="-2367004" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9040013790878163" lon="-122.2068647069801699">
         <tag k="error:circular" v="15"/>
         <tag k="power" v="tower"/>
     </node>
     <node visible="true" id="-2367003" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8473856000000026" lon="-122.1616173000000032"/>
-    <node visible="true" id="-2367001" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0046294999999859" lon="-122.2464609999999965">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="pole"/>
-    </node>
     <node visible="true" id="-2366998" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8486725580727352" lon="-122.1624921864350171"/>
     <node visible="true" id="-2366996" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9941640792258681" lon="-122.1301719896161018">
         <tag k="error:circular" v="15"/>
@@ -957,53 +565,17 @@
         <tag k="error:circular" v="15"/>
         <tag k="power" v="tower"/>
     </node>
-    <node visible="true" id="-2366993" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8612111999999925" lon="-122.1419867999999980">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366992" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8535594567282345" lon="-122.1554743838622556">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
     <node visible="true" id="-2366990" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9653096058426840" lon="-122.2052769599124673">
         <tag k="error:circular" v="15"/>
         <tag k="power" v="tower"/>
     </node>
-    <node visible="true" id="-2366989" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0042982000000080" lon="-122.2459308999999905">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="pole"/>
-    </node>
-    <node visible="true" id="-2366988" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0170794999999941" lon="-122.2344178999999968">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="pole"/>
-    </node>
-    <node visible="true" id="-2366987" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0417026999999877" lon="-122.2518776999999943">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
     <node visible="true" id="-2366985" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0443685999999985" lon="-122.2580602000000027"/>
-    <node visible="true" id="-2366984" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0060957999999971" lon="-122.2527989999999960">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="pole"/>
-    </node>
     <node visible="true" id="-2366983" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9595407327325844" lon="-122.2040636691945679">
         <tag k="error:circular" v="15"/>
         <tag k="power" v="tower"/>
     </node>
     <node visible="true" id="-2366981" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0439664000000022" lon="-122.2568208999999939"/>
-    <node visible="true" id="-2366980" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0127267999999958" lon="-122.2344456999999807">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="pole"/>
-    </node>
-    <node visible="true" id="-2366979" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0405458999999979" lon="-122.2467707999999789">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
     <node visible="true" id="-2366976" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0044318171466458" lon="-122.2321689504823468">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="pole"/>
-    </node>
-    <node visible="true" id="-2366975" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0057791074279052" lon="-122.2344870517326427">
         <tag k="error:circular" v="15"/>
         <tag k="power" v="pole"/>
     </node>
@@ -1015,10 +587,6 @@
         <tag k="error:circular" v="15"/>
         <tag k="power" v="tower"/>
     </node>
-    <node visible="true" id="-2366967" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9066049468739976" lon="-122.2073654096880801">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
     <node visible="true" id="-2366965" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8492199574874277" lon="-122.1594356857997639">
         <tag k="error:circular" v="15"/>
         <tag k="power" v="tower"/>
@@ -1027,108 +595,28 @@
         <tag k="error:circular" v="15"/>
         <tag k="power" v="tower"/>
     </node>
-    <node visible="true" id="-2366961" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8567281999999992" lon="-122.1502049999999997">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366958" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0063503999999881" lon="-122.2536917000000045">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="pole"/>
-    </node>
-    <node visible="true" id="-2366956" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0162600000000026" lon="-122.2344001999999961">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="pole"/>
-    </node>
     <node visible="true" id="-2366955" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9039232289369679" lon="-122.2068502358973490">
         <tag k="error:circular" v="15"/>
         <tag k="power" v="tower"/>
     </node>
-    <node visible="true" id="-2366950" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0431634999999986" lon="-122.2564284999999842">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366948" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0035623999999927" lon="-122.2437270000000069">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="pole"/>
-    </node>
-    <node visible="true" id="-2366947" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0406708000000009" lon="-122.2467205999999891">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
     <node visible="true" id="-2366944" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0144390999999899" lon="-122.1160347999999800"/>
-    <node visible="true" id="-2366942" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0049283041984722" lon="-122.2344975378695295">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="pole"/>
-    </node>
     <node visible="true" id="-2366938" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9056439975330264" lon="-122.2069814677528541"/>
-    <node visible="true" id="-2366937" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0111574876421656" lon="-122.2344516528917922">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="pole"/>
-    </node>
     <node visible="true" id="-2366936" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8481275576050535" lon="-122.1600488862287079"/>
-    <node visible="true" id="-2366934" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0395697000000013" lon="-122.2416781999999955">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
     <node visible="true" id="-2366929" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9406166999999925" lon="-122.2041512999999924">
         <tag k="error:circular" v="15"/>
         <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366928" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0062422999999896" lon="-122.2537370999999951">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="pole"/>
-    </node>
-    <node visible="true" id="-2366925" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0056233000000034" lon="-122.2491251999999946">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="pole"/>
     </node>
     <node visible="true" id="-2366923" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0383354398465769" lon="-122.2338056871957406">
         <tag k="error:circular" v="15"/>
         <tag k="power" v="tower"/>
     </node>
     <node visible="true" id="-2366919" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9940352792314897" lon="-122.1301876896862382"/>
-    <node visible="true" id="-2366918" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8538025567336618" lon="-122.1555028837919821">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366914" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9048269847280963" lon="-122.2096347254433653">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366913" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0057646000000062" lon="-122.2512070999999878">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="pole"/>
-    </node>
-    <node visible="true" id="-2366911" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0144795000000073" lon="-122.2344204000000190">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="pole"/>
-    </node>
-    <node visible="true" id="-2366909" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0059493999999916" lon="-122.2518678999999793">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="pole"/>
-    </node>
     <node visible="true" id="-2366905" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0447732000000016" lon="-122.2565477999999928"/>
-    <node visible="true" id="-2366904" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8592755999999895" lon="-122.1456581000000057">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366903" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0035954999999959" lon="-122.2413120999999876">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="pole"/>
-    </node>
-    <node visible="true" id="-2366902" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0418159999999830" lon="-122.2517525999999890">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
     <node visible="true" id="-2366901" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8499157999999909" lon="-122.1694851000000028">
         <tag k="error:circular" v="15"/>
         <tag k="power" v="tower"/>
     </node>
     <node visible="true" id="-2366900" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0450439000000031" lon="-122.2579286999999795"/>
-    <node visible="true" id="-2366899" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0411184000000091" lon="-122.2492912999999817">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
     <node visible="true" id="-2366898" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9058769704481122" lon="-122.2092324197040796"/>
     <node visible="true" id="-2366897" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9773568000000026" lon="-122.2156633999999968">
         <tag k="error:circular" v="15"/>
@@ -1138,81 +626,17 @@
         <tag k="error:circular" v="15"/>
         <tag k="power" v="tower"/>
     </node>
-    <node visible="true" id="-2366890" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0443491999999921" lon="-122.2560136999999969">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366889" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8573904999999939" lon="-122.1492310999999944">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366885" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0043922999999992" lon="-122.2458699000000024">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="pole"/>
-    </node>
-    <node visible="true" id="-2366882" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8521223571499945" lon="-122.1576758846399855">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
     <node visible="true" id="-2366880" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9940268791696951" lon="-122.1300131897287997">
         <tag k="error:circular" v="15"/>
         <tag k="power" v="tower"/>
     </node>
-    <node visible="true" id="-2366879" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9039138643738838" lon="-122.2056351799373033">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366872" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0038977247868175" lon="-122.2399827160393215">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="pole"/>
-    </node>
-    <node visible="true" id="-2366870" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0426029999999926" lon="-122.2550687999999894">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366869" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0401168398958731" lon="-122.2340023865046135">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
     <node visible="true" id="-2366868" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0143337000000017" lon="-122.1160670000000010"/>
-    <node visible="true" id="-2366867" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0392780410793634" lon="-122.2387846873711794">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366866" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8459099000000094" lon="-122.1317492999999956">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
     <node visible="true" id="-2366861" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0440523999999840" lon="-122.2574961999999914"/>
-    <node visible="true" id="-2366860" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0121476999999999" lon="-122.2344532999999984">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="pole"/>
-    </node>
-    <node visible="true" id="-2366859" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0399158999999969" lon="-122.2439536999999916">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366858" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8480200573825272" lon="-122.1588865860839945">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366857" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9049183838374049" lon="-122.2051231026535305">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
     <node visible="true" id="-2366855" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0010521253380489" lon="-122.2343006141948791">
         <tag k="error:circular" v="15"/>
         <tag k="power" v="tower"/>
     </node>
     <node visible="true" id="-2366854" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0142155999999929" lon="-122.1156064999999984"/>
-    <node visible="true" id="-2366851" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0050653999999994" lon="-122.2479866000000186">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="pole"/>
-    </node>
-    <node visible="true" id="-2366850" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0045675273284544" lon="-122.2369622169095464">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="pole"/>
-    </node>
     <node visible="true" id="-2366848" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8478272999999916" lon="-122.1619369000000006"/>
     <node visible="true" id="-2366844" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9941291793239060" lon="-122.1304487895761071">
         <tag k="error:circular" v="15"/>
@@ -1222,35 +646,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="power" v="tower"/>
     </node>
-    <node visible="true" id="-2366839" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0061935000000020" lon="-122.2527728000000025">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="pole"/>
-    </node>
-    <node visible="true" id="-2366837" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0060504999999935" lon="-122.2518329999999906">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="pole"/>
-    </node>
-    <node visible="true" id="-2366835" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0152914000000095" lon="-122.2344103000000075">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="pole"/>
-    </node>
-    <node visible="true" id="-2366830" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0424795999999859" lon="-122.2551375999999976">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
     <node visible="true" id="-2366829" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9966630999999992" lon="-122.2306863000000021">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366828" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0040243999999987" lon="-122.2452107999999953">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="pole"/>
-    </node>
-    <node visible="true" id="-2366827" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0181669999999912" lon="-122.2344027000000182">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="pole"/>
-    </node>
-    <node visible="true" id="-2366825" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0394359000000009" lon="-122.2417251999999905">
         <tag k="error:circular" v="15"/>
         <tag k="power" v="tower"/>
     </node>
@@ -1259,27 +655,7 @@
         <tag k="power" v="tower"/>
     </node>
     <node visible="true" id="-2366820" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0144380999999996" lon="-122.1157994000000002"/>
-    <node visible="true" id="-2366817" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0098979876409828" lon="-122.2344541526594242">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="pole"/>
-    </node>
-    <node visible="true" id="-2366816" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0394297410764395" lon="-122.2387726873091225">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366815" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8627620999999905" lon="-122.1390722000000011">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
     <node visible="true" id="-2366813" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9999633248758215" lon="-122.2390458151904085">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366811" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0067085256801818" lon="-122.2344708979598096">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="pole"/>
-    </node>
-    <node visible="true" id="-2366810" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0399943999999905" lon="-122.2436542999999887">
         <tag k="error:circular" v="15"/>
         <tag k="power" v="tower"/>
     </node>
@@ -1290,34 +666,6 @@
     </node>
     <node visible="true" id="-2366801" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8484423580439682" lon="-122.1623417864826564"/>
     <node visible="true" id="-2366798" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8484611576558052" lon="-122.1603143861669167"/>
-    <node visible="true" id="-2366794" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9046884036398808" lon="-122.2098007883429744">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366793" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0055465999999882" lon="-122.2507345999999870">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="pole"/>
-    </node>
-    <node visible="true" id="-2366791" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0135007000000016" lon="-122.2344305000000020">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="pole"/>
-    </node>
-    <node visible="true" id="-2366786" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9046810357800368" lon="-122.2058736496841931">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366784" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8498087572389110" lon="-122.1581381854206825">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366783" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0041167999999985" lon="-122.2451549999999969">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="pole"/>
-    </node>
-    <node visible="true" id="-2366782" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0085650876374643" lon="-122.2344769524194845">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="pole"/>
-    </node>
     <node visible="true" id="-2366781" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8542180000000101" lon="-122.1711259000000069">
         <tag k="error:circular" v="15"/>
         <tag k="power" v="tower"/>
@@ -1327,14 +675,6 @@
         <tag k="power" v="tower"/>
     </node>
     <node visible="true" id="-2366778" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0450412999999941" lon="-122.2572811999999800"/>
-    <node visible="true" id="-2366775" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0052379999999914" lon="-122.2480929999999830">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="pole"/>
-    </node>
-    <node visible="true" id="-2366774" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0042373875963690" lon="-122.2385645174965987">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="pole"/>
-    </node>
     <node visible="true" id="-2366773" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9059539465213007" lon="-122.2093218688061569"/>
     <node visible="true" id="-2366772" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0361011397854725" lon="-122.2335618880627806">
         <tag k="error:circular" v="15"/>
@@ -1343,14 +683,6 @@
     <node visible="true" id="-2366771" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8487289576854380" lon="-122.1604693861084456"/>
     <node visible="true" id="-2366768" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9939775792954322" lon="-122.1303681896801265"/>
     <node visible="true" id="-2366767" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8505043581368241" lon="-122.1628286859243673">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366766" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9044302899405068" lon="-122.2078780739196304">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366765" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0443248999999923" lon="-122.2562807999999990">
         <tag k="error:circular" v="15"/>
         <tag k="power" v="tower"/>
     </node>
@@ -1364,32 +696,16 @@
         <tag k="power" v="pole"/>
     </node>
     <node visible="true" id="-2366759" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0159062999999904" lon="-122.1160745999999904"/>
-    <node visible="true" id="-2366758" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0142612999999940" lon="-122.0976827999999870">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
     <node visible="true" id="-2366757" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0147718000000054" lon="-122.1158121999999793"/>
     <node visible="true" id="-2366756" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0261783999999992" lon="-122.1060686999999945">
         <tag k="error:circular" v="15"/>
         <tag k="power" v="pole"/>
-    </node>
-    <node visible="true" id="-2366755" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0279416831329797" lon="-122.1129263655576693">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="pole"/>
-    </node>
-    <node visible="true" id="-2366754" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0125369000000077" lon="-122.1098072000000059">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
     </node>
     <node visible="true" id="-2366753" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0261160828784384" lon="-122.1078821640275720">
         <tag k="error:circular" v="15"/>
         <tag k="power" v="pole"/>
     </node>
     <node visible="true" id="-2366752" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0163233000000034" lon="-122.1159808000000027"/>
-    <node visible="true" id="-2366750" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0133353000000014" lon="-122.1014811999999807">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
     <node visible="true" id="-2366749" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0153728999999956" lon="-122.1157438999999982"/>
     <node visible="true" id="-2366748" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0261951999999894" lon="-122.1050628000000131">
         <tag k="error:circular" v="15"/>
@@ -1406,139 +722,11 @@
     <node visible="true" id="-2366740" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8100393999999937" lon="-122.2718463999999869"/>
     <node visible="true" id="-2366739" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8102993999999981" lon="-122.2717808999999960"/>
     <node visible="true" id="-2366738" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8103418999999974" lon="-122.2720510999999846"/>
-    <node visible="true" id="-2366736" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8646091000000027" lon="-122.1286300000000153">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366734" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8657420999999914" lon="-122.1334078999999946">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366733" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8585464999999957" lon="-122.1138003999999881">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366732" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8651647000000011" lon="-122.1310502000000042">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366729" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8620627999999968" lon="-122.1209177000000068">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366727" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8551475000000011" lon="-122.0973185000000001">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366726" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8614032999999992" lon="-122.1196017999999839">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366724" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0138141999999917" lon="-122.1038508999999976">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
     <node visible="true" id="-2366723" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0158410000000018" lon="-122.1764629999999840">
         <tag k="error:circular" v="15"/>
         <tag k="power" v="tower"/>
     </node>
-    <node visible="true" id="-2366722" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0134312999999935" lon="-122.1099212000000023">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
     <node visible="true" id="-2366721" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0286150305799922" lon="-122.2037261893499931">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366720" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9978204999999889" lon="-122.1216590000000082">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366719" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9995792999999935" lon="-122.1190972999999929">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366718" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0040204000000017" lon="-122.1116003999999862">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366717" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0011811999999907" lon="-122.1167873999999927">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366716" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0062381999999985" lon="-122.1091645000000057">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366715" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9951220775853571" lon="-122.1255405900714663">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366714" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0033308999999875" lon="-122.1136614999999921">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366713" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0024941999999939" lon="-122.1148966999999885">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366712" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0083190999999943" lon="-122.1091909999999956">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366711" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0025209999999944" lon="-122.2075690000000066">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366709" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8760107999999889" lon="-122.2418957999999947">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366708" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8989467999999974" lon="-122.2135313999999795">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366707" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8770110999999972" lon="-122.2410107000000039">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366706" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8781437999999895" lon="-122.2399819999999977">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366705" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8769676999999945" lon="-122.2363797999999946">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366703" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8978779999999986" lon="-122.2134133999999790">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366702" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8952195000000032" lon="-122.2171148999999986">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366701" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8932869999999937" lon="-122.2203147000000030">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366700" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8904653999999894" lon="-122.2234555999999799">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366699" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8862147999999905" lon="-122.2267895999999894">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366698" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8817333000000005" lon="-122.2314003000000042">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366697" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8799867000000035" lon="-122.2327173000000045">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366696" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8777965999999964" lon="-122.2343802999999838">
         <tag k="error:circular" v="15"/>
         <tag k="power" v="tower"/>
     </node>
@@ -1571,30 +759,6 @@
     <node visible="true" id="-2366672" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0028164109806283" lon="-122.2342827413343116">
         <tag k="error:circular" v="15"/>
         <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366671" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0043290110159617" lon="-122.2326501881898793">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="pole"/>
-    </node>
-    <node visible="true" id="-2366670" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0043697449232809" lon="-122.2338533085384285">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="pole"/>
-    </node>
-    <node visible="true" id="-2366668" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0044204859584340" lon="-122.2356052332639962">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="pole"/>
-    </node>
-    <node visible="true" id="-2366667" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0044611193473614" lon="-122.2369442533555031">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="pole"/>
-    </node>
-    <node visible="true" id="-2366666" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0041225779285128" lon="-122.2385233529390121">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="pole"/>
-    </node>
-    <node visible="true" id="-2366665" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0037961247914993" lon="-122.2399339160113385">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="pole"/>
     </node>
     <node visible="true" id="-2366664" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9838033999999993" lon="-122.3303477999999984">
         <tag k="error:circular" v="15"/>
@@ -1638,59 +802,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="power" v="tower"/>
     </node>
-    <node visible="true" id="-2366618" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8523235999999912" lon="-122.1446065999999888">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366617" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8506156999999988" lon="-122.1412076999999812">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366616" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8492805999999931" lon="-122.1384869000000037">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366615" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8482164999999853" lon="-122.1363324999999946">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366614" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8450988000000024" lon="-122.1300324999999987">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366613" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8431670999999952" lon="-122.1261358000000001">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366612" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8419810999999982" lon="-122.1237804000000153">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366611" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8390245000000078" lon="-122.1222694999999874">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366610" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8351526999999948" lon="-122.1203104000000081">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366609" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8546277999999958" lon="-122.1492329000000012">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366608" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8555562000000023" lon="-122.1510781999999864">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366607" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8556781999999927" lon="-122.1513529000000204">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
     <node visible="true" id="-2366606" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8570336000000012" lon="-122.1540480000000031">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366587" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8766417514099913" lon="-122.1841779737199971">
         <tag k="error:circular" v="15"/>
         <tag k="power" v="tower"/>
     </node>
@@ -1700,38 +812,6 @@
     <node visible="true" id="-2366580" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8759502999999995" lon="-122.1867914000000042"/>
     <node visible="true" id="-2366579" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8757342999999906" lon="-122.1870428000000004"/>
     <node visible="true" id="-2366578" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8759619000000001" lon="-122.1873600999999923"/>
-    <node visible="true" id="-2366577" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8885994999999980" lon="-122.1899939000000046">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366576" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8913157999999868" lon="-122.1927661999999941">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366575" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8947836999999907" lon="-122.1962422999999944">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366574" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8958133000000004" lon="-122.1972894999999824">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366573" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8973033999999913" lon="-122.1987658000000181">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366572" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9001547000000016" lon="-122.2005166999999943">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366571" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8873869999999897" lon="-122.1893243999999896">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366568" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8888297999999963" lon="-122.1951952000000006">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
     <node visible="true" id="-2366567" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8875766999999897" lon="-122.1937274999999943">
         <tag k="error:circular" v="15"/>
         <tag k="power" v="tower"/>
@@ -1748,123 +828,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="power" v="tower"/>
     </node>
-    <node visible="true" id="-2366557" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8935510000000022" lon="-122.2008428999999978">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366556" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8917221999999967" lon="-122.1986370000000051">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366555" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8901980999999992" lon="-122.1968432000000035">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366554" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7753235999999930" lon="-122.1224035999999984">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366553" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7796518000000034" lon="-122.1248068999999816">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366552" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7841493000000028" lon="-122.1254076999999967">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366551" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7858451999999971" lon="-122.1257768000000112">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366550" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7877715999999850" lon="-122.1261887000000002">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366549" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7902270000000016" lon="-122.1267294999999820">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366548" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7922482999999971" lon="-122.1273560000000060">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366547" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7936386999999883" lon="-122.1277680000000032">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366546" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7953516000000036" lon="-122.1282635000000028">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366545" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8002770999999953" lon="-122.1297916000000043">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366544" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8020485999999920" lon="-122.1303171999999790">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366543" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8027945999999986" lon="-122.1308235999999852">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366542" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8043339999999901" lon="-122.1318364000000116">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366541" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8073721000000020" lon="-122.1338276999999835">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366540" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8089384999999965" lon="-122.1348061000000058">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366539" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8118950999999868" lon="-122.1367201999999850">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366538" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8129867999999973" lon="-122.1373981999999927">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366537" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8141801999999956" lon="-122.1381965000000065">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366536" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8157600999999985" lon="-122.1392093000000045">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366535" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8168178000000026" lon="-122.1398786999999970">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366534" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8194147000000029" lon="-122.1431488999999857">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366533" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8231164999999905" lon="-122.1477837000000051">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366532" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8242691000000022" lon="-122.1492771999999860">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366531" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8260656999999938" lon="-122.1514829999999847">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366530" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8274893999999975" lon="-122.1532768999999945">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
     <node visible="true" id="-2366529" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9930482797002327" lon="-122.1315100899635837">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366528" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9941511782394628" lon="-122.1273864902263426">
         <tag k="error:circular" v="15"/>
         <tag k="power" v="tower"/>
     </node>
@@ -2053,55 +1017,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="power" v="tower"/>
     </node>
-    <node visible="true" id="-2366417" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9023289999999946" lon="-122.2159965000000170">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366415" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9040636160157689" lon="-122.2128001518518516">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366414" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9043411555607435" lon="-122.2130492614161739">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366411" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9056502511989848" lon="-122.2106481050337408">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366408" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9016200862010919" lon="-122.2044430195836355">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366407" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8992337999999904" lon="-122.2033536999999939">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366406" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8958879999999994" lon="-122.2018516000000119">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366404" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9026213551072502" lon="-122.2020932885846065">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
     <node visible="true" id="-2366403" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9047419782194268" lon="-122.2061305068640280">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366402" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9049063972731446" lon="-122.2034464088597048">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366401" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9044145639212644" lon="-122.2057101173865021">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366398" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9046823382998568" lon="-122.2096174191602245">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366396" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9053325427972823" lon="-122.2104760322335437">
         <tag k="error:circular" v="15"/>
         <tag k="power" v="tower"/>
     </node>
@@ -2249,10 +1165,6 @@
         <tag k="error:circular" v="15"/>
         <tag k="power" v="tower"/>
     </node>
-    <node visible="true" id="-2366347" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0015195177637466" lon="-122.2332952683337624">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
     <node visible="true" id="-2366346" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0002790254098244" lon="-122.2335586138909918">
         <tag k="error:circular" v="15"/>
         <tag k="power" v="tower"/>
@@ -2262,18 +1174,6 @@
         <tag k="power" v="tower"/>
     </node>
     <node visible="true" id="-2366341" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9068633934632757" lon="-122.2085630125026512">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366300" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0024056706898108" lon="-122.1998546191922230">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366299" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0024530704976300" lon="-122.2028406211505143">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366298" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0025071703169530" lon="-122.2056476229924158">
         <tag k="error:circular" v="15"/>
         <tag k="power" v="tower"/>
     </node>
@@ -2291,139 +1191,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="power" v="tower"/>
     </node>
-    <node visible="true" id="-2366274" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9355213999999989" lon="-122.2751808000000011">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366273" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9385449999999977" lon="-122.2737809999999854">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366272" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9396900999999929" lon="-122.2732541999999825">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366271" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9416677999999905" lon="-122.2726746000000020">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366270" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9449438999999913" lon="-122.2717561999999845">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366269" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9479626999999837" lon="-122.2709408000000053">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366268" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9505616999999944" lon="-122.2702198000000067">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366267" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9555674300564263" lon="-122.2687837347410067">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366266" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9571401299199920" lon="-122.2683513341600019">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
     <node visible="true" id="-2366263" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9193430999999990" lon="-122.2815897000000120">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366262" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9186939999999950" lon="-122.2787502999999845">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366261" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9179072000000019" lon="-122.2752782000000025">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366260" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9172075999999976" lon="-122.2725372000000021">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366259" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9165710999999988" lon="-122.2701940999999977">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366258" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9160767999999990" lon="-122.2681513000000137">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366257" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9152980999999869" lon="-122.2652930999999796">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366256" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9148512000000082" lon="-122.2636966999999970">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366255" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9137406999999840" lon="-122.2594737999999808">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366254" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9133885999999976" lon="-122.2582636000000065">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366253" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9123187000000001" lon="-122.2547703000000041">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366252" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9116347000000005" lon="-122.2525043999999923">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366251" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9106054000000015" lon="-122.2491397999999805">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366250" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9100976000000003" lon="-122.2474145999999848">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366249" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9097454000000056" lon="-122.2461099999999874">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366248" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9092714000000015" lon="-122.2443333000000081">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366247" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9081336999999934" lon="-122.2400245999999981">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366246" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9077273999999917" lon="-122.2385310999999888">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366245" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9072735999999963" lon="-122.2368402999999972">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366244" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9060884999999956" lon="-122.2323340999999886">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366243" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9054993000000024" lon="-122.2300853999999930">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366242" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9041922999999912" lon="-122.2251845000000117">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366241" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9030342000000005" lon="-122.2208928999999955">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366240" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9028648999999902" lon="-122.2189101999999821">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366239" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9026345999999990" lon="-122.2161464999999936">
         <tag k="error:circular" v="15"/>
         <tag k="power" v="tower"/>
     </node>
@@ -2435,87 +1203,11 @@
         <tag k="error:circular" v="15"/>
         <tag k="power" v="tower"/>
     </node>
-    <node visible="true" id="-2366231" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7761987999999889" lon="-122.1231093000000101">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366230" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7784171999999998" lon="-122.1243623999999954">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366229" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7857841999999948" lon="-122.1259931999999822">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366228" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7959735000000023" lon="-122.1286764000000034">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366227" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8043612000000024" lon="-122.1320184999999867">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366226" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8073179000000081" lon="-122.1340097999999870">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366225" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8088029999999904" lon="-122.1349625000000003">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366224" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8118467999999837" lon="-122.1368869999999873">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366223" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8140513999999897" lon="-122.1383442999999858">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366222" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8155973000000003" lon="-122.1393398999999960">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366221" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8180112000000008" lon="-122.1417088000000035">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366220" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8273537999999974" lon="-122.1534246999999880">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366219" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8290350999999845" lon="-122.1552442999999926">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366218" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8304112999999944" lon="-122.1569523999999802">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366217" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8317738999999875" lon="-122.1586860999999971">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366216" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8333263000000102" lon="-122.1606345000000005">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366215" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8352853999999965" lon="-122.1630634999999927">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
     <node visible="true" id="-2366208" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8563640999999933" lon="-122.1516994999999923">
         <tag k="error:circular" v="15"/>
         <tag k="power" v="tower"/>
     </node>
     <node visible="true" id="-2366202" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8557474999999926" lon="-122.1522573999999963">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366201" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8540721567353984" lon="-122.1555121837106697">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366200" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8520381571090283" lon="-122.1574618846331077">
         <tag k="error:circular" v="15"/>
         <tag k="power" v="tower"/>
     </node>
@@ -2554,71 +1246,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="power" v="tower"/>
     </node>
-    <node visible="true" id="-2366172" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8476894000000001" lon="-122.1661962999999957">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
     <node visible="true" id="-2366171" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8474793000000034" lon="-122.1623682999999971">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366170" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0137075999999965" lon="-122.1163499999999971">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366169" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0132747999999978" lon="-122.1130969999999820">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366168" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0138833999999903" lon="-122.1161529999999829">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366167" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0134370999999902" lon="-122.1130890000000022">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366166" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0136037999999985" lon="-122.1097079000000036">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366165" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0104607999999971" lon="-122.1092397000000176">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366164" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0125985999999898" lon="-122.1095865999999859">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366163" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0126255999999998" lon="-122.1070974999999947">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366162" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0126661999999911" lon="-122.1045998000000026">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366161" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0151614999999978" lon="-122.0942739999999844">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366160" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0158107000000030" lon="-122.0886524999999807">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366159" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0162139999999908" lon="-122.0852308999999849">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366158" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0164935999999898" lon="-122.0829017999999877">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366157" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0168723000000028" lon="-122.0795286999999831">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366156" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0171428000000020" lon="-122.0772283999999814">
         <tag k="error:circular" v="15"/>
         <tag k="power" v="tower"/>
     </node>
@@ -2773,139 +1401,11 @@
         <tag k="error:circular" v="15"/>
         <tag k="power" v="tower"/>
     </node>
-    <node visible="true" id="-2366038" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7596731999999946" lon="-122.1137626999999810">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366037" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7612610999999987" lon="-122.1146382000000017">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366036" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7634391999999934" lon="-122.1158312000000024">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366035" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7649658999999929" lon="-122.1166981000000078">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366034" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7664110999999991" lon="-122.1174878000000064">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366033" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7710044000000025" lon="-122.1200111999999933">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366032" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7736367999999914" lon="-122.1214960999999875">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366031" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7739284999999967" lon="-122.1218650999999937">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366030" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7709365999999989" lon="-122.1202085999999980">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366029" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7663635999999983" lon="-122.1176679999999948">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366028" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7648979999999881" lon="-122.1168698000000035">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366027" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7633713000000100" lon="-122.1160200999999859">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366026" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7596324999999950" lon="-122.1139600999999857">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
     <node visible="true" id="-2366022" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8144281000000007" lon="-122.2129352000000040">
         <tag k="error:circular" v="15"/>
         <tag k="power" v="tower"/>
     </node>
     <node visible="true" id="-2366017" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8475776999999951" lon="-122.2282040999999992">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366015" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7795703999999972" lon="-122.1250147999999882">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366014" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7841221999999988" lon="-122.1256156000000033">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366013" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7876901999999930" lon="-122.1263965999999925">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366012" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7901930999999962" lon="-122.1269288000000017">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366011" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7922075999999976" lon="-122.1275554000000056">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366010" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7936047999999900" lon="-122.1279844999999824">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366009" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7953207999999847" lon="-122.1284909000000027">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366008" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8002064000000004" lon="-122.1299627999999871">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366007" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8019943999999910" lon="-122.1305336999999867">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366006" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8028420999999994" lon="-122.1310916000000049">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366005" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8127427000000083" lon="-122.1374859999999956">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366004" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8167092999999994" lon="-122.1400780000000026">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366003" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8192925999999900" lon="-122.1432881000000066">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366002" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8241674000000003" lon="-122.1494164000000069">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366001" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8289266999999967" lon="-122.1554074000000014">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2366000" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8302892999999898" lon="-122.1571068999999881">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2365999" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8316518999999900" lon="-122.1588320999999837">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2365998" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8332245999999941" lon="-122.1607889999999941">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2365997" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8351497999999964" lon="-122.1632351999999884">
         <tag k="error:circular" v="15"/>
         <tag k="power" v="tower"/>
     </node>
@@ -3031,58 +1531,6 @@
     <node visible="true" id="-2365915" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.9998387255040626" lon="-122.2325873135829966">
         <tag k="error:circular" v="15"/>
         <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2365914" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8634383999999926" lon="-122.1236490999999802">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2365913" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8552237999999903" lon="-122.1071185999999926">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2365912" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8550362000000007" lon="-122.1019800999999916">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2365911" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8552453000000000" lon="-122.0922261000000049">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2365910" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8553408999999945" lon="-122.0878884999999912">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2365909" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8565788999999882" lon="-122.0818972000000002">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2365908" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8560754000000017" lon="-122.0790460999999993">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2365903" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8467107999999968" lon="-122.1703878999999944">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2365902" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8477774999999923" lon="-122.1683421000000038">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="tower"/>
-    </node>
-    <node visible="true" id="-2365899" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0035102000000009" lon="-122.2412733999999830">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="pole"/>
-    </node>
-    <node visible="true" id="-2365898" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0034595999999851" lon="-122.2437486999999976">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="pole"/>
-    </node>
-    <node visible="true" id="-2365897" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0058383000000006" lon="-122.2500364999999789">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="pole"/>
-    </node>
-    <node visible="true" id="-2365896" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0053967999999927" lon="-122.2506855000000030">
-        <tag k="error:circular" v="15"/>
-        <tag k="power" v="pole"/>
     </node>
     <node visible="true" id="-2365890" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0002122252656136" lon="-122.2350406142448520">
         <tag k="error:circular" v="15"/>

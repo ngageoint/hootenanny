@@ -117,6 +117,7 @@ void LinearMergerJs::apply(const FunctionCallbackInfo<Value>& args)
     sublineMatcher2 = toCpp<SublineStringMatcherPtr>(args[5]);
   }
 
+  LOG_VART(ConfigOptions().getGeometryLinearMergerDefault());
   // Use of LinearTagOnlyMerger for geometries signifies that we're doing Attribute Conflation.
   const bool isAttributeConflate =
     ConfigOptions().getGeometryLinearMergerDefault() == LinearTagOnlyMerger::className();
@@ -124,7 +125,8 @@ void LinearMergerJs::apply(const FunctionCallbackInfo<Value>& args)
   const bool isAverageConflate =
     ConfigOptions().getGeometryLinearMergerDefault() == LinearAverageMerger::className();
   MergerPtr merger;
-  if (isAttributeConflate || isAverageConflate || (matchedBy != "Waterway" && matchedBy != "Line"))
+  if (isAttributeConflate || isAverageConflate ||
+      (matchedBy != "Waterway" && matchedBy != "Line") || !sublineMatcher2)
   {
     merger = LinearMergerFactory::getMerger(pairs, sublineMatcher, matchedBy);
   }
@@ -132,9 +134,10 @@ void LinearMergerJs::apply(const FunctionCallbackInfo<Value>& args)
   {
     merger = LinearMergerFactory::getMerger(pairs, sublineMatcher, sublineMatcher2, matchedBy);
   }
+  LOG_VART(merger->getClassName());
   merger->apply(map, replaced);
 
-  // modify the parameter that was passed in
+  // Modify the parameter that was passed in.
   Local<Array> newArr = Local<Array>::Cast(toV8(replaced));
   Local<Array> arr = Local<Array>::Cast(args[3]);
   arr->Set(String::NewFromUtf8(current, "length"), Integer::New(current, newArr->Length()));

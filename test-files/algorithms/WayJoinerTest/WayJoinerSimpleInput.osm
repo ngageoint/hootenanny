@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="18.55212552077" minlon="-72.32746847105" maxlat="18.55425583901" maxlon="-72.32577632093999"/>
+    <node visible="true" id="-8" version="1" lat="18.5529060655500011" lon="-72.3257763209399940"/>
+    <node visible="true" id="-7" version="1" lat="18.5529060655500011" lon="-72.3274684710499969"/>
+    <node visible="true" id="-6" version="1" lat="18.5538375397499991" lon="-72.3274684710499969"/>
+    <node visible="true" id="-5" version="1" lat="18.5538375397499991" lon="-72.3257763209399940"/>
+    <node visible="true" id="-4" version="1" lat="18.5521255207700015" lon="-72.3265905546700054"/>
+    <node visible="true" id="-3" version="1" lat="18.5529060655500011" lon="-72.3265905546700054"/>
+    <node visible="true" id="-2" version="1" lat="18.5538375397499991" lon="-72.3265905546700054"/>
+    <node visible="true" id="-1" version="1" lat="18.5542558390100005" lon="-72.3265905546700054"/>
+    <way visible="true" id="-3">
+        <nd ref="-7"/>
+        <nd ref="-3"/>
+        <nd ref="-8"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="name" v="West East Ave"/>
+        <tag k="highway" v="primary"/>
+    </way>
+    <way visible="true" id="-2">
+        <nd ref="-5"/>
+        <nd ref="-2"/>
+        <nd ref="-6"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="name" v="East West Ave"/>
+        <tag k="highway" v="primary"/>
+    </way>
+    <way visible="true" id="-1">
+        <nd ref="-1"/>
+        <nd ref="-2"/>
+        <nd ref="-3"/>
+        <nd ref="-4"/>
+        <tag k="name" v="North South Rd"/>
+        <tag k="highway" v="primary"/>
+    </way>
+</osm>

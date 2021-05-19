@@ -78,7 +78,7 @@ public:
     Coordinate coords[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
                             Coordinate(100.0, 10.0), Coordinate(0.0, 10.0),
                             Coordinate::getNull() };
-    WayPtr way = TestUtils::createWay(map, Status::Unknown1, coords, 1, "");
+    WayPtr way = TestUtils::createWay(map, coords, "", Status::Unknown1, 1);
     RelationPtr relation(new Relation(way->getStatus(), map->createNextRelationId(),
       way->getCircularError(), MetadataTags::RelationMultilineString()));
     relation->addElement("", way->getElementId());
@@ -119,8 +119,8 @@ public:
                              Coordinate::getNull() };
     Coordinate coords2[] = { Coordinate(100.0, 10.0), Coordinate(0.0, 10.0),
                              Coordinate::getNull() };
-    WayPtr way1 = TestUtils::createWay(map, Status::Unknown1, coords1, 1, "");
-    WayPtr way2 = TestUtils::createWay(map, Status::Unknown1, coords2, 1, "");
+    WayPtr way1 = TestUtils::createWay(map, coords1, "", Status::Unknown1, 1);
+    WayPtr way2 = TestUtils::createWay(map, coords2, "", Status::Unknown1, 1);
     RelationPtr relation(new Relation(way1->getStatus(), map->createNextRelationId(),
       way1->getCircularError(), MetadataTags::RelationMultilineString()));
     relation->addElement("", way1->getElementId());
@@ -160,8 +160,8 @@ public:
                              Coordinate::getNull() };
     Coordinate coords2[] = { Coordinate(100.0, 10.0), Coordinate(0.0, 10.0),
                              Coordinate::getNull() };
-    WayPtr way1 = TestUtils::createWay(map, Status::Unknown1, coords1, 1, "");
-    WayPtr way2 = TestUtils::createWay(map, Status::Unknown1, coords2, 1, "");
+    WayPtr way1 = TestUtils::createWay(map, coords1, "", Status::Unknown1, 1);
+    WayPtr way2 = TestUtils::createWay(map, coords2, "", Status::Unknown1, 1);
     RelationPtr relation(new Relation(way1->getStatus(), map->createNextRelationId(),
       way1->getCircularError(), MetadataTags::RelationMultilineString()));
     relation->addElement("", way1->getElementId());
@@ -203,9 +203,9 @@ public:
                              Coordinate::getNull() };
     Coordinate coords3[] = { Coordinate(100.0, 10.0), Coordinate(0.0, 10.0),
                              Coordinate::getNull() };
-    WayPtr way1 = TestUtils::createWay(map, Status::Unknown1, coords1, 1, "");
-    WayPtr way2 = TestUtils::createWay(map, Status::Unknown1, coords2, 1, "");
-    WayPtr way3 = TestUtils::createWay(map, Status::Unknown1, coords3, 1, "");
+    WayPtr way1 = TestUtils::createWay(map, coords1, "", Status::Unknown1, 1);
+    WayPtr way2 = TestUtils::createWay(map, coords2, "", Status::Unknown1, 1);
+    WayPtr way3 = TestUtils::createWay(map, coords3, "", Status::Unknown1, 1);
     RelationPtr relation(new Relation(way1->getStatus(), map->createNextRelationId(),
       way1->getCircularError(), MetadataTags::RelationMultilineString()));
     relation->addElement("", way1->getElementId());
@@ -245,7 +245,7 @@ public:
     Coordinate coords[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
                             Coordinate(100.0, 10.0), Coordinate(0.0, 10.0),
                             Coordinate::getNull() };
-    WayPtr way = TestUtils::createWay(map, Status::Unknown1, coords, 1, "");
+    WayPtr way = TestUtils::createWay(map, coords, "", Status::Unknown1, 1);
     RelationPtr relation(new Relation(way->getStatus(), map->createNextRelationId(),
       way->getCircularError(), MetadataTags::RelationMultilineString()));
     relation->addElement("", way->getElementId());
@@ -285,7 +285,7 @@ public:
     Coordinate coords[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
                             Coordinate(100.0, 10.0), Coordinate(0.0, 10.0),
                             Coordinate::getNull() };
-    WayPtr way = TestUtils::createWay(map, Status::Unknown1, coords, 1, "");
+    WayPtr way = TestUtils::createWay(map, coords, "", Status::Unknown1, 1);
     RelationPtr relation(new Relation(way->getStatus(), map->createNextRelationId(),
       way->getCircularError(), MetadataTags::RelationMultilineString()));
     relation->addElement("", way->getElementId());
@@ -325,7 +325,7 @@ public:
     Coordinate coords[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
                             Coordinate(100.0, 10.0), Coordinate(0.0, 10.0),
                             Coordinate::getNull() };
-    WayPtr way = TestUtils::createWay(map, Status::Unknown1, coords, 1, "");
+    WayPtr way = TestUtils::createWay(map, coords, "", Status::Unknown1, 1);
     RelationPtr relation(new Relation(way->getStatus(), map->createNextRelationId(),
       way->getCircularError(), MetadataTags::RelationMultilineString()));
     //relation->addElement("", way->getElementId());
@@ -354,7 +354,7 @@ public:
     Coordinate coords[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
                             Coordinate(100.0, 10.0), Coordinate(0.0, 10.0),
                             Coordinate::getNull() };
-    WayPtr way = TestUtils::createWay(map, Status::Unknown1, coords, 1, "");
+    WayPtr way = TestUtils::createWay(map, coords, "", Status::Unknown1, 1);
     RelationPtr relation(new Relation(way->getStatus(), map->createNextRelationId(),
       way->getCircularError(), MetadataTags::RelationMultiPolygon()));
     relation->addElement("", way->getElementId());
@@ -382,7 +382,7 @@ public:
     Coordinate coords[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
                             Coordinate(100.0, 10.0), Coordinate(0.0, 10.0),
                             Coordinate::getNull() };
-    WayPtr way = TestUtils::createWay(map, Status::Unknown1, coords, 1, "");
+    WayPtr way = TestUtils::createWay(map, coords, "", Status::Unknown1, 1);
     RelationPtr relation(new Relation(way->getStatus(), map->createNextRelationId(),
       way->getCircularError(), MetadataTags::RelationMultilineString()));
     relation->addElement("", way->getElementId());
@@ -410,7 +410,7 @@ public:
     Coordinate coords[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
                             Coordinate(100.0, 10.0), Coordinate(0.0, 10.0),
                             Coordinate::getNull() };
-    WayPtr way = TestUtils::createWay(map, Status::Unknown1, coords, 1, "");
+    WayPtr way = TestUtils::createWay(map, coords, "", Status::Unknown1, 1);
     RelationPtr relation(new Relation(way->getStatus(), map->createNextRelationId(),
       way->getCircularError(), MetadataTags::RelationMultilineString()));
     relation->addElement("", map->getNode(way->getNodeId(0))->getElementId());
@@ -441,8 +441,8 @@ public:
                              Coordinate::getNull() };
     Coordinate coords2[] = { Coordinate(100.0, 10.0), Coordinate(0.0, 10.0),
                              Coordinate::getNull() };
-    WayPtr way1 = TestUtils::createWay(map, Status::Unknown1, coords1, 1, "");
-    WayPtr way2 = TestUtils::createWay(map, Status::Unknown1, coords2, 1, "");
+    WayPtr way1 = TestUtils::createWay(map, coords1, "", Status::Unknown1, 1);
+    WayPtr way2 = TestUtils::createWay(map, coords2, "", Status::Unknown1, 1);
     RelationPtr relation(new Relation(way1->getStatus(), map->createNextRelationId(),
       way1->getCircularError(), MetadataTags::RelationMultilineString()));
     relation->addElement("", map->getNode(way1->getNodeId(0))->getElementId());

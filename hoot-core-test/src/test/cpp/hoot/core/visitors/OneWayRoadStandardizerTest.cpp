@@ -60,7 +60,7 @@ public:
       geos::geom::Coordinate coords[] =
       { geos::geom::Coordinate(0, 0), geos::geom::Coordinate(10, 10),
         geos::geom::Coordinate::getNull() };
-      WayPtr way = TestUtils::createWay(map, Status::Unknown1, coords);
+      WayPtr way = TestUtils::createWay(map, coords);
       way->getTags()["oneway"] = "-1";
       way->getTags()["highway"] = "residential";
 
@@ -82,7 +82,7 @@ public:
       geos::geom::Coordinate coords[] =
       { geos::geom::Coordinate(0, 0), geos::geom::Coordinate(10, 10),
         geos::geom::Coordinate::getNull() };
-      WayPtr way = TestUtils::createWay(map, Status::Unknown1, coords);
+      WayPtr way = TestUtils::createWay(map, coords);
       way->getTags()["oneway"] = "reverse";
       way->getTags()["highway"] = "residential";
 
@@ -104,7 +104,7 @@ public:
       geos::geom::Coordinate coords[] =
       { geos::geom::Coordinate(0, 0), geos::geom::Coordinate(10, 10),
         geos::geom::Coordinate::getNull() };
-      WayPtr way = TestUtils::createWay(map, Status::Unknown1, coords);
+      WayPtr way = TestUtils::createWay(map, coords);
       // This way isn't reversed, so nothing should happen to it.
       way->getTags()["oneway"] = "yes";
       way->getTags()["highway"] = "residential";
@@ -127,7 +127,7 @@ public:
       geos::geom::Coordinate coords[] =
       { geos::geom::Coordinate(0, 0), geos::geom::Coordinate(10, 10),
         geos::geom::Coordinate::getNull() };
-      WayPtr way = TestUtils::createWay(map, Status::Unknown1, coords);
+      WayPtr way = TestUtils::createWay(map, coords);
       // This way isn't a road, so nothing should happen to it.
       way->getTags()["oneway"] = "reverse";
       way->getTags()["building"] = "yes";
@@ -154,7 +154,7 @@ public:
       { geos::geom::Coordinate(0, 0), geos::geom::Coordinate(10, 10),
         geos::geom::Coordinate::getNull() };
       // The member way doesn't need any special tags in order to be reversed.
-      WayPtr way = TestUtils::createWay(map, Status::Unknown1, coords);
+      WayPtr way = TestUtils::createWay(map, coords);
       QList<ElementPtr> elements;
       elements.append(way);
       RelationPtr relation = TestUtils::createRelation(map, elements);
@@ -182,7 +182,7 @@ public:
       { geos::geom::Coordinate(0, 0), geos::geom::Coordinate(10, 10),
         geos::geom::Coordinate::getNull() };
       // The member way doesn't need any special tags in order to be reversed.
-      WayPtr way = TestUtils::createWay(map, Status::Unknown1, coords);
+      WayPtr way = TestUtils::createWay(map, coords);
       QList<ElementPtr> elements;
       elements.append(way);
       RelationPtr relation = TestUtils::createRelation(map, elements);
@@ -209,7 +209,7 @@ public:
       geos::geom::Coordinate coords[] =
       { geos::geom::Coordinate(0, 0), geos::geom::Coordinate(10, 10),
         geos::geom::Coordinate::getNull() };
-      WayPtr way = TestUtils::createWay(map, Status::Unknown1, coords);
+      WayPtr way = TestUtils::createWay(map, coords);
       QList<ElementPtr> elements;
       elements.append(way);
       // This relation isn't reversed, so nothing should happen to it.
@@ -237,7 +237,7 @@ public:
       geos::geom::Coordinate coords[] =
       { geos::geom::Coordinate(0, 0), geos::geom::Coordinate(10, 10),
         geos::geom::Coordinate::getNull() };
-      WayPtr way = TestUtils::createWay(map, Status::Unknown1, coords);
+      WayPtr way = TestUtils::createWay(map, coords);
       QList<ElementPtr> elements;
       elements.append(way);
       RelationPtr relation = TestUtils::createRelation(map, elements);

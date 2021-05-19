@@ -53,17 +53,17 @@ public:
   {
     OsmMapPtr map(new OsmMap());
 
-    NodePtr n1a = TestUtils::createNode(map, Status::Unknown1, 0, 0);
-    NodePtr n1b = TestUtils::createNode(map, Status::Unknown1, 100, 0);
-    NodePtr n1c = TestUtils::createNode(map, Status::Unknown1, 200, 0);
-    WayPtr w1 = TestUtils::createWay(map, QList<NodePtr>() << n1a << n1b);
-    WayPtr w2 = TestUtils::createWay(map, QList<NodePtr>() << n1b << n1c);
+    NodePtr n1a = TestUtils::createNode(map, "", Status::Unknown1, 0, 0);
+    NodePtr n1b = TestUtils::createNode(map, "", Status::Unknown1, 100, 0);
+    NodePtr n1c = TestUtils::createNode(map, "", Status::Unknown1, 200, 0);
+    WayPtr w1 = TestUtils::createWay(map, QList<NodePtr>() << n1a << n1b, "", Status::Unknown1);
+    WayPtr w2 = TestUtils::createWay(map, QList<NodePtr>() << n1b << n1c, "", Status::Unknown1);
 
-    NodePtr n2a = TestUtils::createNode(map, Status::Unknown1, 0, 10);
-    NodePtr n2b = TestUtils::createNode(map, Status::Unknown1, 150, 10);
-    NodePtr n2c = TestUtils::createNode(map, Status::Unknown1, 210, 10);
-    WayPtr w3 = TestUtils::createWay(map, QList<NodePtr>() << n2a << n2b);
-    WayPtr w4 = TestUtils::createWay(map, QList<NodePtr>() << n2c << n2b);
+    NodePtr n2a = TestUtils::createNode(map, "", Status::Unknown1, 0, 10);
+    NodePtr n2b = TestUtils::createNode(map, "", Status::Unknown1, 150, 10);
+    NodePtr n2c = TestUtils::createNode(map, "", Status::Unknown1, 210, 10);
+    WayPtr w3 = TestUtils::createWay(map, QList<NodePtr>() << n2a << n2b, "", Status::Unknown1);
+    WayPtr w4 = TestUtils::createWay(map, QList<NodePtr>() << n2c << n2b, "", Status::Unknown1);
 
     WayStringPtr wstr1(new WayString());
     wstr1->append(WaySubline(WayLocation(map, w1, 0), WayLocation::createAtEndOfWay(map, w1)));

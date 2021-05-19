@@ -63,7 +63,7 @@ public:
     Coordinate coords[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
                             Coordinate(100.0, 10.0), Coordinate(0.0, 10.0),
                             Coordinate::getNull() };
-    WayPtr way = TestUtils::createWay(map, Status::Unknown1, coords, 15);
+    WayPtr way = TestUtils::createWay(map, coords);
     way->getTags().appendValue("name", "test");
     way->getTags().appendValue("name", "TEST");
 
@@ -83,7 +83,7 @@ public:
     Coordinate coords[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
                             Coordinate(100.0, 10.0), Coordinate(0.0, 10.0),
                             Coordinate::getNull() };
-    WayPtr way = TestUtils::createWay(map, Status::Unknown1, coords, 15);
+    WayPtr way = TestUtils::createWay(map, coords);
     way->getTags().appendValue("name", "test");
     way->getTags().appendValue("name", "TEST");
 
@@ -103,7 +103,7 @@ public:
     Coordinate coords[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
                             Coordinate(100.0, 10.0), Coordinate(0.0, 10.0),
                             Coordinate::getNull() };
-    WayPtr way = TestUtils::createWay(map, Status::Unknown1, coords, 15);
+    WayPtr way = TestUtils::createWay(map, coords);
     way->getTags().appendValue("name", "test");
     way->getTags().appendValue("name", "TEST");
     way->getTags().appendValue("name", "blah");

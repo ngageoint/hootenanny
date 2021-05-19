@@ -54,18 +54,18 @@ public:
    * @throws NeedsReviewException If the multilinestring situation is too complex to handle with
    *  a reasonable set of rules.
    */
-  WaySublineMatchString findMatch(const ConstOsmMapPtr& map, const ConstElementPtr& e1,
-    const ConstElementPtr& e2, Meters maxRelevantDistance = -1) const override;
+  WaySublineMatchString findMatch(
+    const ConstOsmMapPtr& map, const ConstElementPtr& e1, const ConstElementPtr& e2,
+    Meters maxRelevantDistance = -1) const override;
 
+  /**
+   * @see Configurable
+   */
   void setConfiguration(const Settings& s) override;
 
   void setMaxRelevantAngle(Radians r) override;
-  /**
-   * minSplitSize is not supported at this time.
-   */
   void setMinSplitSize(Meters minSplitSize) override;
   void setHeadingDelta(Meters headingDelta) override;
-  virtual void setSublineMatcher(const std::shared_ptr<SublineMatcher>& sm);
 
   QString getDescription() const override
   { return "Matches lines based on the maximal subline string found"; }
@@ -73,6 +73,8 @@ public:
   QString getClassName() const override { return className(); }
 
   QString getSublineMatcherName() const override { return _sublineMatcher->getName(); }
+
+  void setSublineMatcher(const std::shared_ptr<SublineMatcher>& sm);
 
 private:
 

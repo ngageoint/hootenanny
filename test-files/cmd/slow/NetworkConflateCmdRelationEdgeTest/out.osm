@@ -6,21 +6,6 @@
     <node visible="true" id="-1383" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.2911531000000007" lon="-16.5215050000000012"/>
     <node visible="true" id="-1337" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.2797613048901528" lon="-16.5237492506429398"/>
     <node visible="true" id="-1223" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.2848796683042156" lon="-16.5236242906602229"/>
-    <node visible="true" id="-127" timestamp="2016-02-03T04:48:55Z" version="1" lat="15.2766830999999996" lon="-16.5160413000000013"/>
-    <node visible="true" id="-126" timestamp="2016-02-03T04:48:55Z" version="1" lat="15.2669541000000031" lon="-16.5225645000000014"/>
-    <node visible="true" id="-125" timestamp="2016-02-03T04:48:55Z" version="1" lat="15.2806987000000003" lon="-16.5154834000000008"/>
-    <node visible="true" id="-124" timestamp="2016-02-03T04:48:55Z" version="1" lat="15.2825202999999963" lon="-16.5157837999999977"/>
-    <node visible="true" id="-123" timestamp="2016-02-03T04:48:55Z" version="1" lat="15.2835965999999974" lon="-16.5161271999999997"/>
-    <node visible="true" id="-122" timestamp="2016-02-03T04:48:55Z" version="1" lat="15.2787530000000000" lon="-16.5155263999999988"/>
-    <node visible="true" id="-121" timestamp="2016-02-03T04:48:55Z" version="1" lat="15.2666228999999980" lon="-16.5234227999999987"/>
-    <node visible="true" id="-120" timestamp="2016-02-03T04:48:55Z" version="1" lat="15.2864095999999989" lon="-16.5194089999999996"/>
-    <node visible="true" id="-119" timestamp="2016-02-03T04:48:55Z" version="1" lat="15.2692869999999967" lon="-16.5306739000000000"/>
-    <node visible="true" id="-118" timestamp="2016-02-03T04:48:55Z" version="1" lat="15.2853084000000035" lon="-16.5175733999999999"/>
-    <node visible="true" id="-117" timestamp="2016-02-03T04:48:55Z" version="1" lat="15.2858547999999974" lon="-16.5184831999999986"/>
-    <node visible="true" id="-116" timestamp="2016-02-03T04:48:55Z" version="1" lat="15.2846832999999993" lon="-16.5168287999999990"/>
-    <node visible="true" id="-115" timestamp="2016-02-03T04:48:55Z" version="1" lat="15.2778008999999990" lon="-16.5156980000000004"/>
-    <node visible="true" id="-114" timestamp="2016-02-03T04:48:55Z" version="1" lat="15.2678442000000025" lon="-16.5216674999999995"/>
-    <node visible="true" id="-113" timestamp="2016-02-03T04:48:55Z" version="1" lat="15.2665401000000038" lon="-16.5247960999999961"/>
     <node visible="true" id="-95" timestamp="2016-02-03T04:48:55Z" version="1" lat="15.2873114999999977" lon="-16.5176340000000010">
         <tag k="error:circular" v="15"/>
         <tag k="place" v="hamlet"/>
@@ -1329,25 +1314,6 @@
         <tag k="source:datetime" v="2015-09-11T12:28:29.000Z"/>
         <tag k="surface" v="asphalt"/>
     </way>
-    <way visible="true" id="-49" timestamp="2016-02-03T10:44:27Z" version="1">
-        <nd ref="-120"/>
-        <nd ref="-117"/>
-        <nd ref="-118"/>
-        <nd ref="-116"/>
-        <nd ref="-123"/>
-        <nd ref="-124"/>
-        <nd ref="-125"/>
-        <nd ref="-122"/>
-        <nd ref="-115"/>
-        <nd ref="-127"/>
-        <nd ref="-114"/>
-        <nd ref="-126"/>
-        <nd ref="-121"/>
-        <nd ref="-113"/>
-        <nd ref="-119"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:hash" v="sha1sum:28a3eb085dec88970a8c1c9ef9ebe62384fd26ca"/>
-    </way>
     <way visible="true" id="-20" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="4747826969"/>
         <nd ref="4748830808"/>
@@ -2015,7 +1981,6 @@
         <tag k="admin_level" v="3"/>
         <tag k="boundary" v="administrative"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:hash" v="sha1sum:a5c7281b2395b9ccb69c9cb9505512e8819b953e"/>
         <tag k="source" v="estimated"/>
         <tag k="source:datetime" v="2015-07-27T16:17:43Z"/>
     </way>
@@ -3803,7 +3768,6 @@
         <member type="way" ref="-13" role="outer"/>
         <member type="way" ref="362621591" role="outer"/>
         <member type="way" ref="-19" role="outer"/>
-        <member type="way" ref="-49" role="outer"/>
         <tag k="ISO3166-2" v="SN-TH"/>
         <tag k="admin_level" v="3"/>
         <tag k="boundary" v="administrative"/>
@@ -3824,7 +3788,6 @@
         <member type="way" ref="-19" role="outer"/>
         <member type="way" ref="362621591" role="outer"/>
         <member type="way" ref="-13" role="outer"/>
-        <member type="way" ref="-49" role="outer"/>
         <tag k="ISO3166-2" v="SN-LG"/>
         <tag k="admin_level" v="3"/>
         <tag k="boundary" v="administrative"/>

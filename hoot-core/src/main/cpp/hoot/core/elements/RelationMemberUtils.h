@@ -150,9 +150,19 @@ public:
    *
    * @param childId ID of the child element
    * @param map map the child element belongs to
+   * @return a collection of relations
+   */
+  static std::vector<RelationPtr> getContainingRelations(
+    const ElementId& childId, const ConstOsmMapPtr& map);
+
+  /**
+   * Retrieves all relations containing a child element
+   *
+   * @param childId ID of the child element
+   * @param map map the child element belongs to
    * @return a collection of const relations
    */
-  static std::vector<ConstRelationPtr> getContainingRelations(
+  static std::vector<ConstRelationPtr> getContainingRelationsConst(
     const ElementId& childId, const ConstOsmMapPtr& map);
 
   /**

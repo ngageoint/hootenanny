@@ -65,7 +65,7 @@ public:
                         Coordinate(20.0, 20.0), Coordinate(0.0, 20.0),
                         Coordinate(0.0, 0.0),
                         Coordinate::getNull() };
-    WayPtr way1 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w1");
+    WayPtr way1 = TestUtils::createWay(map, c1, "w1", Status::Unknown1, 5);
     NodePtr node1(new Node(Status::Unknown1, 1, 10, 10, 5));
     CPPUNIT_ASSERT_DOUBLES_EQUAL(10.0, uut.extract(*map, node1, way1), 0.0001);
   }

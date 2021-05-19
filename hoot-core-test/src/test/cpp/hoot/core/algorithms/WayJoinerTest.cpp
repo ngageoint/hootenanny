@@ -56,8 +56,8 @@ class WayJoinerTest : public HootTestFixture
 public:
 
   WayJoinerTest()
-    : HootTestFixture("test-files/algorithms/wayjoiner/",
-                      "test-output/algorithms/wayjoiner/")
+    : HootTestFixture("test-files/algorithms/WayJoinerTest/",
+                      "test-output/algorithms/WayJoinerTest/")
   {
     setResetType(ResetAll);
   }

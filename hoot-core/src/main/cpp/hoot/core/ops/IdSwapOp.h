@@ -61,7 +61,7 @@ public:
   /**
    * @brief IdSwapOp - Constructor taking two elements to swap IDs
    */
-  IdSwapOp(ElementId e1, ElementId e2) : _idSwap(new IdSwap(e1,e2)) { }
+  IdSwapOp(ElementId e1, ElementId e2) : _idSwap(new IdSwap(e1, e2)) { }
 
   ~IdSwapOp() = default;
 
@@ -71,18 +71,14 @@ public:
    */
   void apply(const std::shared_ptr<OsmMap>& map) override;
 
-  QString getDescription() const override
-  { return "Swap IDs for ID preservation in Attribute Conflation"; }
-
-  QString getInitStatusMessage() const override
-  { return "Swapping IDs..."; }
-
+  QString getInitStatusMessage() const override { return "Swapping IDs..."; }
   QString getCompletedStatusMessage() const override
   { return "Swapped " + QString::number(_numAffected) + " IDs."; }
 
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+  QString getDescription() const override
+  { return "Swap IDs for ID preservation in Attribute Conflation"; }
 
 private:
   /**

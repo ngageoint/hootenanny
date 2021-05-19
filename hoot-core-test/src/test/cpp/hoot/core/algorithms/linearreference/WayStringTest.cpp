@@ -79,14 +79,14 @@ public:
                          Coordinate(20, 0),
                          Coordinate(30, 0),
                          Coordinate::getNull() };
-    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, w1c, 1, "");
+    WayPtr w1 = TestUtils::createWay(map, w1c, "", Status::Unknown1, 1);
     w1->setTag("name", "w1");
 
     Coordinate w2c[] = { Coordinate(40, 0),
                          Coordinate(50, 0),
                          Coordinate(60, 0),
                          Coordinate::getNull() };
-    WayPtr w2 = TestUtils::createWay(map, Status::Unknown1, w2c, 2, "");
+    WayPtr w2 = TestUtils::createWay(map, w2c, "", Status::Unknown1, 2);
     w2->setTag("name", "w2");
     w1->addNode(w2->getFirstNodeId());
 
@@ -94,7 +94,7 @@ public:
                          Coordinate(70, 20),
                          Coordinate(70, 30),
                          Coordinate::getNull() };
-    WayPtr w3 = TestUtils::createWay(map, Status::Unknown1, w3c, 3, "");
+    WayPtr w3 = TestUtils::createWay(map, w3c, "", Status::Unknown1, 3);
     w3->setTag("name", "w3");
     w2->addNode(w3->getFirstNodeId());
 
@@ -160,21 +160,21 @@ public:
                          Coordinate(20, 0),
                          Coordinate(30, 0),
                          Coordinate::getNull() };
-    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, w1c, 1, "");
+    WayPtr w1 = TestUtils::createWay(map, w1c, "", Status::Unknown1, 1);
     w1->setTag("name", "w1");
 
     Coordinate w2c[] = { Coordinate(40, 0),
                          Coordinate(50, 0),
                          Coordinate(60, 0),
                          Coordinate::getNull() };
-    WayPtr w2 = TestUtils::createWay(map, Status::Unknown1, w2c, 2, "");
+    WayPtr w2 = TestUtils::createWay(map, w2c, "", Status::Unknown1, 2);
     w2->setTag("name", "w2");
 
     Coordinate w3c[] = { Coordinate(70, 10),
                          Coordinate(70, 20),
                          Coordinate(70, 30),
                          Coordinate::getNull() };
-    WayPtr w3 = TestUtils::createWay(map, Status::Unknown1, w3c, 3, "");
+    WayPtr w3 = TestUtils::createWay(map, w3c, "", Status::Unknown1, 3);
     w3->setTag("name", "w3");
 
     map->addWay(w1);
@@ -252,14 +252,14 @@ public:
                          Coordinate(30, 0),
                          Coordinate(70, 0),
                          Coordinate::getNull() };
-    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, w1c, 1, "");
+    WayPtr w1 = TestUtils::createWay(map, w1c, "", Status::Unknown1, 1);
     w1->setTag("name", "w1");
 
     Coordinate w2c[] = { Coordinate(150, 0),
                          Coordinate(100, 0),
                          Coordinate(90, 0),
                          Coordinate::getNull() };
-    WayPtr w2 = TestUtils::createWay(map, Status::Unknown1, w2c, 1, "");
+    WayPtr w2 = TestUtils::createWay(map, w2c, "", Status::Unknown1, 1);
     w2->setTag("name", "w2");
 
     vector<long> nodes = w2->getNodeIds();
@@ -302,7 +302,7 @@ public:
                          Coordinate(30, 0),
                          Coordinate(70, 0),
                          Coordinate::getNull() };
-    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, w1c, 1, "");
+    WayPtr w1 = TestUtils::createWay(map, w1c, "", Status::Unknown1, 1);
     w1->setTag("name", "w1");
 
     map->addWay(w1);
@@ -337,13 +337,13 @@ public:
     Coordinate w1c[] = { Coordinate(0, 0),
                          Coordinate(0, 50),
                          Coordinate::getNull() };
-    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, w1c, 1, "");
+    WayPtr w1 = TestUtils::createWay(map, w1c, "", Status::Unknown1, 1);
     w1->setTag("name", "w1");
 
     Coordinate w2c[] = { Coordinate(0, 50),
                          Coordinate(0, 100),
                          Coordinate::getNull() };
-    WayPtr w2 = TestUtils::createWay(map, Status::Unknown1, w2c, 1, "");
+    WayPtr w2 = TestUtils::createWay(map, w2c, "", Status::Unknown1, 1);
     w2->setTag("name", "w2");
     w1->addNode(w2->getFirstNodeId());
 
