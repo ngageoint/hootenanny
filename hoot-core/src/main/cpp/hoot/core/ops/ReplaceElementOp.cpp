@@ -40,14 +40,17 @@ namespace hoot
 HOOT_FACTORY_REGISTER(OsmMapOperation, ReplaceElementOp)
 
 ReplaceElementOp::ReplaceElementOp() :
-_clearAndRemove(false)
+_clearAndRemove(false),
+_removeParentRefs(false)
 {
 }
 
-ReplaceElementOp::ReplaceElementOp(ElementId from, ElementId to, bool clearAndRemove) :
-  _from(from),
-  _to(to),
-  _clearAndRemove(clearAndRemove)
+ReplaceElementOp::ReplaceElementOp(
+  ElementId from, ElementId to, bool clearAndRemove, bool removeParentRefs) :
+_from(from),
+_to(to),
+_clearAndRemove(clearAndRemove),
+_removeParentRefs(removeParentRefs)
 {
 }
 
@@ -129,7 +132,7 @@ void ReplaceElementOp::apply(const OsmMapPtr& map)
   {
     // just in case it is still part of an element (e.g. part of another relation)
     from->getTags().clear();
-    RecursiveElementRemover(_from).apply(map);
+    RecursiveElementRemover(_from, _removeParentRefs).apply(map);
   }
 
   LOG_VART(_to);

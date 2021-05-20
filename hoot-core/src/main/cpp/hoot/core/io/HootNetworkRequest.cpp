@@ -101,7 +101,7 @@ bool HootNetworkRequest::_networkRequest(const QUrl& url, int timeout,
   _error.clear();
   _timedOut = false;
   //  Do HTTP request
-  std::shared_ptr<QNetworkAccessManager> pNAM(new QNetworkAccessManager());
+  std::shared_ptr<QNetworkAccessManager> pNAM = std::make_shared<QNetworkAccessManager>();
   QNetworkRequest request(url);
 
   if (tempUrl.scheme().toLower() == "https")

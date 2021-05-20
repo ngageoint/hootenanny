@@ -24,10 +24,19 @@ exports.reviewThreshold = parseFloat(hoot.get("conflate.review.threshold.default
 // be used to replace exports.isMatchCandidate (see #3047).
 exports.matchCandidateCriterion = "hoot::RailwayCriterion";
 
-var sublineMatcher =
+// We're just using the default max recursions here for MaximalSubline. May need to come up with a
+// custom value via empirical testing.
+var sublineMatcher =  // default subline matcher
+  new hoot.MaximalSublineStringMatcher(
+  {
+    "way.matcher.max.angle": hoot.get("railway.matcher.max.angle"),
+    "way.subline.matcher": hoot.get("railway.subline.matcher"),
+    "maximal.subline.max.recursions": 10000000
+  });
+var frechetSublineMatcher = // we'll switch over to this one if the default matcher runs too slowly
   new hoot.MaximalSublineStringMatcher(
     { "way.matcher.max.angle": hoot.get("railway.matcher.max.angle"),
-      "way.subline.matcher": hoot.get("railway.subline.matcher") });
+      "way.subline.matcher": "hoot::FrechetSublineMatcher" });
 
 var distanceScoreExtractor = new hoot.DistanceScoreExtractor();
 // Use default spacing, 5 meters
@@ -78,8 +87,18 @@ exports.matchScore = function(map, e1, e2)
     return result;
   }
 
-  // extract the sublines needed for matching
-  var sublines = sublineMatcher.extractMatchingSublines(map, e1, e2);
+  // Extract the sublines needed for matching.
+
+  var sublines;
+  hoot.trace("Extracting sublines with default...");
+  sublines = sublineMatcher.extractMatchingSublines(map, e1, e2);
+  hoot.trace(sublines);
+  if (sublines && String(sublines).indexOf("maximum recursion complexity") !== -1)
+  {
+    hoot.trace("Extracting sublines with Frechet...");
+    sublines = frechetSublineMatcher.extractMatchingSublines(map, e1, e2);
+  }
+
   if (sublines) {
     //result = { match: 1.0, explain:"match" };
     //return result;
@@ -122,7 +141,7 @@ exports.mergeSets = function(map, pairs, replaced)
 {
   // snap the ways in the second input to the first input. Use the default tag
   // merge method.
-  return new hoot.LinearMerger().apply(sublineMatcher, map, pairs, replaced, exports.baseFeatureType);
+  return new hoot.LinearMerger().apply(sublineMatcher, map, pairs, replaced, exports.baseFeatureType, frechetSublineMatcher);
 };
 
 exports.getMatchFeatureDetails = function(map, e1, e2)

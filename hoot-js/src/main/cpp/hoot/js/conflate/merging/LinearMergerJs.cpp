@@ -56,10 +56,12 @@ HOOT_JS_REGISTER(LinearMergerJs)
 
 Persistent<Function> LinearMergerJs::_constructor;
 
-void LinearMergerJs::Init(Handle<Object> target)
+void LinearMergerJs::Init(Local<Object> target)
 {
   Isolate* current = target->GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
+
   // Prepare constructor template
   Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
   const QString name = "LinearMerger";
@@ -71,7 +73,7 @@ void LinearMergerJs::Init(Handle<Object> target)
   tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "apply"),
       FunctionTemplate::New(current, apply));
 
-  _constructor.Reset(current, tpl->GetFunction());
+  _constructor.Reset(current, tpl->GetFunction(context).ToLocalChecked());
   target->Set(String::NewFromUtf8(current, name.toStdString().data()), ToLocal(&_constructor));
 }
 
@@ -107,14 +109,22 @@ void LinearMergerJs::apply(const FunctionCallbackInfo<Value>& args)
     // slower (e.g. maximal subline) and the other may be slightly less accurate but much
     // quicker (Frechet). The actual one used here will be determined based how the matcher
     // performs against the input data.
-    if (matchedBy != "Waterway" && matchedBy != "Line")
+    // TODO: make this configurable
+    QStringList allowedMultipleSublineGenericMatchers;
+    allowedMultipleSublineGenericMatchers.append("Waterway");
+    allowedMultipleSublineGenericMatchers.append("Line");
+    allowedMultipleSublineGenericMatchers.append("Railway");
+    allowedMultipleSublineGenericMatchers.append("PowerLine");
+    if (!allowedMultipleSublineGenericMatchers.contains(matchedBy))
     {
       throw IllegalArgumentException(
-        "Only river or generic line merging allows passing in multiple subline matchers.");
+        "Matches matched with: " + matchedBy +
+        " cannot specify multiple subline matchers during merging.");
     }
     sublineMatcher2 = toCpp<SublineStringMatcherPtr>(args[5]);
   }
 
+  LOG_VART(ConfigOptions().getGeometryLinearMergerDefault());
   // Use of LinearTagOnlyMerger for geometries signifies that we're doing Attribute Conflation.
   const bool isAttributeConflate =
     ConfigOptions().getGeometryLinearMergerDefault() == LinearTagOnlyMerger::className();
@@ -122,7 +132,8 @@ void LinearMergerJs::apply(const FunctionCallbackInfo<Value>& args)
   const bool isAverageConflate =
     ConfigOptions().getGeometryLinearMergerDefault() == LinearAverageMerger::className();
   MergerPtr merger;
-  if (isAttributeConflate || isAverageConflate || (matchedBy != "Waterway" && matchedBy != "Line"))
+  if (isAttributeConflate || isAverageConflate ||
+      (matchedBy != "Waterway" && matchedBy != "Line") || !sublineMatcher2)
   {
     merger = LinearMergerFactory::getMerger(pairs, sublineMatcher, matchedBy);
   }
@@ -130,11 +141,12 @@ void LinearMergerJs::apply(const FunctionCallbackInfo<Value>& args)
   {
     merger = LinearMergerFactory::getMerger(pairs, sublineMatcher, sublineMatcher2, matchedBy);
   }
+  LOG_VART(merger->getClassName());
   merger->apply(map, replaced);
 
-  // modify the parameter that was passed in
-  Handle<Array> newArr = Handle<Array>::Cast(toV8(replaced));
-  Handle<Array> arr = Handle<Array>::Cast(args[3]);
+  // Modify the parameter that was passed in.
+  Local<Array> newArr = Local<Array>::Cast(toV8(replaced));
+  Local<Array> arr = Local<Array>::Cast(args[3]);
   arr->Set(String::NewFromUtf8(current, "length"), Integer::New(current, newArr->Length()));
   for (uint32_t i = 0; i < newArr->Length(); i++)
   {

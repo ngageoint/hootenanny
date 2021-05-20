@@ -54,7 +54,7 @@ public:
 
   void addAngle(Radians theta, double length);
 
-  size_t getBin(Radians theta);
+  size_t getBin(Radians theta) const;
 
   /**
    * Returns the angle of the center of the specified bin.
@@ -94,7 +94,7 @@ private:
 
   std::vector<double> _bins;
 
-  Radians _getBinAngle(size_t i);
+  Radians _getBinAngle(size_t i) const;
 };
 
 }

@@ -63,7 +63,7 @@ _returnTestScores(false)
   setGenerateMapStats(configOptions.getPertyTestGenerateMapStats());
 }
 
-void PertyTestRunner::_writeStatsForOutputFiles(const QString& inputMapPath, const QString& sep)
+void PertyTestRunner::_writeStatsForOutputFiles(const QString& inputMapPath, const QString& sep) const
 {
   QString statsOutputPath = inputMapPath;
   statsOutputPath = statsOutputPath.replace(".osm", "-stats");
@@ -206,7 +206,7 @@ QList<std::shared_ptr<const PertyTestRunResult>> PertyTestRunner::runTest(
 }
 
 void PertyTestRunner::_writePlotFile(const QString& outputPath,
-                                     const QList<std::shared_ptr<const PertyTestRunResult>>& testRunResults)
+                                     const QList<std::shared_ptr<const PertyTestRunResult>>& testRunResults) const
 {
   QFile plotFile(outputPath + "/results-plot.dat");
   if (plotFile.exists())

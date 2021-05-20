@@ -57,9 +57,11 @@ public:
 
   int runSimple(QStringList& args) override
   {
-    // only allowing one option per command
     const QStringList supportedOpts = _getSupportedOptions();
     QStringList specifiedOpts;
+    // Only allowing one option per info command by default. Options with more than sub-option
+    // are parsed separately after this.
+    LOG_VART(args);
     for (int i = 0; i < args.size(); i++)
     {
       const QString arg = args.at(i);
@@ -229,7 +231,7 @@ public:
         QString supportedOpt = supportedOpts.at(i);
         if (args.contains(supportedOpt))
         {
-          //should only be one of these
+          // should only be one of these
           args.removeAt(args.indexOf(supportedOpt));
           apiEntityType = supportedOpt.replace("--", "");
         }
@@ -278,6 +280,7 @@ private:
     options.append("--tag-mergers");
     options.append("--value-aggregators");
     options.append("--way-joiners");
+    options.append("--way-snap-criteria");
     return options;
   }
 };

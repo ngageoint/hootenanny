@@ -56,9 +56,14 @@ public:
    */
   void replace(ElementId oldEid, ElementId newEid) override;
 
+  void setPairs(const std::set<std::pair<ElementId, ElementId>>& pairs) { _pairs = pairs; }
+  void setMatchedBy(const QString& matchedBy) { _matchedBy = matchedBy; }
+
 protected:
 
   std::set<std::pair<ElementId, ElementId>> _pairs;
+  // indicates which matcher matched the elements being processed by this merger
+  QString _matchedBy;
 };
 
 }

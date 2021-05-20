@@ -28,17 +28,18 @@ var angleHistogramExtractor = new hoot.AngleHistogramExtractor();
 var weightedShapeDistanceExtractor = new hoot.WeightedShapeDistanceExtractor();
 var distanceScoreExtractor = new hoot.DistanceScoreExtractor();
 var lengthScoreExtractor = new hoot.LengthScoreExtractor();
+// We're just using the default max recursions here for MaximalSubline. May need to come up with a
+// custom value via empirical testing.
 var sublineMatcher =  // default subline matcher
   new hoot.MaximalSublineStringMatcher(
   {
     "way.matcher.max.angle": hoot.get("generic.line.matcher.max.angle"),
     "way.subline.matcher": hoot.get("generic.line.subline.matcher"),
-    // borrowing this from rivers for the time being; TODO: make separate option for it?
-    "maximal.subline.max.recursive.complexity": hoot.get("waterway.maximal.subline.max.recursive.complexity")
+    "maximal.subline.max.recursions": 10000000
   });
 var frechetSublineMatcher = // we'll switch over to this one if the default matcher runs too slowly
   new hoot.MaximalSublineStringMatcher(
-    { "way.matcher.max.angle": hoot.get("waterway.matcher.max.angle"),
+    { "way.matcher.max.angle": hoot.get("generic.line.matcher.max.angle"),
       "way.subline.matcher": "hoot::FrechetSublineMatcher" }); 
 
 /**
@@ -119,13 +120,13 @@ exports.matchScore = function(map, e1, e2)
   hoot.trace("mostSpecificType(e1): " + hoot.OsmSchema.mostSpecificType(e1));
   hoot.trace("mostSpecificType(e2): " + hoot.OsmSchema.mostSpecificType(e2));
 
-  // extract the sublines needed for matching - Note that some of this was taken from Highway.js and other parts 
-  // from River.js. See notes on the dual subline matcher approach in River.js.
+  // Extract the sublines needed for matching. Note that some of this was taken from Highway.js
+  // and other parts from River.js. See notes on the dual subline matcher approach in River.js.
   var sublines;
   hoot.trace("Extracting sublines with default...");
   sublines = sublineMatcher.extractMatchingSublines(map, e1, e2);
   hoot.trace(sublines);
-  if (sublines && String(sublines).indexOf("RecursiveComplexityException") !== -1)
+  if (sublines && String(sublines).indexOf("maximum recursion complexity") !== -1)
   {
     hoot.trace("Extracting sublines with Frechet...");
     sublines = frechetSublineMatcher.extractMatchingSublines(map, e1, e2);

@@ -610,14 +610,14 @@ ElementInputStreamPtr ChangesetCreator::_getExternallySortedElements(const QStri
   return sortedElements;
 }
 
-ElementInputStreamPtr ChangesetCreator::_getEmptyInputStream()
+ElementInputStreamPtr ChangesetCreator::_getEmptyInputStream() const
 {
   // a no-op here since InMemoryElementSorter taking in an empty map will just return an empty
   // element stream
   return InMemoryElementSorterPtr(new InMemoryElementSorter(OsmMapPtr(new OsmMap())));
 }
 
-ElementInputStreamPtr ChangesetCreator::_getFilteredInputStream(const QString& input)
+ElementInputStreamPtr ChangesetCreator::_getFilteredInputStream(const QString& input) const
 {
   LOG_DEBUG("Retrieving filtered input stream for: " << FileUtils::toLogFormat(input, 25) << "...");
 
@@ -658,7 +658,7 @@ ElementInputStreamPtr ChangesetCreator::_getFilteredInputStream(const QString& i
     ElementStreamer::getFilteredInputStream(filteredInputStream, ConfigOptions().getConvertOps());
 }
 
-ElementInputStreamPtr ChangesetCreator::_sortElementsInMemory(OsmMapPtr map)
+ElementInputStreamPtr ChangesetCreator::_sortElementsInMemory(OsmMapPtr map) const
 {
   return InMemoryElementSorterPtr(new InMemoryElementSorter(map));
 }
@@ -749,7 +749,7 @@ void ChangesetCreator::_streamChangesetOutput(
   for (int i = 0; i < changesetProviders.size(); i++)
   {
     ChangesetProviderPtr changesetProvider = changesetProviders.at(i);
-    LOG_DEBUG("Derived changeset: " << i + 1 << " / " << changesetProviders.size() << ": ");
+    LOG_DEBUG("Derived changeset: " << i + 1 << " of " << changesetProviders.size() << ": ");
 
     _numCreateChanges += changesetProvider->getNumCreateChanges();
     _numModifyChanges += changesetProvider->getNumModifyChanges();

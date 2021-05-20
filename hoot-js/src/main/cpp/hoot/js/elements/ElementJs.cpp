@@ -79,6 +79,72 @@ void ElementJs::_addBaseFunctions(Local<FunctionTemplate> tpl)
       FunctionTemplate::New(current, toString));
 }
 
+Local<Object> ElementJs::New(ConstElementPtr e)
+{
+  EscapableHandleScope scope(v8::Isolate::GetCurrent());
+
+  Local<Object> result;
+
+  switch (e->getElementType().getEnum())
+  {
+  case ElementType::Node:
+    {
+      ConstNodePtr n = std::dynamic_pointer_cast<const Node>(e);
+      result = NodeJs::New(n);
+      break;
+    }
+  case ElementType::Way:
+    {
+      ConstWayPtr w = std::dynamic_pointer_cast<const Way>(e);
+      result = WayJs::New(w);
+      break;
+    }
+  case ElementType::Relation:
+    {
+      ConstRelationPtr r = std::dynamic_pointer_cast<const Relation>(e);
+      result = RelationJs::New(r);
+      break;
+    }
+  default:
+    throw IllegalArgumentException("Unexpected element type.");
+  }
+
+  return scope.Escape(result);
+}
+
+Local<Object> ElementJs::New(ElementPtr e)
+{
+  EscapableHandleScope scope(v8::Isolate::GetCurrent());
+
+  Local<Object> result;
+
+  switch (e->getElementType().getEnum())
+  {
+  case ElementType::Node:
+    {
+      NodePtr n = std::dynamic_pointer_cast<Node>(e);
+      result = NodeJs::New(n);
+      break;
+    }
+  case ElementType::Way:
+    {
+      WayPtr w = std::dynamic_pointer_cast<Way>(e);
+      result = WayJs::New(w);
+      break;
+    }
+  case ElementType::Relation:
+    {
+      RelationPtr r = std::dynamic_pointer_cast<Relation>(e);
+      result = RelationJs::New(r);
+      break;
+    }
+  default:
+    throw IllegalArgumentException("Unexpected element type.");
+  }
+
+  return scope.Escape(result);
+}
+
 void ElementJs::getCircularError(const FunctionCallbackInfo<Value>& args)
 {
   HandleScope scope(args.GetIsolate());
@@ -135,72 +201,6 @@ void ElementJs::getTags(const FunctionCallbackInfo<Value>& args)
   args.GetReturnValue().Set(TagsJs::New(e->getTags()));
 }
 
-Handle<Object> ElementJs::New(ConstElementPtr e)
-{
-  EscapableHandleScope scope(v8::Isolate::GetCurrent());
-
-  Handle<Object> result;
-
-  switch (e->getElementType().getEnum())
-  {
-  case ElementType::Node:
-    {
-      ConstNodePtr n = std::dynamic_pointer_cast<const Node>(e);
-      result = NodeJs::New(n);
-      break;
-    }
-  case ElementType::Way:
-    {
-      ConstWayPtr w = std::dynamic_pointer_cast<const Way>(e);
-      result = WayJs::New(w);
-      break;
-    }
-  case ElementType::Relation:
-    {
-      ConstRelationPtr r = std::dynamic_pointer_cast<const Relation>(e);
-      result = RelationJs::New(r);
-      break;
-    }
-  default:
-    throw IllegalArgumentException("Unexpected element type.");
-  }
-
-  return scope.Escape(result);
-}
-
-Handle<Object> ElementJs::New(ElementPtr e)
-{
-  EscapableHandleScope scope(v8::Isolate::GetCurrent());
-
-  Handle<Object> result;
-
-  switch (e->getElementType().getEnum())
-  {
-  case ElementType::Node:
-    {
-      NodePtr n = std::dynamic_pointer_cast<Node>(e);
-      result = NodeJs::New(n);
-      break;
-    }
-  case ElementType::Way:
-    {
-      WayPtr w = std::dynamic_pointer_cast<Way>(e);
-      result = WayJs::New(w);
-      break;
-    }
-  case ElementType::Relation:
-    {
-      RelationPtr r = std::dynamic_pointer_cast<Relation>(e);
-      result = RelationJs::New(r);
-      break;
-    }
-  default:
-    throw IllegalArgumentException("Unexpected element type.");
-  }
-
-  return scope.Escape(result);
-}
-
 void ElementJs::setStatusString(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
@@ -228,6 +228,7 @@ void ElementJs::setTags(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
 
   ElementPtr e = ObjectWrap::Unwrap<ElementJs>(args.This())->getElement();
 
@@ -239,7 +240,7 @@ void ElementJs::setTags(const FunctionCallbackInfo<Value>& args)
   }
   else
   {
-    Tags& tags = ObjectWrap::Unwrap<TagsJs>(args[0]->ToObject())->getTags();
+    const Tags& tags = ObjectWrap::Unwrap<TagsJs>(args[0]->ToObject(context).ToLocalChecked())->getTags();
     e->setTags(tags);
     args.GetReturnValue().SetUndefined();
   }

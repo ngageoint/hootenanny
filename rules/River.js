@@ -81,9 +81,11 @@ exports.calculateSearchRadius = function(map)
   hoot.debug("maxRecursions: " + maxRecursions);
   sublineMatcher =
     new hoot.MaximalSublineStringMatcher(
-      { "way.matcher.max.angle": hoot.get("waterway.matcher.max.angle"),
+      {
+        "way.matcher.max.angle": hoot.get("waterway.matcher.max.angle"),
         "way.subline.matcher": sublineMatcherName,
-        "maximal.subline.max.recursions": maxRecursions });
+        "maximal.subline.max.recursions": maxRecursions
+      });
 }
 
 /**

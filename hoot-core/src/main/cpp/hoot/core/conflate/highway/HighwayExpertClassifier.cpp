@@ -28,7 +28,6 @@
 
 // hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/algorithms/subline-matching/MaximalNearestSubline.h>
 #include <hoot/core/algorithms/ProbabilityOfMatch.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/ops/CopyMapSubsetOp.h>

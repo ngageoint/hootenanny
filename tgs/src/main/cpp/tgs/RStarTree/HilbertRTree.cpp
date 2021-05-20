@@ -234,7 +234,7 @@ void HilbertRTree::_createLeafNodes(const std::vector<UserBoxHolder>& hilbertBox
 //    numProcessed++;
 //    if (numProcessed % 100000 == 0)
 //    {
-//      std::cout << "                              Created " << numProcessed << " / " <<
+//      std::cout << "                              Created " << numProcessed << " of " <<
 //        hilbertBoxes.size() << " leaf nodes." << std::endl;
 //    }
   }
@@ -269,7 +269,7 @@ void HilbertRTree::_createParentNodes(const std::vector<int>& childNodes,
 //    if (numProcessed % 1000 == 0)
 //    {
 //      std::cout << "                                                            Created " <<
-//        numProcessed << " / " << childNodes.size() << " parent nodes." << std::endl;
+//        numProcessed << " of " << childNodes.size() << " parent nodes." << std::endl;
 //    }
   }
 }

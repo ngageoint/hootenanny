@@ -42,53 +42,56 @@ namespace hoot
 
 HOOT_JS_REGISTER(SettingsJs)
 
-void SettingsJs::Init(Handle<Object> exports)
+void SettingsJs::Init(Local<Object> exports)
 {
   Isolate* current = exports->GetIsolate();
   HandleScope scope(current);
-  Handle<Object> settings = Object::New(current);
+  Local<Context> context = current->GetCurrentContext();
+  Local<Object> settings = Object::New(current);
   exports->Set(String::NewFromUtf8(current, "Settings"), settings);
   exports->Set(String::NewFromUtf8(current, "get"),
-               FunctionTemplate::New(current, get)->GetFunction());
+               FunctionTemplate::New(current, get)->GetFunction(context).ToLocalChecked());
   settings->Set(String::NewFromUtf8(current, "get"),
-                FunctionTemplate::New(current, get)->GetFunction());
+                FunctionTemplate::New(current, get)->GetFunction(context).ToLocalChecked());
   exports->Set(String::NewFromUtf8(current, "set"),
-               FunctionTemplate::New(current, set)->GetFunction());
+               FunctionTemplate::New(current, set)->GetFunction(context).ToLocalChecked());
   settings->Set(String::NewFromUtf8(current, "set"),
-                FunctionTemplate::New(current, set)->GetFunction());
+                FunctionTemplate::New(current, set)->GetFunction(context).ToLocalChecked());
   exports->Set(String::NewFromUtf8(current, "appendToList"),
-               FunctionTemplate::New(current, appendToList)->GetFunction());
+               FunctionTemplate::New(current, appendToList)->GetFunction(context).ToLocalChecked());
   settings->Set(String::NewFromUtf8(current, "appendToList"),
-                FunctionTemplate::New(current, appendToList)->GetFunction());
+                FunctionTemplate::New(current, appendToList)->GetFunction(context).ToLocalChecked());
   exports->Set(String::NewFromUtf8(current, "prependToList"),
-               FunctionTemplate::New(current, prependToList)->GetFunction());
+               FunctionTemplate::New(current, prependToList)->GetFunction(context).ToLocalChecked());
   settings->Set(String::NewFromUtf8(current, "prependToList"),
-                FunctionTemplate::New(current, prependToList)->GetFunction());
+                FunctionTemplate::New(current, prependToList)->GetFunction(context).ToLocalChecked());
   exports->Set(String::NewFromUtf8(current, "removeFromList"),
-               FunctionTemplate::New(current, removeFromList)->GetFunction());
+               FunctionTemplate::New(current, removeFromList)->GetFunction(context).ToLocalChecked());
   settings->Set(String::NewFromUtf8(current, "removeFromList"),
-                FunctionTemplate::New(current, removeFromList)->GetFunction());
+                FunctionTemplate::New(current, removeFromList)->GetFunction(context).ToLocalChecked());
   exports->Set(String::NewFromUtf8(current, "replaceInList"),
-               FunctionTemplate::New(current, replaceInList)->GetFunction());
+               FunctionTemplate::New(current, replaceInList)->GetFunction(context).ToLocalChecked());
   settings->Set(String::NewFromUtf8(current, "replaceInList"),
-                FunctionTemplate::New(current, replaceInList)->GetFunction());
+                FunctionTemplate::New(current, replaceInList)->GetFunction(context).ToLocalChecked());
 }
 
 void SettingsJs::get(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
 
   Settings* settings = &conf();
 
-  QString key = str(args[0]->ToString());
-  if (settings->hasKey(key))
+  QString key = str(args[0]->ToString(context).ToLocalChecked());
+  try
   {
     QString value = settings->getString(key);
     args.GetReturnValue().Set(String::NewFromUtf8(current, value.toUtf8().data()));
   }
-  else
+  catch (const IllegalArgumentException& e)
   {
+    LOG_ERROR(e.what());
     args.GetReturnValue().SetUndefined();
   }
 }
@@ -97,16 +100,17 @@ void SettingsJs::set(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
 
   Settings* settings = &conf();
 
   if (args[0]->IsObject())
   {
-    Local<Array> keys = args[0]->ToObject()->GetPropertyNames();
+    Local<Array> keys = args[0]->ToObject(context).ToLocalChecked()->GetPropertyNames(context).ToLocalChecked();
     for (uint32_t i = 0; i < keys->Length(); i++)
     {
-      Local<String> k = keys->Get(i)->ToString();
-      Local<String> v = args[0]->ToObject()->Get(k)->ToString();
+      Local<String> k = keys->Get(i)->ToString(context).ToLocalChecked();
+      Local<String> v = args[0]->ToObject(context).ToLocalChecked()->Get(k)->ToString(context).ToLocalChecked();
       settings->set(str(k), str(v));
     }
     args.GetReturnValue().SetUndefined();
@@ -123,16 +127,17 @@ void SettingsJs::appendToList(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
 
   Settings* settings = &conf();
 
   if (args[0]->IsObject())
   {
-    Local<Array> keys = args[0]->ToObject()->GetPropertyNames();
+    Local<Array> keys = args[0]->ToObject(context).ToLocalChecked()->GetPropertyNames(context).ToLocalChecked();
     for (uint32_t i = 0; i < keys->Length(); i++)
     {
-      Local<String> k = keys->Get(i)->ToString();
-      Local<String> v = args[0]->ToObject()->Get(k)->ToString();
+      Local<String> k = keys->Get(i)->ToString(context).ToLocalChecked();
+      Local<String> v = args[0]->ToObject(context).ToLocalChecked()->Get(k)->ToString(context).ToLocalChecked();
 
       QStringList settingVal = settings->getList(str(k));
       settingVal.append(str(v));
@@ -152,16 +157,17 @@ void SettingsJs::prependToList(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
 
   Settings* settings = &conf();
 
   if (args[0]->IsObject())
   {
-    Local<Array> keys = args[0]->ToObject()->GetPropertyNames();
+    Local<Array> keys = args[0]->ToObject(context).ToLocalChecked()->GetPropertyNames(context).ToLocalChecked();
     for (uint32_t i = 0; i < keys->Length(); i++)
     {
-      Local<String> k = keys->Get(i)->ToString();
-      Local<String> v = args[0]->ToObject()->Get(k)->ToString();
+      Local<String> k = keys->Get(i)->ToString(context).ToLocalChecked();
+      Local<String> v = args[0]->ToObject(context).ToLocalChecked()->Get(k)->ToString(context).ToLocalChecked();
 
       QStringList settingVal = settings->getList(str(k));
       settingVal.prepend(str(v));
@@ -181,16 +187,17 @@ void SettingsJs::removeFromList(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
 
   Settings* settings = &conf();
 
   if (args[0]->IsObject())
   {
-    Local<Array> keys = args[0]->ToObject()->GetPropertyNames();
+    Local<Array> keys = args[0]->ToObject(context).ToLocalChecked()->GetPropertyNames(context).ToLocalChecked();
     for (uint32_t i = 0; i < keys->Length(); i++)
     {
-      Local<String> k = keys->Get(i)->ToString();
-      Local<String> v = args[0]->ToObject()->Get(k)->ToString();
+      Local<String> k = keys->Get(i)->ToString(context).ToLocalChecked();
+      Local<String> v = args[0]->ToObject(context).ToLocalChecked()->Get(k)->ToString(context).ToLocalChecked();
 
       QStringList settingVal = settings->getList(str(k));
       settingVal.removeAll(str(v));
@@ -210,16 +217,17 @@ void SettingsJs::replaceInList(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
 
   Settings* settings = &conf();
 
   if (args[0]->IsObject())
   {
-    Local<Array> keys = args[0]->ToObject()->GetPropertyNames();
+    Local<Array> keys = args[0]->ToObject(context).ToLocalChecked()->GetPropertyNames(context).ToLocalChecked();
     for (uint32_t i = 0; i < keys->Length(); i++)
     {
-      Local<String> k = keys->Get(i)->ToString();
-      Local<String> v = args[0]->ToObject()->Get(k)->ToString();
+      Local<String> k = keys->Get(i)->ToString(context).ToLocalChecked();
+      Local<String> v = args[0]->ToObject(context).ToLocalChecked()->Get(k)->ToString(context).ToLocalChecked();
 
       Settings::replaceListOptionEntryValues(*settings, str(k), str(v).split(";"));
     }

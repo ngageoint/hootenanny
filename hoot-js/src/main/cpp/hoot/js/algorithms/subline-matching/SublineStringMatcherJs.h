@@ -46,7 +46,7 @@ public:
 
   static int logWarnCount;
 
-  static void Init(v8::Handle<v8::Object> target);
+  static void Init(v8::Local<v8::Object> target);
 
   SublineStringMatcherPtr getSublineStringMatcher() { return _sm; }
 
@@ -63,14 +63,14 @@ private:
   SublineStringMatcherPtr _sm;
 };
 
-inline void toCpp(v8::Handle<v8::Value> v, SublineStringMatcherPtr& ptr)
+inline void toCpp(v8::Local<v8::Value> v, SublineStringMatcherPtr& ptr)
 {
   if (!v->IsObject())
   {
     throw IllegalArgumentException("Expected an object, got: (" + toJson(v) + ")");
   }
 
-  v8::Handle<v8::Object> obj = v8::Handle<v8::Object>::Cast(v);
+  v8::Local<v8::Object> obj = v8::Local<v8::Object>::Cast(v);
   SublineStringMatcherJs* ptrj = node::ObjectWrap::Unwrap<SublineStringMatcherJs>(obj);
   ptr = ptrj->getSublineStringMatcher();
 }

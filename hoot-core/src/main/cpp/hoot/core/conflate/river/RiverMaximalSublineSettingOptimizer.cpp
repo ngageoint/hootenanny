@@ -90,7 +90,7 @@ int RiverMaximalSublineSettingOptimizer::getFindBestMatchesMaxRecursions(
     if (numProcessed % statusUpdateInterval == 0)
     {
       PROGRESS_INFO(
-        "Processed " << StringUtils::formatLargeNumber(numProcessed) << " / " <<
+        "Processed " << StringUtils::formatLargeNumber(numProcessed) << " of " <<
         StringUtils::formatLargeNumber(ways.size()) << " ways.");
     }
   }

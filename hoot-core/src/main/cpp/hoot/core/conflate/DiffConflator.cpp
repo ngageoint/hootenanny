@@ -112,9 +112,20 @@ void DiffConflator::_reset()
 void DiffConflator::apply(OsmMapPtr& map)
 {
   // Can't use _removeLinearMatchesPartially() here, b/c we haven't performed matching yet.
-  QString msg =
-    "Generating differential output. Attempting to remove partially matched linear features ";
-  if (_removeLinearPartialMatchesAsWhole)
+  QString msg = "Attempting to remove partially matched non-river linear features ";
+  if (!_removeLinearPartialMatchesAsWhole)
+  {
+    msg += "partially.";
+  }
+  else
+  {
+    msg += "completely.";
+  }
+  LOG_INFO(msg);
+  msg = msg.replace("non-river", "river");
+  msg = msg.replace("partially.", "");
+  msg = msg.replace("completely.", "");
+  if (!ConfigOptions().getDifferentialRemoveRiverPartialMatchesAsWhole())
   {
     msg += "partially.";
   }
@@ -164,7 +175,7 @@ void DiffConflator::apply(OsmMapPtr& map)
     // have no tests yet to catch the particular situation. If so, will have to deal with that on a
     // case by case basis.
 
-    // Result of _removeLinearMatchesPartially is only valid after we've performed matching.
+    // The result of _removeLinearMatchesPartially is only valid after we've performed matching.
     const bool removePartialLinearMatchesPartially = _removeLinearMatchesPartially();
     if (removePartialLinearMatchesPartially)
     {
@@ -234,17 +245,6 @@ void DiffConflator::apply(OsmMapPtr& map)
       _removeMetadataTags();
     }
 
-//    if (removePartialLinearMatchesPartially)
-//    {
-//      // TODO
-//      RemoveDuplicateWayNodesVisitor dupeWayNodeRemover;
-//      _map->visitRw(dupeWayNodeRemover);
-//      InvalidWayRemover invalidWayRemover;
-//      _map->visitRw(invalidWayRemover);
-//      SuperfluousNodeRemover::removeNodes(_map);
-//      OsmMapWriterFactory::writeDebugMap(_map, "after-superfluous-node-removal");
-//    }
-
     _currentStep++;
   }
 
@@ -311,7 +311,7 @@ std::shared_ptr<ChangesetDeriver> DiffConflator::_sortInputs(OsmMapPtr map1, Osm
 
 void DiffConflator::markInputElements(OsmMapPtr map) const
 {
-  // Mark input1 elements
+  // mark input1 elements
   Settings visitorConf;
   visitorConf.set(ConfigOptions::getAddRefVisitorInformationOnlyKey(), "false");
   std::shared_ptr<AddRef1Visitor> pRef1v(new AddRef1Visitor());
@@ -347,6 +347,8 @@ bool DiffConflator::_isMatchToRemovePartially(const ConstMatchPtr& match)
 
 void DiffConflator::_separateMatchesToRemoveAsPartial()
 {
+  LOG_DEBUG("Separating matches to remove as partial...");
+
   for (std::vector<ConstMatchPtr>::const_iterator mit = _matches.begin(); mit != _matches.end();
        ++mit)
   {
@@ -360,6 +362,8 @@ void DiffConflator::_separateMatchesToRemoveAsPartial()
       _matchesToRemoveAsPartial.push_back(match);
     }
   }
+  LOG_VART(_matchesToRemoveAsWhole);
+  LOG_VART(_matchesToRemoveAsPartial);
 }
 
 int DiffConflator::_countMatchesToRemoveAsPartial() const
@@ -499,8 +503,8 @@ void DiffConflator::_removeMatchElementsCompletely(const Status& status)
   {
     matchesToRemoveCompletely = _matches;
   }
-  LOG_VART(matchesToRemoveCompletely.size());
-  //LOG_VART(matchesToRemoveCompletely);
+  //LOG_VART(matchesToRemoveCompletely.size());
+  LOG_VART(matchesToRemoveCompletely);
 
   // We don't want remove elements involved in intra-dataset matches, so record those now.
   if (!_intraDatasetElementIdsPopulated)
@@ -614,6 +618,9 @@ void DiffConflator::_removePartialSecondaryMatchElements()
 {
   std::vector<MergerPtr> relationMergers;
   _createMergers(relationMergers);
+  // We already projected the map to planar earlier, so its strange that it should need to be done
+  // again. Discovered this was needed to be run again for some input data.
+  MapProjector::projectToPlanar(_map);
   _mergeFeatures(relationMergers);
 }
 
@@ -799,7 +806,7 @@ void DiffConflator::_calcAndStoreTagChanges()
     if (numMatchesProcessed % (_taskStatusUpdateInterval * 10) == 0)
     {
       PROGRESS_INFO(
-        "\tStored " << StringUtils::formatLargeNumber(numMatchesProcessed) << " / " <<
+        "\tStored " << StringUtils::formatLargeNumber(numMatchesProcessed) << " of " <<
             StringUtils::formatLargeNumber(_matches.size()) << " match tag changes.");
     }
   }

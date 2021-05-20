@@ -219,7 +219,7 @@ void ConflictsNetworkMatcher::_sanityCheckRelationships()
     if (ctr % 100 == 0)
     {
       PROGRESS_INFO(
-        "Sanity checked " << StringUtils::formatLargeNumber(ctr) << " / " <<
+        "Sanity checked " << StringUtils::formatLargeNumber(ctr) << " of " <<
         StringUtils::formatLargeNumber(total) << " relationships. " <<
         StringUtils::formatLargeNumber(matchesRemoved) << " matches removed.");
     }
@@ -337,7 +337,7 @@ void ConflictsNetworkMatcher::_createMatchRelationships()
     if (count % 1000 == 0)
     {
       PROGRESS_INFO(
-        StringUtils::formatLargeNumber(count) << " / " <<
+        StringUtils::formatLargeNumber(count) << " of " <<
         StringUtils::formatLargeNumber(_edgeMatches->getAllMatches().size()) <<
         " match relationships processed.");
     }
@@ -610,7 +610,7 @@ void ConflictsNetworkMatcher::_iterateSimple()
     if (count % 1000 == 0)
     {
       PROGRESS_INFO(
-        StringUtils::formatLargeNumber(count) << " / " << StringUtils::formatLargeNumber(total) <<
+        StringUtils::formatLargeNumber(count) << " of " << StringUtils::formatLargeNumber(total) <<
         " matches processed.");
     }
   }
@@ -675,7 +675,9 @@ void ConflictsNetworkMatcher::finalize()
     count++;
     if (count % 100 == 0)
     {
-      PROGRESS_INFO(count << " / " << total << " edge matches finalized.");
+      PROGRESS_INFO(
+        StringUtils::formatLargeNumber(count) << " of " << StringUtils::formatLargeNumber(total) <<
+        " edge matches finalized.");
     }
   }
 }
@@ -728,7 +730,7 @@ void ConflictsNetworkMatcher::_seedEdgeScores()
       // added here...why is that?; update 10/11/19: even with StringUtils removed here, I'm still
       // seeing multiple lines logged...why?
       PROGRESS_INFO(
-        StringUtils::formatLargeNumber(count) << " / " <<
+        StringUtils::formatLargeNumber(count) << " of " <<
         StringUtils::formatLargeNumber(em.size()) << " edge match scores processed for " <<
         StringUtils::formatLargeNumber(totalNumIntersections) << " total intersections. " <<
         StringUtils::formatLargeNumber(finder.getNumSimilarEdgeMatches()) <<

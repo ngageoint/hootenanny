@@ -50,9 +50,9 @@ public:
   {
     OsmMapPtr map(new OsmMap());
     ConstNetworkVertexPtr vertex1(
-      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 0, 0)));
+      new NetworkVertex(TestUtils::createNode(map, "", Status::Unknown1, 0, 0)));
     ConstNetworkVertexPtr vertex2(
-      new NetworkVertex(TestUtils::createNode(map, Status::Unknown1, 10, 0)));
+      new NetworkVertex(TestUtils::createNode(map, "", Status::Unknown1, 10, 0)));
     ConstNetworkEdgePtr edge(new NetworkEdge(vertex1, vertex2, true));
     ConstEdgeLocationPtr edgeLocStart(new EdgeLocation(edge, 0.0));
     ConstEdgeLocationPtr edgeLocEnd(new EdgeLocation(edge, 0.7));

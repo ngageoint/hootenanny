@@ -47,14 +47,15 @@ namespace hoot
 
 HOOT_JS_REGISTER(ElementGeometryUtilsJs)
 
-void ElementGeometryUtilsJs::Init(Handle<Object> exports)
+void ElementGeometryUtilsJs::Init(Local<Object> exports)
 {
   Isolate* current = exports->GetIsolate();
   HandleScope scope(current);
-  Handle<Object> thisObj = Object::New(current);
+  Local<Context> context = current->GetCurrentContext();
+  Local<Object> thisObj = Object::New(current);
   exports->Set(String::NewFromUtf8(current, "ElementGeometryUtils"), thisObj);
   thisObj->Set(String::NewFromUtf8(current, "calculateLength"),
-               FunctionTemplate::New(current, calculateLength)->GetFunction());
+               FunctionTemplate::New(current, calculateLength)->GetFunction(context).ToLocalChecked());
 }
 
 void ElementGeometryUtilsJs::calculateLength(const FunctionCallbackInfo<Value>& args)

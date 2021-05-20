@@ -61,6 +61,8 @@ public:
 
   void runBasicTest()
   {
+    const QString testName = "runBasicTest";
+
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(
       map,
@@ -74,7 +76,7 @@ public:
     uut._phoneNumberNormalizer.setSearchInText(false);
     map->visitRw(uut);
 
-    const QString outputFile = _outputPath + "out.osm";
+    const QString outputFile = _outputPath + testName + "Out.osm";
     OsmMapWriterFactory::write(map, outputFile);
 
     CPPUNIT_ASSERT_EQUAL(12, uut._phoneNumberNormalizer.getNumNormalized());
@@ -174,6 +176,8 @@ public:
 
   void runConfigureTest()
   {
+    const QString testName = "runConfigureTest";
+
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(
       map,
@@ -189,7 +193,7 @@ public:
     uut.setConfiguration(settings);
     map->visitRw(uut);
 
-    const QString outputFile = _outputPath + "out.osm";
+    const QString outputFile = _outputPath + testName + "Out.osm";
     OsmMapWriterFactory::write(map, outputFile);
 
     CPPUNIT_ASSERT_EQUAL(12, uut._phoneNumberNormalizer.getNumNormalized());

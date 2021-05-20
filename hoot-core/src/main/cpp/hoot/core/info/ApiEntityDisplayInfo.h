@@ -76,6 +76,8 @@ private:
 
   template<typename ApiEntity>
   static QString _getApiEntitiesForMatchMergerCreators(const QString& apiEntityClassName);
+
+  static QString _getWaySnapCriteria();
 };
 
 }

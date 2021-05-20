@@ -20,7 +20,10 @@ RUN yum install -y wget curl sudo vim yum-utils epel-release && \
  yum-config-manager --add-repo https://hoot-repo.s3.amazonaws.com/el7/pgdg95.repo && \
  yum-config-manager --add-repo https://hoot-repo.s3.amazonaws.com/el7/release/hoot.repo && \
  yum install -y hootenanny-core && \
- yum -y clean all
+ yum -y clean all && rm -rf /var/cache/yum
+
+# yum install -y hootenanny-core && \
+
 
 # Add a user with sudo access
 RUN useradd -mUl -G wheel -u $DEV_UID -s /bin/bash $DEV_NAME \
@@ -28,6 +31,6 @@ RUN useradd -mUl -G wheel -u $DEV_UID -s /bin/bash $DEV_NAME \
   && chmod 0440 /etc/sudoers.d/$DEV_NAME \
   && groupmod --gid $DEV_GID $DEV_NAME
 
-USER dev
-WORKDIR /home/dev
+USER $DEV_NAME
+WORKDIR /home/$DEV_NAME
 

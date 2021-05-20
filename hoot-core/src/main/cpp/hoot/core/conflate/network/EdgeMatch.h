@@ -58,19 +58,15 @@ public:
    * Returns true if the specified edge is in either the first or second edge string.
    */
   bool contains(ConstNetworkEdgePtr e) const;
-
   /**
    * Returns true if string 1 & 2 in other are contained by string 1 & 2 of this.
    */
   bool contains(const std::shared_ptr<const EdgeMatch>& other) const;
-
   /**
    * Returns true if the specified vertex is in either the first or second edge string.
    */
   bool contains(ConstNetworkVertexPtr v) const;
-
   bool containsPartial() const { return getString1()->isPartial() || getString2()->isPartial(); }
-
   bool containsStub() const { return getString1()->isStub() || getString2()->isStub(); }
 
   /**
@@ -79,11 +75,8 @@ public:
   int countPartialMatches() const;
 
   EdgeStringPtr getString1() { return _edges1; }
-
   EdgeStringPtr getString2() { return _edges2; }
-
   ConstEdgeStringPtr getString1() const { return _edges1; }
-
   ConstEdgeStringPtr getString2() const { return _edges2; }
 
   /**

@@ -73,7 +73,7 @@ void MaximalSublineStringMatcher::setConfiguration(const Settings& s)
     std::dynamic_pointer_cast<MaximalSublineMatcher>(_sublineMatcher);
   if (maximalSublineMatcher)
   {
-    // See MaximalSubline::__maxRecursions
+    // See MaximalSubline::_maxRecursions
     maximalSublineMatcher->setMaxRecursions(co.getMaximalSublineMaxRecursions());
   }
 }
@@ -84,8 +84,9 @@ void MaximalSublineStringMatcher::setMaxRelevantAngle(Radians r)
   {
     if (logWarnCount < Log::getWarnMessageLimit())
     {
-      LOG_WARN("Max relevant angle is greaer than PI, did you specify the value in degrees instead "
-               "of radians?");
+      LOG_WARN(
+        "Max relevant angle is greaer than PI, did you specify the value in degrees instead "
+        "of radians?");
     }
     else if (logWarnCount == Log::getWarnMessageLimit())
     {
@@ -137,8 +138,9 @@ void MaximalSublineStringMatcher::_configureSublineMatcher()
   _sublineMatcher->setHeadingDelta(_headingDelta);
 }
 
-WaySublineMatchString MaximalSublineStringMatcher::findMatch(const ConstOsmMapPtr& map,
-  const ConstElementPtr& e1, const ConstElementPtr& e2, Meters maxRelevantDistance) const
+WaySublineMatchString MaximalSublineStringMatcher::findMatch(
+  const ConstOsmMapPtr& map, const ConstElementPtr& e1, const ConstElementPtr& e2,
+  Meters maxRelevantDistance) const
 {
   LOG_VART(e1->getElementId());
   LOG_VART(e2->getElementId());

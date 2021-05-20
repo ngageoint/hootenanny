@@ -59,8 +59,7 @@ public:
     MapProjector::projectToPlanar(map);
 
     std::shared_ptr<WayHeadingVarianceCriterion> uut =
-      std::make_shared<WayHeadingVarianceCriterion>(
-        WayHeadingVarianceCriterion(22.5, NumericComparisonType::EqualTo, map));
+      std::make_shared<WayHeadingVarianceCriterion>(22.5, NumericComparisonType::EqualTo, map);
     uut->setNumHistogramBins(16);
     uut->setSampleDistance(1.0);
     uut->setHeadingDelta(5.0);
@@ -75,7 +74,7 @@ public:
 
     std::shared_ptr<WayHeadingVarianceCriterion> uut =
       std::make_shared<WayHeadingVarianceCriterion>(
-        WayHeadingVarianceCriterion(60.0, NumericComparisonType::GreaterThanOrEqualTo, map));
+        60.0, NumericComparisonType::GreaterThanOrEqualTo, map);
     uut->setNumHistogramBins(16);
     uut->setSampleDistance(1.0);
     uut->setHeadingDelta(5.0);

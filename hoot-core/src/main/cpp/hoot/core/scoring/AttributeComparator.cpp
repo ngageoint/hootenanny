@@ -147,10 +147,10 @@ double AttributeComparator::compareMaps()
       _ci = zalpha * _s / sqrt(scores.size());
     }
 
-    PROGRESS_INFO(i << " / " << _iterations << " mean: " << _mean << "   ");
+    PROGRESS_INFO(i << " of " << _iterations << " mean: " << _mean << "   ");
   }
 
-  LOG_INFO(_iterations << " / " << _iterations << " mean: " << _mean << "   ");
+  LOG_INFO(_iterations << " of " << _iterations << " mean: " << _mean << "   ");
 
   OsmSchema::getInstance().setIsACost(oldIsACost);
 

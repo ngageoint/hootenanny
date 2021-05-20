@@ -49,9 +49,7 @@ public:
 
   QString getDescription() const override
   { return "Merges linear features by averaging tags and geometries"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 
 protected:
@@ -59,6 +57,14 @@ protected:
   bool _mergePair(
     ElementId eid1, ElementId eid2,
     std::vector<std::pair<ElementId, ElementId>>& replaced) override;
+
+  /*
+   * @see LinearMergerAbstract
+   *
+   * not implemented
+   */
+  WaySublineMatchString _matchSubline(ElementPtr /*e1*/, ElementPtr /*e2*/) override
+  { return WaySublineMatchString(); }
 
 private:
 

@@ -231,7 +231,7 @@ public:
     if (_numElementsVisited % (_taskStatusUpdateInterval * 100) == 0)
     {
       PROGRESS_STATUS(
-        "Processed " << StringUtils::formatLargeNumber(_numElementsVisited) << " / " <<
+        "Processed " << StringUtils::formatLargeNumber(_numElementsVisited) << " of " <<
         StringUtils::formatLargeNumber(_map->getWayCount() + _map->getRelationCount()) <<
         " elements.");
     }

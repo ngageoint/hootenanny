@@ -217,10 +217,10 @@ bool ElementIdSynchronizer::_areWayNodesInWaysOfMismatchedType(
 
   // get the ways that contain each.
   const std::vector<ConstWayPtr> containingWays1 =
-    WayUtils::getContainingWaysByNodeId(element1->getId(), _map1);
+    WayUtils::getContainingWaysByNodeIdConst(element1->getId(), _map1);
   LOG_VART(containingWays1.size());
   const std::vector<ConstWayPtr> containingWays2 =
-    WayUtils::getContainingWaysByNodeId(element2->getId(), _map2);
+    WayUtils::getContainingWaysByNodeIdConst(element2->getId(), _map2);
   LOG_VART(containingWays2.size())
 
   // See if any of the ways between the two have a matching type.

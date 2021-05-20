@@ -53,7 +53,7 @@ WaySplitter::WaySplitter(const OsmMapPtr& map, WayPtr way) :
   _nf.reset(new FindNodesInWayFactory(_way));
 }
 
-vector<WayPtr> WaySplitter::createSplits(const vector<WayLocation>& wl)
+vector<WayPtr> WaySplitter::createSplits(const vector<WayLocation>& wl) const
 {
   vector<WayPtr> result;
   WayLocation last = WayLocation(_map, _way, 0, 0.0);
@@ -136,7 +136,7 @@ void WaySplitter::split(const OsmMapPtr& map, const WayPtr& w, double maxSize)
   }
 }
 
-vector<WayPtr> WaySplitter::split(WayLocation& splitPoint)
+vector<WayPtr> WaySplitter::split(WayLocation& splitPoint) const
 {
   vector<WayPtr> result;
 

@@ -171,9 +171,21 @@ public:
    * @param nodeId ID of the node to return containing ways for
    * @param map map which owns the input node
    * @param wayCriterion an optional ElementCriterion to further filter the containing ways
+   * @return a collection of const ways
+   */
+  static std::vector<ConstWayPtr> getContainingWaysByNodeIdConst(
+    const long nodeId, const ConstOsmMapPtr& map,
+    const ElementCriterionPtr& wayCriterion = ElementCriterionPtr());
+
+  /**
+   * Returns all ways containing an input node
+   *
+   * @param nodeId ID of the node to return containing ways for
+   * @param map map which owns the input node
+   * @param wayCriterion an optional ElementCriterion to further filter the containing ways
    * @return a collection of ways
    */
-  static std::vector<ConstWayPtr> getContainingWaysByNodeId(
+  static std::vector<WayPtr> getContainingWaysByNodeId(
     const long nodeId, const ConstOsmMapPtr& map,
     const ElementCriterionPtr& wayCriterion = ElementCriterionPtr());
 

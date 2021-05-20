@@ -697,7 +697,7 @@ void NodeDensityTileBoundsCalculator::_renderImage(const ConstOsmMapPtr& map, cv
     if (nodeCtr % statusUpdateInterval == 0)
     {
       PROGRESS_INFO(
-        "Counted " << StringUtils::formatLargeNumber(nodeCtr) << " / " <<
+        "Counted " << StringUtils::formatLargeNumber(nodeCtr) << " of " <<
         StringUtils::formatLargeNumber(nm.size()) << " nodes.");
     }
   }

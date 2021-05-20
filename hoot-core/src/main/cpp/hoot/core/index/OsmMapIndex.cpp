@@ -124,7 +124,7 @@ void OsmMapIndex::_buildNodeTree() const
 
     if (count % 1000 == 0)
     {
-      PROGRESS_DEBUG("  Node R-Tree count: " << count << " / " << nodes.size() << "       ");
+      PROGRESS_DEBUG("  Node R-Tree count: " << count << " of " << nodes.size() << "       ");
     }
   }
 
@@ -184,7 +184,7 @@ void OsmMapIndex::_buildWayTree() const
 
     if (count % 1000 == 0)
     {
-      PROGRESS_DEBUG("Way R-Tree Index: " << count << " / " << ways.size() << "       ");
+      PROGRESS_DEBUG("Way R-Tree Index: " << count << " of " << ways.size() << "       ");
     }
   }
 

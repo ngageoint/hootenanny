@@ -71,7 +71,7 @@ public:
     CPPUNIT_ASSERT(uut.isSatisfied(node1));
     CPPUNIT_ASSERT(uut.isSatisfied(node2));
 
-    RelationPtr relation1 = std::make_shared<Relation>(Relation(Status::Unknown1, 1));
+    RelationPtr relation1 = std::make_shared<Relation>(Status::Unknown1, 1);
     relation1->addElement("test", way1->getElementId());
     relation1->addElement("test", node3->getElementId());
     map->addRelation(relation1);

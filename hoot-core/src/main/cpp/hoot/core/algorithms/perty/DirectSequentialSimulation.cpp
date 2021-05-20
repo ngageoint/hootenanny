@@ -83,7 +83,7 @@ Mat DirectSequentialSimulation::permute(const geos::geom::Envelope& env, int& po
 }
 
 Mat DirectSequentialSimulation::_gm2dPerturb2(geos::geom::Envelope env, Meters sigma,
-                                              boost::minstd_rand& rng)
+                                              boost::minstd_rand& rng) const
 {
   // Uses John Dollof's Gauss-Markov method to perturb values assigned to a
   // 2D grid with correlation.  Returns 2D grid of perturbations.

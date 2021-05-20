@@ -257,7 +257,7 @@ bool WayJoiner::_areJoinable(const WayPtr& w1, const WayPtr& w2) const
     //  What isn't joinable is one is UNKNOWN1 and the other is UNKNOWN2 or vice-a-versa
 }
 
-void WayJoiner::_writeParentIdsToChildIds()
+void WayJoiner::_writeParentIdsToChildIds() const
 {
   WayMap ways = _map->getWays();
   QSet<long> pidsUsed;
@@ -284,7 +284,7 @@ void WayJoiner::_writeParentIdsToChildIds()
   }
 }
 
-void WayJoiner::_resetParents()
+void WayJoiner::_resetParents() const
 {
   WayMap ways = _map->getWays();
   //  Find all ways that have a split parent id and reset them
@@ -442,7 +442,7 @@ bool WayJoiner::_joinWays(const WayPtr& parent, const WayPtr& child)
     return false;
   }
 
-  //  First make sure that they begin or end at the same node
+  //  First, make sure that they begin or end at the same node.
   bool parentFirst;
   if (child_nodes[0] == parent_nodes[parent_nodes.size() - 1])
     parentFirst = true;
@@ -468,7 +468,6 @@ bool WayJoiner::_joinWays(const WayPtr& parent, const WayPtr& child)
     return false;
   }
 
-
   //  Remove the split parent id
   child->resetPid();
 
@@ -476,6 +475,7 @@ bool WayJoiner::_joinWays(const WayPtr& parent, const WayPtr& child)
   Tags pTags = parent->getTags();
   Tags cTags = child->getTags();
   Tags tags = TagMergerFactory::mergeTags(pTags, cTags, ElementType::Way);
+  LOG_VART(tags);
   parent->setTags(tags);
 
   //  Remove the duplicate node id of the overlap

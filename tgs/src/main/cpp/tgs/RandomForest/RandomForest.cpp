@@ -65,7 +65,7 @@ void RandomForest::trainBinary(const std::shared_ptr<DataFrame>& data, unsigned 
       {
         _forest.push_back(std::shared_ptr<RandomTree>(new RandomTree()));
         _forest.back()->trainBinary(data, numFactors, posClass, nodeSize, true);
-        std::cout << "Trained Tree # " << i + 1 << " / " << numTrees << "     \r";
+        std::cout << "Trained Tree # " << i + 1 << " of " << numTrees << "     \r";
         std::cout.flush();
       }
       std::cout << std::endl;
@@ -161,7 +161,7 @@ void RandomForest::trainMulticlass(const std::shared_ptr<DataFrame>& data, unsig
       {
         _forest.push_back(std::shared_ptr<RandomTree>(new RandomTree()));
         _forest.back()->trainMulticlass(data, numFactors, nodeSize, true);
-        std::cout << "Trained Tree # " << i + 1 << " / " << numTrees << "     \r";
+        std::cout << "Trained Tree # " << i + 1 << " of " << numTrees << "     \r";
         std::cout.flush();
       }
       std::cout << std::endl;
@@ -254,7 +254,7 @@ void RandomForest::trainRoundRobin(const std::shared_ptr<DataFrame>& data, unsig
       {
         _forest.push_back(std::shared_ptr<RandomTree>(new RandomTree()));
         _forest.back()->trainRoundRobin(data, numFactors, posClass, negClass, nodeSize, true);
-        std::cout << "Trained Tree # " << i + 1 << " / " << numTrees << "     \r";
+        std::cout << "Trained Tree # " << i + 1 << " of " << numTrees << "     \r";
         std::cout.flush();
       }
       std::cout << std::endl;

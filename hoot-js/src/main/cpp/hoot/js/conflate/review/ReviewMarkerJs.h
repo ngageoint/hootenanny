@@ -45,7 +45,7 @@ class ReviewMarkerJs : public HootBaseJs
 {
 public:
 
-  static void Init(v8::Handle<v8::Object> target);
+  static void Init(v8::Local<v8::Object> target);
 
   virtual ~ReviewMarkerJs() = default;
 

@@ -44,7 +44,7 @@ public:
 
   virtual ~ClassInitializer() = default;
 
-  virtual void Init(v8::Handle<v8::Object> exports) = 0;
+  virtual void Init(v8::Local<v8::Object> exports) = 0;
 
 private:
 
@@ -61,7 +61,7 @@ public:
 
   ~ClassInitializerTemplate() = default;
 
-  void Init(v8::Handle<v8::Object> exports) override
+  void Init(v8::Local<v8::Object> exports) override
   {
     T::Init(exports);
   }
@@ -76,9 +76,9 @@ public:
 
   static JsRegistrar& getInstance();
 
-  static void Init(v8::Handle<v8::Object> exports);
+  static void Init(v8::Local<v8::Object> exports);
 
-  void initAll(v8::Handle<v8::Object> exports);
+  void initAll(v8::Local<v8::Object> exports);
 
   void registerInitializer(const std::shared_ptr<ClassInitializer>& ci);
 

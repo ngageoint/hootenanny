@@ -49,10 +49,11 @@ HOOT_JS_REGISTER(ElementCriterionJs)
 
 Persistent<Function> ElementCriterionJs::_constructor;
 
-void ElementCriterionJs::Init(Handle<Object> target)
+void ElementCriterionJs::Init(Local<Object> target)
 {
   Isolate* current = target->GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
   vector<QString> opNames =
     Factory::getInstance().getObjectNamesByBase(ElementCriterion::className());
 
@@ -72,7 +73,7 @@ void ElementCriterionJs::Init(Handle<Object> target)
     tpl->PrototypeTemplate()->Set(
       String::NewFromUtf8(current, "isSatisfied"), FunctionTemplate::New(current, isSatisfied));
 
-    _constructor.Reset(current, tpl->GetFunction());
+    _constructor.Reset(current, tpl->GetFunction(context).ToLocalChecked());
     target->Set(String::NewFromUtf8(current, n), ToLocal(&_constructor));
   }
 }
@@ -98,9 +99,10 @@ void ElementCriterionJs::isSatisfied(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
 
   ElementCriterionPtr ec = ObjectWrap::Unwrap<ElementCriterionJs>(args.This())->getCriterion();
-  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
+  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject(context).ToLocalChecked())->getConstElement();
 
   args.GetReturnValue().Set(Boolean::New(current, ec->isSatisfied(e)));
 }

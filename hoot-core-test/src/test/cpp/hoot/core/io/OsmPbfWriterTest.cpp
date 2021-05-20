@@ -60,9 +60,7 @@ class OsmPbfWriterTest : public HootTestFixture
 
 public:
 
-  OsmPbfWriterTest()
-    : HootTestFixture("test-files/io/",
-                      "test-output/io/")
+  OsmPbfWriterTest() : HootTestFixture("test-files/io/", "test-output/io/")
   {
     setResetType(ResetBasic);
   }
@@ -77,9 +75,7 @@ public:
     OsmPbfWriter writer;
     writer.write(map, _outputPath + "OsmPbfWriterTest.pbf");
 
-    HOOT_FILE_EQUALS( _inputPath + "OsmPbfWriterTest.pbf",
-                     _outputPath + "OsmPbfWriterTest.pbf");
-
+    HOOT_FILE_EQUALS(_inputPath + "OsmPbfWriterTest.pbf", _outputPath + "OsmPbfWriterTest.pbf");
   }
 
   void runWriteNodeTest()
@@ -92,8 +88,6 @@ public:
     n->setTag("hello", "world");
     n->setTag("note", "test tag");
     writer.writePb(n, &ss);
-
-    //TestUtils::dumpString(ss.str());
 
     const unsigned char data[] = {
         0,   0,   0, 101,  10,  69,  10,   0,  10,   4, 110, 111, 116, 101,  10,   8, 116, 101,

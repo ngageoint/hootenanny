@@ -45,27 +45,28 @@ HOOT_JS_REGISTER(LogJs)
 
 QHash<QString, int> LogJs::_logs;
 
-void LogJs::Init(Handle<Object> exports)
+void LogJs::Init(Local<Object> exports)
 {
   Isolate* current = exports->GetIsolate();
   HandleScope scope(current);
-  Handle<Object> log = Object::New(current);
+  Local<Context> context = current->GetCurrentContext();
+  Local<Object> log = Object::New(current);
   exports->Set(String::NewFromUtf8(current, "Log"), log);
-  log->Set(String::NewFromUtf8(current, "setLogLevel"), FunctionTemplate::New(current, setLogLevel)->GetFunction());
-  log->Set(String::NewFromUtf8(current, "init"), FunctionTemplate::New(current, init)->GetFunction());
+  log->Set(String::NewFromUtf8(current, "setLogLevel"), FunctionTemplate::New(current, setLogLevel)->GetFunction(context).ToLocalChecked());
+  log->Set(String::NewFromUtf8(current, "init"), FunctionTemplate::New(current, init)->GetFunction(context).ToLocalChecked());
 
-  exports->Set(String::NewFromUtf8(current, "log"), FunctionTemplate::New(current, logInfo)->GetFunction());
-  exports->Set(String::NewFromUtf8(current, "trace"), FunctionTemplate::New(current, logTrace)->GetFunction());
-  exports->Set(String::NewFromUtf8(current, "debug"), FunctionTemplate::New(current, logDebug)->GetFunction());
-  exports->Set(String::NewFromUtf8(current, "logTrace"), FunctionTemplate::New(current, logTrace)->GetFunction());
-  exports->Set(String::NewFromUtf8(current, "logDebug"), FunctionTemplate::New(current, logDebug)->GetFunction());
-  exports->Set(String::NewFromUtf8(current, "logInfo"), FunctionTemplate::New(current, logInfo)->GetFunction());
-  exports->Set(String::NewFromUtf8(current, "logStatus"), FunctionTemplate::New(current, logStatus)->GetFunction());
-  exports->Set(String::NewFromUtf8(current, "status"), FunctionTemplate::New(current, logStatus)->GetFunction());
-  exports->Set(String::NewFromUtf8(current, "warn"), FunctionTemplate::New(current, logWarn)->GetFunction());
-  exports->Set(String::NewFromUtf8(current, "logWarn"), FunctionTemplate::New(current, logWarn)->GetFunction());
-  exports->Set(String::NewFromUtf8(current, "logError"), FunctionTemplate::New(current, logError)->GetFunction());
-  exports->Set(String::NewFromUtf8(current, "logFatal"), FunctionTemplate::New(current, logFatal)->GetFunction());
+  exports->Set(String::NewFromUtf8(current, "log"), FunctionTemplate::New(current, logInfo)->GetFunction(context).ToLocalChecked());
+  exports->Set(String::NewFromUtf8(current, "trace"), FunctionTemplate::New(current, logTrace)->GetFunction(context).ToLocalChecked());
+  exports->Set(String::NewFromUtf8(current, "debug"), FunctionTemplate::New(current, logDebug)->GetFunction(context).ToLocalChecked());
+  exports->Set(String::NewFromUtf8(current, "logTrace"), FunctionTemplate::New(current, logTrace)->GetFunction(context).ToLocalChecked());
+  exports->Set(String::NewFromUtf8(current, "logDebug"), FunctionTemplate::New(current, logDebug)->GetFunction(context).ToLocalChecked());
+  exports->Set(String::NewFromUtf8(current, "logInfo"), FunctionTemplate::New(current, logInfo)->GetFunction(context).ToLocalChecked());
+  exports->Set(String::NewFromUtf8(current, "logStatus"), FunctionTemplate::New(current, logStatus)->GetFunction(context).ToLocalChecked());
+  exports->Set(String::NewFromUtf8(current, "status"), FunctionTemplate::New(current, logStatus)->GetFunction(context).ToLocalChecked());
+  exports->Set(String::NewFromUtf8(current, "warn"), FunctionTemplate::New(current, logWarn)->GetFunction(context).ToLocalChecked());
+  exports->Set(String::NewFromUtf8(current, "logWarn"), FunctionTemplate::New(current, logWarn)->GetFunction(context).ToLocalChecked());
+  exports->Set(String::NewFromUtf8(current, "logError"), FunctionTemplate::New(current, logError)->GetFunction(context).ToLocalChecked());
+  exports->Set(String::NewFromUtf8(current, "logFatal"), FunctionTemplate::New(current, logFatal)->GetFunction(context).ToLocalChecked());
 }
 
 int LogJs::getLogCount(QString log)

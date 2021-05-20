@@ -57,7 +57,7 @@ private:
 
   void _splitWay(
     WayNumber wn, OsmMapPtr map, std::vector<std::pair<ElementId, ElementId>>& replaced,
-    QList<WayMatchStringMerger::SublineMappingPtr> mappings);
+    QList<WayMatchStringMerger::SublineMappingPtr> mappings) const;
 };
 
 }

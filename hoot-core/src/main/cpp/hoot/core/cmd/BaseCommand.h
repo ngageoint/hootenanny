@@ -46,7 +46,6 @@ class BaseCommand : public Command
 public:
 
   BaseCommand() = default;
-
   virtual ~BaseCommand() = default;
 
   QString getHelp() const override;
