@@ -76,6 +76,11 @@ void MaximalSublineStringMatcher::setConfiguration(const Settings& s)
     // See MaximalSubline::_maxRecursions
     maximalSublineMatcher->setMaxRecursions(co.getMaximalSublineMaxRecursions());
   }
+
+  LOG_VART(_sublineMatcher->getName());
+  LOG_VART(_sublineMatcher->getMaxRelevantAngle());
+  LOG_VART(_sublineMatcher->getHeadingDelta());
+  LOG_VART(_sublineMatcher->getMinSplitSize());
 }
 
 void MaximalSublineStringMatcher::setMaxRelevantAngle(Radians r)
