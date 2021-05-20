@@ -896,7 +896,7 @@ public class CustomScriptResource {
                 ||
                 !targetTranslationFolder.getUserId().equals(user.getId())
         )) {
-            throw new ForbiddenException(Response.status(Response.Status.FORBIDDEN).type(MediaType.TEXT_PLAIN).entity("You must own both folders to move it").build());
+            return Response.status(Response.Status.FORBIDDEN).type(MediaType.TEXT_PLAIN).entity("You must own both folders to move it").build();
         }
 
         Map<String, Object> ret = new HashMap<>();
@@ -990,7 +990,7 @@ public class CustomScriptResource {
         if(UserResource.adminUserCheck(user) || user.getId().equals(folder.getUserId()) || folder.getPublicCol()) {
             return folder;
         }
-        throw new ForbiddenException(Response.status(Response.Status.FORBIDDEN).type(MediaType.TEXT_PLAIN).entity("You do not have access to this folder").build());
+        throw new ForbiddenException("You do not have access to this folder");
     }
 
     public static Translations getTranslationForUser(Users user, Long translationId) throws WebApplicationException {
@@ -1001,12 +1001,12 @@ public class CustomScriptResource {
         }
 
         if(user != null && !isVisible(user, translationId)) {
-            throw new ForbiddenException(Response.status(Response.Status.FORBIDDEN).type(MediaType.TEXT_PLAIN).entity("You do not have access to this translation").build());
+            throw new ForbiddenException("You do not have access to this translation");
         }
 
         // Check if owner of translation isn't the user, user isn't admin, and there isn't an owner of the translation
         if(user != null && !translation.getUserId().equals(user.getId()) && !UserResource.adminUserCheck(user) && translation.getUserId() != -1) {
-            throw new ForbiddenException(Response.status(Response.Status.FORBIDDEN).type(MediaType.TEXT_PLAIN).entity("You must own the translation to modify it").build());
+            throw new ForbiddenException("You do not have access to this translation");
         }
         return translation;
     }
