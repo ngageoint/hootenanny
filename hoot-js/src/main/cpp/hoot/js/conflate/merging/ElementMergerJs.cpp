@@ -81,10 +81,10 @@ void ElementMergerJs::mergeElements(const FunctionCallbackInfo<Value>& args)
   LOG_INFO("Merging elements...");
 
   Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
   try
   {
-    HandleScope scope(current);
-    Local<Context> context = current->GetCurrentContext();
     if (args.Length() != 1)
     {
       args.GetReturnValue().Set(

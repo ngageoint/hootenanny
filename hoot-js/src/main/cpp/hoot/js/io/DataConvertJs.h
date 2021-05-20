@@ -217,9 +217,6 @@ inline void toCpp(v8::Local<v8::Value> v, QVariant& qv)
   }
   else if (v->IsInt32())
   {
-    // Changed this since OGR is expecting Int and this makes a Long
-    // It throws an error in OgrWriter.cpp:_addFeature
-//    qv.setValue(v->IntegerValue());
     qv.setValue(v->Int32Value(context).ToChecked());
   }
   else if (v->IsNumber())
@@ -295,50 +292,53 @@ inline T toCpp(v8::Local<v8::Value> v)
 
 inline v8::Local<v8::Value> toV8(bool v)
 {
-  return v8::Boolean::New(v8::Isolate::GetCurrent(), v);
+  v8::EscapableHandleScope scope(v8::Isolate::GetCurrent());
+  return scope.Escape(v8::Boolean::New(v8::Isolate::GetCurrent(), v));
 }
 
 inline v8::Local<v8::Value> toV8(int i)
 {
-  return v8::Integer::New(v8::Isolate::GetCurrent(), i);
+  v8::EscapableHandleScope scope(v8::Isolate::GetCurrent());
+  return scope.Escape(v8::Integer::New(v8::Isolate::GetCurrent(), i));
 }
 
 inline v8::Local<v8::Value> toV8(double v)
 {
-  return v8::Number::New(v8::Isolate::GetCurrent(),v);
+  v8::EscapableHandleScope scope(v8::Isolate::GetCurrent());
+  return scope.Escape(v8::Number::New(v8::Isolate::GetCurrent(),v));
 }
 
 inline v8::Local<v8::Value> toV8(const std::string& s)
 {
-  return
-    v8::String::NewFromUtf8(
-      v8::Isolate::GetCurrent(), s.data(), v8::NewStringType::kNormal, s.length()).ToLocalChecked();
+  v8::EscapableHandleScope scope(v8::Isolate::GetCurrent());
+  return scope.Escape(v8::String::NewFromUtf8(
+      v8::Isolate::GetCurrent(), s.data(), v8::NewStringType::kNormal, s.length()).ToLocalChecked());
 }
 
 template<typename T, typename U>
 v8::Local<v8::Value> toV8(const std::pair<T, U>& p)
 {
   v8::Isolate* current = v8::Isolate::GetCurrent();
-  v8::HandleScope scope(current);
+  v8::EscapableHandleScope scope(current);
   v8::Local<v8::Context> context = current->GetCurrentContext();
   v8::Handle<v8::Array> result = v8::Array::New(v8::Isolate::GetCurrent(), 2);
   result->Set(context, 0, toV8(p.first));
   result->Set(context, 1, toV8(p.second));
-  return result;
+  return scope.Escape(result);
 }
 
 template<typename T>
 v8::Local<v8::Value> toV8(const std::vector<T>& v)
 {
   v8::Isolate* current = v8::Isolate::GetCurrent();
-  v8::HandleScope scope(current);
+  v8::EscapableHandleScope scope(current);
   v8::Local<v8::Context> context = current->GetCurrentContext();
   v8::Handle<v8::Array> result = v8::Array::New(v8::Isolate::GetCurrent(), v.size());
   for (uint32_t i = 0; i < v.size(); i++)
   {
     result->Set(context, i, toV8(v[i]));
   }
-  return result;
+  return scope.Escape(result);
 }
 
 /**
@@ -348,7 +348,7 @@ template<typename T>
 v8::Local<v8::Value> toV8(const std::set<T>& v)
 {
   v8::Isolate* current = v8::Isolate::GetCurrent();
-  v8::HandleScope scope(current);
+  v8::EscapableHandleScope scope(current);
   v8::Local<v8::Context> context = current->GetCurrentContext();
   v8::Handle<v8::Array> result = v8::Array::New(v8::Isolate::GetCurrent(), v.size());
   uint32_t i = 0;
@@ -356,55 +356,56 @@ v8::Local<v8::Value> toV8(const std::set<T>& v)
   {
     result->Set(context, i++, toV8(*it));
   }
-  return result;
+  return scope.Escape(result);
 }
 
 inline v8::Local<v8::Value> toV8(const char* s)
 {
-  return v8::String::NewFromUtf8(v8::Isolate::GetCurrent(), s).ToLocalChecked();
+  v8::EscapableHandleScope scope(v8::Isolate::GetCurrent());
+  return scope.Escape(v8::String::NewFromUtf8(v8::Isolate::GetCurrent(), s).ToLocalChecked());
 }
 
 inline v8::Local<v8::Value> toV8(const QString& s)
 {
+  v8::EscapableHandleScope scope(v8::Isolate::GetCurrent());
   QByteArray utf8 = s.toUtf8();
-  return
-    v8::String::NewFromUtf8(
+  return scope.Escape(v8::String::NewFromUtf8(
       v8::Isolate::GetCurrent(), utf8.data(), v8::NewStringType::kNormal,
-      utf8.length()).ToLocalChecked();
+      utf8.length()).ToLocalChecked());
 }
 
 inline v8::Local<v8::Value> toV8(const QStringList& v)
 {
   v8::Isolate* current = v8::Isolate::GetCurrent();
-  v8::HandleScope scope(current);
+  v8::EscapableHandleScope scope(current);
   v8::Local<v8::Context> context = current->GetCurrentContext();
   v8::Handle<v8::Array> result = v8::Array::New(v8::Isolate::GetCurrent(), v.size());
   for (int i = 0; i < v.size(); i++)
   {
     result->Set(context, i, toV8(v[i]));
   }
-  return result;
+  return scope.Escape(result);
 }
 
 inline v8::Local<v8::Value> toV8(const QVariant& v)
 {
   v8::Isolate* current = v8::Isolate::GetCurrent();
-  v8::HandleScope scope(current);
+  v8::EscapableHandleScope scope(current);
   v8::Local<v8::Context> context = current->GetCurrentContext();
   switch (v.type())
   {
   case QVariant::Invalid:
-    return v8::Undefined(current);
+    return scope.Escape(v8::Undefined(current));
   case QVariant::Bool:
-    return v8::Boolean::New(current, v.toBool());
+    return scope.Escape(v8::Boolean::New(current, v.toBool()));
   case QVariant::Double:
-    return v8::Number::New(current, v.toDouble());
+    return scope.Escape(v8::Number::New(current, v.toDouble()));
   case QVariant::Int:
-    return v8::Integer::New(current, v.toInt());
+    return scope.Escape(v8::Integer::New(current, v.toInt()));
   case QVariant::String:
-    return toV8(v.toString());
+    return scope.Escape(toV8(v.toString()));
   case QVariant::StringList:
-    return toV8(v.toStringList());
+    return scope.Escape(toV8(v.toStringList()));
   case QVariant::List:
   {
     QVariantList l = v.toList();
@@ -413,7 +414,7 @@ inline v8::Local<v8::Value> toV8(const QVariant& v)
     {
       result->Set(context, i, toV8(l[i]));
     }
-    return result;
+    return scope.Escape(result);
   }
   case QVariant::Hash:
   {
@@ -423,7 +424,7 @@ inline v8::Local<v8::Value> toV8(const QVariant& v)
     {
       result->Set(context, toV8(i.key()),toV8(i.value()));
     }
-    return result;
+    return scope.Escape(result);
   }
   case QVariant::Map:
   {
@@ -433,7 +434,7 @@ inline v8::Local<v8::Value> toV8(const QVariant& v)
     {
       result->Set(context, toV8(i.key()),toV8(i.value()));
     }
-    return result;
+    return scope.Escape(result);
   }
   default:
     throw IllegalArgumentException("Received unexpected data type: " + v.toString() + "(" +
@@ -445,7 +446,7 @@ template<typename T, typename U>
 inline v8::Local<v8::Value> toV8(const QHash<T, U>& m)
 {
   v8::Isolate* current = v8::Isolate::GetCurrent();
-  v8::HandleScope scope(current);
+  v8::EscapableHandleScope scope(current);
   v8::Local<v8::Context> context = current->GetCurrentContext();
   v8::Handle<v8::Object> result = v8::Object::New(v8::Isolate::GetCurrent());
   typename QHash<T, U>::const_iterator i;
@@ -453,7 +454,7 @@ inline v8::Local<v8::Value> toV8(const QHash<T, U>& m)
   {
     result->Set(context, toV8(i.key()),toV8(i.value()));
   }
-  return result;
+  return scope.Escape(result);
 }
 
 }

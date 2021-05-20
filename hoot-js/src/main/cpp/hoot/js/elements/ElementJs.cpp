@@ -136,7 +136,7 @@ void ElementJs::getTags(const FunctionCallbackInfo<Value>& args)
 
 Local<Object> ElementJs::New(ConstElementPtr e)
 {
-  EscapableHandleScope scope(v8::Isolate::GetCurrent());
+  EscapableHandleScope scope(Isolate::GetCurrent());
 
   Local<Object> result;
 
@@ -169,7 +169,7 @@ Local<Object> ElementJs::New(ConstElementPtr e)
 
 Local<Object> ElementJs::New(ElementPtr e)
 {
-  EscapableHandleScope scope(v8::Isolate::GetCurrent());
+  EscapableHandleScope scope(Isolate::GetCurrent());
 
   Local<Object> result;
 

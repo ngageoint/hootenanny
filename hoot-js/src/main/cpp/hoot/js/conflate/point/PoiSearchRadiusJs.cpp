@@ -82,7 +82,7 @@ void PoiSearchRadiusJs::getSearchRadii(const FunctionCallbackInfo<Value>& args)
   const QList<PoiSearchRadius> searchRadiiList =
     PoiSearchRadius::readSearchRadii(searchRadiiData);
 
-  Isolate* current = v8::Isolate::GetCurrent();
+  Isolate* current = Isolate::GetCurrent();
   HandleScope scope(current);
   Local<Context> context = current->GetCurrentContext();
   Local<Array> searchRadii = Array::New(current, searchRadiiList.size());

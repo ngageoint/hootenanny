@@ -65,7 +65,7 @@ void ElementIdJs::Init(Local<Object> target)
 
 Local<Object> ElementIdJs::New(ElementId eid)
 {
-  Isolate* current = v8::Isolate::GetCurrent();
+  Isolate* current = Isolate::GetCurrent();
   EscapableHandleScope scope(current);
   Local<Context> context = current->GetCurrentContext();
 
@@ -82,7 +82,7 @@ void ElementIdJs::New(const FunctionCallbackInfo<Value>& args)
   HandleScope scope(current);
 
   ElementIdJs* obj = new ElementIdJs();
-  //  node::ObjectWrap::Wrap takes ownership of the pointer in a v8::Persistent<v8::Object>
+  //  node::ObjectWrap::Wrap takes ownership of the pointer in a Persistent<Object>
   obj->Wrap(args.This());
 
   args.GetReturnValue().Set(args.This());

@@ -385,7 +385,6 @@ public:
     Local<Function> func = Local<Function>::Cast(value);
     Local<Value> jsArgs[1];
     int argc = 0;
-    HandleScope scope(current);  // This extra one might not be needed
     assert(getMap().get());
     OsmMapPtr copiedMap(new OsmMap(getMap()));
     jsArgs[argc++] = OsmMapJs::create(copiedMap);
@@ -786,14 +785,14 @@ MatchPtr ScriptMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId ei
   if (attemptToMatch)
   {
     Isolate* current = v8::Isolate::GetCurrent();
-    HandleScope handleScope(current);
+    EscapableHandleScope handleScope(current);
     Context::Scope context_scope(_script->getContext(current));
 
     Local<Object> mapJs = OsmMapJs::create(map);
     Persistent<Object> plugin(current, ScriptMatchVisitor::getPlugin(_script));
 
     std::shared_ptr<ScriptMatch> match =
-      std::make_shared<ScriptMatch>(_script, plugin, map, mapJs, eid1, eid2, getMatchThreshold());
+      std::make_shared<ScriptMatch>(_script, plugin, map, handleScope.Escape(mapJs), eid1, eid2, getMatchThreshold());
     match->setMatchMembers(
       ScriptMatch::geometryTypeToMatchMembers(
         GeometryTypeCriterion::typeToString(_scriptInfo.getGeometryType())));

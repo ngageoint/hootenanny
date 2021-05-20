@@ -42,7 +42,7 @@ HOOT_FACTORY_REGISTER(ElementCriterion, JsFunctionCriterion)
 
 bool JsFunctionCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  Isolate* current = v8::Isolate::GetCurrent();
+  Isolate* current = Isolate::GetCurrent();
   HandleScope handleScope(current);
   Context::Scope context_scope(current->GetCurrentContext());
   Local<Context> context = current->GetCurrentContext();
