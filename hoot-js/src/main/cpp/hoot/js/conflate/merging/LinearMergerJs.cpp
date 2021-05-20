@@ -94,17 +94,30 @@ void LinearMergerJs::apply(const FunctionCallbackInfo<Value>& args)
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
 
-  SublineStringMatcherPtr sublineMatcher = toCpp<SublineStringMatcherPtr>(args[0]);
-  LOG_VART(sublineMatcher->getName());
-  LOG_VART(sublineMatcher->getSublineMatcherName());
+  SublineStringMatcherPtr sublineStringMatcher = toCpp<SublineStringMatcherPtr>(args[0]);
+  // POTENTIAL BUG HERE: This subline string matcher has already been configured when
+  // SublineStringMatcherFactory creates it during matching. However, if we don't call
+  // setConfiguration here, js linear conflation performs worse on some data due to extra match
+  // conflicts being recognized during match optimization. What's happening here is that, due to the
+  // manner in which MaximalSublineStringMatcher::setConfiguration is set up, the configured subline
+  // matchers are being ignored and reset to MaximalNearestSublineMatcher when setConfiguration is
+  // called here. That isn't really a good thing due to the confusion it causes, but the only other
+  // options would be to either add a separate subline matcher for each data type to be used during
+  // match conflict resolution (and possibly also during merging) only (cumbersome), or just
+  // hardcode the configuration of the subline string matcher here to always use
+  // MaximalNearestSublineMatcher as its primary matcher (not as cumbersome, but more brittle). So,
+  // staying with this behavior for the time being. Eventually, it may be worth correcting this
+  // issue.
+  sublineStringMatcher->setConfiguration(conf());
+  LOG_VART(sublineStringMatcher->getName());
+  LOG_VART(sublineStringMatcher->getSublineMatcherName());
   OsmMapPtr map = toCpp<OsmMapPtr>(args[1]);
   MergerBase::PairsSet pairs = toCpp<MergerBase::PairsSet>(args[2]);
-  vector<pair<ElementId, ElementId>> replaced =
-    toCpp<vector<pair<ElementId, ElementId>>>(args[3]);
+  vector<pair<ElementId, ElementId>> replaced = toCpp<vector<pair<ElementId, ElementId>>>(args[3]);
   const QString matchedBy = toCpp<QString>(args[4]);
   LOG_VART(matchedBy);
 
-  MergerPtr merger = LinearMergerFactory::getMerger(pairs, sublineMatcher, matchedBy);
+  MergerPtr merger = LinearMergerFactory::getMerger(pairs, sublineStringMatcher, matchedBy);
   LOG_VART(merger->getClassName());
   merger->apply(map, replaced);
 

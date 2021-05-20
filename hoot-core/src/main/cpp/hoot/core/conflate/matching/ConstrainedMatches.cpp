@@ -42,7 +42,6 @@ _map(map)
 {
   _score = -1;
   _timeLimit = -1;
-  setConfiguration(conf());
 }
 
 void ConstrainedMatches::_calculateMatchConflicts()
