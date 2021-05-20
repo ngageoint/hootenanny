@@ -51,7 +51,7 @@ public:
 
 private:
 
-  void _snapToEnds(const ConstOsmMapPtr &map, std::vector<WayLocation> &wl) const;
+  void _snapToEnds(const ConstOsmMapPtr &map, std::vector<WayLocation>& wl) const;
 };
 
 }
