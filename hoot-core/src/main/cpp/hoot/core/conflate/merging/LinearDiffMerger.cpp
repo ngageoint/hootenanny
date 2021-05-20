@@ -224,7 +224,8 @@ bool LinearDiffMerger::_findAndProcessMatch(
   {
     OsmMapWriterFactory::writeDebugMap(
       _map,
-      "after-merge-" + way1->getElementId().toString() + "-" + way2->getElementId().toString());
+      "LinearDiffMerger-after-merge-" + way1->getElementId().toString() + "-" +
+       way2->getElementId().toString());
   }
 
   return false;

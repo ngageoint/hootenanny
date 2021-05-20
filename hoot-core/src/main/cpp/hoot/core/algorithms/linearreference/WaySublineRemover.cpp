@@ -145,6 +145,7 @@ std::vector<ElementId> WaySublineRemover::removeSubline(
   // copied input is automatically removed from the map and resulting newly created segments are
   // automatically added to the map.
   std::vector<ElementId> newWayIds1 = _split(wayCopy1, startCopy, map, true);
+  LOG_VART(newWayIds1);
   const bool split1Performed = !newWayIds1.empty();
   LOG_VART(split1Performed);
   if (newWayIds1.empty())

@@ -236,7 +236,7 @@ long WayAverager::_merge(
         std::min(node1->getCircularError(), node2->getCircularError())));
 
   _map->addNode(node);
-  OsmMapWriterFactory::writeDebugMap(_map, "WayAverager-after-merger-add-node");
+  OsmMapWriterFactory::writeDebugMap(_map, "WayAverager-after-add-node");
   // replace all instances of node1/node2 with node.
   _map->replaceNode(node1->getId(), node->getId());
   OsmMapWriterFactory::writeDebugMap(_map, "WayAverager-after-node-replacement-1");
