@@ -29,7 +29,6 @@
 
 // hoot
 #include <hoot/core/algorithms/subline-matching/SublineMatcher.h>
-#include <hoot/core/util/Configurable.h>
 
 namespace hoot
 {
@@ -37,7 +36,7 @@ namespace hoot
 /**
  * A SublineMatcher based on the Frechet distance algorithm.
  */
-class FrechetSublineMatcher : public SublineMatcher, public Configurable
+class FrechetSublineMatcher : public SublineMatcher
 {
 public:
 
@@ -54,20 +53,10 @@ public:
   WaySublineMatchString findMatch(const ConstOsmMapPtr& map, const ConstWayPtr& way1,
     const ConstWayPtr& way2, double& score, Meters maxRelevantDistance = -1) const override;
 
-  void setMaxRelevantAngle(Radians angle) override { _maxAngle = angle; }
-  void setMinSplitSize(Meters /*minSplitSize*/) override { }
-  void setHeadingDelta(Meters /*headingDelta*/) override { }
-
-  void setConfiguration(const Settings &conf) override;
-
   QString getDescription() const override
   { return "Matches lines based on the Frechet Distance algorithm"; }
   QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }
-
-private:
-
-  Radians _maxAngle;
 };
 
 }

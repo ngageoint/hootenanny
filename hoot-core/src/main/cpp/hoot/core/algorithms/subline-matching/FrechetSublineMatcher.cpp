@@ -52,11 +52,9 @@ WaySublineMatchString FrechetSublineMatcher::findMatch(
     maxRelevantDistance;
   //  Create a copy of the map and the two ways
   OsmMapPtr mapCopy(new OsmMap());
-  CopyMapSubsetOp(map,
-               way1->getElementId(),
-               way2->getElementId()).apply(mapCopy);
+  CopyMapSubsetOp(map, way1->getElementId(), way2->getElementId()).apply(mapCopy);
   //  Calculate the Frechet subline
-  FrechetDistance fd(map, way1, way2, _maxAngle);
+  FrechetDistance fd(map, way1, way2, toRadians(_maxRelevantAngle));
   vector<frechet_subline> max = fd.matchingSublines(mrd);
   //  Make sure that there is a valid subline
   if (max.size() < 1)
@@ -97,13 +95,6 @@ WaySublineMatchString FrechetSublineMatcher::findMatch(
       v.emplace_back(match, map);
   }
   return WaySublineMatchString(v);
-}
-
-
-void FrechetSublineMatcher::setConfiguration(const Settings &conf)
-{
-  ConfigOptions co(conf);
-  _maxAngle = toRadians(co.getWayMatcherMaxAngle());
 }
 
 }
