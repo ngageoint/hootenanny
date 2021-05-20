@@ -287,6 +287,7 @@ public class AdvancedConflationOptionsResource {
                     }
                 }
 
+                obj.replace("input", "multiCombobox");
                 obj.put("data", data);
                 obj.put("displayToHootMap", displayToHootMap);
             }
