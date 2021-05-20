@@ -95,6 +95,8 @@ void LinearMergerJs::apply(const FunctionCallbackInfo<Value>& args)
   HandleScope scope(current);
 
   SublineStringMatcherPtr sublineMatcher = toCpp<SublineStringMatcherPtr>(args[0]);
+  LOG_VART(sublineMatcher->getName());
+  LOG_VART(sublineMatcher->getSublineMatcherName());
   OsmMapPtr map = toCpp<OsmMapPtr>(args[1]);
   MergerBase::PairsSet pairs = toCpp<MergerBase::PairsSet>(args[2]);
   vector<pair<ElementId, ElementId>> replaced =

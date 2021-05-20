@@ -145,6 +145,7 @@ std::vector<ElementId> WaySublineRemover::removeSubline(
   // copied input is automatically removed from the map and resulting newly created segments are
   // automatically added to the map.
   std::vector<ElementId> newWayIds1 = _split(wayCopy1, startCopy, map, true);
+  LOG_VART(newWayIds1);
   const bool split1Performed = !newWayIds1.empty();
   LOG_VART(split1Performed);
   if (newWayIds1.empty())
@@ -204,9 +205,9 @@ std::vector<ElementId> WaySublineRemover::removeSubline(
     LOG_TRACE(way->getElementId() << " was not split.")
   }
 
-  LOG_TRACE(map->containsElement(way->getElementId()));
-  LOG_TRACE(map->containsElement(wayCopy1->getElementId()));
-  LOG_TRACE(map->containsElement(wayCopy2->getElementId()));
+  LOG_VART(map->containsElement(way->getElementId()));
+  LOG_VART(map->containsElement(wayCopy1->getElementId()));
+  LOG_VART(map->containsElement(wayCopy2->getElementId()));
 
   return newWayIds;
 }
