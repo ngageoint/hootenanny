@@ -204,9 +204,9 @@ std::vector<ElementId> WaySublineRemover::removeSubline(
     LOG_TRACE(way->getElementId() << " was not split.")
   }
 
-  LOG_TRACE(map->containsElement(way->getElementId()));
-  LOG_TRACE(map->containsElement(wayCopy1->getElementId()));
-  LOG_TRACE(map->containsElement(wayCopy2->getElementId()));
+  LOG_VART(map->containsElement(way->getElementId()));
+  LOG_VART(map->containsElement(wayCopy1->getElementId()));
+  LOG_VART(map->containsElement(wayCopy2->getElementId()));
 
   return newWayIds;
 }
