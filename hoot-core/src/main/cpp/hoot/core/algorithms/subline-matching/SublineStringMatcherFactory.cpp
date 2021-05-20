@@ -70,6 +70,12 @@ SublineStringMatcherPtr SublineStringMatcherFactory::_getHighwayMatcher()
 
 SublineStringMatcherPtr SublineStringMatcherFactory::_getWaterwayMatcher(const ConstOsmMapPtr& map)
 {
+  if (!map)
+  {
+    throw IllegalArgumentException(
+      "No map passed to waterway subline string matcher initialization.");
+  }
+
   ConfigOptions opts;
   int maxRecursions = -1; // default value
   if (opts.getWaterwayMaximalSublineAutoOptimize())

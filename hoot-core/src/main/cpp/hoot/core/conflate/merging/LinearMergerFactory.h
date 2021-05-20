@@ -36,9 +36,11 @@ namespace hoot
 {
 
 /**
- * A factory for creating a merger capable of merging a feature with a linear geometry
+ * A factory for creating a merger capable of merging a feature with a linear geometry. The merger
+ * implementation returned may be controlled via the geometry.linear.merger.default configuration
+ * option.
  *
- * The class hierarchy for linear mergers has become unnecessarily complex over time due to the
+ * The class hierarchy for linear mergers has become somewhat complex over time due to the
  * introduction of the Network Algorithm and Attribute Conflation. This attempts to shield some of
  * that complexity from callers. This class should not be confused with Mergerfactory which
  * generates MergerCreators. MergerCreators dealing with linear features call this class to
@@ -49,7 +51,7 @@ class LinearMergerFactory
 public:
 
   /**
-   * Creates a linear feature merger matched by the Unifying Algorithm.
+   * Creates a linear feature merger
    *
    * @param eids element IDs of the features to be merged
    * @param sublineMatcher the subline matcher to be used to match the features

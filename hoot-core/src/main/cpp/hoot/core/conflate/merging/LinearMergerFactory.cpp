@@ -32,7 +32,6 @@
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/conflate/network/PartialNetworkMerger.h>
-#include <hoot/core/conflate/merging/LinearSnapMerger.h>
 #include <hoot/core/conflate/merging/LinearTagOnlyMerger.h>
 #include <hoot/core/conflate/merging/LinearAverageMerger.h>
 
@@ -74,7 +73,7 @@ MergerPtr LinearMergerFactory::getMerger(
     ConfigOptions().getGeometryLinearMergerDefault() == LinearAverageMerger::className();
   if (isAttributeConflate)
   {
-    // TODO: make this cleaner
+    // This is messy, but we'll need some refactoring to get rid of it.
     merger.reset(
       new LinearTagOnlyMerger(
         eids,

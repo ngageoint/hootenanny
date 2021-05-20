@@ -35,18 +35,19 @@ namespace hoot
 {
 
 /**
- * TODO
+ * A factory for creating subline string matchers
  */
 class SublineStringMatcherFactory
 {
 public:
 
   /**
-   * TODO
+   * Returns the appropriate subline string matcher given the feature type being conflated
    *
-   * @param featureType
-   * @param map
-   * @return
+   * @param featureType the type of feature being conflated
+   * @param map optional map; needed to configure the matcher for some feature types
+   * @return an initialized subline string matcher
+   * @throws IllegalArgumentException if a map was needed for configuration and none was passed in
    */
   static SublineStringMatcherPtr getMatcher(
     const CreatorDescription::BaseFeatureType& featureType,
@@ -60,16 +61,6 @@ private:
   static SublineStringMatcherPtr _getPowerLineMatcher();
   static SublineStringMatcherPtr _getGenericLineMatcher();
 
-  /*
-   * TODO
-   *
-   * @param sublineStringMatcherName
-   * @param sublineMatcherName
-   * @param maxAngle
-   * @param headingDelta
-   * @param maxRecursions
-   * @return
-   */
   static SublineStringMatcherPtr _getMatcher(
     const QString& sublineStringMatcherName, const QString& sublineMatcherName,
     const double maxAngle, const double headingDelta, const int maxRecursions);

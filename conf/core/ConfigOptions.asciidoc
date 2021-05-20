@@ -4991,7 +4991,8 @@ Flat file containing street types and their abbreviations.
 * Data Type: string
 * Default Value: `hoot::FrechetSublineMatcher`
 
-TODO
+This subline matcher is used as a backup if the primary linear subline merging runs for too long.
+See `maximal.subline.max.recursions`.
 
 === superfluous.node.remover.exclude.ids
 
