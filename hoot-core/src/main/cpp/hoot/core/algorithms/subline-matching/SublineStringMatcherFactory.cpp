@@ -79,8 +79,7 @@ SublineStringMatcherPtr SublineStringMatcherFactory::_getWaterwayMatcher(const C
   return
     _getMatcher(
       MaximalSublineStringMatcher::className(), opts.getWaterwaySublineMatcher(),
-      opts.getWaterwayMatcherMaxAngle()/*ConfigOptions::getWayMatcherMaxAngle()*/,
-      opts.getWaterwayMatcherHeadingDelta(), maxRecursions);
+      opts.getWaterwayMatcherMaxAngle(), opts.getWaterwayMatcherHeadingDelta(), maxRecursions);
 }
 
 SublineStringMatcherPtr SublineStringMatcherFactory::_getRailwayMatcher()

@@ -79,7 +79,7 @@ public:
    */
   double getScore() const { return _score; }
 
-  void setConfiguration(const Settings &/*conf*/) override { }
+  void setConfiguration(const Settings& /*conf*/) override { }
 
   void setTimeLimit(double limit) { _timeLimit = limit; }
 
