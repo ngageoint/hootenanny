@@ -244,7 +244,7 @@ private:
 
   unsigned int _calculateEvidence(ConstElementPtr poi, ConstElementPtr poly);
   unsigned int _getDistanceEvidence(ConstElementPtr poi, ConstElementPtr poly);
-  unsigned int _getConvexPolyDistanceEvidence(ConstElementPtr poi, ConstElementPtr poly);
+  unsigned int _getConvexPolyDistanceEvidence(ConstElementPtr poi, ConstElementPtr poly) const;
   unsigned int _getTypeEvidence(ConstElementPtr poi, ConstElementPtr poly);
   unsigned int _getNameEvidence(ConstElementPtr poi, ConstElementPtr poly);
   unsigned int _getAddressEvidence(ConstElementPtr poi, ConstElementPtr poly);
@@ -254,7 +254,7 @@ private:
 
   bool _skipForReviewTypeDebugging() const;
 
-  void _clearCache();
+  void _clearCache() const;
 };
 
 }

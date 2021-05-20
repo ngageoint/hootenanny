@@ -149,7 +149,7 @@ void OgrWriter::setCacheCapacity(const unsigned long maxNodes, const unsigned lo
     std::shared_ptr<ElementCache>(new ElementCacheLRU(maxNodes, maxWays, maxRelations));
 }
 
-void OgrWriter::strictError(const QString& warning)
+void OgrWriter::strictError(const QString& warning) const
 {
   if (_strictChecking == StrictOn)
   {
@@ -279,7 +279,7 @@ void OgrWriter::write(const ConstOsmMapPtr& map)
 void OgrWriter::translateToFeatures(
   const ElementProviderPtr& provider, const ConstElementPtr& e,
   std::shared_ptr<Geometry> &g, // output
-  std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature> &tf) // output
+  std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature> &tf) const // output
 {
   // TODO: maybe return a reference or something, to avoid a copy
 
@@ -802,7 +802,7 @@ void OgrWriter::_addFeature(OGRLayer* layer, const std::shared_ptr<Feature>& f,
 }
 
 void OgrWriter::_addFeatureToLayer(OGRLayer* layer, const std::shared_ptr<Feature>& f,
-                                   const Geometry* g, OGRFeature* poFeature)
+                                   const Geometry* g, OGRFeature* poFeature) const
 {
   std::string wkt = g->toString();
   char* t = (char*)wkt.data();

@@ -248,7 +248,7 @@ void GeometryToElementConverter::convertPolygonToRelation(
 }
 
 NodePtr GeometryToElementConverter::_createNode(const OsmMapPtr& map, const Coordinate& c,
-  Status s, double circularError)
+  Status s, double circularError) const
 {
   if (_nf == nullptr)
   {

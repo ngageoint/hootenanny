@@ -66,7 +66,7 @@ HootApiDbWriter::~HootApiDbWriter()
   close();
 }
 
-void HootApiDbWriter::_addElementTags(const std::shared_ptr<const Element>& e, Tags& t)
+void HootApiDbWriter::_addElementTags(const std::shared_ptr<const Element>& e, Tags& t) const
 {
   LOG_TRACE("Adding element tags to: " << e->getElementId());
   if (!t.contains(MetadataTags::HootStatus()))

@@ -56,7 +56,7 @@ private:
 
   void _addVertexLink(OsmMapPtr map, NetworkVertexScorePtr vertexScore);
 
-  ConstNodePtr _getMedianNode(ConstOsmMapPtr map, QList<ConstElementPtr> e);
+  ConstNodePtr _getMedianNode(ConstOsmMapPtr map, QList<ConstElementPtr> e) const;
   ConstNodePtr _getMedianNode(ConstOsmMapPtr map, ConstElementPtr e);
 };
 

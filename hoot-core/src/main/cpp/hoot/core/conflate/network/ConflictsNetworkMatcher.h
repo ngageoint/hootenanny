@@ -144,19 +144,19 @@ private:
 
   MatchRelationshipMap _matchRelationships;
 
-  double _aggregateScores(QList<double> pairs);
+  double _aggregateScores(QList<double> pairs) const;
 
-  void _createEmptyStubEdges(OsmNetworkPtr na, OsmNetworkPtr nb);
+  void _createEmptyStubEdges(OsmNetworkPtr na, OsmNetworkPtr nb) const;
 
   /* Gets the separation between the pairs in the match, in terms of Frechet distance */
-  Meters _getMatchSeparation(ConstEdgeMatchPtr pMatch);
+  Meters _getMatchSeparation(ConstEdgeMatchPtr pMatch) const;
 
   /* Remove matches that don't make sense, based on frechet distance */
   void _sanityCheckRelationships();
 
   void _createMatchRelationships();
 
-  QList<ConstNetworkEdgePtr> _getEdgesOnVertex(ConstNetworkVertexPtr v);
+  QList<ConstNetworkEdgePtr> _getEdgesOnVertex(ConstNetworkVertexPtr v) const;
 
   QSet<ConstEdgeMatchPtr> _getMatchesWithSharedTermination(ConstNetworkVertexPtr v1,
     ConstNetworkVertexPtr v2) const;
@@ -167,7 +167,7 @@ private:
 
   void _seedEdgeScores();
 
-  void _printEdgeMatches();
+  void _printEdgeMatches() const;
 };
 
 using ConflictsNetworkMatcherPtr = std::shared_ptr<ConflictsNetworkMatcher>;

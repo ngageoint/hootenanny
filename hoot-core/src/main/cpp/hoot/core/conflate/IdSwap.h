@@ -70,7 +70,7 @@ public:
    * @brief size Total number of elements to swap
    * @return count
    */
-  size_t size();
+  size_t size() const;
 
 private:
 

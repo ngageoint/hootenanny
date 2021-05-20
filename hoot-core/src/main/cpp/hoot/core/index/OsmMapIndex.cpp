@@ -80,7 +80,7 @@ void OsmMapIndex::addWay(ConstWayPtr w)
   _pendingWayRemoval.erase(w->getId());
 }
 
-void OsmMapIndex::addRelation(const ConstRelationPtr& r)
+void OsmMapIndex::addRelation(const ConstRelationPtr& r) const
 {
   if (_elementToRelationMap != nullptr)
   {
@@ -519,7 +519,7 @@ std::shared_ptr<const HilbertRTree> OsmMapIndex::getWayTree() const
   return _wayTree;
 }
 
-void OsmMapIndex::_insertNode(long nid)
+void OsmMapIndex::_insertNode(long nid) const
 {
   ConstNodePtr n = _map.getNode(nid);
 
@@ -531,7 +531,7 @@ void OsmMapIndex::_insertNode(long nid)
   _nodeTree->insert(b, _createTreeNid(nid));
 }
 
-void OsmMapIndex::_insertWay(long wid)
+void OsmMapIndex::_insertWay(long wid) const
 {
   ConstWayPtr w = _map.getWay(wid);
 
@@ -620,7 +620,7 @@ void OsmMapIndex::removeNode(ConstNodePtr n)
   }
 }
 
-void OsmMapIndex::removeRelation(const ConstRelationPtr& r)
+void OsmMapIndex::removeRelation(const ConstRelationPtr& r) const
 {
   if (_elementToRelationMap != nullptr)
   {

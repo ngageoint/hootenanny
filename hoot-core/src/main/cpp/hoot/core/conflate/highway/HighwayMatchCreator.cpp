@@ -254,7 +254,7 @@ public:
     }
   }
 
-  bool isMatchCandidate(ConstElementPtr element)
+  bool isMatchCandidate(ConstElementPtr element) const
   {
     // special tag is currently only used by roundabout processing to mark temporary features
     if (element->getTags().contains(MetadataTags::HootSpecial()) ||
@@ -296,7 +296,7 @@ public:
     return _index;
   }
 
-  ConstOsmMapPtr getMap() { return _map; }
+  ConstOsmMapPtr getMap() const { return _map; }
 
   long getNumMatchCandidatesFound() const { return _numMatchCandidatesVisited; }
 

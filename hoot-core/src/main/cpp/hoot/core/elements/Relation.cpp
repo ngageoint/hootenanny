@@ -163,7 +163,7 @@ int Relation::numElementsByRole(const QString& role)
   return getElementsByRole(role).size();
 }
 
-std::vector<RelationData::Entry> Relation::getElementsByRole(const QString& role)
+std::vector<RelationData::Entry> Relation::getElementsByRole(const QString& role) const
 {
   const vector<RelationData::Entry>& members = getMembers();
   std::vector<RelationData::Entry> membersByRole;

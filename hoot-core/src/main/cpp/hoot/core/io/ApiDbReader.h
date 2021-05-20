@@ -171,9 +171,9 @@ protected:
 
   void _readWaysByNodeIds(OsmMapPtr map, const QSet<QString>& nodeIds, QSet<QString>& wayIds,
                           QSet<QString>& additionalNodeIds, long& nodeCount, long& wayCount);
-  void _updateMetadataOnElement(ElementPtr element);
+  void _updateMetadataOnElement(ElementPtr element) const;
 
-  bool _hasBounds();
+  bool _hasBounds() const;
 
 private:
 

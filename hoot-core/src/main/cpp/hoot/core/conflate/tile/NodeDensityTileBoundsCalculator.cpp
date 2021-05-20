@@ -209,7 +209,7 @@ QString NodeDensityTileBoundsCalculator::tilesToString(const vector<vector<Envel
   return str;
 }
 
-void NodeDensityTileBoundsCalculator::_checkForTimeout()
+void NodeDensityTileBoundsCalculator::_checkForTimeout() const
 {
   if (_maxTimePerAttempt > 0 && (_timer.elapsed() / 1000) > _maxTimePerAttempt)
   {
@@ -725,7 +725,7 @@ long NodeDensityTileBoundsCalculator::_sumPixels(const PixelBox& pb)
   return _sumPixels(pb, _r1) + _sumPixels(pb, _r2);
 }
 
-long NodeDensityTileBoundsCalculator::_sumPixels(const PixelBox& pb, cv::Mat& r)
+long NodeDensityTileBoundsCalculator::_sumPixels(const PixelBox& pb, cv::Mat& r) const
 {
   LOG_VART(pb.minY);
   LOG_VART(pb.maxY);
@@ -746,7 +746,7 @@ long NodeDensityTileBoundsCalculator::_sumPixels(const PixelBox& pb, cv::Mat& r)
   return sum;
 }
 
-Envelope NodeDensityTileBoundsCalculator::_toEnvelope(const PixelBox& pb)
+Envelope NodeDensityTileBoundsCalculator::_toEnvelope(const PixelBox& pb) const
 {
   return Envelope(_envelope.MinX + pb.minX * _pixelSize,
     _envelope.MinX + (pb.maxX + 1) * _pixelSize,

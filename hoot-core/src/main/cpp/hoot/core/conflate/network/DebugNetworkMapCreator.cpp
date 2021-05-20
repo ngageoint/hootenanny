@@ -138,7 +138,7 @@ void DebugNetworkMapCreator::_addVertexLink(OsmMapPtr map, NetworkVertexScorePtr
   }
 }
 
-ConstNodePtr DebugNetworkMapCreator::_getMedianNode(ConstOsmMapPtr map, QList<ConstElementPtr> e)
+ConstNodePtr DebugNetworkMapCreator::_getMedianNode(ConstOsmMapPtr map, QList<ConstElementPtr> e) const
 {
   MedianNodeVisitor v;
 

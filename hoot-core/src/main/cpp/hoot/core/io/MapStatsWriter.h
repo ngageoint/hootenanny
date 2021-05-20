@@ -77,7 +77,7 @@ public:
 
 private:
 
-  void _appendUnique(QList<SingleStat>& stats, QStringList& names);
+  void _appendUnique(QList<SingleStat>& stats, QStringList& names) const;
 
 };
 

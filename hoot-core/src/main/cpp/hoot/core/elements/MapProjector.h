@@ -92,7 +92,7 @@ public:
    * Returns a vector of all candidate planar projections for a given envelope.
    */
   std::vector<std::shared_ptr<OGRSpatialReference>> createAllPlanarProjections(
-    const OGREnvelope& env);
+    const OGREnvelope& env) const;
 
   /**
    * Using a predefined set of projections this method evaluates each one of them for both distance
@@ -187,14 +187,14 @@ private:
   static bool _angleLessThan(const PlanarTestResult& p1, const PlanarTestResult& p2);
 
   Radians _calculateAngle(geos::geom::Coordinate p1, geos::geom::Coordinate p2,
-                          geos::geom::Coordinate p3);
+                          geos::geom::Coordinate p3) const;
 
   static bool _distanceLessThan(const PlanarTestResult& p1, const PlanarTestResult& p2);
 
   bool _evaluateProjection(const OGREnvelope& env, const std::shared_ptr<OGRSpatialReference>& srs,
     Meters testDistance, Meters& maxDistanceError, Radians& maxAngleError);
 
-  size_t _findBestScore(std::vector<PlanarTestResult>& results);
+  size_t _findBestScore(std::vector<PlanarTestResult>& results) const;
 
   static bool _scoreLessThan(const PlanarTestResult& p1, const PlanarTestResult& p2);
 

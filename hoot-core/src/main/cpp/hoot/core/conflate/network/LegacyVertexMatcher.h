@@ -128,14 +128,14 @@ private:
 
   double _confidentThreshold;
 
-  Tgs::IntersectionIterator _createIterator(const geos::geom::Envelope& env);
+  Tgs::IntersectionIterator _createIterator(const geos::geom::Envelope& env) const;
 
   void _createVertexIndex(const OsmNetwork::VertexMap& vm, SearchRadiusProvider &srp);
 
   /**
    * Returns the sum of all scores that involve either of the vertices in tie.
    */
-  double _denominatorForTie(TiePointScorePtr tie);
+  double _denominatorForTie(TiePointScorePtr tie) const;
 
   NodeMatcherPtr _getNodeMatcher();
 

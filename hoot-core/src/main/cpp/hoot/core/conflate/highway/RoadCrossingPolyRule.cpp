@@ -327,7 +327,7 @@ Meters RoadCrossingPolyRule::_getSearchRadius(const ConstElementPtr& e) const
   return e->getCircularError();
 }
 
-bool RoadCrossingPolyRule::_isMatchCandidate(ConstElementPtr element)
+bool RoadCrossingPolyRule::_isMatchCandidate(ConstElementPtr element) const
 {
   LOG_VART(element->getElementId());
 

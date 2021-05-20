@@ -175,7 +175,7 @@ public:
 
   QString evaluateThreshold(vector<OsmMapPtr> maps, QString output,
                             std::shared_ptr<MatchThreshold> mt, bool showConfusion,
-                            double& score)
+                            double& score) const
   {
     MatchComparator comparator;
 
@@ -256,7 +256,7 @@ private:
   }
 
   void _printIssues(const QMap<ElementId, QString>& issues, const QString& type,
-                    const QString& map1Path, const QString& map2Path)
+                    const QString& map1Path, const QString& map2Path) const
   {
     if (!issues.isEmpty())
     {

@@ -393,7 +393,7 @@ public:
    * @param keys tag keys to search for
    * @return true if the tags contain at least one of the keys; false otherwise
    */
-  bool hasAnyKey(const QStringList& keys);
+  bool hasAnyKey(const QStringList& keys) const;
 
   /**
    * Returns the first tag key found from an input list of keys

@@ -62,7 +62,7 @@ public:
    * Returns the ids of the current match during iteration. This may have more ids than actually
    * match.
    */
-  const std::vector<long>& getMatch();
+  const std::vector<long>& getMatch() const;
 
   // Returns all potential matches for a specific id, works outside of the iteration method.
   std::vector<long> getMatchesFor(long id);
@@ -102,7 +102,7 @@ private:
 
   HashMap<long, std::vector<int64_t>> _idTobin;
 
-  int64_t _toBin(double x, double y);
+  int64_t _toBin(double x, double y) const;
 };
 
 }
