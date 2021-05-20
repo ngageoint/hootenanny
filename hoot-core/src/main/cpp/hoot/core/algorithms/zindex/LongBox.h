@@ -59,11 +59,11 @@ public:
     * Returns true if at least one edge overlaps with one of the other boxes
     * edges.
     */
-  bool edgeOverlaps(const LongBox& b);
+  bool edgeOverlaps(const LongBox& b) const;
 
-  LongBox expand(int size);
+  LongBox expand(int size) const;
 
-  int getDimensions() { return getMin().size(); }
+  int getDimensions() const { return getMin().size(); }
 
   std::vector<long int> getMax() const { return _max; }
 
@@ -73,15 +73,15 @@ public:
 
   void setMin(const std::vector<long int>& min) { _min = min; }
 
-  bool in(const std::vector<long int>& p);
+  bool in(const std::vector<long int>& p) const;
 
   /**
    * @brief toString
    * @return QString
    */
-  QString toString();
+  QString toString() const;
 
-  long getWidth(int d);
+  long getWidth(int d) const;
 
 private:
   std::vector<long int> _min;

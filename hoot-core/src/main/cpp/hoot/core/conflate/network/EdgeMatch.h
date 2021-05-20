@@ -82,7 +82,7 @@ public:
   /**
    * Call this method if the underlying strings have changed.
    */
-  void notifyStringChange() { _resetHash(); }
+  void notifyStringChange() const { _resetHash(); }
 
   /**
    * Returns true if any of the edges in this edge match overlap with other. Overlapping vertices

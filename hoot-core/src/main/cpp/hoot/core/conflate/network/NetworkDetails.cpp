@@ -412,7 +412,7 @@ QList<ConstNetworkVertexPtr> NetworkDetails::getCandidateMatches(ConstNetworkVer
 }
 
 double NetworkDetails::_getEdgeAngleScore(ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2,
-  ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2)
+  ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2) const
 {
   double score = 1.0;
 
@@ -952,7 +952,7 @@ bool NetworkDetails::hasConfidentTiePoint(ConstNetworkVertexPtr v)
   return _getVertexMatcher()->hasConfidentTiePoint(v);
 }
 
-bool NetworkDetails::isCandidateMatch(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2)
+bool NetworkDetails::isCandidateMatch(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2) const
 {
   Meters ce = getSearchRadius(e1, e2);
 
@@ -1098,7 +1098,7 @@ bool NetworkDetails::isStringCandidate(ConstEdgeStringPtr es, ConstEdgeSublinePt
   return true;
 }
 
-EdgeSublinePtr NetworkDetails::_toEdgeSubline(const WaySubline& ws, ConstNetworkEdgePtr e)
+EdgeSublinePtr NetworkDetails::_toEdgeSubline(const WaySubline& ws, ConstNetworkEdgePtr e) const
 {
   EdgeSublinePtr result;
 

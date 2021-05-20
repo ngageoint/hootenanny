@@ -72,7 +72,7 @@ bool WayNodeCriterion::isSatisfied(const ConstElementPtr& e) const
   return true;
 }
 
-long WayNodeCriterion::getFirstOwningWayId(const ConstNodePtr& node)
+long WayNodeCriterion::getFirstOwningWayId(const ConstNodePtr& node) const
 {
   long result = 0;
 

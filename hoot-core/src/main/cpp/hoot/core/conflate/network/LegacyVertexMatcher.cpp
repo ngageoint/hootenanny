@@ -93,7 +93,7 @@ void LegacyVertexMatcher::_balanceVertexScores()
   }
 }
 
-IntersectionIterator LegacyVertexMatcher::_createIterator(const Envelope& env)
+IntersectionIterator LegacyVertexMatcher::_createIterator(const Envelope& env)  const
 {
   vector<double> min(2), max(2);
   min[0] = env.getMinX();
@@ -136,7 +136,7 @@ void LegacyVertexMatcher::_createVertexIndex(const OsmNetwork::VertexMap& vm,
   _vertex2Index->bulkInsert(boxes, fids);
 }
 
-double LegacyVertexMatcher::_denominatorForTie(TiePointScorePtr tie)
+double LegacyVertexMatcher::_denominatorForTie(TiePointScorePtr tie) const
 {
   QSet<TiePointScorePtr> ties;
 

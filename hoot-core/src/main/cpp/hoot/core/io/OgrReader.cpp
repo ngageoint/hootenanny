@@ -94,7 +94,7 @@ public:
   /**
    * See the associated configuration options text for details.
    */
-  std::shared_ptr<Envelope> getBoundingBoxFromConfig(const Settings& s, OGRSpatialReference* srs);
+  std::shared_ptr<Envelope> getBoundingBoxFromConfig(const Settings& s, OGRSpatialReference* srs) const;
 
   Meters getDefaultCircularError() const { return _defaultCircularError; }
   Status getDefaultStatus() const { return _status; }
@@ -197,7 +197,7 @@ protected:
   void _openLayer(const QString& path, const QString& layer);
   void _openNextLayer();
 
-  Meters _parseCircularError(Tags& t);
+  Meters _parseCircularError(Tags& t) const;
 
   void _reproject(double& x, double& y);
 
@@ -359,7 +359,7 @@ std::shared_ptr<Envelope> OgrReader::getBoundingBoxFromConfig(const Settings& s,
 /**
  * Returns a filtered list of layer names that have geometry.
  */
-QStringList OgrReader::getFilteredLayerNames(const QString& path)
+QStringList OgrReader::getFilteredLayerNames(const QString& path) const
 {
   QRegExp filterStr = _d->getNameFilter();
   LOG_VART(filterStr.pattern());
@@ -388,14 +388,14 @@ bool OgrReader::isReasonablePath(const QString& path)
   return OgrUtilities::getInstance().isReasonableUrl(path);
 }
 
-long OgrReader::getFeatureCount(const QString& path, const QString& layer)
+long OgrReader::getFeatureCount(const QString& path, const QString& layer) const
 {
   _d->open(path, layer);
   _d->close();
   return _d->getFeatureCount();
 }
 
-void OgrReader::read(const QString& path, const QString& layer, const OsmMapPtr& map)
+void OgrReader::read(const QString& path, const QString& layer, const OsmMapPtr& map) const
 {
   map->appendSource(path);
   _d->open(path, layer);
@@ -408,12 +408,12 @@ void OgrReader::setDefaultStatus(Status s)
   _d->setDefaultStatus(s);
 }
 
-void OgrReader::setLimit(long limit)
+void OgrReader::setLimit(long limit) const
 {
   _d->setLimit(limit);
 }
 
-void OgrReader::setSchemaTranslationScript(const QString& translate)
+void OgrReader::setSchemaTranslationScript(const QString& translate) const
 {
   _d->setSchemaTranslationScript(translate);
 }
@@ -823,7 +823,7 @@ void OgrReaderInternal::_finalizeTranslate()
 }
 
 std::shared_ptr<Envelope> OgrReaderInternal::getBoundingBoxFromConfig(
-  const Settings& s, OGRSpatialReference* srs)
+  const Settings& s, OGRSpatialReference* srs) const
 {
   ConfigOptions co(s);
   std::shared_ptr<Envelope> result;
@@ -999,7 +999,7 @@ void OgrReaderInternal::_openNextLayer()
   }
 }
 
-Meters OgrReaderInternal::_parseCircularError(Tags& t)
+Meters OgrReaderInternal::_parseCircularError(Tags& t) const
 {
   Meters circularError = _defaultCircularError;
 

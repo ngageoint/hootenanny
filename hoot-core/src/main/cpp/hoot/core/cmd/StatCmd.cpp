@@ -111,7 +111,7 @@ private:
     return statType == "total" || statType == "min" || statType == "max" || statType == "average";
   }
 
-  std::shared_ptr<PartialOsmMapReader> _getReader(const QString& input)
+  std::shared_ptr<PartialOsmMapReader> _getReader(const QString& input) const
   {
     LOG_TRACE("Getting reader...");
 
@@ -124,7 +124,7 @@ private:
     return reader;
   }
 
-  ElementVisitorPtr _getStatCollector(const QString& visClassName)
+  ElementVisitorPtr _getStatCollector(const QString& visClassName) const
   {
     std::shared_ptr<ElementVisitor> statsCollector;
 

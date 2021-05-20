@@ -144,7 +144,7 @@ public:
 
   bool hasConfidentTiePoint(ConstNetworkVertexPtr v);
 
-  bool isCandidateMatch(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2);
+  bool isCandidateMatch(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2) const;
   bool isCandidateMatch(ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2);
 
   /**
@@ -213,13 +213,13 @@ private:
    */
   double _getEdgeAngleScore(
     ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2, ConstNetworkEdgePtr e1,
-    ConstNetworkEdgePtr e2);
+    ConstNetworkEdgePtr e2) const;
 
   const SublineCache& _getSublineCache(ConstWayPtr w1, ConstWayPtr w2);
 
   LegacyVertexMatcherPtr _getVertexMatcher();
 
-  EdgeSublinePtr _toEdgeSubline(const WaySubline& ws, ConstNetworkEdgePtr);
+  EdgeSublinePtr _toEdgeSubline(const WaySubline& ws, ConstNetworkEdgePtr) const;
 
   void _trimEdgeString(
     ConstElementProviderPtr provider, EdgeStringPtr es, WayPtr w,

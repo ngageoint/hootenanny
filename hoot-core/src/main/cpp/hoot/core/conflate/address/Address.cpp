@@ -69,7 +69,7 @@ _isSubLetter(false)
   }
 }
 
-void Address::_initializeStringComparator()
+void Address::_initializeStringComparator() const
 {
   const QString stringCompClassName = ConfigOptions().getAddressStringComparer().trimmed();
   if (stringCompClassName.isEmpty())

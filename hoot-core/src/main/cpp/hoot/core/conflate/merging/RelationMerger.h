@@ -80,7 +80,7 @@ private:
   /*
    * Returns true if all members from the second relation were merged into the frist relation
    */
-  bool _mergeMembers(RelationPtr replacingRelation, RelationPtr relationBeingReplaced);
+  bool _mergeMembers(RelationPtr replacingRelation, RelationPtr relationBeingReplaced) const;
 };
 
 }

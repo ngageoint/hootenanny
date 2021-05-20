@@ -66,7 +66,7 @@ MatchClassification HighwayExpertClassifier::classify(const ConstOsmMapPtr& map,
 }
 
 MatchClassification HighwayExpertClassifier::classify(
-  const ConstOsmMapPtr& map, const WaySublineMatch& match)
+  const ConstOsmMapPtr& map, const WaySublineMatch& match) const
 {
   MatchClassification result;
 

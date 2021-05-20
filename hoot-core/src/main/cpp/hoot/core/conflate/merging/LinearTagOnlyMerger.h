@@ -73,11 +73,11 @@ private:
 
   void _determineKeeperFeature(
     ElementPtr element1, ElementPtr element2, ElementPtr& keeper, ElementPtr& toRemove,
-    bool& removeSecondaryElement);
+    bool& removeSecondaryElement) const;
 
   void _handleOneWayStreetReversal(
-    ElementPtr elementWithTagsToKeep, ConstElementPtr elementWithTagsToRemove);
-
+    ElementPtr elementWithTagsToKeep, ConstElementPtr elementWithTagsToRemove) const;
+ 
   bool _conflictExists(
     ConstElementPtr elementWithTagsToKeep, ConstElementPtr elementWithTagsToRemove) const;
 

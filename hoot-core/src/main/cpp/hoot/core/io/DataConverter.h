@@ -141,7 +141,7 @@ private:
   // increase if certain pre-conditions are met.
   void _transToOgrMT(const QStringList& inputs, const QString& output);
   void _fillElementCache(const QString& inputUrl, ElementCachePtr cachePtr,
-                         QQueue<ElementPtr>& workQ);
+                         QQueue<ElementPtr>& workQ) const;
 
   // converts from an OGR input to any output; a translation is required
   void _convertFromOgr(const QStringList& inputs, const QString& output);
@@ -158,7 +158,7 @@ private:
   void _handleNonOgrOutputTranslationOpts();
   QString _outputFormatToTranslationDirection(const QString& output) const;
   // If specific columns were specified for export to a shape file, then this is called.
-  void _exportToShapeWithCols(const QString& output, const QStringList& cols, const OsmMapPtr& map);
+  void _exportToShapeWithCols(const QString& output, const QStringList& cols, const OsmMapPtr& map) const;
 
   /*
    * Attempts to determine the relative weighting of each layer in an OGR data source based on
@@ -166,10 +166,10 @@ private:
    * distribution of weighting between layers is returned.
    */
   std::vector<float> _getOgrInputProgressWeights(OgrReader& reader, const QString& input,
-                                                 const QStringList& layers);
-  QStringList _getOgrLayersFromPath(OgrReader& reader, QString& input);
+                                                 const QStringList& layers) const;
+  QStringList _getOgrLayersFromPath(OgrReader& reader, QString& input) const;
 
-  bool _shapeFileColumnsSpecified() { return !_shapeFileColumns.isEmpty(); }
+  bool _shapeFileColumnsSpecified() const { return !_shapeFileColumns.isEmpty(); }
 };
 
 }

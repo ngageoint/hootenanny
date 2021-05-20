@@ -88,7 +88,7 @@ public:
    * @brief isUnknown Provided for backwards compatibility.
    * @return Returns true if the status is one of the first two inputs.
    */
-  bool isUnknown() { return _type == Unknown1 || _type == Unknown2; }
+  bool isUnknown() const { return _type == Unknown1 || _type == Unknown2; }
 
   /**
    * @brief fromString Parses type from either a human readable status string or the numeric status

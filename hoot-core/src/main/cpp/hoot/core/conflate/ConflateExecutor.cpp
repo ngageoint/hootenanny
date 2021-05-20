@@ -628,7 +628,7 @@ float ConflateExecutor::_getJobPercentComplete(const int currentTaskNum) const
   return (float)currentTaskNum / (float)_numTotalTasks;
 }
 
-void ConflateExecutor::_disableRoundaboutRemoval()
+void ConflateExecutor::_disableRoundaboutRemoval() const
 {
   // This applies to both Attribute and Differential Conflation.
 
@@ -652,7 +652,7 @@ void ConflateExecutor::_disableRoundaboutRemoval()
     ConfigOptions::getConflatePostOpsKey(), ReplaceRoundabouts::className());
 }
 
-void ConflateExecutor::_updateConfigOptionsForAttributeConflation()
+void ConflateExecutor::_updateConfigOptionsForAttributeConflation() const
 {
   // These are some custom adjustments to config opts that must be done for Attribute Conflation.
   // There may be a way to eliminate these by adding more custom behavior to the UI.
@@ -672,7 +672,7 @@ void ConflateExecutor::_updateConfigOptionsForAttributeConflation()
   }
 }
 
-void ConflateExecutor::_updateConfigOptionsForDifferentialConflation()
+void ConflateExecutor::_updateConfigOptionsForDifferentialConflation() const
 {
   // This is for custom adjustments to config opts that must be done for Differential Conflation.
 
@@ -682,7 +682,7 @@ void ConflateExecutor::_updateConfigOptionsForDifferentialConflation()
     ConfigOptions::getConflatePostOpsKey(), RoadCrossingPolyReviewMarker::className());
 }
 
-void ConflateExecutor::_updateConfigOptionsForBounds()
+void ConflateExecutor::_updateConfigOptionsForBounds() const
 {
   // If we're working with a bounds, we need to ensure that IDs of the original ref parents created
   // by a split operation are applied to their split children.

@@ -231,7 +231,7 @@ void ExternalMergeElementSorter::_mergeSortedFiles()
 
 void ExternalMergeElementSorter::_mergeSortedElements(ElementPriorityQueue& priorityQueue,
                                               std::shared_ptr<PartialOsmMapWriter> writer,
-                                              QList<std::shared_ptr<PartialOsmMapReader>> readers)
+                                              QList<std::shared_ptr<PartialOsmMapReader>> readers) const
 {
   LOG_DEBUG("Iterating through remaining elements in sorted order...");
 
@@ -300,7 +300,7 @@ void ExternalMergeElementSorter::_mergeSortedElements(ElementPriorityQueue& prio
   LOG_VART(pushesToPriorityQueue);
 }
 
-void ExternalMergeElementSorter::_printPriorityQueue(ElementPriorityQueue priorityQueue)
+void ExternalMergeElementSorter::_printPriorityQueue(ElementPriorityQueue priorityQueue) const
 {
   QString str;
   while (!priorityQueue.empty())
@@ -339,7 +339,7 @@ std::shared_ptr<PartialOsmMapWriter> ExternalMergeElementSorter::_getFinalOutput
 }
 
 ElementPriorityQueue ExternalMergeElementSorter::_getInitializedPriorityQueue(
-  QList<std::shared_ptr<PartialOsmMapReader>>& readers)
+  QList<std::shared_ptr<PartialOsmMapReader>>& readers) const
 {
   LOG_DEBUG("Writing initial records from each temp file to priority queue...");
 

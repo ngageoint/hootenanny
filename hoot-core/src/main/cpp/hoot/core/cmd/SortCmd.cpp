@@ -102,7 +102,7 @@ private:
     return OsmPbfReader().isSupported(input) && OsmPbfReader().isSorted(input);
   }
 
-  void _sortInMemory(const QString& input, const QString& output)
+  void _sortInMemory(const QString& input, const QString& output) const
   {
     OsmMapPtr map(new OsmMap());
     IoUtils::loadMap(map, input, true, Status::Unknown1);
@@ -110,7 +110,7 @@ private:
     IoUtils::saveMap(map, output);
   }
 
-  void _sortExternally(const QString& input, const QString& output)
+  void _sortExternally(const QString& input, const QString& output) const
   {
     std::shared_ptr<PartialOsmMapReader> reader =
       std::dynamic_pointer_cast<PartialOsmMapReader>(

@@ -46,7 +46,7 @@ namespace hoot
 
 struct range_sort
 {
-  bool operator() (const Range& i, const Range& j) { return (i < j);}
+  bool operator() (const Range& i, const Range& j) const { return (i < j);}
 } range_object;
 
 ZCurveRanger::ZCurveRanger(const ZValue& zv)
@@ -228,7 +228,7 @@ LongBox ZCurveRanger::_clipBox(const LongBox& box)
   return result;
 }
 
-vector<Range> ZCurveRanger::_condenseRanges(vector<Range>& r)
+vector<Range> ZCurveRanger::_condenseRanges(vector<Range>& r) const
 {
   std::sort(r.begin(), r.end(), range_object);
 

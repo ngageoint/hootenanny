@@ -63,49 +63,49 @@ public:
   /**
    *  Setter/getter for OSM API version, should be "0.6"
    */
-  QString getVersion()                    { return _version; }
+  QString getVersion() const                   { return _version; }
   void setVersion(const QString& version) { _version = version; }
 
   /**
    *  Setter/getter for max number of GPS trace points allowed to ingest
    */
-  long getTracepoints()                 { return _tracepoints; }
+  long getTracepoints() const                { return _tracepoints; }
   void setTracepoints(long tracepoints) { _tracepoints = tracepoints; }
 
   /**
    *  Setter/getter for max number of nodes per way allowed
    */
-  long getWayNodes()              { return _waynodes; }
+  long getWayNodes() const             { return _waynodes; }
   void setWayNodes(long waynodes) { _waynodes = waynodes; }
 
   /**
    *  Setter/getter for max number of elements per changeset
    */
-  long getChangesets()                { return _changesets; }
+  long getChangesets() const               { return _changesets; }
   void setChangesets(long changesets) { _changesets = changesets; }
 
   /**
    *  Setter/getter for API timeout in seconds
    */
-  long getTimeout()             { return _timeout; }
+  long getTimeout() const            { return _timeout; }
   void setTimeout(long timeout) { _timeout = timeout; }
 
   /**
    *  Setter/getter for database status
    */
-  OsmApiStatus getDatabaseStatus()            { return _database; }
+  OsmApiStatus getDatabaseStatus() const            { return _database; }
   void setDatabaseStatus(OsmApiStatus status) { _database = status; }
 
   /**
    *  Setter/getter for API status
    */
-  OsmApiStatus getApiStatus()             { return _api; }
+  OsmApiStatus getApiStatus() const            { return _api; }
   void setApiStatus(OsmApiStatus status)  { _api = status; }
 
   /**
    *  Setter/getter for GPX status
    */
-  OsmApiStatus getGpxStatus()             { return _gpx; }
+  OsmApiStatus getGpxStatus() const            { return _gpx; }
   void setGpxStatus(OsmApiStatus status)  { _gpx = status; }
 
 private:

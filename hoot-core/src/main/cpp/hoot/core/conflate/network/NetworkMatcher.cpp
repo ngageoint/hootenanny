@@ -84,7 +84,7 @@ void NetworkMatcher::_createEdge2Index()
   _edge2Index->bulkInsert(boxes, fids);
 }
 
-IntersectionIterator NetworkMatcher::_createIterator(const Envelope& env, HilbertRTreePtr tree)
+IntersectionIterator NetworkMatcher::_createIterator(const Envelope& env, HilbertRTreePtr tree) const
 {
   vector<double> min(2), max(2);
   min[0] = env.getMinX();

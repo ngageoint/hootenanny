@@ -51,7 +51,7 @@ using namespace std;
 
 namespace hoot
 {
-void MapStatsWriter::_appendUnique(QList<SingleStat>& stats, QStringList& names)
+void MapStatsWriter::_appendUnique(QList<SingleStat>& stats, QStringList& names) const
 {
   for (int i = 0; i < stats.size(); i++)
   {

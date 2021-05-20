@@ -106,7 +106,7 @@ void ApiDbReader::initializePartial()
   _numRelationsRead = 0;
 }
 
-bool ApiDbReader::_hasBounds()
+bool ApiDbReader::_hasBounds() const
 {
   return _bounds.get() || _overrideBounds.get();
 }
@@ -176,7 +176,7 @@ ElementId ApiDbReader::_mapElementId(const OsmMap& map, ElementId oldId)
   return result;
 }
 
-void ApiDbReader::_updateMetadataOnElement(ElementPtr element)
+void ApiDbReader::_updateMetadataOnElement(ElementPtr element) const
 {
   LOG_TRACE("Updating metadata on element " << element->getElementId() << "...");
 

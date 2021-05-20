@@ -204,7 +204,7 @@ protected:
   static int logWarnCount;
 
   NodePtr _createNode(const OsmMapPtr& map, const geos::geom::Coordinate& c, Status s,
-    double circularError);
+    double circularError) const;
 
   std::shared_ptr<NodeFactory> _nf;
   ConstOsmMapPtr _constMap;
