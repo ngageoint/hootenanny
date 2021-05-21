@@ -1006,7 +1006,7 @@ public class CustomScriptResource {
 
         // Check if owner of translation isn't the user, user isn't admin, and there isn't an owner of the translation
         if(user != null && !translation.getUserId().equals(user.getId()) && !UserResource.adminUserCheck(user) && translation.getUserId() != -1) {
-            throw new ForbiddenException("You do not have access to this translation");
+            throw new ForbiddenException("You must own the translation to modify it");
         }
         return translation;
     }
