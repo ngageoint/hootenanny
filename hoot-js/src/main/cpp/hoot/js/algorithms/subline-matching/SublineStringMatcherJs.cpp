@@ -27,23 +27,23 @@
 #include "SublineStringMatcherJs.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/util/StringUtils.h>
-#include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/algorithms/linearreference/WaySublineCollection.h>
 #include <hoot/core/algorithms/splitter/MultiLineStringSplitter.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/ops/CopyMapSubsetOp.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Settings.h>
+#include <hoot/core/util/StringUtils.h>
 #include <hoot/js/JsRegistrar.h>
-#include <hoot/js/elements/OsmMapJs.h>
 #include <hoot/js/elements/ElementJs.h>
+#include <hoot/js/elements/OsmMapJs.h>
+#include <hoot/js/io/StreamUtilsJs.h>
 #include <hoot/js/util/HootExceptionJs.h>
 #include <hoot/js/util/PopulateConsumersJs.h>
-#include <hoot/js/io/StreamUtilsJs.h>
 #include <hoot/js/util/StringUtilsJs.h>
-#include <hoot/core/algorithms/linearreference/WaySublineCollection.h>
-#include <hoot/core/geometry/ElementToGeometryConverter.h>
 
 // Qt
 #include <QStringList>
@@ -81,8 +81,8 @@ void SublineStringMatcherJs::Init(Local<Object> target)
     tpl->PrototypeTemplate()->Set(current, "extractMatchingSublines",
         FunctionTemplate::New(current, extractMatchingSublines));
 
-    Persistent<Function> constructor(current, tpl->GetFunction(context).ToLocalChecked());
-    target->Set(context, toV8(n), ToLocal(&constructor));
+    _constructor.Reset(current, tpl->GetFunction(context).ToLocalChecked());
+    target->Set(context, toV8(n), ToLocal(&_constructor));
   }
 }
 

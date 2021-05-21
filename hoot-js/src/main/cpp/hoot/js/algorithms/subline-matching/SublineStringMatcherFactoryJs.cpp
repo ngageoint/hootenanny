@@ -31,8 +31,8 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Settings.h>
 
-#include <hoot/js/algorithms/subline-matching/SublineStringMatcherJs.h>
 #include <hoot/js/JsRegistrar.h>
+#include <hoot/js/algorithms/subline-matching/SublineStringMatcherJs.h>
 #include <hoot/js/elements/OsmMapJs.h>
 #include <hoot/js/util/HootExceptionJs.h>
 
@@ -50,9 +50,9 @@ void SublineStringMatcherFactoryJs::Init(Local<Object> exports)
   HandleScope scope(current);
   Local<Context> context = current->GetCurrentContext();
   Local<Object> factory = Object::New(current);
-  exports->Set(String::NewFromUtf8(current, "SublineStringMatcherFactory"), factory);
+  exports->Set(context, toV8("SublineStringMatcherFactory"), factory);
 
-  factory->Set(String::NewFromUtf8(current, "getMatcher"),
+  factory->Set(context, toV8("getMatcher"),
                FunctionTemplate::New(current, getMatcher)->GetFunction(context).ToLocalChecked());
 }
 
@@ -74,4 +74,3 @@ void SublineStringMatcherFactoryJs::getMatcher(const v8::FunctionCallbackInfo<v8
 }
 
 }
-
