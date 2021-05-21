@@ -44,7 +44,7 @@ class IntersectionSplitterTest : public HootTestFixture
   CPPUNIT_TEST_SUITE(IntersectionSplitterTest);
   CPPUNIT_TEST(runTest);
   CPPUNIT_TEST(runTestSimple);
-  //CPPUNIT_TEST(runRelationMemberOrderTest);
+  CPPUNIT_TEST(runRelationMemberOrderTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -104,9 +104,9 @@ public:
     MapProjector::projectToWgs84(map);
     OsmMapWriterFactory::write(map, _outputPath + "runRelationMemberOrderTestOut.osm");
 
-//    HOOT_FILE_EQUALS(
-//      _inputPath + "runRelationMemberOrderTestOut.osm",
-//      _outputPath + "runRelationMemberOrderTestOut.osm");
+    HOOT_FILE_EQUALS(
+      _inputPath + "runRelationMemberOrderTestOut.osm",
+      _outputPath + "runRelationMemberOrderTestOut.osm");
   }
 };
 
