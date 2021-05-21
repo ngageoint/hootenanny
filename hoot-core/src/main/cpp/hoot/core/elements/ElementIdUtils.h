@@ -50,6 +50,25 @@ public:
    * @todo may be able to replace nodesToNodeIds with this more generic version
    */
   static QSet<ElementId> elementsToElementIds(const std::vector<ElementPtr>& elements);
+
+  /**
+   * TODO
+   *
+   * @param type
+   * @param elements
+   * @return
+   */
+  static bool elementsAreAllOfType(const ElementType& type, const QList<ElementPtr>& elements);
+
+  /**
+   * TODO
+   *
+   * @param id
+   * @param elements
+   * @param index
+   * @return
+   */
+  static bool containsElementId(const ElementId& id, const QList<ElementPtr>& elements, int& index);
 };
 
 }

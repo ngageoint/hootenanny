@@ -31,9 +31,12 @@
 #include <hoot/core/algorithms/linearreference/WayLocation.h>
 #include <hoot/core/algorithms/splitter/WaySplitter.h>
 #include <hoot/core/conflate/matching/NodeMatcher.h>
+#include <hoot/core/elements/ElementIdUtils.h>
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/elements/RelationMemberUtils.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/index/OsmMapIndex.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
@@ -49,6 +52,11 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, IntersectionSplitter)
 
+IntersectionSplitter::IntersectionSplitter(const std::shared_ptr<OsmMap>& map) :
+_map(map)
+{
+}
+
 void IntersectionSplitter::_mapNodesToWay(const std::shared_ptr<Way>& way)
 {
   long wId = way->getId();
@@ -57,7 +65,6 @@ void IntersectionSplitter::_mapNodesToWay(const std::shared_ptr<Way>& way)
   for (size_t i = 0; i < nodes.size(); i++)
   {
     _nodeToWays.insert(nodes[i], wId);
-
     if (_nodeToWays.count(nodes[i]) > 1)
     {
       _todoNodes.insert(nodes[i]);
@@ -128,10 +135,10 @@ void IntersectionSplitter::splitIntersections(const std::shared_ptr<OsmMap>& map
 void IntersectionSplitter::splitIntersections()
 {
   _numAffected = 0;
-  // make a map of nodes to ways.
+  // Make a map of nodes to ways.
   _mapNodesToWays();
 
-  // go through all the nodes
+  // Go through all the nodes.
   int numProcessed = 0;
   const int taskStatusUpdateInterval = ConfigOptions().getTaskStatusUpdateInterval();
   while (_todoNodes.isEmpty() == false)
@@ -149,10 +156,10 @@ void IntersectionSplitter::splitIntersections()
         " remaining nodes to process.");
     }
 
-    // if the node is part of two or more ways
+    // If the node is part of two or more ways,
     if (_nodeToWays.count(nodeId) >= 2)
     {
-      // evaluate each way for splitting
+      // evaluate each way for splitting.
       QList<long> ways = _nodeToWays.values(nodeId);
       for (QList<long>::const_iterator way = ways.begin(); way != ways.end(); ++way)
       {
@@ -172,7 +179,7 @@ void IntersectionSplitter::_splitWay(long wayId, long nodeId)
   }
 
   LOG_TRACE(
-    "Splitting way: " << way->getElementId() << " at node: " <<
+    "Attempting to split way: " << way->getElementId() << " at node: " <<
     ElementId(ElementType::Node, nodeId));
 
   // find the first index of the split node that isn't an endpoint.
@@ -204,7 +211,6 @@ void IntersectionSplitter::_splitWay(long wayId, long nodeId)
         continue;
 
       std::shared_ptr<Way> comp = _map->getWay(compWayId);
-      LOG_VART(comp.get());
       if (!comp)
       {
         continue;
@@ -213,7 +219,7 @@ void IntersectionSplitter::_splitWay(long wayId, long nodeId)
       long idx = comp->getNodeIndex(nodeId);
       LOG_VART(idx);
 
-      //  Endpoints of the other way should be split
+      //  The endpoints of the other way should be split.
       if (idx < 1 || idx > (long)compIds.size() - 1)
         continue;
 
@@ -224,15 +230,16 @@ void IntersectionSplitter::_splitWay(long wayId, long nodeId)
     }
 
     LOG_VART(concurrent_count);
-    //  A split point is found when there is at least one non-concurrent way at this node
+    //  A split point is found when there is at least one non-concurrent way at this node.
     if (concurrent_count < otherWays_count)
     {
-      // split the way and remove it from the map
+      // Split the way and remove it from the map.
       WayLocation wl(_map, way, firstIndex, 0.0);
-      LOG_VART(wl.isValid());
+      LOG_TRACE("Splitting " << way->getElementId() << " at " << wl << "...");
       vector<std::shared_ptr<Way>> splits = WaySplitter::split(_map, way, wl);
+      LOG_VART(splits);
 
-      // if a split occurred.
+      // If a split occurred:
       if (splits.size() > 1)
       {
         _numAffected++;
@@ -247,20 +254,32 @@ void IntersectionSplitter::_splitWay(long wayId, long nodeId)
         QList<ElementPtr> newWays;
         foreach (const std::shared_ptr<Way>& w, splits)
         {
-          LOG_VART(w.get());
           newWays.append(w);
         }
+
+        // Ensure that relation member order for the replaced ways are preserved. TODO
+        //_preserveWayRelationMemberOrder(splitWayId, newWays);
 
         // Make sure any ways that are part of relations continue to be part of those relations
         // after they're split.
         _map->replace(way, newWays);
+        if (ConfigOptions().getDebugMapsWrite() && ConfigOptions().getDebugMapsWriteDetailed())
+        {
+          OsmMapWriterFactory::writeDebugMap(
+            _map, "IntersectionSplitter-after-replace-" + way->getElementId().toString());
+        }
 
         _removeWayFromMap(way);
+        if (ConfigOptions().getDebugMapsWrite() && ConfigOptions().getDebugMapsWriteDetailed())
+        {
+          OsmMapWriterFactory::writeDebugMap(
+            _map, "IntersectionSplitter-after-remove-" + way->getElementId().toString());
+        }
 
-        // go through all the resulting splits
+        // Go through all the resulting splits.
         for (size_t i = 0; i < splits.size(); i++)
         {
-          // add the new ways nodes just in case the way was self intersecting.
+          // Add the new ways nodes just in case the way was self-intersecting.
           _mapNodesToWay(splits[i]);
         }
 
@@ -268,6 +287,54 @@ void IntersectionSplitter::_splitWay(long wayId, long nodeId)
       }
     }
   }
+}
+
+void IntersectionSplitter::_preserveWayRelationMemberOrder(
+  const ElementId& splitWayId, QList<ElementPtr>& newWays) const
+{
+  LOG_VART(splitWayId);
+  LOG_VART(newWays);
+
+  int fromIndex = -1;
+  if (newWays.size() == 2 && ElementIdUtils::containsElementId(splitWayId, newWays, fromIndex))
+  {
+    int newWayIndex = 0;
+    if (fromIndex == 0)
+    {
+      newWayIndex = 1;
+    }
+    LOG_VART(newWayIndex);
+    ConstWayPtr newWay = std::dynamic_pointer_cast<const Way>(newWays.at(newWayIndex));
+    LOG_VART(newWay->getElementId());
+
+    // Get all the relations that the split way belongs to. Arbitrarily just looking at the
+    // first one. Not sure what to do in the case of membership to multiple relations yet.
+    const std::vector<ConstRelationPtr> containingRelations =
+      RelationMemberUtils::getContainingRelationsConst(splitWayId, _map, true);
+    LOG_VART(containingRelations.size());
+    if (containingRelations.size() > 0)
+    {
+      ConstRelationPtr containingRelation = containingRelations.front();
+      LOG_VART(containingRelation->getElementId());
+
+      // Get the members adjoined to the split way from the relation.
+      const std::set<ElementId> adjoiningMemberIds =
+        containingRelation->getAdjoiningMemberIds(splitWayId);
+      if (adjoiningMemberIds.size() == 2)
+      {
+        LOG_VART(adjoiningMemberIds.size());
+        ConstWayPtr adjoiningWayMemberIndexedBefore = _map->getWay(*adjoiningMemberIds.begin());
+        LOG_VART(adjoiningWayMemberIndexedBefore->getElementId());
+        // If the new way shares an endpoint with the member indexed before the way being replaced,
+        // reverse the copied list previously created. Otherwise, do nothing.
+        if (newWay->hasSharedNode(*adjoiningWayMemberIndexedBefore))
+        {
+          std::reverse(newWays.begin(), newWays.end());
+        }
+      }
+    }
+  }
+  LOG_VART(newWays);
 }
 
 void IntersectionSplitter::apply(std::shared_ptr<OsmMap> &map)

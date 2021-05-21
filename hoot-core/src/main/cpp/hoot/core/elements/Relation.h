@@ -52,13 +52,12 @@ public:
 
   static QString className() { return "hoot::Relation"; }
 
-  explicit Relation(const Relation& from);
-
   Relation(
     Status s, long id, Meters circularError = ElementData::CIRCULAR_ERROR_EMPTY, QString type = "",
     long changeset = ElementData::CHANGESET_EMPTY, long version = ElementData::VERSION_EMPTY,
     quint64 timestamp = ElementData::TIMESTAMP_EMPTY, QString user = ElementData::USER_EMPTY,
     long uid = ElementData::UID_EMPTY, bool visible = ElementData::VISIBLE_EMPTY);
+  explicit Relation(const Relation& from);
   ~Relation() = default;
 
   void addElement(const QString& role, const std::shared_ptr<const Element>& e);
@@ -76,7 +75,7 @@ public:
    * Returns true if this relation contains the specified ElementId. This does not recursively
    * search for the element.
    */
-  bool contains(ElementId eid) const;
+  bool contains(const ElementId& eid) const;
 
   /**
    * Finds the index of a member
@@ -84,7 +83,31 @@ public:
    * @param eid ID of the relation member
    * @return a numerical index
    */
-  size_t indexOf(ElementId eid) const;
+  size_t indexOf(const ElementId& eid) const;
+
+  /**
+   * TODO
+   *
+   * @param index
+   * @return
+   */
+  ElementId memberAt(const size_t index) const;
+
+  /**
+   * TODO
+   *
+   * @param eid
+   * @return
+   */
+  bool isFirstMember(const ElementId& eid) const;
+
+  /**
+   * TODO
+   *
+   * @param eid
+   * @return
+   */
+  bool isLastMember(const ElementId& eid) const;
 
   /**
    * Inserts a relation member
@@ -124,6 +147,14 @@ public:
    */
   std::set<ElementId> getMemberIds(const ElementType& elementType = ElementType::Unknown) const;
 
+  /**
+   * TODO
+   *
+   * @param memberId
+   * @return
+   */
+  std::set<ElementId> getAdjoiningMemberIds(const ElementId& memberId) const;
+
   geos::geom::Envelope* getEnvelope(
     const std::shared_ptr<const ElementProvider>& ep) const override;
   const geos::geom::Envelope& getEnvelopeInternal(
@@ -160,8 +191,8 @@ public:
    * Replaces all instances of from in the relation with to. If from is not in the relation then
    * no changes are made.
    */
-  void replaceElement(const std::shared_ptr<const Element>& from,
-                      const std::shared_ptr<const Element>& to);
+  void replaceElement(
+    const std::shared_ptr<const Element>& from, const std::shared_ptr<const Element>& to);
   void replaceElement(const ConstElementPtr& from, const QList<ElementPtr>& to);
   void replaceElement(const ElementId& from, const ElementId& to);
 
@@ -194,14 +225,15 @@ public:
   /**
    * @see Element
    */
-  void visitRo(const ElementProvider& map, ConstElementVisitor& filter,
-               const bool recursive = true) const override;
+  void visitRo(
+    const ElementProvider& map, ConstElementVisitor& filter,
+    const bool recursive = true) const override;
 
   /**
    * @see Element
    */
-  void visitRw(ElementProvider& map, ConstElementVisitor& filter,
-               const bool recursive = true) override;
+  void visitRw(
+    ElementProvider& map, ConstElementVisitor& filter, const bool recursive = true) override;
 
 private:
 

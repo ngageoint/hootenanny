@@ -56,13 +56,12 @@ public:
   static QString className() { return "hoot::IntersectionSplitter"; }
 
   IntersectionSplitter() = default;
-  IntersectionSplitter(const std::shared_ptr<OsmMap>& map) : _map(map) { }
+  IntersectionSplitter(const std::shared_ptr<OsmMap>& map);
   ~IntersectionSplitter() = default;
 
   void apply(std::shared_ptr<OsmMap>& map) override;
 
   static void splitIntersections(const std::shared_ptr<OsmMap>& map);
-
   void splitIntersections();
 
   QString getInitStatusMessage() const override { return "Splitting linear intersections..."; }
@@ -93,6 +92,15 @@ private:
    * Given a way and a node, split the way at that node.
    */
   void _splitWay(long wayId, long nodeId);
+
+  /*
+   * TODO
+   *
+   * @param splitWayId
+   * @param newWays
+   */
+  void _preserveWayRelationMemberOrder(
+    const ElementId& splitWayId, QList<ElementPtr>& newWays) const;
 };
 
 }

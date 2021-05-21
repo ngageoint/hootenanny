@@ -73,14 +73,12 @@ public:
     ElementId _eid;
   };
 
-  RelationData(long id, long changeset = ElementData::CHANGESET_EMPTY,
-               long version = ElementData::VERSION_EMPTY,
-               unsigned int timestamp = ElementData::TIMESTAMP_EMPTY,
-               QString user = ElementData::USER_EMPTY, long uid = ElementData::UID_EMPTY,
-               bool visible = ElementData::VISIBLE_EMPTY);
-
+  RelationData(
+    long id, long changeset = ElementData::CHANGESET_EMPTY,
+    long version = ElementData::VERSION_EMPTY,
+    unsigned int timestamp = ElementData::TIMESTAMP_EMPTY, QString user = ElementData::USER_EMPTY,
+    long uid = ElementData::UID_EMPTY, bool visible = ElementData::VISIBLE_EMPTY);
   RelationData(const RelationData& rd);
-
   ~RelationData() = default;
 
   void addElement(const QString& role, ElementId eid);
