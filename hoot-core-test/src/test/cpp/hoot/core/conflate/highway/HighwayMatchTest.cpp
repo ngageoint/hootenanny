@@ -309,7 +309,8 @@ public:
     MapProjector::projectToOrthographic(map);
 
     Settings conf;
-    conf.set(ConfigOptions::getWaySublineMatcherKey(), MaximalNearestSublineMatcher::className());
+    conf.set(
+      ConfigOptions::getWaySublineMatcherKey(), MaximalNearestSublineMatcher::className());
 
     std::shared_ptr<HighwayExpertClassifier> classifier(new HighwayExpertClassifier());
     std::shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());

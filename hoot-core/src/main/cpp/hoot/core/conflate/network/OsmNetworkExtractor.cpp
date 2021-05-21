@@ -63,7 +63,7 @@ private:
 };
 
 void OsmNetworkExtractor::_addEdge(ConstElementPtr from, ConstElementPtr to,
-  QList<ConstElementPtr> members, bool directed)
+  QList<ConstElementPtr> members, bool directed) const
 {
   ConstNetworkVertexPtr v1 = _network->getSingleVertex(from->getElementId());
   if (!v1.get())
@@ -178,7 +178,7 @@ void OsmNetworkExtractor::_getFirstLastNodes(const ConstRelationPtr& r, ElementI
   }
 }
 
-bool OsmNetworkExtractor::_isValidElement(const ConstElementPtr& e)
+bool OsmNetworkExtractor::_isValidElement(const ConstElementPtr& e) const
 {
   bool result = true;
   if (e->getElementType() == ElementType::Node)

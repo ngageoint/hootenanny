@@ -207,8 +207,8 @@ void NonEnglishLanguageDetectionVisitor::visit(const std::shared_ptr<Element>& e
           if (_numTagDetectionsMade % _taskStatusUpdateInterval == 0)
           {
             PROGRESS_INFO(
-              _numTagDetectionsMade << " / " << _numProcessedTags << " tag language detections " <<
-               "made on  " << _numProcessedElements << " / " << _numTotalElements << " elements.");
+              _numTagDetectionsMade << " of " << _numProcessedTags << " tag language detections " <<
+               "made on  " << _numProcessedElements << " of " << _numTotalElements << " elements.");
           }
         }
 

@@ -2265,33 +2265,6 @@
     <node visible="true" id="-2367756" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7590000000000003" lon="-122.1139588225587005"/>
     <node visible="true" id="-2367755" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0459999999999994" lon="-122.2059777980965833"/>
     <node visible="true" id="-2367754" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.0459999999999923" lon="-122.2338033135485205"/>
-    <way visible="true" id="-2386654" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-2369034"/>
-        <nd ref="-2368986"/>
-        <nd ref="-2368987"/>
-        <nd ref="-2368988"/>
-        <nd ref="-2368989"/>
-        <nd ref="-2368990"/>
-        <nd ref="-2368997"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="OBJECTID" v="1297"/>
-        <tag k="Length_Mil" v="6"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="115000"/>
-        <tag k="Legend" v="PG&amp;E_115kV"/>
-        <tag k="name" v="PG&amp;E 115kV"/>
-        <tag k="cables" v="3"/>
-        <tag k="REF1" v="000033;000028;00002a"/>
-        <tag k="REF2" v="todo"/>
-        <tag k="power" v="line"/>
-        <tag k="kV_Sort" v="115"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.105Z;2018-06-08T20:48:49.107Z"/>
-        <tag k="circuits" v="2"/>
-        <tag k="location" v="overhead"/>
-        <tag k="Length_Fee" v="29979.79913248"/>
-        <tag k="Type" v="OH"/>
-        <tag k="Shape__Len" v="0.092586216840936"/>
-    </way>
     <way visible="true" id="-2386562" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2368843"/>
         <nd ref="-2368844"/>
@@ -2303,25 +2276,25 @@
         <nd ref="-2368850"/>
         <nd ref="-2368851"/>
         <nd ref="-2368861"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="OBJECTID" v="1297"/>
-        <tag k="Length_Mil" v="6"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="115000"/>
         <tag k="Legend" v="PG&amp;E_115kV"/>
-        <tag k="name" v="PG&amp;E 115kV"/>
-        <tag k="cables" v="3"/>
+        <tag k="Length_Fee" v="29979.79913248"/>
+        <tag k="Length_Mil" v="6"/>
+        <tag k="OBJECTID" v="1297"/>
         <tag k="REF1" v="000033;000034"/>
         <tag k="REF2" v="todo"/>
-        <tag k="power" v="line"/>
-        <tag k="kV_Sort" v="115"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.105Z"/>
-        <tag k="circuits" v="2"/>
-        <tag k="location" v="overhead"/>
-        <tag k="Length_Fee" v="29979.79913248"/>
-        <tag k="frequency" v="60"/>
-        <tag k="Type" v="OH"/>
         <tag k="Shape__Len" v="0.092586216840936"/>
+        <tag k="Type" v="OH"/>
+        <tag k="cables" v="3"/>
+        <tag k="circuits" v="2"/>
+        <tag k="frequency" v="60"/>
+        <tag k="kV_Sort" v="115"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 115kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.105Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="115000"/>
     </way>
     <way visible="true" id="-2386548" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2368026"/>
@@ -2431,28 +2404,28 @@
         <nd ref="-2367848"/>
         <nd ref="-2368271"/>
         <nd ref="-2367849"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="tiger:upload_uuid" v="bulk_upload.pl-c06aeebd-526f-4861-b1a6-aa2b0d38e820"/>
-        <tag k="OBJECTID" v="2395"/>
-        <tag k="Length_Mil" v="3"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="60000"/>
         <tag k="Legend" v="PG&amp;E_60_70kV"/>
-        <tag k="name" v="PG&amp;E 60kV"/>
-        <tag k="tiger:cfcc" v="C20"/>
+        <tag k="Length_Fee" v="16005.3039981"/>
+        <tag k="Length_Mil" v="3"/>
+        <tag k="OBJECTID" v="2395"/>
         <tag k="REF1" v="000281;00027e;00027f"/>
         <tag k="REF2" v="todo"/>
-        <tag k="tiger:county" v="Contra Costa, CA"/>
-        <tag k="power" v="line"/>
-        <tag k="kV_Sort" v="60"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:48.911Z"/>
-        <tag k="circuits" v="1"/>
-        <tag k="location" v="overhead"/>
-        <tag k="Length_Fee" v="16005.3039981"/>
-        <tag k="Type" v="OH"/>
-        <tag k="tiger:tlid" v="192077615:192090945:192117152"/>
         <tag k="Shape__Len" v="0.050269877773390002"/>
+        <tag k="Type" v="OH"/>
+        <tag k="circuits" v="1"/>
+        <tag k="kV_Sort" v="60"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 60kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:48.911Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="tiger:cfcc" v="C20"/>
+        <tag k="tiger:county" v="Contra Costa, CA"/>
         <tag k="tiger:source" v="tiger_import_dch_v0.6_20070809"/>
+        <tag k="tiger:tlid" v="192077615:192090945:192117152"/>
+        <tag k="tiger:upload_uuid" v="bulk_upload.pl-c06aeebd-526f-4861-b1a6-aa2b0d38e820"/>
+        <tag k="voltage" v="60000"/>
     </way>
     <way visible="true" id="-2386507" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2369999"/>
@@ -2466,22 +2439,22 @@
         <nd ref="-2370007"/>
         <nd ref="-2370008"/>
         <nd ref="-2370009"/>
-        <tag k="owner" v="AMP"/>
-        <tag k="OBJECTID" v="126"/>
+        <tag k="Legend" v="Other_110_161kV"/>
+        <tag k="Length_Fee" v="3807.24014248"/>
         <tag k="Length_Mil" v="1"/>
+        <tag k="OBJECTID" v="126"/>
+        <tag k="REF1" v="00031a"/>
+        <tag k="Shape__Len" v="0.01074336131559"/>
+        <tag k="Type" v="OH"/>
+        <tag k="circuits" v="1"/>
+        <tag k="kV_Sort" v="115"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="AMP 115kV"/>
+        <tag k="owner" v="AMP"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.495Z"/>
         <tag k="status" v="operational"/>
         <tag k="voltage" v="115000"/>
-        <tag k="Legend" v="Other_110_161kV"/>
-        <tag k="name" v="AMP 115kV"/>
-        <tag k="REF1" v="00031a"/>
-        <tag k="power" v="line"/>
-        <tag k="kV_Sort" v="115"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.495Z"/>
-        <tag k="circuits" v="1"/>
-        <tag k="location" v="overhead"/>
-        <tag k="Length_Fee" v="3807.24014248"/>
-        <tag k="Type" v="OH"/>
-        <tag k="Shape__Len" v="0.01074336131559"/>
     </way>
     <way visible="true" id="-2386506" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2369970"/>
@@ -2514,22 +2487,22 @@
         <nd ref="-2369997"/>
         <nd ref="-2369999"/>
         <nd ref="-2369998"/>
-        <tag k="owner" v="AMP"/>
-        <tag k="Length_Mil" v="3"/>
-        <tag k="kV_Sort" v="115"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.495Z"/>
         <tag k="Legend" v="Other_110_161kV"/>
-        <tag k="power" v="line"/>
-        <tag k="circuits" v="1"/>
-        <tag k="Shape__Len" v="0.05514765978524"/>
-        <tag k="location" v="overhead"/>
-        <tag k="name" v="AMP 115kV"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="115000"/>
         <tag k="Length_Fee" v="16505.41123852"/>
+        <tag k="Length_Mil" v="3"/>
         <tag k="OBJECTID" v="125"/>
         <tag k="REF1" v="00031c"/>
+        <tag k="Shape__Len" v="0.05514765978524"/>
         <tag k="Type" v="OH"/>
+        <tag k="circuits" v="1"/>
+        <tag k="kV_Sort" v="115"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="AMP 115kV"/>
+        <tag k="owner" v="AMP"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.495Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="115000"/>
     </way>
     <way visible="true" id="-2386505" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2369956"/>
@@ -2547,22 +2520,22 @@
         <nd ref="-2369967"/>
         <nd ref="-2369968"/>
         <nd ref="-2369969"/>
-        <tag k="owner" v="AMP"/>
-        <tag k="Length_Mil" v="2"/>
-        <tag k="kV_Sort" v="115"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.495Z"/>
         <tag k="Legend" v="Other_110_161kV"/>
-        <tag k="power" v="line"/>
-        <tag k="circuits" v="1"/>
-        <tag k="Shape__Len" v="0.034718350000563003"/>
-        <tag k="location" v="overhead"/>
-        <tag k="name" v="AMP 115kV"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="115000"/>
         <tag k="Length_Fee" v="10879.98077483"/>
+        <tag k="Length_Mil" v="2"/>
         <tag k="OBJECTID" v="124"/>
         <tag k="REF1" v="00031e"/>
+        <tag k="Shape__Len" v="0.034718350000563003"/>
         <tag k="Type" v="OH"/>
+        <tag k="circuits" v="1"/>
+        <tag k="kV_Sort" v="115"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="AMP 115kV"/>
+        <tag k="owner" v="AMP"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.495Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="115000"/>
     </way>
     <way visible="true" id="-2386504" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2369939"/>
@@ -2582,23 +2555,23 @@
         <nd ref="-2369953"/>
         <nd ref="-2369954"/>
         <nd ref="-2369955"/>
-        <tag k="owner" v="AMP"/>
-        <tag k="OBJECTID" v="1"/>
-        <tag k="Length_Mil" v="1"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="115000"/>
         <tag k="Legend" v="Other_110_161kV"/>
-        <tag k="name" v="AMP 115kV"/>
+        <tag k="Length_Fee" v="6135.61557739"/>
+        <tag k="Length_Mil" v="1"/>
+        <tag k="OBJECTID" v="1"/>
         <tag k="REF1" v="000370"/>
-        <tag k="power" v="line"/>
-        <tag k="kV_Sort" v="115"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.468Z"/>
+        <tag k="Shape__Len" v="0.019404863874129999"/>
+        <tag k="Type" v="OH"/>
         <tag k="circuits" v="1"/>
         <tag k="comments" v="Partially underwater"/>
+        <tag k="kV_Sort" v="115"/>
         <tag k="location" v="overhead"/>
-        <tag k="Length_Fee" v="6135.61557739"/>
-        <tag k="Type" v="OH"/>
-        <tag k="Shape__Len" v="0.019404863874129999"/>
+        <tag k="name" v="AMP 115kV"/>
+        <tag k="owner" v="AMP"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.468Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="115000"/>
     </way>
     <way visible="true" id="-2386503" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2369921"/>
@@ -2610,22 +2583,22 @@
         <nd ref="-2369927"/>
         <nd ref="-2369928"/>
         <nd ref="-2369929"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="Length_Mil" v="1"/>
-        <tag k="kV_Sort" v="60"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.265Z"/>
-        <tag k="Shape__Len" v="0.0093081763706009991"/>
-        <tag k="circuits" v="1"/>
         <tag k="Legend" v="PG&amp;E_60_70kV"/>
-        <tag k="power" v="line"/>
-        <tag k="location" v="overhead"/>
-        <tag k="status" v="operational"/>
-        <tag k="name" v="PG&amp;E 60kV"/>
-        <tag k="voltage" v="60000"/>
         <tag k="Length_Fee" v="3095.38953208"/>
+        <tag k="Length_Mil" v="1"/>
         <tag k="OBJECTID" v="3071"/>
         <tag k="REF1" v="0001e1"/>
+        <tag k="Shape__Len" v="0.0093081763706009991"/>
         <tag k="Type" v="OH"/>
+        <tag k="circuits" v="1"/>
+        <tag k="kV_Sort" v="60"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 60kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.265Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="60000"/>
     </way>
     <way visible="true" id="-2386502" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2369915"/>
@@ -2634,22 +2607,22 @@
         <nd ref="-2369918"/>
         <nd ref="-2369919"/>
         <nd ref="-2369920"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="OBJECTID" v="3070"/>
+        <tag k="Legend" v="PG&amp;E_60_70kV"/>
+        <tag k="Length_Fee" v="2165.05843758"/>
         <tag k="Length_Mil" v="0"/>
+        <tag k="OBJECTID" v="3070"/>
+        <tag k="REF1" v="0001e2"/>
+        <tag k="Shape__Len" v="0.007263167159856"/>
+        <tag k="Type" v="OH"/>
+        <tag k="circuits" v="1"/>
+        <tag k="kV_Sort" v="60"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 60kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.265Z"/>
         <tag k="status" v="operational"/>
         <tag k="voltage" v="60000"/>
-        <tag k="Legend" v="PG&amp;E_60_70kV"/>
-        <tag k="name" v="PG&amp;E 60kV"/>
-        <tag k="REF1" v="0001e2"/>
-        <tag k="power" v="line"/>
-        <tag k="kV_Sort" v="60"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.265Z"/>
-        <tag k="circuits" v="1"/>
-        <tag k="location" v="overhead"/>
-        <tag k="Length_Fee" v="2165.05843758"/>
-        <tag k="Type" v="OH"/>
-        <tag k="Shape__Len" v="0.007263167159856"/>
     </way>
     <way visible="true" id="-2386501" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2369881"/>
@@ -2687,22 +2660,22 @@
         <nd ref="-2369913"/>
         <nd ref="-2369915"/>
         <nd ref="-2369914"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="Length_Mil" v="2"/>
-        <tag k="kV_Sort" v="60"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.265Z"/>
         <tag k="Legend" v="PG&amp;E_60_70kV"/>
-        <tag k="power" v="line"/>
-        <tag k="circuits" v="1"/>
-        <tag k="Shape__Len" v="0.040295021697739998"/>
-        <tag k="location" v="overhead"/>
-        <tag k="name" v="PG&amp;E 60kV"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="60000"/>
         <tag k="Length_Fee" v="13187.12332611"/>
+        <tag k="Length_Mil" v="2"/>
         <tag k="OBJECTID" v="3069"/>
         <tag k="REF1" v="0001e4"/>
+        <tag k="Shape__Len" v="0.040295021697739998"/>
         <tag k="Type" v="OH"/>
+        <tag k="circuits" v="1"/>
+        <tag k="kV_Sort" v="60"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 60kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.265Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="60000"/>
     </way>
     <way visible="true" id="-2386500" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2369876"/>
@@ -2710,22 +2683,22 @@
         <nd ref="-2369878"/>
         <nd ref="-2369879"/>
         <nd ref="-2369880"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="Length_Mil" v="0"/>
-        <tag k="kV_Sort" v="60"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.264Z"/>
-        <tag k="Shape__Len" v="0.0058091018666739996"/>
-        <tag k="circuits" v="1"/>
         <tag k="Legend" v="PG&amp;E_60_70kV"/>
-        <tag k="power" v="line"/>
-        <tag k="location" v="overhead"/>
-        <tag k="status" v="operational"/>
-        <tag k="name" v="PG&amp;E 60kV"/>
-        <tag k="voltage" v="60000"/>
         <tag k="Length_Fee" v="1758.61160859"/>
+        <tag k="Length_Mil" v="0"/>
         <tag k="OBJECTID" v="3068"/>
         <tag k="REF1" v="0001e5"/>
+        <tag k="Shape__Len" v="0.0058091018666739996"/>
         <tag k="Type" v="OH"/>
+        <tag k="circuits" v="1"/>
+        <tag k="kV_Sort" v="60"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 60kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.264Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="60000"/>
     </way>
     <way visible="true" id="-2386499" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2369847"/>
@@ -2757,22 +2730,22 @@
         <nd ref="-2369873"/>
         <nd ref="-2369874"/>
         <nd ref="-2369875"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="OBJECTID" v="3067"/>
+        <tag k="Legend" v="PG&amp;E_60_70kV"/>
+        <tag k="Length_Fee" v="12945.70896029"/>
         <tag k="Length_Mil" v="2"/>
+        <tag k="OBJECTID" v="3067"/>
+        <tag k="REF1" v="0001e6"/>
+        <tag k="Shape__Len" v="0.041771879655387999"/>
+        <tag k="Type" v="OH"/>
+        <tag k="circuits" v="1"/>
+        <tag k="kV_Sort" v="60"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 60kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.264Z"/>
         <tag k="status" v="operational"/>
         <tag k="voltage" v="60000"/>
-        <tag k="Legend" v="PG&amp;E_60_70kV"/>
-        <tag k="name" v="PG&amp;E 60kV"/>
-        <tag k="REF1" v="0001e6"/>
-        <tag k="power" v="line"/>
-        <tag k="kV_Sort" v="60"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.264Z"/>
-        <tag k="circuits" v="1"/>
-        <tag k="location" v="overhead"/>
-        <tag k="Length_Fee" v="12945.70896029"/>
-        <tag k="Type" v="OH"/>
-        <tag k="Shape__Len" v="0.041771879655387999"/>
     </way>
     <way visible="true" id="-2386498" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2369833"/>
@@ -2790,22 +2763,22 @@
         <nd ref="-2369844"/>
         <nd ref="-2369845"/>
         <nd ref="-2369846"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="Length_Mil" v="1"/>
-        <tag k="kV_Sort" v="60"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.264Z"/>
         <tag k="Legend" v="PG&amp;E_60_70kV"/>
-        <tag k="power" v="line"/>
-        <tag k="circuits" v="1"/>
-        <tag k="Shape__Len" v="0.022319783069651999"/>
-        <tag k="location" v="overhead"/>
-        <tag k="name" v="PG&amp;E 60kV"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="60000"/>
         <tag k="Length_Fee" v="7067.50724483"/>
+        <tag k="Length_Mil" v="1"/>
         <tag k="OBJECTID" v="3066"/>
         <tag k="REF1" v="0001e7"/>
+        <tag k="Shape__Len" v="0.022319783069651999"/>
         <tag k="Type" v="OH"/>
+        <tag k="circuits" v="1"/>
+        <tag k="kV_Sort" v="60"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 60kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.264Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="60000"/>
     </way>
     <way visible="true" id="-2386497" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2369797"/>
@@ -2847,22 +2820,22 @@
         <nd ref="-2369875"/>
         <nd ref="-2369831"/>
         <nd ref="-2369832"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="Length_Mil" v="3"/>
-        <tag k="kV_Sort" v="60"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.264Z"/>
         <tag k="Legend" v="PG&amp;E_60_70kV"/>
-        <tag k="power" v="line"/>
-        <tag k="circuits" v="1"/>
-        <tag k="Shape__Len" v="0.058872754027971"/>
-        <tag k="location" v="overhead"/>
-        <tag k="name" v="PG&amp;E 60kV"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="60000"/>
         <tag k="Length_Fee" v="18112.81161448"/>
+        <tag k="Length_Mil" v="3"/>
         <tag k="OBJECTID" v="3065"/>
         <tag k="REF1" v="0001e8"/>
+        <tag k="Shape__Len" v="0.058872754027971"/>
         <tag k="Type" v="OH"/>
+        <tag k="circuits" v="1"/>
+        <tag k="kV_Sort" v="60"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 60kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.264Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="60000"/>
     </way>
     <way visible="true" id="-2386496" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2369740"/>
@@ -2922,22 +2895,22 @@
         <nd ref="-2369794"/>
         <nd ref="-2369795"/>
         <nd ref="-2369796"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="OBJECTID" v="3064"/>
+        <tag k="Legend" v="PG&amp;E_60_70kV"/>
+        <tag k="Length_Fee" v="21527.23027944"/>
         <tag k="Length_Mil" v="4"/>
+        <tag k="OBJECTID" v="3064"/>
+        <tag k="REF1" v="0001ea"/>
+        <tag k="Shape__Len" v="0.063111101374870998"/>
+        <tag k="Type" v="OH"/>
+        <tag k="circuits" v="1"/>
+        <tag k="kV_Sort" v="60"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 60kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.264Z"/>
         <tag k="status" v="operational"/>
         <tag k="voltage" v="60000"/>
-        <tag k="Legend" v="PG&amp;E_60_70kV"/>
-        <tag k="name" v="PG&amp;E 60kV"/>
-        <tag k="REF1" v="0001ea"/>
-        <tag k="power" v="line"/>
-        <tag k="kV_Sort" v="60"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.264Z"/>
-        <tag k="circuits" v="1"/>
-        <tag k="location" v="overhead"/>
-        <tag k="Length_Fee" v="21527.23027944"/>
-        <tag k="Type" v="OH"/>
-        <tag k="Shape__Len" v="0.063111101374870998"/>
     </way>
     <way visible="true" id="-2386495" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2369730"/>
@@ -2951,22 +2924,22 @@
         <nd ref="-2369740"/>
         <nd ref="-2369738"/>
         <nd ref="-2369739"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="Length_Mil" v="1"/>
-        <tag k="kV_Sort" v="60"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.263Z"/>
         <tag k="Legend" v="PG&amp;E_60_70kV"/>
-        <tag k="power" v="line"/>
-        <tag k="circuits" v="1"/>
-        <tag k="Shape__Len" v="0.013511702111151"/>
-        <tag k="location" v="overhead"/>
-        <tag k="name" v="PG&amp;E 60kV"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="60000"/>
         <tag k="Length_Fee" v="4081.11389973"/>
+        <tag k="Length_Mil" v="1"/>
         <tag k="OBJECTID" v="3063"/>
         <tag k="REF1" v="0001ec"/>
+        <tag k="Shape__Len" v="0.013511702111151"/>
         <tag k="Type" v="OH"/>
+        <tag k="circuits" v="1"/>
+        <tag k="kV_Sort" v="60"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 60kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.263Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="60000"/>
     </way>
     <way visible="true" id="-2386494" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2369718"/>
@@ -2982,22 +2955,22 @@
         <nd ref="-2369730"/>
         <nd ref="-2369728"/>
         <nd ref="-2369729"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="Length_Mil" v="1"/>
-        <tag k="kV_Sort" v="60"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.263Z"/>
         <tag k="Legend" v="PG&amp;E_60_70kV"/>
-        <tag k="power" v="line"/>
-        <tag k="circuits" v="1"/>
-        <tag k="Shape__Len" v="0.015727510261037001"/>
-        <tag k="location" v="overhead"/>
-        <tag k="name" v="PG&amp;E 60kV"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="60000"/>
         <tag k="Length_Fee" v="4900.75922806"/>
+        <tag k="Length_Mil" v="1"/>
         <tag k="OBJECTID" v="3062"/>
         <tag k="REF1" v="0001ee"/>
+        <tag k="Shape__Len" v="0.015727510261037001"/>
         <tag k="Type" v="OH"/>
+        <tag k="circuits" v="1"/>
+        <tag k="kV_Sort" v="60"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 60kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.263Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="60000"/>
     </way>
     <way visible="true" id="-2386493" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2369703"/>
@@ -3015,22 +2988,22 @@
         <nd ref="-2369715"/>
         <nd ref="-2369716"/>
         <nd ref="-2369717"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="Length_Mil" v="1"/>
-        <tag k="kV_Sort" v="60"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.263Z"/>
         <tag k="Legend" v="PG&amp;E_60_70kV"/>
-        <tag k="power" v="line"/>
-        <tag k="circuits" v="1"/>
-        <tag k="Shape__Len" v="0.012668906807702"/>
-        <tag k="location" v="overhead"/>
-        <tag k="name" v="PG&amp;E 60kV"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="60000"/>
         <tag k="Length_Fee" v="4609.05890592"/>
+        <tag k="Length_Mil" v="1"/>
         <tag k="OBJECTID" v="3061"/>
         <tag k="REF1" v="0001f0"/>
+        <tag k="Shape__Len" v="0.012668906807702"/>
         <tag k="Type" v="OH"/>
+        <tag k="circuits" v="1"/>
+        <tag k="kV_Sort" v="60"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 60kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.263Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="60000"/>
     </way>
     <way visible="true" id="-2386492" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2369695"/>
@@ -3042,22 +3015,22 @@
         <nd ref="-2369701"/>
         <nd ref="-2369702"/>
         <nd ref="-2369713"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="OBJECTID" v="3060"/>
+        <tag k="Legend" v="PG&amp;E_60_70kV"/>
+        <tag k="Length_Fee" v="3574.18307038"/>
         <tag k="Length_Mil" v="1"/>
+        <tag k="OBJECTID" v="3060"/>
+        <tag k="REF1" v="0001f2"/>
+        <tag k="Shape__Len" v="0.010041998944611"/>
+        <tag k="Type" v="OH"/>
+        <tag k="circuits" v="1"/>
+        <tag k="kV_Sort" v="60"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 60kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.263Z"/>
         <tag k="status" v="operational"/>
         <tag k="voltage" v="60000"/>
-        <tag k="Legend" v="PG&amp;E_60_70kV"/>
-        <tag k="name" v="PG&amp;E 60kV"/>
-        <tag k="REF1" v="0001f2"/>
-        <tag k="power" v="line"/>
-        <tag k="kV_Sort" v="60"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.263Z"/>
-        <tag k="circuits" v="1"/>
-        <tag k="location" v="overhead"/>
-        <tag k="Length_Fee" v="3574.18307038"/>
-        <tag k="Type" v="OH"/>
-        <tag k="Shape__Len" v="0.010041998944611"/>
     </way>
     <way visible="true" id="-2386491" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2369674"/>
@@ -3082,42 +3055,42 @@
         <nd ref="-2369692"/>
         <nd ref="-2369693"/>
         <nd ref="-2369694"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="Length_Mil" v="1"/>
-        <tag k="kV_Sort" v="60"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.263Z"/>
         <tag k="Legend" v="PG&amp;E_60_70kV"/>
-        <tag k="power" v="line"/>
-        <tag k="circuits" v="1"/>
-        <tag k="Shape__Len" v="0.019924889404896"/>
-        <tag k="location" v="overhead"/>
-        <tag k="name" v="PG&amp;E 60kV"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="60000"/>
         <tag k="Length_Fee" v="6111.75619116"/>
+        <tag k="Length_Mil" v="1"/>
         <tag k="OBJECTID" v="3059"/>
         <tag k="REF1" v="0001f4"/>
+        <tag k="Shape__Len" v="0.019924889404896"/>
         <tag k="Type" v="OH"/>
+        <tag k="circuits" v="1"/>
+        <tag k="kV_Sort" v="60"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 60kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.263Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="60000"/>
     </way>
     <way visible="true" id="-2386490" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2369672"/>
         <nd ref="-2369673"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="OBJECTID" v="3058"/>
+        <tag k="Legend" v="PG&amp;E_60_70kV"/>
+        <tag k="Length_Fee" v="48.63828844"/>
         <tag k="Length_Mil" v="0"/>
+        <tag k="OBJECTID" v="3058"/>
+        <tag k="REF1" v="0001f6"/>
+        <tag k="Shape__Len" v="0.000145698252638"/>
+        <tag k="Type" v="OH"/>
+        <tag k="circuits" v="1"/>
+        <tag k="kV_Sort" v="60"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 60kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.263Z"/>
         <tag k="status" v="operational"/>
         <tag k="voltage" v="60000"/>
-        <tag k="Legend" v="PG&amp;E_60_70kV"/>
-        <tag k="name" v="PG&amp;E 60kV"/>
-        <tag k="REF1" v="0001f6"/>
-        <tag k="power" v="line"/>
-        <tag k="kV_Sort" v="60"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.263Z"/>
-        <tag k="circuits" v="1"/>
-        <tag k="location" v="overhead"/>
-        <tag k="Length_Fee" v="48.63828844"/>
-        <tag k="Type" v="OH"/>
-        <tag k="Shape__Len" v="0.000145698252638"/>
     </way>
     <way visible="true" id="-2386489" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2369650"/>
@@ -3142,22 +3115,22 @@
         <nd ref="-2369669"/>
         <nd ref="-2369670"/>
         <nd ref="-2369671"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="OBJECTID" v="3057"/>
+        <tag k="Legend" v="PG&amp;E_60_70kV"/>
+        <tag k="Length_Fee" v="7087.31166597"/>
         <tag k="Length_Mil" v="1"/>
+        <tag k="OBJECTID" v="3057"/>
+        <tag k="REF1" v="0001f8"/>
+        <tag k="Shape__Len" v="0.023050725244027001"/>
+        <tag k="Type" v="OH"/>
+        <tag k="circuits" v="1"/>
+        <tag k="kV_Sort" v="60"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 60kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.262Z"/>
         <tag k="status" v="operational"/>
         <tag k="voltage" v="60000"/>
-        <tag k="Legend" v="PG&amp;E_60_70kV"/>
-        <tag k="name" v="PG&amp;E 60kV"/>
-        <tag k="REF1" v="0001f8"/>
-        <tag k="power" v="line"/>
-        <tag k="kV_Sort" v="60"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.262Z"/>
-        <tag k="circuits" v="1"/>
-        <tag k="location" v="overhead"/>
-        <tag k="Length_Fee" v="7087.31166597"/>
-        <tag k="Type" v="OH"/>
-        <tag k="Shape__Len" v="0.023050725244027001"/>
     </way>
     <way visible="true" id="-2386488" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2369616"/>
@@ -3197,22 +3170,22 @@
         <nd ref="-2369647"/>
         <nd ref="-2369648"/>
         <nd ref="-2369649"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="Length_Mil" v="2"/>
-        <tag k="kV_Sort" v="60"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.262Z"/>
-        <tag k="Shape__Len" v="0.027275019727045002"/>
-        <tag k="circuits" v="1"/>
         <tag k="Legend" v="PG&amp;E_60_70kV"/>
-        <tag k="power" v="line"/>
-        <tag k="location" v="overhead"/>
-        <tag k="name" v="PG&amp;E 60kV"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="60000"/>
         <tag k="Length_Fee" v="8398.26709472"/>
+        <tag k="Length_Mil" v="2"/>
         <tag k="OBJECTID" v="3056"/>
         <tag k="REF1" v="0001f9"/>
+        <tag k="Shape__Len" v="0.027275019727045002"/>
         <tag k="Type" v="OH"/>
+        <tag k="circuits" v="1"/>
+        <tag k="kV_Sort" v="60"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 60kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.262Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="60000"/>
     </way>
     <way visible="true" id="-2386487" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2369591"/>
@@ -3241,22 +3214,22 @@
         <nd ref="-2369613"/>
         <nd ref="-2369614"/>
         <nd ref="-2369615"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="Length_Mil" v="1"/>
-        <tag k="kV_Sort" v="60"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.262Z"/>
         <tag k="Legend" v="PG&amp;E_60_70kV"/>
-        <tag k="power" v="line"/>
-        <tag k="circuits" v="1"/>
-        <tag k="Shape__Len" v="0.013498603695700001"/>
-        <tag k="location" v="overhead"/>
-        <tag k="name" v="PG&amp;E 60kV"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="60000"/>
         <tag k="Length_Fee" v="4852.28098506"/>
+        <tag k="Length_Mil" v="1"/>
         <tag k="OBJECTID" v="3055"/>
         <tag k="REF1" v="0001fa"/>
+        <tag k="Shape__Len" v="0.013498603695700001"/>
         <tag k="Type" v="OH"/>
+        <tag k="circuits" v="1"/>
+        <tag k="kV_Sort" v="60"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 60kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.262Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="60000"/>
     </way>
     <way visible="true" id="-2386486" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2369582"/>
@@ -3269,22 +3242,22 @@
         <nd ref="-2369588"/>
         <nd ref="-2369589"/>
         <nd ref="-2369590"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="Length_Mil" v="0"/>
-        <tag k="kV_Sort" v="60"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.262Z"/>
         <tag k="Legend" v="PG&amp;E_60_70kV"/>
-        <tag k="power" v="line"/>
-        <tag k="circuits" v="1"/>
-        <tag k="Shape__Len" v="0.0058982536575239997"/>
-        <tag k="location" v="overhead"/>
-        <tag k="name" v="PG&amp;E 60kV"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="60000"/>
         <tag k="Length_Fee" v="1749.72227192"/>
+        <tag k="Length_Mil" v="0"/>
         <tag k="OBJECTID" v="3054"/>
         <tag k="REF1" v="0001fb"/>
+        <tag k="Shape__Len" v="0.0058982536575239997"/>
         <tag k="Type" v="OH"/>
+        <tag k="circuits" v="1"/>
+        <tag k="kV_Sort" v="60"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 60kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.262Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="60000"/>
     </way>
     <way visible="true" id="-2386485" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2369550"/>
@@ -3320,22 +3293,22 @@
         <nd ref="-2369579"/>
         <nd ref="-2369580"/>
         <nd ref="-2369581"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="Length_Mil" v="2"/>
-        <tag k="kV_Sort" v="60"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.262Z"/>
         <tag k="Legend" v="PG&amp;E_60_70kV"/>
-        <tag k="power" v="line"/>
-        <tag k="circuits" v="1"/>
-        <tag k="Shape__Len" v="0.028946132977805"/>
-        <tag k="location" v="overhead"/>
-        <tag k="name" v="PG&amp;E 60kV"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="60000"/>
         <tag k="Length_Fee" v="9238.91239811"/>
+        <tag k="Length_Mil" v="2"/>
         <tag k="OBJECTID" v="3053"/>
         <tag k="REF1" v="0001fc"/>
+        <tag k="Shape__Len" v="0.028946132977805"/>
         <tag k="Type" v="OH"/>
+        <tag k="circuits" v="1"/>
+        <tag k="kV_Sort" v="60"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 60kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.262Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="60000"/>
     </way>
     <way visible="true" id="-2386484" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2369543"/>
@@ -3345,22 +3318,22 @@
         <nd ref="-2369547"/>
         <nd ref="-2369548"/>
         <nd ref="-2369549"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="Length_Mil" v="0"/>
-        <tag k="kV_Sort" v="60"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.261Z"/>
         <tag k="Legend" v="PG&amp;E_60_70kV"/>
-        <tag k="power" v="line"/>
-        <tag k="circuits" v="1"/>
-        <tag k="Shape__Len" v="0.0040731346266329998"/>
-        <tag k="location" v="overhead"/>
-        <tag k="name" v="PG&amp;E 60kV"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="60000"/>
         <tag k="Length_Fee" v="1237.79544184"/>
+        <tag k="Length_Mil" v="0"/>
         <tag k="OBJECTID" v="3052"/>
         <tag k="REF1" v="0001fd"/>
+        <tag k="Shape__Len" v="0.0040731346266329998"/>
         <tag k="Type" v="OH"/>
+        <tag k="circuits" v="1"/>
+        <tag k="kV_Sort" v="60"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 60kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.261Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="60000"/>
     </way>
     <way visible="true" id="-2386483" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2369525"/>
@@ -3383,64 +3356,64 @@
         <nd ref="-2369540"/>
         <nd ref="-2369541"/>
         <nd ref="-2369542"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="Length_Mil" v="1"/>
-        <tag k="kV_Sort" v="60"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.261Z"/>
         <tag k="Legend" v="PG&amp;E_60_70kV"/>
-        <tag k="power" v="line"/>
-        <tag k="circuits" v="1"/>
-        <tag k="Shape__Len" v="0.010080532624155"/>
-        <tag k="location" v="overhead"/>
-        <tag k="name" v="PG&amp;E 60kV"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="60000"/>
         <tag k="Length_Fee" v="3275.17464925"/>
+        <tag k="Length_Mil" v="1"/>
         <tag k="OBJECTID" v="3051"/>
         <tag k="REF1" v="0001fe"/>
+        <tag k="Shape__Len" v="0.010080532624155"/>
         <tag k="Type" v="OH"/>
+        <tag k="circuits" v="1"/>
+        <tag k="kV_Sort" v="60"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 60kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.261Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="60000"/>
     </way>
     <way visible="true" id="-2386482" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2369523"/>
         <nd ref="-2369524"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="Length_Mil" v="0"/>
-        <tag k="kV_Sort" v="60"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.261Z"/>
-        <tag k="Shape__Len" v="0.000244570323847"/>
-        <tag k="circuits" v="1"/>
         <tag k="Legend" v="PG&amp;E_60_70kV"/>
-        <tag k="power" v="line"/>
-        <tag k="location" v="overhead"/>
-        <tag k="status" v="operational"/>
-        <tag k="name" v="PG&amp;E 60kV"/>
-        <tag k="voltage" v="60000"/>
         <tag k="Length_Fee" v="76.32963238"/>
+        <tag k="Length_Mil" v="0"/>
         <tag k="OBJECTID" v="3049"/>
         <tag k="REF1" v="000200"/>
+        <tag k="Shape__Len" v="0.000244570323847"/>
         <tag k="Type" v="OH"/>
+        <tag k="circuits" v="1"/>
+        <tag k="kV_Sort" v="60"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 60kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.261Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="60000"/>
     </way>
     <way visible="true" id="-2386481" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2369454"/>
         <nd ref="-2369455"/>
         <nd ref="-2369456"/>
         <nd ref="-2369457"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="Length_Mil" v="0"/>
-        <tag k="kV_Sort" v="115"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.253Z"/>
-        <tag k="Shape__Len" v="0.001678688558262"/>
-        <tag k="circuits" v="1"/>
         <tag k="Legend" v="PG&amp;E_115kV"/>
-        <tag k="power" v="line"/>
-        <tag k="location" v="overhead"/>
-        <tag k="status" v="operational"/>
-        <tag k="name" v="PG&amp;E 115kV"/>
-        <tag k="voltage" v="115000"/>
         <tag k="Length_Fee" v="563.52393353"/>
+        <tag k="Length_Mil" v="0"/>
         <tag k="OBJECTID" v="3004"/>
         <tag k="REF1" v="000237"/>
+        <tag k="Shape__Len" v="0.001678688558262"/>
         <tag k="Type" v="OH"/>
+        <tag k="circuits" v="1"/>
+        <tag k="kV_Sort" v="115"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 115kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.253Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="115000"/>
     </way>
     <way visible="true" id="-2386480" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2369450"/>
@@ -3448,22 +3421,22 @@
         <nd ref="-2369451"/>
         <nd ref="-2369452"/>
         <nd ref="-2369453"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="Length_Mil" v="0"/>
-        <tag k="kV_Sort" v="115"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.252Z"/>
         <tag k="Legend" v="PG&amp;E_115kV"/>
-        <tag k="power" v="line"/>
-        <tag k="circuits" v="1"/>
-        <tag k="Shape__Len" v="0.001178237982603"/>
-        <tag k="location" v="overhead"/>
-        <tag k="name" v="PG&amp;E 115kV"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="115000"/>
         <tag k="Length_Fee" v="385.23962169"/>
+        <tag k="Length_Mil" v="0"/>
         <tag k="OBJECTID" v="3003"/>
         <tag k="REF1" v="000239"/>
+        <tag k="Shape__Len" v="0.001178237982603"/>
         <tag k="Type" v="OH"/>
+        <tag k="circuits" v="1"/>
+        <tag k="kV_Sort" v="115"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 115kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.252Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="115000"/>
     </way>
     <way visible="true" id="-2386478" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2369440"/>
@@ -3473,22 +3446,22 @@
         <nd ref="-2369443"/>
         <nd ref="-2369444"/>
         <nd ref="-2369445"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="Length_Mil" v="0"/>
-        <tag k="kV_Sort" v="60"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.252Z"/>
         <tag k="Legend" v="PG&amp;E_60_70kV"/>
-        <tag k="power" v="line"/>
-        <tag k="circuits" v="1"/>
-        <tag k="Shape__Len" v="0.0078526960764769994"/>
-        <tag k="location" v="overhead"/>
-        <tag k="name" v="PG&amp;E 60kV"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="60000"/>
         <tag k="Length_Fee" v="2319.03146717"/>
+        <tag k="Length_Mil" v="0"/>
         <tag k="OBJECTID" v="3001"/>
         <tag k="REF1" v="00023d"/>
+        <tag k="Shape__Len" v="0.0078526960764769994"/>
         <tag k="Type" v="OH"/>
+        <tag k="circuits" v="1"/>
+        <tag k="kV_Sort" v="60"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 60kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.252Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="60000"/>
     </way>
     <way visible="true" id="-2386477" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2369395"/>
@@ -3536,22 +3509,22 @@
         <nd ref="-2369437"/>
         <nd ref="-2369438"/>
         <nd ref="-2369439"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="Length_Mil" v="7"/>
-        <tag k="kV_Sort" v="115"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.230Z"/>
         <tag k="Legend" v="PG&amp;E_115kV"/>
-        <tag k="power" v="line"/>
-        <tag k="circuits" v="2"/>
-        <tag k="Shape__Len" v="0.11587733916562"/>
-        <tag k="location" v="overhead"/>
-        <tag k="name" v="PG&amp;E 115kV"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="115000"/>
         <tag k="Length_Fee" v="38790.08417009"/>
+        <tag k="Length_Mil" v="7"/>
         <tag k="OBJECTID" v="1899"/>
         <tag k="REF1" v="0002ab"/>
+        <tag k="Shape__Len" v="0.11587733916562"/>
         <tag k="Type" v="OH"/>
+        <tag k="circuits" v="2"/>
+        <tag k="kV_Sort" v="115"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 115kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.230Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="115000"/>
     </way>
     <way visible="true" id="-2386476" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2369336"/>
@@ -3562,23 +3535,23 @@
         <nd ref="-2369334"/>
         <nd ref="-2369335"/>
         <nd ref="-2367777"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="Length_Mil" v="10"/>
-        <tag k="kV_Sort" v="115"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.091Z;2018-06-08T20:48:49.199Z;2018-06-08T20:48:49.224Z"/>
         <tag k="Legend" v="PG&amp;E_115kV"/>
-        <tag k="power" v="line"/>
-        <tag k="circuits" v="2"/>
-        <tag k="Shape__Len" v="0.18038848370772501"/>
-        <tag k="location" v="overhead"/>
-        <tag k="name" v="PG&amp;E 115kV"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="115000"/>
         <tag k="Length_Fee" v="55124.05488235"/>
+        <tag k="Length_Mil" v="10"/>
         <tag k="OBJECTID" v="1235"/>
         <tag k="REF1" v="000071;0002d4;0002c3"/>
-        <tag k="Type" v="OH"/>
         <tag k="REF2" v="todo"/>
+        <tag k="Shape__Len" v="0.18038848370772501"/>
+        <tag k="Type" v="OH"/>
+        <tag k="circuits" v="2"/>
+        <tag k="kV_Sort" v="115"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 115kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.091Z;2018-06-08T20:48:49.199Z;2018-06-08T20:48:49.224Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="115000"/>
     </way>
     <way visible="true" id="-2386474" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2369191"/>
@@ -3629,22 +3602,22 @@
         <nd ref="-2369236"/>
         <nd ref="-2369237"/>
         <nd ref="-2369238"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="Length_Mil" v="8"/>
-        <tag k="kV_Sort" v="230"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.117Z"/>
         <tag k="Legend" v="PG&amp;E_230kV"/>
-        <tag k="power" v="line"/>
-        <tag k="circuits" v="1"/>
-        <tag k="Shape__Len" v="0.121230177073769"/>
-        <tag k="location" v="overhead"/>
-        <tag k="name" v="PG&amp;E 230kV"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="230000"/>
         <tag k="Length_Fee" v="41236.59565289"/>
+        <tag k="Length_Mil" v="8"/>
         <tag k="OBJECTID" v="1361"/>
         <tag k="REF1" v="000000"/>
+        <tag k="Shape__Len" v="0.121230177073769"/>
         <tag k="Type" v="OH"/>
+        <tag k="circuits" v="1"/>
+        <tag k="kV_Sort" v="230"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 230kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.117Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="230000"/>
     </way>
     <way visible="true" id="-2386473" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2369238"/>
@@ -3653,22 +3626,22 @@
         <nd ref="-2369188"/>
         <nd ref="-2369189"/>
         <nd ref="-2369190"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="Length_Mil" v="0"/>
-        <tag k="kV_Sort" v="230"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.117Z"/>
-        <tag k="Shape__Len" v="0.003818398744309"/>
-        <tag k="circuits" v="1"/>
         <tag k="Legend" v="PG&amp;E_230kV"/>
-        <tag k="power" v="line"/>
-        <tag k="location" v="overhead"/>
-        <tag k="name" v="PG&amp;E 230kV"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="230000"/>
         <tag k="Length_Fee" v="1392.56956838"/>
+        <tag k="Length_Mil" v="0"/>
         <tag k="OBJECTID" v="1360"/>
         <tag k="REF1" v="000001"/>
+        <tag k="Shape__Len" v="0.003818398744309"/>
         <tag k="Type" v="OH"/>
+        <tag k="circuits" v="1"/>
+        <tag k="kV_Sort" v="230"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 230kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.117Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="230000"/>
     </way>
     <way visible="true" id="-2386472" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2369238"/>
@@ -3677,68 +3650,68 @@
         <nd ref="-2369184"/>
         <nd ref="-2369185"/>
         <nd ref="-2369190"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="Length_Mil" v="0"/>
-        <tag k="kV_Sort" v="230"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.117Z"/>
-        <tag k="Shape__Len" v="0.0038305885618780001"/>
-        <tag k="circuits" v="1"/>
         <tag k="Legend" v="PG&amp;E_230kV"/>
-        <tag k="power" v="line"/>
-        <tag k="location" v="overhead"/>
-        <tag k="name" v="PG&amp;E 230kV"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="230000"/>
         <tag k="Length_Fee" v="1395.33809178"/>
+        <tag k="Length_Mil" v="0"/>
         <tag k="OBJECTID" v="1359"/>
         <tag k="REF1" v="000002"/>
+        <tag k="Shape__Len" v="0.0038305885618780001"/>
         <tag k="Type" v="OH"/>
+        <tag k="circuits" v="1"/>
+        <tag k="kV_Sort" v="230"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 230kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.117Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="230000"/>
     </way>
     <way visible="true" id="-2386470" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2369163"/>
         <nd ref="-2369164"/>
         <nd ref="-2369165"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="OBJECTID" v="1331"/>
-        <tag k="Length_Mil" v="0"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="230000"/>
         <tag k="Legend" v="PG&amp;E_230kV"/>
-        <tag k="name" v="PG&amp;E 230kV"/>
-        <tag k="cables" v="3"/>
+        <tag k="Length_Fee" v="505.8986465"/>
+        <tag k="Length_Mil" v="0"/>
+        <tag k="OBJECTID" v="1331"/>
         <tag k="REF1" v="000015"/>
         <tag k="REF2" v="todo"/>
-        <tag k="power" v="line"/>
-        <tag k="kV_Sort" v="230"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.111Z"/>
+        <tag k="Shape__Len" v="0.0015556265734830001"/>
+        <tag k="Type" v="OH"/>
+        <tag k="cables" v="3"/>
         <tag k="circuits" v="2"/>
         <tag k="comments" v="Triple circuit for 5 miles; 115 line shares 230 poles."/>
-        <tag k="location" v="overhead"/>
-        <tag k="Length_Fee" v="505.8986465"/>
         <tag k="frequency" v="60"/>
+        <tag k="kV_Sort" v="230"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 230kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.111Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="230000"/>
         <tag k="wires" v="double"/>
-        <tag k="Type" v="OH"/>
-        <tag k="Shape__Len" v="0.0015556265734830001"/>
     </way>
     <way visible="true" id="-2386469" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2369089"/>
         <nd ref="-2369090"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="OBJECTID" v="1311"/>
+        <tag k="Legend" v="PG&amp;E_115kV"/>
+        <tag k="Length_Fee" v="253.12090691"/>
         <tag k="Length_Mil" v="0"/>
+        <tag k="OBJECTID" v="1311"/>
+        <tag k="REF1" v="000025"/>
+        <tag k="Shape__Len" v="0.00087063638338400005"/>
+        <tag k="Type" v="OH"/>
+        <tag k="circuits" v="1"/>
+        <tag k="kV_Sort" v="115"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 115kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.107Z"/>
         <tag k="status" v="operational"/>
         <tag k="voltage" v="115000"/>
-        <tag k="Legend" v="PG&amp;E_115kV"/>
-        <tag k="name" v="PG&amp;E 115kV"/>
-        <tag k="REF1" v="000025"/>
-        <tag k="power" v="line"/>
-        <tag k="kV_Sort" v="115"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.107Z"/>
-        <tag k="circuits" v="1"/>
-        <tag k="location" v="overhead"/>
-        <tag k="Length_Fee" v="253.12090691"/>
-        <tag k="Type" v="OH"/>
-        <tag k="Shape__Len" v="0.00087063638338400005"/>
     </way>
     <way visible="true" id="-2386468" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2369192"/>
@@ -3798,118 +3771,110 @@
         <nd ref="-2369087"/>
         <nd ref="-2369089"/>
         <nd ref="-2369088"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="Length_Mil" v="9"/>
-        <tag k="kV_Sort" v="115"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.107Z"/>
-        <tag k="Shape__Len" v="0.137410656126703"/>
-        <tag k="circuits" v="1"/>
         <tag k="Legend" v="PG&amp;E_115kV"/>
-        <tag k="power" v="line"/>
-        <tag k="location" v="overhead"/>
-        <tag k="name" v="PG&amp;E 115kV"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="115000"/>
         <tag k="Length_Fee" v="48230.41800181"/>
+        <tag k="Length_Mil" v="9"/>
         <tag k="OBJECTID" v="1310"/>
         <tag k="REF1" v="000026"/>
+        <tag k="Shape__Len" v="0.137410656126703"/>
         <tag k="Type" v="OH"/>
-    </way>
-    <way visible="true" id="-2386466" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-2369034"/>
-        <nd ref="-2368992"/>
-        <nd ref="-2368993"/>
-        <nd ref="-2368994"/>
-        <nd ref="-2368995"/>
-        <nd ref="-2368996"/>
-        <nd ref="-2368997"/>
+        <tag k="circuits" v="1"/>
+        <tag k="kV_Sort" v="115"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 115kV"/>
         <tag k="owner" v="PG&amp;E"/>
-        <tag k="OBJECTID" v="1308"/>
-        <tag k="Length_Mil" v="0"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.107Z"/>
         <tag k="status" v="operational"/>
         <tag k="voltage" v="115000"/>
-        <tag k="Legend" v="PG&amp;E_115kV"/>
-        <tag k="name" v="PG&amp;E 115kV"/>
-        <tag k="cables" v="3"/>
-        <tag k="REF1" v="000028"/>
-        <tag k="REF2" v="todo"/>
-        <tag k="power" v="line"/>
-        <tag k="kV_Sort" v="115"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.107Z"/>
-        <tag k="circuits" v="2"/>
-        <tag k="location" v="overhead"/>
-        <tag k="Length_Fee" v="1308.73903127"/>
-        <tag k="Type" v="OH"/>
-        <tag k="Shape__Len" v="0.004280024664748"/>
     </way>
     <way visible="true" id="-2386465" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2368997"/>
         <nd ref="-2368984"/>
         <nd ref="-2368985"/>
-        <nd ref="-2368983"/>
         <nd ref="-2368991"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="OBJECTID" v="1304"/>
+        <tag k="Legend" v="PG&amp;E_115kV"/>
+        <tag k="Length_Fee" v="61.87193626"/>
         <tag k="Length_Mil" v="0"/>
+        <tag k="OBJECTID" v="1307"/>
+        <tag k="REF1" v="000029;00002b;00002c"/>
+        <tag k="REF2" v="todo"/>
+        <tag k="Shape__Len" v="0.000198593838851"/>
+        <tag k="Type" v="OH"/>
+        <tag k="cables" v="3"/>
+        <tag k="circuits" v="2"/>
+        <tag k="kV_Sort" v="115"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 115kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.107Z;2018-06-08T20:48:49.106Z"/>
         <tag k="status" v="operational"/>
         <tag k="voltage" v="115000"/>
+    </way>
+    <way visible="true" id="-2386464" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-2369034"/>
+        <nd ref="-2368986"/>
+        <nd ref="-2368987"/>
         <tag k="Legend" v="PG&amp;E_115kV"/>
-        <tag k="name" v="PG&amp;E 115kV"/>
-        <tag k="cables" v="3"/>
-        <tag k="REF1" v="00002c;00002d;000029;00002b"/>
-        <tag k="REF2" v="todo"/>
-        <tag k="power" v="line"/>
-        <tag k="kV_Sort" v="115"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.106Z;2018-06-08T20:48:49.107Z"/>
-        <tag k="circuits" v="2"/>
-        <tag k="location" v="overhead"/>
-        <tag k="Length_Fee" v="43.8480917"/>
+        <tag k="Length_Fee" v="1342.66646523"/>
+        <tag k="Length_Mil" v="0"/>
+        <tag k="OBJECTID" v="1306"/>
+        <tag k="REF1" v="00002a"/>
+        <tag k="Shape__Len" v="0.0043703082411"/>
         <tag k="Type" v="OH"/>
-        <tag k="Shape__Len" v="0.00013731764811100001"/>
+        <tag k="circuits" v="2"/>
+        <tag k="kV_Sort" v="115"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 115kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.107Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="115000"/>
     </way>
     <way visible="true" id="-2386463" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2368997"/>
         <nd ref="-2368991"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="OBJECTID" v="1307"/>
-        <tag k="Length_Mil" v="0"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="115000"/>
         <tag k="Legend" v="PG&amp;E_115kV"/>
-        <tag k="name" v="PG&amp;E 115kV"/>
-        <tag k="cables" v="3"/>
+        <tag k="Length_Fee" v="61.87193626"/>
+        <tag k="Length_Mil" v="0"/>
+        <tag k="OBJECTID" v="1307"/>
         <tag k="REF1" v="000029"/>
         <tag k="REF2" v="todo"/>
-        <tag k="power" v="line"/>
-        <tag k="kV_Sort" v="115"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.107Z"/>
-        <tag k="circuits" v="2"/>
-        <tag k="location" v="overhead"/>
-        <tag k="Length_Fee" v="61.87193626"/>
-        <tag k="Type" v="OH"/>
         <tag k="Shape__Len" v="0.000198593838851"/>
-    </way>
-    <way visible="true" id="-2386462" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-2368985"/>
-        <nd ref="-2368991"/>
+        <tag k="Type" v="OH"/>
+        <tag k="cables" v="3"/>
+        <tag k="circuits" v="2"/>
+        <tag k="kV_Sort" v="115"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 115kV"/>
         <tag k="owner" v="PG&amp;E"/>
-        <tag k="OBJECTID" v="1304"/>
-        <tag k="Length_Mil" v="0"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.107Z"/>
         <tag k="status" v="operational"/>
         <tag k="voltage" v="115000"/>
+    </way>
+    <way visible="true" id="-2386461" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-2368985"/>
+        <nd ref="-2368983"/>
+        <nd ref="-2368991"/>
         <tag k="Legend" v="PG&amp;E_115kV"/>
-        <tag k="name" v="PG&amp;E 115kV"/>
-        <tag k="cables" v="3"/>
-        <tag k="REF1" v="00002c"/>
-        <tag k="REF2" v="todo"/>
-        <tag k="power" v="line"/>
-        <tag k="kV_Sort" v="115"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.106Z"/>
-        <tag k="circuits" v="2"/>
-        <tag k="location" v="overhead"/>
-        <tag k="Length_Fee" v="43.8480917"/>
+        <tag k="Length_Fee" v="104.68721825"/>
+        <tag k="Length_Mil" v="0"/>
+        <tag k="OBJECTID" v="1303"/>
+        <tag k="REF1" v="00002d"/>
+        <tag k="Shape__Len" v="0.00030172434563199998"/>
         <tag k="Type" v="OH"/>
-        <tag k="Shape__Len" v="0.00013731764811100001"/>
+        <tag k="circuits" v="2"/>
+        <tag k="kV_Sort" v="115"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 115kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.106Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="115000"/>
     </way>
     <way visible="true" id="-2386459" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2368964"/>
@@ -3932,23 +3897,23 @@
         <nd ref="-2368980"/>
         <nd ref="-2368981"/>
         <nd ref="-2368985"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="Length_Mil" v="3"/>
-        <tag k="kV_Sort" v="115"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.106Z"/>
-        <tag k="Shape__Len" v="0.054506509548506998"/>
-        <tag k="circuits" v="2"/>
         <tag k="Legend" v="PG&amp;E_115kV"/>
-        <tag k="power" v="line"/>
-        <tag k="location" v="overhead"/>
-        <tag k="name" v="PG&amp;E 115kV"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="115000"/>
         <tag k="Length_Fee" v="17489.64316133"/>
+        <tag k="Length_Mil" v="3"/>
         <tag k="OBJECTID" v="1301"/>
         <tag k="REF1" v="00002f"/>
-        <tag k="Type" v="OH"/>
         <tag k="REF2" v="todo"/>
+        <tag k="Shape__Len" v="0.054506509548506998"/>
+        <tag k="Type" v="OH"/>
+        <tag k="circuits" v="2"/>
+        <tag k="kV_Sort" v="115"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 115kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.106Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="115000"/>
     </way>
     <way visible="true" id="-2386458" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2369016"/>
@@ -3983,23 +3948,23 @@
         <nd ref="-2368961"/>
         <nd ref="-2368962"/>
         <nd ref="-2368963"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="Length_Mil" v="4"/>
-        <tag k="kV_Sort" v="115"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.105Z"/>
-        <tag k="Shape__Len" v="0.070849254504722001"/>
-        <tag k="circuits" v="1"/>
         <tag k="Legend" v="PG&amp;E_115kV"/>
-        <tag k="power" v="line"/>
-        <tag k="location" v="overhead"/>
-        <tag k="name" v="PG&amp;E 115kV"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="115000"/>
         <tag k="Length_Fee" v="21951.011012"/>
+        <tag k="Length_Mil" v="4"/>
         <tag k="OBJECTID" v="1300"/>
         <tag k="REF1" v="000030"/>
-        <tag k="Type" v="OH"/>
         <tag k="REF2" v="todo"/>
+        <tag k="Shape__Len" v="0.070849254504722001"/>
+        <tag k="Type" v="OH"/>
+        <tag k="circuits" v="1"/>
+        <tag k="kV_Sort" v="115"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 115kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.105Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="115000"/>
     </way>
     <way visible="true" id="-2386457" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2368900"/>
@@ -4035,43 +4000,110 @@
         <nd ref="-2368930"/>
         <nd ref="-2368931"/>
         <nd ref="-2368932"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="Length_Mil" v="4"/>
-        <tag k="kV_Sort" v="115"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.105Z"/>
         <tag k="Legend" v="PG&amp;E_115kV"/>
-        <tag k="power" v="line"/>
-        <tag k="circuits" v="1"/>
-        <tag k="Shape__Len" v="0.072837944861390003"/>
-        <tag k="location" v="overhead"/>
-        <tag k="name" v="PG&amp;E 115kV"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="115000"/>
         <tag k="Length_Fee" v="22493.87282968"/>
+        <tag k="Length_Mil" v="4"/>
         <tag k="OBJECTID" v="1299"/>
         <tag k="REF1" v="000031"/>
-        <tag k="Type" v="OH"/>
         <tag k="REF2" v="todo"/>
+        <tag k="Shape__Len" v="0.072837944861390003"/>
+        <tag k="Type" v="OH"/>
+        <tag k="circuits" v="1"/>
+        <tag k="kV_Sort" v="115"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 115kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.105Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="115000"/>
     </way>
     <way visible="true" id="-2386456" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2368898"/>
         <nd ref="-2368899"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="OBJECTID" v="1298"/>
+        <tag k="Legend" v="PG&amp;E_115kV"/>
+        <tag k="Length_Fee" v="850.09915195"/>
         <tag k="Length_Mil" v="0"/>
+        <tag k="OBJECTID" v="1298"/>
+        <tag k="REF1" v="000032"/>
+        <tag k="Shape__Len" v="0.0029216124809159998"/>
+        <tag k="Type" v="OH"/>
+        <tag k="circuits" v="1"/>
+        <tag k="kV_Sort" v="115"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 115kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.105Z"/>
         <tag k="status" v="operational"/>
         <tag k="voltage" v="115000"/>
+    </way>
+    <way visible="true" id="-2386455" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-2368852"/>
+        <nd ref="-2368853"/>
+        <nd ref="-2368854"/>
+        <nd ref="-2368855"/>
+        <nd ref="-2368856"/>
+        <nd ref="-2368857"/>
+        <nd ref="-2368858"/>
+        <nd ref="-2368859"/>
+        <nd ref="-2368860"/>
+        <nd ref="-2368861"/>
+        <nd ref="-2368862"/>
+        <nd ref="-2368863"/>
+        <nd ref="-2368864"/>
+        <nd ref="-2368865"/>
+        <nd ref="-2368866"/>
+        <nd ref="-2368867"/>
+        <nd ref="-2368868"/>
+        <nd ref="-2368869"/>
+        <nd ref="-2368870"/>
+        <nd ref="-2368871"/>
+        <nd ref="-2368872"/>
+        <nd ref="-2368873"/>
+        <nd ref="-2368874"/>
+        <nd ref="-2368875"/>
+        <nd ref="-2368876"/>
+        <nd ref="-2368877"/>
+        <nd ref="-2368878"/>
+        <nd ref="-2368879"/>
+        <nd ref="-2368880"/>
+        <nd ref="-2368881"/>
+        <nd ref="-2368882"/>
+        <nd ref="-2368883"/>
+        <nd ref="-2368884"/>
+        <nd ref="-2368885"/>
+        <nd ref="-2368886"/>
+        <nd ref="-2368887"/>
+        <nd ref="-2368888"/>
+        <nd ref="-2368889"/>
+        <nd ref="-2368890"/>
+        <nd ref="-2368891"/>
+        <nd ref="-2368892"/>
+        <nd ref="-2368893"/>
+        <nd ref="-2368894"/>
+        <nd ref="-2368895"/>
+        <nd ref="-2368896"/>
+        <nd ref="-2368897"/>
         <tag k="Legend" v="PG&amp;E_115kV"/>
-        <tag k="name" v="PG&amp;E 115kV"/>
-        <tag k="REF1" v="000032"/>
-        <tag k="power" v="line"/>
-        <tag k="kV_Sort" v="115"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.105Z"/>
-        <tag k="circuits" v="1"/>
-        <tag k="location" v="overhead"/>
-        <tag k="Length_Fee" v="850.09915195"/>
+        <tag k="Length_Fee" v="29979.79913248"/>
+        <tag k="Length_Mil" v="6"/>
+        <tag k="OBJECTID" v="1297"/>
+        <tag k="REF1" v="000033"/>
+        <tag k="REF2" v="todo"/>
+        <tag k="Shape__Len" v="0.092586216840936"/>
         <tag k="Type" v="OH"/>
-        <tag k="Shape__Len" v="0.0029216124809159998"/>
+        <tag k="cables" v="3"/>
+        <tag k="circuits" v="2"/>
+        <tag k="frequency" v="60"/>
+        <tag k="kV_Sort" v="115"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 115kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.105Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="115000"/>
     </way>
     <way visible="true" id="-2386453" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2368807"/>
@@ -4122,22 +4154,22 @@
         <nd ref="-2369035"/>
         <nd ref="-2369193"/>
         <nd ref="-2369279"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="Length_Mil" v="6"/>
-        <tag k="kV_Sort" v="230"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.101Z"/>
-        <tag k="Shape__Len" v="0.099957525011448001"/>
-        <tag k="circuits" v="2"/>
         <tag k="Legend" v="PG&amp;E_230kV"/>
-        <tag k="power" v="line"/>
-        <tag k="location" v="overhead"/>
-        <tag k="name" v="PG&amp;E 230kV"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="230000"/>
         <tag k="Length_Fee" v="32315.51980185"/>
+        <tag k="Length_Mil" v="6"/>
         <tag k="OBJECTID" v="1295"/>
         <tag k="REF1" v="000035"/>
+        <tag k="Shape__Len" v="0.099957525011448001"/>
         <tag k="Type" v="OH"/>
+        <tag k="circuits" v="2"/>
+        <tag k="kV_Sort" v="230"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 230kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.101Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="230000"/>
     </way>
     <way visible="true" id="-2386452" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2368994"/>
@@ -4161,63 +4193,63 @@
         <nd ref="-2368898"/>
         <nd ref="-2368933"/>
         <nd ref="-2369015"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="Length_Mil" v="2"/>
-        <tag k="kV_Sort" v="115"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.101Z"/>
         <tag k="Legend" v="PG&amp;E_115kV"/>
-        <tag k="power" v="line"/>
-        <tag k="circuits" v="2"/>
-        <tag k="Shape__Len" v="0.038454877708572997"/>
-        <tag k="location" v="overhead"/>
-        <tag k="name" v="PG&amp;E 115kV"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="115000"/>
         <tag k="Length_Fee" v="12893.72789489"/>
+        <tag k="Length_Mil" v="2"/>
         <tag k="OBJECTID" v="1294"/>
         <tag k="REF1" v="000036"/>
+        <tag k="Shape__Len" v="0.038454877708572997"/>
         <tag k="Type" v="OH"/>
+        <tag k="circuits" v="2"/>
+        <tag k="kV_Sort" v="115"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 115kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.101Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="115000"/>
     </way>
     <way visible="true" id="-2386448" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2368594"/>
         <nd ref="-2368595"/>
         <nd ref="-2368596"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="Length_Mil" v="0"/>
-        <tag k="kV_Sort" v="115"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.100Z"/>
-        <tag k="Shape__Len" v="0.0036052084460860001"/>
-        <tag k="circuits" v="1"/>
         <tag k="Legend" v="PG&amp;E_115kV"/>
-        <tag k="power" v="line"/>
-        <tag k="location" v="overhead"/>
-        <tag k="status" v="operational"/>
-        <tag k="name" v="PG&amp;E 115kV"/>
-        <tag k="voltage" v="115000"/>
         <tag k="Length_Fee" v="1129.2620839"/>
+        <tag k="Length_Mil" v="0"/>
         <tag k="OBJECTID" v="1288"/>
         <tag k="REF1" v="00003c"/>
+        <tag k="Shape__Len" v="0.0036052084460860001"/>
         <tag k="Type" v="OH"/>
+        <tag k="circuits" v="1"/>
+        <tag k="kV_Sort" v="115"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 115kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.100Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="115000"/>
     </way>
     <way visible="true" id="-2386447" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2368589"/>
         <nd ref="-2368590"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="Length_Mil" v="0"/>
-        <tag k="kV_Sort" v="115"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.099Z"/>
-        <tag k="Shape__Len" v="0.0011415117331"/>
-        <tag k="circuits" v="1"/>
         <tag k="Legend" v="PG&amp;E_115kV"/>
-        <tag k="power" v="line"/>
-        <tag k="location" v="overhead"/>
-        <tag k="status" v="operational"/>
-        <tag k="name" v="PG&amp;E 115kV"/>
-        <tag k="voltage" v="115000"/>
         <tag k="Length_Fee" v="331.77180744"/>
+        <tag k="Length_Mil" v="0"/>
         <tag k="OBJECTID" v="1284"/>
         <tag k="REF1" v="000040"/>
+        <tag k="Shape__Len" v="0.0011415117331"/>
         <tag k="Type" v="OH"/>
+        <tag k="circuits" v="1"/>
+        <tag k="kV_Sort" v="115"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 115kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.099Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="115000"/>
     </way>
     <way visible="true" id="-2386444" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2368496"/>
@@ -4226,23 +4258,23 @@
         <nd ref="-2368499"/>
         <nd ref="-2368500"/>
         <nd ref="-2368501"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="Length_Mil" v="0"/>
-        <tag k="kV_Sort" v="115"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.092Z"/>
-        <tag k="Shape__Len" v="0.006880524642741"/>
-        <tag k="circuits" v="1"/>
         <tag k="Legend" v="PG&amp;E_115kV"/>
-        <tag k="power" v="line"/>
-        <tag k="location" v="overhead"/>
-        <tag k="name" v="PG&amp;E 115kV"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="115000"/>
         <tag k="Length_Fee" v="2359.93612564"/>
+        <tag k="Length_Mil" v="0"/>
         <tag k="OBJECTID" v="1240"/>
         <tag k="REF1" v="00006c"/>
-        <tag k="Type" v="OH"/>
         <tag k="REF2" v="todo"/>
+        <tag k="Shape__Len" v="0.006880524642741"/>
+        <tag k="Type" v="OH"/>
+        <tag k="circuits" v="1"/>
+        <tag k="kV_Sort" v="115"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 115kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.092Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="115000"/>
     </way>
     <way visible="true" id="-2386443" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2369417"/>
@@ -4255,66 +4287,66 @@
         <nd ref="-2368494"/>
         <nd ref="-2368500"/>
         <nd ref="-2368495"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="Length_Mil" v="0"/>
-        <tag k="kV_Sort" v="115"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.092Z;2018-06-08T20:48:49.091Z"/>
         <tag k="Legend" v="PG&amp;E_115kV"/>
-        <tag k="power" v="line"/>
-        <tag k="circuits" v="1"/>
-        <tag k="Shape__Len" v="0.006880524642741"/>
-        <tag k="location" v="overhead"/>
-        <tag k="name" v="PG&amp;E 115kV"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="115000"/>
         <tag k="Length_Fee" v="2359.93612564"/>
+        <tag k="Length_Mil" v="0"/>
         <tag k="OBJECTID" v="1240"/>
         <tag k="REF1" v="00006c;00006d"/>
-        <tag k="Type" v="OH"/>
         <tag k="REF2" v="todo"/>
+        <tag k="Shape__Len" v="0.006880524642741"/>
+        <tag k="Type" v="OH"/>
+        <tag k="circuits" v="1"/>
+        <tag k="kV_Sort" v="115"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 115kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.092Z;2018-06-08T20:48:49.091Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="115000"/>
     </way>
     <way visible="true" id="-2386442" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2369301"/>
         <nd ref="-2368489"/>
         <nd ref="-2369299"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="Length_Mil" v="0"/>
-        <tag k="kV_Sort" v="115"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.091Z"/>
-        <tag k="Shape__Len" v="0.0038273419175000002"/>
-        <tag k="circuits" v="1"/>
         <tag k="Legend" v="PG&amp;E_115kV"/>
-        <tag k="power" v="line"/>
-        <tag k="location" v="overhead"/>
-        <tag k="status" v="operational"/>
-        <tag k="name" v="PG&amp;E 115kV"/>
-        <tag k="voltage" v="115000"/>
         <tag k="Length_Fee" v="1392.93695565"/>
+        <tag k="Length_Mil" v="0"/>
         <tag k="OBJECTID" v="1238"/>
         <tag k="REF1" v="00006e"/>
+        <tag k="Shape__Len" v="0.0038273419175000002"/>
         <tag k="Type" v="OH"/>
+        <tag k="circuits" v="1"/>
+        <tag k="kV_Sort" v="115"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 115kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.091Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="115000"/>
     </way>
     <way visible="true" id="-2386441" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2368487"/>
         <nd ref="-2369090"/>
         <nd ref="-2369088"/>
         <nd ref="-2368488"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="Length_Mil" v="0"/>
-        <tag k="kV_Sort" v="115"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.091Z"/>
-        <tag k="Shape__Len" v="0.004831019352687"/>
-        <tag k="circuits" v="1"/>
         <tag k="Legend" v="PG&amp;E_115kV"/>
-        <tag k="power" v="line"/>
-        <tag k="location" v="overhead"/>
-        <tag k="name" v="PG&amp;E 115kV"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="115000"/>
         <tag k="Length_Fee" v="1456.45731085"/>
+        <tag k="Length_Mil" v="0"/>
         <tag k="OBJECTID" v="1237"/>
         <tag k="REF1" v="00006f"/>
+        <tag k="Shape__Len" v="0.004831019352687"/>
         <tag k="Type" v="OH"/>
+        <tag k="circuits" v="1"/>
+        <tag k="kV_Sort" v="115"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 115kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.091Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="115000"/>
     </way>
     <way visible="true" id="-2386439" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2368422"/>
@@ -4387,23 +4419,23 @@
         <nd ref="-2368482"/>
         <nd ref="-2368483"/>
         <nd ref="-2368484"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="Length_Mil" v="10"/>
-        <tag k="kV_Sort" v="115"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.091Z"/>
-        <tag k="Shape__Len" v="0.18038848370772501"/>
-        <tag k="circuits" v="2"/>
         <tag k="Legend" v="PG&amp;E_115kV"/>
-        <tag k="power" v="line"/>
-        <tag k="location" v="overhead"/>
-        <tag k="name" v="PG&amp;E 115kV"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="115000"/>
         <tag k="Length_Fee" v="55124.05488235"/>
+        <tag k="Length_Mil" v="10"/>
         <tag k="OBJECTID" v="1235"/>
         <tag k="REF1" v="000071"/>
-        <tag k="Type" v="OH"/>
         <tag k="REF2" v="todo"/>
+        <tag k="Shape__Len" v="0.18038848370772501"/>
+        <tag k="Type" v="OH"/>
+        <tag k="circuits" v="2"/>
+        <tag k="kV_Sort" v="115"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 115kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.091Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="115000"/>
     </way>
     <way visible="true" id="-2386437" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2368353"/>
@@ -4411,22 +4443,22 @@
         <nd ref="-2368354"/>
         <nd ref="-2368841"/>
         <nd ref="-2368355"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="Length_Mil" v="0"/>
-        <tag k="kV_Sort" v="230"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.086Z"/>
         <tag k="Legend" v="PG&amp;E_230kV"/>
-        <tag k="power" v="line"/>
-        <tag k="circuits" v="1"/>
-        <tag k="Shape__Len" v="0.0041424233112089997"/>
-        <tag k="location" v="overhead"/>
-        <tag k="name" v="PG&amp;E 230kV"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="230000"/>
         <tag k="Length_Fee" v="1299.2331891"/>
+        <tag k="Length_Mil" v="0"/>
         <tag k="OBJECTID" v="1210"/>
         <tag k="REF1" v="00008a"/>
+        <tag k="Shape__Len" v="0.0041424233112089997"/>
         <tag k="Type" v="OH"/>
+        <tag k="circuits" v="1"/>
+        <tag k="kV_Sort" v="230"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 230kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.086Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="230000"/>
     </way>
     <way visible="true" id="-2386436" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2368274"/>
@@ -4434,43 +4466,43 @@
         <nd ref="-2368276"/>
         <nd ref="-2368277"/>
         <nd ref="-2368278"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="OBJECTID" v="3000"/>
+        <tag k="Legend" v="PG&amp;E_60_70kV"/>
+        <tag k="Length_Fee" v="1029.26725427"/>
         <tag k="Length_Mil" v="0"/>
+        <tag k="OBJECTID" v="3000"/>
+        <tag k="REF1" v="00010b"/>
+        <tag k="Shape__Len" v="0.0034788717134889998"/>
+        <tag k="Type" v="OH"/>
+        <tag k="circuits" v="1"/>
+        <tag k="kV_Sort" v="60"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 60kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.044Z"/>
         <tag k="status" v="operational"/>
         <tag k="voltage" v="60000"/>
-        <tag k="Legend" v="PG&amp;E_60_70kV"/>
-        <tag k="name" v="PG&amp;E 60kV"/>
-        <tag k="REF1" v="00010b"/>
-        <tag k="power" v="line"/>
-        <tag k="kV_Sort" v="60"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.044Z"/>
-        <tag k="circuits" v="1"/>
-        <tag k="location" v="overhead"/>
-        <tag k="Length_Fee" v="1029.26725427"/>
-        <tag k="Type" v="OH"/>
-        <tag k="Shape__Len" v="0.0034788717134889998"/>
     </way>
     <way visible="true" id="-2386435" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2368271"/>
         <nd ref="-2368272"/>
         <nd ref="-2368273"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="Length_Mil" v="0"/>
-        <tag k="kV_Sort" v="60"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.044Z"/>
-        <tag k="Shape__Len" v="0.0011740595642910001"/>
-        <tag k="circuits" v="1"/>
         <tag k="Legend" v="PG&amp;E_60_70kV"/>
-        <tag k="power" v="line"/>
-        <tag k="location" v="overhead"/>
-        <tag k="status" v="operational"/>
-        <tag k="name" v="PG&amp;E 60kV"/>
-        <tag k="voltage" v="60000"/>
         <tag k="Length_Fee" v="370.10721274"/>
+        <tag k="Length_Mil" v="0"/>
         <tag k="OBJECTID" v="2999"/>
         <tag k="REF1" v="00010c"/>
+        <tag k="Shape__Len" v="0.0011740595642910001"/>
         <tag k="Type" v="OH"/>
+        <tag k="circuits" v="1"/>
+        <tag k="kV_Sort" v="60"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 60kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.044Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="60000"/>
     </way>
     <way visible="true" id="-2386434" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2369025"/>
@@ -4480,22 +4512,22 @@
         <nd ref="-2368264"/>
         <nd ref="-2368265"/>
         <nd ref="-2368266"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="Length_Mil" v="0"/>
-        <tag k="kV_Sort" v="115"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:48.932Z"/>
         <tag k="Legend" v="PG&amp;E_115kV"/>
-        <tag k="power" v="line"/>
-        <tag k="circuits" v="1"/>
-        <tag k="Shape__Len" v="0.0052386084135319999"/>
-        <tag k="location" v="overhead"/>
-        <tag k="name" v="PG&amp;E 115kV"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="115000"/>
         <tag k="Length_Fee" v="1802.42197632"/>
+        <tag k="Length_Mil" v="0"/>
         <tag k="OBJECTID" v="2471"/>
         <tag k="REF1" v="00022b"/>
+        <tag k="Shape__Len" v="0.0052386084135319999"/>
         <tag k="Type" v="OH"/>
+        <tag k="circuits" v="1"/>
+        <tag k="kV_Sort" v="115"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 115kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:48.932Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="115000"/>
     </way>
     <way visible="true" id="-2386433" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2368245"/>
@@ -4516,44 +4548,44 @@
         <nd ref="-2368260"/>
         <nd ref="-2368261"/>
         <nd ref="-2369969"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="Length_Mil" v="1"/>
-        <tag k="kV_Sort" v="115"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:48.925Z"/>
-        <tag k="Shape__Len" v="0.016961006460418"/>
-        <tag k="circuits" v="1"/>
         <tag k="Legend" v="PG&amp;E_115kV"/>
-        <tag k="power" v="line"/>
-        <tag k="location" v="overhead"/>
-        <tag k="status" v="operational"/>
-        <tag k="name" v="PG&amp;E 115kV"/>
-        <tag k="voltage" v="115000"/>
         <tag k="Length_Fee" v="5428.96616889"/>
+        <tag k="Length_Mil" v="1"/>
         <tag k="OBJECTID" v="2440"/>
         <tag k="REF1" v="000253"/>
+        <tag k="Shape__Len" v="0.016961006460418"/>
         <tag k="Type" v="OH"/>
+        <tag k="circuits" v="1"/>
+        <tag k="kV_Sort" v="115"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 115kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:48.925Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="115000"/>
     </way>
     <way visible="true" id="-2386432" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2368241"/>
         <nd ref="-2368242"/>
         <nd ref="-2368243"/>
         <nd ref="-2368244"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="Length_Mil" v="0"/>
-        <tag k="kV_Sort" v="115"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:48.924Z"/>
         <tag k="Legend" v="PG&amp;E_115kV"/>
-        <tag k="power" v="line"/>
-        <tag k="circuits" v="1"/>
-        <tag k="Shape__Len" v="0.0014155485839720001"/>
-        <tag k="location" v="overhead"/>
-        <tag k="name" v="PG&amp;E 115kV"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="115000"/>
         <tag k="Length_Fee" v="435.5147329"/>
+        <tag k="Length_Mil" v="0"/>
         <tag k="OBJECTID" v="2439"/>
         <tag k="REF1" v="000254"/>
+        <tag k="Shape__Len" v="0.0014155485839720001"/>
         <tag k="Type" v="OH"/>
+        <tag k="circuits" v="1"/>
+        <tag k="kV_Sort" v="115"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 115kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:48.924Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="115000"/>
     </way>
     <way visible="true" id="-2386431" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2368243"/>
@@ -4597,22 +4629,22 @@
         <nd ref="-2368238"/>
         <nd ref="-2368239"/>
         <nd ref="-2368240"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="Length_Mil" v="3"/>
-        <tag k="kV_Sort" v="115"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:48.924Z"/>
         <tag k="Legend" v="PG&amp;E_115kV"/>
-        <tag k="power" v="line"/>
-        <tag k="circuits" v="1"/>
-        <tag k="Shape__Len" v="0.057180789599817997"/>
-        <tag k="location" v="overhead"/>
-        <tag k="name" v="PG&amp;E 115kV"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="115000"/>
         <tag k="Length_Fee" v="17634.55342017"/>
+        <tag k="Length_Mil" v="3"/>
         <tag k="OBJECTID" v="2438"/>
         <tag k="REF1" v="000255"/>
+        <tag k="Shape__Len" v="0.057180789599817997"/>
         <tag k="Type" v="OH"/>
+        <tag k="circuits" v="1"/>
+        <tag k="kV_Sort" v="115"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 115kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:48.924Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="115000"/>
     </way>
     <way visible="true" id="-2386430" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2369796"/>
@@ -4631,22 +4663,22 @@
         <nd ref="-2369920"/>
         <nd ref="-2368200"/>
         <nd ref="-2368201"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="Length_Mil" v="1"/>
-        <tag k="kV_Sort" v="115"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:48.924Z"/>
         <tag k="Legend" v="PG&amp;E_115kV"/>
-        <tag k="power" v="line"/>
-        <tag k="circuits" v="1"/>
-        <tag k="Shape__Len" v="0.016559197209159"/>
-        <tag k="location" v="overhead"/>
-        <tag k="name" v="PG&amp;E 115kV"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="115000"/>
         <tag k="Length_Fee" v="5655.24297867"/>
+        <tag k="Length_Mil" v="1"/>
         <tag k="OBJECTID" v="2437"/>
         <tag k="REF1" v="000256"/>
+        <tag k="Shape__Len" v="0.016559197209159"/>
         <tag k="Type" v="OH"/>
+        <tag k="circuits" v="1"/>
+        <tag k="kV_Sort" v="115"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 115kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:48.924Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="115000"/>
     </way>
     <way visible="true" id="-2386429" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2368156"/>
@@ -4683,22 +4715,22 @@
         <nd ref="-2369796"/>
         <nd ref="-2368187"/>
         <nd ref="-2368188"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="Length_Mil" v="2"/>
-        <tag k="kV_Sort" v="115"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:48.924Z"/>
         <tag k="Legend" v="PG&amp;E_115kV"/>
-        <tag k="power" v="line"/>
-        <tag k="circuits" v="1"/>
-        <tag k="Shape__Len" v="0.035517096250657"/>
-        <tag k="location" v="overhead"/>
-        <tag k="name" v="PG&amp;E 115kV"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="115000"/>
         <tag k="Length_Fee" v="12293.53646434"/>
+        <tag k="Length_Mil" v="2"/>
         <tag k="OBJECTID" v="2436"/>
         <tag k="REF1" v="000257"/>
+        <tag k="Shape__Len" v="0.035517096250657"/>
         <tag k="Type" v="OH"/>
+        <tag k="circuits" v="1"/>
+        <tag k="kV_Sort" v="115"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 115kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:48.924Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="115000"/>
     </way>
     <way visible="true" id="-2386428" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2368111"/>
@@ -4747,22 +4779,22 @@
         <nd ref="-2368153"/>
         <nd ref="-2368154"/>
         <nd ref="-2368155"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="Length_Mil" v="3"/>
-        <tag k="kV_Sort" v="115"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:48.923Z"/>
         <tag k="Legend" v="PG&amp;E_115kV"/>
-        <tag k="power" v="line"/>
-        <tag k="circuits" v="1"/>
-        <tag k="Shape__Len" v="0.047091711597591998"/>
-        <tag k="location" v="overhead"/>
-        <tag k="name" v="PG&amp;E 115kV"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="115000"/>
         <tag k="Length_Fee" v="14413.34366223"/>
+        <tag k="Length_Mil" v="3"/>
         <tag k="OBJECTID" v="2435"/>
         <tag k="REF1" v="000258"/>
+        <tag k="Shape__Len" v="0.047091711597591998"/>
         <tag k="Type" v="OH"/>
+        <tag k="circuits" v="1"/>
+        <tag k="kV_Sort" v="115"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 115kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:48.923Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="115000"/>
     </way>
     <way visible="true" id="-2386427" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2368156"/>
@@ -4794,42 +4826,42 @@
         <nd ref="-2368109"/>
         <nd ref="-2368110"/>
         <nd ref="-2368155"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="OBJECTID" v="2434"/>
+        <tag k="Legend" v="PG&amp;E_115kV"/>
+        <tag k="Length_Fee" v="12729.30611994"/>
         <tag k="Length_Mil" v="2"/>
+        <tag k="OBJECTID" v="2434"/>
+        <tag k="REF1" v="000259"/>
+        <tag k="Shape__Len" v="0.040973389883196001"/>
+        <tag k="Type" v="OH"/>
+        <tag k="circuits" v="1"/>
+        <tag k="kV_Sort" v="115"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 115kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:48.923Z"/>
         <tag k="status" v="operational"/>
         <tag k="voltage" v="115000"/>
-        <tag k="Legend" v="PG&amp;E_115kV"/>
-        <tag k="name" v="PG&amp;E 115kV"/>
-        <tag k="REF1" v="000259"/>
-        <tag k="power" v="line"/>
-        <tag k="kV_Sort" v="115"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:48.923Z"/>
-        <tag k="circuits" v="1"/>
-        <tag k="location" v="overhead"/>
-        <tag k="Length_Fee" v="12729.30611994"/>
-        <tag k="Type" v="OH"/>
-        <tag k="Shape__Len" v="0.040973389883196001"/>
     </way>
     <way visible="true" id="-2386426" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2368083"/>
         <nd ref="-2368155"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="Length_Mil" v="0"/>
-        <tag k="kV_Sort" v="60"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:48.923Z"/>
-        <tag k="Shape__Len" v="0.00086949523927699998"/>
-        <tag k="circuits" v="1"/>
         <tag k="Legend" v="PG&amp;E_60_70kV"/>
-        <tag k="power" v="line"/>
-        <tag k="location" v="overhead"/>
-        <tag k="status" v="operational"/>
-        <tag k="name" v="PG&amp;E 60kV"/>
-        <tag k="voltage" v="60000"/>
         <tag k="Length_Fee" v="251.62851355"/>
+        <tag k="Length_Mil" v="0"/>
         <tag k="OBJECTID" v="2433"/>
         <tag k="REF1" v="00025a"/>
+        <tag k="Shape__Len" v="0.00086949523927699998"/>
         <tag k="Type" v="OH"/>
+        <tag k="circuits" v="1"/>
+        <tag k="kV_Sort" v="60"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 60kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:48.923Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="60000"/>
     </way>
     <way visible="true" id="-2386425" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2368054"/>
@@ -4850,25 +4882,25 @@
         <nd ref="-2368067"/>
         <nd ref="-2368274"/>
         <nd ref="-2368068"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="OBJECTID" v="2406"/>
-        <tag k="Length_Mil" v="1"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="60000"/>
         <tag k="Legend" v="PG&amp;E_60_70kV"/>
-        <tag k="name" v="PG&amp;E 60kV"/>
-        <tag k="cables" v="3"/>
+        <tag k="Length_Fee" v="7266.3938094"/>
+        <tag k="Length_Mil" v="1"/>
+        <tag k="OBJECTID" v="2406"/>
         <tag k="REF1" v="000274"/>
         <tag k="REF2" v="todo"/>
-        <tag k="power" v="line"/>
-        <tag k="kV_Sort" v="60"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:48.913Z"/>
-        <tag k="circuits" v="1"/>
-        <tag k="location" v="overhead"/>
-        <tag k="Length_Fee" v="7266.3938094"/>
-        <tag k="wires" v="single"/>
-        <tag k="Type" v="OH"/>
         <tag k="Shape__Len" v="0.023082844656214001"/>
+        <tag k="Type" v="OH"/>
+        <tag k="cables" v="3"/>
+        <tag k="circuits" v="1"/>
+        <tag k="kV_Sort" v="60"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 60kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:48.913Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="60000"/>
+        <tag k="wires" v="single"/>
     </way>
     <way visible="true" id="-2386423" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2367965"/>
@@ -4935,22 +4967,22 @@
         <nd ref="-2368024"/>
         <nd ref="-2368278"/>
         <nd ref="-2368025"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="Length_Mil" v="5"/>
-        <tag k="kV_Sort" v="60"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:48.912Z"/>
-        <tag k="Shape__Len" v="0.085547412703041004"/>
-        <tag k="circuits" v="1"/>
         <tag k="Legend" v="PG&amp;E_60_70kV"/>
-        <tag k="power" v="line"/>
-        <tag k="location" v="overhead"/>
-        <tag k="name" v="PG&amp;E 60kV"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="60000"/>
         <tag k="Length_Fee" v="26606.48741992"/>
+        <tag k="Length_Mil" v="5"/>
         <tag k="OBJECTID" v="2404"/>
         <tag k="REF1" v="000277"/>
+        <tag k="Shape__Len" v="0.085547412703041004"/>
         <tag k="Type" v="OH"/>
+        <tag k="circuits" v="1"/>
+        <tag k="kV_Sort" v="60"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 60kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:48.912Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="60000"/>
     </way>
     <way visible="true" id="-2386422" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2368026"/>
@@ -4959,22 +4991,22 @@
         <nd ref="-2367963"/>
         <nd ref="-2367964"/>
         <nd ref="-2369077"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="OBJECTID" v="2403"/>
+        <tag k="Legend" v="PG&amp;E_115kV"/>
+        <tag k="Length_Fee" v="2660.78913489"/>
         <tag k="Length_Mil" v="1"/>
+        <tag k="OBJECTID" v="2403"/>
+        <tag k="REF1" v="000278"/>
+        <tag k="Shape__Len" v="0.0092071043745129994"/>
+        <tag k="Type" v="OH"/>
+        <tag k="circuits" v="1"/>
+        <tag k="kV_Sort" v="115"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 115kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:48.912Z"/>
         <tag k="status" v="operational"/>
         <tag k="voltage" v="115000"/>
-        <tag k="Legend" v="PG&amp;E_115kV"/>
-        <tag k="name" v="PG&amp;E 115kV"/>
-        <tag k="REF1" v="000278"/>
-        <tag k="power" v="line"/>
-        <tag k="kV_Sort" v="115"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:48.912Z"/>
-        <tag k="circuits" v="1"/>
-        <tag k="location" v="overhead"/>
-        <tag k="Length_Fee" v="2660.78913489"/>
-        <tag k="Type" v="OH"/>
-        <tag k="Shape__Len" v="0.0092071043745129994"/>
     </way>
     <way visible="true" id="-2386421" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2367935"/>
@@ -5000,22 +5032,22 @@
         <nd ref="-2367955"/>
         <nd ref="-2367956"/>
         <nd ref="-2367957"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="Length_Mil" v="2"/>
-        <tag k="kV_Sort" v="60"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:48.912Z"/>
-        <tag k="Shape__Len" v="0.028195310435658"/>
-        <tag k="circuits" v="1"/>
         <tag k="Legend" v="PG&amp;E_60_70kV"/>
-        <tag k="power" v="line"/>
-        <tag k="location" v="overhead"/>
-        <tag k="name" v="PG&amp;E 60kV"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="60000"/>
         <tag k="Length_Fee" v="8681.98677545"/>
+        <tag k="Length_Mil" v="2"/>
         <tag k="OBJECTID" v="2400"/>
         <tag k="REF1" v="00027b"/>
+        <tag k="Shape__Len" v="0.028195310435658"/>
         <tag k="Type" v="OH"/>
+        <tag k="circuits" v="1"/>
+        <tag k="kV_Sort" v="60"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 60kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:48.912Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="60000"/>
     </way>
     <way visible="true" id="-2386420" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2367914"/>
@@ -5041,22 +5073,22 @@
         <nd ref="-2367935"/>
         <nd ref="-2367933"/>
         <nd ref="-2367934"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="Length_Mil" v="2"/>
-        <tag k="kV_Sort" v="60"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:48.911Z"/>
         <tag k="Legend" v="PG&amp;E_60_70kV"/>
-        <tag k="power" v="line"/>
-        <tag k="circuits" v="1"/>
-        <tag k="Shape__Len" v="0.027588549907215001"/>
-        <tag k="location" v="overhead"/>
-        <tag k="name" v="PG&amp;E 60kV"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="60000"/>
         <tag k="Length_Fee" v="8467.60021079"/>
+        <tag k="Length_Mil" v="2"/>
         <tag k="OBJECTID" v="2399"/>
         <tag k="REF1" v="00027d"/>
+        <tag k="Shape__Len" v="0.027588549907215001"/>
         <tag k="Type" v="OH"/>
+        <tag k="circuits" v="1"/>
+        <tag k="kV_Sort" v="60"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 60kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:48.911Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="60000"/>
     </way>
     <way visible="true" id="-2386418" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2367852"/>
@@ -5077,49 +5109,49 @@
         <nd ref="-2367863"/>
         <nd ref="-2367864"/>
         <nd ref="-2368026"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="tiger:upload_uuid" v="bulk_upload.pl-c06aeebd-526f-4861-b1a6-aa2b0d38e820"/>
-        <tag k="OBJECTID" v="2397"/>
-        <tag k="Length_Mil" v="1"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="60000"/>
         <tag k="Legend" v="PG&amp;E_60_70kV"/>
-        <tag k="name" v="PG&amp;E 60kV"/>
-        <tag k="tiger:cfcc" v="C20"/>
+        <tag k="Length_Fee" v="7641.75913657"/>
+        <tag k="Length_Mil" v="1"/>
+        <tag k="OBJECTID" v="2397"/>
         <tag k="REF1" v="00027f"/>
         <tag k="REF2" v="todo"/>
-        <tag k="tiger:county" v="Contra Costa, CA"/>
-        <tag k="power" v="line"/>
-        <tag k="kV_Sort" v="60"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:48.911Z"/>
-        <tag k="circuits" v="1"/>
-        <tag k="location" v="overhead"/>
-        <tag k="Length_Fee" v="7641.75913657"/>
-        <tag k="Type" v="OH"/>
-        <tag k="tiger:tlid" v="192077615:192090945:192117152"/>
         <tag k="Shape__Len" v="0.026473919768262001"/>
+        <tag k="Type" v="OH"/>
+        <tag k="circuits" v="1"/>
+        <tag k="kV_Sort" v="60"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 60kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:48.911Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="tiger:cfcc" v="C20"/>
+        <tag k="tiger:county" v="Contra Costa, CA"/>
         <tag k="tiger:source" v="tiger_import_dch_v0.6_20070809"/>
+        <tag k="tiger:tlid" v="192077615:192090945:192117152"/>
+        <tag k="tiger:upload_uuid" v="bulk_upload.pl-c06aeebd-526f-4861-b1a6-aa2b0d38e820"/>
+        <tag k="voltage" v="60000"/>
     </way>
     <way visible="true" id="-2386417" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2367850"/>
         <nd ref="-2367852"/>
         <nd ref="-2367851"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="Length_Mil" v="0"/>
-        <tag k="kV_Sort" v="60"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:48.911Z"/>
         <tag k="Legend" v="PG&amp;E_60_70kV"/>
-        <tag k="power" v="line"/>
-        <tag k="circuits" v="1"/>
-        <tag k="Shape__Len" v="0.0013714918582190001"/>
-        <tag k="location" v="overhead"/>
-        <tag k="name" v="PG&amp;E 60kV"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="60000"/>
         <tag k="Length_Fee" v="424.40308855"/>
+        <tag k="Length_Mil" v="0"/>
         <tag k="OBJECTID" v="2396"/>
         <tag k="REF1" v="000280"/>
+        <tag k="Shape__Len" v="0.0013714918582190001"/>
         <tag k="Type" v="OH"/>
+        <tag k="circuits" v="1"/>
+        <tag k="kV_Sort" v="60"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 60kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:48.911Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="60000"/>
     </way>
     <way visible="true" id="-2386415" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2369190"/>
@@ -5140,43 +5172,43 @@
         <nd ref="-2369180"/>
         <nd ref="-2369181"/>
         <nd ref="-2367781"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="Length_Mil" v="8"/>
-        <tag k="kV_Sort" v="230"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.117Z"/>
         <tag k="Legend" v="PG&amp;E_230kV"/>
-        <tag k="power" v="line"/>
-        <tag k="circuits" v="1"/>
-        <tag k="Shape__Len" v="0.12218611195533501"/>
-        <tag k="location" v="overhead"/>
-        <tag k="name" v="PG&amp;E 230kV"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="230000"/>
         <tag k="Length_Fee" v="43195.8258019"/>
+        <tag k="Length_Mil" v="8"/>
         <tag k="OBJECTID" v="1358"/>
         <tag k="REF1" v="000003"/>
+        <tag k="Shape__Len" v="0.12218611195533501"/>
         <tag k="Type" v="OH"/>
+        <tag k="circuits" v="1"/>
+        <tag k="kV_Sort" v="230"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 230kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.117Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="230000"/>
     </way>
     <way visible="true" id="-2386413" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2367778"/>
         <nd ref="-2369276"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="Length_Mil" v="0"/>
-        <tag k="kV_Sort" v="230"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.189Z"/>
-        <tag k="Shape__Len" v="0.0054850473304100004"/>
-        <tag k="circuits" v="1"/>
         <tag k="Legend" v="PG&amp;E_230kV"/>
-        <tag k="power" v="line"/>
-        <tag k="location" v="overhead"/>
-        <tag k="name" v="PG&amp;E 230kV"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="230000"/>
         <tag k="Length_Fee" v="1742.69254932"/>
+        <tag k="Length_Mil" v="0"/>
         <tag k="OBJECTID" v="1735"/>
         <tag k="REF1" v="0002d9"/>
-        <tag k="Type" v="OH"/>
         <tag k="REF2" v="todo"/>
+        <tag k="Shape__Len" v="0.0054850473304100004"/>
+        <tag k="Type" v="OH"/>
+        <tag k="circuits" v="1"/>
+        <tag k="kV_Sort" v="230"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 230kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.189Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="230000"/>
     </way>
     <way visible="true" id="-2386411" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2369319"/>
@@ -5191,23 +5223,23 @@
         <nd ref="-2369328"/>
         <nd ref="-2369329"/>
         <nd ref="-2369336"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="Length_Mil" v="10"/>
-        <tag k="kV_Sort" v="115"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.091Z;2018-06-08T20:48:49.199Z"/>
-        <tag k="Shape__Len" v="0.18038848370772501"/>
-        <tag k="circuits" v="2"/>
         <tag k="Legend" v="PG&amp;E_115kV"/>
-        <tag k="power" v="line"/>
-        <tag k="location" v="overhead"/>
-        <tag k="name" v="PG&amp;E 115kV"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="115000"/>
         <tag k="Length_Fee" v="55124.05488235"/>
+        <tag k="Length_Mil" v="10"/>
         <tag k="OBJECTID" v="1235"/>
         <tag k="REF1" v="000071;0002d4"/>
-        <tag k="Type" v="OH"/>
         <tag k="REF2" v="todo"/>
+        <tag k="Shape__Len" v="0.18038848370772501"/>
+        <tag k="Type" v="OH"/>
+        <tag k="circuits" v="2"/>
+        <tag k="kV_Sort" v="115"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 115kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.091Z;2018-06-08T20:48:49.199Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="115000"/>
     </way>
     <way visible="true" id="-2386410" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2369336"/>
@@ -5270,22 +5302,22 @@
         <nd ref="-2369393"/>
         <nd ref="-2369394"/>
         <nd ref="-2367776"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="Length_Mil" v="11"/>
-        <tag k="kV_Sort" v="115"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.225Z"/>
         <tag k="Legend" v="PG&amp;E_115kV"/>
-        <tag k="power" v="line"/>
-        <tag k="circuits" v="2"/>
-        <tag k="Shape__Len" v="0.187034405899031"/>
-        <tag k="location" v="overhead"/>
-        <tag k="name" v="PG&amp;E 115kV"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="115000"/>
         <tag k="Length_Fee" v="58645.62823076"/>
+        <tag k="Length_Mil" v="11"/>
         <tag k="OBJECTID" v="1875"/>
         <tag k="REF1" v="0002c2"/>
+        <tag k="Shape__Len" v="0.187034405899031"/>
         <tag k="Type" v="OH"/>
+        <tag k="circuits" v="2"/>
+        <tag k="kV_Sort" v="115"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 115kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.225Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="115000"/>
     </way>
     <way visible="true" id="-2386409" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2367775"/>
@@ -5294,22 +5326,22 @@
         <nd ref="-2369460"/>
         <nd ref="-2369461"/>
         <nd ref="-2369462"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="Length_Mil" v="2"/>
-        <tag k="kV_Sort" v="60"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.260Z"/>
-        <tag k="Shape__Len" v="0.035445382585735"/>
-        <tag k="circuits" v="1"/>
         <tag k="Legend" v="PG&amp;E_60_70kV"/>
-        <tag k="power" v="line"/>
-        <tag k="location" v="overhead"/>
-        <tag k="status" v="operational"/>
-        <tag k="name" v="PG&amp;E 60kV"/>
-        <tag k="voltage" v="60000"/>
         <tag k="Length_Fee" v="11634.0824332"/>
+        <tag k="Length_Mil" v="2"/>
         <tag k="OBJECTID" v="3044"/>
         <tag k="REF1" v="000205"/>
+        <tag k="Shape__Len" v="0.035445382585735"/>
         <tag k="Type" v="OH"/>
+        <tag k="circuits" v="1"/>
+        <tag k="kV_Sort" v="60"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 60kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.260Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="60000"/>
     </way>
     <way visible="true" id="-2386408" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2369463"/>
@@ -5348,23 +5380,23 @@
         <nd ref="-2369495"/>
         <nd ref="-2369496"/>
         <nd ref="-2367774"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="Length_Mil" v="3"/>
-        <tag k="kV_Sort" v="60"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.261Z"/>
         <tag k="Legend" v="PG&amp;E_60_70kV"/>
-        <tag k="power" v="line"/>
-        <tag k="circuits" v="1"/>
-        <tag k="Shape__Len" v="0.048680834172666998"/>
-        <tag k="location" v="overhead"/>
-        <tag k="name" v="PG&amp;E 60kV"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="60000"/>
-        <tag k="comments" v="Partially underground"/>
         <tag k="Length_Fee" v="15817.29817967"/>
+        <tag k="Length_Mil" v="3"/>
         <tag k="OBJECTID" v="3047"/>
         <tag k="REF1" v="000202"/>
+        <tag k="Shape__Len" v="0.048680834172666998"/>
         <tag k="Type" v="OH"/>
+        <tag k="circuits" v="1"/>
+        <tag k="comments" v="Partially underground"/>
+        <tag k="kV_Sort" v="60"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 60kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.261Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="60000"/>
     </way>
     <way visible="true" id="-2386407" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2367773"/>
@@ -5394,22 +5426,22 @@
         <nd ref="-2369520"/>
         <nd ref="-2369521"/>
         <nd ref="-2369522"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="Length_Mil" v="2"/>
-        <tag k="kV_Sort" v="60"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.261Z"/>
-        <tag k="Shape__Len" v="0.035091613115191003"/>
-        <tag k="circuits" v="1"/>
         <tag k="Legend" v="PG&amp;E_60_70kV"/>
-        <tag k="power" v="line"/>
-        <tag k="location" v="overhead"/>
-        <tag k="status" v="operational"/>
-        <tag k="name" v="PG&amp;E 60kV"/>
-        <tag k="voltage" v="60000"/>
         <tag k="Length_Fee" v="10780.5581357"/>
+        <tag k="Length_Mil" v="2"/>
         <tag k="OBJECTID" v="3048"/>
         <tag k="REF1" v="000201"/>
+        <tag k="Shape__Len" v="0.035091613115191003"/>
         <tag k="Type" v="OH"/>
+        <tag k="circuits" v="1"/>
+        <tag k="kV_Sort" v="60"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 60kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.261Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="60000"/>
     </way>
     <way visible="true" id="-2386406" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2369930"/>
@@ -5422,22 +5454,22 @@
         <nd ref="-2369937"/>
         <nd ref="-2369938"/>
         <nd ref="-2367772"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="Length_Mil" v="1"/>
-        <tag k="kV_Sort" v="60"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.265Z"/>
-        <tag k="Shape__Len" v="0.020750702629286001"/>
-        <tag k="circuits" v="1"/>
         <tag k="Legend" v="PG&amp;E_60_70kV"/>
-        <tag k="power" v="line"/>
-        <tag k="location" v="overhead"/>
-        <tag k="status" v="operational"/>
-        <tag k="name" v="PG&amp;E 60kV"/>
-        <tag k="voltage" v="60000"/>
         <tag k="Length_Fee" v="6937.41243688"/>
+        <tag k="Length_Mil" v="1"/>
         <tag k="OBJECTID" v="3074"/>
         <tag k="REF1" v="0001de"/>
+        <tag k="Shape__Len" v="0.020750702629286001"/>
         <tag k="Type" v="OH"/>
+        <tag k="circuits" v="1"/>
+        <tag k="kV_Sort" v="60"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 60kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.265Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="60000"/>
     </way>
     <way visible="true" id="-2386405" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2367771"/>
@@ -5464,23 +5496,23 @@
         <nd ref="-2367800"/>
         <nd ref="-2367801"/>
         <nd ref="-2367802"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="Length_Mil" v="4"/>
-        <tag k="kV_Sort" v="60"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:48.910Z"/>
-        <tag k="Shape__Len" v="0.074740579573202001"/>
-        <tag k="circuits" v="1"/>
         <tag k="Legend" v="PG&amp;E_60_70kV"/>
-        <tag k="power" v="line"/>
-        <tag k="location" v="overhead"/>
-        <tag k="name" v="PG&amp;E 60kV"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="60000"/>
-        <tag k="comments" v="Partially underground"/>
         <tag k="Length_Fee" v="22482.46574138"/>
+        <tag k="Length_Mil" v="4"/>
         <tag k="OBJECTID" v="2394"/>
         <tag k="REF1" v="000282"/>
+        <tag k="Shape__Len" v="0.074740579573202001"/>
         <tag k="Type" v="OH"/>
+        <tag k="circuits" v="1"/>
+        <tag k="comments" v="Partially underground"/>
+        <tag k="kV_Sort" v="60"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 60kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:48.910Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="60000"/>
     </way>
     <way visible="true" id="-2386403" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2368069"/>
@@ -5498,22 +5530,22 @@
         <nd ref="-2368081"/>
         <nd ref="-2368082"/>
         <nd ref="-2367769"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="Length_Mil" v="2"/>
-        <tag k="kV_Sort" v="60"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:48.914Z"/>
-        <tag k="Shape__Len" v="0.028505756839877001"/>
-        <tag k="circuits" v="1"/>
         <tag k="Legend" v="PG&amp;E_60_70kV"/>
-        <tag k="power" v="line"/>
-        <tag k="location" v="overhead"/>
-        <tag k="status" v="operational"/>
-        <tag k="name" v="PG&amp;E 60kV"/>
-        <tag k="voltage" v="60000"/>
         <tag k="Length_Fee" v="8367.04727965"/>
+        <tag k="Length_Mil" v="2"/>
         <tag k="OBJECTID" v="2407"/>
         <tag k="REF1" v="000273"/>
+        <tag k="Shape__Len" v="0.028505756839877001"/>
         <tag k="Type" v="OH"/>
+        <tag k="circuits" v="1"/>
+        <tag k="kV_Sort" v="60"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 60kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:48.914Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="60000"/>
     </way>
     <way visible="true" id="-2386402" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2367768"/>
@@ -5521,22 +5553,22 @@
         <nd ref="-2370011"/>
         <nd ref="-2370012"/>
         <nd ref="-2367767"/>
-        <tag k="owner" v="TRANS BAY CABLE"/>
-        <tag k="Length_Mil" v="51"/>
-        <tag k="kV_Sort" v="200"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:50.163Z"/>
-        <tag k="Shape__Len" v="0.86106914681911495"/>
-        <tag k="circuits" v="1"/>
         <tag k="Legend" v="Other_200_287kV"/>
-        <tag k="power" v="cable"/>
-        <tag k="location" v="underwater"/>
-        <tag k="name" v="TBC 200kV"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="200000"/>
         <tag k="Length_Fee" v="269775.43775352"/>
+        <tag k="Length_Mil" v="51"/>
         <tag k="OBJECTID" v="6323"/>
         <tag k="REF1" v="0002d8"/>
+        <tag k="Shape__Len" v="0.86106914681911495"/>
         <tag k="Type" v="UW"/>
+        <tag k="circuits" v="1"/>
+        <tag k="kV_Sort" v="200"/>
+        <tag k="location" v="underwater"/>
+        <tag k="name" v="TBC 200kV"/>
+        <tag k="owner" v="TRANS BAY CABLE"/>
+        <tag k="power" v="cable"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:50.163Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="200000"/>
     </way>
     <way visible="true" id="-2386401" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2367766"/>
@@ -5546,22 +5578,22 @@
         <nd ref="-2370016"/>
         <nd ref="-2370017"/>
         <nd ref="-2367765"/>
-        <tag k="owner" v="TRANS BAY CABLE"/>
-        <tag k="Length_Mil" v="51"/>
-        <tag k="kV_Sort" v="200"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:50.163Z"/>
-        <tag k="Shape__Len" v="0.86106914681911495"/>
-        <tag k="circuits" v="1"/>
         <tag k="Legend" v="Other_200_287kV"/>
-        <tag k="power" v="cable"/>
-        <tag k="location" v="underwater"/>
-        <tag k="name" v="TBC 200kV"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="200000"/>
         <tag k="Length_Fee" v="269775.43775352"/>
+        <tag k="Length_Mil" v="51"/>
         <tag k="OBJECTID" v="6323"/>
         <tag k="REF1" v="0002d8"/>
+        <tag k="Shape__Len" v="0.86106914681911495"/>
         <tag k="Type" v="UW"/>
+        <tag k="circuits" v="1"/>
+        <tag k="kV_Sort" v="200"/>
+        <tag k="location" v="underwater"/>
+        <tag k="name" v="TBC 200kV"/>
+        <tag k="owner" v="TRANS BAY CABLE"/>
+        <tag k="power" v="cable"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:50.163Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="200000"/>
     </way>
     <way visible="true" id="-2386400" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2367764"/>
@@ -5569,22 +5601,22 @@
         <nd ref="-2368268"/>
         <nd ref="-2368269"/>
         <nd ref="-2368270"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="Length_Mil" v="0"/>
-        <tag k="kV_Sort" v="60"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.043Z"/>
-        <tag k="Shape__Len" v="0.0057512349287739996"/>
-        <tag k="circuits" v="1"/>
         <tag k="Legend" v="PG&amp;E_60_70kV"/>
-        <tag k="power" v="line"/>
-        <tag k="location" v="overhead"/>
-        <tag k="status" v="operational"/>
-        <tag k="name" v="PG&amp;E 60kV"/>
-        <tag k="voltage" v="60000"/>
         <tag k="Length_Fee" v="1913.49787893"/>
+        <tag k="Length_Mil" v="0"/>
         <tag k="OBJECTID" v="2995"/>
         <tag k="REF1" v="000110"/>
+        <tag k="Shape__Len" v="0.0057512349287739996"/>
         <tag k="Type" v="OH"/>
+        <tag k="circuits" v="1"/>
+        <tag k="kV_Sort" v="60"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 60kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.043Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="60000"/>
     </way>
     <way visible="true" id="-2386399" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2368279"/>
@@ -5613,22 +5645,22 @@
         <nd ref="-2368302"/>
         <nd ref="-2368303"/>
         <nd ref="-2367763"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="Length_Mil" v="18"/>
-        <tag k="kV_Sort" v="230"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.085Z"/>
-        <tag k="Shape__Len" v="0.31530577793533998"/>
-        <tag k="circuits" v="2"/>
         <tag k="Legend" v="PG&amp;E_230kV"/>
-        <tag k="power" v="line"/>
-        <tag k="location" v="overhead"/>
-        <tag k="status" v="operational"/>
-        <tag k="name" v="PG&amp;E 230kV"/>
-        <tag k="voltage" v="230000"/>
         <tag k="Length_Fee" v="97282.77912039"/>
+        <tag k="Length_Mil" v="18"/>
         <tag k="OBJECTID" v="1205"/>
         <tag k="REF1" v="00008f"/>
+        <tag k="Shape__Len" v="0.31530577793533998"/>
         <tag k="Type" v="OH"/>
+        <tag k="circuits" v="2"/>
+        <tag k="kV_Sort" v="230"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 230kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.085Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="230000"/>
     </way>
     <way visible="true" id="-2386398" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2367762"/>
@@ -5682,22 +5714,22 @@
         <nd ref="-2368351"/>
         <nd ref="-2368352"/>
         <nd ref="-2368354"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="Length_Mil" v="23"/>
-        <tag k="kV_Sort" v="230"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.085Z"/>
-        <tag k="Shape__Len" v="0.39549692137577402"/>
-        <tag k="circuits" v="2"/>
         <tag k="Legend" v="PG&amp;E_230kV"/>
-        <tag k="power" v="line"/>
-        <tag k="location" v="overhead"/>
-        <tag k="status" v="operational"/>
-        <tag k="name" v="PG&amp;E 230kV"/>
-        <tag k="voltage" v="230000"/>
         <tag k="Length_Fee" v="123835.36447739"/>
+        <tag k="Length_Mil" v="23"/>
         <tag k="OBJECTID" v="1208"/>
         <tag k="REF1" v="00008c"/>
+        <tag k="Shape__Len" v="0.39549692137577402"/>
         <tag k="Type" v="OH"/>
+        <tag k="circuits" v="2"/>
+        <tag k="kV_Sort" v="230"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 230kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.085Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="230000"/>
     </way>
     <way visible="true" id="-2386397" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2367761"/>
@@ -5717,22 +5749,22 @@
         <nd ref="-2368369"/>
         <nd ref="-2368370"/>
         <nd ref="-2368371"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="Length_Mil" v="3"/>
-        <tag k="kV_Sort" v="115"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.087Z"/>
-        <tag k="Shape__Len" v="0.051991888445569998"/>
-        <tag k="circuits" v="2"/>
         <tag k="Legend" v="PG&amp;E_115kV"/>
-        <tag k="power" v="line"/>
-        <tag k="location" v="overhead"/>
-        <tag k="status" v="operational"/>
-        <tag k="name" v="PG&amp;E 115kV"/>
-        <tag k="voltage" v="115000"/>
         <tag k="Length_Fee" v="15272.33366977"/>
+        <tag k="Length_Mil" v="3"/>
         <tag k="OBJECTID" v="1218"/>
         <tag k="REF1" v="000082"/>
+        <tag k="Shape__Len" v="0.051991888445569998"/>
         <tag k="Type" v="OH"/>
+        <tag k="circuits" v="2"/>
+        <tag k="kV_Sort" v="115"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 115kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.087Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="115000"/>
     </way>
     <way visible="true" id="-2386396" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2367760"/>
@@ -5787,22 +5819,22 @@
         <nd ref="-2368846"/>
         <nd ref="-2368417"/>
         <nd ref="-2368418"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="Length_Mil" v="7"/>
-        <tag k="kV_Sort" v="115"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.090Z"/>
-        <tag k="Shape__Len" v="0.122685915835216"/>
-        <tag k="circuits" v="2"/>
         <tag k="Legend" v="PG&amp;E_115kV"/>
-        <tag k="power" v="line"/>
-        <tag k="location" v="overhead"/>
-        <tag k="name" v="PG&amp;E 115kV"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="115000"/>
         <tag k="Length_Fee" v="37796.49735604"/>
+        <tag k="Length_Mil" v="7"/>
         <tag k="OBJECTID" v="1233"/>
         <tag k="REF1" v="000073"/>
+        <tag k="Shape__Len" v="0.122685915835216"/>
         <tag k="Type" v="OH"/>
+        <tag k="circuits" v="2"/>
+        <tag k="kV_Sort" v="115"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 115kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.090Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="115000"/>
     </way>
     <way visible="true" id="-2386395" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2367759"/>
@@ -5810,22 +5842,22 @@
         <nd ref="-2368587"/>
         <nd ref="-2368589"/>
         <nd ref="-2368588"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="Length_Mil" v="7"/>
-        <tag k="kV_Sort" v="115"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.099Z"/>
-        <tag k="Shape__Len" v="0.114548422810257"/>
-        <tag k="circuits" v="1"/>
         <tag k="Legend" v="PG&amp;E_115kV"/>
-        <tag k="power" v="line"/>
-        <tag k="location" v="overhead"/>
-        <tag k="name" v="PG&amp;E 115kV"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="115000"/>
         <tag k="Length_Fee" v="39228.73260131"/>
+        <tag k="Length_Mil" v="7"/>
         <tag k="OBJECTID" v="1282"/>
         <tag k="REF1" v="000042"/>
+        <tag k="Shape__Len" v="0.114548422810257"/>
         <tag k="Type" v="OH"/>
+        <tag k="circuits" v="1"/>
+        <tag k="kV_Sort" v="115"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 115kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.099Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="115000"/>
     </way>
     <way visible="true" id="-2386394" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2367758"/>
@@ -5833,22 +5865,22 @@
         <nd ref="-2368594"/>
         <nd ref="-2368592"/>
         <nd ref="-2368593"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="Length_Mil" v="7"/>
-        <tag k="kV_Sort" v="115"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.100Z"/>
-        <tag k="Shape__Len" v="0.107089847915945"/>
-        <tag k="circuits" v="1"/>
         <tag k="Legend" v="PG&amp;E_115kV"/>
-        <tag k="power" v="line"/>
-        <tag k="location" v="overhead"/>
-        <tag k="name" v="PG&amp;E 115kV"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="115000"/>
         <tag k="Length_Fee" v="35457.44775563"/>
+        <tag k="Length_Mil" v="7"/>
         <tag k="OBJECTID" v="1287"/>
         <tag k="REF1" v="00003d"/>
+        <tag k="Shape__Len" v="0.107089847915945"/>
         <tag k="Type" v="OH"/>
+        <tag k="circuits" v="1"/>
+        <tag k="kV_Sort" v="115"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 115kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.100Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="115000"/>
     </way>
     <way visible="true" id="-2386393" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2367757"/>
@@ -5900,25 +5932,25 @@
         <nd ref="-2368641"/>
         <nd ref="-2368642"/>
         <nd ref="-2368643"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="OBJECTID" v="1289"/>
-        <tag k="Length_Mil" v="11"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="115000"/>
         <tag k="Legend" v="PG&amp;E_115kV"/>
-        <tag k="name" v="PG&amp;E 115kV"/>
-        <tag k="cables" v="3"/>
+        <tag k="Length_Fee" v="58236.82114167"/>
+        <tag k="Length_Mil" v="11"/>
+        <tag k="OBJECTID" v="1289"/>
         <tag k="REF1" v="00003b"/>
         <tag k="REF2" v="todo"/>
-        <tag k="power" v="line"/>
-        <tag k="kV_Sort" v="115"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.100Z"/>
-        <tag k="circuits" v="1"/>
-        <tag k="location" v="overhead"/>
-        <tag k="Length_Fee" v="58236.82114167"/>
-        <tag k="frequency" v="60"/>
-        <tag k="Type" v="OH"/>
         <tag k="Shape__Len" v="0.17128387068380199"/>
+        <tag k="Type" v="OH"/>
+        <tag k="cables" v="3"/>
+        <tag k="circuits" v="1"/>
+        <tag k="frequency" v="60"/>
+        <tag k="kV_Sort" v="115"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 115kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.100Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="115000"/>
     </way>
     <way visible="true" id="-2386392" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2367756"/>
@@ -5971,25 +6003,25 @@
         <nd ref="-2368690"/>
         <nd ref="-2368691"/>
         <nd ref="-2368692"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="OBJECTID" v="1290"/>
-        <tag k="Length_Mil" v="11"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="115000"/>
         <tag k="Legend" v="PG&amp;E_115kV"/>
-        <tag k="name" v="PG&amp;E 115kV"/>
-        <tag k="cables" v="3"/>
+        <tag k="Length_Fee" v="58259.75743441"/>
+        <tag k="Length_Mil" v="11"/>
+        <tag k="OBJECTID" v="1290"/>
         <tag k="REF1" v="00003a"/>
         <tag k="REF2" v="todo"/>
-        <tag k="power" v="line"/>
-        <tag k="kV_Sort" v="115"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.100Z"/>
-        <tag k="circuits" v="1"/>
-        <tag k="location" v="overhead"/>
-        <tag k="Length_Fee" v="58259.75743441"/>
-        <tag k="frequency" v="60"/>
-        <tag k="Type" v="OH"/>
         <tag k="Shape__Len" v="0.171340978803453"/>
+        <tag k="Type" v="OH"/>
+        <tag k="cables" v="3"/>
+        <tag k="circuits" v="1"/>
+        <tag k="frequency" v="60"/>
+        <tag k="kV_Sort" v="115"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 115kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.100Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="115000"/>
     </way>
     <way visible="true" id="-2386391" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2369091"/>
@@ -6000,23 +6032,23 @@
         <nd ref="-2369096"/>
         <nd ref="-2369097"/>
         <nd ref="-2367755"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="Length_Mil" v="3"/>
-        <tag k="kV_Sort" v="115"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.108Z"/>
-        <tag k="Shape__Len" v="0.039390861959535999"/>
-        <tag k="circuits" v="1"/>
         <tag k="Legend" v="PG&amp;E_115kV"/>
-        <tag k="power" v="line"/>
-        <tag k="location" v="overhead"/>
-        <tag k="status" v="operational"/>
-        <tag k="name" v="PG&amp;E 115kV"/>
-        <tag k="voltage" v="115000"/>
-        <tag k="comments" v="Multiple lines on towers"/>
         <tag k="Length_Fee" v="13988.29157662"/>
+        <tag k="Length_Mil" v="3"/>
         <tag k="OBJECTID" v="1312"/>
         <tag k="REF1" v="000024"/>
+        <tag k="Shape__Len" v="0.039390861959535999"/>
         <tag k="Type" v="OH"/>
+        <tag k="circuits" v="1"/>
+        <tag k="comments" v="Multiple lines on towers"/>
+        <tag k="kV_Sort" v="115"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 115kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.108Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="115000"/>
     </way>
     <way visible="true" id="-2386390" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2369165"/>
@@ -6086,23 +6118,23 @@
         <nd ref="-2369159"/>
         <nd ref="-2369160"/>
         <nd ref="-2367754"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="Length_Mil" v="21"/>
-        <tag k="kV_Sort" v="230"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.111Z"/>
-        <tag k="Shape__Len" v="0.316891218278267"/>
-        <tag k="circuits" v="2"/>
         <tag k="Legend" v="PG&amp;E_230kV"/>
-        <tag k="power" v="line"/>
-        <tag k="location" v="overhead"/>
-        <tag k="name" v="PG&amp;E 230kV"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="230000"/>
-        <tag k="comments" v="Triple circuit for 5 miles; 115 line shares 230 poles."/>
         <tag k="Length_Fee" v="110683.54659046"/>
+        <tag k="Length_Mil" v="21"/>
         <tag k="OBJECTID" v="1329"/>
         <tag k="REF1" v="000017"/>
+        <tag k="Shape__Len" v="0.316891218278267"/>
         <tag k="Type" v="OH"/>
+        <tag k="circuits" v="2"/>
+        <tag k="comments" v="Triple circuit for 5 miles; 115 line shares 230 poles."/>
+        <tag k="kV_Sort" v="230"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 230kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.111Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="230000"/>
     </way>
     <way visible="true" id="-2386379" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2368419"/>
@@ -6110,71 +6142,71 @@
         <nd ref="-2368421"/>
         <nd ref="-2369276"/>
         <nd ref="-2367779"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="Length_Mil" v="0"/>
-        <tag k="kV_Sort" v="230"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.189Z;2018-06-08T20:48:49.091Z"/>
-        <tag k="Shape__Len" v="0.0054850473304100004"/>
-        <tag k="circuits" v="1"/>
         <tag k="Legend" v="PG&amp;E_230kV"/>
-        <tag k="power" v="line"/>
-        <tag k="location" v="overhead"/>
-        <tag k="name" v="PG&amp;E 230kV"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="230000"/>
         <tag k="Length_Fee" v="1742.69254932"/>
+        <tag k="Length_Mil" v="0"/>
         <tag k="OBJECTID" v="1735"/>
         <tag k="REF1" v="0002d9;000072"/>
-        <tag k="Type" v="OH"/>
         <tag k="REF2" v="todo"/>
+        <tag k="Shape__Len" v="0.0054850473304100004"/>
+        <tag k="Type" v="OH"/>
+        <tag k="circuits" v="1"/>
+        <tag k="kV_Sort" v="230"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 230kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.189Z;2018-06-08T20:48:49.091Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="230000"/>
     </way>
     <way visible="true" id="-2386376" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2367958"/>
         <nd ref="-2367959"/>
         <nd ref="-2367960"/>
         <nd ref="-2367770"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="Length_Mil" v="0"/>
-        <tag k="kV_Sort" v="115"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:48.912Z"/>
-        <tag k="Shape__Len" v="0.0076799270110660001"/>
-        <tag k="circuits" v="1"/>
         <tag k="Legend" v="PG&amp;E_115kV"/>
-        <tag k="power" v="line"/>
-        <tag k="location" v="overhead"/>
-        <tag k="name" v="PG&amp;E 115kV"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="115000"/>
         <tag k="Length_Fee" v="2484.57402546"/>
+        <tag k="Length_Mil" v="0"/>
         <tag k="OBJECTID" v="2402"/>
         <tag k="REF1" v="000279"/>
-        <tag k="Type" v="OH"/>
         <tag k="REF2" v="todo"/>
+        <tag k="Shape__Len" v="0.0076799270110660001"/>
+        <tag k="Type" v="OH"/>
+        <tag k="circuits" v="1"/>
+        <tag k="kV_Sort" v="115"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 115kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:48.912Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="115000"/>
     </way>
     <way visible="true" id="92107772" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2369446"/>
         <nd ref="-2369447"/>
         <nd ref="-2369448"/>
         <nd ref="-2369449"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="OBJECTID" v="3002"/>
-        <tag k="Length_Mil" v="0"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="60000"/>
         <tag k="Legend" v="PG&amp;E_60_70kV"/>
-        <tag k="name" v="PG&amp;E 60kV"/>
-        <tag k="cables" v="3"/>
+        <tag k="Length_Fee" v="1401.65918347"/>
+        <tag k="Length_Mil" v="0"/>
+        <tag k="OBJECTID" v="3002"/>
         <tag k="REF1" v="00023b"/>
         <tag k="REF2" v="todo"/>
-        <tag k="power" v="line"/>
-        <tag k="kV_Sort" v="60"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.252Z"/>
-        <tag k="circuits" v="1"/>
-        <tag k="location" v="overhead"/>
-        <tag k="Length_Fee" v="1401.65918347"/>
-        <tag k="wires" v="single"/>
-        <tag k="Type" v="OH"/>
         <tag k="Shape__Len" v="0.0043396957192989999"/>
+        <tag k="Type" v="OH"/>
+        <tag k="cables" v="3"/>
+        <tag k="circuits" v="1"/>
+        <tag k="kV_Sort" v="60"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 60kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.252Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="60000"/>
+        <tag k="wires" v="single"/>
     </way>
     <way visible="true" id="92513738" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2368693"/>
@@ -6210,92 +6242,56 @@
         <nd ref="-2368723"/>
         <nd ref="-2368724"/>
         <nd ref="-2368758"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="OBJECTID" v="1291"/>
-        <tag k="Length_Mil" v="5"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="115000"/>
         <tag k="Legend" v="PG&amp;E_115kV"/>
-        <tag k="name" v="PG&amp;E 115kV"/>
-        <tag k="cables" v="3"/>
+        <tag k="Length_Fee" v="26789.93374941"/>
+        <tag k="Length_Mil" v="5"/>
+        <tag k="OBJECTID" v="1291"/>
         <tag k="REF1" v="000039"/>
         <tag k="REF2" v="todo"/>
-        <tag k="power" v="line"/>
-        <tag k="kV_Sort" v="115"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.101Z"/>
-        <tag k="circuits" v="1"/>
-        <tag k="location" v="overhead"/>
-        <tag k="frequency" v="60"/>
-        <tag k="Length_Fee" v="26789.93374941"/>
-        <tag k="Type" v="OH"/>
         <tag k="Shape__Len" v="0.085687036624263996"/>
-    </way>
-    <way visible="true" id="92513739" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-2368852"/>
-        <nd ref="-2368853"/>
-        <nd ref="-2368854"/>
-        <nd ref="-2368855"/>
-        <nd ref="-2368856"/>
-        <nd ref="-2368857"/>
-        <nd ref="-2368858"/>
-        <nd ref="-2368859"/>
-        <nd ref="-2368860"/>
-        <nd ref="-2368861"/>
-        <nd ref="-2368862"/>
-        <nd ref="-2368863"/>
-        <nd ref="-2368864"/>
-        <nd ref="-2368865"/>
-        <nd ref="-2368866"/>
-        <nd ref="-2368867"/>
-        <nd ref="-2368868"/>
-        <nd ref="-2368869"/>
-        <nd ref="-2368870"/>
-        <nd ref="-2368871"/>
-        <nd ref="-2368872"/>
-        <nd ref="-2368873"/>
-        <nd ref="-2368874"/>
-        <nd ref="-2368875"/>
-        <nd ref="-2368876"/>
-        <nd ref="-2368877"/>
-        <nd ref="-2368878"/>
-        <nd ref="-2368879"/>
-        <nd ref="-2368880"/>
-        <nd ref="-2368881"/>
-        <nd ref="-2368882"/>
-        <nd ref="-2368883"/>
-        <nd ref="-2368884"/>
-        <nd ref="-2368885"/>
-        <nd ref="-2368886"/>
-        <nd ref="-2368887"/>
-        <nd ref="-2368888"/>
-        <nd ref="-2368889"/>
-        <nd ref="-2368890"/>
-        <nd ref="-2368891"/>
-        <nd ref="-2368892"/>
-        <nd ref="-2368893"/>
-        <nd ref="-2368894"/>
-        <nd ref="-2368895"/>
-        <nd ref="-2368896"/>
-        <nd ref="-2368897"/>
+        <tag k="Type" v="OH"/>
+        <tag k="cables" v="3"/>
+        <tag k="circuits" v="1"/>
+        <tag k="frequency" v="60"/>
+        <tag k="kV_Sort" v="115"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 115kV"/>
         <tag k="owner" v="PG&amp;E"/>
-        <tag k="OBJECTID" v="1297"/>
-        <tag k="Length_Mil" v="6"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.101Z"/>
         <tag k="status" v="operational"/>
         <tag k="voltage" v="115000"/>
+    </way>
+    <way visible="true" id="92513739" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-2369034"/>
+        <nd ref="-2368992"/>
+        <nd ref="-2368993"/>
+        <nd ref="-2368994"/>
+        <nd ref="-2368995"/>
+        <nd ref="-2368996"/>
+        <nd ref="-2368997"/>
+        <nd ref="-2368990"/>
+        <nd ref="-2368989"/>
+        <nd ref="-2368988"/>
+        <nd ref="-2368987"/>
         <tag k="Legend" v="PG&amp;E_115kV"/>
-        <tag k="name" v="PG&amp;E 115kV"/>
-        <tag k="cables" v="3"/>
-        <tag k="REF1" v="000033"/>
+        <tag k="Length_Fee" v="1308.73903127"/>
+        <tag k="Length_Mil" v="0"/>
+        <tag k="OBJECTID" v="1308"/>
+        <tag k="REF1" v="000028;00002a"/>
         <tag k="REF2" v="todo"/>
-        <tag k="power" v="line"/>
-        <tag k="kV_Sort" v="115"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.105Z"/>
-        <tag k="circuits" v="2"/>
-        <tag k="location" v="overhead"/>
-        <tag k="frequency" v="60"/>
-        <tag k="Length_Fee" v="29979.79913248"/>
+        <tag k="Shape__Len" v="0.004280024664748"/>
         <tag k="Type" v="OH"/>
-        <tag k="Shape__Len" v="0.092586216840936"/>
+        <tag k="cables" v="3"/>
+        <tag k="circuits" v="2"/>
+        <tag k="kV_Sort" v="115"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 115kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.107Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="115000"/>
     </way>
     <way visible="true" id="92513751" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2368998"/>
@@ -6335,52 +6331,52 @@
         <nd ref="-2369032"/>
         <nd ref="-2369033"/>
         <nd ref="-2369034"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="OBJECTID" v="1309"/>
-        <tag k="Length_Mil" v="5"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="115000"/>
         <tag k="Legend" v="PG&amp;E_115kV"/>
-        <tag k="name" v="PG&amp;E 115kV"/>
-        <tag k="cables" v="3"/>
+        <tag k="Length_Fee" v="24947.68210708"/>
+        <tag k="Length_Mil" v="5"/>
+        <tag k="OBJECTID" v="1309"/>
         <tag k="REF1" v="000027"/>
         <tag k="REF2" v="todo"/>
-        <tag k="power" v="line"/>
-        <tag k="kV_Sort" v="115"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.107Z"/>
-        <tag k="circuits" v="2"/>
-        <tag k="location" v="overhead"/>
-        <tag k="note" v="disconnected"/>
-        <tag k="Length_Fee" v="24947.68210708"/>
-        <tag k="frequency" v="60"/>
-        <tag k="Type" v="OH"/>
         <tag k="Shape__Len" v="0.073990390109161003"/>
+        <tag k="Type" v="OH"/>
+        <tag k="cables" v="3"/>
+        <tag k="circuits" v="2"/>
+        <tag k="frequency" v="60"/>
+        <tag k="kV_Sort" v="115"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 115kV"/>
+        <tag k="note" v="disconnected"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.107Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="115000"/>
     </way>
     <way visible="true" id="92513789" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2369161"/>
         <nd ref="-2369162"/>
         <nd ref="-2369165"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="OBJECTID" v="1331"/>
-        <tag k="Length_Mil" v="0"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="230000"/>
         <tag k="Legend" v="PG&amp;E_230kV"/>
-        <tag k="name" v="PG&amp;E 230kV"/>
-        <tag k="cables" v="3"/>
+        <tag k="Length_Fee" v="505.8986465"/>
+        <tag k="Length_Mil" v="0"/>
+        <tag k="OBJECTID" v="1331"/>
         <tag k="REF1" v="000015;000016"/>
         <tag k="REF2" v="todo"/>
-        <tag k="power" v="line"/>
-        <tag k="kV_Sort" v="230"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.111Z"/>
+        <tag k="Shape__Len" v="0.0015556265734830001"/>
+        <tag k="Type" v="OH"/>
+        <tag k="cables" v="3"/>
         <tag k="circuits" v="2"/>
         <tag k="comments" v="Triple circuit for 5 miles; 115 line shares 230 poles."/>
-        <tag k="location" v="overhead"/>
-        <tag k="Length_Fee" v="505.8986465"/>
         <tag k="frequency" v="60"/>
+        <tag k="kV_Sort" v="230"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 230kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.111Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="230000"/>
         <tag k="wires" v="double"/>
-        <tag k="Type" v="OH"/>
-        <tag k="Shape__Len" v="0.0015556265734830001"/>
     </way>
     <way visible="true" id="92513794" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2368545"/>
@@ -6425,24 +6421,24 @@
         <nd ref="-2368583"/>
         <nd ref="-2368584"/>
         <nd ref="-2368585"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="OBJECTID" v="1247"/>
-        <tag k="Length_Mil" v="6"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="115000"/>
         <tag k="Legend" v="PG&amp;E_115kV"/>
-        <tag k="name" v="PG&amp;E 115kV"/>
-        <tag k="cables" v="3"/>
+        <tag k="Length_Fee" v="29681.0744457"/>
+        <tag k="Length_Mil" v="6"/>
+        <tag k="OBJECTID" v="1247"/>
         <tag k="REF1" v="000065"/>
         <tag k="REF2" v="todo"/>
-        <tag k="power" v="line"/>
-        <tag k="kV_Sort" v="115"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.093Z"/>
-        <tag k="circuits" v="2"/>
-        <tag k="location" v="overhead"/>
-        <tag k="Length_Fee" v="29681.0744457"/>
-        <tag k="Type" v="OH"/>
         <tag k="Shape__Len" v="0.100622191214974"/>
+        <tag k="Type" v="OH"/>
+        <tag k="cables" v="3"/>
+        <tag k="circuits" v="2"/>
+        <tag k="kV_Sort" v="115"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 115kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.093Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="115000"/>
     </way>
     <way visible="true" id="92513803" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2368725"/>
@@ -6479,25 +6475,25 @@
         <nd ref="-2368756"/>
         <nd ref="-2368757"/>
         <nd ref="-2368758"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="OBJECTID" v="1292"/>
-        <tag k="Length_Mil" v="5"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="115000"/>
         <tag k="Legend" v="PG&amp;E_115kV"/>
-        <tag k="name" v="PG&amp;E 115kV"/>
-        <tag k="cables" v="3"/>
+        <tag k="Length_Fee" v="26793.19004001"/>
+        <tag k="Length_Mil" v="5"/>
+        <tag k="OBJECTID" v="1292"/>
         <tag k="REF1" v="000038"/>
         <tag k="REF2" v="todo"/>
-        <tag k="power" v="line"/>
-        <tag k="kV_Sort" v="115"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.101Z"/>
-        <tag k="circuits" v="1"/>
-        <tag k="location" v="overhead"/>
-        <tag k="frequency" v="60"/>
-        <tag k="Length_Fee" v="26793.19004001"/>
-        <tag k="Type" v="OH"/>
         <tag k="Shape__Len" v="0.085592316255965001"/>
+        <tag k="Type" v="OH"/>
+        <tag k="cables" v="3"/>
+        <tag k="circuits" v="1"/>
+        <tag k="frequency" v="60"/>
+        <tag k="kV_Sort" v="115"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 115kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.101Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="115000"/>
     </way>
     <way visible="true" id="92513805" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2369277"/>
@@ -6543,25 +6539,25 @@
         <nd ref="-2369317"/>
         <nd ref="-2369318"/>
         <nd ref="-2369395"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="OBJECTID" v="1779"/>
-        <tag k="Length_Mil" v="8"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="115000"/>
         <tag k="Legend" v="PG&amp;E_115kV"/>
-        <tag k="name" v="PG&amp;E 115kV"/>
-        <tag k="cables" v="3"/>
+        <tag k="Length_Fee" v="40312.98545586"/>
+        <tag k="Length_Mil" v="8"/>
+        <tag k="OBJECTID" v="1779"/>
         <tag k="REF1" v="0002d5"/>
         <tag k="REF2" v="todo"/>
-        <tag k="power" v="line"/>
-        <tag k="kV_Sort" v="115"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.199Z"/>
-        <tag k="circuits" v="2"/>
-        <tag k="location" v="overhead"/>
-        <tag k="Length_Fee" v="40312.98545586"/>
-        <tag k="frequency" v="60"/>
-        <tag k="Type" v="OH"/>
         <tag k="Shape__Len" v="0.118714951278515"/>
+        <tag k="Type" v="OH"/>
+        <tag k="cables" v="3"/>
+        <tag k="circuits" v="2"/>
+        <tag k="frequency" v="60"/>
+        <tag k="kV_Sort" v="115"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 115kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.199Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="115000"/>
     </way>
     <way visible="true" id="92513824" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2367780"/>
@@ -6602,70 +6598,70 @@
         <nd ref="-2369273"/>
         <nd ref="-2369274"/>
         <nd ref="-2369275"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="OBJECTID" v="1627"/>
-        <tag k="Length_Mil" v="14"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="230000"/>
         <tag k="Legend" v="PG&amp;E_230kV"/>
-        <tag k="name" v="PG&amp;E 230kV"/>
-        <tag k="cables" v="3"/>
+        <tag k="Length_Fee" v="73305.37694486"/>
+        <tag k="Length_Mil" v="14"/>
+        <tag k="OBJECTID" v="1627"/>
         <tag k="REF1" v="00032d"/>
         <tag k="REF2" v="todo"/>
-        <tag k="power" v="line"/>
-        <tag k="kV_Sort" v="230"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.168Z"/>
-        <tag k="circuits" v="2"/>
-        <tag k="location" v="overhead"/>
-        <tag k="frequency" v="60"/>
-        <tag k="Length_Fee" v="73305.37694486"/>
-        <tag k="Type" v="OH"/>
         <tag k="Shape__Len" v="0.21578742515570001"/>
+        <tag k="Type" v="OH"/>
+        <tag k="cables" v="3"/>
+        <tag k="circuits" v="2"/>
+        <tag k="frequency" v="60"/>
+        <tag k="kV_Sort" v="230"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 230kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.168Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="230000"/>
     </way>
     <way visible="true" id="92513905" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2368485"/>
         <nd ref="-2368486"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="OBJECTID" v="1236"/>
-        <tag k="Length_Mil" v="0"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="115000"/>
         <tag k="Legend" v="PG&amp;E_115kV"/>
-        <tag k="name" v="PG&amp;E 115kV"/>
-        <tag k="cables" v="3"/>
+        <tag k="Length_Fee" v="266.18490287"/>
+        <tag k="Length_Mil" v="0"/>
+        <tag k="OBJECTID" v="1236"/>
         <tag k="REF1" v="000070"/>
         <tag k="REF2" v="todo"/>
-        <tag k="power" v="line"/>
-        <tag k="kV_Sort" v="115"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.091Z"/>
-        <tag k="circuits" v="1"/>
-        <tag k="location" v="overhead"/>
-        <tag k="Length_Fee" v="266.18490287"/>
-        <tag k="wires" v="single"/>
-        <tag k="Type" v="OH"/>
         <tag k="Shape__Len" v="0.00090148772428400004"/>
+        <tag k="Type" v="OH"/>
+        <tag k="cables" v="3"/>
+        <tag k="circuits" v="1"/>
+        <tag k="kV_Sort" v="115"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 115kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.091Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="115000"/>
+        <tag k="wires" v="single"/>
     </way>
     <way visible="true" id="92513913" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2368991"/>
         <nd ref="-2368982"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="OBJECTID" v="1302"/>
-        <tag k="Length_Mil" v="0"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="115000"/>
         <tag k="Legend" v="PG&amp;E_115kV"/>
-        <tag k="name" v="PG&amp;E 115kV"/>
-        <tag k="cables" v="3"/>
+        <tag k="Length_Fee" v="289.53575539"/>
+        <tag k="Length_Mil" v="0"/>
+        <tag k="OBJECTID" v="1302"/>
         <tag k="REF1" v="00002e"/>
         <tag k="REF2" v="todo"/>
-        <tag k="power" v="line"/>
-        <tag k="kV_Sort" v="115"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.106Z"/>
-        <tag k="circuits" v="2"/>
-        <tag k="location" v="overhead"/>
-        <tag k="Length_Fee" v="289.53575539"/>
-        <tag k="Type" v="OH"/>
         <tag k="Shape__Len" v="0.00092524724585700004"/>
+        <tag k="Type" v="OH"/>
+        <tag k="cables" v="3"/>
+        <tag k="circuits" v="2"/>
+        <tag k="kV_Sort" v="115"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 115kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.106Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="115000"/>
     </way>
     <way visible="true" id="92513916" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2368502"/>
@@ -6711,24 +6707,24 @@
         <nd ref="-2368542"/>
         <nd ref="-2368543"/>
         <nd ref="-2368544"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="OBJECTID" v="1246"/>
-        <tag k="Length_Mil" v="5"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="115000"/>
         <tag k="Legend" v="PG&amp;E_115kV"/>
-        <tag k="name" v="PG&amp;E 115kV"/>
-        <tag k="cables" v="3"/>
+        <tag k="Length_Fee" v="28164.38775402"/>
+        <tag k="Length_Mil" v="5"/>
+        <tag k="OBJECTID" v="1246"/>
         <tag k="REF1" v="000066"/>
         <tag k="REF2" v="todo"/>
-        <tag k="power" v="line"/>
-        <tag k="kV_Sort" v="115"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.093Z"/>
-        <tag k="circuits" v="2"/>
-        <tag k="location" v="overhead"/>
-        <tag k="Length_Fee" v="28164.38775402"/>
-        <tag k="Type" v="OH"/>
         <tag k="Shape__Len" v="0.095780580340901006"/>
+        <tag k="Type" v="OH"/>
+        <tag k="cables" v="3"/>
+        <tag k="circuits" v="2"/>
+        <tag k="kV_Sort" v="115"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 115kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.093Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="115000"/>
     </way>
     <way visible="true" id="92513926" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2368759"/>
@@ -6766,25 +6762,25 @@
         <nd ref="-2368789"/>
         <nd ref="-2368790"/>
         <nd ref="-2368791"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="OBJECTID" v="1293"/>
-        <tag k="Length_Mil" v="5"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="115000"/>
         <tag k="Legend" v="PG&amp;E_115kV"/>
-        <tag k="name" v="PG&amp;E 115kV"/>
-        <tag k="cables" v="6"/>
+        <tag k="Length_Fee" v="25386.01066699"/>
+        <tag k="Length_Mil" v="5"/>
+        <tag k="OBJECTID" v="1293"/>
         <tag k="REF1" v="000037"/>
         <tag k="REF2" v="todo"/>
-        <tag k="power" v="line"/>
-        <tag k="kV_Sort" v="115"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.101Z"/>
-        <tag k="circuits" v="1"/>
-        <tag k="location" v="overhead"/>
-        <tag k="Length_Fee" v="25386.01066699"/>
-        <tag k="frequency" v="60"/>
-        <tag k="Type" v="OH"/>
         <tag k="Shape__Len" v="0.081639752705853996"/>
+        <tag k="Type" v="OH"/>
+        <tag k="cables" v="6"/>
+        <tag k="circuits" v="1"/>
+        <tag k="frequency" v="60"/>
+        <tag k="kV_Sort" v="115"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 115kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.101Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="115000"/>
     </way>
     <way visible="true" id="112227634" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2368026"/>
@@ -6817,22 +6813,22 @@
         <nd ref="-2368051"/>
         <nd ref="-2368052"/>
         <nd ref="-2368053"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="Length_Mil" v="3"/>
-        <tag k="kV_Sort" v="60"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:48.913Z"/>
         <tag k="Legend" v="PG&amp;E_60_70kV"/>
-        <tag k="power" v="minor_line"/>
-        <tag k="circuits" v="1"/>
-        <tag k="Shape__Len" v="0.058357895690229998"/>
-        <tag k="location" v="overhead"/>
-        <tag k="name" v="PG&amp;E 60kV"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="60000"/>
         <tag k="Length_Fee" v="18252.09735487"/>
+        <tag k="Length_Mil" v="3"/>
         <tag k="OBJECTID" v="2405"/>
         <tag k="REF1" v="000275"/>
-        <tag k="Type" v="OH"/>
         <tag k="REF2" v="000275"/>
+        <tag k="Shape__Len" v="0.058357895690229998"/>
+        <tag k="Type" v="OH"/>
+        <tag k="circuits" v="1"/>
+        <tag k="kV_Sort" v="60"/>
+        <tag k="location" v="overhead"/>
+        <tag k="name" v="PG&amp;E 60kV"/>
+        <tag k="owner" v="PG&amp;E"/>
+        <tag k="power" v="minor_line"/>
+        <tag k="source:ingest:datetime" v="2018-06-08T20:48:48.913Z"/>
+        <tag k="status" v="operational"/>
+        <tag k="voltage" v="60000"/>
     </way>
 </osm>

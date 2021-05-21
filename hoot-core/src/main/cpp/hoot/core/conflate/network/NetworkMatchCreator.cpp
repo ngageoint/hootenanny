@@ -79,7 +79,7 @@ MatchPtr NetworkMatchCreator::createMatch(const ConstOsmMapPtr& /*map*/, Element
 }
 
 ConstMatchPtr NetworkMatchCreator::_createMatch(const NetworkDetailsPtr& map, NetworkEdgeScorePtr e,
-  ConstMatchThresholdPtr mt)
+  ConstMatchThresholdPtr mt) const
 {
   return ConstMatchPtr(
     new NetworkMatch(

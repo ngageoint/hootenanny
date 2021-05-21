@@ -47,19 +47,19 @@ public:
   static int logWarnCount;
 
   static void Init(v8::Local<v8::Object> target);
+  virtual ~SublineStringMatcherJs() = default;
+  static v8::Local<v8::Object> New(const SublineStringMatcherPtr& sd);
 
   SublineStringMatcherPtr getSublineStringMatcher() { return _sm; }
-
-  virtual ~SublineStringMatcherJs() = default;
 
 private:
 
   SublineStringMatcherJs(SublineStringMatcherPtr sm) : _sm(sm) { }
 
-  static void extractMatchingSublines(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void extractMatchingSublines(const v8::FunctionCallbackInfo<v8::Value>& args);
 
-  QString _className;
+  static v8::Persistent<v8::Function> _constructor;
   SublineStringMatcherPtr _sm;
 };
 
@@ -73,6 +73,11 @@ inline void toCpp(v8::Local<v8::Value> v, SublineStringMatcherPtr& ptr)
   v8::Local<v8::Object> obj = v8::Local<v8::Object>::Cast(v);
   SublineStringMatcherJs* ptrj = node::ObjectWrap::Unwrap<SublineStringMatcherJs>(obj);
   ptr = ptrj->getSublineStringMatcher();
+}
+
+inline v8::Local<v8::Value> toV8(const SublineStringMatcherPtr& matcher)
+{
+  return SublineStringMatcherJs::New(matcher);
 }
 
 }

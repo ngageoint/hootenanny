@@ -43,8 +43,6 @@ namespace hoot
 
 HOOT_JS_REGISTER(StringDistanceJs)
 
-Persistent<Function> StringDistanceJs::_constructor;
-
 void StringDistanceJs::Init(Local<Object> target)
 {
   Isolate* current = target->GetIsolate();

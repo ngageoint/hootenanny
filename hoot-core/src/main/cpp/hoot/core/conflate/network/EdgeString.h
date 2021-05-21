@@ -73,7 +73,7 @@ public:
 
     // TRICKY: This is used right now for a .Contains() call on a container full of
     // EdgeEntries. "Overlap" works better than strict equality in this case.
-    bool operator== (const EdgeEntry &ee)
+    bool operator== (const EdgeEntry &ee) const
     {
       bool eq = _subline->overlaps(ee.getSubline());
       return eq;

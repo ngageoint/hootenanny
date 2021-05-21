@@ -5,7 +5,7 @@ set -e
 # fully hydrated relations (API DB queries used automatically hydrate the relations) in the 
 # following way:
 #
-# 3) Rivers and their parent relations only are conflated with the input data is first filtered to 
+# 3) Rivers and their parent relations only are conflated where the input data is first filtered to 
 #    rivers only:
 #   a) Same as scenario 2a
 #   b) Same as scenario 2b

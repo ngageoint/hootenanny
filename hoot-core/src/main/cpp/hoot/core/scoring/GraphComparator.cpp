@@ -224,7 +224,7 @@ double GraphComparator::compareMaps()
   //  Calculate the confidence interval
   _ci = zalpha * _s / sqrt(scores.size());
 
-  LOG_INFO(_iterations << " / " << _iterations << " mean: " << _mean << "   ");
+  LOG_INFO(_iterations << " of " << _iterations << " mean: " << _mean << "   ");
 
   return _mean;
 }

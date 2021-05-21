@@ -96,7 +96,7 @@ private:
   /*
    * Invalidates the current graph.
    */
-  void _resetGraph();
+  void _resetGraph() const;
 };
 
 

@@ -76,7 +76,7 @@ void NetworkMatcher::_createEdge2Index()
     if (ctr % 10 == 0)
     {
       PROGRESS_INFO(
-        "Created " << StringUtils::formatLargeNumber(ctr) << " / " <<
+        "Created " << StringUtils::formatLargeNumber(ctr) << " of " <<
         StringUtils::formatLargeNumber(em.size()) << " edge mappings.");
     }
   }
@@ -84,7 +84,7 @@ void NetworkMatcher::_createEdge2Index()
   _edge2Index->bulkInsert(boxes, fids);
 }
 
-IntersectionIterator NetworkMatcher::_createIterator(const Envelope& env, HilbertRTreePtr tree)
+IntersectionIterator NetworkMatcher::_createIterator(const Envelope& env, HilbertRTreePtr tree) const
 {
   vector<double> min(2), max(2);
   min[0] = env.getMinX();

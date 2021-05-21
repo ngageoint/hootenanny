@@ -357,7 +357,7 @@ bool RubberSheet::applyTransform(std::shared_ptr<OsmMap>& map)
     if (ctr % 1000 == 0)
     {
       PROGRESS_INFO(
-        "Applied rubber sheet transform to " << StringUtils::formatLargeNumber(ctr) << " / " <<
+        "Applied rubber sheet transform to " << StringUtils::formatLargeNumber(ctr) << " of " <<
         StringUtils::formatLargeNumber(nm.size()) << " nodes...");
     }
   }
@@ -434,7 +434,7 @@ std::shared_ptr<Interpolator> RubberSheet::_buildInterpolator(Status s) const
     QElapsedTimer timer;
     timer.start();
     LOG_INFO(
-      "Running rubber sheet interpolator: (" << (i + 1) << " / " <<
+      "Running rubber sheet interpolator: (" << (i + 1) << " of " <<
       candidates.size() << "): " << candidates[i] << "...");
 
     std::shared_ptr<Interpolator> candidate(
@@ -526,7 +526,7 @@ bool RubberSheet::_findTies()
     if (ctr % 1000 == 0)
     {
       PROGRESS_INFO(
-        "Processed intersections for " << StringUtils::formatLargeNumber(ctr) << " / " <<
+        "Processed intersections for " << StringUtils::formatLargeNumber(ctr) << " of " <<
         StringUtils::formatLargeNumber(n2w->size()) << " nodes...");
     }
   }
@@ -558,7 +558,7 @@ bool RubberSheet::_findTies()
     if (ctr % 100 == 0)
     {
       PROGRESS_INFO(
-        "Processed paired intersections for " << StringUtils::formatLargeNumber(ctr) << " / " <<
+        "Processed paired intersections for " << StringUtils::formatLargeNumber(ctr) << " of " <<
         StringUtils::formatLargeNumber(_matches.size()) << " matches...");
     }
   }
@@ -606,7 +606,7 @@ bool RubberSheet::_findTies()
     if (ctr % 100 == 0)
     {
       PROGRESS_INFO(
-        "Potential tie points processed: " << StringUtils::formatLargeNumber(ctr) << " / " <<
+        "Potential tie points processed: " << StringUtils::formatLargeNumber(ctr) << " of " <<
         StringUtils::formatLargeNumber(_finalPairs.size()));
     }
   }

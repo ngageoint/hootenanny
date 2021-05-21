@@ -56,8 +56,64 @@ namespace hoot
 {
 
 int SublineStringMatcherJs::logWarnCount = 0;
+Persistent<Function> SublineStringMatcherJs::_constructor;
 
 HOOT_JS_REGISTER(SublineStringMatcherJs)
+
+void SublineStringMatcherJs::Init(Local<Object> target)
+{
+  Isolate* current = target->GetIsolate();
+  HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
+  vector<QString> opNames =
+    Factory::getInstance().getObjectNamesByBase(SublineStringMatcher::className());
+
+  for (size_t i = 0; i < opNames.size(); i++)
+  {
+    QByteArray utf8 = opNames[i].replace("hoot::", "").toUtf8();
+    const char* n = utf8.data();
+
+    // Prepare constructor template
+    Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
+    tpl->SetClassName(String::NewFromUtf8(current, opNames[i].toStdString().data()).ToLocalChecked());
+    tpl->InstanceTemplate()->SetInternalFieldCount(1);
+    // Prototype
+    tpl->PrototypeTemplate()->Set(current, "extractMatchingSublines",
+        FunctionTemplate::New(current, extractMatchingSublines));
+
+    Persistent<Function> constructor(current, tpl->GetFunction(context).ToLocalChecked());
+    target->Set(context, toV8(n), ToLocal(&constructor));
+  }
+}
+
+void SublineStringMatcherJs::New(const FunctionCallbackInfo<Value>& args)
+{
+  HandleScope scope(args.GetIsolate());
+
+  const QString className = "hoot::" + str(args.This()->GetConstructorName());
+
+  SublineStringMatcherPtr sm(
+    Factory::getInstance().constructObject<SublineStringMatcher>(className));
+  SublineStringMatcherJs* obj = new SublineStringMatcherJs(sm);
+  PopulateConsumersJs::populateConsumers(sm.get(), args);
+  //  node::ObjectWrap::Wrap takes ownership of the pointer in a v8::Persistent<v8::Object>
+  obj->Wrap(args.This());
+
+  args.GetReturnValue().Set(args.This());
+}
+
+Local<Object> SublineStringMatcherJs::New(const SublineStringMatcherPtr& matcher)
+{
+  Isolate* current = v8::Isolate::GetCurrent();
+  EscapableHandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
+
+  Local<Object> result = ToLocal(&_constructor)->NewInstance(context).ToLocalChecked();
+  SublineStringMatcherJs* from = ObjectWrap::Unwrap<SublineStringMatcherJs>(result);
+  from->_sm = matcher;
+
+  return scope.Escape(result);
+}
 
 void SublineStringMatcherJs::extractMatchingSublines(const FunctionCallbackInfo<Value>& args)
 {
@@ -81,21 +137,7 @@ void SublineStringMatcherJs::extractMatchingSublines(const FunctionCallbackInfo<
     // Some attempts were made to use cached subline matches here from SublineStringMatcherJs for
     // performance reasons, but the results were unstable. Doing so could lead to a runtime
     // performance boost, so worth revisiting. See branch 3969b.
-    WaySublineMatchString match;
-    try
-    {
-      match = sm->findMatch(m, e1, e2);
-    }
-    catch (const RecursiveComplexityException& e)
-    {
-      // If we receive this exception, we'll return a string with its exception name to the calling
-      // conflate script. Doing so gives it a chance to retry the match with a different matcher.
-      // Kind of kludgy, but not sure if exceptions can be sent back to the js conflate scripts.
-      LOG_TRACE(e.getWhat());
-      const QString msg = "RecursiveComplexityException: " + e.getWhat();
-      args.GetReturnValue().Set(toV8(msg));
-      return;
-    }
+    WaySublineMatchString match = sm->findMatch(m, e1, e2);
 
     if (match.isEmpty() || !match.isValid())
     {
@@ -155,48 +197,6 @@ void SublineStringMatcherJs::extractMatchingSublines(const FunctionCallbackInfo<
   {
     args.GetReturnValue().Set(current->ThrowException(HootExceptionJs::create(e)));
   }
-}
-
-void SublineStringMatcherJs::Init(Local<Object> target)
-{
-  Isolate* current = target->GetIsolate();
-  HandleScope scope(current);
-  Local<Context> context = current->GetCurrentContext();
-  vector<QString> opNames =
-    Factory::getInstance().getObjectNamesByBase(SublineStringMatcher::className());
-
-  for (size_t i = 0; i < opNames.size(); i++)
-  {
-    QByteArray utf8 = opNames[i].replace("hoot::", "").toUtf8();
-    const char* n = utf8.data();
-
-    // Prepare constructor template
-    Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
-    tpl->SetClassName(String::NewFromUtf8(current, opNames[i].toStdString().data()).ToLocalChecked());
-    tpl->InstanceTemplate()->SetInternalFieldCount(1);
-    // Prototype
-    tpl->PrototypeTemplate()->Set(current, "extractMatchingSublines",
-        FunctionTemplate::New(current, extractMatchingSublines));
-
-    Persistent<Function> constructor(current, tpl->GetFunction(context).ToLocalChecked());
-    target->Set(context, toV8(n), ToLocal(&constructor));
-  }
-}
-
-void SublineStringMatcherJs::New(const FunctionCallbackInfo<Value>& args)
-{
-  HandleScope scope(args.GetIsolate());
-
-  const QString className = "hoot::" + str(args.This()->GetConstructorName());
-
-  SublineStringMatcherPtr sm(
-    Factory::getInstance().constructObject<SublineStringMatcher>(className));
-  SublineStringMatcherJs* obj = new SublineStringMatcherJs(sm);
-  PopulateConsumersJs::populateConsumers(sm.get(), args);
-  //  node::ObjectWrap::Wrap takes ownership of the pointer in a v8::Persistent<v8::Object>
-  obj->Wrap(args.This());
-
-  args.GetReturnValue().Set(args.This());
 }
 
 }

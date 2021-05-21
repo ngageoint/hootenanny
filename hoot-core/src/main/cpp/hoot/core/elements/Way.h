@@ -247,8 +247,8 @@ public:
    */
   bool hasPid() const { return _wayData->getPid() != WayData::PID_EMPTY; }
   long getPid() const { return _wayData->getPid(); }
-  void setPid(long pid) { _wayData->setPid(pid); }
-  void resetPid() { _wayData->setPid(WayData::PID_EMPTY); }
+  void setPid(long pid) const { _wayData->setPid(pid); }
+  void resetPid() const { _wayData->setPid(WayData::PID_EMPTY); }
   static long getPid(const std::shared_ptr<const Way>& p, const std::shared_ptr<const Way>& c);
   static long getPid(long p, long c);
 

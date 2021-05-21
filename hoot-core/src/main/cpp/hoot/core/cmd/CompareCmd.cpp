@@ -59,7 +59,7 @@ public:
   QString getName() const override { return "compare"; }
   QString getDescription() const override { return "Compares maps using metrics"; }
 
-  int compareMaps(QString in1, QString in2, QString out)
+  int compareMaps(QString in1, QString in2, QString out) const
   {
     LOG_STATUS(
       "Comparing maps ..." << FileUtils::toLogFormat(in1, 25) << " and ..." <<
@@ -143,7 +143,7 @@ public:
     return 0;
   }
 
-  OsmMapPtr loadMap(QString p)
+  OsmMapPtr loadMap(QString p) const
   {
     OsmMapPtr result(new OsmMap());
     IoUtils::loadMap(result, p, false);

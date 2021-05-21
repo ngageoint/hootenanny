@@ -44,12 +44,10 @@ class ElementIdJs : public HootBaseJs
 public:
 
   static void Init(v8::Local<v8::Object> target);
+  static v8::Local<v8::Object> New(ElementId eid);
+  virtual ~ElementIdJs() = default;
 
   ElementId& getElementId() { return _eid; }
-
-  static v8::Local<v8::Object> New(ElementId eid);
-
-  virtual ~ElementIdJs() = default;
 
 private:
 

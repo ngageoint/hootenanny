@@ -7,7 +7,7 @@ set -e
 #
 # 1) Data of all types and their parent relations conflated with no input filtering:
 #   a) Only features (of any type) that exist within or cross over the bounds should be conflated 
-#      and added to the output changeset. No new secondary features should be added that don'
+#      and added to the output changeset. No new secondary features should be added that don't
 #      satisfy the bounds requirement. 
 #   b) Only reference relations who have at least one member that exists within or crosses over the 
 #      bounds should be merged with secondary relations and added to the output changeset. Members 

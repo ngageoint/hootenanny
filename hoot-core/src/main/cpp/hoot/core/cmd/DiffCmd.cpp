@@ -151,7 +151,7 @@ public:
     return result;
   }
 
-  bool pathIsChangeset(const QString& path)
+  bool pathIsChangeset(const QString& path) const
   {
     QFileInfo fi(path);
     //  .osc files

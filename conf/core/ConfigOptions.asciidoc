@@ -1542,6 +1542,14 @@ Absolute file path to dictionaries of English words. The first file found will b
 dictionary of English words and used by some algorithms. If the files are not found then the English
 words will be silently ignored.
 
+=== generic.line.matcher.heading.delta
+
+* Data Type: double
+* Default Value: `${way.matcher.heading.delta}`
+
+The distance around a point on a power line to look when matching sublines with generic line
+conflation.  See `way.matcher.heading.delta`.
+
 === generic.line.matcher.max.angle
 
 * Data Type: double
@@ -2728,9 +2736,9 @@ RAM usage of applications in a shared server environment.
 * Data Type: int
 * Default Value: `-1`
 
-Maximum recursive calls allowed in MaximalSubline as it looks for line matches. Too low of a number
-may degrade Unifying algorithm line matching conflate performance. Too high of a number may result
-in runaway line matching processing times. -1 indicates an internally determined limit.
+Maximum recursive calls allowed in when using maximal subline matching during conflation. A value of
+-1 indicates an internally determined limit. Setting this too low may degrade linear conflate
+performance. Setting it too high may result in runaway line matching processing times.
 
 === maximal.subline.spacing
 
@@ -3966,6 +3974,14 @@ A weighting coefficient value, in the range [0.0,1.0], for the applying distance
 line matches. This will favor feature that are closer together. The higher the coefficient value,
 the higher the weighting applied. A value of 0.0 will disable distance weighting.
 
+=== power.line.matcher.heading.delta
+
+* Data Type: double
+* Default Value: `${way.matcher.heading.delta}`
+
+The distance around a point on a power line to look when calculating the heading.  See
+`way.matcher.heading.delta`.
+
 === power.line.matcher.max.angle
 
 * Data Type: double
@@ -4969,6 +4985,14 @@ Adds the specified status to elements.  Valid values are: 'Conflated', 'Invalid'
 * Default Value: `${HOOT_HOME}/conf/core/streetTypes`
 
 Flat file containing street types and their abbreviations.
+
+=== subline.matcher.secondary
+
+* Data Type: string
+* Default Value: `hoot::FrechetSublineMatcher`
+
+This subline matcher is used as a backup if the primary linear subline merging runs for too long.
+See `maximal.subline.max.recursions`.
 
 === superfluous.node.remover.exclude.ids
 

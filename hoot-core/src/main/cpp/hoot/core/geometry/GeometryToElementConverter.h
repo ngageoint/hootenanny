@@ -73,10 +73,11 @@ public:
   class NodeFactory
   {
   public:
+
     NodeFactory() = default;
     virtual ~NodeFactory() = default;
-    virtual NodePtr createNode(const OsmMapPtr& map, const geos::geom::Coordinate& c,
-      Status s, double circularError) = 0;
+    virtual NodePtr createNode(
+      const OsmMapPtr& map, const geos::geom::Coordinate& c, Status s, double circularError) = 0;
   };
 
   /**
@@ -120,8 +121,8 @@ public:
    * @param circularError circular error of the returned element
    * @return an OSM way
    */
-  WayPtr convertLineStringToWay(const geos::geom::LineString* ls, const OsmMapPtr& map,
-    Status s, double circularError);
+  WayPtr convertLineStringToWay(
+    const geos::geom::LineString* ls, const OsmMapPtr& map, Status s, double circularError) const;
 
   /**
    * If the MultiLineString contains multiple lines a multilinestring relation is returned. If the
@@ -133,8 +134,8 @@ public:
    * @param circularError circular error of the returned element
    * @return an OSM element
    */
-  std::shared_ptr<Element> convertMultiLineStringToElement(const geos::geom::MultiLineString* mls,
-    const OsmMapPtr& map, Status s, double circularError);
+  std::shared_ptr<Element> convertMultiLineStringToElement(
+    const geos::geom::MultiLineString* mls, const OsmMapPtr& map, Status s, double circularError);
 
   /**
    * Converts a GEOS multi-polygon to an OSM relation
@@ -145,8 +146,8 @@ public:
    * @param circularError circular error of the returned element
    * @return an OSM relation
    */
-  RelationPtr convertMultiPolygonToRelation(const geos::geom::MultiPolygon* mp,
-    const OsmMapPtr& map, Status s, double circularError);
+  RelationPtr convertMultiPolygonToRelation(
+    const geos::geom::MultiPolygon* mp, const OsmMapPtr& map, Status s, double circularError);
 
   /**
    * Converts the provided polygon into an element. If the polygon contains holes then a multi
@@ -158,8 +159,8 @@ public:
    * @param circularError circular error of the returned element
    * @return an OSM element
    */
-  std::shared_ptr<Element> convertPolygonToElement(const geos::geom::Polygon* polygon,
-    const OsmMapPtr& map, Status s, double circularError);
+  std::shared_ptr<Element> convertPolygonToElement(
+    const geos::geom::Polygon* polygon, const OsmMapPtr& map, Status s, double circularError);
 
   /**
    * Converts a GEOS polygon to an OSM relation
@@ -170,8 +171,8 @@ public:
    * @param circularError circular error of the returned element
    * @return an OSM relation
    */
-  RelationPtr convertPolygonToRelation(const geos::geom::Polygon* polygon,
-    const OsmMapPtr& map, Status s, double circularError);
+  RelationPtr convertPolygonToRelation(
+    const geos::geom::Polygon* polygon, const OsmMapPtr& map, Status s, double circularError);
 
   /**
    * Converts a GEOS polygon to an OSM relation
@@ -182,8 +183,9 @@ public:
    * @param s status of the returned element
    * @param circularError circular error of the returned element
    */
-  void convertPolygonToRelation(const geos::geom::Polygon* polygon,
-    const OsmMapPtr& map, const RelationPtr& r, Status s, double circularError);
+  void convertPolygonToRelation(
+    const geos::geom::Polygon* polygon, const OsmMapPtr& map, const RelationPtr& r, Status s,
+    double circularError);
 
   /**
    * Converts a GEOS point to an OSM node
@@ -194,8 +196,8 @@ public:
    * @param circularError circular error of the returned element
    * @return an OSM node
    */
-  NodePtr convertPointToNode(const geos::geom::Point* point, const OsmMapPtr& map, Status s,
-                             double circularError);
+  NodePtr convertPointToNode(
+    const geos::geom::Point* point, const OsmMapPtr& map, Status s, double circularError) const;
 
   void setNodeFactory(const std::shared_ptr<NodeFactory>& nf) { _nf = nf; }
 
@@ -204,7 +206,7 @@ protected:
   static int logWarnCount;
 
   NodePtr _createNode(const OsmMapPtr& map, const geos::geom::Coordinate& c, Status s,
-    double circularError);
+    double circularError) const;
 
   std::shared_ptr<NodeFactory> _nf;
   ConstOsmMapPtr _constMap;

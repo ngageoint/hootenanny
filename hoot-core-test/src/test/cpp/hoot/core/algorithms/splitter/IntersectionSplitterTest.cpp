@@ -32,12 +32,6 @@
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 
-// CPP Unit
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/extensions/TestFactoryRegistry.h>
-#include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
-
 namespace hoot
 {
 
@@ -50,9 +44,8 @@ class IntersectionSplitterTest : public HootTestFixture
 
 public:
 
-  IntersectionSplitterTest()
-    : HootTestFixture("test-files/algorithms/splitter/",
-                      "test-output/algorithms/splitter/")
+  IntersectionSplitterTest() :
+  HootTestFixture("test-files/algorithms/splitter/", "test-output/algorithms/splitter/")
   {
     setResetType(ResetBasic);
   }
@@ -70,7 +63,7 @@ public:
     writer.setIncludeCompatibilityTags(false);
     writer.write(map, _outputPath + "IntersectionSplitterTest.osm");
 
-    HOOT_FILE_EQUALS( _inputPath + "IntersectionSplitterOut.osm",
+    HOOT_FILE_EQUALS(_inputPath + "IntersectionSplitterOut.osm",
                      _outputPath + "IntersectionSplitterTest.osm");
   }
 
@@ -87,9 +80,8 @@ public:
     writer.setIncludeCompatibilityTags(false);
     writer.write(map, _outputPath + "SimpleSplitterOutput.osm");
 
-    HOOT_FILE_EQUALS( _inputPath + "SimpleSplitterExpected.osm",
+    HOOT_FILE_EQUALS(_inputPath + "SimpleSplitterExpected.osm",
                      _outputPath + "SimpleSplitterOutput.osm");
-
   }
 
 };

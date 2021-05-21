@@ -119,7 +119,7 @@ public:
    *
    * @param map - Map to add the changes to
    */
-  void markInputElements(OsmMapPtr map);
+  void markInputElements(OsmMapPtr map) const;
 
   /**
    * Adds the changes to a map, as regular elements. This is useful for visualizing tag-diff output
@@ -128,7 +128,7 @@ public:
    * @param map - Map to add the changes to
    * @param pChanges - Changeset provider
    */
-  void addChangesToMap(OsmMapPtr map, ChangesetProviderPtr pChanges);
+  void addChangesToMap(OsmMapPtr map, ChangesetProviderPtr pChanges) const;
 
   /**
    * Writes a changeset with just the data from the input map
@@ -151,7 +151,7 @@ public:
    * @param pResultMap map containing the features to calculate the statistics from
    * @param stats the statistics to populate
    */
-  void calculateStats(OsmMapPtr pResultMap, QList<SingleStat>& stats);
+  void calculateStats(OsmMapPtr pResultMap, QList<SingleStat>& stats) const;
 
   /**
    * @see ProgressReporter
@@ -252,9 +252,9 @@ private:
   bool _tagsAreDifferent(const Tags& oldTags, const Tags& newTags) const;
 
   // Creates a change object using the original element and new tags
-  Change _getChange(ConstElementPtr pOldElement, ConstElementPtr pNewElement);
-  std::shared_ptr<ChangesetDeriver> _sortInputs(OsmMapPtr map1, OsmMapPtr map2);
-  ChangesetProviderPtr _getChangesetFromMap(OsmMapPtr map);
+  Change _getChange(ConstElementPtr pOldElement, ConstElementPtr pNewElement) const;
+  std::shared_ptr<ChangesetDeriver> _sortInputs(OsmMapPtr map1, OsmMapPtr map2) const;
+  ChangesetProviderPtr _getChangesetFromMap(OsmMapPtr map) const;
 
   long _snapSecondaryLinearFeaturesBackToRef();
 
@@ -281,7 +281,7 @@ private:
    */
   void _removePartialSecondaryMatchElements();
   void _cleanupAfterPartialMatchRemoval();
-  void _removeMetadataTags();
+  void _removeMetadataTags() const;
 };
 
 }

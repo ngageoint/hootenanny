@@ -78,62 +78,6 @@ void ElementJs::_addBaseFunctions(Local<FunctionTemplate> tpl)
       FunctionTemplate::New(current, toString));
 }
 
-void ElementJs::getCircularError(const FunctionCallbackInfo<Value>& args)
-{
-  HandleScope scope(args.GetIsolate());
-
-  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args.This())->getConstElement();
-
-  args.GetReturnValue().Set(toV8(e->getCircularError()));
-}
-
-void ElementJs::getElementId(const FunctionCallbackInfo<Value>& args)
-{
-  HandleScope scope(args.GetIsolate());
-
-  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args.This())->getConstElement();
-
-  args.GetReturnValue().Set(ElementIdJs::New(e->getElementId()));
-}
-
-void ElementJs::getId(const FunctionCallbackInfo<Value>& args)
-{
-  Isolate* current = args.GetIsolate();
-  HandleScope scope(current);
-
-  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args.This())->getConstElement();
-
-  args.GetReturnValue().Set(Integer::New(current, e->getId()));
-}
-
-void ElementJs::getStatusInput(const FunctionCallbackInfo<Value>& args)
-{
-  HandleScope scope(args.GetIsolate());
-
-  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args.This())->getConstElement();
-
-  args.GetReturnValue().Set(toV8(e->getStatus().getInput()));
-}
-
-void ElementJs::getStatusString(const FunctionCallbackInfo<Value>& args)
-{
-  HandleScope scope(args.GetIsolate());
-
-  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args.This())->getConstElement();
-
-  args.GetReturnValue().Set(toV8(e->getStatusString()));
-}
-
-void ElementJs::getTags(const FunctionCallbackInfo<Value>& args)
-{
-  Isolate* current = args.GetIsolate();
-  HandleScope scope(current);
-
-  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args.This())->getConstElement();
-
-  args.GetReturnValue().Set(TagsJs::New(e->getTags()));
-}
-
 Local<Object> ElementJs::New(ConstElementPtr e)
 {
   EscapableHandleScope scope(Isolate::GetCurrent());
@@ -198,6 +142,62 @@ Local<Object> ElementJs::New(ElementPtr e)
   }
 
   return scope.Escape(result);
+}
+
+void ElementJs::getCircularError(const FunctionCallbackInfo<Value>& args)
+{
+  HandleScope scope(args.GetIsolate());
+
+  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args.This())->getConstElement();
+
+  args.GetReturnValue().Set(toV8(e->getCircularError()));
+}
+
+void ElementJs::getElementId(const FunctionCallbackInfo<Value>& args)
+{
+  HandleScope scope(args.GetIsolate());
+
+  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args.This())->getConstElement();
+
+  args.GetReturnValue().Set(ElementIdJs::New(e->getElementId()));
+}
+
+void ElementJs::getId(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
+
+  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args.This())->getConstElement();
+
+  args.GetReturnValue().Set(Integer::New(current, e->getId()));
+}
+
+void ElementJs::getStatusInput(const FunctionCallbackInfo<Value>& args)
+{
+  HandleScope scope(args.GetIsolate());
+
+  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args.This())->getConstElement();
+
+  args.GetReturnValue().Set(toV8(e->getStatus().getInput()));
+}
+
+void ElementJs::getStatusString(const FunctionCallbackInfo<Value>& args)
+{
+  HandleScope scope(args.GetIsolate());
+
+  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args.This())->getConstElement();
+
+  args.GetReturnValue().Set(toV8(e->getStatusString()));
+}
+
+void ElementJs::getTags(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
+
+  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args.This())->getConstElement();
+
+  args.GetReturnValue().Set(TagsJs::New(e->getTags()));
 }
 
 void ElementJs::setStatusString(const FunctionCallbackInfo<Value>& args)

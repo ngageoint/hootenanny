@@ -52,7 +52,7 @@ public:
    *
    * @param e the element to normalize the addresses of
    */
-  void normalizeAddresses(const ElementPtr& e);
+  void normalizeAddresses(const ElementPtr& e) const;
 
   /**
    * Normalizes address strings

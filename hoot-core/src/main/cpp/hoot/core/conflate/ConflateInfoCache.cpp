@@ -286,7 +286,7 @@ int ConflateInfoCache::numAddresses(const ConstElementPtr& element)
   return numAddresses;
 }
 
-bool ConflateInfoCache::containsMember(const ConstElementPtr& parent, const ElementId& memberId)
+bool ConflateInfoCache::containsMember(const ConstElementPtr& parent, const ElementId& memberId) const
 {
   if (!parent ||
       (parent->getElementType() != ElementType::Way &&
