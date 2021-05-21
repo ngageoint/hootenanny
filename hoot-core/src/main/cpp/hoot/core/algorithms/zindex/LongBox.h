@@ -46,14 +46,12 @@ public:
   static QString className() { return "hoot::LongBox"; }
 
   LongBox() = default;
-
   LongBox(const std::vector<long int>& min, const std::vector<long int>& max);
+   virtual ~LongBox();
 
   std::shared_ptr<LongBox> copy() const;
 
-  virtual ~LongBox();
-
-  long int calculateVolume();
+  long int calculateVolume() const;
 
   /**
     * Returns true if at least one edge overlaps with one of the other boxes
@@ -66,11 +64,9 @@ public:
   int getDimensions() const { return getMin().size(); }
 
   std::vector<long int> getMax() const { return _max; }
-
   std::vector<long int> getMin() const { return _min; }
 
   void setMax(const std::vector<long int>& max) { _max = max; }
-
   void setMin(const std::vector<long int>& min) { _min = min; }
 
   bool in(const std::vector<long int>& p) const;
@@ -84,6 +80,7 @@ public:
   long getWidth(int d) const;
 
 private:
+
   std::vector<long int> _min;
   std::vector<long int> _max;
 };

@@ -251,7 +251,7 @@ void HootNetworkRequest::removeIpFromUrlString(QString& endpointUrl, const QUrl&
     endpointUrl.replace(url.host(), "<host-ip>");
 }
 
-void HootNetworkRequest::logConnectionError()
+void HootNetworkRequest::logConnectionError() const
 {
   if (_status < 0)
   {

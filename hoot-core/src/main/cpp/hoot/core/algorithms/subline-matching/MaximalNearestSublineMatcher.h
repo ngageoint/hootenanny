@@ -38,7 +38,7 @@ public:
 
   static QString className() { return "hoot::MaximalNearestSublineMatcher"; }
 
-  MaximalNearestSublineMatcher();
+  MaximalNearestSublineMatcher() = default;
   ~MaximalNearestSublineMatcher() = default;
 
   WaySublineMatchString findMatch(const ConstOsmMapPtr& map, const ConstWayPtr& way1,

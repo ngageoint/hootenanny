@@ -101,7 +101,7 @@ public:
    * @param role role by which to examine elements
    * @return the number of member elements with the specified role
    */
-  int numElementsByRole(const QString& role);
+  int numElementsByRole(const QString& role) const;
 
   /**
    * Retrieves all members with a particular role

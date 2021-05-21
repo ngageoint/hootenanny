@@ -52,7 +52,7 @@ void ConflateStatsHelper::updateStats(QList<SingleStat>& statsToUpdate)
   updateStats(statsToUpdate, statsToUpdate.size());
 }
 
-void ConflateStatsHelper::updateStats(QList<SingleStat>& statsToUpdate, long insertIndex)
+void ConflateStatsHelper::updateStats(QList<SingleStat>& statsToUpdate, long insertIndex) const
 {
   if (insertIndex > statsToUpdate.size())
   {

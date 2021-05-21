@@ -44,13 +44,15 @@ public:
   /**
    * Returns the appropriate subline string matcher given the feature type being conflated
    *
-   * @param featureType the type of feature being conflated
+   * @param featureType the type of feature being conflated; if type is Unknown, then the default
+   * general way parameters will be used to configure the returned subline string matcher
    * @param map optional map; needed to configure the matcher for some feature types
    * @return an initialized subline string matcher
    * @throws IllegalArgumentException if a map was needed for configuration and none was passed in
    */
   static SublineStringMatcherPtr getMatcher(
-    const CreatorDescription::BaseFeatureType& featureType,
+    const CreatorDescription::BaseFeatureType& featureType =
+      CreatorDescription::BaseFeatureType::Unknown,
     const ConstOsmMapPtr& map = ConstOsmMapPtr());
 
 private:
@@ -60,6 +62,7 @@ private:
   static SublineStringMatcherPtr _getRailwayMatcher();
   static SublineStringMatcherPtr _getPowerLineMatcher();
   static SublineStringMatcherPtr _getGenericLineMatcher();
+  static SublineStringMatcherPtr _getDefaultMatcher();
 
   static SublineStringMatcherPtr _getMatcher(
     const QString& sublineStringMatcherName, const QString& sublineMatcherName,

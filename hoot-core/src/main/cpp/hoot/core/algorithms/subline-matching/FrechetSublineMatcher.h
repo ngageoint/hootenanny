@@ -57,7 +57,7 @@ public:
   /**
    * @see Configurable
    */
-  void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
   QString getDescription() const override
   { return "Matches lines based on the Frechet Distance algorithm"; }

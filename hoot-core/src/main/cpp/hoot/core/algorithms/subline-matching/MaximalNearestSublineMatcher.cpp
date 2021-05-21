@@ -43,10 +43,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(SublineMatcher, MaximalNearestSublineMatcher)
 
-MaximalNearestSublineMatcher::MaximalNearestSublineMatcher()
-{
-}
-
 WaySublineMatchString MaximalNearestSublineMatcher::findMatch(const ConstOsmMapPtr& map,
   const ConstWayPtr& way1, const ConstWayPtr& way2, double& score, Meters maxRelevantDistance) const
 {

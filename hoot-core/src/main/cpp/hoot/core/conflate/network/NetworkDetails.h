@@ -119,8 +119,8 @@ public:
   void calculateNearestLocation(ConstEdgeStringPtr string, ConstEdgeSublinePtr subline,
     ConstEdgeLocationPtr &elString, ConstEdgeLocationPtr &elSubline) const;
 
-  double getEdgeMatchScore(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2);
-  double getEdgeStringMatchScore(ConstEdgeStringPtr e1, ConstEdgeStringPtr e2);
+  double getEdgeMatchScore(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2) const;
+  double getEdgeStringMatchScore(ConstEdgeStringPtr e1, ConstEdgeStringPtr e2) const;
   double getPartialEdgeMatchScore(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2);
   /**
    * Returns a score matching v1 to v2. This does not consider any neighboring vertices. 0 means

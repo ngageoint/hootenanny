@@ -285,8 +285,9 @@ private:
     return countVis;
   }
 
-  long _countMemoryBound(const QStringList& inputs, const bool countFeaturesOnly,
-                         const ElementCriterionPtr& criterion)
+  long _countMemoryBound(
+    const QStringList& inputs, const bool countFeaturesOnly,
+    const ElementCriterionPtr& criterion) const
   {
     OsmMapPtr map(new OsmMap());
     IoUtils::loadMaps(map, inputs, true);
@@ -314,8 +315,8 @@ private:
     return (long)counter->getStat();
   }
 
-  long _countStreaming(const QString& input, const bool countFeaturesOnly,
-                       const ElementCriterionPtr& criterion)
+  long _countStreaming(
+    const QString& input, const bool countFeaturesOnly, const ElementCriterionPtr& criterion) const
   {
     long inputTotal = 0;
 

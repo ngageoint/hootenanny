@@ -233,7 +233,8 @@ public:
 
 private:
 
-  bool _validateMatches(const OsmMapPtr& map, const QString& map1Path, const QString& map2Path)
+  bool _validateMatches(
+    const OsmMapPtr& map, const QString& map1Path, const QString& map2Path) const
   {
     QElapsedTimer timer;
     timer.start();

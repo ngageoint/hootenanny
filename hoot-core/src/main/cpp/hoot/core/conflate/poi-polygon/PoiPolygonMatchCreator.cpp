@@ -508,7 +508,7 @@ std::vector<ConstMatchPtr> PoiPolygonMatchCreator::_filterOutNonClosestMatches(
 }
 
 int PoiPolygonMatchCreator::_retainClosestDistanceMatchesOnlyByType(
-  std::vector<ConstMatchPtr>& matches, const ConstOsmMapPtr& map, const bool processPois)
+  std::vector<ConstMatchPtr>& matches, const ConstOsmMapPtr& map, const bool processPois) const
 {
   QString matchTypeStr = "Polygon";
   if (processPois)

@@ -73,7 +73,7 @@ public:
     @param stats the stats to create the string for
     @param stats string separator
     */
-  QString statsToString(QList<QList<SingleStat>>& stats, QString sep);
+  QString statsToString(QList<QList<SingleStat>>& stats, QString sep) const;
 
 private:
 

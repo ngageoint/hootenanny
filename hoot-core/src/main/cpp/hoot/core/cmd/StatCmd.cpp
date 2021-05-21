@@ -148,7 +148,7 @@ private:
     return statsCollector;
   }
 
-  double _calcStat(const QString& input, const QString& visClassName, const QString& statType)
+  double _calcStat(const QString& input, const QString& visClassName, const QString& statType) const
   {
     double stat;
 

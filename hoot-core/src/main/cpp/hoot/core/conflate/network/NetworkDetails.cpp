@@ -571,7 +571,7 @@ void NetworkDetails::extendEdgeString(EdgeStringPtr es, ConstNetworkEdgePtr e) c
   }
 }
 
-double NetworkDetails::getEdgeMatchScore(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2)
+double NetworkDetails::getEdgeMatchScore(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2) const
 {
   assert(e1->getMembers().size() == 1);
   assert(e2->getMembers().size() == 1);
@@ -593,7 +593,7 @@ double NetworkDetails::getEdgeMatchScore(ConstNetworkEdgePtr e1, ConstNetworkEdg
   return result;
 }
 
-double NetworkDetails::getEdgeStringMatchScore(ConstEdgeStringPtr e1, ConstEdgeStringPtr e2)
+double NetworkDetails::getEdgeStringMatchScore(ConstEdgeStringPtr e1, ConstEdgeStringPtr e2) const
 {
   double result;
 

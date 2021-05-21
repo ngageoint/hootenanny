@@ -52,14 +52,13 @@ public:
    * @param statsToUpdate the set of stats to update
    */
   void updateStats(QList<SingleStat>& statsToUpdate);
-
   /**
    * Insert additional conflation stats into a set of existing stats at the specified location.
    *
    * @param statsToUpdate the set of stats to update
    * @param insertIndex the location in statsToUpdate where the stats should be insert
    */
-  void updateStats(QList<SingleStat>& statsToUpdate, long insertIndex);
+  void updateStats(QList<SingleStat>& statsToUpdate, long insertIndex) const;
 
   /**
    * Retrieves a stat by name from a set of stats

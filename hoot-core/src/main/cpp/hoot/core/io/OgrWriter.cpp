@@ -717,8 +717,8 @@ OGRLayer* OgrWriter::_getLayer(const QString& layerName)
   return _layers[layerName];
 }
 
-void OgrWriter::_addFeature(OGRLayer* layer, const std::shared_ptr<Feature>& f,
-                            const std::shared_ptr<Geometry>& g)
+void OgrWriter::_addFeature(
+  OGRLayer* layer, const std::shared_ptr<Feature>& f, const std::shared_ptr<Geometry>& g) const
 {
   OGRFeature* poFeature = OGRFeature::CreateFeature( layer->GetLayerDefn() );
 

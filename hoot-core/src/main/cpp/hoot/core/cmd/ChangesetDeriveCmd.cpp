@@ -166,7 +166,7 @@ private:
 
   void _deriveStandardChangeset(
     const QString& input1, const QString& input2, const QString& output, const bool printStats,
-    const QString& outputStatsFile, const QString& osmApiDbUrl)
+    const QString& outputStatsFile, const QString& osmApiDbUrl) const
   {
     const int maxFilePrintLength = ConfigOptions().getProgressVarPrintLengthMax();
     LOG_STATUS(

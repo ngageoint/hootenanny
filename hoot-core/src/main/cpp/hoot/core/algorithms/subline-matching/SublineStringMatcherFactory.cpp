@@ -53,6 +53,8 @@ SublineStringMatcherPtr SublineStringMatcherFactory::getMatcher(
       return _getPowerLineMatcher();
     case CreatorDescription::BaseFeatureType::Waterway:
       return _getWaterwayMatcher(map);
+    case CreatorDescription::BaseFeatureType::Unknown:
+      return _getDefaultMatcher();
     default:
       throw IllegalArgumentException(
         "Invalid feature type: " + CreatorDescription::baseFeatureTypeToString(featureType));
@@ -113,6 +115,15 @@ SublineStringMatcherPtr SublineStringMatcherFactory::_getGenericLineMatcher()
     _getMatcher(
       MaximalSublineStringMatcher::className(), opts.getGenericLineSublineMatcher(),
       opts.getGenericLineMatcherMaxAngle(), opts.getGenericLineMatcherHeadingDelta(), 1e7);
+}
+
+SublineStringMatcherPtr SublineStringMatcherFactory::_getDefaultMatcher()
+{
+  ConfigOptions opts;
+  return
+    _getMatcher(
+      MaximalSublineStringMatcher::className(), opts.getWaySublineMatcher(),
+      opts.getWayMatcherMaxAngle(), opts.getWayMatcherHeadingDelta(), 1e7);
 }
 
 SublineStringMatcherPtr SublineStringMatcherFactory::_getMatcher(

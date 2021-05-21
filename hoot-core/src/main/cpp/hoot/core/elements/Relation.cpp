@@ -158,7 +158,7 @@ void Relation::insertElement(const QString& role, const ElementId& elementId, si
   _postGeometryChange();
 }
 
-int Relation::numElementsByRole(const QString& role)
+int Relation::numElementsByRole(const QString& role) const
 {
   return getElementsByRole(role).size();
 }

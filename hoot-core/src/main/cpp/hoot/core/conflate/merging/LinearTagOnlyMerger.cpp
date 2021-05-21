@@ -160,7 +160,7 @@ void LinearTagOnlyMerger::_determineKeeperFeature(
 
 bool LinearTagOnlyMerger::_mergeWays(
   ElementPtr elementWithTagsToKeep, ElementPtr elementWithTagsToRemove,
-  const bool removeSecondaryElement, std::vector<std::pair<ElementId, ElementId>>& replaced)
+  const bool removeSecondaryElement, std::vector<std::pair<ElementId, ElementId>>& replaced) const
 {
   if (_conflictExists(elementWithTagsToKeep, elementWithTagsToRemove))
   {

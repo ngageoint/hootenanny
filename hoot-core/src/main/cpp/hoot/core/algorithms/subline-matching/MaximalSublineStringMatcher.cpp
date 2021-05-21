@@ -170,6 +170,7 @@ WaySublineMatchString MaximalSublineStringMatcher::findMatch(
   LOG_VART(ways1.size());
   LOG_VART(ways2.size());
 
+  // TODO: move these values to a config
   if ((ways1.size() > 4 && ways2.size() > 4) || (ways1.size() + ways2.size() > 7))
   {
     throw NeedsReviewException(

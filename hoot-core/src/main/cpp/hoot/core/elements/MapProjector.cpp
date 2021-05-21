@@ -406,9 +406,9 @@ std::shared_ptr<OGRSpatialReference> MapProjector::createWgs84Projection()
   return srs;
 }
 
-bool MapProjector::_evaluateProjection(const OGREnvelope& env,
-  const std::shared_ptr<OGRSpatialReference>& srs, Meters testDistance, Meters& maxDistanceError,
-  Radians& maxAngleError)
+bool MapProjector::_evaluateProjection(
+  const OGREnvelope& env, const std::shared_ptr<OGRSpatialReference>& srs, Meters testDistance,
+  Meters& maxDistanceError, Radians& maxAngleError) const
 {
   // Disable CPL error messages. They will be re-enabled when the DisableCplErrors object is
   // destructed.

@@ -55,7 +55,7 @@ ZCurveRanger::ZCurveRanger(const ZValue& zv)
 {
 }
 
-vector<std::shared_ptr<LongBox>> ZCurveRanger::breakBox(const std::shared_ptr<LongBox>& box)
+vector<std::shared_ptr<LongBox>> ZCurveRanger::breakBox(const std::shared_ptr<LongBox>& box) const
 {
   int bestMaxBit = 0;
   int bestD = 0;
@@ -193,7 +193,7 @@ vector<Range> ZCurveRanger::decomposeRange(const LongBox& box, int levels)
   return _condenseRanges(result);
 }
 
-bool ZCurveRanger::rangeCoversIdentity(const Range& r)
+bool ZCurveRanger::rangeCoversIdentity(const Range& r) const
 {
   vector<long int> min;
   min.reserve(_zv.getDimensions());
@@ -216,7 +216,7 @@ bool ZCurveRanger::rangeCoversIdentity(const Range& r)
   return int2 >= int1;
 }
 
-LongBox ZCurveRanger::_clipBox(const LongBox& box)
+LongBox ZCurveRanger::_clipBox(const LongBox& box) const
 {
   LongBox result = *box.copy().get();
 

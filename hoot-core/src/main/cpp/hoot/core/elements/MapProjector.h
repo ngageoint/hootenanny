@@ -184,6 +184,13 @@ private:
 
   static std::shared_ptr<MapProjector> _theInstance;
 
+  /** Default constructor/destructor */
+  MapProjector() = default;
+  ~MapProjector() = default;
+  /** Delete copy constructor and assignment operator */
+  MapProjector(const MapProjector&) = delete;
+  MapProjector& operator=(const MapProjector&) = delete;
+
   static bool _angleLessThan(const PlanarTestResult& p1, const PlanarTestResult& p2);
 
   Radians _calculateAngle(geos::geom::Coordinate p1, geos::geom::Coordinate p2,
@@ -191,19 +198,13 @@ private:
 
   static bool _distanceLessThan(const PlanarTestResult& p1, const PlanarTestResult& p2);
 
-  bool _evaluateProjection(const OGREnvelope& env, const std::shared_ptr<OGRSpatialReference>& srs,
-    Meters testDistance, Meters& maxDistanceError, Radians& maxAngleError);
+  bool _evaluateProjection(
+    const OGREnvelope& env, const std::shared_ptr<OGRSpatialReference>& srs, Meters testDistance,
+    Meters& maxDistanceError, Radians& maxAngleError) const;
 
   size_t _findBestScore(std::vector<PlanarTestResult>& results) const;
 
   static bool _scoreLessThan(const PlanarTestResult& p1, const PlanarTestResult& p2);
-
-  /** Default constructor/destructor */
-  MapProjector() = default;
-  ~MapProjector() = default;
-  /** Delete copy constructor and assignment operator */
-  MapProjector(const MapProjector&) = delete;
-  MapProjector& operator=(const MapProjector&) = delete;
 };
 
 class ReprojectCoordinateFilter : public geos::geom::CoordinateFilter

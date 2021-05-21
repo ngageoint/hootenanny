@@ -862,7 +862,7 @@ Change DiffConflator::_getChange(ConstElementPtr pOldElement, ConstElementPtr pN
   return Change(Change::Modify, pChangeElement);
 }
 
-ChangesetProviderPtr DiffConflator::_getChangesetFromMap(OsmMapPtr map)
+ChangesetProviderPtr DiffConflator::_getChangesetFromMap(OsmMapPtr map) const
 {
   if (_numSnappedWays == 0)
   {

@@ -85,7 +85,8 @@ public:
      * Crops the line segments a and b down to their maximal nearest sublines relative to each
      * other.
      */
-    virtual void maximalNearestSubline(geos::geom::LineSegment &a, geos::geom::LineSegment &b) const;
+    virtual void maximalNearestSubline(
+      geos::geom::LineSegment& a, geos::geom::LineSegment& b) const;
 
     virtual void setWays(const ConstOsmMapPtr& map, const ConstWayPtr& w1, const ConstWayPtr& w2)
     { _map = map; _w1 = w1; _w2 = w2; }
@@ -109,7 +110,6 @@ public:
   public:
 
     ThresholdMatchCriteria(Meters maxDistance, Radians maxAngleDiff);
-
     ~ThresholdMatchCriteria() = default;
 
     double match(int index1, int index2) const override;
@@ -130,7 +130,6 @@ public:
    *  of @a criteria.
    */
   MaximalSubline(MatchCriteria* criteria, Meters minSplitSize);
-
   ~MaximalSubline() = default;
 
   /**

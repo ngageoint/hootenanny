@@ -126,11 +126,8 @@ public:
     }
 
     PixelBox getColumnBox(int col) const { return PixelBox(col, col, minY, maxY); }
-
     int getHeight() const { return maxY - minY + 1; }
-
     PixelBox getRowBox(int row) const { return PixelBox(minX, maxX, row, row); }
-
     int getWidth() const { return maxX - minX + 1; }
 
     QString toString() const
@@ -239,7 +236,7 @@ private:
 
   double _evaluateSplitPoint(const PixelBox& pb, const Pixel& p);
 
-  void _exportImage(cv::Mat& r, QString output);
+  void _exportImage(cv::Mat& r, QString output) const;
   void _exportResult(const std::vector<PixelBox>& boxes, QString output);
 
   bool _isDone(std::vector<PixelBox>& boxes);

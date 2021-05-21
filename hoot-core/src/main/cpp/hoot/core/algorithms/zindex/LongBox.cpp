@@ -57,7 +57,7 @@ LongBox::~LongBox()
   _max.clear();
 }
 
-long int LongBox::calculateVolume()
+long int LongBox::calculateVolume() const
 {
   long result = 1;
   for (uint i = 0; i < getMin().size(); i++)

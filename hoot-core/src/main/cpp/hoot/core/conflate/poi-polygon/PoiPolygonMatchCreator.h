@@ -100,7 +100,7 @@ private:
    * processed separately; returns the number of matches removed
    */
   int _retainClosestDistanceMatchesOnlyByType(
-    std::vector<ConstMatchPtr>& matches, const ConstOsmMapPtr& map, const bool processPois);
+    std::vector<ConstMatchPtr>& matches, const ConstOsmMapPtr& map, const bool processPois) const;
 
   /*
    * Organizes matches with key=element's ID and value=match its associated with; one
