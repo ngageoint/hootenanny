@@ -31,7 +31,6 @@
 #include <hoot/core/conflate/matching/Match.h>
 #include <hoot/core/conflate/matching/MatchConflicts.h>
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/util/Configurable.h>
 
 // Standard
 #include <map>
@@ -48,7 +47,7 @@ namespace hoot
  * Maximizing the set of matches is kind of tricky. For now, best is defined as maximizing the sum
  * of the Match scores.
  */
-class ConstrainedMatches : public Configurable
+class ConstrainedMatches
 {
 public:
 
@@ -78,8 +77,6 @@ public:
    * Returns the score for the last calculateSubset operation.
    */
   double getScore() const { return _score; }
-
-  void setConfiguration(const Settings &/*conf*/) override { }
 
   void setTimeLimit(double limit) { _timeLimit = limit; }
 

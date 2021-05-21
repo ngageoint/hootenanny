@@ -52,10 +52,6 @@ public:
   WaySublineMatchString findMatch(const ConstOsmMapPtr& map, const ConstWayPtr& way1,
     const ConstWayPtr& way2, double& score, Meters maxRelevantDistance = -1) const override;
 
-  void setMaxRelevantAngle(Radians r) override { _maxAngle = r; }
-  void setMinSplitSize(Meters minSplitSize) override { _minSplitSize = minSplitSize; }
-  void setHeadingDelta(Meters /*headingDelta*/) override { }
-
   void setMaxRecursions(int maxRecursions) { _maxRecursions = maxRecursions; }
 
   QString getDescription() const override
@@ -64,9 +60,6 @@ public:
   QString getClassName() const override { return className(); }
 
 private:
-
-  Radians _maxAngle;
-  Meters _minSplitSize;
 
   // See MaximalSubline::__maxRecursions
   int _maxRecursions;

@@ -481,10 +481,8 @@ void AbstractConflator::_addConflateScoreTags()
     {
       ElementPtr e1 = _map->getElement(it->first);
       ElementPtr e2 = _map->getElement(it->second);
-
       LOG_TRACE(
         "Adding score tags to " << e1->getElementId() << " and " << e2->getElementId() << "...");
-
       _addConflateScoreTags(e1, matchClassification, *matchThreshold);
       _addConflateScoreTags(e2, matchClassification, *matchThreshold);
       e1->getTags().appendValue(MetadataTags::HootScoreUuid(), e2->getTags().getCreateUuid());

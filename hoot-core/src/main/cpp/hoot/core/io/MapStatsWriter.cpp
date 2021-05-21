@@ -169,7 +169,7 @@ void MapStatsWriter::writeStats(const QString& mapInputPath, const QString& stat
   }
 }
 
-QString MapStatsWriter::statsToString(QList<QList<SingleStat>>& stats, QString sep)
+QString MapStatsWriter::statsToString(QList<QList<SingleStat>>& stats, QString sep) const
 {
   QStringList allStatNames;
 

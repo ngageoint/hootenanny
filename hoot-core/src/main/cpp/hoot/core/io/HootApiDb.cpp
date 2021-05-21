@@ -308,7 +308,7 @@ void HootApiDb::createPendingMapIndexes()
   _pendingMapIndexes.clear();
 }
 
-void HootApiDb::deleteMap(long mapId)
+void HootApiDb::deleteMap(long mapId) const
 {
   //  Don't try to delete an invalid map ID
   if (mapId == -1)
@@ -1070,7 +1070,7 @@ bool HootApiDb::isSupported(const QUrl& url)
   return valid;
 }
 
-void HootApiDb::_lazyFlushBulkInsert()
+void HootApiDb::_lazyFlushBulkInsert() const
 {
   bool flush = false;
 

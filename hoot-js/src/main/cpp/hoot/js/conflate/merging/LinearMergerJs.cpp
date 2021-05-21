@@ -94,53 +94,30 @@ void LinearMergerJs::apply(const FunctionCallbackInfo<Value>& args)
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
 
-  SublineStringMatcherPtr sublineMatcher = toCpp<SublineStringMatcherPtr>(args[0]);
+  SublineStringMatcherPtr sublineStringMatcher = toCpp<SublineStringMatcherPtr>(args[0]);
+  // POTENTIAL BUG HERE: This subline string matcher has already been configured when
+  // SublineStringMatcherFactory creates it during matching. However, if we don't call
+  // setConfiguration here, js linear conflation performs worse on some data due to extra match
+  // conflicts being recognized during match optimization. What's happening here is that, due to the
+  // manner in which MaximalSublineStringMatcher::setConfiguration is set up, the configured subline
+  // matchers are being ignored and reset to MaximalNearestSublineMatcher when setConfiguration is
+  // called here. That isn't really a good thing due to the confusion it causes, but the only other
+  // options would be to either add a separate subline matcher for each data type to be used during
+  // match conflict resolution (and possibly also during merging) only (cumbersome), or just
+  // hardcode the configuration of the subline string matcher here to always use
+  // MaximalNearestSublineMatcher as its primary matcher (not as cumbersome, but more brittle). So,
+  // staying with this behavior for the time being. Eventually, it may be worth correcting this
+  // issue.
+  sublineStringMatcher->setConfiguration(conf());
+  LOG_VART(sublineStringMatcher->getName());
+  LOG_VART(sublineStringMatcher->getSublineMatcherName());
   OsmMapPtr map = toCpp<OsmMapPtr>(args[1]);
   MergerBase::PairsSet pairs = toCpp<MergerBase::PairsSet>(args[2]);
-  vector<pair<ElementId, ElementId>> replaced =
-    toCpp<vector<pair<ElementId, ElementId>>>(args[3]);
+  vector<pair<ElementId, ElementId>> replaced = toCpp<vector<pair<ElementId, ElementId>>>(args[3]);
   const QString matchedBy = toCpp<QString>(args[4]);
   LOG_VART(matchedBy);
-  SublineStringMatcherPtr sublineMatcher2;
-  if (args.Length() > 5)
-  {
-    // This is little unusual, but we're allowing an extra subline matcher to be passed in for
-    // certain conflation types. The general idea is that one matcher may be more accurate but
-    // slower (e.g. maximal subline) and the other may be slightly less accurate but much
-    // quicker (Frechet). The actual one used here will be determined based how the matcher
-    // performs against the input data.
-    // TODO: make this configurable
-    QStringList allowedMultipleSublineGenericMatchers;
-    allowedMultipleSublineGenericMatchers.append("Waterway");
-    allowedMultipleSublineGenericMatchers.append("Line");
-    allowedMultipleSublineGenericMatchers.append("Railway");
-    allowedMultipleSublineGenericMatchers.append("PowerLine");
-    if (!allowedMultipleSublineGenericMatchers.contains(matchedBy))
-    {
-      throw IllegalArgumentException(
-        "Matches matched with: " + matchedBy +
-        " cannot specify multiple subline matchers during merging.");
-    }
-    sublineMatcher2 = toCpp<SublineStringMatcherPtr>(args[5]);
-  }
 
-  LOG_VART(ConfigOptions().getGeometryLinearMergerDefault());
-  // Use of LinearTagOnlyMerger for geometries signifies that we're doing Attribute Conflation.
-  const bool isAttributeConflate =
-    ConfigOptions().getGeometryLinearMergerDefault() == LinearTagOnlyMerger::className();
-  // Use of LinearAverageMerger for geometries signifies that we're doing Average Conflation.
-  const bool isAverageConflate =
-    ConfigOptions().getGeometryLinearMergerDefault() == LinearAverageMerger::className();
-  MergerPtr merger;
-  if (isAttributeConflate || isAverageConflate ||
-      (matchedBy != "Waterway" && matchedBy != "Line") || !sublineMatcher2)
-  {
-    merger = LinearMergerFactory::getMerger(pairs, sublineMatcher, matchedBy);
-  }
-  else
-  {
-    merger = LinearMergerFactory::getMerger(pairs, sublineMatcher, sublineMatcher2, matchedBy);
-  }
+  MergerPtr merger = LinearMergerFactory::getMerger(pairs, sublineStringMatcher, matchedBy);
   LOG_VART(merger->getClassName());
   merger->apply(map, replaced);
 

@@ -30,15 +30,14 @@
 #include <hoot/core/algorithms/DirectionFinder.h>
 #include <hoot/core/algorithms/ProbabilityOfMatch.h>
 #include <hoot/core/algorithms/WayHeading.h>
-#include <hoot/core/algorithms/WayMatchStringMerger.h>
+#include <hoot/core/algorithms/subline-matching/SublineStringMatcherFactory.h>
 #include <hoot/core/algorithms/extractors/AngleHistogramExtractor.h>
 #include <hoot/core/algorithms/extractors/EuclideanDistanceExtractor.h>
 #include <hoot/core/algorithms/extractors/HausdorffDistanceExtractor.h>
 #include <hoot/core/algorithms/linearreference/NaiveWayMatchStringMapping.h>
 #include <hoot/core/algorithms/linearreference/WayMatchStringMappingConverter.h>
 #include <hoot/core/algorithms/linearreference/WaySublineCollection.h>
-#include <hoot/core/algorithms/subline-matching/FrechetSublineMatcher.h>
-#include <hoot/core/algorithms/subline-matching/MultipleMatcherSublineStringMatcher.h>
+
 #include <hoot/core/conflate/highway/HighwayClassifier.h>
 #include <hoot/core/elements/ElementGeometryUtils.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
@@ -72,32 +71,8 @@ _maxStubLength(ConfigOptions().getNetworkMaxStubLength())
 void NetworkDetails::setConfiguration(const Settings& conf)
 {
   ConfigOptions opts(conf);
-
-  // Create the default matcher. We're just using the default max recursions here for
-  // MaximalSubline. May need to come up with a custom value via empirical testing.
-  std::shared_ptr<SublineStringMatcher> primaryMatcher(
-    Factory::getInstance().constructObject<SublineStringMatcher>(
-      opts.getHighwaySublineStringMatcher()));
-  Settings settings = conf;
-  settings.set("way.matcher.max.angle", ConfigOptions().getHighwayMatcherMaxAngle());
-  settings.set("way.subline.matcher", ConfigOptions().getHighwaySublineMatcher());
-  settings.set("way.matcher.heading.delta", ConfigOptions().getHighwayMatcherHeadingDelta());
-  primaryMatcher->setConfiguration(settings);
-
-  // Bring in Frechet as a backup matcher for complex roads (similar approach to river
-  // conflation...see details there).
-  std::shared_ptr<SublineStringMatcher> secondaryMatcher(
-    Factory::getInstance().constructObject<SublineStringMatcher>(
-      opts.getHighwaySublineStringMatcher()));
-  Settings secondarySettings = settings;
-  secondarySettings.set("way.subline.matcher", FrechetSublineMatcher::className());
-  secondaryMatcher->setConfiguration(secondarySettings);
-
-  // Wrap use of the matchers with MultipleMatcherSublineStringMatcher. Don't call setConfiguration
-  // here, as we've already set a separate configuration on each matcher passed in here.
   _sublineMatcher =
-    std::make_shared<MultipleMatcherSublineStringMatcher>(primaryMatcher, secondaryMatcher);
-
+    SublineStringMatcherFactory::getMatcher(CreatorDescription::BaseFeatureType::Highway);
   _classifier.reset(
     Factory::getInstance().constructObject<HighwayClassifier>(
       opts.getConflateMatchHighwayClassifier()));
@@ -596,7 +571,7 @@ void NetworkDetails::extendEdgeString(EdgeStringPtr es, ConstNetworkEdgePtr e) c
   }
 }
 
-double NetworkDetails::getEdgeMatchScore(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2)
+double NetworkDetails::getEdgeMatchScore(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2) const
 {
   assert(e1->getMembers().size() == 1);
   assert(e2->getMembers().size() == 1);
@@ -618,7 +593,7 @@ double NetworkDetails::getEdgeMatchScore(ConstNetworkEdgePtr e1, ConstNetworkEdg
   return result;
 }
 
-double NetworkDetails::getEdgeStringMatchScore(ConstEdgeStringPtr e1, ConstEdgeStringPtr e2)
+double NetworkDetails::getEdgeStringMatchScore(ConstEdgeStringPtr e1, ConstEdgeStringPtr e2) const
 {
   double result;
 
@@ -711,7 +686,7 @@ double NetworkDetails::getEdgeStringMatchScore(ConstEdgeStringPtr e1, ConstEdgeS
       WayMatchStringMappingPtr mapping(new NaiveWayMatchStringMapping(ws1, ws2));
       // convert from a mapping to a WaySublineMatchString
       WaySublineMatchStringPtr matchString =
-          WayMatchStringMappingConverter().toWaySublineMatchString(mapping);
+        WayMatchStringMappingConverter().toWaySublineMatchString(mapping);
 
       MatchClassification c;
       // calculate the match score

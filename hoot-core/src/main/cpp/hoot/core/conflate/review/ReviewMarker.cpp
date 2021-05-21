@@ -162,8 +162,9 @@ bool ReviewMarker::isReviewUid(const ConstOsmMapPtr& map, ReviewUid uid)
   return isReview(map->getElement(uid));
 }
 
-void ReviewMarker::mark(const OsmMapPtr& map, const ConstElementPtr& e1, const ConstElementPtr& e2,
-  const QString& note, const QString& reviewType, double score, vector<QString> choices)
+void ReviewMarker::mark(
+  const OsmMapPtr& map, const ConstElementPtr& e1, const ConstElementPtr& e2, const QString& note,
+  const QString& reviewType, double score, vector<QString> choices) const
 {
   if (!e1 || !e2)
     return;
@@ -174,16 +175,18 @@ void ReviewMarker::mark(const OsmMapPtr& map, const ConstElementPtr& e1, const C
   mark(map, ids, note, reviewType, score, choices);
 }
 
-void ReviewMarker::mark(const OsmMapPtr& map, const std::set<ElementId>& ids, const QString& note,
-  const QString& reviewType, double score, vector<QString> choices)
+void ReviewMarker::mark(
+  const OsmMapPtr& map, const std::set<ElementId>& ids, const QString& note,
+  const QString& reviewType, double score, vector<QString> choices) const
 {
   //  Copy element IDs into a vector to preserve ordering used by other overloads of mark() function
   vector<ElementId> vids(ids.begin(), ids.end());
   mark(map, vids, note, reviewType, score, choices);
 }
 
-void ReviewMarker::mark(const OsmMapPtr& map, const ConstElementPtr& e, const QString& note,
-  const QString& reviewType, double score, vector<QString> choices)
+void ReviewMarker::mark(
+  const OsmMapPtr& map, const ConstElementPtr& e, const QString& note, const QString& reviewType,
+  double score, vector<QString> choices) const
 {
   if (!e)
     return;

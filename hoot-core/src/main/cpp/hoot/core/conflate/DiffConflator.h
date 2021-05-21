@@ -254,7 +254,7 @@ private:
   // Creates a change object using the original element and new tags
   Change _getChange(ConstElementPtr pOldElement, ConstElementPtr pNewElement) const;
   std::shared_ptr<ChangesetDeriver> _sortInputs(OsmMapPtr map1, OsmMapPtr map2) const;
-  ChangesetProviderPtr _getChangesetFromMap(OsmMapPtr map);
+  ChangesetProviderPtr _getChangesetFromMap(OsmMapPtr map) const;
 
   long _snapSecondaryLinearFeaturesBackToRef();
 

@@ -136,7 +136,7 @@ public:
   /**
    * @brief logConnectionError Log an error with the connection based on the reponse error, not an HTTP error code
    */
-  void logConnectionError();
+  void logConnectionError() const;
 
 private:
   /**

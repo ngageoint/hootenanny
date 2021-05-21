@@ -74,7 +74,7 @@ MatchConflicts::EidIndexMap MatchConflicts::_calculateEidIndexMap(
 }
 
 void MatchConflicts::calculateMatchConflicts(
-  const std::vector<ConstMatchPtr>& matches, ConflictMap& conflicts)
+  const std::vector<ConstMatchPtr>& matches, ConflictMap& conflicts) const
 {
   QElapsedTimer timer;
   timer.start();

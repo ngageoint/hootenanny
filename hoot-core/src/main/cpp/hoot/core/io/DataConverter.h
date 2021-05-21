@@ -131,7 +131,7 @@ private:
   Progress _progress;
   int _printLengthMax;
 
-  void _validateInput(const QStringList& inputs, const QString& output);
+  void _validateInput(const QStringList& inputs, const QString& output) const;
 
   // converts from any input to an OGR output; A translation is required, operations are memory
   // bound, and if both input and output formats are OGR, this must be used.
@@ -139,9 +139,9 @@ private:
 
   // _convertToOgr will call this to run the translator in a separate thread for a performance
   // increase if certain pre-conditions are met.
-  void _transToOgrMT(const QStringList& inputs, const QString& output);
-  void _fillElementCache(const QString& inputUrl, ElementCachePtr cachePtr,
-                         QQueue<ElementPtr>& workQ) const;
+  void _transToOgrMT(const QStringList& inputs, const QString& output) const;
+  void _fillElementCache(
+    const QString& inputUrl, ElementCachePtr cachePtr, QQueue<ElementPtr>& workQ) const;
 
   // converts from an OGR input to any output; a translation is required
   void _convertFromOgr(const QStringList& inputs, const QString& output);
@@ -158,16 +158,17 @@ private:
   void _handleNonOgrOutputTranslationOpts();
   QString _outputFormatToTranslationDirection(const QString& output) const;
   // If specific columns were specified for export to a shape file, then this is called.
-  void _exportToShapeWithCols(const QString& output, const QStringList& cols, const OsmMapPtr& map) const;
+  void _exportToShapeWithCols(
+    const QString& output, const QStringList& cols, const OsmMapPtr& map) const;
 
   /*
    * Attempts to determine the relative weighting of each layer in an OGR data source based on
    * feature size. If the feature size hasn't already been calculated for each layer, then a even
    * distribution of weighting between layers is returned.
    */
-  std::vector<float> _getOgrInputProgressWeights(OgrReader& reader, const QString& input,
-                                                 const QStringList& layers) const;
-  QStringList _getOgrLayersFromPath(OgrReader& reader, QString& input) const;
+  std::vector<float> _getOgrInputProgressWeights(
+    const OgrReader& reader, const QString& input, const QStringList& layers) const;
+  QStringList _getOgrLayersFromPath(const OgrReader& reader, QString& input) const;
 
   bool _shapeFileColumnsSpecified() const { return !_shapeFileColumns.isEmpty(); }
 };

@@ -40,8 +40,7 @@ class BBox;
 /**
  * Decomposes a bounding box into a range of zcurve values.
  *
- * Yes, ZCurve Ranger. Picture a guy wearing a space helmet in blue spandex
- * covered in Zs.
+ * Yes, ZCurve Ranger. Picture a guy wearing a space helmet in blue spandex covered in Zs.
  */
 class ZCurveRanger
 {
@@ -50,13 +49,12 @@ public:
   static QString className() { return "hoot::ZCurveRanger"; }
 
   ZCurveRanger(const ZValue& zv);
-
   ~ZCurveRanger() = default;
 
   /** Find a good break point for the given box based on major z-value breaks
    * and break the box into two children.
    */
-  std::vector<std::shared_ptr<LongBox>> breakBox(const std::shared_ptr<LongBox>& box);
+  std::vector<std::shared_ptr<LongBox>> breakBox(const std::shared_ptr<LongBox>& box) const;
 
   long int calculateExcess(const std::shared_ptr<LongBox>& box);
 
@@ -75,6 +73,7 @@ public:
    * @param box - Must be a valid box within the ZValue.
    */
   std::vector<Range> decomposeRange(const BBox& box, int levels);
+  std::vector<Range> decomposeRange(const LongBox& box, int levels);
 
   /**
    * The number of cells that can be acceptably merged into one range. This
@@ -86,9 +85,7 @@ public:
    */
   void setSlop(int slop) { _slop = slop; }
 
-  std::vector<Range> decomposeRange(const LongBox& box, int levels);
-
-  bool rangeCoversIdentity(const Range& r);
+  bool rangeCoversIdentity(const Range& r) const;
 
 private:
   /**
@@ -100,7 +97,7 @@ private:
 
   LongBox _toLongBox(const BBox& box);
 
-  LongBox _clipBox(const LongBox& box);
+  LongBox _clipBox(const LongBox& box) const;
 
   long int _slop;
   ZValue _zv;

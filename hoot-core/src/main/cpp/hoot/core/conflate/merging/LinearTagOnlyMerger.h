@@ -83,7 +83,8 @@ private:
 
   bool _mergeWays(
     ElementPtr elementWithTagsToKeep, ElementPtr elementWithTagsToRemove,
-    const bool removeSecondaryElement, std::vector<std::pair<ElementId, ElementId>>& replaced);
+    const bool removeSecondaryElement,
+    std::vector<std::pair<ElementId, ElementId>>& replaced) const;
 };
 
 using LinearTagOnlyMergerPtr = std::shared_ptr<LinearTagOnlyMerger>;

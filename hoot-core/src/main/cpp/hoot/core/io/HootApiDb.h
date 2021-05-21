@@ -49,7 +49,6 @@ public:
   static QString className() { return "hoot::HootApiDb"; }
 
   HootApiDb();
-
   ~HootApiDb();
 
   /**
@@ -159,7 +158,7 @@ public:
   /**
    * Deletes a map and all of it's dependencies.
    */
-  void deleteMap(long mapId);
+  void deleteMap(long mapId) const;
 
   void deleteUser(long userId) override;
 
@@ -690,7 +689,7 @@ private:
   long _getNextRelationId();
   long _getNextWayId();
   void _init();
-  void _lazyFlushBulkInsert();
+  void _lazyFlushBulkInsert() const;
 
   /**
    * Executes the insert, performs error checking and returns the new ID.

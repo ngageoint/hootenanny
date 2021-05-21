@@ -510,7 +510,7 @@ double NodeDensityTileBoundsCalculator::_evaluateSplitPoint(const PixelBox& pb, 
   return intersects * slopMultiplier;
 }
 
-void NodeDensityTileBoundsCalculator::_exportImage(cv::Mat &r, QString output)
+void NodeDensityTileBoundsCalculator::_exportImage(cv::Mat& r, QString output) const
 {
   QImage qImage(r.cols, r.rows, QImage::Format_RGB16);
   if (qImage.isNull())

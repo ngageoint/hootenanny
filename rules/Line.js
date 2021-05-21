@@ -28,19 +28,11 @@ var angleHistogramExtractor = new hoot.AngleHistogramExtractor();
 var weightedShapeDistanceExtractor = new hoot.WeightedShapeDistanceExtractor();
 var distanceScoreExtractor = new hoot.DistanceScoreExtractor();
 var lengthScoreExtractor = new hoot.LengthScoreExtractor();
+
 // We're just using the default max recursions here for MaximalSubline. May need to come up with a
-// custom value via empirical testing.
-var sublineMatcher =  // default subline matcher
-  new hoot.MaximalSublineStringMatcher(
-  {
-    "way.matcher.max.angle": hoot.get("generic.line.matcher.max.angle"),
-    "way.subline.matcher": hoot.get("generic.line.subline.matcher"),
-    "maximal.subline.max.recursions": 10000000
-  });
-var frechetSublineMatcher = // we'll switch over to this one if the default matcher runs too slowly
-  new hoot.MaximalSublineStringMatcher(
-    { "way.matcher.max.angle": hoot.get("generic.line.matcher.max.angle"),
-      "way.subline.matcher": "hoot::FrechetSublineMatcher" }); 
+// custom value via empirical testing. This will not work if we ever end up needing to pass map in
+// here for this data type.
+var sublineStringMatcher = hoot.SublineStringMatcherFactory.getMatcher(exports.baseFeatureType);
 
 /**
  * Returns true if e is a candidate for a match. Implementing this method is
@@ -124,13 +116,8 @@ exports.matchScore = function(map, e1, e2)
   // and other parts from River.js. See notes on the dual subline matcher approach in River.js.
   var sublines;
   hoot.trace("Extracting sublines with default...");
-  sublines = sublineMatcher.extractMatchingSublines(map, e1, e2);
+  sublines = sublineStringMatcher.extractMatchingSublines(map, e1, e2);
   hoot.trace(sublines);
-  if (sublines && String(sublines).indexOf("maximum recursion complexity") !== -1)
-  {
-    hoot.trace("Extracting sublines with Frechet...");
-    sublines = frechetSublineMatcher.extractMatchingSublines(map, e1, e2);
-  }
 
   var distanceScore = -1.0;
   var weightShapeDistanceScore = -1.0;
@@ -186,7 +173,7 @@ exports.mergeSets = function(map, pairs, replaced)
 {
   // Snap the ways in the second input to the first input. Use the default tag 
   // merge method. See related notes in exports.mergeSets in River.js.
-  return new hoot.LinearMerger().apply(sublineMatcher, map, pairs, replaced, exports.baseFeatureType, frechetSublineMatcher);
+  return new hoot.LinearMerger().apply(sublineStringMatcher, map, pairs, replaced, exports.baseFeatureType);
 };
 
 exports.getMatchFeatureDetails = function(map, e1, e2)
