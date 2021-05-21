@@ -66,12 +66,8 @@ public:
   void splitIntersections();
 
   QString getInitStatusMessage() const override { return "Splitting linear intersections..."; }
-
   QString getCompletedStatusMessage() const override
   { return "Split " + QString::number(_numAffected) + " linear intersections"; }
-
-  QString getDescription() const override
-  { return "Makes all linear intersections contain only way end nodes"; }
 
   /**
    * @see FilteredByGeometryTypeCriteria
@@ -79,8 +75,9 @@ public:
   QStringList getCriteria() const override;
 
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+  QString getDescription() const override
+  { return "Makes all linear intersections contain only way end nodes"; }
 
 private:
 

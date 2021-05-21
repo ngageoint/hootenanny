@@ -26,11 +26,19 @@
  */
 
 // Hoot
+#include <hoot/core/criterion/ChainCriterion.h>
+#include <hoot/core/criterion/ElementTypeCriterion.h>
+#include <hoot/core/criterion/TagCriterion.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/splitter/IntersectionSplitter.h>
+#include <hoot/core/io/OsmMapReaderFactory.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
+#include <hoot/core/ops/CopyMapSubsetOp.h>
+
+#include <hoot/core/TestUtils.h>
 
 namespace hoot
 {
@@ -40,12 +48,15 @@ class IntersectionSplitterTest : public HootTestFixture
   CPPUNIT_TEST_SUITE(IntersectionSplitterTest);
   CPPUNIT_TEST(runTest);
   CPPUNIT_TEST(runTestSimple);
+  CPPUNIT_TEST(runRelationMemberOrderTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
   IntersectionSplitterTest() :
-  HootTestFixture("test-files/algorithms/splitter/", "test-output/algorithms/splitter/")
+  HootTestFixture(
+    "test-files/algorithms/splitter/IntersectionSplitterTest/",
+    "test-output/algorithms/splitter/IntersectionSplitterTest/")
   {
     setResetType(ResetBasic);
   }
@@ -84,6 +95,30 @@ public:
                      _outputPath + "SimpleSplitterOutput.osm");
   }
 
+  void runRelationMemberOrderTest()
+  {
+    OsmMapPtr rawMap(new OsmMap());
+    OsmMapReaderFactory::read(
+      rawMap, "test-files/cases/reference/unifying/multiple/highway-3906/Input1.osm");
+
+    OsmMapPtr filteredMap(new OsmMap());
+    CopyMapSubsetOp(
+      rawMap,
+      std::make_shared<ChainCriterion>(
+        std::make_shared<RelationCriterion>("route"),
+        std::make_shared<TagCriterion>("ref", "36")))
+      .apply(filteredMap);
+    LOG_VART(filteredMap->size());
+
+    IntersectionSplitter::splitIntersections(filteredMap);
+
+    MapProjector::projectToWgs84(filteredMap);
+    OsmMapWriterFactory::write(filteredMap, _outputPath + "runRelationMemberOrderTestOut.osm");
+
+    HOOT_FILE_EQUALS(
+      _inputPath + "runRelationMemberOrderTestOut.osm",
+      _outputPath + "runRelationMemberOrderTestOut.osm");
+  }
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(IntersectionSplitterTest, "quick");

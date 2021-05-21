@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="38.9057" minlon="-75.43658093797468" maxlat="38.912551" maxlon="-75.4273"/>
+    <node visible="true" id="-37" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9057000000000031" lon="-75.4365809379746821"/>
+    <node visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9124591980112839" lon="-75.4273000000000025"/>
+    <node visible="true" id="4881725477" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9121419000000017" lon="-75.4284939000000065"/>
+    <node visible="true" id="4881727145" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9124359999999996" lon="-75.4285320000000041"/>
+    <node visible="true" id="4881727146" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9124430000000032" lon="-75.4285310000000067"/>
+    <node visible="true" id="4881727157" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9124580000000009" lon="-75.4285280000000000"/>
+    <node visible="true" id="4881727158" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9125143999999992" lon="-75.4285193999999990"/>
+    <node visible="true" id="4881727159" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9124529999999993" lon="-75.4285299999999950"/>
+    <node visible="true" id="4881729682" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9109600999999969" lon="-75.4325089000000020">
+        <tag k="error:circular" v="15"/>
+        <tag k="railway" v="level_crossing"/>
+        <tag k="source:datetime" v="2013-04-20T20:53:27.000Z"/>
+    </node>
+    <node visible="true" id="4881729880" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9125048000000007" lon="-75.4278309000000036"/>
+    <node visible="true" id="4881729893" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9125510000000006" lon="-75.4283704999999998"/>
+    <node visible="true" id="4881730541" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9093639999999965" lon="-75.4337969999999984"/>
+    <node visible="true" id="4881733488" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9072529999999972" lon="-75.4354270000000042"/>
+    <node visible="true" id="4881733499" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9083789999999965" lon="-75.4345650000000063"/>
+    <node visible="true" id="4881735985" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9111249999999984" lon="-75.4323700000000059"/>
+    <node visible="true" id="4881735994" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9105300000000014" lon="-75.4328160000000025"/>
+    <node visible="true" id="4881735996" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9116399999999985" lon="-75.4307230000000004"/>
+    <node visible="true" id="4881735998" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9112900000000010" lon="-75.4321529999999996"/>
+    <node visible="true" id="4881735999" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9113339999999965" lon="-75.4320290000000000"/>
+    <way visible="true" id="-31" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-37"/>
+        <nd ref="4881733488"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="name" v="Shawnee Road"/>
+        <tag k="ref" v="DE 36"/>
+        <tag k="source:datetime" v="2014-10-01T07:34:03.000Z"/>
+        <tag k="tiger:cfcc" v="A31"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+        <tag k="tiger:name_base" v="State Highway 36"/>
+        <tag k="tiger:name_base_1" v="Shawnee"/>
+        <tag k="tiger:name_type_1" v="Rd"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:zip_right" v="19963"/>
+    </way>
+    <way visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-4"/>
+        <nd ref="4881729880"/>
+        <nd ref="4881729893"/>
+        <nd ref="4881727158"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="name" v="Southeast Front Street"/>
+        <tag k="ref" v="DE 36"/>
+        <tag k="source:datetime" v="2015-04-27T15:16:27.000Z"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="tiger:cfcc" v="A21"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+        <tag k="tiger:name_base" v="E Front"/>
+        <tag k="tiger:name_base_1" v="State Road 36"/>
+        <tag k="tiger:name_direction_prefix" v="S"/>
+        <tag k="tiger:name_type" v="St"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:zip_right" v="19963"/>
+    </way>
+    <way visible="true" id="496849585" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
+        <nd ref="4881735994"/>
+        <nd ref="4881729682"/>
+        <nd ref="4881735985"/>
+        <nd ref="4881735998"/>
+        <nd ref="4881735999"/>
+        <nd ref="4881735996"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="name" v="Causey Avenue"/>
+        <tag k="ref" v="DE 36"/>
+        <tag k="source:datetime" v="2013-04-20T20:52:40.000Z"/>
+        <tag k="tiger:cfcc" v="A21"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+        <tag k="tiger:name_base" v="Causey"/>
+        <tag k="tiger:name_base_1" v="State Road 36"/>
+        <tag k="tiger:name_type" v="Ave"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:zip_right" v="19963"/>
+    </way>
+    <way visible="true" id="496849655" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
+        <nd ref="4881725477"/>
+        <nd ref="4881727145"/>
+        <nd ref="4881727146"/>
+        <nd ref="4881727159"/>
+        <nd ref="4881727157"/>
+        <nd ref="4881727158"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="name" v="North Walnut Street"/>
+        <tag k="ref" v="DE 36"/>
+        <tag k="source:datetime" v="2014-12-20T06:02:00.000Z"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+        <tag k="tiger:name_base" v="Walnut"/>
+        <tag k="tiger:name_base_1" v="County Road 213"/>
+        <tag k="tiger:name_direction_prefix" v="N"/>
+        <tag k="tiger:name_type" v="St"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:zip_right" v="19963"/>
+    </way>
+    <way visible="true" id="496849786" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
+        <nd ref="4881733488"/>
+        <nd ref="4881733499"/>
+        <nd ref="4881730541"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="name" v="Lakeview Avenue"/>
+        <tag k="ref" v="DE 36"/>
+        <tag k="source:datetime" v="2015-09-14T06:08:20.000Z"/>
+        <tag k="tiger:cfcc" v="A21"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+        <tag k="tiger:name_base" v="Lakeview"/>
+        <tag k="tiger:name_base_1" v="State Road 36"/>
+        <tag k="tiger:name_type" v="Ave"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:zip_left_1" v="19963"/>
+        <tag k="tiger:zip_right" v="19963"/>
+    </way>
+    <way visible="true" id="496850273" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
+        <nd ref="4881735996"/>
+        <nd ref="4881725477"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="name" v="Causey Avenue"/>
+        <tag k="name_1" v="Shawnee Rd"/>
+        <tag k="ref" v="DE 36"/>
+        <tag k="source:datetime" v="2014-12-20T08:06:40.000Z"/>
+        <tag k="tiger:cfcc" v="A31"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+        <tag k="tiger:name_base" v="State Highway 36"/>
+        <tag k="tiger:name_base_1" v="Causey"/>
+        <tag k="tiger:name_base_2" v="Shawnee"/>
+        <tag k="tiger:name_type_1" v="Ave"/>
+        <tag k="tiger:name_type_2" v="Rd"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:zip_left_1" v="19963"/>
+        <tag k="tiger:zip_left_2" v="19963"/>
+        <tag k="tiger:zip_right" v="19963"/>
+        <tag k="tiger:zip_right_1" v="19963"/>
+        <tag k="tiger:zip_right_2" v="19963"/>
+    </way>
+    <way visible="true" id="496850334" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
+        <nd ref="4881730541"/>
+        <nd ref="4881735994"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="name" v="Lakeview Avenue"/>
+        <tag k="name_1" v="Shawnee Rd"/>
+        <tag k="ref" v="DE 36"/>
+        <tag k="source:datetime" v="2015-09-14T06:08:30.000Z"/>
+        <tag k="tiger:cfcc" v="A31"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+        <tag k="tiger:name_base" v="State Highway 36"/>
+        <tag k="tiger:name_base_1" v="Lakeview"/>
+        <tag k="tiger:name_base_2" v="Shawnee"/>
+        <tag k="tiger:name_type_1" v="Ave"/>
+        <tag k="tiger:name_type_2" v="Rd"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:zip_right" v="19963"/>
+    </way>
+    <relation visible="true" id="7387465" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
+        <member type="way" ref="-4" role=""/>
+        <member type="way" ref="496849655" role=""/>
+        <member type="way" ref="496850273" role=""/>
+        <member type="way" ref="496849585" role=""/>
+        <member type="way" ref="496850334" role=""/>
+        <member type="way" ref="496849786" role=""/>
+        <member type="way" ref="-31" role=""/>
+        <tag k="FIXME" v="verify east end"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="network" v="US:DE"/>
+        <tag k="ref" v="36"/>
+        <tag k="route" v="road"/>
+        <tag k="source:datetime" v="2015-01-20T08:41:26.000Z"/>
+        <tag k="symbol" v="http://commons.wikimedia.org/wiki/File:Elongated_circle_36.svg"/>
+        <tag k="type" v="route"/>
+        <tag k="wikipedia" v="en:Delaware Route 36"/>
+    </relation>
+</osm>

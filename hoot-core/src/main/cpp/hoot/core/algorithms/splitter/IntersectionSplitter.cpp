@@ -38,6 +38,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
+
 // Qt
 #include <QDebug>
 
@@ -111,7 +112,6 @@ void IntersectionSplitter::_removeWayFromMap(const std::shared_ptr<Way>& way)
   LOG_TRACE("Removing " << way->getElementId() << " from map...");
 
   long wId = way->getId();
-
   const std::vector<long>& nodes = way->getNodeIds();
   for (size_t i = 0; i < nodes.size(); i++)
   {
