@@ -107,6 +107,14 @@ public class AdvancedConflationOptionsResource {
         put("differential w/Tags", DIFFERENTIAL_CONFLATION_PATH);
     }};
 
+    private Map<String, String> matcherMap = new HashMap<String, String>(){{
+        put("GenericLines", "hoot::LinearCriterion");
+        put("PowerLines", "hoot::PowerLineCriterion");
+        put("Railways", "hoot::RailwayCriterion");
+        put("Rivers", "hoot::LinearWaterwayCriterion");
+        put("Roads", "hoot::HighwayCriterion");
+    }};
+
     private static Map<String, Map<String, String>> confOptionsMap = null;
 
     private static Map<String, Map<String, String>> buildConfOptionsMap() {
@@ -289,6 +297,7 @@ public class AdvancedConflationOptionsResource {
                 obj.replace("input", "multiCombobox");
                 obj.put("data", data);
                 obj.put("displayToHootMap", displayToHootMap);
+                obj.put("matcherMap", matcherMap);
             }
         }
     }
