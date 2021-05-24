@@ -71,17 +71,14 @@ public:
     OsmMapReaderFactory::read(map, _inputPath + "ScriptMatchTest.osm", true);
     MapProjector::projectToPlanar(map);
 
-    // create the test scenario in ScriptMatchTest
-    // call ScriptMatch is consistent repeatedly.
-
     std::shared_ptr<const MatchThreshold> mt(new MatchThreshold(0.6, 0.6, 0.6));
 
     ScriptMatchCreator smc;
-    smc.setArguments(QStringList() << "LineTest.js");
+    smc.setArguments(QStringList() << "Line.js");
     vector<ConstMatchPtr> matches;
     smc.createMatches(map, matches, mt);
     HOOT_STR_EQUALS(2, matches.size());
-    HOOT_STR_EQUALS(false, matches[0]->isConflicting(matches[1], map));
+    HOOT_STR_EQUALS(true, matches[0]->isConflicting(matches[1], map));
   }
 
   void cacheTest()

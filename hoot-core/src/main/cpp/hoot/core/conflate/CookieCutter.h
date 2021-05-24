@@ -52,7 +52,7 @@ public:
    * @param cutterShapeOutlineMap the input geometry use for cutting
    * @param doughMap the map to be cut from
    */
-  void cut(OsmMapPtr& cutterShapeOutlineMap, OsmMapPtr& doughMap);
+  void cut(OsmMapPtr& cutterShapeOutlineMap, OsmMapPtr& doughMap) const;
 
 private:
 

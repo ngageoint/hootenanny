@@ -100,14 +100,14 @@ private:
    * processed separately; returns the number of matches removed
    */
   int _retainClosestDistanceMatchesOnlyByType(
-    std::vector<ConstMatchPtr>& matches, const ConstOsmMapPtr& map, const bool processPois);
+    std::vector<ConstMatchPtr>& matches, const ConstOsmMapPtr& map, const bool processPois) const;
 
   /*
    * Organizes matches with key=element's ID and value=match its associated with; one
    * element may be involved in more than one match
    */
   QMultiMap<ElementId, ConstMatchPtr> _indexMatchesById(
-    const std::vector<ConstMatchPtr>& matches, const QString& matchTypeStr);
+    const std::vector<ConstMatchPtr>& matches, const QString& matchTypeStr) const;
 
   /*
    * Finds all instances where an element is involved in more than one match; returns a collection
@@ -115,7 +115,7 @@ private:
    * more than one math
    */
   QMap<ElementId, QList<ConstMatchPtr>> _getOverlappingMatches(
-    const QMultiMap<ElementId, ConstMatchPtr>& matchesById, const QString& matchTypeStr);
+    const QMultiMap<ElementId, ConstMatchPtr>& matchesById, const QString& matchTypeStr) const;
 
   /*
    * Cycles through each overlapping match and keeps only the single match associated with each
@@ -124,7 +124,7 @@ private:
   std::vector<ConstMatchPtr> _filterOutNonClosestMatches(
     const QMap<ElementId, QList<ConstMatchPtr>>& overlappingMatches,
     const std::vector<ConstMatchPtr>& allMatches, const ConstOsmMapPtr& map,
-    const QString& matchTypeStr);
+    const QString& matchTypeStr) const;
 
   // debugging only methods
   bool _containsMatch(

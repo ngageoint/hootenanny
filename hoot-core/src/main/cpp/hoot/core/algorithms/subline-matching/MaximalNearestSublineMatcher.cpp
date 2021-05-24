@@ -43,11 +43,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(SublineMatcher, MaximalNearestSublineMatcher)
 
-MaximalNearestSublineMatcher::MaximalNearestSublineMatcher()
-{
-  _minSplitSize = 0.0;
-}
-
 WaySublineMatchString MaximalNearestSublineMatcher::findMatch(const ConstOsmMapPtr& map,
   const ConstWayPtr& way1, const ConstWayPtr& way2, double& score, Meters maxRelevantDistance) const
 {
@@ -60,9 +55,7 @@ WaySublineMatchString MaximalNearestSublineMatcher::findMatch(const ConstOsmMapP
     maxRelevantDistance;
 
   OsmMapPtr mapCopy(new OsmMap());
-  CopyMapSubsetOp(map,
-               way1->getElementId(),
-               way2->getElementId()).apply(mapCopy);
+  CopyMapSubsetOp(map, way1->getElementId(), way2->getElementId()).apply(mapCopy);
 
   WayPtr way1NonConst = mapCopy->getWay(way1->getId());
   WayPtr way2NonConst = mapCopy->getWay(way2->getId());

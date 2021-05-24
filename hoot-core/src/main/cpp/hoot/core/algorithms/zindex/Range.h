@@ -51,7 +51,7 @@ public:
 
   virtual ~Range() = default;
 
-  bool hashCode();
+  bool hashCode() const;
 
   bool operator>(const Range& r) const { return _min > r.getMin(); }
 
@@ -61,15 +61,15 @@ public:
 
   bool operator==(const Range& r) const { return _min == r.getMin() && _max == r.getMax(); }
 
-  bool in(long int l);
+  bool in(long int l) const;
 
-  bool isValid();
+  bool isValid() const;
 
   void setInvalid();
 
-  QString toString();
+  QString toString() const;
 
-  long calculateSize() { return (_max - _min) + 1; }
+  long calculateSize() const { return (_max - _min) + 1; }
 
   long int getMin() const { return _min; }
 

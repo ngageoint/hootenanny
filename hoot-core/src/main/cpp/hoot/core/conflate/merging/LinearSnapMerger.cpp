@@ -599,7 +599,7 @@ void LinearSnapMerger::_splitElement(
 
 void LinearSnapMerger::_manageElementIds(
   const WayPtr& w1, const WayPtr& w2, const WayPtr& wMatch, const ElementPtr& scraps1,
-  const ElementPtr& scraps2)
+  const ElementPtr& scraps2) const
 {
   LOG_TRACE("Managing element IDs...");
 

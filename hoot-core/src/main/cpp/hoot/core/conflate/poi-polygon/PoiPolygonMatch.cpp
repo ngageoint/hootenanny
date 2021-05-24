@@ -591,7 +591,7 @@ unsigned int PoiPolygonMatch::_getDistanceEvidence(ConstElementPtr poi, ConstEle
 }
 
 unsigned int PoiPolygonMatch::_getConvexPolyDistanceEvidence(ConstElementPtr poi,
-                                                             ConstElementPtr poly)
+                                                             ConstElementPtr poly) const
 {
   LOG_TRACE("Retrieving convex poly distance evidence...");
 
@@ -815,7 +815,7 @@ QString PoiPolygonMatch::toString() const
   }
 }
 
-void PoiPolygonMatch::_clearCache()
+void PoiPolygonMatch::_clearCache() const
 {
   if (_infoCache)
   {

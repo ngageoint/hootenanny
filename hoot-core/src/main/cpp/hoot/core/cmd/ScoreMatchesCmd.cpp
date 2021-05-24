@@ -175,7 +175,7 @@ public:
 
   QString evaluateThreshold(vector<OsmMapPtr> maps, QString output,
                             std::shared_ptr<MatchThreshold> mt, bool showConfusion,
-                            double& score)
+                            double& score) const
   {
     MatchComparator comparator;
 
@@ -233,7 +233,8 @@ public:
 
 private:
 
-  bool _validateMatches(const OsmMapPtr& map, const QString& map1Path, const QString& map2Path)
+  bool _validateMatches(
+    const OsmMapPtr& map, const QString& map1Path, const QString& map2Path) const
   {
     QElapsedTimer timer;
     timer.start();
@@ -256,7 +257,7 @@ private:
   }
 
   void _printIssues(const QMap<ElementId, QString>& issues, const QString& type,
-                    const QString& map1Path, const QString& map2Path)
+                    const QString& map1Path, const QString& map2Path) const
   {
     if (!issues.isEmpty())
     {

@@ -322,7 +322,7 @@ void MapCropper::apply(OsmMapPtr& map)
     if (wayCtr % _statusUpdateInterval == 0)
     {
       PROGRESS_INFO(
-        "Cropped " << StringUtils::formatLargeNumber(wayCtr) << " / " <<
+        "Cropped " << StringUtils::formatLargeNumber(wayCtr) << " of " <<
         StringUtils::formatLargeNumber(ways.size()) << " ways.");
     }
   }
@@ -398,7 +398,7 @@ void MapCropper::apply(OsmMapPtr& map)
     if (nodeCtr % _statusUpdateInterval == 0)
     {
       PROGRESS_INFO(
-        "Cropped " << StringUtils::formatLargeNumber(nodeCtr) << " / " <<
+        "Cropped " << StringUtils::formatLargeNumber(nodeCtr) << " of " <<
         StringUtils::formatLargeNumber(nodes.size()) << " nodes.");
     }
   }

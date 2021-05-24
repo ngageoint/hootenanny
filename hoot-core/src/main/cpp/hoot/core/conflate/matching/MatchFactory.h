@@ -116,7 +116,7 @@ private:
   void _checkMatchCreatorBoundable(const std::shared_ptr<MatchCreator>& matchCreator,
                                    const std::shared_ptr<geos::geom::Geometry>& bounds) const;
   void _setMatchCreators(QStringList matchCreatorsList);
-  ElementCriterionPtr _createFilter();
+  ElementCriterionPtr _createFilter() const;
   void _setTagFilterJson(QString json) { _tagFilterJson = json; }
 
   friend class MatchCandidateCountVisitorTest;

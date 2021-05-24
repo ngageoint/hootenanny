@@ -137,7 +137,7 @@ private:
 
   QElapsedTimer _timer;
 
-  void _processStatsParams(QStringList& args, bool& printStats, QString& outputStatsFile)
+  void _processStatsParams(QStringList& args, bool& printStats, QString& outputStatsFile) const
   {
     if (args.contains("--stats"))
     {
@@ -166,7 +166,7 @@ private:
 
   void _deriveStandardChangeset(
     const QString& input1, const QString& input2, const QString& output, const bool printStats,
-    const QString& outputStatsFile, const QString& osmApiDbUrl)
+    const QString& outputStatsFile, const QString& osmApiDbUrl) const
   {
     const int maxFilePrintLength = ConfigOptions().getProgressVarPrintLengthMax();
     LOG_STATUS(
@@ -192,7 +192,7 @@ private:
 
   void _deriveReplacementChangeset(
     const QString& input1, const QString& input2, const QString& output, const bool printStats,
-    const QString& outputStatsFile, const QString& osmApiDbUrl, const bool enableWaySnapping)
+    const QString& outputStatsFile, const QString& osmApiDbUrl, const bool enableWaySnapping) const
   {
     const bool isCutOnly = input2.isEmpty();
     QString implementation = ConfigOptions().getChangesetReplacementImplementation();
@@ -229,7 +229,7 @@ private:
     changesetCreator->create(input1, input2, bounds, output);
   }
 
-  void _updateConfigOptionsForBounds()
+  void _updateConfigOptionsForBounds() const
   {
     // If we're working within a bounds, we need to ensure that reference features outside of the
     // bounds don't get deleted.

@@ -397,7 +397,7 @@ void AbstractConflator::_createMergers(std::vector<MergerPtr>& relationMergers)
   for (size_t i = 0; i < _matchSets.size(); ++i)
   {
     PROGRESS_INFO(
-      "Converting match set " << StringUtils::formatLargeNumber(i + 1) << " / " <<
+      "Converting match set " << StringUtils::formatLargeNumber(i + 1) << " of " <<
       StringUtils::formatLargeNumber(_matchSets.size()) << " to a merger...");
 
     _mergerFactory->createMergers(_map, _matchSets[i], _mergers);
@@ -481,10 +481,8 @@ void AbstractConflator::_addConflateScoreTags()
     {
       ElementPtr e1 = _map->getElement(it->first);
       ElementPtr e2 = _map->getElement(it->second);
-
       LOG_TRACE(
         "Adding score tags to " << e1->getElementId() << " and " << e2->getElementId() << "...");
-
       _addConflateScoreTags(e1, matchClassification, *matchThreshold);
       _addConflateScoreTags(e2, matchClassification, *matchThreshold);
       e1->getTags().appendValue(MetadataTags::HootScoreUuid(), e2->getTags().getCreateUuid());

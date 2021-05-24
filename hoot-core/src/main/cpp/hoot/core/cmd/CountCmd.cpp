@@ -180,7 +180,7 @@ private:
     return msg;
   }
 
-  std::shared_ptr<PartialOsmMapReader> _getStreamingReader(const QString& input)
+  std::shared_ptr<PartialOsmMapReader> _getStreamingReader(const QString& input) const
   {
     std::shared_ptr<PartialOsmMapReader> reader =
       std::dynamic_pointer_cast<PartialOsmMapReader>(
@@ -192,7 +192,7 @@ private:
   }
 
   ElementCriterionPtr _getCriterion(const QString& criterionClassName, const bool negate,
-                                    bool& isStreamable)
+                                    bool& isStreamable) const
   {
     LOG_TRACE("Getting criterion: " << criterionClassName << "...");
 
@@ -245,7 +245,7 @@ private:
 
   ElementInputStreamPtr _getFilteredInputStream(ElementInputStreamPtr inputStream,
                                                 const ElementCriterionPtr& criterion,
-                                                ConstElementVisitorPtr countVis)
+                                                ConstElementVisitorPtr countVis) const
   {
     LOG_TRACE("Getting filtered input stream...");
     if (criterion)
@@ -269,7 +269,7 @@ private:
     return filteredInputStream;
   }
 
-  ConstElementVisitorPtr _getCountVis(const bool countFeaturesOnly)
+  ConstElementVisitorPtr _getCountVis(const bool countFeaturesOnly) const
   {
     LOG_TRACE("Getting count vis...");
 
@@ -285,8 +285,9 @@ private:
     return countVis;
   }
 
-  long _countMemoryBound(const QStringList& inputs, const bool countFeaturesOnly,
-                         const ElementCriterionPtr& criterion)
+  long _countMemoryBound(
+    const QStringList& inputs, const bool countFeaturesOnly,
+    const ElementCriterionPtr& criterion) const
   {
     OsmMapPtr map(new OsmMap());
     IoUtils::loadMaps(map, inputs, true);
@@ -314,8 +315,8 @@ private:
     return (long)counter->getStat();
   }
 
-  long _countStreaming(const QString& input, const bool countFeaturesOnly,
-                       const ElementCriterionPtr& criterion)
+  long _countStreaming(
+    const QString& input, const bool countFeaturesOnly, const ElementCriterionPtr& criterion) const
   {
     long inputTotal = 0;
 

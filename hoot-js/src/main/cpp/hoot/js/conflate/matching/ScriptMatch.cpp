@@ -193,7 +193,7 @@ bool ScriptMatch::isConflicting(
     sharedEid = _eid2;
   }
 
-  // if the matches don't share at least one eid then it isn't a conflict.
+  // If the matches don't share at least one eid then it isn't a conflict.
   if (sharedEid.isNull())
   {
     return false;
@@ -287,7 +287,7 @@ bool ScriptMatch::_isOrderedConflicting(
 
   LOG_VART(eid11);
   LOG_VART(eid12);
-  // This and the other commented block of code below is an attempt to prevent script matching
+  // This and the other commented block of code below are an attempt to prevent script matching
   // being executed on non-candidate matches, during match conflict resolution. These changes cause
   // regression test failures, and it isn't clear why at this point.
 //  if (!_isMatchCandidate(copiedMap->getElement(eid11), copiedMap) ||

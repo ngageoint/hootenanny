@@ -73,17 +73,18 @@ private:
 
   void _determineKeeperFeature(
     ElementPtr element1, ElementPtr element2, ElementPtr& keeper, ElementPtr& toRemove,
-    bool& removeSecondaryElement);
+    bool& removeSecondaryElement) const;
 
   void _handleOneWayStreetReversal(
-    ElementPtr elementWithTagsToKeep, ConstElementPtr elementWithTagsToRemove);
-
+    ElementPtr elementWithTagsToKeep, ConstElementPtr elementWithTagsToRemove) const;
+ 
   bool _conflictExists(
     ConstElementPtr elementWithTagsToKeep, ConstElementPtr elementWithTagsToRemove) const;
 
   bool _mergeWays(
     ElementPtr elementWithTagsToKeep, ElementPtr elementWithTagsToRemove,
-    const bool removeSecondaryElement, std::vector<std::pair<ElementId, ElementId>>& replaced);
+    const bool removeSecondaryElement,
+    std::vector<std::pair<ElementId, ElementId>>& replaced) const;
 };
 
 using LinearTagOnlyMergerPtr = std::shared_ptr<LinearTagOnlyMerger>;

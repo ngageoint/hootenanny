@@ -857,7 +857,7 @@ QStringList Tags::toKvps() const
   return kvps;
 }
 
-bool Tags::hasAnyKey(const QStringList& keys)
+bool Tags::hasAnyKey(const QStringList& keys) const
 {
   for (int i = 0; i < keys.size(); i++)
   {

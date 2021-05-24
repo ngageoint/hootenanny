@@ -135,7 +135,7 @@ bool LinearTagOnlyMerger::_mergePair(
 
 void LinearTagOnlyMerger::_determineKeeperFeature(
   ElementPtr element1, ElementPtr element2, ElementPtr& keeper, ElementPtr& toRemove,
-  bool& removeSecondaryElement)
+  bool& removeSecondaryElement) const
 {
   removeSecondaryElement = true;
   if (element1->getStatus() == Status::Conflated && element2->getStatus() == Status::Conflated)
@@ -160,7 +160,7 @@ void LinearTagOnlyMerger::_determineKeeperFeature(
 
 bool LinearTagOnlyMerger::_mergeWays(
   ElementPtr elementWithTagsToKeep, ElementPtr elementWithTagsToRemove,
-  const bool removeSecondaryElement, std::vector<std::pair<ElementId, ElementId>>& replaced)
+  const bool removeSecondaryElement, std::vector<std::pair<ElementId, ElementId>>& replaced) const
 {
   if (_conflictExists(elementWithTagsToKeep, elementWithTagsToRemove))
   {
@@ -238,7 +238,7 @@ bool LinearTagOnlyMerger::_conflictExists(
 }
 
 void LinearTagOnlyMerger::_handleOneWayStreetReversal(
-  ElementPtr elementWithTagsToKeep, ConstElementPtr elementWithTagsToRemove)
+  ElementPtr elementWithTagsToKeep, ConstElementPtr elementWithTagsToRemove) const
 {
   // TODO: This is ignoring the contents of multilinestring relations.
   OneWayCriterion isAOneWayStreet;

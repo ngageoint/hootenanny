@@ -310,7 +310,7 @@ void VagabondNetworkMatcher::_calculateEdgeMatches()
     }
     if (Log::getInstance().getLevel() <= Log::Info)
     {
-      cout << "Calculating edge matches: " << count++ << " / " << em.size() << "\t\r" << std::flush;
+      cout << "Calculating edge matches: " << count++ << " of " << em.size() << "\t\r" << std::flush;
     }
   }
   if (Log::getInstance().getLevel() <= Log::Info)

@@ -122,7 +122,7 @@ _minSplitSize(0.0)
 
 void HighwayMatch::_updateNonMatchDescriptionBasedOnGeometricProperties(
   QStringList& description, const ConstOsmMapPtr& map, const ConstElementPtr e1,
-  const ConstElementPtr e2)
+  const ConstElementPtr e2) const
 {
   //  Check the Angle Histogram
   double angle = AngleHistogramExtractor().extract(*map, e1, e2);

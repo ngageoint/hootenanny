@@ -126,15 +126,16 @@ std::shared_ptr<Element> GeometryToElementConverter::convertGeometryToElement(
     return std::shared_ptr<Element>();
   }
 }
+
 NodePtr GeometryToElementConverter::convertPointToNode(
-  const geos::geom::Point* point, const OsmMapPtr& map, Status s, double circularError)
+  const geos::geom::Point* point, const OsmMapPtr& map, Status s, double circularError) const
 {
   LOG_TRACE("Converting point to node...");
   return _createNode(map, Coordinate(point->getX(), point->getY()), s, circularError);
 }
 
 WayPtr GeometryToElementConverter::convertLineStringToWay(
-  const LineString* ls, const OsmMapPtr& map, Status s, double circularError)
+  const LineString* ls, const OsmMapPtr& map, Status s, double circularError) const
 {
   LOG_TRACE("Converting line string to way...");
 
@@ -248,7 +249,7 @@ void GeometryToElementConverter::convertPolygonToRelation(
 }
 
 NodePtr GeometryToElementConverter::_createNode(const OsmMapPtr& map, const Coordinate& c,
-  Status s, double circularError)
+  Status s, double circularError) const
 {
   if (_nf == nullptr)
   {

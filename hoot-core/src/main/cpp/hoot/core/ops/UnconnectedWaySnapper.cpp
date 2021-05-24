@@ -304,7 +304,7 @@ void UnconnectedWaySnapper::apply(OsmMapPtr& map)
     if (waysProcessed % (_taskStatusUpdateInterval * 10) == 0)
     {
       PROGRESS_INFO(
-        "Processed " << StringUtils::formatLargeNumber(waysProcessed) << " / " <<
+        "Processed " << StringUtils::formatLargeNumber(waysProcessed) << " of " <<
         StringUtils::formatLargeNumber(ways.size()) << " ways for unconnected snapping.");
     }
   }

@@ -44,12 +44,9 @@ class ValueAggregatorJs : public HootBaseJs
 public:
 
   static void Init(v8::Local<v8::Object> target);
+  virtual ~ValueAggregatorJs() = default;
 
   ValueAggregatorPtr getValueAggregator() { return _va; }
-
-  static v8::Local<v8::Object> New(const ValueAggregatorPtr& va);
-
-  virtual ~ValueAggregatorJs() = default;
 
 private:
 
@@ -80,11 +77,6 @@ inline void toCpp(v8::Local<v8::Value> v, ValueAggregatorPtr& p)
   {
     throw IllegalArgumentException("Expected a ValueAggregatorJs, got: (" + toJson(v) + ")");
   }
-}
-
-inline v8::Local<v8::Value> toV8(const ValueAggregatorPtr& va)
-{
-  return ValueAggregatorJs::New(va);
 }
 
 }

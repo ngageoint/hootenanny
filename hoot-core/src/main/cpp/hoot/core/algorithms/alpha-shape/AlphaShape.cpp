@@ -231,7 +231,7 @@ void AlphaShape::insert(const vector<pair<double, double>>& points)
     if (i % ConfigOptions().getTaskStatusUpdateInterval() == 0)
     {
       PROGRESS_INFO(
-        "Added " << StringUtils::formatLargeNumber(i) << " / " <<
+        "Added " << StringUtils::formatLargeNumber(i) << " of " <<
         StringUtils::formatLargeNumber(randomized.size() - 1) << " points.");
     }
     _pDelauneyTriangles->insert(randomized[i].first, randomized[i].second);
@@ -239,7 +239,7 @@ void AlphaShape::insert(const vector<pair<double, double>>& points)
   LOG_VARD(_pDelauneyTriangles->getFaces().size());
   //  Report the final progress
   PROGRESS_INFO(
-    "Added " << StringUtils::formatLargeNumber(randomized.size() - 1) << " / " <<
+    "Added " << StringUtils::formatLargeNumber(randomized.size() - 1) << " of " <<
     StringUtils::formatLargeNumber(randomized.size() - 1) << " points.");
 }
 

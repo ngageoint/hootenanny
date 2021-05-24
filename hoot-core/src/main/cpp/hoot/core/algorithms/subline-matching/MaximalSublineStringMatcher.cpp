@@ -73,9 +73,14 @@ void MaximalSublineStringMatcher::setConfiguration(const Settings& s)
     std::dynamic_pointer_cast<MaximalSublineMatcher>(_sublineMatcher);
   if (maximalSublineMatcher)
   {
-    // See MaximalSubline::__maxRecursions
+    // See MaximalSubline::_maxRecursions
     maximalSublineMatcher->setMaxRecursions(co.getMaximalSublineMaxRecursions());
   }
+
+  LOG_VART(_sublineMatcher->getName());
+  LOG_VART(_sublineMatcher->getMaxRelevantAngle());
+  LOG_VART(_sublineMatcher->getHeadingDelta());
+  LOG_VART(_sublineMatcher->getMinSplitSize());
 }
 
 void MaximalSublineStringMatcher::setMaxRelevantAngle(Radians r)
@@ -165,6 +170,7 @@ WaySublineMatchString MaximalSublineStringMatcher::findMatch(
   LOG_VART(ways1.size());
   LOG_VART(ways2.size());
 
+  // TODO: move these values to a config
   if ((ways1.size() > 4 && ways2.size() > 4) || (ways1.size() + ways2.size() > 7))
   {
     throw NeedsReviewException(

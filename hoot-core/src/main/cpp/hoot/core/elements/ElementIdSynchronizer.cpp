@@ -339,7 +339,7 @@ bool ElementIdSynchronizer::_areWayNodesWithoutAWayInCommon(
 
 void ElementIdSynchronizer::_calcElementHashes(
   const OsmMapPtr& map, QMap<QString, ElementId>& hashesToElementIds,
-  QMap<ElementId, QString>& elementIdsToHashes)
+  QMap<ElementId, QString>& elementIdsToHashes) const
 {
   LOG_DEBUG("Calculating " << map->getName() << " element hashes...");
 

@@ -51,7 +51,7 @@ void WayNodeCopier::setConfiguration(const Settings& conf)
   _duplicateNodeTolerance = ConfigOptions(conf).getWayNodeCopierDuplicateNodeTolerance();
 }
 
-void WayNodeCopier::copy(const ElementId& toReplaceWayId, const ElementId& replacingWayId)
+void WayNodeCopier::copy(const ElementId& toReplaceWayId, const ElementId& replacingWayId) const
 {
   if (!_map)
   {

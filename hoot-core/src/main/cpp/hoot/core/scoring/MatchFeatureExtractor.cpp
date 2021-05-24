@@ -253,7 +253,7 @@ void MatchFeatureExtractor::processMap(const std::shared_ptr<const OsmMap>& map)
   // We don't want to validate the thresholds here in order to do the full match feature extraction.
   // Reviews aren't applicable here, so just use the default value.
   std::shared_ptr<const MatchThreshold> mt =
-    std::make_shared<MatchThreshold>(MatchThreshold(0.0, 0.0, 1.0, false));
+    std::make_shared<MatchThreshold>(0.0, 0.0, 1.0, false);
   _matchFactory->createMatches(map, matches, std::shared_ptr<geos::geom::Geometry>(), mt);
   size_t matchCount = 0;
   for (size_t i = 0; i < matches.size(); i++)
@@ -312,7 +312,7 @@ void MatchFeatureExtractor::processMap(const std::shared_ptr<const OsmMap>& map)
       if (matchCount % 10 == 0)
       {
         PROGRESS_INFO(
-          "Processed " << StringUtils::formatLargeNumber(matchCount) << " / " <<
+          "Processed " << StringUtils::formatLargeNumber(matchCount) << " of " <<
           StringUtils::formatLargeNumber(matches.size()) << " matches; samples collected: " <<
           StringUtils::formatLargeNumber(_samples.size()));
       }

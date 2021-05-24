@@ -92,7 +92,7 @@ public:
    * Returns a vector of all candidate planar projections for a given envelope.
    */
   std::vector<std::shared_ptr<OGRSpatialReference>> createAllPlanarProjections(
-    const OGREnvelope& env);
+    const OGREnvelope& env) const;
 
   /**
    * Using a predefined set of projections this method evaluates each one of them for both distance
@@ -184,26 +184,27 @@ private:
 
   static std::shared_ptr<MapProjector> _theInstance;
 
-  static bool _angleLessThan(const PlanarTestResult& p1, const PlanarTestResult& p2);
-
-  Radians _calculateAngle(geos::geom::Coordinate p1, geos::geom::Coordinate p2,
-                          geos::geom::Coordinate p3);
-
-  static bool _distanceLessThan(const PlanarTestResult& p1, const PlanarTestResult& p2);
-
-  bool _evaluateProjection(const OGREnvelope& env, const std::shared_ptr<OGRSpatialReference>& srs,
-    Meters testDistance, Meters& maxDistanceError, Radians& maxAngleError);
-
-  size_t _findBestScore(std::vector<PlanarTestResult>& results);
-
-  static bool _scoreLessThan(const PlanarTestResult& p1, const PlanarTestResult& p2);
-
   /** Default constructor/destructor */
   MapProjector() = default;
   ~MapProjector() = default;
   /** Delete copy constructor and assignment operator */
   MapProjector(const MapProjector&) = delete;
   MapProjector& operator=(const MapProjector&) = delete;
+
+  static bool _angleLessThan(const PlanarTestResult& p1, const PlanarTestResult& p2);
+
+  Radians _calculateAngle(geos::geom::Coordinate p1, geos::geom::Coordinate p2,
+                          geos::geom::Coordinate p3) const;
+
+  static bool _distanceLessThan(const PlanarTestResult& p1, const PlanarTestResult& p2);
+
+  bool _evaluateProjection(
+    const OGREnvelope& env, const std::shared_ptr<OGRSpatialReference>& srs, Meters testDistance,
+    Meters& maxDistanceError, Radians& maxAngleError) const;
+
+  size_t _findBestScore(std::vector<PlanarTestResult>& results) const;
+
+  static bool _scoreLessThan(const PlanarTestResult& p1, const PlanarTestResult& p2);
 };
 
 class ReprojectCoordinateFilter : public geos::geom::CoordinateFilter

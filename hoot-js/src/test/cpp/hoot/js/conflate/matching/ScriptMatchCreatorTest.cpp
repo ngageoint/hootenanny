@@ -62,7 +62,7 @@ public:
   void runIsCandidateTest()
   {
     ScriptMatchCreator uut;
-    uut.setArguments(QStringList() << "test/LineTest.js");
+    uut.setArguments(QStringList() << "Line.js");
 
     ConfigOptions co;
     conf().set(co.getUuidHelperRepeatableKey(), true);
@@ -72,8 +72,8 @@ public:
       map, _inputPath + "ScriptMatchTest.osm", true);
     MapProjector::projectToPlanar(map);
 
-    //to be a candidate: needs to be determined a candidate by the JS rules file...which for this
-    //particular rules file, the element must be linear
+    // To be a candidate: needs to be determined a candidate by the JS rules file, which for this
+    // particular rules file, the element must be linear.
     NodePtr node1 = TestUtils::createNode(map, "", Status::Unknown1, 10.0, 10.0, 250.0);
     CPPUNIT_ASSERT(!uut.isMatchCandidate(node1, map));
 
@@ -82,7 +82,6 @@ public:
     wayNodes.append(node1);
     wayNodes.append(node2);
     WayPtr way1 = TestUtils::createWay(map, wayNodes);
-    way1->getTags().appendValue("highway", "road");
     CPPUNIT_ASSERT(uut.isMatchCandidate(way1, map));
 
     // Untyped features are now conflatable with the generic geometry scripts.
@@ -91,7 +90,6 @@ public:
     way1->getTags().clear();
     HOOT_STR_EQUALS(true, uut.isMatchCandidate(way1, map));
   }
-
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ScriptMatchCreatorTest, "quick");

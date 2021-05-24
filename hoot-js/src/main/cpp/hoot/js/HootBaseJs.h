@@ -47,7 +47,6 @@ public:
 protected:
 
   HootBaseJs() = default;
-
 };
 
 }

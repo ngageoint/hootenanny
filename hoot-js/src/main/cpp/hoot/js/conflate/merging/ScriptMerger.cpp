@@ -164,7 +164,7 @@ void ScriptMerger::_applyMergeSets(const OsmMapPtr& map,
 {
   _callMergeSets(map, replaced);
 
-  // verify that all the elements are where they need to be (e.g. were removed from the map or
+  // Verify that all the elements are where they need to be (e.g. were removed from the map or
   // added to the map as needed).
 }
 

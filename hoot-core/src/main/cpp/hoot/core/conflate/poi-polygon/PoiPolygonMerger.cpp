@@ -363,7 +363,7 @@ vector<ElementId> PoiPolygonMerger::_getBuildingParts(const OsmMapPtr& map, Stat
 
 ElementId PoiPolygonMerger::_mergeBuildings(const OsmMapPtr& map,
   vector<ElementId>& buildings1, vector<ElementId>& buildings2,
-  vector<pair<ElementId, ElementId>>& replaced)
+  vector<pair<ElementId, ElementId>>& replaced) const
 {
   LOG_TRACE("Merging buildings...");
 

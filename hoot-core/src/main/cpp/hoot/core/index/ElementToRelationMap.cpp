@@ -190,7 +190,7 @@ bool ElementToRelationMap::validate(const OsmMap& map) const
     QString getName() const override { return ""; }
     QString getClassName() const override { return ""; }
 
-    bool containsRecursive(const ConstRelationPtr& r, ElementId eid)
+    bool containsRecursive(const ConstRelationPtr& r, ElementId eid) const
     {
       ContainsElementVisitor v(_map, eid);
       r->visitRo(_map, v);

@@ -158,12 +158,12 @@ void Relation::insertElement(const QString& role, const ElementId& elementId, si
   _postGeometryChange();
 }
 
-int Relation::numElementsByRole(const QString& role)
+int Relation::numElementsByRole(const QString& role) const
 {
   return getElementsByRole(role).size();
 }
 
-std::vector<RelationData::Entry> Relation::getElementsByRole(const QString& role)
+std::vector<RelationData::Entry> Relation::getElementsByRole(const QString& role) const
 {
   const vector<RelationData::Entry>& members = getMembers();
   std::vector<RelationData::Entry> membersByRole;

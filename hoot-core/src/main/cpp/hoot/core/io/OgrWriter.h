@@ -113,7 +113,7 @@ public:
   void translateToFeatures(const ElementProviderPtr& provider,
                            const ConstElementPtr& e,
                            std::shared_ptr<geos::geom::Geometry>& g,
-                           std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature>& tf);
+                           std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature>& tf) const;
 
   void writeTranslatedFeature(const std::shared_ptr<geos::geom::Geometry>& g,
                               const std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature>& tf);
@@ -154,11 +154,11 @@ protected:
 
   void _addFeature(
     OGRLayer* layer, const std::shared_ptr<Feature>& f,
-    const std::shared_ptr<geos::geom::Geometry>& g);
+    const std::shared_ptr<geos::geom::Geometry>& g) const;
 
-  void _addFeatureToLayer(OGRLayer* layer, const std::shared_ptr<Feature>& f,
-                          const geos::geom::Geometry* g,
-                          OGRFeature* poFeature);
+  void _addFeatureToLayer(
+    OGRLayer* layer, const std::shared_ptr<Feature>& f, const geos::geom::Geometry* g,
+    OGRFeature* poFeature) const;
 
   void _createLayer(const std::shared_ptr<const Layer>& layer);
 
@@ -166,7 +166,7 @@ protected:
 
   OGRLayer* _getLayerByName(const QString& layerName);
 
-  void strictError(const QString& warning);
+  void strictError(const QString& warning) const;
 
   virtual void _writePartial(ElementProviderPtr& provider, const ConstElementPtr& e);
 

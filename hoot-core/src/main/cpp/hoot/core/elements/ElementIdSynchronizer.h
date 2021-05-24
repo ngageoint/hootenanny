@@ -99,7 +99,7 @@ protected:
    */
   void _calcElementHashes(
     const OsmMapPtr& map, QMap<QString, ElementId>& hashesToElementIds,
-    QMap<ElementId, QString>& elementIdsToHashes);
+    QMap<ElementId, QString>& elementIdsToHashes) const;
 
   /*
    * Determines if two elements (one from each input map) are way nodes which don't have a way
