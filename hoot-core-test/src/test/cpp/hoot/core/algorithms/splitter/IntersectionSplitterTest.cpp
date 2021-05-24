@@ -93,7 +93,9 @@ public:
 
   void runRelationMemberOrderTest()
   {
-    // This test checks that relation member order is preserved after splitting.
+    // This test checks that relation member order is preserved after splitting. Examine the route
+    // relation with tag, "ref=36". Its members consist of intersection split roads, but they should
+    // retain the ordering of the input relation.
 
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(

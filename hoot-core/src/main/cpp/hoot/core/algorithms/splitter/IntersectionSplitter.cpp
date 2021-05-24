@@ -257,8 +257,8 @@ void IntersectionSplitter::_splitWay(long wayId, long nodeId)
           newWays.append(w);
         }
 
-        // Ensure that relation member order for the replaced ways are preserved. TODO
-        //_preserveWayRelationMemberOrder(splitWayId, newWays);
+        // Ensure that relation member order for the replaced ways are preserved.
+        _preserveWayRelationMemberOrder(splitWayId, newWays);
 
         // Make sure any ways that are part of relations continue to be part of those relations
         // after they're split.
@@ -307,27 +307,48 @@ void IntersectionSplitter::_preserveWayRelationMemberOrder(
     ConstWayPtr newWay = std::dynamic_pointer_cast<const Way>(newWays.at(newWayIndex));
     LOG_VART(newWay->getElementId());
 
-    // Get all the relations that the split way belongs to. Arbitrarily just looking at the
-    // first one. Not sure what to do in the case of membership to multiple relations yet.
+    // Get all the relations that the split way belongs to.
     const std::vector<ConstRelationPtr> containingRelations =
       RelationMemberUtils::getContainingRelationsConst(splitWayId, _map, true);
     LOG_VART(containingRelations.size());
     if (containingRelations.size() > 0)
     {
+      // Arbitrarily here just looking at the first one. Not sure what to do in the case of
+      // membership to multiple relations yet.
       ConstRelationPtr containingRelation = containingRelations.front();
       LOG_VART(containingRelation->getElementId());
 
-      // Get the members adjoined to the split way from the relation.
-      const std::set<ElementId> adjoiningMemberIds =
+      // Get the members adjoining the split way from the relation.
+      const QList<ElementId> adjoiningMemberIds =
         containingRelation->getAdjoiningMemberIds(splitWayId);
+      LOG_VART(adjoiningMemberIds);
       if (adjoiningMemberIds.size() == 2)
       {
-        LOG_VART(adjoiningMemberIds.size());
-        ConstWayPtr adjoiningWayMemberIndexedBefore = _map->getWay(*adjoiningMemberIds.begin());
+        ConstWayPtr adjoiningWayMemberIndexedBefore;
+        ConstWayPtr adjoiningWayMemberIndexedAfter;
+        int ctr = 0;
+        for (QList<ElementId>::const_iterator itr = adjoiningMemberIds.begin();
+             itr != adjoiningMemberIds.end(); ++itr)
+        {
+          if (ctr == 0)
+          {
+            adjoiningWayMemberIndexedBefore = _map->getWay(*itr);
+          }
+          else
+          {
+            adjoiningWayMemberIndexedAfter = _map->getWay(*itr);
+          }
+          ctr++;
+        }
+        LOG_VART(adjoiningWayMemberIndexedBefore.get());
         LOG_VART(adjoiningWayMemberIndexedBefore->getElementId());
-        // If the new way shares an endpoint with the member indexed before the way being replaced,
-        // reverse the copied list previously created. Otherwise, do nothing.
-        if (newWay->hasSharedNode(*adjoiningWayMemberIndexedBefore))
+        LOG_VART(adjoiningWayMemberIndexedAfter.get());
+        LOG_VART(adjoiningWayMemberIndexedAfter->getElementId());
+        LOG_VART(newWay->hasSharedEndNode(*adjoiningWayMemberIndexedBefore));
+        // If the new way created by the split shares an endpoint with the member indexed before the
+        // split way being replaced, reverse the copied way list previously created to preserve
+        // membership order. Otherwise, do nothing.
+        if (newWay->hasSharedEndNode(*adjoiningWayMemberIndexedBefore))
         {
           std::reverse(newWays.begin(), newWays.end());
         }

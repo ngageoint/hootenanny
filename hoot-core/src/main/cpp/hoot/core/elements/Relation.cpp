@@ -119,15 +119,7 @@ void Relation::clear()
 
 bool Relation::contains(const ElementId& eid) const
 {
-  const vector<RelationData::Entry>& members = getMembers();
-  for (size_t i = 0; i < members.size(); i++)
-  {
-    if (members[i].getElementId() == eid)
-    {
-      return true;
-    }
-  }
-  return false;
+  return (int)indexOf(eid) != -1;
 }
 
 size_t Relation::indexOf(const ElementId& eid) const
@@ -143,7 +135,7 @@ size_t Relation::indexOf(const ElementId& eid) const
   return -1;
 }
 
-ElementId Relation::memberAt(const size_t index) const
+ElementId Relation::memberIdAt(const size_t index) const
 {
   const std::vector<RelationData::Entry>& members = getMembers();
   if ((int)index >= 0 && index < members.size())
@@ -475,21 +467,34 @@ void Relation::_visitRw(ElementProvider& map, ConstElementVisitor& filter,
   }
 }
 
-std::set<ElementId> Relation::getAdjoiningMemberIds(const ElementId& memberId) const
+QList<ElementId> Relation::getAdjoiningMemberIds(const ElementId& memberId) const
 {
-  std::set<ElementId> ids;
+  LOG_VART(getMembers());
+  QList<ElementId> ids;
   const size_t memberIndex = indexOf(memberId);
+  LOG_VART(memberIndex);
   if ((int)memberIndex != -1)
   {
     if (!isFirstMember(memberId))
     {
-      ids.insert(memberAt(memberIndex - 1));
+      const ElementId memberBeforeId = memberIdAt(memberIndex - 1);
+      LOG_VART(memberBeforeId);
+      if (memberBeforeId.getType() != ElementType::Unknown)
+      {
+        ids.append(memberBeforeId);
+      }
     }
     if (!isLastMember(memberId))
     {
-      ids.insert(memberAt(memberIndex + 1));
+      const ElementId memberAfterId = memberIdAt(memberIndex + 1);
+      LOG_VART(memberAfterId);
+      if (memberAfterId.getType() != ElementType::Unknown)
+      {
+        ids.append(memberAfterId);
+      }
     }
   }
+  LOG_VART(ids);
   return ids;
 }
 

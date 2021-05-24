@@ -91,7 +91,7 @@ public:
    * @param index
    * @return
    */
-  ElementId memberAt(const size_t index) const;
+  ElementId memberIdAt(const size_t index) const;
 
   /**
    * TODO
@@ -153,7 +153,7 @@ public:
    * @param memberId
    * @return
    */
-  std::set<ElementId> getAdjoiningMemberIds(const ElementId& memberId) const;
+  QList<ElementId> getAdjoiningMemberIds(const ElementId& memberId) const;
 
   geos::geom::Envelope* getEnvelope(
     const std::shared_ptr<const ElementProvider>& ep) const override;

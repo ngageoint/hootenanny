@@ -212,6 +212,14 @@ public:
   bool hasSharedNode(const Way& other) const;
 
   /**
+   * Determines if two ways share the same end node
+   *
+   * @param other way to compare with
+   * @return true if the other way shares at least one end node with this way; false otherwise
+   */
+  bool hasSharedEndNode(const Way& other) const;
+
+  /**
    * Retrieves the IDs of shared nodes between two ways
    *
    * @param other way to compare with
