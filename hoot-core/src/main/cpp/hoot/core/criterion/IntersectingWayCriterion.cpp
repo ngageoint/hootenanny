@@ -24,39 +24,45 @@
  *
  * @copyright Copyright (C) 2016, 2017, 2018, 2020, 2021 Maxar (http://www.maxar.com/)
  */
-#include "ReversedRoadCriterion.h"
+#include "IntersectingWayCriterion.h"
 
 // hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/criterion/HighwayCriterion.h>
+#include <hoot/core/elements/WayUtils.h>
 
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementCriterion, ReversedRoadCriterion)
+HOOT_FACTORY_REGISTER(ElementCriterion, IntersectingWayCriterion)
 
-ReversedRoadCriterion::ReversedRoadCriterion(ConstOsmMapPtr map) :
-_map(map)
+IntersectingWayCriterion::IntersectingWayCriterion(
+  const QSet<long>& wayIds, ConstOsmMapPtr map, const ElementCriterionPtr& crit) :
+_wayIds(wayIds),
+_map(map),
+_crit(crit)
 {
 }
 
-bool ReversedRoadCriterion::isSatisfied(const ConstElementPtr& e) const
+bool IntersectingWayCriterion::isSatisfied(const ConstElementPtr& element) const
 {
-  // The only time reversed road relations have been seen so far is as a result of cropping, but
-  // think that it still needs to be supported.
-
-  if (!HighwayCriterion(_map).isSatisfied(e))
+  if (_crit && !_crit->isSatisfied(element))
+  {
+    return false;
+  }
+  // TODO
+  if (_wayIds.find(element->getId()) != _wayIds.end())
   {
     return false;
   }
 
-  const QString oneway = e->getTags()["oneway"].toLower();
-  if (oneway == "-1" || oneway == "reverse")
-  {
-    return true;
-  }
-
-  return false;
+  LOG_VART(element->getElementId());
+  QSet<long> intersectingWayIdsSet =
+    QVector<long>::fromStdVector(
+      WayUtils::getIntersectingWayIdsConst(element->getId(), _map)).toList().toSet();
+  LOG_VART(intersectingWayIdsSet);
+  // Make a copy, so we don't modify _roadIds with the call to intersect.
+  QSet<long> wayIds = _wayIds;
+  return wayIds.intersect(intersectingWayIdsSet).size() > 0;
 }
 
 }

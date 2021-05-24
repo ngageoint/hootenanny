@@ -26,9 +26,12 @@
  */
 
 // Hoot
-#include <hoot/core/criterion/ChainCriterion.h>
 #include <hoot/core/criterion/ElementTypeCriterion.h>
+#include <hoot/core/criterion/IntersectingWayCriterion.h>
+#include <hoot/core/criterion/NetworkTypeCriterion.h>
+#include <hoot/core/criterion/OrCriterion.h>
 #include <hoot/core/criterion/TagCriterion.h>
+#include <hoot/core/elements/ElementIdUtils.h>
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/algorithms/splitter/IntersectionSplitter.h>
@@ -46,9 +49,9 @@ namespace hoot
 class IntersectionSplitterTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(IntersectionSplitterTest);
-  CPPUNIT_TEST(runTest);
-  CPPUNIT_TEST(runTestSimple);
-  CPPUNIT_TEST(runRelationMemberOrderTest);
+//  CPPUNIT_TEST(runTest);
+//  CPPUNIT_TEST(runTestSimple);
+//  CPPUNIT_TEST(runRelationMemberOrderTest);
   CPPUNIT_TEST(runRelationMemberOrder2Test);
   CPPUNIT_TEST_SUITE_END();
 
@@ -122,15 +125,45 @@ public:
     // runRelationMemberOrderTest is a simpler starting point than this for debugging issues.
 
     OsmMapPtr rawMap(new OsmMap());
-    OsmMapReaderFactory::read(
-      rawMap, "test-files/cmd/glacial/RelationMergeTest/input1.osm");
+    OsmMapReaderFactory::read(rawMap, "test-files/cmd/glacial/RelationMergeTest/input2.osm");
 
+    // We're only interested in seeing the splitting done on this one relation in order to cut down
+    // on processing time.
+    ElementCriterionPtr relationCrit =
+      std::make_shared<ChainCriterion>(
+        std::make_shared<RelationCriterion>("route"),
+        std::make_shared<TagCriterion>("ref", "36"));
+
+    // Filter the input map down in a temp map to just the relation in question, so we can get its
+    // road member IDs.
+    OsmMapPtr tempMap(new OsmMap());
+    CopyMapSubsetOp(rawMap, relationCrit).apply(tempMap);
+    LOG_VART(tempMap->size());
+    const RelationMap& relations = tempMap->getRelations();
+    RelationPtr relation = relations.begin()->second;
+    // Get all the road member IDs for the relation.
+    const QSet<long> roadMemberIds =
+      ElementIdUtils::elementIdsToIds(relation->getMemberIds(ElementType::Way));
+    LOG_VART(roadMemberIds);
+
+    // Create a criterion for finding all ways that intersect the member roads.
+    ElementCriterionPtr intersectingCrit =
+      std::make_shared<IntersectingWayCriterion>(roadMemberIds, rawMap);
+
+    // Create a criterion for what types of features are splittable (same used by
+    // IntersectionSplitter).
+    ElementCriterionPtr intersectionSplittableCrit = std::make_shared<NetworkTypeCriterion>(rawMap);
+
+    // Filter the map to process down to the relation we're examining plus all roads that intersect
+    // it.
     OsmMapPtr filteredMap(new OsmMap());
     CopyMapSubsetOp(
       rawMap,
-      std::make_shared<ChainCriterion>(
-        std::make_shared<RelationCriterion>("route"),
-        std::make_shared<TagCriterion>("ref", "36")))
+      // The filtered map only contains features that are the relation we're examining or a
+      // splittable feature that intersects one of the relations road members.
+      std::make_shared<OrCriterion>(
+        relationCrit,
+        std::make_shared<ChainCriterion>(intersectingCrit, intersectionSplittableCrit)))
       .apply(filteredMap);
     LOG_VART(filteredMap->size());
 
@@ -138,10 +171,6 @@ public:
 
     MapProjector::projectToWgs84(filteredMap);
     OsmMapWriterFactory::write(filteredMap, _outputPath + "runRelationMemberOrder2TestOut.osm");
-
-    HOOT_FILE_EQUALS(
-      _inputPath + "runRelationMemberOrder2TestOut.osm",
-      _outputPath + "runRelationMemberOrder2TestOut.osm");
   }
 };
 

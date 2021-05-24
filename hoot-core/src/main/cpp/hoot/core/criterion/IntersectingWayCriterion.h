@@ -22,53 +22,61 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
  */
-#ifndef HIGHWAYCRITERION_H
-#define HIGHWAYCRITERION_H
+#ifndef INTERSECTING_WAY_CRITERION_H
+#define INTERSECTING_WAY_CRITERION_H
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/criterion/GeometryTypeCriterion.h>
 #include <hoot/core/elements/ConstOsmMapConsumer.h>
-#include <hoot/core/criterion/ConflatableElementCriterion.h>
+#include <hoot/core/elements/OsmMap.h>
 
 namespace hoot
 {
 
 /**
- * A criterion that will either keep or remove road matches.
+ * TODO
  */
-class HighwayCriterion : public ConflatableElementCriterion, public ConstOsmMapConsumer
+class IntersectingWayCriterion : public GeometryTypeCriterion, public ConstOsmMapConsumer
 {
 public:
 
-  static QString className() { return "hoot::HighwayCriterion"; }
+  static QString className() { return "hoot::IntersectingWayCriterion"; }
 
-  HighwayCriterion() = default;
-  HighwayCriterion(ConstOsmMapPtr map);
-  ~HighwayCriterion() = default;
+  IntersectingWayCriterion() = default;
+  IntersectingWayCriterion(
+    const QSet<long>& wayIds, ConstOsmMapPtr map,
+    const ElementCriterionPtr& crit = ElementCriterionPtr());
+  virtual ~IntersectingWayCriterion() = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
 
-  GeometryType getGeometryType() const override { return GeometryType::Line; }
+  ElementCriterionPtr clone() override
+  { return ElementCriterionPtr(new IntersectingWayCriterion(_wayIds, _map, _crit)); }
 
-  ElementCriterionPtr clone() override { return ElementCriterionPtr(new HighwayCriterion()); }
+  GeometryType getGeometryType() const override { return GeometryType::Line; }
 
   void setOsmMap(const OsmMap* map) override { _map = map->shared_from_this(); }
 
-  bool supportsSpecificConflation() const override { return true; }
-
-  QStringList getChildCriteria() const override;
-
   QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }
-  QString getDescription() const override { return "Identifies roads"; }
   QString toString() const override { return className(); }
+  QString getDescription() const override { return "TODO"; }
 
-private:
+  void setWayIds(const QSet<long>& ids) { _wayIds = ids; }
+
+protected:
+
+  // TODO
+  mutable QSet<long> _wayIds;
 
   ConstOsmMapPtr _map;
+
+  // TODO
+  ElementCriterionPtr _crit;
 };
 
 }
-#endif // HIGHWAYCRITERION_H
+
+#endif // INTERSECTING_WAY_CRITERION_H

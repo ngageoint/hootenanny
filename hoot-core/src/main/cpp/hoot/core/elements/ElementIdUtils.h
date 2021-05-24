@@ -52,6 +52,14 @@ public:
   static QSet<ElementId> elementsToElementIds(const std::vector<ElementPtr>& elements);
 
   /**
+   * TODO
+   *
+   * @param elementIds
+   * @return
+   */
+  static QSet<long> elementIdsToIds(const std::set<ElementId>& elementIds);
+
+  /**
    * Determines if a collection of elements contains an element with a particular element ID
    *
    * @param id the element ID to search for

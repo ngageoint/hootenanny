@@ -22,42 +22,51 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
  */
-#ifndef ORCRITERION_H
-#define ORCRITERION_H
+#ifndef NETWORK_TYPE_CRITERION_H
+#define NETWORK_TYPE_CRITERION_H
 
-#include <hoot/core/criterion/ChainCriterion.h>
+// Hoot
+#include <hoot/core/criterion/GeometryTypeCriterion.h>
+#include <hoot/core/elements/ConstOsmMapConsumer.h>
+#include <hoot/core/elements/OsmMap.h>
 
 namespace hoot
 {
 
 /**
- * Filters an element if any of the child criteria return true.
+ * TODO
  */
-class OrCriterion : public ChainCriterion
+class NetworkTypeCriterion : public GeometryTypeCriterion, public ConstOsmMapConsumer
 {
 public:
 
-  static QString className() { return "hoot::OrCriterion"; }
+  static QString className() { return "hoot::NetworkTypeCriterion"; }
 
-  OrCriterion() = default;
-  OrCriterion(ElementCriterion* child1, ElementCriterion* child2);
-  OrCriterion(ElementCriterionPtr child1, ElementCriterionPtr child2);
-  ~OrCriterion() = default;
+  NetworkTypeCriterion() = default;
+  NetworkTypeCriterion(ConstOsmMapPtr map);
+  ~NetworkTypeCriterion() = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
 
-  ElementCriterionPtr clone() override;
+  ElementCriterionPtr clone() override
+  { return ElementCriterionPtr(new NetworkTypeCriterion(_map)); }
 
-  QString getDescription() const override { return "Allows for combining criteria (logical OR)"; }
-  QString toString() const override;
+  GeometryType getGeometryType() const override { return GeometryType::Line; }
+
+  void setOsmMap(const OsmMap* map) override { _map = map->shared_from_this(); }
+
   QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }
-};
+  QString toString() const override { return className(); }
+  QString getDescription() const override { return "TODO"; }
 
-using OrCriterionPtr = std::shared_ptr<OrCriterion>;
+private:
+
+  ConstOsmMapPtr _map;
+};
 
 }
 
-#endif // ORCRITERION_H
+#endif // NETWORK_TYPE_CRITERION_H

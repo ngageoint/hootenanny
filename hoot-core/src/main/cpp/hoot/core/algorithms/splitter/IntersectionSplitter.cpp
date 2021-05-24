@@ -30,12 +30,11 @@
 // Hoot
 #include <hoot/core/algorithms/linearreference/WayLocation.h>
 #include <hoot/core/algorithms/splitter/WaySplitter.h>
-#include <hoot/core/conflate/matching/NodeMatcher.h>
+#include <hoot/core/criterion/NetworkTypeCriterion.h>
 #include <hoot/core/elements/ElementIdUtils.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/RelationMemberUtils.h>
 #include <hoot/core/elements/Way.h>
-#include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
@@ -80,30 +79,7 @@ void IntersectionSplitter::_mapNodesToWays()
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
     std::shared_ptr<Way> w = it->second;
-
-    bool isNetworkType = false;
-
-    // Tying this check to NodeMatcher::isNetworkFeatureType, since both have similar requirements.
-    // Its possible in the future, the list of criterion checked may diverge between the two.
-    if (NodeMatcher::isNetworkFeatureType(w))
-    {
-      isNetworkType  = true;
-    }
-    // if the way isn't a network type, maybe it is part of a relation that is a network type.
-    else
-    {
-      const set<long>& relations =
-        _map->getIndex().getElementToRelationMap()->getRelationByElement(w->getElementId());
-      LOG_VART(relations.size());
-      foreach (long rid, relations)
-      {
-        ElementPtr r = _map->getRelation(rid);
-        if (NodeMatcher::isNetworkFeatureType(r))
-        {
-          isNetworkType  = true;
-        }
-      }
-    }
+    const bool isNetworkType = NetworkTypeCriterion(_map).isSatisfied(w);
 
     LOG_VART(w->getElementId());
     LOG_VART(isNetworkType);

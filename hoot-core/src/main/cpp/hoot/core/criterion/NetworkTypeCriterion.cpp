@@ -22,42 +22,50 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2020, 2021 Maxar (http://www.maxar.com/)
  */
-#ifndef ORCRITERION_H
-#define ORCRITERION_H
+#include "NetworkTypeCriterion.h"
 
-#include <hoot/core/criterion/ChainCriterion.h>
+// hoot
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/conflate/matching/NodeMatcher.h>
+#include <hoot/core/index/OsmMapIndex.h>
 
 namespace hoot
 {
 
-/**
- * Filters an element if any of the child criteria return true.
- */
-class OrCriterion : public ChainCriterion
+HOOT_FACTORY_REGISTER(ElementCriterion, NetworkTypeCriterion)
+
+NetworkTypeCriterion::NetworkTypeCriterion(ConstOsmMapPtr map) :
+_map(map)
 {
-public:
+}
 
-  static QString className() { return "hoot::OrCriterion"; }
+bool NetworkTypeCriterion::isSatisfied(const ConstElementPtr& element) const
+{
+  if (element->getElementType() != ElementType::Way)
+  {
+    return false;
+  }
 
-  OrCriterion() = default;
-  OrCriterion(ElementCriterion* child1, ElementCriterion* child2);
-  OrCriterion(ElementCriterionPtr child1, ElementCriterionPtr child2);
-  ~OrCriterion() = default;
+  if (NodeMatcher::isNetworkFeatureType(element))
+  {
+    return true;
+  }
 
-  bool isSatisfied(const ConstElementPtr& e) const override;
+  const std::set<long>& relations =
+    _map->getIndex().getElementToRelationMap()->getRelationByElement(element->getElementId());
+  LOG_VART(relations.size());
+  foreach (long relationId, relations)
+  {
+    if (NodeMatcher::isNetworkFeatureType(_map->getRelation(relationId)))
+    {
+      return true;
+    }
+  }
 
-  ElementCriterionPtr clone() override;
-
-  QString getDescription() const override { return "Allows for combining criteria (logical OR)"; }
-  QString toString() const override;
-  QString getName() const override { return className(); }
-  QString getClassName() const override { return className(); }
-};
-
-using OrCriterionPtr = std::shared_ptr<OrCriterion>;
+  return false;
+}
 
 }
 
-#endif // ORCRITERION_H

@@ -250,6 +250,34 @@ public:
   static std::vector<WayPtr> getIntersectingWays(const long wayId, const OsmMapPtr& map);
 
   /**
+   * TODO
+   *
+   * @param wayId
+   * @param map
+   * @return
+   */
+  static std::vector<long> getIntersectingWayIds(const long wayId, const OsmMapPtr& map);
+
+  /**
+   * Determines the ways intersecting an input way
+   *
+   * @param wayId the ID of the way to find intersecting ways for
+   * @param map the map containing the input and potentially intersecting ways
+   * @return a collection of const ways
+   */
+  static std::vector<ConstWayPtr> getIntersectingWaysConst(
+    const long wayId, const ConstOsmMapPtr& map);
+
+  /**
+   * TODO
+   *
+   * @param wayId
+   * @param map
+   * @return
+   */
+  static std::vector<long> getIntersectingWayIdsConst(const long wayId, const ConstOsmMapPtr& map);
+
+  /**
    * This determines if a node belongs to a way that shares any nodes with another way.
    *
    * @param nodeId ID of the node to examine
