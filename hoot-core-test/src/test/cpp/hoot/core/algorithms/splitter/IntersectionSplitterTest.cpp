@@ -26,6 +26,9 @@
  */
 
 // Hoot
+#include <hoot/core/criterion/ChainCriterion.h>
+#include <hoot/core/criterion/ElementTypeCriterion.h>
+#include <hoot/core/criterion/TagCriterion.h>
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/algorithms/splitter/IntersectionSplitter.h>
@@ -33,6 +36,7 @@
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
+#include <hoot/core/ops/CopyMapSubsetOp.h>
 
 #include <hoot/core/TestUtils.h>
 
@@ -45,6 +49,7 @@ class IntersectionSplitterTest : public HootTestFixture
   CPPUNIT_TEST(runTest);
   CPPUNIT_TEST(runTestSimple);
   CPPUNIT_TEST(runRelationMemberOrderTest);
+  CPPUNIT_TEST(runRelationMemberOrder2Test);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -109,6 +114,34 @@ public:
     HOOT_FILE_EQUALS(
       _inputPath + "runRelationMemberOrderTestOut.osm",
       _outputPath + "runRelationMemberOrderTestOut.osm");
+  }
+
+  void runRelationMemberOrder2Test()
+  {
+    // This is similar to runRelationMemberOrderTest but with more of the original relation intact.
+    // runRelationMemberOrderTest is a simpler starting point than this for debugging issues.
+
+    OsmMapPtr rawMap(new OsmMap());
+    OsmMapReaderFactory::read(
+      rawMap, "test-files/cmd/glacial/RelationMergeTest/input1.osm");
+
+    OsmMapPtr filteredMap(new OsmMap());
+    CopyMapSubsetOp(
+      rawMap,
+      std::make_shared<ChainCriterion>(
+        std::make_shared<RelationCriterion>("route"),
+        std::make_shared<TagCriterion>("ref", "36")))
+      .apply(filteredMap);
+    LOG_VART(filteredMap->size());
+
+    IntersectionSplitter::splitIntersections(filteredMap);
+
+    MapProjector::projectToWgs84(filteredMap);
+    OsmMapWriterFactory::write(filteredMap, _outputPath + "runRelationMemberOrder2TestOut.osm");
+
+    HOOT_FILE_EQUALS(
+      _inputPath + "runRelationMemberOrder2TestOut.osm",
+      _outputPath + "runRelationMemberOrder2TestOut.osm");
   }
 };
 
