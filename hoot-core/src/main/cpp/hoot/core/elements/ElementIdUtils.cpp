@@ -51,20 +51,6 @@ QSet<ElementId> ElementIdUtils::elementsToElementIds(const std::vector<ElementPt
   return ids;
 }
 
-bool ElementIdUtils::elementsAreAllOfType(
-  const ElementType& type, const QList<ElementPtr>& elements)
-{
-  for (QList<ElementPtr>::const_iterator itr = elements.begin(); itr != elements.end(); ++itr)
-  {
-    ElementPtr element = *itr;
-    if (element && element->getElementType() != type)
-    {
-      return false;
-    }
-  }
-  return true;
-}
-
 bool ElementIdUtils::containsElementId(
   const ElementId& id, const QList<ElementPtr>& elements, int& index)
 {
