@@ -60,55 +60,11 @@ public:
   explicit Relation(const Relation& from);
   ~Relation() = default;
 
+  Element* clone() const override { return new Relation(*this); }
+
   void addElement(const QString& role, const std::shared_ptr<const Element>& e);
   void addElement(const QString& role, ElementType t, long id);
   void addElement(const QString& role, ElementId);
-
-  /**
-   * Removes members, tags, type and circularError.
-   */
-  void clear() override;
-
-  Element* clone() const override { return new Relation(*this); }
-
-  /**
-   * Returns true if this relation contains the specified ElementId. This does not recursively
-   * search for the element.
-   */
-  bool contains(const ElementId& eid) const;
-
-  /**
-   * Finds the index of a member
-   *
-   * @param eid ID of the relation member
-   * @return a numerical index
-   */
-  size_t indexOf(const ElementId& eid) const;
-
-  /**
-   * TODO
-   *
-   * @param index
-   * @return
-   */
-  ElementId memberIdAt(const size_t index) const;
-
-  /**
-   * TODO
-   *
-   * @param eid
-   * @return
-   */
-  bool isFirstMember(const ElementId& eid) const;
-
-  /**
-   * TODO
-   *
-   * @param eid
-   * @return
-   */
-  bool isLastMember(const ElementId& eid) const;
-
   /**
    * Inserts a relation member
    *
@@ -117,67 +73,6 @@ public:
    * @param pos position in the relation to insert the member
    */
   void insertElement(const QString& role, const ElementId& elementId, size_t pos);
-
-  /**
-   * Returns the number of member elements with the given relation role
-   *
-   * @param role role by which to examine elements
-   * @return the number of member elements with the specified role
-   */
-  int numElementsByRole(const QString& role) const;
-
-  /**
-   * Retrieves all members with a particular role
-   *
-   * @param role role to search for
-   * @return a collection of members
-   */
-  std::vector<RelationData::Entry> getElementsByRole(const QString& role) const;
-
-  const std::vector<RelationData::Entry>& getMembers() const
-  { return _relationData->getElements(); }
-
-  size_t getMemberCount() const { return _relationData->getElements().size(); }
-
-  /**
-   * Returns the IDs of members
-   *
-   * @param elementType optional element type of element Ids to return
-   * @return a collection of element IDs
-   */
-  std::set<ElementId> getMemberIds(const ElementType& elementType = ElementType::Unknown) const;
-
-  /**
-   * TODO
-   *
-   * @param memberId
-   * @return
-   */
-  QList<ElementId> getAdjoiningMemberIds(const ElementId& memberId) const;
-
-  geos::geom::Envelope* getEnvelope(
-    const std::shared_ptr<const ElementProvider>& ep) const override;
-  const geos::geom::Envelope& getEnvelopeInternal(
-    const std::shared_ptr<const ElementProvider>& ep) const override;
-
-  ElementType getElementType() const override { return ElementType(ElementType::Relation); }
-
-  QString getType() const { return _relationData->getType(); }
-
-  /**
-   * Returns true if this is a multipolygon type. No checking is done to determine if the geometry
-   * is valid.
-   */
-  bool isMultiPolygon() const
-  { return _relationData->getType() == MetadataTags::RelationMultiPolygon(); }
-
-  /**
-   * Returns true if this is a review.
-   */
-  bool isReview() const { return _relationData->getType() == MetadataTags::RelationReview(); }
-
-  bool isRestriction() const
-  { return _relationData->getType() == MetadataTags::RelationRestriction(); }
 
   /**
    * Remove all members that meet the specified criteria. If no members meet the criteria then
@@ -195,7 +90,6 @@ public:
     const std::shared_ptr<const Element>& from, const std::shared_ptr<const Element>& to);
   void replaceElement(const ConstElementPtr& from, const QList<ElementPtr>& to);
   void replaceElement(const ElementId& from, const ElementId& to);
-
   /**
    * Replaces all instances of old with the values in the collection defined by start/end. Order is
    * maintained s/t old entries are replaced by new values in order and the order of the existing
@@ -210,8 +104,110 @@ public:
   template<typename IT>
   void replaceElements(RelationData::Entry old, IT start, IT end);
 
+  const std::vector<RelationData::Entry>& getMembers() const
+  { return _relationData->getElements(); }
+  size_t getMemberCount() const { return _relationData->getElements().size(); }
   void setMembers(const std::vector<RelationData::Entry>& members);
 
+  /**
+   * Removes members, tags, type and circularError.
+   */
+  void clear() override;
+
+  /**
+   * Returns true if this relation contains the specified ElementId. This does not recursively
+   * search for the element.
+   */
+  bool contains(const ElementId& eid) const;
+  /**
+   * Finds the index of a member
+   *
+   * @param eid ID of the relation member
+   * @return a numerical index
+   */
+  size_t indexOf(const ElementId& eid) const;
+  /**
+   * Retrieves the relation member element at a specified index
+   *
+   * @param index the index to retrieve the element member from
+   * @return a valid element, if found; an invalid element otherwise
+   */
+  ElementId memberIdAt(const size_t index) const;
+  /**
+   * Determines if the first relation member has a specified ID
+   *
+   * @param eid the element ID to search for
+   * @return true if an element having the specified ID is contained at the first relation member
+   * location; false otherwise
+   */
+  bool isFirstMember(const ElementId& eid) const;
+  /**
+   * Determines if the last relation member has a specified ID
+   *
+   * @param eid the element ID to search for
+   * @return true if an element having the specified ID is contained at the last relation member
+   * location; false otherwise
+   */
+  bool isLastMember(const ElementId& eid) const;
+  /**
+   * Returns the IDs of members
+   *
+   * @param elementType optional element type of element Ids to return
+   * @return a collection of element IDs
+   */
+  std::set<ElementId> getMemberIds(const ElementType& elementType = ElementType::Unknown) const;
+  /**
+   * Retrieves the member element IDs for members placed immediately before and after the member
+   * element with the specified ID
+   *
+   * @param memberId the ID of the member element to retrieve adjoining member element IDs for
+   * @return If a member with the specified ID exists 1) and is neither the first nor last member, a
+   * list with two elements IDs where the first ID is the ID of the member element directly
+   * preceding the element with the specified ID and the second ID is the ID of the member directly
+   * succeeding the element with the specified ID. 2) and is the first member, a list with one
+   * element ID where the ID is the ID of the member directly succeeding the element with the
+   * specified ID. 3) and is the last member, a list with one element ID where the ID is the ID of
+   * the member directly preceding the element with the specified ID. If the relation contains no
+   * member with the specified ID, then an empty list is returned.
+   */
+  QList<ElementId> getAdjoiningMemberIds(const ElementId& memberId) const;
+
+  /**
+   * Returns the number of member elements with the given relation role
+   *
+   * @param role role by which to examine elements
+   * @return the number of member elements with the specified role
+   */
+  int numElementsByRole(const QString& role) const;
+  /**
+   * Retrieves all members with a particular role
+   *
+   * @param role role to search for
+   * @return a collection of members
+   */
+  std::vector<RelationData::Entry> getElementsByRole(const QString& role) const;
+
+  geos::geom::Envelope* getEnvelope(
+    const std::shared_ptr<const ElementProvider>& ep) const override;
+  const geos::geom::Envelope& getEnvelopeInternal(
+    const std::shared_ptr<const ElementProvider>& ep) const override;
+
+  ElementType getElementType() const override { return ElementType(ElementType::Relation); }
+
+  QString getType() const { return _relationData->getType(); }
+
+  /**
+   * Returns true if this is a multipolygon type. No checking is done to determine if the geometry
+   * is valid.
+   */
+  bool isMultiPolygon() const
+  { return _relationData->getType() == MetadataTags::RelationMultiPolygon(); }
+  /**
+   * Returns true if this is a review.
+   */
+  bool isReview() const { return _relationData->getType() == MetadataTags::RelationReview(); }
+  bool isRestriction() const
+  { return _relationData->getType() == MetadataTags::RelationRestriction(); }
   /**
    * Sets the "type" of the relation. See the OSM wiki [1] for a detailed description. Example
    * types include "building", "multipolygon" and "multilinestring".

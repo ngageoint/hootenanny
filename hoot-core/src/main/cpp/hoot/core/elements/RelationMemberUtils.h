@@ -62,7 +62,7 @@ public:
    *
    * @param map map owning the input element
    * @param childId element ID of the input element
-   * @param ignoreReviewRelations TODO
+   * @param ignoreReviewRelations if true, review relations are ignored when determining membership
    * @return true if the element is a member of a relation
    */
   static bool isMemberOfRelation(
@@ -152,7 +152,7 @@ public:
    *
    * @param childId ID of the child element
    * @param map map the child element belongs to
-   * @param ignoreReviewRelations TODO
+   * @param ignoreReviewRelations if true, review relations are ignored when determining membership
    * @return a collection of relations
    */
   static std::vector<RelationPtr> getContainingRelations(
@@ -163,7 +163,7 @@ public:
    *
    * @param childId ID of the child element
    * @param map map the child element belongs to
-   * @param ignoreReviewRelations TODO
+   * @param ignoreReviewRelations if true, review relations are ignored when determining membership
    * @return a collection of const relations
    */
   static std::vector<ConstRelationPtr> getContainingRelationsConst(
@@ -174,7 +174,7 @@ public:
    *
    * @param childId ID of the child element
    * @param map map the child element belongs to
-   * @param ignoreReviewRelations TODO
+   * @param ignoreReviewRelations if true, review relations are ignored when determining membership
    * @return a relation count
    */
   static int getContainingRelationCount(

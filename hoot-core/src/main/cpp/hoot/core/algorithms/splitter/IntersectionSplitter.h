@@ -94,10 +94,11 @@ private:
   void _splitWay(long wayId, long nodeId);
 
   /*
-   * TODO
+   * Checks relations a split way belongs to and attempts to preserve membership order
    *
-   * @param splitWayId
-   * @param newWays
+   * @param splitWayId the ID of way that has been split
+   * @param newWays the ways replacing the way that has been split.
+   * @note This may not be 100% correct yet.
    */
   void _preserveWayRelationMemberOrder(
     const ElementId& splitWayId, QList<ElementPtr>& newWays) const;
