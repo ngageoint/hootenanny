@@ -85,7 +85,7 @@ public:
 
   void runRelationMemberOrder2Test()
   {
-    // This tests the member ordering of a relation identical to that in RelationMergeTest, but its
+    // This tests the member ordering of a relation identical to one in RelationMergeTest, but its
     // easier to debug within this test.
 
     OsmMapPtr rawMap(new OsmMap());
@@ -98,13 +98,13 @@ public:
         std::make_shared<RelationCriterion>("route"),
         std::make_shared<TagCriterion>("ref", "36"));
 
-    // Filter the input map down in a temp map to just the relation in question, so we can get its
-    // road member IDs.
+    // Filter the input map down to a temp map with just the relation in question.
     OsmMapPtr tempMap(new OsmMap());
     CopyMapSubsetOp(rawMap, relationCrit).apply(tempMap);
     LOG_VART(tempMap->size());
     const RelationMap& relations = tempMap->getRelations();
     RelationPtr relation = relations.begin()->second;
+
     // Get all the road member IDs for the relation.
     const QSet<long> roadMemberIds =
       ElementIdUtils::elementIdsToIds2(relation->getMemberIds2(ElementType::Way));
@@ -118,13 +118,11 @@ public:
     // IntersectionSplitter).
     ElementCriterionPtr intersectionSplittableCrit = std::make_shared<NetworkTypeCriterion>(rawMap);
 
-    // Filter the map to process down to the relation we're examining plus all roads that intersect
-    // it.
+    // Filter the map to process down to the relation we're examining and its members plus all
+    // splittable features that intersect those members.
     OsmMapPtr filteredMap(new OsmMap());
     CopyMapSubsetOp(
       rawMap,
-      // The filtered map only contains features that are the relation we're examining or a
-      // splittable feature that intersects one of the relations road members.
       std::make_shared<OrCriterion>(
         relationCrit,
         std::make_shared<ChainCriterion>(intersectingCrit, intersectionSplittableCrit)))
