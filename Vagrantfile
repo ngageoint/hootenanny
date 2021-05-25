@@ -12,6 +12,13 @@ else
   puts '## Using NFS for file syncing'
 end
 
+$rsyncShare = ENV['RSYNCSHARE']
+if $rsyncShare.nil?
+  $rsyncShare = false
+else
+  puts '## Using RSYNC for file syncing'
+end
+
 $fouoShare = ENV['FOUOSHARE']
 if $fouoShare.nil?
   $fouoShare = false
@@ -153,6 +160,11 @@ Vagrant.configure(2) do |config|
       if $fouoShare
         config.vm.synced_folder "/fouo", "/fouo", type: "nfs"
       end
+    elsif $rsyncShare
+      config.vm.synced_folder ".", "/home/vagrant/hoot", type: "rsync", rsync__exclude: ['.vagrant/', '.git/']
+      if $fouoShare
+        config.vm.synced_folder "/fouo", "/fouo", type: "rsync"
+      end
     else
       config.vm.synced_folder ".", "/home/vagrant/hoot"
       if $fouoShare
@@ -240,9 +252,6 @@ Vagrant.configure(2) do |config|
   # Provider-specific configuration so you can fine-tune various
   # backing providers for Vagrant. These expose provider-specific options.
   config.vm.provider "virtualbox" do |vb|
-    # Display the VirtualBox GUI when booting the machine
-    #vb.gui = true
-
     # Customize the amount of memory on the VM:
     vb.memory = $vbRam
     vb.cpus = $vbCpu
