@@ -44,10 +44,13 @@
 namespace hoot
 {
 
+/*
+ * Moved this out of IntersectionSplitterTest due to its runtime.
+ */
 class IntersectionSplitterRelationMemberOrderTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(IntersectionSplitterRelationMemberOrderTest);
-  CPPUNIT_TEST(runRelationMemberOrderTest);
+  //CPPUNIT_TEST(runRelationMemberOrderTest);
   CPPUNIT_TEST(runRelationMemberOrder2Test);
   CPPUNIT_TEST_SUITE_END();
 
@@ -58,7 +61,6 @@ public:
     "test-files/algorithms/splitter/IntersectionSplitterRelationMemberOrderTest/",
     "test-output/algorithms/splitter/IntersectionSplitterRelationMemberOrderTest/")
   {
-    setResetType(ResetBasic);
   }
 
   void runRelationMemberOrderTest()
@@ -83,10 +85,8 @@ public:
 
   void runRelationMemberOrder2Test()
   {
-    // This tests the member ordering of a relation identical to that in RelationMergeTest, so we
-    // disable it by default. Its left here for debugging purposes. Debugging intersection splitter
-    // relation member ordering issues from a test like this is easier than from a command line test
-    // with a large amount of input data, like RelationMergeTest.
+    // This tests the member ordering of a relation identical to that in RelationMergeTest, but its
+    // easier to debug within this test.
 
     OsmMapPtr rawMap(new OsmMap());
     OsmMapReaderFactory::read(rawMap, "test-files/cmd/glacial/RelationMergeTest/input2.osm");
