@@ -26,20 +26,11 @@
  */
 
 // Hoot
-#include <hoot/core/criterion/ElementTypeCriterion.h>
-#include <hoot/core/criterion/IntersectingWayCriterion.h>
-#include <hoot/core/criterion/NetworkTypeCriterion.h>
-#include <hoot/core/criterion/OrCriterion.h>
-#include <hoot/core/criterion/TagCriterion.h>
-#include <hoot/core/elements/ElementIdUtils.h>
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/algorithms/splitter/IntersectionSplitter.h>
-#include <hoot/core/io/OsmMapReaderFactory.h>
-#include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
-#include <hoot/core/ops/CopyMapSubsetOp.h>
 
 #include <hoot/core/TestUtils.h>
 
@@ -49,10 +40,8 @@ namespace hoot
 class IntersectionSplitterTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(IntersectionSplitterTest);
-//  CPPUNIT_TEST(runTest);
-//  CPPUNIT_TEST(runTestSimple);
-//  CPPUNIT_TEST(runRelationMemberOrderTest);
-  CPPUNIT_TEST(runRelationMemberOrder2Test);
+  CPPUNIT_TEST(runTest);
+  CPPUNIT_TEST(runTestSimple);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -97,80 +86,6 @@ public:
 
     HOOT_FILE_EQUALS(_inputPath + "SimpleSplitterExpected.osm",
                      _outputPath + "SimpleSplitterOutput.osm");
-  }
-
-  void runRelationMemberOrderTest()
-  {
-    // This test checks that relation member order is preserved after splitting. Examine the route
-    // relation with tag, "ref=36". Its members consist of intersection split roads, but they should
-    // retain the ordering of the input relation.
-
-    OsmMapPtr map(new OsmMap());
-    OsmMapReaderFactory::read(
-      map, "test-files/cases/reference/unifying/multiple/highway-3906/Input1.osm");
-
-    IntersectionSplitter::splitIntersections(map);
-
-    MapProjector::projectToWgs84(map);
-    OsmMapWriterFactory::write(map, _outputPath + "runRelationMemberOrderTestOut.osm");
-
-    HOOT_FILE_EQUALS(
-      _inputPath + "runRelationMemberOrderTestOut.osm",
-      _outputPath + "runRelationMemberOrderTestOut.osm");
-  }
-
-  void runRelationMemberOrder2Test()
-  {
-    // This is similar to runRelationMemberOrderTest but with more of the original relation intact.
-    // runRelationMemberOrderTest is a simpler starting point than this for debugging issues.
-
-    OsmMapPtr rawMap(new OsmMap());
-    OsmMapReaderFactory::read(rawMap, "test-files/cmd/glacial/RelationMergeTest/input2.osm");
-
-    // We're only interested in seeing the splitting done on this one relation in order to cut down
-    // on processing time.
-    ElementCriterionPtr relationCrit =
-      std::make_shared<ChainCriterion>(
-        std::make_shared<RelationCriterion>("route"),
-        std::make_shared<TagCriterion>("ref", "36"));
-
-    // Filter the input map down in a temp map to just the relation in question, so we can get its
-    // road member IDs.
-    OsmMapPtr tempMap(new OsmMap());
-    CopyMapSubsetOp(rawMap, relationCrit).apply(tempMap);
-    LOG_VART(tempMap->size());
-    const RelationMap& relations = tempMap->getRelations();
-    RelationPtr relation = relations.begin()->second;
-    // Get all the road member IDs for the relation.
-    const QSet<long> roadMemberIds =
-      ElementIdUtils::elementIdsToIds(relation->getMemberIds(ElementType::Way));
-    LOG_VART(roadMemberIds);
-
-    // Create a criterion for finding all ways that intersect the member roads.
-    ElementCriterionPtr intersectingCrit =
-      std::make_shared<IntersectingWayCriterion>(roadMemberIds, rawMap);
-
-    // Create a criterion for what types of features are splittable (same used by
-    // IntersectionSplitter).
-    ElementCriterionPtr intersectionSplittableCrit = std::make_shared<NetworkTypeCriterion>(rawMap);
-
-    // Filter the map to process down to the relation we're examining plus all roads that intersect
-    // it.
-    OsmMapPtr filteredMap(new OsmMap());
-    CopyMapSubsetOp(
-      rawMap,
-      // The filtered map only contains features that are the relation we're examining or a
-      // splittable feature that intersects one of the relations road members.
-      std::make_shared<OrCriterion>(
-        relationCrit,
-        std::make_shared<ChainCriterion>(intersectingCrit, intersectionSplittableCrit)))
-      .apply(filteredMap);
-    LOG_VART(filteredMap->size());
-
-    IntersectionSplitter::splitIntersections(filteredMap);
-
-    MapProjector::projectToWgs84(filteredMap);
-    OsmMapWriterFactory::write(filteredMap, _outputPath + "runRelationMemberOrder2TestOut.osm");
   }
 };
 

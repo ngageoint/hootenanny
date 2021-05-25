@@ -508,4 +508,14 @@ bool Way::hasSharedEndNode(const Way& other) const
     (nodeIds1.at(nodeIds1.size() - 1) == nodeIds2.at(0));
 }
 
+bool Way::immediatelyPrecedes(const Way& other) const
+{
+  return getFirstNodeId() == other.getLastNodeId();
+}
+
+bool Way::immediatelySucceeds(const Way& other) const
+{
+  return getLastNodeId() == other.getFirstNodeId();
+}
+
 }

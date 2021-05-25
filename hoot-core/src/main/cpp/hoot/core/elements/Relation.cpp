@@ -202,6 +202,21 @@ std::set<ElementId> Relation::getMemberIds(const ElementType& elementType) const
   return memberIds;
 }
 
+std::vector<ElementId> Relation::getMemberIds2(const ElementType& elementType) const
+{
+  std::vector<ElementId> memberIds;
+  const vector<RelationData::Entry>& members = getMembers();
+  for (size_t i = 0; i < members.size(); i++)
+  {
+    RelationData::Entry member = members[i];
+    if (elementType == ElementType::Unknown || member.getElementId().getType() == elementType)
+    {
+      memberIds.emplace_back(member.getElementId());
+    }
+  }
+  return memberIds;
+}
+
 Envelope* Relation::getEnvelope(const std::shared_ptr<const ElementProvider>& ep) const
 {
   return new Envelope(getEnvelopeInternal(ep));

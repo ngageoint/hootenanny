@@ -58,6 +58,7 @@ public:
    * @return
    */
   static QSet<long> elementIdsToIds(const std::set<ElementId>& elementIds);
+  static QSet<long> elementIdsToIds2(const std::vector<ElementId>& elementIds);
 
   /**
    * Determines if a collection of elements contains an element with a particular element ID

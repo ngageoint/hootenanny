@@ -123,7 +123,7 @@ public:
   long getLastNodeId() const { return getNodeId(getNodeCount() - 1); }
 
   /**
-   * Determines if an index is the first or las
+   * Determines if an index is the first or last
    *
    * @param index index to examine
    * @return true if the index is extreme; false otherwise
@@ -218,6 +218,21 @@ public:
    * @return true if the other way shares at least one end node with this way; false otherwise
    */
   bool hasSharedEndNode(const Way& other) const;
+
+  /**
+   * TODO
+   *
+   * @param other
+   * @return
+   */
+  bool immediatelyPrecedes(const Way& other) const;
+  /**
+   * TODO
+   *
+   * @param other
+   * @return
+   */
+  bool immediatelySucceeds(const Way& other) const;
 
   /**
    * Retrieves the IDs of shared nodes between two ways
