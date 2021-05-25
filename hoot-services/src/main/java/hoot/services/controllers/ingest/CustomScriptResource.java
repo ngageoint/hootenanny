@@ -624,8 +624,7 @@ public class CustomScriptResource {
             }
         }
         catch (Exception ex) {
-            String msg = "Error deleting translation. " + ex.getMessage();
-            throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
+            throw new WebApplicationException(ex, Response.serverError().entity(ex.getMessage()).build());
         }
 
         return Response.ok(delArr.toString()).build();
