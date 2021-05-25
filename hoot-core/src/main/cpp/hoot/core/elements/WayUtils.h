@@ -161,7 +161,7 @@ public:
    * @param wayCriterion an optional ElementCriterion to further filter the containing ways
    * @return a collection of way IDs
    */
-  static std::set<long> getContainingWayIdsByNodeId(
+  static std::set<long> getContainingWayIds(
     const long nodeId, const ConstOsmMapPtr& map,
     const ElementCriterionPtr& wayCriterion = ElementCriterionPtr());
 
@@ -173,7 +173,7 @@ public:
    * @param wayCriterion an optional ElementCriterion to further filter the containing ways
    * @return a collection of const ways
    */
-  static std::vector<ConstWayPtr> getContainingWaysByNodeIdConst(
+  static std::vector<ConstWayPtr> getContainingWaysConst(
     const long nodeId, const ConstOsmMapPtr& map,
     const ElementCriterionPtr& wayCriterion = ElementCriterionPtr());
 
@@ -185,7 +185,7 @@ public:
    * @param wayCriterion an optional ElementCriterion to further filter the containing ways
    * @return a collection of ways
    */
-  static std::vector<WayPtr> getContainingWaysByNodeId(
+  static std::vector<WayPtr> getContainingWays(
     const long nodeId, const ConstOsmMapPtr& map,
     const ElementCriterionPtr& wayCriterion = ElementCriterionPtr());
 
@@ -197,7 +197,7 @@ public:
    * @param map map which owns the input node
    * @return a unique collection of type key/value pair strings
    */
-  static std::set<QString> getContainingWaysMostSpecificTypesByNodeId(
+  static std::set<QString> getContainingWaysMostSpecificTypes(
     const long nodeId, const ConstOsmMapPtr& map);
 
   /**
@@ -208,7 +208,7 @@ public:
    * @param map map which owns the input node
    * @return a unique collection of type key strings
    */
-  static std::set<QString> getContainingWaysMostSpecificTypeKeysByNodeId(
+  static std::set<QString> getContainingWaysMostSpecificTypeKeys(
     const long nodeId, const ConstOsmMapPtr& map);
 
   /**

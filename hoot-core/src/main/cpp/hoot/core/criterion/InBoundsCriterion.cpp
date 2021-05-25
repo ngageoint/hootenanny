@@ -109,7 +109,7 @@ bool InBoundsCriterion::isSatisfied(const ConstElementPtr& e) const
   else
   {
     std::vector<ConstWayPtr> containingWays =
-      WayUtils::getContainingWaysByNodeIdConst(e->getElementId().getId(), _map);
+      WayUtils::getContainingWaysConst(e->getElementId().getId(), _map);
     LOG_VART(containingWays.size());
     for (std::vector<ConstWayPtr>::const_iterator containingWaysItr = containingWays.begin();
          containingWaysItr != containingWays.end(); ++containingWaysItr)

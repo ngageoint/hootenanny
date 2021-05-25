@@ -29,6 +29,8 @@
 
 // Hoot
 #include <hoot/core/conflate/ConflateInfoCache.h>
+#include <hoot/core/elements/ElementIdUtils.h>
+#include <hoot/core/elements/WayUtils.h>
 #include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/schema/MetadataTags.h>

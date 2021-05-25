@@ -158,7 +158,7 @@ void IntersectionSplitter::_splitWay(long wayId, long nodeId)
     "Attempting to split way: " << way->getElementId() << " at node: " <<
     ElementId(ElementType::Node, nodeId));
 
-  // find the first index of the split node that isn't an endpoint.
+  // Find the first index of the split node that isn't an endpoint.
   int firstIndex = -1;
   const std::vector<long>& nodeIds = way->getNodeIds();
   for (size_t i = 1; i < nodeIds.size() - 1; i++)
@@ -274,14 +274,14 @@ void IntersectionSplitter::_preserveWayRelationMemberOrder(
   int fromIndex = -1;
   if (newWays.size() == 2 && ElementIdUtils::containsElementId(splitWayId, newWays, fromIndex))
   {
-    int newWayIndex = 0;
+    int addedWayIndex = 0;
     if (fromIndex == 0)
     {
-      newWayIndex = 1;
+      addedWayIndex = 1;
     }
-    LOG_VART(newWayIndex);
-    ConstWayPtr newWay = std::dynamic_pointer_cast<const Way>(newWays.at(newWayIndex));
-    LOG_VART(newWay->getElementId());
+    LOG_VART(addedWayIndex);
+    ConstWayPtr addedWay = std::dynamic_pointer_cast<const Way>(newWays.at(addedWayIndex));
+    LOG_VART(addedWay->getElementId());
 
     // Get all the relations that the split way belongs to.
     const std::vector<ConstRelationPtr> containingRelations =
@@ -294,12 +294,16 @@ void IntersectionSplitter::_preserveWayRelationMemberOrder(
       ConstRelationPtr containingRelation = containingRelations.front();
       LOG_VART(containingRelation->getElementId());
       //LOG_VART(containingRelation->getMembers());
-      LOG_VART(containingRelation->getMemberIds2());
+      //LOG_VART(containingRelation->getMemberIds2());
 
       // Get the members adjoining the split way from the relation.
       const QList<ElementId> adjoiningMemberIds =
         containingRelation->getAdjoiningMemberIds(splitWayId);
       LOG_VART(adjoiningMemberIds);
+      // If we have two adjoining member IDs, that means the split way was neither the first nor
+      // last member in the relation. (We may eventually be able to combine the cases for
+      // adjoiningMemberIds.size() == 1 and adjoiningMemberIds.size() == 2 togther.).
+      bool reverseNewWays = false;
       if (adjoiningMemberIds.size() == 2)
       {
         ConstWayPtr adjoiningWayMemberIndexedBefore;
@@ -322,20 +326,15 @@ void IntersectionSplitter::_preserveWayRelationMemberOrder(
         LOG_VART(adjoiningWayMemberIndexedBefore->getElementId());
         LOG_VART(adjoiningWayMemberIndexedAfter.get());
         LOG_VART(adjoiningWayMemberIndexedAfter->getElementId());
-        LOG_VART(newWay->hasSharedEndNode(*adjoiningWayMemberIndexedBefore));
+        LOG_VART(addedWay->hasSharedEndNode(*adjoiningWayMemberIndexedBefore));
         // If the new way created by the split shares an endpoint with the member indexed before the
         // split way being replaced, reverse the copied way list previously created to preserve
-        // membership order.
-        if (newWay->hasSharedEndNode(*adjoiningWayMemberIndexedBefore))
-        {
-          LOG_TRACE("Reversing new ways...");
-          std::reverse(newWays.begin(), newWays.end());
+        // membership order. Note: not sure yet if this is catching all test cases correctly.
+        if (addedWay->hasSharedEndNode(*adjoiningWayMemberIndexedBefore))
+        {  
+          reverseNewWays = true;
         }
       }
-      // OLD: If only one adjoining member ID was returned, the way being split was the first member
-      // in the relation, and the the split ways (newWays) have the split way ID in the first
-      // position, we need to reverse the split ways list. - fixes RelationMergeTest
-
       // If only one adjoining member ID was returned, the way being split was either the first or
       // last member in the relation.
       else if (adjoiningMemberIds.size() == 1)
@@ -343,31 +342,70 @@ void IntersectionSplitter::_preserveWayRelationMemberOrder(
         LOG_VART(containingRelation->isFirstMember(splitWayId));
         LOG_VART(containingRelation->isLastMember(splitWayId));
 
+        bool firstNewWayIsSplitWay = false;
+        WayPtr splitWay;
+        WayPtr addedWay;
         QList<ElementPtr>::const_iterator itr = newWays.begin();
-        WayPtr firstNewWay = std::dynamic_pointer_cast<Way>(*itr);
+        WayPtr firstWay = std::dynamic_pointer_cast<Way>(*itr);
         itr++;
-        WayPtr secondNewWay = std::dynamic_pointer_cast<Way>(*itr);
-
-        LOG_VART(firstNewWay->getElementId() == splitWayId);
-        LOG_VART(firstNewWay->immediatelyPrecedes(*secondNewWay));
-        LOG_VART(firstNewWay->immediatelySucceeds(*secondNewWay));
-
-        // If the split way was the first member in the relation, then there should be no way
-        // members after it, so its first node should not be connected to the last node of the other
-        // member of the split pair.
-        if ((containingRelation->isFirstMember(splitWayId) &&
-             firstNewWay->getElementId() != splitWayId &&
-             firstNewWay->immediatelyPrecedes(*secondNewWay)) ||
-            // If the split way was the last member in the relation, then there should be no way
-            // members before it, so its last node should not be connected to the first node of the
-            // other member of the split pair.
-            ((containingRelation->isLastMember(splitWayId) &&
-              firstNewWay->getElementId() == splitWayId &&
-              firstNewWay->immediatelySucceeds(*secondNewWay))))
+        WayPtr secondWay = std::dynamic_pointer_cast<Way>(*itr);
+        if (firstWay->getElementId() == splitWayId)
         {
-          LOG_TRACE("Reversing new ways...");
-          std::reverse(newWays.begin(), newWays.end());
+          splitWay = firstWay;
+          addedWay = secondWay;
+          firstNewWayIsSplitWay = true;
         }
+        else
+        {
+          splitWay = secondWay;
+          addedWay = firstWay;
+        }
+
+        LOG_VART(firstNewWayIsSplitWay);
+        LOG_VART(splitWay->getElementId());
+        LOG_VART(addedWay->getElementId());
+
+        // If the way just split was the first relation member,
+        if (containingRelation->isFirstMember(splitWayId))
+        {
+          // the only entry is adjoiningMemberIds is the ID of the way member after it.
+          ConstWayPtr adjoiningWayMemberIndexedAfter = _map->getWay(*(adjoiningMemberIds.begin()));
+          if (adjoiningWayMemberIndexedAfter)
+          {
+            LOG_VART(adjoiningWayMemberIndexedAfter->getElementId());
+            LOG_VART(addedWay->hasSharedEndNode(*adjoiningWayMemberIndexedAfter));
+            // The ordering of ways in newWays should always match the relation member order, so if
+            // the first way is the split way but the added way is connected to the way member after
+            // the split way, we need to reverse the ordering of newWays.
+            if (firstNewWayIsSplitWay &&
+                !addedWay->hasSharedEndNode(*adjoiningWayMemberIndexedAfter))
+            {
+              reverseNewWays = true;
+            }
+          }
+        }
+        // This is similar logic to above but handles when the split way is the last relation
+        // member.
+        else if (containingRelation->isLastMember(splitWayId))
+        {
+          ConstWayPtr adjoiningWayMemberIndexedBefore = _map->getWay(*(adjoiningMemberIds.begin()));
+          if (adjoiningWayMemberIndexedBefore)
+          {
+            LOG_VART(adjoiningWayMemberIndexedBefore->getElementId());
+            LOG_VART(addedWay->hasSharedEndNode(*adjoiningWayMemberIndexedBefore));
+            if (!firstNewWayIsSplitWay &&
+                !addedWay->hasSharedEndNode(*adjoiningWayMemberIndexedBefore))
+            {
+              reverseNewWays = true;
+            }
+          }
+        }
+      }
+
+      if (reverseNewWays)
+      {
+        LOG_TRACE("Reversing new ways...");
+        std::reverse(newWays.begin(), newWays.end());
       }
     }
   }

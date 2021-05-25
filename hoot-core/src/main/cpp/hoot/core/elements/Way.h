@@ -220,21 +220,6 @@ public:
   bool hasSharedEndNode(const Way& other) const;
 
   /**
-   * TODO
-   *
-   * @param other
-   * @return
-   */
-  bool immediatelyPrecedes(const Way& other) const;
-  /**
-   * TODO
-   *
-   * @param other
-   * @return
-   */
-  bool immediatelySucceeds(const Way& other) const;
-
-  /**
    * Retrieves the IDs of shared nodes between two ways
    *
    * @param other way to compare with
