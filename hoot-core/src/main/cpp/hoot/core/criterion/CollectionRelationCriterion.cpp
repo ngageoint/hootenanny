@@ -42,8 +42,6 @@ bool CollectionRelationCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   LOG_VART(e->getElementId());
 
-  bool result = false;
-
   if (e->getElementType() == ElementType::Relation)
   {
     ConstRelationPtr r = std::dynamic_pointer_cast<const Relation>(e);
@@ -55,11 +53,11 @@ bool CollectionRelationCriterion::isSatisfied(const ConstElementPtr& e) const
         r->getType() == MetadataTags::RelationMultiPolygon() ||
         r->getType() == MetadataTags::RelationMultilineString())
     {
-      result = true;
+      return true;
     }
   }
 
-  return result;
+  return false;
 }
 
 }

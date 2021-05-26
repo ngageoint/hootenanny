@@ -68,6 +68,21 @@ See the User Guide for more details on command usage. Most examples use .osm fil
       -D schema.translation.script=myTranslation.js input1.osm input2.osm output.osm
 -----
 
+===== Keep provenance of select tags during conflation:
+
+-----
+    # The default behavior when merging the tags of conflated features is to overwrite conflicting
+    # tags in the target feature. See the list of tag mergers for other options. A slight
+    # modification is made to overwrite tag merging here by allowing certain fields not to be
+    # overwritten and to keep the provenance of their values by appending them to each other with
+    # each successive merge. Use of this option is valid with the OverwriteTag1Merger or
+    # OverwriteTag2Mergers only. e.g. A: { myField1=1, myField2=1 } merged with
+    # B: { myField2=1, myField3=1 } results in C: { myField1=1, myField2=1;2, myField3=1 }
+
+    hoot conflate -D tag.merger.overwrite.accumulate.values.keys="myField2;myField3" \
+      input1.osm input2.osm output.osm
+-----
+
 ==== Applying Changes
 
 ===== Derive a changeset between two maps and write the result back to a Rails Port or CGIMap instance:
