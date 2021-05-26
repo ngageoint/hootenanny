@@ -67,8 +67,7 @@ QSet<long> ElementIdUtils::elementIdsToIds(const std::set<ElementId>& elementIds
   return ids;
 }
 
-bool ElementIdUtils::containsElementId(
-  const ElementId& id, const QList<ElementPtr>& elements, int& index)
+bool ElementIdUtils::containsElementId(const ElementId& id, const QList<ElementPtr>& elements)
 {
   int ctr = 0;
   for (QList<ElementPtr>::const_iterator itr = elements.begin(); itr != elements.end(); ++itr)
@@ -76,7 +75,6 @@ bool ElementIdUtils::containsElementId(
     ElementPtr element = *itr;
     if (element && element->getElementId() == id)
     {
-      index = ctr;
       return true;
     }
     ctr++;

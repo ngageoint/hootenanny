@@ -105,7 +105,7 @@ public:
    */
   std::shared_ptr<OGRSpatialReference> createPlanarProjection(const OGREnvelope& env,
     Radians maxAngleError = toRadians(2.0), Meters maxDistanceError = 10.0,
-    Meters testDistance = 1000.0, bool warnOnFail = true);
+    Meters testDistance = 1000.0, bool warnOnFail = true) const;
 
   static MapProjector& getInstance();
 

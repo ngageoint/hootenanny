@@ -53,7 +53,7 @@ private:
   double _matchThreshold;
 
   void _addEdgeLink(OsmMapPtr map, NetworkEdgeScorePtr edgeScore) const;
-  void _addVertexLink(OsmMapPtr map, NetworkVertexScorePtr vertexScore);
+  void _addVertexLink(OsmMapPtr map, NetworkVertexScorePtr vertexScore) const;
 
   ConstNodePtr _getMedianNode(ConstOsmMapPtr map, QList<ConstElementPtr> e) const;
   ConstNodePtr _getMedianNode(ConstOsmMapPtr map, ConstElementPtr e) const;

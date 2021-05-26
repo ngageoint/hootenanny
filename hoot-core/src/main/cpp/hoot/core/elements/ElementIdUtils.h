@@ -64,12 +64,10 @@ public:
    *
    * @param id the element ID to search for
    * @param elements the collection of elements to search
-   * @param index the index where the element with the specified ID was found; -1 if the element was
-   * not found
    * @return true if the collection of elements contains an element with the specified ID; false
    * otherwise
    */
-  static bool containsElementId(const ElementId& id, const QList<ElementPtr>& elements, int& index);
+  static bool containsElementId(const ElementId& id, const QList<ElementPtr>& elements);
 };
 
 }

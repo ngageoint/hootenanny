@@ -1157,7 +1157,7 @@ void UnconnectedWaySnapper::_markSnappedWay(const long idOfNodeBeingSnapped, con
   _map->getWay(owningWayId)->getTags().set(MetadataTags::HootSnapped(), tagVal);
 }
 
-void UnconnectedWaySnapper::_reviewSnappedWay(const long idOfNodeBeingSnapped)
+void UnconnectedWaySnapper::_reviewSnappedWay(const long idOfNodeBeingSnapped) const
 {
   std::set<long> owningWayIds =
     WayUtils::getContainingWayIds(idOfNodeBeingSnapped, _map);

@@ -50,8 +50,7 @@ public:
 
   bool isSatisfied(const ConstElementPtr& e) const override;
 
-  ElementCriterionPtr clone() override
-  { return ElementCriterionPtr(new ReversedRoadCriterion(_map)); }
+  ElementCriterionPtr clone() override { return std::make_shared<ReversedRoadCriterion>(_map); }
 
   GeometryType getGeometryType() const override { return GeometryType::Line; }
 

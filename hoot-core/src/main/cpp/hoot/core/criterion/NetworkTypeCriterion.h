@@ -47,7 +47,7 @@ public:
 
   NetworkTypeCriterion() = default;
   NetworkTypeCriterion(ConstOsmMapPtr map);
-  ~NetworkTypeCriterion() = default;
+  ~NetworkTypeCriterion() override = default;
 
   /**
    * @see ElementCriterion
@@ -57,8 +57,7 @@ public:
   /**
    * @see ElementCriterion
    */
-  ElementCriterionPtr clone() override
-  { return ElementCriterionPtr(new NetworkTypeCriterion(_map)); }
+  ElementCriterionPtr clone() override { return std::make_shared<NetworkTypeCriterion>(_map); }
 
   /**
    * @see GeometryTypeCriterion

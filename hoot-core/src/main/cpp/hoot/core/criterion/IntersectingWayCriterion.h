@@ -48,7 +48,7 @@ public:
   IntersectingWayCriterion(
     const QSet<long>& wayIds, ConstOsmMapPtr map,
     const ElementCriterionPtr& crit = ElementCriterionPtr());
-  virtual ~IntersectingWayCriterion() = default;
+  ~IntersectingWayCriterion() override = default;
 
   /**
    * @see ElementCriterion
@@ -59,7 +59,7 @@ public:
    * @see ElementCriterion
    */
   ElementCriterionPtr clone() override
-  { return ElementCriterionPtr(new IntersectingWayCriterion(_wayIds, _map, _crit)); }
+  { return std::make_shared<IntersectingWayCriterion>(_wayIds, _map, _crit); }
 
   /**
    * @see GeometryTypeCriterion

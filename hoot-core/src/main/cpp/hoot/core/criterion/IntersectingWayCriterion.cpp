@@ -69,7 +69,7 @@ bool IntersectingWayCriterion::isSatisfied(const ConstElementPtr& element) const
   QSet<long> wayIds = _wayIds;
   // If any of the intersecting way IDs are in our input list (_wayIds), we have an intersecting
   // way.
-  return wayIds.intersect(intersectingWayIdsSet).size() > 0;
+  return !wayIds.intersect(intersectingWayIdsSet).empty();
 }
 
 }

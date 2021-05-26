@@ -359,26 +359,21 @@ void IntersectionSplitter::_preserveWayRelationMemberOrder(
   LOG_VART(splitWayId);
   LOG_VART(newWays);
 
-  // newWays consists of the way that was split and the new way created as a result of the
-  // splitting. Determine which is which.
-  int fromIndex = -1;
   // Sanity check here. Currently, both these conditions should always be true.
-  if (newWays.size() == 2 && ElementIdUtils::containsElementId(splitWayId, newWays, fromIndex))
+  if (newWays.size() == 2 && ElementIdUtils::containsElementId(splitWayId, newWays))
   {
-    int addedWayIndex = 0;
-    if (fromIndex == 0)
-    {
-      addedWayIndex = 1;
-    }
-    LOG_VART(addedWayIndex);
-    ConstWayPtr addedWay = std::dynamic_pointer_cast<const Way>(newWays.at(addedWayIndex));
-    LOG_VART(addedWay->getElementId());
+    // newWays consists of the way that was split and the new way created as a result of the
+    // splitting. Determine which is which.
+    WayPtr splitWay;
+    WayPtr addedWay;
+    const bool firstNewWayIsSplitWay =
+      _determineSplitWaysOrdering(newWays, splitWayId, splitWay, addedWay);
 
     // Get all the relations that the split way belongs to.
     const std::vector<ConstRelationPtr> containingRelations =
       RelationMemberUtils::getContainingRelationsConst(splitWayId, _map, true);
     LOG_VART(containingRelations.size());
-    if (containingRelations.size() > 0)
+    if (!containingRelations.empty())
     {
       // Arbitrarily just looking at the first one here. Not sure what to do in the case of
       // membership to multiple relations yet.
@@ -416,12 +411,6 @@ void IntersectionSplitter::_preserveWayRelationMemberOrder(
       {
         assert(
           adjoiningWayMemberIndexedBefore != nullptr || adjoiningWayMemberIndexedAfter != nullptr);
-
-        WayPtr splitWay;
-        WayPtr addedWay;
-        const bool firstNewWayIsSplitWay =
-          _determineSplitWaysOrdering(newWays, splitWayId, splitWay, addedWay);
-
         LOG_VART(containingRelation->isFirstMember(splitWayId));
         LOG_VART(containingRelation->isLastMember(splitWayId));
 

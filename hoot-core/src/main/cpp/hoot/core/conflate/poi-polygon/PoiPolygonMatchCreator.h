@@ -94,7 +94,7 @@ private:
    * matched features; returns the number of matches removed
    */
   int _retainClosestDistanceMatchesOnly(
-    std::vector<ConstMatchPtr>& matches, const ConstOsmMapPtr& map);
+    std::vector<ConstMatchPtr>& matches, const ConstOsmMapPtr& map) const;
   /*
    * Called by _retainClosestDistanceMatchesOnly; 2:1 POI to poly and 2:1 polyl to POI matches are
    * processed separately; returns the number of matches removed

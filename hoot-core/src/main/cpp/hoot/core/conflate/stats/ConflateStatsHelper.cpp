@@ -47,7 +47,7 @@ _outputStats(outputStats)
 {
 }
 
-void ConflateStatsHelper::updateStats(QList<SingleStat>& statsToUpdate)
+void ConflateStatsHelper::updateStats(QList<SingleStat>& statsToUpdate) const
 {
   updateStats(statsToUpdate, statsToUpdate.size());
 }

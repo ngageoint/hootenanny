@@ -249,12 +249,9 @@ std::vector<ConstRelationPtr> RelationMemberUtils::getContainingRelationsConst(
   {
     ConstRelationPtr relation = map->getRelation(*it);
     LOG_VART(relation.get());
-    if (relation)
+    if (relation && (!ignoreReviewRelations || !relation->hasTag(MetadataTags::HootReviewNeeds())))
     {
-      if (!ignoreReviewRelations || !relation->hasTag(MetadataTags::HootReviewNeeds()))
-      {
-        relations.push_back(relation);
-      }
+      relations.push_back(relation);
     }  
   }
   return relations;

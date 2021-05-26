@@ -418,8 +418,8 @@ std::vector<WayPtr> WayUtils::getIntersectingWays(const long wayId, const OsmMap
   for (std::vector<long>::const_iterator itr = intersectingWayIds.begin();
        itr != intersectingWayIds.end(); ++itr)
   {
-    const long wayId = *itr;
-    WayPtr way = map->getWay(wayId);
+    const long intersectingWayId = *itr;
+    WayPtr way = map->getWay(intersectingWayId);
     if (way)
     {
       intersectingWays.push_back(way);
@@ -460,8 +460,8 @@ std::vector<ConstWayPtr> WayUtils::getIntersectingWaysConst(
   for (std::vector<long>::const_iterator itr = intersectingWayIds.begin();
        itr != intersectingWayIds.end(); ++itr)
   {
-    const long wayId = *itr;
-    ConstWayPtr way = map->getWay(wayId);
+    const long intersectingWayId = *itr;
+    ConstWayPtr way = map->getWay(intersectingWayId);
     if (way)
     {
       intersectingWays.push_back(way);
