@@ -250,11 +250,11 @@ public:
   static std::vector<WayPtr> getIntersectingWays(const long wayId, const OsmMapPtr& map);
 
   /**
-   * TODO
+   * Determines the IDs of ways intersecting an input way
    *
-   * @param wayId
-   * @param map
-   * @return
+   * @param wayId the ID of the way to find intersecting ways for
+   * @param map the map containing the input and potentially intersecting ways
+   * @return a collection of IDs
    */
   static std::vector<long> getIntersectingWayIds(const long wayId, const OsmMapPtr& map);
 
@@ -262,18 +262,18 @@ public:
    * Determines the ways intersecting an input way
    *
    * @param wayId the ID of the way to find intersecting ways for
-   * @param map the map containing the input and potentially intersecting ways
+   * @param map the const map containing the input and potentially intersecting ways
    * @return a collection of const ways
    */
   static std::vector<ConstWayPtr> getIntersectingWaysConst(
     const long wayId, const ConstOsmMapPtr& map);
 
   /**
-   * TODO
+   * Determines the IDs of ways intersecting an input way
    *
-   * @param wayId
-   * @param map
-   * @return
+   * @param wayId the ID of the way to find intersecting ways for
+   * @param map the const map containing the input and potentially intersecting ways
+   * @return a collection of IDs
    */
   static std::vector<long> getIntersectingWayIdsConst(const long wayId, const ConstOsmMapPtr& map);
 

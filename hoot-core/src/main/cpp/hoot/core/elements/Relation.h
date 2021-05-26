@@ -156,7 +156,7 @@ public:
    * @return a collection of element IDs
    */
   std::set<ElementId> getMemberIds(const ElementType& elementType = ElementType::Unknown) const;
-  std::vector<ElementId> getMemberIds2(const ElementType& elementType = ElementType::Unknown) const;
+
   /**
    * Retrieves the member element IDs for members placed immediately before and after the member
    * element with the specified ID

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
  */
 #include "IntersectingWayCriterion.h"
 
@@ -45,23 +45,30 @@ _crit(crit)
 
 bool IntersectingWayCriterion::isSatisfied(const ConstElementPtr& element) const
 {
+  if (element->getElementType() != ElementType::Way)
+  {
+    return false;
+  }
   if (_crit && !_crit->isSatisfied(element))
   {
     return false;
   }
-  // TODO
+  // Don't consider ways in our list, as we only want to count other ways that intersect them.
   if (_wayIds.find(element->getId()) != _wayIds.end())
   {
     return false;
   }
 
   LOG_VART(element->getElementId());
+  // Get all the ways that intersect the way we're examining.
   QSet<long> intersectingWayIdsSet =
     QVector<long>::fromStdVector(
       WayUtils::getIntersectingWayIdsConst(element->getId(), _map)).toList().toSet();
   LOG_VART(intersectingWayIdsSet);
   // Make a copy, so we don't modify _roadIds with the call to intersect.
   QSet<long> wayIds = _wayIds;
+  // If any of the intersecting way IDs are in our input list (_wayIds), we have an intersecting
+  // way.
   return wayIds.intersect(intersectingWayIdsSet).size() > 0;
 }
 

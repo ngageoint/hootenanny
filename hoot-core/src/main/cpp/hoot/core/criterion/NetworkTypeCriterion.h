@@ -36,7 +36,8 @@ namespace hoot
 {
 
 /**
- * TODO
+ * Identifies features that can be treated as "network" with linear and connectedness attributes.
+ * This is primarily used by IntersectionSplitter to determine which features are splittable.
  */
 class NetworkTypeCriterion : public GeometryTypeCriterion, public ConstOsmMapConsumer
 {
@@ -48,19 +49,31 @@ public:
   NetworkTypeCriterion(ConstOsmMapPtr map);
   ~NetworkTypeCriterion() = default;
 
+  /**
+   * @see ElementCriterion
+   */
   bool isSatisfied(const ConstElementPtr& e) const override;
 
+  /**
+   * @see ElementCriterion
+   */
   ElementCriterionPtr clone() override
   { return ElementCriterionPtr(new NetworkTypeCriterion(_map)); }
 
+  /**
+   * @see GeometryTypeCriterion
+   */
   GeometryType getGeometryType() const override { return GeometryType::Line; }
 
+  /**
+   * @see ConstOsmMapConsumer
+   */
   void setOsmMap(const OsmMap* map) override { _map = map->shared_from_this(); }
 
   QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }
   QString toString() const override { return className(); }
-  QString getDescription() const override { return "TODO"; }
+  QString getDescription() const override { return "Identifies network features"; }
 
 private:
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
  */
 #include "NetworkTypeCriterion.h"
 
@@ -53,6 +53,7 @@ bool NetworkTypeCriterion::isSatisfied(const ConstElementPtr& element) const
     return true;
   }
 
+  // If the element itself wasn't a network type, see if it belongs to a relation that is.
   const std::set<long>& relations =
     _map->getIndex().getElementToRelationMap()->getRelationByElement(element->getElementId());
   LOG_VART(relations.size());

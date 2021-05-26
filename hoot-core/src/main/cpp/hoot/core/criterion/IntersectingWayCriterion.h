@@ -36,7 +36,7 @@ namespace hoot
 {
 
 /**
- * TODO
+ * Given a collection of way(s) identifies other ways that intersect with them.
  */
 class IntersectingWayCriterion : public GeometryTypeCriterion, public ConstOsmMapConsumer
 {
@@ -50,30 +50,43 @@ public:
     const ElementCriterionPtr& crit = ElementCriterionPtr());
   virtual ~IntersectingWayCriterion() = default;
 
+  /**
+   * @see ElementCriterion
+   */
   bool isSatisfied(const ConstElementPtr& e) const override;
 
+  /**
+   * @see ElementCriterion
+   */
   ElementCriterionPtr clone() override
   { return ElementCriterionPtr(new IntersectingWayCriterion(_wayIds, _map, _crit)); }
 
+  /**
+   * @see GeometryTypeCriterion
+   */
   GeometryType getGeometryType() const override { return GeometryType::Line; }
 
+  /**
+   * @see ConstOsmMapConsumer
+   */
   void setOsmMap(const OsmMap* map) override { _map = map->shared_from_this(); }
 
   QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }
   QString toString() const override { return className(); }
-  QString getDescription() const override { return "TODO"; }
+  QString getDescription() const override
+  { return "Finds ways that intersect a given collection of ways"; }
 
   void setWayIds(const QSet<long>& ids) { _wayIds = ids; }
 
 protected:
 
-  // TODO
+  // the IDs for the collection of ways to look for other intersecting ways with
   mutable QSet<long> _wayIds;
 
   ConstOsmMapPtr _map;
 
-  // TODO
+  // optional additional criteria for filtering what's considered an intersecting way
   ElementCriterionPtr _crit;
 };
 

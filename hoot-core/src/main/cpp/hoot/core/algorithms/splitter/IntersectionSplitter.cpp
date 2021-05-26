@@ -34,7 +34,6 @@
 #include <hoot/core/elements/ElementIdUtils.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/RelationMemberUtils.h>
-#include <hoot/core/elements/Way.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
@@ -54,6 +53,59 @@ HOOT_FACTORY_REGISTER(OsmMapOperation, IntersectionSplitter)
 IntersectionSplitter::IntersectionSplitter(const std::shared_ptr<OsmMap>& map) :
 _map(map)
 {
+}
+
+QStringList IntersectionSplitter::getCriteria() const
+{
+  return NodeMatcher::getNetworkCriterionClassNames();
+}
+
+void IntersectionSplitter::apply(std::shared_ptr<OsmMap> &map)
+{
+  splitIntersections(map);
+}
+
+void IntersectionSplitter::splitIntersections(const std::shared_ptr<OsmMap>& map)
+{
+  IntersectionSplitter is(map);
+  return is.splitIntersections();
+}
+
+void IntersectionSplitter::splitIntersections()
+{
+  _numAffected = 0;
+  // Make a map of nodes to ways.
+  _mapNodesToWays();
+
+  // Go through all the nodes.
+  int numProcessed = 0;
+  const int taskStatusUpdateInterval = ConfigOptions().getTaskStatusUpdateInterval();
+  while (_todoNodes.isEmpty() == false)
+  {
+    long nodeId = *_todoNodes.begin();
+    //  Remove the node first in case it needs to be reprocessed later
+    _todoNodes.remove(nodeId);
+    numProcessed++;
+
+    if (numProcessed % (taskStatusUpdateInterval * 10) == 0 && !_todoNodes.empty())
+    {
+      PROGRESS_INFO(
+        "\tCreated  " <<  StringUtils::formatLargeNumber(numProcessed) <<
+        " intersection splits. " << StringUtils::formatLargeNumber(_todoNodes.size()) <<
+        " remaining nodes to process.");
+    }
+
+    // If the node is part of two or more ways,
+    if (_nodeToWays.count(nodeId) >= 2)
+    {
+      // evaluate each way for splitting.
+      QList<long> ways = _nodeToWays.values(nodeId);
+      for (QList<long>::const_iterator way = ways.begin(); way != ways.end(); ++way)
+      {
+        _splitWay(*way, nodeId);
+      }
+    }
+  }
 }
 
 void IntersectionSplitter::_mapNodesToWay(const std::shared_ptr<Way>& way)
@@ -99,49 +151,6 @@ void IntersectionSplitter::_removeWayFromMap(const std::shared_ptr<Way>& way)
   for (size_t i = 0; i < nodes.size(); i++)
   {
     _nodeToWays.remove(nodes[i], wId);
-  }
-}
-
-void IntersectionSplitter::splitIntersections(const std::shared_ptr<OsmMap>& map)
-{
-  IntersectionSplitter is(map);
-  return is.splitIntersections();
-}
-
-void IntersectionSplitter::splitIntersections()
-{
-  _numAffected = 0;
-  // Make a map of nodes to ways.
-  _mapNodesToWays();
-
-  // Go through all the nodes.
-  int numProcessed = 0;
-  const int taskStatusUpdateInterval = ConfigOptions().getTaskStatusUpdateInterval();
-  while (_todoNodes.isEmpty() == false)
-  {
-    long nodeId = *_todoNodes.begin();
-    //  Remove the node first in case it needs to be reprocessed later
-    _todoNodes.remove(nodeId);
-    numProcessed++;
-
-    if (numProcessed % (taskStatusUpdateInterval * 10) == 0 && !_todoNodes.empty())
-    {
-      PROGRESS_INFO(
-        "\tCreated  " <<  StringUtils::formatLargeNumber(numProcessed) <<
-        " intersection splits. " << StringUtils::formatLargeNumber(_todoNodes.size()) <<
-        " remaining nodes to process.");
-    }
-
-    // If the node is part of two or more ways,
-    if (_nodeToWays.count(nodeId) >= 2)
-    {
-      // evaluate each way for splitting.
-      QList<long> ways = _nodeToWays.values(nodeId);
-      for (QList<long>::const_iterator way = ways.begin(); way != ways.end(); ++way)
-      {
-        _splitWay(*way, nodeId);
-      }
-    }
   }
 }
 
@@ -265,13 +274,95 @@ void IntersectionSplitter::_splitWay(long wayId, long nodeId)
   }
 }
 
+bool IntersectionSplitter::_determineSplitWaysOrdering(
+  const QList<ElementPtr>& splitWays, const ElementId& splitWayId, WayPtr& splitWay,
+  WayPtr& addedWay) const
+{
+  assert(splitWays.size() == 2);
+  bool firstNewWayIsSplitWay = false;
+
+  QList<ElementPtr>::const_iterator itr = splitWays.begin();
+  WayPtr firstWay = std::dynamic_pointer_cast<Way>(*itr);
+  itr++;
+  WayPtr secondWay = std::dynamic_pointer_cast<Way>(*itr);
+  if (firstWay->getElementId() == splitWayId)
+  {
+    splitWay = firstWay;
+    addedWay = secondWay;
+    firstNewWayIsSplitWay = true;
+  }
+  else
+  {
+    splitWay = secondWay;
+    addedWay = firstWay;
+  }
+
+  LOG_VART(firstNewWayIsSplitWay);
+  LOG_VART(splitWay->getElementId());
+  LOG_VART(addedWay->getElementId());
+
+  return firstNewWayIsSplitWay;
+}
+
+QList<ElementId> IntersectionSplitter::_getAdjoiningRelationMembers(
+  const ElementId& wayId, const ConstRelationPtr& containingRelation,
+  ConstWayPtr& adjoiningWayMemberIndexedBefore, ConstWayPtr& adjoiningWayMemberIndexedAfter) const
+{
+  const QList<ElementId> adjoiningMemberIds =
+    containingRelation->getAdjoiningMemberIds(wayId);
+  LOG_VART(adjoiningMemberIds);
+
+  if (adjoiningMemberIds.size() == 2)
+  {
+    int ctr = 0;
+    for (QList<ElementId>::const_iterator itr = adjoiningMemberIds.begin();
+         itr != adjoiningMemberIds.end(); ++itr)
+    {
+      if (ctr == 0)
+      {
+        adjoiningWayMemberIndexedBefore = _map->getWay(*itr);
+      }
+      else
+      {
+        adjoiningWayMemberIndexedAfter = _map->getWay(*itr);
+      }
+      ctr++;
+    }
+    LOG_VART(adjoiningWayMemberIndexedBefore.get());
+    LOG_VART(adjoiningWayMemberIndexedBefore->getElementId());
+    LOG_VART(adjoiningWayMemberIndexedAfter.get());
+    LOG_VART(adjoiningWayMemberIndexedAfter->getElementId());
+  }
+  else if (adjoiningMemberIds.size() == 1)
+  {
+    if (containingRelation->isFirstMember(wayId))
+    {
+      // The only entry in adjoiningMemberIds is the ID of the way member after it.
+      adjoiningWayMemberIndexedAfter = _map->getWay(*(adjoiningMemberIds.begin()));
+      LOG_VART(adjoiningWayMemberIndexedAfter->getElementId());
+    }
+    else if (containingRelation->isLastMember(wayId))
+    {
+      // The only entry in adjoiningMemberIds is the ID of the way member before it.
+      adjoiningWayMemberIndexedBefore = _map->getWay(*(adjoiningMemberIds.begin()));
+      LOG_VART(adjoiningWayMemberIndexedBefore->getElementId());
+    }
+  }
+
+  LOG_VART(adjoiningMemberIds);
+  return adjoiningMemberIds;
+}
+
 void IntersectionSplitter::_preserveWayRelationMemberOrder(
   const ElementId& splitWayId, QList<ElementPtr>& newWays) const
 {
   LOG_VART(splitWayId);
   LOG_VART(newWays);
 
+  // newWays consists of the way that was split and the new way created as a result of the
+  // splitting. Determine which is which.
   int fromIndex = -1;
+  // Sanity check here. Currently, both these conditions should always be true.
   if (newWays.size() == 2 && ElementIdUtils::containsElementId(splitWayId, newWays, fromIndex))
   {
     int addedWayIndex = 0;
@@ -289,115 +380,75 @@ void IntersectionSplitter::_preserveWayRelationMemberOrder(
     LOG_VART(containingRelations.size());
     if (containingRelations.size() > 0)
     {
-      // Arbitrarily here just looking at the first one. Not sure what to do in the case of
+      // Arbitrarily just looking at the first one here. Not sure what to do in the case of
       // membership to multiple relations yet.
       ConstRelationPtr containingRelation = containingRelations.front();
       LOG_VART(containingRelation->getElementId());
-      //LOG_VART(containingRelation->getMembers());
-      //LOG_VART(containingRelation->getMemberIds2());
 
       // Get the members adjoining the split way from the relation.
+      ConstWayPtr adjoiningWayMemberIndexedBefore;
+      ConstWayPtr adjoiningWayMemberIndexedAfter;
       const QList<ElementId> adjoiningMemberIds =
-        containingRelation->getAdjoiningMemberIds(splitWayId);
-      LOG_VART(adjoiningMemberIds);
-      // If we have two adjoining member IDs, that means the split way was neither the first nor
+        _getAdjoiningRelationMembers(
+          splitWayId, containingRelation, adjoiningWayMemberIndexedBefore,
+          adjoiningWayMemberIndexedAfter);
+
+      // If we have two adjoining member IDs, that means the split way is neither the first nor
       // last member in the relation. (We may eventually be able to combine the cases for
-      // adjoiningMemberIds.size() == 1 and adjoiningMemberIds.size() == 2 togther.).
+      // adjoiningMemberIds.size() == 1 and adjoiningMemberIds.size() == 2 together here).
       bool reverseNewWays = false;
       if (adjoiningMemberIds.size() == 2)
       {
-        ConstWayPtr adjoiningWayMemberIndexedBefore;
-        ConstWayPtr adjoiningWayMemberIndexedAfter;
-        int ctr = 0;
-        for (QList<ElementId>::const_iterator itr = adjoiningMemberIds.begin();
-             itr != adjoiningMemberIds.end(); ++itr)
-        {
-          if (ctr == 0)
-          {
-            adjoiningWayMemberIndexedBefore = _map->getWay(*itr);
-          }
-          else
-          {
-            adjoiningWayMemberIndexedAfter = _map->getWay(*itr);
-          }
-          ctr++;
-        }
-        LOG_VART(adjoiningWayMemberIndexedBefore.get());
-        LOG_VART(adjoiningWayMemberIndexedBefore->getElementId());
-        LOG_VART(adjoiningWayMemberIndexedAfter.get());
-        LOG_VART(adjoiningWayMemberIndexedAfter->getElementId());
+        assert(adjoiningWayMemberIndexedBefore != nullptr);
         LOG_VART(addedWay->hasSharedEndNode(*adjoiningWayMemberIndexedBefore));
         // If the new way created by the split shares an endpoint with the member indexed before the
         // split way being replaced, reverse the copied way list previously created to preserve
-        // membership order. Note: not sure yet if this is catching all test cases correctly.
+        // relation membership order. NOTE: not sure yet if this is catching all test cases
+        // correctly.
         if (addedWay->hasSharedEndNode(*adjoiningWayMemberIndexedBefore))
         {  
           reverseNewWays = true;
         }
       }
-      // If only one adjoining member ID was returned, the way being split was either the first or
+      // If only one adjoining member ID was returned, the way being split is either the first or
       // last member in the relation.
       else if (adjoiningMemberIds.size() == 1)
       {
+        assert(
+          adjoiningWayMemberIndexedBefore != nullptr || adjoiningWayMemberIndexedAfter != nullptr);
+
+        WayPtr splitWay;
+        WayPtr addedWay;
+        const bool firstNewWayIsSplitWay =
+          _determineSplitWaysOrdering(newWays, splitWayId, splitWay, addedWay);
+
         LOG_VART(containingRelation->isFirstMember(splitWayId));
         LOG_VART(containingRelation->isLastMember(splitWayId));
 
-        bool firstNewWayIsSplitWay = false;
-        WayPtr splitWay;
-        WayPtr addedWay;
-        QList<ElementPtr>::const_iterator itr = newWays.begin();
-        WayPtr firstWay = std::dynamic_pointer_cast<Way>(*itr);
-        itr++;
-        WayPtr secondWay = std::dynamic_pointer_cast<Way>(*itr);
-        if (firstWay->getElementId() == splitWayId)
+        // If the way that was split was the first relation member and its ID is first in the
+        // newWays list,
+        if (adjoiningWayMemberIndexedAfter && firstNewWayIsSplitWay &&
+            containingRelation->isFirstMember(splitWayId))
         {
-          splitWay = firstWay;
-          addedWay = secondWay;
-          firstNewWayIsSplitWay = true;
-        }
-        else
-        {
-          splitWay = secondWay;
-          addedWay = firstWay;
-        }
-
-        LOG_VART(firstNewWayIsSplitWay);
-        LOG_VART(splitWay->getElementId());
-        LOG_VART(addedWay->getElementId());
-
-        // If the way just split was the first relation member,
-        if (containingRelation->isFirstMember(splitWayId))
-        {
-          // the only entry is adjoiningMemberIds is the ID of the way member after it.
-          ConstWayPtr adjoiningWayMemberIndexedAfter = _map->getWay(*(adjoiningMemberIds.begin()));
-          if (adjoiningWayMemberIndexedAfter)
+          LOG_VART(addedWay->hasSharedEndNode(*adjoiningWayMemberIndexedAfter));
+          // ...and the added way shares an end node with the member indexed after, then we need to
+          // reverse newWays. The ordering of ways in newWays should always match the relation
+          // member order, so if the first way is the split way but the added way is connected to
+          // the way member after the split way, we need to reverse the ordering of newWays.
+          if (!addedWay->hasSharedEndNode(*adjoiningWayMemberIndexedAfter))
           {
-            LOG_VART(adjoiningWayMemberIndexedAfter->getElementId());
-            LOG_VART(addedWay->hasSharedEndNode(*adjoiningWayMemberIndexedAfter));
-            // The ordering of ways in newWays should always match the relation member order, so if
-            // the first way is the split way but the added way is connected to the way member after
-            // the split way, we need to reverse the ordering of newWays.
-            if (firstNewWayIsSplitWay &&
-                !addedWay->hasSharedEndNode(*adjoiningWayMemberIndexedAfter))
-            {
-              reverseNewWays = true;
-            }
+            reverseNewWays = true;
           }
         }
         // This is similar logic to above but handles when the split way is the last relation
         // member.
-        else if (containingRelation->isLastMember(splitWayId))
+        else if (adjoiningWayMemberIndexedBefore && !firstNewWayIsSplitWay &&
+                 containingRelation->isLastMember(splitWayId))
         {
-          ConstWayPtr adjoiningWayMemberIndexedBefore = _map->getWay(*(adjoiningMemberIds.begin()));
-          if (adjoiningWayMemberIndexedBefore)
+          LOG_VART(addedWay->hasSharedEndNode(*adjoiningWayMemberIndexedBefore));
+          if (!addedWay->hasSharedEndNode(*adjoiningWayMemberIndexedBefore))
           {
-            LOG_VART(adjoiningWayMemberIndexedBefore->getElementId());
-            LOG_VART(addedWay->hasSharedEndNode(*adjoiningWayMemberIndexedBefore));
-            if (!firstNewWayIsSplitWay &&
-                !addedWay->hasSharedEndNode(*adjoiningWayMemberIndexedBefore))
-            {
-              reverseNewWays = true;
-            }
+            reverseNewWays = true;
           }
         }
       }
@@ -410,16 +461,6 @@ void IntersectionSplitter::_preserveWayRelationMemberOrder(
     }
   }
   LOG_VART(newWays);
-}
-
-void IntersectionSplitter::apply(std::shared_ptr<OsmMap> &map)
-{
-  splitIntersections(map);
-}
-
-QStringList IntersectionSplitter::getCriteria() const
-{
-  return NodeMatcher::getNetworkCriterionClassNames();
 }
 
 }

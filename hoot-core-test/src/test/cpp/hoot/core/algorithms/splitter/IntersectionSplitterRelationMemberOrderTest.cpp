@@ -46,6 +46,9 @@ namespace hoot
 
 /*
  * Moved this out of IntersectionSplitterTest due to its runtime.
+ *
+ * This currently is handling the testing for IntersectingWayCriterion as well. If further testing
+ * is ever required for IntersectingWayCriterion, then a separate test should be created.
  */
 class IntersectionSplitterRelationMemberOrderTest : public HootTestFixture
 {
@@ -109,7 +112,7 @@ public:
 
     // Get all the road member IDs for the relation.
     const QSet<long> roadMemberIds =
-      ElementIdUtils::elementIdsToIds2(relation->getMemberIds2(ElementType::Way));
+      ElementIdUtils::elementIdsToIds(relation->getMemberIds(ElementType::Way));
     LOG_VART(roadMemberIds);
 
     // Create a criterion for finding all ways that intersect the member roads.
