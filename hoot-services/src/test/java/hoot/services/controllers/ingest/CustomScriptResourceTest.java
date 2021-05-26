@@ -360,8 +360,6 @@ public class CustomScriptResourceTest extends HootServicesJerseyTestAbstract {
     @Test
     @Category(UnitTest.class)
     public void testGetScriptsList() throws Exception {
-        CustomScriptResource customScriptResource = new CustomScriptResource();
-
         Response response = target("/customscript/save")
                 .queryParam("SCRIPT_NAME", "testName3")
                 .queryParam("SCRIPT_DESCRIPTION", "Test3 Description")
@@ -384,7 +382,9 @@ public class CustomScriptResourceTest extends HootServicesJerseyTestAbstract {
         file = new File(customScriptFolder, "testName4.js");
         assertTrue(file.exists());
 
-        response = customScriptResource.getScriptsList();
+        response = target("/customscript/save")
+                .request(MediaType.APPLICATION_JSON)
+                .get();
         String strList = response.getEntity().toString();
 
         JSONParser parser = new JSONParser();

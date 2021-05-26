@@ -27,7 +27,6 @@
 package hoot.services.controllers.ingest;
 
 import static hoot.services.HootProperties.*;
-import static hoot.services.models.db.QFolders.folders;
 import static hoot.services.models.db.QTranslationFolders.translationFolders;
 import static hoot.services.models.db.QTranslations.translations;
 import static hoot.services.utils.DbUtils.createQuery;
@@ -48,6 +47,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
@@ -69,7 +69,6 @@ import javax.ws.rs.core.Response;
 
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.dsl.Expressions;
-import com.querydsl.sql.SQLQuery;
 import com.querydsl.sql.dml.SQLUpdateClause;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -229,7 +228,8 @@ public class CustomScriptResource {
     @GET
     @Path("/getlist")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getScriptsList() {
+    public Response getScriptsList(@Context HttpServletRequest request) {
+        Users user = Users.fromRequest(request);
         JSONArray retList = new JSONArray();
         JSONArray filesList = new JSONArray();
 
@@ -255,26 +255,35 @@ public class CustomScriptResource {
                 .select(translations.id,
                         translations.displayName,
                         translations.userId,
-                        translations.publicCol,
                         translations.createdAt,
                         translations.folderId,
-                        translationFolders.path)
+                        translationFolders.path,
+                        translationFolders.publicCol)
                 .from(translations)
                 .leftJoin(translationFolders).on(translationFolders.id.eq(translations.folderId))
                 .fetch();
 
-            for (Tuple folder: mappings) {
+            Set<Long> visibleFolders = DbUtils.getTranslationFolderIdsForUser(user.getId());
+            for (Tuple translationRecord: mappings) {
                 JSONObject json = new JSONObject();
-                String translationName = folder.get(translations.displayName);
+                String translationName = translationRecord.get(translations.displayName);
+                Long folderId = translationRecord.get(translations.folderId);
+                Boolean parentFolderIsPublic = translationRecord.get(translationFolders.publicCol);
 
-                json.put("id", folder.get(translations.id));
+                json.put("id", translationRecord.get(translations.id));
                 json.put("name", translationName);
-                json.put("userId", folder.get(translations.userId));
-                json.put("public", folder.get(translations.publicCol));
-                json.put("date", folder.get(translations.createdAt).toString());
-                json.put("folderId", folder.get(translations.folderId));
+                json.put("userId", translationRecord.get(translations.userId));
+                json.put("date", translationRecord.get(translations.createdAt).toString());
+                json.put("folderId", folderId);
 
-                String path = folder.get(translationFolders.path);
+                if (parentFolderIsPublic == null) {
+                    parentFolderIsPublic = true;
+                }
+                if (folderId == null || folderId.equals(0L) || visibleFolders.contains(folderId)) {
+                    json.put("public", parentFolderIsPublic);
+                }
+
+                String path = translationRecord.get(translationFolders.path);
                 String translationPath = File.separator + translationName;
                 translationPath = path != null ? path + translationPath : translationPath;
                 File translationFile = new File(SCRIPT_FOLDER, translationPath + ".js");

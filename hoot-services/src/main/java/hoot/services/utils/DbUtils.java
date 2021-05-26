@@ -1157,6 +1157,15 @@ public class DbUtils {
         return folderRecordSet;
     }
 
+    public static Set<Long> getTranslationFolderIdsForUser(Long userId) {
+        List<TranslationFolder> folders = getTranslationFoldersForUser(userId);
+        Set<Long> out = new HashSet<Long>(folders.size());
+        for (TranslationFolder f : folders) {
+            out.add(f.getId());
+        }
+        return out;
+    }
+
     public static void addTranslation(String scriptName, Long userId, Long folderId) {
         Boolean isPublic = createQuery()
             .select(translationFolders.publicCol)
