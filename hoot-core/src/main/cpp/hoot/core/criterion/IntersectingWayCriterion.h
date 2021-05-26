@@ -31,23 +31,29 @@
 #include <hoot/core/criterion/GeometryTypeCriterion.h>
 #include <hoot/core/elements/ConstOsmMapConsumer.h>
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/util/Configurable.h>
 
 namespace hoot
 {
 
 /**
  * Given a collection of way(s) identifies other ways that intersect with them.
+ *
+ * To get more mileage out of this if needed, we could replace _sourceWayIds with a source way
+ * criterion (a crit inside of a crit...is that strange?). That would probably add some processing
+ * time, though, as each intersecting way would have to be checked against the crit. OR maybe we
+ * make use of FindIntersectionsOp for that purpose instead...
  */
-class IntersectingWayCriterion : public GeometryTypeCriterion, public ConstOsmMapConsumer
+class IntersectingWayCriterion : public GeometryTypeCriterion, public ConstOsmMapConsumer,
+  public Configurable
 {
 public:
 
   static QString className() { return "hoot::IntersectingWayCriterion"; }
 
   IntersectingWayCriterion() = default;
-  IntersectingWayCriterion(
-    const QSet<long>& wayIds, ConstOsmMapPtr map,
-    const ElementCriterionPtr& crit = ElementCriterionPtr());
+  IntersectingWayCriterion(ConstOsmMapPtr map);
+  IntersectingWayCriterion(const QSet<long>& sourceWayIds, ConstOsmMapPtr map);
   ~IntersectingWayCriterion() override = default;
 
   /**
@@ -58,8 +64,7 @@ public:
   /**
    * @see ElementCriterion
    */
-  ElementCriterionPtr clone() override
-  { return std::make_shared<IntersectingWayCriterion>(_wayIds, _map, _crit); }
+  ElementCriterionPtr clone() override;
 
   /**
    * @see GeometryTypeCriterion
@@ -71,23 +76,25 @@ public:
    */
   void setOsmMap(const OsmMap* map) override { _map = map->shared_from_this(); }
 
+  /**
+   * @see Configurable
+   */
+  void setConfiguration(const Settings& conf) override;
+
   QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }
   QString toString() const override { return className(); }
   QString getDescription() const override
-  { return "Finds ways that intersect a given collection of ways"; }
+  { return "Finds ways that intersect a specified ways"; }
 
-  void setWayIds(const QSet<long>& ids) { _wayIds = ids; }
+private:
 
-protected:
-
-  // the IDs for the collection of ways to look for other intersecting ways with
-  mutable QSet<long> _wayIds;
+  // the IDs for the ways to look for other intersecting ways with
+  mutable QSet<long> _sourceWayIds;
 
   ConstOsmMapPtr _map;
 
-  // optional additional criteria for filtering what's considered an intersecting way
-  ElementCriterionPtr _crit;
+  static const QString EMPTY_SOURCE_IDS_ERROR_MESSAGE;
 };
 
 }

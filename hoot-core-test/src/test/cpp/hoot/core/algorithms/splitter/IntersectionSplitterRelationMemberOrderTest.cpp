@@ -46,9 +46,6 @@ namespace hoot
 
 /*
  * Moved this out of IntersectionSplitterTest due to its runtime.
- *
- * This currently is handling the testing for IntersectingWayCriterion as well. If further testing
- * is ever required for IntersectingWayCriterion, then a separate test should be created.
  */
 class IntersectionSplitterRelationMemberOrderTest : public HootTestFixture
 {
@@ -73,7 +70,7 @@ public:
     // relation with tag, "ref=36". Its members consist of intersection split roads, but they should
     // retain the ordering of the input relation.
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map, "test-files/cases/reference/unifying/multiple/highway-3906/Input1.osm");
 
@@ -93,7 +90,7 @@ public:
     // runRelationMemberOrderTest, so a little more complex. Its also identical to one in
     // RelationMergeTest, but its easier to debug member ordering issues within this test.
 
-    OsmMapPtr rawMap(new OsmMap());
+    OsmMapPtr rawMap = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(rawMap, "test-files/cmd/glacial/RelationMergeTest/input2.osm");
 
     // We're only interested in seeing the splitting done on this one relation in order to cut down

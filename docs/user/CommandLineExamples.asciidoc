@@ -704,16 +704,16 @@ hoot alpha-shape --buffer 10 input.osm 200 0 output.osm
     hoot convert -D convert.ops="hoot::FindHighwayIntersectionsOp" input.osm output.osm
 -----
 
-===== Create a node density plot:
-
------
-    hoot plot-node-density input.osm output.png 100
------
-
 ===== Detect railway intersections:
 
 -----
 hoot convert -D convert.ops="hoot::FindRailwayIntersectionsOp" input.osm output.osm
+-----
+
+===== Create a node density plot:
+
+-----
+    hoot plot-node-density input.osm output.png 100
 -----
 
 ===== Detect and mark divided highways:
@@ -997,7 +997,8 @@ hoot alpha-shape --alpha 200 --buffer -10 input.osm 200 0 output.osm
 ===== Calculate the average number of nodes for a set of buildings:
 
 -----
-hoot stat -D nodes.per.way.visitor.element.criterion=hoot::BuildingCriterion input.osm hoot::NodesPerWayVisitor average
+hoot stat -D nodes.per.way.visitor.element.criterion=hoot::BuildingCriterion input.osm \
+  hoot::NodesPerWayVisitor average
 -----
 
 ===== Calculate the numerical average of all tags with a given key:
@@ -1028,6 +1029,13 @@ hoot stat -D nodes.per.way.visitor.element.criterion=hoot::BuildingCriterion inp
 
 -----
     hoot stat input.osm hoot::PhoneNumberCountVisitor
+-----
+
+===== Count how many roads intersect two other roads given their IDs:
+
+-----
+hoot count -D intersecting.way.criterion.source.way.ids="-76;-985" input.osm \
+  hoot::IntersectingWayCriterion
 -----
 
 ===== Display the distribution of highway tags for roads in a map:
