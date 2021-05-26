@@ -74,13 +74,13 @@ void DuplicateElementMarker::apply(OsmMapPtr& map)
       if (wayNodeCrit.isSatisfied(dupe1))
       {
         const std::set<QString> containingWayTypesTemp =
-          WayUtils::getContainingWaysMostSpecificTypesByNodeId(dupe1->getId(), map);
+          WayUtils::getContainingWaysMostSpecificTypes(dupe1->getId(), map);
         _containingWayTypes.insert(containingWayTypesTemp.begin(), containingWayTypesTemp.end());
       }
       if (wayNodeCrit.isSatisfied(dupe2))
       {
         const std::set<QString> containingWayTypesTemp =
-          WayUtils::getContainingWaysMostSpecificTypesByNodeId(dupe2->getId(), map);
+          WayUtils::getContainingWaysMostSpecificTypes(dupe2->getId(), map);
         _containingWayTypes.insert(containingWayTypesTemp.begin(), containingWayTypesTemp.end());
       }
     }

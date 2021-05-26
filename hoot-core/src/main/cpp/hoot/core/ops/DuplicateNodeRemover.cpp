@@ -243,7 +243,7 @@ bool DuplicateNodeRemover::_passesLogMergeFilter(
   kvps.append("OBJECTID=76174");
 
   std::set<ElementId> wayIdsOwning1;
-  const std::set<long> waysOwning1 = WayUtils::getContainingWayIdsByNodeId(nodeId1, map);
+  const std::set<long> waysOwning1 = WayUtils::getContainingWayIds(nodeId1, map);
   for (std::set<long>::const_iterator it = waysOwning1.begin(); it != waysOwning1.end(); ++it)
   {
     wayIdsOwning1.insert(ElementId(ElementType::Way, *it));
@@ -254,7 +254,7 @@ bool DuplicateNodeRemover::_passesLogMergeFilter(
   }
 
   std::set<ElementId> wayIdsOwning2;
-  const std::set<long> waysOwning2 = WayUtils::getContainingWayIdsByNodeId(nodeId2, map);
+  const std::set<long> waysOwning2 = WayUtils::getContainingWayIds(nodeId2, map);
   for (std::set<long>::const_iterator it = waysOwning2.begin(); it != waysOwning2.end(); ++it)
   {
     wayIdsOwning2.insert(ElementId(ElementType::Way, *it));
@@ -289,10 +289,10 @@ void DuplicateNodeRemover::_logMergeResult(
     LOG_TRACE(msg);
     LOG_TRACE(
       "Node " << nodeId1 << " belongs to ways: " <<
-      WayUtils::getContainingWayIdsByNodeId(nodeId1, map));
+      WayUtils::getContainingWayIds(nodeId1, map));
     LOG_TRACE(
       "Node " << nodeId2 << " belongs to ways: " <<
-      WayUtils::getContainingWayIdsByNodeId(nodeId2, map));
+      WayUtils::getContainingWayIds(nodeId2, map));
     LOG_VART(WayUtils::nodesAreContainedInTheSameWay(nodeId1, nodeId2, map));
   }
 }

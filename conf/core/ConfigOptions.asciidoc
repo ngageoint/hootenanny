@@ -2117,6 +2117,14 @@ are -1 or 1 up to the number of available processors.
 If true, all implicit taggers will translate element name words to English before querying the
 corresponding implicit tag rules database.
 
+=== intersecting.way.criterion.source.way.ids
+
+* Data Type: list
+* Default Value:
+** ``
+
+List of way IDs to find intersecting ways for when using `IntersectingWayCriterion`.
+
 === javascript.schema.translator.path
 
 * Data Type: list

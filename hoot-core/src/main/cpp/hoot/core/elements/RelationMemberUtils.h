@@ -62,9 +62,11 @@ public:
    *
    * @param map map owning the input element
    * @param childId element ID of the input element
+   * @param ignoreReviewRelations if true, review relations are ignored when determining membership
    * @return true if the element is a member of a relation
    */
-  static bool isMemberOfRelation(const ConstOsmMapPtr& map, const ElementId& childId);
+  static bool isMemberOfRelation(
+    const ConstOsmMapPtr& map, const ElementId& childId, const bool ignoreReviewRelations = false);
 
   /**
    * Determines if an element is a member of a relation of a given type
@@ -150,29 +152,33 @@ public:
    *
    * @param childId ID of the child element
    * @param map map the child element belongs to
+   * @param ignoreReviewRelations if true, review relations are ignored when determining membership
    * @return a collection of relations
    */
   static std::vector<RelationPtr> getContainingRelations(
-    const ElementId& childId, const ConstOsmMapPtr& map);
+    const ElementId& childId, const ConstOsmMapPtr& map, const bool ignoreReviewRelations = false);
 
   /**
    * Retrieves all relations containing a child element
    *
    * @param childId ID of the child element
    * @param map map the child element belongs to
+   * @param ignoreReviewRelations if true, review relations are ignored when determining membership
    * @return a collection of const relations
    */
   static std::vector<ConstRelationPtr> getContainingRelationsConst(
-    const ElementId& childId, const ConstOsmMapPtr& map);
+    const ElementId& childId, const ConstOsmMapPtr& map, const bool ignoreReviewRelations = false);
 
   /**
    * Retrieves the number of relations containing a child element
    *
    * @param childId ID of the child element
    * @param map map the child element belongs to
+   * @param ignoreReviewRelations if true, review relations are ignored when determining membership
    * @return a relation count
    */
-  static int getContainingRelationCount(const ElementId& childId, const ConstOsmMapPtr& map);
+  static int getContainingRelationCount(
+    const ElementId& childId, const ConstOsmMapPtr& map, const bool ignoreReviewRelations = false);
 };
 
 }

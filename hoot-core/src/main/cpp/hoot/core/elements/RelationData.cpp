@@ -31,20 +31,22 @@ using namespace std;
 namespace hoot
 {
 
-RelationData::RelationData(long id, long changeset, long version, unsigned int timestamp,
-                           QString user, long uid, bool visible)
-  : ElementData(id, Tags(), ElementData::CIRCULAR_ERROR_EMPTY, changeset, version,
-                timestamp, user, uid, visible)
+RelationData::RelationData(
+  long id, long changeset, long version, unsigned int timestamp, QString user, long uid,
+  bool visible) :
+ElementData(
+  id, Tags(), ElementData::CIRCULAR_ERROR_EMPTY, changeset, version, timestamp, user, uid, visible)
 {
 }
 
-RelationData::RelationData(const RelationData& rd)
-  : ElementData(rd.getId(), rd.getTags(),
-                (rd.hasCircularError() ? rd.getCircularError() : ElementData::CIRCULAR_ERROR_EMPTY),
-                rd.getChangeset(), rd.getVersion(), rd.getTimestamp(), rd.getUser(),
-                rd.getUid(), rd.getVisible()),
-    _type(rd._type),
-    _members(rd._members)
+RelationData::RelationData(const RelationData& rd) :
+ElementData(
+  rd.getId(), rd.getTags(),
+  (rd.hasCircularError() ? rd.getCircularError() : ElementData::CIRCULAR_ERROR_EMPTY),
+  rd.getChangeset(), rd.getVersion(), rd.getTimestamp(), rd.getUser(), rd.getUid(),
+  rd.getVisible()),
+_type(rd._type),
+_members(rd._members)
 {
 }
 

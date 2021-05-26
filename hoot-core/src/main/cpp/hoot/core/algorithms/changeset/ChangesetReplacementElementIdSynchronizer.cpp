@@ -136,10 +136,10 @@ void ChangesetReplacementElementIdSynchronizer::_syncElementIds(
         // find all ways each node belong to
         QSet<long> containingWayIds1 =
           CollectionUtils::stdSetToQSet(
-            WayUtils::getContainingWayIdsByNodeId(map1IdenticalElement->getId(), _map1));
+            WayUtils::getContainingWayIds(map1IdenticalElement->getId(), _map1));
         QSet<long> containingWayIds2 =
           CollectionUtils::stdSetToQSet(
-            WayUtils::getContainingWayIdsByNodeId(map2IdenticalElement->getId(), _map2));
+            WayUtils::getContainingWayIds(map2IdenticalElement->getId(), _map2));
         // If any of them match, we'll proceed to copy the element ID of the first map over to the
         // second map element and be sure to keep the second map element's tags (nodes matched only
         // on coordinate, so that will be the same between the two).

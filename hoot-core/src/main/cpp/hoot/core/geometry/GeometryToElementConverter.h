@@ -135,7 +135,8 @@ public:
    * @return an OSM element
    */
   std::shared_ptr<Element> convertMultiLineStringToElement(
-    const geos::geom::MultiLineString* mls, const OsmMapPtr& map, Status s, double circularError);
+    const geos::geom::MultiLineString* mls, const OsmMapPtr& map, Status s,
+    double circularError) const;
 
   /**
    * Converts a GEOS multi-polygon to an OSM relation
@@ -172,7 +173,7 @@ public:
    * @return an OSM relation
    */
   RelationPtr convertPolygonToRelation(
-    const geos::geom::Polygon* polygon, const OsmMapPtr& map, Status s, double circularError);
+    const geos::geom::Polygon* polygon, const OsmMapPtr& map, Status s, double circularError) const;
 
   /**
    * Converts a GEOS polygon to an OSM relation
@@ -185,7 +186,7 @@ public:
    */
   void convertPolygonToRelation(
     const geos::geom::Polygon* polygon, const OsmMapPtr& map, const RelationPtr& r, Status s,
-    double circularError);
+    double circularError) const;
 
   /**
    * Converts a GEOS point to an OSM node

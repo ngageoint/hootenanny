@@ -287,7 +287,7 @@ std::shared_ptr<OGRSpatialReference> MapProjector::createOrthographic(double x, 
 }
 
 std::shared_ptr<OGRSpatialReference> MapProjector::createPlanarProjection(const OGREnvelope& env,
-  Radians maxAngleError, Meters maxDistanceError, Meters testDistance, bool warnOnFail)
+  Radians maxAngleError, Meters maxDistanceError, Meters testDistance, bool warnOnFail) const
 {
   LOG_TRACE("Selecting best planar projection...");
 

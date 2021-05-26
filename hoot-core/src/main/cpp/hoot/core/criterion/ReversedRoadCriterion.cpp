@@ -28,13 +28,17 @@
 
 // hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/elements/Element.h>
 #include <hoot/core/criterion/HighwayCriterion.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementCriterion, ReversedRoadCriterion)
+
+ReversedRoadCriterion::ReversedRoadCriterion(ConstOsmMapPtr map) :
+_map(map)
+{
+}
 
 bool ReversedRoadCriterion::isSatisfied(const ConstElementPtr& e) const
 {

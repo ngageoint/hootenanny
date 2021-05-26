@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-1' action='modify' visible='true' lat='38.88597706722' lon='-77.03369805447'><tag k='name' v='Top' /></node>
+  <node id='-2' action='modify' visible='true' lat='38.88567651440' lon='-77.03368983921'><tag k='name' v='Top Intersection' /></node>
+  <node id='-3' action='modify' visible='true' lat='38.88535997336' lon='-77.03368573159'><tag k='name' v='Middle' /></node>
+  <node id='-4' action='modify' visible='true' lat='38.88508179976' lon='-77.03368573159'><tag k='name' v='Bottom Intersection' /></node>
+  <node id='-5' action='modify' visible='true' lat='38.88477165090' lon='-77.03372680785'><tag k='name' v='Bottom' /></node>
+  <node id='-6' action='modify' visible='true' lat='38.88567971178' lon='-77.03419918494'><tag k='name' v='Top Other' /></node>
+  <node id='-7' action='modify' visible='true' lat='38.88506581274' lon='-77.03306547994'><tag k='name' v='Bottom Other' /></node>
+  <way id='-8' action='modify' visible='true'>
+    <nd ref='-1' />
+    <nd ref='-2' />
+    <nd ref='-3' />
+    <nd ref='-4' />
+    <nd ref='-5' />
+    <tag k='name' v='Vertical Road' />
+    <tag k='accuracy' v='5' />
+    <tag k='highway' v='unclassified' />
+  </way>
+  <way id='-9' action='modify' visible='true'>
+    <nd ref='-6' />
+    <nd ref='-2' />
+    <nd ref='-3' />
+    <nd ref='-4' />
+    <nd ref='-7' />
+    <tag k='name' v='Cross Road' />
+    <tag k='accuracy' v='5' />
+    <tag k='highway' v='unclassified' />
+  </way>
+</osm>

@@ -62,8 +62,8 @@ void MapStatsWriter::_appendUnique(QList<SingleStat>& stats, QStringList& names)
   }
 }
 
-void MapStatsWriter::writeStatsToJson(QList<QList<SingleStat>>& stats,
-                                      const QString& statsOutputFilePath)
+void MapStatsWriter::writeStatsToJson(
+  QList<QList<SingleStat>>& stats, const QString& statsOutputFilePath) const
 {
   try
   {
@@ -112,8 +112,8 @@ void MapStatsWriter::writeStatsToJson(QList<QList<SingleStat>>& stats,
   }
 }
 
-void MapStatsWriter::writeStatsToText(QList<QList<SingleStat>> &stats,
-                                      const QString &statsOutputFilePath)
+void MapStatsWriter::writeStatsToText(
+  QList<QList<SingleStat>>& stats, const QString &statsOutputFilePath) const
 {
   LOG_INFO("Writing stats to file: " << statsOutputFilePath);
 
@@ -135,8 +135,8 @@ void MapStatsWriter::writeStatsToText(QList<QList<SingleStat>> &stats,
   }
 }
 
-void MapStatsWriter::writeStats(const QString& mapInputPath, const QString& statsOutputFilePath,
-                                QString sep)
+void MapStatsWriter::writeStats(
+  const QString& mapInputPath, const QString& statsOutputFilePath, QString sep) const
 {
   LOG_INFO("Writing stats for map in file: " << mapInputPath << " to file: " << statsOutputFilePath);
 

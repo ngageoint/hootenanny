@@ -499,4 +499,17 @@ bool Way::hasSharedNode(const Way& other) const
   return !sharedNodeIds(other).empty();
 }
 
+bool Way::hasSharedEndNode(const Way& other) const
+{
+  const std::vector<long> nodeIds1 = getNodeIds();
+  const std::vector<long> nodeIds2 = other.getNodeIds();
+  const long firstNodeId = nodeIds1.at(0);
+  const long lastNodeId = nodeIds1.at(nodeIds1.size() - 1);
+  const long otherFirstNodeId = nodeIds2.at(0);
+  const long otherLastNodeId = nodeIds2.at(nodeIds2.size() - 1);
+  return
+    firstNodeId == otherFirstNodeId || firstNodeId == otherLastNodeId ||
+    lastNodeId == otherFirstNodeId || lastNodeId == otherLastNodeId;
+}
+
 }
