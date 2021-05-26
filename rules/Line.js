@@ -48,11 +48,11 @@ exports.isMatchCandidate = function(map, e)
     return false;
   }
   // This prevents some of the problems seen in #4149. It should be removed after that issue is fixed.
-  else if (e.getElementId().getType() == "Way" && !hoot.OsmSchema.hasType(e) &&
+  /*else if (e.getElementId().getType() == "Way" && !hoot.OsmSchema.hasType(e) &&
            hoot.RelationMemberUtils.isMemberOfRelationSatisfyingCriterion(map, e.getElementId(), "hoot::CollectionRelationCriterion"))
   {
     return false;
-  }
+  }*/
 
   return hoot.OsmSchema.isLinear(e) && !hoot.OsmSchema.isSpecificallyConflatable(map, e, exports.geometryType);
 };
