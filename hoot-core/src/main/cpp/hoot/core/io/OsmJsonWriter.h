@@ -135,7 +135,7 @@ protected:
   void _writeKvp(const QString& key, const QString& value);
   void _writeKvp(const QString& key, long value);
   void _writeKvp(const QString& key, double value);
-  bool _hasTags(const ConstElementPtr& e);
+  bool _hasTags(const ConstElementPtr& e) const;
   void _writeTag(const QString& key, const QString& value, bool& firstTag);
   void _writeTags(const ConstElementPtr& e);
   void _writeMetadata(const Element& element);

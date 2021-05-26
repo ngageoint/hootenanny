@@ -70,7 +70,7 @@ public:
 
   void visit(const ConstElementPtr& e) override;
 
-  void finalizeIndex();
+  void finalizeIndex() const;
 
   /**
    * Find elements within a specified bounds

@@ -58,7 +58,7 @@ BaseComparator::BaseComparator(
   _init(map1, map2);
 }
 
-void BaseComparator::_calculateColor(double v, double max, QRgb& c)
+void BaseComparator::_calculateColor(double v, double max, QRgb& c) const
 {
   if (v >= 0.0)
   {
@@ -92,7 +92,7 @@ void BaseComparator::_calculateColor(double v, double max, QRgb& c)
   }
 }
 
-double BaseComparator::_calculateError(const cv::Mat& image1, const cv::Mat& image2)
+double BaseComparator::_calculateError(const cv::Mat& image1, const cv::Mat& image2) const
 {
   double errorSum = 0.0;
   double image1Sum = 0.0;
@@ -110,7 +110,7 @@ double BaseComparator::_calculateError(const cv::Mat& image1, const cv::Mat& ima
   return errorSum / (image1Sum + image2Sum);
 }
 
-void BaseComparator::_calculateRingColor(double v, double, QRgb& c)
+void BaseComparator::_calculateRingColor(double v, double, QRgb& c) const
 {
   double m = v / 60.0;
   if (v >= 0.0)

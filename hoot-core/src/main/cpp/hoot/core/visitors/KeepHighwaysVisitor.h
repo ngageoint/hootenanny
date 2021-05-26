@@ -55,7 +55,7 @@ public:
   /**
    * KeepHighwaysVisitor requires a read/write map.
    */
-  void setOsmMap(const OsmMap* /*map*/) { assert(false); }
+  void setOsmMap(const OsmMap* /*map*/) const { assert(false); }
 
   void visit(const ConstElementPtr& e) override;
 

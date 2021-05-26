@@ -1148,7 +1148,7 @@ bool UnconnectedWaySnapper::_snapClosestWayEndpointToWay(
   return _snapUnconnectedWayEndNodeToWay(endpoint, connectTo, snappedToNode);
 }
 
-void UnconnectedWaySnapper::_markSnappedWay(const long idOfNodeBeingSnapped, const bool toWayNode)
+void UnconnectedWaySnapper::_markSnappedWay(const long idOfNodeBeingSnapped, const bool toWayNode) const
 {
   std::set<long> owningWayIds =
     WayUtils::getContainingWayIds(idOfNodeBeingSnapped, _map);

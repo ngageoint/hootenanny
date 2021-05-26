@@ -155,7 +155,7 @@ private:
    */
   std::shared_ptr<MatchCreator> getMatchCreator(
     const std::vector<std::shared_ptr<MatchCreator>>& matchCreators,
-    const QString &matchCreatorName, CreatorDescription::BaseFeatureType& featureType);
+    const QString &matchCreatorName, CreatorDescription::BaseFeatureType& featureType) const;
 
   double _applyVisitor(
     const hoot::FilteredVisitor& v, const QString& statName,
@@ -179,7 +179,7 @@ private:
     const long poisMergedIntoPolysFromMap2);
 
   ConstElementVisitorPtr _getElementVisitorForFeatureType(
-    const CreatorDescription::BaseFeatureType& featureType);
+    const CreatorDescription::BaseFeatureType& featureType) const;
 };
 
 }

@@ -159,7 +159,7 @@ private:
    * In cases where these is a word/tag key occurrence count tie, this resolves the tie.
    */
   void _resolveCountTies();
-  void _sortByWord(const std::shared_ptr<QTemporaryFile>& input);
+  void _sortByWord(const std::shared_ptr<QTemporaryFile>& input) const;
 };
 
 }

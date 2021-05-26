@@ -94,7 +94,7 @@ public:
 
   static QString escapeCopyToData(const QString& stringToOutput);
 
-  inline unsigned int _convertDegreesToNanodegrees(const double degrees)
+  inline unsigned int _convertDegreesToNanodegrees(const double degrees) const
   {
     return round(degrees * ApiDb::COORDINATE_SCALE);
   }

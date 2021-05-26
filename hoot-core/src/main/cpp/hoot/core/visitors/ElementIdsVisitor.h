@@ -53,7 +53,7 @@ public:
 
   void visit(const std::shared_ptr<const Element>& e) override;
 
-  std::vector<long> getIds() { return _elementIds; }
+  std::vector<long> getIds() const { return _elementIds; }
 
   /**
    * Retrieves the IDs of all elements of a given type passing specified criteria

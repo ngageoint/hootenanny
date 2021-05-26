@@ -97,8 +97,8 @@ public:
 
 private:
 
-  QString _truncateTag(const QString& key, const QString& value);
-  bool _truncateTags(Tags& tags);
+  QString _truncateTag(const QString& key, const QString& value) const;
+  bool _truncateTags(Tags& tags) const;
 
   int _maxLength;
 };

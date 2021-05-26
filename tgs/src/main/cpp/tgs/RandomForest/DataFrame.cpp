@@ -925,7 +925,7 @@ namespace Tgs
 
 
   void DataFrame::makeBoostrapAndOobSets(std::vector<unsigned int> & bootstrap, 
-    std::vector<unsigned int> & oob)
+    std::vector<unsigned int> & oob) const
   {
     try
     {

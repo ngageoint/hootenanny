@@ -123,7 +123,7 @@ private:
   long _getNextId(const ElementType type);
 
   //clones the input so local element version tracking can be done
-  ElementPtr _getChangeElement(ConstElementPtr element);
+  ElementPtr _getChangeElement(ConstElementPtr element) const;
 
   // All of the create methods here assume you've already set the ID correctly in terms of
   // preventing conflicts with the OSM API target db for the element to be created.  The one

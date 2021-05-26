@@ -79,7 +79,7 @@ private:
   // collects the most specific type of any way owning a way node marked as a duplicate
   std::set<QString> _containingWayTypes;
 
-  QString _getUuidVal(const QString& newUuid, const ConstElementPtr& element);
+  QString _getUuidVal(const QString& newUuid, const ConstElementPtr& element) const;
 };
 
 }

@@ -137,7 +137,7 @@ void WayToIntersectionGeoModifier::processIntersections(OsmMap* pMap, const WayP
   }
 }
 
-bool WayToIntersectionGeoModifier::assignToAdjacentWay(OsmMap* pMap, const std::shared_ptr<NodeToWayMap>& n2w, long myWayId, const vector<long>& nodesToAttach)
+bool WayToIntersectionGeoModifier::assignToAdjacentWay(OsmMap* pMap, const std::shared_ptr<NodeToWayMap>& n2w, long myWayId, const vector<long>& nodesToAttach) const
 {
   long nodeId = nodesToAttach[0];
   const set<long>& wayIds = n2w->getWaysByNode(nodeId);

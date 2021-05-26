@@ -90,7 +90,7 @@ private:
   static QString _getDetectorsUrl();
   static QString _getTranslatorsUrl();
 
-  QString _getAvailableLanguagesRequestData(const QStringList& apps);
+  QString _getAvailableLanguagesRequestData(const QStringList& apps) const;
   /** Timeout for HTTP requests in seconds */
   int _timeout;
 };

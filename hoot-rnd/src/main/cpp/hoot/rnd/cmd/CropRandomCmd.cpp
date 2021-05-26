@@ -163,7 +163,7 @@ public:
 
 private:
 
-  OsmMapPtr _readInputs(const QStringList& inputs)
+  OsmMapPtr _readInputs(const QStringList& inputs) const
   {
     OsmMapPtr map(new OsmMap());
     for (int i = 0; i < inputs.size(); i++)

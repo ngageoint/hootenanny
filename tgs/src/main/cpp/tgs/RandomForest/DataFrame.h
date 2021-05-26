@@ -128,7 +128,7 @@ namespace Tgs
     /**
     *  @return true is DataFrame contains 0 data vectors
     */
-    bool empty(){return _data.empty();}
+    bool empty() const {return _data.empty();}
 
     /**
      * @brief exportData exports the data to an XML document
@@ -266,19 +266,19 @@ namespace Tgs
      * @brief getTrainingLabelList
      * @return the list of class labels corresponding to the training data vectors
      */
-    std::vector<std::string> getTrainingLabelList(){return _trainingLabels;}
+    std::vector<std::string> getTrainingLabelList() const {return _trainingLabels;}
 
     /**
      * @brief hasFactorTypes
      * @return true is factor types have been set
      */
-    bool hasFactorTypes(){return !_factorType.empty();}
+    bool hasFactorTypes() const {return !_factorType.empty();}
 
     /**
      * @brief hasNullTreatments
      * @return true if null treatment values have been set
      */
-    bool hasNullTreatments(){return !_nullTreatment.empty();}
+    bool hasNullTreatments() const {return !_nullTreatment.empty();}
 
     /**
     *  Import the data frame from the file stream
@@ -344,7 +344,7 @@ namespace Tgs
     * @param oob  the output container to hold indices to data vectors for the out of bag set
     */
     void makeBoostrapAndOobSets(std::vector<unsigned int> & bootstrap, 
-      std::vector<unsigned int> & oob);
+      std::vector<unsigned int> & oob) const;
 
     /**
      * Returns what DataFrame considers a null value (NaN in double land).

@@ -447,7 +447,7 @@ void OsmJsonReader::_parseOverpassJson()
   // the child itself is definitely absent from the input.
 }
 
-void OsmJsonReader::_updateRelationChildRefs(const ElementType& childElementType)
+void OsmJsonReader::_updateRelationChildRefs(const ElementType& childElementType) const
 {
   QList<long> relationIdsWithChildrenNotPresent;
   QHash<long, long> originalIdMap;
@@ -975,7 +975,7 @@ long OsmJsonReader::_getRelationId(long fileId)
   return newId;
 }
 
-void OsmJsonReader::_addTags(const boost::property_tree::ptree& item, hoot::ElementPtr pElement)
+void OsmJsonReader::_addTags(const boost::property_tree::ptree& item, hoot::ElementPtr pElement) const
 {
   // Find tags and add them
   if (item.not_found() != item.find("tags"))

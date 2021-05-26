@@ -486,7 +486,7 @@ void SingleSidedNetworkMatcher::_updateEdgeScoresAdditive()
 }
 
 // modify this to use the EdgeMatchSet rather than the vertices
-void SingleSidedNetworkMatcher::_updateVertexScores()
+void SingleSidedNetworkMatcher::_updateVertexScores() const
 {
 }
 

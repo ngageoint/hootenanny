@@ -117,7 +117,7 @@ void OsmXmlReader::setConfiguration(const Settings& conf)
   setCircularErrorTagKeys(configOptions.getCircularErrorTagKeys());
 }
 
-void OsmXmlReader::_parseTimeStamp(const QXmlAttributes& attributes)
+void OsmXmlReader::_parseTimeStamp(const QXmlAttributes& attributes) const
 {
   if ((attributes.value("timestamp") != "") &&
       (attributes.value("timestamp") != "1970-01-01T00:00:00Z") &&
@@ -384,7 +384,7 @@ bool OsmXmlReader::isSupported(const QString& url)
   return false;
 }
 
-double OsmXmlReader::_parseDouble(const QString& s)
+double OsmXmlReader::_parseDouble(const QString& s) const
 {
   bool ok;
   double result = s.toDouble(&ok);
@@ -397,7 +397,7 @@ double OsmXmlReader::_parseDouble(const QString& s)
   return result;
 }
 
-long OsmXmlReader::_parseLong(const QString& s)
+long OsmXmlReader::_parseLong(const QString& s) const
 {
   bool ok;
   long result = s.toLong(&ok);
@@ -999,7 +999,7 @@ void OsmXmlReader::_uncompressInput()
 }
 
 QXmlAttributes OsmXmlReader::_streamAttributesToAttributes(
-  const QXmlStreamAttributes& streamAttributes)
+  const QXmlStreamAttributes& streamAttributes) const
 {
   QXmlAttributes attributes;
   for (QXmlStreamAttributes::const_iterator itr = streamAttributes.begin();

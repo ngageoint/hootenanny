@@ -97,7 +97,7 @@ public:
    */
   void insert(const Box& b, int userId);
 
-  void cleanTree();
+  void cleanTree() const;
 
   /**
    * Traverses the tree and looks for inconsistencies. This is helpful when debugging. Returns

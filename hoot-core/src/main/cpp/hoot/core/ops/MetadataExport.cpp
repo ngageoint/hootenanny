@@ -185,7 +185,7 @@ void MetadataExport::_exportMetadataFromElements()
   _numAffected = _modifiedDatasets.length();
 }
 
-long MetadataExport::_addNodeToPoly(double x, double y, WayPtr& pPoly)
+long MetadataExport::_addNodeToPoly(double x, double y, WayPtr& pPoly) const
 {
   long nodeId = _pMap->createNextNodeId();
   NodePtr pNode(new Node(Status::Unknown1, nodeId, Coordinate(x,y)));

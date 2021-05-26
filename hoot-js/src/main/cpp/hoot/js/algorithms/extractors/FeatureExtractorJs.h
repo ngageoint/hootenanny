@@ -49,7 +49,7 @@ public:
 
   static void Init(v8::Local<v8::Object> target);
 
-  FeatureExtractorPtr getFeatureExtractor() { return _fe; }
+  FeatureExtractorPtr getFeatureExtractor() const { return _fe; }
 
   virtual ~FeatureExtractorJs() = default;
 

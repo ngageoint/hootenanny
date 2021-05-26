@@ -59,9 +59,9 @@ protected:
   cv::Mat _render1, _render2;
   Meters _wayLengthSum;
 
-  void _dumpImage(cv::Mat& image);
+  void _dumpImage(cv::Mat& image) const;
 
-  void _renderImage(const std::shared_ptr<OsmMap>& map, cv::Mat& result);
+  void _renderImage(const std::shared_ptr<OsmMap>& map, cv::Mat& result) const;
 };
 
 }

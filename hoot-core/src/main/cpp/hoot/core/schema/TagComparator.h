@@ -65,14 +65,14 @@ public:
   void compareEnumeratedTags(Tags t1, Tags t2, double& score, double& weight);
 
   void compareNames(const Tags& t1, const Tags& t2, double& score, double& weight,
-                    bool strict = false);
+                    bool strict = false) const;
 
   double compareTags(const Tags& t1, const Tags& t2, bool strict = false);
 
   /**
    * Compares all non-name text tags and puts the score in score and weight in weight.
    */
-  void compareTextTags(const Tags& t1, const Tags& t2, double& score, double& weight);
+  void compareTextTags(const Tags& t1, const Tags& t2, double& score, double& weight) const;
 
   /**
    * Generalize the tags in t1 and t2 to make them consistent. Using the following rules:
@@ -100,7 +100,7 @@ public:
    */
   void mergeNames(Tags& t1, Tags& t2, Tags& result,
                   const QStringList& overwriteExcludeTagKeys = QStringList(),
-                  bool caseSensitive = true);
+                  bool caseSensitive = true) const;
 
   /**
    * Keep all names. If there is a conflict in tags between t1 and t2 then use the value in t1.
@@ -138,7 +138,7 @@ public:
    * @return true if both tag sets have identical non-name, non-metadata contents (excluding
    * ordering); false otherwise
    */
-  bool nonNameTagsExactlyMatch(const Tags& t1, const Tags& t2, bool caseSensitive = true);
+  bool nonNameTagsExactlyMatch(const Tags& t1, const Tags& t2, bool caseSensitive = true) const;
 
   /**
    * Merge tags of type text
@@ -150,25 +150,25 @@ public:
    * @param caseSensitive True for case sensitive merge names
    */
   void mergeText(Tags& t1, Tags& t2, Tags& result,
-                 const QStringList& overwriteExcludeTagKeys = QStringList(), bool caseSensitive = true);
+                 const QStringList& overwriteExcludeTagKeys = QStringList(), bool caseSensitive = true) const;
 
 private:
 
   void _addDefaults(Tags& t);
 
-  void _addAsDefault(Tags& t, const QString& key, const QString& value);
+  void _addAsDefault(Tags& t, const QString& key, const QString& value) const;
 
   /**
    * Add any tags to result from t1 that don't conflict with t2. Any tag that is added to result
    * will also be removed from t1. This will not add any tags in t2 to result, nor modify t2.
    */
-  void _addNonConflictingTags(Tags& t1, const Tags& t2, Tags& result);
+  void _addNonConflictingTags(Tags& t1, const Tags& t2, Tags& result) const;
 
   /**
    * Any exact matches between t1 & t2 are put into result and removed from t1/t2. All lists are
    * treated as unordered lists.
    */
-  void _mergeExactMatches(Tags& t1, Tags& t2, Tags& result);
+  void _mergeExactMatches(Tags& t1, Tags& t2, Tags& result) const;
 
   /**
    * Any tag that is unrecognized will be put into result. If the values differ then a list will
@@ -183,15 +183,15 @@ private:
   void _overwriteRemainingTags(Tags& t1, Tags& t2, Tags& result,
                                const QStringList& overwriteExcludeTagKeys = QStringList(),
                                const QStringList& accumulateValuesTagKeys = QStringList(),
-                               bool caseSensitive = true);
+                               bool caseSensitive = true) const;
 
-  void _overwriteUnrecognizedTags(Tags& t1, Tags& t2, Tags& result);
+  void _overwriteUnrecognizedTags(Tags& t1, Tags& t2, Tags& result) const;
 
   /**
    * If two tags share a common ancestor then the result gets the common ancestor and the tags are
    * removed from t1 and t2.
    */
-  void _promoteToCommonAncestor(Tags& t1, Tags& t2, Tags& result);
+  void _promoteToCommonAncestor(Tags& t1, Tags& t2, Tags& result) const;
 
   QSet<QString> _toSet(const Tags& t, const QString& k);
 

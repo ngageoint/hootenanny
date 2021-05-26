@@ -57,7 +57,7 @@ public:
   void visit(const ConstElementPtr& e) override;
 
   void setOsmMap(OsmMap* map) override { _map = map; }
-  void setOsmMap(const OsmMap* /*map*/) { assert(false); }
+  void setOsmMap(const OsmMap* /*map*/) const { assert(false); }
 
   QString getDescription() const override
   { return "Decomposes complex buildings into simpler elements"; }

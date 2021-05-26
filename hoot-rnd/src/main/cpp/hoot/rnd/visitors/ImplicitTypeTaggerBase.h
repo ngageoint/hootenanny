@@ -58,8 +58,8 @@ public:
   void setTranslateNamesToEnglish(bool translate) { _translateNamesToEnglish = translate; }
   void setMatchEndOfNameSingleTokenFirst(bool match) { _matchEndOfNameSingleTokenFirst = match; }
   void setAllowTaggingSpecificFeatures(bool allow) { _allowTaggingSpecificFeatures = allow; }
-  void setAddTopTagOnly(bool add) { _ruleReader->setAddTopTagOnly(add); }
-  void setAllowWordsInvolvedInMultipleRules(bool allow)
+  void setAddTopTagOnly(bool add) const { _ruleReader->setAddTopTagOnly(add); }
+  void setAllowWordsInvolvedInMultipleRules(bool allow) const
   { _ruleReader->setAllowWordsInvolvedInMultipleRules(allow); }
 
   QString getName() const override { return className(); }
@@ -117,7 +117,7 @@ private:
 
   QStringList _getNameTokens(const QStringList& names) const;
   QStringList _getTranslatedNames(const QStringList& names, const Tags& tags);
-  QStringList _cleanNames(Tags& tags);
+  QStringList _cleanNames(Tags& tags) const;
   QString _getEndOfNameToken(const QString& name, const QStringList& nameTokensList) const;
 
   void _addImplicitTags(const ElementPtr& e, const Tags& tagsToAdd,
@@ -126,16 +126,16 @@ private:
   /*
    * Ensure a tag with less specificity than tags the element already contained are not added.
    */
-  void _ensureCorrectTagSpecificity(const ElementPtr& e, Tags& tagsToAdd);
+  void _ensureCorrectTagSpecificity(const ElementPtr& e, Tags& tagsToAdd) const;
 
   void _getImplicitlyDerivedTagsFromMultipleNameTokens(
     const QStringList& names, const QStringList& nameTokensList, const Tags& elementTags,
-    Tags& implicitlyDerivedTags, QSet<QString>& matchingWords, bool& wordsInvolvedInMultipleRules);
+    Tags& implicitlyDerivedTags, QSet<QString>& matchingWords, bool& wordsInvolvedInMultipleRules) const;
 
   void _getImplicitlyDerivedTagsFromSingleNameTokens(const QStringList& names,
     QStringList& nameTokensList, const Tags& elementTags, Tags& implicitlyDerivedTags,
     QSet<QString>& matchingWords, bool& wordsInvolvedInMultipleRules, bool& namesContainBuilding,
-    bool& namesContainOffice);
+    bool& namesContainOffice) const;
 
   Tags _applyCustomRules(const ElementPtr& e, const QStringList& filteredNames);
 };

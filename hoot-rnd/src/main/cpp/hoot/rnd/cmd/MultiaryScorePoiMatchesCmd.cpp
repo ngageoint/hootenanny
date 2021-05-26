@@ -68,7 +68,7 @@ public:
 
 
   QString evaluateThreshold(OsmMapPtr map, QString output,
-    std::shared_ptr<MatchThreshold> mt, bool showConfusion)
+    std::shared_ptr<MatchThreshold> mt, bool showConfusion) const
   {
     MultiaryMatchComparator comparator;
     comparator.setTranslationScript(_translator);

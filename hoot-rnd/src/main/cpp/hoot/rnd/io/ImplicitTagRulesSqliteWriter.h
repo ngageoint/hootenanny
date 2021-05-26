@@ -55,7 +55,7 @@ public:
    * @param outputUrl output database location
    * @return true if the output location is supported; false otherwise
    */
-  bool isSupported(const QString& outputUrl);
+  bool isSupported(const QString& outputUrl) const;
 
   /**
    * Opens the output rules database
@@ -96,13 +96,13 @@ private:
 
   long _statusUpdateInterval;
 
-  void _createTables();
+  void _createTables() const;
   void _prepareQueries();
 
   long _insertWord(const QString& word);
   long _insertTag(const QString& kvp);
   void _insertRule(const long wordId, const long tagId, const long tagOccurrenceCount);
-  void _createIndexes();
+  void _createIndexes() const;
 };
 
 }

@@ -107,13 +107,13 @@ private:
   //file which has had filtering applied to it based on _customRules
   std::shared_ptr<QTemporaryFile> _filteredCountFile;
 
-  void _validateInputs(const QString& input, const QString& output);
+  void _validateInputs(const QString& input, const QString& output) const;
 
   void _populateSchemaTagValues();
-  bool _wordIsNotASchemaTagValue(const QString& word);
+  bool _wordIsNotASchemaTagValue(const QString& word) const;
 
-  void _writeRules(const QString& input, const QString& output);
-  void _writeCustomRules(long& linesWrittenCount);
+  void _writeRules(const QString& input, const QString& output) const;
+  void _writeCustomRules(long& linesWrittenCount) const;
 
   void _removeKvpsBelowOccurrenceThreshold(const QString& input, const int minOccurrencesThreshold);
   /*

@@ -112,7 +112,7 @@ namespace Tgs
     int _order;
     bitmask_t* _point;
 
-    bitmask_t bitTranspose(unsigned nDims, unsigned nBits, bitmask_t inCoords)
+    bitmask_t bitTranspose(unsigned nDims, unsigned nBits, bitmask_t inCoords) const
     {
       unsigned const nDims1 = nDims-1;
       unsigned inB = nBits;

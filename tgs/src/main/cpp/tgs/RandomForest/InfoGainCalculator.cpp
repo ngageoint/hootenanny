@@ -38,7 +38,7 @@
 
 namespace Tgs
 {
-  double InfoGainCalculator::_calcLogFunc(double n)
+  double InfoGainCalculator::_calcLogFunc(double n) const
   {
     if (n < std::numeric_limits<double>::epsilon())
     {
@@ -76,7 +76,7 @@ namespace Tgs
   }
  
   void InfoGainCalculator::_findCandidateSplits(DataFrame & df, std::vector<unsigned int> & indices, unsigned int fIdx, 
-    std::vector<unsigned int> & splits)
+    std::vector<unsigned int> & splits) const
   {
      splits.clear();
  

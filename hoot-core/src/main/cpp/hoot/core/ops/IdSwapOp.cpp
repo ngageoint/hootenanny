@@ -113,7 +113,7 @@ void IdSwapOp::apply(const std::shared_ptr<hoot::OsmMap>& map)
   }
 }
 
-void IdSwapOp::swapNodeIdInWay(const std::shared_ptr<OsmMap>& map, long nodeId, long swapId)
+void IdSwapOp::swapNodeIdInWay(const std::shared_ptr<OsmMap>& map, long nodeId, long swapId) const
 {
   std::shared_ptr<NodeToWayMap> nodeToWayMap = map->getIndex().getNodeToWayMap();
   std::set<long> ways = nodeToWayMap->getWaysByNode(nodeId);

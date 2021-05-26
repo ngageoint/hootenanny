@@ -109,7 +109,7 @@ public:
    * @brief getType Get the element type
    * @return Element type (node/way/relation)
    */
-  ElementType::Type getType() { return _type; }
+  ElementType::Type getType() const { return _type; }
   /**
    * @brief toString Get the XML string equivalent for the element
    * @param changesetId ID of the changeset to insert into the element

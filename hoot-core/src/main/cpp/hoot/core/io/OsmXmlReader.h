@@ -188,7 +188,7 @@ protected:
   bool _foundOsmElementXmlEndElement() const;
   bool _foundOsmHeaderXmlStartElement();
 
-  void _parseTimeStamp(const QXmlAttributes& attributes);
+  void _parseTimeStamp(const QXmlAttributes& attributes) const;
 
   /*
    * Given the file ID return a relation ID. If the ID has already been mapped it will simply
@@ -197,12 +197,12 @@ protected:
    */
   long _getRelationId(long fileId);
 
-  double _parseDouble(const QString& s);
-  long _parseLong(const QString& s);
+  double _parseDouble(const QString& s) const;
+  long _parseLong(const QString& s) const;
 
   const QString& _saveMemory(const QString& s);
 
-  QXmlAttributes _streamAttributesToAttributes(const QXmlStreamAttributes& streamAttributes);
+  QXmlAttributes _streamAttributesToAttributes(const QXmlStreamAttributes& streamAttributes) const;
 
   void _uncompressInput();
 

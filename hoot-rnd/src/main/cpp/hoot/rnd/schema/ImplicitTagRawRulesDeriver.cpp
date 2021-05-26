@@ -644,7 +644,7 @@ void ImplicitTagRawRulesDeriver::_resolveCountTies()
   _tieResolvedCountFile->close();
 }
 
-void ImplicitTagRawRulesDeriver::_sortByWord(const std::shared_ptr<QTemporaryFile>& input)
+void ImplicitTagRawRulesDeriver::_sortByWord(const std::shared_ptr<QTemporaryFile>& input) const
 {
   LOG_INFO("Sorting output by word...");
   if (!input->exists())

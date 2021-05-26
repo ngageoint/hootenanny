@@ -219,17 +219,17 @@ void OsmPbfReader::_addTag(const std::shared_ptr<Element>& e, const QString& key
   }
 }
 
-double OsmPbfReader::_convertLon(long lon)
+double OsmPbfReader::_convertLon(long lon) const
 {
   return .000000001 * (_lonOffset + (_granularity * lon));
 }
 
-double OsmPbfReader::_convertLat(long lat)
+double OsmPbfReader::_convertLat(long lat) const
 {
   return .000000001 * (_latOffset + (_granularity * lat));
 }
 
-ElementId OsmPbfReader::_convertToElementId(long id, int memberType)
+ElementId OsmPbfReader::_convertToElementId(long id, int memberType) const
 {
   ElementType t;
   switch (memberType)
@@ -1023,7 +1023,7 @@ void OsmPbfReader::parseElements(QByteArray bytes, const OsmMapPtr& map)
   parseElements(&ss, map);
 }
 
-int OsmPbfReader::_parseInt(const QString& s)
+int OsmPbfReader::_parseInt(const QString& s) const
 {
   bool ok;
   int result = s.toInt(&ok);
@@ -1408,7 +1408,7 @@ void OsmPbfReader::close()
   _in = nullptr;
 }
 
-void OsmPbfReader::_parseTimestamp(const hoot::pb::Info& info, Tags& t)
+void OsmPbfReader::_parseTimestamp(const hoot::pb::Info& info, Tags& t) const
 {
   if (_addSourceDateTime && t.getInformationCount() > 0) // Make sure we actually have attributes
   {
