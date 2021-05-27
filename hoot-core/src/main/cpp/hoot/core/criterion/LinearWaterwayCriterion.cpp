@@ -85,9 +85,7 @@ bool LinearWaterwayCriterion::isSatisfied(const ConstElementPtr& e) const
 
 QStringList LinearWaterwayCriterion::getChildCriteria() const
 {
-  QStringList criteria;
-  criteria.append(LinearWaterwayWayNodeCriterion::className());
-  return criteria;
+  return QStringList(LinearWaterwayWayNodeCriterion::className());
 }
 
 }

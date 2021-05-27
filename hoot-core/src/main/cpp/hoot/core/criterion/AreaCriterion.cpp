@@ -98,9 +98,7 @@ bool AreaCriterion::isSatisfied(const Tags& tags, const ElementType& elementType
 
 QStringList AreaCriterion::getChildCriteria() const
 {
-  QStringList criteria;
-  criteria.append(AreaWayNodeCriterion::className());
-  return criteria;
+  return QStringList(AreaWayNodeCriterion::className());
 }
 
 }

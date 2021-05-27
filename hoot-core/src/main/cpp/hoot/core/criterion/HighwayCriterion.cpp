@@ -98,10 +98,8 @@ bool HighwayCriterion::isSatisfied(const ConstElementPtr& element) const
 }
 
 QStringList HighwayCriterion::getChildCriteria() const
-{
-  QStringList criteria;
-  criteria.append(HighwayWayNodeCriterion::className());
-  return criteria;
+{;
+  return QStringList(HighwayWayNodeCriterion::className());
 }
 
 }

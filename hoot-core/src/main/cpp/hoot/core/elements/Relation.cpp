@@ -117,6 +117,26 @@ void Relation::clear()
   _postGeometryChange();
 }
 
+RelationData::Entry Relation::getMember(const ElementId& elementId) const
+{
+  const size_t index = indexOf(elementId);
+  if ((int)index == -1)
+  {
+    return RelationData::Entry();
+  }
+  return getMembers().at(index);
+}
+
+QString Relation::getRole(const ElementId& elementId) const
+{
+  const RelationData::Entry member = getMember(elementId);
+  if (member.getElementId().getType() == ElementType::Unknown)
+  {
+    return "";
+  }
+  return member.getRole();
+}
+
 bool Relation::contains(const ElementId& eid) const
 {
   return (int)indexOf(eid) != -1;

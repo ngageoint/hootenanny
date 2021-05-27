@@ -95,9 +95,7 @@ bool PoiPolygonPolyCriterion::isSatisfied(const ConstElementPtr& e) const
 
 QStringList PoiPolygonPolyCriterion::getChildCriteria() const
 {
-  QStringList criteria;
-  criteria.append(PoiPolygonPolyWayNodeCriterion::className());
-  return criteria;
+  return QStringList(PoiPolygonPolyWayNodeCriterion::className());
 }
 
 }

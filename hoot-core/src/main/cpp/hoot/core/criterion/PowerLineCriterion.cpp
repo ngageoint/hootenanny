@@ -52,9 +52,7 @@ bool PowerLineCriterion::isSatisfied(const ConstElementPtr& e) const
 
 QStringList PowerLineCriterion::getChildCriteria() const
 {
-  QStringList criteria;
-  criteria.append(PowerLineWayNodeCriterion::className());
-  return criteria;
+  return QStringList(PowerLineWayNodeCriterion::className());
 }
 
 }

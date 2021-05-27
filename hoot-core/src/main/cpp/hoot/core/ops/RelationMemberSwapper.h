@@ -45,8 +45,9 @@ public:
   static QString className() { return "hoot::RelationMemberSwapper"; }
 
   RelationMemberSwapper();
-  RelationMemberSwapper(const ElementId& idToReplace, const ElementId& idToReplaceWith,
-                        const bool includeReviewRelations = true);
+  RelationMemberSwapper(
+    const ElementId& idToReplace, const ElementId& idToReplaceWith,
+    const bool includeReviewRelations = true);
   ~RelationMemberSwapper() = default;
 
   /**
@@ -62,8 +63,9 @@ public:
    * @param map map owning the element being removed
    * @param includeReviewRelations if true, review relations are modified
    */
-  static void swap(const ElementId& idToReplace, const ElementId& idToReplaceWith,
-                   const OsmMapPtr& map, const bool includeReviewRelations = true);
+  static void swap(
+    const ElementId& idToReplace, const ElementId& idToReplaceWith, const OsmMapPtr& map,
+    const bool includeReviewRelations = true);
 
   QString getInitStatusMessage() const override
   {
@@ -71,15 +73,12 @@ public:
       "Swapping relation member references for " + _idToReplace.toString() + " with " +
       _idToReplaceWith.toString() + " ...";
   }
-
   QString getCompletedStatusMessage() const override
   { return "Swapped " + QString::number(_numAffected) + " relation member references"; }
 
   QString getDescription() const override
   { return "Swaps all relation members references for one element ID with another"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 
 private:
