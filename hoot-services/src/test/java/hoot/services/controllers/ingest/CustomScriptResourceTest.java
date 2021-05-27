@@ -385,7 +385,7 @@ public class CustomScriptResourceTest extends HootServicesJerseyTestAbstract {
         response = target("/customscript/getlist")
                 .request(MediaType.APPLICATION_JSON)
                 .get();
-        String strList = response.getEntity().toString();
+        String strList = response.readEntity(String.class);
 
         JSONParser parser = new JSONParser();
         JSONArray arr = (JSONArray) parser.parse(strList);
