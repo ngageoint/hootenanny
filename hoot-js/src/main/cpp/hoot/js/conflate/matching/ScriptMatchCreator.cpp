@@ -500,7 +500,7 @@ public:
    *  - The Unknown1/Input1 is always e1. This is a requirement for some of the older code.
    *  - Gives a consistent ordering to allow backwards compatibility with system tests.
    */
-  bool isCorrectOrder(const ConstElementPtr& e1, const ConstElementPtr& e2)
+  bool isCorrectOrder(const ConstElementPtr& e1, const ConstElementPtr& e2) const
   {
     LOG_VART(e1->getStatus().getEnum());
     LOG_VART(e2->getStatus().getEnum());

@@ -61,7 +61,7 @@ public:
   MultiaryPoiMergeCache(const ConstOsmMapPtr& map, const std::shared_ptr<MatchCreator>& matchCreator,
     const std::shared_ptr<MergerCreator>& mergerCreator);
 
-  MultiaryClusterPtr merge(const MultiaryClusterPtr& c1, const MultiaryClusterPtr& c2);
+  MultiaryClusterPtr merge(const MultiaryClusterPtr& c1, const MultiaryClusterPtr& c2) const;
 
 private:
 

@@ -175,7 +175,7 @@ public:
 
   EdgeIterator() : _atEnd(true) { }
 
-  Edge operator*();
+  Edge operator*() const;
   Edge operator++(int);
   Edge& operator++();
   bool operator==(const EdgeIterator& other) const { return _atEnd == other._atEnd; }
@@ -210,7 +210,7 @@ public:
   FaceIterator() : _f(nullptr), _atEnd(true) { }
   virtual ~FaceIterator();
 
-  const Face& operator*();
+  const Face& operator*() const;
   Face operator++(int);
   Face& operator++();
   bool operator==(const FaceIterator& other) const { return _atEnd == other._atEnd; }

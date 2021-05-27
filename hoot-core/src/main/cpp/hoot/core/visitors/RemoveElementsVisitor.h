@@ -56,7 +56,7 @@ public:
   void setConfiguration(const Settings& conf) override;
 
   void setOsmMap(OsmMap* map) override;
-  void setOsmMap(const OsmMap* /*map*/) { assert(false); }
+  void setOsmMap(const OsmMap* /*map*/) const { assert(false); }
 
   static void removeWays(const std::shared_ptr<OsmMap>& pMap, const ElementCriterionPtr& pCrit);
 

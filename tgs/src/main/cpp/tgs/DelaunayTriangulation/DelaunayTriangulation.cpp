@@ -624,7 +624,7 @@ EdgeIterator::EdgeIterator(const set<QuadEdge *> &edges)
   operator++(0);
 }
 
-Edge EdgeIterator::operator*()
+Edge EdgeIterator::operator*() const
 {
   return _e;
 }
@@ -814,7 +814,7 @@ FaceIterator::~FaceIterator()
   }
 }
 
-const Face& FaceIterator::operator*()
+const Face& FaceIterator::operator*() const
 {
   return *_f;
 }

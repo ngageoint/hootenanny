@@ -110,7 +110,7 @@ namespace Tgs
     /**
     *  Computes the entropy function -n * log2(n)
     */
-    double _calcLogFunc(double n);
+    double _calcLogFunc(double n) const;
 
     /**
     * This methods takes a subset of data vectors held by indices and finds
@@ -123,7 +123,7 @@ namespace Tgs
     * @param splits the potential splits in the data to consider 
     */
     void _findCandidateSplits(DataFrame & df, std::vector<unsigned int> & indices, 
-      unsigned int fIdx, std::vector<unsigned int> & splits);
+      unsigned int fIdx, std::vector<unsigned int> & splits) const;
 
   };
 }  //End Namespace

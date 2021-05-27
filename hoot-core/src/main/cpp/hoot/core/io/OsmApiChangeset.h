@@ -70,7 +70,7 @@ struct LastElementInfo
     : _id(), _version(-1), _type(ChangesetType::TypeMax) { }
   LastElementInfo(ElementId id, long version, ChangesetType type)
     : _id(id), _version(version), _type(type) { }
-  bool isValid()
+  bool isValid() const
   {
     return !(_type == ChangesetType::TypeMax ||
              _id.getType().getEnum() == ElementType::Max ||
@@ -123,12 +123,12 @@ public:
    * @brief hasElementsToSend Checks if all elements have been marked as sent
    * @return true if there are elements that haven't been sent yet
    */
-  bool hasElementsToSend() { return (long)(_allNodes.size() + _allWays.size() + _allRelations.size()) > _sentCount; }
+  bool hasElementsToSend() const { return (long)(_allNodes.size() + _allWays.size() + _allRelations.size()) > _sentCount; }
   /**
    * @brief isDone Checks if all elements are either finalized or failed
    * @return true if there aren't any elements left to receive updates from
    */
-  bool isDone() { return (long)(_allNodes.size() + _allWays.size() + _allRelations.size()) <= _processedCount + _failedCount; }
+  bool isDone() const { return (long)(_allNodes.size() + _allWays.size() + _allRelations.size()) <= _processedCount + _failedCount; }
   /** Convert ChangesetType to string */
   static QString getString(ChangesetType type);
   /**
@@ -182,22 +182,22 @@ public:
    * @brief getTotalElementCount
    * @return total number of elements in the changeset
    */
-  long getTotalElementCount()   { return _allNodes.size() + _allWays.size() + _allRelations.size(); }
+  long getTotalElementCount() const  { return _allNodes.size() + _allWays.size() + _allRelations.size(); }
   /**
    * @brief getTotalNodeCount
    * @return total number of nodes in the changeset (create, modify, or delete)
    */
-  long getTotalNodeCount()      { return _allNodes.size(); }
+  long getTotalNodeCount() const     { return _allNodes.size(); }
   /**
    * @brief getTotalWayCount
    * @return total number of ways in the changeset (create, modify, or delete)
    */
-  long getTotalWayCount()       { return _allWays.size(); }
+  long getTotalWayCount() const     { return _allWays.size(); }
   /**
    * @brief getTotalRelationCount
    * @return total number of relations in the changeset (create, modify, or delete)
    */
-  long getTotalRelationCount()  { return _allRelations.size(); }
+  long getTotalRelationCount() const { return _allRelations.size(); }
   /**
    * @brief getTotalCreateCount
    * @return total number of nodes/ways/relations created in the changeset
@@ -225,7 +225,7 @@ public:
    * @brief getProcessedCount
    * @return Number of elements processed so far
    */
-  long getProcessedCount()      { return _processedCount; }
+  long getProcessedCount() const     { return _processedCount; }
   /**
    * @brief setErrorPathname Record the pathname of the error changeset
    * @param path Pathname
@@ -277,7 +277,7 @@ public:
    * @brief getCleanupCount Get the number of elements that need clean-up
    * @return Element count
    */
-  int getCleanupCount() { return _cleanupCount; }
+  int getCleanupCount() const { return _cleanupCount; }
   /**
    * @brief updateLastElement Set the last element structure metadata (updated ID and version)
    * @param last Last element information, in/out
@@ -328,7 +328,7 @@ private:
    * @param tags Current set of tags on the object
    * @return True if a change was made to fix the element
    */
-  bool fixElement(ChangesetTypeMap& map, long id, long version, QMap<QString, QString> tags);
+  bool fixElement(ChangesetTypeMap& map, long id, long version, QMap<QString, QString> tags) const;
   /**
    * @brief loadElements Load elements from the XML reader of type 'type'
    * @param reader XML reader of the file
@@ -382,7 +382,7 @@ private:
    * @param failing Set to true if the element is getting set to failed state, it is more selective about moves
    * @return false if the element cannot be moved successfully
    */
-  bool moveNode(const ChangesetInfoPtr& source, const ChangesetInfoPtr& destination, ChangesetType type, ChangesetNode* node, bool failing = false);
+  bool moveNode(const ChangesetInfoPtr& source, const ChangesetInfoPtr& destination, ChangesetType type, ChangesetNode* node, bool failing = false) const;
   bool moveWay(const ChangesetInfoPtr& source, const ChangesetInfoPtr& destination, ChangesetType type, ChangesetWay* way, bool failing = false);
   bool moveRelation(const ChangesetInfoPtr& source, const ChangesetInfoPtr& destination, ChangesetType type, ChangesetRelation* relation, bool failing = false);
   /**
@@ -419,7 +419,7 @@ private:
   size_t getObjectCount(ChangesetNode* node, ElementCountSet& elements, bool countSent = true);
   size_t getObjectCount(ChangesetWay* way, ElementCountSet& elements, bool countSent = true);
   size_t getObjectCount(ChangesetRelation* relation, ElementCountSet& elements, bool countSent = true);
-  size_t getObjectCount(const ChangesetInfoPtr& changeset, ChangesetNode* node, ElementCountSet& elements, bool countSent = true);
+  size_t getObjectCount(const ChangesetInfoPtr& /*changeset*/, ChangesetNode* node, ElementCountSet& elements, bool countSent = true) const;
   size_t getObjectCount(const ChangesetInfoPtr& changeset, ChangesetWay* way, ElementCountSet& elements, bool countSent = true);
   size_t getObjectCount(const ChangesetInfoPtr& changeset, ChangesetRelation* relation, ElementCountSet& elements, bool countSent = true);
   /**
@@ -427,13 +427,13 @@ private:
    * @param element Pointer to the element to check
    * @return true if the element has been sent to the API
    */
-  bool isSent(ChangesetElement* element);
+  bool isSent(ChangesetElement* element) const;
   /**
    * @brief canSend Check if the node/way/relation can be sent (if it is available) along with all of its downstream elements
    * @param node/way/relation Pointer to the element to check
    * @return true if element and all downstream elements are available to send
    */
-  bool canSend(ChangesetNode* node);
+  bool canSend(ChangesetNode* node) const;
   bool canSend(ChangesetWay* way);
   bool canSend(ChangesetRelation* relation);
   /**
@@ -486,7 +486,7 @@ private:
    * @brief getRemainingFilename Get the filename for the "remaining" elements
    * @return _errorPathname with "error" replaced by "remaining"
    */
-  QString getRemainingFilename();
+  QString getRemainingFilename() const;
   /**
    * @brief fixOrphanedNodesSplit When a changeset info object is split it may produce orphaned nodes, this
    *   function splits them out to the `_cleanup` object
@@ -502,7 +502,7 @@ private:
    * @param elementMap List of elements for the changeset types (_nodes/_ways/_relations)
    * @param all List of all elements in the changeset (_allNodes/_allWays/_allRelations)
    */
-  void insertElement(const ChangesetElementPtr& element, ChangesetType type, ChangesetTypeMap& elementMap, ChangesetElementMap& all);
+  void insertElement(const ChangesetElementPtr& element, ChangesetType type, ChangesetTypeMap& elementMap, ChangesetElementMap& all) const;
 
   bool fixPlaceholderFailure(ChangesetInfoPtr changeset, ChangesetInfoPtr& split,
                              long member_id, ElementType::Type member_type,
@@ -649,20 +649,20 @@ public:
    */
   size_t size();
   /** Set/get _attemptedResolveChangesetIssues member */
-  bool getAttemptedResolveChangesetIssues();
+  bool getAttemptedResolveChangesetIssues() const;
   void setAttemptedResolveChangesetIssues(bool attempted);
   /** Set/get _numRetries member */
-  bool canRetryFailure();
+  bool canRetryFailure() const;
   void retryFailure();
   /** Set/get _versionRetries member */
-  bool canRetryVersion();
+  bool canRetryVersion() const;
   void retryVersion();
   /** Set/get _finished member for final error checking */
   void setFinished() { _finished = true; }
-  bool getFinished() { return _finished; }
+  bool getFinished() const { return _finished; }
   /** Set/get _isError member */
   void setError() { _isError = true; }
-  bool getError() { return _isError; }
+  bool getError() const { return _isError; }
   /** Append another changeset info object to this one */
   void append(const std::shared_ptr<ChangesetInfo>& info);
   /** Return the information of the last element in this changeset */

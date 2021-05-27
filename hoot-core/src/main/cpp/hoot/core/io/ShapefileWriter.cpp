@@ -149,7 +149,7 @@ void ShapefileWriter::setConfiguration(const Settings& conf)
   _includeCircularError = ConfigOptions(conf).getWriterIncludeCircularErrorTags();
 }
 
-void ShapefileWriter::_removeShapefile(const QString& path)
+void ShapefileWriter::_removeShapefile(const QString& path) const
 {
   QFileInfo fi(path);
 
@@ -487,7 +487,7 @@ void ShapefileWriter::writePolygons(const ConstOsmMapPtr& map, const QString& pa
 
 void ShapefileWriter::_writeRelationPolygon(const ConstOsmMapPtr& map,
   const RelationPtr& relation, OGRLayer* poLayer, const QStringList& columns,
-  const QStringList& shpColumns)
+  const QStringList& shpColumns) const
 {
   OGRFeature* poFeature = OGRFeature::CreateFeature(poLayer->GetLayerDefn());
   // set all the column values.
@@ -536,7 +536,7 @@ void ShapefileWriter::_writeRelationPolygon(const ConstOsmMapPtr& map,
 }
 
 void ShapefileWriter::_writeWayPolygon(const ConstOsmMapPtr& map, const WayPtr& way,
-  OGRLayer* poLayer, const QStringList& columns, const QStringList &shpColumns)
+  OGRLayer* poLayer, const QStringList& columns, const QStringList &shpColumns) const
 {
   OGRFeature* poFeature = OGRFeature::CreateFeature(poLayer->GetLayerDefn());
   // set all the column values.

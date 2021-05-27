@@ -144,14 +144,14 @@ private:
    * Check to see which input words exist
    */
   void _queryWords(const QSet<QString>& words, QSet<long>& queriedWordIds,
-                   QSet<QString>& queriedWords);
+                   QSet<QString>& queriedWords) const;
   /*
    * Gets tags associated with only the inputs words that actually exist
    */
   Tags _getTagsForWords(const QSet<long>& queriedWordIds, const QSet<QString>& queriedWords,
                         const QSet<QString>& inputWords, QSet<QString>& matchingWords,
                         bool& wordsInvolvedInMultipleRules);
-  void _removeTagsWithDuplicatedValues(Tags& tags);
+  void _removeTagsWithDuplicatedValues(Tags& tags) const;
   void _modifyWordIdsForMultipleRules(QSet<long>& queriedWordIds);
 };
 

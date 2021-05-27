@@ -170,7 +170,7 @@ private:
      * Return the cluster that contains id. If the cluster doesn't exist an empty cluster is
      * returned.
      */
-    IdClusterPtr getCluster(QString id)
+    IdClusterPtr getCluster(QString id) const
     {
       IdClusterPtr result = value(id);
       if (!result.get())

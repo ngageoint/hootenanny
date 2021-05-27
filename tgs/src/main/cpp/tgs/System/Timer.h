@@ -40,7 +40,7 @@ namespace Tgs
 
     Timer() { _start = Tgs::Time::getTime(); }
 
-    double getElapsed() { return Tgs::Time::getTime() - _start; }
+    double getElapsed() const { return Tgs::Time::getTime() - _start; }
 
     double getElapsedAndRestart()
     {

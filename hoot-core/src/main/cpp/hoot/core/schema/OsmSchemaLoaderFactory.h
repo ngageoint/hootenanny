@@ -46,7 +46,7 @@ public:
 
   static OsmSchemaLoaderFactory& getInstance();
 
-  std::shared_ptr<OsmSchemaLoader> createLoader(QString url);
+  std::shared_ptr<OsmSchemaLoader> createLoader(QString url) const;
 
 private:
 

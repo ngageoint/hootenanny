@@ -138,7 +138,7 @@ private:
    *  <bounds minlat="xxx" minlon="xxx" maxlat="xxx" maxlong="xxx" />
    * @param bounds the bounds to write
    */
-  void _writeBounds(const geos::geom::Envelope& bounds);
+  void _writeBounds(const geos::geom::Envelope& bounds) const;
 };
 
 }

@@ -104,7 +104,7 @@ protected:
   WayPtr _assignToDataset( ElementPtr pElement );
 
   // removes unused or unneeded dataset ways and their nodes
-  void _removeDatasetWay(WayPtr pDataset);
+  void _removeDatasetWay(WayPtr pDataset) const;
 
 private:
 

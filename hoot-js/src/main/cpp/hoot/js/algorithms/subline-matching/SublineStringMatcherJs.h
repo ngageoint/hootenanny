@@ -50,7 +50,7 @@ public:
   virtual ~SublineStringMatcherJs() = default;
   static v8::Local<v8::Object> New(const SublineStringMatcherPtr& sd);
 
-  SublineStringMatcherPtr getSublineStringMatcher() { return _sm; }
+  SublineStringMatcherPtr getSublineStringMatcher() const { return _sm; }
 
 private:
 

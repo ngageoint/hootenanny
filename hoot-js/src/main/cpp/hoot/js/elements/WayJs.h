@@ -49,7 +49,7 @@ public:
   ConstElementPtr getConstElement() const override { return getConstWay(); }
   ConstWayPtr getConstWay() const { return _constWay; }
   ElementPtr getElement() override { return getWay(); }
-  WayPtr getWay() { assert(_way); return _way; }
+  WayPtr getWay() const { assert(_way); return _way; }
 
   static v8::Local<v8::Object> New(ConstWayPtr way);
   static v8::Local<v8::Object> New(WayPtr way);

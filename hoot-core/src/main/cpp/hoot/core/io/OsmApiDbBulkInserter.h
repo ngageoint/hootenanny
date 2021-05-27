@@ -220,7 +220,7 @@ protected:
   void _verifyStartingIds();
   void _closeOutputFiles();
   void _flush();
-  void _verifyDependencies();
+  void _verifyDependencies() const;
 
   void _createOutputFile(const QString& tableName, const QString& header = "");
   QString _getCombinedSqlFileName() const;
@@ -271,7 +271,7 @@ protected:
 
   virtual unsigned int _numberOfFileDataPasses() const;
 
-  void _logStats(const bool debug = false);
+  void _logStats(const bool debug = false) const;
 
   virtual unsigned long _getTotalRecordsWritten() const;
   virtual unsigned long _getTotalFeaturesWritten() const;
@@ -292,17 +292,17 @@ private:
   OsmApiDb _database;
   std::shared_ptr<OsmApiDbSqlStatementFormatter> _sqlFormatter;
 
-  void _verifyOutputCopySettings();
-  void _verifyFileOutputs();
+  void _verifyOutputCopySettings() const;
+  void _verifyFileOutputs() const;
   void _verifyChangesetUserId();
 
   void _incrementAndGetLatestIdsFromDb();
-  void _updateRecordLineWithIdOffset(const QString& tableName, QString& recordLine);
+  void _updateRecordLineWithIdOffset(const QString& tableName, QString& recordLine) const;
   void _reserveIdsInDb();
 
   void _writeSequenceUpdates(long changesetId, const unsigned long nodeId,
                              const unsigned long wayId, const unsigned long relationId,
-                             QString& outputStr);
+                             QString& outputStr) const;
 };
 
 }

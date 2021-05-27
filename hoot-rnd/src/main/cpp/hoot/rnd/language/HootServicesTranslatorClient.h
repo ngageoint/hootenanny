@@ -154,9 +154,9 @@ private:
   void _checkLangsAvailable(const QString& type);
 
   void _validateAvailableLangs(const std::shared_ptr<boost::property_tree::ptree>& replyObj,
-                               const QString& type);
+                               const QString& type) const;
 
-  QString _getRequestData(const QString& text);
+  QString _getRequestData(const QString& text) const;
   void _parseResponse(const std::shared_ptr<boost::property_tree::ptree>& replyObj);
 
   bool _getTranslationFromCache(const QString& text);

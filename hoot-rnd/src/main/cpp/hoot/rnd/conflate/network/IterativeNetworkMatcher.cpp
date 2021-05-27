@@ -50,7 +50,7 @@ IterativeNetworkMatcher::IterativeNetworkMatcher() :
   _edgeMatches.reset(new IndexedEdgeMatchSet());
 }
 
-double IterativeNetworkMatcher::_aggregateScores(QList<double> pairs)
+double IterativeNetworkMatcher::_aggregateScores(QList<double> pairs) const
 {
   //qSort(pairs.begin(), pairs.end(), greaterThan);
   qSort(pairs);
@@ -186,7 +186,7 @@ void IterativeNetworkMatcher::_createEmptyStubEdges(OsmNetworkPtr na, OsmNetwork
 }
 
 void IterativeNetworkMatcher::_createStubIntersection(OsmNetworkPtr na, OsmNetworkPtr nb,
-  ConstNetworkVertexPtr va, ConstNetworkEdgePtr smallWayB)
+  ConstNetworkVertexPtr va, ConstNetworkEdgePtr smallWayB) const
 {
   // Find all the edges that connect to eb
   QSet<ConstNetworkEdgePtr> ebNeighborhood = QSet<ConstNetworkEdgePtr>::fromList(
@@ -347,7 +347,7 @@ QList<NetworkVertexScorePtr> IterativeNetworkMatcher::getAllVertexScores() const
   return result;
 }
 
-QList<ConstNetworkEdgePtr> IterativeNetworkMatcher::_getEdgesOnVertex(ConstNetworkVertexPtr v)
+QList<ConstNetworkEdgePtr> IterativeNetworkMatcher::_getEdgesOnVertex(ConstNetworkVertexPtr v) const
 {
   QList<ConstNetworkEdgePtr> r1 = _n1->getEdgesFromVertex(v);
   QList<ConstNetworkEdgePtr> r2 = _n2->getEdgesFromVertex(v);
@@ -420,7 +420,7 @@ void IterativeNetworkMatcher::_normalizeAllScores()
 }
 
 // this method will need to be redefined to take advantage of the new match strings
-void IterativeNetworkMatcher::_normalizeScoresGlobal(EdgeScoreMap& t)
+void IterativeNetworkMatcher::_normalizeScoresGlobal(EdgeScoreMap& t) const
 {
   double sum = 0.0;
   for (EdgeScoreMap::iterator it = t.begin(); it != t.end(); ++it)
@@ -436,7 +436,7 @@ void IterativeNetworkMatcher::_normalizeScoresGlobal(EdgeScoreMap& t)
   }
 }
 
-void IterativeNetworkMatcher::_normalizeScoresGlobal(VertexScoreMap& t)
+void IterativeNetworkMatcher::_normalizeScoresGlobal(VertexScoreMap& t) const
 {
   for (VertexScoreMap::iterator it = t.begin(); it != t.end(); ++it)
   {
@@ -456,7 +456,7 @@ void IterativeNetworkMatcher::_normalizeScoresGlobal(VertexScoreMap& t)
 }
 
 // this method will need to be redefined to take advantage of the new match strings
-void IterativeNetworkMatcher::_normalizeScoresLocal(EdgeScoreMap& t)
+void IterativeNetworkMatcher::_normalizeScoresLocal(EdgeScoreMap& t) const
 {
   EdgeScoreMap oldScores = t;
 
@@ -479,7 +479,7 @@ void IterativeNetworkMatcher::_normalizeScoresLocal(EdgeScoreMap& t)
   }
 }
 
-void IterativeNetworkMatcher::_normalizeScoresLocal(VertexScoreMap& t)
+void IterativeNetworkMatcher::_normalizeScoresLocal(VertexScoreMap& t) const
 {
   for (VertexScoreMap::iterator it = t.begin(); it != t.end(); ++it)
   {
@@ -586,7 +586,7 @@ void IterativeNetworkMatcher::_seedVertexScores()
   }
 }
 
-void IterativeNetworkMatcher::_updateEdgeScores(EdgeScoreMap &em, const VertexScoreMap& vm)
+void IterativeNetworkMatcher::_updateEdgeScores(EdgeScoreMap &em, const VertexScoreMap& vm) const
 {
   // go through all edge matches
   for (EdgeScoreMap::iterator it = em.begin(); it != em.end(); ++it)

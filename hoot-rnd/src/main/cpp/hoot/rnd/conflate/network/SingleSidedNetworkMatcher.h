@@ -149,7 +149,7 @@ private:
 
   void _updateEdgeScoresAdditive();
 
-  void _updateVertexScores();
+  void _updateVertexScores() const;
 
 };
 

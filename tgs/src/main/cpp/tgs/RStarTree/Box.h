@@ -81,13 +81,13 @@ public:
 
   bool isValid() const;
 
-  bool operator==(const Box& b);
+  bool operator==(const Box& b) const;
 
   void setDimensions(int d);
 
   std::string toString() const;
 
-  bool isContained(const Box& b);
+  bool isContained(const Box& b) const;
 
 private:
 
@@ -96,7 +96,7 @@ private:
   bool _valid;
   int _dimensions;
 
-  void _copyArray(double* destination, const double* source)
+  void _copyArray(double* destination, const double* source) const
   {
     memcpy(destination, source, sizeof(double) * MAX_DIMENSIONS);
   }

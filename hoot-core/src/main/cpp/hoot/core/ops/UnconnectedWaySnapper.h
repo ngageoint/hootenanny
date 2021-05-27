@@ -351,7 +351,7 @@ private:
   /*
    * Marks a snapped way with a custom tag
    */
-  void _markSnappedWay(const long idOfNodeBeingSnapped, const bool toWayNode);
+  void _markSnappedWay(const long idOfNodeBeingSnapped, const bool toWayNode) const;
   /*
    * Marks a snapped way with a review tag
    */

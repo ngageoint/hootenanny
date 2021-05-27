@@ -171,7 +171,7 @@ void _loadAssociatedWith(SchemaVertex& tv, const QVariant& v, OsmSchema& s)
   }
 }
 
-void JsonOsmSchemaLoader::_loadBase(QVariantMap& copy, OsmSchema& s, SchemaVertex& tv)
+void JsonOsmSchemaLoader::_loadBase(QVariantMap& copy, OsmSchema& s, SchemaVertex& tv) const
 {
   // we don't need this anymore
   copy.remove("objectType");
@@ -281,7 +281,7 @@ void JsonOsmSchemaLoader::_loadCompound(const QVariantMap& v, OsmSchema& s)
   s.updateOrCreateVertex(tv);
 }
 
-void JsonOsmSchemaLoader::_loadCompoundTags(SchemaVertex& tv, const QVariant& value)
+void JsonOsmSchemaLoader::_loadCompoundTags(SchemaVertex& tv, const QVariant& value) const
 {
   if (value.type() != QVariant::List)
   {

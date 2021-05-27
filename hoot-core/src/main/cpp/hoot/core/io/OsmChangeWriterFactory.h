@@ -50,7 +50,7 @@ public:
    * @return an OSM change writer
    */
   std::shared_ptr<OsmChangeWriter> createWriter(const QString& url,
-                                                const QString& elementPayloadFormat = "json");
+                                                const QString& elementPayloadFormat = "json") const;
 
   /**
    * Determines if the output location is supported by any OsmChangeWriter
@@ -58,7 +58,7 @@ public:
    * @param output the output path to validate
    * @return true if the output path is supported by any writer; false otherwise
    */
-  bool isSupported(const QString& output);
+  bool isSupported(const QString& output) const;
 
   /**
    * Returns a Singleton instance of OsmChangeWriterFactory

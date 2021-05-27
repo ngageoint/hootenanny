@@ -60,10 +60,10 @@ public:
   /**
    * Returns the 90% confidence interval.
    */
-  double getConfidenceInterval() { return _ci; }
-  double getMeanScore() { return _mean; }
-  double getMedianScore() { return _median; }
-  double getStandardDeviation() { return _s; }
+  double getConfidenceInterval() const { return _ci; }
+  double getMeanScore() const { return _mean; }
+  double getMedianScore() const { return _median; }
+  double getStandardDeviation() const { return _s; }
 
   void setDebugImages(bool di) { _debugImages = di; }
   void setIterations(int i) { _iterations = i; }
@@ -111,10 +111,10 @@ private:
   cv::Mat _calculateCostDistance(
     OsmMapPtr map, geos::geom::Coordinate c, double& maxGraphCost, const Tgs::RandomPtr& random);
 
-  void _calculateRasterCost(cv::Mat& mat, const Tgs::RandomPtr& random);
+  void _calculateRasterCost(cv::Mat& mat, const Tgs::RandomPtr& random) const;
 
   void _exportGraphImage(OsmMapPtr map, DirectedGraph& graph, ShortestPath& sp,
-                         QString path, const geos::geom::Coordinate& coord);
+                         QString path, const geos::geom::Coordinate& coord) const;
 
   void _init();
 
@@ -122,7 +122,7 @@ private:
 
   void _paintWay(
     cv::Mat& mat, ConstOsmMapPtr map, WayPtr way, double friction, double startCost,
-    double endCost);
+    double endCost) const;
 };
 
 }

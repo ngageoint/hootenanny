@@ -240,7 +240,7 @@ namespace Tgs
   }
 
   void RandomTree::findProximity(const std::shared_ptr<DataFrame>& data,
-    std::vector<unsigned int> & proximity)
+    std::vector<unsigned int> & proximity) const
   {
     try
     {

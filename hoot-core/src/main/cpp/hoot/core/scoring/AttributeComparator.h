@@ -43,13 +43,13 @@ public:
 
   double compareMaps() override;
 
-  double getConfidenceInterval() { return _ci; }
+  double getConfidenceInterval() const { return _ci; }
 
-  double getMeanScore() { return _mean; }
+  double getMeanScore() const { return _mean; }
 
-  double getMedianScore() { return _median; }
+  double getMedianScore() const { return _median; }
 
-  double getStandardDeviation() { return _s; }
+  double getStandardDeviation() const { return _s; }
 
   void setIterations(int i) { _iterations = i; }
 

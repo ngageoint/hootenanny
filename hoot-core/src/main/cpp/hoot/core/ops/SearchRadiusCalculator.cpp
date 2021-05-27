@@ -91,7 +91,7 @@ void SearchRadiusCalculator::apply(std::shared_ptr<OsmMap>& map)
   _calculateSearchRadius(tiePointDistances);
 }
 
-OsmMapPtr SearchRadiusCalculator::_getFilteredMap(const ConstOsmMapPtr& map)
+OsmMapPtr SearchRadiusCalculator::_getFilteredMap(const ConstOsmMapPtr& map) const
 {
   OsmMapPtr filteredMap(new OsmMap());
 
@@ -127,7 +127,7 @@ OsmMapPtr SearchRadiusCalculator::_getFilteredMap(const ConstOsmMapPtr& map)
   return filteredMap;
 }
 
-std::vector<double> SearchRadiusCalculator::_getTiePointDistances(OsmMapPtr& map)
+std::vector<double> SearchRadiusCalculator::_getTiePointDistances(OsmMapPtr& map) const
 {
   std::vector<double> tiePointDistances;
   //  First check if there is a cached RubberSheet before creating a new one
@@ -198,7 +198,7 @@ void SearchRadiusCalculator::_calculateSearchRadius(const std::vector<double>& t
   }
 }
 
-double SearchRadiusCalculator::_calculateStandardDeviation(const std::vector<double>& samples)
+double SearchRadiusCalculator::_calculateStandardDeviation(const std::vector<double>& samples) const
 {
   double sumSquares = 0.0;
   for (size_t i = 0; i < samples.size(); i++)

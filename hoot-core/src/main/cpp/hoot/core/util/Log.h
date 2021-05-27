@@ -103,7 +103,7 @@ public:
   /**
    * May get called multiple times (e.g. before and after config settings are finalized).
    */
-  void init();
+  void init() const;
 
   static WarningLevel levelFromString(QString l);
   static QString levelToString(WarningLevel l);
@@ -164,7 +164,7 @@ public:
     reset();
   }
 
-  void reset()
+  void reset() const
   {
     Log::getInstance().setLevel(_oldLevel);
     Log::getInstance().log(Log::Trace, "Enabled logging.");

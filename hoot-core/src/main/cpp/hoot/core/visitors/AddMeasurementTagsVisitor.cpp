@@ -174,7 +174,7 @@ void AddMeasurementTagsVisitor::processWay(const WayPtr pWay)
   }
 }
 
-void AddMeasurementTagsVisitor::calculateExtents(Geometry* pGeometry, double& length, double &width)
+void AddMeasurementTagsVisitor::calculateExtents(Geometry* pGeometry, double& length, double &width) const
 {
   // calculate polygon length and width
   length = 0;

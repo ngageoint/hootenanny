@@ -87,7 +87,7 @@ private:
 
   QElapsedTimer _timer;
 
-  std::shared_ptr<ElementInputStream> _getFilteredNewInputStream(const QString& sortedNewInput);
+  std::shared_ptr<ElementInputStream> _getFilteredNewInputStream(const QString& sortedNewInput) const;
 
   /*
    * Writes data to the reference layer when no data exists there (no changeset derivation)
@@ -111,7 +111,7 @@ private:
   void _sortInputFile(const QString& input);
 
   void _doInputErrorChecking(const QString& newInput, const QString& translationScript,
-                             const QString& referenceOutput, const QString& changesetOutput);
+                             const QString& referenceOutput, const QString& changesetOutput) const;
 };
 
 }

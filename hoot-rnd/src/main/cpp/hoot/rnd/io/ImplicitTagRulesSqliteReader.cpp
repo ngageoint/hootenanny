@@ -337,7 +337,7 @@ Tags ImplicitTagRulesSqliteReader::_checkCachedTags(const QSet<QString>& words,
 
 void ImplicitTagRulesSqliteReader::_queryWords(const QSet<QString>& words,
                                                QSet<long>& queriedWordIds,
-                                               QSet<QString>& queriedWords)
+                                               QSet<QString>& queriedWords) const
 {
   //can't prepare this query due to the variable inputs
   QSqlQuery selectWordIdsForWords(_db);
@@ -491,7 +491,7 @@ Tags ImplicitTagRulesSqliteReader::_getTagsForWords(const QSet<long>& queriedWor
   return tags;
 }
 
-void ImplicitTagRulesSqliteReader::_removeTagsWithDuplicatedValues(Tags& tags)
+void ImplicitTagRulesSqliteReader::_removeTagsWithDuplicatedValues(Tags& tags) const
 {
   QStringList tagValues;
   QStringList tagKeysWithDuplicatedValues;

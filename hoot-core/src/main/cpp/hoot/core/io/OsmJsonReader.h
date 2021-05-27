@@ -192,25 +192,25 @@ public:
    * @brief getVersion Overpass API version, if that's where JSON comes from
    * @return version string
    */
-  QString getVersion() { return _version; }
+  QString getVersion() const { return _version; }
 
   /**
    * @brief getGenerator Map generator name, if supplied in JSON
    * @return generator name string
    */
-  QString getGenerator() { return _generator; }
+  QString getGenerator() const { return _generator; }
 
   /**
    * @brief getTimestampBase OSM timestamp base, if supplied in JSON
    * @return timestamp base string
    */
-  QString getTimestampBase() { return _timestamp_base; }
+  QString getTimestampBase() const { return _timestamp_base; }
 
   /**
    * @brief getCopyright Copyright statement, if supplied in JSON
    * @return copyright string
    */
-  QString getCopyright() { return _copyright; }
+  QString getCopyright() const { return _copyright; }
 
   /**
    * @brief scrubQuotes Converts single quotes to double quotes, and escaped
@@ -336,7 +336,7 @@ protected:
    * @param pElement Element to which we will add the tags
    */
   void _addTags(const boost::property_tree::ptree &item,
-                hoot::ElementPtr pElement);
+                hoot::ElementPtr pElement) const;
 
   /**
    * @brief _readFromHttp Creates HTTP(S) connection and downloads JSON to the _results list or
@@ -354,7 +354,7 @@ protected:
    */
   void _updateChildRefs();
   void _updateWayChildRefs();
-  void _updateRelationChildRefs(const ElementType& childElementType);
+  void _updateRelationChildRefs(const ElementType& childElementType) const;
 
   void _reset();
   void _resetIds();

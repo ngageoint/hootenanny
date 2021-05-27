@@ -49,7 +49,7 @@ public:
   /**
    * @brief init - A no-op that makes the code a little easier to read.
    */
-  void init() {}
+  void init() const {}
 
   static v8::Isolate* getIsolate();
 

@@ -71,11 +71,11 @@ protected:
 
   void _processObject(const QVariantMap& v, OsmSchema& s);
 
-  void _loadBase(QVariantMap& v, OsmSchema &s, SchemaVertex& tv);
+  void _loadBase(QVariantMap& v, OsmSchema &s, SchemaVertex& tv) const;
 
   void _loadCompound(const QVariantMap& v, OsmSchema& s);
 
-  void _loadCompoundTags(SchemaVertex& tv, const QVariant& value);
+  void _loadCompoundTags(SchemaVertex& tv, const QVariant& value) const;
 
   void _loadGeometries(SchemaVertex& tv, const QVariant& v) const;
 
