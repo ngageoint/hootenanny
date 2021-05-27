@@ -382,7 +382,7 @@ public class CustomScriptResourceTest extends HootServicesJerseyTestAbstract {
         file = new File(customScriptFolder, "testName4.js");
         assertTrue(file.exists());
 
-        response = target("/customscript/save")
+        response = target("/customscript/getlist")
                 .request(MediaType.APPLICATION_JSON)
                 .get();
         String strList = response.getEntity().toString();
