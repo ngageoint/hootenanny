@@ -74,7 +74,7 @@ private:
   /** In Hootenanny we own the Isolate, when called from Node we do not */
   bool _ownIsolate;
   /** Platform object */
-  std::shared_ptr<v8::Platform> _platform;
+  std::unique_ptr<v8::Platform> _platform;
   std::shared_ptr<v8::Locker> _locker;
   /** Main context */
   std::shared_ptr<v8::Persistent<v8::Context>> _context;

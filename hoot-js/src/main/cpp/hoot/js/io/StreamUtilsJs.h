@@ -55,9 +55,10 @@ inline v8::Local<v8::Value> fromJson(QString qstr, QString fileName="")
     v8::String::NewFromUtf8(
       current, utf8.data(), v8::NewStringType::kNormal, utf8.length()).ToLocalChecked();
 
-  v8::Local<v8::Object> JSON = global->Get(v8::String::NewFromUtf8(current, "JSON"))->ToObject(context).ToLocalChecked();
+  v8::Local<v8::Object> JSON =
+    global->Get(context, v8::String::NewFromUtf8(current, "JSON").ToLocalChecked()).ToLocalChecked()->ToObject(context).ToLocalChecked();
   v8::Local<v8::Function> JSON_parse =
-    v8::Local<v8::Function>::Cast(JSON->Get(v8::String::NewFromUtf8(current, "parse")));
+    v8::Local<v8::Function>::Cast(JSON->Get(context, v8::String::NewFromUtf8(current, "parse").ToLocalChecked()).ToLocalChecked());
 
   v8::Local<v8::Value> args[1];
   args[0] = str;
@@ -119,9 +120,9 @@ QString toJson(const v8::Local<T> object)
     v8::Local<v8::Context> context = current->GetCurrentContext();
     v8::Local<v8::Object> global = context->Global();
 
-    v8::Local<v8::Object> JSON = global->Get(v8::String::NewFromUtf8(current, "JSON"))->ToObject(context).ToLocalChecked();
+    v8::Local<v8::Object> JSON = global->Get(context, v8::String::NewFromUtf8(current, "JSON").ToLocalChecked()).ToLocalChecked()->ToObject(context).ToLocalChecked();
     v8::Local<v8::Function> JSON_stringify =
-      v8::Local<v8::Function>::Cast(JSON->Get(v8::String::NewFromUtf8(current, "stringify")));
+      v8::Local<v8::Function>::Cast(JSON->Get(context, v8::String::NewFromUtf8(current, "stringify").ToLocalChecked()).ToLocalChecked());
 
     v8::Local<v8::Value> args[1];
     args[0] = object;
@@ -129,9 +130,9 @@ QString toJson(const v8::Local<T> object)
     v8::Local<v8::Value> resultValue = JSON_stringify->Call(context, JSON, 1, args).ToLocalChecked();
     v8::Local<v8::String> s = v8::Local<v8::String>::Cast(resultValue);
 
-    size_t utf8Length = s->Utf8Length() + 1;
+    size_t utf8Length = s->Utf8Length(current) + 1;
     std::unique_ptr<char[]> buffer(new char[utf8Length]);
-    s->WriteUtf8(buffer.get(), utf8Length);
+    s->WriteUtf8(current, buffer.get(), utf8Length);
 
     result = QString::fromUtf8(buffer.get());
   }

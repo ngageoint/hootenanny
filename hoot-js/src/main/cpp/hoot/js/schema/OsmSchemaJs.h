@@ -89,6 +89,8 @@ private:
 inline v8::Local<v8::Value> toV8(const SchemaVertex& tv)
 {
   v8::Isolate* current = v8::Isolate::GetCurrent();
+  v8::HandleScope scope(current);
+  v8::Local<v8::Context> context = current->GetCurrentContext();
   v8::Local<v8::Object> result = v8::Object::New(current);
 
   if (tv.isEmpty())
@@ -97,18 +99,18 @@ inline v8::Local<v8::Value> toV8(const SchemaVertex& tv)
   }
   else
   {
-    result->Set(toV8("name"), toV8(tv.name));
-    result->Set(toV8("description"), toV8(tv.description));
-    result->Set(toV8("key"), toV8(tv.key));
-    result->Set(toV8("value"), toV8(tv.value));
-    result->Set(toV8("influence"), toV8(tv.influence));
-    result->Set(toV8("childWeight"), toV8(tv.childWeight));
-    result->Set(toV8("mismatchScore"), toV8(tv.mismatchScore));
+    result->Set(context, toV8("name"), toV8(tv.name));
+    result->Set(context, toV8("description"), toV8(tv.description));
+    result->Set(context, toV8("key"), toV8(tv.key));
+    result->Set(context, toV8("value"), toV8(tv.value));
+    result->Set(context, toV8("influence"), toV8(tv.influence));
+    result->Set(context, toV8("childWeight"), toV8(tv.childWeight));
+    result->Set(context, toV8("mismatchScore"), toV8(tv.mismatchScore));
     // need to create a string conversion for this if we want to use it. Unused for now.
     //result->Set(toV8("valueType"), toV8(tv.valueType), None);
-    result->Set(toV8("aliases"), toV8(tv.aliases));
-    result->Set(toV8("categories"), toV8(tv.categories));
-    result->Set(toV8("geometries"), toV8(tv.geometries));
+    result->Set(context, toV8("aliases"), toV8(tv.aliases));
+    result->Set(context, toV8("categories"), toV8(tv.categories));
+    result->Set(context, toV8("geometries"), toV8(tv.geometries));
   }
 
   return result;

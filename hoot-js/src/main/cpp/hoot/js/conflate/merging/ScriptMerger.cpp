@@ -175,8 +175,8 @@ Local<Value> ScriptMerger::_callMergePair(const OsmMapPtr& map) const
   Local<Context> context = current->GetCurrentContext();
   Local<Object> plugin =
     Local<Object>::Cast(
-      _script->getContext(current)->Global()->Get(String::NewFromUtf8(current, "plugin")));
-  Local<Value> value = plugin->Get(String::NewFromUtf8(current, "mergePair"));
+      _script->getContext(current)->Global()->Get(context, toV8("plugin")).ToLocalChecked());
+  Local<Value> value = plugin->Get(context, toV8("mergePair")).ToLocalChecked();
 
   if (value.IsEmpty() || value->IsFunction() == false)
   {
@@ -215,8 +215,8 @@ void ScriptMerger::_callMergeSets(const OsmMapPtr& map,
 
   Local<Object> plugin =
     Local<Object>::Cast(
-      _script->getContext(current)->Global()->Get(String::NewFromUtf8(current, "plugin")));
-  Local<Value> value = plugin->Get(String::NewFromUtf8(current, "mergeSets"));
+      _script->getContext(current)->Global()->Get(context, toV8("plugin")).ToLocalChecked());
+  Local<Value> value = plugin->Get(context, toV8("mergeSets")).ToLocalChecked();
 
   if (value.IsEmpty() || value->IsFunction() == false)
   {
@@ -244,10 +244,10 @@ bool ScriptMerger::hasFunction(QString name) const
   Isolate* current = v8::Isolate::GetCurrent();
   HandleScope handleScope(current);
   Context::Scope context_scope(_script->getContext(current));
+  Local<Context> context = current->GetCurrentContext();
   Local<Object> plugin =
-    Local<Object>::Cast(_script->getContext(current)->Global()->Get(
-      String::NewFromUtf8(current, "plugin")));
-  Local<Value> value = plugin->Get(String::NewFromUtf8(current, name.toUtf8().data()));
+    Local<Object>::Cast(_script->getContext(current)->Global()->Get(context, toV8("plugin")).ToLocalChecked());
+  Local<Value> value = plugin->Get(context, toV8(name.toUtf8().data())).ToLocalChecked();
 
   bool result = true;
   if (value.IsEmpty() || value->IsFunction() == false)

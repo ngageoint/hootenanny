@@ -62,56 +62,56 @@ void OsmSchemaJs::Init(Local<Object> exports)
   HandleScope scope(current);
   Local<Context> context = current->GetCurrentContext();
   Local<Object> schema = Object::New(current);
-  exports->Set(String::NewFromUtf8(current, "OsmSchema"), schema);
+  exports->Set(context, toV8("OsmSchema"), schema);
 
-  schema->Set(String::NewFromUtf8(current, "getAllTags"),
+  schema->Set(context, toV8("getAllTags"),
               FunctionTemplate::New(current, getAllTags)->GetFunction(context).ToLocalChecked());
-  schema->Set(String::NewFromUtf8(current, "getCategories"),
+  schema->Set(context, toV8("getCategories"),
               FunctionTemplate::New(current, getCategories)->GetFunction(context).ToLocalChecked());
-  schema->Set(String::NewFromUtf8(current, "getChildTagsAsVertices"),
+  schema->Set(context, toV8("getChildTagsAsVertices"),
               FunctionTemplate::New(current, getChildTagsAsVertices)->GetFunction(context).ToLocalChecked());
-  schema->Set(String::NewFromUtf8(current, "getSimilarTagsAsVertices"),
+  schema->Set(context, toV8("getSimilarTagsAsVertices"),
               FunctionTemplate::New(current, getSimilarTagsAsVertices)->GetFunction(context).ToLocalChecked());
-  schema->Set(String::NewFromUtf8(current, "getTagVertex"),
+  schema->Set(context, toV8("getTagVertex"),
               FunctionTemplate::New(current, getTagVertex)->GetFunction(context).ToLocalChecked());
-  schema->Set(String::NewFromUtf8(current, "isAncestor"),
+  schema->Set(context, toV8("isAncestor"),
               FunctionTemplate::New(current, isAncestor)->GetFunction(context).ToLocalChecked());
-  schema->Set(String::NewFromUtf8(current, "isGeneric"),
+  schema->Set(context, toV8("isGeneric"),
               FunctionTemplate::New(current, isGeneric)->GetFunction(context).ToLocalChecked());
-  schema->Set(String::NewFromUtf8(current, "hasType"),
+  schema->Set(context, toV8("hasType"),
               FunctionTemplate::New(current, hasType)->GetFunction(context).ToLocalChecked());
-  schema->Set(String::NewFromUtf8(current, "explicitTypeMismatch"),
+  schema->Set(context, toV8("explicitTypeMismatch"),
               FunctionTemplate::New(current, explicitTypeMismatch)->GetFunction(context).ToLocalChecked());
-  schema->Set(String::NewFromUtf8(current, "mostSpecificType"),
+  schema->Set(context, toV8("mostSpecificType"),
               FunctionTemplate::New(current, mostSpecificType)->GetFunction(context).ToLocalChecked());
-  schema->Set(String::NewFromUtf8(current, "score"),
+  schema->Set(context, toV8("score"),
               FunctionTemplate::New(current, score)->GetFunction(context).ToLocalChecked());
-  schema->Set(String::NewFromUtf8(current, "scoreTypes"),
+  schema->Set(context, toV8("scoreTypes"),
               FunctionTemplate::New(current, scoreTypes)->GetFunction(context).ToLocalChecked());
-  schema->Set(String::NewFromUtf8(current, "scoreOneWay"),
+  schema->Set(context, toV8("scoreOneWay"),
               FunctionTemplate::New(current, scoreOneWay)->GetFunction(context).ToLocalChecked());
-  schema->Set(String::NewFromUtf8(current, "hasName"),
+  schema->Set(context, toV8("hasName"),
               FunctionTemplate::New(current, hasName)->GetFunction(context).ToLocalChecked());
-  schema->Set(String::NewFromUtf8(current, "isSpecificallyConflatable"),
+  schema->Set(context, toV8("isSpecificallyConflatable"),
               FunctionTemplate::New(current, isSpecificallyConflatable)->GetFunction(context).ToLocalChecked());
 
-  schema->Set(String::NewFromUtf8(current, "isPolygon"),
+  schema->Set(context, toV8("isPolygon"),
               FunctionTemplate::New(current, isPolygon)->GetFunction(context).ToLocalChecked());
-  schema->Set(String::NewFromUtf8(current, "isPoint"),
+  schema->Set(context, toV8("isPoint"),
               FunctionTemplate::New(current, isPoint)->GetFunction(context).ToLocalChecked());
-  schema->Set(String::NewFromUtf8(current, "isLinear"),
+  schema->Set(context, toV8("isLinear"),
               FunctionTemplate::New(current, isLinear)->GetFunction(context).ToLocalChecked());
-  schema->Set(String::NewFromUtf8(current, "isLinearWaterway"),
+  schema->Set(context, toV8("isLinearWaterway"),
               FunctionTemplate::New(current, isLinearWaterway)->GetFunction(context).ToLocalChecked());
-  schema->Set(String::NewFromUtf8(current, "isPowerLine"),
+  schema->Set(context, toV8("isPowerLine"),
               FunctionTemplate::New(current, isPowerLine)->GetFunction(context).ToLocalChecked());
-  schema->Set(String::NewFromUtf8(current, "isPoi"),
+  schema->Set(context, toV8("isPoi"),
               FunctionTemplate::New(current, isPoi)->GetFunction(context).ToLocalChecked());
-  schema->Set(String::NewFromUtf8(current, "isRailway"),
+  schema->Set(context, toV8("isRailway"),
               FunctionTemplate::New(current, isRailway)->GetFunction(context).ToLocalChecked());
-  schema->Set(String::NewFromUtf8(current, "isNonBuildingArea"),
+  schema->Set(context, toV8("isNonBuildingArea"),
               FunctionTemplate::New(current, isNonBuildingArea)->GetFunction(context).ToLocalChecked());
-  schema->Set(String::NewFromUtf8(current, "isCollectionRelation"),
+  schema->Set(context, toV8("isCollectionRelation"),
               FunctionTemplate::New(current, isCollectionRelation)->GetFunction(context).ToLocalChecked());
 }
 
@@ -403,7 +403,7 @@ void OsmSchemaJs::mostSpecificType(const FunctionCallbackInfo<Value>& args)
 
   ConstElementPtr element = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject(context).ToLocalChecked())->getConstElement();
   const QString kvp = OsmSchema::getInstance().mostSpecificType(element->getTags());
-  args.GetReturnValue().Set(String::NewFromUtf8(current, kvp.toUtf8().data()));
+  args.GetReturnValue().Set(String::NewFromUtf8(current, kvp.toUtf8().data()).ToLocalChecked());
 }
 
 }

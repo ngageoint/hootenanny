@@ -53,19 +53,19 @@ void RelationMemberUtilsJs::Init(Local<Object> exports)
   HandleScope scope(current);
   Local<Context> context = current->GetCurrentContext();
   Local<Object> obj = Object::New(current);
-  exports->Set(String::NewFromUtf8(current, "RelationMemberUtils"), obj);
+  exports->Set(context, toV8("RelationMemberUtils"), obj);
 
-  obj->Set(String::NewFromUtf8(current, "isMemberOfRelationWithType"),
+  obj->Set(context, toV8("isMemberOfRelationWithType"),
            FunctionTemplate::New(current, isMemberOfRelationWithType)->GetFunction(context).ToLocalChecked());
-  obj->Set(String::NewFromUtf8(current, "isMemberOfRelationInCategory"),
+  obj->Set(context, toV8("isMemberOfRelationInCategory"),
            FunctionTemplate::New(current, isMemberOfRelationInCategory)->GetFunction(context).ToLocalChecked());
-  obj->Set(String::NewFromUtf8(current, "isMemberOfRelationWithTagKey"),
+  obj->Set(context, toV8("isMemberOfRelationWithTagKey"),
            FunctionTemplate::New(current, isMemberOfRelationWithTagKey)->GetFunction(context).ToLocalChecked());
-  obj->Set(String::NewFromUtf8(current, "getNumRelationMemberNodes"),
+  obj->Set(context, toV8("getNumRelationMemberNodes"),
            FunctionTemplate::New(current, getNumRelationMemberNodes)->GetFunction(context).ToLocalChecked());
-  obj->Set(String::NewFromUtf8(current, "relationsHaveConnectedWayMembers"),
+  obj->Set(context, toV8("relationsHaveConnectedWayMembers"),
            FunctionTemplate::New(current, relationsHaveConnectedWayMembers)->GetFunction(context).ToLocalChecked());
-  obj->Set(String::NewFromUtf8(current, "isMemberOfRelationSatisfyingCriterion"),
+  obj->Set(context, toV8("isMemberOfRelationSatisfyingCriterion"),
            FunctionTemplate::New(current, isMemberOfRelationSatisfyingCriterion)->GetFunction(context).ToLocalChecked());
 }
 

@@ -27,23 +27,23 @@
 #include "SublineStringMatcherJs.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/util/StringUtils.h>
-#include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/algorithms/linearreference/WaySublineCollection.h>
 #include <hoot/core/algorithms/splitter/MultiLineStringSplitter.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/ops/CopyMapSubsetOp.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Settings.h>
+#include <hoot/core/util/StringUtils.h>
 #include <hoot/js/JsRegistrar.h>
-#include <hoot/js/elements/OsmMapJs.h>
 #include <hoot/js/elements/ElementJs.h>
+#include <hoot/js/elements/OsmMapJs.h>
+#include <hoot/js/io/StreamUtilsJs.h>
 #include <hoot/js/util/HootExceptionJs.h>
 #include <hoot/js/util/PopulateConsumersJs.h>
-#include <hoot/js/io/StreamUtilsJs.h>
 #include <hoot/js/util/StringUtilsJs.h>
-#include <hoot/core/algorithms/linearreference/WaySublineCollection.h>
-#include <hoot/core/geometry/ElementToGeometryConverter.h>
 
 // Qt
 #include <QStringList>
@@ -75,14 +75,14 @@ void SublineStringMatcherJs::Init(Local<Object> target)
 
     // Prepare constructor template
     Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
-    tpl->SetClassName(String::NewFromUtf8(current, opNames[i].toStdString().data()));
+    tpl->SetClassName(String::NewFromUtf8(current, opNames[i].toStdString().data()).ToLocalChecked());
     tpl->InstanceTemplate()->SetInternalFieldCount(1);
     // Prototype
-    tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "extractMatchingSublines"),
+    tpl->PrototypeTemplate()->Set(current, "extractMatchingSublines",
         FunctionTemplate::New(current, extractMatchingSublines));
 
     _constructor.Reset(current, tpl->GetFunction(context).ToLocalChecked());
-    target->Set(String::NewFromUtf8(current, n), ToLocal(&_constructor));
+    target->Set(context, toV8(n), ToLocal(&_constructor));
   }
 }
 
@@ -186,9 +186,9 @@ void SublineStringMatcherJs::extractMatchingSublines(const FunctionCallbackInfo<
     {
       LOG_TRACE("match");
       Local<Object> obj = Object::New(current);
-      obj->Set(String::NewFromUtf8(current, "map"), OsmMapJs::create(copiedMap));
-      obj->Set(String::NewFromUtf8(current, "match1"), ElementJs::New(match1));
-      obj->Set(String::NewFromUtf8(current, "match2"), ElementJs::New(match2));
+      obj->Set(context, toV8("map"), OsmMapJs::create(copiedMap));
+      obj->Set(context, toV8("match1"), ElementJs::New(match1));
+      obj->Set(context, toV8("match2"), ElementJs::New(match2));
       result = obj;
     }
     args.GetReturnValue().Set(result);

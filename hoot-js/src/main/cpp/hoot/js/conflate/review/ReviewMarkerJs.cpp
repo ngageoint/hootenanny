@@ -50,8 +50,8 @@ void ReviewMarkerJs::Init(Local<Object> exports)
   HandleScope scope(current);
   Local<Context> context = current->GetCurrentContext();
   Local<Object> reviewMarker = Object::New(current);
-  exports->Set(String::NewFromUtf8(current, "ReviewMarker"), reviewMarker);
-  reviewMarker->Set(String::NewFromUtf8(current, "mark"),
+  exports->Set(context, toV8("ReviewMarker"), reviewMarker);
+  reviewMarker->Set(context, toV8("mark"),
                     FunctionTemplate::New(current, mark)->GetFunction(context).ToLocalChecked());
 }
 

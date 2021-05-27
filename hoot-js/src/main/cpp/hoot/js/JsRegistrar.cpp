@@ -29,6 +29,8 @@
 #include <hoot/core/Hoot.h>
 #include <hoot/core/util/Log.h>
 
+#include <hoot/js/io/DataConvertJs.h>
+
 using namespace v8;
 
 namespace hoot
@@ -38,7 +40,7 @@ void Method(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
-  args.GetReturnValue().Set(String::NewFromUtf8(current, "world"));
+  args.GetReturnValue().Set(toV8("world"));
 }
 
 JsRegistrar& JsRegistrar::getInstance()
@@ -61,9 +63,7 @@ void JsRegistrar::initAll(Local<Object> exports)
   NODE_SET_METHOD(exports, "hello", Method);
 
   for (size_t i = 0; i < _initializers.size(); i++)
-  {
     _initializers[i]->Init(exports);
-  }
 }
 
 void JsRegistrar::registerInitializer(const std::shared_ptr<ClassInitializer>& ci)
