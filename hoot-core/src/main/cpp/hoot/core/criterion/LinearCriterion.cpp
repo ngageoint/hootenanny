@@ -106,6 +106,8 @@ bool LinearCriterion::isLinearRelation(const ConstRelationPtr& relation)
       return true;
     }
   }
+
+  return false;
 }
 
 QStringList LinearCriterion::getChildCriteria() const
