@@ -5,7 +5,7 @@ AC_DEFUN([NODEJS_INIT],[
   # Now find out which version we have
   # We set the include path in the hoot-js.pro file 
   #saved_CPPFLAGS=$CPPFLAGS
-  CPPFLAGS="-std=c++11 -I/usr/include/nodejs -I/usr/include/node -I/usr/include/nodejs/deps/uv/include ${CPPFLAGS}"
+  CPPFLAGS="-std=c++11 -I/usr/include -I/usr/include/nodejs -I/usr/include/node -I/usr/include/nodejs/deps/uv/include ${CPPFLAGS}"
 
   AC_LANG_PUSH([C++])
     AC_CHECK_HEADERS([nodejs/src/node.h], [hootFoundNjsHeaders=yes; break;])

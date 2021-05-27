@@ -27,15 +27,15 @@
 #include "LinearMergerJs.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/conflate/merging/LinearTagOnlyMerger.h>
 #include <hoot/core/conflate/merging/LinearAverageMerger.h>
 #include <hoot/core/conflate/merging/LinearMergerFactory.h>
+#include <hoot/core/conflate/merging/LinearTagOnlyMerger.h>
+#include <hoot/core/util/Factory.h>
 
 #include <hoot/js/JsRegistrar.h>
-#include <hoot/js/elements/OsmMapJs.h>
 #include <hoot/js/algorithms/subline-matching//SublineStringMatcherJs.h>
 #include <hoot/js/elements/ElementIdJs.h>
+#include <hoot/js/elements/OsmMapJs.h>
 #include <hoot/js/io/DataConvertJs.h>
 #include <hoot/js/util/PopulateConsumersJs.h>
 #include <hoot/js/util/StringUtilsJs.h>
@@ -65,16 +65,14 @@ void LinearMergerJs::Init(Local<Object> target)
   // Prepare constructor template
   Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
   const QString name = "LinearMerger";
-  tpl->SetClassName(String::NewFromUtf8(current, name.toStdString().data()));
+  tpl->SetClassName(String::NewFromUtf8(current, name.toStdString().data()).ToLocalChecked());
   tpl->InstanceTemplate()->SetInternalFieldCount(1);
   // Prototype
-  tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(),
-    String::NewFromUtf8(current, MergerBase::className().toStdString().data()));
-  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "apply"),
-      FunctionTemplate::New(current, apply));
+  tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(), toV8(MergerBase::className()));
+  tpl->PrototypeTemplate()->Set(current, "apply", FunctionTemplate::New(current, apply));
 
   _constructor.Reset(current, tpl->GetFunction(context).ToLocalChecked());
-  target->Set(String::NewFromUtf8(current, name.toStdString().data()), ToLocal(&_constructor));
+  target->Set(context, toV8(name), ToLocal(&_constructor));
 }
 
 void LinearMergerJs::New(const FunctionCallbackInfo<Value>& args)
@@ -93,6 +91,7 @@ void LinearMergerJs::apply(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
 
   SublineStringMatcherPtr sublineStringMatcher = toCpp<SublineStringMatcherPtr>(args[0]);
   // POTENTIAL BUG HERE: This subline string matcher has already been configured when
@@ -124,10 +123,10 @@ void LinearMergerJs::apply(const FunctionCallbackInfo<Value>& args)
   // Modify the parameter that was passed in.
   Local<Array> newArr = Local<Array>::Cast(toV8(replaced));
   Local<Array> arr = Local<Array>::Cast(args[3]);
-  arr->Set(String::NewFromUtf8(current, "length"), Integer::New(current, newArr->Length()));
+  arr->Set(context, toV8("length"), Integer::New(current, newArr->Length()));
   for (uint32_t i = 0; i < newArr->Length(); i++)
   {
-    arr->Set(i, newArr->Get(i));
+    arr->Set(context, i, newArr->Get(context, i).ToLocalChecked());
   }
 
   args.GetReturnValue().SetUndefined();

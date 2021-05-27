@@ -21,6 +21,8 @@ INCLUDEPATH += \
   $${DEPENDPATH} \
   ../local/include/ \
 
+QMAKE_CXXFLAGS = -I/usr/include/node -I/usr/local/include/node $$QMAKE_CXXFLAGS
+
 CONFIG += rtti \
     debug \
     precompile_header

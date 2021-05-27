@@ -28,25 +28,26 @@
 #define POPULATECONSUMERSJS_H
 
 // hoot
-#include <hoot/core/elements/ConstOsmMapConsumer.h>
 #include <hoot/core/algorithms/string/StringDistanceConsumer.h>
 #include <hoot/core/algorithms/aggregator/ValueAggregatorConsumer.h>
-#include <hoot/core/elements/ElementConsumer.h>
 #include <hoot/core/criterion/ElementCriterionConsumer.h>
-#include <hoot/core/visitors/ElementVisitorConsumer.h>
+#include <hoot/core/elements/ConstOsmMapConsumer.h>
+#include <hoot/core/elements/ElementConsumer.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Settings.h>
-#include <hoot/js/elements/OsmMapJs.h>
+#include <hoot/core/visitors/ElementVisitorConsumer.h>
+#include <hoot/core/visitors/MultipleCriterionConsumerVisitor.h>
+
 #include <hoot/js/algorithms/string/StringDistanceJs.h>
 #include <hoot/js/algorithms/aggregator/ValueAggregatorJs.h>
 #include <hoot/js/criterion/ElementCriterionJs.h>
+#include <hoot/js/criterion/JsFunctionCriterion.h>
 #include <hoot/js/elements/ElementJs.h>
+#include <hoot/js/elements/OsmMapJs.h>
+#include <hoot/js/util/JsFunctionConsumer.h>
 #include <hoot/js/util/StringUtilsJs.h>
 #include <hoot/js/visitors/ElementVisitorJs.h>
-#include <hoot/core/visitors/MultipleCriterionConsumerVisitor.h>
-#include <hoot/js/criterion/JsFunctionCriterion.h>
-#include <hoot/js/util/JsFunctionConsumer.h>
 
 // node.js
 #include <hoot/js/SystemNodeJs.h>
@@ -59,7 +60,7 @@ class PopulateConsumersJs
 public:
 
   static v8::Local<v8::String> baseClass()
-  { return v8::String::NewFromUtf8(v8::Isolate::GetCurrent(), "baseClass"); }
+  { return v8::String::NewFromUtf8(v8::Isolate::GetCurrent(), "baseClass").ToLocalChecked(); }
 
   template <typename T>
   static void populateConsumers(T* consumer, const v8::FunctionCallbackInfo<v8::Value>& args)
@@ -86,34 +87,34 @@ public:
 
       if (obj->Has(context, baseClass()).ToChecked())
       {
-        if (str(obj->Get(baseClass())) == ElementCriterion::className())
+        if (str(obj->Get(context, baseClass()).ToLocalChecked()) == ElementCriterion::className())
         {
           populateCriterionConsumer<T>(consumer, v);
         }
-        else if (str(obj->Get(baseClass())) == ElementVisitor::className())
+        else if (str(obj->Get(context, baseClass()).ToLocalChecked()) == ElementVisitor::className())
         {
           populateVisitorConsumer<T>(consumer, v);
         }
-        else if (str(obj->Get(baseClass())) == Element::className())
+        else if (str(obj->Get(context, baseClass()).ToLocalChecked()) == Element::className())
         {
           populateElementConsumer<T>(consumer, v);
         }
-        else if (str(obj->Get(baseClass())) == StringDistance::className())
+        else if (str(obj->Get(context, baseClass()).ToLocalChecked()) == StringDistance::className())
         {
           populateStringDistanceConsumer<T>(consumer, v);
         }
-        else if (str(obj->Get(baseClass())) == ValueAggregator::className())
+        else if (str(obj->Get(context, baseClass()).ToLocalChecked()) == ValueAggregator::className())
         {
           populateValueAggregatorConsumer<T>(consumer, v);
         }
-        else if (str(obj->Get(baseClass())) == OsmMap::className())
+        else if (str(obj->Get(context, baseClass()).ToLocalChecked()) == OsmMap::className())
         {
           populateOsmMapConsumer<T>(consumer, v);
         }
         else
         {
           throw IllegalArgumentException(
-            "Unexpected object passed to consumer " + str(obj->Get(baseClass())));
+            "Unexpected object passed to consumer " + str(obj->Get(context, baseClass()).ToLocalChecked()));
         }
       }
       else
@@ -142,8 +143,8 @@ public:
 
     for (uint32_t i = 0; i < keys->Length(); i++)
     {
-      v8::Local<v8::String> k = keys->Get(i)->ToString(current);
-      v8::Local<v8::String> v = obj->Get(k)->ToString(current);
+      v8::Local<v8::String> k = keys->Get(context, i).ToLocalChecked()->ToString(context).ToLocalChecked();
+      v8::Local<v8::String> v = obj->Get(context, k).ToLocalChecked()->ToString(context).ToLocalChecked();
       LOG_VART(str(k));
       LOG_VART(str(v));
       settings.set(str(k), str(v));
@@ -153,7 +154,7 @@ public:
     if (c == nullptr)
     {
       throw IllegalArgumentException(
-        "Object does not accept custom settings as an argument: " + str(obj->Get(baseClass())));
+        "Object does not accept custom settings as an argument: " + str(obj->Get(context, baseClass()).ToLocalChecked()));
     }
 
     // Configuration from Javascript for criterion consumers is handled a little differently where

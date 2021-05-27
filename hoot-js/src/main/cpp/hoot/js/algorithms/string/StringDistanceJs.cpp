@@ -58,15 +58,13 @@ void StringDistanceJs::Init(Local<Object> target)
 
     // Prepare constructor template
     Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
-    tpl->SetClassName(String::NewFromUtf8(current, opNames[i].toStdString().data()));
+    tpl->SetClassName(String::NewFromUtf8(current, opNames[i].toStdString().data()).ToLocalChecked());
     tpl->InstanceTemplate()->SetInternalFieldCount(2);
     // Prototype
-    tpl->PrototypeTemplate()->Set(
-      PopulateConsumersJs::baseClass(),
-      String::NewFromUtf8(current, StringDistance::className().toStdString().data()));
+    tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(), toV8(StringDistance::className()));
 
     Persistent<Function> constructor(current, tpl->GetFunction(context).ToLocalChecked());
-    target->Set(String::NewFromUtf8(current, n), ToLocal(&constructor));
+    target->Set(context, toV8(n), ToLocal(&constructor));
   }
 }
 

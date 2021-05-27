@@ -47,8 +47,8 @@ void RiverMaximalSublineSettingOptimizerJs::Init(Local<Object> exports)
   HandleScope scope(current);
   Local<Context> context = current->GetCurrentContext();
   Local<Object> thisObj = Object::New(current);
-  exports->Set(String::NewFromUtf8(current, "RiverMaximalSublineSettingOptimizer"), thisObj);
-  thisObj->Set(String::NewFromUtf8(current, "getFindBestMatchesMaxRecursions"),
+  exports->Set(context, toV8("RiverMaximalSublineSettingOptimizer"), thisObj);
+  thisObj->Set(context, toV8("getFindBestMatchesMaxRecursions"),
                FunctionTemplate::New(current, getFindBestMatchesMaxRecursions)->GetFunction(context).ToLocalChecked());
 }
 

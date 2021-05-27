@@ -176,11 +176,11 @@ sudo yum -y install \
     protobuf \
     protobuf-compiler \
     protobuf-devel \
-    python  \
-    python-devel \
-    python-matplotlib \
-    python-pip  \
-    python-setuptools \
+    python3  \
+    python3-devel \
+    python3-matplotlib \
+    python3-pip  \
+    python3-setuptools \
     qt5-qtbase \
     qt5-qtbase-devel \
     qt5-qtbase-postgresql \
@@ -213,6 +213,9 @@ fi
 cd $HOOT_HOME
 
 echo "### Configuring environment..."
+
+# Update RVM flags to run auto-update to latest version
+echo rvm_autoupdate_flag=2 >> ~/.rvmrc
 
 # Configure https alternative mirror for maven install, this can likely be removed once
 # we are using maven 3.2.3 or higher

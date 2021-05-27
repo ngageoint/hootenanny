@@ -62,25 +62,19 @@ void OsmMapJs::Init(Local<Object> target)
 
   // Prepare constructor template
   Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
-  tpl->SetClassName(String::NewFromUtf8(current, "OsmMap"));
+  tpl->SetClassName(String::NewFromUtf8(current, "OsmMap").ToLocalChecked());
   tpl->InstanceTemplate()->SetInternalFieldCount(1);
 
   // Prototype
-  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "clone"),
-        FunctionTemplate::New(current, clone));
-  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getElement"),
-      FunctionTemplate::New(current, getElement));
-  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getElementCount"),
-        FunctionTemplate::New(current, getElementCount));
-  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "visit"),
-      FunctionTemplate::New(current, visit));
+  tpl->PrototypeTemplate()->Set(current, "clone", FunctionTemplate::New(current, clone));
+  tpl->PrototypeTemplate()->Set(current, "getElement", FunctionTemplate::New(current, getElement));
+  tpl->PrototypeTemplate()->Set(current, "getElementCount", FunctionTemplate::New(current, getElementCount));
+  tpl->PrototypeTemplate()->Set(current, "visit", FunctionTemplate::New(current, visit));
 
-  tpl->PrototypeTemplate()->Set(
-    PopulateConsumersJs::baseClass(),
-    String::NewFromUtf8(current, OsmMap::className().toStdString().data()));
+  tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(), toV8(OsmMap::className()));
 
   _constructor.Reset(current, tpl->GetFunction(context).ToLocalChecked());
-  target->Set(String::NewFromUtf8(current, "OsmMap"), ToLocal(&_constructor));
+  target->Set(context, toV8("OsmMap"), ToLocal(&_constructor));
 }
 
 Local<Object> OsmMapJs::create(ConstOsmMapPtr map)

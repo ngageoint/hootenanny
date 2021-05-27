@@ -49,9 +49,9 @@ void MapProjectorJs::Init(Local<Object> exports)
   HandleScope scope(current);
   Local<Context> context = current->GetCurrentContext();
   Local<Object> obj = Object::New(current);
-  exports->Set(String::NewFromUtf8(current, "MapProjector"), obj);
+  exports->Set(context, toV8("MapProjector"), obj);
 
-  obj->Set(String::NewFromUtf8(current, "projectToPlanar"),
+  obj->Set(context, toV8("projectToPlanar"),
            FunctionTemplate::New(current, projectToPlanar)->GetFunction(context).ToLocalChecked());
 }
 

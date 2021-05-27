@@ -44,8 +44,8 @@ void TagMergerFactoryJs::Init(Local<Object> exports)
   HandleScope scope(current);
   Local<Context> context = current->GetCurrentContext();
   Local<Object> tagMergerFactory = Object::New(current);
-  exports->Set(String::NewFromUtf8(current, "TagMergerFactory"), tagMergerFactory);
-  tagMergerFactory->Set(String::NewFromUtf8(current, "mergeTags"),
+  exports->Set(context, toV8("TagMergerFactory"), tagMergerFactory);
+  tagMergerFactory->Set(context, toV8("mergeTags"),
     FunctionTemplate::New(current, mergeTags)->GetFunction(context).ToLocalChecked());
 }
 

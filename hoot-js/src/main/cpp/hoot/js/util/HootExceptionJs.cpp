@@ -72,13 +72,12 @@ void HootExceptionJs::Init(Local<Object> target)
     tpl->SetClassName(Local<String>::Cast(toV8(opNames[i])));
     tpl->InstanceTemplate()->SetInternalFieldCount(2);
     // Prototype
-    tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "toString"),
-        FunctionTemplate::New(current, toString));
+    tpl->PrototypeTemplate()->Set(current, "toString", FunctionTemplate::New(current, toString));
     tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(),
                                   toV8(HootException::className()));
 
     _constructor.Reset(current, tpl->GetFunction(context).ToLocalChecked());
-    target->Set(toV8(noNamespace), ToLocal(&_constructor));
+    target->Set(context, toV8(noNamespace), ToLocal(&_constructor));
   }
 }
 
@@ -161,19 +160,31 @@ void HootExceptionJs::throwAsHootException(TryCatch& tc)
     }
     else
     {
-      // See ReportException in http://v8.googlecode.com/svn/trunk/samples/shell.cc
-      QString fileName = toCpp<QString>(msg->GetScriptResourceName());
-      int lineNumber = msg->GetLineNumber(context).ToChecked();
-
-      QString sourceLine = toCpp<QString>(msg->GetSourceLine(context).ToLocalChecked());
-
-      // Put a cool wavy line under the error
-      int start = msg->GetStartColumn();
-      int end = msg->GetEndColumn();
-      QString blank(start,' ');
-      QString wave(end - start,'^');
-
-      throw HootException(QString("%1 (%2) \n%3\n%4 \n%5").arg(fileName).arg(lineNumber).arg(sourceLine).arg(blank + wave).arg(str(exception->ToString(context).ToLocalChecked())));
+      //  See ReportException in https://github.com/v8/v8/blob/master/samples/shell.cc
+      QString exception_string = (str(tc.Exception()));
+      QString filename_string = (str(msg->GetScriptOrigin().ResourceName()));
+      int linenum = msg->GetLineNumber(context).FromJust();
+      QString sourceline_string = (str(msg->GetSourceLine(context).ToLocalChecked()));
+      int start = msg->GetStartColumn(context).FromJust();
+      QString start_string(start, ' ');
+      int end = msg->GetEndColumn(context).FromJust();
+      QString end_string(end - start, '^');
+      QString stack_trace_string;
+      v8::Local<v8::Value> stack_trace;
+      if (tc.StackTrace(context).ToLocal(&stack_trace) &&
+          stack_trace->IsString() &&
+          stack_trace.As<v8::String>()->Length() > 0)
+      {
+        stack_trace_string = (str(stack_trace));
+      }
+      throw HootException(QString("%1:%2: %3\n%4\n%5%6\n%7")
+          .arg(filename_string)
+          .arg(linenum)
+          .arg(exception_string)
+          .arg(sourceline_string)
+          .arg(start_string)
+          .arg(end_string)
+          .arg(stack_trace_string));
     }
   }
 }

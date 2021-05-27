@@ -45,8 +45,8 @@ void OsmWriterJs::Init(Local<Object> exports)
   HandleScope scope(current);
   Local<Context> context = current->GetCurrentContext();
   Local<Object> writer = Object::New(current);
-  exports->Set(String::NewFromUtf8(current, "OsmWriter"), writer);
-  writer->Set(String::NewFromUtf8(current, "toString"),
+  exports->Set(context, toV8("OsmWriter"), writer);
+  writer->Set(context, toV8("toString"),
               FunctionTemplate::New(current, toString)->GetFunction(context).ToLocalChecked());
 }
 
