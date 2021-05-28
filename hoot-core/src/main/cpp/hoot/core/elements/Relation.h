@@ -107,6 +107,7 @@ public:
   const std::vector<RelationData::Entry>& getMembers() const
   { return _relationData->getElements(); }
   size_t getMemberCount() const { return _relationData->getElements().size(); }
+  RelationData::Entry getMember(const ElementId& elementId) const;
   void setMembers(const std::vector<RelationData::Entry>& members);
 
   /**
@@ -187,6 +188,7 @@ public:
    * @return a collection of members
    */
   std::vector<RelationData::Entry> getElementsByRole(const QString& role) const;
+  QString getRole(const ElementId& elementId) const;
 
   geos::geom::Envelope* getEnvelope(
     const std::shared_ptr<const ElementProvider>& ep) const override;
