@@ -39,6 +39,8 @@
 #include <hoot/core/io/PartialOsmMapReader.h>
 #include <hoot/core/io/ElementCriterionVisitorInputStream.h>
 #include <hoot/core/io/ElementVisitorInputStream.h>
+#include <hoot/core/util/DbUtils.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/io/IoUtils.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
@@ -63,7 +65,6 @@ public:
   }
 
   QString getName() const override { return "count"; }
-
   QString getDescription() const override
   { return "Counts the number of features in a map that meet specified criteria"; }
 
@@ -93,10 +94,13 @@ public:
     for (int i = 0; i < inputs.size(); i++)
     {
       const QString input = inputs.at(i);
-      QFileInfo fileInfo(input);
-      if (!fileInfo.exists())
+      if (!DbUtils::isDbUrl(input))
       {
-        throw IllegalArgumentException("Input file does not exist: " + input);
+        QFileInfo fileInfo(input);
+        if (!fileInfo.exists())
+        {
+          throw IllegalArgumentException("Input file does not exist: " + input);
+        }
       }
     }
 
@@ -113,20 +117,20 @@ public:
     ElementCriterionPtr crit =
       _getCriterion(
         criterionClassName, ConfigOptions().getElementCriterionNegate(), isStreamableCrit);
+    LOG_VARD(isStreamableCrit);
 
-    const QString dataType = countFeaturesOnly ? "features" : "elements";
     if (isStreamableCrit)
     {
       for (int i = 0; i < inputs.size(); i++)
       {
-        LOG_INFO(
-          "Counting " << dataType << " satisfying " << criterionClassName << " from ..." <<
-          inputs.at(i).right(25) << "...");
+        LOG_STATUS(_getStatusMessage(inputs.at(i), countFeaturesOnly, criterionClassName));
         _total += _countStreaming(inputs.at(i), countFeaturesOnly, crit);
       }
     }
     else
     {
+
+      LOG_STATUS(_getStatusMessage(inputs.size(), countFeaturesOnly, criterionClassName));
       _total += _countMemoryBound(inputs, countFeaturesOnly, crit);
     }
 
@@ -150,10 +154,34 @@ private:
   long _total;
   int _taskStatusUpdateInterval;
 
-  std::shared_ptr<PartialOsmMapReader> _getStreamingReader(const QString& input)
+  QString _getStatusMessage(
+    const QString& input, const bool countFeaturesOnly, const QString& criterionClassName) const
   {
-    LOG_TRACE("Getting reader...");
+    const QString dataType = countFeaturesOnly ? "features" : "elements";
+    QString msg = "Counting " + dataType;
+    if (!criterionClassName.isEmpty())
+    {
+      msg += " satisfying " + criterionClassName;
+    }
+    msg += " from " + FileUtils::toLogFormat(input, 25) + "...";
+    return msg;
+  }
 
+  QString _getStatusMessage(
+    const int inputsSize, const bool countFeaturesOnly, const QString& criterionClassName) const
+  {
+    const QString dataType = countFeaturesOnly ? "features" : "elements";
+    QString msg = "Counting " + dataType;
+    if (!criterionClassName.isEmpty())
+    {
+      msg += " satisfying " + criterionClassName;
+    }
+    msg += " from " + QString::number(inputsSize) + " inputs...";
+    return msg;
+  }
+
+  std::shared_ptr<PartialOsmMapReader> _getStreamingReader(const QString& input) const
+  {
     std::shared_ptr<PartialOsmMapReader> reader =
       std::dynamic_pointer_cast<PartialOsmMapReader>(
         OsmMapReaderFactory::createReader(input));
@@ -164,7 +192,7 @@ private:
   }
 
   ElementCriterionPtr _getCriterion(const QString& criterionClassName, const bool negate,
-                                    bool& isStreamable)
+                                    bool& isStreamable) const
   {
     LOG_TRACE("Getting criterion: " << criterionClassName << "...");
 
@@ -217,7 +245,7 @@ private:
 
   ElementInputStreamPtr _getFilteredInputStream(ElementInputStreamPtr inputStream,
                                                 const ElementCriterionPtr& criterion,
-                                                ConstElementVisitorPtr countVis)
+                                                ConstElementVisitorPtr countVis) const
   {
     LOG_TRACE("Getting filtered input stream...");
     if (criterion)
@@ -241,7 +269,7 @@ private:
     return filteredInputStream;
   }
 
-  ConstElementVisitorPtr _getCountVis(const bool countFeaturesOnly)
+  ConstElementVisitorPtr _getCountVis(const bool countFeaturesOnly) const
   {
     LOG_TRACE("Getting count vis...");
 
@@ -257,8 +285,9 @@ private:
     return countVis;
   }
 
-  long _countMemoryBound(const QStringList& inputs, const bool countFeaturesOnly,
-                         const ElementCriterionPtr& criterion)
+  long _countMemoryBound(
+    const QStringList& inputs, const bool countFeaturesOnly,
+    const ElementCriterionPtr& criterion) const
   {
     OsmMapPtr map(new OsmMap());
     IoUtils::loadMaps(map, inputs, true);
@@ -286,8 +315,8 @@ private:
     return (long)counter->getStat();
   }
 
-  long _countStreaming(const QString& input, const bool countFeaturesOnly,
-                       const ElementCriterionPtr& criterion)
+  long _countStreaming(
+    const QString& input, const bool countFeaturesOnly, const ElementCriterionPtr& criterion) const
   {
     long inputTotal = 0;
 
@@ -328,7 +357,7 @@ private:
         msg += " total.";
         // TODO: We could do a sliding interval here, like we do for poi/poly match counting. Would
         // help give better status for datasets with sparser number of features satisfying the crit.
-        PROGRESS_INFO(msg);
+        PROGRESS_STATUS(msg);
       }
     }
     LOG_VART(inputTotal);

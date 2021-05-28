@@ -61,11 +61,8 @@ public:
 
   QString getDescription() const override
   { return "Identifies elements containing a specified tag key/value combination"; }
-
   QString toString() const override;
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 
 private:

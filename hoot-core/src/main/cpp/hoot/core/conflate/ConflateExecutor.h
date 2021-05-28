@@ -69,6 +69,8 @@ public:
   void setIsDiffConflate(bool isDiffConflate) { _isDiffConflate = isDiffConflate; }
   void setDiffConflateEnableTags(bool enable) { if (enable) _diffConflator.enableTags(); }
   void setDiffConflateSeparateOutput(bool separate) { _diffConflateSeparateOutput = separate; }
+  void setDiffRemoveLinearPartialMatchesAsWhole(bool remove)
+  { _diffConflator.setRemoveLinearPartialMatchesAsWhole(remove); }
 
   void setOsmApiDbUrl(QString url) { _osmApiDbUrl = url; }
 
@@ -81,6 +83,7 @@ private:
 
   bool _isDiffConflate;
   bool _diffConflateSeparateOutput;
+  bool _diffRemoveLinearPartialMatchesAsWhole;
   DiffConflator _diffConflator;
   ChangesetProviderPtr _pTagChanges;
 
@@ -106,10 +109,10 @@ private:
   Tgs::Timer _taskTimer;
 
   void _initConfig();
-  void _updateConfigOptionsForAttributeConflation();
-  void _updateConfigOptionsForDifferentialConflation();
-  void _updateConfigOptionsForBounds();
-  void _disableRoundaboutRemoval();
+  void _updateConfigOptionsForAttributeConflation() const;
+  void _updateConfigOptionsForDifferentialConflation() const;
+  void _updateConfigOptionsForBounds() const;
+  void _disableRoundaboutRemoval() const;
   void _checkForTagValueTruncationOverride();
 
   void _initTaskCount();

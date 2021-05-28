@@ -72,6 +72,9 @@ public:
   Tags(const QString& kvp);
   virtual ~Tags() = default;
 
+  bool operator==(const Tags& other) const;
+  inline bool operator!=(const Tags& other) const { return !(*this == other); }
+
   void addNote(const QString& note);
 
   /**
@@ -137,7 +140,6 @@ public:
    * Return all the keys that are used in names.
    */
   static const QStringList& getNameKeys();
-
   /**
    * Get name keys for a set of tags
    *
@@ -145,20 +147,24 @@ public:
    * @return a list of name keys
    */
   static QStringList getNameKeys(const Tags& tags);
-
   /**
    * Return all the names for the current feature.
    *
    * @param includeAltName if true, returns names with the alt_name tag key
    */
   QStringList getNames(const bool includeAltName = true) const;
-
   /**
    * Returns a name given tags
    *
    * @return the first name found, if one is present
    */
   QString getName() const;
+  /**
+   * Return all the names associated with the feature. These are more loosely defined and may
+   * include things like operator name and brand name. See conf/NameSchema.json for a definition.
+   */
+  const QStringList& getPseudoNameKeys() const;
+  QStringList getPseudoNames() const;
 
   /**
    * Returns the speed in standard units (m/s).
@@ -176,15 +182,7 @@ public:
    * hoot:. An example of an informational tag is name or highway.
    */
   int getInformationCount() const;
-
   int getNonDebugCount() const;
-
-  /**
-   * Return all the names associated with the feature. These are more loosely defined and may
-   * include things like operator name and brand name. See conf/NameSchema.json for a definition.
-   */
-  const QStringList& getPseudoNameKeys() const;
-  QStringList getPseudoNames() const;
 
   /**
    * Checks for common false values such as "no", "false", "0", "off".
@@ -203,9 +201,6 @@ public:
    * methods.
    */
   bool isTrue(const QString& key) const;
-
-  bool operator==(const Tags& other) const;
-  inline bool operator!=(const Tags& other) const { return !(*this == other); }
 
   /**
    * Similar to operator== but 'hoot::*' tags are ignored
@@ -253,7 +248,6 @@ public:
    * @return the number of tags removed
    */
   int removeKeys(const QStringList& keys);
-
   /**
    * Removes any tag who's key matches the input regular expression
    *
@@ -261,7 +255,6 @@ public:
    * @return the number of tags removed
    */
   int removeKey(const QRegExp& regex);
-
   /**
    * Removes all tags who's keys match the input regular expressions
    *
@@ -269,7 +262,6 @@ public:
    * @return the number of tags removed
    */
   int removeKeys(const QList<QRegExp>& regexes);
-
   /**
    * Removes all tags with keys that contain the input substring
    *
@@ -297,13 +289,11 @@ public:
   void set(const QString& key, double v) { set(key, QString::number(v)); }
   void set(const QString& key, int v) { set(key, QString::number(v)); }
   void set(const QString& key, int64_t v) { set(key, QString::number(v)); }
-
   /**
    * If a kvp is in other, then set it in this. If this already has that key then the value will
    * be overwritten.
    */
   void set(const Tags& other);
-
   /**
    * Sets a value using the strings in the specified iterator. The values in the iterator will
    * be concatenated into a list using semi-colons. [1]
@@ -346,7 +336,6 @@ public:
    * @return true if the input string is a valid kvp; false otherwise
    */
   static bool isValidKvp(const QString& str);
-
   /**
    * Extracts a tag key from a tag key/value pair
    *
@@ -354,7 +343,6 @@ public:
    * @return a tag key string
    */
   static QString kvpToKey(const QString& kvp);
-
   /**
    * Extracts a tag value from a tag key/value pair
    *
@@ -362,7 +350,6 @@ public:
    * @return a tag value string
    */
   static QString kvpToVal(const QString& kvp);
-
   /**
    * Returns true if the tags have the specified kvp
    *
@@ -370,7 +357,6 @@ public:
    * @return true if tags contain the kvp; false otherwise
    */
   bool hasKvp(const QString& kvp) const;
-
   /**
    * Returns true if the tags have any key=value in the input list
    *
@@ -378,7 +364,6 @@ public:
    * @return true if tags contain at least one kvp; false otherwise
    */
   bool hasAnyKvp(const QStringList& kvps) const;
-
   /**
    * Returns the first matching key/value pair (kvp) from the input list
    *
@@ -393,7 +378,7 @@ public:
    * @param keys tag keys to search for
    * @return true if the tags contain at least one of the keys; false otherwise
    */
-  bool hasAnyKey(const QStringList& keys);
+  bool hasAnyKey(const QStringList& keys) const;
 
   /**
    * Returns the first tag key found from an input list of keys
@@ -434,8 +419,8 @@ public:
    * @parm strictNameMatch if true, will not consider names with the alt_name tag key
    * @return true if the tags have at least one matching name; false otherwise
    */
-  static bool haveMatchingName(const Tags& tags1, const Tags& tags2,
-                               const bool strictNameMatch = false);
+  static bool haveMatchingName(
+    const Tags& tags1, const Tags& tags2, const bool strictNameMatch = false);
 
   /**
    * Determines whether a name exists in the set of tag

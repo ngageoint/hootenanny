@@ -60,8 +60,8 @@ public:
 
 private:
 
-  void _init();
-  QString _removeComments(QString s);
+  void _init() const;
+  QString _removeComments(QString s) const;
 
   QTemporaryFile _configFileTmp;
 

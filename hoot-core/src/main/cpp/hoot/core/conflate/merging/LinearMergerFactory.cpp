@@ -33,7 +33,6 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/conflate/network/PartialNetworkMerger.h>
 #include <hoot/core/conflate/merging/LinearTagOnlyMerger.h>
-#include <hoot/core/conflate/merging/MultipleSublineMatcherSnapMerger.h>
 #include <hoot/core/conflate/merging/LinearAverageMerger.h>
 
 namespace hoot
@@ -74,6 +73,7 @@ MergerPtr LinearMergerFactory::getMerger(
     ConfigOptions().getGeometryLinearMergerDefault() == LinearAverageMerger::className();
   if (isAttributeConflate)
   {
+    // This is messy, but we'll need some refactoring to get rid of it.
     merger.reset(
       new LinearTagOnlyMerger(
         eids,
@@ -85,44 +85,16 @@ MergerPtr LinearMergerFactory::getMerger(
   }
   else if (isAverageConflate)
   {
+    // Average Conflation doesn't use a subline matcher.
     return getMerger(eids, std::shared_ptr<SublineStringMatcher>(), matchedBy);
   }
   else
   {
+    // Reference or Differential Network Conflation; The Network algorithm doesn't support
+    // Differential Conflation partial match merging yet, so we don't use it.
     merger.reset(new PartialNetworkMerger(eids, edgeMatches, details));
   }
 
-  return merger;
-}
-
-MergerPtr LinearMergerFactory::getMerger(
-  const std::set<std::pair<ElementId, ElementId>>& eids,
-  const std::shared_ptr<SublineStringMatcher>& sublineMatcher1,
-  const std::shared_ptr<SublineStringMatcher>& sublineMatcher2, const QString matchedBy)
-{
-  if (matchedBy != "Waterway" && matchedBy != "Line")
-  {
-    throw IllegalArgumentException(
-      "Invalid matcher for MultipleSublineMatcherSnapMerger: " + matchedBy);
-  }
-  // Use of LinearTagOnlyMerger for geometries signifies that we're doing Attribute Conflation.
-  const bool isAttributeConflate =
-    ConfigOptions().getGeometryLinearMergerDefault() == LinearTagOnlyMerger::className();
-  // Use of LinearAverageMerger for geometries signifies that we're doing Average Conflation.
-  const bool isAverageConflate =
-    ConfigOptions().getGeometryLinearMergerDefault() == LinearAverageMerger::className();
-  if (isAttributeConflate || isAverageConflate)
-  {
-    // For Attribute Conflation we do no subline matching at all during merging, so passing in
-    // multiple subline matchers shouldn't ever happen. For Average Conflation we do custom merging
-    // and don't use a subline matcher at all.
-    throw IllegalArgumentException(
-      "MultipleSublineMatcherSnapMerger may not be used with Attribute or Average Conflation.");
-  }
-
-  std::shared_ptr<LinearMergerAbstract> merger(
-    new MultipleSublineMatcherSnapMerger(eids, sublineMatcher1, sublineMatcher2));
-  merger->setMatchedBy(matchedBy);
   return merger;
 }
 

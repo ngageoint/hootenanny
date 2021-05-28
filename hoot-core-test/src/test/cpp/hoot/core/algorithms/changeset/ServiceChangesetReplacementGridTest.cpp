@@ -44,6 +44,7 @@
 #include <hoot/core/ops/MapCropper.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ConfigUtils.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
@@ -1474,7 +1475,7 @@ private:
 
     map.reset(new OsmMap());
     // TODO: replace the string truncation lengths with getProgressVarPrintLengthMax
-    LOG_STATUS("Reading the data to replace from: ..." << input.right(25) << "...");
+    LOG_STATUS("Reading the data to replace from: ..." << FileUtils::toLogFormat(input, 25) << "...");
     OsmMapReaderFactory::read(map, input, true, Status::Unknown1);
     LOG_STATUS(
       StringUtils::formatLargeNumber(map->size()) << " elements to replace read in: " <<
@@ -1499,7 +1500,7 @@ private:
         {
           throw IllegalArgumentException("No crop output file path specified.");
         }
-        LOG_STATUS("Writing cropped data to: ..." << cropOut.right(25) << "...");
+        LOG_STATUS("Writing cropped data to: ..." << FileUtils::toLogFormat(cropOut, 25) << "...");
         OsmMapWriterFactory::write(map, cropOut);
       }
       _subTaskTimer.restart();
@@ -1514,7 +1515,7 @@ private:
     // TODO: after separating quality issue tagging from replacement, grab starting quality metrics
     // for this data.
 
-    LOG_STATUS("Loading the data to replace db to: ..." << DATA_TO_REPLACE_URL.right(25) << "...");
+    LOG_STATUS("Loading the data to replace db to: ..." << FileUtils::toLogFormat(DATA_TO_REPLACE_URL, 25) << "...");
     OsmMapWriterFactory::write(map, DATA_TO_REPLACE_URL);
     _originalDataSize = (int)map->size();
     LOG_STATUS(
@@ -1529,7 +1530,7 @@ private:
     // TODO: Can this be converted over to use the bulk inserter?
 
     OsmMapPtr map(new OsmMap());
-    LOG_STATUS("Reading the replacement data from: ..." << input.right(25) << "...");
+    LOG_STATUS("Reading the replacement data from: ..." << FileUtils::toLogFormat(input, 25) << "...");
     // Load in with the replacement source IDs to mimic production behavior.
     // ChangesetReplacementCreator will throw them out when the data is first loaded in to avoid ID
     // conflicts.
@@ -1557,7 +1558,7 @@ private:
         {
           throw IllegalArgumentException("No crop output file path specified.");
         }
-        LOG_STATUS("Writing cropped data to: ..." << cropOut.right(25) << "...");
+        LOG_STATUS("Writing cropped data to: ..." << FileUtils::toLogFormat(cropOut, 25) << "...");
         OsmMapWriterFactory::write(map, cropOut);
       }
       _subTaskTimer.restart();
@@ -1572,7 +1573,7 @@ private:
     // TODO: after separating quality issue tagging from replacement, grab starting quality metrics
     // for this data.
 
-    LOG_STATUS("Loading the replacement data db to: ..." << _replacementDataUrl.right(25) << "...");
+    LOG_STATUS("Loading the replacement data db to: ..." << FileUtils::toLogFormat(_replacementDataUrl, 25) << "...");
     OsmMapWriterFactory::write(map, _replacementDataUrl);
     LOG_STATUS(
       StringUtils::formatLargeNumber(map->size()) << " replacement elements loaded in: " <<
@@ -1600,12 +1601,11 @@ private:
   }
 
   void _writeDiffBetweenReplacedAndReplacement(
-    const geos::geom::Envelope& bounds, const QString& output)
+    const geos::geom::Envelope& bounds, QString& output)
   {
     // Calculate a diff between the data we just replaced and the original replacement data to
     // aid in finding any errors during the replacement process. We only want to calculate the
     // diff out to the task grid bounds, b/c that's the data that was actually replaced.
-    //conf().set(ConfigOptions::getBoundsKey(), GeometryUtils::envelopeToString(bounds));
     // use a lenient bounds
     conf().set(ConfigOptions::getBoundsKeepEntireFeaturesCrossingBoundsKey(), true);
     conf().set(
@@ -1618,7 +1618,7 @@ private:
   void _cleanupDataToReplace()
   {
     LOG_STATUS(
-      "Cleaning up the data to replace db at: ..." << DATA_TO_REPLACE_URL.right(25) << "...");
+      "Cleaning up the data to replace db at: ..." << FileUtils::toLogFormat(DATA_TO_REPLACE_URL, 25) << "...");
     ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase();
     LOG_INFO(
       "Data to replace db cleaned in: " <<
@@ -1629,7 +1629,7 @@ private:
   void _cleanupReplacementData()
   {
     LOG_STATUS(
-      "Cleaning up the replacement data db at: ..." << _replacementDataUrl.right(25) << "...");
+      "Cleaning up the replacement data db at: ..." << FileUtils::toLogFormat(_replacementDataUrl, 25) << "...");
     HootApiDb database;
     database.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
     database.deleteMap(database.getMapIdByName(_testName));

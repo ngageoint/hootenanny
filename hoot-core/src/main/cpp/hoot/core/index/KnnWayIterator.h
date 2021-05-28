@@ -58,7 +58,7 @@ public:
 
   bool hasNext() override;
 
-  int getDistanceCount() { return _distanceCount; }
+  int getDistanceCount() const { return _distanceCount; }
 
 protected:
 

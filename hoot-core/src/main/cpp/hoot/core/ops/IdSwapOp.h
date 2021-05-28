@@ -61,7 +61,7 @@ public:
   /**
    * @brief IdSwapOp - Constructor taking two elements to swap IDs
    */
-  IdSwapOp(ElementId e1, ElementId e2) : _idSwap(new IdSwap(e1,e2)) { }
+  IdSwapOp(ElementId e1, ElementId e2) : _idSwap(new IdSwap(e1, e2)) { }
 
   ~IdSwapOp() = default;
 
@@ -71,18 +71,14 @@ public:
    */
   void apply(const std::shared_ptr<OsmMap>& map) override;
 
-  QString getDescription() const override
-  { return "Swap IDs for ID preservation in Attribute Conflation"; }
-
-  QString getInitStatusMessage() const override
-  { return "Swapping IDs..."; }
-
+  QString getInitStatusMessage() const override { return "Swapping IDs..."; }
   QString getCompletedStatusMessage() const override
   { return "Swapped " + QString::number(_numAffected) + " IDs."; }
 
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+  QString getDescription() const override
+  { return "Swap IDs for ID preservation in Attribute Conflation"; }
 
 private:
   /**
@@ -91,7 +87,7 @@ private:
    * @param nodeId - Node ID of the node in the ways that is being replaced
    * @param swapId - Node ID of the node to swap into the ways
    */
-  void swapNodeIdInWay(const std::shared_ptr<OsmMap>& map, long nodeId, long swapId);
+  void swapNodeIdInWay(const std::shared_ptr<OsmMap>& map, long nodeId, long swapId) const;
 
   /** Element IDs of elements to swap, if empty check the map for an IdSwap object */
   IdSwapPtr _idSwap;

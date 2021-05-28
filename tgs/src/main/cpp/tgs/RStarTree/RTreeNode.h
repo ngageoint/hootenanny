@@ -77,7 +77,7 @@ public:
 
   bool isContained(const Box& b) const;
 
-  void setBounds(int d, double lower, double upper);
+  void setBounds(int d, double lower, double upper) const;
 
   /**
    * Returns the number of bytes this structure will take up with the given number of

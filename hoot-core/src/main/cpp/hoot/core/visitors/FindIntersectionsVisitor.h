@@ -51,24 +51,19 @@ public:
   void visit(const ConstElementPtr& e) override;
 
   void setOsmMap(OsmMap* map) override { _map = map; }
-
   virtual void setOsmMap(const OsmMap* /*map*/) { assert(false); }
 
   std::vector<long>& getIntersections() { return _ids; }
 
-  QString getDescription() const override { return "Identifies generic intersections"; }
-
-  QString getInitStatusMessage() const override
-  { return "Finding intersections..."; }
-
+  QString getInitStatusMessage() const override { return "Finding intersections..."; }
   QString getCompletedStatusMessage() const override
   { return "Found " + QString::number(_numAffected) + " intersections"; }
 
   virtual ElementCriterionPtr createCriterion(ConstOsmMapPtr map) = 0;
 
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+  QString getDescription() const override { return "Identifies generic intersections"; }
 
 private:
 
@@ -93,7 +88,6 @@ public:
 
   QString getInitStatusMessage() const override
   { return "Finding road intersections..."; }
-
   QString getCompletedStatusMessage() const override
   { return "Found " + QString::number(_numAffected) + " road intersections"; }
 
@@ -116,7 +110,6 @@ public:
 
   QString getInitStatusMessage() const override
   { return "Finding railway intersections..."; }
-
   QString getCompletedStatusMessage() const override
   { return "Found " + QString::number(_numAffected) + " railway intersections"; }
 

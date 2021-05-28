@@ -30,6 +30,7 @@
 #include <hoot/core/elements/ElementDeduplicator.h>
 #include <hoot/core/io/IoUtils.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/StringUtils.h>
 
 // Qt
@@ -47,10 +48,8 @@ public:
   DeDuplicateCmd() = default;
 
   QString getName() const override { return "de-duplicate"; }
-
   QString getDescription() const override
   { return "Removes duplicate features within a single map or between two maps (experimental)"; }
-
   QString getType() const override { return "rnd"; }
 
   int runSimple(QStringList& args) override
@@ -82,7 +81,8 @@ public:
       input1 = args[0].trimmed();
       output1 = args[1].trimmed();
       LOG_STATUS(
-        "De-duplicating ...:" << input1.right(25) << " to ..." << output1.right(25) << "...");
+        "De-duplicating ...:" << FileUtils::toLogFormat(input1, 25) << " to ..." <<
+        FileUtils::toLogFormat(output1, 25) << "...");
     }
     else
     {
@@ -91,8 +91,10 @@ public:
       output1 = args[2].trimmed();
       output2 = args[3].trimmed();
       LOG_STATUS(
-        "De-duplicating ...:" << input1.right(25) << " to ..." << output1.right(25) << " and ..." <<
-        input2.right(25) << " to ..." << output2.right(25) << "...");
+        "De-duplicating ...:" << FileUtils::toLogFormat(input1, 25) << " to ..." <<
+        FileUtils::toLogFormat(output1, 25) << " and ..." <<
+        FileUtils::toLogFormat(input2, 25) << " to ..." << FileUtils::toLogFormat(output2, 25) <<
+        "...");
     }
     LOG_VARD(input1);
     LOG_VARD(input2);
@@ -127,7 +129,8 @@ public:
     LOG_STATUS(
       "De-duplicated " <<
       StringUtils::formatLargeNumber(deduper.getMap1DuplicateTotalFeaturesRemoved()) <<
-      " features from ..." << input1 << " and wrote them to: ..." << output1.right(25) << ".");
+      " features from ..." << FileUtils::toLogFormat(input1) << " and wrote them to: ..." <<
+      FileUtils::toLogFormat(output1, 25) << ".");
     LOG_STATUS(
       "\t" << StringUtils::formatLargeNumber(deduper.getMap1DuplicateNodesRemoved()) << " nodes");
     LOG_STATUS(
@@ -140,7 +143,8 @@ public:
       LOG_STATUS(
         "De-duplicated " <<
         StringUtils::formatLargeNumber(deduper.getMap2DuplicateTotalFeaturesRemoved()) <<
-        " features from ..." << input2 << " and wrote them to: ..." << output2.right(25) << ".");
+        " features from ..." << FileUtils::toLogFormat(input2) << " and wrote them to: ..." <<
+        FileUtils::toLogFormat(output2, 25) << ".");
       LOG_STATUS(
         "\t" << StringUtils::formatLargeNumber(deduper.getMap2DuplicateNodesRemoved()) << " nodes");
       LOG_STATUS(

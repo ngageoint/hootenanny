@@ -132,7 +132,7 @@ private:
 
   void _updateNewNodeProperties(NodePtr newNode,
                                 ConstNodePtr firstSplitBetweenNode,
-                                ConstNodePtr lastSplitBetweenNode);
+                                ConstNodePtr lastSplitBetweenNode) const;
 };
 
 }

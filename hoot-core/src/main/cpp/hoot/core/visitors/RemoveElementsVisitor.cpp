@@ -115,7 +115,7 @@ void RemoveElementsVisitor::visit(const ElementPtr& e)
     if (_recursive)
     {
       LOG_TRACE("Removing element: " << e->getElementId() << " recursively...");
-      RecursiveElementRemover(e->getElementId()).apply(_map->shared_from_this());
+      RecursiveElementRemover(e->getElementId()/*, true*/).apply(_map->shared_from_this());
     }
     else
     {

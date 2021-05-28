@@ -118,12 +118,12 @@ void UnlikelyIntersectionRemover::_evaluateAndSplit(long intersectingNode, const
     }
     // Since this class operates on elements with generic types, an additional check must be
     // performed here during conflation to enure we don't modify any element not associated with
-    // and active conflate matcher in the current conflation configuration.
+    // an active conflate matcher in the current conflation configuration.
     else if (_conflateInfoCache &&
              !_conflateInfoCache->elementCanBeConflatedByActiveMatcher(w, className()))
     {
       LOG_TRACE(
-        "Skipping processing of " << w->getElementId() << " as it cannot be conflated by any " <<
+        "Skipping processing of " << w->getElementId() << ", as it cannot be conflated by any " <<
         "actively configured conflate matcher...");
       continue;
     }
@@ -157,7 +157,7 @@ void UnlikelyIntersectionRemover::_evaluateAndSplit(long intersectingNode, const
 
 double UnlikelyIntersectionRemover::_pIntersection(long intersectingNode,
                                                    const std::shared_ptr<Way>& w1,
-                                                   const std::shared_ptr<Way>& w2)
+                                                   const std::shared_ptr<Way>& w2) const 
 {
   // presume it is a valid intersection
   double p = 1.0;
@@ -236,7 +236,7 @@ void UnlikelyIntersectionRemover::removeIntersections(std::shared_ptr<OsmMap> ma
 }
 
 void UnlikelyIntersectionRemover::_splitIntersection(long intersectingNode,
-                                                     const vector<std::shared_ptr<Way>>& g2)
+                                                     const vector<std::shared_ptr<Way>>& g2) const
 {
   LOG_VART(intersectingNode);
   LOG_VART(g2.size());

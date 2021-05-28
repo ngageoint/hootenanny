@@ -39,6 +39,11 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, HighwayCriterion)
 
+HighwayCriterion::HighwayCriterion(ConstOsmMapPtr map) :
+_map(map)
+{
+}
+
 bool HighwayCriterion::isSatisfied(const ConstElementPtr& element) const
 {
   if (!element)
@@ -93,10 +98,8 @@ bool HighwayCriterion::isSatisfied(const ConstElementPtr& element) const
 }
 
 QStringList HighwayCriterion::getChildCriteria() const
-{
-  QStringList criteria;
-  criteria.append(HighwayWayNodeCriterion::className());
-  return criteria;
+{;
+  return QStringList(HighwayWayNodeCriterion::className());
 }
 
 }

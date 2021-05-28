@@ -232,7 +232,7 @@ QSet<QString> SuperfluousConflateOpRemover::getMatchCreatorGeometryTypeCrits(con
 
       if (addParents)
       {
-        // also add any generic geometry crits the crit inherits from
+        // Also, add any generic geometry crits the crit inherits from.
 
         const QStringList pointCrits =
           GeometryTypeCriterion::getCriterionClassNamesByGeometryType(
@@ -288,6 +288,11 @@ bool SuperfluousConflateOpRemover::_isGeometryTypeCrit(const QString& className)
   }
 
   return false;
+}
+
+bool SuperfluousConflateOpRemover::linearMatcherPresent()
+{
+  return getMatchCreatorGeometryTypeCrits().contains(LinearCriterion::className());
 }
 
 }

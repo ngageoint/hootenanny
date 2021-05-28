@@ -62,7 +62,7 @@ private:
   double _width = DEFAULT_WIDTH;  
   QString _widthTag = QString();
 
-  void addNodeToPoly( const CoordinateExt& pos, OsmMap* pMap, WayPtr pPoly );
+  void addNodeToPoly( const CoordinateExt& pos, OsmMap* pMap, WayPtr pPoly ) const;
 };
 
 }

@@ -51,13 +51,12 @@ public:
 
   ElementCriterionPtr clone() override { return ElementCriterionPtr(new PoiCriterion()); }
 
-  QString getDescription() const override { return "Identifies POIs"; }
-
-  QString getName() const override { return className(); }
-
-  QString getClassName() const override { return className(); }
-
   bool supportsSpecificConflation() const override { return true; }
+
+  QString getDescription() const override { return "Identifies POIs"; }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
+  QString toString() const override { return className(); }
 };
 
 }

@@ -96,10 +96,10 @@ namespace hoot
     QList<GeometryModifierActionDesc> _readJsonRules();
 
     // json filter parser
-    void _parseFilter(GeometryModifierActionDesc& actionDesc, boost::property_tree::ptree ptree);
+    void _parseFilter(GeometryModifierActionDesc& actionDesc, boost::property_tree::ptree ptree) const;
 
     // json action arguments parser
-    void _parseArguments(GeometryModifierActionDesc& actionDesc, boost::property_tree::ptree ptree);
+    void _parseArguments(GeometryModifierActionDesc& actionDesc, boost::property_tree::ptree ptree) const;
 
     const Settings* _pConf;
   };

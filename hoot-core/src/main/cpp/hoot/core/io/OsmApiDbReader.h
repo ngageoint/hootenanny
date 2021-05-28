@@ -72,7 +72,7 @@ private:
    * The element ID is passed in separately from the element here, as the element may have been
    * set with a remapped ID, and we need to use the original ID to retrieve the element's tags.
    */
-  void _parseAndSetTagsOnElement(const ElementId& elementId, const ElementPtr& element);
+  void _parseAndSetTagsOnElement(const ElementId& elementId, const ElementPtr& element) const;
 };
 
 }

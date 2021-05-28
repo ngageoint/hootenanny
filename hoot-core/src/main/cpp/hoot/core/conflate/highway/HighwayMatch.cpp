@@ -61,11 +61,11 @@ QString HighwayMatch::_noMatchingSubline = "No valid matching subline found.";
 HighwayMatch::HighwayMatch(const std::shared_ptr<HighwayClassifier>& classifier,
   const std::shared_ptr<SublineStringMatcher>& sublineMatcher, const ConstOsmMapPtr& map,
   const ElementId& eid1, const ElementId& eid2, ConstMatchThresholdPtr mt) :
-  Match(mt, eid1, eid2),
-  _classifier(classifier),
-  _sublineMatcher(sublineMatcher),
-  _minSplitSize(0.0),
-  _score(0.0)
+Match(mt, eid1, eid2),
+_classifier(classifier),
+_score(0.0),
+_sublineMatcher(sublineMatcher),
+_minSplitSize(0.0)
 {
   assert(_eid1 != _eid2);
 
@@ -122,7 +122,7 @@ HighwayMatch::HighwayMatch(const std::shared_ptr<HighwayClassifier>& classifier,
 
 void HighwayMatch::_updateNonMatchDescriptionBasedOnGeometricProperties(
   QStringList& description, const ConstOsmMapPtr& map, const ConstElementPtr e1,
-  const ConstElementPtr e2)
+  const ConstElementPtr e2) const
 {
   //  Check the Angle Histogram
   double angle = AngleHistogramExtractor().extract(*map, e1, e2);

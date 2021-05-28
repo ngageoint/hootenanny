@@ -52,7 +52,7 @@ _removeMissingElements(removeMissingElements)
 {
 }
 
-void CookieCutter::cut(OsmMapPtr& cutterShapeOutlineMap, OsmMapPtr& doughMap)
+void CookieCutter::cut(OsmMapPtr& cutterShapeOutlineMap, OsmMapPtr& doughMap) const
 {
   LOG_VARD(cutterShapeOutlineMap->getNodes().size());
   LOG_VART(MapProjector::toWkt(cutterShapeOutlineMap->getProjection()));

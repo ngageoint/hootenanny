@@ -34,6 +34,7 @@
 #include <hoot/core/io/PartialOsmMapReader.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/OpenCv.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 
@@ -60,13 +61,10 @@ class PlotNodeDensityCmd : public BaseCommand
     PlotNodeDensityCmd() = default;
 
     QString getName() const override { return "plot-node-density"; }
-
-    QString getDescription() const override
-    { return "Creates a node density plot for a map"; }
-
+    QString getDescription() const override { return "Creates a node density plot for a map"; }
     QString getType() const { return "rnd"; }
 
-    Envelope getEnvelope(const std::shared_ptr<OsmMapReader>& reader)
+    Envelope getEnvelope(const std::shared_ptr<OsmMapReader>& reader) const
     {
       std::shared_ptr<EnvelopeProvider> ep =
         std::dynamic_pointer_cast<EnvelopeProvider>(reader);
@@ -115,7 +113,7 @@ class PlotNodeDensityCmd : public BaseCommand
     }
 
     cv::Mat calculateDensity(const Envelope& envelope, double pixelSize,
-                             std::shared_ptr<OsmMapReader> reader)
+                             std::shared_ptr<OsmMapReader> reader) const
     {
       std::shared_ptr<PartialOsmMapReader> r =
         std::dynamic_pointer_cast<PartialOsmMapReader>(reader);
@@ -149,7 +147,7 @@ class PlotNodeDensityCmd : public BaseCommand
       return c;
     }
 
-    int toColorBand(QString c)
+    int toColorBand(QString c) const
     {
       bool ok;
       int result = c.toInt(&ok);
@@ -160,7 +158,7 @@ class PlotNodeDensityCmd : public BaseCommand
       return result;
     }
 
-    int toColorPortion(QString c)
+    int toColorPortion(QString c) const
     {
       bool ok;
       double result = c.toDouble(&ok);
@@ -190,6 +188,10 @@ class PlotNodeDensityCmd : public BaseCommand
       {
         throw HootException("Expected a number > 0 for max size.");
       }
+
+      LOG_STATUS(
+        "Plotting node density for ..." << FileUtils::toLogFormat(input, 25) <<
+        " and writing output to ..." << FileUtils::toLogFormat(output, 25) << "...");
 
       // initialize to black
       QRgb baseColors = qRgba(0, 0, 0, 255);

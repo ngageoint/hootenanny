@@ -82,7 +82,7 @@ protected:
 
   QMultiHash<long, Edge> _edges;
 
-  double _mphToSecondsPerMeter(double mph) { return 2.23694 / mph; }
+  double _mphToSecondsPerMeter(double mph) const { return 2.23694 / mph; } 
 };
 
 }

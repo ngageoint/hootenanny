@@ -178,12 +178,12 @@ private:
     _printCommands(rndCmds);
 
     cout << endl << "Log Levels:" << endl << endl;
-    cout << "  --trace" << endl;
-    cout << "  --debug" << endl;
-    cout << "  --info" << endl;
-    cout << "  --status" << endl;
-    cout << "  --warn" << endl;
     cout << "  --error" << endl;
+    cout << "  --warn" << endl;
+    cout << "  --status (default)" << endl;
+    cout << "  --info" << endl;
+    cout << "  --debug" << endl;
+    cout << "  --trace" << endl;
     cout << endl;
 
     cout << "List Option Operations:" << endl << endl;

@@ -157,7 +157,6 @@ protected:
   NodeData _nodeData;
 
   ElementData& _getElementData() override { return _nodeData; }
-
   const ElementData& _getElementData() const override { return _nodeData; }
 };
 

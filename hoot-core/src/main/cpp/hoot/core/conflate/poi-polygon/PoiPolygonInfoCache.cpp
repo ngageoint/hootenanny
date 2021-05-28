@@ -174,7 +174,7 @@ bool PoiPolygonInfoCache::hasMoreThanOneType(const ConstElementPtr& element)
   return hasMoreThanOneType;
 }
 
-bool PoiPolygonInfoCache::hasRelatedType(const ConstElementPtr& element)
+bool PoiPolygonInfoCache::hasRelatedType(const ConstElementPtr& element) const
 {
   if (!element)
   {

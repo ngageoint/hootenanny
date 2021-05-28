@@ -125,7 +125,7 @@ long RelationWithMostMembersOp::getIdOfRelationWithMaxCritSatisfactions(const Co
   return idOfRelationWithMaxCritSatisfactions;
 }
 
-void RelationWithMostMembersOp::_setOutput(const long relationId, OsmMapPtr& outputMap)
+void RelationWithMostMembersOp::_setOutput(const long relationId, OsmMapPtr& outputMap) const
 {
   std::set<ElementId> elementIds;
   elementIds.insert(ElementId(ElementType::Relation, relationId));

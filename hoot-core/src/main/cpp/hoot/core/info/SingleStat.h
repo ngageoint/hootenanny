@@ -41,7 +41,6 @@ public:
   double value;
 
   SingleStat() = default;
-
   SingleStat(const QString& n, double v) : name(n), value(v) { }
 
   QString toString() const

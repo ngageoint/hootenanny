@@ -38,8 +38,8 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, ChainCriterion)
 
-ChainCriterion::ChainCriterion(const ElementCriterionPtr& child1,
-                               const ElementCriterionPtr& child2)
+ChainCriterion::ChainCriterion(
+  const ElementCriterionPtr& child1, const ElementCriterionPtr& child2)
 {
   _criteria.push_back(child1);
   _criteria.push_back(child2);
@@ -57,15 +57,15 @@ ChainCriterion::ChainCriterion(ElementCriterion* child1, ElementCriterionPtr chi
   _criteria.push_back(child2);
 }
 
-ChainCriterion::ChainCriterion(ElementCriterion* child1, ElementCriterion* child2,
-                               ElementCriterion* child3)
+ChainCriterion::ChainCriterion(
+  ElementCriterion* child1, ElementCriterion* child2, ElementCriterion* child3)
 {
   _criteria.push_back(std::shared_ptr<ElementCriterion>(child1));
   _criteria.push_back(std::shared_ptr<ElementCriterion>(child2));
   _criteria.push_back(std::shared_ptr<ElementCriterion>(child3));
 }
 
-ChainCriterion::ChainCriterion(const std::vector<std::shared_ptr<ElementCriterion>>& criteria)
+ChainCriterion::ChainCriterion(const std::vector<ElementCriterionPtr>& criteria)
 {
   for (size_t i = 0; i < criteria.size(); i++)
     _criteria.push_back(std::shared_ptr<ElementCriterion>(criteria[i]->clone()));
@@ -107,15 +107,17 @@ bool ChainCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   for (size_t i = 0; i < _criteria.size(); i++)
   {
-    if (!_criteria[i]->isSatisfied(e))
+    ElementCriterionPtr crit = _criteria[i];
+    if (!crit->isSatisfied(e))
     {
       LOG_TRACE(
-        "One chained criterion not satisfied in: " << toString() << ". Filter not satisfied " <<
-        "for: " << e);
+        "One chained criterion not satisfied in: " << toString() << ". Filter: " << crit <<
+        " not satisfied for: " << e);
+      LOG_VART(e->getStatus());
       return false;
     }
   }
-  LOG_TRACE("One chained criteria satisfied in: " << toString() << ". Filter satisfied for: " << e);
+  LOG_TRACE("Chained criteria satisfied: " << toString() << " for: " << e);
   return true;
 }
 

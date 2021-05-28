@@ -44,7 +44,6 @@ public:
   TypeSimilarityCmd() = default;
 
   QString getName() const override { return "type-similarity"; }
-
   QString getDescription() const override
   { return "Calculates a similarity score between two type tags"; }
 
@@ -58,6 +57,8 @@ public:
 
     const QString tag1 = args[0];
     const QString tag2 = args[1];
+
+    LOG_STATUS("Calculating type similarity score for " << tag1 << " and " << tag2 << "...");
 
     const QString invalidKvpMsg = "is not a valid key/value pair of the form: key=value.";
     if (!Tags::isValidKvp(tag1))

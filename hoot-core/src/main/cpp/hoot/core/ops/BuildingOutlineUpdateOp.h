@@ -88,7 +88,7 @@ private:
    * "changed" by replacing the nodes with the equivalent nodes in reference.
    */
   void _mergeNodes(const std::shared_ptr<Element>& changed,
-                   const RelationPtr& reference);
+                   const RelationPtr& reference) const;
 };
 
 }

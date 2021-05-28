@@ -64,18 +64,11 @@ public:
    */
   void restore(OsmMapPtr& map);
 
-  QString getName() const override { return className(); }
-
-  QString getClassName() const override { return className(); }
-
-  QString getInitStatusMessage() const override
-  { return "Remapping element IDs..."; }
-
+  QString getInitStatusMessage() const override { return "Remapping element IDs..."; }
   QString getCompletedStatusMessage() const override
   {
     return "Remapped " + StringUtils::formatLargeNumber(_numAffected) + " element IDs.";
   }
-
   QString getRestoreCompletedStatusMessage() const
   {
     return "Restored " + StringUtils::formatLargeNumber(_restoredIds) + " element IDs.";
@@ -83,6 +76,8 @@ public:
 
   QString getDescription() const override
   { return "Remaps element IDs and is capable of restoring the IDs"; }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
   QMap<ElementId, ElementId> getIdMappings() const { return _originalToRemappedElementIds; }
   int getNumRestoredIds() const { return _restoredIds; }

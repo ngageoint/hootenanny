@@ -36,6 +36,7 @@
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/io/IoUtils.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/StringUtils.h>
 
 // Qt
@@ -53,7 +54,6 @@ public:
   SortCmd() = default;
 
   QString getName() const override { return "sort"; }
-
   QString getDescription() const override { return "Sorts a map to the OSM standard"; }
 
   int runSimple(QStringList& args) override
@@ -69,8 +69,10 @@ public:
 
     const QString input = args[0];
     const QString output = args[1];
-    LOG_VARD(input);
-    LOG_VARD(output);
+
+    LOG_STATUS(
+      "Sorting maps ..." << FileUtils::toLogFormat(input, 25) << " and writing output to ..." <<
+      FileUtils::toLogFormat(output, 25) << "...");
 
     if (_inputIsSorted(input))
     {
@@ -100,7 +102,7 @@ private:
     return OsmPbfReader().isSupported(input) && OsmPbfReader().isSorted(input);
   }
 
-  void _sortInMemory(const QString& input, const QString& output)
+  void _sortInMemory(const QString& input, const QString& output) const
   {
     OsmMapPtr map(new OsmMap());
     IoUtils::loadMap(map, input, true, Status::Unknown1);
@@ -108,7 +110,7 @@ private:
     IoUtils::saveMap(map, output);
   }
 
-  void _sortExternally(const QString& input, const QString& output)
+  void _sortExternally(const QString& input, const QString& output) const
   {
     std::shared_ptr<PartialOsmMapReader> reader =
       std::dynamic_pointer_cast<PartialOsmMapReader>(

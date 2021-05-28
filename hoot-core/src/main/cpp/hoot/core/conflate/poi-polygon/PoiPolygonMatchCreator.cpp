@@ -46,8 +46,8 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(MatchCreator, PoiPolygonMatchCreator)
 
-MatchPtr PoiPolygonMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId eid1,
-                                             ElementId eid2)
+MatchPtr PoiPolygonMatchCreator::createMatch(
+  const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2)
 {
   if (!_infoCache)
   {
@@ -163,14 +163,14 @@ void PoiPolygonMatchCreator::createMatches(const ConstOsmMapPtr& map,
     " total names processed.");
   LOG_DEBUG(
     "POI/Polygon address matches: " <<
-    StringUtils::formatLargeNumber(PoiPolygonMatch::addressMatches) << " / " <<
+    StringUtils::formatLargeNumber(PoiPolygonMatch::addressMatches) << " of " <<
     StringUtils::formatLargeNumber(PoiPolygonMatch::addressMatchCandidates) <<
     " candidate matches.  " <<
     StringUtils::formatLargeNumber(PoiPolygonMatch::addressesProcessed) <<
     " total addresses processed.");
   LOG_DEBUG(
     "POI/Polygon phone number matches: " <<
-    StringUtils::formatLargeNumber(PoiPolygonMatch::phoneNumberMatches) << " / " <<
+    StringUtils::formatLargeNumber(PoiPolygonMatch::phoneNumberMatches) << " of " <<
     StringUtils::formatLargeNumber(PoiPolygonMatch::phoneNumberMatchCandidates) <<
     " candidate matches.  " <<
     StringUtils::formatLargeNumber(PoiPolygonMatch::phoneNumbersProcesed) <<
@@ -192,7 +192,7 @@ void PoiPolygonMatchCreator::createMatches(const ConstOsmMapPtr& map,
 }
 
 int PoiPolygonMatchCreator::_retainClosestDistanceMatchesOnly(
-  std::vector<ConstMatchPtr>& matches, const ConstOsmMapPtr& map)
+  std::vector<ConstMatchPtr>& matches, const ConstOsmMapPtr& map) const
 {
   LOG_INFO("Discarding non-closest matches...");
 
@@ -290,7 +290,7 @@ int PoiPolygonMatchCreator::_numMatchesContainingElement(
 }
 
 QMultiMap<ElementId, ConstMatchPtr> PoiPolygonMatchCreator::_indexMatchesById(
-  const std::vector<ConstMatchPtr>& matches, const QString& matchTypeStr)
+  const std::vector<ConstMatchPtr>& matches, const QString& matchTypeStr) const
 {
   LOG_DEBUG(
     "Indexing " << StringUtils::formatLargeNumber(matches.size()) << " " << matchTypeStr <<
@@ -341,7 +341,7 @@ QMultiMap<ElementId, ConstMatchPtr> PoiPolygonMatchCreator::_indexMatchesById(
 }
 
 QMap<ElementId, QList<ConstMatchPtr>> PoiPolygonMatchCreator::_getOverlappingMatches(
-  const QMultiMap<ElementId, ConstMatchPtr>& matchesById, const QString& matchTypeStr)
+  const QMultiMap<ElementId, ConstMatchPtr>& matchesById, const QString& matchTypeStr) const
 {
   LOG_DEBUG(
     "Finding overlapping " << matchTypeStr << " matches out of " <<
@@ -368,7 +368,7 @@ QMap<ElementId, QList<ConstMatchPtr>> PoiPolygonMatchCreator::_getOverlappingMat
 std::vector<ConstMatchPtr> PoiPolygonMatchCreator::_filterOutNonClosestMatches(
   const QMap<ElementId, QList<ConstMatchPtr>>& overlappingMatches,
   const std::vector<ConstMatchPtr>& allMatches, const ConstOsmMapPtr& map,
-  const QString& matchTypeStr)
+  const QString& matchTypeStr) const
 {
   LOG_DEBUG(
     "Filtering out non-closest " << matchTypeStr << " matches out of " <<
@@ -508,7 +508,7 @@ std::vector<ConstMatchPtr> PoiPolygonMatchCreator::_filterOutNonClosestMatches(
 }
 
 int PoiPolygonMatchCreator::_retainClosestDistanceMatchesOnlyByType(
-  std::vector<ConstMatchPtr>& matches, const ConstOsmMapPtr& map, const bool processPois)
+  std::vector<ConstMatchPtr>& matches, const ConstOsmMapPtr& map, const bool processPois) const
 {
   QString matchTypeStr = "Polygon";
   if (processPois)

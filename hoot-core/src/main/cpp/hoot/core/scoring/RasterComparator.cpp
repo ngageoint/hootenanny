@@ -133,7 +133,7 @@ double RasterComparator::compareMaps()
   return 1 - error;
 }
 
-void RasterComparator::_dumpImage(cv::Mat& image)
+void RasterComparator::_dumpImage(cv::Mat& image) const
 {
   printf("\n");
   for (int y = 0; y < _height; y++)
@@ -147,7 +147,7 @@ void RasterComparator::_dumpImage(cv::Mat& image)
   }
 }
 
-void RasterComparator::_renderImage(const std::shared_ptr<OsmMap>& map, cv::Mat& image)
+void RasterComparator::_renderImage(const std::shared_ptr<OsmMap>& map, cv::Mat& image) const
 {
   QImage qImage(_width, _height, QImage::Format_ARGB32);
   QPainter pt(&qImage);

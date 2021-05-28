@@ -36,7 +36,7 @@ namespace hoot
 {
 
 /**
- * isSatisfied returns true if all the children are satisfied
+ * isSatisfied returns true if all the children criteria are satisfied
  */
 class ChainCriterion : public ElementCriterion, public ElementCriterionConsumer,
   public Configurable, public ConstOsmMapConsumer
@@ -56,26 +56,24 @@ public:
 
   bool isSatisfied(const ConstElementPtr& e) const override;
 
-  ElementCriterionPtr clone() override { return ElementCriterionPtr(new ChainCriterion(_criteria)); }
-
-  QString getDescription() const override
-  { return "Allows for chaining criteria together (logical AND)"; }
-
-  QString toString() const override;
-
-  QString getName() const override { return className(); }
-
-  QString getClassName() const override { return className(); }
+  ElementCriterionPtr clone() override
+  { return ElementCriterionPtr(new ChainCriterion(_criteria)); }
 
   void setOsmMap(const OsmMap* map) override;
 
   void setConfiguration(const Settings& conf) override;
 
+  QString getDescription() const override
+  { return "Allows for chaining criteria together (logical AND)"; }
+  QString toString() const override;
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
+
   int criteriaSize() const { return _criteria.size(); }
 
 protected:
 
-  ChainCriterion(const std::vector<std::shared_ptr<ElementCriterion>>& criteria);
+  ChainCriterion(const std::vector<ElementCriterionPtr>& criteria);
 
   std::vector<std::shared_ptr<ElementCriterion>> _criteria;
 

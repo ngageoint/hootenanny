@@ -53,10 +53,11 @@ namespace hoot
 
 HOOT_JS_REGISTER(OsmMapOperationJs)
 
-void OsmMapOperationJs::Init(Handle<Object> target)
+void OsmMapOperationJs::Init(Local<Object> target)
 {
   Isolate* current = target->GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
   vector<QString> opNames =
     Factory::getInstance().getObjectNamesByBase(OsmMapOperation::className());
 
@@ -66,19 +67,17 @@ void OsmMapOperationJs::Init(Handle<Object> target)
     const char* n = utf8.data();
     // Prepare constructor template
     Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
-    tpl->SetClassName(String::NewFromUtf8(current, opNames[i].toStdString().data()));
+    tpl->SetClassName(String::NewFromUtf8(current, opNames[i].toStdString().data()).ToLocalChecked());
     tpl->InstanceTemplate()->SetInternalFieldCount(2);
     // Prototype
-    tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "apply"),
-        FunctionTemplate::New(current, apply));
-    tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "applyAndGetResult"),
-        FunctionTemplate::New(current, applyAndGetResult));
+    tpl->PrototypeTemplate()->Set(current, "apply", FunctionTemplate::New(current, apply));
+    tpl->PrototypeTemplate()->Set(current, "applyAndGetResult", FunctionTemplate::New(current, applyAndGetResult));
     tpl->PrototypeTemplate()->Set(
       PopulateConsumersJs::baseClass(),
-      String::NewFromUtf8(current, OsmMapOperation::className().toStdString().data()));
+      String::NewFromUtf8(current, OsmMapOperation::className().toStdString().data()).ToLocalChecked());
 
-    Persistent<Function> constructor(current, tpl->GetFunction());
-    target->Set(String::NewFromUtf8(current, n), ToLocal(&constructor));
+    Persistent<Function> constructor(current, tpl->GetFunction(context).ToLocalChecked());
+    target->Set(context, toV8(n), ToLocal(&constructor));
   }
 }
 
@@ -109,9 +108,10 @@ void OsmMapOperationJs::apply(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
 
   OsmMapOperationJs* op = ObjectWrap::Unwrap<OsmMapOperationJs>(args.This());
-  OsmMapPtr& map = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject())->getMap();
+  OsmMapPtr& map = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject(context).ToLocalChecked())->getMap();
 
   op->getMapOp()->apply(map);
 
@@ -122,9 +122,10 @@ void OsmMapOperationJs::applyAndGetResult(const FunctionCallbackInfo<Value>& arg
 {
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
 
   OsmMapOperationJs* op = ObjectWrap::Unwrap<OsmMapOperationJs>(args.This());
-  OsmMapPtr& map = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject())->getMap();
+  OsmMapPtr& map = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject(context).ToLocalChecked())->getMap();
   op->getMapOp()->apply(map);
   boost::any result = op->getMapOp()->getResult();
 
@@ -140,7 +141,7 @@ void OsmMapOperationJs::applyAndGetResult(const FunctionCallbackInfo<Value>& arg
   }
   else if (result.type() == typeid(QString))
   {
-    args.GetReturnValue().Set(String::NewFromUtf8(current, boost::any_cast<QString>(result).toLatin1().data()));
+    args.GetReturnValue().Set(String::NewFromUtf8(current, boost::any_cast<QString>(result).toLatin1().data()).ToLocalChecked());
   }
   else
   {

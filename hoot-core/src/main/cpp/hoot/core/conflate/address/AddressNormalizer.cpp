@@ -45,7 +45,7 @@ _numNormalized(0)
   _addressTagKeys.reset(new AddressTagKeys());
 }
 
-void AddressNormalizer::normalizeAddresses(const ElementPtr& e)
+void AddressNormalizer::normalizeAddresses(const ElementPtr& e) const
 {
   const QSet<QString> addressTagKeys = _addressTagKeys->getAddressTagKeys(*e);
   LOG_VART(addressTagKeys);

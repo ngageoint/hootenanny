@@ -70,7 +70,7 @@ _autoStrm(new fstream())
   }
 }
 
-bool ArffReader::_eof()
+bool ArffReader::_eof() const
 {
   bool result;
   if (_bstrm.get())

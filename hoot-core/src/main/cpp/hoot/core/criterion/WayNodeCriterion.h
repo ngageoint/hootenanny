@@ -49,15 +49,9 @@ public:
 
   ElementCriterionPtr clone() override { return ElementCriterionPtr(new WayNodeCriterion(_map)); }
 
-  QString getDescription() const override { return "Identifies way nodes"; }
-
   void setOsmMap(const OsmMap* map) override { _map = map->shared_from_this(); }
 
   GeometryType getGeometryType() const override { return GeometryType::Point; }
-
-  QString getName() const override { return className(); }
-
-  QString getClassName() const override { return className(); }
 
   /**
    * Returns the ID of the first way that owns input node
@@ -66,7 +60,12 @@ public:
    * @return the first way ID found that contains the node
    * @todo move to WayUtils
    */
-  long getFirstOwningWayId(const ConstNodePtr& node);
+  long getFirstOwningWayId(const ConstNodePtr& node) const;
+
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
+  QString getDescription() const override { return "Identifies way nodes"; }
+  QString toString() const override { return className(); }
 
 protected:
 

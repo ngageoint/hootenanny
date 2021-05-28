@@ -51,15 +51,14 @@ public:
    *
    * @param statsToUpdate the set of stats to update
    */
-  void updateStats(QList<SingleStat>& statsToUpdate);
-
+  void updateStats(QList<SingleStat>& statsToUpdate) const;
   /**
    * Insert additional conflation stats into a set of existing stats at the specified location.
    *
    * @param statsToUpdate the set of stats to update
    * @param insertIndex the location in statsToUpdate where the stats should be insert
    */
-  void updateStats(QList<SingleStat>& statsToUpdate, long insertIndex);
+  void updateStats(QList<SingleStat>& statsToUpdate, long insertIndex) const;
 
   /**
    * Retrieves a stat by name from a set of stats
@@ -93,7 +92,7 @@ private:
    * These are useful stats if the reference map (map 1) is being treated as ground truth.
    * Eventually, may want to add the option to turn this on/off.
    */
-  void _addRefAsGroundTruthStats(QList<SingleStat>& statsToUpdate, long insertIndex);
+  void _addRefAsGroundTruthStats(QList<SingleStat>& statsToUpdate, long insertIndex) const;
 };
 
 }

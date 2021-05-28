@@ -213,8 +213,8 @@ void PoiPolygonMatchVisitor::visit(const ConstElementPtr& e)
   _numElementsVisited++;
   if (_numElementsVisited % _taskStatusUpdateInterval == 0)
   {
-    PROGRESS_INFO(
-      "Processed " << StringUtils::formatLargeNumber(_numElementsVisited) << " / " <<
+    PROGRESS_STATUS(
+      "Processed " << StringUtils::formatLargeNumber(_numElementsVisited) << " of " <<
       StringUtils::formatLargeNumber(_map->getNodeCount()) << " nodes.");
     _timer.restart();
   }
@@ -224,7 +224,7 @@ void PoiPolygonMatchVisitor::visit(const ConstElementPtr& e)
   }
 }
 
-bool PoiPolygonMatchVisitor::isMatchCandidate(ConstElementPtr element)
+bool PoiPolygonMatchVisitor::isMatchCandidate(ConstElementPtr element) const
 {
   if (_filter && !_filter->isSatisfied(element))
   {

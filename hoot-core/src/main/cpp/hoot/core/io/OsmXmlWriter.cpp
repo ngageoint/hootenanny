@@ -253,7 +253,7 @@ void OsmXmlWriter::write(const ConstOsmMapPtr& map)
   close();
 }
 
-void OsmXmlWriter::_writeMetadata(const Element* e)
+void OsmXmlWriter::_writeMetadata(const Element* e) const
 {
   if (_includeCompatibilityTags)
   {
@@ -267,8 +267,8 @@ void OsmXmlWriter::_writeMetadata(const Element* e)
   }
   else
   {
-    //This comparison seems to be still unequal when I set an element's timestamp to
-    //ElementData::TIMESTAMP_EMPTY.  See RemoveAttributesVisitor
+    // This comparison seems to be still unequal when I set an element's timestamp to
+    // ElementData::TIMESTAMP_EMPTY.  See RemoveAttributesVisitor
     if (e->getTimestamp() != ElementData::TIMESTAMP_EMPTY)
     {
       _writer->writeAttribute("timestamp", DateTimeUtils::toTimeString(e->getTimestamp()));
@@ -279,7 +279,7 @@ void OsmXmlWriter::_writeMetadata(const Element* e)
     }
   }
   if (e->getChangeset() != ElementData::CHANGESET_EMPTY &&
-      e->getId() > 0) //  Negative IDs are considered "new" elements and shouldn't have a changeset
+      e->getId() > 0) //  Negative IDs are considered "new" elements and shouldn't have a changeset.
   {
     _writer->writeAttribute("changeset", QString::number(e->getChangeset()));
   }
@@ -349,7 +349,7 @@ void OsmXmlWriter::_writeNodes(ConstOsmMapPtr map)
     nids.append(it->first);
   }
 
-  // sort the values to give consistent results.
+  // Sort the values to give consistent results.
   if (nids.size() > 100000)
   {
     LOG_INFO("Sorting nodes...");
@@ -412,7 +412,7 @@ void OsmXmlWriter::_writeRelations(ConstOsmMapPtr map)
   }
 }
 
-void OsmXmlWriter::_writeBounds(const Envelope& bounds)
+void OsmXmlWriter::_writeBounds(const Envelope& bounds) const
 {
   _writer->writeStartElement("bounds");
   _writer->writeAttribute("minlat", QString::number(bounds.getMinY(), 'g', _precision));

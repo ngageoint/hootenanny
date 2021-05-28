@@ -13,7 +13,7 @@ export GLPK_VERSION=4.64
 export LIBOAUTHCPP_VERSION=0.1.0
 export LIBGEOTIFF_VERSION=1.4.2
 export LIBPHONENUMBER_VERSION=8.9.16
-export NODE_VERSION=8.9.3
+export NODE_VERSION=14.16.1
 export PROJ_VERSION=4.8.0
 export STXXL_VERSION=1.3.1
 
@@ -31,3 +31,6 @@ export RVM_BASE_URL=https://github.com/rvm/rvm
 export RVM_BINARIES_URL="${RUBY_BASE_URL}/binaries"
 export RVM_HOME="${RVM_HOME:-${HOME}/.rvm}"
 export RVM_VERSION=1.29.4
+
+# Devtoolset
+export DEVTOOLSET_VERSION=8

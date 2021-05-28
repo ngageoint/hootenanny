@@ -27,13 +27,14 @@
 
 // Hoot
 #include <hoot/core/algorithms/changeset/ChangesetCreator.h>
-#include <hoot/core/cmd/BoundedCommand.h>
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/io/ChangesetStatsFormat.h>
-#include <hoot/core/util/StringUtils.h>
-#include <hoot/core/util/ConfigUtils.h>
 #include <hoot/core/algorithms/changeset/ChangesetReplacement.h>
+#include <hoot/core/cmd/BoundedCommand.h>
 #include <hoot/core/geometry/GeometryUtils.h>
+#include <hoot/core/io/ChangesetStatsFormat.h>
+#include <hoot/core/util/ConfigUtils.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/FileUtils.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Qt
 #include <QFileInfo>
@@ -54,7 +55,6 @@ public:
   ChangesetDeriveCmd() = default;
 
   QString getName() const override { return "changeset-derive"; }
-
   QString getDescription() const override
   { return "Creates a changeset representing the difference between two maps"; }
 
@@ -137,7 +137,7 @@ private:
 
   QElapsedTimer _timer;
 
-  void _processStatsParams(QStringList& args, bool& printStats, QString& outputStatsFile)
+  void _processStatsParams(QStringList& args, bool& printStats, QString& outputStatsFile) const
   {
     if (args.contains("--stats"))
     {
@@ -166,13 +166,14 @@ private:
 
   void _deriveStandardChangeset(
     const QString& input1, const QString& input2, const QString& output, const bool printStats,
-    const QString& outputStatsFile, const QString& osmApiDbUrl)
+    const QString& outputStatsFile, const QString& osmApiDbUrl) const
   {
     const int maxFilePrintLength = ConfigOptions().getProgressVarPrintLengthMax();
     LOG_STATUS(
-      "Generating standard changeset for inputs: ..." << input1.right(maxFilePrintLength) <<
-      " and ..." << input2.right(maxFilePrintLength) << " and output: ..." <<
-      output.right(maxFilePrintLength));
+      "Generating standard changeset for inputs: ..." <<
+      FileUtils::toLogFormat(input1, maxFilePrintLength) << " and ..." <<
+      FileUtils::toLogFormat(input2, maxFilePrintLength) << " and output: ..." <<
+      FileUtils::toLogFormat(output, maxFilePrintLength));
 
     // Note that we may need to eventually further restrict this to only data with relation having
     // oob members due to full hydration (would then need to move this code to inside
@@ -191,7 +192,7 @@ private:
 
   void _deriveReplacementChangeset(
     const QString& input1, const QString& input2, const QString& output, const bool printStats,
-    const QString& outputStatsFile, const QString& osmApiDbUrl, const bool enableWaySnapping)
+    const QString& outputStatsFile, const QString& osmApiDbUrl, const bool enableWaySnapping) const
   {
     const bool isCutOnly = input2.isEmpty();
     QString implementation = ConfigOptions().getChangesetReplacementImplementation();
@@ -228,7 +229,7 @@ private:
     changesetCreator->create(input1, input2, bounds, output);
   }
 
-  void _updateConfigOptionsForBounds()
+  void _updateConfigOptionsForBounds() const
   {
     // If we're working within a bounds, we need to ensure that reference features outside of the
     // bounds don't get deleted.

@@ -207,7 +207,7 @@ void MatchComparator::_clearCache()
 }
 
 bool MatchComparator::_debugLog(const QString& uuid1, const QString& uuid2, const ConstOsmMapPtr& in,
-  const ConstOsmMapPtr& /*conflated*/)
+  const ConstOsmMapPtr& /*conflated*/) const
 {
   TagContainsCriterion tcf("uuid", uuid1);
   tcf.addPair("uuid", uuid2);
@@ -392,7 +392,7 @@ double MatchComparator::evaluateMatches(const ConstOsmMapPtr& in, const OsmMapPt
     numPairsParsed++;
     if (numPairsParsed % _statusUpdateInterval == 0)
     {
-      PROGRESS_INFO("Processed " << numPairsParsed << " / " << allPairs.size() << " match pairs.");
+      PROGRESS_INFO("Processed " << numPairsParsed << " of " << allPairs.size() << " match pairs.");
     }
   }
 
@@ -411,7 +411,7 @@ double MatchComparator::evaluateMatches(const ConstOsmMapPtr& in, const OsmMapPt
 }
 
 void MatchComparator::_createMatches(const set<QString>& uuids1, const set<QString>& uuids2,
-  set<UuidPair>& matches, Tgs::DisjointSetMap<QString>& groups)
+  set<UuidPair>& matches, Tgs::DisjointSetMap<QString>& groups) const
 {
   // create a match between all the combinations of ref1 uuid to ref2 uuid
   for (set<QString>::const_iterator u1 = uuids1.begin(); u1 != uuids1.end(); ++u1)
@@ -628,7 +628,7 @@ int MatchComparator::getTotalCount() const
 }
 
 bool MatchComparator::_isNeedsReview(const QString& uuid1, const QString& uuid2,
-                                     const ConstOsmMapPtr& conflated)
+                                     const ConstOsmMapPtr& conflated) const
 {
   QList<ElementId> eid1s = _actualUuidToEid.values(uuid1);
   QList<ElementId> eid2s = _actualUuidToEid.values(uuid2);

@@ -105,12 +105,12 @@ OsmPbfWriter::~OsmPbfWriter()
   close();
 }
 
-long OsmPbfWriter::_convertLon(double lon)
+long OsmPbfWriter::_convertLon(double lon) const
 {
   return (1000000000 * lon - _lonOffset) / _granularity;
 }
 
-long OsmPbfWriter::_convertLat(double lat)
+long OsmPbfWriter::_convertLat(double lat) const
 {
   return (1000000000 * lat - _latOffset) / _granularity;
 }
@@ -260,7 +260,7 @@ void OsmPbfWriter::setIdDelta(long nodeIdDelta, long wayIdDelta, long relationId
   _relationIdDelta = relationIdDelta;
 }
 
-int OsmPbfWriter::_toRelationMemberType(ElementType t)
+int OsmPbfWriter::_toRelationMemberType(ElementType t) const
 {
   // This is actually a 1 to 1 translation, but I don't want to rely on the element type
   // enumerations staying static.

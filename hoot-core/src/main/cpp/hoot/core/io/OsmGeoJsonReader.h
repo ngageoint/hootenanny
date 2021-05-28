@@ -180,7 +180,7 @@ private:
    * @param bbox Tree of bounding box JSON array
    * @return Bounding box as a usable Envelope
    */
-  geos::geom::Envelope _parseBbox(const boost::property_tree::ptree& bbox);
+  geos::geom::Envelope _parseBbox(const boost::property_tree::ptree& bbox) const;
 
   /**
    * @brief _addTags Reads tags or properties from the given ptree, and adds them to the
@@ -202,7 +202,7 @@ private:
    */
   std::queue<std::string> _roles;
 
-  std::shared_ptr<geos::geom::Coordinate> ReadCoordinate(const boost::property_tree::ptree& coordsIt);
+  std::shared_ptr<geos::geom::Coordinate> ReadCoordinate(const boost::property_tree::ptree& coordsIt) const;
 
   /*
    * For use with older data not necessarily in WGS84.

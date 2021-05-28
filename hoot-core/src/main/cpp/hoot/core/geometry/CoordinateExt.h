@@ -61,12 +61,12 @@ public:
     y /= len;
   }
 
-  double dotProduct(CoordinateExt val)
+  double dotProduct(CoordinateExt val) const
   {
     return x * val.x + y * val.y;
   }
 
-  double crossProduct(CoordinateExt val)
+  double crossProduct(CoordinateExt val) const
   {
       return x * val.y - y * val.x;
   }

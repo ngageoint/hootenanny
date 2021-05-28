@@ -311,7 +311,7 @@ NodePtr RandomWaySplitter::_getNodeAddedBySplit(const QList<long>& nodeIdsBefore
 
 void RandomWaySplitter::_updateNewNodeProperties(NodePtr newNode,
                                                  ConstNodePtr firstSplitBetweenNode,
-                                                 ConstNodePtr lastSplitBetweenNode)
+                                                 ConstNodePtr lastSplitBetweenNode) const
 {
   //arbitrarily copy the status from one split between node to the new node
   newNode->setStatus(firstSplitBetweenNode->getStatus());

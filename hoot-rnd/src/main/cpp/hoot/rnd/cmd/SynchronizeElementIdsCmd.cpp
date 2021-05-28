@@ -30,6 +30,7 @@
 #include <hoot/core/elements/ElementIdSynchronizer.h>
 #include <hoot/core/io/IoUtils.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/StringUtils.h>
 
 // Qt
@@ -50,10 +51,8 @@ public:
   SynchronizeElementIdsCmd() = default;
 
   QString getName() const override { return "sync-element-ids"; }
-
   QString getDescription() const override
   { return "Copies IDs for identical elements from one map to another (experimental)"; }
-
   QString getType() const override { return "rnd"; }
 
   int runSimple(QStringList& args) override
@@ -76,8 +75,8 @@ public:
     LOG_VARD(output);
 
     LOG_STATUS(
-      "Synchronizing element IDs between ..." << input1.right(25) << " and ..." <<
-      input2.right(25) << " to ..." << output.right(25) << "...");
+      "Synchronizing element IDs between ..." << FileUtils::toLogFormat(input1, 25) << " and ..." <<
+      FileUtils::toLogFormat(input2, 25) << " to ..." << FileUtils::toLogFormat(output, 25) << "...");
 
     OsmMapPtr input1Map(new OsmMap());
     IoUtils::loadMap(input1Map, input1, true, Status::Unknown1);
@@ -91,8 +90,9 @@ public:
 
     LOG_STATUS(
       "Synchronized " << idSynchronizer.getNumTotalFeatureIdsSynchronized() <<
-      " element IDs from ..." << input1.right(25) << " to ..." << input2.right(25) <<
-      " and wrote them to ..." << output.right(25) << ".");
+      " element IDs from ..." << FileUtils::toLogFormat(input1, 25) <<
+      " to ..." << FileUtils::toLogFormat(input2, 25) <<
+      " and wrote them to ..." << FileUtils::toLogFormat(output, 25) << ".");
     LOG_STATUS("\t" << idSynchronizer.getNumNodeIdsSynchronized() << " nodes");
     LOG_STATUS("\t" << idSynchronizer.getNumWayIdsSynchronized() << " ways");
     LOG_STATUS("\t" << idSynchronizer.getNumRelationIdsSynchronized() << " relations");

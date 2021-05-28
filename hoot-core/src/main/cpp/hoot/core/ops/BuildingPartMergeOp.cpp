@@ -149,7 +149,7 @@ QQueue<BuildingPartRelationship> BuildingPartMergeOp::_getBuildingPartWayPreProc
     if (numProcessed % 10000 == 0)
     {
       PROGRESS_INFO(
-        "\tAdded " << StringUtils::formatLargeNumber(numProcessed) << " / " <<
+        "\tAdded " << StringUtils::formatLargeNumber(numProcessed) << " of " <<
         StringUtils::formatLargeNumber(ways.size()) << " ways to building part input.");
     }
   }
@@ -230,7 +230,7 @@ QQueue<BuildingPartRelationship> BuildingPartMergeOp::_getBuildingPartRelationPr
     if (numProcessed % 10000 == 0)
     {
       PROGRESS_INFO(
-        "\tAdded " << StringUtils::formatLargeNumber(numProcessed) << " / " <<
+        "\tAdded " << StringUtils::formatLargeNumber(numProcessed) << " of " <<
         StringUtils::formatLargeNumber(relations.size()) << " relations to building part input.");
     }
   }
@@ -310,7 +310,7 @@ void BuildingPartMergeOp::_mergeBuildingParts()
       PROGRESS_INFO(
         "\tMerged " << StringUtils::formatLargeNumber(_numAffected) <<
         " building parts after processing " <<
-        StringUtils::formatLargeNumber(_numBuildingGroupsMerged) << " / " <<
+        StringUtils::formatLargeNumber(_numBuildingGroupsMerged) << " of " <<
         StringUtils::formatLargeNumber(_totalBuildingGroupsProcessed) << " building groups.");
     }
   }
@@ -354,7 +354,7 @@ std::set<long> BuildingPartMergeOp::_calculateNeighbors(const ConstWayPtr& way, 
   return neighborIds;
 }
 
-bool BuildingPartMergeOp::_compareTags(Tags t1, Tags t2)
+bool BuildingPartMergeOp::_compareTags(Tags t1, Tags t2) const
 {
   // remove all the building tags that are building:part=yes specific.
   const QSet<QString> buildingPartTagNames =

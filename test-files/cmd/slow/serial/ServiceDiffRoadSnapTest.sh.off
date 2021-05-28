@@ -39,6 +39,11 @@ HOOT_DB_URL="hootapidb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME"
 HOOT_EMAIL="$TEST_NAME@hoottestcpp.org"
 
 GENERAL_OPTS=$CONFIG" -C "$ALG_CONFIG" -C DifferentialConflation.conf -C Testing.conf -D uuid.helper.repeatable=true -D writer.include.debug.tags=true -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false"
+# When using Diff conflate w/ Network, we're not allowed to remove partial match elements in a partial fashion at this 
+# time, so change the default setting to avoid a warning.
+if [ "$ALG_CONFIG" == "NetworkAlgorithm.conf" ]; then
+  GENERAL_OPTS+=" -D differential.remove.linear.partial.matches.as.whole=true"
+fi
 DB_OPTS="-D api.db.email=$HOOT_EMAIL -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true -D changeset.user.id=1 -D changeset.max.size=999999"
 CONFLATE_OPTS="$MATCHERS $MERGERS -D snap.unconnected.ways.mark.snapped.nodes=true -D snap.unconnected.ways.mark.snapped.ways=true"
 CHANGESET_DERIVE_OPTS="-D changeset.user.id=1 -D changeset.allow.deleting.reference.features=false"
@@ -73,13 +78,13 @@ fi
 
 if [ "$NUM_STEPS" == "2" ]; then
   # run diff conflate to changeset w/ road snapping; retain both sets of IDs during conflate
-  hoot conflate $LOG_LEVEL $LOG_FILTER -D debug.maps.filename=$OUTPUT_DIR/conflate-debug.osm $GENERAL_OPTS $DB_OPTS $CONFLATE_OPTS $CHANGESET_DERIVE_OPTS -D conflate.use.data.source.ids.1=true -D conflate.use.data.source.ids.2=true -D differential.snap.unconnected.roads=true -D snap.unconnected.ways.snap.tolerance=10.0 $OSM_API_DB_URL $SEC_LAYER $OUTPUT_DIR/diff.osc.sql $OSM_API_DB_URL --differential
+  hoot conflate $LOG_LEVEL $LOG_FILTER -D debug.maps.filename=$OUTPUT_DIR/conflate-debug.osm $GENERAL_OPTS $DB_OPTS $CONFLATE_OPTS $CHANGESET_DERIVE_OPTS -D conflate.use.data.source.ids.1=true -D conflate.use.data.source.ids.2=true -D differential.snap.unconnected.features=true -D snap.unconnected.ways.snap.criteria=hoot::HighwayCriterion -D snap.unconnected.ways.snap.tolerance=10.0 $OSM_API_DB_URL $SEC_LAYER $OUTPUT_DIR/diff.osc.sql $OSM_API_DB_URL --differential
   if [ "$DEBUG" == "true" ]; then
     hoot conflate $LOG_LEVEL $LOG_FILTER -D debug.maps.filename=$OUTPUT_DIR/conflate-debug.osm $GENERAL_OPTS $DB_OPTS $CONFLATE_OPTS $CHANGESET_DERIVE_OPTS -D conflate.use.data.source.ids.1=true -D conflate.use.data.source.ids.2=true -D differential.snap.unconnected.roads=true -D snap.unconnected.ways.snap.tolerance=10.0 $OSM_API_DB_URL $SEC_LAYER $OUTPUT_DIR/diff.osc --differential  
   fi
 else
   # run diff conflate to osm w/ road snapping; retain both sets of IDs during conflate
-  hoot conflate $LOG_LEVEL $LOG_FILTER -D debug.maps.filename=$OUTPUT_DIR/conflate-debug.osm $GENERAL_OPTS $DB_OPTS $CONFLATE_OPTS -D conflate.use.data.source.ids.1=true -D conflate.use.data.source.ids.2=true -D differential.snap.unconnected.roads=true -D snap.unconnected.ways.snap.tolerance=10.0 $OSM_API_DB_URL $SEC_LAYER $OUTPUT_DIR/diff.osm --differential
+  hoot conflate $LOG_LEVEL $LOG_FILTER -D debug.maps.filename=$OUTPUT_DIR/conflate-debug.osm $GENERAL_OPTS $DB_OPTS $CONFLATE_OPTS -D conflate.use.data.source.ids.1=true -D conflate.use.data.source.ids.2=true -D differential.snap.unconnected.features=true -D snap.unconnected.ways.snap.criteria=hoot::HighwayCriterion -D snap.unconnected.ways.snap.tolerance=10.0 $OSM_API_DB_URL $SEC_LAYER $OUTPUT_DIR/diff.osm --differential
   # generate a changeset between the original ref data and the diff calculated in the previous step
   hoot changeset-derive $LOG_LEVEL $LOG_FILTER -D debug.maps.filename=$OUTPUT_DIR/changeset-derive-debug.osm $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS $OSM_API_DB_URL $OUTPUT_DIR/diff.osm $OUTPUT_DIR/diff.osc.sql $OSM_API_DB_URL
   if [ "$DEBUG" == "true" ]; then

@@ -39,12 +39,13 @@ namespace hoot
 
 HOOT_JS_REGISTER(OsmGeoJsonWriterJs)
 
-void OsmGeoJsonWriterJs::Init(Handle<Object> exports)
+void OsmGeoJsonWriterJs::Init(Local<Object> exports)
 {
   Isolate* current = exports->GetIsolate();
   HandleScope scope(current);
-  Handle<Object> writer = Object::New(current);
-  exports->Set(String::NewFromUtf8(current, "OsmGeoJsonWriter"), writer);
+  Local<Context> context = current->GetCurrentContext();
+  Local<Object> writer = Object::New(current);
+  exports->Set(context, toV8("OsmGeoJsonWriter"), writer);
 }
 
 }

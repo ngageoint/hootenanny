@@ -68,6 +68,21 @@ See the User Guide for more details on command usage. Most examples use .osm fil
       -D schema.translation.script=myTranslation.js input1.osm input2.osm output.osm
 -----
 
+===== Keep provenance of select tags during conflation:
+
+-----
+    # The default behavior when merging the tags of conflated features is to overwrite conflicting
+    # tags in the target feature. See the list of tag mergers for other options. A slight
+    # modification is made to overwrite tag merging here by allowing certain fields not to be
+    # overwritten and to keep the provenance of their values by appending them to each other with
+    # each successive merge. Use of this option is valid with the OverwriteTag1Merger or
+    # OverwriteTag2Mergers only. e.g. A: { myField1=1, myField2=1 } merged with
+    # B: { myField2=1, myField3=1 } results in C: { myField1=1, myField2=1;2, myField3=1 }
+
+    hoot conflate -D tag.merger.overwrite.accumulate.values.keys="myField2;myField3" \
+      input1.osm input2.osm output.osm
+-----
+
 ==== Applying Changes
 
 ===== Derive a changeset between two maps and write the result back to a Rails Port or CGIMap instance:
@@ -181,9 +196,7 @@ See the User Guide for more details on command usage. Most examples use .osm fil
 
 -----
     hoot convert -D convert.ops="hoot::UnconnectedWaySnapper" \
-      -D snap.unconnected.ways.snap.way.criterion=hoot::HighwayCriterion \
-      -D snap.unconnected.ways.snap.to.way.criterion=hoot::HighwayCriterion \
-      -D snap.unconnected.ways.snap.to.way.node.criterion=hoot::HighwayWayNodeCriterion \
+      -D snap.unconnected.ways.snap.criteria=hoot::HighwayCriterion \
       -D snap.unconnected.ways.snap.to.way.status=Input1 \
       -D snap.unconnected.ways.snap.way.status=Input2 \
       input1.osm input2.osm output.osm
@@ -706,16 +719,16 @@ hoot alpha-shape --buffer 10 input.osm 200 0 output.osm
     hoot convert -D convert.ops="hoot::FindHighwayIntersectionsOp" input.osm output.osm
 -----
 
-===== Create a node density plot:
-
------
-    hoot plot-node-density input.osm output.png 100
------
-
 ===== Detect railway intersections:
 
 -----
 hoot convert -D convert.ops="hoot::FindRailwayIntersectionsOp" input.osm output.osm
+-----
+
+===== Create a node density plot:
+
+-----
+    hoot plot-node-density input.osm output.png 100
 -----
 
 ===== Detect and mark divided highways:
@@ -797,14 +810,23 @@ hoot convert -D convert.ops="hoot::UnlikelyRoadRemover" input.osm output.osm
     hoot convert -D convert.ops="hoot::PhoneNumberLocateVisitor" input.osm output.osm
 -----
 
+===== Snap unconnected secondary roads in one dataset back to any type of linear feature in another dataset:
+
+-----
+    hoot convert -D convert.ops="hoot::UnconnectedWaySnapper" \
+      -D snap.unconnected.ways.snap.way.criteria=hoot::HighwayCriterion \
+      -D snap.unconnected.ways.snap.to.way.criteria=hoot::LinearCriterion \
+      -D snap.unconnected.ways.snap.to.way.status=Input1 \
+      -D snap.unconnected.ways.snap.way.status=Input2 \
+      input1.osm input2.osm output.osm
+-----
+
 ===== Snap unconnected roads in one dataset back to neighboring roads in another dataset using a stricter feature type matching requirement:
 
 -----
     hoot convert -D convert.ops="hoot::UnconnectedWaySnapper" \
       -D snap.unconnected.ways.minimum.type.match.score=0.8 \
-      -D snap.unconnected.ways.snap.way.criterion=hoot::HighwayCriterion \
-      -D snap.unconnected.ways.snap.to.way.criterion=hoot::HighwayCriterion \
-      -D snap.unconnected.ways.snap.to.way.node.criterion=hoot::HighwayWayNodeCriterion \
+      -D snap.unconnected.ways.snap.criterion=hoot::HighwayCriterion \
       -D snap.unconnected.ways.snap.to.way.status=Input1 \
       -D snap.unconnected.ways.snap.way.status=Input2 \
       input1.osm input2.osm output.osm
@@ -814,9 +836,7 @@ hoot convert -D convert.ops="hoot::UnlikelyRoadRemover" input.osm output.osm
 
 -----
     hoot convert -D convert.ops="hoot::UnconnectedWaySnapper" \
-      -D snap.unconnected.ways.snap.way.criterion=hoot::HighwayCriterion \
-      -D snap.unconnected.ways.snap.to.way.criterion=hoot::HighwayCriterion \
-      -D snap.unconnected.ways.snap.to.way.node.criterion=hoot::HighwayWayNodeCriterion \
+      -D snap.unconnected.ways.snap.criterion=hoot::HighwayCriterion \
       -D snap.unconnected.ways.snap.to.way.status=Input1 \
       -D snap.unconnected.ways.snap.way.status=Input2 \
       -D snap.unconnected.ways.review.snapped=true \
@@ -828,8 +848,6 @@ hoot convert -D convert.ops="hoot::UnlikelyRoadRemover" input.osm output.osm
 -----
     hoot convert -D convert.ops="hoot::UnconnectedWaySnapper" \
       -D snap.unconnected.ways.snap.way.criterion=hoot::HighwayCriterion \
-      -D snap.unconnected.ways.snap.to.way.criterion=hoot::HighwayCriterion \
-      -D snap.unconnected.ways.snap.to.way.node.criterion=hoot::HighwayWayNodeCriterion \
       -D snap.unconnected.ways.snap.to.way.status=Input1 \
       -D snap.unconnected.ways.snap.way.status=Input2 \
       -D snap.unconnected.ways.review.snapped=true \
@@ -994,7 +1012,8 @@ hoot alpha-shape --alpha 200 --buffer -10 input.osm 200 0 output.osm
 ===== Calculate the average number of nodes for a set of buildings:
 
 -----
-hoot stat -D nodes.per.way.visitor.element.criterion=hoot::BuildingCriterion input.osm hoot::NodesPerWayVisitor average
+hoot stat -D nodes.per.way.visitor.element.criterion=hoot::BuildingCriterion input.osm \
+  hoot::NodesPerWayVisitor average
 -----
 
 ===== Calculate the numerical average of all tags with a given key:
@@ -1025,6 +1044,13 @@ hoot stat -D nodes.per.way.visitor.element.criterion=hoot::BuildingCriterion inp
 
 -----
     hoot stat input.osm hoot::PhoneNumberCountVisitor
+-----
+
+===== Count how many roads intersect two other roads given their IDs:
+
+-----
+hoot count -D intersecting.way.criterion.source.way.ids="-76;-985" input.osm \
+  hoot::IntersectingWayCriterion
 -----
 
 ===== Display the distribution of highway tags for roads in a map:
@@ -1323,6 +1349,19 @@ Requires a language translation server installation.  See the Hootenanny Install
 
 -----
     hoot info --way-joiners
+-----
+
+===== List all way snap criteria for the current conflate configuration:
+
+-----
+    hoot info --way-snap-critera
+-----
+
+===== List all way snap criteria for a specific set of conflate matchers:
+
+-----
+    hoot info -D match.creators="hoot::HighwayMatchCreator;hoot::ScriptMatchCreator,River.js" \
+      --way-snap-critera
 -----
 
 ===== List the available JOSM validators:

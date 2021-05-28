@@ -322,7 +322,7 @@ void MapCropper::apply(OsmMapPtr& map)
     if (wayCtr % _statusUpdateInterval == 0)
     {
       PROGRESS_INFO(
-        "Cropped " << StringUtils::formatLargeNumber(wayCtr) << " / " <<
+        "Cropped " << StringUtils::formatLargeNumber(wayCtr) << " of " <<
         StringUtils::formatLargeNumber(ways.size()) << " ways.");
     }
   }
@@ -398,7 +398,7 @@ void MapCropper::apply(OsmMapPtr& map)
     if (nodeCtr % _statusUpdateInterval == 0)
     {
       PROGRESS_INFO(
-        "Cropped " << StringUtils::formatLargeNumber(nodeCtr) << " / " <<
+        "Cropped " << StringUtils::formatLargeNumber(nodeCtr) << " of " <<
         StringUtils::formatLargeNumber(nodes.size()) << " nodes.");
     }
   }
@@ -558,7 +558,7 @@ void MapCropper::_cropWay(const OsmMapPtr& map, long wid)
   }
 }
 
-bool MapCropper::_isWhollyInside(const Envelope& e)
+bool MapCropper::_isWhollyInside(const Envelope& e) const
 {
   bool result = false;;
   if (_invert)
@@ -579,7 +579,7 @@ bool MapCropper::_isWhollyInside(const Envelope& e)
   return result;
 }
 
-bool MapCropper::_isWhollyInside(const Geometry& e)
+bool MapCropper::_isWhollyInside(const Geometry& e) const
 {
   bool result = false;
   if (_invert)
@@ -600,7 +600,7 @@ bool MapCropper::_isWhollyInside(const Geometry& e)
   return result;
 }
 
-bool MapCropper::_isWhollyOutside(const Envelope& e)
+bool MapCropper::_isWhollyOutside(const Envelope& e) const
 {
   bool result = false;
   if (!_invert)
@@ -622,7 +622,7 @@ bool MapCropper::_isWhollyOutside(const Envelope& e)
   return result;
 }
 
-bool MapCropper::_isWhollyOutside(const Geometry& e)
+bool MapCropper::_isWhollyOutside(const Geometry& e) const
 {
   bool result = false;
   if (!_invert)

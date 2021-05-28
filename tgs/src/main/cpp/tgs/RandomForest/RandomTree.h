@@ -102,7 +102,7 @@ namespace Tgs
     * @param data the set of data vectors
     * @param proximity a n x n (where n is the number of total data vectors) adjacency matrix
     */
-    void findProximity(const std::shared_ptr<DataFrame>& data, std::vector<unsigned int> & proximity);
+    void findProximity(const std::shared_ptr<DataFrame>& data, std::vector<unsigned int> & proximity) const;
 
     /**
     * Finds the factor importance as the sum of the info gain at each tree node per factor

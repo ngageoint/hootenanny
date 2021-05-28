@@ -51,14 +51,13 @@ public:
   ElementCriterionPtr clone() override
   { return ElementCriterionPtr(new ContainsNodeCriterion(_nodeId)); }
 
-  QString getDescription() const override
-  { return "Determines if an element contains the given node ID"; }
-
   void setConfiguration(const Settings& s) override;
 
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+  QString toString() const override { return className(); }
+  QString getDescription() const override
+  { return "Determines if an element contains the given node ID"; }
 
 private:
 

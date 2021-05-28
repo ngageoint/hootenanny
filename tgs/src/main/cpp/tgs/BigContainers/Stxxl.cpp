@@ -56,11 +56,11 @@ Stxxl& Stxxl::getInstance()
   return instance;
 }
 
-void Stxxl::_init()
+void Stxxl::_init() const
 {
 }
 
-QString Stxxl::_removeComments(QString s)
+QString Stxxl::_removeComments(QString s) const
 {
   QStringList l = s.split("\n");
   QStringList result;
@@ -68,9 +68,7 @@ QString Stxxl::_removeComments(QString s)
   for (int i = 0; i < l.size(); i++)
   {
     if (l[i].startsWith("#") == false)
-    {
       result.append(l[i]);
-    }
   }
 
   return result.join("\n");
@@ -81,9 +79,7 @@ void Stxxl::setConfig(QString configFile)
   QFile fp(configFile);
 
   if (fp.open(QIODevice::ReadOnly) == false)
-  {
     throw Tgs::Exception(("Error opening file " + configFile).toStdString());
-  }
 
   QString s = fp.readAll();
   long pid = QCoreApplication::applicationPid();
@@ -104,9 +100,10 @@ void Stxxl::setConfig(QString configFile)
 
   if (_configFileTmp.write(s.toUtf8()) == 0)
   {
-    QString err("Error writing data to %1 (%2)");
-    err.arg(_configFileTmp.fileName()).arg(_configFileTmp.errorString());
-    throw Tgs::Exception(err.toStdString());
+    throw Tgs::Exception(
+      QString("Error writing data to %1 (%2)")
+          .arg(_configFileTmp.fileName())
+          .arg(_configFileTmp.errorString()).toStdString());
   }
 
   _configFileTmp.close();

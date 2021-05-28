@@ -32,6 +32,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.hamcrest.CoreMatchers;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
@@ -55,6 +56,7 @@ public class AdvancedOptResourceTest extends HootServicesJerseyTestAbstract {
          assertThat(jsonStr, CoreMatchers.containsString("BuildingKeepMoreComplexGeometryWhenAutoMerging"));
     }
 
+    @Ignore
     @Test
     @Category(UnitTest.class)
     public void testGetOptionsWhenHoot2() throws Exception {

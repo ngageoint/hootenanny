@@ -100,8 +100,6 @@ public:
 
   QString toString() const override;
 
-  void setPairs(const std::set<std::pair<ElementId, ElementId>>& pairs) { _pairs = pairs; }
-  void setMatchedBy(const QString& matchedBy) { _matchedBy = matchedBy; }
   void setSublineMatcher(const std::shared_ptr<SublineStringMatcher>& sublineMatcher)
   { _sublineMatcher = sublineMatcher; }
 
@@ -114,9 +112,6 @@ protected:
 
   std::shared_ptr<SublineStringMatcher> _sublineMatcher;
 
-  // indicates which matcher matched the elements being processed by this merger
-  QString _matchedBy;
-
   /*
    * Return true if pair needs review.
    */
@@ -125,6 +120,15 @@ protected:
 
   virtual void _markNeedsReview(
     ElementPtr e1, ElementPtr e2, QString note, QString reviewType);
+
+  void _mergeShortestPairsFirst(
+    std::vector<std::pair<ElementId, ElementId>>& pairs,
+    std::vector<std::pair<ElementId, ElementId>>& replaced);
+
+  /*
+   * Finds a matching subline between two elements with the configured subline matcher
+   */
+  virtual WaySublineMatchString _matchSubline(ElementPtr e1, ElementPtr e2) = 0;
 
   void _removeSpans(const ElementPtr& w1, const ElementPtr& w2) const;
   void _removeSpans(const WayPtr& w1, const WayPtr& w2) const;

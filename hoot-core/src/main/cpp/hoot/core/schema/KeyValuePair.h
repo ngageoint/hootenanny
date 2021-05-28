@@ -64,7 +64,7 @@ public:
   QString getName() const { return _name; }
   QString getValue() const { return _value; }
 
-  bool isMatch(const QString& k, const QString& v) { return _key == k && _value == v; }
+  bool isMatch(const QString& k, const QString& v) const { return _key == k && _value == v; }
 
   QString toString() const { return _name; }
 

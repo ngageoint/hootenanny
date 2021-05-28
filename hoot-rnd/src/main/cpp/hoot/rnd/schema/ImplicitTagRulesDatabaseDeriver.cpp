@@ -126,7 +126,7 @@ void ImplicitTagRulesDatabaseDeriver::deriveRulesDatabase(const QString& input, 
   }
 }
 
-void ImplicitTagRulesDatabaseDeriver::_writeRules(const QString& input, const QString& output)
+void ImplicitTagRulesDatabaseDeriver::_writeRules(const QString& input, const QString& output) const
 {
   ImplicitTagRulesSqliteWriter ruleWordPartWriter;
   ruleWordPartWriter.open(output);
@@ -174,7 +174,7 @@ void ImplicitTagRulesDatabaseDeriver::_removeKvpsBelowOccurrenceThreshold(const 
   _thresholdedCountFile->close();
 }
 
-bool ImplicitTagRulesDatabaseDeriver::_wordIsNotASchemaTagValue(const QString& word)
+bool ImplicitTagRulesDatabaseDeriver::_wordIsNotASchemaTagValue(const QString& word) const
 {
   //If _useSchemaTagValuesForWordsOnly is activated, the word is not on the ignore list, and any
   //token in the name matches a OSM tag value parsed from the hoot schema, then the whole word is
@@ -201,7 +201,7 @@ bool ImplicitTagRulesDatabaseDeriver::_wordIsNotASchemaTagValue(const QString& w
   return wordNotASchemaTagValue;
 }
 
-void ImplicitTagRulesDatabaseDeriver::_validateInputs(const QString& input, const QString& output)
+void ImplicitTagRulesDatabaseDeriver::_validateInputs(const QString& input, const QString& output) const
 {
   if (!input.endsWith(".implicitTagRules"))
   {
@@ -433,13 +433,13 @@ void ImplicitTagRulesDatabaseDeriver::_applyFiltering(const QString& input)
   _writeCustomRules(linesWrittenCount);
 
   LOG_INFO(
-    "Wrote " << StringUtils::formatLargeNumber(linesWrittenCount) << " / " <<
+    "Wrote " << StringUtils::formatLargeNumber(linesWrittenCount) << " of " <<
      StringUtils::formatLargeNumber(linesParsedCount) << " lines to filtered file.");
 
   _filteredCountFile->close();
 }
 
-void ImplicitTagRulesDatabaseDeriver::_writeCustomRules(long& linesWrittenCount)
+void ImplicitTagRulesDatabaseDeriver::_writeCustomRules(long& linesWrittenCount) const
 {
   // would like to know somehow if any of the custom rules overlap with the db derived
   // rules from the public data - #2300

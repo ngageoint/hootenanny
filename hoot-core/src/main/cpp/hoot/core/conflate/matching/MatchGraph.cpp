@@ -301,7 +301,7 @@ MatchGraph::MatchGraph()
   _d.reset(new MatchGraphInternal(_matches));
 }
 
-void MatchGraph::_resetGraph()
+void MatchGraph::_resetGraph() const
 {
   _d->reset();
   _d->build();

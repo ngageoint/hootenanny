@@ -55,7 +55,8 @@ public:
    * Calculates all the conflicts between matches and puts the indexes to the conflicting pairs in
    * the provided conflicts set. conflicts is cleared before inserting conflicts.
    */
-  void calculateMatchConflicts(const std::vector<ConstMatchPtr>& matches, ConflictMap& conflicts);
+  void calculateMatchConflicts(
+    const std::vector<ConstMatchPtr>& matches, ConflictMap& conflicts) const;
 
 private:
 
@@ -63,7 +64,7 @@ private:
 
   void _calculateSubsetConflicts(
     const std::vector<ConstMatchPtr>& matches, ConflictMap& conflicts,
-    const std::vector<int>& matchSet, const QHash<QString, ConstMatchPtr>& idIndexedMatches);
+    const std::vector<int>& matchSet, const QHash<QString, ConstMatchPtr>& idIndexedMatches) const;
 
   EidIndexMap _calculateEidIndexMap(const std::vector<ConstMatchPtr>& matches) const;
 };

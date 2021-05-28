@@ -53,30 +53,95 @@ void ElementJs::_addBaseFunctions(Local<FunctionTemplate> tpl)
 {
   Isolate* current = v8::Isolate::GetCurrent();
   HandleScope scope(current);
-  tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(),
-      String::NewFromUtf8(current, Element::className().toStdString().data()));
-  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getCircularError"),
+  tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(), toV8(Element::className()));
+  tpl->PrototypeTemplate()->Set(current, "getCircularError",
       FunctionTemplate::New(current, getCircularError));
-  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getElementId"),
+  tpl->PrototypeTemplate()->Set(current, "getElementId",
       FunctionTemplate::New(current, getElementId));
-  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getId"),
+  tpl->PrototypeTemplate()->Set(current, "getId",
       FunctionTemplate::New(current, getId));
-  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getStatusInput"),
+  tpl->PrototypeTemplate()->Set(current, "getStatusInput",
       FunctionTemplate::New(current, getStatusString));
-  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getStatusString"),
+  tpl->PrototypeTemplate()->Set(current, "getStatusString",
       FunctionTemplate::New(current, getStatusString));
-  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getTags"),
+  tpl->PrototypeTemplate()->Set(current, "getTags",
       FunctionTemplate::New(current, getTags));
-  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "setStatusString"),
+  tpl->PrototypeTemplate()->Set(current, "setStatusString",
       FunctionTemplate::New(current, setStatusString));
-  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "setTags"),
+  tpl->PrototypeTemplate()->Set(current, "setTags",
       FunctionTemplate::New(current, setTags));
-  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "setTag"),
+  tpl->PrototypeTemplate()->Set(current, "setTag",
       FunctionTemplate::New(current, setTag));
-  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "toJSON"),
+  tpl->PrototypeTemplate()->Set(current, "toJSON",
       FunctionTemplate::New(current, toString));
-  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "toString"),
+  tpl->PrototypeTemplate()->Set(current, "toString",
       FunctionTemplate::New(current, toString));
+}
+
+Local<Object> ElementJs::New(ConstElementPtr e)
+{
+  EscapableHandleScope scope(Isolate::GetCurrent());
+
+  Local<Object> result;
+
+  switch (e->getElementType().getEnum())
+  {
+  case ElementType::Node:
+    {
+      ConstNodePtr n = std::dynamic_pointer_cast<const Node>(e);
+      result = NodeJs::New(n);
+      break;
+    }
+  case ElementType::Way:
+    {
+      ConstWayPtr w = std::dynamic_pointer_cast<const Way>(e);
+      result = WayJs::New(w);
+      break;
+    }
+  case ElementType::Relation:
+    {
+      ConstRelationPtr r = std::dynamic_pointer_cast<const Relation>(e);
+      result = RelationJs::New(r);
+      break;
+    }
+  default:
+    throw IllegalArgumentException("Unexpected element type.");
+  }
+
+  return scope.Escape(result);
+}
+
+Local<Object> ElementJs::New(ElementPtr e)
+{
+  EscapableHandleScope scope(Isolate::GetCurrent());
+
+  Local<Object> result;
+
+  switch (e->getElementType().getEnum())
+  {
+  case ElementType::Node:
+    {
+      NodePtr n = std::dynamic_pointer_cast<Node>(e);
+      result = NodeJs::New(n);
+      break;
+    }
+  case ElementType::Way:
+    {
+      WayPtr w = std::dynamic_pointer_cast<Way>(e);
+      result = WayJs::New(w);
+      break;
+    }
+  case ElementType::Relation:
+    {
+      RelationPtr r = std::dynamic_pointer_cast<Relation>(e);
+      result = RelationJs::New(r);
+      break;
+    }
+  default:
+    throw IllegalArgumentException("Unexpected element type.");
+  }
+
+  return scope.Escape(result);
 }
 
 void ElementJs::getCircularError(const FunctionCallbackInfo<Value>& args)
@@ -135,72 +200,6 @@ void ElementJs::getTags(const FunctionCallbackInfo<Value>& args)
   args.GetReturnValue().Set(TagsJs::New(e->getTags()));
 }
 
-Handle<Object> ElementJs::New(ConstElementPtr e)
-{
-  EscapableHandleScope scope(v8::Isolate::GetCurrent());
-
-  Handle<Object> result;
-
-  switch (e->getElementType().getEnum())
-  {
-  case ElementType::Node:
-    {
-      ConstNodePtr n = std::dynamic_pointer_cast<const Node>(e);
-      result = NodeJs::New(n);
-      break;
-    }
-  case ElementType::Way:
-    {
-      ConstWayPtr w = std::dynamic_pointer_cast<const Way>(e);
-      result = WayJs::New(w);
-      break;
-    }
-  case ElementType::Relation:
-    {
-      ConstRelationPtr r = std::dynamic_pointer_cast<const Relation>(e);
-      result = RelationJs::New(r);
-      break;
-    }
-  default:
-    throw IllegalArgumentException("Unexpected element type.");
-  }
-
-  return scope.Escape(result);
-}
-
-Handle<Object> ElementJs::New(ElementPtr e)
-{
-  EscapableHandleScope scope(v8::Isolate::GetCurrent());
-
-  Handle<Object> result;
-
-  switch (e->getElementType().getEnum())
-  {
-  case ElementType::Node:
-    {
-      NodePtr n = std::dynamic_pointer_cast<Node>(e);
-      result = NodeJs::New(n);
-      break;
-    }
-  case ElementType::Way:
-    {
-      WayPtr w = std::dynamic_pointer_cast<Way>(e);
-      result = WayJs::New(w);
-      break;
-    }
-  case ElementType::Relation:
-    {
-      RelationPtr r = std::dynamic_pointer_cast<Relation>(e);
-      result = RelationJs::New(r);
-      break;
-    }
-  default:
-    throw IllegalArgumentException("Unexpected element type.");
-  }
-
-  return scope.Escape(result);
-}
-
 void ElementJs::setStatusString(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
@@ -228,6 +227,7 @@ void ElementJs::setTags(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
 
   ElementPtr e = ObjectWrap::Unwrap<ElementJs>(args.This())->getElement();
 
@@ -239,7 +239,7 @@ void ElementJs::setTags(const FunctionCallbackInfo<Value>& args)
   }
   else
   {
-    Tags& tags = ObjectWrap::Unwrap<TagsJs>(args[0]->ToObject())->getTags();
+    const Tags& tags = ObjectWrap::Unwrap<TagsJs>(args[0]->ToObject(context).ToLocalChecked())->getTags();
     e->setTags(tags);
     args.GetReturnValue().SetUndefined();
   }
@@ -274,7 +274,7 @@ void ElementJs::toString(const FunctionCallbackInfo<Value>& args)
 
   ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args.This())->getConstElement();
 
-  args.GetReturnValue().Set(String::NewFromUtf8(current, e->toString().toUtf8().data()));
+  args.GetReturnValue().Set(String::NewFromUtf8(current, e->toString().toUtf8().data()).ToLocalChecked());
 }
 
 }

@@ -46,8 +46,6 @@ namespace hoot
 
 int WayLocation::logWarnCount = 0;
 
-Coordinate c;
-
 const double WayLocation::SLOPPY_EPSILON = 1e-10;
 
 WayLocation::WayLocation() :

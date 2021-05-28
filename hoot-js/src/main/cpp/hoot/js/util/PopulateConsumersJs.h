@@ -28,25 +28,26 @@
 #define POPULATECONSUMERSJS_H
 
 // hoot
-#include <hoot/core/elements/ConstOsmMapConsumer.h>
 #include <hoot/core/algorithms/string/StringDistanceConsumer.h>
 #include <hoot/core/algorithms/aggregator/ValueAggregatorConsumer.h>
-#include <hoot/core/elements/ElementConsumer.h>
 #include <hoot/core/criterion/ElementCriterionConsumer.h>
-#include <hoot/core/visitors/ElementVisitorConsumer.h>
+#include <hoot/core/elements/ConstOsmMapConsumer.h>
+#include <hoot/core/elements/ElementConsumer.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Settings.h>
-#include <hoot/js/elements/OsmMapJs.h>
+#include <hoot/core/visitors/ElementVisitorConsumer.h>
+#include <hoot/core/visitors/MultipleCriterionConsumerVisitor.h>
+
 #include <hoot/js/algorithms/string/StringDistanceJs.h>
 #include <hoot/js/algorithms/aggregator/ValueAggregatorJs.h>
 #include <hoot/js/criterion/ElementCriterionJs.h>
+#include <hoot/js/criterion/JsFunctionCriterion.h>
 #include <hoot/js/elements/ElementJs.h>
+#include <hoot/js/elements/OsmMapJs.h>
+#include <hoot/js/util/JsFunctionConsumer.h>
 #include <hoot/js/util/StringUtilsJs.h>
 #include <hoot/js/visitors/ElementVisitorJs.h>
-#include <hoot/core/visitors/MultipleCriterionConsumerVisitor.h>
-#include <hoot/js/criterion/JsFunctionCriterion.h>
-#include <hoot/js/util/JsFunctionConsumer.h>
 
 // node.js
 #include <hoot/js/SystemNodeJs.h>
@@ -59,7 +60,7 @@ class PopulateConsumersJs
 public:
 
   static v8::Local<v8::String> baseClass()
-  { return v8::String::NewFromUtf8(v8::Isolate::GetCurrent(), "baseClass"); }
+  { return v8::String::NewFromUtf8(v8::Isolate::GetCurrent(), "baseClass").ToLocalChecked(); }
 
   template <typename T>
   static void populateConsumers(T* consumer, const v8::FunctionCallbackInfo<v8::Value>& args)
@@ -73,44 +74,47 @@ public:
   template <typename T>
   static void populateConsumers(T* consumer, const v8::Local<v8::Value>& v)
   {
+    v8::Isolate* current = v8::Isolate::GetCurrent();
+    v8::HandleScope scope(current);
+    v8::Local<v8::Context> context = current->GetCurrentContext();
     if (v->IsFunction())
     {
       populateFunctionConsumer<T>(consumer, v);
     }
     else if (v->IsObject())
     {
-      v8::Local<v8::Object> obj = v->ToObject();
+      v8::Local<v8::Object> obj = v->ToObject(context).ToLocalChecked();
 
-      if (obj->Has(baseClass()))
+      if (obj->Has(context, baseClass()).ToChecked())
       {
-        if (str(obj->Get(baseClass())) == ElementCriterion::className())
+        if (str(obj->Get(context, baseClass()).ToLocalChecked()) == ElementCriterion::className())
         {
           populateCriterionConsumer<T>(consumer, v);
         }
-        else if (str(obj->Get(baseClass())) == ElementVisitor::className())
+        else if (str(obj->Get(context, baseClass()).ToLocalChecked()) == ElementVisitor::className())
         {
           populateVisitorConsumer<T>(consumer, v);
         }
-        else if (str(obj->Get(baseClass())) == Element::className())
+        else if (str(obj->Get(context, baseClass()).ToLocalChecked()) == Element::className())
         {
           populateElementConsumer<T>(consumer, v);
         }
-        else if (str(obj->Get(baseClass())) == StringDistance::className())
+        else if (str(obj->Get(context, baseClass()).ToLocalChecked()) == StringDistance::className())
         {
           populateStringDistanceConsumer<T>(consumer, v);
         }
-        else if (str(obj->Get(baseClass())) == ValueAggregator::className())
+        else if (str(obj->Get(context, baseClass()).ToLocalChecked()) == ValueAggregator::className())
         {
           populateValueAggregatorConsumer<T>(consumer, v);
         }
-        else if (str(obj->Get(baseClass())) == OsmMap::className())
+        else if (str(obj->Get(context, baseClass()).ToLocalChecked()) == OsmMap::className())
         {
           populateOsmMapConsumer<T>(consumer, v);
         }
         else
         {
           throw IllegalArgumentException(
-            "Unexpected object passed to consumer " + str(obj->Get(baseClass())));
+            "Unexpected object passed to consumer " + str(obj->Get(context, baseClass()).ToLocalChecked()));
         }
       }
       else
@@ -125,9 +129,13 @@ public:
   {
     LOG_TRACE("Populating configurable...");
 
+    v8::Isolate* current = v8::Isolate::GetCurrent();
+    v8::HandleScope scope(current);
+    v8::Local<v8::Context> context = current->GetCurrentContext();
+
     Settings settings = conf();
 
-    v8::Local<v8::Array> keys = obj->GetPropertyNames();
+    v8::Local<v8::Array> keys = obj->GetPropertyNames(context).ToLocalChecked();
     if (keys->Length() == 0)
     {
       LOG_WARN("Populating object with empty configuration. Is this what you wanted?");
@@ -135,8 +143,8 @@ public:
 
     for (uint32_t i = 0; i < keys->Length(); i++)
     {
-      v8::Local<v8::String> k = keys->Get(i)->ToString();
-      v8::Local<v8::String> v = obj->Get(k)->ToString();
+      v8::Local<v8::String> k = keys->Get(context, i).ToLocalChecked()->ToString(context).ToLocalChecked();
+      v8::Local<v8::String> v = obj->Get(context, k).ToLocalChecked()->ToString(context).ToLocalChecked();
       LOG_VART(str(k));
       LOG_VART(str(v));
       settings.set(str(k), str(v));
@@ -146,7 +154,7 @@ public:
     if (c == nullptr)
     {
       throw IllegalArgumentException(
-        "Object does not accept custom settings as an argument: " + str(obj->Get(baseClass())));
+        "Object does not accept custom settings as an argument: " + str(obj->Get(context, baseClass()).ToLocalChecked()));
     }
 
     // Configuration from Javascript for criterion consumers is handled a little differently where
@@ -167,14 +175,18 @@ public:
   {
     LOG_TRACE("Populating criterion consumer...");
 
-    ElementCriterionJs* obj = node::ObjectWrap::Unwrap<ElementCriterionJs>(v->ToObject());
+    v8::Isolate* current = v8::Isolate::GetCurrent();
+    v8::HandleScope scope(current);
+    v8::Local<v8::Context> context = current->GetCurrentContext();
+
+    ElementCriterionJs* obj = node::ObjectWrap::Unwrap<ElementCriterionJs>(v->ToObject(context).ToLocalChecked());
     ElementCriterionConsumer* c = dynamic_cast<ElementCriterionConsumer*>(consumer);
 
     if (c == nullptr)
     {
       throw IllegalArgumentException(
         "Object does not accept ElementCriterion as an argument: " +
-        str(v->ToObject()->Get(baseClass())));
+        str(v->ToObject(context).ToLocalChecked()->Get(context, baseClass()).ToLocalChecked()));
     }
     else
     {
@@ -187,13 +199,17 @@ public:
   {
     LOG_TRACE("Populating element consumer...");
 
-    ElementJs* obj = node::ObjectWrap::Unwrap<ElementJs>(v->ToObject());
+    v8::Isolate* current = v8::Isolate::GetCurrent();
+    v8::HandleScope scope(current);
+    v8::Local<v8::Context> context = current->GetCurrentContext();
+
+    ElementJs* obj = node::ObjectWrap::Unwrap<ElementJs>(v->ToObject(context).ToLocalChecked());
     ElementConsumer* c = dynamic_cast<ElementConsumer*>(consumer);
 
     if (c == nullptr)
     {
       throw IllegalArgumentException(
-        "Object does not accept Element as an argument: " + str(v->ToObject()->Get(baseClass())));
+        "Object does not accept Element as an argument: " + str(v->ToObject(context).ToLocalChecked()->Get(context, baseClass()).ToLocalChecked()));
     }
     else
     {
@@ -206,7 +222,11 @@ public:
   {
     LOG_TRACE("Populating osm map consumer...");
 
-    OsmMapJs* obj = node::ObjectWrap::Unwrap<OsmMapJs>(v->ToObject());
+    v8::Isolate* current = v8::Isolate::GetCurrent();
+    v8::HandleScope scope(current);
+    v8::Local<v8::Context> context = current->GetCurrentContext();
+
+    OsmMapJs* obj = node::ObjectWrap::Unwrap<OsmMapJs>(v->ToObject(context).ToLocalChecked());
 
     if (obj->isConst())
     {
@@ -216,7 +236,7 @@ public:
       {
         throw IllegalArgumentException(
           "Object does not accept const OsmMap as an argument. Maybe try a non-const OsmMap?: " +
-          str(v->ToObject()->Get(baseClass())));
+          str(v->ToObject(context).ToLocalChecked()->Get(context, baseClass()).ToLocalChecked()));
       }
       else
       {
@@ -243,6 +263,10 @@ public:
   {
     LOG_TRACE("Populating string distance consumer...");
 
+    v8::Isolate* current = v8::Isolate::GetCurrent();
+    v8::HandleScope scope(current);
+    v8::Local<v8::Context> context = current->GetCurrentContext();
+
     StringDistancePtr sd = toCpp<StringDistancePtr>(v);
 
     StringDistanceConsumer* c = dynamic_cast<StringDistanceConsumer*>(consumer);
@@ -251,7 +275,7 @@ public:
     {
       throw IllegalArgumentException(
         "Object does not accept StringDistance as an argument: " +
-        str(v->ToObject()->Get(baseClass())));
+        str(v->ToObject(context).ToLocalChecked()->Get(context, baseClass()).ToLocalChecked()));
     }
     else
     {
@@ -264,6 +288,10 @@ public:
   {
     LOG_TRACE("Populating aggregator consumer...");
 
+    v8::Isolate* current = v8::Isolate::GetCurrent();
+    v8::HandleScope scope(current);
+    v8::Local<v8::Context> context = current->GetCurrentContext();
+
     ValueAggregatorPtr va = toCpp<ValueAggregatorPtr>(v);
 
     ValueAggregatorConsumer* c = dynamic_cast<ValueAggregatorConsumer*>(consumer);
@@ -272,7 +300,7 @@ public:
     {
       throw IllegalArgumentException(
         "Object does not accept ValueAggregator as an argument: " +
-        str(v->ToObject()->Get(baseClass())));
+        str(v->ToObject(context).ToLocalChecked()->Get(context, baseClass()).ToLocalChecked()));
     }
     else
     {
@@ -285,7 +313,11 @@ public:
   {
     LOG_TRACE("Populating visitor consumer...");
 
-    ElementVisitorJs* obj = node::ObjectWrap::Unwrap<ElementVisitorJs>(v->ToObject());
+    v8::Isolate* current = v8::Isolate::GetCurrent();
+    v8::HandleScope scope(current);
+    v8::Local<v8::Context> context = current->GetCurrentContext();
+
+    ElementVisitorJs* obj = node::ObjectWrap::Unwrap<ElementVisitorJs>(v->ToObject(context).ToLocalChecked());
 
     ElementVisitorConsumer* c = dynamic_cast<ElementVisitorConsumer*>(consumer);
 
@@ -293,7 +325,7 @@ public:
     {
       throw IllegalArgumentException(
         "Object does not accept ElementCriterion as an argument: " +
-        str(v->ToObject()->Get(baseClass())));
+        str(v->ToObject(context).ToLocalChecked()->Get(context, baseClass()).ToLocalChecked()));
     }
     else
     {

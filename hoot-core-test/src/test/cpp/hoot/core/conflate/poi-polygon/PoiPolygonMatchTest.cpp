@@ -71,7 +71,7 @@ public:
                         Coordinate(20.0, 20.0), Coordinate(0.0, 20.0),
                         Coordinate(0.0, 0.0),
                         Coordinate::getNull() };
-    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w1");
+    WayPtr w1 = TestUtils::createWay(map, c1, "w1", Status::Unknown1, 5);
     w1->getTags().set("area", true);
     w1->getTags().set("poi", true);
     w1->getTags()["name"] = "United Kingdoms";
@@ -126,7 +126,7 @@ public:
                         Coordinate(20.0, 20.0), Coordinate(0.0, 20.0),
                         Coordinate(0.0, 0.0),
                         Coordinate::getNull() };
-    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w1");
+    WayPtr w1 = TestUtils::createWay(map, c1, "w1", Status::Unknown1, 5);
     w1->getTags().set("building", true);
     NodePtr n1(new Node(Status::Unknown1, 1, -1, 10, 5));
     map->addNode(n1);
@@ -180,7 +180,7 @@ public:
                         Coordinate(20.0, 20.0), Coordinate(0.0, 20.0),
                         Coordinate(0.0, 0.0),
                         Coordinate::getNull() };
-    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w1");
+    WayPtr w1 = TestUtils::createWay(map, c1, "w1", Status::Unknown1, 5);
     w1->getTags().set("building", true);
     NodePtr n1(new Node(Status::Unknown1, 1, 10, 10, 5));
     map->addNode(n1);
@@ -254,7 +254,7 @@ public:
                         Coordinate(20.0, 20.0), Coordinate(0.0, 20.0),
                         Coordinate(0.0, 0.0),
                         Coordinate::getNull() };
-    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w1");
+    WayPtr w1 = TestUtils::createWay(map, c1, "w1", Status::Unknown1, 5);
     w1->getTags().set("area", true);
     w1->getTags().set("poi", true);
     w1->getTags()["name"] = "United Kingdoms";
@@ -538,7 +538,7 @@ public:
                         Coordinate(20.0, 20.0), Coordinate(0.0, 20.0),
                         Coordinate(0.0, 0.0),
                         Coordinate::getNull() };
-    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w1");
+    WayPtr w1 = TestUtils::createWay(map, c1, "w1", Status::Unknown1, 5);
     w1->getTags().set("area", true);
     w1->getTags().set("poi", true);
     w1->getTags()["name"] = "United Kingdoms";
@@ -602,7 +602,7 @@ public:
                         Coordinate(20.0, 20.0), Coordinate(0.0, 20.0),
                         Coordinate(0.0, 0.0),
                         Coordinate::getNull() };
-    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w1");
+    WayPtr w1 = TestUtils::createWay(map, c1, "w1", Status::Unknown1, 5);
     w1->getTags().set("area", true);
     w1->getTags().set("poi", true);
     w1->getTags()["name"] = "United Kingdoms";
@@ -666,7 +666,7 @@ public:
                         Coordinate(20.0, 20.0), Coordinate(0.0, 20.0),
                         Coordinate(0.0, 0.0),
                         Coordinate::getNull() };
-    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w1");
+    WayPtr w1 = TestUtils::createWay(map, c1, "w1", Status::Unknown1, 5);
     w1->getTags().set("area", true);
     w1->getTags().set("poi", true);
     w1->getTags()["name"] = "United Kingdoms";
@@ -707,7 +707,7 @@ public:
                         Coordinate(20.0, 20.0), Coordinate(0.0, 20.0),
                         Coordinate(0.0, 0.0),
                         Coordinate::getNull() };
-    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w1");
+    WayPtr w1 = TestUtils::createWay(map, c1, "w1", Status::Unknown1, 5);
     w1->getTags().set("area", true);
     w1->getTags().set("poi", true);
     w1->getTags()["name"] = "United Kingdoms";
@@ -787,7 +787,7 @@ public:
     {
       n1->getTags()["name"] = "Staunton Elementary";
 
-      WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w1");
+      WayPtr w1 = TestUtils::createWay(map, c1, "w1", Status::Unknown1, 5);
       w1->getTags()["name"] = "Staunton Elementary";
       w1->getTags().set("building", "yes");
       w1->getTags().set("building:use", "multipurpose");
@@ -803,7 +803,7 @@ public:
     {
       n1->getTags()["name"] = "Staunton Elementary";
 
-      WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w1");
+      WayPtr w1 = TestUtils::createWay(map, c1, "w1", Status::Unknown1, 5);
       w1->getTags()["name"] = "Staunton Elementary";
       w1->getTags().set("amenity", "school");
       w1->getTags().set("building:use", "multipurpose");
@@ -820,7 +820,7 @@ public:
       n1->getTags()["name"] = "Honey Creek Mall";
       n1->getTags()["shop"] = "mall";
 
-      WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w1");
+      WayPtr w1 = TestUtils::createWay(map, c1, "w1", Status::Unknown1, 5);
       w1->getTags()["name"] = "Honey Creek Mall";
       w1->getTags().set("building", "yes");
       w1->getTags().set("shop", "mall");
@@ -841,7 +841,7 @@ public:
       n1->getTags()["name"] = "Honey Creek Mall";
       n1->getTags()["shop"] = "mall";
 
-      WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w1");
+      WayPtr w1 = TestUtils::createWay(map, c1, "w1", Status::Unknown1, 5);
       w1->getTags()["name"] = "Honey Creek Mall";
       w1->getTags().set("shop", "mall");
 
@@ -856,7 +856,7 @@ public:
     {
       n1->getTags()["name"] = "Staunton Elementary";
 
-      WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w1");
+      WayPtr w1 = TestUtils::createWay(map, c1, "w1", Status::Unknown1, 5);
       w1->getTags()["name"] = "Staunton Elementary";
       w1->getTags().set("amenity", "school");
       w1->getTags().set("building:use", "multipurpose");
@@ -872,7 +872,7 @@ public:
     {
       n1->getTags()["name"] = "Staunton Elementary";
 
-      WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w1");
+      WayPtr w1 = TestUtils::createWay(map, c1, "w1", Status::Unknown1, 5);
       w1->getTags()["name"] = "Staunton Elementary";
       w1->getTags().set("building", "yes");
 
@@ -887,7 +887,7 @@ public:
     {
       n1->getTags()["name"] = "Staunton Elementary";
 
-      WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w1");
+      WayPtr w1 = TestUtils::createWay(map, c1, "w1", Status::Unknown1, 5);
       w1->getTags()["name"] = "Staunton Elementary";
       w1->getTags().set("amenity", "school");
 
@@ -902,7 +902,7 @@ public:
     {
       n1->getTags()["name"] = "Staunton Elementary";
 
-      WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w1");
+      WayPtr w1 = TestUtils::createWay(map, c1, "w1", Status::Unknown1, 5);
       w1->getTags()["name"] = "Staunton Elementary";
       w1->getTags().set("area", "yes");
       w1->getTags().set("building:use", "multipurpose");
@@ -924,7 +924,7 @@ public:
                         Coordinate(20.0, 20.0), Coordinate(0.0, 20.0),
                         Coordinate(0.0, 0.0),
                         Coordinate::getNull() };
-    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w1");
+    WayPtr w1 = TestUtils::createWay(map, c1, "w1", Status::Unknown1, 5);
     w1->getTags().set("area", true);
     w1->getTags().set("poi", true);
     w1->getTags()["name"] = "United Kingdoms";

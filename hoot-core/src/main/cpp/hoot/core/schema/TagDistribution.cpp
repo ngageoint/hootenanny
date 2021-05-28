@@ -35,6 +35,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/StringUtils.h>
 
 #include <QTextStream>
@@ -69,7 +70,7 @@ QString TagDistribution::_getPercentageStr(const double percentage) const
   return percentageStr;
 }
 
-QString TagDistribution::getTagCountsString(const std::map<QString, int>& tagCounts)
+QString TagDistribution::getTagCountsString(const std::map<QString, int>& tagCounts) const
 {
   QString buffer;
   QTextStream ts(&buffer);
@@ -211,7 +212,7 @@ void TagDistribution::_countTags(const QString& input, std::map<QString, int>& t
   {
     LOG_INFO(
       "Processed " << StringUtils::formatLargeNumber(_total) << " elements from " <<
-      input.right(25) << ".");
+      FileUtils::toLogFormat(input, 25) << ".");
   }
 
   LOG_VART(inputTotal);
@@ -238,7 +239,7 @@ ElementInputStreamPtr TagDistribution::_getFilteredInputStream(const ElementInpu
   return filteredInputStream;
 }
 
-std::shared_ptr<PartialOsmMapReader> TagDistribution::_getReader(const QString& input)
+std::shared_ptr<PartialOsmMapReader> TagDistribution::_getReader(const QString& input) const
 {
   std::shared_ptr<PartialOsmMapReader> reader =
     std::dynamic_pointer_cast<PartialOsmMapReader>(
@@ -249,7 +250,7 @@ std::shared_ptr<PartialOsmMapReader> TagDistribution::_getReader(const QString& 
   return reader;
 }
 
-ElementCriterionPtr TagDistribution::_getCriterion()
+ElementCriterionPtr TagDistribution::_getCriterion() const
 {
   ElementCriterionPtr crit;
 

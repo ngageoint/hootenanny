@@ -76,9 +76,7 @@ bool RailwayCriterion::isSatisfied(const ConstElementPtr& e) const
 
 QStringList RailwayCriterion::getChildCriteria() const
 {
-  QStringList criteria;
-  criteria.append(RailwayWayNodeCriterion::className());
-  return criteria;
+  return QStringList(RailwayWayNodeCriterion::className());
 }
 
 }

@@ -74,7 +74,7 @@ MatchConflicts::EidIndexMap MatchConflicts::_calculateEidIndexMap(
 }
 
 void MatchConflicts::calculateMatchConflicts(
-  const std::vector<ConstMatchPtr>& matches, ConflictMap& conflicts)
+  const std::vector<ConstMatchPtr>& matches, ConflictMap& conflicts) const
 {
   QElapsedTimer timer;
   timer.start();
@@ -110,8 +110,10 @@ void MatchConflicts::calculateMatchConflicts(
     eidToMatchCount++;
     if (eidToMatchCount % 10 == 0)
     {
+      // TODO: would like this to be status, but it logs a separate line for each statement
+      // for some reason unfortunately.
       PROGRESS_INFO(
-        "Processed matches for " << StringUtils::formatLargeNumber(eidToMatchCount) << " / " <<
+        "Processed matches for " << StringUtils::formatLargeNumber(eidToMatchCount) << " of " <<
         StringUtils::formatLargeNumber(eidToMatches.size()) << " elements. Found " <<
         StringUtils::formatLargeNumber(conflicts.size()) << " match conflicts.");
     }
@@ -126,7 +128,7 @@ void MatchConflicts::calculateMatchConflicts(
 
 void MatchConflicts::_calculateSubsetConflicts(
   const std::vector<ConstMatchPtr>& matches, ConflictMap& conflicts, const vector<int>& matchSet,
-  const QHash<QString, ConstMatchPtr>& idIndexedMatches)
+  const QHash<QString, ConstMatchPtr>& idIndexedMatches) const
 {
   LOG_TRACE("Calculating subset conflicts...");
   LOG_VART(matches.size());

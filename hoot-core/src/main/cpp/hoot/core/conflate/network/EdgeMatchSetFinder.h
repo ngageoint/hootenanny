@@ -107,7 +107,7 @@ private:
 
   double _scoreMatch(ConstEdgeMatchPtr em) const;
 
-  void _addReverseMatch(ConstEdgeMatchPtr edgeMatch, const double score);
+  void _addReverseMatch(ConstEdgeMatchPtr edgeMatch, const double score) const;
 
   void _resetEdgeMatchSimilarities();
 };

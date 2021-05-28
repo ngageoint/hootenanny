@@ -40,7 +40,17 @@ if [ "${ADDREPOS:-yes}" = "yes" ]; then
     # configure PGDG repository for PostgreSQL 9.5.
     echo "### Add pgdg repo ###" >> CentOS_upgrade.txt
     sudo $HOOT_HOME/scripts/yum/pgdg-repo.sh 9.5
+
+    # configure the devtoolset repository
+#    echo "### Add devtoolset repo ###"
+#    sudo yum install -y centos-release-scl
+#    sudo yum-config-manager --enable rhel-server-rhscl-7-rpms
 fi
+
+# configure the devtoolset repository
+echo "### Add devtoolset repo ###"
+sudo yum install -y centos-release-scl yum-utils
+sudo yum-config-manager --enable rhel-server-rhscl-7-rpms
 
 if [ "${YUMUPDATE:-yes}" = "yes" ]; then
     echo "Updating OS..."
@@ -135,10 +145,8 @@ sudo yum -y install \
     cmake \
     cppunit-devel \
     dblatex \
+    devtoolset-$DEVTOOLSET_VERSION \
     doxygen \
-    gcc \
-    gcc-c++ \
-    gdb \
     git \
     git-core \
     gnuplot \
@@ -168,11 +176,11 @@ sudo yum -y install \
     protobuf \
     protobuf-compiler \
     protobuf-devel \
-    python  \
-    python-devel \
-    python-matplotlib \
-    python-pip  \
-    python-setuptools \
+    python3  \
+    python3-devel \
+    python3-matplotlib \
+    python3-pip  \
+    python3-setuptools \
     qt5-qtbase \
     qt5-qtbase-devel \
     qt5-qtbase-postgresql \
@@ -205,6 +213,9 @@ fi
 cd $HOOT_HOME
 
 echo "### Configuring environment..."
+
+# Update RVM flags to run auto-update to latest version
+echo rvm_autoupdate_flag=2 >> ~/.rvmrc
 
 # Configure https alternative mirror for maven install, this can likely be removed once
 # we are using maven 3.2.3 or higher
@@ -353,6 +364,17 @@ rm -rf $HOOT_HOME/userfiles/tmp
 # This is defensive!
 # We do this so that Tomcat doesnt. If it does, it screws the permissions up
 mkdir -p $HOOT_HOME/userfiles/tmp
+
+# Update the gcc location to devtoolset
+if ! grep --quiet "devtoolset-$DEVTOOLSET_VERSION" ~/.bash_profile; then
+    echo "Adding devtoolset-$DEVTOOLSET_VERSION to profile..."
+    # Devtoolset <= 8 has a sudo issue, fix it here
+    if [ $(($DEVTOOLSET_VERSION)) -le 8 ]; then
+        echo "sudo chmod -x /opt/rh/devtoolset-$DEVTOOLSET_VERSION/root/usr/bin/sudo" >> ~/.bash_profile
+    fi
+    # Enable devtoolset
+    echo "source /opt/rh/devtoolset-$DEVTOOLSET_VERSION/enable" >> ~/.bash_profile
+fi
 
 # OK, this is seriously UGLY but it fixes an NFS problem
 #chmod -R 777 $HOOT_HOME/userfiles

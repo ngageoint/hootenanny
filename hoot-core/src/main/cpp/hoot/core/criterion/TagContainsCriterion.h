@@ -63,17 +63,14 @@ public:
 
   ElementCriterionPtr clone() override { return ElementCriterionPtr(new TagContainsCriterion()); }
 
-  QString getDescription() const override
-  { return "Identifies elements having a particular tag key and tag value substring"; }
-
   void setKvps(const QStringList kvps);
   void setCaseSensitive(bool caseSens) { _caseSensitive = caseSens; }
 
   QString toString() const override;
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+  QString getDescription() const override
+  { return "Identifies elements having a particular tag key and tag value substring"; }
 
 private:
 

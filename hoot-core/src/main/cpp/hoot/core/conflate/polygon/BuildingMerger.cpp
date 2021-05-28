@@ -269,8 +269,8 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementI
   }
 
   // remove the scrap element from the map
-  DeletableBuildingCriterion crit;
-  RecursiveElementRemover(scrap->getElementId(), &crit).apply(map);
+  std::shared_ptr<DeletableBuildingCriterion> crit = std::make_shared<DeletableBuildingCriterion>();
+  RecursiveElementRemover(scrap->getElementId(), false, crit).apply(map);
   scrap->getTags().clear();
 
   // delete any pre-existing multipoly members
@@ -549,14 +549,15 @@ std::shared_ptr<Element> BuildingMerger::buildBuilding(
     LOG_TRACE("Combined constituent buildings into: " << result);
 
     // remove the relation we previously marked for removal
-    DeletableBuildingCriterion crit;
+    std::shared_ptr<DeletableBuildingCriterion> crit =
+      std::make_shared<DeletableBuildingCriterion>();
     for (size_t i = 0; i < toRemove.size(); i++)
     {
       if (map->containsElement(toRemove[i]))
       {
         ElementPtr willRemove = map->getElement(toRemove[i]);
         ReplaceElementOp(toRemove[i], result->getElementId()).apply(map);
-        RecursiveElementRemover(toRemove[i], &crit).apply(map);
+        RecursiveElementRemover(toRemove[i], false, crit).apply(map);
         // just in case it wasn't removed (e.g. part of another relation)
         willRemove->getTags().clear();
       }
@@ -789,11 +790,11 @@ void BuildingMerger::mergeBuildings(OsmMapPtr map, const ElementId& mergeTargetI
 {
   LOG_INFO("Merging buildings...");
 
-  //The building merger by default uses geometric complexity (node count) to determine which
-  //building geometry to keep.  Since the UI at this point will never pass in buildings with their
-  //child nodes, we want to override the default behavior and make sure the building merger always
-  //arbitrarily keeps the geometry of the first building passed in.  This is ok, b/c the UI workflow
-  //lets the user select which building to keep and using complexity wouldn't make sense.
+  // The building merger by default uses geometric complexity (node count) to determine which
+  // building geometry to keep.  Since the UI at this point will never pass in buildings with their
+  // child nodes, we want to override the default behavior and make sure the building merger always
+  // arbitrarily keeps the geometry of the first building passed in.  This is ok, b/c the UI
+  // workflow lets the user select which building to keep and using complexity wouldn't make sense.
   LOG_VART(ConfigOptions::getBuildingKeepMoreComplexGeometryWhenAutoMergingKey());
   conf().set(
     ConfigOptions::getBuildingKeepMoreComplexGeometryWhenAutoMergingKey(), "false");
@@ -808,9 +809,12 @@ void BuildingMerger::mergeBuildings(OsmMapPtr map, const ElementId& mergeTargetI
     _fixStatuses(map);
   }
 
+  // Formerly, we required that the buildings have a status other than conflated in order to be
+  // merged...can't remember exactly why...but removed that stipulation and test output still looks
+  // good.
+
   int buildingsMerged = 0;
   BuildingCriterion buildingCrit;
-  const QString statusErrMsg = "Elements being merged must have an Unknown1 or Unknown2 status.";
 
   const WayMap ways = map->getWays();
   for (WayMap::const_iterator wayItr = ways.begin(); wayItr != ways.end(); ++wayItr)
@@ -818,12 +822,7 @@ void BuildingMerger::mergeBuildings(OsmMapPtr map, const ElementId& mergeTargetI
     const ConstWayPtr& way = wayItr->second;
     if (way->getElementId() != mergeTargetId && buildingCrit.isSatisfied(way))
     {
-      LOG_VART(way);
-      if (way->getStatus() == Status::Conflated)
-      {
-        throw IllegalArgumentException(statusErrMsg);
-      }
-
+      LOG_VART(way->getElementId());
       std::set<std::pair<ElementId, ElementId>> pairs;
       pairs.emplace(mergeTargetId, way->getElementId());
       BuildingMerger merger(pairs);
@@ -840,12 +839,7 @@ void BuildingMerger::mergeBuildings(OsmMapPtr map, const ElementId& mergeTargetI
     const ConstRelationPtr& relation = relItr->second;
     if (relation->getElementId() != mergeTargetId && buildingCrit.isSatisfied(relation))
     {
-      LOG_VART(relation);
-      if (relation->getStatus() == Status::Conflated)
-      {
-        throw IllegalArgumentException(statusErrMsg);
-      }
-
+      LOG_VART(relation->getElementId());
       std::set<std::pair<ElementId, ElementId>> pairs;
       pairs.emplace(mergeTargetId, relation->getElementId());
       BuildingMerger merger(pairs);

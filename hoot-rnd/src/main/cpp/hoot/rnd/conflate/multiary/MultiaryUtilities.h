@@ -79,11 +79,11 @@ public:
     _hash(h), _bounds(b), _payload(p) {}
 #endif
 
-  const geos::geom::Envelope& getBounds() { return _bounds; }
+  const geos::geom::Envelope& getBounds() const { return _bounds; }
 
-  QString getHash() { return _hash; }
+  QString getHash() const { return _hash; }
 
-  QByteArray getPayload() { return _payload; }
+  QByteArray getPayload() const { return _payload; }
 
   void setBounds(const geos::geom::Envelope& bounds) { _bounds = bounds; }
 

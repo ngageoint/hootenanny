@@ -75,7 +75,7 @@ void SpatialIndexer::addCriterion(const ElementCriterionPtr& e)
   _criterion = e;
 }
 
-void SpatialIndexer::finalizeIndex()
+void SpatialIndexer::finalizeIndex() const
 {
   QElapsedTimer timer;
   timer.start();

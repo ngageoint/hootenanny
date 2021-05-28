@@ -33,6 +33,7 @@
 #include <hoot/core/visitors/KeepHighwaysVisitor.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/io/IoUtils.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/scoring/MapCompareUtils.h>
 
@@ -56,11 +57,15 @@ public:
   CompareCmd() = default;
 
   QString getName() const override { return "compare"; }
-
   QString getDescription() const override { return "Compares maps using metrics"; }
 
-  int compareMaps(QString in1, QString in2, QString out)
+  int compareMaps(QString in1, QString in2, QString out) const
   {
+    LOG_STATUS(
+      "Comparing maps ..." << FileUtils::toLogFormat(in1, 25) << " and ..." <<
+      FileUtils::toLogFormat(in2, 25) << "; writing output to ..." <<
+      FileUtils::toLogFormat(out, 25) << "...");
+
     OsmMapPtr map1 = loadMap(in1);
     if (map1->isEmpty())
     {
@@ -138,7 +143,7 @@ public:
     return 0;
   }
 
-  OsmMapPtr loadMap(QString p)
+  OsmMapPtr loadMap(QString p) const
   {
     OsmMapPtr result(new OsmMap());
     IoUtils::loadMap(result, p, false);

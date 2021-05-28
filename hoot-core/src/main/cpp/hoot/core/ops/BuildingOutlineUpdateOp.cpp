@@ -316,7 +316,7 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& pBuilding)
 }
 
 void BuildingOutlineUpdateOp::_mergeNodes(
-  const std::shared_ptr<Element>& changed, const RelationPtr& reference)
+  const std::shared_ptr<Element>& changed, const RelationPtr& reference) const
 {
   set<long> changedNodes;
   set<long> referenceNodes;

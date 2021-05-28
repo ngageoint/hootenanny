@@ -84,7 +84,7 @@ private:
   int _numRelationMembersSatisfyingCriterion;
 
   long getIdOfRelationWithMaxCritSatisfactions(const ConstOsmMapPtr& map, RelationPtr& outRelation);
-  void _setOutput(const long relationId, OsmMapPtr& outputMap);
+  void _setOutput(const long relationId, OsmMapPtr& outputMap) const;
 };
 
 }

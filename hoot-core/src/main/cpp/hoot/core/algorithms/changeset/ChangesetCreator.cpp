@@ -156,8 +156,8 @@ void ChangesetCreator::create(const QString& output, const QString& input1, cons
   Progress progress(ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running);
   const int maxFilePrintLength = ConfigOptions().getProgressVarPrintLengthMax();
   QString msg =
-    "Deriving output changeset: ..." + output.right(maxFilePrintLength) + " from inputs: ..." +
-    input1.right(maxFilePrintLength) + " and ..." + input2.right(maxFilePrintLength);
+    "Deriving output changeset: ..." + FileUtils::toLogFormat(output, maxFilePrintLength) + " from inputs: ..." +
+    FileUtils::toLogFormat(input1, maxFilePrintLength) + " and ..." + FileUtils::toLogFormat(input2, maxFilePrintLength);
   if (ConfigUtils::boundsOptionEnabled())
   {
     msg += " over bounds: ..." + ConfigUtils::getBoundsString().right(maxFilePrintLength);
@@ -236,7 +236,7 @@ void ChangesetCreator::create(const QString& output, const QString& input1, cons
 
   progress.set(
     1.0, Progress::JobState::Successful,
-    "Changeset written to: ..." + output.right(maxFilePrintLength));
+    "Changeset written to: ..." + FileUtils::toLogFormat(output, maxFilePrintLength));
 }
 
 void ChangesetCreator::create(OsmMapPtr& map1, OsmMapPtr& map2, const QString& output)
@@ -264,9 +264,9 @@ void ChangesetCreator::create(
     // If map2 is empty, we'll end up deleting features from map1 in the resultant changeset.
     OsmMapPtr map2 = map2Inputs.at(i);
     LOG_DEBUG(
-      "Creating changeset from inputs: " << map1->getName() << " of size: " << map1->size() <<
-      " and " << map2->getName() << " of size: " << map2->size() << " to output: " <<
-      output.right(25) << "...");
+      "Creating changeset from inputs: " << FileUtils::toLogFormat(map1->getName()) << " of size: " << map1->size() <<
+      " and " << FileUtils::toLogFormat(map2->getName()) << " of size: " << map2->size() << " to output: " <<
+      FileUtils::toLogFormat(output, 25) << "...");
     OsmMapWriterFactory::writeDebugMap(map1, "map1-before-changeset-derivation-" + map1->getName());
     OsmMapWriterFactory::writeDebugMap(map2, "map2-before-changeset-derivation-" + map2->getName());
 
@@ -587,7 +587,7 @@ ElementInputStreamPtr ChangesetCreator::_getExternallySortedElements(const QStri
 {
   progress.set(
     (float)(_currentTaskNum - 1) / (float)_numTotalTasks,
-    "Sorting input elements ..." + input.right(25) + "...");
+    "Sorting input elements ..." + FileUtils::toLogFormat(input, 25) + "...");
 
   ElementInputStreamPtr sortedElements;
 
@@ -610,16 +610,16 @@ ElementInputStreamPtr ChangesetCreator::_getExternallySortedElements(const QStri
   return sortedElements;
 }
 
-ElementInputStreamPtr ChangesetCreator::_getEmptyInputStream()
+ElementInputStreamPtr ChangesetCreator::_getEmptyInputStream() const
 {
   // a no-op here since InMemoryElementSorter taking in an empty map will just return an empty
   // element stream
   return InMemoryElementSorterPtr(new InMemoryElementSorter(OsmMapPtr(new OsmMap())));
 }
 
-ElementInputStreamPtr ChangesetCreator::_getFilteredInputStream(const QString& input)
+ElementInputStreamPtr ChangesetCreator::_getFilteredInputStream(const QString& input) const
 {
-  LOG_DEBUG("Retrieving filtered input stream for: " << input.right(25) << "...");
+  LOG_DEBUG("Retrieving filtered input stream for: " << FileUtils::toLogFormat(input, 25) << "...");
 
   QList<ElementVisitorPtr> visitors;
   std::shared_ptr<ElementCriterion> elementCriterion;
@@ -658,7 +658,7 @@ ElementInputStreamPtr ChangesetCreator::_getFilteredInputStream(const QString& i
     ElementStreamer::getFilteredInputStream(filteredInputStream, ConfigOptions().getConvertOps());
 }
 
-ElementInputStreamPtr ChangesetCreator::_sortElementsInMemory(OsmMapPtr map)
+ElementInputStreamPtr ChangesetCreator::_sortElementsInMemory(OsmMapPtr map) const
 {
   return InMemoryElementSorterPtr(new InMemoryElementSorter(map));
 }
@@ -682,7 +682,7 @@ void ChangesetCreator::_streamChangesetOutput(
       "Changeset input data inputs are not the same size for streaming to output.");
   }
 
-  LOG_INFO("Streaming changeset output to ..." << output.right(25) << "...");
+  LOG_INFO("Streaming changeset output to ..." << FileUtils::toLogFormat(output, 25) << "...");
 
   QString detailedStats;
   _numCreateChanges = 0;
@@ -749,7 +749,7 @@ void ChangesetCreator::_streamChangesetOutput(
   for (int i = 0; i < changesetProviders.size(); i++)
   {
     ChangesetProviderPtr changesetProvider = changesetProviders.at(i);
-    LOG_DEBUG("Derived changeset: " << i + 1 << " / " << changesetProviders.size() << ": ");
+    LOG_DEBUG("Derived changeset: " << i + 1 << " of " << changesetProviders.size() << ": ");
 
     _numCreateChanges += changesetProvider->getNumCreateChanges();
     _numModifyChanges += changesetProvider->getNumModifyChanges();
@@ -800,7 +800,7 @@ void ChangesetCreator::_streamChangesetOutput(
     }
     else
     {
-      LOG_DEBUG("Writing changeset stats to: ..." << _statsOutputFile.right(25) << "...");
+      LOG_DEBUG("Writing changeset stats to: ..." << FileUtils::toLogFormat(_statsOutputFile, 25) << "...");
       FileUtils::writeFully(_statsOutputFile, detailedStats);
     }
   }

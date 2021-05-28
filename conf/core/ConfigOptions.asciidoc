@@ -848,9 +848,10 @@ may be desirable.
 * Default Value:
 ** `road_marking=solid_stop_line`
 ** `highway=steps`
+** `noexit=yes`
 
 Feature types that should never be snapped by `ChangesetReplacementCreator` when using
-`UnconnectedWaySnapper`.
+`UnconnectedWaySnapper`. Overrides +snap.unconnected.ways.exclude.types+.
 
 === changeset.source
 
@@ -1025,8 +1026,9 @@ See also:
 ** `hoot::ApiTagTruncateVisitor`
 ** `hoot::AddHilbertReviewSortOrderOp`
 
-List of operations to run in the conflate command after data is conflated, but before exporting.
-'hoot info --operators' displays information about the available operations.
+Runs during conflation just after the data is conflated, but before it is saved. The ordering here
+is sensitive and addition of new operations may take experimentation to produce optimal conflated
+output. 'hoot info --operators' displays information about the available operations.
 
 === conflate.pre.ops
 
@@ -1040,7 +1042,9 @@ List of operations to run in the conflate command after data is conflated, but b
 ** `hoot::RemoveInvalidReviewRelationsVisitor`
 ** `hoot::RubberSheet`
 
-Runs in the conflate command after data is loaded. 'hoot info --operators' displays information
+Runs during conflation just after data is loaded. The ordering here is sensitive (although
+generally not as sensitive as with conflate.post.ops) and addition of new operations may take
+experimentation to produce optimal conflated output. 'hoot info --operators' displays information
 about the available operations.
 
 See also: <<MapCleanerTransforms,map.cleaner.transforms>>
@@ -1296,6 +1300,17 @@ If enabled, debug maps are written from inside loops where enabled. debug.maps.w
 be enabled for this option to be used. Enabling this option can create a lot of debug maps and slow
 down debugging significantly, so use with caution.
 
+=== differential.remove.linear.partial.matches.as.whole
+
+* Data Type: bool
+* Default Value: `false`
+
+When disabled, Differential Conflation only removes the element geometric portions of linear matches
+involved in the match from the differential output. Otherwise, elements are removed completely from
+the differential, even if they are only partially involved in a match. Disabling this setting may
+yield more accurate linear feature differentials. This setting may only be disabled when using the
+Unifying Algorithm.
+
 === differential.remove.reference.data
 
 * Data Type: bool
@@ -1303,6 +1318,13 @@ down debugging significantly, so use with caution.
 
 If false, when running Differential Conflation the reference elements will not be dropped from the
 output. Setting this to false is primarily useful when debugging unconnected way snapping issues.
+
+=== differential.remove.river.partial.matches.as.whole
+
+* Data Type: bool
+* Default Value: `true`
+
+Overrides +differential.remove.linear.partial.matches.as.whole+ when dealing with river data.
 
 === differential.remove.unconflatable.data
 
@@ -1312,13 +1334,13 @@ output. Setting this to false is primarily useful when debugging unconnected way
 If true Differential Conflation will remove all elements from output which Hootenanny is unable to
 match. If false, the unconflatable data will pass through to the output.
 
-=== differential.snap.unconnected.roads
+=== differential.snap.unconnected.features
 
 * Data Type: bool
 * Default Value: `false`
 
 If true, when running Differential Conflation the Unconnected Way Snapper will snap unconnected
-secondary road endpoint nodes to the nearest reference road.
+features to the nearest feature. See snap.unconnected.ways.* options for configurability.
 
 === differential.tag.ignore.list
 
@@ -1335,7 +1357,7 @@ are always ignored.
 * Default Value: `true`
 
 If true, reviews are treated as matches by Differential Conflation and removed from the output if
-differential.remove.reference.data is enabled. If set to false, reviews are not treated as matches
++differential.remove.reference.data+ is enabled. If set to false, reviews are not treated as matches
 and will pass through to the differential output.
 
 === direction.finder.angle.threshold
@@ -1344,8 +1366,7 @@ and will pass through to the differential output.
 * Default Value: `45.0`
 
 Maximum angle different in degrees that two line features can have and still be considered as
-going in the same direction by DirectionFinder::isSimilarDirection2. Used by Attribute Conflation
-only.
+going in the same direction by Attribute Conflation.
 
 === distance.node.criterion.center
 
@@ -1520,6 +1541,14 @@ indicates no limit.
 Absolute file path to dictionaries of English words. The first file found will be loaded into the
 dictionary of English words and used by some algorithms. If the files are not found then the English
 words will be silently ignored.
+
+=== generic.line.matcher.heading.delta
+
+* Data Type: double
+* Default Value: `${way.matcher.heading.delta}`
+
+The distance around a point on a power line to look when matching sublines with generic line
+conflation.  See `way.matcher.heading.delta`.
 
 === generic.line.matcher.max.angle
 
@@ -2087,6 +2116,14 @@ are -1 or 1 up to the number of available processors.
 
 If true, all implicit taggers will translate element name words to English before querying the
 corresponding implicit tag rules database.
+
+=== intersecting.way.criterion.source.way.ids
+
+* Data Type: list
+* Default Value:
+** ``
+
+List of way IDs to find intersecting ways for when using `IntersectingWayCriterion`.
 
 === javascript.schema.translator.path
 
@@ -2707,9 +2744,9 @@ RAM usage of applications in a shared server environment.
 * Data Type: int
 * Default Value: `-1`
 
-Maximum recursive calls allowed in MaximalSubline as it looks for line matches. Too low of a number
-may degrade Unifying algorithm line matching conflate performance. Too high of a number may result
-in runaway line matching processing times. -1 indicates an internally determined limit.
+Maximum recursive calls allowed in when using maximal subline matching during conflation. A value of
+-1 indicates an internally determined limit. Setting this too low may degrade linear conflate
+performance. Setting it too high may result in runaway line matching processing times.
 
 === maximal.subline.spacing
 
@@ -3945,6 +3982,14 @@ A weighting coefficient value, in the range [0.0,1.0], for the applying distance
 line matches. This will favor feature that are closer together. The higher the coefficient value,
 the higher the weighting applied. A value of 0.0 will disable distance weighting.
 
+=== power.line.matcher.heading.delta
+
+* Data Type: double
+* Default Value: `${way.matcher.heading.delta}`
+
+The distance around a point on a power line to look when calculating the heading.  See
+`way.matcher.heading.delta`.
+
 === power.line.matcher.max.angle
 
 * Data Type: double
@@ -4760,6 +4805,14 @@ The spacing granularity to which a unconnected way node is snapped back to a way
 Unconnected Way Snapper.  Setting this too low could result in lower algorithm performance, and
 setting it too high may result in less accurate way snapping.
 
+=== snap.unconnected.ways.exclude.types
+
+* Data Type: list
+* Default Value:
+** `noexit=yes`
+
+Feature types that should never be snapped.
+
 === snap.unconnected.ways.existing.way.node.tolerance
 
 * Data Type: double
@@ -4812,24 +4865,28 @@ completely and only the snap criterions will influence the snapping.
 If true, any snapped way will be marked for review. Useful if you want the opportunity to manually
 correct any snaps made.
 
-=== snap.unconnected.ways.snap.to.way.criterion
+=== snap.unconnected.ways.snap.criteria
 
-* Data Type: string
-* Default Value: `hoot::WayCriterion`
+* Data Type: list
+* Default Value:
+** ``
 
-Optional criterion class to filter the types of ways being snapped to.  An example would be:
-hoot::HighwayCriterion. If no criterion is specified, then all ways are considered as targets for
-way snapping.
+Optional criterion class list used to filter both the types of ways being snapped (sources) and
+the types of ways being snapped to (targets). The classes specified must inherit from
+`ConflatableElementCriterion`. An example is: `hoot::HighwayCriterion`. The default value of an
+empty list allows for snapping any type of linear feature. This option is overridden by the options:
+`snap.unconnected.ways.snap.way.criteria` and/or `snap.unconnected.ways.snap.to.way.criteria` to
+allow for more granularity in selecting the types to snap.
 
-=== snap.unconnected.ways.snap.to.way.node.criterion
+=== snap.unconnected.ways.snap.to.way.criteria
 
-* Data Type: string
-* Default Value: `hoot::WayNodeCriterion`
+* Data Type: list
+* Default Value:
+** ``
 
-Optional criterion class to filter the types of way nodes being snapped to.  An example would be:
-hoot::HighwayWayNodeCriterion. If no criterion is specified, then all ways are considered as
-targets for way snapping. This option is only used if snap.unconnected.ways.reuse.way.nodes is
-enabled.
+Optional criterion class list used to filter the types of ways being snapped to (targets). The
+classes specified must inherit from `ConflatableElementCriterion`. An example is:
+`hoot::HighwayCriterion`. This option overrides `snap.unconnected.ways.snap.criteria`.
 
 === snap.unconnected.ways.snap.to.way.statuses
 
@@ -4840,7 +4897,8 @@ enabled.
 Statuses of ways or way nodes being snapped to. Valid values are 'Input1', 'Input2', or 'Conflated'.
 Specify 'Input1' to snap secondary ways to reference ways or 'Input2' to snap reference ways to
 secondary ways. You may add multiple statuses and separate them with a semicolon. For example, to
-snap to both reference and conflated ways use: 'Input1;Conflated'.
+snap to both reference and conflated ways use: 'Input1;Conflated'. If no statuses are specified,
+then feature status is ignored for ways or way nodes being snapped to.
 
 === snap.unconnected.ways.snap.tolerance
 
@@ -4851,14 +4909,15 @@ Maximum distance used by the Unconnected Way Snapper, in meters, allowed between
 way endpoint node and a neighboring way for the way endpoint node to be snapped to the closest
 section of the neighboring way.
 
-=== snap.unconnected.ways.snap.way.criterion
+=== snap.unconnected.ways.snap.way.criteria
 
-* Data Type: string
-* Default Value: `hoot::WayCriterion`
+* Data Type: list
+* Default Value:
+** ```
 
-Optional criterion class to filter the types of ways being snapped. An example would be:
-hoot::HighwayCriterion. If no criterion is specified, then all ways are considered as sources for
-way snapping.
+Optional criterion class list used to filter the types of ways being snapped (sources). The classes
+specified must inherit from `ConflatableElementCriterion`. An example is: `hoot::HighwayCriterion`.
+This option overrides `snap.unconnected.ways.snap.criteria`.
 
 === snap.unconnected.ways.snap.way.statuses
 
@@ -4869,7 +4928,8 @@ way snapping.
 Statuses of ways being snapped.  Valid values are 'Input1', 'Input2', or 'Conflated'. Specify
 'Input1' to snap reference ways to secondary ways or 'Input2' to snap secondary ways to reference
 ways. You may add multiple statuses and separate them with a semicolon. For example, to snap both
-reference and conflated ways use: 'Input1;Conflated'.
+reference and conflated ways use: 'Input1;Conflated'. If no statuses are specified, then feature
+status is ignored for ways or way nodes being snapped.
 
 === snap.unconnected.ways.use.existing.way.nodes
 
@@ -4933,6 +4993,14 @@ Adds the specified status to elements.  Valid values are: 'Conflated', 'Invalid'
 * Default Value: `${HOOT_HOME}/conf/core/streetTypes`
 
 Flat file containing street types and their abbreviations.
+
+=== subline.matcher.secondary
+
+* Data Type: string
+* Default Value: `hoot::FrechetSublineMatcher`
+
+This subline matcher is used as a backup if the primary linear subline merging runs for too long.
+See `maximal.subline.max.recursions`.
 
 === superfluous.node.remover.exclude.ids
 
@@ -5067,8 +5135,8 @@ available mergers.
 This allows the OverwriteTagMerger to preserve the values of select tags during tag merging. This
 does not apply to name tags or tags marked as type "text" or "metadata" in the schema. Any tag key
 in the option list found in the set of tags used to overwrite will result in corresponding tag
-values in the target feature being appended to each other. e.g. A: { a_id=1, b_id=1 } merged with
-B: { b_id=2 } results in C: { a_id=1, b_id=1;2 }
+values in the target feature being appended to each other. e.g. A: { myField1=1, myField2=1 }
+merged with B: { myField2=1, myField3=1 } results in C: { myField1=1, myField2=1;2, myField3=1 }
 
 === tag.merger.overwrite.exclude
 

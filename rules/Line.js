@@ -28,18 +28,11 @@ var angleHistogramExtractor = new hoot.AngleHistogramExtractor();
 var weightedShapeDistanceExtractor = new hoot.WeightedShapeDistanceExtractor();
 var distanceScoreExtractor = new hoot.DistanceScoreExtractor();
 var lengthScoreExtractor = new hoot.LengthScoreExtractor();
-var sublineMatcher =  // default subline matcher
-  new hoot.MaximalSublineStringMatcher(
-  {
-    "way.matcher.max.angle": hoot.get("generic.line.matcher.max.angle"),
-    "way.subline.matcher": hoot.get("generic.line.subline.matcher"),
-    // borrowing this from rivers for the time being; TODO: make separate option for it?
-    "maximal.subline.max.recursive.complexity": hoot.get("waterway.maximal.subline.max.recursive.complexity")
-  });
-var frechetSublineMatcher = // we'll switch over to this one if the default matcher runs too slowly
-  new hoot.MaximalSublineStringMatcher(
-    { "way.matcher.max.angle": hoot.get("waterway.matcher.max.angle"),
-      "way.subline.matcher": "hoot::FrechetSublineMatcher" }); 
+
+// We're just using the default max recursions here for MaximalSubline. May need to come up with a
+// custom value via empirical testing. This will not work if we ever end up needing to pass map in
+// here for this data type.
+var sublineStringMatcher = hoot.SublineStringMatcherFactory.getMatcher(exports.baseFeatureType);
 
 /**
  * Returns true if e is a candidate for a match. Implementing this method is
@@ -54,13 +47,6 @@ exports.isMatchCandidate = function(map, e)
   {
     return false;
   }
-  // This prevents some of the problems seen in #4149. It should be removed after that issue is fixed.
-  else if (e.getElementId().getType() == "Way" && !hoot.OsmSchema.hasType(e) &&
-           hoot.RelationMemberUtils.isMemberOfRelationSatisfyingCriterion(map, e.getElementId(), "hoot::CollectionRelationCriterion"))
-  {
-    return false;
-  }
-
   return hoot.OsmSchema.isLinear(e) && !hoot.OsmSchema.isSpecificallyConflatable(map, e, exports.geometryType);
 };
 
@@ -119,17 +105,12 @@ exports.matchScore = function(map, e1, e2)
   hoot.trace("mostSpecificType(e1): " + hoot.OsmSchema.mostSpecificType(e1));
   hoot.trace("mostSpecificType(e2): " + hoot.OsmSchema.mostSpecificType(e2));
 
-  // extract the sublines needed for matching - Note that some of this was taken from Highway.js and other parts 
-  // from River.js. See notes on the dual subline matcher approach in River.js.
+  // Extract the sublines needed for matching. Note that some of this was taken from Highway.js
+  // and other parts from River.js. See notes on the dual subline matcher approach in River.js.
   var sublines;
   hoot.trace("Extracting sublines with default...");
-  sublines = sublineMatcher.extractMatchingSublines(map, e1, e2);
+  sublines = sublineStringMatcher.extractMatchingSublines(map, e1, e2);
   hoot.trace(sublines);
-  if (sublines && String(sublines).indexOf("RecursiveComplexityException") !== -1)
-  {
-    hoot.trace("Extracting sublines with Frechet...");
-    sublines = frechetSublineMatcher.extractMatchingSublines(map, e1, e2);
-  }
 
   var distanceScore = -1.0;
   var weightShapeDistanceScore = -1.0;
@@ -185,7 +166,7 @@ exports.mergeSets = function(map, pairs, replaced)
 {
   // Snap the ways in the second input to the first input. Use the default tag 
   // merge method. See related notes in exports.mergeSets in River.js.
-  return new hoot.LinearSnapMerger().apply(sublineMatcher, map, pairs, replaced, exports.baseFeatureType, frechetSublineMatcher);
+  return new hoot.LinearMerger().apply(sublineStringMatcher, map, pairs, replaced, exports.baseFeatureType);
 };
 
 exports.getMatchFeatureDetails = function(map, e1, e2)

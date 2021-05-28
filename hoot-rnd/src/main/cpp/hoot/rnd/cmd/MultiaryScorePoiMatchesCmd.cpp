@@ -61,8 +61,14 @@ public:
 
   MultiaryScorePoiMatchesCmd() = default;
 
+  QString getName() const override { return "multiary-score-poi-matches"; }
+  QString getDescription() const override
+  { return "Scores the performance of multiary-poi-conflate against a manually matched map (experimental) "; }
+  QString getType() const override { return "rnd"; }
+
+
   QString evaluateThreshold(OsmMapPtr map, QString output,
-    std::shared_ptr<MatchThreshold> mt, bool showConfusion)
+    std::shared_ptr<MatchThreshold> mt, bool showConfusion) const
   {
     MultiaryMatchComparator comparator;
     comparator.setTranslationScript(_translator);
@@ -105,13 +111,6 @@ public:
     return result;
   }
 
-  QString getName() const override { return "multiary-score-poi-matches"; }
-
-  QString getDescription() const override
-  { return "Scores the performance of multiary-poi-conflate against a manually matched map (experimental) "; }
-
-  QString getType() const override { return "rnd"; }
-
   int runSimple(QStringList& args) override
   {
     QElapsedTimer timer;
@@ -145,6 +144,8 @@ public:
         QString("%1 takes at least two parameters: two or more input maps")
           .arg(getName()));
     }
+
+    LOG_STATUS("Scoring multiary conflate matches from ..." << args.size() << " inputs...");
 
     // modifying the schema is necessary to ensure the conflation concatenates values.
     SchemaVertex id;
@@ -182,8 +183,7 @@ public:
     MapProjector::projectToPlanar(map);
 
     // Apparently, multiary will allow with > 1.0 review thresholds.
-    std::shared_ptr<MatchThreshold> mt =
-      std::make_shared<MatchThreshold>(MatchThreshold(0.5, 0.5, 1.0, false));
+    std::shared_ptr<MatchThreshold> mt = std::make_shared<MatchThreshold>(0.5, 0.5, 1.0, false);
     QString result = evaluateThreshold(map, output, mt, showConfusion);
 
     cout << result;

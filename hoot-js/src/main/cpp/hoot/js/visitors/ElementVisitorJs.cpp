@@ -47,10 +47,11 @@ namespace hoot
 
 HOOT_JS_REGISTER(ElementVisitorJs)
 
-void ElementVisitorJs::Init(Handle<Object> target)
+void ElementVisitorJs::Init(Local<Object> target)
 {
   Isolate* current = target->GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
   vector<QString> opNames =
     Factory::getInstance().getObjectNamesByBase(ElementVisitor::className());
 
@@ -61,15 +62,15 @@ void ElementVisitorJs::Init(Handle<Object> target)
 
     // Prepare constructor template
     Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
-    tpl->SetClassName(String::NewFromUtf8(current, opNames[i].toStdString().data()));
+    tpl->SetClassName(String::NewFromUtf8(current, opNames[i].toStdString().data()).ToLocalChecked());
     tpl->InstanceTemplate()->SetInternalFieldCount(1);
     // Prototype
     tpl->PrototypeTemplate()->Set(
        PopulateConsumersJs::baseClass(),
-       String::NewFromUtf8(current, ElementVisitor::className().toStdString().data()));
+       String::NewFromUtf8(current, ElementVisitor::className().toStdString().data()).ToLocalChecked());
 
-    Persistent<Function> constructor(current, tpl->GetFunction());
-    target->Set(String::NewFromUtf8(current, n), ToLocal(&constructor));
+    Persistent<Function> constructor(current, tpl->GetFunction(context).ToLocalChecked());
+    target->Set(context, toV8(n), ToLocal(&constructor));
   }
 }
 

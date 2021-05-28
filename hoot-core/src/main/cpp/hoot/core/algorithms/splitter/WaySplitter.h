@@ -68,7 +68,7 @@ public:
    * E.g. two way locations that are in the same location, or a way location at the start/end of the
    * way.
    */
-  std::vector<WayPtr> createSplits(const std::vector<WayLocation>& wl);
+  std::vector<WayPtr> createSplits(const std::vector<WayLocation>& wl) const;
 
   /**
    * Given an input subline, breaks the way up into up to 3 pieces
@@ -88,7 +88,7 @@ public:
    * @param splitPoint point at which to split the way
    * @return split way parts, which are added to the map
    */
-  std::vector<WayPtr> split(WayLocation& splitPoint);
+  std::vector<WayPtr> split(WayLocation& splitPoint) const;
 
   /**
    * Splits way into smaller ways no bigger than maxSize. If a is smaller than maxSize already

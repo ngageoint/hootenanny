@@ -42,7 +42,7 @@ class ElementVisitorJs : public HootBaseJs
 {
 public:
 
-  static void Init(v8::Handle<v8::Object> target);
+  static void Init(v8::Local<v8::Object> target);
 
   std::shared_ptr<ElementVisitor> getVisitor() { return _v; }
 

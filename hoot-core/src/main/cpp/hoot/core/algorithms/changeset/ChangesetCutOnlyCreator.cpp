@@ -55,6 +55,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ConfigUtils.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/MemoryUsageChecker.h>
 
 #include <hoot/core/visitors/ApiTagTruncateVisitor.h>
@@ -149,7 +150,7 @@ void ChangesetCutOnlyCreator::create(
     LOG_INFO("******************************************");
     LOG_STATUS(
       "Generating " << GeometryTypeCriterion::typeToString(itr.key()) << " diff maps for " <<
-      "changeset derivation with ID: " << _changesetId << ". Pass: " << passCtr << " / " <<
+      "changeset derivation with ID: " << _changesetId << ". Pass: " << passCtr << " of " <<
       refFilters.size() << "...");
 
     OsmMapPtr refMap;
@@ -245,7 +246,7 @@ void ChangesetCutOnlyCreator::create(
 
   _progress->set(
     1.0, Progress::JobState::Successful,
-    "Derived replacement changeset: ..." + _output.right(_maxFilePrintLength) + " with " +
+    "Derived replacement changeset: ..." + FileUtils::toLogFormat(_output, _maxFilePrintLength) + " with " +
     StringUtils::formatLargeNumber(_numChanges) + " changes in " +
     StringUtils::millisecondsToDhms(timer.elapsed()) + " total.");
 }

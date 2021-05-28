@@ -29,8 +29,11 @@
 // hoot
 #include <hoot/core/algorithms/changeset/MultipleChangesetProvider.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
+#include <hoot/core/conflate/SuperfluousConflateOpRemover.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonMatch.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
+#include <hoot/core/criterion/ElementTypeCriterion.h>
+#include <hoot/core/criterion/HighwayCriterion.h>
 #include <hoot/core/criterion/PoiCriterion.h>
 #include <hoot/core/criterion/StatusCriterion.h>
 #include <hoot/core/criterion/TagKeyCriterion.h>
@@ -60,8 +63,9 @@
 #include <hoot/core/ops/WayJoinerOp.h>
 #include <hoot/core/util/ConfigUtils.h>
 #include <hoot/core/io/OsmChangesetFileWriter.h>
-#include <hoot/core/criterion/HighwayCriterion.h>
-#include <hoot/core/conflate/ConflateInfoCache.h>
+#include <hoot/core/ops/SuperfluousNodeRemover.h>
+#include <hoot/core/visitors/RemoveDuplicateWayNodesVisitor.h>
+#include <hoot/core/visitors/InvalidWayRemover.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -70,15 +74,13 @@ namespace hoot
 {
 
 int DiffConflator::logWarnCount = 0;
-// ONLY ENABLE THIS DURING DEBUGGING; We don't want to tie it to debug.maps.write, as it may
-// produce a very large number of output files.
-const bool DiffConflator::WRITE_DETAILED_DEBUG_MAPS = false;
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, DiffConflator)
 
 DiffConflator::DiffConflator() :
 AbstractConflator(),
 _intraDatasetElementIdsPopulated(false),
+_removeLinearPartialMatchesAsWhole(false),
 _numSnappedWays(0),
 _numUnconflatableElementsDiscarded(0)
 {
@@ -87,6 +89,7 @@ _numUnconflatableElementsDiscarded(0)
 DiffConflator::DiffConflator(const std::shared_ptr<MatchThreshold>& matchThreshold) :
 AbstractConflator(matchThreshold),
 _intraDatasetElementIdsPopulated(false),
+_removeLinearPartialMatchesAsWhole(false),
 _numSnappedWays(0),
 _numUnconflatableElementsDiscarded(0)
 {
@@ -108,16 +111,38 @@ void DiffConflator::_reset()
 
 void DiffConflator::apply(OsmMapPtr& map)
 {
-  LOG_INFO("Calculating differential output...");
+  // Can't use _removeLinearMatchesPartially() here, b/c we haven't performed matching yet.
+  QString msg = "Attempting to remove partially matched non-river linear features ";
+  if (!_removeLinearPartialMatchesAsWhole)
+  {
+    msg += "partially.";
+  }
+  else
+  {
+    msg += "completely.";
+  }
+  LOG_INFO(msg);
+  msg = msg.replace("non-river", "river");
+  msg = msg.replace("partially.", "");
+  msg = msg.replace("completely.", "");
+  if (!ConfigOptions().getDifferentialRemoveRiverPartialMatchesAsWhole())
+  {
+    msg += "partially.";
+  }
+  else
+  {
+    msg += "completely.";
+  }
+  LOG_INFO(msg);
+
+  _reset();
+  // Store the map, as we might need it for a tag diff later.
+  _map = map;
 
   // This status progress reporting could get way more granular, but we'll go with this for now to
   // avoid overloading users with status.
   int currentStep = 1;  // tracks the current job task step for progress reporting
   _updateProgress(currentStep - 1, "Matching features...");
-  _reset();
-  // Store the map, as we might need it for a tag diff later.
-  _map = map;
-  std::shared_ptr<ConflateInfoCache> conflateInfoCache(new ConflateInfoCache(map));
 
   // If we skip this part, then any unmatchable data will simply pass through to output, which can
   // be useful during debugging.
@@ -130,65 +155,101 @@ void DiffConflator::apply(OsmMapPtr& map)
   _stats.append(SingleStat("Project to Planar Time (sec)", _timer.getElapsedAndRestart()));
   OsmMapWriterFactory::writeDebugMap(_map, "after-projecting-to-planar");
 
-  // find all the matches in this map
+  // Find all the matches in this map.
   _intraDatasetMatchOnlyElementIds.clear();
   _intraDatasetElementIdsPopulated = false;
   _createMatches();
+  if (ConfigOptions().getWriterIncludeConflateScoreTags())
+  {
+    // Add score tags to all matches that have some score component.
+    _addConflateScoreTags();
+  }
 
   _currentStep++;
 
-  if (_conflateTags)
-  {
-    // Use matches to calculate and store tag diff. We must do this before we create the map diff,
-    // because that operation deletes all of the info needed for calculating the tag diff.
-    _updateProgress(currentStep - 1, "Storing tag differentials...");
-    _calcAndStoreTagChanges();
-    _currentStep++;
-  }
+  if (!ConfigOptions().getConflateMatchOnly())
+  {  
+    // We only need to optimize linear matches if we aren't removing them completely and a linear
+    // matcher was specified in the first place. There still may be some issues with optimizing
+    // matches here where linear and non-linear features are mixed, we specify all matches, and we
+    // have no tests yet to catch the particular situation. If so, will have to deal with that on a
+    // case by case basis.
 
-  // Get rid of everything from the ref1 map that matched something in the ref2 map. Note, there is
-  // a deficiency here in that partial matches won't lead to only partial features in ref 1 being
-  // dropped...the entire feature will be dropped, including the parts that didn't match (#4311).
+    // The result of _removeLinearMatchesPartially is only valid after we've performed matching.
+    const bool removePartialLinearMatchesPartially = _removeLinearMatchesPartially();
+    if (removePartialLinearMatchesPartially)
+    {
+      _updateProgress(_currentStep - 1, "Optimizing feature matches...");
+      // If removing linear match elements partially, matches need to be separated into linear and
+      // non-linear to avoid corrupting the non-linear matches.
+      _separateMatchesToRemoveAsPartial();
+      _matchSets = _optimizeMatches(_matchesToRemoveAsPartial);
+      _currentStep++;
+    }
 
-  QString message = "Dropping match conflicts";
-  if (ConfigOptions().getDifferentialSnapUnconnectedRoads())
-  {
-    message += " and snapping roads";
-  }
-  message += "...";
-  _updateProgress(currentStep - 1, message);
+    if (_conflateTags)
+    {
+      // Use matches to calculate and store tag diff. We must do this before we create the map diff,
+      // because that operation deletes all of the info needed for calculating the tag diff.
+      _updateProgress(currentStep - 1, "Storing tag differentials...");
+      _calcAndStoreTagChanges();
+      _currentStep++;
+    }
 
-  // We're eventually getting rid of all matches from the output, but in order to make the road
-  // snapping work correctly we'll get rid of secondary elements in matches first.
-  _removeMatches(Status::Unknown2);
-  MemoryUsageChecker::getInstance().check();
+    // Get rid of everything from the ref1 map that matched something in the ref2 map.
 
-  // Eventually, we could extend this snapping to all linear feature types.
-  if (ConfigOptions().getDifferentialSnapUnconnectedRoads())
-  {
-    if (conflateInfoCache->elementCriterionInUseByActiveMatcher(HighwayCriterion::className()))
+    QString message = "Dropping match conflicts";
+    if (ConfigOptions().getDifferentialSnapUnconnectedFeatures())
+    {
+      message += " and snapping roads";
+    }
+    message += "...";
+    _updateProgress(currentStep - 1, message);
+
+    // We're eventually getting rid of all matches from the output, but in order to make the road
+    // snapping work correctly we'll get rid of secondary elements in matches first.
+    if (removePartialLinearMatchesPartially)
+    {
+      // Use the MergerCreator framework and only remove the sections of linear features that match.
+      // All other feature types are removed completely.
+      _removePartialSecondaryMatchElements();
+      // Originally tried doing this cleanup as part of conflate.post.ops, which required re-order
+      // some of the ops. Unfortunately, that breaks some ref conflate regression tests. So, opting
+      // to do it inside DiffConflator instead.
+      _cleanupAfterPartialMatchRemoval();
+    }
+    // This uses a naive approach and remove all elements involved in a match completely, despite
+    // possible partial subline matches (if linear features are present). If we're removing partial
+    // linear matches partially, then _separateMatchesToRemoveAsPartial has already been run and the
+    // logic in this method is smart enough to only completely remove non-linear Unknown2 matches.
+    _removeMatchElementsCompletely(Status::Unknown2);
+    MemoryUsageChecker::getInstance().check();
+
+    // Eventually, we could extend this snapping to all linear feature types.
+    if (ConfigOptions().getDifferentialSnapUnconnectedFeatures())
     {
       // Let's try to snap disconnected ref2 roads back to ref1 roads. This has to done before
       // dumping the ref elements in the matches, or the roads we need to snap back to won't be
       // there anymore.
-      _numSnappedWays = _snapSecondaryRoadsBackToRef();
+      _numSnappedWays = _snapSecondaryLinearFeaturesBackToRef();
       MemoryUsageChecker::getInstance().check();
     }
-    else
+
+    if (ConfigOptions().getDifferentialRemoveReferenceData())
     {
-      LOG_TRACE("Skipping road snapping as conflation is not configured for road features.")
+      _removeRefData();
     }
+
+    if (!ConfigOptions().getWriterIncludeDebugTags())
+    {
+      _removeMetadataTags();
+    }
+
+    _currentStep++;
   }
 
-  if (ConfigOptions().getDifferentialRemoveReferenceData())
-  {
-    _removeRefData();
-  }
-
-  if (!ConfigOptions().getWriterIncludeDebugTags())
-  {
-    _removeMetadataTags();
-  }
+  // Free up any used resources.
+  AbstractConflator::_reset();
 }
 
 void DiffConflator::_discardUnconflatableElements()
@@ -199,7 +260,7 @@ void DiffConflator::_discardUnconflatableElements()
   MemoryUsageChecker::getInstance().check();
   _stats.append(
     SingleStat("Remove Non-conflatable Elements Time (sec)", _timer.getElapsedAndRestart()));
-  OsmMapWriterFactory::writeDebugMap(_map, "after-removing non-conflatable");
+  OsmMapWriterFactory::writeDebugMap(_map, "after-removing-non-conflatable");
   _numUnconflatableElementsDiscarded = mapSizeBefore - _map->size();
   LOG_INFO(
     "Discarded " << StringUtils::formatLargeNumber(_numUnconflatableElementsDiscarded) <<
@@ -236,7 +297,7 @@ void DiffConflator::storeOriginalMap(OsmMapPtr& map)
   mapCopier.apply(_originalRef1Map);
 }
 
-std::shared_ptr<ChangesetDeriver> DiffConflator::_sortInputs(OsmMapPtr map1, OsmMapPtr map2)
+std::shared_ptr<ChangesetDeriver> DiffConflator::_sortInputs(OsmMapPtr map1, OsmMapPtr map2) const
 {
   // Conflation requires all data to be in memory, so no point in adding support for the
   // ExternalMergeElementSorter here.
@@ -248,14 +309,76 @@ std::shared_ptr<ChangesetDeriver> DiffConflator::_sortInputs(OsmMapPtr map1, Osm
   return delta;
 }
 
-void DiffConflator::markInputElements(OsmMapPtr map)
+void DiffConflator::markInputElements(OsmMapPtr map) const
 {
-  // Mark input1 elements
+  // mark input1 elements
   Settings visitorConf;
   visitorConf.set(ConfigOptions::getAddRefVisitorInformationOnlyKey(), "false");
   std::shared_ptr<AddRef1Visitor> pRef1v(new AddRef1Visitor());
   pRef1v->setConfiguration(visitorConf);
   map->visitRw(*pRef1v);
+}
+
+bool DiffConflator::_removeLinearMatchesPartially() const
+{
+  LOG_VART(_removeLinearPartialMatchesAsWhole);
+  LOG_VART(SuperfluousConflateOpRemover::linearMatcherPresent());
+  const int numMatchesToRemoveAsPartial = _countMatchesToRemoveAsPartial();
+  LOG_VART(_countMatchesToRemoveAsPartial());
+  return
+    !_removeLinearPartialMatchesAsWhole && SuperfluousConflateOpRemover::linearMatcherPresent() &&
+    numMatchesToRemoveAsPartial > 0;
+}
+
+bool DiffConflator::_isMatchToRemovePartially(const ConstMatchPtr& match)
+{
+  LOG_VART(match);
+  bool isMatchToRemovePartially = match->getMatchMembers() == MatchMembers::Polyline;
+  // River matches are handled by their own config option, since they can be expensive to optimize.
+  const bool removeRiverPartialMatchesAsWhole =
+    ConfigOptions().getDifferentialRemoveRiverPartialMatchesAsWhole();
+  if (removeRiverPartialMatchesAsWhole && match->getName().toLower() == "waterway")
+  {
+    isMatchToRemovePartially = false;
+  }
+  LOG_VART(isMatchToRemovePartially);
+  return isMatchToRemovePartially;
+}
+
+void DiffConflator::_separateMatchesToRemoveAsPartial()
+{
+  LOG_DEBUG("Separating matches to remove as partial...");
+
+  for (std::vector<ConstMatchPtr>::const_iterator mit = _matches.begin(); mit != _matches.end();
+       ++mit)
+  {
+    ConstMatchPtr match = *mit;
+    if (!_isMatchToRemovePartially(match))
+    {
+      _matchesToRemoveAsWhole.push_back(match);
+    }
+    else
+    {
+      _matchesToRemoveAsPartial.push_back(match);
+    }
+  }
+  LOG_VART(_matchesToRemoveAsWhole);
+  LOG_VART(_matchesToRemoveAsPartial);
+}
+
+int DiffConflator::_countMatchesToRemoveAsPartial() const
+{
+  int numMatchesToRemovePartially = 0;
+  for (std::vector<ConstMatchPtr>::const_iterator mit = _matches.begin(); mit != _matches.end();
+       ++mit)
+  {
+    ConstMatchPtr match = *mit;
+    if (_isMatchToRemovePartially(match))
+    {
+      numMatchesToRemovePartially++;
+    }
+  }
+  return numMatchesToRemovePartially;
 }
 
 QSet<ElementId> DiffConflator::_getElementIdsInvolvedInOnlyIntraDatasetMatches(
@@ -324,111 +447,201 @@ QSet<ElementId> DiffConflator::_getElementIdsInvolvedInOnlyIntraDatasetMatches(
   return elementIds;
 }
 
-long DiffConflator::_snapSecondaryRoadsBackToRef()
+long DiffConflator::_snapSecondaryLinearFeaturesBackToRef()
 {
-  UnconnectedWaySnapper roadSnapper;
-  roadSnapper.setConfiguration(conf());
+  UnconnectedWaySnapper linearFeatureSnapper;
+  linearFeatureSnapper.setConfiguration(conf());
   // The ref snapped features must be marked to prevent their removal before changeset generation
   // later on.
-  roadSnapper.setMarkSnappedNodes(true);
-  roadSnapper.setMarkSnappedWays(true);
-  LOG_INFO("\t" << roadSnapper.getInitStatusMessage());
-  roadSnapper.apply(_map);
-  LOG_DEBUG("\t" << roadSnapper.getCompletedStatusMessage());
+  linearFeatureSnapper.setMarkSnappedNodes(true);
+  linearFeatureSnapper.setMarkSnappedWays(true);
+  LOG_INFO("\t" << linearFeatureSnapper.getInitStatusMessage());
+  linearFeatureSnapper.apply(_map);
+  LOG_DEBUG("\t" << linearFeatureSnapper.getCompletedStatusMessage());
   OsmMapWriterFactory::writeDebugMap(_map, "after-road-snapping");
 
-  // Since way splitting was done as part of the conflate pre ops previously run and we've now
-  // snapped unconnected ways, we need to rejoin any split ways *before* we remove reference data.
-  // If not, some ref linear data may incorrectly drop out of the diff.
-  WayJoinerOp wayJoiner;
-  wayJoiner.setConfiguration(conf());
-  LOG_INFO("\t" << wayJoiner.getInitStatusMessage());
-  wayJoiner.apply(_map);
-  LOG_DEBUG("\t" << wayJoiner.getCompletedStatusMessage());
-  OsmMapWriterFactory::writeDebugMap(_map, "after-way-joining");
+  const long numFeaturesSnapped = linearFeatureSnapper.getNumFeaturesAffected();
+  if (numFeaturesSnapped > 0)
+  {
+    // Since way splitting was done as part of the conflate pre ops previously run and we've now
+    // snapped unconnected ways, we need to rejoin any split ways *before* we remove reference data.
+    // If not, some ref linear data may incorrectly drop out of the diff.
+    WayJoinerOp wayJoiner;
+    wayJoiner.setConfiguration(conf());
+    LOG_INFO("\t" << wayJoiner.getInitStatusMessage());
+    wayJoiner.apply(_map);
+    LOG_DEBUG("\t" << wayJoiner.getCompletedStatusMessage());
+    OsmMapWriterFactory::writeDebugMap(_map, "after-way-joining");
 
-  // No point in running way joining a second time in post conflate ops since we already did it here
-  // (its configured in post ops by default), so let's remove it.
-  ConfigUtils::removeListOpEntry(
-    ConfigOptions::getConflatePostOpsKey(), WayJoinerOp::className());
-
-  return roadSnapper.getNumFeaturesAffected();
+    // No point in running way joining a second time in post conflate ops since we already did it here
+    // (its configured in post ops by default), so let's remove it.
+    ConfigUtils::removeListOpEntry(
+      ConfigOptions::getConflatePostOpsKey(), WayJoinerOp::className());
+  }
+  return numFeaturesSnapped;
 }
 
-void DiffConflator::_removeMatches(const Status& status)
+void DiffConflator::_removeMatchElementsCompletely(const Status& status)
 {
-  LOG_DEBUG("\tRemoving match elements with status: " << status.toString() << "...");
+  size_t mapSizeBefore = _map->size();
+  LOG_DEBUG(
+    "\tRemoving match elements completely with status: " << status.toString() <<
+    " from map of size: " << StringUtils::formatLargeNumber(mapSizeBefore) << "...");
 
+  // If we're treating reviews as matches, elements involved in reviews will be removed as well.
   const bool treatReviewsAsMatches = ConfigOptions().getDifferentialTreatReviewsAsMatches();
-  LOG_VARD(treatReviewsAsMatches);
+  LOG_VART(treatReviewsAsMatches);
 
+  // If we're removing linear feature partial matches in a partial manner, we need to skip
+  // processing them here. Otherwise, remove everything.
+  std::vector<ConstMatchPtr> matchesToRemoveCompletely;
+  if (_removeLinearMatchesPartially())
+  {
+    matchesToRemoveCompletely = _matchesToRemoveAsWhole;
+  }
+  else
+  {
+    matchesToRemoveCompletely = _matches;
+  }
+  //LOG_VART(matchesToRemoveCompletely.size());
+  LOG_VART(matchesToRemoveCompletely);
+
+  // We don't want remove elements involved in intra-dataset matches, so record those now.
   if (!_intraDatasetElementIdsPopulated)
   {
-    _intraDatasetMatchOnlyElementIds = _getElementIdsInvolvedInOnlyIntraDatasetMatches(_matches);
+    _intraDatasetMatchOnlyElementIds =
+      _getElementIdsInvolvedInOnlyIntraDatasetMatches(matchesToRemoveCompletely);
     _intraDatasetElementIdsPopulated = true;
   }
 
-  ElementCriterionPtr notSnappedCrit(
-    NotCriterionPtr(new NotCriterion(new TagKeyCriterion(MetadataTags::HootSnapped()))));
-
-  for (std::vector<ConstMatchPtr>::iterator mit = _matches.begin(); mit != _matches.end(); ++mit)
+  // Go through all the matches.
+  for (std::vector<ConstMatchPtr>::const_iterator mit = matchesToRemoveCompletely.begin();
+       mit != matchesToRemoveCompletely.end(); ++mit)
   {
     ConstMatchPtr match = *mit;
-    if (match->getType() == MatchType::Match ||
-       (treatReviewsAsMatches && match->getType() == MatchType::Review))
+    const MatchType matchType = match->getType();
+
+    // Make sure its not a miss.
+    if (matchType == MatchType::Match || (treatReviewsAsMatches && matchType == MatchType::Review))
     {
-      LOG_VART(match);
-      LOG_VART(match->getClassification().getMissP());
-      LOG_VART(match->getClassification().getReviewP());
+      LOG_VART(match->getName());
+      LOG_VART(match->getMatchMembers());
 
-      std::set<std::pair<ElementId, ElementId>> pairs = match->getMatchPairs();
-      for (std::set<std::pair<ElementId, ElementId>>::iterator pit = pairs.begin();
-           pit != pairs.end(); ++pit)
+      // Get the element IDs involved in the match and remove the elements involved in the match
+      // completely.
+      const std::set<std::pair<ElementId, ElementId>> singleMatchPairs = match->getMatchPairs();
+      for (std::set<std::pair<ElementId, ElementId>>::const_iterator pairItr =
+             singleMatchPairs.begin();
+           pairItr != singleMatchPairs.end(); ++pairItr)
       {
-        ElementPtr e1;
-        ElementPtr e2;
-
-        if (!pit->first.isNull())
-        {
-          LOG_VART(pit->first);
-          e1 = _map->getElement(pit->first);
-
-        }
-        if (!pit->second.isNull())
-        {
-          LOG_VART(pit->second);
-          e2 = _map->getElement(pit->second);
-        }
-
-        if (e1 &&
-            e1->getStatus() == status &&
-            // We don't want to remove any ref snapped ways here. They need to be included in the
-            // resulting diff in order to be properly updated in the final output.
-            (status != Status::Unknown1 || notSnappedCrit->isSatisfied(e1)) &&
-            // poi/poly is the only conflation type that allows intra-dataset matches. We don't want
-            // these to be removed from the diff output.
-            !(match->getName() == PoiPolygonMatch::MATCH_NAME &&
-              _intraDatasetMatchOnlyElementIds.contains(pit->first)))
-        {
-          LOG_TRACE("Removing element involved in match: " << pit->first << "...");
-          RecursiveElementRemover(pit->first).apply(_map);
-        }
-        if (e2 &&
-            e2->getStatus() == status &&
-            // see related comment above
-            (status != Status::Unknown1 || notSnappedCrit->isSatisfied(e2)) &&
-            // see related comment above
-            !(match->getName() == PoiPolygonMatch::MATCH_NAME &&
-             _intraDatasetMatchOnlyElementIds.contains(pit->second)))
-        {
-          LOG_TRACE("Removing element involved in match: " << pit->second << "...");
-          RecursiveElementRemover(pit->second).apply(_map);
-        }
+        _removeMatchElementPairCompletely(match, *pairItr, status);
       }
     }
   }
 
+  LOG_TRACE(
+    "\tRemoved " << StringUtils::formatLargeNumber(mapSizeBefore -_map->size()) <<
+    " match elements completely with status: " << status.toString() << "...");
   OsmMapWriterFactory::writeDebugMap(_map, "after-removing-" + status.toString() + "-matches");
+}
+
+bool DiffConflator::_satisfiesCompleteElementRemovalCondition(
+  const ConstElementPtr& element, const Status& status, const ConstMatchPtr& match) const
+{
+  ElementCriterionPtr notSnappedCrit(
+    NotCriterionPtr(new NotCriterion(new TagKeyCriterion(MetadataTags::HootSnapped()))));
+  return
+    element->getStatus() == status  &&
+    // We don't want to remove any ref snapped ways here. They need to be included in the
+    // resulting diff in order to be properly updated in the final output.
+    (status != Status::Unknown1 || notSnappedCrit->isSatisfied(element)) &&
+    // poi/poly is the only conflation type that allows intra-dataset matches. We don't want
+    // these to be removed from the diff output.
+    !(match->getName() == PoiPolygonMatch::MATCH_NAME &&
+     _intraDatasetMatchOnlyElementIds.contains(element->getElementId()));
+}
+
+void DiffConflator::_removeMatchElementPairCompletely(
+  const ConstMatchPtr& match, const std::pair<ElementId, ElementId>& elementPair,
+  const Status& status) const
+{
+  LOG_TRACE(
+    "Removing match element pair completely: " << elementPair << " for elements with status: " <<
+    status << "...");
+  LOG_VART(match->getName());
+  const MatchType matchType = match->getType();
+  LOG_VART(matchType);
+  LOG_VART(match->getClassification());
+  LOG_VART(match->getMatchPairs().size());
+
+  if (!elementPair.first.isNull())
+  {
+    ElementPtr e1 = _map->getElement(elementPair.first);
+    if (e1)
+    {
+      QString msg =
+        "Removed entire element: " + e1->getElementId().toString() + " with status: " +
+        e1->getStatus().toString() + ", involved in match of type: " + matchType.toString() + "...";
+      if (_satisfiesCompleteElementRemovalCondition(e1, status, match))
+      {
+        RecursiveElementRemover(e1->getElementId()).apply(_map);
+      }
+      else
+      {
+        msg = msg.replace("Removed", "Did not remove");
+      }
+      LOG_TRACE(msg);
+    }
+  }
+  if (!elementPair.second.isNull())
+  {
+    ElementPtr e2 = _map->getElement(elementPair.second);
+    if (e2)
+    {
+      QString msg =
+        "Removed entire element: " + e2->getElementId().toString() + " with status: " +
+        e2->getStatus().toString() + ", involved in match of type: " + matchType.toString() + "...";
+      if (_satisfiesCompleteElementRemovalCondition(e2, status, match))
+      {
+        RecursiveElementRemover(e2->getElementId()).apply(_map);
+      }
+      else
+      {
+        msg = msg.replace("Removed", "Did not remove");
+      }
+      LOG_TRACE(msg);
+    }
+  }
+}
+
+void DiffConflator::_removePartialSecondaryMatchElements()
+{
+  std::vector<MergerPtr> relationMergers;
+  _createMergers(relationMergers);
+  // We already projected the map to planar earlier, so its strange that it should need to be done
+  // again. Discovered this was needed to be run again for some input data.
+  MapProjector::projectToPlanar(_map);
+  _mergeFeatures(relationMergers);
+}
+
+void DiffConflator::_cleanupAfterPartialMatchRemoval()
+{
+  std::shared_ptr<ConflateInfoCache> conflateInfoCache =
+    std::make_shared<ConflateInfoCache>(_map);
+
+  RemoveDuplicateWayNodesVisitor dupeWayNodeRemover;
+  dupeWayNodeRemover.setConflateInfoCache(conflateInfoCache);
+  LOG_INFO(dupeWayNodeRemover.getInitStatusMessage());
+  _map->visitWaysRw(dupeWayNodeRemover);
+  LOG_DEBUG(dupeWayNodeRemover.getCompletedStatusMessage());
+
+  InvalidWayRemover invalidWayRemover;
+  invalidWayRemover.setConflateInfoCache(conflateInfoCache);
+  LOG_INFO(invalidWayRemover.getInitStatusMessage());
+  _map->visitWaysRw(invalidWayRemover);
+  LOG_DEBUG(invalidWayRemover.getCompletedStatusMessage());
+
+  SuperfluousNodeRemover::removeNodes(_map);
 }
 
 void DiffConflator::_removeRefData()
@@ -438,7 +651,7 @@ void DiffConflator::_removeRefData()
   // _map at this point contains all of input1, we are going to delete everything left that
   // belongs to a match pair. Then we will delete all remaining input1 items...leaving us with the
   // differential that we want.
-  _removeMatches(Status::Unknown1);
+  _removeMatchElementsCompletely(Status::Unknown1);
   MemoryUsageChecker::getInstance().check();
 
   // Now remove input1 elements. Don't remove any features involved in a snap, as they are needed
@@ -461,8 +674,10 @@ void DiffConflator::_removeRefData()
     " reference elements...");
 }
 
-void DiffConflator::addChangesToMap(OsmMapPtr map, ChangesetProviderPtr pChanges)
+void DiffConflator::addChangesToMap(OsmMapPtr map, ChangesetProviderPtr pChanges) const
 {
+  LOG_TRACE("Adding changes to map...");
+
   while (pChanges->hasMoreChanges())
   {
     Change c = pChanges->readNextChange();
@@ -591,7 +806,7 @@ void DiffConflator::_calcAndStoreTagChanges()
     if (numMatchesProcessed % (_taskStatusUpdateInterval * 10) == 0)
     {
       PROGRESS_INFO(
-        "\tStored " << StringUtils::formatLargeNumber(numMatchesProcessed) << " / " <<
+        "\tStored " << StringUtils::formatLargeNumber(numMatchesProcessed) << " of " <<
             StringUtils::formatLargeNumber(_matches.size()) << " match tag changes.");
     }
   }
@@ -624,7 +839,7 @@ bool DiffConflator::_tagsAreDifferent(const Tags& oldTags, const Tags& newTags) 
   return false;
 }
 
-Change DiffConflator::_getChange(ConstElementPtr pOldElement, ConstElementPtr pNewElement)
+Change DiffConflator::_getChange(ConstElementPtr pOldElement, ConstElementPtr pNewElement) const
 {
   // Create a new change object based on the original element, with new tags. This may seem a
   // little weird, but we want something very specific here. We want the old element as it was...
@@ -647,7 +862,7 @@ Change DiffConflator::_getChange(ConstElementPtr pOldElement, ConstElementPtr pN
   return Change(Change::Modify, pChangeElement);
 }
 
-ChangesetProviderPtr DiffConflator::_getChangesetFromMap(OsmMapPtr map)
+ChangesetProviderPtr DiffConflator::_getChangesetFromMap(OsmMapPtr map) const
 {
   if (_numSnappedWays == 0)
   {
@@ -670,6 +885,8 @@ void DiffConflator::writeChangeset(
   OsmMapPtr pResultMap, QString& output, bool separateOutput,
   const ChangesetStatsFormat& changesetStatsFormat, const QString& osmApiDbUrl)
 {
+  LOG_DEBUG("Writing changeset: " << output << "...");
+
   if (output.endsWith(".osc.sql") && osmApiDbUrl.trimmed().isEmpty())
   {
     throw IllegalArgumentException(
@@ -754,7 +971,7 @@ void DiffConflator::writeChangeset(
   }
 }
 
-void DiffConflator::calculateStats(OsmMapPtr pResultMap, QList<SingleStat>& stats)
+void DiffConflator::calculateStats(OsmMapPtr pResultMap, QList<SingleStat>& stats) const
 {
   // Differential specific stats
 
@@ -778,7 +995,7 @@ void DiffConflator::calculateStats(OsmMapPtr pResultMap, QList<SingleStat>& stat
   stats.append((SingleStat("Km of New Roads", lengthVisitor.getStat() / 1000.0)));
 }
 
-void DiffConflator::_removeMetadataTags()
+void DiffConflator::_removeMetadataTags() const
 {
   QStringList tagKeysToRemove;
   tagKeysToRemove.append(MetadataTags::Ref1());
@@ -786,6 +1003,24 @@ void DiffConflator::_removeMetadataTags()
   tagKeysToRemove.append(MetadataTags::HootSnapped());
   RemoveTagsVisitor tagRemover(tagKeysToRemove);
   _map->visitRw(tagRemover);
+}
+
+unsigned int DiffConflator::getNumSteps() const
+{
+  unsigned int numSteps = 4;
+  if (!_conflateTags)
+  {
+    numSteps--;
+  }
+  if (!ConfigOptions().getConflateMatchOnly())
+  {
+    numSteps--;
+  }
+  if (!ConfigOptions().getDifferentialRemoveLinearPartialMatchesAsWhole())
+  {
+    numSteps--;
+  }
+  return numSteps;
 }
 
 }

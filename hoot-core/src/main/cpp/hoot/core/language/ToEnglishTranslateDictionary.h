@@ -53,15 +53,15 @@ public:
 
   static ToEnglishTranslateDictionary& getInstance();
 
-  const QMap<QString, QStringList>& getTable() { return _translations; }
+  const QMap<QString, QStringList>& getTable() const { return _translations; }
 
   void load(const QString& path);
 
   std::shared_ptr<Transliterator> getTransliterator() const { return _transliterator; }
   std::shared_ptr<Transliterator> getTitler() const { return _titler; }
 
-  bool getFromTransliterationCache(const QString& originalText, QString& transliteratedText);
-  void insertIntoTransliterationCache(const QString& originalText, const QString& transliteratedText);
+  bool getFromTransliterationCache(const QString& originalText, QString& transliteratedText) const;
+  void insertIntoTransliterationCache(const QString& originalText, const QString& transliteratedText) const;
 
   bool transliterationCachingEnabled() const { return _transliterationCachingEnabled; }
 

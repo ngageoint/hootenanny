@@ -49,10 +49,9 @@ public:
   { return ElementCriterionPtr(new AreaWayNodeCriterion(_map)); }
 
   QString getDescription() const override { return "Identifies area nodes"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+  QString toString() const override { return className(); }
 };
 
 }

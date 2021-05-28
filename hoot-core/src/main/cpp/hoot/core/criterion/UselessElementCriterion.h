@@ -59,10 +59,9 @@ public:
   ElementCriterionPtr clone() override { return ElementCriterionPtr(new UselessElementCriterion()); }
 
   QString getDescription() const override { return "Identifies elements that have no use"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+  QString toString() const override { return className(); }
 
 private:
 

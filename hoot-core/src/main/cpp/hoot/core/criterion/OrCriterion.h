@@ -33,7 +33,7 @@ namespace hoot
 {
 
 /**
- * Filters an element if any of the child criterion return true.
+ * Filters an element if any of the child criteria return true.
  */
 class OrCriterion : public ChainCriterion
 {
@@ -51,11 +51,8 @@ public:
   ElementCriterionPtr clone() override;
 
   QString getDescription() const override { return "Allows for combining criteria (logical OR)"; }
-
   QString toString() const override;
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 };
 

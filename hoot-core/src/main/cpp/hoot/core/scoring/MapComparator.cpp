@@ -97,7 +97,7 @@ public:
   }
   ~CompareVisitor() = default;
 
-  bool isMatch() { return _matches; }
+  bool isMatch() const { return _matches; }
 
   QString getDescription() const override { return ""; }
   QString getName() const override { return ""; }
@@ -270,7 +270,7 @@ MapComparator::MapComparator():
 
 void MapComparator::_printIdDiff(
   const std::shared_ptr<OsmMap>& map1, const std::shared_ptr<OsmMap>& map2,
-  const ElementType& elementType, const int limit)
+  const ElementType& elementType, const int limit) const
 {
   QSet<long> ids1;
   QSet<long> ids2;

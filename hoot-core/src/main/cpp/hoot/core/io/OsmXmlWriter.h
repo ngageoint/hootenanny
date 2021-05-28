@@ -125,17 +125,23 @@ private:
   static int logWarnCount;
 
   bool _formatXml;
+
   bool _includeDebug;
   bool _includePointInWays;
   bool _includeCompatibilityTags;
   bool _includePid;
+
   bool _sortTags;
   QString _osmSchema;
+
   int _precision;
   std::shared_ptr<QIODevice> _fp;
   int _encodingErrorCount;
+
   std::shared_ptr<QXmlStreamWriter> _writer;
+
   geos::geom::Envelope _bounds;
+
   int _numWritten;
   int _statusUpdateInterval;
   AddExportTagsVisitor _addExportTagsVisitor;
@@ -145,7 +151,7 @@ private:
   void _initWriter();
 
   void _writeTags(const ConstElementPtr& element);
-  void _writeMetadata(const Element* e);
+  void _writeMetadata(const Element* e) const;
   void _writeNodes(ConstOsmMapPtr map);
   void _writePartialIncludePoints(const ConstWayPtr& w, ConstOsmMapPtr map);
   void _writeWays(ConstOsmMapPtr map);
@@ -156,7 +162,7 @@ private:
    *  <bounds minlat="xxx" minlon="xxx" maxlat="xxx" maxlong="xxx" />
    * @param bounds the bounds to write
    */
-  void _writeBounds(const geos::geom::Envelope& bounds);
+  void _writeBounds(const geos::geom::Envelope& bounds) const;
 
   /**
    * Sets debug settings to add extra metadata to output map for debugging purposes

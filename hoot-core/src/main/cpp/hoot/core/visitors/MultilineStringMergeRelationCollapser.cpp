@@ -122,7 +122,7 @@ void MultilineStringMergeRelationCollapser::setConfiguration(const Settings& con
   LOG_VART(_mergeAllTypes);
 }
 
-void MultilineStringMergeRelationCollapser::visit(const ElementPtr& e)
+void MultilineStringMergeRelationCollapser::visit(const ElementPtr& element)
 {
   if (!_mergeAllTypes && _typeKeys.isEmpty() && _typeKvps.isEmpty())
   {
@@ -132,123 +132,158 @@ void MultilineStringMergeRelationCollapser::visit(const ElementPtr& e)
 
   _numProcessed++;
 
-  if (!e)
+  if (!element || element->getElementType() != ElementType::Relation)
   {
     return;
   }
 
   // The criteria used here was set up in setConfiguration.
-  if (!_criteriaSatisfied(e))
+  if (!_criteriaSatisfied(element))
   {
-    LOG_TRACE(e->getElementId() << " did not satisfy criteria: " << toString() << ". Skipping...");
+    LOG_TRACE(
+      element->getElementId() << " did not satisfy criteria: " << toString() << ". Skipping...");
     return;
   }
 
-  LOG_VART(e->getElementId());
-//  LOG_VART(e);
-//  LOG_VART(
-//    RelationMemberUtils::getRelationMembersDetailString(
-//      std::dynamic_pointer_cast<const Relation>(e), _map));
+  RelationPtr relation = std::dynamic_pointer_cast<Relation>(element);
+  LOG_VART(relation);
+  LOG_VART(RelationMemberUtils::getRelationMembersDetailString(relation, _map));
 
+  QString matchingTypeTag;
+  bool matchingTypeTagIsKey = false;
+  if (!_hasValidType(relation, matchingTypeTag, matchingTypeTagIsKey))
+  {
+    return;
+  }
+
+  // Get any relations which may own our relation being collapsed.
+  const std::vector<ConstRelationPtr> relationsOwningMsRelation =
+    RelationMemberUtils::getContainingRelationsConst(relation->getElementId(), _map);
+  LOG_VART(relationsOwningMsRelation.size());
+
+  // For all the members of our relation being collapsed,
+  QSet<ElementId> parsedOwningRelationIds;
+  const std::vector<RelationData::Entry>& members = relation->getMembers();
+  for (std::vector<RelationData::Entry>::const_iterator membersItr = members.begin();
+       membersItr != members.end(); ++membersItr)
+  {
+    RelationData::Entry member = *membersItr;
+    ElementPtr memberElement = _map->getElement(member.getElementId());
+    if (memberElement)
+    {
+      if (!matchingTypeTag.isEmpty())
+      {
+        // ...update each member's tag.
+        if (matchingTypeTagIsKey)
+        {
+          LOG_TRACE(
+            "Adding " << matchingTypeTag << "=" << relation->getTag(matchingTypeTag) << " to " <<
+            memberElement->getElementId() << "...");
+          memberElement->setTag(matchingTypeTag, relation->getTag(matchingTypeTag));
+        }
+        else
+        {
+          LOG_TRACE(
+            "Adding " << matchingTypeTag << " to " << memberElement->getElementId() << "...");
+          memberElement->setTag(Tags::kvpToKey(matchingTypeTag), Tags::kvpToVal(matchingTypeTag));
+        }
+      }
+
+      _numRelationMembersModified++;
+    }
+  }
+
+  // Merge the relation we're removing with any relations that own it.
+  for (std::vector<ConstRelationPtr>::const_iterator owningRelationsItr =
+         relationsOwningMsRelation.begin();
+       owningRelationsItr != relationsOwningMsRelation.end(); ++owningRelationsItr)
+  {
+    RelationPtr relationOwningMsRelation =
+      std::const_pointer_cast<Relation>(*owningRelationsItr);
+    LOG_VART(relationOwningMsRelation.get());
+    LOG_VART(parsedOwningRelationIds);
+    if (relationOwningMsRelation &&
+        !parsedOwningRelationIds.contains(relationOwningMsRelation->getElementId()))
+    {
+      LOG_VART(relationOwningMsRelation->getElementId());
+      // Use relation merger here, as it will make the member insert indexes be correct. Prevent
+      // the merger from deleting the merged ms relation, as we may need to merge it with
+      // multiple parent relations within this loop. It will be deleted at the end.
+      _relationMerger.merge(
+        relationOwningMsRelation->getElementId(), relation->getElementId());
+      parsedOwningRelationIds.insert(relationOwningMsRelation->getElementId());
+    }
+  }
+  LOG_VART(relation->getMemberCount());
+
+  // Remove the ms relation we collapsed, since we didn't have RelationMerger remove it.
+  LOG_TRACE("Non-recursively removing " << relation->getElementId() << "...");
+  RemoveRelationByEid::removeRelation(_map, relation->getId());
+
+  _numAffected++;
+}
+
+bool MultilineStringMergeRelationCollapser::_hasValidType(
+  const ConstRelationPtr& relation, QString& matchingTypeTag, bool& matchingTypeTagIsKey) const
+{
+  // First check the tags for a matching type, then check the type itself. We allow for both
+  // (arguably the ordering of this check could be reversed). Only type tags will be transferred to
+  // members.
+
+  matchingTypeTag = _getMatchingTypeTag(relation, matchingTypeTagIsKey);
+
+  if (!_mergeAllTypes)
+  {
+    // No matching type tag, so check the type.
+    const QString type = relation->getType().trimmed();
+    if (matchingTypeTag.isEmpty() && type.isEmpty())
+    {
+      LOG_TRACE(relation->getElementId() << " has no matching type tag and no type. Skipping...");
+      return false;
+    }
+    else if (!type.isEmpty() && !_typeKeys.contains(type))
+    {
+      LOG_TRACE(relation->getElementId() << " has no matching type tag or type. Skipping...");
+      return false;
+    }
+  }
+
+  return true;
+}
+
+QString MultilineStringMergeRelationCollapser::_getMatchingTypeTag(
+  const ConstElementPtr& element, bool& matchingTypeTagIsKey) const
+{
   // Check the relation for any type tags matching the ones we added during configuration. This
   // doesn't handle multiple matching types. It only grabs the first one. No checking is done here
   // to verify the type passed in is contained in the schema...not sure yet if that needs to be done
   // at this point.
-  bool matchingTypeIsKey = false;
-  QString matchingType;
+
+  QString matchingTypeTag;
   if (_mergeAllTypes)
   {
     // returns a kvp
-    matchingType = OsmSchema::getInstance().getFirstType(e->getTags(), true);
+    matchingTypeTag = OsmSchema::getInstance().getFirstType(element->getTags(), true);
   }
   else
   {
     // Check to see whether its a key/value pair or just a type tag key.
-    matchingType = e->getTags().getFirstMatchingKvp(_typeKvps);
-    if (matchingType.isEmpty())
+    matchingTypeTag = element->getTags().getFirstMatchingKvp(_typeKvps);
+    if (matchingTypeTag.isEmpty())
     {
-      matchingType = e->getTags().getFirstMatchingKey(_typeKeys);
-      matchingTypeIsKey = true;
+      matchingTypeTag = element->getTags().getFirstMatchingKey(_typeKeys);
+      if (!matchingTypeTag.isEmpty())
+      {
+        matchingTypeTagIsKey = true;
+      }
     }
   }
-  LOG_VART(matchingType);
-
-  if (!matchingType.isEmpty())
+  LOG_VART(matchingTypeTag);
+  if (!matchingTypeTag.isEmpty())
   {
-    RelationPtr relation = _map->getRelation(e->getId());
-    LOG_VART(relation.get());
-    if (relation)
-    {
-      LOG_VART(relation->getElementId());
-      LOG_VART(relation->getType());
-      LOG_VART(relation->getTags().getName());
-      LOG_VART(matchingType);
-      LOG_VART(matchingTypeIsKey);
-
-      // Get any relations which may own our relation being collapsed.
-      const std::vector<ConstRelationPtr> relationsOwningMsRelation =
-        RelationMemberUtils::getContainingRelations(relation->getElementId(), _map);
-      LOG_VART(relationsOwningMsRelation.size());
-
-      // For all the members of our relation being collapsed,
-      QSet<ElementId> parsedOwningRelationIds;
-      const std::vector<RelationData::Entry>& members = relation->getMembers();
-      for (std::vector<RelationData::Entry>::const_iterator membersItr = members.begin();
-           membersItr != members.end(); ++membersItr)
-      {
-        RelationData::Entry member = *membersItr;
-        ElementPtr memberElement = _map->getElement(member.getElementId());
-        if (memberElement)
-        {
-          // ...update each member's tag.
-          if (matchingTypeIsKey)
-          {
-            LOG_TRACE(
-              "Adding " << matchingType << "=" << relation->getTag(matchingType) << " to " <<
-              memberElement->getElementId() << "...");
-            memberElement->setTag(matchingType, relation->getTag(matchingType));
-          }
-          else
-          {
-            LOG_TRACE(
-              "Adding " << matchingType << " to " << memberElement->getElementId() << "...");
-            memberElement->setTag(Tags::kvpToKey(matchingType), Tags::kvpToVal(matchingType));
-          }
-
-          _numRelationMembersModified++;
-        }
-      }
-
-      // Merge the relation we're removing with any relations that own it.
-      for (std::vector<ConstRelationPtr>::const_iterator owningRelationsItr =
-             relationsOwningMsRelation.begin();
-           owningRelationsItr != relationsOwningMsRelation.end(); ++owningRelationsItr)
-      {
-        RelationPtr relationOwningMsRelation =
-          std::const_pointer_cast<Relation>(*owningRelationsItr);
-        LOG_VART(relationOwningMsRelation.get());
-        LOG_VART(parsedOwningRelationIds);
-        if (relationOwningMsRelation &&
-            !parsedOwningRelationIds.contains(relationOwningMsRelation->getElementId()))
-        {
-          LOG_VART(relationOwningMsRelation->getElementId());
-          // Use relation merger here, as will make the member insert indexes be correct. Prevent
-          // the merger from deleting the merged ms relation, as we may need to merge it with
-          // multiple parent relations within this loop. It will be deleted at the end.
-          _relationMerger.merge(
-            relationOwningMsRelation->getElementId(), relation->getElementId());
-          parsedOwningRelationIds.insert(relationOwningMsRelation->getElementId());
-        }
-      }
-      LOG_VART(relation->getMemberCount());
-
-      // Remove the ms relation we collapsed, since we didn't have RelationMerger remove it.
-      LOG_TRACE("Non-recursively removing " << relation->getElementId() << "...");
-      RemoveRelationByEid::removeRelation(_map, relation->getId());
-
-      _numAffected++;
-    }
+    LOG_VART(matchingTypeTagIsKey);
   }
+  return matchingTypeTag;
 }
 
 }

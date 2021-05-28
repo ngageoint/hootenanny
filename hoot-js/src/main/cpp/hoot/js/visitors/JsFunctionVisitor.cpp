@@ -45,16 +45,17 @@ void JsFunctionVisitor::visit(const ConstElementPtr& e)
 {
   Isolate* current = v8::Isolate::GetCurrent();
   HandleScope handleScope(current);
-  Context::Scope context_scope(current->GetCallingContext());
+  Context::Scope context_scope(current->GetCurrentContext());
+  Local<Context> context = current->GetCurrentContext();
 
-  Handle<Value> jsArgs[3];
+  Local<Value> jsArgs[3];
 
   if (_func.IsEmpty())
   {
     throw IllegalArgumentException("JsFunctionVisitor must have a valid function.");
   }
 
-  Handle<Object> elementObj;
+  Local<Object> elementObj;
   if (_map)
   {
     ElementPtr nonConst = _map->getElement(e->getElementId());
@@ -68,9 +69,9 @@ void JsFunctionVisitor::visit(const ConstElementPtr& e)
   int argc = 0;
   jsArgs[argc++] = elementObj;
 
-  TryCatch trycatch;
-  Handle<Value> funcResult =
-    ToLocal(&_func)->Call(current->GetCallingContext()->Global(), argc, jsArgs);
+  TryCatch trycatch(current);
+  MaybeLocal<Value> funcResult =
+    ToLocal(&_func)->Call(context, current->GetCurrentContext()->Global(), argc, jsArgs);
 
   if (funcResult.IsEmpty())
   {

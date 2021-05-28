@@ -76,7 +76,7 @@ public:
 
     if (is.good() == false)
     {
-      throw HootException(QString("Error reading %1").arg(path));
+      throw IllegalArgumentException(QString("Error reading %1").arg(path));
     }
 
     try
@@ -153,7 +153,7 @@ private:
 
       //  Throw an exception for unrecognized keys
       if (!_s->hasKey(optionName))
-        throw HootException("Unknown JSON setting: (" + optionName + ")");
+        throw IllegalArgumentException("Unknown JSON setting: (" + optionName + ")");
 
       //  Set key/value pair as name and data, data() turns everything to a string
       const QString optionVal = QString::fromUtf8(element.second.data().c_str());
@@ -204,8 +204,9 @@ void Settings::_checkConvert(const QString& key, const QVariant& value, QVariant
 {
   if (value.isNull() || value.canConvert(QVariant::Bool) == false)
   {
-    throw HootException(QString("Unable to convert key: '%1', value: '%2' to %3.")
-      .arg(key).arg(value.toString()).arg(QVariant::typeToName(type)));
+    throw HootException(
+      QString("Unable to convert key: '%1', value: '%2' to %3.")
+        .arg(key).arg(value.toString()).arg(QVariant::typeToName(type)));
   }
 }
 
@@ -223,7 +224,7 @@ QVariant Settings::get(const QString& key) const
 {
   if (hasKey(key) == false)
   {
-    throw HootException("Error finding key: " + key);
+    throw IllegalArgumentException("Error finding option with key: " + key);
   }
   QVariant result = _settings.value(key);
 
@@ -238,10 +239,6 @@ QVariant Settings::get(const QString& key) const
 
 bool Settings::getBool(const QString& key) const
 {
-  if (hasKey(key) == false)
-  {
-    throw HootException("Error finding key: " + key);
-  }
   const QVariant v = get(key);
   _checkConvert(key, v, QVariant::Bool);
   return v.toBool();
@@ -260,10 +257,6 @@ bool Settings::getBool(const QString& key, bool defaultValue) const
 
 double Settings::getDouble(const QString& key) const
 {
-  if (hasKey(key) == false)
-  {
-    throw HootException("Error finding key: " + key);
-  }
   const QVariant v = get(key);
   _checkConvert(key, v, QVariant::Double);
   return v.toDouble();
@@ -317,10 +310,6 @@ Settings& Settings::getInstance()
 
 int Settings::getInt(const QString& key) const
 {
-  if (hasKey(key) == false)
-  {
-    throw HootException("Error finding key: " + key);
-  }
   const QVariant v = get(key);
   _checkConvert(key, v, QVariant::Int);
   return v.toInt();
@@ -355,10 +344,6 @@ int Settings::getInt(const QString& key, int defaultValue, int min, int max) con
 
 long Settings::getLong(const QString& key) const
 {
-  if (hasKey(key) == false)
-  {
-    throw HootException("Error finding key: " + key);
-  }
   const QVariant v = get(key);
   _checkConvert(key, v, QVariant::LongLong);
   return v.toLongLong();
@@ -378,7 +363,6 @@ long Settings::getLong(const QString& key, long defaultValue) const
 long Settings::getLong(const QString& key, long defaultValue, long min, long max) const
 {
   long retVal = getLong(key, defaultValue);
-
   if ( retVal < min )
   {
     retVal = min;
@@ -387,28 +371,22 @@ long Settings::getLong(const QString& key, long defaultValue, long min, long max
   {
     retVal = max;
   }
-
   return retVal;
 }
 
 QStringList Settings::getList(const QString& key) const
 {
-  QString str = getString(key);
-
-  return str.split(";");
+  return getString(key).split(";");
 }
 
 QStringList Settings::getList(const QString& key, const QString& defaultValue) const
 {
-  QString str = getString(key, defaultValue);
-
-  return str.split(";", QString::SkipEmptyParts);
+  return getString(key, defaultValue).split(";", QString::SkipEmptyParts);
 }
 
 QStringList Settings::getList(const QString& key, const QStringList& defaultValue) const
 {
   QStringList result;
-
   if (hasKey(key))
   {
     QString str = getString(key);
@@ -426,10 +404,6 @@ QStringList Settings::getList(const QString& key, const QStringList& defaultValu
 
 QString Settings::getString(const QString& key) const
 {
-  if (hasKey(key) == false)
-  {
-    throw HootException("Error finding key: " + key);
-  }
   return get(key).toString();
 }
 
@@ -586,7 +560,7 @@ void Settings::parseCommonArguments(QStringList& args)
     {
       if (args.size() < 2)
       {
-        throw HootException("--conf must be followed by a file name.");
+        throw IllegalArgumentException("--conf must be followed by a file name.");
       }
       LOG_DEBUG("Loading " << args[1] << "...");
       conf().loadJson(args[1]);
@@ -637,7 +611,7 @@ void Settings::parseCommonArguments(QStringList& args)
     {
       if (args.size() < 2)
       {
-        throw HootException(optionInputFormatErrorMsg + ": " + args.join(";"));
+        throw IllegalArgumentException(optionInputFormatErrorMsg + ": " + args.join(";"));
       }
 
       QString kv = args[1];
@@ -819,7 +793,7 @@ QString Settings::_replaceVariables(const QString& key, std::set<QString> used) 
 {
   if (used.find(key) != used.end())
   {
-    throw HootException("Recursive key in configuration file. (" + key + ")");
+    throw IllegalArgumentException("Recursive key in configuration file. (" + key + ")");
   }
   // if the variable doesn't exist then it defaults to an empty string.
   if (_settings.contains(key) == false)
@@ -902,7 +876,7 @@ void Settings::storeJson(const QString& path) const
 
   if (os.good() == false)
   {
-    throw HootException(QString("Error opening %1 for writing.").arg(path));
+    throw IllegalArgumentException(QString("Error opening %1 for writing.").arg(path));
   }
 
   os << toString().toUtf8().constData();

@@ -75,7 +75,7 @@ public:
       }
 
 
-    int getChildCount() 
+    int getChildCount() const
       { 
         return _childCount; 
       }
@@ -85,7 +85,7 @@ public:
         return _value; 
       }
 
-    int getIndex() 
+    int getIndex() const
       { 
         return _index; 
       }

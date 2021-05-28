@@ -32,6 +32,7 @@
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 #include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/io/IoUtils.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/StringUtils.h>
 
 // Qt
@@ -52,7 +53,6 @@ public:
   ExtentCmd() = default;
 
   QString getName() const override { return "extent"; }
-
   QString getDescription() const override { return "Calculates the bounds of a map"; }
 
   int runSimple(QStringList& args) override
@@ -76,7 +76,9 @@ public:
     conf().set(ConfigOptions::getWriterPrecisionKey(), 9);
 
     const QString input = args[0];
-    LOG_VARD(input);
+
+    LOG_STATUS("Calculating extent for ..." << FileUtils::toLogFormat(input, 25) << "...");
+
     OsmMapPtr map(new OsmMap());
     IoUtils::loadMap(map, input, true, Status::Invalid);
 

@@ -39,6 +39,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ConfigUtils.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/visitors/ConstElementVisitor.h>
 
@@ -79,8 +80,8 @@ bool ElementStreamer::areStreamableIo(const QStringList& inputs, const QString& 
     if (!ElementStreamer::isStreamableIo(inputs.at(i), output))
     {
       LOG_INFO(
-        "Unable to stream I/O due to input: " << inputs.at(i).right(25) << " and/or output: " <<
-        output.right(25) << ". Loading entire map into memory...");
+        "Unable to stream I/O due to input: " << FileUtils::toLogFormat(inputs.at(i), 25) << " and/or output: " <<
+        FileUtils::toLogFormat(output, 25) << ". Loading entire map into memory...");
       return false;
     }
   }

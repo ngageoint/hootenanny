@@ -45,6 +45,7 @@
 #include <hoot/core/elements/ElementComparer.h>
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/elements/NodeToWayMap.h>
+#include <hoot/core/elements/RelationMemberUtils.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
@@ -92,15 +93,6 @@ _markAddedMultilineStringRelations
 {
 }
 
-WaySublineMatchString LinearSnapMerger::_matchSubline(ElementPtr e1, ElementPtr e2)
-{
-  LOG_TRACE(
-    "Matching sublines for: " << e1->getElementId() << " and " << e2->getElementId() << "...");
-  // Some attempts were made to use cached subline matches pased in from LinearSnapMergerJs for
-  // performance reasons, but the results were unstable. See branch 3969b.
-  return _sublineMatcher->findMatch(_map, e1, e2);
-}
-
 bool LinearSnapMerger::_mergePair(
   ElementId eid1, ElementId eid2, vector<pair<ElementId, ElementId>>& replaced)
 {
@@ -113,7 +105,9 @@ bool LinearSnapMerger::_mergePair(
   LOG_TRACE("Snap merging " << eid1 << " and " << eid2 << "...");
 
   ElementPtr e1 = _map->getElement(eid1);
+  LOG_VART(e1->getStatus());
   ElementPtr e2 = _map->getElement(eid2);
+  LOG_VART(e2->getStatus());
 
   // If the two elements being merged are identical, then there's no point of going through
   // splitting and trying to match sections of them together. Just set the match equal to the
@@ -141,8 +135,13 @@ bool LinearSnapMerger::_mergePair(
   if (!match.isValid())
   {
     LOG_TRACE("Complex conflict causes an empty match");
-    _markNeedsReview(e1, e2, "Complex conflict causes an empty match",
-                     HighwayMatch::getHighwayMatchName());
+    _markNeedsReview(
+      e1, e2, "Complex conflict causes an empty match", HighwayMatch::getHighwayMatchName());
+    if (ConfigOptions().getDebugMapsWrite() && ConfigOptions().getDebugMapsWriteDetailed())
+    {
+      OsmMapWriterFactory::writeDebugMap(
+       _map, "LinearSnapMerger-after-complex-conflict-" + _eidLogString);
+    }
     return true;
   }
   LOG_VART(match);
@@ -159,6 +158,17 @@ bool LinearSnapMerger::_mergePair(
   // Split the second element and reverse any geometries to make the matches work.
   _splitElement(
     match.getSublineString2(), match.getReverseVector2(), replaced, e2, e2Match, scraps2);
+
+  LOG_VART(e1Match->getElementId());
+  LOG_VART(e2Match->getElementId());
+  if (scraps1)
+  {
+    LOG_VART(scraps1->getElementId());
+  }
+  if (scraps2)
+  {
+    LOG_VART(scraps2->getElementId());
+  }
 
   // Remove any ways that directly connect from e1Match to e2Match.
   _removeSpans(e1Match, e2Match);
@@ -196,8 +206,8 @@ bool LinearSnapMerger::_mergePair(
     }
   }
 
-  // Remove the old way that was split and snapped.
-  _removeSplitWay(e1, scraps1, e1Match, swapWayIds);
+  // Deal with the old way that was split and snapped.
+  _handleSplitWay(e1, scraps1, e1Match, swapWayIds);
 
   // If there is something left to review against,
   if (scraps2)
@@ -209,15 +219,17 @@ bool LinearSnapMerger::_mergePair(
   {
     // Otherwise, drop the element and any reviews its in.
     _dropSecondaryElements(eid1, e1Match->getElementId(), eid2, e2Match->getElementId());
+    // Do some additional processing on the way that was split and snapped.
+    _handleSplitWay(eid1, scraps1, e1Match, replaced);
   }
 
   if (_markAddedMultilineStringRelations)
   {
     // This is a sanity check to make sure elements other than relations aren't marked incorrectly.
-    _markMultilineStringRelations(e1Match);
-    _markMultilineStringRelations(scraps1);
-    _markMultilineStringRelations(e2Match);
-    _markMultilineStringRelations(scraps2);
+    _validateMarkedMultilineStringRelations(e1Match);
+    _validateMarkedMultilineStringRelations(scraps1);
+    _validateMarkedMultilineStringRelations(e2Match);
+    _validateMarkedMultilineStringRelations(scraps2);
   }
 
   LOG_VART(replaced);
@@ -249,10 +261,9 @@ bool LinearSnapMerger::_checkForIdenticalElements(const ElementPtr& e1, const El
     LOG_TRACE(
       "Merging identical elements: " << keep->getElementId() << " and " << remove->getElementId() <<
       "...");
-    e1->setStatus(Status::Conflated);
     keep->setStatus(Status::Conflated);
     // remove the second element and any reviews that contain the element
-    RemoveReviewsByEidOp(remove->getElementId(), true).apply(_map);
+    RemoveReviewsByEidOp(remove->getElementId(), true, true).apply(_map);
 
     if (ConfigOptions().getDebugMapsWrite() && ConfigOptions().getDebugMapsWriteDetailed())
     {
@@ -263,6 +274,15 @@ bool LinearSnapMerger::_checkForIdenticalElements(const ElementPtr& e1, const El
     return true;
   }
   return false;
+}
+
+WaySublineMatchString LinearSnapMerger::_matchSubline(ElementPtr e1, ElementPtr e2)
+{
+  LOG_TRACE(
+    "Matching sublines for: " << e1->getElementId() << " and " << e2->getElementId() << "...");
+  // Some attempts were made to use cached subline matches pased in from LinearSnapMergerJs for
+  // performance reasons, but the results were unstable. See branch 3969b.
+  return _sublineMatcher->findMatch(_map, e1, e2);
 }
 
 void LinearSnapMerger::_mergeTags(
@@ -508,7 +528,7 @@ void LinearSnapMerger::_splitElement(
     if (splitee->getElementType() == ElementType::Relation &&
         scrap->getTags().getInformationCount() > 0 && scrap->getElementType() == ElementType::Way)
     {
-      // create a new relation to contain this single way (footway relation)
+      // Create a new relation to contain this single way (footway relation).
       RelationPtr r(
         new Relation(
           splitee->getStatus(), _map->createNextRelationId(), splitee->getCircularError(),
@@ -568,19 +588,34 @@ void LinearSnapMerger::_splitElement(
       scrap->getTags().set(MetadataTags::HootMultilineString(), "yes");
     }
 
+    // Add the scraps way to whatever relations the way that was split is in.
+    std::vector<RelationPtr> relationsContainingSplitWay =
+      RelationMemberUtils::getContainingRelations(splitee->getElementId(), _map);
+    for (std::vector<RelationPtr>::const_iterator itr = relationsContainingSplitWay.begin();
+         itr != relationsContainingSplitWay.end(); ++itr)
+    {
+      RelationPtr relation = *itr;
+      if (relation)
+      {
+        relation->addElement(relation->getRole(splitee->getElementId()), scrap->getElementId());
+      }
+    }
+
     replaced.emplace_back(splitee->getElementId(), scrap->getElementId());
     LOG_VART(replaced);
   }
 
   if (ConfigOptions().getDebugMapsWrite() && ConfigOptions().getDebugMapsWriteDetailed())
   {
-    OsmMapWriterFactory::writeDebugMap(_map, "LinearSnapMerger-after-way-split" + _eidLogString);
+    OsmMapWriterFactory::writeDebugMap(
+      _map, "LinearSnapMerger-after-way-split-" + splitee->getElementId().toString() + "-" +
+      _eidLogString);
   }
 }
 
 void LinearSnapMerger::_manageElementIds(
   const WayPtr& w1, const WayPtr& w2, const WayPtr& wMatch, const ElementPtr& scraps1,
-  const ElementPtr& scraps2)
+  const ElementPtr& scraps2) const
 {
   LOG_TRACE("Managing element IDs...");
 
@@ -606,7 +641,9 @@ void LinearSnapMerger::_manageElementIds(
 
 void LinearSnapMerger::_handleScrapsIds(const ElementPtr& scraps, const WayPtr& way) const
 {
-  LOG_TRACE("Handling scrap IDs...");
+  LOG_TRACE(
+    "Handling scrap IDs for scraps: " << scraps->getElementId() << " and " <<
+    way->getElementId() << "...");
 
   if (scraps->getElementType() == ElementType::Way)
   {
@@ -644,7 +681,7 @@ void LinearSnapMerger::_updateScrapParent(long id, const ElementPtr& scrap)
   {
     RelationPtr relation = std::dynamic_pointer_cast<Relation>(scrap);
     const vector<RelationData::Entry>& members = relation->getMembers();
-    //  Iterate all of the members and update the parent id recursively
+    //  Iterate all of the members and update the parent id recursively.
     for (size_t i = 0; i < members.size(); ++i)
       _updateScrapParent(id, _map->getElement(members[i].getElementId()));
   }
@@ -678,15 +715,20 @@ void LinearSnapMerger::_dropSecondaryElements(
   }
 
   // Remove reviews e2Match is involved in.
-  RemoveReviewsByEidOp(eidMatch2, true).apply(_map);
+  LOG_TRACE("Removing reviews " << eidMatch2 << " is involved in...");
+  RemoveReviewsByEidOp(eidMatch2, true, false).apply(_map);
 
   // Make the way that we're keeping have membership in whatever relations the way we're removing
   // was in. I *think* this makes sense. This logic may also need to be replicated elsewhere
   // during merging.
-  RelationMemberSwapper::swap(eid2, eid1, _map, false);
+  LOG_TRACE(
+    "Swapping relation membership. Adding " << eidMatch1 << " to all relations " << eid2 <<
+    " belongs in...");
+  RelationMemberSwapper::swap(eid2, eidMatch1, _map, false);
 
   // Remove reviews e2 is involved in.
-  RemoveReviewsByEidOp(eid2, true).apply(_map);
+  LOG_TRACE("Removing reviews " << eid2 << " is involved...");
+  RemoveReviewsByEidOp(eid2, true, false).apply(_map);
 
   if (ConfigOptions().getDebugMapsWrite() && ConfigOptions().getDebugMapsWriteDetailed())
   {
@@ -712,10 +754,10 @@ void LinearSnapMerger::_swapSecondaryElementWithScraps(
   }
 }
 
-void LinearSnapMerger::_removeSplitWay(
+void LinearSnapMerger::_handleSplitWay(
   const ElementPtr& e1, const ElementPtr& scraps1, const ElementPtr& e1Match, const bool swapWayIds)
 {
-  LOG_TRACE("Removing split way...");
+  LOG_TRACE("Handling split way...");
 
   const ElementId eid1 = e1->getElementId();
   if (e1 != e1Match && scraps1)
@@ -747,18 +789,38 @@ void LinearSnapMerger::_removeSplitWay(
   }
   else
   {
-    // Remove any reviews that contain this element.
-    LOG_TRACE("Removing e1: " << eid1 << "...");
-    RemoveReviewsByEidOp(eid1, true).apply(_map);
+    // Remove any reviews that contain this element. Don't remove the element itself yet. That may
+    // be done later.
+    LOG_TRACE("Removing reviews for e1: " << eid1 << "...");
+    RemoveReviewsByEidOp(eid1, true, false).apply(_map);
   }
+
   if (ConfigOptions().getDebugMapsWrite() && ConfigOptions().getDebugMapsWriteDetailed())
   {
     OsmMapWriterFactory::writeDebugMap(
-      _map, "LinearSnapMerger-after-split-way-removal" + _eidLogString);
+      _map, "LinearSnapMerger-after-split-way-removal-1" + _eidLogString);
   }
 }
 
-void LinearSnapMerger::_markMultilineStringRelations(const ElementPtr& element) const
+void LinearSnapMerger::_handleSplitWay(
+  const ElementId& eid1, const ElementPtr& scraps1, const ElementPtr& e1Match,
+  std::vector<std::pair<ElementId, ElementId>>& replaced)
+{
+  if (!scraps1)
+  {
+    LOG_TRACE("Replacing " << eid1 << " with " << e1Match->getElementId() << "...");
+    RemoveElementByEid(eid1).apply(_map);
+    replaced.emplace_back(eid1, e1Match->getElementId());
+
+    if (ConfigOptions().getDebugMapsWrite() && ConfigOptions().getDebugMapsWriteDetailed())
+    {
+      OsmMapWriterFactory::writeDebugMap(
+        _map, "LinearSnapMerger-after-split-way-removal-2" + _eidLogString);
+    }
+  }
+}
+
+void LinearSnapMerger::_validateMarkedMultilineStringRelations(const ElementPtr& element) const
 {
   if (element && element->getElementType() != ElementType::Relation)
   {

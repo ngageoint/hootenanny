@@ -49,14 +49,13 @@ public:
 
   ElementCriterionPtr clone() override { return ElementCriterionPtr(new BuildingPartCriterion()); }
 
-  QString getDescription() const override { return "Identifies parts of buildings"; }
-
   GeometryType getGeometryType() const override
   { return GeometryType::Polygon; }
 
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+  QString toString() const override { return className(); }
+  QString getDescription() const override { return "Identifies parts of buildings"; }
 };
 
 }

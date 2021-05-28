@@ -43,15 +43,16 @@ namespace hoot
 
 HOOT_JS_REGISTER(MapProjectorJs)
 
-void MapProjectorJs::Init(Handle<Object> exports)
+void MapProjectorJs::Init(Local<Object> exports)
 {
   Isolate* current = exports->GetIsolate();
   HandleScope scope(current);
-  Handle<Object> obj = Object::New(current);
-  exports->Set(String::NewFromUtf8(current, "MapProjector"), obj);
+  Local<Context> context = current->GetCurrentContext();
+  Local<Object> obj = Object::New(current);
+  exports->Set(context, toV8("MapProjector"), obj);
 
-  obj->Set(String::NewFromUtf8(current, "projectToPlanar"),
-           FunctionTemplate::New(current, projectToPlanar)->GetFunction());
+  obj->Set(context, toV8("projectToPlanar"),
+           FunctionTemplate::New(current, projectToPlanar)->GetFunction(context).ToLocalChecked());
 }
 
 void MapProjectorJs::projectToPlanar(const FunctionCallbackInfo<Value>& args)

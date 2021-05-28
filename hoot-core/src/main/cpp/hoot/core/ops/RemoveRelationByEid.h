@@ -35,51 +35,44 @@ namespace hoot
 {
 
 /**
- * @brief The RemoveRelationEid class removes a relation from an OsmMap
+ * Removes a relation from a map
  */
 class RemoveRelationByEid : public OsmMapOperation
 {
 public:
 
-  /**
-   * @brief className gets the class name as a string
-   * @return class name
-   */
   static QString className() { return "hoot::RemoveRelationByEid"; }
-  QString getName() const override { return className(); }
-  QString getClassName() const override { return className(); }
 
   /**
-   * @brief RemoveRelationByEid Default constructor
+   * Constructor
    */
   RemoveRelationByEid();
   ~RemoveRelationByEid() = default;
 
   /**
-   * @brief RemoveRelationByEid
-   * @param rId ID of relation to remove
+   * Constructor
+   *
+   * @param rId ID of the relation to remove
    */
   RemoveRelationByEid(long rId);
 
   /**
-   * @brief apply Peform the remove operation
-   * @param map Map to operate on
+   * @see OsmMapOperation
    */
   void apply(OsmMapPtr& map) override;
 
   /**
-   * @brief setRelationId Set the ID of the relation to remove
-   * @param rId ID of relation to remove
-   */
-  void setRelationId(long rId) { _rIdToRemove = rId; }
-
-  /**
-   * @brief removeRelation Remove the specified relation from the given map
+   * Removes the specified relation from the map
+   *
    * @param map Map to operate on
    * @param rId ID of relation to remove
    */
   static void removeRelation(OsmMapPtr map, long rId);
 
+  void setRelationId(long rId) { _rIdToRemove = rId; }
+
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
   QString getDescription() const override { return "Removes a single relation by element ID"; }
 
 private:

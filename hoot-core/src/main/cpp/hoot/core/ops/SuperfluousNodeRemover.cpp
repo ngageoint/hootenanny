@@ -136,12 +136,12 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
       continue;
     }
     const vector<long>& nodeIds = w->getNodeIds();
-    LOG_VART(nodeIds);
+    LOG_TRACE("Nodes belonging to " << w->getElementId() << ": " << nodeIds);
     _usedNodeIds.insert(nodeIds.begin(), nodeIds.end());
     _numProcessed += nodeIds.size();
 
     _numProcessed++;
-    if (_numProcessed % _taskStatusUpdateInterval == 0)
+    if ((_numProcessed % (_taskStatusUpdateInterval * 100) == 0) && _numProcessed != 0)
     {
       PROGRESS_INFO(
         "Exempted " << StringUtils::formatLargeNumber(_usedNodeIds.size()) <<
@@ -194,12 +194,12 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
     }
     // Since this class operates on elements with generic types, an additional check must be
     // performed here during conflation to enure we don't modify any element not associated with
-    // and active conflate matcher in the current conflation configuration.
+    // an active conflate matcher in the current conflation configuration.
     else if (_conflateInfoCache && _ignoreInformationTags &&
              !_conflateInfoCache->elementCanBeConflatedByActiveMatcher(n->cloneSp(), className()))
     {
       LOG_TRACE(
-        "Skipping processing of " << n->getElementId() << " as it cannot be conflated by any " <<
+        "Skipping processing of " << n->getElementId() << ", as it cannot be conflated by any " <<
         "actively configured conflate matcher...");
       _usedNodeIds.insert(n->getId());
     }
@@ -209,7 +209,7 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
     }
     _numProcessed++;
 
-    if (_numProcessed % _taskStatusUpdateInterval == 0 && _numProcessed != 0)
+    if ((_numProcessed % (_taskStatusUpdateInterval * 100) == 0) && _numProcessed != 0)
     {
       PROGRESS_INFO(
         "Exempted " << StringUtils::formatLargeNumber(_usedNodeIds.size()) <<
@@ -229,7 +229,7 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
   // if the map is not in WGS84
   if (MapProjector::isGeographic(map) == false)
   {
-    // create a new copy of the map and reproject it. This way we can be sure we do the bounds
+    // Create a new copy of the map and reproject it. This way we can be sure we do the bounds
     // calculation correctly.
     reprojected.reset(new OsmMap(map));
     MapProjector::projectToWgs84(reprojected);
@@ -265,7 +265,7 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
       }
       else
       {
-        LOG_TRACE("node not in bounds. " << n->getElementId());
+        LOG_TRACE("Node not in bounds: " << n->getElementId());
         LOG_VART(_bounds);
       }
     }

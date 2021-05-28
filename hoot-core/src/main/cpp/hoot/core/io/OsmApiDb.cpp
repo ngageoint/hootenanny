@@ -97,7 +97,7 @@ void OsmApiDb::close()
   _db.close();
 }
 
-void OsmApiDb::deleteData()
+void OsmApiDb::deleteData() const
 {
   LOG_TRACE("Deleting all data...");
 
@@ -456,7 +456,7 @@ std::shared_ptr<QSqlQuery> OsmApiDb::selectTagsForNode(long nodeId)
   return _selectTagsForNode;
 }
 
-QString OsmApiDb::extractTagFromRow(const std::shared_ptr<QSqlQuery>& row, ElementType::Type type)
+QString OsmApiDb::extractTagFromRow(const std::shared_ptr<QSqlQuery>& row, ElementType::Type type) const
 {
   QString tag = "";
   int pos = -1;

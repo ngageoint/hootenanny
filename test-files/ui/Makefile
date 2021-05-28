@@ -1,6 +1,7 @@
 
 SHELL=/bin/bash
 
+HOOT_OPTS=--status
 # If the silent flag is passed to make then make hoot quiet too.
 ifneq (,$(findstring s,$(MAKEFLAGS)))
   HOOT_OPTS=--warn
@@ -179,5 +180,5 @@ load-data: clean
 	hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/ToyTestB.osm $(DB_URL)/ToyTestBCucumber
 	hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/ToyTestCauseReview.osm $(DB_URL)/TTCauseReviewCucumber
 	hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/Merged_Brazil_daba15e4.osm $(DB_URL)/BrazilMergedCucumber
-	hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/cmd/slow/DiffConflateCmdTest/input1.osm $(DB_URL)/DiffInput1Cucumber
-	hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/cmd/slow/DiffConflateCmdTest/input2.osm $(DB_URL)/DiffInput2Cucumber
+	hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/cmd/glacial/DiffConflateCmdTest/input1.osm $(DB_URL)/DiffInput1Cucumber
+	hoot convert $(HOOT_OPTS) $(HOOT_HOME)/test-files/cmd/glacial/DiffConflateCmdTest/input2.osm $(DB_URL)/DiffInput2Cucumber

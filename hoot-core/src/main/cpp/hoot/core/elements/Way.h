@@ -61,9 +61,7 @@ public:
 
   void addNode(long id);
   void insertNode(long index, long id);
-
   void addNodes(const std::vector<long>& ids);
-
   /**
    * Adds nodes from the provided iterator. This can be faster than repeatedly calling addNode
    * because the indexes will only need to be updated once.
@@ -125,7 +123,7 @@ public:
   long getLastNodeId() const { return getNodeId(getNodeCount() - 1); }
 
   /**
-   * Determines if an index is the first or las
+   * Determines if an index is the first or last
    *
    * @param index index to examine
    * @return true if the index is extreme; false otherwise
@@ -214,6 +212,14 @@ public:
   bool hasSharedNode(const Way& other) const;
 
   /**
+   * Determines if two ways share the same end node
+   *
+   * @param other way to compare with
+   * @return true if the other way shares at least one end node with this way; false otherwise
+   */
+  bool hasSharedEndNode(const Way& other) const;
+
+  /**
    * Retrieves the IDs of shared nodes between two ways
    *
    * @param other way to compare with
@@ -247,8 +253,8 @@ public:
    */
   bool hasPid() const { return _wayData->getPid() != WayData::PID_EMPTY; }
   long getPid() const { return _wayData->getPid(); }
-  void setPid(long pid) { _wayData->setPid(pid); }
-  void resetPid() { _wayData->setPid(WayData::PID_EMPTY); }
+  void setPid(long pid) const { _wayData->setPid(pid); }
+  void resetPid() const { _wayData->setPid(WayData::PID_EMPTY); }
   static long getPid(const std::shared_ptr<const Way>& p, const std::shared_ptr<const Way>& c);
   static long getPid(long p, long c);
 

@@ -35,8 +35,6 @@
 namespace hoot
 {
 
-class Element;
-
 /**
  * Identifies reversed roads
  */
@@ -47,22 +45,21 @@ public:
   static QString className() { return "hoot::ReversedRoadCriterion"; }
 
   ReversedRoadCriterion() = default;
-  ReversedRoadCriterion(ConstOsmMapPtr map) : _map(map) { }
+  ReversedRoadCriterion(ConstOsmMapPtr map);
   ~ReversedRoadCriterion() = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
 
-  ElementCriterionPtr clone() override { return ElementCriterionPtr(new ReversedRoadCriterion()); }
-
-  QString getDescription() const override { return "Identifies reversed roads"; }
+  ElementCriterionPtr clone() override { return std::make_shared<ReversedRoadCriterion>(_map); }
 
   GeometryType getGeometryType() const override { return GeometryType::Line; }
 
-  QString getName() const override { return className(); }
-
-  QString getClassName() const override { return className(); }
-
   void setOsmMap(const OsmMap* map) override { _map = map->shared_from_this(); }
+
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
+  QString toString() const override { return className(); }
+  QString getDescription() const override { return "Identifies reversed roads"; }
 
 private:
 

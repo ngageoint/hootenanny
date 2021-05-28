@@ -169,7 +169,7 @@ private:
   // see getStreetTypeAbbreviationsToFullTypes
   static QMap<QString, QString> _streetTypeAbbreviationsToFullTypes;
 
-  void _initializeStringComparator();
+  void _initializeStringComparator() const;
 };
 
 }

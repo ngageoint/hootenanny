@@ -44,14 +44,15 @@ namespace hoot
 
 HOOT_JS_REGISTER(ReviewMarkerJs)
 
-void ReviewMarkerJs::Init(Handle<Object> exports)
+void ReviewMarkerJs::Init(Local<Object> exports)
 {
   Isolate* current = exports->GetIsolate();
   HandleScope scope(current);
-  Handle<Object> reviewMarker = Object::New(current);
-  exports->Set(String::NewFromUtf8(current, "ReviewMarker"), reviewMarker);
-  reviewMarker->Set(String::NewFromUtf8(current, "mark"),
-                    FunctionTemplate::New(current, mark)->GetFunction());
+  Local<Context> context = current->GetCurrentContext();
+  Local<Object> reviewMarker = Object::New(current);
+  exports->Set(context, toV8("ReviewMarker"), reviewMarker);
+  reviewMarker->Set(context, toV8("mark"),
+                    FunctionTemplate::New(current, mark)->GetFunction(context).ToLocalChecked());
 }
 
 void ReviewMarkerJs::mark(const FunctionCallbackInfo<Value>& args)

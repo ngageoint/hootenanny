@@ -34,6 +34,7 @@
 #include <hoot/core/io/IoUtils.h>
 #include <hoot/core/ops/MapCleaner.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Settings.h>
@@ -44,8 +45,13 @@
 namespace hoot
 {
 
-void RubberSheetApplier::apply(const QString& transform, const QString& input, const QString& output)
+void RubberSheetApplier::apply(
+  const QString& transform, const QString& input, const QString& output) const
 {
+  LOG_STATUS(
+    "Applying alignment transform from ..." << FileUtils::toLogFormat(input, 25) << " to " <<
+    FileUtils::toLogFormat(output, 25) << "...");
+
   OsmMapPtr map(new OsmMap());
   IoUtils::loadMap(map, input, true, Status::Unknown1);
 

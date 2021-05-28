@@ -33,9 +33,13 @@
 namespace hoot
 {
 
-inline QString str(v8::Handle<v8::Value> ls)
+inline QString str(v8::Local<v8::Value> ls)
 {
-  v8::String::Utf8Value param(ls->ToString());
+  v8::Isolate* current = v8::Isolate::GetCurrent();
+  v8::HandleScope scope(current);
+  v8::Local<v8::Context> context = current->GetCurrentContext();
+
+  v8::String::Utf8Value param(current, ls->ToString(context).ToLocalChecked());
   return QString::fromUtf8(*param);
 }
 

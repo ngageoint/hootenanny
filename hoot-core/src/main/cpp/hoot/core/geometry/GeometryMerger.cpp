@@ -121,7 +121,7 @@ GeometryPtr GeometryMerger::mergeGeometries(std::vector<GeometryPtr> geometries,
     threads[i].join();
   //  Report the final progress
   PROGRESS_INFO(
-    "Merged " << StringUtils::formatLargeNumber(_counter + 1) << " / " <<
+    "Merged " << StringUtils::formatLargeNumber(_counter + 1) << " of " <<
     StringUtils::formatLargeNumber(_geometryCount) << " geometries.");
   //  Return the merged geometry
   return geometries[0];
@@ -199,7 +199,7 @@ void GeometryMerger::mergeGeometryThread()
         if (_geometryCount - _counter < _updateInterval && _updateInterval > 10)
           _updateInterval = _updateInterval / 10;
         PROGRESS_INFO(
-          "Merged " << StringUtils::formatLargeNumber(_counter) << " / " <<
+          "Merged " << StringUtils::formatLargeNumber(_counter) << " of " <<
           StringUtils::formatLargeNumber(_geometryCount) << " geometries.");
       }
     }

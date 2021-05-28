@@ -34,6 +34,7 @@
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/CollectionUtils.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/visitors/CountManualMatchesVisitor.h>
 #include <hoot/core/visitors/CountUniqueReviewsVisitor.h>
 #include <hoot/core/visitors/ElementIdToTagValueMapper.h>
@@ -91,8 +92,8 @@ void ScoreMatchesDiff::calculateDiff(const QString& input1, const QString& input
   _input1 = input1;
   _input2 = input2;
   LOG_INFO(
-    "Calculating match scoring differential for " << _input1.right(25) << " and " <<
-    _input2.right(25) << "...");
+    "Calculating match scoring differential for " << FileUtils::toLogFormat(_input1, 25) << " and " <<
+    FileUtils::toLogFormat(_input2, 25) << "...");
 
   // Considered making this not memory bound, but our scoring data outputs aren't ever humongous
   // and the inputs had to be conflated at some point where they were read completely into
@@ -229,20 +230,20 @@ bool ScoreMatchesDiff::printDiff(const QString& output)
   }
 
   LOG_INFO(
-    "Writing match scoring differential for " << _input1.right(25) << " and " <<
-     _input2.right(25) << " to " << _output.right(25) << "...");
+    "Writing match scoring differential for " << FileUtils::toLogFormat(_input1, 25) << " and " <<
+     FileUtils::toLogFormat(_input2, 25) << " to " << FileUtils::toLogFormat(_output, 25) << "...");
 
   _outputFile = _getOutputFile(_output);
   QTextStream out(_outputFile.get());
 
-  out << "Input files: ..." << _input1.right(25) << " and ..." << _input2.right(25) << "\n\n";
+  out << "Input files: ..." << FileUtils::toLogFormat(_input1, 25) << " and ..." << FileUtils::toLogFormat(_input2, 25) << "\n\n";
   _writeConflateStatusSummary(out);
   _writeConflateStatusDetail(out);
 
   return true;
 }
 
-std::shared_ptr<QFile> ScoreMatchesDiff::_getOutputFile(const QString& outputPath)
+std::shared_ptr<QFile> ScoreMatchesDiff::_getOutputFile(const QString& outputPath) const
 {
   std::shared_ptr<QFile> outputFile(new QFile(outputPath));
   if (outputFile->exists())
@@ -265,7 +266,7 @@ QSet<ElementId> ScoreMatchesDiff::_getAllIds(const ConstOsmMapPtr& map)
 }
 
 QMap<ElementId, QString> ScoreMatchesDiff::_getMatchStatuses(
-  const ConstOsmMapPtr& map, const QString& tagKey)
+  const ConstOsmMapPtr& map, const QString& tagKey) const
 {
   LOG_DEBUG("Retrieving match status: " << tagKey << " for " << map->getName() << "...");
   ElementIdToTagValueMapper vis;
@@ -286,7 +287,7 @@ QSet<ElementId> ScoreMatchesDiff::_getWrong(const ConstOsmMapPtr& map)
 
 QMap<QString, QSet<ElementId>> ScoreMatchesDiff::_getMatchScoringDiff(
   const QSet<ElementId>& elementIds, const QMap<ElementId, QString>& expectedTagMappings,
-  const QMap<ElementId, QString>& actualTagMappings)
+  const QMap<ElementId, QString>& actualTagMappings) const
 {
   LOG_DEBUG("Calculating match scoring diff...");
   QMap<QString, QSet<ElementId>> matchSwitches;
@@ -348,7 +349,7 @@ QMap<QString, QSet<ElementId>> ScoreMatchesDiff::_getMatchScoringDiff(
 
 void ScoreMatchesDiff::_setAddedAndRemovedElements(
   const QSet<ElementId>& all1Ids, const QSet<ElementId>& all2Ids,
-  QSet<ElementId>& elementIdsAdded, QSet<ElementId>& elementIdsRemoved)
+  QSet<ElementId>& elementIdsAdded, QSet<ElementId>& elementIdsRemoved) const
 {
   LOG_DEBUG("Recording added/removed elements...");
   QSet<ElementId> allIds = all1Ids;

@@ -136,7 +136,7 @@ private:
   std::deque<ElementId> _indexToEid;
 
   Meters _getSearchRadius(const ConstElementPtr& e) const;
-  bool _isMatchCandidate(ConstElementPtr element);
+  bool _isMatchCandidate(ConstElementPtr element) const;
 };
 
 }

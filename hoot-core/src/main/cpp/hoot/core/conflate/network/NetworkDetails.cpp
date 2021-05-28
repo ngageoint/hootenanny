@@ -30,21 +30,24 @@
 #include <hoot/core/algorithms/DirectionFinder.h>
 #include <hoot/core/algorithms/ProbabilityOfMatch.h>
 #include <hoot/core/algorithms/WayHeading.h>
-#include <hoot/core/algorithms/WayMatchStringMerger.h>
+#include <hoot/core/algorithms/subline-matching/SublineStringMatcherFactory.h>
 #include <hoot/core/algorithms/extractors/AngleHistogramExtractor.h>
 #include <hoot/core/algorithms/extractors/EuclideanDistanceExtractor.h>
 #include <hoot/core/algorithms/extractors/HausdorffDistanceExtractor.h>
 #include <hoot/core/algorithms/linearreference/NaiveWayMatchStringMapping.h>
 #include <hoot/core/algorithms/linearreference/WayMatchStringMappingConverter.h>
 #include <hoot/core/algorithms/linearreference/WaySublineCollection.h>
-#include <hoot/core/algorithms/subline-matching/MaximalSublineMatcher.h>
-#include <hoot/core/algorithms/subline-matching/SublineStringMatcher.h>
+
 #include <hoot/core/conflate/highway/HighwayClassifier.h>
 #include <hoot/core/elements/ElementGeometryUtils.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/ops/CopyMapSubsetOp.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/StringUtils.h>
+
+// Qt
+#include <QElapsedTimer>
 
 using namespace geos::geom;
 using namespace std;
@@ -57,10 +60,10 @@ int NetworkDetails::logWarnCount = 0;
 static double min(double a, double b, double c) { return std::min(a, std::min(b, c)); }
 
 NetworkDetails::NetworkDetails(ConstOsmMapPtr map, ConstOsmNetworkPtr n1, ConstOsmNetworkPtr n2) :
-  _map(map),
-  _n1(n1),
-  _n2(n2),
-  _maxStubLength(ConfigOptions().getNetworkMaxStubLength())
+_map(map),
+_n1(n1),
+_n2(n2),
+_maxStubLength(ConfigOptions().getNetworkMaxStubLength())
 {
   setConfiguration(conf());
 }
@@ -68,9 +71,8 @@ NetworkDetails::NetworkDetails(ConstOsmMapPtr map, ConstOsmNetworkPtr n1, ConstO
 void NetworkDetails::setConfiguration(const Settings& conf)
 {
   ConfigOptions opts(conf);
-  _sublineMatcher.reset(
-    Factory::getInstance().constructObject<SublineStringMatcher>(
-      opts.getHighwaySublineStringMatcher()));
+  _sublineMatcher =
+    SublineStringMatcherFactory::getMatcher(CreatorDescription::BaseFeatureType::Highway);
   _classifier.reset(
     Factory::getInstance().constructObject<HighwayClassifier>(
       opts.getConflateMatchHighwayClassifier()));
@@ -78,9 +80,7 @@ void NetworkDetails::setConfiguration(const Settings& conf)
 
 Meters NetworkDetails::calculateDistance(ConstEdgeLocationPtr el) const
 {
-  Meters l = calculateLength(el->getEdge());
-
-  return (el->getPortion()) * l;
+  return (el->getPortion()) * calculateLength(el->getEdge());
 }
 
 Meters NetworkDetails::calculateDistance(ConstEdgeStringPtr s, ConstEdgeLocationPtr el) const
@@ -92,7 +92,7 @@ Meters NetworkDetails::calculateDistance(ConstEdgeStringPtr s, ConstEdgeLocation
   {
     LOG_VART(s);
     LOG_VART(el);
-    throw IllegalArgumentException("el isn't close enough to s to provide a distance.");
+    throw IllegalArgumentException("Edge location isn't close enough to s to provide a distance.");
   }
   else if (d < 0)
   {
@@ -116,8 +116,8 @@ Radians NetworkDetails::calculateHeading(ConstEdgeLocationPtr el) const
   return WayHeading::calculateHeading(wl);
 }
 
-Radians NetworkDetails::calculateHeadingAtVertex(ConstNetworkEdgePtr e,
-                                                 ConstNetworkVertexPtr v) const
+Radians NetworkDetails::calculateHeadingAtVertex(
+  ConstNetworkEdgePtr e, ConstNetworkVertexPtr v) const
 {  
   // Is it possible if e is a relation and has one way member, then we should use that for the way
   // here? Haven't seen evidence of that yet, so not implementing it.
@@ -169,8 +169,8 @@ Meters NetworkDetails::calculateLength(ConstEdgeStringPtr e) const
   return l;
 }
 
-QList<EdgeSublineMatchPtr> NetworkDetails::calculateMatchingSublines(ConstNetworkEdgePtr e1,
-  ConstNetworkEdgePtr e2)
+QList<EdgeSublineMatchPtr> NetworkDetails::calculateMatchingSublines(
+  ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2)
 {
   LOG_TRACE("Calculating matching sublines...");
 
@@ -200,10 +200,9 @@ QList<EdgeSublineMatchPtr> NetworkDetails::calculateMatchingSublines(ConstNetwor
   return result;
 }
 
-void NetworkDetails::calculateNearestLocation(ConstEdgeStringPtr string,
-                                              ConstEdgeSublinePtr subline,
-                                              ConstEdgeLocationPtr& elString,
-                                              ConstEdgeLocationPtr& elSubline) const
+void NetworkDetails::calculateNearestLocation(
+  ConstEdgeStringPtr string, ConstEdgeSublinePtr subline, ConstEdgeLocationPtr& elString,
+  ConstEdgeLocationPtr& elSubline) const
 {
   LOG_DEBUG("Calculating nearest location...");
 
@@ -347,9 +346,8 @@ double NetworkDetails::calculateStringLocation(ConstEdgeStringPtr es, ConstEdgeL
   return numeric_limits<double>::max();
 }
 
-NetworkDetails::SublineCache NetworkDetails::_calculateSublineScore(ConstOsmMapPtr map,
-                                                                    ConstWayPtr w1,
-                                                                    ConstWayPtr w2) const
+NetworkDetails::SublineCache NetworkDetails::_calculateSublineScore(
+  ConstOsmMapPtr map, ConstWayPtr w1, ConstWayPtr w2) const
 {
   LOG_TRACE("Calculating subline score...");
 
@@ -358,22 +356,21 @@ NetworkDetails::SublineCache NetworkDetails::_calculateSublineScore(ConstOsmMapP
   Meters searchRadiusHighway = ConfigOptions().getSearchRadiusHighway();
   double searchRadius = searchRadiusHighway <= 0.0 ? getSearchRadius(w1, w2) : searchRadiusHighway;
 
-  // Gonna round this up to the nearest whole
-  // If this doesn't work out, consider adding some rounding or slop or whatever to
-  // WayLocation::move(Meters distance) [which is, like, 7 layers deeper in the onion]
+  // Gonna round this up to the nearest whole. If this doesn't work out, consider adding some
+  // rounding or slop or whatever to WayLocation::move(Meters distance) [which is, like, 7 layers
+  // deeper in the onion].
   searchRadius = ceil(searchRadius);
   LOG_VART(searchRadiusHighway);
   LOG_VART(searchRadius);
 
-  //_sublineMatcher->setMinSplitSize(sr / 2.0);
-  // calculated the shared sublines
+  // Calculate the shared sublines.
   WaySublineMatchString sublineMatch = _sublineMatcher->findMatch(map, w1, w2, searchRadius);
   LOG_VART(sublineMatch);
 
   MatchClassification c;
   if (sublineMatch.isValid())
   {
-    // calculate the match score
+    // Calculate the match score.
     c = _classifier->classify(map, w1->getElementId(), w2->getElementId(), sublineMatch);
   }
 
@@ -390,7 +387,7 @@ QList<ConstNetworkVertexPtr> NetworkDetails::getCandidateMatches(ConstNetworkVer
 }
 
 double NetworkDetails::_getEdgeAngleScore(ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2,
-  ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2)
+  ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2) const
 {
   double score = 1.0;
 
@@ -421,8 +418,8 @@ double NetworkDetails::_getEdgeAngleScore(ConstNetworkVertexPtr v1, ConstNetwork
   return score;
 }
 
-EdgeMatchPtr NetworkDetails::extendEdgeMatch(ConstEdgeMatchPtr em, ConstNetworkEdgePtr e1,
-                                             ConstNetworkEdgePtr e2) const
+EdgeMatchPtr NetworkDetails::extendEdgeMatch(
+  ConstEdgeMatchPtr em, ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2) const
 {
   LOG_TRACE("Extending edge match...");
 
@@ -574,7 +571,7 @@ void NetworkDetails::extendEdgeString(EdgeStringPtr es, ConstNetworkEdgePtr e) c
   }
 }
 
-double NetworkDetails::getEdgeMatchScore(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2)
+double NetworkDetails::getEdgeMatchScore(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2) const
 {
   assert(e1->getMembers().size() == 1);
   assert(e2->getMembers().size() == 1);
@@ -596,7 +593,7 @@ double NetworkDetails::getEdgeMatchScore(ConstNetworkEdgePtr e1, ConstNetworkEdg
   return result;
 }
 
-double NetworkDetails::getEdgeStringMatchScore(ConstEdgeStringPtr e1, ConstEdgeStringPtr e2)
+double NetworkDetails::getEdgeStringMatchScore(ConstEdgeStringPtr e1, ConstEdgeStringPtr e2) const
 {
   double result;
 
@@ -689,7 +686,7 @@ double NetworkDetails::getEdgeStringMatchScore(ConstEdgeStringPtr e1, ConstEdgeS
       WayMatchStringMappingPtr mapping(new NaiveWayMatchStringMapping(ws1, ws2));
       // convert from a mapping to a WaySublineMatchString
       WaySublineMatchStringPtr matchString =
-          WayMatchStringMappingConverter().toWaySublineMatchString(mapping);
+        WayMatchStringMappingConverter().toWaySublineMatchString(mapping);
 
       MatchClassification c;
       // calculate the match score
@@ -770,12 +767,12 @@ double NetworkDetails::getPartialEdgeMatchScore(ConstNetworkEdgePtr e1, ConstNet
     LOG_VART(w1.get());
     LOG_VART(w2.get());
 
-    //Not sure why this is happening...
+    // Not sure why this is happening...
     if (!w1.get() || !w2.get())
     {
       if (logWarnCount < Log::getWarnMessageLimit())
       {
-        LOG_WARN("Unable to retrieve partial match score.  One or more ways is null.");
+        LOG_WARN("Unable to retrieve partial match score. One or more ways is null.");
         if (!w1.get())
         {
           LOG_DEBUG("Way 1 is null.");
@@ -930,7 +927,7 @@ bool NetworkDetails::hasConfidentTiePoint(ConstNetworkVertexPtr v)
   return _getVertexMatcher()->hasConfidentTiePoint(v);
 }
 
-bool NetworkDetails::isCandidateMatch(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2)
+bool NetworkDetails::isCandidateMatch(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2) const
 {
   Meters ce = getSearchRadius(e1, e2);
 
@@ -1076,7 +1073,7 @@ bool NetworkDetails::isStringCandidate(ConstEdgeStringPtr es, ConstEdgeSublinePt
   return true;
 }
 
-EdgeSublinePtr NetworkDetails::_toEdgeSubline(const WaySubline& ws, ConstNetworkEdgePtr e)
+EdgeSublinePtr NetworkDetails::_toEdgeSubline(const WaySubline& ws, ConstNetworkEdgePtr e) const
 {
   EdgeSublinePtr result;
 

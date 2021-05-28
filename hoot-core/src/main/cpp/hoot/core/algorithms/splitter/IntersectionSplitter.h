@@ -31,6 +31,8 @@
 // Hoot
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/elements/Way.h>
+#include <hoot/core/elements/Relation.h>
 
 // Qt
 #include <QMultiHash>
@@ -56,22 +58,20 @@ public:
   static QString className() { return "hoot::IntersectionSplitter"; }
 
   IntersectionSplitter() = default;
-  IntersectionSplitter(const std::shared_ptr<OsmMap>& map) : _map(map) { }
+  IntersectionSplitter(const std::shared_ptr<OsmMap>& map);
   ~IntersectionSplitter() = default;
 
+  /**
+   * @see OsmMapOperation
+   */
   void apply(std::shared_ptr<OsmMap>& map) override;
 
   static void splitIntersections(const std::shared_ptr<OsmMap>& map);
-
   void splitIntersections();
 
   QString getInitStatusMessage() const override { return "Splitting linear intersections..."; }
-
   QString getCompletedStatusMessage() const override
   { return "Split " + QString::number(_numAffected) + " linear intersections"; }
-
-  QString getDescription() const override
-  { return "Makes all linear intersections contain only way end nodes"; }
 
   /**
    * @see FilteredByGeometryTypeCriteria
@@ -79,8 +79,9 @@ public:
   QStringList getCriteria() const override;
 
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+  QString getDescription() const override
+  { return "Splits linear intersections by making them contain only way end nodes"; }
 
 private:
 
@@ -92,10 +93,52 @@ private:
   void _mapNodesToWay(const std::shared_ptr<Way>& w);
   void _removeWayFromMap(const std::shared_ptr<Way>& way);
 
-  /**
+  /*
    * Given a way and a node, split the way at that node.
    */
   void _splitWay(long wayId, long nodeId);
+
+  /*
+   * Checks relations a split way belongs to and attempts to preserve membership order
+   *
+   * @param splitWayId the ID of way that has been split
+   * @param newWays the ways replacing the way that has been split.
+   * @note This may not be 100% correct yet.
+   */
+  void _preserveWayRelationMemberOrder(
+    const ElementId& splitWayId, QList<ElementPtr>& newWays) const;
+  /*
+   * Given a collection of ways made as the result of splitting, determines which one is the
+   * original way that was split and which one was created as a result of the split.
+   *
+   * @param splitWays collection of ways created after intersection splitting
+   * @param splitWayId ID of the original way known to have been split
+   * @param splitWay to be modified pointer to the original split way
+   * @param addedWay to be modified pointer to the way created as a result of splitting
+   * @return true if the original split way is first in the input collection; false otherwise
+   */
+  bool _determineSplitWaysOrdering(
+    const QList<ElementPtr>& splitWays, const ElementId& splitWayId, WayPtr& splitWay,
+    WayPtr& addedWay) const;
+  /*
+   * Retrieves adjoining way members from a relation for a given way
+   *
+   * @param wayId the ID of the way member to retrieve adjoining members for
+   * @param containingRelation the relation containing the way with ID = wayId
+   * @param adjoiningWayMemberIndexedBefore to be modified pointer to way member indexed before the
+   * input way; may end up being null
+   * @param adjoiningWayMemberIndexedAfter to be modified pointer to way member indexed after the
+   * input way; may end up being null
+   * @return a list of element IDs of size = 1 or 2 for the adjoining members where for a non-end
+   * input way member the first ID is the ID of the member ordered immediately before the input way
+   * and the second ID is the ID of the member ordered immediately after the input way. If the input
+   * way is an end member (first or last member), then a list of size one is returned with either
+   * the ID of the member before OR the ID of the member after.
+   */
+  QList<ElementId> _getAdjoiningRelationMembers(
+    const ElementId& wayId, const ConstRelationPtr& containingRelation,
+    ConstWayPtr& adjoiningWayMemberIndexedBefore,
+    ConstWayPtr& adjoiningWayMemberIndexedAfter) const;
 };
 
 }

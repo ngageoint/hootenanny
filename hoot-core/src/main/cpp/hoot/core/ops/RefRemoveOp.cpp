@@ -79,8 +79,8 @@ public:
   {
     if (_criterion->isSatisfied(e))
     {
-      NotCriterion nc(_criterion);
-      RecursiveElementRemover(e->getElementId(), &nc).apply(_map->shared_from_this());
+      NotCriterionPtr nc = std::make_shared<NotCriterion>(_criterion);
+      RecursiveElementRemover(e->getElementId(), false, nc).apply(_map->shared_from_this());
     }
   }
 
@@ -100,7 +100,7 @@ public:
   UpdateRefVisitor(const set<QString>& refs) : _refs(refs) { }
   ~UpdateRefVisitor() = default;
 
-  QStringList _removeRef1(QStringList refs)
+  QStringList _removeRef1(QStringList refs) const
   {
     QStringList result;
     for (int i = 0; i < refs.size(); i++)

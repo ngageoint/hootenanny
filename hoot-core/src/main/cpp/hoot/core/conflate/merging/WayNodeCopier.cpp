@@ -51,7 +51,7 @@ void WayNodeCopier::setConfiguration(const Settings& conf)
   _duplicateNodeTolerance = ConfigOptions(conf).getWayNodeCopierDuplicateNodeTolerance();
 }
 
-void WayNodeCopier::copy(const ElementId& toReplaceWayId, const ElementId& replacingWayId)
+void WayNodeCopier::copy(const ElementId& toReplaceWayId, const ElementId& replacingWayId) const
 {
   if (!_map)
   {
@@ -84,6 +84,10 @@ void WayNodeCopier::copy(const ElementId& toReplaceWayId, const ElementId& repla
     for (size_t i = 0; i < toReplaceWay->getNodeCount(); i++)
     {
       ConstNodePtr nodeToBeRemoved = _map->getNode(toReplaceWay->getNodeId(i));
+      if (!nodeToBeRemoved)
+      {
+        continue;
+      }
       LOG_VART(nodeToBeRemoved->getElementId());
 
       // for each node satisfying the specifying criteria (if there is one)

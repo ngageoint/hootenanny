@@ -134,12 +134,12 @@ private:
    * @brief resetParents Resets parent id for all ways after joining operation has completed
    *    does nothing if _leavePid is true
    */
-  void _resetParents();
+  void _resetParents() const;
 
   /*
    * @see _writePidToChildId
    */
-  void _writeParentIdsToChildIds();
+  void _writeParentIdsToChildIds() const;
 };
 
 }

@@ -48,8 +48,17 @@ tds70 = {
     // Add empty "extra" feature layers if needed
     if (config.getOgrNoteExtra() == 'file') tds70.rawSchema = translate.addExtraFeature(tds70.rawSchema);
 
-    // Build the TDS fcode/attrs lookup table. Note: This is <GLOBAL>
-    tds70.attrLookup = translate.makeAttrLookup(tds70.rawSchema);
+      // Build the TDS fcode/attrs lookup table. Note: This is <GLOBAL>
+      // And, add the OSMTAGS, attribute as well
+    if (config.getOgrOutputFormat() == 'shp')
+    {
+      tds70.attrLookup = translate.makeAttrLookup(translate.addTagFeatures(tds70.rawSchema));
+    }
+    else
+    {
+      tds70.attrLookup = translate.makeAttrLookup(translate.addSingleTagFeature(tds70.rawSchema));
+    }
+
 
     // Debug:
     // print("tds70.attrLookup");
@@ -402,7 +411,9 @@ tds70 = {
 
     // We are going to make another feature so copy tags and trash the UUID so it gets a new one
     var newFeatures = [];
-    var newAttributes = {};
+    // var newAttributes = {};
+    var newAttributes = JSON.parse(JSON.stringify(attrs));
+    delete newAttributes.F_CODE;
     var nTags = JSON.parse(JSON.stringify(tags));
     delete nTags.uuid;
     delete nTags['hoot:id'];
@@ -690,21 +701,52 @@ tds70 = {
   // #####################################################################################################
   applyToOsmPostProcessing : function (attrs, tags, layerName, geometryType)
   {
-    // Unpack the ZI006_MEM field
-    if (tags.note)
+    // Unpack the ZI006_MEM field or OSMTAGS
+    if (tags.note || attrs.OSMTAGS)
     {
+      var tTags = {};
       var tObj = translate.unpackMemo(tags.note);
 
       if (tObj.tags !== '')
       {
-        var tTags = JSON.parse(tObj.tags);
-        for (i in tTags)
+        try
         {
-          // Debug
-          // print('Memo: Add: ' + i + ' = ' + tTags[i]);
-          if (tags[tTags[i]]) hoot.logWarn('Unpacking ZI006_MEM, overwriting ' + i + ' = ' + tags[i] + '  with ' + tTags[i]);
-          tags[i] = tTags[i];
+          tTags = JSON.parse(tObj.tags);
         }
+        catch (error)
+        {
+          hoot.logError('Unable to parse OSM tags in TXT attribute: ' + tObj.tags);
+        }
+      }
+
+      if (attrs.OSMTAGS)
+      {
+        try
+        {
+          var tStr = attrs.OSMTAGS;
+          ['OSMTAGS2','OSMTAGS3','OSMTAGS4'].forEach( item => { if (attrs[item]) tStr = tStr.concat(attrs[item]); });
+
+          var tmp = JSON.parse(tStr);
+          for (var i in tmp)
+          {
+            if (tTags[i]) hoot.logWarn('Overwriting unpacked tag ' + i + '=' + tTags[i] + ' with ' + tmp[i]);
+            tTags[i] = tmp[i];
+          }
+        }
+        catch (error)
+        {
+          hoot.logError('Unable to parse OSM tags from one of the OSMTAGS attributes');
+        }
+      }
+
+      // Now add the unpacked tags to the main list
+      for (var i in tTags)
+      {
+        // Debug
+        // print('Memo: Add: ' + i + ' = ' + tTags[i]);
+        if (tags[tTags[i]]) hoot.logDebug('Unpacking tags, overwriting ' + i + ' = ' + tags[i] + '  with ' + tTags[i]);
+        tags[i] = tTags[i];
+
         // Now check if this is a synonym etc. If so, remove the other tag.
         if (i in tds70.fcodeLookupOut) // tag -> FCODE table
         {
@@ -724,9 +766,9 @@ tds70 = {
             }
           }
         }
-      }
+      } // End nTags
 
-      if (tObj.text && tObj.text !== '')
+      if (tObj.text !== '')
       {
         tags.note = tObj.text;
       }
@@ -1232,6 +1274,21 @@ tds70 = {
       }
     } // End for GE4 loop
 
+    // Clean up metadata - the many to one issue
+    switch(tags['source:datetime'])
+    {
+      case undefined:
+        break;
+
+      // These are all mapped to ZI009_SDV on export.
+      case tags['source:imagery:datetime']:
+      case tags['source:date']:
+      case tags['source:geometry:date']:
+        delete tags['source:datetime'];
+        break;
+
+    } // End source:datetime
+
   }, // End of applyToOsmPostProcessing
 
   // ##### End of the xxToOsmxx Block #####
@@ -1247,6 +1304,14 @@ tds70 = {
     delete tags.area;
     delete tags['error:circular'];
     delete tags['hoot:status'];
+
+    // Dropping 'source:datetime' if we have an imagery date.
+    // Usually, this is added by Hoot on import
+    if (tags['source:datetime'] && tags['source:imagery:datetime'])
+    {
+      delete tags['source:datetime'];
+    }
+
 
     // If we use ogr2osm, the GDAL driver jams any tag it doesn't know about into an "other_tags" tag.
     // We need to unpack this before we can do anything.
@@ -1964,15 +2029,16 @@ tds70 = {
         {
           var row = tds70.fcodeLookup[col][value];
           attrs.F_CODE = row[1];
+          break;
         }
         else if (col in tds70.fcodeLookupOut && (value in tds70.fcodeLookupOut[col]))
         {
           var row = tds70.fcodeLookupOut[col][value];
           attrs.F_CODE = row[1];
+          break;
         }
       }
     } // End find F_CODE
-
 
     // Some tags imply that they are buildings but don't actually say so.
     // Most of these are taken from raw OSM and the OSM Wiki
@@ -2488,6 +2554,25 @@ tds70 = {
       attrs.ZI001_SDV = translate.chopDateTime(attrs.ZI001_SDV);
     }
 
+    // Now try using tags from Taginfo
+    if (!attrs.ZI001_SDV)
+    {
+      // Use the imagery date if we have it.
+      // NOTE: We are going to override the normal source:datetime with what we get from JOSM
+      if (tags['source:imagery:datetime'])
+      {
+        attrs.ZI001_SDV = tags['source:imagery:datetime'];
+      }
+      else if (tags['source:date'])
+      {
+        attrs.ZI001_SDV = tags['source:date'];
+      }
+      else if (tags['source:geometry:date'])
+      {
+        attrs.ZI001_SDV = tags['source:geometry:date'];
+      }
+    }
+
     // Fix the ZI020_GE4X Values
     // NOTE: This is the opposite to what is done in the toOSM post processing
     var ge4attr = ['ZI020_GE4','ZI020_GE42','ZI020_GE43','ZI020_GE44'];
@@ -2513,13 +2598,6 @@ tds70 = {
       }
     } // End for GE4 loop
 
-    // Fix ZI001_SDV
-    // NOTE: We are going to override the normal source:datetime with what we get from JOSM
-    if (notUsedTags['source.imagery.datetime'])
-    {
-      attrs.ZI001_SDV = notUsedTags['source.imagery.datetime'];
-      delete notUsedTags['source.imagery.datetime'];
-    }
 
     // Wetlands
     // Normally, these go to Marsh
@@ -2535,21 +2613,6 @@ tds70 = {
       break;
     } // End Wetlands
 
-    // Now try using tags from Taginfo
-    if (!attrs.ZI001_SDV)
-    {
-      if (tags['source:date'])
-      {
-        attrs.ZI001_SDV = tags['source:date'];
-        // delete notUsedTags['source:date'];
-      }
-      else if (tags['source:geometry:date'])
-      {
-        attrs.ZI001_SDV = tags['source:geometry:date'];
-        // delete notUsedTags['source:geometry:date'];
-      }
-    }
-
     // Add imagery tags
     if (!attrs.ZI001_SRT)
     {
@@ -2559,7 +2622,7 @@ tds70 = {
       if (notUsedTags['source:imagery']) attrs.ZI001_SRT = 'imageryUnspecified';
 
       // This should have already been removed from notUsedTags
-      if (tags['source.imagery:sensor'] == 'IK02') attrs.ZI001_SRT = 'ikonosImagery';
+      if (tags['source:imagery:sensor'] == 'IK02') attrs.ZI001_SRT = 'ikonosImagery';
     }
 
     if (!attrs.ZI001_SDP && notUsedTags['source:imagery'])
@@ -2586,7 +2649,6 @@ tds70 = {
         notUsedTags.railway = tags.railway; // Preserving this
         break;
     }
-
   }, // End applyToOgrPostProcessing
 
   // #####################################################################################################
@@ -2830,8 +2892,6 @@ tds70 = {
     // Pre Processing
     tds70.applyToOgrPreProcessing(tags, attrs, geometryType);
 
-    if (tds70.configOut.OgrDebugDumptags == 'true') translate.debugOutput(tags,'',geometryType,elementType,'After Pre: ');
-
     // Make a copy of the input tags so we can remove them as they get translated. What is left is
     // the not used tags.
     // not in v8 yet: // var tTags = Object.assign({},tags);
@@ -2850,7 +2910,6 @@ tds70 = {
     // Apply the fuzzy rules
     // NOTE: This deletes tags as they are used
     translate.applyOne2OneQuiet(notUsedTags, attrs, tds70.fuzzy,{'k':'v'});
-    if (tds70.configOut.OgrDebugDumptags == 'true') translate.debugOutput(notUsedTags,'',geometryType,elementType,'Not used 0: ');
 
     // Translate the XXX:2, XXX2, XXX:3 etc attributes
     // Note: This deletes tags as they are used
@@ -2858,19 +2917,12 @@ tds70 = {
 
     // one 2 one: we call the version that knows about the OTH field
     // NOTE: This deletes tags as they are used
-    if (tds70.configOut.OgrDebugDumptags == 'true') translate.debugOutput(notUsedTags,'',geometryType,elementType,'Not used 1: ');
-
     translate.applyTdsOne2One(notUsedTags, attrs, tds70.lookup, tds70.fcodeLookup,transMap);
-    if (tds70.configOut.OgrDebugDumptags == 'true') translate.debugOutput(notUsedTags,'',geometryType,elementType,'Not used 2: ');
-    if (tds70.configOut.OgrDebugDumptags == 'true') translate.debugOutput(tags,'',geometryType,elementType,'tags 2: ');
 
     // Post Processing.
     // We send the original list of tags and the list of tags we haven't used yet.
     // tds70.applyToOgrPostProcessing(tags, attrs, geometryType);
     tds70.applyToOgrPostProcessing(tags, attrs, geometryType, notUsedTags);
-
-    // Debug
-    if (tds70.configOut.getOgrDebugDumptags == 'true') translate.debugOutput(notUsedTags,'',geometryType,elementType,'Not used 3: ');
 
     // Now check for invalid feature geometry
     // E.g. If the spec says a runway is a polygon and we have a line, throw error and
@@ -2959,8 +3011,22 @@ tds70 = {
           // If we have unused tags, add them to the memo field.
           if (Object.keys(notUsedTags).length > 0 && tds70.configOut.OgrNoteExtra == 'attribute')
           {
-            var tStr = '<OSM>' + JSON.stringify(notUsedTags) + '</OSM>';
-            returnData[i]['attrs']['ZI006_MEM'] = translate.appendValue(returnData[i]['attrs']['ZI006_MEM'],tStr,';');
+            // var tStr = '<OSM>' + JSON.stringify(notUsedTags) + '</OSM>';
+            // returnData[i]['attrs']['ZI006_MEM'] = translate.appendValue(returnData[i]['attrs']['ZI006_MEM'],tStr,';');
+            var str = JSON.stringify(notUsedTags,Object.keys(notUsedTags).sort());
+            if (tds70.configOut.OgrFormat == 'shp')
+            {
+              returnData[i]['attrs']['OSMTAGS'] = str.substring(0,225);
+              returnData[i]['attrs']['OSMTAGS2'] = str.substring(225,450);
+              returnData[i]['attrs']['OSMTAGS3'] = str.substring(450,675);
+              returnData[i]['attrs']['OSMTAGS4'] = str.substring(675,900);
+            }
+            else
+            {
+              returnData[i]['attrs']['OSMTAGS'] = str;
+            }
+
+
           }
 
           // Now set the FCSubtype.

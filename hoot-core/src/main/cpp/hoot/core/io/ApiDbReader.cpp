@@ -32,6 +32,7 @@
 #include <hoot/core/io/IoUtils.h>
 #include <hoot/core/io/TableType.h>
 #include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
 
@@ -105,7 +106,7 @@ void ApiDbReader::initializePartial()
   _numRelationsRead = 0;
 }
 
-bool ApiDbReader::_hasBounds()
+bool ApiDbReader::_hasBounds() const
 {
   return _bounds.get() || _overrideBounds.get();
 }
@@ -175,7 +176,7 @@ ElementId ApiDbReader::_mapElementId(const OsmMap& map, ElementId oldId)
   return result;
 }
 
-void ApiDbReader::_updateMetadataOnElement(ElementPtr element)
+void ApiDbReader::_updateMetadataOnElement(ElementPtr element) const
 {
   LOG_TRACE("Updating metadata on element " << element->getElementId() << "...");
 
@@ -671,7 +672,7 @@ bool ApiDbReader::hasMoreElements()
     //we'll just grab the estimated count and expect it to be wrong from time to time.
 
     const double start = Tgs::Time::getTime();
-    LOG_DEBUG("Retrieving element counts and max IDs for: " << _url.right(25) << "...");
+    LOG_DEBUG("Retrieving element counts and max IDs for: " << FileUtils::toLogFormat(_url, 25) << "...");
 
     _totalNumMapNodes = _getDatabase()->numEstimatedElements(ElementType::Node);
     _totalNumMapWays = 0;
@@ -726,7 +727,7 @@ std::shared_ptr<Element> ApiDbReader::_getElementUsingIterator()
   {
     //no results are available, so request some more results
     LOG_DEBUG(
-      "Requesting more query results from: " << _url.right(50) << ", for element type: " <<
+      "Requesting more query results from: " << FileUtils::toLogFormat(_url, 50) << ", for element type: " <<
        _selectElementType.toString() << ", starting with ID: " << _lastId << "...");
     const double start = Tgs::Time::getTime();
     //NEVER remove the _lastId input from the call to selectElements here.  Doing that will

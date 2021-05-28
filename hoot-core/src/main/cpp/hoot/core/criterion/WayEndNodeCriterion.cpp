@@ -64,7 +64,7 @@ bool WayEndNodeCriterion::isSatisfied(const ConstElementPtr& e) const
   assert(e->getElementType() == ElementType::Node);
 
   // Get all the ways this node belongs to.
-  const std::set<long> containingWayIds = WayUtils::getContainingWayIdsByNodeId(e->getId(), _map);
+  const std::set<long> containingWayIds = WayUtils::getContainingWayIds(e->getId(), _map);
   assert(containingWayIds.size() >= 1);
   // If we're not allowing the way node to be shared, then return false if more than one way
   // contains it.

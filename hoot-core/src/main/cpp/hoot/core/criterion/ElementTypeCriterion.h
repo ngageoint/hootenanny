@@ -43,7 +43,7 @@ public:
   static QString className() { return "hoot::ElementTypeCriterion"; }
 
   ElementTypeCriterion() = default;
-  ElementTypeCriterion(ElementType::Type eType) : _elementType(eType) { }
+  ElementTypeCriterion(ElementType::Type eType) : _elementType(eType) {}
   virtual ~ElementTypeCriterion() = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
@@ -53,31 +53,28 @@ public:
 
   QString getDescription() const override
   { return "Identifies elements based on the specified type"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+  QString toString() const override { return className(); }
 
 protected:
 
   ElementType::Type _elementType;
 };
 
-// Helper classes for data driven stats
 class NodeCriterion : public ElementTypeCriterion
 {
 public:
 
   static QString className() { return "hoot::NodeCriterion"; }
 
-  NodeCriterion() : ElementTypeCriterion(ElementType::Node) { }
+  NodeCriterion() : ElementTypeCriterion(ElementType::Node) {}
   ~NodeCriterion() = default;
 
   QString getDescription() const override { return "Identifies nodes"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+  QString toString() const override { return className(); }
 };
 
 class WayCriterion : public ElementTypeCriterion
@@ -86,14 +83,13 @@ public:
 
   static QString className() { return "hoot::WayCriterion"; }
 
-  WayCriterion() : ElementTypeCriterion(ElementType::Way) { }
+  WayCriterion() : ElementTypeCriterion(ElementType::Way) {}
   ~WayCriterion() = default;
 
   QString getDescription() const override { return "Identifies ways"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+  QString toString() const override { return className(); }
 };
 
 class RelationCriterion : public ElementTypeCriterion, public Configurable
@@ -102,9 +98,9 @@ public:
 
   static QString className() { return "hoot::RelationCriterion"; }
 
-  RelationCriterion() : ElementTypeCriterion(ElementType::Relation) { }
+  RelationCriterion() : ElementTypeCriterion(ElementType::Relation) {}
   RelationCriterion(const QString& type) :
-    ElementTypeCriterion(ElementType::Relation), _type(type.trimmed()) { }
+    ElementTypeCriterion(ElementType::Relation), _type(type.trimmed()) {}
   ~RelationCriterion() = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override
@@ -125,9 +121,7 @@ public:
   }
 
   QString getDescription() const override { return "Identifies relations"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 
   void setConfiguration(const Settings& conf) override

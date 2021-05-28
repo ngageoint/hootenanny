@@ -497,10 +497,6 @@
         <tag k="hoot:id" v="-1038"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-1037" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1826166999999996" lon="22.4601660000000010">
-        <tag k="hoot:id" v="-1037"/>
-        <tag k="hoot:status" v="1"/>
-    </node>
     <node visible="true" id="-1036" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.1826766722709539" lon="22.4603794219047330">
         <tag k="hoot:id" v="-1036"/>
         <tag k="hoot:status" v="1"/>
@@ -36643,7 +36639,7 @@
         <nd ref="1252"/>
         <nd ref="-3975"/>
         <nd ref="1251"/>
-        <nd ref="-1037"/>
+        <nd ref="-532"/>
         <tag k="condition" v="functional"/>
         <tag k="error:circular" v="28.65"/>
         <tag k="highway" v="road"/>
@@ -39096,7 +39092,6 @@
     </way>
     <way visible="true" id="-188" timestamp="2016-04-11T14:26:31Z" version="1">
         <nd ref="-532"/>
-        <nd ref="-1037"/>
         <nd ref="-531"/>
         <nd ref="-530"/>
         <nd ref="-529"/>
@@ -39128,7 +39123,7 @@
         <tag k="hoot:id" v="-188"/>
         <tag k="hoot:snapped" v="to_way_target"/>
         <tag k="hoot:status" v="2"/>
-        <tag k="hoot:way:node:count" v="28"/>
+        <tag k="hoot:way:node:count" v="27"/>
         <tag k="junction" v="roundabout"/>
         <tag k="oneway" v="yes"/>
         <tag k="ref" v="RN6"/>

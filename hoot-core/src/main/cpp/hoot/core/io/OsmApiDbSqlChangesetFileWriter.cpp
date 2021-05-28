@@ -107,7 +107,7 @@ void OsmApiDbSqlChangesetFileWriter::write(
   for (int i = 0; i < changesetProviders.size(); i++)
   {
     LOG_DEBUG(
-      "Deriving changes with changeset provider: " << i + 1 << " / " << changesetProviders.size() <<
+      "Deriving changes with changeset provider: " << i + 1 << " of " << changesetProviders.size() <<
       "...");
 
     // Bounds checking requires a map. Grab the two input maps if they were passed in...one for
@@ -237,7 +237,7 @@ void OsmApiDbSqlChangesetFileWriter::_createChangeSet()
     .toUtf8());
 }
 
-ElementPtr OsmApiDbSqlChangesetFileWriter::_getChangeElement(ConstElementPtr element)
+ElementPtr OsmApiDbSqlChangesetFileWriter::_getChangeElement(ConstElementPtr element) const
 {
   ElementPtr changeElement;
   switch (element->getElementType().getEnum())

@@ -27,9 +27,7 @@
 #include "HighwayMatchCreator.h"
 
 // hoot
-#include <hoot/core/algorithms/subline-matching/MaximalNearestSublineMatcher.h>
-#include <hoot/core/algorithms/subline-matching/MaximalSublineStringMatcher.h>
-#include <hoot/core/algorithms/subline-matching/SublineStringMatcher.h>
+#include <hoot/core/algorithms/subline-matching/SublineStringMatcherFactory.h>
 #include <hoot/core/conflate/highway/HighwayClassifier.h>
 #include <hoot/core/conflate/highway/HighwayExpertClassifier.h>
 #include <hoot/core/conflate/highway/HighwayMatch.h>
@@ -245,8 +243,8 @@ public:
     _numElementsVisited++;
     if (_numElementsVisited % (_taskStatusUpdateInterval /* 10*/) == 0)
     {
-      PROGRESS_INFO(
-        "Processed " << StringUtils::formatLargeNumber(_numElementsVisited) << " / " <<
+      PROGRESS_STATUS(
+        "Processed " << StringUtils::formatLargeNumber(_numElementsVisited) << " of " <<
         StringUtils::formatLargeNumber(_map->getWayCount() + _map->getRelationCount()) <<
         " elements.");
     }
@@ -256,7 +254,7 @@ public:
     }
   }
 
-  bool isMatchCandidate(ConstElementPtr element)
+  bool isMatchCandidate(ConstElementPtr element) const
   {
     // special tag is currently only used by roundabout processing to mark temporary features
     if (element->getTags().contains(MetadataTags::HootSpecial()) ||
@@ -298,7 +296,7 @@ public:
     return _index;
   }
 
-  ConstOsmMapPtr getMap() { return _map; }
+  ConstOsmMapPtr getMap() const { return _map; }
 
   long getNumMatchCandidatesFound() const { return _numMatchCandidatesVisited; }
 
@@ -335,16 +333,8 @@ HighwayMatchCreator::HighwayMatchCreator()
   _classifier.reset(
     Factory::getInstance().constructObject<HighwayClassifier>(
       ConfigOptions().getConflateMatchHighwayClassifier()));
-
-  _sublineMatcher.reset(
-    Factory::getInstance().constructObject<SublineStringMatcher>(
-      ConfigOptions().getHighwaySublineStringMatcher()));
-  Settings settings = conf();
-  settings.set("way.matcher.max.angle", ConfigOptions().getHighwayMatcherMaxAngle());
-  settings.set("way.subline.matcher", ConfigOptions().getHighwaySublineMatcher());
-  settings.set("way.matcher.heading.delta", ConfigOptions().getHighwayMatcherHeadingDelta());
-  _sublineMatcher->setConfiguration(settings);
-
+  _sublineMatcher =
+    SublineStringMatcherFactory::getMatcher(CreatorDescription::BaseFeatureType::Highway);
   _tagAncestorDiff = std::shared_ptr<TagAncestorDifferencer>(new TagAncestorDifferencer("highway"));
 }
 

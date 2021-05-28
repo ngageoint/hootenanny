@@ -118,59 +118,46 @@ bool TestUtils::compareMaps(OsmMapPtr ref, OsmMapPtr test)
   return MapComparator().isMatch(ref, test);
 }
 
-NodePtr TestUtils::createNode(OsmMapPtr map, Status status, double x, double y,
-                              Meters circularError, Tags tags)
+NodePtr TestUtils::createNode(
+  const OsmMapPtr& map, const QString& note, const Status& status, const double x, const double y,
+  const Meters circularError, const Tags& tags)
 {
-  NodePtr result(new Node(status, map->createNextNodeId(), x, y, circularError));
-  map->addNode(result);
-  result->getTags().add(tags);
-  return result;
-}
-
-WayPtr TestUtils::createDummyWay(OsmMapPtr map, Status status)
-{
-  geos::geom::Coordinate coords[] =
-  { geos::geom::Coordinate(0, 0), geos::geom::Coordinate(0, 10),
-    geos::geom::Coordinate::getNull() };
-  return createWay(map, status, coords);
-}
-
-WayPtr TestUtils::createWay(OsmMapPtr map, Status s, Coordinate c[], Meters circularError,
-                            const QString& note)
-{
-  WayPtr result(new Way(s, map->createNextWayId(), circularError));
-  for (size_t i = 0; c[i].isNull() == false; i++)
-  {
-    NodePtr n(new Node(s, map->createNextNodeId(), c[i], circularError));
-    map->addNode(n);
-    result->addNode(n->getId());
-  }
-
+  NodePtr node(new Node(status, map->createNextNodeId(), x, y, circularError));
+  map->addNode(node);
+  node->getTags().add(tags);
   if (!note.isEmpty())
   {
-    result->getTags().addNote(note);
+    node->getTags().addNote(note);
   }
-  map->addWay(result);
-  return result;
+  return node;
 }
 
-WayPtr TestUtils::createWay(OsmMapPtr map, geos::geom::Coordinate c[], Status status,
-                            Meters circularError, Tags tags)
+WayPtr TestUtils::createWay(
+  const OsmMapPtr& map, const geos::geom::Coordinate c[], const QString& note, const Status& s,
+  const Meters circularError, const Tags& tags)
 {
-  WayPtr way(new Way(status, map->createNextWayId(), circularError));
-  for (size_t i = 0; c[i].isNull() == false; i++)
+  WayPtr way(new Way(s, map->createNextWayId(), circularError));
+  if (c != nullptr)
   {
-    NodePtr n(new Node(status, map->createNextNodeId(), c[i], circularError));
-    map->addNode(n);
-    way->addNode(n->getId());
+    for (size_t i = 0; c[i].isNull() == false; i++)
+    {
+      NodePtr n(new Node(s, map->createNextNodeId(), c[i], circularError));
+      map->addNode(n);
+      way->addNode(n->getId());
+    }
   }
-  way->setTags(tags);
+  way->getTags().add(tags);
+  if (!note.isEmpty())
+  {
+    way->getTags().addNote(note);
+  }
   map->addWay(way);
   return way;
 }
 
-WayPtr TestUtils::createWay(OsmMapPtr map, const QList<NodePtr>& nodes, Status status,
-                            Meters circularError, Tags tags)
+WayPtr TestUtils::createWay(
+  const OsmMapPtr& map, const QList<NodePtr>& nodes, const QString& note, const Status& status,
+  const Meters circularError, const Tags& tags)
 {
   WayPtr way(new Way(status, map->createNextWayId(), circularError));
   foreach (NodePtr node, nodes)
@@ -179,17 +166,39 @@ WayPtr TestUtils::createWay(OsmMapPtr map, const QList<NodePtr>& nodes, Status s
     way->addNode(node->getId());
   }
   way->setTags(tags);
+  if (!note.isEmpty())
+  {
+    way->getTags().addNote(note);
+  }
   map->addWay(way);
   return way;
 }
 
-RelationPtr TestUtils::createDummyRelation(OsmMapPtr map, Status status)
+WayPtr TestUtils::createWay(
+  const OsmMapPtr& map, const QList<ElementId>& nodeIds, const QString& note, const Status& status,
+  const Meters circularError, const Tags& tags)
 {
-  return createRelation(map, QList<ElementPtr>(), status);
+  WayPtr way(new Way(status, map->createNextWayId(), circularError));
+  foreach (ElementId nodeId, nodeIds)
+  {
+    if (!map->containsNode(nodeId.getId()))
+    {
+      throw IllegalArgumentException(nodeId.toString() + " not present in test map.");
+    }
+    way->addNode(nodeId.getId());
+  }
+  way->setTags(tags);
+  if (!note.isEmpty())
+  {
+    way->getTags().addNote(note);
+  }
+  map->addWay(way);
+  return way;
 }
 
-RelationPtr TestUtils::createRelation(OsmMapPtr map, const QList<ElementPtr>& elements,
-  Status status, Meters circularError, Tags tags)
+RelationPtr TestUtils::createRelation(
+  const OsmMapPtr& map, const QList<ElementPtr>& elements, const QString& note,
+  const Status& status, const Meters circularError, const Tags& tags)
 {
   RelationPtr relation(new Relation(status, map->createNextRelationId(), circularError));
   foreach (ElementPtr element, elements)
@@ -198,6 +207,32 @@ RelationPtr TestUtils::createRelation(OsmMapPtr map, const QList<ElementPtr>& el
     relation->addElement("test", element);
   }
   relation->setTags(tags);
+  if (!note.isEmpty())
+  {
+    relation->getTags().addNote(note);
+  }
+  map->addRelation(relation);
+  return relation;
+}
+
+RelationPtr TestUtils::createRelation(
+  const OsmMapPtr& map, const QList<ElementId>& elementIds, const QString& note,
+  const Status& status, const Meters circularError, const Tags& tags)
+{
+  RelationPtr relation(new Relation(status, map->createNextRelationId(), circularError));
+  foreach (ElementId elementId, elementIds)
+  {
+    if (!map->containsElement(elementId))
+    {
+      throw IllegalArgumentException(elementId.toString() + " not present in test map.");
+    }
+    relation->addElement("test", elementId);
+  }
+  relation->setTags(tags);
+  if (!note.isEmpty())
+  {
+    relation->getTags().addNote(note);
+  }
   map->addRelation(relation);
   return relation;
 }

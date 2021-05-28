@@ -66,14 +66,11 @@ public:
   void setCaseSensitive(bool caseSensitive) { _caseSensitive = caseSensitive; }
 
   QString getInitStatusMessage() const override { return "Removing duplicate name tags..."; }
-
   QString getCompletedStatusMessage() const override
   { return "Removed " + QString::number(_numAffected) + " duplicate name tags"; }
 
   QString getDescription() const override { return "Removes duplicate name tags from a feature"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 
   void setConflateInfoCache(const std::shared_ptr<ConflateInfoCache>& cache) override

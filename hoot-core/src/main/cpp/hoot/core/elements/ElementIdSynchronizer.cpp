@@ -217,10 +217,10 @@ bool ElementIdSynchronizer::_areWayNodesInWaysOfMismatchedType(
 
   // get the ways that contain each.
   const std::vector<ConstWayPtr> containingWays1 =
-    WayUtils::getContainingWaysByNodeId(element1->getId(), _map1);
+    WayUtils::getContainingWaysConst(element1->getId(), _map1);
   LOG_VART(containingWays1.size());
   const std::vector<ConstWayPtr> containingWays2 =
-    WayUtils::getContainingWaysByNodeId(element2->getId(), _map2);
+    WayUtils::getContainingWaysConst(element2->getId(), _map2);
   LOG_VART(containingWays2.size())
 
   // See if any of the ways between the two have a matching type.
@@ -295,14 +295,12 @@ bool ElementIdSynchronizer::_areWayNodesWithoutAWayInCommon(
     return false;
   }
 
-  // get the ways that contain each.
+  // Get the ways that contain each.
   const QSet<long> containingWayIds1 =
-    CollectionUtils::stdSetToQSet(
-      WayUtils::getContainingWayIdsByNodeId(element1->getId(), _map1));
+    CollectionUtils::stdSetToQSet(WayUtils::getContainingWayIds(element1->getId(), _map1));
   LOG_VART(containingWayIds1);
   const QSet<long> containingWayIds2 =
-    CollectionUtils::stdSetToQSet(
-      WayUtils::getContainingWayIdsByNodeId(element2->getId(), _map2));
+    CollectionUtils::stdSetToQSet(WayUtils::getContainingWayIds(element2->getId(), _map2));
   LOG_VART(containingWayIds2);
 
   for (QSet<long>::const_iterator containingWays1Itr = containingWayIds1.begin();
@@ -339,7 +337,7 @@ bool ElementIdSynchronizer::_areWayNodesWithoutAWayInCommon(
 
 void ElementIdSynchronizer::_calcElementHashes(
   const OsmMapPtr& map, QMap<QString, ElementId>& hashesToElementIds,
-  QMap<ElementId, QString>& elementIdsToHashes)
+  QMap<ElementId, QString>& elementIdsToHashes) const
 {
   LOG_DEBUG("Calculating " << map->getName() << " element hashes...");
 

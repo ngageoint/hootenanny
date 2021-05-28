@@ -176,14 +176,14 @@ public:
     _neighborCountMax = std::max(_neighborCountMax, neighborCount);
   }
 
-  std::shared_ptr<BuildingMatch> createMatch(ElementId eid1, ElementId eid2)
+  std::shared_ptr<BuildingMatch> createMatch(ElementId eid1, ElementId eid2) const
   {
     return std::shared_ptr<BuildingMatch>(new BuildingMatch(_map, _rf, eid1, eid2, _mt));
   }
 
   static bool isRelated(ConstElementPtr e1, ConstElementPtr e2)
   {
-    BuildingCriterion buildingCrit(false);
+    BuildingCriterion buildingCrit;
     if (e1->getStatus() != e2->getStatus() && e1->isUnknown() && e2->isUnknown() &&
         buildingCrit.isSatisfied(e1) && buildingCrit.isSatisfied(e2))
     {
@@ -230,8 +230,8 @@ public:
     _numElementsVisited++;
     if (_numElementsVisited % (_taskStatusUpdateInterval * 100) == 0)
     {
-      PROGRESS_INFO(
-        "Processed " << StringUtils::formatLargeNumber(_numElementsVisited) << " / " <<
+      PROGRESS_STATUS(
+        "Processed " << StringUtils::formatLargeNumber(_numElementsVisited) << " of " <<
         StringUtils::formatLargeNumber(_map->getWayCount() + _map->getRelationCount()) <<
         " elements.");
     }
@@ -241,7 +241,7 @@ public:
     }
   }
 
-  bool isMatchCandidate(ConstElementPtr element)
+  bool isMatchCandidate(ConstElementPtr element) const
   {
     if (_filter && !_filter->isSatisfied(element))
     {
@@ -284,7 +284,7 @@ public:
     return _index;
   }
 
-  ConstOsmMapPtr getMap() { return _map; }
+  ConstOsmMapPtr getMap() const { return _map; }
 
   long getNumMatchCandidatesFound() const { return _numMatchCandidatesVisited; }
 
@@ -314,7 +314,7 @@ private:
   int _taskStatusUpdateInterval;
   int _memoryCheckUpdateInterval;
 
-  void _markNonOneToOneMatchesAsReview(std::vector<MatchPtr>& matches)
+  void _markNonOneToOneMatchesAsReview(std::vector<MatchPtr>& matches) const
   {      
     for (std::vector<MatchPtr>::iterator it = matches.begin(); it != matches.end(); ++it)
     {
@@ -328,7 +328,7 @@ private:
     }
   }
 
-  void _adjustForOverlappingAdjoiningBuildingMatches(std::vector<MatchPtr>& matches)
+  void _adjustForOverlappingAdjoiningBuildingMatches(std::vector<MatchPtr>& matches) const
   {
     // If we have matches or reviews between adjoining houses (building=terrace; townhouses and
     // the like), check for many to one relationships. From the many to one, keep only the match

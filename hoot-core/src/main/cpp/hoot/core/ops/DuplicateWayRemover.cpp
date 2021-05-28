@@ -34,7 +34,6 @@
 #include <hoot/core/criterion/OneWayCriterion.h>
 #include <hoot/core/criterion/PolygonCriterion.h>
 #include <hoot/core/conflate/ConflateUtils.h>
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/NodeToWayMap.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/index/OsmMapIndex.h>
@@ -120,7 +119,7 @@ void DuplicateWayRemover::apply(OsmMapPtr& map)
              !_conflateInfoCache->elementCanBeConflatedByActiveMatcher(w, className()))
     {
       LOG_TRACE(
-        "Skipping processing of " << w->getElementId() << " as it cannot be conflated by any " <<
+        "Skipping processing of " << w->getElementId() << ", as it cannot be conflated by any " <<
         "actively configured conflate matcher...");
       continue;
     }
@@ -315,7 +314,7 @@ vector<WayPtr> DuplicateWayRemover::_splitWay(WayPtr w, int start, int length, b
   return results;
 }
 
-WayPtr DuplicateWayRemover::_getUpdatedWay(WayPtr way, const vector<long>& nodes, bool newIds)
+WayPtr DuplicateWayRemover::_getUpdatedWay(WayPtr way, const vector<long>& nodes, bool newIds) const
 {
   if (newIds)
   {

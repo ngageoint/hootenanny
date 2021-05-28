@@ -37,8 +37,7 @@ class TagMergerFactoryJs : public HootBaseJs
 {
 public:
 
-  static void Init(v8::Handle<v8::Object> target);
-
+  static void Init(v8::Local<v8::Object> target);
   virtual ~TagMergerFactoryJs() = default;
 
 private:
@@ -46,7 +45,6 @@ private:
   TagMergerFactoryJs() = default;
 
   static void mergeTags(const v8::FunctionCallbackInfo<v8::Value>& args);
-
 };
 
 

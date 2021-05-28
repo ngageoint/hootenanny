@@ -93,7 +93,7 @@ long int ZValue::calculateComponent(double v, int d)
   return round(((v - _min[d]) / (_max[d] - _min[d])) * _range);
 }
 
-void ZValue::decompose(long int v, vector<long int>& point)
+void ZValue::decompose(long int v, vector<long int>& point) const
 {
   for (uint i = 0; i < point.size(); i++)
   {

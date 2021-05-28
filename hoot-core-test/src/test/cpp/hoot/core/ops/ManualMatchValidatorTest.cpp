@@ -71,14 +71,14 @@ public:
     Tags tags;
 
     tags.set(MetadataTags::Ref1(), "");
-    NodePtr node = TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0, 15.0, tags);
+    NodePtr node = TestUtils::createNode(map, "", Status::Unknown1, 0.0, 0.0, 15.0, tags);
 
     tags.clear();
     tags.set(MetadataTags::Ref2(), "");
     geos::geom::Coordinate c1[] = {
       geos::geom::Coordinate(0.0, 0.0), geos::geom::Coordinate(1.0, 1.0),
       geos::geom::Coordinate::getNull() };
-    WayPtr way = TestUtils::createWay(map, c1, Status::Unknown1, 15.0, tags);
+    WayPtr way = TestUtils::createWay(map, c1, "", Status::Unknown1, 15.0, tags);
 
     tags.clear();
     tags.set(MetadataTags::Review(), "");
@@ -86,19 +86,12 @@ public:
     relationMembers.append(node);
     relationMembers.append(way);
     ConstRelationPtr relation =
-      TestUtils::createRelation(map, relationMembers, Status::Unknown1, 15.0, tags);
+      TestUtils::createRelation(map, relationMembers, "", Status::Unknown1, 15.0, tags);
 
     ManualMatchValidator uut;
     uut.apply(map);
 
     CPPUNIT_ASSERT(uut.hasErrors());
-//    LOG_VARW(uut.getErrors().size());
-//    QMap<ElementId, QString> errors = uut.getErrors();
-//    for (QMap<ElementId, QString>::const_iterator itr = errors.begin();
-//         itr != errors.end(); ++itr)
-//    {
-//      LOG_WARN(itr.key().toString() << ";" << itr.value());
-//    }
     CPPUNIT_ASSERT(uut.getErrors().size() == 3);
     QMap<ElementId, QString>::const_iterator errorItr =
       uut.getErrors().find(node->getElementId());
@@ -120,7 +113,7 @@ public:
 
     tags.set(MetadataTags::Ref1(), "002c75");
     tags.set(MetadataTags::Ref2(), "002da0");
-    NodePtr node = TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0, 15.0, tags);
+    NodePtr node = TestUtils::createNode(map, "", Status::Unknown1, 0.0, 0.0, 15.0, tags);
 
     uut.apply(map);
 
@@ -155,11 +148,11 @@ public:
     QMap<ElementId, QString>::const_iterator errorItr;
 
     tags.set(MetadataTags::Ref1(), "002c75");
-    TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0, 15.0, tags);
+    TestUtils::createNode(map, "", Status::Unknown1, 0.0, 0.0, 15.0, tags);
 
     tags.clear();
     tags.set(MetadataTags::Ref2(), "002da0");
-    ConstNodePtr ref2 = TestUtils::createNode(map, Status::Unknown2, 0.0, 0.0, 15.0, tags);
+    ConstNodePtr ref2 = TestUtils::createNode(map, "", Status::Unknown2, 0.0, 0.0, 15.0, tags);
 
     uut.apply(map);
 
@@ -171,7 +164,7 @@ public:
     tags.clear();
     RemoveNodeByEid::removeNode(map, ref2->getId());
     tags.set(MetadataTags::Review(), "002da0");
-    ConstNodePtr review = TestUtils::createNode(map, Status::Unknown2, 0.0, 0.0, 15.0, tags);
+    ConstNodePtr review = TestUtils::createNode(map, "", Status::Unknown2, 0.0, 0.0, 15.0, tags);
 
     uut.apply(map);
 
@@ -184,7 +177,7 @@ public:
     tags.clear();
     RemoveNodeByEid::removeNode(map, review->getId());
     tags.set(MetadataTags::Ref2(), "NONE");
-    ref2 = TestUtils::createNode(map, Status::Unknown2, 0.0, 0.0, 15.0, tags);
+    ref2 = TestUtils::createNode(map, "", Status::Unknown2, 0.0, 0.0, 15.0, tags);
 
     uut.apply(map);
 
@@ -193,7 +186,7 @@ public:
     tags.clear();
     RemoveNodeByEid::removeNode(map, ref2->getId());
     tags.set(MetadataTags::Review(), "todo");
-    review = TestUtils::createNode(map, Status::Unknown2, 0.0, 0.0, 15.0, tags);
+    review = TestUtils::createNode(map, "", Status::Unknown2, 0.0, 0.0, 15.0, tags);
 
     uut.apply(map);
 
@@ -213,11 +206,11 @@ public:
     uut.setRequireRef1(false);
 
     tags.set(MetadataTags::Ref1(), "002c75");
-    TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0, 15.0, tags);
+    TestUtils::createNode(map, "", Status::Unknown1, 0.0, 0.0, 15.0, tags);
 
     tags.clear();
     tags.set(MetadataTags::Ref2(), "002da0");
-    ConstNodePtr ref2 = TestUtils::createNode(map, Status::Unknown2, 0.0, 0.0, 15.0, tags);
+    ConstNodePtr ref2 = TestUtils::createNode(map,"",  Status::Unknown2, 0.0, 0.0, 15.0, tags);
 
     uut.apply(map);
 
@@ -241,7 +234,7 @@ public:
     uut.setAllowUuidManualMatchIds(true);
 
     tags.set(MetadataTags::Ref1(), "{1c745d1e-39e5-4926-a2d3-8f87af39e037}");
-    NodePtr node = TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0, 15.0, tags);
+    NodePtr node = TestUtils::createNode(map, "", Status::Unknown1, 0.0, 0.0, 15.0, tags);
 
     uut.apply(map);
 
@@ -251,7 +244,7 @@ public:
     node->getTags().clear();
     const QString badUuid = "{1c745d1e-3e5-4926-a2d3-8f87af39e037}";
     tags.set(MetadataTags::Ref1(), badUuid);
-    node = TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0, 15.0, tags);
+    node = TestUtils::createNode(map, "", Status::Unknown1, 0.0, 0.0, 15.0, tags);
 
     uut.apply(map);
 
@@ -267,7 +260,7 @@ public:
     map->clear();
     node->getTags().clear();
     tags.set(MetadataTags::Ref1(), "002c75");
-    node = TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0, 15.0, tags);
+    node = TestUtils::createNode(map, "", Status::Unknown1, 0.0, 0.0, 15.0, tags);
 
     uut.apply(map);
 
@@ -286,7 +279,7 @@ public:
     // ref1 ids all must all be as defined by AddRef1Visitor
 
     tags.set(MetadataTags::Ref1(), "todo");
-    ConstNodePtr ref1 = TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0, 15.0, tags);
+    ConstNodePtr ref1 = TestUtils::createNode(map, "", Status::Unknown1, 0.0, 0.0, 15.0, tags);
 
     uut.apply(map);
 
@@ -298,7 +291,7 @@ public:
     map->clear();
     tags.clear();
     tags.set(MetadataTags::Ref1(), "none");
-    ref1 = TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0, 15.0, tags);
+    ref1 = TestUtils::createNode(map, "", Status::Unknown1, 0.0, 0.0, 15.0, tags);
 
     uut.apply(map);
 
@@ -312,7 +305,7 @@ public:
     map->clear();
     tags.clear();
     tags.set(MetadataTags::Ref1(), idWrongSize);
-    ref1 = TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0, 15.0, tags);
+    ref1 = TestUtils::createNode(map, "", Status::Unknown1, 0.0, 0.0, 15.0, tags);
 
     uut.apply(map);
 
@@ -329,7 +322,7 @@ public:
     map->clear();
     tags.clear();
     tags.set(MetadataTags::Ref2(), idWrongSize);
-    ConstNodePtr ref2 = TestUtils::createNode(map, Status::Unknown2, 0.0, 0.0, 15.0, tags);
+    ConstNodePtr ref2 = TestUtils::createNode(map, "", Status::Unknown2, 0.0, 0.0, 15.0, tags);
 
     uut.apply(map);
 
@@ -343,7 +336,7 @@ public:
     map->clear();
     tags.clear();
     tags.set(MetadataTags::Review(), idWrongSize);
-    ConstNodePtr review = TestUtils::createNode(map, Status::Unknown2, 0.0, 0.0, 15.0, tags);
+    ConstNodePtr review = TestUtils::createNode(map, "", Status::Unknown2, 0.0, 0.0, 15.0, tags);
 
     uut.apply(map);
 
@@ -359,7 +352,7 @@ public:
     map->clear();
     tags.clear();
     tags.set(MetadataTags::Ref1(), idWrongEnd);
-    ref1 = TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0, 15.0, tags);
+    ref1 = TestUtils::createNode(map, "", Status::Unknown1, 0.0, 0.0, 15.0, tags);
 
     uut.apply(map);
 
@@ -373,7 +366,7 @@ public:
     map->clear();
     tags.clear();
     tags.set(MetadataTags::Ref2(), idWrongEnd);
-    ref2 = TestUtils::createNode(map, Status::Unknown2, 0.0, 0.0, 15.0, tags);
+    ref2 = TestUtils::createNode(map, "", Status::Unknown2, 0.0, 0.0, 15.0, tags);
 
     uut.apply(map);
 
@@ -387,7 +380,7 @@ public:
     map->clear();
     tags.clear();
     tags.set(MetadataTags::Review(), idWrongEnd);
-    review = TestUtils::createNode(map, Status::Unknown2, 0.0, 0.0, 15.0, tags);
+    review = TestUtils::createNode(map, "", Status::Unknown2, 0.0, 0.0, 15.0, tags);
 
     uut.apply(map);
 
@@ -409,12 +402,12 @@ public:
     QMap<ElementId, QString>::const_iterator errorItr;
 
     tags.set(MetadataTags::Ref1(), "002da0");
-    TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0, 15.0, tags);
+    TestUtils::createNode(map, "", Status::Unknown1, 0.0, 0.0, 15.0, tags);
 
     tags.clear();
     tags.set(MetadataTags::Ref2(), "002da0");
     tags.set(MetadataTags::Review(), "002da0");
-    ConstNodePtr invalidRef = TestUtils::createNode(map, Status::Unknown2, 0.0, 0.0, 15.0, tags);
+    ConstNodePtr invalidRef = TestUtils::createNode(map, "", Status::Unknown2, 0.0, 0.0, 15.0, tags);
 
     uut.apply(map);
 
@@ -437,7 +430,8 @@ public:
     QMap<ElementId, QString>::const_iterator errorItr;
 
     tags.set(MetadataTags::Ref1(), "002da0");
-    ConstNodePtr invalidRef1 = TestUtils::createNode(map, Status::Unknown2, 0.0, 0.0, 15.0, tags);
+    ConstNodePtr invalidRef1 =
+      TestUtils::createNode(map, "", Status::Unknown2, 0.0, 0.0, 15.0, tags);
 
     uut.apply(map);
 
@@ -449,7 +443,8 @@ public:
     map->clear();
     tags.clear();
     tags.set(MetadataTags::Ref2(), "002da0");
-    ConstNodePtr invalidRef2 = TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0, 15.0, tags);
+    ConstNodePtr invalidRef2 =
+      TestUtils::createNode(map, "", Status::Unknown1, 0.0, 0.0, 15.0, tags);
 
     uut.apply(map);
 
@@ -461,7 +456,8 @@ public:
     map->clear();
     tags.clear();
     tags.set(MetadataTags::Review(), "002da0");
-    ConstNodePtr invalidReview = TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0, 15.0, tags);
+    ConstNodePtr invalidReview =
+      TestUtils::createNode(map, "", Status::Unknown1, 0.0, 0.0, 15.0, tags);
 
     uut.apply(map);
 
@@ -481,7 +477,8 @@ public:
     QMap<ElementId, QString>::const_iterator errorItr;
 
     tags.set(MetadataTags::Ref1(), "002da0;002e0f");
-    ConstNodePtr invalidRef1 = TestUtils::createNode(map, Status::Unknown2, 0.0, 0.0, 15.0, tags);
+    ConstNodePtr invalidRef1 =
+      TestUtils::createNode(map, "", Status::Unknown2, 0.0, 0.0, 15.0, tags);
 
     uut.apply(map);
 
@@ -501,7 +498,8 @@ public:
     QMap<ElementId, QString>::const_iterator errorItr;
 
     tags.set(MetadataTags::Ref2(), "002da0;todo");
-    ConstNodePtr invalidRef2 = TestUtils::createNode(map, Status::Unknown2, 0.0, 0.0, 15.0, tags);
+    ConstNodePtr invalidRef2 =
+      TestUtils::createNode(map, "", Status::Unknown2, 0.0, 0.0, 15.0, tags);
 
     uut.apply(map);
 
@@ -513,7 +511,8 @@ public:
     tags.clear();
     map->clear();
     tags.set(MetadataTags::Ref2(), "none;002da0");
-    invalidRef2 = TestUtils::createNode(map, Status::Unknown2, 0.0, 0.0, 15.0, tags);
+    invalidRef2 =
+      TestUtils::createNode(map, "", Status::Unknown2, 0.0, 0.0, 15.0, tags);
 
     uut.apply(map);
 
@@ -525,7 +524,8 @@ public:
     tags.clear();
     map->clear();
     tags.set(MetadataTags::Review(), "002da0;todo");
-    ConstNodePtr invalidReview = TestUtils::createNode(map, Status::Unknown2, 0.0, 0.0, 15.0, tags);
+    ConstNodePtr invalidReview =
+      TestUtils::createNode(map, "", Status::Unknown2, 0.0, 0.0, 15.0, tags);
 
     uut.apply(map);
 
@@ -537,7 +537,7 @@ public:
     tags.clear();
     map->clear();
     tags.set(MetadataTags::Review(), "none;002da0");
-    invalidReview = TestUtils::createNode(map, Status::Unknown2, 0.0, 0.0, 15.0, tags);
+    invalidReview = TestUtils::createNode(map, "", Status::Unknown2, 0.0, 0.0, 15.0, tags);
 
     uut.apply(map);
 
@@ -557,7 +557,8 @@ public:
     QMap<ElementId, QString>::const_iterator errorItr;
 
     tags.set(MetadataTags::Ref2(), "002da0;002da0");
-    ConstNodePtr invalidRef2 = TestUtils::createNode(map, Status::Unknown2, 0.0, 0.0, 15.0, tags);
+    ConstNodePtr invalidRef2 =
+      TestUtils::createNode(map, "", Status::Unknown2, 0.0, 0.0, 15.0, tags);
 
     uut.apply(map);
 
@@ -569,7 +570,8 @@ public:
     tags.clear();
     map->clear();
     tags.set(MetadataTags::Review(), "002da0;002da0");
-    ConstNodePtr invalidReview = TestUtils::createNode(map, Status::Unknown2, 0.0, 0.0, 15.0, tags);
+    ConstNodePtr invalidReview =
+      TestUtils::createNode(map, "", Status::Unknown2, 0.0, 0.0, 15.0, tags);
 
     uut.apply(map);
 
@@ -590,7 +592,8 @@ public:
 
     tags.set(MetadataTags::Ref2(), "002da0;002da0");
     tags.set("blah", "bleh");
-    ConstNodePtr invalidRef2 = TestUtils::createNode(map, Status::Unknown2, 0.0, 0.0, 15.0, tags);
+    ConstNodePtr invalidRef2 =
+      TestUtils::createNode(map, "", Status::Unknown2, 0.0, 0.0, 15.0, tags);
 
     uut.apply(map);
 
