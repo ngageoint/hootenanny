@@ -394,7 +394,6 @@ void IntersectionSplitter::_preserveWayRelationMemberOrder(
       bool reverseNewWays = false;
       if (adjoiningMemberIds.size() == 2)
       {
-        assert(adjoiningWayMemberIndexedBefore != nullptr);
         LOG_VART(addedWay->hasSharedEndNode(*adjoiningWayMemberIndexedBefore));
         // If the new way created by the split shares an endpoint with the member indexed before the
         // split way being replaced, reverse the copied way list previously created to preserve
@@ -409,8 +408,6 @@ void IntersectionSplitter::_preserveWayRelationMemberOrder(
       // last member in the relation.
       else if (adjoiningMemberIds.size() == 1)
       {
-        assert(
-          adjoiningWayMemberIndexedBefore != nullptr || adjoiningWayMemberIndexedAfter != nullptr);
         LOG_VART(containingRelation->isFirstMember(splitWayId));
         LOG_VART(containingRelation->isLastMember(splitWayId));
 
