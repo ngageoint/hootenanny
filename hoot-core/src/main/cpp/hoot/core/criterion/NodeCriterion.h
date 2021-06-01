@@ -22,20 +22,31 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
  */
-#include "ElementTypeCriterion.h"
+#ifndef NODE_CRITERION_H
+#define NODE_CRITERION_H
 
-#include <hoot/core/util/Factory.h>
+#include <hoot/core/criterion/ElementTypeCriterion.h>
 
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementCriterion, ElementTypeCriterion)
-
-bool ElementTypeCriterion::isSatisfied(const ConstElementPtr& e) const
+class NodeCriterion : public ElementTypeCriterion
 {
-  return e->getElementType() == _elementType;
-}
+public:
+
+  static QString className() { return "hoot::NodeCriterion"; }
+
+  NodeCriterion();
+  ~NodeCriterion() override = default;
+
+  QString getDescription() const override { return "Identifies nodes"; }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
+  QString toString() const override { return className(); }
+};
 
 }
+
+#endif // NODE_CRITERION_H

@@ -35,7 +35,7 @@
 #include <hoot/core/conflate/CookieCutter.h>
 
 #include <hoot/core/criterion/ChainCriterion.h>
-#include <hoot/core/criterion/ElementTypeCriterion.h>
+#include <hoot/core/criterion/WayCriterion.h>
 #include <hoot/core/criterion/InBoundsCriterion.h>
 #include <hoot/core/criterion/NotCriterion.h>
 #include <hoot/core/criterion/TagKeyCriterion.h>

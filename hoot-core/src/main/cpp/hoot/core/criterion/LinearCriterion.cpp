@@ -75,7 +75,8 @@ bool LinearCriterion::isSatisfied(const ConstElementPtr& e) const
 
 bool LinearCriterion::isLinearRelation(const ConstRelationPtr& relation)
 {
-  // This is our list of known linear relation types.
+  // As an opt, we're first checking a static list of types of relations that are known to contain
+  // linear features and then consulting the schema if the relation doesn't match one of the types.
   if (relation->getType() == MetadataTags::RelationMultilineString() ||
       relation->getType() == MetadataTags::RelationRoute() ||
       relation->getType() == MetadataTags::RelationBoundary() ||

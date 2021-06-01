@@ -196,7 +196,6 @@ public:
     relation = TestUtils::createRelation(map, elements);
     CPPUNIT_ASSERT_EQUAL(ec.getGeometryType(relation), GEOS_GEOMETRYCOLLECTION);
   }
-
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ElementToGeometryConverterTest, "quick");

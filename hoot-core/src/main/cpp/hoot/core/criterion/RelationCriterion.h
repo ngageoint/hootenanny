@@ -22,45 +22,43 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
  */
-#ifndef COLLECTION_RELATION_CRITERION_H
-#define COLLECTION_RELATION_CRITERION_H
+#ifndef RELATION_CRITERION_H
+#define RELATION_CRITERION_H
 
-// hoot
-#include <hoot/core/criterion/ConflatableElementCriterion.h>
+#include <hoot/core/criterion/ElementTypeCriterion.h>
 
 namespace hoot
 {
 
-/**
- * Identifies collection relations
+/*
+ * Relations are conflatable, so RelationCriterion could inherit from ConflatableElementCriterion,
+ * but it hasn't been needed so far and prevents us from multiple inheritance here.
  */
-class CollectionRelationCriterion : public ConflatableElementCriterion
+class RelationCriterion : public ElementTypeCriterion, public Configurable
 {
 public:
 
-  static QString className() { return "hoot::CollectionRelationCriterion"; }
+  static QString className() { return "hoot::RelationCriterion"; }
 
-  CollectionRelationCriterion() = default;
-  ~CollectionRelationCriterion() = default;
+  RelationCriterion();
+  RelationCriterion(const QString& type);
+  ~RelationCriterion() override = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
 
-  // TODO: should this be linear instead?
-  GeometryType getGeometryType() const override { return GeometryType::Polygon; }
+  void setConfiguration(const Settings& conf) override;
 
-  bool supportsSpecificConflation() const override { return true; }
-
-  ElementCriterionPtr clone() override
-  { return ElementCriterionPtr(new CollectionRelationCriterion()); }
-
-  QString getDescription() const override { return "Identifies collection relations"; }
+  QString getDescription() const override { return "Identifies relations"; }
   QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }
-  QString toString() const override { return className(); }
+
+private:
+
+  QString _type;
 };
 
 }
 
-#endif // COLLECTION_RELATION_CRITERION_H
+#endif // RELATION_CRITERION_H

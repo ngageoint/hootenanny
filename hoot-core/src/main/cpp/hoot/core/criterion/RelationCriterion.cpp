@@ -22,20 +22,48 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
  */
-#include "ElementTypeCriterion.h"
+#include "RelationCriterion.h"
 
+#include <hoot/core/elements/Relation.h>
 #include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementCriterion, ElementTypeCriterion)
+HOOT_FACTORY_REGISTER(ElementCriterion, RelationCriterion)
 
-bool ElementTypeCriterion::isSatisfied(const ConstElementPtr& e) const
+RelationCriterion::RelationCriterion() : ElementTypeCriterion(ElementType::Relation)
 {
-  return e->getElementType() == _elementType;
+}
+
+RelationCriterion::RelationCriterion(const QString& type) :
+ElementTypeCriterion(ElementType::Relation),
+_type(type.trimmed())
+{
+}
+
+void RelationCriterion::setConfiguration(const Settings& conf)
+{
+  _type = ConfigOptions(conf).getRelationCriterionType();
+}
+
+bool RelationCriterion::isSatisfied(const ConstElementPtr& e) const
+{
+  const bool typeMatch = ElementTypeCriterion::isSatisfied(e);
+  if (typeMatch)
+  {
+    if (_type.isEmpty())
+    {
+      return true;
+    }
+    else
+    {
+      return std::dynamic_pointer_cast<const Relation>(e)->getType() == _type;
+    }
+  }
+  return false;
 }
 
 }

@@ -29,7 +29,7 @@
 
 // Hoot
 #include <hoot/core/criterion/ChainCriterion.h>
-#include <hoot/core/criterion/ElementTypeCriterion.h>
+#include <hoot/core/criterion/WayCriterion.h>
 #include <hoot/core/criterion/TagKeyCriterion.h>
 #include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/io/OgrReader.h>

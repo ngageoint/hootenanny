@@ -28,6 +28,7 @@
 
 // hoot
 #include <hoot/core/conflate/matching/MatchFactory.h>
+#include <hoot/core/criterion/RelationCriterion.h>
 #include <hoot/core/criterion/LinearCriterion.h>
 #include <hoot/core/criterion/PointCriterion.h>
 #include <hoot/core/criterion/PolygonCriterion.h>
@@ -150,7 +151,10 @@ QStringList SuperfluousConflateOpRemover::_filterOutUnneededOps(
       {
         const QString opCrit = opCrits.at(j);
 
-        if (!_isGeometryTypeCrit(opCrit))
+        // Even though we conflate relations, they RelationCriterion doesn't inherit from
+        // ConflatableElementCriterion. So, we let it pass through here in order for stats to be
+        // calculated correctly, but it doesn't have any effect on conflate op removal.
+        if (opCrit != RelationCriterion::className() && !_isGeometryTypeCrit(opCrit))
         {
           throw HootException(
             "FilteredByGeometryTypeCriteria::getCriteria implementation in " + opName +
@@ -214,8 +218,8 @@ QSet<QString> SuperfluousConflateOpRemover::getMatchCreatorGeometryTypeCrits(con
       const QString critStr = crits.at(i);
       LOG_VART(critStr);
 
-      // doublecheck this is a valid crit
-      if (!_isGeometryTypeCrit(critStr))
+      // doublecheck this is a valid crit; See related note in _filterOutUnneededOps.
+      if (critStr != RelationCriterion::className() && !_isGeometryTypeCrit(critStr))
       {
         throw HootException(
           "FilteredByGeometryTypeCriteria::getCriteria implementation in " +
