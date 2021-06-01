@@ -29,7 +29,7 @@
 // hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/algorithms/aggregator/MeanAggregator.h>
-#include <hoot/core/criterion/ElementTypeCriterion.h>
+#include <hoot/core/criterion/RelationCriterion.h>
 
 using namespace std;
 

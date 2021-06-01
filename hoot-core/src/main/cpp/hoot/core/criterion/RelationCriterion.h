@@ -22,20 +22,43 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
  */
-#include "ElementTypeCriterion.h"
+#ifndef RELATION_CRITERION_H
+#define RELATION_CRITERION_H
 
-#include <hoot/core/util/Factory.h>
+#include <hoot/core/criterion/ElementTypeCriterion.h>
 
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementCriterion, ElementTypeCriterion)
-
-bool ElementTypeCriterion::isSatisfied(const ConstElementPtr& e) const
+/*
+ * Relations are conflatable, so RelationCriterion could inherit from ConflatableElementCriterion,
+ * but it hasn't been needed so far and prevents us from multiple inheritance here.
+ */
+class RelationCriterion : public ElementTypeCriterion, public Configurable
 {
-  return e->getElementType() == _elementType;
-}
+public:
+
+  static QString className() { return "hoot::RelationCriterion"; }
+
+  RelationCriterion();
+  RelationCriterion(const QString& type);
+  ~RelationCriterion() = default;
+
+  bool isSatisfied(const ConstElementPtr& e) const override;
+
+  void setConfiguration(const Settings& conf) override;
+
+  QString getDescription() const override { return "Identifies relations"; }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
+
+private:
+
+  QString _type;
+};
 
 }
+
+#endif // RELATION_CRITERION_H
