@@ -198,7 +198,7 @@ public class ExtractAttributesResource {
                     }
                     else {
                         //if we have shapefiles, only include shp refs
-                        if (extension.equalsIgnoreCase("shp")) {
+                        if (extension.equalsIgnoreCase("shp") || extension.equalsIgnoreCase("gpkg")) {
                             files.add(uploadedFile);
                         }
                     }
