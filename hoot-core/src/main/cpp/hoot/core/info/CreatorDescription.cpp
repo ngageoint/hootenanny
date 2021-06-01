@@ -99,8 +99,8 @@ QString CreatorDescription::baseFeatureTypeToString(BaseFeatureType t)
       return "Point";
     case Line:
       return "Line";
-    case CollectionRelation:
-      return "Collection Relation";
+    case Relation:
+      return "Relation";
     default:
       return "Unknown";
   }
@@ -131,8 +131,8 @@ CreatorDescription::BaseFeatureType CreatorDescription::stringToBaseFeatureType(
     return Point;
   else if (0 == s.compare("line"))
     return Line;
-  else if (0 == s.compare("collectionrelation"))
-    return CollectionRelation;
+  else if (0 == s.compare("relation"))
+    return Relation;
   else
     return Unknown;
 }
@@ -163,7 +163,7 @@ CreatorDescription::FeatureCalcType CreatorDescription::getFeatureCalcType(BaseF
       return CalcTypeNone;
     case Line:
       return CalcTypeLength;
-    case CollectionRelation:
+    case Relation:
       return CalcTypeArea;
     default:
       return CalcTypeNone;
@@ -197,7 +197,7 @@ std::shared_ptr<GeometryTypeCriterion> CreatorDescription::getElementCriterion(
       return std::make_shared<PointCriterion>(map);
     case Line:
       return std::make_shared<LinearCriterion>();
-    case CollectionRelation:
+    case Relation:
       return std::make_shared<CollectionRelationCriterion>();
     default:
       return std::shared_ptr<GeometryTypeCriterion>();
@@ -230,7 +230,7 @@ QString CreatorDescription::getElementCriterionName(BaseFeatureType t)
       return PointCriterion::className();
     case Line:
       return LinearCriterion::className();
-    case CollectionRelation:
+    case Relation:
       return CollectionRelationCriterion::className();
     default:
       return "";

@@ -6,7 +6,7 @@
 "use strict";
 
 exports.candidateDistanceSigma = 1.0; // 1.0 * (CE95 + Worst CE95);
-exports.description = "Matches collection relations";
+exports.description = "Matches relations";
 
 // This matcher only sets match/miss/review values to 1.0, therefore the score thresholds aren't used.
 // If that ever changes, then the generic score threshold configuration options used below should
@@ -19,7 +19,7 @@ exports.searchRadius = parseFloat(hoot.get("search.radius.relation"));
 exports.typeThreshold = parseFloat(hoot.get("relation.type.threshold"));
 exports.nameThreshold = parseFloat(hoot.get("relation.name.threshold"));
 exports.experimental = false;
-exports.baseFeatureType = "CollectionRelation";
+exports.baseFeatureType = "Relation";
 exports.writeDebugTags = hoot.get("writer.include.debug.tags");
 exports.writeMatchedBy = hoot.get("writer.include.matched.by.tag");
 // TODO: should this be line?
@@ -42,9 +42,8 @@ var memberSimilarityExtractor = new hoot.RelationMemberSimilarityExtractor();
  */
 exports.isMatchCandidate = function(map, e)
 {
-  // TODO: Think the collection relation part is too strict and should be changed to all relations
-  // at some point.
-  return hoot.OsmSchema.isCollectionRelation(e);
+  // TODO
+  return e.getElementId().getType() == "Relation" && e.getType() != "building";
 };
 
 /**
@@ -72,8 +71,8 @@ function typeMismatch(e1, e2)
   hoot.trace("mostSpecificType(e1): " + hoot.OsmSchema.mostSpecificType(e1));
   hoot.trace("mostSpecificType(e2): " + hoot.OsmSchema.mostSpecificType(e2));
 
-  // If the collection relations aren't filtered out properly by type beforehand the
-  // geometry checks afterward can become very expensive.
+  // If the relations aren't filtered out properly by type beforehand the geometry checks afterward
+  // can become very expensive.
 
   if (type1 != type2)
   {
