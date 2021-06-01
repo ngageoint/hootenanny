@@ -22,12 +22,13 @@ exports.experimental = false;
 exports.baseFeatureType = "Relation";
 exports.writeDebugTags = hoot.get("writer.include.debug.tags");
 exports.writeMatchedBy = hoot.get("writer.include.matched.by.tag");
-// TODO: should this be line?
-exports.geometryType = "polygon";
+// Relations can contain features of any geometry type, so we don't need to identify a specific
+// geometry type here.
+exports.geometryType = "";
 
 // This is needed for disabling superfluous conflate ops. In the future, it may also
 // be used to replace exports.isMatchCandidate (see #3047).
-exports.matchCandidateCriterion = "hoot::CollectionRelationCriterion";
+exports.matchCandidateCriterion = "hoot::RelationCriterion";
 
 var edgeDistanceExtractor = new hoot.EdgeDistanceExtractor();
 var angleHistExtractor = new hoot.AngleHistogramExtractor();
@@ -42,7 +43,8 @@ var memberSimilarityExtractor = new hoot.RelationMemberSimilarityExtractor();
  */
 exports.isMatchCandidate = function(map, e)
 {
-  // TODO
+  // Building conflation is already set up to handle conflating building relations, so we skip them
+  // here.
   return e.getElementId().getType() == "Relation" && e.getType() != "building";
 };
 

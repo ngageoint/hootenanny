@@ -92,6 +92,10 @@ public:
   QString toString() const override { return className(); }
 };
 
+/*
+ * Relations are conflatable, so RelationCriterion could inherit from ConflatableElementCriterion,
+ * but it hasn't been needed so far and prevents us from multiple inheritance here.
+ */
 class RelationCriterion : public ElementTypeCriterion, public Configurable
 {
 public:

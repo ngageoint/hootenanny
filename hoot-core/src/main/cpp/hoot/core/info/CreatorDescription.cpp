@@ -31,7 +31,7 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/criterion/AreaCriterion.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
-#include <hoot/core/criterion/CollectionRelationCriterion.h>
+#include <hoot/core/criterion/ElementTypeCriterion.h>
 #include <hoot/core/criterion/LinearCriterion.h>
 #include <hoot/core/criterion/LinearWaterwayCriterion.h>
 #include <hoot/core/criterion/HighwayCriterion.h>
@@ -170,7 +170,7 @@ CreatorDescription::FeatureCalcType CreatorDescription::getFeatureCalcType(BaseF
   }
 }
 
-std::shared_ptr<GeometryTypeCriterion> CreatorDescription::getElementCriterion(
+std::shared_ptr<ElementCriterion> CreatorDescription::getElementCriterion(
   BaseFeatureType t, ConstOsmMapPtr map)
 {
   switch (t)
@@ -198,7 +198,7 @@ std::shared_ptr<GeometryTypeCriterion> CreatorDescription::getElementCriterion(
     case Line:
       return std::make_shared<LinearCriterion>();
     case Relation:
-      return std::make_shared<CollectionRelationCriterion>();
+      return std::make_shared<RelationCriterion>();
     default:
       return std::shared_ptr<GeometryTypeCriterion>();
   }
@@ -231,7 +231,7 @@ QString CreatorDescription::getElementCriterionName(BaseFeatureType t)
     case Line:
       return LinearCriterion::className();
     case Relation:
-      return CollectionRelationCriterion::className();
+      return RelationCriterion::className();
     default:
       return "";
   }

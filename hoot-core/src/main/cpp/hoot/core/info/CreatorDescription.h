@@ -58,8 +58,8 @@ public:
     Highway = 1,
     Building = 2,
     Waterway = 3,
-    PoiPolygonPOI = 4, //this is a superset of POI specific to poi/poly conflation
-    Polygon = 5, //polygon is a superset of building
+    PoiPolygonPOI = 4, // This is a superset of POI specific to poi/poly conflation.
+    Polygon = 5, // Polygon is a superset of building.
     Area = 6,
     Railway = 7,
     PowerLine = 8,
@@ -127,7 +127,7 @@ public:
    * getElementCriterionName. Think if we change to AreaCriterion, however, that will throw the
    * stats off.
    */
-  static std::shared_ptr<GeometryTypeCriterion> getElementCriterion(
+  static std::shared_ptr<ElementCriterion> getElementCriterion(
     BaseFeatureType t, ConstOsmMapPtr map);
 
   /**
