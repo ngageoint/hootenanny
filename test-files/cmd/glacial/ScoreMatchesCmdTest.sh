@@ -12,7 +12,7 @@ map1=test-files/ScoreMatchRef1.osm
 map2=test-files/ScoreMatchRef2.osm
 outputfile=$OUTPUT_DIR/output.osm
 
-# Run the command. Note that we sanitize output to remove timestamps
+# Run the command. Note that we sanitize output to remove timestamps.
 echo "Running optimized..."
 echo
 hoot score-matches $LOG_LEVEL $CONFIG --confusion --optimize $map1 $map2 $outputfile 

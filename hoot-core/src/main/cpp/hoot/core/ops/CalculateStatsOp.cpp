@@ -918,6 +918,7 @@ void CalculateStatsOp::_generateFeatureStats(
   const long poisMergedIntoPolys, const long poisMergedIntoPolysFromMap1,
   const long poisMergedIntoPolysFromMap2)
 {
+  LOG_VARD(criterion->className());
   LOG_VARD(poisMergedIntoPolys);
   const QString description = CreatorDescription::baseFeatureTypeToString(featureType);
   LOG_VARD(description);

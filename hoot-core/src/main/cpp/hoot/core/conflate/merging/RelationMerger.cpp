@@ -109,7 +109,8 @@ void RelationMerger::merge(
   }
 }
 
-bool RelationMerger::_mergeMembers(RelationPtr replacingRelation, RelationPtr relationBeingReplaced) const
+bool RelationMerger::_mergeMembers(
+  RelationPtr replacingRelation, RelationPtr relationBeingReplaced) const
 {
   LOG_TRACE("Merging members...");
 

@@ -22,42 +22,20 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
  */
-#include "CollectionRelationCriterion.h"
+#include "NodeCriterion.h"
 
-// hoot
-#include <hoot/core/criterion/LinearCriterion.h>
-#include <hoot/core/elements/Relation.h>
-#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/Log.h>
 
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementCriterion, CollectionRelationCriterion)
+HOOT_FACTORY_REGISTER(ElementCriterion, NodeCriterion)
 
-bool CollectionRelationCriterion::isSatisfied(const ConstElementPtr& e) const
+NodeCriterion::NodeCriterion() :
+ElementTypeCriterion(ElementType::Node)
 {
-  LOG_VART(e->getElementId());
-
-  if (e->getElementType() == ElementType::Relation)
-  {
-    ConstRelationPtr r = std::dynamic_pointer_cast<const Relation>(e);
-    // This list could get HUGE.
-    if (LinearCriterion::isLinearRelation(r) ||
-        r->getType() == MetadataTags::RelationWaterway() ||
-        r->getType() == MetadataTags::RelationNetwork() ||
-        // not sure about these yet
-        r->getType() == MetadataTags::RelationMultiPolygon() ||
-        r->getType() == MetadataTags::RelationMultilineString())
-    {
-      return true;
-    }
-  }
-
-  return false;
 }
 
 }

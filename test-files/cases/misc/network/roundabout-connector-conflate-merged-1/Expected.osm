@@ -5353,7 +5353,7 @@
         <tag k="hoot:id" v="-167"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:type" v="CollectionRelation"/>
+        <tag k="hoot:review:type" v="Relation"/>
         <tag k="hoot:status" v="3"/>
         <tag k="type" v="review"/>
     </relation>
@@ -5363,7 +5363,7 @@
         <tag k="hoot:id" v="-166"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:type" v="CollectionRelation"/>
+        <tag k="hoot:review:type" v="Relation"/>
         <tag k="hoot:status" v="3"/>
         <tag k="type" v="review"/>
     </relation>
@@ -5373,7 +5373,7 @@
         <tag k="hoot:id" v="-165"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:type" v="CollectionRelation"/>
+        <tag k="hoot:review:type" v="Relation"/>
         <tag k="hoot:status" v="3"/>
         <tag k="type" v="review"/>
     </relation>
@@ -5383,7 +5383,7 @@
         <tag k="hoot:id" v="-164"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:type" v="CollectionRelation"/>
+        <tag k="hoot:review:type" v="Relation"/>
         <tag k="hoot:status" v="3"/>
         <tag k="type" v="review"/>
     </relation>

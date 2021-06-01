@@ -27,7 +27,7 @@
 #include "MatchScoringMapPreparer.h"
 
 // hoot
-#include <hoot/core/criterion/ElementTypeCriterion.h>
+#include <hoot/core/criterion/NodeCriterion.h>
 #include <hoot/core/criterion/TagCriterion.h>
 #include <hoot/core/criterion/TagKeyCriterion.h>
 #include <hoot/core/ops/MapCleaner.h>

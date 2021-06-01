@@ -421,7 +421,7 @@ void AbstractConflator::_createMergers(std::vector<MergerPtr>& relationMergers)
   {
     MergerPtr merger = *mergersItr;
     LOG_VART(merger->getName());
-    if (merger->getName().contains("CollectionRelation"))
+    if (merger->getName().contains("Relation"))
     {
       relationMergers.push_back(merger);
     }
