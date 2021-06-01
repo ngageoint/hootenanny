@@ -46,7 +46,7 @@ public:
   static void Init(v8::Local<v8::Object> target);
   virtual ~ValueAggregatorJs() = default;
 
-  ValueAggregatorPtr getValueAggregator() { return _va; }
+  ValueAggregatorPtr getValueAggregator() const { return _va; }
 
 private:
 

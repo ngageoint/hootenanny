@@ -60,7 +60,7 @@ int ParentMembershipRemover::removeMemberships(
 
   if (elementId.getType() == ElementType::Node)
   {
-    std::vector<WayPtr> ways = WayUtils::getContainingWaysByNodeId(elementId.getId(), map);
+    std::vector<WayPtr> ways = WayUtils::getContainingWays(elementId.getId(), map);
     LOG_VART(ways.size());
     for (std::vector<WayPtr>::const_iterator itr = ways.begin(); itr != ways.end(); ++itr)
     {

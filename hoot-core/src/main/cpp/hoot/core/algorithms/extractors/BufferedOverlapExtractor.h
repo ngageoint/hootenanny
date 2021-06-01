@@ -63,15 +63,13 @@ public:
 
   static QString className() { return "hoot::BufferedOverlapExtractor"; }
 
-  QString getClassName() const override { return BufferedOverlapExtractor::className(); }
-
-  QString getName() const override;
-
   void setConfiguration(const Settings& conf) override;
 
   double extract(const OsmMap& map, const std::shared_ptr<const Element>& target,
     const std::shared_ptr<const Element>& candidate) const override;
 
+  QString getClassName() const override { return BufferedOverlapExtractor::className(); }
+  QString getName() const override;
   QString getDescription() const override
   { return "Determines the overlap between two features with buffering"; }
 

@@ -43,8 +43,9 @@ void OsmGeoJsonWriterJs::Init(Local<Object> exports)
 {
   Isolate* current = exports->GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
   Local<Object> writer = Object::New(current);
-  exports->Set(String::NewFromUtf8(current, "OsmGeoJsonWriter"), writer);
+  exports->Set(context, toV8("OsmGeoJsonWriter"), writer);
 }
 
 }

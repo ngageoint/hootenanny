@@ -59,17 +59,6 @@ bool PolygonCriterion::isSatisfied(const ConstElementPtr& e) const
   {
     return false;
   }
-  else if (e->getElementType() == ElementType::Relation)
-  {
-    // We use to define poly relations using a static list of relation types. Now, we look at the
-    // member contents instead. If any member is a poly, then we call it a poly relation.
-    const bool result = _relationCrit.isSatisfied(e);
-    if (result)
-    {
-      LOG_TRACE("Relation has polygon members; crit satisified.");
-    }
-    return result;
-  }
   else if (e->getElementType() == ElementType::Way)
   {
     ConstWayPtr way = std::dynamic_pointer_cast<const Way>(e);
@@ -81,15 +70,24 @@ bool PolygonCriterion::isSatisfied(const ConstElementPtr& e) const
       return true;
     }
   }
+  else if (e->getElementType() == ElementType::Relation)
+  {
+    // We use to define poly relations using a static list of relation types. Now, we look at the
+    // member contents instead. If any member is a poly, then we call it a poly relation.
+    const bool result = _relationCrit.isSatisfied(e);
+    if (result)
+    {
+      LOG_TRACE("Relation has polygon members; crit satisified.");
+    }
+    return result;
+  }
 
   return false;
 }
 
 QStringList PolygonCriterion::getChildCriteria() const
 {
-  QStringList criteria;
-  criteria.append(PolygonWayNodeCriterion::className());
-  return criteria;
+  return QStringList(PolygonWayNodeCriterion::className());
 }
 
 }

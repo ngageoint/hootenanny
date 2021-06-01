@@ -119,6 +119,8 @@ public:
   Tags& getTags() { return _getElementData().getTags(); }
   QString getTag(const QString& key) const { return _getElementData().getTags().get(key); }
   bool hasTag(const QString& key) const { return _getElementData().getTags().contains(key); }
+  bool hasTag(const QString& key, const QString& val) const
+  { return _getElementData().getTags().get(key) == val; }
   int getTagCount() const { return _getElementData().getTags().size(); }
 
   bool hasCircularError() const { return _getElementData().hasCircularError(); }
@@ -180,8 +182,9 @@ public:
    * @param visitor the visitor to visit with
    * @param recursive if true, child elements are visited
    */
-  virtual void visitRo(const ElementProvider& map, ConstElementVisitor& visitor,
-                       const bool recursive = true) const = 0;
+  virtual void visitRo(
+    const ElementProvider& map, ConstElementVisitor& visitor,
+    const bool recursive = true) const = 0;
 
   /**
    * Applies a read write visitor to this element and all child elements. The visitor will be called
@@ -203,8 +206,8 @@ public:
    * @param visitor the visitor to visit with
    * @param recursive if true, child elements are visited
    */
-  virtual void visitRw(ElementProvider& map, ConstElementVisitor& visitor,
-                       const bool recursive = true) = 0;
+  virtual void visitRw(
+    ElementProvider& map, ConstElementVisitor& visitor, const bool recursive = true) = 0;
 
 protected:
 

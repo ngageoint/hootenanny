@@ -100,7 +100,7 @@ public:
   UpdateRefVisitor(const set<QString>& refs) : _refs(refs) { }
   ~UpdateRefVisitor() = default;
 
-  QStringList _removeRef1(QStringList refs)
+  QStringList _removeRef1(QStringList refs) const
   {
     QStringList result;
     for (int i = 0; i < refs.size(); i++)

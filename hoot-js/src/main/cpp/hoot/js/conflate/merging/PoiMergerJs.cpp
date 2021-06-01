@@ -54,17 +54,17 @@ void PoiMergerJs::mergePois(OsmMapPtr map, const ElementId& mergeTargetId, Isola
 
   // instantiate script merger
   std::shared_ptr<PluginContext> script(new PluginContext());
-  v8::HandleScope handleScope(current);
-  v8::Context::Scope context_scope(script->getContext(current));
-  v8::Local<v8::Context> context = current->GetCurrentContext();
+  HandleScope handleScope(current);
+  Context::Scope context_scope(script->getContext(current));
+  Local<Context> context = current->GetCurrentContext();
 
   script->loadScript(ConfPath::search("Poi.js", "rules"), "plugin");
-  v8::Local<v8::Object> global = script->getContext(current)->Global();
-  if (global->Has(context, String::NewFromUtf8(current, "plugin")).ToChecked() == false)
+  Local<Object> global = script->getContext(current)->Global();
+  if (global->Has(context, toV8("plugin")).ToChecked() == false)
   {
     throw IllegalArgumentException("Expected the script to have exports.");
   }
-  Local<Value> pluginValue = global->Get(String::NewFromUtf8(current, "plugin"));
+  Local<Value> pluginValue = global->Get(context, toV8("plugin")).ToLocalChecked();
   Persistent<Object> plugin(current, Local<Object>::Cast(pluginValue));
   if (plugin.IsEmpty() || ToLocal(&plugin)->IsObject() == false)
   {

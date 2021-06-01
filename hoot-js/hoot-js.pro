@@ -32,7 +32,7 @@ OTHER_FILES += \
 
 include(../Configure.pri)
 
-QMAKE_CXXFLAGS = -I/usr/include/node $$QMAKE_CXXFLAGS
+QMAKE_CXXFLAGS = -I/usr/include/node -I/usr/local/include/node -Wno-unused-result $$QMAKE_CXXFLAGS
 
 QMAKE_POST_LINK = cp -l ../lib/libHootJs.so.1.0.0 ../lib/HootJs.node 2>/dev/null || cp ../lib/libHootJs.so.1.0.0 ../lib/HootJs.node
 

@@ -46,8 +46,8 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(MatchCreator, PoiPolygonMatchCreator)
 
-MatchPtr PoiPolygonMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId eid1,
-                                             ElementId eid2)
+MatchPtr PoiPolygonMatchCreator::createMatch(
+  const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2)
 {
   if (!_infoCache)
   {
@@ -192,7 +192,7 @@ void PoiPolygonMatchCreator::createMatches(const ConstOsmMapPtr& map,
 }
 
 int PoiPolygonMatchCreator::_retainClosestDistanceMatchesOnly(
-  std::vector<ConstMatchPtr>& matches, const ConstOsmMapPtr& map)
+  std::vector<ConstMatchPtr>& matches, const ConstOsmMapPtr& map) const
 {
   LOG_INFO("Discarding non-closest matches...");
 

@@ -49,8 +49,8 @@ void PoiSearchRadiusJs::Init(Local<Object> exports)
   HandleScope scope(current);
   Local<Context> context = current->GetCurrentContext();
   Local<Object> thisObj = Object::New(current);
-  exports->Set(String::NewFromUtf8(current, "PoiSearchRadius"), thisObj);
-  thisObj->Set(String::NewFromUtf8(current, "getSearchRadii"),
+  exports->Set(context, toV8("PoiSearchRadius"), thisObj);
+  thisObj->Set(context, toV8("getSearchRadii"),
                FunctionTemplate::New(current, getSearchRadii)->GetFunction(context).ToLocalChecked());
 }
 
@@ -82,24 +82,25 @@ void PoiSearchRadiusJs::getSearchRadii(const FunctionCallbackInfo<Value>& args)
   const QList<PoiSearchRadius> searchRadiiList =
     PoiSearchRadius::readSearchRadii(searchRadiiData);
 
-  Isolate* current = v8::Isolate::GetCurrent();
+  Isolate* current = Isolate::GetCurrent();
+  HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
   Local<Array> searchRadii = Array::New(current, searchRadiiList.size());
-  searchRadii->Set(
-    String::NewFromUtf8(current, "length"), Integer::New(current, searchRadiiList.size()));
+  searchRadii->Set(context, toV8("length"), Integer::New(current, searchRadiiList.size()));
   for (int i = 0 ; i < searchRadiiList.size(); i++)
   {
     const PoiSearchRadius searchRadius = searchRadiiList.at(i);
     LOG_VART(searchRadius);
 
     Local<Object> searchRadiusObj = Object::New(current);
-    searchRadiusObj->Set(toV8(QString("key")), toV8(searchRadius.getKey()));
+    searchRadiusObj->Set(context, toV8("key"), toV8(searchRadius.getKey()));
     if (!searchRadius.getValue().isEmpty())
     {
-      searchRadiusObj->Set(toV8(QString("value")), toV8(searchRadius.getValue()));
+      searchRadiusObj->Set(context, toV8("value"), toV8(searchRadius.getValue()));
     }
-    searchRadiusObj->Set(toV8(QString("distance")), toV8(searchRadius.getDistance()));
+    searchRadiusObj->Set(context, toV8("distance"), toV8(searchRadius.getDistance()));
 
-    searchRadii->Set((uint32_t)i, searchRadiusObj);
+    searchRadii->Set(context, (uint32_t)i, searchRadiusObj);
   }
   args.GetReturnValue().Set(searchRadii);
 }

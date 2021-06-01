@@ -76,7 +76,7 @@ void HilbertRTree::bulkInsert(const std::vector<Box>& boxes, const std::vector<i
 }
 
 void HilbertRTree::_calculateHilbertValues(const std::vector<Box>& boxes,
-  const std::vector<int>& fids, std::vector<UserBoxHolder>& hilbertBoxes)
+  const std::vector<int>& fids, std::vector<UserBoxHolder>& hilbertBoxes) const
 {
   //std::cout << "Calculating Hilbert values..." << std::endl;
 
@@ -179,7 +179,7 @@ double HilbertRTree::_calculatePairwiseOverlap(int parentId, std::vector<double>
   return result;
 }
 
-int HilbertRTree::_chooseWeightedChild(const std::vector<double>& weights)
+int HilbertRTree::_chooseWeightedChild(const std::vector<double>& weights) const
 {
   assert(weights.size() > 0);
   int result = -1;
@@ -335,7 +335,7 @@ public:
     hilbertValue = hv;
   }
 
-  bool operator<(const BoxHolder& b)
+  bool operator<(const BoxHolder& b) const
   {
     return hilbertValue < b.hilbertValue;
   }
@@ -411,7 +411,7 @@ int HilbertRTree::_splitBoxes(BoxVector& boxes)
   return _chooseSplitIndex(boxes);
 }
 
-double HilbertRTree::_sum(const std::vector<double>& v)
+double HilbertRTree::_sum(const std::vector<double>& v) const
 {
   double result = 0.0;
   for (unsigned int i = 0; i < v.size(); i++)

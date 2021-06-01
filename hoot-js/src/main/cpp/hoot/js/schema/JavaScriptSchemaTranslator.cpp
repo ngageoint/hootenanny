@@ -198,7 +198,7 @@ void JavaScriptSchemaTranslator::_finalize()
 
     Local<Object> tObj = _gContext->getContext(current)->Global();
 
-    if (tObj->Has(context, String::NewFromUtf8(current, "finalize")).ToChecked())
+    if (tObj->Has(context, toV8("finalize")).ToChecked())
     {
       TryCatch trycatch(current);
       Local<Value> finalize = _gContext->call(tObj,"finalize");
@@ -241,7 +241,7 @@ void JavaScriptSchemaTranslator::_init()
   Local<Object> tObj = _gContext->getContext(current)->Global();
 
   // Run Initialize, if it exists
-  if (tObj->Has(context, String::NewFromUtf8(current, "initialize")).ToChecked())
+  if (tObj->Has(context, toV8("initialize")).ToChecked())
   {
     TryCatch trycatch(current);
     Local<Value> initial = _gContext->call(tObj,"initialize");
@@ -249,11 +249,11 @@ void JavaScriptSchemaTranslator::_init()
   }
 
   // Sort out what the toOsm function is called
-  if (tObj->Has(context, String::NewFromUtf8(current, "translateToOsm")).ToChecked())
+  if (tObj->Has(context, toV8("translateToOsm")).ToChecked())
   {
     _toOsmFunctionName = "translateToOsm";
   }
-  else if (tObj->Has(context, String::NewFromUtf8(current, "translateAttributes")).ToChecked())
+  else if (tObj->Has(context, toV8("translateAttributes")).ToChecked())
   {
     _toOsmFunctionName = "translateAttributes";
   }
@@ -279,7 +279,7 @@ QString JavaScriptSchemaTranslator::getLayerNameFilter()
   Local<Object> tObj = _gContext->getContext(current)->Global();
 
   LOG_TRACE("Getting layer name filter...");
-  if (tObj->Has(context, String::NewFromUtf8(current, "layerNameFilter")).ToChecked())
+  if (tObj->Has(context, toV8("layerNameFilter")).ToChecked())
   {
     return toCpp<QString>(_gContext->call(tObj,"layerNameFilter"));
   }
@@ -336,7 +336,7 @@ std::shared_ptr<const Schema> JavaScriptSchemaTranslator::getOgrOutputSchema()
 
     Local<Object> tObj = _gContext->getContext(current)->Global();
 
-    if (!tObj->Has(context, String::NewFromUtf8(current, "getDbSchema")).ToChecked())
+    if (!tObj->Has(context, toV8("getDbSchema")).ToChecked())
     {
       throw HootException("This translation file does not support converting to OGR. "
                           "(Missing schema)");
@@ -809,7 +809,7 @@ QVariantList JavaScriptSchemaTranslator::_translateToOgrVariants(Tags& tags,
   Local<Object> v8tags = Object::New(current);
   for (Tags::const_iterator it = tags.begin(); it != tags.end(); ++it)
   {
-    v8tags->Set(toV8(it.key()), toV8(it.value()));
+    v8tags->Set(context, toV8(it.key()), toV8(it.value()));
   }
 
   // Hardcoded to 3 arguments
@@ -822,18 +822,18 @@ QVariantList JavaScriptSchemaTranslator::_translateToOgrVariants(Tags& tags,
   {
   case GEOS_POINT:
   case GEOS_MULTIPOINT:
-    args[2] = String::NewFromUtf8(current, "Point");
+    args[2] = toV8("Point");
     break;
   case GEOS_LINESTRING:
   case GEOS_MULTILINESTRING:
-    args[2] = String::NewFromUtf8(current, "Line");
+    args[2] = toV8("Line");
     break;
   case GEOS_POLYGON:
   case GEOS_MULTIPOLYGON:
-    args[2] = String::NewFromUtf8(current, "Area");
+    args[2] = toV8("Area");
     break;
   case GEOS_GEOMETRYCOLLECTION:
-    args[2] = String::NewFromUtf8(current, "Collection");
+    args[2] = toV8("Collection");
     break;
   default:
     throw InternalErrorException("Unexpected geometry type.");
@@ -850,7 +850,7 @@ QVariantList JavaScriptSchemaTranslator::_translateToOgrVariants(Tags& tags,
 
   // We assume this exists. we checked during Init.
   Local<Function> tFunc =
-    Local<Function>::Cast(tObj->Get(String::NewFromUtf8(current, "translateToOgr")));
+    Local<Function>::Cast(tObj->Get(context, toV8("translateToOgr")).ToLocalChecked());
 
   // Make sure we have a translation function. No easy way to do this earlier than now
   if (tFunc->IsUndefined())
@@ -920,7 +920,7 @@ void JavaScriptSchemaTranslator::_translateToOsm(Tags& t, const char* layerName,
   {
     LOG_VART(it.key());
     LOG_VART(it.value());
-    tags->Set(toV8(it.key()), toV8(it.value()));
+    tags->Set(context, toV8(it.key()), toV8(it.value()));
   }
 
   Local<Value> args[3];
@@ -931,7 +931,7 @@ void JavaScriptSchemaTranslator::_translateToOsm(Tags& t, const char* layerName,
   Local<Object> tObj = _gContext->getContext(current)->Global();
 
   // This has a variable since we don't know if it will be "translateToOsm" or "translateAttributes"
-  Local<Function> tFunc = Local<Function>::Cast(tObj->Get(toV8(_toOsmFunctionName)));
+  Local<Function> tFunc = Local<Function>::Cast(tObj->Get(context, toV8(_toOsmFunctionName)).ToLocalChecked());
   TryCatch trycatch(current);
 
   // NOTE: the "3" here is the number of arguments
@@ -972,12 +972,12 @@ void JavaScriptSchemaTranslator::_translateToOsm(Tags& t, const char* layerName,
 
     for (uint32_t i = 0; i < arr->Length(); i++)
     {
-      Local<Value> v(obj->Get(arr->Get(i)));
+      Local<Value> v(obj->Get(context, arr->Get(context, i).ToLocalChecked()).ToLocalChecked());
 
       // Need to make sure the "Value" is not undefined or else "Bad Things Happen"
       if (v != Undefined(current))
       {
-        t.insert(toCpp<QString>(arr->Get(i)), toCpp<QString>(v));
+        t.insert(toCpp<QString>(arr->Get(context, i).ToLocalChecked()), toCpp<QString>(v));
       }
       LOG_VART(t);
     }

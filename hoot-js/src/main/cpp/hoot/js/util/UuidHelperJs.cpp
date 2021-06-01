@@ -49,10 +49,10 @@ void UuidHelperJs::Init(Local<Object> exports)
   Local<Context> context = current->GetCurrentContext();
 
   Local<Object> helpUuid = Object::New(current);
-  exports->Set(String::NewFromUtf8(current, "UuidHelper"), helpUuid);
-  helpUuid->Set(String::NewFromUtf8(current, "createUuid"),
+  exports->Set(context, toV8("UuidHelper"), helpUuid);
+  helpUuid->Set(context, toV8("createUuid"),
                 FunctionTemplate::New(current, createUuid)->GetFunction(context).ToLocalChecked());
-  helpUuid->Set(String::NewFromUtf8(current, "createUuid5"),
+  helpUuid->Set(context, toV8("createUuid5"),
                 FunctionTemplate::New(current, createUuid5)->GetFunction(context).ToLocalChecked());
 }
 

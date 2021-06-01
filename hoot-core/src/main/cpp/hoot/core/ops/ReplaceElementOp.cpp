@@ -80,7 +80,7 @@ void ReplaceElementOp::apply(const OsmMapPtr& map)
 
   LOG_TRACE("Replacing " << _from << " with " << _to << "...");
 
-  // if from isn't in the map, there is nothing to do.
+  // If from isn't in the map, there is nothing to do.
   if (map->containsElement(_from) == false)
   {
     LOG_TRACE(_from << " doesn't exist in map.");

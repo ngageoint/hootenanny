@@ -52,40 +52,19 @@ public:
 
   static QString className() { return "hoot::Relation"; }
 
-  explicit Relation(const Relation& from);
-
   Relation(
     Status s, long id, Meters circularError = ElementData::CIRCULAR_ERROR_EMPTY, QString type = "",
     long changeset = ElementData::CHANGESET_EMPTY, long version = ElementData::VERSION_EMPTY,
     quint64 timestamp = ElementData::TIMESTAMP_EMPTY, QString user = ElementData::USER_EMPTY,
     long uid = ElementData::UID_EMPTY, bool visible = ElementData::VISIBLE_EMPTY);
+  explicit Relation(const Relation& from);
   ~Relation() = default;
+
+  Element* clone() const override { return new Relation(*this); }
 
   void addElement(const QString& role, const std::shared_ptr<const Element>& e);
   void addElement(const QString& role, ElementType t, long id);
   void addElement(const QString& role, ElementId);
-
-  /**
-   * Removes members, tags, type and circularError.
-   */
-  void clear() override;
-
-  Element* clone() const override { return new Relation(*this); }
-
-  /**
-   * Returns true if this relation contains the specified ElementId. This does not recursively
-   * search for the element.
-   */
-  bool contains(ElementId eid) const;
-
-  /**
-   * Finds the index of a member
-   *
-   * @param eid ID of the relation member
-   * @return a numerical index
-   */
-  size_t indexOf(ElementId eid) const;
-
   /**
    * Inserts a relation member
    *
@@ -96,26 +75,81 @@ public:
   void insertElement(const QString& role, const ElementId& elementId, size_t pos);
 
   /**
-   * Returns the number of member elements with the given relation role
-   *
-   * @param role role by which to examine elements
-   * @return the number of member elements with the specified role
+   * Remove all members that meet the specified criteria. If no members meet the criteria then
+   * no changes are made.
    */
-  int numElementsByRole(const QString& role) const;
+  void removeElement(const QString& role, const std::shared_ptr<const Element>& e);
+  void removeElement(const QString& role, ElementId eid);
+  void removeElement(ElementId eid);
 
   /**
-   * Retrieves all members with a particular role
-   *
-   * @param role role to search for
-   * @return a collection of members
+   * Replaces all instances of from in the relation with to. If from is not in the relation then
+   * no changes are made.
    */
-  std::vector<RelationData::Entry> getElementsByRole(const QString& role) const;
+  void replaceElement(
+    const std::shared_ptr<const Element>& from, const std::shared_ptr<const Element>& to);
+  void replaceElement(const ConstElementPtr& from, const QList<ElementPtr>& to);
+  void replaceElement(const ElementId& from, const ElementId& to);
+  /**
+   * Replaces all instances of old with the values in the collection defined by start/end. Order is
+   * maintained s/t old entries are replaced by new values in order and the order of the existing
+   * members are maintained. This can be slow in some cases.
+   *
+   * This may not be what you want. Think long and hard to make sure the roles and relation order
+   * will be maintained properly.
+   *
+   * @param start Iterator start position pointing to a RelationData::Entry
+   * @param end Iterator end position pointing to a RelationData::Entry
+   */
+  template<typename IT>
+  void replaceElements(RelationData::Entry old, IT start, IT end);
 
   const std::vector<RelationData::Entry>& getMembers() const
   { return _relationData->getElements(); }
-
   size_t getMemberCount() const { return _relationData->getElements().size(); }
+  RelationData::Entry getMember(const ElementId& elementId) const;
+  void setMembers(const std::vector<RelationData::Entry>& members);
 
+  /**
+   * Removes members, tags, type and circularError.
+   */
+  void clear() override;
+
+  /**
+   * Returns true if this relation contains the specified ElementId. This does not recursively
+   * search for the element.
+   */
+  bool contains(const ElementId& eid) const;
+  /**
+   * Finds the index of a member
+   *
+   * @param eid ID of the relation member
+   * @return a numerical index
+   */
+  size_t indexOf(const ElementId& eid) const;
+  /**
+   * Retrieves the relation member element at a specified index
+   *
+   * @param index the index to retrieve the element member from
+   * @return a valid element, if found; an invalid element otherwise
+   */
+  ElementId memberIdAt(const size_t index) const;
+  /**
+   * Determines if the first relation member has a specified ID
+   *
+   * @param eid the element ID to search for
+   * @return true if an element having the specified ID is contained at the first relation member
+   * location; false otherwise
+   */
+  bool isFirstMember(const ElementId& eid) const;
+  /**
+   * Determines if the last relation member has a specified ID
+   *
+   * @param eid the element ID to search for
+   * @return true if an element having the specified ID is contained at the last relation member
+   * location; false otherwise
+   */
+  bool isLastMember(const ElementId& eid) const;
   /**
    * Returns the IDs of members
    *
@@ -123,6 +157,38 @@ public:
    * @return a collection of element IDs
    */
   std::set<ElementId> getMemberIds(const ElementType& elementType = ElementType::Unknown) const;
+
+  /**
+   * Retrieves the member element IDs for members placed immediately before and after the member
+   * element with the specified ID
+   *
+   * @param memberId the ID of the member element to retrieve adjoining member element IDs for
+   * @return If a member with the specified ID exists 1) and is neither the first nor last member, a
+   * list with two elements IDs where the first ID is the ID of the member element directly
+   * preceding the element with the specified ID and the second ID is the ID of the member directly
+   * succeeding the element with the specified ID. 2) and is the first member, a list with one
+   * element ID where the ID is the ID of the member directly succeeding the element with the
+   * specified ID. 3) and is the last member, a list with one element ID where the ID is the ID of
+   * the member directly preceding the element with the specified ID. If the relation contains no
+   * member with the specified ID, then an empty list is returned.
+   */
+  QList<ElementId> getAdjoiningMemberIds(const ElementId& memberId) const;
+
+  /**
+   * Returns the number of member elements with the given relation role
+   *
+   * @param role role by which to examine elements
+   * @return the number of member elements with the specified role
+   */
+  int numElementsByRole(const QString& role) const;
+  /**
+   * Retrieves all members with a particular role
+   *
+   * @param role role to search for
+   * @return a collection of members
+   */
+  std::vector<RelationData::Entry> getElementsByRole(const QString& role) const;
+  QString getRole(const ElementId& elementId) const;
 
   geos::geom::Envelope* getEnvelope(
     const std::shared_ptr<const ElementProvider>& ep) const override;
@@ -139,48 +205,12 @@ public:
    */
   bool isMultiPolygon() const
   { return _relationData->getType() == MetadataTags::RelationMultiPolygon(); }
-
   /**
    * Returns true if this is a review.
    */
   bool isReview() const { return _relationData->getType() == MetadataTags::RelationReview(); }
-
   bool isRestriction() const
   { return _relationData->getType() == MetadataTags::RelationRestriction(); }
-
-  /**
-   * Remove all members that meet the specified criteria. If no members meet the criteria then
-   * no changes are made.
-   */
-  void removeElement(const QString& role, const std::shared_ptr<const Element>& e);
-  void removeElement(const QString& role, ElementId eid);
-  void removeElement(ElementId eid);
-
-  /**
-   * Replaces all instances of from in the relation with to. If from is not in the relation then
-   * no changes are made.
-   */
-  void replaceElement(const std::shared_ptr<const Element>& from,
-                      const std::shared_ptr<const Element>& to);
-  void replaceElement(const ConstElementPtr& from, const QList<ElementPtr>& to);
-  void replaceElement(const ElementId& from, const ElementId& to);
-
-  /**
-   * Replaces all instances of old with the values in the collection defined by start/end. Order is
-   * maintained s/t old entries are replaced by new values in order and the order of the existing
-   * members are maintained. This can be slow in some cases.
-   *
-   * This may not be what you want. Think long and hard to make sure the roles and relation order
-   * will be maintained properly.
-   *
-   * @param start Iterator start position pointing to a RelationData::Entry
-   * @param end Iterator end position pointing to a RelationData::Entry
-   */
-  template<typename IT>
-  void replaceElements(RelationData::Entry old, IT start, IT end);
-
-  void setMembers(const std::vector<RelationData::Entry>& members);
-
   /**
    * Sets the "type" of the relation. See the OSM wiki [1] for a detailed description. Example
    * types include "building", "multipolygon" and "multilinestring".
@@ -194,14 +224,15 @@ public:
   /**
    * @see Element
    */
-  void visitRo(const ElementProvider& map, ConstElementVisitor& filter,
-               const bool recursive = true) const override;
+  void visitRo(
+    const ElementProvider& map, ConstElementVisitor& filter,
+    const bool recursive = true) const override;
 
   /**
    * @see Element
    */
-  void visitRw(ElementProvider& map, ConstElementVisitor& filter,
-               const bool recursive = true) override;
+  void visitRw(
+    ElementProvider& map, ConstElementVisitor& filter, const bool recursive = true) override;
 
 private:
 

@@ -265,25 +265,25 @@ public:
 
   virtual ~OsmSchema() = default;
 
-  void addAssociatedWith(const QString& name1, const QString& name2);
-  void addIsA(const QString& name1, const QString& name2);
-  void addSimilarTo(const QString& name1, const QString& name2, double weight, bool oneway = false);
+  void addAssociatedWith(const QString& name1, const QString& name2) const;
+  void addIsA(const QString& name1, const QString& name2) const;
+  void addSimilarTo(const QString& name1, const QString& name2, double weight, bool oneway = false) const;
 
-  QString average(const QString& kvp1, double w1, const QString& kvp2, double w2, double& best);
-  QString average(const QString& kvp1, const QString& kvp2, double& best);
-
+  QString average(const QString& kvp1, double w1, const QString& kvp2, double w2, double& best) const;
+  QString average(const QString& kvp1, const QString& kvp2, double& best) const;
+ 
   /**
    * ONLY FOR UNIT TESTING. Be a good neighbor and call loadDefault() when you're done.
    */
-  void createTestingGraph();
+  void createTestingGraph() const;
 
   /**
    * Searches for the first common ancestor between two key value pairs. If there is no common
    * ancestor then an empty TagVertex is returned.
    */
-  const SchemaVertex& getFirstCommonAncestor(const QString& kvp1, const QString& kvp2);
+  const SchemaVertex& getFirstCommonAncestor(const QString& kvp1, const QString& kvp2) const;
 
-  std::vector<SchemaVertex> getAssociatedTagsAsVertices(const QString& name);
+  std::vector<SchemaVertex> getAssociatedTagsAsVertices(const QString& name) const;
   /**
    * Retrieves a set of tags that are associated with the input tags, as defined by the hoot schema
    *
@@ -296,7 +296,7 @@ public:
   OsmSchemaCategory getCategories(const QString& k, const QString& v) const;
   OsmSchemaCategory getCategories(const QString& kvp) const;
 
-  std::vector<SchemaVertex> getAllTags();
+  std::vector<SchemaVertex> getAllTags() const;
 
   /**
    * Retrieves all possible tag keys from the schema
@@ -314,7 +314,7 @@ public:
 
   bool hasTagKey(const QString& key);
 
-  std::vector<SchemaVertex> getChildTagsAsVertices(const QString& name);
+  std::vector<SchemaVertex> getChildTagsAsVertices(const QString& name) const;
 
   /**
    * Retrieves all child tags for the given input tags
@@ -333,7 +333,7 @@ public:
    *
    * minimumScore must be > 0.
    */
-  std::vector<SchemaVertex> getSimilarTagsAsVertices(const QString& name, double minimumScore);
+  std::vector<SchemaVertex> getSimilarTagsAsVertices(const QString& name, double minimumScore) const;
 
   /**
    * Retrieves tags similar to the input tag
@@ -398,9 +398,9 @@ public:
    */
   bool hasAnyCategory(const QString& key, const QString& val) const;
 
-  bool isAncestor(const QString& childKvp, const QString& parentKvp);
+  bool isAncestor(const QString& childKvp, const QString& parentKvp) const;
 
-  bool allowsFor(const Tags& t, const ElementType& type, OsmGeometries::Type geometries);
+  bool allowsFor(const Tags& t, const ElementType& type, OsmGeometries::Type geometries) const;
   bool allowsFor(const ConstElementPtr& e, OsmGeometries::Type geometries);
 
   /**
@@ -427,12 +427,12 @@ public:
   /**
    * Return true if this tag can contain free-form text.
    */
-  bool isTextTag(const QString& key);
+  bool isTextTag(const QString& key) const;
 
   /**
    * Return true if this tag can contain numeric text.
    */
-  bool isNumericTag(const QString& key);
+  bool isNumericTag(const QString& key) const;
 
   /**
    * Loads the default configuration. This should only be used by unit tests.
@@ -497,7 +497,7 @@ public:
    * @param kvp the key/value pair to examine
    * @return true if the input key/value pair represents a generic type; false otherwise
    */
-  bool isGenericKvp(const QString& kvp);
+  bool isGenericKvp(const QString& kvp) const;
 
   /**
    * Determines whether a set of tags represents a generic feature type
@@ -546,7 +546,7 @@ public:
    * @brief scoreOneWay Returns a oneway score. E.g. highway=primary is similar to highway=road,
    *  but a highway=road isn't necessarily similar to a highway=primary (so it gets a low score).
    */
-  double scoreOneWay(const QString& kvp1, const QString& kvp2);
+  double scoreOneWay(const QString& kvp1, const QString& kvp2) const;
 
   /**
    * Determines if a tag key corresponds to a type in the schema
@@ -560,15 +560,15 @@ public:
    * Sets the cost when traversing up the tree to a parent node. This is useful for strict score
    * checking rather than equivalent tags.
    */
-  void setIsACost(double cost);
+  void setIsACost(double cost) const;
 
   QString toGraphvizString() const;
 
   static QString toKvp(const QString& key, const QString& value);
 
-  void update();
+  void update() const;
 
-  void updateOrCreateVertex(const SchemaVertex& tv);
+  void updateOrCreateVertex(const SchemaVertex& tv) const;
 
   /**
    * Determines tags are contained in a list of tags

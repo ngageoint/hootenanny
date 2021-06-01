@@ -131,7 +131,7 @@ cv::Mat GraphComparator::_calculateCostDistance(
   return mat;
 }
 
-void GraphComparator::_calculateRasterCost(cv::Mat& mat, const RandomPtr& random)
+void GraphComparator::_calculateRasterCost(cv::Mat& mat, const RandomPtr& random) const
 {
   LOG_TRACE("Calculating raster cost...");
 
@@ -370,7 +370,7 @@ void GraphComparator::drawCostDistance(OsmMapPtr map, vector<Coordinate>& c,
 
 void GraphComparator::_exportGraphImage(OsmMapPtr map, DirectedGraph& /*graph*/,
                                         ShortestPath& sp, QString path,
-                                        const geos::geom::Coordinate& coord)
+                                        const geos::geom::Coordinate& coord) const
 {
   const NodeMap& nodes = map->getNodes();
 
@@ -482,7 +482,7 @@ cv::Mat GraphComparator::_paintGraph(OsmMapPtr map, DirectedGraph& graph, Shorte
 }
 
 void GraphComparator::_paintWay(cv::Mat& mat, ConstOsmMapPtr map, WayPtr way, double friction,
-                                double startCost, double endCost)
+                                double startCost, double endCost) const
 {
   LocationOfPoint lop(map, way);
   double length = ElementToGeometryConverter(map).convertToLineString(way)->getLength();

@@ -39,7 +39,7 @@ using namespace std;
 namespace hoot
 {
 
-void Log::init()
+void Log::init() const
 {
 }
 

@@ -79,7 +79,7 @@ QString NonEnglishLanguageDetectionVisitor::getCompletedStatusMessage() const
   return _detectionSummary;
 }
 
-void NonEnglishLanguageDetectionVisitor::_printDetailedSummary()
+void NonEnglishLanguageDetectionVisitor::_printDetailedSummary() const
 {
   LOG_DEBUG("");
   LOG_DEBUG(getCompletedStatusMessage());

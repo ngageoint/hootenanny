@@ -224,7 +224,7 @@ void PoiPolygonMatchVisitor::visit(const ConstElementPtr& e)
   }
 }
 
-bool PoiPolygonMatchVisitor::isMatchCandidate(ConstElementPtr element)
+bool PoiPolygonMatchVisitor::isMatchCandidate(ConstElementPtr element) const
 {
   if (_filter && !_filter->isSatisfied(element))
   {

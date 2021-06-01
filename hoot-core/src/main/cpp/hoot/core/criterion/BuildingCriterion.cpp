@@ -110,9 +110,7 @@ bool BuildingCriterion::isSatisfied(const Tags& tags, const ElementType& element
 
 QStringList BuildingCriterion::getChildCriteria() const
 {
-  QStringList criteria;
-  criteria.append(BuildingWayNodeCriterion::className());
-  return criteria;
+  return QStringList(BuildingWayNodeCriterion::className());
 }
 
 }

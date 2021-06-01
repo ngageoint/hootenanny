@@ -85,19 +85,19 @@ private:
 
   friend class CostT;
 
-  double _calculateDataLogLikelihood(const cv::Mat& m, double v);
+  double _calculateDataLogLikelihood(const cv::Mat& m, double v) const;
 
   void _calculateNewMuAndSigma(const std::vector<double>& EH, const cv::Mat& m);
 
   void _calculateNewV(const cv::Mat& m, const std::vector<double>& EH, const std::vector<double>& ELogH);
 
-  double _calculateTCost(double v, const std::vector<double> &EH, const std::vector<double> &ELogH);
+  double _calculateTCost(double v, const std::vector<double> &EH, const std::vector<double> &ELogH) const;
 
   void _initMu(const cv::Mat& m);
 
   void _initSigma(const cv::Mat& m);
 
-  cv::Mat _log(const cv::Mat& m);
+  cv::Mat _log(const cv::Mat& m) const;
 };
 
 }

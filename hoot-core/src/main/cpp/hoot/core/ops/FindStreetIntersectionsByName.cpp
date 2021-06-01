@@ -151,7 +151,7 @@ void FindStreetIntersectionsByName::apply(OsmMapPtr& map)
 }
 
 OsmMapPtr FindStreetIntersectionsByName::_filterRoadsByStreetName(
-  const QString& name, const Status& status, const ConstOsmMapPtr& map)
+  const QString& name, const Status& status, const ConstOsmMapPtr& map) const
 {
   const QStringList streetNames(name);
   _nameCrit->setNames(streetNames);

@@ -53,13 +53,13 @@ void MapIoJs::Init(Local<Object> exports)
   Isolate* current = exports->GetIsolate();
   HandleScope scope(current);
   Local<Context> context = current->GetCurrentContext();
-  exports->Set(String::NewFromUtf8(current, "loadMap"),
+  exports->Set(context, toV8("loadMap"),
                FunctionTemplate::New(current, loadMap)->GetFunction(context).ToLocalChecked());
-  exports->Set(String::NewFromUtf8(current, "loadMapFromString"),
+  exports->Set(context, toV8("loadMapFromString"),
                FunctionTemplate::New(current, loadMapFromString)->GetFunction(context).ToLocalChecked());
-  exports->Set(String::NewFromUtf8(current, "loadMapFromStringPreserveIdAndStatus"),
+  exports->Set(context, toV8("loadMapFromStringPreserveIdAndStatus"),
                FunctionTemplate::New(current, loadMapFromStringPreserveIdAndStatus)->GetFunction(context).ToLocalChecked());
-  exports->Set(String::NewFromUtf8(current, "saveMap"),
+  exports->Set(context, toV8("saveMap"),
                FunctionTemplate::New(current, saveMap)->GetFunction(context).ToLocalChecked());
 }
 
@@ -73,13 +73,13 @@ void MapIoJs::loadMap(const FunctionCallbackInfo<Value>& args)
   {
     OsmMapJs* map = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject(context).ToLocalChecked());
 
-    String::Utf8Value param1(args[1]->ToString());
+    String::Utf8Value param1(current, args[1]->ToString(context).ToLocalChecked());
     QString url = QString::fromUtf8(*param1);
 
     bool useFileId = true;
     if (args.Length() >= 3)
     {
-      useFileId = args[2]->ToBoolean(context).ToLocalChecked()->Value();
+      useFileId = args[2]->BooleanValue(current);
     }
 
     Status status = Status::Invalid;
@@ -150,7 +150,7 @@ void MapIoJs::saveMap(const FunctionCallbackInfo<Value>& args)
 
   MapProjector::projectToWgs84(map);
 
-  String::Utf8Value param1(args[1]->ToString());
+  String::Utf8Value param1(current, args[1]->ToString(context).ToLocalChecked());
   QString url = QString::fromUtf8(*param1);
 
   OsmMapWriterFactory::write(map, url);

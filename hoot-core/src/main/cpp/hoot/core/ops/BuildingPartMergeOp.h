@@ -181,7 +181,7 @@ private:
   /*
    * Returns a similarity decision by scoring the non-building part tags between two tag sets
    */
-  bool _compareTags(Tags t1, Tags te);
+  bool _compareTags(Tags t1, Tags te) const;
 };
 
 }

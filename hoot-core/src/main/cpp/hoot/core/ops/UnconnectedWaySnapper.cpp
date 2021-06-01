@@ -670,9 +670,9 @@ std::set<long> UnconnectedWaySnapper::_getUnconnectedWayEndNodeIds(
 
   // filter all the ways containing each endpoint down by the feature crit
   const std::set<long> filteredWaysContainingFirstEndNode =
-    WayUtils::getContainingWayIdsByNodeId(firstEndNodeId, _map, wayCrit);
+    WayUtils::getContainingWayIds(firstEndNodeId, _map, wayCrit);
   const std::set<long> filteredWaysContainingSecondEndNode =
-    WayUtils::getContainingWayIdsByNodeId(secondEndNodeId, _map, wayCrit);
+    WayUtils::getContainingWayIds(secondEndNodeId, _map, wayCrit);
   LOG_VART(filteredWaysContainingFirstEndNode);
   LOG_VART(filteredWaysContainingSecondEndNode);
 
@@ -776,7 +776,7 @@ bool UnconnectedWaySnapper::_snapUnconnectedWayEndNodeToWayNode(
         if (_minTypeMatchScore != -1.0)
         {
           const std::vector<ConstWayPtr> containingWays =
-            WayUtils::getContainingWaysByNodeIdConst(wayNodeToSnapToId, _map);
+            WayUtils::getContainingWaysConst(wayNodeToSnapToId, _map);
           LOG_VART(containingWays.size());
           bool typeMatchFound = false;
           for (std::vector<ConstWayPtr>::const_iterator containingWaysItr = containingWays.begin();
@@ -1148,19 +1148,19 @@ bool UnconnectedWaySnapper::_snapClosestWayEndpointToWay(
   return _snapUnconnectedWayEndNodeToWay(endpoint, connectTo, snappedToNode);
 }
 
-void UnconnectedWaySnapper::_markSnappedWay(const long idOfNodeBeingSnapped, const bool toWayNode)
+void UnconnectedWaySnapper::_markSnappedWay(const long idOfNodeBeingSnapped, const bool toWayNode) const
 {
   std::set<long> owningWayIds =
-    WayUtils::getContainingWayIdsByNodeId(idOfNodeBeingSnapped, _map);
+    WayUtils::getContainingWayIds(idOfNodeBeingSnapped, _map);
   const long owningWayId = *owningWayIds.begin();
   const QString tagVal = toWayNode ? "to_way_node_source" : "to_way_source";
   _map->getWay(owningWayId)->getTags().set(MetadataTags::HootSnapped(), tagVal);
 }
 
-void UnconnectedWaySnapper::_reviewSnappedWay(const long idOfNodeBeingSnapped)
+void UnconnectedWaySnapper::_reviewSnappedWay(const long idOfNodeBeingSnapped) const
 {
   std::set<long> owningWayIds =
-    WayUtils::getContainingWayIdsByNodeId(idOfNodeBeingSnapped, _map);
+    WayUtils::getContainingWayIds(idOfNodeBeingSnapped, _map);
   const long owningWayId = *owningWayIds.begin();
   _reviewMarker.mark(
     _map, _map->getWay(owningWayId), "Potentially snappable unconnected way",

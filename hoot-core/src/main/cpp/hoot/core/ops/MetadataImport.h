@@ -96,7 +96,7 @@ private:
   void _importMetadataToElements();
 
   // helper functions
-  bool _areMetadataTagsEqual(ElementPtr p1, ElementPtr p2);
+  bool _areMetadataTagsEqual(ElementPtr p1, ElementPtr p2) const;
   bool _applyToElement(ElementPtr pElement);
 };
 

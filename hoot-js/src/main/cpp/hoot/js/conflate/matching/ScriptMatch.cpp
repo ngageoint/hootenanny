@@ -79,23 +79,23 @@ void ScriptMatch::_calculateClassification(
 
   // removing these two lines causes a crash when checking for conflicts. WTF?
   Local<Object> global = _script->getContext(current)->Global();
-  global->Get(String::NewFromUtf8(current, "plugin"));
-  if (plugin->Has(context, String::NewFromUtf8(current, "isWholeGroup")).ToChecked())
+  global->Get(context, toV8("plugin"));
+  if (plugin->Has(context, toV8("isWholeGroup")).ToChecked())
   {
     Local<Value> v = _script->call(plugin, "isWholeGroup");
-    _isWholeGroup = v->BooleanValue(context).ToChecked();
+    _isWholeGroup = v->BooleanValue(current);
   }
 
-  if (plugin->Has(context, String::NewFromUtf8(current, "neverCausesConflict")).ToChecked())
+  if (plugin->Has(context, toV8("neverCausesConflict")).ToChecked())
   {
     Local<Value> v = _script->call(plugin, "neverCausesConflict");
-    _neverCausesConflict = v->BooleanValue(context).ToChecked();
+    _neverCausesConflict = v->BooleanValue(current);
   }
 
-  Local<String> featureTypeStr = String::NewFromUtf8(current, "baseFeatureType");
+  Local<String> featureTypeStr = String::NewFromUtf8(current, "baseFeatureType").ToLocalChecked();
   if (plugin->Has(context, featureTypeStr).ToChecked())
   {
-    Local<Value> value = plugin->Get(featureTypeStr);
+    Local<Value> value = plugin->Get(context, featureTypeStr).ToLocalChecked();
     _matchName = toCpp<QString>(value);
   }
 
@@ -392,7 +392,7 @@ Local<Value> ScriptMatch::_call(
   Context::Scope context_scope(_script->getContext(current));
   Local<Context> context = current->GetCurrentContext();
 
-  Local<Value> value = plugin->Get(String::NewFromUtf8(current, "matchScore"));
+  Local<Value> value = plugin->Get(context, toV8("matchScore")).ToLocalChecked();
   Local<Function> func = Local<Function>::Cast(value);
   Local<Value> jsArgs[3];
 
@@ -428,8 +428,8 @@ Local<Value> ScriptMatch::_callGetMatchFeatureDetails(const ConstOsmMapPtr& map)
 
   Local<Object> plugin =
     Local<Object>::Cast(
-      _script->getContext(current)->Global()->Get(String::NewFromUtf8(current, "plugin")));
-  Local<Value> value = plugin->Get(String::NewFromUtf8(current, "getMatchFeatureDetails"));
+      _script->getContext(current)->Global()->Get(context, toV8("plugin")).ToLocalChecked());
+  Local<Value> value = plugin->Get(context, toV8("getMatchFeatureDetails")).ToLocalChecked();
   Local<Function> func = Local<Function>::Cast(value);
   Local<Value> jsArgs[3];
 
@@ -460,10 +460,11 @@ std::map<QString, double> ScriptMatch::getFeatures(const ConstOsmMapPtr& map) co
   Isolate* current = v8::Isolate::GetCurrent();
   HandleScope handleScope(current);
   Context::Scope context_scope(_script->getContext(current));
+  Local<Context> context = current->GetCurrentContext();
 
   // removing these two lines causes a crash when checking for conflicts. WTF?
   Local<Object> global = _script->getContext(current)->Global();
-  global->Get(String::NewFromUtf8(current, "plugin"));
+  global->Get(context, toV8("plugin"));
 
   std::map<QString, double> result;
   LOG_TRACE("Calling getMatchFeatureDetails...");

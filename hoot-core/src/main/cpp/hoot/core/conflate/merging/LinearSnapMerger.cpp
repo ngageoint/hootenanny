@@ -45,6 +45,7 @@
 #include <hoot/core/elements/ElementComparer.h>
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/elements/NodeToWayMap.h>
+#include <hoot/core/elements/RelationMemberUtils.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
@@ -527,7 +528,7 @@ void LinearSnapMerger::_splitElement(
     if (splitee->getElementType() == ElementType::Relation &&
         scrap->getTags().getInformationCount() > 0 && scrap->getElementType() == ElementType::Way)
     {
-      // create a new relation to contain this single way (footway relation)
+      // Create a new relation to contain this single way (footway relation).
       RelationPtr r(
         new Relation(
           splitee->getStatus(), _map->createNextRelationId(), splitee->getCircularError(),
@@ -587,13 +588,28 @@ void LinearSnapMerger::_splitElement(
       scrap->getTags().set(MetadataTags::HootMultilineString(), "yes");
     }
 
+    // Add the scraps way to whatever relations the way that was split is in.
+    std::vector<RelationPtr> relationsContainingSplitWay =
+      RelationMemberUtils::getContainingRelations(splitee->getElementId(), _map);
+    for (std::vector<RelationPtr>::const_iterator itr = relationsContainingSplitWay.begin();
+         itr != relationsContainingSplitWay.end(); ++itr)
+    {
+      RelationPtr relation = *itr;
+      if (relation)
+      {
+        relation->addElement(relation->getRole(splitee->getElementId()), scrap->getElementId());
+      }
+    }
+
     replaced.emplace_back(splitee->getElementId(), scrap->getElementId());
     LOG_VART(replaced);
   }
 
   if (ConfigOptions().getDebugMapsWrite() && ConfigOptions().getDebugMapsWriteDetailed())
   {
-    OsmMapWriterFactory::writeDebugMap(_map, "LinearSnapMerger-after-way-split" + _eidLogString);
+    OsmMapWriterFactory::writeDebugMap(
+      _map, "LinearSnapMerger-after-way-split-" + splitee->getElementId().toString() + "-" +
+      _eidLogString);
   }
 }
 
@@ -625,7 +641,9 @@ void LinearSnapMerger::_manageElementIds(
 
 void LinearSnapMerger::_handleScrapsIds(const ElementPtr& scraps, const WayPtr& way) const
 {
-  LOG_TRACE("Handling scrap IDs...");
+  LOG_TRACE(
+    "Handling scrap IDs for scraps: " << scraps->getElementId() << " and " <<
+    way->getElementId() << "...");
 
   if (scraps->getElementType() == ElementType::Way)
   {

@@ -41,7 +41,7 @@ v8Engine::v8Engine()
   {
     V8::InitializeICUDefaultLocation(nullptr);
     V8::InitializeExternalStartupData(nullptr);
-    _platform.reset(platform::CreateDefaultPlatform());
+    _platform = platform::NewDefaultPlatform();
     V8::InitializePlatform(_platform.get());
     //  Initialize v8
     V8::Initialize();

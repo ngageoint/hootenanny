@@ -157,7 +157,7 @@ WayPtr GeometryToElementConverter::convertLineStringToWay(
 }
 
 std::shared_ptr<Element> GeometryToElementConverter::convertMultiLineStringToElement(
-  const MultiLineString* mls, const OsmMapPtr& map, Status s, double circularError)
+  const MultiLineString* mls, const OsmMapPtr& map, Status s, double circularError) const
 {
   LOG_TRACE("Converting multiline string to element...");
 
@@ -223,7 +223,7 @@ std::shared_ptr<Element> GeometryToElementConverter::convertPolygonToElement(
 }
 
 RelationPtr GeometryToElementConverter::convertPolygonToRelation(const Polygon* polygon,
-  const OsmMapPtr& map, Status s, double circularError)
+  const OsmMapPtr& map, Status s, double circularError) const
 {
   RelationPtr r(new Relation(s, map->createNextRelationId(), circularError,
     MetadataTags::RelationMultiPolygon()));
@@ -234,7 +234,7 @@ RelationPtr GeometryToElementConverter::convertPolygonToRelation(const Polygon* 
 
 void GeometryToElementConverter::convertPolygonToRelation(
   const Polygon* polygon, const OsmMapPtr& map, const RelationPtr& r, Status s,
-  double circularError)
+  double circularError) const
 {
   WayPtr outer = convertLineStringToWay(polygon->getExteriorRing(), map, s, circularError);
   if (outer != nullptr)

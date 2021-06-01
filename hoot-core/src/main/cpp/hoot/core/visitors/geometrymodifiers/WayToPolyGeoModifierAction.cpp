@@ -186,7 +186,7 @@ bool WayToPolyGeoModifierAction::processElement(const ElementPtr& pElement, OsmM
   return true;
 }
 
-void WayToPolyGeoModifierAction::addNodeToPoly(const CoordinateExt& pos, OsmMap* pMap, WayPtr pPoly)
+void WayToPolyGeoModifierAction::addNodeToPoly(const CoordinateExt& pos, OsmMap* pMap, WayPtr pPoly) const
 {
   long nodeId = pMap->createNextNodeId();
   NodePtr pNode(new Node(Status::Unknown1, nodeId, pos));

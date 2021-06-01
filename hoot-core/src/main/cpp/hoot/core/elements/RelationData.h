@@ -73,14 +73,12 @@ public:
     ElementId _eid;
   };
 
-  RelationData(long id, long changeset = ElementData::CHANGESET_EMPTY,
-               long version = ElementData::VERSION_EMPTY,
-               unsigned int timestamp = ElementData::TIMESTAMP_EMPTY,
-               QString user = ElementData::USER_EMPTY, long uid = ElementData::UID_EMPTY,
-               bool visible = ElementData::VISIBLE_EMPTY);
-
+  RelationData(
+    long id, long changeset = ElementData::CHANGESET_EMPTY,
+    long version = ElementData::VERSION_EMPTY,
+    unsigned int timestamp = ElementData::TIMESTAMP_EMPTY, QString user = ElementData::USER_EMPTY,
+    long uid = ElementData::UID_EMPTY, bool visible = ElementData::VISIBLE_EMPTY);
   RelationData(const RelationData& rd);
-
   ~RelationData() = default;
 
   void addElement(const QString& role, ElementId eid);
@@ -117,11 +115,11 @@ private:
 
   QString _type;
 
-  //The argument could be made to change this from a vector to a set to eliminate the possibilty of
-  //duplicates.  Have decided against that change for now, until the performance impacts can be
-  //determined.  The workaround is to use RemoveDuplicateRelationMembersVisitor.  There's also an
-  //additional argument to change this to a linked list, as described in replaceElements, which
-  //would rule out using the set.
+  // The argument could be made to change this from a vector to a set to eliminate the possibilty of
+  // duplicates.  Have decided against that change for now, until the performance impacts can be
+  // determined.  The workaround is to use RemoveDuplicateRelationMembersVisitor.  There's also an
+  // additional argument to change this to a linked list, as described in replaceElements, which
+  // would rule out using the set.
   std::vector<Entry> _members;
 };
 

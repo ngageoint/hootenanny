@@ -70,7 +70,7 @@ QString TagDistribution::_getPercentageStr(const double percentage) const
   return percentageStr;
 }
 
-QString TagDistribution::getTagCountsString(const std::map<QString, int>& tagCounts)
+QString TagDistribution::getTagCountsString(const std::map<QString, int>& tagCounts) const
 {
   QString buffer;
   QTextStream ts(&buffer);
@@ -239,7 +239,7 @@ ElementInputStreamPtr TagDistribution::_getFilteredInputStream(const ElementInpu
   return filteredInputStream;
 }
 
-std::shared_ptr<PartialOsmMapReader> TagDistribution::_getReader(const QString& input)
+std::shared_ptr<PartialOsmMapReader> TagDistribution::_getReader(const QString& input) const
 {
   std::shared_ptr<PartialOsmMapReader> reader =
     std::dynamic_pointer_cast<PartialOsmMapReader>(
@@ -250,7 +250,7 @@ std::shared_ptr<PartialOsmMapReader> TagDistribution::_getReader(const QString& 
   return reader;
 }
 
-ElementCriterionPtr TagDistribution::_getCriterion()
+ElementCriterionPtr TagDistribution::_getCriterion() const
 {
   ElementCriterionPtr crit;
 

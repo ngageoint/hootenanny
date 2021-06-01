@@ -83,7 +83,7 @@ inline void toCpp(v8::Local<v8::Value> v, ElementId& eid)
 
   v8::Local<v8::Object> obj = v8::Local<v8::Object>::Cast(v);
 
-  QString className = str(obj->Get(PopulateConsumersJs::baseClass()));
+  QString className = str(obj->Get(context, PopulateConsumersJs::baseClass()).ToLocalChecked());
   ElementIdJs* eidj = nullptr;
   if (obj->InternalFieldCount() >= 1 && className == ElementId::className())
   {
@@ -94,13 +94,13 @@ inline void toCpp(v8::Local<v8::Value> v, ElementId& eid)
   {
     eid = eidj->getElementId();
   }
-  else if (obj->Has(context, v8::String::NewFromUtf8(current, "id")).ToChecked() &&
-           obj->Has(context, v8::String::NewFromUtf8(current, "type")).ToChecked())
+  else if (obj->Has(context, v8::String::NewFromUtf8(current, "id").ToLocalChecked()).ToChecked() &&
+           obj->Has(context, v8::String::NewFromUtf8(current, "type").ToLocalChecked()).ToChecked())
   {
     long id;
     QString type;
-    toCpp(obj->Get(v8::String::NewFromUtf8(current, "id")), id);
-    toCpp(obj->Get(v8::String::NewFromUtf8(current, "type")), type);
+    toCpp(obj->Get(context, toV8("id")).ToLocalChecked(), id);
+    toCpp(obj->Get(context, toV8("type")).ToLocalChecked(), type);
     eid = ElementId(ElementType::fromString(type), id);
   }
   else

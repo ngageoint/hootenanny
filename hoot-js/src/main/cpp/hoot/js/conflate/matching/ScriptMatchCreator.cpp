@@ -138,6 +138,7 @@ public:
     Isolate* current = v8::Isolate::GetCurrent();
     HandleScope handleScope(current);
     Context::Scope context_scope(_script->getContext(current));
+    Local<Context> context = current->GetCurrentContext();
     Local<Object> plugin = getPlugin();
 
     _candidateDistanceSigma = getNumber(plugin, "candidateDistanceSigma", 0.0, 1.0);
@@ -147,7 +148,7 @@ public:
       getNumber(plugin, "searchRadius", -1.0, ConfigOptions().getCircularErrorDefaultValue());
     LOG_VARD(_customSearchRadius);
 
-    Local<Value> value = plugin->Get(toV8("getSearchRadius"));
+    Local<Value> value = plugin->Get(context, toV8("getSearchRadius")).ToLocalChecked();
     if (value->IsUndefined())
     {
       // pass
@@ -250,10 +251,10 @@ public:
     Local<Context> context = current->GetCurrentContext();
 
     double result = defaultValue;
-    Local<String> cdtKey = String::NewFromUtf8(current, key.toUtf8());
+    Local<String> cdtKey = String::NewFromUtf8(current, key.toUtf8()).ToLocalChecked();
     if (obj->Has(context, cdtKey).ToChecked())
     {
-      Local<Value> v = obj->Get(cdtKey);
+      Local<Value> v = obj->Get(context, cdtKey).ToLocalChecked();
       if (v->IsNumber() == false || ::qIsNaN(v->NumberValue(context).ToChecked()))
       {
         throw IllegalArgumentException("Expected " + key + " to be a number.");
@@ -282,12 +283,12 @@ public:
     Local<Context> context = current->GetCurrentContext();
     Local<Object> global = script->getContext(current)->Global();
 
-    if (global->Has(context, String::NewFromUtf8(current, "plugin")).ToChecked() == false)
+    if (global->Has(context, toV8("plugin")).ToChecked() == false)
     {
       throw IllegalArgumentException("Expected the script to have exports.");
     }
 
-    Local<Value> pluginValue = global->Get(String::NewFromUtf8(current, "plugin"));
+    Local<Value> pluginValue = global->Get(context, toV8("plugin")).ToLocalChecked();
     Local<Object> plugin(Local<Object>::Cast(pluginValue));
     if (plugin.IsEmpty() || plugin->IsObject() == false)
     {
@@ -365,14 +366,14 @@ public:
     Local<Context> context = current->GetCurrentContext();
 
     Persistent<Object> plugin(current, getPlugin(_script));
-    Local<String> initStr = String::NewFromUtf8(current, "calculateSearchRadius");
+    Local<String> initStr = String::NewFromUtf8(current, "calculateSearchRadius").ToLocalChecked();
     // optional method, so don't throw an error
     if (ToLocal(&plugin)->Has(context, initStr).ToChecked() == false)
     {
       LOG_TRACE("calculateSearchRadius function not present.");
       return;
     }
-    Local<Value> value = ToLocal(&plugin)->Get(initStr);
+    Local<Value> value = ToLocal(&plugin)->Get(context, initStr).ToLocalChecked();
     if (value->IsFunction() == false)
     {
       LOG_TRACE("calculateSearchRadius function not present.");
@@ -384,7 +385,6 @@ public:
     Local<Function> func = Local<Function>::Cast(value);
     Local<Value> jsArgs[1];
     int argc = 0;
-    HandleScope scope(current);  // This extra one might not be needed
     assert(getMap().get());
     OsmMapPtr copiedMap(new OsmMap(getMap()));
     jsArgs[argc++] = OsmMapJs::create(copiedMap);
@@ -500,7 +500,7 @@ public:
    *  - The Unknown1/Input1 is always e1. This is a requirement for some of the older code.
    *  - Gives a consistent ordering to allow backwards compatibility with system tests.
    */
-  bool isCorrectOrder(const ConstElementPtr& e1, const ConstElementPtr& e2)
+  bool isCorrectOrder(const ConstElementPtr& e1, const ConstElementPtr& e2) const
   {
     LOG_VART(e1->getStatus().getEnum());
     LOG_VART(e2->getStatus().getEnum());
@@ -541,12 +541,12 @@ public:
     // the crit instead of the function; doing so causes this to crash; see #3047 and the history
     // of this file for the failing code that needs to be re-enabled
 
-    Local<String> isMatchCandidateStr = String::NewFromUtf8(current, "isMatchCandidate");
+    Local<String> isMatchCandidateStr = String::NewFromUtf8(current, "isMatchCandidate").ToLocalChecked();
     if (ToLocal(&plugin)->Has(context, isMatchCandidateStr).ToChecked() == false)
     {
       throw HootException("Error finding 'isMatchCandidate' function.");
     }
-    Local<Value> value = ToLocal(&plugin)->Get(isMatchCandidateStr);
+    Local<Value> value = ToLocal(&plugin)->Get(context, isMatchCandidateStr).ToLocalChecked();
     if (value->IsFunction() == false)
     {
       throw HootException("isMatchCandidate is not a function.");
@@ -560,7 +560,7 @@ public:
 
     Local<Value> f = func->Call(context, ToLocal(&plugin), argc, jsArgs).ToLocalChecked();
 
-    result = f->BooleanValue(context).ToChecked();
+    result = f->BooleanValue(current);
 
     _matchCandidateCache[e->getElementId()] = result;
 
@@ -999,38 +999,38 @@ CreatorDescription ScriptMatchCreator::_getScriptDescription(QString path) const
   script->loadScript(path, "plugin");
 
   Persistent<Object> plugin(current, ScriptMatchVisitor::getPlugin(script));
-  Local<String> descriptionStr = String::NewFromUtf8(current, "description");
+  Local<String> descriptionStr = String::NewFromUtf8(current, "description").ToLocalChecked();
   if (ToLocal(&plugin)->Has(context, descriptionStr).ToChecked())
   {
-    Local<Value> value = ToLocal(&plugin)->Get(descriptionStr);
+    Local<Value> value = ToLocal(&plugin)->Get(context, descriptionStr).ToLocalChecked();
     result.setDescription(toCpp<QString>(value));
   }
-  Local<String> experimentalStr = String::NewFromUtf8(current, "experimental");
+  Local<String> experimentalStr = String::NewFromUtf8(current, "experimental").ToLocalChecked();
   if (ToLocal(&plugin)->Has(context, experimentalStr).ToChecked())
   {
-    Local<Value> value = ToLocal(&plugin)->Get(experimentalStr);
+    Local<Value> value = ToLocal(&plugin)->Get(context, experimentalStr).ToLocalChecked();
     result.setExperimental(toCpp<bool>(value));
   }
-  Local<String> featureTypeStr = String::NewFromUtf8(current, "baseFeatureType");
+  Local<String> featureTypeStr = String::NewFromUtf8(current, "baseFeatureType").ToLocalChecked();
   if (ToLocal(&plugin)->Has(context, featureTypeStr).ToChecked())
   {
-    Local<Value> value = ToLocal(&plugin)->Get(featureTypeStr);
+    Local<Value> value = ToLocal(&plugin)->Get(context, featureTypeStr).ToLocalChecked();
     result.setBaseFeatureType(CreatorDescription::stringToBaseFeatureType(toCpp<QString>(value)));
   }
-  Local<String> geometryTypeStr = String::NewFromUtf8(current, "geometryType");
+  Local<String> geometryTypeStr = String::NewFromUtf8(current, "geometryType").ToLocalChecked();
   if (ToLocal(&plugin)->Has(context, geometryTypeStr).ToChecked())
   {
-    Local<Value> value = ToLocal(&plugin)->Get(geometryTypeStr);
+    Local<Value> value = ToLocal(&plugin)->Get(context, geometryTypeStr).ToLocalChecked();
     result.setGeometryType(GeometryTypeCriterion::typeFromString(toCpp<QString>(value)));
   }
   // This controls which feature types a script conflates and is required. It allows for disabling
   // superfluous conflate ops. It should probably be integrated with isMatchCandidate somehow at
   // some point, if possible.
   Local<String> matchCandidateCriterionStr =
-    String::NewFromUtf8(current, "matchCandidateCriterion");
+    String::NewFromUtf8(current, "matchCandidateCriterion").ToLocalChecked();
   if (ToLocal(&plugin)->Has(context, matchCandidateCriterionStr).ToChecked())
   {
-    Local<Value> value = ToLocal(&plugin)->Get(matchCandidateCriterionStr);
+    Local<Value> value = ToLocal(&plugin)->Get(context, matchCandidateCriterionStr).ToLocalChecked();
     const QString valueStr = toCpp<QString>(value);
     if (valueStr.contains(";"))
     {

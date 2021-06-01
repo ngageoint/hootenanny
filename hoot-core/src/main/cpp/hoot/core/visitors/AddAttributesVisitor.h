@@ -77,7 +77,7 @@ private:
   //forces the visitor to only update features where the attribute has an empty (default) value
   bool _addOnlyIfEmpty;
 
-  ElementAttributeType::Type _getAttributeType(const QString& attribute, QString& attributeValue);
+  ElementAttributeType::Type _getAttributeType(const QString& attribute, QString& attributeValue) const;
 };
 
 }

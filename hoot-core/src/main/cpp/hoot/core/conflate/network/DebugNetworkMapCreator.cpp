@@ -111,7 +111,7 @@ void DebugNetworkMapCreator::_addEdgeLink(OsmMapPtr map, NetworkEdgeScorePtr edg
   }
 }
 
-void DebugNetworkMapCreator::_addVertexLink(OsmMapPtr map, NetworkVertexScorePtr vertexScore)
+void DebugNetworkMapCreator::_addVertexLink(OsmMapPtr map, NetworkVertexScorePtr vertexScore) const
 {
   ConstNodePtr n1 = _getMedianNode(map, vertexScore->getV1()->getElement());
   ConstNodePtr n2 = _getMedianNode(map, vertexScore->getV2()->getElement());

@@ -84,13 +84,13 @@ ToEnglishTranslateDictionary& ToEnglishTranslateDictionary::getInstance()
 }
 
 bool ToEnglishTranslateDictionary::getFromTransliterationCache(const QString& originalText,
-                                                      QString& transliteratedText)
+                                                      QString& transliteratedText) const
 {
   return _transliterationCache->get(originalText, transliteratedText);
 }
 
 void ToEnglishTranslateDictionary::insertIntoTransliterationCache(const QString& originalText,
-                                                         const QString& transliteratedText)
+                                                         const QString& transliteratedText) const
 {
   _transliterationCache->insert(originalText, transliteratedText);
 }

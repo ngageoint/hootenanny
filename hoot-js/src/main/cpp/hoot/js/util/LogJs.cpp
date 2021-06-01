@@ -51,22 +51,22 @@ void LogJs::Init(Local<Object> exports)
   HandleScope scope(current);
   Local<Context> context = current->GetCurrentContext();
   Local<Object> log = Object::New(current);
-  exports->Set(String::NewFromUtf8(current, "Log"), log);
-  log->Set(String::NewFromUtf8(current, "setLogLevel"), FunctionTemplate::New(current, setLogLevel)->GetFunction(context).ToLocalChecked());
-  log->Set(String::NewFromUtf8(current, "init"), FunctionTemplate::New(current, init)->GetFunction(context).ToLocalChecked());
+  exports->Set(context, toV8("Log"), log);
+  log->Set(context, toV8("setLogLevel"), FunctionTemplate::New(current, setLogLevel)->GetFunction(context).ToLocalChecked());
+  log->Set(context, toV8("init"), FunctionTemplate::New(current, init)->GetFunction(context).ToLocalChecked());
 
-  exports->Set(String::NewFromUtf8(current, "log"), FunctionTemplate::New(current, logInfo)->GetFunction(context).ToLocalChecked());
-  exports->Set(String::NewFromUtf8(current, "trace"), FunctionTemplate::New(current, logTrace)->GetFunction(context).ToLocalChecked());
-  exports->Set(String::NewFromUtf8(current, "debug"), FunctionTemplate::New(current, logDebug)->GetFunction(context).ToLocalChecked());
-  exports->Set(String::NewFromUtf8(current, "logTrace"), FunctionTemplate::New(current, logTrace)->GetFunction(context).ToLocalChecked());
-  exports->Set(String::NewFromUtf8(current, "logDebug"), FunctionTemplate::New(current, logDebug)->GetFunction(context).ToLocalChecked());
-  exports->Set(String::NewFromUtf8(current, "logInfo"), FunctionTemplate::New(current, logInfo)->GetFunction(context).ToLocalChecked());
-  exports->Set(String::NewFromUtf8(current, "logStatus"), FunctionTemplate::New(current, logStatus)->GetFunction(context).ToLocalChecked());
-  exports->Set(String::NewFromUtf8(current, "status"), FunctionTemplate::New(current, logStatus)->GetFunction(context).ToLocalChecked());
-  exports->Set(String::NewFromUtf8(current, "warn"), FunctionTemplate::New(current, logWarn)->GetFunction(context).ToLocalChecked());
-  exports->Set(String::NewFromUtf8(current, "logWarn"), FunctionTemplate::New(current, logWarn)->GetFunction(context).ToLocalChecked());
-  exports->Set(String::NewFromUtf8(current, "logError"), FunctionTemplate::New(current, logError)->GetFunction(context).ToLocalChecked());
-  exports->Set(String::NewFromUtf8(current, "logFatal"), FunctionTemplate::New(current, logFatal)->GetFunction(context).ToLocalChecked());
+  exports->Set(context, toV8("log"), FunctionTemplate::New(current, logInfo)->GetFunction(context).ToLocalChecked());
+  exports->Set(context, toV8("trace"), FunctionTemplate::New(current, logTrace)->GetFunction(context).ToLocalChecked());
+  exports->Set(context, toV8("debug"), FunctionTemplate::New(current, logDebug)->GetFunction(context).ToLocalChecked());
+  exports->Set(context, toV8("logTrace"), FunctionTemplate::New(current, logTrace)->GetFunction(context).ToLocalChecked());
+  exports->Set(context, toV8("logDebug"), FunctionTemplate::New(current, logDebug)->GetFunction(context).ToLocalChecked());
+  exports->Set(context, toV8("logInfo"), FunctionTemplate::New(current, logInfo)->GetFunction(context).ToLocalChecked());
+  exports->Set(context, toV8("logStatus"), FunctionTemplate::New(current, logStatus)->GetFunction(context).ToLocalChecked());
+  exports->Set(context, toV8("status"), FunctionTemplate::New(current, logStatus)->GetFunction(context).ToLocalChecked());
+  exports->Set(context, toV8("warn"), FunctionTemplate::New(current, logWarn)->GetFunction(context).ToLocalChecked());
+  exports->Set(context, toV8("logWarn"), FunctionTemplate::New(current, logWarn)->GetFunction(context).ToLocalChecked());
+  exports->Set(context, toV8("logError"), FunctionTemplate::New(current, logError)->GetFunction(context).ToLocalChecked());
+  exports->Set(context, toV8("logFatal"), FunctionTemplate::New(current, logFatal)->GetFunction(context).ToLocalChecked());
 }
 
 int LogJs::getLogCount(QString log)
@@ -96,7 +96,7 @@ void LogJs::log(const FunctionCallbackInfo<Value>& args, Log::WarningLevel level
   if (level >= Log::getInstance().getLevel())
   {
     Local<StackTrace> stack = StackTrace::CurrentStackTrace(current, 1);
-    Local<StackFrame> frame = stack->GetFrame(0);
+    Local<StackFrame> frame = stack->GetFrame(current, 0);
     int lineNumber = -1;
     QString script("<unknown>");
     QString functionName("<unknown>");

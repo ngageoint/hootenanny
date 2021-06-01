@@ -37,11 +37,8 @@
 // hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Way.h>
-#include <hoot/core/geometry/GeometryUtils.h>
-#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/ConstElementVisitor.h>
-
 
 using namespace geos::geom;
 using namespace std;
@@ -78,18 +75,19 @@ private:
   long _thisId;
 };
 
-Relation::Relation(Status s, long id, Meters circularError, QString type, long changeset,
-                   long version, quint64 timestamp, QString user, long uid, bool visible)
-  : Element(s)
+Relation::Relation(
+  Status s, long id, Meters circularError, QString type, long changeset, long version,
+  quint64 timestamp, QString user, long uid, bool visible) :
+Element(s)
 {
   _relationData.reset(new RelationData(id, changeset, version, timestamp, user, uid, visible));
   _relationData->setCircularError(circularError);
   _relationData->setType(type);
 }
 
-Relation::Relation(const Relation& from)
-  : Element(from.getStatus()),
-  _relationData(new RelationData(*from._relationData.get()))
+Relation::Relation(const Relation& from) :
+Element(from.getStatus()),
+_relationData(new RelationData(*from._relationData.get()))
 {
 }
 
@@ -119,20 +117,32 @@ void Relation::clear()
   _postGeometryChange();
 }
 
-bool Relation::contains(ElementId eid) const
+RelationData::Entry Relation::getMember(const ElementId& elementId) const
 {
-  const vector<RelationData::Entry>& members = getMembers();
-  for (size_t i = 0; i < members.size(); i++)
+  const size_t index = indexOf(elementId);
+  if ((int)index == -1)
   {
-    if (members[i].getElementId() == eid)
-    {
-      return true;
-    }
+    return RelationData::Entry();
   }
-  return false;
+  return getMembers().at(index);
 }
 
-size_t Relation::indexOf(ElementId eid) const
+QString Relation::getRole(const ElementId& elementId) const
+{
+  const RelationData::Entry member = getMember(elementId);
+  if (member.getElementId().getType() == ElementType::Unknown)
+  {
+    return "";
+  }
+  return member.getRole();
+}
+
+bool Relation::contains(const ElementId& eid) const
+{
+  return (int)indexOf(eid) != -1;
+}
+
+size_t Relation::indexOf(const ElementId& eid) const
 {
   const vector<RelationData::Entry>& members = getMembers();
   for (size_t i = 0; i < members.size(); i++)
@@ -143,6 +153,26 @@ size_t Relation::indexOf(ElementId eid) const
     }
   }
   return -1;
+}
+
+ElementId Relation::memberIdAt(const size_t index) const
+{
+  const std::vector<RelationData::Entry>& members = getMembers();
+  if ((int)index >= 0 && index < members.size())
+  {
+    return getMembers().at(index).getElementId();
+  }
+  return ElementId();
+}
+
+bool Relation::isFirstMember(const ElementId& eid) const
+{
+  return indexOf(eid) == 0;
+}
+
+bool Relation::isLastMember(const ElementId& eid) const
+{
+  return indexOf(eid) == getMemberCount() - 1;
 }
 
 void Relation::insertElement(const QString& role, const ElementId& elementId, size_t pos)
@@ -289,6 +319,7 @@ void Relation::replaceElement(const ElementId& from, const ElementId& to)
 
 void Relation::replaceElement(const ConstElementPtr& from, const QList<ElementPtr>& to)
 {
+  LOG_TRACE("Replacing " << from->getElementId() << " with " << to << "...");
   _preGeometryChange();
   _makeWritable();
   QList<ElementId> copy;
@@ -454,6 +485,37 @@ void Relation::_visitRw(ElementProvider& map, ConstElementVisitor& filter,
       }
     }
   }
+}
+
+QList<ElementId> Relation::getAdjoiningMemberIds(const ElementId& memberId) const
+{
+  LOG_VART(getMembers());
+  QList<ElementId> ids;
+  const size_t memberIndex = indexOf(memberId);
+  LOG_VART(memberIndex);
+  if ((int)memberIndex != -1)
+  {
+    if (!isFirstMember(memberId))
+    {
+      const ElementId memberBeforeId = memberIdAt(memberIndex - 1);
+      LOG_VART(memberBeforeId);
+      if (memberBeforeId.getType() != ElementType::Unknown)
+      {
+        ids.append(memberBeforeId);
+      }
+    }
+    if (!isLastMember(memberId))
+    {
+      const ElementId memberAfterId = memberIdAt(memberIndex + 1);
+      LOG_VART(memberAfterId);
+      if (memberAfterId.getType() != ElementType::Unknown)
+      {
+        ids.append(memberAfterId);
+      }
+    }
+  }
+  LOG_VART(ids);
+  return ids;
 }
 
 }

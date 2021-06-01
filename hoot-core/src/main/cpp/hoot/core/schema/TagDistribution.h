@@ -62,7 +62,7 @@ public:
    *
    * @param tagCounts the data to display
    */
-  QString getTagCountsString(const std::map<QString, int>& tagCounts);
+  QString getTagCountsString(const std::map<QString, int>& tagCounts) const;
 
   void setTagKeys(const QStringList& keys) { _tagKeys = keys; }
   void setCriterionClassName(const QString& name) { _criterionClassName = name; }
@@ -94,9 +94,9 @@ private:
   QRegExp _nonWord;
 
   void _countTags(const QString& input, std::map<QString, int>& tagCounts);
-  std::shared_ptr<PartialOsmMapReader> _getReader(const QString& input);
+  std::shared_ptr<PartialOsmMapReader> _getReader(const QString& input) const;
   ElementInputStreamPtr _getFilteredInputStream(const ElementInputStreamPtr& inputStream);
-  ElementCriterionPtr _getCriterion();
+  ElementCriterionPtr _getCriterion() const;
 
   QString _getPercentageStr(const double percentage) const;
 };

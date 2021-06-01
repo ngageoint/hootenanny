@@ -558,7 +558,7 @@ void MapCropper::_cropWay(const OsmMapPtr& map, long wid)
   }
 }
 
-bool MapCropper::_isWhollyInside(const Envelope& e)
+bool MapCropper::_isWhollyInside(const Envelope& e) const
 {
   bool result = false;;
   if (_invert)
@@ -579,7 +579,7 @@ bool MapCropper::_isWhollyInside(const Envelope& e)
   return result;
 }
 
-bool MapCropper::_isWhollyInside(const Geometry& e)
+bool MapCropper::_isWhollyInside(const Geometry& e) const
 {
   bool result = false;
   if (_invert)
@@ -600,7 +600,7 @@ bool MapCropper::_isWhollyInside(const Geometry& e)
   return result;
 }
 
-bool MapCropper::_isWhollyOutside(const Envelope& e)
+bool MapCropper::_isWhollyOutside(const Envelope& e) const
 {
   bool result = false;
   if (!_invert)
@@ -622,7 +622,7 @@ bool MapCropper::_isWhollyOutside(const Envelope& e)
   return result;
 }
 
-bool MapCropper::_isWhollyOutside(const Geometry& e)
+bool MapCropper::_isWhollyOutside(const Geometry& e) const
 {
   bool result = false;
   if (!_invert)

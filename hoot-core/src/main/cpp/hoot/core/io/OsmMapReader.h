@@ -89,7 +89,7 @@ public:
   /**
    * Gets the ignore duplicates flag
    */
-  bool getIgnoreDuplicates() { return _ignoreDuplicates; }
+  bool getIgnoreDuplicates() const { return _ignoreDuplicates; }
 
   /**
    * Set the ignore duplicates flag, when set to true, derived classes will ignore any element

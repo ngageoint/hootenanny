@@ -43,7 +43,7 @@ OsmSchemaLoaderFactory& OsmSchemaLoaderFactory::getInstance()
   return instance;
 }
 
-std::shared_ptr<OsmSchemaLoader> OsmSchemaLoaderFactory::createLoader(QString url)
+std::shared_ptr<OsmSchemaLoader> OsmSchemaLoaderFactory::createLoader(QString url) const
 {
   vector<QString> names = Factory::getInstance().getObjectNamesByBase(OsmSchemaLoader::className());
   for (size_t i = 0; i < names.size(); ++i)

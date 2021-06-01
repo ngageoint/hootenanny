@@ -48,7 +48,7 @@ public:
     @param map the map to prepare
     @param removeNodes if true, removes all nodes from the map
     */
-  void prepMap(OsmMapPtr map, const bool removeNodes);
+  void prepMap(OsmMapPtr map, const bool removeNodes) const;
 };
 
 }
