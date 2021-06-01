@@ -39,7 +39,7 @@ public:
   static QString className() { return "hoot::WayCriterion"; }
 
   WayCriterion();
-  ~WayCriterion() = default;
+  ~WayCriterion() override = default;
 
   QString getDescription() const override { return "Identifies ways"; }
   QString getName() const override { return className(); }

@@ -44,7 +44,7 @@ public:
 
   RelationCriterion();
   RelationCriterion(const QString& type);
-  ~RelationCriterion() = default;
+  ~RelationCriterion() override = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
 

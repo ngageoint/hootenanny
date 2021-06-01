@@ -39,7 +39,7 @@ public:
   static QString className() { return "hoot::NodeCriterion"; }
 
   NodeCriterion();
-  ~NodeCriterion() = default;
+  ~NodeCriterion() override = default;
 
   QString getDescription() const override { return "Identifies nodes"; }
   QString getName() const override { return className(); }
