@@ -96,6 +96,7 @@ int ConflateCmd::runSimple(QStringList& args)
     isDiffConflate = true;
     conflator.setIsDiffConflate(true);
     conflator.setDiffRemoveLinearPartialMatchesAsWhole(removeDiffLinearPartialMatchesAsWhole);
+    conflator.setDiffRemoveRiverPartialMatchesAsWhole(removeDiffRiverPartialMatchesAsWhole);
     args.removeAt(args.indexOf("--differential"));
 
     if (args.contains("--include-tags"))
