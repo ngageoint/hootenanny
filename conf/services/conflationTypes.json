@@ -49,8 +49,8 @@
         "matcher": "",
         "merger": "",
         "members": {
-            "differential.remove.linear.partial.matches.as.whole": "Remove features involved in linear partial matches completely",
-            "differential.remove.river.partial.matches.as.whole": "Remove rivers involved in river partial matches completely",
+            "differential.remove.linear.partial.matches.as.whole": "Remove features involved in linear partial matches completely (valid with Unifying Algorithm only)",
+            "differential.remove.river.partial.matches.as.whole": "Remove rivers involved in river partial matches completely (valid with Unifying Algorithm only)",
             "differential.remove.unconflatable.data": "Remove unconflatable data in the secondary layer from the output",
             "differential.snap.unconnected.features": "Snap unconnected secondary linear features to reference linear features",
             "snap.unconnected.ways.snap.criteria": "Linear feature types to snap",
