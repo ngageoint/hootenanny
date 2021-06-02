@@ -174,12 +174,11 @@ public class CustomScriptResource {
             folderId = 0L;
         }
 
-        // get full directory path for file being deleted
         TranslationFolder folder = getTranslationFolderForUser(user, folderId);
         String path = folder.getPath();
 
         try {
-            saveArr.add(saveScript(scriptName, scriptDescription, script, path));
+            saveArr.add(saveScript(scriptName, scriptDescription, script, path, false));
         }
         catch (Exception e) {
             String msg = "Error processing script save for: " + scriptName + ".  Cause: " + e.getMessage();
@@ -202,7 +201,7 @@ public class CustomScriptResource {
             response = new ScriptsModifiedResponse();
             List<String> scriptsModified = new ArrayList<>();
             for (Script script : saveMultipleScriptsRequest.getScripts()) {
-                if (saveScript(script.getName(), script.getDescription(), script.getContent(), null) != null) {
+                if (saveScript(script.getName(), script.getDescription(), script.getContent(), null, false) != null) {
                     scriptsModified.add(script.getName());
                 }
             }
@@ -247,8 +246,7 @@ public class CustomScriptResource {
             Map<String, JSONObject> sortedScripts = new TreeMap<>();
             for (Object o : filesList) {
                 JSONObject cO = (JSONObject) o;
-                String sName = cO.get("NAME").toString();
-                sortedScripts.put(sName.toUpperCase(), cO);
+                retList.add(cO);
             }
 
             List<Tuple> mappings = createQuery()
@@ -298,11 +296,9 @@ public class CustomScriptResource {
                         json.put("CANEXPORT", header.get("CANEXPORT"));
                     }
 
-                    sortedScripts.put(translationName, json);
+                    retList.add(json);
                 }
             }
-
-            retList.addAll(sortedScripts.values());
         }
         catch (Exception e) {
             String msg = "Error getting scripts list.  Cause: " + e.getMessage();
@@ -941,12 +937,15 @@ public class CustomScriptResource {
      * @return jobId Success = True/False
      */
     @PUT
-    @Path("/moveTranslation")
+    @Path("/modifyTranslation")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
     public Response moveTranslation(@Context HttpServletRequest request,
+            @QueryParam("name") String name,
+            @QueryParam("description") String description,
             @QueryParam("translationId") Long translationId,
-            @QueryParam("folderId") Long folderId) {
+            @QueryParam("folderId") Long folderId,
+            String script) {
 
         Users user = Users.fromRequest(request);
 
@@ -955,16 +954,18 @@ public class CustomScriptResource {
         File currentFile = getTranslationFile(currentFolder.getPath(), translation.getDisplayName());
 
         TranslationFolder targetFolder = getTranslationFolderForUser(user, folderId);
-        File targetFile = getTranslationFile(targetFolder.getPath(), translation.getDisplayName());
+        File targetFile = getTranslationFile(targetFolder.getPath(), name);
 
         Map<String, Object> ret = new HashMap<>();
-        if (currentFile.renameTo(targetFile)) {
-            currentFile.delete();
+        ret.put("success", true);
 
+        // rename and move file
+        if (currentFile.renameTo(targetFile)) {
             SQLUpdateClause query = createQuery()
                 .update(translations)
                 .where(translations.id.eq(translationId))
-                .set(translations.folderId, targetFolder.getId());
+                .set(translations.folderId, targetFolder.getId())
+                .set(translations.displayName, name);
 
             // if translation doesn't have an owner, assign it to user that moved it
             if (translation.getUserId() == -1) {
@@ -972,10 +973,16 @@ public class CustomScriptResource {
             }
 
             query.execute();
-
-            ret.put("success", true);
         } else {
             ret.put("success", false);
+        }
+
+        try {
+            saveScript(name, description, script, targetFolder.getPath(), true);
+        }
+        catch (Exception e) {
+            String msg = "Error processing script save for: " + name + ".  Cause: " + e.getMessage();
+            throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
         return Response.ok().entity(ret).build();
@@ -1103,7 +1110,7 @@ public class CustomScriptResource {
         return (List<File>) FileUtils.listFiles(scriptsDir, exts, false);
     }
 
-    private static JSONObject saveScript(String name, String description, String content, String scriptPath) throws IOException {
+    private static JSONObject saveScript(String name, String description, String content, String scriptPath, boolean overwriteData) throws IOException {
         if (StringUtils.trimToNull(name) == null) {
             logger.error("Invalid input script name: {}", name);
             return null;
@@ -1125,7 +1132,7 @@ public class CustomScriptResource {
 
         File fScript = new File(SCRIPT_FOLDER, translationPath + ".js");
         if (!fScript.exists()) {
-            if (!fScript.createNewFile()) {
+            if (!fScript.createNewFile() && !overwriteData) {
                 logger.error("File {} should not have existed before we tried to create it!", fScript.getAbsolutePath());
             }
         }
