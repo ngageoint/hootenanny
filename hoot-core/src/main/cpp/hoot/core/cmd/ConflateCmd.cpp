@@ -76,17 +76,21 @@ int ConflateCmd::runSimple(QStringList& args)
 
   if (args.contains("--differential"))
   {
-    // Setting these diff specific properties here on ConflateExecutor feels a little kludgy. May
-    // need some refactoring.
+    // Setting these diff specific properties here on ConflateExecutor feels a little kludgy. This
+    // may need some refactoring.
 
     bool removeDiffLinearPartialMatchesAsWhole =
       ConfigOptions().getDifferentialRemoveLinearPartialMatchesAsWhole();
-    if (ConflateUtils::isNetworkConflate() && !removeDiffLinearPartialMatchesAsWhole)
+    bool removeDiffRiverPartialMatchesAsWhole =
+      ConfigOptions().getDifferentialRemoveRiverPartialMatchesAsWhole();
+    if (ConflateUtils::isNetworkConflate() &&
+        (!removeDiffLinearPartialMatchesAsWhole || !removeDiffRiverPartialMatchesAsWhole))
     {
-      LOG_WARN(
+      LOG_DEBUG(
         "Removing elements partially from partial matches when using Differential Conflation is "
-        "not allowed when running the Network Algorithm.");
+        "not allowed when running the Network Algorithm. Forcing complete match element removal.");
       removeDiffLinearPartialMatchesAsWhole = true;
+      removeDiffRiverPartialMatchesAsWhole = true;
     }
 
     isDiffConflate = true;
