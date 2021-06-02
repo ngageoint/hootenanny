@@ -20,8 +20,8 @@ exports.reviewThreshold = parseFloat(hoot.get("conflate.review.threshold.default
 exports.nameThreshold = parseFloat(hoot.get("waterway.name.threshold"));
 exports.typeThreshold = parseFloat(hoot.get("waterway.type.threshold"));
 
-// This is needed for disabling superfluous conflate ops. In the future, it may also
-// be used to replace exports.isMatchCandidate (see #3047). 
+// This is needed for disabling superfluous conflate ops and calculating a search radius only.
+// exports.isMatchCandidate handles culling match candidates.
 exports.matchCandidateCriterion = "hoot::LinearWaterwayCriterion";
 
 // used during subline matching

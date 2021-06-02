@@ -8,9 +8,9 @@ exports.candidateDistanceSigma = 1.0; // 1.0 * (CE95 + Worst CE95);
 exports.description = "Matches generic lines";
 exports.experimental = false;
 
-// This matcher only sets match/miss/review values to 1.0, therefore the score thresholds aren't used. 
-// If that ever changes, then the generic score threshold configuration options used below should 
-// be replaced with custom score threshold configuration options.
+// This matcher only sets match/miss/review values to 1.0, therefore the score thresholds aren't
+// used. If that ever changes, then the generic score threshold configuration options used below
+// should be replaced with custom score threshold configuration options.
 exports.matchThreshold = parseFloat(hoot.get("conflate.match.threshold.default"));
 exports.missThreshold = parseFloat(hoot.get("conflate.miss.threshold.default"));
 exports.reviewThreshold = parseFloat(hoot.get("conflate.review.threshold.default"));
@@ -20,8 +20,8 @@ exports.typeThreshold = parseFloat(hoot.get("generic.line.type.threshold"));
 exports.baseFeatureType = "Line";
 exports.geometryType = "line";
 
-// This is needed for disabling superfluous conflate ops. In the future, it may also
-// be used to replace exports.isMatchCandidate (see #3047).
+// This is needed for disabling superfluous conflate ops only. exports.isMatchCandidate handles
+// culling match candidates.
 exports.matchCandidateCriterion = "hoot::LinearCriterion";
 
 var angleHistogramExtractor = new hoot.AngleHistogramExtractor();
@@ -35,14 +35,15 @@ var lengthScoreExtractor = new hoot.LengthScoreExtractor();
 var sublineStringMatcher = hoot.SublineStringMatcherFactory.getMatcher(exports.baseFeatureType);
 
 /**
- * Returns true if e is a candidate for a match. Implementing this method is
- * optional, but may dramatically increase speed if you can cull some features
- * early on. E.g. no need to check nodes for a polygon to polygon match.
+ * Returns true if e is a candidate for a match. Implementing this method is optional, but may
+   dramatically increase speed if you can cull some features early on. E.g. no need to check nodes
+   for a polygon to polygon match.
  */
 exports.isMatchCandidate = function(map, e)
 {
   hoot.trace("e: " + e.getElementId());
-  // Even though a route relation passes the linear crit, we want only highway or rail conflation to conflate it.
+  // Even though a route relation passes the linear crit, we want only highway or rail conflation to
+  // conflate it.
   if (e.getElementId().getType() == "Relation" && e.getTags().contains("route"))
   {
     return false;
@@ -51,12 +52,11 @@ exports.isMatchCandidate = function(map, e)
 };
 
 /**
- * If this function returns true then all overlapping matches will be treated
- * as a group. For now that means if two matches overlap then the whole group
- * will be marked as needing review.
+ * If this function returns true then all overlapping matches will be treated as a group. For now
+   that means if two matches overlap then the whole group will be marked as needing review.
  *
- * If this function returns false the conflation routines will attempt to 
- * pick the best subset of matches that do not conflict.
+ * If this function returns false the conflation routines will attempt to pick the best subset of
+   matches that do not conflict.
  */
 exports.isWholeGroup = function() 
 {
@@ -69,8 +69,8 @@ exports.isWholeGroup = function()
  * - miss
  * - review
  *
- * The scores should always sum to one. If they don't you will be taunted 
- * mercilessly and we'll normalize it anyway. :P
+ * The scores should always sum to one. If they don't you will be taunted mercilessly and we'll
+   normalize it anyway. :P
  */
 exports.matchScore = function(map, e1, e2) 
 {
