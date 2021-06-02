@@ -985,7 +985,12 @@ mgcp = {
       tags.natural = 'water';
       break;
 
-    // BA040 - Tidal Water
+    // BB190 - Berthing Structure
+    case 'BB190':
+      if (tags.waterway == 'dock' && tags.man_made == 'berthing_structure') delete tags.man_made;
+      break;
+
+    // BD180 - Wreck
     case 'BD180':
       if (!tags['seamark:type']) tags['seamark:type'] = 'wreck';
       break;
