@@ -32,8 +32,9 @@ exports.writeMatchedBy = hoot.get("writer.include.matched.by.tag");
 exports.geometryType = "polygon";
 
 // This is needed for disabling superfluous conflate ops only. exports.isMatchCandidate handles
-// culling match candidates.
-exports.matchCandidateCriterion = "hoot::NonBuildingAreaCriterion";
+// culling match candidates. This seems like it should probably be NonBuildingAreaCriterion instead
+// but that has some affect on the stats that still needs to be investigated.
+exports.matchCandidateCriterion = "hoot::AreaCriterion";
 
 var sublineMatcher = new hoot.MaximalSublineStringMatcher();
 var smallerOverlapExtractor = new hoot.SmallerOverlapExtractor();
