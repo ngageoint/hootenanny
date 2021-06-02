@@ -22,8 +22,8 @@ exports.writeDebugTags = hoot.get("writer.include.debug.tags");
 exports.writeMatchedBy = hoot.get("writer.include.matched.by.tag");
 exports.geometryType = "point";
 
-// This is needed for disabling superfluous conflate ops. In the future, it may also
-// be used to replace exports.isMatchCandidate (see #3047).
+// This is needed for disabling superfluous conflate ops only. exports.isMatchCandidate handles
+// culling match candidates.
 exports.matchCandidateCriterion = "hoot::PointCriterion";
 
 function distance(e1, e2) 
