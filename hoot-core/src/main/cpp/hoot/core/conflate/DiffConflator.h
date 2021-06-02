@@ -184,6 +184,8 @@ public:
 
   void setRemoveLinearPartialMatchesAsWhole(bool remove)
   { _removeLinearPartialMatchesAsWhole = remove; }
+  void setRemoveRiverPartialMatchesAsWhole(bool remove)
+  { _removeRiverPartialMatchesAsWhole = remove; }
 
 private:
 
@@ -207,6 +209,7 @@ private:
   // portions that matched) or completely removed (entire element); see
   // differential.remove.linear.partial.matches.as.whole
   bool _removeLinearPartialMatchesAsWhole;
+  bool _removeRiverPartialMatchesAsWhole; // overrides the linear only option
   // These are only used when _removeLinearMatchesPartially returns true.
   std::vector<ConstMatchPtr> _matchesToRemoveAsPartial;
   std::vector<ConstMatchPtr> _matchesToRemoveAsWhole;
