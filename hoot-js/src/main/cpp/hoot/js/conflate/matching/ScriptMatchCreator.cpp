@@ -307,13 +307,13 @@ public:
     {
       if (_customSearchRadius < 0)
       {
-        //base the radius off of the element itself
+        // base the radius off of the element itself
         LOG_TRACE("Calculating search radius based off of element...");
         result = e->getCircularError() * _candidateDistanceSigma;
       }
       else
       {
-        //base the radius off some predefined radius
+        // base the radius off some predefined radius
         LOG_TRACE("Calculating search radius based off of custom defined script value...");
         result = _customSearchRadius * _candidateDistanceSigma;
       }
@@ -339,7 +339,8 @@ public:
         int argc = 0;
         jsArgs[argc++] = ElementJs::New(e);
 
-        Local<Value> f = ToLocal(&_getSearchRadius)->Call(context, getPlugin(), argc, jsArgs).ToLocalChecked();
+        Local<Value> f =
+          ToLocal(&_getSearchRadius)->Call(context, getPlugin(), argc, jsArgs).ToLocalChecked();
 
         result = toCpp<Meters>(f) * _candidateDistanceSigma;
 
@@ -541,7 +542,8 @@ public:
     // the crit instead of the function; doing so causes this to crash; see #3047 and the history
     // of this file for the failing code that needs to be re-enabled
 
-    Local<String> isMatchCandidateStr = String::NewFromUtf8(current, "isMatchCandidate").ToLocalChecked();
+    Local<String> isMatchCandidateStr =
+      String::NewFromUtf8(current, "isMatchCandidate").ToLocalChecked();
     if (ToLocal(&plugin)->Has(context, isMatchCandidateStr).ToChecked() == false)
     {
       throw HootException("Error finding 'isMatchCandidate' function.");

@@ -26,7 +26,7 @@ exports.geometryType = "polygon";
 
 // This is needed for disabling superfluous conflate ops. In the future, it may also
 // be used to replace exports.isMatchCandidate (see #3047).
-exports.matchCandidateCriterion = "hoot::AreaCriterion";
+exports.matchCandidateCriterion = "hoot::NonBuildingAreaCriterion";
 
 var sublineMatcher = new hoot.MaximalSublineStringMatcher();
 var smallerOverlapExtractor = new hoot.SmallerOverlapExtractor();

@@ -42,7 +42,6 @@ exports.isMatchCandidate = function(map, e)
   {
     return false;
   }
-
   return hoot.OsmSchema.isPolygon(map, e) && !hoot.OsmSchema.isSpecificallyConflatable(map, e, exports.geometryType);
 };
 

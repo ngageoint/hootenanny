@@ -42,7 +42,8 @@ var sublineStringMatcher = hoot.SublineStringMatcherFactory.getMatcher(exports.b
 exports.isMatchCandidate = function(map, e)
 {
   hoot.trace("e: " + e.getElementId());
-  // Even though a route relation passes the linear crit, we want only highway or rail conflation to conflate it.
+  // Even though a route relation passes the linear crit, we want only highway or rail conflation to
+  // conflate it.
   if (e.getElementId().getType() == "Relation" && e.getTags().contains("route"))
   {
     return false;
