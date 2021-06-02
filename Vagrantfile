@@ -166,9 +166,9 @@ Vagrant.configure(2) do |config|
         config.vm.synced_folder "/fouo", "/fouo", type: "rsync"
       end
     else
-      config.vm.synced_folder ".", "/home/vagrant/hoot", type: "sshfs"
+      config.vm.synced_folder ".", "/home/vagrant/hoot"
       if $fouoShare
-        config.vm.synced_folder "/fouo", "/fouo", type: "sshfs"
+        config.vm.synced_folder "/fouo", "/fouo"
       end
     end
   end
@@ -255,7 +255,13 @@ Vagrant.configure(2) do |config|
     # Customize the amount of memory on the VM:
     vb.memory = $vbRam
     vb.cpus = $vbCpu
-  end
+
+    # Use sshfs sync folder type for Virtualbox
+    config.vm.synced_folder ".", "/home/vagrant/hoot", type: "sshfs"
+    if $fouoShare
+      config.vm.synced_folder "/fouo", "/fouo", type: "sshfs"
+    end
+end
 end
 
 # Allow local overrides of vagrant settings
