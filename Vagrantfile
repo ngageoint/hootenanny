@@ -166,9 +166,10 @@ Vagrant.configure(2) do |config|
         config.vm.synced_folder "/fouo", "/fouo", type: "rsync"
       end
     else
-      config.vm.synced_folder ".", "/home/vagrant/hoot"
+      config.vagrant.plugins = "vagrant-sshfs"
+      config.vm.synced_folder ".", "/home/vagrant/hoot", type: "sshfs"
       if $fouoShare
-        config.vm.synced_folder "/fouo", "/fouo"
+        config.vm.synced_folder "/fouo", "/fouo", type: "sshfs"
       end
     end
   end
