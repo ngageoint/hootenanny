@@ -167,10 +167,16 @@ Vagrant.configure(2) do |config|
       end
     else
       # Use sshfs sharing if available, otherwise default sharing
-      sharing_type = Vagrant.has_plugin?("vagrant-sshfs") ? "sshfs" : ""
-      config.vm.synced_folder ".", "/home/vagrant/hoot", type: sharing_type
-      if $fouoShare
-        config.vm.synced_folder "/fouo", "/fouo", type: sharing_type
+      if Vagrant.has_plugin?("vagrant-sshfs")
+        config.vm.synced_folder ".", "/home/vagrant/hoot", type: "sshfs"
+        if $fouoShare
+          config.vm.synced_folder "/fouo", "/fouo", type: "sshfs"
+        end
+      else
+        config.vm.synced_folder ".", "/home/vagrant/hoot"
+        if $fouoShare
+          config.vm.synced_folder "/fouo", "/fouo"
+        end
       end
     end
   end
