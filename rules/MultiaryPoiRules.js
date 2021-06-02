@@ -12,7 +12,8 @@ exports.candidateDistanceSigma = 1.0; // 1.0 * (CE95 + Worst CE95);
 exports.matchThreshold = parseFloat(hoot.get("conflate.match.threshold.default"));
 exports.missThreshold = parseFloat(hoot.get("conflate.miss.threshold.default"));
 exports.reviewThreshold = parseFloat(hoot.get("conflate.review.threshold.default"));
-exports.searchRadius = -1.0;;
+exports.searchRadius = -1.0;
+exports.matchCandidateCriterion = "hoot::PoiCriterion";
 
 var soundexExtractor = new hoot.NameExtractor(
     new hoot.Soundex());
