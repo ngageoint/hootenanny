@@ -178,14 +178,22 @@ public class CustomScriptResource {
         String path = folder.getPath();
 
         try {
-            saveArr.add(saveScript(scriptName, scriptDescription, script, path, false));
+            saveArr.add(saveScript(scriptName, scriptDescription, script, path));
         }
         catch (Exception e) {
             String msg = "Error processing script save for: " + scriptName + ".  Cause: " + e.getMessage();
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
-        DbUtils.addTranslation(scriptName, user.getId(), folderId);
+        long translationExists = createQuery()
+                .select(translations)
+                .from(translations)
+                .where(translations.folderId.eq(folderId).and(translations.displayName.eq(scriptName)))
+                .fetchCount();
+
+        if (translationExists == 0) {
+            DbUtils.addTranslation(scriptName, user.getId(), folderId);
+        }
 
         return Response.ok(saveArr.toString()).build();
     }
@@ -201,7 +209,7 @@ public class CustomScriptResource {
             response = new ScriptsModifiedResponse();
             List<String> scriptsModified = new ArrayList<>();
             for (Script script : saveMultipleScriptsRequest.getScripts()) {
-                if (saveScript(script.getName(), script.getDescription(), script.getContent(), null, false) != null) {
+                if (saveScript(script.getName(), script.getDescription(), script.getContent(), null) != null) {
                     scriptsModified.add(script.getName());
                 }
             }
@@ -940,7 +948,7 @@ public class CustomScriptResource {
     @Path("/modifyTranslation")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response moveTranslation(@Context HttpServletRequest request,
+    public Response modifyTranslation(@Context HttpServletRequest request,
             @QueryParam("name") String name,
             @QueryParam("description") String description,
             @QueryParam("translationId") Long translationId,
@@ -978,7 +986,7 @@ public class CustomScriptResource {
         }
 
         try {
-            saveScript(name, description, script, targetFolder.getPath(), true);
+            saveScript(name, description, script, targetFolder.getPath());
         }
         catch (Exception e) {
             String msg = "Error processing script save for: " + name + ".  Cause: " + e.getMessage();
@@ -1110,7 +1118,7 @@ public class CustomScriptResource {
         return (List<File>) FileUtils.listFiles(scriptsDir, exts, false);
     }
 
-    private static JSONObject saveScript(String name, String description, String content, String scriptPath, boolean overwriteData) throws IOException {
+    private static JSONObject saveScript(String name, String description, String content, String scriptPath) throws IOException {
         if (StringUtils.trimToNull(name) == null) {
             logger.error("Invalid input script name: {}", name);
             return null;
@@ -1132,7 +1140,7 @@ public class CustomScriptResource {
 
         File fScript = new File(SCRIPT_FOLDER, translationPath + ".js");
         if (!fScript.exists()) {
-            if (!fScript.createNewFile() && !overwriteData) {
+            if (!fScript.createNewFile()) {
                 logger.error("File {} should not have existed before we tried to create it!", fScript.getAbsolutePath());
             }
         }
