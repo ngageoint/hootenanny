@@ -727,8 +727,20 @@ public class CustomScriptResource {
         String newFolder = File.separator + folderName;
         folderPath = folderPath != null ? folderPath + newFolder : newFolder;
 
-        File workDir = new File(SCRIPT_FOLDER, folderPath);
+        if(isPublic == null) {
+            isPublic = folder.getPublicCol();
+            // If the user did specify verify visibility:
+        } else {
+            if(isPublic && !folder.getPublicCol()) {
+                throw new BadRequestException("public folders cannot be created under private folders");
+            }
+            // don't allow private folders to be create under public folders -except- root.
+            if(!isPublic && folder.getPublicCol() && !folder.getId().equals(0L)) {
+                throw new BadRequestException("private folders cannot be create under public folders");
+            }
+        }
 
+        File workDir = new File(SCRIPT_FOLDER, folderPath);
         if (!workDir.exists()) {
             try {
                 FileUtils.forceMkdir(workDir);
