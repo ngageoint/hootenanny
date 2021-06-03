@@ -15,15 +15,7 @@ The +tag-compare+ command reads from inputs and outputs a co-occurrence matrix b
 tag-compare (input1 input2) [--no-table]
 --------------------------------------
 
-=== Example Output
-
-------------------
-|                    | amenity=restaurant | building=yes | name=<NULL> | name=<SIMILAR> |
-| amenity=restaurant |                  4 |              |             |                |
-|       building=yes |                    |           28 |             |                |
-|        name=<NULL> |                    |              |           4 |                |
-|     name=<SIMILAR> |                    |              |             |             24 |
-------------------
+https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#compare-the-tag-in-two-maps[Examples]
 
 === See Also
 

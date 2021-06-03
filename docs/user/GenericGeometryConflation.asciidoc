@@ -2,10 +2,10 @@
 [[GenericGeometryConflation]]
 == Generic Geometry Conflation
 
-Hootenanny uses machine learning techniques, customizable scripts, and flexible configuration options to develop algorithms that will yield 
-good conflated output for a given type of data (roads, buildings, etc.). If a type of map data is encountered for which Hootenanny has no
-specific conflation algorithm available, that data will be conflated with Generic Geometry Conflation scripts. This ensures that all data in
-an input map has a chance to be conflated. 
+Hootenanny uses machine learning techniques, customizable scripts, and flexible configuration options to develop algorithms 
+that will yield good conflated output for a given type of data (roads, buildings, etc.). If a type of map data is 
+encountered for which Hootenanny has no specific conflation algorithm available, that data will be conflated with 
+Generic Geometry Conflation scripts. This ensures that all data in an input map has a chance to be conflated. 
 
 A separate script exists for geometry type Hootenanny conflates. The scripts are:
 
@@ -14,6 +14,6 @@ A separate script exists for geometry type Hootenanny conflates. The scripts are
 * `Polygon.js`
 * `PointPolygon.js`
 
-The scripts use very simple techniques to attempt to conflate data, including Euclidean distance matching and type tag similarity scoring. 
-Related configuration options include the `search.generic.*` and `generic.*` options.
+The scripts use very simple techniques to attempt to conflate data, including Euclidean distance matching and type 
+tag similarity scoring. Related configuration options include the `search.generic.*` and `generic.*` options.
 
