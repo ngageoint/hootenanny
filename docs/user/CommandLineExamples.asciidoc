@@ -14,20 +14,20 @@ See the User Guide for more specific details on command usage. Most of these exa
     hoot help conflate
 -----
 
-* [Alignment](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#alignment)
-* [Applying Changes](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#applying-changes)
-* [Cleaning](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#cleaning)
-* [Comparison](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#comparison)
-* [Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#conflation)
-* [Conversion](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#conversion)
-* [Language Translation](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#language-translation)
-* [MetaInfo](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#metainfo)
-* [Schema Translation](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#schema-translation)
-* [Statistics](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#statistics)
-* [Tag Info](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#tag-info)
-* [Tag Manipulation](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#tag-manipulation)
-* [Utilities](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#utilities))
-* [Validation](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#validation)
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#alignment[Alignment]
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#applying-changes[Applying Changes]
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#cleaning[Cleaning]
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#comparison[Comparison]
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#conflation[Conflation]
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#conversion[Conversion]
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#language-translation[Language Translation]
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#metainfo[MetaInfo]
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#schema-translation[Schema Translation]
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#statistics[Statistics]
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#tag-info[Tag Info]
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#tag-manipulation[Tag Manipulation]
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#utilities[Utilities]
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#validation[Validation]
 
 === Alignment
 
