@@ -3,19 +3,20 @@
 
 === Description
 
-The +tag-distribution+ command prints out a distribution count for all values of a specified tag key, including a percentage of the
-each value's frequency compared to all tag values processed for the key.
+The +tag-distribution+ command prints out a distribution count for all values of a specified tag key, including a 
+percentage of the each value's frequency compared to all tag values processed for the key.
 
-* +inputs+           - Inputs; may be any supported input format (e.g. OSM file). Specify multiple inputs by separating them with a semicolon 
-                       and surrounding them with quotes.
-* +tagKeys+          - The names of tag keys to gather statistics for; specify multiple inputs by separating them with a semicolon and
-                       surrounding them with quotes. Ignored if --names is specified.
-* +criterion+        - (optional) The criterion must be a single class name of a Hootenanny criterion inherting from ElementCriterion.  A
-                       criterion can be negated using the element.criterion.negate configuration option. Use the +info --operators+ command to
-                       obtain a list of available Hootenanny criteria.
+* +inputs+           - Inputs; may be any supported input format (e.g. OSM file). Specify multiple inputs by separating 
+                       them with a semicolon and surrounding them with quotes.
+* +tagKeys+          - The names of tag keys to gather statistics for; specify multiple inputs by separating them with 
+                       a semicolon and surrounding them with quotes. Ignored if --names is specified.
+* +criterion+        - (optional) The criterion must be a single class name of a Hootenanny criterion inherting 
+                       from `ElementCriterion`. A criterion can be negated using the +element.criterion.negate+ 
+                       configuration option. Use the +info --operators+ command to obtain a list of available 
+                       Hootenanny criteria.
 * +--names+          - If specified, tagKeys is ignored and only name tags, as defined by Hootenanny's schema, are processed
-* +--sort-by-value   - If specified, results are sorted alphabetically by tag value.  If not specified, results are sorted by decreasing
-                       tag value occurrence frequency.
+* +--sort-by-value   - If specified, results are sorted alphabetically by tag value.  If not specified, results are sorted 
+                       by decreasing tag value occurrence frequency.
 * +--limit+          - Limits the number of results returned.
 * +--tokenize+       - Breaks tag values up into individual tokens.
 
@@ -25,22 +26,7 @@ each value's frequency compared to all tag values processed for the key.
 tag-distribution (input1;input2...) (tagKeys) [criterion] [--names] [--sort-by-value] [--limit]  [--tokenize]
 --------------------------------------
 
-==== Example Usage
-
---------------------------------------
-hoot tag-distribution test-files/DcGisRoads.osm highway hoot::HighwayCriterion
-
-hoot tag-distribution test-files/DcGisRoads.osm "highway;name" hoot::HighwayCriterion
-
-hoot tag-distribution test-files/DcGisRoads.osm hoot::HighwayCriterion --names --limit 5
---------------------------------------
-
-==== Example Output
-
---------------------------------------
-road : 365 (0.9759)
-motorway : 9 (0.02406)
---------------------------------------
+TODO
 
 === See Also
 

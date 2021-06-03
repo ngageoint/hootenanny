@@ -88,8 +88,8 @@ See the User Guide for more details on command usage. Most examples use .osm fil
 ===== Derive a changeset between two maps and write the result back to a Rails Port or CGIMap instance:
 
 -----
-    hoot changeset-derive input1.osm input2.osm changeset.osc
-    hoot changeset-apply changeset.osc http://url --stats --progress
+    hoot changeset-derive input1.osm input2.osm changeset.osc --stats myStats.json
+    hoot changeset-apply changeset.osc http://username:password@localhost --stats --progress
 -----
 
 ===== Create a changeset that replaces all features in one dataset with features from another dataset within a specified bounding box:
@@ -148,6 +148,18 @@ See the User Guide for more details on command usage. Most examples use .osm fil
       input1.osm input2.osm output.osm
 -----
 
+===== Retrieve OSM data around Paris, France from the OSM API:
+
+-----
+    hoot convert -D bounds=2.277303,48.851684,2.311635,48.864701 https://osm-api-url/api/0.6/map output.osm
+-----
+
+===== Retrieve OSM data around Paris, France from the OSM API specifying the bounds in a file:
+
+-----
+    hoot convert -D bounds.input.filename=bounds.osm https://osm-api-url/api/0.6/map output.osm
+-----
+
 ===== Apply a schema translation to a map:
 
 -----
@@ -155,6 +167,12 @@ See the User Guide for more details on command usage. Most examples use .osm fil
 -----
 
 ==== Utilities
+
+===== Cut a section out of a map:
+
+-----
+    hoot cut shape.osm input.osm output.osm
+-----
 
 ===== Clean erroneous data from two maps:
 
@@ -169,6 +187,12 @@ See the User Guide for more details on command usage. Most examples use .osm fil
 -----
 
 ===== Run JOSM validation on a map:
+
+-----
+    hoot validate input.osm
+-----
+
+===== Run JOSM validation on a map and mark failing features:
 
 -----
     hoot validate input.osm output.osm
@@ -222,10 +246,10 @@ See the User Guide for more details on command usage. Most examples use .osm fil
       -D name.criterion.partial.match=false input.osm output.osm
 -----
 
-===== Create a shape that covers a set of features:
+===== Create a shape that covers a set of features with a buffer:
 
 -----
-hoot alpha-shape --buffer 10 input.osm 200 0 output.osm
+hoot alpha-shape --buffer 10 input.osm output.osm
 -----
 
 ===== Attempt to add missing type tags to POIs and buildings:
@@ -413,6 +437,24 @@ hoot alpha-shape --buffer 10 input.osm 200 0 output.osm
 
 ==== Applying Changes
 
+===== Derive a changeset from a single input:
+
+-----
+    hoot changeset-derive input.osm "" output.osc
+-----
+
+===== Apply changes from multiple changeset files to an API endpoint:
+
+-----
+    hoot changeset-apply changeset.osc changeset-001.osc changeset-002.osc https://username:password@localhost
+-----
+
+===== Apply changes from an OSM file to an API endpoint:
+
+-----
+    hoot changeset-apply input.osm http://username:password@localhost --stats --progress
+-----
+
 ===== Derive a changeset between two maps and write the result directly to an OSM API database:
 
 -----
@@ -486,6 +528,18 @@ hoot alpha-shape --buffer 10 input.osm 200 0 output.osm
     hoot convert -D changeset.user.id=1 \
       -D osmapidb.bulk.inserter.reserve.record.ids.before.writing.data=true \
       input.osm.pbf osmapidb://username:password@localhost:5432/database
+-----
+
+===== List maps in the Hootenanny Web Services database:
+
+-----
+    hoot db-list -D api.db.email=myemail@me.com hootapidb://user:password@localhost:5432/hoot
+-----
+
+===== Delete a map from the Hootenanny Web Services database:
+
+-----
+    hoot db-delete -D api.db.email=myemail@me.com hootapidb://user:password@localhost:5432/hoot/mapLayerName
 -----
 
 ===== Remove relations from a map:
@@ -627,6 +681,24 @@ hoot alpha-shape --buffer 10 input.osm 200 0 output.osm
 
 ==== Utilities
 
+===== Calculate a covering shape with a specified alpha value:
+
+-----
+   hoot alpha-shape --alpha 200 input.osm output.osm 
+-----
+
+===== Derive an alignment transform for two maps:
+
+-----
+    hoot align --derive --ref input1.osm input2.osm transform.rs
+-----
+
+===== Apply an alignment transform for two maps:
+
+-----
+    hoot align --apply transform.rs input.osm output.osm
+-----
+
 ===== Clean erroneous data from two maps using Hooteanny's default cleaning operations plus a subset of JOSM's cleaning capabilities via exclusion:
 
 -----
@@ -683,10 +755,16 @@ hoot alpha-shape --buffer 10 input.osm 200 0 output.osm
     hoot crop -D crop.invert=true input.osm output.osm "-77.0551,38.8845,-77.0281,38.9031"
 -----
 
-===== Put out a random subset of data with a maximum node size from a large input dataset (useful during conflation testing):
+===== Crop out a random subset of data with a maximum node size:
 
 -----
     hoot crop-random input.osm output.osm 5000
+-----
+
+===== Crop out a random subset of data with a maximum node size while seeing the random number generator:
+
+-----
+    hoot crop-random input1.osm output.osm 1000 0.001 3
 -----
 
 ===== Determine if a map is sorted to the OSM standard:
@@ -1125,7 +1203,13 @@ hoot count -D intersecting.way.criterion.source.way.ids="-76;-985" input.osm \
     1	(<1%)	medium building overlap building orientation not similar building edges not very close to each other
 -----
 
-===== Display a delimited list as a string of all tag keys in a map:
+===== Display all unique values for a particular tag key in a map:
+
+-----
+    hoot tag-info input.osm --keys "key"
+-----
+
+===== Display a all tag keys in a map as a delimited list string:
 
 -----
     hoot tag-info --warn --keys-only --delimited-text input.osm
@@ -1368,5 +1452,11 @@ Requires a language translation server installation.  See the Hootenanny Install
 
 -----
     hoot validate --available-validators
+-----
+
+===== Run customized JOSM validation on a map:
+
+-----
+    hoot validate -D josm.validators.include="DuplicatedWayNodes" input.osm
 -----
 

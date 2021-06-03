@@ -3,8 +3,8 @@
 
 === Description
 
-The +type-similarity+ command returns a similarity score for two type tags based on the Hootenanny internal schema. This is useful when 
-debugging conflation matches.
+The +type-similarity+ command returns a similarity score for two type tags based on the Hootenanny internal schema. This 
+is useful when debugging conflation matches.
 
 * +tag1+  - Type tag key/value pair that maps to a type in the schema; e.g. "amenity=school"
 * +tag2+  - Type tag key/value pair that maps to a type in the schema; e.g. "amenity=school"
@@ -17,11 +17,7 @@ If a type is passed into either input that is not present in the schema, an erro
 type-similarity (tag1) (tag2)
 --------------------------------------
 
-==== Example
-
---------------------------------------
-hoot type-similarity amenity=school landuse=residential
---------------------------------------
+TODO
 
 ==== See Also
 

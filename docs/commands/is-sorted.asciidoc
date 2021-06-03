@@ -5,9 +5,9 @@
 
 The +is-sorted+ command determines whether data has been sorted by element type and ID.
 
-This operation is fast for OSM PBF file, since their headers can simply be checked to see if the file is sorted.  For all other formats, the
-data is read in one feature at a time and negative result is returned as soon as an unsorted element is found.  If the data is sorted, but
-entire contents of the input will be read through.
+This operation is fast for OSM PBF file, since their headers can simply be checked to see if the file is sorted.  For all 
+other formats, the data is read in one feature at a time and negative result is returned as soon as an unsorted element 
+is found.  If the data is sorted, but entire contents of the input will be read through.
 
 * +input+ - Input; may be any supported input format (e.g. OSM file).
 
@@ -17,11 +17,7 @@ entire contents of the input will be read through.
 is-sorted (input)
 --------------------------------------
 
-==== Example
-
---------------------------------------
-hoot is-sorted myInput.osm.pbf
---------------------------------------
+TODO
 
 === See Also
 

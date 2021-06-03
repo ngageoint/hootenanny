@@ -3,20 +3,20 @@
 
 === Description
 
-The +crop-random+ command randomly crops a section of map data to an output with a specified maximum node count. This is useful if you have a 
-very large file dataset and need a smaller subset of data to test conflation against.
+The +crop-random+ command randomly crops a section of map data to an output with a specified maximum node count. This is 
+useful if you have a very large file dataset and need a smaller subset of data to test conflation against.
 
-* +input(s)+      - One or more input paths; may be any supported input format (e.g. OSM file). Specify multiple inputs by separating them 
-                    with a semicolon.
+* +input(s)+      - One or more input paths; may be any supported input format (e.g. OSM file). Specify multiple inputs 
+                    by separating them with a semicolon.
 * +output+        - The output data path; may be any supported output format (e.g. OSM file)
-* +maxNodeCount+  - The maximum number of nodes to include in the output. If the number of nodes in the entire dataset is less than the 
-                    specified number, no cropping will occur.
+* +maxNodeCount+  - The maximum number of nodes to include in the output. If the number of nodes in the entire dataset is 
+                    less than the specified number, no cropping will occur. If too low a value is specified for maxNodeCount 
+                    or too high a value is specified for pixelSize, the algorithm used may not be able to find a solution.
 * +pixelSize+     - Size of the pixel used in the calculation in degrees. A good starting default is 0.001.
-* +randomSeed+    - Optionally seeds the random number generator for consistent output; useful during testing; use -1 for no seeding
-* +--write-tiles+ - Optionally writes the calculated tile footprints to a separate OSM file in the same output directory as +output+.
-
-If too low a value is specified for maxNodeCount or too high a value is specified for pixelSize, the algorithm used may not be able
-to find a solution.
+* +randomSeed+    - Optionally seeds the random number generator for consistent output; useful during testing; use -1 for 
+                    no seeding
+* +--write-tiles+ - Optionally writes the calculated tile footprints to a separate OSM file in the same output directory 
+                    as +output+.
 
 === Usage
 
@@ -33,17 +33,10 @@ The following cropping configuration options are not supported:
 
 See the +crop+ command for details on the remaining supported cropping configuration options.
 
-If you need to run random map cropping inline, use the hoot::RandomMapCropper OSM map operation along with crop.random.* configuration options.
+If you need to run random map cropping inline with another command, use the hoot::RandomMapCropper OSM map operation along 
+with crop.random.* configuration options.
 
-=== Examples
-
---------------------------------------
-# pseudo random selection
-hoot crop-random -D crop.keep.only.features.inside.bounds=true "input1.osm;input2.osm" output.osm 1000 0.001
-
-# seed the random selection for testing
-hoot crop-random -D crop.keep.only.features.inside.bounds=true "input1.osm;input2.osm" output.osm 1000 0.001 3
---------------------------------------
+TODO
 
 === See Also
 

@@ -3,14 +3,14 @@
 
 === Description
 
-The +convert+ command converts map data from one input format to another.  Optionally, a schema translation may be performed during the
-conversion.  The process may be memory bound depending upon the input or output formats selected.  See the Hootenanny User Guide Supported
-Data Formats section for more information.
+The +convert+ command converts map data from one input format to another.  Optionally, a schema translation may be 
+performed during the conversion.  The process may be memory bound depending upon the input or output formats selected.  
+See the Hootenanny User Guide Supported Data Formats section for more information.
 
-* +input(s)+       - Input path(s) to convert from; may be any supported input format; Multiple inputs are supported unless converting to 
-                     an OGR format, and path wildcards may be used for inputs within the same directory. For OGR inputs, layer names may 
-                     also optionally be specified.  Use a single space to separate each input and a ';' between inputs and layer 
-                     (<filename>;<layer name>).
+* +input(s)+       - Input path(s) to convert from; may be any supported input format; Multiple inputs are supported 
+                     unless converting to an OGR format, and path wildcards may be used for inputs within the same 
+                     directory. For OGR inputs, layer names may also optionally be specified.  Use a single space to 
+                     separate each input and a ';' between inputs and layer (<filename>;<layer name>).
 * +output+         - Output path to convert to; may be any supported output format (e.g. .osm file, etc.).
 * +--write-bounds+ - If the `bounds` configuration option is specified, optionally outputs a file containing the input bounds.
                      The location of the file is controlled via the `bounds.output.file` configuration option.
@@ -31,13 +31,6 @@ to the map, in order, before writing the result to the output. If a schema trans
 specified in schema.translation.script a SchemaTranslationVisitor is automatically added to the
 convert operations, so explicitly specifying it is unnecessary but will not cause problems.
 
-example:
---------------------------------------
-# Remove relations from a map
-hoot convert -D convert.ops="hoot::RemoveElementsVisitor" \
-  -D remove.elements.visitor.element.criteria="hoot::RelationCriterion" input.osm output.osm
---------------------------------------
-
 === Filtering Features Geographically
 
 If the configuration option, `bounds`, is set to a valid geographic bounds (see the configuration 
@@ -45,161 +38,23 @@ option documentation for formats), supporting readers will read data only from w
 bounds. The `bounds.*` configuration options allow for further customization of the bounds 
 requirement.
 
-==== Schema Translation
-
-Use the following configuration options to perform schema translations:
-* `schema.translation.script`
-* `schema.translation.direction`
-
-See their descriptions for more detail.
-
-examples:
---------------------------------------
-# All of these do the same thing:
-
-# every option specified
-hoot convert -D convert.ops=hoot::SchemaTranslationVisitor -D schema.translation.direction=toogr -D schema.translation.script=translations/MGCP_TRD4.js test-files/ToyTestA.osm $OUTPUT_DIR/translation-check-out.gdb
-
-# translation onvert op not specified; gets automatically added
-hoot convert -D schema.translation.direction=toogr -D schema.translation.script=translations/MGCP_TRD4.js test-files/ToyTestA.osm $OUTPUT_DIR/translation-check-out.gdb
-
-# neither translation convert op nor translation direction specified; op gets automatically added and the direction is assumed to be to
-# OGR due an OGR output format having been specified
-hoot convert -D schema.translation.script=translations/MGCP_TRD4.js test-files/ToyTestA.osm $OUTPUT_DIR/translation-check-out.gdb
---------------------------------------
-
-==== Shape File Conversion
-
-The option, `shape.file.writer.cols`, allows for filtering shape file output columns.
-
-==== OGR Caching
-
-Use the following configuration options to control the size of the element memory cache (valid only when converting OSM to an OGR format).  This
-can prevent memory issues:
-* `element.cache.size.node`
-* `element.cache.size.relation`
-* `element.cache.size.way`
-
-==== OGR Feature Limiting
-
-Use the configuration option `ogr.reader.limit` to limit the number of features read from an OGR input.
-
-=== Examples
-
-==== Combining Data
-
-Combine multiple OSM files into a single file:
-
---------------------------------------
-hoot convert input1.osm input2.osm output.osm
---------------------------------------
-
-==== Converting OSM Files to Geodatabases
-
-Convert an OSM file to a file geodatabase and apply an OGR translation:
-
---------------------------------------
-hoot convert -D schema.translation.script=MyTranslation.js MyInput.osm MyOutput.gdb
---------------------------------------
-
-==== Converting OSM Databases to Geodatabases
-
-Convert an OSM database to a file geodatabase and apply an OGR translation:
-
---------------------------------------
-hoot convert -D schema.translation.script=MyTranslation.js \
- PG:"dbname='mydb' host='myhost' port='5432' user='myuser' password='mypass'" MyOutput.gdb
---------------------------------------
-
-Convert an OSM database to a file geodatabase, apply a translation, and set element cache capacities:
-
---------------------------------------
-hoot convert -D schema.translation.script=MyTranslation.js \
- PG:"dbname='mydb' host='myhost' port='5432' user='myuser' password='mypass'" \
- MyOutput.gdb -D element.cache.size.node=10000 -D element.cache.size.way=2000 -D element.cache.size.relation=2000
---------------------------------------
-
-==== Converting OSM Files to Shape Files
-
-Convert an OSM file to a shape file specifying export columns:
-
---------------------------------------
-hoot convert -D shape.file.writer.cols="highway,surface,name,alt_name,oneway,bridge" MyInput.osm MyOutput.shp
---------------------------------------
-
-Convert an OSM file to a shape file, allowing the export columns to be automatically selected based on frequency:
-
---------------------------------------
-hoot convert MyInput.osm MyOutput.shp
---------------------------------------
-
-==== Converting Shape Files to OSM Files
-
-Convert multiple shape files to an OSM file with translation:
-
-------------------------------
-hoot convert -D schema.translation.script=MyTranslation.js -D schema.translation.direction=toosm input1.shp input2.shp output.osm
-------------------------------
-
-Convert multiple tiger road data sets using a tiger translation file found in _translations/TigerRoads.py_. by converting multiple files
-at one time.  Hootenanny will make sure that road end points that fall within 1 meter will be merged into intersections:
-
---------------------------------------
-hoot convert -D schema.translation.script=TigerRoads til_2010_*_roads.shp TigerRoadsOutput.osm
---------------------------------------
-
-==== Converting File Geodatabases to OSM Files
-
-Convert roads, bridges, overpasses and tunnels from a File Geodatabase into a single .osm file using a translation file named
-_translations/MyGdbTranslation.py_:
-
---------------------------------------
-hoot convert -D schema.translation.script=MyGdbTranslation MyGdb.gdb;ROAD_L MyGdb.gdb;BRIDGE_OVERPASS_L MyGdb.gdb;TUNNEL_L MyGdbOutput.osm
---------------------------------------
-
-==== Converting Zipped Shape Files to OSM
-
-Convert a road shapefile that is stored inside the +tds+ directory in a Zip file:
-
---------------------------------------
-hoot convert -D schema.translation.script=TDSv40.js /vsizip//gis-data/test_data.zip/tds/LAP030.shp ds_roads.osm
---------------------------------------
-
-Convert all TDS shapefiles stored in the top level of a Zip file:
-
---------------------------------------
-hoot convert -D schema.translation.script=TDSv40.js /vsizip//gis-data/test_data.zip/ tds_roads.osm
---------------------------------------
-
-==== Converting OSM API data to OSM
-
-Retrieve OSM data around Paris, France from an OSM API and save it to an OSM file:
-
---------------------------------------
-hoot convert -D bounds=2.277303,48.851684,2.311635,48.864701 https://osm-api-url/api/0.6/map download.osm
---------------------------------------
-
-Same command but using a file containing the bounds around Paris, France:
-
---------------------------------------
-hoot convert -D bounds.input.filename=bounds.osm https://osm-api-url/api/0.6/map download.osm
---------------------------------------
+TODO
 
 === Notes
 
 * The format for OSM database URLs is: protocol://<user name>:<password>@<host name>:<port>/<database name>
 * The format for OGR database URLs is: PG:"dbname='databasename' host='addr' port='5432' user='x' password='y'"
 * Writing to OSM API databases (osmapidb://) is intended to be a bulk operation for new data only (no updates on existing data).
-* When converting from OSM to an OGR format, the +convert+ command provides conversion from .osm files or POSTGIS osm databases to
-Shapefile, FileGDB, etc. The OGR libraries are used on the back end so other formats such as PostGIS and SQLite will likely work,
-but are not tested.
-* The conversion from OSM file to shape file is a lossy process that generates a point, line and polygon shapefile.  The OSM XML
-format is a richer format than Shapefile and supports such things as multiple geometry types within one file, inherit topology and
-arbitrary tagging. For these reasons the conversion to Shapefile is a lossy conversion.
+* When converting from OSM to an OGR format, the +convert+ command provides conversion from .osm files or POSTGIS osm 
+databases to Shapefile, FileGDB, etc. The OGR libraries are used on the back end so other formats such as PostGIS and 
+SQLite will likely work, but are not tested.
+* The conversion from OSM file to shape file is a lossy process that generates a point, line and polygon shapefile. The OSM 
+XML format is a richer format than Shapefile and supports such things as multiple geometry types within one file, 
+inherit topology and arbitrary tagging. For these reasons the conversion to Shapefile is a lossy conversion.
 * To use file geodatabases, the File Geodatabase module must be compiled into your version of GDAL to work. See
 http://trac.osgeo.org/gdal/wiki/FileGDB for details.
-* The format for specifying zip file data is: "/vsizip/<path to Zip file>/<path to the shape file INSIDE the Zip file>.  The "/" are
-field separators. If you get errors using absolute paths, check that you have the right number of "/".
+* The format for specifying zip file data is: "/vsizip/<path to Zip file>/<path to the shape file INSIDE the Zip file>. 
+The "/" are field separators. If you get errors using absolute paths, check that you have the right number of "/".
 ** a Zip file located at /gis-data/test_data.zip
 *** The path to the shapefile inside the Zip file: "dir/LAP010.shp
 *** The input is: "/vsizip//gis-data/test_data.zip/dir/LAP010.shp"

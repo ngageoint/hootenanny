@@ -15,10 +15,5 @@ Note you can also simply type hoot and the command to get the help.
 help [command] [--verbose]
 --------------------------------------
 
-==== Example
-
---------------------------------------
-hoot help conflate
-hoot help --verbose
---------------------------------------
+TODO
 

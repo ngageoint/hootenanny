@@ -83,24 +83,7 @@ info --config-options (name) [--option-names]
 info --config-options (name) [--option-details]
 --------------------------------------
 
-==== Example
-
---------------------------------------
-# by default lists all config option names
-hoot info --config-options
-
-# list all config option names
-hoot info --config-options --option-names
-
-# list all config option names and their descriptions
-hoot info --config-options --option-details
-
-# list all config option names where the name contains the given string
-hoot info --config-options poi.polygon --option-names
-
-# list all config option names and their descriptions where the name contains the given string
-hoot info --config-options poi.polygon --option-details
---------------------------------------
+TODO
 
 === Conflatable Criteria
 
@@ -112,11 +95,7 @@ The +--conflatable-crieria++ option prints out all element criteria classes that
 info --conflatable-criteria
 --------------------------------------
 
-==== Example
-
---------------------------------------
-hoot info --conflatable-criteria
---------------------------------------
+TODO
 
 === Conflate Post Operations
 
@@ -129,11 +108,7 @@ conflation job with the 'conflate' command.  The configuration option 'conflate.
 info --conflate-post-operations
 --------------------------------------
 
-==== Example
-
---------------------------------------
-hoot info --conflate-post-operations
---------------------------------------
+TODO
 
 === Conflate Pre Operations
 
@@ -146,11 +121,7 @@ conflation job with the 'conflate' command.  The configuration option 'conflate.
 info --conflate-pre-operations
 --------------------------------------
 
-==== Example
-
---------------------------------------
-hoot info --conflate-pre-operations
---------------------------------------
+TODO
 
 === Element Criterion Consumers
 
@@ -164,11 +135,7 @@ data transformations on them.
 info --criterion-consumers
 --------------------------------------
 
-==== Example
-
---------------------------------------
-hoot info --criterion-consumers
---------------------------------------
+TODO
 
 === Feature Extractors
 
@@ -181,11 +148,7 @@ model with manually matched map training data.
 info --feature-extractors
 --------------------------------------
 
-==== Example
-
---------------------------------------
-hoot info --feature-extractors
---------------------------------------
+TODO
 
 === Filters
 
@@ -198,11 +161,7 @@ the +--operators+ option. Element criteria can be used to filter elements during
 info --filters
 --------------------------------------
 
-==== Example
-
---------------------------------------
-hoot info --filters
---------------------------------------
+TODO
 
 === Formats
 
@@ -217,33 +176,7 @@ configuration option.
 info --formats [--input] [--output] [--input-bounded] [--input-streamable] [--output-streamable] [--ogr]
 --------------------------------------
 
-==== Example
-
---------------------------------------
-# prints all supported input and output formats
-hoot info --formats
-
-# prints supported input formats
-hoot info --formats --input
-
-# prints streamable supported input formats
-hoot info --formats --input-streamable
-
-# prints supported input formats that support bounded reading
-hoot info --formats --input-bounded
-
-# prints supported output formats
-hoot info --formats --output
-
-# prints streamable supported input formats
-hoot info --formats --output-streamable
-
-# prints input formats for which Hootenanny uses OGR to read
-hoot info --formats --input --ogr
-
-# prints input formats for which Hootenanny uses OGR to write
-hoot info --formats --output --ogr
---------------------------------------
+TODO
 
 === Geometry Type Criteria
 
@@ -256,11 +189,7 @@ element's geometry.
 info --geometry-type-crieria
 --------------------------------------
 
-==== Example
-
---------------------------------------
-hoot info --geometry-type-crieria
---------------------------------------
+TODO
 
 === Matchers
 
@@ -273,11 +202,7 @@ contain the criteria to match a specific pair of features
 info --matchers
 --------------------------------------
 
-==== Example
-
---------------------------------------
-hoot info --matchers
---------------------------------------
+TODO
 
 === Match Creators
 
@@ -290,11 +215,7 @@ Match Creators are responsible for spawning matchers.
 info --match-creators
 --------------------------------------
 
-==== Example
-
---------------------------------------
-hoot info --match-creators
---------------------------------------
+TODO
 
 === Mergers
 
@@ -307,11 +228,7 @@ created to merge a feature pair supported by a corresponding matcher.
 info --mergers
 --------------------------------------
 
-==== Example
-
---------------------------------------
-hoot info --mergers
---------------------------------------
+TODO
 
 === Merger Creators
 
@@ -324,11 +241,7 @@ Merger Creators are responsible for spawning mergers.
 info --merger-creators
 --------------------------------------
 
-==== Example
-
---------------------------------------
-hoot info --merger-creators
---------------------------------------
+TODO
 
 === Operators
 
@@ -345,12 +258,7 @@ Map operators can be criterion, operations, or visitors.
 info --operators
 --------------------------------------
 
-==== Example
-
---------------------------------------
-# lists all available operators
-hoot info --operators
---------------------------------------
+TODO
 
 === Subline Matchers
 
@@ -362,11 +270,7 @@ The +--subline-matchers+ option prints out available subline matchers that deter
 info --subline-matchers
 --------------------------------------
 
-==== Example
-
---------------------------------------
-hoot info --subline-matchers
---------------------------------------
+TODO
 
 === Subline String Matchers
 
@@ -379,11 +283,7 @@ of multilinestring matching is used during conflation.
 info --subline-string-matchers
 --------------------------------------
 
-==== Example
-
---------------------------------------
-hoot info --subline-string-matchers
---------------------------------------
+TODO
 
 === String Comparators
 
@@ -395,11 +295,7 @@ The +--string-comparators+ option prints out available string comparators that c
 info --string-comparators
 --------------------------------------
 
-==== Example
-
---------------------------------------
-hoot info --string-comparators
---------------------------------------
+TODO
 
 === Tag Mergers
 
@@ -411,17 +307,7 @@ The +--tag-mergers+ option prints out available tag mergers that may be applied 
 info --tag-mergers
 --------------------------------------
 
-==== Example
-
---------------------------------------
-hoot info --tag-mergers
---------------------------------------
-
-==== Example
-
---------------------------------------
-hoot info --tag-mergers
---------------------------------------
+TODO
 
 === Value Aggregators
 
@@ -434,11 +320,7 @@ a conflation model with manually matched map training data.
 info --value-aggregators
 --------------------------------------
 
-==== Example
-
---------------------------------------
-hoot info --value-aggregators
---------------------------------------
+TODO
 
 === Way Joiners
 
@@ -451,11 +333,7 @@ in conjunction with the OsmMapOperation, `hoot::WayJoinerOp`.
 info --way-joiners
 --------------------------------------
 
-==== Example
-
---------------------------------------
-hoot info --way-joiners
---------------------------------------
+TODO
 
 === Way Snap Criteria
 
@@ -474,14 +352,5 @@ list with all available snapping criteria are returned. The list of available ma
 info --way-snap-criteria
 --------------------------------------
 
-==== Example
-
---------------------------------------
-# return all criterion classes
-hoot info --way-snap-criteria
-
-# return just the criterion classes applicable to matchers matching highway and river features; the config
-# option must be added before --way-snap-criteria
-hoot info -D match.creators="hoot::HighwayMatchCreator;hoot::ScriptMatchCreator,River.js" --way-snap-criteria
---------------------------------------
+TODO
 

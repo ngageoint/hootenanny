@@ -16,8 +16,6 @@ the two of them.
 hoot sync-element-ids (input1) (input2) (output)
 --------------------------------------
 
-=== Examples
-
 * [Basic Examples](https://github.com/ngageoint/hootenanny/blob/4182/docs/user/CommandLineExamples.asciidoc#copy-element-ids-from-one-map-to-another-where-identical-elements-are-found-between-them)
 
 === See Also

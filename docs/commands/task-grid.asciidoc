@@ -3,59 +3,63 @@
 
 === Description
 
-The +task-grid+ command generates a grid consisting of rectangle shaped bounding boxes that can be used for dividing work to be performed on a 
-map and writes the output to a file.
+The +task-grid+ command generates a grid consisting of rectangle shaped bounding boxes that can be used for dividing work to 
+be performed on a map and writes the output to a file.
 
 === Uniform Grid
 
-If the +--uniform+ option is specified, a task grid consisting of regular rectangle shaped bounding boxes that are uniformly distributed across
-an area is generated and written to an output file. The following options may be used with +--uniform+:
+If the +--uniform+ option is specified, a task grid consisting of regular rectangle shaped bounding boxes that are 
+uniformly distributed across an area is generated and written to an output file. The following options may be used 
+with +--uniform+:
 
-* +input/bounds+      - Either one or more input URLs or a bounding box string. If inputs(s) are specified, the task grid bounds will be the
-                        entire extent of the input data. Otherwise, the extent will match the specified bounding box string. Inputs URLs may 
-                        be any supported input format (e.g. OSM file). Specify multiple inputs by separating them with a semicolon. Bounding 
-                        box strings must be of the form: minx,miny,maxx,maxy; e.g. "-71.4698,42.4866,-71.4657,42.4902"
+* +input/bounds+      - Either one or more input URLs or a bounding box string. If inputs(s) are specified, the task 
+                        grid bounds will be the entire extent of the input data. Otherwise, the extent will match the 
+                        specified bounding box string. Inputs URLs may be any supported input format (e.g. OSM file). 
+                        Specify multiple inputs by separating them with a semicolon. Bounding box strings must be of the 
+                        form: minx,miny,maxx,maxy; e.g. "-71.4698,42.4866,-71.4657,42.4902"
 * +output+            - Output file to write the tile boundaries to; must be GeoJSON (*.geojson) or OSM (*.osm).
 * +gridDimensionSize+ - The number of rows and columns in the grid.
 
 === Node Density Grid
 
-If the +--node-density+ option is specified, a task grid consisting of irregular rectangle shaped bounding boxes that contain roughly equal 
-distributions of node data from the specified input(s) is generated and written to an output file. The following options may be used with 
-+--node-density+:
+If the +--node-density+ option is specified, a task grid consisting of irregular rectangle shaped bounding boxes that 
+contain roughly equal distributions of node data from the specified input(s) is generated and written to an output file. 
+The following options may be used with +--node-density+:
 
-* +input+                      - One or more inputs; may be any supported input format (e.g. OSM file). Specify multiple inputs by separating 
-                                 them with a semicolon.
+* +input+                      - One or more inputs; may be any supported input format (e.g. OSM file). Specify multiple 
+                                 inputs by separating them with a semicolon.
 * +output+                     - Output file to write the tile boundaries to; must be GeoJSON (*.geojson) or OSM (*.osm).
-* +--bounds+                   - Optional bounding box string to further restrict the extent of the task grid; must be of the form: 
-                                 minx,miny,maxx,maxy; e.g. "-71.4698,42.4866,-71.4657,42.4902"
-* +--maxNodesPerCell+          - Optional maximum number of nodes in any grid cell. The default value is 1000. If the specified value is less 
-                                 than the number of nodes in the input data, then a single bounding box containing all of the data is output.
+* +--bounds+                   - Optional bounding box string to further restrict the extent of the task grid; must be of 
+                                 the form: minx,miny,maxx,maxy; e.g. "-71.4698,42.4866,-71.4657,42.4902"
+* +--maxNodesPerCell+          - Optional maximum number of nodes in any grid cell. The default value is 1000. If the 
+                                 specified value is less than the number of nodes in the input data, then a single bounding 
+                                 box containing all of the data is output. If too low a value is specified for 
+                                 +--maxNodesPerCell+ or too high a value is specified for pixelSize, the algorithm 
+                                 used may not be able to find a solution and the runtime may increase dramatically. 
+                                 The +--maxAttempts+ option allows you to let the algorithm find potentially better 
+                                 input values.
 * +--pixelSize+                - Optional size of the pixel used in the calculation in degrees. The default size is 0.001.
-* +--maxAttempts+              - Optional maximum number of calculation attempts. Defaults to three attempts. This is useful when using this 
-                                 command in an automated fashion via a script. If this is set to greater than one and the first calculation 
-                                 attempt fails, additional calculation attempts will automatically be made after tweaking the initial input 
-                                 parameters. Note that as additional attempts are made the adjustments to the inputs may dramatically increase 
+* +--maxAttempts+              - Optional maximum number of calculation attempts. Defaults to three attempts. This is 
+                                 useful when using this command in an automated fashion via a script. If this is set to 
+                                 greater than one and the first calculation attempt fails, additional calculation attempts 
+                                 will automatically be made after tweaking the initial input parameters. Note that 
+                                 as additional attempts are made the adjustments to the inputs may dramatically increase 
                                  the runtime of a calculation.
-* +--maxTimePerAttempt+        - Optional maximum time allowed, in seconds, for a calculation attempt. Defaults to no time limit (-1). The 
-                                 timeout is not guaranteed to happen exactly after the specified time has elapsed and will happen as close to it 
-                                 as possible.
-* +--pixelSizeReductionFactor+ - Optional percentage by which +--pixelSize+ will be automatically reduced if +--maxAttempts+ is greater than 
-                                 one and any calculation attempt fails. The default value is 10%.
+* +--maxTimePerAttempt+        - Optional maximum time allowed, in seconds, for a calculation attempt. Defaults to no 
+                                 time limit (-1). The timeout is not guaranteed to happen exactly after the specified time 
+                                 has elapsed and will happen as close to it as possible.
+* +--pixelSizeReductionFactor+ - Optional percentage by which +--pixelSize+ will be automatically reduced if +--maxAttempts+ 
+                                 is greater than one and any calculation attempt fails. The default value is 10%.
 * +--random+                   - Optionally selects a single random grid cell from those calculated
-* +--randomSeed+               - Optionally seeds the random number generator for consistent grid cell selection; valid only if +--random+ 
-                                 is specified; use -1 for pseudo-random seeding; defaults to -1
-
-If too low a value is specified for +--maxNodesPerTile+ or too high a value is specified for pixelSize, the algorithm used may not be able
-to find a solution and the runtime may increase dramatically. The +--maxAttempts+ option allows you to let the algorithm find potentially
-better input values.
+* +--randomSeed+               - Optionally seeds the random number generator for consistent grid cell selection; valid only 
+                                 if +--random+ is specified; use -1 for pseudo-random seeding; defaults to -1
 
 === Usage
 
 --------------------------------------
-hoot task-grid (input1.osm)[;input2.osm...]|(bounds) (output) (gridDimensionSize) --uniform
+task-grid (input1.osm)[;input2.osm...]|(bounds) (output) (gridDimensionSize) --uniform
 
-hoot task-grid (input1.osm)[;input2.osm...] (output) [--bounds <value>] [--maxNodesPerCell <value>] [--pixelSize <value>] [--maxAttempts <value>] [--maxTimePerAttempt <value>] [--pixelSizeReductionFactor <value>] [--random] [--randomSeed <value>] --node-density
+task-grid (input1.osm)[;input2.osm...] (output) [--bounds <value>] [--maxNodesPerCell <value>] [--pixelSize <value>] [--maxAttempts <value>] [--maxTimePerAttempt <value>] [--pixelSizeReductionFactor <value>] [--random] [--randomSeed <value>] --node-density
 --------------------------------------
 
 === Examples
