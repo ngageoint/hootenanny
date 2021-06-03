@@ -47,7 +47,7 @@ To just derive a transform file that can be used separately to rubber sheet data
 align --derive [--ref] (input1) (input2) (transform2to1.rs) [transform1to2.rs]
 --------------------------------------
 
-* [Examples](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#derive-an-alignment-transform-for-two-maps)
+https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#derive-an-alignment-transform-for-two-maps[Examples]
 
 === Description With Apply Option
 
@@ -64,7 +64,7 @@ input parameters are:
 align --apply (transform.rs) (input) (output)
 --------------------------------------
 
-* [Examples](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#apply-an-alignment-transform-for-two-maps)
+https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#apply-an-alignment-transform-for-two-maps[Examples]
 
 === See Also
 

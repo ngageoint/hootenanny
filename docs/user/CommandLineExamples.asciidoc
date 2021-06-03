@@ -224,7 +224,7 @@ hoot convert -D convert.ops="hoot::UnlikelyRoadRemover" input.osm output.osm
     hoot diff input1.osm input2.osm
 -----
 
-==== Compare the tags in two maps:
+==== Compare two maps:
 
 -----
     hoot compare input1.osm input2.osm
@@ -239,8 +239,11 @@ hoot convert -D convert.ops="hoot::UnlikelyRoadRemover" input.osm output.osm
     Graph Score 2: 996 +/-0 (996 to 996)
     Graph Score: 970 +/-10 (960 to 980)
     Overall: 981 +/-4 (977 to 985)
+-----
 
-    # Compare tags between maps
+==== Compare the tags in two maps:
+
+-----
     hoot tag-compare input1.osm input2.osm
 
     |                    | amenity=restaurant | building=yes | name=<NULL> | name=<SIMILAR> |
@@ -589,7 +592,7 @@ Requires a language translation server installation.  See the Hootenanny Install
 
 === MetaInfo
 
-=====List all configuration option names:
+==== List all configuration option names:
 
 -----
     hoot info --config-options
@@ -709,7 +712,7 @@ Requires a language translation server installation.  See the Hootenanny Install
     hoot info-rnd --languages --detectable
 -----
 
-=====List all translatable languages:
+==== List all translatable languages:
 
 -----
     hoot info-rnd --languages --translatable
@@ -848,12 +851,6 @@ Requires a language translation server installation.  See the Hootenanny Install
 
 === Statistics
 
-==== Display a set of statistics for a map:
-
------
-    hoot stats input.osm
------
-
 ==== Count all features in a map:
 
 -----
@@ -953,17 +950,17 @@ Requires a language translation server installation.  See the Hootenanny Install
       -D attribute.value.criterion.comparison.value="username" input.osm hoot::AttributeValueCriterion
 -----
 
-==== Calculate the average number of nodes for a set of buildings:
+==== Count the number of elements with valid phone number tags in a map:
 
 -----
-hoot stat -D nodes.per.way.visitor.element.criterion=hoot::BuildingCriterion input.osm \
-  hoot::NodesPerWayVisitor average
+    hoot count input.osm hoot::HasPhoneNumberCriterion
 -----
 
-==== Calculate the numerical average of all tags with a given key:
+==== Count how many roads intersect two other roads given their IDs:
 
 -----
-    hoot stat -D tags.visitor.keys="accuracy" input.osm hoot::AverageNumericTagsVisitor
+    hoot count -D intersecting.way.criterion.source.way.ids="-76;-985" input.osm \
+      hoot::IntersectingWayCriterion
 -----
 
 ==== Count the number of elements with valid address tags in a map:
@@ -972,16 +969,23 @@ hoot stat -D nodes.per.way.visitor.element.criterion=hoot::BuildingCriterion inp
     hoot count input.osm hoot::HasAddressCriterion
 -----
 
+==== Calculate the average number of nodes for a set of buildings:
+
+-----
+    hoot stat -D nodes.per.way.visitor.element.criterion=hoot::BuildingCriterion input.osm \
+      hoot::NodesPerWayVisitor average
+-----
+
+==== Calculate the numerical average of all tags with a given key:
+
+-----
+    hoot stat -D tags.visitor.keys="accuracy" input.osm hoot::AverageNumericTagsVisitor
+-----
+
 ==== Count the total number of valid address tags in a map:
 
 -----
     hoot stat input.osm hoot::AddressCountVisitor
------
-
-==== Count the number of elements with valid phone number tags in a map:
-
------
-    hoot count input.osm hoot::HasPhoneNumberCriterion
 -----
 
 ==== Count the total number of valid phone number tags in a map:
@@ -990,12 +994,13 @@ hoot stat -D nodes.per.way.visitor.element.criterion=hoot::BuildingCriterion inp
     hoot stat input.osm hoot::PhoneNumberCountVisitor
 -----
 
-==== Count how many roads intersect two other roads given their IDs:
+==== Display a set of statistics for a map:
 
 -----
-hoot count -D intersecting.way.criterion.source.way.ids="-76;-985" input.osm \
-  hoot::IntersectingWayCriterion
+    hoot stats input.osm
 -----
+
+=== Tag Info
 
 ==== Display the distribution of highway tags for roads in a map:
 
@@ -1006,7 +1011,34 @@ hoot count -D intersecting.way.criterion.source.way.ids="-76;-985" input.osm \
     9	(2.41%)		motorway
 -----
 
-=== Tag Info
+==== Display occurrence frequencies of tokenized feature names:
+
+-----
+    hoot tag-distribution input.osm --names --tokenize --limit 5
+
+    320	(6.81%)	nw
+    246	(5.24%)	st
+    80	(1.70%)	ave
+    45	(0.96%)	sw
+    18	(0.38%)	h
+-----
+
+==== Show a summary of building conflation reviews by type and frequency:
+
+-----
+    hoot tag-distribution input.osm hoot:review:note hoot::ReviewRelationCriterion
+
+    Total tag count: 129
+    62	(48.1%)	unmatched buildings are overlapping
+    20	(15.5%)	very little building overlap building orientation not similar building edges not very close to each other
+    15	(11.6%)	very little building overlap similar building orientation building edges not very close to each other
+    14	(10.9%)	very little building overlap semisimilar building orientation building edges not very close to each other
+    12	(9.3%)	very little building overlap very similar building orientation building edges not very close to each other
+    3	(2.33%)	small building overlap building orientation not similar building edges not very close to each other
+    1	(<1%)	small building overlap similar building orientation building edges not very close to each other
+    1	(<1%)	small building overlap semisimilar building orientation building edges not very close to each other
+    1	(<1%)	medium building overlap building orientation not similar building edges not very close to each other
+-----
 
 ==== Display tag schema information for a map
 
@@ -1042,42 +1074,13 @@ hoot count -D intersecting.way.criterion.source.way.ids="-76;-985" input.osm \
     }}
 -----
 
-==== Display occurrence frequencies of tokenized feature names:
-
------
-    hoot tag-distribution input.osm --names --tokenize --limit 5
-
-    320	(6.81%)	nw
-    246	(5.24%)	st
-    80	(1.70%)	ave
-    45	(0.96%)	sw
-    18	(0.38%)	h
------
-
-==== Show a summary of building conflation reviews by type and frequency:
-
------
-    hoot tag-distribution input.osm hoot:review:note hoot::ReviewRelationCriterion
-
-    Total tag count: 129
-    62	(48.1%)	unmatched buildings are overlapping
-    20	(15.5%)	very little building overlap building orientation not similar building edges not very close to each other
-    15	(11.6%)	very little building overlap similar building orientation building edges not very close to each other
-    14	(10.9%)	very little building overlap semisimilar building orientation building edges not very close to each other
-    12	(9.3%)	very little building overlap very similar building orientation building edges not very close to each other
-    3	(2.33%)	small building overlap building orientation not similar building edges not very close to each other
-    1	(<1%)	small building overlap similar building orientation building edges not very close to each other
-    1	(<1%)	small building overlap semisimilar building orientation building edges not very close to each other
-    1	(<1%)	medium building overlap building orientation not similar building edges not very close to each other
------
-
 ==== Display all unique values for a particular tag key in a map:
 
 -----
     hoot tag-info input.osm --keys "key"
 -----
 
-==== Display a all tag keys in a map as a delimited list string:
+==== Display all tag keys in a map as a delimited list string:
 
 -----
     hoot tag-info --warn --keys-only --delimited-text input.osm
