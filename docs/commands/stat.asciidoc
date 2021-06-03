@@ -19,7 +19,7 @@ The +stat+ command displays a statistic calculated from the features in a map.
 hoot stat (input) (visitor) [statType]
 --------------------------------------
 
-* [Examples](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#calculate-the-area-of-all-features-in-a-map)
+[Examples](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#calculate-the-area-of-all-features-in-a-map)
 
 === See Also
 

@@ -20,8 +20,7 @@ validate (input) [output]
 validate [--available-validators]
 --------------------------------------
 
-* [Basic Examples](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#run-josm-validation-on-a-map)
-* [Advanced Examples](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#list-the-available-josm-validators)
+[Examples](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#validation)
 
 ==== See Also
 

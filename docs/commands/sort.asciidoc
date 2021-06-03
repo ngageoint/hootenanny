@@ -15,7 +15,7 @@ is: 1) nodes, 2) ways, and then 3) relations.
 sort (input) (output)
 --------------------------------------
 
-* [Examples](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#sort-a-map-to-the-osm-standard-in-memory)
+[Examples](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#sort-a-map-to-the-osm-standard-in-memory)
 
 === Notes
 

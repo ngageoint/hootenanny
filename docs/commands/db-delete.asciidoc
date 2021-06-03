@@ -13,5 +13,5 @@ The +db-delete+ command deletes a map from the Hootenanny Web Services database.
 db-delete (mapUrl)
 --------------------------------------
 
-* [Examples](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#delete-a-map-from-the-hootenanny-web-services-database)
+[Examples](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#delete-a-map-from-the-hootenanny-web-services-database)
 

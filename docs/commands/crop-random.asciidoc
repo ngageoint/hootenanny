@@ -24,7 +24,7 @@ useful if you have a very large file dataset and need a smaller subset of data t
 crop-random (input1.osm)[;input2.osm...] (output.osm) (maxNodeCount) (pixelSize) [randomSeed]
 --------------------------------------
 
-* [Examples](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#crop-out-a-random-subset-of-data-with-a-maximum-node-size)
+[Examples](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#crop-out-a-random-subset-of-data-with-a-maximum-node-size)
 
 === Configuration Options
 

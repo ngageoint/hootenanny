@@ -26,7 +26,7 @@ The following optional defines can be set:
 align (input1) (input2) (output)
 --------------------------------------
 
-https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#bring-two-maps-closer-in-alignment-without-merging-them[Example]
+[Examples](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#alignment)
 
 === Description With Derive Option
 

@@ -26,7 +26,7 @@ percentage of the each value's frequency compared to all tag values processed fo
 tag-distribution (input1;input2...) (tagKeys) [criterion] [--names] [--sort-by-value] [--limit]  [--tokenize]
 --------------------------------------
 
-* [Examples](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#display-the-distribution-of-highway-tags-for-roads-in-a-map)
+[Examples](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#display-the-distribution-of-highway-tags-for-roads-in-a-map)
 
 === See Also
 

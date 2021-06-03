@@ -24,8 +24,7 @@ convert (input) (output)
 convert "(input1[;layer]) [input2[;layer]]" (output) [--write-bounds]
 --------------------------------------
 
-* [Basic Examples](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#combine-two-maps-into-a-single-map)
-* [Advanced Examples](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#convert-an-osm-api-database-to-a-file-geodatabase-and-apply-a-schema-translation)
+[Examples](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#conversion)
 
 === Conversion Operations
 

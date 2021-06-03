@@ -27,8 +27,7 @@ changeset-apply (changeset.os*) [changeset2.os* ...] (targetUrl) [--stats] [--pr
 changeset-apply (changeset.osc.sql) (targetUrl) [conflictAoi] [conflictTimestamp]
 --------------------------------------
 
-* [Basic Examples](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#derive-a-changeset-between-two-maps-and-write-the-result-back-to-a-rails-port-or-cgimap-instance)
-* [Advanced Examples](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#apply-changes-from-multiple-changeset-files-to-an-api-endpoint)
+[Examples](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#applying-changes)
 
 === See Also
 

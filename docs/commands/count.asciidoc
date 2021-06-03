@@ -20,8 +20,7 @@ The +count+ command displays a count of the number of features in a map, allowin
 hoot count (input1;input2...) [criterion] [--all-elements]
 --------------------------------------
 
-* [Basic Examples](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#count-all-features-in-a-map)
-* [Advanced Examples](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#count-all-elements-that-are-not-pois)
+[Examples](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#count-all-features-in-a-map)
 
 === See Also
 

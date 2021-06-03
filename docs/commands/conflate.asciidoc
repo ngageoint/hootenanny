@@ -49,8 +49,7 @@ call to the `changeset-derive` command as well.
 conflate (input1) (input2) (output) [--differential] [--include-tags] [--separate-output] [--stats filename] [--changeset-stats geometry-stats-filename tags-stats-filename]
 --------------------------------------
 
-* [Basic Examples](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#conflate-two-maps-into-a-single-map-using-the-first-map-as-a-reference-reference-conflation-and-using-the-unifying-algorithm)
-* [Advanced Examples](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#conflate-by-adding-geometry-data-from-the-second-map-to-output-that-does-not-conflict-with-data-in-the-first-map-differential-tag-only-conflation-tags-may-be-overwritten)
+[Examples](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#conflation)
 
 === See Also
 

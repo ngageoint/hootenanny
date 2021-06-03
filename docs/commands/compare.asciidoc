@@ -26,7 +26,7 @@ The following variables are provided in the score result:
 compare (base1) [base2] (uut)
 --------------------------------------
 
-* [Examples](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#compare-two-maps)
+[Examples](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#comparison)
 
 === See Also
 

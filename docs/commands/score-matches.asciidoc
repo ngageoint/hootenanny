@@ -25,10 +25,10 @@ score-matches [--confusion] [--optimize] [--validation-off] (input1 input2) [inp
 === Examples
 
 --------------------------------------
-# TODO
+# Displays match scores
 hoot score-matches --confusion --optimize input1.osm input2.osm output.osm
 
-# TODO
+# Writes match scoring to a file
 hoot score-matches --confusion input1.osm input2.osm output.osm
 --------------------------------------
 

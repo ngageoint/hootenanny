@@ -15,5 +15,5 @@ Note you can also simply type hoot and the command to get the help.
 help [command] [--verbose]
 --------------------------------------
 
-* [Examples](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#display-available-commands)
+[Examples](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#help)
 
