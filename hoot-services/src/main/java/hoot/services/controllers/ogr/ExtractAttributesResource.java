@@ -113,6 +113,7 @@ public class ExtractAttributesResource {
             List<File> files = processFormDataMultiPart(multiPart, workDir, jobId, inputType);
 
             ExternalCommand getAttributesCommand = getAttributesCommandFactory.build(jobId, workDir, files, debugLevel, this.getClass());
+            getAttributesCommand.setTrackable(Boolean.FALSE);
 
             Command[] workflow = { getAttributesCommand };
 
@@ -198,7 +199,7 @@ public class ExtractAttributesResource {
                     }
                     else {
                         //if we have shapefiles, only include shp refs
-                        if (extension.equalsIgnoreCase("shp")) {
+                        if (extension.equalsIgnoreCase("shp") || extension.equalsIgnoreCase("gpkg")) {
                             files.add(uploadedFile);
                         }
                     }

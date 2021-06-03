@@ -61,7 +61,8 @@ mgcp.rules = {
     ['F_CODE','BB041','man_made','breakwater'], // Breakwater - NFDD BB081
     ['F_CODE','BB043','man_made','groyne'], // Groin - NFDD BB081
     ['F_CODE','BB140','man_made','training_wall'], // Training Wall - NFDD BB081
-    ['F_CODE','BB190','waterway','dock'], // Berthing Structure - NFDD BB081
+    ['F_CODE','BB190','man_made','shoreline_construction'], // Shoreline Construction
+    // ['F_CODE','BB190','man_made','berthing_structure'], // Berthing Structure - NFDD BB081
     ['F_CODE','BB230','wall','seawall'], // Seawall - NFDD BB081
     ['F_CODE','BB240','leisure','slipway'], // Slipway - NFDD BB082
     ['F_CODE','BD110','man_made','offshore_construction'], // Offshore Platform - NFDD BD115
@@ -137,6 +138,8 @@ mgcp.rules = {
     ['F_CODE','BA030','place','islet'], // From OSM
     ['F_CODE','BA040','water','tidal'], // Tidal Water
     ['F_CODE','BB190','man_made','pier'], // From OSM
+    ['F_CODE','BB190','man_made','quay'], // Berthing Structure - NFDD BB081
+    ['F_CODE','BB190','waterway','dock'], // Berthing Structure - NFDD BB081
     ['F_CODE','BH080','landuse','basin'], // From OSM - Lake is close but not great
     ['F_CODE','BH130','landuse','reservoir'], // From OSM
     ['F_CODE','BH130','man_made','reservoir'], // Reservoir - NFDD BH082
@@ -833,7 +836,7 @@ mgcp.rules = {
 
     // PWC - Shoreline Construction Type
     //['PWC','0','raw:PWC','unknown'], // Unknown
-    ['PWC','0',undefined,undefined], // Unknown
+    ['PWC','0','shoreline_construction:type','unknown'], // Unknown
     ['PWC','1','man_made','pier'], // Pier
     ['PWC','2','waterway','dock'], // Wharf
     ['PWC','3','man_made','quay'], // Quay
@@ -2249,11 +2252,11 @@ mgcp.rules = {
     ['FUN','6','condition','not_isolated'], // Changed to Fully Functional
 
     // Highway
-    ['HCT','3','highway','motorway_link'],
     ['HCT','1','highway','trunk'],
     ['HCT','1','highway','trunk_link'],
     ['HCT','1','highway','primary_link'],
     ['HCT','2','highway','secondary_link'],
+    ['HCT','3','highway','motorway_link'],
     ['HCT','4','highway','tertiary_link'],
     ['HCT','4','highway','living_street'],
     ['HCT','4','highway','residential'],

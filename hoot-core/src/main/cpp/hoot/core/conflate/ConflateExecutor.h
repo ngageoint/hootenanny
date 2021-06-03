@@ -71,6 +71,8 @@ public:
   void setDiffConflateSeparateOutput(bool separate) { _diffConflateSeparateOutput = separate; }
   void setDiffRemoveLinearPartialMatchesAsWhole(bool remove)
   { _diffConflator.setRemoveLinearPartialMatchesAsWhole(remove); }
+  void setDiffRemoveRiverPartialMatchesAsWhole(bool remove)
+  { _diffConflator.setRemoveRiverPartialMatchesAsWhole(remove); }
 
   void setOsmApiDbUrl(QString url) { _osmApiDbUrl = url; }
 
@@ -83,7 +85,6 @@ private:
 
   bool _isDiffConflate;
   bool _diffConflateSeparateOutput;
-  bool _diffRemoveLinearPartialMatchesAsWhole;
   DiffConflator _diffConflator;
   ChangesetProviderPtr _pTagChanges;
 

@@ -307,13 +307,13 @@ public:
     {
       if (_customSearchRadius < 0)
       {
-        //base the radius off of the element itself
+        // base the radius off of the element itself
         LOG_TRACE("Calculating search radius based off of element...");
         result = e->getCircularError() * _candidateDistanceSigma;
       }
       else
       {
-        //base the radius off some predefined radius
+        // base the radius off some predefined radius
         LOG_TRACE("Calculating search radius based off of custom defined script value...");
         result = _customSearchRadius * _candidateDistanceSigma;
       }
@@ -339,7 +339,8 @@ public:
         int argc = 0;
         jsArgs[argc++] = ElementJs::New(e);
 
-        Local<Value> f = ToLocal(&_getSearchRadius)->Call(context, getPlugin(), argc, jsArgs).ToLocalChecked();
+        Local<Value> f =
+          ToLocal(&_getSearchRadius)->Call(context, getPlugin(), argc, jsArgs).ToLocalChecked();
 
         result = toCpp<Meters>(f) * _candidateDistanceSigma;
 
@@ -541,7 +542,8 @@ public:
     // the crit instead of the function; doing so causes this to crash; see #3047 and the history
     // of this file for the failing code that needs to be re-enabled
 
-    Local<String> isMatchCandidateStr = String::NewFromUtf8(current, "isMatchCandidate").ToLocalChecked();
+    Local<String> isMatchCandidateStr =
+      String::NewFromUtf8(current, "isMatchCandidate").ToLocalChecked();
     if (ToLocal(&plugin)->Has(context, isMatchCandidateStr).ToChecked() == false)
     {
       throw HootException("Error finding 'isMatchCandidate' function.");
@@ -1005,6 +1007,10 @@ CreatorDescription ScriptMatchCreator::_getScriptDescription(QString path) const
     Local<Value> value = ToLocal(&plugin)->Get(context, descriptionStr).ToLocalChecked();
     result.setDescription(toCpp<QString>(value));
   }
+  else
+  {
+    throw IllegalArgumentException("No script description provided for: " + path);
+  }
   Local<String> experimentalStr = String::NewFromUtf8(current, "experimental").ToLocalChecked();
   if (ToLocal(&plugin)->Has(context, experimentalStr).ToChecked())
   {
@@ -1017,15 +1023,28 @@ CreatorDescription ScriptMatchCreator::_getScriptDescription(QString path) const
     Local<Value> value = ToLocal(&plugin)->Get(context, featureTypeStr).ToLocalChecked();
     result.setBaseFeatureType(CreatorDescription::stringToBaseFeatureType(toCpp<QString>(value)));
   }
+  // A little kludgy, but we'll identify generic geometry Point/Polygon conflation by its script
+  // name.
+  else if (!path.contains("PointPolygon.js"))
+  {
+    throw IllegalArgumentException("No base feature type provided for: " + path);
+  }
   Local<String> geometryTypeStr = String::NewFromUtf8(current, "geometryType").ToLocalChecked();
   if (ToLocal(&plugin)->Has(context, geometryTypeStr).ToChecked())
   {
     Local<Value> value = ToLocal(&plugin)->Get(context, geometryTypeStr).ToLocalChecked();
     result.setGeometryType(GeometryTypeCriterion::typeFromString(toCpp<QString>(value)));
   }
-  // This controls which feature types a script conflates and is required. It allows for disabling
-  // superfluous conflate ops. It should probably be integrated with isMatchCandidate somehow at
-  // some point, if possible.
+  else if (!path.contains("PointPolygon.js"))
+  {
+    throw IllegalArgumentException("No geometry type provided for: " + path);
+  }
+  // The criteria parsed here describe which feature types a script conflates. Its used only for
+  // determining which conflate ops to disable with SuperfluousConflateOpRemover and for some
+  // scripts, also to determine how to cull features when performing rubbersheeting during search
+  // radius auto-calc. Is does *not* actually cull features during matching.
+  // exports.isMatchCandidate does that. So, there is a bit of a disconnect there. However, it
+  // hasn't caused any problems so far.
   Local<String> matchCandidateCriterionStr =
     String::NewFromUtf8(current, "matchCandidateCriterion").ToLocalChecked();
   if (ToLocal(&plugin)->Has(context, matchCandidateCriterionStr).ToChecked())
@@ -1040,6 +1059,10 @@ CreatorDescription ScriptMatchCreator::_getScriptDescription(QString path) const
     {
       result.setMatchCandidateCriteria(QStringList(valueStr));
     }
+  }
+  else
+  {
+    throw IllegalArgumentException("No match candidate criteria provided for: " + path);
   }
 
   QFileInfo fi(path);

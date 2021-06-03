@@ -19,14 +19,12 @@ exports.searchRadius = parseFloat(hoot.get("search.radius.generic.point.polygon"
 exports.typeThreshold = parseFloat(hoot.get("generic.point.polygon.type.threshold"));
 exports.writeDebugTags = hoot.get("writer.include.debug.tags");
 exports.writeMatchedBy = hoot.get("writer.include.matched.by.tag");
-// The baseFeatureType and geometryType vars don't work for Point/Polygon with stats due to it
+// The baseFeatureType and geometryType aren't needed for Point/Polygon with stats due to it
 // conflating different geometry types. Logic has been added to ScriptMatchCreator to handle this,
-// so they can remain empty.
-//exports.baseFeatureType = ""; // 
-//exports.geometryType = "";
+// in a custom fashion so they may remain empty.
 
-// This is needed for disabling superfluous conflate ops. In the future, it may also
-// be used to replace exports.isMatchCandidate (see #3047).
+// This is needed for disabling superfluous conflate ops only. exports.isMatchCandidate handles
+// culling match candidates.
 exports.matchCandidateCriterion = "hoot::PointCriterion;hoot::PolygonCriterion";
 
 var distanceExtractor = 

@@ -26,8 +26,8 @@ exports.writeMatchedBy = hoot.get("writer.include.matched.by.tag");
 // geometry type here.
 exports.geometryType = "";
 
-// This is needed for disabling superfluous conflate ops. In the future, it may also
-// be used to replace exports.isMatchCandidate (see #3047).
+// This is needed for disabling superfluous conflate ops only. exports.isMatchCandidate handles
+// culling match candidates.
 exports.matchCandidateCriterion = "hoot::RelationCriterion";
 
 var edgeDistanceExtractor = new hoot.EdgeDistanceExtractor();

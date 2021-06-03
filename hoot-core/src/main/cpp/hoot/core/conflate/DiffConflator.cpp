@@ -79,6 +79,7 @@ DiffConflator::DiffConflator() :
 AbstractConflator(),
 _intraDatasetElementIdsPopulated(false),
 _removeLinearPartialMatchesAsWhole(false),
+_removeRiverPartialMatchesAsWhole(true),
 _numSnappedWays(0),
 _numUnconflatableElementsDiscarded(0)
 {
@@ -88,6 +89,7 @@ DiffConflator::DiffConflator(const std::shared_ptr<MatchThreshold>& matchThresho
 AbstractConflator(matchThreshold),
 _intraDatasetElementIdsPopulated(false),
 _removeLinearPartialMatchesAsWhole(false),
+_removeRiverPartialMatchesAsWhole(true),
 _numSnappedWays(0),
 _numUnconflatableElementsDiscarded(0)
 {
@@ -123,7 +125,7 @@ void DiffConflator::apply(OsmMapPtr& map)
   msg = msg.replace("non-river", "river");
   msg = msg.replace("partially.", "");
   msg = msg.replace("completely.", "");
-  if (!ConfigOptions().getDifferentialRemoveRiverPartialMatchesAsWhole())
+  if (!_removeRiverPartialMatchesAsWhole)
   {
     msg += "partially.";
   }

@@ -12,7 +12,6 @@ include::JavascriptOverview.asciidoc[]
 include::tmp/RulesLib.asciidoc[]
 include::tmp/RulesTemplate.asciidoc[]
 :leveloffset: 0
-include::user/HootAPIexamples.asciidoc[]
 :imagesdir: ./user
 include::user/SupportedDataFormats.asciidoc[]
 include::user/GenericGeometryConflation.asciidoc[]

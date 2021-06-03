@@ -49,7 +49,6 @@ public:
   ~AreaCriterion() = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
-
   bool isSatisfied(const Tags& tags, const ElementType& elementType) const;
 
   GeometryType getGeometryType() const override { return GeometryType::Polygon; }
