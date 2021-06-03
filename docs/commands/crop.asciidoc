@@ -19,7 +19,7 @@ configuration options.
 crop (input.osm) (output.osm) (bounds) [--write-bounds]
 --------------------------------------
 
-[Examples](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#crop-a-map-to-an-extent)
+https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#crop-a-map-to-an-extent[Examples]
 
 === Configuration Options
 

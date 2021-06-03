@@ -20,7 +20,7 @@ validate (input) [output]
 validate [--available-validators]
 --------------------------------------
 
-[Examples](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#validation)
+https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#validation[Examples]
 
 ==== See Also
 

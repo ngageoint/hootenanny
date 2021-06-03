@@ -35,7 +35,7 @@ Only one of the following options can be passed to the command:
 
 The +--detectors+ option prints out all available language detectors that can be used with the Hootenanny web services.
 
-[Examples](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#metainfo)
+https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#metainfo[Examples]
 
 Each of the following sections describes an option that may be used with this command and its input parameters.
 

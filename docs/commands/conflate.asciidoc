@@ -49,7 +49,7 @@ call to the `changeset-derive` command as well.
 conflate (input1) (input2) (output) [--differential] [--include-tags] [--separate-output] [--stats filename] [--changeset-stats geometry-stats-filename tags-stats-filename]
 --------------------------------------
 
-[Examples](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#conflation)
+https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#conflation[Examples]
 
 === See Also
 

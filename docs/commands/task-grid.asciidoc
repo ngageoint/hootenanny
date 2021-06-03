@@ -62,8 +62,8 @@ task-grid (input1.osm)[;input2.osm...]|(bounds) (output) (gridDimensionSize) --u
 task-grid (input1.osm)[;input2.osm...] (output) [--bounds <value>] [--maxNodesPerCell <value>] [--pixelSize <value>] [--maxAttempts <value>] [--maxTimePerAttempt <value>] [--pixelSizeReductionFactor <value>] [--random] [--randomSeed <value>] --node-density
 --------------------------------------
 
-* [Uniform Grid Examples](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#generate-a-grid-with-regular-shaped-cells-across-an-entire-map)
-* [Node Density Grid Examples](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#generate-a-grid-with-irregular-shaped-cells-that-will-fit-at-most-1000-nodes-each-for-an-entire-map)
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#generate-a-grid-with-regular-shaped-cells-across-an-entire-map[Uniform Grid Examples]
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#generate-a-grid-with-irregular-shaped-cells-that-will-fit-at-most-1000-nodes-each-for-an-entire-map[Node Density Grid Examples]
 
 === See Also
 

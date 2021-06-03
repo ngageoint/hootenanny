@@ -14,7 +14,7 @@ The +extent+ command outputs the geospatial bounds of the input map data as an A
 extent (input) [verbose]
 --------------------------------------
 
-[Examples](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#display-the-geospatial-extent-of-a-map)
+https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#display-the-geospatial-extent-of-a-map[Examples]
 
 === See Also
 

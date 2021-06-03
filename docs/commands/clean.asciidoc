@@ -20,7 +20,7 @@ hoot info --cleaning-operations
 clean (input) (output)
 --------------------------------------
 
-[Examples](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#cleaning)
+https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#cleaning[Examples]
 
 ==== See Also
 

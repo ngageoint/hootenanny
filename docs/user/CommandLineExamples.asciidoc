@@ -2,7 +2,7 @@
 [[CommandLineExamples]]
 == Command Line Examples
 
-See the User Guide for more specific details on command usage. Most of these examples use .osm files, however, many [other formats](https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc) are supported.
+See the User Guide for more specific details on command usage. Most of these examples use .osm files, however, many https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc[other formats] are supported.
 
 === Help
 

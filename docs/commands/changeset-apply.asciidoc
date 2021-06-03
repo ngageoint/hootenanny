@@ -27,7 +27,7 @@ changeset-apply (changeset.os*) [changeset2.os* ...] (targetUrl) [--stats] [--pr
 changeset-apply (changeset.osc.sql) (targetUrl) [conflictAoi] [conflictTimestamp]
 --------------------------------------
 
-[Examples](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#applying-changes)
+https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#applying-changes[Examples]
 
 === See Also
 

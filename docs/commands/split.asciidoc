@@ -23,7 +23,7 @@ highest percentage of overlap.
 split (tiles) (input) (output)
 --------------------------------------
 
-[Examples](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#split-a-map-into-multiple-maps-using-tiles-from-a-file)
+https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#split-a-map-into-multiple-maps-using-tiles-from-a-file[Examples]
 
 === See Also
 

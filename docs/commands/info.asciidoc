@@ -40,7 +40,7 @@ hoot info -D match.creators="hoot::HighwayMatchCreator;hoot::ScriptMatchCreator,
 
 Note how "--way-snap-criteria" is specified after the single configuration option.
 
-[Examples](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#metainfo)
+https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#metainfo[Examples]
 
 Each of the following sections describes an option that may be used with this command and its input parameters.
 

@@ -24,7 +24,7 @@ convert (input) (output)
 convert "(input1[;layer]) [input2[;layer]]" (output) [--write-bounds]
 --------------------------------------
 
-[Examples](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#conversion)
+https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#conversion[Examples]
 
 === Conversion Operations
 

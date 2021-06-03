@@ -27,7 +27,7 @@ hoot de-duplicate (input1) [input2] (output1) [output2] [--favor-connected-ways]
 
 === Examples
 
-[Examples](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#remove-intra-map-duplicates-within-a-single-map)
+https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#remove-intra-map-duplicates-within-a-single-map[Examples]
 
 === See Also
 

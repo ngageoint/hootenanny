@@ -15,7 +15,7 @@ The +tag-compare+ command reads from inputs and outputs a co-occurrence matrix b
 tag-compare (input1 input2) [--no-table]
 --------------------------------------
 
-[Examples](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#compare-the-tag-in-two-maps)
+https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#compare-the-tag-in-two-maps[Examples]
 
 === See Also
 
