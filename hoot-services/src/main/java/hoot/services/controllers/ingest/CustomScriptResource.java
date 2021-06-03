@@ -736,7 +736,7 @@ public class CustomScriptResource {
             }
             // don't allow private folders to be create under public folders -except- root.
             if(!isPublic && folder.getPublicCol() && !folder.getId().equals(0L)) {
-                throw new BadRequestException("private folders cannot be create under public folders");
+                throw new BadRequestException("private folders cannot be created under public folders");
             }
         }
 
