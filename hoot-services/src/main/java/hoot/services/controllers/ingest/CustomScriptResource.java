@@ -160,7 +160,6 @@ public class CustomScriptResource {
      */
     @POST
     @Path("/save")
-    @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
     public Response processSave(@Context HttpServletRequest request,
                                 String script,
@@ -946,7 +945,6 @@ public class CustomScriptResource {
      */
     @PUT
     @Path("/modifyTranslation")
-    @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
     public Response modifyTranslation(@Context HttpServletRequest request,
             @QueryParam("name") String name,
