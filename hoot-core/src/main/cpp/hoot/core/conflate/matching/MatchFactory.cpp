@@ -231,8 +231,8 @@ MatchFactory& MatchFactory::getInstance()
     OptionsValidator::fixGenericMatcherOrdering();
   }
 
-  // keep this outside of _tempFixDefaults, since it needs to be checked from the command line as
-  // well
+  // Keep this outside of _tempFixDefaults, since it needs to be checked from the command line as
+  // well.
   OptionsValidator::validateMatchers();
 
   //only get the match creators that are specified in the config
