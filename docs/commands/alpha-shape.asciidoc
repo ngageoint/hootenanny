@@ -32,7 +32,8 @@ a Shapefile it will be a multipolygon shapefile with a single record. Hootenanny
 alpha-shape [--alpha value] [--buffer value] (points) (output)
 --------------------------------------
 
-TODO
+* [Basic Examples](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#create-a-shape-that-covers-a-set-of-features-with-a-buffer)
+* [Advanced Examples](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#calculate-a-covering-shape-with-a-specified-alpha-value)
 
 === See Also
 

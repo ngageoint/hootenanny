@@ -273,7 +273,7 @@ hoot alpha-shape --buffer 10 input.osm output.osm
     hoot diff input1.osm input2.osm
 -----
 
-===== Compare two maps:
+===== Compare the tags in two maps:
 
 -----
     hoot compare input1.osm input2.osm
@@ -779,16 +779,16 @@ hoot alpha-shape --buffer 10 input.osm output.osm
     hoot sort input.osm output.osm
 -----
 
-===== Tag features with a conflate matcher capable of matching them (useful in debugging):
-
------
-    hoot convert -D convert.ops="hoot::ConflatableCriteriaVisitor" input.osm output.osm
------
-
 ===== Sort data to the OSM standard that is too large to fit in memory:
 
 -----
     hoot sort -D element.sorter.element.buffer.size=10000 input.osm output.osm
+-----
+
+===== Tag features with a conflate matcher capable of matching them (useful in debugging):
+
+-----
+    hoot convert -D convert.ops="hoot::ConflatableCriteriaVisitor" input.osm output.osm
 -----
 
 ===== Detect road intersections:
@@ -1003,12 +1003,6 @@ hoot task-grid test-files/MyInputFile.osm MyOutputFile.geojson --maxNodesPerCell
 
 -----
     hoot split output.geojson input.osm output.osm
------
-
-===== Create a shape that covers a set of features by manually specifying an alpha value:
-
------
-hoot alpha-shape --alpha 200 --buffer -10 input.osm 200 0 output.osm
 -----
 
 ==== Statistics

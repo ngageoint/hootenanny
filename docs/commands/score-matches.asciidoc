@@ -22,7 +22,15 @@ command will return an error if any manual match is invalid.
 score-matches [--confusion] [--optimize] [--validation-off] (input1 input2) [input1 input2 ...] (output)
 --------------------------------------
 
-TODO
+=== Examples
+
+--------------------------------------
+# TODO
+hoot score-matches --confusion --optimize input1.osm input2.osm output.osm
+
+# TODO
+hoot score-matches --confusion input1.osm input2.osm output.osm
+--------------------------------------
 
 === See Also
 

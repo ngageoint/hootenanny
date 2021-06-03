@@ -43,12 +43,8 @@ second should be the newer dataset.
 changeset-derive (input1) [input2] (output) [osmApiDatabaseUrl] [--replacement] [--enable-way-snapping] [--stats filename] [--write-bounds]
 --------------------------------------
 
-TODO
-
-Additional examples:
-
-* https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#applying-changes[Basic]
-* https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#applying-changes-1[Advanced]
+* [Basic Examples](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#applying-changes)
+* [Advanced Examples](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#applying-changes-1)
 
 === Configuration Options
 

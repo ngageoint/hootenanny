@@ -23,7 +23,7 @@ The following optional defines can be set:
 === Usage
 
 --------------------------------------
-rubber-sheet (input1) (input2) (output)
+align (input1) (input2) (output)
 --------------------------------------
 
 https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#bring-two-maps-closer-in-alignment-without-merging-them[Example]
@@ -44,10 +44,10 @@ To just derive a transform file that can be used separately to rubber sheet data
 === Usage With Derive Option
 
 --------------------------------------
-rubber-sheet --derive [--ref] (input1) (input2) (transform2to1.rs) [transform1to2.rs]
+align --derive [--ref] (input1) (input2) (transform2to1.rs) [transform1to2.rs]
 --------------------------------------
 
-TODO
+* [Examples](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#derive-an-alignment-transform-for-two-maps)
 
 === Description With Apply Option
 
@@ -61,10 +61,10 @@ input parameters are:
 === Usage With Apply Option
 
 --------------------------------------
-rubber-sheet --apply (transform.rs) (input) (output)
+align --apply (transform.rs) (input) (output)
 --------------------------------------
 
-TODO
+* [Examples](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#apply-an-alignment-transform-for-two-maps)
 
 === See Also
 

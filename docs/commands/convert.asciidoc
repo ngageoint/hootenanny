@@ -24,6 +24,9 @@ convert (input) (output)
 convert "(input1[;layer]) [input2[;layer]]" (output) [--write-bounds]
 --------------------------------------
 
+* [Basic Examples](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#combine-two-maps-into-a-single-map)
+* [Advanced Examples](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#convert-an-osm-api-database-to-a-file-geodatabase-and-apply-a-schema-translation)
+
 === Conversion Operations
 
 If the `convert.ops` configuration option is included, then all the specified operations are applied
@@ -37,8 +40,6 @@ If the configuration option, `bounds`, is set to a valid geographic bounds (see 
 option documentation for formats), supporting readers will read data only from within the specified 
 bounds. The `bounds.*` configuration options allow for further customization of the bounds 
 requirement.
-
-TODO
 
 === Notes
 

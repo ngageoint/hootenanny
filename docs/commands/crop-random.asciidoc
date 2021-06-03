@@ -24,6 +24,8 @@ useful if you have a very large file dataset and need a smaller subset of data t
 crop-random (input1.osm)[;input2.osm...] (output.osm) (maxNodeCount) (pixelSize) [randomSeed]
 --------------------------------------
 
+* [Examples](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#crop-out-a-random-subset-of-data-with-a-maximum-node-size)
+
 === Configuration Options
 
 The following cropping configuration options are not supported:
@@ -35,8 +37,6 @@ See the +crop+ command for details on the remaining supported cropping configura
 
 If you need to run random map cropping inline with another command, use the hoot::RandomMapCropper OSM map operation along 
 with crop.random.* configuration options.
-
-TODO
 
 === See Also
 

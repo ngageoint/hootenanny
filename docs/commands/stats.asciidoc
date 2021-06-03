@@ -16,7 +16,7 @@ The +stats+ command reads a map and writes out its statistics.
 stats (input) [input2, ...] [--brief] [--output=path] 
 --------------------------------------
 
-TODO
+* [Examples](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#display-a-set-of-statistics-for-a-map)
 
 === See Also
 

@@ -15,4 +15,4 @@ the user.
 db-list (databaseUrl)
 --------------------------------------
 
-TODO
+* [Examples](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#list-maps-in-the-hootenanny-web-services-database)

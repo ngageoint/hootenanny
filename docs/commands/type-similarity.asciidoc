@@ -17,7 +17,7 @@ If a type is passed into either input that is not present in the schema, an erro
 type-similarity (tag1) (tag2)
 --------------------------------------
 
-TODO
+* [Examples](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#obtain-a-similarity-score-for-two-type-tags-based-on-the-internal-schema)
 
 ==== See Also
 

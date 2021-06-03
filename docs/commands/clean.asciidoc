@@ -20,7 +20,8 @@ hoot info --cleaning-operations
 clean (input) (output)
 --------------------------------------
 
-TODO
+* [Basic Examples](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#clean-erroneous-data-from-two-maps)
+* [Advanced Examples](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#clean-erroneous-data-from-two-maps-using-hooteannys-default-cleaning-operations-plus-a-subset-of-josms-cleaning-capabilities-via-exclusion)
 
 ==== See Also
 

@@ -35,13 +35,15 @@ Only one of the following options can be passed to the command:
 
 The +--detectors+ option prints out all available language detectors that can be used with the Hootenanny web services.
 
+* [Examples](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#list-all-configuration-option-names-and-their-descriptions)
+
+Each of the following sections describes an option that may be used with this command and its input parameters.
+
 ==== Usage
 
 --------------------------------------
 info --languages --detectors
 --------------------------------------
-
-TODO
 
 The +--translators+ option prints out all available language translators that can be used with the Hootenanny web services.
 
@@ -51,8 +53,6 @@ The +--translators+ option prints out all available language translators that ca
 info --languages --translators
 --------------------------------------
 
-TODO
-
 The +--detectable+ option prints out spoken languages which Hootenanny can detect when using the Hootenanny web services.
 
 ==== Usage
@@ -60,8 +60,6 @@ The +--detectable+ option prints out spoken languages which Hootenanny can detec
 --------------------------------------
 info --languages --detectable
 --------------------------------------
-
-TODO
 
 The +--translatable+ option prints out spoken languages which Hootenanny can translate from to English when using 
 the Hootenanny web services.
@@ -71,5 +69,3 @@ the Hootenanny web services.
 --------------------------------------
 info --languages --translatable
 --------------------------------------
-
-TODO

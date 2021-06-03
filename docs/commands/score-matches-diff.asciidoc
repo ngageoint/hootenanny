@@ -17,7 +17,11 @@ outputs difference detail to a file.
 score-matches-diff (input1) (input2) (output)
 --------------------------------------
 
-TODO
+=== Examples
+
+--------------------------------------
+hoot score-matches-diff input1.osm input2.osm output
+--------------------------------------
 
 === See Also
 

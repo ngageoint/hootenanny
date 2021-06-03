@@ -7,7 +7,7 @@ The +info+ command displays information about Hootenanny capabilities. For furth
 
 Only one of the following options can be passed to the command per invocation:
 
-* +--cleaning-operations+      - Displays operations configured for cleaning map data
+* +--cleaning-operations+      - Displays the default configured options for cleaning map data
 * +--config-options+           - Displays available configuration options
 * +--conflatable-criteria+     - Displays criteria that identify conflatable elements
 * +--conflate-post-operations+ - Displays operations configured by default to run after a conflation job (can be 
@@ -40,6 +40,9 @@ hoot info -D match.creators="hoot::HighwayMatchCreator;hoot::ScriptMatchCreator,
 
 Note how "--way-snap-criteria" is specified after the single configuration option.
 
+* [Basic Examples](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#list-all-configuration-option-names)
+* [Advanced Examples](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#list-all-configuration-option-names-and-their-descriptions)
+
 Each of the following sections describes an option that may be used with this command and its input parameters.
 
 === Cleaning Operations
@@ -52,12 +55,6 @@ are applied.
 
 --------------------------------------
 info --cleaning-operations
---------------------------------------
-
-==== Example
-
---------------------------------------
-hoot info --cleaning-operations
 --------------------------------------
 
 === Configuration Options
@@ -83,8 +80,6 @@ info --config-options (name) [--option-names]
 info --config-options (name) [--option-details]
 --------------------------------------
 
-TODO
-
 === Conflatable Criteria
 
 The +--conflatable-crieria++ option prints out all element criteria classes that can be used to identify conflatable elements.
@@ -94,8 +89,6 @@ The +--conflatable-crieria++ option prints out all element criteria classes that
 --------------------------------------
 info --conflatable-criteria
 --------------------------------------
-
-TODO
 
 === Conflate Post Operations
 
@@ -108,8 +101,6 @@ conflation job with the 'conflate' command.  The configuration option 'conflate.
 info --conflate-post-operations
 --------------------------------------
 
-TODO
-
 === Conflate Pre Operations
 
 The +--conflate-pre-operations+ option prints out the currently configured operations to run immediately after a 
@@ -120,8 +111,6 @@ conflation job with the 'conflate' command.  The configuration option 'conflate.
 --------------------------------------
 info --conflate-pre-operations
 --------------------------------------
-
-TODO
 
 === Element Criterion Consumers
 
@@ -135,8 +124,6 @@ data transformations on them.
 info --criterion-consumers
 --------------------------------------
 
-TODO
-
 === Feature Extractors
 
 The +--feature-extractors+ option prints out available feature extractors that can be used when building a conflation 
@@ -148,8 +135,6 @@ model with manually matched map training data.
 info --feature-extractors
 --------------------------------------
 
-TODO
-
 === Filters
 
 The +--filters++ option prints out all the element criteria classes, which are a subset of what is displayed with 
@@ -160,8 +145,6 @@ the +--operators+ option. Element criteria can be used to filter elements during
 --------------------------------------
 info --filters
 --------------------------------------
-
-TODO
 
 === Formats
 
@@ -176,8 +159,6 @@ configuration option.
 info --formats [--input] [--output] [--input-bounded] [--input-streamable] [--output-streamable] [--ogr]
 --------------------------------------
 
-TODO
-
 === Geometry Type Criteria
 
 The +--geometry-type-crieria++ option prints out all element criteria classes that can be used to identify an 
@@ -188,8 +169,6 @@ element's geometry.
 --------------------------------------
 info --geometry-type-crieria
 --------------------------------------
-
-TODO
 
 === Matchers
 
@@ -202,8 +181,6 @@ contain the criteria to match a specific pair of features
 info --matchers
 --------------------------------------
 
-TODO
-
 === Match Creators
 
 The +--match-creators+ option prints out available conflate match creators that may be applied when conflating data. 
@@ -214,8 +191,6 @@ Match Creators are responsible for spawning matchers.
 --------------------------------------
 info --match-creators
 --------------------------------------
-
-TODO
 
 === Mergers
 
@@ -228,8 +203,6 @@ created to merge a feature pair supported by a corresponding matcher.
 info --mergers
 --------------------------------------
 
-TODO
-
 === Merger Creators
 
 The +--merger-creators+ option prints out available conflate merger creators that may be applied when conflating data. 
@@ -240,8 +213,6 @@ Merger Creators are responsible for spawning mergers.
 --------------------------------------
 info --merger-creators
 --------------------------------------
-
-TODO
 
 === Operators
 
@@ -258,8 +229,6 @@ Map operators can be criterion, operations, or visitors.
 info --operators
 --------------------------------------
 
-TODO
-
 === Subline Matchers
 
 The +--subline-matchers+ option prints out available subline matchers that determine which method of line matching is used during conflation.
@@ -269,8 +238,6 @@ The +--subline-matchers+ option prints out available subline matchers that deter
 --------------------------------------
 info --subline-matchers
 --------------------------------------
-
-TODO
 
 === Subline String Matchers
 
@@ -283,8 +250,6 @@ of multilinestring matching is used during conflation.
 info --subline-string-matchers
 --------------------------------------
 
-TODO
-
 === String Comparators
 
 The +--string-comparators+ option prints out available string comparators that can be used during conflation when comparing tag string values.
@@ -295,8 +260,6 @@ The +--string-comparators+ option prints out available string comparators that c
 info --string-comparators
 --------------------------------------
 
-TODO
-
 === Tag Mergers
 
 The +--tag-mergers+ option prints out available tag mergers that may be applied when conflating data.
@@ -306,8 +269,6 @@ The +--tag-mergers+ option prints out available tag mergers that may be applied 
 --------------------------------------
 info --tag-mergers
 --------------------------------------
-
-TODO
 
 === Value Aggregators
 
@@ -320,8 +281,6 @@ a conflation model with manually matched map training data.
 info --value-aggregators
 --------------------------------------
 
-TODO
-
 === Way Joiners
 
 The +--way-joiners+ option prints out all way joiner class implementations that may either be used independently or 
@@ -332,8 +291,6 @@ in conjunction with the OsmMapOperation, `hoot::WayJoinerOp`.
 --------------------------------------
 info --way-joiners
 --------------------------------------
-
-TODO
 
 === Way Snap Criteria
 
@@ -351,6 +308,4 @@ list with all available snapping criteria are returned. The list of available ma
 --------------------------------------
 info --way-snap-criteria
 --------------------------------------
-
-TODO
 
