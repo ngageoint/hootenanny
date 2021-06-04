@@ -49,9 +49,6 @@
 namespace hoot
 {
 
-/**
- * TODO
- */
 class ScoreFunction : public Tgs::NelderMead::Function
 {
 public:
@@ -144,7 +141,7 @@ void MatchScorer::score(
 
 QString MatchScorer::evaluateThreshold(
   const std::vector<OsmMapPtr>& maps, const QString& output,
-  const std::shared_ptr<MatchThreshold>& mt,
+  const std::shared_ptr<MatchThreshold>& matchThreshold,
   const bool showConfusion, double& score) const
 {
   MatchComparator comparator;
@@ -165,7 +162,7 @@ QString MatchScorer::evaluateThreshold(
     LOG_INFO("Applying pre conflation operations...");
     LOG_VART(ConfigOptions().getConflatePreOps());
     OpExecutor(ConfigOptions().getConflatePreOps()).apply(copy);
-    UnifyingConflator(mt).apply(copy);
+    UnifyingConflator(matchThreshold).apply(copy);
     LOG_INFO("Applying post conflation operations...");
     OpExecutor(ConfigOptions().getConflatePostOps()).apply(copy);
 
@@ -182,9 +179,9 @@ QString MatchScorer::evaluateThreshold(
   LOG_VARD(showConfusion);
   if (showConfusion)
   {
-    if (mt)
+    if (matchThreshold)
     {
-      std::cout << "Threshold: " << mt->toString() << std::endl;
+      std::cout << "Threshold: " << matchThreshold->toString() << std::endl;
     }
     std::cout << comparator.toString();
     std::cout << QString("number of manual matches made: %1\n").arg(numManualMatches) << std::endl;

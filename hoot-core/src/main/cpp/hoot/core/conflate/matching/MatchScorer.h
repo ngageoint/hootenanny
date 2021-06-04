@@ -38,7 +38,7 @@ namespace hoot
 {
 
 /**
- * TODO
+ * Scores matches
  */
 class MatchScorer
 {
@@ -48,28 +48,30 @@ public:
   ~MatchScorer() = default;
 
   /**
-   * TODO
+   * Scores the correctness of conflated matches against manually made matches
    *
-   * @param ref1Inputs
-   * @param ref2Inputs
-   * @param output
+   * @param ref1Inputs paths to the first set of inputs to conflate; should not contain manual
+   * matches
+   * @param ref2Inputs paths to the second set of inputs to conflate; should contain manual matches
+   * @param output path to write conflated data; invalid if _optimizeThresholds = true.
    */
   void score(
     const QStringList& ref1Inputs, const QStringList& ref2Inputs, const QString output = "");
 
   /**
-   * TODO
+   * Evaluates conflated matches against manually made matches
    *
-   * @param maps
-   * @param output
-   * @param mt
-   * @param showConfusion
-   * @param score
+   * @param maps REF1/REF2 combined maps to conflate
+   * @param output path to write conflated output to
+   * @param matchThreshold the match score threshold
+   * @param showConfusion if true, a confusion score matrix is printed
+   * @param score the computed correctness score
    * @return
    */
   QString evaluateThreshold(
     const std::vector<OsmMapPtr>& maps, const QString& output,
-    const std::shared_ptr<MatchThreshold>& mt, const bool showConfusion, double& score) const;
+    const std::shared_ptr<MatchThreshold>& matchThreshold, const bool showConfusion,
+    double& score) const;
 
   void setPrintConfusion(bool print) { _printConfusion = print; }
   void setOptimizeThresholds(bool optimize) { _optimizeThresholds = optimize; }
@@ -77,8 +79,11 @@ public:
 
 private:
 
+  // prints a confusion matrix with score information
   bool _printConfusion;
+  // runs a NelderMead optimizer against the inputs
   bool _optimizeThresholds;
+  // validates manual matches in inputs before scoring
   bool _validateManualMatches;
 
   void _optimize(const std::vector<OsmMapPtr>& maps, const bool showConfusion);

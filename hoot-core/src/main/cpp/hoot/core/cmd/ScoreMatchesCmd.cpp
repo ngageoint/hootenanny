@@ -101,6 +101,7 @@ public:
       output = args.last();
     }
 
+    // Load the maps as pairs.
     QStringList ref1Inputs;
     QStringList ref2Inputs;
     for (int i = 0; i < args.size() - 1; i += 2)
