@@ -75,7 +75,6 @@ public:
       FileUtils::toLogFormat(out, 25) << "...");
 
     BoundedCommand::runSimple(args);
-
     _env = GeometryUtils::boundsFromString(args[2]);
 
     OsmMapPtr map(new OsmMap());
@@ -93,7 +92,7 @@ public:
     return 0;
   }
 
-protected:
+private:
 
   std::shared_ptr<geos::geom::Geometry> _env;
 

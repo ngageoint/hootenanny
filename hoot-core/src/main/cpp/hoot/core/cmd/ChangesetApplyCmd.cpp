@@ -109,7 +109,8 @@ public:
       {
         progress.set(
           0.0,
-          "Adding changeset: ..." + FileUtils::toLogFormat(args[i], maxFilePrintLength) + " for application to: " +
+          "Adding changeset: ..." + FileUtils::toLogFormat(args[i], maxFilePrintLength) +
+            " for application to: " +
           FileUtils::toLogFormat(osm.toString(), maxFilePrintLength) + "...", true);
         changesets.append(args[i]);
       }
@@ -134,7 +135,8 @@ public:
 
       progress.set(
         1.0, writer.containsFailed() ? Progress::JobState::Failed : Progress::JobState::Successful,
-        "Changeset(s) applied to: " + FileUtils::toLogFormat(osm.toString(), maxFilePrintLength) + "...");
+        "Changeset(s) applied to: " + FileUtils::toLogFormat(osm.toString(), maxFilePrintLength) +
+        "...");
 
       //  Output the last changeset ID in a status message
       LastElementInfo last = writer.getLastElementInfo();
@@ -184,10 +186,9 @@ public:
       {
         if (changesetWriter.conflictExistsInTarget(args[2], args[3]))
         {
-          //Don't like throwing an exception here from the command line, but this error needs to
-          //bubble up to the web service.
-          //The better thing to do here would be to return an error code and have the services
-          //scripts look for it, I think.
+          // Don't like throwing an exception here from the command line, but this error needs to
+          // bubble up to the web service. The better thing to do here would be to return an error
+          // code and have the services scripts look for it, I think.
           throw HootException(
             "The changeset will not be written because conflicts exist in the target OSM API database.");
         }

@@ -248,9 +248,9 @@ private:
     return crit;
   }
 
-  ElementInputStreamPtr _getFilteredInputStream(ElementInputStreamPtr inputStream,
-                                                const ElementCriterionPtr& criterion,
-                                                ConstElementVisitorPtr countVis) const
+  ElementInputStreamPtr _getFilteredInputStream(
+    ElementInputStreamPtr inputStream, const ElementCriterionPtr& criterion,
+    ConstElementVisitorPtr countVis) const
   {
     LOG_TRACE("Getting filtered input stream...");
     if (criterion)

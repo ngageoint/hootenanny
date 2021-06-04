@@ -78,7 +78,7 @@ public:
     bool quick = false;
     bool toFile = false;
     QString outputFilename = "";
-    // Capture any flags and remove them before processing inputs
+    // Capture any flags and remove them before processing inputs.
     for (int i = 0; i < args.size(); i++)
     {
       if (args[i].startsWith(OUTPUT_SWITCH))
@@ -96,7 +96,6 @@ public:
     }
 
     const QString sep = "\t";
-    // read the conflation status from the file.
     conf().set(ConfigOptions::getReaderUseFileStatusKey(), true);
 
     QList<QList<SingleStat>> allStats;
@@ -129,7 +128,8 @@ public:
 
     if (toFile)
     {
-      LOG_STATUS("Writing statistics output to: " << FileUtils::toLogFormat(outputFilename, 25) << "...");
+      LOG_STATUS(
+        "Writing statistics output to: " << FileUtils::toLogFormat(outputFilename, 25) << "...");
       if (outputFilename.endsWith(".json", Qt::CaseInsensitive))
         MapStatsWriter().writeStatsToJson(allStats, outputFilename);
       else

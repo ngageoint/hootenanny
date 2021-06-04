@@ -53,244 +53,242 @@ namespace hoot
 
 class PlotNodeDensityCmd : public BaseCommand
 {
+public:
 
-  public:
+  static QString className() { return "hoot::PlotNodeDensityCmd"; }
 
-    static QString className() { return "hoot::PlotNodeDensityCmd"; }
+  PlotNodeDensityCmd() = default;
 
-    PlotNodeDensityCmd() = default;
+  QString getName() const override { return "plot-node-density"; }
+  QString getDescription() const override { return "Creates a node density plot for a map"; }
+  QString getType() const { return "rnd"; }
 
-    QString getName() const override { return "plot-node-density"; }
-    QString getDescription() const override { return "Creates a node density plot for a map"; }
-    QString getType() const { return "rnd"; }
+  Envelope getEnvelope(const std::shared_ptr<OsmMapReader>& reader) const
+  {
+    std::shared_ptr<EnvelopeProvider> ep =
+      std::dynamic_pointer_cast<EnvelopeProvider>(reader);
+    std::shared_ptr<PartialOsmMapReader> r =
+      std::dynamic_pointer_cast<PartialOsmMapReader>(reader);
 
-    Envelope getEnvelope(const std::shared_ptr<OsmMapReader>& reader) const
+    if (ep)
     {
-      std::shared_ptr<EnvelopeProvider> ep =
-        std::dynamic_pointer_cast<EnvelopeProvider>(reader);
-      std::shared_ptr<PartialOsmMapReader> r =
-        std::dynamic_pointer_cast<PartialOsmMapReader>(reader);
-
-      if (ep)
-      {
-        return ep->calculateEnvelope();
-      }
-      else if (r)
-      {
-        long nodeCount = 0;
-        Envelope result;
-        reader->setUseDataSourceIds(true);
-
-        while (r->hasMoreElements())
-        {
-          ElementPtr e = r->readNextElement();
-
-          if (e->getElementType() == ElementType::Node)
-          {
-            nodeCount++;
-            NodePtr n = std::dynamic_pointer_cast<Node>(e);
-            if (result.isNull())
-            {
-              result = Envelope(n->getX(), n->getX(), n->getY(), n->getY());
-            }
-            else
-            {
-              result.expandToInclude(n->getX(), n->getY());
-            }
-          }
-        }
-        LOG_VARD(nodeCount);
-
-        return result;
-      }
-      else
-      {
-        OsmMapPtr map(new OsmMap());
-        reader->setUseDataSourceIds(true);
-        reader->read(map);
-        return CalculateMapBoundsVisitor::getGeosBounds(map);
-      }
+      return ep->calculateEnvelope();
     }
-
-    cv::Mat calculateDensity(const Envelope& envelope, double pixelSize,
-                             std::shared_ptr<OsmMapReader> reader) const
+    else if (r)
     {
-      std::shared_ptr<PartialOsmMapReader> r =
-        std::dynamic_pointer_cast<PartialOsmMapReader>(reader);
-      r->setUseDataSourceIds(true);
+      long nodeCount = 0;
+      Envelope result;
+      reader->setUseDataSourceIds(true);
 
-      int width = ceil(envelope.getWidth() / pixelSize);
-      int height = ceil(envelope.getHeight() / pixelSize);
-
-      cv::Mat c(cvSize(width, height), CV_32SC1, 0.0);
-
-      long count = 0;
       while (r->hasMoreElements())
       {
         ElementPtr e = r->readNextElement();
 
-        if (e.get() && e->getElementType() == ElementType::Node)
+        if (e->getElementType() == ElementType::Node)
         {
+          nodeCount++;
           NodePtr n = std::dynamic_pointer_cast<Node>(e);
-          int px = int((n->getX() - envelope.getMinX()) / pixelSize);
-          int py = int((n->getY() - envelope.getMinY()) / pixelSize);
-          px = std::min(width - 1, std::max(0, px));
-          py = std::min(height - 1, std::max(0, py));
-
-          c.ptr<int32_t>(py)[px] = c.ptr<int32_t>(py)[px] + 1;
-          count++;
+          if (result.isNull())
+          {
+            result = Envelope(n->getX(), n->getX(), n->getY(), n->getY());
+          }
+          else
+          {
+            result.expandToInclude(n->getX(), n->getY());
+          }
         }
       }
+      LOG_VARD(nodeCount);
 
-      LOG_VARD(count);
-
-      return c;
-    }
-
-    int toColorBand(QString c) const
-    {
-      bool ok;
-      int result = c.toInt(&ok);
-      if (!ok || result < 0 || result > 255)
-      {
-        throw HootException("Expected the color to be a number in the range [0-255]");
-      }
       return result;
     }
-
-    int toColorPortion(QString c) const
+    else
     {
-      bool ok;
-      double result = c.toDouble(&ok);
-      if (!ok || result < 0 || result > 255)
+      OsmMapPtr map(new OsmMap());
+      reader->setUseDataSourceIds(true);
+      reader->read(map);
+      return CalculateMapBoundsVisitor::getGeosBounds(map);
+    }
+  }
+
+  cv::Mat calculateDensity(
+    const Envelope& envelope, double pixelSize, std::shared_ptr<OsmMapReader> reader) const
+  {
+    std::shared_ptr<PartialOsmMapReader> r =
+      std::dynamic_pointer_cast<PartialOsmMapReader>(reader);
+    r->setUseDataSourceIds(true);
+
+    int width = ceil(envelope.getWidth() / pixelSize);
+    int height = ceil(envelope.getHeight() / pixelSize);
+
+    cv::Mat c(cvSize(width, height), CV_32SC1, 0.0);
+
+    long count = 0;
+    while (r->hasMoreElements())
+    {
+      ElementPtr e = r->readNextElement();
+
+      if (e.get() && e->getElementType() == ElementType::Node)
       {
-        throw HootException("Expected the color portion to be a number in the range [0-255]");
+        NodePtr n = std::dynamic_pointer_cast<Node>(e);
+        int px = int((n->getX() - envelope.getMinX()) / pixelSize);
+        int py = int((n->getY() - envelope.getMinY()) / pixelSize);
+        px = std::min(width - 1, std::max(0, px));
+        py = std::min(height - 1, std::max(0, py));
+
+        c.ptr<int32_t>(py)[px] = c.ptr<int32_t>(py)[px] + 1;
+        count++;
       }
-      return result;
     }
 
-    int runSimple(QStringList& args) override
+    LOG_VARD(count);
+
+    return c;
+  }
+
+  int toColorBand(QString c) const
+  {
+    bool ok;
+    int result = c.toInt(&ok);
+    if (!ok || result < 0 || result > 255)
     {
-      QElapsedTimer timer;
-      timer.start();
+      throw HootException("Expected the color to be a number in the range [0-255]");
+    }
+    return result;
+  }
 
-      if (args.size() < 3 || args.size() > 5)
+  int toColorPortion(QString c) const
+  {
+    bool ok;
+    double result = c.toDouble(&ok);
+    if (!ok || result < 0 || result > 255)
+    {
+      throw HootException("Expected the color portion to be a number in the range [0-255]");
+    }
+    return result;
+  }
+
+  int runSimple(QStringList& args) override
+  {
+    QElapsedTimer timer;
+    timer.start();
+
+    if (args.size() < 3 || args.size() > 5)
+    {
+      cout << getHelp() << endl << endl;
+      throw HootException(QString("%1 takes three to five parameters.").arg(getName()));
+    }
+
+    bool ok;
+    QString input = args[0];
+    QString output = args[1];
+    double maxSize = args[2].toDouble(&ok);
+    if (!ok || maxSize < 1)
+    {
+      throw HootException("Expected a number > 0 for max size.");
+    }
+
+    LOG_STATUS(
+      "Plotting node density for ..." << FileUtils::toLogFormat(input, 25) <<
+      " and writing output to ..." << FileUtils::toLogFormat(output, 25) << "...");
+
+    // initialize to black
+    QRgb baseColors = qRgba(0, 0, 0, 255);
+    if (args.size() >= 4)
+    {
+      QStringList bs = args[3].split(",");
+      if (bs.size() != 4)
       {
-        cout << getHelp() << endl << endl;
-        throw HootException(QString("%1 takes three to five parameters.").arg(getName()));
+        throw HootException("Expected base-colors to be RGBA and comma delimited.");
       }
-
-      bool ok;
-      QString input = args[0];
-      QString output = args[1];
-      double maxSize = args[2].toDouble(&ok);
-      if (!ok || maxSize < 1)
+      baseColors =
+        qRgba(toColorBand(bs[0]), toColorBand(bs[1]), toColorBand(bs[2]), toColorBand(bs[3]));
+    }
+    vector<double> colorMultiplier(4, 255.0);
+    colorMultiplier[3] = 0.0;
+    if (args.size() >= 5)
+    {
+      QStringList bs = args[4].split(",");
+      if (bs.size() != 4)
       {
-        throw HootException("Expected a number > 0 for max size.");
+        throw HootException("Expected base-colors to be RGBA and comma delimited.");
       }
+      colorMultiplier[0] = toColorPortion(bs[0]);
+      colorMultiplier[1] = toColorPortion(bs[1]);
+      colorMultiplier[2] = toColorPortion(bs[2]);
+      colorMultiplier[3] = toColorPortion(bs[3]);
+    }
 
-      LOG_STATUS(
-        "Plotting node density for ..." << FileUtils::toLogFormat(input, 25) <<
-        " and writing output to ..." << FileUtils::toLogFormat(output, 25) << "...");
+    std::shared_ptr<OsmMapReader> reader =
+      OsmMapReaderFactory::createReader(input, true);
+    reader->open(input);
+    Envelope e = getEnvelope(reader);
+    LOG_DEBUG("Envelope: " << GeometryUtils::toString(e));
 
-      // initialize to black
-      QRgb baseColors = qRgba(0, 0, 0, 255);
-      if (args.size() >= 4)
-      {
-        QStringList bs = args[3].split(",");
-        if (bs.size() != 4)
-        {
-          throw HootException("Expected base-colors to be RGBA and comma delimited.");
-        }
-        baseColors = qRgba(toColorBand(bs[0]), toColorBand(bs[1]), toColorBand(bs[2]),
-          toColorBand(bs[3]));
-      }
-      vector<double> colorMultiplier(4, 255.0);
-      colorMultiplier[3] = 0.0;
-      if (args.size() >= 5)
-      {
-        QStringList bs = args[4].split(",");
-        if (bs.size() != 4)
-        {
-          throw HootException("Expected base-colors to be RGBA and comma delimited.");
-        }
-        colorMultiplier[0] = toColorPortion(bs[0]);
-        colorMultiplier[1] = toColorPortion(bs[1]);
-        colorMultiplier[2] = toColorPortion(bs[2]);
-        colorMultiplier[3] = toColorPortion(bs[3]);
-      }
+    double pixelSize;
+    if (e.getWidth() > e.getHeight())
+    {
+      pixelSize = e.getWidth() / maxSize;
+    }
+    else
+    {
+      pixelSize = e.getHeight() / maxSize;
+    }
 
-      std::shared_ptr<OsmMapReader> reader =
-        OsmMapReaderFactory::createReader(input, true);
-      reader->open(input);
-      Envelope e = getEnvelope(reader);
-      LOG_DEBUG("Envelope: " << GeometryUtils::toString(e));
-
-      double pixelSize;
-      if (e.getWidth() > e.getHeight())
-      {
-        pixelSize = e.getWidth() / maxSize;
-      }
-      else
-      {
-        pixelSize = e.getHeight() / maxSize;
-      }
-
-      reader = OsmMapReaderFactory::createReader(input, true);
-      reader->open(input);
-      cv::Mat mat = calculateDensity(e, pixelSize, reader);
-      Envelope imageEnvelope(e.getMinX(), e.getMinX() + pixelSize * mat.size().width,
+    reader = OsmMapReaderFactory::createReader(input, true);
+    reader->open(input);
+    cv::Mat mat = calculateDensity(e, pixelSize, reader);
+    Envelope imageEnvelope(e.getMinX(), e.getMinX() + pixelSize * mat.size().width,
                              e.getMinY(), e.getMinY() + pixelSize * mat.size().height);
 
-      QImage qImage(mat.size().width, mat.size().height, QImage::Format_ARGB32);
+    QImage qImage(mat.size().width, mat.size().height, QImage::Format_ARGB32);
 
-      int32_t maxValue = 0;
-      for (int y = 0; y < qImage.height(); y++)
+    int32_t maxValue = 0;
+    for (int y = 0; y < qImage.height(); y++)
+    {
+      const int32_t* row = mat.ptr<int32_t>(y);
+      for (int x = 0; x < qImage.width(); x++)
       {
-        const int32_t* row = mat.ptr<int32_t>(y);
-        for (int x = 0; x < qImage.width(); x++)
-        {
-          maxValue = std::max(row[x], maxValue);
-        }
+        maxValue = std::max(row[x], maxValue);
       }
-      QRgb rgb;
-      for (int y = 0; y < qImage.height(); y++)
-      {
-        const int32_t* row = mat.ptr<int32_t>(y);
-        for (int x = 0; x < qImage.width(); x++)
-        {
-          double v = log1p(row[x]) / log(maxValue);
-          int r = max(0, min<int>(255, v * colorMultiplier[0] + qRed(baseColors)));
-          int g = max(0, min<int>(255, v * colorMultiplier[1] + qGreen(baseColors)));
-          int b = max(0, min<int>(255, v * colorMultiplier[2] + qBlue(baseColors)));
-          int a = max(0, min<int>(255, v * colorMultiplier[3] + qAlpha(baseColors)));
-          rgb = qRgba(r, g, b, a);
-          qImage.setPixel(x, qImage.height() - y - 1, rgb);
-        }
-      }
-      LOG_VARD(maxValue);
-
-      qImage.save(output);
-
-      // based on the definition here: http://en.wikipedia.org/wiki/World_file
-      fstream pngw;
-      pngw.exceptions(ios::failbit | ios_base::badbit);
-      pngw.open((output + "w").toUtf8().constData(), ios_base::out | ios_base::trunc);
-      pngw << pixelSize << endl;
-      pngw << 0 << endl;
-      pngw << 0 << endl;
-      pngw << -pixelSize << endl;
-      pngw << e.getMinX() + pixelSize / 2.0 << endl;
-      pngw << e.getMinY() + (mat.size().height - 1) * pixelSize - pixelSize / 2.0 << endl;
-
-      pngw.close();
-
-      LOG_STATUS(
-        "Node density plotted in " << StringUtils::millisecondsToDhms(timer.elapsed()) <<
-         " total.");
-
-      return 0;
     }
+    QRgb rgb;
+    for (int y = 0; y < qImage.height(); y++)
+    {
+      const int32_t* row = mat.ptr<int32_t>(y);
+      for (int x = 0; x < qImage.width(); x++)
+      {
+        double v = log1p(row[x]) / log(maxValue);
+        int r = max(0, min<int>(255, v * colorMultiplier[0] + qRed(baseColors)));
+        int g = max(0, min<int>(255, v * colorMultiplier[1] + qGreen(baseColors)));
+        int b = max(0, min<int>(255, v * colorMultiplier[2] + qBlue(baseColors)));
+        int a = max(0, min<int>(255, v * colorMultiplier[3] + qAlpha(baseColors)));
+        rgb = qRgba(r, g, b, a);
+        qImage.setPixel(x, qImage.height() - y - 1, rgb);
+      }
+    }
+    LOG_VARD(maxValue);
+
+    qImage.save(output);
+
+    // based on the definition here: http://en.wikipedia.org/wiki/World_file
+    fstream pngw;
+    pngw.exceptions(ios::failbit | ios_base::badbit);
+    pngw.open((output + "w").toUtf8().constData(), ios_base::out | ios_base::trunc);
+    pngw << pixelSize << endl;
+    pngw << 0 << endl;
+    pngw << 0 << endl;
+    pngw << -pixelSize << endl;
+    pngw << e.getMinX() + pixelSize / 2.0 << endl;
+    pngw << e.getMinY() + (mat.size().height - 1) * pixelSize - pixelSize / 2.0 << endl;
+
+    pngw.close();
+
+    LOG_STATUS(
+      "Node density plotted in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
+
+    return 0;
+  }
 };
 
 HOOT_FACTORY_REGISTER(Command, PlotNodeDensityCmd)

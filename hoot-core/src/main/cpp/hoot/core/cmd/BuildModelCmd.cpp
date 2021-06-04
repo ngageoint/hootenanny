@@ -65,10 +65,10 @@ public:
 
     if (args.size() == 2 && !exportArffOnly)
     {
-      //must be a .arff to .rf conversion
+      // must be a .arff to .rf conversion
       ArffToRfConverter::convert(args[0], args[1]);
     }
-    //must be a conversion to .rf from training data
+    // must be a conversion to .rf from training data
     else if (args.size() < 3 || args.size() % 2 == 0)
     {
       std::cout << getHelp() << std::endl << std::endl;

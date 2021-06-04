@@ -63,10 +63,8 @@ public:
     }
 
     LOG_STATUS("Printing schema...");
-
     std::shared_ptr<ScriptSchemaTranslator> schemaPrinter(
       ScriptSchemaTranslatorFactory::getInstance().createTranslator(printScript));
-
     if (!schemaPrinter)
     {
       throw HootException("Unable to find a valid translation format for: " + printScript);
