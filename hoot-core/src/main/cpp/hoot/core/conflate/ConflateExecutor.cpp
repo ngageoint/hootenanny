@@ -139,6 +139,7 @@ void ConflateExecutor::_initConfig()
 void ConflateExecutor::_initTaskCount()
 {
   // The number of steps here must be updated as you add/remove job steps in the logic.
+  // TODO: describe how the total steps are derived
   _numTotalTasks = 5;
   if (_displayStats)
   {
@@ -558,16 +559,6 @@ void ConflateExecutor::_writeStats(
   _stats.append(
     SingleStat("Calculate Stats for Output Time (sec)", _taskTimer.getElapsedAndRestart()));
   _currentTask++;
-
-  if (_isDiffConflate)
-  {
-    _progress->set(
-      _getJobPercentComplete(_currentTask - 1),
-      "Calculating differential output statistics for: ..." +
-      FileUtils::toLogFormat(outputFileName, _maxFilePrintLength) + "...");
-    _diffConflator.calculateStats(map, _stats);
-    _currentTask++;
-  }
 
   _allStats.append(_stats);
   if (_outputStatsFile.isEmpty())
