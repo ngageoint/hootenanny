@@ -102,6 +102,8 @@ void MatchScorer::score(
     OsmMapPtr map(new OsmMap());
     const QString map1Path = ref1Inputs.at(i);
     const QString map2Path = ref2Inputs.at(i);
+    LOG_VART(map1Path);
+    LOG_VART(map2Path);
 
     LOG_STATUS(
       "Scoring matches for ..." << FileUtils::toLogFormat(map1Path, 25) << " and ..." <<

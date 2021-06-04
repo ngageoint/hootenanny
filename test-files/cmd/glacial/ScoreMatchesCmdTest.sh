@@ -22,7 +22,7 @@ hoot score-matches $LOG_LEVEL $CONFIG --confusion --optimize $map1 $map2
 echo "Running unoptimized with output..."
 echo
 hoot score-matches $LOG_LEVEL $CONFIG $map1 $map2 $OUTPUT_DIR/output-1.osm
-hoot diff $LOG_LEVEL $CONFIG $OUTPUT_DIR/output-1.osm $INPUT_DIR/output-1.osm || diff $OUTPUT_DIR/output-1.osm $INPUT_DIR/output-1.osm
+hoot diff $LOG_LEVEL $CONFIG $OUTPUT_DIR/output-1.osm $INPUT_DIR/output-1.osm
 
 # Run with multiple inputs. Its a little silly to run with the same inputs twice, but we're mostly checking to see that
 # the file handling logic works for now. Eventually, differing inputs should be selected to make the test more robust.
@@ -34,4 +34,4 @@ hoot score-matches $LOG_LEVEL $CONFIG --confusion --optimize $map1 $map2 $map1 $
 echo "Running unoptimized with multiple inputs and an output..."
 echo
 hoot score-matches $LOG_LEVEL $CONFIG $map1 $map2 $map1 $map2 $OUTPUT_DIR/output-2.osm
-hoot diff $LOG_LEVEL $CONFIG $OUTPUT_DIR/output-2.osm $INPUT_DIR/output-2.osm || diff $OUTPUT_DIR/output-2.osm $INPUT_DIR/output-2.osm
+hoot diff $LOG_LEVEL $CONFIG $OUTPUT_DIR/output-2.osm $INPUT_DIR/output-2.osm
