@@ -16,7 +16,7 @@ review. This allows you to manually correct any poorly snapped ways.
 
 The +snap.unconnected.ways.mark.only+ option bypasses way snapping completely, and when used in
 conjunction with the +snap.unconnected.ways.review.snapped.ways+ option, marks any ways that would
-have been snapped withthe current configuration as needing review. This allows you to have complete
+have been snapped with the current configuration as needing review. This allows you to have complete
 manual control over way snapping.
 
 === Configuration

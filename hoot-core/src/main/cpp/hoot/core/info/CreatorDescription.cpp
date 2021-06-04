@@ -31,7 +31,7 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/criterion/AreaCriterion.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
-#include <hoot/core/criterion/CollectionRelationCriterion.h>
+#include <hoot/core/criterion/RelationCriterion.h>
 #include <hoot/core/criterion/LinearCriterion.h>
 #include <hoot/core/criterion/LinearWaterwayCriterion.h>
 #include <hoot/core/criterion/HighwayCriterion.h>
@@ -99,8 +99,8 @@ QString CreatorDescription::baseFeatureTypeToString(BaseFeatureType t)
       return "Point";
     case Line:
       return "Line";
-    case CollectionRelation:
-      return "Collection Relation";
+    case Relation:
+      return "Relation";
     default:
       return "Unknown";
   }
@@ -131,8 +131,8 @@ CreatorDescription::BaseFeatureType CreatorDescription::stringToBaseFeatureType(
     return Point;
   else if (0 == s.compare("line"))
     return Line;
-  else if (0 == s.compare("collectionrelation"))
-    return CollectionRelation;
+  else if (0 == s.compare("relation"))
+    return Relation;
   else
     return Unknown;
 }
@@ -163,14 +163,14 @@ CreatorDescription::FeatureCalcType CreatorDescription::getFeatureCalcType(BaseF
       return CalcTypeNone;
     case Line:
       return CalcTypeLength;
-    case CollectionRelation:
+    case Relation:
       return CalcTypeArea;
     default:
       return CalcTypeNone;
   }
 }
 
-std::shared_ptr<GeometryTypeCriterion> CreatorDescription::getElementCriterion(
+std::shared_ptr<ElementCriterion> CreatorDescription::getElementCriterion(
   BaseFeatureType t, ConstOsmMapPtr map)
 {
   switch (t)
@@ -197,8 +197,8 @@ std::shared_ptr<GeometryTypeCriterion> CreatorDescription::getElementCriterion(
       return std::make_shared<PointCriterion>(map);
     case Line:
       return std::make_shared<LinearCriterion>();
-    case CollectionRelation:
-      return std::make_shared<CollectionRelationCriterion>();
+    case Relation:
+      return std::make_shared<RelationCriterion>();
     default:
       return std::shared_ptr<GeometryTypeCriterion>();
   }
@@ -230,8 +230,8 @@ QString CreatorDescription::getElementCriterionName(BaseFeatureType t)
       return PointCriterion::className();
     case Line:
       return LinearCriterion::className();
-    case CollectionRelation:
-      return CollectionRelationCriterion::className();
+    case Relation:
+      return RelationCriterion::className();
     default:
       return "";
   }

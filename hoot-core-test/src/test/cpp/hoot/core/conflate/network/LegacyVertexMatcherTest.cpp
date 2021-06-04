@@ -27,7 +27,6 @@
 
 // Hoot
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/criterion/HighwayCriterion.h>
 #include <hoot/core/criterion/StatusCriterion.h>
 #include <hoot/core/conflate/network/LegacyVertexMatcher.h>
 #include <hoot/core/conflate/network/NetworkDetails.h>

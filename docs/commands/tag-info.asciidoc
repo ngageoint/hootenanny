@@ -3,7 +3,7 @@
 
 === Description
 
-The +tag-info+ command prints out unique feature tag values grouped by tag key.
+The +tag-info+ command prints out unique feature tag values grouped by tag key. This command works on streamable inputs only.
 
 * +inputs+              - One or more inputs; may be any supported input format (e.g. OSM file).  If using an OGR layer within 
                           a data source, then delimit the data source and layer with a semicolon.
@@ -26,59 +26,7 @@ The +tag-info+ command prints out unique feature tag values grouped by tag key.
 tag-info (input1[;layer]) [input2[;layer]] ... [--tag-values-limit] [--keys-only "key1;key2..."] [--keys-only] [--case-insensitive] [--delimited-text]
 --------------------------------------
 
-==== Examples
-
---------------------------------------
-hoot tag-info myshapefile.shp "myfgb.gdb;mylayer"
-
-hoot tag-info input.osm
-
-hoot tag-info input.osm --keys-only
-
-hoot tag-info input.osm --keys "key1;Key2" --case-insensitive
-
-hoot tag-info myshapefile.shp "myfgb.gdb;mylayer" --tag-values-limit 30
-
-hoot tag-info input.osm --keys "key" --partial-key-match
-
-hoot tag-info input.osm --keys-only --delimited-text
---------------------------------------
-
-=== Example Output
-
----------------------------------------
-.{
-  "ca-Transmission_Line-state-gov.shp":{
-    "ca-Transmission_Line-state-gov":{
-      "Circuit":[
-        "Double",
-        "Duble",
-        "Liberty Energy",
-        "Many",
-        "Quad",
-        "Single"
-        ],
-      "Comments":[
-        "Attached to 115kv poles",
-        "Caldwell-victor 220kv",
-        "Changed kv from 115 to 60kv",
-        "Distribution line",
-        ...
-        ],
-      "Legend":[
-        "IID_161kV",
-        "IID_230kV",
-        "IID_34.5_92kV",
-        "LADWP_115_138kV",
-        ...
-        ],
-        ...
-}}
----------------------------------------
-
-=== Notes
-
-This command works on streamable inputs only.
+https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#display-tag-schema-information-for-a-map[Examples]
 
 === See Also
 

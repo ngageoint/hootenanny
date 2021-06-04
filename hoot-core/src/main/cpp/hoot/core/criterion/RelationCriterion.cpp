@@ -22,41 +22,47 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
-#include "CollectionRelationCriterion.h"
+#include "RelationCriterion.h"
 
-// hoot
-#include <hoot/core/criterion/LinearCriterion.h>
 #include <hoot/core/elements/Relation.h>
-#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/Log.h>
 
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementCriterion, CollectionRelationCriterion)
+HOOT_FACTORY_REGISTER(ElementCriterion, RelationCriterion)
 
-bool CollectionRelationCriterion::isSatisfied(const ConstElementPtr& e) const
+RelationCriterion::RelationCriterion() : ElementTypeCriterion(ElementType::Relation)
 {
-  LOG_VART(e->getElementId());
+}
 
-  if (e->getElementType() == ElementType::Relation)
+RelationCriterion::RelationCriterion(const QString& type) :
+ElementTypeCriterion(ElementType::Relation),
+_type(type.trimmed())
+{
+}
+
+void RelationCriterion::setConfiguration(const Settings& conf)
+{
+  _type = ConfigOptions(conf).getRelationCriterionType();
+}
+
+bool RelationCriterion::isSatisfied(const ConstElementPtr& e) const
+{
+  const bool typeMatch = ElementTypeCriterion::isSatisfied(e);
+  if (typeMatch)
   {
-    ConstRelationPtr r = std::dynamic_pointer_cast<const Relation>(e);
-    // This list could get HUGE.
-    if (LinearCriterion::isLinearRelation(r) ||
-        r->getType() == MetadataTags::RelationWaterway() ||
-        r->getType() == MetadataTags::RelationNetwork() ||
-        // not sure about these yet
-        r->getType() == MetadataTags::RelationMultiPolygon() ||
-        r->getType() == MetadataTags::RelationMultilineString())
+    if (_type.isEmpty())
     {
       return true;
     }
+    else
+    {
+      return std::dynamic_pointer_cast<const Relation>(e)->getType() == _type;
+    }
   }
-
   return false;
 }
 

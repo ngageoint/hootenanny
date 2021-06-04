@@ -109,10 +109,15 @@ public:
     {
       criterionClassName = args[1].trimmed();
     }
+    const QString namespacePrefix = "hoot::";
+    if (!criterionClassName.isEmpty() && !criterionClassName.startsWith(namespacePrefix))
+    {
+      criterionClassName.prepend(namespacePrefix);
+    }
     LOG_VARD(criterionClassName);
 
-    // test crit here to see if I/O can be streamed or not; if it requires a map, then it can't be
-    // streamed
+    // Test crit here to see if I/O can be streamed or not. If it requires a map, then it can't be
+    // streamed.
     bool isStreamableCrit = false;
     ElementCriterionPtr crit =
       _getCriterion(
@@ -191,8 +196,8 @@ private:
     return reader;
   }
 
-  ElementCriterionPtr _getCriterion(const QString& criterionClassName, const bool negate,
-                                    bool& isStreamable) const
+  ElementCriterionPtr _getCriterion(
+    const QString& criterionClassName, const bool negate, bool& isStreamable) const
   {
     LOG_TRACE("Getting criterion: " << criterionClassName << "...");
 

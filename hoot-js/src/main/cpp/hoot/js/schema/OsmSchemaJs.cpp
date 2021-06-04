@@ -41,7 +41,7 @@
 #include <hoot/core/criterion/PolygonCriterion.h>
 #include <hoot/core/criterion/NonConflatableCriterion.h>
 #include <hoot/core/criterion/NonBuildingAreaCriterion.h>
-#include <hoot/core/criterion/CollectionRelationCriterion.h>
+#include <hoot/core/criterion/ElementTypeCriterion.h>
 
 #include <hoot/js/elements/TagsJs.h>
 #include <hoot/js/JsRegistrar.h>
@@ -111,8 +111,6 @@ void OsmSchemaJs::Init(Local<Object> exports)
               FunctionTemplate::New(current, isRailway)->GetFunction(context).ToLocalChecked());
   schema->Set(context, toV8("isNonBuildingArea"),
               FunctionTemplate::New(current, isNonBuildingArea)->GetFunction(context).ToLocalChecked());
-  schema->Set(context, toV8("isCollectionRelation"),
-              FunctionTemplate::New(current, isCollectionRelation)->GetFunction(context).ToLocalChecked());
 }
 
 void OsmSchemaJs::getAllTags(const FunctionCallbackInfo<Value>& args)
@@ -309,17 +307,6 @@ void OsmSchemaJs::isNonBuildingArea(const FunctionCallbackInfo<Value>& args)
     Boolean::New(current, NonBuildingAreaCriterion(mapJs->getConstMap()).isSatisfied(e)));
 }
 
-void OsmSchemaJs::isCollectionRelation(const FunctionCallbackInfo<Value>& args)
-{
-  Isolate* current = args.GetIsolate();
-  HandleScope scope(current);
-  Local<Context> context = current->GetCurrentContext();
-
-  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject(context).ToLocalChecked())->getConstElement();
-
-  args.GetReturnValue().Set(
-    Boolean::New(current, CollectionRelationCriterion().isSatisfied(e)));
-}
 void OsmSchemaJs::isSpecificallyConflatable(
   const FunctionCallbackInfo<Value>& args)
 {

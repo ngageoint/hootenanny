@@ -44,7 +44,8 @@ All Hootenanny commands can be passed any supported input/output format unless o
 
 Additional data types can be be made importable/exportable using Hootenanny's pluggable I/O architecture.  See the Hootenanny Developer Guide for details.
 
-The Hootenanny API database format (hootapidb://) is a slightly optimized version of the OSM API database with a different schema than the 
-database used with public OSM (osmapidb://) for use with conflation. The primary difference between the two is that the Hootenanny API database
-allows for multiple feature layers with each one corresponding to a map stored in its own table. The public OSM API database supports a single
-feature layer for the entire world. The format is meant for internal use by Hootenanny only.
+The Hootenanny API database format (hootapidb://) is a slightly optimized version of the OSM API database with a 
+different schema than the database used with public OSM (osmapidb://) for use with conflation. The primary difference 
+between the two is that the Hootenanny API database allows for multiple feature layers with each one corresponding to a 
+map stored in its own table. The public OSM API database supports a single feature layer for the entire world. The format 
+is meant for internal use by Hootenanny only.

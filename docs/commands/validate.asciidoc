@@ -3,15 +3,14 @@
 
 === Description
 
-The +validate+ command uses JOSM to identify (but does not fix) data with common erroneous aspects. This command is only available when
-Hootenanny is configured with JOSM (compiled --with-josm).
+The +validate+ command uses JOSM to identify data with common erroneous aspects without fixing it.
 
 * +input+                  - Input; may be any supported input format (e.g. .osm file).
-* +output+                 - (optional) Output file; may be any supported output format (e.g. .osm file). If specified, elements with 
-                             validation will be marked with tags in the output file. If not specified, then only a validation error summary 
-                             will be displayed.
-* +--available-validators+ - Displays available JOSM validators for use in validation. Not all validators have cleaning (auto-fix) capabilities. 
-                             If this option is selected, neither an input or output must be specified.
+* +output+                 - (optional) Output file; may be any supported output format (e.g. .osm file). If 
+                             specified, elements with validation will be marked with tags in the output file. If not 
+                             specified, then only a validation error summary will be displayed.
+* +--available-validators+ - Displays available JOSM validators for use in validation. Not all validators have cleaning 
+                             (auto-fix) capabilities. If this option is selected, neither an input or output must be specified.
 
 === Usage
 
@@ -21,21 +20,7 @@ validate (input) [output]
 validate [--available-validators]
 --------------------------------------
 
-==== Examples
-
---------------------------------------
-# run default validation
-hoot validate input.osm
-
-# run default validation and mark features with validation failure tags
-hoot validate input.osm output.osm
-
-# list the available validators
-hoot validate --available-validators
-
-# run customized validation
-hoot validate -D josm.validators.include="DuplicatedWayNodes" input.osm
---------------------------------------
+https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#validation[Examples]
 
 ==== See Also
 
