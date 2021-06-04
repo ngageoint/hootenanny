@@ -769,7 +769,7 @@ void ChangesetReplacementCreatorAbstract::_cleanup(OsmMapPtr& map) const
 }
 
 void ChangesetReplacementCreatorAbstract::_synchronizeIds(
-  const QList<OsmMapPtr>& mapsBeingReplaced, const QList<OsmMapPtr>& replacementMaps)
+  const QList<OsmMapPtr>& mapsBeingReplaced, const QList<OsmMapPtr>& replacementMaps) const
 {
   assert(mapsBeingReplaced.size() == replacementMaps.size());
   for (int i = 0; i < mapsBeingReplaced.size(); i++)

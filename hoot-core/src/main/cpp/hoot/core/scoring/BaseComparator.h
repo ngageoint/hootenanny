@@ -88,7 +88,7 @@ protected:
 
   virtual void _init(const std::shared_ptr<OsmMap>& map1, const std::shared_ptr<OsmMap>& map2);
 
-  void _saveImage(cv::Mat& image, QString path, double max = 0.0, bool gradient = true);
+  void _saveImage(cv::Mat& image, QString path, double max = 0.0, bool gradient = true) const;
 
   void _updateBounds();
 

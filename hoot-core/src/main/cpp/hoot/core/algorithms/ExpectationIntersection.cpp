@@ -96,7 +96,7 @@ double ExpectationIntersection::_findSplit(const TDistribution& t1, const TDistr
   return result;
 }
 
-vector<double> ExpectationIntersection::snapMatches(const Mat& matches, const Mat& ranges)
+vector<double> ExpectationIntersection::snapMatches(const Mat& matches, const Mat& ranges) const
 {
   LOG_TRACE("Snapping matches...");
 

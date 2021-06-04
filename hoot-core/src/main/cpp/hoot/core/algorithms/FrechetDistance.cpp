@@ -155,7 +155,7 @@ Radians FrechetDistance::getHeadingWay2(int index)
   return getHeading(_w2, index);
 }
 
-Radians FrechetDistance::getHeading(WayPtr way, int index)
+Radians FrechetDistance::getHeading(WayPtr way, int index) const
 {
   return getHeadingAvg(way, index);
 }

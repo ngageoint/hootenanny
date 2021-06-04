@@ -112,7 +112,7 @@ vector<JavaScriptSchemaTranslator::TranslatedFeature> JavaScriptSchemaTranslator
 }
 
 std::shared_ptr<Feature> JavaScriptSchemaTranslator::_createFeature(const QVariantMap& vm,
-                                                              QString &tableName)
+                                                              QString &tableName) const
 {
   if (vm.contains("attrs") == false)
   {

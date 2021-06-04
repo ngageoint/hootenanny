@@ -68,7 +68,7 @@ public:
    */
   OsmMapPtr replace(const QString& toReplace, const QString& replacement, const TaskGrid& taskGrid);
 
-  DataQualityMetricTagger getOutputMetrics() { return _metricTagger; }
+  DataQualityMetricTagger getOutputMetrics() const { return _metricTagger; }
   QMap<QString, long> getChangesetStats() const { return _changesetStats; }
 
   void setOriginalDataSize(int size) { _originalDataSize = size; }

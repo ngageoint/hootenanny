@@ -211,7 +211,7 @@ private:
     const ConstWayPtr& w2, Sparse2dMatrix &scores) const;
 
   std::vector<std::pair<WayLocation, WayLocation>> _discretizePointPairs(const ConstOsmMapPtr &map,
-    const ConstWayPtr& w1, const ConstWayPtr& w2, std::vector<WaySublineMatch> &rawSublineMatches);
+    const ConstWayPtr& w1, const ConstWayPtr& w2, std::vector<WaySublineMatch> &rawSublineMatches) const;
 
   std::vector<WaySublineMatch> _extractAllMatches(const ConstOsmMapPtr& map, const ConstWayPtr& w1,
     const ConstWayPtr& w2, Sparse2dMatrix& sublineMatrix);
@@ -243,8 +243,8 @@ private:
    * If the Match Criteria considers these close enough to the ends of the line then they'll be
    * snapped to the end.
    */
-  void _snapToEnd(WayLocation& wl, double thresh = -1) { _snapToTerminal(wl, false, thresh); }
-  void _snapToStart(WayLocation& wl, double thresh = -1) { _snapToTerminal(wl, true, thresh); }
+  void _snapToEnd(WayLocation& wl, double thresh = -1) const { _snapToTerminal(wl, false, thresh); }
+  void _snapToStart(WayLocation& wl, double thresh = -1) const { _snapToTerminal(wl, true, thresh); }
   void _snapToTerminal(WayLocation& wl, bool startOfLines = true, double threshold = -1) const;
 
   bool _checkForSortedSecondSubline(const std::vector<WaySublineMatch>& rawSublineMatches) const;

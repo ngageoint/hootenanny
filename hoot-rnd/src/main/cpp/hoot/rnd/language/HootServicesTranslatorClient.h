@@ -151,7 +151,7 @@ private:
    * detectable language results in a warning, while a failure to verify a translatable language
    * results in an error
    */
-  void _checkLangsAvailable(const QString& type);
+  void _checkLangsAvailable(const QString& type) const;
 
   void _validateAvailableLangs(const std::shared_ptr<boost::property_tree::ptree>& replyObj,
                                const QString& type) const;

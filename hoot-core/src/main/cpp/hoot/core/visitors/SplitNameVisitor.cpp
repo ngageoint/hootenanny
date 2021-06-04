@@ -46,7 +46,7 @@ void SplitNameVisitor::setConfiguration(const Settings& conf)
   _maxSize = ConfigOptions(conf).getMaxTagLength();
 }
 
-void SplitNameVisitor::_addExtraNames(Tags& t, const QStringList& extraNames)
+void SplitNameVisitor::_addExtraNames(Tags& t, const QStringList& extraNames) const
 {
   int lastNameId = -1;
   int size = 0;

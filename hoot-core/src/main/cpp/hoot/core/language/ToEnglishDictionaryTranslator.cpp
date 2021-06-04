@@ -67,7 +67,7 @@ QString ToEnglishDictionaryTranslator::translate(const QString& textToTranslate)
   return toEnglish(textToTranslate, _tokenizeInput);
 }
 
-QString ToEnglishDictionaryTranslator::toEnglish(const QString& input, const bool tokenize)
+QString ToEnglishDictionaryTranslator::toEnglish(const QString& input, const bool tokenize) const
 {
   LOG_TRACE("Translating: " << input << " to English...");
 
@@ -203,7 +203,7 @@ QString ToEnglishDictionaryTranslator::toTitleCase(const QString& input) const
   return _transform(ToEnglishTranslateDictionary::getInstance().getTitler(), input);
 }
 
-QString ToEnglishDictionaryTranslator::translateStreet(const QString& input)
+QString ToEnglishDictionaryTranslator::translateStreet(const QString& input) const
 {
   QStringList l = input.split(_whiteSpace, QString::SkipEmptyParts);
 

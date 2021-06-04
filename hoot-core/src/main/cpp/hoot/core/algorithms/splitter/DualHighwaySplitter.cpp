@@ -213,7 +213,7 @@ Coordinate DualHighwaySplitter::_normalizedVector(long nid1, long nid2) const
 }
 
 bool DualHighwaySplitter::_onRight(long intersectionId, const std::shared_ptr<Way>& inbound,
-                                   long leftNn, long rightNn)
+                                   long leftNn, long rightNn) const
 {
   // calculate the normalized vector from nodeId to the nearest end point on left.
   size_t inboundNodeIndex = 0;

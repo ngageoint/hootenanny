@@ -118,7 +118,7 @@ private:
 
   void _init();
 
-  cv::Mat _paintGraph(OsmMapPtr map, DirectedGraph& graph, ShortestPath& sp, double& maxGraphCost);
+  cv::Mat _paintGraph(OsmMapPtr map, DirectedGraph& graph, ShortestPath& sp, double& maxGraphCost) const;
 
   void _paintWay(
     cv::Mat& mat, ConstOsmMapPtr map, WayPtr way, double friction, double startCost,

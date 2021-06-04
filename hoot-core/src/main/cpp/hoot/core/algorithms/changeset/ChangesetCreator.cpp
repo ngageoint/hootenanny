@@ -663,7 +663,7 @@ ElementInputStreamPtr ChangesetCreator::_sortElementsInMemory(OsmMapPtr map) con
   return InMemoryElementSorterPtr(new InMemoryElementSorter(map));
 }
 
-ElementInputStreamPtr ChangesetCreator::_sortElementsExternally(const QString& input)
+ElementInputStreamPtr ChangesetCreator::_sortElementsExternally(const QString& input) const
 {
   std::shared_ptr<ExternalMergeElementSorter> sorted(new ExternalMergeElementSorter());
   sorted->sort(_getFilteredInputStream(input));

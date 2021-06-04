@@ -154,7 +154,7 @@ void BuildingOutlineUpdateOp::apply(std::shared_ptr<OsmMap>& map)
 
 void BuildingOutlineUpdateOp::_unionOutline(const RelationPtr& pBuilding,
                                             const ElementPtr& pElement,
-                                            std::shared_ptr<Geometry>& pOutline)
+                                            std::shared_ptr<Geometry>& pOutline) const
 {
   ElementToGeometryConverter elementConverter = ElementToGeometryConverter(_map);
   std::shared_ptr<Geometry> pGeometry;

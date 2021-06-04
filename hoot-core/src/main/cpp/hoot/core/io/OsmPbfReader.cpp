@@ -1087,7 +1087,7 @@ uint32_t OsmPbfReader::_readUInt32()
   return ntohl(buf);
 }
 
-Status OsmPbfReader::_parseStatus(const QString& s)
+Status OsmPbfReader::_parseStatus(const QString& s) const
 {
   Status result;
 

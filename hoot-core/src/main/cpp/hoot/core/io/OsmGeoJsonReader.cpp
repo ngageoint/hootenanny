@@ -686,7 +686,7 @@ void OsmGeoJsonReader::_parseMultiPolygonGeometry(const boost::property_tree::pt
   }
 }
 
-JsonCoordinates OsmGeoJsonReader::_parseGeometry(const pt::ptree& geometry)
+JsonCoordinates OsmGeoJsonReader::_parseGeometry(const pt::ptree& geometry) const
 {
   JsonCoordinates results;
   string type = geometry.get("type", "");
@@ -732,7 +732,7 @@ JsonCoordinates OsmGeoJsonReader::_parseGeometry(const pt::ptree& geometry)
   return results;
 }
 
-vector<JsonCoordinates> OsmGeoJsonReader::_parseMultiGeometry(const pt::ptree& geometry)
+vector<JsonCoordinates> OsmGeoJsonReader::_parseMultiGeometry(const pt::ptree& geometry) const
 {
   vector<JsonCoordinates> results;
   string type = geometry.get("type", "");

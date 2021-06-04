@@ -172,12 +172,12 @@ public:
    * @brief hasFailedElements
    * @return true if any elements failed upload
    */
-  bool hasFailedElements() { return _failedCount > 0; }
+  bool hasFailedElements() const { return _failedCount > 0; }
   /**
    * @brief getFailedCount
    * @return number of failed elements
    */
-  long getFailedCount()         { return _failedCount; }
+  long getFailedCount()  const       { return _failedCount; }
   /**
    * @brief getTotalElementCount
    * @return total number of elements in the changeset
@@ -246,7 +246,7 @@ public:
   /**
    * @brief updateRemainingChangeset
    */
-  void updateRemainingChangeset();
+  void updateRemainingChangeset() const;
   /**
    * @brief isMatch Function to compare two changesets
    * @param changeset Changeset object to compare this changeset against
@@ -416,7 +416,7 @@ private:
    * @param countSent
    * @return total number of elements within this element
    */
-  size_t getObjectCount(ChangesetNode* node, ElementCountSet& elements, bool countSent = true);
+  size_t getObjectCount(ChangesetNode* node, ElementCountSet& elements, bool countSent = true) const;
   size_t getObjectCount(ChangesetWay* way, ElementCountSet& elements, bool countSent = true);
   size_t getObjectCount(ChangesetRelation* relation, ElementCountSet& elements, bool countSent = true);
   size_t getObjectCount(const ChangesetInfoPtr& /*changeset*/, ChangesetNode* node, ElementCountSet& elements, bool countSent = true) const;

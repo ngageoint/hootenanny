@@ -49,7 +49,7 @@ public:
    * Calculates the z value by interleaving values that are already scaled to
    * the proper space.
    */
-  long int calculate(std::vector<long int> point);
+  long int calculate(std::vector<long int> point) const;
 
   /**
    * Calculates the non-interleaved component for one dimension.

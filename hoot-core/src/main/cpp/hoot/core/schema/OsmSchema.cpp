@@ -689,7 +689,7 @@ public:
    * then that is substituted. E.g. addr:housenumber=123 would be converted to addr:housenumber=*.
    * If neither of those situations matches then an empty string is returned.
    */
-  QString normalizeEnumeratedKvp(const QString& kvp)
+  QString normalizeEnumeratedKvp(const QString& kvp) const
   {
     QString result = _normalizeEnumeratedKvp(kvp);
     if (result.isEmpty())
@@ -1745,7 +1745,7 @@ bool OsmSchema::allowsFor(const Tags& t, const ElementType& /*type*/,
   return (value & geometries) != OsmGeometries::Empty;
 }
 
-bool OsmSchema::allowsFor(const ConstElementPtr& e, OsmGeometries::Type geometries)
+bool OsmSchema::allowsFor(const ConstElementPtr& e, OsmGeometries::Type geometries) const
 {
   return allowsFor(e->getTags(), e->getElementType(), geometries);
 }
@@ -1798,18 +1798,18 @@ void OsmSchema::loadDefault()
   LOG_DEBUG("Translation files loaded.");
 }
 
-double OsmSchema::score(const QString& kvp1, const QString& kvp2) 
+double OsmSchema::score(const QString& kvp1, const QString& kvp2) const
 {
   // I tried using a LruCache here to speed up scoring, but it had a negative impact. :(
   return std::max(_d->score(kvp1, kvp2), _d->score(kvp2, kvp1));
 }
 
-double OsmSchema::score(const SchemaVertex& v1, const SchemaVertex& v2)
+double OsmSchema::score(const SchemaVertex& v1, const SchemaVertex& v2) const
 {
   return score(v1.name, v2.name);
 }
 
-double OsmSchema::score(const QString& kvp, const Tags& tags)
+double OsmSchema::score(const QString& kvp, const Tags& tags) const
 {
   double maxScore = 0.0;
   for (Tags::const_iterator tagItr = tags.begin(); tagItr != tags.end(); ++tagItr)
@@ -2122,7 +2122,7 @@ void OsmSchema::updateOrCreateVertex(const SchemaVertex& tv) const
   _d->updateOrCreateVertex(tv);
 }
 
-QString OsmSchema::getParentKvp(const QString& kvp1, const QString& kvp2)
+QString OsmSchema::getParentKvp(const QString& kvp1, const QString& kvp2) const
 {
   if (isAncestor(kvp1, kvp2))
   {

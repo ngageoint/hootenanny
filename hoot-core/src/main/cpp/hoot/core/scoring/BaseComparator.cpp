@@ -183,7 +183,7 @@ void BaseComparator::_init(const std::shared_ptr<OsmMap>& map1, const std::share
   MapProjector::projectToOrthographic(_mapP2, _worldBounds);
 }
 
-void BaseComparator::_saveImage(cv::Mat& image, QString path, double max, bool gradient)
+void BaseComparator::_saveImage(cv::Mat& image, QString path, double max, bool gradient) const
 {
   if (max <= 0.0)
   {
