@@ -724,6 +724,10 @@ public class CustomScriptResource {
         TranslationFolder folder = getTranslationFolderForUser(user, parentId);
         String folderPath = folder.getPath();
 
+        if(folder.getId() != 0 && !folder.getUserId().equals(userid)) {
+            throw new ForbiddenException(Response.status(Response.Status.FORBIDDEN).type(MediaType.TEXT_PLAIN).entity("You must be the owner of this folder to create a folder inside it.").build());
+        }
+
         String newFolder = File.separator + folderName;
         folderPath = folderPath != null ? folderPath + newFolder : newFolder;
 
@@ -733,10 +737,6 @@ public class CustomScriptResource {
         } else {
             if(isPublic && !folder.getPublicCol()) {
                 throw new BadRequestException("public folders cannot be created under private folders");
-            }
-            // don't allow private folders to be create under public folders -except- root.
-            if(!isPublic && folder.getPublicCol() && !folder.getId().equals(0L)) {
-                throw new BadRequestException("private folders cannot be created under public folders");
             }
         }
 
