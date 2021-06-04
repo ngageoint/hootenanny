@@ -39,7 +39,7 @@ _matchThreshold(ConfigOptions().getNetworkMatchThreshold())
 }
 
 void DebugNetworkMapCreator::addDebugElements(OsmMapPtr map, QList<NetworkEdgeScorePtr> edgeScores,
-  QList<NetworkVertexScorePtr> vertexScores)
+  QList<NetworkVertexScorePtr> vertexScores) const
 {
 
   for (int i = 0; i < edgeScores.size(); ++i)

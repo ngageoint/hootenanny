@@ -63,7 +63,7 @@ public:
   /**
    * Translates the given input string into a translation & transliteration of the input.
    */
-  QString toEnglish(const QString& input, const bool tokenize = true);
+  QString toEnglish(const QString& input, const bool tokenize = true) const;
 
   /**
    * @see ToEnglishTranslator; wraps call to toEnglish
@@ -89,7 +89,7 @@ public:
 
   QString transliterateToLatin(const QString& input) const;
 
-  QString translateStreet(const QString& input);
+  QString translateStreet(const QString& input) const;
 
   QStringList getSourceLanguages() const override { return QStringList(); }
   void setSourceLanguages(const QStringList& /*langCodes*/) override { }

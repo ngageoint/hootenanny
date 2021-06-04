@@ -203,7 +203,7 @@ OsmMapPtr PertyMatchScorer::_combineMapsAndPrepareForConflation(
 }
 
 std::shared_ptr<MatchComparator> PertyMatchScorer::_conflateAndScoreMatches(
-  const OsmMapPtr& combinedDataToConflate, const QString& conflatedMapOutputPath)
+  const OsmMapPtr& combinedDataToConflate, const QString& conflatedMapOutputPath) const
 {
   LOG_DEBUG("Conflating the reference data with the perturbed data, scoring the matches, and " <<
             "saving the conflated output to: " << conflatedMapOutputPath);

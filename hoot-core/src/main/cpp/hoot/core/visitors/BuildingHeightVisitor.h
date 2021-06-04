@@ -86,7 +86,7 @@ private:
   QRegularExpression _feetRegEx;
 
   void _createFeetRegEx();
-  Meters _getHeight(const ConstElementPtr& e);
+  Meters _getHeight(const ConstElementPtr& e) const; 
   // considered putting this parsing logic in Tags::getLength() but decided against it for the time
   // being
   Meters _parseMetersVal(const QString& heightStr) const;

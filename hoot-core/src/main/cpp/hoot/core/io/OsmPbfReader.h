@@ -290,7 +290,7 @@ private:
 
   void _parseOsmHeader();
 
-  Status _parseStatus(const QString& s);
+  Status _parseStatus(const QString& s) const;
 
   void _parseTimestamp(const hoot::pb::Info& info, Tags& t) const;
 

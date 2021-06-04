@@ -273,7 +273,7 @@ protected:
    * being replaced with the IDs from the maps being replaced.
    */
   void _synchronizeIds(
-    const QList<OsmMapPtr>& mapsBeingReplaced, const QList<OsmMapPtr>& replacementMaps);
+    const QList<OsmMapPtr>& mapsBeingReplaced, const QList<OsmMapPtr>& replacementMaps) const;
 
   /*
    * Runs the default hoot cleaning on the data. This helps solve a lot of problems with output, but

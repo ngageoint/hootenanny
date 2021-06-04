@@ -154,7 +154,7 @@ public:
 
 private:
 
-  void _addDefaults(Tags& t);
+  void _addDefaults(Tags& t) const;
 
   void _addAsDefault(Tags& t, const QString& key, const QString& value) const;
 

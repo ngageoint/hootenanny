@@ -66,15 +66,15 @@ public:
   /**
     Returns the output path of the reference map
     */
-  QString getReferenceMapOutput() { return _referenceMapOutput; }
+  QString getReferenceMapOutput() const { return _referenceMapOutput; }
   /**
     Returns the output path of the perturbed map
     */
-  QString getPerturbedMapOutput() { return _perturbedMapOutput; }
+  QString getPerturbedMapOutput() const { return _perturbedMapOutput; }
   /**
     Returns the output path of the conflated map
     */
-  QString getConflatedMapOutput() { return _conflatedMapOutput; }
+  QString getConflatedMapOutput() const { return _conflatedMapOutput; }
 
   /**
     Returns the search distance used during conflation
@@ -104,7 +104,7 @@ private:
   OsmMapPtr _combineMapsAndPrepareForConflation(const OsmMapPtr& referenceMap,
                                                 const QString& perturbedMapInputPath) const;
   std::shared_ptr<MatchComparator> _conflateAndScoreMatches(const OsmMapPtr& combinedDataToConflate,
-                                                            const QString& conflatedMapOutputPath);
+                                                            const QString& conflatedMapOutputPath) const;
 
   /**
    * Prepares map for saving and saves the map. The map will be modified.

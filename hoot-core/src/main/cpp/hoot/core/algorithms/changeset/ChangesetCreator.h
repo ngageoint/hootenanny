@@ -178,7 +178,7 @@ private:
 
   ElementInputStreamPtr _getExternallySortedElements(const QString& input, Progress progress);
   ElementInputStreamPtr _getFilteredInputStream(const QString& input) const;
-  ElementInputStreamPtr _sortElementsExternally(const QString& input);
+  ElementInputStreamPtr _sortElementsExternally(const QString& input) const;
 
   /*
    * Runs the two data source streams through a changeset deriver

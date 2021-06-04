@@ -371,7 +371,7 @@ void MapComparator::_printIdDiff(
 }
 
 bool MapComparator::isMatch(const std::shared_ptr<OsmMap>& refMap,
-                            const std::shared_ptr<OsmMap>& testMap)
+                            const std::shared_ptr<OsmMap>& testMap) const
 {
   bool mismatch = false;
   if (refMap->getNodes().size() != testMap->getNodes().size())

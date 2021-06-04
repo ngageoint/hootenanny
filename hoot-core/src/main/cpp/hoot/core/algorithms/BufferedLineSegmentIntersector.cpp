@@ -148,7 +148,7 @@ bool BufferedLineSegmentIntersector::isWithinLineSegment(const LineSegment& ls, 
 }
 
 void BufferedLineSegmentIntersector::circleIntersection(const Coordinate& origin, Meters r,
-  const LineSegment& l, Coordinate& p1, Coordinate& p2)
+  const LineSegment& l, Coordinate& p1, Coordinate& p2) const
 {
   // the algorithm assume the circle is centered at 0,0
   LineSegment c(l.p0.x - origin.x, l.p0.y - origin.y, l.p1.x - origin.x, l.p1.y - origin.y);

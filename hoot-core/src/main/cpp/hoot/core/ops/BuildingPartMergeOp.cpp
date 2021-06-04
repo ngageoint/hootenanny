@@ -316,7 +316,7 @@ void BuildingPartMergeOp::_mergeBuildingParts()
   }
 }
 
-std::set<long> BuildingPartMergeOp::_calculateNeighbors(const ConstWayPtr& way, const Tags& tags)
+std::set<long> BuildingPartMergeOp::_calculateNeighbors(const ConstWayPtr& way, const Tags& tags) const
 {
   LOG_VART(way->getElementId());
 

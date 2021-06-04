@@ -49,7 +49,7 @@ public:
   static QString className() { return "hoot::ZCurveRanger"; }
 
   ZCurveRanger(const ZValue& zv);
-  ~ZCurveRanger() = default;
+  ~ZCurveRanger() = default;;
 
   /** Find a good break point for the given box based on major z-value breaks
    * and break the box into two children.

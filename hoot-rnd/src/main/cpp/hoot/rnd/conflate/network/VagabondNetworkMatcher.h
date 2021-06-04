@@ -110,7 +110,7 @@ private:
   void _countEdgesUsed(QHash<ConstNetworkEdgePtr, int>& counts, ConstEdgeStringPtr str) const;
 
   void _distributePrEvenly() const;
-  void _distributePrLengthWeighted();
+  void _distributePrLengthWeighted() const;
 
   QSet<EdgeMatchPtr> _getConnectedEdges(ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2);
 };

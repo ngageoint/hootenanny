@@ -88,7 +88,7 @@ vector<WayPtr> WaySplitter::createSplits(const vector<WayLocation>& wl) const
   return result;
 }
 
-WayPtr WaySplitter::createSubline(const WaySubline& subline, vector<WayPtr>& scraps)
+WayPtr WaySplitter::createSubline(const WaySubline& subline, vector<WayPtr>& scraps) const
 {
   vector<WayLocation> wls;
   wls.push_back(subline.getStart());

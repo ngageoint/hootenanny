@@ -85,7 +85,7 @@ public:
   /**
    * User barycentric interpolation to determine the shift at a given point.
    */
-  Vec2d _interpolateShift(const Coordinate& p)
+  Vec2d _interpolateShift(const Coordinate& p) const
   {
     Vec2d result;
 

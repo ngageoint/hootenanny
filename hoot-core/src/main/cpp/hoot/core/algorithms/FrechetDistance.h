@@ -130,7 +130,7 @@ protected:
    * @param index - node index into way of where to get the heading at
    * @return heading of way at the point index in radians
    */
-  Radians getHeading(WayPtr way, int index);
+  Radians getHeading(WayPtr way, int index) const;
   /**
    * @brief getHeadingWay1 and getHeadingWay2 - helper functions to make using getHeading easier to use
    * @param index - node index into way of where to get the heading at

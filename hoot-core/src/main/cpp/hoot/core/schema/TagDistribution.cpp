@@ -222,7 +222,7 @@ void TagDistribution::_countTags(const QString& input, std::map<QString, int>& t
   filteredInputStream->close();
 }
 
-ElementInputStreamPtr TagDistribution::_getFilteredInputStream(const ElementInputStreamPtr& inputStream)
+ElementInputStreamPtr TagDistribution::_getFilteredInputStream(const ElementInputStreamPtr& inputStream) const
 {
   ElementInputStreamPtr filteredInputStream;
 
