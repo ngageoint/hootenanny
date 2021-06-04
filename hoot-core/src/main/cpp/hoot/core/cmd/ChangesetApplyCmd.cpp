@@ -190,36 +190,20 @@ private:
 
   void _writeSqlChangeset(const QStringList& args)
   {
-    // Not worrying about progress updates for SQL changesets, since those will eventually go
-    // away (#3156).
-
-    if (args.size() != 2 && args.size() != 4)
+    if (args.size() != 2)
     {
       cout << getHelp() << endl << endl;
       throw HootException(
-        QString("%1 takes two or four parameters and was given %2 parameters")
+        QString("%1 takes two parameters and was given %2 parameters")
           .arg(getName())
           .arg(args.size()));
     }
 
     LOG_STATUS("Applying changeset " << args[0] << " to " << args[1] << "...");
 
+    QFile changesetSqlFile(args[0]);
     QUrl url(args[1]);
     OsmApiDbSqlChangesetApplier changesetWriter(url);
-
-    if (args.size() == 4)
-    {
-      if (changesetWriter.conflictExistsInTarget(args[2], args[3]))
-      {
-        // Don't like throwing an exception here from the command line, but this error needs to
-        // bubble up to the web service. The better thing to do here would be to return an error
-        // code and have the services scripts look for it, I think.
-        throw HootException(
-          "The changeset will not be written because conflicts exist in the target OSM API database.");
-      }
-    }
-
-    QFile changesetSqlFile(args[0]);
     changesetWriter.write(changesetSqlFile);
     //The tests rely on this being output, so leave it as a cout and not a log statement.
     cout << changesetWriter.getChangesetStatsSummary();

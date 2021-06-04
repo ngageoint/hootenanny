@@ -27,17 +27,13 @@
 #include "OsmApiDbSqlChangesetApplier.h"
 
 // hoot
-#include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/util/DbUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
 
 // Qt
-#include <QtSql/QSqlDatabase>
 #include <QUrl>
-#include <QSqlError>
-#include <QDateTime>
 
 using namespace geos::geom;
 
@@ -252,50 +248,6 @@ QString OsmApiDbSqlChangesetApplier::getChangesetStatsSummary() const
     "Total Creations: " + StringUtils::formatLargeNumber(_changesetStats[TOTAL_CREATE_KEY]) + "\n" +
     "Total Modifications: " + StringUtils::formatLargeNumber(_changesetStats[TOTAL_MODIFY_KEY]) + "\n" +
     "Total Deletions: " + StringUtils::formatLargeNumber(_changesetStats[TOTAL_DELETE_KEY]) + "\n";
-}
-
-bool OsmApiDbSqlChangesetApplier::conflictExistsInTarget(const QString& boundsStr,
-                                                         const QString& timeStr)
-{
-  LOG_DEBUG("Checking for OSM API DB conflicts for " << ApiDb::getChangesetsTableName() <<
-           " within " << boundsStr << " and created after " << timeStr << "...");
-
-  const Envelope bounds = GeometryUtils::envelopeFromString(boundsStr);
-  LOG_VARD(bounds.toString());
-
-  const QDateTime time = QDateTime::fromString(timeStr, OsmApiDb::TIME_FORMAT);
-  LOG_VARD(time);
-  if (!time.isValid())
-  {
-    throw HootException(
-      "Invalid timestamp: " + time.toString() + ".  Should be of the form " + OsmApiDb::TIME_FORMAT);
-  }
-
-  std::shared_ptr<QSqlQuery> changesetItr = _db.getChangesetsCreatedAfterTime(timeStr);
-  while (changesetItr->next())
-  {
-    LOG_VARD(changesetItr->value(0).toLongLong());
-    LOG_VARD(changesetItr->value(1).toLongLong());
-    LOG_VARD(changesetItr->value(2).toLongLong());
-    LOG_VARD(changesetItr->value(3).toLongLong());
-    Envelope changesetBounds(
-      changesetItr->value(0).toLongLong() / (double)ApiDb::COORDINATE_SCALE,
-      changesetItr->value(1).toLongLong() / (double)ApiDb::COORDINATE_SCALE,
-      changesetItr->value(2).toLongLong() / (double)ApiDb::COORDINATE_SCALE,
-      changesetItr->value(3).toLongLong() / (double)ApiDb::COORDINATE_SCALE);
-    LOG_VARD(changesetBounds.toString());
-    if (changesetBounds.intersects(bounds))
-    {
-      // logging as info instead of error since I couldn't get the log output disabled in the test
-      // with the log disabler
-      LOG_INFO(
-        "Conflict exists at bounds " << changesetBounds.toString() << "for input bounds " <<
-        boundsStr << " and input time " << timeStr);
-      return true;
-    }
-  }
-  LOG_DEBUG("No conflicts exist for input bounds " << boundsStr << " and input time " << timeStr);
-  return false;
 }
 
 }
