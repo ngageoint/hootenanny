@@ -1,0 +1,9 @@
+Unstaged changes after reset:
+M	Makefile.hoot
+M	docs/commands/score-matches.asciidoc
+M	hoot-core/src/main/cpp/hoot/core/cmd/ScoreMatchesCmd.cpp
+M	hoot-services/Makefile
+M	test-files/cmd/glacial/ScoreMatchesCmdTest.sh
+M	test-files/cmd/glacial/ScoreMatchesCmdTest.sh.stdout
+M	test-files/cmd/glacial/ScoreMatchesCmdTest/output-1.osm
+D	test-files/cmd/glacial/ScoreMatchesCmdTest/output.osm

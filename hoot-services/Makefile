@@ -38,8 +38,8 @@ run-liquibase:
 build: build-info config run-liquibase
 	# If there isn't a local copy of the properties, copy the global version.
 	# [ -f src/main/resources/conf/hoot-services.conf ] || cp src/main/resources/conf/hoot-services.conf.orig src/main/resources/conf/hoot-services.conf
-	../scripts/maven/mvn-build $(MVN_QUIET) build
-	cp target/hoot-services-*.war ../bin
+	#../scripts/maven/mvn-build $(MVN_QUIET) build
+	#cp target/hoot-services-*.war ../bin
 
 docs: config
 	../scripts/maven/mvn-build $(MVN_QUIET) docs

@@ -445,7 +445,7 @@
     <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8543319201230304" lon="-104.9017876860593788">
         <tag k="hoot:status" v="1"/>
     </node>
-    <way visible="true" id="-95" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-141" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-125"/>
         <nd ref="-128"/>
         <nd ref="-129"/>
@@ -467,7 +467,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="name" v="Maid-Rite"/>
     </way>
-    <way visible="true" id="-94" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-140" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-125"/>
         <nd ref="-128"/>
         <nd ref="-129"/>
@@ -818,7 +818,7 @@
         <tag k="hoot:status" v="3"/>
         <tag k="note" v="1"/>
     </way>
-    <relation visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-18" role="reviewee"/>
         <member type="way" ref="-15" role="reviewee"/>
         <tag k="hoot:review:members" v="2"/>
@@ -829,7 +829,7 @@
         <tag k="hoot:review:type" v="Building"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-18" role="reviewee"/>
         <member type="way" ref="-16" role="reviewee"/>
         <tag k="hoot:review:members" v="2"/>
@@ -840,7 +840,7 @@
         <tag k="hoot:review:type" v="Building"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-18" role="reviewee"/>
         <member type="way" ref="-17" role="reviewee"/>
         <tag k="hoot:review:members" v="2"/>
@@ -854,7 +854,7 @@
     <relation visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-11" role="part"/>
         <member type="way" ref="-12" role="part"/>
-        <member type="way" ref="-95" role="outline"/>
+        <member type="way" ref="-141" role="outline"/>
         <tag k="REF1" v="002c75"/>
         <tag k="REF2" v="002c75"/>
         <tag k="alt_name" v="Maid-Rite Diner;Panera Bread"/>
