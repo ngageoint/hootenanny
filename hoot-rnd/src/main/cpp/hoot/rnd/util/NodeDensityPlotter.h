@@ -54,7 +54,7 @@ public:
    * @param input path to the input map containing the nodes to plot
    * @param output path to a raster output image
    */
-  void plot(const QString& input, const QString& output);
+  void plot(const QString& input, const QString& output) const;
 
   /**
    * Converts the string representation of a number to a numeric color band
