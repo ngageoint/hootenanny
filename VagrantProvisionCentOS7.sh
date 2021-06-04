@@ -370,7 +370,7 @@ if ! grep --quiet "devtoolset-$DEVTOOLSET_VERSION" ~/.bash_profile; then
     echo "Adding devtoolset-$DEVTOOLSET_VERSION to profile..."
     # Devtoolset <= 8 has a sudo issue, fix it here
     if [ $(($DEVTOOLSET_VERSION)) -le 8 ]; then
-        echo "sudo chmod -x /opt/rh/devtoolset-$DEVTOOLSET_VERSION/root/usr/bin/sudo" >> ~/.bash_profile
+        sudo chmod -x /opt/rh/devtoolset-$DEVTOOLSET_VERSION/root/usr/bin/sudo
     fi
     # Enable devtoolset
     echo "source /opt/rh/devtoolset-$DEVTOOLSET_VERSION/enable" >> ~/.bash_profile
