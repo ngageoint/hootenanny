@@ -13,6 +13,12 @@ Object.keys(poi).forEach(function(key) {
 exports.description = "Matches three or more POIs";
 exports.experimental = true;
 exports.geometryType = "point";
+exports.baseFeatureType = "POI";
+exports.geometryType = "point";
+
+// This is needed for disabling superfluous conflate ops only. exports.isMatchCandidate handles
+// culling match candidates.
+exports.matchCandidateCriterion = "hoot::PoiCriterion";
 
 // this matcher will never cause a conflict. However, another matcher may conflict with us.
 exports.neverCausesConflict = function() { return true; }

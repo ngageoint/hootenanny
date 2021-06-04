@@ -22,40 +22,26 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
-#ifndef COLLECTION_RELATION_CRITERION_H
-#define COLLECTION_RELATION_CRITERION_H
+#ifndef NODE_CRITERION_H
+#define NODE_CRITERION_H
 
-// hoot
-#include <hoot/core/criterion/ConflatableElementCriterion.h>
+#include <hoot/core/criterion/ElementTypeCriterion.h>
 
 namespace hoot
 {
 
-/**
- * Identifies collection relations
- */
-class CollectionRelationCriterion : public ConflatableElementCriterion
+class NodeCriterion : public ElementTypeCriterion
 {
 public:
 
-  static QString className() { return "hoot::CollectionRelationCriterion"; }
+  static QString className() { return "hoot::NodeCriterion"; }
 
-  CollectionRelationCriterion() = default;
-  ~CollectionRelationCriterion() = default;
+  NodeCriterion();
+  ~NodeCriterion() override = default;
 
-  bool isSatisfied(const ConstElementPtr& e) const override;
-
-  // TODO: should this be linear instead?
-  GeometryType getGeometryType() const override { return GeometryType::Polygon; }
-
-  bool supportsSpecificConflation() const override { return true; }
-
-  ElementCriterionPtr clone() override
-  { return ElementCriterionPtr(new CollectionRelationCriterion()); }
-
-  QString getDescription() const override { return "Identifies collection relations"; }
+  QString getDescription() const override { return "Identifies nodes"; }
   QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }
   QString toString() const override { return className(); }
@@ -63,4 +49,4 @@ public:
 
 }
 
-#endif // COLLECTION_RELATION_CRITERION_H
+#endif // NODE_CRITERION_H

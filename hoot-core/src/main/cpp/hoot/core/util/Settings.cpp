@@ -212,12 +212,36 @@ void Settings::_checkConvert(const QString& key, const QVariant& value, QVariant
 
 void Settings::clear()
 {
-  // this can be very handy when determining why/when settings got cleared.
+  // This can be very handy when determining why/when settings got cleared.
   if (this == _theInstance.get())
   {
     LOG_DEBUG("Clearing global settings.");
   }
   _settings.clear();
+}
+
+void Settings::_addNamespacePrefixIfClassNameWithout(QString& val)
+{
+  const QString namespacePrefix = "hoot::";
+  // If the interal factory recognizes this option value as a factory class name and it doesn't have
+  // the global namespace already prepended to it, we'll do that here.
+  if (!val.isEmpty() && !val.startsWith(namespacePrefix) &&
+      Factory::getInstance().hasClass(namespacePrefix + val))
+  {
+    val.prepend(namespacePrefix);
+  }
+}
+
+void Settings::_updateClassNamesInList(QStringList& list)
+{
+  QStringList moddedList;
+  for (int i = 0; i < list.size(); i++)
+  {
+    QString val = list.at(i);
+    _addNamespacePrefixIfClassNameWithout(val);
+    moddedList.append(val);
+  }
+  list = moddedList;
 }
 
 QVariant Settings::get(const QString& key) const
@@ -231,8 +255,9 @@ QVariant Settings::get(const QString& key) const
   if (result.type() == QVariant::String)
   {
     std::set<QString> used;
-    QString r = _replaceVariables(key, used);
-    result = r;
+    QString val = _replaceVariables(key, used);
+    _addNamespacePrefixIfClassNameWithout(val);
+    result = val;
   }
   return result;
 }
@@ -376,12 +401,16 @@ long Settings::getLong(const QString& key, long defaultValue, long min, long max
 
 QStringList Settings::getList(const QString& key) const
 {
-  return getString(key).split(";");
+  QStringList list = getString(key).split(";");
+  _updateClassNamesInList(list);
+  return list;
 }
 
 QStringList Settings::getList(const QString& key, const QString& defaultValue) const
 {
-  return getString(key, defaultValue).split(";", QString::SkipEmptyParts);
+  QStringList list = getString(key, defaultValue).split(";", QString::SkipEmptyParts);
+  _updateClassNamesInList(list);
+  return list;
 }
 
 QStringList Settings::getList(const QString& key, const QStringList& defaultValue) const
@@ -389,8 +418,7 @@ QStringList Settings::getList(const QString& key, const QStringList& defaultValu
   QStringList result;
   if (hasKey(key))
   {
-    QString str = getString(key);
-    result = str.split(";", QString::SkipEmptyParts);
+    result = getString(key).split(";", QString::SkipEmptyParts);
   }
   else
   {
@@ -399,6 +427,7 @@ QStringList Settings::getList(const QString& key, const QStringList& defaultValu
       result.append(_replaceVariablesValue(defaultValue[i]));
     }
   }
+  _updateClassNamesInList(result);
   return result;
 }
 
@@ -471,12 +500,13 @@ void Settings::_validateOperatorRefs(const QStringList& operators)
   {
     QString operatorName = operators[i];
     operatorName = operatorName.remove("\"");
-    LOG_VART(operatorName);
+    LOG_VARD(operatorName);
     const QString errorMsg = "Invalid option operator class name: " + operatorName;
 
-    if (!operatorName.startsWith("hoot::"))
+    const QString namespacePrefix = "hoot::";
+    if (!operatorName.startsWith(namespacePrefix))
     {
-      throw IllegalArgumentException(errorMsg);
+      operatorName.prepend(namespacePrefix);
     }
 
     // Should either be a visitor, op, or criterion, but we don't know which one, so check for all
@@ -756,8 +786,8 @@ void Settings::parseCommonArguments(QStringList& args)
   Hoot::getInstance().reinit();
 }
 
-void Settings::replaceListOptionEntryValues(Settings& settings, const QString& optionName,
-                                            const QStringList& listReplacementEntryValues)
+void Settings::replaceListOptionEntryValues(
+  Settings& settings, const QString& optionName, const QStringList& listReplacementEntryValues)
 {
   LOG_DEBUG(optionName << " before replacement: " << conf().getList(optionName));
   foreach (QString v, listReplacementEntryValues)
@@ -795,7 +825,7 @@ QString Settings::_replaceVariables(const QString& key, std::set<QString> used) 
   {
     throw IllegalArgumentException("Recursive key in configuration file. (" + key + ")");
   }
-  // if the variable doesn't exist then it defaults to an empty string.
+  // If the variable doesn't exist, then it defaults to an empty string.
   if (_settings.contains(key) == false)
   {
     return "";
@@ -896,6 +926,15 @@ QString Settings::toString() const
   result += "}\n";
 
   return result;
+}
+
+QString Settings::_markup(QString s) const
+{
+  s.replace("\\", "\\\\");
+  s.replace("\n", "\\n");
+  s.replace("\t", "\\t");
+  s.replace("\"", "\\\"");
+  return s;
 }
 
 }

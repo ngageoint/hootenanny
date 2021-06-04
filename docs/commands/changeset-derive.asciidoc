@@ -17,8 +17,8 @@ If deriving a changeset between two inputs from different dates, the first input
 second should be the newer dataset.
 
 * +input1+                - OSM data input 1; may be any supported input format (e.g. .osm file).
-* +input2+                - OSM data input 2; may be any supported input format or empty (e.g. .osm file or empty string ("") to 
-                            derive changeset from one input only).
+* +input2+                - OSM data input 2; may be any supported input format or empty (e.g. .osm file or empty string 
+                            ("") to derive changeset from one input only).
 * +output+                - Output location; must be a changeset .osc or .osc.sql file.
 * +osmApiDatabaseUrl+     - Target OSM API database the derived changeset is to be applied, used to maintain element ID 
                             continuity. Required only if the changeset output format is .osc.sql. Used to maintain element 
@@ -43,26 +43,7 @@ second should be the newer dataset.
 changeset-derive (input1) [input2] (output) [osmApiDatabaseUrl] [--replacement] [--enable-way-snapping] [--stats filename] [--write-bounds]
 --------------------------------------
 
-=== Examples
-
---------------------------------------
-hoot changeset-derive inputData1.osm inputData2.osm outputChangeset.osc
-
-hoot changeset-derive -D convert.ops="op1;op2" inputData1.osm inputData2.osm outputChangeset.osc
-
-hoot changeset-derive inputData1.osm inputData2.osm outputChangeset.osc --stats
-
-hoot changeset-derive inputData1.osm inputData2.osm outputChangeset.osc --stats myStats.json
-
-hoot changeset-derive inputData.osm "" outputChangeset.osc
-
-hoot changeset-derive inputData.osm "" outputChangeset.osc.sql osmapidb://username:password@localhost:5432/osmApiDatabaseName
---------------------------------------
-
-Additional examples:
-
-* https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#applying-changes[Basic]
-* https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#applying-changes-1[Advanced]
+https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#applying-changes[Examples]
 
 === Configuration Options
 

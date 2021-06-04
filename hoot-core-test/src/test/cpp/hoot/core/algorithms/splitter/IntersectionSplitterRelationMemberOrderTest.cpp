@@ -26,7 +26,7 @@
  */
 
 // Hoot
-#include <hoot/core/criterion/ElementTypeCriterion.h>
+#include <hoot/core/criterion/RelationCriterion.h>
 #include <hoot/core/criterion/IntersectingWayCriterion.h>
 #include <hoot/core/criterion/NetworkTypeCriterion.h>
 #include <hoot/core/criterion/OrCriterion.h>

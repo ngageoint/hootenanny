@@ -31,7 +31,7 @@
 // hoot
 #include <hoot/core/visitors/ConstElementVisitor.h>
 #include <hoot/core/info/NumericStatistic.h>
-#include <hoot/core/criterion/ElementTypeCriterion.h>
+#include <hoot/core/criterion/RelationCriterion.h>
 
 namespace hoot
 {

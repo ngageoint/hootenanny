@@ -14,8 +14,8 @@ exports.matchThreshold = parseFloat(hoot.get("power.line.match.threshold"));
 exports.missThreshold = parseFloat(hoot.get("power.line.miss.threshold"));
 exports.reviewThreshold = parseFloat(hoot.get("power.line.review.threshold"));
 
-// This is needed for disabling superfluous conflate ops. In the future, it may also
-// be used to replace exports.isMatchCandidate (see #3047).
+// This is needed for disabling superfluous conflate ops and calculating a search radius only.
+// exports.isMatchCandidate handles culling match candidates.
 exports.matchCandidateCriterion = "hoot::PowerLineCriterion";
 
 // We're just using the default max recursions here for MaximalSubline. May need to come up with a

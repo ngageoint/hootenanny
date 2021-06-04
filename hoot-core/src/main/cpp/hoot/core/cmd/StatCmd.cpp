@@ -74,7 +74,12 @@ public:
     }
 
     const QString input = args[0].trimmed();
-    const QString visClassName = args[1].trimmed();
+    QString visClassName = args[1].trimmed();
+    const QString namespacePrefix = "hoot::";
+    if (!visClassName.startsWith(namespacePrefix))
+    {
+      visClassName.prepend(namespacePrefix);
+    }
 
     QString statType = "total";
     if (args.size() == 3)

@@ -11,7 +11,8 @@ tags or the second input file contains any REF1 tags.
 * +--confusion+ - print the confusion matrix
 * +input1+      - Input 1; may be any supported input format (e.g. OSM file).
 * +input2+      - Input 2; may be any supported input format (e.g. OSM file).
-* +output+      - Output file for debugging; may be any supported output format (e.g. OSM file). Only the first conflation will be output.
+* +output+      - Output file for debugging; may be any supported output format (e.g. OSM file). Only the first conflation 
+                  will be output.
 
 === Usage
 

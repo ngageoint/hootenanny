@@ -72,7 +72,6 @@ const QString ConflateExecutor::JOB_SOURCE = "Conflate";
 ConflateExecutor::ConflateExecutor() :
 _isDiffConflate(false),
 _diffConflateSeparateOutput(false),
-_diffRemoveLinearPartialMatchesAsWhole(false),
 _isAttributeConflate(false),
 _isAverageConflate(false),
 _displayStats(false),

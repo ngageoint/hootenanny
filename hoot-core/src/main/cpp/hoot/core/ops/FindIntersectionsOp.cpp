@@ -31,7 +31,9 @@
 #include <hoot/core/algorithms/splitter/IntersectionSplitter.h>
 #include <hoot/core/criterion/ChainCriterion.h>
 #include <hoot/core/criterion/ElementIdCriterion.h>
-#include <hoot/core/criterion/ElementTypeCriterion.h>
+#include <hoot/core/criterion/NodeCriterion.h>
+#include <hoot/core/criterion/WayCriterion.h>
+#include <hoot/core/criterion/RelationCriterion.h>
 #include <hoot/core/criterion/NotCriterion.h>
 #include <hoot/core/criterion/TagCriterion.h>
 #include <hoot/core/elements/OsmMap.h>

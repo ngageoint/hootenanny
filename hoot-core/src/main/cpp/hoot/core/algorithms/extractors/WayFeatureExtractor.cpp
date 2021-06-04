@@ -29,7 +29,7 @@
 // hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/algorithms/aggregator/MeanAggregator.h>
-#include <hoot/core/criterion/CollectionRelationCriterion.h>
+#include <hoot/core/criterion/RelationCriterion.h>
 
 using namespace std;
 
@@ -66,10 +66,8 @@ double WayFeatureExtractor::extract(
     ConstRelationPtr r1 = std::dynamic_pointer_cast<const Relation>(target);
     ConstRelationPtr r2 = std::dynamic_pointer_cast<const Relation>(candidate);
 
-    CollectionRelationCriterion collectionCrit;
-    if (/*r1->getType() == MetadataTags::RelationMultilineString() &&
-        r2->getType() == MetadataTags::RelationMultilineString() &&*/
-        collectionCrit.isSatisfied(r1) && collectionCrit.isSatisfied(r2) &&
+    RelationCriterion crit;
+    if (crit.isSatisfied(r1) && crit.isSatisfied(r2) &&
         // These have to be of the same size for the way by way comparison score to have any
         // meaning.
         r1->getMembers().size() == r2->getMembers().size())

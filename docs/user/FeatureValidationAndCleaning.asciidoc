@@ -6,19 +6,20 @@ Hootenanny allows for tagging features which fail JOSM validation tests without 
 
 "validation examples":https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#run-josm-validation-on-a-map
 
-Map elements will be tagged with 'hoot:validation:error' which describes the error and 'hoot:validation:error:source' which shows the validator
-that found the error.
+Map elements will be tagged with 'hoot:validation:error' which describes the error and 'hoot:validation:error:source' 
+which shows the validator that found the error.
 
 "list validators example":https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#list-the-available-josm-validators
 
 === Crossing Roads
 
-Hootenanny will attempt to detect roads that incorrectly cross polygons automatically after conflation (this is not part of the +validate+ 
-command). This is primarily helpful when a newer dataset is conflated with an older one where you want to keep provenance in the older data
-while brining in as many of the features from the new dataset as possible. A rules file, specified by the +highway.crossing.poly.rules+ 
-configuration option, controls which polygons are search for roads over them and which roads are allowed to cross certain polygons (if any). 
-For example, there are any instances where we would want to see a road crossing though a building but we allow a service road to pass through 
-a parking lot. The rules file will require maintenance over time as more road crossing data scenarios are encountered.
+Hootenanny will attempt to detect roads that incorrectly cross polygons automatically after conflation (this is not part of 
+the +validate+ command). This is primarily helpful when a newer dataset is conflated with an older one where you want to 
+keep provenance in the older data while brining in as many of the features from the new dataset as possible. A rules 
+file, specified by the +highway.crossing.poly.rules+ configuration option, controls which polygons are search for roads 
+over them and which roads are allowed to cross certain polygons (if any). For example, there are any instances where we 
+would want to see a road crossing though a building but we allow a service road to pass through a parking lot. The rules 
+file will require maintenance over time as more road crossing data scenarios are encountered.
 
 File format example:
 
@@ -42,20 +43,18 @@ File format example:
 
 "name" is the name of the rule; required and used for readability purposes in reviews
 
-"polyCriteriaFilter" consists of one or more Hootenanny element criterion class names that are logically OR'd together to create a type filter 
-for the polygons which are search for roads crossing over them. The form of the value string is: <criterion 1>;<criterion 2>...; e.g. 
-"hoot::BuildingCriterion;hoot::AreaCriterion"
+"polyCriteriaFilter" consists of one or more Hootenanny element criterion class names that are logically OR'd together 
+to create a type filter for the polygons which are search for roads crossing over them. The form of the value string is: <criterion 1>;<criterion 2>...; e.g. hoot::BuildingCriterion;hoot::AreaCriterion"
 
-"polyTagFilter" consists of one or more tag key/value pairs that are logically OR'd together to create a tag filter used to determine which 
-types of polygons are checked for crossing roads using tag checks of the form: <key1=value1>;<key2=value2>...; e.g. 
-"amenity=parking;leisure=park"
+"polyTagFilter" consists of one or more tag key/value pairs that are logically OR'd together to create a tag filter 
+used to determine which types of polygons are checked for crossing roads using tag checks of the form: <key1=value1>;<key2=value2>...; e.g. "amenity=parking;leisure=park"
 
 At least one of "polyCriteriaFilter" and "polyTagFilter" must be specified. Both may be specified but it is not required.
 
-"allowedRoadTagFilter" determines which type of roads are allowed to cross the polygons being search for in this rule. It consists one or 
-more highway tag key/value pairs that are logically OR'd together to create a tag filter used to determine which 
-types of polygons are checked for crossing roads using tag checks of the form: <key1=value1>;<key2=value2>...; e.g. 
-"highway=service;highway=footway"
+"allowedRoadTagFilter" determines which type of roads are allowed to cross the polygons being search for in this rule.
+It consists one or more highway tag key/value pairs that are logically OR'd together to create a tag filter used to 
+determine which types of polygons are checked for crossing roads using tag checks of the 
+form: <key1=value1>;<key2=value2>...; e.g. "highway=service;highway=footway"
 
 [[FeatureCleaning]]
 == Feature Cleaning
