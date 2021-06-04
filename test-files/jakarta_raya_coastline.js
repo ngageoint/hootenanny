@@ -7,8 +7,6 @@ var attributeMapping = {
         "water": "coastline",
         "shoreline": "coastline"
       }
-//      "water": { "natural":  "coastline"},
-//      "shoreline": { "natural": "coastline"}
     }
   }
 };
