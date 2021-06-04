@@ -56,8 +56,7 @@ public:
   double f(Tgs::Vector v) override
   {
     double score;
-    std::shared_ptr<MatchThreshold> mt =
-      std::make_shared<MatchThreshold>(MatchThreshold(v[0], v[1], v[2], false));
+    std::shared_ptr<MatchThreshold> mt = std::make_shared<MatchThreshold>(v[0], v[1], v[2], false);
     _scorer->evaluateThreshold(_maps, "", mt, _showConfusion, score);
     return score;
   }
@@ -99,7 +98,7 @@ void MatchScorer::score(
   std::vector<OsmMapPtr> maps;
   for (int i = 0; i < ref1Inputs.size(); i++)
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     const QString map1Path = ref1Inputs.at(i);
     const QString map2Path = ref2Inputs.at(i);
     LOG_VART(map1Path);
@@ -153,12 +152,13 @@ QString MatchScorer::evaluateThreshold(
   long numManualMatches = 0;
   for (size_t i = 0; i < maps.size(); i++)
   {
-    OsmMapPtr copy(new OsmMap(maps[i]));
+    OsmMapPtr copy = std::make_shared<OsmMap>(maps[i]);
 
-    std::shared_ptr<CountManualMatchesVisitor> manualMatchVisitor(
-      new CountManualMatchesVisitor());
+    std::shared_ptr<CountManualMatchesVisitor> manualMatchVisitor =
+      std::make_shared<CountManualMatchesVisitor>();
+
     maps[i]->visitRo(*manualMatchVisitor);
-    numManualMatches += manualMatchVisitor->getStat();
+    numManualMatches += (long)manualMatchVisitor->getStat();
     LOG_VARD(numManualMatches);
 
     LOG_INFO("Applying pre conflation operations...");

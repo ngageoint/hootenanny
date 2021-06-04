@@ -76,9 +76,9 @@ double StatCalculator::calculateStat(
 
   ElementVisitorPtr statCollector = _getStatCollector(visitorClassName);
 
-  ElementInputStreamPtr filteredInputStream(
-    new ElementVisitorInputStream(
-      std::dynamic_pointer_cast<ElementInputStream>(reader), statCollector));
+  ElementInputStreamPtr filteredInputStream =
+    std::make_shared<ElementVisitorInputStream>(
+      std::dynamic_pointer_cast<ElementInputStream>(reader), statCollector);
 
   std::shared_ptr<SingleStatistic> singleStatCtr =
     std::dynamic_pointer_cast<SingleStatistic>(statCollector);

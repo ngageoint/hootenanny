@@ -114,7 +114,8 @@ private:
 
   std::shared_ptr<Progress> _progress;
 
-  void _writeXmlChangeset(const bool showProgress, const bool showStats, const QStringList& args)
+  void _writeXmlChangeset(
+    const bool showProgress, const bool showStats, const QStringList& args) const
   {
     //  Get the endpoint URL
     const QString urlStr = args[args.size() - 1];
@@ -188,7 +189,7 @@ private:
     }
   }
 
-  void _writeSqlChangeset(const QStringList& args)
+  void _writeSqlChangeset(const QStringList& args) const
   {
     if (args.size() != 2)
     {

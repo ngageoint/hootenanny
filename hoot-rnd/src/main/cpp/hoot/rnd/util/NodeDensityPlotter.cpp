@@ -51,7 +51,7 @@ _maxSize(-1.0)
 {
 }
 
-void NodeDensityPlotter::plot(const QString& input, const QString& output)
+void NodeDensityPlotter::plot(const QString& input, const QString& output) const
 {
   if (_maxSize < 1.0)
   {
@@ -193,7 +193,7 @@ geos::geom::Envelope NodeDensityPlotter::_getEnvelope(
   }
   else
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader->setUseDataSourceIds(true);
     reader->read(map);
     return CalculateMapBoundsVisitor::getGeosBounds(map);

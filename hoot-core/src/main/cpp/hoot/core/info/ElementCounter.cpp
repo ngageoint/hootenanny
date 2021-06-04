@@ -255,7 +255,7 @@ ConstElementVisitorPtr ElementCounter::_getCountVis() const
 long ElementCounter::_countMemoryBound(
   const QStringList& inputs, const ElementCriterionPtr& criterion) const
 {
-  OsmMapPtr map(new OsmMap());
+  OsmMapPtr map = std::make_shared<OsmMap>();
   IoUtils::loadMaps(map, inputs, true);
 
   OsmMapConsumer* omc = dynamic_cast<OsmMapConsumer*>(criterion.get());
