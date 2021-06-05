@@ -59,14 +59,41 @@ public:
   QString getName() const override { return "compare"; }
   QString getDescription() const override { return "Compares maps using metrics"; }
 
-  int compareMaps(QString in1, QString in2, QString out) const
+  int runSimple(QStringList& args) override
+  {
+    QElapsedTimer timer;
+    timer.start();
+
+    if (args.size() < 2 || args.size() > 3)
+    {
+      LOG_VAR(args);
+      cout << getHelp() << endl << endl;
+      throw HootException(QString("%1 takes at two or three parameters.").
+                          arg(getName()));
+    }
+
+    QString base1 = args[0];
+    QString base2 = args.size() == 3 ? args[1] : QString();
+    QString uut = args.last();
+
+    const int status = _compareMaps(base1, base2, uut);
+
+    LOG_STATUS(
+      "Maps compared in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
+
+    return status;
+  }
+
+private:
+
+  int _compareMaps(QString in1, QString in2, QString out) const
   {
     LOG_STATUS(
       "Comparing maps ..." << FileUtils::toLogFormat(in1, 25) << " and ..." <<
       FileUtils::toLogFormat(in2, 25) << "; writing output to ..." <<
       FileUtils::toLogFormat(out, 25) << "...");
 
-    OsmMapPtr map1 = loadMap(in1);
+    OsmMapPtr map1 = _loadMap(in1);
     if (map1->isEmpty())
     {
       return -1;
@@ -74,13 +101,13 @@ public:
     OsmMapPtr map2;
     if (in2 != "")
     {
-      map2 = loadMap(in2);
+      map2 = _loadMap(in2);
       if (map2->isEmpty())
       {
         return -1;
       }
     }
-    OsmMapPtr outMap = loadMap(out);
+    OsmMapPtr outMap = _loadMap(out);
 
     int aic, aim;
     MapCompareUtils::getAttributeComparisonFinalScores(map1, outMap, aim, aic, 600);
@@ -143,7 +170,7 @@ public:
     return 0;
   }
 
-  OsmMapPtr loadMap(QString p) const
+  OsmMapPtr _loadMap(QString p) const
   {
     OsmMapPtr result(new OsmMap());
     IoUtils::loadMap(result, p, false);
@@ -156,31 +183,6 @@ public:
     result->visitRw(keepHighways);
 
     return result;
-  }
-
-  int runSimple(QStringList& args) override
-  {
-    QElapsedTimer timer;
-    timer.start();
-
-    if (args.size() < 2 || args.size() > 3)
-    {
-      LOG_VAR(args);
-      cout << getHelp() << endl << endl;
-      throw HootException(QString("%1 takes at two or three parameters.").
-                          arg(getName()));
-    }
-
-    QString base1 = args[0];
-    QString base2 = args.size() == 3 ? args[1] : QString();
-    QString uut = args.last();
-
-    const int status = compareMaps(base1, base2, uut);
-
-    LOG_STATUS(
-      "Maps compared in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
-
-    return status;
   }
 };
 

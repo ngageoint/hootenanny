@@ -71,8 +71,7 @@ public:
     {
       LOG_VARD(args);
       cout << getHelp() << endl << endl;
-      throw HootException(QString("%1 takes two parameters.").
-                          arg(getName()));
+      throw HootException(QString("%1 takes two parameters.").arg(getName()));
     }
 
     const QString input1 = args[0];

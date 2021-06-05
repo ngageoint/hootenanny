@@ -28,26 +28,8 @@
 // Hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/core/io/OsmMapReaderFactory.h>
-#include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/criterion/ElementCriterion.h>
-#include <hoot/core/visitors/ElementCountVisitor.h>
-#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/criterion/NotCriterion.h>
-#include <hoot/core/visitors/FeatureCountVisitor.h>
-#include <hoot/core/util/Configurable.h>
-#include <hoot/core/io/PartialOsmMapReader.h>
-#include <hoot/core/io/ElementCriterionVisitorInputStream.h>
-#include <hoot/core/io/ElementVisitorInputStream.h>
-#include <hoot/core/util/DbUtils.h>
-#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/io/IoUtils.h>
-#include <hoot/core/visitors/FilteredVisitor.h>
-
-// Qt
-#include <QFileInfo>
-#include <QElapsedTimer>
+#include <hoot/core/info/ElementCounter.h>
 
 namespace hoot
 {
@@ -58,11 +40,7 @@ public:
 
   static QString className() { return "hoot::CountCmd"; }
 
-  CountCmd() :
-  _total(0),
-  _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
-  {
-  }
+  CountCmd() = default;
 
   QString getName() const override { return "count"; }
   QString getDescription() const override
@@ -70,9 +48,6 @@ public:
 
   int runSimple(QStringList& args) override
   {
-    QElapsedTimer timer;
-    timer.start();
-
     if (args.size() < 1 || args.size() > 3)
     {
       LOG_VAR(args);
@@ -85,293 +60,29 @@ public:
     {
       countFeaturesOnly = false;
       args.removeAt(args.indexOf("--all-elements"));
-      LOG_VART(args);
     }
-    LOG_VARD(countFeaturesOnly);
 
     const QStringList inputs = args[0].trimmed().split(";");
-    LOG_VART(inputs.size());
-    for (int i = 0; i < inputs.size(); i++)
-    {
-      const QString input = inputs.at(i);
-      if (!DbUtils::isDbUrl(input))
-      {
-        QFileInfo fileInfo(input);
-        if (!fileInfo.exists())
-        {
-          throw IllegalArgumentException("Input file does not exist: " + input);
-        }
-      }
-    }
-
     QString criterionClassName = "";
     if (args.size() > 1)
     {
       criterionClassName = args[1].trimmed();
     }
-    const QString namespacePrefix = "hoot::";
-    if (!criterionClassName.isEmpty() && !criterionClassName.startsWith(namespacePrefix))
-    {
-      criterionClassName.prepend(namespacePrefix);
-    }
-    LOG_VARD(criterionClassName);
 
-    // Test crit here to see if I/O can be streamed or not. If it requires a map, then it can't be
-    // streamed.
-    bool isStreamableCrit = false;
-    ElementCriterionPtr crit =
-      _getCriterion(
-        criterionClassName, ConfigOptions().getElementCriterionNegate(), isStreamableCrit);
-    LOG_VARD(isStreamableCrit);
+    ElementCounter counter;
+    counter.setCountFeaturesOnly(countFeaturesOnly);
+    const long totalCount = counter.count(inputs, criterionClassName);
 
-    if (isStreamableCrit)
-    {
-      for (int i = 0; i < inputs.size(); i++)
-      {
-        LOG_STATUS(_getStatusMessage(inputs.at(i), countFeaturesOnly, criterionClassName));
-        _total += _countStreaming(inputs.at(i), countFeaturesOnly, crit);
-      }
-    }
-    else
-    {
-
-      LOG_STATUS(_getStatusMessage(inputs.size(), countFeaturesOnly, criterionClassName));
-      _total += _countMemoryBound(inputs, countFeaturesOnly, crit);
-    }
-
-    LOG_STATUS(
-      "Features counted in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
-
-    //putting a preceding endline in here since PROGRESS_INFO doesn't clear itself out at the end
+    // putting a preceding endline in here since PROGRESS_INFO doesn't clear itself out at the end
     QString displayStr = "Total count ";
     if (!criterionClassName.isEmpty())
     {
       displayStr += "(" + criterionClassName + ")";
     }
-    displayStr += ": " + StringUtils::formatLargeNumber(_total);
+    displayStr += ": " + StringUtils::formatLargeNumber(totalCount);
     std::cout << std::endl << displayStr << std::endl;
 
     return 0;
-  }
-
-private:
-
-  long _total;
-  int _taskStatusUpdateInterval;
-
-  QString _getStatusMessage(
-    const QString& input, const bool countFeaturesOnly, const QString& criterionClassName) const
-  {
-    const QString dataType = countFeaturesOnly ? "features" : "elements";
-    QString msg = "Counting " + dataType;
-    if (!criterionClassName.isEmpty())
-    {
-      msg += " satisfying " + criterionClassName;
-    }
-    msg += " from " + FileUtils::toLogFormat(input, 25) + "...";
-    return msg;
-  }
-
-  QString _getStatusMessage(
-    const int inputsSize, const bool countFeaturesOnly, const QString& criterionClassName) const
-  {
-    const QString dataType = countFeaturesOnly ? "features" : "elements";
-    QString msg = "Counting " + dataType;
-    if (!criterionClassName.isEmpty())
-    {
-      msg += " satisfying " + criterionClassName;
-    }
-    msg += " from " + QString::number(inputsSize) + " inputs...";
-    return msg;
-  }
-
-  std::shared_ptr<PartialOsmMapReader> _getStreamingReader(const QString& input) const
-  {
-    std::shared_ptr<PartialOsmMapReader> reader =
-      std::dynamic_pointer_cast<PartialOsmMapReader>(
-        OsmMapReaderFactory::createReader(input));
-    reader->setUseDataSourceIds(true);
-    reader->open(input);
-    reader->initializePartial();
-    return reader;
-  }
-
-  ElementCriterionPtr _getCriterion(
-    const QString& criterionClassName, const bool negate, bool& isStreamable) const
-  {
-    LOG_TRACE("Getting criterion: " << criterionClassName << "...");
-
-    if (criterionClassName.isEmpty())
-    {
-      return ElementCriterionPtr();
-    }
-
-    ElementCriterionPtr crit;
-
-    try
-    {
-      crit.reset(
-        Factory::getInstance().constructObject<ElementCriterion>(criterionClassName));
-    }
-    catch (const boost::bad_any_cast&)
-    {
-      throw IllegalArgumentException("Invalid criterion: " + criterionClassName);
-    }
-
-    OsmMapConsumer* omc = dynamic_cast<OsmMapConsumer*>(crit.get());
-    if (omc)
-    {
-      isStreamable = false;
-    }
-    else
-    {
-      isStreamable = true;
-    }
-
-    if (negate)
-    {
-      crit.reset(new NotCriterion(crit));
-    }
-    LOG_VART(crit.get());
-
-    std::shared_ptr<Configurable> critConfig;
-    if (crit.get())
-    {
-      critConfig = std::dynamic_pointer_cast<Configurable>(crit);
-    }
-    LOG_VART(critConfig.get());
-    if (critConfig.get())
-    {
-      critConfig->setConfiguration(conf());
-    }
-
-    return crit;
-  }
-
-  ElementInputStreamPtr _getFilteredInputStream(ElementInputStreamPtr inputStream,
-                                                const ElementCriterionPtr& criterion,
-                                                ConstElementVisitorPtr countVis) const
-  {
-    LOG_TRACE("Getting filtered input stream...");
-    if (criterion)
-    {
-      LOG_VARD(criterion->toString());
-    }
-
-    ElementInputStreamPtr filteredInputStream;
-
-    LOG_TRACE("Creating stream...");
-    if (criterion)
-    {
-      filteredInputStream.reset(
-        new ElementCriterionVisitorInputStream(inputStream, criterion, countVis));
-    }
-    else
-    {
-      filteredInputStream.reset(new ElementVisitorInputStream(inputStream, countVis));
-    }
-
-    return filteredInputStream;
-  }
-
-  ConstElementVisitorPtr _getCountVis(const bool countFeaturesOnly) const
-  {
-    LOG_TRACE("Getting count vis...");
-
-    ConstElementVisitorPtr countVis;
-    if (countFeaturesOnly)
-    {
-      countVis.reset(new FeatureCountVisitor());
-    }
-    else
-    {
-      countVis.reset(new ElementCountVisitor());
-    }
-    return countVis;
-  }
-
-  long _countMemoryBound(
-    const QStringList& inputs, const bool countFeaturesOnly,
-    const ElementCriterionPtr& criterion) const
-  {
-    OsmMapPtr map(new OsmMap());
-    IoUtils::loadMaps(map, inputs, true);
-
-    OsmMapConsumer* omc = dynamic_cast<OsmMapConsumer*>(criterion.get());
-    if (omc)
-    {
-      omc->setOsmMap(map.get());
-    }
-
-    ConstElementVisitorPtr countVis = _getCountVis(countFeaturesOnly);
-    ConstElementVisitorPtr vis;
-    if (criterion)
-    {
-      vis.reset(new FilteredVisitor(criterion, countVis));
-    }
-    else
-    {
-      vis = countVis;
-    }
-    map->visitRo(*vis);
-
-    std::shared_ptr<SingleStatistic> counter =
-      std::dynamic_pointer_cast<SingleStatistic>(countVis);
-    return (long)counter->getStat();
-  }
-
-  long _countStreaming(
-    const QString& input, const bool countFeaturesOnly, const ElementCriterionPtr& criterion) const
-  {
-    long inputTotal = 0;
-
-    std::shared_ptr<PartialOsmMapReader> reader = _getStreamingReader(input);
-
-    ConstElementVisitorPtr countVis = _getCountVis(countFeaturesOnly);
-
-    ElementInputStreamPtr filteredInputStream =
-      _getFilteredInputStream(
-        std::dynamic_pointer_cast<ElementInputStream>(reader),
-        criterion,
-        countVis);
-
-    std::shared_ptr<SingleStatistic> counter =
-      std::dynamic_pointer_cast<SingleStatistic>(countVis);
-    LOG_VART(counter.get());
-
-    while (filteredInputStream->hasMoreElements())
-    {
-      /*ConstElementPtr element = */filteredInputStream->readNextElement();
-      inputTotal = (int)counter->getStat();
-
-      // It would be nice if we could display information on the total elements processed, as well
-      // as the ones counted, but since the element stream is already filtered by this point that
-      // would take some extra work.
-      const long runningTotal = _total + inputTotal;
-      if (runningTotal > 0 && runningTotal % (_taskStatusUpdateInterval * 10) == 0)
-      {
-        QString msg = "Counted " + StringUtils::formatLargeNumber(runningTotal);
-        if (countFeaturesOnly)
-        {
-          msg += " features";
-        }
-        else
-        {
-          msg += " elements";
-        }
-        msg += " total.";
-        // TODO: We could do a sliding interval here, like we do for poi/poly match counting. Would
-        // help give better status for datasets with sparser number of features satisfying the crit.
-        PROGRESS_STATUS(msg);
-      }
-    }
-    LOG_VART(inputTotal);
-
-    reader->finalizePartial();
-    reader->close();
-    filteredInputStream->close();
-
-    return inputTotal;
   }
 };
 

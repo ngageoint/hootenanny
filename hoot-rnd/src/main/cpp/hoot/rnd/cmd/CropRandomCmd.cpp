@@ -84,7 +84,7 @@ public:
     }
     else
     {
-      //multiple inputs
+      // multiple inputs
       inputs = input.split(";");
     }
 
@@ -96,14 +96,12 @@ public:
     {
       throw HootException("Invalid maximum node count: " + args[2]);
     }
-
     ok = false;
     double pixelSize = args[3].toDouble(&ok);
     if (!ok || pixelSize <= 0.0)
     {
       throw HootException("Invalid pixel size value: " + args[3]);
     }
-
     int randomSeed = -1;
     if (args.size() > 4)
     {

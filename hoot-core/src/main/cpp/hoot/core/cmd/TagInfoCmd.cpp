@@ -77,7 +77,6 @@ public:
       args.removeAt(limitIndex + 1);
       args.removeAt(limitIndex);
     }
-
     QStringList keys;
     if (args.contains("--keys"))
     {
@@ -86,28 +85,24 @@ public:
       args.removeAt(keysIndex + 1);
       args.removeAt(keysIndex);
     }
-
     bool keysOnly = false;
     if (args.contains("--keys-only"))
     {
       keysOnly = true;
       args.removeAt(args.indexOf("--keys-only"));
     }
-
     bool caseSensitive = true;
     if (args.contains("--case-insensitive"))
     {
       caseSensitive = false;
       args.removeAt(args.indexOf("--case-insensitive"));
     }
-
     bool exactKeyMatch = true;
     if (args.contains("--partial-key-match"))
     {
       exactKeyMatch = false;
       args.removeAt(args.indexOf("--partial-key-match"));
     }
-
     bool delimitedTextOutput = false;
     if (args.contains("--delimited-text"))
     {
@@ -121,7 +116,7 @@ public:
       args.removeAt(args.indexOf("--delimited-text"));
     }
 
-    // everything left is an input
+    // Everything left is an input.
     QStringList inputs;
     for (int i = 0; i < args.size(); i++)
     {
@@ -129,11 +124,9 @@ public:
     }
 
     LOG_STATUS("Displaying tag information for " << inputs.size() << "inputs...");
-
     TagInfo tagInfo(
       tagValuesPerKeyLimit, keys, keysOnly, caseSensitive, exactKeyMatch, delimitedTextOutput);
     cout << tagInfo.getInfo(inputs) << endl;
-
     LOG_STATUS(
       "Tag information collected in " << StringUtils::millisecondsToDhms(timer.elapsed()) <<
       " total.");

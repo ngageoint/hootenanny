@@ -60,21 +60,18 @@ public:
       nameKeysOnly = true;
       args.removeAt(args.indexOf("--names"));
     }
-
     bool sortByFrequency = true;
     if (args.contains("--sort-by-value"))
     {
       sortByFrequency = false;
       args.removeAt(args.indexOf("--sort-by-value"));
     }
-
     bool tokenize = false;
     if (args.contains("--tokenize"))
     {
       tokenize = true;
       args.removeAt(args.indexOf("--tokenize"));
     }
-
     int limit = -1;
     if (args.contains("--limit"))
     {
