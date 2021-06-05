@@ -93,7 +93,7 @@ void BuildingHeightVisitor::visit(const ConstElementPtr& e)
   }
 }
 
-Meters BuildingHeightVisitor::_getHeight(const ConstElementPtr& e)
+Meters BuildingHeightVisitor::_getHeight(const ConstElementPtr& e) const
 {
   QString heightStr = e->getTags().get("height");
   LOG_VART(heightStr);

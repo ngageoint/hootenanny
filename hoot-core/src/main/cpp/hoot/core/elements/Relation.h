@@ -248,7 +248,7 @@ private:
   void _visitRo(const ElementProvider& map, ConstElementVisitor& filter,
     QList<long>& visitedRelations, const bool recursive = true) const;
   void _visitRw(ElementProvider& map, ConstElementVisitor& filter,
-    QList<long>& visitedRelations, const bool recursive = true);
+    QList<long>& visitedRelations, const bool recursive = true) const;
 };
 
 template<typename IT>

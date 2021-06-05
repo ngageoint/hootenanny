@@ -120,9 +120,9 @@ private:
    */
   void _removeUnsnappedImmediatelyConnectedOutOfBoundsWays(OsmMapPtr& map) const;
 
-  void _snapUnconnectedPreChangesetMapCropping(OsmMapPtr& combinedMap);
+  void _snapUnconnectedPreChangesetMapCropping(OsmMapPtr& combinedMap) const;
   void _snapUnconnectedPostChangesetMapCropping(
-    OsmMapPtr& refMap, OsmMapPtr& combinedMap, OsmMapPtr& immediatelyConnectedOutOfBoundsWays);
+    OsmMapPtr& refMap, OsmMapPtr& combinedMap, OsmMapPtr& immediatelyConnectedOutOfBoundsWays) const;
 
   /*
    * Performs cropping to prepare a map for changeset derivation. This is potentially different

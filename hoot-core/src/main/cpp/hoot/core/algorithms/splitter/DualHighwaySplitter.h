@@ -123,7 +123,7 @@ private:
 
   geos::geom::Coordinate _normalizedVector(long nid1, long nid2) const;
   bool _onRight(long intersectionId, const std::shared_ptr<Way>& inbound, long leftNn,
-                long rightNn);
+                long rightNn) const;
   void _reconnectEnd(long centerNodeId, const std::shared_ptr<Way>& edge) const;
   void _splitIntersectingWays(long nid);
   void _splitWay(long wid);

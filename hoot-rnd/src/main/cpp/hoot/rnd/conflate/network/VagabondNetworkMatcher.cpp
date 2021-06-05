@@ -344,7 +344,7 @@ void VagabondNetworkMatcher::_countEdgesUsed(QHash<ConstNetworkEdgePtr, int>& co
   }
 }
 
-void VagabondNetworkMatcher::_distributePrLengthWeighted()
+void VagabondNetworkMatcher::_distributePrLengthWeighted() const
 {
   QHash<ConstNetworkEdgePtr, int> counts;
 

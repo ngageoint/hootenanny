@@ -49,7 +49,7 @@ namespace Tgs
   }
 
   double InfoGainCalculator::computeEntropyByClass(DataFrame & df, 
-    std::vector<unsigned int> & indices)
+    std::vector<unsigned int> & indices) const
   {
 //     double entSum = 0;
 //     std::vector<int> popDist;
@@ -163,7 +163,7 @@ namespace Tgs
 
   double InfoGainCalculator::getMaxInfoGainByFactor(DataFrame & df, 
     std::vector<unsigned int> & indices, unsigned int fIdx, double totalEntropy, 
-    unsigned int & bestSplit)
+    unsigned int & bestSplit) const
   {
     //Indices need to be sorted on the factor to use this as a public function 
 

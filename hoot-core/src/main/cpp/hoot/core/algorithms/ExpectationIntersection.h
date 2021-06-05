@@ -64,7 +64,7 @@ public:
    *
    * 1. http://en.wikipedia.org/wiki/Expectation%E2%80%93maximization_algorithm
    */
-  std::vector<double> snapMatches(const cv::Mat& matches, const cv::Mat& ranges);
+  std::vector<double> snapMatches(const cv::Mat& matches, const cv::Mat& ranges) const;
 
 private:
 

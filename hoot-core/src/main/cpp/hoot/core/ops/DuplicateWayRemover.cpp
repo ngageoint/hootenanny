@@ -280,7 +280,7 @@ void DuplicateWayRemover::removeDuplicates(OsmMapPtr map)
   a.apply(map);
 }
 
-vector<WayPtr> DuplicateWayRemover::_splitWay(WayPtr w, int start, int length, bool newIds)
+vector<WayPtr> DuplicateWayRemover::_splitWay(WayPtr w, int start, int length, bool newIds) const
 {
   LOG_TRACE("Ways have common node(s)");
   const std::vector<long>& nodes = w->getNodeIds();

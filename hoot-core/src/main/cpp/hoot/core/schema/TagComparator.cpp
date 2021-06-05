@@ -65,7 +65,7 @@ void TagComparator::_addAsDefault(Tags& t, const QString& key, const QString& va
   }
 }
 
-void TagComparator::_addDefaults(Tags& t)
+void TagComparator::_addDefaults(Tags& t) const
 {
   if (t.contains("highway"))
   {

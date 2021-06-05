@@ -77,7 +77,7 @@ public:
    * @param populated with scraps from the split
    * @return the way that covers the subline
    */
-  WayPtr createSubline(const WaySubline& subline, std::vector<WayPtr>& scraps);
+  WayPtr createSubline(const WaySubline& subline, std::vector<WayPtr>& scraps) const;
 
   /**
    * Given a split point on a way, breaks the way into two smaller ways

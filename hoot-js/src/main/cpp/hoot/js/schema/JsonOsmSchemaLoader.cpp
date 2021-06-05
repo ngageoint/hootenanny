@@ -242,7 +242,7 @@ void JsonOsmSchemaLoader::_loadBase(QVariantMap& copy, OsmSchema& s, SchemaVerte
   }
 }
 
-void JsonOsmSchemaLoader::_loadCompound(const QVariantMap& v, OsmSchema& s)
+void JsonOsmSchemaLoader::_loadCompound(const QVariantMap& v, OsmSchema& s) const
 {
   QVariantMap copy;
   // copy all the non-comments
@@ -434,7 +434,7 @@ void JsonOsmSchemaLoader::_loadSimilarTo(QString fromName, const QVariant& value
   }
 }
 
-void JsonOsmSchemaLoader::_loadTag(const QVariantMap& v, OsmSchema& s)
+void JsonOsmSchemaLoader::_loadTag(const QVariantMap& v, OsmSchema& s) const
 {
   QVariantMap copy;
   // copy all the non-comments

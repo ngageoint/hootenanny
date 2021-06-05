@@ -56,7 +56,7 @@ namespace Tgs
     *  @param df the source data set
     *  @param indices a list of data vector indices in the data set
     */
-    double computeEntropyByClass(DataFrame & df, std::vector<unsigned int> & indices);
+    double computeEntropyByClass(DataFrame & df, std::vector<unsigned int> & indices) const;
 
     /**
     * Using the list of data vector indices as input this method
@@ -89,7 +89,7 @@ namespace Tgs
     * @return the information gain corresponding to bestSplit
     */
     double getMaxInfoGainByFactor(DataFrame & df, std::vector<unsigned int> & indices, 
-      unsigned int fIdx, double totalEntropy, unsigned int & bestSplit);
+      unsigned int fIdx, double totalEntropy, unsigned int & bestSplit) const;
 
     /**
     * This method looks at a single factor and computes the maximum gain ratio against

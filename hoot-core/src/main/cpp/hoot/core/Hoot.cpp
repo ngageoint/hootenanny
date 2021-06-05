@@ -74,7 +74,7 @@ Hoot& Hoot::getInstance()
   return instance;
 }
 
-void Hoot::_init()
+void Hoot::_init() const
 {
   // Lower this log level temporarily *only* for debugging init issues. Some hoot services
   // functionality that parses log output is sensitive to extra logged statements and will fail

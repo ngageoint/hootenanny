@@ -82,7 +82,7 @@ See the User Guide for more specific details on command usage. Most of these exa
 ==== Apply changes from multiple changeset files to an API endpoint:
 
 -----
-    hoot changeset-apply changeset.osc changeset-001.osc changeset-002.osc https://username:password@localhost
+    hoot changeset-apply changeset-001.osc changeset-002.osc https://username:password@localhost
 -----
 
 ==== Apply changes from an OSM file to an API endpoint:

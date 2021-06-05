@@ -48,7 +48,7 @@ public:
   /**
    * A no-op that makes the code a little easier to read.
    */
-  void init() {}
+  void init() const {}
 
   /**
    * Load the specified library if it exists using QLibrary.
@@ -62,7 +62,7 @@ public:
 
 private:
 
-  void _init();
+  void _init() const;
 
   long _toBytes(const QString& str) const;
 
