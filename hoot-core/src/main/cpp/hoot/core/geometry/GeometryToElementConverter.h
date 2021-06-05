@@ -148,7 +148,7 @@ public:
    * @return an OSM relation
    */
   RelationPtr convertMultiPolygonToRelation(
-    const geos::geom::MultiPolygon* mp, const OsmMapPtr& map, Status s, double circularError);
+    const geos::geom::MultiPolygon* mp, const OsmMapPtr& map, Status s, double circularError) const;
 
   /**
    * Converts the provided polygon into an element. If the polygon contains holes then a multi
@@ -161,7 +161,7 @@ public:
    * @return an OSM element
    */
   std::shared_ptr<Element> convertPolygonToElement(
-    const geos::geom::Polygon* polygon, const OsmMapPtr& map, Status s, double circularError);
+    const geos::geom::Polygon* polygon, const OsmMapPtr& map, Status s, double circularError) const;
 
   /**
    * Converts a GEOS polygon to an OSM relation

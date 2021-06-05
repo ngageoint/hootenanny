@@ -115,7 +115,7 @@ public:
 
     int result = 1;
     //  Compare changesets differently than all other types
-    if (pathIsChangeset(pathname1) && pathIsChangeset(pathname2))
+    if (_pathIsChangeset(pathname1) && _pathIsChangeset(pathname2))
     {
       XmlChangeset changeset1(pathname1);
       XmlChangeset changeset2(pathname2);
@@ -151,7 +151,9 @@ public:
     return result;
   }
 
-  bool pathIsChangeset(const QString& path) const
+private:
+
+  bool _pathIsChangeset(const QString& path) const
   {
     QFileInfo fi(path);
     //  .osc files

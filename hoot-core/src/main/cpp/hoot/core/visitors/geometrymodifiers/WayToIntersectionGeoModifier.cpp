@@ -107,7 +107,7 @@ bool WayToIntersectionGeoModifier::processElement(const ElementPtr& pElement, Os
   return true;
 }
 
-void WayToIntersectionGeoModifier::processIntersections(OsmMap* pMap, const WayPtr pWay, vector<IntersectionInfo>& inters)
+void WayToIntersectionGeoModifier::processIntersections(OsmMap* pMap, const WayPtr pWay, vector<IntersectionInfo>& inters) const
 {
   for (IntersectionInfo intersInfo : inters)
   {

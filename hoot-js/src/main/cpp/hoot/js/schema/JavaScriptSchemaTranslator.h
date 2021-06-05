@@ -118,7 +118,7 @@ protected:
   Settings _conf;
 
   std::vector<TranslatedFeature> _createAllFeatures(const QVariantList& vm);
-  std::shared_ptr<Feature> _createFeature(const QVariantMap& vm, QString& tableName);
+  std::shared_ptr<Feature> _createFeature(const QVariantMap& vm, QString& tableName) const;
 
   void _init() override;
 

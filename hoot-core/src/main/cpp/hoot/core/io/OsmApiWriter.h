@@ -108,7 +108,7 @@ public:
    * @param request - Network request object initialized with OSM API URL
    * @return true if the current user has write permission for the OSM API
    */
-  bool validatePermissions(HootNetworkRequestPtr request);
+  bool validatePermissions(HootNetworkRequestPtr request) const;
   /**
    * @brief usingCgiMap Run a small query on the OSM API and check the generator for CGImap
    * @param request - Network request object initialized with OSM API URL
@@ -200,7 +200,7 @@ private:
    * @param capabilites - XML response from the capabilites request
    * @return parsed capabilities object
    */
-  OsmApiCapabilites _parseCapabilities(const QString& capabilites);
+  OsmApiCapabilites _parseCapabilities(const QString& capabilites) const;
   /**
    * @brief _parsePermissions Parse the OSM API perissions
    *  see: https://wiki.openstreetmap.org/wiki/API_v0.6#Retrieving_permissions:_GET_.2Fapi.2F0.6.2Fpermissions
@@ -241,9 +241,9 @@ private:
    * @param id ID of node/way/relation to query from database
    * @return OSM XML string of node/way/relation as it currently sits in the OSM API database
    */
-  QString _getNode(HootNetworkRequestPtr request, long id);
-  QString _getWay(HootNetworkRequestPtr request, long id);
-  QString _getRelation(HootNetworkRequestPtr request, long id);
+  QString _getNode(HootNetworkRequestPtr request, long id) const;
+  QString _getWay(HootNetworkRequestPtr request, long id) const;
+  QString _getRelation(HootNetworkRequestPtr request, long id) const;
   /**
    * @brief _getElement Perform HTTP GET request to OSM API to get current element by ID
    * @param request Network request object initialized with OSM API URL
@@ -261,7 +261,7 @@ private:
   /** Yield or sleep this thread */
   void _yield(int milliseconds = 10) const;
   /** Yield or sleep this thread for a random amount of time between minimum and maximum */
-  void _yield(int minimum_ms, int maximum_ms);
+  void _yield(int minimum_ms, int maximum_ms) const;
   /**
    * @brief createNetworkRequest Create a network request object
    * @param requiresAuthentication Authentication flag set to true will cause OAuth credentials,

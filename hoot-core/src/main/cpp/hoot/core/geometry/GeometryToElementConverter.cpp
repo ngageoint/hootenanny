@@ -185,7 +185,7 @@ std::shared_ptr<Element> GeometryToElementConverter::convertMultiLineStringToEle
 }
 
 RelationPtr GeometryToElementConverter::convertMultiPolygonToRelation(
-  const MultiPolygon* mp, const OsmMapPtr& map, Status s, double circularError)
+  const MultiPolygon* mp, const OsmMapPtr& map, Status s, double circularError) const
 {
   LOG_TRACE("Converting multipolygon to relation...");
 
@@ -202,7 +202,7 @@ RelationPtr GeometryToElementConverter::convertMultiPolygonToRelation(
 }
 
 std::shared_ptr<Element> GeometryToElementConverter::convertPolygonToElement(
-  const Polygon* polygon, const OsmMapPtr& map, Status s, double circularError)
+  const Polygon* polygon, const OsmMapPtr& map, Status s, double circularError) const
 {
   LOG_TRACE("Converting polygon to element...");
 

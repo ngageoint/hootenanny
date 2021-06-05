@@ -44,7 +44,7 @@ public:
 
   static void Init(v8::Local<v8::Object> target);
 
-  std::shared_ptr<ElementVisitor> getVisitor() { return _v; }
+  std::shared_ptr<ElementVisitor> getVisitor() const { return _v; }
 
   virtual ~ElementVisitorJs() = default;
 

@@ -44,7 +44,7 @@ QString WayMatchStringSplitter::_overlyAggressiveMergeReviewText =
 
 void WayMatchStringSplitter::applySplits(OsmMapPtr map,
   vector<pair<ElementId, ElementId>> &replaced,
-  QList<WayMatchStringMerger::SublineMappingPtr> mappings)
+  QList<WayMatchStringMerger::SublineMappingPtr> mappings) const
 {
   LOG_TRACE("Applying way splits...");
   _splitWay(WayNumber::Way1, map, replaced, mappings);

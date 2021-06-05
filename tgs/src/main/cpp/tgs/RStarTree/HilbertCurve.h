@@ -177,7 +177,7 @@ namespace Tgs
      *      nDims*nBits <= (sizeof bitmask_t) * (bits_per_byte)
      */
     bitmask_t
-    hilbert_c2inew(unsigned nDims, unsigned nBits, bitmask_t const coord[])
+    hilbert_c2inew(unsigned nDims, unsigned nBits, bitmask_t const coord[]) const
     {
       if (nDims > 1)
         {

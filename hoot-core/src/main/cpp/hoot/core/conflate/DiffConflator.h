@@ -167,7 +167,7 @@ public:
    *
    * @return A changeset provider that can be used with ChangesetWriter classes
    */
-  MemChangesetProviderPtr getTagDiff() { return _tagChanges; }
+  MemChangesetProviderPtr getTagDiff() const { return _tagChanges; }
 
   QString getGeometryChangesetStats() const { return _geometryChangesetStats; }
   QString getTagChangesetStats() const { return _tagChangesetStats; }

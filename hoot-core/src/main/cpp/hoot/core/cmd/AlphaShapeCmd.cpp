@@ -124,32 +124,38 @@ public:
     // reproject back into lat/lng
     MapProjector::projectToWgs84(result);
 
-    // save out the result.
-    if (outputPath.toLower().endsWith(".shp"))
-    {
-      ShapefileWriter writer;
-      writer.writePolygons(result, outputPath);
-    }
-    else if (outputPath.toLower().endsWith(".geojson"))
-    {
-      OsmGeoJsonWriter writer;
-      Settings s;
-      //  Output the source tags in the geojson writer
-      s.set(ConfigOptions::getJsonOutputTaskingManagerAoiKey(), true);
-      writer.setConfiguration(s);
-      writer.open(outputPath);
-      writer.write(result);
-    }
-    else
-    {
-      IoUtils::saveMap(result, outputPath);
-    }
+    // Save out the result.
+    _writeOutput(result, outputPath);
 
     LOG_STATUS(
       "Alpha shape written to " << outputPath << " in " <<
        StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 
     return 0;
+  }
+
+private:
+
+  void _writeOutput(const OsmMapPtr& map, const QString& path)
+  {
+    if (path.toLower().endsWith(".shp"))
+    {
+      ShapefileWriter().writePolygons(map, path);
+    }
+    else if (path.toLower().endsWith(".geojson"))
+    {
+      OsmGeoJsonWriter writer;
+      Settings s;
+      //  Output the source tags in the geojson writer
+      s.set(ConfigOptions::getJsonOutputTaskingManagerAoiKey(), true);
+      writer.setConfiguration(s);
+      writer.open(path);
+      writer.write(map);
+    }
+    else
+    {
+      IoUtils::saveMap(map, path);
+    }
   }
 };
 

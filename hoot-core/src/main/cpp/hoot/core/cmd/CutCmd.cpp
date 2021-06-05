@@ -101,15 +101,15 @@ public:
       FileUtils::toLogFormat(doughPath, 25) << " and writing output to ..." <<
       FileUtils::toLogFormat(outputPath, 25) << "...");
 
-    // load up the shape being cut out
+    // Load up the shape being cut out.
     OsmMapPtr cutterShapeMap(new OsmMap());
     IoUtils::loadMap(cutterShapeMap, cutterShapePath, true, Status::Unknown1);
 
-    // load up the dough
+    // Load up the dough.
     OsmMapPtr doughMap(new OsmMap());
     IoUtils::loadMap(doughMap, doughPath, true, Status::Unknown1);
 
-    // cut the cutter shape out of the dough
+    // Cut the cutter shape out of the dough.
     CookieCutter(crop, buffer).cut(cutterShapeMap, doughMap);
     OsmMapPtr result = doughMap;
 

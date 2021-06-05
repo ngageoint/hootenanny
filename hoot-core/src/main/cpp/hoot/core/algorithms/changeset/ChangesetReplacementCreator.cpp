@@ -506,7 +506,7 @@ OsmMapPtr ChangesetReplacementCreator::_loadAndFilterSecMap()
   return secMap;
 }
 
-void ChangesetReplacementCreator::_snapUnconnectedPreChangesetMapCropping(OsmMapPtr& combinedMap)
+void ChangesetReplacementCreator::_snapUnconnectedPreChangesetMapCropping(OsmMapPtr& combinedMap) const
 {
   LOG_INFO("Snapping unconnected ways to each other in replacement map...");
 
@@ -525,7 +525,7 @@ void ChangesetReplacementCreator::_snapUnconnectedPreChangesetMapCropping(OsmMap
 }
 
 void ChangesetReplacementCreator::_snapUnconnectedPostChangesetMapCropping(
-  OsmMapPtr& refMap, OsmMapPtr& combinedMap, OsmMapPtr& immediatelyConnectedOutOfBoundsWays)
+  OsmMapPtr& refMap, OsmMapPtr& combinedMap, OsmMapPtr& immediatelyConnectedOutOfBoundsWays) const
 {
   QStringList snapWayStatuses;
   snapWayStatuses.append("Input2");

@@ -401,7 +401,7 @@ public:
   bool isAncestor(const QString& childKvp, const QString& parentKvp) const;
 
   bool allowsFor(const Tags& t, const ElementType& type, OsmGeometries::Type geometries) const;
-  bool allowsFor(const ConstElementPtr& e, OsmGeometries::Type geometries);
+  bool allowsFor(const ConstElementPtr& e, OsmGeometries::Type geometries) const;
 
   /**
    * Returns true if this is a list of values. Right now this just looks for a semicolon in value,
@@ -439,8 +439,8 @@ public:
    */
   void loadDefault();
 
-  double score(const QString& kvp1, const QString& kvp2);
-  double score(const SchemaVertex& v1, const SchemaVertex& v2);
+  double score(const QString& kvp1, const QString& kvp2) const;
+  double score(const SchemaVertex& v1, const SchemaVertex& v2) const;
 
   /**
    * Scores a particular kvp against an element's tags
@@ -449,7 +449,7 @@ public:
    * @param tags the tags to compare against
    * @return the highest similarity score found in tags when compared to kvp
    */
-  double score(const QString& kvp, const Tags& tags);
+  double score(const QString& kvp, const Tags& tags) const;
 
   /**
    * Returns a collection of tag key/value pairs that represent generic feature types
@@ -599,7 +599,7 @@ public:
    * @return tag that is the ancestor of the other or the first tag if neither is an ancestor of
    * each other
    */
-  QString getParentKvp(const QString& kvp1, const QString& kvp2);
+  QString getParentKvp(const QString& kvp1, const QString& kvp2) const;
 
 private:
 

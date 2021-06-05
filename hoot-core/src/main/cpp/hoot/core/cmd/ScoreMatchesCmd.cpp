@@ -27,29 +27,9 @@
 
 // Hoot
 #include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/core/conflate/UnifyingConflator.h>
-#include <hoot/core/conflate/matching/MatchThreshold.h>
-#include <hoot/core/elements/MapProjector.h>
-#include <hoot/core/io/IoUtils.h>
-#include <hoot/core/ops/BuildingOutlineUpdateOp.h>
-#include <hoot/core/ops/ManualMatchValidator.h>
-#include <hoot/core/ops/OpExecutor.h>
-#include <hoot/core/scoring/MatchComparator.h>
-#include <hoot/core/scoring/MatchScoringMapPreparer.h>
-#include <hoot/core/schema/MetadataTags.h>
-#include <hoot/core/util/ConfigUtils.h>
+#include <hoot/core/conflate/matching/MatchScorer.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/Settings.h>
-#include <hoot/core/visitors/CountManualMatchesVisitor.h>
-
-// tgs
-#include <tgs/Optimization/NelderMead.h>
-
-// Qt
-#include <QElapsedTimer>
-#include <QFileInfo>
 
 using namespace std;
 using namespace Tgs;
@@ -72,9 +52,6 @@ public:
 
   int runSimple(QStringList& args) override
   {
-    QElapsedTimer timer;
-    timer.start();
-
     bool showConfusion = false;
     if (args.contains("--confusion"))
     {
@@ -94,223 +71,52 @@ public:
       validateManualMatches = false;
     }
 
-    if (args.size() < 3 || args.size() % 2 != 1)
+    // With optimization on, no data is output.
+    if (!optimizeThresholds)
     {
-      LOG_VAR(args);
-      cout << getHelp() << endl << endl;
-      throw HootException(
-        QString("%1 takes at least three parameters: two or more input maps (even number) and an output map")
-          .arg(getName()));
-    }
-
-    ConfigUtils::checkForTagValueTruncationOverride();
-    QStringList allOps = ConfigOptions().getConflatePreOps();
-    allOps += ConfigOptions().getConflatePostOps();
-    ConfigUtils::checkForDuplicateElementCorrectionMismatch(allOps);
-
-    vector<OsmMapPtr> maps;
-    QString output = args.last();
-
-    for (int i = 0; i < args.size() - 1; i += 2)
-    {
-      OsmMapPtr map(new OsmMap());
-      const QString map1Path = args[i];
-      const QString map2Path = args[i + 1];
-
-      LOG_STATUS(
-        "Scoring matches for ..." << FileUtils::toLogFormat(map1Path, 25) << " and ..." <<
-        FileUtils::toLogFormat(map2Path, 25) << "...");
-
-      IoUtils::loadMap(map, map1Path, false, Status::Unknown1);
-      IoUtils::loadMap(map, map2Path, false, Status::Unknown2);
-
-      // If any of the map files have errors, we'll print some out and terminate.
-      if (validateManualMatches && _validateMatches(map, map1Path, map2Path))
+      if (args.size() < 3 || args.size() % 2 != 1)
       {
-        return 1;
+        LOG_VAR(args);
+        cout << getHelp() << endl << endl;
+        throw HootException(
+          QString("%1 takes at least three parameters: one or more pairs of input maps and an output map")
+            .arg(getName()));
       }
-
-      MatchScoringMapPreparer().prepMap(map, ConfigOptions().getScoreMatchesRemoveNodes());
-      maps.push_back(map);
-    }
-    LOG_VARD(maps.size());
-
-    if (optimizeThresholds)
-    {
-      _optimize(maps, showConfusion);
     }
     else
     {
-      double score;
-      // We *don't* want to init the match threshold here, as that will send us down the wrong code
-      // path. Found that out the hard way.
-      std::shared_ptr<MatchThreshold> mt;
-      const QString result = evaluateThreshold(maps, output, mt, showConfusion, score);
-      cout << result;
+      if (args.size() < 2 || args.size() % 2 != 0)
+      {
+        LOG_VAR(args);
+        cout << getHelp() << endl << endl;
+        throw HootException(
+          QString("%1 takes at least two parameters: one or more pairs of input maps")
+            .arg(getName()));
+      }
     }
 
-    LOG_STATUS(
-      "Match scoring ran in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
+    QString output;
+    if (!optimizeThresholds)
+    {
+      output = args.last();
+    }
+
+    // Load the maps as pairs.
+    QStringList ref1Inputs;
+    QStringList ref2Inputs;
+    for (int i = 0; i < args.size() - 1; i += 2)
+    {
+      ref1Inputs.append(args[i]);
+      ref2Inputs.append(args[i + 1]);
+    }
+
+    MatchScorer matchScorer;
+    matchScorer.setPrintConfusion(showConfusion);
+    matchScorer.setOptimizeThresholds(optimizeThresholds);
+    matchScorer.setValidateManualMatches(validateManualMatches);
+    matchScorer.score(ref1Inputs, ref2Inputs, output);
 
     return 0;
-  }
-
-  class ScoreFunction : public Tgs::NelderMead::Function
-  {
-  public:
-
-    double f(Tgs::Vector v) override
-    {
-      double score;
-      std::shared_ptr<MatchThreshold> mt =
-        std::make_shared<MatchThreshold>(MatchThreshold(v[0], v[1], v[2], false));
-      _cmd->evaluateThreshold(_maps, "", mt, _showConfusion, score);
-      return score;
-    }
-
-    ScoreMatchesCmd* _cmd;
-    vector<OsmMapPtr> _maps;
-    bool _showConfusion;
-  };
-
-  QString evaluateThreshold(vector<OsmMapPtr> maps, QString output,
-                            std::shared_ptr<MatchThreshold> mt, bool showConfusion,
-                            double& score) const
-  {
-    MatchComparator comparator;
-
-    QString result;
-
-    long numManualMatches = 0;
-    for (size_t i = 0; i < maps.size(); i++)
-    {
-      OsmMapPtr copy(new OsmMap(maps[i]));
-
-      std::shared_ptr<CountManualMatchesVisitor> manualMatchVisitor(
-        new CountManualMatchesVisitor());
-      maps[i]->visitRo(*manualMatchVisitor);
-      numManualMatches += manualMatchVisitor->getStat();
-      LOG_VARD(numManualMatches);
-
-      LOG_INFO("Applying pre conflation operations...");
-      LOG_VART(ConfigOptions().getConflatePreOps());
-      OpExecutor(ConfigOptions().getConflatePreOps()).apply(copy);
-      UnifyingConflator(mt).apply(copy);
-      LOG_INFO("Applying post conflation operations...");
-      OpExecutor(ConfigOptions().getConflatePostOps()).apply(copy);
-
-      comparator.evaluateMatches(maps[i], copy);
-
-      if (i == 0 && !output.isEmpty())
-      {
-        BuildingOutlineUpdateOp().apply(copy);
-        MapProjector::projectToWgs84(copy);
-        IoUtils::saveMap(copy, output);
-      }
-    }
-
-    LOG_VARD(showConfusion);
-    if (showConfusion)
-    {
-      if (mt)
-      {
-        cout << "Threshold: " << mt->toString() << endl;
-      }
-      cout << comparator.toString();
-      cout << QString("number of manual matches made: %1\n").arg(numManualMatches) << endl;
-    }
-    QString line = QString("%1,%2,%3,%4\n").arg(-1)
-        .arg(comparator.getPercentCorrect())
-        .arg(comparator.getPercentWrong())
-        .arg(comparator.getPercentUnnecessaryReview());
-    result += line;
-
-    score = -comparator.getPercentWrong() * 5 - comparator.getPercentUnnecessaryReview();
-    cout << "Score: " << score << endl;
-
-    return result;
-  }
-
-private:
-
-  bool _validateMatches(
-    const OsmMapPtr& map, const QString& map1Path, const QString& map2Path) const
-  {
-    QElapsedTimer timer;
-    timer.start();
-    LOG_INFO("Validating manual matches...");
-
-    ManualMatchValidator inputValidator;
-    inputValidator.setRequireRef1(ConfigOptions().getScoreMatchesRequireRef1());
-    inputValidator.setAllowUuidManualMatchIds(ConfigOptions().getScoreMatchesAllowUuidsAsIds());
-    inputValidator.setFullDebugOutput(ConfigOptions().getScoreMatchesFullDebugOutput());
-    inputValidator.getInitStatusMessage();
-    inputValidator.apply(map);
-    inputValidator.getCompletedStatusMessage();
-
-    LOG_INFO("Validated manual matches in: " << StringUtils::millisecondsToDhms(timer.elapsed()));
-
-    _printIssues(inputValidator.getWarnings(), "warnings", map1Path, map2Path);
-    _printIssues(inputValidator.getErrors(), "errors", map1Path, map2Path);
-
-    return !inputValidator.getErrors().isEmpty();
-  }
-
-  void _printIssues(const QMap<ElementId, QString>& issues, const QString& type,
-                    const QString& map1Path, const QString& map2Path) const
-  {
-    if (!issues.isEmpty())
-    {
-      QFileInfo fileInfo1(map1Path);
-      QFileInfo fileInfo2(map2Path);
-      cout << "There are " << StringUtils::formatLargeNumber(issues.size()) <<
-              " manual match " << type << " for inputs " <<
-              FileUtils::toLogFormat(fileInfo1.completeBaseName(), 30) <<
-              " and " << FileUtils::toLogFormat(fileInfo2.completeBaseName(), 30) << ":\n\n";
-      int issueCount = 0;
-      for (QMap<ElementId, QString>::const_iterator itr = issues.begin();
-           itr != issues.end(); ++itr)
-      {
-        cout << itr.key().toString() + ": " + itr.value() + "\n";
-
-        issueCount++;
-        if (issueCount >= 10)
-        {
-          cout << "Printing " << type << " for the first 10 elements only..." << endl;
-          break;
-        }
-      }
-    }
-  }
-
-  void _optimize(vector<OsmMapPtr> maps, bool showConfusion)
-  {
-    ScoreFunction* sf = new ScoreFunction();
-    sf->_cmd = this;
-    sf->_maps = maps;
-    sf->_showConfusion = showConfusion;
-
-    NelderMead optimizer(3, sf, 0.0001);
-
-    Vector result;
-
-    result = Vector(.01, .01, 0.01);
-    optimizer.step(result, sf->f(result));
-    result = Vector(0, 1, 0.01);
-    optimizer.step(result, sf->f(result));
-    result = Vector(.22, 1, .33);
-    optimizer.step(result, sf->f(result));
-    result = Vector(0, 0.8, 0.01);
-    optimizer.step(result, sf->f(result));
-
-    while (optimizer.done() == false)
-    {
-      result = optimizer.step(result, sf->f(result));
-      result[0] = min(1., max(0., result[0]));
-      result[1] = min(1., max(0., result[1]));
-      result[2] = min(1., max(0., result[2]));
-      LOG_VAR(result.getVector());
-    }
   }
 };
 

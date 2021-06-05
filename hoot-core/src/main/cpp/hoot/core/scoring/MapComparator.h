@@ -48,7 +48,7 @@ public:
    * Returns true if the maps are essentially the same. Minor differences in node locations are
    * ignored.
    */
-  bool isMatch(const std::shared_ptr<OsmMap>& ref, const std::shared_ptr<OsmMap>& test);
+  bool isMatch(const std::shared_ptr<OsmMap>& ref, const std::shared_ptr<OsmMap>& test) const;
 
   void setIgnoreUUID() { _ignoreUUID = true; }
   void setUseDateTime() { _useDateTime = true; }

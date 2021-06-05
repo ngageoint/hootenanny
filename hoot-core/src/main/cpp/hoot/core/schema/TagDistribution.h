@@ -95,7 +95,7 @@ private:
 
   void _countTags(const QString& input, std::map<QString, int>& tagCounts);
   std::shared_ptr<PartialOsmMapReader> _getReader(const QString& input) const;
-  ElementInputStreamPtr _getFilteredInputStream(const ElementInputStreamPtr& inputStream);
+  ElementInputStreamPtr _getFilteredInputStream(const ElementInputStreamPtr& inputStream) const;
   ElementCriterionPtr _getCriterion() const;
 
   QString _getPercentageStr(const double percentage) const;

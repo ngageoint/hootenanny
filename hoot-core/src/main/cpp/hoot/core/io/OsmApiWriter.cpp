@@ -632,7 +632,7 @@ void OsmApiWriter::_yield(int milliseconds) const
     std::this_thread::yield();
 }
 
-void OsmApiWriter::_yield(int minimum_ms, int maximum_ms)
+void OsmApiWriter::_yield(int minimum_ms, int maximum_ms) const
 {
   //  Yield for a random amount of time between minimum_ms and maximum_ms
   _yield(minimum_ms + Tgs::Random::instance()->generateInt(maximum_ms - minimum_ms));
@@ -700,7 +700,7 @@ bool OsmApiWriter::queryCapabilities(HootNetworkRequestPtr request)
 }
 
 //  https://wiki.openstreetmap.org/wiki/API_v0.6#Retrieving_permissions:_GET_.2Fapi.2F0.6.2Fpermissions
-bool OsmApiWriter::validatePermissions(HootNetworkRequestPtr request)
+bool OsmApiWriter::validatePermissions(HootNetworkRequestPtr request) const
 {
   bool success = false;
   try
@@ -743,7 +743,7 @@ bool OsmApiWriter::usingCgiMap(HootNetworkRequestPtr request) const
   return cgimap;
 }
 
-OsmApiCapabilites OsmApiWriter::_parseCapabilities(const QString& capabilites)
+OsmApiCapabilites OsmApiWriter::_parseCapabilities(const QString& capabilites) const
 {
   OsmApiCapabilites caps;
   QXmlStreamReader reader(capabilites);
@@ -1044,7 +1044,7 @@ bool OsmApiWriter::_resolveIssues(HootNetworkRequestPtr request, ChangesetInfoPt
   return success;
 }
 
-QString OsmApiWriter::_getNode(HootNetworkRequestPtr request, long id)
+QString OsmApiWriter::_getNode(HootNetworkRequestPtr request, long id) const
 {
   //  Check for a valid ID to query against
   if (id < 1)
@@ -1053,7 +1053,7 @@ QString OsmApiWriter::_getNode(HootNetworkRequestPtr request, long id)
   return _getElement(request, QString(OsmApiEndpoints::API_PATH_GET_ELEMENT).arg("node").arg(id));
 }
 
-QString OsmApiWriter::_getWay(HootNetworkRequestPtr request, long id)
+QString OsmApiWriter::_getWay(HootNetworkRequestPtr request, long id) const
 {
   //  Check for a valid ID to query against
   if (id < 1)
@@ -1062,7 +1062,7 @@ QString OsmApiWriter::_getWay(HootNetworkRequestPtr request, long id)
   return _getElement(request, QString(OsmApiEndpoints::API_PATH_GET_ELEMENT).arg("way").arg(id));
 }
 
-QString OsmApiWriter::_getRelation(HootNetworkRequestPtr request, long id)
+QString OsmApiWriter::_getRelation(HootNetworkRequestPtr request, long id) const
 {
   //  Check for a valid ID to query against
   if (id < 1)

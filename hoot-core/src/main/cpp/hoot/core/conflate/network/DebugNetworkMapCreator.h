@@ -46,7 +46,7 @@ public:
   DebugNetworkMapCreator();
 
   void addDebugElements(OsmMapPtr map, QList<NetworkEdgeScorePtr> edgeScores,
-    QList<NetworkVertexScorePtr> vertexScores);
+    QList<NetworkVertexScorePtr> vertexScores) const;
 
 private:
 

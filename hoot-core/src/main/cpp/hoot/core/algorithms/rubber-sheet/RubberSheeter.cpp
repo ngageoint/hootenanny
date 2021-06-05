@@ -42,7 +42,7 @@
 namespace hoot
 {
 
-void RubberSheeter::rubberSheet(const QString& input1, const QString& input2, const QString& output)
+void RubberSheeter::rubberSheet(const QString& input1, const QString& input2, const QString& output) const
 {
   LOG_STATUS(
     "Applying alignment transform for inputs ..." << FileUtils::toLogFormat(input1, 25) <<
