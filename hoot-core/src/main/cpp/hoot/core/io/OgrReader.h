@@ -36,8 +36,9 @@
 #include <QHash>
 #include <QString>
 #include <QStringList>
-#include <QXmlDefaultHandler>
+//#include <QXmlDefaultHandler>
 
+// geos
 #include <ogr_spatialref.h>
 
 // Standard
@@ -61,19 +62,18 @@ public:
 
   static QString className() { return "hoot::OgrReader"; }
 
-  /**
-   * Returns true if this appears to be a reasonable path without actually attempting to open the
-   * data source.
-   */
-  static bool isReasonablePath(const QString& path);
-
   OgrReader();
   OgrReader(const QString& path);
   ~OgrReader() = default;
 
-  ElementIterator* createIterator(const QString& path, const QString& layer) const;
-
-  QStringList getFilteredLayerNames(const QString& path) const;
+  void initializePartial() override;
+  bool hasMoreElements() override;
+  ElementPtr readNextElement() override;
+  void close() override;
+  bool isSupported(const QString& url) override;
+  void open(const QString& url) override;
+  void setUseDataSourceIds(bool useDataSourceIds) override;
+  void finalizePartial() override;
 
   /**
    * Read all geometry data from the specified path.
@@ -81,31 +81,22 @@ public:
    * @param path
    * @param layer Read only from this layer. If no layer is specified then read from all geometry
    *  layers.
-   * @param map Put what we read in this map.
+   * @param map map to load into
    */
   void read(const QString& path, const QString& layer, const OsmMapPtr& map) const;
 
-  void setDefaultStatus(Status s) override;
-  void setLimit(long limit) const;
-  void setSchemaTranslationScript(const QString& translate) const;
+  /**
+   * Returns true if this appears to be a reasonable path without actually attempting to open the
+   * data source.
+   */
+  static bool isReasonablePath(const QString& path);
 
   long getFeatureCount(const QString& path, const QString& layer) const;
-
-  void initializePartial() override;
-
-  bool hasMoreElements() override;
-
-  ElementPtr readNextElement() override;
-
-  void close() override;
-
-  bool isSupported(const QString& url) override;
-
-  void open(const QString& url) override;
-
-  void setUseDataSourceIds(bool useDataSourceIds) override;
-
-  void finalizePartial() override;
+  ElementIterator* createIterator(const QString& path, const QString& layer) const;
+  /**
+   * Returns a filtered list of layer names that have geometry.
+   */
+  QStringList getFilteredLayerNames(const QString& path) const;
 
   /**
    * Returns the bounding box for the specified projection and configuration settings. This is
@@ -116,7 +107,7 @@ public:
 
   std::shared_ptr<OGRSpatialReference> getProjection() const override;
 
-  //leaving this empty for the time being
+  // leaving this empty
   QString supportedFormats() override { return ""; }
 
   /**
@@ -128,7 +119,11 @@ public:
    */
   unsigned int getNumSteps() const override { return 1; }
 
-protected:
+  void setDefaultStatus(Status s) override;
+  void setLimit(long limit) const;
+  void setSchemaTranslationScript(const QString& translate) const;
+
+private:
 
   std::shared_ptr<OgrReaderInternal> _d;
 

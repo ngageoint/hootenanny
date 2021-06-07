@@ -212,6 +212,17 @@ public:
                           Qt::CaseSensitivity caseSensitivity = Qt::CaseInsensitive);
 
   /**
+   * Determines if any one of a group of strings ends with a single string
+   *
+   * @param inputs the strings to examine
+   * @param compareStr string to compare with
+   * @param caseSensitivity determines whether comparisons are case sensitive
+   * @return true if the input ends with any string in the compare list; false otherwise
+   */
+  static bool endsWithAny(const QStringList& inputs, const QString& compareStr,
+                          Qt::CaseSensitivity caseSensitivity = Qt::CaseInsensitive);
+
+  /**
    * Returns the first string at the end of the input that matches any one of a group of strings
    *
    * @param input the string to examine

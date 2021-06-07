@@ -112,10 +112,9 @@ void elementTranslatorThread::run()
 
 void ogrWriterThread::run()
 {
-  // Messing with these parameters did not improve performance...
-  // http://trac.osgeo.org/gdal/wiki/ConfigOptions
-  // e.g. using CPLSetConfigOption to set "GDAL_CACHEMAX" to "512" or using CPLSetConfigOption
-  // to set "FGDB_BULK_LOAD" to "YES"
+  // Messing with these parameters did not improve performance:
+  // http://trac.osgeo.org/gdal/wiki/ConfigOptions - e.g. using CPLSetConfigOption to set
+  // "GDAL_CACHEMAX" to "512" or using CPLSetConfigOption to set "FGDB_BULK_LOAD" to "YES"
 
   //  Create an isolate for our thread
   v8::Isolate::CreateParams params;
@@ -224,28 +223,34 @@ void DataConverter::convert(const QStringList& inputs, const QString& output)
     "Converting ..." + FileUtils::toLogFormat(inputs, _printLengthMax) + " to ..." +
     FileUtils::toLogFormat(output, _printLengthMax) + "...");
 
-  // There is a custom code path for converting to OGR formats where the schema translation runs
-  // in a separate thread. The code path is memory bound and configurable. Also if both input and
-  // output formats are OGR formats, a memory bound conversion must also be done.
+  // If we have a gdb as input, we have to run through _convertFromOgr in order for the layer
+  // parsing to work correctly. So, we'll force a quick and dirty translation script here.
+//  if (_translation.isEmpty() && StringUtils::endsWithAny(inputs, ".gdb"))
+//  {
+//    _translation = "translations/quick.js";
+//  }
+
+  // If we're writing to an OGR format and multi-threaded processing was specified or if both input
+  // and output formats are OGR formats, we'll have to run the memory bounded _convertToOgr method.
   if ((IoUtils::isSupportedOgrFormat(output, true) && _translateMultithreaded) ||
       (IoUtils::areSupportedOgrFormats(inputs, true) &&
        IoUtils::isSupportedOgrFormat(output, true)))
   {
     _convertToOgr(inputs, output);
   }
-  // We require that a translation be present when converting from OGR, the translation direction be
-  // to OSM or unspecified, and multiple inputs are supported.
+  // We require that a translation be present when converting from OGR, since OgrReader is tightly
+  // coupled to the translation logic. We also require that  the translation direction be to OSM or
+  // unspecified.
   else if (IoUtils::areSupportedOgrFormats(inputs, true) &&
            !_translation.isEmpty() &&
            (_translationDirection.isEmpty() || _translationDirection == "toosm"))
   {
     _convertFromOgr(inputs, output);
   }
-  // If this wasn't a to/from OGR conversion, multi-threaded translation was disable, no translation
-  // was specified, or a translation direction different than what was expected for the input/output
-  // formats was specified, we'll call the generic convert routine. If no translation direction was
-  // specified, we'll try to guess it and let the user know that we did. Note that it still is
-  // possible an OGR format can go in here, if you didn't specify a translation.
+  // If none of the above conditions was satisfied, we'll call the generic convert routine. If no
+  // translation direction was specified, we'll try to guess it and let the user know that we did.
+  // Note that it still is possible an OGR format can go in here, if you didn't specify a
+  // translation.
   else
   {
     _convert(inputs, output);
@@ -316,8 +321,8 @@ void DataConverter::_validateInput(const QStringList& inputs, const QString& out
   }
 }
 
-void DataConverter::_fillElementCache(const QString& inputUrl, ElementCachePtr cachePtr,
-                                      QQueue<ElementPtr>& workQ) const
+void DataConverter::_fillElementCache(
+  const QString& inputUrl, ElementCachePtr cachePtr, QQueue<ElementPtr>& workQ) const
 {
   // Setup reader
   std::shared_ptr<OsmMapReader> reader =
@@ -443,12 +448,13 @@ void DataConverter::_convertToOgr(const QStringList& inputs, const QString& outp
   _convertOps.removeAll(SchemaTranslationVisitor::className());
   LOG_VARD(_convertOps);
 
-  // check to see if all of the i/o can be streamed
+  // Check to see if all of the i/o can be streamed.
   LOG_VARD(OsmMapReaderFactory::hasElementInputStream(inputs));
   if (OsmMapReaderFactory::hasElementInputStream(inputs) &&
-      // multithreaded code doesn't support conversion ops. could it?
+      // Multi-threaded code doesn't support conversion ops. Could it?
       _convertOps.empty() &&
-      // multithreaded code doesn't support a bounds...not sure if it could be made to at some point
+      // Multi-threaded code doesn't support a bounds...not sure if it could be made to at some
+      // point.
       !ConfigUtils::boundsOptionEnabled())
   {
     _progress.set(0.0, "Loading and translating maps: ...");
@@ -646,7 +652,7 @@ void DataConverter::_convertFromOgr(const QStringList& inputs, const QString& ou
   timer.start();
 
   // This code path has always assumed translation to OSM and never reads the direction, but let's
-  // warn callers that the opposite direction they specified won't be used.
+  // warn callers that if they specified the opposite direction it won't be used.
   if (conf().getString(ConfigOptions::getSchemaTranslationDirectionKey()) == "toogr")
   {
     LOG_INFO(
@@ -671,8 +677,8 @@ void DataConverter::_convertFromOgr(const QStringList& inputs, const QString& ou
   LOG_VARD(_convertOps);
 
   _setFromOgrOptions();
-  // Inclined to do this: _convertOps.removeDuplicates();, but there could be some workflows where
-  // the same op needs to be called more than once.
+  // Inclined to do this here: _convertOps.removeDuplicates(), but there could be some workflows
+  // where the same op needs to be called more than once.
   LOG_VARD(_convertOps);
 
   // The number of task steps here must be updated as you add/remove job steps in the logic.
@@ -681,6 +687,7 @@ void DataConverter::_convertFromOgr(const QStringList& inputs, const QString& ou
   {
     numTasks++;
   }
+
   int currentTask = 1;
   const float taskWeight = 1.0 / (float)numTasks;
 
@@ -697,7 +704,7 @@ void DataConverter::_convertFromOgr(const QStringList& inputs, const QString& ou
 
     const QStringList layers = _getOgrLayersFromPath(reader, input);
     const std::vector<float> progressWeights = _getOgrInputProgressWeights(reader, input, layers);
-    // read each layer's data
+    // Read each layer's data.
     for (int j = 0; j < layers.size(); j++)
     {
       PROGRESS_INFO(
@@ -721,8 +728,6 @@ void DataConverter::_convertFromOgr(const QStringList& inputs, const QString& ou
   LOG_INFO(
     "Read " << StringUtils::formatLargeNumber(map->getElementCount()) <<
     " elements from input in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
-  // turn this on for debugging only
-  //OsmMapWriterFactory::writeDebugMap(map, "after-convert-from-ogr");
   currentTask++;
 
   if (!_convertOps.empty())
@@ -805,7 +810,7 @@ void DataConverter::_convert(const QStringList& inputs, const QString& output)
   conf().set(ConfigOptions::getReaderUseFileStatusKey(), true);
   conf().set(ConfigOptions::getReaderKeepStatusTagKey(), true);
 
-  // see note in convert; an OGR format could still be processed here
+  // See note in convert. An OGR format other than gdb could still be processed here.
   if (IoUtils::anyAreSupportedOgrFormats(inputs, true))
   {
     _setFromOgrOptions();
@@ -834,7 +839,7 @@ void DataConverter::_convert(const QStringList& inputs, const QString& output)
 
   LOG_VARD(_shapeFileColumnsSpecified());
 
-  //check to see if all of the i/o can be streamed
+  // Check to see if all of the i/o can be streamed.
   LOG_VARD(ElementStreamer::areValidStreamingOps(_convertOps));
   LOG_VARD(ElementStreamer::areStreamableIo(inputs, output));
   const bool isStreamable =
@@ -860,11 +865,11 @@ void DataConverter::_convert(const QStringList& inputs, const QString& output)
 
   if (isStreamable)
   {
-    //Shape file output currently isn't streamable, so we know we won't see export cols here. If
-    //it is ever made streamable, then we'd have to refactor this.
+    // Shape file output currently isn't streamable, so we know we won't see export cols here. If
+    // it is ever made streamable, then we'd have to refactor this and remove the assertion.
     assert(!_shapeFileColumnsSpecified());
 
-    //stream the i/o
+    // stream the i/o
     ElementStreamer::stream(
       inputs, output, _convertOps,
       Progress(

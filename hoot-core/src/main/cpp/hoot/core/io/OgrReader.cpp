@@ -81,6 +81,42 @@ public:
   ~OgrReaderInternal();
 
   void close();
+  /**
+   * Reads all the features into the given map.
+   */
+  void read(const OsmMapPtr& map);
+  /**
+   * Reads the next feature into the given map.
+   */
+  void readNext(const OsmMapPtr& map);
+  ElementPtr readNextElement();
+  bool hasMoreElements();
+  void open(const QString& path, const QString& layer);
+  bool isOpen() const { return _dataSource != nullptr; }
+
+  QRegExp getNameFilter();
+
+  long getFeatureCount() const { return _featureCount; }
+
+  QStringList getLayersWithGeometry(const QString& path) const;
+
+  std::shared_ptr<Envelope> getBoundingBoxFromConfig(
+    const Settings& s, OGRSpatialReference* srs) const;
+
+  void initializePartial();
+  void setUseDataSourceIds(bool useIds);
+
+  QString getTranslationFile() const { return _translatePath; }
+  Meters getDefaultCircularError() const { return _defaultCircularError; }
+  Status getDefaultStatus() const { return _status; }
+
+  void setDefaultCircularError(Meters circularError) { _defaultCircularError = circularError; }
+  void setDefaultStatus(Status s) { _status = s; }
+  void setLimit(long limit) { _limit = limit; }
+  void setSchemaTranslationScript(const QString& translate)
+  { _finalizeTranslate(); _translatePath = translate; }
+
+  std::shared_ptr<OGRSpatialReference> getProjection() const;
 
   /**
    * @see ProgressReporter
@@ -90,52 +126,6 @@ public:
    * @see ProgressReporter
    */
   unsigned int getNumSteps() const override { return 1; }
-
-  /**
-   * See the associated configuration options text for details.
-   */
-  std::shared_ptr<Envelope> getBoundingBoxFromConfig(const Settings& s, OGRSpatialReference* srs) const;
-
-  Meters getDefaultCircularError() const { return _defaultCircularError; }
-  Status getDefaultStatus() const { return _status; }
-
-  QString getTranslationFile() const { return _translatePath; }
-
-  long getFeatureCount() const { return _featureCount; }
-
-  QStringList getLayersWithGeometry(const QString& path) const;
-
-  void open(const QString& path, const QString& layer);
-
-  QRegExp getNameFilter();
-
-  bool isOpen() const { return _dataSource != nullptr; }
-
-  /**
-   * Reads all the features into the given map.
-   */
-  void read(const OsmMapPtr& map);
-
-  /**
-   * Reads the next feature into the given map.
-   */
-  void readNext(const OsmMapPtr& map);
-
-  void setDefaultCircularError(Meters circularError) { _defaultCircularError = circularError; }
-  void setDefaultStatus(Status s) { _status = s; }
-  void setLimit(long limit) { _limit = limit; }
-
-  void setSchemaTranslationScript(const QString& translate)
-  { _finalizeTranslate(); _translatePath = translate; }
-
-  void initializePartial();
-
-  void setUseDataSourceIds(bool useIds);
-
-  ElementPtr readNextElement();
-  bool hasMoreElements();
-
-  std::shared_ptr<OGRSpatialReference> getProjection() const;
 
 protected:
 
@@ -184,8 +174,6 @@ protected:
 
   WayPtr _createWay(OGRLinearRing* lr, Meters circularError);
 
-  void _finalizeTranslate();
-
   /**
    * Use some hard coded rules to convert from projections that PROJ4 doesn't handle to projections
    * that it will handle.
@@ -193,6 +181,7 @@ protected:
   std::shared_ptr<OGRSpatialReference> _fixProjection(std::shared_ptr<OGRSpatialReference> srs);
 
   void _initTranslate();
+  void _finalizeTranslate();
 
   void _openLayer(const QString& path, const QString& layer);
   void _openNextLayer();
@@ -228,7 +217,7 @@ public:
   }
 
   // not implemented
-  void resetIterator() override { }
+  void resetIterator() override {}
 
 protected:
 
@@ -291,7 +280,8 @@ ElementIterator* OgrReader::createIterator(const QString& path, const QString& l
   return new OgrElementIterator(d);
 }
 
-std::shared_ptr<OGRSpatialReference> OgrReaderInternal::_fixProjection(std::shared_ptr<OGRSpatialReference> srs)
+std::shared_ptr<OGRSpatialReference> OgrReaderInternal::_fixProjection(
+  std::shared_ptr<OGRSpatialReference> srs)
 {
   std::shared_ptr<OGRSpatialReference> result;
   int epsgOverride = ConfigOptions().getOgrReaderEpsgOverride();
@@ -330,18 +320,20 @@ std::shared_ptr<OGRSpatialReference> OgrReaderInternal::_fixProjection(std::shar
   if (srs && result->IsSame(srs.get()) &&
     _toWkt(result.get()) != _toWkt(srs.get()))
   {
-    LOG_WARN("Overriding input projection with proj4 compatible EPSG:3857. See this for details: https://trac.osgeo.org/proj/wiki/FAQ#ChangingEllipsoidWhycantIconvertfromWGS84toGoogleEarthVirtualGlobeMercator");
+    LOG_WARN(
+      "Overriding input projection with proj4 compatible EPSG:3857. See this for details: https://trac.osgeo.org/proj/wiki/FAQ#ChangingEllipsoidWhycantIconvertfromWGS84toGoogleEarthVirtualGlobeMercator");
     return result;
   }
 
-  // this check came from redmine issue 4399
-  // The input isn't considered the same as EPSG:3857 according to OGR. I do this WKT level check
-  // to override the projection.
-  const char* wkt3857 = "PROJCS[\"WGS_1984_Web_Mercator_Auxiliary_Sphere\",GEOGCS[\"GCS_WGS_1984\",DATUM[\"WGS_1984\",SPHEROID[\"WGS_84\",6378137.0,298.257223563]],PRIMEM[\"Greenwich\",0.0],UNIT[\"Degree\",0.0174532925199433]],PROJECTION[\"Mercator_Auxiliary_Sphere\"],PARAMETER[\"False_Easting\",0.0],PARAMETER[\"False_Northing\",0.0],PARAMETER[\"Central_Meridian\",0.0],PARAMETER[\"Standard_Parallel_1\",0.0],PARAMETER[\"Auxiliary_Sphere_Type\",0.0],UNIT[\"Meter\",1.0],AUTHORITY[\"EPSG\",\"3857\"]]";
+  // This check came from redmine issue 4399. The input isn't considered the same as EPSG:3857
+  // according to OGR. Do this WKT level check to override the projection.
+  const char* wkt3857 =
+    "PROJCS[\"WGS_1984_Web_Mercator_Auxiliary_Sphere\",GEOGCS[\"GCS_WGS_1984\",DATUM[\"WGS_1984\",SPHEROID[\"WGS_84\",6378137.0,298.257223563]],PRIMEM[\"Greenwich\",0.0],UNIT[\"Degree\",0.0174532925199433]],PROJECTION[\"Mercator_Auxiliary_Sphere\"],PARAMETER[\"False_Easting\",0.0],PARAMETER[\"False_Northing\",0.0],PARAMETER[\"Central_Meridian\",0.0],PARAMETER[\"Standard_Parallel_1\",0.0],PARAMETER[\"Auxiliary_Sphere_Type\",0.0],UNIT[\"Meter\",1.0],AUTHORITY[\"EPSG\",\"3857\"]]";
   result->importFromWkt((char**)&wkt3857);
   if (srs && result->IsSame(srs.get()))
   {
-    LOG_WARN("Overriding input projection with proj4 compatible EPSG:3857. See this for details: https://trac.osgeo.org/proj/wiki/FAQ#ChangingEllipsoidWhycantIconvertfromWGS84toGoogleEarthVirtualGlobeMercator");
+    LOG_WARN(
+      "Overriding input projection with proj4 compatible EPSG:3857. See this for details: https://trac.osgeo.org/proj/wiki/FAQ#ChangingEllipsoidWhycantIconvertfromWGS84toGoogleEarthVirtualGlobeMercator");
     result->importFromEPSG(3857);
     return result;
   }
@@ -356,9 +348,6 @@ std::shared_ptr<Envelope> OgrReader::getBoundingBoxFromConfig(const Settings& s,
   return _d->getBoundingBoxFromConfig(s, srs);
 }
 
-/**
- * Returns a filtered list of layer names that have geometry.
- */
 QStringList OgrReader::getFilteredLayerNames(const QString& path) const
 {
   QRegExp filterStr = _d->getNameFilter();
@@ -377,7 +366,7 @@ QStringList OgrReader::getFilteredLayerNames(const QString& path) const
     }
   }
 
-  // make the results consistent
+  // Make the results consistent.
   result.sort();
 
   return result;
@@ -511,7 +500,7 @@ QStringList OgrReaderInternal::getLayersWithGeometry(const QString& path) const
     l->Dereference();
   }
 
-  // make the result consistent.
+  // Make the result consistent.
   result.sort();
 
   return result;
@@ -519,21 +508,16 @@ QStringList OgrReaderInternal::getLayersWithGeometry(const QString& path) const
 
 QRegExp OgrReaderInternal::getNameFilter()
 {
-  // Just to make sure we have a translation script to work with
+  // Make sure we have a translation script to work with.
   _initTranslate();
-
-  // Check the commandline / environment var
+  // Check the commandline / environment var.
   QString rawFilter = ConfigOptions().getOgrImportFilter();
-
   if (rawFilter == "")
   {
-    // Try the translation file. This function will return "." by default
+    // Try the translation file. This function will return "." by default.
     rawFilter = _translator->getLayerNameFilter();
   }
-
-  QRegExp result(rawFilter);
-
-  return result;
+  return QRegExp(rawFilter);
 }
 
 void OgrReaderInternal::_addFeature(OGRFeature* f)
@@ -558,7 +542,7 @@ void OgrReaderInternal::_addFeature(OGRFeature* f)
       value = QString::fromUtf8(f->GetFieldAsString(i));
     }
 
-    // Ticket 5833: make sure tag is only added if value is non-null
+    // Make sure the tag is only added if its value is non-null.
     if ( value.length() == 0 )
     {
       LOG_TRACE(
@@ -778,7 +762,7 @@ void OgrReaderInternal::_addPolygon(OGRPolygon* p, RelationPtr r, Meters circula
 
 void OgrReaderInternal::close()
 {
-  // no need to finalize the translation here. We may need it again.
+  // No need to finalize the translation here. We may need it again.
 
   _useFileId = false;
 
@@ -904,9 +888,7 @@ void OgrReaderInternal::_initTranslate()
 {
   if (_translatePath != "" && _translator.get() == nullptr)
   {
-    // Nice and short. Taken from TranslatedTagDifferencer
     _translator.reset(ScriptSchemaTranslatorFactory::getInstance().createTranslator(_translatePath));
-
     if (_translator.get() == nullptr)
     {
       throw HootException("Unable to find a valid translation format for: " + _translatePath);
@@ -991,6 +973,7 @@ void OgrReaderInternal::_openNextLayer()
 {
   _layer = nullptr;
 
+  LOG_VART(_pendingLayers);
   if (_pendingLayers.isEmpty() == false)
   {
     LOG_TRACE("Opening layer " + _pendingLayers.front());
@@ -1082,7 +1065,6 @@ void OgrReaderInternal::read(const OsmMapPtr& map)
 void OgrReaderInternal::readNext(const OsmMapPtr& map)
 {
   bool done = false;
-
   _map = map;
 
   while (!done)
@@ -1214,28 +1196,26 @@ void OgrReaderInternal::setUseDataSourceIds(bool useIds)
 
 bool OgrReaderInternal::hasMoreElements()
 {
-  // If we're not open, definitely no more elements
+  // If we're not open, definitely no more elements.
   if (isOpen() == false)
   {
     return false;
   }
 
   // Do we have data already in map from previous reads?
-  if ( (_nodesItr != _map->getNodes().end()) || (_waysItr != _map->getWays().end())
-      || (_relationsItr != _map->getRelations().end()) )
+  if ((_nodesItr != _map->getNodes().end()) || (_waysItr != _map->getWays().end()) ||
+     (_relationsItr != _map->getRelations().end()))
   {
     return true;
   }
 
-  // Let's try a read and see if that put anything into the map
-
-  // Do a read if the element maps are empty
+  // Let's try a read and see if that put anything into the map. Do a read if the element maps are
+  // empty.
   populateElementMap();
 
-  bool result = ( (_nodesItr != _map->getNodes().end()) || (_waysItr != _map->getWays().end())
-      || (_relationsItr != _map->getRelations().end()) );
-
-  return result;
+  return
+    ((_nodesItr != _map->getNodes().end()) || (_waysItr != _map->getWays().end())
+     || (_relationsItr != _map->getRelations().end()));
 }
 
 ElementPtr OgrReaderInternal::readNextElement()
@@ -1244,7 +1224,7 @@ ElementPtr OgrReaderInternal::readNextElement()
       && (_relationsItr == _map->getRelations().end()))
   {
     // Load the next OGR feature, with 1..N elemenents per feature, into the map of the various
-    //    element types
+    // element types.
     populateElementMap();
   }
 

@@ -44,6 +44,7 @@
 namespace hoot
 {
 
+// TODO: move this to its own class file
 class elementTranslatorThread : public QThread
 {
   Q_OBJECT

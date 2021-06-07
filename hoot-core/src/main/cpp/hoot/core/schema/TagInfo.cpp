@@ -126,7 +126,7 @@ QString TagInfo::_getInfo(const QString& input) const
       inputInfo, ConfigOptions().getReaderUseDataSourceIds(),
       Status::fromString(ConfigOptions().getReaderSetDefaultStatus()));
 
-  // Using a different code path for the OGR inputs to handle the layer syntax.  There may be
+  // Using a different code path for the OGR inputs to handle the layer syntax. There may be
   // a way to combine the two logic paths...not sure, though.
   std::shared_ptr<OgrReader> ogrReader = std::dynamic_pointer_cast<OgrReader>(reader);
   if (ogrReader.get())
