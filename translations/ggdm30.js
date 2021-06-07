@@ -51,7 +51,14 @@ ggdm30 = {
     if (config.getOgrNoteExtra() == 'file') ggdm30.rawSchema = translate.addExtraFeature(ggdm30.rawSchema);
 
     // Build the GGDM fcode/attrs lookup table. Note: This is <GLOBAL>
-    ggdm30.ggdmAttrLookup = translate.makeAttrLookup(ggdm30.rawSchema);
+    if (config.getOgrOutputFormat() == 'shp')
+    {
+      ggdm30.ggdmAttrLookup = translate.makeAttrLookup(translate.addTagFeatures(ggdm30.rawSchema));
+    }
+    else
+    {
+      ggdm30.ggdmAttrLookup = translate.makeAttrLookup(translate.addSingleTagFeature(ggdm30.rawSchema));
+    }
 
     // Debug:
     // print("ggdm30.ggdmAttrLookup: Start");
@@ -687,42 +694,74 @@ ggdm30 = {
   // #####################################################################################################
   applyToOsmPostProcessing : function (attrs, tags, layerName, geometryType)
   {
-    // Unpack the MEMO field
-    if (tags.note)
+    // Unpack the ZI006_MEM field or OSMTAGS
+    if (tags.note || attrs.OSMTAGS)
     {
+      var tTags = {};
       var tObj = translate.unpackMemo(tags.note);
 
       if (tObj.tags !== '')
       {
-        var tTags = JSON.parse(tObj.tags);
-        for (i in tTags)
+        try
         {
-          if (tags[tTags[i]]) hoot.logDebug('Unpacking ZI006_MEM, overwriteing ' + i + ' = ' + tags[i] + '  with ' + tTags[i]);
-          tags[i] = tTags[i];
+          tTags = JSON.parse(tObj.tags);
+        }
+        catch (error)
+        {
+          hoot.logError('Unable to parse OSM tags in TXT attribute: ' + tObj.tags);
+        }
+      }
 
-          // Now check if this is a synonym etc. If so, remove the other tag.
-          if (i in ggdm30.fcodeLookupOut) // tag -> FCODE table
+      if (attrs.OSMTAGS)
+      {
+        try
+        {
+          var tStr = attrs.OSMTAGS;
+          ['OSMTAGS2','OSMTAGS3','OSMTAGS4'].forEach( item => { if (attrs[item]) tStr = tStr.concat(attrs[item]); });
+
+          var tmp = JSON.parse(tStr);
+          for (var i in tmp)
           {
-            if (tags[i] in ggdm30.fcodeLookupOut[i])
-            {
-              var row = ggdm30.fcodeLookupOut[i][tags[i]];
+            if (tTags[i]) hoot.logWarn('Overwriting unpacked tag ' + i + '=' + tTags[i] + ' with ' + tmp[i]);
+            tTags[i] = tmp[i];
+          }
+        }
+        catch (error)
+        {
+          hoot.logError('Unable to parse OSM tags from one of the OSMTAGS attributes');
+        }
+      }
 
-              // Now find the "real" tag that comes frm the FCode
-              if (row[1] in ggdm30.fcodeLookup['F_CODE'])
+      // Now add the unpacked tags to the main list
+      for (var i in tTags)
+      {
+        // Debug
+        // print('Memo: Add: ' + i + ' = ' + tTags[i]);
+        if (tags[tTags[i]]) hoot.logDebug('Unpacking tags, overwriting ' + i + ' = ' + tags[i] + '  with ' + tTags[i]);
+        tags[i] = tTags[i];
+
+        // Now check if this is a synonym etc. If so, remove the other tag.
+        if (i in ggdm30.fcodeLookupOut) // tag -> FCODE table
+        {
+          if (tags[i] in ggdm30.fcodeLookupOut[i])
+          {
+            var row = ggdm30.fcodeLookupOut[i][tags[i]];
+
+            // Now find the "real" tag that comes frm the FCode
+            if (row[1] in ggdm30.fcodeLookup['F_CODE'])
+            {
+              var row2 = ggdm30.fcodeLookup['F_CODE'][row[1]];
+              // If the tags match, delete it
+              if (tags[row2[0]] && (tags[row2[0]] == row2[1]))
               {
-                var row2 = ggdm30.fcodeLookup['F_CODE'][row[1]];
-                // If the tags match, delete it
-                if (tags[row2[0]] && (tags[row2[0]] == row2[1]))
-                {
-                  delete tags[row2[0]];
-                }
+                delete tags[row2[0]];
               }
             }
           }
-        } // End nTags
-      }
+        }
+      } // End nTags
 
-      if (tObj.text && tObj.text !== '')
+      if (tObj.text !== '')
       {
         tags.note = tObj.text;
       }
@@ -2846,17 +2885,19 @@ ggdm30 = {
           // If we have unused tags, add them to the memo field
           if (Object.keys(notUsedTags).length > 0 && ggdm30.config.OgrNoteExtra == 'attribute')
           {
-            var tStr = '<OSM>' + JSON.stringify(notUsedTags) + '</OSM>';
-
-            // there is always one.....
-            // ZI031 (Dataset) has MEM instead of ZI006_MEM.  Why???????
-            if (returnData[i]['attrs']['F_CODE'] == 'ZI031')
+            // var tStr = '<OSM>' + JSON.stringify(notUsedTags) + '</OSM>';
+            // returnData[i]['attrs']['ZI006_MEM'] = translate.appendValue(returnData[i]['attrs']['ZI006_MEM'],tStr,';');
+            var str = JSON.stringify(notUsedTags,Object.keys(notUsedTags).sort());
+            if (tds70.configOut.OgrFormat == 'shp')
             {
-              returnData[i]['attrs']['MEM'] = translate.appendValue(returnData[i]['attrs']['MEM'],tStr,';');
+              returnData[i]['attrs']['OSMTAGS'] = str.substring(0,225);
+              returnData[i]['attrs']['OSMTAGS2'] = str.substring(225,450);
+              returnData[i]['attrs']['OSMTAGS3'] = str.substring(450,675);
+              returnData[i]['attrs']['OSMTAGS4'] = str.substring(675,900);
             }
             else
             {
-              returnData[i]['attrs']['ZI006_MEM'] = translate.appendValue(returnData[i]['attrs']['ZI006_MEM'],tStr,';');
+              returnData[i]['attrs']['OSMTAGS'] = str;
             }
           }
 
@@ -2884,6 +2925,7 @@ ggdm30 = {
           // Debug
           // print('## Skipping: ' + gFcode);
           returnData.splice(i,1);
+          fLen = returnData.length;
         }
       } // End returnData loop
 

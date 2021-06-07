@@ -51,8 +51,17 @@ tds40 = {
     // Add empty "extra" feature layers if needed
     if (config.getOgrNoteExtra() == 'file') tds40.rawSchema = translate.addExtraFeature(tds40.rawSchema);
 
-    // Build the TDS fcode/attrs lookup table. Note: This is <GLOBAL>
-    tds40.attrLookup = translate.makeAttrLookup(tds40.rawSchema);
+
+      // Build the TDS fcode/attrs lookup table. Note: This is <GLOBAL>
+      // And, add the OSMTAGS, attribute as well
+    if (config.getOgrOutputFormat() == 'shp')
+    {
+      tds40.attrLookup = translate.makeAttrLookup(translate.addTagFeatures(tds40.rawSchema));
+    }
+    else
+    {
+      tds40.attrLookup = translate.makeAttrLookup(translate.addSingleTagFeature(tds40.rawSchema));
+    }
 
     // Debug
     // print("tds40.attrLookup");
@@ -695,44 +704,74 @@ tds40 = {
   // #####################################################################################################
   applyToOsmPostProcessing : function (attrs, tags, layerName, geometryType)
   {
-    // Unpack the ZI006_MEM field
-    if (tags.note)
+    // Unpack the ZI006_MEM field or OSMTAGS
+    if (tags.note || attrs.OSMTAGS)
     {
+      var tTags = {};
       var tObj = translate.unpackMemo(tags.note);
 
       if (tObj.tags !== '')
       {
-        var tTags = JSON.parse(tObj.tags);
-        for (i in tTags)
+        try
         {
-          // Debug
-          // print('Memo: Add: ' + i + ' = ' + tTags[i]);
-          if (tags[tTags[i]]) hoot.logWarn('Unpacking ZI006_MEM, overwriting ' + i + ' = ' + tags[i] + '  with ' + tTags[i]);
-          tags[i] = tTags[i];
+          tTags = JSON.parse(tObj.tags);
+        }
+        catch (error)
+        {
+          hoot.logError('Unable to parse OSM tags in TXT attribute: ' + tObj.tags);
+        }
+      }
 
-          // Now check if this is a synonym etc. If so, remove the other tag.
-          if (i in tds40.fcodeLookupOut) // tag -> FCODE table
+      if (attrs.OSMTAGS)
+      {
+        try
+        {
+          var tStr = attrs.OSMTAGS;
+          ['OSMTAGS2','OSMTAGS3','OSMTAGS4'].forEach( item => { if (attrs[item]) tStr = tStr.concat(attrs[item]); });
+
+          var tmp = JSON.parse(tStr);
+          for (var i in tmp)
           {
-            if (tags[i] in tds40.fcodeLookupOut[i])
-            {
-              var row = tds40.fcodeLookupOut[i][tags[i]];
+            if (tTags[i]) hoot.logWarn('Overwriting unpacked tag ' + i + '=' + tTags[i] + ' with ' + tmp[i]);
+            tTags[i] = tmp[i];
+          }
+        }
+        catch (error)
+        {
+          hoot.logError('Unable to parse OSM tags from one of the OSMTAGS attributes');
+        }
+      }
 
-              // Now find the "real" tag that comes frm the FCode
-              if (row[1] in tds40.fcodeLookup['F_CODE'])
+      // Now add the unpacked tags to the main list
+      for (var i in tTags)
+      {
+        // Debug
+        // print('Memo: Add: ' + i + ' = ' + tTags[i]);
+        if (tags[tTags[i]]) hoot.logDebug('Unpacking tags, overwriting ' + i + ' = ' + tags[i] + '  with ' + tTags[i]);
+        tags[i] = tTags[i];
+
+        // Now check if this is a synonym etc. If so, remove the other tag.
+        if (i in tds40.fcodeLookupOut) // tag -> FCODE table
+        {
+          if (tags[i] in tds40.fcodeLookupOut[i])
+          {
+            var row = tds40.fcodeLookupOut[i][tags[i]];
+
+            // Now find the "real" tag that comes frm the FCode
+            if (row[1] in tds40.fcodeLookup['F_CODE'])
+            {
+              var row2 = tds40.fcodeLookup['F_CODE'][row[1]];
+              // If the tags match, delete it
+              if (tags[row2[0]] && (tags[row2[0]] == row2[1]))
               {
-                var row2 = tds40.fcodeLookup['F_CODE'][row[1]];
-                // If the tags match, delete it
-                if (tags[row2[0]] && (tags[row2[0]] == row2[1]))
-                {
-                  delete tags[row2[0]];
-                }
+                delete tags[row2[0]];
               }
             }
           }
         }
-      }
+      } // End nTags
 
-      if (tObj.text && tObj.text !== '')
+      if (tObj.text !== '')
       {
         tags.note = tObj.text;
       }
@@ -740,7 +779,7 @@ tds40 = {
       {
         delete tags.note;
       }
-    } // End unpack tags.note
+    } // End process tags.note
 
     // Add the LayerName to the source
     if ((! tags.source) && layerName !== '') tags.source = 'tdsv40:' + layerName.toLowerCase();
@@ -2733,8 +2772,20 @@ tds40 = {
           // If we have unused tags, add them to the memo field
           if (Object.keys(notUsedTags).length > 0 && tds40.configOut.OgrNoteExtra == 'attribute')
           {
-            var tStr = '<OSM>' + JSON.stringify(notUsedTags) + '</OSM>';
-            returnData[i]['attrs']['ZI006_MEM'] = translate.appendValue(returnData[i]['attrs']['ZI006_MEM'],tStr,';');
+            // var tStr = '<OSM>' + JSON.stringify(notUsedTags) + '</OSM>';
+            // returnData[i]['attrs']['ZI006_MEM'] = translate.appendValue(returnData[i]['attrs']['ZI006_MEM'],tStr,';');
+            var str = JSON.stringify(notUsedTags,Object.keys(notUsedTags).sort());
+            if (tds70.configOut.OgrFormat == 'shp')
+            {
+              returnData[i]['attrs']['OSMTAGS'] = str.substring(0,225);
+              returnData[i]['attrs']['OSMTAGS2'] = str.substring(225,450);
+              returnData[i]['attrs']['OSMTAGS3'] = str.substring(450,675);
+              returnData[i]['attrs']['OSMTAGS4'] = str.substring(675,900);
+            }
+            else
+            {
+              returnData[i]['attrs']['OSMTAGS'] = str;
+            }
           }
 
           // Now set the FCSubtype

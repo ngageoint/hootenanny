@@ -48,8 +48,17 @@ tds61 = {
     // Add empty "extra" feature layers if needed
     if (config.getOgrNoteExtra() == 'file') tds61.rawSchema = translate.addExtraFeature(tds61.rawSchema);
 
-    // Build the TDS fcode/attrs lookup table. Note: This is <GLOBAL>
-    tds61.attrLookup = translate.makeAttrLookup(tds61.rawSchema);
+
+      // Build the TDS fcode/attrs lookup table. Note: This is <GLOBAL>
+      // And, add the OSMTAGS, attribute as well
+    if (config.getOgrOutputFormat() == 'shp')
+    {
+      tds61.attrLookup = translate.makeAttrLookup(translate.addTagFeatures(tds61.rawSchema));
+    }
+    else
+    {
+      tds61.attrLookup = translate.makeAttrLookup(translate.addSingleTagFeature(tds61.rawSchema));
+    }
 
     // Debug:
     // print("tds61.attrLookup");
@@ -678,21 +687,52 @@ tds61 = {
   // #####################################################################################################
   applyToOsmPostProcessing : function (attrs, tags, layerName, geometryType)
   {
-    // Unpack the ZI006_MEM field
-    if (tags.note)
+    // Unpack the ZI006_MEM field or OSMTAGS
+    if (tags.note || attrs.OSMTAGS)
     {
+      var tTags = {};
       var tObj = translate.unpackMemo(tags.note);
 
       if (tObj.tags !== '')
       {
-        var tTags = JSON.parse(tObj.tags);
-        for (i in tTags)
+        try
         {
-          // Debug
-          // print('Memo: Add: ' + i + ' = ' + tTags[i]);
-          if (tags[tTags[i]]) hoot.logWarn('Unpacking ZI006_MEM, overwriting ' + i + ' = ' + tags[i] + '  with ' + tTags[i]);
-          tags[i] = tTags[i];
+          tTags = JSON.parse(tObj.tags);
         }
+        catch (error)
+        {
+          hoot.logError('Unable to parse OSM tags in TXT attribute: ' + tObj.tags);
+        }
+      }
+
+      if (attrs.OSMTAGS)
+      {
+        try
+        {
+          var tStr = attrs.OSMTAGS;
+          ['OSMTAGS2','OSMTAGS3','OSMTAGS4'].forEach( item => { if (attrs[item]) tStr = tStr.concat(attrs[item]); });
+
+          var tmp = JSON.parse(tStr);
+          for (var i in tmp)
+          {
+            if (tTags[i]) hoot.logWarn('Overwriting unpacked tag ' + i + '=' + tTags[i] + ' with ' + tmp[i]);
+            tTags[i] = tmp[i];
+          }
+        }
+        catch (error)
+        {
+          hoot.logError('Unable to parse OSM tags from one of the OSMTAGS attributes');
+        }
+      }
+
+      // Now add the unpacked tags to the main list
+      for (var i in tTags)
+      {
+        // Debug
+        // print('Memo: Add: ' + i + ' = ' + tTags[i]);
+        if (tags[tTags[i]]) hoot.logDebug('Unpacking tags, overwriting ' + i + ' = ' + tags[i] + '  with ' + tTags[i]);
+        tags[i] = tTags[i];
+
         // Now check if this is a synonym etc. If so, remove the other tag.
         if (i in tds61.fcodeLookupOut) // tag -> FCODE table
         {
@@ -712,9 +752,9 @@ tds61 = {
             }
           }
         }
-      }
+      } // End nTags
 
-      if (tObj.text && tObj.text !== '')
+      if (tObj.text !== '')
       {
         tags.note = tObj.text;
       }
@@ -2886,8 +2926,20 @@ tds61 = {
           // If we have unused tags, add them to the memo field
           if (Object.keys(notUsedTags).length > 0 && tds61.configOut.OgrNoteExtra == 'attribute')
           {
-            var tStr = '<OSM>' + JSON.stringify(notUsedTags) + '</OSM>';
-            returnData[i]['attrs']['ZI006_MEM'] = translate.appendValue(returnData[i]['attrs']['ZI006_MEM'],tStr,';');
+            // var tStr = '<OSM>' + JSON.stringify(notUsedTags) + '</OSM>';
+            // returnData[i]['attrs']['ZI006_MEM'] = translate.appendValue(returnData[i]['attrs']['ZI006_MEM'],tStr,';');
+            var str = JSON.stringify(notUsedTags,Object.keys(notUsedTags).sort());
+            if (tds70.configOut.OgrFormat == 'shp')
+            {
+              returnData[i]['attrs']['OSMTAGS'] = str.substring(0,225);
+              returnData[i]['attrs']['OSMTAGS2'] = str.substring(225,450);
+              returnData[i]['attrs']['OSMTAGS3'] = str.substring(450,675);
+              returnData[i]['attrs']['OSMTAGS4'] = str.substring(675,900);
+            }
+            else
+            {
+              returnData[i]['attrs']['OSMTAGS'] = str;
+            }
           }
 
           // Now set the FCSubtype

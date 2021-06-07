@@ -42,11 +42,6 @@ dnc = {
     // Now add some fields to hold OSM specific information on export
     for (var i = 0, schemaLen = dnc.rawSchema.length; i < schemaLen; i++)
     {
-      dnc.rawSchema[i].columns.push( { name:'OSM_TAGS',
-        desc:'Unused OSM tags',
-        type:'String',
-        defValue:''
-      });
       dnc.rawSchema[i].columns.push( { name:'OSM_UUID',
         desc:'OSM UUID',
         type:'String',
@@ -59,12 +54,12 @@ dnc = {
     if (config.getOgrOutputFormat() == 'shp')
     {
       // Add tag1, tag2, tag3 and tag4
-      dnc.rawSchema = translate.addO2sFeatures(dnc.rawSchema);
+      dnc.rawSchema = translate.addO2sFeatures(translate.addTagFeatures(dnc.rawSchema));
     }
     else
     {
       // Just add tag1
-      dnc.rawSchema = translate.addSingleO2sFeature(dnc.rawSchema);
+      dnc.rawSchema = translate.addSingleO2sFeature(translate.addSingleTagFeature(dncPreRules.rawSchema));
     }
 
     // Add the empty Review layers
@@ -94,7 +89,6 @@ dnc = {
       returnData.push({attrs:{'F_CODE':'FA000X'}, tableName:'COALINE'});
       return returnData;
     }
-
 
     // Only looking at roads & railways with something else tacked on
     if (!(tags.highway || tags.railway)) return returnData;
@@ -579,22 +573,76 @@ dnc = {
 
   applyToOsmPostProcessing : function (attrs, tags, layerName, geometryType)
   {
-    // Unpack the OSM_TAGS attribute if it exists
-    if (attrs.OSM_TAGS)
+    // Unpack the note field or OSMTAGS
+    if (tags.note || attrs.OSMTAGS || attrs.OSM_TAGS)
     {
-      var tObj = translate.unpackMemo(attrs.OSM_TAGS);
+      var tTags = {};
+      var tObj = translate.unpackMemo(tags.note);
 
       if (tObj.tags !== '')
       {
-        var tTags = JSON.parse(tObj.tags);
-        for (i in tTags)
+        try
         {
-          // Debug
-          // print('Memo: Add: ' + i + ' = ' + tTags[i]);
-          if (tags[tTags[i]]) hoot.logWarn('Unpacking OSM_TAGS, overwriting ' + i + ' = ' + tags[i] + '  with ' + tTags[i]);
-          tags[i] = tTags[i];
+          tTags = JSON.parse(tObj.tags);
+        }
+        catch (error)
+        {
+          hoot.logError('Unable to parse OSM tags in TXT attribute: ' + tObj.tags);
         }
       }
+
+      if (attrs.OSM_TAGS) // Old style
+      {
+        tObj = translate.unpackMemo(attrs.OSM_TAGS);
+        try
+        {
+          if (tObj.tags !== '')
+          {
+            var tmp = JSON.parse(tObj.tags);
+            for (var i in tmp)
+            {
+              // Debug
+              // print('Memo: Add: ' + i + ' = ' + tTags[i]);
+              if (tTags[tmp[i]]) hoot.logWarn('Unpacking OSM_TAGS, overwriting ' + i + ' = ' + tags[i] + '  with ' + tTags[i]);
+              tTags[i] = tmp[i];
+            }
+          }
+        }
+        catch (error)
+        {
+          hoot.logError('Unable to parse OSM tags from the OSM_TAGS attribute');
+        }
+      }
+
+
+      if (attrs.OSMTAGS)
+      {
+        try
+        {
+          var tStr = attrs.OSMTAGS;
+          ['OSMTAGS2','OSMTAGS3','OSMTAGS4'].forEach( item => { if (attrs[item]) tStr = tStr.concat(attrs[item]); });
+
+          var tmp = JSON.parse(tStr);
+          for (var i in tmp)
+          {
+            if (tTags[i]) hoot.logWarn('Overwriting unpacked tag ' + i + '=' + tTags[i] + ' with ' + tmp[i]);
+            tTags[i] = tmp[i];
+          }
+        }
+        catch (error)
+        {
+          hoot.logError('Unable to parse OSM tags from one of the OSMTAGS attributes');
+        }
+      }
+
+      // Now add the unpacked tags to the main list
+      for (var i in tTags)
+      {
+        // Debug
+        // print('Memo: Add: ' + i + ' = ' + tTags[i]);
+        if (tags[tTags[i]]) hoot.logDebug('Unpacking tags, overwriting ' + i + ' = ' + tags[i] + '  with ' + tTags[i]);
+        tags[i] = tTags[i];
+      } // End nTags
 
       if (tObj.text !== '')
       {
@@ -604,7 +652,8 @@ dnc = {
       {
         delete tags.note;
       }
-    } // End process attrs.OSM_TAGS
+    } // End process tags.note
+
 
     // F_CODE specific tags
     switch (attrs.F_CODE)
@@ -1577,8 +1626,18 @@ dnc = {
           if (Object.keys(notUsedTags).length > 0)
           {
             // var tStr = '<OSM>' + JSON.stringify(notUsedTags) + '</OSM>';
-            var tStr = '<OSM>' + JSON.stringify(notUsedTags) + '</OSM>';
-            returnData[i]['attrs']['OSM_TAGS'] = tStr;
+            var str = JSON.stringify(notUsedTags,Object.keys(notUsedTags).sort());
+            if (dnc.configOut.OgrFormat == 'shp')
+            {
+              returnData[i]['attrs']['OSMTAGS'] = str.substring(0,225);
+              returnData[i]['attrs']['OSMTAGS2'] = str.substring(225,450);
+              returnData[i]['attrs']['OSMTAGS3'] = str.substring(450,675);
+              returnData[i]['attrs']['OSMTAGS4'] = str.substring(675,900);
+            }
+            else
+            {
+              returnData[i]['attrs']['OSMTAGS'] = str;
+            }
           }
         }
         else

@@ -59,7 +59,6 @@ tds70 = {
       tds70.attrLookup = translate.makeAttrLookup(translate.addSingleTagFeature(tds70.rawSchema));
     }
 
-
     // Debug:
     // print("tds70.attrLookup");
     // translate.dumpLookup(tds70.attrLookup);
@@ -2924,12 +2923,108 @@ tds70 = {
     // tds70.applyToOgrPostProcessing(tags, attrs, geometryType);
     tds70.applyToOgrPostProcessing(tags, attrs, geometryType, notUsedTags);
 
+    if (tds70.config.OgrDebugDumptags == 'true') translate.debugOutput(notUsedTags,'',geometryType,elementType,'Not used: ');
+
     // Now check for invalid feature geometry
     // E.g. If the spec says a runway is a polygon and we have a line, throw error and
     // push the feature to o2s layer
     var gFcode = geometryType.toString().charAt(0) + attrs.F_CODE;
 
-    if (!(tds70.attrLookup[gFcode.toUpperCase()]))
+    if (tds70.attrLookup[gFcode.toUpperCase()])
+    {
+      // Check if we need to make more features.
+      // NOTE: This returns the structure we are going to send back to Hoot:  {attrs: attrs, tableName: 'Name'}
+      returnData = tds70.manyFeatures(geometryType,tags,attrs,transMap);
+
+      // Debug: Add the first feature
+      //returnData.push({attrs: attrs, tableName: ''});
+
+      // Now go through the features and clean them up.
+      var gType = geometryType.toString().charAt(0);
+      for (var i = 0, fLen = returnData.length; i < fLen; i++)
+      {
+        // Make sure that we have a valid FCODE
+        var gFcode = gType + returnData[i]['attrs']['F_CODE'];
+        if (tds70.attrLookup[gFcode.toUpperCase()])
+        {
+          // Validate attrs: remove all that are not supposed to be part of a feature
+          tds70.validateAttrs(geometryType,returnData[i]['attrs'], notUsedTags,transMap);
+
+          // If we have unused tags, add them to the memo field.
+          if (Object.keys(notUsedTags).length > 0 && tds70.configOut.OgrNoteExtra == 'attribute')
+          {
+            // var tStr = '<OSM>' + JSON.stringify(notUsedTags) + '</OSM>';
+            // returnData[i]['attrs']['ZI006_MEM'] = translate.appendValue(returnData[i]['attrs']['ZI006_MEM'],tStr,';');
+            var str = JSON.stringify(notUsedTags,Object.keys(notUsedTags).sort());
+            if (tds70.configOut.OgrFormat == 'shp')
+            {
+              returnData[i]['attrs']['OSMTAGS'] = str.substring(0,225);
+              returnData[i]['attrs']['OSMTAGS2'] = str.substring(225,450);
+              returnData[i]['attrs']['OSMTAGS3'] = str.substring(450,675);
+              returnData[i]['attrs']['OSMTAGS4'] = str.substring(675,900);
+            }
+            else
+            {
+              returnData[i]['attrs']['OSMTAGS'] = str;
+            }
+          }
+
+          // Now set the FCSubtype.
+          // NOTE: If we export to shapefile, GAIT _will_ complain about this
+          if (tds70.configOut.OgrEsriFcsubtype == 'true')
+          {
+            returnData[i]['attrs']['FCSUBTYPE'] = tds70.rules.subtypeList[returnData[i]['attrs']['F_CODE']];
+          }
+
+          // If we are using the TDS structre, fill the rest of the unused attrs in the schema
+          if (tds70.configOut.OgrThematicStructure == 'true')
+          {
+            returnData[i]['tableName'] = tds70.rules.thematicGroupList[gFcode];
+            tds70.validateThematicAttrs(gFcode, returnData[i]['attrs']);
+          }
+          else
+          {
+            returnData[i]['tableName'] = tds70.layerNameLookup[gFcode.toUpperCase()];
+          }
+        }
+        else
+        {
+          // If the feature is not valid, just drop it
+          // Debug
+          // print('## Skipping: ' + gFcode);
+          returnData.splice(i,1);
+          fLen = returnData.length;
+        }
+      } // End returnData loop
+
+      // If we have unused tags, throw them into the "extra" layer
+      if (Object.keys(notUsedTags).length > 0 && tds70.configOut.OgrNoteExtra == 'file')
+      {
+        var extraFeature = {};
+        extraFeature.tags = JSON.stringify(notUsedTags);
+        extraFeature.uuid = attrs.UFI;
+
+        var extraName = 'extra_' + geometryType.toString().charAt(0);
+
+        returnData.push({attrs: extraFeature, tableName: extraName});
+      } // End notUsedTags
+
+      // Look for Review tags and push them to a review layer if found
+      if (tags['hoot:review:needs'] == 'yes')
+      {
+        var reviewAttrs = {};
+
+        // Note: Some of these may be "undefined"
+        reviewAttrs.note = tags['hoot:review:note'];
+        reviewAttrs.score = tags['hoot:review:score'];
+        reviewAttrs.uuid = tags.uuid;
+        reviewAttrs.source = tags['hoot:review:source'];
+
+        var reviewTable = 'review_' + geometryType.toString().charAt(0);
+        returnData.push({attrs: reviewAttrs, tableName: reviewTable});
+      } // End ReviewTags
+    }
+    else // We don't have a feature
     {
       // For the UI: Throw an error and die if we don't have a valid feature
       if (tds70.configOut.OgrThrowError == 'true')
@@ -2987,103 +3082,8 @@ tds70 = {
       }
 
       returnData.push({attrs: attrs, tableName: tableName});
-    }
-    else // We have a feature
-    {
-      // Check if we need to make more features.
-      // NOTE: This returns the structure we are going to send back to Hoot:  {attrs: attrs, tableName: 'Name'}
-      returnData = tds70.manyFeatures(geometryType,tags,attrs,transMap);
 
-      // Debug: Add the first feature
-      //returnData.push({attrs: attrs, tableName: ''});
-
-      // Now go through the features and clean them up.
-      var gType = geometryType.toString().charAt(0);
-      for (var i = 0, fLen = returnData.length; i < fLen; i++)
-      {
-        // Make sure that we have a valid FCODE
-        var gFcode = gType + returnData[i]['attrs']['F_CODE'];
-        if (tds70.attrLookup[gFcode.toUpperCase()])
-        {
-          // Validate attrs: remove all that are not supposed to be part of a feature
-          tds70.validateAttrs(geometryType,returnData[i]['attrs'], notUsedTags,transMap);
-
-          // If we have unused tags, add them to the memo field.
-          if (Object.keys(notUsedTags).length > 0 && tds70.configOut.OgrNoteExtra == 'attribute')
-          {
-            // var tStr = '<OSM>' + JSON.stringify(notUsedTags) + '</OSM>';
-            // returnData[i]['attrs']['ZI006_MEM'] = translate.appendValue(returnData[i]['attrs']['ZI006_MEM'],tStr,';');
-            var str = JSON.stringify(notUsedTags,Object.keys(notUsedTags).sort());
-            if (tds70.configOut.OgrFormat == 'shp')
-            {
-              returnData[i]['attrs']['OSMTAGS'] = str.substring(0,225);
-              returnData[i]['attrs']['OSMTAGS2'] = str.substring(225,450);
-              returnData[i]['attrs']['OSMTAGS3'] = str.substring(450,675);
-              returnData[i]['attrs']['OSMTAGS4'] = str.substring(675,900);
-            }
-            else
-            {
-              returnData[i]['attrs']['OSMTAGS'] = str;
-            }
-
-
-          }
-
-          // Now set the FCSubtype.
-          // NOTE: If we export to shapefile, GAIT _will_ complain about this
-          if (tds70.configOut.OgrEsriFcsubtype == 'true')
-          {
-            returnData[i]['attrs']['FCSUBTYPE'] = tds70.rules.subtypeList[returnData[i]['attrs']['F_CODE']];
-          }
-
-          // If we are using the TDS structre, fill the rest of the unused attrs in the schema
-          if (tds70.configOut.OgrThematicStructure == 'true')
-          {
-            returnData[i]['tableName'] = tds70.rules.thematicGroupList[gFcode];
-            tds70.validateThematicAttrs(gFcode, returnData[i]['attrs']);
-          }
-          else
-          {
-            returnData[i]['tableName'] = tds70.layerNameLookup[gFcode.toUpperCase()];
-          }
-        }
-        else
-        {
-          // If the feature is not valid, just drop it
-          // Debug
-          // print('## Skipping: ' + gFcode);
-          returnData.splice(i,1);
-          fLen = returnData.length;
-        }
-      } // End returnData loop
-
-      // If we have unused tags, throw them into the "extra" layer
-      if (Object.keys(notUsedTags).length > 0 && tds70.configOut.OgrNoteExtra == 'file')
-      {
-        var extraFeature = {};
-        extraFeature.tags = JSON.stringify(notUsedTags);
-        extraFeature.uuid = attrs.UFI;
-
-        var extraName = 'extra_' + geometryType.toString().charAt(0);
-
-        returnData.push({attrs: extraFeature, tableName: extraName});
-      } // End notUsedTags
-
-      // Look for Review tags and push them to a review layer if found
-      if (tags['hoot:review:needs'] == 'yes')
-      {
-        var reviewAttrs = {};
-
-        // Note: Some of these may be "undefined"
-        reviewAttrs.note = tags['hoot:review:note'];
-        reviewAttrs.score = tags['hoot:review:score'];
-        reviewAttrs.uuid = tags.uuid;
-        reviewAttrs.source = tags['hoot:review:source'];
-
-        var reviewTable = 'review_' + geometryType.toString().charAt(0);
-        returnData.push({attrs: reviewAttrs, tableName: reviewTable});
-      } // End ReviewTags
-    } // End else We have a feature
+    } // End we don't have a feature
 
     // Debug:
     if (tds70.configOut.OgrDebugDumptags == 'true')
