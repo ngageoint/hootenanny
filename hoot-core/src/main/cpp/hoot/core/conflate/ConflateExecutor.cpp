@@ -261,7 +261,8 @@ void ConflateExecutor::conflate(const QString& input1, const QString& input2, QS
   {
     _progress->set(
       _getJobPercentComplete(_currentTask - 1),
-      "Calculating reference statistics for: ..." + FileUtils::toLogFormat(input1, _maxFilePrintLength) + "...");
+      "Calculating reference statistics for: ..." +
+      FileUtils::toLogFormat(input1, _maxFilePrintLength) + "...");
     input1Cso.apply(map);
     _allStats.append(input1Cso.getStats());
     _stats.append(
@@ -270,7 +271,8 @@ void ConflateExecutor::conflate(const QString& input1, const QString& input2, QS
 
     _progress->set(
       _getJobPercentComplete(_currentTask - 1),
-      "Calculating secondary data statistics for: ..." + FileUtils::toLogFormat(input2, _maxFilePrintLength) + "...");
+      "Calculating secondary data statistics for: ..." +
+      FileUtils::toLogFormat(input2, _maxFilePrintLength) + "...");
     input2Cso.apply(map);
     _allStats.append(input2Cso.getStats());
     _stats.append(
