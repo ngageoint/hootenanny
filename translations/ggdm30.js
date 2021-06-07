@@ -2888,7 +2888,7 @@ ggdm30 = {
             // var tStr = '<OSM>' + JSON.stringify(notUsedTags) + '</OSM>';
             // returnData[i]['attrs']['ZI006_MEM'] = translate.appendValue(returnData[i]['attrs']['ZI006_MEM'],tStr,';');
             var str = JSON.stringify(notUsedTags,Object.keys(notUsedTags).sort());
-            if (ggdm30.configOut.OgrFormat == 'shp')
+            if (ggdm30.config.OgrFormat == 'shp')
             {
               returnData[i]['attrs']['OSMTAGS'] = str.substring(0,225);
               returnData[i]['attrs']['OSMTAGS2'] = str.substring(225,450);
