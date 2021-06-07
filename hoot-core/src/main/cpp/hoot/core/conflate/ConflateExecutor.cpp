@@ -139,6 +139,7 @@ void ConflateExecutor::_initConfig()
 void ConflateExecutor::_initTaskCount()
 {
   // The number of steps here must be updated as you add/remove job steps in the logic.
+  // TODO: describe how the total steps are derived
   _numTotalTasks = 5;
   if (_displayStats)
   {
@@ -260,7 +261,8 @@ void ConflateExecutor::conflate(const QString& input1, const QString& input2, QS
   {
     _progress->set(
       _getJobPercentComplete(_currentTask - 1),
-      "Calculating reference statistics for: ..." + FileUtils::toLogFormat(input1, _maxFilePrintLength) + "...");
+      "Calculating reference statistics for: ..." +
+      FileUtils::toLogFormat(input1, _maxFilePrintLength) + "...");
     input1Cso.apply(map);
     _allStats.append(input1Cso.getStats());
     _stats.append(
@@ -269,7 +271,8 @@ void ConflateExecutor::conflate(const QString& input1, const QString& input2, QS
 
     _progress->set(
       _getJobPercentComplete(_currentTask - 1),
-      "Calculating secondary data statistics for: ..." + FileUtils::toLogFormat(input2, _maxFilePrintLength) + "...");
+      "Calculating secondary data statistics for: ..." +
+      FileUtils::toLogFormat(input2, _maxFilePrintLength) + "...");
     input2Cso.apply(map);
     _allStats.append(input2Cso.getStats());
     _stats.append(
@@ -558,16 +561,6 @@ void ConflateExecutor::_writeStats(
   _stats.append(
     SingleStat("Calculate Stats for Output Time (sec)", _taskTimer.getElapsedAndRestart()));
   _currentTask++;
-
-  if (_isDiffConflate)
-  {
-    _progress->set(
-      _getJobPercentComplete(_currentTask - 1),
-      "Calculating differential output statistics for: ..." +
-      FileUtils::toLogFormat(outputFileName, _maxFilePrintLength) + "...");
-    _diffConflator.calculateStats(map, _stats);
-    _currentTask++;
-  }
 
   _allStats.append(_stats);
   if (_outputStatsFile.isEmpty())
