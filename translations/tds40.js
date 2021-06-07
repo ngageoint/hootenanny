@@ -2775,7 +2775,7 @@ tds40 = {
             // var tStr = '<OSM>' + JSON.stringify(notUsedTags) + '</OSM>';
             // returnData[i]['attrs']['ZI006_MEM'] = translate.appendValue(returnData[i]['attrs']['ZI006_MEM'],tStr,';');
             var str = JSON.stringify(notUsedTags,Object.keys(notUsedTags).sort());
-            if (tds70.configOut.OgrFormat == 'shp')
+            if (tds40.configOut.OgrFormat == 'shp')
             {
               returnData[i]['attrs']['OSMTAGS'] = str.substring(0,225);
               returnData[i]['attrs']['OSMTAGS2'] = str.substring(225,450);
