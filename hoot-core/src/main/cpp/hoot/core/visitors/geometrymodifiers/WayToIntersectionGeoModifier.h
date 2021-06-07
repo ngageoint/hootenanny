@@ -67,7 +67,7 @@ public:
   bool processElement(const ElementPtr& pElement, OsmMap* pMap) override;
 private:
 
-  void processIntersections(OsmMap* pMap, const WayPtr pWay, std::vector<IntersectionInfo>& inters);
+  void processIntersections(OsmMap* pMap, const WayPtr pWay, std::vector<IntersectionInfo>& inters) const;
   bool assignToAdjacentWay(OsmMap* pMap, const std::shared_ptr<NodeToWayMap>& n2w, long myWayId,
                            const std::vector<long>& nodesToAttach) const;
 };

@@ -1087,7 +1087,7 @@ bool XmlChangeset::canMoveRelation(const ChangesetInfoPtr& source, const Changes
   return source->size() != count;
 }
 
-size_t XmlChangeset::getObjectCount(ChangesetNode* node, ElementCountSet& elements, bool countSent)
+size_t XmlChangeset::getObjectCount(ChangesetNode* node, ElementCountSet& elements, bool countSent) const
 {
   ChangesetInfoPtr empty;
   return getObjectCount(empty, node, elements, countSent);
@@ -2024,7 +2024,7 @@ bool XmlChangeset::calculateRemainingChangeset(ChangesetInfoPtr& changeset)
   return !empty_changeset;
 }
 
-void XmlChangeset::updateRemainingChangeset()
+void XmlChangeset::updateRemainingChangeset() const
 {
   //  Remove the "remaining" file once it comes back successfully
   QFile::remove(getRemainingFilename());

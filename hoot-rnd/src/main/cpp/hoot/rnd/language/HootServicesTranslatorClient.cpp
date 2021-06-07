@@ -158,7 +158,7 @@ void HootServicesTranslatorClient::setSourceLanguages(const QStringList& langCod
   _checkLangsAvailable("translatable");
 }
 
-void HootServicesTranslatorClient::_checkLangsAvailable(const QString& type)
+void HootServicesTranslatorClient::_checkLangsAvailable(const QString& type) const
 {
   //request the supported langs info from the service and check the supported langs against our
   //specified source langs

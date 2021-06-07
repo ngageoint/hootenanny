@@ -97,12 +97,12 @@ namespace hoot
 class VersionCmd : public BaseCommand
 {
 public:
+
   static QString className() { return "hoot::VersionCmd"; }
 
   VersionCmd() = default;
 
   QString getName() const override { return "version"; }
-
   QString getDescription() const override { return "Displays version information"; }
 
   int runSimple(QStringList& args) override

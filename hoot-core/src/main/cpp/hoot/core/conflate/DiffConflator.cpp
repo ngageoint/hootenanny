@@ -31,8 +31,6 @@
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/SuperfluousConflateOpRemover.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonMatch.h>
-#include <hoot/core/criterion/BuildingCriterion.h>
-#include <hoot/core/criterion/PoiCriterion.h>
 #include <hoot/core/criterion/StatusCriterion.h>
 #include <hoot/core/criterion/TagKeyCriterion.h>
 #include <hoot/core/elements/InMemoryElementSorter.h>
@@ -50,7 +48,6 @@
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/visitors/AddRef1Visitor.h>
 #include <hoot/core/visitors/CriterionCountVisitor.h>
-#include <hoot/core/visitors/LengthOfWaysVisitor.h>
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
 #include <hoot/core/io/OsmChangesetFileWriterFactory.h>
 #include <hoot/core/ops/CopyMapSubsetOp.h>
@@ -969,30 +966,6 @@ void DiffConflator::writeChangeset(
       _unifiedChangesetStats = writer->getStatsTable(changesetStatsFormat);
     }
   }
-}
-
-void DiffConflator::calculateStats(OsmMapPtr pResultMap, QList<SingleStat>& stats) const
-{
-  // Differential specific stats
-
-  // TODO: This should be moved to CalculateStatsOp, run with diff conflate only, and expanded to
-  // cover all conflatable features types (#4743).
-
-  ElementCriterionPtr pPoiCrit(new PoiCriterion());
-  CriterionCountVisitor poiCounter;
-  poiCounter.addCriterion(pPoiCrit);
-  pResultMap->visitRo(poiCounter);
-  stats.append((SingleStat("New POIs", poiCounter.getCount())));
-
-  ElementCriterionPtr pBuildingCrit(new BuildingCriterion(pResultMap));
-  CriterionCountVisitor buildingCounter;
-  buildingCounter.addCriterion(pBuildingCrit);
-  pResultMap->visitRo(buildingCounter);
-  stats.append((SingleStat("New Buildings", buildingCounter.getCount())));
-
-  LengthOfWaysVisitor lengthVisitor;
-  pResultMap->visitRo(lengthVisitor);
-  stats.append((SingleStat("Km of New Roads", lengthVisitor.getStat() / 1000.0)));
 }
 
 void DiffConflator::_removeMetadataTags() const

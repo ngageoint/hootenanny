@@ -103,7 +103,7 @@ std::shared_ptr<IterativeNetworkMatcher> IterativeNetworkMatcher::create()
   return std::shared_ptr<IterativeNetworkMatcher>(new IterativeNetworkMatcher());
 }
 
-void IterativeNetworkMatcher::_createEmptyStubEdges(OsmNetworkPtr na, OsmNetworkPtr nb)
+void IterativeNetworkMatcher::_createEmptyStubEdges(OsmNetworkPtr na, OsmNetworkPtr nb) const
 {
   if (na == _n1)
   {
@@ -609,7 +609,7 @@ void IterativeNetworkMatcher::_updateEdgeScores(EdgeScoreMap &em, const VertexSc
 }
 
 // modify this to use the EdgeMatchSet rather than the vertices
-void IterativeNetworkMatcher::_updateVertexScores(VertexScoreMap& vm, EdgeScoreMap &/*em*/)
+void IterativeNetworkMatcher::_updateVertexScores(VertexScoreMap& vm, EdgeScoreMap &/*em*/) const
 {
   CostFunction cost;
   if (&vm == &_vertex12Scores)

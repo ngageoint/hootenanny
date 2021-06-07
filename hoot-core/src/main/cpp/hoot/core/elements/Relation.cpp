@@ -435,7 +435,7 @@ void Relation::visitRw(ElementProvider& map, ConstElementVisitor& filter, const 
 }
 
 void Relation::_visitRw(ElementProvider& map, ConstElementVisitor& filter,
-  QList<long>& visitedRelations, const bool recursive)
+  QList<long>& visitedRelations, const bool recursive) const
 {
   if (visitedRelations.contains(getId()))
   {

@@ -153,7 +153,7 @@ private:
    * @param geometry Tree of simple geometry in JSON format
    * @return Vector of coordinates
    */
-  JsonCoordinates _parseGeometry(const boost::property_tree::ptree& geometry);
+  JsonCoordinates _parseGeometry(const boost::property_tree::ptree& geometry) const;
 
   /**
    * @brief _parseMulti*Geometry Parse the multi geometries into a vector of coordinates
@@ -173,7 +173,7 @@ private:
    * @param geometry Three of "multi" geometry in JSON format
    * @return Vector of vectors of coordinates
    */
-  std::vector<JsonCoordinates> _parseMultiGeometry(const boost::property_tree::ptree& geometry);
+  std::vector<JsonCoordinates> _parseMultiGeometry(const boost::property_tree::ptree& geometry) const;
 
   /**
    * @brief _parseBbox Parse the bounding box array in JSON format into Geos Envelope

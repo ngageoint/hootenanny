@@ -437,7 +437,7 @@ void GraphComparator::_init()
 }
 
 cv::Mat GraphComparator::_paintGraph(OsmMapPtr map, DirectedGraph& graph, ShortestPath& sp,
-                                     double& maxGraphCost)
+                                     double& maxGraphCost) const
 {
   LOG_TRACE("Painting graph...");
 

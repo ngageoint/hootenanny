@@ -60,9 +60,7 @@ public:
 
   QString getDescription() const override
   { return "Counts the number of elements matching a criterion"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 
 private:

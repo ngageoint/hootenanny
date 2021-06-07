@@ -146,14 +146,6 @@ public:
     const QString& osmApiDbUrl = "");
 
   /**
-   * Calculates statistics unique to Differential Conflation
-   *
-   * @param pResultMap map containing the features to calculate the statistics from
-   * @param stats the statistics to populate
-   */
-  void calculateStats(OsmMapPtr pResultMap, QList<SingleStat>& stats) const;
-
-  /**
    * @see ProgressReporter
    */
   unsigned int getNumSteps() const override;
@@ -175,7 +167,7 @@ public:
    *
    * @return A changeset provider that can be used with ChangesetWriter classes
    */
-  MemChangesetProviderPtr getTagDiff() { return _tagChanges; }
+  MemChangesetProviderPtr getTagDiff() const { return _tagChanges; }
 
   QString getGeometryChangesetStats() const { return _geometryChangesetStats; }
   QString getTagChangesetStats() const { return _tagChangesetStats; }

@@ -332,7 +332,7 @@ void Way::_makeWritable()
   }
 }
 
-void Way::removeNode(long id)
+void Way::removeNode(long id) const
 {
   LOG_TRACE("Removing node: " << id << " in way: " << getId() << "...");
 

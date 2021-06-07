@@ -66,7 +66,7 @@ long int ZValue::calculate(vector<double> point)
   return calculate(_b);
 }
 
-long int ZValue::calculate(vector<long int> point)
+long int ZValue::calculate(vector<long int> point) const
 {
   long int bitRead = 1 << (_depth - 1);
   long int result = 0;

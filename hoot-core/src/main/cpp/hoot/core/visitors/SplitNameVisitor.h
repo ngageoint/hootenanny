@@ -70,7 +70,7 @@ private:
 
   int _maxSize;
 
-  void _addExtraNames(Tags& t, const QStringList& extraNames);
+  void _addExtraNames(Tags& t, const QStringList& extraNames) const;
 
   int _getNextNameId(const Tags& t, int lastId) const;
 

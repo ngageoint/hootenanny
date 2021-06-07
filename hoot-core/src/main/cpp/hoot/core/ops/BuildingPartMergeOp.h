@@ -174,7 +174,7 @@ private:
   /*
    * Determines neighboring building parts for a building
    */
-  std::set<long> _calculateNeighbors(const ConstWayPtr& way, const Tags& tags);
+  std::set<long> _calculateNeighbors(const ConstWayPtr& way, const Tags& tags) const;
 
   static bool _hasContiguousNodes(const ConstWayPtr& way, const long node1Id, const long node2Id);
 

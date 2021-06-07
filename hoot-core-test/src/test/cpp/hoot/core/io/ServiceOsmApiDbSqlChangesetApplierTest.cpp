@@ -25,12 +25,6 @@
  * @copyright Copyright (C) 2013, 2014, 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
-// CPP Unit
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/extensions/TestFactoryRegistry.h>
-#include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
-
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/io/OsmApiDb.h>
@@ -42,7 +36,6 @@
 
 // Qt
 #include <QDateTime>
-#include <QSqlError>
 
 using namespace geos::geom;
 
@@ -53,10 +46,6 @@ class ServiceOsmApiDbSqlChangesetApplierTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ServiceOsmApiDbSqlChangesetApplierTest);
   CPPUNIT_TEST(runSqlChangesetWriteTest);
-  CPPUNIT_TEST(runConflictWithConflictsTest);
-  CPPUNIT_TEST(runConflictNonIntersectingBoundsTest);
-  CPPUNIT_TEST(runConflictCreatedAtAfterTimeTest);
-  CPPUNIT_TEST(runConflictBadTimeTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -135,7 +124,8 @@ public:
     database.open(ServicesDbTestUtils::getOsmApiDbUrl());
     database.deleteData();
     ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), _scriptDir + "users.sql");
-    ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), _scriptDir + "changesets.sql");
+    ApiDb::execSqlFile(
+      ServicesDbTestUtils::getOsmApiDbUrl().toString(), _scriptDir + "changesets.sql");
 
     std::shared_ptr<QSqlQuery> nodesItr = database.selectElements(ElementType::Node);
     assert(nodesItr->isActive());
@@ -183,104 +173,6 @@ public:
     LOG_VARD(nodesCountAfter);
 
     CPPUNIT_ASSERT(nodesCountAfter == (nodesCountBefore + 1));
-  }
-
-  void runConflictWithConflictsTest()
-  {
-    OsmApiDb database;
-    database.open(ServicesDbTestUtils::getOsmApiDbUrl());
-    database.deleteData();
-    ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), _scriptDir + "users.sql");
-
-    //grab the current time
-    const QDateTime startTime = now();
-
-    //define an aoi
-    const QString aoi = "-10,-10,10,10";
-
-    //write a changeset with an intersecting aoi and some created time in the future
-    insertChangeset(startTime.addSecs(60 * 60), "-15,-15,5,5");
-
-    //changeset writer should detect a conflict when passed the same aoi and the current time,
-    //since a changeset was written intersecting with the aoi after the specified time
-    CPPUNIT_ASSERT(
-      OsmApiDbSqlChangesetApplier(ServicesDbTestUtils::getOsmApiDbUrl())
-        .conflictExistsInTarget(aoi, startTime.toString(OsmApiDb::TIME_FORMAT)));
-  }
-
-  void runConflictNonIntersectingBoundsTest()
-  {
-    OsmApiDb database;
-    database.open(ServicesDbTestUtils::getOsmApiDbUrl());
-    database.deleteData();
-    ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), _scriptDir + "users.sql");
-
-    //grab the current time
-    const QDateTime startTime = now();
-
-    //define an aoi
-    const QString aoi = "-10,-10,10,10";
-
-    //write a changeset with an non-intersecting aoi and some created time in the future
-    insertChangeset(startTime.toUTC().addSecs(60 * 60), "-20,-20,-11,-11");
-
-    //changeset writer should not detect a conflict since the aois don't intersect
-    CPPUNIT_ASSERT(
-      !OsmApiDbSqlChangesetApplier(ServicesDbTestUtils::getOsmApiDbUrl())
-        .conflictExistsInTarget(aoi, startTime.toString(OsmApiDb::TIME_FORMAT)));
-  }
-
-  void runConflictCreatedAtAfterTimeTest()
-  {
-    OsmApiDb database;
-    database.open(ServicesDbTestUtils::getOsmApiDbUrl());
-    database.deleteData();
-    ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), _scriptDir + "users.sql");
-
-    //define an aoi
-    const QString aoi = "-10,-10,10,10";
-
-    //write a changeset with an intersecting aoi and the current time
-    insertChangeset(now(), "-15,-15,5,5");
-
-    //wait just a sec to make sure time passes
-    sleep(1);
-
-    //changeset writer should not detect a conflict when passed the same aoi and the current time,
-    //since the changeset was written beforehand
-    CPPUNIT_ASSERT(
-      !OsmApiDbSqlChangesetApplier(ServicesDbTestUtils::getOsmApiDbUrl())
-        .conflictExistsInTarget(
-            aoi, now().toString(OsmApiDb::TIME_FORMAT)));
-  }
-
-  //Bounds error checking tests are covered in GeometryUtilsTest.
-
-  void runConflictBadTimeTest()
-  {
-    QString exceptionMsg;
-
-    try
-    {
-      OsmApiDbSqlChangesetApplier(ServicesDbTestUtils::getOsmApiDbUrl())
-        .conflictExistsInTarget("-10,-10,10,10", "2016-05-04 10:15");
-    }
-    catch (const HootException& e)
-    {
-      exceptionMsg = e.what();
-    }
-    CPPUNIT_ASSERT(exceptionMsg.contains("Invalid timestamp"));
-
-    try
-    {
-      OsmApiDbSqlChangesetApplier(ServicesDbTestUtils::getOsmApiDbUrl())
-        .conflictExistsInTarget("-10,-10,10,10", " ");
-    }
-    catch (const HootException& e)
-    {
-      exceptionMsg = e.what();
-    }
-    CPPUNIT_ASSERT(exceptionMsg.contains("Invalid timestamp"));
   }
 };
 
