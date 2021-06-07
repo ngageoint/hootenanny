@@ -2923,7 +2923,7 @@ tds70 = {
     // tds70.applyToOgrPostProcessing(tags, attrs, geometryType);
     tds70.applyToOgrPostProcessing(tags, attrs, geometryType, notUsedTags);
 
-    if (tds70.config.OgrDebugDumptags == 'true') translate.debugOutput(notUsedTags,'',geometryType,elementType,'Not used: ');
+    if (tds70.configOut.OgrDebugDumptags == 'true') translate.debugOutput(notUsedTags,'',geometryType,elementType,'Not used: ');
 
     // Now check for invalid feature geometry
     // E.g. If the spec says a runway is a polygon and we have a line, throw error and
