@@ -34,6 +34,7 @@
 #include <hoot/core/io/OgrWriter.h>
 #include <hoot/core/io/ElementTranslatorThread.h>
 #include <hoot/core/io/OgrWriterThread.h>
+#include <hoot/core/io/OsmMapReader.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/io/ShapefileWriter.h>

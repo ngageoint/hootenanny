@@ -61,6 +61,8 @@ public:
 
   static QString className() { return "hoot::OgrReader"; }
 
+  static int logWarnCount;
+
   OgrReader();
   OgrReader(const QString& path);
   ~OgrReader() = default;
@@ -75,13 +77,19 @@ public:
   void finalizePartial() override;
 
   /**
-   * Read all geometry data from the specified path.
+   * Read all data from the specified path.
+   *
+   * This is memory bound. Use the PartialOsmMapReader interface for streaming reads.
    *
    * @param path the path to the data to read
    * @param layer Read only from this layer. If no layer is specified then read from all layers.
    * @param map map to load into
+   * @param jobSource optional job name for status reporting
+   * @param numTasks optional number of job tasks being performed for status reporting
    */
-  void read(const QString& path, const QString& layer, const OsmMapPtr& map) const;
+  void read(
+    const QString& path, const QString& layer, const OsmMapPtr& map, const QString& jobSource = "",
+    const int numTasks = -1);
 
   /**
    * Returns true if this appears to be a reasonable path without actually attempting to open the
@@ -126,6 +134,18 @@ private:
   std::shared_ptr<OgrReaderInternal> _d;
 
   Progress _progress;
+
+  /*
+   * Attempts to determine the relative weighting of each layer in an OGR data source based on
+   * feature size. If the feature size hasn't already been calculated for each layer, then a even
+   * distribution of weighting between layers is returned.
+   */
+  std::vector<float> _getInputProgressWeights(
+    const QString& input, const QStringList& layers) const;
+  /*
+   * Determines the list of layers in an OGR input. The reader must already have been initialized.
+   */
+  QStringList _getLayersFromPath(QString& input) const;
 };
 
 }

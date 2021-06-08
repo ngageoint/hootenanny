@@ -63,6 +63,8 @@ using namespace std;
 namespace hoot
 {
 
+int OgrReader::logWarnCount = 0;
+
 HOOT_FACTORY_REGISTER(OsmMapReader, OgrReader)
 
 /**
@@ -383,11 +385,135 @@ long OgrReader::getFeatureCount(const QString& path, const QString& layer) const
   return _d->getFeatureCount();
 }
 
-void OgrReader::read(const QString& path, const QString& layer, const OsmMapPtr& map) const
+std::vector<float> OgrReader::_getInputProgressWeights(
+  const QString& input, const QStringList& layers) const
+{
+  std::vector<float> progressWeights;
+  LOG_VART(layers.size());
+
+  // process the completion status report information first
+  long featureCountTotal = 0;
+  int undefinedCounts = 0;
+  for (int i = 0; i < layers.size(); i++)
+  {
+    LOG_VART(layers[i]);
+    // simply open the file, get the meta feature count value, and close
+    int featuresPerLayer = getFeatureCount(input, layers[i]);
+    LOG_VART(featuresPerLayer);
+    progressWeights.push_back((float)featuresPerLayer);
+    // cover the case where no feature count available efficiently; Despite the documentation
+    // saying "-1" should be returned for layers without the number of features calculated, a size
+    // of zero has been seen with some layers.
+    if (featuresPerLayer < 1) undefinedCounts++;
+    else featureCountTotal += featuresPerLayer;
+  }
+  LOG_VART(featureCountTotal);
+  LOG_VART(undefinedCounts);
+
+  int definedCounts = layers.size() - undefinedCounts;
+  LOG_VART(definedCounts);
+
+  // determine weights for 3 possible cases
+  if (undefinedCounts == layers.size())
+  {
+    for (int i = 0; i < layers.size(); i++) progressWeights[i] = 1. / (float)layers.size();
+  }
+  else if (definedCounts == layers.size())
+  {
+    for (int i = 0; i < layers.size(); i++) progressWeights[i] /= (float)featureCountTotal;
+  }
+  else
+  {
+    for (int i = 0; i<layers.size(); i++)
+      if (progressWeights[i] == -1)
+      {
+        progressWeights[i] = (1. / (float)definedCounts) * featureCountTotal;
+      }
+    // reset featurecount total and recalculate
+    featureCountTotal = 0;
+    for (int i = 0; i < layers.size(); i++) featureCountTotal += progressWeights[i];
+    LOG_VART(progressWeights);
+    for (int i = 0; i < layers.size(); i++) progressWeights[i] /= (float)featureCountTotal;
+  }
+
+  LOG_VART(progressWeights);
+  return progressWeights;
+}
+
+QStringList OgrReader::_getLayersFromPath(QString& input) const
+{
+  LOG_VART(input);
+
+  QStringList layers;
+
+  if (input.contains(";"))
+  {
+    QStringList list = input.split(";");
+    input = list.at(0);
+    layers.append(list.at(1));
+  }
+  else
+  {
+    layers = getFilteredLayerNames(input);
+    layers.sort();
+  }
+  LOG_VARD(layers);
+
+  if (layers.empty())
+  {
+    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN("Could not find any valid layers to read from in " + input + ".");
+    }
+    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+    }
+    logWarnCount++;
+  }
+
+  return layers;
+}
+
+void OgrReader::read(
+  const QString& path, const QString& layer, const OsmMapPtr& map, const QString& jobSource,
+  const int numTasks)
 {
   map->appendSource(path);
-  _d->open(path, layer);
-  _d->read(map);
+
+  // These are the OGR inputs types for which we need to iterate through layers. This list may
+  // eventually need to be expanded. May be able to tighten the dir condition to dirs with shape
+  // files only.
+  if (path.endsWith(".gdb") || QFileInfo(path).isDir() || path.endsWith(".zip"))
+  {
+    QString pathCopy = path;
+    const QStringList layers = _getLayersFromPath(pathCopy);
+    LOG_VART(layers);
+    const std::vector<float> progressWeights = _getInputProgressWeights(path, layers);
+    // Read each layer's data.
+    for (int j = 0; j < layers.size(); j++)
+    {
+      PROGRESS_INFO(
+        "Reading layer " << j + 1 << " of " << layers.size() << ": " << layers[j] << "...");
+      LOG_VART(progressWeights[j]);
+      if (!jobSource.isEmpty() && numTasks != -1)
+      {
+        setProgress(
+          Progress(
+            ConfigOptions().getJobId(), jobSource, Progress::JobState::Running,
+            (float)j / (float)(layers.size() * numTasks), progressWeights[j]));
+      }
+      _d->open(path, layers[j]);
+      _d->read(map);
+    }
+  }
+  else
+  {
+    // For other OGR types, just read a single layer.
+    _d->open(path, layer);
+    _d->read(map);
+  }
+
   _d->close();
 }
 

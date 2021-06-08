@@ -35,7 +35,6 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/io/ElementVisitorInputStream.h>
-#include <hoot/core/io/OgrReader.h>
 
 // Qt
 #include <QString>
@@ -103,8 +102,8 @@ public:
     @param ogrFeatureLimit limit of features to read per input; applicable to OGR inputs only;
     ignored otherwise
     @param jobSource job name for status reporting; applicable to OGR inputs only; ignored otherwise
-    @param numTasks number of job tasks being performed; applicable to OGR inputs only;
-    ignored otherwise
+    @param numTasks number of job tasks being performed for status reporting; applicable to OGR
+    inputs only; ignored otherwise
     */
   static void loadMap(
     const OsmMapPtr& map, const QString& path, bool useFileId = true,
@@ -188,20 +187,6 @@ public:
    * interface
    */
   static bool urlsAreBoundable(const QStringList& urls);
-
-private:
-
-  /*
-   * Attempts to determine the relative weighting of each layer in an OGR data source based on
-   * feature size. If the feature size hasn't already been calculated for each layer, then a even
-   * distribution of weighting between layers is returned.
-   */
-  static std::vector<float> _getOgrInputProgressWeights(
-    const OgrReader& reader, const QString& input, const QStringList& layers);
-  /*
-   * Determines the list of layers in an OGR input. The reader must already have been initialized.
-   */
-  static QStringList _getOgrLayersFromPath(const OgrReader& reader, QString& input);
 };
 
 }
