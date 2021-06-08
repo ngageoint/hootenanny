@@ -525,6 +525,11 @@ mgcp = {
         break;
     } // End F_CODE
 
+    // Convert Rasilway guage widths
+    if (attrs.GAW)
+    {
+      attrs.GAW = number(attrs.GAW) * 1000; // Convert M to MM
+    }
 
   }, // End of applyToOsmPreProcessing
 
@@ -2159,6 +2164,62 @@ mgcp = {
       attrs.SDV = translate.chopDateTime(attrs.SDV);
     }
 
+    // Fix Railway gauges
+    if (tags.gauge)
+    {
+      // First, see if we have a range
+      if (~tags['gauge'].indexOf(';'))
+      {
+        notUsedTags.gauge = tags.gauge; // Save the raw value
+        tags.gauge = tags.['gauge'].split(';')[0]; // Grab the first value
+      }
+
+      // Handle "standard" text values
+      switch (tags.gauge)
+      {
+        case 'standard':
+          tags.gauge = 1435;
+          break;
+
+        case 'narrow':
+          notUsedTags.gauge = tags.gauge;
+          tags.gauge = 0;
+          attrs.RGC = '2';
+          break;
+
+        case 'broad':
+          notUsedTags.gauge = tags.gauge;
+          tags.gauge = 0;
+          attrs.RGC = '1';
+          break;
+      }
+
+      // Now work on the numbers
+      var gWidth = parseInt(tags.gauge,10);
+
+      if (!isNan(gWidth) && gWidth > 0)
+      {
+        if (gWidth == 1435)
+        {
+          attrs.RGC = 3;
+        }
+        else if (gWidth < 1435)
+        {
+          attrs.RGC = 2;
+        }
+        else
+        {
+          attrs.RGC = 1;
+        }
+        attrs.GAW = (gWidth / 1000).toFixed(3);  // Convert to Metres
+      }
+      else  // Not a number, cleanup time
+      {
+        // Dont use the value, just punt it to the OSMTAGS attribute
+        delete attrs.GAW;
+        notUsedTags.gauge = tags.gauge;
+      }
+    }
   }, // End of applyToOgrPostProcessing
 
   // ##### End of the xxToOgrxx Block #####
