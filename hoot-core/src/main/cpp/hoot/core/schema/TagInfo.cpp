@@ -126,11 +126,13 @@ QString TagInfo::_getInfo(const QString& input) const
       inputInfo, ConfigOptions().getReaderUseDataSourceIds(),
       Status::fromString(ConfigOptions().getReaderSetDefaultStatus()));
 
-  // Using a different code path for the OGR inputs to handle the layer syntax.  There may be
-  // a way to combine the two logic paths...not sure, though.
+  // Using a different code path for the OGR inputs to handle the layer syntax. We need to add
+  // custom behavior to the element parsing, so loading the map through IoUtils::loadMap won't work
+  // here.
   std::shared_ptr<OgrReader> ogrReader = std::dynamic_pointer_cast<OgrReader>(reader);
   if (ogrReader.get())
   {
+    // We have to have a translation for the reading, so just use the simplest one.
     ogrReader->setSchemaTranslationScript(ConfPath::getHootHome() + "/translations/quick.js");
 
     QStringList layers;
@@ -173,7 +175,7 @@ QString TagInfo::_getInfo(const QString& input) const
       if (_delimitedTextOutput)
       {
         const QString tmpText = _printDelimitedText(result);
-        // Skip empty layers
+        // Skip empty layers.
         if (tmpText == "")
         {
           continue;
@@ -187,7 +189,7 @@ QString TagInfo::_getInfo(const QString& input) const
       else
       {
         const QString tmpText = _printJSON(layers[i], result);
-        // Skip empty layers
+        // Skip empty layers.
         if (tmpText == "")
         {
           continue;

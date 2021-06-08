@@ -1,6 +1,7 @@
 #!/bin/bash
 set -e
 
+INPUT_DIR=test-files/cmd/slow/CountCmdTest
 OUTPUT_DIR=test-output/cmd/slow/CountCmdTest
 rm -rf $OUTPUT_DIR
 mkdir -p $OUTPUT_DIR
@@ -32,3 +33,8 @@ hoot count --warn $CONFIG "$INPUT_FILE_1;$INPUT_FILE_2" hoot::PoiCriterion
 
 echo "counting all elements that are not POIs..."
 hoot count --warn $CONFIG -D element.criterion.negate=true "$INPUT_FILE_1;$INPUT_FILE_2" hoot::PoiCriterion
+
+# Check to make sure multi-layer gdb's get parsed correctly.
+
+echo "counting all element from multi-layer GDB..."
+hoot count $INPUT_DIR/input.gdb --all-elements

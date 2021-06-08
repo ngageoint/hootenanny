@@ -53,9 +53,7 @@ public:
   void visit(const ConstElementPtr& e) override;
 
   QString getDescription() const override { return "Counts the number of elements"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 
 private:

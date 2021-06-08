@@ -33,6 +33,7 @@
 #include <hoot/core/io/ElementVisitorInputStream.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/io/PartialOsmMapReader.h>
 #include <hoot/core/io/PartialOsmMapWriter.h>
 #include <hoot/core/util/Configurable.h>
@@ -65,10 +66,10 @@ bool ElementStreamer::isStreamableIo(const QString& input, const QString& output
   return
     OsmMapReaderFactory::hasElementInputStream(input) &&
     OsmMapWriterFactory::hasElementOutputStream(output) &&
-    //the XML writer can't keep sorted output when streaming, so require an additional config
-    //option be specified in order to stream when writing that format
-    (writerName != "hoot::OsmXmlWriter" ||
-    (writerName == "hoot::OsmXmlWriter" && !ConfigOptions().getWriterXmlSortById())) &&
+    // The XML writer can't keep sorted output when streaming, so require an additional config
+    // option be specified in order to stream when writing that format
+    (writerName != OsmXmlWriter::className() ||
+     (writerName == OsmXmlWriter::className() && !ConfigOptions().getWriterXmlSortById())) &&
     // No readers when using the bounds option are able to do streaming I/O at this point.
     !ConfigUtils::boundsOptionEnabled();
 }
@@ -80,8 +81,9 @@ bool ElementStreamer::areStreamableIo(const QStringList& inputs, const QString& 
     if (!ElementStreamer::isStreamableIo(inputs.at(i), output))
     {
       LOG_INFO(
-        "Unable to stream I/O due to input: " << FileUtils::toLogFormat(inputs.at(i), 25) << " and/or output: " <<
-        FileUtils::toLogFormat(output, 25) << ". Loading entire map into memory...");
+        "Unable to stream I/O due to input: ..." << FileUtils::toLogFormat(inputs.at(i), 25) <<
+        " and/or output: ..." << FileUtils::toLogFormat(output, 25) <<
+        ". Loading entire map into memory...");
       return false;
     }
   }

@@ -55,9 +55,7 @@ public:
 
   QString getDescription() const override
   { return "Counts the number of elements having at least one information tag"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 
 private:

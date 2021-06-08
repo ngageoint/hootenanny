@@ -1,6 +1,7 @@
 #!/bin/bash
 set -e
 
+INPUT_DIR=test-files/cmd/slow/ConvertCmdTest
 OUTPUT_DIR=test-output/cmd/slow/ConvertCmdTest
 rm -rf $OUTPUT_DIR
 mkdir -p $OUTPUT_DIR
@@ -38,3 +39,7 @@ hoot convert $CONFIG test-files/io/InvalidCharacters.osm $OUTPUT_DIR/InvalidChar
 echo "Translation check..."
 # This wasn't working at one point.
 hoot convert $CONFIG -D convert.ops=hoot::SchemaTranslationVisitor -D schema.translation.direction=toogr -D schema.translation.script=translations/MGCP_TRD4.js test-files/ToyTestA.osm $OUTPUT_DIR/translation-check-out.gdb
+
+echo "Multi-layer GDB to OSM..."
+hoot convert $CONFIG test-files/cmd/slow/CountCmdTest/input.gdb $OUTPUT_DIR/multi-layer-gdb-out.osm
+hoot diff $CONFIG $INPUT_DIR/multi-layer-gdb-out.osm $OUTPUT_DIR/multi-layer-gdb-out.osm
