@@ -65,24 +65,24 @@ void WayJoiner::join(const OsmMapPtr& map)
 
   //  Join back any ways with parent ids
   _joinParentChild();
-  OsmMapWriterFactory::writeDebugMap(map, "after-way-joiner-join-parent-child-1");
+  OsmMapWriterFactory::writeDebugMap(map, className(), "after-join-parent-child-1");
 
   //  Join any siblings that have the same parent id but the parent isn't connected
   _joinSiblings();
-  OsmMapWriterFactory::writeDebugMap(map, "after-way-joiner-join-siblings");
+  OsmMapWriterFactory::writeDebugMap(map, className(), "after-join-siblings");
 
   //  Rejoin any ways that are now connected to their parents
   _joinParentChild();
-  OsmMapWriterFactory::writeDebugMap(map, "after-way-joiner-join-parent-child-2");
+  OsmMapWriterFactory::writeDebugMap(map, className(), "after-join-parent-child-2");
 
   //  Run one last join on ways that share a node and have a parent id
   _joinAtNode();
-  OsmMapWriterFactory::writeDebugMap(map, "after-way-joiner-join-at-node");
+  OsmMapWriterFactory::writeDebugMap(map, className(), "after-join-at-node");
 
   if (_writePidToChildId)
   {
     _writeParentIdsToChildIds();
-    OsmMapWriterFactory::writeDebugMap(map, "after-way-joiner-write-parent-ids-to-child-ids");
+    OsmMapWriterFactory::writeDebugMap(map, className(), "after-write-parent-ids-to-child-ids");
   }
 
   LOG_VARD(_leavePid);
@@ -90,7 +90,7 @@ void WayJoiner::join(const OsmMapPtr& map)
   {
     //  Clear out any remaining unjoined parent ids
     _resetParents();
-    OsmMapWriterFactory::writeDebugMap(map, "after-way-joiner-remove-parent-ids");
+    OsmMapWriterFactory::writeDebugMap(map, className(), "after-remove-parent-ids");
   }
 }
 

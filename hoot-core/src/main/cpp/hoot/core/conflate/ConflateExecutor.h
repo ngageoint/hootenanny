@@ -53,6 +53,8 @@ class ConflateExecutor
 
 public:
 
+  static QString className() { return "hoot::ConflateExecutor"; }
+
   static const QString JOB_SOURCE;
 
   ConflateExecutor();

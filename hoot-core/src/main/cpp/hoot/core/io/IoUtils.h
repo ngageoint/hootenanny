@@ -50,6 +50,8 @@ class IoUtils
 
 public:
 
+  static QString className() { return "hoot::IoUtils"; }
+
   /**
    * Returns true if the input format is a Hootenanny supported OSM format
    *

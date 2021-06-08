@@ -243,7 +243,7 @@ void UnconnectedWaySnapper::apply(OsmMapPtr& map)
   _numSnappedToWayNodes = 0;
   _snappedWayNodeIds.clear();
 
-  OsmMapWriterFactory::writeDebugMap(map, "UnconnectedWaySnapper-before-snapping");
+  OsmMapWriterFactory::writeDebugMap(map, className(), "before-snapping");
 
   // need to be in planar for all of this
   MapProjector::projectToPlanar(_map);
@@ -633,13 +633,13 @@ bool UnconnectedWaySnapper::_snapUnconnectedWayEndNode(
     // haven't any direct evidence of that being necessary for proper snapping yet. If it
     // is needed, that would likely slow things down a lot.
 
-    if (ConfigOptions().getDebugMapsWrite() && ConfigOptions().getDebugMapsWriteDetailed())
+    if (ConfigOptions().getDebugMapsWriteDetailed())
     {
       OsmMapWriterFactory::writeDebugMap(
-        _map,
+        _map, className(),
         "after-snap-" + wayToSnap->getElementId().toString() + "-" +
-        unconnectedEndNode->getElementId().toString() + "-" +
-        _snappedToWay->getElementId().toString());
+          unconnectedEndNode->getElementId().toString() + "-" +
+          _snappedToWay->getElementId().toString());
     }
   }
   return snapOccurred;

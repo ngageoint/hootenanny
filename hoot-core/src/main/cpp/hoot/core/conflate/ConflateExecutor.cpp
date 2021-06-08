@@ -283,7 +283,7 @@ void ConflateExecutor::conflate(const QString& input1, const QString& input2, QS
 
   size_t initialElementCount = map->getElementCount();
   _stats.append(SingleStat("Initial Element Count", initialElementCount));
-  OsmMapWriterFactory::writeDebugMap(map, "after-load");
+  OsmMapWriterFactory::writeDebugMap(map, className(), "after-load");
 
   if (!ConfigOptions().getConflatePreOps().empty())
   {
@@ -319,7 +319,7 @@ void ConflateExecutor::conflate(const QString& input1, const QString& input2, QS
 
   MapProjector::projectToWgs84(map);
   _stats.append(SingleStat("Project to WGS84 Time (sec)", _taskTimer.getElapsedAndRestart()));
-  OsmMapWriterFactory::writeDebugMap(map, "after-wgs84-projection");
+  OsmMapWriterFactory::writeDebugMap(map, className(), "after-wgs84-projection");
 
   _writeOutput(map, output, isChangesetOutput);
 
@@ -491,7 +491,7 @@ void ConflateExecutor::_runConflateOps(OsmMapPtr& map, const bool runPre)
   _stats.append(
     SingleStat("Apply " + opStr + "-Conflate Ops Time (sec)", _taskTimer.getElapsedAndRestart()));
 
-  OsmMapWriterFactory::writeDebugMap(map, "after-" + opStr.toLower() + "-ops");
+  OsmMapWriterFactory::writeDebugMap(map, className(), "after-" + opStr.toLower() + "-ops");
   _currentTask++;
   LOG_STATUS(
     "Conflate " << opStr.toLower() << "-operations ran in " +
@@ -535,7 +535,7 @@ void ConflateExecutor::_writeOutput(OsmMapPtr& map, QString& output, const bool 
       _currentTask++;
     }
     IoUtils::saveMap(map, output);
-    OsmMapWriterFactory::writeDebugMap(map, "after-conflate-output-write");
+    OsmMapWriterFactory::writeDebugMap(map, className(), "after-conflate-output-write");
   }
   _currentTask++;
 }

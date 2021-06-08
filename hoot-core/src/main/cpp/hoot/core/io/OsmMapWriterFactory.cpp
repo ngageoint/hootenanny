@@ -134,8 +134,8 @@ bool OsmMapWriterFactory::hasElementOutputStream(const QString& url)
   return result;
 }
 
-void OsmMapWriterFactory::write(const std::shared_ptr<OsmMap>& map, const QString& url,
-                                const bool silent, const bool is_debug)
+void OsmMapWriterFactory::write(
+  const std::shared_ptr<OsmMap>& map, const QString& url, const bool silent, const bool is_debug)
 {
   bool skipEmptyMap = map->isEmpty() && ConfigOptions().getMapWriterSkipEmpty();
 
@@ -165,65 +165,86 @@ void OsmMapWriterFactory::write(const std::shared_ptr<OsmMap>& map, const QStrin
   }
 }
 
-void OsmMapWriterFactory::writeDebugMap(const ConstOsmMapPtr& map, const QString& title,
-                                        NetworkMatcherPtr matcher)
+void OsmMapWriterFactory::writeDebugMap(
+  const ConstOsmMapPtr& map, const QString& callingClass, const QString& title,
+  NetworkMatcherPtr matcher)
 {
   if (ConfigOptions().getDebugMapsWrite())
   {
-    QString debugMapFileName = ConfigOptions().getDebugMapsFilename();
-    if (!debugMapFileName.toLower().endsWith(".osm"))
+    if (callingClass.trimmed().isEmpty())
     {
-      throw IllegalArgumentException("Debug maps must be written to an .osm file.");
+      throw IllegalArgumentException("Empty calling class.");
+    }
+    else if (!callingClass.startsWith("hoot::"))
+    {
+      throw IllegalArgumentException("Invalid calling class: " + callingClass);
     }
 
-    LOG_VART(StringUtils::formatLargeNumber(map->getElementCount()));
-    LOG_VART(StringUtils::formatLargeNumber(map->getNodeCount()));
-    LOG_VART(StringUtils::formatLargeNumber(map->getWayCount()));
-    LOG_VART(StringUtils::formatLargeNumber(map->getRelationCount()));
+    const QStringList classFilter = ConfigOptions().getDebugMapsClassFilter().split(";");
+    QString callingClassNoNamespace = callingClass;
+    callingClassNoNamespace = callingClassNoNamespace.replace("hoot::", "");
+    if (classFilter.isEmpty() || classFilter.contains(callingClassNoNamespace))
+    {
+      QString debugMapFileName = ConfigOptions().getDebugMapsFilename();
+      if (!debugMapFileName.toLower().endsWith(".osm"))
+      {
+        throw IllegalArgumentException("Debug maps must be written to an .osm file.");
+      }
 
-    const QString fileNumberStr = StringUtils::padFrontOfNumberStringWithZeroes(_debugMapCount, 4);
-    if (!title.isEmpty())
-    {
-      debugMapFileName =
-        debugMapFileName.replace(".osm", "-" + fileNumberStr + "-" + title + ".osm");
-    }
-    else
-    {
-      debugMapFileName = debugMapFileName.replace(".osm", "-" + fileNumberStr + ".osm");
-    }
-    LOG_INFO("Writing debug output to: ..." << FileUtils::toLogFormat(debugMapFileName, 30));
-    OsmMapPtr copy(new OsmMap(map));
+      LOG_VART(StringUtils::formatLargeNumber(map->getElementCount()));
+      LOG_VART(StringUtils::formatLargeNumber(map->getNodeCount()));
+      LOG_VART(StringUtils::formatLargeNumber(map->getWayCount()));
+      LOG_VART(StringUtils::formatLargeNumber(map->getRelationCount()));
 
-    if (matcher)
-    {
-      DebugNetworkMapCreator()
-        .addDebugElements(copy, matcher->getAllEdgeScores(), matcher->getAllVertexScores());
-    }
+      const QString fileNumberStr =
+        StringUtils::padFrontOfNumberStringWithZeroes(_debugMapCount, 4);
+      if (!title.isEmpty())
+      {
+        debugMapFileName =
+          debugMapFileName.replace(
+            ".osm", "-" + fileNumberStr + "-" + callingClassNoNamespace + "-" + title + ".osm");
+      }
+      else
+      {
+        debugMapFileName =
+          debugMapFileName.replace(
+            ".osm", "-" + fileNumberStr + "-" + callingClassNoNamespace + ".osm");
+      }
+      LOG_INFO("Writing debug output to: ..." << FileUtils::toLogFormat(debugMapFileName, 30));
+      OsmMapPtr copy(new OsmMap(map));
 
-    MapProjector::projectToWgs84(copy);
-    if (ConfigOptions().getDebugMapsRemoveMissingElements())
-    {
-      // Don't remove elements recursively here. You can end up with a map unreadable in JOSM if
-      // you don't remove missing elements here. However, in some cases (like debugging cut and
-      // replace), you want to see them in the raw output to know things are working the way they
-      // should be.
-      RemoveMissingElementsVisitor missingElementsRemover;
-      copy->visitRw(missingElementsRemover);
+      if (matcher)
+      {
+        DebugNetworkMapCreator()
+          .addDebugElements(copy, matcher->getAllEdgeScores(), matcher->getAllVertexScores());
+      }
+
+      MapProjector::projectToWgs84(copy);
+      if (ConfigOptions().getDebugMapsRemoveMissingElements())
+      {
+        // Don't remove elements recursively here. You can end up with a map unreadable in JOSM if
+        // you don't remove missing elements here. However, in some cases (like debugging cut and
+        // replace), you want to see them in the raw output to know things are working the way they
+        // should be.
+        RemoveMissingElementsVisitor missingElementsRemover;
+        copy->visitRw(missingElementsRemover);
+      }
+      write(copy, debugMapFileName, true, true);
+      _debugMapCount++;
     }
-    write(copy, debugMapFileName, true, true);
-    _debugMapCount++;
   }
 }
 
 void OsmMapWriterFactory::writeDebugMap(
   const std::shared_ptr<geos::geom::Geometry>& geometry,
-  std::shared_ptr<OGRSpatialReference> spatRef, const QString& title, NetworkMatcherPtr matcher)
+  std::shared_ptr<OGRSpatialReference> spatRef, const QString& callingClass, const QString& title,
+  NetworkMatcherPtr matcher)
 {
   OsmMapPtr map(new OsmMap(spatRef));
   // add the resulting alpha shape for debugging.
   GeometryToElementConverter(map).convertGeometryToElement(geometry.get(), Status::Invalid, -1);
 
-  writeDebugMap(map, title, matcher);
+  writeDebugMap(map, callingClass, title, matcher);
 }
 
 }

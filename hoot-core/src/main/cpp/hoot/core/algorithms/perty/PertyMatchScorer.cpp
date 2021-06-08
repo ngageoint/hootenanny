@@ -87,15 +87,15 @@ std::shared_ptr<MatchComparator> PertyMatchScorer::scoreMatches(const QString& r
   _conflatedMapOutput = conflatedMapOutputPath;
 
   OsmMapPtr referenceMap = _loadReferenceMap(referenceMapInputPath, referenceMapOutputPath);
-  OsmMapWriterFactory::writeDebugMap(referenceMap, "perty-ref-map");
+  OsmMapWriterFactory::writeDebugMap(referenceMap, className(), "ref-map");
   _loadPerturbedMap(referenceMapOutputPath, perturbedMapOutputPath);
   OsmMapPtr combinedMap =
     _combineMapsAndPrepareForConflation(referenceMap, perturbedMapOutputPath);
-  OsmMapWriterFactory::writeDebugMap(combinedMap, "perty-combined-map-1");
+  OsmMapWriterFactory::writeDebugMap(combinedMap, className(), "combined-map-1");
 
   MapProjector::projectToWgs84(combinedMap);
   IoUtils::saveMap(combinedMap, combinedMapOutputPath);
-  OsmMapWriterFactory::writeDebugMap(combinedMap, "perty-combined-map-2");
+  OsmMapWriterFactory::writeDebugMap(combinedMap, className(), "combined-map-2");
 
   return _conflateAndScoreMatches(combinedMap, conflatedMapOutputPath);
 }
@@ -109,9 +109,9 @@ OsmMapPtr PertyMatchScorer::_loadReferenceMap(const QString& referenceMapInputPa
 
   OsmMapPtr referenceMap(new OsmMap());
   IoUtils::loadMap(referenceMap, referenceMapInputPath, false, Status::Unknown1);
-  OsmMapWriterFactory::writeDebugMap(referenceMap, "perty-ref-map-initial");
+  OsmMapWriterFactory::writeDebugMap(referenceMap, className(), "ref-map-initial");
   MapCleaner().apply(referenceMap);
-  OsmMapWriterFactory::writeDebugMap(referenceMap, "perty-cleaned-ref-map");
+  OsmMapWriterFactory::writeDebugMap(referenceMap, className(), "cleaned-ref-map");
 
   std::shared_ptr<AddRef1Visitor> addRef1Visitor(new AddRef1Visitor());
   referenceMap->visitRw(*addRef1Visitor);
@@ -121,7 +121,7 @@ OsmMapPtr PertyMatchScorer::_loadReferenceMap(const QString& referenceMapInputPa
   referenceMap->visitRw(*setAccuracyVisitor);
   LOG_VARD(referenceMap->getNodes().size());
   LOG_VARD(referenceMap->getWays().size());
-  OsmMapWriterFactory::writeDebugMap(referenceMap, "perty-tagged-ref-map");
+  OsmMapWriterFactory::writeDebugMap(referenceMap, className(), "tagged-ref-map");
 
   OsmMapPtr referenceMapCopy(referenceMap);
   MapProjector::projectToWgs84(referenceMapCopy);
@@ -140,9 +140,9 @@ void PertyMatchScorer::_loadPerturbedMap(const QString& perturbedMapInputPath,
   // since updates to the names of the ref tags on this map will propagate to the map copied from
   OsmMapPtr perturbedMap(new OsmMap());
   IoUtils::loadMap(perturbedMap, perturbedMapInputPath, false, Status::Unknown2);
-  OsmMapWriterFactory::writeDebugMap(perturbedMap, "perty-pre-perturbed-map");
+  OsmMapWriterFactory::writeDebugMap(perturbedMap, className(), "pre-perturbed-map");
   MapCleaner().apply(perturbedMap);
-  OsmMapWriterFactory::writeDebugMap(perturbedMap, "perty-pre-perturbed-cleaned-map");
+  OsmMapWriterFactory::writeDebugMap(perturbedMap, className(), "pre-perturbed-cleaned-map");
 
   std::shared_ptr<TagRenameKeyVisitor> tagRenameKeyVisitor(
     new TagRenameKeyVisitor(MetadataTags::Ref1(), MetadataTags::Ref2()));
@@ -153,7 +153,7 @@ void PertyMatchScorer::_loadPerturbedMap(const QString& perturbedMapInputPath,
   perturbedMap->visitRw(*setAccuracyVisitor);
   LOG_VARD(perturbedMap->getNodes().size());
   LOG_VARD(perturbedMap->getWays().size());
-  OsmMapWriterFactory::writeDebugMap(perturbedMap, "perty-pre-perturbed-tagged-map");
+  OsmMapWriterFactory::writeDebugMap(perturbedMap, className(), "pre-perturbed-tagged-map");
 
   LOG_DEBUG("Perturbing the copied reference data and saving it to: " << perturbedMapOutputPath);
 
@@ -165,7 +165,7 @@ void PertyMatchScorer::_loadPerturbedMap(const QString& perturbedMapInputPath,
 
   MapProjector::projectToWgs84(perturbedMap);
   IoUtils::saveMap(perturbedMap, perturbedMapOutputPath);
-  OsmMapWriterFactory::writeDebugMap(perturbedMap, "perty-perturbed-map");
+  OsmMapWriterFactory::writeDebugMap(perturbedMap, className(), "perturbed-map");
 }
 
 OsmMapPtr PertyMatchScorer::_combineMapsAndPrepareForConflation(
@@ -175,14 +175,14 @@ OsmMapPtr PertyMatchScorer::_combineMapsAndPrepareForConflation(
 
   OsmMapPtr combinedMap(referenceMap);
   IoUtils::loadMap(combinedMap, perturbedMapInputPath, false, Status::Unknown2);
-  OsmMapWriterFactory::writeDebugMap(combinedMap, "perty-before-prepped-map");
+  OsmMapWriterFactory::writeDebugMap(combinedMap, className(), "before-prepped-map");
   LOG_VARD(combinedMap->getNodes().size());
   LOG_VARD(combinedMap->getWays().size());
 
   // Not sure there is ever any reason to set score.matches.remove.nodes=true here, but leaving it '
   // configurable for now.
   MatchScoringMapPreparer().prepMap(combinedMap, ConfigOptions().getScoreMatchesRemoveNodes());
-  OsmMapWriterFactory::writeDebugMap(combinedMap, "perty-after-prepped-map");
+  OsmMapWriterFactory::writeDebugMap(combinedMap, className(), "after-prepped-map");
   LOG_VARD(combinedMap->getNodes().size());
   LOG_VARD(combinedMap->getWays().size());
 
@@ -193,7 +193,7 @@ OsmMapPtr PertyMatchScorer::_combineMapsAndPrepareForConflation(
     std::shared_ptr<RubberSheet> rubberSheetOp(new RubberSheet());
     rubberSheetOp->setConfiguration(_settings);
     rubberSheetOp->apply(combinedMap);
-    OsmMapWriterFactory::writeDebugMap(combinedMap, "perty-after-rubber-sheet");
+    OsmMapWriterFactory::writeDebugMap(combinedMap, className(), "after-rubber-sheet");
 
     LOG_VARD(combinedMap->getNodes().size());
     LOG_VARD(combinedMap->getWays().size());
@@ -215,7 +215,7 @@ std::shared_ptr<MatchComparator> PertyMatchScorer::_conflateAndScoreMatches(
   // are, however, cleaning each input map with MapCleaner beforehand.
   UnifyingConflator conflator;
   conflator.apply(conflationCopy);
-  OsmMapWriterFactory::writeDebugMap(conflationCopy, "perty-conflated-map");
+  OsmMapWriterFactory::writeDebugMap(conflationCopy, className(), "conflated-map");
 
   try
   {
@@ -230,7 +230,7 @@ std::shared_ptr<MatchComparator> PertyMatchScorer::_conflateAndScoreMatches(
   }
 
   _saveMap(conflationCopy, conflatedMapOutputPath);
-  OsmMapWriterFactory::writeDebugMap(conflationCopy, "perty-after-eval-matches");
+  OsmMapWriterFactory::writeDebugMap(conflationCopy, className(), "after-eval-matches");
 
   return comparator;
 }

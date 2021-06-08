@@ -234,7 +234,7 @@ void IoUtils::cropToBounds(OsmMapPtr& map, const std::shared_ptr<geos::geom::Geo
   LOG_DEBUG(cropper.getCompletedStatusMessage());
   LOG_VARD(StringUtils::formatLargeNumber(map->getElementCount()));
 
-  OsmMapWriterFactory::writeDebugMap(map, "cropped-to-bounds");
+  OsmMapWriterFactory::writeDebugMap(map, className(), "cropped-to-bounds");
 }
 
 std::shared_ptr<ElementVisitorInputStream> IoUtils::getVisitorInputStream(
