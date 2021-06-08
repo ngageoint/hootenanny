@@ -53,6 +53,9 @@ XML format is a richer format than Shapefile and supports such things as multipl
 inherit topology and arbitrary tagging. For these reasons the conversion to Shapefile is a lossy conversion.
 * To use file geodatabases, the File Geodatabase module must be compiled into your version of GDAL to work. See
 http://trac.osgeo.org/gdal/wiki/FileGDB for details.
+* A file geodatabase with files in a directory must have the top level directory named as *.gdb in order to be 
+recognized correctly.
+* A directory of shape files must have the top level directory named as *.shp in order to be recognized correctly.
 * The format for specifying zip file data is: "/vsizip/<path to Zip file>/<path to the shape file INSIDE the Zip file>. 
 The "/" are field separators. If you get errors using absolute paths, check that you have the right number of "/".
 ** a Zip file located at /gis-data/test_data.zip

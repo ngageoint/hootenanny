@@ -493,7 +493,7 @@ void OgrReader::read(
     // Read each layer's data.
     for (int j = 0; j < layers.size(); j++)
     {
-      PROGRESS_INFO(
+      PROGRESS_STATUS(
         "Reading layer " << j + 1 << " of " << layers.size() << ": " << layers[j] << "...");
       LOG_VART(progressWeights[j]);
       if (!jobSource.isEmpty() && numTasks != -1)
@@ -509,7 +509,7 @@ void OgrReader::read(
   }
   else
   {
-    // For other OGR types, just read a single layer.
+    // For other OGR types, just assume only a single layer.
     _d->open(path, layer);
     _d->read(map);
   }
@@ -1164,7 +1164,7 @@ void OgrReaderInternal::read(const OsmMapPtr& map)
       "layer name?");
   }
 
-  LOG_INFO("Reading: " << _layerName.toLatin1().data() << "...");
+  LOG_STATUS("Reading: " << _layerName.toLatin1().data() << "...");
 
   const int statusUpdateInterval = ConfigOptions().getTaskStatusUpdateInterval();
   OGRFeature* f;
