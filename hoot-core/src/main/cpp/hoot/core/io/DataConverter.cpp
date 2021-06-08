@@ -250,8 +250,7 @@ void DataConverter::convert(const QStringList& inputs, const QString& output)
   }
   // If none of the above conditions was satisfied, we'll call the generic convert routine. If no
   // translation direction was specified, we'll try to guess it and let the user know that we did.
-  // Note that it still is possible an OGR format can go in here, if you didn't specify a
-  // translation.
+  // Note that it still is possible an OGR format can be processed here.
   else
   {
     _convert(inputs, output);
@@ -521,42 +520,6 @@ void DataConverter::_convertToOgr(const QStringList& inputs, const QString& outp
   }
 }
 
-void DataConverter::_setFromOgrOptions()
-{
-  // The ordering for these added ops matters. Let's run them after any user specified convert ops
-  // to avoid unnecessary processing time. Also, if any of these ops gets added here, then we never
-  // have a streaming OGR read, since they all require a full map...don't love that...but not sure
-  // what can be done about it.
-
-  // Nodes that are very close together but with different IDs present a problem from OGR sources,
-  // so let's merge them together.
-  if (ConfigOptions().getOgr2osmMergeNearbyNodes())
-  {
-    if (!_convertOps.contains(DuplicateNodeRemover::className()))
-    {
-      _convertOps.append(DuplicateNodeRemover::className());
-      // also run dupe way node removal
-      _convertOps.append(RemoveDuplicateWayNodesVisitor::className());
-    }
-  }
-
-  // Complex building simplification is primarily meant for UFD buildings, commonly read from OGR
-  // sources.
-  if (ConfigOptions().getOgr2osmSimplifyComplexBuildings())
-  {
-    // Building outline updating needs to happen after building part merging, or we can end up with
-    // role verification warnings in JOSM.
-    if (!_convertOps.contains(BuildingPartMergeOp::className()))
-    {
-      _convertOps.append(BuildingPartMergeOp::className());
-    }
-    if (!_convertOps.contains(BuildingOutlineUpdateOp::className()))
-    {
-      _convertOps.append(BuildingOutlineUpdateOp::className());
-    }
-  }
-}
-
 void DataConverter::_convertFromOgr(const QStringList& inputs, const QString& output)
 {
   LOG_DEBUG("_convertFromOgr");
@@ -575,14 +538,14 @@ void DataConverter::_convertFromOgr(const QStringList& inputs, const QString& ou
 
   _progress.set(0.0, "Loading maps: ..." + FileUtils::toLogFormat(inputs, _printLengthMax) + "...");
 
-  // see similar note in _convertToOgr
+  // See similar note in _convertToOgr.
   _convertOps.removeAll(SchemaTranslationOp::className());
   _convertOps.removeAll(SchemaTranslationVisitor::className());
   LOG_VARD(_convertOps);
 
   _setFromOgrOptions();
-  // Inclined to do this here: _convertOps.removeDuplicates(), but there could be some workflows
-  // where the same op needs to be called more than once.
+  // Inclined to add _convertOps.removeDuplicates() here, but there could be some workflows where
+  // the same op needs to be called more than once.
   LOG_VARD(_convertOps);
 
   // The number of task steps here must be updated as you add/remove job steps in the logic.
@@ -649,54 +612,6 @@ void DataConverter::_convertFromOgr(const QStringList& inputs, const QString& ou
   currentTask++;
 }
 
-void DataConverter::_setToOgrOptions(const QString& output)
-{
-  // This code path has always assumed translation to OGR and never reads the direction, but let's
-  // warn callers that the opposite direction they specified won't be used.
-  if (_translationDirection == "toosm")
-  {
-    LOG_INFO(
-      "Ignoring specified schema.translation.direction=toosm and using toogr to write to " <<
-      "OGR output...");
-  }
-
-  // Set a config option so the translation script knows what the output format is. For this,
-  // output format == file extension. We are going to grab everything after the last "." in the
-  // output file name and use it as the file extension.
-  QString outputFormat = "";
-  if (output.lastIndexOf(".") > -1)
-  {
-    outputFormat = output.right(output.size() - output.lastIndexOf(".") - 1).toLower();
-  }
-  conf().set(ConfigOptions::getOgrOutputFormatKey(), outputFormat);
-
-  LOG_DEBUG(conf().getString(ConfigOptions::getOgrOutputFormatKey()));
-
-  // Translation for going to OGR is always required and happens in the writer itself. It is not to
-  // be done with convert ops, so let's ignore any translation ops that were specified.
-  _convertOps.removeAll(SchemaTranslationOp::className());
-  _convertOps.removeAll(SchemaTranslationVisitor::className());
-}
-
-QString DataConverter::_outputFormatToTranslationDirection(const QString& output) const
-{
-  if (IoUtils::isSupportedOgrFormat(output, true))
-  {
-    LOG_INFO("No translation direction specified. Assuming 'toogr' based on output format...");
-    return "toogr";
-  }
-  else if (IoUtils::isSupportedOsmFormat(output))
-  {
-    LOG_INFO("No translation direction specified. Assuming 'toosm' based on output format...");
-    return "toosm";
-  }
-  else
-  {
-    LOG_INFO("No translation direction specified. Using 'toosm'...");
-    return "toosm";
-  }
-}
-
 void DataConverter::_convert(const QStringList& inputs, const QString& output)
 {
   LOG_DEBUG("general convert");
@@ -705,7 +620,7 @@ void DataConverter::_convert(const QStringList& inputs, const QString& output)
   conf().set(ConfigOptions::getReaderUseFileStatusKey(), true);
   conf().set(ConfigOptions::getReaderKeepStatusTagKey(), true);
 
-  // See note in convert. An OGR format could still be processed here. (?)
+  // See note in convert. An OGR format could still be processed here.
   if (IoUtils::anyAreSupportedOgrFormats(inputs, true))
   {
     _setFromOgrOptions();
@@ -823,6 +738,113 @@ void DataConverter::_convert(const QStringList& inputs, const QString& output)
   }
 }
 
+void DataConverter::_exportToShapeWithCols(const QString& output, const QStringList& cols,
+                                           const OsmMapPtr& map) const
+{
+  LOG_DEBUG("_exportToShapeWithCols");
+
+  QElapsedTimer timer;
+  timer.start();
+
+  std::shared_ptr<OsmMapWriter> writer =
+    OsmMapWriterFactory::createWriter(output);
+  std::shared_ptr<ShapefileWriter> shapeFileWriter =
+    std::dynamic_pointer_cast<ShapefileWriter>(writer);
+  //currently only one shape file writer, and this is it
+  assert(shapeFileWriter.get());
+  shapeFileWriter->setColumns(cols);
+  shapeFileWriter->open(output);
+  shapeFileWriter->write(map, output);
+
+  LOG_INFO(
+    "Wrote " << StringUtils::formatLargeNumber(map->getElementCount()) <<
+    " elements to output in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
+}
+
+void DataConverter::_setFromOgrOptions()
+{
+  // The ordering for these added ops matters. Let's run them after any user specified convert ops
+  // to avoid unnecessary processing time. Also, if any of these ops gets added here, then we never
+  // have a streaming OGR read, since they all require a full map...don't love that...but not sure
+  // what can be done about it.
+
+  // Nodes that are very close together but with different IDs present a problem from OGR sources,
+  // so let's merge them together.
+  if (ConfigOptions().getOgr2osmMergeNearbyNodes())
+  {
+    if (!_convertOps.contains(DuplicateNodeRemover::className()))
+    {
+      _convertOps.append(DuplicateNodeRemover::className());
+      // also run dupe way node removal
+      _convertOps.append(RemoveDuplicateWayNodesVisitor::className());
+    }
+  }
+
+  // Complex building simplification is primarily meant for UFD buildings, commonly read from OGR
+  // sources.
+  if (ConfigOptions().getOgr2osmSimplifyComplexBuildings())
+  {
+    // Building outline updating needs to happen after building part merging, or we can end up with
+    // role verification warnings in JOSM.
+    if (!_convertOps.contains(BuildingPartMergeOp::className()))
+    {
+      _convertOps.append(BuildingPartMergeOp::className());
+    }
+    if (!_convertOps.contains(BuildingOutlineUpdateOp::className()))
+    {
+      _convertOps.append(BuildingOutlineUpdateOp::className());
+    }
+  }
+}
+
+void DataConverter::_setToOgrOptions(const QString& output)
+{
+  // This code path has always assumed translation to OGR and never reads the direction, but let's
+  // warn callers that the opposite direction they specified won't be used.
+  if (_translationDirection == "toosm")
+  {
+    LOG_INFO(
+      "Ignoring specified schema.translation.direction=toosm and using toogr to write to " <<
+      "OGR output...");
+  }
+
+  // Set a config option so the translation script knows what the output format is. For this,
+  // output format == file extension. We are going to grab everything after the last "." in the
+  // output file name and use it as the file extension.
+  QString outputFormat = "";
+  if (output.lastIndexOf(".") > -1)
+  {
+    outputFormat = output.right(output.size() - output.lastIndexOf(".") - 1).toLower();
+  }
+  conf().set(ConfigOptions::getOgrOutputFormatKey(), outputFormat);
+
+  LOG_DEBUG(conf().getString(ConfigOptions::getOgrOutputFormatKey()));
+
+  // Translation for going to OGR is always required and happens in the writer itself. It is not to
+  // be done with convert ops, so let's ignore any translation ops that were specified.
+  _convertOps.removeAll(SchemaTranslationOp::className());
+  _convertOps.removeAll(SchemaTranslationVisitor::className());
+}
+
+QString DataConverter::_outputFormatToTranslationDirection(const QString& output) const
+{
+  if (IoUtils::isSupportedOgrFormat(output, true))
+  {
+    LOG_INFO("No translation direction specified. Assuming 'toogr' based on output format...");
+    return "toogr";
+  }
+  else if (IoUtils::isSupportedOsmFormat(output))
+  {
+    LOG_INFO("No translation direction specified. Assuming 'toosm' based on output format...");
+    return "toosm";
+  }
+  else
+  {
+    LOG_INFO("No translation direction specified. Using 'toosm'...");
+    return "toosm";
+  }
+}
+
 void DataConverter::_handleNonOgrOutputTranslationOpts()
 {
   //a previous check was done to make sure both a translation and export cols weren't specified
@@ -847,29 +869,6 @@ void DataConverter::_handleNonOgrOutputTranslationOpts()
       SchemaTranslationOp::className(), SchemaTranslationVisitor::className());
   }
   LOG_VARD(_convertOps);
-}
-
-void DataConverter::_exportToShapeWithCols(const QString& output, const QStringList& cols,
-                                           const OsmMapPtr& map) const
-{
-  LOG_DEBUG("_exportToShapeWithCols");
-
-  QElapsedTimer timer;
-  timer.start();
-
-  std::shared_ptr<OsmMapWriter> writer =
-    OsmMapWriterFactory::createWriter(output);
-  std::shared_ptr<ShapefileWriter> shapeFileWriter =
-    std::dynamic_pointer_cast<ShapefileWriter>(writer);
-  //currently only one shape file writer, and this is it
-  assert(shapeFileWriter.get());
-  shapeFileWriter->setColumns(cols);
-  shapeFileWriter->open(output);
-  shapeFileWriter->write(map, output);
-
-  LOG_INFO(
-    "Wrote " << StringUtils::formatLargeNumber(map->getElementCount()) <<
-    " elements to output in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
 }
 
 }
