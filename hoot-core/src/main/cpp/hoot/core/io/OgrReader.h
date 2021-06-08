@@ -77,7 +77,7 @@ public:
   /**
    * Read all geometry data from the specified path.
    *
-   * @param path
+   * @param path TODO
    * @param layer Read only from this layer. If no layer is specified then read from all layers.
    * @param map map to load into
    */
