@@ -88,8 +88,6 @@ bool IoUtils::isSupportedOgrFormat(const QString& input, const bool allowDir)
     return false;
   }
 
-  LOG_VART(QFileInfo(input).isDir());
-  LOG_VART(FileUtils::dirContainsFileWithExtension(QFileInfo(input).dir(), "shp"));
   // input is a dir; only accepting a dir as input if it contains a shape file or is a file geodb
   if (QFileInfo(input).isDir())
   {
@@ -251,6 +249,8 @@ void IoUtils::loadMap(
   LOG_VART(path);
   LOG_VART(pathLayer);
   LOG_VART(justPath);
+  // We need to perform custom read logic for OGR inputs due to the fact they may have multiple
+  // layers per input file or multiple files per directory.
   if (isSupportedOgrFormat(path, true))
   {
     OgrReader reader;
@@ -262,6 +262,9 @@ void IoUtils::loadMap(
     }
     reader.setSchemaTranslationScript(translationScript);
 
+    // These are the OGR inputs types for which we need to iterate through layers. This list may
+    // eventually need to be expanded. May be able to tighten the dir condition to dirs with shape
+    // files only.
     if (path.endsWith(".gdb") || QFileInfo(path).isDir() || path.endsWith(".zip"))
     {
       QString pathCopy = path;
@@ -274,15 +277,19 @@ void IoUtils::loadMap(
         PROGRESS_INFO(
           "Reading layer " << j + 1 << " of " << layers.size() << ": " << layers[j] << "...");
         LOG_VART(progressWeights[j]);
-        reader.setProgress(
-          Progress(
-            ConfigOptions().getJobId(), jobSource, Progress::JobState::Running,
-            (float)j / (float)(layers.size() * numTasks), progressWeights[j]));
+        if (!jobSource.isEmpty() && numTasks != -1)
+        {
+          reader.setProgress(
+            Progress(
+              ConfigOptions().getJobId(), jobSource, Progress::JobState::Running,
+              (float)j / (float)(layers.size() * numTasks), progressWeights[j]));
+        }
         reader.read(path, layers[j], map);
       }
     }
     else
     {
+      // For other OGR types, just read a single layer.
       reader.read(justPath, pathLayer.size() > 1 ? pathLayer[1] : "", map);
     }
 
@@ -290,6 +297,7 @@ void IoUtils::loadMap(
   }
   else
   {
+    // This handles all non-OGR format reading.
     OsmMapReaderFactory::read(map, path, useFileId, defaultStatus);
   }
 }
@@ -305,7 +313,8 @@ void IoUtils::loadMaps(
 
 void IoUtils::saveMap(const OsmMapPtr& map, const QString& path)
 {
-  // We could pass progress in here to get more granular write status feedback.
+  // We could pass progress in here to get more granular write status feedback. Otherwise, this is
+  // merely a wrapper.
   OsmMapWriterFactory::write(map, path);
 }
 

@@ -30,53 +30,15 @@
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/schema/ScriptToOgrSchemaTranslator.h>
 #include <hoot/core/io/ElementCache.h>
 #include <hoot/core/util/Progress.h>
-#include <hoot/core/io/OgrReader.h>
 
 // Qt
 #include <QStringList>
 #include <QQueue>
-#include <QThread>
-#include <QMutex>
 
 namespace hoot
 {
-
-// TODO: move this to its own class file
-class elementTranslatorThread : public QThread
-{
-  Q_OBJECT
-  void run() override;
-
-public:
-
-  QString _translation;
-  QQueue<ElementPtr>* _pElementQ;
-  QMutex* _pTransFeaturesQMutex;
-  QMutex* _pInitMutex;
-  QQueue<std::pair<std::shared_ptr<geos::geom::Geometry>,
-         std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature>>>* _pTransFeaturesQ;
-  bool* _pFinishedTranslating;
-  ElementCachePtr _pElementCache;
-};
-
-class ogrWriterThread : public QThread
-{
-  Q_OBJECT
-  void run() override;
-
-public:
-
-  QString _translation;
-  QString _output;
-  QMutex* _pTransFeaturesQMutex;
-  QMutex* _pInitMutex;
-  QQueue<std::pair<std::shared_ptr<geos::geom::Geometry>,
-         std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature>>>* _pTransFeaturesQ;
-  bool* _pFinishedTranslating;
-};
 
 /**
  * Converts data from one Hootenanny supported format to another
@@ -134,8 +96,8 @@ private:
 
   void _validateInput(const QStringList& inputs, const QString& output) const;
 
-  // converts from any input to an OGR output; A translation is required, operations are memory
-  // bound, and if both input and output formats are OGR, this must be used.
+  // converts from any input to an OGR output; A translation is required and operations are memory
+  // bound.
   void _convertToOgr(const QStringList& inputs, const QString& output);
   // converts from an OGR input to any output; a translation is required
   void _convertFromOgr(const QStringList& inputs, const QString& output);
@@ -160,7 +122,7 @@ private:
   // _convertToOgr will call this to run the translator in a separate thread for a performance
   // increase if certain pre-conditions are met.
   void _transToOgrMT(const QStringList& inputs, const QString& output) const;
-  void _fillElementCache(
+  void _fillElementCacheMT(
     const QString& inputUrl, ElementCachePtr cachePtr, QQueue<ElementPtr>& workQ) const;
 };
 

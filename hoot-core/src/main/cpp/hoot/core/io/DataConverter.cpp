@@ -32,9 +32,12 @@
 #include <hoot/core/io/ElementStreamer.h>
 #include <hoot/core/io/IoUtils.h>
 #include <hoot/core/io/OgrWriter.h>
+#include <hoot/core/io/ElementTranslatorThread.h>
+#include <hoot/core/io/OgrWriterThread.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/io/ShapefileWriter.h>
+#include <hoot/core/schema/ScriptToOgrSchemaTranslator.h>
 #include <hoot/core/ops/BuildingOutlineUpdateOp.h>
 #include <hoot/core/ops/BuildingPartMergeOp.h>
 #include <hoot/core/ops/DuplicateNodeRemover.h>
@@ -43,7 +46,6 @@
 #include <hoot/core/schema/SchemaUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ConfigUtils.h>
-//#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
@@ -51,123 +53,18 @@
 #include <hoot/core/visitors/ProjectToGeographicVisitor.h>
 #include <hoot/core/visitors/RemoveDuplicateWayNodesVisitor.h>
 #include <hoot/core/visitors/SchemaTranslationVisitor.h>
-#include <hoot/js/v8Engine.h>
 
 // std
 #include <vector>
 
 // Qt
 #include <QElapsedTimer>
+#include <QMutex>
 
 namespace hoot
 {
 
 const QString DataConverter::JOB_SOURCE = "Convert";
-
-void elementTranslatorThread::run()
-{
-  //  Create an isolate for the thread
-  v8::Isolate::CreateParams params;
-  params.array_buffer_allocator = v8::ArrayBuffer::Allocator::NewDefaultAllocator();
-  v8::Isolate * threadIsolate = v8::Isolate::New(params);
-  threadIsolate->Enter();
-  v8::Locker v8Lock(threadIsolate);
-
-  ElementPtr pNewElement(nullptr);
-  ElementProviderPtr cacheProvider(_pElementCache);
-
-  // Setup writer used for translation
-  std::shared_ptr<OgrWriter> ogrWriter;
-  { // Mutex Scope
-    // We use this init mutex as a bandaid. Hoot uses a lot of problematic
-    // singletons that cause issues when you try to multithread stuff.
-    QMutexLocker lock(_pInitMutex);
-    ogrWriter.reset(new OgrWriter());
-    ogrWriter->setSchemaTranslationScript(_translation);
-    ogrWriter->initTranslator();
-    ogrWriter->setCache(_pElementCache);
-  }
-
-  while (!_pElementQ->empty())
-  {
-    pNewElement = _pElementQ->dequeue();
-
-    std::shared_ptr<geos::geom::Geometry> g;
-    std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature> tf;
-    ogrWriter->translateToFeatures(cacheProvider, pNewElement, g, tf);
-
-    { // Mutex Scope
-      QMutexLocker lock(_pTransFeaturesQMutex);
-      _pTransFeaturesQ->enqueue(std::pair<std::shared_ptr<geos::geom::Geometry>,
-                                std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature>>(g, tf));
-    }
-  }
-
-  { // Mutex Scope
-    QMutexLocker lock(_pTransFeaturesQMutex);
-    *_pFinishedTranslating = true;
-  }
-}
-
-void ogrWriterThread::run()
-{
-  // Messing with these parameters did not improve performance:
-  // http://trac.osgeo.org/gdal/wiki/ConfigOptions - e.g. using CPLSetConfigOption to set
-  // "GDAL_CACHEMAX" to "512" or using CPLSetConfigOption to set "FGDB_BULK_LOAD" to "YES"
-
-  //  Create an isolate for our thread
-  v8::Isolate::CreateParams params;
-  params.array_buffer_allocator = v8::ArrayBuffer::Allocator::NewDefaultAllocator();
-  v8::Isolate * threadIsolate = v8::Isolate::New(params);
-  threadIsolate->Enter();
-  v8::Locker v8Lock(threadIsolate);
-
-  bool done = false;
-  std::pair<std::shared_ptr<geos::geom::Geometry>,
-    std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature>> feature;
-
-  // Setup writer
-  std::shared_ptr<OgrWriter> ogrWriter;
-  { // Mutex Scope
-    QMutexLocker lock(_pInitMutex);
-    ogrWriter.reset(new OgrWriter());
-    ogrWriter->setSchemaTranslationScript(_translation);
-    ogrWriter->open(_output);
-  }
-
-  while (!done)
-  {
-    bool doSleep = false;
-
-    // Get element
-    { // Mutex Scope
-      QMutexLocker lock(_pTransFeaturesQMutex);
-      if (_pTransFeaturesQ->isEmpty())
-      {
-        doSleep = true;
-        if (*_pFinishedTranslating)
-        {
-          done = true;
-        }
-      }
-      else
-      {
-        feature = _pTransFeaturesQ->dequeue();
-      }
-    }
-
-    // Write element or sleep
-    if (doSleep)
-    {
-      msleep(100);
-    }
-    else
-    {
-      ogrWriter->writeTranslatedFeature(feature.first, feature.second);
-    }
-  }
-  ogrWriter->close();
-}
 
 int DataConverter::logWarnCount = 0;
 
@@ -222,21 +119,24 @@ void DataConverter::convert(const QStringList& inputs, const QString& output)
     "Converting ..." + FileUtils::toLogFormat(inputs, _printLengthMax) + " to ..." +
     FileUtils::toLogFormat(output, _printLengthMax) + "...");
 
+  // OGR format I/O is handled a little different compared to other formats, so we'll pick the
+  // most appropriate I/O logic path here based on the formats involved. This has been simplfied
+  // several times but there still seems to be some logic duplication, and this can probably still
+  // be simplified more.
+
   // If we're writing to an OGR format and multi-threaded processing was specified or if both input
-  // and output formats are OGR formats, we'll have to run the memory bounded _convertToOgr method.
+  // and output formats are OGR formats, we'll need to run the memory bounded _convertToOgr method.
   if ((IoUtils::isSupportedOgrFormat(output, true) && _translateMultithreaded) ||
       (IoUtils::areSupportedOgrFormats(inputs, true) &&
        IoUtils::isSupportedOgrFormat(output, true)))
   {
     _convertToOgr(inputs, output);
   }
-  // We require that a translation be present when converting from OGR, since OgrReader is tightly
-  // coupled to the translation logic. We also require that  the translation direction be to OSM or
-  // unspecified.
   else if (IoUtils::areSupportedOgrFormats(inputs, true))
   {
-    // If we have a gdb as input, we have to run through _convertFromOgr in order for the layer
-    // parsing to work correctly. So, we'll force a quick and dirty translation script here.
+    // We require that a translation be present when converting from OGR, since OgrReader is tightly
+    // coupled to the translation logic. If we have a gdb or a dir as input and no translation is
+    // present, we'll add a quick and dirty translation script here.
     if (_translation.isEmpty() &&
         (StringUtils::endsWithAny(inputs, ".gdb") || FileUtils::anyAreDirs(inputs)))
     {
@@ -244,9 +144,9 @@ void DataConverter::convert(const QStringList& inputs, const QString& output)
     }
     _convertFromOgr(inputs, output);
   }
-  // If none of the above conditions was satisfied, we'll call the generic convert routine. If no
-  // translation direction was specified, we'll try to guess it and let the user know that we did.
-  // Note that it still is possible an OGR format can be processed here.
+  // If none of the above conditions was satisfied, we'll call the generic convert routine. Note
+  // that _convert may still be passed some OGR formats, which is a bit confusing and further
+  // refactoring might change that.
   else
   {
     _convert(inputs, output);
@@ -315,102 +215,6 @@ void DataConverter::_validateInput(const QStringList& inputs, const QString& out
     // can't be written
     IoUtils::writeOutputDir(output);
   }
-}
-
-void DataConverter::_fillElementCache(
-  const QString& inputUrl, ElementCachePtr cachePtr, QQueue<ElementPtr>& workQ) const
-{
-  // Setup reader
-  std::shared_ptr<OsmMapReader> reader =
-    OsmMapReaderFactory::createReader(inputUrl);
-  reader->open(inputUrl);
-  std::shared_ptr<ElementInputStream> streamReader =
-    std::dynamic_pointer_cast<ElementInputStream>(reader);
-
-  std::shared_ptr<OGRSpatialReference> projection = streamReader->getProjection();
-  ProjectToGeographicVisitor visitor;
-  bool notGeographic = !projection->IsGeographic();
-
-  if (notGeographic)
-  {
-    visitor.initialize(projection);
-  }
-
-  while (streamReader->hasMoreElements())
-  {
-    ElementPtr pNewElement = streamReader->readNextElement();
-    if (!pNewElement)
-      continue;
-    if (notGeographic)
-    {
-      visitor.visit(pNewElement);
-    }
-
-    workQ.enqueue(pNewElement);
-    ConstElementPtr constElement(pNewElement);
-    cachePtr->addElement(constElement);
-  }
-
-  LOG_DEBUG("Done Reading");
-}
-
-void DataConverter::_transToOgrMT(const QStringList& inputs, const QString& output) const
-{
-  LOG_DEBUG("_transToOgrMT");
-
-  QQueue<ElementPtr> elementQ;
-  ElementCachePtr pElementCache(
-    new ElementCacheLRU(
-      ConfigOptions().getElementCacheSizeNode(),
-      ConfigOptions().getElementCacheSizeWay(),
-      ConfigOptions().getElementCacheSizeRelation()));
-  QMutex initMutex;
-  QMutex transFeaturesMutex;
-  QQueue<std::pair<std::shared_ptr<geos::geom::Geometry>,
-         std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature>>> transFeaturesQ;
-  bool finishedTranslating = false;
-
-  for (int i = 0; i < inputs.size(); i++)
-  {
-    QString input = inputs.at(i).trimmed();
-
-    LOG_DEBUG("Reading: " << input);
-
-    // Read all elements from an input
-    _fillElementCache(input, pElementCache, elementQ);
-  }
-
-  LOG_DEBUG("Element Cache Filled");
-
-  // Note the OGR writer is the slowest part of this whole operation, but it's relatively opaque
-  // to us as a 3rd party library. So the best we can do right now is try to translate & write in
-  // parallel.
-
-  // Setup & start translator thread
-  hoot::elementTranslatorThread transThread;
-  transThread._translation = _translation;
-  transThread._pElementQ = &elementQ;
-  transThread._pTransFeaturesQMutex = &transFeaturesMutex;
-  transThread._pInitMutex = &initMutex;
-  transThread._pTransFeaturesQ = &transFeaturesQ;
-  transThread._pFinishedTranslating = &finishedTranslating;
-  transThread._pElementCache = pElementCache;
-  transThread.start();
-  LOG_DEBUG("Translation Thread Started");
-
-  // Setup & start our writer thread
-  hoot::ogrWriterThread writerThread;
-  writerThread._translation = _translation;
-  writerThread._output = output;
-  writerThread._pTransFeaturesQMutex = &transFeaturesMutex;
-  writerThread._pInitMutex = &initMutex;
-  writerThread._pTransFeaturesQ = &transFeaturesQ;
-  writerThread._pFinishedTranslating = &finishedTranslating;
-  writerThread.start();
-  LOG_DEBUG("OGR Writer Thread Started");
-
-  LOG_DEBUG("Waiting for writer to finish...");
-  writerThread.wait();
 }
 
 void DataConverter::_convertToOgr(const QStringList& inputs, const QString& output)
@@ -566,6 +370,7 @@ void DataConverter::_convertFromOgr(const QStringList& inputs, const QString& ou
       continue;
     }
 
+    // Pass in the job and task info here so progress gets tracked.
     IoUtils::loadMap(
       map, input, ConfigOptions().getReaderUseDataSourceIds(),
       Status::fromString(ConfigOptions().getReaderSetDefaultStatus()), _translation,
@@ -755,6 +560,102 @@ void DataConverter::_exportToShapeWithCols(
   LOG_INFO(
     "Wrote " << StringUtils::formatLargeNumber(map->getElementCount()) <<
     " elements to output in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
+}
+
+void DataConverter::_fillElementCacheMT(
+  const QString& inputUrl, ElementCachePtr cachePtr, QQueue<ElementPtr>& workQ) const
+{
+  // Setup reader
+  std::shared_ptr<OsmMapReader> reader =
+    OsmMapReaderFactory::createReader(inputUrl);
+  reader->open(inputUrl);
+  std::shared_ptr<ElementInputStream> streamReader =
+    std::dynamic_pointer_cast<ElementInputStream>(reader);
+
+  std::shared_ptr<OGRSpatialReference> projection = streamReader->getProjection();
+  ProjectToGeographicVisitor visitor;
+  bool notGeographic = !projection->IsGeographic();
+
+  if (notGeographic)
+  {
+    visitor.initialize(projection);
+  }
+
+  while (streamReader->hasMoreElements())
+  {
+    ElementPtr pNewElement = streamReader->readNextElement();
+    if (!pNewElement)
+      continue;
+    if (notGeographic)
+    {
+      visitor.visit(pNewElement);
+    }
+
+    workQ.enqueue(pNewElement);
+    ConstElementPtr constElement(pNewElement);
+    cachePtr->addElement(constElement);
+  }
+
+  LOG_DEBUG("Done Reading");
+}
+
+void DataConverter::_transToOgrMT(const QStringList& inputs, const QString& output) const
+{
+  LOG_DEBUG("_transToOgrMT");
+
+  QQueue<ElementPtr> elementQ;
+  ElementCachePtr pElementCache(
+    new ElementCacheLRU(
+      ConfigOptions().getElementCacheSizeNode(),
+      ConfigOptions().getElementCacheSizeWay(),
+      ConfigOptions().getElementCacheSizeRelation()));
+  QMutex initMutex;
+  QMutex transFeaturesMutex;
+  QQueue<std::pair<std::shared_ptr<geos::geom::Geometry>,
+         std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature>>> transFeaturesQ;
+  bool finishedTranslating = false;
+
+  for (int i = 0; i < inputs.size(); i++)
+  {
+    QString input = inputs.at(i).trimmed();
+
+    LOG_DEBUG("Reading: " << input);
+
+    // Read all elements from an input
+    _fillElementCacheMT(input, pElementCache, elementQ);
+  }
+
+  LOG_DEBUG("Element Cache Filled");
+
+  // Note the OGR writer is the slowest part of this whole operation, but it's relatively opaque
+  // to us as a 3rd party library. So the best we can do right now is try to translate & write in
+  // parallel.
+
+  // Setup & start translator thread
+  ElementTranslatorThread transThread;
+  transThread.setTranslation(_translation);
+  transThread.setElementQueue(&elementQ);
+  transThread.setTransFeaturesQueueMutex(&transFeaturesMutex);
+  transThread.setInitMutex(&initMutex);
+  transThread.setTransFeaturesQueue(&transFeaturesQ);
+  transThread.setFinishedTranslating(&finishedTranslating);
+  transThread.setElementCache(pElementCache);
+  transThread.start();
+  LOG_DEBUG("Translation Thread Started");
+
+  // Setup & start our writer thread
+  OgrWriterThread writerThread;
+  writerThread.setTranslation(_translation);
+  writerThread.setOutput(output);
+  writerThread.setTransFeaturesQueueMutex(&transFeaturesMutex);
+  writerThread.setInitMutex(&initMutex);
+  writerThread.setTransFeaturesQueue(&transFeaturesQ);
+  writerThread.setFinishedTranslating(&finishedTranslating);
+  writerThread.start();
+  LOG_DEBUG("OGR Writer Thread Started");
+
+  LOG_DEBUG("Waiting for writer to finish...");
+  writerThread.wait();
 }
 
 void DataConverter::_setFromOgrOptions()

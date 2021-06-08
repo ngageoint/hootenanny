@@ -98,10 +98,11 @@ public:
     @param useFileId if true, uses the element ID's in the map file; otherwise, generates new
     element ID's
     @param defaultStatus the hoot status to assign to all elements
-    @param translationScript TODO
-    @param ogrFeatureLimit TODO
-    @param jobSource TODO
-    @param numTasks TODO
+    @param translationScript script used to translate data; required only if the input is an OGR
+    format
+    @param ogrFeatureLimit limit of features to read per input; applicable to OGR inputs only
+    @param jobSource job name for status reporting; applicable to OGR inputs only
+    @param numTasks number of job tasks being performed; applicable to OGR inputs only
     */
   static void loadMap(
     const OsmMapPtr& map, const QString& path, bool useFileId,
@@ -126,7 +127,6 @@ public:
 
     @param map the map object to save
     @param path the file path to save the map to
-    @todo get rid of this?
    */
   static void saveMap(const OsmMapPtr& map, const QString& path);
 
@@ -196,6 +196,9 @@ private:
    */
   static std::vector<float> _getOgrInputProgressWeights(
     const OgrReader& reader, const QString& input, const QStringList& layers);
+  /*
+   * Determines the list of layers in an OGR input. The reader must already have been initialized.
+   */
   static QStringList _getOgrLayersFromPath(const OgrReader& reader, QString& input);
 };
 

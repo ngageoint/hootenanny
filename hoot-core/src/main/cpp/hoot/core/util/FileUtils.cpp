@@ -250,14 +250,14 @@ QString FileUtils::toLogFormat(QStringList urls, int characters)
   return result.right((characters >= 0) ? characters : result.length());
 }
 
-bool FileUtils::anyAreDirs(const QStringList& inputs)
+bool FileUtils::anyAreDirs(const QStringList& paths)
 {
-  if (inputs.empty())
+  if (paths.empty())
     return false;
 
-  for (int i = 0; i < inputs.size(); i++)
+  for (int i = 0; i < paths.size(); i++)
   {
-    if (QFileInfo(inputs.at(i)).isDir())
+    if (QFileInfo(paths.at(i)).isDir())
       return true;
   }
   return false;
