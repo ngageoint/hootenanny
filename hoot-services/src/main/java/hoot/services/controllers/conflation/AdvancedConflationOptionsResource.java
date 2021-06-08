@@ -228,6 +228,18 @@ public class AdvancedConflationOptionsResource {
                     diffTemplate = (JSONArray) diffOpts.get("members");
 
                     addMemberData(diffTemplate);
+
+                    //Add dropdown for road algorithm
+                    JSONObject roadObj = (JSONObject) hoot2Opts.stream().filter(config -> {
+                        return ((JSONObject) config).get("name").equals("Roads");
+                    }).findFirst().orElse(null);
+                    if (roadObj != null) {
+                        JSONArray roadOpts = (JSONArray) roadObj.get("members");
+                        JSONObject roadAlg = (JSONObject) roadOpts.stream().filter(config -> {
+                            return ((JSONObject) config).get("id").equals("RoadEngines");
+                        }).findFirst().orElse(null);
+                        diffTemplate.add(roadAlg);
+                    }
                 }
                 template = diffTemplate;
             }
