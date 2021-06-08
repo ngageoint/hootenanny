@@ -67,7 +67,7 @@ public:
    * Writes a map useful for debugging
    *
    * @param map the map to write
-   * @param callingClass TODO
+   * @param callingClass name of the class calling this method
    * @param title a descriptive title
    * @param matcher If the Network conflation algorithm was used to generate the input data, pass
    * in the matcher used to write additional debugging information.
@@ -80,8 +80,8 @@ public:
    * Writes a feature geometry useful for debugging
    *
    * @param geometry the geometry to write
-   * @param spatRef TODO
-   * @param callingClass TODO
+   * @param spatRef the spatial reference the geometry being written is in
+   * @param callingClass name of the class calling this method
    * @param title a descriptive title
    * @param matcher If the Network conflation algorithm was used to generate the input data, pass
    * in the matcher used to write additional debugging information.
