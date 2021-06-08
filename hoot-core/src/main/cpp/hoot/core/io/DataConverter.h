@@ -30,52 +30,15 @@
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/schema/ScriptToOgrSchemaTranslator.h>
 #include <hoot/core/io/ElementCache.h>
 #include <hoot/core/util/Progress.h>
-#include <hoot/core/io/OgrReader.h>
 
 // Qt
 #include <QStringList>
 #include <QQueue>
-#include <QThread>
-#include <QMutex>
 
 namespace hoot
 {
-
-class elementTranslatorThread : public QThread
-{
-  Q_OBJECT
-  void run() override;
-
-public:
-
-  QString _translation;
-  QQueue<ElementPtr>* _pElementQ;
-  QMutex* _pTransFeaturesQMutex;
-  QMutex* _pInitMutex;
-  QQueue<std::pair<std::shared_ptr<geos::geom::Geometry>,
-         std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature>>>* _pTransFeaturesQ;
-  bool* _pFinishedTranslating;
-  ElementCachePtr _pElementCache;
-};
-
-class ogrWriterThread : public QThread
-{
-  Q_OBJECT
-  void run() override;
-
-public:
-
-  QString _translation;
-  QString _output;
-  QMutex* _pTransFeaturesQMutex;
-  QMutex* _pInitMutex;
-  QQueue<std::pair<std::shared_ptr<geos::geom::Geometry>,
-         std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature>>>* _pTransFeaturesQ;
-  bool* _pFinishedTranslating;
-};
 
 /**
  * Converts data from one Hootenanny supported format to another
@@ -133,44 +96,34 @@ private:
 
   void _validateInput(const QStringList& inputs, const QString& output) const;
 
-  // converts from any input to an OGR output; A translation is required, operations are memory
-  // bound, and if both input and output formats are OGR, this must be used.
+  // converts from any input to an OGR output; A translation is required and operations are memory
+  // bound.
   void _convertToOgr(const QStringList& inputs, const QString& output);
-
-  // _convertToOgr will call this to run the translator in a separate thread for a performance
-  // increase if certain pre-conditions are met.
-  void _transToOgrMT(const QStringList& inputs, const QString& output) const;
-  void _fillElementCache(
-    const QString& inputUrl, ElementCachePtr cachePtr, QQueue<ElementPtr>& workQ) const;
-
   // converts from an OGR input to any output; a translation is required
   void _convertFromOgr(const QStringList& inputs, const QString& output);
-
   /*
    * This method handles all conversions including OGR conversions not done by _convertToOgr or
    * _convertFromOgr. OGR conversions performed by this method will not be memory bound.
    */
   void _convert(const QStringList& inputs, const QString& output);
+
   // sets ogr options only for _convert
   void _setFromOgrOptions();
   void _setToOgrOptions(const QString& output);
   // This handles configures translations options correctly for non-OGR outputs.
   void _handleNonOgrOutputTranslationOpts();
   QString _outputFormatToTranslationDirection(const QString& output) const;
+
   // If specific columns were specified for export to a shape file, then this is called.
   void _exportToShapeWithCols(
     const QString& output, const QStringList& cols, const OsmMapPtr& map) const;
-
-  /*
-   * Attempts to determine the relative weighting of each layer in an OGR data source based on
-   * feature size. If the feature size hasn't already been calculated for each layer, then a even
-   * distribution of weighting between layers is returned.
-   */
-  std::vector<float> _getOgrInputProgressWeights(
-    const OgrReader& reader, const QString& input, const QStringList& layers) const;
-  QStringList _getOgrLayersFromPath(const OgrReader& reader, QString& input) const;
-
   bool _shapeFileColumnsSpecified() const { return !_shapeFileColumns.isEmpty(); }
+
+  // _convertToOgr will call this to run the translator in a separate thread for a performance
+  // increase if certain pre-conditions are met.
+  void _transToOgrMT(const QStringList& inputs, const QString& output) const;
+  void _fillElementCacheMT(
+    const QString& inputUrl, ElementCachePtr cachePtr, QQueue<ElementPtr>& workQ) const;
 };
 
 }

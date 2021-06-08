@@ -109,6 +109,14 @@ public:
   static QStringList readFileToList(const QString& inputPath);
 
   /**
+   * Determines if any path in a collection of paths are directories
+   *
+   * @param paths paths to examine
+   * @return true if any input path is a directory; false otherwise
+   */
+  static bool anyAreDirs(const QStringList& paths);
+
+  /**
    * Convert a URL (file path, database URL, or other resource location) to a loggable format
    * Removes usernames, passwords, ip addresses, etc. and truncates the filename if needed
    *

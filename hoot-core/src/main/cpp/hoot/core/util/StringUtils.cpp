@@ -259,6 +259,19 @@ bool StringUtils::endsWithAny(const QString& input, const QStringList& toCompare
   return false;
 }
 
+bool StringUtils::endsWithAny(const QStringList& inputs, const QString& compareStr,
+                              Qt::CaseSensitivity caseSensitivity)
+{
+  for (int i = 0; i < inputs.size(); i++)
+  {
+    if (inputs.at(i).endsWith(compareStr, caseSensitivity))
+    {
+      return true;
+    }
+  }
+  return false;
+}
+
 QString StringUtils::endsWithAnyAsStr(const QString& input, const QStringList& toCompare,
                                       Qt::CaseSensitivity caseSensitivity)
 {
