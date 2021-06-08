@@ -54,9 +54,7 @@ class OgrReaderTest : public HootTestFixture
 
 public:
 
-    OgrReaderTest()
-      : HootTestFixture("test-files/",
-                        UNUSED_PATH)
+    OgrReaderTest() : HootTestFixture("test-files/", UNUSED_PATH)
     {
     }
 

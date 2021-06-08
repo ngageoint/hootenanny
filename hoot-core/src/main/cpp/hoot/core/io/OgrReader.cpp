@@ -66,8 +66,7 @@ namespace hoot
 HOOT_FACTORY_REGISTER(OsmMapReader, OgrReader)
 
 /**
- * I've put this in the C++ to avoid too much header nastiness for the classes that use the
- * OgrReader.
+ * This in the C++ to avoid too much header nastiness for the classes that use the OgrReader.
  */
 class OgrReaderInternal : public ProgressReporter
 {
@@ -96,8 +95,6 @@ public:
 
   QRegExp getNameFilter();
 
-  long getFeatureCount() const { return _featureCount; }
-
   QStringList getLayersWithGeometry(const QString& path) const;
 
   std::shared_ptr<Envelope> getBoundingBoxFromConfig(
@@ -106,6 +103,7 @@ public:
   void initializePartial();
   void setUseDataSourceIds(bool useIds);
 
+  long getFeatureCount() const { return _featureCount; }
   QString getTranslationFile() const { return _translatePath; }
   Meters getDefaultCircularError() const { return _defaultCircularError; }
   Status getDefaultStatus() const { return _status; }
@@ -245,13 +243,11 @@ private:
   OgrReaderInternal* _d;
 };
 
-OgrReader::OgrReader()
-  : _d(new OgrReaderInternal())
+OgrReader::OgrReader() : _d(new OgrReaderInternal())
 {
 }
 
-OgrReader::OgrReader(const QString& path)
-  : _d(new OgrReaderInternal())
+OgrReader::OgrReader(const QString& path) : _d(new OgrReaderInternal())
 {
   if (isSupported(path) == true)
   {

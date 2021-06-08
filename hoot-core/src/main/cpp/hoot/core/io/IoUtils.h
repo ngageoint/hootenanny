@@ -99,13 +99,15 @@ public:
     element ID's
     @param defaultStatus the hoot status to assign to all elements
     @param translationScript script used to translate data; required only if the input is an OGR
-    format
-    @param ogrFeatureLimit limit of features to read per input; applicable to OGR inputs only
-    @param jobSource job name for status reporting; applicable to OGR inputs only
-    @param numTasks number of job tasks being performed; applicable to OGR inputs only
+    format; ignored otherwise
+    @param ogrFeatureLimit limit of features to read per input; applicable to OGR inputs only;
+    ignored otherwise
+    @param jobSource job name for status reporting; applicable to OGR inputs only; ignored otherwise
+    @param numTasks number of job tasks being performed; applicable to OGR inputs only;
+    ignored otherwise
     */
   static void loadMap(
-    const OsmMapPtr& map, const QString& path, bool useFileId,
+    const OsmMapPtr& map, const QString& path, bool useFileId = true,
     Status defaultStatus = Status::Invalid, const QString& translationScript = "",
     const int ogrFeatureLimit = -1, const QString& jobSource = "", const int numTasks = -1);
 

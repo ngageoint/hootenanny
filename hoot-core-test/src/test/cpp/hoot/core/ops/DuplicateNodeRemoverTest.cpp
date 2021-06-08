@@ -28,8 +28,8 @@
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/io/OgrReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
+#include <hoot/core/io/IoUtils.h>
 #include <hoot/core/ops/DuplicateNodeRemover.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/elements/MapProjector.h>
@@ -62,13 +62,12 @@ public:
 
   void runBasicTest()
   {
-    OgrReader reader;
     OsmMapPtr map(new OsmMap());
-    reader.read(_inputPath + "jakarta_raya_coastline.shp", "", map);
+    IoUtils::loadMap(map, _inputPath + "jakarta_raya_coastline.shp", true);
     MapProjector::projectToOrthographic(map);
     CPPUNIT_ASSERT_EQUAL(604, (int)map->getNodes().size());
 
-    // merge all nodes within a meter.
+    // Merge all nodes within a meter.
     DuplicateNodeRemover::removeNodes(map, 1.0);
 
     CPPUNIT_ASSERT_EQUAL(601, (int)map->getNodes().size());
