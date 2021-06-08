@@ -43,7 +43,7 @@
 #include <hoot/core/schema/SchemaUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ConfigUtils.h>
-#include <hoot/core/util/Factory.h>
+//#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
@@ -51,7 +51,6 @@
 #include <hoot/core/visitors/ProjectToGeographicVisitor.h>
 #include <hoot/core/visitors/RemoveDuplicateWayNodesVisitor.h>
 #include <hoot/core/visitors/SchemaTranslationVisitor.h>
-#include <hoot/core/visitors/WayGeneralizeVisitor.h>
 #include <hoot/js/v8Engine.h>
 
 // std
@@ -223,14 +222,6 @@ void DataConverter::convert(const QStringList& inputs, const QString& output)
     "Converting ..." + FileUtils::toLogFormat(inputs, _printLengthMax) + " to ..." +
     FileUtils::toLogFormat(output, _printLengthMax) + "...");
 
-  // If we have a gdb as input, we have to run through _convertFromOgr in order for the layer
-  // parsing to work correctly. So, we'll force a quick and dirty translation script here.
-  if (_translation.isEmpty() &&
-      (StringUtils::endsWithAny(inputs, ".gdb") || FileUtils::anyAreDirs(inputs)))
-  {
-    _translation = "translations/quick.js";
-  }
-
   // If we're writing to an OGR format and multi-threaded processing was specified or if both input
   // and output formats are OGR formats, we'll have to run the memory bounded _convertToOgr method.
   if ((IoUtils::isSupportedOgrFormat(output, true) && _translateMultithreaded) ||
@@ -242,10 +233,15 @@ void DataConverter::convert(const QStringList& inputs, const QString& output)
   // We require that a translation be present when converting from OGR, since OgrReader is tightly
   // coupled to the translation logic. We also require that  the translation direction be to OSM or
   // unspecified.
-  else if (IoUtils::areSupportedOgrFormats(inputs, true) &&
-           !_translation.isEmpty() &&
-           (_translationDirection.isEmpty() || _translationDirection == "toosm"))
+  else if (IoUtils::areSupportedOgrFormats(inputs, true))
   {
+    // If we have a gdb as input, we have to run through _convertFromOgr in order for the layer
+    // parsing to work correctly. So, we'll force a quick and dirty translation script here.
+    if (_translation.isEmpty() &&
+        (StringUtils::endsWithAny(inputs, ".gdb") || FileUtils::anyAreDirs(inputs)))
+    {
+      _translation = "translations/quick.js";
+    }
     _convertFromOgr(inputs, output);
   }
   // If none of the above conditions was satisfied, we'll call the generic convert routine. If no
@@ -738,8 +734,8 @@ void DataConverter::_convert(const QStringList& inputs, const QString& output)
   }
 }
 
-void DataConverter::_exportToShapeWithCols(const QString& output, const QStringList& cols,
-                                           const OsmMapPtr& map) const
+void DataConverter::_exportToShapeWithCols(
+  const QString& output, const QStringList& cols, const OsmMapPtr& map) const
 {
   LOG_DEBUG("_exportToShapeWithCols");
 

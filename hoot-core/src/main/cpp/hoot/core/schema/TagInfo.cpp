@@ -132,6 +132,7 @@ QString TagInfo::_getInfo(const QString& input) const
   std::shared_ptr<OgrReader> ogrReader = std::dynamic_pointer_cast<OgrReader>(reader);
   if (ogrReader.get())
   {
+    // We have to have a translation for the reading, so just use the simplest one.
     ogrReader->setSchemaTranslationScript(ConfPath::getHootHome() + "/translations/quick.js");
 
     QStringList layers;

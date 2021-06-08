@@ -137,41 +137,31 @@ private:
   // converts from any input to an OGR output; A translation is required, operations are memory
   // bound, and if both input and output formats are OGR, this must be used.
   void _convertToOgr(const QStringList& inputs, const QString& output);
-
-  // _convertToOgr will call this to run the translator in a separate thread for a performance
-  // increase if certain pre-conditions are met.
-  void _transToOgrMT(const QStringList& inputs, const QString& output) const;
-  void _fillElementCache(
-    const QString& inputUrl, ElementCachePtr cachePtr, QQueue<ElementPtr>& workQ) const;
-
   // converts from an OGR input to any output; a translation is required
   void _convertFromOgr(const QStringList& inputs, const QString& output);
-
   /*
    * This method handles all conversions including OGR conversions not done by _convertToOgr or
    * _convertFromOgr. OGR conversions performed by this method will not be memory bound.
    */
   void _convert(const QStringList& inputs, const QString& output);
+
   // sets ogr options only for _convert
   void _setFromOgrOptions();
   void _setToOgrOptions(const QString& output);
   // This handles configures translations options correctly for non-OGR outputs.
   void _handleNonOgrOutputTranslationOpts();
   QString _outputFormatToTranslationDirection(const QString& output) const;
+
   // If specific columns were specified for export to a shape file, then this is called.
   void _exportToShapeWithCols(
     const QString& output, const QStringList& cols, const OsmMapPtr& map) const;
-
-  /*
-   * Attempts to determine the relative weighting of each layer in an OGR data source based on
-   * feature size. If the feature size hasn't already been calculated for each layer, then a even
-   * distribution of weighting between layers is returned.
-   */
-//  std::vector<float> _getOgrInputProgressWeights(
-//    const OgrReader& reader, const QString& input, const QStringList& layers) const;
-//  QStringList _getOgrLayersFromPath(const OgrReader& reader, QString& input) const;
-
   bool _shapeFileColumnsSpecified() const { return !_shapeFileColumns.isEmpty(); }
+
+  // _convertToOgr will call this to run the translator in a separate thread for a performance
+  // increase if certain pre-conditions are met.
+  void _transToOgrMT(const QStringList& inputs, const QString& output) const;
+  void _fillElementCache(
+    const QString& inputUrl, ElementCachePtr cachePtr, QQueue<ElementPtr>& workQ) const;
 };
 
 }
