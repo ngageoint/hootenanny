@@ -180,7 +180,12 @@ void OsmMapWriterFactory::writeDebugMap(
       throw IllegalArgumentException("Invalid calling class: " + callingClass);
     }
 
-    const QStringList classFilter = ConfigOptions().getDebugMapsClassFilter().split(";");
+    LOG_VARD(ConfigOptions().getDebugMapsWrite());
+    LOG_VARD(callingClass);
+
+    QStringList classFilter = ConfigOptions().getDebugMapsClassFilter().split(";");
+    StringUtils::removeEmptyStrings(classFilter);
+    LOG_VARD(classFilter);
     QString callingClassNoNamespace = callingClass;
     callingClassNoNamespace = callingClassNoNamespace.replace("hoot::", "");
     if (classFilter.isEmpty() || classFilter.contains(callingClassNoNamespace))
