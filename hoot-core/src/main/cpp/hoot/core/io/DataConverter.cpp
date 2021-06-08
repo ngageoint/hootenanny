@@ -225,10 +225,11 @@ void DataConverter::convert(const QStringList& inputs, const QString& output)
 
   // If we have a gdb as input, we have to run through _convertFromOgr in order for the layer
   // parsing to work correctly. So, we'll force a quick and dirty translation script here.
-//  if (_translation.isEmpty() && StringUtils::endsWithAny(inputs, ".gdb"))
-//  {
-//    _translation = "translations/quick.js";
-//  }
+  if (_translation.isEmpty() &&
+      (StringUtils::endsWithAny(inputs, ".gdb") || FileUtils::anyAreDirs(inputs)))
+  {
+    _translation = "translations/quick.js";
+  }
 
   // If we're writing to an OGR format and multi-threaded processing was specified or if both input
   // and output formats are OGR formats, we'll have to run the memory bounded _convertToOgr method.
@@ -520,94 +521,6 @@ void DataConverter::_convertToOgr(const QStringList& inputs, const QString& outp
   }
 }
 
-std::vector<float> DataConverter::_getOgrInputProgressWeights(
-  const OgrReader& reader, const QString& input, const QStringList& layers) const
-{
-  std::vector<float> progressWeights;
-  LOG_VART(layers.size());
-
-  // process the completion status report information first
-  long featureCountTotal = 0;
-  int undefinedCounts = 0;
-  for (int i = 0; i < layers.size(); i++)
-  {
-    LOG_VART(layers[i]);
-    // simply open the file, get the meta feature count value, and close
-    int featuresPerLayer = reader.getFeatureCount(input, layers[i]);
-    LOG_VART(featuresPerLayer);
-    progressWeights.push_back((float)featuresPerLayer);
-    // cover the case where no feature count available efficiently; Despite the documentation
-    // saying "-1" should be returned for layers without the number of features calculated, a size
-    // of zero has been seen with some layers.
-    if (featuresPerLayer < 1) undefinedCounts++;
-    else featureCountTotal += featuresPerLayer;
-  }
-  LOG_VART(featureCountTotal);
-  LOG_VART(undefinedCounts);
-
-  int definedCounts = layers.size() - undefinedCounts;
-  LOG_VART(definedCounts);
-
-  // determine weights for 3 possible cases
-  if (undefinedCounts == layers.size())
-  {
-    for (int i = 0; i < layers.size(); i++) progressWeights[i] = 1. / (float)layers.size();
-  }
-  else if (definedCounts == layers.size())
-  {
-    for (int i = 0; i < layers.size(); i++) progressWeights[i] /= (float)featureCountTotal;
-  }
-  else
-  {
-    for (int i = 0; i<layers.size(); i++)
-      if (progressWeights[i] == -1)
-      {
-        progressWeights[i] = (1. / (float)definedCounts) * featureCountTotal;
-      }
-    // reset featurecount total and recalculate
-    featureCountTotal = 0;
-    for (int i = 0; i < layers.size(); i++) featureCountTotal += progressWeights[i];
-    LOG_VART(progressWeights);
-    for (int i = 0; i < layers.size(); i++) progressWeights[i] /= (float)featureCountTotal;
-  }
-
-  LOG_VART(progressWeights);
-  return progressWeights;
-}
-
-QStringList DataConverter::_getOgrLayersFromPath(const OgrReader& reader, QString& input) const
-{
-  QStringList layers;
-
-  if (input.contains(";"))
-  {
-    QStringList list = input.split(";");
-    input = list.at(0);
-    layers.append(list.at(1));
-  }
-  else
-  {
-    layers = reader.getFilteredLayerNames(input);
-    layers.sort();
-  }
-  LOG_VARD(layers);
-
-  if (layers.empty())
-  {
-    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
-    {
-      LOG_WARN("Could not find any valid layers to read from in " + input + ".");
-    }
-    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
-    {
-      LOG_WARN(typeid(this).name() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
-    }
-    logWarnCount++;
-  }
-
-  return layers;
-}
-
 void DataConverter::_setFromOgrOptions()
 {
   // The ordering for these added ops matters. Let's run them after any user specified convert ops
@@ -662,15 +575,6 @@ void DataConverter::_convertFromOgr(const QStringList& inputs, const QString& ou
 
   _progress.set(0.0, "Loading maps: ..." + FileUtils::toLogFormat(inputs, _printLengthMax) + "...");
 
-  OsmMapPtr map(new OsmMap());
-  OgrReader reader;
-  if (_ogrFeatureReadLimit > 0)
-  {
-    reader.setLimit(_ogrFeatureReadLimit);
-  }
-  reader.setConfiguration(conf());
-  reader.setSchemaTranslationScript(_translation);
-
   // see similar note in _convertToOgr
   _convertOps.removeAll(SchemaTranslationOp::className());
   _convertOps.removeAll(SchemaTranslationVisitor::className());
@@ -691,6 +595,7 @@ void DataConverter::_convertFromOgr(const QStringList& inputs, const QString& ou
   int currentTask = 1;
   const float taskWeight = 1.0 / (float)numTasks;
 
+  OsmMapPtr map(new OsmMap());
   for (int i = 0; i < inputs.size(); i++)
   {
     QString input = inputs[i].trimmed();
@@ -702,20 +607,10 @@ void DataConverter::_convertFromOgr(const QStringList& inputs, const QString& ou
       continue;
     }
 
-    const QStringList layers = _getOgrLayersFromPath(reader, input);
-    const std::vector<float> progressWeights = _getOgrInputProgressWeights(reader, input, layers);
-    // Read each layer's data.
-    for (int j = 0; j < layers.size(); j++)
-    {
-      PROGRESS_INFO(
-        "Reading layer " << j + 1 << " of " << layers.size() << ": " << layers[j] << "...");
-      LOG_VART(progressWeights[j]);
-      reader.setProgress(
-        Progress(
-          ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running,
-          (float)j / (float)(layers.size() * numTasks), progressWeights[j]));
-      reader.read(input, layers[j], map);
-    }
+    IoUtils::loadMap(
+      map, input, ConfigOptions().getReaderUseDataSourceIds(),
+      Status::fromString(ConfigOptions().getReaderSetDefaultStatus()), _translation,
+      _ogrFeatureReadLimit, JOB_SOURCE, numTasks);
   }
 
   if (map->getNodes().size() == 0)
@@ -810,7 +705,7 @@ void DataConverter::_convert(const QStringList& inputs, const QString& output)
   conf().set(ConfigOptions::getReaderUseFileStatusKey(), true);
   conf().set(ConfigOptions::getReaderKeepStatusTagKey(), true);
 
-  // See note in convert. An OGR format other than gdb could still be processed here.
+  // See note in convert. An OGR format could still be processed here. (?)
   if (IoUtils::anyAreSupportedOgrFormats(inputs, true))
   {
     _setFromOgrOptions();

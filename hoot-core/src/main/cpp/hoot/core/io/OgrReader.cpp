@@ -350,6 +350,9 @@ std::shared_ptr<Envelope> OgrReader::getBoundingBoxFromConfig(const Settings& s,
 
 QStringList OgrReader::getFilteredLayerNames(const QString& path) const
 {
+  LOG_VART(_d.get());
+  LOG_VART(path);
+
   QRegExp filterStr = _d->getNameFilter();
   LOG_VART(filterStr.pattern());
 
@@ -886,9 +889,13 @@ std::shared_ptr<Envelope> OgrReaderInternal::getBoundingBoxFromConfig(
 
 void OgrReaderInternal::_initTranslate()
 {
+  LOG_VART(_translatePath);
+  LOG_VART(_translator.get());
+
   if (_translatePath != "" && _translator.get() == nullptr)
   {
-    _translator.reset(ScriptSchemaTranslatorFactory::getInstance().createTranslator(_translatePath));
+    _translator.reset(
+      ScriptSchemaTranslatorFactory::getInstance().createTranslator(_translatePath));
     if (_translator.get() == nullptr)
     {
       throw HootException("Unable to find a valid translation format for: " + _translatePath);

@@ -109,6 +109,14 @@ public:
   static QStringList readFileToList(const QString& inputPath);
 
   /**
+   * TODO
+   *
+   * @param inputs
+   * @return
+   */
+  static bool anyAreDirs(const QStringList& inputs);
+
+  /**
    * Convert a URL (file path, database URL, or other resource location) to a loggable format
    * Removes usernames, passwords, ip addresses, etc. and truncates the filename if needed
    *

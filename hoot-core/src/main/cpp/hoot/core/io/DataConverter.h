@@ -167,9 +167,9 @@ private:
    * feature size. If the feature size hasn't already been calculated for each layer, then a even
    * distribution of weighting between layers is returned.
    */
-  std::vector<float> _getOgrInputProgressWeights(
-    const OgrReader& reader, const QString& input, const QStringList& layers) const;
-  QStringList _getOgrLayersFromPath(const OgrReader& reader, QString& input) const;
+//  std::vector<float> _getOgrInputProgressWeights(
+//    const OgrReader& reader, const QString& input, const QStringList& layers) const;
+//  QStringList _getOgrLayersFromPath(const OgrReader& reader, QString& input) const;
 
   bool _shapeFileColumnsSpecified() const { return !_shapeFileColumns.isEmpty(); }
 };

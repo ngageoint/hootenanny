@@ -35,6 +35,7 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/io/ElementVisitorInputStream.h>
+#include <hoot/core/io/OgrReader.h>
 
 // Qt
 #include <QString>
@@ -49,6 +50,10 @@ class IoUtils
 {
 
 public:
+
+  static QString className() { return "hoot::IoUtils"; }
+
+  static int logWarnCount;
 
   /**
    * Returns true if the input format is a Hootenanny supported OSM format
@@ -93,9 +98,15 @@ public:
     @param useFileId if true, uses the element ID's in the map file; otherwise, generates new
     element ID's
     @param defaultStatus the hoot status to assign to all elements
+    @param translationScript TODO
+    @param ogrFeatureLimit TODO
+    @param jobSource TODO
+    @param numTasks TODO
     */
-  static void loadMap(const OsmMapPtr& map, const QString& path, bool useFileId,
-                      Status defaultStatus = Status::Invalid);
+  static void loadMap(
+    const OsmMapPtr& map, const QString& path, bool useFileId,
+    Status defaultStatus = Status::Invalid, const QString& translationScript = "",
+    const int ogrFeatureLimit = -1, const QString& jobSource = "", const int numTasks = -1);
 
   /**
     Loads multiple OSM maps into an OsmMap object
@@ -106,8 +117,9 @@ public:
     element ID's
     @param defaultStatus the hoot status to assign to all elements
     */
-  static void loadMaps(const OsmMapPtr& map, const QStringList& paths, bool useFileId,
-                       Status defaultStatus = Status::Invalid);
+  static void loadMaps(
+    const OsmMapPtr& map, const QStringList& paths, bool useFileId,
+    Status defaultStatus = Status::Invalid);
 
   /**
     Saves an OSM map to an OsmMap object
@@ -126,8 +138,8 @@ public:
    * @param keepConnectedOobWays if true any way falling outside of the bounds but directly
    * connected to a way within the bounds will be kept
    */
-  static void cropToBounds(OsmMapPtr& map, const geos::geom::Envelope& bounds,
-                           const bool keepConnectedOobWays = false);
+  static void cropToBounds(
+    OsmMapPtr& map, const geos::geom::Envelope& bounds, const bool keepConnectedOobWays = false);
 
   /**
    * Crops a map to a given bounds
@@ -137,8 +149,9 @@ public:
    * @param keepConnectedOobWays if true any way falling outside of the bounds but directly
    * connected to a way within the bounds will be kept
    */
-  static void cropToBounds(OsmMapPtr& map, const std::shared_ptr<geos::geom::Geometry>& bounds,
-                           const bool keepConnectedOobWays = false);
+  static void cropToBounds(
+    OsmMapPtr& map, const std::shared_ptr<geos::geom::Geometry>& bounds,
+    const bool keepConnectedOobWays = false);
 
   /**
    * Creates an input stream with a visitor in the loop
@@ -173,6 +186,12 @@ public:
    * interface
    */
   static bool urlsAreBoundable(const QStringList& urls);
+
+private:
+
+  static std::vector<float> _getOgrInputProgressWeights(
+    const OgrReader& reader, const QString& input, const QStringList& layers);
+  static QStringList _getOgrLayersFromPath(const OgrReader& reader, QString& input);
 };
 
 }

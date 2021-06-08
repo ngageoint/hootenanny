@@ -173,7 +173,7 @@ QString TagInfo::_getInfo(const QString& input) const
       if (_delimitedTextOutput)
       {
         const QString tmpText = _printDelimitedText(result);
-        // Skip empty layers
+        // Skip empty layers.
         if (tmpText == "")
         {
           continue;
@@ -187,7 +187,7 @@ QString TagInfo::_getInfo(const QString& input) const
       else
       {
         const QString tmpText = _printJSON(layers[i], result);
-        // Skip empty layers
+        // Skip empty layers.
         if (tmpText == "")
         {
           continue;

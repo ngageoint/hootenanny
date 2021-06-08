@@ -36,7 +36,6 @@
 #include <QHash>
 #include <QString>
 #include <QStringList>
-//#include <QXmlDefaultHandler>
 
 // geos
 #include <ogr_spatialref.h>
@@ -79,8 +78,7 @@ public:
    * Read all geometry data from the specified path.
    *
    * @param path
-   * @param layer Read only from this layer. If no layer is specified then read from all geometry
-   *  layers.
+   * @param layer Read only from this layer. If no layer is specified then read from all layers.
    * @param map map to load into
    */
   void read(const QString& path, const QString& layer, const OsmMapPtr& map) const;

@@ -32,7 +32,6 @@
 #include <hoot/core/criterion/WayCriterion.h>
 #include <hoot/core/criterion/TagKeyCriterion.h>
 #include <hoot/core/geometry/GeometryUtils.h>
-#include <hoot/core/io/OgrReader.h>
 #include <hoot/core/io/OgrUtilities.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
@@ -51,6 +50,8 @@
 
 namespace hoot
 {
+
+int IoUtils::logWarnCount = 0;
 
 bool IoUtils::urlsAreBoundable(const QStringList& urls)
 {
@@ -88,13 +89,15 @@ bool IoUtils::isSupportedOgrFormat(const QString& input, const bool allowDir)
   }
 
   LOG_VART(QFileInfo(input).isDir());
-  //input is a dir; only accepting a dir as input if it contains a shape file or is a file geodb
+  LOG_VART(FileUtils::dirContainsFileWithExtension(QFileInfo(input).dir(), "shp"));
+  // input is a dir; only accepting a dir as input if it contains a shape file or is a file geodb
   if (QFileInfo(input).isDir())
   {
-    return input.toLower().endsWith(".gdb") ||
-           FileUtils::dirContainsFileWithExtension(QFileInfo(input).dir(), "shp");
+    return
+      input.toLower().endsWith(".gdb") ||
+      FileUtils::dirContainsFileWithExtension(QFileInfo(input).dir(), "shp");
   }
-  //single input
+  // single input
   else
   {
     //The only zip file format we support are ones containing OGR inputs.
@@ -108,8 +111,9 @@ bool IoUtils::isSupportedOgrFormat(const QString& input, const bool allowDir)
     }
     LOG_VART(OgrUtilities::getInstance().getSupportedFormats(false));
     LOG_VART(QFileInfo(input).suffix());
-    return OgrUtilities::getInstance().getSupportedFormats(false)
-             .contains("." + QFileInfo(input).suffix());
+    return
+      OgrUtilities::getInstance().getSupportedFormats(false).contains(
+        "." + QFileInfo(input).suffix());
   }
 }
 
@@ -147,19 +151,141 @@ bool IoUtils::areSupportedOgrFormats(const QStringList& inputs, const bool allow
   return true;
 }
 
-void IoUtils::loadMap(const OsmMapPtr& map, const QString& path, bool useFileId,
-                      Status defaultStatus)
+std::vector<float> IoUtils::_getOgrInputProgressWeights(
+  const OgrReader& reader, const QString& input, const QStringList& layers)
 {
-  // TODO: Roll this whole thing into OsmMapReaderFactory somehow and get rid of OgrReader portion?
+  std::vector<float> progressWeights;
+  LOG_VART(layers.size());
 
-  QStringList pathLayer = path.split(";");
-  QString justPath = pathLayer[0];
-  if (OgrReader::isReasonablePath(justPath))
+  // process the completion status report information first
+  long featureCountTotal = 0;
+  int undefinedCounts = 0;
+  for (int i = 0; i < layers.size(); i++)
+  {
+    LOG_VART(layers[i]);
+    // simply open the file, get the meta feature count value, and close
+    int featuresPerLayer = reader.getFeatureCount(input, layers[i]);
+    LOG_VART(featuresPerLayer);
+    progressWeights.push_back((float)featuresPerLayer);
+    // cover the case where no feature count available efficiently; Despite the documentation
+    // saying "-1" should be returned for layers without the number of features calculated, a size
+    // of zero has been seen with some layers.
+    if (featuresPerLayer < 1) undefinedCounts++;
+    else featureCountTotal += featuresPerLayer;
+  }
+  LOG_VART(featureCountTotal);
+  LOG_VART(undefinedCounts);
+
+  int definedCounts = layers.size() - undefinedCounts;
+  LOG_VART(definedCounts);
+
+  // determine weights for 3 possible cases
+  if (undefinedCounts == layers.size())
+  {
+    for (int i = 0; i < layers.size(); i++) progressWeights[i] = 1. / (float)layers.size();
+  }
+  else if (definedCounts == layers.size())
+  {
+    for (int i = 0; i < layers.size(); i++) progressWeights[i] /= (float)featureCountTotal;
+  }
+  else
+  {
+    for (int i = 0; i<layers.size(); i++)
+      if (progressWeights[i] == -1)
+      {
+        progressWeights[i] = (1. / (float)definedCounts) * featureCountTotal;
+      }
+    // reset featurecount total and recalculate
+    featureCountTotal = 0;
+    for (int i = 0; i < layers.size(); i++) featureCountTotal += progressWeights[i];
+    LOG_VART(progressWeights);
+    for (int i = 0; i < layers.size(); i++) progressWeights[i] /= (float)featureCountTotal;
+  }
+
+  LOG_VART(progressWeights);
+  return progressWeights;
+}
+
+QStringList IoUtils::_getOgrLayersFromPath(const OgrReader& reader, QString& input)
+{
+  LOG_VART(input);
+
+  QStringList layers;
+
+  if (input.contains(";"))
+  {
+    QStringList list = input.split(";");
+    input = list.at(0);
+    layers.append(list.at(1));
+  }
+  else
+  {
+    layers = reader.getFilteredLayerNames(input);
+    layers.sort();
+  }
+  LOG_VARD(layers);
+
+  if (layers.empty())
+  {
+    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN("Could not find any valid layers to read from in " + input + ".");
+    }
+    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+    }
+    logWarnCount++;
+  }
+
+  return layers;
+}
+
+void IoUtils::loadMap(
+  const OsmMapPtr& map, const QString& path, bool useFileId, Status defaultStatus,
+  const QString& translationScript, const int ogrFeatureLimit, const QString& jobSource,
+  const int numTasks)
+{
+  const QStringList pathLayer = path.split(";");
+  const QString justPath = pathLayer[0];
+  LOG_VART(path);
+  LOG_VART(pathLayer);
+  LOG_VART(justPath);
+  if (isSupportedOgrFormat(path, true))
   {
     OgrReader reader;
-    reader.setDefaultStatus(defaultStatus);
     reader.setConfiguration(conf());
-    reader.read(justPath, pathLayer.size() > 1 ? pathLayer[1] : "", map);
+    reader.setDefaultStatus(defaultStatus);
+    if (ogrFeatureLimit > 0)
+    {
+      reader.setLimit(ogrFeatureLimit);
+    }
+    reader.setSchemaTranslationScript(translationScript);
+
+    if (path.endsWith(".gdb") || QFileInfo(path).isDir() || path.endsWith(".zip"))
+    {
+      QString pathCopy = path;
+      const QStringList layers = _getOgrLayersFromPath(reader, pathCopy);
+      LOG_VART(layers);
+      const std::vector<float> progressWeights = _getOgrInputProgressWeights(reader, path, layers);
+      // Read each layer's data.
+      for (int j = 0; j < layers.size(); j++)
+      {
+        PROGRESS_INFO(
+          "Reading layer " << j + 1 << " of " << layers.size() << ": " << layers[j] << "...");
+        LOG_VART(progressWeights[j]);
+        reader.setProgress(
+          Progress(
+            ConfigOptions().getJobId(), jobSource, Progress::JobState::Running,
+            (float)j / (float)(layers.size() * numTasks), progressWeights[j]));
+        reader.read(path, layers[j], map);
+      }
+    }
+    else
+    {
+      reader.read(justPath, pathLayer.size() > 1 ? pathLayer[1] : "", map);
+    }
+
     reader.close();
   }
   else
@@ -168,8 +294,8 @@ void IoUtils::loadMap(const OsmMapPtr& map, const QString& path, bool useFileId,
   }
 }
 
-void IoUtils::loadMaps(const OsmMapPtr& map, const QStringList& paths, bool useFileId,
-                       Status defaultStatus)
+void IoUtils::loadMaps(
+  const OsmMapPtr& map, const QStringList& paths, bool useFileId, Status defaultStatus)
 {
   for (int i = 0; i < paths.size(); i++)
   {
@@ -179,18 +305,19 @@ void IoUtils::loadMaps(const OsmMapPtr& map, const QStringList& paths, bool useF
 
 void IoUtils::saveMap(const OsmMapPtr& map, const QString& path)
 {
-  // We could pass a progress in here to get more granular write status feedback.
+  // We could pass progress in here to get more granular write status feedback.
   OsmMapWriterFactory::write(map, path);
 }
 
-void IoUtils::cropToBounds(OsmMapPtr& map, const geos::geom::Envelope& bounds,
-                           const bool keepConnectedOobWays)
+void IoUtils::cropToBounds(
+  OsmMapPtr& map, const geos::geom::Envelope& bounds, const bool keepConnectedOobWays)
 {
   cropToBounds(map, GeometryUtils::envelopeToPolygon(bounds), keepConnectedOobWays);
 }
 
-void IoUtils::cropToBounds(OsmMapPtr& map, const std::shared_ptr<geos::geom::Geometry>& bounds,
-                           const bool keepConnectedOobWays)
+void IoUtils::cropToBounds(
+  OsmMapPtr& map, const std::shared_ptr<geos::geom::Geometry>& bounds,
+  const bool keepConnectedOobWays)
 {
   LOG_INFO(
     "Applying bounds filtering to input data: ..." <<

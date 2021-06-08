@@ -37,7 +37,6 @@ HOOT_FACTORY_REGISTER(ElementVisitor, FeatureCountVisitor)
 void FeatureCountVisitor::visit(const std::shared_ptr<const Element>& e)
 {
   LOG_VART(e->getElementId());
-  //LOG_VART(e);
   if (e->getTags().getInformationCount() > 0)
   {
     _count++;
