@@ -785,7 +785,7 @@ public class CustomScriptResource {
 
         TranslationFolder folder = getTranslationFolderForUser(user, folderId);
 
-        if(!folder.getUserId().equals(user.getId())) {
+        if(!UserResource.adminUserCheck(user) && !folder.getUserId().equals(user.getId())) {
             throw new ForbiddenException(Response.status(Response.Status.FORBIDDEN).type(MediaType.TEXT_PLAIN).entity("You must own the folder to delete it").build());
         }
 
@@ -914,12 +914,15 @@ public class CustomScriptResource {
         String targetPath = targetTranslationFolder.getPath() != null ? targetTranslationFolder.getPath() : "";
         File targetFolder = new File(SCRIPT_FOLDER, targetPath);
 
-        if(user != null && targetTranslationFolder.getId() != 0 && (
+        if (user != null && targetTranslationFolder.getId() != 0 && (
                 !currentTranslationFolder.getUserId().equals(user.getId())
                 ||
                 !targetTranslationFolder.getUserId().equals(user.getId())
         )) {
-            return Response.status(Response.Status.FORBIDDEN).type(MediaType.TEXT_PLAIN).entity("You must own both folders to move it").build();
+            return Response.status(Response.Status.FORBIDDEN).type(MediaType.TEXT_PLAIN).entity("You must own both folders to move it.").build();
+        } else if (currentTranslationFolder.getPublicCol() && !targetTranslationFolder.getPublicCol()) {
+            // dont allow moving public folder into private folder
+            return Response.status(Response.Status.FORBIDDEN).type(MediaType.TEXT_PLAIN).entity("Can't move public folder into private folder.").build();
         }
 
         Map<String, Object> ret = new HashMap<>();
