@@ -78,7 +78,7 @@ void WayJoinerAdvanced::join(const OsmMapPtr& map)
   if (ConfigOptions().getAttributeConflationAggressiveHighwayJoining())
   {
     _joinUnsplitWaysAtNode();
-    OsmMapWriterFactory::writeDebugMap(map, "after-way-joiner-join-unsplit-ways");
+    OsmMapWriterFactory::writeDebugMap(map, className(), "after-join-unsplit-ways");
   }
 }
 

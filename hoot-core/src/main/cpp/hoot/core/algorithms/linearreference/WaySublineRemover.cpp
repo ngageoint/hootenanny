@@ -66,10 +66,10 @@ std::vector<ElementId> WaySublineRemover::removeSubline(
       "Subline matches covers entire way. Removing entire way: " << way->getElementId() << "...");
     RecursiveElementRemover(way->getElementId(), true).apply(map);
 
-    if (ConfigOptions().getDebugMapsWrite() && ConfigOptions().getDebugMapsWriteDetailed())
+    if (ConfigOptions().getDebugMapsWriteDetailed())
     {
       OsmMapWriterFactory::writeDebugMap(
-        map, "WaySublineRemover-after-entire-way-removal-" + way->getElementId().toString());
+        map, className(), "after-entire-way-removal-" + way->getElementId().toString());
     }
   }
   else
@@ -85,10 +85,10 @@ std::vector<ElementId> WaySublineRemover::removeSubline(
       // Update references to the modified way.
       ReplaceElementOp(way->getElementId(), newWayIds.at(0), true).apply(map);
 
-      if (ConfigOptions().getDebugMapsWrite() && ConfigOptions().getDebugMapsWriteDetailed())
+      if (ConfigOptions().getDebugMapsWriteDetailed())
       {
         OsmMapWriterFactory::writeDebugMap(
-          map, "WaySublineRemover-after-way-ref-update-" + way->getElementId().toString());
+          map, className(), "after-way-ref-update-" + way->getElementId().toString());
       }
     }
     else
@@ -136,9 +136,9 @@ std::vector<ElementId> WaySublineRemover::removeSubline(
   map->addWay(wayCopy2);
   WayLocation endCopy(map, wayCopy2, end.getSegmentIndex(), end.getSegmentFraction());
 
-  if (ConfigOptions().getDebugMapsWrite() && ConfigOptions().getDebugMapsWriteDetailed())
+  if (ConfigOptions().getDebugMapsWriteDetailed())
   {
-    OsmMapWriterFactory::writeDebugMap(map, "WaySublineRemover-after-copied-ways-added");
+    OsmMapWriterFactory::writeDebugMap(map, className(), "after-copied-ways-added");
   }
 
   // Split the way at the beginning of the section we want to remove. If a split is performed, the
@@ -155,9 +155,9 @@ std::vector<ElementId> WaySublineRemover::removeSubline(
     LOG_TRACE("Removing " << wayCopy1->getElementId() << "...");
     RecursiveElementRemover(wayCopy1->getElementId()).apply(map);
   }
-  if (ConfigOptions().getDebugMapsWrite() && ConfigOptions().getDebugMapsWriteDetailed())
+  if (ConfigOptions().getDebugMapsWriteDetailed())
   {
-    OsmMapWriterFactory::writeDebugMap(map, "WaySublineRemover-after-split-1-performed");
+    OsmMapWriterFactory::writeDebugMap(map, className(), "after-split-1-performed");
   }
 
   // Split the way at the end of the section we want to remove.
@@ -169,9 +169,9 @@ std::vector<ElementId> WaySublineRemover::removeSubline(
     LOG_TRACE("Removing " << wayCopy2->getElementId() << "...");
     RecursiveElementRemover(wayCopy2->getElementId()).apply(map);
   }
-  if (ConfigOptions().getDebugMapsWrite() && ConfigOptions().getDebugMapsWriteDetailed())
+  if (ConfigOptions().getDebugMapsWriteDetailed())
   {
-    OsmMapWriterFactory::writeDebugMap(map, "WaySublineRemover-after-split-2-performed");
+    OsmMapWriterFactory::writeDebugMap(map, className(), "after-split-2-performed");
   }
 
   std::vector<ElementId> newWayIds = newWayIds1;
@@ -194,10 +194,10 @@ std::vector<ElementId> WaySublineRemover::removeSubline(
     }
     LOG_TRACE("Output way length(s): " << outputLengthsStr);
 
-    if (ConfigOptions().getDebugMapsWrite() && ConfigOptions().getDebugMapsWriteDetailed())
+    if (ConfigOptions().getDebugMapsWriteDetailed())
     {
       OsmMapWriterFactory::writeDebugMap(
-        map, "WaySublineRemover-after-original-way-removed-" + way->getElementId().toString());
+        map, className(), "after-original-way-removed-" + way->getElementId().toString());
     }
   }
   else

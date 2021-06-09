@@ -1267,6 +1267,15 @@ The pixel size used when running either the `crop-random` command or `RandomMapC
 
 List of valid values for data sources used to calculate the summary data for multiple conflations
 
+=== debug.maps.class.filter
+
+* Data Type: string
+* Default Value: ``
+
+A semicolon delimited list of class names used for limiting the classes which write debug map
+output. Do not prepend class names with their namespace. An empty string (default) disables the
+filtering.
+
 === debug.maps.filename
 
 * Data Type: string

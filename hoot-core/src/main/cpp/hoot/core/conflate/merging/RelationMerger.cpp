@@ -105,7 +105,7 @@ void RelationMerger::merge(
   if (ConfigOptions().getDebugMapsWriteDetailed())
   {
     OsmMapWriterFactory::writeDebugMap(
-      _map, "RelationMerger-" + elementId1.toString() + "-" + elementId2.toString());
+      _map, className(), elementId1.toString() + "-" + elementId2.toString());
   }
 }
 

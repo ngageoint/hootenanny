@@ -52,8 +52,6 @@ public:
 
   static QString className() { return "hoot::IoUtils"; }
 
-  static int logWarnCount;
-
   /**
    * Returns true if the input format is a Hootenanny supported OSM format
    *

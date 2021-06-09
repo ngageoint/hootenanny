@@ -381,7 +381,8 @@ void ChangesetCutOnlyCreator::_processMaps(
   // TODO: remove this combining
   // Combine the cookie cut ref map back with the secondary map for cleaning purposes.
   MapUtils::combineMaps(cookieCutRefMap, secMap, false);
-  OsmMapWriterFactory::writeDebugMap(cookieCutRefMap, _changesetId + "-combined-before-conflation");
+  OsmMapWriterFactory::writeDebugMap(
+    cookieCutRefMap, className(), _changesetId + "-combined-before-conflation");
   secMap.reset();
   LOG_VARD(cookieCutRefMap->size());
 

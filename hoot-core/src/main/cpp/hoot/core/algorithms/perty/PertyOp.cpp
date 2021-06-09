@@ -205,7 +205,7 @@ void PertyOp::apply(std::shared_ptr<OsmMap>& map)
 
   // permute the data first
   permute(map);
-  OsmMapWriterFactory::writeDebugMap(map, "perty-after-perty-op");
+  OsmMapWriterFactory::writeDebugMap(map, className(), "after-perty-op");
 
   // apply any custom perturbation ops
   OpExecutor namedOps(_namedOps);

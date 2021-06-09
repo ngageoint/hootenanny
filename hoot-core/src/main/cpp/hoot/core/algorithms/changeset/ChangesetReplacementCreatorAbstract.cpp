@@ -300,7 +300,7 @@ OsmMapPtr ChangesetReplacementCreatorAbstract::_loadInputMap(
 
   LOG_VART(MapProjector::toWkt(map->getProjection()));
   OsmMapWriterFactory::writeDebugMap(
-    map, _changesetId + "-" + map->getName() + "-after-cropped-load");
+    map, className(), _changesetId + "-" + map->getName() + "-after-cropped-load");
 
   MemoryUsageChecker::getInstance().check();
 
@@ -335,7 +335,7 @@ void ChangesetReplacementCreatorAbstract::_markElementsWithMissingChildren(OsmMa
     elementMarker.getNumRelationsTagged() << " relations with missing child elements.");
 
   OsmMapWriterFactory::writeDebugMap(
-    map, _changesetId + "-" + map->getName() + "-after-missing-marked");
+    map, className(), _changesetId + "-" + map->getName() + "-after-missing-marked");
 }
 
 void ChangesetReplacementCreatorAbstract::_filterFeatures(
@@ -361,7 +361,7 @@ void ChangesetReplacementCreatorAbstract::_filterFeatures(
   LOG_INFO(elementPruner.getCompletedStatusMessage());
 
   LOG_VART(MapProjector::toWkt(map->getProjection()));
-  OsmMapWriterFactory::writeDebugMap(map, debugFileName);
+  OsmMapWriterFactory::writeDebugMap(map, className(), debugFileName);
 }
 
 OsmMapPtr ChangesetReplacementCreatorAbstract::_getCookieCutMap(
@@ -382,8 +382,8 @@ OsmMapPtr ChangesetReplacementCreatorAbstract::_getCookieCutMap(
   LOG_VARD(doughMap->size());
   LOG_VARD(cutterMap->getName());
   LOG_VARD(cutterMap->size());
-  OsmMapWriterFactory::writeDebugMap(doughMap, _changesetId + "-dough-map-input");
-  OsmMapWriterFactory::writeDebugMap(cutterMap, _changesetId + "-cutter-map-input");
+  OsmMapWriterFactory::writeDebugMap(doughMap, className(), _changesetId + "-dough-map-input");
+  OsmMapWriterFactory::writeDebugMap(cutterMap, className(), _changesetId + "-cutter-map-input");
 
   // It could just be an byproduct of how data is being read out by core scripts during testing, but
   // when doing adjacent cell updates I'm getting cropped data with a bunch of empty relations in
@@ -414,7 +414,7 @@ OsmMapPtr ChangesetReplacementCreatorAbstract::_getCookieCutMap(
     LOG_DEBUG(
       "Nothing to cut from dough map, so returning the empty dough map as the map after " <<
       "cutting: " << doughMap->getName() << "...");
-    OsmMapWriterFactory::writeDebugMap(doughMap, _changesetId + "-cookie-cut");
+    OsmMapWriterFactory::writeDebugMap(doughMap, className(), _changesetId + "-cookie-cut");
     // copy here to avoid changing the ref map passed in as the dough map input
     return OsmMapPtr(new OsmMap(doughMap));
   }
@@ -442,7 +442,7 @@ OsmMapPtr ChangesetReplacementCreatorAbstract::_getCookieCutMap(
         LOG_DEBUG(
           "Nothing in cutter map. Full replacement not enabled, so returning the entire dough " <<
           "map as the map after cutting: " << doughMap->getName() << "...");
-        OsmMapWriterFactory::writeDebugMap(doughMap, _changesetId + "-cookie-cut");
+        OsmMapWriterFactory::writeDebugMap(doughMap, className(), _changesetId + "-cookie-cut");
         // copy here to avoid changing the ref map passed in as the dough map input
         return OsmMapPtr(new OsmMap(doughMap));
       }
@@ -489,7 +489,7 @@ OsmMapPtr ChangesetReplacementCreatorAbstract::_getCookieCutMap(
         LOG_STATUS(cropper.getInitStatusMessage());
         cropper.apply(cookieCutMap);
         LOG_INFO(cropper.getCompletedStatusMessage());
-        OsmMapWriterFactory::writeDebugMap(cookieCutMap, _changesetId + "-cookie-cut");
+        OsmMapWriterFactory::writeDebugMap(cookieCutMap, className(), _changesetId + "-cookie-cut");
         return cookieCutMap;
       }
       else
@@ -499,7 +499,7 @@ OsmMapPtr ChangesetReplacementCreatorAbstract::_getCookieCutMap(
         LOG_DEBUG(
           "Nothing in cutter map for linear features. Full replacement not enabled, so returning "
           "the entire dough map as the map after cutting: " << doughMap->getName() << "...");
-        OsmMapWriterFactory::writeDebugMap(doughMap, _changesetId + "-cookie-cut");
+        OsmMapWriterFactory::writeDebugMap(doughMap, className(), _changesetId + "-cookie-cut");
         // copy here to avoid changing the ref map passed in as the dough map input
         return OsmMapPtr(new OsmMap(doughMap));
       }
@@ -508,7 +508,7 @@ OsmMapPtr ChangesetReplacementCreatorAbstract::_getCookieCutMap(
 
   LOG_VART(doughMap->size());
   LOG_VART(MapProjector::toWkt(doughMap->getProjection()));
-  OsmMapWriterFactory::writeDebugMap(doughMap, _changesetId + "-dough-map");
+  OsmMapWriterFactory::writeDebugMap(doughMap, className(), _changesetId + "-dough-map");
   LOG_VART(MapProjector::toWkt(cutterMap->getProjection()));
 
   OsmMapPtr cookieCutMap(new OsmMap(doughMap));
@@ -583,7 +583,8 @@ OsmMapPtr ChangesetReplacementCreatorAbstract::_getCookieCutMap(
   }
 
   LOG_VART(cutterMapToUse->size());
-  OsmMapWriterFactory::writeDebugMap(cutterMapToUse, _changesetId + "-cutter-map-to-use");
+  OsmMapWriterFactory::writeDebugMap(
+    cutterMapToUse, className(), _changesetId + "-cutter-map-to-use");
 
   LOG_STATUS(
     "Generating cutter shape map from: " << cutterMapToUse->getName() << " of size: " <<
@@ -626,7 +627,8 @@ OsmMapPtr ChangesetReplacementCreatorAbstract::_getCookieCutMap(
   // not exactly sure yet why this projection needs to be done
   MapProjector::projectToWgs84(cutterShapeOutlineMap);
   LOG_VART(MapProjector::toWkt(cutterShapeOutlineMap->getProjection()));
-  OsmMapWriterFactory::writeDebugMap(cutterShapeOutlineMap, _changesetId + "-cutter-shape");
+  OsmMapWriterFactory::writeDebugMap(
+    cutterShapeOutlineMap, className(), _changesetId + "-cutter-shape");
 
   // Cookie cut the shape of the cutter shape map out of the cropped ref map.
   LOG_STATUS(
@@ -645,7 +647,7 @@ OsmMapPtr ChangesetReplacementCreatorAbstract::_getCookieCutMap(
   MapProjector::projectToWgs84(doughMap);
   LOG_VART(MapProjector::toWkt(cookieCutMap->getProjection()));
   MemoryUsageChecker::getInstance().check();
-  OsmMapWriterFactory::writeDebugMap(cookieCutMap, _changesetId + "-cookie-cut");
+  OsmMapWriterFactory::writeDebugMap(cookieCutMap, className(), _changesetId + "-cookie-cut");
 
   return cookieCutMap;
 }
@@ -660,7 +662,7 @@ void ChangesetReplacementCreatorAbstract::_clean(OsmMapPtr& map) const
 
   MapProjector::projectToWgs84(map);  // cleaning works in planar
   LOG_VART(MapProjector::toWkt(map->getProjection()));
-  OsmMapWriterFactory::writeDebugMap(map, _changesetId + "-cleaned");
+  OsmMapWriterFactory::writeDebugMap(map, className(), _changesetId + "-cleaned");
   LOG_DEBUG("Cleaned map size: " << map->size());
 }
 
@@ -708,7 +710,7 @@ void ChangesetReplacementCreatorAbstract::_addChangesetDeleteExclusionTags(OsmMa
 
   MemoryUsageChecker::getInstance().check();
   OsmMapWriterFactory::writeDebugMap(
-    map, _changesetId + "-" + map->getName() + "-after-delete-exclusion-tagging-1");
+    map, className(), _changesetId + "-" + map->getName() + "-after-delete-exclusion-tagging-1");
 }
 
 void ChangesetReplacementCreatorAbstract::_excludeFeaturesFromChangesetDeletion(OsmMapPtr& map) const
@@ -738,7 +740,7 @@ void ChangesetReplacementCreatorAbstract::_excludeFeaturesFromChangesetDeletion(
   MemoryUsageChecker::getInstance().check();
   LOG_VART(MapProjector::toWkt(map->getProjection()));
   OsmMapWriterFactory::writeDebugMap(
-    map, _changesetId + "-" + map->getName() + "-after-delete-exclusion-tagging-2");
+    map, className(), _changesetId + "-" + map->getName() + "-after-delete-exclusion-tagging-2");
 }
 
 void ChangesetReplacementCreatorAbstract::_cleanup(OsmMapPtr& map) const
@@ -765,7 +767,8 @@ void ChangesetReplacementCreatorAbstract::_cleanup(OsmMapPtr& map) const
   // get out of orthographic
   MapProjector::projectToWgs84(map);
 
-  OsmMapWriterFactory::writeDebugMap(map, _changesetId + "-" + map->getName() + "-after-cleanup");
+  OsmMapWriterFactory::writeDebugMap(
+    map, className(), _changesetId + "-" + map->getName() + "-after-cleanup");
 }
 
 void ChangesetReplacementCreatorAbstract::_synchronizeIds(
@@ -801,10 +804,11 @@ void ChangesetReplacementCreatorAbstract::_synchronizeIds(
 
   ChangesetReplacementElementIdSynchronizer idSync;
   OsmMapWriterFactory::writeDebugMap(
-    mapBeingReplaced, _changesetId + "-" + mapBeingReplaced->getName() +
+    mapBeingReplaced, className(), _changesetId + "-" + mapBeingReplaced->getName() +
     "-source-before-id-sync");
   OsmMapWriterFactory::writeDebugMap(
-    replacementMap, _changesetId + "-" + replacementMap->getName() + "-target-before-id-sync");
+    replacementMap, className(),
+    _changesetId + "-" + replacementMap->getName() + "-target-before-id-sync");
 
   idSync.synchronize(mapBeingReplaced, replacementMap);
 
@@ -814,7 +818,7 @@ void ChangesetReplacementCreatorAbstract::_synchronizeIds(
   orphanedNodeRemover.apply(replacementMap);
   LOG_DEBUG(orphanedNodeRemover.getCompletedStatusMessage());
   OsmMapWriterFactory::writeDebugMap(
-    replacementMap, _changesetId + "-" + replacementMap->getName() + "-after-id-sync");
+    replacementMap, className(), _changesetId + "-" + replacementMap->getName() + "-after-id-sync");
 }
 
 }

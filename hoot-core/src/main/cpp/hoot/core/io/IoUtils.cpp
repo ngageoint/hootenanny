@@ -51,8 +51,6 @@
 namespace hoot
 {
 
-int IoUtils::logWarnCount = 0;
-
 bool IoUtils::urlsAreBoundable(const QStringList& urls)
 {
   for (int i = 0; i < urls.size(); i++)
@@ -249,7 +247,7 @@ void IoUtils::cropToBounds(
   LOG_DEBUG(cropper.getCompletedStatusMessage());
   LOG_VARD(StringUtils::formatLargeNumber(map->getElementCount()));
 
-  OsmMapWriterFactory::writeDebugMap(map, "cropped-to-bounds");
+  OsmMapWriterFactory::writeDebugMap(map, className(), "cropped-to-bounds");
 }
 
 std::shared_ptr<ElementVisitorInputStream> IoUtils::getVisitorInputStream(
