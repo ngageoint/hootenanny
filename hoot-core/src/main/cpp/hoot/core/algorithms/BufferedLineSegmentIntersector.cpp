@@ -43,6 +43,7 @@ namespace hoot
 class LineSegmentResult
 {
 public:
+
   LineSegmentResult(const LineSegment& ls) :
     _c0(Coordinate::getNull()),
     _c1(Coordinate::getNull()),

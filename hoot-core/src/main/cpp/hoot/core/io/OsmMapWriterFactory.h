@@ -67,8 +67,8 @@ public:
    * Writes a map useful for debugging
    *
    * @param map the map to write
-   * @param callingClass name of the class calling this method
-   * @param title a descriptive title
+   * @param callingClass name of the class calling this method for the map output file
+   * @param title a descriptive title for the map output file
    * @param matcher If the Network conflation algorithm was used to generate the input data, pass
    * in the matcher used to write additional debugging information.
    */
@@ -81,8 +81,8 @@ public:
    *
    * @param geometry the geometry to write
    * @param spatRef the spatial reference the geometry being written is in
-   * @param callingClass name of the class calling this method
-   * @param title a descriptive title
+   * @param callingClass name of the class calling this method for the map output file
+   * @param title a descriptive title for the output map file
    * @param matcher If the Network conflation algorithm was used to generate the input data, pass
    * in the matcher used to write additional debugging information.
    */

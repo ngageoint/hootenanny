@@ -122,6 +122,14 @@ public:
   static void removeEmptyStrings(QStringList& strings);
 
   /**
+   * Removes matching prefixes from a collection of strings
+   *
+   * @param prefix the prefix to remove from the strings
+   * @param input the collection of strings to modify
+   */
+  static void removePrefixes(const QString& prefix, QStringList& input);
+
+  /**
    * Determines if a string is made up of entirely alphanumeric characters
    *
    * @param input string to examine
@@ -183,7 +191,7 @@ public:
   static void removeAll(QStringList& input, const QStringList& toRemove);
 
   /**
-   * Removes the last occurrence of a gropu of strings from a single string
+   * Removes the last occurrence of a group of strings from a single string
    *
    * @param input the string to remove from
    * @param toRemove the tokens to remove
@@ -194,7 +202,7 @@ public:
     Qt::CaseSensitivity caseSensitivity = Qt::CaseInsensitive);
 
   /**
-   * Determines if list contains any strings from another list
+   * Determines if a list contains any strings from another list
    *
    * @param input list to search
    * @param toCompare list to compare with
@@ -204,6 +212,15 @@ public:
   static bool containsAny(
     const QStringList& input, const QStringList& compareList,
     Qt::CaseSensitivity caseSensitivity = Qt::CaseInsensitive);
+
+  /**
+   * Determines if a list contains a string using wildcard matching
+   *
+   * @param str the string to search for; may contain '*' for wildcard matching
+   * @param input list to search
+   * @return true if at least one match is found; false otherwise
+   */
+  static bool containsWildcard(const QString& str, const QStringList& inputs);
 
   /**
    * Determines if a string ends with any one of a group of strings
@@ -243,7 +260,7 @@ public:
     Qt::CaseSensitivity caseSensitivity = Qt::CaseInsensitive);
 
   /**
-   * Determines if a string is contains a matching instance of any one of a group of regular
+   * Determines if a string contains a matching instance of any one of a group of regular
    * expressions which bisects it
    *
    * @param input the string to examine
