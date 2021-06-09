@@ -143,7 +143,7 @@ HOOT_EMAIL="${TEST_NAME}@hoottestcpp.org"
 # bounds.remove.missing.elements=false ensures that we don't drop any missing elements except when writing out our debug maps.
 
 LOG_LEVEL="--warn"
-GENERAL_OPTS="-C UnifyingAlgorithm.conf -C Testing.conf -D uuid.helper.repeatable=true -D writer.include.debug.tags=true -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false -D bounds.remove.missing.elements=false -D log.warnings.for.missing.elements=false -D debug.maps.write=false -D debug.maps.remove.missing.elements=false -D element.hash.visitor.non.metadata.ignore.keys=note $EXTRA_PARAMS -D log.class.filter= "
+GENERAL_OPTS="-C UnifyingAlgorithm.conf -C Testing.conf -D uuid.helper.repeatable=true -D writer.include.debug.tags=true -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false -D bounds.remove.missing.elements=false -D log.warnings.for.missing.elements=false -D debug.maps.write=false -D debug.maps.remove.missing.elements=false -D element.hash.visitor.non.metadata.ignore.keys=note $EXTRA_PARAMS -D log.class.include.filter= "
 # Holding onto missing child element refs does not work yet with cropping, so disable it when cropping is specified.
 # TODO: bug issue creation pending.
 # TODO: This needs to be only added for the initial write and not all convert ops in the script.

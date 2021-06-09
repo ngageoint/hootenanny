@@ -45,7 +45,7 @@ DEBUG=false
 if [ "$DEBUG" == "true" ]; then
   GENERAL_OPTS=$GENERAL_OPTS" -D debug.maps.write=true"
   LOG_LEVEL="--trace"
-  LOG_FILTER="-D log.class.filter= "
+  LOG_FILTER="-D log.class.include.filter= "
 fi
 
 scripts/database/CleanAndInitializeOsmApiDb.sh
