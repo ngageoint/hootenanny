@@ -84,9 +84,8 @@ static void cplErrorHandler(CPLErr eErrClass, int err_no, const char *msg)
   Log::getInstance().log(l, ss.str());
 }
 
-Log::Log()
-  : _level(Log::Info),
-    _classFilterInitialized(false)
+Log::Log() :
+_level(Log::Info)
 {
   qInstallMessageHandler(myLoggerFunction);
   CPLSetErrorHandler(cplErrorHandler);
