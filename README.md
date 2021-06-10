@@ -35,7 +35,7 @@ Hootenanny has specifically tailored conflation algorithms available for the fol
 * Roads
 
 Any feature whose type does not fit into the list of types above, or has no type at all, will be conflated with 
-[Generic Geometry Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/user/GenericGeometryConflation.asciidoc), which uses a 
+[Generic Geometry Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/user/OldDocs.asciidoc), which uses a 
 simpler rules based approach than the type specific conflation algorithms.
 
 [Conflation Algorithms Detail](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/ConflationAlgsOverview.md)

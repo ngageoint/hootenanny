@@ -3,8 +3,7 @@
 
 Hootenanny offers the capability to convert data between an OpenStreetMap Editing API Database and any supported 
 Hootenanny data output format. The OpenStreetMap Editing API database allows fetching and saving of raw geo-data 
-for OpenStreetMap. The current supported API version is 0.6. More information about the database and API is found 
-at: https://wiki.openstreetmap.org/wiki/API.
+for OpenStreetMap. The current supported API version is 0.6. More information about the database and API can be found https://wiki.openstreetmap.org/wiki/API.[here].
 
 Hootenanny supports reading and writing from the OpenStreetMap API database using its `convert` command. A description 
 of how to use Hootenanny's capability for 'writing to' and 'reading from' an OpenStreetMap Editing API Database is 
@@ -40,7 +39,7 @@ osmapidb://hoot:hoottest@localhost:5432/osmapi_test
 
 === Writing to an OpenStreetMap Editing API Database Using the Command Line
 
-Hootenanny's `hoot convert` command uses optimized SQL routines to write large amounts of data to the OSM API database, which results in much faster performance than using XML changesets passed to the OSM web services over HTTP (Rails Port).  The writer
+Hootenanny's `hoot convert` command uses optimized SQL routines to write large amounts of data to the OSM API database, which results in much faster performance than using XML changesets passed to the OSM web services over HTTP (Rails Port or cgimap).  The writer
 has two possible workflows: online and offline.  The offline mode is meant for the fastest performance writing against offline
 databases (no other writers present), while the online mode sacrifices some performance but is safe for writing against online databases (other writers present).
 

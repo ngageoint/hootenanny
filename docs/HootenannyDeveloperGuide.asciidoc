@@ -2,25 +2,23 @@
 
 = Hootenanny Developer Guide
 
+include::developer/HootenannyArchitecture.asciidoc[]
 include::developer/HootenannyBuild.asciidoc[]
-include::developer/HootenannyDeveloperIDESetup.asciidoc[]
-include::developer/HootenannyTroubleshooting.asciidoc[]
-include::developer/HootenannyTests.asciidoc[]
-include::developer/HootenannyWebArchitecture_Intro.asciidoc[]
-include::developer/HootenannyServicesDatabaseNotes.asciidoc[]
-include::developer/HootenannyDebugging.asciidoc[]
-include::developer/HootenannyFasterCompile.asciidoc[]
-include::developer/HootenannyInconsistentOutput.asciidoc[]
 include::developer/HootenannyNotesOnConfigure.asciidoc[]
-include::developer/HootenannyDevelopmentAdvancedOptionsInfo.asciidoc[]
+include::developer/HootenannyTests.asciidoc[]
+include::developer/HootenannyDebugging.asciidoc[]
+include::developer/HootenannyDevelopmentProcess.asciidoc[]
+include::developer/HootenannyInconsistentOutput.asciidoc[]
 include::developer/HootenannyManualConflation.asciidoc[]
 include::developer/HootenannyManualMultiaryConflation.asciidoc[]
+include::developer/HootenannyRegenerateUnifyingRandomForestModels.asciidoc[]
 include::developer/HootenannyConflatingANewFeatureTypeWithGenericConflation.asciidoc[]
-include::developer/HootenannyOsmApiDatabaseConflationNotes.asciidoc[]
+include::developer/HootenannyOptimizingNetworkAlgorithmSettings.asciidoc[]
 include::developer/HootenannyImplicitTagDatabaseGeneration.asciidoc[]
 include::developer/HootenannyLanguageTranslation.asciidoc[]
-include::developer/HootenannyRegenerateUnifyingRandomForestModels.asciidoc[]
-include::developer/HootenannyOptimizingNetworkAlgorithmSettings.asciidoc[]
+include::developer/HootenannyServicesDatabaseNotes.asciidoc[]
+include::developer/HootenannyDevelopmentAdvancedOptionsInfo.asciidoc[]
+include::developer/HootenannyGrailNotes.asciidoc[]
 
 
 

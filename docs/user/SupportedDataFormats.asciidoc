@@ -6,8 +6,8 @@
 
 * File Geodatabase (.gdb)
 * GeoJSON (.geojson file or Overpass query URL) (M1)
-* link:$$https://www.geonames.org/$$[GeoNames] (.geonames)
-* link:$$https://geonames.nga.mil/gns/html/gis_countryfiles.html$$[Geonames.nga.mil] (.geonames)
+* https://www.geonames.org[GeoNames] (.geonames)
+* https://geonames.nga.mil/gns/html/gis_countryfiles.html[Geonames.nga.mil] (.geonames)
 * Hootenanny API Database (hootapidb://)
 * OpenStreetMap API Database (osmapidb://)
 * OpenStreetMap API Web Service (http://)
