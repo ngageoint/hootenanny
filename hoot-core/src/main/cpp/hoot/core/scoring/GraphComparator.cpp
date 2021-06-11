@@ -414,7 +414,7 @@ void GraphComparator::_exportGraphImage(OsmMapPtr map, DirectedGraph& /*graph*/,
     }
     else
     {
-      int v = (cost / maxCost) * 255.0;
+      double v = (cost / maxCost) * 255.0;
       c.setRgb(255, v, 0);
     }
 

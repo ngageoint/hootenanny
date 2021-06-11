@@ -64,9 +64,9 @@ void ElementDeduplicator::dedupe(OsmMapPtr map)
   LOG_INFO("De-duping intra-map: " << map->getName() << "...");
   LOG_DEBUG(map->getName() << " size before de-duping: " << map->size());
 
-  const long nodesBefore = map->getNodeCount();
-  const long waysBefore = map->getWayCount();
-  const long relationsBefore = map->getRelationCount();
+  const int nodesBefore = map->getNodeCount();
+  const int waysBefore = map->getWayCount();
+  const int relationsBefore = map->getRelationCount();
 
   // calculate our unique hashes per element and get a list of duplicate pairs within the map
   QMap<QString, ElementId> mapHashes;
@@ -107,12 +107,12 @@ void ElementDeduplicator::dedupe(OsmMapPtr map1, OsmMapPtr map2)
   LOG_DEBUG(map2->getName() << " size before de-duping: " << map2->size());
   LOG_VARD(_favorMoreConnectedWays);
 
-  const long map1NodesBefore = map1->getNodeCount();
-  const long map1WaysBefore = map1->getWayCount();
-  const long map1RelationsBefore = map1->getRelationCount();
-  const long map2NodesBefore = map2->getNodeCount();
-  const long map2WaysBefore = map2->getWayCount();
-  const long map2RelationsBefore = map2->getRelationCount();
+  const int map1NodesBefore = map1->getNodeCount();
+  const int map1WaysBefore = map1->getWayCount();
+  const int map1RelationsBefore = map1->getRelationCount();
+  const int map2NodesBefore = map2->getNodeCount();
+  const int map2WaysBefore = map2->getWayCount();
+  const int map2RelationsBefore = map2->getRelationCount();
 
   // Calculate our unique hashes per element for each map and get a list of duplicate pairs within
   // each map.

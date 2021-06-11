@@ -270,7 +270,7 @@ void DataConverter::_convertToOgr(const QStringList& inputs, const QString& outp
       numTasks++;
     }
     int currentTask = 1;
-    const float taskWeight = 1.0 / (float)numTasks;
+    double taskWeight = 1.0 / numTasks;
 
     Progress inputLoadProgress(
       ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running, 0.0, taskWeight);
@@ -294,7 +294,7 @@ void DataConverter::_convertToOgr(const QStringList& inputs, const QString& outp
       convertOps.setProgress(
         Progress(
           ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running,
-          (float)(currentTask - 1) / (float)numTasks, 1.0 / (float)numTasks));
+          (currentTask - 1) / numTasks, 1.0 / numTasks));
       convertOps.apply(map);
       currentTask++;
       LOG_STATUS(
@@ -357,7 +357,7 @@ void DataConverter::_convertFromOgr(const QStringList& inputs, const QString& ou
   }
 
   int currentTask = 1;
-  const float taskWeight = 1.0 / (float)numTasks;
+  double taskWeight = 1.0 / (float)numTasks;
 
   OsmMapPtr map(new OsmMap());
   for (int i = 0; i < inputs.size(); i++)
@@ -473,7 +473,7 @@ void DataConverter::_convert(const QStringList& inputs, const QString& output)
     }
   }
   int currentTask = 1;
-  const float taskWeight = 1.0 / (float)numTasks;
+  double taskWeight = 1.0 / numTasks;
 
   if (isStreamable)
   {

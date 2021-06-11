@@ -123,7 +123,7 @@ std::shared_ptr<QImage> NodeDensityPlotter::_createImage(const cv::Mat& mat) con
     const int32_t* row = mat.ptr<int32_t>(y);
     for (int x = 0; x < qImage->width(); x++)
     {
-      double v = log1p(row[x]) / log(maxValue);
+      int v = log1p(row[x]) / log(maxValue);
       int r = std::max(0, std::min<int>(255, v * _colorMultiplier[0] + qRed(_baseColors)));
       int g = std::max(0, std::min<int>(255, v * _colorMultiplier[1] + qGreen(_baseColors)));
       int b = std::max(0, std::min<int>(255, v * _colorMultiplier[2] + qBlue(_baseColors)));

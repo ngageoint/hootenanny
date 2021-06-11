@@ -91,7 +91,7 @@ public:
     const QString output = args[1].trimmed();
 
     bool ok = false;
-    const int maxNodes = args[2].toLong(&ok);
+    long maxNodes = args[2].toLong(&ok);
     if (!ok || maxNodes < 1)
     {
       throw HootException("Invalid maximum node count: " + args[2]);

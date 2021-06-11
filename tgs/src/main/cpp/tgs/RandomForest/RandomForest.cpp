@@ -81,7 +81,7 @@ void RandomForest::trainBinary(const std::shared_ptr<DataFrame>& data, unsigned 
 
         std::vector<std::string> badFactors;
 
-        unsigned int cutOffIdx = topFactors.size() - (unsigned int)((double)topFactors.size() * retrain);
+        unsigned long cutOffIdx = topFactors.size() - (unsigned int)((double)topFactors.size() * retrain);
 
         std::multimap<double, std::string> sortedFactors;
         std::multimap<double, std::string>::iterator mMapItr;
@@ -177,7 +177,7 @@ void RandomForest::trainMulticlass(const std::shared_ptr<DataFrame>& data, unsig
 
         std::vector<std::string> badFactors;
 
-        unsigned int cutOffIdx =
+        unsigned long cutOffIdx =
           topFactors.size() - (unsigned int)((double)topFactors.size() * retrain);
 
         std::multimap<double, std::string> sortedFactors;
@@ -270,7 +270,7 @@ void RandomForest::trainRoundRobin(const std::shared_ptr<DataFrame>& data, unsig
 
         std::vector<std::string> badFactors;
 
-        unsigned int cutOffIdx =
+        unsigned long cutOffIdx =
           topFactors.size() - (unsigned int)((double)topFactors.size() * retrain);
 
         std::multimap<double, std::string> sortedFactors;
