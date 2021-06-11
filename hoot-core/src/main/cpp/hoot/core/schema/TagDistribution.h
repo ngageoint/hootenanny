@@ -68,7 +68,7 @@ public:
   void setProcessAllTagKeys(const bool process) { _processAllTagKeys = process; }
   void setCountOnlyMatchingElementsInTotal(const bool count)
   { _countOnlyMatchingElementsInTotal = count; }
-  void setCriterionClassName(const QString& name);
+  void setCriteria(QStringList& names);
   void setSortByFrequency(const bool sort) { _sortByFrequency = sort; }
   void setTokenize(const bool tokenize) { _tokenize = tokenize; }
   void setLimit(const int limit) { _limit = limit; }
@@ -87,7 +87,7 @@ private:
   bool _countOnlyMatchingElementsInTotal;
 
   // optional filtering crit
-  QString _criterionClassName;
+  ElementCriterionPtr _crit;
 
   // if true, tag values sorted by decreasing frequency; otherwise sorted alphabetically
   bool _sortByFrequency;
@@ -110,7 +110,6 @@ private:
 
   std::shared_ptr<PartialOsmMapReader> _getReader(const QString& input) const;
   ElementInputStreamPtr _getFilteredInputStream(const ElementInputStreamPtr& inputStream) const;
-  ElementCriterionPtr _getCriterion() const;
 
   void _countTags(const QString& input, std::map<QString, int>& tagCounts);
   void _processTagKey(

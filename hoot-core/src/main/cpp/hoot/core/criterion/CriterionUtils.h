@@ -48,6 +48,20 @@ class CriterionUtils
 public:
 
   /**
+   * TODO
+   *
+   * @param criteriaClassNames
+   * @param chainCriteria
+   * @param negate
+   * @param isStreamable
+   * @return
+   * @todo may be able to use this in MultipleCriterionConsumerVisitor
+   */
+  static ElementCriterionPtr constructCriterion(
+    const QStringList& criteriaClassNames, const bool chainCriteria, const bool negate,
+    bool& isStreamable);
+
+  /**
    * Determines whether a map contains a minimum or a fixed amount of elements matching the
    * criterion type. Only objects of type ElementCriterion are allowed, all others will return
    * false.

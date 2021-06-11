@@ -18,13 +18,13 @@ hoot count --warn $CONFIG "$INPUT_FILE_1;$INPUT_FILE_2"
 echo "counting all elements..."
 hoot count --warn $CONFIG "$INPUT_FILE_1;$INPUT_FILE_2" --all-elements
 
-# LinearWaterwayCriterion is not a map consumer, so streaming I/O can occur.
+# LinearWaterwayCriterion is not a map consumer, so streaming I/O will occur.
 
 echo "counting all rivers..."
 hoot count --warn $CONFIG "$INPUT_FILE_3;$INPUT_FILE_4" hoot::LinearWaterwayCriterion
 
 echo "counting all elements that are not rivers..."
-hoot count --warn $CONFIG -D element.criterion.negate=true "$INPUT_FILE_3;$INPUT_FILE_4" hoot::LinearWaterwayCriterion
+hoot count --warn $CONFIG -D element.criteria.negate=true "$INPUT_FILE_3;$INPUT_FILE_4" hoot::LinearWaterwayCriterion
 
 # PoiCriterion is a map consumer, so streaming I/O cannot occur.
 
@@ -32,9 +32,20 @@ echo "counting all POIs..."
 hoot count --warn $CONFIG "$INPUT_FILE_1;$INPUT_FILE_2" hoot::PoiCriterion
 
 echo "counting all elements that are not POIs..."
-hoot count --warn $CONFIG -D element.criterion.negate=true "$INPUT_FILE_1;$INPUT_FILE_2" hoot::PoiCriterion
+hoot count --warn $CONFIG -D element.criteria.negate=true "$INPUT_FILE_1;$INPUT_FILE_2" hoot::PoiCriterion
 
 # Check to make sure multi-layer gdb's get parsed correctly.
 
 echo "counting all element from multi-layer GDB..."
 hoot count $INPUT_DIR/input.gdb --all-elements
+
+# Check combos of crits and crit related options
+
+echo "counting all rivers and POIs..."
+hoot count --warn $CONFIG "$INPUT_FILE_1;$INPUT_FILE_2;$INPUT_FILE_3;$INPUT_FILE_4" "LinearWaterwayCriterion;PoiCriterion"
+
+echo "counting elements that are both rivers and POIs..."
+hoot count --warn $CONFIG -D element.counter.chain.element.criteria=true "$INPUT_FILE_1;$INPUT_FILE_2;$INPUT_FILE_3;$INPUT_FILE_4" "LinearWaterwayCriterion;PoiCriterion"
+
+echo "counting elements that are not POIs..."
+hoot count --warn $CONFIG -D element.criteria.negate=true "$INPUT_FILE_1;$INPUT_FILE_2;$INPUT_FILE_3;$INPUT_FILE_4" PoiCriterion

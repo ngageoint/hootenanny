@@ -77,12 +77,10 @@ private:
   int _taskStatusUpdateInterval;
 
   void _checkForMissingInputs(const QStringList& inputs) const;
-  QString _getStatusMessage(const QString& input, const QString& criterionClassName) const;
-  QString _getStatusMessage(const int inputsSize, const QString& criterionClassName) const;
+  QString _getStatusMessage(const QString& input, const QString& critStr) const;
+  QString _getStatusMessage(const int inputsSize, const QString& critStr) const;
 
   std::shared_ptr<PartialOsmMapReader> _getStreamingReader(const QString& input) const;
-  ElementCriterionPtr _getCriterion(
-    const QString& criterionClassName, const bool negate, bool& isStreamable) const;
   ElementInputStreamPtr _getFilteredInputStream(
     ElementInputStreamPtr inputStream, const ElementCriterionPtr& criterion,
     ConstElementVisitorPtr countVis) const;

@@ -387,7 +387,7 @@ hoot convert -D convert.ops="UnlikelyRoadRemover" input.osm output.osm
     hoot conflate -C AttributeConflation.conf -C UnifyingAlgorithm.conf \
       -D convert.ops=RemoveElementsVisitor \
       -D remove.elements.visitor.element.criteria=LinearWaterwayCriterion;LinearWaterwayWayNodeCriterion;RelationWithRiverMembersCriterion \
-      -D element.criterion.negate=true \
+      -D element.criteria.negate=true \
       -D remove.elements.visitor.chain.element.criteria=true \
       -D remove.elements.visitor.recursive=false input1.osm input2.osm output.osm
 -----
@@ -534,7 +534,7 @@ hoot convert -D convert.ops="UnlikelyRoadRemover" input.osm output.osm
     hoot convert -D convert.ops="RemoveElementsVisitor" \
     -D remove.elements.visitor.element.criteria="ElementIdCriterion" 
     -D element.id.criterion.ids="Relation:-1;Relation:7387470" 
-    -D element.criterion.negate=true input.osm output.osm
+    -D element.criteria.negate=true input.osm output.osm
 -----
 
 ==== Remove relations and ways from a map:
@@ -548,7 +548,7 @@ hoot convert -D convert.ops="UnlikelyRoadRemover" input.osm output.osm
 
 -----
     hoot convert -D convert.ops="RemoveElementsVisitor" \
-      -D remove.elements.visitor.element.criteria="PolygonCriterion" -D element.criterion.negate=true \ 
+      -D remove.elements.visitor.element.criteria="PolygonCriterion" -D element.criteria.negate=true \
       input.osm output.osm
 -----
 
@@ -879,7 +879,7 @@ Requires a language translation server installation.  See the Hootenanny Install
 ==== Count all elements that are not POIs:
 
 -----
-    hoot count -D element.criterion.negate=true "input1.osm;input2.osm" PoiCriterion \
+    hoot count -D element.criteria.negate=true "input1.osm;input2.osm" PoiCriterion \
       --all-elements
 -----
 
@@ -1178,7 +1178,7 @@ Requires a language translation server installation.  See the Hootenanny Install
 -----
     hoot convert -D convert.ops=RemoveTagsVisitor -D tag.filter.keys="REF1;REF2" \
       -D tag.filter.element.criterion=TagCriterion \
-      -D tag.criterion.kvps="power=line" -D element.criterion.negate=true input.osm output.osm
+      -D tag.criterion.kvps="power=line" -D element.criteria.negate=true input.osm output.osm
 -----
 
 ==== For all features with a "voltage" tag between 1 and 45k volts, set the tag "power=minor_line":

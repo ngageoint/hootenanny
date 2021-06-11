@@ -12,9 +12,12 @@ percentage of each value's frequency compared to other tag values.
                                semicolon and surrounding them with quotes. To process all tags, leave this empty by specifying 
                                a pair of quotes with nothing between them. This parameter is ignored if `--names` or `--types` 
                                is used.
-* +criterion+                - (optional) A criterion used to filter the input before tag counting. The criterion must be 
-                               a single class name of a inheriting  from `ElementCriterion`. Use the +info --operators+ 
-                               command to obtain a list of available Hootenanny criteria.
+* +criteria+                 - (optional) Filtering criteria; May be one or more class names inheriting from 
+                               `ElementCriterion` delimited with a semicolon and surrounded by quotes. By default, 
+                               multiple criteria are logically OR'd together. Set the 
+                               `tag.distribution.chain.element.criteria` option to true to have the criteria logically 
+                               AND'd together. The criteria can be negated with the option `element.criteria.negate`.
+                               Use the +info --operators+ command to obtain a list of available criteria.
 * +--names+                  - If specified, `tagKeys` is ignored and only name tags, as defined by Hootenanny's schema, 
                                are processed. This is incompatible with the `--types` option.
 * +--types+                  - If specified, `tagKeys` is ignored and only type tags, as defined by Hootenanny's schema, 
@@ -38,7 +41,7 @@ This command works on streamable inputs only. To determine if an input is stream
 === Usage
 
 --------------------------------------
-tag-distribution (input1;input2...) (tagKeys) [criterion] [--names] [--types] [--percentage-of-matching] [--sort-by-value] [--limit]  [--tokenize]
+tag-distribution (input1;input2...) (tagKeys) [criterion1;criterion2] [--names] [--types] [--percentage-of-matching] [--sort-by-value] [--limit]  [--tokenize]
 --------------------------------------
 
 https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#display-the-distribution-of-highway-tags-for-roads-in-a-map[Examples]

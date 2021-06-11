@@ -138,16 +138,16 @@ public:
     {
       tagKeys = args[1].split(";", QString::SkipEmptyParts);
     }
-    QString criterionClassName;
+    QStringList criteriaClassNames;
     if (args.size() == 3)
     {
-      criterionClassName = args[2];
+      criteriaClassNames = args[2].trimmed().split(";");
     }
 
     LOG_STATUS("Calculating tag distribution for " << inputs.size() << " input(s)...");
 
     TagDistribution tagDist;
-    tagDist.setCriterionClassName(criterionClassName);
+    tagDist.setCriteria(criteriaClassNames);
     tagDist.setLimit(limit);
     tagDist.setSortByFrequency(sortByFrequency);
     tagDist.setTagKeys(tagKeys);

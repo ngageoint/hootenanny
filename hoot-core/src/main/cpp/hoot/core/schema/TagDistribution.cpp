@@ -28,17 +28,17 @@
 #include "TagDistribution.h"
 
 // Hoot
-#include <hoot/core/criterion/NotCriterion.h>
+#include <hoot/core/criterion/CriterionUtils.h>
 #include <hoot/core/io/ElementCriterionInputStream.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/CollectionUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/StringUtils.h>
 
+// Qt
 #include <QTextStream>
 
 namespace hoot
@@ -57,13 +57,29 @@ _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
   _nonWord.setPattern("[^\\w\\s]");
 }
 
-void TagDistribution::setCriterionClassName(const QString& name)
+void TagDistribution::setCriteria(QStringList& names)
 {
-  _criterionClassName = name;
-  if (!_criterionClassName.isEmpty() &&
-      !_criterionClassName.startsWith(MetadataTags::HootNamespacePrefix()))
+  if (!names.isEmpty())
   {
-    _criterionClassName.prepend(MetadataTags::HootNamespacePrefix());
+    for (int i = 0; i < names.size(); i++)
+    {
+      if (!names.at(i).startsWith(MetadataTags::HootNamespacePrefix()))
+      {
+        QString className = names[i];
+        className.prepend(MetadataTags::HootNamespacePrefix());
+        names[i] = className;
+      }
+    }
+
+    ConfigOptions opts;
+    bool isStreamableCrit = false;
+    _crit =
+      CriterionUtils::constructCriterion(
+        names, opts.getElementCriteriaChain(), opts.getElementCriteriaNegate(), isStreamableCrit);
+//    if (!isStreamableCrit)
+//    {
+//      throw IllegalArgumentException("Criteria for TagDistribution must be streamable.");
+//    }
   }
 }
 
@@ -109,9 +125,9 @@ QString TagDistribution::getTagCountsString(const std::map<QString, int>& tagCou
       msg =
         "No tags with keys: " + _tagKeys.join(",") + " were found out of " +
         StringUtils::formatLargeNumber(_totalTagsProcessed) + " total tags processed.";
-      if (!_criterionClassName.isEmpty())
+      if (_crit)
       {
-        msg += " Filtered by: " + _criterionClassName + ".";
+        msg += " Filtered by: " + _crit->toString() + ".";
       }
       ts << msg << endl;
     }
@@ -126,9 +142,9 @@ QString TagDistribution::getTagCountsString(const std::map<QString, int>& tagCou
       "Total elements processed: " +
       StringUtils::formatLargeNumber(_totalElementsProcessed) + ". Total tags processed: " +
       StringUtils::formatLargeNumber(_totalTagsProcessed) + ".";
-    if (!_criterionClassName.isEmpty())
+    if (_crit)
     {
-      msg += " Filtered by: " + _criterionClassName + ".";
+      msg += " Filtered by: " + _crit->toString() + ".";
     }
     ts << msg << endl;
 
@@ -313,10 +329,9 @@ ElementInputStreamPtr TagDistribution::_getFilteredInputStream(
 {
   ElementInputStreamPtr filteredInputStream;
 
-  if (!_criterionClassName.trimmed().isEmpty())
+  if (_crit)
   {
-    ElementCriterionPtr crit = _getCriterion();
-    filteredInputStream.reset(new ElementCriterionInputStream(inputStream, crit));
+    filteredInputStream.reset(new ElementCriterionInputStream(inputStream, _crit));
   }
   else
   {
@@ -331,7 +346,7 @@ std::shared_ptr<PartialOsmMapReader> TagDistribution::_getReader(const QString& 
   // See related note in TagInfo::_getInfo.
   if (!OsmMapReaderFactory::hasElementInputStream(input))
   {
-    throw HootException("Inputs to TagDistribution must be streamable.");
+    throw IllegalArgumentException("Inputs to TagDistribution must be streamable.");
   }
 
   std::shared_ptr<PartialOsmMapReader> reader =
@@ -341,40 +356,6 @@ std::shared_ptr<PartialOsmMapReader> TagDistribution::_getReader(const QString& 
   reader->open(input);
   reader->initializePartial();
   return reader;
-}
-
-ElementCriterionPtr TagDistribution::_getCriterion() const
-{
-  ElementCriterionPtr crit;
-
-  try
-  {
-    crit.reset(
-      Factory::getInstance().constructObject<ElementCriterion>(_criterionClassName));
-  }
-  catch (const boost::bad_any_cast&)
-  {
-    throw IllegalArgumentException("Invalid criterion: " + _criterionClassName);
-  }
-
-  if (ConfigOptions().getElementCriterionNegate())
-  {
-    crit.reset(new NotCriterion(crit));
-  }
-  LOG_VART(crit.get());
-
-  std::shared_ptr<Configurable> critConfig;
-  if (crit.get())
-  {
-    critConfig = std::dynamic_pointer_cast<Configurable>(crit);
-  }
-  LOG_VART(critConfig.get());
-  if (critConfig.get())
-  {
-    critConfig->setConfiguration(conf());
-  }
-
-  return crit;
 }
 
 }

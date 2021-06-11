@@ -52,7 +52,7 @@ void NodesPerWayVisitor::setConfiguration(const Settings& conf)
   // Can we move some of the logic up to the parent? Do the same in the other children as well.
 
   ConfigOptions configOptions(conf);
-  _negateCriterion = configOptions.getElementCriterionNegate();
+  _negateCriterion = configOptions.getElementCriteriaNegate();
   LOG_VARD(_negateCriterion);
   const QString critName = configOptions.getNodesPerWayVisitorElementCriterion();
   LOG_VARD(critName);
