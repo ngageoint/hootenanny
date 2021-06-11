@@ -1,23 +1,42 @@
+
 counting all features...
 
 Total count : 47
+
 counting all elements...
 
 Total count : 259
+
 counting all rivers...
 
 Total count (hoot::LinearWaterwayCriterion): 29
+
 counting all elements that are not rivers...
 
 Total count (hoot::LinearWaterwayCriterion): 0
+
 counting all POIs...
 
 Total count (hoot::PoiCriterion): 21
+
 counting all elements that are not POIs...
 
 Total count (hoot::PoiCriterion): 26
+
 counting all element from multi-layer GDB...
-20:37:56.896 STATUS ...t/core/info/ElementCounter.cpp(  93) Counting elements from ow/CountCmdTest/input.gdb...
-20:37:56.948 STATUS ...t/core/info/ElementCounter.cpp( 104) Features counted in 00:00 total.
+20:58:15.960 STATUS ...t/core/info/ElementCounter.cpp( 109) Counting elements from ow/CountCmdTest/input.gdb...
+20:58:16.012 STATUS ...t/core/info/ElementCounter.cpp( 120) Features counted in 00:00 total.
 
 Total count : 20
+
+counting all rivers and POIs...
+
+Total count (hoot::LinearWaterwayCriterion;hoot::PoiCriterion): 50
+
+counting elements that are both rivers and POIs...
+
+Total count (hoot::LinearWaterwayCriterion;hoot::PoiCriterion): 0
+
+counting elements that are not POIs...
+
+Total count (hoot::PoiCriterion): 55

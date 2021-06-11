@@ -55,22 +55,18 @@ public:
    */
   long count(const QStringList& inputs);
 
-  /**
-   * Counts the number of elements in inputs that satisify a criterion
-   *
-   * @param inputs paths to map inputs to count within
-   * @param criteriaClassNames list of ElementCriterion class names to use for filtering
-   * @return a count
-   */
-  long count(const QStringList& inputs, QStringList& criteriaClassNames);
-
   void setCountFeaturesOnly(const bool countFeaturesOnly)
   { _countFeaturesOnly = countFeaturesOnly; }
+  void setCriteria(QStringList& names);
 
 private:
 
   // if true, elements with no information tags are not counted
   bool _countFeaturesOnly;
+  // optional filtering criteria
+  ElementCriterionPtr _crit;
+  // determines whether _crit supports streaming I/O
+  bool _isStreamableCrit;
   // total number of elements counted
   long _total;
 

@@ -52,66 +52,68 @@ namespace hoot
 
 ElementCounter::ElementCounter() :
 _countFeaturesOnly(true),
+_isStreamableCrit(false),
 _total(0),
 _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
 {
 }
 
-long ElementCounter::count(const QStringList& inputs)
+void ElementCounter::setCriteria(QStringList& names)
 {
-  QStringList strs;
-  return count(inputs, strs);
-}
-
-long ElementCounter::count(const QStringList& inputs, QStringList& criteriaClassNames)
-{
-  _checkForMissingInputs(inputs);
-
-  if (!criteriaClassNames.isEmpty())
+  if (!names.isEmpty())
   {
-    for (int i = 0; i < criteriaClassNames.size(); i++)
+    for (int i = 0; i < names.size(); i++)
     {
-      if (!criteriaClassNames.at(i).startsWith(MetadataTags::HootNamespacePrefix()))
+      if (!names.at(i).startsWith(MetadataTags::HootNamespacePrefix()))
       {
-        QString className = criteriaClassNames[i];
+        QString className = names[i];
         className.prepend(MetadataTags::HootNamespacePrefix());
-        criteriaClassNames[i] = className;
+        names[i] = className;
       }
     }
+
+    ConfigOptions opts;
+    // Test crit here to see if I/O can be streamed or not. If it requires a map, then it can't be
+    // streamed.
+    _isStreamableCrit = false;
+    _crit =
+      CriterionUtils::constructCriterion(
+        names, opts.getElementCriteriaChain(), opts.getElementCriteriaNegate(), _isStreamableCrit);
   }
-  LOG_VARD(criteriaClassNames);
+  else
+  {
+    _isStreamableCrit = true;
+  }
+}
+
+long ElementCounter::count(const QStringList& inputs)
+{
+  _checkForMissingInputs(inputs);
 
   QElapsedTimer timer;
   timer.start();
 
-  ConfigOptions opts;
-
-  // Test crit here to see if I/O can be streamed or not. If it requires a map, then it can't be
-  // streamed.
-  bool isStreamableCrit = false;
-  ElementCriterionPtr crit =
-    CriterionUtils::constructCriterion(
-      criteriaClassNames, opts.getElementCriteriaChain(), opts.getElementCriteriaNegate(),
-      isStreamableCrit);
-  LOG_VARD(isStreamableCrit);
-
   QString critStr;
-  if (crit)
+  if (_crit)
   {
-    critStr = crit->toString();
+    critStr = _crit->toString();
   }
-  if (isStreamableCrit)
+  else
+  {
+    _isStreamableCrit = true;
+  }
+  if (_isStreamableCrit)
   {
     for (int i = 0; i < inputs.size(); i++)
     {
       LOG_STATUS(_getStatusMessage(inputs.at(i), critStr));
-      _total += _countStreaming(inputs.at(i), crit);
+      _total += _countStreaming(inputs.at(i), _crit);
     }
   }
   else
   {
     LOG_STATUS(_getStatusMessage(inputs.size(), critStr));
-    _total += _countMemoryBound(inputs, crit);
+    _total += _countMemoryBound(inputs, _crit);
   }
 
   LOG_STATUS(
@@ -157,7 +159,7 @@ QString ElementCounter::_getStatusMessage(const int inputsSize, const QString& c
   {
     msg += " satisfying " + critStr;
   }
-  msg += " from " + QString::number(inputsSize) + " inputs...";
+  msg += " from " + QString::number(inputsSize) + " input(s)...";
   return msg;
 }
 

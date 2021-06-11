@@ -71,7 +71,8 @@ public:
 
     ElementCounter counter;
     counter.setCountFeaturesOnly(countFeaturesOnly);
-    const long totalCount = counter.count(inputs, criteriaClassNames);
+    counter.setCriteria(criteriaClassNames);
+    const long totalCount = counter.count(inputs);
 
     // putting a preceding endline in here since PROGRESS_INFO doesn't clear itself out at the end
     QString displayStr = "Total count ";

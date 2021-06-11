@@ -12,40 +12,50 @@ INPUT_FILE_4=test-files/conflate/generic/rivers/Haiti_osm_waterway_ss_REF2-cropp
 
 CONFIG="-C Testing.conf"
 
+echo ""
 echo "counting all features..."
 hoot count --warn $CONFIG "$INPUT_FILE_1;$INPUT_FILE_2"
 
+echo ""
 echo "counting all elements..."
 hoot count --warn $CONFIG "$INPUT_FILE_1;$INPUT_FILE_2" --all-elements
 
 # LinearWaterwayCriterion is not a map consumer, so streaming I/O will occur.
 
+echo ""
 echo "counting all rivers..."
 hoot count --warn $CONFIG "$INPUT_FILE_3;$INPUT_FILE_4" hoot::LinearWaterwayCriterion
 
+echo ""
 echo "counting all elements that are not rivers..."
 hoot count --warn $CONFIG -D element.criteria.negate=true "$INPUT_FILE_3;$INPUT_FILE_4" hoot::LinearWaterwayCriterion
 
 # PoiCriterion is a map consumer, so streaming I/O cannot occur.
 
+echo ""
 echo "counting all POIs..."
 hoot count --warn $CONFIG "$INPUT_FILE_1;$INPUT_FILE_2" hoot::PoiCriterion
 
+echo ""
 echo "counting all elements that are not POIs..."
 hoot count --warn $CONFIG -D element.criteria.negate=true "$INPUT_FILE_1;$INPUT_FILE_2" hoot::PoiCriterion
 
 # Check to make sure multi-layer gdb's get parsed correctly.
 
+echo ""
 echo "counting all element from multi-layer GDB..."
 hoot count $INPUT_DIR/input.gdb --all-elements
 
 # Check combos of crits and crit related options
 
+echo ""
 echo "counting all rivers and POIs..."
 hoot count --warn $CONFIG "$INPUT_FILE_1;$INPUT_FILE_2;$INPUT_FILE_3;$INPUT_FILE_4" "LinearWaterwayCriterion;PoiCriterion"
 
+echo ""
 echo "counting elements that are both rivers and POIs..."
-hoot count --warn $CONFIG -D element.counter.chain.element.criteria=true "$INPUT_FILE_1;$INPUT_FILE_2;$INPUT_FILE_3;$INPUT_FILE_4" "LinearWaterwayCriterion;PoiCriterion"
+hoot count --warn $CONFIG -D element.criteria.chain=true "$INPUT_FILE_1;$INPUT_FILE_2;$INPUT_FILE_3;$INPUT_FILE_4" "LinearWaterwayCriterion;PoiCriterion"
 
+echo ""
 echo "counting elements that are not POIs..."
 hoot count --warn $CONFIG -D element.criteria.negate=true "$INPUT_FILE_1;$INPUT_FILE_2;$INPUT_FILE_3;$INPUT_FILE_4" PoiCriterion

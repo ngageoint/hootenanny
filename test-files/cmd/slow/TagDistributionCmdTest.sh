@@ -28,12 +28,12 @@ hoot tag-distribution $CONFIG $INPUT_DIR/DcGisRoads.osm highway HighwayCriterion
 echo ""
 echo "Testing with a single key and multiple criteria specified..."
 echo ""
-hoot tag-distribution $CONFIG $INPUT_DIR/DcGisRoads.osm highway "HighwayCriterion;HighwayWayNodeCriterion"
+hoot tag-distribution $CONFIG $INPUT_DIR/DcGisRoads.osm highway "HighwayCriterion;WayCriterion"
 
 echo ""
 echo "Testing a crit chain..."
 echo ""
-hoot tag-distribution $CONFIG -D element.counter.chain.element.criteria=true $INPUT_DIR/DcGisRoads.osm highway "HighwayCriterion;PoiCriterion"
+hoot tag-distribution $CONFIG -D element.criteria.chain=true $INPUT_DIR/DcGisRoads.osm highway "HighwayCriterion;PoiCriterion"
 
 echo ""
 echo "Testing a negated crit..."

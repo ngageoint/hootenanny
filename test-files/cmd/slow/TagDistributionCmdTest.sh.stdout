@@ -184,11 +184,27 @@ Total elements processed: 374. Total tags processed: 748. Filtered by: hoot::Hig
 365	(97.6%)	highway=road
 9	(2.41%)	highway=motorway
 
+Testing with a single key and multiple criteria specified...
+
+Total elements processed: 374. Total tags processed: 748. Filtered by: OrCriterion(hoot::HighwayCriterion;hoot::WayCriterion).
+365	(97.6%)	highway=road
+9	(2.41%)	highway=motorway
+
+Testing a crit chain...
+
+No tags with keys: highway were found out of 0 total tags processed. Filtered by: ChainCriterion(hoot::HighwayCriterion;hoot::PoiCriterion).
+
+Testing a negated crit...
+
+Total elements processed: 4,698. Total tags processed: 748. Filtered by: NotCriterion(hoot::PoiCriterion).
+365	(7.77%)	highway=road
+9	(<1%)	highway=motorway
+
 Testing key not present...
 
 No tags with keys: blah were found out of 748 total tags processed.
 
-Testing criterion not present...
+Testing criterion for elements not present...
 
 No tags with keys: highway were found out of 0 total tags processed. Filtered by: hoot::PoiCriterion.
 

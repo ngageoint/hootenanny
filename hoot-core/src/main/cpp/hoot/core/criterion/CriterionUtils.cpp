@@ -49,18 +49,21 @@ ElementCriterionPtr CriterionUtils::constructCriterion(
 
   ChainCriterionPtr crit;
 
-  if (chainCriteria)
+  if (criteriaClassNames.size() > 1)
   {
-    crit = std::make_shared<ChainCriterion>();
-  }
-  else
-  {
-    crit = std::make_shared<OrCriterion>();
+    if (chainCriteria)
+    {
+      crit = std::make_shared<ChainCriterion>();
+    }
+    else
+    {
+      crit = std::make_shared<OrCriterion>();
+    }
   }
 
+  ElementCriterionPtr subCrit;
   for (int i = 0; i < criteriaClassNames.size(); i++)
   {
-    ElementCriterionPtr subCrit;
     const QString criterionClassName = criteriaClassNames.at(i);
     try
     {
@@ -99,10 +102,20 @@ ElementCriterionPtr CriterionUtils::constructCriterion(
       critConfig->setConfiguration(conf());
     }
 
-    crit->addCriterion(subCrit);
+    if (crit)
+    {
+      crit->addCriterion(subCrit);
+    }
   }
 
-  return crit;
+  if (criteriaClassNames.size() == 1)
+  {
+    return subCrit;
+  }
+  else
+  {
+    return crit;
+  }
 }
 
 }

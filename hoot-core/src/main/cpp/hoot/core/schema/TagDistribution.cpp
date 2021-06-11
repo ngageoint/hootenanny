@@ -342,6 +342,8 @@ ElementInputStreamPtr TagDistribution::_getFilteredInputStream(
 
 std::shared_ptr<PartialOsmMapReader> TagDistribution::_getReader(const QString& input) const
 {
+  // TODO: support non-streaming reads
+
   // See related note in TagInfo::_getInfo.
   if (!OsmMapReaderFactory::hasElementInputStream(input))
   {
