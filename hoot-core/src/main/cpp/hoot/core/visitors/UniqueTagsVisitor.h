@@ -34,7 +34,7 @@ namespace hoot
 {
 
 /**
- * TODO
+ * Collects unique tags
  */
 class UniqueTagsVisitor : public ConstElementVisitor
 {

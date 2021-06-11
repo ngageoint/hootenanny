@@ -36,7 +36,7 @@ namespace hoot
 {
 
 /**
- * TODO
+ * Counts unique instances of tags in elements
  */
 class UniqueTagCounter : public ConstElementVisitor, public SingleStatistic
 {
