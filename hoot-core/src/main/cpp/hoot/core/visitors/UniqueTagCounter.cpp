@@ -22,41 +22,26 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
  */
-#include "UniqueTagValuesVisitor.h"
+
+#include "UniqueTagCounter.h"
+
+// Hoot
+#include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
 
-// This isn't being factory registered, since there's no standard way to retrieve a set of strings
-// from a visitor
+HOOT_FACTORY_REGISTER(ElementVisitor, UniqueTagCounter)
 
-UniqueTagValuesVisitor::UniqueTagValuesVisitor(QString key, std::set<QString>& bag, bool split) :
-_key(key),
-_bag(bag),
-_split(split)
+void UniqueTagCounter::visit(const ConstElementPtr& e)
 {
-}
-
-void UniqueTagValuesVisitor::visit(const ConstElementPtr& e)
-{
-  Tags::const_iterator it = e->getTags().find(_key);
-  if (it != e->getTags().end())
+  OsmSchema& schema = OsmSchema::getInstance();
+  for (Tags::const_iterator tagItr = e->getTags().begin(); tagItr != e->getTags().end(); ++tagItr)
   {
-    if (_split)
-    {
-      QStringList l;
-      e->getTags().readValues(_key, l);
-      for (int i = 0; i < l.size(); i++)
-      {
-        _bag.insert(l[i]);
-      }
-    }
-    else
-    {
-      _bag.insert(it.value());
-    }
+    _tagKvps.insert(schema.toKvp(tagItr.key(), tagItr.value()));
   }
 }
 

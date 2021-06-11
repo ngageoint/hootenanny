@@ -45,13 +45,13 @@ You can create your own custom conflation algorithms for additional feature type
 # [Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/user/Introduction.asciidoc) Workflows
 
 A conflation workflow defines the manner in which two maps are merged together. Hootenanny has the following workflows:
-* **[Reference Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/user/OldDocs.asciidoc)** **(default)** - _Keep the best of both maps while favoring the first_
+* **[Reference Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/user/Introduction.asciidoc#conflation-strategies)** **(default)** - _Keep the best of both maps while favoring the first_
   * Use this type of conflation when you want map output based on the best state of two maps while favoring the first one.
-* **[Average Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/user/OldDocs.asciidoc)** - _Keep an average of both maps_ 
+* **[Average Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/user/Introduction.asciidoc#average-conflation)** - _Keep an average of both maps_ 
   * Use this type of conflation when you consider both input maps equal in quality and want a result that is an average of the two.
   * Currently, geometry averaging only applies to linear features but could be extended to point and polygon geometries. Point and polygon geometries are merged the same as in Reference Conflation. 
   * Average Conflation is currently not available from iD Editor.
-* **[Horizontal Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/cut.asciidoc)** (aka Cookie Cutter Conflation) - _Completely replace a section_
+* **[Horizontal Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/user/Introduction.asciidoc#conflation-strategies)** (aka Cookie Cutter Conflation) - _Completely replace a section_
   * Use this type of conflation if you have a specific region of your map that you would like to completely replace with a region from another map.
 * **[Differential Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/DifferentialConflation.asciidoc)** - _Add new features that do not conflict_
   * Use this type of conflation when you want to fill holes in your map with data from another source without actually modifying any of the data in your map.

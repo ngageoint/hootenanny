@@ -22,42 +22,40 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
  */
-#include "UniqueTagValuesVisitor.h"
+
+// hoot
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/TestUtils.h>
+#include <hoot/core/io/OsmMapReaderFactory.h>
+#include <hoot/core/visitors/UniqueTagCounter.h>
 
 namespace hoot
 {
 
-// This isn't being factory registered, since there's no standard way to retrieve a set of strings
-// from a visitor
-
-UniqueTagValuesVisitor::UniqueTagValuesVisitor(QString key, std::set<QString>& bag, bool split) :
-_key(key),
-_bag(bag),
-_split(split)
+class UniqueTagCounterTest : public HootTestFixture
 {
-}
+  CPPUNIT_TEST_SUITE(UniqueTagCounterTest);
+  CPPUNIT_TEST(runBasicTest);
+  CPPUNIT_TEST_SUITE_END();
 
-void UniqueTagValuesVisitor::visit(const ConstElementPtr& e)
-{
-  Tags::const_iterator it = e->getTags().find(_key);
-  if (it != e->getTags().end())
+public:
+
+  void runBasicTest()
   {
-    if (_split)
-    {
-      QStringList l;
-      e->getTags().readValues(_key, l);
-      for (int i = 0; i < l.size(); i++)
-      {
-        _bag.insert(l[i]);
-      }
-    }
-    else
-    {
-      _bag.insert(it.value());
-    }
+    OsmMapPtr map = std::make_shared<OsmMap>();
+    OsmMapReaderFactory::read(map, "test-files/DcGisRoads.osm", false, Status::Unknown1);
+
+    UniqueTagCounter uut;
+    map->visitRo(uut);
+
+    CPPUNIT_ASSERT_EQUAL(68, (int)uut.getStat());
   }
-}
+};
+
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(UniqueTagCounterTest, "quick");
 
 }
+
+

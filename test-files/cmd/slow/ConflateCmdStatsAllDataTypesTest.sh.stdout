@@ -1,5 +1,5 @@
-13:23:57.953 STATUS .../cpp/hoot/core/cmd/DiffCmd.cpp( 114) Comparing ...st/all-data-types-out.osm and ...st/all-data-types-out.osm...
-13:23:57.965 STATUS .../cpp/hoot/core/cmd/DiffCmd.cpp( 149) Map difference calculated in 00:00 total.
+17:05:26.592 STATUS .../cpp/hoot/core/cmd/DiffCmd.cpp( 114) Comparing ...st/all-data-types-out.osm and ...st/all-data-types-out.osm...
+17:05:26.603 STATUS .../cpp/hoot/core/cmd/DiffCmd.cpp( 149) Map difference calculated in 00:00 total.
 stats = (stat) OR (input map 1 stat) (input map 2 stat) (output map stat)
 Nodes	117	116	142	
 Ways	14	12	16	
@@ -12,6 +12,8 @@ Least Members in a Relation	0	0	2
 Most Members in a Relation	0	0	2	
 Average Members Per Relation	0	0	2	
 Total Relation Members	0	0	18	
+Unique Feature Tags	36	28	67	
+Unique Feature Tag Keys	11	9	21	
 Least Tags on a Feature	2	1	0	
 Most Tags on a Feature	4	4	6	
 Average Tags Per Feature	3	2	3	
@@ -272,10 +274,10 @@ Percentage of Area of Map 2 Polygons Not Matched With Map 1 Polygons			358.33780
 Percentage of Length of Map 1 Lines Matched With Map 2 Lines			94.06469567813517	
 Percentage of Length of Map 1 Lines Not Matched With Map 2 Lines			5.935273565020475	
 Percentage of Length of Map 2 Lines Not Matched With Map 1 Lines			0	
-Calculate Stats for Input 1 Time (sec)				4.174302816390991
-Calculate Stats for Input 2 Time (sec)				0.4137351512908936
-Apply Pre-Conflate Ops Time (sec)				0.007621049880981445
-Apply Post-Conflate Ops Time (sec)				0.003606081008911133
-Calculate Stats for Output Time (sec)				0.4857730865478516
+Calculate Stats for Input 1 Time (sec)				4.183370113372803
+Calculate Stats for Input 2 Time (sec)				0.3748629093170166
+Apply Pre-Conflate Ops Time (sec)				0.007505893707275391
+Apply Post-Conflate Ops Time (sec)				0.003694057464599609
+Calculate Stats for Output Time (sec)				0.4604170322418213
 
-13:23:57.575 STATUS ...pp/hoot/core/util/Progress.cpp(  86) Conflate (100%): Conflation job completed in 00:06 for reference map: ...late/unified/AllDataTypesA.osm and secondary map: ...late/unified/AllDataTypesB.osm and written to output: ...atsTest/all-data-types-out.osm
+17:05:26.221 STATUS ...pp/hoot/core/util/Progress.cpp(  86) Conflate (100%): Conflation job completed in 00:06 for reference map: ...late/unified/AllDataTypesA.osm and secondary map: ...late/unified/AllDataTypesB.osm and written to output: ...atsTest/all-data-types-out.osm

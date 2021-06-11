@@ -22,42 +22,50 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
  */
-#include "UniqueTagValuesVisitor.h"
+
+#ifndef UNIQUE_TAG_COUNTER_H
+#define UNIQUE_TAG_COUNTER_H
+
+// hoot
+#include <hoot/core/visitors/ConstElementVisitor.h>
+#include <hoot/core/info/SingleStatistic.h>
 
 namespace hoot
 {
 
-// This isn't being factory registered, since there's no standard way to retrieve a set of strings
-// from a visitor
-
-UniqueTagValuesVisitor::UniqueTagValuesVisitor(QString key, std::set<QString>& bag, bool split) :
-_key(key),
-_bag(bag),
-_split(split)
+/**
+ * TODO
+ */
+class UniqueTagCounter : public ConstElementVisitor, public SingleStatistic
 {
+public:
+
+  static QString className() { return "hoot::UniqueTagCounter"; }
+
+  UniqueTagCounter() = default;
+  ~UniqueTagCounter() = default;
+
+  /**
+   * @see ConstElementVisitor
+   */
+  void visit(const ConstElementPtr& e) override;
+
+  /**
+   * @see SingleStatistic
+   */
+  double getStat() const override { return _tagKvps.size(); }
+
+  QString getDescription() const override { return "Counts the number of unique tags"; }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
+
+private:
+
+  std::set<QString> _tagKvps;
+};
+
 }
 
-void UniqueTagValuesVisitor::visit(const ConstElementPtr& e)
-{
-  Tags::const_iterator it = e->getTags().find(_key);
-  if (it != e->getTags().end())
-  {
-    if (_split)
-    {
-      QStringList l;
-      e->getTags().readValues(_key, l);
-      for (int i = 0; i < l.size(); i++)
-      {
-        _bag.insert(l[i]);
-      }
-    }
-    else
-    {
-      _bag.insert(it.value());
-    }
-  }
-}
-
-}
+#endif // UNIQUE_TAG_KEY_COUNTER_H
