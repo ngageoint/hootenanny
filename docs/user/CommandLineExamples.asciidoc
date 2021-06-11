@@ -1002,13 +1002,39 @@ Requires a language translation server installation.  See the Hootenanny Install
 
 === Tag Info
 
-==== Display the distribution of highway tags for roads in a map:
+==== Display the distribution of highway tags for all elements in a map:
 
 -----
-    hoot tag-distribution input.osm highway hoot::HighwayCriterion
+    hoot tag-distribution input.osm highway --limit 3
+    
+    Total elements with specified tags: 8,707
+    401	(4.61%)	highway=residential
+    97	(1.11%)	highway=service
+    56	(<1%)	highway=secondary
+-----
 
-    365	(97.59%)	road
-    9	(2.41%)		motorway
+==== Display the distribution of highway tags for only way roads in a map:
+
+-----
+    hoot tag-distribution input.osm highway HighwayCriterion --limit 3
+
+    Total elements with specified tags: 673
+    401	(59.6%)	highway=residential
+    97	(14.4%)	highway=service
+    56	(8.32%)	highway=secondary
+-----
+
+==== Display the distribution of highway tags for any feature having the tag:
+
+-----
+    # This adds non-way features with the "highway" tag. e.g. `highway=traffic_signals` and
+`highway=turning_circle` nodes
+    hoot tag-distribution input.osm highway HighwayCriterion --limit 3
+
+    Total elements with specified tags: 673
+    401	(59.6%)	highway=residential
+    97	(14.4%)	highway=service
+    56	(8.32%)	highway=secondary
 -----
 
 ==== Display occurrence frequencies of tokenized feature names:
@@ -1016,28 +1042,28 @@ Requires a language translation server installation.  See the Hootenanny Install
 -----
     hoot tag-distribution input.osm --names --tokenize --limit 5
 
-    320	(6.81%)	nw
-    246	(5.24%)	st
-    80	(1.70%)	ave
-    45	(0.96%)	sw
-    18	(0.38%)	h
+    320	(6.81%)	name=nw
+    246	(5.24%)	name=st
+    80	(1.70%)	name=ave
+    45	(0.96%)	name=sw
+    18	(0.38%)	name=h
 -----
 
-==== Show a summary of building conflation reviews by type and frequency:
+==== Show a summary of conflation reviews by type and frequency:
 
 -----
     hoot tag-distribution input.osm hoot:review:note hoot::ReviewRelationCriterion
 
     Total tag count: 129
-    62	(48.1%)	unmatched buildings are overlapping
-    20	(15.5%)	very little building overlap building orientation not similar building edges not very close to each other
-    15	(11.6%)	very little building overlap similar building orientation building edges not very close to each other
-    14	(10.9%)	very little building overlap semisimilar building orientation building edges not very close to each other
-    12	(9.3%)	very little building overlap very similar building orientation building edges not very close to each other
-    3	(2.33%)	small building overlap building orientation not similar building edges not very close to each other
-    1	(<1%)	small building overlap similar building orientation building edges not very close to each other
-    1	(<1%)	small building overlap semisimilar building orientation building edges not very close to each other
-    1	(<1%)	medium building overlap building orientation not similar building edges not very close to each other
+    62	(48.1%)	hoot:review:note=unmatched buildings are overlapping
+    20	(15.5%)	hoot:review:note=very little building overlap building orientation not similar building edges not very close to each other
+    15	(11.6%)	hoot:review:note=very little building overlap similar building orientation building edges not very close to each other
+    14	(10.9%)	hoot:review:note=very little building overlap semisimilar building orientation building edges not very close to each other
+    12	(9.3%)	hoot:review:note=very little building overlap very similar building orientation building edges not very close to each other
+    3	  (2.33%)	hoot:review:note=small building overlap building orientation not similar building edges not very close to each other
+    1	  (<1%)	  hoot:review:note=small building overlap similar building orientation building edges not very close to each other
+    1	  (<1%)	  hoot:review:note=small building overlap semisimilar building orientation building edges not very close to each other
+    1	  (<1%)	 hoot:review:note=medium building overlap building orientation not similar building edges not very close to each other
 -----
 
 ==== Display tag schema information for a map

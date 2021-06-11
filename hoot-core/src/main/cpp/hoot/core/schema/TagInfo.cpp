@@ -44,8 +44,9 @@
 namespace hoot
 {
 
-TagInfo::TagInfo(const int tagValuesPerKeyLimit, const QStringList& keys, const bool keysOnly,
-                 const bool caseSensitive, const bool exactKeyMatch, const bool delimitedTextOutput) :
+TagInfo::TagInfo(
+  const int tagValuesPerKeyLimit, const QStringList& keys, const bool keysOnly,
+  const bool caseSensitive, const bool exactKeyMatch, const bool delimitedTextOutput) :
 _tagValuesPerKeyLimit(tagValuesPerKeyLimit),
 _keys(keys),
 _keysOnly(keysOnly),
@@ -66,7 +67,6 @@ QString TagInfo::getInfo(const QStringList& inputs) const
 
   if (_delimitedTextOutput)
   {
-    // TODO
     QSet<QString> uniqueKeys;
     for (int i = 0; i < inputs.size(); i++)
     {
@@ -207,10 +207,9 @@ QString TagInfo::_getInfo(const QString& input) const
     // At this time, the only unstreamable readers are the JSON readers. If this capability is
     // needed for JSON data, then either those readers can implement PartialOsmMapReader or the
     // needed readed code can be manually added to this class.
-
     if (!OsmMapReaderFactory::hasElementInputStream(inputInfo))
     {
-      throw HootException("Inputs to tag-values must be streamable.");
+      throw HootException("Inputs to TagInfo must be streamable.");
     }
 
     LOG_DEBUG("Reading: " << inputInfo << "...");

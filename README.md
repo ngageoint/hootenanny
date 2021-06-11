@@ -35,7 +35,7 @@ Hootenanny has specifically tailored conflation algorithms available for the fol
 * Roads
 
 Any feature whose type does not fit into the list of types above, or has no type at all, will be conflated with 
-[Generic Geometry Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/user/OldDocs.asciidoc), which uses a 
+[Generic Geometry Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/user/OldDocs.asciidoc#generic-geometry), which uses a 
 simpler rules based approach than the type specific conflation algorithms.
 
 [Conflation Algorithms Detail](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/ConflationAlgsOverview.md)
@@ -59,7 +59,7 @@ A conflation workflow defines the manner in which two maps are merged together. 
 * **[Attribute Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/AttributeConflation.asciidoc)** - _Transfer attributes over to existing geometries_
   * Use this type of conflation when one map's geometry is superior to that of a second map, but the attributes of the second map are superior to that of the first map.
   
-# Attribute Translation
+# [Attribute Translation](https://github.com/ngageoint/hootenanny/blob/master/docs/user/OldDocs.asciidoc#translation)
 Hootenanny leverages the OSM key value pair tag concept to support translation between various data schemas and supports the following schemas: 
 * Topographic Data Store (TDS) 
 * Multi-National Geospatial Co-Production Program (MGCP)
@@ -135,7 +135,7 @@ hoot.saveMap(map, "output.osm");
 
 In addition to conflating map data, Hootenanny also provides these supporting capabilities:
 * [Add missing type tags](https://github.com/ngageoint/hootenanny/blob/master/docs/user/ImplicitTypeTagging.asciidoc) to features implicitly based on their name (experimental)
-* [Align two maps](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/align.asciidoc) more closely with each other
+* [Align](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/align.asciidoc) the geometries of two maps more closely with each other
 * [Apply data transformation operations](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/convert.asciidoc#conversion-operations) to a map
 * [Calculate the geospatial extent](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/extent.asciidoc) of a map
 * [Clean map data](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/clean.asciidoc)

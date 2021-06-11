@@ -60,10 +60,9 @@ double StatCalculator::calculateStat(
     "Calculating statistic of type: " << statType << ", with visitor: " << visitorClassName <<
     ", for " << FileUtils::toLogFormat(input, 25) << "...");
 
-  const QString namespacePrefix = "hoot::";
-  if (!visitorClassName.startsWith(namespacePrefix))
+  if (!visitorClassName.startsWith(MetadataTags::HootNamespacePrefix()))
   {
-    visitorClassName.prepend(namespacePrefix);
+    visitorClassName.prepend(MetadataTags::HootNamespacePrefix());
   }
   if (!_isValidStatType(statType))
   {
