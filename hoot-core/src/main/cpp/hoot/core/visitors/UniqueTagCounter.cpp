@@ -38,10 +38,9 @@ HOOT_FACTORY_REGISTER(ElementVisitor, UniqueTagCounter)
 
 void UniqueTagCounter::visit(const ConstElementPtr& e)
 {
-  OsmSchema& schema = OsmSchema::getInstance();
   for (Tags::const_iterator tagItr = e->getTags().begin(); tagItr != e->getTags().end(); ++tagItr)
   {
-    _tagKvps.insert(schema.toKvp(tagItr.key(), tagItr.value()));
+    _tagKvps.insert(OsmSchema::toKvp(tagItr.key(), tagItr.value()));
   }
 }
 
