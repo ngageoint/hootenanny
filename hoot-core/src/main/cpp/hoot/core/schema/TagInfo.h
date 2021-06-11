@@ -44,9 +44,10 @@ class TagInfo
 {
 public:
 
-  TagInfo(const int tagValuesPerKeyLimit = INT_MAX, const QStringList& keys = QStringList(),
-          const bool keysOnly = false, const bool caseSensitive = true,
-          const bool exactKeyMatch = true, const bool delimitedTextOutput = false);
+  TagInfo(
+    const int tagValuesPerKeyLimit = INT_MAX, const QStringList& keys = QStringList(),
+    const bool keysOnly = false, const bool caseSensitive = true, const bool exactKeyMatch = true,
+    const bool delimitedTextOutput = false);
 
   /**
    * Returns a JSON string with tag values grouped by keys
@@ -77,7 +78,7 @@ private:
   // they match if any part of the feature tag key is contained in the specified tag key
   bool _exactKeyMatch;
 
-  // TODO
+  // prints the output as a single delimited string instead of JSON
   bool _delimitedTextOutput;
 
   int _taskStatusUpdateInterval;

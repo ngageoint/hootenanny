@@ -1,5 +1,5 @@
-13:04:34.495 STATUS .../cpp/hoot/core/cmd/DiffCmd.cpp( 114) Comparing ...st/generic-rivers-out.osm and ...st/generic-rivers-out.osm...
-13:04:34.518 STATUS .../cpp/hoot/core/cmd/DiffCmd.cpp( 149) Map difference calculated in 00:00 total.
+17:04:34.820 STATUS .../cpp/hoot/core/cmd/DiffCmd.cpp( 114) Comparing ...st/generic-rivers-out.osm and ...st/generic-rivers-out.osm...
+17:04:34.842 STATUS .../cpp/hoot/core/cmd/DiffCmd.cpp( 149) Map difference calculated in 00:00 total.
 stats = (stat) OR (input map 1 stat) (input map 2 stat) (output map stat)
 Nodes	338	176	432	
 Ways	14	15	32	
@@ -12,6 +12,8 @@ Least Members in a Relation	0	0	0
 Most Members in a Relation	0	0	0	
 Average Members Per Relation	0	0	0	
 Total Relation Members	0	0	0	
+Unique Feature Tags	22	18	44	
+Unique Feature Tag Keys	6	4	13	
 Least Tags on a Feature	4	3	1	
 Most Tags on a Feature	6	4	9	
 Average Tags Per Feature	5	3	5	
@@ -69,10 +71,10 @@ Percentage of Number of Total Map 2 Features Not Matched With Map 1 Features			1
 Percentage of Length of Map 1 Waterways Matched With Map 2 Waterways			99.99999999678559	
 Percentage of Length of Map 1 Waterways Not Matched With Map 2 Waterways			0	
 Percentage of Length of Map 2 Waterways Not Matched With Map 1 Waterways			46.24320728582661	
-Calculate Stats for Input 1 Time (sec)				4.583454132080078
-Calculate Stats for Input 2 Time (sec)				0.5493359565734863
-Apply Pre-Conflate Ops Time (sec)				0.02096390724182129
-Apply Post-Conflate Ops Time (sec)				0.005768775939941406
-Calculate Stats for Output Time (sec)				0.4537670612335205
+Calculate Stats for Input 1 Time (sec)				4.326219081878662
+Calculate Stats for Input 2 Time (sec)				0.3821089267730713
+Apply Pre-Conflate Ops Time (sec)				0.01740193367004395
+Apply Post-Conflate Ops Time (sec)				0.005877971649169922
+Calculate Stats for Output Time (sec)				0.4463210105895996
 
-13:04:34.103 STATUS ...pp/hoot/core/util/Progress.cpp(  86) Conflate (100%): Conflation job completed in 00:05 for reference map: ...NIGS_Rivers_REF1-cropped-2.osm and secondary map: ...waterway_ss_REF2-cropped-2.osm and written to output: ...atsTest/generic-rivers-out.osm
+17:04:34.498 STATUS ...pp/hoot/core/util/Progress.cpp(  86) Conflate (100%): Conflation job completed in 00:05 for reference map: ...NIGS_Rivers_REF1-cropped-2.osm and secondary map: ...waterway_ss_REF2-cropped-2.osm and written to output: ...atsTest/generic-rivers-out.osm

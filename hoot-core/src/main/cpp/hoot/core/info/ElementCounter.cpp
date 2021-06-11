@@ -41,6 +41,7 @@
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/io/IoUtils.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/util/Factory.h>
 
@@ -68,10 +69,10 @@ long ElementCounter::count(const QStringList& inputs, QString& criterionClassNam
 {
   _checkForMissingInputs(inputs);
 
-  const QString namespacePrefix = "hoot::";
-  if (!criterionClassName.isEmpty() && !criterionClassName.startsWith(namespacePrefix))
+  if (!criterionClassName.isEmpty() &&
+      !criterionClassName.startsWith(MetadataTags::HootNamespacePrefix()))
   {
-    criterionClassName.prepend(namespacePrefix);
+    criterionClassName.prepend(MetadataTags::HootNamespacePrefix());
   }
   LOG_VARD(criterionClassName);
 

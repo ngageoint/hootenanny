@@ -31,6 +31,7 @@
 #include <hoot/core/criterion/NotCriterion.h>
 #include <hoot/core/io/ElementCriterionInputStream.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
+#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/CollectionUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Configurable.h>
@@ -44,17 +45,41 @@ namespace hoot
 {
 
 TagDistribution::TagDistribution() :
+_processAllTagKeys(false),
+_countOnlyMatchingElementsInTotal(false),
 _sortByFrequency(true),
 _tokenize(false),
 _limit(-1),
-_total(0),
+_totalTagsProcessed(0),
+_totalElementsProcessed(0),
 _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
 {
   _nonWord.setPattern("[^\\w\\s]");
 }
 
+void TagDistribution::setCriterionClassName(const QString& name)
+{
+  _criterionClassName = name;
+  if (!_criterionClassName.isEmpty() &&
+      !_criterionClassName.startsWith(MetadataTags::HootNamespacePrefix()))
+  {
+    _criterionClassName.prepend(MetadataTags::HootNamespacePrefix());
+  }
+}
+
 std::map<QString, int> TagDistribution::getTagCounts(const QStringList& inputs)
 {
+  LOG_VART(_processAllTagKeys);
+  LOG_VART(_tagKeys.size());
+  LOG_VART(_sortByFrequency);
+  LOG_VART(_tokenize);
+  LOG_VART(_limit);
+
+  if (!_processAllTagKeys && _tagKeys.isEmpty())
+  {
+    throw IllegalArgumentException("No tag keys specified.");
+  }
+
   std::map<QString, int> tagCounts;
   for (int i = 0; i < inputs.size(); i++)
   {
@@ -76,13 +101,36 @@ QString TagDistribution::getTagCountsString(const std::map<QString, int>& tagCou
   QTextStream ts(&buffer);
   QLocale locale(QLocale::English);
 
+  QString msg;
   if (tagCounts.empty())
   {
-    ts << "No tags with keys: " << _tagKeys.join(",") << " were found." << endl;
+    if (!_tagKeys.isEmpty())
+    {
+      msg =
+        "No tags with keys: " + _tagKeys.join(",") + " were found out of " +
+        StringUtils::formatLargeNumber(_totalTagsProcessed) + " total tags processed.";
+      if (!_criterionClassName.isEmpty())
+      {
+        msg += " Filtered by: " + _criterionClassName + ".";
+      }
+      ts << msg << endl;
+    }
+    else
+    {
+      ts << "No tags were found." << endl;
+    }
   }
   else
   {
-    ts << "Total tag count: " << StringUtils::formatLargeNumber(_total) << endl;
+    msg =
+      "Total elements processed: " +
+      StringUtils::formatLargeNumber(_totalElementsProcessed) + ". Total tags processed: " +
+      StringUtils::formatLargeNumber(_totalTagsProcessed) + ".";
+    if (!_criterionClassName.isEmpty())
+    {
+      msg += " Filtered by: " + _criterionClassName + ".";
+    }
+    ts << msg << endl;
 
     int ctr = 0;
     if (!_sortByFrequency)
@@ -92,7 +140,7 @@ QString TagDistribution::getTagCountsString(const std::map<QString, int>& tagCou
       {
         const QString tagValue = itr->first;
         const int count = itr->second;
-        const double percentageOfTotal = (double)count / (double)_total;
+        const double percentageOfTotal = (double)count / (double)_totalElementsProcessed;
         ts << StringUtils::formatLargeNumber(count) << "\t(" <<
               _getPercentageStr(percentageOfTotal) << "%)\t" << tagValue << endl;
 
@@ -111,7 +159,7 @@ QString TagDistribution::getTagCountsString(const std::map<QString, int>& tagCou
       {
         const QString tagValue = itr->second;
         const int count = itr->first;
-        const double percentageOfTotal = (double)count / (double)_total;
+        const double percentageOfTotal = (double)count / (double)_totalElementsProcessed;
         ts << StringUtils::formatLargeNumber(count) << "\t(" <<
            _getPercentageStr(percentageOfTotal) << "%)\t" << tagValue << endl;
 
@@ -130,7 +178,9 @@ QString TagDistribution::getTagCountsString(const std::map<QString, int>& tagCou
 
 void TagDistribution::_countTags(const QString& input, std::map<QString, int>& tagCounts)
 {
-  long inputTotal = 0;
+  // Keep a per input total for reporting purposes.
+  long inputElementTotal = 0;
+  long inputTagsTotal = 0;
 
   std::shared_ptr<PartialOsmMapReader> reader = _getReader(input);
 
@@ -144,63 +194,46 @@ void TagDistribution::_countTags(const QString& input, std::map<QString, int>& t
     if (element)
     {
       elementCtr++;
-      _total++;
+      // If we're processing any tag or not just counting elements with matching tags, go ahead
+      // and this element to the total.
+      if (_processAllTagKeys || !_countOnlyMatchingElementsInTotal)
+      {
+        //LOG_VART(element);
+        _totalElementsProcessed++;
+      }
+      inputElementTotal++;
 
       const Tags& tags = element->getTags();
-      for (int i = 0; i < _tagKeys.size(); i++)
+      _totalTagsProcessed += tags.size();
+      inputTagsTotal+= tags.size();
+      if (!_processAllTagKeys)
       {
-        const QString tagKey = _tagKeys.at(i);
-        if (tags.contains(tagKey))
+        assert(!_tagKeys.isEmpty());
+        for (int i = 0; i < _tagKeys.size(); i++)
         {
-          QString tagValue = tags.get(tagKey);
-          QStringList tagValues;
-          if (_tokenize)
+          const QString tagKey = _tagKeys.at(i);
+          if (tags.contains(tagKey))
           {
-            tagValues = tagValue.split(" ");
-          }
-          else
-          {
-            tagValues.append(tagValue);
-          }
-
-          for (int j = 0; j < tagValues.size(); j++)
-          {
-            // See wikipedia for a description of what this does, but we're trying to group words
-            // that are effectively the same together in the same hash bin.
-            // http://en.wikipedia.org/wiki/Unicode_equivalence
-            QString tagToken =
-              tagValues.at(j)
-                .toLower().normalized(QString::NormalizationForm_C).simplified().trimmed();
-            LOG_VART(tagToken);
-            // remove all the non-word characters (e.g. "(", "-", etc.)
-            QString noSymbols = tagToken;
-            noSymbols.replace(_nonWord, "");
-            LOG_VART(noSymbols);
-            // if there is still a word left then use the word w/o symbols.
-            // E.g. don't remove "&" if it is all by itself.
-            if (!noSymbols.trimmed().isEmpty())
+            // We didn't count this element earlier in the total, so do it now.
+            if (_countOnlyMatchingElementsInTotal)
             {
-              tagToken = noSymbols;
+              //LOG_VART(element);
+              _totalElementsProcessed++;
             }
-            LOG_VART(tagToken);
-
-            if (!tagToken.trimmed().isEmpty())
-            {
-              if (tagCounts.find(tagToken) != tagCounts.end())
-              {
-                tagCounts[tagToken]++;
-              }
-              else
-              {
-                tagCounts[tagToken] = 1;
-              }
-            }
+            _processTagKey(tagKey, tags, tagCounts);
           }
         }
       }
+      else
+      {
+        for (Tags::const_iterator tagItr = tags.begin(); tagItr != tags.end(); ++tagItr)
+        {
+          _processTagKey(tagItr.key(), tags, tagCounts);
+        }
+      }
 
-      // see status logging note in corresponding location in CountCmd::_count
-      const long runningTotal = _total + elementCtr;
+      // See status logging note in corresponding location in CountCmd::_count.
+      const long runningTotal = _totalElementsProcessed + elementCtr;
       if (runningTotal > 0 && runningTotal % (_taskStatusUpdateInterval * 10) == 0)
       {
         PROGRESS_INFO("Processed " << StringUtils::formatLargeNumber(runningTotal) << " elements.");
@@ -208,21 +241,74 @@ void TagDistribution::_countTags(const QString& input, std::map<QString, int>& t
     }
   }
 
-  if (_total > 0)
+  if (inputElementTotal > 0)
   {
     LOG_INFO(
-      "Processed " << StringUtils::formatLargeNumber(_total) << " elements from " <<
+      "Processed " << StringUtils::formatLargeNumber(inputTagsTotal) << " tags from " <<
+      StringUtils::formatLargeNumber(inputElementTotal) << " elements from " <<
       FileUtils::toLogFormat(input, 25) << ".");
   }
-
-  LOG_VART(inputTotal);
 
   reader->finalizePartial();
   reader->close();
   filteredInputStream->close();
 }
 
-ElementInputStreamPtr TagDistribution::_getFilteredInputStream(const ElementInputStreamPtr& inputStream) const
+void TagDistribution::_processTagKey(
+  const QString& tagKey, const Tags& tags, std::map<QString, int>& tagCounts) const
+{
+  const QString tagValue = tags.get(tagKey);
+  QStringList tagValues;
+  if (_tokenize)
+  {
+    tagValues = tagValue.split(" ");
+  }
+  else
+  {
+    tagValues.append(tagValue);
+  }
+
+  for (int j = 0; j < tagValues.size(); j++)
+  {
+    // See wikipedia for a description of what this does, but we're trying to group words
+    // that are effectively the same together in the same hash bin:
+    // http://en.wikipedia.org/wiki/Unicode_equivalence
+    QString tagToken =
+      tagValues.at(j)
+        .toLower().normalized(QString::NormalizationForm_C).simplified().trimmed();
+    LOG_VART(tagToken);
+    // Remove all the non-word characters (e.g. "(", "-", etc.).
+    QString noSymbols = tagToken;
+    noSymbols.replace(_nonWord, "");
+    LOG_VART(noSymbols);
+    // If there is still a word left then use the word w/o symbols. e.g. don't remove "&"
+    // if it is all by itself.
+    if (!noSymbols.trimmed().isEmpty())
+    {
+      tagToken = noSymbols;
+    }
+    LOG_VART(tagToken);
+
+    // Make this a KVP so that we see differences between tags that have the same value but
+    // different keys.
+    tagToken = OsmSchema::toKvp(tagKey, tagToken);
+
+    if (!tagToken.trimmed().isEmpty())
+    {
+      if (tagCounts.find(tagToken) != tagCounts.end())
+      {
+        tagCounts[tagToken]++;
+      }
+      else
+      {
+        tagCounts[tagToken] = 1;
+      }
+    }
+  }
+}
+
+ElementInputStreamPtr TagDistribution::_getFilteredInputStream(
+  const ElementInputStreamPtr& inputStream) const
 {
   ElementInputStreamPtr filteredInputStream;
 
@@ -241,6 +327,12 @@ ElementInputStreamPtr TagDistribution::_getFilteredInputStream(const ElementInpu
 
 std::shared_ptr<PartialOsmMapReader> TagDistribution::_getReader(const QString& input) const
 {
+  // See related note in TagInfo::_getInfo.
+  if (!OsmMapReaderFactory::hasElementInputStream(input))
+  {
+    throw HootException("Inputs to TagDistribution must be streamable.");
+  }
+
   std::shared_ptr<PartialOsmMapReader> reader =
     std::dynamic_pointer_cast<PartialOsmMapReader>(
       OsmMapReaderFactory::createReader(input));

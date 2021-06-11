@@ -53,7 +53,8 @@ public:
   {
     OsmMapPtr map(new OsmMap());
     // reusing BuildingHeightVisitorTest's input
-    OsmMapReaderFactory::read(map, _inputPath + "BuildingHeightVisitorTestInput.osm", false, Status::Unknown1);
+    OsmMapReaderFactory::read(
+      map, _inputPath + "BuildingHeightVisitorTestInput.osm", false, Status::Unknown1);
 
     BuildingLevelsVisitor uut;
     map->visitRo(uut);

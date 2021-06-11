@@ -28,6 +28,7 @@
 #include "Log.h"
 
 // Hoot
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/StringUtils.h>
 
@@ -142,12 +143,11 @@ void Log::setLevel(WarningLevel l)
 
 void Log::_setFilter()
 {
-  const QString namespacePrefix = "hoot::";
   _includeClassFilter = ConfigOptions().getLogClassIncludeFilter();
-  StringUtils::removePrefixes(namespacePrefix, _includeClassFilter);
+  StringUtils::removePrefixes(MetadataTags::HootNamespacePrefix(), _includeClassFilter);
   _includeClassFilter.removeDuplicates();
   _excludeClassFilter = ConfigOptions().getLogClassExcludeFilter();
-  StringUtils::removePrefixes(namespacePrefix, _excludeClassFilter);
+  StringUtils::removePrefixes(MetadataTags::HootNamespacePrefix(), _excludeClassFilter);
   _excludeClassFilter.removeDuplicates();
 }
 
