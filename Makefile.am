@@ -153,6 +153,8 @@ install-other:
 	rm -f tmp/other.tar
 	mkdir -p $(docdir)
 	cp LICENSE README.md docs/*.pdf $(docdir)
+	mkdir -p $(docdir)/commands
+	cp docs/commands/*.asciidoc $(docdir)/commands
 	mkdir -p $(sysconfdir)/profile.d/
 	mkdir -p $(sysconfdir)/asciidoc/filters/
 	cp -R docs/filters/* $(sysconfdir)/asciidoc/filters/
