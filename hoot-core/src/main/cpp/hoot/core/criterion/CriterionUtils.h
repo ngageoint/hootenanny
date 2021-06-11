@@ -48,14 +48,15 @@ class CriterionUtils
 public:
 
   /**
-   * TODO
+   * Constructs a criterion that is the combination of multiple criterion
    *
-   * @param criteriaClassNames
-   * @param chainCriteria
-   * @param negate
-   * @param isStreamable
-   * @return
-   * @todo may be able to use this in MultipleCriterionConsumerVisitor
+   * @param criteriaClassNames names of the ElementCriterion classes to build the criterion
+   * @param chainCriteria if true, the input criteria are chained together with ChainCriterion;
+   * otherwise they are placed into an OrCriterion
+   * @param negate if true, negates the built criterion
+   * @param isStreamable determines if the built criterion supports streaming I/O
+   * @return an element criterion
+   * @todo may be able to use this in MultipleCriterionConsumerVisitor to simplify it
    */
   static ElementCriterionPtr constructCriterion(
     const QStringList& criteriaClassNames, const bool chainCriteria, const bool negate,
