@@ -248,17 +248,17 @@ void IntersectionSplitter::_splitWay(long wayId, long nodeId)
         // Make sure any ways that are part of relations continue to be part of those relations
         // after they're split.
         _map->replace(way, newWays);
-        if (ConfigOptions().getDebugMapsWrite() && ConfigOptions().getDebugMapsWriteDetailed())
+        if (ConfigOptions().getDebugMapsWriteDetailed())
         {
           OsmMapWriterFactory::writeDebugMap(
-            _map, "IntersectionSplitter-after-replace-" + way->getElementId().toString());
+            _map, className(), "after-replace-" + way->getElementId().toString());
         }
 
         _removeWayFromMap(way);
-        if (ConfigOptions().getDebugMapsWrite() && ConfigOptions().getDebugMapsWriteDetailed())
+        if (ConfigOptions().getDebugMapsWriteDetailed())
         {
           OsmMapWriterFactory::writeDebugMap(
-            _map, "IntersectionSplitter-after-remove-" + way->getElementId().toString());
+            _map, className(), "after-remove-" + way->getElementId().toString());
         }
 
         // Go through all the resulting splits.

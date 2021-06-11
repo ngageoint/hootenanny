@@ -64,8 +64,7 @@ element.
 * Default Value: ``
 
 One or more element criteria used for selecting elements whose attributes to modify. Delimit names
-with '='. From the command line, names with ';' and surround the entire list in double quotes.
-E.g. "hoot::TagCriterion;hoot::ReviewRelationCriterion"
+with '='. E.g. "hoot::TagCriterion;hoot::ReviewRelationCriterion"
 
 === add.attributes.visitor.kvps
 
@@ -118,8 +117,7 @@ Tag key used by AddUuidVisitor for adding custom unique ID's to data.
 ** ``
 
 By default,conflation examines standard OSM tags for address comparisons (see the addressTagKeys
-file).  You can expand the tag keys searched by populating this list. From the command line,
-separate list items with a semicolon and surround the entire list in double quotes.
+file).  You can expand the tag keys searched by populating this list.
 
 === address.allow.lenient.house.number.matching
 
@@ -1267,6 +1265,22 @@ The pixel size used when running either the `crop-random` command or `RandomMapC
 
 List of valid values for data sources used to calculate the summary data for multiple conflations
 
+=== debug.maps.class.exclude.filter
+
+* Data Type: list
+* Default Value: ``
+
+A list of class names used for controlling debug map writing. This follows the same format as
+`log.class.exclude.filter`.
+
+=== debug.maps.class.include.filter
+
+* Data Type: list
+* Default Value: ``
+
+A list of class names used for controlling debug map writing. This follows the same format as
+`log.class.include.filter`.
+
 === debug.maps.filename
 
 * Data Type: string
@@ -2376,8 +2390,7 @@ HootServicesLanguageDetectorClient as a source language detector, one or more ho
 class names implementing LanguageDetector.  Language detectors are used in order of entry.
 'hoot info --languages --detectors' displays information about the available server side detectors.
 If no detectors are specified, then language translation will attempt to use as many detectors as
-needed, in a pre-determined order, to get a positive detection. Separate values with a ';' and
-surround in quotes when passing in from the command line.
+needed, in a pre-determined order, to get a positive detection.
 
 === language.info.provider
 
@@ -2437,8 +2450,7 @@ will skip the translation of any tags whose value is in an English dictionary.
 
 A list of keys of tags whose values are to either be translated to English by a
 ToEnglishTranslationVisitor or just have their source languages detected by a
-LanguageDetectionVisitor depending on the operation being performed. Separate keys with a ';' and
-surround in quotes when passing in from the command line.
+LanguageDetectionVisitor depending on the operation being performed.
 
 === language.translation.comparison.pretranslated.tag.keys
 
@@ -2447,8 +2459,7 @@ surround in quotes when passing in from the command line.
 ** ``
 
 A list of tag keys whose values are known to have been previously translated to the desired target
-language.  The list ordering should correspond to that of language.tag.keys.  Separate keys with a
-';' and surround in quotes when passing in from the command line.
+language. The list ordering should correspond to that of language.tag.keys.
 
 === language.translation.comparison.scorer
 
@@ -2495,8 +2506,7 @@ ISO-639-1 language codes for the source languages for to English translation
 (https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes).  Also, you can specify a single list item,
 "detect", to attempt to auto-detect the appropriate source language before translation.  Specifying
 multiple source languages can have a large impact on translation performance due to language
-detection cost.  Separate list items with a ';' and surround in quotes when passing them in from
-the command line.
+detection cost.
 
 === language.translation.string.distance.tokenize
 
@@ -2545,13 +2555,24 @@ The "best" value varies depending on the input data as well as how the data is b
 Absolute path to the directory where the libpostal library, used for address parsing, stores its
 data.
 
-=== log.class.filter
+=== log.class.exclude.filter
 
-* Data Type: string
+* Data Type: list
 * Default Value: ``
 
-A semicolon delimited list of class names used for limiting the log output. Do not prepend class
-names with their namespace. An empty string (default) disables the filtering.
+A list of class names used for controlling logging. If the list is not empty, all classes in this
+list will not be allowed to write log statements. An empty list disables the filtering completely.
+Wildcard regular expressions with '*' are allowed. `log.class.include.filter` is overriden by this
+option.
+
+=== log.class.include.filter
+
+* Data Type: list
+* Default Value: ``
+
+A list of class names used for controlling logging. If the list is not empty, only classes in this
+list will be allowed to write log statements. An empty list disables the filtering completely.
+Wildcard regular expressions with '*' are allowed. `log.class.exclude.filter` overrides this option.
 
 === log.warn.message.limit
 
@@ -2864,8 +2885,7 @@ name.criterion.names. If false, the cases of the names do not have to match.
 * Data Type: list
 * Default Value: ``
 
-A list of names to use with NameCriterion. From the command line, delimit multiple entries with ';'
-and surround the entire list in double quotes. E.g. "Subway;Jimmys"
+A list of names to use with NameCriterion.
 
 === name.criterion.partial.match
 
@@ -3622,8 +3642,7 @@ final PERTY score for the test run.
 ** ``
 
 By default, conflation examines all tags with keys containing the text "phone" for phone number
-comparisons.  You can expand the tag keys searched by populating this list. From the command line,
-separate list items with a semicolon and surround the entire list in double quotes.
+comparisons.  You can expand the tag keys searched by populating this list.
 
 === phone.number.normalization.format
 
@@ -3883,8 +3902,7 @@ changed except when working with specific POI/Polygon conflation use cases that 
 
 List of key value pairs in the format 'key=value' or  'key,value' (UI only) for features to always
 review if marked as matches with POI to polygon conflation.  Delimit the individual types with ';'.
-e.g. 'amenity=school;shop=mall' or 'amenity,school;shop,mall'.  Also, when specifying the list from
-the command line, surround the entire value string in double quotes.
+e.g. 'amenity=school;shop=mall' or 'amenity,school;shop,mall'.
 
 === poi.polygon.review.multiuse.buildings
 
@@ -4365,9 +4383,7 @@ one of the specified criteria must be met in order to remove an element.
 * Data Type: list
 * Default Value: ``
 
-One or more element criteria used for selecting elements to remove. Delimit names with '='. From
-the command line, names with ';' and surround the entire list in double quotes.
-E.g. "hoot::TagCriterion;hoot::ReviewRelationCriterion"
+One or more element criteria used for selecting elements to remove.
 
 === remove.elements.visitor.recursive
 
@@ -5062,9 +5078,8 @@ to match.
 * Data Type: list
 * Default Value: ``
 
-Key/value pairs to use with TagContainsCriterion. Delimit keys and values with '='.  From the
-command line, delimit multiple key/value pairs with ';' and surround the entire list in double
-quotes. E.g. "name=Java;name=Shop"
+Key/value pairs to use with TagContainsCriterion. Delimit keys and values with '='.  E.g.
+"name=Java;name=Shop"
 
 === tag.criterion.case.sensitive
 
@@ -5079,9 +5094,8 @@ tag.criterion.kvps. If false, the cases of the tag strings do not have to match.
 * Data Type: list
 * Default Value: ``
 
-Key/value pairs to use with TagCriterion. Delimit keys and values with '='.  From the command line,
-delimit multiple key/value pairs with ';' and surround the entire list in double quotes.
-E.g. "highway=road;amenity=school"
+Key/value pairs to use with TagCriterion. Delimit keys and values with '='. E.g.
+"highway=road;amenity=school"
 
 === tag.filter.element.criterion
 
@@ -5099,8 +5113,7 @@ Javascript interface instead.
 ** ``
 
 A list of tag keys the KeepTagsVisitor/RemoveTagsVisitor will keep/remove on/from elements.
-Wildcard matching is supported with '*'. From the command line, separate list items with a semicolon
-and surround the entire list in double quotes.
+Wildcard matching is supported with '*'.
 
 === tag.key.contains.criterion.text
 
@@ -5114,8 +5127,7 @@ Text that TagKeyContainsCriterion uses to filter elements.
 * Data Type: list
 * Default Value: ``
 
-Tag keys that TagKeyCriterion uses to filter elements. From the command line, delimit multiple
-key/value pairs with ';' and surround the entire list in double quotes.
+Tag keys that TagKeyCriterion uses to filter elements.
 
 === tag.merger.default
 
@@ -5185,8 +5197,7 @@ renaming existing tag keys on all elements in a map.
 ** ``
 
 The keys the TagValueNumericRangeCriterion examines the numeric value of.  Tags for all keys must
-meet the numeric range requirement for the criterion to be met.  Separate multiple keys with a
-semicolon from the command line and surround the entire list in double quotes.
+meet the numeric range requirement for the criterion to be met.
 
 === tag.value.numeric.range.criterion.max
 
@@ -5209,8 +5220,7 @@ Minimum tag numeric value that will allow the TagValueNumericRangeCriterion to b
 ** ``
 
 List of tag keys for which the AverageNumericTagsVisitor, SumNumericTagsVisitor, or
-TagKeyCountVisitor uses.  Separate keys with a ';' and surround entire list in double quotes when
-passing in from the command line.
+TagKeyCountVisitor uses.
 
 === task.status.update.interval
 

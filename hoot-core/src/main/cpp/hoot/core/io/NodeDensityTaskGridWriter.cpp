@@ -63,7 +63,7 @@ void NodeDensityTaskGridWriter::writeTilesToGeoJson(
   writer.open(outputPath);
   writer.write(boundaryMap);
 
-  OsmMapWriterFactory::writeDebugMap(boundaryMap, "osm-tiles");
+  OsmMapWriterFactory::writeDebugMap(boundaryMap, className(), "osm-tiles");
 }
 
 void NodeDensityTaskGridWriter::writeTilesToOsm(
@@ -81,7 +81,7 @@ void NodeDensityTaskGridWriter::writeTilesToOsm(
     _tilesToOsmMap(tiles, nodeCounts, randomTileIndex, selectSingleRandomTile);
 
   OsmMapWriterFactory::write(boundaryMap, outputPath);
-  OsmMapWriterFactory::writeDebugMap(boundaryMap, "osm-tiles");
+  OsmMapWriterFactory::writeDebugMap(boundaryMap, className(), "osm-tiles");
 }
 
 OsmMapPtr NodeDensityTaskGridWriter::_tilesToOsmMap(

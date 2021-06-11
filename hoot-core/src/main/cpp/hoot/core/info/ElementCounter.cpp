@@ -167,6 +167,7 @@ ElementCriterionPtr ElementCounter::_getCriterion(
 
   if (criterionClassName.isEmpty())
   {
+    isStreamable = true;
     return ElementCriterionPtr();
   }
 
@@ -216,13 +217,13 @@ ElementInputStreamPtr ElementCounter::_getFilteredInputStream(
   ConstElementVisitorPtr countVis) const
 {
   LOG_TRACE("Getting filtered input stream...");
+
   if (criterion)
   {
     LOG_VARD(criterion->toString());
   }
 
   ElementInputStreamPtr filteredInputStream;
-  LOG_TRACE("Creating stream...");
   if (criterion)
   {
     filteredInputStream.reset(
@@ -241,6 +242,7 @@ ConstElementVisitorPtr ElementCounter::_getCountVis() const
   LOG_TRACE("Getting count vis...");
 
   ConstElementVisitorPtr countVis;
+  LOG_VART(_countFeaturesOnly);
   if (_countFeaturesOnly)
   {
     countVis.reset(new FeatureCountVisitor());
@@ -255,6 +257,8 @@ ConstElementVisitorPtr ElementCounter::_getCountVis() const
 long ElementCounter::_countMemoryBound(
   const QStringList& inputs, const ElementCriterionPtr& criterion) const
 {
+  LOG_DEBUG("Counting memory bound...");
+
   OsmMapPtr map = std::make_shared<OsmMap>();
   IoUtils::loadMaps(map, inputs, true);
 
@@ -284,25 +288,24 @@ long ElementCounter::_countMemoryBound(
 long ElementCounter::_countStreaming(
   const QString& input, const ElementCriterionPtr& criterion) const
 {
+  LOG_DEBUG("Counting streaming...");
+
   long inputTotal = 0;
 
   std::shared_ptr<PartialOsmMapReader> reader = _getStreamingReader(input);
 
   ConstElementVisitorPtr countVis = _getCountVis();
-
   ElementInputStreamPtr filteredInputStream =
     _getFilteredInputStream(
-      std::dynamic_pointer_cast<ElementInputStream>(reader),
-      criterion,
-      countVis);
-
+      std::dynamic_pointer_cast<ElementInputStream>(reader), criterion, countVis);
   std::shared_ptr<SingleStatistic> counter =
     std::dynamic_pointer_cast<SingleStatistic>(countVis);
   LOG_VART(counter.get());
 
   while (filteredInputStream->hasMoreElements())
   {
-    /*ConstElementPtr element = */filteredInputStream->readNextElement();
+    ConstElementPtr element = filteredInputStream->readNextElement();
+    LOG_VART(element->getElementId());
     inputTotal = (int)counter->getStat();
 
     // It would be nice if we could display information on the total elements processed, as well

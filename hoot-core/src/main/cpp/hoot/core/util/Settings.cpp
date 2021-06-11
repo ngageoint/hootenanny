@@ -782,7 +782,7 @@ void Settings::parseCommonArguments(QStringList& args)
     }
   }
 
-  // re-initialize the logger and other resources after the settings have been parsed.
+  // Re-initialize the logger and other resources after the settings have been parsed.
   Hoot::getInstance().reinit();
 }
 

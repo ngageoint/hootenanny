@@ -61,7 +61,7 @@ AlphaShapeGenerator::AlphaShapeGenerator(const double alpha, const double buffer
 OsmMapPtr AlphaShapeGenerator::generateMap(OsmMapPtr inputMap)
 {
   LOG_DEBUG("Generating map...");
-  OsmMapWriterFactory::writeDebugMap(inputMap, "alpha-shape-input-map");
+  OsmMapWriterFactory::writeDebugMap(inputMap, className(), "alpha-shape-input-map");
 
   std::shared_ptr<Geometry> cutterShape = generateGeometry(inputMap);
   if (cutterShape->getArea() == 0.0)
@@ -70,7 +70,8 @@ OsmMapPtr AlphaShapeGenerator::generateMap(OsmMapPtr inputMap)
     // clients who are expecting the alpha shape to be generated
     throw HootException("Alpha Shape area is zero. Try increasing the buffer size and/or alpha.");
   }
-  OsmMapWriterFactory::writeDebugMap(cutterShape, inputMap->getProjection(), "cutter-shape-map");
+  OsmMapWriterFactory::writeDebugMap(
+    cutterShape, inputMap->getProjection(), className(), "cutter-shape-map");
 
   OsmMapPtr result;
   result.reset(new OsmMap(inputMap->getProjection()));
@@ -86,7 +87,7 @@ OsmMapPtr AlphaShapeGenerator::generateMap(OsmMapPtr inputMap)
   }
 
   LOG_VART(MapProjector::toWkt(result->getProjection()));
-  OsmMapWriterFactory::writeDebugMap(result, "alpha-shape-result-map");
+  OsmMapWriterFactory::writeDebugMap(result, className(), "alpha-shape-result-map");
 
   return result;
 }

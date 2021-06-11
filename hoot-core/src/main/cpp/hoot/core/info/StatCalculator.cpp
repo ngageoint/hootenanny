@@ -157,8 +157,6 @@ bool StatCalculator::_isValidStatType(const QString& statType) const
 
 std::shared_ptr<PartialOsmMapReader> StatCalculator::_getReader(const QString& input) const
 {
-  LOG_TRACE("Getting reader...");
-
   std::shared_ptr<PartialOsmMapReader> reader =
     std::dynamic_pointer_cast<PartialOsmMapReader>(
       OsmMapReaderFactory::createReader(input));

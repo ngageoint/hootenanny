@@ -1,0 +1,5 @@
+
+== Hootenanny Development Process
+
+"Described here":http://github.com/ngageoint/hootenanny/blob/master/CONTRIBUTING.md
+

@@ -1284,6 +1284,12 @@ Requires a language translation server installation.  See the Hootenanny Install
     hoot convert -D convert.ops="hoot::DualHighwayMarker" input.osm output.osm
 -----
 
+===== Split a way into segments of a particular size:
+
+-----
+    hoot convert -D convert.ops="hoot::WaySplitterOp" -D way.splitter.max.length=100 input.osm output.osm
+-----
+
 ==== Crop a map to an extent:
 
 -----

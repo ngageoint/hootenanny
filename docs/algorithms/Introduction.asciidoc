@@ -44,7 +44,7 @@ attractive business model where the user community can contribute, customize,
 share, and help maintain the software in an interactive environment. For this
 reason, Hootenanny is being developed under the open source General Public License
 (GPL) and will be hosted on the National Geospatial-Intelligence Agency’s (NGA)
-link:$$https://github.com/ngageoint/hootenanny$$[GitHub website] (NGA GitHub, 2015).
+https://github.com/ngageoint/hootenanny[GitHub website] (NGA GitHub, 2015).
 
 === History
 

@@ -157,12 +157,13 @@ void NetworkMatchCreator::createMatches(
     matcher->iterate();
     LOG_INFO("Optimization iteration: " << i + 1 << "/" << numIterations << " complete.");
 
-    OsmMapWriterFactory::writeDebugMap(map, "network-match-iteration-" + QString::number(i + 1));
+    OsmMapWriterFactory::writeDebugMap(
+      map, className(), "match-iteration-" + QString::number(i + 1));
   }
 
   matcher->finalize();
 
-  OsmMapWriterFactory::writeDebugMap(map, "network-match-after-final-iteration", matcher);
+  OsmMapWriterFactory::writeDebugMap(map, className(), "match-after-final-iteration", matcher);
 
   LOG_DEBUG("Retrieving edge scores...");
   // Convert graph edge matches into NetworkMatch objects.

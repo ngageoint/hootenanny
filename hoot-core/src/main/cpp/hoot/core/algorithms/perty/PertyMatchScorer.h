@@ -44,6 +44,8 @@ class PertyMatchScorer : public Configurable
 {
 public:
 
+  static QString className() { return "hoot::PertyMatchScorer"; }
+
   PertyMatchScorer();
   ~PertyMatchScorer() = default;
 

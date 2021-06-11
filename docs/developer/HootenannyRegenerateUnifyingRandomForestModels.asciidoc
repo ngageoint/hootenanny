@@ -1,8 +1,8 @@
 
 [[RegenerateRandomForestModels]]
-== Regenerating Random Forest Models For Unifying Conflation
+== Regenerating Random Forest Models For Conflation
 
-As of 12/19/18, Random Forest models (.rf) are used in Unifying Conflation for Road and Building conflation only.  If changes are made to code
+Random Forest models (.rf) are used in Unifying Conflation for Road and Building conflation only.  If changes are made to code
 that affects the extracted features that help create those files, they must be regenerated and replaced in the hoot repository.  POI Generic
 Conflation does not actually use its generated Random Forest model (.rf) and uses the Attribute Relation File (.arff).  The POI Attribute
 Relation File need only be regnerated if you plan to rework the Generic Conflation rules in the generic script file (Poi.js).

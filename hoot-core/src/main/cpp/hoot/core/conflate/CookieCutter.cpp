@@ -57,10 +57,10 @@ void CookieCutter::cut(OsmMapPtr& cutterShapeOutlineMap, OsmMapPtr& doughMap) co
   LOG_VARD(cutterShapeOutlineMap->getNodes().size());
   LOG_VART(MapProjector::toWkt(cutterShapeOutlineMap->getProjection()));
   OsmMapWriterFactory::writeDebugMap(
-    cutterShapeOutlineMap, "cookie-cutter-cutter-shape-outline-map");
+    cutterShapeOutlineMap, className(), "cutter-shape-outline-map");
   LOG_VARD(doughMap->getNodes().size());
   LOG_VART(MapProjector::toWkt(doughMap->getProjection()));
-  OsmMapWriterFactory::writeDebugMap(doughMap, "cookie-cutter-dough-map");
+  OsmMapWriterFactory::writeDebugMap(doughMap, className(), "dough-map");
 
   OGREnvelope env = CalculateMapBoundsVisitor::getBounds(cutterShapeOutlineMap);
   LOG_VARD(GeometryUtils::toEnvelope(env)->toString());
@@ -105,7 +105,7 @@ void CookieCutter::cut(OsmMapPtr& cutterShapeOutlineMap, OsmMapPtr& doughMap) co
   OsmMapPtr cookieCutMap = doughMap;
   LOG_VARD(cookieCutMap->getNodes().size());
   LOG_VART(MapProjector::toWkt(cookieCutMap->getProjection()));
-  OsmMapWriterFactory::writeDebugMap(cookieCutMap, "cookie-cutter-cookie-cut-map");
+  OsmMapWriterFactory::writeDebugMap(cookieCutMap, className(), "cookie-cut-map");
 }
 
 }

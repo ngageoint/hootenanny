@@ -327,7 +327,7 @@ void MapCropper::apply(OsmMapPtr& map)
     }
   }
   LOG_VARD(map->size());
-  OsmMapWriterFactory::writeDebugMap(map, "after-way-removal");
+  OsmMapWriterFactory::writeDebugMap(map, className(), "after-way-removal");
 
   std::shared_ptr<NodeToWayMap> n2w = map->getIndex().getNodeToWayMap();
 
@@ -403,7 +403,7 @@ void MapCropper::apply(OsmMapPtr& map)
     }
   }
   LOG_VARD(map->size());
-  OsmMapWriterFactory::writeDebugMap(map, "after-node-removal");
+  OsmMapWriterFactory::writeDebugMap(map, className(), "after-node-removal");
 
   // Remove dangling features here now, which used to be done in CropCmd only.
   long numSuperfluousWaysRemoved = 0;
@@ -411,9 +411,9 @@ void MapCropper::apply(OsmMapPtr& map)
   if (_removeSuperfluousFeatures)
   {
     numSuperfluousWaysRemoved = SuperfluousWayRemover::removeWays(map);
-    OsmMapWriterFactory::writeDebugMap(map, "cropper-after-superfluous-way-removal");
+    OsmMapWriterFactory::writeDebugMap(map, className(), "after-superfluous-way-removal");
     numSuperfluousNodesRemoved = SuperfluousNodeRemover::removeNodes(map);
-    OsmMapWriterFactory::writeDebugMap(map, "cropper-after-superfluous-node-removal");
+    OsmMapWriterFactory::writeDebugMap(map, className(), "after-superfluous-node-removal");
   }
 
   // Most of the time we want to remove missing refs in order for the output to be clean. In some
@@ -429,7 +429,7 @@ void MapCropper::apply(OsmMapPtr& map)
     map->visitRw(missingElementsRemover);
     LOG_DEBUG("\t" << missingElementsRemover.getCompletedStatusMessage());
     LOG_VARD(map->size());
-    OsmMapWriterFactory::writeDebugMap(map, "cropper-after-missing-elements-removal");
+    OsmMapWriterFactory::writeDebugMap(map, className(), "after-missing-elements-removal");
 
     // This will remove any relations that were already empty or became empty after the previous
     // step.
@@ -438,7 +438,7 @@ void MapCropper::apply(OsmMapPtr& map)
     LOG_INFO("\t" << emptyRelationRemover.getInitStatusMessage());
     emptyRelationRemover.apply(map);
     LOG_DEBUG("\t" << emptyRelationRemover.getCompletedStatusMessage());
-    OsmMapWriterFactory::writeDebugMap(map, "cropper-after-empty-relations-removal");
+    OsmMapWriterFactory::writeDebugMap(map, className(), "after-empty-relations-removal");
   }
 
   LOG_VARD(_numAffected);

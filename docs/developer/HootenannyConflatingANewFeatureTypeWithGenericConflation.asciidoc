@@ -1,5 +1,5 @@
 
-== Conflating a New Feature Type With Generic Conflation
+== Conflating a New Feature Type With Script Conflation
 
 This document discusses in detail some of the processes involved with using generic conflation to
 conflate a new type of feature with Hootenanny.  Hootenanny's generic conflation framework allows for
@@ -200,29 +200,18 @@ if (HighwayCriterion().isSatisfied(w) == false &&
 ==== Javascript Code Changes Required
 
 The following Javascript code changes are required to add new schema entries:
-* HootLib.js - Make a Javascript API entry for your wrapped C++ method here.  Example:
--------------
-/**
- * Returns true if the specified element is an linear waterway element.
- *
- * See the OSM wiki for more information:
- * http://wiki.openstreetmap.org/wiki/River
- */
-function isLinearWaterway(e)
-{
-  return hoot.OsmSchema.isLinearWaterway(e);
-}
--------------
-* rules file - Finally, reference your schema related method from your rules file so that the generic
-conflation can identify the correct features to conflate.  Example from rules/River.js:
+
+* Update `isMatchCandidate` to tell your script which type of features it should conflate.  
+Example from rules/River.js:
 ------------
 /**
  * Returns true if e is a candidate for a match. Implementing this method is
  * optional, but may dramatically increase speed if you can cull some features
  * early on. E.g. no need to check nodes for a polygon to polygon match.
  */
-exports.isMatchCandidate = function(map, e) {
-    return isLinearWaterway(e);
+exports.isMatchCandidate = function(map, e) 
+{
+    return hoot.OsmSchema.isLinearWaterway(e);
 };
 ------------
 

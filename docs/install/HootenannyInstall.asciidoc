@@ -11,12 +11,12 @@ are provided.
 * An installation of CentOS/RHEL 7 64bit with a working yum repository or access to downloadable installable RPM's.
 * A client machine with the Chrome (or Chromium) browser installed. Hootenanny is only supported in Chrome.
 
-== Virtual Machine Instructions
+== Virtual Machine
 
-See VAGRANT.md
+https://github.com/ngageoint/hootenanny/blob/master/docs/user/VAGRANT.md[VAGRANT.md]
 
 [[fullinstall]]
-== CentOS/RHEL RPM Install Instructions
+== CentOS/RHEL RPM
 
 The recommended and easiest installation method is to install from RPMs.  This can be accomplished by running the following commands:
 
@@ -32,58 +32,16 @@ This will set up the EPEL, PGDG, and Hootennanny repositories.  All packages in 
 
 For additional details on configuring the database connection pool, see <<HootDBConnectionPool>>.
 
-== Hootenanny Package Descriptions
+== Language Translation Service
 
-The following instructions assumed you have used the Hootenanny build process to already have generated the following files:
-
-* The Hootenanny core and UI source archive (hootenanny-X.Y.Z.tar.gz)
-** The hoot core code is written in C++ and is to be packaged in a source archive (tar.gz) on a build machine during the release process. The source archive will be then compiled on the target installation machine.
-** The hoot UI code is in Javascript and is packaged inside of the same source archive that the hoot core code is packaged in a directory named "hoot-id". The directory is to be manually copied to the web server on the target installation machine.
-* The Hootenanny services web archive (hootenanny-services-X.Y.Z.war) files
-** The hoot services code is in Java and is compiled on a build machine and packaged into a web archive (.war) file as a result of the release process. The war file is then deployed to the web server on the target installation machine.
-* The FOUO translations archive (hootenanny-translations.tar.gz), which are only available through official channels.
-
-== Helpful Hints
-
-. You can also add a custom base map quickly to the Hootenanny UI, without having to edit Javascript code if that is more convenient, but the base map will not be retained in the base maps list between browser refreshes (a bug). To add a custom basemap:
-
-.. From the right hand menu in iD, click "Custom".
-.. Add the URL for the basemap you wish to use.
-
-. You can quickly zoom to an AOI by modifying the end of the browser URL. The parts you modify are of the form /[zoom]/[latitude]/[longitude].
-
-== Advanced Tasks
-
-=== Ingest Data (optional)
-
-If you have a small amount of data to ingest, you can easily do it from within the Hootenanny UI using the "Add Dataset" feature. If you have a large number of files you would like to script for ingest at one time, you may do it with repeated call something like the following:
-
---------------------------------------
-#adjust email accordingly; setting not needed if already set in conf/hoot.json during build
-hoot convert -D services.db.write.email='test@test.com' /myData.osm postgresql://hoot:hoottest@localhost:5432/hoot/myMap
-
---------------------------------------
-
-=== Configure the Base Map List
-
-To manually configure the available base maps shown in the iD editor:
-
-. Edit +$HOOT_HOME/hoot-ui/data/imagery.json+
-. Add or remove JSON entries to edit the base maps.  At a minimum, you must:
-.. specify a unique ID for the layer in the "id" attribute
-.. specify a name for the base map in the "name" attribute
-.. specify a min and max scale extent for the base map that defines at what zoom level range it will be visible in the "scaleExtent" attribute
-.. specify whether the base map should be selected by default by setting the "default" attribute to "true" or "false
-
-== Installing a Joshua Language Translation Service
-
-By default, Joshua is not enabled with any languages.  To launch a Joshua translation service for a given language:
+By default, the Joshua language translation service is not enabled with any languages.  To launch a Joshua translation 
+service for a given language:
 
 1) Verify that you have enough extra memory on hand to support the new translation service deployments.  Translation services have been seen
 to take up as much as 9-10GB of memory under light load for the largest language packs.  The 'joshuaMaxMemory' configuration property in
 hoot-services/src/main/resources/hoot-services.conf.in allows for setting an upper limit on per service memory allocation.
 
-2) Download the version 2 language pack from here: https://cwiki.apache.org/confluence/display/JOSHUA/Language+Packs
+2) Download the version 2 language pack from http://cwiki.apache.org/confluence/display/JOSHUA/Language+Packs[here].
 
 3) Extract the file to a desired location.  Within the extracted root folder at a minimum you should see the folders: "model" and
 "target".  "model" contains the language translation model and "target" contains the executable Joshua jar.  There should also be in

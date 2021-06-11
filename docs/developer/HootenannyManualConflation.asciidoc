@@ -478,9 +478,9 @@ See the Matching Overview section for details on how to change Miss/Match/Review
 
 === Areas
 
-For now, an area is defined as a polygon representing a semi-permanent location.  An example is a park polygon surrounding various other POI's and polygons representing things like baseball fields, clubhouses, tennis courts, etc.
+For now, an area is defined as a polygon representing a semi-permanent location. An example is a park polygon surrounding various other POI's and polygons representing things like baseball fields, clubhouses, tennis courts, etc.
 
-Note: This type of conflation is still largely under investigation.
+TODO: finish
 
 === POI's and Buildings
 
@@ -509,9 +509,23 @@ See the Matching Overview section for details on how to change Miss/Match/Review
 
 ==== POI/Area Matching Standards
 
-Note: This type of conflation is still largely under investigation.
+TODO
 
 ==== POI/Area Match Tagging
 
-Note: This type of conflation is still largely under investigation.
+TODO
+
+=== Rivers
+
+TODO
+
+=== Railways
+
+TODO
+
+=== Power Lines
+
+TODO
+
+
 

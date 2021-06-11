@@ -176,7 +176,7 @@ private:
     }
     LOG_VARD(map->getNodeCount());
 
-    OsmMapWriterFactory::writeDebugMap(map);
+    OsmMapWriterFactory::writeDebugMap(map, className(), "");
 
     return map;
   }

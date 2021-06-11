@@ -220,12 +220,11 @@ bool LinearDiffMerger::_findAndProcessMatch(
       "Replacing " << way2->getElementId() << " with " << relation->getElementId() << "...");
     replaced.emplace_back(way2->getElementId(), relation->getElementId());
   }
-  if (ConfigOptions().getDebugMapsWrite() && ConfigOptions().getDebugMapsWriteDetailed())
+  if (ConfigOptions().getDebugMapsWriteDetailed())
   {
     OsmMapWriterFactory::writeDebugMap(
-      _map,
-      "LinearDiffMerger-after-merge-" + way1->getElementId().toString() + "-" +
-       way2->getElementId().toString());
+      _map, className(),
+      "after-merge-" + way1->getElementId().toString() + "-" + way2->getElementId().toString());
   }
 
   return false;

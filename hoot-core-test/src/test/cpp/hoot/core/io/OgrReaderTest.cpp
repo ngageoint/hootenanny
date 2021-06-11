@@ -54,9 +54,7 @@ class OgrReaderTest : public HootTestFixture
 
 public:
 
-    OgrReaderTest()
-      : HootTestFixture("test-files/",
-                        UNUSED_PATH)
+    OgrReaderTest() : HootTestFixture("test-files/", UNUSED_PATH)
     {
     }
 
@@ -172,18 +170,18 @@ public:
     {
       OgrReader reader1;
 
-      // If we haven't opened a file, it best not be ready to read
+      // If we haven't opened a file, it best not be ready to read.
       CPPUNIT_ASSERT_EQUAL(reader1.hasMoreElements(), false);
 
-      // Try to open invalid file
+      // Try to open an invalid file.
       OgrReader reader2(_inputPath + "totalgarbage.osm.pbf");
       CPPUNIT_ASSERT_EQUAL(reader2.hasMoreElements(), false);
 
-      // Open valid file
+      // Open a valid file.
       OgrReader reader3(_inputPath + "jakarta_raya_coastline.shp");
       CPPUNIT_ASSERT_EQUAL(reader3.hasMoreElements(), true);
 
-      // Close file and check again
+      // Close the file and check again.
       reader3.close();
       CPPUNIT_ASSERT_EQUAL(reader3.hasMoreElements(), false);
     }
@@ -192,7 +190,7 @@ public:
     {
       OgrReader reader(_inputPath + "jakarta_raya_coastline.shp");
 
-      // Iterate through all items
+      // Iterate through all items.
       int numberOfElements(0);
       while (reader.hasMoreElements() == true)
       {

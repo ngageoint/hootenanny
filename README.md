@@ -35,7 +35,7 @@ Hootenanny has specifically tailored conflation algorithms available for the fol
 * Roads
 
 Any feature whose type does not fit into the list of types above, or has no type at all, will be conflated with 
-[Generic Geometry Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/user/GenericGeometryConflation.asciidoc), which uses a 
+[Generic Geometry Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/user/OldDocs.asciidoc), which uses a 
 simpler rules based approach than the type specific conflation algorithms.
 
 [Conflation Algorithms Detail](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/ConflationAlgsOverview.md)
@@ -159,7 +159,7 @@ In addition to conflating map data, Hootenanny also provides these supporting ca
 * [Plot node density](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/plot-node-density.asciidoc)
 * [Process map postal address data](https://github.com/ngageoint/hootenanny/blob/master/docs/user/PostalAddressUtilities.asciidoc)
 * [Simplify ways](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#simplify-ways-in-a-map-by-removing-unnecessary-nodes-from-them) by removing unnecessary nodes
-* [Snap unconnected ways](https://github.com/ngageoint/hootenanny/blob/master/docs/user/SnapUnconnectedWays.asciidoc) to neighboring ways
+* [Snap unconnected ways](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#snap-unconnected-roads-in-one-dataset-back-to-neighboring-roads-in-another-dataset) to neighboring ways
 * [Sort map data](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/sort.asciidoc)
 * [Split](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#split-a-map-into-multiple-maps-corresponding-to-irregular-shaped-tiles-produced-above) a map into tiles
 * [Translate feature tags](https://github.com/ngageoint/hootenanny/blob/master/docs/user/Hootenanny-id.asciidoc#translations) using standardized or user defined [schemas](https://github.com/ngageoint/hootenanny#tag-schemas)
