@@ -909,6 +909,15 @@ Requires a language translation server installation.  See the Hootenanny Install
       input.osm hoot::NameCriterion
 -----
 
+==== Count all conflatable elements in a map:
+
+-----
+    # Generally, this should be equal to the total number of elements in a map since Hootenanny 
+    # be able to conflate any feature. In the rare circumstance its not, this can be used to
+    # track down which elements cannot be conflated.
+    hoot count input.osm ConflatableElementCriterion
+-----
+
 ==== Calculate the area of all features in a map:
 
 -----
