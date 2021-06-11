@@ -55,7 +55,7 @@ public:
   /**
    * @see SingleStatistic
    */
-  double getStat() const override { return _tagKvps.size(); }
+  double getStat() const override { return (double)_tagKvps.size(); }
 
   QString getDescription() const override { return "Counts the number of unique tags"; }
   QString getName() const override { return className(); }

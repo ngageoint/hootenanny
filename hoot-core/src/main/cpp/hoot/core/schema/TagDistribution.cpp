@@ -284,7 +284,6 @@ void TagDistribution::_processTagKey(
     tagValues.append(tagValue);
   }
 
-  OsmSchema& schema = OsmSchema::getInstance();
   for (int j = 0; j < tagValues.size(); j++)
   {
     // See wikipedia for a description of what this does, but we're trying to group words
@@ -308,7 +307,7 @@ void TagDistribution::_processTagKey(
 
     // Make this a KVP so that we see differences between tags that have the same value but
     // different keys.
-    tagToken = schema.toKvp(tagKey, tagToken);
+    tagToken = OsmSchema::toKvp(tagKey, tagToken);
 
     if (!tagToken.trimmed().isEmpty())
     {

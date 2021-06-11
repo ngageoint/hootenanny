@@ -55,7 +55,7 @@ public:
   /**
    * @see SingleStatistic
    */
-  double getStat() const override { return _tagKeys.size(); }
+  double getStat() const override { return (double)_tagKeys.size(); }
 
   QString getDescription() const override { return "Counts the number of unique tag keys"; }
   QString getName() const override { return className(); }
