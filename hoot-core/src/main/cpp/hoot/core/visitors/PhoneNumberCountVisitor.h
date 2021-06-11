@@ -65,9 +65,7 @@ public:
 
   QString getDescription() const override
   { return "Counts the number of valid element phone numbers"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 
 private:
