@@ -54,8 +54,8 @@ namespace hoot
 
 ElementCounter::ElementCounter() :
 _countFeaturesOnly(true),
-_taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
-_total(0)
+_total(0),
+_taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
 {
 }
 
@@ -65,7 +65,7 @@ long ElementCounter::count(const QStringList& inputs)
   return count(inputs, str);
 }
 
-long ElementCounter::count(const QStringList& inputs, QString& criterionClassName)
+long ElementCounter::count(const QStringList& inputs, QStringList& criteriaClassNames)
 {
   _checkForMissingInputs(inputs);
 

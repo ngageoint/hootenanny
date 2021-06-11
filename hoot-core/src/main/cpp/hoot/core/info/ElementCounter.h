@@ -59,10 +59,10 @@ public:
    * Counts the number of elements in inputs that satisify a criterion
    *
    * @param inputs paths to map inputs to count within
-   * @param criterionClassName name of the ElementCriterion class to use for filtering
+   * @param criteriaClassNames list of ElementCriterion class names to use for filtering
    * @return a count
    */
-  long count(const QStringList& inputs, QString& criterionClassName);
+  long count(const QStringList& inputs, QStringList& criteriaClassNames);
 
   void setCountFeaturesOnly(const bool countFeaturesOnly)
   { _countFeaturesOnly = countFeaturesOnly; }
@@ -71,9 +71,10 @@ private:
 
   // if true, elements with no information tags are not counted
   bool _countFeaturesOnly;
-  int _taskStatusUpdateInterval;
   // total number of elements counted
   long _total;
+
+  int _taskStatusUpdateInterval;
 
   void _checkForMissingInputs(const QStringList& inputs) const;
   QString _getStatusMessage(const QString& input, const QString& criterionClassName) const;

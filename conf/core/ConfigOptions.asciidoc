@@ -54,7 +54,7 @@ regardless.
 * Default Value: `false`
 
 If set to true and multiple criterion are specified in add.attributes.visitor.element.criteria,
-the attributes of elements will be modified only if they satisfy all of the criteria.  If set to
+the attributes of elements will be modified only if they satisfy all of the criteria. If set to
 false, then only one of the specified criteria must be met in order to modify the attributes of an
 element.
 
@@ -1505,6 +1505,16 @@ Size of the in memory relation cache used when streaming I/O is used with relati
 * Default Value: `2000000`
 
 Size of the in memory way cache used when streaming I/O is used with ways.
+
+=== element.counter.chain.element.criteria
+
+* Data Type: bool
+* Default Value: `false`
+
+If set to true and multiple criterion are specified to the `count` command or passed directly into
+`ElementCounter`, an element must satisfy each criterion in order to pass the counting filter.  If
+set tofalse, then only one of the specified criteria must be satisified in order to pass the
+counting filter.
 
 === element.criterion.negate
 
@@ -4374,9 +4384,9 @@ Use this class for calculating the difference between element tags. If the diffe
 * Data Type: bool
 * Default Value: `false`
 
-If set to true and multiple criterion are specified in remove.elements.visitor.element.criteria,
-elements will be removed only if they satisfy all of the criteria.  If set to false, then only
-one of the specified criteria must be met in order to remove an element.
+If set to true and multiple criterion are specified in `remove.elements.visitor.element.criteria`,
+elements will be removed only if they satisfy all of the criteria. If set to false, then only
+one of the specified criteria must be satisified in order to remove an element.
 
 === remove.elements.visitor.element.criteria
 
@@ -4722,7 +4732,7 @@ option will have the value specified in the set.tag.value.visitor.value option a
 * Data Type: bool
 * Default Value: `false`
 
-If set to true and multiple criterion are specified in set.tag.value.visitor.element.criteria,
+If set to true and multiple criterion are specified in `set.tag.value.visitor.element.criteria`,
 the tags of elements will be modified only if they satisfy all of the criteria.  If set to
 false, then only one of the specified criteria must be met in order to modify the tags of an
 element.

@@ -94,4 +94,3 @@ The increased total element count includes non-way elements with a "highway" tag
 === See Also
 
 * https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc#applying-changes-1[Supported Input Formats]
-
