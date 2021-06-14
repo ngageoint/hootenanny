@@ -36,6 +36,12 @@ echo ""
 hoot tag-distribution $CONFIG -D element.criteria.chain=true $INPUT_DIR/DcGisRoads.osm highway "HighwayCriterion;PoiCriterion"
 
 echo ""
+echo "Testing a non-stremable crit chain that will fail without an input map..."
+echo ""
+hoot tag-distribution $CONFIG -D element.criteria.chain=true $INPUT_DIR/DcGisRoads.osm highway \
+  "HighwayCriterion;HighwayWayNodeCriterion"
+
+echo ""
 echo "Testing a negated crit..."
 echo ""
 hoot tag-distribution $CONFIG -D element.criteria.negate=true $INPUT_DIR/DcGisRoads.osm highway PoiCriterion

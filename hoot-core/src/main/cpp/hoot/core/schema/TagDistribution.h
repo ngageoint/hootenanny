@@ -88,6 +88,8 @@ private:
 
   // optional filtering crit
   ElementCriterionPtr _crit;
+  // determines whether _crit supports streaming I/O
+  bool _isStreamableCrit;
 
   // if true, tag values sorted by decreasing frequency; otherwise sorted alphabetically
   bool _sortByFrequency;
@@ -108,10 +110,12 @@ private:
 
   QRegExp _nonWord;
 
-  std::shared_ptr<PartialOsmMapReader> _getReader(const QString& input) const;
+  std::shared_ptr<PartialOsmMapReader> _getStreamingReader(const QString& input) const;
   ElementInputStreamPtr _getFilteredInputStream(const ElementInputStreamPtr& inputStream) const;
 
-  void _countTags(const QString& input, std::map<QString, int>& tagCounts);
+  void _countTagsStreaming(const QString& input, std::map<QString, int>& tagCounts);
+  void _countTagsMemoryBound(const QStringList& inputs, std::map<QString, int>& tagCounts);
+  int _processElement(const ConstElementPtr& element, std::map<QString, int>& tagCounts);
   void _processTagKey(
     const QString& tagKey, const Tags& tags, std::map<QString, int>& tagCounts) const;
 

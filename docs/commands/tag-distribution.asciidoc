@@ -6,8 +6,8 @@
 The +tag-distribution+ command prints out a distribution for all values of a specified tag key, including a 
 percentage of each value's frequency compared to other tag values.
 
-* +inputs+                   - One or more streamable inputs to read (e.g. OSM file). Specify multiple inputs 
-                               by separating them with a semicolon and surrounding them with quotes.
+* +inputs+                   - One or more inputs to read (e.g. OSM file). Specify multiple inputs by separating them with 
+                               a semicolon and surrounding them with quotes.
 * +tagKeys+                  - The tag keys to gather statistics for. Specify multiple inputs by separating them with a 
                                semicolon and surrounding them with quotes. To process all tags, leave this empty by specifying 
                                a pair of quotes with nothing between them. This parameter is ignored if `--names` or `--types` 
@@ -27,16 +27,10 @@ percentage of each value's frequency compared to other tag values.
                                counted in the element total. With this option enabled, only elements which have one of the
                                specified tags are counted in the element total. Enabling this option has no effect if
                                all tag keys are parsed (empty `tagKeys`).
-* +--sort-by-value +         - Sorts results alphabetically by tag value.  If not specified, results are sorted by decreasing 
+* +--sort-by-value +         - Sorts results alphabetically by tag value. If not specified, results are sorted by decreasing 
                                tag value occurrence frequency.
 * +--limit+                  - Limits the number of results returned.
 * +--tokenize+               - Breaks tag values up into individual tokens before counting them.
-
-This command works on streamable inputs only. To determine if an input is streamable use:
-
------
-    hoot info --formats --input-streamable
------
 
 === Usage
 

@@ -6,18 +6,18 @@
 The +tag-info+ command prints out unique feature tag values grouped by tag key. 
 
 * +inputs+              - One or more streamable inputs; (e.g. OSM file).
-* +--tag-values-limit+  - Limits the number of unique tag values printed per tag key.  By default, there is no limit.  This 
+* +--tag-values-limit+  - Limits the number of unique tag values printed per tag key. By default, there is no limit. This 
                           option is ignored if --keys-only is specified.
 * +--keys+              - Prints unique tag values for the specified keys only.  Delimit multiple keys with a semicolon 
-                          (e.g. "key1;key2"). This option is ignored if --keys-only is specified.
+                          (e.g. "key1;key2"). This option is ignored if `--keys-only` is specified.
 * +--keys-only+         - Prints tag keys only and does not print any associated values.
 * +--case-insensitive+  - If this option is specified, tag key comparisons are not case sensitive. By default the comparisons 
                           are case sensitive.
 * +--partial-key-match+ - If this option is specified, then any key in a feature which partially matches the given set of keys 
-                          in --keys will have its tag value added to the output. By default, keys must be an exact match 
+                          in `--keys` will have its tag value added to the output. By default, keys must be an exact match 
                           with each other for the tag value to be written to output.
 * +--delimited-text+    - By default, JSON output is generated. If this option is specified, a delimited list with the format
-                          "key1;key2..." is returned. Value when the +--keys-only+ option is used only.
+                          "key1;key2..." is returned. Value when the `--keys-only` option is used only.
 
 This command works on streamable inputs only. To determine if an input is streamable use:
 
