@@ -68,7 +68,7 @@ class RunDiffCommand extends GrailCommand {
             }
 
             if (hoot2AdvOptions.get("RoadEngines") != null) {
-                algorithm = "-C " + hoot2AdvOptions.get("RoadEngines") + "Algorithm.conf";
+                algorithm = hoot2AdvOptions.get("RoadEngines") + "Algorithm.conf";
             }
         }
 
@@ -81,7 +81,9 @@ class RunDiffCommand extends GrailCommand {
         substitutionMap.put("STATS_FILE", new File(params.getWorkDir(), "stats.json").getPath());
         substitutionMap.put("ROAD_ALGORITHM", algorithm);
 
-        String command = "hoot.bin conflate --${DEBUG_LEVEL} -C DifferentialConflation.conf ${ROAD_ALGORITHM} ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} --differential --changeset-stats ${STATS_FILE} --include-tags --separate-output";
+        String command = "hoot.bin conflate --${DEBUG_LEVEL} -C DifferentialConflation.conf"
+                + (!algorithm.equals("") ? " -C ${ROAD_ALGORITHM}" : "")
+                + " ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} --differential --changeset-stats ${STATS_FILE} --include-tags --separate-output";
 
         super.configureCommand(command, substitutionMap, caller);
     }
