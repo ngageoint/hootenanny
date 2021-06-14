@@ -64,9 +64,9 @@ void ElementDeduplicator::dedupe(OsmMapPtr map)
   LOG_INFO("De-duping intra-map: " << map->getName() << "...");
   LOG_DEBUG(map->getName() << " size before de-duping: " << map->size());
 
-  const int nodesBefore = map->getNodeCount();
-  const int waysBefore = map->getWayCount();
-  const int relationsBefore = map->getRelationCount();
+  const long nodesBefore = map->getNodeCount();
+  const long waysBefore = map->getWayCount();
+  const long relationsBefore = map->getRelationCount();
 
   // calculate our unique hashes per element and get a list of duplicate pairs within the map
   QMap<QString, ElementId> mapHashes;
@@ -82,9 +82,9 @@ void ElementDeduplicator::dedupe(OsmMapPtr map)
   _removeElements(elementsToRemove[ElementType::Way], map);
   _removeElements(elementsToRemove[ElementType::Node], map);
 
-  _map1DuplicateNodesRemoved = nodesBefore - map->getNodeCount();
-  _map1DuplicateWaysRemoved = waysBefore - map->getWayCount();
-  _map1DuplicateRelationsRemoved = relationsBefore - map->getRelationCount();
+  _map1DuplicateNodesRemoved = (int)(nodesBefore - map->getNodeCount());
+  _map1DuplicateWaysRemoved = (int)(waysBefore - map->getWayCount());
+  _map1DuplicateRelationsRemoved = (int)(relationsBefore - map->getRelationCount());
 
   LOG_DEBUG(map->getName() << " size after de-duping: " << map->size());
   LOG_DEBUG("Removed " << _map1DuplicateNodesRemoved << " duplicate nodes from " << map->getName());

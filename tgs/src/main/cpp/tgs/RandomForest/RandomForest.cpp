@@ -81,7 +81,7 @@ void RandomForest::trainBinary(const std::shared_ptr<DataFrame>& data, unsigned 
 
         std::vector<std::string> badFactors;
 
-        unsigned long cutOffIdx = topFactors.size() - (unsigned int)((double)topFactors.size() * retrain);
+        unsigned int cutOffIdx = topFactors.size() - (unsigned int)((double)topFactors.size() * retrain);
 
         std::multimap<double, std::string> sortedFactors;
         std::multimap<double, std::string>::iterator mMapItr;
