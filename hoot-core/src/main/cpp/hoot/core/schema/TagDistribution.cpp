@@ -28,17 +28,19 @@
 #include "TagDistribution.h"
 
 // Hoot
-#include <hoot/core/criterion/NotCriterion.h>
+#include <hoot/core/criterion/CriterionUtils.h>
 #include <hoot/core/io/ElementCriterionInputStream.h>
+#include <hoot/core/io/ElementStreamer.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
+#include <hoot/core/io/IoUtils.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/CollectionUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/StringUtils.h>
 
+// Qt
 #include <QTextStream>
 
 namespace hoot
@@ -47,6 +49,7 @@ namespace hoot
 TagDistribution::TagDistribution() :
 _processAllTagKeys(false),
 _countOnlyMatchingElementsInTotal(false),
+_isStreamableCrit(false),
 _sortByFrequency(true),
 _tokenize(false),
 _limit(-1),
@@ -57,13 +60,24 @@ _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
   _nonWord.setPattern("[^\\w\\s]");
 }
 
-void TagDistribution::setCriterionClassName(const QString& name)
+void TagDistribution::setCriteria(QStringList& names)
 {
-  _criterionClassName = name;
-  if (!_criterionClassName.isEmpty() &&
-      !_criterionClassName.startsWith(MetadataTags::HootNamespacePrefix()))
+  if (!names.isEmpty())
   {
-    _criterionClassName.prepend(MetadataTags::HootNamespacePrefix());
+    for (int i = 0; i < names.size(); i++)
+    {
+      if (!names.at(i).startsWith(MetadataTags::HootNamespacePrefix()))
+      {
+        QString className = names[i];
+        className.prepend(MetadataTags::HootNamespacePrefix());
+        names[i] = className;
+      }
+    }
+
+    ConfigOptions opts;
+    _crit =
+      CriterionUtils::constructCriterion(
+        names, opts.getElementCriteriaChain(), opts.getElementCriteriaNegate(), _isStreamableCrit);
   }
 }
 
@@ -80,10 +94,24 @@ std::map<QString, int> TagDistribution::getTagCounts(const QStringList& inputs)
     throw IllegalArgumentException("No tag keys specified.");
   }
 
-  std::map<QString, int> tagCounts;
-  for (int i = 0; i < inputs.size(); i++)
+  if (!_crit)
   {
-    _countTags(inputs.at(i), tagCounts);
+    _isStreamableCrit = true;
+  }
+
+  LOG_VARD(_isStreamableCrit);
+  LOG_VARD(ElementStreamer::areStreamableInputs(inputs));
+  std::map<QString, int> tagCounts;
+  if (_isStreamableCrit && ElementStreamer::areStreamableInputs(inputs))
+  {
+    for (int i = 0; i < inputs.size(); i++)
+    {
+      _countTagsStreaming(inputs.at(i), tagCounts);
+    }
+  }
+  else
+  {
+    _countTagsMemoryBound(inputs, tagCounts);
   }
   return tagCounts;
 }
@@ -109,9 +137,9 @@ QString TagDistribution::getTagCountsString(const std::map<QString, int>& tagCou
       msg =
         "No tags with keys: " + _tagKeys.join(",") + " were found out of " +
         StringUtils::formatLargeNumber(_totalTagsProcessed) + " total tags processed.";
-      if (!_criterionClassName.isEmpty())
+      if (_crit)
       {
-        msg += " Filtered by: " + _criterionClassName + ".";
+        msg += " Filtered by: " + _crit->toString() + ".";
       }
       ts << msg << endl;
     }
@@ -126,9 +154,9 @@ QString TagDistribution::getTagCountsString(const std::map<QString, int>& tagCou
       "Total elements processed: " +
       StringUtils::formatLargeNumber(_totalElementsProcessed) + ". Total tags processed: " +
       StringUtils::formatLargeNumber(_totalTagsProcessed) + ".";
-    if (!_criterionClassName.isEmpty())
+    if (_crit)
     {
-      msg += " Filtered by: " + _criterionClassName + ".";
+      msg += " Filtered by: " + _crit->toString() + ".";
     }
     ts << msg << endl;
 
@@ -176,82 +204,131 @@ QString TagDistribution::getTagCountsString(const std::map<QString, int>& tagCou
   return ts.readAll();
 }
 
-void TagDistribution::_countTags(const QString& input, std::map<QString, int>& tagCounts)
+void TagDistribution::_countTagsStreaming(const QString& input, std::map<QString, int>& tagCounts)
 {
+  LOG_DEBUG("Counting streaming...");
+
   // Keep a per input total for reporting purposes.
   long inputElementTotal = 0;
   long inputTagsTotal = 0;
 
-  std::shared_ptr<PartialOsmMapReader> reader = _getReader(input);
-
+  std::shared_ptr<PartialOsmMapReader> reader = _getStreamingReader(input);
   ElementInputStreamPtr filteredInputStream =
     _getFilteredInputStream(std::dynamic_pointer_cast<ElementInputStream>(reader));
 
   long elementCtr = 0;
   while (filteredInputStream->hasMoreElements())
   {
-    ElementPtr element = filteredInputStream->readNextElement();
+    ConstElementPtr element = filteredInputStream->readNextElement();
     if (element)
     {
       elementCtr++;
-      // If we're processing any tag or not just counting elements with matching tags, go ahead
-      // and this element to the total.
-      if (_processAllTagKeys || !_countOnlyMatchingElementsInTotal)
-      {
-        //LOG_VART(element);
-        _totalElementsProcessed++;
-      }
       inputElementTotal++;
-
-      const Tags& tags = element->getTags();
-      _totalTagsProcessed += tags.size();
-      inputTagsTotal+= tags.size();
-      if (!_processAllTagKeys)
-      {
-        assert(!_tagKeys.isEmpty());
-        for (int i = 0; i < _tagKeys.size(); i++)
-        {
-          const QString tagKey = _tagKeys.at(i);
-          if (tags.contains(tagKey))
-          {
-            // We didn't count this element earlier in the total, so do it now.
-            if (_countOnlyMatchingElementsInTotal)
-            {
-              //LOG_VART(element);
-              _totalElementsProcessed++;
-            }
-            _processTagKey(tagKey, tags, tagCounts);
-          }
-        }
-      }
-      else
-      {
-        for (Tags::const_iterator tagItr = tags.begin(); tagItr != tags.end(); ++tagItr)
-        {
-          _processTagKey(tagItr.key(), tags, tagCounts);
-        }
-      }
+      inputTagsTotal+= _processElement(element, tagCounts);
 
       // See status logging note in corresponding location in CountCmd::_count.
       const long runningTotal = _totalElementsProcessed + elementCtr;
       if (runningTotal > 0 && runningTotal % (_taskStatusUpdateInterval * 10) == 0)
       {
-        PROGRESS_INFO("Processed " << StringUtils::formatLargeNumber(runningTotal) << " elements.");
+        PROGRESS_STATUS(
+          "Processed " << StringUtils::formatLargeNumber(runningTotal) << " elements.");
       }
     }
   }
 
-  if (inputElementTotal > 0)
-  {
-    LOG_INFO(
-      "Processed " << StringUtils::formatLargeNumber(inputTagsTotal) << " tags from " <<
-      StringUtils::formatLargeNumber(inputElementTotal) << " elements from " <<
-      FileUtils::toLogFormat(input, 25) << ".");
-  }
+  LOG_STATUS(
+    "Processed " << StringUtils::formatLargeNumber(inputTagsTotal) << " tags from " <<
+    StringUtils::formatLargeNumber(inputElementTotal) << " elements from " <<
+    FileUtils::toLogFormat(input, 25) << ".");
 
   reader->finalizePartial();
   reader->close();
   filteredInputStream->close();
+}
+
+void TagDistribution::_countTagsMemoryBound(
+  const QStringList& inputs, std::map<QString, int>& tagCounts)
+{
+  LOG_DEBUG("Counting memory bound...");
+
+  OsmMapPtr map = std::make_shared<OsmMap>();
+  IoUtils::loadMaps(map, inputs, true);
+
+  OsmMapConsumer* omc = dynamic_cast<OsmMapConsumer*>(_crit.get());
+  if (omc)
+  {
+    omc->setOsmMap(map.get());
+  }
+
+  long parsedElementCtr = 0;
+  long totalElementCtr = 0;
+  long inputTagsTotal = 0;
+  while (map->hasNext())
+  {
+    ConstElementPtr element = map->next();
+    if (element)
+    {
+      totalElementCtr++;
+      if (!_crit || _crit->isSatisfied(element))
+      {
+        parsedElementCtr++;
+        inputTagsTotal += _processElement(element, tagCounts);
+      }
+    }
+
+    if (totalElementCtr > 0 && totalElementCtr % (_taskStatusUpdateInterval * 10) == 0)
+    {
+      PROGRESS_STATUS(
+        "Processed " << StringUtils::formatLargeNumber(totalElementCtr) << " elements.");
+    }
+  }
+
+  LOG_STATUS(
+    "Processed " << StringUtils::formatLargeNumber(inputTagsTotal) << " tags from " <<
+    StringUtils::formatLargeNumber(parsedElementCtr) << " elements from " <<
+    inputs.size() << " inputs.");
+}
+
+int TagDistribution::_processElement(
+  const ConstElementPtr& element, std::map<QString, int>& tagCounts)
+{
+  // If we're processing any tag or not just counting elements with matching tags, go ahead
+  // and this element to the total.
+  if (_processAllTagKeys || !_countOnlyMatchingElementsInTotal)
+  {
+    //LOG_VART(element);
+    _totalElementsProcessed++;
+  }
+
+  const Tags& tags = element->getTags();
+  _totalTagsProcessed += tags.size();
+  if (!_processAllTagKeys)
+  {
+    assert(!_tagKeys.isEmpty());
+    for (int i = 0; i < _tagKeys.size(); i++)
+    {
+      const QString tagKey = _tagKeys.at(i);
+      if (tags.contains(tagKey))
+      {
+        // We didn't count this element earlier in the total, so do it now.
+        if (_countOnlyMatchingElementsInTotal)
+        {
+          //LOG_VART(element);
+          _totalElementsProcessed++;
+        }
+        _processTagKey(tagKey, tags, tagCounts);
+      }
+    }
+  }
+  else
+  {
+    for (Tags::const_iterator tagItr = tags.begin(); tagItr != tags.end(); ++tagItr)
+    {
+      _processTagKey(tagItr.key(), tags, tagCounts);
+    }
+  }
+
+  return tags.size();
 }
 
 void TagDistribution::_processTagKey(
@@ -312,10 +389,9 @@ ElementInputStreamPtr TagDistribution::_getFilteredInputStream(
 {
   ElementInputStreamPtr filteredInputStream;
 
-  if (!_criterionClassName.trimmed().isEmpty())
+  if (_crit)
   {
-    ElementCriterionPtr crit = _getCriterion();
-    filteredInputStream.reset(new ElementCriterionInputStream(inputStream, crit));
+    filteredInputStream.reset(new ElementCriterionInputStream(inputStream, _crit));
   }
   else
   {
@@ -325,14 +401,9 @@ ElementInputStreamPtr TagDistribution::_getFilteredInputStream(
   return filteredInputStream;
 }
 
-std::shared_ptr<PartialOsmMapReader> TagDistribution::_getReader(const QString& input) const
+std::shared_ptr<PartialOsmMapReader> TagDistribution::_getStreamingReader(
+  const QString& input) const
 {
-  // See related note in TagInfo::_getInfo.
-  if (!OsmMapReaderFactory::hasElementInputStream(input))
-  {
-    throw HootException("Inputs to TagDistribution must be streamable.");
-  }
-
   std::shared_ptr<PartialOsmMapReader> reader =
     std::dynamic_pointer_cast<PartialOsmMapReader>(
       OsmMapReaderFactory::createReader(input));
@@ -340,40 +411,6 @@ std::shared_ptr<PartialOsmMapReader> TagDistribution::_getReader(const QString& 
   reader->open(input);
   reader->initializePartial();
   return reader;
-}
-
-ElementCriterionPtr TagDistribution::_getCriterion() const
-{
-  ElementCriterionPtr crit;
-
-  try
-  {
-    crit.reset(
-      Factory::getInstance().constructObject<ElementCriterion>(_criterionClassName));
-  }
-  catch (const boost::bad_any_cast&)
-  {
-    throw IllegalArgumentException("Invalid criterion: " + _criterionClassName);
-  }
-
-  if (ConfigOptions().getElementCriterionNegate())
-  {
-    crit.reset(new NotCriterion(crit));
-  }
-  LOG_VART(crit.get());
-
-  std::shared_ptr<Configurable> critConfig;
-  if (crit.get())
-  {
-    critConfig = std::dynamic_pointer_cast<Configurable>(crit);
-  }
-  LOG_VART(critConfig.get());
-  if (critConfig.get())
-  {
-    critConfig->setConfiguration(conf());
-  }
-
-  return crit;
 }
 
 }

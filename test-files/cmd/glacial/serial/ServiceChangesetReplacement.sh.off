@@ -178,7 +178,7 @@ else
 fi
 echo ""
 scripts/database/CleanAndInitializeOsmApiDb.sh
-hoot convert $LOG_LEVEL $GENERAL_OPTS $DB_OPTS $CROP_OPTS $PERTY_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-ref-xml.osm -D reader.use.data.source.ids=false -D id.generator=hoot::PositiveIdGenerator -D convert.ops=$REF_CONVERT_OPS -D remove.elements.visitor.element.criteria=$INPUT_FILTER -D remove.elements.visitor.recursive=true -D element.criterion.negate=true -D remove.elements.visitor.chain.element.criteria=true -D set.tag.value.visitor.keys=$CUSTOM_TAG_KEY -D set.tag.value.visitor.values=$CUSTOM_TAG_VAL" 1" $SOURCE_FILE_1 $REF_DB_INPUT
+hoot convert $LOG_LEVEL $GENERAL_OPTS $DB_OPTS $CROP_OPTS $PERTY_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-ref-xml.osm -D reader.use.data.source.ids=false -D id.generator=hoot::PositiveIdGenerator -D convert.ops=$REF_CONVERT_OPS -D remove.elements.visitor.element.criteria=$INPUT_FILTER -D remove.elements.visitor.recursive=true -D element.criteria.negate=true -D remove.elements.visitor.chain.element.criteria=true -D set.tag.value.visitor.keys=$CUSTOM_TAG_KEY -D set.tag.value.visitor.values=$CUSTOM_TAG_VAL" 1" $SOURCE_FILE_1 $REF_DB_INPUT
 # Don't remove missing elements for these file conversions (even if you need to view them in JOSM), since they are the 
 # input data and we want to see any errors caused by them having missing elements.
 echo ""
@@ -192,7 +192,7 @@ else
   echo "Cropping the secondary dataset from: $SOURCE_FILE_2 to: $CROP_AOI, then writing it to an xml file: $SEC_XML_INPUT (contains features to replace with)..."
 fi
 echo ""
-hoot convert $LOG_LEVEL $GENERAL_OPTS $CROP_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-sec-xml.osm -D reader.use.data.source.ids=false -D convert.ops=$SEC_CONVERT_OPS -D remove.elements.visitor.element.criteria=$INPUT_FILTER -D remove.elements.visitor.recursive=true -D element.criterion.negate=true -D remove.elements.visitor.chain.element.criteria=true -D set.tag.value.visitor.keys=$CUSTOM_TAG_KEY -D set.tag.value.visitor.values=$CUSTOM_TAG_VAL" 2" $SOURCE_FILE_2 $SEC_XML_INPUT
+hoot convert $LOG_LEVEL $GENERAL_OPTS $CROP_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-sec-xml.osm -D reader.use.data.source.ids=false -D convert.ops=$SEC_CONVERT_OPS -D remove.elements.visitor.element.criteria=$INPUT_FILTER -D remove.elements.visitor.recursive=true -D element.criteria.negate=true -D remove.elements.visitor.chain.element.criteria=true -D set.tag.value.visitor.keys=$CUSTOM_TAG_KEY -D set.tag.value.visitor.values=$CUSTOM_TAG_VAL" 2" $SOURCE_FILE_2 $SEC_XML_INPUT
 
 # CHANGESET DERIVATION
 

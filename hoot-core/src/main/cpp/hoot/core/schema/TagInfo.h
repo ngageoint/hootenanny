@@ -39,6 +39,9 @@ namespace hoot
 
 /**
  * Prints information about a set of tags
+ *
+ * This only works with streamable inputs but could probably be made to work with non-streamable, if
+ * needed.
  */
 class TagInfo
 {

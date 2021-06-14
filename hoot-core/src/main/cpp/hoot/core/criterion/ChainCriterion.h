@@ -36,7 +36,7 @@ namespace hoot
 {
 
 /**
- * isSatisfied returns true if all the children criteria are satisfied
+ * Is satisified if all of its children criteria are satisfied
  */
 class ChainCriterion : public ElementCriterion, public ElementCriterionConsumer,
   public Configurable, public ConstOsmMapConsumer

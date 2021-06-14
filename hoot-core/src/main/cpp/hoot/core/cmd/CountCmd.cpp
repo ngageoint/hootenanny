@@ -63,21 +63,22 @@ public:
     }
 
     const QStringList inputs = args[0].trimmed().split(";");
-    QString criterionClassName = "";
+    QStringList criteriaClassNames;
     if (args.size() > 1)
     {
-      criterionClassName = args[1].trimmed();
+      criteriaClassNames = args[1].trimmed().split(";");
     }
 
     ElementCounter counter;
     counter.setCountFeaturesOnly(countFeaturesOnly);
-    const long totalCount = counter.count(inputs, criterionClassName);
+    counter.setCriteria(criteriaClassNames);
+    const long totalCount = counter.count(inputs);
 
     // putting a preceding endline in here since PROGRESS_INFO doesn't clear itself out at the end
     QString displayStr = "Total count ";
-    if (!criterionClassName.isEmpty())
+    if (!criteriaClassNames.isEmpty())
     {
-      displayStr += "(" + criterionClassName + ")";
+      displayStr += "(" + criteriaClassNames.join(";") + ")";
     }
     displayStr += ": " + StringUtils::formatLargeNumber(totalCount);
     std::cout << std::endl << displayStr << std::endl;
