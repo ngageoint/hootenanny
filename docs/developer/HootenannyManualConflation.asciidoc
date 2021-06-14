@@ -33,10 +33,10 @@ hoot clean CroppedOutput2.osm CleanedOutput2.osm
 # prune (optional); keep only buildings
 hoot convert -D convert.ops=hoot::RemoveElementsVisitor \
   -D remove.elements.visitor.element.criteria=hoot::BuildingCriterion \
-  -D element.criterion.negate=true CleanedOutput1.osm BuildingsOutput1.osm
+  -D element.criteria.negate=true CleanedOutput1.osm BuildingsOutput1.osm
 hoot convert -D convert.ops=hoot::RemoveElementsVisitor \
   -D remove.elements.visitor.element.criteria=hoot::BuildingCriterion \
-  -D element.criterion.negate=true CleanedOutput2.osm BuildingsOutput2.osm
+  -D element.criteria.negate=true CleanedOutput2.osm BuildingsOutput2.osm
 
 # add ref tags
 hoot convert -D convert.ops=hoot::AddRef1Visitor BuildingsOutput1.osm Ref1.osm

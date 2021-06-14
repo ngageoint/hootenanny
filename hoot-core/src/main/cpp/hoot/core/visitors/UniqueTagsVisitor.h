@@ -22,42 +22,42 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
  */
-#include "UniqueTagValuesVisitor.h"
+#ifndef UNIQUE_TAGS_VISITOR_H
+#define UNIQUE_TAGS_VISITOR_H
+
+// hoot
+#include <hoot/core/visitors/ConstElementVisitor.h>
 
 namespace hoot
 {
 
-// This isn't being factory registered, since there's no standard way to retrieve a set of strings
-// from a visitor
-
-UniqueTagValuesVisitor::UniqueTagValuesVisitor(QString key, std::set<QString>& bag, bool split) :
-_key(key),
-_bag(bag),
-_split(split)
+/**
+ * Collects unique tags
+ */
+class UniqueTagsVisitor : public ConstElementVisitor
 {
-}
+public:
 
-void UniqueTagValuesVisitor::visit(const ConstElementPtr& e)
-{
-  Tags::const_iterator it = e->getTags().find(_key);
-  if (it != e->getTags().end())
-  {
-    if (_split)
-    {
-      QStringList l;
-      e->getTags().readValues(_key, l);
-      for (int i = 0; i < l.size(); i++)
-      {
-        _bag.insert(l[i]);
-      }
-    }
-    else
-    {
-      _bag.insert(it.value());
-    }
-  }
-}
+  static QString className() { return "hoot::UniqueTagsVisitor"; }
+
+  UniqueTagsVisitor() = default;
+  ~UniqueTagsVisitor() = default;
+
+  void visit(const ConstElementPtr& e) override;
+
+  QString getDescription() const override { return "Collects unique tags"; }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
+
+  std::set<QString> getUniqueKvps() const { return _uniqueKvps; }
+
+private:
+
+  std::set<QString> _uniqueKvps;
+};
 
 }
+
+#endif // UNIQUE_TAG_VALUES_VISITOR_H

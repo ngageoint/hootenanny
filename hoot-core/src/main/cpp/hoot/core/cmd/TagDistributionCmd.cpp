@@ -28,6 +28,7 @@
 // Hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
+#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/schema/TagDistribution.h>
 #include <hoot/core/util/StringUtils.h>
 
@@ -54,11 +55,23 @@ public:
     QElapsedTimer timer;
     timer.start();
 
+    bool typeKeysOnly = false;
+    if (args.contains("--types"))
+    {
+      typeKeysOnly = true;
+      args.removeAt(args.indexOf("--types"));
+    }
     bool nameKeysOnly = false;
     if (args.contains("--names"))
     {
       nameKeysOnly = true;
       args.removeAt(args.indexOf("--names"));
+    }
+    bool countOnlyMatchingElementsInTotal = false;
+    if (args.contains("--percentage-of-matching"))
+    {
+      countOnlyMatchingElementsInTotal = true;
+      args.removeAt(args.indexOf("--percentage-of-matching"));
     }
     bool sortByFrequency = true;
     if (args.contains("--sort-by-value"))
@@ -85,53 +98,63 @@ public:
       limit = args.at(limitIndex + 1).toInt(&ok);
       if (!ok)
       {
-        throw HootException(
+        throw IllegalArgumentException(
           QString("Invalid limit value specified: " +  args.at(limitIndex + 1)).arg(getName()));
       }
       args.removeAt(limitIndex + 1);
       args.removeAt(limitIndex);
     }
 
-    if (!nameKeysOnly && (args.size() < 2 || args.size() > 3))
+    if (typeKeysOnly && nameKeysOnly)
+    {
+      throw IllegalArgumentException(
+        "Only either --names or --types may be specified as an option to " + getName() + ".");
+    }
+
+    if (!nameKeysOnly && !typeKeysOnly && (args.size() < 2 || args.size() > 3))
     {
       std::cout << getHelp() << std::endl << std::endl;
-      throw HootException(
+      throw IllegalArgumentException(
         QString("%1 takes two to three parameters when --names is not specified.").arg(getName()));
     }
-    else if (nameKeysOnly && (args.size() < 1 || args.size() > 2))
+    else if ((nameKeysOnly || typeKeysOnly) && (args.size() < 1 || args.size() > 2))
     {
       std::cout << getHelp() << std::endl << std::endl;
-      throw HootException(
+      throw IllegalArgumentException(
         QString("%1 takes one to two parameters when --names is specified.").arg(getName()));
     }
 
     const QStringList inputs = args[0].split(";");
     QStringList tagKeys;
-    if (nameKeysOnly)
+    if (typeKeysOnly)
+    {
+      tagKeys = OsmSchema::getInstance().getAllTypeKeys().toList();
+    }
+    else if (nameKeysOnly)
     {
       tagKeys = Tags::getNameKeys();
     }
     else
     {
-      tagKeys = args[1].split(";");
+      tagKeys = args[1].split(";", QString::SkipEmptyParts);
     }
-    QString criterionClassName;
+    QStringList criteriaClassNames;
     if (args.size() == 3)
     {
-      criterionClassName = args[2];
+      criteriaClassNames = args[2].trimmed().split(";");
     }
 
-    LOG_STATUS("Calculating tag distribution for ..." << inputs.size() << " inputs...");
+    LOG_STATUS("Calculating tag distribution for " << inputs.size() << " input(s)...");
 
     TagDistribution tagDist;
-    tagDist.setCriterionClassName(criterionClassName);
+    tagDist.setCriteria(criteriaClassNames);
     tagDist.setLimit(limit);
     tagDist.setSortByFrequency(sortByFrequency);
     tagDist.setTagKeys(tagKeys);
+    tagDist.setProcessAllTagKeys(tagKeys.empty());
+    tagDist.setCountOnlyMatchingElementsInTotal(countOnlyMatchingElementsInTotal);
     tagDist.setTokenize(tokenize);
 
-    // We may want to eventually consider refactoring this to write to a file support very large
-    // amounts of output.
     std::cout << tagDist.getTagCountsString(tagDist.getTagCounts(inputs));
 
     LOG_STATUS(

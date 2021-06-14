@@ -90,6 +90,18 @@ bool ElementStreamer::areStreamableIo(const QStringList& inputs, const QString& 
   return true;
 }
 
+bool ElementStreamer::areStreamableInputs(const QStringList& inputs)
+{
+  for (int i = 0; i < inputs.size(); i++)
+  {
+    if (!OsmMapReaderFactory::hasElementInputStream(inputs.at(i)))
+    {
+      return false;
+    }
+  }
+  return true;
+}
+
 bool ElementStreamer::areValidStreamingOps(const QStringList& ops)
 {
   LOG_VARD(ops);
