@@ -119,6 +119,10 @@ private:
   void _processTagKey(
     const QString& tagKey, const Tags& tags, std::map<QString, int>& tagCounts) const;
 
+  void _countTags(const QString& input, std::map<QString, int>& tagCounts);
+  void _processTagKey(
+    const QString& tagKey, const Tags& tags, std::map<QString, int>& tagCounts) const;
+
   QString _getPercentageStr(const double percentage) const;
 };
 
