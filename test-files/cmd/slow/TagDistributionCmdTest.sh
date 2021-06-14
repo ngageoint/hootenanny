@@ -26,14 +26,35 @@ echo ""
 hoot tag-distribution $CONFIG $INPUT_DIR/DcGisRoads.osm highway HighwayCriterion
 
 echo ""
+echo "Testing with a single key and multiple criteria specified..."
+echo ""
+hoot tag-distribution $CONFIG $INPUT_DIR/DcGisRoads.osm highway "HighwayCriterion;WayCriterion"
+
+echo ""
+echo "Testing a crit chain..."
+echo ""
+hoot tag-distribution $CONFIG -D element.criteria.chain=true $INPUT_DIR/DcGisRoads.osm highway "HighwayCriterion;PoiCriterion"
+
+echo ""
+echo "Testing a non-streamable crit chain that will fail without an input map..."
+echo ""
+hoot tag-distribution $CONFIG -D element.criteria.chain=false $INPUT_DIR/DcGisRoads.osm highway \
+  "HighwayCriterion;HighwayWayNodeCriterion"
+
+echo ""
+echo "Testing a negated crit..."
+echo ""
+hoot tag-distribution $CONFIG -D element.criteria.negate=true $INPUT_DIR/DcGisRoads.osm highway PoiCriterion
+
+echo ""
 echo "Testing key not present..."
 echo ""
 hoot tag-distribution $CONFIG $INPUT_DIR/DcGisRoads.osm blah
 
 echo ""
-echo "Testing criterion not present..."
+echo "Testing criterion for elements not present..."
 echo ""
-hoot tag-distribution $CONFIG $INPUT_DIR/DcGisRoads.osm highway hoot::PoiCriterion
+hoot tag-distribution $CONFIG $INPUT_DIR/DcGisRoads.osm highway PoiCriterion
 
 echo ""
 echo "Testing with a single key and counting matching elements only..."

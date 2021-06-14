@@ -238,7 +238,7 @@ public class AdvancedConflationOptionsResource {
                         JSONObject roadAlg = (JSONObject) roadOpts.stream().filter(config -> {
                             return ((JSONObject) config).get("id").equals("RoadEngines");
                         }).findFirst().orElse(null);
-                        diffTemplate.add(roadAlg);
+                        diffTemplate.add(0, roadAlg);
                     }
                 }
                 template = diffTemplate;

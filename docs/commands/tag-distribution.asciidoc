@@ -6,15 +6,18 @@
 The +tag-distribution+ command prints out a distribution for all values of a specified tag key, including a 
 percentage of each value's frequency compared to other tag values.
 
-* +inputs+                   - One or more streamable inputs to read (e.g. OSM file). Specify multiple inputs 
-                               by separating them with a semicolon and surrounding them with quotes.
+* +inputs+                   - One or more inputs to read (e.g. OSM file). Specify multiple inputs by separating them with 
+                               a semicolon and surrounding them with quotes.
 * +tagKeys+                  - The tag keys to gather statistics for. Specify multiple inputs by separating them with a 
                                semicolon and surrounding them with quotes. To process all tags, leave this empty by specifying 
                                a pair of quotes with nothing between them. This parameter is ignored if `--names` or `--types` 
                                is used.
-* +criterion+                - (optional) A criterion used to filter the input before tag counting. The criterion must be 
-                               a single class name of a inheriting  from `ElementCriterion`. Use the +info --operators+ 
-                               command to obtain a list of available Hootenanny criteria.
+* +criteria+                 - (optional) Filtering criteria; May be one or more class names inheriting from 
+                               `ElementCriterion` delimited with a semicolon and surrounded by quotes. By default, 
+                               multiple criteria are logically OR'd together. Set the 
+                               `tag.distribution.chain.element.criteria` option to true to have the criteria logically 
+                               AND'd together. The criteria can be negated with the option `element.criteria.negate`.
+                               Use the +info --operators+ command to obtain a list of available criteria.
 * +--names+                  - If specified, `tagKeys` is ignored and only name tags, as defined by Hootenanny's schema, 
                                are processed. This is incompatible with the `--types` option.
 * +--types+                  - If specified, `tagKeys` is ignored and only type tags, as defined by Hootenanny's schema, 
@@ -24,21 +27,15 @@ percentage of each value's frequency compared to other tag values.
                                counted in the element total. With this option enabled, only elements which have one of the
                                specified tags are counted in the element total. Enabling this option has no effect if
                                all tag keys are parsed (empty `tagKeys`).
-* +--sort-by-value +         - Sorts results alphabetically by tag value.  If not specified, results are sorted by decreasing 
+* +--sort-by-value +         - Sorts results alphabetically by tag value. If not specified, results are sorted by decreasing 
                                tag value occurrence frequency.
 * +--limit+                  - Limits the number of results returned.
 * +--tokenize+               - Breaks tag values up into individual tokens before counting them.
 
-This command works on streamable inputs only. To determine if an input is streamable use:
-
------
-    hoot info --formats --input-streamable
------
-
 === Usage
 
 --------------------------------------
-tag-distribution (input1;input2...) (tagKeys) [criterion] [--names] [--types] [--percentage-of-matching] [--sort-by-value] [--limit]  [--tokenize]
+tag-distribution (input1;input2...) (tagKeys) [criterion1;criterion2] [--names] [--types] [--percentage-of-matching] [--sort-by-value] [--limit]  [--tokenize]
 --------------------------------------
 
 https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#display-the-distribution-of-highway-tags-for-roads-in-a-map[Examples]
@@ -94,4 +91,3 @@ The increased total element count includes non-way elements with a "highway" tag
 === See Also
 
 * https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc#applying-changes-1[Supported Input Formats]
-

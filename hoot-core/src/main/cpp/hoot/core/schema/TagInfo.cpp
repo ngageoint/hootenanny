@@ -209,7 +209,7 @@ QString TagInfo::_getInfo(const QString& input) const
     // needed readed code can be manually added to this class.
     if (!OsmMapReaderFactory::hasElementInputStream(inputInfo))
     {
-      throw HootException("Inputs to TagInfo must be streamable.");
+      throw IllegalArgumentException("Inputs to TagInfo must be streamable.");
     }
 
     LOG_DEBUG("Reading: " << inputInfo << "...");
