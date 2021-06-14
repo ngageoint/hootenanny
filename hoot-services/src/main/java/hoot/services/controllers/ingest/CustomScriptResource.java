@@ -27,6 +27,10 @@
 package hoot.services.controllers.ingest;
 
 import static hoot.services.HootProperties.*;
+import static hoot.services.models.db.QTranslationFolders.translationFolders;
+import static hoot.services.models.db.QTranslations.translations;
+import static hoot.services.utils.DbUtils.createQuery;
+import static hoot.services.utils.DbUtils.getConnection;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -34,40 +38,62 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.StringReader;
 import java.nio.charset.Charset;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.BadRequestException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.ForbiddenException;
 import javax.ws.rs.GET;
+import javax.ws.rs.NotFoundException;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.querydsl.core.Tuple;
+import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.sql.dml.SQLUpdateClause;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import org.mozilla.javascript.Context;
 import org.mozilla.javascript.EvaluatorException;
 import org.mozilla.javascript.Function;
 import org.mozilla.javascript.ScriptableObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
+
+import hoot.services.controllers.osm.user.UserResource;
+import hoot.services.models.db.TranslationFolder;
+import hoot.services.models.db.Translations;
+import hoot.services.models.db.Users;
+import hoot.services.utils.DbUtils;
 
 
 @Controller
 @Path("/customscript")
+@Transactional
 public class CustomScriptResource {
     private static final Logger logger = LoggerFactory.getLogger(CustomScriptResource.class);
     private static final boolean FOUO_TRANSLATIONS_EXIST;
@@ -102,7 +128,7 @@ public class CustomScriptResource {
 
     /**
      * Create or update user provided script into file.
-     * 
+     *
      * // A non-standard extension to include additional js files within the
      * same dir // sub-tree. require("example")
      *
@@ -121,7 +147,9 @@ public class CustomScriptResource {
      * tags = {}; //print(layerName); for (var key in attrs) { k =
      * key.toLowerCase() //print(k + ": " + attrs[key]); tags[k] = attrs[key] }
      * return tags; }
-     * 
+     *
+     * POST hoot-services/ingest/customscript/save
+     *
      * @param script
      *            Name of script. If exists then it will be updated
      * @param scriptName
@@ -132,19 +160,38 @@ public class CustomScriptResource {
      */
     @POST
     @Path("/save")
-    @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response processSave(String script,
+    public Response processSave(@Context HttpServletRequest request,
+                                String script,
                                 @QueryParam("SCRIPT_NAME") String scriptName,
-                                @QueryParam("SCRIPT_DESCRIPTION") String scriptDescription) {
+                                @QueryParam("SCRIPT_DESCRIPTION") String scriptDescription,
+                                @QueryParam("folderId") Long folderId) {
+        Users user = Users.fromRequest(request);
         JSONArray saveArr = new JSONArray();
 
+        if (folderId == null) {
+            folderId = 0L;
+        }
+
+        TranslationFolder folder = getTranslationFolderForUser(user, folderId);
+        String path = folder.getPath();
+
         try {
-            saveArr.add(saveScript(scriptName, scriptDescription, script));
+            saveArr.add(saveScript(scriptName, scriptDescription, script, path));
         }
         catch (Exception e) {
             String msg = "Error processing script save for: " + scriptName + ".  Cause: " + e.getMessage();
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
+        }
+
+        long translationExists = createQuery()
+                .select(translations)
+                .from(translations)
+                .where(translations.folderId.eq(folderId).and(translations.displayName.eq(scriptName)))
+                .fetchCount();
+
+        if (translationExists == 0) {
+            DbUtils.addTranslation(scriptName, user.getId(), folderId);
         }
 
         return Response.ok(saveArr.toString()).build();
@@ -161,7 +208,7 @@ public class CustomScriptResource {
             response = new ScriptsModifiedResponse();
             List<String> scriptsModified = new ArrayList<>();
             for (Script script : saveMultipleScriptsRequest.getScripts()) {
-                if (saveScript(script.getName(), script.getDescription(), script.getContent()) != null) {
+                if (saveScript(script.getName(), script.getDescription(), script.getContent(), null) != null) {
                     scriptsModified.add(script.getName());
                 }
             }
@@ -178,40 +225,21 @@ public class CustomScriptResource {
 
     /**
      * Gets the list of available scripts.
-     * 
+     *
      * GET hoot-services/ingest/customscript/getlist
-     * 
+     *
      * @return JSON Array containing JSON of name and description of all
      *         available scripts
      */
     @GET
     @Path("/getlist")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getScriptsList() {
+    public Response getScriptsList(@Context HttpServletRequest request) {
+        Users user = Users.fromRequest(request);
         JSONArray retList = new JSONArray();
         JSONArray filesList = new JSONArray();
 
         try {
-            File scriptsDir = new File(SCRIPT_FOLDER);
-            if (scriptsDir.exists()) {
-                String[] exts = { "js" };
-                List<File> files = (List<File>) FileUtils.listFiles(scriptsDir, exts, false);
-
-                for (File file : files) {
-                    String content = FileUtils.readFileToString(file, "UTF-8");
-                    JSONObject oScript = getScriptObject(content);
-
-                    if (oScript != null) {
-                        JSONObject header = (JSONObject) oScript.get("HEADER");
-                        if (header.get("CANEXPORT") == null) {
-                            boolean canExport = validateExport(oScript.get("BODY").toString());
-                            header.put("CANEXPORT", canExport);
-                        }
-                        filesList.add(header);
-                    }
-                }
-            }
-
             List<String> configFiles = new ArrayList<>();
             configFiles.add(DEFAULT_TRANSLATIONS_CONFIG);
 
@@ -225,11 +253,59 @@ public class CustomScriptResource {
             Map<String, JSONObject> sortedScripts = new TreeMap<>();
             for (Object o : filesList) {
                 JSONObject cO = (JSONObject) o;
-                String sName = cO.get("NAME").toString();
-                sortedScripts.put(sName.toUpperCase(), cO);
+                retList.add(cO);
             }
 
-            retList.addAll(sortedScripts.values());
+            List<Tuple> mappings = createQuery()
+                .select(translations.id,
+                        translations.displayName,
+                        translations.userId,
+                        translations.createdAt,
+                        translations.folderId,
+                        translationFolders.path,
+                        translationFolders.publicCol)
+                .from(translations)
+                .leftJoin(translationFolders).on(translationFolders.id.eq(translations.folderId))
+                .fetch();
+
+            Set<Long> visibleFolders = DbUtils.getTranslationFolderIdsForUser(user.getId());
+            for (Tuple translationRecord: mappings) {
+                JSONObject json = new JSONObject();
+                String translationName = translationRecord.get(translations.displayName);
+                Long folderId = translationRecord.get(translations.folderId);
+                Boolean parentFolderIsPublic = translationRecord.get(translationFolders.publicCol);
+
+                json.put("id", translationRecord.get(translations.id));
+                json.put("name", translationName);
+                json.put("userId", translationRecord.get(translations.userId));
+                json.put("date", translationRecord.get(translations.createdAt).toString());
+                json.put("folderId", folderId);
+
+                if (parentFolderIsPublic == null) {
+                    parentFolderIsPublic = true;
+                }
+                if (folderId == null || folderId.equals(0L) || visibleFolders.contains(folderId)) {
+                    json.put("public", parentFolderIsPublic);
+                }
+
+                String path = translationRecord.get(translationFolders.path);
+                String translationPath = File.separator + translationName;
+                translationPath = path != null ? path + translationPath : translationPath;
+                File translationFile = new File(SCRIPT_FOLDER, translationPath + ".js");
+
+                if (translationFile.exists()) {
+                    String content = FileUtils.readFileToString(translationFile, "UTF-8");
+                    JSONObject oScript = getScriptObject(content);
+
+                    if (oScript != null) {
+                        JSONObject header = (JSONObject) oScript.get("HEADER");
+                        json.put("DESCRIPTION", header.get("DESCRIPTION"));
+                        json.put("CANEXPORT", header.get("CANEXPORT"));
+                    }
+
+                    retList.add(json);
+                }
+            }
         }
         catch (Exception e) {
             String msg = "Error getting scripts list.  Cause: " + e.getMessage();
@@ -249,7 +325,7 @@ public class CustomScriptResource {
      */
     private static JSONArray getDefaultList(List<String> configFiles) throws IOException, ParseException {
         JSONArray filesList = new JSONArray();
-        
+
         for (String configFile : configFiles) {
             File file = new File(configFile);
             if (file.exists()) {
@@ -308,9 +384,9 @@ public class CustomScriptResource {
 
     /**
      * Returns the specified script.
-     * 
+     *
      * GET hoot-services/ingest/customscript/getscript?SCRIPT_NAME=MyTest
-     * 
+     *
      * // A non-standard extension to include additional js files within the
      * same dir // sub-tree. require("example")
      *
@@ -329,45 +405,79 @@ public class CustomScriptResource {
      * tags = {}; //print(layerName); for (var key in attrs) { k =
      * key.toLowerCase() //print(k + ": " + attrs[key]); tags[k] = attrs[key] }
      * return tags; }
-     * 
-     * @param scriptName
+     *
+     * @param identifier
      *            Name of the script to retrieve.
      * @return Requested translation script
      */
     @GET
     @Path("/getscript")
     @Produces(MediaType.TEXT_PLAIN)
-    public Response getScript(@QueryParam("SCRIPT_NAME") String scriptName) {
+    public Response getScript(@Context HttpServletRequest request,@QueryParam("SCRIPT_NAME") String identifier) {
+        Users user = Users.fromRequest(request);
         String script = "";
 
+        long translationId = -1;
+
         try {
-            File scriptsDir = new File(SCRIPT_FOLDER);
+            translationId = Long.parseLong(identifier);
+        } catch (NumberFormatException exc) {}
 
-            if (scriptsDir.exists()) {
-                String[] exts = { "js" };
-                List<File> files = (List<File>) FileUtils.listFiles(scriptsDir, exts, false);
+        try {
+            if (translationId > -1) {
+                Translations folderMapInfo = DbUtils.getTranslation(translationId);
+                String translationName = folderMapInfo.getDisplayName();
 
-                for (File file : files) {
+                // get full directory path for file being deleted
+                TranslationFolder folder = getTranslationFolderForUser(user, folderMapInfo.getFolderId());
+                String getPath = folder.getPath();
+
+                String translationPath = File.separator + translationName;
+                translationPath = getPath != null ? getPath + translationPath : translationPath;
+                File translationFile = new File(SCRIPT_FOLDER, translationPath + ".js");
+
+                if (translationFile.exists()) {
                     try {
-                        String content = FileUtils.readFileToString(file, "UTF-8");
+                        String content = FileUtils.readFileToString(translationFile, "UTF-8");
                         JSONObject oScript = getScriptObject(content);
 
                         if (oScript != null) {
-                            JSONObject header = (JSONObject) oScript.get("HEADER");
-                            if (header.get("NAME").toString().equalsIgnoreCase(scriptName)) {
-                                script = oScript.get("BODY").toString();
-                                break;
-                            }
+                            script = oScript.get("BODY").toString();
                         }
                     }
                     catch (Exception e) {
                         logger.error("Failed to read file header: {}", e.getMessage(), e);
                     }
                 }
+            } else {
+                File scriptsDir = new File(SCRIPT_FOLDER);
+
+                if (scriptsDir.exists()) {
+                    String[] exts = { "js" };
+                    List<File> files = (List<File>) FileUtils.listFiles(scriptsDir, exts, false);
+
+                    for (File file : files) {
+                        try {
+                            String content = FileUtils.readFileToString(file, "UTF-8");
+                            JSONObject oScript = getScriptObject(content);
+
+                            if (oScript != null) {
+                                JSONObject header = (JSONObject) oScript.get("HEADER");
+                                if (header.get("NAME").toString().equalsIgnoreCase(identifier)) {
+                                    script = oScript.get("BODY").toString();
+                                    break;
+                                }
+                            }
+                        }
+                        catch (Exception e) {
+                            logger.error("Failed to read file header: {}", e.getMessage(), e);
+                        }
+                    }
+                }
             }
         }
         catch (Exception ex) {
-            String msg = "Error getting script: " + scriptName;
+            String msg = "Error getting script: " + identifier;
             throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
         }
 
@@ -376,10 +486,10 @@ public class CustomScriptResource {
 
     /**
      * Returns the default script.
-     * 
+     *
      * GET hoot-services/ingest/customscript/getscript?SCRIPT_PATH=customscript/
      * testdefault.js
-     * 
+     *
      * // A non-standard extension to include additional js files within the
      * same dir // sub-tree. require("example")
      *
@@ -398,7 +508,7 @@ public class CustomScriptResource {
      * tags = {}; //print(layerName); for (var key in attrs) { k =
      * key.toLowerCase() //print(k + ": " + attrs[key]); tags[k] = attrs[key] }
      * return tags; }
-     * 
+     *
      * @param scriptPath
      *            Relative path of default translation script. (Relative to hoot home path)
      * @return Requested translation script
@@ -456,46 +566,77 @@ public class CustomScriptResource {
 
     /**
      * Deletes the specified script.
-     * 
-     * GET hoot-services/ingest/customscript/deletescript?SCRIPT_NAME=My Test6
-     * 
+     *
+     * GET hoot-services/ingest/customscript/deletescript?SCRIPT_INFO=My Test6
+     *
      * //TODO: should be an HTTP DELETE
-     * 
-     * @param scriptName
+     *
+     * @param identifier
      *            Name of the script to delete.
      * @return JSON Array containing JSON of name and description of deleted scripts
      */
     @GET
     @Path("/deletescript")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response deleteScript(@QueryParam("SCRIPT_NAME") String scriptName) {
+    public Response deleteScript(@Context HttpServletRequest request, @QueryParam("SCRIPT_INFO") String identifier) {
+        Users user = Users.fromRequest(request);
         JSONArray delArr = new JSONArray();
 
+        long translationId = -1;
+
         try {
-            List<File> files = getFilesInScriptDir();
-            if (files == null) {
-                throw new IOException("Script directory does not exist.");
-            }
+            translationId = Long.parseLong(identifier);
+        } catch (NumberFormatException exc) {}
 
-            for (File file : files) {
-                String content = FileUtils.readFileToString(file, "UTF-8");
+        try {
+            if (translationId > -1) {
+                // get the display name because that's the file to delete. folder id is to get path for the file
+                Translations folderMapInfo = getTranslationForUser(user, translationId);
+                String translationName = folderMapInfo.getDisplayName();
+
+                // get full directory path for file being deleted
+                TranslationFolder folder = getTranslationFolderForUser(user, folderMapInfo.getFolderId());
+                String getPath = folder.getPath();
+
+                String translationPath = File.separator + translationName;
+                translationPath = getPath != null ? getPath + translationPath : translationPath;
+                File translationFile = new File(SCRIPT_FOLDER, translationPath + ".js");
+
+                String content = FileUtils.readFileToString(translationFile, "UTF-8");
                 JSONObject oScript = getScriptObject(content);
+                delArr.add((JSONObject) oScript.get("HEADER"));
 
-                if (oScript != null) {
-                    JSONObject header = (JSONObject) oScript.get("HEADER");
-                    if (header.get("NAME").toString().equalsIgnoreCase(scriptName)) {
-                        delArr.add(header);
-                        if (!file.delete()) {
-                            throw new IOException("Error deleting script: " + file.getAbsolutePath());
+                translationFile.delete();
+
+                createQuery().delete(translations)
+                    .where(translations.id.eq(translationId))
+                    .execute();
+            } else {
+
+                List<File> files = getFilesInScriptDir();
+                if (files == null) {
+                    throw new IOException("Script directory does not exist.");
+                }
+
+                for (File file : files) {
+                    String content = FileUtils.readFileToString(file, "UTF-8");
+                    JSONObject oScript = getScriptObject(content);
+
+                    if (oScript != null) {
+                        JSONObject header = (JSONObject) oScript.get("HEADER");
+                        if (header.get("NAME").toString().equalsIgnoreCase(identifier)) {
+                            delArr.add(header);
+                            if (!file.delete()) {
+                                throw new IOException("Error deleting script: " + file.getAbsolutePath());
+                            }
+                            break;
                         }
-                        break;
                     }
                 }
             }
         }
         catch (Exception ex) {
-            String msg = "Error deleting script: " + scriptName;
-            throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
+            throw new WebApplicationException(ex, Response.serverError().entity(ex.getMessage()).build());
         }
 
         return Response.ok(delArr.toString()).build();
@@ -503,7 +644,7 @@ public class CustomScriptResource {
 
     /**
      * Deletes requested script
-     * 
+     *
      * @param deleteScriptsRequest
      * @return ScriptsModifiedResponse
      */
@@ -551,6 +692,378 @@ public class CustomScriptResource {
         return response;
     }
 
+    /**
+     * Creates translations folder
+     *
+     * POST hoot-services/ingest/customscript/createfolder
+     *
+     * @param request
+     * @param parentId
+     * @param folderName
+     * @param isPublic
+     * @return
+     * @throws SQLException
+     */
+    @POST
+    @Path("/createfolder")
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response addFolder(@Context HttpServletRequest request,
+            @QueryParam("parentId") Long parentId,
+            @QueryParam("folderName") String folderName,
+            @QueryParam("isPublic") Boolean isPublic) {
+
+        Map<String, Object> resp = new HashMap<>();
+        Users user = Users.fromRequest(request);
+        Long userid = -1L;
+        if(user != null) {
+            userid = user.getId();
+        }
+
+        // get folder path
+        TranslationFolder folder = getTranslationFolderForUser(user, parentId);
+        String folderPath = folder.getPath();
+
+        if(folder.getId() != 0 && !folder.getUserId().equals(userid)) {
+            throw new ForbiddenException(Response.status(Response.Status.FORBIDDEN).type(MediaType.TEXT_PLAIN).entity("You must be the owner of this folder to create a folder inside it.").build());
+        }
+
+        String newFolder = File.separator + folderName;
+        folderPath = folderPath != null ? folderPath + newFolder : newFolder;
+
+        if(isPublic == null) {
+            isPublic = folder.getPublicCol();
+            // If the user did specify verify visibility:
+        } else {
+            if(isPublic && !folder.getPublicCol()) {
+                throw new BadRequestException("public folders cannot be created under private folders");
+            }
+        }
+
+        File workDir = new File(SCRIPT_FOLDER, folderPath);
+        if (!workDir.exists()) {
+            try {
+                FileUtils.forceMkdir(workDir);
+            }
+            catch (IOException exc) {
+                String msg = "Error creating folder!";
+                throw new WebApplicationException(exc, Response.serverError().entity(msg).build());
+            }
+        } else {
+            return Response.status(Response.Status.CONFLICT).entity("Unable to create folder because it already exists").build();
+        }
+
+        Long newId = createQuery()
+                .select(Expressions.numberTemplate(Long.class, "nextval('translation_folders_id_seq')"))
+                .from()
+                .fetchOne();
+
+        Timestamp now = new Timestamp(System.currentTimeMillis());
+
+        createQuery()
+            .insert(translationFolders)
+            .columns(translationFolders.id, translationFolders.displayName, translationFolders.parentId, translationFolders.userId, translationFolders.publicCol, translationFolders.createdAt, translationFolders.path)
+            .values(newId, folderName, parentId, userid, isPublic, now, folderPath)
+            .execute();
+
+        resp.put("success", true);
+        resp.put("folderId", 1);
+
+        return Response.ok().entity(resp).build();
+    }
+
+    @DELETE
+    @Path("/deleteFolder")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deleteFolder(@Context HttpServletRequest request, @QueryParam("folderId") Long folderId) {
+
+        Users user = Users.fromRequest(request);
+        if(folderId.equals(0L) || user == null) {
+            throw new BadRequestException();
+        }
+
+        TranslationFolder folder = getTranslationFolderForUser(user, folderId);
+
+        if(!UserResource.adminUserCheck(user) && !folder.getUserId().equals(user.getId())) {
+            throw new ForbiddenException(Response.status(Response.Status.FORBIDDEN).type(MediaType.TEXT_PLAIN).entity("You must own the folder to delete it").build());
+        }
+
+        long translationsInFolder = createQuery()
+            .select(translations)
+            .from(translations)
+            .where(translations.folderId.eq(folderId))
+            .fetchCount();
+
+        if (translationsInFolder == 0) {
+            // get file path
+            String path = folder.getPath() != null ? folder.getPath() : "";
+            File translationFile = new File(SCRIPT_FOLDER, path);
+            translationFile.delete();
+
+            createQuery()
+                    .delete(translationFolders)
+                    .where(translationFolders.id.eq(folderId))
+                    .execute();
+        } else {
+            throw new ForbiddenException(Response.status(Response.Status.FORBIDDEN).type(MediaType.TEXT_PLAIN).entity("You must clear files inside the folder before deleting it").build());
+        }
+
+        return Response.ok().build();
+    }
+
+    /**
+     * Returns a list of all translation folders in the services database.
+     *
+     * GET hoot-services/osm/api/0.6/map/folders
+     *
+     * @return a JSON object containing a list of folders
+     */
+    @GET
+    @Path("/getFolders")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<TranslationFolder> getFolders(@Context HttpServletRequest request) {
+        Users user = Users.fromRequest(request);
+
+        List<TranslationFolder> folderRecordSet = DbUtils.getTranslationFoldersForUser(user.getId());
+        List<TranslationFolder> visibleFolders = new ArrayList<>();
+        for(TranslationFolder f : folderRecordSet) {
+            if(folderIsPublic(folderRecordSet, f, user)) {
+                visibleFolders.add(f);
+            }
+        }
+
+        return visibleFolders;
+    }
+
+    @PUT
+    @Path("/changeVisibility")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response changeVisibility(@Context HttpServletRequest request,
+            @QueryParam("folderId") Long folderId,
+            @QueryParam("visibility") String visibility) throws SQLException {
+        Users user = Users.fromRequest(request);
+
+        // handle some ACL logic:
+        TranslationFolder folder = getTranslationFolderForUser(user, folderId);
+        // User must also -own- the folder:
+        if(!folder.getUserId().equals(user.getId())) {
+            throw new ForbiddenException(Response.status(Response.Status.FORBIDDEN).type(MediaType.TEXT_PLAIN).entity("You must own the folder to set/view it's attributes").build());
+        }
+
+        // If a folder is changed to public, it will recurse up the parents and set those folders to public
+        // If a folder is changed private, it will recurse down that folder and set everything to private
+        String query = String.format("with recursive related_folders as (" +
+                "     select id, display_name, parent_id, user_id, public, created_at from translation_folders where id = %d" +
+                "     union" +
+                "     select f.id, f.display_name, f.parent_id, f.user_id, f.public, f.created_at from translation_folders f" +
+                "     inner join related_folders rf on (" +
+                "          f.id != 0 AND (" +
+                (visibility.equals("public") ? "f.id = rf.parent_id" : "f.parent_id = rf.id") +
+                "          )" +
+                "     )" +
+                ")" +
+                "update translation_folders x set public = %s " +
+                "where x.id in (select id from related_folders)", folderId, visibility.equals("public"));
+        long updated = 0;
+        try(Connection conn = getConnection() ) {
+            Statement stmt = conn.createStatement();
+            stmt.execute(query);
+            updated = stmt.getUpdateCount();
+
+            if(!conn.getAutoCommit()) {
+                conn.commit();
+            }
+        }
+
+        java.util.Map<String, Object> r = new HashMap<>();
+        r.put("updated", updated);
+        return Response.status(Response.Status.OK).entity(r).build();
+    }
+
+    /**
+     * Moves translation folder to new folder
+     *
+     * @param folderId
+     *            ID of folder
+     * @param targetFolderId
+     *            ID of target folder
+     *
+     * @return jobId Success = True/False
+     */
+    @PUT
+    @Path("/moveFolder")
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response moveFolder(@Context HttpServletRequest request,
+            @QueryParam("folderId") Long folderId,
+            @QueryParam("targetFolderId") Long targetFolderId) {
+        if(folderId.equals(0L)) {
+            throw new BadRequestException();
+        } else if(folderId.equals(targetFolderId)) {
+            return Response.status(Response.Status.BAD_REQUEST).entity("The new parent folder cannot be the current folder").build();
+        }
+
+        Users user = Users.fromRequest(request);
+
+        TranslationFolder currentTranslationFolder = getTranslationFolderForUser(user, folderId);
+        String currentPath = currentTranslationFolder.getPath() != null ? currentTranslationFolder.getPath() : "";
+        File currentFolder = new File(SCRIPT_FOLDER, currentPath);
+
+        TranslationFolder targetTranslationFolder = getTranslationFolderForUser(user, targetFolderId);
+        String targetPath = targetTranslationFolder.getPath() != null ? targetTranslationFolder.getPath() : "";
+        File targetFolder = new File(SCRIPT_FOLDER, targetPath);
+
+        if (user != null && targetTranslationFolder.getId() != 0 && (
+                !currentTranslationFolder.getUserId().equals(user.getId())
+                ||
+                !targetTranslationFolder.getUserId().equals(user.getId())
+        )) {
+            return Response.status(Response.Status.FORBIDDEN).type(MediaType.TEXT_PLAIN).entity("You must own both folders to move it.").build();
+        } else if (currentTranslationFolder.getPublicCol() && !targetTranslationFolder.getPublicCol()) {
+            // dont allow moving public folder into private folder
+            return Response.status(Response.Status.FORBIDDEN).type(MediaType.TEXT_PLAIN).entity("Can't move public folder into private folder.").build();
+        }
+
+        Map<String, Object> ret = new HashMap<>();
+        try {
+            FileUtils.moveDirectoryToDirectory(currentFolder, targetFolder, true);
+            String newPath = targetPath + File.separator + currentTranslationFolder.getDisplayName();
+
+            createQuery()
+                .update(translationFolders)
+                .where(translationFolders.id.eq(folderId))
+                .set(translationFolders.parentId, targetTranslationFolder.getId())
+                .execute();
+
+            // Recurses down the folder and changes the paths of all sub folders as well as target folder
+            DbUtils.changeTranslationFoldersPath(folderId, newPath);
+
+            ret.put("success", true);
+        }
+        catch (IOException exc) {
+            ret.put("success", false);
+        }
+
+        return Response.ok().entity(ret).build();
+    }
+
+    /**
+     * Moves translation file to new folder
+     *
+     * @param translationId
+     *            ID of translation
+     * @param folderId
+     *            ID of folder
+     *
+     * @return jobId Success = True/False
+     */
+    @PUT
+    @Path("/modifyTranslation")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response modifyTranslation(@Context HttpServletRequest request,
+            @QueryParam("name") String name,
+            @QueryParam("description") String description,
+            @QueryParam("translationId") Long translationId,
+            @QueryParam("folderId") Long folderId,
+            String script) {
+
+        Users user = Users.fromRequest(request);
+
+        Translations translation = getTranslationForUser(user, translationId);
+        TranslationFolder currentFolder = getTranslationFolderForUser(user, translation.getFolderId());
+        File currentFile = getTranslationFile(currentFolder.getPath(), translation.getDisplayName());
+
+        TranslationFolder targetFolder = getTranslationFolderForUser(user, folderId);
+        File targetFile = getTranslationFile(targetFolder.getPath(), name);
+
+        Map<String, Object> ret = new HashMap<>();
+        ret.put("success", true);
+
+        // rename and move file
+        if (currentFile.renameTo(targetFile)) {
+            SQLUpdateClause query = createQuery()
+                .update(translations)
+                .where(translations.id.eq(translationId))
+                .set(translations.folderId, targetFolder.getId())
+                .set(translations.displayName, name);
+
+            // if translation doesn't have an owner, assign it to user that moved it
+            if (translation.getUserId() == -1) {
+                query.set(translations.userId, user.getId());
+            }
+
+            query.execute();
+        } else {
+            ret.put("success", false);
+        }
+
+        try {
+            saveScript(name, description, script, targetFolder.getPath());
+        }
+        catch (Exception e) {
+            String msg = "Error processing script save for: " + name + ".  Cause: " + e.getMessage();
+            throw new WebApplicationException(e, Response.serverError().entity(msg).build());
+        }
+
+        return Response.ok().entity(ret).build();
+    }
+
+    public static File getTranslationFile(String folderPath, String translationName) {
+        String translationPath = File.separator + translationName;
+        translationPath = folderPath != null ? folderPath + translationPath : translationPath;
+
+        return new File(SCRIPT_FOLDER, translationPath + ".js");
+    }
+
+    public static TranslationFolder getTranslationFolderForUser(Users user, Long folderId) {
+        TranslationFolder folder = DbUtils.getTranslationFolder(folderId);
+
+        if(folder == null) {
+            throw new NotFoundException();
+        }
+
+        if(UserResource.adminUserCheck(user) || user.getId().equals(folder.getUserId()) || folder.getPublicCol()) {
+            return folder;
+        }
+        throw new ForbiddenException("You do not have access to this folder");
+    }
+
+    public static Translations getTranslationForUser(Users user, Long translationId) throws WebApplicationException {
+        Translations translation = DbUtils.getTranslation(translationId);
+
+        if(translation == null) {
+            throw new NotFoundException("No translation with that id exists");
+        }
+
+        if(user != null && !isVisible(user, translationId)) {
+            throw new ForbiddenException("You must own the translation to modify it");
+        }
+
+        // Check if owner of translation isn't the user, user isn't admin, and there isn't an owner of the translation
+        if(user != null && !translation.getUserId().equals(user.getId()) && !UserResource.adminUserCheck(user) && translation.getUserId() != -1) {
+            throw new ForbiddenException("You must own the translation to modify it");
+        }
+        return translation;
+    }
+
+    // Check if user is admin, owner of the translation, nobody is owner of translation, or folder that translation is inside is public
+    public static boolean isVisible(Users user, Long translationId) {
+        Tuple t = createQuery()
+            .select(translations.userId, translationFolders.publicCol)
+            .from(translations)
+            .leftJoin(translationFolders).on(translationFolders.id.eq(translations.folderId))
+            .where(translations.id.eq(translationId))
+            .fetchFirst();
+
+        Long ownerId = t.get(translations.userId);
+        Boolean isPublic = t.get(translationFolders.publicCol);
+
+        if (UserResource.adminUserCheck(user)) return true;
+
+        return user.getId().equals(ownerId) || ownerId == null || isPublic == null || isPublic;
+    }
+
     private static JSONObject getScriptObject(String content) throws ParseException {
         JSONObject script = new JSONObject();
 
@@ -576,6 +1089,37 @@ public class CustomScriptResource {
         return null;
     }
 
+    public static void scanTranslations() {
+        List<File> files;
+        ResultSet queryResult;
+
+        try (Connection conn = getConnection(); Statement dbQuery = conn.createStatement()) {
+            files = getFilesInScriptDir();
+
+            for (File file: files) {
+                String fileName = file.getName();
+                fileName = fileName.substring(0, fileName.lastIndexOf(".js"));
+
+                queryResult = dbQuery.executeQuery(String.format("SELECT id FROM translations WHERE display_name = '%s'", fileName));
+
+                if (!queryResult.next()) {
+                    Timestamp created = new Timestamp(System.currentTimeMillis());
+
+                    String queryInsert = String.format(
+                            "INSERT INTO translations(display_name, user_id, public, created_at, folder_id) " +
+                            "VALUES('%s', '%d', '%s', '%s', '%d') ", fileName, -1, true, created, 0
+                            );
+
+                    dbQuery.executeUpdate(queryInsert);
+                }
+            }
+        }
+        catch (Exception exc) {
+            String msg = "Error retrieving files in script directory!";
+            throw new WebApplicationException(exc, Response.serverError().entity(msg).build());
+        }
+    }
+
     private static List<File> getFilesInScriptDir() throws IOException {
         if (!uploadDirExists()) {
             FileUtils.forceMkdir(getUploadDir());
@@ -587,7 +1131,7 @@ public class CustomScriptResource {
         return (List<File>) FileUtils.listFiles(scriptsDir, exts, false);
     }
 
-    private static JSONObject saveScript(String name, String description, String content) throws IOException {
+    private static JSONObject saveScript(String name, String description, String content, String scriptPath) throws IOException {
         if (StringUtils.trimToNull(name) == null) {
             logger.error("Invalid input script name: {}", name);
             return null;
@@ -604,11 +1148,10 @@ public class CustomScriptResource {
             FileUtils.forceMkdir(getUploadDir());
         }
 
-        if (!validateFilePath(SCRIPT_FOLDER, SCRIPT_FOLDER + "/" + name + ".js")) {
-            throw new IOException("Script name can not contain path.");
-        }
+        String translationPath = File.separator + name;
+        translationPath = scriptPath != null ? scriptPath + translationPath : translationPath;
 
-        File fScript = new File(SCRIPT_FOLDER, name + ".js");
+        File fScript = new File(SCRIPT_FOLDER, translationPath + ".js");
         if (!fScript.exists()) {
             if (!fScript.createNewFile()) {
                 logger.error("File {} should not have existed before we tried to create it!", fScript.getAbsolutePath());
@@ -635,7 +1178,7 @@ public class CustomScriptResource {
     // translateToOgr which indicates if it can export
     private static boolean validateExport(String script) throws IOException {
         boolean canExport = false;
-        Context context = Context.enter();
+        org.mozilla.javascript.Context context = org.mozilla.javascript.Context.enter();
         try {
             // initialize Rhino
             ScriptableObject scope = context.initStandardObjects();
@@ -677,7 +1220,7 @@ public class CustomScriptResource {
         }
 
         finally {
-            Context.exit();
+            org.mozilla.javascript.Context.exit();
         }
 
         return canExport;
@@ -700,8 +1243,38 @@ public class CustomScriptResource {
         }
     }
 
-    private static boolean validateFilePath(String expectedPath, String actualPath) {
-        String path = FilenameUtils.getFullPathNoEndSeparator(actualPath);
-        return expectedPath.equals(path);
+    public static boolean folderIsPublic(List<TranslationFolder> folders, TranslationFolder f, Users user) {
+        // If the user is an admin
+        if(UserResource.adminUserCheck(user)) {
+            return true;
+        }
+        // If its public & attached to root (0)
+        if(f.getPublicCol() && f.getParentId() != null && f.getParentId().equals(0L)) {
+            return true;
+        }
+        // if we have a user, and folder is private, but its owned by this user:
+        if(user != null && !f.getPublicCol() && f.getUserId().equals(user.getId())) {
+            return true;
+        }
+
+        // Look for this folder's parent in the list:
+        TranslationFolder parentFolder = null;
+        for(TranslationFolder currentFolder : folders) {
+            // if we find it, stop:
+            if(f.getParentId() != null && f.getParentId().equals(currentFolder.getId())) {
+                parentFolder = currentFolder;
+                break;
+            }
+        }
+        // We found the parent in the list, recurse down:
+        if(parentFolder != null) {
+            return folderIsPublic(folders, parentFolder, user);
+        }
+
+        // We did not find the parent, this means that the parent
+        // was not visible to us -so- neither should this folder be:
+        return false;
     }
+
+
 }
