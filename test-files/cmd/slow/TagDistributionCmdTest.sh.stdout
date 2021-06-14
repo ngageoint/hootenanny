@@ -194,6 +194,12 @@ Testing a crit chain...
 
 No tags with keys: highway were found out of 0 total tags processed. Filtered by: ChainCriterion(hoot::HighwayCriterion;hoot::PoiCriterion).
 
+Testing a non-streamable crit chain that will fail without an input map...
+
+Total elements processed: 4,698. Total tags processed: 748. Filtered by: OrCriterion(hoot::HighwayCriterion;hoot::HighwayWayNodeCriterion).
+365	(7.77%)	highway=road
+9	(<1%)	highway=motorway
+
 Testing a negated crit...
 
 Total elements processed: 4,698. Total tags processed: 748. Filtered by: NotCriterion(hoot::PoiCriterion).
