@@ -1037,7 +1037,7 @@ public class CustomScriptResource {
         }
 
         if(user != null && !isVisible(user, translationId)) {
-            throw new ForbiddenException("You do not have access to this translation");
+            throw new ForbiddenException("You must own the translation to modify it");
         }
 
         // Check if owner of translation isn't the user, user isn't admin, and there isn't an owner of the translation
