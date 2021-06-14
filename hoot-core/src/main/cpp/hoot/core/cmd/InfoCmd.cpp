@@ -191,8 +191,8 @@ public:
         args.removeAt(args.indexOf("--output-streamable"));
       }
 
-      // If none were specified, show them all, except OGR.
-      // This is getting a little messy...maybe pass in an object with the settings instead...
+      // If none were specified, show them all, except OGR. This is getting a little messy...maybe
+      // pass in an object with the settings instead.
       if (!displayInputs && !displayInputsSupportingBounds && !displayInputsSupportingStreaming &&
           !displayOutputs && !displayOutputsSupportingStreaming &&
           (args.empty() || (args.size() == 1 && displayOgrOnly)))
