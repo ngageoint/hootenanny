@@ -36,6 +36,7 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/OpenCv.h>
+#include <hoot/core/util/StringUtils.h>
 #include <hoot/core/criterion/HighwayCriterion.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/WaysVisitor.h>
@@ -87,8 +88,9 @@ BaseComparator(map1, map2)
 
 double RasterComparator::compareMaps()
 {
-  _updateBounds();
+  LOG_STATUS("Comparing maps using raster scoring...");
 
+  _updateBounds();
   _wayLengthSum = 0.0;
 
   cv::Mat image1;
@@ -110,11 +112,13 @@ double RasterComparator::compareMaps()
   min = std::min(min, minTemp);
   max = std::max(max, maxTemp);
 
+  LOG_STATUS("Calculating error...");
   double error = _calculateError(image1, image2);
 
   IplImage* diffImage = cvCreateImage( cvSize(_width, _height), IPL_DEPTH_32F, 1);
   cv::Mat diff = cv::cvarrToMat(diffImage);
 
+  LOG_STATUS("Calculating difference...");
   const float* image1Data = image1.ptr<float>(0);
   const float* image2Data = image2.ptr<float>(0);
   float* diffData = diff.ptr<float>(0);
@@ -168,19 +172,27 @@ void RasterComparator::_renderImage(const std::shared_ptr<OsmMap>& map, cv::Mat&
   cv::Mat in(cvSize(_width, _height), CV_32FC1);
   image = cv::Mat(cvSize(_width, _height), CV_32FC1);
 
+  int pixelCtr = 0;
   for (int y = 0; y < _height; y++)
   {
     float* row = in.ptr<float>(y);
     for (int x = 0; x < _width; x++)
     {
       row[x] = qRed(qImage.pixel(x, y)) * _pixelSize;
+
+      pixelCtr++;
+      if (pixelCtr % (_taskStatusUpdateInterval * 1000) == 0)
+      {
+        PROGRESS_STATUS(
+          "Rendered " << StringUtils::formatLargeNumber(pixelCtr) << " of " <<
+          StringUtils::formatLargeNumber(_height * _width) << " pixels.");
+      }
     }
   }
 
   int ks = ceil(_sigma / _pixelSize * 3) * 2 + 1;
-  cv::GaussianBlur(in, image, cvSize(ks, ks), _sigma / _pixelSize, _sigma / _pixelSize,
-                   cv::BORDER_CONSTANT);
-
+  cv::GaussianBlur(
+    in, image, cvSize(ks, ks), _sigma / _pixelSize, _sigma / _pixelSize, cv::BORDER_CONSTANT);
 }
 
 }

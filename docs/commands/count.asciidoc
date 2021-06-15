@@ -7,10 +7,10 @@ The +count+ command displays a count of the number of features in a map, allowin
 
 * +inputs+         - One or more inputs; may be any supported input format (e.g. .osm file); specify multiple inputs 
                      by separating them with a semicolon and surrounding them with quotes.
-* +criteria+       - (optional) Filtering criteria; May be one or more class names inheriting from `ElementCriterion` 
-                     delimited with a semicolon and surrounded by quotes. By default, multiple criteria are logically 
-                     OR'd together. Set the `element.counter.chain.element.criteria` option to true to have the 
-                     criteria logically AND'd together. The criteria can be negated with the option 
+* +criteria+       - (optional) Filtering criteria for the inputs; May be one or more class names inheriting 
+                     from `ElementCriterion` delimited with a semicolon and surrounded by quotes. By default, multiple 
+                     criteria are logically OR'd together. Set the `element.counter.chain.element.criteria` option to true 
+                     to have the criteria logically AND'd together. The criteria can be negated with the option 
                      `element.criteria.negate`. Use the +info --operators+ command to obtain a list of available criteria.
 * +--all-elements+ - The default behavior is to only count features. Features are defined as elements with at least 
                      one information tag, whereas elements have no tag requirements. Activating this option causes the 

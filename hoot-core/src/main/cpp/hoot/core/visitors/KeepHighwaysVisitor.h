@@ -38,9 +38,7 @@ namespace hoot
  * Removes all ways and relations that are not part of a linear highway.
  * Note: You may have to run this multiple times to get the desired effect.
  *
- * It may be possible to remove this class after both #3276 are completed and any regression tests
- * using it can be converted to use RemoveElementsVisitor combined with a NotCriterion instead
- * (second part may not be possible given how this class has been written).
+ * @todo delete
  */
 class KeepHighwaysVisitor : public ConstElementVisitor, public OsmMapConsumer
 {
@@ -61,9 +59,7 @@ public:
 
   QString getDescription() const override
   { return "Removes all ways and relations that are not part of a linear highway"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 
 private:

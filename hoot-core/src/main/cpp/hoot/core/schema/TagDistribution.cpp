@@ -64,16 +64,6 @@ void TagDistribution::setCriteria(QStringList& names)
 {
   if (!names.isEmpty())
   {
-    for (int i = 0; i < names.size(); i++)
-    {
-      if (!names.at(i).startsWith(MetadataTags::HootNamespacePrefix()))
-      {
-        QString className = names[i];
-        className.prepend(MetadataTags::HootNamespacePrefix());
-        names[i] = className;
-      }
-    }
-
     ConfigOptions opts;
     _crit =
       CriterionUtils::constructCriterion(

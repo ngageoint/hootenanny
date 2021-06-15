@@ -1205,6 +1205,13 @@ parallel.  Warning: each thread has some memory overhead
 Crops based on the polygon rather than doing a cookie cut when using the cookie cutter map
 operation (see CookieCutterOp).
 
+=== copy.map.subset.op.element.criteria
+
+* Data Type: list
+* Default Value: ``
+
+One or more element criteria used for filtering maps with `CopyMapSubsetOp`.
+
 === create.bogus.review.tags
 
 * Data Type: bool

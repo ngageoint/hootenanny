@@ -52,7 +52,6 @@ class GraphComparator : public BaseComparator
 public:
 
   GraphComparator(OsmMapPtr map1, OsmMapPtr map2);
-
   ~GraphComparator() = default;
 
   double compareMaps() override;
@@ -103,6 +102,7 @@ private:
   /** Vector of error values - returned from _calculateError() in each iteration */
   std::vector<double> _results;
   std::mutex _resultsMutex;
+  std::mutex _logMutex;
   /**
    * @brief _graphCompareThreadFunc - Thread function that processes a graph comparison operation
    */
@@ -118,7 +118,8 @@ private:
 
   void _init();
 
-  cv::Mat _paintGraph(OsmMapPtr map, DirectedGraph& graph, ShortestPath& sp, double& maxGraphCost) const;
+  cv::Mat _paintGraph(
+    OsmMapPtr map, DirectedGraph& graph, ShortestPath& sp, double& maxGraphCost) const;
 
   void _paintWay(
     cv::Mat& mat, ConstOsmMapPtr map, WayPtr way, double friction, double startCost,
