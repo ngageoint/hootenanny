@@ -447,7 +447,7 @@ bool MapProjector::_evaluateProjection(
     {
       Coordinate c1(x, y);
       Coordinate p1 = c1;
-      success &= t->TransformEx(1, &p1.x, &p1.y);
+      success &= t->Transform(1, &p1.x, &p1.y);
 
       if (!success)
       {
@@ -456,13 +456,13 @@ bool MapProjector::_evaluateProjection(
 
       Coordinate upc = GeometryUtils::calculateDestination(c1, 0.0, testDistance);
       Coordinate up = upc;
-      success &= t->TransformEx(1, &up.x, &up.y);
+      success &= t->Transform(1, &up.x, &up.y);
 
       for (double bearing = 0.0; bearing < 360.0; bearing += 20.0)
       {
         Coordinate c2 = GeometryUtils::calculateDestination(c1, bearing, testDistance);
         Coordinate p2 = c2;
-        success &= t->TransformEx(1, &p2.x, &p2.y);
+        success &= t->Transform(1, &p2.x, &p2.y);
 
         if (e->contains(c2))
         {
@@ -681,7 +681,7 @@ QString MapProjector::toWkt(OGRSpatialReference* srs)
   char* wkt = nullptr;
   srs->exportToWkt(&wkt);
   QString result = QString::fromUtf8(wkt);
-  OGRFree(wkt);
+  CPLFree(wkt);
   return result;
 }
 

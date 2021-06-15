@@ -42,7 +42,7 @@ HOOT_FACTORY_REGISTER(ElementVisitor, UnionPolygonsVisitor)
 
 UnionPolygonsVisitor::UnionPolygonsVisitor()
 {
-  _result.reset(GeometryFactory::getDefaultInstance()->createEmptyGeometry());
+  _result = GeometryFactory::getDefaultInstance()->createEmptyGeometry();
 }
 
 void UnionPolygonsVisitor::visit(const std::shared_ptr<const Element>& e)
@@ -58,7 +58,7 @@ void UnionPolygonsVisitor::visit(const std::shared_ptr<const Element>& e)
       ElementToGeometryConverter(_map->shared_from_this()).convertToGeometry(e);
     if (g && !g->isEmpty())
     {
-      _result.reset(g->Union(_result.get()));
+      _result = g->Union(_result.get());
       _numAffected++;
     }
   }

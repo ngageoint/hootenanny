@@ -104,7 +104,7 @@ GeometryPtr AlphaShape::_convertFaceToPolygon(const Face& face) const
 {
   GeometryPtr result;
   CoordinateSequence* cs =
-    GeometryFactory::getDefaultInstance()->getCoordinateSequenceFactory()->create(4, 2);
+    GeometryFactory::getDefaultInstance()->getCoordinateSequenceFactory()->create(4, 2).release();
   LinearRing* lr;
 
   Coordinate c;
@@ -124,7 +124,7 @@ GeometryPtr AlphaShape::_convertFaceToPolygon(const Face& face) const
   cs->setAt(c, p++);
 
   lr = GeometryFactory::getDefaultInstance()->createLinearRing(cs);
-  std::vector<Geometry*>* holes = new std::vector<Geometry*>();
+  std::vector<LinearRing*>* holes = new std::vector<LinearRing*>();
   result.reset(GeometryFactory::getDefaultInstance()->createPolygon(lr, holes));
 
   return result;
@@ -403,7 +403,7 @@ GeometryPtr AlphaShape::toGeometry()
   LOG_DEBUG("Creating output geometry...");
 
   if (!result || result->isEmpty())
-    result.reset(GeometryFactory::getDefaultInstance()->createEmptyGeometry());
+    result = GeometryFactory::getDefaultInstance()->createEmptyGeometry();
 
   LOG_DEBUG("Validating output geometry...");
   //  Validate the resulting geometry

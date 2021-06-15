@@ -195,7 +195,8 @@ private:
   long _lastLon;
   long _lastLat;
   long _lastWayNid;
-  long _minBlobTarget, _maxBlobTarget;
+  std::size_t _minBlobTarget;
+  long _maxBlobTarget;
 
   int _granularity;
   long _latOffset;

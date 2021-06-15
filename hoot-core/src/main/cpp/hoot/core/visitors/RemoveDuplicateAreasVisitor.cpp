@@ -128,7 +128,7 @@ bool RemoveDuplicateAreasVisitor::_equals(const std::shared_ptr<Element>& e1,
   {
     g1.reset(GeometryUtils::validateGeometry(g1.get()));
     g2.reset(GeometryUtils::validateGeometry(g2.get()));
-    overlap.reset(g1->intersection(g2.get()));
+    overlap = g1->intersection(g2.get());
   }
 
   double ao = overlap->getArea();

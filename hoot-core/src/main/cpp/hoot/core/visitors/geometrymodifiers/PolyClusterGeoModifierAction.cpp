@@ -204,7 +204,7 @@ void PolyClusterGeoModifierAction::_generateClusters()
   foreach (std::shared_ptr<Polygon> poly, _polys)
   {
     long wayId = (long)poly->getUserData();
-    CoordinateSequence* pCoords = poly->getCoordinates();
+    std::unique_ptr<CoordinateSequence> pCoords = poly->getCoordinates();
     int coordCount = min((int)pCoords->size(), MAX_PROCESSED_NODES_PER_POLY-1);
 
     for (int i = 0; i < coordCount; i++)
@@ -328,7 +328,7 @@ void PolyClusterGeoModifierAction::_createClusterPolygons()
 
     foreach (long wayId, cluster)
     {
-      CoordinateSequence* pCoords = _polyByWayId[wayId]->getCoordinates();
+      std::unique_ptr<CoordinateSequence> pCoords = _polyByWayId[wayId]->getCoordinates();
 
       CoordinateExt last;
       bool hasLast = false;
@@ -374,16 +374,15 @@ void PolyClusterGeoModifierAction::_createClusterPolygons()
     std::shared_ptr<Geometry> pAlphaGeom = alphashape.toGeometry();
 
     // combine polys from this cluster with AlphaShape
-    vector<Geometry*> geomvect;
-    geomvect.push_back(pAlphaGeom.get());
+    vector<Geometry*>* geomvect = new vector<Geometry*>();
+    geomvect->push_back(pAlphaGeom.get());
 
     foreach (long wayId, cluster)
     {
-      geomvect.push_back(_polyByWayId[wayId].get());
+      geomvect->push_back(_polyByWayId[wayId].get());
     }
 
-    MultiPolygon *mp = GeometryFactory::getDefaultInstance()->createMultiPolygon(&geomvect);
-    //std::shared_ptr<MultiPolygon> mp = std::shared_ptr<MultiPolygon>(GeometryFactory::getDefaultInstance()->createMultiPolygon(&geomvect));
+    Geometry *mp = GeometryFactory::getDefaultInstance()->createMultiPolygon(geomvect);
     std::shared_ptr<Geometry> pCombinedPoly = geos::operation::geounion::UnaryUnionOp::Union(*mp);
 
     // create a new element with cluster representation

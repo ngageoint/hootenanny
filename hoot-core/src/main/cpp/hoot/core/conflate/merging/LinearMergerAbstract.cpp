@@ -257,14 +257,14 @@ bool LinearMergerAbstract::_directConnect(WayPtr w) const
     return false;
   }
 
-  CoordinateSequence* cs =
+  std::unique_ptr<CoordinateSequence> cs =
     GeometryFactory::getDefaultInstance()->getCoordinateSequenceFactory()->create(2, 2);
 
   cs->setAt(_map->getNode(w->getNodeId(0))->toCoordinate(), 0);
   cs->setAt(_map->getNode(w->getLastNodeId())->toCoordinate(), 1);
 
   // create a straight line and buffer it
-  std::shared_ptr<LineString> straight(GeometryFactory::getDefaultInstance()->createLineString(cs));
+  std::shared_ptr<LineString> straight(GeometryFactory::getDefaultInstance()->createLineString(*cs));
   std::shared_ptr<Geometry> g(straight->buffer(w->getCircularError()));
 
   // is the way in question completely contained in the buffer?
