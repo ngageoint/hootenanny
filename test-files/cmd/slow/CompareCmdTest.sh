@@ -14,35 +14,28 @@ LOG_LEVEL="--warn"
   
 echo "Comparing single base map..."
 echo ""
-hoot compare $LOG_LEVEL $CONFIG $baseMap1 $uut1 |\
-  sed "s/ [0-9]\+\.[0-9]\+e\-[0-9]\+//g"
+hoot compare $LOG_LEVEL $CONFIG $baseMap1 $uut1 | sed "s/ [0-9]\+\.[0-9]\+e\-[0-9]\+//g"
   
 echo ""
 echo "Comparing two base maps..."
 echo ""
-hoot compare $LOG_LEVEL $CONFIG $baseMap1 $baseMap1 $uut1 |\
-  sed "s/ [0-9]\+\.[0-9]\+e\-[0-9]\+//g"
+hoot compare $LOG_LEVEL $CONFIG $baseMap1 $baseMap1 $uut1 | sed "s/ [0-9]\+\.[0-9]\+e\-[0-9]\+//g"
 
 echo ""  
 echo "Comparing single base map with criteria..."
 echo ""
-hoot compare $LOG_LEVEL $CONFIG $baseMap1 $uut1 \
-  "HighwayCriterion;HighwayWayNodeCriterion;RelationWithHighwayMembersCriterion" |\
-  sed "s/ [0-9]\+\.[0-9]\+e\-[0-9]\+//g"
+hoot compare $LOG_LEVEL $CONFIG $baseMap1 $uut1 "HighwayCriterion" | sed "s/ [0-9]\+\.[0-9]\+e\-[0-9]\+//g"
 
 echo ""  
 echo "Comparing two base maps with criteria..."
 echo ""
-hoot compare $LOG_LEVEL $CONFIG $baseMap1 $baseMap1 $uut1 \
-  "HighwayCriterion;HighwayWayNodeCriterion;RelationWithHighwayMembersCriterion" |\
-  sed "s/ [0-9]\+\.[0-9]\+e\-[0-9]\+//g" 
+hoot compare $LOG_LEVEL $CONFIG $baseMap1 $baseMap1 $uut1 "HighwayCriterion" | sed "s/ [0-9]\+\.[0-9]\+e\-[0-9]\+//g" 
 
 echo ""
 echo "Comparing two base maps with criteria and multiple threads..."
 echo ""
 hoot compare $LOG_LEVEL $CONFIG -D graph.comparator.max.threads=2 $baseMap1 $baseMap1 $uut1 \
-  "HighwayCriterion;HighwayWayNodeCriterion;RelationWithHighwayMembersCriterion" |\
-  sed "s/ [0-9]\+\.[0-9]\+e\-[0-9]\+//g"  
+  "HighwayCriterion" | sed "s/ [0-9]\+\.[0-9]\+e\-[0-9]\+//g"  
            
 # Test with inputs that have something other than roads. Graph scoring takes a very long time for 
 # these inputs, so we turn it off. Attribute scoring is returning an odd score for this and needs to 
