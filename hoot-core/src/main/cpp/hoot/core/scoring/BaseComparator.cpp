@@ -68,17 +68,17 @@ void BaseComparator::_calculateColor(double v, double max, QRgb& c) const
     }
     if (v < max / 3.0)
     {
-      double r = v / (max / 3.0) * 255.0;
+      int r = (int)((v / (max / 3.0) * 255.0));
       c = qRgb(r, 0, 0);
     }
     else if (v < max * 2.0 / 3.0)
     {
-      double r = (v - (max / 3.0)) / (max / 3.0) * 255.0;
+      int r = (int)((v - (max / 3.0)) / (max / 3.0) * 255.0);
       c = qRgb(255, r, 0);
     }
     else if (v <= max)
     {
-      double r = (v - (max * 2.0 / 3.0)) / (max / 3.0) * 255.0;
+      int r = (int)((v - (max * 2.0 / 3.0)) / (max / 3.0) * 255.0);
       c = qRgb(255, 255, r);
     }
     else

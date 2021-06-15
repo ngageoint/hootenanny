@@ -422,7 +422,7 @@ void ChangesetCreator::_handleUnstreamableConvertOpsInMemory(
   convertOps.setProgress(
     Progress(
       ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running,
-      (_currentTaskNum - 1) / _numTotalTasks, 1.0 / _numTotalTasks));
+      (float)(_currentTaskNum - 1) / (float)_numTotalTasks, 1.0f / (float)_numTotalTasks));
   convertOps.apply(fullMap);
   // get back into wgs84 in case some op changed the proj
   MapProjector::projectToWgs84(fullMap);

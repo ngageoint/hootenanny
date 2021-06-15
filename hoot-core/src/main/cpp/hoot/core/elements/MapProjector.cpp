@@ -432,8 +432,8 @@ bool MapProjector::_evaluateProjection(
   double stepSize = max(width, height) / 20.0;
   double stepsX = (width) / stepSize;
   double stepsY = (height) / stepSize;
-  double stepSizeX = (width) / (double)stepsX;
-  double stepSizeY = (height) / (double)stepsY;
+  double stepSizeX = (width) / stepsX;
+  double stepSizeY = (height) / stepsY;
   std::shared_ptr<geos::geom::Envelope> e(GeometryUtils::toEnvelope(env));
 
   bool success = true;
