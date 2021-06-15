@@ -54,19 +54,19 @@ Feature: Advanced Conflation Options
             | General Conflation Options | hoot_general_conflation_options_label | element_cache_size_node | 10000000 |
             | General Conflation Options | hoot_general_conflation_options_label | element_cache_size_relation | 2000000 |
             | General Conflation Options | hoot_general_conflation_options_label | element_cache_size_way | 2000000 |
-            | Waterway Options | hoot_waterway_options_label | waterway_way_angle_sample_distance | "20.0" |
+            | River Options | hoot_river_options_label | river_way_angle_sample_distance | "20.0" |
             #TODO: fix me
             #| Waterway Options | hoot_waterway_options_label | waterway_way_matcher_heading_delta | "150.0" |
-            | Waterway Options | hoot_waterway_options_label | waterway_rubber_sheet_minimum_ties | 5 |
+            | River Options | hoot_river_options_label | river_rubber_sheet_minimum_ties | 5 |
 
         Scenario: Open options that require checkbox for input
             Then I should see "Rubber Sheeting Options"
             Then I click on "#hoot_rubber_sheeting_options_label"
             Then I should see checkbox "Enabled" checked
             Then I should see checkbox "Don't Move Reference Layer" checked
-            Then I should see "Waterway Options"
-            Then I click on "#hoot_waterway_options_label"
-            Then I uncheck the "Waterway Auto Calculate Search Radius" checkbox
+            Then I should see "River Options"
+            Then I click on "#hoot_river_options_label"
+            Then I uncheck the "River Auto Calculate Search Radius" checkbox
 
             Scenario Outline: Check for Invalid Inputs that require checkboxes
                 And I should see element "#<element>" with no value and placeholder <placeholder>
@@ -81,9 +81,9 @@ Feature: Advanced Conflation Options
                     | rubber_sheet_minimum_ties | 4 | "abcdef" |
                     | rubber_sheet_minimum_ties | 4 | "-10000" |
                     | rubber_sheet_minimum_ties | 4 | "&*^@(!" |
-                    | search_radius_waterway | "-1" | "abcdef" |
-                    | search_radius_waterway | "-1" | "-10000" |
-                    | search_radius_waterway | "-1" | "&*^@(!" |
+                    | search_radius_river | "-1" | "abcdef" |
+                    | search_radius_river | "-1" | "-10000" |
+                    | search_radius_river | "-1" | "&*^@(!" |
 
     #TODO: this test needs to be re-enabled; it was already mostly disabled, so I disabled the rest of it completely
     #Scenario: Test Cookie Cutter Options that are different than Reference or Average Options
