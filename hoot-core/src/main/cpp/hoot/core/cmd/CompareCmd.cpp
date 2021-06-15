@@ -28,6 +28,7 @@
 // Hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/criterion/CriterionUtils.h>
+#include <hoot/core/criterion/LinearCriterion.h>
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
@@ -213,9 +214,15 @@ private:
 
     if (!_disableGraphScoring)
     {
-      // TODO: filter map down to linear only features here?
-
-      _calculateGraphScore(map1, map2, outMap);
+      // The graph score only makes sense for linear features, so we'll further filter the input
+      // maps here to ensure only linear features are present.
+      OsmMapPtr filteredMap1 = _filterToLinearOnly(map1);
+      OsmMapPtr filteredMap2;
+      if (map2)
+      {
+        filteredMap2 = _filterToLinearOnly(map2);
+      }
+      _calculateGraphScore(filteredMap1, filteredMap2, outMap);
     }
     else
     {
@@ -242,7 +249,7 @@ private:
 
   OsmMapPtr _loadMap(const QString& path, const ElementCriterionPtr& filteringCrit) const
   {
-    LOG_STATUS("Loading input map...");
+    LOG_STATUS("Loading input map: ..." << path << "...");
     OsmMapPtr map = std::make_shared<OsmMap>();
     IoUtils::loadMap(map, path, false);
 
@@ -269,6 +276,17 @@ private:
     OsmMapWriterFactory::writeDebugMap(map, className(), "after-input-filtering");
 
     return map;
+  }
+
+  OsmMapPtr _filterToLinearOnly(const ConstOsmMapPtr& map)
+  {
+    LOG_STATUS("Filtering input map to linear features only...");
+    OsmMapPtr filteredMap = std::make_shared<OsmMap>();
+    CopyMapSubsetOp op(map, std::make_shared<LinearCriterion>());
+    op.setCopyChildren(true);
+    op.apply(filteredMap);
+    LOG_VARD(filteredMap->size());
+    return filteredMap;
   }
 
   void _calculateAttributeScore(
