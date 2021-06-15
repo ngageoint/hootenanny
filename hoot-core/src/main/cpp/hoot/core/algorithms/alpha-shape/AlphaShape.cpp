@@ -345,7 +345,7 @@ GeometryPtr AlphaShape::toGeometry()
     for (EdgeIterator it = _pDelauneyTriangles->getEdgeIterator(); it != _pDelauneyTriangles->getEdgeEnd(); ++it)
     {
       //  Multiply by scale and convert it to a whole number for deduplication in the set
-      long length = (long)(*it).getLength() * scale;
+      double length = (*it).getLength() * scale;
       if (length > 0 && length > _alpha)
         alpha_values.insert(length);
     }
