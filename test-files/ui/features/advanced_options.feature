@@ -116,9 +116,9 @@ Feature: Advanced Conflation Options
         And I should see checkbox "Enabled" checked
         And I should see element "#waterway_way_angle_sample_distance" with no value and placeholder "20.0"
         And I should see element "#waterway_way_matcher_heading_delta" with no value and placeholder "150.0"
-        And I should see checkbox "Waterway Auto Calculate Search Radius" checked
+        And I should see checkbox "River Auto Calculate Search Radius" checked
         And I should see element "#search_radius_waterway" with no value and placeholder "-1"
-        And I should see "Waterway Search Radius" not enabled
+        And I should see "River Search Radius" not enabled
         And I should see element "#waterway_rubber_sheet_minimum_ties" with no value and placeholder "5"
         And I should see checkbox "Waterway Auto-Search Radius Calculation Rubber Sheet Ref" checked
         And I click on "#hoot_waterway_options_label"
