@@ -3,15 +3,15 @@
 
 === Description
 
-The +stat+ command displays a statistic calculated from the features in a map.
+The +stat+ command displays a single statistic calculated from the features in a map.
 
-* +input+    - Input; may be any supported input format (e.g. OSM file).
+* +input+    - Input; may be any supported input format (e.g. .osm file).
 * +visitor+  - The stat visitor must be the single class name of a Hootenanny visitor that inherits from 
                +ElementVisitor+ and supports the +SingleStatistic+ or +NumericStatistic+ interfaces. Use the 
                +info --operators+ command to obtain a list of available visitors.
 * +statType+ - If +visitor+ supports `NumericStatistic`, this optional parameter allows for specifying the statistic type 
-               to collect. Supported types are 'total', 'min', 'max', and 'average'. If +visitor+ just 
-               supports `SingleStatistic`, this parameter is ignored and 'total' is automatically used.
+               to collect. Supported types are 'total', 'min', 'max', and 'average'. If +visitor+ implements 
+               `SingleStatistic`, this parameter is ignored and 'total' is automatically used.
 
 === Usage
 

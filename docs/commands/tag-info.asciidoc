@@ -3,9 +3,10 @@
 
 === Description
 
-The +tag-info+ command prints out unique feature tag values grouped by tag key. 
+The +tag-info+ command displays unique feature tag values found in one or more inputs, grouped by tag key. 
 
-* +inputs+              - One or more streamable inputs; (e.g. OSM file).
+* +input(s)+            - One or more streamable inputs; (e.g. .osm file). Specify multiple inputs by separating them 
+                          with a semicolon and surrounding them with quotes.
 * +--tag-values-limit+  - Limits the number of unique tag values printed per tag key. By default, there is no limit. This 
                           option is ignored if --keys-only is specified.
 * +--keys+              - Prints unique tag values for the specified keys only.  Delimit multiple keys with a semicolon 

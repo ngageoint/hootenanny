@@ -3,10 +3,10 @@
 
 === Description
 
-The +tag-distribution+ command prints out a distribution for all values of a specified tag key, including a 
-percentage of each value's frequency compared to other tag values.
+The +tag-distribution+ command displays a distribution for all values of a specified tag key and a 
+percentage of each value's frequency compared to all other tag values.
 
-* +inputs+                   - One or more inputs to read (e.g. OSM file). Specify multiple inputs by separating them with 
+* +input(s)+                 - One or more inputs to read (e.g. .osm file). Specify multiple inputs by separating them with 
                                a semicolon and surrounding them with quotes.
 * +tagKeys+                  - The tag keys to gather statistics for. Specify multiple inputs by separating them with a 
                                semicolon and surrounding them with quotes. To process all tags, leave this empty by specifying 

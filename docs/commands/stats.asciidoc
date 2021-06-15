@@ -3,10 +3,10 @@
 
 === Description
 
-The +stats+ command reads a map and writes out its statistics.
+The +stats+ command reads calculates a static set of statistics for one or more maps.
 
-* +input(s)+      - Input map(s); one or more inputs in a semi-colon delimited list; may be any supported input format 
-                    (e.g. OSM file).
+* +input(s)+      - Input map(s); one or more inputs in a semi-colon delimited list (e.g. .osm file). Specify multiple inputs 
+                    by separating them with a semicolon and surrounding them with quotes.
 * +--brief+       - Only calculate subset of statistics.
 * +--output=path+ - Output file path; supported file types are text (*.txt) and JSON (*.json). 
 
