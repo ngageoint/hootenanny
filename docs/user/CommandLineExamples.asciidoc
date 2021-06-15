@@ -372,7 +372,7 @@ hoot convert -D convert.ops="UnlikelyRoadRemover" input.osm output.osm
       -D conflate.tag.filter=myFilter.json input1.osm input2.osm output.osm
 -----
 
-==== Filter maps down to POIs only before conflating them:
+==== Filter POIs out of maps before conflating them:
 
 -----
     hoot conflate -C AttributeConflation.conf -C UnifyingAlgorithm.conf \
