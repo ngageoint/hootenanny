@@ -39,7 +39,6 @@
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/scoring/MapCompareUtils.h>
-#include <hoot/core/visitors/KeepHighwaysVisitor.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -250,14 +249,10 @@ private:
     SuperfluousWayRemover::removeWays(map);
     LOG_VARD(map->size());
 
-//    // Drop everything that isn't a highway.
-//    KeepHighwaysVisitor keepHighways;
-//    map->visitRw(keepHighways);
-//    map->visitRw(keepHighways);
-//    map->visitRw(keepHighways);
-
     if (filteringCrit)
     {
+      LOG_STATUS("Filtering input map...");
+
       OsmMapConsumer* omc = dynamic_cast<OsmMapConsumer*>(filteringCrit.get());
       if (omc)
       {
@@ -266,7 +261,6 @@ private:
 
       OsmMapPtr filteredMap = std::make_shared<OsmMap>();
       CopyMapSubsetOp op(map, filteringCrit);
-      LOG_STATUS("Filtering input map...");
       op.apply(filteredMap);
       map = filteredMap;
       LOG_VARD(map->size());
