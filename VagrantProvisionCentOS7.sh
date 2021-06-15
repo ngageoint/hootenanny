@@ -45,12 +45,19 @@ if [ "${ADDREPOS:-yes}" = "yes" ]; then
 #    echo "### Add devtoolset repo ###"
 #    sudo yum install -y centos-release-scl
 #    sudo yum-config-manager --enable rhel-server-rhscl-7-rpms
+    # add the geoint-deps repository
+#    echo  "### Add geoint-deps repo ###"
+#    sudo yum-config-manager --add-repo https://geoint-deps.s3.amazonaws.com/el7/stable/geoint-deps.repo
 fi
 
 # configure the devtoolset repository
 echo "### Add devtoolset repo ###"
 sudo yum install -y centos-release-scl yum-utils
 sudo yum-config-manager --enable rhel-server-rhscl-7-rpms
+
+# add the geoint-deps repository
+echo  "### Add geoint-deps repo ###"
+sudo yum-config-manager --add-repo https://geoint-deps.s3.amazonaws.com/el7/stable/geoint-deps.repo
 
 if [ "${YUMUPDATE:-yes}" = "yes" ]; then
     echo "Updating OS..."
@@ -69,9 +76,9 @@ else
          geos-devel \
          glpk \
          glpk-devel \
-         hoot-gdal \
-         hoot-gdal-devel \
-         hoot-gdal-python \
+         gdal \
+         gdal-devel \
+         gdal-python \
          libgeotiff \
          libgeotiff-devel \
          liboauthcpp \
@@ -93,9 +100,9 @@ sudo yum install -y \
      geos-devel-$GEOS_VERSION \
      glpk-$GLPK_VERSION \
      glpk-devel-$GLPK_VERSION \
-     hoot-gdal-$GDAL_VERSION \
-     hoot-gdal-devel-$GDAL_VERSION \
-     hoot-gdal-python-$GDAL_VERSION \
+     gdal-$GDAL_VERSION \
+     gdal-devel-$GDAL_VERSION \
+     gdal-python-$GDAL_VERSION \
      libgeotiff-$LIBGEOTIFF_VERSION \
      libgeotiff-devel-$LIBGEOTIFF_VERSION \
      libphonenumber-$LIBPHONENUMBER_VERSION \
@@ -116,9 +123,9 @@ sudo yum versionlock add \
      geos-devel-$GEOS_VERSION \
      glpk-$GLPK_VERSION \
      glpk-devel-$GLPK_VERSION \
-     hoot-gdal-$GDAL_VERSION \
-     hoot-gdal-devel-$GDAL_VERSION \
-     hoot-gdal-python-$GDAL_VERSION \
+     gdal-$GDAL_VERSION \
+     gdal-devel-$GDAL_VERSION \
+     gdal-python-$GDAL_VERSION \
      libgeotiff-$LIBGEOTIFF_VERSION \
      libgeotiff-devel-$LIBGEOTIFF_VERSION \
      libphonenumber-$LIBPHONENUMBER_VERSION \
@@ -139,6 +146,7 @@ sudo yum -y install \
     autoconf \
     autoconf-archive \
     automake \
+    bison \
     boost-devel \
     bzip2 \
     ccache \
@@ -147,10 +155,12 @@ sudo yum -y install \
     dblatex \
     devtoolset-$DEVTOOLSET_VERSION \
     doxygen \
+    gcc-c++ \
     git \
     git-core \
     gnuplot \
     lcov \
+    libffi-devel \
     libicu-devel \
     libpng-devel \
     libtool \
@@ -171,11 +181,11 @@ sudo yum -y install \
     postgresql95-contrib \
     postgresql95-devel \
     postgresql95-server \
-    proj \
-    proj-devel \
     protobuf \
     protobuf-compiler \
     protobuf-devel \
+    python \
+    python-devel \
     python3  \
     python3-devel \
     python3-matplotlib \
@@ -186,7 +196,9 @@ sudo yum -y install \
     qt5-qtbase-postgresql \
     qt5-qtwebkit \
     qt5-qtwebkit-devel \
+    readline-devel \
     redhat-lsb-core \
+    sqlite-devel \
     swig \
     tex-fonts-hebrew \
     texlive \
@@ -199,7 +211,7 @@ sudo yum -y install \
     wget \
     words \
     xorg-x11-server-Xvfb \
-    zip \
+    zip
 
 # Fix missing qmake
 if ! hash qmake >/dev/null 2>&1 ; then
