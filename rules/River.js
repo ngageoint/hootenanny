@@ -4,9 +4,13 @@
 
 "use strict";
 
-exports.description = "Matches linear waterways";
+// Much like road conflation covers everything from dirt paths to interstates, this script,
+// although labeled as "river", covers everything from rivers to creeks, etc....basically any
+// linear waterway.
+
+exports.description = "Matches rivers";
 exports.experimental = false;
-exports.baseFeatureType = "Waterway";
+exports.baseFeatureType = "River";
 exports.geometryType = "line";
 
 exports.candidateDistanceSigma = 1.0; // 1.0 * (CE95 + Worst CE95);
@@ -17,20 +21,20 @@ exports.candidateDistanceSigma = 1.0; // 1.0 * (CE95 + Worst CE95);
 exports.matchThreshold = parseFloat(hoot.get("conflate.match.threshold.default"));
 exports.missThreshold = parseFloat(hoot.get("conflate.miss.threshold.default"));
 exports.reviewThreshold = parseFloat(hoot.get("conflate.review.threshold.default"));
-exports.nameThreshold = parseFloat(hoot.get("waterway.name.threshold"));
-exports.typeThreshold = parseFloat(hoot.get("waterway.type.threshold"));
+exports.nameThreshold = parseFloat(hoot.get("river.name.threshold"));
+exports.typeThreshold = parseFloat(hoot.get("river.type.threshold"));
 
 // This is needed for disabling superfluous conflate ops and calculating a search radius only.
 // exports.isMatchCandidate handles culling match candidates.
-exports.matchCandidateCriterion = "hoot::LinearWaterwayCriterion";
+exports.matchCandidateCriterion = "hoot::RiverCriterion";
 
 // used during subline matching
 var sublineStringMatcher; // gets set up in calculateSearchRadius function
 
 var sampledAngleHistogramExtractor =
   new hoot.SampledAngleHistogramExtractor(
-    { "way.angle.sample.distance" : hoot.get("waterway.angle.sample.distance"),
-      "way.matcher.heading.delta" : hoot.get("waterway.matcher.heading.delta"),
+    { "way.angle.sample.distance" : hoot.get("river.angle.sample.distance"),
+      "way.matcher.heading.delta" : hoot.get("river.matcher.heading.delta"),
       "angle.histogram.extractor.process.relations" : "false" });
 var weightedShapeDistanceExtractor = new hoot.WeightedShapeDistanceExtractor();
 var nameExtractor = new hoot.NameExtractor(
@@ -45,22 +49,22 @@ var nameExtractor = new hoot.NameExtractor(
  */
 exports.calculateSearchRadius = function(map)
 {
-  var autoCalcSearchRadius = (hoot.get("waterway.auto.calc.search.radius") === 'true');
+  var autoCalcSearchRadius = (hoot.get("river.auto.calc.search.radius") === 'true');
   if (autoCalcSearchRadius)
   {
-    hoot.log("Calculating search radius for waterway conflation...");
+    hoot.log("Calculating search radius for river conflation...");
     exports.searchRadius =
       parseFloat(
         calculateSearchRadiusUsingRubberSheeting(
           map,
-          hoot.get("waterway.rubber.sheet.ref"),
-          hoot.get("waterway.rubber.sheet.minimum.ties"),
+          hoot.get("river.rubber.sheet.ref"),
+          hoot.get("river.rubber.sheet.minimum.ties"),
           exports.matchCandidateCriterion));
   }
   else
   {
-    exports.searchRadius = parseFloat(hoot.get("search.radius.waterway"));
-    hoot.debug("Using specified search radius for waterway conflation: " + exports.searchRadius);
+    exports.searchRadius = parseFloat(hoot.get("search.radius.river"));
+    hoot.debug("Using specified search radius for river conflation: " + exports.searchRadius);
   }
 
   sublineStringMatcher = hoot.SublineStringMatcherFactory.getMatcher(exports.baseFeatureType, map);
@@ -73,7 +77,7 @@ exports.calculateSearchRadius = function(map)
  */
 exports.isMatchCandidate = function(map, e)
 {
-  return hoot.OsmSchema.isLinearWaterway(e);
+  return hoot.OsmSchema.isRiver(e);
 };
 
 /**

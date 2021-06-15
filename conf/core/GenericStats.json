@@ -401,10 +401,10 @@
          "StatCall":"Stat"
       },
       {
-         "name":"Waterway Translated Populated Tag Percent",
+         "name":"River Translated Populated Tag Percent",
          "visitor":"hoot::SchemaTranslatedTagCountVisitor",
-         "criterion":"hoot::LinearWaterwayCriterion",
-         "filterCriterion":"hoot::LinearWaterwayCriterion",
+         "criterion":"hoot::RiverCriterion",
+         "filterCriterion":"hoot::RiverCriterion",
          "StatCall":"Stat"
       }
    ]

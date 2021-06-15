@@ -386,7 +386,7 @@ hoot convert -D convert.ops="UnlikelyRoadRemover" input.osm output.osm
 -----
     hoot conflate -C AttributeConflation.conf -C UnifyingAlgorithm.conf \
       -D convert.ops=RemoveElementsVisitor \
-      -D remove.elements.visitor.element.criteria=LinearWaterwayCriterion;LinearWaterwayWayNodeCriterion;RelationWithRiverMembersCriterion \
+      -D remove.elements.visitor.element.criteria=RiverCriterion;RiverWayNodeCriterion;RelationWithRiverMembersCriterion \
       -D element.criteria.negate=true \
       -D remove.elements.visitor.chain.element.criteria=true \
       -D remove.elements.visitor.recursive=false input1.osm input2.osm output.osm

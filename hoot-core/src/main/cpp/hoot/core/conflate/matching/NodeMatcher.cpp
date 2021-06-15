@@ -31,7 +31,7 @@
 #include <hoot/core/algorithms/WayHeading.h>
 #include <hoot/core/algorithms/linearreference/WayLocation.h>
 #include <hoot/core/criterion/HighwayCriterion.h>
-#include <hoot/core/criterion/LinearWaterwayCriterion.h>
+#include <hoot/core/criterion/RiverCriterion.h>
 #include <hoot/core/criterion/PowerLineCriterion.h>
 #include <hoot/core/criterion/RailwayCriterion.h>
 #include <hoot/core/elements/MapProjector.h>
@@ -69,7 +69,7 @@ QStringList NodeMatcher::getNetworkCriterionClassNames()
   // TODO: Should LinearCriterion be added here?
   QStringList critClasses;
   critClasses.append(HighwayCriterion::className());
-  critClasses.append(LinearWaterwayCriterion::className());
+  critClasses.append(RiverCriterion::className());
   critClasses.append(PowerLineCriterion::className());
   critClasses.append(RailwayCriterion::className());
   return critClasses;

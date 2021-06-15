@@ -33,7 +33,7 @@
 #include <hoot/core/criterion/BuildingCriterion.h>
 #include <hoot/core/criterion/RelationCriterion.h>
 #include <hoot/core/criterion/LinearCriterion.h>
-#include <hoot/core/criterion/LinearWaterwayCriterion.h>
+#include <hoot/core/criterion/RiverCriterion.h>
 #include <hoot/core/criterion/HighwayCriterion.h>
 #include <hoot/core/criterion/NonBuildingAreaCriterion.h>
 #include <hoot/core/criterion/PoiCriterion.h>
@@ -83,8 +83,8 @@ QString CreatorDescription::baseFeatureTypeToString(BaseFeatureType t)
       return "Road";
     case Building:
       return "Building";
-    case Waterway:
-      return "Waterway";
+    case River:
+      return "River";
     case PoiPolygonPOI:
       return "Polygon Conflatable POI";
     case Polygon:
@@ -115,8 +115,8 @@ CreatorDescription::BaseFeatureType CreatorDescription::stringToBaseFeatureType(
     return Highway;
   else if (0 == s.compare("building"))
     return Building;
-  else if (0 == s.compare("waterway"))
-    return Waterway;
+  else if (0 == s.compare("river"))
+    return River;
   else if (0 == s.compare("polygon conflatable poi"))
     return PoiPolygonPOI;
   else if (0 == s.compare("polygon"))
@@ -147,7 +147,7 @@ CreatorDescription::FeatureCalcType CreatorDescription::getFeatureCalcType(BaseF
       return CalcTypeLength;
     case Building:
       return CalcTypeArea;
-    case Waterway:
+    case River:
       return CalcTypeLength;
     case PoiPolygonPOI:
       return CalcTypeNone;
@@ -181,8 +181,8 @@ std::shared_ptr<ElementCriterion> CreatorDescription::getElementCriterion(
       return std::make_shared<HighwayCriterion>(map);
     case Building:
       return std::make_shared<BuildingCriterion>(map);
-    case Waterway:
-      return std::make_shared<LinearWaterwayCriterion>();
+    case River:
+      return std::make_shared<RiverCriterion>();
     case PoiPolygonPOI:
       return std::make_shared<PoiPolygonPoiCriterion>();
     case Polygon:
@@ -214,8 +214,8 @@ QString CreatorDescription::getElementCriterionName(BaseFeatureType t)
       return HighwayCriterion::className();
     case Building:
       return BuildingCriterion::className();
-    case Waterway:
-      return LinearWaterwayCriterion::className();
+    case River:
+      return RiverCriterion::className();
     case PoiPolygonPOI:
       return PoiPolygonPoiCriterion::className();
     case Polygon:

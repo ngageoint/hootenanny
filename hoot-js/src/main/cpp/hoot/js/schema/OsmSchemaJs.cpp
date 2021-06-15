@@ -31,7 +31,7 @@
 #include <hoot/core/criterion/AreaCriterion.h>
 #include <hoot/core/criterion/LinearCriterion.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
-#include <hoot/core/criterion/LinearWaterwayCriterion.h>
+#include <hoot/core/criterion/RiverCriterion.h>
 #include <hoot/core/criterion/PowerLineCriterion.h>
 #include <hoot/core/criterion/PoiCriterion.h>
 #include <hoot/core/criterion/RailwayCriterion.h>
@@ -101,8 +101,8 @@ void OsmSchemaJs::Init(Local<Object> exports)
               FunctionTemplate::New(current, isPoint)->GetFunction(context).ToLocalChecked());
   schema->Set(context, toV8("isLinear"),
               FunctionTemplate::New(current, isLinear)->GetFunction(context).ToLocalChecked());
-  schema->Set(context, toV8("isLinearWaterway"),
-              FunctionTemplate::New(current, isLinearWaterway)->GetFunction(context).ToLocalChecked());
+  schema->Set(context, toV8("isRiver"),
+              FunctionTemplate::New(current, isRiver)->GetFunction(context).ToLocalChecked());
   schema->Set(context, toV8("isPowerLine"),
               FunctionTemplate::New(current, isPowerLine)->GetFunction(context).ToLocalChecked());
   schema->Set(context, toV8("isPoi"),
@@ -250,7 +250,7 @@ void OsmSchemaJs::isPolygon(const FunctionCallbackInfo<Value>& args)
     Boolean::New(current, PolygonCriterion(mapJs->getConstMap()).isSatisfied(e)));
 }
 
-void OsmSchemaJs::isLinearWaterway(const FunctionCallbackInfo<Value>& args)
+void OsmSchemaJs::isRiver(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
@@ -258,7 +258,7 @@ void OsmSchemaJs::isLinearWaterway(const FunctionCallbackInfo<Value>& args)
 
   ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject(context).ToLocalChecked())->getConstElement();
 
-  args.GetReturnValue().Set(Boolean::New(current, LinearWaterwayCriterion().isSatisfied(e)));
+  args.GetReturnValue().Set(Boolean::New(current, RiverCriterion().isSatisfied(e)));
 }
 
 void OsmSchemaJs::isPowerLine(const FunctionCallbackInfo<Value>& args)

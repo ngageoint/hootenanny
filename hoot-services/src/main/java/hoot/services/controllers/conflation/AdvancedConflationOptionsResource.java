@@ -111,7 +111,7 @@ public class AdvancedConflationOptionsResource {
         put("GenericLines", "hoot::LinearCriterion");
         put("PowerLines", "hoot::PowerLineCriterion");
         put("Railways", "hoot::RailwayCriterion");
-        put("Rivers", "hoot::LinearWaterwayCriterion");
+        put("Rivers", "hoot::RiverCriterion");
         put("Roads", "hoot::HighwayCriterion");
     }};
 
