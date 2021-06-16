@@ -81,9 +81,9 @@ Feature: Advanced Conflation Options
                     | rubber_sheet_minimum_ties | 4 | "abcdef" |
                     | rubber_sheet_minimum_ties | 4 | "-10000" |
                     | rubber_sheet_minimum_ties | 4 | "&*^@(!" |
-                    | search_radius_river | "-1" | "abcdef" |
-                    | search_radius_river | "-1" | "-10000" |
-                    | search_radius_river | "-1" | "&*^@(!" |
+                    #| search_radius_river | "-1" | "abcdef" |
+                    #| search_radius_river | "-1" | "-10000" |
+                    #| search_radius_river | "-1" | "&*^@(!" |
 
     #TODO: this test needs to be re-enabled; it was already mostly disabled, so I disabled the rest of it completely
     #Scenario: Test Cookie Cutter Options that are different than Reference or Average Options
