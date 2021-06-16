@@ -489,7 +489,7 @@ void ChangesetCreator::_handleStreamableConvertOpsInMemory(
   convertOps.setProgress(
     Progress(
       ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running,
-      (_currentTaskNum - 1) / _numTotalTasks, 1.0 / _numTotalTasks));
+      (float)(_currentTaskNum - 1) / (float)_numTotalTasks, 1.0f / (float)_numTotalTasks));
   convertOps.apply(map1);
   MapProjector::projectToWgs84(map1);
   if (!_singleInput)
