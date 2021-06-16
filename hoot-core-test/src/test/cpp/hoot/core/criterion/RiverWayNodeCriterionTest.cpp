@@ -27,14 +27,14 @@
 
 // Hoot
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/criterion/LinearWaterwayWayNodeCriterion.h>
+#include <hoot/core/criterion/RiverWayNodeCriterion.h>
 
 namespace hoot
 {
 
-class LinearWaterwayWayNodeCriterionTest : public HootTestFixture
+class RiverWayNodeCriterionTest : public HootTestFixture
 {
-  CPPUNIT_TEST_SUITE(LinearWaterwayWayNodeCriterionTest);
+  CPPUNIT_TEST_SUITE(RiverWayNodeCriterionTest);
   CPPUNIT_TEST(runBasicTest);
   CPPUNIT_TEST_SUITE_END();
 
@@ -43,7 +43,7 @@ public:
   void runBasicTest()
   {
     OsmMapPtr map(new OsmMap());
-    LinearWaterwayWayNodeCriterion uut(map);
+    RiverWayNodeCriterion uut(map);
 
     NodePtr node1(new Node(Status::Unknown1, 1, geos::geom::Coordinate(0.0, 0.0), 15.0));
     map->addNode(node1);
@@ -81,6 +81,6 @@ public:
 
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(LinearWaterwayWayNodeCriterionTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(RiverWayNodeCriterionTest, "quick");
 
 }

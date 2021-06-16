@@ -72,17 +72,9 @@ public:
       " and ..." << FileUtils::toLogFormat(input2, 25) << "; writing output to ..." <<
       FileUtils::toLogFormat(output, 25) << "...");
 
-    try
-    {
-      ScoreMatchesDiff diffGen;
-      diffGen.calculateDiff(input1, input2);
-      diffGen.printDiff(output);
-    }
-    catch (const HootException& e)
-    {
-      LOG_ERROR(e.what());
-      return 1;
-    }
+    ScoreMatchesDiff diffGen;
+    diffGen.calculateDiff(input1, input2);
+    diffGen.printDiff(output);
 
     LOG_STATUS(
       "Matches difference calculated in " << StringUtils::millisecondsToDhms(timer.elapsed()) <<

@@ -28,7 +28,7 @@
 #include "RiverMaximalSublineSettingOptimizer.h"
 
 // Hoot
-#include <hoot/core/criterion/LinearWaterwayCriterion.h>
+#include <hoot/core/criterion/RiverCriterion.h>
 #include <hoot/core/criterion/InBoundsCriterion.h>
 #include <hoot/core/elements/ElementGeometryUtils.h>
 #include <hoot/core/util/StringUtils.h>
@@ -73,13 +73,13 @@ int RiverMaximalSublineSettingOptimizer::getFindBestMatchesMaxRecursions(
     const WayPtr& way = it->second;
     if (way)
     {
-      LOG_VART(LinearWaterwayCriterion().isSatisfied(way));
+      LOG_VART(RiverCriterion().isSatisfied(way));
     }
     if (boundsCrit && way)
     {
       LOG_VART(boundsCrit->isSatisfied(way));
     }
-    if (way && LinearWaterwayCriterion().isSatisfied(way) &&
+    if (way && RiverCriterion().isSatisfied(way) &&
         (!boundsCrit || boundsCrit->isSatisfied(way)))
     { 
       totalRiverLength += ElementGeometryUtils::calculateLength(way, map);

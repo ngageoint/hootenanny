@@ -91,10 +91,8 @@ public:
       "Conflating " << FileUtils::toLogFormat(inputs) <<
       " and writing the output to " << FileUtils::toLogFormat(output, 50) << "...");
 
-    // read input 1
     OsmMapPtr map(new OsmMap());
-
-    // load all the inputs into a single map
+    // Load all the inputs into a single map.
     for (int i = 0; i < inputs.size(); ++i)
     {
       IoUtils::loadMap(map, inputs[i], false, Status::fromInput(i));
@@ -114,9 +112,7 @@ public:
     OpExecutor(ConfigOptions().getConflatePostOps()).apply(map);
 
     MapProjector::projectToWgs84(map);
-
     map->visitRw(hashVisitor);
-
     IoUtils::saveMap(map, output);
 
     LOG_STATUS(

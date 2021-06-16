@@ -12,7 +12,7 @@ percentage of each value's frequency compared to all other tag values.
                                semicolon and surrounding them with quotes. To process all tags, leave this empty by specifying 
                                a pair of quotes with nothing between them. This parameter is ignored if `--names` or `--types` 
                                is used.
-* +criteria+                 - (optional) Filtering criteria; May be one or more class names inheriting from 
+* +criteria+                 - (optional) Filtering criteria for the inputs; May be one or more class names inheriting from 
                                `ElementCriterion` delimited with a semicolon and surrounded by quotes. By default, 
                                multiple criteria are logically OR'd together. Set the 
                                `tag.distribution.chain.element.criteria` option to true to have the criteria logically 

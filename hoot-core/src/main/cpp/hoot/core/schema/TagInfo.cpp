@@ -98,7 +98,7 @@ QString TagInfo::getInfo(const QStringList& inputs) const
       info += _getInfo(inputs.at(i));
       info += "\n  }";
 
-      // Don't add a comma to the last dataset
+      // Don't add a comma to the last dataset.
       if (i != (inputs.size() - 1))
       {
         info += ",\n";

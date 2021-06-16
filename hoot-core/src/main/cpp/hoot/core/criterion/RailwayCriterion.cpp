@@ -40,7 +40,7 @@ HOOT_FACTORY_REGISTER(ElementCriterion, RailwayCriterion)
 
 bool RailwayCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  // See similar note in LinearWaterwayCriterion
+  // See similar note in RiverCriterion.
   if (e->getElementType() != ElementType::Way)
   {
     return false;

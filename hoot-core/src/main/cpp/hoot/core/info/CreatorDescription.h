@@ -57,7 +57,7 @@ public:
     POI = 0,
     Highway = 1,
     Building = 2,
-    Waterway = 3,
+    River = 3,
     PoiPolygonPOI = 4, // This is a superset of POI specific to poi/poly conflation.
     Polygon = 5, // Polygon is a superset of building.
     Area = 6,

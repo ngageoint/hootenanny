@@ -25,8 +25,8 @@
  * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
-#ifndef LINEAR_WATERWAY_CRITERION_H
-#define LINEAR_WATERWAY_CRITERION_H
+#ifndef RIVER_CRITERION_H
+#define RIVER_CRITERION_H
 
 #include <hoot/core/criterion/ConflatableElementCriterion.h>
 
@@ -36,21 +36,21 @@ namespace hoot
 /**
  * Identifies linear bodies of water
  */
-class LinearWaterwayCriterion : public ConflatableElementCriterion
+class RiverCriterion : public ConflatableElementCriterion
 {
 public:
 
-  static QString className() { return "hoot::LinearWaterwayCriterion"; }
+  static QString className() { return "hoot::RiverCriterion"; }
 
-  LinearWaterwayCriterion() = default;
-  ~LinearWaterwayCriterion() = default;
+  RiverCriterion() = default;
+  ~RiverCriterion() = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
 
   GeometryType getGeometryType() const override { return GeometryType::Line; }
 
   ElementCriterionPtr clone() override
-  { return std::make_shared<LinearWaterwayCriterion>(); }
+  { return std::make_shared<RiverCriterion>(); }
 
   QString getDescription() const override { return "Identifies linear bodies of water"; }
   QString getName() const override { return className(); }
@@ -63,4 +63,4 @@ public:
 };
 
 }
-#endif // LINEAR_WATERWAY_CRITERION_H
+#endif // RIVER_CRITERION_H

@@ -62,16 +62,6 @@ void ElementCounter::setCriteria(QStringList& names)
 {
   if (!names.isEmpty())
   {
-    for (int i = 0; i < names.size(); i++)
-    {
-      if (!names.at(i).startsWith(MetadataTags::HootNamespacePrefix()))
-      {
-        QString className = names[i];
-        className.prepend(MetadataTags::HootNamespacePrefix());
-        names[i] = className;
-      }
-    }
-
     ConfigOptions opts;
     // Test crit here to see if I/O can be streamed or not. If it requires a map, then it can't be
     // streamed.

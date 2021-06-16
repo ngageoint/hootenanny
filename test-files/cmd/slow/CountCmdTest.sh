@@ -20,15 +20,15 @@ echo ""
 echo "counting all elements..."
 hoot count --warn $CONFIG "$INPUT_FILE_1;$INPUT_FILE_2" --all-elements
 
-# LinearWaterwayCriterion is not a map consumer, so streaming I/O will occur.
+# RiverCriterion is not a map consumer, so streaming I/O will occur.
 
 echo ""
 echo "counting all rivers..."
-hoot count --warn $CONFIG "$INPUT_FILE_3;$INPUT_FILE_4" hoot::LinearWaterwayCriterion
+hoot count --warn $CONFIG "$INPUT_FILE_3;$INPUT_FILE_4" RiverCriterion
 
 echo ""
 echo "counting all elements that are not rivers..."
-hoot count --warn $CONFIG -D element.criteria.negate=true "$INPUT_FILE_3;$INPUT_FILE_4" hoot::LinearWaterwayCriterion
+hoot count --warn $CONFIG -D element.criteria.negate=true "$INPUT_FILE_3;$INPUT_FILE_4" RiverCriterion
 
 # PoiCriterion is a map consumer, so streaming I/O cannot occur.
 
@@ -38,7 +38,7 @@ hoot count --warn $CONFIG "$INPUT_FILE_1;$INPUT_FILE_2" hoot::PoiCriterion
 
 echo ""
 echo "counting all elements that are not POIs..."
-hoot count --warn $CONFIG -D element.criteria.negate=true "$INPUT_FILE_1;$INPUT_FILE_2" hoot::PoiCriterion
+hoot count --warn $CONFIG -D element.criteria.negate=true "$INPUT_FILE_1;$INPUT_FILE_2" PoiCriterion
 
 # Check to make sure multi-layer gdb's get parsed correctly.
 
@@ -50,11 +50,11 @@ hoot count $INPUT_DIR/input.gdb --all-elements
 
 echo ""
 echo "counting all rivers and POIs..."
-hoot count --warn $CONFIG "$INPUT_FILE_1;$INPUT_FILE_2;$INPUT_FILE_3;$INPUT_FILE_4" "LinearWaterwayCriterion;PoiCriterion"
+hoot count --warn $CONFIG "$INPUT_FILE_1;$INPUT_FILE_2;$INPUT_FILE_3;$INPUT_FILE_4" "RiverCriterion;PoiCriterion"
 
 echo ""
 echo "counting elements that are both rivers and POIs..."
-hoot count --warn $CONFIG -D element.criteria.chain=true "$INPUT_FILE_1;$INPUT_FILE_2;$INPUT_FILE_3;$INPUT_FILE_4" "LinearWaterwayCriterion;PoiCriterion"
+hoot count --warn $CONFIG -D element.criteria.chain=true "$INPUT_FILE_1;$INPUT_FILE_2;$INPUT_FILE_3;$INPUT_FILE_4" "RiverCriterion;PoiCriterion"
 
 echo ""
 echo "counting elements that are not POIs..."
