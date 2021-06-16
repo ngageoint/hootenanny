@@ -31,7 +31,6 @@
 #include <hoot/core/criterion/LinearCriterion.h>
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/ops/SuperfluousWayRemover.h>
 #include <hoot/core/util/ConfigOptions.h>
@@ -115,7 +114,7 @@ public:
     else if (args.size() == 3)
     {
       // The last parameter could be either the second base map input or a list of criteria.
-      if (OsmMapReaderFactory::isSupportedFormat(args[2]))
+      if (IoUtils::isSupportedInputFormat(args[2]))
       {
         uut = args[2];
       }

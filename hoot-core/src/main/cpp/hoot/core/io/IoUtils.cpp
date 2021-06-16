@@ -51,6 +51,7 @@
 
 // Qt
 #include <QFileInfo>
+#include <QDirIterator>
 
 // GEOS
 #include <geos/geom/GeometryFactory.h>
