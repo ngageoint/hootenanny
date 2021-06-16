@@ -80,11 +80,11 @@ public:
   /**
     @see OperationStatus
     */
-  virtual QString getInitStatusMessage() const { return "Copying map subset..."; }
+  QString getInitStatusMessage() const override { return "Copying map subset..."; }
   /**
     @see OperationStatus
     */
-  virtual QString getCompletedStatusMessage() const { return "Subset map copying complete."; }
+  QString getCompletedStatusMessage() const override { return "Subset map copying complete."; }
 
   QString getDescription() const override { return "Copies a subset of the map into a new map"; }
   QString getName() const override { return className(); }

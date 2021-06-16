@@ -229,10 +229,18 @@ private:
       numScores--;
     }
 
-    const int overall = (_aim + _gim + _rasterScore) / numScores;
-    const int overallConf = (_aic + _gic) / numScores;
-    cout << "Overall: " << overall << " +/-" << overallConf << " (" << overall - overallConf <<
-        " to " << overall + overallConf << ")" << endl;
+    if (numScores > 0)
+    {
+      const int overall = (_aim + _gim + _rasterScore) / numScores;
+      const int overallConf = (_aic + _gic) / numScores;
+      cout << "Overall: " << overall << " +/-" << overallConf << " (" << overall - overallConf <<
+          " to " << overall + overallConf << ")" << endl;
+    }
+    else
+    {
+      // This actually can't happen due to an earlier check, but sonar still complains about it.
+      throw IllegalArgumentException("No scoring method selected.");
+    }
   }
 
   ElementCriterionPtr _getCrit(QStringList& names) const
@@ -278,7 +286,7 @@ private:
     return map;
   }
 
-  OsmMapPtr _filterToLinearOnly(const ConstOsmMapPtr& map)
+  OsmMapPtr _filterToLinearOnly(const ConstOsmMapPtr& map) const
   {
     LOG_STATUS("Filtering input map to linear features only...");
     OsmMapPtr filteredMap = std::make_shared<OsmMap>();

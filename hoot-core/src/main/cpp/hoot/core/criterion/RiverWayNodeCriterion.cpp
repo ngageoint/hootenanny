@@ -38,13 +38,13 @@ HOOT_FACTORY_REGISTER(ElementCriterion, RiverWayNodeCriterion)
 RiverWayNodeCriterion::RiverWayNodeCriterion() :
 WayNodeCriterion()
 {
-  _parentCriterion.reset(new RiverCriterion());
+  _parentCriterion = std::make_shared<RiverCriterion>();
 }
 
 RiverWayNodeCriterion::RiverWayNodeCriterion(ConstOsmMapPtr map) :
 WayNodeCriterion(map)
 {
-  _parentCriterion.reset(new RiverCriterion());
+  _parentCriterion = std::make_shared<RiverCriterion>();
 }
 
 }

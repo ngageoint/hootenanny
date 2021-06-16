@@ -44,7 +44,7 @@ void DirectedGraph::addEdge(long from, long to, double weight)
   _edges.insert(from, Edge(from, to, weight));
 }
 
-double DirectedGraph::determineCost(const std::shared_ptr<Way>& way)
+double DirectedGraph::determineCost(const std::shared_ptr<Way>& way) const
 {
   QString highway = way->getTags()["highway"];
   // reasonable default for an unknown "highway"
