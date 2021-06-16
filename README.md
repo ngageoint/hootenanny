@@ -30,7 +30,7 @@ No automated map conflation technology is perfect. If you are conflating a relat
 # Documentation
 
 Documentation is included as a [PDF](https://github.com/ngageoint/hootenanny/releases) with each release. Download 
-the Hootenanny .tar.gz installation file and location the documentation within the "docs" directory.
+the Hootenanny .tar.gz installation file and locate the documentation within the "docs" directory.
 
 # Conflatable Feature Types
 
