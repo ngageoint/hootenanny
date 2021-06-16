@@ -29,7 +29,6 @@
 // Hoot
 #include <hoot/core/criterion/CriterionUtils.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
-#include <hoot/core/io/ElementStreamer.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/visitors/ElementCountVisitor.h>
 #include <hoot/core/util/ConfigOptions.h>
@@ -104,7 +103,7 @@ long ElementCounter::count(const QStringList& inputs)
     _isStreamableCrit = true;
   }
 
-  if (_isStreamableCrit && ElementStreamer::areStreamableInputs(inputs))
+  if (_isStreamableCrit && IoUtils::areStreamableInputs(inputs))
   {
     for (int i = 0; i < inputs.size(); i++)
     {

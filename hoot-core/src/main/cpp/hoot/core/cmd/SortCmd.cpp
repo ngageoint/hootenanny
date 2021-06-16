@@ -80,7 +80,7 @@ public:
       return 0;
     }
 
-    if (OsmMapReaderFactory::hasElementInputStream(input) &&
+    if (IoUtils::isStreamableInput(input) &&
         ConfigOptions().getElementSorterElementBufferSize() != -1)
     {
       _sortExternally(input, output);

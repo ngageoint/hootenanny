@@ -28,6 +28,7 @@
 // Hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
+#include <hoot/core/io/IoUtils.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/info/ElementCounter.h>
 
@@ -48,13 +49,6 @@ public:
 
   int runSimple(QStringList& args) override
   {
-    if (args.size() < 1 || args.size() > 3)
-    {
-      LOG_VAR(args);
-      std::cout << getHelp() << std::endl << std::endl;
-      throw HootException(QString("%1 takes one to three parameters.").arg(getName()));
-    }
-
     bool countFeaturesOnly = true;
     if (args.contains("--all-elements"))
     {
@@ -62,7 +56,30 @@ public:
       args.removeAt(args.indexOf("--all-elements"));
     }
 
-    const QStringList inputs = args[0].trimmed().split(";");
+    bool recursive = false;
+    if (args.contains("--recursive"))
+    {
+      recursive = false;
+      args.removeAt(args.indexOf("--recursive"));
+    }
+
+    if (args.size() < 1 || args.size() > 2)
+    {
+      LOG_VAR(args);
+      std::cout << getHelp() << std::endl << std::endl;
+      throw HootException(QString("%1 takes one or two parameters.").arg(getName()));
+    }
+
+    QStringList inputs;
+    if (!recursive)
+    {
+      inputs = args[0].trimmed().split(";");
+    }
+    else
+    {
+      inputs = IoUtils::getSupportedInputsRecursively(args[0].trimmed().split(";"));
+    }
+
     QStringList criteriaClassNames;
     if (args.size() > 1)
     {

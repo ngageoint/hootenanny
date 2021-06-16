@@ -250,8 +250,8 @@ void DataConverter::_convertToOgr(const QStringList& inputs, const QString& outp
   LOG_VARD(_convertOps);
 
   // Check to see if all of the i/o can be streamed.
-  LOG_VARD(OsmMapReaderFactory::hasElementInputStream(inputs));
-  if (OsmMapReaderFactory::hasElementInputStream(inputs) &&
+  LOG_VARD(IoUtils::areStreamableInputs(inputs));
+  if (IoUtils::areStreamableInputs(inputs, true) &&
       // Multi-threaded code doesn't support conversion ops. Could it?
       _convertOps.empty() &&
       // Multi-threaded code doesn't support a bounds...not sure if it could be made to at some
@@ -452,11 +452,11 @@ void DataConverter::_convert(const QStringList& inputs, const QString& output)
   LOG_VARD(_shapeFileColumnsSpecified());
 
   // Check to see if all of the i/o can be streamed.
-  LOG_VARD(ElementStreamer::areValidStreamingOps(_convertOps));
-  LOG_VARD(ElementStreamer::areStreamableIo(inputs, output));
+  LOG_VARD(IoUtils::areValidStreamingOps(_convertOps));
+  LOG_VARD(IoUtils::areStreamableIo(inputs, output));
   const bool isStreamable =
-    ElementStreamer::areValidStreamingOps(_convertOps) &&
-    ElementStreamer::areStreamableIo(inputs, output);
+    IoUtils::areValidStreamingOps(_convertOps) &&
+    IoUtils::areStreamableIo(inputs, output);
 
   // The number of steps here must be updated as you add/remove job steps in the logic.
   int numTasks = 0;

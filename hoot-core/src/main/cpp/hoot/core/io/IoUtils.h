@@ -53,6 +53,14 @@ public:
   static QString className() { return "hoot::IoUtils"; }
 
   /**
+   * TODO
+   *
+   * @param url
+   * @return
+   */
+  static bool isSupportedFormat(const QString& url);
+
+  /**
    * Returns true if the input format is a Hootenanny supported OSM format
    *
    * @param input input path
@@ -86,6 +94,81 @@ public:
    * @return true if any of the inputs passed in are supported by OGR; false otherwise
    */
   static bool anyAreSupportedOgrFormats(const QStringList& inputs, const bool allowDir = false);
+
+  /**
+   * TODO
+   *
+   * @param topLevelPaths
+   * @return
+   */
+  static QStringList getSupportedInputsRecursively(const QStringList& topLevelPaths);
+
+  /**
+   * Determines whether both input and output are streamable data sources (associated
+   * readers/writers must implemented the partial map interfaces)
+   *
+   * @param input data source
+   * @param output data destination
+   * @return true if both formats are streamable; false otherwise
+   */
+  static bool isStreamableIo(const QString& input, const QString& output);
+
+  /**
+   * Determines whether both inputs and output are streamable data sources (associated
+   * readers/writers must implemented the partial map interfaces)
+   *
+   * @param inputs data sources
+   * @param output data destination
+   * @return true if all formats are streamable; false otherwise
+   */
+  static bool areStreamableIo(const QStringList& inputs, const QString& output);
+
+  /**
+   * Determines whether inputs and are streamable data sources (associated
+   * readers/writers must implemented the partial map interfaces)
+   *
+   * @param inputs data sources
+   * @param logUnstreamable TODO
+   * @return true if all inputs are streamable; false otherwise
+   */
+  static bool areStreamableInputs(const QStringList& inputs, const bool logUnstreamable = false);
+
+  /**
+   * Return true if all the specified operations are valid streaming operations.
+   *
+   * There are some ops that require the whole map be available in RAM (e.g. remove duplicate
+   * nodes). These operations are not applicable for streaming.
+   *
+   * @param ops
+   * @return
+   */
+  static bool areValidStreamingOps(const QStringList& ops);
+
+  /**
+   * TODO
+   *
+   * @param url
+   * @return
+   */
+  static bool isStreamableInput(const QString& url);
+
+  /**
+   * TODO
+   *
+   * @param url
+   * @return
+   */
+  static bool isStreamableOutput(const QString& url);
+
+  /**
+   * Get an input stream set up to be filtered by operations
+   *
+   * @param streamToFilter the stream to be filtered
+   * @param ops a list of Hoot operation class names to use for inline filtering on the input stream
+   * @return an input stream
+   */
+  static ElementInputStreamPtr getFilteredInputStream(
+    ElementInputStreamPtr streamToFilter, const QStringList& ops);
 
   /**
     Loads an OSM map into an OsmMap object
