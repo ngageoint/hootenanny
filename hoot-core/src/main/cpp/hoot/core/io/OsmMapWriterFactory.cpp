@@ -178,7 +178,7 @@ void OsmMapWriterFactory::writeDebugMap(
     StringUtils::removeEmptyStrings(excludeClassFilter);
     LOG_VART(excludeClassFilter);
     if (!excludeClassFilter.isEmpty() &&
-        StringUtils::containsWildcard(callingClassNoNamespace, excludeClassFilter))
+        StringUtils::matchesWildcard(callingClassNoNamespace, excludeClassFilter))
     {
       return;
     }
@@ -190,7 +190,7 @@ void OsmMapWriterFactory::writeDebugMap(
     StringUtils::removeEmptyStrings(includeClassFilter);
     LOG_VART(includeClassFilter);
     if (includeClassFilter.isEmpty() ||
-        StringUtils::containsWildcard(callingClassNoNamespace, includeClassFilter))
+        StringUtils::matchesWildcard(callingClassNoNamespace, includeClassFilter))
     {
       QString debugMapFileName = ConfigOptions().getDebugMapsFilename();
       if (!debugMapFileName.toLower().endsWith(".osm"))

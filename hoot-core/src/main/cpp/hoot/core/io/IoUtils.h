@@ -107,9 +107,11 @@ public:
    * TODO
    *
    * @param topLevelPaths
+   * @param nameFilters
    * @return
    */
-  static QStringList getSupportedInputsRecursively(const QStringList& topLevelPaths);
+  static QStringList getSupportedInputsRecursively(
+    const QStringList& topLevelPaths, const QStringList& nameFilters = QStringList());
 
   /**
    * Determines whether both input and output are streamable data sources (associated

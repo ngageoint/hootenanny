@@ -155,22 +155,25 @@ bool IoUtils::areSupportedOgrFormats(const QStringList& inputs, const bool allow
   return true;
 }
 
-QStringList IoUtils::getSupportedInputsRecursively(const QStringList& topLevelPaths)
+QStringList IoUtils::getSupportedInputsRecursively(
+  const QStringList& topLevelPaths, const QStringList& nameFilters)
 {
   QStringList validInputs;
   for (int i = 0; i < topLevelPaths.size(); i++)
   {
+    // If its a file and not a dir, go ahead and add it if its supported.
     const QString path = topLevelPaths.at(i);
     if (!QFileInfo(path).isDir())
     {
-      if (isSupportedInputFormat(path))
+      if ((nameFilters.isEmpty() || StringUtils::matchesWildcard(path, nameFilters)) &&
+           isSupportedInputFormat(path))
       {
         validInputs.append(path);
       }
     }
     else
     {
-      QDirIterator itr(path, QDirIterator::Subdirectories);
+      QDirIterator itr(path, nameFilters, QDir::NoFilter, QDirIterator::Subdirectories);
       while (itr.hasNext())
       {
         const QString input = itr.next();

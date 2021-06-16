@@ -874,6 +874,12 @@ Requires a language translation server installation.  See the Hootenanny Install
     hoot count input.osm --all-elements
 -----
 
+==== Count all features recursively across multiple OSM files under a directory:
+
+-----
+    hoot count /my/dir --recursive --input-filters "*.osm"
+-----
+
 ==== Count all elements within a bounding box:
 
 -----

@@ -218,7 +218,8 @@ long ElementCounter::_countMemoryBound(
   LOG_DEBUG("Counting memory bound...");
 
   OsmMapPtr map = std::make_shared<OsmMap>();
-  IoUtils::loadMaps(map, inputs, true);
+  // Don't read in file IDs or duplicated elements across inputs won't be counted.
+  IoUtils::loadMaps(map, inputs, false);
 
   OsmMapConsumer* omc = dynamic_cast<OsmMapConsumer*>(criterion.get());
   if (omc)

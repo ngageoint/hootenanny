@@ -55,13 +55,31 @@ public:
       countFeaturesOnly = false;
       args.removeAt(args.indexOf("--all-elements"));
     }
-
     bool recursive = false;
     if (args.contains("--recursive"))
     {
       recursive = true;
       args.removeAt(args.indexOf("--recursive"));
     }
+    QStringList inputFilters;
+    if (args.contains("--input-filters"))
+    {
+      if (!recursive)
+      {
+        throw IllegalArgumentException(
+          "The --input-filters option requires also specifying the --recursive option.");
+      }
+      const int inputFiltersIndex = args.indexOf("--input-filters");
+      if (args.size() < inputFiltersIndex + 2)
+      {
+        throw IllegalArgumentException(
+          "The --input-filters option must be followed by one or more filters.");
+      }
+      inputFilters = args.at(inputFiltersIndex + 1).trimmed().split(";");
+      args.removeAt(inputFiltersIndex + 1);
+      args.removeAt(inputFiltersIndex);
+    }
+    LOG_VARD(inputFilters);
 
     if (args.size() < 1 || args.size() > 2)
     {
@@ -77,7 +95,7 @@ public:
     }
     else
     {
-      inputs = IoUtils::getSupportedInputsRecursively(args[0].trimmed().split(";"));
+      inputs = IoUtils::getSupportedInputsRecursively(args[0].trimmed().split(";"), inputFilters);
     }
 
     QStringList criteriaClassNames;
