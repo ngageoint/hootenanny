@@ -58,7 +58,15 @@ public:
    * @param url
    * @return
    */
-  static bool isSupportedFormat(const QString& url);
+  static bool isSupportedInputFormat(const QString& url);
+
+  /**
+   * TODO
+   *
+   * @param url
+   * @return
+   */
+  static bool isSupportedOutputFormat(const QString& url);
 
   /**
    * Returns true if the input format is a Hootenanny supported OSM format

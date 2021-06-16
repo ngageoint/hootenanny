@@ -154,29 +154,32 @@ bool IoUtils::areSupportedOgrFormats(const QStringList& inputs, const bool allow
   return true;
 }
 
-QStringList IoUtils::getSupportedInputsRecursively(const QStringList& /*topLevelPaths*/)
+QStringList IoUtils::getSupportedInputsRecursively(const QStringList& topLevelPaths)
 {
-//  QDirIterator it("/etc", QDirIterator::Subdirectories);
-//  while (it.hasNext())
-//  {
-//    qDebug() << it.next();
-//  }
-
-//  QDirIterator it(
-//    "/sys", QStringList() << "scaling_cur_freq", QDir::NoFilter, QDirIterator::Subdirectories);
-//  while (it.hasNext())
-//  {
-//    QFile f(it.next());
-//    f.open(QIODevice::ReadOnly);
-//    qDebug() << f.fileName() << f.readAll().trimmed().toDouble() / 1000 << "MHz";
-//  }
-
-  return QStringList();
+  QStringList validInputs;
+  for (int i = 0; i < topLevelPaths.size(); i++)
+  {
+    QDirIterator itr(topLevelPaths.at(i), QDirIterator::Subdirectories);
+    while (itr.hasNext())
+    {
+      const QString input = itr.next();
+      if (isSupportedInputFormat(input))
+      {
+        validInputs.append(input);
+      }
+    }
+  }
+  return validInputs;
 }
 
-bool IoUtils::isSupportedFormat(const QString& url)
+bool IoUtils::isSupportedInputFormat(const QString& url)
 {
   return !OsmMapReaderFactory::getReaderName(url).trimmed().isEmpty();
+}
+
+bool IoUtils::isSupportedOutputFormat(const QString& url)
+{
+  return !OsmMapWriterFactory::getWriterName(url).trimmed().isEmpty();
 }
 
 bool IoUtils::isStreamableIo(const QString& input, const QString& output)
