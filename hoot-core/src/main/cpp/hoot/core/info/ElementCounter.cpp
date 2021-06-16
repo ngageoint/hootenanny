@@ -78,6 +78,11 @@ void ElementCounter::setCriteria(QStringList& names)
 
 long ElementCounter::count(const QStringList& inputs)
 {
+  if (inputs.empty())
+  {
+    throw IllegalArgumentException("No inputs available for element counting.");
+  }
+
   _checkForMissingInputs(inputs);
 
   QElapsedTimer timer;
@@ -138,7 +143,7 @@ QString ElementCounter::_getStatusMessage(const QString& input, const QString& c
   {
     msg += " satisfying " + critStr;
   }
-  msg += " from " + FileUtils::toLogFormat(input, 25) + "...";
+  msg += " from ..." + FileUtils::toLogFormat(input, 25) + "...";
   return msg;
 }
 

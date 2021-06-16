@@ -59,7 +59,7 @@ public:
     bool recursive = false;
     if (args.contains("--recursive"))
     {
-      recursive = false;
+      recursive = true;
       args.removeAt(args.indexOf("--recursive"));
     }
 
@@ -85,6 +85,7 @@ public:
     {
       criteriaClassNames = args[1].trimmed().split(";");
     }
+    LOG_VARD(criteriaClassNames);
 
     ElementCounter counter;
     counter.setCountFeaturesOnly(countFeaturesOnly);

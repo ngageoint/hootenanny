@@ -9,6 +9,7 @@ INPUT_FILE_1=test-files/conflate/unified/AllDataTypesA.osm
 INPUT_FILE_2=test-files/conflate/unified/AllDataTypesB.osm
 INPUT_FILE_3=test-files/conflate/generic/rivers/Haiti_CNIGS_Rivers_REF1-cropped-2.osm
 INPUT_FILE_4=test-files/conflate/generic/rivers/Haiti_osm_waterway_ss_REF2-cropped-2.osm
+INPUT_FILE_5=test-files/cmd/slow/CountCmdTest/inputDir
 
 CONFIG="-C Testing.conf"
 
@@ -59,3 +60,11 @@ hoot count --warn $CONFIG -D element.criteria.chain=true "$INPUT_FILE_1;$INPUT_F
 echo ""
 echo "counting elements that are not POIs..."
 hoot count --warn $CONFIG -D element.criteria.negate=true "$INPUT_FILE_1;$INPUT_FILE_2;$INPUT_FILE_3;$INPUT_FILE_4" PoiCriterion
+
+echo ""
+echo "counting recursively in a directory structure..."
+hoot count --warn $CONFIG "$INPUT_FILE_1;$INPUT_FILE_5" --recursive
+
+echo ""
+echo "counting recursively in a directory structure with a criterion..."
+hoot count --warn $CONFIG "$INPUT_FILE_1;$INPUT_FILE_5" HighwayCriterion --recursive

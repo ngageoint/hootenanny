@@ -160,13 +160,24 @@ QStringList IoUtils::getSupportedInputsRecursively(const QStringList& topLevelPa
   QStringList validInputs;
   for (int i = 0; i < topLevelPaths.size(); i++)
   {
-    QDirIterator itr(topLevelPaths.at(i), QDirIterator::Subdirectories);
-    while (itr.hasNext())
+    const QString path = topLevelPaths.at(i);
+    if (!QFileInfo(path).isDir())
     {
-      const QString input = itr.next();
-      if (isSupportedInputFormat(input))
+      if (isSupportedInputFormat(path))
       {
-        validInputs.append(input);
+        validInputs.append(path);
+      }
+    }
+    else
+    {
+      QDirIterator itr(path, QDirIterator::Subdirectories);
+      while (itr.hasNext())
+      {
+        const QString input = itr.next();
+        if (isSupportedInputFormat(input))
+        {
+          validInputs.append(input);
+        }
       }
     }
   }
