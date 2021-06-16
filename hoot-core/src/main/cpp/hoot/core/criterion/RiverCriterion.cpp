@@ -59,7 +59,7 @@ bool RiverCriterion::isSatisfied(const ConstElementPtr& e) const
   }
   else
   {
-    OsmSchema& schema = OsmSchema::getInstance();
+    const OsmSchema& schema = OsmSchema::getInstance();
     for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
     {
       const QString key = it.key();

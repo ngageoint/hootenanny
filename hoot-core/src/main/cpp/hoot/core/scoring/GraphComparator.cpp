@@ -375,7 +375,7 @@ void GraphComparator::drawCostDistance(
 }
 
 void GraphComparator::_exportGraphImage(
-  OsmMapPtr map, DirectedGraph& /*graph*/, ShortestPath& sp, QString path,
+  OsmMapPtr map, const ShortestPath& sp, const QString& path,
   const geos::geom::Coordinate& coord) const
 {
   const NodeMap& nodes = map->getNodes();
@@ -443,7 +443,8 @@ void GraphComparator::_init()
 }
 
 cv::Mat GraphComparator::_paintGraph(
-  OsmMapPtr map, DirectedGraph& graph, ShortestPath& sp, double& maxGraphCost) const
+  const ConstOsmMapPtr& map, const DirectedGraph& graph, const ShortestPath& sp,
+  double& maxGraphCost) const
 {
   LOG_TRACE("Painting graph...");
 
@@ -488,8 +489,8 @@ cv::Mat GraphComparator::_paintGraph(
 }
 
 void GraphComparator::_paintWay(
-  cv::Mat& mat, ConstOsmMapPtr map, WayPtr way, double friction, double startCost,
-  double endCost) const
+  cv::Mat& mat, const ConstOsmMapPtr& map, const ConstWayPtr& way, double friction,
+  double startCost, double endCost) const
 {
   LocationOfPoint lop(map, way);
   double length = ElementToGeometryConverter(map).convertToLineString(way)->getLength();
