@@ -81,6 +81,7 @@ Feature: Advanced Conflation Options
                     | rubber_sheet_minimum_ties | 4 | "abcdef" |
                     | rubber_sheet_minimum_ties | 4 | "-10000" |
                     | rubber_sheet_minimum_ties | 4 | "&*^@(!" |
+                    # TODO: fix
                     #| search_radius_river | "-1" | "abcdef" |
                     #| search_radius_river | "-1" | "-10000" |
                     #| search_radius_river | "-1" | "&*^@(!" |
