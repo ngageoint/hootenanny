@@ -110,8 +110,6 @@ OsmMapPtr SearchRadiusCalculator::_getFilteredMap(const ConstOsmMapPtr& map) con
   {
     // If a match candidate criterion was specified, filter out the remaining elements that don't
     // fit the criterion.
-    // TODO: This logic doesn't support Generic Conflation calling scripts who implement the
-    // isMatchCandidate function. - see #3048
     ElementCriterionPtr candidateCrit(
       Factory::getInstance().constructObject<ElementCriterion>(_elementCriterion));
     crit.reset(new ChainCriterion(unknownCrit, candidateCrit));
@@ -145,9 +143,9 @@ std::vector<double> SearchRadiusCalculator::_getTiePointDistances(OsmMapPtr& map
     }
     catch (const HootException& e)
     {
-      // In many cases, the input map will have already been cleaned by this point...but possibly not
-      // (direct call to the stats command, for example). So, try to clean it and re-run to get around
-      // this error.
+      // In many cases, the input map will have already been cleaned by this point...but possibly
+      // not (direct call to the stats command, for example). So, try to clean it and re-run to get
+      // around this error.
       LOG_DEBUG("Rubber sheeting error: " << e.getWhat());
       LOG_DEBUG(
         "An error occurred calculating the rubber sheet transform during automatic search radius " <<

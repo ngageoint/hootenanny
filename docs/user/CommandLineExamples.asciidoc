@@ -372,7 +372,7 @@ hoot convert -D convert.ops="UnlikelyRoadRemover" input.osm output.osm
       -D conflate.tag.filter=myFilter.json input1.osm input2.osm output.osm
 -----
 
-==== Filter maps down to POIs only before conflating them:
+==== Filter POIs out of maps before conflating them:
 
 -----
     hoot conflate -C AttributeConflation.conf -C UnifyingAlgorithm.conf \
@@ -386,7 +386,18 @@ hoot convert -D convert.ops="UnlikelyRoadRemover" input.osm output.osm
 -----
     hoot conflate -C AttributeConflation.conf -C UnifyingAlgorithm.conf \
       -D convert.ops=RemoveElementsVisitor \
-      -D remove.elements.visitor.element.criteria=LinearWaterwayCriterion;LinearWaterwayWayNodeCriterion;RelationWithRiverMembersCriterion \
+      -D remove.elements.visitor.element.criteria=RiverCriterion \
+      -D element.criteria.negate=true \
+      -D remove.elements.visitor.chain.element.criteria=true \
+      -D remove.elements.visitor.recursive=false input1.osm input2.osm output.osm
+-----
+
+==== Filter maps down to rivers only before conflating them and keep any relations that contain them:
+
+-----
+    hoot conflate -C AttributeConflation.conf -C UnifyingAlgorithm.conf \
+      -D convert.ops=RemoveElementsVisitor \
+      -D remove.elements.visitor.element.criteria=RiverCriterion;RelationWithRiverMembersCriterion \
       -D element.criteria.negate=true \
       -D remove.elements.visitor.chain.element.criteria=true \
       -D remove.elements.visitor.recursive=false input1.osm input2.osm output.osm

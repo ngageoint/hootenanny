@@ -58,7 +58,7 @@ public:
 private:
 
   static SublineStringMatcherPtr _getHighwayMatcher();
-  static SublineStringMatcherPtr _getWaterwayMatcher(const ConstOsmMapPtr& map);
+  static SublineStringMatcherPtr _getRiverMatcher(const ConstOsmMapPtr& map);
   static SublineStringMatcherPtr _getRailwayMatcher();
   static SublineStringMatcherPtr _getPowerLineMatcher();
   static SublineStringMatcherPtr _getGenericLineMatcher();

@@ -70,9 +70,7 @@ public:
       " using translation ..." << FileUtils::toLogFormat(translation, 25) <<
       " and writing output to ..." << FileUtils::toLogFormat(output, 25) <<
       " and changeset output to ..." << FileUtils::toLogFormat(changesetOutput, 25) << "...");
-
     MultiaryIngester().ingest(input, translation, output, changesetOutput);
-
     LOG_STATUS(
       "Ingest completed in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 

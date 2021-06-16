@@ -334,7 +334,7 @@ bool DiffConflator::_isMatchToRemovePartially(const ConstMatchPtr& match)
   // River matches are handled by their own config option, since they can be expensive to optimize.
   const bool removeRiverPartialMatchesAsWhole =
     ConfigOptions().getDifferentialRemoveRiverPartialMatchesAsWhole();
-  if (removeRiverPartialMatchesAsWhole && match->getName().toLower() == "waterway")
+  if (removeRiverPartialMatchesAsWhole && match->getName().toLower() == "river")
   {
     isMatchToRemovePartially = false;
   }

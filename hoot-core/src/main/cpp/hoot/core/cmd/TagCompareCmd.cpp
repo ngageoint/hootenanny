@@ -58,8 +58,6 @@ public:
     timer.start();
 
     bool tableFormat = true;
-    AttributeCoOccurrence cooccurrence;
-
     // Print a table or just a list
     if (args.contains("--no-table"))
     {
@@ -85,6 +83,7 @@ public:
     IoUtils::loadMap(map, input1, false, Status::Unknown1);
     IoUtils::loadMap(map, input2, false, Status::Unknown2);
 
+    AttributeCoOccurrence cooccurrence;
     cooccurrence.addToMatrix(map);
 
     if (tableFormat)

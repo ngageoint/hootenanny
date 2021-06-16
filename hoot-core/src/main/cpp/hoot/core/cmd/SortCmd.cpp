@@ -69,10 +69,14 @@ public:
 
     const QString input = args[0];
     const QString output = args[1];
+    const bool sortingInMemory =
+      !(OsmMapReaderFactory::hasElementInputStream(input) &&
+        ConfigOptions().getElementSorterElementBufferSize() != -1);
+    const QString sortingStr = sortingInMemory ? " in memory" : " externally";
 
     LOG_STATUS(
-      "Sorting maps ..." << FileUtils::toLogFormat(input, 25) << " and writing output to ..." <<
-      FileUtils::toLogFormat(output, 25) << "...");
+      "Sorting maps ..." << FileUtils::toLogFormat(input, 25) << sortingInMemory <<
+      " and writing output to ..." << FileUtils::toLogFormat(output, 25) << "...");
 
     if (_inputIsSorted(input))
     {
@@ -80,8 +84,7 @@ public:
       return 0;
     }
 
-    if (OsmMapReaderFactory::hasElementInputStream(input) &&
-        ConfigOptions().getElementSorterElementBufferSize() != -1)
+    if (!sortingInMemory)
     {
       _sortExternally(input, output);
     }
