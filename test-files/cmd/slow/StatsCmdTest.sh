@@ -16,7 +16,12 @@ rm -rf $OUTPUT_DIR
 mkdir -p $OUTPUT_DIR
 
 echo ""
-echo "Quick Stats from single file to txt..."
+echo "Quick Stats from a single file to the display..."
+echo ""
+hoot stats $CONFIG $INPUT1 --brief
+
+echo ""
+echo "Quick Stats from a single file to txt..."
 echo ""
 hoot stats $CONFIG $INPUT1 $OUTPUT1 --brief
 cat $OUTPUT1
