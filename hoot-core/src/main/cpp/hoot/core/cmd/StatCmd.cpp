@@ -27,6 +27,7 @@
 
 // Hoot
 #include <hoot/core/cmd/BaseCommand.h>
+#include <hoot/core/io/IoUtils.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/info/StatCalculator.h>
 
@@ -46,6 +47,9 @@ public:
 
   int runSimple(QStringList& args) override
   {
+    bool recursive = false;
+    const QStringList inputFilters = _parseRecursiveInputParameter(args, recursive);
+
     if (args.size() < 2 || args.size() > 3)
     {
       LOG_VAR(args);
@@ -53,7 +57,15 @@ public:
       throw HootException(QString("%1 takes two or three parameters.").arg(getName()));
     }
 
-    const QStringList inputs = args[0].trimmed().split(";");
+    QStringList inputs;
+    if (!recursive)
+    {
+      inputs = args[0].trimmed().split(";");
+    }
+    else
+    {
+      inputs = IoUtils::getSupportedInputsRecursively(args[0].trimmed().split(";"), inputFilters);
+    }
     QString visClassName = args[1].trimmed();
     QString statType = "total";
     if (args.size() == 3)

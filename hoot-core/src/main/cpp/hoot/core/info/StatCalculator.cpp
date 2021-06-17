@@ -31,6 +31,7 @@
 #include <hoot/core/info/SingleStatistic.h>
 #include <hoot/core/info/NumericStatistic.h>
 #include <hoot/core/io/ElementVisitorInputStream.h>
+#include <hoot/core/io/IoUtils.h>
 #include <hoot/core/io/OsmMapReader.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/PartialOsmMapReader.h>
@@ -197,6 +198,12 @@ bool StatCalculator::_isValidStatType(const QString& statType) const
 
 std::shared_ptr<PartialOsmMapReader> StatCalculator::_getReader(const QString& input) const
 {
+  // TODO: change this
+  if (!IoUtils::isStreamableInput(input))
+  {
+    throw IllegalArgumentException("Inputs to StatCalculator must be streamable.");
+  }
+
   std::shared_ptr<PartialOsmMapReader> reader =
     std::dynamic_pointer_cast<PartialOsmMapReader>(
       OsmMapReaderFactory::createReader(input));
