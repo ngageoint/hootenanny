@@ -1,28 +1,67 @@
 #!/bin/bash
 set -e
 
-CONFIG="--warn -C Testing.conf"
+RECURSIVE_INPUT=test-files/cmd/slow/CountCmdTest/inputDir
 
-hoot tag-info $CONFIG $HOOT_HOME/test-files/jakarta_raya_coastline.shp
+CONFIG="-C Testing.conf"
+LOG_LEVEL="--warn"
 
-hoot tag-info $CONFIG $HOOT_HOME/test-files/jakarta_raya_coastline.shp --tag-values-limit 1
+echo ""
+echo "Display tag information..."
+echo ""
+hoot tag-info $LOG_LEVEL $CONFIG $HOOT_HOME/test-files/jakarta_raya_coastline.shp
 
-hoot tag-info $CONFIG $HOOT_HOME/test-files/DcTigerRoads.osm --tag-values-limit 5
+echo ""
+echo "Display tag information with limiting part 1..."
+echo ""
+hoot tag-info $LOG_LEVEL $CONFIG $HOOT_HOME/test-files/jakarta_raya_coastline.shp --tag-values-limit 1
 
-hoot tag-info $CONFIG $HOOT_HOME/test-files/DcTigerRoads.osm --keys-only
+echo ""
+echo "Display tag information with limiting part 2..."
+echo ""
+hoot tag-info $LOG_LEVEL $CONFIG $HOOT_HOME/test-files/DcTigerRoads.osm --tag-values-limit 5
 
-hoot tag-info $CONFIG $HOOT_HOME/test-files/DcTigerRoads.osm --keys "foot;highway"
+echo ""
+echo "Display tag information for keys only..."
+echo ""
+hoot tag-info $LOG_LEVEL $CONFIG $HOOT_HOME/test-files/DcTigerRoads.osm --keys-only
 
-hoot tag-info $CONFIG $HOOT_HOME/test-files/DcTigerRoads.osm --keys "foot;HIGHWAY"
+echo ""
+echo "Display tag information for keys part 1..."
+echo ""
+hoot tag-info $LOG_LEVEL $CONFIG $HOOT_HOME/test-files/DcTigerRoads.osm --keys "foot;highway"
 
-hoot tag-info $CONFIG $HOOT_HOME/test-files/DcTigerRoads.osm --keys "foot;HIGHWAY" --case-insensitive
+echo ""
+echo "Display tag information for keys part 2..."
+echo ""
+hoot tag-info $LOG_LEVEL $CONFIG $HOOT_HOME/test-files/DcTigerRoads.osm --keys "foot;HIGHWAY"
 
-hoot tag-info $CONFIG $HOOT_HOME/test-files/DcTigerRoads.osm --keys "blah"
+echo ""
+echo "Display tag information for keys with case insenstivity..."
+echo ""
+hoot tag-info $LOG_LEVEL $CONFIG $HOOT_HOME/test-files/DcTigerRoads.osm --keys "foot;HIGHWAY" --case-insensitive
 
-hoot tag-info $CONFIG $HOOT_HOME/test-files/DcTigerRoads.osm --keys "high" --partial-key-match
+echo ""
+echo "Display tag information for non-existent key..."
+echo ""
+hoot tag-info $LOG_LEVEL $CONFIG $HOOT_HOME/test-files/DcTigerRoads.osm --keys "blah"
 
-hoot tag-info $CONFIG $HOOT_HOME/test-files/DcTigerRoads.osm --keys "HIGH" --partial-key-match
+echo ""
+echo "Display tag information for keys with partial match part 1..."
+echo ""
+hoot tag-info $LOG_LEVEL $CONFIG $HOOT_HOME/test-files/DcTigerRoads.osm --keys "high" --partial-key-match
 
-hoot tag-info $CONFIG $HOOT_HOME/test-files/DcTigerRoads.osm --keys "HIGH" --partial-key-match --case-insensitive
+echo ""
+echo "Display tag information for keys with partial match part 2..."
+echo ""
+hoot tag-info $LOG_LEVEL $CONFIG $HOOT_HOME/test-files/DcTigerRoads.osm --keys "HIGH" --partial-key-match
 
-hoot tag-info $CONFIG $HOOT_HOME/test-files/DcTigerRoads.osm --keys-only --delimited-text
+echo ""
+echo "Display tag information for keys with partial match and case insensitivity..."
+echo ""
+hoot tag-info $LOG_LEVEL $CONFIG $HOOT_HOME/test-files/DcTigerRoads.osm --keys "HIGH" --partial-key-match --case-insensitive
+
+echo ""
+echo "Display tag information for keys as delimited text..."
+echo ""
+hoot tag-info $LOG_LEVEL $CONFIG $HOOT_HOME/test-files/DcTigerRoads.osm --keys-only --delimited-text
