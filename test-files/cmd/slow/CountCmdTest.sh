@@ -63,16 +63,16 @@ hoot count --warn $CONFIG -D element.criteria.negate=true "$INPUT_FILE_1;$INPUT_
 
 echo ""
 echo "counting recursively in a directory structure..."
-hoot count --warn $CONFIG "$INPUT_FILE_1;$INPUT_FILE_5" --recursive
+hoot count --warn $CONFIG "$INPUT_FILE_1;$INPUT_FILE_5" --recursive "*"
 
 echo ""
 echo "counting recursively in a directory structure with one filter..."
-hoot count --warn $CONFIG "$INPUT_FILE_1;$INPUT_FILE_5" --recursive --input-filters "*.json"
+hoot count --warn $CONFIG "$INPUT_FILE_1;$INPUT_FILE_5" --recursive "*.json"
 
 echo ""
 echo "counting recursively in a directory structure with two filters..."
-hoot count --warn $CONFIG "$INPUT_FILE_1;$INPUT_FILE_5" --recursive --input-filters "*.json;*.osm"
+hoot count --warn $CONFIG "$INPUT_FILE_1;$INPUT_FILE_5" --recursive "*.json;*.osm"
 
 echo ""
 echo "counting recursively in a directory structure with a criterion..."
-hoot count --warn $CONFIG "$INPUT_FILE_1;$INPUT_FILE_5" HighwayCriterion --recursive
+hoot count --warn $CONFIG "$INPUT_FILE_1;$INPUT_FILE_5" HighwayCriterion --recursive "*"

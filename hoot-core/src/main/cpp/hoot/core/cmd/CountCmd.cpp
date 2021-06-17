@@ -55,29 +55,26 @@ public:
       countFeaturesOnly = false;
       args.removeAt(args.indexOf("--all-elements"));
     }
+    QStringList inputFilters;
     bool recursive = false;
     if (args.contains("--recursive"))
     {
       recursive = true;
-      args.removeAt(args.indexOf("--recursive"));
-    }
-    QStringList inputFilters;
-    if (args.contains("--input-filters"))
-    {
-      if (!recursive)
+      const int recursiveIndex = args.indexOf("--recursive");
+      if (args.size() < recursiveIndex + 2)
       {
         throw IllegalArgumentException(
-          "The --input-filters option requires also specifying the --recursive option.");
+          "The --recursive option must be followed by either \"*\" for no filtering or one or "
+          "more filters.");
       }
-      const int inputFiltersIndex = args.indexOf("--input-filters");
-      if (args.size() < inputFiltersIndex + 2)
+      const QString filter = args.at(recursiveIndex + 1).trimmed();
+      // "*" denotes no filtering
+      if (filter != "*")
       {
-        throw IllegalArgumentException(
-          "The --input-filters option must be followed by one or more filters.");
+        inputFilters = filter.split(";");
       }
-      inputFilters = args.at(inputFiltersIndex + 1).trimmed().split(";");
-      args.removeAt(inputFiltersIndex + 1);
-      args.removeAt(inputFiltersIndex);
+      args.removeAt(recursiveIndex + 1);
+      args.removeAt(recursiveIndex);
     }
     LOG_VARD(inputFilters);
 
