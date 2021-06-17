@@ -3,7 +3,7 @@
 
 === Description
 
-The +stats+ command reads calculates a partially configurable set of statistics for one or more maps.
+The +stats+ command calculates a partially configurable set of statistics for one or more maps.
 
 * +input(s)+ - One or more inputs; may be any supported input format (e.g. .osm file).
 * +output+   - Optional output file path; supported file types are text (*.txt) and JSON (*.json).

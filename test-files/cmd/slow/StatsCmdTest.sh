@@ -15,12 +15,15 @@ CONFIG="-C Testing.conf"
 rm -rf $OUTPUT_DIR
 mkdir -p $OUTPUT_DIR
 
-# Test the stats
-echo "****Quick Stats****"
+echo ""
+echo "Quick Stats from single file to txt..."
+echo ""
 hoot stats $CONFIG $INPUT1 $OUTPUT1 --brief
 cat $OUTPUT1
 
-echo "****JSON Stats****"
+echo ""
+echo "Full stats from multiple files to json..."
+echo ""
 hoot stats $CONFIG "$INPUT1;$INPUT2" $OUTPUT2 
 cat $OUTPUT2
 
