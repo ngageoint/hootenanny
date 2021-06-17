@@ -40,12 +40,13 @@ namespace hoot
 
 HOOT_JS_REGISTER(PrintJs)
 
-void PrintJs::Init(Handle<Object> exports)
+void PrintJs::Init(Local<Object> exports)
 {
   Isolate* current = exports->GetIsolate();
   HandleScope scope(current);
-  exports->Set(String::NewFromUtf8(current, "print"),
-               FunctionTemplate::New(current, jsPrint)->GetFunction());
+  Local<Context> context = current->GetCurrentContext();
+  exports->Set(context, toV8("print"),
+               FunctionTemplate::New(current, jsPrint)->GetFunction(context).ToLocalChecked());
 }
 
 void PrintJs::jsPrint(const FunctionCallbackInfo<Value>& args)

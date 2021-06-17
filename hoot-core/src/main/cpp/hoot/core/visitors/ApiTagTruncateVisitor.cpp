@@ -68,7 +68,7 @@ QString ApiTagTruncateVisitor::truncateTag(const QString &key, const QString &va
   return visitor._truncateTag(key, value);
 }
 
-bool ApiTagTruncateVisitor::_truncateTags(Tags& tags)
+bool ApiTagTruncateVisitor::_truncateTags(Tags& tags) const
 {
   bool tagsAffected = false;
   //  Iterate all tags looking for ones that are too long or the special cases
@@ -88,7 +88,7 @@ bool ApiTagTruncateVisitor::_truncateTags(Tags& tags)
   return tagsAffected;
 }
 
-QString ApiTagTruncateVisitor::_truncateTag(const QString &key, const QString &value)
+QString ApiTagTruncateVisitor::_truncateTag(const QString &key, const QString &value) const
 {
   QString result;
   //  First check the special cases of lists where only one value is kept

@@ -76,7 +76,7 @@ vector<QString> Factory::getObjectNamesByBase(const QString& baseName)
   return result;
 }
 
-bool Factory::hasClass(const QString& name)
+bool Factory::hasClass(const QString& name) const
 {
   return _creators.find(name) != _creators.end();
 }

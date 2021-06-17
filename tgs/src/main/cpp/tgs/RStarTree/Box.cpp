@@ -202,7 +202,7 @@ namespace Tgs
     return _valid;
   }
 
-  bool Box::operator==(const Box& b)
+  bool Box::operator==(const Box& b) const
   {
     if (_dimensions != b._dimensions)
     {
@@ -233,7 +233,7 @@ namespace Tgs
     return "(" + lower.str() + ") - (" + upper.str() + ")";
   }
 
-  bool Box::isContained(const Box& b)
+  bool Box::isContained(const Box& b) const
   {
     bool result = true;
     for (int i = 0; i < _dimensions; i++)

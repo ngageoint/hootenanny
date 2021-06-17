@@ -49,18 +49,18 @@ public:
    * Calculates the z value by interleaving values that are already scaled to
    * the proper space.
    */
-  long int calculate(std::vector<long int> point);
+  long int calculate(std::vector<long int> point) const;
 
   /**
    * Calculates the non-interleaved component for one dimension.
    */
   long int calculateComponent(double v, int d);
 
-  void decompose(long int v, std::vector<long int>& point);
+  void decompose(long int v, std::vector<long int>& point) const;
 
-  int getDepth() { return _depth; }
+  int getDepth() const { return _depth; }
 
-  int getDimensions() { return _dimensions; }
+  int getDimensions() const { return _dimensions; }
 
   double getMax(int d) { return _max[d]; }
 
@@ -70,7 +70,7 @@ public:
     * Returns the maximum value in any one dimension (number of bins in that
     * direction - 1).
     */
-  long int getMaxDimensionRange() { return _range; }
+  long int getMaxDimensionRange() const { return _range; }
 
 private:
   std::vector<long int> _b;

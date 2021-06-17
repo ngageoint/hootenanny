@@ -103,7 +103,7 @@ public:
   /**
    * May get called multiple times (e.g. before and after config settings are finalized).
    */
-  void init();
+  void init() const;
 
   static WarningLevel levelFromString(QString l);
   static QString levelToString(WarningLevel l);
@@ -129,12 +129,10 @@ public:
 
 private:
 
-  bool notFiltered(const std::string& prettyFunction);
-
   WarningLevel _level;
   static int _warnMessageLimit;
-  bool _classFilterInitialized;
-  QStringList _classFilter;
+  QStringList _includeClassFilter;
+  QStringList _excludeClassFilter;
 
   Log();
   /** Default destructor */
@@ -142,6 +140,17 @@ private:
   /** Delete copy constructor and assignment operator */
   Log(const Log&) = delete;
   Log& operator=(const Log&) = delete;
+
+  void _setFilter();
+  /*
+   * Determines whether the function logging should be allowed to or log or be prevented from
+   * logging based on the filter configuration.
+   *
+   * One item to note is that inner classes with names different than the class files they are
+   * included in can cause log statements to print even when the class name is in the exclude list.
+   * This isn't really a bug, but just something to be aware of.
+   */
+  bool _passesFilter(const std::string& prettyFunction);
 };
 
 /**
@@ -164,7 +173,7 @@ public:
     reset();
   }
 
-  void reset()
+  void reset() const
   {
     Log::getInstance().setLevel(_oldLevel);
     Log::getInstance().log(Log::Trace, "Enabled logging.");

@@ -84,7 +84,7 @@ namespace Tgs
     int _splitBoxes(BoxVector& boxes) override;
 
     void _calculateHilbertValues(const std::vector<Box>& boxes, 
-      const std::vector<int>& fids, std::vector<UserBoxHolder>& hilbertBoxes);
+      const std::vector<int>& fids, std::vector<UserBoxHolder>& hilbertBoxes) const;
 
     double _calculateArea(int parentId);
 
@@ -96,7 +96,7 @@ namespace Tgs
      * Randomly select a child based on the available weights. The weights must be >= 0 and the 
      * sum must be > 0.
      */
-    int _chooseWeightedChild(const std::vector<double>& weights);
+    int _chooseWeightedChild(const std::vector<double>& weights) const;
 
     void _createLeafNodes(const std::vector<UserBoxHolder>& hilbertBoxes, 
       std::vector<int>& result);
@@ -109,7 +109,7 @@ namespace Tgs
      */
     void _greedyShuffle(int parentId);
 
-    double _sum(const std::vector<double>& v);
+    double _sum(const std::vector<double>& v) const;
 
     double _swapGrandChildNodes(int parentId, const std::vector<double>& overlaps);
   };

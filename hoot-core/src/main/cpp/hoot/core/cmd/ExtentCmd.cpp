@@ -66,15 +66,14 @@ public:
       throw HootException(QString("%1 takes one or two parameters.").arg(getName()));
     }
 
+    conf().set(ConfigOptions::getWriterPrecisionKey(), 9);
+
     bool verbose = true;
     if (args.size() == 2 && args[1].toLower() == "false")
     {
       verbose = false;
     }
     LOG_VARD(verbose);
-
-    conf().set(ConfigOptions::getWriterPrecisionKey(), 9);
-
     const QString input = args[0];
 
     LOG_STATUS("Calculating extent for ..." << FileUtils::toLogFormat(input, 25) << "...");

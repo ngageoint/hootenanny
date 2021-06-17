@@ -1,9 +1,9 @@
 Running optimized...
 
-18:03:33.999 WARN   ...re/scoring/MatchComparator.cpp( 470) Missing uuid for Way(-36)
-18:03:33.999 WARN   ...re/scoring/MatchComparator.cpp( 470) Missing uuid for Way(-13)
-18:03:34.000 WARN   ...re/scoring/MatchComparator.cpp( 470) Missing uuid for Way(-14)
-18:03:34.000 WARN   ...re/scoring/MatchComparator.cpp( 474) hoot::MatchComparator: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
+15:03:26.072 WARN   ...re/scoring/MatchComparator.cpp( 470) Missing uuid for Way(-36)
+15:03:26.073 WARN   ...re/scoring/MatchComparator.cpp( 470) Missing uuid for Way(-13)
+15:03:26.073 WARN   ...re/scoring/MatchComparator.cpp( 470) Missing uuid for Way(-14)
+15:03:26.073 WARN   ...re/scoring/MatchComparator.cpp( 474) hoot::MatchComparator: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
 Threshold: Thresholds; Match: 0.01 Miss: 0.01 Review: 0.01
 |                 |        |\3=.       expected     |
 |                 |        | miss  | match | review |
@@ -1502,8 +1502,1518 @@ number of manual matches made: 5
 Score: -1.8
 Running unoptimized with output...
 
-18:03:51.913 WARN   ...re/scoring/MatchComparator.cpp( 470) Missing uuid for Way(-94)
-18:03:51.913 WARN   ...re/scoring/MatchComparator.cpp( 470) Missing uuid for Way(-12)
-18:03:51.913 WARN   ...re/scoring/MatchComparator.cpp( 470) Missing uuid for Way(-11)
+15:03:33.991 WARN   ...re/scoring/MatchComparator.cpp( 470) Missing uuid for Way(-94)
+15:03:33.991 WARN   ...re/scoring/MatchComparator.cpp( 470) Missing uuid for Way(-12)
+15:03:33.991 WARN   ...re/scoring/MatchComparator.cpp( 470) Missing uuid for Way(-11)
+Score: -1.8
+-1,0.4,0.3,0.3
+Running optimized with multiple inputs...
+
+15:03:36.166 WARN   ...re/scoring/MatchComparator.cpp( 470) Missing uuid for Way(-36)
+15:03:36.166 WARN   ...re/scoring/MatchComparator.cpp( 470) Missing uuid for Way(-13)
+15:03:36.166 WARN   ...re/scoring/MatchComparator.cpp( 470) Missing uuid for Way(-14)
+15:03:36.166 WARN   ...re/scoring/MatchComparator.cpp( 474) hoot::MatchComparator: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
+Threshold: Thresholds; Match: 0.01 Miss: 0.01 Review: 0.01
+|                 |        |\3=.       expected     |
+|                 |        | miss  | match | review |
+|/3. test outcome | miss   |   -   |     6 |     0  |
+                  | match  |     0 |     0 |     0  |
+                  | review |     6 |     8 |     0  |
+
+correct: 0
+wrong: 0.3
+unnecessary reviews: 0.7
+
+elements involved in a wrong match:
+  nodes: 0
+  ways: 0
+  relations: 2
+correct match count: 0
+wrong match count: 6
+unnecessary review count: 14
+ratio of unnecessary reviews to correct matches: inf
+number of manual matches made: 10
+
+Score: -2.2
+Threshold: Thresholds; Match: 0 Miss: 1 Review: 0.01
+|                 |        |\3=.       expected     |
+|                 |        | miss  | match | review |
+|/3. test outcome | miss   |   -   |     6 |     0  |
+                  | match  |     0 |     8 |     0  |
+                  | review |     6 |     0 |     0  |
+
+correct: 0.4
+wrong: 0.3
+unnecessary reviews: 0.3
+
+elements involved in a wrong match:
+  nodes: 0
+  ways: 0
+  relations: 1
+correct match count: 8
+wrong match count: 6
+unnecessary review count: 6
+ratio of unnecessary reviews to correct matches: 0.75
+number of manual matches made: 10
+
+Score: -1.8
+Threshold: Thresholds; Match: 0.22 Miss: 1 Review: 0.33
+|                 |        |\3=.       expected     |
+|                 |        | miss  | match | review |
+|/3. test outcome | miss   |   -   |     6 |     0  |
+                  | match  |     0 |     8 |     0  |
+                  | review |     6 |     0 |     0  |
+
+correct: 0.4
+wrong: 0.3
+unnecessary reviews: 0.3
+
+elements involved in a wrong match:
+  nodes: 0
+  ways: 0
+  relations: 1
+correct match count: 8
+wrong match count: 6
+unnecessary review count: 6
+ratio of unnecessary reviews to correct matches: 0.75
+number of manual matches made: 10
+
+Score: -1.8
+Threshold: Thresholds; Match: 0 Miss: 0.8 Review: 0.01
+|                 |        |\3=.       expected     |
+|                 |        | miss  | match | review |
+|/3. test outcome | miss   |   -   |     6 |     0  |
+                  | match  |     0 |     8 |     0  |
+                  | review |     6 |     0 |     0  |
+
+correct: 0.4
+wrong: 0.3
+unnecessary reviews: 0.3
+
+elements involved in a wrong match:
+  nodes: 0
+  ways: 0
+  relations: 1
+correct match count: 8
+wrong match count: 6
+unnecessary review count: 6
+ratio of unnecessary reviews to correct matches: 0.75
+number of manual matches made: 10
+
+Score: -1.8
+Threshold: Thresholds; Match: 0.136667 Miss: 1.85667 Review: 0.223333
+|                 |        |\3=.       expected     |
+|                 |        | miss  | match | review |
+|/3. test outcome | miss   |   -   |     6 |     0  |
+                  | match  |     0 |     8 |     0  |
+                  | review |     6 |     0 |     0  |
+
+correct: 0.4
+wrong: 0.3
+unnecessary reviews: 0.3
+
+elements involved in a wrong match:
+  nodes: 0
+  ways: 0
+  relations: 1
+correct match count: 8
+wrong match count: 6
+unnecessary review count: 6
+ratio of unnecessary reviews to correct matches: 0.75
+number of manual matches made: 10
+
+Score: -1.8
+Threshold: Thresholds; Match: 0.0416667 Miss: 0.471667 Review: 0.0633333
+|                 |        |\3=.       expected     |
+|                 |        | miss  | match | review |
+|/3. test outcome | miss   |   -   |     6 |     0  |
+                  | match  |     0 |     8 |     0  |
+                  | review |     6 |     0 |     0  |
+
+correct: 0.4
+wrong: 0.3
+unnecessary reviews: 0.3
+
+elements involved in a wrong match:
+  nodes: 0
+  ways: 0
+  relations: 1
+correct match count: 8
+wrong match count: 6
+unnecessary review count: 6
+ratio of unnecessary reviews to correct matches: 0.75
+number of manual matches made: 10
+
+Score: -1.8
+Threshold: Thresholds; Match: 0.105 Miss: 1.395 Review: 0.17
+|                 |        |\3=.       expected     |
+|                 |        | miss  | match | review |
+|/3. test outcome | miss   |   -   |     6 |     0  |
+                  | match  |     0 |     8 |     0  |
+                  | review |     6 |     0 |     0  |
+
+correct: 0.4
+wrong: 0.3
+unnecessary reviews: 0.3
+
+elements involved in a wrong match:
+  nodes: 0
+  ways: 0
+  relations: 1
+correct match count: 8
+wrong match count: 6
+unnecessary review count: 6
+ratio of unnecessary reviews to correct matches: 0.75
+number of manual matches made: 10
+
+Score: -1.8
+Threshold: Thresholds; Match: 0.0575 Miss: 0.7025 Review: 0.09
+|                 |        |\3=.       expected     |
+|                 |        | miss  | match | review |
+|/3. test outcome | miss   |   -   |     6 |     0  |
+                  | match  |     0 |     8 |     0  |
+                  | review |     6 |     0 |     0  |
+
+correct: 0.4
+wrong: 0.3
+unnecessary reviews: 0.3
+
+elements involved in a wrong match:
+  nodes: 0
+  ways: 0
+  relations: 1
+correct match count: 8
+wrong match count: 6
+unnecessary review count: 6
+ratio of unnecessary reviews to correct matches: 0.75
+number of manual matches made: 10
+
+Score: -1.8
+Threshold: Thresholds; Match: 0 Miss: 0.9 Review: 0.01
+|                 |        |\3=.       expected     |
+|                 |        | miss  | match | review |
+|/3. test outcome | miss   |   -   |     6 |     0  |
+                  | match  |     0 |     8 |     0  |
+                  | review |     6 |     0 |     0  |
+
+correct: 0.4
+wrong: 0.3
+unnecessary reviews: 0.3
+
+elements involved in a wrong match:
+  nodes: 0
+  ways: 0
+  relations: 1
+correct match count: 8
+wrong match count: 6
+unnecessary review count: 6
+ratio of unnecessary reviews to correct matches: 0.75
+number of manual matches made: 10
+
+Score: -1.8
+Threshold: Thresholds; Match: 0.0208333 Miss: 0.635833 Review: 0.0366667
+|                 |        |\3=.       expected     |
+|                 |        | miss  | match | review |
+|/3. test outcome | miss   |   -   |     6 |     0  |
+                  | match  |     0 |     8 |     0  |
+                  | review |     6 |     0 |     0  |
+
+correct: 0.4
+wrong: 0.3
+unnecessary reviews: 0.3
+
+elements involved in a wrong match:
+  nodes: 0
+  ways: 0
+  relations: 1
+correct match count: 8
+wrong match count: 6
+unnecessary review count: 6
+ratio of unnecessary reviews to correct matches: 0.75
+number of manual matches made: 10
+
+Score: -1.8
+Threshold: Thresholds; Match: 0.11 Miss: 0.9 Review: 0.17
+|                 |        |\3=.       expected     |
+|                 |        | miss  | match | review |
+|/3. test outcome | miss   |   -   |     6 |     0  |
+                  | match  |     0 |     8 |     0  |
+                  | review |     6 |     0 |     0  |
+
+correct: 0.4
+wrong: 0.3
+unnecessary reviews: 0.3
+
+elements involved in a wrong match:
+  nodes: 0
+  ways: 0
+  relations: 1
+correct match count: 8
+wrong match count: 6
+unnecessary review count: 6
+ratio of unnecessary reviews to correct matches: 0.75
+number of manual matches made: 10
+
+Score: -1.8
+Threshold: Thresholds; Match: 0.0525 Miss: 1.0975 Review: 0.09
+|                 |        |\3=.       expected     |
+|                 |        | miss  | match | review |
+|/3. test outcome | miss   |   -   |     6 |     0  |
+                  | match  |     0 |     8 |     0  |
+                  | review |     6 |     0 |     0  |
+
+correct: 0.4
+wrong: 0.3
+unnecessary reviews: 0.3
+
+elements involved in a wrong match:
+  nodes: 0
+  ways: 0
+  relations: 1
+correct match count: 8
+wrong match count: 6
+unnecessary review count: 6
+ratio of unnecessary reviews to correct matches: 0.75
+number of manual matches made: 10
+
+Score: -1.8
+Threshold: Thresholds; Match: 0.02875 Miss: 0.75125 Review: 0.05
+|                 |        |\3=.       expected     |
+|                 |        | miss  | match | review |
+|/3. test outcome | miss   |   -   |     6 |     0  |
+                  | match  |     0 |     8 |     0  |
+                  | review |     6 |     0 |     0  |
+
+correct: 0.4
+wrong: 0.3
+unnecessary reviews: 0.3
+
+elements involved in a wrong match:
+  nodes: 0
+  ways: 0
+  relations: 1
+correct match count: 8
+wrong match count: 6
+unnecessary review count: 6
+ratio of unnecessary reviews to correct matches: 0.75
+number of manual matches made: 10
+
+Score: -1.8
+Threshold: Thresholds; Match: 0 Miss: 0.85 Review: 0.01
+|                 |        |\3=.       expected     |
+|                 |        | miss  | match | review |
+|/3. test outcome | miss   |   -   |     6 |     0  |
+                  | match  |     0 |     8 |     0  |
+                  | review |     6 |     0 |     0  |
+
+correct: 0.4
+wrong: 0.3
+unnecessary reviews: 0.3
+
+elements involved in a wrong match:
+  nodes: 0
+  ways: 0
+  relations: 1
+correct match count: 8
+wrong match count: 6
+unnecessary review count: 6
+ratio of unnecessary reviews to correct matches: 0.75
+number of manual matches made: 10
+
+Score: -1.8
+Threshold: Thresholds; Match: 0.0104167 Miss: 0.717917 Review: 0.0233333
+|                 |        |\3=.       expected     |
+|                 |        | miss  | match | review |
+|/3. test outcome | miss   |   -   |     6 |     0  |
+                  | match  |     0 |     8 |     0  |
+                  | review |     6 |     0 |     0  |
+
+correct: 0.4
+wrong: 0.3
+unnecessary reviews: 0.3
+
+elements involved in a wrong match:
+  nodes: 0
+  ways: 0
+  relations: 1
+correct match count: 8
+wrong match count: 6
+unnecessary review count: 6
+ratio of unnecessary reviews to correct matches: 0.75
+number of manual matches made: 10
+
+Score: -1.8
+Threshold: Thresholds; Match: 0.055 Miss: 0.85 Review: 0.09
+|                 |        |\3=.       expected     |
+|                 |        | miss  | match | review |
+|/3. test outcome | miss   |   -   |     6 |     0  |
+                  | match  |     0 |     8 |     0  |
+                  | review |     6 |     0 |     0  |
+
+correct: 0.4
+wrong: 0.3
+unnecessary reviews: 0.3
+
+elements involved in a wrong match:
+  nodes: 0
+  ways: 0
+  relations: 1
+correct match count: 8
+wrong match count: 6
+unnecessary review count: 6
+ratio of unnecessary reviews to correct matches: 0.75
+number of manual matches made: 10
+
+Score: -1.8
+Threshold: Thresholds; Match: 0.02625 Miss: 0.94875 Review: 0.05
+|                 |        |\3=.       expected     |
+|                 |        | miss  | match | review |
+|/3. test outcome | miss   |   -   |     6 |     0  |
+                  | match  |     0 |     8 |     0  |
+                  | review |     6 |     0 |     0  |
+
+correct: 0.4
+wrong: 0.3
+unnecessary reviews: 0.3
+
+elements involved in a wrong match:
+  nodes: 0
+  ways: 0
+  relations: 1
+correct match count: 8
+wrong match count: 6
+unnecessary review count: 6
+ratio of unnecessary reviews to correct matches: 0.75
+number of manual matches made: 10
+
+Score: -1.8
+Threshold: Thresholds; Match: 0.014375 Miss: 0.775625 Review: 0.03
+|                 |        |\3=.       expected     |
+|                 |        | miss  | match | review |
+|/3. test outcome | miss   |   -   |     6 |     0  |
+                  | match  |     0 |     8 |     0  |
+                  | review |     6 |     0 |     0  |
+
+correct: 0.4
+wrong: 0.3
+unnecessary reviews: 0.3
+
+elements involved in a wrong match:
+  nodes: 0
+  ways: 0
+  relations: 1
+correct match count: 8
+wrong match count: 6
+unnecessary review count: 6
+ratio of unnecessary reviews to correct matches: 0.75
+number of manual matches made: 10
+
+Score: -1.8
+Threshold: Thresholds; Match: 0 Miss: 0.825 Review: 0.01
+|                 |        |\3=.       expected     |
+|                 |        | miss  | match | review |
+|/3. test outcome | miss   |   -   |     6 |     0  |
+                  | match  |     0 |     8 |     0  |
+                  | review |     6 |     0 |     0  |
+
+correct: 0.4
+wrong: 0.3
+unnecessary reviews: 0.3
+
+elements involved in a wrong match:
+  nodes: 0
+  ways: 0
+  relations: 1
+correct match count: 8
+wrong match count: 6
+unnecessary review count: 6
+ratio of unnecessary reviews to correct matches: 0.75
+number of manual matches made: 10
+
+Score: -1.8
+Threshold: Thresholds; Match: 0.00520833 Miss: 0.758958 Review: 0.0166667
+|                 |        |\3=.       expected     |
+|                 |        | miss  | match | review |
+|/3. test outcome | miss   |   -   |     6 |     0  |
+                  | match  |     0 |     8 |     0  |
+                  | review |     6 |     0 |     0  |
+
+correct: 0.4
+wrong: 0.3
+unnecessary reviews: 0.3
+
+elements involved in a wrong match:
+  nodes: 0
+  ways: 0
+  relations: 1
+correct match count: 8
+wrong match count: 6
+unnecessary review count: 6
+ratio of unnecessary reviews to correct matches: 0.75
+number of manual matches made: 10
+
+Score: -1.8
+Threshold: Thresholds; Match: 0.0275 Miss: 0.825 Review: 0.05
+|                 |        |\3=.       expected     |
+|                 |        | miss  | match | review |
+|/3. test outcome | miss   |   -   |     6 |     0  |
+                  | match  |     0 |     8 |     0  |
+                  | review |     6 |     0 |     0  |
+
+correct: 0.4
+wrong: 0.3
+unnecessary reviews: 0.3
+
+elements involved in a wrong match:
+  nodes: 0
+  ways: 0
+  relations: 1
+correct match count: 8
+wrong match count: 6
+unnecessary review count: 6
+ratio of unnecessary reviews to correct matches: 0.75
+number of manual matches made: 10
+
+Score: -1.8
+Threshold: Thresholds; Match: 0.013125 Miss: 0.874375 Review: 0.03
+|                 |        |\3=.       expected     |
+|                 |        | miss  | match | review |
+|/3. test outcome | miss   |   -   |     6 |     0  |
+                  | match  |     0 |     8 |     0  |
+                  | review |     6 |     0 |     0  |
+
+correct: 0.4
+wrong: 0.3
+unnecessary reviews: 0.3
+
+elements involved in a wrong match:
+  nodes: 0
+  ways: 0
+  relations: 1
+correct match count: 8
+wrong match count: 6
+unnecessary review count: 6
+ratio of unnecessary reviews to correct matches: 0.75
+number of manual matches made: 10
+
+Score: -1.8
+Threshold: Thresholds; Match: 0.0071875 Miss: 0.787813 Review: 0.02
+|                 |        |\3=.       expected     |
+|                 |        | miss  | match | review |
+|/3. test outcome | miss   |   -   |     6 |     0  |
+                  | match  |     0 |     8 |     0  |
+                  | review |     6 |     0 |     0  |
+
+correct: 0.4
+wrong: 0.3
+unnecessary reviews: 0.3
+
+elements involved in a wrong match:
+  nodes: 0
+  ways: 0
+  relations: 1
+correct match count: 8
+wrong match count: 6
+unnecessary review count: 6
+ratio of unnecessary reviews to correct matches: 0.75
+number of manual matches made: 10
+
+Score: -1.8
+Threshold: Thresholds; Match: 0 Miss: 0.8125 Review: 0.01
+|                 |        |\3=.       expected     |
+|                 |        | miss  | match | review |
+|/3. test outcome | miss   |   -   |     6 |     0  |
+                  | match  |     0 |     8 |     0  |
+                  | review |     6 |     0 |     0  |
+
+correct: 0.4
+wrong: 0.3
+unnecessary reviews: 0.3
+
+elements involved in a wrong match:
+  nodes: 0
+  ways: 0
+  relations: 1
+correct match count: 8
+wrong match count: 6
+unnecessary review count: 6
+ratio of unnecessary reviews to correct matches: 0.75
+number of manual matches made: 10
+
+Score: -1.8
+Threshold: Thresholds; Match: 0.00260417 Miss: 0.779479 Review: 0.0133333
+|                 |        |\3=.       expected     |
+|                 |        | miss  | match | review |
+|/3. test outcome | miss   |   -   |     6 |     0  |
+                  | match  |     0 |     8 |     0  |
+                  | review |     6 |     0 |     0  |
+
+correct: 0.4
+wrong: 0.3
+unnecessary reviews: 0.3
+
+elements involved in a wrong match:
+  nodes: 0
+  ways: 0
+  relations: 1
+correct match count: 8
+wrong match count: 6
+unnecessary review count: 6
+ratio of unnecessary reviews to correct matches: 0.75
+number of manual matches made: 10
+
+Score: -1.8
+Threshold: Thresholds; Match: 0.01375 Miss: 0.8125 Review: 0.03
+|                 |        |\3=.       expected     |
+|                 |        | miss  | match | review |
+|/3. test outcome | miss   |   -   |     6 |     0  |
+                  | match  |     0 |     8 |     0  |
+                  | review |     6 |     0 |     0  |
+
+correct: 0.4
+wrong: 0.3
+unnecessary reviews: 0.3
+
+elements involved in a wrong match:
+  nodes: 0
+  ways: 0
+  relations: 1
+correct match count: 8
+wrong match count: 6
+unnecessary review count: 6
+ratio of unnecessary reviews to correct matches: 0.75
+number of manual matches made: 10
+
+Score: -1.8
+Threshold: Thresholds; Match: 0.0065625 Miss: 0.837187 Review: 0.02
+|                 |        |\3=.       expected     |
+|                 |        | miss  | match | review |
+|/3. test outcome | miss   |   -   |     6 |     0  |
+                  | match  |     0 |     8 |     0  |
+                  | review |     6 |     0 |     0  |
+
+correct: 0.4
+wrong: 0.3
+unnecessary reviews: 0.3
+
+elements involved in a wrong match:
+  nodes: 0
+  ways: 0
+  relations: 1
+correct match count: 8
+wrong match count: 6
+unnecessary review count: 6
+ratio of unnecessary reviews to correct matches: 0.75
+number of manual matches made: 10
+
+Score: -1.8
+Threshold: Thresholds; Match: 0.00359375 Miss: 0.793906 Review: 0.015
+|                 |        |\3=.       expected     |
+|                 |        | miss  | match | review |
+|/3. test outcome | miss   |   -   |     6 |     0  |
+                  | match  |     0 |     8 |     0  |
+                  | review |     6 |     0 |     0  |
+
+correct: 0.4
+wrong: 0.3
+unnecessary reviews: 0.3
+
+elements involved in a wrong match:
+  nodes: 0
+  ways: 0
+  relations: 1
+correct match count: 8
+wrong match count: 6
+unnecessary review count: 6
+ratio of unnecessary reviews to correct matches: 0.75
+number of manual matches made: 10
+
+Score: -1.8
+Threshold: Thresholds; Match: 0 Miss: 0.80625 Review: 0.01
+|                 |        |\3=.       expected     |
+|                 |        | miss  | match | review |
+|/3. test outcome | miss   |   -   |     6 |     0  |
+                  | match  |     0 |     8 |     0  |
+                  | review |     6 |     0 |     0  |
+
+correct: 0.4
+wrong: 0.3
+unnecessary reviews: 0.3
+
+elements involved in a wrong match:
+  nodes: 0
+  ways: 0
+  relations: 1
+correct match count: 8
+wrong match count: 6
+unnecessary review count: 6
+ratio of unnecessary reviews to correct matches: 0.75
+number of manual matches made: 10
+
+Score: -1.8
+Threshold: Thresholds; Match: 0.00130208 Miss: 0.78974 Review: 0.0116667
+|                 |        |\3=.       expected     |
+|                 |        | miss  | match | review |
+|/3. test outcome | miss   |   -   |     6 |     0  |
+                  | match  |     0 |     8 |     0  |
+                  | review |     6 |     0 |     0  |
+
+correct: 0.4
+wrong: 0.3
+unnecessary reviews: 0.3
+
+elements involved in a wrong match:
+  nodes: 0
+  ways: 0
+  relations: 1
+correct match count: 8
+wrong match count: 6
+unnecessary review count: 6
+ratio of unnecessary reviews to correct matches: 0.75
+number of manual matches made: 10
+
+Score: -1.8
+Threshold: Thresholds; Match: 0.006875 Miss: 0.80625 Review: 0.02
+|                 |        |\3=.       expected     |
+|                 |        | miss  | match | review |
+|/3. test outcome | miss   |   -   |     6 |     0  |
+                  | match  |     0 |     8 |     0  |
+                  | review |     6 |     0 |     0  |
+
+correct: 0.4
+wrong: 0.3
+unnecessary reviews: 0.3
+
+elements involved in a wrong match:
+  nodes: 0
+  ways: 0
+  relations: 1
+correct match count: 8
+wrong match count: 6
+unnecessary review count: 6
+ratio of unnecessary reviews to correct matches: 0.75
+number of manual matches made: 10
+
+Score: -1.8
+Threshold: Thresholds; Match: 0.00328125 Miss: 0.818594 Review: 0.015
+|                 |        |\3=.       expected     |
+|                 |        | miss  | match | review |
+|/3. test outcome | miss   |   -   |     6 |     0  |
+                  | match  |     0 |     8 |     0  |
+                  | review |     6 |     0 |     0  |
+
+correct: 0.4
+wrong: 0.3
+unnecessary reviews: 0.3
+
+elements involved in a wrong match:
+  nodes: 0
+  ways: 0
+  relations: 1
+correct match count: 8
+wrong match count: 6
+unnecessary review count: 6
+ratio of unnecessary reviews to correct matches: 0.75
+number of manual matches made: 10
+
+Score: -1.8
+Threshold: Thresholds; Match: 0.00179687 Miss: 0.796953 Review: 0.0125
+|                 |        |\3=.       expected     |
+|                 |        | miss  | match | review |
+|/3. test outcome | miss   |   -   |     6 |     0  |
+                  | match  |     0 |     8 |     0  |
+                  | review |     6 |     0 |     0  |
+
+correct: 0.4
+wrong: 0.3
+unnecessary reviews: 0.3
+
+elements involved in a wrong match:
+  nodes: 0
+  ways: 0
+  relations: 1
+correct match count: 8
+wrong match count: 6
+unnecessary review count: 6
+ratio of unnecessary reviews to correct matches: 0.75
+number of manual matches made: 10
+
+Score: -1.8
+Threshold: Thresholds; Match: 0 Miss: 0.803125 Review: 0.01
+|                 |        |\3=.       expected     |
+|                 |        | miss  | match | review |
+|/3. test outcome | miss   |   -   |     6 |     0  |
+                  | match  |     0 |     8 |     0  |
+                  | review |     6 |     0 |     0  |
+
+correct: 0.4
+wrong: 0.3
+unnecessary reviews: 0.3
+
+elements involved in a wrong match:
+  nodes: 0
+  ways: 0
+  relations: 1
+correct match count: 8
+wrong match count: 6
+unnecessary review count: 6
+ratio of unnecessary reviews to correct matches: 0.75
+number of manual matches made: 10
+
+Score: -1.8
+Threshold: Thresholds; Match: 0.000651042 Miss: 0.79487 Review: 0.0108333
+|                 |        |\3=.       expected     |
+|                 |        | miss  | match | review |
+|/3. test outcome | miss   |   -   |     6 |     0  |
+                  | match  |     0 |     8 |     0  |
+                  | review |     6 |     0 |     0  |
+
+correct: 0.4
+wrong: 0.3
+unnecessary reviews: 0.3
+
+elements involved in a wrong match:
+  nodes: 0
+  ways: 0
+  relations: 1
+correct match count: 8
+wrong match count: 6
+unnecessary review count: 6
+ratio of unnecessary reviews to correct matches: 0.75
+number of manual matches made: 10
+
+Score: -1.8
+Threshold: Thresholds; Match: 0.0034375 Miss: 0.803125 Review: 0.015
+|                 |        |\3=.       expected     |
+|                 |        | miss  | match | review |
+|/3. test outcome | miss   |   -   |     6 |     0  |
+                  | match  |     0 |     8 |     0  |
+                  | review |     6 |     0 |     0  |
+
+correct: 0.4
+wrong: 0.3
+unnecessary reviews: 0.3
+
+elements involved in a wrong match:
+  nodes: 0
+  ways: 0
+  relations: 1
+correct match count: 8
+wrong match count: 6
+unnecessary review count: 6
+ratio of unnecessary reviews to correct matches: 0.75
+number of manual matches made: 10
+
+Score: -1.8
+Threshold: Thresholds; Match: 0.00164063 Miss: 0.809297 Review: 0.0125
+|                 |        |\3=.       expected     |
+|                 |        | miss  | match | review |
+|/3. test outcome | miss   |   -   |     6 |     0  |
+                  | match  |     0 |     8 |     0  |
+                  | review |     6 |     0 |     0  |
+
+correct: 0.4
+wrong: 0.3
+unnecessary reviews: 0.3
+
+elements involved in a wrong match:
+  nodes: 0
+  ways: 0
+  relations: 1
+correct match count: 8
+wrong match count: 6
+unnecessary review count: 6
+ratio of unnecessary reviews to correct matches: 0.75
+number of manual matches made: 10
+
+Score: -1.8
+Threshold: Thresholds; Match: 0.000898437 Miss: 0.798477 Review: 0.01125
+|                 |        |\3=.       expected     |
+|                 |        | miss  | match | review |
+|/3. test outcome | miss   |   -   |     6 |     0  |
+                  | match  |     0 |     8 |     0  |
+                  | review |     6 |     0 |     0  |
+
+correct: 0.4
+wrong: 0.3
+unnecessary reviews: 0.3
+
+elements involved in a wrong match:
+  nodes: 0
+  ways: 0
+  relations: 1
+correct match count: 8
+wrong match count: 6
+unnecessary review count: 6
+ratio of unnecessary reviews to correct matches: 0.75
+number of manual matches made: 10
+
+Score: -1.8
+Threshold: Thresholds; Match: 0 Miss: 0.801563 Review: 0.01
+|                 |        |\3=.       expected     |
+|                 |        | miss  | match | review |
+|/3. test outcome | miss   |   -   |     6 |     0  |
+                  | match  |     0 |     8 |     0  |
+                  | review |     6 |     0 |     0  |
+
+correct: 0.4
+wrong: 0.3
+unnecessary reviews: 0.3
+
+elements involved in a wrong match:
+  nodes: 0
+  ways: 0
+  relations: 1
+correct match count: 8
+wrong match count: 6
+unnecessary review count: 6
+ratio of unnecessary reviews to correct matches: 0.75
+number of manual matches made: 10
+
+Score: -1.8
+Threshold: Thresholds; Match: 0.000325521 Miss: 0.797435 Review: 0.0104167
+|                 |        |\3=.       expected     |
+|                 |        | miss  | match | review |
+|/3. test outcome | miss   |   -   |     6 |     0  |
+                  | match  |     0 |     8 |     0  |
+                  | review |     6 |     0 |     0  |
+
+correct: 0.4
+wrong: 0.3
+unnecessary reviews: 0.3
+
+elements involved in a wrong match:
+  nodes: 0
+  ways: 0
+  relations: 1
+correct match count: 8
+wrong match count: 6
+unnecessary review count: 6
+ratio of unnecessary reviews to correct matches: 0.75
+number of manual matches made: 10
+
+Score: -1.8
+Threshold: Thresholds; Match: 0.00171875 Miss: 0.801563 Review: 0.0125
+|                 |        |\3=.       expected     |
+|                 |        | miss  | match | review |
+|/3. test outcome | miss   |   -   |     6 |     0  |
+                  | match  |     0 |     8 |     0  |
+                  | review |     6 |     0 |     0  |
+
+correct: 0.4
+wrong: 0.3
+unnecessary reviews: 0.3
+
+elements involved in a wrong match:
+  nodes: 0
+  ways: 0
+  relations: 1
+correct match count: 8
+wrong match count: 6
+unnecessary review count: 6
+ratio of unnecessary reviews to correct matches: 0.75
+number of manual matches made: 10
+
+Score: -1.8
+Threshold: Thresholds; Match: 0.000820313 Miss: 0.804648 Review: 0.01125
+|                 |        |\3=.       expected     |
+|                 |        | miss  | match | review |
+|/3. test outcome | miss   |   -   |     6 |     0  |
+                  | match  |     0 |     8 |     0  |
+                  | review |     6 |     0 |     0  |
+
+correct: 0.4
+wrong: 0.3
+unnecessary reviews: 0.3
+
+elements involved in a wrong match:
+  nodes: 0
+  ways: 0
+  relations: 1
+correct match count: 8
+wrong match count: 6
+unnecessary review count: 6
+ratio of unnecessary reviews to correct matches: 0.75
+number of manual matches made: 10
+
+Score: -1.8
+Threshold: Thresholds; Match: 0.000449219 Miss: 0.799238 Review: 0.010625
+|                 |        |\3=.       expected     |
+|                 |        | miss  | match | review |
+|/3. test outcome | miss   |   -   |     6 |     0  |
+                  | match  |     0 |     8 |     0  |
+                  | review |     6 |     0 |     0  |
+
+correct: 0.4
+wrong: 0.3
+unnecessary reviews: 0.3
+
+elements involved in a wrong match:
+  nodes: 0
+  ways: 0
+  relations: 1
+correct match count: 8
+wrong match count: 6
+unnecessary review count: 6
+ratio of unnecessary reviews to correct matches: 0.75
+number of manual matches made: 10
+
+Score: -1.8
+Threshold: Thresholds; Match: 0 Miss: 0.800781 Review: 0.01
+|                 |        |\3=.       expected     |
+|                 |        | miss  | match | review |
+|/3. test outcome | miss   |   -   |     6 |     0  |
+                  | match  |     0 |     8 |     0  |
+                  | review |     6 |     0 |     0  |
+
+correct: 0.4
+wrong: 0.3
+unnecessary reviews: 0.3
+
+elements involved in a wrong match:
+  nodes: 0
+  ways: 0
+  relations: 1
+correct match count: 8
+wrong match count: 6
+unnecessary review count: 6
+ratio of unnecessary reviews to correct matches: 0.75
+number of manual matches made: 10
+
+Score: -1.8
+Threshold: Thresholds; Match: 0.00016276 Miss: 0.798717 Review: 0.0102083
+|                 |        |\3=.       expected     |
+|                 |        | miss  | match | review |
+|/3. test outcome | miss   |   -   |     6 |     0  |
+                  | match  |     0 |     8 |     0  |
+                  | review |     6 |     0 |     0  |
+
+correct: 0.4
+wrong: 0.3
+unnecessary reviews: 0.3
+
+elements involved in a wrong match:
+  nodes: 0
+  ways: 0
+  relations: 1
+correct match count: 8
+wrong match count: 6
+unnecessary review count: 6
+ratio of unnecessary reviews to correct matches: 0.75
+number of manual matches made: 10
+
+Score: -1.8
+Threshold: Thresholds; Match: 0.000859375 Miss: 0.800781 Review: 0.01125
+|                 |        |\3=.       expected     |
+|                 |        | miss  | match | review |
+|/3. test outcome | miss   |   -   |     6 |     0  |
+                  | match  |     0 |     8 |     0  |
+                  | review |     6 |     0 |     0  |
+
+correct: 0.4
+wrong: 0.3
+unnecessary reviews: 0.3
+
+elements involved in a wrong match:
+  nodes: 0
+  ways: 0
+  relations: 1
+correct match count: 8
+wrong match count: 6
+unnecessary review count: 6
+ratio of unnecessary reviews to correct matches: 0.75
+number of manual matches made: 10
+
+Score: -1.8
+Threshold: Thresholds; Match: 0.000410156 Miss: 0.802324 Review: 0.010625
+|                 |        |\3=.       expected     |
+|                 |        | miss  | match | review |
+|/3. test outcome | miss   |   -   |     6 |     0  |
+                  | match  |     0 |     8 |     0  |
+                  | review |     6 |     0 |     0  |
+
+correct: 0.4
+wrong: 0.3
+unnecessary reviews: 0.3
+
+elements involved in a wrong match:
+  nodes: 0
+  ways: 0
+  relations: 1
+correct match count: 8
+wrong match count: 6
+unnecessary review count: 6
+ratio of unnecessary reviews to correct matches: 0.75
+number of manual matches made: 10
+
+Score: -1.8
+Threshold: Thresholds; Match: 0.000224609 Miss: 0.799619 Review: 0.0103125
+|                 |        |\3=.       expected     |
+|                 |        | miss  | match | review |
+|/3. test outcome | miss   |   -   |     6 |     0  |
+                  | match  |     0 |     8 |     0  |
+                  | review |     6 |     0 |     0  |
+
+correct: 0.4
+wrong: 0.3
+unnecessary reviews: 0.3
+
+elements involved in a wrong match:
+  nodes: 0
+  ways: 0
+  relations: 1
+correct match count: 8
+wrong match count: 6
+unnecessary review count: 6
+ratio of unnecessary reviews to correct matches: 0.75
+number of manual matches made: 10
+
+Score: -1.8
+Threshold: Thresholds; Match: 0 Miss: 0.800391 Review: 0.01
+|                 |        |\3=.       expected     |
+|                 |        | miss  | match | review |
+|/3. test outcome | miss   |   -   |     6 |     0  |
+                  | match  |     0 |     8 |     0  |
+                  | review |     6 |     0 |     0  |
+
+correct: 0.4
+wrong: 0.3
+unnecessary reviews: 0.3
+
+elements involved in a wrong match:
+  nodes: 0
+  ways: 0
+  relations: 1
+correct match count: 8
+wrong match count: 6
+unnecessary review count: 6
+ratio of unnecessary reviews to correct matches: 0.75
+number of manual matches made: 10
+
+Score: -1.8
+Threshold: Thresholds; Match: 8.13802e-5 Miss: 0.799359 Review: 0.0101042
+|                 |        |\3=.       expected     |
+|                 |        | miss  | match | review |
+|/3. test outcome | miss   |   -   |     6 |     0  |
+                  | match  |     0 |     8 |     0  |
+                  | review |     6 |     0 |     0  |
+
+correct: 0.4
+wrong: 0.3
+unnecessary reviews: 0.3
+
+elements involved in a wrong match:
+  nodes: 0
+  ways: 0
+  relations: 1
+correct match count: 8
+wrong match count: 6
+unnecessary review count: 6
+ratio of unnecessary reviews to correct matches: 0.75
+number of manual matches made: 10
+
+Score: -1.8
+Threshold: Thresholds; Match: 0.000429688 Miss: 0.800391 Review: 0.010625
+|                 |        |\3=.       expected     |
+|                 |        | miss  | match | review |
+|/3. test outcome | miss   |   -   |     6 |     0  |
+                  | match  |     0 |     8 |     0  |
+                  | review |     6 |     0 |     0  |
+
+correct: 0.4
+wrong: 0.3
+unnecessary reviews: 0.3
+
+elements involved in a wrong match:
+  nodes: 0
+  ways: 0
+  relations: 1
+correct match count: 8
+wrong match count: 6
+unnecessary review count: 6
+ratio of unnecessary reviews to correct matches: 0.75
+number of manual matches made: 10
+
+Score: -1.8
+Threshold: Thresholds; Match: 0.000205078 Miss: 0.801162 Review: 0.0103125
+|                 |        |\3=.       expected     |
+|                 |        | miss  | match | review |
+|/3. test outcome | miss   |   -   |     6 |     0  |
+                  | match  |     0 |     8 |     0  |
+                  | review |     6 |     0 |     0  |
+
+correct: 0.4
+wrong: 0.3
+unnecessary reviews: 0.3
+
+elements involved in a wrong match:
+  nodes: 0
+  ways: 0
+  relations: 1
+correct match count: 8
+wrong match count: 6
+unnecessary review count: 6
+ratio of unnecessary reviews to correct matches: 0.75
+number of manual matches made: 10
+
+Score: -1.8
+Threshold: Thresholds; Match: 0.000112305 Miss: 0.79981 Review: 0.0101563
+|                 |        |\3=.       expected     |
+|                 |        | miss  | match | review |
+|/3. test outcome | miss   |   -   |     6 |     0  |
+                  | match  |     0 |     8 |     0  |
+                  | review |     6 |     0 |     0  |
+
+correct: 0.4
+wrong: 0.3
+unnecessary reviews: 0.3
+
+elements involved in a wrong match:
+  nodes: 0
+  ways: 0
+  relations: 1
+correct match count: 8
+wrong match count: 6
+unnecessary review count: 6
+ratio of unnecessary reviews to correct matches: 0.75
+number of manual matches made: 10
+
+Score: -1.8
+Threshold: Thresholds; Match: 0 Miss: 0.800195 Review: 0.01
+|                 |        |\3=.       expected     |
+|                 |        | miss  | match | review |
+|/3. test outcome | miss   |   -   |     6 |     0  |
+                  | match  |     0 |     8 |     0  |
+                  | review |     6 |     0 |     0  |
+
+correct: 0.4
+wrong: 0.3
+unnecessary reviews: 0.3
+
+elements involved in a wrong match:
+  nodes: 0
+  ways: 0
+  relations: 1
+correct match count: 8
+wrong match count: 6
+unnecessary review count: 6
+ratio of unnecessary reviews to correct matches: 0.75
+number of manual matches made: 10
+
+Score: -1.8
+Threshold: Thresholds; Match: 4.06901e-5 Miss: 0.799679 Review: 0.0100521
+|                 |        |\3=.       expected     |
+|                 |        | miss  | match | review |
+|/3. test outcome | miss   |   -   |     6 |     0  |
+                  | match  |     0 |     8 |     0  |
+                  | review |     6 |     0 |     0  |
+
+correct: 0.4
+wrong: 0.3
+unnecessary reviews: 0.3
+
+elements involved in a wrong match:
+  nodes: 0
+  ways: 0
+  relations: 1
+correct match count: 8
+wrong match count: 6
+unnecessary review count: 6
+ratio of unnecessary reviews to correct matches: 0.75
+number of manual matches made: 10
+
+Score: -1.8
+Threshold: Thresholds; Match: 0.000214844 Miss: 0.800195 Review: 0.0103125
+|                 |        |\3=.       expected     |
+|                 |        | miss  | match | review |
+|/3. test outcome | miss   |   -   |     6 |     0  |
+                  | match  |     0 |     8 |     0  |
+                  | review |     6 |     0 |     0  |
+
+correct: 0.4
+wrong: 0.3
+unnecessary reviews: 0.3
+
+elements involved in a wrong match:
+  nodes: 0
+  ways: 0
+  relations: 1
+correct match count: 8
+wrong match count: 6
+unnecessary review count: 6
+ratio of unnecessary reviews to correct matches: 0.75
+number of manual matches made: 10
+
+Score: -1.8
+Threshold: Thresholds; Match: 0.000102539 Miss: 0.800581 Review: 0.0101562
+|                 |        |\3=.       expected     |
+|                 |        | miss  | match | review |
+|/3. test outcome | miss   |   -   |     6 |     0  |
+                  | match  |     0 |     8 |     0  |
+                  | review |     6 |     0 |     0  |
+
+correct: 0.4
+wrong: 0.3
+unnecessary reviews: 0.3
+
+elements involved in a wrong match:
+  nodes: 0
+  ways: 0
+  relations: 1
+correct match count: 8
+wrong match count: 6
+unnecessary review count: 6
+ratio of unnecessary reviews to correct matches: 0.75
+number of manual matches made: 10
+
+Score: -1.8
+Threshold: Thresholds; Match: 5.61523e-5 Miss: 0.799905 Review: 0.0100781
+|                 |        |\3=.       expected     |
+|                 |        | miss  | match | review |
+|/3. test outcome | miss   |   -   |     6 |     0  |
+                  | match  |     0 |     8 |     0  |
+                  | review |     6 |     0 |     0  |
+
+correct: 0.4
+wrong: 0.3
+unnecessary reviews: 0.3
+
+elements involved in a wrong match:
+  nodes: 0
+  ways: 0
+  relations: 1
+correct match count: 8
+wrong match count: 6
+unnecessary review count: 6
+ratio of unnecessary reviews to correct matches: 0.75
+number of manual matches made: 10
+
+Score: -1.8
+Threshold: Thresholds; Match: 0 Miss: 0.800098 Review: 0.01
+|                 |        |\3=.       expected     |
+|                 |        | miss  | match | review |
+|/3. test outcome | miss   |   -   |     6 |     0  |
+                  | match  |     0 |     8 |     0  |
+                  | review |     6 |     0 |     0  |
+
+correct: 0.4
+wrong: 0.3
+unnecessary reviews: 0.3
+
+elements involved in a wrong match:
+  nodes: 0
+  ways: 0
+  relations: 1
+correct match count: 8
+wrong match count: 6
+unnecessary review count: 6
+ratio of unnecessary reviews to correct matches: 0.75
+number of manual matches made: 10
+
+Score: -1.8
+Threshold: Thresholds; Match: 2.03451e-5 Miss: 0.79984 Review: 0.010026
+|                 |        |\3=.       expected     |
+|                 |        | miss  | match | review |
+|/3. test outcome | miss   |   -   |     6 |     0  |
+                  | match  |     0 |     8 |     0  |
+                  | review |     6 |     0 |     0  |
+
+correct: 0.4
+wrong: 0.3
+unnecessary reviews: 0.3
+
+elements involved in a wrong match:
+  nodes: 0
+  ways: 0
+  relations: 1
+correct match count: 8
+wrong match count: 6
+unnecessary review count: 6
+ratio of unnecessary reviews to correct matches: 0.75
+number of manual matches made: 10
+
+Score: -1.8
+Threshold: Thresholds; Match: 0.000107422 Miss: 0.800098 Review: 0.0101562
+|                 |        |\3=.       expected     |
+|                 |        | miss  | match | review |
+|/3. test outcome | miss   |   -   |     6 |     0  |
+                  | match  |     0 |     8 |     0  |
+                  | review |     6 |     0 |     0  |
+
+correct: 0.4
+wrong: 0.3
+unnecessary reviews: 0.3
+
+elements involved in a wrong match:
+  nodes: 0
+  ways: 0
+  relations: 1
+correct match count: 8
+wrong match count: 6
+unnecessary review count: 6
+ratio of unnecessary reviews to correct matches: 0.75
+number of manual matches made: 10
+
+Score: -1.8
+Threshold: Thresholds; Match: 5.12695e-5 Miss: 0.800291 Review: 0.0100781
+|                 |        |\3=.       expected     |
+|                 |        | miss  | match | review |
+|/3. test outcome | miss   |   -   |     6 |     0  |
+                  | match  |     0 |     8 |     0  |
+                  | review |     6 |     0 |     0  |
+
+correct: 0.4
+wrong: 0.3
+unnecessary reviews: 0.3
+
+elements involved in a wrong match:
+  nodes: 0
+  ways: 0
+  relations: 1
+correct match count: 8
+wrong match count: 6
+unnecessary review count: 6
+ratio of unnecessary reviews to correct matches: 0.75
+number of manual matches made: 10
+
+Score: -1.8
+Threshold: Thresholds; Match: 2.80762e-5 Miss: 0.799952 Review: 0.0100391
+|                 |        |\3=.       expected     |
+|                 |        | miss  | match | review |
+|/3. test outcome | miss   |   -   |     6 |     0  |
+                  | match  |     0 |     8 |     0  |
+                  | review |     6 |     0 |     0  |
+
+correct: 0.4
+wrong: 0.3
+unnecessary reviews: 0.3
+
+elements involved in a wrong match:
+  nodes: 0
+  ways: 0
+  relations: 1
+correct match count: 8
+wrong match count: 6
+unnecessary review count: 6
+ratio of unnecessary reviews to correct matches: 0.75
+number of manual matches made: 10
+
+Score: -1.8
+Threshold: Thresholds; Match: 0 Miss: 0.800049 Review: 0.01
+|                 |        |\3=.       expected     |
+|                 |        | miss  | match | review |
+|/3. test outcome | miss   |   -   |     6 |     0  |
+                  | match  |     0 |     8 |     0  |
+                  | review |     6 |     0 |     0  |
+
+correct: 0.4
+wrong: 0.3
+unnecessary reviews: 0.3
+
+elements involved in a wrong match:
+  nodes: 0
+  ways: 0
+  relations: 1
+correct match count: 8
+wrong match count: 6
+unnecessary review count: 6
+ratio of unnecessary reviews to correct matches: 0.75
+number of manual matches made: 10
+
+Score: -1.8
+Threshold: Thresholds; Match: 1.01725e-5 Miss: 0.79992 Review: 0.010013
+|                 |        |\3=.       expected     |
+|                 |        | miss  | match | review |
+|/3. test outcome | miss   |   -   |     6 |     0  |
+                  | match  |     0 |     8 |     0  |
+                  | review |     6 |     0 |     0  |
+
+correct: 0.4
+wrong: 0.3
+unnecessary reviews: 0.3
+
+elements involved in a wrong match:
+  nodes: 0
+  ways: 0
+  relations: 1
+correct match count: 8
+wrong match count: 6
+unnecessary review count: 6
+ratio of unnecessary reviews to correct matches: 0.75
+number of manual matches made: 10
+
+Score: -1.8
+Threshold: Thresholds; Match: 5.37109e-5 Miss: 0.800049 Review: 0.0100781
+|                 |        |\3=.       expected     |
+|                 |        | miss  | match | review |
+|/3. test outcome | miss   |   -   |     6 |     0  |
+                  | match  |     0 |     8 |     0  |
+                  | review |     6 |     0 |     0  |
+
+correct: 0.4
+wrong: 0.3
+unnecessary reviews: 0.3
+
+elements involved in a wrong match:
+  nodes: 0
+  ways: 0
+  relations: 1
+correct match count: 8
+wrong match count: 6
+unnecessary review count: 6
+ratio of unnecessary reviews to correct matches: 0.75
+number of manual matches made: 10
+
+Score: -1.8
+Threshold: Thresholds; Match: 2.56348e-5 Miss: 0.800145 Review: 0.0100391
+|                 |        |\3=.       expected     |
+|                 |        | miss  | match | review |
+|/3. test outcome | miss   |   -   |     6 |     0  |
+                  | match  |     0 |     8 |     0  |
+                  | review |     6 |     0 |     0  |
+
+correct: 0.4
+wrong: 0.3
+unnecessary reviews: 0.3
+
+elements involved in a wrong match:
+  nodes: 0
+  ways: 0
+  relations: 1
+correct match count: 8
+wrong match count: 6
+unnecessary review count: 6
+ratio of unnecessary reviews to correct matches: 0.75
+number of manual matches made: 10
+
+Score: -1.8
+Threshold: Thresholds; Match: 1.40381e-5 Miss: 0.799976 Review: 0.0100195
+|                 |        |\3=.       expected     |
+|                 |        | miss  | match | review |
+|/3. test outcome | miss   |   -   |     6 |     0  |
+                  | match  |     0 |     8 |     0  |
+                  | review |     6 |     0 |     0  |
+
+correct: 0.4
+wrong: 0.3
+unnecessary reviews: 0.3
+
+elements involved in a wrong match:
+  nodes: 0
+  ways: 0
+  relations: 1
+correct match count: 8
+wrong match count: 6
+unnecessary review count: 6
+ratio of unnecessary reviews to correct matches: 0.75
+number of manual matches made: 10
+
+Score: -1.8
+Running unoptimized with multiple inputs and an output...
+
+15:03:50.358 WARN   ...re/scoring/MatchComparator.cpp( 470) Missing uuid for Way(-140)
+15:03:50.358 WARN   ...re/scoring/MatchComparator.cpp( 470) Missing uuid for Way(-12)
+15:03:50.358 WARN   ...re/scoring/MatchComparator.cpp( 470) Missing uuid for Way(-11)
+15:03:50.449 WARN   ...re/scoring/MatchComparator.cpp( 474) hoot::MatchComparator: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
 Score: -1.8
 -1,0.4,0.3,0.3

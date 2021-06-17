@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 
+# TODO: fix the orphaned power pole nodes in the output as part of #4465
+
 IN_DIR=test-files/cmd/slow/PowerLineDiffConflateTest
 OUT_DIR=test-output/cmd/slow/PowerLineDiffConflateTest
 mkdir -p $OUT_DIR

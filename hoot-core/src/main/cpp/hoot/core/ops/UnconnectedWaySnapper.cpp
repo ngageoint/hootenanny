@@ -76,9 +76,9 @@ _markSnappedNodes(false),
 _markSnappedWays(false),
 _reviewSnappedWays(false),
 _markOnly(false),
-_wayToSnapToCriteria(QStringList("hoot::LinearCriterion")),
-_wayToSnapCriteria(QStringList("hoot::LinearCriterion")),
-_wayNodeToSnapToCriteria(QStringList("hoot::LinearWayNodeCriterion")),
+_wayToSnapToCriteria(QStringList(LinearCriterion::className())),
+_wayToSnapCriteria(QStringList(LinearCriterion::className())),
+_wayNodeToSnapToCriteria(QStringList(LinearWayNodeCriterion::className())),
 _snapWayStatuses(QStringList(Status(Status::Unknown2).toString())),
 _snapToWayStatuses(QStringList(Status(Status::Unknown1).toString())),
 _minTypeMatchScore(-1.0),
@@ -243,7 +243,7 @@ void UnconnectedWaySnapper::apply(OsmMapPtr& map)
   _numSnappedToWayNodes = 0;
   _snappedWayNodeIds.clear();
 
-  OsmMapWriterFactory::writeDebugMap(map, "UnconnectedWaySnapper-before-snapping");
+  OsmMapWriterFactory::writeDebugMap(map, className(), "before-snapping");
 
   // need to be in planar for all of this
   MapProjector::projectToPlanar(_map);
@@ -304,7 +304,7 @@ void UnconnectedWaySnapper::apply(OsmMapPtr& map)
     if (waysProcessed % (_taskStatusUpdateInterval * 10) == 0)
     {
       PROGRESS_INFO(
-        "Processed " << StringUtils::formatLargeNumber(waysProcessed) << " / " <<
+        "Processed " << StringUtils::formatLargeNumber(waysProcessed) << " of " <<
         StringUtils::formatLargeNumber(ways.size()) << " ways for unconnected snapping.");
     }
   }
@@ -429,6 +429,9 @@ ElementCriterionPtr UnconnectedWaySnapper::_getTypeCriterion(
       Factory::getInstance().constructObject<ElementCriterion>(typeCriterion));
     LOG_VART(typeCrit);
 
+    // TODO: I think requiring that the criteria be ConflatableElementCriterion is a little kludy,
+    // as they don't necessary have to be conflatable. Doing so is needed for now, though, so that
+    // we can call getChildCriteria when isNode=true.
     std::shared_ptr<ConflatableElementCriterion> conflatableCrit =
       std::dynamic_pointer_cast<ConflatableElementCriterion>(typeCrit);
     if (!conflatableCrit)
@@ -437,9 +440,14 @@ ElementCriterionPtr UnconnectedWaySnapper::_getTypeCriterion(
         "Only classes inheriting from ConflatableElementCriterion are valid as way snapping "
         "criteria.");
     }
+    if (conflatableCrit->getGeometryType() != GeometryTypeCriterion::GeometryType::Line)
+    {
+      throw IllegalArgumentException(
+        "Only classes capable of conflating linear features are valid as way snapping criteria.");
+    }
 
     // If we're creating a node index, get the corresponding way node type from the conflatable
-    // crit we just created. Assuming a single criterion returned here, which *should( be true for
+    // crit we just created. Assuming a single criterion returned here, which *should* be true for
     // all linear crits.
     if (isNode)
     {
@@ -625,13 +633,13 @@ bool UnconnectedWaySnapper::_snapUnconnectedWayEndNode(
     // haven't any direct evidence of that being necessary for proper snapping yet. If it
     // is needed, that would likely slow things down a lot.
 
-    if (ConfigOptions().getDebugMapsWrite() && ConfigOptions().getDebugMapsWriteDetailed())
+    if (ConfigOptions().getDebugMapsWriteDetailed())
     {
       OsmMapWriterFactory::writeDebugMap(
-        _map,
+        _map, className(),
         "after-snap-" + wayToSnap->getElementId().toString() + "-" +
-        unconnectedEndNode->getElementId().toString() + "-" +
-        _snappedToWay->getElementId().toString());
+          unconnectedEndNode->getElementId().toString() + "-" +
+          _snappedToWay->getElementId().toString());
     }
   }
   return snapOccurred;
@@ -662,9 +670,9 @@ std::set<long> UnconnectedWaySnapper::_getUnconnectedWayEndNodeIds(
 
   // filter all the ways containing each endpoint down by the feature crit
   const std::set<long> filteredWaysContainingFirstEndNode =
-    WayUtils::getContainingWayIdsByNodeId(firstEndNodeId, _map, wayCrit);
+    WayUtils::getContainingWayIds(firstEndNodeId, _map, wayCrit);
   const std::set<long> filteredWaysContainingSecondEndNode =
-    WayUtils::getContainingWayIdsByNodeId(secondEndNodeId, _map, wayCrit);
+    WayUtils::getContainingWayIds(secondEndNodeId, _map, wayCrit);
   LOG_VART(filteredWaysContainingFirstEndNode);
   LOG_VART(filteredWaysContainingSecondEndNode);
 
@@ -768,7 +776,7 @@ bool UnconnectedWaySnapper::_snapUnconnectedWayEndNodeToWayNode(
         if (_minTypeMatchScore != -1.0)
         {
           const std::vector<ConstWayPtr> containingWays =
-            WayUtils::getContainingWaysByNodeId(wayNodeToSnapToId, _map);
+            WayUtils::getContainingWaysConst(wayNodeToSnapToId, _map);
           LOG_VART(containingWays.size());
           bool typeMatchFound = false;
           for (std::vector<ConstWayPtr>::const_iterator containingWaysItr = containingWays.begin();
@@ -1140,19 +1148,19 @@ bool UnconnectedWaySnapper::_snapClosestWayEndpointToWay(
   return _snapUnconnectedWayEndNodeToWay(endpoint, connectTo, snappedToNode);
 }
 
-void UnconnectedWaySnapper::_markSnappedWay(const long idOfNodeBeingSnapped, const bool toWayNode)
+void UnconnectedWaySnapper::_markSnappedWay(const long idOfNodeBeingSnapped, const bool toWayNode) const
 {
   std::set<long> owningWayIds =
-    WayUtils::getContainingWayIdsByNodeId(idOfNodeBeingSnapped, _map);
+    WayUtils::getContainingWayIds(idOfNodeBeingSnapped, _map);
   const long owningWayId = *owningWayIds.begin();
   const QString tagVal = toWayNode ? "to_way_node_source" : "to_way_source";
   _map->getWay(owningWayId)->getTags().set(MetadataTags::HootSnapped(), tagVal);
 }
 
-void UnconnectedWaySnapper::_reviewSnappedWay(const long idOfNodeBeingSnapped)
+void UnconnectedWaySnapper::_reviewSnappedWay(const long idOfNodeBeingSnapped) const
 {
   std::set<long> owningWayIds =
-    WayUtils::getContainingWayIdsByNodeId(idOfNodeBeingSnapped, _map);
+    WayUtils::getContainingWayIds(idOfNodeBeingSnapped, _map);
   const long owningWayId = *owningWayIds.begin();
   _reviewMarker.mark(
     _map, _map->getWay(owningWayId), "Potentially snappable unconnected way",

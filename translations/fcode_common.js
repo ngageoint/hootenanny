@@ -245,7 +245,8 @@ fcodeCommon = {
       ['F_CODE','BB020','seamark:type','berth'], // GGDM3/NAS7 BERTH
       ['F_CODE','BB050','seamark:type','calling-in_point'], // GGDM3/NAS7 CALLING_IN_POINT
       ['F_CODE','BB080','seamark:mooring:category','dolphin'], // GGDM3/NAS7 DOLPHIN
-      ['F_CODE','BB081','shoreline_construction','yes'], // Shoreline Construction
+      // ['F_CODE','BB081','shoreline_construction','yes'], // Shoreline Construction
+      ['F_CODE','BB081','man_made','shoreline_construction'], // Shoreline Construction
       ['F_CODE','BB082','leisure','slipway'], // Shoreline Ramp
       ['F_CODE','BB090','dock','drydock'], // Dry Dock
       ['F_CODE','BB100','seamark:fishing_facility:category','stake'], // GGDM3/NAS7 Fishing Stakes

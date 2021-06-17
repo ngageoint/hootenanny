@@ -161,7 +161,6 @@ public:
         args.removeAt(optionNameIndex);
       }
       LOG_VARD(bounds);
-
       if (args.contains("--maxNodesPerCell"))
       {
         const int optionNameIndex = args.indexOf("--maxNodesPerCell");
@@ -177,7 +176,6 @@ public:
         args.removeAt(optionNameIndex);
       }
       LOG_VARD(maxNodesPerCell);
-
       if (args.contains("--pixel-size"))
       {
         const int optionNameIndex = args.indexOf("--pixel-size");
@@ -192,7 +190,6 @@ public:
         args.removeAt(optionNameIndex);
       }
       LOG_VARD(pixelSize);
-
       if (args.contains("--maxAttempts"))
       {
         const int optionNameIndex = args.indexOf("--maxAttempts");
@@ -207,7 +204,6 @@ public:
         args.removeAt(optionNameIndex);
       }
       LOG_VARD(maxAttempts);
-
       if (args.contains("--maxTimePerAttempt"))
       {
         const int optionNameIndex = args.indexOf("--maxTimePerAttempt");
@@ -222,7 +218,6 @@ public:
         args.removeAt(optionNameIndex);
       }
       LOG_VARD(maxTimePerAttempt);
-
       if (args.contains("--pixelSizeReductionFactor"))
       {
         const int optionNameIndex = args.indexOf("--pixelSizeReductionFactor");

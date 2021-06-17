@@ -62,12 +62,12 @@ namespace Tgs
     PpPoint(int row, int col, std::string name)
       : row(row), col(col), name(name), cost(0.0f) { }
 
-    bool operator!=(const PpPoint& p)
+    bool operator!=(const PpPoint& p) const
     {
       return row != p.row || col != p.col;
     }
 
-    bool operator==(const PpPoint& p)
+    bool operator==(const PpPoint& p) const
     {
       return row == p.row && col == p.col;
     }
@@ -225,7 +225,7 @@ namespace Tgs
      */
     void _checkForInconsistency(const PpPoint& p, MyHeap& q);
 
-    float _calculateDistance(const PpPoint& p1, const PpPoint& p2);
+    float _calculateDistance(const PpPoint& p1, const PpPoint& p2) const;
 
     /**
      * Calculates the shortest path from the given source to all the _remainingDestinations.
@@ -239,7 +239,7 @@ namespace Tgs
 
     void _calculateWithoutWaypoints(int iterations);
 
-    void _checkBounds(const PpPoint& p);
+    void _checkBounds(const PpPoint& p) const;
 
     float _heuristic(int start);
 

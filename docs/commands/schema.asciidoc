@@ -14,6 +14,8 @@ The +schema+ command prints OSM tag documentation. If +[documentation script]+ i
 schema [documentation script]
 --------------------------------------
 
+https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#display-the-internal-tag-schema-that-hootenanny-uses[Examples]
+
 === See Also
 
 * <<hootuser, SchemaFiles>>

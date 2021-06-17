@@ -114,7 +114,7 @@ private:
    * element type for removal purposes; the second element is arbitarily selected for removal
    */
   QMap<ElementType::Type, QSet<ElementId>> _dupesToElementIds(
-    const QSet<std::pair<ElementId, ElementId>>& duplicates);
+    const QSet<std::pair<ElementId, ElementId>>& duplicates) const;
 
   /*
    * Similar to _dupesToElementIds except for ways if _favorMoreConnectedWays is enabled, this
@@ -124,7 +124,7 @@ private:
   void _dupesToElementIdsCheckMap(
     const QSet<std::pair<ElementId, ElementId>>& duplicates, OsmMapPtr map1, OsmMapPtr map2,
     QMap<ElementType::Type, QSet<ElementId>>& elementsToRemove,
-    QMap<ElementId, QString>& elementIdsToRemoveFromMap);
+    QMap<ElementId, QString>& elementIdsToRemoveFromMap) const;
 
   /*
    * Converts element hashes of duplicated features' element IDs to a collection of element IDs
@@ -136,9 +136,9 @@ private:
     const QSet<QString>& sharedHashes, OsmMapPtr map1, OsmMapPtr map2,
     const QMap<QString, ElementId>& map1Hashes, const QMap<QString, ElementId>& map2Hashes,
     QMap<ElementType::Type, QSet<ElementId>>& elementsToRemove,
-    QMap<ElementId, QString>& elementIdsToRemoveFromMap);
+    QMap<ElementId, QString>& elementIdsToRemoveFromMap) const;
 
-  void _removeElements(const QSet<ElementId>& elementsToRemove, OsmMapPtr map);
+  void _removeElements(const QSet<ElementId>& elementsToRemove, OsmMapPtr map) const;
 
   /*
    * Similar to _removeElements except for ways if _favorMoreConnectedWays is enabled, this
@@ -146,7 +146,7 @@ private:
    */
   void _removeWaysCheckMap(
     const QSet<ElementId>& waysToRemove, OsmMapPtr map1, OsmMapPtr map2,
-    const QMap<ElementId, QString>& elementIdsToRemoveFromMap);
+    const QMap<ElementId, QString>& elementIdsToRemoveFromMap) const;
 
   /*
    * Determines if two elements belong to ways with different types.

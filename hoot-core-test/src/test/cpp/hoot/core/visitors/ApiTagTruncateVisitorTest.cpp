@@ -58,16 +58,16 @@ public:
     QString value = UuidHelper::createUuid().toString();
 
     tags["uuid"] = value;
-    NodePtr n1 = TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0, 15.0, tags);
+    NodePtr n1 = TestUtils::createNode(map, "", Status::Unknown1, 0.0, 0.0, 15.0, tags);
 
     tags.appendValue("uuid", UuidHelper::createUuid().toString());
-    NodePtr n2 = TestUtils::createNode(map, Status::Unknown1, 0.0, 1.0, 15.0, tags);
+    NodePtr n2 = TestUtils::createNode(map, "", Status::Unknown1, 0.0, 1.0, 15.0, tags);
 
     QStringList uuids;
     for (int i = 0; i < 5; ++i)
       uuids.append(UuidHelper::createUuid().toString());
     tags.appendValue("uuid", uuids);
-    NodePtr n3 = TestUtils::createNode(map, Status::Unknown1, 0.0, 2.0, 15.0, tags);
+    NodePtr n3 = TestUtils::createNode(map, "", Status::Unknown1, 0.0, 2.0, 15.0, tags);
 
     ApiTagTruncateVisitor v;
     map->visitRw(v);
@@ -88,16 +88,16 @@ public:
 
     tags.insert(MetadataTags::SourceDateTime(), value);
     tags[MetadataTags::SourceDateTime()] = value;
-    NodePtr n1 = TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0, 15.0, tags);
+    NodePtr n1 = TestUtils::createNode(map, "", Status::Unknown1, 0.0, 0.0, 15.0, tags);
 
     tags.appendValue(MetadataTags::SourceDateTime(), DateTimeUtils::toTimeString(0));
-    NodePtr n2 = TestUtils::createNode(map, Status::Unknown1, 0.0, 1.0, 15.0, tags);
+    NodePtr n2 = TestUtils::createNode(map, "", Status::Unknown1, 0.0, 1.0, 15.0, tags);
 
     QStringList dates;
     for (int i = 0; i < 30; ++i)
       dates.append(DateTimeUtils::toTimeString(0));
     tags.appendValue(MetadataTags::SourceIngestDateTime(), dates);
-    NodePtr n3 = TestUtils::createNode(map, Status::Unknown1, 0.0, 2.0, 15.0, tags);
+    NodePtr n3 = TestUtils::createNode(map, "", Status::Unknown1, 0.0, 2.0, 15.0, tags);
 
     ApiTagTruncateVisitor v;
     map->visitRw(v);
@@ -118,17 +118,17 @@ public:
     int length = value.length();
 
     tags["some_key"] = value;
-    NodePtr n1 = TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0, 15.0, tags);
+    NodePtr n1 = TestUtils::createNode(map, "", Status::Unknown1, 0.0, 0.0, 15.0, tags);
 
     tags.appendValue("some_key", value);
-    NodePtr n2 = TestUtils::createNode(map, Status::Unknown1, 0.0, 1.0, 15.0, tags);
+    NodePtr n2 = TestUtils::createNode(map, "", Status::Unknown1, 0.0, 1.0, 15.0, tags);
 
     QStringList values;
     int iterations = (max - 1) / (length + 1);
     for (int i = 0; i <= iterations; ++i)
       values.append(value);
     tags.appendValue("some_key", values);
-    NodePtr n3 = TestUtils::createNode(map, Status::Unknown1, 0.0, 2.0, 15.0, tags);
+    NodePtr n3 = TestUtils::createNode(map, "", Status::Unknown1, 0.0, 2.0, 15.0, tags);
 
     ApiTagTruncateVisitor v;
     map->visitRw(v);
@@ -150,12 +150,12 @@ public:
     QString value(length, 'B');
 
     tags["some_key"] = value;
-    NodePtr n1 = TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0, 15.0, tags);
+    NodePtr n1 = TestUtils::createNode(map, "", Status::Unknown1, 0.0, 0.0, 15.0, tags);
 
     int tooLong = max * 2;
     QString valueTooLong(tooLong, 'C');
     tags["some_key"] = valueTooLong;
-    NodePtr n2 = TestUtils::createNode(map, Status::Unknown1, 0.0, 1.0, 15.0, tags);
+    NodePtr n2 = TestUtils::createNode(map, "", Status::Unknown1, 0.0, 1.0, 15.0, tags);
 
     ApiTagTruncateVisitor v;
     map->visitRw(v);
@@ -172,14 +172,14 @@ public:
     Tags tags;
 
     tags["name"] = "&quot;This &amp; that&quot; or other stuff.";
-    NodePtr n1 = TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0, 15.0, tags);
+    NodePtr n1 = TestUtils::createNode(map, "", Status::Unknown1, 0.0, 0.0, 15.0, tags);
 
     tags["name"] = "ﻉیﻡﺍﺮﺗ ﺏﺎﻏی ﻥیﻥ یﺉﺭی - ﻢﺤﻟ ﻖﺒﻟی ﻊﻣﺍﺮﺗ ﺏﺎﻏ";
-    NodePtr n2 = TestUtils::createNode(map, Status::Unknown1, 0.0, 1.0, 15.0, tags);
+    NodePtr n2 = TestUtils::createNode(map, "", Status::Unknown1, 0.0, 1.0, 15.0, tags);
 
     //  Length of the following text is 266 and should be truncated
     tags["name"] = "ﻊﻣﺍﺮﺗ ﺏﺎﻏ &quot;ﺹﺎﺤﺑ ﺩیﻭﺎﻧ ﻢﺤﻣﺩ ﻊﻟی ﻡیﺭﺯﺍ&quot; ﺩﺭ ﺖﺑﺭیﺯ کﻩ ﺮﺿﺍ ﺵﺎﻫ ﺐﻫ ﺐﻫﺎﻨﻫ ﻕﺎﺟﺍﺭیﻩ ﺯﺩﺎﺋی ﺂﻧ ﺭﺍ ﺖﺧﺭیﺏ کﺭﺩ ﻭ ﻎﻣ ﺎﻧگیﺰﺗﺭ ﺂﻧ کﻩ ﺰﻧﺩﺎﻧ کﻥﻮﻧی ﺖﺑﺭیﺯ ﺭﻭی ﻭیﺭﺎﻨﻫ ﻪﻣیﻥ ﺱﺎﺨﺘﻣﺎﻧ ﺐﻧﺍ ﺵﺪﻫ ﺎﺴﺗ Təbrizin tarixi Sahib Divan sarayi ki Qacarların izlərini itirmək amacilə sökülmüşdür";
-    NodePtr n3 = TestUtils::createNode(map, Status::Unknown1, 1.0, 1.0, 15.0, tags);
+    NodePtr n3 = TestUtils::createNode(map, "", Status::Unknown1, 1.0, 1.0, 15.0, tags);
 
     ApiTagTruncateVisitor v;
     Settings s;

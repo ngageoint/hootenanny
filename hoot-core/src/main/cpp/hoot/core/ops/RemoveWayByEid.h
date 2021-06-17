@@ -91,8 +91,8 @@ private:
   long _wayIdToRemove;
   bool _removeFully;
 
-  void _removeWay(OsmMapPtr& map, long wId);
-  void _removeWayFully(OsmMapPtr& map, long wId);
+  void _removeWay(OsmMapPtr& map, long wId) const;
+  void _removeWayFully(OsmMapPtr& map, long wId) const;
 };
 
 }

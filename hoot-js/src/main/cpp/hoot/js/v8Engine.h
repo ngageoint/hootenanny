@@ -49,7 +49,7 @@ public:
   /**
    * @brief init - A no-op that makes the code a little easier to read.
    */
-  void init() {}
+  void init() const {}
 
   static v8::Isolate* getIsolate();
 
@@ -74,7 +74,7 @@ private:
   /** In Hootenanny we own the Isolate, when called from Node we do not */
   bool _ownIsolate;
   /** Platform object */
-  std::shared_ptr<v8::Platform> _platform;
+  std::unique_ptr<v8::Platform> _platform;
   std::shared_ptr<v8::Locker> _locker;
   /** Main context */
   std::shared_ptr<v8::Persistent<v8::Context>> _context;

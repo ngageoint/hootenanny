@@ -48,7 +48,7 @@ public:
 
   MatchComparator(const vector<ConstMatchPtr>& matches) : _matches(matches) { }
 
-  bool operator()(size_t i, size_t j)
+  bool operator()(size_t i, size_t j) const
   {
     return _matches[i]->getScore() > _matches[j]->getScore();
   }

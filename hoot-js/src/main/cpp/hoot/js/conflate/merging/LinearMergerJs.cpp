@@ -27,15 +27,15 @@
 #include "LinearMergerJs.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/conflate/merging/LinearTagOnlyMerger.h>
 #include <hoot/core/conflate/merging/LinearAverageMerger.h>
 #include <hoot/core/conflate/merging/LinearMergerFactory.h>
+#include <hoot/core/conflate/merging/LinearTagOnlyMerger.h>
+#include <hoot/core/util/Factory.h>
 
 #include <hoot/js/JsRegistrar.h>
-#include <hoot/js/elements/OsmMapJs.h>
 #include <hoot/js/algorithms/subline-matching//SublineStringMatcherJs.h>
 #include <hoot/js/elements/ElementIdJs.h>
+#include <hoot/js/elements/OsmMapJs.h>
 #include <hoot/js/io/DataConvertJs.h>
 #include <hoot/js/util/PopulateConsumersJs.h>
 #include <hoot/js/util/StringUtilsJs.h>
@@ -56,23 +56,23 @@ HOOT_JS_REGISTER(LinearMergerJs)
 
 Persistent<Function> LinearMergerJs::_constructor;
 
-void LinearMergerJs::Init(Handle<Object> target)
+void LinearMergerJs::Init(Local<Object> target)
 {
   Isolate* current = target->GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
+
   // Prepare constructor template
   Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
   const QString name = "LinearMerger";
-  tpl->SetClassName(String::NewFromUtf8(current, name.toStdString().data()));
+  tpl->SetClassName(String::NewFromUtf8(current, name.toStdString().data()).ToLocalChecked());
   tpl->InstanceTemplate()->SetInternalFieldCount(1);
   // Prototype
-  tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(),
-    String::NewFromUtf8(current, MergerBase::className().toStdString().data()));
-  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "apply"),
-      FunctionTemplate::New(current, apply));
+  tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(), toV8(MergerBase::className()));
+  tpl->PrototypeTemplate()->Set(current, "apply", FunctionTemplate::New(current, apply));
 
-  _constructor.Reset(current, tpl->GetFunction());
-  target->Set(String::NewFromUtf8(current, name.toStdString().data()), ToLocal(&_constructor));
+  _constructor.Reset(current, tpl->GetFunction(context).ToLocalChecked());
+  target->Set(context, toV8(name), ToLocal(&_constructor));
 }
 
 void LinearMergerJs::New(const FunctionCallbackInfo<Value>& args)
@@ -91,54 +91,42 @@ void LinearMergerJs::apply(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
 
-  SublineStringMatcherPtr sublineMatcher = toCpp<SublineStringMatcherPtr>(args[0]);
+  SublineStringMatcherPtr sublineStringMatcher = toCpp<SublineStringMatcherPtr>(args[0]);
+  // POTENTIAL BUG HERE: This subline string matcher has already been configured when
+  // SublineStringMatcherFactory creates it during matching. However, if we don't call
+  // setConfiguration here, js linear conflation performs worse on some data due to extra match
+  // conflicts being recognized during match optimization. What's happening here is that, due to the
+  // manner in which MaximalSublineStringMatcher::setConfiguration is set up, the configured subline
+  // matchers are being ignored and reset to MaximalNearestSublineMatcher when setConfiguration is
+  // called here. That isn't really a good thing due to the confusion it causes, but the only other
+  // options would be to either add a separate subline matcher for each data type to be used during
+  // match conflict resolution (and possibly also during merging) only (cumbersome), or just
+  // hardcode the configuration of the subline string matcher here to always use
+  // MaximalNearestSublineMatcher as its primary matcher (not as cumbersome, but more brittle). So,
+  // staying with this behavior for the time being. Eventually, it may be worth correcting this
+  // issue.
+  sublineStringMatcher->setConfiguration(conf());
+  LOG_VART(sublineStringMatcher->getName());
+  LOG_VART(sublineStringMatcher->getSublineMatcherName());
   OsmMapPtr map = toCpp<OsmMapPtr>(args[1]);
   MergerBase::PairsSet pairs = toCpp<MergerBase::PairsSet>(args[2]);
-  vector<pair<ElementId, ElementId>> replaced =
-    toCpp<vector<pair<ElementId, ElementId>>>(args[3]);
+  vector<pair<ElementId, ElementId>> replaced = toCpp<vector<pair<ElementId, ElementId>>>(args[3]);
   const QString matchedBy = toCpp<QString>(args[4]);
   LOG_VART(matchedBy);
-  SublineStringMatcherPtr sublineMatcher2;
-  if (args.Length() > 5)
-  {
-    // This is little unusual, but we're allowing an extra subline matcher to be passed in for
-    // certain conflation types. The general idea is that one matcher may be more accurate but
-    // slower (e.g. maximal subline) and the other may be slightly less accurate but much
-    // quicker (Frechet). The actual one used here will be determined based how the matcher
-    // performs against the input data.
-    if (matchedBy != "Waterway" && matchedBy != "Line")
-    {
-      throw IllegalArgumentException(
-        "Only river or generic line merging allows passing in multiple subline matchers.");
-    }
-    sublineMatcher2 = toCpp<SublineStringMatcherPtr>(args[5]);
-  }
 
-  // Use of LinearTagOnlyMerger for geometries signifies that we're doing Attribute Conflation.
-  const bool isAttributeConflate =
-    ConfigOptions().getGeometryLinearMergerDefault() == LinearTagOnlyMerger::className();
-  // Use of LinearAverageMerger for geometries signifies that we're doing Average Conflation.
-  const bool isAverageConflate =
-    ConfigOptions().getGeometryLinearMergerDefault() == LinearAverageMerger::className();
-  MergerPtr merger;
-  if (isAttributeConflate || isAverageConflate || (matchedBy != "Waterway" && matchedBy != "Line"))
-  {
-    merger = LinearMergerFactory::getMerger(pairs, sublineMatcher, matchedBy);
-  }
-  else
-  {
-    merger = LinearMergerFactory::getMerger(pairs, sublineMatcher, sublineMatcher2, matchedBy);
-  }
+  MergerPtr merger = LinearMergerFactory::getMerger(pairs, sublineStringMatcher, matchedBy);
+  LOG_VART(merger->getClassName());
   merger->apply(map, replaced);
 
-  // modify the parameter that was passed in
-  Handle<Array> newArr = Handle<Array>::Cast(toV8(replaced));
-  Handle<Array> arr = Handle<Array>::Cast(args[3]);
-  arr->Set(String::NewFromUtf8(current, "length"), Integer::New(current, newArr->Length()));
+  // Modify the parameter that was passed in.
+  Local<Array> newArr = Local<Array>::Cast(toV8(replaced));
+  Local<Array> arr = Local<Array>::Cast(args[3]);
+  arr->Set(context, toV8("length"), Integer::New(current, newArr->Length()));
   for (uint32_t i = 0; i < newArr->Length(); i++)
   {
-    arr->Set(i, newArr->Get(i));
+    arr->Set(context, i, newArr->Get(context, i).ToLocalChecked());
   }
 
   args.GetReturnValue().SetUndefined();

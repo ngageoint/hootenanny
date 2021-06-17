@@ -81,7 +81,7 @@ public:
   /**
     * Deletes data in the Osm Api db
     */
-  void deleteData();
+  void deleteData() const;
 
   /**
    * Purpose: to extract tags from the extra lines returned in the
@@ -95,7 +95,7 @@ public:
    * @param Type
    * @return
    */
-  QString extractTagFromRow(const std::shared_ptr<QSqlQuery>& row, ElementType::Type Type);
+  QString extractTagFromRow(const std::shared_ptr<QSqlQuery>& row, ElementType::Type Type) const;
 
   std::shared_ptr<QSqlQuery> selectTagsForNode(long nodeId);
 

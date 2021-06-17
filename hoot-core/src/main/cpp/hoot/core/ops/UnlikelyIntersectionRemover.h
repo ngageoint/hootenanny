@@ -97,8 +97,8 @@ private:
 
   void _evaluateAndSplit(long intersectingNode, const std::set<long>& wayIds);
   double _pIntersection(long intersectingNode, const std::shared_ptr<Way>& w1,
-                        const std::shared_ptr<Way>& w2);
-  void _splitIntersection(long intersectingNode, const std::vector<std::shared_ptr<Way>>& g2);
+                        const std::shared_ptr<Way>& w2) const;
+  void _splitIntersection(long intersectingNode, const std::vector<std::shared_ptr<Way>>& g2) const;
 };
 
 }

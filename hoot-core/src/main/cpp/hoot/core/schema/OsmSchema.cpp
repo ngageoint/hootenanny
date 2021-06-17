@@ -179,7 +179,7 @@ public:
 
   VertexNameComparator(const TagGraph& graph) : _graph(graph) { }
 
-  bool operator()(VertexId v1, VertexId v2)
+  bool operator() (VertexId v1, VertexId v2) const
   {
     return _graph[v1].name < _graph[v2].name;
   }
@@ -689,7 +689,7 @@ public:
    * then that is substituted. E.g. addr:housenumber=123 would be converted to addr:housenumber=*.
    * If neither of those situations matches then an empty string is returned.
    */
-  QString normalizeEnumeratedKvp(const QString& kvp)
+  QString normalizeEnumeratedKvp(const QString& kvp) const
   {
     QString result = _normalizeEnumeratedKvp(kvp);
     if (result.isEmpty())
@@ -1155,7 +1155,7 @@ private:
     return vid != numeric_limits<VertexId>::max();
   }
 
-  QString _normalizeEnumeratedKvp(const QString& kvp)
+  QString _normalizeEnumeratedKvp(const QString& kvp) const
   {
     static QString equalStar = "=*";
     if (_name2Vertex.contains(kvp))
@@ -1394,38 +1394,38 @@ OsmSchema::OsmSchema()
 {
 }
 
-void OsmSchema::addAssociatedWith(const QString& name1, const QString& name2)
+void OsmSchema::addAssociatedWith(const QString& name1, const QString& name2) const
 {
   _d->addAssociatedWith(name1, name2);
 }
 
-void OsmSchema::addIsA(const QString& name1, const QString& name2)
+void OsmSchema::addIsA(const QString& name1, const QString& name2) const
 {
   _d->addIsA(name1, name2);
 }
 
-void OsmSchema::addSimilarTo(const QString& name1, const QString& name2, double weight, bool oneway)
+void OsmSchema::addSimilarTo(const QString& name1, const QString& name2, double weight, bool oneway) const
 {
   _d->addSimilarTo(name1, name2, weight, oneway);
 }
 
-QString OsmSchema::average(const QString& kvp1, const QString& kvp2, double& score)
+QString OsmSchema::average(const QString& kvp1, const QString& kvp2, double& score) const
 {
   return _d->average(kvp1, 1.0, kvp2, 1.0, score);
 }
 
 QString OsmSchema::average(const QString& kvp1, double w1, const QString& kvp2, double w2,
-                           double& score)
+                           double& score) const
 {
   return _d->average(kvp1, w1, kvp2, w2, score);
 }
 
-void OsmSchema::createTestingGraph()
+void OsmSchema::createTestingGraph() const
 {
   _d->createTestingGraph();
 }
 
-vector<SchemaVertex> OsmSchema::getAllTags()
+vector<SchemaVertex> OsmSchema::getAllTags() const
 {
   return _d->getAllTags();
 }
@@ -1491,7 +1491,7 @@ Tags OsmSchema::getAssociatedTags(const Tags& tags)
   return tagsToReturn;
 }
 
-vector<SchemaVertex> OsmSchema::getAssociatedTagsAsVertices(const QString& name)
+vector<SchemaVertex> OsmSchema::getAssociatedTagsAsVertices(const QString& name) const
 {
   return _d->getAssociatedTags(name);
 }
@@ -1531,7 +1531,7 @@ OsmSchemaCategory OsmSchema::getCategories(const QString& kvp) const
   return result;
 }
 
-vector<SchemaVertex> OsmSchema::getChildTagsAsVertices(const QString& name)
+vector<SchemaVertex> OsmSchema::getChildTagsAsVertices(const QString& name) const
 {
   return _d->getChildTags(name);
 }
@@ -1567,7 +1567,7 @@ Tags OsmSchema::getAliasTags(const Tags& tags)
   return tagsToReturn;
 }
 
-const SchemaVertex& OsmSchema::getFirstCommonAncestor(const QString& kvp1, const QString& kvp2)
+const SchemaVertex& OsmSchema::getFirstCommonAncestor(const QString& kvp1, const QString& kvp2) const
 {
   return _d->getFirstCommonAncestor(kvp1, kvp2);
 }
@@ -1615,7 +1615,7 @@ vector<SchemaVertex> OsmSchema::getSchemaVertices(const Tags& tags) const
   return _d->getSchemaVertices(tags);
 }
 
-vector<SchemaVertex> OsmSchema::getSimilarTagsAsVertices(const QString& name, double minimumScore)
+vector<SchemaVertex> OsmSchema::getSimilarTagsAsVertices(const QString& name, double minimumScore) const
 {
   if (minimumScore <= 0)
   {
@@ -1697,7 +1697,7 @@ bool OsmSchema::hasCategory(const QString& kvp, const OsmSchemaCategory& categor
   return hasCategory(kvp, category.toString());
 }
 
-bool OsmSchema::isAncestor(const QString& childKvp, const QString& parentKvp)
+bool OsmSchema::isAncestor(const QString& childKvp, const QString& parentKvp) const
 {
   return _d->isAncestor(childKvp, parentKvp);
 }
@@ -1721,7 +1721,7 @@ bool OsmSchema::containsTagFromList(const Tags& tags, const QStringList& tagList
 }
 
 bool OsmSchema::allowsFor(const Tags& t, const ElementType& /*type*/,
-                          OsmGeometries::Type geometries)
+                          OsmGeometries::Type geometries) const
 {
   //  Empty tags shouldn't allow for anything
   if (t.empty())
@@ -1745,7 +1745,7 @@ bool OsmSchema::allowsFor(const Tags& t, const ElementType& /*type*/,
   return (value & geometries) != OsmGeometries::Empty;
 }
 
-bool OsmSchema::allowsFor(const ConstElementPtr& e, OsmGeometries::Type geometries)
+bool OsmSchema::allowsFor(const ConstElementPtr& e, OsmGeometries::Type geometries) const
 {
   return allowsFor(e->getTags(), e->getElementType(), geometries);
 }
@@ -1776,12 +1776,12 @@ bool OsmSchema::isMetaData(const QString& key, const QString& /*value*/)
   }
 }
 
-bool OsmSchema::isTextTag(const QString& key)
+bool OsmSchema::isTextTag(const QString& key) const
 {
   return getTagVertex(key).valueType == Text;
 }
 
-bool OsmSchema::isNumericTag(const QString& key)
+bool OsmSchema::isNumericTag(const QString& key) const
 {
   TagValueType valueType = getTagVertex(key).valueType;
   return valueType == Real || valueType == Int;
@@ -1798,18 +1798,18 @@ void OsmSchema::loadDefault()
   LOG_DEBUG("Translation files loaded.");
 }
 
-double OsmSchema::score(const QString& kvp1, const QString& kvp2)
+double OsmSchema::score(const QString& kvp1, const QString& kvp2) const
 {
   // I tried using a LruCache here to speed up scoring, but it had a negative impact. :(
   return std::max(_d->score(kvp1, kvp2), _d->score(kvp2, kvp1));
 }
 
-double OsmSchema::score(const SchemaVertex& v1, const SchemaVertex& v2)
+double OsmSchema::score(const SchemaVertex& v1, const SchemaVertex& v2) const
 {
   return score(v1.name, v2.name);
 }
 
-double OsmSchema::score(const QString& kvp, const Tags& tags)
+double OsmSchema::score(const QString& kvp, const Tags& tags) const
 {
   double maxScore = 0.0;
   for (Tags::const_iterator tagItr = tags.begin(); tagItr != tags.end(); ++tagItr)
@@ -1839,7 +1839,7 @@ bool OsmSchema::isGeneric(const Tags& tags)
     StringUtils::containsAny(tags.toKvps(), getGenericKvps().toList());
 }
 
-bool OsmSchema::isGenericKvp(const QString& kvp)
+bool OsmSchema::isGenericKvp(const QString& kvp) const
 {
   return getGenericKvps().contains(kvp);
 }
@@ -2085,12 +2085,12 @@ bool OsmSchema::isTypeKey(const QString& key)
   return getAllTypeKeys().contains(key);
 }
 
-double OsmSchema::scoreOneWay(const QString& kvp1, const QString& kvp2)
+double OsmSchema::scoreOneWay(const QString& kvp1, const QString& kvp2) const
 {
   return _d->score(kvp1, kvp2);
 }
 
-void OsmSchema::setIsACost(double cost)
+void OsmSchema::setIsACost(double cost) const
 {
   _d->setIsACost(cost);
 }
@@ -2112,17 +2112,17 @@ QString OsmSchema::toKvp(const QString& key, const QString& value)
   }
 }
 
-void OsmSchema::update()
+void OsmSchema::update() const
 {
   _d->update();
 }
 
-void OsmSchema::updateOrCreateVertex(const SchemaVertex& tv)
+void OsmSchema::updateOrCreateVertex(const SchemaVertex& tv) const
 {
   _d->updateOrCreateVertex(tv);
 }
 
-QString OsmSchema::getParentKvp(const QString& kvp1, const QString& kvp2)
+QString OsmSchema::getParentKvp(const QString& kvp1, const QString& kvp2) const
 {
   if (isAncestor(kvp1, kvp2))
   {

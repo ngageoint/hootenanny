@@ -40,7 +40,7 @@ class OsmSchemaJs : public HootBaseJs
 {
 public:
 
-  static void Init(v8::Handle<v8::Object> target);
+  static void Init(v8::Local<v8::Object> target);
 
   virtual ~OsmSchemaJs() = default;
 
@@ -71,12 +71,11 @@ private:
   static void isPoint(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isPolygon(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isLinear(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void isLinearWaterway(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void isRiver(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isPowerLine(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isPoi(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isRailway(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isNonBuildingArea(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void isCollectionRelation(const v8::FunctionCallbackInfo<v8::Value>& args);
 
   /**
    * See description in rules/HootLib.js isSpecificallyConflatable method
@@ -86,10 +85,12 @@ private:
   static void hasName(const v8::FunctionCallbackInfo<v8::Value>& args);
 };
 
-inline v8::Handle<v8::Value> toV8(const SchemaVertex& tv)
+inline v8::Local<v8::Value> toV8(const SchemaVertex& tv)
 {
   v8::Isolate* current = v8::Isolate::GetCurrent();
-  v8::Handle<v8::Object> result = v8::Object::New(current);
+  v8::HandleScope scope(current);
+  v8::Local<v8::Context> context = current->GetCurrentContext();
+  v8::Local<v8::Object> result = v8::Object::New(current);
 
   if (tv.isEmpty())
   {
@@ -97,18 +98,18 @@ inline v8::Handle<v8::Value> toV8(const SchemaVertex& tv)
   }
   else
   {
-    result->Set(toV8("name"), toV8(tv.name));
-    result->Set(toV8("description"), toV8(tv.description));
-    result->Set(toV8("key"), toV8(tv.key));
-    result->Set(toV8("value"), toV8(tv.value));
-    result->Set(toV8("influence"), toV8(tv.influence));
-    result->Set(toV8("childWeight"), toV8(tv.childWeight));
-    result->Set(toV8("mismatchScore"), toV8(tv.mismatchScore));
+    result->Set(context, toV8("name"), toV8(tv.name));
+    result->Set(context, toV8("description"), toV8(tv.description));
+    result->Set(context, toV8("key"), toV8(tv.key));
+    result->Set(context, toV8("value"), toV8(tv.value));
+    result->Set(context, toV8("influence"), toV8(tv.influence));
+    result->Set(context, toV8("childWeight"), toV8(tv.childWeight));
+    result->Set(context, toV8("mismatchScore"), toV8(tv.mismatchScore));
     // need to create a string conversion for this if we want to use it. Unused for now.
     //result->Set(toV8("valueType"), toV8(tv.valueType), None);
-    result->Set(toV8("aliases"), toV8(tv.aliases));
-    result->Set(toV8("categories"), toV8(tv.categories));
-    result->Set(toV8("geometries"), toV8(tv.geometries));
+    result->Set(context, toV8("aliases"), toV8(tv.aliases));
+    result->Set(context, toV8("categories"), toV8(tv.categories));
+    result->Set(context, toV8("geometries"), toV8(tv.geometries));
   }
 
   return result;

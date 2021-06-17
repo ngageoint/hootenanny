@@ -1,6 +1,6 @@
 
 [[HootJavaScriptOverview]]
-== JavaScript Overview
+== Script Conflation Overview
 
 The Hootenanny <<JS,JavaScript>> Interfaces provide ways to both call Hootenanny
 programmatically using <<Node.js,Node.js>> and also embed routines within Hootenanny to

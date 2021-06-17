@@ -69,7 +69,7 @@ void MultipleChangesetProvider::addChangesetProvider(ChangesetProviderPtr newCha
   _changesets.push_back(newChangeset);
 }
 
-size_t MultipleChangesetProvider::getNumChangesets()
+size_t MultipleChangesetProvider::getNumChangesets() const
 {
   return _changesets.size();
 }

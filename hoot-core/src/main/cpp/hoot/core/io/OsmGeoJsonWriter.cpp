@@ -118,8 +118,8 @@ QString OsmGeoJsonWriter::toString(const ConstOsmMapPtr& map)
   return QString::fromUtf8(buf.buffer());
 }
 
-QString OsmGeoJsonWriter::_getBbox()
-{
+QString OsmGeoJsonWriter::_getBbox() const
+{ 
   Envelope bounds = CalculateMapBoundsVisitor::getGeosBounds(_map);
   return QString("[%1, %2, %3, %4]").arg(QString::number(bounds.getMinX(), 'g', 5))
                                     .arg(QString::number(bounds.getMinY(), 'g', 5))

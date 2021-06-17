@@ -54,7 +54,7 @@ public:
    * Determines if the coordinate c is within the endpoints of ls. It is assumed that c falls on
    * or approximately on the line formed by ls (as in the line that goes to inifite).
    */
-  bool isWithinLineSegment(const geos::geom::LineSegment& ls, const geos::geom::Coordinate& c);
+  bool isWithinLineSegment(const geos::geom::LineSegment& ls, const geos::geom::Coordinate& c) const;
 
   /**
    * Intersect a circle with a line segment and returns the intersecting points in p1 and p2. If
@@ -65,7 +65,7 @@ public:
    */
   void circleIntersection(const geos::geom::Coordinate& origin, Meters radius,
                           const geos::geom::LineSegment& l,
-                          geos::geom::Coordinate& p1, geos::geom::Coordinate& p2);
+                          geos::geom::Coordinate& p1, geos::geom::Coordinate& p2) const;
 
 };
 

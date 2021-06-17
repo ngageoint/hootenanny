@@ -97,7 +97,7 @@ void ReplacementSnappedWayJoiner::join(const OsmMapPtr& map)
     const long pid = _getPid(way);
     LOG_VART(pid);
   }
-  OsmMapWriterFactory::writeDebugMap(map, "after-replacement-snapped-way-joiner-pid-set");
+  OsmMapWriterFactory::writeDebugMap(map, className(), "after-pid-set");
 }
 
 }

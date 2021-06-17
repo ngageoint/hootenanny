@@ -83,10 +83,10 @@ public:
     MapProjector::projectToOrthographic(map, env);
 
     Coordinate w1c[] = { Coordinate(0, 0), Coordinate(100, 0), Coordinate::getNull() };
-    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, w1c);
+    WayPtr w1 = TestUtils::createWay(map, w1c, "", Status::Unknown1);
 
     Coordinate w2c[] = { Coordinate(90, 5), Coordinate(190, 5), Coordinate::getNull() };
-    WayPtr w2 = TestUtils::createWay(map, Status::Unknown2, w2c);
+    WayPtr w2 = TestUtils::createWay(map, w2c, "", Status::Unknown2);
 
     std::shared_ptr<MaximalNearestSublineMatcher> matcher(new MaximalNearestSublineMatcher());
 
@@ -120,10 +120,10 @@ public:
     MapProjector::projectToOrthographic(map, env);
 
     Coordinate w1c[] = { Coordinate(0, 0), Coordinate(100, 0), Coordinate::getNull() };
-    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, w1c);
+    WayPtr w1 = TestUtils::createWay(map, w1c, "", Status::Unknown1);
 
     Coordinate w2c[] = { Coordinate(110, 5), Coordinate(210, 5), Coordinate::getNull() };
-    WayPtr w2 = TestUtils::createWay(map, Status::Unknown2, w2c);
+    WayPtr w2 = TestUtils::createWay(map, w2c, "", Status::Unknown2);
 
     std::shared_ptr<MaximalNearestSublineMatcher> matcher(new MaximalNearestSublineMatcher());
 

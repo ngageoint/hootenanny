@@ -186,7 +186,7 @@ public:
         return pow(sum, 0.5);
     }
 
-    const std::vector<double>& getVector() { return coords; }
+    const std::vector<double>& getVector() const { return coords; }
 
 private:
 

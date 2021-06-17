@@ -105,11 +105,12 @@ void RelationMerger::merge(
   if (ConfigOptions().getDebugMapsWriteDetailed())
   {
     OsmMapWriterFactory::writeDebugMap(
-      _map, "RelationMerger-" + elementId1.toString() + "-" + elementId2.toString());
+      _map, className(), elementId1.toString() + "-" + elementId2.toString());
   }
 }
 
-bool RelationMerger::_mergeMembers(RelationPtr replacingRelation, RelationPtr relationBeingReplaced)
+bool RelationMerger::_mergeMembers(
+  RelationPtr replacingRelation, RelationPtr relationBeingReplaced) const
 {
   LOG_TRACE("Merging members...");
 

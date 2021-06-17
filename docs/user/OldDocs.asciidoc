@@ -1,9 +1,9 @@
 
 == Using Hootenanny
 
-Hootenanny can be accessed from both command line and via a simple web user interface (Hootenanny-iD) built on top of the link:$$https://www.openstreetmap.org/edit?editor=id$$[OpenStreetMap iD] Editor.  At its core, Hootenanny  provides a set of tools for manipulating and conflating vector data as well as translating data between various out of the box supported reference tag schemas such as OSM, TDS, UTP, MGCP.  As an extension to the existing translation capabilities within Hootenanny, the Hootenanny-iD web interface provides a simple translation tool known as the _Translation Assistant_ that will walk users through a custom translation of any customer data format into a supported tag schema.  Additional background on the Hootenanny-iD interface and Translation Assistant can be found in the Hootenanny User Interface Guide.
+Hootenanny can be accessed from both command line and via a simple web user interface (Hootenanny-iD) built on top of the https://www.openstreetmap.org/edit?editor=id[OpenStreetMap iD] Editor.  At its core, Hootenanny  provides a set of tools for manipulating and conflating vector data as well as translating data between various out of the box supported reference tag schemas such as OSM, TDS, UTP, MGCP.  As an extension to the existing translation capabilities within Hootenanny, the Hootenanny-iD web interface provides a simple translation tool known as the _Translation Assistant_ that will walk users through a custom translation of any customer data format into a supported tag schema.  Additional background on the Hootenanny-iD interface and Translation Assistant can be found in the Hootenanny User Interface Guide.
 
-This document provides background on how to use Hootenanny in a number of common use cases and work flows with a strong emphasis on the command line interface. Note that there are a number of undocumented features in Hootenanny that are referenced from the command line help. If you need more detailed information on that functionality please contact the developers at https://github.com/ngageoint/hootenanny.
+This document provides background on how to use Hootenanny in a number of common use cases and work flows with a strong emphasis on the command line interface. Note that there are a number of undocumented features in Hootenanny that are referenced from the command line help. If you need more detailed information on that functionality please contact the developers at the https://github.com/ngageoint/hootenanny[Hootenanny Github page].
 
 [[Installation]]
 == Installation
@@ -11,7 +11,7 @@ This document provides background on how to use Hootenanny in a number of common
 See the <<hootInstall, Hootenanny Installation>> and <<hootDevGuide, Hootenanny Developer>> Guides for additional information.
 
 [[OldDocsConflation]]
-== Conflation Supported Feature Types
+== Supported Feature Types
 
 === Road Conflation
 
@@ -121,8 +121,8 @@ this conflation.
 [width="65%"]
 |======
 | *Location* | *Description*
-| `conf/schema/WaterwaySchema.json` | attribute schema definitions
-| `rules/LinearWaterway.js` | custom rule based conflation model
+| `conf/schema/waterway.json` | attribute schema definitions
+| `rules/River.js` | custom rule based conflation model
 |======
 
 ==== Usage
@@ -162,24 +162,6 @@ Power line conflation can be done from the command line or the web user interfac
 in the above River Conflation section.  Railway Conflation can further be customized with the power.line.* configuration options. See the
 "Configuration Options" section of User Guide for more detail.
 
-[[Feature-Review]]
-=== Feature Review
-
-During the conflation process if Hootenanny cannot determine with confidence the best way to
-conflate features, it will mark one or more features as needing a manual review by the user.  Below
-are listed the possible solutions where Hootenanny may request a manual review from a user.
-
-.*Feature Review Situations*
-[width="100%"]
-|======
-| *Needs Review Message* | *Possible Causes* | *Potential User Actions to Take*
-| Elements contain too many ways and the computational complexity is unreasonable. | A multiline string geometry was attempted to be conflated that had more lines in it than Hootenanny can conflate in a reasonable amount of time using its current algorithms. Currently, that is when both input sublines to conflate contain more than four lines, or if the sum of lines they contain is greater than seven. | Review this feature manually. It can only be automatically conflated by developing new conflation algorithms that can handle multilinestring input data of this size.
-| Internal Error: Expected a matching subline, but got an empty match. Please report this to the developers. | An unexpected internal error occurred. Multiple matching line parts have caused extra difficulty during the line matching process. | Review this feature manually, and report this behavior to the Hootenanny development team for further examination.
-| MultiLineString relations can only contain ways when matching sublines. | A input being conflated of geometry type multiline string contained an OSM feature type other than a way (nodes or relations). | Review this feature manually. This is invalid input data for Hootenanny conflation purposes and cannot be conflated automatically.
-| Multiple overlapping way matches were found within one set of ways. | When attempting to conflate sublines from line inputs, multiple overlapping lines were found. | TODO
-| No valid matching subline found. | When conflating two linear inputs, Hootenanny could not find a corresponding matching subline part in one of the inputs. | Review this feature manually, as Hootenanny can not determine automatically whether it matches any feature in the opposite input dataset.
-|======
-
 [[RailwayConflation]]
 === Railway Conflation
 
@@ -200,8 +182,44 @@ this conflation.
 Railway Conflation can further be customized with the railway.* configuration options. See the "Configuration Options" section of User Guide
 for more detail.
 
+[[GenericGeometry]]
+=== Generic Geometry
+
+Hootenanny uses machine learning techniques, customizable scripts, and flexible configuration options to develop algorithms 
+that will yield good conflated output for a given type of data (roads, buildings, etc.). If a type of map data is 
+encountered for which Hootenanny has no specific conflation algorithm available, that data will be conflated with 
+Generic Geometry Conflation scripts. This ensures that all data in an input map has a chance to be conflated. 
+
+A separate script exists for geometry type Hootenanny conflates. The scripts are:
+
+* `Line.js`
+* `Point.js`
+* `Polygon.js`
+* `PointPolygon.js`
+
+The scripts use very simple techniques to attempt to conflate data, including Euclidean distance matching and type 
+tag similarity scoring. Related configuration options include the `search.generic.*` and `generic.*` options.
+
+[[Feature-Review]]
+== Feature Review
+
+During the conflation process if Hootenanny cannot determine with confidence the best way to
+conflate features, it will mark one or more features as needing a manual review by the user.  Below
+are listed the possible solutions where Hootenanny may request a manual review from a user.
+
+.*Feature Review Situations*
+[width="100%"]
+|======
+| *Needs Review Message* | *Possible Causes* | *Potential User Actions to Take*
+| Elements contain too many ways and the computational complexity is unreasonable. | A multiline string geometry was attempted to be conflated that had more lines in it than Hootenanny can conflate in a reasonable amount of time using its current algorithms. Currently, that is when both input sublines to conflate contain more than four lines, or if the sum of lines they contain is greater than seven. | Review this feature manually. It can only be automatically conflated by developing new conflation algorithms that can handle multilinestring input data of this size.
+| Internal Error: Expected a matching subline, but got an empty match. Please report this to the developers. | An unexpected internal error occurred. Multiple matching line parts have caused extra difficulty during the line matching process. | Review this feature manually, and report this behavior to the Hootenanny development team for further examination.
+| MultiLineString relations can only contain ways when matching sublines. | A input being conflated of geometry type multiline string contained an OSM feature type other than a way (nodes or relations). | Review this feature manually. This is invalid input data for Hootenanny conflation purposes and cannot be conflated automatically.
+| Multiple overlapping way matches were found within one set of ways. | When attempting to conflate sublines from line inputs, multiple overlapping lines were found. | TODO
+| No valid matching subline found. | When conflating two linear inputs, Hootenanny could not find a corresponding matching subline part in one of the inputs. | Review this feature manually, as Hootenanny can not determine automatically whether it matches any feature in the opposite input dataset.
+|======
+
 [[ConflationFeatureAccuracyHandling]]
-== Conflation Feature Accuracy Handling
+== Feature Accuracy Handling
 
 Feature accuracy is measure of the confidence in how accurately a feature's geospatial coordinates are. Feature accuracy values affect the
 accuracy of conflated output data. Feature circular error (accuracy) can be processed in one of two ways: 1) on a feature by feature basis manually or 2) use Hootenanny's default value to assign it to all features.
@@ -470,7 +488,7 @@ function translateToOsm(attrs, layerName) {
 ===== Translation File
 
 The purpose of the translation file is to convert your custom Shapefile into the
-OSM schema (http://wiki.openstreetmap.org/wiki/Map_Features). The translation
+http://wiki.openstreetmap.org/wiki/Map_Features[OSM schema]. The translation
 file is a Python script with a global function with the following definition:
 
 * +def translateToOsm(attrs, layerName):+
@@ -519,8 +537,7 @@ passed will be:
 |===================================================================
 
 The syntax above for _attrs_ is the dictionary syntax in Python. For more
-details see the Python documentation
-(http://docs.python.org/2/library/stdtypes.html#mapping-types-dict). You may
+details see the http://docs.python.org/2/library/stdtypes.html#mapping-types-dict[Python documentation]. You may
 also have noticed that _layerName_ does not change during any of the calls. In
 this case since we're only passing one input file the value will stay the same,
 if we passed multiple files as input then the _layerName_ would change to
@@ -865,7 +882,7 @@ hoot convert -D schema.translation.script=translations/Poi.js foo.vrt ConvertedB
 === Buildings Translation
 
 
-In the simplest case a building is a way tagged with +building=yes+ . However, when it comes to 3D features buildings can get dramatically more complex. For a thorough discussion of Buildings and how they're mapped see the link:$$http://wiki.openstreetmap.org/wiki/Simple_3D_Buildings$$[OSM wiki page on Simple 3D Buildings] .
+In the simplest case a building is a way tagged with +building=yes+ . However, when it comes to 3D features buildings can get dramatically more complex. For a thorough discussion of Buildings and how they're mapped see the http://wiki.openstreetmap.org/wiki/Simple_3D_Buildings[OSM wiki page on Simple 3D Buildings].
 
 
 [[Translating-Building-Parts]]
@@ -874,7 +891,7 @@ In the simplest case a building is a way tagged with +building=yes+ . However, w
 
 Some Shapefiles contain buildings that are mapped out as independent parts. Where each part refers to the roof type and height of a portion of the building. E.g. The Capital building might be mapped out as one large, low flat roof record and a second tall domed roof record. This provides for very rich data, but also a complex representation in OSM. Fortunately Hootenanny handles most of the heavy lifting for you.
 
-To translate complex building parts simply translate them in the same way you would translate any other building. By default Hootenanny will then search through all the buildings and look for buildings that appear to be part of the same structure. If they're part of the same structure then a complex building will be created for you automatically. The complex buildings will take the form specified in the link:$$http://wiki.openstreetmap.org/wiki/Simple_3D_Buildings$$[Simple 3D Buildings] specification. The following section gives a specific example.
+To translate complex building parts simply translate them in the same way you would translate any other building. By default Hootenanny will then search through all the buildings and look for buildings that appear to be part of the same structure. If they're part of the same structure then a complex building will be created for you automatically. The complex buildings will take the form specified in the http://wiki.openstreetmap.org/wiki/Simple_3D_Buildings[Simple 3D Buildings] specification. The following section gives a specific example.
 
 
 [[Complex-Building-Example]]
@@ -939,7 +956,7 @@ hoot convert -D schema.translation.script=MyTranslation -D ogr2osm.simplify.comp
 ------
 
 [[Common-Use-Cases]]
-== Common Conflation Use Cases
+== Common Use Cases
 
 
 The following sections describe some common use cases and how to approach them using Hootenanny.
@@ -961,8 +978,8 @@ The following subsections describe how to do the following steps:
 
 We'll be using files from the http://www.census.gov/geo/www/tiger/tgrshp2012/tgrshp2012.html[US Census Tiger] data and http://dcgis.dc.gov[DC GIS]
 
-* Tiger Roads - link:$$ftp://ftp2.census.gov/geo/tiger/TIGER2012/ROADS/tl_2012_11001_roads.zip$$[ftp://ftp2.census.gov/geo/tiger/TIGER2012/ROADS/tl_2012_11001_roads.zip]
-* DC GIS Roads - http://dcatlas.dcgis.dc.gov/catalog/download.asp?downloadID=88&downloadTYPE=ESRI[http://dcatlas.dcgis.dc.gov/catalog/download.asp?downloadID=88&downloadTYPE=ESRI]
+* ftp://ftp2.census.gov/geo/tiger/TIGER2012/ROADS/tl_2012_11001_roads.zip[Tiger Roads]
+* http://dcatlas.dcgis.dc.gov/catalog/download.asp?downloadID=88&downloadTYPE=ESRI[DC GIS Roads]
 
 
 [[Prepare-the-Shapefiles]]
@@ -1203,8 +1220,8 @@ ESRI ArcMap can use Visual Representation rules to display symbology. Hootenanny
 
 References:
 
-* http://resources.arcgis.com/en/help/main/10.2/index.html#/What_are_representations/00s50000004m000000/
-* http://resources.arcgis.com/en/help/main/10.2/index.html#/What_are_visual_specifications/0103000001w9000000/
+* http://resources.arcgis.com/en/help/main/10.2/index.html#/What_are_representations/00s50000004m000000/[What are representations
+* http://resources.arcgis.com/en/help/main/10.2/index.html#/What_are_visual_specifications/0103000001w9000000[What are visual specifications]
 
 ==== Requirements
 The main requirement is access to a copy of ESRI ArcGIS with the following:
@@ -1235,7 +1252,7 @@ Transfer the LTDS_4_0.gdb to the machine that has ESRI ArcGIS installed::
 * Place it in a convenient location
 
 Set the "Product Library" in ArcMap::
-Reference: http://resources.arcgis.com/en/help/main/10.2/index.html#//0103000001p0000000
+http://resources.arcgis.com/en/help/main/10.2/index.html#//0103000001p0000000[Reference]
 * Copy `C:\Program Files\ArcGIS\EsriDefenseMapping\Desktop10.2\Tds\Local\Product Library\LTDS_4_0_Product_Library.zip` to where you saved the Hoot File GeoDatabase
 * Unzip `LTDS_4_0_Product_Library.zip` to get `LTDS_4_0_Product_Library.gdb`
 * Open ArcMap:
@@ -1246,7 +1263,7 @@ Reference: http://resources.arcgis.com/en/help/main/10.2/index.html#//0103000001
 
 
 Calculate the Visual Specifications::
-Reference: http://resources.arcgis.com/en/help/main/10.2/index.html#/Calculate_Visual_Specifications/01090000001w000000/
+http://resources.arcgis.com/en/help/main/10.2/index.html#/Calculate_Visual_Specifications/01090000001w000000/[Reference]
 * Open ArcCatalog
 * Run `Toolboxes->System Toolboxes->Production Mapping Toolbox->Symbology->Calculate Visual Specifications`:
 ** *Input Features* Browse to where the Hootenanny File GeoDatabase is saved and select all of the features inside the `LTDS` feature dataset
@@ -1258,4 +1275,159 @@ Reference: http://resources.arcgis.com/en/help/main/10.2/index.html#/Calculate_V
 View the Default Symbology::
 * Open ArcMap
 * Add the +LTDS_4_0.gdb+ dataset
+
+[[Tag-Merging-Configuration]]
+=== Tag Merging
+
+When two features/elements are merged into a single feature/element the tags must be merged into a single set of tags. Depending on the use case there may be many different desirable ways to merge tags. Below are the options exposed to the user for merging tags. The default way to set this configuration for many functions is through the +tag.merger.default+ configuration key. Some older operations may not support configurable merging techniques. The default value is +hoot::AverageTagMerger+ .
+
+[[Overwrite-Tag-1]]
+==== Overwrite Tag 1
+
+Use the value +hoot::OverwriteTag1Merger+ . For example:
+
+------
+hoot conflate -D tag.merger.default=hoot::OverwriteTag1Merger input1.osm input2.osm output.osm
+------
+
+Overwrite the values in the first input with the values in the second input. This will still keep all unique names, but all other tags will simply be overwritten. For example:
+
+*Tags on First Input*
+|======
+| key | value
+| name | Simonovsky Val Expressway
+| name:en | Simonovsky Val Expressway
+| highway | trunk
+| ref | RU 24
+| oneway | yes
+| lanes | 2
+| uuid | foo
+|======
+
+*Tags on Second Input*
+|======
+| key | value
+| highway | secondary
+| name | Simonovsky Val Expy
+| name:en | Simonovsky Val Expressway
+| name:ru | *улица Симоновский Вал*
+| ref | 24
+| oneway | true
+| bridge | yes
+| uuid | bar
+|======
+
+*Result*
+|======
+| key | value
+| name | Simonovsky Val Expy
+| name:en | Simonovsky Val Expressway
+| name:ru | *улица Симоновский Вал*
+| alt_name | Simonovsky Val Expressway;RU 24
+| bridge | yes
+| highway | secondary
+| ref | 24
+| oneway | true
+| lanes | 2
+| uuid | bar
+|======
+
+[[Overwrite-Tag-2]]
+==== Overwrite Tag 2
+
+Use the value +hoot::OverwriteTag2Merger+ . For example:
+
+------
+hoot conflate -D tag.merger.default=hoot::OverwriteTag2Merger input1.osm input2.osm output.osm
+------
+
+Overwrite the values in the second input with the values in the first input. This will still keep all unique names, but all other tags will simply be overwritten. For example:
+
+*Tags on Input 1*
+|======
+| key | value
+| name | Simonovsky Val Expressway
+| name:en | Simonovsky Val Expressway
+| highway | trunk
+| ref | RU 24
+| oneway | yes
+| lanes | 2
+| uuid | foo
+|======
+
+*Tags on Input 2*
+|======
+| key | value
+| highway | secondary
+| name | Simonovsky Val Expy
+| name:en | Simonovsky Val Expressway
+| name:ru | *улица Симоновский Вал*
+| ref | 24
+| oneway | true
+| bridge | yes
+| uuid | bar
+|======
+
+*Result*
+|======
+| key | value
+| name | Midland Expressway
+| name:en | Midland Expressway
+| name:ru | *улица Симоновский Вал*
+| alt_name | 24;Simonovsky Val Expy
+| bridge | yes
+| highway | trunk
+| ref | RU 24
+| oneway | yes
+| lanes | 2
+| uuid | foo
+|======
+
+[[Average-Tags]]
+===== Average Tags
+
+Use an internal method to average the tags between two features.
+
+Use the value +hoot::AverageTagMerger+ . For example:
+
+------
+hoot conflate -D tag.merger.default=hoot::AverageTagMerger input1.osm input2.osm output.osm
+------
+
+[[Generalize-Tag-Merger]]
+===== Generalize Tag Merger
+
+Use an internal method to generalize the tags between two features. For instance, generalizing between +highway=primary+ and +highway=secondary+ results in +highway=road+ since road is the least general form that represents both primary and secondary.
+
+Use the value +hoot::GeneralizeTagMerger+ . For example:
+
+------
+hoot conflate -D tag.merger.default=hoot::GeneralizeTagMerger input1.osm input2.osm output.osm
+------
+
+[[Provenance-Aware-Overwrite-Tag-Merger]]
+===== Provenance Aware Overwrite Tag Merger
+
+This tag merger assumes features in different input files have their provenance tracked with a tag with the key `hoot:source`.
+This tag merger will ensure that tag value is not overwritten for either feature being merged.  Instead, the values from both
+features are concatenated together.
+
+Use the value +hoot::ProvenanceAwareOverwriteTagMerger+ . For example:
+
+------
+hoot conflate -D tag.merger.default=hoot::ProvenanceAwareOverwriteTagMerger input1.osm input2.osm output.osm
+------
+
+[[Preserve-Types-Tag-Merger]]
+===== Preserve Types Tag Merger
+
+This tag merger preserves tags from both features.  In instances where two features have the same type tag key, the most specific type
+is chosen (or arbitrarily the reference type in a tie) and the unselected type is stored in an `alt_types` field.
+
+Use the value +hoot::PreserveTypesTagMerger+ . For example:
+
+------
+hoot conflate -D tag.merger.default=hoot::PreserveTypesTagMerger input1.osm input2.osm output.osm
+------
+
 

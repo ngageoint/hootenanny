@@ -34,6 +34,7 @@
 #include <hoot/core/algorithms/string/StringDistance.h>
 #include <hoot/core/algorithms/subline-matching/SublineMatcher.h>
 #include <hoot/core/algorithms/subline-matching/SublineStringMatcher.h>
+#include <hoot/core/conflate/SuperfluousConflateOpRemover.h>
 #include <hoot/core/conflate/matching/Match.h>
 #include <hoot/core/conflate/matching/MatchCreator.h>
 #include <hoot/core/conflate/merging/Merger.h>
@@ -67,7 +68,7 @@ public:
 
   ApiEntityNameComparator() = default;
 
-  bool operator()(const QString& name1, const QString& name2)
+  bool operator()(const QString& name1, const QString& name2) const
   {
     QString name1Temp = name1;
     QString name2Temp = name2;
@@ -148,7 +149,8 @@ QString ApiEntityDisplayInfo::getDisplayInfoOps(const QString& optName)
 
 QString ApiEntityDisplayInfo::getDisplayInfo(const QString& apiEntityType)
 {
-  DisableLog dl; // Disable this for debugging.
+  // The log must be disabled for this to display things correctly. Disable it for debugging only.
+  DisableLog dl;
   QString msg = " (prepend 'hoot::' before using";
   QString buffer;
   QTextStream ts(&buffer);
@@ -268,6 +270,12 @@ QString ApiEntityDisplayInfo::getDisplayInfo(const QString& apiEntityType)
     ts <<
       _getApiEntities<WayJoiner, WayJoiner>(
         WayJoiner::className(), "way joiner", false, MAX_NAME_SIZE - 10);
+  }
+  else if (apiEntityType == "way-snap-criteria")
+  {
+    // For this one we're just print a list of class names, rather than the descriptions as well, as
+    // that's all that's needed right now.
+    ts << _getWaySnapCriteria() << endl;
   }
   else if (apiEntityType == "conflatable-criteria")
   {
@@ -399,7 +407,7 @@ template<typename ApiEntity>
 QString ApiEntityDisplayInfo::_getApiEntitiesForMatchMergerCreators(
   const QString& apiEntityClassName)
 {
-  //the size of the longest names plus a 3 space buffer
+  // the size of the longest names plus a 3 space buffer
   const int maxNameSize = 48;
 
   std::vector<QString> names = Factory::getInstance().getObjectNamesByBase(apiEntityClassName);
@@ -459,6 +467,28 @@ QString ApiEntityDisplayInfo::_apiEntityTypeForBaseClass(const QString& classNam
     return "visitor";
   }
   return "";
+}
+
+QString ApiEntityDisplayInfo::_getWaySnapCriteria()
+{
+  QStringList filteredCritClassNames;
+  const QStringList linearCritClassNames =
+    ConflatableElementCriterion::getCriterionClassNamesByGeometryType(
+      GeometryTypeCriterion::GeometryType::Line);
+  LOG_VARD(linearCritClassNames);
+  const QSet<QString> matchCreatorCritClassNames =
+    SuperfluousConflateOpRemover::getMatchCreatorGeometryTypeCrits();
+  LOG_VARD(matchCreatorCritClassNames);
+  for (QSet<QString>::const_iterator itr = matchCreatorCritClassNames.begin();
+       itr != matchCreatorCritClassNames.end(); ++itr)
+  {
+    if (linearCritClassNames.contains(*itr))
+    {
+      filteredCritClassNames.append(*itr);
+    }
+  }
+  qSort(filteredCritClassNames);
+  return filteredCritClassNames.join(";");
 }
 
 }

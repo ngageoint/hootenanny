@@ -37,7 +37,7 @@ class OsmMap;
 
 /**
  * Compares two OSM maps for consistency of vector location and density. The resulting score is a
- * value from 0 to 1 where 1 is an exact match and 0 is completely different.
+ * value from 0 to 1, where 1 is an exact match and 0 is completely different.
  *
  * We refer to this as the Shuey Method. Chad Shuey gave me the idea. -surratt
  */
@@ -49,9 +49,11 @@ public:
    * Takes two maps for comparison as input
    */
   RasterComparator(const std::shared_ptr<OsmMap>& map1, const std::shared_ptr<OsmMap>& map2);
-
   ~RasterComparator() = default;
 
+  /**
+   * @see BaseComparator
+   */
   double compareMaps() override;
 
 protected:
@@ -59,9 +61,8 @@ protected:
   cv::Mat _render1, _render2;
   Meters _wayLengthSum;
 
-  void _dumpImage(cv::Mat& image);
-
-  void _renderImage(const std::shared_ptr<OsmMap>& map, cv::Mat& result);
+  void _dumpImage(cv::Mat& image) const;
+  void _renderImage(const std::shared_ptr<OsmMap>& map, cv::Mat& result) const;
 };
 
 }

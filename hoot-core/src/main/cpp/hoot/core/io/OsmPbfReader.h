@@ -162,7 +162,7 @@ public:
 
   std::shared_ptr<OGRSpatialReference> getProjection() const override;
 
-  bool getSortedTypeThenId() { return _typeThenId; }
+  bool getSortedTypeThenId() const { return _typeThenId; }
 
   void setAddSourceDateTime(bool add) { _addSourceDateTime = add; }
 
@@ -244,11 +244,11 @@ private:
 
   void _addTag(const std::shared_ptr<Element>& n, const QString& k, const QString& v);
 
-  double _convertLon(long lon);
+  double _convertLon(long lon) const;
 
-  double _convertLat(long lat);
+  double _convertLat(long lat) const;
 
-  ElementId _convertToElementId(long id, int memberType);
+  ElementId _convertToElementId(long id, int memberType) const;
 
   long _createRelationId(long fromFile);
 
@@ -284,15 +284,15 @@ private:
 
   void _parseBlobHeader();
 
-  int _parseInt(const QString& s);
+  int _parseInt(const QString& s) const;
 
   void _parseOsmData();
 
   void _parseOsmHeader();
 
-  Status _parseStatus(const QString& s);
+  Status _parseStatus(const QString& s) const;
 
-  void _parseTimestamp(const hoot::pb::Info& info, Tags& t);
+  void _parseTimestamp(const hoot::pb::Info& info, Tags& t) const;
 
   uint32_t _readUInt32();
 

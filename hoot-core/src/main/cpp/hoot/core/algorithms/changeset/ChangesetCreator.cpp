@@ -267,8 +267,10 @@ void ChangesetCreator::create(
       "Creating changeset from inputs: " << FileUtils::toLogFormat(map1->getName()) << " of size: " << map1->size() <<
       " and " << FileUtils::toLogFormat(map2->getName()) << " of size: " << map2->size() << " to output: " <<
       FileUtils::toLogFormat(output, 25) << "...");
-    OsmMapWriterFactory::writeDebugMap(map1, "map1-before-changeset-derivation-" + map1->getName());
-    OsmMapWriterFactory::writeDebugMap(map2, "map2-before-changeset-derivation-" + map2->getName());
+    OsmMapWriterFactory::writeDebugMap(
+      map1, className(), "map1-before-changeset-derivation-" + map1->getName());
+    OsmMapWriterFactory::writeDebugMap(
+      map2, className(), "map2-before-changeset-derivation-" + map2->getName());
 
     if (!_includeReviews)
     {
@@ -371,13 +373,15 @@ void ChangesetCreator::_handleUnstreamableConvertOpsInMemory(
     // Load the first map. If we have a bounded query, let's check for the crop related option
     // overrides.
     IoUtils::loadMap(fullMap, input1, true, Status::Unknown1);
-    OsmMapWriterFactory::writeDebugMap(fullMap, "after-initial-read-unstreamable-ref-map");
+    OsmMapWriterFactory::writeDebugMap(
+      fullMap, className(), "after-initial-read-unstreamable-ref-map");
 
     // append the second map onto the first one
 
     OsmMapPtr tmpMap(new OsmMap());
     IoUtils::loadMap(tmpMap, input2, true, Status::Unknown2);
-    OsmMapWriterFactory::writeDebugMap(tmpMap, "after-initial-read-unstreamable-sec-map");
+    OsmMapWriterFactory::writeDebugMap(
+      tmpMap, className(), "after-initial-read-unstreamable-sec-map");
 
     try
     {
@@ -406,7 +410,8 @@ void ChangesetCreator::_handleUnstreamableConvertOpsInMemory(
   }
 
   LOG_VARD(fullMap->getElementCount());
-  OsmMapWriterFactory::writeDebugMap(fullMap, "after-initial-read-unstreamable-full-map");
+  OsmMapWriterFactory::writeDebugMap(
+    fullMap, className(), "after-initial-read-unstreamable-full-map");
   _currentTaskNum++;
 
   // Apply our convert ops to the entire map. If any of these are map consumers (OsmMapOperation)
@@ -442,9 +447,9 @@ void ChangesetCreator::_handleUnstreamableConvertOpsInMemory(
     map1->visitRw(remove1Vis);
   }
   LOG_VARD(map1->getElementCount());
-  OsmMapWriterFactory::writeDebugMap(map1, "unstreamable-separated-map-1");
+  OsmMapWriterFactory::writeDebugMap(map1, className(), "unstreamable-separated-map-1");
   LOG_VARD(map2->getElementCount());
-  OsmMapWriterFactory::writeDebugMap(map2, "unstreamable-separated-map-2");
+  OsmMapWriterFactory::writeDebugMap(map2, className(), "unstreamable-separated-map-2");
   _currentTaskNum++;
 }
 
@@ -474,8 +479,8 @@ void ChangesetCreator::_handleStreamableConvertOpsInMemory(
     // input.
     IoUtils::loadMap(map1, input1, true, Status::Unknown2);
   }
-  OsmMapWriterFactory::writeDebugMap(map1, "after-initial-read-streamable-map-1");
-  OsmMapWriterFactory::writeDebugMap(map2, "after-initial-read-streamable-map-2");
+  OsmMapWriterFactory::writeDebugMap(map1, className(), "after-initial-read-streamable-map-1");
+  OsmMapWriterFactory::writeDebugMap(map2, className(), "after-initial-read-streamable-map-2");
   _currentTaskNum++;
 
   // Apply our convert ops to each map separately.
@@ -544,8 +549,8 @@ void ChangesetCreator::_readInputsFully(
       // input.
       IoUtils::loadMap(map1, input1, true, Status::Unknown2);
     }
-    OsmMapWriterFactory::writeDebugMap(map1, "after-initial-read-no-ops-map-1");
-    OsmMapWriterFactory::writeDebugMap(map2, "after-initial-read-no-ops-map-2");
+    OsmMapWriterFactory::writeDebugMap(map1, className(), "after-initial-read-no-ops-map-1");
+    OsmMapWriterFactory::writeDebugMap(map2, className(), "after-initial-read-no-ops-map-2");
     _currentTaskNum++;
   }
 
@@ -563,8 +568,8 @@ void ChangesetCreator::_readInputsFully(
     {
       map2->visitRw(removeElementsVisitor);
     }
-    OsmMapWriterFactory::writeDebugMap(map1, "after-remove-reviews-map-1");
-    OsmMapWriterFactory::writeDebugMap(map2, "after-remove-reviews-map-2");
+    OsmMapWriterFactory::writeDebugMap(map1, className(), "after-remove-reviews-map-1");
+    OsmMapWriterFactory::writeDebugMap(map2, className(), "after-remove-reviews-map-2");
     _currentTaskNum++;
   }
 
@@ -577,8 +582,8 @@ void ChangesetCreator::_readInputsFully(
   {
     map2->visitRw(truncateTags);
   }
-  OsmMapWriterFactory::writeDebugMap(map1, "after-truncate-tags-map-1");
-  OsmMapWriterFactory::writeDebugMap(map2, "after-truncate-tags-map-2");
+  OsmMapWriterFactory::writeDebugMap(map1, className(), "after-truncate-tags-map-1");
+  OsmMapWriterFactory::writeDebugMap(map2, className(), "after-truncate-tags-map-2");
   _currentTaskNum++;
 }
 
@@ -610,14 +615,14 @@ ElementInputStreamPtr ChangesetCreator::_getExternallySortedElements(const QStri
   return sortedElements;
 }
 
-ElementInputStreamPtr ChangesetCreator::_getEmptyInputStream()
+ElementInputStreamPtr ChangesetCreator::_getEmptyInputStream() const
 {
   // a no-op here since InMemoryElementSorter taking in an empty map will just return an empty
   // element stream
   return InMemoryElementSorterPtr(new InMemoryElementSorter(OsmMapPtr(new OsmMap())));
 }
 
-ElementInputStreamPtr ChangesetCreator::_getFilteredInputStream(const QString& input)
+ElementInputStreamPtr ChangesetCreator::_getFilteredInputStream(const QString& input) const
 {
   LOG_DEBUG("Retrieving filtered input stream for: " << FileUtils::toLogFormat(input, 25) << "...");
 
@@ -658,12 +663,12 @@ ElementInputStreamPtr ChangesetCreator::_getFilteredInputStream(const QString& i
     ElementStreamer::getFilteredInputStream(filteredInputStream, ConfigOptions().getConvertOps());
 }
 
-ElementInputStreamPtr ChangesetCreator::_sortElementsInMemory(OsmMapPtr map)
+ElementInputStreamPtr ChangesetCreator::_sortElementsInMemory(OsmMapPtr map) const
 {
   return InMemoryElementSorterPtr(new InMemoryElementSorter(map));
 }
 
-ElementInputStreamPtr ChangesetCreator::_sortElementsExternally(const QString& input)
+ElementInputStreamPtr ChangesetCreator::_sortElementsExternally(const QString& input) const
 {
   std::shared_ptr<ExternalMergeElementSorter> sorted(new ExternalMergeElementSorter());
   sorted->sort(_getFilteredInputStream(input));
@@ -749,7 +754,7 @@ void ChangesetCreator::_streamChangesetOutput(
   for (int i = 0; i < changesetProviders.size(); i++)
   {
     ChangesetProviderPtr changesetProvider = changesetProviders.at(i);
-    LOG_DEBUG("Derived changeset: " << i + 1 << " / " << changesetProviders.size() << ": ");
+    LOG_DEBUG("Derived changeset: " << i + 1 << " of " << changesetProviders.size() << ": ");
 
     _numCreateChanges += changesetProvider->getNumCreateChanges();
     _numModifyChanges += changesetProvider->getNumModifyChanges();

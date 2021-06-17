@@ -243,7 +243,7 @@ public:
       readCoords(_inputPath + "RdpWayGeneralizerTestDataset1.txt");
     CPPUNIT_ASSERT_EQUAL(197, inputCoords.size());
     inputCoords.append(Coordinate::getNull());
-    WayPtr way = TestUtils::createWay(map, Status::Unknown1, inputCoords.toVector().data(), 1, "");
+    WayPtr way = TestUtils::createWay(map, inputCoords.toVector().data(), "", Status::Unknown1, 1);
     CPPUNIT_ASSERT_EQUAL((size_t)197, way->getNodeIds().size());
 
     RdpWayGeneralizer generalizer(0.1);
@@ -265,7 +265,7 @@ public:
       readCoords(_inputPath + "RdpWayGeneralizerTestDataset1.txt");
     CPPUNIT_ASSERT_EQUAL(197, inputCoords.size());
     inputCoords.append(Coordinate::getNull());
-    WayPtr way = TestUtils::createWay(map, Status::Unknown1, inputCoords.toVector().data(), 1, "");
+    WayPtr way = TestUtils::createWay(map, inputCoords.toVector().data(), "", Status::Unknown1, 1);
     CPPUNIT_ASSERT_EQUAL((size_t)197, way->getNodeIds().size());
 
     //randomly add some information tags to nodes

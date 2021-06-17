@@ -81,14 +81,14 @@ private:
 
   void _createOutline(const RelationPtr& building);
   void _unionOutline(const RelationPtr& building, const ElementPtr& element,
-                     std::shared_ptr<geos::geom::Geometry>& outline);
+                     std::shared_ptr<geos::geom::Geometry>& outline) const;
 
   /**
    * Match nodes in change to nodes in reference. If there is an exact node match then change
    * "changed" by replacing the nodes with the equivalent nodes in reference.
    */
   void _mergeNodes(const std::shared_ptr<Element>& changed,
-                   const RelationPtr& reference);
+                   const RelationPtr& reference) const;
 };
 
 }

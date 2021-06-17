@@ -39,7 +39,7 @@ _matchThreshold(ConfigOptions().getNetworkMatchThreshold())
 }
 
 void DebugNetworkMapCreator::addDebugElements(OsmMapPtr map, QList<NetworkEdgeScorePtr> edgeScores,
-  QList<NetworkVertexScorePtr> vertexScores)
+  QList<NetworkVertexScorePtr> vertexScores) const
 {
 
   for (int i = 0; i < edgeScores.size(); ++i)
@@ -53,7 +53,7 @@ void DebugNetworkMapCreator::addDebugElements(OsmMapPtr map, QList<NetworkEdgeSc
   }
 }
 
-void DebugNetworkMapCreator::_addEdgeLink(OsmMapPtr map, NetworkEdgeScorePtr edgeScore)
+void DebugNetworkMapCreator::_addEdgeLink(OsmMapPtr map, NetworkEdgeScorePtr edgeScore) const
 {
   if (edgeScore->getScore() >= 1e-4)
   {
@@ -111,7 +111,7 @@ void DebugNetworkMapCreator::_addEdgeLink(OsmMapPtr map, NetworkEdgeScorePtr edg
   }
 }
 
-void DebugNetworkMapCreator::_addVertexLink(OsmMapPtr map, NetworkVertexScorePtr vertexScore)
+void DebugNetworkMapCreator::_addVertexLink(OsmMapPtr map, NetworkVertexScorePtr vertexScore) const
 {
   ConstNodePtr n1 = _getMedianNode(map, vertexScore->getV1()->getElement());
   ConstNodePtr n2 = _getMedianNode(map, vertexScore->getV2()->getElement());
@@ -138,19 +138,18 @@ void DebugNetworkMapCreator::_addVertexLink(OsmMapPtr map, NetworkVertexScorePtr
   }
 }
 
-ConstNodePtr DebugNetworkMapCreator::_getMedianNode(ConstOsmMapPtr map, QList<ConstElementPtr> e)
+ConstNodePtr DebugNetworkMapCreator::_getMedianNode(
+  ConstOsmMapPtr map, QList<ConstElementPtr> e) const
 {
   MedianNodeVisitor v;
-
   for (int i = 0; i < e.size(); ++i)
   {
     e[i]->visitRo(*map, v);
   }
-
   return v.calculateMedianNode();
 }
 
-ConstNodePtr DebugNetworkMapCreator::_getMedianNode(ConstOsmMapPtr map, ConstElementPtr e)
+ConstNodePtr DebugNetworkMapCreator::_getMedianNode(ConstOsmMapPtr map, ConstElementPtr e) const
 {
   QList<ConstElementPtr> l;
   l.append(e);

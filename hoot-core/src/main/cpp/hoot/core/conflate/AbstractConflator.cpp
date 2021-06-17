@@ -27,6 +27,7 @@
 #include "AbstractConflator.h"
 
 // hoot
+#include <hoot/core/algorithms/subline-matching/MultipleMatcherSublineStringMatcher.h>
 #include <hoot/core/conflate/matching/GreedyConstrainedMatches.h>
 #include <hoot/core/conflate/matching/MatchFactory.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
@@ -114,7 +115,7 @@ QString AbstractConflator::_matchSetToString(const MatchSet& matchSet) const
 
 void AbstractConflator::_createMatches()
 {
-  OsmMapWriterFactory::writeDebugMap(_map, "before-matching");
+  OsmMapWriterFactory::writeDebugMap(_map, className(), "before-matching");
   // find all the matches in this map
   if (_matchThreshold.get())
   {
@@ -131,7 +132,7 @@ void AbstractConflator::_createMatches()
   LOG_DEBUG("Match count: " << StringUtils::formatLargeNumber(_matches.size()));
   //LOG_VART(_matches);
   LOG_DEBUG(Tgs::SystemInfo::getCurrentProcessMemoryUsageString());
-  OsmMapWriterFactory::writeDebugMap(_map, "after-matching");
+  OsmMapWriterFactory::writeDebugMap(_map, className(), "after-matching");
 
   double findMatchesTime = _timer.getElapsedAndRestart();
   _stats.append(SingleStat("Find Matches Time (sec)", findMatchesTime));
@@ -157,7 +158,7 @@ MatchSetVector AbstractConflator::_optimizeMatches(std::vector<ConstMatchPtr>& m
   LOG_DEBUG(
     "Number of Matches After Whole Groups: " << StringUtils::formatLargeNumber(matches.size()));
   //LOG_VART(_matches);
-  OsmMapWriterFactory::writeDebugMap(_map, "after-whole-group-removal");
+  OsmMapWriterFactory::writeDebugMap(_map, className(), "after-whole-group-removal");
 
   // Globally optimize the set of matches to maximize the conflation score.
   {
@@ -213,7 +214,7 @@ MatchSetVector AbstractConflator::_optimizeMatches(std::vector<ConstMatchPtr>& m
   // TODO: this stat isn't right for Network
   LOG_DEBUG("Post constraining match count: " << matches.size());
   //LOG_VART(_matches);
-  OsmMapWriterFactory::writeDebugMap(_map, "after-match-optimization");
+  OsmMapWriterFactory::writeDebugMap(_map, className(), "after-match-optimization");
 
   {
     // Search the matches for groups (subgraphs) of matches. In other words, groups where all the
@@ -225,7 +226,7 @@ MatchSetVector AbstractConflator::_optimizeMatches(std::vector<ConstMatchPtr>& m
     LOG_DEBUG(Tgs::SystemInfo::getCurrentProcessMemoryUsageString());
   }
   LOG_DEBUG("Match sets count: " << matchSets.size());
-  OsmMapWriterFactory::writeDebugMap(_map, "after-match-optimization-2");
+  OsmMapWriterFactory::writeDebugMap(_map, className(), "after-match-optimization-2");
 
   return matchSets;
 }
@@ -335,6 +336,7 @@ void AbstractConflator::_applyMergers(const std::vector<MergerPtr>& mergers, Osm
     {
       LOG_DEBUG(msg);
     }
+    LOG_VART(merger->getImpactedElementIds());
 
     merger->apply(map, replaced);
     LOG_VART(map->size());
@@ -350,16 +352,19 @@ void AbstractConflator::_applyMergers(const std::vector<MergerPtr>& mergers, Osm
     }
     LOG_VART(merger->getImpactedElementIds());
 
-    if (ConfigOptions().getDebugMapsWrite() && ConfigOptions().getDebugMapsWriteDetailed())
+    if (ConfigOptions().getDebugMapsWriteDetailed())
     {
       OsmMapWriterFactory::writeDebugMap(
-        map, "after-merge-" + merger->getName() + "-#" + StringUtils::formatLargeNumber(i + 1));
+        map, className(),
+        "after-merge-" + merger->getName() + "-#" + StringUtils::formatLargeNumber(i + 1) +
+          "-" + StringUtils::setToString<ElementId>(merger->getImpactedElementIds()));
     }
   }
 
   LOG_INFO(
     "Applied " << StringUtils::formatLargeNumber(mergers.size()) << " mergers in " <<
     StringUtils::millisecondsToDhms(mergersTimer.elapsed()) << ".");
+  LOG_VARD(MultipleMatcherSublineStringMatcher::getNumTimesBackupMatcherUsed());
 }
 
 void AbstractConflator::_createMergers(std::vector<MergerPtr>& relationMergers)
@@ -393,7 +398,7 @@ void AbstractConflator::_createMergers(std::vector<MergerPtr>& relationMergers)
   for (size_t i = 0; i < _matchSets.size(); ++i)
   {
     PROGRESS_INFO(
-      "Converting match set " << StringUtils::formatLargeNumber(i + 1) << " / " <<
+      "Converting match set " << StringUtils::formatLargeNumber(i + 1) << " of " <<
       StringUtils::formatLargeNumber(_matchSets.size()) << " to a merger...");
 
     _mergerFactory->createMergers(_map, _matchSets[i], _mergers);
@@ -417,7 +422,7 @@ void AbstractConflator::_createMergers(std::vector<MergerPtr>& relationMergers)
   {
     MergerPtr merger = *mergersItr;
     LOG_VART(merger->getName());
-    if (merger->getName().contains("CollectionRelation"))
+    if (merger->getName().contains("Relation"))
     {
       relationMergers.push_back(merger);
     }
@@ -440,7 +445,7 @@ void AbstractConflator::_mergeFeatures(const std::vector<MergerPtr>& relationMer
   _applyMergers(relationMergers, _map);
 
   MemoryUsageChecker::getInstance().check();
-  OsmMapWriterFactory::writeDebugMap(_map, "after-merging");
+  OsmMapWriterFactory::writeDebugMap(_map, className(), "after-merging");
 
   LOG_DEBUG(Tgs::SystemInfo::getCurrentProcessMemoryUsageString());
   const size_t mergerCount = _mergers.size() + relationMergers.size();
@@ -477,10 +482,8 @@ void AbstractConflator::_addConflateScoreTags()
     {
       ElementPtr e1 = _map->getElement(it->first);
       ElementPtr e2 = _map->getElement(it->second);
-
       LOG_TRACE(
         "Adding score tags to " << e1->getElementId() << " and " << e2->getElementId() << "...");
-
       _addConflateScoreTags(e1, matchClassification, *matchThreshold);
       _addConflateScoreTags(e2, matchClassification, *matchThreshold);
       e1->getTags().appendValue(MetadataTags::HootScoreUuid(), e2->getTags().getCreateUuid());

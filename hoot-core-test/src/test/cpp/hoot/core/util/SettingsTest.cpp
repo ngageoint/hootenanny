@@ -137,9 +137,11 @@ public:
       "hoot::LinearSnapMerger", uut.getString("geometry.linear.merger.default"));
     //  Default value before change in NetworkAlgorithm.conf
     HOOT_STR_EQUALS("hoot::HighwayRfClassifier", uut.getString("conflate.match.highway.classifier"));
-    HOOT_STR_EQUALS("hoot::MaximalNearestSublineMatcher", uut.getString("way.subline.matcher"));
+    HOOT_STR_EQUALS(
+      "hoot::MaximalNearestSublineMatcher", uut.getString("way.subline.matcher"));
 
-    uut.loadFromString("{ \"base.config\": \"AttributeConflation.conf,NetworkAlgorithm.conf\", \"uuid.helper.repeatable\": \"true\" }");
+    uut.loadFromString(
+      "{ \"base.config\": \"AttributeConflation.conf,NetworkAlgorithm.conf\", \"uuid.helper.repeatable\": \"true\" }");
     //  From the JSON
     CPPUNIT_ASSERT_EQUAL(true, uut.getBool("uuid.helper.repeatable"));
     //  From AttributeConflation.conf
@@ -147,8 +149,9 @@ public:
     HOOT_STR_EQUALS(
       "hoot::LinearTagOnlyMerger", uut.getString("geometry.linear.merger.default"));
     //  From NetworkAlgorithm.conf
-    HOOT_STR_EQUALS("hoot::HighwayExpertClassifier", uut.getString("conflate.match.highway.classifier"));
-    HOOT_STR_EQUALS("hoot::MaximalSublineMatcher", uut.getString("way.subline.matcher"));
+    HOOT_STR_EQUALS(
+      "hoot::HighwayExpertClassifier", uut.getString("conflate.match.highway.classifier"));
+    HOOT_STR_EQUALS("hoot::MaximalSublineMatcher", uut.getString("highway.subline.matcher"));
   }
 
   void invalidOptionNameTest()
@@ -183,6 +186,7 @@ public:
       BuildingCriterion::className() + ";" +
       // fails; only ops, vis, and crits are valid
       Node::className());
+    exceptionMsg = "";
     try
     {
       Settings::parseCommonArguments(args);
@@ -200,8 +204,9 @@ public:
     args.append(
       ConfigOptions::getConvertOpsKey() + "=" +
       ReplaceElementOp::className() + ";" +
-      // fails; visitor is missing namespace
+      // This should not fail, as the namespace gets automatically added to the visitor.
       RemoveElementsVisitor::className().replace("hoot::", ""));
+    exceptionMsg = "";
     try
     {
       Settings::parseCommonArguments(args);
@@ -210,10 +215,7 @@ public:
     {
       exceptionMsg = e.what();
     }
-    expectedErrorMessage =
-      "Invalid option operator class name: " +
-      RemoveElementsVisitor::className().replace("hoot::", "");
-    CPPUNIT_ASSERT_EQUAL(expectedErrorMessage.toStdString(), exceptionMsg.toStdString());
+    CPPUNIT_ASSERT(exceptionMsg.isEmpty());
 
     args.clear();
     args.append("-D");

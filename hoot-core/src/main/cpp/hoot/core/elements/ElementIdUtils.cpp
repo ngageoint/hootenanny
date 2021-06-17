@@ -51,4 +51,35 @@ QSet<ElementId> ElementIdUtils::elementsToElementIds(const std::vector<ElementPt
   return ids;
 }
 
+QSet<long> ElementIdUtils::elementIdsToIds(const std::set<ElementId>& elementIds)
+{
+  QSet<long> ids;
+  const ElementType firstType = elementIds.begin()->getType();
+  for (std::set<ElementId>::const_iterator itr = elementIds.begin(); itr != elementIds.end(); ++itr)
+  {
+    const ElementId elementId = *itr;
+    if (elementId.getType() != firstType)
+    {
+      throw IllegalArgumentException("All element IDs must be of the same type.");
+    }
+    ids.insert(elementId.getId());
+  }
+  return ids;
+}
+
+bool ElementIdUtils::containsElementId(const ElementId& id, const QList<ElementPtr>& elements)
+{
+  int ctr = 0;
+  for (QList<ElementPtr>::const_iterator itr = elements.begin(); itr != elements.end(); ++itr)
+  {
+    ElementPtr element = *itr;
+    if (element && element->getElementId() == id)
+    {
+      return true;
+    }
+    ctr++;
+  }
+  return false;
+}
+
 }

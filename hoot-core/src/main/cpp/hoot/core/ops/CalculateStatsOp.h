@@ -67,33 +67,18 @@ public:
   void apply(const OsmMapPtr& map) override;
 
   QList<SingleStat> getStats() const { return _stats; }
-
-  /**
-   * O(n)
-   */
   double getSingleStat(const QString& n) const;
-
-  /**
-   * O(n)
-   */
   bool hasSingleStat(const QString& n) const;
-
-  /**
-   * O(n)
-   */
   long indexOfSingleStat(const QString& n) const;
-
-  void setQuickSubset(bool quick) { _quick = quick; }
-
-  QString getDescription() const override { return "Calculates map statistics"; }
 
   void setConfiguration(const Settings& conf) override;
 
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+  QString getDescription() const override { return "Calculates map statistics"; }
 
   void setFilter(const QSet<QString>& filter) { _filter = filter; }
+  void setQuickSubset(bool quick) { _quick = quick; }
 
 private:
 
@@ -155,7 +140,7 @@ private:
    */
   std::shared_ptr<MatchCreator> getMatchCreator(
     const std::vector<std::shared_ptr<MatchCreator>>& matchCreators,
-    const QString &matchCreatorName, CreatorDescription::BaseFeatureType& featureType);
+    const QString &matchCreatorName, CreatorDescription::BaseFeatureType& featureType) const;
 
   double _applyVisitor(
     const hoot::FilteredVisitor& v, const QString& statName,
@@ -179,7 +164,7 @@ private:
     const long poisMergedIntoPolysFromMap2);
 
   ConstElementVisitorPtr _getElementVisitorForFeatureType(
-    const CreatorDescription::BaseFeatureType& featureType);
+    const CreatorDescription::BaseFeatureType& featureType) const;
 };
 
 }

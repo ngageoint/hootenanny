@@ -41,7 +41,7 @@ RStarTreePrinter::RStarTreePrinter(const std::shared_ptr<const RStarTree>& tree)
 {
 }
 
-string RStarTreePrinter::_indentStr(int size)
+string RStarTreePrinter::_indentStr(int size) const
 {
   string result;
   for (int i = 0; i < size; i++)

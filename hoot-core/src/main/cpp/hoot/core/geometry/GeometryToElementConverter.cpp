@@ -126,15 +126,16 @@ std::shared_ptr<Element> GeometryToElementConverter::convertGeometryToElement(
     return std::shared_ptr<Element>();
   }
 }
+
 NodePtr GeometryToElementConverter::convertPointToNode(
-  const geos::geom::Point* point, const OsmMapPtr& map, Status s, double circularError)
+  const geos::geom::Point* point, const OsmMapPtr& map, Status s, double circularError) const
 {
   LOG_TRACE("Converting point to node...");
   return _createNode(map, Coordinate(point->getX(), point->getY()), s, circularError);
 }
 
 WayPtr GeometryToElementConverter::convertLineStringToWay(
-  const LineString* ls, const OsmMapPtr& map, Status s, double circularError)
+  const LineString* ls, const OsmMapPtr& map, Status s, double circularError) const
 {
   LOG_TRACE("Converting line string to way...");
 
@@ -156,7 +157,7 @@ WayPtr GeometryToElementConverter::convertLineStringToWay(
 }
 
 std::shared_ptr<Element> GeometryToElementConverter::convertMultiLineStringToElement(
-  const MultiLineString* mls, const OsmMapPtr& map, Status s, double circularError)
+  const MultiLineString* mls, const OsmMapPtr& map, Status s, double circularError) const
 {
   LOG_TRACE("Converting multiline string to element...");
 
@@ -184,7 +185,7 @@ std::shared_ptr<Element> GeometryToElementConverter::convertMultiLineStringToEle
 }
 
 RelationPtr GeometryToElementConverter::convertMultiPolygonToRelation(
-  const MultiPolygon* mp, const OsmMapPtr& map, Status s, double circularError)
+  const MultiPolygon* mp, const OsmMapPtr& map, Status s, double circularError) const
 {
   LOG_TRACE("Converting multipolygon to relation...");
 
@@ -201,7 +202,7 @@ RelationPtr GeometryToElementConverter::convertMultiPolygonToRelation(
 }
 
 std::shared_ptr<Element> GeometryToElementConverter::convertPolygonToElement(
-  const Polygon* polygon, const OsmMapPtr& map, Status s, double circularError)
+  const Polygon* polygon, const OsmMapPtr& map, Status s, double circularError) const
 {
   LOG_TRACE("Converting polygon to element...");
 
@@ -222,7 +223,7 @@ std::shared_ptr<Element> GeometryToElementConverter::convertPolygonToElement(
 }
 
 RelationPtr GeometryToElementConverter::convertPolygonToRelation(const Polygon* polygon,
-  const OsmMapPtr& map, Status s, double circularError)
+  const OsmMapPtr& map, Status s, double circularError) const
 {
   RelationPtr r(new Relation(s, map->createNextRelationId(), circularError,
     MetadataTags::RelationMultiPolygon()));
@@ -233,7 +234,7 @@ RelationPtr GeometryToElementConverter::convertPolygonToRelation(const Polygon* 
 
 void GeometryToElementConverter::convertPolygonToRelation(
   const Polygon* polygon, const OsmMapPtr& map, const RelationPtr& r, Status s,
-  double circularError)
+  double circularError) const
 {
   WayPtr outer = convertLineStringToWay(polygon->getExteriorRing(), map, s, circularError);
   if (outer != nullptr)
@@ -248,7 +249,7 @@ void GeometryToElementConverter::convertPolygonToRelation(
 }
 
 NodePtr GeometryToElementConverter::_createNode(const OsmMapPtr& map, const Coordinate& c,
-  Status s, double circularError)
+  Status s, double circularError) const
 {
   if (_nf == nullptr)
   {

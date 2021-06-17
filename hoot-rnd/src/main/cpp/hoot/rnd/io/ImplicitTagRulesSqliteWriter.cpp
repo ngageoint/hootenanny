@@ -51,7 +51,7 @@ ImplicitTagRulesSqliteWriter::~ImplicitTagRulesSqliteWriter()
   close();
 }
 
-bool ImplicitTagRulesSqliteWriter::isSupported(const QString& outputUrl)
+bool ImplicitTagRulesSqliteWriter::isSupported(const QString& outputUrl) const
 {
   return outputUrl.endsWith(".sqlite", Qt::CaseInsensitive);
 }
@@ -198,7 +198,7 @@ void ImplicitTagRulesSqliteWriter::write(const QString& inputUrl)
   DbUtils::execNoPrepare(_db, "COMMIT");
 }
 
-void ImplicitTagRulesSqliteWriter::_createTables()
+void ImplicitTagRulesSqliteWriter::_createTables() const
 {
   DbUtils::execNoPrepare(
     _db, "CREATE TABLE words (id INTEGER PRIMARY KEY, word TEXT NOT NULL UNIQUE)");
@@ -352,7 +352,7 @@ long ImplicitTagRulesSqliteWriter::_insertWord(const QString& word)
   return id;
 }
 
-void ImplicitTagRulesSqliteWriter::_createIndexes()
+void ImplicitTagRulesSqliteWriter::_createIndexes() const
 {
   LOG_INFO("Creating database indexes...");
   LOG_DEBUG("Creating tags index...");

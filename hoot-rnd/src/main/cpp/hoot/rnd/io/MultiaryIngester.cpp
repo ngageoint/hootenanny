@@ -69,7 +69,7 @@ _logUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
 void MultiaryIngester::_doInputErrorChecking(const QString& newInput,
                                              const QString& translationScript,
                                              const QString& referenceOutput,
-                                             const QString& changesetOutput)
+                                             const QString& changesetOutput) const
 {
   if (!OsmMapReaderFactory::hasElementInputStream(newInput))
   {
@@ -194,7 +194,7 @@ void MultiaryIngester::_sortInputFile(const QString& input)
 }
 
 std::shared_ptr<ElementInputStream> MultiaryIngester::_getFilteredNewInputStream(
-  const QString& sortedNewInput)
+  const QString& sortedNewInput) const
 {
   std::shared_ptr<PartialOsmMapReader> newInputReader =
     std::dynamic_pointer_cast<PartialOsmMapReader>(

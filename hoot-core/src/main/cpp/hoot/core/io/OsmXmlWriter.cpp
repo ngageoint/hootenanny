@@ -253,7 +253,7 @@ void OsmXmlWriter::write(const ConstOsmMapPtr& map)
   close();
 }
 
-void OsmXmlWriter::_writeMetadata(const Element* e)
+void OsmXmlWriter::_writeMetadata(const Element* e) const
 {
   if (_includeCompatibilityTags)
   {
@@ -412,7 +412,7 @@ void OsmXmlWriter::_writeRelations(ConstOsmMapPtr map)
   }
 }
 
-void OsmXmlWriter::_writeBounds(const Envelope& bounds)
+void OsmXmlWriter::_writeBounds(const Envelope& bounds) const
 {
   _writer->writeStartElement("bounds");
   _writer->writeAttribute("minlat", QString::number(bounds.getMinY(), 'g', _precision));

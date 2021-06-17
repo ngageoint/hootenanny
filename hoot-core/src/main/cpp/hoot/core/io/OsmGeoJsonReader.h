@@ -153,7 +153,7 @@ private:
    * @param geometry Tree of simple geometry in JSON format
    * @return Vector of coordinates
    */
-  JsonCoordinates _parseGeometry(const boost::property_tree::ptree& geometry);
+  JsonCoordinates _parseGeometry(const boost::property_tree::ptree& geometry) const;
 
   /**
    * @brief _parseMulti*Geometry Parse the multi geometries into a vector of coordinates
@@ -173,14 +173,14 @@ private:
    * @param geometry Three of "multi" geometry in JSON format
    * @return Vector of vectors of coordinates
    */
-  std::vector<JsonCoordinates> _parseMultiGeometry(const boost::property_tree::ptree& geometry);
+  std::vector<JsonCoordinates> _parseMultiGeometry(const boost::property_tree::ptree& geometry) const;
 
   /**
    * @brief _parseBbox Parse the bounding box array in JSON format into Geos Envelope
    * @param bbox Tree of bounding box JSON array
    * @return Bounding box as a usable Envelope
    */
-  geos::geom::Envelope _parseBbox(const boost::property_tree::ptree& bbox);
+  geos::geom::Envelope _parseBbox(const boost::property_tree::ptree& bbox) const;
 
   /**
    * @brief _addTags Reads tags or properties from the given ptree, and adds them to the
@@ -202,7 +202,7 @@ private:
    */
   std::queue<std::string> _roles;
 
-  std::shared_ptr<geos::geom::Coordinate> ReadCoordinate(const boost::property_tree::ptree& coordsIt);
+  std::shared_ptr<geos::geom::Coordinate> ReadCoordinate(const boost::property_tree::ptree& coordsIt) const;
 
   /*
    * For use with older data not necessarily in WGS84.

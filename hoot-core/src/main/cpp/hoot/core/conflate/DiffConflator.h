@@ -119,7 +119,7 @@ public:
    *
    * @param map - Map to add the changes to
    */
-  void markInputElements(OsmMapPtr map);
+  void markInputElements(OsmMapPtr map) const;
 
   /**
    * Adds the changes to a map, as regular elements. This is useful for visualizing tag-diff output
@@ -128,7 +128,7 @@ public:
    * @param map - Map to add the changes to
    * @param pChanges - Changeset provider
    */
-  void addChangesToMap(OsmMapPtr map, ChangesetProviderPtr pChanges);
+  void addChangesToMap(OsmMapPtr map, ChangesetProviderPtr pChanges) const;
 
   /**
    * Writes a changeset with just the data from the input map
@@ -144,14 +144,6 @@ public:
     const ChangesetStatsFormat& changesetStatsFormat =
       ChangesetStatsFormat(ChangesetStatsFormat::Unknown),
     const QString& osmApiDbUrl = "");
-
-  /**
-   * Calculates statistics unique to Differential Conflation
-   *
-   * @param pResultMap map containing the features to calculate the statistics from
-   * @param stats the statistics to populate
-   */
-  void calculateStats(OsmMapPtr pResultMap, QList<SingleStat>& stats);
 
   /**
    * @see ProgressReporter
@@ -175,7 +167,7 @@ public:
    *
    * @return A changeset provider that can be used with ChangesetWriter classes
    */
-  MemChangesetProviderPtr getTagDiff() { return _tagChanges; }
+  MemChangesetProviderPtr getTagDiff() const { return _tagChanges; }
 
   QString getGeometryChangesetStats() const { return _geometryChangesetStats; }
   QString getTagChangesetStats() const { return _tagChangesetStats; }
@@ -184,6 +176,8 @@ public:
 
   void setRemoveLinearPartialMatchesAsWhole(bool remove)
   { _removeLinearPartialMatchesAsWhole = remove; }
+  void setRemoveRiverPartialMatchesAsWhole(bool remove)
+  { _removeRiverPartialMatchesAsWhole = remove; }
 
 private:
 
@@ -207,6 +201,7 @@ private:
   // portions that matched) or completely removed (entire element); see
   // differential.remove.linear.partial.matches.as.whole
   bool _removeLinearPartialMatchesAsWhole;
+  bool _removeRiverPartialMatchesAsWhole; // overrides the linear only option
   // These are only used when _removeLinearMatchesPartially returns true.
   std::vector<ConstMatchPtr> _matchesToRemoveAsPartial;
   std::vector<ConstMatchPtr> _matchesToRemoveAsWhole;
@@ -252,9 +247,9 @@ private:
   bool _tagsAreDifferent(const Tags& oldTags, const Tags& newTags) const;
 
   // Creates a change object using the original element and new tags
-  Change _getChange(ConstElementPtr pOldElement, ConstElementPtr pNewElement);
-  std::shared_ptr<ChangesetDeriver> _sortInputs(OsmMapPtr map1, OsmMapPtr map2);
-  ChangesetProviderPtr _getChangesetFromMap(OsmMapPtr map);
+  Change _getChange(ConstElementPtr pOldElement, ConstElementPtr pNewElement) const;
+  std::shared_ptr<ChangesetDeriver> _sortInputs(OsmMapPtr map1, OsmMapPtr map2) const;
+  ChangesetProviderPtr _getChangesetFromMap(OsmMapPtr map) const;
 
   long _snapSecondaryLinearFeaturesBackToRef();
 
@@ -280,7 +275,8 @@ private:
    * Removes only the geometric portions of linear match elements that were involved in a match.
    */
   void _removePartialSecondaryMatchElements();
-  void _removeMetadataTags();
+  void _cleanupAfterPartialMatchRemoval();
+  void _removeMetadataTags() const;
 };
 
 }

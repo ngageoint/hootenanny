@@ -162,7 +162,7 @@ public:
    */
   void replace(const std::shared_ptr<const Element>& from, const QList<ElementPtr>& to);
 
-  //NODE///////////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////NODE//////////////////////////////////////////////
 
   ConstNodePtr getNode(long id) const override;
   NodePtr getNode(long id) override;
@@ -199,7 +199,7 @@ public:
   int numNodesAppended() const { return _numNodesAppended; }
   int numNodesSkippedForAppending() const { return _numNodesSkippedForAppending; }
 
-  //WAY///////////////////////////////////////////////////////////////////////////////////
+  ///////////////////////////////////////WAY////////////////////////////////////////////////
 
   /**
    * Return the way with the specified id or null if it doesn't exist.
@@ -231,7 +231,7 @@ public:
   int numWaysAppended() const { return _numWaysAppended; }
   int numWaysSkippedForAppending() const { return _numWaysSkippedForAppending; }
 
-  //RELATION///////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////RELATION/////////////////////////////////////////////////
 
   ConstRelationPtr getRelation(long id) const override;
   RelationPtr getRelation(long id) override;

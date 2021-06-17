@@ -40,19 +40,19 @@ Range::Range(long int min, long int max)
   set(min,max);
 }
 
-bool Range::hashCode()
+bool Range::hashCode() const
 {
   int result = (int) (_max ^ (_max >> 32));
   result = (31 * result) + (int) (_min ^ (_min >> 32));
   return result;
 }
 
-bool Range::in(long int l)
+bool Range::in(long int l) const
 {
   return (l >= _min) && (l <= _max);
 }
 
-bool Range::isValid()
+bool Range::isValid() const
 {
   return (_min >= 0) && (_max >= 0);
 }
@@ -63,7 +63,7 @@ void Range::setInvalid()
   _max = -1;
 }
 
-QString Range::toString()
+QString Range::toString() const
 {
   return "[" + QString::number(_min) + " : " + QString::number(_max) + "]";
 }

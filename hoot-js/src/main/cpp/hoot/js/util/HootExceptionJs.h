@@ -47,14 +47,14 @@ class HootExceptionJs : public HootBaseJs
 {
 public:
 
-  static void Init(v8::Handle<v8::Object> target);
+  static void Init(v8::Local<v8::Object> target);
 
-  static v8::Handle<v8::Object> create(const HootException& e) { return create(std::shared_ptr<HootException>(e.clone())); }
-  static v8::Handle<v8::Object> create(const std::shared_ptr<HootException>& e);
+  static v8::Local<v8::Object> create(const HootException& e) { return create(std::shared_ptr<HootException>(e.clone())); }
+  static v8::Local<v8::Object> create(const std::shared_ptr<HootException>& e);
 
   std::shared_ptr<HootException> getException() const { return _e; }
 
-  static bool isHootException(v8::Handle<v8::Value> v);
+  static bool isHootException(v8::Local<v8::Value> v);
 
   /**
    * A convenience function for checking the result of a V8 call. This will throw an appropriate
@@ -63,7 +63,7 @@ public:
    * @param result Result of the V8 function call.
    * @param tc Try catch object. Must be instantiated before the V8 function is called.
    */
-  static void checkV8Exception(v8::Handle<v8::Value> result, v8::TryCatch& tc);
+  static void checkV8Exception(v8::Local<v8::Value> result, v8::TryCatch& tc);
 
   /**
    * This will throw an appropriate HootException based on the contents of tc.
@@ -86,11 +86,11 @@ private:
   static void toString(const v8::FunctionCallbackInfo<v8::Value>& args);
 };
 
-inline void toCpp(v8::Handle<v8::Value> v, std::shared_ptr<HootException>& e)
+inline void toCpp(v8::Local<v8::Value> v, std::shared_ptr<HootException>& e)
 {
   if (HootExceptionJs::isHootException(v))
   {
-    v8::Handle<v8::Object> obj = v8::Handle<v8::Object>::Cast(v);
+    v8::Local<v8::Object> obj = v8::Local<v8::Object>::Cast(v);
     HootExceptionJs* ex = node::ObjectWrap::Unwrap<HootExceptionJs>(obj);
 
     e = ex->getException();

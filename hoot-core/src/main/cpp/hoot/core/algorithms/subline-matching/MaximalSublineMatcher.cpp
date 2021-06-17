@@ -40,8 +40,6 @@ namespace hoot
 HOOT_FACTORY_REGISTER(SublineMatcher, MaximalSublineMatcher)
 
 MaximalSublineMatcher::MaximalSublineMatcher() :
-_maxAngle(-1.0),
-_minSplitSize(-1.0),
 _maxRecursions(-1)
 {
 }
@@ -54,10 +52,10 @@ WaySublineMatchString MaximalSublineMatcher::findMatch(const ConstOsmMapPtr& map
     maxRelevantDistance;
   LOG_VART(maxRelevantDistance);
   LOG_VART(_minSplitSize);
-  LOG_VART(_maxAngle);
+  LOG_VART(_maxRelevantAngle);
 
   MaximalSubline::ThresholdMatchCriteria* threshold =
-    new MaximalSubline::ThresholdMatchCriteria(mrd, _maxAngle);
+    new MaximalSubline::ThresholdMatchCriteria(mrd, _maxRelevantAngle);
   // This should use _minSplitSize rather than mrd, but that causes some tests to fail. We should
   // look into the problem and solve it. See redmine #6159.
   MaximalSubline ms(threshold, mrd);

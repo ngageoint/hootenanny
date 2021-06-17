@@ -158,7 +158,7 @@ bool LinearDiffMerger::_findAndProcessMatch(
   WaySublineMatchString match;
   try
   {
-    match = _sublineMatcher->findMatch(_map, way1, way2);
+    match = _matchSubline(way1, way2);
   }
   catch (const NeedsReviewException& e)
   {
@@ -189,8 +189,7 @@ bool LinearDiffMerger::_findAndProcessMatch(
   // We don't want to remove the nodes in this way's sublines, since they may belong to other
   // portions of the way or other ways. The caller of this class will be responsible for cleaning
   // them up, or they may be handled by conflate post ops.
-  const std::vector<ElementId> newWayIds =
-    WaySublineRemover::removeSubline(way2, subline2, _map, false);
+  const std::vector<ElementId> newWayIds = WaySublineRemover::removeSubline(way2, subline2, _map);
   LOG_VART(newWayIds.size());
   if (newWayIds.size() == 1)
   {
@@ -221,14 +220,23 @@ bool LinearDiffMerger::_findAndProcessMatch(
       "Replacing " << way2->getElementId() << " with " << relation->getElementId() << "...");
     replaced.emplace_back(way2->getElementId(), relation->getElementId());
   }
-  if (ConfigOptions().getDebugMapsWrite() && ConfigOptions().getDebugMapsWriteDetailed())
+  if (ConfigOptions().getDebugMapsWriteDetailed())
   {
     OsmMapWriterFactory::writeDebugMap(
-      _map,
+      _map, className(),
       "after-merge-" + way1->getElementId().toString() + "-" + way2->getElementId().toString());
   }
 
   return false;
+}
+
+WaySublineMatchString LinearDiffMerger::_matchSubline(ElementPtr e1, ElementPtr e2)
+{
+  LOG_TRACE(
+    "Matching sublines for: " << e1->getElementId() << " and " << e2->getElementId() << "...");
+  // Some attempts were made to use cached subline matches pased in from LinearSnapMergerJs for
+  // performance reasons, but the results were unstable. See branch 3969b.
+  return _sublineMatcher->findMatch(_map, e1, e2);
 }
 
 }

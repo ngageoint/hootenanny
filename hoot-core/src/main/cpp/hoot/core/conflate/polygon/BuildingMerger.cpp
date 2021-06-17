@@ -35,7 +35,7 @@
 #include <hoot/core/criterion/BuildingCriterion.h>
 #include <hoot/core/criterion/BuildingPartCriterion.h>
 #include <hoot/core/criterion/ElementCriterion.h>
-#include <hoot/core/criterion/ElementTypeCriterion.h>
+#include <hoot/core/criterion/NodeCriterion.h>
 #include <hoot/core/elements/ElementIdUtils.h>
 #include <hoot/core/elements/InMemoryElementSorter.h>
 #include <hoot/core/elements/OsmUtils.h>
@@ -269,8 +269,8 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementI
   }
 
   // remove the scrap element from the map
-  DeletableBuildingCriterion crit;
-  RecursiveElementRemover(scrap->getElementId(), &crit).apply(map);
+  std::shared_ptr<DeletableBuildingCriterion> crit = std::make_shared<DeletableBuildingCriterion>();
+  RecursiveElementRemover(scrap->getElementId(), false, crit).apply(map);
   scrap->getTags().clear();
 
   // delete any pre-existing multipoly members
@@ -549,14 +549,15 @@ std::shared_ptr<Element> BuildingMerger::buildBuilding(
     LOG_TRACE("Combined constituent buildings into: " << result);
 
     // remove the relation we previously marked for removal
-    DeletableBuildingCriterion crit;
+    std::shared_ptr<DeletableBuildingCriterion> crit =
+      std::make_shared<DeletableBuildingCriterion>();
     for (size_t i = 0; i < toRemove.size(); i++)
     {
       if (map->containsElement(toRemove[i]))
       {
         ElementPtr willRemove = map->getElement(toRemove[i]);
         ReplaceElementOp(toRemove[i], result->getElementId()).apply(map);
-        RecursiveElementRemover(toRemove[i], &crit).apply(map);
+        RecursiveElementRemover(toRemove[i], false, crit).apply(map);
         // just in case it wasn't removed (e.g. part of another relation)
         willRemove->getTags().clear();
       }

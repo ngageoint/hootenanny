@@ -49,9 +49,7 @@ public:
   void visit(const std::shared_ptr<Element>& e) override;
 
   QString getDescription() const override { return "Keeps tags by key"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 };
 

@@ -97,7 +97,7 @@ public:
     Tags tags;
     tags.set("poi", "yes");
     OsmMapPtr map(new OsmMap());
-    ConstWayPtr w1 = TestUtils::createWay(map, c, Status::Unknown1, 15.0, tags);
+    ConstWayPtr w1 = TestUtils::createWay(map, c, "", Status::Unknown1, 15.0, tags);
 
     CPPUNIT_ASSERT(!uut.isSatisfied(w1));
   }

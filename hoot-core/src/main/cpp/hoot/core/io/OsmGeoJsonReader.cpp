@@ -279,7 +279,7 @@ void OsmGeoJsonReader::_parseGeoJsonFeature(const boost::property_tree::ptree& f
   }
 }
 
-geos::geom::Envelope OsmGeoJsonReader::_parseBbox(const boost::property_tree::ptree& bbox)
+geos::geom::Envelope OsmGeoJsonReader::_parseBbox(const boost::property_tree::ptree& bbox) const
 {
   pt::ptree::const_iterator bboxIt = bbox.begin();
   if (bboxIt == bbox.end())
@@ -686,7 +686,7 @@ void OsmGeoJsonReader::_parseMultiPolygonGeometry(const boost::property_tree::pt
   }
 }
 
-JsonCoordinates OsmGeoJsonReader::_parseGeometry(const pt::ptree& geometry)
+JsonCoordinates OsmGeoJsonReader::_parseGeometry(const pt::ptree& geometry) const
 {
   JsonCoordinates results;
   string type = geometry.get("type", "");
@@ -732,7 +732,7 @@ JsonCoordinates OsmGeoJsonReader::_parseGeometry(const pt::ptree& geometry)
   return results;
 }
 
-vector<JsonCoordinates> OsmGeoJsonReader::_parseMultiGeometry(const pt::ptree& geometry)
+vector<JsonCoordinates> OsmGeoJsonReader::_parseMultiGeometry(const pt::ptree& geometry) const
 {
   vector<JsonCoordinates> results;
   string type = geometry.get("type", "");
@@ -845,7 +845,7 @@ string OsmGeoJsonReader::_parseSubTags(const pt::ptree& item)
     return ss.str();
 }
 
-std::shared_ptr<Coordinate> OsmGeoJsonReader::ReadCoordinate(const pt::ptree& coordsIt)
+std::shared_ptr<Coordinate> OsmGeoJsonReader::ReadCoordinate(const pt::ptree& coordsIt) const
 {
   std::shared_ptr<Coordinate> pCoord;
 

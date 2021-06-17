@@ -49,7 +49,6 @@ public:
   static QString className() { return "hoot::HootApiDb"; }
 
   HootApiDb();
-
   ~HootApiDb();
 
   /**
@@ -159,7 +158,7 @@ public:
   /**
    * Deletes a map and all of it's dependencies.
    */
-  void deleteMap(long mapId);
+  void deleteMap(long mapId) const;
 
   void deleteUser(long userId) override;
 
@@ -287,12 +286,12 @@ public:
    *
    * @param tableName
    */
-  void dropTable(const QString& tableName);
+  void dropTable(const QString& tableName) const;
 
   /**
    * Check if the database has table.
    */
-  bool hasTable(const QString& tableName);
+  bool hasTable(const QString& tableName) const;
 
   /**
    * Drops the specified sequences and cascades. No warning or error will be given
@@ -302,7 +301,7 @@ public:
    *
    * @param sequenceName
    */
-  void dropSequence(const QString& sequenceName);
+  void dropSequence(const QString& sequenceName) const;
 
   /**
    * Returns a map ID string suitable for using in table names. E.g. _1
@@ -353,7 +352,7 @@ public:
    * Very handy for testing.
    */
   QString execToString(QString sql, QVariant v1 = QVariant(), QVariant v2 = QVariant(),
-                       QVariant v3 = QVariant());
+                       QVariant v3 = QVariant()) const;
 
   QString tableTypeToTableName(const TableType& tableType) const override;
 
@@ -682,20 +681,20 @@ private:
    * @param from Copy structure from this table.
    * @param to Copy structure to this table.
    */
-  void _copyTableStructure(const QString& from, const QString& to);
+  void _copyTableStructure(const QString& from, const QString& to) const;
 
-  void _flushBulkInserts();
-  void _flushBulkDeletes();
+  void _flushBulkInserts() const;
+  void _flushBulkDeletes() const;
   long _getNextNodeId();
   long _getNextRelationId();
   long _getNextWayId();
   void _init();
-  void _lazyFlushBulkInsert();
+  void _lazyFlushBulkInsert() const;
 
   /**
    * Executes the insert, performs error checking and returns the new ID.
    */
-  long _insertRecord(QSqlQuery& query);
+  long _insertRecord(QSqlQuery& query) const;
   void _updateChangesetEnvelope( const ConstNodePtr node );
   void _updateChangesetEnvelope(const ConstWayPtr way);
   void _updateChangesetEnvelopeWayIds(const std::vector<long>& wayIds);
@@ -708,7 +707,7 @@ private:
   // These delete methods are for testing purposes only, as they don't do any checks for orphaned
   // relationships.  Feel free to harden them and promote to public members that can be used beyond
   // test code, if needed.
-  void _deleteFolderMapMappingsByMapId(const long mapId);
+  void _deleteFolderMapMappingsByMapId(const long mapId) const;
   void _deleteAllFolders(const std::set<long>& folderIds);
   void _deleteJob(const QString& id);
 };

@@ -42,7 +42,7 @@ IterativeEdgeMatcher::IterativeEdgeMatcher() :
 {
 }
 
-double IterativeEdgeMatcher::_aggregateScores(QList<double> pairs)
+double IterativeEdgeMatcher::_aggregateScores(QList<double> pairs) const
 {
   //qSort(pairs.begin(), pairs.end(), greaterThan);
   qSort(pairs);
@@ -106,7 +106,7 @@ QList<NetworkVertexScorePtr> IterativeEdgeMatcher::getAllVertexScores() const
   return result;
 }
 
-QList<ConstNetworkEdgePtr> IterativeEdgeMatcher::_getEdgesOnVertex(ConstNetworkVertexPtr v)
+QList<ConstNetworkEdgePtr> IterativeEdgeMatcher::_getEdgesOnVertex(ConstNetworkVertexPtr v) const
 {
   QList<ConstNetworkEdgePtr> r1 = _n1->getEdgesFromVertex(v);
   QList<ConstNetworkEdgePtr> r2 = _n2->getEdgesFromVertex(v);
@@ -160,7 +160,7 @@ void IterativeEdgeMatcher::_normalizeAllScores()
   _normalizeScores(_vertex21Scores);
 }
 
-void IterativeEdgeMatcher::_normalizeGlobalScores(EdgeScoreMap& t)
+void IterativeEdgeMatcher::_normalizeGlobalScores(EdgeScoreMap& t) const
 {
   double sum = 0.0;
   for (EdgeScoreMap::iterator it = t.begin(); it != t.end(); ++it)
@@ -185,7 +185,7 @@ void IterativeEdgeMatcher::_normalizeGlobalScores(EdgeScoreMap& t)
   }
 }
 
-void IterativeEdgeMatcher::_normalizeGlobalScores(VertexScoreMap& t)
+void IterativeEdgeMatcher::_normalizeGlobalScores(VertexScoreMap& t) const
 {
   double sum = 0.0;
   for (VertexScoreMap::iterator it = t.begin(); it != t.end(); ++it)
@@ -209,7 +209,7 @@ void IterativeEdgeMatcher::_normalizeGlobalScores(VertexScoreMap& t)
   }
 }
 
-void IterativeEdgeMatcher::_normalizeScores(EdgeScoreMap& t)
+void IterativeEdgeMatcher::_normalizeScores(EdgeScoreMap& t) const
 {
   for (EdgeScoreMap::iterator it = t.begin(); it != t.end(); ++it)
   {
@@ -229,7 +229,7 @@ void IterativeEdgeMatcher::_normalizeScores(EdgeScoreMap& t)
   }
 }
 
-void IterativeEdgeMatcher::_normalizeScores(VertexScoreMap& t)
+void IterativeEdgeMatcher::_normalizeScores(VertexScoreMap& t) const
 {
   for (VertexScoreMap::iterator it = t.begin(); it != t.end(); ++it)
   {
@@ -316,7 +316,7 @@ void IterativeEdgeMatcher::_seedVertexScores()
   }
 }
 
-void IterativeEdgeMatcher::_updateEdgeScores(EdgeScoreMap &em, const VertexScoreMap& vm)
+void IterativeEdgeMatcher::_updateEdgeScores(EdgeScoreMap &em, const VertexScoreMap& vm) const
 {
   // go through all edge matches
   for (EdgeScoreMap::iterator it = em.begin(); it != em.end(); ++it)
@@ -360,7 +360,7 @@ void IterativeEdgeMatcher::_updateEdgeScores(EdgeScoreMap &em, const VertexScore
   }
 }
 
-void IterativeEdgeMatcher::_updateVertexScores(VertexScoreMap& vm, EdgeScoreMap &/*em*/)
+void IterativeEdgeMatcher::_updateVertexScores(VertexScoreMap& vm, EdgeScoreMap &/*em*/) const
 {
   CostFunction cost;
   if (&vm == &_vertex12Scores)

@@ -71,7 +71,7 @@ private:
   OsmNetworkPtr _network;
 
   void _addEdge(ConstElementPtr from, ConstElementPtr to, QList<ConstElementPtr> members,
-    bool directed);
+    bool directed) const;
 
   /**
    * This is a very strict definition of contiguous. We're looking to make sure that the first
@@ -83,7 +83,7 @@ private:
 
   void _getFirstLastNodes(const ConstRelationPtr& r, ElementId& first, ElementId& last);
 
-  bool _isValidElement(const ConstElementPtr& e);
+  bool _isValidElement(const ConstElementPtr& e) const;
 
   void _visit(const ConstElementPtr& e);
 };

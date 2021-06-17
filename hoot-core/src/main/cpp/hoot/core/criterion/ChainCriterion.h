@@ -36,7 +36,7 @@ namespace hoot
 {
 
 /**
- * isSatisfied returns true if all the children are satisfied
+ * Is satisified if all of its children criteria are satisfied
  */
 class ChainCriterion : public ElementCriterion, public ElementCriterionConsumer,
   public Configurable, public ConstOsmMapConsumer
@@ -56,7 +56,8 @@ public:
 
   bool isSatisfied(const ConstElementPtr& e) const override;
 
-  ElementCriterionPtr clone() override { return ElementCriterionPtr(new ChainCriterion(_criteria)); }
+  ElementCriterionPtr clone() override
+  { return ElementCriterionPtr(new ChainCriterion(_criteria)); }
 
   void setOsmMap(const OsmMap* map) override;
 
@@ -72,7 +73,7 @@ public:
 
 protected:
 
-  ChainCriterion(const std::vector<std::shared_ptr<ElementCriterion>>& criteria);
+  ChainCriterion(const std::vector<ElementCriterionPtr>& criteria);
 
   std::vector<std::shared_ptr<ElementCriterion>> _criteria;
 

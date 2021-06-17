@@ -73,7 +73,7 @@ private:
   std::istream* _strm;
   char _buffer[2048];
 
-  bool _eof();
+  bool _eof() const;
   QString _readLine();
 };
 

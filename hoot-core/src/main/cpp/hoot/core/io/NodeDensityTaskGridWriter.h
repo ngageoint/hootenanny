@@ -44,6 +44,8 @@ class NodeDensityTaskGridWriter
 {
 public:
 
+  static QString className() { return "hoot::NodeDensityTaskGridWriter"; }
+
   /**
    * Writes boundary tiles to a GeoJSON output file
    *
@@ -55,11 +57,10 @@ public:
    * @todo collapse with OSM writing method and refactor to TileFootprintWriter?
    * @todo refactor selectSingleRandomTile out?
    */
-  static void writeTilesToGeoJson(const std::vector<std::vector<geos::geom::Envelope>>& tiles,
-                                  const std::vector<std::vector<long>>& nodeCounts,
-                                  const QString& outputPath,
-                                  const QString& fileSource = "",
-                                  const bool selectSingleRandomTile = false, int randomSeed = -1);
+  static void writeTilesToGeoJson(
+    const std::vector<std::vector<geos::geom::Envelope>>& tiles,
+    const std::vector<std::vector<long>>& nodeCounts, const QString& outputPath,
+    const QString& fileSource = "", const bool selectSingleRandomTile = false, int randomSeed = -1);
 
   /**
    * Writes boundary tiles to an OSM output file

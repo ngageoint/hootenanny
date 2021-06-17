@@ -48,7 +48,7 @@ class WayJoinerTest : public HootTestFixture
   CPPUNIT_TEST_SUITE(WayJoinerTest);
   CPPUNIT_TEST(runSimpleTest);
   CPPUNIT_TEST(runCornerSplitterTest);
-  CPPUNIT_TEST(runIntersectionSplitterTest);
+  CPPUNIT_TEST(runIntersectionSplitTest);
   CPPUNIT_TEST(runConflateTest);
   CPPUNIT_TEST(runAdvancedConflateTest);
   CPPUNIT_TEST(runNonIntersectionJoinerTest);
@@ -56,8 +56,8 @@ class WayJoinerTest : public HootTestFixture
 public:
 
   WayJoinerTest()
-    : HootTestFixture("test-files/algorithms/wayjoiner/",
-                      "test-output/algorithms/wayjoiner/")
+    : HootTestFixture("test-files/algorithms/WayJoinerTest/",
+                      "test-output/algorithms/WayJoinerTest/")
   {
     setResetType(ResetAll);
   }
@@ -100,7 +100,7 @@ public:
                      _inputPath + "WayJoinerCornerSplitterExpected.osm");
   }
 
-  void runIntersectionSplitterTest()
+  void runIntersectionSplitTest()
   {
     OsmXmlReader reader;
     OsmMapPtr map(new OsmMap());

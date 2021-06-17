@@ -1,201 +1,321 @@
 
-#1:
-Total tag count: 4,698
-365	(7.77%)	road
-9	(<1%)	motorway
+Testing with no keys specified...
 
-#2:
-Total tag count: 4,698
-9	(<1%)	motorway
-365	(7.77%)	road
+Total elements processed: 4,698. Total tags processed: 748.
+365	(7.77%)	highway=road
+18	(<1%)	name=h st nw
+18	(<1%)	name=pennsylvania ave nw
+17	(<1%)	name=i st nw
+15	(<1%)	name=constitution ave nw
+14	(<1%)	name=17th st nw
+14	(<1%)	name=e st nw
+13	(<1%)	name=k st nw
+13	(<1%)	name=virginia ave nw
+12	(<1%)	name=14th st nw
+12	(<1%)	name=15th st nw
+12	(<1%)	name=18th st nw
+11	(<1%)	name=independence ave sw
+11	(<1%)	name=25th st nw
+11	(<1%)	name=g st nw
+11	(<1%)	name=f st nw
+10	(<1%)	name=21st st nw
+10	(<1%)	name=20th st nw
+10	(<1%)	name=19th st nw
+10	(<1%)	name=23rd st nw
+9	(<1%)	name=interstate 66 bn
+9	(<1%)	highway=motorway
+8	(<1%)	name=13th st nw
+7	(<1%)	name=22nd st nw
+6	(<1%)	name=washington cir nw
+6	(<1%)	name=24th st nw
+6	(<1%)	name=c st nw
+6	(<1%)	name=new york ave nw
+6	(<1%)	name=new hampshire ave nw
+5	(<1%)	name=14th st sw
+4	(<1%)	name=12th st sw
+4	(<1%)	name=16th st nw
+3	(<1%)	name=ohio dr nw
+3	(<1%)	name=madison dr nw
+3	(<1%)	name=lincoln memorial cir sw
+3	(<1%)	name=lincoln memorial cir nw
+3	(<1%)	name=d st nw
+3	(<1%)	name=26th st nw
+3	(<1%)	name=jefferson dr sw
+3	(<1%)	name=maine ave sw
+2	(<1%)	name=ohio dr sw
+2	(<1%)	name=ellipse rd nw
+2	(<1%)	name=east executive ave nw
+2	(<1%)	name=d st sw
+2	(<1%)	name=connecticut ave nw
+2	(<1%)	name=c st sw
+2	(<1%)	name=15th st sw
+2	(<1%)	name=12th st nw
+2	(<1%)	name=e st expy nw
+2	(<1%)	name=rock creek  potomac pkwy nw
+2	(<1%)	name=raoul wallenberg pl sw
+2	(<1%)	name=vermont ave nw
+2	(<1%)	name=state pl nw
+1	(<1%)	name=west executive ave nw
+1	(<1%)	name=west basin dr sw
+1	(<1%)	name=south executive ave nw
+1	(<1%)	name=queen annes ln nw
+1	(<1%)	name=madison pl nw
+1	(<1%)	name=jackson pl nw
+1	(<1%)	name=henry bacon dr nw
+1	(<1%)	name=daniel c french dr sw
+1	(<1%)	name=arlington memorial brg sw
+1	(<1%)	name=alexander hamilton pl nw
+1	(<1%)	name=23rd st sw
+1	(<1%)	name=17th st sw
+1	(<1%)	name=13th st sw
+1	(<1%)	name=13 12 st nw
+1	(<1%)	name=12th st expy nw
 
-#3:
-No tags with keys: highway were found.
+Testing with a single key specified...
 
-#4:
-Total tag count: 4,698
-18	(<1%)	h st nw
-18	(<1%)	pennsylvania ave nw
-17	(<1%)	i st nw
-15	(<1%)	constitution ave nw
-14	(<1%)	17th st nw
-14	(<1%)	e st nw
-13	(<1%)	k st nw
-13	(<1%)	virginia ave nw
-12	(<1%)	14th st nw
-12	(<1%)	15th st nw
-12	(<1%)	18th st nw
-11	(<1%)	independence ave sw
-11	(<1%)	25th st nw
-11	(<1%)	g st nw
-11	(<1%)	f st nw
-10	(<1%)	21st st nw
-10	(<1%)	20th st nw
-10	(<1%)	19th st nw
-10	(<1%)	23rd st nw
-9	(<1%)	interstate 66 bn
-8	(<1%)	13th st nw
-7	(<1%)	22nd st nw
-6	(<1%)	washington cir nw
-6	(<1%)	24th st nw
-6	(<1%)	c st nw
-6	(<1%)	new york ave nw
-6	(<1%)	new hampshire ave nw
-5	(<1%)	14th st sw
-4	(<1%)	12th st sw
-4	(<1%)	16th st nw
-3	(<1%)	ohio dr nw
-3	(<1%)	madison dr nw
-3	(<1%)	lincoln memorial cir sw
-3	(<1%)	lincoln memorial cir nw
-3	(<1%)	d st nw
-3	(<1%)	26th st nw
-3	(<1%)	jefferson dr sw
-3	(<1%)	maine ave sw
-2	(<1%)	ohio dr sw
-2	(<1%)	ellipse rd nw
-2	(<1%)	east executive ave nw
-2	(<1%)	d st sw
-2	(<1%)	connecticut ave nw
-2	(<1%)	c st sw
-2	(<1%)	15th st sw
-2	(<1%)	12th st nw
-2	(<1%)	e st expy nw
-2	(<1%)	rock creek  potomac pkwy nw
-2	(<1%)	raoul wallenberg pl sw
-2	(<1%)	vermont ave nw
-2	(<1%)	state pl nw
-1	(<1%)	west executive ave nw
-1	(<1%)	west basin dr sw
-1	(<1%)	south executive ave nw
-1	(<1%)	queen annes ln nw
-1	(<1%)	madison pl nw
-1	(<1%)	jackson pl nw
-1	(<1%)	henry bacon dr nw
-1	(<1%)	daniel c french dr sw
-1	(<1%)	arlington memorial brg sw
-1	(<1%)	alexander hamilton pl nw
-1	(<1%)	23rd st sw
-1	(<1%)	17th st sw
-1	(<1%)	13th st sw
-1	(<1%)	13 12 st nw
-1	(<1%)	12th st expy nw
+Total elements processed: 4,698. Total tags processed: 748.
+365	(7.77%)	highway=road
+9	(<1%)	highway=motorway
 
-#5:
-Total tag count: 4,698
-18	(<1%)	h st nw
-18	(<1%)	pennsylvania ave nw
-17	(<1%)	i st nw
-15	(<1%)	constitution ave nw
-14	(<1%)	17th st nw
+Testing with multiple keys and inputs specified...
 
-#6:
-Total tag count: 4,698
-320	(6.81%)	nw
-246	(5.24%)	st
-80	(1.7%)	ave
-45	(<1%)	sw
-18	(<1%)	h
+Total elements processed: 8,088. Total tags processed: 1,137.
+417	(5.16%)	highway=road
+148	(1.83%)	highway=unclassified
+28	(<1%)	name=pennsylvania ave nw
+20	(<1%)	name=h st nw
+19	(<1%)	name=i st nw
+18	(<1%)	highway=secondary
+17	(<1%)	name=e st nw
+16	(<1%)	name=17th st nw
+16	(<1%)	name=constitution ave nw
+16	(<1%)	name=k st nw
+15	(<1%)	name=independence ave sw
+15	(<1%)	name=25th st nw
+14	(<1%)	name=14th st nw
+14	(<1%)	name=15th st nw
+14	(<1%)	name=g st nw
+14	(<1%)	name=f st nw
+14	(<1%)	name=virginia ave nw
+13	(<1%)	name=18th st nw
+12	(<1%)	name=20th st nw
+12	(<1%)	name=23rd st nw
+12	(<1%)	name=ellipse rd nw
+11	(<1%)	name=21st st nw
+11	(<1%)	name=19th st nw
+10	(<1%)	name=22nd st nw
+10	(<1%)	name=new hampshire ave nw
+9	(<1%)	name=interstate 66 bn
+9	(<1%)	highway=motorway
+9	(<1%)	name=13th st nw
+8	(<1%)	name=new york ave nw
+8	(<1%)	name=14th st sw
+8	(<1%)	name=12th st sw
+8	(<1%)	name=c st nw
+7	(<1%)	name=24th st nw
+7	(<1%)	name=washington cir nw
+6	(<1%)	name=d st nw
+6	(<1%)	highway=path
+6	(<1%)	name=16th st nw
+5	(<1%)	name=maine ave sw
+5	(<1%)	name=ohio dr sw
+5	(<1%)	name=us hwy 50
+4	(<1%)	name=vermont ave nw
+4	(<1%)	name=26th st nw
+4	(<1%)	name=17th st sw
+4	(<1%)	name=connecticut ave nw
+4	(<1%)	name=jefferson dr sw
+4	(<1%)	name=madison dr nw
+4	(<1%)	name=rock crk and potomac pkwy nw
+3	(<1%)	name=snows ct nw
+3	(<1%)	name=ohio dr nw
+3	(<1%)	name=d st sw
+3	(<1%)	name=c st sw
+3	(<1%)	name=15th st sw
+3	(<1%)	highway=primary
+3	(<1%)	name=12th st nw
+3	(<1%)	name=lincoln memorial cir sw
+3	(<1%)	name=lincoln memorial cir nw
+3	(<1%)	name=raoul wallenberg pl sw
+3	(<1%)	name=us hwy 29
+3	(<1%)	name=us hwy 1
+3	(<1%)	name=state pl nw
+3	(<1%)	name=w basin dr sw
+2	(<1%)	name=queen annes ln nw
+2	(<1%)	name=madison pl nw
+2	(<1%)	name=jackson pl nw
+2	(<1%)	name=henry bacon dr nw
+2	(<1%)	name=east executive ave nw
+2	(<1%)	name=alexander hamilton pl nw
+2	(<1%)	name=13th st sw
+2	(<1%)	name=13 12 st nw
+2	(<1%)	name=e st expy nw
+2	(<1%)	name=e st expy
+2	(<1%)	name=i 66
+2	(<1%)	name=rock creek  potomac pkwy nw
+2	(<1%)	name=south pl nw
+1	(<1%)	name=zei aly nw
+1	(<1%)	name=whitehurst fwy rmp
+1	(<1%)	name=west executive ave nw
+1	(<1%)	name=west basin dr sw
+1	(<1%)	name=w executive ave nw
+1	(<1%)	name=virginia avenue north w
+1	(<1%)	name=south executive ave nw
+1	(<1%)	name=reed ct nw
+1	(<1%)	name=rawlings sq nw
+1	(<1%)	name=raoul wallenberg pl
+1	(<1%)	name=lincoln memorial cir
+1	(<1%)	name=lees ct nw
+1	(<1%)	name=kutz brg
+1	(<1%)	name=hughes mews st nw
+1	(<1%)	name=executive ave nw
+1	(<1%)	name=e executive ave nw
+1	(<1%)	name=daniel french dr sw
+1	(<1%)	name=daniel c french dr sw
+1	(<1%)	name=colonial ln nw
+1	(<1%)	name=arlington memorial brg sw
+1	(<1%)	name=arlington memorial brg
+1	(<1%)	name=23rd st sw
+1	(<1%)	name=12th st expy nw
 
-#7:
-Total tag count: 8,088
-417	(5.16%)	road
-148	(1.83%)	unclassified
-28	(<1%)	pennsylvania ave nw
-20	(<1%)	h st nw
-19	(<1%)	i st nw
-18	(<1%)	secondary
-17	(<1%)	e st nw
-16	(<1%)	17th st nw
-16	(<1%)	constitution ave nw
-16	(<1%)	k st nw
-15	(<1%)	independence ave sw
-15	(<1%)	25th st nw
-14	(<1%)	14th st nw
-14	(<1%)	15th st nw
-14	(<1%)	g st nw
-14	(<1%)	f st nw
-14	(<1%)	virginia ave nw
-13	(<1%)	18th st nw
-12	(<1%)	20th st nw
-12	(<1%)	23rd st nw
-12	(<1%)	ellipse rd nw
-11	(<1%)	21st st nw
-11	(<1%)	19th st nw
-10	(<1%)	22nd st nw
-10	(<1%)	new hampshire ave nw
-9	(<1%)	interstate 66 bn
-9	(<1%)	13th st nw
-9	(<1%)	motorway
-8	(<1%)	new york ave nw
-8	(<1%)	14th st sw
-8	(<1%)	12th st sw
-8	(<1%)	c st nw
-7	(<1%)	24th st nw
-7	(<1%)	washington cir nw
-6	(<1%)	d st nw
-6	(<1%)	16th st nw
-6	(<1%)	path
-5	(<1%)	maine ave sw
-5	(<1%)	ohio dr sw
-5	(<1%)	us hwy 50
-4	(<1%)	vermont ave nw
-4	(<1%)	26th st nw
-4	(<1%)	17th st sw
-4	(<1%)	connecticut ave nw
-4	(<1%)	jefferson dr sw
-4	(<1%)	madison dr nw
-4	(<1%)	rock crk and potomac pkwy nw
-3	(<1%)	us hwy 29
-3	(<1%)	us hwy 1
-3	(<1%)	snows ct nw
-3	(<1%)	primary
-3	(<1%)	ohio dr nw
-3	(<1%)	d st sw
-3	(<1%)	c st sw
-3	(<1%)	15th st sw
-3	(<1%)	12th st nw
-3	(<1%)	lincoln memorial cir sw
-3	(<1%)	lincoln memorial cir nw
-3	(<1%)	raoul wallenberg pl sw
-3	(<1%)	state pl nw
-3	(<1%)	w basin dr sw
-2	(<1%)	rock creek  potomac pkwy nw
-2	(<1%)	queen annes ln nw
-2	(<1%)	madison pl nw
-2	(<1%)	jackson pl nw
-2	(<1%)	henry bacon dr nw
-2	(<1%)	east executive ave nw
-2	(<1%)	alexander hamilton pl nw
-2	(<1%)	13th st sw
-2	(<1%)	13 12 st nw
-2	(<1%)	e st expy nw
-2	(<1%)	e st expy
-2	(<1%)	i 66
-2	(<1%)	south pl nw
-1	(<1%)	zei aly nw
-1	(<1%)	whitehurst fwy rmp
-1	(<1%)	west executive ave nw
-1	(<1%)	west basin dr sw
-1	(<1%)	w executive ave nw
-1	(<1%)	virginia avenue north w
-1	(<1%)	south executive ave nw
-1	(<1%)	reed ct nw
-1	(<1%)	rawlings sq nw
-1	(<1%)	raoul wallenberg pl
-1	(<1%)	lincoln memorial cir
-1	(<1%)	lees ct nw
-1	(<1%)	kutz brg
-1	(<1%)	hughes mews st nw
-1	(<1%)	executive ave nw
-1	(<1%)	e executive ave nw
-1	(<1%)	daniel french dr sw
-1	(<1%)	daniel c french dr sw
-1	(<1%)	colonial ln nw
-1	(<1%)	arlington memorial brg sw
-1	(<1%)	arlington memorial brg
-1	(<1%)	23rd st sw
-1	(<1%)	12th st expy nw
+Testing with a single key and a criterion specified...
 
-#8:
-No tags with keys: blah were found.
+Total elements processed: 374. Total tags processed: 748. Filtered by: hoot::HighwayCriterion.
+365	(97.6%)	highway=road
+9	(2.41%)	highway=motorway
+
+Testing with a single key and multiple criteria specified...
+
+Total elements processed: 374. Total tags processed: 748. Filtered by: OrCriterion(hoot::HighwayCriterion;hoot::WayCriterion).
+365	(97.6%)	highway=road
+9	(2.41%)	highway=motorway
+
+Testing a crit chain...
+
+No tags with keys: highway were found out of 0 total tags processed. Filtered by: ChainCriterion(hoot::HighwayCriterion;hoot::PoiCriterion).
+
+Testing a non-streamable crit chain that will fail without an input map...
+
+Total elements processed: 4,698. Total tags processed: 748. Filtered by: OrCriterion(hoot::HighwayCriterion;hoot::HighwayWayNodeCriterion).
+365	(7.77%)	highway=road
+9	(<1%)	highway=motorway
+
+Testing a negated crit...
+
+Total elements processed: 4,698. Total tags processed: 748. Filtered by: NotCriterion(hoot::PoiCriterion).
+365	(7.77%)	highway=road
+9	(<1%)	highway=motorway
+
+Testing key not present...
+
+No tags with keys: blah were found out of 748 total tags processed.
+
+Testing criterion for elements not present...
+
+No tags with keys: highway were found out of 0 total tags processed. Filtered by: hoot::PoiCriterion.
+
+Testing with a single key and counting matching elements only...
+
+Total elements processed: 374. Total tags processed: 748.
+365	(97.6%)	highway=road
+9	(2.41%)	highway=motorway
+
+Testing names...
+
+Total elements processed: 4,698. Total tags processed: 748.
+18	(<1%)	name=h st nw
+18	(<1%)	name=pennsylvania ave nw
+17	(<1%)	name=i st nw
+15	(<1%)	name=constitution ave nw
+14	(<1%)	name=17th st nw
+14	(<1%)	name=e st nw
+13	(<1%)	name=k st nw
+13	(<1%)	name=virginia ave nw
+12	(<1%)	name=14th st nw
+12	(<1%)	name=15th st nw
+12	(<1%)	name=18th st nw
+11	(<1%)	name=independence ave sw
+11	(<1%)	name=25th st nw
+11	(<1%)	name=g st nw
+11	(<1%)	name=f st nw
+10	(<1%)	name=21st st nw
+10	(<1%)	name=20th st nw
+10	(<1%)	name=19th st nw
+10	(<1%)	name=23rd st nw
+9	(<1%)	name=interstate 66 bn
+8	(<1%)	name=13th st nw
+7	(<1%)	name=22nd st nw
+6	(<1%)	name=washington cir nw
+6	(<1%)	name=24th st nw
+6	(<1%)	name=c st nw
+6	(<1%)	name=new york ave nw
+6	(<1%)	name=new hampshire ave nw
+5	(<1%)	name=14th st sw
+4	(<1%)	name=12th st sw
+4	(<1%)	name=16th st nw
+3	(<1%)	name=ohio dr nw
+3	(<1%)	name=madison dr nw
+3	(<1%)	name=lincoln memorial cir sw
+3	(<1%)	name=lincoln memorial cir nw
+3	(<1%)	name=d st nw
+3	(<1%)	name=26th st nw
+3	(<1%)	name=jefferson dr sw
+3	(<1%)	name=maine ave sw
+2	(<1%)	name=ohio dr sw
+2	(<1%)	name=ellipse rd nw
+2	(<1%)	name=east executive ave nw
+2	(<1%)	name=d st sw
+2	(<1%)	name=connecticut ave nw
+2	(<1%)	name=c st sw
+2	(<1%)	name=15th st sw
+2	(<1%)	name=12th st nw
+2	(<1%)	name=e st expy nw
+2	(<1%)	name=rock creek  potomac pkwy nw
+2	(<1%)	name=raoul wallenberg pl sw
+2	(<1%)	name=vermont ave nw
+2	(<1%)	name=state pl nw
+1	(<1%)	name=west executive ave nw
+1	(<1%)	name=west basin dr sw
+1	(<1%)	name=south executive ave nw
+1	(<1%)	name=queen annes ln nw
+1	(<1%)	name=madison pl nw
+1	(<1%)	name=jackson pl nw
+1	(<1%)	name=henry bacon dr nw
+1	(<1%)	name=daniel c french dr sw
+1	(<1%)	name=arlington memorial brg sw
+1	(<1%)	name=alexander hamilton pl nw
+1	(<1%)	name=23rd st sw
+1	(<1%)	name=17th st sw
+1	(<1%)	name=13th st sw
+1	(<1%)	name=13 12 st nw
+1	(<1%)	name=12th st expy nw
+
+Testing types...
+
+Total elements processed: 4,698. Total tags processed: 748.
+365	(7.77%)	highway=road
+9	(<1%)	highway=motorway
+
+Testing sorting by value...
+
+Total elements processed: 4,698. Total tags processed: 748.
+9	(<1%)	highway=motorway
+365	(7.77%)	highway=road
+
+Testing limiting...
+
+Total elements processed: 4,698. Total tags processed: 748.
+18	(<1%)	name=h st nw
+18	(<1%)	name=pennsylvania ave nw
+17	(<1%)	name=i st nw
+15	(<1%)	name=constitution ave nw
+14	(<1%)	name=17th st nw
+
+Testing tokenization...
+
+Total elements processed: 4,698. Total tags processed: 748.
+320	(6.81%)	name=nw
+246	(5.24%)	name=st
+80	(1.7%)	name=ave
+45	(<1%)	name=sw
+18	(<1%)	name=h

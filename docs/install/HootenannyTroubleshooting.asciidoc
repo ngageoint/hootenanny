@@ -2,24 +2,11 @@
 [[HootInstallTroubleshooting]]
 == Troubleshooting
 
-*8/19/20: Many items in this document are now obsolete.*
-
 === Core
 
-* *You cannot resolve any Hootenanny commands by typing 'hoot' at the command line?* -> Hootenanny Core has been installed incorrectly by the InstallHoot.sh script.  The script is designed to clear existing
-Hootenanny installations from the install target path when run, but its possible this did not occur.  The following commands will completely clean Hootenanny core from the system (paths are dependent upon the
-settings used in the UpdateHoot-CentOS6.sh script):
---------
-sudo rm -rf $HOOT_CORE_INSTALL_DIR/hootenanny-$NEW_VERSION
-sudo rm -f $HOOT_CORE_INSTALL_DIR/hoot
-sudo rm -f $HOOT_CORE_INSTALL_DIR/bin/hoot
---------
-
-* *Don't think the correct version of Hootenanny core is installed?* -> You can check the version of the core by clicking on the "Hootenanny | Innovision" logo from within the UI.  Or as a sanity check, type 'hoot version' from the command line.  The version displayed should match the version you installed.  Finally, the core version used by the services can be found by navigating to the following URLs:
+* *Don't think the correct version of Hootenanny core is installed?* -> You can check the version of the core by clicking on the "Hootenanny" logo from within the UI. Or as a sanity check, type 'hoot version' from the command line.  The version displayed should match the version you installed. Finally, the core version used by the services can be found by navigating to the following URLs:
 	** +http://localhost/hoot-services/info/about/coreVersionInfo+
 	** +http://localhost/hoot-services/info/about/coreVersionDetail+
-
-* *qmake step fails during hoot compilation?* -> Do you have `QT_HOME/bin` on your path?
 
 * *Not sure if hoot is using the correct version of a dependency library?* -> run: +ldd /usr/local/bin/hoot.bin+ to see a list of the libraries its using. You can use +yum list installed | grep <library name>+ to see the libraries installed on your system.
 
@@ -27,19 +14,12 @@ sudo rm -f $HOOT_CORE_INSTALL_DIR/bin/hoot
 	**  +/usr/local/hootenanny-X.Y.Z/conf/database/DatabaseConfigLocal.sh+
 	**  +/usr/local/hootenanny-X.Y.Z/conf/database/DatabaseConfigDefault.sh+
 
-* *"PostgreSQL" and "FileGDB" formats do not show when running ogrinfo --formats* -> Possibly you have compiled GDAL incorrectly. Re-compile with the steps listed in INSTALL-CentOS6.5-PG9.1.txt that were run during the hoot core installation.
-
-* *Problems with the GDAL Python module?* -> Make sure you compiled GDAL with the +--with-python+ switch.
-
-* *Problems with gdal2tiles.py?* -> You may be able to solve this problem by modifying the GDAL2TILES property in +$HOOT_HOME/scripts/makerastertotiles+ by providing it with the full path to gdal2tiles.py (usually in +/usr/local/bin+ or +/usr/local/gdal<version>/swig/python/scripts+ ).
-
-* *Getting a compiler failure when compiling Hoot core?* -> g++ fails with a non-descript error? Its not known what causes this yet, but its very bad and has happened a few times now. First, be sure you've done a make uninstall on the previous version of Hoot and go ahead and do a make uninstall on the version you're trying to compile. Its also possible you have a bad release, in which case a new one should be built.
-
 === Database
 
-* *Unable to use PSQL?* -> Is the PSQL executable on your path?
-
-* *Problems updating the hoot database schema?* -> Verify that the owner listed in the script is "hoot" throughout for all the hoot database tables. If not replace the text "OWNER TO <other-owner> with "OWNER TO hoot".
+* *Want to clear data out of the hoot database?* ->
+--------------------------------------
+make clean-db
+--------------------------------------
 
 * *Unable to delete one of the databases?* -> try (from link:$$http://stackoverflow.com/questions/11388786/how-does-one-drop-a-template-database-from-postgresql$$[here]):
 
@@ -59,20 +39,9 @@ SELECT * FROM pg_stat_activity WHERE datname='database name';
 dropdb 'database name'
 --------------------------------------
 
-* *Want to clear data out of the hoot database?* ->
-
---------------------------------------
-export HOOT_HOME=/usr/local/hoot
-$HOOT_HOME/scripts/database/DeleteAllTables.sh
---------------------------------------
-
-To re-create the hoot database, run the UpdateHoot-CentOS6.sh script with only the +UPDATE_DATABASE+ variable set to "true".
+To re-create the hoot database, run `make`.
 
 * *When using PSQL, asked for a password for a database (rather than for a user) and don't have it?* -> Possibly, you have authentication still set to MD5 in the pg_hba.conf file. Temporarily set unset if from MD5 (see Postgres install steps) to use PSQL. Set it back to MD5 when you've finished using PSQL.
-
-
-* *liquibase update fails to run on the hoot database?*->
-	** The update will fail if you do not reference the path to the changelog files in exactly the same way the hoot database references them in the databasechangelog table. If they are referenced from a different path, then you will lose all your data. As a last resort if the liquibase update does not work, you can run the `$HOOT_HOME/database/DeleteAllTables.sh` script and then re-create the tables with `$HOOT_HOME/DbSchema.sql`. You will lose all existing data with this method.
 
 * *Getting a change log lock error?* ->
 
@@ -116,35 +85,17 @@ COMMIT
 
 === Services
 
-* *WAR files will not deploy?* -> If your Tomcat instance is not set up to automatically deploy WAR files for some reason, then you will need to restart Tomcat to extract the WAR contents to a folder before setting permissions on them.
-* *Need to monitor the Tomcat log for errors?* ->
+* *Need to monitor the Tomcat log?* ->
+
 --------------------------------------
-tail -f /var/log/tomcat8/catalina.out | grep -i -e ERROR -e SEVERE
+sudo journalctl -eu tomcat8
 --------------------------------------
 
 * *Not sure the correct version of Hootenanny services are deployed?* -> You can check the version of the core by clicking on the "Hootenanny | Innovision| logo from within the UI.  Or as a sanity check, verify the services version by navigating to the following URLs:
 	** +http://localhost/hoot-services/info/about/servicesVersionInfo+
 	** +http://localhost/hoot-services/info/about/servicesVersionDetail+
 
-* *Can't hit the service URL's above?* -> The install script should handle this installation correctly, but perhaps the Hootenanny web application was installed to the incorrect location.  It should exist at: /var/lib/tomcat8/webapps/hoot-services .  Although UpdateHoot-CentOS6.sh will clean out any previously existing Hootenanny web applications, as a manual alternative, the following commands will clean out any previously existing
-installations:
---------
-sudo rm -f /var/lib/tomcat8/webapps/hoot*-services*.war
-sudo rm -rf /var/lib/tomcat8/webapps/hoot*-services*
---------
-
 * *Do you want to see more granular services log output or redirect it to a file?* -> Edit +/var/lib/tomcat8/webapps/hoot-services/WEB-INF/classes/log4j2.xml+ . See the log4j2 documentation for details on how to edit the file. Restart Tomcat after any changes made to the file.
-
-* *Problems reading/writing from the database when using hoot?* -> Verify the database credentials in:
-	**  +$HOOT_HOME/conf/database/DatabaseConfigLocal.sh+
-	**  +$HOOT_HOME/conf/database/DatabaseConfigDefault.sh+
-	**  +/var/lib/tomcat8/webapps/hoot-services/WEB-INF/classes/db/db.properties+
-	**  +/var/lib/tomcat8/webapps/hoot-services/WEB-INF/classes/conf/hoot-services.conf+
-	** Also, verify +/var/lib/tomcat8/webapps/hoot-services/WEB-INF/classes/db/db.properties+
-		. `HOOTAPI_CONNECTION_POOL_MAX_ACTIVE=90`
-		. `HOOTAPI_CONNECTION_POOL_MAX_IDLE=30`
-
-* *Seeing this error: "convert Unable to open /path/to/file.shp"* -> Possibly you do not have the Postgres extension installed for GDAL. See related troubleshooting tip in the "Core" section.
 
 [[HootUITroubleshoot]]
 === UI

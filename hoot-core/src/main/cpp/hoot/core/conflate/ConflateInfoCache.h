@@ -160,7 +160,7 @@ public:
    * @param memberId the element ID of the child
    * @return true if parent has the element with memberId as a child; false otherwise
    */
-  bool containsMember(const ConstElementPtr& parent, const ElementId& memberId);
+  bool containsMember(const ConstElementPtr& parent, const ElementId& memberId) const;
 
   /**
    * Clears the contents of the cache

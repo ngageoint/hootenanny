@@ -43,7 +43,7 @@
 #include <hoot/core/criterion/AreaCriterion.h>
 #include <hoot/core/criterion/StatsAreaCriterion.h>
 #include <hoot/core/criterion/LinearCriterion.h>
-#include <hoot/core/criterion/CollectionRelationCriterion.h>
+#include <hoot/core/criterion/RelationCriterion.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/geometry/GeometryUtils.h>
@@ -389,7 +389,7 @@ geos::geom::GeometryTypeId ElementToGeometryConverter::getGeometryType(
         else if (linearCrit.isSatisfied(r))
           return GEOS_MULTILINESTRING;
         // an empty geometry, pass back a collection
-        else if (r->getMembers().empty() || CollectionRelationCriterion().isSatisfied(r))
+        else if (r->getMembers().empty() || RelationCriterion().isSatisfied(r))
           return GEOS_GEOMETRYCOLLECTION;
       }
 

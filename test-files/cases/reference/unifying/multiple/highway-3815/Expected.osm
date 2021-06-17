@@ -5239,7 +5239,7 @@
     <node visible="true" id="6096478820" timestamp="2020-02-14T16:24:59Z" version="1" changeset="39" lat="8.6361637000000009" lon="11.2447143000000001"/>
     <node visible="true" id="6096478821" timestamp="2020-02-14T16:24:59Z" version="1" changeset="39" lat="8.6364955000000005" lon="11.2457629999999984"/>
     <node visible="true" id="6096478842" timestamp="2020-02-14T16:24:59Z" version="1" changeset="39" lat="8.7048091000000021" lon="11.2583280999999982"/>
-    <way visible="true" id="-680" timestamp="2020-02-14T16:24:59Z" version="1">
+    <way visible="true" id="-681" timestamp="2020-02-14T16:24:59Z" version="1">
         <nd ref="6096477708"/>
         <nd ref="6096477702"/>
         <nd ref="6096477698"/>
@@ -5323,6 +5323,7 @@
         <nd ref="6096477504"/>
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="trunk"/>
+        <tag k="hoot:hash" v="sha1sum:1cd1130f13fca134c14a8f889f34ef3c176423ef;sha1sum:39768b4c2fb3a1d391fa0fd76a9c797416d90266"/>
         <tag k="lanes" v="2"/>
         <tag k="oneway" v="no"/>
         <tag k="ref" v="A12"/>
@@ -5579,7 +5580,7 @@
         <nd ref="6096477619"/>
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="trunk"/>
-        <tag k="hoot:hash" v="sha1sum:37ee47cec06172b1e21b75b6214a68581e195b07"/>
+        <tag k="hoot:hash" v="sha1sum:37ee47cec06172b1e21b75b6214a68581e195b07;sha1sum:9549308a569fe0d20e6c648bfd4b35e285ff09ce"/>
         <tag k="lanes" v="2"/>
         <tag k="oneway" v="no"/>
         <tag k="ref" v="A12"/>
@@ -9410,6 +9411,7 @@
         <tag k="admin_level" v="6"/>
         <tag k="boundary" v="administrative"/>
         <tag k="error:circular" v="15"/>
+        <tag k="hoot:hash" v="sha1sum:430ba39671f5165560742d7dcf592b65cca547fe"/>
         <tag k="source" v="ehealthafrica.org"/>
         <tag k="source:date" v="2013"/>
         <tag k="source:datetime" v="2014-05-06T13:32:07Z"/>
@@ -9525,6 +9527,7 @@
         <tag k="admin_level" v="6"/>
         <tag k="boundary" v="administrative"/>
         <tag k="error:circular" v="15"/>
+        <tag k="hoot:hash" v="sha1sum:4a3480692de84aba44a62e3d39ac6666a93824ab"/>
         <tag k="source" v="ehealthafrica.org"/>
         <tag k="source:date" v="2013"/>
         <tag k="source:datetime" v="2014-05-06T13:32:06Z"/>
@@ -11639,6 +11642,7 @@
         <nd ref="6096477468"/>
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="trunk"/>
+        <tag k="hoot:hash" v="sha1sum:28483bc3c63a0c387716a153267907157611e175"/>
         <tag k="lanes" v="2"/>
         <tag k="oneway" v="no"/>
         <tag k="ref" v="A12"/>
@@ -11751,52 +11755,6 @@
         <tag k="oneway" v="no"/>
         <tag k="ref" v="A12"/>
         <tag k="source:datetime" v="2015-11-26T13:34:33.000Z;2019-05-07T08:54:02Z;2019-05-07T08:54:07Z"/>
-    </way>
-    <way visible="true" id="649671763" timestamp="2020-02-14T16:24:59Z" version="1" changeset="39">
-        <nd ref="6096477708"/>
-        <nd ref="6096477702"/>
-        <nd ref="6096477698"/>
-        <nd ref="6096477694"/>
-        <nd ref="6096477688"/>
-        <nd ref="6096477687"/>
-        <nd ref="6096477683"/>
-        <nd ref="6096477678"/>
-        <nd ref="6096477676"/>
-        <nd ref="6096477672"/>
-        <nd ref="6096477671"/>
-        <nd ref="6096477669"/>
-        <nd ref="6096477666"/>
-        <nd ref="6096477663"/>
-        <nd ref="6096477665"/>
-        <nd ref="6096477667"/>
-        <nd ref="6096477670"/>
-        <nd ref="6096477674"/>
-        <nd ref="6096477675"/>
-        <nd ref="6096477679"/>
-        <nd ref="6096477680"/>
-        <nd ref="6096477682"/>
-        <nd ref="6096477684"/>
-        <nd ref="6096477686"/>
-        <nd ref="6096477690"/>
-        <nd ref="6096477692"/>
-        <nd ref="6096477696"/>
-        <nd ref="6096477700"/>
-        <nd ref="6096477704"/>
-        <nd ref="6096477706"/>
-        <nd ref="6096477710"/>
-        <nd ref="6096477712"/>
-        <nd ref="6096477714"/>
-        <nd ref="6096477716"/>
-        <nd ref="6096477717"/>
-        <nd ref="6096477719"/>
-        <nd ref="6096477721"/>
-        <nd ref="6096477723"/>
-        <nd ref="6096477725"/>
-        <nd ref="6096477727"/>
-        <nd ref="6096477729"/>
-        <nd ref="6096477731"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:hash" v="sha1sum:118685d78d6ad11b7977c86460331a2453a6a66b"/>
     </way>
     <way visible="true" id="649671764" timestamp="2020-02-14T16:24:59Z" version="1">
         <nd ref="6096478192"/>
@@ -12483,10 +12441,13 @@
         <member type="way" ref="-225" role=""/>
         <member type="way" ref="-228" role=""/>
         <member type="way" ref="-649" role=""/>
+        <member type="way" ref="649671757" role=""/>
         <member type="way" ref="-632" role=""/>
         <member type="way" ref="-255" role=""/>
+        <member type="way" ref="-678" role=""/>
         <member type="way" ref="-35" role=""/>
         <member type="way" ref="-15" role=""/>
+        <member type="way" ref="-675" role=""/>
         <member type="way" ref="-24" role=""/>
         <member type="way" ref="-14" role=""/>
         <member type="way" ref="-29" role=""/>
@@ -12520,12 +12481,12 @@
         <tag k="type" v="route"/>
     </relation>
     <relation visible="true" id="7326625" timestamp="2020-02-14T16:24:59Z" version="1" changeset="39">
-        <member type="way" ref="649671763" role="outer"/>
+        <member type="way" ref="-83" role="outer"/>
+        <member type="way" ref="-77" role="outer"/>
+        <member type="way" ref="-681" role="outer"/>
         <member type="way" ref="-81" role="outer"/>
         <member type="way" ref="-78" role="outer"/>
         <member type="way" ref="-79" role="outer"/>
-        <member type="way" ref="-83" role="outer"/>
-        <member type="way" ref="-77" role="outer"/>
         <tag k="admin_level" v="6"/>
         <tag k="boundary" v="administrative"/>
         <tag k="error:circular" v="15"/>
@@ -12538,8 +12499,6 @@
         <tag k="wikipedia" v="en:Ardo-Kola"/>
     </relation>
     <relation visible="true" id="7326626" timestamp="2020-02-14T16:24:59Z" version="1" changeset="39">
-        <member type="way" ref="649671763" role="outer"/>
-        <member type="way" ref="-80" role="outer"/>
         <member type="way" ref="-74" role="outer"/>
         <member type="way" ref="-73" role="outer"/>
         <member type="way" ref="-84" role="outer"/>
@@ -12547,6 +12506,8 @@
         <member type="way" ref="-85" role="outer"/>
         <member type="way" ref="-75" role="outer"/>
         <member type="way" ref="-76" role="outer"/>
+        <member type="way" ref="-681" role="outer"/>
+        <member type="way" ref="-80" role="outer"/>
         <tag k="admin_level" v="6"/>
         <tag k="boundary" v="administrative"/>
         <tag k="error:circular" v="15"/>

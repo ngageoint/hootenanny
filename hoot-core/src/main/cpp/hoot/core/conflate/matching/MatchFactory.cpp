@@ -79,7 +79,7 @@ void MatchFactory::createMatches(const ConstOsmMapPtr& map, std::vector<ConstMat
   { 
     std::shared_ptr<MatchCreator> matchCreator = _creators[i];
     LOG_STATUS(
-      "Running matcher: " << i + 1 << " / " << _creators.size() << ": " <<
+      "Running matcher: " << i + 1 << " of " << _creators.size() << ": " <<
       matchCreator->getName() << "...");
     _checkMatchCreatorBoundable(matchCreator, bounds);
     if (threshold.get())
@@ -148,7 +148,7 @@ void MatchFactory::registerCreator(const QString& c)
   }
 }
 
-ElementCriterionPtr MatchFactory::_createFilter()
+ElementCriterionPtr MatchFactory::_createFilter() const
 {
   ElementCriterionPtr filter;
 
@@ -231,8 +231,8 @@ MatchFactory& MatchFactory::getInstance()
     OptionsValidator::fixGenericMatcherOrdering();
   }
 
-  // keep this outside of _tempFixDefaults, since it needs to be checked from the command line as
-  // well
+  // Keep this outside of _tempFixDefaults, since it needs to be checked from the command line as
+  // well.
   OptionsValidator::validateMatchers();
 
   //only get the match creators that are specified in the config

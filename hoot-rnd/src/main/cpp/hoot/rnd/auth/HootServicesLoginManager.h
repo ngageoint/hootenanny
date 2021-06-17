@@ -72,7 +72,7 @@ public:
    * @paraqm userName populated user name for the authenticated user
    * @return ID of the authenticated user
    */
-  long verifyUserAndLogin(const QString& requestToken, const QString& verifier, QString& userName);
+  long verifyUserAndLogin(const QString& requestToken, const QString& verifier, QString& userName) const;
 
   /**
    * Retrieves OAuth access tokens for an authenticated user
@@ -81,7 +81,7 @@ public:
    * @param accessToken populated OAuth public access token
    * @param accessTokenSecret populated OAuth private access token
    */
-  void getAccessTokens(const long userId, QString& accessToken, QString& accessTokenSecret);
+  void getAccessTokens(const long userId, QString& accessToken, QString& accessTokenSecret) const;
 
   /**
    * Logs a user out of the Hootenanny Web Services
@@ -91,7 +91,7 @@ public:
    * @param accessTokenSecret the OAuth private access token for the user
    * @return true if the logout was successful; false otherwise
    */
-  bool logout(const QString& userName, const QString& accessToken, const QString& accessTokenSecret);
+  bool logout(const QString& userName, const QString& accessToken, const QString& accessTokenSecret) const;
 
   /**
    * Returns the base URL used to access Hootenanny Web Services

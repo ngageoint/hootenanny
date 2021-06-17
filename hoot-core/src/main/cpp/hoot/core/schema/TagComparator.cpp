@@ -57,7 +57,7 @@ struct Entry
   }
 };
 
-void TagComparator::_addAsDefault(Tags& t, const QString& key, const QString& value)
+void TagComparator::_addAsDefault(Tags& t, const QString& key, const QString& value) const
 {
   if (t.contains(key) == false || t[key].isEmpty() == true)
   {
@@ -65,7 +65,7 @@ void TagComparator::_addAsDefault(Tags& t, const QString& key, const QString& va
   }
 }
 
-void TagComparator::_addDefaults(Tags& t)
+void TagComparator::_addDefaults(Tags& t) const
 {
   if (t.contains("highway"))
   {
@@ -75,7 +75,7 @@ void TagComparator::_addDefaults(Tags& t)
   }
 }
 
-void TagComparator::_addNonConflictingTags(Tags& t1, const Tags& t2, Tags& result)
+void TagComparator::_addNonConflictingTags(Tags& t1, const Tags& t2, Tags& result) const
 {
   OsmSchema& schema = OsmSchema::getInstance();
 
@@ -273,7 +273,7 @@ void TagComparator::compareEnumeratedTags(Tags t1, Tags t2, double& score,
   LOG_TRACE("score: " << score);
 }
 
-void TagComparator::compareTextTags(const Tags& t1, const Tags& t2, double& score, double& weight)
+void TagComparator::compareTextTags(const Tags& t1, const Tags& t2, double& score, double& weight) const
 {
   OsmSchema& schema = OsmSchema::getInstance();
 
@@ -299,7 +299,7 @@ void TagComparator::compareTextTags(const Tags& t1, const Tags& t2, double& scor
 }
 
 void TagComparator::compareNames(const Tags& t1, const Tags& t2, double& score, double& weight,
-                                 bool strict)
+                                 bool strict) const
 {
   //double score = LevenshteinDistance::score();
   // Check out picard's coefficient
@@ -409,7 +409,7 @@ double TagComparator::compareTags(const Tags &t1, const Tags &t2, bool strict)
   }
 }
 
-bool TagComparator::nonNameTagsExactlyMatch(const Tags& t1, const Tags& t2, bool caseSensitive)
+bool TagComparator::nonNameTagsExactlyMatch(const Tags& t1, const Tags& t2, bool caseSensitive) const
 {
   const Qt::CaseSensitivity caseSensitivity =
     caseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive;
@@ -495,7 +495,7 @@ Tags TagComparator::generalize(Tags t1, Tags t2, bool overwriteUnrecognizedTags,
   return result;
 }
 
-void TagComparator::_mergeExactMatches(Tags& t1, Tags& t2, Tags& result)
+void TagComparator::_mergeExactMatches(Tags& t1, Tags& t2, Tags& result) const
 {
   OsmSchema& schema = OsmSchema::getInstance();
 
@@ -533,7 +533,7 @@ void TagComparator::_mergeExactMatches(Tags& t1, Tags& t2, Tags& result)
 }
 
 void TagComparator::mergeNames(Tags& t1, Tags& t2, Tags& result,
-                               const QStringList& overwriteExcludeTagKeys, bool caseSensitive)
+                               const QStringList& overwriteExcludeTagKeys, bool caseSensitive) const
 {
   LOG_TRACE("Merging names...");
   LOG_VART(t1);
@@ -631,7 +631,7 @@ void TagComparator::mergeNames(Tags& t1, Tags& t2, Tags& result,
 
 void TagComparator::mergeText(Tags& t1, Tags& t2, Tags& result,
                               const QStringList& overwriteExcludeTagKeys,
-                              bool caseSensitive)
+                              bool caseSensitive) const
 {
   LOG_TRACE("Merging text...");
   LOG_VART(t1);
@@ -781,7 +781,7 @@ Tags TagComparator::replaceMerge(const Tags& t1, const Tags& t2,
 void TagComparator::_overwriteRemainingTags(Tags& t1, Tags& t2, Tags& result,
                                             const QStringList& overwriteExcludeTagKeys,
                                             const QStringList& accumulateValuesTagKeys,
-                                            bool caseSensitive)
+                                            bool caseSensitive) const
 {
   LOG_TRACE("Overwriting remaining tags...");
 
@@ -836,7 +836,7 @@ void TagComparator::_overwriteRemainingTags(Tags& t1, Tags& t2, Tags& result,
   t2.clear();
 }
 
-void TagComparator::_overwriteUnrecognizedTags(Tags& t1, Tags& t2, Tags& result)
+void TagComparator::_overwriteUnrecognizedTags(Tags& t1, Tags& t2, Tags& result) const
 {
   OsmSchema& schema = OsmSchema::getInstance();
 
@@ -872,7 +872,7 @@ void TagComparator::_overwriteUnrecognizedTags(Tags& t1, Tags& t2, Tags& result)
   }
 }
 
-void TagComparator::_promoteToCommonAncestor(Tags& t1, Tags& t2, Tags& result)
+void TagComparator::_promoteToCommonAncestor(Tags& t1, Tags& t2, Tags& result) const
 {
   OsmSchema& schema = OsmSchema::getInstance();
 

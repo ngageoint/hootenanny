@@ -43,6 +43,7 @@ namespace hoot
 class LineSegmentResult
 {
 public:
+
   LineSegmentResult(const LineSegment& ls) :
     _c0(Coordinate::getNull()),
     _c1(Coordinate::getNull()),
@@ -51,7 +52,7 @@ public:
   {
   }
 
-  double d2(const Coordinate& c1, const Coordinate& c2)
+  double d2(const Coordinate& c1, const Coordinate& c2) const
   {
     double dx = c1.x - c2.x;
     double dy = c1.y - c2.y;
@@ -125,7 +126,7 @@ inline double sgn(double x)
   }
 }
 
-bool BufferedLineSegmentIntersector::isWithinLineSegment(const LineSegment& ls, const Coordinate& c)
+bool BufferedLineSegmentIntersector::isWithinLineSegment(const LineSegment& ls, const Coordinate& c) const
 {
   const Coordinate& a = ls.p0;
   const Coordinate& b = ls.p1;
@@ -148,7 +149,7 @@ bool BufferedLineSegmentIntersector::isWithinLineSegment(const LineSegment& ls, 
 }
 
 void BufferedLineSegmentIntersector::circleIntersection(const Coordinate& origin, Meters r,
-  const LineSegment& l, Coordinate& p1, Coordinate& p2)
+  const LineSegment& l, Coordinate& p1, Coordinate& p2) const
 {
   // the algorithm assume the circle is centered at 0,0
   LineSegment c(l.p0.x - origin.x, l.p0.y - origin.y, l.p1.x - origin.x, l.p1.y - origin.y);

@@ -77,7 +77,7 @@ void OsmApiDbReader::open(const QString& urlStr)
 }
 
 void OsmApiDbReader::_parseAndSetTagsOnElement(const ElementId& elementId,
-                                               const ElementPtr& element)
+                                               const ElementPtr& element) const
 {
   // If performance here is ever a problem, we should see if these tags can be read out at the same
   // time the element itself is read out.

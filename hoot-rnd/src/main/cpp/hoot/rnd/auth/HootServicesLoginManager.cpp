@@ -128,7 +128,7 @@ QString HootServicesLoginManager::promptForAuthorizationVerifier() const
 }
 
 long HootServicesLoginManager::verifyUserAndLogin(const QString& requestToken,
-                                                  const QString& verifier, QString& userName)
+                                                  const QString& verifier, QString& userName) const
 {
   QUrl loginUrl;
   HootNetworkRequest loginRequest = _getLoginRequest(requestToken, verifier, loginUrl);
@@ -191,7 +191,7 @@ long HootServicesLoginManager::_parseLoginResponse(const QString& response) cons
 }
 
 void HootServicesLoginManager::getAccessTokens(const long userId, QString& accessToken,
-                                               QString& accessTokenSecret)
+                                               QString& accessTokenSecret) const
 {
   HootApiDb db;
   LOG_VARD(HootApiDb::getBaseUrl());
@@ -212,7 +212,7 @@ void HootServicesLoginManager::getAccessTokens(const long userId, QString& acces
 }
 
 bool HootServicesLoginManager::logout(const QString& userName, const QString& accessToken,
-                                      const QString& accessTokenSecret)
+                                      const QString& accessTokenSecret) const
 {
   HootApiDb db;
   //hoot db requires a layer to open, but we don't need one here...so put anything in

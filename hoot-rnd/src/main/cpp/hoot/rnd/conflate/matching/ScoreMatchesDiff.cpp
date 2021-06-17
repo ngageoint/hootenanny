@@ -243,7 +243,7 @@ bool ScoreMatchesDiff::printDiff(const QString& output)
   return true;
 }
 
-std::shared_ptr<QFile> ScoreMatchesDiff::_getOutputFile(const QString& outputPath)
+std::shared_ptr<QFile> ScoreMatchesDiff::_getOutputFile(const QString& outputPath) const
 {
   std::shared_ptr<QFile> outputFile(new QFile(outputPath));
   if (outputFile->exists())
@@ -266,7 +266,7 @@ QSet<ElementId> ScoreMatchesDiff::_getAllIds(const ConstOsmMapPtr& map)
 }
 
 QMap<ElementId, QString> ScoreMatchesDiff::_getMatchStatuses(
-  const ConstOsmMapPtr& map, const QString& tagKey)
+  const ConstOsmMapPtr& map, const QString& tagKey) const
 {
   LOG_DEBUG("Retrieving match status: " << tagKey << " for " << map->getName() << "...");
   ElementIdToTagValueMapper vis;
@@ -287,7 +287,7 @@ QSet<ElementId> ScoreMatchesDiff::_getWrong(const ConstOsmMapPtr& map)
 
 QMap<QString, QSet<ElementId>> ScoreMatchesDiff::_getMatchScoringDiff(
   const QSet<ElementId>& elementIds, const QMap<ElementId, QString>& expectedTagMappings,
-  const QMap<ElementId, QString>& actualTagMappings)
+  const QMap<ElementId, QString>& actualTagMappings) const
 {
   LOG_DEBUG("Calculating match scoring diff...");
   QMap<QString, QSet<ElementId>> matchSwitches;
@@ -349,7 +349,7 @@ QMap<QString, QSet<ElementId>> ScoreMatchesDiff::_getMatchScoringDiff(
 
 void ScoreMatchesDiff::_setAddedAndRemovedElements(
   const QSet<ElementId>& all1Ids, const QSet<ElementId>& all2Ids,
-  QSet<ElementId>& elementIdsAdded, QSet<ElementId>& elementIdsRemoved)
+  QSet<ElementId>& elementIdsAdded, QSet<ElementId>& elementIdsRemoved) const
 {
   LOG_DEBUG("Recording added/removed elements...");
   QSet<ElementId> allIds = all1Ids;

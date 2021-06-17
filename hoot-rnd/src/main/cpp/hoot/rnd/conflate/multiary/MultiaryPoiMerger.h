@@ -78,7 +78,7 @@ private:
    * @param reviews List of links that should be reviewed.
    */
   void _createReviews(const OsmMapPtr& map,
-    QList<MultiaryClusterAlgorithm::ClusterLinkPtr> reviews);
+    QList<MultiaryClusterAlgorithm::ClusterLinkPtr> reviews) const;
 
   /**
    * Merge all the elements that make up each of the clusters into a single element.
@@ -88,7 +88,7 @@ private:
    */
   void _mergeClusters(const OsmMapPtr& map,
     std::vector<std::pair<ElementId, ElementId>>& replaced,
-    MultiaryClusterAlgorithm::ClusterList clusters);
+    MultiaryClusterAlgorithm::ClusterList clusters) const;
 };
 
 }

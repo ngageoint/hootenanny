@@ -64,7 +64,7 @@ public:
    *
    * 1. http://en.wikipedia.org/wiki/Expectation%E2%80%93maximization_algorithm
    */
-  std::vector<double> snapMatches(const cv::Mat& matches, const cv::Mat& ranges);
+  std::vector<double> snapMatches(const cv::Mat& matches, const cv::Mat& ranges) const;
 
 private:
 
@@ -74,13 +74,13 @@ private:
     tbs::TDistribution& t);
 
   double _findSplit(const tbs::TDistribution& t1, const tbs::TDistribution& t2, const cv::Mat& matches,
-    int start, int stop);
+    int start, int stop) const;
 
   /**
    * Verify that the caller provided meaningful ranges.
    * Throws an exception on failure.
    */
-  void _validateRanges(int rowCount, const cv::Mat& ranges);
+  void _validateRanges(int rowCount, const cv::Mat& ranges) const;
 };
 
 }

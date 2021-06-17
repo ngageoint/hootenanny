@@ -55,7 +55,7 @@ void RemoveTagsVisitor::setConfiguration(const Settings& conf)
 {
   ConfigOptions configOptions(conf);
   _setKeys(configOptions.getTagFilterKeys());
-  _negateCriterion = configOptions.getElementCriterionNegate();
+  _negateCriterion = configOptions.getElementCriteriaNegate();
   _setCriterion(configOptions.getTagFilterElementCriterion());
 }
 

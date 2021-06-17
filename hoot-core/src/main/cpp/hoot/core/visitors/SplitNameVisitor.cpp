@@ -46,7 +46,7 @@ void SplitNameVisitor::setConfiguration(const Settings& conf)
   _maxSize = ConfigOptions(conf).getMaxTagLength();
 }
 
-void SplitNameVisitor::_addExtraNames(Tags& t, const QStringList& extraNames)
+void SplitNameVisitor::_addExtraNames(Tags& t, const QStringList& extraNames) const
 {
   int lastNameId = -1;
   int size = 0;
@@ -76,7 +76,7 @@ void SplitNameVisitor::_addExtraNames(Tags& t, const QStringList& extraNames)
   }
 }
 
-int SplitNameVisitor::_getNextNameId(const Tags& t, int lastId)
+int SplitNameVisitor::_getNextNameId(const Tags& t, int lastId) const
 {
   for (int i = lastId + 1; i < lastId + 100; i++)
   {
@@ -91,7 +91,7 @@ int SplitNameVisitor::_getNextNameId(const Tags& t, int lastId)
   throw InternalErrorException("Unable to find a valid key for a new extra name.");
 }
 
-QStringList SplitNameVisitor::_splitNames(const QString& v, QStringList& extras)
+QStringList SplitNameVisitor::_splitNames(const QString& v, QStringList& extras) const
 {
   QStringList result;
   QStringList allNames = Tags::split(v);

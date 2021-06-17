@@ -46,7 +46,7 @@ ExpectationIntersection::ExpectationIntersection()
 }
 
 double ExpectationIntersection::_findSplit(const TDistribution& t1, const TDistribution& t2,
-  const Mat &matches, int start, int stop)
+  const Mat &matches, int start, int stop) const
 {
   vector<double> p1(matches.rows);
   double sum2 = 0.0;
@@ -96,7 +96,7 @@ double ExpectationIntersection::_findSplit(const TDistribution& t1, const TDistr
   return result;
 }
 
-vector<double> ExpectationIntersection::snapMatches(const Mat& matches, const Mat& ranges)
+vector<double> ExpectationIntersection::snapMatches(const Mat& matches, const Mat& ranges) const
 {
   LOG_TRACE("Snapping matches...");
 
@@ -166,7 +166,7 @@ vector<double> ExpectationIntersection::snapMatches(const Mat& matches, const Ma
   return splits;
 }
 
-void ExpectationIntersection::_validateRanges(int rowCount, const Mat& ranges)
+void ExpectationIntersection::_validateRanges(int rowCount, const Mat& ranges) const
 {
   assert(ranges.at<int>(0, 0) == 0);
   if (ranges.at<int>(ranges.rows - 1, 1) != rowCount - 1)

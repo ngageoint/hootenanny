@@ -1,18 +1,27 @@
 
 == Working with OpenStreetMap Editing API Database Data in Hootenanny
 
-Hootenanny offers the capability to convert data between an OpenStreetMap Editing API Database and any supported Hootenanny data output format.  The OpenStreetMap Editing API database allows fetching and saving of raw geo-data for OpenStreetMap.  The current supported API version is 0.6. More information about the database and API is found at: https://wiki.openstreetmap.org/wiki/API.
+Hootenanny offers the capability to convert data between an OpenStreetMap Editing API Database and any supported 
+Hootenanny data output format. The OpenStreetMap Editing API database allows fetching and saving of raw geo-data 
+for OpenStreetMap. The current supported API version is 0.6. More information about the database and API can be found https://wiki.openstreetmap.org/wiki/API.[here].
 
-Hootenanny supports reading and writing from the OpenStreetMap API database using its `convert` command.  A description of how to use Hootenanny's capability for 'writing to' and 'reading from' an OpenStreetMap Editing API Database is described in this section.
+Hootenanny supports reading and writing from the OpenStreetMap API database using its `convert` command. A description 
+of how to use Hootenanny's capability for 'writing to' and 'reading from' an OpenStreetMap Editing API Database is 
+described in this section.
 
-Postgres database tuning is very important to support large data ingests.  The Hootenanny default Postgres database instance comes
-with moderate tuning, but you may need to perform additional tuning for your database.  Postgres tuning is outside of the scope of this document, so visit the Postgres website for more information.
+Postgres database tuning is very important to support large data ingests.  The Hootenanny default Postgres database 
+instance comes with moderate tuning, but you may need to perform additional tuning for your database. Postgres tuning 
+is outside of the scope of this document, so visit the Postgres website for more information.
 
 === Configuring an OSM API Database Connection
 
-If you want to make use of an OSM API Database from within the Hootenanny iD Editor UI, you must configure Hootenanny to use your OSM API database (only one database at a time is supported).  See "Configuring an OSM API Database Connection" section of the Hootenanny Installation Guide for instructions.
+If you want to make use of an OSM API Database from within the Hootenanny iD Editor UI, you must configure Hootenanny to 
+use your OSM API database (only one database at a time is supported). See "Configuring an OSM API Database Connection" 
+section of the Hootenanny Installation Guide for instructions.
 
-If you are using Hootenanny from the command line no configuration is required, and you can simply reference a URL to your OSM API database within the command.  See the `hoot convert` documentation for details on the URL format (also examples below).
+If you are using Hootenanny from the command line no configuration is required, and you can simply reference a URL 
+to your OSM API database within the command.  See the `hoot convert` documentation for details on the URL format 
+(also examples below).
 
 === Creating an OSM API Database
 
@@ -30,7 +39,7 @@ osmapidb://hoot:hoottest@localhost:5432/osmapi_test
 
 === Writing to an OpenStreetMap Editing API Database Using the Command Line
 
-Hootenanny's `hoot convert` command uses optimized SQL routines to write large amounts of data to the OSM API database, which results in much faster performance than using XML changesets passed to the OSM web services over HTTP (Rails Port).  The writer
+Hootenanny's `hoot convert` command uses optimized SQL routines to write large amounts of data to the OSM API database, which results in much faster performance than using XML changesets passed to the OSM web services over HTTP (Rails Port or cgimap).  The writer
 has two possible workflows: online and offline.  The offline mode is meant for the fastest performance writing against offline
 databases (no other writers present), while the online mode sacrifices some performance but is safe for writing against online databases (other writers present).
 
@@ -102,20 +111,21 @@ record ID conflicts.
 
 If you are writing extreme amounts of data and have adequate memory available, you may be able to improve the performance of the write operation with additional tweaks.  The configuration option, `max.elements.per.partial.map`, determines how many file lines are held in memory before they are flushed out to disk when generating the output files.  The default setting is fairly large, but you may be able to improve write performance by increasing it (conversely, if your memory is limited, you may need to decrease this setting).  This optimization deals *only* with the output file generation, however, and does nothing to increase the performance of the SQL execution against the target database (database tuning may help there).
 
-The configuration option, `osmapidb.bulk.inserter.disable.database.constraints.during.write`, allows for disabling database constraints during writing.
-This may speed up data loads.  Similarly, the configuration option, `apidb.bulk.inserter.disable.database.indexes.during.write`, allows for dropping database
-indexes during writing and re-enabling them after writing is finished, which may also speed up data loads.  Both options should only be used with databases
-that have been taken completely offline.
+The configuration option, `osmapidb.bulk.inserter.disable.database.constraints.during.write`, allows for disabling 
+database constraints during writing. This may speed up data loads. Similarly, the configuration option, `apidb.bulk.inserter.disable.database.indexes.during.write`, allows for dropping database indexes during writing and 
+re-enabling them after writing is finished, which may also speed up data loads.  Both options should only be used 
+with databases that have been taken completely offline.
 
-The configuration option, `task.status.update.interval`, simply determines how often you see progress updates when generating the output files.  The default
-value is fairly large, but for very large amounts of data you may wish to increase the value of this option to avoid too frequent of progress update messages.
+The configuration option, `task.status.update.interval`, simply determines how often you see progress updates when 
+generating the output files. The default value is fairly large, but for very large amounts of data you may wish to 
+increase the value of this option to avoid too frequent of progress update messages.
 
 IMPORTANT: The configuration option, `changeset.user.id`, is required and must match a valid user ID in your OSM API database.  All writes you do with `hoot convert` will be associated with this user ID.
 
 IMPORTANT: OSM PBF (.osm.pbf) is currently the most efficient OSM source format for writing large amounts of data to an OSM API database, due to the fact the format was designed for optimal performance.
 
-See the User Guide descriptions of all settings prefixed with `apidb.bulk.inserter` or `osmapidb.bulk.inserter` for a complete overview of the OSM API
-database writing options available.
+See the User Guide descriptions of all settings prefixed with `apidb.bulk.inserter` or `osmapidb.bulk.inserter` for a 
+complete overview of the OSM API database writing options available.
 
 === Reading from an OpenStreetMap Editing API Database
 

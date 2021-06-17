@@ -75,7 +75,6 @@ public:
     Settings testSettings = conf();
     testSettings.set("perty.seed", QString::number(2));
     testSettings.set("perty.search.distance", QString::number(15.0));
-    testSettings.set("conflate.enable.old.roads", "false");
 
     PertyTestRunner testRunner;
     testRunner.setConfiguration(testSettings);
@@ -156,10 +155,6 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, result->getDynamicVariableStartingValue(), 0.00001);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, result->getDynamicVariableValue(), 0.00001);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, result->getExpectedScore(), 0.00001);
-    //HOOT_STR_EQUALS(_outputPath + "Dynamic", result->getOutputDir());
-    //HOOT_STR_EQUALS(
-      //_inputPath + "PertyTestRunnerTest-reference-in-1.osm",
-      //result->getReferenceInput());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.15, result->getScoreVariance(), 0.00001);
 
     result = results[1];
@@ -174,10 +169,6 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, result->getDynamicVariableStartingValue(), 0.00001);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.1, result->getDynamicVariableValue(), 0.00001);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, result->getExpectedScore(), 0.00001);
-    //HOOT_STR_EQUALS(_outputPath + "Dynamic", result->getOutputDir());
-    //HOOT_STR_EQUALS(
-      //_inputPath + "PertyTestRunnerTest-reference-in-1.osm",
-      //result->getReferenceInput());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.2, result->getScoreVariance(), 0.00001);
   }
 
@@ -191,7 +182,6 @@ public:
     Settings testSettings = conf();
     testSettings.set("perty.seed", QString::number(2));
     testSettings.set("perty.search.distance", QString::number(15.0));
-    testSettings.set("conflate.enable.old.roads", "false");
 
     PertyTestRunner testRunner;
     testRunner.setConfiguration(testSettings);
@@ -253,10 +243,6 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, result->getDynamicVariableStartingValue(), 0.00001);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, result->getDynamicVariableValue(), 0.00001);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, result->getExpectedScore(), 0.00001);
-    //HOOT_STR_EQUALS(_outputPath + "Static", result->getOutputDir());
-    //HOOT_STR_EQUALS(
-      //_inputPath + "PertyTestRunnerTest-reference-in-1.osm",
-      //result->getReferenceInput());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.15, result->getScoreVariance(), 0.00001);
     CPPUNIT_ASSERT_EQUAL(2, result->getSimulationScores().size());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.9, result->getSimulationScores().at(0), 0.00001);
@@ -272,10 +258,6 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, result->getDynamicVariableStartingValue(), 0.00001);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, result->getDynamicVariableValue(), 0.00001);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, result->getExpectedScore(), 0.00001);
-    //HOOT_STR_EQUALS(_outputPath + "Static", result->getOutputDir());
-    //HOOT_STR_EQUALS(
-      //_inputPath + "PertyTestRunnerTest-reference-in-1.osm",
-      //result->getReferenceInput());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.2, result->getScoreVariance(), 0.00001);
     CPPUNIT_ASSERT_EQUAL(2, result->getSimulationScores().size());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.75, result->getSimulationScores().at(0), 0.00001);
@@ -357,10 +339,6 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, result->getDynamicVariableStartingValue(), 0.00001);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, result->getDynamicVariableValue(), 0.00001);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.69, result->getExpectedScore(), 0.00001);
-    //HOOT_STR_EQUALS(_outputPath + "Variance", result->getOutputDir());
-    //HOOT_STR_EQUALS(
-      //_inputPath + "PertyTestRunnerTest-reference-in-1.osm",
-      //result->getReferenceInput());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.16, result->getScoreVariance(), 0.00001);
     CPPUNIT_ASSERT_EQUAL(2, result->getSimulationScores().size());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.9, result->getSimulationScores().at(0), 0.00001);
@@ -376,10 +354,6 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, result->getDynamicVariableStartingValue(), 0.00001);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, result->getDynamicVariableValue(), 0.00001);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.75, result->getExpectedScore(), 0.00001);
-    //HOOT_STR_EQUALS(_outputPath + "Variance", result->getOutputDir());
-    //HOOT_STR_EQUALS(
-      //_inputPath + "PertyTestRunnerTest-reference-in-1.osm",
-      //result->getReferenceInput());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.05, result->getScoreVariance(), 0.00001);
     CPPUNIT_ASSERT_EQUAL(2, result->getSimulationScores().size());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.75, result->getSimulationScores().at(0), 0.00001);

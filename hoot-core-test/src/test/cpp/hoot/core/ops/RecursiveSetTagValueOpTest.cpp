@@ -33,7 +33,7 @@
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/criterion/ElementTypeCriterion.h>
+#include <hoot/core/criterion/RelationCriterion.h>
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>

@@ -29,6 +29,8 @@
 #include <hoot/core/Hoot.h>
 #include <hoot/core/util/Log.h>
 
+#include <hoot/js/io/DataConvertJs.h>
+
 using namespace v8;
 
 namespace hoot
@@ -38,7 +40,7 @@ void Method(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
-  args.GetReturnValue().Set(String::NewFromUtf8(current, "world"));
+  args.GetReturnValue().Set(toV8("world"));
 }
 
 JsRegistrar& JsRegistrar::getInstance()
@@ -48,22 +50,20 @@ JsRegistrar& JsRegistrar::getInstance()
   return instance;
 }
 
-void JsRegistrar::Init(Handle<Object> exports)
+void JsRegistrar::Init(Local<Object> exports)
 {
   LOG_DEBUG("JS registrar init...");
   Hoot::getInstance().init();
   getInstance().initAll(exports);
 }
 
-void JsRegistrar::initAll(Handle<Object> exports)
+void JsRegistrar::initAll(Local<Object> exports)
 {
   // Got this from the NodeJS docs. Seems to be a bit simpler than what we were doing.
   NODE_SET_METHOD(exports, "hello", Method);
 
   for (size_t i = 0; i < _initializers.size(); i++)
-  {
     _initializers[i]->Init(exports);
-  }
 }
 
 void JsRegistrar::registerInitializer(const std::shared_ptr<ClassInitializer>& ci)

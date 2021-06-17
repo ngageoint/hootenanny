@@ -33,6 +33,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/criterion/LinearCriterion.h>
 #include <hoot/core/criterion/PolygonCriterion.h>
+#include <hoot/core/ops/RemoveWayByEid.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/conflate/ConflateUtils.h>
 
@@ -60,7 +61,6 @@ void RemoveDuplicateWayNodesVisitor::visit(const ElementPtr& e)
   if (e->getElementType() == ElementType::Way)
   {
     WayPtr way = std::dynamic_pointer_cast<Way>(e);
-    assert(way.get());
 
     // Since this class operates on elements with generic types, an additional check must be
     // performed here during conflation to enure we don't modify any element not associated with
@@ -79,11 +79,12 @@ void RemoveDuplicateWayNodesVisitor::visit(const ElementPtr& e)
     LOG_VART(wayNodeIds);
 
     // Technically InvalidWayRemover handles this situation, so this is arguably redundant in the
-    // conflate pipeline. However, outside of the pipeline we'd want it removed.
+    // conflate pipeline. However, outside of the pipeline we'd want this way removed.
+    LOG_VART(way->isSimpleLoop());
     if (wayNodeIds.size() == 2 && way->isSimpleLoop())
     {
       LOG_TRACE("Removing invalid way: " << way->getElementId() << "...");
-      RecursiveElementRemover(way->getElementId()).apply(_map);
+      RecursiveElementRemover(way->getElementId(), true).apply(_map);
       return;
     }
 

@@ -46,13 +46,12 @@ public:
   static int logWarnCount;
 
   ScriptMerger() = default;
+  ScriptMerger(
+    const std::shared_ptr<PluginContext>& script, v8::Persistent<v8::Object>& plugin,
+    const std::set<std::pair<ElementId, ElementId>>& pairs);
   ~ScriptMerger() = default;
 
-  ScriptMerger(const std::shared_ptr<PluginContext>& script, v8::Persistent<v8::Object>& plugin,
-    const std::set<std::pair<ElementId, ElementId>>& pairs);
-
-  void apply(const OsmMapPtr& map,
-             std::vector<std::pair<ElementId, ElementId>>& replaced) override;
+  void apply(const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced) override;
 
   /**
    * Returns true if the plugin has a function with the specified name.
@@ -86,7 +85,7 @@ protected:
   virtual void _applyMergeSets(
     const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced) const;
 
-  v8::Handle<v8::Value> _callMergePair(const OsmMapPtr& map) const;
+  v8::Local<v8::Value> _callMergePair(const OsmMapPtr& map) const;
   void _callMergeSets(const OsmMapPtr& map,
                       std::vector<std::pair<ElementId, ElementId>>& replaced) const;
 };

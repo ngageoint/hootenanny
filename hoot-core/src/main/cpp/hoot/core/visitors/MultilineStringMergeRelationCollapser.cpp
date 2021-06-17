@@ -33,7 +33,7 @@
 #include <hoot/core/ops/RemoveRelationByEid.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/schema/MetadataTags.h>
-#include <hoot/core/criterion/ElementTypeCriterion.h>
+#include <hoot/core/criterion/RelationCriterion.h>
 #include <hoot/core/criterion/TagKeyCriterion.h>
 #include <hoot/core/elements/RelationMemberUtils.h>
 
@@ -158,7 +158,7 @@ void MultilineStringMergeRelationCollapser::visit(const ElementPtr& element)
 
   // Get any relations which may own our relation being collapsed.
   const std::vector<ConstRelationPtr> relationsOwningMsRelation =
-    RelationMemberUtils::getContainingRelations(relation->getElementId(), _map);
+    RelationMemberUtils::getContainingRelationsConst(relation->getElementId(), _map);
   LOG_VART(relationsOwningMsRelation.size());
 
   // For all the members of our relation being collapsed,
@@ -206,7 +206,7 @@ void MultilineStringMergeRelationCollapser::visit(const ElementPtr& element)
         !parsedOwningRelationIds.contains(relationOwningMsRelation->getElementId()))
     {
       LOG_VART(relationOwningMsRelation->getElementId());
-      // Use relation merger here, as will make the member insert indexes be correct. Prevent
+      // Use relation merger here, as it will make the member insert indexes be correct. Prevent
       // the merger from deleting the merged ms relation, as we may need to merge it with
       // multiple parent relations within this loop. It will be deleted at the end.
       _relationMerger.merge(

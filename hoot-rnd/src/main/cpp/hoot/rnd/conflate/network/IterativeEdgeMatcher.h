@@ -159,12 +159,12 @@ private:
   double _p;
   double _dampening;
 
-  double _aggregateScores(QList<double> pairs);
+  double _aggregateScores(QList<double> pairs) const;
 
   double _calculateEdgeVertexScore(const VertexScoreMap& vm, ConstNetworkVertexPtr from1,
     ConstNetworkVertexPtr from2, ConstNetworkVertexPtr to1, ConstNetworkVertexPtr to2) const;
 
-  QList<ConstNetworkEdgePtr> _getEdgesOnVertex(ConstNetworkVertexPtr v);
+  QList<ConstNetworkEdgePtr> _getEdgesOnVertex(ConstNetworkVertexPtr v) const;
 
   void _normalizeAllScores();
 
@@ -172,23 +172,23 @@ private:
    * Normalizes the scores in a table. All the weights will sum to a constant based on the network
    * size. All values will be treated as at least EPSILON for normalizing purposes.
    */
-  void _normalizeGlobalScores(EdgeScoreMap& t);
-  void _normalizeGlobalScores(VertexScoreMap& t);
+  void _normalizeGlobalScores(EdgeScoreMap& t) const;
+  void _normalizeGlobalScores(VertexScoreMap& t) const;
 
   /**
    * Normalizes the scores in a table. All the columns in a given row will sum to 1. All values will
    * be treated as at least EPSILON for normalizing purposes.
    */
-  void _normalizeScores(EdgeScoreMap& t);
-  void _normalizeScores(VertexScoreMap& t);
+  void _normalizeScores(EdgeScoreMap& t) const;
+  void _normalizeScores(VertexScoreMap& t) const;
 
   void _seedEdgeScores();
 
   void _seedVertexScores();
 
-  void _updateEdgeScores(EdgeScoreMap &em, const VertexScoreMap &vm);
+  void _updateEdgeScores(EdgeScoreMap &em, const VertexScoreMap &vm) const;
 
-  void _updateVertexScores(VertexScoreMap& vm, EdgeScoreMap &em);
+  void _updateVertexScores(VertexScoreMap& vm, EdgeScoreMap &em) const;
 
 };
 

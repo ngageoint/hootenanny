@@ -53,6 +53,7 @@ void FeatureExtractorJs::extract(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
 
   FeatureExtractorJs* feJs = ObjectWrap::Unwrap<FeatureExtractorJs>(args.This());
 
@@ -61,9 +62,9 @@ void FeatureExtractorJs::extract(const FunctionCallbackInfo<Value>& args)
     throw IllegalArgumentException("Expected exactly three argument in extract (map, e1, e2)");
   }
 
-  OsmMapJs* mapJs = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject());
-  ElementJs* e1Js = ObjectWrap::Unwrap<ElementJs>(args[1]->ToObject());
-  ElementJs* e2Js = ObjectWrap::Unwrap<ElementJs>(args[2]->ToObject());
+  OsmMapJs* mapJs = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject(context).ToLocalChecked());
+  const ElementJs* e1Js = ObjectWrap::Unwrap<ElementJs>(args[1]->ToObject(context).ToLocalChecked());
+  const ElementJs* e2Js = ObjectWrap::Unwrap<ElementJs>(args[2]->ToObject(context).ToLocalChecked());
 
   double result =
     feJs->getFeatureExtractor()->extract(
@@ -79,10 +80,11 @@ void FeatureExtractorJs::extract(const FunctionCallbackInfo<Value>& args)
   }
 }
 
-void FeatureExtractorJs::Init(Handle<Object> target)
+void FeatureExtractorJs::Init(Local<Object> target)
 {
   Isolate* current = target->GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
   vector<QString> opNames =
     Factory::getInstance().getObjectNamesByBase(FeatureExtractor::className());
 
@@ -93,14 +95,13 @@ void FeatureExtractorJs::Init(Handle<Object> target)
 
     // Prepare constructor template
     Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
-    tpl->SetClassName(String::NewFromUtf8(current, opNames[i].toStdString().data()));
+    tpl->SetClassName(String::NewFromUtf8(current, opNames[i].toStdString().data()).ToLocalChecked());
     tpl->InstanceTemplate()->SetInternalFieldCount(1);
     // Prototype
-    tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "extract"),
-        FunctionTemplate::New(current, extract));
+    tpl->PrototypeTemplate()->Set(current, "extract", FunctionTemplate::New(current, extract));
 
-    Persistent<Function> constructor(current, tpl->GetFunction());
-    target->Set(String::NewFromUtf8(current, n), ToLocal(&constructor));
+    Persistent<Function> constructor(current, tpl->GetFunction(context).ToLocalChecked());
+    target->Set(context, toV8(n), ToLocal(&constructor));
   }
 }
 

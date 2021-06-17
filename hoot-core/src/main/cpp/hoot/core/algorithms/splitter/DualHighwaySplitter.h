@@ -111,20 +111,20 @@ private:
 
   void _addConnector(long nodeId);
   std::shared_ptr<Way> _createOneWay(const std::shared_ptr<const Way>& w, Meters bufferSize,
-                                     bool left);
+                                     bool left) const;
   void _createStub(const std::shared_ptr<Way>& dividedWay, long centerNodeId, long edgeNodeId);
   double _dotProduct(const geos::geom::Coordinate& c1, const geos::geom::Coordinate& c2) const;
-  void _fixLanes(const std::shared_ptr<Way>& w);
+  void _fixLanes(const std::shared_ptr<Way>& w) const;
 
   /**
    * Returns the node id of the nearest node to nid on w
    */
-  long _nearestNode(long nid, const std::shared_ptr<const Way>& w);
+  long _nearestNode(long nid, const std::shared_ptr<const Way>& w) const;
 
-  geos::geom::Coordinate _normalizedVector(long nid1, long nid2);
+  geos::geom::Coordinate _normalizedVector(long nid1, long nid2) const;
   bool _onRight(long intersectionId, const std::shared_ptr<Way>& inbound, long leftNn,
-                long rightNn);
-  void _reconnectEnd(long centerNodeId, const std::shared_ptr<Way>& edge);
+                long rightNn) const;
+  void _reconnectEnd(long centerNodeId, const std::shared_ptr<Way>& edge) const;
   void _splitIntersectingWays(long nid);
   void _splitWay(long wid);
 };

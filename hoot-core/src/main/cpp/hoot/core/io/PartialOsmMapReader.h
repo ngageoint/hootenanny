@@ -47,8 +47,7 @@ public:
 
   virtual ~PartialOsmMapReader() = default;
 
-  long getMaxElementsPerMap() { return _maxElementsPerMap; }
-
+  long getMaxElementsPerMap() const { return _maxElementsPerMap; }
   void setMaxElementsPerMap(long maxElements) { _maxElementsPerMap = maxElements; }
 
   /**

@@ -31,14 +31,13 @@
 
 #include <hoot/core/algorithms/changeset/ChangesetCreator.h>
 
-#include <hoot/core/criterion/ElementTypeCriterion.h>
+#include <hoot/core/criterion/WayCriterion.h>
 #include <hoot/core/criterion/LinearCriterion.h>
 #include <hoot/core/criterion/NotCriterion.h>
 #include <hoot/core/criterion/OrCriterion.h>
 #include <hoot/core/criterion/StatusCriterion.h>
 #include <hoot/core/criterion/TagCriterion.h>
 #include <hoot/core/criterion/TagKeyCriterion.h>
-#include <hoot/core/criterion/WayNodeCriterion.h>
 
 #include <hoot/core/elements/CommonElementIdFinder.h>
 #include <hoot/core/elements/MapProjector.h>
@@ -201,13 +200,15 @@ void ChangesetReplacementCreator::create(
     LOG_INFO(secIdRemapper.getInitStatusMessage());
     secIdRemapper.apply(secMap);
     LOG_INFO(secIdRemapper.getCompletedStatusMessage());
-    OsmMapWriterFactory::writeDebugMap(secMap, _changesetId + "-sec-after-id-remapping");
+    OsmMapWriterFactory::writeDebugMap(
+      secMap, className(), _changesetId + "-sec-after-id-remapping");
   }
 
   // Combine the cookie cut ref map back with the secondary map, which is needed to generate the
   // diff and for way snapping.
   MapUtils::combineMaps(cookieCutRefMap, secMap, false);
-  OsmMapWriterFactory::writeDebugMap(cookieCutRefMap, _changesetId + "-combined-before-conflation");
+  OsmMapWriterFactory::writeDebugMap(
+    cookieCutRefMap, className(), _changesetId + "-combined-before-conflation");
   secMap.reset();
   LOG_VARD(cookieCutRefMap->size());
   OsmMapPtr combinedMap = cookieCutRefMap; // rename to reflect the state of the dataset
@@ -236,7 +237,8 @@ void ChangesetReplacementCreator::create(
     ReplacementSnappedWayJoiner wayJoiner(refIdToVersionMappings);
     wayJoiner.join(combinedMap);
     LOG_VART(MapProjector::toWkt(combinedMap->getProjection()));
-    OsmMapWriterFactory::writeDebugMap(combinedMap, _changesetId + "-after-way-joining");
+    OsmMapWriterFactory::writeDebugMap(
+      combinedMap, className(), _changesetId + "-after-way-joining");
 
     _currentTask++;
   }
@@ -295,7 +297,8 @@ void ChangesetReplacementCreator::create(
     // Restore the remapped relation IDs.
     secIdRemapper.restore(combinedMap);
     LOG_INFO(secIdRemapper.getRestoreCompletedStatusMessage());
-    OsmMapWriterFactory::writeDebugMap(combinedMap, _changesetId + "-combined-after-id-restoring");
+    OsmMapWriterFactory::writeDebugMap(
+      combinedMap, className(), _changesetId + "-combined-after-id-restoring");
   }
 
   if (!ConfigOptions().getChangesetReplacementAllowDeletingReferenceFeaturesOutsideBounds())
@@ -410,7 +413,7 @@ void ChangesetReplacementCreator::_setGlobalOpts()
 }
 
 void ChangesetReplacementCreator::_syncInputVersions(const OsmMapPtr& refMap,
-                                                     const OsmMapPtr& secMap)
+                                                     const OsmMapPtr& secMap) const
 {
   LOG_STATUS("Synchronizing elements...");
 
@@ -507,7 +510,7 @@ OsmMapPtr ChangesetReplacementCreator::_loadAndFilterSecMap()
   return secMap;
 }
 
-void ChangesetReplacementCreator::_snapUnconnectedPreChangesetMapCropping(OsmMapPtr& combinedMap)
+void ChangesetReplacementCreator::_snapUnconnectedPreChangesetMapCropping(OsmMapPtr& combinedMap) const
 {
   LOG_INFO("Snapping unconnected ways to each other in replacement map...");
 
@@ -526,7 +529,7 @@ void ChangesetReplacementCreator::_snapUnconnectedPreChangesetMapCropping(OsmMap
 }
 
 void ChangesetReplacementCreator::_snapUnconnectedPostChangesetMapCropping(
-  OsmMapPtr& refMap, OsmMapPtr& combinedMap, OsmMapPtr& immediatelyConnectedOutOfBoundsWays)
+  OsmMapPtr& refMap, OsmMapPtr& combinedMap, OsmMapPtr& immediatelyConnectedOutOfBoundsWays) const
 {
   QStringList snapWayStatuses;
   snapWayStatuses.append("Input2");
@@ -549,7 +552,8 @@ void ChangesetReplacementCreator::_snapUnconnectedPostChangesetMapCropping(
 
   // combine the conflated map with the immediately connected out of bounds ways
   MapUtils::combineMaps(combinedMap, immediatelyConnectedOutOfBoundsWays, true);
-  OsmMapWriterFactory::writeDebugMap(combinedMap, _changesetId + "-conflated-connected-combined");
+  OsmMapWriterFactory::writeDebugMap(
+    combinedMap, className(), _changesetId + "-conflated-connected-combined");
 
   // Snap the connected ways to other ways in the conflated map. Mark the ways that were
   // snapped, as we'll need that info in the next step.
@@ -567,12 +571,12 @@ void ChangesetReplacementCreator::_snapUnconnectedPostChangesetMapCropping(
   // Copy the connected ways back into the ref map as well, so the changeset will derive
   // properly.
   MapUtils::combineMaps(refMap, immediatelyConnectedOutOfBoundsWays, true);
-  OsmMapWriterFactory::writeDebugMap(refMap, _changesetId + "-ref-connected-combined");
+  OsmMapWriterFactory::writeDebugMap(refMap, className(), _changesetId + "-ref-connected-combined");
 }
 
 void ChangesetReplacementCreator::_snapUnconnectedWays(
   OsmMapPtr& map, const QStringList& snapWayStatuses, const QStringList& snapToWayStatuses,
-  const QString& typeCriterionClassName, const bool markSnappedWays, const QString& debugFileName)
+  const QString& typeCriterionClassName, const bool markSnappedWays, const QString& debugFileName) const
 {
   LOG_DEBUG(
     "Snapping ways for map: " << map->getName() << ", with filter type: " <<
@@ -599,7 +603,7 @@ void ChangesetReplacementCreator::_snapUnconnectedWays(
   MapProjector::projectToWgs84(map);   // snapping works in planar
   LOG_VART(MapProjector::toWkt(map->getProjection()));
   MemoryUsageChecker::getInstance().check();
-  OsmMapWriterFactory::writeDebugMap(map, debugFileName);
+  OsmMapWriterFactory::writeDebugMap(map, className(), debugFileName);
 }
 
 OsmMapPtr ChangesetReplacementCreator::_getImmediatelyConnectedOutOfBoundsWays(
@@ -619,12 +623,12 @@ OsmMapPtr ChangesetReplacementCreator::_getImmediatelyConnectedOutOfBoundsWays(
   connectedWays->setName(outputMapName);
   LOG_VART(MapProjector::toWkt(connectedWays->getProjection()));
   MemoryUsageChecker::getInstance().check();
-  OsmMapWriterFactory::writeDebugMap(connectedWays, _changesetId + "-connected-ways");
+  OsmMapWriterFactory::writeDebugMap(connectedWays, className(), _changesetId + "-connected-ways");
   return connectedWays;
 }
 
 void ChangesetReplacementCreator::_removeUnsnappedImmediatelyConnectedOutOfBoundsWays(
-  OsmMapPtr& map)
+  OsmMapPtr& map) const
 {
   LOG_INFO(
     "Removing any immediately connected ways that were not previously snapped in: " <<
@@ -646,12 +650,12 @@ void ChangesetReplacementCreator::_removeUnsnappedImmediatelyConnectedOutOfBound
   MemoryUsageChecker::getInstance().check();
   LOG_VART(MapProjector::toWkt(map->getProjection()));
   OsmMapWriterFactory::writeDebugMap(
-    map, _changesetId + "-" + map->getName() + "-unsnapped-removed");
+    map, className(), _changesetId + "-" + map->getName() + "-unsnapped-removed");
 }
 
 void ChangesetReplacementCreator::_cropMapForChangesetDerivation(
   OsmMapPtr& map, const bool keepEntireFeaturesCrossingBounds,
-  const bool keepOnlyFeaturesInsideBounds, const QString& debugFileName)
+  const bool keepOnlyFeaturesInsideBounds, const QString& debugFileName) const
 {
   if (map->size() == 0)
   {
@@ -676,7 +680,7 @@ void ChangesetReplacementCreator::_cropMapForChangesetDerivation(
 
   MemoryUsageChecker::getInstance().check();
   LOG_VART(MapProjector::toWkt(map->getProjection()));
-  OsmMapWriterFactory::writeDebugMap(map, debugFileName);
+  OsmMapWriterFactory::writeDebugMap(map, className(), debugFileName);
   LOG_DEBUG("Cropped map: " << map->getName() << " size: " << map->size());
 }
 

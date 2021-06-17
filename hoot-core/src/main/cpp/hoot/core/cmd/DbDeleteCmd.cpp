@@ -64,9 +64,7 @@ public:
     }
 
     LOG_STATUS("Deleting ..." << FileUtils::toLogFormat(args[0], 25) << "...");
-
     HootApiDbWriter().deleteMap(args[0]);
-
     LOG_STATUS("Map deleted in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 
     return 0;

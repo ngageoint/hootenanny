@@ -29,6 +29,16 @@
 namespace hoot
 {
 
+// This isn't being factory registered, since there's no standard way to retrieve a set of strings
+// from a visitor
+
+UniqueTagValuesVisitor::UniqueTagValuesVisitor(QString key, std::set<QString>& bag, bool split) :
+_key(key),
+_bag(bag),
+_split(split)
+{
+}
+
 void UniqueTagValuesVisitor::visit(const ConstElementPtr& e)
 {
   Tags::const_iterator it = e->getTags().find(_key);

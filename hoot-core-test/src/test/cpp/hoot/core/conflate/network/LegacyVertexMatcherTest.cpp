@@ -27,7 +27,6 @@
 
 // Hoot
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/criterion/HighwayCriterion.h>
 #include <hoot/core/criterion/StatusCriterion.h>
 #include <hoot/core/conflate/network/LegacyVertexMatcher.h>
 #include <hoot/core/conflate/network/NetworkDetails.h>
@@ -66,35 +65,35 @@ public:
     Tags tags;
     tags.set("highway", "road");
 
-    NodePtr a1 = TestUtils::createNode(map, Status::Unknown1, -50, 0);
-    NodePtr b1 = TestUtils::createNode(map, Status::Unknown1, 0, 0);
-    NodePtr c1 = TestUtils::createNode(map, Status::Unknown1, 0, 50);
-    NodePtr d1 = TestUtils::createNode(map, Status::Unknown1, 0, -50);
-    NodePtr e1 = TestUtils::createNode(map, Status::Unknown1, 50, 0);
+    NodePtr a1 = TestUtils::createNode(map, "", Status::Unknown1, -50, 0);
+    NodePtr b1 = TestUtils::createNode(map, "", Status::Unknown1, 0, 0);
+    NodePtr c1 = TestUtils::createNode(map, "", Status::Unknown1, 0, 50);
+    NodePtr d1 = TestUtils::createNode(map, "", Status::Unknown1, 0, -50);
+    NodePtr e1 = TestUtils::createNode(map, "", Status::Unknown1, 50, 0);
 
-    WayPtr ab1 = TestUtils::createWay(map, QList<NodePtr>() << a1 << b1, Status::Unknown1, 15,
-      tags);
-    WayPtr bc1 = TestUtils::createWay(map, QList<NodePtr>() << b1 << c1, Status::Unknown1, 15,
-      tags);
-    WayPtr bd1 = TestUtils::createWay(map, QList<NodePtr>() << b1 << d1, Status::Unknown1, 15,
-      tags);
-    WayPtr be1 = TestUtils::createWay(map, QList<NodePtr>() << b1 << e1, Status::Unknown1, 15,
-      tags);
+    /*WayPtr ab1 =*/
+      TestUtils::createWay(map, QList<NodePtr>() << a1 << b1, "", Status::Unknown1, 15, tags);
+    /*WayPtr bc1 =*/
+      TestUtils::createWay(map, QList<NodePtr>() << b1 << c1, "", Status::Unknown1, 15, tags);
+    /*WayPtr bd1 =*/
+      TestUtils::createWay(map, QList<NodePtr>() << b1 << d1, "", Status::Unknown1, 15, tags);
+    /*WayPtr be1 =*/
+      TestUtils::createWay(map, QList<NodePtr>() << b1 << e1, "", Status::Unknown1, 15, tags);
 
-    NodePtr a2 = TestUtils::createNode(map, Status::Unknown2, -51, 1);
-    NodePtr b2 = TestUtils::createNode(map, Status::Unknown2, 1, 1);
-    NodePtr c2 = TestUtils::createNode(map, Status::Unknown2, 1, 51);
-    NodePtr d2 = TestUtils::createNode(map, Status::Unknown2, 1, -51);
-    NodePtr e2 = TestUtils::createNode(map, Status::Unknown2, 51, 1);
+    NodePtr a2 = TestUtils::createNode(map, "", Status::Unknown2, -51, 1);
+    NodePtr b2 = TestUtils::createNode(map, "", Status::Unknown2, 1, 1);
+    NodePtr c2 = TestUtils::createNode(map, "", Status::Unknown2, 1, 51);
+    NodePtr d2 = TestUtils::createNode(map, "", Status::Unknown2, 1, -51);
+    NodePtr e2 = TestUtils::createNode(map, "", Status::Unknown2, 51, 1);
 
-    WayPtr ba2 = TestUtils::createWay(map, QList<NodePtr>() << b2 << a2, Status::Unknown2, 15,
-      tags);
-    WayPtr bc2 = TestUtils::createWay(map, QList<NodePtr>() << b2 << c2, Status::Unknown2, 15,
-      tags);
-    WayPtr db2 = TestUtils::createWay(map, QList<NodePtr>() << d2 << b2, Status::Unknown2, 15,
-      tags);
-    WayPtr be2 = TestUtils::createWay(map, QList<NodePtr>() << b2 << e2, Status::Unknown2, 15,
-      tags);
+    /*WayPtr ba2 =*/
+      TestUtils::createWay(map, QList<NodePtr>() << b2 << a2, "", Status::Unknown2, 15, tags);
+    /*WayPtr bc2 =*/
+      TestUtils::createWay(map, QList<NodePtr>() << b2 << c2, "", Status::Unknown2, 15, tags);
+    /*WayPtr db2 =*/
+      TestUtils::createWay(map, QList<NodePtr>() << d2 << b2, "", Status::Unknown2, 15, tags);
+    /*WayPtr be2 =*/
+      TestUtils::createWay(map, QList<NodePtr>() << b2 << e2, "", Status::Unknown2, 15, tags);
 
     OsmNetworkExtractor ext1;
     ElementCriterionPtr criterion1(new StatusCriterion(Status::Unknown1));

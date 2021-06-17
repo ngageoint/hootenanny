@@ -50,6 +50,24 @@ public:
    * @todo may be able to replace nodesToNodeIds with this more generic version
    */
   static QSet<ElementId> elementsToElementIds(const std::vector<ElementPtr>& elements);
+
+  /**
+   * Converts element IDs to numeric IDs
+   *
+   * @param elementIds the element ID collection to convert
+   * @return a collection of numeric IDs
+   */
+  static QSet<long> elementIdsToIds(const std::set<ElementId>& elementIds);
+
+  /**
+   * Determines if a collection of elements contains an element with a particular element ID
+   *
+   * @param id the element ID to search for
+   * @param elements the collection of elements to search
+   * @return true if the collection of elements contains an element with the specified ID; false
+   * otherwise
+   */
+  static bool containsElementId(const ElementId& id, const QList<ElementPtr>& elements);
 };
 
 }

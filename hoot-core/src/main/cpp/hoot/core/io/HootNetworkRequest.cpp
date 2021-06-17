@@ -101,7 +101,7 @@ bool HootNetworkRequest::_networkRequest(const QUrl& url, int timeout,
   _error.clear();
   _timedOut = false;
   //  Do HTTP request
-  std::shared_ptr<QNetworkAccessManager> pNAM(new QNetworkAccessManager());
+  std::shared_ptr<QNetworkAccessManager> pNAM = std::make_shared<QNetworkAccessManager>();
   QNetworkRequest request(url);
 
   if (tempUrl.scheme().toLower() == "https")
@@ -213,7 +213,7 @@ bool HootNetworkRequest::_networkRequest(const QUrl& url, int timeout,
   return true;
 }
 
-int HootNetworkRequest::_getHttpResponseCode(QNetworkReply* reply)
+int HootNetworkRequest::_getHttpResponseCode(QNetworkReply* reply) const
 {
   if (reply != nullptr)
   {
@@ -226,7 +226,7 @@ int HootNetworkRequest::_getHttpResponseCode(QNetworkReply* reply)
   return 0;
 }
 
-void HootNetworkRequest::_setOAuthHeader(QNetworkAccessManager::Operation http_op, QNetworkRequest& request)
+void HootNetworkRequest::_setOAuthHeader(QNetworkAccessManager::Operation http_op, QNetworkRequest& request) const
 {
   //  Convert the operation format
   OAuth::Http::RequestType op;
@@ -251,7 +251,7 @@ void HootNetworkRequest::removeIpFromUrlString(QString& endpointUrl, const QUrl&
     endpointUrl.replace(url.host(), "<host-ip>");
 }
 
-void HootNetworkRequest::logConnectionError()
+void HootNetworkRequest::logConnectionError() const
 {
   if (_status < 0)
   {

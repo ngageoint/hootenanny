@@ -81,7 +81,7 @@ public:
     _children.insert(child);
   }
 
-  int getId() { return _id; }
+  int getId() const { return _id; }
 
 private:
 
@@ -231,7 +231,7 @@ void AlphaShape::insert(const vector<pair<double, double>>& points)
     if (i % ConfigOptions().getTaskStatusUpdateInterval() == 0)
     {
       PROGRESS_INFO(
-        "Added " << StringUtils::formatLargeNumber(i) << " / " <<
+        "Added " << StringUtils::formatLargeNumber(i) << " of " <<
         StringUtils::formatLargeNumber(randomized.size() - 1) << " points.");
     }
     _pDelauneyTriangles->insert(randomized[i].first, randomized[i].second);
@@ -239,7 +239,7 @@ void AlphaShape::insert(const vector<pair<double, double>>& points)
   LOG_VARD(_pDelauneyTriangles->getFaces().size());
   //  Report the final progress
   PROGRESS_INFO(
-    "Added " << StringUtils::formatLargeNumber(randomized.size() - 1) << " / " <<
+    "Added " << StringUtils::formatLargeNumber(randomized.size() - 1) << " of " <<
     StringUtils::formatLargeNumber(randomized.size() - 1) << " points.");
 }
 
@@ -256,7 +256,7 @@ OsmMapPtr AlphaShape::_toOsmMap()
   return result;
 }
 
-double AlphaShape::_collectValidFaces(const double alpha, std::vector<GeometryPtr>& faces, Envelope& e)
+double AlphaShape::_collectValidFaces(const double alpha, std::vector<GeometryPtr>& faces, Envelope& e) const
 {
   double preUnionArea = 0.0;
   for (FaceIterator fi = _pDelauneyTriangles->getFaceIterator();
@@ -429,7 +429,7 @@ GeometryPtr AlphaShape::toGeometry()
   return result;
 }
 
-QString AlphaShape::toString()
+QString AlphaShape::toString() const
 {
   QString result;
   Edge start = _pDelauneyTriangles->getStartingEdge();

@@ -33,7 +33,7 @@ namespace hoot
 {
 
 /**
- * Filters an element if any of the child criterion return true.
+ * Is satisfied if any of its child criteria are satisfied.
  */
 class OrCriterion : public ChainCriterion
 {
