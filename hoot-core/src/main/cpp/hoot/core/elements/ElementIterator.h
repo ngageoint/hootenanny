@@ -37,27 +37,26 @@ namespace hoot
 class Element;
 
 /**
- * Implements the iterator concept and provides some simple methods for the inheriter to use.
+ * Iterator concept for element traversal.
  */
 class ElementIterator
 {
 public:
 
   ElementIterator() = default;
-
   virtual ~ElementIterator() = default;
 
   /**
-   * TODO
+   * Returns the next available Element
    *
-   * @return
+   * @return an Element
    */
   const std::shared_ptr<Element>& next();
 
   /**
-   * TODO
+   * Determines if the iterator has any more available Elements
    *
-   * @return
+   * @return true if another Element is available; false otherwise
    */
   bool hasNext();
 

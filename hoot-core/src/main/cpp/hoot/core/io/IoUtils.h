@@ -53,18 +53,18 @@ public:
   static QString className() { return "hoot::IoUtils"; }
 
   /**
-   * TODO
+   * Determines if the a URL is a supported input format
    *
-   * @param url
-   * @return
+   * @param url the URL to examine
+   * @return true if the URL points to a valid input format; false otherwise
    */
   static bool isSupportedInputFormat(const QString& url);
 
   /**
-   * TODO
+   * Determines if the a URL is a supported output format
    *
-   * @param url
-   * @return
+   * @param url the URL to examine
+   * @return true if the URL points to a valid output format; false otherwise
    */
   static bool isSupportedOutputFormat(const QString& url);
 
@@ -104,11 +104,11 @@ public:
   static bool anyAreSupportedOgrFormats(const QStringList& inputs, const bool allowDir = false);
 
   /**
-   * TODO
+   * Returns all file paths under a directory point to a supported input format
    *
-   * @param topLevelPaths
-   * @param nameFilters
-   * @return
+   * @param topLevelPaths one or more directory paths
+   * @param nameFilters wildcard filters for path exclusion; e.g. *myFile*, *.json
+   * @return a list of file paths
    */
   static QStringList getSupportedInputsRecursively(
     const QStringList& topLevelPaths, const QStringList& nameFilters = QStringList());
@@ -138,7 +138,8 @@ public:
    * readers/writers must implemented the partial map interfaces)
    *
    * @param inputs data sources
-   * @param logUnstreamable TODO
+   * @param logUnstreamable if true, a message is logged to indicate the input being parsed is not
+   * a streamable input
    * @return true if all inputs are streamable; false otherwise
    */
   static bool areStreamableInputs(const QStringList& inputs, const bool logUnstreamable = false);
@@ -155,18 +156,18 @@ public:
   static bool areValidStreamingOps(const QStringList& ops);
 
   /**
-   * TODO
+   * Determines if a URL points to a valid streamable input
    *
-   * @param url
-   * @return
+   * @param url the URL to examine
+   * @return true if the URL points to a valid streamable input; false otherwise
    */
   static bool isStreamableInput(const QString& url);
 
   /**
-   * TODO
+   * Determines if a URL points to a valid streamable output
    *
-   * @param url
-   * @return
+   * @param url the URL to examine
+   * @return true if the URL points to a valid streamable output; false otherwise
    */
   static bool isStreamableOutput(const QString& url);
 
