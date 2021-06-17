@@ -71,13 +71,24 @@ public:
       args.removeAt(args.indexOf("--brief"));
     }
 
+    bool recursive = false;
+    const QStringList inputFilters = _parseRecursiveInputParameter(args, recursive);
+
     if (args.size() < 1 || args.size() > 2)
     {
       cout << getHelp() << endl << endl;
       throw HootException(QString("%1 takes one or two parameters.").arg(getName()));
     }
 
-    const QStringList inputs = args.at(0).trimmed().split(";");
+    QStringList inputs;
+    if (!recursive)
+    {
+      inputs = args[0].trimmed().split(";");
+    }
+    else
+    {
+      inputs = IoUtils::getSupportedInputsRecursively(args[0].trimmed().split(";"), inputFilters);
+    }
     QString output;
     if (args.size() == 2)
     {

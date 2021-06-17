@@ -75,6 +75,15 @@ protected:
   QStringList _rawArgs;
 
   virtual QString _getHelpPath() const;
+
+  /**
+   * TODO
+   *
+   * @param args
+   * @param paramPresent
+   * @return
+   */
+  static QStringList _parseRecursiveInputParameter(QStringList& args, bool& paramPresent);
 };
 
 using BaseCommandPtr = std::shared_ptr<BaseCommand>;

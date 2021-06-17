@@ -55,28 +55,9 @@ public:
       countFeaturesOnly = false;
       args.removeAt(args.indexOf("--all-elements"));
     }
-    QStringList inputFilters;
+
     bool recursive = false;
-    if (args.contains("--recursive"))
-    {
-      recursive = true;
-      const int recursiveIndex = args.indexOf("--recursive");
-      if (args.size() < recursiveIndex + 2)
-      {
-        throw IllegalArgumentException(
-          "The --recursive option must be followed by either \"*\" for no filtering or one or "
-          "more filters.");
-      }
-      const QString filter = args.at(recursiveIndex + 1).trimmed();
-      // "*" denotes no filtering
-      if (filter != "*")
-      {
-        inputFilters = filter.split(";");
-      }
-      args.removeAt(recursiveIndex + 1);
-      args.removeAt(recursiveIndex);
-    }
-    LOG_VARD(inputFilters);
+    const QStringList inputFilters = _parseRecursiveInputParameter(args, recursive);
 
     if (args.size() < 1 || args.size() > 2)
     {
