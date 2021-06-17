@@ -5,8 +5,7 @@
 
 The +tag-info+ command displays unique feature tag values found in one or more inputs, grouped by tag key. 
 
-* +input(s)+            - One or more streamable inputs; (e.g. .osm file). Specify multiple inputs by separating them 
-                          with a semicolon and surrounding them with quotes.
+* +input(s)+            - One or more streamable inputs; may be any supported streamable input format (e.g. .osm file).
 * +--tag-values-limit+  - Limits the number of unique tag values printed per tag key. By default, there is no limit. This 
                           option is ignored if --keys-only is specified.
 * +--keys+              - Prints unique tag values for the specified keys only.  Delimit multiple keys with a semicolon 
@@ -29,7 +28,7 @@ This command works on streamable inputs only. To determine if an input is stream
 === Usage
 
 --------------------------------------
-tag-info (input1[;layer]) [input2[;layer]] ... [--tag-values-limit] [--keys-only "key1;key2..."] [--keys-only] [--case-insensitive] [--delimited-text]
+tag-info ("input1;input2...") [--tag-values-limit] [--keys-only "key1;key2..."] [--keys-only] [--case-insensitive] [--delimited-text]
 --------------------------------------
 
 https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#display-tag-schema-information-for-a-map[Examples]

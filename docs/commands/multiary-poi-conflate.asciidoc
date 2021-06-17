@@ -5,8 +5,8 @@
 
 The +multiary-poi-conflate+ command conflates two or more POI map sources into a single map.
 
-* +inputs+ - 2 or more input files; may be any supported input format (e.g. OSM file).
-* +output+ - The output path; may be any supported output format (e.g. OSM file).
+* +inputs+ - 2 or more input files; may be any supported input format (e.g. .osm file).
+* +output+ - The output path; may be any supported output format (e.g. .osm file).
 
 === Usage
 

@@ -5,7 +5,7 @@
 
 The +nplot-node-density+ command creates a density plot of the specified input.
 
-* +input+         - Input path; may be any supported input format (e.g. OSM file).
+* +input+         - Input path; may be any supported input format (e.g. .osm file).
 * +output-image+  - Output image name. Must always be a +.png+ file. A corresponding +.pngw+ file will also be generated.
 * +max-dimension+ - Maximum size of the image on one side. The actual size will be determined based on the envelope. If 
                     the envelope is wider than tall then this will be the width of the image (and vice versa). The pixels 

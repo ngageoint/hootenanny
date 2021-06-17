@@ -11,17 +11,17 @@ User Guide for more information.
 
 A raw rules file must be created before generating a rules database.  Use the --create-raw option to generate it:
 
-* +inputs+       - Semicolon delimited list of input paths; may be any supported input format (e.g. OSM file).
-* +translations+ - Semicolon delimited list of translation scripts used to translate each input dataset; must be 
-                   *.js or *.py files. Specify 'none' as an individual entry to skip translation for an input.
-* +output+       - An *.implicitTagRules tab delimited implicit tag rules file.
+* +input(s)+       - Inputs; may be any supported input format (e.g. .osm file).
+* +translation(s)+ - Translation scripts used to translate each input dataset; must be *.js or *.py files. Specify 'none' as 
+                     an individual entry to skip translation for an input.
+* +output+         - An *.implicitTagRules tab delimited implicit tag rules file.
 
 Relevant configuration options are those beginning with implicit.tagging.raw.rules.deriver.*, and in some cases those beginning with implicit.tagging.*, in conf/core/ConfigOptions.asciidoc.
 
 ==== Usage
 
 --------------------------------------
-type-tagger-rules --create-raw (inputs) (translations) (output)
+type-tagger-rules --create-raw ("input1;input2...") ("translation1;translation2...") (output)
 --------------------------------------
 
 ==== Examples
