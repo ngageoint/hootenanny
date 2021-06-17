@@ -9,11 +9,27 @@ INPUT_FILE_2=test-files/ToyBuildingsTestA.osm
 
 CONFIG="-C Testing.conf"
 
-# calculate the numerical average of all values for a custom tag
+echo ""
+echo "Calculating the numerical average of all values for a custom tag..."
+echo ""
 hoot stat $CONFIG -D tags.visitor.keys="test1" $INPUT_FILE_1 hoot::AverageNumericTagsVisitor
 
-# calculate the averge number of nodes per way
-hoot stat $CONFIG $INPUT_FILE_2 hoot::NodesPerWayVisitor average
+echo ""
+echo "Calculating the minimum number of nodes per way..."
+echo ""
+hoot stat $CONFIG $INPUT_FILE_2 NodesPerWayVisitor min
 
-# This results in an error since AddressCountVisitor doesn't support NumericStatistic.
-hoot stat $CONFIG $INPUT_FILE_2 hoot::AddressCountVisitor average
+echo ""
+echo "Calculating the maximum number of nodes per way..."
+echo ""
+hoot stat $CONFIG $INPUT_FILE_2 NodesPerWayVisitor max
+
+echo ""
+echo "Calculating the average number of nodes per way..."
+echo ""
+hoot stat $CONFIG $INPUT_FILE_2 NodesPerWayVisitor average
+
+echo ""
+echo "Calculating the total number of nodes per way against multiple files..."
+echo ""
+hoot stat $CONFIG "$INPUT_FILE_1;$INPUT_FILE_2" NodesPerWayVisitor total

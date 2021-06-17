@@ -53,7 +53,7 @@ public:
       throw HootException(QString("%1 takes two or three parameters.").arg(getName()));
     }
 
-    const QString input = args[0].trimmed();
+    const QStringList inputs = args[0].trimmed().split(";");
     QString visClassName = args[1].trimmed();
     QString statType = "total";
     if (args.size() == 3)
@@ -61,7 +61,7 @@ public:
       statType = args[2].trimmed();
     }
 
-    const double stat = StatCalculator().calculateStat(input, visClassName, statType);
+    const double stat = StatCalculator().calculateStat(inputs, visClassName, statType);
     // see note in CountCmd about the preceding endline
     std::cout << std::endl << "Calculated statistic: " <<
                  QString::number(stat, 'g', 3) << std::endl;

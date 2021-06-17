@@ -52,13 +52,18 @@ _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
 }
 
 double StatCalculator::calculateStat(
-  const QString& input, QString& visitorClassName, const QString& statType) const
+  const QStringList& inputs, QString& visitorClassName, const QString& statType) const
 {
+  if (inputs.empty())
+  {
+    throw IllegalArgumentException("No inputs passed to StatCalculator.");
+  }
+
   QElapsedTimer timer;
   timer.start();
   LOG_STATUS(
-    "Calculating statistic of type: " << statType << ", with visitor: " << visitorClassName <<
-    ", for " << FileUtils::toLogFormat(input, 25) << "...");
+    "Calculating statistic of type: " << statType << ", using visitor: " << visitorClassName <<
+    ", against " << inputs.size() << " inputs...");
 
   if (!visitorClassName.startsWith(MetadataTags::HootNamespacePrefix()))
   {
@@ -69,16 +74,7 @@ double StatCalculator::calculateStat(
     throw IllegalArgumentException("Invalid statistic type: " + statType);
   }
 
-  double stat;
-
-  std::shared_ptr<PartialOsmMapReader> reader = _getReader(input);
-
   ElementVisitorPtr statCollector = _getStatCollector(visitorClassName);
-
-  ElementInputStreamPtr filteredInputStream =
-    std::make_shared<ElementVisitorInputStream>(
-      std::dynamic_pointer_cast<ElementInputStream>(reader), statCollector);
-
   std::shared_ptr<SingleStatistic> singleStatCtr =
     std::dynamic_pointer_cast<SingleStatistic>(statCollector);
   LOG_VART(singleStatCtr.get());
@@ -97,36 +93,90 @@ double StatCalculator::calculateStat(
         "Visitors passed to the stat command with a statistic type other than \"total\" must "
          "support the NumericStatistic interface.");
     }
-  }
-
-  LOG_TRACE("Calculating statistic...");
-  long numElementsParsed = 0;
-  while (filteredInputStream->hasMoreElements())
-  {
-    /*ConstElementPtr element = */filteredInputStream->readNextElement();
-    numElementsParsed++;
-
-    if (numElementsParsed % (_taskStatusUpdateInterval * 10) == 0)
+    // TODO
+    if (inputs.size() > 1 && statType == "average")
     {
-      PROGRESS_INFO(
-        "Calculated statistic for: " << StringUtils::formatLargeNumber(numElementsParsed) <<
-        " elements.");
+      throw IllegalArgumentException(
+        "An average statistic may only be calculated against a single input.");
     }
   }
+
+  double stat = 0.0;
+  double statMin = std::numeric_limits<double>::max();
+  double statMax = std::numeric_limits<double>::min();
+  double statAvg = 0.0;
+  for (int i = 0; i < inputs.size(); i++)
+  {
+    LOG_STATUS(
+      "Calculating statistic of type: " << statType << ", using visitor: " << visitorClassName <<
+      ", against " << FileUtils::toLogFormat(inputs.at(i), 25) << "...");
+
+    std::shared_ptr<PartialOsmMapReader> reader = _getReader(inputs.at(i));
+    ElementInputStreamPtr filteredInputStream =
+      std::make_shared<ElementVisitorInputStream>(
+        std::dynamic_pointer_cast<ElementInputStream>(reader), statCollector);
+
+    long numElementsParsed = 0;
+    while (filteredInputStream->hasMoreElements())
+    {
+      /*ConstElementPtr element = */filteredInputStream->readNextElement();
+      numElementsParsed++;
+
+      if (numElementsParsed % (_taskStatusUpdateInterval * 10) == 0)
+      {
+        PROGRESS_INFO(
+          "Calculated statistic for: " << StringUtils::formatLargeNumber(numElementsParsed) <<
+          " elements.");
+      }
+    }
+
+    if (numericStatCtr)
+    {
+      if (statType == "min")
+      {
+        statMin = std::min(statMin, numericStatCtr->getMin());
+      }
+      else if (statType == "max")
+      {
+        statMax = std::max(statMax, numericStatCtr->getMax());
+      }
+      else if (statType == "average")
+      {
+        // TODO
+        statAvg = numericStatCtr->getAverage();
+      }
+      else
+      {
+        // won't get here
+        throw HootException("");
+      }
+    }
+    else
+    {
+      stat += singleStatCtr->getStat();
+    }
+
+    reader->finalizePartial();
+    reader->close();
+    filteredInputStream->close();
+  }
+
+  LOG_STATUS(
+    "Statistic calculated in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 
   if (numericStatCtr)
   {
     if (statType == "min")
     {
-      stat = numericStatCtr->getMin();
+      return statMin;
     }
     else if (statType == "max")
     {
-      stat = numericStatCtr->getMax();
+      return statMax;
     }
     else if (statType == "average")
     {
-      stat = numericStatCtr->getAverage();
+      return statAvg;
     }
     else
     {
@@ -136,17 +186,8 @@ double StatCalculator::calculateStat(
   }
   else
   {
-    stat = singleStatCtr->getStat();
+    return stat;
   }
-
-  reader->finalizePartial();
-  reader->close();
-  filteredInputStream->close();
-
-  LOG_STATUS(
-    "Statistic calculated in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
-
-  return stat;
 }
 
 bool StatCalculator::_isValidStatType(const QString& statType) const

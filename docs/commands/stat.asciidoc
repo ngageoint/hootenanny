@@ -5,7 +5,8 @@
 
 The +stat+ command displays a single statistic calculated from the features in a map.
 
-* +input(s)+ - One or more inputs; may be any supported input format (e.g. .osm file).
+* +input(s)+ - One or more inputs; may be any supported input format (e.g. .osm file). If statType is 'average', then only one
+               input is supported.
 * +visitor+  - The stat visitor must be the single class name of a Hootenanny visitor that inherits from 
                +ElementVisitor+ and supports the +SingleStatistic+ or +NumericStatistic+ interfaces. Use the 
                +info --operators+ command to obtain a list of available visitors.

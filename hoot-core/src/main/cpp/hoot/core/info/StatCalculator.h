@@ -48,7 +48,7 @@ public:
   /**
    * Calculates a statistic given an element visitor
    *
-   * @param input path to input map containing the elements to examine
+   * @param input paths to input maps containing the elements to calculate a statistic against
    * @param visitorClassName name of an ElementVisitor class that implements either SingleStatistic
    * or NumericStatistic
    * @param statType the type of statistic to calculate; valid types are: total, min, max, or
@@ -56,7 +56,7 @@ public:
    * @return a numeric statistic
    */
   double calculateStat(
-    const QString& input, QString& visitorClassName, const QString& statType) const;
+    const QStringList& inputs, QString& visitorClassName, const QString& statType) const;
 
 private:
 
