@@ -79,9 +79,11 @@ public:
       0.0, Progress::JobState::Running,
       "Importing " + QString::number(inputs.size()) + " map(s)...");
     OsmMapPtr map(new OsmMap());
-    // If we only have one input, then we'll retain the source IDs to keep the output as consistent
-    // with the input as possible. With more than one input there could be ID conflicts, so we won't
-    // retain the originals.
+    // We don't try to stream here, b/c there are generally always going to be non-streamable
+    // cleaning ops (possibly not, though, if someone drastically changed the default cleaning
+    // config...unlikely). If we only have one input, then we'll retain the source IDs to keep the
+    // output as consistent with the input as possible. With more than one input there could be ID
+    // conflicts, so we won't retain the originals.
     if (inputs.size() == 1)
     {
       IoUtils::loadMap(map, inputs.at(0), true, Status::Unknown1);

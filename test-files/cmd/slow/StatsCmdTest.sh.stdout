@@ -1446,7 +1446,7 @@ Full stats from multiple files to json...
 
 Quick Stats recursively from a directory to the display...
 
-Stat Name	test-files/cmd/slow/CountCmdTest/inputDir/input1b.osm	test-files/cmd/slow/CountCmdTest/inputDir/input1a.osm	test-files/cmd/slow/CountCmdTest/inputDir/input1.json	test-files/cmd/slow/CountCmdTest/inputDir/inputDir2/input1b.osm	test-files/cmd/slow/CountCmdTest/inputDir/inputDir2/input1a.osm
+Stat Name	test-files/cmd/slow/CountCmdTest/inputDir/input1.json	test-files/cmd/slow/CountCmdTest/inputDir/input1a.osm	test-files/cmd/slow/CountCmdTest/inputDir/input1b.osm	test-files/cmd/slow/CountCmdTest/inputDir/inputDir2/input1a.osm	test-files/cmd/slow/CountCmdTest/inputDir/inputDir2/input1b.osm
 Nodes	36	36	36	36	36
 Ways	4	4	4	4	4
 Relations	0	0	0	0	0

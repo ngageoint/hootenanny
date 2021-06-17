@@ -12,22 +12,79 @@ Display tag information...
   }
 }
 
+Display tag information recursively from a directory...
+
+{
+  "input1.json":{
+    "osm":{
+      "highway":[
+        "road"
+        ],
+      "note":[
+        "0",
+        "1",
+        "2",
+        "3"
+        ]
+      }
+  },
+  "input1a.osm":{
+    "osm":{
+      "highway":[
+        "road"
+        ],
+      "note":[
+        "0",
+        "1",
+        "2",
+        "3"
+        ]
+      }
+  },
+  "input1b.osm":{
+    "osm":{
+      "highway":[
+        "road"
+        ],
+      "note":[
+        "0",
+        "1",
+        "2",
+        "3"
+        ]
+      }
+  },
+  "input1a.osm":{
+    "osm":{
+      "highway":[
+        "road"
+        ],
+      "note":[
+        "0",
+        "1",
+        "2",
+        "3"
+        ]
+      }
+  },
+  "input1b.osm":{
+    "osm":{
+      "highway":[
+        "road"
+        ],
+      "note":[
+        "0",
+        "1",
+        "2",
+        "3"
+        ]
+      }
+  }
+}
+
 Display tag information recursively from a directory filtered to json files...
 
 {
-  "input1b.osm":{
-    "osm":{
-      "highway":[
-        "road"
-        ],
-      "note":[
-        "0",
-        "1",
-        "2",
-        "3"
-        ]
-      }
-  },
   "input1a.osm":{
     "osm":{
       "highway":[
@@ -55,6 +112,19 @@ Display tag information recursively from a directory filtered to json files...
       }
   },
   "input1a.osm":{
+    "osm":{
+      "highway":[
+        "road"
+        ],
+      "note":[
+        "0",
+        "1",
+        "2",
+        "3"
+        ]
+      }
+  },
+  "input1b.osm":{
     "osm":{
       "highway":[
         "road"

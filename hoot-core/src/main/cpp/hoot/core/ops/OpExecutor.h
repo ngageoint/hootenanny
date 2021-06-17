@@ -60,14 +60,12 @@ public:
 
   void setConfiguration(const Settings& conf) override;
 
-  QString getDescription() const override { return ""; }
-
   void setProgress(const Progress& progress) override { _progress = progress; }
   unsigned int getNumSteps() const override { return _namedOps.size(); }
 
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+  QString getDescription() const override { return ""; }
 
   std::shared_ptr<OsmMapOperation> getAppliedOperation(const QString& className)
   { return _appliedOps[className]; }

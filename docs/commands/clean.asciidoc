@@ -4,7 +4,7 @@
 === Description
 
 The +clean+ command corrects common erroneous data scenarios from input and writes to output by applying the 
-operations specified in the `map.cleaner.transforms` configuration option.
+operations specified in the `map.cleaner.transforms` configuration option. The operation is memory bound.
 
 * +input(s)+ - One or more inputs(s); may be any supported input format (e.g. .osm file).
 * +output+   - Output; may be any supported output format (e.g. .osm file).
