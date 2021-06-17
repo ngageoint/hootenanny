@@ -70,16 +70,26 @@ public:
     }
 
     Progress progress(
-      ConfigOptions().getJobId(),
-      JOB_SOURCE,
-      Progress::JobState::Running,
-      0.0,
+      ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running, 0.0,
       // import, export, and cleaning tasks
       1.0 / 3.0);
 
-    progress.set(0.0, Progress::JobState::Running, "Importing map...");
+    const QStringList inputs = args[0].trimmed().split(";");
+    progress.set(
+      0.0, Progress::JobState::Running,
+      "Importing " + QString::number(inputs.size()) + " map(s)...");
     OsmMapPtr map(new OsmMap());
-    IoUtils::loadMap(map, args[0], true, Status::Unknown1);
+    // If we only have one input, then we'll retain the source IDs to keep the output as consistent
+    // with the input as possible. With more than one input there could be ID conflicts, so we won't
+    // retain the originals.
+    if (inputs.size() == 1)
+    {
+      IoUtils::loadMap(map, inputs.at(0), true, Status::Unknown1);
+    }
+    else
+    {
+      IoUtils::loadMaps(map, inputs, false, Status::Unknown1);
+    }
 
     progress.set(1.0 / 3.0, Progress::JobState::Running, "Cleaning map...");
     MapCleaner(progress).apply(map);
