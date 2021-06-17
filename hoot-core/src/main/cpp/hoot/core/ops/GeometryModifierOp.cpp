@@ -151,7 +151,7 @@ QList<GeometryModifierActionDesc> GeometryModifierOp::_readJsonRules()
   return actionDescs;
 }
 
-void GeometryModifierOp::_parseFilter(GeometryModifierActionDesc& actionDesc, bpt::ptree ptree)
+void GeometryModifierOp::_parseFilter(GeometryModifierActionDesc& actionDesc, bpt::ptree ptree) const
 {
   // turn the filter part of the rules file entry back to a json string
   std::stringstream stringStream;
@@ -170,7 +170,7 @@ void GeometryModifierOp::_parseFilter(GeometryModifierActionDesc& actionDesc, bp
   }
 }
 
-void GeometryModifierOp::_parseArguments(GeometryModifierActionDesc& actionDesc, boost::property_tree::ptree ptree)
+void GeometryModifierOp::_parseArguments(GeometryModifierActionDesc& actionDesc, boost::property_tree::ptree ptree) const
 {
   QList<QString> availableParameters = actionDesc.pAction->getParameterNames();
 

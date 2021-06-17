@@ -47,7 +47,7 @@ public:
     ElementId eid1, ElementId eid2, const WaySublineMatchString& match) override;
 
   MatchClassification classify(const ConstOsmMapPtr& map,
-    const WaySublineMatch& match);
+    const WaySublineMatch& match) const;
 
   std::map<QString, double> getFeatures(const ConstOsmMapPtr& m,
     ElementId eid1, ElementId eid2, const WaySublineMatchString& match) const override;

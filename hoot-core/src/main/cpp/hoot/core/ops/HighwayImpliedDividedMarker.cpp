@@ -52,7 +52,7 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, HighwayImpliedDividedMarker)
 
-bool HighwayImpliedDividedMarker::_dividerSandwich(const std::shared_ptr<Way>& w)
+bool HighwayImpliedDividedMarker::_dividerSandwich(const std::shared_ptr<Way>& w) const
 {
   long firstNodeId = w->getNodeId(0);
   long lastNodeId = w->getLastNodeId();
@@ -68,7 +68,7 @@ bool HighwayImpliedDividedMarker::_dividerSandwich(const std::shared_ptr<Way>& w
   }
 }
 
-bool HighwayImpliedDividedMarker::_hasDividerConnected(long nodeId, long excludedWayId)
+bool HighwayImpliedDividedMarker::_hasDividerConnected(long nodeId, long excludedWayId) const
 {
   const set<long>& wayIds = (*_n2w)[nodeId];
 

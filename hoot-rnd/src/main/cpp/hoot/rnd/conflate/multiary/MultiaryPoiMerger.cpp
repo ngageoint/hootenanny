@@ -93,7 +93,7 @@ void MultiaryPoiMerger::apply(const OsmMapPtr& map,
 }
 
 void MultiaryPoiMerger::_createReviews(const OsmMapPtr& map,
-  QList<MultiaryClusterAlgorithm::ClusterLinkPtr> reviews)
+  QList<MultiaryClusterAlgorithm::ClusterLinkPtr> reviews) const
 {
   ReviewMarker reviewMarker;
   foreach (MultiaryClusterAlgorithm::ClusterLinkPtr link, reviews)
@@ -111,7 +111,7 @@ void MultiaryPoiMerger::_createReviews(const OsmMapPtr& map,
 
 void MultiaryPoiMerger::_mergeClusters(const OsmMapPtr& map,
   std::vector<std::pair<ElementId, ElementId>>& replaced,
-  MultiaryClusterAlgorithm::ClusterList clusters)
+  MultiaryClusterAlgorithm::ClusterList clusters) const
 {
   foreach (MultiaryClusterPtr mc, clusters)
   {

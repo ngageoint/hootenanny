@@ -72,6 +72,11 @@ protected:
     ElementId eid1, ElementId eid2,
     std::vector<std::pair<ElementId, ElementId>>& replaced) override;
 
+  /*
+   * @see LinearMergerAbstract
+   */
+  WaySublineMatchString _matchSubline(ElementPtr e1, ElementPtr e2) override;
+
 private:
 
   // see differential.treat.reviews.as.matches

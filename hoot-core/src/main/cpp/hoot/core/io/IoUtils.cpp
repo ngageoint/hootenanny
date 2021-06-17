@@ -29,10 +29,9 @@
 
 // Hoot
 #include <hoot/core/criterion/ChainCriterion.h>
-#include <hoot/core/criterion/ElementTypeCriterion.h>
+#include <hoot/core/criterion/WayCriterion.h>
 #include <hoot/core/criterion/TagKeyCriterion.h>
 #include <hoot/core/geometry/GeometryUtils.h>
-#include <hoot/core/io/OgrReader.h>
 #include <hoot/core/io/OgrUtilities.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
@@ -41,7 +40,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/Progress.h>
+#include <hoot/core/io/OgrReader.h>
 
 // Qt
 #include <QFileInfo>
@@ -87,14 +86,14 @@ bool IoUtils::isSupportedOgrFormat(const QString& input, const bool allowDir)
     return false;
   }
 
-  LOG_VART(QFileInfo(input).isDir());
-  //input is a dir; only accepting a dir as input if it contains a shape file or is a file geodb
+  // input is a dir; only accepting a dir as input if it contains a shape file or is a file geodb
   if (QFileInfo(input).isDir())
   {
-    return input.toLower().endsWith(".gdb") ||
-           FileUtils::dirContainsFileWithExtension(QFileInfo(input).dir(), "shp");
+    return
+      input.toLower().endsWith(".gdb") ||
+      FileUtils::dirContainsFileWithExtension(QFileInfo(input).dir(), "shp");
   }
-  //single input
+  // single input
   else
   {
     //The only zip file format we support are ones containing OGR inputs.
@@ -108,8 +107,9 @@ bool IoUtils::isSupportedOgrFormat(const QString& input, const bool allowDir)
     }
     LOG_VART(OgrUtilities::getInstance().getSupportedFormats(false));
     LOG_VART(QFileInfo(input).suffix());
-    return OgrUtilities::getInstance().getSupportedFormats(false)
-             .contains("." + QFileInfo(input).suffix());
+    return
+      OgrUtilities::getInstance().getSupportedFormats(false).contains(
+        "." + QFileInfo(input).suffix());
   }
 }
 
@@ -147,29 +147,40 @@ bool IoUtils::areSupportedOgrFormats(const QStringList& inputs, const bool allow
   return true;
 }
 
-void IoUtils::loadMap(const OsmMapPtr& map, const QString& path, bool useFileId,
-                      Status defaultStatus)
+void IoUtils::loadMap(
+  const OsmMapPtr& map, const QString& path, bool useFileId, Status defaultStatus,
+  const QString& translationScript, const int ogrFeatureLimit, const QString& jobSource,
+  const int numTasks)
 {
-  // TODO: Roll this whole thing into OsmMapReaderFactory somehow and get rid of OgrReader portion?
-
-  QStringList pathLayer = path.split(";");
-  QString justPath = pathLayer[0];
-  if (OgrReader::isReasonablePath(justPath))
+  const QStringList pathLayer = path.split(";");
+  const QString justPath = pathLayer[0];
+  LOG_VART(path);
+  LOG_VART(pathLayer);
+  LOG_VART(justPath);
+  // We need to perform custom read logic for OGR inputs due to the fact they may have multiple
+  // layers per input file or multiple files per directory.
+  if (isSupportedOgrFormat(path, true))
   {
     OgrReader reader;
-    reader.setDefaultStatus(defaultStatus);
     reader.setConfiguration(conf());
-    reader.read(justPath, pathLayer.size() > 1 ? pathLayer[1] : "", map);
-    reader.close();
+    reader.setDefaultStatus(defaultStatus);
+    if (ogrFeatureLimit > 0)
+    {
+      reader.setLimit(ogrFeatureLimit);
+    }
+    reader.setSchemaTranslationScript(translationScript);
+    // This reader closes itself.
+    reader.read(path, pathLayer.size() > 1 ? pathLayer[1] : "", map, jobSource, numTasks);
   }
   else
   {
+    // This handles all non-OGR format reading.
     OsmMapReaderFactory::read(map, path, useFileId, defaultStatus);
   }
 }
 
-void IoUtils::loadMaps(const OsmMapPtr& map, const QStringList& paths, bool useFileId,
-                       Status defaultStatus)
+void IoUtils::loadMaps(
+  const OsmMapPtr& map, const QStringList& paths, bool useFileId, Status defaultStatus)
 {
   for (int i = 0; i < paths.size(); i++)
   {
@@ -179,18 +190,20 @@ void IoUtils::loadMaps(const OsmMapPtr& map, const QStringList& paths, bool useF
 
 void IoUtils::saveMap(const OsmMapPtr& map, const QString& path)
 {
-  // We could pass a progress in here to get more granular write status feedback.
+  // We could pass progress in here to get more granular write status feedback. Otherwise, this is
+  // merely a wrapper.
   OsmMapWriterFactory::write(map, path);
 }
 
-void IoUtils::cropToBounds(OsmMapPtr& map, const geos::geom::Envelope& bounds,
-                           const bool keepConnectedOobWays)
+void IoUtils::cropToBounds(
+  OsmMapPtr& map, const geos::geom::Envelope& bounds, const bool keepConnectedOobWays)
 {
   cropToBounds(map, GeometryUtils::envelopeToPolygon(bounds), keepConnectedOobWays);
 }
 
-void IoUtils::cropToBounds(OsmMapPtr& map, const std::shared_ptr<geos::geom::Geometry>& bounds,
-                           const bool keepConnectedOobWays)
+void IoUtils::cropToBounds(
+  OsmMapPtr& map, const std::shared_ptr<geos::geom::Geometry>& bounds,
+  const bool keepConnectedOobWays)
 {
   LOG_INFO(
     "Applying bounds filtering to input data: ..." <<
@@ -234,7 +247,7 @@ void IoUtils::cropToBounds(OsmMapPtr& map, const std::shared_ptr<geos::geom::Geo
   LOG_DEBUG(cropper.getCompletedStatusMessage());
   LOG_VARD(StringUtils::formatLargeNumber(map->getElementCount()));
 
-  OsmMapWriterFactory::writeDebugMap(map, "cropped-to-bounds");
+  OsmMapWriterFactory::writeDebugMap(map, className(), "cropped-to-bounds");
 }
 
 std::shared_ptr<ElementVisitorInputStream> IoUtils::getVisitorInputStream(

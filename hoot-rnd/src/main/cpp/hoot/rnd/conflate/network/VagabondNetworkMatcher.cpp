@@ -310,7 +310,7 @@ void VagabondNetworkMatcher::_calculateEdgeMatches()
     }
     if (Log::getInstance().getLevel() <= Log::Info)
     {
-      cout << "Calculating edge matches: " << count++ << " / " << em.size() << "\t\r" << std::flush;
+      cout << "Calculating edge matches: " << count++ << " of " << em.size() << "\t\r" << std::flush;
     }
   }
   if (Log::getInstance().getLevel() <= Log::Info)
@@ -320,7 +320,7 @@ void VagabondNetworkMatcher::_calculateEdgeMatches()
 }
 
 double VagabondNetworkMatcher::_calculateLinkWeight(QHash<ConstNetworkEdgePtr, int>& counts,
-  ConstEdgeStringPtr str)
+  ConstEdgeStringPtr str) const
 {
   double result = 0.0;
   for (int i = 0; i < str->getAllEdges().size(); ++i)
@@ -336,7 +336,7 @@ double VagabondNetworkMatcher::_calculateLinkWeight(QHash<ConstNetworkEdgePtr, i
 
 
 void VagabondNetworkMatcher::_countEdgesUsed(QHash<ConstNetworkEdgePtr, int>& counts,
-  ConstEdgeStringPtr str)
+  ConstEdgeStringPtr str) const
 {
   for (int i = 0; i < str->getAllEdges().size(); ++i)
   {
@@ -344,7 +344,7 @@ void VagabondNetworkMatcher::_countEdgesUsed(QHash<ConstNetworkEdgePtr, int>& co
   }
 }
 
-void VagabondNetworkMatcher::_distributePrLengthWeighted()
+void VagabondNetworkMatcher::_distributePrLengthWeighted() const
 {
   QHash<ConstNetworkEdgePtr, int> counts;
 
@@ -378,7 +378,7 @@ void VagabondNetworkMatcher::_distributePrLengthWeighted()
   }
 }
 
-void VagabondNetworkMatcher::_distributePrEvenly()
+void VagabondNetworkMatcher::_distributePrEvenly() const
 {
   // distribute an even PR to all edge pairs
   double startPr = 1.0 / (double)_pr->getSize();

@@ -63,8 +63,8 @@ public:
     Coordinate c[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
                        Coordinate(100.0, 10.0), Coordinate(0.0, 10.0),
                        Coordinate::getNull() };
-    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c, 1, "");
-    WayPtr w2 = TestUtils::createWay(map, Status::Unknown2, c, 1, "");
+    WayPtr w1 = TestUtils::createWay(map,  c, "", Status::Unknown1, 1);
+    WayPtr w2 = TestUtils::createWay(map, c, "", Status::Unknown2, 1);
 
     OsmMapPtr copy(new OsmMap());
     set<ElementId> eids;
@@ -92,8 +92,8 @@ public:
     Coordinate c[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
                        Coordinate(100.0, 10.0), Coordinate(0.0, 10.0),
                        Coordinate::getNull() };
-    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c, 1, "");
-    WayPtr w2 = TestUtils::createWay(map, Status::Unknown2, c, 1, "");
+    WayPtr w1 = TestUtils::createWay(map, c, "", Status::Unknown1, 1);
+    WayPtr w2 = TestUtils::createWay(map, c, "", Status::Unknown2, 1);
 
     OsmMapPtr copy(new OsmMap());
     set<ElementId> eids;

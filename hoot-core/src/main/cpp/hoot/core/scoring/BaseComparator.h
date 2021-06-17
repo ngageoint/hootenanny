@@ -64,40 +64,43 @@ public:
    * Takes two maps for comparison as input
    */
   BaseComparator(const std::shared_ptr<OsmMap>& map1, const std::shared_ptr<OsmMap>& map2);
-
   virtual ~BaseComparator() = default;
 
-  void setPixelSize(double pixelSize) { _pixelSize = pixelSize; }
-
   virtual double compareMaps() = 0;
+
+  void setPixelSize(double pixelSize) { _pixelSize = pixelSize; }
 
 protected:
 
   int _width, _height;
+
   std::shared_ptr<OsmMap> _map1, _map2;
   std::shared_ptr<OsmMap> _mapP1, _mapP2;
+
   Meters _pixelSize;
+
   OGREnvelope _worldBounds;
   OGREnvelope _projectedBounds;
+
   Meters _sigma;
 
-  double _calculateError(const cv::Mat& image1, const cv::Mat& image2);
+  int _taskStatusUpdateInterval;
+
+  virtual void _init(const std::shared_ptr<OsmMap>& map1, const std::shared_ptr<OsmMap>& map2);
+  void _updateBounds();
+
+  double _calculateError(const cv::Mat& image1, const cv::Mat& image2) const;
 
   geos::geom::Coordinate _findNearestPointOnFeature(
     const std::shared_ptr<OsmMap>& map, const geos::geom::Coordinate& c);
 
-  virtual void _init(const std::shared_ptr<OsmMap>& map1, const std::shared_ptr<OsmMap>& map2);
-
-  void _saveImage(cv::Mat& image, QString path, double max = 0.0, bool gradient = true);
-
-  void _updateBounds();
-
-  void _calculateColor(double v, double max, QRgb& c);
-
+  void _calculateColor(double v, double max, QRgb& c) const;
   /**
    * Calculates rings on 10min intervals.
    */
-  void _calculateRingColor(double v, double max, QRgb& c);
+  void _calculateRingColor(double v, double max, QRgb& c) const;
+
+  void _saveImage(cv::Mat& image, QString path, double max = 0.0, bool gradient = true) const;
 };
 
 }

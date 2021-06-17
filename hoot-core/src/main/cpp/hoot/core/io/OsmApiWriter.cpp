@@ -623,7 +623,7 @@ void OsmApiWriter::_changesetThreadFunc(int index)
     _updateThreadStatus(index, ThreadStatus::Completed);
 }
 
-void OsmApiWriter::_yield(int milliseconds)
+void OsmApiWriter::_yield(int milliseconds) const
 {
   //  Sleep for the specified number of milliseconds
   if (milliseconds != 10)
@@ -632,7 +632,7 @@ void OsmApiWriter::_yield(int milliseconds)
     std::this_thread::yield();
 }
 
-void OsmApiWriter::_yield(int minimum_ms, int maximum_ms)
+void OsmApiWriter::_yield(int minimum_ms, int maximum_ms) const
 {
   //  Yield for a random amount of time between minimum_ms and maximum_ms
   _yield(minimum_ms + Tgs::Random::instance()->generateInt(maximum_ms - minimum_ms));
@@ -660,7 +660,7 @@ void OsmApiWriter::setConfiguration(const Settings& conf)
   _timeout = options.getChangesetApidbTimeout();
 }
 
-bool OsmApiWriter::isSupported(const QUrl &url)
+bool OsmApiWriter::isSupported(const QUrl &url) const
 {
   if (url.isEmpty() ||
       url.isLocalFile() ||
@@ -700,7 +700,7 @@ bool OsmApiWriter::queryCapabilities(HootNetworkRequestPtr request)
 }
 
 //  https://wiki.openstreetmap.org/wiki/API_v0.6#Retrieving_permissions:_GET_.2Fapi.2F0.6.2Fpermissions
-bool OsmApiWriter::validatePermissions(HootNetworkRequestPtr request)
+bool OsmApiWriter::validatePermissions(HootNetworkRequestPtr request) const
 {
   bool success = false;
   try
@@ -718,7 +718,7 @@ bool OsmApiWriter::validatePermissions(HootNetworkRequestPtr request)
   return success;
 }
 
-bool OsmApiWriter::usingCgiMap(HootNetworkRequestPtr request)
+bool OsmApiWriter::usingCgiMap(HootNetworkRequestPtr request) const
 {
   bool cgimap = false;
   try
@@ -743,7 +743,7 @@ bool OsmApiWriter::usingCgiMap(HootNetworkRequestPtr request)
   return cgimap;
 }
 
-OsmApiCapabilites OsmApiWriter::_parseCapabilities(const QString& capabilites)
+OsmApiCapabilites OsmApiWriter::_parseCapabilities(const QString& capabilites) const
 {
   OsmApiCapabilites caps;
   QXmlStreamReader reader(capabilites);
@@ -781,7 +781,7 @@ OsmApiCapabilites OsmApiWriter::_parseCapabilities(const QString& capabilites)
   return caps;
 }
 
-OsmApiStatus OsmApiWriter::_parseStatus(const QString& status)
+OsmApiStatus OsmApiWriter::_parseStatus(const QString& status) const
 {
   if (status == "online")
     return OsmApiStatus::ONLINE;
@@ -791,7 +791,7 @@ OsmApiStatus OsmApiWriter::_parseStatus(const QString& status)
     return OsmApiStatus::OFFLINE;
 }
 
-bool OsmApiWriter::_parsePermissions(const QString& permissions)
+bool OsmApiWriter::_parsePermissions(const QString& permissions) const
 {
   QXmlStreamReader reader(permissions);
 
@@ -821,7 +821,7 @@ long OsmApiWriter::_createChangeset(HootNetworkRequestPtr request,
                                     const QString& description,
                                     const QString& source,
                                     const QString& hashtags,
-                                    int& http_status)
+                                    int& http_status) const
 {
   try
   {
@@ -921,7 +921,7 @@ void OsmApiWriter::_closeChangeset(HootNetworkRequestPtr request, long changeset
  *  When a relation has elements that do not exist or are not visible:
  *   "Relation with id #{id} cannot be saved due to #{element} with id #{element.id}"
  */
-OsmApiWriter::OsmApiFailureInfoPtr OsmApiWriter::_uploadChangeset(HootNetworkRequestPtr request, long id, const QString& changeset)
+OsmApiWriter::OsmApiFailureInfoPtr OsmApiWriter::_uploadChangeset(HootNetworkRequestPtr request, long id, const QString& changeset) const
 {
   OsmApiFailureInfoPtr info(new OsmApiFailureInfo());
   //  Don't even attempt if the ID is bad
@@ -1006,7 +1006,7 @@ bool OsmApiWriter::_fixConflict(HootNetworkRequestPtr request, ChangesetInfoPtr 
   return success;
 }
 
-bool OsmApiWriter::_changesetClosed(const QString &conflictExplanation)
+bool OsmApiWriter::_changesetClosed(const QString &conflictExplanation) const
 {
   return _changeset.getFailureCheck().matchesChangesetClosedFailure(conflictExplanation);
 }
@@ -1044,7 +1044,7 @@ bool OsmApiWriter::_resolveIssues(HootNetworkRequestPtr request, ChangesetInfoPt
   return success;
 }
 
-QString OsmApiWriter::_getNode(HootNetworkRequestPtr request, long id)
+QString OsmApiWriter::_getNode(HootNetworkRequestPtr request, long id) const
 {
   //  Check for a valid ID to query against
   if (id < 1)
@@ -1053,7 +1053,7 @@ QString OsmApiWriter::_getNode(HootNetworkRequestPtr request, long id)
   return _getElement(request, QString(OsmApiEndpoints::API_PATH_GET_ELEMENT).arg("node").arg(id));
 }
 
-QString OsmApiWriter::_getWay(HootNetworkRequestPtr request, long id)
+QString OsmApiWriter::_getWay(HootNetworkRequestPtr request, long id) const
 {
   //  Check for a valid ID to query against
   if (id < 1)
@@ -1062,7 +1062,7 @@ QString OsmApiWriter::_getWay(HootNetworkRequestPtr request, long id)
   return _getElement(request, QString(OsmApiEndpoints::API_PATH_GET_ELEMENT).arg("way").arg(id));
 }
 
-QString OsmApiWriter::_getRelation(HootNetworkRequestPtr request, long id)
+QString OsmApiWriter::_getRelation(HootNetworkRequestPtr request, long id) const
 {
   //  Check for a valid ID to query against
   if (id < 1)
@@ -1071,7 +1071,7 @@ QString OsmApiWriter::_getRelation(HootNetworkRequestPtr request, long id)
   return _getElement(request, QString(OsmApiEndpoints::API_PATH_GET_ELEMENT).arg("relation").arg(id));
 }
 
-QString OsmApiWriter::_getElement(HootNetworkRequestPtr request, const QString& endpoint)
+QString OsmApiWriter::_getElement(HootNetworkRequestPtr request, const QString& endpoint) const
 {
   //  Don't follow an uninitialized URL or empty endpoint
   if (endpoint == OsmApiEndpoints::API_PATH_GET_ELEMENT || endpoint == "")
@@ -1093,7 +1093,7 @@ QString OsmApiWriter::_getElement(HootNetworkRequestPtr request, const QString& 
   return "";
 }
 
-HootNetworkRequestPtr OsmApiWriter::createNetworkRequest(bool requiresAuthentication)
+HootNetworkRequestPtr OsmApiWriter::createNetworkRequest(bool requiresAuthentication) const
 {
   HootNetworkRequestPtr request;
   if (!requiresAuthentication)
@@ -1162,7 +1162,7 @@ bool OsmApiWriter::_splitChangeset(const ChangesetInfoPtr& workInfo, const QStri
   return false;
 }
 
-void OsmApiWriter::_writeDebugFile(const QString& type, const QString& data, int file_id, long changeset_id, int status)
+void OsmApiWriter::_writeDebugFile(const QString& type, const QString& data, int file_id, long changeset_id, int status) const
 {
   //  Setup the path including the changeset and file IDs, type and HTTP status
   QString path = QString("%1/OsmApiWriter-%2-%3-%4-%5.osc")
@@ -1251,7 +1251,7 @@ bool OsmApiWriter::_hasFailedThread()
   return false;
 }
 
-void OsmApiWriter::_statusMessage(OsmApiFailureInfoPtr info, long changesetId)
+void OsmApiWriter::_statusMessage(OsmApiFailureInfoPtr info, long changesetId) const
 {
   //  Log the error as a status message
   switch (info->status)

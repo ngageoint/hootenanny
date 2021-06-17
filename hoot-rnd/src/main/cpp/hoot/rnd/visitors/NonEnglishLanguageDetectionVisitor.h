@@ -100,7 +100,7 @@ private:
 
   QString _getLangCountsSortedByLangName() const;
 
-  void _printDetailedSummary();
+  void _printDetailedSummary() const;
 };
 
 }

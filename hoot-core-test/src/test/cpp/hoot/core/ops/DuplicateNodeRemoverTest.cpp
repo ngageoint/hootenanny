@@ -28,8 +28,8 @@
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/io/OgrReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
+#include <hoot/core/io/IoUtils.h>
 #include <hoot/core/ops/DuplicateNodeRemover.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/elements/MapProjector.h>
@@ -62,13 +62,12 @@ public:
 
   void runBasicTest()
   {
-    OgrReader reader;
     OsmMapPtr map(new OsmMap());
-    reader.read(_inputPath + "jakarta_raya_coastline.shp", "", map);
+    IoUtils::loadMap(map, _inputPath + "jakarta_raya_coastline.shp", true);
     MapProjector::projectToOrthographic(map);
     CPPUNIT_ASSERT_EQUAL(604, (int)map->getNodes().size());
 
-    // merge all nodes within a meter.
+    // Merge all nodes within a meter.
     DuplicateNodeRemover::removeNodes(map, 1.0);
 
     CPPUNIT_ASSERT_EQUAL(601, (int)map->getNodes().size());
@@ -79,8 +78,8 @@ public:
     OsmMapPtr map(new OsmMap());
 
     // Nodes are within the proximity threshold and have no tags...so they're dupes.
-    /*NodePtr node1 =*/ TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0);
-    /*NodePtr node2 =*/ TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0);
+    /*NodePtr node1 =*/ TestUtils::createNode(map);
+    /*NodePtr node2 =*/ TestUtils::createNode(map);
     MapProjector::projectToOrthographic(map);
 
     DuplicateNodeRemover::removeNodes(map, 1.0);
@@ -89,9 +88,9 @@ public:
 
     // uuid is a metadata tag and should be ignored, so no removal here
     map->clear();
-    NodePtr node3 = TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0);
+    NodePtr node3 = TestUtils::createNode(map);
     node3->getTags().set("uuid", "{12449bc4-c059-4270-8d72-134fcf54291d}");
-    NodePtr node4 = TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0);
+    NodePtr node4 = TestUtils::createNode(map);
     node4->getTags().set("uuid", "{bfbf2946-4342-444c-9926-1477c7bcce05}");
     MapProjector::projectToOrthographic(map);
 
@@ -101,9 +100,9 @@ public:
 
     // hoot:* tags are metadata tags and should be ignored, so no removal here
     map->clear();
-    NodePtr node5 = TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0);
+    NodePtr node5 = TestUtils::createNode(map);
     node5->getTags().set("hoot:id", "1");
-    NodePtr node6 = TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0);
+    NodePtr node6 = TestUtils::createNode(map);
     node6->getTags().set("hoot:id", "2");
     MapProjector::projectToOrthographic(map);
 
@@ -114,9 +113,9 @@ public:
     // The nodes are inside of the proximity threshold but have different names, so aren't
     // duplicates.
     map->clear();
-    NodePtr node7 = TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0);
+    NodePtr node7 = TestUtils::createNode(map);
     node7->getTags().set("name", "node7");
-    NodePtr node8 = TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0);
+    NodePtr node8 = TestUtils::createNode(map);
     node8->getTags().set("name", "node8");
     MapProjector::projectToOrthographic(map);
 
@@ -149,8 +148,8 @@ public:
     OsmMapPtr map(new OsmMap());
 
     // Statuses are different, so won't be considered dupes unless we explicitly ignore status.
-    /*NodePtr node1 =*/ TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0);
-    /*NodePtr node2 =*/ TestUtils::createNode(map, Status::Unknown2, 0.0, 0.0);
+    /*NodePtr node1 =*/ TestUtils::createNode(map, "", Status::Unknown1);
+    /*NodePtr node2 =*/ TestUtils::createNode(map, "", Status::Unknown2);
     MapProjector::projectToOrthographic(map);
 
     DuplicateNodeRemover::removeNodes(map, 1.0, true);

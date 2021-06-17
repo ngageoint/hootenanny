@@ -101,7 +101,7 @@ bool NetworkMergerCreator::createMergers(
         if (count % 100 == 0)
         {
           PROGRESS_INFO(
-            "Added match " << count << " / " << matches.size() << " to partial network merger...");
+            "Added match " << count << " of " << matches.size() << " to partial network merger...");
         }
       }
       mergers.push_back(
@@ -166,7 +166,7 @@ bool NetworkMergerCreator::createMergers(
             if (count % 100 == 0)
             {
               PROGRESS_INFO(
-                "Added match " << count << " / " << matches.size() << " for review...");
+                "Added match " << count << " of " << matches.size() << " for review...");
             }
           }
         }

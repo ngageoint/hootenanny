@@ -47,12 +47,12 @@ _outputStats(outputStats)
 {
 }
 
-void ConflateStatsHelper::updateStats(QList<SingleStat>& statsToUpdate)
+void ConflateStatsHelper::updateStats(QList<SingleStat>& statsToUpdate) const
 {
   updateStats(statsToUpdate, statsToUpdate.size());
 }
 
-void ConflateStatsHelper::updateStats(QList<SingleStat>& statsToUpdate, long insertIndex)
+void ConflateStatsHelper::updateStats(QList<SingleStat>& statsToUpdate, long insertIndex) const
 {
   if (insertIndex > statsToUpdate.size())
   {
@@ -87,7 +87,7 @@ void ConflateStatsHelper::updateStats(QList<SingleStat>& statsToUpdate, long ins
 }
 
 void ConflateStatsHelper::_addRefAsGroundTruthStats(QList<SingleStat>& statsToUpdate,
-                                                    long insertIndex)
+                                                    long insertIndex) const
 {
   // Some extra stats requested for comparing conflated output when map 1 is known to be ground
   // truth. Although not added to the statistic labels themselves, if map 1 is ground truth then

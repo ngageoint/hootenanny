@@ -67,7 +67,7 @@ QString ToEnglishDictionaryTranslator::translate(const QString& textToTranslate)
   return toEnglish(textToTranslate, _tokenizeInput);
 }
 
-QString ToEnglishDictionaryTranslator::toEnglish(const QString& input, const bool tokenize)
+QString ToEnglishDictionaryTranslator::toEnglish(const QString& input, const bool tokenize) const
 {
   LOG_TRACE("Translating: " << input << " to English...");
 
@@ -198,12 +198,12 @@ QStringList ToEnglishDictionaryTranslator::toEnglishAll(const QStringList& l)
   return result;
 }
 
-QString ToEnglishDictionaryTranslator::toTitleCase(const QString& input)
+QString ToEnglishDictionaryTranslator::toTitleCase(const QString& input) const
 {
   return _transform(ToEnglishTranslateDictionary::getInstance().getTitler(), input);
 }
 
-QString ToEnglishDictionaryTranslator::translateStreet(const QString& input)
+QString ToEnglishDictionaryTranslator::translateStreet(const QString& input) const
 {
   QStringList l = input.split(_whiteSpace, QString::SkipEmptyParts);
 
@@ -234,7 +234,7 @@ QString ToEnglishDictionaryTranslator::translateStreet(const QString& input)
   return toTitleCase(result);
 }
 
-QString ToEnglishDictionaryTranslator::transliterateToLatin(const QString& input)
+QString ToEnglishDictionaryTranslator::transliterateToLatin(const QString& input) const
 {
   // cache incoming requests -- we sometimes get a lot of duplicates.
   QString result;

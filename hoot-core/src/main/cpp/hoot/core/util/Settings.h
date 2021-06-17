@@ -83,7 +83,6 @@ public:
    */
   void loadEnvironment();
   void loadFromString(QString json);
-
   /**
    * Load the JSON file at the path specified.
    */
@@ -170,26 +169,19 @@ public:
    * @param listReplacementEntryValues list of value replacement entries of the form:
    * "<old optionValueEntry 1>-><new optionValueEntry 1>;<old optionValueEntry 2>-><new optionValueEntry 2>..."
    */
-  static void replaceListOptionEntryValues(Settings& settings, const QString& optionName,
-                                           const QStringList& listReplacementEntryValues);
+  static void replaceListOptionEntryValues(
+    Settings& settings, const QString& optionName, const QStringList& listReplacementEntryValues);
 
 private:
 
   static std::shared_ptr<Settings> _theInstance;
   SettingsMap _settings;
-  /// matches variables in the form ${My_Var_1}
+  // matches variables in the form ${My_Var_1}
   QRegularExpression _dynamicRegex;
-  /// matches variables in the form $(My_Var_1)
+  // matches variables in the form $(My_Var_1)
   QRegularExpression _staticRegex;
 
-  QString _markup(QString s) const
-  {
-    s.replace("\\", "\\\\");
-    s.replace("\n", "\\n");
-    s.replace("\t", "\\t");
-    s.replace("\"", "\\\"");
-    return s;
-  }
+  QString _markup(QString s) const;
 
   void _checkConvert(const QString& key, const QVariant& value, QVariant::Type type) const;
 
@@ -203,6 +195,13 @@ private:
    * ElementVisitor or OsmMapOperation)
    */
   static void _validateOperatorRefs(const QStringList& operators);
+
+  // This ensure option values matching factory class names always have the global namespace
+  // prepended to them. This allows users to avoid having to type in the namespace repeatedly when
+  // using commands and shorten command text. If hoot ever updates namespace usage to anything other
+  // than a single global namespece, then this logic would become obsolete
+  static void _addNamespacePrefixIfClassNameWithout(QString& val);
+  static void _updateClassNamesInList(QStringList& list);
 };
 
 inline Settings& conf() { return Settings::getInstance(); }

@@ -65,7 +65,7 @@ public:
 
   void addChangesetProvider(ChangesetProviderPtr newChangeset);
 
-  size_t getNumChangesets();
+  size_t getNumChangesets() const;
 
 private:
 

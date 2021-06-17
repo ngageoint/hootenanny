@@ -33,17 +33,16 @@
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/elements/ConstOsmMapConsumer.h>
 #include <hoot/core/criterion/ElementCriterionConsumer.h>
+#include <hoot/core/util/Configurable.h>
 
 namespace hoot
 {
 
 /**
  * Copies a subset of the map into a new map. The old map is unchanged.
- *
- * TODO: implement OperationStatus
  */
 class CopyMapSubsetOp : public OsmMapOperation, public ConstOsmMapConsumer,
-  public ElementCriterionConsumer
+  public ElementCriterionConsumer, public Configurable
 {
 public:
 
@@ -64,6 +63,11 @@ public:
   void apply(OsmMapPtr& map) override;
 
   /**
+   * @see Configurable
+   */
+  void setConfiguration(const Settings& conf) override;
+
+  /**
    * @see ConstOsmMapConsumer
    */
   void setOsmMap(const OsmMap* map) override { _from = map->shared_from_this(); }
@@ -73,10 +77,17 @@ public:
    */
   void addCriterion(const ElementCriterionPtr& crit) override;
 
+  /**
+    @see OperationStatus
+    */
+  QString getInitStatusMessage() const override { return "Copying map subset..."; }
+  /**
+    @see OperationStatus
+    */
+  QString getCompletedStatusMessage() const override { return "Subset map copying complete."; }
+
   QString getDescription() const override { return "Copies a subset of the map into a new map"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 
   std::set<ElementId>& getEidsCopied() { return _eidsCopied; }

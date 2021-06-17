@@ -3,35 +3,37 @@
 [[DifferentialConflation]]
 == Differential Conflation
 
-Differential Conflation makes use of the Unifying conflation framework within Hootenanny, but attempts a much simpler operation than 
-"full" conflation. The idea is to allow a user to take two datasets, A and B, and generate a changeset from them such that the changeset 
-includes all of the data in set B that does not overlap (conflict, need merging, etc.) with set A. The changeset can then be applied directly 
-to dataset A, without generating any review items.
+Differential Conflation makes use of the Unifying conflation framework within Hootenanny, but attempts a much simpler 
+operation than "full" conflation. The idea is to allow a user to take two datasets, A and B, and generate a changeset from 
+them such that the changeset includes all of the data in set B that does not overlap (conflict, need merging, etc.) with set 
+A. The changeset can then be applied directly to dataset A, without generating any review items.
 
-Currently it works best if you use the Network Conflation conflicts matcher (see +conf/core/NetworkAlgorithm.conf+), but if you are in a 
-situation where you need to process a lot of data quickly, using the unifying-conflation HighwayMatchCreator produces acceptable results,
-in a shorter timeframe. Please note that the differential conflation algorithm isn't limited to roads: it will use any matcher specified in 
-Hootenanny when doing the conflation. Thus, waterways, railways, powerlines, POIs, areas, etc. will be included in the conflation operation.
+To re-iterate, Hootenanny will consider any conflatable feature type during differential conflation. Types that cannot 
+be conflated by Hootenanny (that is, types for which hootenanny does not have a matcher) will be removed from the 
+differential output. This is to prevent possible duplication of features when differential conflation is used in an 
+automated fashion to bulk-process data.
 
-To re-iterated, hootenanny will consider any conflatable feature type during differential conflation. Types that cannot be conflated by 
-Hootenanny (that is, types for which hootenanny does not have a matcher) will be removed from the differential output. This is to prevent 
-possible duplication of features when differential conflation is used in an automated fashion to bulk-process data.
+In a nutshell, the basic differential algorithm works like this: both inputs are loaded into a single map, with elements 
+marked "unknown1" and "unknown2", respectively. Matches are generated using all specified matchers, then all of the 
+elements involved in the matches are removed from the map. Next, all of the remaining elements from the first input 
+("unknown1") are removed. At this point, the only elements remaining in the map will be elements from the second input that 
+did not match any elements in the first input.
 
-In a nutshell, the basic differential algorithm works like this: both inputs are loaded into a single map, with elements marked "unknown1" 
-and "unknown2", respectively. Matches are generated using all specified matchers, then all of the elements involved in the matches are removed 
-from the map. Next, all of the remaining elements from the first input ("unknown1") are removed. At this point, the only elements remaining in 
-the map will be elements from the second input that did not match any elements in the first input.
+So now we have all of the "new" geometry from the second input isolated as output, but what if there were also new or 
+updated tags on some of the elements in the second input? How can we capture those new tags? If the --include-tags option 
+is enabled, we simply go back through the matches derived in the previous step, and compare the tags of the elements involved 
+in the match. If the element from the second input contains new tag keys, or tag values different from the first input 
+element, the tags are merged using an overwrite algorithm, where all key/value pairs are kept from the first input, all 
+key/value pairs from the second input are appended, and any keys that conflict are assigned the value from the second input, 
+as it is assumed that the second input contains updated information. The merged tag set is applied to the *original* 
+element geometry, and it is written out as a changeset "modify" directive.
 
-So now we have all of the "new" geometry from the second input isolated as output, but what if there were also new or updated tags on some of 
-the elements in the second input? How can we capture those new tags? If the --include-tags option is enabled, we simply go back through the 
-matches derived in the previous step, and compare the tags of the elements involved in the match. If the element from the second input contains 
-new tag keys, or tag values different from the first input element, the tags are merged using an overwrite algorithm, where all key/value pairs 
-are kept from the first input, all key/value pairs from the second input are appended, and any keys that conflict are assigned the value from 
-the second input, as it is assumed that the second input contains updated information. The merged tag set is applied to the *original* element 
-geometry, and it is written out as a changeset "modify" directive.
+When using Differential Conflation against non-road linear features or road features with the Unifying Roads Algorithm, 
+it supports calculating a differential against partial linear feature matches. This generates a more granular differential
+for linear features than using whole feature matches. There may, however, be times when a less granular differential is desired
+and the behavior may be turned off by enabling the `differential.remove.linear.partial.matches.as.whole` configuration option. 
+By default when using the Unifying Roads Algorithm, partial match removal is enabled when conflating all linear feature 
+types except rivers. Differentials generated with river data do not seem to benefit from partial linear match removal.
 
-In the future, it might be a good idea to detect coincident ways between the input maps, and attempt to split them at overlapping endpoints. 
-That is to say, if way1 from map1 is coincident with way2 from map2, but way1 is shorter - it might be a good idea to split way2 at 
-approximately the endpoint of way1, thus allowing the "extra stuff" from way2 to make it into the output map.
-
-Differential Conflation can further be customized by modifying the +conf/core/DifferentialConflation.conf+ configuration options file.
+Differential Conflation can further be customized by modifying the +conf/core/DifferentialConflation.conf+ configuration 
+options file.

@@ -202,7 +202,7 @@ protected:
   float _getJobPercentComplete() const;
 
   virtual void _setGlobalOpts() = 0;
-  void _validateInputs();
+  void _validateInputs() const;
   void _printJobDescription() const;
   QString _boundsInterpretationToString(const BoundsInterpretation& boundsInterpretation) const;
 
@@ -210,7 +210,7 @@ protected:
     const QString& mapName, const QString& inputUrl, const bool useFileIds, const Status& status,
     const bool keepEntireFeaturesCrossingBounds, const bool keepOnlyFeaturesInsideBounds,
     const bool keepImmediatelyConnectedWaysOutsideBounds, const bool warnOnZeroVersions,
-    OsmMapPtr& cachedMap);
+    OsmMapPtr& cachedMap) const;
 
   /*
    * Filters features down to just those that should be replaced in the ref dataset or used to
@@ -219,19 +219,19 @@ protected:
   void _filterFeatures(
     OsmMapPtr& map, const ElementCriterionPtr& featureFilter,
     const GeometryTypeCriterion::GeometryType& geometryType, const Settings& config,
-    const QString& debugFileName);
+    const QString& debugFileName) const;
 
   /*
    * Removes changeset replacement metadata tags which should be seen in raw input
    */
-  void _removeMetadataTags(const OsmMapPtr& map);
+  void _removeMetadataTags(const OsmMapPtr& map) const;
 
   /*
    * Adds a custom tag to any element from the input with a missing child. This is primarily useful
    * in repairing relations manually that were passed in without some of their child elements after
    * the replacement changeset is written.
    */
-  void _markElementsWithMissingChildren(OsmMapPtr& map);
+  void _markElementsWithMissingChildren(OsmMapPtr& map) const;
 
   /*
    * Keeps track of the changeset versions for features
@@ -242,44 +242,44 @@ protected:
    * Adds tags to a feature that will prevent ChangesetDeriver from ever creating a delete
    * statement for it
    */
-  void _addChangesetDeleteExclusionTags(OsmMapPtr& map);
+  void _addChangesetDeleteExclusionTags(OsmMapPtr& map) const;
 
   /*
    * Cut out of the reference map what you don't want, and if there is anything in the secondary
    * map, add that data in (not applicable in the cut only scenario).
    */
   OsmMapPtr _getCookieCutMap(OsmMapPtr doughMap, OsmMapPtr cutterMap,
-                             const GeometryTypeCriterion::GeometryType& geometryType);
+                             const GeometryTypeCriterion::GeometryType& geometryType) const;
 
   /*
    * Excludes all features within the specified bounds from deletion during changeset derivation
    */
-  void _excludeFeaturesFromChangesetDeletion(OsmMapPtr& map);
+  void _excludeFeaturesFromChangesetDeletion(OsmMapPtr& map) const;
 
   /*
    * Final data cleanup after the changeset replacement maps have been generated to fix any errors
    * introduced.
    */
-  void _cleanup(OsmMapPtr& map);
+  void _cleanup(OsmMapPtr& map) const;
 
   /*
    * Replaces the IDs of elements in the replacment map that are identical with those in the map
    * being replaced with the IDs from the map being replaced.
    */
-  void _synchronizeIds(OsmMapPtr mapBeingReplaced, OsmMapPtr replacementMap);
+  void _synchronizeIds(OsmMapPtr mapBeingReplaced, OsmMapPtr replacementMap) const;
 
   /*
    * Replaces the IDs of elements in the replacment maps that are identical with those in the maps
    * being replaced with the IDs from the maps being replaced.
    */
   void _synchronizeIds(
-    const QList<OsmMapPtr>& mapsBeingReplaced, const QList<OsmMapPtr>& replacementMaps);
+    const QList<OsmMapPtr>& mapsBeingReplaced, const QList<OsmMapPtr>& replacementMaps) const;
 
   /*
    * Runs the default hoot cleaning on the data. This helps solve a lot of problems with output, but
    * its likely a subset of the cleaning ops could be run instead to be more efficient.
    */
-  void _clean(OsmMapPtr& map);
+  void _clean(OsmMapPtr& map) const;
 };
 
 }

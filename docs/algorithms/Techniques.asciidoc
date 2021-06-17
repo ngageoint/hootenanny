@@ -368,7 +368,7 @@ From the above examples and many others within real world data sets, several thi
 5. Many FACC layers use uppercase names.
 6. A single feature may have multiple names.
 
-To address these problems, we have adopted an approach with similarities to Smart, et al. (Philip D. Smart, 2010), but for simplicity we have removed link:$$https://en.wikipedia.org/?title=Soundex$$[SoundEx], a phonetic algorithm for indexing names by sound, and added some additional checks to handle cases when there are multiple names on each feature.  The approach is broken into a three-step process:
+To address these problems, we have adopted an approach with similarities to Smart, et al. (Philip D. Smart, 2010), but for simplicity we have removed https://en.wikipedia.org/?title=Soundex[SoundEx], a phonetic algorithm for indexing names by sound, and added some additional checks to handle cases when there are multiple names on each feature.  The approach is broken into a three-step process:
 
 1. Normalize the road names into English.
 2. Create a matrix of distance scores.

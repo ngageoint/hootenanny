@@ -66,7 +66,7 @@ const QString& ScriptSchemaTranslator::_saveMemory(const QString& s)
   return _strings[s];
 }
 
-void ScriptSchemaTranslator::strictError(const QString& s)
+void ScriptSchemaTranslator::strictError(const QString& s) const
 {
   if (_strict == StrictOn)
   {

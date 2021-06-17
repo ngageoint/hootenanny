@@ -1,7 +1,5 @@
 
-== Services DB
-
-_Current as of 8/30/2013_
+== Web Services Database
 
 === Liquibase
 

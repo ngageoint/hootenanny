@@ -100,13 +100,13 @@ protected:
   QDir _outputDir;
   int _circularErrorIndex;
 
-  void _removeShapefile(const QString& path);
+  void _removeShapefile(const QString& path) const;
 
   void _writeRelationPolygon(const ConstOsmMapPtr& map, const RelationPtr& relation,
-    OGRLayer* poLayer, const QStringList& columns, const QStringList& shpColumns);
+    OGRLayer* poLayer, const QStringList& columns, const QStringList& shpColumns) const;
 
   void _writeWayPolygon(const ConstOsmMapPtr& map, const WayPtr& way, OGRLayer *poLayer,
-    const QStringList& columns, const QStringList &shpColumns);
+    const QStringList& columns, const QStringList &shpColumns) const;
 };
 
 } // hoot

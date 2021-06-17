@@ -52,7 +52,6 @@ class GraphComparator : public BaseComparator
 public:
 
   GraphComparator(OsmMapPtr map1, OsmMapPtr map2);
-
   ~GraphComparator() = default;
 
   double compareMaps() override;
@@ -60,10 +59,10 @@ public:
   /**
    * Returns the 90% confidence interval.
    */
-  double getConfidenceInterval() { return _ci; }
-  double getMeanScore() { return _mean; }
-  double getMedianScore() { return _median; }
-  double getStandardDeviation() { return _s; }
+  double getConfidenceInterval() const { return _ci; }
+  double getMeanScore() const { return _mean; }
+  double getMedianScore() const { return _median; }
+  double getStandardDeviation() const { return _s; }
 
   void setDebugImages(bool di) { _debugImages = di; }
   void setIterations(int i) { _iterations = i; }
@@ -103,6 +102,7 @@ private:
   /** Vector of error values - returned from _calculateError() in each iteration */
   std::vector<double> _results;
   std::mutex _resultsMutex;
+  std::mutex _logMutex;
   /**
    * @brief _graphCompareThreadFunc - Thread function that processes a graph comparison operation
    */
@@ -111,18 +111,21 @@ private:
   cv::Mat _calculateCostDistance(
     OsmMapPtr map, geos::geom::Coordinate c, double& maxGraphCost, const Tgs::RandomPtr& random);
 
-  void _calculateRasterCost(cv::Mat& mat, const Tgs::RandomPtr& random);
+  void _calculateRasterCost(cv::Mat& mat, const Tgs::RandomPtr& random) const;
 
-  void _exportGraphImage(OsmMapPtr map, DirectedGraph& graph, ShortestPath& sp,
-                         QString path, const geos::geom::Coordinate& coord);
+  void _exportGraphImage(
+    OsmMapPtr map, const ShortestPath& sp, const QString& path,
+    const geos::geom::Coordinate& coord) const;
 
   void _init();
 
-  cv::Mat _paintGraph(OsmMapPtr map, DirectedGraph& graph, ShortestPath& sp, double& maxGraphCost);
+  cv::Mat _paintGraph(
+    const ConstOsmMapPtr& map, const DirectedGraph& graph, const ShortestPath& sp,
+    double& maxGraphCost) const;
 
   void _paintWay(
-    cv::Mat& mat, ConstOsmMapPtr map, WayPtr way, double friction, double startCost,
-    double endCost);
+    cv::Mat& mat, const ConstOsmMapPtr& map, const ConstWayPtr& way, double friction,
+    double startCost, double endCost) const;
 };
 
 }

@@ -133,7 +133,7 @@ public:
     QStringList nameFilter;
     nameFilter << "*.shp";
 
-    // make sure it created the shapefiles, we aren't actually testing for correct output.
+    // Make sure it created the shapefiles, we aren't actually testing for correct output.
     HOOT_STR_EQUALS("[4]{AAL015.shp, LAP010.shp, LAP030.shp, PAL015.shp}",
                     QDir(_outputPath + "OgrWriterShpTest").entryList(nameFilter));
   }
@@ -151,9 +151,9 @@ public:
     CPPUNIT_ASSERT(QDir(_outputPath + "OgrWriterTest.gdb").entryList().size() > 10);
   }
 
-  //We're testing here that the writer properly writes the relations in two passes (not checking
-  //the output, just for an error) and is able to write a relation which references another relation
-  //that hasn't been yet written.
+  // We're testing here that the writer properly writes the relations in two passes (not checking
+  // the output, just for an error) and is able to write a relation which references another
+  // relation that hasn't been yet written.
   void runRelationContainingRelationTest()
   {
     OsmMapPtr map = createTestMap();

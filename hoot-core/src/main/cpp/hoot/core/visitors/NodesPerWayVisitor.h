@@ -30,7 +30,7 @@
 
 // hoot
 #include <hoot/core/info/NumericStatistic.h>
-#include <hoot/core/criterion/ElementTypeCriterion.h>
+#include <hoot/core/criterion/WayCriterion.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/visitors/ConstElementVisitor.h>
 #include <hoot/core/criterion/ElementCriterionConsumer.h>
@@ -61,11 +61,8 @@ public:
 
   void setConfiguration(const Settings& conf) override;
 
-  QString getDescription() const override { return "Calculates way node statistics"; }
-
   QString getInitStatusMessage() const override
   { return "Calculating way node statistics..."; }
-
   QString getCompletedStatusMessage() const override
   { return "Calculated node statistics for " + QString::number(_numAffected) + " ways"; }
 
@@ -80,8 +77,8 @@ public:
   }
 
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+  QString getDescription() const override { return "Calculates way node statistics"; }
 
 private:
 

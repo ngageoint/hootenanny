@@ -93,7 +93,7 @@ void BuildingHeightVisitor::visit(const ConstElementPtr& e)
   }
 }
 
-Meters BuildingHeightVisitor::_getHeight(const ConstElementPtr& e)
+Meters BuildingHeightVisitor::_getHeight(const ConstElementPtr& e) const
 {
   QString heightStr = e->getTags().get("height");
   LOG_VART(heightStr);
@@ -129,7 +129,7 @@ Meters BuildingHeightVisitor::_getHeight(const ConstElementPtr& e)
   return 0.0;
 }
 
-void BuildingHeightVisitor::_cleanHeightStr(QString& heightStr)
+void BuildingHeightVisitor::_cleanHeightStr(QString& heightStr) const
 {
   heightStr =
     heightStr.toLower()
@@ -138,7 +138,7 @@ void BuildingHeightVisitor::_cleanHeightStr(QString& heightStr)
     .simplified();
 }
 
-Meters BuildingHeightVisitor::_parseMetersVal(const QString& heightStr)
+Meters BuildingHeightVisitor::_parseMetersVal(const QString& heightStr) const
 {
   bool ok = false;
   const Meters height = heightStr.toDouble(&ok);

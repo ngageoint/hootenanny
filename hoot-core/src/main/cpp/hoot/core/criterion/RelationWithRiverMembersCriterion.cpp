@@ -29,7 +29,7 @@
 
 // hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/criterion/LinearWaterwayCriterion.h>
+#include <hoot/core/criterion/RiverCriterion.h>
 
 namespace hoot
 {
@@ -43,12 +43,12 @@ RelationWithMembersOfTypeCriterion()
 
 QString RelationWithRiverMembersCriterion::getCriterion() const
 {
-  return LinearWaterwayCriterion::className();
+  return RiverCriterion::className();
 }
 
 GeometryTypeCriterion::GeometryType RelationWithRiverMembersCriterion::getGeometryType() const
 {
-  return LinearWaterwayCriterion().getGeometryType();
+  return RiverCriterion().getGeometryType();
 }
 
 }

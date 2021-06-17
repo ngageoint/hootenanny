@@ -53,8 +53,8 @@ namespace Tgs
   }
 
   void BaseRandomForestManager::addTrainingVector(std::string classLabel,
-    const std::vector<double>& trainVec)
-  {
+    const std::vector<double>& trainVec) const
+  { 
     try
     {
       _data->addDataVector(classLabel, trainVec);
@@ -160,7 +160,7 @@ namespace Tgs
     }
   }
 
-  void BaseRandomForestManager::exportTrainingData(std::fstream & fileStream)
+  void BaseRandomForestManager::exportTrainingData(std::fstream & fileStream) const
   {
     try
     {
@@ -391,7 +391,7 @@ namespace Tgs
     }
   }
 
-  void BaseRandomForestManager::getFactorLabels(std::vector<std::string> & factors)
+  void BaseRandomForestManager::getFactorLabels(std::vector<std::string> & factors) const
   {
     try
     {
@@ -536,7 +536,7 @@ namespace Tgs
     }
   }
 
-  void BaseRandomForestManager::replaceMissingData(double missingDataValue)
+  void BaseRandomForestManager::replaceMissingData(double missingDataValue) const
   {
     try
     {
@@ -578,7 +578,7 @@ namespace Tgs
     }
   }
 
-  void BaseRandomForestManager::setFactorLabels(std::vector<std::string> & factorLabels)
+  void BaseRandomForestManager::setFactorLabels(std::vector<std::string> & factorLabels) const
   {
     try
     {

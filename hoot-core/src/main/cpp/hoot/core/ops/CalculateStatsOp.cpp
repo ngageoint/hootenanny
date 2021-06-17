@@ -177,7 +177,7 @@ void CalculateStatsOp::_readGenericStatsConfiguration()
 
 shared_ptr<MatchCreator> CalculateStatsOp::getMatchCreator(
   const vector<shared_ptr<MatchCreator>>& matchCreators, const QString& matchCreatorName,
-  CreatorDescription::BaseFeatureType& featureType)
+  CreatorDescription::BaseFeatureType& featureType) const
 {
   for (vector<shared_ptr<MatchCreator>>::const_iterator matchIt = matchCreators.begin();
        matchIt != matchCreators.end(); ++matchIt)
@@ -322,7 +322,7 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
   // either calculated by themselves or after a conflation job. As more script conflators implement
   // a search radius function vs using a predefined value, this list could get a little unruly.
   conf().set(ConfigOptions::getPowerLineAutoCalcSearchRadiusKey(), false);
-  conf().set(ConfigOptions::getWaterwayAutoCalcSearchRadiusKey(), false);
+  conf().set(ConfigOptions::getRiverAutoCalcSearchRadiusKey(), false);
 
   _initStatCalc();
 
@@ -897,7 +897,7 @@ long CalculateStatsOp::indexOfSingleStat(const QString& n) const
 }
 
 ConstElementVisitorPtr CalculateStatsOp::_getElementVisitorForFeatureType(
-  const CreatorDescription::BaseFeatureType& featureType)
+  const CreatorDescription::BaseFeatureType& featureType) const
 {
   if (featureType == CreatorDescription::PoiPolygonPOI ||
       featureType == CreatorDescription::Polygon)
@@ -918,6 +918,7 @@ void CalculateStatsOp::_generateFeatureStats(
   const long poisMergedIntoPolys, const long poisMergedIntoPolysFromMap1,
   const long poisMergedIntoPolysFromMap2)
 {
+  LOG_VARD(criterion->className());
   LOG_VARD(poisMergedIntoPolys);
   const QString description = CreatorDescription::baseFeatureTypeToString(featureType);
   LOG_VARD(description);

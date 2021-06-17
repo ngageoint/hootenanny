@@ -78,7 +78,7 @@ void WayJoinerAdvanced::join(const OsmMapPtr& map)
   if (ConfigOptions().getAttributeConflationAggressiveHighwayJoining())
   {
     _joinUnsplitWaysAtNode();
-    OsmMapWriterFactory::writeDebugMap(map, "after-way-joiner-join-unsplit-ways");
+    OsmMapWriterFactory::writeDebugMap(map, className(), "after-join-unsplit-ways");
   }
 }
 
@@ -770,7 +770,7 @@ void WayJoinerAdvanced::_determineKeeperFeatureForId(WayPtr parent, WayPtr child
 }
 
 bool WayJoinerAdvanced::_handleOneWayStreetReversal(WayPtr wayWithTagsToKeep,
-                                                    ConstWayPtr wayWithTagsToLose)
+                                                    ConstWayPtr wayWithTagsToLose) const
 {
   OneWayCriterion oneWayCrit;
   if (oneWayCrit.isSatisfied(wayWithTagsToLose) &&

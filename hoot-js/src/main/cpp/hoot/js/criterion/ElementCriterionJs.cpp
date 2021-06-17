@@ -49,10 +49,11 @@ HOOT_JS_REGISTER(ElementCriterionJs)
 
 Persistent<Function> ElementCriterionJs::_constructor;
 
-void ElementCriterionJs::Init(Handle<Object> target)
+void ElementCriterionJs::Init(Local<Object> target)
 {
   Isolate* current = target->GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
   vector<QString> opNames =
     Factory::getInstance().getObjectNamesByBase(ElementCriterion::className());
 
@@ -63,17 +64,17 @@ void ElementCriterionJs::Init(Handle<Object> target)
 
     // Prepare constructor template
     Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
-    tpl->SetClassName(String::NewFromUtf8(current, opNames[i].toStdString().data()));
+    tpl->SetClassName(String::NewFromUtf8(current, opNames[i].toStdString().data()).ToLocalChecked());
     tpl->InstanceTemplate()->SetInternalFieldCount(2);
     // Prototype
     tpl->PrototypeTemplate()->Set(
       PopulateConsumersJs::baseClass(),
-      String::NewFromUtf8(current, ElementCriterion::className().toStdString().data()));
+      toV8(ElementCriterion::className()));
     tpl->PrototypeTemplate()->Set(
-      String::NewFromUtf8(current, "isSatisfied"), FunctionTemplate::New(current, isSatisfied));
+      String::NewFromUtf8(current, "isSatisfied").ToLocalChecked(), FunctionTemplate::New(current, isSatisfied));
 
-    _constructor.Reset(current, tpl->GetFunction());
-    target->Set(String::NewFromUtf8(current, n), ToLocal(&_constructor));
+    _constructor.Reset(current, tpl->GetFunction(context).ToLocalChecked());
+    target->Set(context, toV8(n), ToLocal(&_constructor));
   }
 }
 
@@ -86,7 +87,7 @@ void ElementCriterionJs::New(const FunctionCallbackInfo<Value>& args)
   LOG_VART(className);
   ElementCriterion* c = Factory::getInstance().constructObject<ElementCriterion>(className);
   ElementCriterionJs* obj = new ElementCriterionJs(c);
-  //  node::ObjectWrap::Wrap takes ownership of the pointer in a v8::Persistent<v8::Object>
+  //  node::ObjectWrap::Wrap takes ownership of the pointer in a Persistent<Object>
   obj->Wrap(args.This());
 
   PopulateConsumersJs::populateConsumers<ElementCriterion>(c, args);
@@ -98,9 +99,10 @@ void ElementCriterionJs::isSatisfied(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
 
   ElementCriterionPtr ec = ObjectWrap::Unwrap<ElementCriterionJs>(args.This())->getCriterion();
-  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
+  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject(context).ToLocalChecked())->getConstElement();
 
   args.GetReturnValue().Set(Boolean::New(current, ec->isSatisfied(e)));
 }

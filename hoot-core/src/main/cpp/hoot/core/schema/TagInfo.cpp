@@ -44,8 +44,9 @@
 namespace hoot
 {
 
-TagInfo::TagInfo(const int tagValuesPerKeyLimit, const QStringList& keys, const bool keysOnly,
-                 const bool caseSensitive, const bool exactKeyMatch, const bool delimitedTextOutput) :
+TagInfo::TagInfo(
+  const int tagValuesPerKeyLimit, const QStringList& keys, const bool keysOnly,
+  const bool caseSensitive, const bool exactKeyMatch, const bool delimitedTextOutput) :
 _tagValuesPerKeyLimit(tagValuesPerKeyLimit),
 _keys(keys),
 _keysOnly(keysOnly),
@@ -66,7 +67,6 @@ QString TagInfo::getInfo(const QStringList& inputs) const
 
   if (_delimitedTextOutput)
   {
-    // TODO
     QSet<QString> uniqueKeys;
     for (int i = 0; i < inputs.size(); i++)
     {
@@ -97,7 +97,7 @@ QString TagInfo::getInfo(const QStringList& inputs) const
       info += _getInfo(inputs.at(i));
       info += "\n  }";
 
-      // Don't add a comma to the last dataset
+      // Don't add a comma to the last dataset.
       if (i != (inputs.size() - 1))
       {
         info += ",\n";
@@ -126,11 +126,13 @@ QString TagInfo::_getInfo(const QString& input) const
       inputInfo, ConfigOptions().getReaderUseDataSourceIds(),
       Status::fromString(ConfigOptions().getReaderSetDefaultStatus()));
 
-  // Using a different code path for the OGR inputs to handle the layer syntax.  There may be
-  // a way to combine the two logic paths...not sure, though.
+  // Using a different code path for the OGR inputs to handle the layer syntax. We need to add
+  // custom behavior to the element parsing, so loading the map through IoUtils::loadMap won't work
+  // here.
   std::shared_ptr<OgrReader> ogrReader = std::dynamic_pointer_cast<OgrReader>(reader);
   if (ogrReader.get())
   {
+    // We have to have a translation for the reading, so just use the simplest one.
     ogrReader->setSchemaTranslationScript(ConfPath::getHootHome() + "/translations/quick.js");
 
     QStringList layers;
@@ -173,7 +175,7 @@ QString TagInfo::_getInfo(const QString& input) const
       if (_delimitedTextOutput)
       {
         const QString tmpText = _printDelimitedText(result);
-        // Skip empty layers
+        // Skip empty layers.
         if (tmpText == "")
         {
           continue;
@@ -187,7 +189,7 @@ QString TagInfo::_getInfo(const QString& input) const
       else
       {
         const QString tmpText = _printJSON(layers[i], result);
-        // Skip empty layers
+        // Skip empty layers.
         if (tmpText == "")
         {
           continue;
@@ -205,10 +207,9 @@ QString TagInfo::_getInfo(const QString& input) const
     // At this time, the only unstreamable readers are the JSON readers. If this capability is
     // needed for JSON data, then either those readers can implement PartialOsmMapReader or the
     // needed readed code can be manually added to this class.
-
     if (!OsmMapReaderFactory::hasElementInputStream(inputInfo))
     {
-      throw HootException("Inputs to tag-values must be streamable.");
+      throw IllegalArgumentException("Inputs to TagInfo must be streamable.");
     }
 
     LOG_DEBUG("Reading: " << inputInfo << "...");

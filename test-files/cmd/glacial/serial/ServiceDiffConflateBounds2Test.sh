@@ -45,7 +45,7 @@ DEBUG=false
 if [ "$DEBUG" == "true" ]; then
   GENERAL_OPTS=$GENERAL_OPTS" -D debug.maps.write=true"
   LOG_LEVEL="--trace"
-  LOG_FILTER="-D log.class.filter= "
+  LOG_FILTER="-D log.class.include.filter= "
 fi
 
 scripts/database/CleanAndInitializeOsmApiDb.sh
@@ -78,4 +78,3 @@ hoot diff $LOG_LEVEL $LOG_FILTER $GENERAL_OPTS $GOLD_DIR/out-2.osm $OUTPUT_DIR/o
 scripts/database/CleanOsmApiDB.sh
 hoot db-delete --warn $GENERAL_OPTS $DB_OPTS $SEC_INPUT
 hoot db-delete --warn $GENERAL_OPTS $DB_OPTS $CONFLATED
-#PGPASSWORD=$DB_PASSWORD psql $PSQL_DB_AUTH -d $DB_NAME -c "DELETE FROM users WHERE email='$HOOT_EMAIL';" > /dev/null

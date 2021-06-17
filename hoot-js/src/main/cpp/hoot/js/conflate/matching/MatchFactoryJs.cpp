@@ -37,12 +37,13 @@ namespace hoot
 
 HOOT_JS_REGISTER(MatchFactoryJs)
 
-void MatchFactoryJs::Init(Handle<Object> exports)
+void MatchFactoryJs::Init(Local<Object> exports)
 {
   Isolate* current = exports->GetIsolate();
   HandleScope scope(current);
-  Handle<Object> schema = Object::New(current);
-  exports->Set(String::NewFromUtf8(current, "MatchFactory"), schema);
+  Local<Context> context = current->GetCurrentContext();
+  Local<Object> schema = Object::New(current);
+  exports->Set(context, toV8("MatchFactory"), schema);
 }
 
 }

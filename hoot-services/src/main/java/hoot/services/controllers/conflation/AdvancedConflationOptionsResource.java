@@ -39,6 +39,9 @@ import static hoot.services.HootProperties.NETWORK_CONFLATION_PATH;
 import static hoot.services.HootProperties.REF_OVERRIDE_PATH;
 import static hoot.services.HootProperties.TEMPLATE_PATH;
 
+import hoot.services.command.CommandResult;
+import hoot.services.controllers.info.HootWaySnapCriteria;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -52,6 +55,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import javax.ws.rs.GET;
@@ -73,7 +78,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 
 @Controller
 @Path("/advancedopts")
@@ -99,6 +105,14 @@ public class AdvancedConflationOptionsResource {
         put("network", NETWORK_CONFLATION_PATH);
         put("differential", DIFFERENTIAL_CONFLATION_PATH);
         put("differential w/Tags", DIFFERENTIAL_CONFLATION_PATH);
+    }};
+
+    private Map<String, String> matcherMap = new HashMap<String, String>(){{
+        put("GenericLines", "hoot::LinearCriterion");
+        put("PowerLines", "hoot::PowerLineCriterion");
+        put("Railways", "hoot::RailwayCriterion");
+        put("Rivers", "hoot::RiverCriterion");
+        put("Roads", "hoot::HighwayCriterion");
     }};
 
     private static Map<String, Map<String, String>> confOptionsMap = null;
@@ -193,6 +207,14 @@ public class AdvancedConflationOptionsResource {
                 if ((hoot2Template == null) || doForce) {
                     hoot2Template = new JSONArray();
                     hoot2Template = (JSONArray) hoot2Override.get("hoot2");
+
+                    for (Object memberObj : hoot2Template) {
+                        JSONObject obj = (JSONObject) memberObj;
+                        if (obj.get("name") != null && obj.get("name").equals("Differential")) {
+                            addMemberData((JSONArray) obj.get("members"));
+                        }
+
+                    }
                 }
                 template = hoot2Template;
             }
@@ -200,10 +222,24 @@ public class AdvancedConflationOptionsResource {
             else if (confType.equalsIgnoreCase("differential")) {
                 if ((diffTemplate == null) || doForce) {
                     JSONArray hoot2Opts = (JSONArray) hoot2Override.get("hoot2");
-                    JSONObject diffOpts = (JSONObject)hoot2Opts.stream().filter(config -> {
+                    JSONObject diffOpts = (JSONObject) hoot2Opts.stream().filter(config -> {
                                 return ((JSONObject)config).get("name").equals("Differential");
                             }).findFirst().orElse(null);
                     diffTemplate = (JSONArray) diffOpts.get("members");
+
+                    addMemberData(diffTemplate);
+
+                    //Add dropdown for road algorithm
+                    JSONObject roadObj = (JSONObject) hoot2Opts.stream().filter(config -> {
+                        return ((JSONObject) config).get("name").equals("Roads");
+                    }).findFirst().orElse(null);
+                    if (roadObj != null) {
+                        JSONArray roadOpts = (JSONArray) roadObj.get("members");
+                        JSONObject roadAlg = (JSONObject) roadOpts.stream().filter(config -> {
+                            return ((JSONObject) config).get("id").equals("RoadEngines");
+                        }).findFirst().orElse(null);
+                        diffTemplate.add(0, roadAlg);
+                    }
                 }
                 template = diffTemplate;
             }
@@ -245,6 +281,37 @@ public class AdvancedConflationOptionsResource {
         }
 
         return Response.ok(template.toJSONString()).build();
+    }
+
+    private void addMemberData(JSONArray template) {
+        for (Object memberObj : template) {
+            JSONObject obj = (JSONObject) memberObj;
+
+            // add list of options for SnapUnconnectedWaysSnapCriteria
+            if (obj.get("id") != null && obj.get("id").equals("SnapUnconnectedWaysSnapCriteria")) {
+                HootWaySnapCriteria hootCriteriaCommand = new HootWaySnapCriteria(this.getClass());
+                CommandResult commandResult = hootCriteriaCommand.execute();
+                String output = commandResult.getStdout().replace("\n", "");
+
+                JSONArray data = new JSONArray();
+                JSONObject displayToHootMap = new JSONObject();
+                Pattern pattern = Pattern.compile("hoot::([A-Za-z]+)"); // matches hoot::*criterion* pattern
+                for (String criteria : output.split(";")) {
+                    Matcher matcher = pattern.matcher(criteria);
+                    if (matcher.find()) {
+                        // add space between capital letters
+                        String hootCriterion = matcher.group(1).replaceAll("([^_])([A-Z])", "$1 $2");
+                        data.add(hootCriterion);
+                        displayToHootMap.put(hootCriterion, criteria);
+                    }
+                }
+
+                obj.replace("input", "multiCombobox");
+                obj.put("data", data);
+                obj.put("displayToHootMap", displayToHootMap);
+                obj.put("matcherMap", matcherMap);
+            }
+        }
     }
 
     private void getOverrides(Boolean doForce) throws IOException, ParseException {

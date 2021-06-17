@@ -121,7 +121,7 @@ bool WayDiscretizer::discretize(double spacing, vector<Coordinate>& result)
   return true;
 }
 
-bool WayDiscretizer::discretize(double spacing, vector<WayLocation>& result)
+bool WayDiscretizer::discretize(double spacing, vector<WayLocation>& result) const
 {
   if (!_way)
   {

@@ -129,11 +129,11 @@ public:
     network1->addEdge(_e1cd);
     network1->addEdge(_e1df);
 
-    NodePtr n2a = TestUtils::createNode(map, Status::Unknown2, 2, -50);
-    NodePtr n2b = TestUtils::createNode(map, Status::Unknown2, 2, 100);
-    NodePtr n2c = TestUtils::createNode(map, Status::Unknown2, 2, 400);
-    WayPtr w2ab = TestUtils::createWay(map, QList<NodePtr>() << n2a << n2b);
-    WayPtr w2bc = TestUtils::createWay(map, QList<NodePtr>() << n2b << n2c);
+    NodePtr n2a = TestUtils::createNode(map, "", Status::Unknown2, 2, -50);
+    NodePtr n2b = TestUtils::createNode(map, "", Status::Unknown2, 2, 100);
+    NodePtr n2c = TestUtils::createNode(map, "", Status::Unknown2, 2, 400);
+    WayPtr w2ab = TestUtils::createWay(map, QList<NodePtr>() << n2a << n2b, "", Status::Unknown2);
+    WayPtr w2bc = TestUtils::createWay(map, QList<NodePtr>() << n2b << n2c, "", Status::Unknown2);
 
     NetworkVertexPtr v2a(new NetworkVertex(n2a));
     NetworkVertexPtr v2b(new NetworkVertex(n2b));

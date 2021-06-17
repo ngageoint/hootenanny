@@ -36,8 +36,8 @@
 #include <QHash>
 #include <QString>
 #include <QStringList>
-#include <QXmlDefaultHandler>
 
+// geos
 #include <ogr_spatialref.h>
 
 // Standard
@@ -61,51 +61,48 @@ public:
 
   static QString className() { return "hoot::OgrReader"; }
 
+  static int logWarnCount;
+
+  OgrReader();
+  OgrReader(const QString& path);
+  ~OgrReader() = default;
+
+  void initializePartial() override;
+  bool hasMoreElements() override;
+  ElementPtr readNextElement() override;
+  void close() override;
+  bool isSupported(const QString& url) override;
+  void open(const QString& url) override;
+  void setUseDataSourceIds(bool useDataSourceIds) override;
+  void finalizePartial() override;
+
+  /**
+   * Read all data from the specified path.
+   *
+   * This is memory bound. Use the PartialOsmMapReader interface for streaming reads.
+   *
+   * @param path the path to the data to read
+   * @param layer Read only from this layer. If no layer is specified then read from all layers.
+   * @param map map to load into
+   * @param jobSource optional job name for status reporting
+   * @param numTasks optional number of job tasks being performed for status reporting
+   */
+  void read(
+    const QString& path, const QString& layer, const OsmMapPtr& map, const QString& jobSource = "",
+    const int numTasks = -1);
+
   /**
    * Returns true if this appears to be a reasonable path without actually attempting to open the
    * data source.
    */
   static bool isReasonablePath(const QString& path);
 
-  OgrReader();
-  OgrReader(const QString& path);
-  ~OgrReader() = default;
-
+  long getFeatureCount(const QString& path, const QString& layer) const;
   ElementIterator* createIterator(const QString& path, const QString& layer) const;
-
-  QStringList getFilteredLayerNames(const QString& path);
-
   /**
-   * Read all geometry data from the specified path.
-   *
-   * @param path
-   * @param layer Read only from this layer. If no layer is specified then read from all geometry
-   *  layers.
-   * @param map Put what we read in this map.
+   * Returns a filtered list of layer names that have geometry.
    */
-  void read(const QString& path, const QString& layer, const OsmMapPtr& map);
-
-  void setDefaultStatus(Status s) override;
-  void setLimit(long limit);
-  void setSchemaTranslationScript(const QString& translate);
-
-  long getFeatureCount(const QString& path, const QString& layer);
-
-  void initializePartial() override;
-
-  bool hasMoreElements() override;
-
-  ElementPtr readNextElement() override;
-
-  void close() override;
-
-  bool isSupported(const QString& url) override;
-
-  void open(const QString& url) override;
-
-  void setUseDataSourceIds(bool useDataSourceIds) override;
-
-  void finalizePartial() override;
+  QStringList getFilteredLayerNames(const QString& path) const;
 
   /**
    * Returns the bounding box for the specified projection and configuration settings. This is
@@ -116,7 +113,7 @@ public:
 
   std::shared_ptr<OGRSpatialReference> getProjection() const override;
 
-  //leaving this empty for the time being
+  // leaving this empty
   QString supportedFormats() override { return ""; }
 
   /**
@@ -128,11 +125,27 @@ public:
    */
   unsigned int getNumSteps() const override { return 1; }
 
-protected:
+  void setDefaultStatus(Status s) override;
+  void setLimit(long limit) const;
+  void setSchemaTranslationScript(const QString& translate) const;
+
+private:
 
   std::shared_ptr<OgrReaderInternal> _d;
 
   Progress _progress;
+
+  /*
+   * Attempts to determine the relative weighting of each layer in an OGR data source based on
+   * feature size. If the feature size hasn't already been calculated for each layer, then a even
+   * distribution of weighting between layers is returned.
+   */
+  std::vector<float> _getInputProgressWeights(
+    const QString& input, const QStringList& layers) const;
+  /*
+   * Determines the list of layers in an OGR input. The reader must already have been initialized.
+   */
+  QStringList _getLayersFromPath(QString& input) const;
 };
 
 }

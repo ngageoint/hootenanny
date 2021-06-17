@@ -84,7 +84,7 @@ public:
   /**
    * Returns the number of elements written by this class since it was instantiated.
    */
-  int getElementsWritten() { return _elementsWritten; }
+  int getElementsWritten() const { return _elementsWritten; }
 
   /**
    * Removes the version number from the output. This is only useful for unit testing.
@@ -216,9 +216,9 @@ private:
 
   void _addTag(const std::shared_ptr<Element>& n, const QString& k, const QString& v);
 
-  long _convertLon(double lon);
+  long _convertLon(double lon) const;
 
-  long _convertLat(double lat);
+  long _convertLat(double lat) const;
 
   int _convertString(const QString& s);
 
@@ -228,7 +228,7 @@ private:
 
   void _initBlob();
 
-  int _toRelationMemberType(ElementType t);
+  int _toRelationMemberType(ElementType t) const;
 
   void _writeBlob(const char* buffer, int size, const std::string& type);
 

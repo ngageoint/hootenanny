@@ -125,7 +125,7 @@ void MetadataImport::_importMetadataToElements()
   }
 }
 
-bool MetadataImport::_areMetadataTagsEqual(ElementPtr p1, ElementPtr p2)
+bool MetadataImport::_areMetadataTagsEqual(ElementPtr p1, ElementPtr p2) const
 {
   Tags t1 = p1->getTags();
   Tags t2 = p2->getTags();

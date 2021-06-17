@@ -74,7 +74,7 @@ Hoot& Hoot::getInstance()
   return instance;
 }
 
-void Hoot::_init()
+void Hoot::_init() const
 {
   // Lower this log level temporarily *only* for debugging init issues. Some hoot services
   // functionality that parses log output is sensitive to extra logged statements and will fail
@@ -134,7 +134,7 @@ void Hoot::_init()
   qRegisterMetaType<QSharedPointer<QNetworkSession>>();
 }
 
-void Hoot::loadLibrary(const QString& name)
+void Hoot::loadLibrary(const QString& name) const
 {
   // this library sticks around in ram even after the object is destroyed.
   QLibrary lib(name);
@@ -153,7 +153,7 @@ void Hoot::loadLibrary(const QString& name)
   }
 }
 
-void Hoot::reinit()
+void Hoot::reinit() const
 {
   LOG_TRACE("Hoot instance reinit...");
 

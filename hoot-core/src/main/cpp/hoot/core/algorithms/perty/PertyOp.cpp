@@ -85,7 +85,7 @@ public:
   /**
    * User barycentric interpolation to determine the shift at a given point.
    */
-  Vec2d _interpolateShift(const Coordinate& p)
+  Vec2d _interpolateShift(const Coordinate& p) const
   {
     Vec2d result;
 
@@ -143,7 +143,7 @@ public:
     return result;
   }
 
-  Coordinate gridCoordinate(int r, int c)
+  Coordinate gridCoordinate(int r, int c) const
   {
     return Coordinate((double)c * _gridSpacing + _e.getMinX(),
       (double)r * _gridSpacing + _e.getMinY());
@@ -152,7 +152,7 @@ public:
   /**
    * Return 2 * the area of a triangle.
    */
-  double triArea2(const Coordinate& a, const Coordinate& b, const Coordinate& c)
+  double triArea2(const Coordinate& a, const Coordinate& b, const Coordinate& c) const
   {
     return fabs((b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x));
   }
@@ -164,12 +164,12 @@ private:
   const Envelope& _e;
   Meters _gridSpacing;
 
-  double _getX(int row, int col)
+  double _getX(int row, int col) const
   {
     return _EX.at<double>((row * _cols + col) * 2, 0);
   }
 
-  double _getY(int row, int col)
+  double _getY(int row, int col) const
   {
     return _EX.at<double>((row * _cols + col) * 2 + 1, 0);
   }
@@ -205,7 +205,7 @@ void PertyOp::apply(std::shared_ptr<OsmMap>& map)
 
   // permute the data first
   permute(map);
-  OsmMapWriterFactory::writeDebugMap(map, "perty-after-perty-op");
+  OsmMapWriterFactory::writeDebugMap(map, className(), "after-perty-op");
 
   // apply any custom perturbation ops
   OpExecutor namedOps(_namedOps);

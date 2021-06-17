@@ -99,9 +99,9 @@ private:
   /**
    * Returns true if the given way has a divider highway connected on both ends.
    */
-  bool _dividerSandwich(const std::shared_ptr<Way>& w);
+  bool _dividerSandwich(const std::shared_ptr<Way>& w) const;
 
-  bool _hasDividerConnected(long nodeId, long excludedWayId);
+  bool _hasDividerConnected(long nodeId, long excludedWayId) const;
 };
 
 }

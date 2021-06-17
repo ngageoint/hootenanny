@@ -54,9 +54,9 @@ public:
     HandleScope handleScope(current);
     Context::Scope context_scope(_pc->getContext(current));
 
-    Handle<Object> exports = _pc->loadScript("rules/Polygon.js");
+    Local<Object> exports = _pc->loadScript("rules/Polygon.js");
 
-    Handle<Value> result = _pc->call(exports, "isWholeGroup");
+    Local<Value> result = _pc->call(exports, "isWholeGroup");
     HOOT_STR_EQUALS("true", result);
 
     result = _pc->call(_pc->getContext(current)->Global(), "testAdd",

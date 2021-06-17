@@ -38,18 +38,14 @@ class AttributeComparator : public BaseComparator
 public:
 
   AttributeComparator(const std::shared_ptr<OsmMap>& map1, const std::shared_ptr<OsmMap>& map2);
-
   ~AttributeComparator() = default;
 
   double compareMaps() override;
 
-  double getConfidenceInterval() { return _ci; }
-
-  double getMeanScore() { return _mean; }
-
-  double getMedianScore() { return _median; }
-
-  double getStandardDeviation() { return _s; }
+  double getConfidenceInterval() const { return _ci; }
+  double getMeanScore() const { return _mean; }
+  double getMedianScore() const { return _median; }
+  double getStandardDeviation() const { return _s; }
 
   void setIterations(int i) { _iterations = i; }
 

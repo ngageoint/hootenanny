@@ -40,12 +40,12 @@ namespace hoot
 {
 
 /**
- * Replaces all instances of one element with another element. In some cases we may not be able
+ * Replaces all instances of one element with another element. In some cases, we may not be able
  * to replace all instances of the "from" element. E.g. if "from" is a node and "to" is a way. If
  * "from" is part of a way, then we can't do the replacement. In this case it won't be replaced and
  * will still be part of the parent way.
  *
- * In many cases you may want to follow this call by clearing tags and then attempting to remove
+ * In many cases, you may want to follow this call by clearing tags and then attempting to remove
  * "from". E.g.
  *
  *    ReplaceElementOp(from, to).apply(map);
@@ -61,25 +61,29 @@ public:
   /**
    * Constructor
    *
+   * It is expected that the eid will be populated with addElement after construction. addElement
+   * must be called exactly two times.
+   */
+  ReplaceElementOp();
+  /**
+   * Constructor
+   *
    * @param from Replace this element.
    * @param to Use this to replace the specified element.
    * @param clearAndRemove If set to true, then the element will be cleared of all attributes and a
    * removal will be attempted. In some cases (e.g. replace can't be complete if you're replacing a
    * node with a way and the node is in a way), the element won't be removed. If this happens, then
    * all tags will be cleared.
+   * @param removeParentRefs If true, removes all references in parent relations or ways to the
+   * element being removed before trying to remove it. If false and clearAndRemove=true, and the
+   * element being removed has memberships in a relation or way, the element will not be removed.
    */
-  ReplaceElementOp(ElementId from, ElementId to, bool clearAndRemove = false);
-  /**
-   * Constructor
-   *
-   * It is expected that the eid will be populated with addElement after construction. addElement
-   * must be called exactly two times.
-   */
-  ReplaceElementOp();
+  ReplaceElementOp(
+    ElementId from, ElementId to, bool clearAndRemove = false, bool removeParentRefs = false);
   ~ReplaceElementOp() = default;
 
   /**
-   * If the elements aren't specified in the constructor this must be called exactly two times. Once
+   * If the elements aren't specified in the constructor this must be called exactly two times, once
    * for 'from' and a second time for 'to'.
    */
   void addElement(const ConstElementPtr& e) override;
@@ -97,7 +101,10 @@ private:
 
   ElementId _from;
   ElementId _to;
+  // removes an element after it has been replaced
   bool _clearAndRemove;
+  // removes all references in parent elements to the element being removed before removing it
+  bool _removeParentRefs;
 };
 
 }

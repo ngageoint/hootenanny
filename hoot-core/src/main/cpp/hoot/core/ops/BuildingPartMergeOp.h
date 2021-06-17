@@ -174,14 +174,14 @@ private:
   /*
    * Determines neighboring building parts for a building
    */
-  std::set<long> _calculateNeighbors(const ConstWayPtr& way, const Tags& tags);
+  std::set<long> _calculateNeighbors(const ConstWayPtr& way, const Tags& tags) const;
 
   static bool _hasContiguousNodes(const ConstWayPtr& way, const long node1Id, const long node2Id);
 
   /*
    * Returns a similarity decision by scoring the non-building part tags between two tag sets
    */
-  bool _compareTags(Tags t1, Tags te);
+  bool _compareTags(Tags t1, Tags te) const;
 };
 
 }

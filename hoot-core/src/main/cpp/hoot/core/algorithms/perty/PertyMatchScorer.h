@@ -44,6 +44,8 @@ class PertyMatchScorer : public Configurable
 {
 public:
 
+  static QString className() { return "hoot::PertyMatchScorer"; }
+
   PertyMatchScorer();
   ~PertyMatchScorer() = default;
 
@@ -66,20 +68,20 @@ public:
   /**
     Returns the output path of the reference map
     */
-  QString getReferenceMapOutput() { return _referenceMapOutput; }
+  QString getReferenceMapOutput() const { return _referenceMapOutput; }
   /**
     Returns the output path of the perturbed map
     */
-  QString getPerturbedMapOutput() { return _perturbedMapOutput; }
+  QString getPerturbedMapOutput() const { return _perturbedMapOutput; }
   /**
     Returns the output path of the conflated map
     */
-  QString getConflatedMapOutput() { return _conflatedMapOutput; }
+  QString getConflatedMapOutput() const { return _conflatedMapOutput; }
 
   /**
     Returns the search distance used during conflation
     */
-  double getSearchDistance() { return _searchDistance; }
+  double getSearchDistance() const { return _searchDistance; }
   /**
     Sets the search distance used during conflation
     */
@@ -88,7 +90,7 @@ public:
   /**
     Returns a string representation of the object
     */
-  QString toString();
+  QString toString() const;
 
 private:
 
@@ -98,18 +100,18 @@ private:
   Settings _settings;
 
   OsmMapPtr _loadReferenceMap(const QString& referenceMapInputPath,
-                              const QString& referenceMapOutputPath);
+                              const QString& referenceMapOutputPath) const;
   void _loadPerturbedMap(const QString& perturbedMapInputPath,
-                         const QString& perturbedMapOutputPath);
+                         const QString& perturbedMapOutputPath) const;
   OsmMapPtr _combineMapsAndPrepareForConflation(const OsmMapPtr& referenceMap,
-                                                const QString& perturbedMapInputPath);
+                                                const QString& perturbedMapInputPath) const;
   std::shared_ptr<MatchComparator> _conflateAndScoreMatches(const OsmMapPtr& combinedDataToConflate,
-                                                            const QString& conflatedMapOutputPath);
+                                                            const QString& conflatedMapOutputPath) const;
 
   /**
    * Prepares map for saving and saves the map. The map will be modified.
    */
-  void _saveMap(OsmMapPtr& map, const QString& path);
+  void _saveMap(OsmMapPtr& map, const QString& path) const;
 
   QString _referenceMapOutput;
   QString _perturbedMapOutput;

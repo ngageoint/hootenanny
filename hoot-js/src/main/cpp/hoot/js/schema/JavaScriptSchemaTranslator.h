@@ -113,12 +113,12 @@ protected:
   Tags* _tags;
   std::vector<double> _timing;
   QHash<QString, int> _logs;
-  v8::Handle<v8::Value> _empty[0]; // For function calls
+  v8::Local<v8::Value> _empty[0]; // For function calls
 
   Settings _conf;
 
   std::vector<TranslatedFeature> _createAllFeatures(const QVariantList& vm);
-  std::shared_ptr<Feature> _createFeature(const QVariantMap& vm, QString& tableName);
+  std::shared_ptr<Feature> _createFeature(const QVariantMap& vm, QString& tableName) const;
 
   void _init() override;
 

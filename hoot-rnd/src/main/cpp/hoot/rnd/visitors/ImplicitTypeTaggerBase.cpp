@@ -93,7 +93,7 @@ ImplicitTypeTaggerBase::~ImplicitTypeTaggerBase()
 
   LOG_INFO(
     "Added " << StringUtils::formatLargeNumber(_numTagsAdded) << " tags to " <<
-    StringUtils::formatLargeNumber(_numFeaturesModified) << " / " <<
+    StringUtils::formatLargeNumber(_numFeaturesModified) << " of " <<
     StringUtils::formatLargeNumber(_numFeaturesParsed)  << " total features.");
   LOG_INFO(
     StringUtils::formatLargeNumber(_numFeaturesInvolvedInMultipleRules) <<
@@ -347,7 +347,7 @@ Tags ImplicitTypeTaggerBase::_applyCustomRules(const ElementPtr& e, const QStrin
   return tagsToAdd;
 }
 
-QStringList ImplicitTypeTaggerBase::_cleanNames(Tags& tags)
+QStringList ImplicitTypeTaggerBase::_cleanNames(Tags& tags) const
 {
   //the normal hoot convention is to split the name tag on ';' into multiple names; bypassing that
   //here, as it seems to cause more harm to implicit tagging than good
@@ -401,7 +401,7 @@ QString ImplicitTypeTaggerBase::_getEndOfNameToken(const QString& name,
 }
 
 void ImplicitTypeTaggerBase::_getImplicitlyDerivedTagsFromMultipleNameTokens(const QStringList& names, const QStringList& nameTokensList, const Tags& elementTags,
-  Tags& implicitlyDerivedTags, QSet<QString>& matchingWords, bool& wordsInvolvedInMultipleRules)
+  Tags& implicitlyDerivedTags, QSet<QString>& matchingWords, bool& wordsInvolvedInMultipleRules) const
 {
   // This method needs cleanup
 
@@ -484,7 +484,7 @@ void ImplicitTypeTaggerBase::_getImplicitlyDerivedTagsFromMultipleNameTokens(con
 
 void ImplicitTypeTaggerBase::_getImplicitlyDerivedTagsFromSingleNameTokens(const QStringList& names, QStringList& nameTokensList, const Tags& elementTags,
   Tags& implicitlyDerivedTags, QSet<QString>& matchingWords, bool& wordsInvolvedInMultipleRules,
-  bool& namesContainBuilding, bool& namesContainOffice)
+  bool& namesContainBuilding, bool& namesContainOffice) const
 {
   // Should be possible to combine this logic with
   //_getImplicitlyDerivedTagsFromMultipleNameTokens into a single method
@@ -591,7 +591,7 @@ void ImplicitTypeTaggerBase::_getImplicitlyDerivedTagsFromSingleNameTokens(const
   LOG_VART(implicitlyDerivedTags);
 }
 
-void ImplicitTypeTaggerBase::_ensureCorrectTagSpecificity(const ElementPtr& e, Tags& tagsToAdd)
+void ImplicitTypeTaggerBase::_ensureCorrectTagSpecificity(const ElementPtr& e, Tags& tagsToAdd) const
 {
   Tags updatedTags;
   bool tagsAdded = false;

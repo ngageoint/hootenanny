@@ -177,7 +177,7 @@ namespace Tgs
     return false;
   }
 
-  float ProbablePathCalculator::_calculateDistance(const PpPoint& p1, const PpPoint& p2)
+  float ProbablePathCalculator::_calculateDistance(const PpPoint& p1, const PpPoint& p2) const
   {
     int dy = p1.row - p2.row;
     int dx = p1.col - p2.col;
@@ -237,7 +237,7 @@ namespace Tgs
             _randomizeCurrentValues();
           }
 
-          _v() << i + 1 << " / " << iterations << " (" << (i + 1) * 100 / iterations << "%)   \r";
+          _v() << i + 1 << " of " << iterations << " (" << (i + 1) * 100 / iterations << "%)   \r";
         }
       }
     }
@@ -274,7 +274,7 @@ namespace Tgs
     }
   }
 
-  void ProbablePathCalculator::_checkBounds(const PpPoint& p)
+  void ProbablePathCalculator::_checkBounds(const PpPoint& p) const
   {
     if (p.col < 0)
     {

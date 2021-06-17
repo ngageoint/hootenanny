@@ -46,18 +46,17 @@ public:
   DebugNetworkMapCreator();
 
   void addDebugElements(OsmMapPtr map, QList<NetworkEdgeScorePtr> edgeScores,
-    QList<NetworkVertexScorePtr> vertexScores);
+    QList<NetworkVertexScorePtr> vertexScores) const;
 
 private:
 
   double _matchThreshold;
 
-  void _addEdgeLink(OsmMapPtr map, NetworkEdgeScorePtr edgeScore);
+  void _addEdgeLink(OsmMapPtr map, NetworkEdgeScorePtr edgeScore) const;
+  void _addVertexLink(OsmMapPtr map, NetworkVertexScorePtr vertexScore) const;
 
-  void _addVertexLink(OsmMapPtr map, NetworkVertexScorePtr vertexScore);
-
-  ConstNodePtr _getMedianNode(ConstOsmMapPtr map, QList<ConstElementPtr> e);
-  ConstNodePtr _getMedianNode(ConstOsmMapPtr map, ConstElementPtr e);
+  ConstNodePtr _getMedianNode(ConstOsmMapPtr map, QList<ConstElementPtr> e) const;
+  ConstNodePtr _getMedianNode(ConstOsmMapPtr map, ConstElementPtr e) const;
 };
 
 }

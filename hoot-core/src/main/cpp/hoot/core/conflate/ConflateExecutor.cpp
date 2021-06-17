@@ -72,7 +72,6 @@ const QString ConflateExecutor::JOB_SOURCE = "Conflate";
 ConflateExecutor::ConflateExecutor() :
 _isDiffConflate(false),
 _diffConflateSeparateOutput(false),
-_diffRemoveLinearPartialMatchesAsWhole(false),
 _isAttributeConflate(false),
 _isAverageConflate(false),
 _displayStats(false),
@@ -91,6 +90,7 @@ void ConflateExecutor::_initConfig()
   allOps += ConfigOptions().getConflatePostOps();
   ConfigUtils::checkForDuplicateElementCorrectionMismatch(allOps);
 
+  LOG_VARD(ConfigOptions().getGeometryLinearMergerDefault());
   // Use of LinearTagOnlyMerger for geometries signifies that we're doing Attribute Conflation.
   _isAttributeConflate =
     ConfigOptions().getGeometryLinearMergerDefault() == LinearTagOnlyMerger::className();
@@ -139,6 +139,7 @@ void ConflateExecutor::_initConfig()
 void ConflateExecutor::_initTaskCount()
 {
   // The number of steps here must be updated as you add/remove job steps in the logic.
+  // TODO: describe how the total steps are derived
   _numTotalTasks = 5;
   if (_displayStats)
   {
@@ -260,7 +261,8 @@ void ConflateExecutor::conflate(const QString& input1, const QString& input2, QS
   {
     _progress->set(
       _getJobPercentComplete(_currentTask - 1),
-      "Calculating reference statistics for: ..." + FileUtils::toLogFormat(input1, _maxFilePrintLength) + "...");
+      "Calculating reference statistics for: ..." +
+      FileUtils::toLogFormat(input1, _maxFilePrintLength) + "...");
     input1Cso.apply(map);
     _allStats.append(input1Cso.getStats());
     _stats.append(
@@ -269,7 +271,8 @@ void ConflateExecutor::conflate(const QString& input1, const QString& input2, QS
 
     _progress->set(
       _getJobPercentComplete(_currentTask - 1),
-      "Calculating secondary data statistics for: ..." + FileUtils::toLogFormat(input2, _maxFilePrintLength) + "...");
+      "Calculating secondary data statistics for: ..." +
+      FileUtils::toLogFormat(input2, _maxFilePrintLength) + "...");
     input2Cso.apply(map);
     _allStats.append(input2Cso.getStats());
     _stats.append(
@@ -280,7 +283,7 @@ void ConflateExecutor::conflate(const QString& input1, const QString& input2, QS
 
   size_t initialElementCount = map->getElementCount();
   _stats.append(SingleStat("Initial Element Count", initialElementCount));
-  OsmMapWriterFactory::writeDebugMap(map, "after-load");
+  OsmMapWriterFactory::writeDebugMap(map, className(), "after-load");
 
   if (!ConfigOptions().getConflatePreOps().empty())
   {
@@ -316,7 +319,7 @@ void ConflateExecutor::conflate(const QString& input1, const QString& input2, QS
 
   MapProjector::projectToWgs84(map);
   _stats.append(SingleStat("Project to WGS84 Time (sec)", _taskTimer.getElapsedAndRestart()));
-  OsmMapWriterFactory::writeDebugMap(map, "after-wgs84-projection");
+  OsmMapWriterFactory::writeDebugMap(map, className(), "after-wgs84-projection");
 
   _writeOutput(map, output, isChangesetOutput);
 
@@ -488,7 +491,7 @@ void ConflateExecutor::_runConflateOps(OsmMapPtr& map, const bool runPre)
   _stats.append(
     SingleStat("Apply " + opStr + "-Conflate Ops Time (sec)", _taskTimer.getElapsedAndRestart()));
 
-  OsmMapWriterFactory::writeDebugMap(map, "after-" + opStr.toLower() + "-ops");
+  OsmMapWriterFactory::writeDebugMap(map, className(), "after-" + opStr.toLower() + "-ops");
   _currentTask++;
   LOG_STATUS(
     "Conflate " << opStr.toLower() << "-operations ran in " +
@@ -532,7 +535,7 @@ void ConflateExecutor::_writeOutput(OsmMapPtr& map, QString& output, const bool 
       _currentTask++;
     }
     IoUtils::saveMap(map, output);
-    OsmMapWriterFactory::writeDebugMap(map, "after-conflate-output-write");
+    OsmMapWriterFactory::writeDebugMap(map, className(), "after-conflate-output-write");
   }
   _currentTask++;
 }
@@ -558,16 +561,6 @@ void ConflateExecutor::_writeStats(
   _stats.append(
     SingleStat("Calculate Stats for Output Time (sec)", _taskTimer.getElapsedAndRestart()));
   _currentTask++;
-
-  if (_isDiffConflate)
-  {
-    _progress->set(
-      _getJobPercentComplete(_currentTask - 1),
-      "Calculating differential output statistics for: ..." +
-      FileUtils::toLogFormat(outputFileName, _maxFilePrintLength) + "...");
-    _diffConflator.calculateStats(map, _stats);
-    _currentTask++;
-  }
 
   _allStats.append(_stats);
   if (_outputStatsFile.isEmpty())
@@ -627,7 +620,7 @@ float ConflateExecutor::_getJobPercentComplete(const int currentTaskNum) const
   return (float)currentTaskNum / (float)_numTotalTasks;
 }
 
-void ConflateExecutor::_disableRoundaboutRemoval()
+void ConflateExecutor::_disableRoundaboutRemoval() const
 {
   // This applies to both Attribute and Differential Conflation.
 
@@ -651,7 +644,7 @@ void ConflateExecutor::_disableRoundaboutRemoval()
     ConfigOptions::getConflatePostOpsKey(), ReplaceRoundabouts::className());
 }
 
-void ConflateExecutor::_updateConfigOptionsForAttributeConflation()
+void ConflateExecutor::_updateConfigOptionsForAttributeConflation() const
 {
   // These are some custom adjustments to config opts that must be done for Attribute Conflation.
   // There may be a way to eliminate these by adding more custom behavior to the UI.
@@ -671,7 +664,7 @@ void ConflateExecutor::_updateConfigOptionsForAttributeConflation()
   }
 }
 
-void ConflateExecutor::_updateConfigOptionsForDifferentialConflation()
+void ConflateExecutor::_updateConfigOptionsForDifferentialConflation() const
 {
   // This is for custom adjustments to config opts that must be done for Differential Conflation.
 
@@ -681,7 +674,7 @@ void ConflateExecutor::_updateConfigOptionsForDifferentialConflation()
     ConfigOptions::getConflatePostOpsKey(), RoadCrossingPolyReviewMarker::className());
 }
 
-void ConflateExecutor::_updateConfigOptionsForBounds()
+void ConflateExecutor::_updateConfigOptionsForBounds() const
 {
   // If we're working with a bounds, we need to ensure that IDs of the original ref parents created
   // by a split operation are applied to their split children.

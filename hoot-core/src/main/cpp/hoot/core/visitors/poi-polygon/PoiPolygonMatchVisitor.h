@@ -70,7 +70,7 @@ public:
    */
   void visit(const ConstElementPtr& e) override;
 
-  bool isMatchCandidate(ConstElementPtr element);
+  bool isMatchCandidate(ConstElementPtr element) const;
 
   QString getDescription() const override { return ""; }
 
@@ -122,7 +122,7 @@ private:
 
   std::shared_ptr<Tgs::HilbertRTree>& _getPolyIndex();
 
-  ConstOsmMapPtr _getMap() { return _map; }
+  ConstOsmMapPtr _getMap() const { return _map; }
 };
 
 }

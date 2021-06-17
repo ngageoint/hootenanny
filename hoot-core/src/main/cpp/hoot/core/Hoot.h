@@ -48,21 +48,21 @@ public:
   /**
    * A no-op that makes the code a little easier to read.
    */
-  void init() {}
+  void init() const {}
 
   /**
    * Load the specified library if it exists using QLibrary.
    */
-  void loadLibrary(const QString& name);
+  void loadLibrary(const QString& name) const;
 
   /**
    * Reinitialize hootenanny based on configuration changes.
    */
-  void reinit();
+  void reinit() const;
 
 private:
 
-  void _init();
+  void _init() const;
 
   long _toBytes(const QString& str) const;
 

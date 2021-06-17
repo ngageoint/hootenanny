@@ -26,7 +26,8 @@ local name for BHUTAN
 {}
 #####
 local name for ZAF
-{ 'Suid-Afrika': 'afr',
+{
+  'Suid-Afrika': 'afr',
   'South Africa': 'eng',
   'Sewula Afrika': 'nbl',
   'Afrika-Borwa': 'sot',
@@ -34,7 +35,8 @@ local name for ZAF
   'Aforika Borwa': 'tsn',
   'Afrika Dzonga': 'tso',
   'Afurika Tshipembe': 'ven',
-  'umZantsi Afrika': 'xho' }
+  'umZantsi Afrika': 'xho'
+}
 #####
 country name for local name Kòrsou
 CURAÇAO

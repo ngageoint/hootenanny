@@ -107,7 +107,7 @@ private:
    * @param e Pointer to the element
    * @return `hstore` formatted string of tags
    */
-  QString _getTags(const ConstElementPtr& e);
+  QString _getTags(const ConstElementPtr& e) const;
 
   /** Decimal precision for output from configuration */
   int _precision;

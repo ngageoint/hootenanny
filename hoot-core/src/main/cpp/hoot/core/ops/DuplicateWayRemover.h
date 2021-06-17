@@ -99,8 +99,8 @@ protected:
 
   bool _isCandidateWay(const ConstWayPtr& w) const;
   void _splitDuplicateWays(WayPtr w1, WayPtr w2, bool rev1 = false, bool rev2 = false);
-  std::vector<WayPtr> _splitWay(WayPtr w, int start, int length, bool newIds = false);
-  WayPtr _getUpdatedWay(WayPtr way, const std::vector<long>& nodes, bool newIds);
+  std::vector<WayPtr> _splitWay(WayPtr w, int start, int length, bool newIds = false) const;
+  WayPtr _getUpdatedWay(WayPtr way, const std::vector<long>& nodes, bool newIds) const;
   void _replaceMultiple(const ConstWayPtr& oldWay, const std::vector<WayPtr>& ways);
 
  private:

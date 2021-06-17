@@ -228,7 +228,7 @@ server repeatedly.
 This is unlikely to occur in the wild as one IP would have to churn with
 more than 30k connections within 60 seconds.
 
-A good summary of the issue can be found link:$$http://vincent.bernat.im/en/blog/2014-tcp-time-wait-state-linux.html$$[here]:
+A good summary of the issue can be found http://vincent.bernat.im/en/blog/2014-tcp-time-wait-state-linux.html[here]:
 
 If for some reason this is still an issue there are a number of rather straight
 forward fixes:

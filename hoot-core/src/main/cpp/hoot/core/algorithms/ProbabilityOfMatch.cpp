@@ -65,7 +65,7 @@ ProbabilityOfMatch::ProbabilityOfMatch()
 }
 
 double ProbabilityOfMatch::attributeScore(const ConstOsmMapPtr& map,
-  const ConstWayPtr& w1, const ConstWayPtr& w2)
+  const ConstWayPtr& w1, const ConstWayPtr& w2) const
 {
   double score = 1.0;
 
@@ -143,7 +143,7 @@ ProbabilityOfMatch& ProbabilityOfMatch::getInstance()
 }
 
 double ProbabilityOfMatch::lengthScore(const ConstOsmMapPtr& map, const ConstWayPtr& w1,
-  const ConstWayPtr &w2)
+  const ConstWayPtr &w2) const
 {
   Meters l1 = ElementToGeometryConverter(map).convertToLineString(w1)->getLength();
   Meters l2 = ElementToGeometryConverter(map).convertToLineString(w2)->getLength();
@@ -155,7 +155,7 @@ double ProbabilityOfMatch::lengthScore(const ConstOsmMapPtr& map, const ConstWay
 }
 
 double ProbabilityOfMatch::parallelScore(const ConstOsmMapPtr& map, const ConstWayPtr& w1,
-                                         const ConstWayPtr& w2)
+                                         const ConstWayPtr& w2) const
 {
   ParallelWayCriterion pwf(map, w1, true);
 
@@ -182,7 +182,7 @@ double ProbabilityOfMatch::expertProbability(const ConstOsmMapPtr& map, const Co
   return ds * ps * as * zs * ls;
 }
 
-double ProbabilityOfMatch::zipperScore(const ConstWayPtr& w1, const ConstWayPtr& w2)
+double ProbabilityOfMatch::zipperScore(const ConstWayPtr& w1, const ConstWayPtr& w2) const
 {
   double result = 1.0;
 

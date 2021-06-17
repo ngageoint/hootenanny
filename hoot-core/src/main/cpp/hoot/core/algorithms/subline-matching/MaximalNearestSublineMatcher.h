@@ -38,30 +38,20 @@ public:
 
   static QString className() { return "hoot::MaximalNearestSublineMatcher"; }
 
-  MaximalNearestSublineMatcher();
+  MaximalNearestSublineMatcher() = default;
   ~MaximalNearestSublineMatcher() = default;
 
   WaySublineMatchString findMatch(const ConstOsmMapPtr& map, const ConstWayPtr& way1,
     const ConstWayPtr& way2, double& score, Meters maxRelevantDistance) const override;
 
-  void setMaxRelevantAngle(Radians r) override { _maxRelevantAngle = r; }
-  void setMinSplitSize(Meters minSplitSize) override { _minSplitSize = minSplitSize; }
-  void setHeadingDelta(Meters headingDelta) override { _headingDelta = headingDelta; }
-
   QString getDescription() const override
   { return "Matches lines based on the maximal nearest subline found"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 
 private:
 
-  Meters _minSplitSize;
-  Radians _maxRelevantAngle;
-  Meters _headingDelta;
-
-  void _snapToEnds(const ConstOsmMapPtr &map, std::vector<WayLocation> &wl) const;
+  void _snapToEnds(const ConstOsmMapPtr &map, std::vector<WayLocation>& wl) const;
 };
 
 }

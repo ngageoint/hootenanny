@@ -227,7 +227,7 @@ void HootApiDb::commit()
   }
 }
 
-void HootApiDb::_copyTableStructure(const QString& from, const QString& to)
+void HootApiDb::_copyTableStructure(const QString& from, const QString& to) const
 {
   // inserting strings in this fashion is safe b/c it is private and we closely control the table
   // names.
@@ -308,7 +308,7 @@ void HootApiDb::createPendingMapIndexes()
   _pendingMapIndexes.clear();
 }
 
-void HootApiDb::deleteMap(long mapId)
+void HootApiDb::deleteMap(long mapId) const
 {
   //  Don't try to delete an invalid map ID
   if (mapId == -1)
@@ -338,7 +338,7 @@ void HootApiDb::deleteMap(long mapId)
   LOG_DEBUG("Finished deleting map: " << mapId << ".");
 }
 
-bool HootApiDb::hasTable(const QString& tableName)
+bool HootApiDb::hasTable(const QString& tableName) const
 {
   QString sql = "SELECT 1 from pg_catalog.pg_class c JOIN pg_catalog.pg_namespace n ON "
       "n.oid = c.relnamespace WHERE c.relname = :name";
@@ -347,7 +347,7 @@ bool HootApiDb::hasTable(const QString& tableName)
   return q.next();
 }
 
-void HootApiDb::dropTable(const QString& tableName)
+void HootApiDb::dropTable(const QString& tableName) const
 {
   LOG_TRACE("Dropping table: " << tableName << "...");
 
@@ -364,7 +364,7 @@ void HootApiDb::dropTable(const QString& tableName)
   }
 }
 
-void HootApiDb::dropSequence(const QString& sequenceName)
+void HootApiDb::dropSequence(const QString& sequenceName) const
 {
   LOG_TRACE("Dropping sequence: " << sequenceName << "...");
 
@@ -432,7 +432,7 @@ QString HootApiDb::_escapeTags(const Tags& tags)
   return hstoreStr;
 }
 
-QString HootApiDb::execToString(QString sql, QVariant v1, QVariant v2, QVariant v3)
+QString HootApiDb::execToString(QString sql, QVariant v1, QVariant v2, QVariant v3) const
 {
   QSqlQuery q = _exec(sql, v1, v2, v3);
 
@@ -452,7 +452,7 @@ QString HootApiDb::execToString(QString sql, QVariant v1, QVariant v2, QVariant 
   return l.join("\n");
 }
 
-void HootApiDb::_flushBulkInserts()
+void HootApiDb::_flushBulkInserts() const
 {
   LOG_TRACE("Flushing bulk inserts...");
 
@@ -478,7 +478,7 @@ void HootApiDb::_flushBulkInserts()
   }
 }
 
-void HootApiDb::_flushBulkDeletes()
+void HootApiDb::_flushBulkDeletes() const
 {
   LOG_TRACE("Flushing bulk deletes...");
 
@@ -985,7 +985,7 @@ void HootApiDb::setMapId(const long sessionMapId)
   LOG_DEBUG("Map ID updated to " + QString::number(_currMapId));
 }
 
-long HootApiDb::_insertRecord(QSqlQuery& query)
+long HootApiDb::_insertRecord(QSqlQuery& query) const
 {
   if (query.exec() == false)
   {
@@ -1070,7 +1070,7 @@ bool HootApiDb::isSupported(const QUrl& url)
   return valid;
 }
 
-void HootApiDb::_lazyFlushBulkInsert()
+void HootApiDb::_lazyFlushBulkInsert() const
 {
   bool flush = false;
 
@@ -1518,7 +1518,7 @@ set<long> HootApiDb::getFolderIdsAssociatedWithMap(const long mapId)
   return result;
 }
 
-void HootApiDb::_deleteFolderMapMappingsByMapId(const long mapId)
+void HootApiDb::_deleteFolderMapMappingsByMapId(const long mapId) const
 {
   _exec(
     "DELETE FROM " + getFolderMapMappingsTableName() +

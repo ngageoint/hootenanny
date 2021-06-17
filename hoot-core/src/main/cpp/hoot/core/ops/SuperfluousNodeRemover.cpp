@@ -141,7 +141,7 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
     _numProcessed += nodeIds.size();
 
     _numProcessed++;
-    if (_numProcessed % _taskStatusUpdateInterval == 0)
+    if ((_numProcessed % (_taskStatusUpdateInterval * 100) == 0) && _numProcessed != 0)
     {
       PROGRESS_INFO(
         "Exempted " << StringUtils::formatLargeNumber(_usedNodeIds.size()) <<
@@ -209,7 +209,7 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
     }
     _numProcessed++;
 
-    if (_numProcessed % _taskStatusUpdateInterval == 0 && _numProcessed != 0)
+    if ((_numProcessed % (_taskStatusUpdateInterval * 100) == 0) && _numProcessed != 0)
     {
       PROGRESS_INFO(
         "Exempted " << StringUtils::formatLargeNumber(_usedNodeIds.size()) <<

@@ -167,7 +167,9 @@ tds70.rules = {
     'ZSAX_RX0':'security:dissemination_control:ic', // Restriction Information : Security Attributes Group <resource dissemination controls>
     'ZSAX_RX3':'security:dissemination_control:non_ic', // Restriction Information : Security Attributes Group <resource non-intelligence community markings>
     'ZSAX_RX4':'security:resource_owner', // Restriction Information : Security Attributes Group <resource owner-producer>
-    'image_id':'source:imagery:id', // Image_id - non-spec
+    'image_id':'source:imagery:id', // iamge layer name - non-spec
+    'img_layer':'source:imagery:layerName', // Image_id - non-spec
+    'img_mosaic':'source:imagery:mosaic', // Is this an image mosaic? - non-spec
     'legacy_id':'source:imagery:legacy_id', // Image_id - non-spec    'img_layer':'source:imagery:layerName', // Layer name - non-spec
     'early_date':'source:imagery:earliestDate', // Earliest image in a mosaic - non-spec
     'late_date':'source:imagery:latestDate', // Latest image in a mosaic - non-spec

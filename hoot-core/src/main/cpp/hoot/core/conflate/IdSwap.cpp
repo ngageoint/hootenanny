@@ -62,7 +62,7 @@ IdSwap::iterator IdSwap::end()
   return _idMap.end();
 }
 
-size_t IdSwap::size()
+size_t IdSwap::size() const
 {
   //  Total # of elements to be swapped
   return _idMap.size();

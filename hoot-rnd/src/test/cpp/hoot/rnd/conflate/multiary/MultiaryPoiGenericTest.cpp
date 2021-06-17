@@ -74,15 +74,15 @@ public:
     foo["name"] = "foo";
     foo["alt_name"] = "bar";
     foo["hoot:hash"] = "AAA";
-    TestUtils::createNode(map, Status::fromInput(0), 0, 0, 15, foo);
+    TestUtils::createNode(map, "", Status::fromInput(0), 0.0, 0.0, 15.0, foo);
 
     foo["alt_name"] = "baz";
     foo["hoot:hash"] = "BBB";
-    TestUtils::createNode(map, Status::fromInput(1), 5, 0, 15, foo);
+    TestUtils::createNode(map, "", Status::fromInput(1), 5.0, 0.0, 15.0, foo);
 
     foo["alt_name"] = "qux";
     foo["hoot:hash"] = "CCC";
-    TestUtils::createNode(map, Status::fromInput(1), 10, 0, 15, foo);
+    TestUtils::createNode(map, "", Status::fromInput(1), 10.0, 0.0, 15.0, foo);
 
     MatchFactory::getInstance().reset();
     MatchFactory::getInstance().registerCreator("hoot::ScriptMatchCreator,MultiaryPoi.js");

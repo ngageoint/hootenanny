@@ -430,7 +430,7 @@ void OsmGbdxXmlWriter::_writeRelations(ConstOsmMapPtr map)
   }
 }
 
-void OsmGbdxXmlWriter::_writeBounds(const Envelope& bounds)
+void OsmGbdxXmlWriter::_writeBounds(const Envelope& bounds) const
 {
   _writer->writeStartElement("bounds");
   _writer->writeAttribute("minlat", QString::number(bounds.getMinY(), 'g', _precision));

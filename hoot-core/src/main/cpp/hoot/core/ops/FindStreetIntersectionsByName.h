@@ -85,7 +85,7 @@ private:
   std::shared_ptr<NameCriterion> _nameCrit;
 
   OsmMapPtr _filterRoadsByStreetName(
-    const QString& name, const Status& status, const ConstOsmMapPtr& map);
+    const QString& name, const Status& status, const ConstOsmMapPtr& map) const;
 };
 
 }

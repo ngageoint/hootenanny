@@ -150,7 +150,7 @@ void ChangesetCutOnlyCreator::create(
     LOG_INFO("******************************************");
     LOG_STATUS(
       "Generating " << GeometryTypeCriterion::typeToString(itr.key()) << " diff maps for " <<
-      "changeset derivation with ID: " << _changesetId << ". Pass: " << passCtr << " / " <<
+      "changeset derivation with ID: " << _changesetId << ". Pass: " << passCtr << " of " <<
       refFilters.size() << "...");
 
     OsmMapPtr refMap;
@@ -381,7 +381,8 @@ void ChangesetCutOnlyCreator::_processMaps(
   // TODO: remove this combining
   // Combine the cookie cut ref map back with the secondary map for cleaning purposes.
   MapUtils::combineMaps(cookieCutRefMap, secMap, false);
-  OsmMapWriterFactory::writeDebugMap(cookieCutRefMap, _changesetId + "-combined-before-conflation");
+  OsmMapWriterFactory::writeDebugMap(
+    cookieCutRefMap, className(), _changesetId + "-combined-before-conflation");
   secMap.reset();
   LOG_VARD(cookieCutRefMap->size());
 

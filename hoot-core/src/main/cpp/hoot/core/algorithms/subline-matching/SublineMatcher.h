@@ -44,7 +44,12 @@ public:
 
   static QString className() { return "hoot::SublineMatcher"; }
 
-  SublineMatcher() = default;
+  SublineMatcher() :
+  _minSplitSize(ConfigOptions().getWayMergerMinSplitSize()),
+  _maxRelevantAngle(ConfigOptions().getWayMatcherMaxAngle()),
+  _headingDelta(ConfigOptions().getWayMatcherHeadingDelta())
+  {
+  }
   virtual ~SublineMatcher() = default;
 
   /**
@@ -52,14 +57,25 @@ public:
    *  based on the CE of the inputs. If set to -1 then the value is derived based on the CE of the
    *  input ways.
    */
-  virtual WaySublineMatchString findMatch(const ConstOsmMapPtr& map, const ConstWayPtr& way1,
-    const ConstWayPtr& way2, double& score, Meters maxRelevantDistance = -1) const = 0;
+  virtual WaySublineMatchString findMatch(
+    const ConstOsmMapPtr& map, const ConstWayPtr& way1, const ConstWayPtr& way2, double& score,
+    Meters maxRelevantDistance = -1) const = 0;
 
-  virtual void setMaxRelevantAngle(Radians r) = 0;
-  virtual void setMinSplitSize(Meters minSplitSize) = 0;
-  virtual void setHeadingDelta(Meters headingDelta) = 0;
+  Meters getMinSplitSize() const { return _minSplitSize; }
+  Meters getMaxRelevantAngle() const { return _maxRelevantAngle; }
+  Meters getHeadingDelta() const { return _headingDelta; }
+
+  void setMaxRelevantAngle(Radians angle) { _maxRelevantAngle = angle; }
+  void setMinSplitSize(Meters minSplitSize) { _minSplitSize = minSplitSize; }
+  void setHeadingDelta(Meters headingDelta) { _headingDelta = headingDelta; }
 
   QString toString() const override { return ""; }
+
+protected:
+
+  Meters _minSplitSize;
+  Radians _maxRelevantAngle;
+  Meters _headingDelta;
 };
 
 using SublineMatcherPtr = std::shared_ptr<SublineMatcher>;

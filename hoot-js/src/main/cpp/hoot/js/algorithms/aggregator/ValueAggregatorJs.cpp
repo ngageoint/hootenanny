@@ -45,10 +45,12 @@ HOOT_JS_REGISTER(ValueAggregatorJs)
 
 Persistent<Function> ValueAggregatorJs::_constructor;
 
-void ValueAggregatorJs::Init(Handle<Object> target)
+void ValueAggregatorJs::Init(Local<Object> target)
 {
   Isolate* current = target->GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
+
   vector<QString> opNames =
     Factory::getInstance().getObjectNamesByBase(ValueAggregator::className());
 
@@ -59,15 +61,13 @@ void ValueAggregatorJs::Init(Handle<Object> target)
 
     // Prepare constructor template
     Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
-    tpl->SetClassName(String::NewFromUtf8(current, opNames[i].toStdString().data()));
+    tpl->SetClassName(String::NewFromUtf8(current, opNames[i].toStdString().data()).ToLocalChecked());
     tpl->InstanceTemplate()->SetInternalFieldCount(2);
     // Prototype
-    tpl->PrototypeTemplate()->Set(
-      PopulateConsumersJs::baseClass(),
-      String::NewFromUtf8(current, ValueAggregator::className().toStdString().data()));
+    tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(), toV8(ValueAggregator::className()));
 
-    Persistent<Function> constructor(current, tpl->GetFunction());
-    target->Set(String::NewFromUtf8(current, n), ToLocal(&constructor));
+    Persistent<Function> constructor(current, tpl->GetFunction(context).ToLocalChecked());
+    target->Set(context, toV8(n), ToLocal(&constructor));
   }
 }
 

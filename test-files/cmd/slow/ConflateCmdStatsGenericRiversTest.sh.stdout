@@ -1,30 +1,32 @@
-16:45:47.390 STATUS .../cpp/hoot/core/cmd/DiffCmd.cpp( 114) Comparing ...st/generic-rivers-out.osm and ...st/generic-rivers-out.osm...
-16:45:47.413 STATUS .../cpp/hoot/core/cmd/DiffCmd.cpp( 149) Map difference calculated in 00:00 total.
+17:43:53.084 STATUS .../cpp/hoot/core/cmd/DiffCmd.cpp( 114) Comparing ...st/generic-rivers-out.osm and ...st/generic-rivers-out.osm...
+17:43:53.105 STATUS .../cpp/hoot/core/cmd/DiffCmd.cpp( 149) Map difference calculated in 00:00 total.
 stats = (stat) OR (input map 1 stat) (input map 2 stat) (output map stat)
-Nodes	338	176	407	
-Ways	14	15	52	
+Nodes	338	176	432	
+Ways	14	15	32	
 Relations	0	0	0	
 Least Nodes in a Way	3	2	2	
-Most Nodes in a Way	66	26	68	
-Average Nodes Per Way	24	12	9	
-Total Way Nodes	348	187	488	
+Most Nodes in a Way	66	26	69	
+Average Nodes Per Way	24	12	14	
+Total Way Nodes	348	187	468	
 Least Members in a Relation	0	0	0	
 Most Members in a Relation	0	0	0	
 Average Members Per Relation	0	0	0	
 Total Relation Members	0	0	0	
+Unique Feature Tags	22	18	44	
+Unique Feature Tag Keys	6	4	13	
 Least Tags on a Feature	4	3	1	
 Most Tags on a Feature	6	4	9	
-Average Tags Per Feature	5	3	4	
+Average Tags Per Feature	5	3	5	
 Least Information Tags on a Feature	3	3	1	
 Most Information Tags on a Feature	5	4	8	
-Average Information Tags Per Feature	4.142857142857143	3.133333333333333	4.461538461538462	
-Features with Names	4	2	16	
+Average Information Tags Per Feature	4.142857142857143	3.133333333333333	5.03125	
+Features with Names	4	2	11	
 Multi-Use Features	0	0	0	
 Features with Addresses	0	0	0	
 Total Addresses	0	0	0	
 Features with Phone Numbers	0	0	0	
 Total Phone Numbers	0	0	0	
-Total Features	14	15	52	
+Total Features	14	15	32	
 Total Conflatable Features	14	15	0	
 Percentage of Total Features Conflatable	100	100	0	
 Untagged Features	0	0	0	
@@ -32,47 +34,47 @@ Total Unconflatable Features	0	0	0
 Percentage of Total Features Unconflatable	0	0	0	
 Match Creators	1	1	1	
 Features Conflatable by: hoot::ScriptMatchCreator,River.js	14	15	0	
-Total Conflated Features	0	0	11	
-Percentage of Total Features Conflated	0	0	21.15384615384615	
+Total Conflated Features	0	0	15	
+Percentage of Total Features Conflated	0	0	46.875	
 Total Features Marked for Review	0	0	0	
 Percentage of Total Features Marked for Review	0	0	0	
 Total Reviews to be Made	0	0	0	
-Total Unmatched Features	14	15	41	
-Percentage of Total Features Unmatched	100	100	78.84615384615384	
-Total Unmatched Features From Map 1	14	0	6	
-Percentage of Total Features Unmatched From Map 1	100	0	11.53846153846154	
-Total Unmatched Features From Map 2	0	15	35	
-Percentage of Total Features Unmatched From Map 2	0	100	67.30769230769231	
-Waterways	14	15	52	
-Conflatable Waterways	14	15	0	
-Conflated Waterways	0	0	11	
-Waterways Marked for Review	0	0	0	
-Waterway Reviews to be Made	0	0	0	
-Unmatched Waterways	14	15	41	
-Unmatched Waterways From Map 1	14	0	6	
-Unmatched Waterways From Map 2	0	15	35	
-Total Meters of Waterways	26027.07173885541	25763.06593050528	35077.21074569128	
-Meters of Conflated Waterways	0	0	11178.11346457614	
-Meters of Unmatched Waterways From Map 1	26027.07173885541	0	14848.95827299593	
-Meters of Unmatched Waterways From Map 2	0	25763.06593050528	9050.139008119211	
-Percentage of Waterways Conflated	0	0	21.15384615384615	
-Percentage of Waterways Marked for Review	0	0	0	
-Percentage of Unmatched Waterways From Map 1	100	0	11.53846153846154	
-Percentage of Unmatched Waterways From Map 2	0	100	67.30769230769231	
-Percentage of Unmatched Waterways	100	100	78.84615384615384	
-Translated Populated Tags	14	92	344	
-Difference Between Total Features in Output and Total Features in Inputs			23	
-Percentage Difference Between Total Features in Output and Total Features in Inputs			79.31034482758621	
-Percentage of Number of Total Map 1 Features Matched With Map 2 Features			78.57142857142857	
-Percentage of Number of Total Map 1 Features Not Matched With Map 2 Features			42.85714285714285	
-Percentage of Number of Total Map 2 Features Not Matched With Map 1 Features			233.3333333333333	
-Percentage of Length of Map 1 Waterways Matched With Map 2 Waterways			42.94802572003714	
-Percentage of Length of Map 1 Waterways Not Matched With Map 2 Waterways			57.05197427503207	
-Percentage of Length of Map 2 Waterways Not Matched With Map 1 Waterways			35.12834626333511	
-Calculate Stats for Input 1 Time (sec)				4.553843975067139
-Calculate Stats for Input 2 Time (sec)				0.4833950996398926
-Apply Pre-Conflate Ops Time (sec)				0.01778697967529297
-Apply Post-Conflate Ops Time (sec)				0.01220798492431641
-Calculate Stats for Output Time (sec)				0.462932825088501
+Total Unmatched Features	14	15	17	
+Percentage of Total Features Unmatched	100	100	53.125	
+Total Unmatched Features From Map 1	14	0	0	
+Percentage of Total Features Unmatched From Map 1	100	0	0	
+Total Unmatched Features From Map 2	0	15	17	
+Percentage of Total Features Unmatched From Map 2	0	100	53.125	
+Rivers	14	15	32	
+Conflatable Rivers	14	15	0	
+Conflated Rivers	0	0	15	
+Rivers Marked for Review	0	0	0	
+River Reviews to be Made	0	0	0	
+Unmatched Rivers	14	15	17	
+Unmatched Rivers From Map 1	14	0	0	
+Unmatched Rivers From Map 2	0	15	17	
+Total Meters of Rivers	26027.07173885541	25763.06593050528	37940.73971944653	
+Meters of Conflated Rivers	0	0	26027.0717380188	
+Meters of Unmatched Rivers From Map 1	26027.07173885541	0	0	
+Meters of Unmatched Rivers From Map 2	0	25763.06593050528	11913.66798142773	
+Percentage of Rivers Conflated	0	0	46.875	
+Percentage of Rivers Marked for Review	0	0	0	
+Percentage of Unmatched Rivers From Map 1	100	0	0	
+Percentage of Unmatched Rivers From Map 2	0	100	53.125	
+Percentage of Unmatched Rivers	100	100	53.125	
+Translated Populated Tags	14	92	217	
+Difference Between Total Features in Output and Total Features in Inputs			3	
+Percentage Difference Between Total Features in Output and Total Features in Inputs			10.3448275862069	
+Percentage of Number of Total Map 1 Features Matched With Map 2 Features			107.1428571428571	
+Percentage of Number of Total Map 1 Features Not Matched With Map 2 Features			0	
+Percentage of Number of Total Map 2 Features Not Matched With Map 1 Features			113.3333333333333	
+Percentage of Length of Map 1 Rivers Matched With Map 2 Rivers			99.99999999678559	
+Percentage of Length of Map 1 Rivers Not Matched With Map 2 Rivers			0	
+Percentage of Length of Map 2 Rivers Not Matched With Map 1 Rivers			46.24320728582661	
+Calculate Stats for Input 1 Time (sec)				4.449168920516968
+Calculate Stats for Input 2 Time (sec)				0.3791830539703369
+Apply Pre-Conflate Ops Time (sec)				0.01998305320739746
+Apply Post-Conflate Ops Time (sec)				0.006325960159301758
+Calculate Stats for Output Time (sec)				0.9953098297119141
 
-16:45:47.048 STATUS ...pp/hoot/core/util/Progress.cpp(  86) Conflate (100%): Conflation job completed in 00:05 for reference map: ...NIGS_Rivers_REF1-cropped-2.osm and secondary map: ...waterway_ss_REF2-cropped-2.osm and written to output: ...atsTest/generic-rivers-out.osm
+17:43:52.687 STATUS ...pp/hoot/core/util/Progress.cpp(  86) Conflate (100%): Conflation job completed in 00:05 for reference map: ...NIGS_Rivers_REF1-cropped-2.osm and secondary map: ...waterway_ss_REF2-cropped-2.osm and written to output: ...atsTest/generic-rivers-out.osm

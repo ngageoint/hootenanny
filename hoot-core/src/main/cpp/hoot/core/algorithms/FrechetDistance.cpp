@@ -84,7 +84,7 @@ FrechetDistance::FrechetDistance(const ConstOsmMapPtr &map, const ConstWayPtr &w
   _matrix = calculateMatrix();
 }
 
-frechet_matrix FrechetDistance::calculateMatrix()
+frechet_matrix FrechetDistance::calculateMatrix() const
 {
   int rows = _ls1->getNumPoints();
   int cols = _ls2->getNumPoints();
@@ -155,12 +155,12 @@ Radians FrechetDistance::getHeadingWay2(int index)
   return getHeading(_w2, index);
 }
 
-Radians FrechetDistance::getHeading(WayPtr way, int index)
+Radians FrechetDistance::getHeading(WayPtr way, int index) const
 {
   return getHeadingAvg(way, index);
 }
 
-Radians FrechetDistance::getHeadingSimple(WayPtr way, int index)
+Radians FrechetDistance::getHeadingSimple(WayPtr way, int index) const
 {
   //  Setup the indices to check between
   int index1 = index;
@@ -197,7 +197,7 @@ Radians FrechetDistance::getHeadingSimple(WayPtr way, int index)
     return WayHeading::calculateHeading(WayLocation(_map, way, index, 0), 0.5);
 }
 
-Radians FrechetDistance::getHeadingAvg(WayPtr way, int index)
+Radians FrechetDistance::getHeadingAvg(WayPtr way, int index) const
 {
   //  Get the average of the previous, current, and next headings if possible
   int start = index - 1;

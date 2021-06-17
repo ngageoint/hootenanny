@@ -66,51 +66,6 @@ public:
   { return "Scores the performance of multiary-poi-conflate against a manually matched map (experimental) "; }
   QString getType() const override { return "rnd"; }
 
-
-  QString evaluateThreshold(OsmMapPtr map, QString output,
-    std::shared_ptr<MatchThreshold> mt, bool showConfusion)
-  {
-    MultiaryMatchComparator comparator;
-    comparator.setTranslationScript(_translator);
-
-    QString result;
-
-    OsmMapPtr copy(new OsmMap(map));
-
-    // Apply any user specified operations.
-    OpExecutor(ConfigOptions().getConflatePreOps()).apply(copy);
-
-    MultiaryUtilities::conflate(copy);
-    // Apply any user specified operations.
-    OpExecutor(ConfigOptions().getConflatePostOps()).apply(copy);
-
-    comparator.evaluateMatches(map, copy);
-
-    MapProjector::projectToWgs84(copy);
-    IoUtils::saveMap(copy, output);
-    OsmXmlWriter writer;
-    writer.setIncludeHootInfo(true);
-    writer.write(copy, output);
-
-    if (showConfusion)
-    {
-      if (mt)
-      {
-        cout << "Threshold: " << mt->toString() << endl;
-      }
-      cout << comparator.toString() /*<< endl*/;
-    }
-    QString line = QString("%1,%2,%3,%4\n").arg(-1)
-        .arg(comparator.getPercentCorrect())
-        .arg(comparator.getPercentWrong())
-        .arg(comparator.getPercentUnnecessaryReview());
-    result += line;
-
-    cout << "F1 Score: " << comparator.getFScore(1) << endl;
-
-    return result;
-  }
-
   int runSimple(QStringList& args) override
   {
     QElapsedTimer timer;
@@ -168,7 +123,6 @@ public:
 
     QString output = args.last();
     OsmMapPtr map(new OsmMap());
-
     for (int i = 0; i < args.size() - 1; i++)
     {
       Status s = Status::fromInput(i);
@@ -183,9 +137,8 @@ public:
     MapProjector::projectToPlanar(map);
 
     // Apparently, multiary will allow with > 1.0 review thresholds.
-    std::shared_ptr<MatchThreshold> mt =
-      std::make_shared<MatchThreshold>(MatchThreshold(0.5, 0.5, 1.0, false));
-    QString result = evaluateThreshold(map, output, mt, showConfusion);
+    std::shared_ptr<MatchThreshold> mt = std::make_shared<MatchThreshold>(0.5, 0.5, 1.0, false);
+    QString result = _evaluateThreshold(map, output, mt, showConfusion);
 
     cout << result;
 
@@ -196,8 +149,52 @@ public:
   }
 
 private:
+
   QString _translator;
 
+  QString _evaluateThreshold(OsmMapPtr map, QString output,
+    std::shared_ptr<MatchThreshold> mt, bool showConfusion) const
+  {
+    MultiaryMatchComparator comparator;
+    comparator.setTranslationScript(_translator);
+
+    QString result;
+    OsmMapPtr copy(new OsmMap(map));
+
+    // Apply any user specified operations.
+    OpExecutor(ConfigOptions().getConflatePreOps()).apply(copy);
+
+    MultiaryUtilities::conflate(copy);
+
+    // Apply any user specified operations.
+    OpExecutor(ConfigOptions().getConflatePostOps()).apply(copy);
+
+    comparator.evaluateMatches(map, copy);
+
+    MapProjector::projectToWgs84(copy);
+    IoUtils::saveMap(copy, output);
+    OsmXmlWriter writer;
+    writer.setIncludeHootInfo(true);
+    writer.write(copy, output);
+
+    if (showConfusion)
+    {
+      if (mt)
+      {
+        cout << "Threshold: " << mt->toString() << endl;
+      }
+      cout << comparator.toString() /*<< endl*/;
+    }
+    QString line = QString("%1,%2,%3,%4\n").arg(-1)
+        .arg(comparator.getPercentCorrect())
+        .arg(comparator.getPercentWrong())
+        .arg(comparator.getPercentUnnecessaryReview());
+    result += line;
+
+    cout << "F1 Score: " << comparator.getFScore(1) << endl;
+
+    return result;
+  }
 };
 
 HOOT_FACTORY_REGISTER(Command, MultiaryScorePoiMatchesCmd)

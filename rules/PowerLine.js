@@ -7,21 +7,21 @@
 exports.description = "Matches power lines";
 exports.experimental = false;
 exports.baseFeatureType = "PowerLine";
+exports.geometryType = "line";
 
 exports.candidateDistanceSigma = 1.0; // 1.0 * (CE95 + Worst CE95);
 exports.matchThreshold = parseFloat(hoot.get("power.line.match.threshold"));
 exports.missThreshold = parseFloat(hoot.get("power.line.miss.threshold"));
 exports.reviewThreshold = parseFloat(hoot.get("power.line.review.threshold"));
-exports.geometryType = "line";
 
-// This is needed for disabling superfluous conflate ops. In the future, it may also
-// be used to replace exports.isMatchCandidate (see #3047).
+// This is needed for disabling superfluous conflate ops and calculating a search radius only.
+// exports.isMatchCandidate handles culling match candidates.
 exports.matchCandidateCriterion = "hoot::PowerLineCriterion";
 
-var sublineMatcher =
-  new hoot.MaximalSublineStringMatcher(
-    { "way.matcher.max.angle": hoot.get("power.line.matcher.max.angle"),
-      "way.subline.matcher": hoot.get("power.line.subline.matcher") });
+// We're just using the default max recursions here for MaximalSubline. May need to come up with a
+// custom value via empirical testing. This will not work if we ever end up needing to pass map in
+// here for this data type.
+var sublineStringMatcher = hoot.SublineStringMatcherFactory.getMatcher(exports.baseFeatureType);
 
 var centroidDistanceExtractor = new hoot.CentroidDistanceExtractor();
 var edgeDistanceExtractor1 = new hoot.EdgeDistanceExtractor(new hoot.MeanAggregator());
@@ -108,7 +108,12 @@ exports.matchScore = function(map, e1, e2)
     return result;
   }
 
-  var sublines = sublineMatcher.extractMatchingSublines(map, e1, e2);
+  // Extract the sublines needed for matching.
+
+  var sublines;
+  hoot.trace("Extracting sublines with default...");
+  sublines = sublineStringMatcher.extractMatchingSublines(map, e1, e2);
+  hoot.trace(sublines);
   if (sublines)
   {
     var m = sublines.map;
@@ -192,7 +197,7 @@ exports.mergeSets = function(map, pairs, replaced)
 {
   // snap the ways in the second input to the first input. Use the default tag
   // merge method.
-  return new hoot.LinearMerger().apply(sublineMatcher, map, pairs, replaced, exports.baseFeatureType);
+  return new hoot.LinearMerger().apply(sublineStringMatcher, map, pairs, replaced, exports.baseFeatureType);
 };
 
 exports.getMatchFeatureDetails = function(map, e1, e2)

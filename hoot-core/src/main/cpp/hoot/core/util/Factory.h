@@ -68,8 +68,8 @@ class ObjectCreatorTemplate : public ObjectCreator
 {
 public:
 
-  ObjectCreatorTemplate(QString baseName, QString name)
-    : _name(name), _baseName(baseName)
+  ObjectCreatorTemplate(QString baseName, QString name) :
+  _name(name), _baseName(baseName)
   {
   }
 
@@ -85,12 +85,12 @@ public:
   }
 
   QString getBaseName() const override { return _baseName; }
-
   QString getName() const override { return _name; }
 
 private:
 
-  QString _name, _baseName;
+  QString _name;
+  QString _baseName;
 };
 
 /**
@@ -150,7 +150,7 @@ public:
 
   std::vector<QString> getObjectNamesByBase(const QString& baseName);
 
-  bool hasClass(const QString& name);
+  bool hasClass(const QString& name) const;
 
   /**
    * Register an object creator.

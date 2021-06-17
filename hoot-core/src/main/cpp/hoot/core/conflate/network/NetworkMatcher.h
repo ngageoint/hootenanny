@@ -86,7 +86,7 @@ protected:
 
   void _createVertex2Index();
 
-  Tgs::IntersectionIterator _createIterator(const geos::geom::Envelope& env, Tgs::HilbertRTreePtr tree);
+  Tgs::IntersectionIterator _createIterator(const geos::geom::Envelope& env, Tgs::HilbertRTreePtr tree) const;
 };
 
 using NetworkMatcherPtr = std::shared_ptr<NetworkMatcher>;

@@ -205,10 +205,9 @@ void LinearMergerAbstract::_removeSpans(const ElementPtr& e1, const ElementPtr& 
     }
   }
 
-  if (ConfigOptions().getDebugMapsWrite() && ConfigOptions().getDebugMapsWriteDetailed())
+  if (ConfigOptions().getDebugMapsWriteDetailed())
   {
-    OsmMapWriterFactory::writeDebugMap(
-      _map, "LinearMergerAbstract-after-remove-spans" + _eidLogString);
+    OsmMapWriterFactory::writeDebugMap(_map, className(), "after-remove-spans" + _eidLogString);
   }
 }
 

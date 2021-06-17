@@ -45,13 +45,12 @@ public:
   static QString className() { return "hoot::HighwayCriterion"; }
 
   HighwayCriterion() = default;
-  HighwayCriterion(ConstOsmMapPtr map) : _map(map) { }
+  HighwayCriterion(ConstOsmMapPtr map);
   ~HighwayCriterion() = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
 
-  GeometryType getGeometryType() const override
-  { return GeometryType::Line; }
+  GeometryType getGeometryType() const override { return GeometryType::Line; }
 
   ElementCriterionPtr clone() override { return ElementCriterionPtr(new HighwayCriterion()); }
 

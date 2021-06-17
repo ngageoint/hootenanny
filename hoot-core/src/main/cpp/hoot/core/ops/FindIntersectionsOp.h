@@ -55,16 +55,14 @@ public:
 
   void apply(std::shared_ptr<OsmMap>& map) override;
 
-  QString getDescription() const override { return "Identifies generic intersections"; }
-
   /**
    *  Pure virtual function called by constructor to create the intersection visitor
    */
   virtual std::shared_ptr<FindIntersectionsVisitor> createVisitor() = 0;
 
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+  QString getDescription() const override { return "Identifies generic intersections"; }
 };
 
 /**
@@ -79,13 +77,11 @@ public:
 
   static QString className() { return "hoot::FindHighwayIntersectionsOp"; }
 
-  QString getDescription() const override { return "Identifies highway intersections"; }
-
   std::shared_ptr<FindIntersectionsVisitor> createVisitor() override;
 
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+  QString getDescription() const override { return "Identifies highway intersections"; }
 };
 
 /**
@@ -100,13 +96,11 @@ public:
 
   static QString className() { return "hoot::FindRailwayIntersectionsOp"; }
 
-  QString getDescription() const override { return "Identifies railway intersections"; }
-
   std::shared_ptr<FindIntersectionsVisitor> createVisitor() override;
 
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+  QString getDescription() const override { return "Identifies railway intersections"; }
 };
 
 }

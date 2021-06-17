@@ -112,7 +112,7 @@ namespace Tgs
     int _order;
     bitmask_t* _point;
 
-    bitmask_t bitTranspose(unsigned nDims, unsigned nBits, bitmask_t inCoords)
+    bitmask_t bitTranspose(unsigned nDims, unsigned nBits, bitmask_t inCoords) const
     {
       unsigned const nDims1 = nDims-1;
       unsigned inB = nBits;
@@ -177,7 +177,7 @@ namespace Tgs
      *      nDims*nBits <= (sizeof bitmask_t) * (bits_per_byte)
      */
     bitmask_t
-    hilbert_c2inew(unsigned nDims, unsigned nBits, bitmask_t const coord[])
+    hilbert_c2inew(unsigned nDims, unsigned nBits, bitmask_t const coord[]) const
     {
       if (nDims > 1)
         {

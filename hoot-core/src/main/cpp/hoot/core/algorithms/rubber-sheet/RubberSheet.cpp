@@ -219,18 +219,18 @@ bool RubberSheet::_calcAndApplyTransform(OsmMapPtr& map)
     "Rubber sheeting map having " <<
     StringUtils::formatLargeNumber(map->getWayCount()) << " ways out of a " <<
     StringUtils::formatLargeNumber(_maxAllowedWays) << " maximum allowed for rubber sheeting.");
-  OsmMapWriterFactory::writeDebugMap(map, "rubbersheet-before-transform-calc");
+  OsmMapWriterFactory::writeDebugMap(map, className(), "before-transform-calc");
 
   std::shared_ptr<OGRSpatialReference> oldSrs = _projection;
   bool success = calculateTransform(map);
   _projection = oldSrs;
-  OsmMapWriterFactory::writeDebugMap(map, "rubbersheet-after-calculate-transform");
+  OsmMapWriterFactory::writeDebugMap(map, className(), "after-calculate-transform");
 
   if (success)
   {
     success = applyTransform(map);
     _numAffected = map->getWayCount();
-    OsmMapWriterFactory::writeDebugMap(map, "rubbersheet-after-apply-transform");
+    OsmMapWriterFactory::writeDebugMap(map, className(), "after-apply-transform");
   }
 
   return success;
@@ -241,7 +241,7 @@ void RubberSheet::_filterCalcAndApplyTransform(OsmMapPtr& map)
   // Potentially filtering out potentially multiple feature types here. Not sure if it would be
   // beneficial to rubbersheet each criterion separately...
   LOG_DEBUG("Filtering map before rubbersheeting...");
-  OsmMapWriterFactory::writeDebugMap(map, "rubbersheet-before-filtering");
+  OsmMapWriterFactory::writeDebugMap(map, className(), "before-filtering");
 
   _projection = map->getProjection();
 
@@ -271,7 +271,7 @@ void RubberSheet::_filterCalcAndApplyTransform(OsmMapPtr& map)
     return;
   }
 
-  OsmMapWriterFactory::writeDebugMap(toModify, "rubbersheet-to-modify");
+  OsmMapWriterFactory::writeDebugMap(toModify, className(), "to-modify");
 
   // copy out elements not meeting filter criteria into another map
   OsmMapPtr toNotModify(new OsmMap());
@@ -280,7 +280,7 @@ void RubberSheet::_filterCalcAndApplyTransform(OsmMapPtr& map)
   LOG_DEBUG(
     "Element count for map not being modified: " <<
     StringUtils::formatLargeNumber(toNotModify->getElementCount()));
-  OsmMapWriterFactory::writeDebugMap(toNotModify, "rubbersheet-to-not-modify");
+  OsmMapWriterFactory::writeDebugMap(toNotModify, className(), "to-not-modify");
 
   // run the rubbersheeting on just the elements we want to modify
   if (_calcAndApplyTransform(toModify))
@@ -294,8 +294,8 @@ void RubberSheet::_filterCalcAndApplyTransform(OsmMapPtr& map)
       MapProjector::project(toNotModify, _projection);
       MapProjector::project(toModify, _projection);
     }
-    OsmMapWriterFactory::writeDebugMap(toNotModify, "rubbersheet-to-not-modify-after-reproject");
-    OsmMapWriterFactory::writeDebugMap(toModify, "rubbersheet-to-modify-after-reproject");
+    OsmMapWriterFactory::writeDebugMap(toNotModify, className(), "to-not-modify-after-reproject");
+    OsmMapWriterFactory::writeDebugMap(toModify, className(), "to-modify-after-reproject");
 
     // append what we rubbersheeted back to what we didn't rubbersheet to become the final map
     toNotModify->append(toModify, true);
@@ -303,7 +303,7 @@ void RubberSheet::_filterCalcAndApplyTransform(OsmMapPtr& map)
     map->setRoundabouts(roundabouts);
     LOG_DEBUG(
       "Element count for result map: " << StringUtils::formatLargeNumber(map->getElementCount()));
-    OsmMapWriterFactory::writeDebugMap(map, "rubbersheet-result-map");
+    OsmMapWriterFactory::writeDebugMap(map, className(), "result-map");
   }
 }
 
@@ -357,7 +357,7 @@ bool RubberSheet::applyTransform(std::shared_ptr<OsmMap>& map)
     if (ctr % 1000 == 0)
     {
       PROGRESS_INFO(
-        "Applied rubber sheet transform to " << StringUtils::formatLargeNumber(ctr) << " / " <<
+        "Applied rubber sheet transform to " << StringUtils::formatLargeNumber(ctr) << " of " <<
         StringUtils::formatLargeNumber(nm.size()) << " nodes...");
     }
   }
@@ -434,7 +434,7 @@ std::shared_ptr<Interpolator> RubberSheet::_buildInterpolator(Status s) const
     QElapsedTimer timer;
     timer.start();
     LOG_INFO(
-      "Running rubber sheet interpolator: (" << (i + 1) << " / " <<
+      "Running rubber sheet interpolator: (" << (i + 1) << " of " <<
       candidates.size() << "): " << candidates[i] << "...");
 
     std::shared_ptr<Interpolator> candidate(
@@ -526,7 +526,7 @@ bool RubberSheet::_findTies()
     if (ctr % 1000 == 0)
     {
       PROGRESS_INFO(
-        "Processed intersections for " << StringUtils::formatLargeNumber(ctr) << " / " <<
+        "Processed intersections for " << StringUtils::formatLargeNumber(ctr) << " of " <<
         StringUtils::formatLargeNumber(n2w->size()) << " nodes...");
     }
   }
@@ -558,7 +558,7 @@ bool RubberSheet::_findTies()
     if (ctr % 100 == 0)
     {
       PROGRESS_INFO(
-        "Processed paired intersections for " << StringUtils::formatLargeNumber(ctr) << " / " <<
+        "Processed paired intersections for " << StringUtils::formatLargeNumber(ctr) << " of " <<
         StringUtils::formatLargeNumber(_matches.size()) << " matches...");
     }
   }
@@ -606,7 +606,7 @@ bool RubberSheet::_findTies()
     if (ctr % 100 == 0)
     {
       PROGRESS_INFO(
-        "Potential tie points processed: " << StringUtils::formatLargeNumber(ctr) << " / " <<
+        "Potential tie points processed: " << StringUtils::formatLargeNumber(ctr) << " of " <<
         StringUtils::formatLargeNumber(_finalPairs.size()));
     }
   }

@@ -86,7 +86,7 @@ protected:
 
   Page* _createPage(PageStore* parent, int id, char* data, int size)
   { return new Page(parent, id, data, size); }
-  void _setPageClean(Page * p){p->_setClean();}
+  void _setPageClean(Page * p) const {p->_setClean();}
 
 private:
 

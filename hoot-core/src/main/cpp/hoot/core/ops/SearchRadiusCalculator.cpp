@@ -91,7 +91,7 @@ void SearchRadiusCalculator::apply(std::shared_ptr<OsmMap>& map)
   _calculateSearchRadius(tiePointDistances);
 }
 
-OsmMapPtr SearchRadiusCalculator::_getFilteredMap(const ConstOsmMapPtr& map)
+OsmMapPtr SearchRadiusCalculator::_getFilteredMap(const ConstOsmMapPtr& map) const
 {
   OsmMapPtr filteredMap(new OsmMap());
 
@@ -110,8 +110,6 @@ OsmMapPtr SearchRadiusCalculator::_getFilteredMap(const ConstOsmMapPtr& map)
   {
     // If a match candidate criterion was specified, filter out the remaining elements that don't
     // fit the criterion.
-    // TODO: This logic doesn't support Generic Conflation calling scripts who implement the
-    // isMatchCandidate function. - see #3048
     ElementCriterionPtr candidateCrit(
       Factory::getInstance().constructObject<ElementCriterion>(_elementCriterion));
     crit.reset(new ChainCriterion(unknownCrit, candidateCrit));
@@ -127,7 +125,7 @@ OsmMapPtr SearchRadiusCalculator::_getFilteredMap(const ConstOsmMapPtr& map)
   return filteredMap;
 }
 
-std::vector<double> SearchRadiusCalculator::_getTiePointDistances(OsmMapPtr& map)
+std::vector<double> SearchRadiusCalculator::_getTiePointDistances(OsmMapPtr& map) const
 {
   std::vector<double> tiePointDistances;
   //  First check if there is a cached RubberSheet before creating a new one
@@ -145,9 +143,9 @@ std::vector<double> SearchRadiusCalculator::_getTiePointDistances(OsmMapPtr& map
     }
     catch (const HootException& e)
     {
-      // In many cases, the input map will have already been cleaned by this point...but possibly not
-      // (direct call to the stats command, for example). So, try to clean it and re-run to get around
-      // this error.
+      // In many cases, the input map will have already been cleaned by this point...but possibly
+      // not (direct call to the stats command, for example). So, try to clean it and re-run to get
+      // around this error.
       LOG_DEBUG("Rubber sheeting error: " << e.getWhat());
       LOG_DEBUG(
         "An error occurred calculating the rubber sheet transform during automatic search radius " <<
@@ -198,7 +196,7 @@ void SearchRadiusCalculator::_calculateSearchRadius(const std::vector<double>& t
   }
 }
 
-double SearchRadiusCalculator::_calculateStandardDeviation(const std::vector<double>& samples)
+double SearchRadiusCalculator::_calculateStandardDeviation(const std::vector<double>& samples) const
 {
   double sumSquares = 0.0;
   for (size_t i = 0; i < samples.size(); i++)

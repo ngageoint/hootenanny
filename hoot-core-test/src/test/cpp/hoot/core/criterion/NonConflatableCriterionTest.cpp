@@ -57,24 +57,24 @@ public:
 
     CPPUNIT_ASSERT(
       !uut.isSatisfied(
-        TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0, 15.0, Tags("poi", "yes"))));
+        TestUtils::createNode(map, "", Status::Unknown1, 0.0, 0.0, 15.0, Tags("poi", "yes"))));
 
     CPPUNIT_ASSERT(
       !uut.isSatisfied(
-        TestUtils::createWay(map, wayCoords, Status::Unknown1, 15.0, Tags("building", "yes"))));
+        TestUtils::createWay(map, wayCoords, "", Status::Unknown1, 15.0, Tags("building", "yes"))));
 
     // Untyped feature are now conflatable by default, if NonConflatableCriterion is set to consider
     // the generic geometry conflate scripts.
     CPPUNIT_ASSERT(
       !uut.isSatisfied(
-        TestUtils::createWay(map, wayCoords, Status::Unknown1, 15.0, Tags("blah", "blah"))));
+        TestUtils::createWay(map, wayCoords, "", Status::Unknown1, 15.0, Tags("blah", "blah"))));
 
     // If its set to ignore the generic geometry scripts, then an untyped feature won't be
     // confltable.
     uut.setIgnoreGenericConflators(true);
     CPPUNIT_ASSERT(
       uut.isSatisfied(
-        TestUtils::createWay(map, wayCoords, Status::Unknown1, 15.0, Tags("blah", "blah"))));
+        TestUtils::createWay(map, wayCoords, "", Status::Unknown1, 15.0, Tags("blah", "blah"))));
   }
 };
 

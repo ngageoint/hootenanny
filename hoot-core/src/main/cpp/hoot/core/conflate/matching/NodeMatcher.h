@@ -61,7 +61,7 @@ public:
   /**
    * Returns the degree of a node (number of ways incident to the node)
    */
-  int getDegree(ElementId nid);
+  int getDegree(ElementId nid) const;
 
   /**
    * Returns a score for the confidence that two nodes represent the same intersection. 0 means

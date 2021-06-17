@@ -136,9 +136,9 @@ void ScriptMerger::_applyMergePair(const OsmMapPtr& map,
   Isolate* current = v8::Isolate::GetCurrent();
   HandleScope handleScope(current);
   Context::Scope context_scope(_script->getContext(current));
-  Handle<Value> v = _callMergePair(map);
+  Local<Value> v = _callMergePair(map);
 
-  Handle<Object> o = Handle<Object>::Cast(v);
+  Local<Object> o = Local<Object>::Cast(v);
   ElementJs* newElementJs = ObjectWrap::Unwrap<ElementJs>(o);
   ConstElementPtr newElement = newElementJs->getConstElement();
 
@@ -164,26 +164,27 @@ void ScriptMerger::_applyMergeSets(const OsmMapPtr& map,
 {
   _callMergeSets(map, replaced);
 
-  // verify that all the elements are where they need to be (e.g. were removed from the map or
+  // Verify that all the elements are where they need to be (e.g. were removed from the map or
   // added to the map as needed).
 }
 
-Handle<Value> ScriptMerger::_callMergePair(const OsmMapPtr& map) const
+Local<Value> ScriptMerger::_callMergePair(const OsmMapPtr& map) const
 {
   Isolate* current = v8::Isolate::GetCurrent();
   EscapableHandleScope handleScope(current);
-  Handle<Object> plugin =
-    Handle<Object>::Cast(
-      _script->getContext(current)->Global()->Get(String::NewFromUtf8(current, "plugin")));
-  Handle<Value> value = plugin->Get(String::NewFromUtf8(current, "mergePair"));
+  Local<Context> context = current->GetCurrentContext();
+  Local<Object> plugin =
+    Local<Object>::Cast(
+      _script->getContext(current)->Global()->Get(context, toV8("plugin")).ToLocalChecked());
+  Local<Value> value = plugin->Get(context, toV8("mergePair")).ToLocalChecked();
 
   if (value.IsEmpty() || value->IsFunction() == false)
   {
     throw IllegalArgumentException("The merge function 'mergePair' was not found.");
   }
 
-  Handle<Function> func = Handle<Function>::Cast(value);
-  Handle<Value> jsArgs[3];
+  Local<Function> func = Local<Function>::Cast(value);
+  Local<Value> jsArgs[3];
 
   LOG_VART(map->getElement(_eid1));
   LOG_VART(map->getElement(_eid2));
@@ -192,8 +193,8 @@ Handle<Value> ScriptMerger::_callMergePair(const OsmMapPtr& map) const
   jsArgs[argc++] = ElementJs::New(map->getElement(_eid1));
   jsArgs[argc++] = ElementJs::New(map->getElement(_eid2));
 
-  TryCatch trycatch;
-  Handle<Value> result = func->Call(ToLocal(&_plugin), argc, jsArgs);
+  TryCatch trycatch(current);
+  Local<Value> result = func->Call(context, ToLocal(&_plugin), argc, jsArgs).ToLocalChecked();
   HootExceptionJs::checkV8Exception(result, trycatch);
 
   if (result.IsEmpty() || result == Undefined(current))
@@ -210,26 +211,28 @@ void ScriptMerger::_callMergeSets(const OsmMapPtr& map,
   Isolate* current = v8::Isolate::GetCurrent();
   HandleScope handleScope(current);
   Context::Scope context_scope(_script->getContext(current));
-  Handle<Object> plugin =
-    Handle<Object>::Cast(
-      _script->getContext(current)->Global()->Get(String::NewFromUtf8(current, "plugin")));
-  Handle<Value> value = plugin->Get(String::NewFromUtf8(current, "mergeSets"));
+  Local<Context> context = current->GetCurrentContext();
+
+  Local<Object> plugin =
+    Local<Object>::Cast(
+      _script->getContext(current)->Global()->Get(context, toV8("plugin")).ToLocalChecked());
+  Local<Value> value = plugin->Get(context, toV8("mergeSets")).ToLocalChecked();
 
   if (value.IsEmpty() || value->IsFunction() == false)
   {
     throw IllegalArgumentException("The merge function 'mergeSets' was not found.");
   }
 
-  Handle<Function> func = Handle<Function>::Cast(value);
-  Handle<Value> jsArgs[3];
+  Local<Function> func = Local<Function>::Cast(value);
+  Local<Value> jsArgs[3];
 
   int argc = 0;
   jsArgs[argc++] = OsmMapJs::create(map);
   jsArgs[argc++] = toV8(_pairs);
   jsArgs[argc++] = toV8(replaced);
 
-  TryCatch trycatch;
-  Handle<Value> result = func->Call(ToLocal(&_plugin), argc, jsArgs);
+  TryCatch trycatch(current);
+  Local<Value> result = func->Call(context, ToLocal(&_plugin), argc, jsArgs).ToLocalChecked();
   HootExceptionJs::checkV8Exception(result, trycatch);
 
   // read the replaced values back out
@@ -241,10 +244,10 @@ bool ScriptMerger::hasFunction(QString name) const
   Isolate* current = v8::Isolate::GetCurrent();
   HandleScope handleScope(current);
   Context::Scope context_scope(_script->getContext(current));
-  Handle<Object> plugin =
-    Handle<Object>::Cast(_script->getContext(current)->Global()->Get(
-      String::NewFromUtf8(current, "plugin")));
-  Handle<Value> value = plugin->Get(String::NewFromUtf8(current, name.toUtf8().data()));
+  Local<Context> context = current->GetCurrentContext();
+  Local<Object> plugin =
+    Local<Object>::Cast(_script->getContext(current)->Global()->Get(context, toV8("plugin")).ToLocalChecked());
+  Local<Value> value = plugin->Get(context, toV8(name.toUtf8().data())).ToLocalChecked();
 
   bool result = true;
   if (value.IsEmpty() || value->IsFunction() == false)

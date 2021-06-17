@@ -27,7 +27,7 @@
 #include "MatchScoringMapPreparer.h"
 
 // hoot
-#include <hoot/core/criterion/ElementTypeCriterion.h>
+#include <hoot/core/criterion/NodeCriterion.h>
 #include <hoot/core/criterion/TagCriterion.h>
 #include <hoot/core/criterion/TagKeyCriterion.h>
 #include <hoot/core/ops/MapCleaner.h>
@@ -69,7 +69,7 @@ public:
   QString getClassName() const override { return ""; }
 };
 
-void MatchScoringMapPreparer::prepMap(OsmMapPtr map, const bool removeNodes)
+void MatchScoringMapPreparer::prepMap(OsmMapPtr map, const bool removeNodes) const
 {
   // If an element has a uuid, but no REF1/REF2 tag then create a REF tag with the uuid. Whether its
   // REF1 or REF2 is determined by the unknown status.

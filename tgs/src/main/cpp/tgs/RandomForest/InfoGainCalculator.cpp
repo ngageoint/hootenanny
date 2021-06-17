@@ -38,7 +38,7 @@
 
 namespace Tgs
 {
-  double InfoGainCalculator::_calcLogFunc(double n)
+  double InfoGainCalculator::_calcLogFunc(double n) const
   {
     if (n < std::numeric_limits<double>::epsilon())
     {
@@ -49,7 +49,7 @@ namespace Tgs
   }
 
   double InfoGainCalculator::computeEntropyByClass(DataFrame & df, 
-    std::vector<unsigned int> & indices)
+    std::vector<unsigned int> & indices) const
   {
 //     double entSum = 0;
 //     std::vector<int> popDist;
@@ -76,7 +76,7 @@ namespace Tgs
   }
  
   void InfoGainCalculator::_findCandidateSplits(DataFrame & df, std::vector<unsigned int> & indices, unsigned int fIdx, 
-    std::vector<unsigned int> & splits)
+    std::vector<unsigned int> & splits) const
   {
      splits.clear();
  
@@ -163,7 +163,7 @@ namespace Tgs
 
   double InfoGainCalculator::getMaxInfoGainByFactor(DataFrame & df, 
     std::vector<unsigned int> & indices, unsigned int fIdx, double totalEntropy, 
-    unsigned int & bestSplit)
+    unsigned int & bestSplit) const
   {
     //Indices need to be sorted on the factor to use this as a public function 
 

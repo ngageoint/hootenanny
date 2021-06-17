@@ -56,7 +56,7 @@ namespace Tgs
     *  @param df the source data set
     *  @param indices a list of data vector indices in the data set
     */
-    double computeEntropyByClass(DataFrame & df, std::vector<unsigned int> & indices);
+    double computeEntropyByClass(DataFrame & df, std::vector<unsigned int> & indices) const;
 
     /**
     * Using the list of data vector indices as input this method
@@ -89,7 +89,7 @@ namespace Tgs
     * @return the information gain corresponding to bestSplit
     */
     double getMaxInfoGainByFactor(DataFrame & df, std::vector<unsigned int> & indices, 
-      unsigned int fIdx, double totalEntropy, unsigned int & bestSplit);
+      unsigned int fIdx, double totalEntropy, unsigned int & bestSplit) const;
 
     /**
     * This method looks at a single factor and computes the maximum gain ratio against
@@ -110,7 +110,7 @@ namespace Tgs
     /**
     *  Computes the entropy function -n * log2(n)
     */
-    double _calcLogFunc(double n);
+    double _calcLogFunc(double n) const;
 
     /**
     * This methods takes a subset of data vectors held by indices and finds
@@ -123,7 +123,7 @@ namespace Tgs
     * @param splits the potential splits in the data to consider 
     */
     void _findCandidateSplits(DataFrame & df, std::vector<unsigned int> & indices, 
-      unsigned int fIdx, std::vector<unsigned int> & splits);
+      unsigned int fIdx, std::vector<unsigned int> & splits) const;
 
   };
 }  //End Namespace

@@ -93,7 +93,7 @@ private:
   /*
    * Reads tag keys used to identify tags as addresses
    */
-  void _readAddressTagKeys(const QString& configFile);
+  void _readAddressTagKeys(const QString& configFile) const;
 
   QString _getAddressTag(const Tags& tags, const QString& addressTagType, bool key) const;
 

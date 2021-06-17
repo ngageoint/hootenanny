@@ -245,7 +245,7 @@ void OsmPgCsvWriter::writePartial(const hoot::ConstRelationPtr& r)
   }
 }
 
-QString OsmPgCsvWriter::_getTags(const ConstElementPtr& e)
+QString OsmPgCsvWriter::_getTags(const ConstElementPtr& e) const
 {
   QString buffer;
   QTextStream stream(&buffer);

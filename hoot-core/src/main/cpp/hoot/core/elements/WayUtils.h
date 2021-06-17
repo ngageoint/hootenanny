@@ -161,7 +161,19 @@ public:
    * @param wayCriterion an optional ElementCriterion to further filter the containing ways
    * @return a collection of way IDs
    */
-  static std::set<long> getContainingWayIdsByNodeId(
+  static std::set<long> getContainingWayIds(
+    const long nodeId, const ConstOsmMapPtr& map,
+    const ElementCriterionPtr& wayCriterion = ElementCriterionPtr());
+
+  /**
+   * Returns all ways containing an input node
+   *
+   * @param nodeId ID of the node to return containing ways for
+   * @param map map which owns the input node
+   * @param wayCriterion an optional ElementCriterion to further filter the containing ways
+   * @return a collection of const ways
+   */
+  static std::vector<ConstWayPtr> getContainingWaysConst(
     const long nodeId, const ConstOsmMapPtr& map,
     const ElementCriterionPtr& wayCriterion = ElementCriterionPtr());
 
@@ -173,7 +185,7 @@ public:
    * @param wayCriterion an optional ElementCriterion to further filter the containing ways
    * @return a collection of ways
    */
-  static std::vector<ConstWayPtr> getContainingWaysByNodeId(
+  static std::vector<WayPtr> getContainingWays(
     const long nodeId, const ConstOsmMapPtr& map,
     const ElementCriterionPtr& wayCriterion = ElementCriterionPtr());
 
@@ -185,7 +197,7 @@ public:
    * @param map map which owns the input node
    * @return a unique collection of type key/value pair strings
    */
-  static std::set<QString> getContainingWaysMostSpecificTypesByNodeId(
+  static std::set<QString> getContainingWaysMostSpecificTypes(
     const long nodeId, const ConstOsmMapPtr& map);
 
   /**
@@ -196,7 +208,7 @@ public:
    * @param map map which owns the input node
    * @return a unique collection of type key strings
    */
-  static std::set<QString> getContainingWaysMostSpecificTypeKeysByNodeId(
+  static std::set<QString> getContainingWaysMostSpecificTypeKeys(
     const long nodeId, const ConstOsmMapPtr& map);
 
   /**
@@ -236,6 +248,34 @@ public:
    * @return a collection of ways
    */
   static std::vector<WayPtr> getIntersectingWays(const long wayId, const OsmMapPtr& map);
+
+  /**
+   * Determines the IDs of ways intersecting an input way
+   *
+   * @param wayId the ID of the way to find intersecting ways for
+   * @param map the map containing the input and potentially intersecting ways
+   * @return a collection of IDs
+   */
+  static std::vector<long> getIntersectingWayIds(const long wayId, const OsmMapPtr& map);
+
+  /**
+   * Determines the ways intersecting an input way
+   *
+   * @param wayId the ID of the way to find intersecting ways for
+   * @param map the const map containing the input and potentially intersecting ways
+   * @return a collection of const ways
+   */
+  static std::vector<ConstWayPtr> getIntersectingWaysConst(
+    const long wayId, const ConstOsmMapPtr& map);
+
+  /**
+   * Determines the IDs of ways intersecting an input way
+   *
+   * @param wayId the ID of the way to find intersecting ways for
+   * @param map the const map containing the input and potentially intersecting ways
+   * @return a collection of IDs
+   */
+  static std::vector<long> getIntersectingWayIdsConst(const long wayId, const ConstOsmMapPtr& map);
 
   /**
    * This determines if a node belongs to a way that shares any nodes with another way.

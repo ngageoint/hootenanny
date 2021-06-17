@@ -252,7 +252,7 @@ public:
     RubberSheet uut;
     uut.setReference(true);
     uut.setDebug(true);
-    uut.setCriteria(QStringList("hoot::LinearWaterwayCriterion"), map);
+    uut.setCriteria(QStringList("hoot::RiverCriterion"), map);
     uut.apply(map);
 
     MapProjector::projectToWgs84(map);
@@ -276,7 +276,7 @@ public:
     uut.setReference(true);
     uut.setDebug(true);
     QStringList criteria;
-    criteria.append("hoot::LinearWaterwayCriterion");
+    criteria.append("hoot::RiverCriterion");
     criteria.append("hoot::HighwayCriterion");
     uut.setCriteria(criteria, map);
     uut.apply(map);

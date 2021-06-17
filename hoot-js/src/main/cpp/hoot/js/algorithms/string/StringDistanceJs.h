@@ -38,20 +38,14 @@
 namespace hoot
 {
 
-/**
- *
- */
 class StringDistanceJs : public HootBaseJs
 {
 public:
 
-  static void Init(v8::Handle<v8::Object> target);
-
-  StringDistancePtr getStringDistance() { return _sd; }
-
-  static v8::Handle<v8::Object> New(const StringDistancePtr& sd);
-
+  static void Init(v8::Local<v8::Object> target);
   virtual ~StringDistanceJs() = default;
+
+  StringDistancePtr getStringDistance() const { return _sd; }
 
 private:
 
@@ -61,17 +55,16 @@ private:
   static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
 
   StringDistancePtr _sd;
-  static v8::Persistent<v8::Function> _constructor;
 };
 
-inline void toCpp(v8::Handle<v8::Value> v, StringDistancePtr& p)
+inline void toCpp(v8::Local<v8::Value> v, StringDistancePtr& p)
 {
   if (!v->IsObject())
   {
     throw IllegalArgumentException("Expected an object, got: (" + toJson(v) + ")");
   }
 
-  v8::Handle<v8::Object> obj = v8::Handle<v8::Object>::Cast(v);
+  v8::Local<v8::Object> obj = v8::Local<v8::Object>::Cast(v);
   StringDistanceJs* sdj = nullptr;
   sdj = node::ObjectWrap::Unwrap<StringDistanceJs>(obj);
   if (sdj)
@@ -82,11 +75,6 @@ inline void toCpp(v8::Handle<v8::Value> v, StringDistancePtr& p)
   {
     throw IllegalArgumentException("Expected a StringDistanceJs, got: (" + toJson(v) + ")");
   }
-}
-
-inline v8::Handle<v8::Value> toV8(const StringDistancePtr& sd)
-{
-  return StringDistanceJs::New(sd);
 }
 
 }

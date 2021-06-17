@@ -53,6 +53,8 @@ class ConflateExecutor
 
 public:
 
+  static QString className() { return "hoot::ConflateExecutor"; }
+
   static const QString JOB_SOURCE;
 
   ConflateExecutor();
@@ -71,6 +73,8 @@ public:
   void setDiffConflateSeparateOutput(bool separate) { _diffConflateSeparateOutput = separate; }
   void setDiffRemoveLinearPartialMatchesAsWhole(bool remove)
   { _diffConflator.setRemoveLinearPartialMatchesAsWhole(remove); }
+  void setDiffRemoveRiverPartialMatchesAsWhole(bool remove)
+  { _diffConflator.setRemoveRiverPartialMatchesAsWhole(remove); }
 
   void setOsmApiDbUrl(QString url) { _osmApiDbUrl = url; }
 
@@ -83,7 +87,6 @@ private:
 
   bool _isDiffConflate;
   bool _diffConflateSeparateOutput;
-  bool _diffRemoveLinearPartialMatchesAsWhole;
   DiffConflator _diffConflator;
   ChangesetProviderPtr _pTagChanges;
 
@@ -109,10 +112,10 @@ private:
   Tgs::Timer _taskTimer;
 
   void _initConfig();
-  void _updateConfigOptionsForAttributeConflation();
-  void _updateConfigOptionsForDifferentialConflation();
-  void _updateConfigOptionsForBounds();
-  void _disableRoundaboutRemoval();
+  void _updateConfigOptionsForAttributeConflation() const;
+  void _updateConfigOptionsForDifferentialConflation() const;
+  void _updateConfigOptionsForBounds() const;
+  void _disableRoundaboutRemoval() const;
   void _checkForTagValueTruncationOverride();
 
   void _initTaskCount();

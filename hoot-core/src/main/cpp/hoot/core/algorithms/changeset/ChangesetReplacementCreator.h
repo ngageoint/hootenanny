@@ -89,7 +89,7 @@ private:
    * For any element in the sec dataset with a lower version than the corresponding element in the
    * ref dataset, updates the version of the sec element.
    */
-  void _syncInputVersions(const OsmMapPtr& refMap, const OsmMapPtr& secMap);
+  void _syncInputVersions(const OsmMapPtr& refMap, const OsmMapPtr& secMap) const;
 
   OsmMapPtr _loadAndFilterRefMap(QMap<ElementId, long>& refIdToVersionMappings);
   OsmMapPtr _loadAndFilterSecMap();
@@ -112,17 +112,17 @@ private:
   void _snapUnconnectedWays(
     OsmMapPtr& map, const QStringList& snapWayStatuses, const QStringList& snapToWayStatuses,
     const QString& typeCriterionClassName, const bool markSnappedWays,
-    const QString& debugFileName);
+    const QString& debugFileName) const;
 
   /*
    * Removes all ways from the map with both MetadataTags::HootConnectedWayOutsideBounds() and
    * MetadataTags::HootSnapped() tags
    */
-  void _removeUnsnappedImmediatelyConnectedOutOfBoundsWays(OsmMapPtr& map);
+  void _removeUnsnappedImmediatelyConnectedOutOfBoundsWays(OsmMapPtr& map) const;
 
-  void _snapUnconnectedPreChangesetMapCropping(OsmMapPtr& combinedMap);
+  void _snapUnconnectedPreChangesetMapCropping(OsmMapPtr& combinedMap) const;
   void _snapUnconnectedPostChangesetMapCropping(
-    OsmMapPtr& refMap, OsmMapPtr& combinedMap, OsmMapPtr& immediatelyConnectedOutOfBoundsWays);
+    OsmMapPtr& refMap, OsmMapPtr& combinedMap, OsmMapPtr& immediatelyConnectedOutOfBoundsWays) const;
 
   /*
    * Performs cropping to prepare a map for changeset derivation. This is potentially different
@@ -130,7 +130,7 @@ private:
    */
   void _cropMapForChangesetDerivation(
     OsmMapPtr& map, const bool keepEntireFeaturesCrossingBounds,
-    const bool keepOnlyFeaturesInsideBounds, const QString& debugFileName);
+    const bool keepOnlyFeaturesInsideBounds, const QString& debugFileName) const;
 
   void _generateChangeset(OsmMapPtr& refMap, OsmMapPtr& combinedMap);
 };

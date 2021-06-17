@@ -158,7 +158,7 @@ void HootServicesTranslatorClient::setSourceLanguages(const QStringList& langCod
   _checkLangsAvailable("translatable");
 }
 
-void HootServicesTranslatorClient::_checkLangsAvailable(const QString& type)
+void HootServicesTranslatorClient::_checkLangsAvailable(const QString& type) const
 {
   //request the supported langs info from the service and check the supported langs against our
   //specified source langs
@@ -166,7 +166,7 @@ void HootServicesTranslatorClient::_checkLangsAvailable(const QString& type)
 }
 
 void HootServicesTranslatorClient::_validateAvailableLangs(
-  const std::shared_ptr<boost::property_tree::ptree>& replyObj, const QString& type)
+  const std::shared_ptr<boost::property_tree::ptree>& replyObj, const QString& type) const
 {
   QMap<QString, bool> returnedLangs;
   for (boost::property_tree::ptree::value_type& language : replyObj->get_child("languages"))
@@ -205,7 +205,7 @@ void HootServicesTranslatorClient::_validateAvailableLangs(
   }
 }
 
-QString HootServicesTranslatorClient::_getRequestData(const QString& text)
+QString HootServicesTranslatorClient::_getRequestData(const QString& text) const
 {
   boost::property_tree::ptree requestObj;
   requestObj.put("translator", _translator.toStdString());

@@ -31,6 +31,7 @@
 #include <hoot/core/Hoot.h>
 #include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/ops/OsmMapOperation.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/ConfigDefaults.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ConfPath.h>
@@ -76,7 +77,7 @@ public:
 
     if (is.good() == false)
     {
-      throw HootException(QString("Error reading %1").arg(path));
+      throw IllegalArgumentException(QString("Error reading %1").arg(path));
     }
 
     try
@@ -153,7 +154,7 @@ private:
 
       //  Throw an exception for unrecognized keys
       if (!_s->hasKey(optionName))
-        throw HootException("Unknown JSON setting: (" + optionName + ")");
+        throw IllegalArgumentException("Unknown JSON setting: (" + optionName + ")");
 
       //  Set key/value pair as name and data, data() turns everything to a string
       const QString optionVal = QString::fromUtf8(element.second.data().c_str());
@@ -204,14 +205,15 @@ void Settings::_checkConvert(const QString& key, const QVariant& value, QVariant
 {
   if (value.isNull() || value.canConvert(QVariant::Bool) == false)
   {
-    throw HootException(QString("Unable to convert key: '%1', value: '%2' to %3.")
-      .arg(key).arg(value.toString()).arg(QVariant::typeToName(type)));
+    throw HootException(
+      QString("Unable to convert key: '%1', value: '%2' to %3.")
+        .arg(key).arg(value.toString()).arg(QVariant::typeToName(type)));
   }
 }
 
 void Settings::clear()
 {
-  // this can be very handy when determining why/when settings got cleared.
+  // This can be very handy when determining why/when settings got cleared.
   if (this == _theInstance.get())
   {
     LOG_DEBUG("Clearing global settings.");
@@ -219,29 +221,49 @@ void Settings::clear()
   _settings.clear();
 }
 
+void Settings::_addNamespacePrefixIfClassNameWithout(QString& val)
+{
+  // If the interal factory recognizes this option value as a factory class name and it doesn't have
+  // the global namespace already prepended to it, we'll do that here.
+  if (!val.isEmpty() && !val.startsWith(MetadataTags::HootNamespacePrefix()) &&
+      Factory::getInstance().hasClass(MetadataTags::HootNamespacePrefix() + val))
+  {
+    val.prepend(MetadataTags::HootNamespacePrefix());
+  }
+}
+
+void Settings::_updateClassNamesInList(QStringList& list)
+{
+  QStringList moddedList;
+  for (int i = 0; i < list.size(); i++)
+  {
+    QString val = list.at(i);
+    _addNamespacePrefixIfClassNameWithout(val);
+    moddedList.append(val);
+  }
+  list = moddedList;
+}
+
 QVariant Settings::get(const QString& key) const
 {
   if (hasKey(key) == false)
   {
-    throw HootException("Error finding key: " + key);
+    throw IllegalArgumentException("Error finding option with key: " + key);
   }
   QVariant result = _settings.value(key);
 
   if (result.type() == QVariant::String)
   {
     std::set<QString> used;
-    QString r = _replaceVariables(key, used);
-    result = r;
+    QString val = _replaceVariables(key, used);
+    _addNamespacePrefixIfClassNameWithout(val);
+    result = val;
   }
   return result;
 }
 
 bool Settings::getBool(const QString& key) const
 {
-  if (hasKey(key) == false)
-  {
-    throw HootException("Error finding key: " + key);
-  }
   const QVariant v = get(key);
   _checkConvert(key, v, QVariant::Bool);
   return v.toBool();
@@ -260,10 +282,6 @@ bool Settings::getBool(const QString& key, bool defaultValue) const
 
 double Settings::getDouble(const QString& key) const
 {
-  if (hasKey(key) == false)
-  {
-    throw HootException("Error finding key: " + key);
-  }
   const QVariant v = get(key);
   _checkConvert(key, v, QVariant::Double);
   return v.toDouble();
@@ -317,10 +335,6 @@ Settings& Settings::getInstance()
 
 int Settings::getInt(const QString& key) const
 {
-  if (hasKey(key) == false)
-  {
-    throw HootException("Error finding key: " + key);
-  }
   const QVariant v = get(key);
   _checkConvert(key, v, QVariant::Int);
   return v.toInt();
@@ -355,10 +369,6 @@ int Settings::getInt(const QString& key, int defaultValue, int min, int max) con
 
 long Settings::getLong(const QString& key) const
 {
-  if (hasKey(key) == false)
-  {
-    throw HootException("Error finding key: " + key);
-  }
   const QVariant v = get(key);
   _checkConvert(key, v, QVariant::LongLong);
   return v.toLongLong();
@@ -378,7 +388,6 @@ long Settings::getLong(const QString& key, long defaultValue) const
 long Settings::getLong(const QString& key, long defaultValue, long min, long max) const
 {
   long retVal = getLong(key, defaultValue);
-
   if ( retVal < min )
   {
     retVal = min;
@@ -387,32 +396,29 @@ long Settings::getLong(const QString& key, long defaultValue, long min, long max
   {
     retVal = max;
   }
-
   return retVal;
 }
 
 QStringList Settings::getList(const QString& key) const
 {
-  QString str = getString(key);
-
-  return str.split(";");
+  QStringList list = getString(key).split(";");
+  _updateClassNamesInList(list);
+  return list;
 }
 
 QStringList Settings::getList(const QString& key, const QString& defaultValue) const
 {
-  QString str = getString(key, defaultValue);
-
-  return str.split(";", QString::SkipEmptyParts);
+  QStringList list = getString(key, defaultValue).split(";", QString::SkipEmptyParts);
+  _updateClassNamesInList(list);
+  return list;
 }
 
 QStringList Settings::getList(const QString& key, const QStringList& defaultValue) const
 {
   QStringList result;
-
   if (hasKey(key))
   {
-    QString str = getString(key);
-    result = str.split(";", QString::SkipEmptyParts);
+    result = getString(key).split(";", QString::SkipEmptyParts);
   }
   else
   {
@@ -421,15 +427,12 @@ QStringList Settings::getList(const QString& key, const QStringList& defaultValu
       result.append(_replaceVariablesValue(defaultValue[i]));
     }
   }
+  _updateClassNamesInList(result);
   return result;
 }
 
 QString Settings::getString(const QString& key) const
 {
-  if (hasKey(key) == false)
-  {
-    throw HootException("Error finding key: " + key);
-  }
   return get(key).toString();
 }
 
@@ -497,12 +500,12 @@ void Settings::_validateOperatorRefs(const QStringList& operators)
   {
     QString operatorName = operators[i];
     operatorName = operatorName.remove("\"");
-    LOG_VART(operatorName);
+    LOG_VARD(operatorName);
     const QString errorMsg = "Invalid option operator class name: " + operatorName;
 
-    if (!operatorName.startsWith("hoot::"))
+    if (!operatorName.startsWith(MetadataTags::HootNamespacePrefix()))
     {
-      throw IllegalArgumentException(errorMsg);
+      operatorName.prepend(MetadataTags::HootNamespacePrefix());
     }
 
     // Should either be a visitor, op, or criterion, but we don't know which one, so check for all
@@ -586,7 +589,7 @@ void Settings::parseCommonArguments(QStringList& args)
     {
       if (args.size() < 2)
       {
-        throw HootException("--conf must be followed by a file name.");
+        throw IllegalArgumentException("--conf must be followed by a file name.");
       }
       LOG_DEBUG("Loading " << args[1] << "...");
       conf().loadJson(args[1]);
@@ -637,7 +640,7 @@ void Settings::parseCommonArguments(QStringList& args)
     {
       if (args.size() < 2)
       {
-        throw HootException(optionInputFormatErrorMsg + ": " + args.join(";"));
+        throw IllegalArgumentException(optionInputFormatErrorMsg + ": " + args.join(";"));
       }
 
       QString kv = args[1];
@@ -778,12 +781,12 @@ void Settings::parseCommonArguments(QStringList& args)
     }
   }
 
-  // re-initialize the logger and other resources after the settings have been parsed.
+  // Re-initialize the logger and other resources after the settings have been parsed.
   Hoot::getInstance().reinit();
 }
 
-void Settings::replaceListOptionEntryValues(Settings& settings, const QString& optionName,
-                                            const QStringList& listReplacementEntryValues)
+void Settings::replaceListOptionEntryValues(
+  Settings& settings, const QString& optionName, const QStringList& listReplacementEntryValues)
 {
   LOG_DEBUG(optionName << " before replacement: " << conf().getList(optionName));
   foreach (QString v, listReplacementEntryValues)
@@ -819,9 +822,9 @@ QString Settings::_replaceVariables(const QString& key, std::set<QString> used) 
 {
   if (used.find(key) != used.end())
   {
-    throw HootException("Recursive key in configuration file. (" + key + ")");
+    throw IllegalArgumentException("Recursive key in configuration file. (" + key + ")");
   }
-  // if the variable doesn't exist then it defaults to an empty string.
+  // If the variable doesn't exist, then it defaults to an empty string.
   if (_settings.contains(key) == false)
   {
     return "";
@@ -902,7 +905,7 @@ void Settings::storeJson(const QString& path) const
 
   if (os.good() == false)
   {
-    throw HootException(QString("Error opening %1 for writing.").arg(path));
+    throw IllegalArgumentException(QString("Error opening %1 for writing.").arg(path));
   }
 
   os << toString().toUtf8().constData();
@@ -922,6 +925,15 @@ QString Settings::toString() const
   result += "}\n";
 
   return result;
+}
+
+QString Settings::_markup(QString s) const
+{
+  s.replace("\\", "\\\\");
+  s.replace("\n", "\\n");
+  s.replace("\t", "\\t");
+  s.replace("\"", "\\\"");
+  return s;
 }
 
 }

@@ -47,25 +47,26 @@ namespace hoot
 
 HOOT_JS_REGISTER(RelationMemberUtilsJs)
 
-void RelationMemberUtilsJs::Init(Handle<Object> exports)
+void RelationMemberUtilsJs::Init(Local<Object> exports)
 {
   Isolate* current = exports->GetIsolate();
   HandleScope scope(current);
-  Handle<Object> obj = Object::New(current);
-  exports->Set(String::NewFromUtf8(current, "RelationMemberUtils"), obj);
+  Local<Context> context = current->GetCurrentContext();
+  Local<Object> obj = Object::New(current);
+  exports->Set(context, toV8("RelationMemberUtils"), obj);
 
-  obj->Set(String::NewFromUtf8(current, "isMemberOfRelationWithType"),
-           FunctionTemplate::New(current, isMemberOfRelationWithType)->GetFunction());
-  obj->Set(String::NewFromUtf8(current, "isMemberOfRelationInCategory"),
-           FunctionTemplate::New(current, isMemberOfRelationInCategory)->GetFunction());
-  obj->Set(String::NewFromUtf8(current, "isMemberOfRelationWithTagKey"),
-           FunctionTemplate::New(current, isMemberOfRelationWithTagKey)->GetFunction());
-  obj->Set(String::NewFromUtf8(current, "getNumRelationMemberNodes"),
-           FunctionTemplate::New(current, getNumRelationMemberNodes)->GetFunction());
-  obj->Set(String::NewFromUtf8(current, "relationsHaveConnectedWayMembers"),
-           FunctionTemplate::New(current, relationsHaveConnectedWayMembers)->GetFunction());
-  obj->Set(String::NewFromUtf8(current, "isMemberOfRelationSatisfyingCriterion"),
-           FunctionTemplate::New(current, isMemberOfRelationSatisfyingCriterion)->GetFunction());
+  obj->Set(context, toV8("isMemberOfRelationWithType"),
+           FunctionTemplate::New(current, isMemberOfRelationWithType)->GetFunction(context).ToLocalChecked());
+  obj->Set(context, toV8("isMemberOfRelationInCategory"),
+           FunctionTemplate::New(current, isMemberOfRelationInCategory)->GetFunction(context).ToLocalChecked());
+  obj->Set(context, toV8("isMemberOfRelationWithTagKey"),
+           FunctionTemplate::New(current, isMemberOfRelationWithTagKey)->GetFunction(context).ToLocalChecked());
+  obj->Set(context, toV8("getNumRelationMemberNodes"),
+           FunctionTemplate::New(current, getNumRelationMemberNodes)->GetFunction(context).ToLocalChecked());
+  obj->Set(context, toV8("relationsHaveConnectedWayMembers"),
+           FunctionTemplate::New(current, relationsHaveConnectedWayMembers)->GetFunction(context).ToLocalChecked());
+  obj->Set(context, toV8("isMemberOfRelationSatisfyingCriterion"),
+           FunctionTemplate::New(current, isMemberOfRelationSatisfyingCriterion)->GetFunction(context).ToLocalChecked());
 }
 
 void RelationMemberUtilsJs::isMemberOfRelationWithType(const FunctionCallbackInfo<Value>& args)

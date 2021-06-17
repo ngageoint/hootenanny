@@ -28,15 +28,10 @@
 // Hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/core/io/OsmPbfReader.h>
-#include <hoot/core/io/OsmMapReaderFactory.h>
-#include <hoot/core/visitors/IsSortedVisitor.h>
-#include <hoot/core/util/FileUtils.h>
+#include <hoot/core/elements/SortedElementsValidator.h>
 #include <hoot/core/util/StringUtils.h>
 
 // Qt
-#include <QFile>
-#include <QFileInfo>
 #include <QElapsedTimer>
 
 namespace hoot
@@ -56,58 +51,17 @@ public:
 
   int runSimple(QStringList& args) override
   {
-    QElapsedTimer timer;
-    timer.start();
-
     if (args.size() != 1)
     {
       std::cout << getHelp() << std::endl << std::endl;
       throw HootException(QString("%1 takes one parameter.").arg(getName()));
     }
 
+    QElapsedTimer timer;
+    timer.start();
+
     const QString input = args[0];
-    QFileInfo fileInfo(input);
-    if (!fileInfo.exists())
-    {
-      throw HootException("Specified input: " + input + " does not exist.");
-    }
-
-    LOG_STATUS("Determining if ..." << FileUtils::toLogFormat(input, 25) << " is sorted...");
-
-    bool result = true;
-    if (OsmPbfReader().isSupported(input))
-    {
-      result = OsmPbfReader().isSorted(input);
-    }
-    else
-    {
-      std::shared_ptr<PartialOsmMapReader> reader =
-        std::dynamic_pointer_cast<PartialOsmMapReader>(
-          OsmMapReaderFactory::createReader(input));
-      reader->setUseDataSourceIds(true);
-      reader->open(input);
-      reader->initializePartial();
-
-      IsSortedVisitor vis;
-      while (reader->hasMoreElements())
-      {
-        ElementPtr element = reader->readNextElement();
-        if (element)
-        {
-          vis.visit(element);
-          if (!vis.getIsSorted())
-          {
-            result = false;
-            LOG_VART(result);
-            break;
-          }
-        }
-      }
-
-      reader->finalizePartial();
-      reader->close();
-    }
-
+    const bool result = SortedElementsValidator::validate(input);
     if (result)
     {
       std::cout << input << " is sorted." << std::endl;

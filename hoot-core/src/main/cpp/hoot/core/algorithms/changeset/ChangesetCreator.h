@@ -65,6 +65,8 @@ class ChangesetCreator
 
 public:
 
+  static QString className() { return "hoot::ChangesetCreator"; }
+
   static const QString JOB_SOURCE;
 
   /**
@@ -153,7 +155,7 @@ private:
   bool _inputIsSorted(const QString& input) const;
   bool _inputIsStreamable(const QString& input) const;
 
-  ElementInputStreamPtr _getEmptyInputStream();
+  ElementInputStreamPtr _getEmptyInputStream() const;
 
   // IN MEMORY SORTING BASED METHODS
 
@@ -172,13 +174,13 @@ private:
    */
   void _handleStreamableConvertOpsInMemory(const QString& input1, const QString& input2,
                                            OsmMapPtr& map1, OsmMapPtr& map2, Progress progress);
-  ElementInputStreamPtr _sortElementsInMemory(OsmMapPtr map);
+  ElementInputStreamPtr _sortElementsInMemory(OsmMapPtr map) const;
 
   // EXTERNAL DISK SORTING BASED METHODS
 
   ElementInputStreamPtr _getExternallySortedElements(const QString& input, Progress progress);
-  ElementInputStreamPtr _getFilteredInputStream(const QString& input);
-  ElementInputStreamPtr _sortElementsExternally(const QString& input);
+  ElementInputStreamPtr _getFilteredInputStream(const QString& input) const;
+  ElementInputStreamPtr _sortElementsExternally(const QString& input) const;
 
   /*
    * Runs the two data source streams through a changeset deriver

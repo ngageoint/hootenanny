@@ -74,12 +74,12 @@ public:
     Coordinate c1[] = {
       Coordinate(0.0, 0.0), Coordinate(10.0, 0.0), Coordinate(15.0, 37.0), Coordinate(20.0, 0.0), Coordinate(30.0, 0.0), Coordinate(40.0, 0.0),
       Coordinate::getNull() };
-    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 3, "w1");
+    WayPtr w1 = TestUtils::createWay(map, c1, "w1", Status::Unknown1, 3);
 
     Coordinate c2[] = {
       Coordinate(0.0, 3.0), Coordinate(10.0, 3.0), Coordinate(15.0, 40.0), Coordinate(20.0, 3.0), Coordinate(30.0, 3.0), Coordinate(40.0, 3.0),
       Coordinate::getNull() };
-    WayPtr w2 = TestUtils::createWay(map, Status::Unknown1, c2, 3, "w2");
+    WayPtr w2 = TestUtils::createWay(map, c2, "w2", Status::Unknown1, 3);
 
     FrechetSublineMatcher uut;
     uut.setConfiguration(s);
@@ -100,14 +100,14 @@ public:
     OsmMapPtr map = createMap();
 
     Coordinate c1[] = {
-      Coordinate(0.0, 0.0), Coordinate(10.0, 0.0), Coordinate(20.0, 0.0), Coordinate(30.0, 0.0), Coordinate(40.0, 0.0),
-      Coordinate::getNull() };
-    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 3, "w1");
+      Coordinate(0.0, 0.0), Coordinate(10.0, 0.0), Coordinate(20.0, 0.0), Coordinate(30.0, 0.0),
+      Coordinate(40.0, 0.0), Coordinate::getNull() };
+    WayPtr w1 = TestUtils::createWay(map, c1, "w1", Status::Unknown1, 3);
 
     Coordinate c2[] = {
-      Coordinate(0.0, 3.0), Coordinate(10.0, 3.0), Coordinate(15.0, 40.0), Coordinate(20.0, 3.0), Coordinate(30.0, 3.0), Coordinate(40.0, 3.0),
-      Coordinate::getNull() };
-    WayPtr w2 = TestUtils::createWay(map, Status::Unknown1, c2, 3, "w2");
+      Coordinate(0.0, 3.0), Coordinate(10.0, 3.0), Coordinate(15.0, 40.0), Coordinate(20.0, 3.0),
+      Coordinate(30.0, 3.0), Coordinate(40.0, 3.0), Coordinate::getNull() };
+    WayPtr w2 = TestUtils::createWay(map, c2, "w2", Status::Unknown1, 3);
 
     FrechetSublineMatcher uut;
     uut.setConfiguration(s);

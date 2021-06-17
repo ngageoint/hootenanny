@@ -107,6 +107,18 @@
          "StatCall":"Stat"
       },
       {
+         "name":"Unique Feature Tags",
+         "visitor":"hoot::UniqueTagCounter",
+         "criterion":"",
+         "StatCall":"Stat"
+      },
+      {
+         "name":"Unique Feature Tag Keys",
+         "visitor":"hoot::UniqueTagKeyCounter",
+         "criterion":"",
+         "StatCall":"Stat"
+      },
+      {
          "name":"Total Feature Information Tags",
          "visitor":"hoot::TagCountVisitor",
          "StatCall":"InfoCount"
@@ -389,10 +401,10 @@
          "StatCall":"Stat"
       },
       {
-         "name":"Waterway Translated Populated Tag Percent",
+         "name":"River Translated Populated Tag Percent",
          "visitor":"hoot::SchemaTranslatedTagCountVisitor",
-         "criterion":"hoot::LinearWaterwayCriterion",
-         "filterCriterion":"hoot::LinearWaterwayCriterion",
+         "criterion":"hoot::RiverCriterion",
+         "filterCriterion":"hoot::RiverCriterion",
          "StatCall":"Stat"
       }
    ]

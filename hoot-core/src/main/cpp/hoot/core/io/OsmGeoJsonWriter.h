@@ -159,7 +159,7 @@ protected:
    * @brief _getBbox Create a bounding box array in GeoJSON format
    * @return
    */
-  QString _getBbox();
+  QString _getBbox() const;
 
   /**
    * @brief _buildRoles Iterates all members of relations (recurses super-relations) collecting roles

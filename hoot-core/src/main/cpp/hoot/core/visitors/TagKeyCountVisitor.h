@@ -52,14 +52,12 @@ public:
 
   double getStat() const override { return _keyCount; }
 
-  QString getDescription() const override
-  { return "Counts the number of tags with the given keys"; }
-
   void setConfiguration(const Settings& conf) override;
 
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+  QString getDescription() const override
+  { return "Counts the number of tags with the given keys"; }
 
 private:
 

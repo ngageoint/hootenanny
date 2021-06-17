@@ -57,41 +57,36 @@ void TagsJs::contains(const FunctionCallbackInfo<Value>& args)
   args.GetReturnValue().Set(toV8(t.contains(key)));
 }
 
-void TagsJs::Init(Handle<Object> target)
+void TagsJs::Init(Local<Object> target)
 {
   Isolate* current = v8::Isolate::GetCurrent();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
   // Prepare constructor template
   Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
-  tpl->SetClassName(String::NewFromUtf8(current, Tags::className().toStdString().data()));
+  tpl->SetClassName(String::NewFromUtf8(current, Tags::className().toStdString().data()).ToLocalChecked());
   tpl->InstanceTemplate()->SetInternalFieldCount(1);
   // Prototype
-  tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(),
-    String::NewFromUtf8(current, Tags::className().toStdString().data()));
-  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "contains"),
-      FunctionTemplate::New(current, contains));
-  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "get"),
-      FunctionTemplate::New(current, get));
-  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getInformationCount"),
-      FunctionTemplate::New(current, getInformationCount));
-  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getNames"),
-      FunctionTemplate::New(current, getNames));
-  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "set"),
-      FunctionTemplate::New(current, set));
-  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "toDict"),
-      FunctionTemplate::New(current, toDict));
-  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "toString"),
-      FunctionTemplate::New(current, toString));
+  tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(), toV8(Tags::className()));
+  tpl->PrototypeTemplate()->Set(current, "contains", FunctionTemplate::New(current, contains));
+  tpl->PrototypeTemplate()->Set(current, "get", FunctionTemplate::New(current, get));
+  tpl->PrototypeTemplate()->Set(current, "getInformationCount", FunctionTemplate::New(current, getInformationCount));
+  tpl->PrototypeTemplate()->Set(current, "getNames", FunctionTemplate::New(current, getNames));
+  tpl->PrototypeTemplate()->Set(current, "set", FunctionTemplate::New(current, set));
+  tpl->PrototypeTemplate()->Set(current, "toDict", FunctionTemplate::New(current, toDict));
+  tpl->PrototypeTemplate()->Set(current, "toString", FunctionTemplate::New(current, toString));
 
-  _constructor.Reset(current, tpl->GetFunction());
-  target->Set(String::NewFromUtf8(current, "Tags"), ToLocal(&_constructor));
+  _constructor.Reset(current, tpl->GetFunction(context).ToLocalChecked());
+  target->Set(context, toV8("Tags"), ToLocal(&_constructor));
 }
 
-Handle<Object> TagsJs::New(const Tags& t)
+Local<Object> TagsJs::New(const Tags& t)
 {
-  EscapableHandleScope scope(v8::Isolate::GetCurrent());
+  Isolate* current = v8::Isolate::GetCurrent();
+  EscapableHandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
 
-  Handle<Object> result = ToLocal(&_constructor)->NewInstance();
+  Local<Object> result = ToLocal(&_constructor)->NewInstance(context).ToLocalChecked();
   TagsJs* from = ObjectWrap::Unwrap<TagsJs>(result);
   from->_setTags(t);
 
@@ -113,14 +108,15 @@ void TagsJs::get(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
+  Local<Context> context = current->GetCurrentContext();
 
   Tags& t = ObjectWrap::Unwrap<TagsJs>(args.This())->getTags();
 
-  QString key = str(args[0]->ToString());
+  QString key = str(args[0]->ToString(context).ToLocalChecked());
   if (t.contains(key))
   {
     QString value = t.get(key);
-    args.GetReturnValue().Set(String::NewFromUtf8(current, value.toUtf8().data()));
+    args.GetReturnValue().Set(String::NewFromUtf8(current, value.toUtf8().data()).ToLocalChecked());
   }
   else
   {

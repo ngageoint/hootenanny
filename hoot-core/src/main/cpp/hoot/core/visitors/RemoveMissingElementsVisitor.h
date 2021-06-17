@@ -48,7 +48,7 @@ public:
   ~RemoveMissingElementsVisitor() = default;
 
   void setOsmMap(OsmMap* map) override { _v->setOsmMap(map);}
-  void setOsmMap(const OsmMap* /*map*/)
+  void setOsmMap(const OsmMap* /*map*/) const
   { throw NotImplementedException("Set Map with const is not supported"); }
 
   void visit(const ConstElementPtr& e) override;

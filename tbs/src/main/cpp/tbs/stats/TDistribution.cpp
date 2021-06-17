@@ -73,7 +73,7 @@ TDistribution::TDistribution(const Mat& m)
   initialize(m);
 }
 
-double TDistribution::_calculateDataLogLikelihood(const Mat& m, double v)
+double TDistribution::_calculateDataLogLikelihood(const Mat& m, double v) const
 {
   vector<double> delta(m.rows);
 
@@ -130,7 +130,7 @@ void TDistribution::_calculateNewV(const Mat& m, const vector<double>& EH, const
 }
 
 double TDistribution::_calculateTCost(double v, const vector<double>& EH,
-  const vector<double>& ELogH)
+  const vector<double>& ELogH) const
 {
 // This gives results much closer to expected.
 //  return _calculateDataLogLikelihood(m, v);
@@ -229,7 +229,7 @@ void TDistribution::initialize(const Mat& m)
   }
 }
 
-Mat TDistribution::_log(const Mat& m)
+Mat TDistribution::_log(const Mat& m) const
 {
   Mat result;
   log(m, result);

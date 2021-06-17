@@ -1,9 +1,9 @@
-16:52:26.164 STATUS .../cpp/hoot/core/cmd/DiffCmd.cpp( 114) Comparing ...st/all-data-types-out.osm and ...st/all-data-types-out.osm...
-16:52:26.175 STATUS .../cpp/hoot/core/cmd/DiffCmd.cpp( 149) Map difference calculated in 00:00 total.
+17:45:34.914 STATUS .../cpp/hoot/core/cmd/DiffCmd.cpp( 114) Comparing ...st/all-data-types-out.osm and ...st/all-data-types-out.osm...
+17:45:34.928 STATUS .../cpp/hoot/core/cmd/DiffCmd.cpp( 149) Map difference calculated in 00:00 total.
 stats = (stat) OR (input map 1 stat) (input map 2 stat) (output map stat)
 Nodes	117	116	142	
 Ways	14	12	16	
-Relations	0	0	9	
+Relations	0	0	0	0	9	1	
 Least Nodes in a Way	3	4	3	
 Most Nodes in a Way	33	41	33	
 Average Nodes Per Way	8	10	9	
@@ -12,6 +12,8 @@ Least Members in a Relation	0	0	2
 Most Members in a Relation	0	0	2	
 Average Members Per Relation	0	0	2	
 Total Relation Members	0	0	18	
+Unique Feature Tags	36	28	67	
+Unique Feature Tag Keys	11	9	21	
 Least Tags on a Feature	2	1	0	
 Most Tags on a Feature	4	4	6	
 Average Tags Per Feature	3	2	3	
@@ -109,23 +111,23 @@ Percentage of Buildings Marked for Review	0	0	0
 Percentage of Unmatched Buildings From Map 1	100	0	54.54545454545454	
 Percentage of Unmatched Buildings From Map 2	0	100	9.090909090909092	
 Percentage of Unmatched Buildings	100	100	63.63636363636363	
-Waterways	0	0	0	
-Conflatable Waterways	0	0	0	
-Conflated Waterways	0	0	0	
-Waterways Marked for Review	0	0	0	
-Waterway Reviews to be Made	0	0	0	
-Unmatched Waterways	0	0	0	
-Unmatched Waterways From Map 1	0	0	0	
-Unmatched Waterways From Map 2	0	0	0	
-Total Meters of Waterways	0	0	0	
-Meters of Conflated Waterways	0	0	0	
-Meters of Unmatched Waterways From Map 1	0	0	0	
-Meters of Unmatched Waterways From Map 2	0	0	0	
-Percentage of Waterways Conflated	0	0	0	
-Percentage of Waterways Marked for Review	0	0	0	
-Percentage of Unmatched Waterways From Map 1	0	0	0	
-Percentage of Unmatched Waterways From Map 2	0	0	0	
-Percentage of Unmatched Waterways	0	0	0	
+Rivers	0	0	0	
+Conflatable Rivers	0	0	0	
+Conflated Rivers	0	0	0	
+Rivers Marked for Review	0	0	0	
+River Reviews to be Made	0	0	0	
+Unmatched Rivers	0	0	0	
+Unmatched Rivers From Map 1	0	0	0	
+Unmatched Rivers From Map 2	0	0	0	
+Total Meters of Rivers	0	0	0	
+Meters of Conflated Rivers	0	0	0	
+Meters of Unmatched Rivers From Map 1	0	0	0	
+Meters of Unmatched Rivers From Map 2	0	0	0	
+Percentage of Rivers Conflated	0	0	0	
+Percentage of Rivers Marked for Review	0	0	0	
+Percentage of Unmatched Rivers From Map 1	0	0	0	
+Percentage of Unmatched Rivers From Map 2	0	0	0	
+Percentage of Unmatched Rivers	0	0	0	
 Polygon Conflatable POIs	10	8	14	
 Conflatable Polygon Conflatable POIs	10	8	0	
 Conflated Polygon Conflatable POIs	0	0	4	
@@ -237,23 +239,22 @@ Percentage of Lines Marked for Review	0	0	0
 Percentage of Unmatched Lines From Map 1	100	0	25	
 Percentage of Unmatched Lines From Map 2	0	100	0	
 Percentage of Unmatched Lines	100	100	25	
-Collection Relations	0	0	1	
-Conflatable Collection Relations	0	0	0	
-Conflated Collection Relations	0	0	1	
-Collection Relations Marked for Review	0	0	0	
-Collection Relation Reviews to be Made	0	0	0	
-Unmatched Collection Relations	0	0	0	
-Unmatched Collection Relations From Map 1	0	0	0	
-Unmatched Collection Relations From Map 2	0	0	0	
-Total Square Meters of Collection Relations	0	0	0	
-Square Meters of Conflated Collection Relations	0	0	709.8419141394307	
-Square Meters of Unmatched Collection Relations From Map 1	0	0	0	
-Square Meters of Unmatched Collection Relations From Map 2	0	0	0	
-Percentage of Collection Relations Conflated	0	0	100	
-Percentage of Collection Relations Marked for Review	0	0	0	
-Percentage of Unmatched Collection Relations From Map 1	0	0	0	
-Percentage of Unmatched Collection Relations From Map 2	0	0	0	
-Percentage of Unmatched Collection Relations	0	0	0	
+Conflatable Relations	0	0	0	
+Conflated Relations	0	0	1	
+Relations Marked for Review	0	0	0	
+Relation Reviews to be Made	0	0	0	
+Unmatched Relations	0	0	0	
+Unmatched Relations From Map 1	0	0	0	
+Unmatched Relations From Map 2	0	0	0	
+Total Square Meters of Relations	0	0	0	
+Square Meters of Conflated Relations	0	0	709.8419141394307	
+Square Meters of Unmatched Relations From Map 1	0	0	0	
+Square Meters of Unmatched Relations From Map 2	0	0	0	
+Percentage of Relations Conflated	0	0	100	
+Percentage of Relations Marked for Review	0	0	0	
+Percentage of Unmatched Relations From Map 1	0	0	0	
+Percentage of Unmatched Relations From Map 2	0	0	0	
+Percentage of Unmatched Relations	0	0	0	
 Translated Populated Tags	123	107	162	
 Features Conflatable by: hoot::ScriptMatchCreator,Area.js			0	
 Difference Between Total Features in Output and Total Features in Inputs			-14	
@@ -273,10 +274,10 @@ Percentage of Area of Map 2 Polygons Not Matched With Map 1 Polygons			358.33780
 Percentage of Length of Map 1 Lines Matched With Map 2 Lines			94.06469567813517	
 Percentage of Length of Map 1 Lines Not Matched With Map 2 Lines			5.935273565020475	
 Percentage of Length of Map 2 Lines Not Matched With Map 1 Lines			0	
-Calculate Stats for Input 1 Time (sec)				4.379630088806152
-Calculate Stats for Input 2 Time (sec)				0.5159769058227539
-Apply Pre-Conflate Ops Time (sec)				0.007570981979370117
-Apply Post-Conflate Ops Time (sec)				0.003716945648193359
-Calculate Stats for Output Time (sec)				0.4635300636291504
+Calculate Stats for Input 1 Time (sec)				4.238797903060913
+Calculate Stats for Input 2 Time (sec)				0.4116981029510498
+Apply Pre-Conflate Ops Time (sec)				0.007838010787963867
+Apply Post-Conflate Ops Time (sec)				0.004173994064331055
+Calculate Stats for Output Time (sec)				0.5036461353302002
 
-16:52:25.810 STATUS ...pp/hoot/core/util/Progress.cpp(  86) Conflate (100%): Conflation job completed in 00:06 for reference map: ...late/unified/AllDataTypesA.osm and secondary map: ...late/unified/AllDataTypesB.osm and written to output: ...atsTest/all-data-types-out.osm
+17:45:34.510 STATUS ...pp/hoot/core/util/Progress.cpp(  86) Conflate (100%): Conflation job completed in 00:06 for reference map: ...late/unified/AllDataTypesA.osm and secondary map: ...late/unified/AllDataTypesB.osm and written to output: ...atsTest/all-data-types-out.osm

@@ -60,7 +60,7 @@ void ClosePointHash::addPoint(double x, double y, long id)
   _idTobin[id].push_back(binIx);
 }
 
-const vector<long>& ClosePointHash::getMatch()
+const vector<long>& ClosePointHash::getMatch() const
 {
   return _match;
 }
@@ -101,7 +101,7 @@ void ClosePointHash::resetIterator()
   _it = _bins.begin();
 }
 
-int64_t ClosePointHash::_toBin(double x, double y)
+int64_t ClosePointHash::_toBin(double x, double y) const
 {
   uint64_t xi = (uint32_t)(x / _binSize + 0.5);
   uint64_t yi = (uint32_t)(y / _binSize + 0.5);

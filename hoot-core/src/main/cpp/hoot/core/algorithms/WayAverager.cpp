@@ -129,7 +129,7 @@ WayPtr WayAverager::replaceWaysWithAveragedWay()
   {
     result->addNode(_merge(node1a, weight1, node2a, weight2));
   }
-  OsmMapWriterFactory::writeDebugMap(_map, "WayAverger-after-first-add-node");
+  OsmMapWriterFactory::writeDebugMap(_map, className(), "after-first-add-node");
 
   // We're getting the vectors after the above merge because the merge will change node ids.
   const std::vector<long>& ns1 = _w1->getNodeIds();
@@ -148,13 +148,13 @@ WayPtr WayAverager::replaceWaysWithAveragedWay()
     if (i1 == ns1.size() - 1)
     {
       result->addNode(_moveToLine(ns2[i2++], weight2, ls1.get(), weight1, 2));
-      OsmMapWriterFactory::writeDebugMap(_map, "WayAverager-after-move-to-line-1");
+      OsmMapWriterFactory::writeDebugMap(_map, className(), "after-move-to-line-1");
     }
     // if we're all out of cs2 points
     else if (i2 == ns2.size() - 1)
     {
       result->addNode(_moveToLine(ns1[i1++], weight1, ls2.get(), weight2, 1));
-      OsmMapWriterFactory::writeDebugMap(_map, "WayAverager-after-move-to-line-2");
+      OsmMapWriterFactory::writeDebugMap(_map, className(), "after-move-to-line-2");
     }
     else
     {
@@ -166,18 +166,18 @@ WayPtr WayAverager::replaceWaysWithAveragedWay()
       if (nc1.distance(last) < nc2.distance(last))
       {
         result->addNode(_moveToLine(ns1[i1++], weight1, ls2.get(), weight2, 1));
-        OsmMapWriterFactory::writeDebugMap(_map, "WayAverager-after-move-to-line-3");
+        OsmMapWriterFactory::writeDebugMap(_map, className(), "after-move-to-line-3");
       }
       else
       {
         result->addNode(_moveToLine(ns2[i2++], weight2, ls1.get(), weight1, 2));
-        OsmMapWriterFactory::writeDebugMap(_map, "WayAverager-after-move-to-line-4");
+        OsmMapWriterFactory::writeDebugMap(_map, className(), "after-move-to-line-4");
       }
       index++;
     }
 
     OsmMapWriterFactory::writeDebugMap(
-      _map, "WayAverger-after-add-node-loop-" + QString::number(index));
+      _map, className(), "after-add-node-loop-" + QString::number(index));
   }
   LOG_VART(result->getNodeIds().size());
   LOG_VART(i1);
@@ -191,7 +191,7 @@ WayPtr WayAverager::replaceWaysWithAveragedWay()
     result->addNode(_merge(node1b, weight1, node2b, weight2));
   }
   LOG_VART(result->getNodeIds().size());
-  OsmMapWriterFactory::writeDebugMap(_map, "WayAverager-after-last-add-node");
+  OsmMapWriterFactory::writeDebugMap(_map, className(), "after-last-add-node");
 
   // use the default tag merging mechanism
   result->setTags(TagMergerFactory::mergeTags(_w1->getTags(), _w2->getTags(), ElementType::Way));
@@ -236,12 +236,12 @@ long WayAverager::_merge(
         std::min(node1->getCircularError(), node2->getCircularError())));
 
   _map->addNode(node);
-  OsmMapWriterFactory::writeDebugMap(_map, "WayAverager-after-merger-add-node");
+  OsmMapWriterFactory::writeDebugMap(_map, className(), "after-add-node");
   // replace all instances of node1/node2 with node.
   _map->replaceNode(node1->getId(), node->getId());
-  OsmMapWriterFactory::writeDebugMap(_map, "WayAverager-after-node-replacement-1");
+  OsmMapWriterFactory::writeDebugMap(_map, className(), "after-node-replacement-1");
   _map->replaceNode(node2->getId(), node->getId());
-  OsmMapWriterFactory::writeDebugMap(_map, "WayAverager-after-node-replacement-2");
+  OsmMapWriterFactory::writeDebugMap(_map, className(), "after-node-replacement-2");
 
   return node->getId();
 }

@@ -30,7 +30,6 @@
 
 // Hoot
 #include <hoot/core/elements/ElementIdSynchronizer.h>
-#include <hoot/core/criterion/WayNodeCriterion.h>
 
 namespace hoot
 {

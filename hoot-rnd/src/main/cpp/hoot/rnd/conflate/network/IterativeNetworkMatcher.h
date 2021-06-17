@@ -147,17 +147,17 @@ private:
   /// The higher this value the faster the algorithm will converge
   double _dampening;
 
-  double _aggregateScores(QList<double> pairs);
+  double _aggregateScores(QList<double> pairs) const;
 
-  void _createEmptyStubEdges(OsmNetworkPtr na, OsmNetworkPtr nb);
+  void _createEmptyStubEdges(OsmNetworkPtr na, OsmNetworkPtr nb) const;
 
   void _createStubIntersection(OsmNetworkPtr na, OsmNetworkPtr nb, ConstNetworkVertexPtr va,
-    ConstNetworkEdgePtr eb);
+    ConstNetworkEdgePtr eb) const;
 
   double _calculateEdgeVertexScore(const VertexScoreMap& vm, ConstEdgeLocationPtr from1,
     ConstEdgeLocationPtr from2, ConstEdgeLocationPtr to1, ConstEdgeLocationPtr to2) const;
 
-  QList<ConstNetworkEdgePtr> _getEdgesOnVertex(ConstNetworkVertexPtr v);
+  QList<ConstNetworkEdgePtr> _getEdgesOnVertex(ConstNetworkVertexPtr v) const;
 
   void _normalizeAllScores();
 
@@ -165,23 +165,23 @@ private:
    * Normalizes the scores in a table. All the weights will sum to a constant based on the network
    * size. All values will be treated as at least EPSILON for normalizing purposes.
    */
-  void _normalizeScoresGlobal(EdgeScoreMap& t);
-  void _normalizeScoresGlobal(VertexScoreMap& t);
+  void _normalizeScoresGlobal(EdgeScoreMap& t) const;
+  void _normalizeScoresGlobal(VertexScoreMap& t) const;
 
   /**
    * Normalizes the scores in a table. All the columns in a given row will sum to 1. All values will
    * be treated as at least EPSILON for normalizing purposes.
    */
-  void _normalizeScoresLocal(EdgeScoreMap& t);
-  void _normalizeScoresLocal(VertexScoreMap& t);
+  void _normalizeScoresLocal(EdgeScoreMap& t) const;
+  void _normalizeScoresLocal(VertexScoreMap& t) const;
 
   void _seedEdgeScores();
 
   void _seedVertexScores();
 
-  void _updateEdgeScores(EdgeScoreMap &em, const VertexScoreMap &vm);
+  void _updateEdgeScores(EdgeScoreMap &em, const VertexScoreMap &vm) const;
 
-  void _updateVertexScores(VertexScoreMap& vm, EdgeScoreMap &em);
+  void _updateVertexScores(VertexScoreMap& vm, EdgeScoreMap &em) const;
 
 };
 

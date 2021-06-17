@@ -1,19 +1,19 @@
 [[login]]
 == login
 
-The +login+ command logs a user into the Hootenanny application, authenticating via the Hootenanny Web Services, and returns Hootenanny
-access tokens for use in command invocations.  Some commands require Hootenanny Web Services authentication before use (e.g. 'languages'
-command).
+The +login+ command logs a user into the Hootenanny application, authenticating via the Hootenanny Web Services, and 
+returns Hootenanny access tokens for use in command invocations.  Some commands require Hootenanny Web Services 
+authentication before use (e.g. 'languages' command).
 
-The access tokens retrieved after login, along with their associated user name, must be used as configuration options when using any
-Hootenanny commands requiring Hootenanny Web Services authentication:
+The access tokens retrieved after login, along with their associated user name, must be used as configuration options 
+when using any Hootenanny commands requiring Hootenanny Web Services authentication:
 * hoot.services.auth.user.name
 * hoot.services.auth.access.token
 * hoot.services.auth.access.token.secret
 
-For the login command to work correctly, the oauthRedirectURL property for the Hootenanny Web Services in hoot-services.conf must be pointed
-to the page 'out-of-band.html' found in the Hootenanny Web Services application.  See the Hootenanny OAuth documentation for more detail
-on the Hootenanny authentication process.
+For the login command to work correctly, the oauthRedirectURL property for the Hootenanny Web Services in 
+hoot-services.conf must be pointed to the page 'out-of-band.html' found in the Hootenanny Web Services application.  See 
+the Hootenanny OAuth documentation for more detail on the Hootenanny authentication process.
 
 === Usage
 

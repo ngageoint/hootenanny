@@ -44,7 +44,7 @@ OsmChangesetFileWriterFactory& OsmChangesetFileWriterFactory::getInstance()
 }
 
 std::shared_ptr<OsmChangesetFileWriter> OsmChangesetFileWriterFactory::createWriter(
-  const QString& url, const QString& osmApiDbUrl)
+  const QString& url, const QString& osmApiDbUrl) const
 {
   LOG_VARD(url);
   LOG_VARD(osmApiDbUrl);

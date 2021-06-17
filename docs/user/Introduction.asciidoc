@@ -9,6 +9,8 @@ from overlapping sources so as to retain accurate data, minimize redundancy, and
 reconcile data conflicts.
 _____
 
+Check out the quick Hootenanny overview http://github.com/ngageoint/hootenanny#readme[here].
+
 Conflation within GIS can generally be grouped into several high level
 categories:
 
@@ -127,6 +129,10 @@ See also:
 
 * <<conflate,conflate command>>
 
+===== Average Conflation
+
+TODO
+
 ===== Horizontal Conflation
 
 .Horizontal Conflation.  This is a good candidate for Horizontal Conflation because there is a small amount of overlap between the two data sets.
@@ -138,7 +144,7 @@ Programmatically there is no difference between Vertical and Horizontal conflati
 .Unsupported Horizontal Conflation due to the complete lack of overlap between the two data sets.
 image::images/NotHorizontalConflation.png[]
 
-As demonstrated in <<UnsupportedHorizontalConflation>> two vector layers that don't quite touch are not conflated. If this is of interest please create an issue at https://github.com/ngageoint/hootenanny.
+As demonstrated in <<UnsupportedHorizontalConflation>> two vector layers that don't quite touch are not conflated. If this is of interest please create an issue at the https://github.com/ngageoint/hootenanny[Hootenanny GitHub page].
 
 To use, pass +HorizontalConflation.conf+ to the conflate command.
 

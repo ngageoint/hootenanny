@@ -105,12 +105,12 @@ private:
 
   void _calculateEdgeLinks();
   void _calculateEdgeMatches();
-  double _calculateLinkWeight(QHash<ConstNetworkEdgePtr, int>& counts, ConstEdgeStringPtr str);
+  double _calculateLinkWeight(QHash<ConstNetworkEdgePtr, int>& counts, ConstEdgeStringPtr str) const;
 
-  void _countEdgesUsed(QHash<ConstNetworkEdgePtr, int>& counts, ConstEdgeStringPtr str);
+  void _countEdgesUsed(QHash<ConstNetworkEdgePtr, int>& counts, ConstEdgeStringPtr str) const;
 
-  void _distributePrEvenly();
-  void _distributePrLengthWeighted();
+  void _distributePrEvenly() const;
+  void _distributePrLengthWeighted() const;
 
   QSet<EdgeMatchPtr> _getConnectedEdges(ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2);
 };

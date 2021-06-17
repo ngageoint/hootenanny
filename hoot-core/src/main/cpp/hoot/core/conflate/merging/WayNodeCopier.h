@@ -53,7 +53,7 @@ public:
    * @param toReplaceWayId ID of the way to be replaced
    * @param replacingWayId ID of the replacing way
    */
-  void copy(const ElementId& toReplaceWayId, const ElementId& replacingWayId);
+  void copy(const ElementId& toReplaceWayId, const ElementId& replacingWayId) const;
 
   /**
    * @see OsmMapConsumer

@@ -57,7 +57,7 @@ LongBox::~LongBox()
   _max.clear();
 }
 
-long int LongBox::calculateVolume()
+long int LongBox::calculateVolume() const
 {
   long result = 1;
   for (uint i = 0; i < getMin().size(); i++)
@@ -67,7 +67,7 @@ long int LongBox::calculateVolume()
   return result;
 }
 
-bool LongBox::edgeOverlaps(const LongBox& b)
+bool LongBox::edgeOverlaps(const LongBox& b) const
 {
   bool result = false;
   for (uint i = 0; i < getMin().size(); i++)
@@ -82,7 +82,7 @@ bool LongBox::edgeOverlaps(const LongBox& b)
   return result;
 }
 
-LongBox LongBox::expand(int size)
+LongBox LongBox::expand(int size) const
 {
   vector<long int> min = getMin();
   vector<long int> max = getMax();
@@ -95,7 +95,7 @@ LongBox LongBox::expand(int size)
   return LongBox(min, max);
 }
 
-bool LongBox::in(const vector<long int>& p)
+bool LongBox::in(const vector<long int>& p) const
 {
   if (p.size() < _min.size() || p.size() < _max.size())
   {
@@ -110,7 +110,7 @@ bool LongBox::in(const vector<long int>& p)
   return result;
 }
 
-QString LongBox::toString()
+QString LongBox::toString() const
 {
   QString result = "{ ";
   for (uint i = 0; i < _min.size(); i++)
@@ -121,7 +121,7 @@ QString LongBox::toString()
   return result;
 }
 
-long LongBox::getWidth(int d)
+long LongBox::getWidth(int d) const
 {
   if (d > (int)getMin().size() || d > (int)getMax().size())
   {

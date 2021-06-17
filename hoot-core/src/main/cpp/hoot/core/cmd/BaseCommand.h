@@ -46,7 +46,6 @@ class BaseCommand : public Command
 public:
 
   BaseCommand() = default;
-
   virtual ~BaseCommand() = default;
 
   QString getHelp() const override;
@@ -67,7 +66,7 @@ public:
    */
   virtual int runSimple(QStringList& args) = 0;
 
-  QStringList toQStringList(char* argv[], int argc);
+  QStringList toQStringList(char* argv[], int argc) const;
 
 protected:
 
