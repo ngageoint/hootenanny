@@ -120,116 +120,60 @@ QString TagInfo::_getInfo(const QString& input) const
 
   QString inputInfo = input;
   LOG_VARD(inputInfo);
-  QString finalText;
 
   std::shared_ptr<OsmMapReader> reader =
     OsmMapReaderFactory::createReader(
       inputInfo, ConfigOptions().getReaderUseDataSourceIds(),
       Status::fromString(ConfigOptions().getReaderSetDefaultStatus()));
-
-  // Using a different code path for the OGR inputs to handle the layer syntax. We need to add
-  // custom behavior to the element parsing, so loading the map through IoUtils::loadMap won't work
-  // here.
   std::shared_ptr<OgrReader> ogrReader = std::dynamic_pointer_cast<OgrReader>(reader);
   if (ogrReader.get())
   {
-    // We have to have a translation for the reading, so just use the simplest one.
-    ogrReader->setSchemaTranslationScript(ConfPath::getHootHome() + "/translations/quick.js");
-
-    QStringList layers;
-    if (inputInfo.contains(";"))
-    {
-      QStringList list = inputInfo.split(";");
-      inputInfo = list.at(0);
-      layers.append(list.at(1));
-    }
-    else
-    {
-      layers = ogrReader->getFilteredLayerNames(inputInfo);
-    }
-
-    if (layers.empty())
-    {
-      LOG_WARN("Could not find any valid layers to read from in " + inputInfo + ".");
-    }
-
-    for (int i = 0; i < layers.size(); i++)
-    {
-      LOG_DEBUG("Reading: " << inputInfo + " " << layers[i] << "...");
-
-      TagInfoHash result;
-      int numElementsProcessed = 0;
-      std::shared_ptr<ElementIterator> iterator(ogrReader->createIterator(inputInfo, layers[i]));
-      while (iterator->hasNext())
-      {
-        std::shared_ptr<Element> e = iterator->next();
-        _parseElement(e, result);
-
-        numElementsProcessed++;
-        if (numElementsProcessed % (_taskStatusUpdateInterval * 10) == 0)
-        {
-          PROGRESS_INFO(
-            "Processed " << StringUtils::formatLargeNumber(numElementsProcessed) << " elements.");
-        }
-      }
-
-      if (_delimitedTextOutput)
-      {
-        const QString tmpText = _printDelimitedText(result);
-        // Skip empty layers.
-        if (tmpText == "")
-        {
-          continue;
-        }
-        finalText += tmpText;
-        if (i != (layers.size() - 1))
-        {
-          finalText += ";";
-        }
-      }
-      else
-      {
-        const QString tmpText = _printJSON(layers[i], result);
-        // Skip empty layers.
-        if (tmpText == "")
-        {
-          continue;
-        }
-        finalText += tmpText;
-        if (i != (layers.size() - 1))
-        {
-          finalText += ",\n";
-        }
-      }
-    }
+    // Using a different code path for the OGR inputs to handle the layer syntax. We need to add
+    // custom behavior to the element parsing, so loading the map through IoUtils::loadMap won't work
+    // here.
+    return _getInfoFromOgrInput(ogrReader, inputInfo);
   }
   else
   {
-    // At this time, the only unstreamable readers are the JSON readers. If this capability is
-    // needed for JSON data, then either those readers can implement PartialOsmMapReader or the
-    // needed readed code can be manually added to this class.
-    // TODO: change this
-    if (!IoUtils::isStreamableInput(inputInfo))
-    {
-      throw IllegalArgumentException("Inputs to TagInfo must be streamable.");
-    }
+    return _getInfoFromStreamableInput(reader, inputInfo);
+  }
+}
 
-    LOG_DEBUG("Reading: " << inputInfo << "...");
+QString TagInfo::_getInfoFromOgrInput(
+  const std::shared_ptr<OgrReader>& reader, QString& input) const
+{
+  // We have to have a translation for the reading, so just use the simplest one.
+  reader->setSchemaTranslationScript(ConfPath::getHootHome() + "/translations/quick.js");
 
-    reader->open(inputInfo);
-    std::shared_ptr<ElementInputStream> streamReader =
-      std::dynamic_pointer_cast<ElementInputStream>(reader);
+  QStringList layers;
+  if (input.contains(";"))
+  {
+    QStringList list = input.split(";");
+    input = list.at(0);
+    layers.append(list.at(1));
+  }
+  else
+  {
+    layers = reader->getFilteredLayerNames(input);
+  }
+
+  if (layers.empty())
+  {
+    LOG_WARN("Could not find any valid layers to read from in " + input + ".");
+  }
+
+  QString finalText;
+  for (int i = 0; i < layers.size(); i++)
+  {
+    LOG_DEBUG("Reading: " << input + " " << layers[i] << "...");
 
     TagInfoHash result;
     int numElementsProcessed = 0;
-    while (streamReader->hasMoreElements())
+    std::shared_ptr<ElementIterator> iterator(reader->createIterator(input, layers[i]));
+    while (iterator->hasNext())
     {
-      ElementPtr e = streamReader->readNextElement();
-      if (e.get())
-      {
-        LOG_VART(e);
-        _parseElement(e, result);
-      }
+      std::shared_ptr<Element> e = iterator->next();
+      _parseElement(e, result);
 
       numElementsProcessed++;
       if (numElementsProcessed % (_taskStatusUpdateInterval * 10) == 0)
@@ -238,24 +182,90 @@ QString TagInfo::_getInfo(const QString& input) const
           "Processed " << StringUtils::formatLargeNumber(numElementsProcessed) << " elements.");
       }
     }
-    std::shared_ptr<PartialOsmMapReader> partialReader =
-      std::dynamic_pointer_cast<PartialOsmMapReader>(reader);
-    if (partialReader.get())
-    {
-      partialReader->finalizePartial();
-    }
 
     if (_delimitedTextOutput)
     {
-      finalText = _printDelimitedText(result);
+      const QString tmpText = _printDelimitedText(result);
+      // Skip empty layers.
+      if (tmpText == "")
+      {
+        continue;
+      }
+      finalText += tmpText;
+      if (i != (layers.size() - 1))
+      {
+        finalText += ";";
+      }
     }
     else
     {
-      finalText = _printJSON("osm", result);
+      const QString tmpText = _printJSON(layers[i], result);
+      // Skip empty layers.
+      if (tmpText == "")
+      {
+        continue;
+      }
+      finalText += tmpText;
+      if (i != (layers.size() - 1))
+      {
+        finalText += ",\n";
+      }
     }
   }
-
   return finalText;
+}
+
+QString TagInfo::_getInfoFromStreamableInput(
+  const std::shared_ptr<OsmMapReader>& reader, const QString& input) const
+{
+  // At this time, the only unstreamable readers are the JSON readers. If this capability is
+  // needed for JSON data, then either those readers can implement PartialOsmMapReader or the
+  // needed readed code can be manually added to this class.
+  // TODO: change this
+  if (!IoUtils::isStreamableInput(input))
+  {
+    throw IllegalArgumentException("Inputs to TagInfo must be streamable.");
+  }
+
+  LOG_DEBUG("Reading: " << input << "...");
+
+  reader->open(input);
+  std::shared_ptr<ElementInputStream> streamReader =
+    std::dynamic_pointer_cast<ElementInputStream>(reader);
+
+  TagInfoHash result;
+  int numElementsProcessed = 0;
+  while (streamReader->hasMoreElements())
+  {
+    ElementPtr e = streamReader->readNextElement();
+    if (e.get())
+    {
+      LOG_VART(e);
+      _parseElement(e, result);
+    }
+
+    numElementsProcessed++;
+    if (numElementsProcessed % (_taskStatusUpdateInterval * 10) == 0)
+    {
+      PROGRESS_INFO(
+        "Processed " << StringUtils::formatLargeNumber(numElementsProcessed) << " elements.");
+    }
+  }
+  std::shared_ptr<PartialOsmMapReader> partialReader =
+    std::dynamic_pointer_cast<PartialOsmMapReader>(reader);
+  if (partialReader.get())
+  {
+    partialReader->finalizePartial();
+  }
+
+  if (_delimitedTextOutput)
+  {
+    return _printDelimitedText(result);
+  }
+  else
+  {
+    return _printJSON("osm", result);
+  }
 }
 
 bool TagInfo::_tagKeysMatch(const QString& tagKey) const
