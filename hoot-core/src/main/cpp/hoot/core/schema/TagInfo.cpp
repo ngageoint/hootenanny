@@ -208,6 +208,7 @@ QString TagInfo::_getInfo(const QString& input) const
     // At this time, the only unstreamable readers are the JSON readers. If this capability is
     // needed for JSON data, then either those readers can implement PartialOsmMapReader or the
     // needed readed code can be manually added to this class.
+    // TODO: change this
     if (!IoUtils::isStreamableInput(inputInfo))
     {
       throw IllegalArgumentException("Inputs to TagInfo must be streamable.");
