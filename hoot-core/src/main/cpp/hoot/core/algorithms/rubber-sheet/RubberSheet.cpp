@@ -692,6 +692,7 @@ std::shared_ptr<Interpolator> RubberSheet::_readInterpolator(QIODevice& is)
   ds >> projStr;
   _projection.reset(new OGRSpatialReference());
   _projection->importFromProj4(projStr.toUtf8().data());
+  _projection->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
 
   QString interpolatorClass;
   ds >> interpolatorClass;

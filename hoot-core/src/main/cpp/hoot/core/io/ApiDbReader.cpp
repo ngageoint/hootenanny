@@ -934,6 +934,7 @@ std::shared_ptr<OGRSpatialReference> ApiDbReader::getProjection() const
   {
     throw HootException("Error creating EPSG:4326 projection.");
   }
+  wgs84->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
   return wgs84;
 }
 

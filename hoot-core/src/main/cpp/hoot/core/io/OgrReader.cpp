@@ -291,7 +291,7 @@ std::shared_ptr<OGRSpatialReference> OgrReaderInternal::_fixProjection(
     {
       throw HootException(QString("Error creating EPSG:%1 projection.").arg(epsgOverride));
     }
-
+    result->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
     return result;
   }
 
@@ -299,6 +299,7 @@ std::shared_ptr<OGRSpatialReference> OgrReaderInternal::_fixProjection(
   // situation for known EPSGs and warn/fix the issue.
   result.reset(new OGRSpatialReference());
   result->importFromEPSG(3785);
+  result->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
   if (srs && result->IsSame(srs.get()) &&
     _toWkt(result.get()) != _toWkt(srs.get()))
   {
@@ -1077,7 +1078,7 @@ void OgrReaderInternal::_openLayer(const QString& path, const QString& layer)
     {
       throw HootException("Error creating EPSG:4326 projection.");
     }
-
+    _wgs84->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
     _transform = OGRCreateCoordinateTransformation(sourceSrs.get(), _wgs84.get());
 
     if (_transform == nullptr)
@@ -1395,6 +1396,7 @@ std::shared_ptr<OGRSpatialReference> OgrReaderInternal::getProjection() const
   {
     throw HootException("Error creating EPSG:4326 projection.");
   }
+  wgs84->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
   return wgs84;
 }
 

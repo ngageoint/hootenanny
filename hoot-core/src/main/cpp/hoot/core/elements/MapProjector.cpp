@@ -147,7 +147,7 @@ std::shared_ptr<OGRSpatialReference> MapProjector::createAeacProjection(const OG
   {
     throw HootException("Error creating Albers equal area conic projection.");
   }
-
+  srs->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
   return srs;
 }
 
@@ -170,32 +170,37 @@ vector<std::shared_ptr<OGRSpatialReference>> MapProjector::createAllPlanarProjec
     try { result.push_back(createSinusoidalProjection(env)); } catch (const HootException&) { }
 
     std::shared_ptr<OGRSpatialReference> mollweide(new OGRSpatialReference());
-    if (mollweide->importFromEPSG(54009) == OGRERR_NONE)
+    if (mollweide->SetFromUserInput("ESRI:54009") == OGRERR_NONE)
     {
+      mollweide->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
       result.push_back(mollweide);
     }
 
     std::shared_ptr<OGRSpatialReference> eckertVI(new OGRSpatialReference());
-    if (eckertVI->importFromEPSG(53010) == OGRERR_NONE)
+    if (eckertVI->SetFromUserInput("ESRI:53010") == OGRERR_NONE)
     {
+      eckertVI->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
       result.push_back(eckertVI);
     }
 
     std::shared_ptr<OGRSpatialReference> sphereBonne(new OGRSpatialReference());
-    if (sphereBonne->importFromEPSG(53024) == OGRERR_NONE)
+    if (sphereBonne->SetFromUserInput("ESRI:53024") == OGRERR_NONE)
     {
+      sphereBonne->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
       result.push_back(sphereBonne);
     }
 
     std::shared_ptr<OGRSpatialReference> customMercator(new OGRSpatialReference());
     if (customMercator->SetMercator(centerLat, centerLon, 1.0, 0.0, 0.0) == OGRERR_NONE)
     {
+      customMercator->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
       result.push_back(customMercator);
     }
 
     std::shared_ptr<OGRSpatialReference> customBonne(new OGRSpatialReference());
     if (customBonne->SetBonne(M_PI_2, centerLon, 0.0, 0.0) == OGRERR_NONE)
     {
+      customBonne->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
       result.push_back(customBonne);
     }
 
@@ -203,18 +208,21 @@ vector<std::shared_ptr<OGRSpatialReference>> MapProjector::createAllPlanarProjec
     std::shared_ptr<OGRSpatialReference> customLaea(new OGRSpatialReference());
     if (customLaea->SetLAEA(centerLat, centerLon, 0.0, 0.0) == OGRERR_NONE)
     {
+      customLaea->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
       result.push_back(customLaea);
     }
 
     std::shared_ptr<OGRSpatialReference> customLcc1sp(new OGRSpatialReference());
     if (customLcc1sp->SetLCC1SP(centerLat, centerLon, 1.0, 0.0, 0.0) == OGRERR_NONE)
     {
+      customLcc1sp->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
       result.push_back(customLcc1sp);
     }
 
     std::shared_ptr<OGRSpatialReference> customRobinson(new OGRSpatialReference());
     if (customRobinson->SetRobinson(centerLon, 0.0, 0.0) == OGRERR_NONE)
     {
+      customRobinson->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
       result.push_back(customRobinson);
     }
 
@@ -222,6 +230,7 @@ vector<std::shared_ptr<OGRSpatialReference>> MapProjector::createAllPlanarProjec
     std::shared_ptr<OGRSpatialReference> customTm(new OGRSpatialReference());
     if (customTm->SetTM(centerLat, centerLon, 1.0, 0.0, 0.0) == OGRERR_NONE)
     {
+      customTm->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
       result.push_back(customTm);
     }
 
@@ -229,6 +238,7 @@ vector<std::shared_ptr<OGRSpatialReference>> MapProjector::createAllPlanarProjec
     std::shared_ptr<OGRSpatialReference> customPolyconic(new OGRSpatialReference());
     if (customPolyconic->SetPolyconic(centerLat, centerLon, 0.0, 0.0) == OGRERR_NONE)
     {
+      customPolyconic->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
       result.push_back(customPolyconic);
     }
 
@@ -236,6 +246,7 @@ vector<std::shared_ptr<OGRSpatialReference>> MapProjector::createAllPlanarProjec
     std::shared_ptr<OGRSpatialReference> customTped(new OGRSpatialReference());
     if (customTped->SetTPED(stdP1, centerLon, stdP2, centerLon, 0.0, 0.0) == OGRERR_NONE)
     {
+      customTped->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
       result.push_back(customTped);
     }
 
@@ -243,6 +254,7 @@ vector<std::shared_ptr<OGRSpatialReference>> MapProjector::createAllPlanarProjec
     std::shared_ptr<OGRSpatialReference> customEc(new OGRSpatialReference());
     if (customEc->SetEC(stdP1, stdP2, centerLat, centerLon, 0.0, 0.0) == OGRERR_NONE)
     {
+      customEc->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
       result.push_back(customEc);
     }
 
@@ -250,6 +262,7 @@ vector<std::shared_ptr<OGRSpatialReference>> MapProjector::createAllPlanarProjec
     std::shared_ptr<OGRSpatialReference> customAe(new OGRSpatialReference());
     if (customAe->SetAE(centerLat, centerLon, 0.0, 0.0) == OGRERR_NONE)
     {
+      customAe->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
       result.push_back(customAe);
     }
 
@@ -257,6 +270,7 @@ vector<std::shared_ptr<OGRSpatialReference>> MapProjector::createAllPlanarProjec
     std::shared_ptr<OGRSpatialReference> customLcc(new OGRSpatialReference());
     if (customLcc->SetLCC(stdP1, stdP2, centerLat, centerLon, 0.0, 0.0) == OGRERR_NONE)
     {
+      customLcc->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
       result.push_back(customLcc);
     }
   }
@@ -273,6 +287,7 @@ std::shared_ptr<OGRSpatialReference> MapProjector::createOrthographic(const OGRE
   {
     throw HootException("Error creating orthographic projection.");
   }
+  srs->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
   return srs;
 }
 
@@ -283,6 +298,7 @@ std::shared_ptr<OGRSpatialReference> MapProjector::createOrthographic(double x, 
   {
     throw HootException("Error creating orthographic projection.");
   }
+  srs->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
   return srs;
 }
 
@@ -393,6 +409,7 @@ std::shared_ptr<OGRSpatialReference> MapProjector::createSinusoidalProjection(co
   {
     throw HootException("Error creating sinusoidal projection.");
   }
+  srs->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
   return srs;
 }
 
@@ -403,6 +420,7 @@ std::shared_ptr<OGRSpatialReference> MapProjector::createWgs84Projection()
   {
     throw HootException("Error creating EPSG:4326 projection.");
   }
+  srs->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
   return srs;
 }
 
@@ -447,12 +465,16 @@ bool MapProjector::_evaluateProjection(
     {
       Coordinate c1(x, y);
       Coordinate p1 = c1;
-      success &= t->Transform(1, &p1.x, &p1.y);
+//      success &= t->Transform(1, &p1.x, &p1.y);
+      int s = t->Transform(1, &p1.x, &p1.y);
+      success &= s;
 
       if (!success)
       {
+        LOG_INFO("Failure = " << s);
         return false;
       }
+      LOG_INFO("SUCCESS");
 
       Coordinate upc = GeometryUtils::calculateDestination(c1, 0.0, testDistance);
       Coordinate up = upc;
@@ -622,6 +644,7 @@ void MapProjector::projectToOrthographic(const std::shared_ptr<OsmMap>& map, con
   LOG_TRACE("Projecting to orthographic...");
   MapProjector proj;
   std::shared_ptr<OGRSpatialReference> srs(new OGRSpatialReference());
+  srs->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
   double x = (env.MinX + env.MaxX) / 2.0;
   double y = (env.MinY + env.MaxY) / 2.0;
   if (srs->SetOrthographic(y, x, 0, 0) != OGRERR_NONE)
@@ -657,6 +680,7 @@ void MapProjector::projectToWgs84(const std::shared_ptr<OsmMap>& map)
     MapProjector proj;
     std::shared_ptr<OGRSpatialReference> srs(new OGRSpatialReference());
     srs->SetWellKnownGeogCS("WGS84");
+    srs->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
     proj.project(map, srs);
   }
 }
@@ -667,6 +691,7 @@ Coordinate MapProjector::projectFromWgs84(const Coordinate& c,
   LOG_TRACE("Projecting from WGS84...");
   std::shared_ptr<OGRSpatialReference> wgs84(new OGRSpatialReference());
   wgs84->importFromEPSG(4326);
+  wgs84->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
   return project(c, wgs84, srs);
 }
 

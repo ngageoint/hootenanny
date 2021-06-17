@@ -336,7 +336,7 @@ void OsmPbfWriter::writePb(const ConstOsmMapPtr& m, ostream* strm)
   bool oldSetting = _enablePbFlushing;
   _enablePbFlushing = false;
   _writeMap();
-  uint32_t size = qToBigEndian(_d->primitiveBlock.ByteSizeLong());
+  uint32_t size = qToBigEndian((uint32_t)_d->primitiveBlock.ByteSizeLong());
   strm->write((const char*)&size, sizeof(uint32_t));
   _d->primitiveBlock.SerializePartialToOstream(strm);
   _map.reset();
@@ -348,7 +348,7 @@ void OsmPbfWriter::writePb(const ConstNodePtr& n, ostream* strm)
   _initBlob();
 
   _writeNode(n);
-  uint32_t size = qToBigEndian(_d->primitiveBlock.ByteSizeLong());
+  uint32_t size = qToBigEndian((uint32_t)_d->primitiveBlock.ByteSizeLong());
   strm->write((const char*)&size, sizeof(uint32_t));
   _d->primitiveBlock.SerializePartialToOstream(strm);
 }
@@ -358,7 +358,7 @@ void OsmPbfWriter::writePb(const ConstWayPtr& w, ostream* strm)
   _initBlob();
 
   _writeWay(w);
-  uint32_t size = qToBigEndian(_d->primitiveBlock.ByteSizeLong());
+  uint32_t size = qToBigEndian((uint32_t)_d->primitiveBlock.ByteSizeLong());
   strm->write((const char*)&size, sizeof(uint32_t));
   _d->primitiveBlock.SerializePartialToOstream(strm);
 }
@@ -368,7 +368,7 @@ void OsmPbfWriter::writePb(const ConstRelationPtr& r, ostream* strm)
   _initBlob();
 
   _writeRelation(r);
-  uint32_t size = qToBigEndian(_d->primitiveBlock.ByteSizeLong());
+  uint32_t size = qToBigEndian((uint32_t)_d->primitiveBlock.ByteSizeLong());
   strm->write((const char*)&size, sizeof(uint32_t));
   _d->primitiveBlock.SerializePartialToOstream(strm);
 }
@@ -388,9 +388,9 @@ void OsmPbfWriter::_writeBlob(const char* buffer, int size, const string& type)
   // create and serialize the blob header
   _d->blobHeader.Clear();
   _d->blobHeader.set_type(type);
-  _d->blobHeader.set_datasize(_d->blob.ByteSizeLong());
+  _d->blobHeader.set_datasize((uint32_t)_d->blob.ByteSizeLong());
 
-  uint32_t blobHeaderSize = htonl(_d->blobHeader.ByteSizeLong());
+  uint32_t blobHeaderSize = htonl((uint32_t)_d->blobHeader.ByteSizeLong());
   _out->write((char*)&blobHeaderSize, 4);
 
   // serialize the blob header
@@ -420,7 +420,7 @@ void OsmPbfWriter::_writeMap()
     _writeNodeDense(n);
 
     if (_enablePbFlushing && _tick % 100000 == 0 &&
-        _d->primitiveBlock.ByteSizeLong() > _minBlobTarget)
+        (uint32_t)_d->primitiveBlock.ByteSizeLong() > _minBlobTarget)
     {
       _writePrimitiveBlock();
     }
@@ -443,7 +443,7 @@ void OsmPbfWriter::_writeMap()
     const std::shared_ptr<const hoot::Way>& w = _map->getWay(wids[i]);
     _writeWay(w);
 
-    if (_enablePbFlushing && _tick % 10000 == 0 && _d->primitiveBlock.ByteSizeLong() > _minBlobTarget)
+    if (_enablePbFlushing && _tick % 10000 == 0 && (uint32_t)_d->primitiveBlock.ByteSizeLong() > _minBlobTarget)
     {
       _writePrimitiveBlock();
     }
@@ -467,7 +467,7 @@ void OsmPbfWriter::_writeMap()
     const ConstRelationPtr& r = _map->getRelation(rids[i]);
     _writeRelation(r);
 
-    if (_enablePbFlushing && _tick % 10000 == 0 && _d->primitiveBlock.ByteSizeLong() > _minBlobTarget)
+    if (_enablePbFlushing && _tick % 10000 == 0 && (uint32_t)_d->primitiveBlock.ByteSizeLong() > _minBlobTarget)
     {
       _writePrimitiveBlock();
     }
@@ -640,7 +640,7 @@ void OsmPbfWriter::_writeOsmHeader(bool includeBounds, bool sorted)
     _d->headerBlock.mutable_writingprogram()->assign(HOOT_NAME);
   }
 
-  int size = _d->headerBlock.ByteSizeLong();
+  int size = (uint32_t)_d->headerBlock.ByteSizeLong();
   LOG_VART(size);
   _d->headerBlock.SerializePartialToArray(_getBuffer(size), size);
   _writeBlob(_buffer.data(), size, PBF_OSM_HEADER);
@@ -657,7 +657,7 @@ void OsmPbfWriter::writePartial(const ConstNodePtr& n)
 {
   _writeNodeDense(n);
 
-  if (_enablePbFlushing && _tick % 100000 == 0 && _d->primitiveBlock.ByteSizeLong() > _minBlobTarget)
+  if (_enablePbFlushing && _tick % 100000 == 0 && (uint32_t)_d->primitiveBlock.ByteSizeLong() > _minBlobTarget)
   {
     _writePrimitiveBlock();
   }
@@ -668,7 +668,7 @@ void OsmPbfWriter::writePartial(const ConstWayPtr& w)
 {
   _writeWay(w);
 
-  if (_enablePbFlushing && _tick % 10000 == 0 && _d->primitiveBlock.ByteSizeLong() > _minBlobTarget)
+  if (_enablePbFlushing && _tick % 10000 == 0 && (uint32_t)_d->primitiveBlock.ByteSizeLong() > _minBlobTarget)
   {
     _writePrimitiveBlock();
   }
@@ -679,7 +679,7 @@ void OsmPbfWriter::writePartial(const ConstRelationPtr& r)
 {
   _writeRelation(r);
 
-  if (_enablePbFlushing && _tick % 10000 == 0 && _d->primitiveBlock.ByteSizeLong() > _minBlobTarget)
+  if (_enablePbFlushing && _tick % 10000 == 0 && (uint32_t)_d->primitiveBlock.ByteSizeLong() > _minBlobTarget)
   {
     _writePrimitiveBlock();
   }
@@ -691,7 +691,7 @@ void OsmPbfWriter::_writePrimitiveBlock()
   if (_dirty)
   {
     LOG_DEBUG("Writing primitive block...");
-    int size = _d->primitiveBlock.ByteSizeLong();
+    int size = (uint32_t)_d->primitiveBlock.ByteSizeLong();
     _d->primitiveBlock.SerializePartialToArray(_getBuffer(size), size);
     _writeBlob(_buffer.data(), size, PBF_OSM_DATA);
   }

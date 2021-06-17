@@ -341,6 +341,7 @@ void GraphComparator::drawCostDistance(OsmMapPtr map, vector<Coordinate>& c,
 
   std::shared_ptr<OGRSpatialReference> srs(new OGRSpatialReference());
   srs->importFromEPSG(900913);
+  srs->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
 
   Coordinate c1 =
     MapProjector::project(

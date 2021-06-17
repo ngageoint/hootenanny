@@ -205,23 +205,27 @@ public:
   {
     std::shared_ptr<OGRSpatialReference> sinusoidal = MapProjector::createSinusoidalProjection(env);
     std::shared_ptr<OGRSpatialReference> mollweide(new OGRSpatialReference());
-    if (mollweide->importFromEPSG(54009) != OGRERR_NONE)
+    if (mollweide->SetFromUserInput("ESRI:54009") != OGRERR_NONE)
     {
-      throw HootException("Error creating mollweide projection.");
+      throw HootException("Error creating Mollweide projection.");
     }
+    mollweide->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
+
     std::shared_ptr<OGRSpatialReference> orthographic = MapProjector::createOrthographic(env);
 
     std::shared_ptr<OGRSpatialReference> eckertVI(new OGRSpatialReference());
-    if (eckertVI->importFromEPSG(53010) != OGRERR_NONE)
+    if (eckertVI->SetFromUserInput("ESRI:53010") != OGRERR_NONE)
     {
-      throw HootException("Error creating mollweide projection.");
+      throw HootException("Error creating EckertVI projection.");
     }
+    eckertVI->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
 
     std::shared_ptr<OGRSpatialReference> sphereBoone(new OGRSpatialReference());
-    if (sphereBoone->importFromEPSG(53024) != OGRERR_NONE)
+    if (sphereBoone->SetFromUserInput("ESRI:53024") != OGRERR_NONE)
     {
-      throw HootException("Error creating mollweide projection.");
+      throw HootException("Error creating SphereBoone projection.");
     }
+    sphereBoone->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
 
     static double o = -0.1;
     o += 0.1;
