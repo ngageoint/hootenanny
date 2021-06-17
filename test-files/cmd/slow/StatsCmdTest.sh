@@ -17,10 +17,10 @@ mkdir -p $OUTPUT_DIR
 
 # Test the stats
 echo "****Quick Stats****"
-hoot stats $CONFIG --brief --output=$OUTPUT1 $INPUT1
+hoot stats $CONFIG $INPUT1 $OUTPUT1 --brief
 cat $OUTPUT1
 
 echo "****JSON Stats****"
-hoot stats $CONFIG --output=$OUTPUT2 $INPUT1 $INPUT2
+hoot stats $CONFIG "$INPUT1;$INPUT2" $OUTPUT2 
 cat $OUTPUT2
 

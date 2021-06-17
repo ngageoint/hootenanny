@@ -64,35 +64,24 @@ public:
     QElapsedTimer timer;
     timer.start();
 
-    if (args.size() < 1)
+    bool quick = false;
+    if (args.contains("--brief"))
     {
-      cout << getHelp() << endl << endl;
-      throw HootException(QString("%1 takes one parameter.").arg(getName()));
+      quick = true;
+      args.removeAt(args.indexOf("--brief"));
     }
 
-    const QString QUICK_SWITCH = "--brief";
-    const QString OUTPUT_SWITCH = "--output=";
-
-    QStringList inputs(args);
-
-    bool quick = false;
-    bool toFile = false;
-    QString outputFilename = "";
-    // Capture any flags and remove them before processing inputs.
-    for (int i = 0; i < args.size(); i++)
+    if (args.size() < 1 || args.size() > 2)
     {
-      if (args[i].startsWith(OUTPUT_SWITCH))
-      {
-        outputFilename = args[i];
-        outputFilename.remove(OUTPUT_SWITCH);
-        toFile = true;
-        inputs.removeOne(args[i]);
-      }
-      else if (args[i] == QUICK_SWITCH)
-      {
-        quick = true;
-        inputs.removeOne(args[i]);
-      }
+      cout << getHelp() << endl << endl;
+      throw HootException(QString("%1 takes one or two parameters.").arg(getName()));
+    }
+
+    const QStringList inputs = args.at(0).trimmed().split(";");
+    QString output;
+    if (args.size() == 2)
+    {
+      output = args[1].trimmed();
     }
 
     const QString sep = "\t";
@@ -126,14 +115,14 @@ public:
         inputs[i].right(25) << " in " + StringUtils::millisecondsToDhms(timer2.elapsed()));
     }
 
-    if (toFile)
+    if (!output.isEmpty())
     {
       LOG_STATUS(
-        "Writing statistics output to: " << FileUtils::toLogFormat(outputFilename, 25) << "...");
-      if (outputFilename.endsWith(".json", Qt::CaseInsensitive))
-        MapStatsWriter().writeStatsToJson(allStats, outputFilename);
+        "Writing statistics output to: " << FileUtils::toLogFormat(output, 25) << "...");
+      if (output.endsWith(".json", Qt::CaseInsensitive))
+        MapStatsWriter().writeStatsToJson(allStats, output);
       else
-        MapStatsWriter().writeStatsToText(allStats, outputFilename);
+        MapStatsWriter().writeStatsToText(allStats, output);
     }
     else
     {

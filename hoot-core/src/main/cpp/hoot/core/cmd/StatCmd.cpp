@@ -53,7 +53,6 @@ public:
       throw HootException(QString("%1 takes two or three parameters.").arg(getName()));
     }
 
-    // TODO: convert to allow multiple inputs
     const QString input = args[0].trimmed();
     QString visClassName = args[1].trimmed();
     QString statType = "total";

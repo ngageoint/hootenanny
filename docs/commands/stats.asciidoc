@@ -3,17 +3,16 @@
 
 === Description
 
-The +stats+ command reads calculates a static set of statistics for one or more maps.
+The +stats+ command reads calculates a partially configurable set of statistics for one or more maps.
 
-* +input(s)+      - Input map(s); one or more inputs in a semi-colon delimited list (e.g. .osm file). Specify multiple inputs 
-                    by separating them with a semicolon and surrounding them with quotes.
-* +--brief+       - Only calculate subset of statistics.
-* +--output=path+ - Output file path; supported file types are text (*.txt) and JSON (*.json). 
+* +input(s)+ - One or more inputs; may be any supported input format (e.g. .osm file).
+* +output+   - Optional output file path; supported file types are text (*.txt) and JSON (*.json).
+* +--brief+  - Only calculate subset of statistics. 
 
 === Usage
 
 --------------------------------------
-stats (input) [input2, ...] [--brief] [--output=path] 
+stats ("input1;input2...") [output] [--brief]
 --------------------------------------
 
 https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#display-a-set-of-statistics-for-a-map[Examples]
