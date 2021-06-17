@@ -5,8 +5,8 @@
 
 The +stat+ command displays a single statistic calculated from the features in a map.
 
-* +input(s)+    - One or more streamable inputs; may be any supported streamable input format (e.g. .osm file). If 
-                  statType is 'average', then only one input is supported.
+* +input(s)+    - One or more inputs; may be any supported input format (e.g. .osm file). If statType is 'average', then 
+                  only one input is supported.
 * +visitor+     - The stat visitor must be the single class name of a Hootenanny visitor that inherits from 
                   +ElementVisitor+ and supports the +SingleStatistic+ or +NumericStatistic+ interfaces. Use the 
                   +info --operators+ command to obtain a list of available visitors.
@@ -17,12 +17,6 @@ The +stat+ command displays a single statistic calculated from the features in a
                   be followed by either "*" to denote no filtering or one or more wildcard name filters. e.g. "*.osm;*.json" 
                   or "*myFile*". The recursion is only performed on file directories and this parameter is ignored 
                   for other input types.
-
-This command works on streamable inputs only. To determine if an input is streamable use:
-
------
-    hoot info --formats --input-streamable
------
 
 === Usage
 

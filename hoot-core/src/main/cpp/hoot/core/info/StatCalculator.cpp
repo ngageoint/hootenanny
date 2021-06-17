@@ -74,8 +74,60 @@ double StatCalculator::calculateStat(
   {
     throw IllegalArgumentException("Invalid statistic type: " + statType);
   }
+  // TODO: We may be able to calculate this after all...
+  if (inputs.size() > 1 && statType == "average")
+  {
+    throw IllegalArgumentException(
+      "An average statistic may only be calculated against a single input.");
+  }
 
-  ElementVisitorPtr statCollector = _getStatCollector(visitorClassName);
+  ElementVisitorPtr statCollector = _getStatCollector(statType, visitorClassName);
+  double stat = -1.0;
+  if (IoUtils::areStreamableInputs(inputs))
+  {
+    stat = _calcStatStreaming(inputs, visitorClassName, statCollector, statType);
+  }
+//  else
+//  {
+
+//  }
+
+  LOG_STATUS(
+    "Statistic calculated in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
+
+  return stat;
+}
+
+bool StatCalculator::_isValidStatType(const QString& statType) const
+{
+  return statType == "total" || statType == "min" || statType == "max" || statType == "average";
+}
+
+std::shared_ptr<PartialOsmMapReader> StatCalculator::_getStreamableReader(
+  const QString& input) const
+{
+  std::shared_ptr<PartialOsmMapReader> reader =
+    std::dynamic_pointer_cast<PartialOsmMapReader>(
+      OsmMapReaderFactory::createReader(input));
+  reader->setUseDataSourceIds(true);
+  reader->open(input);
+  reader->initializePartial();
+  return reader;
+}
+
+ElementVisitorPtr StatCalculator::_getStatCollector(
+  const QString& statType, const QString& visClassName) const
+{
+  std::shared_ptr<ElementVisitor> statCollector;
+  try
+  {
+    statCollector.reset(Factory::getInstance().constructObject<ElementVisitor>(visClassName));
+  }
+  catch (const boost::bad_any_cast&)
+  {
+    throw IllegalArgumentException("Invalid visitor: " + visClassName);
+  }
+
   std::shared_ptr<SingleStatistic> singleStatCtr =
     std::dynamic_pointer_cast<SingleStatistic>(statCollector);
   LOG_VART(singleStatCtr.get());
@@ -94,12 +146,31 @@ double StatCalculator::calculateStat(
         "Visitors passed to the stat command with a statistic type other than \"total\" must "
          "support the NumericStatistic interface.");
     }
-    // TODO
-    if (inputs.size() > 1 && statType == "average")
-    {
-      throw IllegalArgumentException(
-        "An average statistic may only be calculated against a single input.");
-    }
+  }
+
+  std::shared_ptr<Configurable> visConfig =
+    std::dynamic_pointer_cast<Configurable>(statCollector);
+  LOG_VART(visConfig.get());
+  if (visConfig.get())
+  {
+    visConfig->setConfiguration(conf());
+  }
+
+  return statCollector;
+}
+
+double StatCalculator::_calcStatStreaming(
+  const QStringList& inputs, const QString& visitorClassName,
+  const ElementVisitorPtr& statCollector, const QString& statType) const
+{
+  LOG_DEBUG("Calculating stat streaming...");
+
+  std::shared_ptr<SingleStatistic> singleStatCtr =
+    std::dynamic_pointer_cast<SingleStatistic>(statCollector);
+  std::shared_ptr<NumericStatistic> numericStatCtr;
+  if (statType != "total")
+  {
+    numericStatCtr = std::dynamic_pointer_cast<NumericStatistic>(singleStatCtr);
   }
 
   double stat = 0.0;
@@ -110,9 +181,9 @@ double StatCalculator::calculateStat(
   {
     LOG_STATUS(
       "Calculating statistic of type: " << statType << ", using visitor: " << visitorClassName <<
-      ", against " << FileUtils::toLogFormat(inputs.at(i), 25) << "...");
+      ", against ..." << FileUtils::toLogFormat(inputs.at(i), 25) << "...");
 
-    std::shared_ptr<PartialOsmMapReader> reader = _getReader(inputs.at(i));
+    std::shared_ptr<PartialOsmMapReader> reader = _getStreamableReader(inputs.at(i));
     ElementInputStreamPtr filteredInputStream =
       std::make_shared<ElementVisitorInputStream>(
         std::dynamic_pointer_cast<ElementInputStream>(reader), statCollector);
@@ -143,13 +214,13 @@ double StatCalculator::calculateStat(
       }
       else if (statType == "average")
       {
-        // TODO
+        // This works b/c we're limiting the inputs to a size of 1.
         statAvg = numericStatCtr->getAverage();
       }
       else
       {
         // won't get here
-        throw HootException("");
+        throw HootException("Invalid statistic type.");
       }
     }
     else
@@ -161,9 +232,6 @@ double StatCalculator::calculateStat(
     reader->close();
     filteredInputStream->close();
   }
-
-  LOG_STATUS(
-    "Statistic calculated in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 
   if (numericStatCtr)
   {
@@ -182,58 +250,13 @@ double StatCalculator::calculateStat(
     else
     {
       // won't get here
-      throw HootException("");
+      throw HootException("Invalid statistic type.");
     }
   }
   else
   {
     return stat;
   }
-}
-
-bool StatCalculator::_isValidStatType(const QString& statType) const
-{
-  return statType == "total" || statType == "min" || statType == "max" || statType == "average";
-}
-
-std::shared_ptr<PartialOsmMapReader> StatCalculator::_getReader(const QString& input) const
-{
-  // TODO: change this
-  if (!IoUtils::isStreamableInput(input))
-  {
-    throw IllegalArgumentException("Inputs to StatCalculator must be streamable.");
-  }
-
-  std::shared_ptr<PartialOsmMapReader> reader =
-    std::dynamic_pointer_cast<PartialOsmMapReader>(
-      OsmMapReaderFactory::createReader(input));
-  reader->setUseDataSourceIds(true);
-  reader->open(input);
-  reader->initializePartial();
-  return reader;
-}
-
-ElementVisitorPtr StatCalculator::_getStatCollector(const QString& visClassName) const
-{
-  std::shared_ptr<ElementVisitor> statsCollector;
-  try
-  {
-    statsCollector.reset(Factory::getInstance().constructObject<ElementVisitor>(visClassName));
-  }
-  catch (const boost::bad_any_cast&)
-  {
-    throw IllegalArgumentException("Invalid visitor: " + visClassName);
-  }
-
-  std::shared_ptr<Configurable> visConfig =
-    std::dynamic_pointer_cast<Configurable>(statsCollector);
-  LOG_VART(visConfig.get());
-  if (visConfig.get())
-  {
-    visConfig->setConfiguration(conf());
-  }
-
-  return statsCollector;
 }
 
 }

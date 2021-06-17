@@ -63,8 +63,12 @@ private:
   int _taskStatusUpdateInterval;
 
   bool _isValidStatType(const QString& statType) const;
-  std::shared_ptr<PartialOsmMapReader> _getReader(const QString& input) const;
-  ElementVisitorPtr _getStatCollector(const QString& visClassName) const;
+
+  std::shared_ptr<PartialOsmMapReader> _getStreamableReader(const QString& input) const;
+  ElementVisitorPtr _getStatCollector(const QString& statType, const QString& visClassName) const;
+  double _calcStatStreaming(
+    const QStringList& inputs, const QString& visitorClassName,
+    const ElementVisitorPtr& statCollector, const QString& statType) const;
 };
 
 }
