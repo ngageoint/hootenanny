@@ -28,7 +28,7 @@
 #define STAT_CALCULATOR_H
 
 // Hoot
-#include <hoot/core/visitors/ElementVisitor.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 
 namespace hoot
 {
@@ -65,10 +65,14 @@ private:
   bool _isValidStatType(const QString& statType) const;
 
   std::shared_ptr<PartialOsmMapReader> _getStreamableReader(const QString& input) const;
-  ElementVisitorPtr _getStatCollector(const QString& statType, const QString& visClassName) const;
+  ConstElementVisitorPtr _getStatCollector(
+    const QString& statType, const QString& visClassName) const;
   double _calcStatStreaming(
-    const QStringList& inputs, const QString& visitorClassName,
-    const ElementVisitorPtr& statCollector, const QString& statType) const;
+    const QStringList& inputs, const ConstElementVisitorPtr& statCollector,
+    const QString& statType) const;
+  double _calcStatMemoryBound(
+    const QStringList& inputs, const ConstElementVisitorPtr& statCollector,
+    const QString& statType) const;
 };
 
 }

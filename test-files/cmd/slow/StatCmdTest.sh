@@ -37,6 +37,11 @@ echo ""
 hoot stat $LOG_LEVEL $CONFIG "$INPUT_FILE_1;$INPUT_FILE_2" NodesPerWayVisitor total
 
 echo ""
+echo "Calculating the total number of nodes per way recursively from a directory..."
+echo ""
+hoot stat $LOG_LEVEL $CONFIG $RECURSIVE_INPUT NodesPerWayVisitor total --recursive "*"
+
+echo ""
 echo "Calculating the total number of nodes per way recursively from a directory filtered to read osm inputs only..."
 echo ""
 hoot stat $LOG_LEVEL $CONFIG $RECURSIVE_INPUT NodesPerWayVisitor total --recursive "*.osm"

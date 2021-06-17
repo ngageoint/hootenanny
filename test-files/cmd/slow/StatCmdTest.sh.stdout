@@ -24,6 +24,11 @@ Calculating the total number of nodes per way against multiple files...
 
 Calculated statistic: 89
 
+Calculating the total number of nodes per way recursively from a directory...
+
+
+Calculated statistic: 200
+
 Calculating the total number of nodes per way recursively from a directory filtered to read osm inputs only...
 
 
