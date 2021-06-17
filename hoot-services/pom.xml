@@ -44,8 +44,8 @@
         <rhino.version>1.7.13</rhino.version>
         <slf4j.version>1.7.30</slf4j.version>
         <smiley-http-proxy-servlet.version>1.12</smiley-http-proxy-servlet.version>
-        <spring.version>5.2.10.RELEASE</spring.version>
-        <spring.security.version>4.2.20.RELEASE</spring.security.version>
+        <spring.version>5.2.15.RELEASE</spring.version>
+        <spring.security.version>5.2.10.RELEASE</spring.security.version>
         <tika.version>1.26</tika.version>
         <xalan.version>2.7.2</xalan.version>
         <xercesImpl.version>2.12.1</xercesImpl.version>
