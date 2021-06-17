@@ -5,7 +5,7 @@
 
 The +tag-info+ command displays unique feature tag values found in one or more inputs, grouped by tag key. 
 
-* +input(s)+            - One or more streamable inputs; may be any supported streamable input format (e.g. .osm file).
+* +input(s)+            - One or more inputs; may be any supported input format (e.g. .osm file).
 * +--tag-values-limit+  - Limits the number of unique tag values printed per tag key. By default, there is no limit. This 
                           option is ignored if --keys-only is specified.
 * +--keys+              - Prints unique tag values for the specified keys only.  Delimit multiple keys with a semicolon 
@@ -22,12 +22,6 @@ The +tag-info+ command displays unique feature tag values found in one or more i
                           This must be followed by either "*" to denote no filtering or one or more wildcard name filters. 
                           e.g. "*.osm;*.json" or "*myFile*". The recursion is only performed on file directories and 
                           this parameter is ignored for other input types.
-
-This command works on streamable inputs only. To determine if an input is streamable use:
-
------
-    hoot info --formats --input-streamable
------
 
 === Usage
 

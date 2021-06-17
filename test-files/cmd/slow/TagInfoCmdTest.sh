@@ -12,6 +12,11 @@ echo ""
 hoot tag-info $LOG_LEVEL $CONFIG test-files/jakarta_raya_coastline.shp
 
 echo ""
+echo "Display tag information recursively from a directory..."
+echo ""
+hoot tag-info $LOG_LEVEL $CONFIG $RECURSIVE_INPUT --recursive "*"
+
+echo ""
 echo "Display tag information recursively from a directory filtered to json files..."
 echo ""
 hoot tag-info $LOG_LEVEL $CONFIG $RECURSIVE_INPUT --recursive "*.osm"

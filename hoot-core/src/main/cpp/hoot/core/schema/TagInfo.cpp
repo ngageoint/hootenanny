@@ -121,27 +121,30 @@ QString TagInfo::_getInfo(const QString& input) const
   QString inputInfo = input;
   LOG_VARD(inputInfo);
 
-  std::shared_ptr<OsmMapReader> reader =
-    OsmMapReaderFactory::createReader(
-      inputInfo, ConfigOptions().getReaderUseDataSourceIds(),
-      Status::fromString(ConfigOptions().getReaderSetDefaultStatus()));
-  std::shared_ptr<OgrReader> ogrReader = std::dynamic_pointer_cast<OgrReader>(reader);
-  if (ogrReader.get())
+  if (IoUtils::isSupportedOgrFormat(input))
   {
     // Using a different code path for the OGR inputs to handle the layer syntax. We need to add
-    // custom behavior to the element parsing, so loading the map through IoUtils::loadMap won't work
-    // here.
-    return _getInfoFromOgrInput(ogrReader, inputInfo);
+    // custom behavior to the element parsing, so loading the map through IoUtils::loadMap won't
+    // work here.
+    return _getInfoFromOgrInput(inputInfo);
+  }
+  else if (IoUtils::isStreamableInput(input))
+  {
+    return _getInfoFromStreamableInput(inputInfo);
   }
   else
   {
-    return _getInfoFromStreamableInput(reader, inputInfo);
+    return _getInfoFromMemoryBoundInput(inputInfo);
   }
 }
 
-QString TagInfo::_getInfoFromOgrInput(
-  const std::shared_ptr<OgrReader>& reader, QString& input) const
+QString TagInfo::_getInfoFromOgrInput(QString& input) const
 {
+  std::shared_ptr<OgrReader> reader =
+    std::dynamic_pointer_cast<OgrReader>(
+      OsmMapReaderFactory::createReader(
+        input, ConfigOptions().getReaderUseDataSourceIds(),
+        Status::fromString(ConfigOptions().getReaderSetDefaultStatus())));
   // We have to have a translation for the reading, so just use the simplest one.
   reader->setSchemaTranslationScript(ConfPath::getHootHome() + "/translations/quick.js");
 
@@ -215,20 +218,52 @@ QString TagInfo::_getInfoFromOgrInput(
   return finalText;
 }
 
-QString TagInfo::_getInfoFromStreamableInput(
-  const std::shared_ptr<OsmMapReader>& reader, const QString& input) const
+QString TagInfo::_getInfoFromMemoryBoundInput(const QString& input) const
 {
-  // At this time, the only unstreamable readers are the JSON readers. If this capability is
-  // needed for JSON data, then either those readers can implement PartialOsmMapReader or the
-  // needed readed code can be manually added to this class.
-  // TODO: change this
-  if (!IoUtils::isStreamableInput(input))
-  {
-    throw IllegalArgumentException("Inputs to TagInfo must be streamable.");
-  }
-
   LOG_DEBUG("Reading: " << input << "...");
 
+  OsmMapPtr map = std::make_shared<OsmMap>();
+  IoUtils::loadMap(
+    map, input, ConfigOptions().getReaderUseDataSourceIds(),
+    Status::fromString(ConfigOptions().getReaderSetDefaultStatus()));
+
+  TagInfoHash result;
+  int numElementsProcessed = 0;
+  while (map->hasNext())
+  {
+    ConstElementPtr e = map->next();
+    if (e.get())
+    {
+      LOG_VART(e);
+      _parseElement(e, result);
+    }
+
+    numElementsProcessed++;
+    if (numElementsProcessed % (_taskStatusUpdateInterval * 10) == 0)
+    {
+      PROGRESS_INFO(
+        "Processed " << StringUtils::formatLargeNumber(numElementsProcessed) << " elements.");
+    }
+  }
+
+  if (_delimitedTextOutput)
+  {
+    return _printDelimitedText(result);
+  }
+  else
+  {
+    return _printJSON("osm", result);
+  }
+}
+
+QString TagInfo::_getInfoFromStreamableInput(const QString& input) const
+{
+  LOG_DEBUG("Reading: " << input << "...");
+
+  std::shared_ptr<OsmMapReader> reader =
+    OsmMapReaderFactory::createReader(
+      input, ConfigOptions().getReaderUseDataSourceIds(),
+      Status::fromString(ConfigOptions().getReaderSetDefaultStatus()));
   reader->open(input);
   std::shared_ptr<ElementInputStream> streamReader =
     std::dynamic_pointer_cast<ElementInputStream>(reader);
@@ -292,7 +327,7 @@ bool TagInfo::_tagKeysMatch(const QString& tagKey) const
   return false;
 }
 
-void TagInfo::_parseElement(const ElementPtr& e, TagInfoHash& result) const
+void TagInfo::_parseElement(const ConstElementPtr& e, TagInfoHash& result) const
 {
   for (Tags::const_iterator it = e->getTags().begin(); it != e->getTags().end(); ++it)
   {

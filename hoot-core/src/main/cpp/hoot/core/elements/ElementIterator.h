@@ -47,8 +47,18 @@ public:
 
   virtual ~ElementIterator() = default;
 
+  /**
+   * TODO
+   *
+   * @return
+   */
   const std::shared_ptr<Element>& next();
 
+  /**
+   * TODO
+   *
+   * @return
+   */
   bool hasNext();
 
   /**

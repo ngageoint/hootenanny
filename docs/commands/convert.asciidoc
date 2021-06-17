@@ -20,7 +20,7 @@ See the Hootenanny User Guide Supported Data Formats section for more informatio
 convert (input) [input2...] (output)
 
 # This syntax is upported for OGR inputs only.
-convert "(input1[;layer]) [input2[;layer]]" (output) [--write-bounds]
+convert (input1[;layer]) [input2[;layer]] (output) [--write-bounds]
 --------------------------------------
 
 https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#conversion[Examples]

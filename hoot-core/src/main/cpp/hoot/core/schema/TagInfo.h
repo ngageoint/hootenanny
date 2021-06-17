@@ -87,15 +87,14 @@ private:
   int _taskStatusUpdateInterval;
 
   QString _getInfo(const QString& input) const;
-  QString _getInfoFromOgrInput(
-    const std::shared_ptr<OgrReader>& reader, QString& input) const;
-  QString _getInfoFromStreamableInput(
-    const std::shared_ptr<OsmMapReader>& reader, const QString& input) const;
+  QString _getInfoFromOgrInput(QString& input) const;
+  QString _getInfoFromStreamableInput(const QString& input) const;
+  QString _getInfoFromMemoryBoundInput(const QString& input) const;
 
   QString _printJSON(const QString& lName, TagInfoHash& data) const;
   QString _printDelimitedText(TagInfoHash& data) const;
 
-  void _parseElement(const ElementPtr& e, TagInfoHash& result) const;
+  void _parseElement(const ConstElementPtr& e, TagInfoHash& result) const;
   bool _tagKeysMatch(const QString& tagKey) const;
 };
 
