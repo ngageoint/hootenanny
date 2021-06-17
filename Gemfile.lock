@@ -8,7 +8,7 @@ GEM
       nokogiri (~> 1.8, >= 1.8.1)
       tomlrb (~> 1.1)
     appium_lib_core (1.8.4)
-      faye-websocket (~> 0.10.0)
+      faye-websocket (~> 0.11.0)
       selenium-webdriver (~> 3.5, < 3.14)
     backports (3.16.1)
     builder (3.2.4)
