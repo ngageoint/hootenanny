@@ -44,8 +44,8 @@ public:
    * @param elementSource source of the element stream
    * @param visitor an element visitor to filter the stream with
    */
-  ElementVisitorInputStream(const ElementInputStreamPtr& elementSource,
-                            const ElementVisitorPtr& visitor);
+  ElementVisitorInputStream(
+    const ElementInputStreamPtr& elementSource, const ElementVisitorPtr& visitor);
   ~ElementVisitorInputStream() = default;
 
   /**
