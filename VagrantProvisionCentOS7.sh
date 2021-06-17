@@ -78,7 +78,7 @@ else
          glpk-devel \
          gdal \
          gdal-devel \
-         gdal-python \
+         gdal-python-tools \
          libgeotiff \
          libgeotiff-devel \
          liboauthcpp \
