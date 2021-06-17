@@ -18,7 +18,7 @@ on `<osmChange>` file to be compared to the other file/directory.
 === Usage
 
 --------------------------------------
-diff [--ignore-uuid] [--use-datetime] [--error-limit limit] (input1) (input2)
+diff (input1) (input2) [--ignore-uuid] [--use-datetime] [--error-limit limit]
 --------------------------------------
 
 https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#calculate-the-difference-between-two-maps[Examples]

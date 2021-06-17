@@ -37,6 +37,9 @@
 namespace hoot
 {
 
+/**
+ * TODO
+ */
 class AttributeCoOccurrence
 {
 public:
@@ -45,10 +48,25 @@ public:
 
   AttributeCoOccurrence() = default;
 
+  /**
+   * TODO
+   *
+   * @param in
+   */
   void addToMatrix(const ConstOsmMapPtr& in);
 
+  /**
+   * TODO
+   *
+   * @return
+   */
   QString printTable();
 
+  /**
+   * TODO
+   *
+   * @return
+   */
   QString printList();
 
 private:
