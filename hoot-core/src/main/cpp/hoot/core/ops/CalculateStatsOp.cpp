@@ -322,7 +322,7 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
   // either calculated by themselves or after a conflation job. As more script conflators implement
   // a search radius function vs using a predefined value, this list could get a little unruly.
   conf().set(ConfigOptions::getPowerLineAutoCalcSearchRadiusKey(), false);
-  conf().set(ConfigOptions::getWaterwayAutoCalcSearchRadiusKey(), false);
+  conf().set(ConfigOptions::getRiverAutoCalcSearchRadiusKey(), false);
 
   _initStatCalc();
 

@@ -24,27 +24,27 @@
  *
  * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
-#include "LinearWaterwayWayNodeCriterion.h"
+#include "RiverWayNodeCriterion.h"
 
 // hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/criterion/LinearWaterwayCriterion.h>
+#include <hoot/core/criterion/RiverCriterion.h>
 
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementCriterion, LinearWaterwayWayNodeCriterion)
+HOOT_FACTORY_REGISTER(ElementCriterion, RiverWayNodeCriterion)
 
-LinearWaterwayWayNodeCriterion::LinearWaterwayWayNodeCriterion() :
+RiverWayNodeCriterion::RiverWayNodeCriterion() :
 WayNodeCriterion()
 {
-  _parentCriterion.reset(new LinearWaterwayCriterion());
+  _parentCriterion = std::make_shared<RiverCriterion>();
 }
 
-LinearWaterwayWayNodeCriterion::LinearWaterwayWayNodeCriterion(ConstOsmMapPtr map) :
+RiverWayNodeCriterion::RiverWayNodeCriterion(ConstOsmMapPtr map) :
 WayNodeCriterion(map)
 {
-  _parentCriterion.reset(new LinearWaterwayCriterion());
+  _parentCriterion = std::make_shared<RiverCriterion>();
 }
 
 }

@@ -372,7 +372,7 @@ hoot convert -D convert.ops="UnlikelyRoadRemover" input.osm output.osm
       -D conflate.tag.filter=myFilter.json input1.osm input2.osm output.osm
 -----
 
-==== Filter maps down to POIs only before conflating them:
+==== Filter POIs out of maps before conflating them:
 
 -----
     hoot conflate -C AttributeConflation.conf -C UnifyingAlgorithm.conf \
@@ -386,7 +386,18 @@ hoot convert -D convert.ops="UnlikelyRoadRemover" input.osm output.osm
 -----
     hoot conflate -C AttributeConflation.conf -C UnifyingAlgorithm.conf \
       -D convert.ops=RemoveElementsVisitor \
-      -D remove.elements.visitor.element.criteria=LinearWaterwayCriterion;LinearWaterwayWayNodeCriterion;RelationWithRiverMembersCriterion \
+      -D remove.elements.visitor.element.criteria=RiverCriterion \
+      -D element.criteria.negate=true \
+      -D remove.elements.visitor.chain.element.criteria=true \
+      -D remove.elements.visitor.recursive=false input1.osm input2.osm output.osm
+-----
+
+==== Filter maps down to rivers only before conflating them and keep any relations that contain them:
+
+-----
+    hoot conflate -C AttributeConflation.conf -C UnifyingAlgorithm.conf \
+      -D convert.ops=RemoveElementsVisitor \
+      -D remove.elements.visitor.element.criteria=RiverCriterion;RelationWithRiverMembersCriterion \
       -D element.criteria.negate=true \
       -D remove.elements.visitor.chain.element.criteria=true \
       -D remove.elements.visitor.recursive=false input1.osm input2.osm output.osm
@@ -863,6 +874,18 @@ Requires a language translation server installation.  See the Hootenanny Install
     hoot count input.osm --all-elements
 -----
 
+==== Count all features recursively across multiple files under a directory:
+
+-----
+    hoot count /my/dir --recursive "*"
+-----
+
+==== Count all features recursively across multiple OSM files under a directory:
+
+-----
+    hoot count /my/dir --recursive "*.osm"
+-----
+
 ==== Count all elements within a bounding box:
 
 -----
@@ -928,6 +951,18 @@ Requires a language translation server installation.  See the Hootenanny Install
 
 -----
     hoot stat input.osm UniqueTagKeyCounter
+-----
+
+==== Count unique tag keys recursively across multiple files under a directory:
+
+-----
+    hoot count /my/dir UniqueTagKeyCounter --recursive "*"
+-----
+
+==== Count unique tag keys recursively across multiple OSM files under a directory:
+
+-----
+    hoot count /my/dir UniqueTagKeyCounter --recursive "*.osm"
 -----
 
 ==== Calculate the area of all features in a map:
@@ -1021,6 +1056,18 @@ Requires a language translation server installation.  See the Hootenanny Install
     hoot stats input.osm
 -----
 
+==== Display a set of statistics recursively across multiple maps under a directory:
+
+-----
+    hoot stats /my/dir --recursive "*"
+-----
+
+==== Display a set of statistics recursively across multiple OSM file maps under a directory:
+
+-----
+    hoot stats /my/dir --recursive "*.osm"
+-----
+
 === Tag Info
 
 ==== Display the distribution of highway tags for all elements in a map:
@@ -1032,6 +1079,18 @@ Requires a language translation server installation.  See the Hootenanny Install
     401	(4.61%)	highway=residential
     97	(1.11%)	highway=service
     56	(<1%)	highway=secondary
+-----
+
+==== Display the distribution of highway tags recursively across multiple maps under a directory:
+
+-----
+    hoot tag-distribution /my/dir highway --limit 3 --recursive "*"
+-----
+
+==== Display the distribution of highway tags recursively across multiple OSM file maps under a directory:
+
+-----
+    hoot tag-distribution /my/dir highway --limit 3 --recursive "*.osm"
 -----
 
 ==== Display the distribution of highway tags for only way roads in a map:
@@ -1119,6 +1178,18 @@ Requires a language translation server installation.  See the Hootenanny Install
         ],
         ...
     }}
+-----
+
+==== Display tag information recursively across multiple maps under a directory:
+
+-----
+    hoot tag-info /my/dir --recursive "*"
+-----
+
+==== Display tag information recursively across multiple OSM file maps under a directory:
+
+-----
+    hoot tag-info /my/dir --recursive "*.osm"
 -----
 
 ==== Display all unique values for a particular tag key in a map:

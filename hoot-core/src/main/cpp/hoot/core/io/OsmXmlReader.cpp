@@ -461,7 +461,7 @@ void OsmXmlReader::read(const OsmMapPtr& map)
 
   // This is meant for taking a larger input down to a smaller size. Clearly, if the input data's
   // bounds is already smaller than _bounds, this will have no effect. Also, We don't support
-  // cropping during streaming, and there is a check in ElementStreamer::isStreamableIo to make
+  // cropping during streaming, and there is a check in IoUtils::isStreamableIo to make
   // sure nothing tries to stream with this reader when a bounds has been set.
   LOG_VARD(_bounds.get());
   if (_bounds.get())
@@ -479,9 +479,9 @@ void OsmXmlReader::read(const OsmMapPtr& map)
   _map.reset();
 }
 
-OsmMapPtr OsmXmlReader::fromXml(const QString& xml, const bool useDataSourceId,
-                                const bool useDataSourceStatus, const bool keepStatusTag,
-                                const bool addChildRefsWhenMissing)
+OsmMapPtr OsmXmlReader::fromXml(
+  const QString& xml, const bool useDataSourceId, const bool useDataSourceStatus,
+  const bool keepStatusTag, const bool addChildRefsWhenMissing)
 {
   if (xml.isEmpty())
   {

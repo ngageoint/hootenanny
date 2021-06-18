@@ -33,7 +33,6 @@
 #include <hoot/core/io/OsmMapWriter.h>
 #include <hoot/core/io/OgrWriter.h>
 #include <hoot/core/io/PartialOsmMapWriter.h>
-#include <hoot/core/io/ElementOutputStream.h>
 #include <hoot/core/schema/SchemaUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
@@ -121,19 +120,6 @@ QString OsmMapWriterFactory::getWriterName(const QString& url)
   return "";
 }
 
-bool OsmMapWriterFactory::hasElementOutputStream(const QString& url)
-{
-  bool result = false;
-  std::shared_ptr<OsmMapWriter> writer = createWriter(url);
-  std::shared_ptr<ElementOutputStream> streamWriter =
-    std::dynamic_pointer_cast<ElementOutputStream>(writer);
-  if (streamWriter)
-  {
-    result = true;
-  }
-  return result;
-}
-
 void OsmMapWriterFactory::write(
   const std::shared_ptr<OsmMap>& map, const QString& url, const bool silent, const bool is_debug)
 {
@@ -192,7 +178,7 @@ void OsmMapWriterFactory::writeDebugMap(
     StringUtils::removeEmptyStrings(excludeClassFilter);
     LOG_VART(excludeClassFilter);
     if (!excludeClassFilter.isEmpty() &&
-        StringUtils::containsWildcard(callingClassNoNamespace, excludeClassFilter))
+        StringUtils::matchesWildcard(callingClassNoNamespace, excludeClassFilter))
     {
       return;
     }
@@ -204,7 +190,7 @@ void OsmMapWriterFactory::writeDebugMap(
     StringUtils::removeEmptyStrings(includeClassFilter);
     LOG_VART(includeClassFilter);
     if (includeClassFilter.isEmpty() ||
-        StringUtils::containsWildcard(callingClassNoNamespace, includeClassFilter))
+        StringUtils::matchesWildcard(callingClassNoNamespace, includeClassFilter))
     {
       QString debugMapFileName = ConfigOptions().getDebugMapsFilename();
       if (!debugMapFileName.toLower().endsWith(".osm"))

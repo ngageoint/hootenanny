@@ -36,7 +36,6 @@
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/io/ElementCriterionVisitorInputStream.h>
-#include <hoot/core/io/ElementStreamer.h>
 #include <hoot/core/io/IoUtils.h>
 #include <hoot/core/io/OsmChangesetFileWriter.h>
 #include <hoot/core/io/OsmChangesetFileWriterFactory.h>
@@ -119,7 +118,7 @@ void ChangesetCreator::create(const QString& output, const QString& input1, cons
   LOG_VARD(_singleInput);
   // both inputs must support streaming to use streaming I/O
   const bool useStreamingIo =
-    // TODO: may be able to move this check to ElementStreamer::areValidStreamingOps
+    // TODO: may be able to move this check to IoUtils::areValidStreamingOps
     !ConfigUtils::boundsOptionEnabled() &&
     _inputIsStreamable(input1) &&
     (_singleInput || _inputIsStreamable(input2));
@@ -139,7 +138,7 @@ void ChangesetCreator::create(const QString& output, const QString& input1, cons
       // Convert ops get a single task, which OpExecutor will break down into sub-tasks during
       // progress reporting.
       _numTotalTasks++;
-      if (!ElementStreamer::areValidStreamingOps(ConfigOptions().getConvertOps()))
+      if (!IoUtils::areValidStreamingOps(ConfigOptions().getConvertOps()))
       {
         // Have the extra work of combining and separating data inputs when any of the convert
         // ops aren't streamable.
@@ -344,14 +343,14 @@ bool ChangesetCreator::_inputIsSorted(const QString& input) const
 
 bool ChangesetCreator::_inputIsStreamable(const QString& input) const
 {
-  LOG_VARD(OsmMapReaderFactory::hasElementInputStream(input));
-  LOG_VARD(ElementStreamer::areValidStreamingOps(ConfigOptions().getConvertOps()));
+  LOG_VARD(IoUtils::isStreamableInput(input));
+  LOG_VARD(IoUtils::areValidStreamingOps(ConfigOptions().getConvertOps()));
   LOG_VARD(ConfigOptions().getElementSorterElementBufferSize());
   return
     // The input format itself must be streamable (partially read).
-    OsmMapReaderFactory::hasElementInputStream(input) &&
+    IoUtils::isStreamableInput(input) &&
     // All ops must be streamable, otherwise we'll load both inputs into memory.
-    ElementStreamer::areValidStreamingOps(ConfigOptions().getConvertOps()) &&
+    IoUtils::areValidStreamingOps(ConfigOptions().getConvertOps()) &&
     // If no sort buffer size is set, we sort in-memory. If we're already loading the data
     // into memory for sorting, might as well force it into memory for the initial read as well.
     ConfigOptions().getElementSorterElementBufferSize() != -1;
@@ -506,7 +505,7 @@ void ChangesetCreator::_readInputsFully(
   LOG_VARD(ConfigOptions().getConvertOps().size());
   if (!ConfigOptions().getConvertOps().empty())
   {
-    if (!ElementStreamer::areValidStreamingOps(ConfigOptions().getConvertOps()))
+    if (!IoUtils::areValidStreamingOps(ConfigOptions().getConvertOps()))
     {
       /*
        * If any op in the convert ops is a map consumer, then it must go through this logic, which
@@ -660,7 +659,7 @@ ElementInputStreamPtr ChangesetCreator::_getFilteredInputStream(const QString& i
   // TODO: Any OsmMapOperations in the bunch need to operate on the entire map made up of both
   // inputs to work correctly.
   return
-    ElementStreamer::getFilteredInputStream(filteredInputStream, ConfigOptions().getConvertOps());
+    IoUtils::getFilteredInputStream(filteredInputStream, ConfigOptions().getConvertOps());
 }
 
 ElementInputStreamPtr ChangesetCreator::_sortElementsInMemory(OsmMapPtr map) const

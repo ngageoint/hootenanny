@@ -39,6 +39,7 @@
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/util/OpenCv.h>
+#include <hoot/core/util/StringUtils.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 
 // Qt
@@ -53,7 +54,8 @@ namespace hoot
 {
 
 BaseComparator::BaseComparator(
-  const std::shared_ptr<OsmMap>& map1, const std::shared_ptr<OsmMap>& map2)
+  const std::shared_ptr<OsmMap>& map1, const std::shared_ptr<OsmMap>& map2) :
+_taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
 {
   _init(map1, map2);
 }
@@ -106,7 +108,6 @@ double BaseComparator::_calculateError(const cv::Mat& image1, const cv::Mat& ima
     image1Sum += image1Data[i];
     image2Sum += image2Data[i];
   }
-
   return errorSum / (image1Sum + image2Sum);
 }
 
@@ -145,8 +146,6 @@ void BaseComparator::_calculateRingColor(double v, double, QRgb& c) const
 Coordinate BaseComparator::_findNearestPointOnFeature(
   const std::shared_ptr<OsmMap>& map, const Coordinate& c)
 {
-  LOG_TRACE("Finding nearest point to: " << c << "...");
-
   Coordinate result;
 
   // find the nearest feature
@@ -185,21 +184,30 @@ void BaseComparator::_saveImage(cv::Mat& image, QString path, double max, bool g
 {
   if (max <= 0.0)
   {
+    int pixelCtr = 0;
     for (int y = 0; y < _height; y++)
     {
       float* row = image.ptr<float>(y);
       for (int x = 0; x < _width; x++)
       {
         max = std::max((double)row[x], max);
+
+        pixelCtr++;
+        if (pixelCtr % (_taskStatusUpdateInterval * 1000) == 0)
+        {
+          PROGRESS_STATUS(
+            "Calculated maximum value for " << StringUtils::formatLargeNumber(pixelCtr) << " of " <<
+            StringUtils::formatLargeNumber(_height * _width) << " pixels.");
+        }
       }
     }
   }
 
   QImage qImage(_width, _height, QImage::Format_ARGB32);
-
   QRgb rgb = 0;
   if (max > 0.0)
   {
+    int pixelCtr = 0;
     for (int y = 0; y < _height; y++)
     {
       float* row = image.ptr<float>(y);
@@ -214,6 +222,14 @@ void BaseComparator::_saveImage(cv::Mat& image, QString path, double max, bool g
           _calculateRingColor(row[x], max, rgb);
         }
         qImage.setPixel(x, y, rgb);
+
+        pixelCtr++;
+        if (pixelCtr % (_taskStatusUpdateInterval * 1000) == 0)
+        {
+          PROGRESS_STATUS(
+            "Wrote " << StringUtils::formatLargeNumber(pixelCtr) << " of " <<
+            StringUtils::formatLargeNumber(_height * _width) << " pixels.");
+        }
       }
     }
   }

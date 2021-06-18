@@ -261,11 +261,11 @@ bool StringUtils::containsAny(
   return false;
 }
 
-bool StringUtils::containsWildcard(const QString& str, const QStringList& inputs)
+bool StringUtils::matchesWildcard(const QString& str, const QStringList& wildcards)
 {
-  for (int i = 0; i < inputs.size(); i++)
+  for (int i = 0; i < wildcards.size(); i++)
   {
-    QRegExp regex(inputs.at(i), Qt::CaseInsensitive, QRegExp::Wildcard);
+    QRegExp regex(wildcards.at(i), Qt::CaseInsensitive, QRegExp::Wildcard);
     if (regex.exactMatch(str))
     {
       return true;

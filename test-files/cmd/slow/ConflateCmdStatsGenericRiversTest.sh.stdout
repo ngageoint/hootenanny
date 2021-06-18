@@ -45,32 +45,32 @@ Total Unmatched Features From Map 1	14	0	0
 Percentage of Total Features Unmatched From Map 1	100	0	0	
 Total Unmatched Features From Map 2	0	15	17	
 Percentage of Total Features Unmatched From Map 2	0	100	53.125	
-Waterways	14	15	32	
-Conflatable Waterways	14	15	0	
-Conflated Waterways	0	0	15	
-Waterways Marked for Review	0	0	0	
-Waterway Reviews to be Made	0	0	0	
-Unmatched Waterways	14	15	17	
-Unmatched Waterways From Map 1	14	0	0	
-Unmatched Waterways From Map 2	0	15	17	
-Total Meters of Waterways	26027.07208471537	25763.06610558051	37828.52606487304	
-Meters of Conflated Waterways	0	0	26027.0719422241	
-Meters of Unmatched Waterways From Map 1	26027.07208471537	0	0	
-Meters of Unmatched Waterways From Map 2	0	25763.06610558051	11801.45412264895	
-Percentage of Waterways Conflated	0	0	46.875	
-Percentage of Waterways Marked for Review	0	0	0	
-Percentage of Unmatched Waterways From Map 1	100	0	0	
-Percentage of Unmatched Waterways From Map 2	0	100	53.125	
-Percentage of Unmatched Waterways	100	100	53.125	
+Rivers	14	15	32	
+Conflatable Rivers	14	15	0	
+Conflated Rivers	0	0	15	
+Rivers Marked for Review	0	0	0	
+River Reviews to be Made	0	0	0	
+Unmatched Rivers	14	15	17	
+Unmatched Rivers From Map 1	14	0	0	
+Unmatched Rivers From Map 2	0	15	17	
+Total Meters of Rivers	26027.07208471537	25763.06610558051	37828.52606487304	
+Meters of Conflated Rivers	0	0	26027.0719422241	
+Meters of Unmatched Rivers From Map 1	26027.07208471537	0	0	
+Meters of Unmatched Rivers From Map 2	0	25763.06610558051	11801.45412264895	
+Percentage of Rivers Conflated	0	0	46.875	
+Percentage of Rivers Marked for Review	0	0	0	
+Percentage of Unmatched Rivers From Map 1	100	0	0	
+Percentage of Unmatched Rivers From Map 2	0	100	53.125	
+Percentage of Unmatched Rivers	100	100	53.125	
 Translated Populated Tags	14	92	217	
 Difference Between Total Features in Output and Total Features in Inputs			3	
 Percentage Difference Between Total Features in Output and Total Features in Inputs			10.3448275862069	
 Percentage of Number of Total Map 1 Features Matched With Map 2 Features			107.1428571428571	
 Percentage of Number of Total Map 1 Features Not Matched With Map 2 Features			0	
 Percentage of Number of Total Map 2 Features Not Matched With Map 1 Features			113.3333333333333	
-Percentage of Length of Map 1 Waterways Matched With Map 2 Waterways			99.99999945252669	
-Percentage of Length of Map 1 Waterways Not Matched With Map 2 Waterways			0	
-Percentage of Length of Map 2 Waterways Not Matched With Map 1 Waterways			45.80764600876698	
+Percentage of Length of Map 1 Rivers Matched With Map 2 Rivers			99.99999945252669	
+Percentage of Length of Map 1 Rivers Not Matched With Map 2 Rivers			0	
+Percentage of Length of Map 2 Rivers Not Matched With Map 1 Rivers			45.80764600876698	
 Calculate Stats for Input 1 Time (sec)				13.02799105644226
 Calculate Stats for Input 2 Time (sec)				0.717628002166748
 Apply Pre-Conflate Ops Time (sec)				0.04079699516296387

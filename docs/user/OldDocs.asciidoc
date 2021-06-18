@@ -121,8 +121,8 @@ this conflation.
 [width="65%"]
 |======
 | *Location* | *Description*
-| `conf/schema/WaterwaySchema.json` | attribute schema definitions
-| `rules/LinearWaterway.js` | custom rule based conflation model
+| `conf/schema/waterway.json` | attribute schema definitions
+| `rules/River.js` | custom rule based conflation model
 |======
 
 ==== Usage

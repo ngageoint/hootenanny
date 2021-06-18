@@ -111,23 +111,23 @@ Percentage of Buildings Marked for Review	0	0	0
 Percentage of Unmatched Buildings From Map 1	100	0	54.54545454545454	
 Percentage of Unmatched Buildings From Map 2	0	100	9.090909090909092	
 Percentage of Unmatched Buildings	100	100	63.63636363636363	
-Waterways	0	0	0	
-Conflatable Waterways	0	0	0	
-Conflated Waterways	0	0	0	
-Waterways Marked for Review	0	0	0	
-Waterway Reviews to be Made	0	0	0	
-Unmatched Waterways	0	0	0	
-Unmatched Waterways From Map 1	0	0	0	
-Unmatched Waterways From Map 2	0	0	0	
-Total Meters of Waterways	0	0	0	
-Meters of Conflated Waterways	0	0	0	
-Meters of Unmatched Waterways From Map 1	0	0	0	
-Meters of Unmatched Waterways From Map 2	0	0	0	
-Percentage of Waterways Conflated	0	0	0	
-Percentage of Waterways Marked for Review	0	0	0	
-Percentage of Unmatched Waterways From Map 1	0	0	0	
-Percentage of Unmatched Waterways From Map 2	0	0	0	
-Percentage of Unmatched Waterways	0	0	0	
+Rivers	0	0	0	
+Conflatable Rivers	0	0	0	
+Conflated Rivers	0	0	0	
+Rivers Marked for Review	0	0	0	
+River Reviews to be Made	0	0	0	
+Unmatched Rivers	0	0	0	
+Unmatched Rivers From Map 1	0	0	0	
+Unmatched Rivers From Map 2	0	0	0	
+Total Meters of Rivers	0	0	0	
+Meters of Conflated Rivers	0	0	0	
+Meters of Unmatched Rivers From Map 1	0	0	0	
+Meters of Unmatched Rivers From Map 2	0	0	0	
+Percentage of Rivers Conflated	0	0	0	
+Percentage of Rivers Marked for Review	0	0	0	
+Percentage of Unmatched Rivers From Map 1	0	0	0	
+Percentage of Unmatched Rivers From Map 2	0	0	0	
+Percentage of Unmatched Rivers	0	0	0	
 Polygon Conflatable POIs	10	8	14	
 Conflatable Polygon Conflatable POIs	10	8	0	
 Conflated Polygon Conflatable POIs	0	0	4	

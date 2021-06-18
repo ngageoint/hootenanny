@@ -7,10 +7,9 @@ The +convert+ command converts map data from one input format to another.  Optio
 performed during the conversion.  The process may be memory bound depending upon the input or output formats selected.  
 See the Hootenanny User Guide Supported Data Formats section for more information.
 
-* +input(s)+       - Input path(s) to convert from; may be any supported input format; Multiple inputs are supported 
-                     unless converting to an OGR format, and path wildcards may be used for inputs within the same 
-                     directory. For OGR inputs, layer names may also optionally be specified.  Use a single space to 
-                     separate each input and a ';' between inputs and layer (<filename>;<layer name>).
+* +input(s)+       - Input path(s) to convert from; may be any supported input format (e.g. .osm file). Multiple inputs 
+                     are supported unless converting to an OGR format. Path wildcards may be used for inputs within the 
+                     same directory. For OGR inputs, layer names may also optionally be specified.
 * +output+         - Output path to convert to; may be any supported output format (e.g. .osm file, etc.).
 * +--write-bounds+ - If the `bounds` configuration option is specified, optionally outputs a file containing the input bounds.
                      The location of the file is controlled via the `bounds.output.file` configuration option.
@@ -18,10 +17,10 @@ See the Hootenanny User Guide Supported Data Formats section for more informatio
 === Usage
 
 --------------------------------------
-convert (input) (output)
+convert (input) [input2...] (output)
 
 # This syntax is upported for OGR inputs only.
-convert "(input1[;layer]) [input2[;layer]]" (output) [--write-bounds]
+convert (input1[;layer]) [input2[;layer]] (output) [--write-bounds]
 --------------------------------------
 
 https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#conversion[Examples]

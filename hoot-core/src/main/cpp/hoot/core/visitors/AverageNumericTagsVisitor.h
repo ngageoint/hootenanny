@@ -68,13 +68,11 @@ public:
 
   double getStat() const override;
 
-  QString getDescription() const override { return "Calculates the average of numeric tag values"; }
-
   void setConfiguration(const Settings& conf) override;
 
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+  QString getDescription() const override { return "Calculates the average of numeric tag values"; }
 
 private:
 

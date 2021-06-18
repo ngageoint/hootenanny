@@ -71,7 +71,7 @@ private:
   static void isPoint(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isPolygon(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isLinear(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void isLinearWaterway(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void isRiver(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isPowerLine(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isPoi(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isRailway(const v8::FunctionCallbackInfo<v8::Value>& args);

@@ -32,6 +32,7 @@
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/rnd/io/SparkChangesetWriter.h>
 #include <hoot/core/io/HootApiDbReader.h>
+#include <hoot/core/io/IoUtils.h>
 #include <hoot/core/io/ElementCriterionVisitorInputStream.h>
 #include <hoot/core/criterion/PoiCriterion.h>
 #include <hoot/core/visitors/SchemaTranslationVisitor.h>
@@ -71,7 +72,7 @@ void MultiaryIngester::_doInputErrorChecking(const QString& newInput,
                                              const QString& referenceOutput,
                                              const QString& changesetOutput) const
 {
-  if (!OsmMapReaderFactory::hasElementInputStream(newInput))
+  if (!IoUtils::isStreamableInput(newInput))
   {
     throw IllegalArgumentException(
       QString("Multiary ingest only supports streamable input formats.") +

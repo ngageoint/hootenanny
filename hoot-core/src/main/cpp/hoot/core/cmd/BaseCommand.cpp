@@ -119,4 +119,31 @@ QStringList BaseCommand::toQStringList(char* argv[], int argc) const
   return result;
 }
 
+QStringList BaseCommand::_parseRecursiveInputParameter(QStringList& args, bool& paramPresent)
+{
+  QStringList inputFilters;
+  paramPresent = false;
+  if (args.contains("--recursive"))
+  {
+    paramPresent = true;
+    const int recursiveIndex = args.indexOf("--recursive");
+    if (args.size() < recursiveIndex + 2)
+    {
+      throw IllegalArgumentException(
+        "The --recursive option must be followed by either \"*\" for no filtering or one or "
+        "more filters.");
+    }
+    const QString filter = args.at(recursiveIndex + 1).trimmed();
+    // "*" denotes no filtering
+    if (filter != "*")
+    {
+      inputFilters = filter.split(";");
+    }
+    args.removeAt(recursiveIndex + 1);
+    args.removeAt(recursiveIndex);
+  }
+  LOG_VARD(inputFilters);
+  return inputFilters;
+}
+
 }

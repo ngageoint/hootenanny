@@ -53,9 +53,9 @@ void NodesPerWayVisitor::setConfiguration(const Settings& conf)
 
   ConfigOptions configOptions(conf);
   _negateCriterion = configOptions.getElementCriteriaNegate();
-  LOG_VARD(_negateCriterion);
+  LOG_VART(_negateCriterion);
   const QString critName = configOptions.getNodesPerWayVisitorElementCriterion();
-  LOG_VARD(critName);
+  LOG_VART(critName);
   _setCriterion(critName);
 }
 

@@ -52,7 +52,6 @@ class GraphComparator : public BaseComparator
 public:
 
   GraphComparator(OsmMapPtr map1, OsmMapPtr map2);
-
   ~GraphComparator() = default;
 
   double compareMaps() override;
@@ -103,6 +102,7 @@ private:
   /** Vector of error values - returned from _calculateError() in each iteration */
   std::vector<double> _results;
   std::mutex _resultsMutex;
+  std::mutex _logMutex;
   /**
    * @brief _graphCompareThreadFunc - Thread function that processes a graph comparison operation
    */
@@ -113,16 +113,19 @@ private:
 
   void _calculateRasterCost(cv::Mat& mat, const Tgs::RandomPtr& random) const;
 
-  void _exportGraphImage(OsmMapPtr map, DirectedGraph& graph, ShortestPath& sp,
-                         QString path, const geos::geom::Coordinate& coord) const;
+  void _exportGraphImage(
+    OsmMapPtr map, const ShortestPath& sp, const QString& path,
+    const geos::geom::Coordinate& coord) const;
 
   void _init();
 
-  cv::Mat _paintGraph(OsmMapPtr map, DirectedGraph& graph, ShortestPath& sp, double& maxGraphCost) const;
+  cv::Mat _paintGraph(
+    const ConstOsmMapPtr& map, const DirectedGraph& graph, const ShortestPath& sp,
+    double& maxGraphCost) const;
 
   void _paintWay(
-    cv::Mat& mat, ConstOsmMapPtr map, WayPtr way, double friction, double startCost,
-    double endCost) const;
+    cv::Mat& mat, const ConstOsmMapPtr& map, const ConstWayPtr& way, double friction,
+    double startCost, double endCost) const;
 };
 
 }

@@ -49,7 +49,6 @@ ElementPtr ElementVisitorInputStream::readNextElement()
 {
   ElementPtr element = _elementSource->readNextElement();
   _visitor->visit(element);
-
   return element;
 }
 

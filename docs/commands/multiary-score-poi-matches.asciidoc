@@ -8,16 +8,16 @@ manually matched data as a reference. It reads from inputs, adds UUIDs, conflate
 scores the matches. The command will return  an error if the first input file contains any REF2
 tags or the second input file contains any REF1 tags.
 
-* +--confusion+ - print the confusion matrix
 * +input1+      - Input 1; may be any supported input format (e.g. OSM file).
 * +input2+      - Input 2; may be any supported input format (e.g. OSM file).
 * +output+      - Output file for debugging; may be any supported output format (e.g. OSM file). Only the first conflation 
                   will be output.
+* +--confusion+ - print the confusion matrix
 
 === Usage
 
 --------------------------------------
-multiary-score-poi-matches [--confusion] (input1 input2) [input1 input2 ...] (output)
+multiary-score-poi-matches (input1 input2) [input1 input2 ...] (output) [--confusion]
 --------------------------------------
 
 === See Also

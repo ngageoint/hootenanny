@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
-#ifndef LINEAR_WATERWAY_WAY_NODE_CRITERION_H
-#define LINEAR_WATERWAY_WAY_NODE_CRITERION_H
+#ifndef RIVER_WAY_NODE_CRITERION_H
+#define RIVER_WAY_NODE_CRITERION_H
 
 // hoot
 #include <hoot/core/criterion/WayNodeCriterion.h>
@@ -33,18 +33,18 @@
 namespace hoot
 {
 
-class LinearWaterwayWayNodeCriterion : public WayNodeCriterion
+class RiverWayNodeCriterion : public WayNodeCriterion
 {
 public:
 
-  static QString className() { return "hoot::LinearWaterwayWayNodeCriterion"; }
+  static QString className() { return "hoot::RiverWayNodeCriterion"; }
 
-  LinearWaterwayWayNodeCriterion();
-  LinearWaterwayWayNodeCriterion(ConstOsmMapPtr map);
-  ~LinearWaterwayWayNodeCriterion() = default;
+  RiverWayNodeCriterion();
+  RiverWayNodeCriterion(ConstOsmMapPtr map);
+  ~RiverWayNodeCriterion() = default;
 
   ElementCriterionPtr clone() override
-  { return ElementCriterionPtr(new LinearWaterwayWayNodeCriterion(_map)); }
+  { return ElementCriterionPtr(new RiverWayNodeCriterion(_map)); }
 
   QString getDescription() const override
   { return "Identifies nodes belonging to linear bodies of water"; }
@@ -55,4 +55,4 @@ public:
 
 }
 
-#endif // LINEAR_WATERWAY_WAY_NODE_CRITERION_H
+#endif // RIVER_WAY_NODE_CRITERION_H

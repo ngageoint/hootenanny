@@ -25,20 +25,20 @@
  * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
-#include "LinearWaterwayCriterion.h"
+#include "RiverCriterion.h"
 
 // hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/criterion/LinearCriterion.h>
-#include <hoot/core/criterion/LinearWaterwayWayNodeCriterion.h>
+#include <hoot/core/criterion/RiverWayNodeCriterion.h>
 
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementCriterion, LinearWaterwayCriterion)
+HOOT_FACTORY_REGISTER(ElementCriterion, RiverCriterion)
 
-bool LinearWaterwayCriterion::isSatisfied(const ConstElementPtr& e) const
+bool RiverCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   LOG_VART(e->getElementId());
 
@@ -59,7 +59,7 @@ bool LinearWaterwayCriterion::isSatisfied(const ConstElementPtr& e) const
   }
   else
   {
-    OsmSchema& schema = OsmSchema::getInstance();
+    const OsmSchema& schema = OsmSchema::getInstance();
     for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
     {
       const QString key = it.key();
@@ -83,9 +83,9 @@ bool LinearWaterwayCriterion::isSatisfied(const ConstElementPtr& e) const
   return passedTagFilter;
 }
 
-QStringList LinearWaterwayCriterion::getChildCriteria() const
+QStringList RiverCriterion::getChildCriteria() const
 {
-  return QStringList(LinearWaterwayWayNodeCriterion::className());
+  return QStringList(RiverWayNodeCriterion::className());
 }
 
 }

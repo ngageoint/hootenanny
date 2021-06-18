@@ -45,8 +45,6 @@ class OsmMap;
 /**
  * Removes all ways that are not being used by relations and contain zero nodes or all the nodes
  * are identical.
- *
- * @todo what about one node ways?
  */
 class SuperfluousWayRemover : public OsmMapOperation, public Configurable,
   public ConflateInfoCacheConsumer
@@ -76,12 +74,8 @@ public:
   void setConfiguration(const Settings& conf) override;
 
   QString getInitStatusMessage() const override { return "Removing superfluous ways..."; }
-
   QString getCompletedStatusMessage() const override
   { return "Removed " + QString::number(_numAffected) + " superfluous ways"; }
-
-  QString getDescription() const override
-  { return "Removes ways not in relations or containing zero or all identical nodes"; }
 
   /**
    * @see FilteredByGeometryTypeCriteria
@@ -89,8 +83,9 @@ public:
   QStringList getCriteria() const override;
 
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+  QString getDescription() const override
+  { return "Removes ways not in relations or containing zero or all identical nodes"; }
 
   void setConflateInfoCache(const std::shared_ptr<ConflateInfoCache>& cache) override
   { _conflateInfoCache = cache; }

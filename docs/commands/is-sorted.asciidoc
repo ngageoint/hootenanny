@@ -9,7 +9,7 @@ This operation is fast for OSM PBF file, since their headers can simply be check
 other formats, the data is read in one feature at a time and negative result is returned as soon as an unsorted element 
 is found.  If the data is sorted, the entire contents of the input will be read before a positive verification.
 
-* +input+ - Input; may be any supported input format (e.g. OSM file).
+* +input+ - Input; may be any supported input format (e.g. .osm file).
 
 === Usage
 

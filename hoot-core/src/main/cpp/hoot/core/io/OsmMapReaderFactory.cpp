@@ -27,7 +27,6 @@
 #include "OsmMapReaderFactory.h"
 
 // hoot
-#include <hoot/core/io/ElementInputStream.h>
 #include <hoot/core/io/OsmMapReader.h>
 #include <hoot/core/io/PartialOsmMapReader.h>
 #include <hoot/core/util/Boundable.h>
@@ -46,36 +45,7 @@ using namespace std;
 namespace hoot
 {
 
-bool OsmMapReaderFactory::hasElementInputStream(const QString& url)
-{
-  bool result = false;
-  std::shared_ptr<OsmMapReader> reader = createReader(url, true, Status::Unknown1);
-  std::shared_ptr<ElementInputStream> eis =
-    std::dynamic_pointer_cast<ElementInputStream>(reader);
-  if (eis)
-  {
-    result = true;
-  }
-
-  return result;
-}
-
-bool OsmMapReaderFactory::hasElementInputStream(const QStringList& inputs)
-{
-  for (int i = 0; i < inputs.size(); i++)
-  {
-    if (!hasElementInputStream(inputs.at(i)))
-    {
-      LOG_INFO(
-        "Unable to stream Inputs due to input: " << inputs.at(i).right(25) <<
-        ". Loading entire map into memory...");
-      return false;
-    }
-  }
-  return true;
-}
-
-bool OsmMapReaderFactory::hasPartialReader(const QString& url)
+bool OsmMapReaderFactory::supportsPartialReading(const QString& url)
 {
   bool result = false;
   std::shared_ptr<OsmMapReader> reader = createReader(url, true, Status::Unknown1);
@@ -85,7 +55,6 @@ bool OsmMapReaderFactory::hasPartialReader(const QString& url)
   {
     result = true;
   }
-
   return result;
 }
 
@@ -172,11 +141,6 @@ QString OsmMapReaderFactory::getReaderName(const QString& url)
   return "";
 }
 
-bool OsmMapReaderFactory::isSupportedFormat(const QString& url)
-{
-  return !getReaderName(url).trimmed().isEmpty();
-}
-
 void OsmMapReaderFactory::read(
   const OsmMapPtr& map, const QString& url, bool useDataSourceIds, Status defaultStatus)
 {
@@ -194,8 +158,8 @@ void OsmMapReaderFactory::read(
   _read(map, reader, url);
 }
 
-void OsmMapReaderFactory::_read(const OsmMapPtr& map,
-                                const std::shared_ptr<OsmMapReader>& reader, const QString& url)
+void OsmMapReaderFactory::_read(
+  const OsmMapPtr& map, const std::shared_ptr<OsmMapReader>& reader, const QString& url)
 {
   std::shared_ptr<Boundable> boundable = std::dynamic_pointer_cast<Boundable>(reader);
   if (!ConfigOptions().getBounds().trimmed().isEmpty() && !boundable.get())
