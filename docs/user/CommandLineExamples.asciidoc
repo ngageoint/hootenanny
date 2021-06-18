@@ -890,46 +890,58 @@ Requires a language translation server installation.  See the Hootenanny Install
 
 -----
     hoot count -D in.bounds.criterion.bounds="-77.0551,38.8845,-77.0281,38.9031" -D in.bounds.criterion.strict=true \
-      input.osm InBoundsCriterion
+      input.osm --criteria InBoundsCriterion
 -----
 
 ==== Count all the POIs in multiple maps:
 
 -----
-    hoot count "input1.osm;input2.osm" PoiCriterion
+    hoot count input1.osm input2.osm --criteria PoiCriterion
 -----
 
 ==== Count all elements that are not POIs:
 
 -----
-    hoot count -D element.criteria.negate=true "input1.osm;input2.osm" PoiCriterion \
+    hoot count -D element.criteria.negate=true "input1.osm;input2.osm" --criteria PoiCriterion \
       --all-elements
+-----
+
+==== Count all elements that are either POIs or roads:
+
+-----
+    hoot count input.osm --criteria PoiCriterion --all-elements
+-----
+
+==== Count all POIs that have a phone number:
+
+-----
+    hoot count input.osm -D element.criteria.chain=true --criteria "PoiCriterion;HasPhoneNumberCriterion"
 -----
 
 ==== Count all features which have a tag whose key contains the text "phone":
 
 -----
-    hoot count -D tag.key.contains.criterion.text="phone" input.osm TagKeyContainsCriterion
+    hoot count -D tag.key.contains.criterion.text="phone" input.osm --criteria TagKeyContainsCriterion
 -----
 
 ==== Count all features which have a name:
 
 -----
-    hoot count input.osm HasNameCriterion
+    hoot count input.osm --criteria HasNameCriterion
 -----
 
 ==== Count all features which have the name, "Old Town Tavern":
 
 -----
     hoot count -D name.criterion.names="Old Town Tavern" -D name.criterion.case.sensitive=false \
-      input.osm NameCriterion
+      input.osm --criteria NameCriterion
 -----
 
 ==== Count all features whose name contains "subway":
 
 -----
     hoot count -D name.criterion.names="subway" -D name.criterion.case.sensitive=false \
-      input.osm NameCriterion
+      input.osm --criteria NameCriterion
 -----
 
 ==== Count all conflatable elements in a map:
@@ -938,7 +950,7 @@ Requires a language translation server installation.  See the Hootenanny Install
     # Generally, this should be equal to the total number of elements in a map since Hootenanny 
     # be able to conflate any feature. In the rare circumstance its not, this can be used to
     # track down which elements cannot be conflated.
-    hoot count input.osm ConflatableElementCriterion
+    hoot count input.osm --criteria ConflatableElementCriterion
 -----
 
 ==== Count unique tags:
