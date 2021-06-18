@@ -72,7 +72,7 @@ public:
     {
       const int randomSeedIndex = args.indexOf("--randomSeed");
       ok = false;
-      randomSeed = args[randomSeedIndex + 1].toLong(&ok);
+      randomSeed = args[randomSeedIndex + 1].toInt(&ok);
       if (!ok || randomSeed < -1)
       {
         throw HootException("Invalid random seed: " + args[randomSeedIndex]);
@@ -96,7 +96,7 @@ public:
 
     ok = false;
     const int maxNodesIndex = args.size() - 2;
-    const int maxNodes = args[maxNodesIndex].toLong(&ok);
+    const int maxNodes = args[maxNodesIndex].toInt(&ok);
     if (!ok || maxNodes < 1)
     {
       throw HootException("Invalid maximum node count: " + args[maxNodesIndex]);

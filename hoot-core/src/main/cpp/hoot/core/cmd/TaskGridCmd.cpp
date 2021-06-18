@@ -305,7 +305,7 @@ private:
     /*TaskGrid taskGrid =*/ taskGridGen.generateTaskGrid();
   }
 
-  void _validateOutput(const QString& output)
+  void _validateOutput(const QString& output) const
   {
     if (!output.toLower().endsWith(".geojson") && !output.toLower().endsWith(".osm"))
     {
