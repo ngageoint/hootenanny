@@ -100,13 +100,25 @@ See the User Guide for more specific details on command usage. Most of these exa
 
 === Cleaning
 
-==== Clean erroneous data from two maps:
+==== Clean erroneous data from a map:
 
 -----
     hoot clean input.osm output.osm
 -----
 
-==== Clean erroneous data from two maps using Hooteanny's default cleaning operations plus JOSM's cleaning capabilities:
+==== Clean erroneous data recursively across multiple files under a directory:
+
+-----
+    hoot clean /my/dir output.osm --recursive "*"
+-----
+
+==== Clean erroneous data recursively across multiple OSM files under a directory:
+
+-----
+    hoot clean /my/dir output.osm --recursive "*.osm"
+-----
+
+==== Clean erroneous data from a map using Hooteanny's default cleaning operations plus JOSM's cleaning capabilities:
 
 -----
     hoot clean -D map.cleaner.transforms++=JosmMapCleaner input.osm output.osm
