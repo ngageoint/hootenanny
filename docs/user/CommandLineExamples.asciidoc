@@ -1213,7 +1213,7 @@ Requires a language translation server installation.  See the Hootenanny Install
 ==== Display all tag keys in a map as a delimited list string:
 
 -----
-    hoot tag-info --warn --keys-only --delimited-text input.osm
+    hoot tag-info --keys-only --delimited-text input.osm
 -----
 
 === Tag Manipulation

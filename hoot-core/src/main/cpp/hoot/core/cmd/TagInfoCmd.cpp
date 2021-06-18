@@ -125,14 +125,15 @@ public:
     bool recursive = false;
     const QStringList inputFilters = _parseRecursiveInputParameter(args, recursive);
 
+    // Everything left is an input.
     QStringList inputs;
     if (!recursive)
     {
-      inputs = args[0].trimmed().split(";");
+      inputs = args;
     }
     else
     {
-      inputs = IoUtils::getSupportedInputsRecursively(args[0].trimmed().split(";"), inputFilters);
+      inputs = IoUtils::getSupportedInputsRecursively(args, inputFilters);
     }
 
     LOG_STATUS("Displaying tag information for " << inputs.size() << "inputs...");

@@ -7,9 +7,14 @@ CONFIG="-C Testing.conf"
 LOG_LEVEL="--warn"
 
 echo ""
-echo "Display tag information..."
+echo "Display tag information from a single input..."
 echo ""
 hoot tag-info $LOG_LEVEL $CONFIG test-files/jakarta_raya_coastline.shp
+
+echo ""
+echo "Display tag information from multiple inputs..."
+echo ""
+hoot tag-info $LOG_LEVEL $CONFIG test-files/jakarta_raya_coastline.shp test-files/DcTigerRoads.osm
 
 echo ""
 echo "Display tag information recursively from a directory..."
