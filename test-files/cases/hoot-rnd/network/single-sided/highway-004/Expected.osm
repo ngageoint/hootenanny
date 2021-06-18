@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
-    <bounds minlat="-0.0009806089100000011" minlon="0.0017728795" maxlat="0.01055288979" maxlon="0.00893974199"/>
-    <node visible="true" id="-1018689" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0048427069810808" lon="0.0056549112103702">
-        <tag k="hoot:id" v="-1018689"/>
+    <bounds minlat="-0.0009806089099999992" minlon="0.0017728795" maxlat="0.01055288979" maxlon="0.00893974199"/>
+    <node visible="true" id="-1018691" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0048430392345198" lon="0.0056548361099826">
+        <tag k="hoot:id" v="-1018691"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-1018670" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0090293950900000" lon="0.0017728795000000">
@@ -40,7 +40,7 @@
     <way visible="true" id="-1018722" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1018568"/>
         <nd ref="-1018570"/>
-        <nd ref="-1018689"/>
+        <nd ref="-1018691"/>
         <nd ref="-1018572"/>
         <nd ref="-1018574"/>
         <tag k="error:circular" v="400"/>
