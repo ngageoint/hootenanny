@@ -5,13 +5,12 @@
 
 The +extent+ command outputs the geospatial bounds of the input map data as an AOI string (minx,maxx,miny,maxy).
 
-* +input+   - Input; may be any supported input format (e.g. OSM file).
-* +verbose+ - If true, outputs a description of the output format (minx,maxx,miny,maxy); defaults to true; optional
+* +input(s)+ - One or more input paths; may be any supported input format (e.g. OSM file).
 
 === Usage
 
 --------------------------------------
-extent (input) [verbose]
+extent (input1) [input2...]
 --------------------------------------
 
 https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#display-the-geospatial-extent-of-a-map[Examples]

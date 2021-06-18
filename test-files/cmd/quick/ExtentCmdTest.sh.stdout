@@ -1,2 +1,8 @@
-14:46:07.942 INFO  ...hoot/core/cmd/MapExtentCmd.cpp(  57) Loading map data from test-files/DcGisRoads.osm ...
+
+Calculating the extent of one input...
+
 Map extent (minx,miny,maxx,maxy): -77.0551,38.8845,-77.0281,38.9031
+
+Calculating the extent of multiple inputs...
+
+Map extent (minx,miny,maxx,maxy): -104.902432,38.8532424,-77.0281,38.9031
