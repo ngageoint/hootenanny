@@ -465,16 +465,10 @@ bool MapProjector::_evaluateProjection(
     {
       Coordinate c1(x, y);
       Coordinate p1 = c1;
-//      success &= t->Transform(1, &p1.x, &p1.y);
-      int s = t->Transform(1, &p1.x, &p1.y);
-      success &= s;
+      success &= t->Transform(1, &p1.x, &p1.y);
 
       if (!success)
-      {
-        LOG_INFO("Failure = " << s);
         return false;
-      }
-      LOG_INFO("SUCCESS");
 
       Coordinate upc = GeometryUtils::calculateDestination(c1, 0.0, testDistance);
       Coordinate up = upc;
