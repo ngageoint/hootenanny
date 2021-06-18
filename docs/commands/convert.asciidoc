@@ -19,7 +19,7 @@ See the Hootenanny User Guide Supported Data Formats section for more informatio
 --------------------------------------
 convert (input) [input2...] (output)
 
-# This syntax is upported for OGR inputs only.
+# This syntax is supported for OGR inputs only.
 convert (input1[;layer]) [input2[;layer]] (output) [--write-bounds]
 --------------------------------------
 
