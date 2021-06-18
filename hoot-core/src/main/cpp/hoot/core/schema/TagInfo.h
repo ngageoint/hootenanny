@@ -37,11 +37,11 @@
 namespace hoot
 {
 
+class OgrReader;
+class OsmMapReader;
+
 /**
  * Prints information about a set of tags
- *
- * This only works with streamable inputs but could probably be made to work with non-streamable, if
- * needed.
  */
 class TagInfo
 {
@@ -87,11 +87,14 @@ private:
   int _taskStatusUpdateInterval;
 
   QString _getInfo(const QString& input) const;
+  QString _getInfoFromOgrInput(QString& input) const;
+  QString _getInfoFromStreamableInput(const QString& input) const;
+  QString _getInfoFromMemoryBoundInput(const QString& input) const;
 
   QString _printJSON(const QString& lName, TagInfoHash& data) const;
   QString _printDelimitedText(TagInfoHash& data) const;
 
-  void _parseElement(const ElementPtr& e, TagInfoHash& result) const;
+  void _parseElement(const ConstElementPtr& e, TagInfoHash& result) const;
   bool _tagKeysMatch(const QString& tagKey) const;
 };
 

@@ -214,13 +214,13 @@ public:
     Qt::CaseSensitivity caseSensitivity = Qt::CaseInsensitive);
 
   /**
-   * Determines if a list contains a string using wildcard matching
+   * Determines if a string matches any of a collection of wildcard strings
    *
-   * @param str the string to search for; may contain '*' for wildcard matching
-   * @param input list to search
+   * @param str the string to match
+   * @param wildcards the wildcard strings to match against
    * @return true if at least one match is found; false otherwise
    */
-  static bool containsWildcard(const QString& str, const QStringList& inputs);
+  static bool matchesWildcard(const QString& str, const QStringList& wildcards);
 
   /**
    * Determines if a string ends with any one of a group of strings

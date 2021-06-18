@@ -30,7 +30,6 @@
 // Hoot
 #include <hoot/core/criterion/CriterionUtils.h>
 #include <hoot/core/io/ElementCriterionInputStream.h>
-#include <hoot/core/io/ElementStreamer.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/IoUtils.h>
 #include <hoot/core/schema/OsmSchema.h>
@@ -90,9 +89,9 @@ std::map<QString, int> TagDistribution::getTagCounts(const QStringList& inputs)
   }
 
   LOG_VARD(_isStreamableCrit);
-  LOG_VARD(ElementStreamer::areStreamableInputs(inputs));
+  LOG_VARD(IoUtils::areStreamableInputs(inputs));
   std::map<QString, int> tagCounts;
-  if (_isStreamableCrit && ElementStreamer::areStreamableInputs(inputs))
+  if (_isStreamableCrit && IoUtils::areStreamableInputs(inputs))
   {
     for (int i = 0; i < inputs.size(); i++)
     {

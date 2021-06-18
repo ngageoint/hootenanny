@@ -77,6 +77,16 @@ Total elements processed: 4,698. Total tags processed: 748.
 365	(7.77%)	highway=road
 9	(<1%)	highway=motorway
 
+Testing with a single key specified reading recursively from a directory...
+
+Total elements processed: 40. Total tags processed: 8.
+4	(10%)	highway=road
+
+Testing with a single key specified reading recursively from a directory filtered to json files...
+
+Total elements processed: 40. Total tags processed: 8.
+4	(10%)	highway=road
+
 Testing with multiple keys and inputs specified...
 
 Total elements processed: 8,088. Total tags processed: 1,137.

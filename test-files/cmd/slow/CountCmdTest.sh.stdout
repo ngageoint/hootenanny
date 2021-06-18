@@ -24,8 +24,8 @@ counting all elements that are not POIs...
 Total count (hoot::PoiCriterion): 26
 
 counting all element from multi-layer GDB...
-17:44:33.839 STATUS ...t/core/info/ElementCounter.cpp( 101) Counting elements from ow/CountCmdTest/input.gdb...
-17:44:33.888 STATUS ...t/core/info/ElementCounter.cpp( 112) Features counted in 00:00 total.
+21:49:03.894 STATUS ...t/core/info/ElementCounter.cpp( 105) Counting elements from ...ow/CountCmdTest/input.gdb...
+21:49:03.973 STATUS ...t/core/info/ElementCounter.cpp( 116) Features counted in 00:00 total.
 
 Total count : 20
 
@@ -40,3 +40,19 @@ Total count (hoot::RiverCriterion;hoot::PoiCriterion): 0
 counting elements that are not POIs...
 
 Total count (hoot::PoiCriterion): 55
+
+counting recursively in a directory structure...
+
+Total count : 45
+
+counting recursively in a directory structure with one filter...
+
+Total count : 4
+
+counting recursively in a directory structure with two filters...
+
+Total count : 45
+
+counting recursively in a directory structure with a criterion...
+
+Total count (hoot::HighwayCriterion): 24

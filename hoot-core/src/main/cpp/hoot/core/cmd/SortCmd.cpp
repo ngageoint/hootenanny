@@ -70,7 +70,7 @@ public:
     const QString input = args[0];
     const QString output = args[1];
     const bool sortingInMemory =
-      !(OsmMapReaderFactory::hasElementInputStream(input) &&
+      !(IoUtils::isStreamableInput(input) &&
         ConfigOptions().getElementSorterElementBufferSize() != -1);
     const QString sortingStr = sortingInMemory ? " in memory" : " externally";
 

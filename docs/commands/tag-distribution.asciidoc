@@ -3,18 +3,15 @@
 
 === Description
 
-The +tag-distribution+ command prints out a distribution for all values of a specified tag key, including a 
-percentage of each value's frequency compared to other tag values.
+The +tag-distribution+ command displays a distribution for all values of a specified tag key and a 
+percentage of each value's frequency compared to all other tag values.
 
-* +inputs+                   - One or more inputs to read (e.g. OSM file). Specify multiple inputs by separating them with 
-                               a semicolon and surrounding them with quotes.
-* +tagKeys+                  - The tag keys to gather statistics for. Specify multiple inputs by separating them with a 
-                               semicolon and surrounding them with quotes. To process all tags, leave this empty by specifying 
+* +input(s)+                 - One or more inputs; may be any supported input format (e.g. .osm file).
+* +tagKeys+                  - The tag keys to gather statistics for. To process all tags, leave this empty by specifying 
                                a pair of quotes with nothing between them. This parameter is ignored if `--names` or `--types` 
                                is used.
 * +criteria+                 - (optional) Filtering criteria for the inputs; May be one or more class names inheriting from 
-                               `ElementCriterion` delimited with a semicolon and surrounded by quotes. By default, 
-                               multiple criteria are logically OR'd together. Set the 
+                               `ElementCriterion`. By default, multiple criteria are logically OR'd together. Set the 
                                `tag.distribution.chain.element.criteria` option to true to have the criteria logically 
                                AND'd together. The criteria can be negated with the option `element.criteria.negate`.
                                Use the +info --operators+ command to obtain a list of available criteria.
@@ -31,11 +28,16 @@ percentage of each value's frequency compared to other tag values.
                                tag value occurrence frequency.
 * +--limit+                  - Limits the number of results returned.
 * +--tokenize+               - Breaks tag values up into individual tokens before counting them.
+* +--recursive+              - Allows for displaying tag information against elements recursively in a directory structure. 
+                               This must be followed by either "*" to denote no filtering or one or more wildcard 
+                               name filters. e.g. "*.osm;*.json" or "*myFile*". The recursion is only performed on 
+                               file directories and this parameter is ignored for other input types.
 
 === Usage
 
 --------------------------------------
-tag-distribution (input1;input2...) (tagKeys) [criterion1;criterion2] [--names] [--types] [--percentage-of-matching] [--sort-by-value] [--limit]  [--tokenize]
+tag-distribution ("input1;input2...") ("tagKey1;tagKey2...") ["criterion1;criterion2..."] [--names] [--types] \
+  [--percentage-of-matching] [--sort-by-value] [--limit]  [--tokenize] [--recursive]
 --------------------------------------
 
 https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#display-the-distribution-of-highway-tags-for-roads-in-a-map[Examples]

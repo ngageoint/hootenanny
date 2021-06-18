@@ -28,6 +28,7 @@
 // Hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
+#include <hoot/core/io/IoUtils.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/schema/TagDistribution.h>
 #include <hoot/core/util/StringUtils.h>
@@ -61,30 +62,35 @@ public:
       typeKeysOnly = true;
       args.removeAt(args.indexOf("--types"));
     }
+
     bool nameKeysOnly = false;
     if (args.contains("--names"))
     {
       nameKeysOnly = true;
       args.removeAt(args.indexOf("--names"));
     }
+
     bool countOnlyMatchingElementsInTotal = false;
     if (args.contains("--percentage-of-matching"))
     {
       countOnlyMatchingElementsInTotal = true;
       args.removeAt(args.indexOf("--percentage-of-matching"));
     }
+
     bool sortByFrequency = true;
     if (args.contains("--sort-by-value"))
     {
       sortByFrequency = false;
       args.removeAt(args.indexOf("--sort-by-value"));
     }
+
     bool tokenize = false;
     if (args.contains("--tokenize"))
     {
       tokenize = true;
       args.removeAt(args.indexOf("--tokenize"));
     }
+
     int limit = -1;
     if (args.contains("--limit"))
     {
@@ -105,6 +111,9 @@ public:
       args.removeAt(limitIndex);
     }
 
+    bool recursive = false;
+    const QStringList inputFilters = _parseRecursiveInputParameter(args, recursive);
+
     if (typeKeysOnly && nameKeysOnly)
     {
       throw IllegalArgumentException(
@@ -124,7 +133,15 @@ public:
         QString("%1 takes one to two parameters when --names is specified.").arg(getName()));
     }
 
-    const QStringList inputs = args[0].split(";");
+    QStringList inputs;
+    if (!recursive)
+    {
+      inputs = args[0].trimmed().split(";");
+    }
+    else
+    {
+      inputs = IoUtils::getSupportedInputsRecursively(args[0].trimmed().split(";"), inputFilters);
+    }
     QStringList tagKeys;
     if (typeKeysOnly)
     {

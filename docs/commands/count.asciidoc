@@ -3,24 +3,28 @@
 
 === Description
 
-The +count+ command displays a count of the number of features in a map, allowing for optional filtering with criteria.
+The +count+ command displays a count of the number of features in one or more maps.
 
-* +inputs+         - One or more inputs; may be any supported input format (e.g. .osm file); specify multiple inputs 
-                     by separating them with a semicolon and surrounding them with quotes.
-* +criteria+       - (optional) Filtering criteria for the inputs; May be one or more class names inheriting 
-                     from `ElementCriterion` delimited with a semicolon and surrounded by quotes. By default, multiple 
-                     criteria are logically OR'd together. Set the `element.counter.chain.element.criteria` option to true 
-                     to have the criteria logically AND'd together. The criteria can be negated with the option 
-                     `element.criteria.negate`. Use the +info --operators+ command to obtain a list of available criteria.
-* +--all-elements+ - The default behavior is to only count features. Features are defined as elements with at least 
-                     one information tag, whereas elements have no tag requirements. Activating this option causes the 
-                     command to consider all elements regardless of whether they have any information tags. The `criteria`
-                     parameter may prevent all elements from actually being parsed, however.
+* +input(s)+        - One or more inputs; may be any supported input format (e.g. .osm file).
+* +criteria+        - (optional) Filtering criteria for the inputs; May be one or more class names inheriting 
+                      from `ElementCriterion`. By default, multiple criteria are logically OR'd together. Set 
+                      the `element.counter.chain.element.criteria` option to true to have the criteria logically 
+                      AND'd together. The criteria can be negated with the option `element.criteria.negate`. Use the 
+                      +info --operators+ command to obtain a list of available criteria.
+* +--all-elements+  - The default behavior is to only count features. Features are defined as elements with at least 
+                      one information tag, whereas elements have no tag requirements. Activating this option causes the 
+                      command to consider all elements regardless of whether they have any information tags. The contents 
+                      of the `criteria` parameter may prevent all elements from actually being parsed, however, when used
+                      with this parameter.
+* +--recursive+     - Allows for counting elements recursively in a directory structure. This must be followed 
+                      by either "*" to denote no filtering or one or more wildcard name filters. e.g. "*.osm;*.json" 
+                      or "*myFile*". The recursion is only performed on file directories and this parameter is ignored 
+                      for other input types.
 
 === Usage
 
 --------------------------------------
-hoot count (input1;input2...) [criterion1;criterion2...] [--all-elements]
+hoot count ("input1;input2...") ["criterion1;criterion2..."] [--all-elements] [--recursive "*"|"filter1;filter2..."]
 --------------------------------------
 
 https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#count-all-features-in-a-map[Examples]

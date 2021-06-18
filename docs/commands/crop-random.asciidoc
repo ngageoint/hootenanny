@@ -6,8 +6,7 @@
 The +crop-random+ command randomly crops a section of map data to an output with a specified maximum node count. This is 
 useful if you have a very large file dataset and need a smaller subset of data to test conflation against.
 
-* +input(s)+      - One or more input paths; may be any supported input format (e.g. OSM file). Specify multiple inputs 
-                    by separating them with a semicolon.
+* +input(s)+      - One or more input paths; may be any supported input format (e.g. .osm file).
 * +output+        - The output data path; may be any supported output format (e.g. OSM file)
 * +maxNodeCount+  - The maximum number of nodes to include in the output. If the number of nodes in the entire dataset is 
                     less than the specified number, no cropping will occur. If too low a value is specified for maxNodeCount 
@@ -21,7 +20,7 @@ useful if you have a very large file dataset and need a smaller subset of data t
 === Usage
 
 --------------------------------------
-crop-random (input1.osm)[;input2.osm...] (output.osm) (maxNodeCount) (pixelSize) [randomSeed]
+crop-random ("input1;input2...") (output.osm) (maxNodeCount) (pixelSize) [randomSeed]
 --------------------------------------
 
 https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#crop-out-a-random-subset-of-data-with-a-maximum-node-size[Examples]

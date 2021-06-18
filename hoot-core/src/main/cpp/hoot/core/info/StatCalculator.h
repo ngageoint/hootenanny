@@ -28,7 +28,7 @@
 #define STAT_CALCULATOR_H
 
 // Hoot
-#include <hoot/core/visitors/ElementVisitor.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 
 namespace hoot
 {
@@ -48,7 +48,7 @@ public:
   /**
    * Calculates a statistic given an element visitor
    *
-   * @param input path to input map containing the elements to examine
+   * @param input paths to input maps containing the elements to calculate a statistic against
    * @param visitorClassName name of an ElementVisitor class that implements either SingleStatistic
    * or NumericStatistic
    * @param statType the type of statistic to calculate; valid types are: total, min, max, or
@@ -56,15 +56,23 @@ public:
    * @return a numeric statistic
    */
   double calculateStat(
-    const QString& input, QString& visitorClassName, const QString& statType) const;
+    const QStringList& inputs, QString& visitorClassName, const QString& statType) const;
 
 private:
 
   int _taskStatusUpdateInterval;
 
   bool _isValidStatType(const QString& statType) const;
-  std::shared_ptr<PartialOsmMapReader> _getReader(const QString& input) const;
-  ElementVisitorPtr _getStatCollector(const QString& visClassName) const;
+
+  std::shared_ptr<PartialOsmMapReader> _getStreamableReader(const QString& input) const;
+  ConstElementVisitorPtr _getStatCollector(
+    const QString& statType, const QString& visClassName) const;
+  double _calcStatStreaming(
+    const QStringList& inputs, const ConstElementVisitorPtr& statCollector,
+    const QString& statType) const;
+  double _calcStatMemoryBound(
+    const QStringList& inputs, const ConstElementVisitorPtr& statCollector,
+    const QString& statType) const;
 };
 
 }

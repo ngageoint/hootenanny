@@ -3,9 +3,9 @@
 
 === Description
 
-The +tag-info+ command prints out unique feature tag values grouped by tag key. 
+The +tag-info+ command displays unique feature tag values found in one or more inputs, grouped by tag key. 
 
-* +inputs+              - One or more streamable inputs; (e.g. OSM file).
+* +input(s)+            - One or more inputs; may be any supported input format (e.g. .osm file).
 * +--tag-values-limit+  - Limits the number of unique tag values printed per tag key. By default, there is no limit. This 
                           option is ignored if --keys-only is specified.
 * +--keys+              - Prints unique tag values for the specified keys only.  Delimit multiple keys with a semicolon 
@@ -18,17 +18,16 @@ The +tag-info+ command prints out unique feature tag values grouped by tag key.
                           with each other for the tag value to be written to output.
 * +--delimited-text+    - By default, JSON output is generated. If this option is specified, a delimited list with the format
                           "key1;key2..." is returned. Value when the `--keys-only` option is used only.
-
-This command works on streamable inputs only. To determine if an input is streamable use:
-
------
-    hoot info --formats --input-streamable
------
+* +--recursive+         - Allows for displaying tag information against elements recursively in a directory structure. 
+                          This must be followed by either "*" to denote no filtering or one or more wildcard name filters. 
+                          e.g. "*.osm;*.json" or "*myFile*". The recursion is only performed on file directories and 
+                          this parameter is ignored for other input types.
 
 === Usage
 
 --------------------------------------
-tag-info (input1[;layer]) [input2[;layer]] ... [--tag-values-limit] [--keys-only "key1;key2..."] [--keys-only] [--case-insensitive] [--delimited-text]
+tag-info ("input1;input2...") [--tag-values-limit] [--keys-only "key1;key2..."] [--keys-only] \
+  [--case-insensitive] [--delimited-text] [--recursive]
 --------------------------------------
 
 https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#display-tag-schema-information-for-a-map[Examples]

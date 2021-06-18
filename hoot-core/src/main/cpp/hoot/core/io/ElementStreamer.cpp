@@ -27,22 +27,15 @@
 #include "ElementStreamer.h"
 
 // Hoot
-#include <hoot/core/elements/OsmMapConsumer.h>
-#include <hoot/core/io/ElementCriterionInputStream.h>
+#include <hoot/core/io/ElementInputStream.h>
 #include <hoot/core/io/ElementOutputStream.h>
-#include <hoot/core/io/ElementVisitorInputStream.h>
+#include <hoot/core/io/IoUtils.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/io/PartialOsmMapReader.h>
 #include <hoot/core/io/PartialOsmMapWriter.h>
-#include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/ConfigUtils.h>
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/visitors/ConstElementVisitor.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -50,187 +43,14 @@
 namespace hoot
 {
 
-bool ElementStreamer::isStreamableIo(const QString& input, const QString& output)
-{
-  QString writerName = ConfigOptions().getMapFactoryWriter();
-  if (writerName.trimmed().isEmpty())
-  {
-    writerName = OsmMapWriterFactory::getWriterName(output);
-  }
-  LOG_VARD(writerName);
-  LOG_VARD(OsmMapReaderFactory::hasElementInputStream(input));
-  LOG_VARD(OsmMapWriterFactory::hasElementOutputStream(output));
-  LOG_VARD(ConfigUtils::boundsOptionEnabled());
-  LOG_VARD(ConfigOptions().getWriterXmlSortById());
-
-  return
-    OsmMapReaderFactory::hasElementInputStream(input) &&
-    OsmMapWriterFactory::hasElementOutputStream(output) &&
-    // The XML writer can't keep sorted output when streaming, so require an additional config
-    // option be specified in order to stream when writing that format
-    (writerName != OsmXmlWriter::className() ||
-     (writerName == OsmXmlWriter::className() && !ConfigOptions().getWriterXmlSortById())) &&
-    // No readers when using the bounds option are able to do streaming I/O at this point.
-    !ConfigUtils::boundsOptionEnabled();
-}
-
-bool ElementStreamer::areStreamableIo(const QStringList& inputs, const QString& output)
-{
-  for (int i = 0; i < inputs.size(); i++)
-  {
-    if (!ElementStreamer::isStreamableIo(inputs.at(i), output))
-    {
-      LOG_INFO(
-        "Unable to stream I/O due to input: ..." << FileUtils::toLogFormat(inputs.at(i), 25) <<
-        " and/or output: ..." << FileUtils::toLogFormat(output, 25) <<
-        ". Loading entire map into memory...");
-      return false;
-    }
-  }
-  return true;
-}
-
-bool ElementStreamer::areStreamableInputs(const QStringList& inputs)
-{
-  for (int i = 0; i < inputs.size(); i++)
-  {
-    if (!OsmMapReaderFactory::hasElementInputStream(inputs.at(i)))
-    {
-      return false;
-    }
-  }
-  return true;
-}
-
-bool ElementStreamer::areValidStreamingOps(const QStringList& ops)
-{
-  LOG_VARD(ops);
-  // add visitor/criterion operations if any of the convert ops are visitors.
-  foreach (QString opName, ops)
-  {
-    if (!opName.trimmed().isEmpty())
-    {
-      const QString unstreamableMsg =
-        "Unable to stream I/O due to op: " + opName + ". Loading entire map...";
-
-      if (Factory::getInstance().hasBase<ElementCriterion>(opName))
-      {
-        ElementCriterionPtr criterion(
-          Factory::getInstance().constructObject<ElementCriterion>(opName));
-        // when streaming we can't provide a reliable OsmMap.
-        if (dynamic_cast<OsmMapConsumer*>(criterion.get()) != nullptr)
-        {
-          LOG_INFO(unstreamableMsg);
-          return false;
-        }
-      }
-      else if (Factory::getInstance().hasBase<ElementVisitor>(opName))
-      {
-        ElementVisitorPtr vis(
-          Factory::getInstance().constructObject<ElementVisitor>(opName));
-        // when streaming we can't provide a reliable OsmMap.
-        if (dynamic_cast<OsmMapConsumer*>(vis.get()) != nullptr)
-        {
-          LOG_INFO(unstreamableMsg);
-          return false;
-        }
-      }
-      else if (Factory::getInstance().hasBase<ConstElementVisitor>(opName))
-      {
-        ConstElementVisitorPtr vis(
-          Factory::getInstance().constructObject<ConstElementVisitor>(opName));
-        // when streaming we can't provide a reliable OsmMap.
-        if (dynamic_cast<OsmMapConsumer*>(vis.get()) != nullptr)
-        {
-          LOG_INFO(unstreamableMsg);
-          return false;
-        }
-      }
-      // OsmMapOperation isn't streamable.
-      else
-      {
-        LOG_INFO(unstreamableMsg);
-        return false;
-      }
-    }
-  }
-
-  return true;
-}
-
-ElementInputStreamPtr ElementStreamer::getFilteredInputStream(
-  ElementInputStreamPtr streamToFilter, const QStringList& ops)
-{
-  if (ops.empty())
-  {
-    return streamToFilter;
-  }
-
-  ConfigUtils::checkForDuplicateElementCorrectionMismatch(ops);
-
-  foreach (QString opName, ops)
-  {
-    LOG_VARD(opName);
-    if (!opName.trimmed().isEmpty())
-    {
-      // Can this be cleaned up?
-
-      if (Factory::getInstance().hasBase<ElementCriterion>(opName))
-      {
-        LOG_INFO("Initializing operation: " << opName << "...");
-        ElementCriterionPtr criterion(
-          Factory::getInstance().constructObject<ElementCriterion>(opName));
-
-        std::shared_ptr<Configurable> critConfig;
-        if (criterion.get())
-        {
-          critConfig = std::dynamic_pointer_cast<Configurable>(criterion);
-        }
-        LOG_VART(critConfig.get());
-        if (critConfig.get())
-        {
-          critConfig->setConfiguration(conf());
-        }
-
-        streamToFilter.reset(new ElementCriterionInputStream(streamToFilter, criterion));
-      }
-      else if (Factory::getInstance().hasBase<ElementVisitor>(opName))
-      {
-        LOG_INFO("Initializing operation: " << opName << "...");
-        ElementVisitorPtr visitor(Factory::getInstance().constructObject<ElementVisitor>(opName));
-
-        std::shared_ptr<Configurable> visConfig;
-        if (visitor.get())
-        {
-          visConfig = std::dynamic_pointer_cast<Configurable>(visitor);
-        }
-        LOG_VART(visConfig.get());
-        if (visConfig.get())
-        {
-          visConfig->setConfiguration(conf());
-        }
-
-        streamToFilter.reset(new ElementVisitorInputStream(streamToFilter, visitor));
-      }
-      else
-      {
-        throw HootException(
-          "An unsupported operation was passed to a streaming conversion: " + opName);
-      }
-    }
-  }
-
-  return streamToFilter;
-}
-
-void ElementStreamer::stream(const QString& input, const QString& out, const QStringList& convertOps,
-                             Progress progress)
+void ElementStreamer::stream(
+  const QString& input, const QString& out, const QStringList& convertOps, Progress progress)
 {
   stream(QStringList(input), out, convertOps, progress);
 }
 
-void ElementStreamer::stream(const QStringList& inputs, const QString& out,
-                             const QStringList& convertOps, Progress progress)
+void ElementStreamer::stream(
+  const QStringList& inputs, const QString& out, const QStringList& convertOps, Progress progress)
 {
   QElapsedTimer timer;
   timer.start();
@@ -269,7 +89,8 @@ void ElementStreamer::stream(const QStringList& inputs, const QString& out,
     // add visitor/criterion operations if any of the convert ops are visitors.
     LOG_VARD(convertOps);
     ElementInputStreamPtr streamReader =
-      getFilteredInputStream(std::dynamic_pointer_cast<ElementInputStream>(reader), convertOps);
+      IoUtils::getFilteredInputStream(
+        std::dynamic_pointer_cast<ElementInputStream>(reader), convertOps);
 
     ElementOutputStream::writeAllElements(*streamReader, *streamWriter);
 
