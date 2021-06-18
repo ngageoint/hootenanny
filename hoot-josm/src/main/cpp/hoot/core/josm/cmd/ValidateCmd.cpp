@@ -47,9 +47,7 @@ public:
   ValidateCmd() = default;
 
   virtual QString getName() const override { return "validate"; }
-
   virtual QString getType() const { return "josm"; }
-
   virtual QString getDescription() const override
   { return "Checks map data for validation errors"; }
 
