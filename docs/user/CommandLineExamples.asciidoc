@@ -1085,7 +1085,7 @@ Requires a language translation server installation.  See the Hootenanny Install
 ==== Display the distribution of highway tags for all elements in a map:
 
 -----
-    hoot tag-distribution input.osm highway --limit 3
+    hoot tag-distribution input.osm --tagKeys highway --limit 3
     
     Total elements with specified tags: 8,707
     401	(4.61%)	highway=residential
@@ -1096,19 +1096,19 @@ Requires a language translation server installation.  See the Hootenanny Install
 ==== Display the distribution of highway tags recursively across multiple maps under a directory:
 
 -----
-    hoot tag-distribution /my/dir highway --limit 3 --recursive "*"
+    hoot tag-distribution /my/dir --tagKeys highway --limit 3 --recursive "*"
 -----
 
 ==== Display the distribution of highway tags recursively across multiple OSM file maps under a directory:
 
 -----
-    hoot tag-distribution /my/dir highway --limit 3 --recursive "*.osm"
+    hoot tag-distribution /my/dir --tagKeys highway --limit 3 --recursive "*.osm"
 -----
 
 ==== Display the distribution of highway tags for only way roads in a map:
 
 -----
-    hoot tag-distribution input.osm highway HighwayCriterion --limit 3
+    hoot tag-distribution input.osm --tagKeys highway --criteria HighwayCriterion --limit 3
 
     Total elements with specified tags: 673
     401	(59.6%)	highway=residential
@@ -1121,7 +1121,7 @@ Requires a language translation server installation.  See the Hootenanny Install
 -----
     # This adds non-way features with the "highway" tag. e.g. `highway=traffic_signals` and
 `highway=turning_circle` nodes
-    hoot tag-distribution input.osm highway HighwayCriterion --limit 3
+    hoot tag-distribution input.osm --tagKeys highway --criteria HighwayCriterion --limit 3
 
     Total elements with specified tags: 673
     401	(59.6%)	highway=residential
@@ -1144,7 +1144,7 @@ Requires a language translation server installation.  See the Hootenanny Install
 ==== Show a summary of conflation reviews by type and frequency:
 
 -----
-    hoot tag-distribution input.osm hoot:review:note ReviewRelationCriterion
+    hoot tag-distribution input.osm --tagKeys hoot:review:note --criteria ReviewRelationCriterion
 
     Total tag count: 129
     62	(48.1%)	hoot:review:note=unmatched buildings are overlapping
