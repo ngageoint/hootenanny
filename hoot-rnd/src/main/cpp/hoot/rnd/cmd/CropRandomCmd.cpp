@@ -59,15 +59,6 @@ public:
 
   int runSimple(QStringList& args) override
   {
-    QElapsedTimer timer;
-    timer.start();
-
-    if (args.size() < 4 || args.size() > 6)
-    {
-      std::cout << getHelp() << std::endl << std::endl;
-      throw HootException(QString("%1 takes four to six parameters.").arg(getName()));
-    }
-
     bool writeTileFootprints = false;
     if (args.contains("--write-tiles"))
     {
@@ -75,43 +66,54 @@ public:
       args.removeAll("--write-tiles");
     }
 
-    QStringList inputs;
-    const QString input = args[0].trimmed();
-    LOG_VARD(input);
-    if (!input.contains(";"))
-    {
-      inputs.append(input);
-    }
-    else
-    {
-      // multiple inputs
-      inputs = input.split(";");
-    }
-
-    const QString output = args[1].trimmed();
-
     bool ok = false;
-    const int maxNodes = args[2].toLong(&ok);
-    if (!ok || maxNodes < 1)
-    {
-      throw HootException("Invalid maximum node count: " + args[2]);
-    }
-    ok = false;
-    double pixelSize = args[3].toDouble(&ok);
-    if (!ok || pixelSize <= 0.0)
-    {
-      throw HootException("Invalid pixel size value: " + args[3]);
-    }
     int randomSeed = -1;
-    if (args.size() > 4)
+    if (args.contains("--randomSeed"))
     {
+      const int randomSeedIndex = args.indexOf("--randomSeed");
       ok = false;
-      randomSeed = args[4].toLong(&ok);
+      randomSeed = args[randomSeedIndex + 1].toInt(&ok);
       if (!ok || randomSeed < -1)
       {
-        throw HootException("Invalid random seed: " + args[4]);
+        throw HootException("Invalid random seed: " + args[randomSeedIndex]);
       }
+      args.removeAt(randomSeedIndex + 1);
+      args.removeAt(randomSeedIndex);
     }
+
+    if (args.size() < 4)
+    {
+      std::cout << getHelp() << std::endl << std::endl;
+      throw HootException(QString("%1 takes at least four parameters.").arg(getName()));
+    }
+
+    QElapsedTimer timer;
+    timer.start();
+
+    const int outputIndex = args.size() - 3;
+    const QString output = args[outputIndex].trimmed();
+    args.removeAt(outputIndex);
+
+    ok = false;
+    const int maxNodesIndex = args.size() - 2;
+    const int maxNodes = args[maxNodesIndex].toInt(&ok);
+    if (!ok || maxNodes < 1)
+    {
+      throw HootException("Invalid maximum node count: " + args[maxNodesIndex]);
+    }
+    args.removeAt(maxNodesIndex);
+
+    ok = false;
+    const int pixelSizeIndex = args.size() - 1;
+    double pixelSize = args[pixelSizeIndex].toDouble(&ok);
+    if (!ok || pixelSize <= 0.0)
+    {
+      throw HootException("Invalid pixel size value: " + args[pixelSizeIndex]);
+    }
+    args.removeAt(pixelSizeIndex);
+
+    // Everything left is an input.
+    const QStringList inputs = args;
 
     QString tileOutputFootprintPath;
     if (writeTileFootprints)

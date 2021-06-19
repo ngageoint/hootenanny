@@ -19,29 +19,29 @@ hoot stat $LOG_LEVEL $CONFIG -D tags.visitor.keys="test1" $INPUT_FILE_1 AverageN
 echo ""
 echo "Calculating the minimum number of nodes per way..."
 echo ""
-hoot stat $LOG_LEVEL $CONFIG $INPUT_FILE_2 NodesPerWayVisitor min
+hoot stat $LOG_LEVEL $CONFIG $INPUT_FILE_2 NodesPerWayVisitor --statType min
 
 echo ""
 echo "Calculating the maximum number of nodes per way..."
 echo ""
-hoot stat $LOG_LEVEL $CONFIG $INPUT_FILE_2 NodesPerWayVisitor max
+hoot stat $LOG_LEVEL $CONFIG $INPUT_FILE_2 NodesPerWayVisitor --statType max
 
 echo ""
 echo "Calculating the average number of nodes per way..."
 echo ""
-hoot stat $LOG_LEVEL $CONFIG $INPUT_FILE_2 NodesPerWayVisitor average
+hoot stat $LOG_LEVEL $CONFIG $INPUT_FILE_2 NodesPerWayVisitor --statType average
 
 echo ""
 echo "Calculating the total number of nodes per way against multiple files..."
 echo ""
-hoot stat $LOG_LEVEL $CONFIG "$INPUT_FILE_1;$INPUT_FILE_2" NodesPerWayVisitor total
+hoot stat $LOG_LEVEL $CONFIG $INPUT_FILE_1 $INPUT_FILE_2 NodesPerWayVisitor --statType total
 
 echo ""
 echo "Calculating the total number of nodes per way recursively from a directory..."
 echo ""
-hoot stat $LOG_LEVEL $CONFIG $RECURSIVE_INPUT NodesPerWayVisitor total --recursive "*"
+hoot stat $LOG_LEVEL $CONFIG $RECURSIVE_INPUT NodesPerWayVisitor --statType total --recursive "*"
 
 echo ""
 echo "Calculating the total number of nodes per way recursively from a directory filtered to read osm inputs only..."
 echo ""
-hoot stat $LOG_LEVEL $CONFIG $RECURSIVE_INPUT NodesPerWayVisitor total --recursive "*.osm"
+hoot stat $LOG_LEVEL $CONFIG $RECURSIVE_INPUT NodesPerWayVisitor --statType total --recursive "*.osm"

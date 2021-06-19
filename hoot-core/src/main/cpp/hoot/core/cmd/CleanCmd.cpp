@@ -63,10 +63,10 @@ public:
   {
     Tgs::Timer timer;
 
-    if (args.size() != 2)
+    if (args.size() < 2)
     {
       cout << getHelp() << endl << endl;
-      throw HootException(QString("%1 takes two parameters.").arg(getName()));
+      throw HootException(QString("%1 takes at least two parameters.").arg(getName()));
     }
 
     Progress progress(
@@ -74,7 +74,13 @@ public:
       // import, export, and cleaning tasks
       1.0 / 3.0);
 
-    const QStringList inputs = args[0].trimmed().split(";");
+    // Output is the last param.
+    const int outputIndex = args.size() - 1;
+    const QString output = args[outputIndex];
+    args.removeAt(outputIndex);
+    // Everything that's left is an input.
+    const QStringList inputs = args;
+
     progress.set(
       0.0, Progress::JobState::Running,
       "Importing " + QString::number(inputs.size()) + " map(s)...");
@@ -98,7 +104,7 @@ public:
 
     progress.set(2.0 / 3.0, Progress::JobState::Running, "Exporting map...");
     MapProjector::projectToWgs84(map);
-    IoUtils::saveMap(map, args[1]);
+    IoUtils::saveMap(map, output);
 
     double totalElapsed = timer.getElapsed();
     progress.set(

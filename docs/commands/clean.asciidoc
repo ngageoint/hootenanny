@@ -17,7 +17,7 @@ hoot info --cleaning-operations
 === Usage
 
 --------------------------------------
-clean ("input1;input2...") (output)
+clean (input) [input2...] (output)
 --------------------------------------
 
 https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#cleaning[Examples]

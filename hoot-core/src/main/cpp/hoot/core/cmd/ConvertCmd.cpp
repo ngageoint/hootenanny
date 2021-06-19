@@ -83,34 +83,12 @@ public:
         ConfigOptions::getCropBoundsKey() + " option must be specified.");
     }
 
-    QStringList inputs;
-    QString output;
-    int argIndex = 0;
-    for (int i = 0; i < args.size(); i++)
-    {
-      const QString arg = args[i];
-      LOG_VART(arg);
-      // Formerly, "--" options existed and were required to all be at the end of the command, so
-      // you could break here once you reached them, and you knew you were done parsing
-      // inputs/outputs. Now, the command doesn't take any command line options except
-      // --write-bounds, which is parsed out beforehand. After that, it uses all configuration
-      // options. So, let's throw if we see a command line option at this point.
-      if (arg.startsWith("--"))
-      {
-        throw IllegalArgumentException(
-          QString("The convert command takes no inline options starting with '--'. All options ") +
-          QString("are passed in as configuration options (-D)."));
-      }
-      argIndex++;
-      inputs.append(arg);
-    }
-    LOG_VART(inputs.size());
-    LOG_VART(argIndex);
-    output = inputs.at(argIndex - 1);
-    inputs.removeAt(argIndex - 1);
-    LOG_VART(inputs.size());
-    LOG_VART(inputs);
-    LOG_VART(output);  
+    // Output is the last param.
+    const int outputIndex = args.size() - 1;
+    const QString output = args[outputIndex];
+    args.removeAt(outputIndex);
+    // Everything that's left is an input.
+    const QStringList inputs = args;
 
     ConfigUtils::checkForDuplicateElementCorrectionMismatch(ConfigOptions().getConvertOps());
 

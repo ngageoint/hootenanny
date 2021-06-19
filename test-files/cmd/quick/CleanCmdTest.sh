@@ -10,7 +10,7 @@ comparefile=$IN_DIR/cleaned.osm
 outputfile=$OUT_DIR/cleaned.osm
 
 GOLD_FILE_MULTIPLE=$IN_DIR/cleaned-multiple.osm
-INPUT_MULTIPLE="test-files/DcGisRoads.osm;test-files/DcTigerRoads.osm"
+INPUT_MULTIPLE="test-files/DcGisRoads.osm test-files/DcTigerRoads.osm"
 OUTPUT_FILE_MULTIPLE=$OUT_DIR/cleaned-multiple.osm
 
 CONFIG="-C Testing.conf"

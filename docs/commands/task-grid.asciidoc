@@ -23,7 +23,7 @@ with +--uniform+:
 === Uniform Grid Usage
 
 --------------------------------------
-task-grid ("input1.osm;input2.osm...")|(bounds) (output) (gridDimensionSize) --uniform
+task-grid (input1.osm) [input2.osm...] | (bounds) (output) (gridDimensionSize) --uniform
 --------------------------------------
 
 === Node Density Grid
@@ -62,7 +62,7 @@ The following options may be used with +--node-density+:
 === Node Density Usage
 
 --------------------------------------
-task-grid ("input1.osm;input2.osm...") (output) [--bounds <value>] [--maxNodesPerCell <value>] [--pixelSize <value>] [--maxAttempts <value>] [--maxTimePerAttempt <value>] [--pixelSizeReductionFactor <value>] [--random] [--randomSeed <value>] --node-density
+task-grid (input1.osm) [input2.osm...] (output) [--bounds <value>] [--maxNodesPerCell <value>] [--pixelSize <value>] [--maxAttempts <value>] [--maxTimePerAttempt <value>] [--pixelSizeReductionFactor <value>] [--random] [--randomSeed <value>] --node-density
 --------------------------------------
 
 https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#generate-a-grid-with-regular-shaped-cells-across-an-entire-map[Examples]

@@ -7,10 +7,9 @@ The +tag-distribution+ command displays a distribution for all values of a speci
 percentage of each value's frequency compared to all other tag values.
 
 * +input(s)+                 - One or more inputs; may be any supported input format (e.g. .osm file).
-* +tagKeys+                  - The tag keys to gather statistics for. To process all tags, leave this empty by specifying 
-                               a pair of quotes with nothing between them. This parameter is ignored if `--names` or `--types` 
-                               is used.
-* +criteria+                 - (optional) Filtering criteria for the inputs; May be one or more class names inheriting from 
+* +--tagKeys+                - The tag keys to gather statistics for. If this parameter is ommitted, all tag keys are 
+                               processed. This parameter is ignored if `--names` or `--types` is used.
+* +--criteria+               - Optional filtering criteria for the inputs; May be one or more class names inheriting from 
                                `ElementCriterion`. By default, multiple criteria are logically OR'd together. Set the 
                                `tag.distribution.chain.element.criteria` option to true to have the criteria logically 
                                AND'd together. The criteria can be negated with the option `element.criteria.negate`.
@@ -36,8 +35,8 @@ percentage of each value's frequency compared to all other tag values.
 === Usage
 
 --------------------------------------
-tag-distribution ("input1;input2...") ("tagKey1;tagKey2...") ["criterion1;criterion2..."] [--names] [--types] \
-  [--percentage-of-matching] [--sort-by-value] [--limit]  [--tokenize] [--recursive]
+tag-distribution (input1) [input2...] [--tagKeys "tagKey1;tagKey2..."] [--criteria "criterion1;criterion2..."] [--names] \
+  [--types] [--percentage-of-matching] [--sort-by-value] [--limit]  [--tokenize] [--recursive]
 --------------------------------------
 
 https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#display-the-distribution-of-highway-tags-for-roads-in-a-map[Examples]
@@ -49,7 +48,7 @@ Usage of options can change the way the tag percentages are calculated.
 As an example, here we calculate the distribution of "highway" tags for all elements in a map:
 
 -----
-hoot tag-distribution input.osm highway --limit 3
+hoot tag-distribution input.osm --tagKeys highway --limit 3
 
 Total elements processed: 8,707. Total tags processed: 6,529.
 401	(4.61%)	highway=residential
@@ -64,7 +63,7 @@ Now, we run the same calculation, but restrict the elements parsed to only those
 (`HighwayCriterion`). Hootenanny classifies roads as way elements possessing a "highway" tag.
 
 -----
-hoot tag-distribution input.osm highway HighwayCriterion --limit 3
+hoot tag-distribution input.osm --tagKeys highway --criteria HighwayCriterion --limit 3
 
 Total elements processed: 673. Total tags processed: 5,565. Filtered by: hoot::HighwayCriterion.
 401	(59.6%)	highway=residential
@@ -79,7 +78,7 @@ Finally, we have a third option for counting "highway" tags where we only count 
 without restricting the elements parsed to those that Hootenanny deems to be roads (`HighwayCriterion`).
 
 -----
-hoot tag-distribution input.osm highway --percentage-of-matching --limit 3
+hoot tag-distribution input.osm --tagKeys highway --percentage-of-matching --limit 3
 
 Total elements processed: 721. Total tags processed: 6,529.
 401	(55.6%)	highway=residential

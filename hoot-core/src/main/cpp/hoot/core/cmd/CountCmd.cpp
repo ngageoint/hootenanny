@@ -56,32 +56,38 @@ public:
       args.removeAt(args.indexOf("--all-elements"));
     }
 
+    QStringList criteriaClassNames;
+    if (args.contains("--criteria"))
+    {
+      const int criteriaIndex = args.indexOf("--criteria");
+      criteriaClassNames = args[criteriaIndex + 1].trimmed().split(";");
+      args.removeAt(criteriaIndex + 1);
+      args.removeAt(criteriaIndex);
+    }
+    LOG_VARD(criteriaClassNames);
+
     bool recursive = false;
     const QStringList inputFilters = _parseRecursiveInputParameter(args, recursive);
+    LOG_VARD(inputFilters);
 
-    if (args.size() < 1 || args.size() > 2)
+    if (args.size() < 1)
     {
       LOG_VAR(args);
       std::cout << getHelp() << std::endl << std::endl;
-      throw HootException(QString("%1 takes one or two parameters.").arg(getName()));
+      throw HootException(QString("%1 takes at least one parameter.").arg(getName()));
     }
 
+    // The only args left are all inputs.
     QStringList inputs;
     if (!recursive)
     {
-      inputs = args[0].trimmed().split(";");
+      inputs = args;
     }
     else
     {
-      inputs = IoUtils::getSupportedInputsRecursively(args[0].trimmed().split(";"), inputFilters);
-    }
-
-    QStringList criteriaClassNames;
-    if (args.size() > 1)
-    {
-      criteriaClassNames = args[1].trimmed().split(";");
-    }
-    LOG_VARD(criteriaClassNames);
+      inputs = IoUtils::getSupportedInputsRecursively(args, inputFilters);
+    }  
+    LOG_VARD(inputs);
 
     ElementCounter counter;
     counter.setCountFeaturesOnly(countFeaturesOnly);

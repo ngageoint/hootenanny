@@ -25,13 +25,13 @@ hoot stats $LOG_LEVEL $CONFIG $INPUT1 --brief
 echo ""
 echo "Quick Stats from a single file to txt..."
 echo ""
-hoot stats $LOG_LEVEL $CONFIG $INPUT1 $OUTPUT1 --brief
+hoot stats $LOG_LEVEL $CONFIG $INPUT1 --output $OUTPUT1 --brief
 cat $OUTPUT1
 
 echo ""
 echo "Full stats from multiple files to json..."
 echo ""
-hoot stats $LOG_LEVEL $CONFIG "$INPUT1;$INPUT2" $OUTPUT2 
+hoot stats $LOG_LEVEL $CONFIG $INPUT1 $INPUT2 --output $OUTPUT2 
 cat $OUTPUT2
 
 echo ""
