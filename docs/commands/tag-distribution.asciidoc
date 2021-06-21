@@ -27,10 +27,10 @@ percentage of each value's frequency compared to all other tag values.
                                tag value occurrence frequency.
 * +--limit+                  - Limits the number of results returned.
 * +--tokenize+               - Breaks tag values up into individual tokens before counting them.
-* +--recursive+              - Allows for displaying tag information against elements recursively in a directory structure. 
-                               This must be followed by either "*" to denote no filtering or one or more wildcard 
-                               name filters. e.g. "*.osm;*.json" or "*myFile*". The recursion is only performed on 
-                               file directories and this parameter is ignored for other input types.
+* +--recursive+              - Allows for displaying tag information for data recursively in a directory structure. This 
+                               must be followed by either "*" to denote no filtering or one or more wildcard name 
+                               filters. e.g. "*.osm;*.json" or "*myFile*". The recursion is only performed on file 
+                               directories and this parameter is ignored for other input types.
 
 === Usage
 

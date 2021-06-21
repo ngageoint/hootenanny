@@ -13,7 +13,7 @@ The +stat+ command displays a single statistic calculated from the features in a
 * +--statType+  - If +visitor+ supports `NumericStatistic`, this optional parameter allows for specifying the statistic type 
                   to collect. Supported types are 'total', 'min', 'max', and 'average'. If +visitor+ implements 
                   `SingleStatistic`, this parameter is ignored and 'total' is automatically used.
-* +--recursive+ - Allows for calculating a statistic against elements recursively in a directory structure. This must 
+* +--recursive+ - Allows for calculating a statistic against data recursively in a directory structure. This must 
                   be followed by either "*" to denote no filtering or one or more wildcard name filters. e.g. "*.osm;*.json" 
                   or "*myFile*". The recursion is only performed on file directories and this parameter is ignored 
                   for other input types.
