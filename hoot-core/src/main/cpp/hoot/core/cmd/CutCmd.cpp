@@ -58,9 +58,6 @@ public:
 
   int runSimple(QStringList& args) override
   {
-    QElapsedTimer timer;
-    timer.start();
-
     if (args.size() < 3 || args.size() > 5)
     {
       std::cout << getHelp() << std::endl << std::endl;
@@ -85,6 +82,7 @@ public:
     {
       buffer = 0.0;
     }
+    LOG_VARD(buffer);
     bool crop = false;
     if (args.size() > i)
     {
@@ -99,6 +97,9 @@ public:
             arg(args[i - 1]));
       }
     }
+
+    QElapsedTimer timer;
+    timer.start();
 
     LOG_STATUS(
       "Cutting ..." << FileUtils::toLogFormat(cutterShapePath, 25) << " out of ..." <<
