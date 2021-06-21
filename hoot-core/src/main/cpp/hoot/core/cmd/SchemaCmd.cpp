@@ -50,25 +50,24 @@ public:
 
   int runSimple(QStringList& args) override
   {
-    QString printScript(ConfigOptions().getTagPrintingScript());
-
-    if (args.size() == 1)
+    if (args.size() != 0)
     {
-      printScript = args[0];
-    }
-    else if (args.size() > 1)
-    {
-      cout << getHelp() << endl << endl;
-      throw HootException(QString("%1 takes one optional parameter.").arg(getName()));
+      std::cout << getHelp() << std::endl << std::endl;
+      throw IllegalArgumentException(
+        QString("%1 takes zero parameters. You provided %2: %3")
+          .arg(getName())
+          .arg(args.size())
+          .arg(args.join(",")));
     }
 
     LOG_STATUS("Printing schema...");
     std::shared_ptr<ScriptSchemaTranslator> schemaPrinter(
-      ScriptSchemaTranslatorFactory::getInstance().createTranslator(printScript));
+      ScriptSchemaTranslatorFactory::getInstance().createTranslator(
+        ConfigOptions().getTagPrintingScript()));
     if (!schemaPrinter)
     {
       throw IllegalArgumentException(
-        "Unable to find a valid translation format for: " + printScript);
+        "Unable to find a valid translation format for: " + ConfigOptions().getTagPrintingScript());
     }
 
     return 0;
