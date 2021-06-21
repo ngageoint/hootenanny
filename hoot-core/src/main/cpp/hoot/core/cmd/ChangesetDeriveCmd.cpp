@@ -90,11 +90,30 @@ public:
         "The --enable-way-snapping option is only valid when the --replacement option is specified.");
     }
 
+    QString osmApiDbUrl;
+    if (args.contains("--osmApiDatabaseUrl"))
+    {
+      const int osmApiDbUrlIndex = args.indexOf("--osmApiDatabaseUrl");
+      osmApiDbUrl = args.at(osmApiDbUrlIndex + 1);
+      args.removeAt(osmApiDbUrlIndex + 1);
+      args.removeAt(osmApiDbUrlIndex);
+    }
+
     bool printStats = false;
     QString outputStatsFile;
     _processStatsParams(args, printStats, outputStatsFile);
 
     LOG_VARD(args);
+
+    if (args.size() != 3)
+    {
+      std::cout << getHelp() << std::endl << std::endl;
+      throw IllegalArgumentException(
+        QString("%1 takes three parameters. You provided %2: %3")
+          .arg(getName())
+          .arg(args.size())
+          .arg(args.join(",")));
+    }
 
     // process required params
 
@@ -102,22 +121,11 @@ public:
     const QString input2 = args[1].trimmed();
     const QString output = args[2].trimmed();
 
-    QString osmApiDbUrl;
-    if (output.endsWith(".osc.sql"))
+    if (output.endsWith(".osc.sql") && osmApiDbUrl.isEmpty())
     {
-      if (args.size() != 4)
-      {
-        std::cout << getHelp() << std::endl << std::endl;
-        throw IllegalArgumentException(
-          QString("%1 with SQL changeset output takes four parameters.").arg(getName()));
-      }
-      osmApiDbUrl = args[3];
-    }
-    else if (args.size() > 3)
-    {
-      std::cout << getHelp() << std::endl << std::endl;
       throw IllegalArgumentException(
-        QString("%1 with output: " + output + " takes three parameters.").arg(getName()));
+        QString("Writing SQL changeset output (*.osc.sql) requires that the ") +
+        QString("--osmApiDatabaseUrl parameter be specified."));
     }
 
     if (!isReplacement)

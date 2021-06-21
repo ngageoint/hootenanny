@@ -57,7 +57,11 @@ public:
     if (args.size() != 4)
     {
       std::cout << getHelp() << std::endl << std::endl;
-      throw HootException(QString("%1 takes four parameters.").arg(getName()));
+      throw IllegalArgumentException(
+        QString("%1 takes four parameters. You provided %2: %3")
+          .arg(getName())
+          .arg(args.size())
+          .arg(args.join(",")));
     }
 
     const QString input = args[0];

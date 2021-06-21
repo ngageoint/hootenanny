@@ -165,12 +165,22 @@ int ConflateCmd::runSimple(QStringList& args)
   conflator.setDisplayChangesetStats(displayChangesetStats);
   conflator.setOutputChangesetStatsFile(outputChangesetStatsFile);
 
+  QString osmApiDbUrl;
+  if (args.contains("--osmApiDatabaseUrl"))
+  {
+    const int osmApiDbUrlIndex = args.indexOf("--osmApiDatabaseUrl");
+    osmApiDbUrl = args.at(osmApiDbUrlIndex + 1);
+    conflator.setOsmApiDbUrl(osmApiDbUrl);
+    args.removeAt(osmApiDbUrlIndex + 1);
+    args.removeAt(osmApiDbUrlIndex);
+  }
+
   LOG_VARD(args.size() );
-  if (args.size() < 3 || args.size() > 4)
+  if (args.size() != 3)
   {
     cout << getHelp() << endl << endl;
     throw IllegalArgumentException(
-      QString("%1 takes three or four parameters. You provided %2: %3")
+      QString("%1 takes three parameters. You provided %2: %3")
         .arg(getName())
         .arg(args.size())
         .arg(args.join(",")));
@@ -180,32 +190,11 @@ int ConflateCmd::runSimple(QStringList& args)
   const QString input2 = args[1];
   QString output = args[2];
 
-  QString osmApiDbUrl;
-  if (output.endsWith(".osc.sql"))
+  if (output.endsWith(".osc.sql") && osmApiDbUrl.isEmpty())
   {
-    if (args.size() != 4)
-    {
-      std::cout << getHelp() << std::endl << std::endl;
-      throw IllegalArgumentException(
-        QString("%1 with SQL changeset output takes four parameters.").arg(getName()));
-    }
-    else if (displayChangesetStats)
-    {
-      throw IllegalArgumentException(
-        QString("Changeset statistics (--changeset-stats) may only be calculated with an XML ") +
-        QString("changeset output (.osc)."));
-    }
-    osmApiDbUrl = args[3];
-    conflator.setOsmApiDbUrl(osmApiDbUrl);
-  }
-  else if (args.size() > 3)
-  {
-    std::cout << getHelp() << std::endl << std::endl;
     throw IllegalArgumentException(
-      QString("%1 with output: " + output + " takes three parameters. You provided %2: %3")
-        .arg(getName())
-        .arg(args.size())
-        .arg(args.join(",")));
+      QString("Writing SQL changeset output (*.osc.sql) requires that the --osmApiDatabaseUrl ") +
+      QString("parameter be specified."));
   }
 
   conflator.conflate(input1, input2, output);

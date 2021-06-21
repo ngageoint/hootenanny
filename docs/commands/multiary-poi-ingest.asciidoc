@@ -3,19 +3,19 @@
 
 === Description
 
-The +multiary-poi-ingest+ command ingests POI data for use by the +multiary-conflate+ command by calculating the 
-difference between new and existing data.
+The +multiary-poi-ingest+ command ingests POI data for use by the +multiary-conflate+ command.
 
 * +input+             - Input; may be any supported input format (e.g. .osm file).
-* +translationScript+ - Translation script used to translate the input data to OSM
-* +referenceOutput+   - Reference data to write; must be a Hootenanny API database layer; If the layer does not exist, it 
-                        will be created.
-* +changesetOutput+   - Output changeset; must be a Spark changeset (*.spark.1).
+* +translationScript+ - Translation script used to translate the input data; must by a Javascript (.js) or Python 
+                        (.py) translation file
+* +referenceOutput+   - Reference data output; must be a Hootenanny API database layer (hootapidb://); If the layer does 
+                        not exist, it will be created.
+* +changesetOutput+   - Output changeset; must be a Spark changeset file (*.spark.1).
 
 === Usage
 
 --------------------------------------
-multiary-poi-ingest (input) (translationScript) (referenceOutput) (changesetOutput)
+hoot multiary-poi-ingest (input) (translationScript) (referenceOutput) (changesetOutput)
 --------------------------------------
 
 ==== Examples

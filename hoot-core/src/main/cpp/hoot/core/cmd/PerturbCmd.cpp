@@ -70,8 +70,12 @@ public:
     LOG_VARD(args.size());
     if (args.size() < 2 || args.size() > 3)
     {
-      cout << getHelp() << endl << endl;
-      throw HootException(QString("%1 takes two or three parameters.").arg(getName()));
+      std::cout << getHelp() << std::endl << std::endl;
+      throw IllegalArgumentException(
+        QString("%1 takes at two to three parameters. You provided %2: %3")
+          .arg(getName())
+          .arg(args.size())
+          .arg(args.join(",")));
     }
 
     bool scoreOptionSpecified = false;

@@ -1,7 +1,7 @@
 [[info-rnd]]
 == info-rnd
 
-The +info-rnd+ command displays information about Hootenanny capabilities specific to the hoot-rnd module.
+The +info-rnd+ command displays information about command capabilities specific to the `hoot-rnd` module.
 
 For further detail on how to use this information see both the Hootenanny User and Developer Guides.
 
@@ -42,7 +42,7 @@ Each of the following sections describes an option that may be used with this co
 ==== Usage
 
 --------------------------------------
-info-rnd --languages --detectors
+hoot info-rnd --languages --detectors
 --------------------------------------
 
 The +--translators+ option prints out all available language translators that can be used with the Hootenanny web services.
@@ -50,7 +50,7 @@ The +--translators+ option prints out all available language translators that ca
 ==== Usage
 
 --------------------------------------
-info-rnd --languages --translators
+hoot info-rnd --languages --translators
 --------------------------------------
 
 The +--detectable+ option prints out spoken languages which Hootenanny can detect when using the Hootenanny web services.
@@ -58,7 +58,7 @@ The +--detectable+ option prints out spoken languages which Hootenanny can detec
 ==== Usage
 
 --------------------------------------
-info-rnd --languages --detectable
+hoot info-rnd --languages --detectable
 --------------------------------------
 
 The +--translatable+ option prints out spoken languages which Hootenanny can translate from to English when using 
@@ -67,5 +67,5 @@ the Hootenanny web services.
 ==== Usage
 
 --------------------------------------
-info-rnd --languages --translatable
+hoot info-rnd --languages --translatable
 --------------------------------------

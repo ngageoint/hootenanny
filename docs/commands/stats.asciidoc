@@ -3,20 +3,18 @@
 
 === Description
 
-The +stats+ command calculates a partially configurable set of statistics for one or more maps.
+The +stats+ command calculates a pre-determined set of statistics for one or more maps.
 
-* +input(s)+    - One or more inputs; may be any supported input format (e.g. .osm file).
-* +--brief+     - Only calculate subset of statistics. 
-* +--output+    - Optional output file path; supported file types are text (*.txt) and JSON (*.json).
-* +--recursive+ - Allows for calculating statistics against elements recursively in a directory structure. This must 
-                  be followed by either "*" to denote no filtering or one or more wildcard name filters. e.g. "*.osm;*.json" 
-                  or "*myFile*". The recursion is only performed on file directories and this parameter is ignored 
-                  for other input types.
+* +input(s)+    - Input(s); may be any supported input format (e.g. .osm file).
+* +--brief+     - Only calculates subset of statistics. 
+* +--output+    - Optional output; supported formats are text (.txt) and JSON (.json).
+* +--recursive+ - Allows for processing inputs recursively in a directory structure. This must be followed by either "*" 
+                  to denote no filtering or one or more wildcard name filters. e.g. "*.osm;*.json" or "*myFile*".
 
 === Usage
 
 --------------------------------------
-stats (input1) [input2...] [--brief] [--output path] [--recursive]
+hoot stats (input1) [input2...] [--brief] [--output path] [--recursive]
 --------------------------------------
 
 https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#display-a-set-of-statistics-for-a-map[Examples]

@@ -58,11 +58,18 @@ public:
   QString getDescription() const override { return "Crops a map to a bounds"; }
 
   int runSimple(QStringList& args) override
-  {      
+  {
+    bool recursive = false;
+    const QStringList inputFilters = _parseRecursiveInputParameter(args, recursive);
+
     if (args.size() < 3)
     {
-      cout << getHelp() << endl << endl;
-      throw HootException(QString("%1 takes at least three parameters.").arg(getName()));
+      std::cout << getHelp() << std::endl << std::endl;
+      throw IllegalArgumentException(
+        QString("%1 takes at least three parameters. You provided %2: %3")
+          .arg(getName())
+          .arg(args.size())
+          .arg(args.join(",")));
     }
 
     int boundsIndex;
@@ -83,7 +90,15 @@ public:
     args.removeLast();
 
     // Everything left is an input.
-    const QStringList inputs = args;
+    QStringList inputs;
+    if (!recursive)
+    {
+      inputs = args;
+    }
+    else
+    {
+      inputs = IoUtils::getSupportedInputsRecursively(args, inputFilters);
+    }
 
     QElapsedTimer timer;
     timer.start();

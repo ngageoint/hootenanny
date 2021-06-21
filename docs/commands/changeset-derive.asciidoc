@@ -3,44 +3,34 @@
 
 === Description
 
-The +changeset-derive+ command creates an OSM changeset file that represents the difference between two input OSM datasets
-within an optionally specified bounds (used the +bounds+ configuration option).  Alternatively, when only one dataset is 
-input it generates a changeset file representing all the data in the input dataset. The output changeset file can later 
-be applied to an OSM API database with the +changeset-apply+ command.
+The +changeset-derive+ command creates an OSM changeset file that represents the difference between two input OSM 
+datasets. When only one dataset is input it generates a changeset file representing all the data in the input dataset. 
+The output changeset file can later be applied to an OSM API database with the +changeset-apply+ command. 
 
-When the +--replacement+ option is specified, the data from the second specified input dataset (secondary layer) 
-completely replaces data in the first specified dataset (reference layer). Since the command replaces all data and does
-not allow use of the +convert.ops+ configuration option when the +--replacement+ option is specified, inputs should be 
-pre-filtered in situations where it is not desirable to replace all of the data.  
-
-If deriving a changeset between two inputs from different dates, the first input should be the older dataset and the 
-second should be the newer dataset.
-
-* +input1+                - OSM data input 1; may be any supported input format (e.g. .osm file).
-* +input2+                - OSM data input 2; may be any supported input format or empty (e.g. .osm file or empty string 
-                            ("") to derive changeset from one input only).
-* +output+                - Output location; must be a changeset .osc or .osc.sql file.
-* +osmApiDatabaseUrl+     - Target OSM API database the derived changeset is to be applied, used to maintain element ID 
-                            continuity. Required only if the changeset output format is .osc.sql. Used to maintain element 
-                            ID continuity with the database target for a derived changeset. 
-* +--replacement+         - Causes data from input2 to completely replace data in input1. Leave input2 empty ("") to cut 
-                            data out of input1 while adding no replacement data from input2. 
-* +--enable-way-snapping+ - Optionally snap unconnected ways in the replacement data to the data being replaced. This option
+* +input1+                - Input 1; may be any supported input format (e.g. .osm file).
+* +input2+                - Input 2; may be any supported input format (e.g. .osm file). Optionally, specify an empty 
+                            string ("") to derive changeset from one input only.
+* +output+                - Output; must be a changeset file (.osc or .osc.sql).
+* +--enable-way-snapping+ - Optionally snaps unconnected ways in the replacement data to the data being replaced. This option
                             is only valid if the +--replacement+ option is used. This is generally used to smooth out ways 
                             at the edge of the replacement boundary when the dataset used for replacement has very 
                             different linear data than the data being replaced. This option is ignored when using the cut 
-                            only replacement workflow (no second input).
-* +--stats+               - Displays changeset statistics and may be optionally followed by an output JSON file name to write 
-                            the statistics to. If a file is not specified, statistics are printed to the screen. Valid 
-                            when writing the .osc changeset output format only.
-* +--write-bounds+        - If the `bounds` configuration option is specified, optionally outputs a file containing the 
+                            only replacement workflow (no second input specified).
+* +--osmApiDatabaseUrl+   - Target OSM API database to which the derived changeset is to be applied, used to maintain 
+                            element ID continuity. Required only if the changeset output format is SQL (.osc.sql).
+* +--replacement+         - Causes data from input2 to completely replace data in input1. Leave input2 empty ("") to cut 
+                            data out of input1 while adding no replacement data from input2.
+* +--stats+               - Displays changeset statistics and optionally writes them to a JSON file (.json). Ignored if 
+                            the changeset output format is SQL (.osc.sql).
+* +--write-bounds+        - If the `bounds` configuration option is specified, this optionally outputs a file containing the 
                             input bounds. The location of the file is controlled via the `bounds.output.file` 
                             configuration option.
 
 === Usage
 
 --------------------------------------
-changeset-derive (input1) [input2] (output) [osmApiDatabaseUrl] [--replacement] [--enable-way-snapping] [--stats filename] [--write-bounds]
+hoot changeset-derive (input1) [input2] (output) [--osmApiDatabaseUrl url] [--enable-way-snapping] [--replacement] \
+  [--stats filename] [--write-bounds]
 --------------------------------------
 
 https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#applying-changes[Examples]

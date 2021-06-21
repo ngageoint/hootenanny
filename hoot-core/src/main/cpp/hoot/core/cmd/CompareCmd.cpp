@@ -93,19 +93,28 @@ public:
     {
       throw IllegalArgumentException("No scoring method selected.");
     }
+    QStringList criteriaClassNames;
+    if (args.contains("--criteria"))
+    {
+      const int criteriaIndex = args.indexOf("--criteria");
+      criteriaClassNames = args.at(criteriaIndex + 1).trimmed().split(";");
+      args.removeAt(criteriaIndex + 1);
+      args.removeAt(criteriaIndex);
+    }
     LOG_VARD(args);
 
-    if (args.size() < 2 || args.size() > 4)
-    {
-      LOG_VAR(args);
-      cout << getHelp() << endl << endl;
+    if (args.size() < 2 || args.size() > 3)
+    {   
+      std::cout << getHelp() << std::endl << std::endl;
       throw IllegalArgumentException(
-        QString("%1 takes at two to four parameters.").arg(getName()));
+        QString("%1 takes two to three parameters. You provided %2: %3")
+          .arg(getName())
+          .arg(args.size())
+          .arg(args.join(",")));
     }
 
     const QString base1 = args[0];
     QString base2;
-    QStringList criteria;
     QString uut;
     if (args.size() == 2)
     {
@@ -113,30 +122,16 @@ public:
     }
     else if (args.size() == 3)
     {
-      // The last parameter could be either the second base map input or a list of criteria.
-      if (IoUtils::isSupportedInputFormat(args[2]))
-      {
-        uut = args[2];
-      }
-      else
-      {
-        uut = args[1];
-        criteria = args[2].split(";");
-      }
-    }
-    else if (args.size() == 4)
-    {
       base2 = args[1];
       uut = args[2];
-      criteria = args[3].split(";");
     }
 
     LOG_VARD(base1);
     LOG_VARD(base2);
-    LOG_VARD(criteria);
+    LOG_VARD(criteriaClassNames);
     LOG_VARD(uut);
 
-    _compareMaps(base1, base2, uut, _getCrit(criteria));
+    _compareMaps(base1, base2, uut, _getCrit(criteriaClassNames));
 
     LOG_STATUS(
       "Maps compared in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
