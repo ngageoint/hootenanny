@@ -15,7 +15,7 @@
     "mocha": "^8.4.0"
   },
   "scripts": {
-    "start": "node server.js --config config.json",
+    "start": "node server.js",
     "test": "mocha"
   }
 }
