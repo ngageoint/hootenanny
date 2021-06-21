@@ -123,11 +123,11 @@ std::shared_ptr<QImage> NodeDensityPlotter::_createImage(const cv::Mat& mat) con
     const int32_t* row = mat.ptr<int32_t>(y);
     for (int x = 0; x < qImage->width(); x++)
     {
-      int v = log1p(row[x]) / log(maxValue);
-      int r = std::max(0, std::min<int>(255, std::static_cast<int>(v * _colorMultiplier[0] + qRed(_baseColors))));
-      int g = std::max(0, std::min<int>(255, std::static_cast<int>(v * _colorMultiplier[1] + qGreen(_baseColors))));
-      int b = std::max(0, std::min<int>(255, std::static_cast<int>(v * _colorMultiplier[2] + qBlue(_baseColors))));
-      int a = std::max(0, std::min<int>(255, std::static_cast<int>(v * _colorMultiplier[3] + qAlpha(_baseColors))));
+      double v = log1p(row[x]) / log(maxValue);
+      int r = std::max(0, std::min<int>(255, static_cast<int>(v * _colorMultiplier[0] + qRed(_baseColors))));
+      int g = std::max(0, std::min<int>(255, static_cast<int>(v * _colorMultiplier[1] + qGreen(_baseColors))));
+      int b = std::max(0, std::min<int>(255, static_cast<int>(v * _colorMultiplier[2] + qBlue(_baseColors))));
+      int a = std::max(0, std::min<int>(255, static_cast<int>(v * _colorMultiplier[3] + qAlpha(_baseColors))));
       rgb = qRgba(r, g, b, a);
       qImage->setPixel(x, qImage->height() - y - 1, rgb);
     }

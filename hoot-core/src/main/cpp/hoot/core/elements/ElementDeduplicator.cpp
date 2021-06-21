@@ -107,12 +107,12 @@ void ElementDeduplicator::dedupe(OsmMapPtr map1, OsmMapPtr map2)
   LOG_DEBUG(map2->getName() << " size before de-duping: " << map2->size());
   LOG_VARD(_favorMoreConnectedWays);
 
-  const int map1NodesBefore = map1->getNodeCount();
-  const int map1WaysBefore = map1->getWayCount();
-  const int map1RelationsBefore = map1->getRelationCount();
-  const int map2NodesBefore = map2->getNodeCount();
-  const int map2WaysBefore = map2->getWayCount();
-  const int map2RelationsBefore = map2->getRelationCount();
+  const long map1NodesBefore = map1->getNodeCount();
+  const long map1WaysBefore = map1->getWayCount();
+  const long map1RelationsBefore = map1->getRelationCount();
+  const long map2NodesBefore = map2->getNodeCount();
+  const long map2WaysBefore = map2->getWayCount();
+  const long map2RelationsBefore = map2->getRelationCount();
 
   // Calculate our unique hashes per element for each map and get a list of duplicate pairs within
   // each map.
@@ -159,12 +159,12 @@ void ElementDeduplicator::dedupe(OsmMapPtr map1, OsmMapPtr map2)
   }
   _removeElements(elementsToRemove[ElementType::Node], map2);
 
-  _map1DuplicateNodesRemoved = map1NodesBefore - map1->getNodeCount();
-  _map1DuplicateWaysRemoved = map1WaysBefore - map1->getWayCount();
-  _map1DuplicateRelationsRemoved = map1RelationsBefore - map1->getRelationCount();
-  _map2DuplicateNodesRemoved = map2NodesBefore - map2->getNodeCount();
-  _map2DuplicateWaysRemoved = map2WaysBefore - map2->getWayCount();
-  _map2DuplicateRelationsRemoved = map2RelationsBefore - map2->getRelationCount();
+  _map1DuplicateNodesRemoved = static_cast<int>(map1NodesBefore - map1->getNodeCount());
+  _map1DuplicateWaysRemoved = static_cast<int>(map1WaysBefore - map1->getWayCount());
+  _map1DuplicateRelationsRemoved = static_cast<int>(map1RelationsBefore - map1->getRelationCount());
+  _map2DuplicateNodesRemoved = static_cast<int>(map2NodesBefore - map2->getNodeCount());
+  _map2DuplicateWaysRemoved = static_cast<int>(map2WaysBefore - map2->getWayCount());
+  _map2DuplicateRelationsRemoved = static_cast<int>(map2RelationsBefore - map2->getRelationCount());
 
   LOG_DEBUG(map1->getName() << " size after de-duping: " << map1->size());
   LOG_DEBUG(map2->getName() << " size after de-duping: " << map2->size());

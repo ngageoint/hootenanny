@@ -294,7 +294,7 @@ void DataConverter::_convertToOgr(const QStringList& inputs, const QString& outp
       convertOps.setProgress(
         Progress(
           ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running,
-          (currentTask - 1) / numTasks, 1.0f / numTasks));
+          (float)(currentTask - 1) / (float)numTasks, 1.0f / (float)numTasks));
       convertOps.apply(map);
       currentTask++;
       LOG_STATUS(
