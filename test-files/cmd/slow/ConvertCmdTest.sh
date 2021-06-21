@@ -7,39 +7,44 @@ rm -rf $OUTPUT_DIR
 mkdir -p $OUTPUT_DIR
 
 CONFIG="-C Testing.conf"
+LOG_LEVEL="--warn"
 
 echo "Multiple OSM to single OSM..."
 hoot convert $CONFIG test-files/ToyTestA.osm test-files/ToyTestB.osm $OUTPUT_DIR/ToyTestC.osm
 hoot diff $CONFIG test-files/cmd/slow/ConvertCmdTest/ToyTestC.osm $OUTPUT_DIR/ToyTestC.osm
 
+#echo "OSM by filter in dir to single OSM..."
+#hoot convert $CONFIG test-files $OUTPUT_DIR/ToyTestC.osm
+#hoot diff $CONFIG test-files/cmd/slow/ConvertCmdTest/ToyTestC.osm $OUTPUT_DIR/ToyTestC.osm
+
 echo "PBF to OSM..."
-hoot convert $CONFIG test-files/ToyTestA.osm.pbf $OUTPUT_DIR/ToyTestA.osm
+hoot convert $LOG_LEVEL $CONFIG test-files/ToyTestA.osm.pbf $OUTPUT_DIR/ToyTestA.osm
 cat $OUTPUT_DIR/ToyTestA.osm
 
 echo "PBF to SHP..."
-hoot convert $CONFIG test-files/ToyTestA.osm.pbf $OUTPUT_DIR/ToyTestA.shp
+hoot convert $LOG_LEVEL $CONFIG test-files/ToyTestA.osm.pbf $OUTPUT_DIR/ToyTestA.shp
 
 echo "SHP to OSM..."
 # comparing shapefiles is kinda hard. We'll convert it to a .osm file first.
-hoot convert $CONFIG $OUTPUT_DIR/ToyTestA.shp $OUTPUT_DIR/ToyTestAShp.osm
-hoot diff $CONFIG $OUTPUT_DIR/ToyTestAShp.osm $OUTPUT_DIR/ToyTestAShp.osm
+hoot convert $LOG_LEVEL $CONFIG $OUTPUT_DIR/ToyTestA.shp $OUTPUT_DIR/ToyTestAShp.osm
+hoot diff $LOG_LEVEL $CONFIG $OUTPUT_DIR/ToyTestAShp.osm $OUTPUT_DIR/ToyTestAShp.osm
 
 echo "Streaming XML read and write..."
-hoot convert $CONFIG -D writer.xml.sort.by.id="false" test-files/ToyTestA.osm $OUTPUT_DIR/ToyTestA2.osm
-hoot diff $CONFIG test-files/ToyTestA.osm $OUTPUT_DIR/ToyTestA2.osm
+hoot convert $LOG_LEVEL $CONFIG -D writer.xml.sort.by.id="false" test-files/ToyTestA.osm $OUTPUT_DIR/ToyTestA2.osm
+hoot diff $LOG_LEVEL $CONFIG test-files/ToyTestA.osm $OUTPUT_DIR/ToyTestA2.osm
 
 echo "POI Criterion..."
 # test streaming filter output to pois only
-hoot convert $CONFIG -D writer.xml.sort.by.id="false" -D convert.ops="hoot::PoiCriterion" test-files/conflate/unified/AllDataTypesA.osm.pbf $OUTPUT_DIR/AllDataTypesA.osm
-hoot diff $CONFIG test-files/cmd/slow/ConvertCmdTest/AllDataTypesAPois.osm $OUTPUT_DIR/AllDataTypesA.osm
+hoot convert $LOG_LEVEL $CONFIG -D writer.xml.sort.by.id="false" -D convert.ops="hoot::PoiCriterion" test-files/conflate/unified/AllDataTypesA.osm.pbf $OUTPUT_DIR/AllDataTypesA.osm
+hoot diff $LOG_LEVEL $CONFIG test-files/cmd/slow/ConvertCmdTest/AllDataTypesAPois.osm $OUTPUT_DIR/AllDataTypesA.osm
 
 echo "Check for invalid characters. You should see 3 sets of warnings."
-hoot convert $CONFIG test-files/io/InvalidCharacters.osm $OUTPUT_DIR/InvalidCharacters.osm
+hoot convert $LOG_LEVEL $CONFIG test-files/io/InvalidCharacters.osm $OUTPUT_DIR/InvalidCharacters.osm
 
 echo "Translation check..."
 # This wasn't working at one point.
-hoot convert $CONFIG -D convert.ops=hoot::SchemaTranslationVisitor -D schema.translation.direction=toogr -D schema.translation.script=translations/MGCP_TRD4.js test-files/ToyTestA.osm $OUTPUT_DIR/translation-check-out.gdb
+hoot convert $LOG_LEVEL $CONFIG -D convert.ops=hoot::SchemaTranslationVisitor -D schema.translation.direction=toogr -D schema.translation.script=translations/MGCP_TRD4.js test-files/ToyTestA.osm $OUTPUT_DIR/translation-check-out.gdb
 
 echo "Multi-layer GDB to OSM..."
-hoot convert $CONFIG test-files/cmd/slow/CountCmdTest/input.gdb $OUTPUT_DIR/multi-layer-gdb-out.osm
-hoot diff $CONFIG $INPUT_DIR/multi-layer-gdb-out.osm $OUTPUT_DIR/multi-layer-gdb-out.osm
+hoot convert $LOG_LEVEL $CONFIG test-files/cmd/slow/CountCmdTest/input.gdb $OUTPUT_DIR/multi-layer-gdb-out.osm
+hoot diff $LOG_LEVEL $CONFIG $INPUT_DIR/multi-layer-gdb-out.osm $OUTPUT_DIR/multi-layer-gdb-out.osm
