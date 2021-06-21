@@ -50,10 +50,48 @@ public:
 
   int runSimple(QStringList& args) override
   {
-    if (args.size() < 3 || args.size() > 5)
+    NodeDensityPlotter plotter;
+
+    // initialize to black
+    QRgb baseColors = qRgba(0, 0, 0, 255);
+    if (args.contains("--base-colors"))
+    {
+      const int baseColorIndex = args.indexOf("--base-colors");
+      const QStringList bs = args[baseColorIndex].split(",");
+      if (bs.size() != 4)
+      {
+        throw HootException("Expected --base-colors to be RGBA and comma delimited.");
+      }
+      baseColors =
+        qRgba(
+          plotter.toColorBand(bs[0]), plotter.toColorBand(bs[1]), plotter.toColorBand(bs[2]),
+          plotter.toColorBand(bs[3]));
+      args.removeAt(baseColorIndex + 1);
+      args.removeAt(baseColorIndex);
+    }
+
+    std::vector<double> multiplier(4, 255.0);
+    multiplier[3] = 0.0;
+    if (args.contains("--multiplier"))
+    {
+      const int multiplierIndex = args.indexOf("--multiplier");
+      const QStringList bs = args[4].split(",");
+      if (bs.size() != 4)
+      {
+        throw HootException("Expected --multiplier to be RGBA and comma delimited.");
+      }
+      multiplier[0] = plotter.toColorPortion(bs[0]);
+      multiplier[1] = plotter.toColorPortion(bs[1]);
+      multiplier[2] = plotter.toColorPortion(bs[2]);
+      multiplier[3] = plotter.toColorPortion(bs[3]);
+      args.removeAt(multiplierIndex + 1);
+      args.removeAt(multiplierIndex);
+    }
+
+    if (args.size() != 3)
     {
       std::cout << getHelp() << std::endl << std::endl;
-      throw HootException(QString("%1 takes three to five parameters.").arg(getName()));
+      throw HootException(QString("%1 takes at least three parameters.").arg(getName()));
     }
 
     bool ok;
@@ -65,39 +103,8 @@ public:
       throw IllegalArgumentException("Expected a number greater 1.0 for max size.");
     }
 
-    NodeDensityPlotter plotter;
-
-    // initialize to black
-    QRgb baseColors = qRgba(0, 0, 0, 255);
-    if (args.size() >= 4)
-    {
-      QStringList bs = args[3].split(",");
-      if (bs.size() != 4)
-      {
-        throw HootException("Expected base-colors to be RGBA and comma delimited.");
-      }
-      baseColors =
-        qRgba(
-          plotter.toColorBand(bs[0]), plotter.toColorBand(bs[1]), plotter.toColorBand(bs[2]),
-          plotter.toColorBand(bs[3]));
-    }
-    std::vector<double> colorMultiplier(4, 255.0);
-    colorMultiplier[3] = 0.0;
-    if (args.size() >= 5)
-    {
-      QStringList bs = args[4].split(",");
-      if (bs.size() != 4)
-      {
-        throw HootException("Expected base-colors to be RGBA and comma delimited.");
-      }
-      colorMultiplier[0] = plotter.toColorPortion(bs[0]);
-      colorMultiplier[1] = plotter.toColorPortion(bs[1]);
-      colorMultiplier[2] = plotter.toColorPortion(bs[2]);
-      colorMultiplier[3] = plotter.toColorPortion(bs[3]);
-    }
-
     plotter.setBaseColors(baseColors);
-    plotter.setColorMultiplier(colorMultiplier);
+    plotter.setColorMultiplier(multiplier);
     plotter.setMaxSize(maxSize);
     plotter.plot(input, output);
 
