@@ -94,7 +94,8 @@ See the User Guide for more specific details on command usage. Most of these exa
 ==== Derive a changeset between two maps and write the result directly to an OSM API database:
 
 -----
-    hoot changeset-derive inputData1.osm inputData2.osm changeset.osc.sql
+    hoot changeset-derive inputData1.osm inputData2.osm changeset.osc.sql \
+      --osmApiDatabaseUrl osmapidb://username:password@localhost:5432/databaseName
     hoot changeset-apply changeset.osc.sql osmapidb://username:password@localhost:5432/databaseName
 -----
 

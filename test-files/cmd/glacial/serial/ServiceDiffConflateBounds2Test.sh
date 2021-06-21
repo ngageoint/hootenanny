@@ -62,7 +62,7 @@ CONFLATED=$HOOT_DB_URL/$TEST_NAME-conflated
 hoot conflate $LOG_LEVEL $LOG_FILTER $GENERAL_OPTS $DB_OPTS $CONFLATE_OPTS -D debug.maps.filename=$OUTPUT_DIR/conflate-debug.osm -D conflate.use.data.source.ids.1=true -D conflate.use.data.source.ids.2=true $OSM_API_DB_URL $SEC_INPUT $CONFLATED --write-bounds
 
 # generate a changeset between the original ref data and the diff calculated in the previous step
-hoot changeset-derive $LOG_LEVEL $LOG_FILTER $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUTPUT_DIR/changeset-derive-debug.osm $OSM_API_DB_URL $CONFLATED $OUTPUT_DIR/diff.osc.sql $OSM_API_DB_URL
+hoot changeset-derive $LOG_LEVEL $LOG_FILTER $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUTPUT_DIR/changeset-derive-debug.osm $OSM_API_DB_URL $CONFLATED $OUTPUT_DIR/diff.osc.sql --osmApiDatabaseUrl $OSM_API_DB_URL
 if [ "$DEBUG" == "true" ]; then
   hoot changeset-derive $LOG_LEVEL $LOG_FILTER $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUTPUT_DIR/changeset-derive-debug.osm $OSM_API_DB_URL $CONFLATED $OUTPUT_DIR/diff.osc
 fi
