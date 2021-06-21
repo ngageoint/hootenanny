@@ -76,8 +76,8 @@ bool PolygonCompare::operator()(const std::shared_ptr<geos::geom::Geometry>& p1,
   i2[1] = (int)((y2 - _e.getMinY()) / (_e.getHeight()) * _size);
 
   bool result;
-  int h1 = _curve->encode(i1);
-  int h2 = _curve->encode(i2);
+  long h1 = _curve->encode(i1);
+  long h2 = _curve->encode(i2);
   if (h1 == h2)
     result = p1 < p2;
   else

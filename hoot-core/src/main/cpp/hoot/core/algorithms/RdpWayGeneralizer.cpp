@@ -170,7 +170,7 @@ QList<long> RdpWayGeneralizer::_getUpdatedWayNodeIdsForThoseNotAllowedToBeRemove
   for (QSet<long>::const_iterator it = nodeIdsNotAllowedToBeRemoved.begin();
        it != nodeIdsNotAllowedToBeRemoved.end(); ++it)
   {
-    const int nodeIdToAddBack = *it;
+    const long nodeIdToAddBack = *it;
     LOG_VART(nodeIdToAddBack);
     const int originalIndex = nodeIdsBeforeGeneralization.indexOf(nodeIdToAddBack);
     LOG_VART(originalIndex);
