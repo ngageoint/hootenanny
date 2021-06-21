@@ -54,18 +54,22 @@ public:
 
   int runSimple(QStringList& args) override
   {
-    QElapsedTimer timer;
-    timer.start();
-
     if (args.size() != 3)
     {
       std::cout << getHelp() << std::endl << std::endl;
-      throw HootException(QString("%1 takes three parameters.").arg(getName()));
+      throw IllegalArgumentException(
+        QString("%1 takes three parameters. You provided %2: %3")
+          .arg(getName())
+          .arg(args.size())
+          .arg(args.join(",")));
     }
 
     const QString input1 = args[0].trimmed();
     const QString input2 = args[1].trimmed();
     const QString output = args[2].trimmed();
+
+    QElapsedTimer timer;
+    timer.start();
 
     LOG_STATUS(
       "Calculating conflate match difference between ..." << FileUtils::toLogFormat(input1, 25) <<

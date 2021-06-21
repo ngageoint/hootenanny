@@ -64,8 +64,12 @@ public:
 
     if (args.size() < 3)
     {
-      cout << getHelp() << endl << endl;
-      throw HootException(QString("%1 takes at least three parameters.").arg(getName()));
+      std::cout << getHelp() << std::endl << std::endl;
+      throw IllegalArgumentException(
+        QString("%1 takes at least three parameters. You provided %2: %3")
+          .arg(getName())
+          .arg(args.size())
+          .arg(args.join(",")));
     }
 
     int boundsIndex;

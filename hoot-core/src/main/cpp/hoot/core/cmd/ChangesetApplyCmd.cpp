@@ -78,11 +78,12 @@ public:
     //  Make sure that there are at least two other arguments
     if (args.size() < 2)
     {
-      cout << getHelp() << endl << endl;
-      throw HootException(
-        QString("%1 takes at least 2 parameters and was given %2 parameters")
+      std::cout << getHelp() << std::endl << std::endl;
+      throw IllegalArgumentException(
+        QString("%1 takes at least 2 parameters. You provided %2: %3")
           .arg(getName())
-          .arg(args.size()));
+          .arg(args.size())
+          .arg(args.join(",")));
     }
 
     _progress =

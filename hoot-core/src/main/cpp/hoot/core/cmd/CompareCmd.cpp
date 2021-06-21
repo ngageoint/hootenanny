@@ -104,10 +104,13 @@ public:
     LOG_VARD(args);
 
     if (args.size() < 2 || args.size() > 3)
-    {
-      LOG_VAR(args);
-      cout << getHelp() << endl << endl;
-      throw IllegalArgumentException(QString("%1 takes two to three parameters.").arg(getName()));
+    {   
+      std::cout << getHelp() << std::endl << std::endl;
+      throw IllegalArgumentException(
+        QString("%1 takes two to three parameters. You provided %2: %3")
+          .arg(getName())
+          .arg(args.size())
+          .arg(args.join(",")));
     }
 
     const QString base1 = args[0];

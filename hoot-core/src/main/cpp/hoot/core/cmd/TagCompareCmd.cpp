@@ -67,9 +67,12 @@ public:
 
     if (args.size() != 2)
     {
-      LOG_VARD(args);
-      cout << getHelp() << endl << endl;
-      throw HootException(QString("%1 takes two parameters.").arg(getName()));
+      std::cout << getHelp() << std::endl << std::endl;
+      throw IllegalArgumentException(
+        QString("%1 takes at two parameters. You provided %2: %3")
+          .arg(getName())
+          .arg(args.size())
+          .arg(args.join(",")));
     }
 
     const QString input1 = args[0];

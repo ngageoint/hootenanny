@@ -72,9 +72,13 @@ public:
     const QStringList inputFilters = _parseRecursiveInputParameter(args, recursive);
 
     if (args.size() < 2)
-    {
-      cout << getHelp() << endl << endl;
-      throw HootException(QString("%1 takes at least two parameters.").arg(getName()));
+    { 
+      std::cout << getHelp() << std::endl << std::endl;
+      throw IllegalArgumentException(
+        QString("%1 takes at least two parameters. You provided %2: %3")
+          .arg(getName())
+          .arg(args.size())
+          .arg(args.join(",")));
     }
 
     ConfigOptions configOpts(conf());

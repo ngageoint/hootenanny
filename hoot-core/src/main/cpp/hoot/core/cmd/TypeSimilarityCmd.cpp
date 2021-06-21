@@ -52,7 +52,11 @@ public:
     if (args.size() != 2)
     {
       std::cout << getHelp() << std::endl << std::endl;
-      throw IllegalArgumentException(QString("%1 takes two parameters.").arg(getName()));
+      throw IllegalArgumentException(
+        QString("%1 takes two parameters. You provided %2: %3")
+          .arg(getName())
+          .arg(args.size())
+          .arg(args.join(",")));
     }
 
     const QString tag1 = args[0];

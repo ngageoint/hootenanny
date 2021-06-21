@@ -20,6 +20,3 @@ hoot convert $LOG $CONF -D reader.use.data.source.ids=false test-files/ToyTestA.
 hoot sync-element-ids $LOG $CONF test-files/conflate/unified/AllDataTypesA.osm $OUT/in2.osm $OUT/out.osm
 
 hoot diff --warn $CONF $IN/out.osm $OUT/out.osm
-
-
-

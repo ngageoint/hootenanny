@@ -71,10 +71,13 @@ public:
     LOG_VARD(inputFilters);
 
     if (args.size() < 1)
-    {
-      LOG_VAR(args);
+    {  
       std::cout << getHelp() << std::endl << std::endl;
-      throw HootException(QString("%1 takes at least one parameter.").arg(getName()));
+      throw IllegalArgumentException(
+        QString("%1 takes at least one parameter. You provided %2: %3")
+          .arg(getName())
+          .arg(args.size())
+          .arg(args.join(",")));
     }
 
     // The only args left are all inputs.

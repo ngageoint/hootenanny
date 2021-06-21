@@ -63,8 +63,12 @@ public:
 
     if (args.size() < 3 || args.size() > 5)
     {
-      cout << getHelp() << endl << endl;
-      throw HootException(QString("%1 takes three to five parameters.").arg(getName()));
+      std::cout << getHelp() << std::endl << std::endl;
+      throw IllegalArgumentException(
+        QString("%1 takes at three to five parameters. You provided %2: %3")
+          .arg(getName())
+          .arg(args.size())
+          .arg(args.join(",")));
     }
 
     int i = 0;
