@@ -461,6 +461,18 @@ hoot convert -D convert.ops="UnlikelyRoadRemover" input.osm output.osm
       input1.osm input2.osm output.osm
 -----
 
+==== Combine multiple maps recursively across multiple files under a directory:
+
+-----
+    hoot convert /my/dir output.osm --recursive "*"
+-----
+
+==== Combine multiple maps recursively across multiple OSM files under a directory:
+
+-----
+    hoot convert /my/dir output.osm --recursive "*.osm"
+-----
+
 ==== Combine like polygons together without using full-fledged conflation:
 
 -----
