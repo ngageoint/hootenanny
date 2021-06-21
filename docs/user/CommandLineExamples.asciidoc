@@ -1504,6 +1504,18 @@ Requires a language translation server installation.  See the Hootenanny Install
     hoot extent input.osm
 -----
 
+==== Display the geospatial extent of map data recursively across multiple files under a directory:
+
+-----
+    hoot extent /my/dir --recursive "*"
+-----
+
+==== isplay the geospatial extent of map data recursively across multiple OSM files under a directory:
+
+-----
+    hoot extent /my/dir --recursive "*.osm"
+-----
+
 ==== Determine if a map is sorted to the OSM standard:
 
 -----
