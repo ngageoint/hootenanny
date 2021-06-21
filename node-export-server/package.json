@@ -4,7 +4,6 @@
   "private": true,
   "dependencies": {
     "archiver": "^5.3.0",
-    "configure": "0.0.1",
     "express": "^4.17.1",
     "lodash": "^4.17.21",
     "rimraf": "^3.0.2",
@@ -16,7 +15,7 @@
     "mocha": "^8.4.0"
   },
   "scripts": {
-    "start": "node server.js --config config.json",
+    "start": "node server.js",
     "test": "mocha"
   }
 }
