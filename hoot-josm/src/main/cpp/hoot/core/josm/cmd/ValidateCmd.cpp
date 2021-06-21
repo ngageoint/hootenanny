@@ -53,14 +53,15 @@ public:
 
   virtual int runSimple(QStringList& args) override
   {
-    if (args.size() == 1)
+    bool showAvailableValidatorsOnly = false;
+    if (args.contains("--available-validators"))
     {
-      if (!args.contains("--available-validators"))
-      {
-        throw IllegalArgumentException(
-          "When the validate command is called with one parameter, the parameter must be "
-          "'--available-validators'.");
-      }
+      showAvailableValidatorsOnly = true;
+      args.removeAt(args.indexOf("--available-validators"));
+    }
+
+    if (showAvailableValidatorsOnly)
+    {
       _printJosmValidators();
     }
     else
@@ -100,8 +101,11 @@ public:
       validator.apply(map);
       LOG_INFO(validator.getCompletedStatusMessage());
 
-      MapProjector::projectToWgs84(map);
-      IoUtils::saveMap(map, output);
+      if (!output.isEmpty())
+      {
+        MapProjector::projectToWgs84(map);
+        IoUtils::saveMap(map, output);
+      }
 
       std::cout << validator.getSummary() << std::endl;
     }
