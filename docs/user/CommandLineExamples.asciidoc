@@ -1456,6 +1456,18 @@ Requires a language translation server installation.  See the Hootenanny Install
     hoot crop -D crop.invert=true input.osm output.osm "-77.0551,38.8845,-77.0281,38.9031"
 -----
 
+==== Crop map data recursively across multiple files under a directory:
+
+-----
+    hoot crop /my/dir output.osm "-77.0551,38.8845,-77.0281,38.9031" --recursive "*"
+-----
+
+==== Crop map data recursively across multiple OSM files under a directory:
+
+-----
+    hoot crop /my/dir output.osm "-77.0551,38.8845,-77.0281,38.9031" --recursive "*.osm"
+-----
+
 ==== Crop out a random subset of data with a maximum node size:
 
 -----
