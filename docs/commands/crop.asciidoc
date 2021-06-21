@@ -3,27 +3,27 @@
 
 === Description
 
-The +crop+ command crops a map to the given bounds. The default cropping behavior is that individual features on the border 
-are modified to make sure nothing is outside the given bounds. This behavior may be customized with the `crop.*` 
-configuration options.
+The +crop+ command crops a map to the given bounds. 
+
+The default cropping behavior is that individual features on the border are modified to make sure nothing is outside the 
+given bounds. This behavior may be customized with the `crop.*` configuration options.
 
 * +input(s)+       - Input path(s); may be any supported input format (e.g. .osm file).
 * +output+         - The output data path; may be any supported output format (e.g. .osm file).
 * +bounds+         - Comma delimited bounds. minx,miny,maxx,maxy e.g.38,-105,39,-104
+* +--recursive+    - Allows for cropping elements recursively in a directory structure. This must be followed by either 
+                     "*" to denote no filtering or one or more wildcard name filters. e.g. "*.osm;*.json" or "*myFile*". 
+                     The recursion is only performed on file directories and this parameter is ignored for other input types.
 * +--write-bounds+ - Optionally outputs a file containing the input bounds. The location of the file is controlled via the 
                      `bounds.output.file` configuration option.
 
 === Usage
 
 --------------------------------------
-crop (input1) [input2...] (output) (bounds) [--write-bounds]
+crop (input1) [input2...] (output) (bounds) [--recursive] [--write-bounds]
 --------------------------------------
 
 https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#crop-a-map-to-an-extent[Examples]
-
-=== Configuration Options
-
-The configuration options `crop.*` control the behavior of map cropping. See their descriptions in the Hootenanny User Guide for more detail.
 
 === See Also
 

@@ -59,6 +59,9 @@ public:
 
   int runSimple(QStringList& args) override
   {      
+    bool recursive = false;
+    const QStringList inputFilters = _parseRecursiveInputParameter(args, recursive);
+
     if (args.size() < 3)
     {
       cout << getHelp() << endl << endl;
@@ -83,7 +86,15 @@ public:
     args.removeLast();
 
     // Everything left is an input.
-    const QStringList inputs = args;
+    QStringList inputs;
+    if (!recursive)
+    {
+      inputs = args;
+    }
+    else
+    {
+      inputs = IoUtils::getSupportedInputsRecursively(args, inputFilters);
+    }
 
     QElapsedTimer timer;
     timer.start();

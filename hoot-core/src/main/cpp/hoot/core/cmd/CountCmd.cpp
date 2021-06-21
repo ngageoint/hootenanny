@@ -86,7 +86,7 @@ public:
     else
     {
       inputs = IoUtils::getSupportedInputsRecursively(args, inputFilters);
-    }  
+    }
     LOG_VARD(inputs);
 
     ElementCounter counter;
