@@ -98,7 +98,7 @@ void SetTagValueVisitor::setConfiguration(const Settings& conf)
   _appendToExistingValue = configOptions.getSetTagValueVisitorAppendToExistingValue();
   _overwriteExistingTag = configOptions.getSetTagValueVisitorOverwrite();
 
-  _negateCriteria = configOptions.getElementCriterionNegate();
+  _negateCriteria = configOptions.getElementCriteriaNegate();
   _chainCriteria = configOptions.getSetTagValueVisitorChainElementCriteria();
   const QStringList critNames = configOptions.getSetTagValueVisitorElementCriteria();
   LOG_VART(critNames);

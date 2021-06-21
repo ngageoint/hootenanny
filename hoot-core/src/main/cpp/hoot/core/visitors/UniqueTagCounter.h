@@ -22,29 +22,50 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
  */
-#include "LinearWaterwayWayNodeCriterion.h"
+
+#ifndef UNIQUE_TAG_COUNTER_H
+#define UNIQUE_TAG_COUNTER_H
 
 // hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/criterion/LinearWaterwayCriterion.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
+#include <hoot/core/info/SingleStatistic.h>
 
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementCriterion, LinearWaterwayWayNodeCriterion)
-
-LinearWaterwayWayNodeCriterion::LinearWaterwayWayNodeCriterion() :
-WayNodeCriterion()
+/**
+ * Counts unique instances of tags in elements
+ */
+class UniqueTagCounter : public ConstElementVisitor, public SingleStatistic
 {
-  _parentCriterion.reset(new LinearWaterwayCriterion());
+public:
+
+  static QString className() { return "hoot::UniqueTagCounter"; }
+
+  UniqueTagCounter() = default;
+  ~UniqueTagCounter() = default;
+
+  /**
+   * @see ConstElementVisitor
+   */
+  void visit(const ConstElementPtr& e) override;
+
+  /**
+   * @see SingleStatistic
+   */
+  double getStat() const override { return (double)_tagKvps.size(); }
+
+  QString getDescription() const override { return "Counts the number of unique tags"; }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
+
+private:
+
+  std::set<QString> _tagKvps;
+};
+
 }
 
-LinearWaterwayWayNodeCriterion::LinearWaterwayWayNodeCriterion(ConstOsmMapPtr map) :
-WayNodeCriterion(map)
-{
-  _parentCriterion.reset(new LinearWaterwayCriterion());
-}
-
-}
+#endif // UNIQUE_TAG_KEY_COUNTER_H

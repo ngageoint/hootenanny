@@ -27,6 +27,7 @@
 
 // Hoot
 #include <hoot/core/cmd/BaseCommand.h>
+#include <hoot/core/io/IoUtils.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/info/StatCalculator.h>
 
@@ -46,22 +47,41 @@ public:
 
   int runSimple(QStringList& args) override
   {
-    if (args.size() < 2 || args.size() > 3)
+    QString statType = "total";
+    if (args.contains("--statType"))
+    {
+      const int statTypeIndex = args.indexOf("--statType");
+      statType = args.at(statTypeIndex + 1);
+      args.removeAt(statTypeIndex + 1);
+      args.removeAt(statTypeIndex);
+    }
+
+    bool recursive = false;
+    const QStringList inputFilters = _parseRecursiveInputParameter(args, recursive);
+
+    if (args.size() < 2)
     {
       LOG_VAR(args);
       std::cout << getHelp() << std::endl << std::endl;
-      throw HootException(QString("%1 takes two or three parameters.").arg(getName()));
+      throw HootException(QString("%1 takes at least two parameters.").arg(getName()));
     }
 
-    const QString input = args[0].trimmed();
-    QString visClassName = args[1].trimmed();
-    QString statType = "total";
-    if (args.size() == 3)
+    const int visClassIndex = args.size() - 1;
+    QString visClassName = args[visClassIndex].trimmed();
+    args.removeAt(visClassIndex);
+
+    // Everything left is an input.
+    QStringList inputs;
+    if (!recursive)
     {
-      statType = args[2].trimmed();
+      inputs = args;
+    }
+    else
+    {
+      inputs = IoUtils::getSupportedInputsRecursively(args, inputFilters);
     }
 
-    const double stat = StatCalculator().calculateStat(input, visClassName, statType);
+    const double stat = StatCalculator().calculateStat(inputs, visClassName, statType);
     // see note in CountCmd about the preceding endline
     std::cout << std::endl << "Calculated statistic: " <<
                  QString::number(stat, 'g', 3) << std::endl;

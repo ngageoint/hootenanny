@@ -74,7 +74,7 @@ public:
   /**
    * Determine the cost of a way in cost per meter.
    */
-  virtual double determineCost(const std::shared_ptr<Way>& way);
+  virtual double determineCost(const std::shared_ptr<Way>& way) const;
 
   virtual bool isOneWay(const std::shared_ptr<Way>& way);
 

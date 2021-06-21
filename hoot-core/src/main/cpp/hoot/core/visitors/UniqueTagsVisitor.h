@@ -22,55 +22,42 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
  */
-#ifndef KEEPHIGHWAYSVISITOR_H
-#define KEEPHIGHWAYSVISITOR_H
+#ifndef UNIQUE_TAGS_VISITOR_H
+#define UNIQUE_TAGS_VISITOR_H
 
 // hoot
 #include <hoot/core/visitors/ConstElementVisitor.h>
-#include <hoot/core/elements/OsmMapConsumer.h>
 
 namespace hoot
 {
 
 /**
- * Removes all ways and relations that are not part of a linear highway.
- * Note: You may have to run this multiple times to get the desired effect.
- *
- * It may be possible to remove this class after both #3276 are completed and any regression tests
- * using it can be converted to use RemoveElementsVisitor combined with a NotCriterion instead
- * (second part may not be possible given how this class has been written).
+ * Collects unique tags
  */
-class KeepHighwaysVisitor : public ConstElementVisitor, public OsmMapConsumer
+class UniqueTagsVisitor : public ConstElementVisitor
 {
 public:
 
-  static QString className() { return "hoot::KeepHighwaysVisitor"; }
+  static QString className() { return "hoot::UniqueTagsVisitor"; }
 
-  KeepHighwaysVisitor() = default;
-  ~KeepHighwaysVisitor() = default;
-
-  void setOsmMap(OsmMap* map) override { _map = map; }
-  /**
-   * KeepHighwaysVisitor requires a read/write map.
-   */
-  void setOsmMap(const OsmMap* /*map*/) const { assert(false); }
+  UniqueTagsVisitor() = default;
+  ~UniqueTagsVisitor() = default;
 
   void visit(const ConstElementPtr& e) override;
 
-  QString getDescription() const override
-  { return "Removes all ways and relations that are not part of a linear highway"; }
-
+  QString getDescription() const override { return "Collects unique tags"; }
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+
+  std::set<QString> getUniqueKvps() const { return _uniqueKvps; }
 
 private:
 
-  OsmMap* _map;
+  std::set<QString> _uniqueKvps;
 };
 
 }
 
-#endif // KEEPHIGHWAYSVISITOR_H
+#endif // UNIQUE_TAG_VALUES_VISITOR_H

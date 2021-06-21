@@ -62,7 +62,7 @@ public:
     : HootTestFixture("test-files/",
                       UNUSED_PATH)
   {
-    setResetType(ResetBasic);
+    setResetType(ResetAll);
   }
 
   void runTest()

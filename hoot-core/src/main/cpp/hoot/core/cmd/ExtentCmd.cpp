@@ -38,8 +38,6 @@
 // Qt
 #include <QElapsedTimer>
 
-using namespace std;
-
 namespace hoot
 {
 
@@ -56,48 +54,34 @@ public:
   QString getDescription() const override { return "Calculates the bounds of a map"; }
 
   int runSimple(QStringList& args) override
-  {
-    QElapsedTimer timer;
-    timer.start();
-
-    if (args.size() < 1 || args.size() > 2)
+  {    
+    if (args.size() < 1)
     {
-      cout << getHelp() << endl << endl;
-      throw HootException(QString("%1 takes one or two parameters.").arg(getName()));
+      std::cout << getHelp() << std::endl << std::endl;
+      throw HootException(QString("%1 takes at least one parameters.").arg(getName()));
     }
 
     conf().set(ConfigOptions::getWriterPrecisionKey(), 9);
 
-    bool verbose = true;
-    if (args.size() == 2 && args[1].toLower() == "false")
-    {
-      verbose = false;
-    }
-    LOG_VARD(verbose);
-    const QString input = args[0];
+    const QStringList inputs = args;
 
-    LOG_STATUS("Calculating extent for ..." << FileUtils::toLogFormat(input, 25) << "...");
+    QElapsedTimer timer;
+    timer.start();
+
+    LOG_STATUS("Calculating extent for ..." << FileUtils::toLogFormat(inputs, 25) << "...");
 
     OsmMapPtr map(new OsmMap());
-    IoUtils::loadMap(map, input, true, Status::Invalid);
+    IoUtils::loadMaps(map, inputs, false, Status::Invalid);
 
     const QString bounds =
       GeometryUtils::envelopeToString(CalculateMapBoundsVisitor::getGeosBounds(map));
-    if (verbose)
-    {
-      cout << "Map extent (minx,miny,maxx,maxy): " << bounds << endl;
-    }
-    else
-    {
-      cout << bounds << endl;
-    }
+    std::cout << "Map extent (minx,miny,maxx,maxy): " << bounds << std::endl;
 
     LOG_STATUS(
       "Map extent calculated in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 
     return 0;
   }
-
 };
 
 HOOT_FACTORY_REGISTER(Command, ExtentCmd)

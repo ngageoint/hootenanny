@@ -28,6 +28,7 @@
 // Hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
+#include <hoot/core/io/IoUtils.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/info/ElementCounter.h>
 
@@ -48,13 +49,6 @@ public:
 
   int runSimple(QStringList& args) override
   {
-    if (args.size() < 1 || args.size() > 3)
-    {
-      LOG_VAR(args);
-      std::cout << getHelp() << std::endl << std::endl;
-      throw HootException(QString("%1 takes one to three parameters.").arg(getName()));
-    }
-
     bool countFeaturesOnly = true;
     if (args.contains("--all-elements"))
     {
@@ -62,22 +56,49 @@ public:
       args.removeAt(args.indexOf("--all-elements"));
     }
 
-    const QStringList inputs = args[0].trimmed().split(";");
-    QString criterionClassName = "";
-    if (args.size() > 1)
+    QStringList criteriaClassNames;
+    if (args.contains("--criteria"))
     {
-      criterionClassName = args[1].trimmed();
+      const int criteriaIndex = args.indexOf("--criteria");
+      criteriaClassNames = args[criteriaIndex + 1].trimmed().split(";");
+      args.removeAt(criteriaIndex + 1);
+      args.removeAt(criteriaIndex);
     }
+    LOG_VARD(criteriaClassNames);
+
+    bool recursive = false;
+    const QStringList inputFilters = _parseRecursiveInputParameter(args, recursive);
+    LOG_VARD(inputFilters);
+
+    if (args.size() < 1)
+    {
+      LOG_VAR(args);
+      std::cout << getHelp() << std::endl << std::endl;
+      throw HootException(QString("%1 takes at least one parameter.").arg(getName()));
+    }
+
+    // The only args left are all inputs.
+    QStringList inputs;
+    if (!recursive)
+    {
+      inputs = args;
+    }
+    else
+    {
+      inputs = IoUtils::getSupportedInputsRecursively(args, inputFilters);
+    }  
+    LOG_VARD(inputs);
 
     ElementCounter counter;
     counter.setCountFeaturesOnly(countFeaturesOnly);
-    const long totalCount = counter.count(inputs, criterionClassName);
+    counter.setCriteria(criteriaClassNames);
+    const long totalCount = counter.count(inputs);
 
     // putting a preceding endline in here since PROGRESS_INFO doesn't clear itself out at the end
     QString displayStr = "Total count ";
-    if (!criterionClassName.isEmpty())
+    if (!criteriaClassNames.isEmpty())
     {
-      displayStr += "(" + criterionClassName + ")";
+      displayStr += "(" + criteriaClassNames.join(";") + ")";
     }
     displayStr += ": " + StringUtils::formatLargeNumber(totalCount);
     std::cout << std::endl << displayStr << std::endl;

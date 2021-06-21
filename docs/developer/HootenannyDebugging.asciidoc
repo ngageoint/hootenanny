@@ -23,3 +23,5 @@ many files being written and slow down the debugging process considerably. Also,
 may be filtered by class in the same manner that debug logging is filtered. Modify the
 `debug.maps.class.include.filter` and `debug.maps.class.exclude.filter` configuration options to do 
 so. See the documentation on those configuration options as well as the class documentation for `OsmMapWriterFactory::writeDebugMap` for additional information.
+
+

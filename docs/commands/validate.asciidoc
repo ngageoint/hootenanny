@@ -5,8 +5,8 @@
 
 The +validate+ command uses JOSM to identify data with common erroneous aspects without fixing it.
 
-* +input+                  - Input; may be any supported input format (e.g. .osm file).
-* +output+                 - (optional) Output file; may be any supported output format (e.g. .osm file). If 
+* +input(s)+               - One or more map inputs; may be any supported input format (e.g. .osm file).
+* +--output+               - Optional output file; may be any supported output format (e.g. .osm file). If 
                              specified, elements with validation will be marked with tags in the output file. If not 
                              specified, then only a validation error summary will be displayed.
 * +--available-validators+ - Displays available JOSM validators for use in validation. Not all validators have cleaning 
@@ -15,8 +15,10 @@ The +validate+ command uses JOSM to identify data with common erroneous aspects 
 === Usage
 
 --------------------------------------
-validate (input) [output]
+# perform validation
+validate (input1) [input2...] [--output path]
 
+# list the available validators
 validate [--available-validators]
 --------------------------------------
 

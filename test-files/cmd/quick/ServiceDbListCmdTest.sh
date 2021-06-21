@@ -17,8 +17,7 @@ hoot convert --warn $CONFIG -D api.db.email=$HOOT_EMAIL -D hootapi.db.writer.cre
 hoot db-list --warn $CONFIG -D api.db.email=$HOOT_EMAIL $HOOT_DB_URL
 
 # clean-up the databases
-hoot db-delete --warn $CONFIG -D api.db.email=$HOOT_EMAIL $HOOT_DB_URL/DbListMapsCmdTest1
-hoot db-delete --warn $CONFIG -D api.db.email=$HOOT_EMAIL $HOOT_DB_URL/DbListMapsCmdTest2
+hoot db-delete --warn $CONFIG -D api.db.email=$HOOT_EMAIL $HOOT_DB_URL/DbListMapsCmdTest1 $HOOT_DB_URL/DbListMapsCmdTest2
 
 # Delete the user
 PGPASSWORD=$DB_PASSWORD psql $PSQL_DB_AUTH -d $DB_NAME -c "DELETE FROM users WHERE email='$HOOT_EMAIL';" > /dev/null

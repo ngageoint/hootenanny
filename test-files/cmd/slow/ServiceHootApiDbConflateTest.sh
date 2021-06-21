@@ -15,8 +15,7 @@ mkdir -p test-output/cmd/slow/ServiceHootApiDbConflateTest
 
 echo "Running select all conflate..."
 
-hoot db-delete $HOOT_OPTS "$DB_URL/AllDataTypesA-ServiceHootApiDbConflateTest" &
-hoot db-delete $HOOT_OPTS "$DB_URL/AllDataTypesB-ServiceHootApiDbConflateTest" &
+hoot db-delete $HOOT_OPTS "$DB_URL/AllDataTypesA-ServiceHootApiDbConflateTest" "$DB_URL/AllDataTypesB-ServiceHootApiDbConflateTest" &
 wait
 ###
 # I've run into strange situations where it seems like the whole files isn't being converted.
@@ -31,8 +30,7 @@ wait
 hoot conflate $HOOT_OPTS $CONFLATE_OPTS -D conflate.post.ops++="hoot::RemoveTagsVisitor;hoot::RemoveAttributesVisitor" -D tag.filter.keys="source:datetime" -D remove.attributes.visitor.types="changeset;timestamp" "$DB_URL/AllDataTypesA-ServiceHootApiDbConflateTest" "$DB_URL/AllDataTypesB-ServiceHootApiDbConflateTest" test-output/cmd/slow/ServiceHootApiDbConflateTest/output1.osm
 hoot diff test-files/cmd/slow/ServiceHootApiDbConflateTest/output1.osm test-output/cmd/slow/ServiceHootApiDbConflateTest/output1.osm
 
-hoot db-delete $HOOT_OPTS "$DB_URL/AllDataTypesA-ServiceHootApiDbConflateTest" &
-hoot db-delete $HOOT_OPTS "$DB_URL/AllDataTypesB-ServiceHootApiDbConflateTest" &
+hoot db-delete $HOOT_OPTS "$DB_URL/AllDataTypesA-ServiceHootApiDbConflateTest" "$DB_URL/AllDataTypesB-ServiceHootApiDbConflateTest" &
 wait
 
 export PGPASSWORD=$DB_PASSWORD
@@ -41,8 +39,7 @@ psql -U $DB_USER -h $DB_HOST -p $DB_PORT -d $DB_NAME -c "select display_name fro
 
 echo "Running select by bounds conflate..."
 
-hoot db-delete $HOOT_OPTS "$DB_URL/DcGisRoads-ServiceHootApiDbConflateTest" &
-hoot db-delete $HOOT_OPTS "$DB_URL/DcTigerRoads-ServiceHootApiDbConflateTest" &
+hoot db-delete $HOOT_OPTS "$DB_URL/DcGisRoads-ServiceHootApiDbConflateTest" "$DB_URL/DcTigerRoads-ServiceHootApiDbConflateTest" &
 wait
 
 hoot convert $HOOT_OPTS test-files/DcGisRoads.osm "$DB_URL/DcGisRoads-ServiceHootApiDbConflateTest" &
@@ -52,8 +49,7 @@ wait
 hoot conflate $HOOT_OPTS $CONFLATE_OPTS -D match.creators=hoot::HighwayMatchCreator -D merger.creators=hoot::HighwayMergerCreator -D bounds=-77.04,38.8916,-77.03324,38.8958 -D conflate.post.ops++="hoot::RemoveTagsVisitor;hoot::RemoveAttributesVisitor" -D tag.filter.keys="source:datetime" -D remove.attributes.visitor.types="changeset;timestamp" "$DB_URL/DcGisRoads-ServiceHootApiDbConflateTest" "$DB_URL/DcTigerRoads-ServiceHootApiDbConflateTest" test-output/cmd/slow/ServiceHootApiDbConflateTest/output2.osm
 hoot diff test-files/cmd/slow/ServiceHootApiDbConflateTest/output2.osm test-output/cmd/slow/ServiceHootApiDbConflateTest/output2.osm
 
-hoot db-delete $HOOT_OPTS "$DB_URL/DcGisRoads-ServiceHootApiDbConflateTest" &
-hoot db-delete $HOOT_OPTS "$DB_URL/DcTigerRoads-ServiceHootApiDbConflateTest" &
+hoot db-delete $HOOT_OPTS "$DB_URL/DcGisRoads-ServiceHootApiDbConflateTest" "$DB_URL/DcTigerRoads-ServiceHootApiDbConflateTest" &
 wait
 
 export PGPASSWORD=$DB_PASSWORD

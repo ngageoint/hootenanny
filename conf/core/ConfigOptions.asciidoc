@@ -54,7 +54,7 @@ regardless.
 * Default Value: `false`
 
 If set to true and multiple criterion are specified in add.attributes.visitor.element.criteria,
-the attributes of elements will be modified only if they satisfy all of the criteria.  If set to
+the attributes of elements will be modified only if they satisfy all of the criteria. If set to
 false, then only one of the specified criteria must be met in order to modify the attributes of an
 element.
 
@@ -1077,8 +1077,8 @@ See also:
 
 * Data Type: list
 * Default Value:
-** `hoot::LinearWaterwayCriterion`
-** `hoot::LinearWaterwayWayNodeCriterion`
+** `hoot::RiverCriterion`
+** `hoot::RiverWayNodeCriterion`
 ** `hoot::PowerLineCriterion`
 ** `hoot::PowerLineWayNodeCriterion`
 
@@ -1204,6 +1204,13 @@ parallel.  Warning: each thread has some memory overhead
 
 Crops based on the polygon rather than doing a cookie cut when using the cookie cutter map
 operation (see CookieCutterOp).
+
+=== copy.map.subset.op.element.criteria
+
+* Data Type: list
+* Default Value: ``
+
+One or more element criteria used for filtering maps with `CopyMapSubsetOp`.
 
 === create.bogus.review.tags
 
@@ -1506,15 +1513,25 @@ Size of the in memory relation cache used when streaming I/O is used with relati
 
 Size of the in memory way cache used when streaming I/O is used with ways.
 
-=== element.criterion.negate
+=== element.criteria.chain
 
 * Data Type: bool
 * Default Value: `false`
 
-If true, element criterion passed to an ElementCriterionConsumer will be negated. Not honored by
-all ElementCriterionConsumers. Since this configuration option is shared across all
-ElementCriterionConsumers, there may be undesirable effects in invocations involving multiple
-ElementCriterionConsumers.
+Generic criteria chaining option used by classes which run in isolation from the command line and
+do not require their own version of the option. If set to true and multiple criterion are specified,
+an element must satisfy each criterion in order to pass the filter. If set to false, then only one
+of the specified criteria must be satisified in order to pass the filter.
+
+=== element.criteria.negate
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, element criteria passed to an ElementCriterionConsumer and other consuming classes will be
+negated. Not honored by all ElementCriterionConsumers. Since this configuration option is shared
+across all ElementCriterionConsumers, there may be undesirable effects in invocations involving
+multiple ElementCriterionConsumers.
 
 === element.hash.visitor.non.metadata.ignore.keys
 
@@ -4374,9 +4391,9 @@ Use this class for calculating the difference between element tags. If the diffe
 * Data Type: bool
 * Default Value: `false`
 
-If set to true and multiple criterion are specified in remove.elements.visitor.element.criteria,
-elements will be removed only if they satisfy all of the criteria.  If set to false, then only
-one of the specified criteria must be met in order to remove an element.
+If set to true and multiple criterion are specified in `remove.elements.visitor.element.criteria`,
+elements will be removed only if they satisfy all of the criteria. If set to false, then only
+one of the specified criteria must be satisified in order to remove an element.
 
 === remove.elements.visitor.element.criteria
 
@@ -4431,6 +4448,83 @@ with attribute.conflation.allow.reviews.by.score.
 The score threshold below which reviews will not pass the filter, in the range [0.0,1.0],.  A value
 of 0.0 signifies no minimum score threshold.  This currently works with Attribute Conflation only
 and can be enabled with attribute.conflation.allow.reviews.by.score.
+
+=== river.angle.sample.distance
+
+* Data Type: double
+* Default Value: `20.0`
+
+Distance, in meters, used for sampling river data during angle histogram extraction with the
+SampledAngleHistogramExtractor
+
+=== river.auto.calc.search.radius
+
+* Data Type: bool
+* Default Value: `true`
+
+Automatically calculates the search radius to be used during conflation of rivers using rubber
+sheet tie point distances.
+
+=== river.matcher.heading.delta
+
+* Data Type: double
+* Default Value: `150.0`
+
+The distance around a point on a river to look when calculating the heading. See
+`way.matcher.heading.delta`.
+
+=== river.matcher.max.angle
+
+* Data Type: double
+* Default Value: `90.0`
+
+Sets that maximum angle that is still considered a river match. Units in degrees.
+
+=== river.maximal.subline.auto.optimize
+
+* Data Type: bool
+* Default Value: `true`
+
+Enabling this allows River Conflation to optimize the manner it uses maximal subline matching for
+runtime performance.
+
+=== river.name.threshold
+
+* Data Type: double
+* Default Value: `0.9`
+
+Name similarity threshold, in the range (0.0,1.0], at or above which a river feature is considered
+to have a name match.
+
+=== river.rubber.sheet.minimum.ties
+
+* Data Type: int
+* Default Value: `5`
+
+Sets the minimum number of tie points that will be used when calculating a rubber sheeting solution
+with river data.
+
+=== river.rubber.sheet.ref
+
+* Data Type: bool
+* Default Value: `true`
+
+See `rubber.sheet.ref`. Used during river conflation.
+
+=== river.subline.matcher
+
+* Data Type: string
+* Default Value: `hoot::MaximalSublineMatcher`
+
+The way subline matcher to use when determining matching sublines.
+
+=== river.type.threshold
+
+* Data Type: double
+* Default Value: `0.7`
+
+Tag similarity threshold, in the range (0.0,1.0], at or above which a river element is considered
+to have similar tags.
 
 === rubber.sheet.debug
 
@@ -4700,13 +4794,13 @@ The search radius, in meters, to use when conflating railways. See `search.radiu
 The search radius, in meters, to use when conflating collection relations. See
 `search.radius.default`.
 
-=== search.radius.waterway
+=== search.radius.river
 
 * Data Type: double
 * Default Value: `${search.radius.default}`
 
-The search radius to use when conflating waterways. This value is not used if
-`waterway.auto.calc.search.radius=true`, and in that case the search radius is auto-calculated for
+The search radius to use when conflating rivers. This value is not used if
+`river.auto.calc.search.radius=true`, and in that case the search radius is auto-calculated for
 the entire input dataset.  See `search.radius.default`.
 
 === set.tag.value.visitor.append.to.existing.value
@@ -4722,7 +4816,7 @@ option will have the value specified in the set.tag.value.visitor.value option a
 * Data Type: bool
 * Default Value: `false`
 
-If set to true and multiple criterion are specified in set.tag.value.visitor.element.criteria,
+If set to true and multiple criterion are specified in `set.tag.value.visitor.element.criteria`,
 the tags of elements will be modified only if they satisfy all of the criteria.  If set to
 false, then only one of the specified criteria must be met in order to modify the tags of an
 element.
@@ -4871,7 +4965,7 @@ marked with a custom tag. Useful for debugging purposes.
 
 The feature type similarity score at or above which two ways being snapped must score. Valid values
 are, -1.0 and the range (0.0,1.0],. A value of -1.0 disables the feature type match requirement
-completely and only the snap criterions will influence the snapping.
+completely and only the snap criteria will influence the snapping.
 
 === snap.unconnected.ways.review.snapped.ways
 
@@ -4887,8 +4981,8 @@ correct any snaps made.
 * Default Value:
 ** ``
 
-Optional criterion class list used to filter both the types of ways being snapped (sources) and
-the types of ways being snapped to (targets). The classes specified must inherit from
+Optional criteria used to filter both the types of ways being snapped (sources) and the types of
+ways being snapped to (targets). The classes specified must inherit from
 `ConflatableElementCriterion`. An example is: `hoot::HighwayCriterion`. The default value of an
 empty list allows for snapping any type of linear feature. This option is overridden by the options:
 `snap.unconnected.ways.snap.way.criteria` and/or `snap.unconnected.ways.snap.to.way.criteria` to
@@ -4900,9 +4994,9 @@ allow for more granularity in selecting the types to snap.
 * Default Value:
 ** ``
 
-Optional criterion class list used to filter the types of ways being snapped to (targets). The
-classes specified must inherit from `ConflatableElementCriterion`. An example is:
-`hoot::HighwayCriterion`. This option overrides `snap.unconnected.ways.snap.criteria`.
+Optional criteria used to filter the types of ways being snapped to (targets). The classes specified
+must inherit from `ConflatableElementCriterion`. An example is: `hoot::HighwayCriterion`. This
+option overrides `snap.unconnected.ways.snap.criteria`.
 
 === snap.unconnected.ways.snap.to.way.statuses
 
@@ -4931,9 +5025,9 @@ section of the neighboring way.
 * Default Value:
 ** ```
 
-Optional criterion class list used to filter the types of ways being snapped (sources). The classes
-specified must inherit from `ConflatableElementCriterion`. An example is: `hoot::HighwayCriterion`.
-This option overrides `snap.unconnected.ways.snap.criteria`.
+Optional criteria used to filter the types of ways being snapped (sources). The classes specified
+must inherit from `ConflatableElementCriterion`. An example is: `hoot::HighwayCriterion`. This
+option overrides `snap.unconnected.ways.snap.criteria`.
 
 === snap.unconnected.ways.snap.way.statuses
 
@@ -5102,9 +5196,9 @@ Key/value pairs to use with TagCriterion. Delimit keys and values with '='. E.g.
 * Data Type: string
 * Default Value: ``
 
-The class name of an element criterion used to select tags to keep/remove used by
-RemoveTagsVisitor.  To pass in complex nested criteria for tag filtering, use the Hootenanny
-Javascript interface instead.
+The class name of an element criterion used to select tags to keep/remove used by RemoveTagsVisitor.
+To pass in complex nested criteria for tag filtering, use the Hootenanny Javascript interface
+instead.
 
 === tag.filter.keys
 
@@ -5402,83 +5496,6 @@ Way sample distance used by UnlikelyRoadRemover. See `way.angle.sample.distance`
 
 Creates a repeatable UUID for the features. This is useful for debugging, but shouldn't be used in
 normal operation.
-
-=== waterway.angle.sample.distance
-
-* Data Type: double
-* Default Value: `20.0`
-
-Distance, in meters, used for sampling river data during angle histogram extraction with the
-SampledAngleHistogramExtractor
-
-=== waterway.auto.calc.search.radius
-
-* Data Type: bool
-* Default Value: `true`
-
-Automatically calculates the search radius to be used during conflation of waterways using rubber
-sheet tie point distances.
-
-=== waterway.matcher.heading.delta
-
-* Data Type: double
-* Default Value: `150.0`
-
-The distance around a point on a waterway to look when calculating the heading. See
-`way.matcher.heading.delta`.
-
-=== waterway.matcher.max.angle
-
-* Data Type: double
-* Default Value: `90.0`
-
-Sets that maximum angle that is still considered a waterway match. Units in degrees.
-
-=== waterway.maximal.subline.auto.optimize
-
-* Data Type: bool
-* Default Value: `true`
-
-Enabling this allows River Conflation to optimize the manner it uses maximal subline matching for
-runtime performance.
-
-=== waterway.name.threshold
-
-* Data Type: double
-* Default Value: `0.9`
-
-Name similarity threshold, in the range (0.0,1.0], at or above which a linear waterway feature is
-considered to have a name match.
-
-=== waterway.rubber.sheet.minimum.ties
-
-* Data Type: int
-* Default Value: `5`
-
-Sets the minimum number of tie points that will be used when calculating a rubber sheeting solution
-with river data.
-
-=== waterway.rubber.sheet.ref
-
-* Data Type: bool
-* Default Value: `true`
-
-See `rubber.sheet.ref`.  Used during waterway conflation.
-
-=== waterway.subline.matcher
-
-* Data Type: string
-* Default Value: `hoot::MaximalSublineMatcher`
-
-The way subline matcher to use when determining matching sublines.
-
-=== waterway.type.threshold
-
-* Data Type: double
-* Default Value: `0.7`
-
-Tag similarity threshold, in the range (0.0,1.0], at or above which a waterway element is considered
-to have similar tags.
 
 === way.angle.sample.distance
 

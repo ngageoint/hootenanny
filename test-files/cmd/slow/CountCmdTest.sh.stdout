@@ -1,23 +1,58 @@
+
 counting all features...
 
 Total count : 47
+
 counting all elements...
 
 Total count : 259
+
 counting all rivers...
 
-Total count (hoot::LinearWaterwayCriterion): 29
+Total count (hoot::RiverCriterion): 29
+
 counting all elements that are not rivers...
 
-Total count (hoot::LinearWaterwayCriterion): 0
+Total count (hoot::RiverCriterion): 0
+
 counting all POIs...
 
 Total count (hoot::PoiCriterion): 21
+
 counting all elements that are not POIs...
 
 Total count (hoot::PoiCriterion): 26
+
 counting all element from multi-layer GDB...
-20:37:56.896 STATUS ...t/core/info/ElementCounter.cpp(  93) Counting elements from ow/CountCmdTest/input.gdb...
-20:37:56.948 STATUS ...t/core/info/ElementCounter.cpp( 104) Features counted in 00:00 total.
+21:49:03.894 STATUS ...t/core/info/ElementCounter.cpp( 105) Counting elements from ...ow/CountCmdTest/input.gdb...
+21:49:03.973 STATUS ...t/core/info/ElementCounter.cpp( 116) Features counted in 00:00 total.
 
 Total count : 20
+
+counting all rivers and POIs...
+
+Total count (hoot::RiverCriterion;hoot::PoiCriterion): 50
+
+counting elements that are both rivers and POIs...
+
+Total count (hoot::RiverCriterion;hoot::PoiCriterion): 0
+
+counting elements that are not POIs...
+
+Total count (hoot::PoiCriterion): 55
+
+counting recursively in a directory structure...
+
+Total count : 45
+
+counting recursively in a directory structure with one filter...
+
+Total count : 4
+
+counting recursively in a directory structure with two filters...
+
+Total count : 45
+
+counting recursively in a directory structure with a criterion...
+
+Total count (hoot::HighwayCriterion): 24

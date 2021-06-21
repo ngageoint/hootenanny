@@ -386,7 +386,7 @@ NOTE: In the user interface there is no way to tune or modify the generated alph
 
 ==== Advanced Conflation
 
-Advanced Conflation allows users to customize a particular conflation job using a set of exposed advanced <<Advanced_Conflation_Options,options>>. These are intended for use cases where there is intimate familiarity with both the configuration parameters and the unique set of conditions that warrant their use. For example, to modify any of the Cleaning or Rubber Sheeting options when conflating rivers, users can simply expand the Cleaning Options and Waterway Options panels and modify accordingly. Note that caution should be exercised when applying these as their use may produce unexpected results.
+Advanced Conflation allows users to customize a particular conflation job using a set of exposed advanced <<Advanced_Conflation_Options,options>>. These are intended for use cases where there is intimate familiarity with both the configuration parameters and the unique set of conditions that warrant their use. For example, to modify any of the Cleaning or Rubber Sheeting options when conflating rivers, users can simply expand the Cleaning Options and River Options panels and modify accordingly. Note that caution should be exercised when applying these as their use may produce unexpected results.
 
 The advanced parameters are accessed by clicking on the triangle next the Type highlighted in the red box in <<HootiD-advanced>>. Background on each Advanced Conflation option can be found in <<Advanced_Conflation_Options>>.
 
@@ -641,9 +641,9 @@ NOTE: A POI merge can occur in either direction depending on the users preferenc
 [[HootiD_GenericRiverConflation]]
 ==== River Conflation
 
-One of the options available for advanced conflation is the ability to conflate Waterways data using methods described in the Hootenanny Developer Guide in the Generic River Conflation section.  If users would like to explore this capability by conflating two rivers datasets, make sure that the Waterways options have been enabled in the Advanced Conflation Options panel as shown in the figure below.  Note that no exact set of parameters may produce the desired results so experimentation maybe required.  Background on each options is provided in greater detail in the Developer Guide and listed in <<WaterwayOptions>>.
+One of the options available for advanced conflation is the ability to conflate River data using methods described in the Hootenanny Developer Guide in the Generic River Conflation section.  If users would like to explore this capability by conflating two rivers datasets, make sure that the River options have been enabled in the Advanced Conflation Options panel as shown in the figure below.  Note that no exact set of parameters may produce the desired results so experimentation maybe required.  Background on each options is provided in greater detail in the Developer Guide and listed in <<RiverOptions>>.
 
-.Waterway conflation options available from the Advanced Conflation Options panel.
+.River conflation options available from the Advanced Conflation Options panel.
 image::images/id/hoot_waterway.png[scaledwidth="25%"]
 
 [[HootiD_PowerLineConflation]]
@@ -1015,17 +1015,17 @@ The following advanced configuration parameters are provided to the user via the
 ** *Unify*: Conflates POIs with Unify algorithm routines into a single process flow and flag reviewable items to the user. See Hootenanny - Algorithms Guide for more detail.
 ** *Disabled*: Disables the POI conflation options.
 
-[[WaterwayOptions]]
-=== Waterway Options
-The Waterway options have been pre-populated with default values based on generic river matching work discussed in the Hootenanny - Developer Guide. These can be modified if the user has deeper familiarity with the parameters. Waterway options are disabled by default.
+[[RiverOptions]]
+=== River Options
+The River options have been pre-populated with default values based on generic river matching work discussed in the Hootenanny - Developer Guide. These can be modified if the user has deeper familiarity with the parameters. River options are disabled by default.
 
-* *Enabled*: Enables waterway conflation options below.
-* *Waterway Angle Sample Distance*: Distance used for sampling during angle histogram extraction with the SampledAngleHistogramExtractor. Values are in meters.
-* *Waterway Matcher Heading Delta*: The distance around a point on a way to look when calculating the heading. A larger value will smooth out the heading values on
+* *Enabled*: Enables river conflation options below.
+* *River Angle Sample Distance*: Distance used for sampling during angle histogram extraction with the SampledAngleHistogramExtractor. Values are in meters.
+* *River Matcher Heading Delta*: The distance around a point on a way to look when calculating the heading. A larger value will smooth out the heading values on
 a line. A smaller value will make the heading values correspond directly to the heading on the way at that point. This is primarily
 used in subline matching. Values are in meters.
-* *Waterway Auto Calc Search Radius*: Auto calculates the search radius using the circular error.
-* *Search Radius Waterway*: Search radius value to override the auto calculated radius. Waterway Auto Calc Search Radius must be unchecked to enter value.
-* *Waterway Rubber Sheet Minimum Ties*: Minimum tie points to use for rubber sheeting.
-* *Waterway Rubber Sheet Ref*: Provides a rubber sheet transform for moving input 2 towards input 1. If not enabled, both inputs are moved towards each other.
+* *River Auto Calc Search Radius*: Auto calculates the search radius using the circular error.
+* *Search Radius River*: Search radius value to override the auto calculated radius. River Auto Calc Search Radius must be unchecked to enter value.
+* *River Rubber Sheet Minimum Ties*: Minimum tie points to use for rubber sheeting.
+* *River Rubber Sheet Ref*: Provides a rubber sheet transform for moving input 2 towards input 1. If not enabled, both inputs are moved towards each other.
 

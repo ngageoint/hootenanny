@@ -75,6 +75,17 @@ protected:
   QStringList _rawArgs;
 
   virtual QString _getHelpPath() const;
+
+  /*
+   * Parses the --recursive parameter used by several commands to parse input directories
+   * recursively from args.
+   *
+   * @param args command line arguments; If --recursive is found in args, it is removed from them.
+   * @param paramPresent determines if --recursive was present in args
+   * @return the name filters specified as part of --recursive; An empty list is returned if no
+   * filtering was specified with "*".
+   */
+  static QStringList _parseRecursiveInputParameter(QStringList& args, bool& paramPresent);
 };
 
 using BaseCommandPtr = std::shared_ptr<BaseCommand>;

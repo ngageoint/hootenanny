@@ -28,6 +28,8 @@
 // Hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
+#include <hoot/core/io/IoUtils.h>
+#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/schema/TagDistribution.h>
 #include <hoot/core/util/StringUtils.h>
 
@@ -51,8 +53,12 @@ public:
 
   int runSimple(QStringList& args) override
   {
-    QElapsedTimer timer;
-    timer.start();
+    bool typeKeysOnly = false;
+    if (args.contains("--types"))
+    {
+      typeKeysOnly = true;
+      args.removeAt(args.indexOf("--types"));
+    }
 
     bool nameKeysOnly = false;
     if (args.contains("--names"))
@@ -60,18 +66,60 @@ public:
       nameKeysOnly = true;
       args.removeAt(args.indexOf("--names"));
     }
+
+    if (typeKeysOnly && nameKeysOnly)
+    {
+      throw IllegalArgumentException(
+        "Only either --names or --types may be specified as an option to " + getName() + ".");
+    }
+
+    QStringList tagKeys;
+    if (args.contains("--tagKeys"))
+    {
+      const int tagKeysIndex = args.indexOf("--tagKeys");
+      tagKeys = args.at(tagKeysIndex + 1).trimmed().split(";");
+      args.removeAt(tagKeysIndex + 1);
+      args.removeAt(tagKeysIndex);
+    }
+    if (typeKeysOnly)
+    {
+      tagKeys = OsmSchema::getInstance().getAllTypeKeys().toList();
+    }
+    else if (nameKeysOnly)
+    {
+      tagKeys = Tags::getNameKeys();
+    }
+
+    QStringList criteriaClassNames;
+    if (args.contains("--criteria"))
+    {
+      const int criteriaIndex = args.indexOf("--criteria");
+      criteriaClassNames = args.at(criteriaIndex + 1).trimmed().split(";");
+      args.removeAt(criteriaIndex + 1);
+      args.removeAt(criteriaIndex);
+    }
+
+    bool countOnlyMatchingElementsInTotal = false;
+    if (args.contains("--percentage-of-matching"))
+    {
+      countOnlyMatchingElementsInTotal = true;
+      args.removeAt(args.indexOf("--percentage-of-matching"));
+    }
+
     bool sortByFrequency = true;
     if (args.contains("--sort-by-value"))
     {
       sortByFrequency = false;
       args.removeAt(args.indexOf("--sort-by-value"));
     }
+
     bool tokenize = false;
     if (args.contains("--tokenize"))
     {
       tokenize = true;
       args.removeAt(args.indexOf("--tokenize"));
     }
+
     int limit = -1;
     if (args.contains("--limit"))
     {
@@ -85,53 +133,47 @@ public:
       limit = args.at(limitIndex + 1).toInt(&ok);
       if (!ok)
       {
-        throw HootException(
+        throw IllegalArgumentException(
           QString("Invalid limit value specified: " +  args.at(limitIndex + 1)).arg(getName()));
       }
       args.removeAt(limitIndex + 1);
       args.removeAt(limitIndex);
     }
 
-    if (!nameKeysOnly && (args.size() < 2 || args.size() > 3))
+    bool recursive = false;
+    const QStringList inputFilters = _parseRecursiveInputParameter(args, recursive);
+
+    if (args.size() < 1)
     {
       std::cout << getHelp() << std::endl << std::endl;
-      throw HootException(
-        QString("%1 takes two to three parameters when --names is not specified.").arg(getName()));
-    }
-    else if (nameKeysOnly && (args.size() < 1 || args.size() > 2))
-    {
-      std::cout << getHelp() << std::endl << std::endl;
-      throw HootException(
-        QString("%1 takes one to two parameters when --names is specified.").arg(getName()));
+      throw IllegalArgumentException(QString("%1 takes at least one parameter.").arg(getName()));
     }
 
-    const QStringList inputs = args[0].split(";");
-    QStringList tagKeys;
-    if (nameKeysOnly)
+    QElapsedTimer timer;
+    timer.start();
+
+    // Everything left is an input.
+    QStringList inputs;
+    if (!recursive)
     {
-      tagKeys = Tags::getNameKeys();
+      inputs = args;
     }
     else
     {
-      tagKeys = args[1].split(";");
-    }
-    QString criterionClassName;
-    if (args.size() == 3)
-    {
-      criterionClassName = args[2];
+      inputs = IoUtils::getSupportedInputsRecursively(args, inputFilters);
     }
 
-    LOG_STATUS("Calculating tag distribution for ..." << inputs.size() << " inputs...");
+    LOG_STATUS("Calculating tag distribution for " << inputs.size() << " input(s)...");
 
     TagDistribution tagDist;
-    tagDist.setCriterionClassName(criterionClassName);
+    tagDist.setCriteria(criteriaClassNames);
     tagDist.setLimit(limit);
     tagDist.setSortByFrequency(sortByFrequency);
     tagDist.setTagKeys(tagKeys);
+    tagDist.setProcessAllTagKeys(tagKeys.empty());
+    tagDist.setCountOnlyMatchingElementsInTotal(countOnlyMatchingElementsInTotal);
     tagDist.setTokenize(tokenize);
 
-    // We may want to eventually consider refactoring this to write to a file support very large
-    // amounts of output.
     std::cout << tagDist.getTagCountsString(tagDist.getTagCounts(inputs));
 
     LOG_STATUS(

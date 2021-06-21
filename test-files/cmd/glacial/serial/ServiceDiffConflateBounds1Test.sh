@@ -94,5 +94,4 @@ hoot diff $LOG_LEVEL $LOG_FILTER $GENERAL_OPTS $GOLD_DIR/out-1.osm $OUTPUT_DIR/o
 
 # cleanup
 scripts/database/CleanOsmApiDB.sh
-hoot db-delete --warn $GENERAL_OPTS $DB_OPTS $SEC_INPUT
-hoot db-delete --warn $GENERAL_OPTS $DB_OPTS $CONFLATED
+hoot db-delete --warn $GENERAL_OPTS $DB_OPTS $SEC_INPUT $CONFLATED

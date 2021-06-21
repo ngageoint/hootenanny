@@ -54,18 +54,24 @@ public:
 
   int runSimple(QStringList& args) override
   {
+    if (args.size() < 1)
+    {
+      cout << getHelp() << endl << endl;
+      throw HootException(QString("%1 takes at least one parameter.").arg(getName()));
+    }
+
     QElapsedTimer timer;
     timer.start();
 
-    if (args.size() != 1)
+    const QStringList inputs = args;
+    for (int i = 0; i < inputs.size(); i++)
     {
-      cout << getHelp() << endl << endl;
-      throw HootException(QString("%1 takes one parameter.").arg(getName()));
+      LOG_STATUS("Deleting ..." << FileUtils::toLogFormat(inputs.at(i), 25) << "...");
+      HootApiDbWriter().deleteMap(inputs.at(i));
     }
 
-    LOG_STATUS("Deleting ..." << FileUtils::toLogFormat(args[0], 25) << "...");
-    HootApiDbWriter().deleteMap(args[0]);
-    LOG_STATUS("Map deleted in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
+    LOG_STATUS(
+      "Map(s) deleted in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 
     return 0;
   }

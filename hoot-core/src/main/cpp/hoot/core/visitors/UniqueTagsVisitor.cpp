@@ -22,37 +22,25 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
  */
-#ifndef LINEAR_WATERWAY_WAY_NODE_CRITERION_H
-#define LINEAR_WATERWAY_WAY_NODE_CRITERION_H
+#include "UniqueTagsVisitor.h"
 
 // hoot
-#include <hoot/core/criterion/WayNodeCriterion.h>
+#include <hoot/core/schema/OsmSchema.h>
 
 namespace hoot
 {
 
-class LinearWaterwayWayNodeCriterion : public WayNodeCriterion
+// This isn't being factory registered, since there's no standard way to retrieve a set of strings
+// from a visitor.
+
+void UniqueTagsVisitor::visit(const ConstElementPtr& e)
 {
-public:
-
-  static QString className() { return "hoot::LinearWaterwayWayNodeCriterion"; }
-
-  LinearWaterwayWayNodeCriterion();
-  LinearWaterwayWayNodeCriterion(ConstOsmMapPtr map);
-  ~LinearWaterwayWayNodeCriterion() = default;
-
-  ElementCriterionPtr clone() override
-  { return ElementCriterionPtr(new LinearWaterwayWayNodeCriterion(_map)); }
-
-  QString getDescription() const override
-  { return "Identifies nodes belonging to linear bodies of water"; }
-  QString getName() const override { return className(); }
-  QString getClassName() const override { return className(); }
-  QString toString() const override { return className(); }
-};
-
+  for (Tags::const_iterator tagItr = e->getTags().begin(); tagItr != e->getTags().end(); ++tagItr)
+  {
+    _uniqueKvps.insert(OsmSchema::toKvp(tagItr.key(), tagItr.value()));
+  }
 }
 
-#endif // LINEAR_WATERWAY_WAY_NODE_CRITERION_H
+}

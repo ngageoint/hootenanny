@@ -1,0 +1,1471 @@
+
+Quick Stats from a single file to the display...
+
+Stat Name	test-files/conflate/unified/AllDataTypesA.osm
+Nodes	117
+Ways	14
+Relations	0
+Minimum Node ID	-1559901
+Maximum Node ID	-1559547
+Minimum Way ID	-1559905
+Maximum Way ID	-1559687
+Minimum Relation ID	9.223372036854776e+18
+Maximum Relation ID	-9.223372036854776e+18
+
+Quick Stats from a single file to txt...
+
+Nodes	117
+Ways	14
+Relations	0
+Minimum Node ID	-1559901
+Maximum Node ID	-1559547
+Minimum Way ID	-1559905
+Maximum Way ID	-1559687
+Minimum Relation ID	9.223372036854776e+18
+Maximum Relation ID	-9.223372036854776e+18
+
+Full stats from multiple files to json...
+
+{
+    "Nodes":
+    [
+        "117",
+        "116"
+    ],
+    "Ways":
+    [
+        "14",
+        "12"
+    ],
+    "Relations":
+    [
+        "0",
+        "0",
+        "0",
+        "0"
+    ],
+    "Minimum Node ID":
+    [
+        "-1559901",
+        "-1560063"
+    ],
+    "Maximum Node ID":
+    [
+        "-1559547",
+        "-1559707"
+    ],
+    "Minimum Way ID":
+    [
+        "-1559905",
+        "-1560043"
+    ],
+    "Maximum Way ID":
+    [
+        "-1559687",
+        "-1559789"
+    ],
+    "Minimum Relation ID":
+    [
+        "9.223372036854776e+18",
+        "9.223372036854776e+18"
+    ],
+    "Maximum Relation ID":
+    [
+        "-9.223372036854776e+18",
+        "-9.223372036854776e+18"
+    ],
+    "Least Nodes in a Way":
+    [
+        "3",
+        "4"
+    ],
+    "Most Nodes in a Way":
+    [
+        "33",
+        "41"
+    ],
+    "Average Nodes Per Way":
+    [
+        "8",
+        "10"
+    ],
+    "Total Way Nodes":
+    [
+        "121",
+        "126"
+    ],
+    "Least Members in a Relation":
+    [
+        "0",
+        "0"
+    ],
+    "Most Members in a Relation":
+    [
+        "0",
+        "0"
+    ],
+    "Average Members Per Relation":
+    [
+        "0",
+        "0"
+    ],
+    "Total Relation Members":
+    [
+        "0",
+        "0"
+    ],
+    "Total Feature Tags":
+    [
+        "77",
+        "62"
+    ],
+    "Unique Feature Tags":
+    [
+        "36",
+        "28"
+    ],
+    "Unique Feature Tag Keys":
+    [
+        "11",
+        "9"
+    ],
+    "Total Feature Information Tags":
+    [
+        "77",
+        "62"
+    ],
+    "Total Feature Metadata Tags":
+    [
+        "0",
+        "0"
+    ],
+    "Least Tags on a Feature":
+    [
+        "2",
+        "1"
+    ],
+    "Most Tags on a Feature":
+    [
+        "4",
+        "4"
+    ],
+    "Average Tags Per Feature":
+    [
+        "3",
+        "2"
+    ],
+    "Least Information Tags on a Feature":
+    [
+        "2",
+        "1"
+    ],
+    "Most Information Tags on a Feature":
+    [
+        "4",
+        "4"
+    ],
+    "Average Information Tags Per Feature":
+    [
+        "3.08",
+        "2.818181818181818"
+    ],
+    "Features with Names":
+    [
+        "20",
+        "17"
+    ],
+    "Unique Names":
+    [
+        "12",
+        "12"
+    ],
+    "Unique Road Names":
+    [
+        "0",
+        "0"
+    ],
+    "Unique Building Names":
+    [
+        "7",
+        "7"
+    ],
+    "Meters of Linear Features":
+    [
+        "1268.391471683038",
+        "1199.557803800593"
+    ],
+    "Meters Squared of Area Features":
+    [
+        "20531.70536126304",
+        "18518.60105949109"
+    ],
+    "Meters of Roads":
+    [
+        "1268.391471683038",
+        "1199.557803800593"
+    ],
+    "Meters Squared of Buildings":
+    [
+        "20531.70536126304",
+        "18518.60105949109"
+    ],
+    "Bridges":
+    [
+        "0",
+        "0"
+    ],
+    "Tunnels":
+    [
+        "0",
+        "0"
+    ],
+    "One-Way Streets":
+    [
+        "0",
+        "0"
+    ],
+    "Reversed Roads":
+    [
+        "0",
+        "0"
+    ],
+    "Road Roundabouts":
+    [
+        "0",
+        "0"
+    ],
+    "Multi-Use Features":
+    [
+        "2",
+        "2"
+    ],
+    "Multi-Use Buildings":
+    [
+        "0",
+        "0"
+    ],
+    "Buildings With Height Info":
+    [
+        "0",
+        "0"
+    ],
+    "Shortest Building Height":
+    [
+        "0",
+        "0"
+    ],
+    "Tallest Building Height":
+    [
+        "0",
+        "0"
+    ],
+    "Average Height Per Building":
+    [
+        "0",
+        "0"
+    ],
+    "Buildings With Level Info":
+    [
+        "0",
+        "0"
+    ],
+    "Least Levels in a Building":
+    [
+        "0",
+        "0"
+    ],
+    "Most Levels in a Building":
+    [
+        "0",
+        "0"
+    ],
+    "Average Levels Per Building":
+    [
+        "0",
+        "0"
+    ],
+    "Non-Building Areas":
+    [
+        "0",
+        "0"
+    ],
+    "Features with Addresses":
+    [
+        "0",
+        "0"
+    ],
+    "Total Addresses":
+    [
+        "0",
+        "0"
+    ],
+    "Features with Phone Numbers":
+    [
+        "0",
+        "0"
+    ],
+    "Total Phone Numbers":
+    [
+        "0",
+        "0"
+    ],
+    "Longest Tag Length":
+    [
+        "21",
+        "21"
+    ],
+    "Area Translated Populated Tag Percent":
+    [
+        "0.0505050505050505",
+        "0.04924242424242424"
+    ],
+    "Building Translated Populated Tag Percent":
+    [
+        "0.0505050505050505",
+        "0.04924242424242424"
+    ],
+    "Road Translated Populated Tag Percent":
+    [
+        "0.03184713375796178",
+        "0.03184713375796178"
+    ],
+    "POI Translated Populated Tag Percent":
+    [
+        "0.06649937264742785",
+        "0.06557377049180328"
+    ],
+    "Polygon Conflatable POI Translated Populated Tag Percent":
+    [
+        "0.06557377049180328",
+        "0.06312292358803986"
+    ],
+    "Polygon Translated Populated Tag Percent":
+    [
+        "0.0505050505050505",
+        "0.04924242424242424"
+    ],
+    "Power Line Translated Populated Tag Percent":
+    [
+        "-",
+        "-"
+    ],
+    "Railway Translated Populated Tag Percent":
+    [
+        "-",
+        "-"
+    ],
+    "River Translated Populated Tag Percent":
+    [
+        "-",
+        "-"
+    ],
+    "Total Features":
+    [
+        "25",
+        "22"
+    ],
+    "Total Conflatable Features":
+    [
+        "25",
+        "22"
+    ],
+    "Percentage of Total Features Conflatable":
+    [
+        "100",
+        "100"
+    ],
+    "Untagged Features":
+    [
+        "0",
+        "0"
+    ],
+    "Total Unconflatable Features":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Total Features Unconflatable":
+    [
+        "0",
+        "0"
+    ],
+    "Match Creators":
+    [
+        "13",
+        "13"
+    ],
+    "Features Conflatable by: hoot::BuildingMatchCreator":
+    [
+        "10",
+        "8"
+    ],
+    "Features Conflatable by: hoot::HighwayMatchCreator":
+    [
+        "4",
+        "4"
+    ],
+    "Features Conflatable by: hoot::ScriptMatchCreator,Poi":
+    {
+        "js":
+        [
+            "11",
+            "10"
+        ]
+    },
+    "Total Conflated Features":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Total Features Conflated":
+    [
+        "0",
+        "0"
+    ],
+    "Total Features Marked for Review":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Total Features Marked for Review":
+    [
+        "0",
+        "0"
+    ],
+    "Total Reviews to be Made":
+    [
+        "0",
+        "0"
+    ],
+    "Total Unmatched Features":
+    [
+        "25",
+        "22"
+    ],
+    "Percentage of Total Features Unmatched":
+    [
+        "100",
+        "100"
+    ],
+    "Total Unmatched Features From Map 1":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Total Features Unmatched From Map 1":
+    [
+        "0",
+        "0"
+    ],
+    "Total Unmatched Features From Map 2":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Total Features Unmatched From Map 2":
+    [
+        "0",
+        "0"
+    ],
+    "POIs":
+    [
+        "11",
+        "10"
+    ],
+    "Conflatable POIs":
+    [
+        "11",
+        "10"
+    ],
+    "Conflated POIs":
+    [
+        "0",
+        "0"
+    ],
+    "POIs Marked for Review":
+    [
+        "0",
+        "0"
+    ],
+    "POI Reviews to be Made":
+    [
+        "0",
+        "0"
+    ],
+    "Unmatched POIs":
+    [
+        "11",
+        "10"
+    ],
+    "Unmatched POIs From Map 1":
+    [
+        "0",
+        "0"
+    ],
+    "Unmatched POIs From Map 2":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of POIs Conflated":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of POIs Marked for Review":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Unmatched POIs From Map 1":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Unmatched POIs From Map 2":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Unmatched POIs":
+    [
+        "100",
+        "100"
+    ],
+    "Roads":
+    [
+        "4",
+        "4"
+    ],
+    "Conflatable Roads":
+    [
+        "4",
+        "4"
+    ],
+    "Conflated Roads":
+    [
+        "0",
+        "0"
+    ],
+    "Roads Marked for Review":
+    [
+        "0",
+        "0"
+    ],
+    "Road Reviews to be Made":
+    [
+        "0",
+        "0"
+    ],
+    "Unmatched Roads":
+    [
+        "4",
+        "4"
+    ],
+    "Unmatched Roads From Map 1":
+    [
+        "0",
+        "0"
+    ],
+    "Unmatched Roads From Map 2":
+    [
+        "0",
+        "0"
+    ],
+    "Total Meters of Roads":
+    [
+        "1268.391471683038",
+        "1199.557803800593"
+    ],
+    "Meters of Conflated Roads":
+    [
+        "0",
+        "0"
+    ],
+    "Meters of Unmatched Roads From Map 1":
+    [
+        "0",
+        "0"
+    ],
+    "Meters of Unmatched Roads From Map 2":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Roads Conflated":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Roads Marked for Review":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Unmatched Roads From Map 1":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Unmatched Roads From Map 2":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Unmatched Roads":
+    [
+        "100",
+        "100"
+    ],
+    "Buildings":
+    [
+        "10",
+        "8"
+    ],
+    "Conflatable Buildings":
+    [
+        "10",
+        "8"
+    ],
+    "Conflated Buildings":
+    [
+        "0",
+        "0"
+    ],
+    "Buildings Marked for Review":
+    [
+        "0",
+        "0"
+    ],
+    "Building Reviews to be Made":
+    [
+        "0",
+        "0"
+    ],
+    "Unmatched Buildings":
+    [
+        "10",
+        "8"
+    ],
+    "Unmatched Buildings From Map 1":
+    [
+        "0",
+        "0"
+    ],
+    "Unmatched Buildings From Map 2":
+    [
+        "0",
+        "0"
+    ],
+    "Total Square Meters of Buildings":
+    [
+        "1591.156764501918",
+        "1511.545828525935"
+    ],
+    "Square Meters of Conflated Buildings":
+    [
+        "0",
+        "0"
+    ],
+    "Square Meters of Unmatched Buildings From Map 1":
+    [
+        "0",
+        "0"
+    ],
+    "Square Meters of Unmatched Buildings From Map 2":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Buildings Conflated":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Buildings Marked for Review":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Unmatched Buildings From Map 1":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Unmatched Buildings From Map 2":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Unmatched Buildings":
+    [
+        "100",
+        "100"
+    ],
+    "Rivers":
+    [
+        "0",
+        "0"
+    ],
+    "Conflatable Rivers":
+    [
+        "0",
+        "0"
+    ],
+    "Conflated Rivers":
+    [
+        "0",
+        "0"
+    ],
+    "Rivers Marked for Review":
+    [
+        "0",
+        "0"
+    ],
+    "River Reviews to be Made":
+    [
+        "0",
+        "0"
+    ],
+    "Unmatched Rivers":
+    [
+        "0",
+        "0"
+    ],
+    "Unmatched Rivers From Map 1":
+    [
+        "0",
+        "0"
+    ],
+    "Unmatched Rivers From Map 2":
+    [
+        "0",
+        "0"
+    ],
+    "Total Meters of Rivers":
+    [
+        "0",
+        "0"
+    ],
+    "Meters of Conflated Rivers":
+    [
+        "0",
+        "0"
+    ],
+    "Meters of Unmatched Rivers From Map 1":
+    [
+        "0",
+        "0"
+    ],
+    "Meters of Unmatched Rivers From Map 2":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Rivers Conflated":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Rivers Marked for Review":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Unmatched Rivers From Map 1":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Unmatched Rivers From Map 2":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Unmatched Rivers":
+    [
+        "0",
+        "0"
+    ],
+    "Polygon Conflatable POIs":
+    [
+        "10",
+        "8"
+    ],
+    "Conflatable Polygon Conflatable POIs":
+    [
+        "0",
+        "0"
+    ],
+    "Conflated Polygon Conflatable POIs":
+    [
+        "0",
+        "0"
+    ],
+    "Polygon Conflatable POIs Marked for Review":
+    [
+        "0",
+        "0"
+    ],
+    "Polygon Conflatable POI Reviews to be Made":
+    [
+        "0",
+        "0"
+    ],
+    "Unmatched Polygon Conflatable POIs":
+    [
+        "10",
+        "8"
+    ],
+    "Unmatched Polygon Conflatable POIs From Map 1":
+    [
+        "0",
+        "0"
+    ],
+    "Unmatched Polygon Conflatable POIs From Map 2":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Polygon Conflatable POIs Conflated":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Polygon Conflatable POIs Marked for Review":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Unmatched Polygon Conflatable POIs From Map 1":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Unmatched Polygon Conflatable POIs From Map 2":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Unmatched Polygon Conflatable POIs":
+    [
+        "100",
+        "100"
+    ],
+    "Polygons":
+    [
+        "10",
+        "8"
+    ],
+    "Conflatable Polygons":
+    [
+        "0",
+        "0"
+    ],
+    "Conflated Polygons":
+    [
+        "0",
+        "0"
+    ],
+    "Polygons Marked for Review":
+    [
+        "0",
+        "0"
+    ],
+    "Polygon Reviews to be Made":
+    [
+        "0",
+        "0"
+    ],
+    "Unmatched Polygons":
+    [
+        "10",
+        "8"
+    ],
+    "Unmatched Polygons From Map 1":
+    [
+        "0",
+        "0"
+    ],
+    "Unmatched Polygons From Map 2":
+    [
+        "0",
+        "0"
+    ],
+    "Total Square Meters of Polygons":
+    [
+        "1591.156764501918",
+        "1511.545828525935"
+    ],
+    "Square Meters of Conflated Polygons":
+    [
+        "0",
+        "0"
+    ],
+    "Square Meters of Unmatched Polygons From Map 1":
+    [
+        "0",
+        "0"
+    ],
+    "Square Meters of Unmatched Polygons From Map 2":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Polygons Conflated":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Polygons Marked for Review":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Unmatched Polygons From Map 1":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Unmatched Polygons From Map 2":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Unmatched Polygons":
+    [
+        "100",
+        "100"
+    ],
+    "Areas":
+    [
+        "0",
+        "0"
+    ],
+    "Conflatable Areas":
+    [
+        "0",
+        "0"
+    ],
+    "Conflated Areas":
+    [
+        "0",
+        "0"
+    ],
+    "Areas Marked for Review":
+    [
+        "0",
+        "0"
+    ],
+    "Area Reviews to be Made":
+    [
+        "0",
+        "0"
+    ],
+    "Unmatched Areas":
+    [
+        "0",
+        "0"
+    ],
+    "Unmatched Areas From Map 1":
+    [
+        "0",
+        "0"
+    ],
+    "Unmatched Areas From Map 2":
+    [
+        "0",
+        "0"
+    ],
+    "Total Square Meters of Areas":
+    [
+        "0",
+        "0"
+    ],
+    "Square Meters of Conflated Areas":
+    [
+        "0",
+        "0"
+    ],
+    "Square Meters of Unmatched Areas From Map 1":
+    [
+        "0",
+        "0"
+    ],
+    "Square Meters of Unmatched Areas From Map 2":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Areas Conflated":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Areas Marked for Review":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Unmatched Areas From Map 1":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Unmatched Areas From Map 2":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Unmatched Areas":
+    [
+        "0",
+        "0"
+    ],
+    "Railways":
+    [
+        "0",
+        "0"
+    ],
+    "Conflatable Railways":
+    [
+        "0",
+        "0"
+    ],
+    "Conflated Railways":
+    [
+        "0",
+        "0"
+    ],
+    "Railways Marked for Review":
+    [
+        "0",
+        "0"
+    ],
+    "Railway Reviews to be Made":
+    [
+        "0",
+        "0"
+    ],
+    "Unmatched Railways":
+    [
+        "0",
+        "0"
+    ],
+    "Unmatched Railways From Map 1":
+    [
+        "0",
+        "0"
+    ],
+    "Unmatched Railways From Map 2":
+    [
+        "0",
+        "0"
+    ],
+    "Total Meters of Railways":
+    [
+        "0",
+        "0"
+    ],
+    "Meters of Conflated Railways":
+    [
+        "0",
+        "0"
+    ],
+    "Meters of Unmatched Railways From Map 1":
+    [
+        "0",
+        "0"
+    ],
+    "Meters of Unmatched Railways From Map 2":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Railways Conflated":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Railways Marked for Review":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Unmatched Railways From Map 1":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Unmatched Railways From Map 2":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Unmatched Railways":
+    [
+        "0",
+        "0"
+    ],
+    "Power Lines":
+    [
+        "0",
+        "0"
+    ],
+    "Conflatable Power Lines":
+    [
+        "0",
+        "0"
+    ],
+    "Conflated Power Lines":
+    [
+        "0",
+        "0"
+    ],
+    "Power Lines Marked for Review":
+    [
+        "0",
+        "0"
+    ],
+    "Power Line Reviews to be Made":
+    [
+        "0",
+        "0"
+    ],
+    "Unmatched Power Lines":
+    [
+        "0",
+        "0"
+    ],
+    "Unmatched Power Lines From Map 1":
+    [
+        "0",
+        "0"
+    ],
+    "Unmatched Power Lines From Map 2":
+    [
+        "0",
+        "0"
+    ],
+    "Total Meters of Power Lines":
+    [
+        "0",
+        "0"
+    ],
+    "Meters of Conflated Power Lines":
+    [
+        "0",
+        "0"
+    ],
+    "Meters of Unmatched Power Lines From Map 1":
+    [
+        "0",
+        "0"
+    ],
+    "Meters of Unmatched Power Lines From Map 2":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Power Lines Conflated":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Power Lines Marked for Review":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Unmatched Power Lines From Map 1":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Unmatched Power Lines From Map 2":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Unmatched Power Lines":
+    [
+        "0",
+        "0"
+    ],
+    "Points":
+    [
+        "11",
+        "10"
+    ],
+    "Conflatable Points":
+    [
+        "0",
+        "0"
+    ],
+    "Conflated Points":
+    [
+        "0",
+        "0"
+    ],
+    "Points Marked for Review":
+    [
+        "0",
+        "0"
+    ],
+    "Point Reviews to be Made":
+    [
+        "0",
+        "0"
+    ],
+    "Unmatched Points":
+    [
+        "11",
+        "10"
+    ],
+    "Unmatched Points From Map 1":
+    [
+        "0",
+        "0"
+    ],
+    "Unmatched Points From Map 2":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Points Conflated":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Points Marked for Review":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Unmatched Points From Map 1":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Unmatched Points From Map 2":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Unmatched Points":
+    [
+        "100",
+        "100"
+    ],
+    "Lines":
+    [
+        "4",
+        "4"
+    ],
+    "Conflatable Lines":
+    [
+        "0",
+        "0"
+    ],
+    "Conflated Lines":
+    [
+        "0",
+        "0"
+    ],
+    "Lines Marked for Review":
+    [
+        "0",
+        "0"
+    ],
+    "Line Reviews to be Made":
+    [
+        "0",
+        "0"
+    ],
+    "Unmatched Lines":
+    [
+        "4",
+        "4"
+    ],
+    "Unmatched Lines From Map 1":
+    [
+        "0",
+        "0"
+    ],
+    "Unmatched Lines From Map 2":
+    [
+        "0",
+        "0"
+    ],
+    "Total Meters of Lines":
+    [
+        "1268.391471683038",
+        "1199.557803800593"
+    ],
+    "Meters of Conflated Lines":
+    [
+        "0",
+        "0"
+    ],
+    "Meters of Unmatched Lines From Map 1":
+    [
+        "0",
+        "0"
+    ],
+    "Meters of Unmatched Lines From Map 2":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Lines Conflated":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Lines Marked for Review":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Unmatched Lines From Map 1":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Unmatched Lines From Map 2":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Unmatched Lines":
+    [
+        "100",
+        "100"
+    ],
+    "Conflatable Relations":
+    [
+        "0",
+        "0"
+    ],
+    "Conflated Relations":
+    [
+        "0",
+        "0"
+    ],
+    "Relations Marked for Review":
+    [
+        "0",
+        "0"
+    ],
+    "Relation Reviews to be Made":
+    [
+        "0",
+        "0"
+    ],
+    "Unmatched Relations":
+    [
+        "0",
+        "0"
+    ],
+    "Unmatched Relations From Map 1":
+    [
+        "0",
+        "0"
+    ],
+    "Unmatched Relations From Map 2":
+    [
+        "0",
+        "0"
+    ],
+    "Total Square Meters of Relations":
+    [
+        "0",
+        "0"
+    ],
+    "Square Meters of Conflated Relations":
+    [
+        "0",
+        "0"
+    ],
+    "Square Meters of Unmatched Relations From Map 1":
+    [
+        "0",
+        "0"
+    ],
+    "Square Meters of Unmatched Relations From Map 2":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Relations Conflated":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Relations Marked for Review":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Unmatched Relations From Map 1":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Unmatched Relations From Map 2":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Unmatched Relations":
+    [
+        "0",
+        "0"
+    ],
+    "Translated Populated Tag Percent":
+    [
+        "0.05093167701863354",
+        "0.04972118959107807"
+    ],
+    "Translated Populated Tags":
+    [
+        "123",
+        "107"
+    ],
+    "Translated Default Tags":
+    [
+        "1748",
+        "1535"
+    ],
+    "Translated Null Tags":
+    [
+        "544",
+        "510"
+    ]
+}
+
+Quick Stats recursively from a directory to the display...
+
+Stat Name	test-files/cmd/slow/CountCmdTest/inputDir/input1.json	test-files/cmd/slow/CountCmdTest/inputDir/input1a.osm	test-files/cmd/slow/CountCmdTest/inputDir/input1b.osm	test-files/cmd/slow/CountCmdTest/inputDir/inputDir2/input1a.osm	test-files/cmd/slow/CountCmdTest/inputDir/inputDir2/input1b.osm
+Nodes	36	36	36	36	36
+Ways	4	4	4	4	4
+Relations	0	0	0	0	0
+Minimum Node ID	-1669793	-1669793	-1669793	-1669793	-1669793
+Maximum Node ID	-1669723	-1669723	-1669723	-1669723	-1669723
+Minimum Way ID	-1669801	-1669801	-1669801	-1669801	-1669801
+Maximum Way ID	-1669795	-1669795	-1669795	-1669795	-1669795
+Minimum Relation ID	9.223372036854776e+18	9.223372036854776e+18	9.223372036854776e+18	9.223372036854776e+18	9.223372036854776e+18
+Maximum Relation ID	-9.223372036854776e+18	-9.223372036854776e+18	-9.223372036854776e+18	-9.223372036854776e+18	-9.223372036854776e+18
+
+Quick Stats recursively from a directory filtered to read json inputs only to the display...
+
+Stat Name	test-files/cmd/slow/CountCmdTest/inputDir/input1.json
+Nodes	36
+Ways	4
+Relations	0
+Minimum Node ID	-1669793
+Maximum Node ID	-1669723
+Minimum Way ID	-1669801
+Maximum Way ID	-1669795
+Minimum Relation ID	9.223372036854776e+18
+Maximum Relation ID	-9.223372036854776e+18

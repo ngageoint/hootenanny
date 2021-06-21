@@ -61,21 +61,16 @@ public:
   /**
    * Returns true if a partial reader is available for the given URL.
    */
-  static bool hasPartialReader(const QString& url);
-
-  static bool hasElementInputStream(const QString& url);
-  static bool hasElementInputStream(const QStringList& inputs);
+  static bool supportsPartialReading(const QString& url);
 
   static void read(
     const std::shared_ptr<OsmMap>& map, const QString& url, bool useFileId = true,
     Status defaultStatus = Status::Invalid);
-  // see note for createReader
+  // See note for createReader.
   static void read(
     const std::shared_ptr<OsmMap>& map, bool useFileId, bool useFileStatus, const QString& url);
 
   static QString getReaderName(const QString& url);
-
-  static bool isSupportedFormat(const QString& url);
 
 private:
 

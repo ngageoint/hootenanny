@@ -3,11 +3,11 @@
 
 === Description
 
-The +tag-compare+ command reads from inputs and outputs a co-occurrence matrix based on tag values.
+The +tag-compare+ command displays a co-occurrence matrix comparing tag values from two inputs.
 
-* +input1+ -     Input 1; may be any supported input format (e.g. OSM file).
-* +input2+ -     Input 2; may be any supported input format (e.g. OSM file).
-* +--no-table+ - print the matrix as a list.  The default is to print out as a table.
+* +input1+ -     Input 1; may be any supported input format (e.g. .osm file).
+* +input2+ -     Input 2; may be any supported input format (e.g. .osm file).
+* +--no-table+ - Prints the matrix as a list instead of a table.
 
 === Usage
 

@@ -7,8 +7,8 @@ The +crop+ command crops a map to the given bounds. The default cropping behavio
 are modified to make sure nothing is outside the given bounds. This behavior may be customized with the `crop.*` 
 configuration options.
 
-* +input+          - The input data path; may be any supported input format (e.g. OSM file).
-* +output+         - The output data path; may be any supported output format (e.g. OSM file).
+* +input(s)+       - Input path(s); may be any supported input format (e.g. .osm file).
+* +output+         - The output data path; may be any supported output format (e.g. .osm file).
 * +bounds+         - Comma delimited bounds. minx,miny,maxx,maxy e.g.38,-105,39,-104
 * +--write-bounds+ - Optionally outputs a file containing the input bounds. The location of the file is controlled via the 
                      `bounds.output.file` configuration option.
@@ -16,7 +16,7 @@ configuration options.
 === Usage
 
 --------------------------------------
-crop (input.osm) (output.osm) (bounds) [--write-bounds]
+crop (input1) [input2...] (output) (bounds) [--write-bounds]
 --------------------------------------
 
 https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#crop-a-map-to-an-extent[Examples]

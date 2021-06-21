@@ -486,6 +486,7 @@ void OgrReader::read(
   // These are the OGR inputs types for which we need to iterate through layers. This list may
   // eventually need to be expanded. May be able to tighten the dir condition to dirs with shape
   // files only.
+  // TODO: Can we just check to see if layer is empty here instead?
   if (path.endsWith(".gdb") || QFileInfo(path).isDir() || path.endsWith(".zip"))
   {
     QString pathCopy = path;

@@ -33,7 +33,6 @@
 #include <hoot/core/io/OsmMapWriter.h>
 #include <hoot/core/io/OgrWriter.h>
 #include <hoot/core/io/PartialOsmMapWriter.h>
-#include <hoot/core/io/ElementOutputStream.h>
 #include <hoot/core/schema/SchemaUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
@@ -121,19 +120,6 @@ QString OsmMapWriterFactory::getWriterName(const QString& url)
   return "";
 }
 
-bool OsmMapWriterFactory::hasElementOutputStream(const QString& url)
-{
-  bool result = false;
-  std::shared_ptr<OsmMapWriter> writer = createWriter(url);
-  std::shared_ptr<ElementOutputStream> streamWriter =
-    std::dynamic_pointer_cast<ElementOutputStream>(writer);
-  if (streamWriter)
-  {
-    result = true;
-  }
-  return result;
-}
-
 void OsmMapWriterFactory::write(
   const std::shared_ptr<OsmMap>& map, const QString& url, const bool silent, const bool is_debug)
 {
@@ -180,19 +166,19 @@ void OsmMapWriterFactory::writeDebugMap(
       throw IllegalArgumentException("Invalid calling class: " + callingClass);
     }
 
-    const QString namespacePrefix = "hoot::";
     QString callingClassNoNamespace = callingClass;
-    callingClassNoNamespace = callingClassNoNamespace.replace(namespacePrefix, "");
+    callingClassNoNamespace =
+      callingClassNoNamespace.replace(MetadataTags::HootNamespacePrefix(), "");
     LOG_VART(callingClassNoNamespace);
 
     // If anything was added to the exclude filter and this class was explicitly excluded, we'll
     // skip writing out the map.
     QStringList excludeClassFilter = ConfigOptions().getDebugMapsClassExcludeFilter();
-    StringUtils::removePrefixes(namespacePrefix, excludeClassFilter);
+    StringUtils::removePrefixes(MetadataTags::HootNamespacePrefix(), excludeClassFilter);
     StringUtils::removeEmptyStrings(excludeClassFilter);
     LOG_VART(excludeClassFilter);
     if (!excludeClassFilter.isEmpty() &&
-        StringUtils::containsWildcard(callingClassNoNamespace, excludeClassFilter))
+        StringUtils::matchesWildcard(callingClassNoNamespace, excludeClassFilter))
     {
       return;
     }
@@ -200,11 +186,11 @@ void OsmMapWriterFactory::writeDebugMap(
     // If nothing was added to the include list, everything is allowed to write map files.
     // Otherwise, only allow this class to write a file if it has been added to the include list.
     QStringList includeClassFilter = ConfigOptions().getDebugMapsClassIncludeFilter();
-    StringUtils::removePrefixes(namespacePrefix, includeClassFilter);
+    StringUtils::removePrefixes(MetadataTags::HootNamespacePrefix(), includeClassFilter);
     StringUtils::removeEmptyStrings(includeClassFilter);
     LOG_VART(includeClassFilter);
     if (includeClassFilter.isEmpty() ||
-        StringUtils::containsWildcard(callingClassNoNamespace, includeClassFilter))
+        StringUtils::matchesWildcard(callingClassNoNamespace, includeClassFilter))
     {
       QString debugMapFileName = ConfigOptions().getDebugMapsFilename();
       if (!debugMapFileName.toLower().endsWith(".osm"))

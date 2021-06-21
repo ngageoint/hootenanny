@@ -58,11 +58,8 @@ public:
   { return ElementCriterionPtr(new NotCriterion(_child->clone())); }
 
   QString getDescription() const override { return "Negates a criterion"; }
-
   QString toString() const override;
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 
   void setConfiguration(const Settings& conf) override;

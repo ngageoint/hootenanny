@@ -114,7 +114,6 @@ void DataConverter::convert(const QStringList& inputs, const QString& output)
   _progress.setJobId(ConfigOptions().getJobId());
   _progress.setSource(JOB_SOURCE);
   _progress.setState(Progress::JobState::Running);
-
   _progress.set(
     0.0,
     "Converting ..." + FileUtils::toLogFormat(inputs, _printLengthMax) + " to ..." +
@@ -126,13 +125,15 @@ void DataConverter::convert(const QStringList& inputs, const QString& output)
   // be simplified more.
 
   // If we're writing to an OGR format and multi-threaded processing was specified or if both input
-  // and output formats are OGR formats, we'll need to run the memory bounded _convertToOgr method.
+  // and output formats are OGR formats, we'll need to run the _convertToOgr method in order to
+  // handle the layers correctly.
   if ((IoUtils::isSupportedOgrFormat(output, true) && _translateMultithreaded) ||
       (IoUtils::areSupportedOgrFormats(inputs, true) &&
        IoUtils::isSupportedOgrFormat(output, true)))
   {
     _convertToOgr(inputs, output);
   }
+  // We need to run _convertFromOgr in order to handle layers correctly.
   else if (IoUtils::areSupportedOgrFormats(inputs, true))
   {
     // We require that a translation be present when converting from OGR, since OgrReader is tightly
@@ -147,7 +148,7 @@ void DataConverter::convert(const QStringList& inputs, const QString& output)
   }
   // If none of the above conditions was satisfied, we'll call the generic convert routine. Note
   // that _convert may still be passed some OGR formats, which is a bit confusing and further
-  // refactoring might change that.
+  // refactoring could change that.
   else
   {
     _convert(inputs, output);
@@ -250,8 +251,8 @@ void DataConverter::_convertToOgr(const QStringList& inputs, const QString& outp
   LOG_VARD(_convertOps);
 
   // Check to see if all of the i/o can be streamed.
-  LOG_VARD(OsmMapReaderFactory::hasElementInputStream(inputs));
-  if (OsmMapReaderFactory::hasElementInputStream(inputs) &&
+  LOG_VARD(IoUtils::areStreamableInputs(inputs));
+  if (IoUtils::areStreamableInputs(inputs, true) &&
       // Multi-threaded code doesn't support conversion ops. Could it?
       _convertOps.empty() &&
       // Multi-threaded code doesn't support a bounds...not sure if it could be made to at some
@@ -452,11 +453,11 @@ void DataConverter::_convert(const QStringList& inputs, const QString& output)
   LOG_VARD(_shapeFileColumnsSpecified());
 
   // Check to see if all of the i/o can be streamed.
-  LOG_VARD(ElementStreamer::areValidStreamingOps(_convertOps));
-  LOG_VARD(ElementStreamer::areStreamableIo(inputs, output));
+  LOG_VARD(IoUtils::areValidStreamingOps(_convertOps));
+  LOG_VARD(IoUtils::areStreamableIo(inputs, output));
   const bool isStreamable =
-    ElementStreamer::areValidStreamingOps(_convertOps) &&
-    ElementStreamer::areStreamableIo(inputs, output);
+    IoUtils::areValidStreamingOps(_convertOps) &&
+    IoUtils::areStreamableIo(inputs, output);
 
   // The number of steps here must be updated as you add/remove job steps in the logic.
   int numTasks = 0;
@@ -552,7 +553,7 @@ void DataConverter::_exportToShapeWithCols(
     OsmMapWriterFactory::createWriter(output);
   std::shared_ptr<ShapefileWriter> shapeFileWriter =
     std::dynamic_pointer_cast<ShapefileWriter>(writer);
-  //currently only one shape file writer, and this is it
+  // Currently there is only one shape file writer, and this is it.
   assert(shapeFileWriter.get());
   shapeFileWriter->setColumns(cols);
   shapeFileWriter->open(output);
@@ -619,10 +620,9 @@ void DataConverter::_transToOgrMT(const QStringList& inputs, const QString& outp
   for (int i = 0; i < inputs.size(); i++)
   {
     QString input = inputs.at(i).trimmed();
-
     LOG_DEBUG("Reading: " << input);
 
-    // Read all elements from an input
+    // Read all elements from an input.
     _fillElementCacheMT(input, pElementCache, elementQ);
   }
 
@@ -632,7 +632,7 @@ void DataConverter::_transToOgrMT(const QStringList& inputs, const QString& outp
   // to us as a 3rd party library. So the best we can do right now is try to translate & write in
   // parallel.
 
-  // Setup & start translator thread
+  // Setup & start translator thread.
   ElementTranslatorThread transThread;
   transThread.setTranslation(_translation);
   transThread.setElementQueue(&elementQ);
@@ -644,7 +644,7 @@ void DataConverter::_transToOgrMT(const QStringList& inputs, const QString& outp
   transThread.start();
   LOG_DEBUG("Translation Thread Started");
 
-  // Setup & start our writer thread
+  // Setup & start our writer thread.
   OgrWriterThread writerThread;
   writerThread.setTranslation(_translation);
   writerThread.setOutput(output);

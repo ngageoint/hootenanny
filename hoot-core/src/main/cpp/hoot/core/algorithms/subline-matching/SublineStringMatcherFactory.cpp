@@ -51,8 +51,8 @@ SublineStringMatcherPtr SublineStringMatcherFactory::getMatcher(
       return _getRailwayMatcher();
     case CreatorDescription::BaseFeatureType::PowerLine:
       return _getPowerLineMatcher();
-    case CreatorDescription::BaseFeatureType::Waterway:
-      return _getWaterwayMatcher(map);
+    case CreatorDescription::BaseFeatureType::River:
+      return _getRiverMatcher(map);
     case CreatorDescription::BaseFeatureType::Unknown:
       return _getDefaultMatcher();
     default:
@@ -70,24 +70,24 @@ SublineStringMatcherPtr SublineStringMatcherFactory::_getHighwayMatcher()
       opts.getHighwayMatcherMaxAngle(), opts.getHighwayMatcherHeadingDelta(), 1e7);
 }
 
-SublineStringMatcherPtr SublineStringMatcherFactory::_getWaterwayMatcher(const ConstOsmMapPtr& map)
+SublineStringMatcherPtr SublineStringMatcherFactory::_getRiverMatcher(const ConstOsmMapPtr& map)
 {
   if (!map)
   {
     throw IllegalArgumentException(
-      "No map passed to waterway subline string matcher initialization.");
+      "No map passed to river subline string matcher initialization.");
   }
 
   ConfigOptions opts;
   int maxRecursions = -1; // default value
-  if (opts.getWaterwayMaximalSublineAutoOptimize())
+  if (opts.getRiverMaximalSublineAutoOptimize())
   {
     maxRecursions = RiverMaximalSublineSettingOptimizer().getFindBestMatchesMaxRecursions(map);
   }
   return
     _getMatcher(
-      MaximalSublineStringMatcher::className(), opts.getWaterwaySublineMatcher(),
-      opts.getWaterwayMatcherMaxAngle(), opts.getWaterwayMatcherHeadingDelta(), maxRecursions);
+      MaximalSublineStringMatcher::className(), opts.getRiverSublineMatcher(),
+      opts.getRiverMatcherMaxAngle(), opts.getRiverMatcherHeadingDelta(), maxRecursions);
 }
 
 SublineStringMatcherPtr SublineStringMatcherFactory::_getRailwayMatcher()

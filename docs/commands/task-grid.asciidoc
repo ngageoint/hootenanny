@@ -12,13 +12,19 @@ If the +--uniform+ option is specified, a task grid consisting of regular rectan
 uniformly distributed across an area is generated and written to an output file. The following options may be used 
 with +--uniform+:
 
-* +input/bounds+      - Either one or more input URLs or a bounding box string. If inputs(s) are specified, the task 
+* +input(s)/bounds+   - Either one or more input URLs or a bounding box string. If inputs(s) are specified, the task 
                         grid bounds will be the entire extent of the input data. Otherwise, the extent will match the 
                         specified bounding box string. Inputs URLs may be any supported input format (e.g. OSM file). 
-                        Specify multiple inputs by separating them with a semicolon. Bounding box strings must be of the 
-                        form: minx,miny,maxx,maxy; e.g. "-71.4698,42.4866,-71.4657,42.4902"
+                        Bounding box strings must be of the form: minx,miny,maxx,maxy; 
+                        e.g. "-71.4698,42.4866,-71.4657,42.4902"
 * +output+            - Output file to write the tile boundaries to; must be GeoJSON (*.geojson) or OSM (*.osm).
 * +gridDimensionSize+ - The number of rows and columns in the grid.
+
+=== Uniform Grid Usage
+
+--------------------------------------
+task-grid (input1.osm) [input2.osm...] | (bounds) (output) (gridDimensionSize) --uniform
+--------------------------------------
 
 === Node Density Grid
 
@@ -26,8 +32,7 @@ If the +--node-density+ option is specified, a task grid consisting of irregular
 contain roughly equal distributions of node data from the specified input(s) is generated and written to an output file. 
 The following options may be used with +--node-density+:
 
-* +input+                      - One or more inputs; may be any supported input format (e.g. OSM file). Specify multiple 
-                                 inputs by separating them with a semicolon.
+* +input(s)+                   - One or more inputs; may be any supported input format (e.g. .osm file).
 * +output+                     - Output file to write the tile boundaries to; must be GeoJSON (*.geojson) or OSM (*.osm).
 * +--bounds+                   - Optional bounding box string to further restrict the extent of the task grid; must be of 
                                  the form: minx,miny,maxx,maxy; e.g. "-71.4698,42.4866,-71.4657,42.4902"
@@ -54,12 +59,10 @@ The following options may be used with +--node-density+:
 * +--randomSeed+               - Optionally seeds the random number generator for consistent grid cell selection; valid only 
                                  if +--random+ is specified; use -1 for pseudo-random seeding; defaults to -1
 
-=== Usage
+=== Node Density Usage
 
 --------------------------------------
-task-grid (input1.osm)[;input2.osm...]|(bounds) (output) (gridDimensionSize) --uniform
-
-task-grid (input1.osm)[;input2.osm...] (output) [--bounds <value>] [--maxNodesPerCell <value>] [--pixelSize <value>] [--maxAttempts <value>] [--maxTimePerAttempt <value>] [--pixelSizeReductionFactor <value>] [--random] [--randomSeed <value>] --node-density
+task-grid (input1.osm) [input2.osm...] (output) [--bounds <value>] [--maxNodesPerCell <value>] [--pixelSize <value>] [--maxAttempts <value>] [--maxTimePerAttempt <value>] [--pixelSizeReductionFactor <value>] [--random] [--randomSeed <value>] --node-density
 --------------------------------------
 
 https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#generate-a-grid-with-regular-shaped-cells-across-an-entire-map[Examples]

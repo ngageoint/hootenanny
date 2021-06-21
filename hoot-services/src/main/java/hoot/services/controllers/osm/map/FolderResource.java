@@ -474,7 +474,7 @@ public class FolderResource {
      *            set of map layer records
      * @return folders web service object
      */
-    private static FolderRecords mapFolderRecordsToFolders(List<Folders> folderRecordSet) {
+    public static FolderRecords mapFolderRecordsToFolders(List<Folders> folderRecordSet) {
         FolderRecords folderRecords = new FolderRecords();
         List<FolderRecord> folderRecordList = new ArrayList<>();
 

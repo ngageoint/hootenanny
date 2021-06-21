@@ -28,6 +28,7 @@
 #include "Log.h"
 
 // Hoot
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/StringUtils.h>
 
@@ -126,13 +127,13 @@ bool Log::_passesFilter(const string& prettyFunction)
 
   // If anything was added to the exclude filter and this class was explicitly excluded, we'll skip
   // logging.
-  if (!_excludeClassFilter.isEmpty() && StringUtils::containsWildcard(name, _excludeClassFilter))
+  if (!_excludeClassFilter.isEmpty() && StringUtils::matchesWildcard(name, _excludeClassFilter))
   {
     return false;
   }
   // If nothing was added to the include list, everything is allowed to log. Otherwise, only allow
   // this class to log if it has been added to the include list.
-  return _includeClassFilter.isEmpty() || StringUtils::containsWildcard(name, _includeClassFilter);
+  return _includeClassFilter.isEmpty() || StringUtils::matchesWildcard(name, _includeClassFilter);
 }
 
 void Log::setLevel(WarningLevel l)
@@ -142,12 +143,11 @@ void Log::setLevel(WarningLevel l)
 
 void Log::_setFilter()
 {
-  const QString namespacePrefix = "hoot::";
   _includeClassFilter = ConfigOptions().getLogClassIncludeFilter();
-  StringUtils::removePrefixes(namespacePrefix, _includeClassFilter);
+  StringUtils::removePrefixes(MetadataTags::HootNamespacePrefix(), _includeClassFilter);
   _includeClassFilter.removeDuplicates();
   _excludeClassFilter = ConfigOptions().getLogClassExcludeFilter();
-  StringUtils::removePrefixes(namespacePrefix, _excludeClassFilter);
+  StringUtils::removePrefixes(MetadataTags::HootNamespacePrefix(), _excludeClassFilter);
   _excludeClassFilter.removeDuplicates();
 }
 

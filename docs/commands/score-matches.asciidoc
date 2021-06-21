@@ -9,7 +9,7 @@ command will return an error if any manual match is invalid.
 
 * +input+            - One or more pairs of inputs where the first item in the pair contain REF1 data (no manual matches) 
                        and the second item in the pair contain REF2 or REVIEW data (with manual matches); may be any 
-                       supported input format (e.g. OSM file).
+                       supported input format (e.g. .osm file).
 * +output+           - Output file for debugging; may be any supported output format (e.g. OSM file). Only the first 
                        conflated file will be output. Invalid if +--optimize+ is selected.
 * +--confusion+      - Prints a confusion matrix

@@ -35,6 +35,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.nio.charset.Charset;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -42,6 +43,8 @@ import java.util.List;
 import java.util.Scanner;
 
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
@@ -55,8 +58,15 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import org.junit.runner.RunWith;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.support.AnnotationConfigContextLoader;
+import org.springframework.transaction.annotation.Transactional;
 
 import hoot.services.UnitTest;
+import hoot.services.jerseyframework.HootServicesJerseyTestAbstract;
+import hoot.services.jerseyframework.HootServicesSpringTestConfig;
 import hoot.services.utils.HootCustomPropertiesSetter;
 
 
@@ -66,7 +76,10 @@ import hoot.services.utils.HootCustomPropertiesSetter;
  * is a way around the issue, but was unable to get it to work so far.  So, will remove the Jersey
  * resource from those tests.
  */
-public class CustomScriptResourceTest {
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = HootServicesSpringTestConfig.class, loader = AnnotationConfigContextLoader.class)
+@Transactional
+public class CustomScriptResourceTest extends HootServicesJerseyTestAbstract {
     private static File homefolder;
     private static File customScriptFolder;
     private static String original_HOME_FOLDER;
@@ -112,15 +125,19 @@ public class CustomScriptResourceTest {
     @Test
     @Category(UnitTest.class)
     public void testProcessSave() throws Exception {
-        CustomScriptResource res = new CustomScriptResource();
-        Response resp = res.processSave("test", "testName", "Test Description");
+        Response response = target("/customscript/save")
+                .queryParam("SCRIPT_NAME", "testName")
+                .queryParam("SCRIPT_DESCRIPTION", "Test Description")
+                .queryParam("folderId", 0)
+                .request(MediaType.APPLICATION_JSON)
+                .post(Entity.entity("test", MediaType.TEXT_PLAIN), Response.class);
 
         JSONParser parser = new JSONParser();
-        JSONArray actualObj = (JSONArray) parser.parse(resp.getEntity().toString());
+        JSONArray actualObj = (JSONArray) parser.parse(response.readEntity(String.class));
         JSONArray expectedObj = (JSONArray) parser.parse("[{\"NAME\":\"testName\",\"DESCRIPTION\":\"Test Description\",\"CANEXPORT\":false}]");
 
         assertEquals(expectedObj, actualObj);
-        assertEquals(200, resp.getStatus());
+        assertEquals(200, response.getStatus());
 
         File file = new File(customScriptFolder + "/" + "testName.js");
         assertTrue(file.exists());
@@ -136,7 +153,12 @@ public class CustomScriptResourceTest {
     public void testSaveBadSyntax() throws Exception {
         CustomScriptResource res = new CustomScriptResource();
         try {
-            res.processSave("{ test", "testName", "Test Description");
+            Response response = target("/customscript/save")
+                    .queryParam("SCRIPT_NAME", "testName")
+                    .queryParam("SCRIPT_DESCRIPTION", "Test Description")
+                    .queryParam("folderId", 0)
+                    .request(MediaType.APPLICATION_JSON)
+                    .post(Entity.entity("{ test", MediaType.TEXT_PLAIN), Response.class);
         }
         catch (WebApplicationException e) {
             Response response = e.getResponse();
@@ -338,12 +360,20 @@ public class CustomScriptResourceTest {
     @Test
     @Category(UnitTest.class)
     public void testGetScriptsList() throws Exception {
-        CustomScriptResource customScriptResource = new CustomScriptResource();
-
-        Response response = customScriptResource.processSave("test3", "testName3", "Test3 Description");
+        Response response = target("/customscript/save")
+                .queryParam("SCRIPT_NAME", "testName3")
+                .queryParam("SCRIPT_DESCRIPTION", "Test3 Description")
+                .queryParam("folderId", 0)
+                .request(MediaType.APPLICATION_JSON)
+                .post(Entity.entity("test3", MediaType.TEXT_PLAIN), Response.class);
         assertEquals(200, response.getStatus());
 
-        response = customScriptResource.processSave("test1", "testName4", "Test4 Description");
+        response = target("/customscript/save")
+                .queryParam("SCRIPT_NAME", "testName4")
+                .queryParam("SCRIPT_DESCRIPTION", "Test4 Description")
+                .queryParam("folderId", 0)
+                .request(MediaType.APPLICATION_JSON)
+                .post(Entity.entity("test1", MediaType.TEXT_PLAIN), Response.class);
         assertEquals(200, response.getStatus());
 
         File file = new File(customScriptFolder, "testName3.js");
@@ -352,8 +382,10 @@ public class CustomScriptResourceTest {
         file = new File(customScriptFolder, "testName4.js");
         assertTrue(file.exists());
 
-        response = customScriptResource.getScriptsList();
-        String strList = response.getEntity().toString();
+        response = target("/customscript/getlist")
+                .request(MediaType.APPLICATION_JSON)
+                .get();
+        String strList = response.readEntity(String.class);
 
         JSONParser parser = new JSONParser();
         JSONArray arr = (JSONArray) parser.parse(strList);
@@ -375,10 +407,21 @@ public class CustomScriptResourceTest {
     @Category(UnitTest.class)
     public void testGetScript() throws Exception {
         CustomScriptResource res = new CustomScriptResource();
-        Response resp = res.processSave("test5", "testName5", "Test5 Description");
 
+        Response resp = target("/customscript/save")
+                .queryParam("SCRIPT_NAME", "testName5")
+                .queryParam("SCRIPT_DESCRIPTION", "Test5 Description")
+                .queryParam("folderId", 0)
+                .request(MediaType.APPLICATION_JSON)
+                .post(Entity.entity("test5", MediaType.TEXT_PLAIN), Response.class);
         assertEquals(200, resp.getStatus());
-        resp = res.processSave("test6", "testName6", "Test6 Description");
+
+        resp = target("/customscript/save")
+                .queryParam("SCRIPT_NAME", "testName6")
+                .queryParam("SCRIPT_DESCRIPTION", "Test6 Description")
+                .queryParam("folderId", 0)
+                .request(MediaType.APPLICATION_JSON)
+                .post(Entity.entity("test6", MediaType.TEXT_PLAIN), Response.class);
         assertEquals(200, resp.getStatus());
 
         File file = new File(customScriptFolder, "testName5.js");
@@ -387,13 +430,19 @@ public class CustomScriptResourceTest {
         file = new File(customScriptFolder, "testName6.js");
         assertTrue(file.exists());
 
-        resp = res.getScript("testName5");
-        String scriptStr = resp.getEntity().toString();
+        resp = target("/customscript/getscript")
+                .queryParam("SCRIPT_NAME", "testName5")
+                .request(MediaType.TEXT_PLAIN)
+                .get();
+        String scriptStr = resp.readEntity(String.class);
 
         assertEquals("test5", scriptStr);
 
-        resp = res.getScript("testName6");
-        scriptStr = resp.getEntity().toString();
+        resp = target("/customscript/getscript")
+                .queryParam("SCRIPT_NAME", "testName6")
+                .request(MediaType.TEXT_PLAIN)
+                .get();
+        scriptStr = resp.readEntity(String.class);
 
         assertEquals("test6", scriptStr);
     }
@@ -401,15 +450,22 @@ public class CustomScriptResourceTest {
     @Test
     @Category(UnitTest.class)
     public void testDeleteScript() throws Exception {
-        CustomScriptResource res = new CustomScriptResource();
-        Response resp = res.processSave("test9", "testName9", "Test9 Description");
+        Response resp = target("/customscript/save")
+                .queryParam("SCRIPT_NAME", "testName9")
+                .queryParam("SCRIPT_DESCRIPTION", "Test9 Description")
+                .queryParam("folderId", 0)
+                .request(MediaType.APPLICATION_JSON)
+                .post(Entity.entity("test9", MediaType.TEXT_PLAIN), Response.class);
         assertEquals(200, resp.getStatus());
 
         File file = new File(customScriptFolder, "testName9.js");
         assertTrue(file.exists());
 
-        resp = res.deleteScript("testName9");
-        String deletedStr = resp.getEntity().toString();
+        resp = target("/customscript/deletescript")
+                .queryParam("SCRIPT_INFO", "testName9")
+                .request(MediaType.APPLICATION_JSON)
+                .get();
+        String deletedStr = resp.readEntity(String.class);
 
         JSONParser parser = new JSONParser();
         JSONArray actualObj = (JSONArray) parser.parse(deletedStr);
@@ -420,14 +476,23 @@ public class CustomScriptResourceTest {
 
     @Test
     @Category(UnitTest.class)
-    public void testDeleteMultiple() {
-        CustomScriptResource res = new CustomScriptResource();
-        Response saveResponse = res.processSave("test9", "testName9", "Test9 Description");
+    public void testDeleteMultiple() throws SQLException {
+        Response saveResponse = target("/customscript/save")
+                .queryParam("SCRIPT_NAME", "testName9")
+                .queryParam("SCRIPT_DESCRIPTION", "Test9 Description")
+                .queryParam("folderId", 0)
+                .request(MediaType.APPLICATION_JSON)
+                .post(Entity.entity("test9", MediaType.TEXT_PLAIN), Response.class);
         assertEquals(200, saveResponse.getStatus());
         File file = new File(customScriptFolder, "testName9.js");
         assertTrue(file.exists());
 
-        saveResponse = res.processSave("test10", "testName10", "Test10 Description");
+        saveResponse = target("/customscript/save")
+                .queryParam("SCRIPT_NAME", "testName10")
+                .queryParam("SCRIPT_DESCRIPTION", "Test10 Description")
+                .queryParam("folderId", 0)
+                .request(MediaType.APPLICATION_JSON)
+                .post(Entity.entity("test10", MediaType.TEXT_PLAIN), Response.class);
         assertEquals(200, saveResponse.getStatus());
         file = new File(customScriptFolder, "testName10.js");
         assertTrue(file.exists());
@@ -440,6 +505,7 @@ public class CustomScriptResourceTest {
         scriptsToDelete.add(script);
         request.setScripts(scriptsToDelete.toArray(new Script[scriptsToDelete.size()]));
 
+        CustomScriptResource res = new CustomScriptResource();
         ScriptsModifiedResponse deleteResponse = res.deleteScripts(request);
 
         assertEquals(2, deleteResponse.getScriptsModified().length);
@@ -480,13 +546,22 @@ public class CustomScriptResourceTest {
         /*
          * See explanation in testSaveMultipleEmptyName why no failure occurs here
          */
-        CustomScriptResource res = new CustomScriptResource();
-        Response saveResponse = res.processSave("test9", "testName9", "Test9 Description");
+        Response saveResponse = target("/customscript/save")
+                .queryParam("SCRIPT_NAME", "testName9")
+                .queryParam("SCRIPT_DESCRIPTION", "Test9 Description")
+                .queryParam("folderId", 0)
+                .request(MediaType.APPLICATION_JSON)
+                .post(Entity.entity("test9", MediaType.TEXT_PLAIN), Response.class);
         assertEquals(200, saveResponse.getStatus());
         File file = new File(customScriptFolder, "testName9.js");
         assertTrue(file.exists());
 
-        saveResponse = res.processSave("test10", "testName10", "Test10 Description");
+        saveResponse = target("/customscript/save")
+                .queryParam("SCRIPT_NAME", "testName10")
+                .queryParam("SCRIPT_DESCRIPTION", "Test10 Description")
+                .queryParam("folderId", 0)
+                .request(MediaType.APPLICATION_JSON)
+                .post(Entity.entity("test10", MediaType.TEXT_PLAIN), Response.class);
         assertEquals(200, saveResponse.getStatus());
         file = new File(customScriptFolder + "/" + "testName10.js");
         assertTrue(file.exists());
@@ -500,6 +575,7 @@ public class CustomScriptResourceTest {
         scriptsToDelete.add(script);
         request.setScripts(scriptsToDelete.toArray(new Script[scriptsToDelete.size()]));
 
+        CustomScriptResource res = new CustomScriptResource();
         ScriptsModifiedResponse deleteResponse = res.deleteScripts(request);
 
         assertEquals(1, deleteResponse.getScriptsModified().length);
@@ -535,13 +611,22 @@ public class CustomScriptResourceTest {
     @Test
     @Category(UnitTest.class)
     public void testDeleteMultipleScriptToBeDeletedHasNoHeader() throws Exception {
-        CustomScriptResource res = new CustomScriptResource();
-        Response saveResponse = res.processSave("test9", "testName9", "Test9 Description");
+        Response saveResponse = target("/customscript/save")
+                .queryParam("SCRIPT_NAME", "testName9")
+                .queryParam("SCRIPT_DESCRIPTION", "Test9 Description")
+                .queryParam("folderId", 0)
+                .request(MediaType.APPLICATION_JSON)
+                .post(Entity.entity("test9", MediaType.TEXT_PLAIN), Response.class);
         assertEquals(200, saveResponse.getStatus());
         File file = new File(customScriptFolder, "testName9.js");
         assertTrue(file.exists());
 
-        saveResponse = res.processSave("test10", "testName10", "Test10 Description");
+        saveResponse = target("/customscript/save")
+                .queryParam("SCRIPT_NAME", "testName10")
+                .queryParam("SCRIPT_DESCRIPTION", "Test10 Description")
+                .queryParam("folderId", 0)
+                .request(MediaType.APPLICATION_JSON)
+                .post(Entity.entity("test10", MediaType.TEXT_PLAIN), Response.class);
         assertEquals(200, saveResponse.getStatus());
         file = new File(customScriptFolder, "testName10.js");
         assertTrue(file.exists());
@@ -561,6 +646,7 @@ public class CustomScriptResourceTest {
         scriptsToDelete.add(script);
         request.setScripts(scriptsToDelete.toArray(new Script[scriptsToDelete.size()]));
 
+        CustomScriptResource res = new CustomScriptResource();
         ScriptsModifiedResponse deleteResponse = res.deleteScripts(request);
 
         assertEquals(1, deleteResponse.getScriptsModified().length);

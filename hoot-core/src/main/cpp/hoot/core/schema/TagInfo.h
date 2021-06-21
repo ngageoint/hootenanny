@@ -37,6 +37,9 @@
 namespace hoot
 {
 
+class OgrReader;
+class OsmMapReader;
+
 /**
  * Prints information about a set of tags
  */
@@ -44,9 +47,10 @@ class TagInfo
 {
 public:
 
-  TagInfo(const int tagValuesPerKeyLimit = INT_MAX, const QStringList& keys = QStringList(),
-          const bool keysOnly = false, const bool caseSensitive = true,
-          const bool exactKeyMatch = true, const bool delimitedTextOutput = false);
+  TagInfo(
+    const int tagValuesPerKeyLimit = INT_MAX, const QStringList& keys = QStringList(),
+    const bool keysOnly = false, const bool caseSensitive = true, const bool exactKeyMatch = true,
+    const bool delimitedTextOutput = false);
 
   /**
    * Returns a JSON string with tag values grouped by keys
@@ -77,17 +81,20 @@ private:
   // they match if any part of the feature tag key is contained in the specified tag key
   bool _exactKeyMatch;
 
-  // TODO
+  // prints the output as a single delimited string instead of JSON
   bool _delimitedTextOutput;
 
   int _taskStatusUpdateInterval;
 
   QString _getInfo(const QString& input) const;
+  QString _getInfoFromOgrInput(QString& input) const;
+  QString _getInfoFromStreamableInput(const QString& input) const;
+  QString _getInfoFromMemoryBoundInput(const QString& input) const;
 
   QString _printJSON(const QString& lName, TagInfoHash& data) const;
   QString _printDelimitedText(TagInfoHash& data) const;
 
-  void _parseElement(const ElementPtr& e, TagInfoHash& result) const;
+  void _parseElement(const ConstElementPtr& e, TagInfoHash& result) const;
   bool _tagKeysMatch(const QString& tagKey) const;
 };
 

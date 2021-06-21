@@ -59,7 +59,6 @@ namespace hybrid
  * structure a bit, but it really needs to go through the profiler and hand tune the data
  * structures for size. Each node is quite wasteful. I did some work with the FqNodes to bring down
  * the memory usage by removing vectors, but using boost pools may also help out.
- *
  */
 template <class KeyType, class DataType, class DistanceFunction>
 class RFqHybridTree : public SubTreeCallback<KeyType, DataType>

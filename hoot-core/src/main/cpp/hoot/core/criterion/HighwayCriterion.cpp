@@ -52,8 +52,6 @@ bool HighwayCriterion::isSatisfied(const ConstElementPtr& element) const
   }
 
   LOG_VART(element->getElementId());
-  //LOG_VART(element);
-
   const ElementType type = element->getElementType();
 
   if (type == ElementType::Node)
@@ -61,7 +59,6 @@ bool HighwayCriterion::isSatisfied(const ConstElementPtr& element) const
     return false;
   }
 
-  //LOG_VART(element);
   bool result = false;
   const Tags& tags = element->getTags();
 
@@ -82,10 +79,6 @@ bool HighwayCriterion::isSatisfied(const ConstElementPtr& element) const
     LOG_VART(result);
   }
 
-  // At one point we were allowing any way with a date tag to pass here as well, but that can lead
-  // to false positive highway matches, so it was removed. Its better to tag the way as a highway
-  // before conflation.
-
   // Make sure this isn't an area highway section.
   if (result)
   {
@@ -98,7 +91,7 @@ bool HighwayCriterion::isSatisfied(const ConstElementPtr& element) const
 }
 
 QStringList HighwayCriterion::getChildCriteria() const
-{;
+{
   return QStringList(HighwayWayNodeCriterion::className());
 }
 
