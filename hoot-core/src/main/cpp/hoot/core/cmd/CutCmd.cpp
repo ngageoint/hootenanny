@@ -58,45 +58,42 @@ public:
 
   int runSimple(QStringList& args) override
   {
-    if (args.size() < 3 || args.size() > 5)
+    bool crop = false;
+    if (args.contains("--crop"))
+    {
+      crop = true;
+      args.removeAt(args.indexOf("--crop"));
+    }
+
+    double buffer = 0.0;
+    if (args.contains("--buffer"))
+    {
+      const int bufferIndex = args.indexOf("--buffer");
+      bool ok = false;
+      buffer = args.at(bufferIndex + 1).toDouble(&ok);
+      if (!ok)
+      {
+        throw IllegalArgumentException("Invalid buffer value: " + args.at(bufferIndex));
+      }
+      args.removeAt(bufferIndex + 1);
+      args.removeAt(bufferIndex);
+    }
+
+    LOG_VARD(args);
+
+    if (args.size() != 3)
     {
       std::cout << getHelp() << std::endl << std::endl;
       throw IllegalArgumentException(
-        QString("%1 takes at three to five parameters. You provided %2: %3")
+        QString("%1 takes at three parameters. You provided %2: %3")
           .arg(getName())
           .arg(args.size())
           .arg(args.join(",")));
     }
 
-    int i = 0;
-    QString cutterShapePath = args[i++];
-    QString doughPath = args[i++];
-    QString outputPath = args[i++];
-    bool ok = false;
-    double buffer = args.size() > i ? args[i].toDouble(&ok) : 0.0;
-    if (ok)
-    {
-      i++;
-    }
-    else
-    {
-      buffer = 0.0;
-    }
-    LOG_VARD(buffer);
-    bool crop = false;
-    if (args.size() > i)
-    {
-      if (args[i++] == "--crop")
-      {
-        crop = true;
-      }
-      else
-      {
-        throw HootException(
-          QString("Expected --crop as the last argument, but got %1.").
-            arg(args[i - 1]));
-      }
-    }
+    const QString cutterShapePath = args[0].trimmed();
+    const QString doughPath = args[1].trimmed();
+    const QString outputPath = args[2].trimmed();
 
     QElapsedTimer timer;
     timer.start();
