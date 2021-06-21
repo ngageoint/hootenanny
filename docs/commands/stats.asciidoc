@@ -3,11 +3,11 @@
 
 === Description
 
-The +stats+ command calculates a partially configurable set of statistics for one or more maps.
+The +stats+ command calculates a pre-determined set of statistics for one or more maps.
 
-* +input(s)+    - One or more inputs; may be any supported input format (e.g. .osm file).
-* +--brief+     - Only calculate subset of statistics. 
-* +--output+    - Optional output file path; supported file types are text (*.txt) and JSON (*.json).
+* +input(s)+    - Input(s); may be any supported input format (e.g. .osm file).
+* +--brief+     - Only calculates subset of statistics. 
+* +--output+    - Optional output; supported formats are text (.txt) and JSON (.json).
 * +--recursive+ - Allows for processing inputs recursively in a directory structure. This must be followed by either "*" 
                   to denote no filtering or one or more wildcard name filters. e.g. "*.osm;*.json" or "*myFile*".
 

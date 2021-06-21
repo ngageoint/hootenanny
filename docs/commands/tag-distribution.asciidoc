@@ -3,38 +3,37 @@
 
 === Description
 
-The +tag-distribution+ command displays a distribution for all values of a specified tag key and a 
-percentage of each value's frequency compared to all other tag values.
+The +tag-distribution+ command displays a distribution of values for tags in one or more maps.
 
-* +input(s)+                 - One or more inputs; may be any supported input format (e.g. .osm file).
+* +input(s)+                 - Input(s); may be any supported input format (e.g. .osm file).
 * +--criteria+               - Optional filtering criteria for the inputs; May be one or more class names inheriting from 
                                `ElementCriterion`. By default, multiple criteria are logically OR'd together. Set the 
                                `tag.distribution.chain.element.criteria` option to true to have the criteria logically 
                                AND'd together. The criteria can be negated with the option `element.criteria.negate`.
                                Use the +info --operators+ command to obtain a list of available criteria.
 * +--limit+                  - Limits the number of results returned.
-* +--names+                  - If specified, `tagKeys` is ignored and only name tags, as defined by Hootenanny's schema, 
-                               are processed. This is incompatible with the `--types` option.
+* +--names+                  - If specified, name tags, as defined by Hootenanny's schema, are used as the tag keys to 
+                               gather statistics for. This is incompatible with the `--types` option.
 * +--percentage-of-matching+ - By default with this option omitted, tag distribution percentages are based on all elements
                                parsed. Elements not possessing the tags specified in `tagKeys`, `--names`, or `--types` are
                                counted in the element total. With this option enabled, only elements which have one of the
                                specified tags are counted in the element total. Enabling this option has no effect if
-                               all tag keys are parsed (empty `tagKeys`).
+                               all tag keys are parsed (nothing specified for `tagKeys`).
 * +--recursive+              - Allows for processing inputs recursively in a directory structure. This must be followed 
                                by either "*" to denote no filtering or one or more wildcard name filters. e.g. 
                                "*.osm;*.json" or "*myFile*".
 * +--sort-by-value +         - Sorts results alphabetically by tag value. If not specified, results are sorted by decreasing 
                                tag value occurrence frequency.
 * +--tagKeys+                - The tag keys to gather statistics for. If this parameter is omitted, all tag keys are 
-                               processed. This parameter is ignored if `--names` or `--types` is used.
+                               processed. This parameter is ignored if `--names` or `--types` are used.
 * +--tokenize+               - Breaks tag values up into individual tokens before counting them.
-* +--types+                  - If specified, `tagKeys` is ignored and only type tags, as defined by Hootenanny's schema, 
-                               are processed. This is incompatible with the `--names` option.
+* +--types+                  - If specified, type tags, as defined by Hootenanny's schema, are used as the tag keys to 
+                               gather statistics for. This is incompatible with the `--names` option.
 
 === Usage
 
 --------------------------------------
-hoot tag-distribution (input1) [input2...] [--criteria "criterion1;criterion2..."] [--limit] [--names] \
+hoot tag-distribution (input1) [input2...] [--criteria "criterion1;criterion2..."] [--limit value] [--names] \
   [--percentage-of-matching] [--recursive "*"|"filter1;filter2..."]  [--sort-by-value] [--tagKeys "tagKey1;tagKey2..."] \
   [--tokenize] [--types]
 --------------------------------------

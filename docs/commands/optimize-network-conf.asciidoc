@@ -6,16 +6,15 @@
 The +optimize-network-conf+ command runs a series of network road conflation tests to determine the best performing values 
 for a user specified group of configuration options.
 
-* +testsDir+      - the root directory containing the tests to run; the directory must contain Hootenanny conflate case tests,
-                    release regression tests, or PERTY regression tests
-* +testType+      - the type of test to run; valid values are 'case', 'release', or 'perty'; only one type may be used at a time
-* +testSettings+  - a JSON file containing configuration with min/max test values; see
-                    'test-files/cmd/glacial/OptimizeConflateSettingsCmd/testSettings.json' for an example
-* +numIterations+ - the number of test iterations to run
-* +output+        - file location to write the text summary of the optimization to
-* +verbose+       - if true; logs extra detail during the optimization run
-* +customConfig+  - file location of a custom Hootenanny configuration file containing static configuration options to apply
-                    to the tests (configuration values remain constant for the duration of the test run (optional)
+* +testsDir+      - The root directory containing the tests to run. The directory must contain Hootenanny conflate case tests,
+                    release regression tests, or PERTY regression tests.
+* +testType+      - The type of test to run. Valid values are 'case', 'release', or 'perty'. Only one type may be used at a time.
+* +testSettings+  - A JSON file containing configuration with min/max test values.
+* +numIterations+ - The number of test iterations to run.
+* +output+        - Output; file location to write the text summary of the optimization to.
+* +verbose+       - If true, logs extra detail to +output+ during the optimization run.
+* +customConfig+  - Optional custom configuration file containing static configuration options to apply to the 
+                    tests (configuration values remain constant for the duration of the test run.
 
 === Usage
 
@@ -29,9 +28,8 @@ hoot optimize-network-conf (testsDir) (testType) (testSettings) (numIterations) 
 hoot optimize-network-conf test-files/cases/hoot-rnd/network/conflicts case settings.json 50 output Config.conf
 --------------------------------------
 
-NOTE: To use tests of type 'release' or 'perty' you must have access to the Hootenanny regression tests, which are not 
-supplied with Hootenanny by default.  Also, only the Network Conflation versions of those tests will work with this 
-settings optimizer.
+NOTE: To use tests of type 'release' or 'perty' you must have access to the regression tests, which are not supplied 
+with Hootenanny by default. Only the Network Conflation versions of those tests will work with this settings optimizer.
 
 === See Also
 

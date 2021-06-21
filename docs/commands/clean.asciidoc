@@ -19,7 +19,7 @@ hoot info --cleaning-operations
 === Usage
 
 --------------------------------------
-hoot clean (input) [input2...] (output) [--recursive "*"|"filter1;filter2..."]
+hoot clean (input) [input2] ... (output) [--recursive "*"|"filter1;filter2..."]
 --------------------------------------
 
 https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#cleaning[Examples]

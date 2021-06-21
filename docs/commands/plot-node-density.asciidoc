@@ -3,19 +3,19 @@
 
 === Description
 
-The +nplot-node-density+ command creates a density plot of the specified input.
+The +plot-node-density+ command creates a density plot from a specified input.
 
-* +input+         - Input path; may be any supported input format (e.g. .osm file).
-* +output-image+  - Output image name. Must always be a +.png+ file. A corresponding +.pngw+ file will also be generated.
+* +input+         - Input; may be any supported input format (e.g. .osm file).
+* +output+        - Output; Must be a Portable Network Graphic image (.png) file.
 * +max-dimension+ - Maximum size of the image on one side. The actual size will be determined based on the envelope. If 
-                    the envelope is wider than tall then this will be the width of the image (and vice versa). The pixels 
-                    in the output image will always be square and the image may be slightly larger than the envelope 
+                    the envelope is wider than tall, then this will be the width of the image (and vice versa). The pixels 
+                    in the output image will always be square, and the image may be slightly larger than the envelope 
                     to accommodate this.
-* +--base-colors+ - Base colors to use for each channel. These will be added to each channel (R,G,B,A). An alpha value of 255 
-                    is opaque.
-* +--multiplier+  - Multiply the log count ratio by these values. 4 comma delimited values (R,G,B,A).
+* +--base-colors+ - Base colors to use for each image channel. These will be added to each channel (R,G,B,A). An alpha value 
+                    of 255 is opaque.
+* +--multiplier+  - Multiplies the log count ratio by these values (R,G,B,A).
 
-By default the colors of the image are black to white where black represents no data. The colors are always in log scale. 
+By default, the colors of the image are black to white where black represents no data. The colors are always in log scale. 
 You can manipulate the +base-color+ and +count-colors+ parameters to change the colors. This approach allows creating 
 simple positive gradients. If you require more complex color mappings you may want to take a peek at link:$$http://www.imagemagick.org/$$[ImageMagick] or some other similar mechanism.
 

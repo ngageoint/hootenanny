@@ -4,17 +4,17 @@
 === Description
 
 The +type-tagger-rules+ command allows for creating an implicit tag rules database that can be used to implicitly add type 
-tags to features based on their names.  See the "Implicit Element Type Tagging Based On Name" section in the Hootenanny 
-User Guide for more information.
+tags to features based on their names. See the "Implicit Element Type Tagging Based On Name" section in the Hootenanny User 
+Guide for more information.
 
 === Creating the Raw Implicit Type Tagging Rules File
 
-A raw rules file must be created before generating a rules database.  Use the --create-raw option to generate it:
+A raw rules file must be created before generating a rules database.  Use the `--create-raw` option to generate it:
 
-* +input(s)+       - Inputs; may be any supported input format (e.g. .osm file).
-* +translation(s)+ - Translation scripts used to translate each input dataset; must be *.js or *.py files. Specify 'none' as 
-                     an individual entry to skip translation for an input.
-* +output+         - An *.implicitTagRules tab delimited implicit tag rules file.
+* +input(s)+       - Input(s); may be any supported input format (e.g. .osm file).
+* +translation(s)+ - Translation scripts used to translate each input dataset; must be either a Javascript (.js) or Python 
+                     (.py) translation file. Specify 'none' as an individual entry to skip translation of an input.
+* +output+         - A implicit tag rules file (.implicitTagRules).
 
 Relevant configuration options are those beginning with implicit.tagging.raw.rules.deriver.*, and in some cases those beginning with implicit.tagging.*, in conf/core/ConfigOptions.asciidoc.
 
@@ -34,12 +34,12 @@ hoot type-tagger-rules --create-raw "myInput.osm.pbf;myInput.geonames" \
 
 === Creating the Implicit Type Tagging Rules Database
 
-Once a raw rules file has been generated, an implicit type tag rules database may be generated with the --create-db option:
+Once a raw rules file has been generated, an implicit type tag rules database may be generated with the `--create-db` option:
 
-* +input+  - an .implicitTagRules tab delimited rules for input
-* +output+ - a .sqlite database file for output
+* +input+  - Input; must be an implicit tag rules (.implicitTagRules) file
+* +output+ - Output; must be a SQLLite database (.sqlite).
 
-Relevant configuration options are those beginning with implicit.tagging.database.deriver.* and in some cases those 
+Relevant configuration options are those beginning with implicit.tagging.database.deriver.*, and in some cases, also those 
 beginning with implicit.tagging.*, in conf/core/ConfigOptions.asciidoc.
 
 ==== Usage
@@ -56,9 +56,9 @@ hoot type-tagger-rules --create-db myInput.implicitTagRules implicitTagRules.sql
 
 === Showing Rules Database Statistics
 
-Statistics for a rules database can be displayed with the --db-stats option:
+Statistics for a rules database can be displayed with the `--db-stats` option:
 
-* +input+ - an .implicitTagRules tab delimited rules for input
+* +input+ - Input; an implicit tag rules (.implicitTagRules) file
 
 ==== Usage
 

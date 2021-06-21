@@ -3,14 +3,12 @@
 
 === Description
 
-The +convert+ command converts map data from one input format to another.  Optionally, a schema translation may be 
-performed during the conversion.  The process may be memory bound depending upon the input or output formats selected.  
-See the Hootenanny User Guide Supported Data Formats section for more information.
+The +convert+ command converts map data from one format to another.  Optionally, data may be schema translated during 
+the conversion.  The process may be memory bound depending upon the input or output formats selected.
 
-* +input(s)+       - Input path(s); may be any supported input format (e.g. .osm file). Multiple inputs 
-                     are supported unless converting to an OGR format. Path wildcards may be used for inputs within the 
-                     same directory. For OGR inputs, layer names may also optionally be specified.
-* +output+         - Output path to convert to; may be any supported output format (e.g. .osm file, etc.).
+* +input(s)+       - Input(s); may be any supported input format (e.g. .osm file). Path wildcards may be used for inputs 
+                     within the same directory. For OGR inputs, layer filtering may be performed (see syntax in Usage section).
+* +output+         - Output; may be any supported output format (e.g. .osm file).
 * +--recursive+    - Allows for processing inputs recursively in a directory structure. This must be followed by either "*" 
                      to denote no filtering or one or more wildcard name filters. e.g. "*.osm;*.json" or "*myFile*". 
                      This parameter is not compatible with the OGR layer syntax.
@@ -28,25 +26,31 @@ hoot convert (input1[;layer]) [input2[;layer]] (output) [--write-bounds]
 
 https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#conversion[Examples]
 
+=== Translating Features
+
+The configuration option, `schema.translation.script`, may be used to schema translate feature during the conversion process.
+
 === Conversion Operations
 
-If the `convert.ops` configuration option is included, then all the specified operations are applied
-to the map, in order, before writing the result to the output. If a schema translation script is
-specified in schema.translation.script a SchemaTranslationVisitor is automatically added to the
-convert operations, so explicitly specifying it is unnecessary but will not cause problems.
+The `convert.ops` configuration option can be used to apply map operations to data during conversion. Information about the
+available conversion operations may be found with:
+
+-----
+hoot info --operators
+-----
 
 === Filtering Features Geographically
 
-If the configuration option, `bounds`, is set to a valid geographic bounds (see the configuration 
-option documentation for formats), supporting readers will read data only from within the specified 
-bounds. The `bounds.*` configuration options allow for further customization of the bounds 
-requirement.
+If the configuration option, `bounds`, is set to a valid geographic bounds (see the configuration option documentation 
+for formats), supporting readers will read data only from within the specified bounds. The `bounds.*` configuration options 
+allow for further customization of the bounds requirement.
 
-=== Notes
+=== Shape Files
 
-* The conversion from OSM file to shape file is a lossy process that generates a point, line and polygon shapefile. The OSM 
-XML format is a richer format than Shapefile and supports such things as multiple geometry types within one file, 
+* The conversion from OSM file to shape file is a lossy process that generates a point, line and polygon shapefile. The 
+OSM XML format is a richer format than Shapefile and supports such things as multiple geometry types within one file, 
 inherit topology and arbitrary tagging. For these reasons the conversion to Shapefile is a lossy conversion.
+* Column filtering for shape files is supported with the `shape.file.writer.cols` configuration option.
 
 === See Also
 

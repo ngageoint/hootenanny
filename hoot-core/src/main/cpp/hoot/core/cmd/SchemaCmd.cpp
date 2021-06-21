@@ -50,7 +50,7 @@ public:
 
   int runSimple(QStringList& args) override
   {
-    if (args.size() != 0)
+    if (!args.empty())
     {
       std::cout << getHelp() << std::endl << std::endl;
       throw IllegalArgumentException(

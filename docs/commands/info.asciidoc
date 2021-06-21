@@ -1,7 +1,7 @@
 [[info]]
 == info
 
-The +info+ command displays information about Hootenanny capabilities. For further detail on how to use this information see both the Hootenanny User and Developer Guides.
+The +info+ command displays information about command capabilities.
 
 === Option Overview
 

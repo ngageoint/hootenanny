@@ -1,7 +1,7 @@
 [[info-rnd]]
 == info-rnd
 
-The +info-rnd+ command displays information about Hootenanny capabilities specific to the hoot-rnd module.
+The +info-rnd+ command displays information about command capabilities specific to the `hoot-rnd` module.
 
 For further detail on how to use this information see both the Hootenanny User and Developer Guides.
 

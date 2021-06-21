@@ -9,7 +9,7 @@ parameters are:
 
 * +input1+ - Input 1; may be any supported input format (e.g. OSM file).
 * +input2+ - Input 2; may be any supported input format (e.g. OSM file).
-* +output+ - Output file; may be any supported output format (e.g. OSM file).
+* +output+ - Output; may be any supported output format (e.g. OSM file).
 
 The following optional defines can be set:
 

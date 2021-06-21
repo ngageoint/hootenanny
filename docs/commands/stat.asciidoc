@@ -5,14 +5,14 @@
 
 The +stat+ command displays a single statistic calculated from the features in a map.
 
-* +input(s)+    - One or more inputs; may be any supported input format (e.g. .osm file). If statType is 'average', then 
-                  only one input is supported.
+* +input(s)+    - Input(s); may be any supported input format (e.g. .osm file). If statType is 'average', then only one input 
+                  is supported.
 * +visitor+     - The stat visitor must be the single class name of a Hootenanny visitor that inherits from 
                   +ConstElementVisitor+ and supports the +SingleStatistic+ or +NumericStatistic+ interfaces. Use the 
                   +info --operators+ command to obtain a list of available visitors.
 * +--recursive+ - Allows for processing inputs recursively in a directory structure. This must be followed by either "*" 
                   to denote no filtering or one or more wildcard name filters. e.g. "*.osm;*.json" or "*myFile*".
-* +--statType+  - If +visitor+ supports `NumericStatistic`, this optional parameter allows for specifying the statistic type 
+* +--statType+  - If +visitor+ implements `NumericStatistic`, this optional parameter allows for specifying the statistic type 
                   to collect. Supported types are 'total', 'min', 'max', and 'average'. If +visitor+ implements 
                   `SingleStatistic`, this parameter is ignored and 'total' is automatically used.
 
