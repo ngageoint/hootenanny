@@ -20,7 +20,7 @@ for a user specified group of configuration options.
 === Usage
 
 --------------------------------------
-optimize-network-conf (testsDir) (testType) (testSettings) (numIterations) (output) [customConfig]
+hoot optimize-network-conf (testsDir) (testType) (testSettings) (numIterations) (output) [customConfig]
 --------------------------------------
 
 ==== Example

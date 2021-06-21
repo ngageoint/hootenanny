@@ -12,7 +12,7 @@ The +tag-compare+ command displays a co-occurrence matrix comparing tag values f
 === Usage
 
 --------------------------------------
-tag-compare (input1 input2) [--no-table]
+hoot tag-compare (input1 input2) [--no-table]
 --------------------------------------
 
 https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#compare-the-tags-in-two-maps[Examples]

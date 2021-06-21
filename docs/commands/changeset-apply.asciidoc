@@ -13,15 +13,15 @@ after the time represented by a timestamp that intersect with a specified AOI, t
                    be a single SQL changeset (.osc.sql) files.
 * +targetUrl+    - If writing the changeset through the OSM API, the OSM API endpoint the changeset will be written to. If 
                    writing the changeset directly to an OSM API database, the URL of the database being written to.
+* +--progress+   - Display progress as a percent complete while the upload is working; ignored when using SQL changesets
 * +--stats+      - Output statistics (element, node, way, relation, failure, create, modify, and delete counts); ignored when
                    using SQL changesets
-* +--progress+   - Display progress as a percent complete while the upload is working; ignored when using SQL changesets
 
 === Usage
 
 --------------------------------------
-changeset-apply (changeset1.os*) [changeset2.os* ...] (targetUrl) [--stats] [--progress]
-changeset-apply (changeset.osc.sql) (targetUrl)
+hoot changeset-apply (changeset1.os*) [changeset2.os* ...] (targetUrl) [--progress] [--stats] 
+hoot changeset-apply (changeset.osc.sql) (targetUrl)
 --------------------------------------
 
 https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#applying-changes[Examples]

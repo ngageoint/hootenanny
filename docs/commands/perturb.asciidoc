@@ -16,7 +16,7 @@ The +perturb+ command perturbs map data.  It reads from input, permutes the data
               permuted data, and then write the reference data, permuted data, and conflated data to output files.
 * +--test+  - (optional) This option causes the command to generate a series of PERTY scores for the same set of 
               conflation inputs and averages them together (to account for randomness), which yields a single PERTY 
-              score.  Must be specified after configuration options.  Not valid in combination with the --score option. 
+              score.  Must be specified after configuration options. Not valid in combination with the --score option. 
               Any number of conflation jobs may be run per test.
 
 === Optional Defines
@@ -27,7 +27,7 @@ details. Use the `info` command to learn more about the available configuration 
 === Usage
 
 --------------------------------------
-perturb (input) (output) [--score] [--test]
+hoot perturb (input) (output) [--score]|[--test]
 --------------------------------------
 
 === Examples

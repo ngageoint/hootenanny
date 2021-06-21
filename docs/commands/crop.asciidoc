@@ -11,16 +11,15 @@ given bounds. This behavior may be customized with the `crop.*` configuration op
 * +input(s)+       - Input path(s); may be any supported input format (e.g. .osm file).
 * +output+         - The output data path; may be any supported output format (e.g. .osm file).
 * +bounds+         - Comma delimited bounds. minx,miny,maxx,maxy e.g.38,-105,39,-104
-* +--recursive+    - Allows for cropping data recursively in a directory structure. This must be followed by either 
-                     "*" to denote no filtering or one or more wildcard name filters. e.g. "*.osm;*.json" or "*myFile*". 
-                     The recursion is only performed on file directories and this parameter is ignored for other input types.
+* +--recursive+    - Allows for processing inputs recursively in a directory structure. This must be followed by either 
+                     "*" to denote no filtering or one or more wildcard name filters. e.g. "*.osm;*.json" or "*myFile*".
 * +--write-bounds+ - Optionally outputs a file containing the input bounds. The location of the file is controlled via the 
                      `bounds.output.file` configuration option.
 
 === Usage
 
 --------------------------------------
-crop (input1) [input2...] (output) (bounds) [--recursive "*"|"filter1;filter2..."] [--write-bounds]
+hoot crop (input1) [input2...] (output) (bounds) [--recursive "*"|"filter1;filter2..."] [--write-bounds]
 --------------------------------------
 
 https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#crop-a-map-to-an-extent[Examples]

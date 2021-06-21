@@ -12,7 +12,7 @@ Note you can also simply type hoot and the command to get the help.
 === Usage
 
 --------------------------------------
-help [command] [--verbose]
+hoot help [command] [--verbose]
 --------------------------------------
 
 https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#help[Examples]

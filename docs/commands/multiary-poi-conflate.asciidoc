@@ -11,7 +11,7 @@ The +multiary-poi-conflate+ command conflates two or more POI map sources into a
 === Usage
 
 --------------------------------------
-multiary-poi-conflate (input1) (input2) [input3, ...] (output)
+hoot multiary-poi-conflate (input1) (input2) [input3, ...] (output)
 --------------------------------------
 
 ==== Example

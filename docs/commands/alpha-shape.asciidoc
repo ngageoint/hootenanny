@@ -24,7 +24,7 @@ The +alpha-shape+ command provides a way to generate a concave hull for a set of
 === Usage
 
 --------------------------------------
-alpha-shape (input) (output) [--alpha value] [--buffer value]
+hoot alpha-shape (input) (output) [--alpha value] [--buffer value]
 --------------------------------------
 
 https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#create-a-shape-that-covers-a-set-of-features-with-a-buffer[Examples]

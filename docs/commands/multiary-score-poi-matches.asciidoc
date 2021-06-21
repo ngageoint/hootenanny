@@ -17,7 +17,7 @@ tags or the second input file contains any REF1 tags.
 === Usage
 
 --------------------------------------
-multiary-score-poi-matches (input1 input2) [input1 input2 ...] (output) [--confusion]
+hoot multiary-score-poi-matches (input1 input2) [input1 input2 ...] (output) [--confusion]
 --------------------------------------
 
 === See Also

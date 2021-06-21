@@ -12,7 +12,7 @@ is: 1) nodes, 2) ways, and then 3) relations.
 === Usage
 
 --------------------------------------
-sort (input) (output)
+hoot sort (input) (output)
 --------------------------------------
 
 https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#sort-a-map-to-the-osm-standard-in-memory[Examples]

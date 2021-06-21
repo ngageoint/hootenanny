@@ -56,7 +56,7 @@ a +.osm.pbf+ format took about 4.5 hours.
 === Usage
 
 --------------------------------------
-plot-node-density (input) (output-image) (max-dimension) [base-colors] [multiplier]
+hoot plot-node-density (input) (output-image) (max-dimension) [base-colors] [multiplier]
 --------------------------------------
 
 ==== Example

@@ -12,6 +12,10 @@ The +conflate+ command conflates two maps into a single map.
 * +osmApiDatabaseUrl+ - Target OSM API database the derived changeset is to be applied, used to maintain element 
                         ID continuity. Required only if the +--differential+ option is specified and the changeset 
                         output format is .osc.sql.
+* +--changeset-stats+ - Displays changeset statistics and may be optionally followed by an output JSON file name. If a file 
+                        is not specified, statistics are printed to the screen. Valid only if the +--differential+ option 
+                        is specified and the output format is .osc. If the +--include-tags++ option is specified, tag
+                        changeset statistics are also output.
 * +--differential+    - Calculates the the differential between two conflation inputs.  The output will be all elements 
                         in input2 that do not conflict with any elements in input1.
 * +--include-tags+    - Include a check for modified tags when doing differential conflation. The output will 
@@ -21,18 +25,15 @@ The +conflate+ command conflates two maps into a single map.
                         and +--include-tags++ options are used.
 * +--stats+           - Displays map statistics and may be optionally followed by an output JSON file name. If a file is 
                         not specified, statistics are printed to the screen.
-* +--changeset-stats+ - Displays changeset statistics and may be optionally followed by an output JSON file name. If a file 
-                        is not specified, statistics are printed to the screen. Valid only if the +--differential+ option 
-                        is specified and the output format is .osc. If the +--include-tags++ option is specified, tag
-                        changeset statistics are also output.
 * +--write-bounds+    - If the `bounds` configuration option is specified, optionally outputs a file containing the 
                         input bounds. The location of the file is controlled via the `bounds.output.file` configuration option.
 
 === Feature Tag Filtering
 
-A subset of input features may be conflated by specifying the 'conflate.tag.filter' configuration option.  The option 
-allows for JSON feature tag filtering by specifying either inline JSON or the path to a JSON file.  For more information, 
-see the "Feature Filtering" section of the Hootenanny User Guide.
+A subset of input features may be conflated by specifying the 'conflate.tag.filter' configuration 
+option. The option allows for JSON feature tag filtering by specifying either inline JSON or the 
+path to a JSON file.  For more information, see the "Feature Filtering" section of the Hootenanny 
+User Guide.
 
 === Filtering Features Geographically
 
@@ -46,7 +47,8 @@ call to the `changeset-derive` command as well.
 === Usage
 
 --------------------------------------
-conflate (input1) (input2) (output) [--differential] [--include-tags] [--separate-output] [--stats filename] [--changeset-stats geometry-stats-filename tags-stats-filename]
+hoot conflate (input1) (input2) (output) [osmApiDatabaseUrl] [--changeset-stats geometry-stats-filename tags-stats-filename] \
+  [--differential] [--include-tags] [--separate-output] [--stats filename] 
 --------------------------------------
 
 https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#conflation[Examples]

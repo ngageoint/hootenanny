@@ -11,14 +11,14 @@ on `<osmChange>` file to be compared to the other file/directory.
 
 * +input1+          - Input 1; may be any supported input format (e.g. .osm file).
 * +input2+          - Input 2; may be any supported input format (e.g. .osm file).
+* +--error-limit+   - Increase the compare error limit from the defaule value of 10
 * +--ignore-uuid+   - Ignore UUID's in the map comparison
 * +--use-datetime+  - Do not ignore source:datetime & source:ingest:datetime
-* +--error-limit+   - Increase the compare error limit from the defaule value of 10
 
 === Usage
 
 --------------------------------------
-diff (input1) (input2) [--ignore-uuid] [--use-datetime] [--error-limit limit]
+hoot diff (input1) (input2) [--error-limit limit] [--ignore-uuid] [--use-datetime]
 --------------------------------------
 
 https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#calculate-the-difference-between-two-maps[Examples]

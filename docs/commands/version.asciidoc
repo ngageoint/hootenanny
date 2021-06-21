@@ -9,6 +9,6 @@ and statistics.
 === Usage
 
 --------------------------------------
-version [--debug]
+hoot version [--debug]
 --------------------------------------
 

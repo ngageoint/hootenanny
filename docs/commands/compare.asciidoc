@@ -30,7 +30,7 @@ The following types of scores are provided in the score result:
 === Usage
 
 --------------------------------------
-compare (base1) [base2] (uut) [criteria] (--disable-attribute | --disable-raster> | --disable-graph)
+hoot compare (base1) [base2] (uut) [criteria] (--disable-attribute | --disable-raster> | --disable-graph)
 --------------------------------------
 
 https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#comparison[Examples]

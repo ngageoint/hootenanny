@@ -22,14 +22,14 @@ second should be the newer dataset.
 * +output+                - Output location; must be a changeset .osc or .osc.sql file.
 * +osmApiDatabaseUrl+     - Target OSM API database the derived changeset is to be applied, used to maintain element ID 
                             continuity. Required only if the changeset output format is .osc.sql. Used to maintain element 
-                            ID continuity with the database target for a derived changeset. 
-* +--replacement+         - Causes data from input2 to completely replace data in input1. Leave input2 empty ("") to cut 
-                            data out of input1 while adding no replacement data from input2. 
+                            ID continuity with the database target for a derived changeset.
 * +--enable-way-snapping+ - Optionally snap unconnected ways in the replacement data to the data being replaced. This option
                             is only valid if the +--replacement+ option is used. This is generally used to smooth out ways 
                             at the edge of the replacement boundary when the dataset used for replacement has very 
                             different linear data than the data being replaced. This option is ignored when using the cut 
                             only replacement workflow (no second input).
+* +--replacement+         - Causes data from input2 to completely replace data in input1. Leave input2 empty ("") to cut 
+                            data out of input1 while adding no replacement data from input2.
 * +--stats+               - Displays changeset statistics and may be optionally followed by an output JSON file name to write 
                             the statistics to. If a file is not specified, statistics are printed to the screen. Valid 
                             when writing the .osc changeset output format only.
@@ -40,7 +40,7 @@ second should be the newer dataset.
 === Usage
 
 --------------------------------------
-changeset-derive (input1) [input2] (output) [osmApiDatabaseUrl] [--replacement] [--enable-way-snapping] [--stats filename] [--write-bounds]
+hoot changeset-derive (input1) [input2] (output) [osmApiDatabaseUrl] [--replacement] [--enable-way-snapping] [--stats filename] [--write-bounds]
 --------------------------------------
 
 https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#applying-changes[Examples]

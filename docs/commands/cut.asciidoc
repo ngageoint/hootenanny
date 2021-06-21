@@ -23,7 +23,7 @@ are written to 'output'. The dough input is limited by the available RAM.
 === Usage
 
 --------------------------------------
-cut (cutter-shape) (dough) (output) [buffer] [--crop]
+hoot cut (cutter-shape) (dough) (output) [buffer] [--crop]
 --------------------------------------
 
 https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#cut-a-section-out-of-a-map[Examples]

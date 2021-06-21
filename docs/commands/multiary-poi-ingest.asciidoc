@@ -15,7 +15,7 @@ difference between new and existing data.
 === Usage
 
 --------------------------------------
-multiary-poi-ingest (input) (translationScript) (referenceOutput) (changesetOutput)
+hoot multiary-poi-ingest (input) (translationScript) (referenceOutput) (changesetOutput)
 --------------------------------------
 
 ==== Examples

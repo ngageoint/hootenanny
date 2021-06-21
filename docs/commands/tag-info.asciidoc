@@ -6,28 +6,27 @@
 The +tag-info+ command displays unique feature tag values found in one or more inputs, grouped by tag key. 
 
 * +input(s)+            - One or more inputs; may be any supported input format (e.g. .osm file).
-* +--tag-values-limit+  - Limits the number of unique tag values printed per tag key. By default, there is no limit. This 
-                          option is ignored if --keys-only is specified.
+* +--case-insensitive+  - If this option is specified, tag key comparisons are not case sensitive. By default the comparisons 
+                          are case sensitive.
+* +--delimited-text+    - By default, JSON output is generated. If this option is specified, a delimited list with the format
+                          "key1;key2..." is returned. Value when the `--keys-only` option is used only.
 * +--keys+              - Prints unique tag values for the specified keys only.  Delimit multiple keys with a semicolon 
                           (e.g. "key1;key2"). This option is ignored if `--keys-only` is specified.
 * +--keys-only+         - Prints tag keys only and does not print any associated values.
-* +--case-insensitive+  - If this option is specified, tag key comparisons are not case sensitive. By default the comparisons 
-                          are case sensitive.
 * +--partial-key-match+ - If this option is specified, then any key in a feature which partially matches the given set of keys 
                           in `--keys` will have its tag value added to the output. By default, keys must be an exact match 
                           with each other for the tag value to be written to output.
-* +--delimited-text+    - By default, JSON output is generated. If this option is specified, a delimited list with the format
-                          "key1;key2..." is returned. Value when the `--keys-only` option is used only.
-* +--recursive+         - Allows for displaying tag information for data recursively in a directory structure. 
-                          This must be followed by either "*" to denote no filtering or one or more wildcard name filters. 
-                          e.g. "*.osm;*.json" or "*myFile*". The recursion is only performed on file directories and 
-                          this parameter is ignored for other input types.
+* +--recursive+         - Allows forprocessing inputs recursively in a directory structure. This must be followed by 
+                          either "*" to denote no filtering or one or more wildcard name filters. e.g. "*.osm;*.json" 
+                          or "*myFile*".
+* +--tag-values-limit+  - Limits the number of unique tag values printed per tag key. By default, there is no limit. This 
+                          option is ignored if --keys-only is specified.
 
 === Usage
 
 --------------------------------------
-tag-info (input1) [input2...] [--tag-values-limit] [--keys-only "key1;key2..."] [--keys-only] \
-  [--case-insensitive] [--delimited-text] [--recursive]
+hoot tag-info (input1) [input2...] [--case-insensitive] [--delimited-text] [--keys "key1;key2..."] [--keys-only] \
+  [--partial-key-match] [--recursive "*"|"filter1;filter2..."] [--tag-values-limit]
 --------------------------------------
 
 https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#display-tag-schema-information-for-a-map[Examples]

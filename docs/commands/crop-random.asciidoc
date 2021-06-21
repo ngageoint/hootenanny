@@ -20,7 +20,7 @@ useful if you have a very large file dataset and need a smaller subset of data t
 === Usage
 
 --------------------------------------
-crop-random (input1) [input2...] (output.osm) (maxNodeCount) (pixelSize) [--randomSeed seedValue]
+hoot crop-random (input1) [input2...] (output.osm) (maxNodeCount) (pixelSize) [--randomSeed seedValue]
 --------------------------------------
 
 https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#crop-out-a-random-subset-of-data-with-a-maximum-node-size[Examples]

@@ -19,8 +19,8 @@ command will return an error if any manual match is invalid.
 === Usage
 
 --------------------------------------
-score-matches [--confusion] [--validation-off] (input1 input2) [input1 input2 ...] (output)
-score-matches [--confusion] [--optimize] [--validation-off] (input1 input2) [input1 input2 ...]
+hoot score-matches (input1 input2) [input1 input2 ...] (output) [--confusion] [--validation-off]
+hoot score-matches (input1 input2) [input1 input2 ...] [--confusion] [--optimize] [--validation-off]
 --------------------------------------
 
 === Examples
