@@ -54,7 +54,10 @@ public:
   QString getDescription() const override { return "Calculates the bounds of a map"; }
 
   int runSimple(QStringList& args) override
-  {    
+  {
+    bool recursive = false;
+    const QStringList inputFilters = _parseRecursiveInputParameter(args, recursive);
+
     if (args.size() < 1)
     {
       std::cout << getHelp() << std::endl << std::endl;
