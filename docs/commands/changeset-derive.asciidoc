@@ -40,7 +40,7 @@ second should be the newer dataset.
 === Usage
 
 --------------------------------------
-hoot changeset-derive (input1) [input2] (output) [osmApiDatabaseUrl] [--replacement] [--enable-way-snapping] [--stats filename] [--write-bounds]
+hoot changeset-derive (input1) [input2] (output) [osmApiDatabaseUrl] [--enable-way-snapping] [--replacement]  [--stats filename] [--write-bounds]
 --------------------------------------
 
 https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#applying-changes[Examples]
