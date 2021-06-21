@@ -9,14 +9,13 @@ The scores provided give an idea of similarity between maps. A score of 1000 mea
 0 means the maps are very different.
 
 * +base1+                 - The first map file to compare; may be any supported input format.
-* +base2+                 - (optional) The second base map file to compare; may be any supported input format.
+* +base2+                 - Optional second base map file to compare; may be any supported input format.
 * +uut+                   - The map file being evaluated; may be any supported input format.
-* +criteria+              - (optional) Filtering criteria for the inputs; May be one or more class names inheriting 
-                            from `ElementCriterion` delimited with a semicolon and surrounded by quotes. By default, multiple 
-                            criteria are logically OR'd together. Set the `element.counter.chain.element.criteria` option 
-                            to true to have the criteria logically AND'd together. The criteria can be negated with the 
-                            option `element.criteria.negate`. Use the +info --operators+ command to obtain a list of 
-                            available criteria.
+* +--criteria+            - Optional filtering criteria for the inputs; May be one or more class names inheriting 
+                            from `ElementCriterion`. By default, multiple criteria are logically OR'd together. Set 
+                            the `element.counter.chain.element.criteria` option to true to have the criteria logically 
+                            AND'd together. The criteria can be negated with the option `element.criteria.negate`. Use 
+                            the +info --operators+ command to obtain a list of available criteria.
 * +--disable-<scoreType>+ - Allows for disabling any of the score types. e.g. `--disable-attribute`.
 
 The following types of scores are provided in the score result:
@@ -30,7 +29,7 @@ The following types of scores are provided in the score result:
 === Usage
 
 --------------------------------------
-hoot compare (base1) [base2] (uut) [criteria] (--disable-attribute | --disable-raster> | --disable-graph)
+hoot compare (base1) [base2] (uut) [--criteria] (--disable-attribute | --disable-raster> | --disable-graph)
 --------------------------------------
 
 https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#comparison[Examples]
