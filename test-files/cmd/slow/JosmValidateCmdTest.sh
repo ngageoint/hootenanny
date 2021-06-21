@@ -34,6 +34,12 @@ hoot diff $LOG_LEVEL $CONFIG $comparefile $outputfile || diff $comparefile $outp
 echo ""
 echo "Validating multiple inputs..."
 echo ""
-# Just loading the same file twice for now.
+# Just loading the same file twice for now. Should get double the number of validation errors 
+# compared to the single input file.
 hoot validate $LOG_LEVEL $CONFIG -D josm.validators.include=$VALIDATORS $inputfile $inputfile --output $OUTPUT_FILE_MULTIPLE
 hoot diff $LOG_LEVEL $CONFIG $COMPARE_FILE_MULTIPLE $OUTPUT_FILE_MULTIPLE || diff $COMPARE_FILE_MULTIPLE $OUTPUT_FILE_MULTIPLE
+
+echo ""
+echo "Validating recursively in a directory structure with a filter..."
+echo ""
+hoot validate $LOG_LEVEL $CONFIG -D josm.validators.include=$VALIDATORS test-files/ops/JosmMapCleanerTest --recursive "*.json"

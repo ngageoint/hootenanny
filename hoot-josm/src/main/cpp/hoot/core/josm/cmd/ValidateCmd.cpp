@@ -60,6 +60,11 @@ public:
       args.removeAt(args.indexOf("--available-validators"));
     }
 
+    bool recursive = false;
+    const QStringList inputFilters = _parseRecursiveInputParameter(args, recursive);
+    LOG_VARD(recursive);
+    LOG_VARD(inputFilters);
+
     if (showAvailableValidatorsOnly)
     {
       _printJosmValidators();
@@ -82,7 +87,16 @@ public:
       }
 
       // Everything left is an input.
-      const QStringList inputs = args;
+      QStringList inputs;
+      if (!recursive)
+      {
+        inputs = args;
+      }
+      else
+      {
+        inputs = IoUtils::getSupportedInputsRecursively(args, inputFilters);
+      }
+      LOG_VARD(inputs);
 
       OsmMapPtr map(new OsmMap());
       if (inputs.size() == 1)

@@ -1636,16 +1636,28 @@ hoot task-grid test-files/MyInputFile.osm MyOutputFile.geojson --maxNodesPerCell
 
 === Validation
 
-==== Run JOSM validation on a map:
+==== Run validation on a map:
 
 -----
     hoot validate input.osm
 -----
 
-==== Run JOSM validation on a map and mark failing features:
+==== Run validation on a map and mark failing features:
 
 -----
     hoot validate input.osm output.osm
+-----
+
+==== Run validation on map data recursively across multiple files under a directory:
+
+-----
+    hoot validate /my/dir output.osm --recursive "*"
+-----
+
+==== Run validation on map data map data recursively across multiple OSM files under a directory:
+
+-----
+    hoot validate /my/dir output.osm --recursive "*.osm"
 -----
 
 ==== List the available JOSM validators:

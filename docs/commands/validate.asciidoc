@@ -11,15 +11,19 @@ The +validate+ command uses JOSM to identify data with common erroneous aspects 
                              specified, then only a validation error summary will be displayed.
 * +--available-validators+ - Displays available JOSM validators for use in validation. Not all validators have cleaning 
                              (auto-fix) capabilities. If this option is selected, neither an input or output must be specified.
+* +--recursive+            - Allows for validating elements recursively in a directory structure. This must be followed 
+                             by either "*" to denote no filtering or one or more wildcard name filters. e.g. "*.osm;*.json" 
+                             or "*myFile*". The recursion is only performed on file directories and this parameter is 
+                             ignored for other input types.
 
 === Usage
 
 --------------------------------------
-# perform validation
-validate (input1) [input2...] [--output path]
-
 # list the available validators
 validate [--available-validators]
+
+# perform validation
+validate (input1) [input2...] [--output path] [--recursive "*"|"filter1;filter2..."]
 --------------------------------------
 
 https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#validation[Examples]
