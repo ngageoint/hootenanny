@@ -1431,11 +1431,11 @@ void OsmPbfReader::_parseTimestamp(const hoot::pb::Info& info, Tags& t) const
 std::shared_ptr<OGRSpatialReference> OsmPbfReader::getProjection() const
 {
   std::shared_ptr<OGRSpatialReference> wgs84(new OGRSpatialReference());
+  wgs84->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
   if (wgs84->SetWellKnownGeogCS("WGS84") != OGRERR_NONE)
   {
     throw HootException("Error creating EPSG:4326 projection.");
   }
-  wgs84->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
   return wgs84;
 }
 

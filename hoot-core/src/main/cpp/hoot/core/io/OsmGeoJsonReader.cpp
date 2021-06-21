@@ -206,8 +206,8 @@ void OsmGeoJsonReader::_parseCoordSys()
     {
       LOG_DEBUG("Setting map projection to EPSG: " << crs);
       std::shared_ptr<OGRSpatialReference> spatRef(new OGRSpatialReference());
-      spatRef->importFromEPSG(crs);
       spatRef->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
+      spatRef->importFromEPSG(crs);
       _map->setProjection(spatRef);
     }
   }

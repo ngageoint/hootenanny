@@ -286,20 +286,19 @@ std::shared_ptr<OGRSpatialReference> OgrReaderInternal::_fixProjection(
   if (epsgOverride >= 0)
   {
     result.reset(new OGRSpatialReference());
-
+    result->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
     if (result->importFromEPSG(epsgOverride) != OGRERR_NONE)
     {
       throw HootException(QString("Error creating EPSG:%1 projection.").arg(epsgOverride));
     }
-    result->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
     return result;
   }
 
   // proj4 requires some extra parameters to handle Google map style projections. Check for this
   // situation for known EPSGs and warn/fix the issue.
   result.reset(new OGRSpatialReference());
-  result->importFromEPSG(3785);
   result->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
+  result->importFromEPSG(3785);
   if (srs && result->IsSame(srs.get()) &&
     _toWkt(result.get()) != _toWkt(srs.get()))
   {
@@ -1074,11 +1073,11 @@ void OgrReaderInternal::_openLayer(const QString& path, const QString& layer)
   {
     LOG_DEBUG("Input SRS: " << _toWkt(sourceSrs.get()));
     _wgs84.reset(new OGRSpatialReference());
+    _wgs84->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
     if (_wgs84->SetWellKnownGeogCS("WGS84") != OGRERR_NONE)
     {
       throw HootException("Error creating EPSG:4326 projection.");
     }
-    _wgs84->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
     _transform = OGRCreateCoordinateTransformation(sourceSrs.get(), _wgs84.get());
 
     if (_transform == nullptr)
@@ -1392,11 +1391,11 @@ void OgrReaderInternal::populateElementMap()
 std::shared_ptr<OGRSpatialReference> OgrReaderInternal::getProjection() const
 {
   std::shared_ptr<OGRSpatialReference> wgs84(new OGRSpatialReference());
+  wgs84->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
   if (wgs84->SetWellKnownGeogCS("WGS84") != OGRERR_NONE)
   {
     throw HootException("Error creating EPSG:4326 projection.");
   }
-  wgs84->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
   return wgs84;
 }
 

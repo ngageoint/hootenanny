@@ -110,8 +110,8 @@ std::shared_ptr<InBoundsCriterion> ConfigUtils::getBoundsFilter(const ConstOsmMa
       // the bounds.
       LOG_DEBUG("Reprojecting bounds: " << boundsStr << "...");
       std::shared_ptr<OGRSpatialReference> srs84(new OGRSpatialReference());
-      srs84->SetWellKnownGeogCS("WGS84");
       srs84->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
+      srs84->SetWellKnownGeogCS("WGS84");
       MapProjector::project(bounds, srs84, map->getProjection());
     }
     boundsCrit->setBounds(bounds);
