@@ -20,7 +20,7 @@ given bounds. This behavior may be customized with the `crop.*` configuration op
 === Usage
 
 --------------------------------------
-crop (input1) [input2...] (output) (bounds) [--recursive] [--write-bounds]
+crop (input1) [input2...] (output) (bounds) [--recursive "*"|"filter1;filter2..."] [--write-bounds]
 --------------------------------------
 
 https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#crop-a-map-to-an-extent[Examples]
