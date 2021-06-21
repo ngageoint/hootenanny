@@ -6,16 +6,26 @@ OUTPUT_DIR=test-output/cmd/slow/ConvertCmdTest
 rm -rf $OUTPUT_DIR
 mkdir -p $OUTPUT_DIR
 
+RECURSIVE_INPUT=test-files/cmd/slow/CountCmdTest/inputDir
+
 CONFIG="-C Testing.conf"
 LOG_LEVEL="--warn"
 
 echo "Multiple OSM to single OSM..."
 hoot convert $CONFIG test-files/ToyTestA.osm test-files/ToyTestB.osm $OUTPUT_DIR/ToyTestC.osm
-hoot diff $CONFIG test-files/cmd/slow/ConvertCmdTest/ToyTestC.osm $OUTPUT_DIR/ToyTestC.osm
+hoot diff $CONFIG $INPUT_DIR/ToyTestC.osm $OUTPUT_DIR/ToyTestC.osm
 
-#echo "OSM by filter in dir to single OSM..."
-#hoot convert $CONFIG test-files $OUTPUT_DIR/ToyTestC.osm
-#hoot diff $CONFIG test-files/cmd/slow/ConvertCmdTest/ToyTestC.osm $OUTPUT_DIR/ToyTestC.osm
+echo "OSM dir with no filter to single OSM..."
+# The input dir has duplicated files. Set to not load data source IDs to load in the duplicated 
+# elements. The output should have duplicated features in it.
+hoot convert $CONFIG -D reader.use.data.source.ids=false $RECURSIVE_INPUT $OUTPUT_DIR/recursive-out-1.osm --recursive "*"
+hoot diff $CONFIG $INPUT_DIR/recursive-out-1.osm $OUTPUT_DIR/recursive-out-1.osm
+
+echo "OSM dir with filter to single OSM..."
+# In this case there's only one json file in the dir, so the output won't have any duplicated
+# elements due to the input filtering.
+hoot convert $CONFIG -D reader.use.data.source.ids=false $RECURSIVE_INPUT $OUTPUT_DIR/recursive-out-2.osm --recursive "*.json"
+hoot diff $CONFIG $INPUT_DIR/recursive-out-2.osm $OUTPUT_DIR/recursive-out-2.osm
 
 echo "PBF to OSM..."
 hoot convert $LOG_LEVEL $CONFIG test-files/ToyTestA.osm.pbf $OUTPUT_DIR/ToyTestA.osm
@@ -36,7 +46,7 @@ hoot diff $LOG_LEVEL $CONFIG test-files/ToyTestA.osm $OUTPUT_DIR/ToyTestA2.osm
 echo "POI Criterion..."
 # test streaming filter output to pois only
 hoot convert $LOG_LEVEL $CONFIG -D writer.xml.sort.by.id="false" -D convert.ops="hoot::PoiCriterion" test-files/conflate/unified/AllDataTypesA.osm.pbf $OUTPUT_DIR/AllDataTypesA.osm
-hoot diff $LOG_LEVEL $CONFIG test-files/cmd/slow/ConvertCmdTest/AllDataTypesAPois.osm $OUTPUT_DIR/AllDataTypesA.osm
+hoot diff $LOG_LEVEL $CONFIG $INPUT_DIR/AllDataTypesAPois.osm $OUTPUT_DIR/AllDataTypesA.osm
 
 echo "Check for invalid characters. You should see 3 sets of warnings."
 hoot convert $LOG_LEVEL $CONFIG test-files/io/InvalidCharacters.osm $OUTPUT_DIR/InvalidCharacters.osm

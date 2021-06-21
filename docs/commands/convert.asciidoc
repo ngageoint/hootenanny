@@ -11,13 +11,17 @@ See the Hootenanny User Guide Supported Data Formats section for more informatio
                      are supported unless converting to an OGR format. Path wildcards may be used for inputs within the 
                      same directory. For OGR inputs, layer names may also optionally be specified.
 * +output+         - Output path to convert to; may be any supported output format (e.g. .osm file, etc.).
+* +--recursive+    - Allows for converting data recursively in a directory structure. This must be followed by either "*" 
+                     to denote no filtering or one or more wildcard name filters. e.g. "*.osm;*.json" or "*myFile*". 
+                     This parameter is not compatible with the OGR layer syntax. The recursion is only performed on 
+                     file directories and this parameter is ignored for other input types.
 * +--write-bounds+ - If the `bounds` configuration option is specified, optionally outputs a file containing the input bounds.
                      The location of the file is controlled via the `bounds.output.file` configuration option.
 
 === Usage
 
 --------------------------------------
-convert (input) [input2...] (output)
+convert (input) [input2...] (output) [--recursive "*"|"filter1;filter2..."] [--write-bounds]
 
 # This syntax is supported for OGR inputs only.
 convert (input1[;layer]) [input2[;layer]] (output) [--write-bounds]

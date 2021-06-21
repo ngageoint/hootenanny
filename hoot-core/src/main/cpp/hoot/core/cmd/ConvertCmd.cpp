@@ -30,6 +30,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/io/DataConverter.h>
+#include <hoot/core/io/IoUtils.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
@@ -67,6 +68,9 @@ public:
 
     BoundedCommand::runSimple(args);
 
+    bool recursive = false;
+    const QStringList inputFilters = _parseRecursiveInputParameter(args, recursive);
+
     if (args.size() < 2)
     {
       cout << getHelp() << endl << endl;
@@ -88,7 +92,15 @@ public:
     const QString output = args[outputIndex];
     args.removeAt(outputIndex);
     // Everything that's left is an input.
-    const QStringList inputs = args;
+    QStringList inputs;
+    if (!recursive)
+    {
+      inputs = args;
+    }
+    else
+    {
+      inputs = IoUtils::getSupportedInputsRecursively(args, inputFilters);
+    }
 
     ConfigUtils::checkForDuplicateElementCorrectionMismatch(ConfigOptions().getConvertOps());
 
