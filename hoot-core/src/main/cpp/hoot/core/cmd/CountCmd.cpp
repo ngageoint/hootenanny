@@ -87,7 +87,6 @@ public:
     {
       inputs = IoUtils::getSupportedInputsRecursively(args, inputFilters);
     }
-    LOG_VARD(inputs);
 
     ElementCounter counter;
     counter.setCountFeaturesOnly(countFeaturesOnly);

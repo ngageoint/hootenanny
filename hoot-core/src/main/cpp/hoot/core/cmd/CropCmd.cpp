@@ -58,7 +58,7 @@ public:
   QString getDescription() const override { return "Crops a map to a bounds"; }
 
   int runSimple(QStringList& args) override
-  {      
+  {
     bool recursive = false;
     const QStringList inputFilters = _parseRecursiveInputParameter(args, recursive);
 

@@ -55,9 +55,6 @@ public:
 
   int runSimple(QStringList& args) override
   {    
-    bool recursive = false;
-    const QStringList inputFilters = _parseRecursiveInputParameter(args, recursive);
-
     if (args.size() < 1)
     {
       std::cout << getHelp() << std::endl << std::endl;

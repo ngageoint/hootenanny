@@ -15,6 +15,7 @@ echo ""
 echo "Calculating the extent of multiple inputs..."
 echo ""
 hoot extent $LOG_LEVEL $CONFIG test-files/DcGisRoads.osm test-files/ToyTestA.osm
+<<<<<<< HEAD
 
 echo ""
 echo "Calculating the extent of data recursively in a directory structure..."
