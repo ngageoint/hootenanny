@@ -19,7 +19,7 @@ stored model file. The `.arff` file is considerably smaller than the .rf output.
 ==== Usage
 
 --------------------------------------
-build-model (ref1 ref2) [ref1 ref2 ...] (output) [--export-arff-only]
+hoot build-model (ref1 ref2) [ref1 ref2 ...] (output) [--export-arff-only]
 --------------------------------------
 
 === Generate Model From Attribute-Relation File

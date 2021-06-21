@@ -107,7 +107,8 @@ void ElementStreamer::stream(
     partialWriter->finalizePartial();
   }
 
-  LOG_INFO("Streaming element I/O took: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
+  LOG_INFO(
+    "Streaming element I/O took: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
 }
 
 }

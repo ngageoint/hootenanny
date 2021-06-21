@@ -184,7 +184,7 @@ void JosmMapValidatorAbstract::apply(std::shared_ptr<OsmMap>& map)
     _initJosmValidatorsList();
   }
 
-  // pass the map to JOSM for updating
+  // Pass the map to JOSM for updating.
   MapProjector::projectToWgs84(map);
   OsmMapPtr validatedMap = _getUpdatedMap(map);
   if (validatedMap)

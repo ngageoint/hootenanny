@@ -9,7 +9,7 @@ parameters are:
 
 * +input1+ - Input 1; may be any supported input format (e.g. OSM file).
 * +input2+ - Input 2; may be any supported input format (e.g. OSM file).
-* +output+ - Output file; may be any supported output format (e.g. OSM file).
+* +output+ - Output; may be any supported output format (e.g. OSM file).
 
 The following optional defines can be set:
 
@@ -23,7 +23,7 @@ The following optional defines can be set:
 === Usage
 
 --------------------------------------
-align (input1) (input2) (output)
+hoot align (input1) (input2) (output)
 --------------------------------------
 
 https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#alignment[Examples]
@@ -43,7 +43,7 @@ To just derive a transform file that can be used separately to rubber sheet data
 === Usage With Derive Option
 
 --------------------------------------
-align --derive (input1) (input2) (transform2to1.rs) [transform1to2.rs] [--ref]
+hoot align --derive (input1) (input2) (transform2to1.rs) [transform1to2.rs] [--ref]
 --------------------------------------
 
 https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#derive-an-alignment-transform-for-two-maps[Examples]
@@ -60,7 +60,7 @@ input parameters are:
 === Usage With Apply Option
 
 --------------------------------------
-align --apply (transform.rs) (input) (output)
+hoot align --apply (transform.rs) (input) (output)
 --------------------------------------
 
 https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#apply-an-alignment-transform-for-two-maps[Examples]

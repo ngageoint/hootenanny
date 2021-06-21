@@ -3,41 +3,39 @@
 
 === Description
 
-The +tag-distribution+ command displays a distribution for all values of a specified tag key and a 
-percentage of each value's frequency compared to all other tag values.
+The +tag-distribution+ command displays a distribution of values for tags in one or more maps.
 
-* +input(s)+                 - One or more inputs; may be any supported input format (e.g. .osm file).
-* +tagKeys+                  - The tag keys to gather statistics for. To process all tags, leave this empty by specifying 
-                               a pair of quotes with nothing between them. This parameter is ignored if `--names` or `--types` 
-                               is used.
-* +criteria+                 - (optional) Filtering criteria for the inputs; May be one or more class names inheriting from 
+* +input(s)+                 - Input(s); may be any supported input format (e.g. .osm file).
+* +--criteria+               - Optional filtering criteria for the inputs; May be one or more class names inheriting from 
                                `ElementCriterion`. By default, multiple criteria are logically OR'd together. Set the 
                                `tag.distribution.chain.element.criteria` option to true to have the criteria logically 
                                AND'd together. The criteria can be negated with the option `element.criteria.negate`.
                                Use the +info --operators+ command to obtain a list of available criteria.
-* +--names+                  - If specified, `tagKeys` is ignored and only name tags, as defined by Hootenanny's schema, 
-                               are processed. This is incompatible with the `--types` option.
-* +--types+                  - If specified, `tagKeys` is ignored and only type tags, as defined by Hootenanny's schema, 
-                               are processed. This is incompatible with the `--names` option.
+* +--limit+                  - Limits the number of results returned.
+* +--names+                  - If specified, name tags, as defined by Hootenanny's schema, are used as the tag keys to 
+                               gather statistics for. This is incompatible with the `--types` option.
 * +--percentage-of-matching+ - By default with this option omitted, tag distribution percentages are based on all elements
                                parsed. Elements not possessing the tags specified in `tagKeys`, `--names`, or `--types` are
                                counted in the element total. With this option enabled, only elements which have one of the
                                specified tags are counted in the element total. Enabling this option has no effect if
-                               all tag keys are parsed (empty `tagKeys`).
+                               all tag keys are parsed (nothing specified for `tagKeys`).
+* +--recursive+              - Allows for processing inputs recursively in a directory structure. This must be followed 
+                               by either "*" to denote no filtering or one or more wildcard name filters. e.g. 
+                               "*.osm;*.json" or "*myFile*".
 * +--sort-by-value +         - Sorts results alphabetically by tag value. If not specified, results are sorted by decreasing 
                                tag value occurrence frequency.
-* +--limit+                  - Limits the number of results returned.
+* +--tagKeys+                - The tag keys to gather statistics for. If this parameter is omitted, all tag keys are 
+                               processed. This parameter is ignored if `--names` or `--types` are used.
 * +--tokenize+               - Breaks tag values up into individual tokens before counting them.
-* +--recursive+              - Allows for displaying tag information against elements recursively in a directory structure. 
-                               This must be followed by either "*" to denote no filtering or one or more wildcard 
-                               name filters. e.g. "*.osm;*.json" or "*myFile*". The recursion is only performed on 
-                               file directories and this parameter is ignored for other input types.
+* +--types+                  - If specified, type tags, as defined by Hootenanny's schema, are used as the tag keys to 
+                               gather statistics for. This is incompatible with the `--names` option.
 
 === Usage
 
 --------------------------------------
-tag-distribution ("input1;input2...") ("tagKey1;tagKey2...") ["criterion1;criterion2..."] [--names] [--types] \
-  [--percentage-of-matching] [--sort-by-value] [--limit]  [--tokenize] [--recursive]
+hoot tag-distribution (input1) [input2...] [--criteria "criterion1;criterion2..."] [--limit value] [--names] \
+  [--percentage-of-matching] [--recursive "*"|"filter1;filter2..."]  [--sort-by-value] [--tagKeys "tagKey1;tagKey2..."] \
+  [--tokenize] [--types]
 --------------------------------------
 
 https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#display-the-distribution-of-highway-tags-for-roads-in-a-map[Examples]
@@ -49,7 +47,7 @@ Usage of options can change the way the tag percentages are calculated.
 As an example, here we calculate the distribution of "highway" tags for all elements in a map:
 
 -----
-hoot tag-distribution input.osm highway --limit 3
+hoot tag-distribution input.osm --tagKeys highway --limit 3
 
 Total elements processed: 8,707. Total tags processed: 6,529.
 401	(4.61%)	highway=residential
@@ -64,7 +62,7 @@ Now, we run the same calculation, but restrict the elements parsed to only those
 (`HighwayCriterion`). Hootenanny classifies roads as way elements possessing a "highway" tag.
 
 -----
-hoot tag-distribution input.osm highway HighwayCriterion --limit 3
+hoot tag-distribution input.osm --tagKeys highway --criteria HighwayCriterion --limit 3
 
 Total elements processed: 673. Total tags processed: 5,565. Filtered by: hoot::HighwayCriterion.
 401	(59.6%)	highway=residential
@@ -79,7 +77,7 @@ Finally, we have a third option for counting "highway" tags where we only count 
 without restricting the elements parsed to those that Hootenanny deems to be roads (`HighwayCriterion`).
 
 -----
-hoot tag-distribution input.osm highway --percentage-of-matching --limit 3
+hoot tag-distribution input.osm --tagKeys highway --percentage-of-matching --limit 3
 
 Total elements processed: 721. Total tags processed: 6,529.
 401	(55.6%)	highway=residential

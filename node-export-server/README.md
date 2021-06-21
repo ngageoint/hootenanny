@@ -15,19 +15,6 @@ To start the service run
 
     npm start
 
-There is also an init.d script provided that can be used to automate the start/stop of this service.
-
-```
-sudo cp init.d/node-export-server /etc/init.d
-sudo service node-export-server [start|stop|status|restart]
-# optionally start/stop on boot/shutdown
-sudo update-rc.d node-export-server defaults
-# to remove
-sudo update-rc.d -f node-export-server remove
-```
-
-*Note:*  Adding the init.d script to rc.d will not work for Vagrant vms, due to the late mounting of the shared folder. The Vagrantfile works around this by adding a 'run always' inline command to start the service.
-
 ### Configuration
 The service uses a json configuration file, `config.json`.  Any valid Hootenanny input source string (*i.e.* OGR datasource) can be configured as an export datasource.  Initally this was a PostGIS render db generated with `osm2pgsql` (*Note: this is the only datasource that will export with the schema/format combination of OSM/Shapefile and OSM/FileGeodatabase.*), but now includes connections to osm api db and osm api web service.  OSM and PBF files could be used, but I do not believe the hoot bounds param works with them.  In the future the overpass api service could be added.
 

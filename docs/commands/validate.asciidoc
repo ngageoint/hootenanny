@@ -3,21 +3,26 @@
 
 === Description
 
-The +validate+ command uses JOSM to identify data with common erroneous aspects without fixing it.
+The +validate+ command uses JOSM to identify map data with erroneous aspects.
 
-* +input+                  - Input; may be any supported input format (e.g. .osm file).
-* +output+                 - (optional) Output file; may be any supported output format (e.g. .osm file). If 
-                             specified, elements with validation will be marked with tags in the output file. If not 
-                             specified, then only a validation error summary will be displayed.
+* +input(s)+               - Input(s); may be any supported input format (e.g. .osm file).
+* +--output+               - Optional output; may be any supported output format (e.g. .osm file). If specified, elements 
+                             with validation will be marked with tags in the output file. If not specified, then only 
+                             a validation error summary will be displayed.
 * +--available-validators+ - Displays available JOSM validators for use in validation. Not all validators have cleaning 
-                             (auto-fix) capabilities. If this option is selected, neither an input or output must be specified.
+                             (auto-fix) capabilities. If this option is selected, neither an input or output need be specified.
+* +--recursive+            - Allows for processing inputs recursively in a directory structure. This must be followed 
+                             by either "*" to denote no filtering or one or more wildcard name filters. e.g. "*.osm;*.json" 
+                             or "*myFile*".
 
 === Usage
 
 --------------------------------------
-validate (input) [output]
+# list the available validators
+hoot validate [--available-validators]
 
-validate [--available-validators]
+# perform validation
+hoot validate (input1) [input2...] [--output path] [--recursive "*"|"filter1;filter2..."]
 --------------------------------------
 
 https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#validation[Examples]

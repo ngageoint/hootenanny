@@ -12,67 +12,70 @@ INPUT_FILE_4=test-files/conflate/generic/rivers/Haiti_osm_waterway_ss_REF2-cropp
 INPUT_FILE_5=test-files/cmd/slow/CountCmdTest/inputDir
 
 CONFIG="-C Testing.conf"
+LOG_LEVEL="--warn"
 
 echo ""
 echo "counting all features..."
-hoot count --warn $CONFIG "$INPUT_FILE_1;$INPUT_FILE_2"
+hoot count $LOG_LEVEL $CONFIG $INPUT_FILE_1 $INPUT_FILE_2
 
 echo ""
 echo "counting all elements..."
-hoot count --warn $CONFIG "$INPUT_FILE_1;$INPUT_FILE_2" --all-elements
+hoot count $LOG_LEVEL $CONFIG $INPUT_FILE_1 $INPUT_FILE_2 --all-elements
 
 # RiverCriterion is not a map consumer, so streaming I/O will occur.
 
 echo ""
 echo "counting all rivers..."
-hoot count --warn $CONFIG "$INPUT_FILE_3;$INPUT_FILE_4" RiverCriterion
+hoot count $LOG_LEVEL $CONFIG $INPUT_FILE_3 $INPUT_FILE_4 --criteria RiverCriterion
 
 echo ""
 echo "counting all elements that are not rivers..."
-hoot count --warn $CONFIG -D element.criteria.negate=true "$INPUT_FILE_3;$INPUT_FILE_4" RiverCriterion
+hoot count $LOG_LEVEL $CONFIG -D element.criteria.negate=true $INPUT_FILE_3 $INPUT_FILE_4 --criteria RiverCriterion
 
 # PoiCriterion is a map consumer, so streaming I/O cannot occur.
 
 echo ""
 echo "counting all POIs..."
-hoot count --warn $CONFIG "$INPUT_FILE_1;$INPUT_FILE_2" hoot::PoiCriterion
+hoot count $LOG_LEVEL $CONFIG $INPUT_FILE_1 $INPUT_FILE_2 --criteria hoot::PoiCriterion
 
 echo ""
 echo "counting all elements that are not POIs..."
-hoot count --warn $CONFIG -D element.criteria.negate=true "$INPUT_FILE_1;$INPUT_FILE_2" PoiCriterion
+hoot count $LOG_LEVEL $CONFIG -D element.criteria.negate=true $INPUT_FILE_1 $INPUT_FILE_2 --criteria PoiCriterion
 
 # Check to make sure multi-layer gdb's get parsed correctly.
 
 echo ""
 echo "counting all element from multi-layer GDB..."
-hoot count $INPUT_DIR/input.gdb --all-elements
+hoot count $LOG_LEVEL $CONFIG $INPUT_DIR/input.gdb --all-elements
 
 # Check combos of crits and crit related options
 
 echo ""
 echo "counting all rivers and POIs..."
-hoot count --warn $CONFIG "$INPUT_FILE_1;$INPUT_FILE_2;$INPUT_FILE_3;$INPUT_FILE_4" "RiverCriterion;PoiCriterion"
+hoot count $LOG_LEVEL $CONFIG $INPUT_FILE_1 $INPUT_FILE_2 $INPUT_FILE_3 $INPUT_FILE_4 --criteria "RiverCriterion;PoiCriterion"
 
 echo ""
 echo "counting elements that are both rivers and POIs..."
-hoot count --warn $CONFIG -D element.criteria.chain=true "$INPUT_FILE_1;$INPUT_FILE_2;$INPUT_FILE_3;$INPUT_FILE_4" "RiverCriterion;PoiCriterion"
+hoot count $LOG_LEVEL $CONFIG -D element.criteria.chain=true $INPUT_FILE_1 $INPUT_FILE_2 $INPUT_FILE_3 $INPUT_FILE_4 \
+  --criteria "RiverCriterion;PoiCriterion"
 
 echo ""
 echo "counting elements that are not POIs..."
-hoot count --warn $CONFIG -D element.criteria.negate=true "$INPUT_FILE_1;$INPUT_FILE_2;$INPUT_FILE_3;$INPUT_FILE_4" PoiCriterion
+hoot count $LOG_LEVEL $CONFIG -D element.criteria.negate=true $INPUT_FILE_1 $INPUT_FILE_2 $INPUT_FILE_3 $INPUT_FILE_4 \
+  --criteria PoiCriterion
 
 echo ""
 echo "counting recursively in a directory structure..."
-hoot count --warn $CONFIG "$INPUT_FILE_1;$INPUT_FILE_5" --recursive "*"
+hoot count $LOG_LEVEL $CONFIG $INPUT_FILE_1 $INPUT_FILE_5 --recursive "*"
 
 echo ""
 echo "counting recursively in a directory structure with one filter..."
-hoot count --warn $CONFIG "$INPUT_FILE_1;$INPUT_FILE_5" --recursive "*.json"
+hoot count $LOG_LEVEL $CONFIG $INPUT_FILE_1 $INPUT_FILE_5 --recursive "*.json"
 
 echo ""
 echo "counting recursively in a directory structure with two filters..."
-hoot count --warn $CONFIG "$INPUT_FILE_1;$INPUT_FILE_5" --recursive "*.json;*.osm"
+hoot count $LOG_LEVEL $CONFIG $INPUT_FILE_1 $INPUT_FILE_5 --recursive "*.json;*.osm"
 
 echo ""
 echo "counting recursively in a directory structure with a criterion..."
-hoot count --warn $CONFIG "$INPUT_FILE_1;$INPUT_FILE_5" HighwayCriterion --recursive "*"
+hoot count $LOG_LEVEL $CONFIG $INPUT_FILE_1 $INPUT_FILE_5 --criteria HighwayCriterion --recursive "*"

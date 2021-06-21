@@ -3,68 +3,56 @@
 
 === Description
 
-The +convert+ command converts map data from one input format to another.  Optionally, a schema translation may be 
-performed during the conversion.  The process may be memory bound depending upon the input or output formats selected.  
-See the Hootenanny User Guide Supported Data Formats section for more information.
+The +convert+ command converts map data from one format to another.  Optionally, data may be schema translated during 
+the conversion.  The process may be memory bound depending upon the input or output formats selected.
 
-* +input(s)+       - Input path(s) to convert from; may be any supported input format (e.g. .osm file). Multiple inputs 
-                     are supported unless converting to an OGR format. Path wildcards may be used for inputs within the 
-                     same directory. For OGR inputs, layer names may also optionally be specified.
-* +output+         - Output path to convert to; may be any supported output format (e.g. .osm file, etc.).
+* +input(s)+       - Input(s); may be any supported input format (e.g. .osm file). Path wildcards may be used for inputs 
+                     within the same directory. For OGR inputs, layer filtering may be performed (see syntax in Usage section).
+* +output+         - Output; may be any supported output format (e.g. .osm file).
+* +--recursive+    - Allows for processing inputs recursively in a directory structure. This must be followed by either "*" 
+                     to denote no filtering or one or more wildcard name filters. e.g. "*.osm;*.json" or "*myFile*". 
+                     This parameter is not compatible with the OGR layer syntax.
 * +--write-bounds+ - If the `bounds` configuration option is specified, optionally outputs a file containing the input bounds.
                      The location of the file is controlled via the `bounds.output.file` configuration option.
 
 === Usage
 
 --------------------------------------
-convert (input) [input2...] (output)
+hoot convert (input) [input2...] (output) [--recursive "*"|"filter1;filter2..."] [--write-bounds]
 
-# This syntax is upported for OGR inputs only.
-convert (input1[;layer]) [input2[;layer]] (output) [--write-bounds]
+# This syntax is supported for OGR inputs only.
+hoot convert (input1[;layer]) [input2[;layer]] (output) [--write-bounds]
 --------------------------------------
 
 https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#conversion[Examples]
 
+=== Translating Features
+
+The configuration option, `schema.translation.script`, may be used to schema translate feature during the conversion process.
+
 === Conversion Operations
 
-If the `convert.ops` configuration option is included, then all the specified operations are applied
-to the map, in order, before writing the result to the output. If a schema translation script is
-specified in schema.translation.script a SchemaTranslationVisitor is automatically added to the
-convert operations, so explicitly specifying it is unnecessary but will not cause problems.
+The `convert.ops` configuration option can be used to apply map operations to data during conversion. Information about the
+available conversion operations may be found with:
+
+-----
+hoot info --operators
+-----
 
 === Filtering Features Geographically
 
-If the configuration option, `bounds`, is set to a valid geographic bounds (see the configuration 
-option documentation for formats), supporting readers will read data only from within the specified 
-bounds. The `bounds.*` configuration options allow for further customization of the bounds 
-requirement.
+If the configuration option, `bounds`, is set to a valid geographic bounds (see the configuration option documentation 
+for formats), supporting readers will read data only from within the specified bounds. The `bounds.*` configuration options 
+allow for further customization of the bounds requirement.
 
-=== Notes
+=== Shape Files
 
-* The format for OSM database URLs is: protocol://<user name>:<password>@<host name>:<port>/<database name>
-* The format for OGR database URLs is: PG:"dbname='databasename' host='addr' port='5432' user='x' password='y'"
-* Writing to OSM API databases (osmapidb://) is intended to be a bulk operation for new data only (no updates on existing data).
-* When converting from OSM to an OGR format, the +convert+ command provides conversion from .osm files or POSTGIS osm 
-databases to Shapefile, FileGDB, etc. The OGR libraries are used on the back end so other formats such as PostGIS and 
-SQLite will likely work, but are not tested.
-* The conversion from OSM file to shape file is a lossy process that generates a point, line and polygon shapefile. The OSM 
-XML format is a richer format than Shapefile and supports such things as multiple geometry types within one file, 
+* The conversion from OSM file to shape file is a lossy process that generates a point, line and polygon shapefile. The 
+OSM XML format is a richer format than Shapefile and supports such things as multiple geometry types within one file, 
 inherit topology and arbitrary tagging. For these reasons the conversion to Shapefile is a lossy conversion.
-* To use file geodatabases, the File Geodatabase module must be compiled into your version of GDAL to work. See
-http://trac.osgeo.org/gdal/wiki/FileGDB for details.
-* A file geodatabase with files in a directory must have the top level directory named as *.gdb in order to be 
-recognized correctly.
-* A directory of shape files must have the top level directory named as *.shp in order to be recognized correctly.
-* The format for specifying zip file data is: "/vsizip/<path to Zip file>/<path to the shape file INSIDE the Zip file>. 
-The "/" are field separators. If you get errors using absolute paths, check that you have the right number of "/".
-** a Zip file located at /gis-data/test_data.zip
-*** The path to the shapefile inside the Zip file: "dir/LAP010.shp
-*** The input is: "/vsizip//gis-data/test_data.zip/dir/LAP010.shp"
-*** If the Zip file is in the current directory, the input will be: /vsizip/./test_data.zip/dir/LAP010.shp
-*** If you do not specify a specific shapefile then it will read in all shapefiles in the given directory
-* To prevent memory bound conversion when converting to OSM XML, you must set the writer.xml.sort.by.id configuration option to false.
+* Column filtering for shape files is supported with the `shape.file.writer.cols` configuration option.
 
 === See Also
 
-* https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc#applying-changes-1[Supported Input Formats]
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc[Supported Input Formats]
 * `bounds.*` configuration options

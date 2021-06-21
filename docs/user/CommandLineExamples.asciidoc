@@ -94,19 +94,32 @@ See the User Guide for more specific details on command usage. Most of these exa
 ==== Derive a changeset between two maps and write the result directly to an OSM API database:
 
 -----
-    hoot changeset-derive inputData1.osm inputData2.osm changeset.osc.sql
+    hoot changeset-derive inputData1.osm inputData2.osm changeset.osc.sql \
+      --osmApiDatabaseUrl osmapidb://username:password@localhost:5432/databaseName
     hoot changeset-apply changeset.osc.sql osmapidb://username:password@localhost:5432/databaseName
 -----
 
 === Cleaning
 
-==== Clean erroneous data from two maps:
+==== Clean erroneous data from a map:
 
 -----
     hoot clean input.osm output.osm
 -----
 
-==== Clean erroneous data from two maps using Hooteanny's default cleaning operations plus JOSM's cleaning capabilities:
+==== Clean erroneous data recursively across multiple files under a directory:
+
+-----
+    hoot clean /my/dir output.osm --recursive "*"
+-----
+
+==== Clean erroneous data recursively across multiple OSM files under a directory:
+
+-----
+    hoot clean /my/dir output.osm --recursive "*.osm"
+-----
+
+==== Clean erroneous data from a map using Hooteanny's default cleaning operations plus JOSM's cleaning capabilities:
 
 -----
     hoot clean -D map.cleaner.transforms++=JosmMapCleaner input.osm output.osm
@@ -447,6 +460,18 @@ hoot convert -D convert.ops="UnlikelyRoadRemover" input.osm output.osm
 -----
     hoot convert -D bounds="-71.4745,42.4841;-71.4669,42.4918;-71.4619,42.4839;-71.4745,42.4841" \
       input1.osm input2.osm output.osm
+-----
+
+==== Combine multiple maps recursively across multiple files under a directory:
+
+-----
+    hoot convert /my/dir output.osm --recursive "*"
+-----
+
+==== Combine multiple maps recursively across multiple OSM files under a directory:
+
+-----
+    hoot convert /my/dir output.osm --recursive "*.osm"
 -----
 
 ==== Combine like polygons together without using full-fledged conflation:
@@ -890,46 +915,58 @@ Requires a language translation server installation.  See the Hootenanny Install
 
 -----
     hoot count -D in.bounds.criterion.bounds="-77.0551,38.8845,-77.0281,38.9031" -D in.bounds.criterion.strict=true \
-      input.osm InBoundsCriterion
+      input.osm --criteria InBoundsCriterion
 -----
 
 ==== Count all the POIs in multiple maps:
 
 -----
-    hoot count "input1.osm;input2.osm" PoiCriterion
+    hoot count input1.osm input2.osm --criteria PoiCriterion
 -----
 
 ==== Count all elements that are not POIs:
 
 -----
-    hoot count -D element.criteria.negate=true "input1.osm;input2.osm" PoiCriterion \
+    hoot count -D element.criteria.negate=true "input1.osm;input2.osm" --criteria PoiCriterion \
       --all-elements
+-----
+
+==== Count all elements that are either POIs or roads:
+
+-----
+    hoot count input.osm --criteria PoiCriterion --all-elements
+-----
+
+==== Count all POIs that have a phone number:
+
+-----
+    hoot count input.osm -D element.criteria.chain=true --criteria "PoiCriterion;HasPhoneNumberCriterion"
 -----
 
 ==== Count all features which have a tag whose key contains the text "phone":
 
 -----
-    hoot count -D tag.key.contains.criterion.text="phone" input.osm TagKeyContainsCriterion
+    hoot count -D tag.key.contains.criterion.text="phone" input.osm --criteria TagKeyContainsCriterion
 -----
 
 ==== Count all features which have a name:
 
 -----
-    hoot count input.osm HasNameCriterion
+    hoot count input.osm --criteria HasNameCriterion
 -----
 
 ==== Count all features which have the name, "Old Town Tavern":
 
 -----
     hoot count -D name.criterion.names="Old Town Tavern" -D name.criterion.case.sensitive=false \
-      input.osm NameCriterion
+      input.osm --criteria NameCriterion
 -----
 
 ==== Count all features whose name contains "subway":
 
 -----
     hoot count -D name.criterion.names="subway" -D name.criterion.case.sensitive=false \
-      input.osm NameCriterion
+      input.osm --criteria NameCriterion
 -----
 
 ==== Count all conflatable elements in a map:
@@ -938,7 +975,7 @@ Requires a language translation server installation.  See the Hootenanny Install
     # Generally, this should be equal to the total number of elements in a map since Hootenanny 
     # be able to conflate any feature. In the rare circumstance its not, this can be used to
     # track down which elements cannot be conflated.
-    hoot count input.osm ConflatableElementCriterion
+    hoot count input.osm --criteria ConflatableElementCriterion
 -----
 
 ==== Count unique tags:
@@ -1073,7 +1110,7 @@ Requires a language translation server installation.  See the Hootenanny Install
 ==== Display the distribution of highway tags for all elements in a map:
 
 -----
-    hoot tag-distribution input.osm highway --limit 3
+    hoot tag-distribution input.osm --tagKeys highway --limit 3
     
     Total elements with specified tags: 8,707
     401	(4.61%)	highway=residential
@@ -1084,19 +1121,19 @@ Requires a language translation server installation.  See the Hootenanny Install
 ==== Display the distribution of highway tags recursively across multiple maps under a directory:
 
 -----
-    hoot tag-distribution /my/dir highway --limit 3 --recursive "*"
+    hoot tag-distribution /my/dir --tagKeys highway --limit 3 --recursive "*"
 -----
 
 ==== Display the distribution of highway tags recursively across multiple OSM file maps under a directory:
 
 -----
-    hoot tag-distribution /my/dir highway --limit 3 --recursive "*.osm"
+    hoot tag-distribution /my/dir --tagKeys highway --limit 3 --recursive "*.osm"
 -----
 
 ==== Display the distribution of highway tags for only way roads in a map:
 
 -----
-    hoot tag-distribution input.osm highway HighwayCriterion --limit 3
+    hoot tag-distribution input.osm --tagKeys highway --criteria HighwayCriterion --limit 3
 
     Total elements with specified tags: 673
     401	(59.6%)	highway=residential
@@ -1109,7 +1146,7 @@ Requires a language translation server installation.  See the Hootenanny Install
 -----
     # This adds non-way features with the "highway" tag. e.g. `highway=traffic_signals` and
 `highway=turning_circle` nodes
-    hoot tag-distribution input.osm highway HighwayCriterion --limit 3
+    hoot tag-distribution input.osm --tagKeys highway --criteria HighwayCriterion --limit 3
 
     Total elements with specified tags: 673
     401	(59.6%)	highway=residential
@@ -1132,7 +1169,7 @@ Requires a language translation server installation.  See the Hootenanny Install
 ==== Show a summary of conflation reviews by type and frequency:
 
 -----
-    hoot tag-distribution input.osm hoot:review:note ReviewRelationCriterion
+    hoot tag-distribution input.osm --tagKeys hoot:review:note --criteria ReviewRelationCriterion
 
     Total tag count: 129
     62	(48.1%)	hoot:review:note=unmatched buildings are overlapping
@@ -1201,7 +1238,7 @@ Requires a language translation server installation.  See the Hootenanny Install
 ==== Display all tag keys in a map as a delimited list string:
 
 -----
-    hoot tag-info --warn --keys-only --delimited-text input.osm
+    hoot tag-info --keys-only --delimited-text input.osm
 -----
 
 === Tag Manipulation
@@ -1432,6 +1469,18 @@ Requires a language translation server installation.  See the Hootenanny Install
     hoot crop -D crop.invert=true input.osm output.osm "-77.0551,38.8845,-77.0281,38.9031"
 -----
 
+==== Crop map data recursively across multiple files under a directory:
+
+-----
+    hoot crop /my/dir output.osm "-77.0551,38.8845,-77.0281,38.9031" --recursive "*"
+-----
+
+==== Crop map data recursively across multiple OSM files under a directory:
+
+-----
+    hoot crop /my/dir output.osm "-77.0551,38.8845,-77.0281,38.9031" --recursive "*.osm"
+-----
+
 ==== Crop out a random subset of data with a maximum node size:
 
 -----
@@ -1466,6 +1515,18 @@ Requires a language translation server installation.  See the Hootenanny Install
 
 -----
     hoot extent input.osm
+-----
+
+==== Display the geospatial extent of map data recursively across multiple files under a directory:
+
+-----
+    hoot extent /my/dir --recursive "*"
+-----
+
+==== isplay the geospatial extent of map data recursively across multiple OSM files under a directory:
+
+-----
+    hoot extent /my/dir --recursive "*.osm"
 -----
 
 ==== Determine if a map is sorted to the OSM standard:
@@ -1537,39 +1598,39 @@ Requires a language translation server installation.  See the Hootenanny Install
 ==== Generate a grid with regular shaped cells across an entire map:
 
 -----
-    hoot task-grid "input1.osm;input2.osm" output.geojson --uniform
+    hoot task-grid input1.osm input2.osm output.geojson --uniform
 -----
 
 ==== Generate a grid with irregular shaped cells that will fit at most 1000 nodes each for an entire map:
 
 -----
-    hoot task-grid "input1.osm;input2.osm" output.geojson --maxNodesPerCell 1000 --node-density
+    hoot task-grid input1.osm input2.osm output.geojson --maxNodesPerCell 1000 --node-density
 -----
 
 ==== Generate a grid with regular shaped cells across a subset of a map:
 
 -----
-    hoot task-grid  "-71.4698,42.4866,-71.4657,42.4902" output.geojson --uniform
+    hoot task-grid "-71.4698,42.4866,-71.4657,42.4902" output.geojson --uniform
 -----
 
 ==== Generate a grid with irregular shaped cells that will fit at most 1000 nodes each for a subset of a map:
 
 -----
-    hoot task-grid "input1.osm;input2.osm" output.geojson \
+    hoot task-grid input1.osm input2.osm output.geojson \
       --maxNodesPerCell 1000 --bounds "-71.4698,42.4866,-71.4657,42.4902" --node-density
 -----
 
 ==== Generate a grid based on node density, specifying the maximum allowed node count per grid cell and a pixel size:
 
 --------------------------------------
-hoot task-grid "test-files/MyInputFile1.osm;test-files/MyInputFile2.osm" MyOutputFile.geojson \
+hoot task-grid test-files/MyInputFile1.osm test-files/MyInputFile2.osm MyOutputFile.geojson \
    --maxNodesPerCell 1000 --pixelSize 0.001 --node-density
 --------------------------------------
 
 ==== Calculate a grid based on node density, specifying the maximum allowed node count per cell, a pixel size, and allow for more than one calculation attempt:
 
 --------------------------------------
-hoot task-grid "test-files/MyInputFile1.osm;test-files/MyInputFile2.osm" MyOutputFile.geojson \
+hoot task-grid test-files/MyInputFile1.osm test-files/MyInputFile2.osm MyOutputFile.geojson \
   --maxNodesPerCell 1000 --pixelSize 0.001 --maxAttempts 5 --pixelSizeAutoReductionFactor 10 --node-density
 --------------------------------------
 
@@ -1588,16 +1649,28 @@ hoot task-grid test-files/MyInputFile.osm MyOutputFile.geojson --maxNodesPerCell
 
 === Validation
 
-==== Run JOSM validation on a map:
+==== Run validation on a map:
 
 -----
     hoot validate input.osm
 -----
 
-==== Run JOSM validation on a map and mark failing features:
+==== Run validation on a map and mark failing features:
 
 -----
     hoot validate input.osm output.osm
+-----
+
+==== Run validation on map data recursively across multiple files under a directory:
+
+-----
+    hoot validate /my/dir output.osm --recursive "*"
+-----
+
+==== Run validation on map data map data recursively across multiple OSM files under a directory:
+
+-----
+    hoot validate /my/dir output.osm --recursive "*.osm"
 -----
 
 ==== List the available JOSM validators:

@@ -53,9 +53,6 @@ public:
 
   int runSimple(QStringList& args) override
   {
-    QElapsedTimer timer;
-    timer.start();
-
     bool typeKeysOnly = false;
     if (args.contains("--types"))
     {
@@ -68,6 +65,38 @@ public:
     {
       nameKeysOnly = true;
       args.removeAt(args.indexOf("--names"));
+    }
+
+    if (typeKeysOnly && nameKeysOnly)
+    {
+      throw IllegalArgumentException(
+        "Only either --names or --types may be specified as an option to " + getName() + ".");
+    }
+
+    QStringList tagKeys;
+    if (args.contains("--tagKeys"))
+    {
+      const int tagKeysIndex = args.indexOf("--tagKeys");
+      tagKeys = args.at(tagKeysIndex + 1).trimmed().split(";");
+      args.removeAt(tagKeysIndex + 1);
+      args.removeAt(tagKeysIndex);
+    }
+    if (typeKeysOnly)
+    {
+      tagKeys = OsmSchema::getInstance().getAllTypeKeys().toList();
+    }
+    else if (nameKeysOnly)
+    {
+      tagKeys = Tags::getNameKeys();
+    }
+
+    QStringList criteriaClassNames;
+    if (args.contains("--criteria"))
+    {
+      const int criteriaIndex = args.indexOf("--criteria");
+      criteriaClassNames = args.at(criteriaIndex + 1).trimmed().split(";");
+      args.removeAt(criteriaIndex + 1);
+      args.removeAt(criteriaIndex);
     }
 
     bool countOnlyMatchingElementsInTotal = false;
@@ -114,51 +143,28 @@ public:
     bool recursive = false;
     const QStringList inputFilters = _parseRecursiveInputParameter(args, recursive);
 
-    if (typeKeysOnly && nameKeysOnly)
-    {
-      throw IllegalArgumentException(
-        "Only either --names or --types may be specified as an option to " + getName() + ".");
-    }
-
-    if (!nameKeysOnly && !typeKeysOnly && (args.size() < 2 || args.size() > 3))
+    if (args.size() < 1)
     {
       std::cout << getHelp() << std::endl << std::endl;
       throw IllegalArgumentException(
-        QString("%1 takes two to three parameters when --names is not specified.").arg(getName()));
-    }
-    else if ((nameKeysOnly || typeKeysOnly) && (args.size() < 1 || args.size() > 2))
-    {
-      std::cout << getHelp() << std::endl << std::endl;
-      throw IllegalArgumentException(
-        QString("%1 takes one to two parameters when --names is specified.").arg(getName()));
+        QString("%1 takes at least one parameter. You provided %2: %3")
+          .arg(getName())
+          .arg(args.size())
+          .arg(args.join(",")));
     }
 
+    QElapsedTimer timer;
+    timer.start();
+
+    // Everything left is an input.
     QStringList inputs;
     if (!recursive)
     {
-      inputs = args[0].trimmed().split(";");
+      inputs = args;
     }
     else
     {
-      inputs = IoUtils::getSupportedInputsRecursively(args[0].trimmed().split(";"), inputFilters);
-    }
-    QStringList tagKeys;
-    if (typeKeysOnly)
-    {
-      tagKeys = OsmSchema::getInstance().getAllTypeKeys().toList();
-    }
-    else if (nameKeysOnly)
-    {
-      tagKeys = Tags::getNameKeys();
-    }
-    else
-    {
-      tagKeys = args[1].split(";", QString::SkipEmptyParts);
-    }
-    QStringList criteriaClassNames;
-    if (args.size() == 3)
-    {
-      criteriaClassNames = args[2].trimmed().split(";");
+      inputs = IoUtils::getSupportedInputsRecursively(args, inputFilters);
     }
 
     LOG_STATUS("Calculating tag distribution for " << inputs.size() << " input(s)...");

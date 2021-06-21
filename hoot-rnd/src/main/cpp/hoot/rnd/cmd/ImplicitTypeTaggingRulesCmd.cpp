@@ -62,10 +62,13 @@ public:
     {
       args.removeAt(args.indexOf("--create-raw"));
       if (args.size() != 3)
-      {
+      {  
         std::cout << getHelp() << std::endl << std::endl;
-        throw HootException(
-          QString("%1 with the --create-raw option takes three parameters.").arg(getName()));
+        throw IllegalArgumentException(
+          QString("%1 with the --create-raw option takes three parameters. You provided %2: %3")
+            .arg(getName())
+            .arg(args.size())
+            .arg(args.join(",")));
       }
 
       const QStringList inputs = args[0].trimmed().split(";");
@@ -84,10 +87,13 @@ public:
     {
       args.removeAt(args.indexOf("--create-db"));
       if (args.size() != 2)
-      {
+      {   
         std::cout << getHelp() << std::endl << std::endl;
-        throw HootException(
-          QString("%1 with the --create-db option takes two parameters.").arg(getName()));
+        throw IllegalArgumentException(
+          QString("%1 with the --create-db option takes two parameters. You provided %2: %3")
+            .arg(getName())
+            .arg(args.size())
+            .arg(args.join(",")));
       }
 
       const QString input = args[0].trimmed();
@@ -105,10 +111,13 @@ public:
     {
       args.removeAt(args.indexOf("--db-stats"));
       if (args.size() != 1)
-      {
+      {  
         std::cout << getHelp() << std::endl << std::endl;
-        throw HootException(
-          QString("%1 with the --db-stats option takes one parameter.").arg(getName()));
+        throw IllegalArgumentException(
+          QString("%1 with the --db-stats option takes one parameter. You provided %2: %3")
+            .arg(getName())
+            .arg(args.size())
+            .arg(args.join(",")));
       }
 
       const QString input = args[0].trimmed();

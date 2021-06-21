@@ -67,9 +67,12 @@ public:
 
     if (args.size() != 2 && args.size() != 4)
     {
-      LOG_VAR(args);
       std::cout << getHelp() << std::endl << std::endl;
-      throw HootException(QString("%1 takes two or four parameters.").arg(getName()));
+      throw IllegalArgumentException(
+        QString("%1 takes at least two or four parameters. You provided %2: %3")
+          .arg(getName())
+          .arg(args.size())
+          .arg(args.join(",")));
     }
 
     QString input1;

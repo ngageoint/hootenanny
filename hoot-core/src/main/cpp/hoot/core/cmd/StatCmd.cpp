@@ -47,30 +47,41 @@ public:
 
   int runSimple(QStringList& args) override
   {
+    QString statType = "total";
+    if (args.contains("--statType"))
+    {
+      const int statTypeIndex = args.indexOf("--statType");
+      statType = args.at(statTypeIndex + 1);
+      args.removeAt(statTypeIndex + 1);
+      args.removeAt(statTypeIndex);
+    }
+
     bool recursive = false;
     const QStringList inputFilters = _parseRecursiveInputParameter(args, recursive);
 
-    if (args.size() < 2 || args.size() > 3)
+    if (args.size() < 2)
     {
-      LOG_VAR(args);
       std::cout << getHelp() << std::endl << std::endl;
-      throw HootException(QString("%1 takes two or three parameters.").arg(getName()));
+      throw IllegalArgumentException(
+        QString("%1 takes at least two parameters. You provided %2: %3")
+          .arg(getName())
+          .arg(args.size())
+          .arg(args.join(",")));
     }
 
+    const int visClassIndex = args.size() - 1;
+    QString visClassName = args[visClassIndex].trimmed();
+    args.removeAt(visClassIndex);
+
+    // Everything left is an input.
     QStringList inputs;
     if (!recursive)
     {
-      inputs = args[0].trimmed().split(";");
+      inputs = args;
     }
     else
     {
-      inputs = IoUtils::getSupportedInputsRecursively(args[0].trimmed().split(";"), inputFilters);
-    }
-    QString visClassName = args[1].trimmed();
-    QString statType = "total";
-    if (args.size() == 3)
-    {
-      statType = args[2].trimmed();
+      inputs = IoUtils::getSupportedInputsRecursively(args, inputFilters);
     }
 
     const double stat = StatCalculator().calculateStat(inputs, visClassName, statType);

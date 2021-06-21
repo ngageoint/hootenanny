@@ -52,7 +52,11 @@ public:
     if (!args.empty())
     {
       std::cout << getHelp() << std::endl << std::endl;
-      throw HootException(QString("%1 takes zero parameters.").arg(getName()));
+      throw IllegalArgumentException(
+        QString("%1 takes zero parameters. You provided %2: %3")
+          .arg(getName())
+          .arg(args.size())
+          .arg(args.join(",")));
     }
 
     HootServicesLoginManager loginManager;

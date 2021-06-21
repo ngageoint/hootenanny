@@ -59,10 +59,12 @@ public:
 
     if (args.size() != 3)
     {
-      LOG_VARD(args);
-      cout << getHelp() << endl << endl;
-      throw HootException(QString("%1 takes three parameters.").
-                          arg(getName()));
+      std::cout << getHelp() << std::endl << std::endl;
+      throw IllegalArgumentException(
+        QString("%1 takes at three parameters. You provided %2: %3")
+          .arg(getName())
+          .arg(args.size())
+          .arg(args.join(",")));
     }
 
     const QString input1 = args[0];

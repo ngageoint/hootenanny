@@ -55,9 +55,6 @@ public:
 
   int runSimple(QStringList& args) override
   {
-    QElapsedTimer timer;
-    timer.start();
-
     if (args.size() < 1)
     {
       cout << getHelp() << endl << endl;
@@ -125,15 +122,29 @@ public:
     bool recursive = false;
     const QStringList inputFilters = _parseRecursiveInputParameter(args, recursive);
 
+    if (args.size() < 1)
+    {
+      std::cout << getHelp() << std::endl << std::endl;
+      throw IllegalArgumentException(
+        QString("%1 takes at least one parameter. You provided %2: %3")
+          .arg(getName())
+          .arg(args.size())
+          .arg(args.join(",")));
+    }
+
+    // Everything left is an input.
     QStringList inputs;
     if (!recursive)
     {
-      inputs = args[0].trimmed().split(";");
+      inputs = args;
     }
     else
     {
-      inputs = IoUtils::getSupportedInputsRecursively(args[0].trimmed().split(";"), inputFilters);
+      inputs = IoUtils::getSupportedInputsRecursively(args, inputFilters);
     }
+
+    QElapsedTimer timer;
+    timer.start();
 
     LOG_STATUS("Displaying tag information for " << inputs.size() << "inputs...");
     TagInfo tagInfo(

@@ -38,8 +38,8 @@
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/StringUtils.h>
 
-// Tgs
-#include <tgs/System/Timer.h>
+// Qt
+#include <QElapsedTimer>
 
 using namespace std;
 
@@ -61,12 +61,18 @@ public:
 
   int runSimple(QStringList& args) override
   {
-    Tgs::Timer timer;
+    bool recursive = false;
+    const QStringList inputFilters = _parseRecursiveInputParameter(args, recursive);
+    LOG_VARD(inputFilters);
 
-    if (args.size() != 2)
+    if (args.size() < 2)
     {
-      cout << getHelp() << endl << endl;
-      throw HootException(QString("%1 takes two parameters.").arg(getName()));
+      std::cout << getHelp() << std::endl << std::endl;
+      throw IllegalArgumentException(
+        QString("%1 takes at least two parameters. You provided %2: %3")
+          .arg(getName())
+          .arg(args.size())
+          .arg(args.join(",")));
     }
 
     Progress progress(
@@ -74,7 +80,24 @@ public:
       // import, export, and cleaning tasks
       1.0 / 3.0);
 
-    const QStringList inputs = args[0].trimmed().split(";");
+    // Output is the last param.
+    const int outputIndex = args.size() - 1;
+    const QString output = args[outputIndex];
+    args.removeAt(outputIndex);
+    // Everything that's left is an input.
+    QStringList inputs;
+    if (!recursive)
+    {
+      inputs = args;
+    }
+    else
+    {
+      inputs = IoUtils::getSupportedInputsRecursively(args, inputFilters);
+    }
+
+    QElapsedTimer timer;
+    timer.start();
+
     progress.set(
       0.0, Progress::JobState::Running,
       "Importing " + QString::number(inputs.size()) + " map(s)...");
@@ -98,14 +121,13 @@ public:
 
     progress.set(2.0 / 3.0, Progress::JobState::Running, "Exporting map...");
     MapProjector::projectToWgs84(map);
-    IoUtils::saveMap(map, args[1]);
+    IoUtils::saveMap(map, output);
 
-    double totalElapsed = timer.getElapsed();
     progress.set(
       1.0, Progress::JobState::Successful,
       "Cleaning job completed using " +
       QString::number(ConfigOptions().getMapCleanerTransforms().size()) +
-      " cleaning operations in " + StringUtils::millisecondsToDhms((qint64)(totalElapsed * 1000)));
+      " cleaning operations in " + StringUtils::millisecondsToDhms(timer.elapsed()));
 
     return 0;
   }

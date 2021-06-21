@@ -47,47 +47,79 @@ public:
   ValidateCmd() = default;
 
   virtual QString getName() const override { return "validate"; }
-
   virtual QString getType() const { return "josm"; }
-
   virtual QString getDescription() const override
   { return "Checks map data for validation errors"; }
 
   virtual int runSimple(QStringList& args) override
   {
-    if (args.size() < 1 || args.size() > 2)
+    bool showAvailableValidatorsOnly = false;
+    if (args.contains("--available-validators"))
     {
-      std::cout << getHelp() << std::endl << std::endl;
-      throw HootException(QString("%1 takes one or two parameters.").arg(getName()));
+      showAvailableValidatorsOnly = true;
+      args.removeAt(args.indexOf("--available-validators"));
     }
 
-    if (args.size() == 1)
-    {
-      if (!args.contains("--available-validators"))
-      {
-        throw IllegalArgumentException(
-          "When the validate command is called with one parameter, the parameter must be "
-          "'--available-validators'.");
-      }
+    bool recursive = false;
+    const QStringList inputFilters = _parseRecursiveInputParameter(args, recursive);
+    LOG_VARD(recursive);
+    LOG_VARD(inputFilters);
 
+    if (showAvailableValidatorsOnly)
+    {
       _printJosmValidators();
     }
     else
     {
-      const QString input = args[0];
-      const QString output = args[1];
+      QString output;
+      if (args.contains("--output"))
+      {
+        const int outputIndex = args.indexOf("--output");
+        output = args.at(outputIndex + 1).trimmed();
+        args.removeAt(outputIndex + 1);
+        args.removeAt(outputIndex);
+      }
+
+      if (args.size() < 1)
+      {
+        std::cout << getHelp() << std::endl << std::endl;
+        throw HootException(QString("%1 takes at least one parameter.").arg(getName()));
+      }
+
+      // Everything left is an input.
+      QStringList inputs;
+      if (!recursive)
+      {
+        inputs = args;
+      }
+      else
+      {
+        inputs = IoUtils::getSupportedInputsRecursively(args, inputFilters);
+      }
+      LOG_VARD(inputs);
 
       OsmMapPtr map(new OsmMap());
-      IoUtils::loadMap(map, input, true, Status::Unknown1);
+      if (inputs.size() == 1)
+      {
+        IoUtils::loadMap(map, inputs.at(0), true, Status::Unknown1);
+      }
+      else
+      {
+        // Avoid ID conflicts across multiple inputs.
+        IoUtils::loadMaps(map, inputs, false, Status::Unknown1);
+      }
 
       JosmMapValidator validator;
       validator.setConfiguration(conf());
-      LOG_INFO(validator.getInitStatusMessage());
+      LOG_STATUS(validator.getInitStatusMessage());
       validator.apply(map);
       LOG_INFO(validator.getCompletedStatusMessage());
 
-      MapProjector::projectToWgs84(map);
-      IoUtils::saveMap(map, output);
+      if (!output.isEmpty())
+      {
+        MapProjector::projectToWgs84(map);
+        IoUtils::saveMap(map, output);
+      }
 
       std::cout << validator.getSummary() << std::endl;
     }
@@ -117,4 +149,3 @@ private:
 HOOT_FACTORY_REGISTER(Command, ValidateCmd)
 
 }
-

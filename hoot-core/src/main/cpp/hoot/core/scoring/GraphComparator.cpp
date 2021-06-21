@@ -421,7 +421,7 @@ void GraphComparator::_exportGraphImage(
     }
     else
     {
-      int v = (cost / maxCost) * 255.0;
+      int v = (int)((cost / maxCost) * 255.0);
       c.setRgb(255, v, 0);
     }
 

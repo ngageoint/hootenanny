@@ -38,8 +38,6 @@
 // Qt
 #include <QElapsedTimer>
 
-using namespace std;
-
 namespace hoot
 {
 
@@ -57,47 +55,48 @@ public:
 
   int runSimple(QStringList& args) override
   {
-    QElapsedTimer timer;
-    timer.start();
+    bool recursive = false;
+    const QStringList inputFilters = _parseRecursiveInputParameter(args, recursive);
 
-    if (args.size() < 1 || args.size() > 2)
+    if (args.size() < 1)
     {
-      cout << getHelp() << endl << endl;
-      throw HootException(QString("%1 takes one or two parameters.").arg(getName()));
+      std::cout << getHelp() << std::endl << std::endl;
+      throw IllegalArgumentException(
+        QString("%1 takes at least one parameter. You provided %2: %3")
+          .arg(getName())
+          .arg(args.size())
+          .arg(args.join(",")));
     }
 
     conf().set(ConfigOptions::getWriterPrecisionKey(), 9);
 
-    bool verbose = true;
-    if (args.size() == 2 && args[1].toLower() == "false")
+    QStringList inputs;
+    if (!recursive)
     {
-      verbose = false;
-    }
-    LOG_VARD(verbose);
-    const QString input = args[0];
-
-    LOG_STATUS("Calculating extent for ..." << FileUtils::toLogFormat(input, 25) << "...");
-
-    OsmMapPtr map(new OsmMap());
-    IoUtils::loadMap(map, input, true, Status::Invalid);
-
-    const QString bounds =
-      GeometryUtils::envelopeToString(CalculateMapBoundsVisitor::getGeosBounds(map));
-    if (verbose)
-    {
-      cout << "Map extent (minx,miny,maxx,maxy): " << bounds << endl;
+      inputs = args;
     }
     else
     {
-      cout << bounds << endl;
+      inputs = IoUtils::getSupportedInputsRecursively(args, inputFilters);
     }
+
+    QElapsedTimer timer;
+    timer.start();
+
+    LOG_STATUS("Calculating extent for ..." << FileUtils::toLogFormat(inputs, 25) << "...");
+
+    OsmMapPtr map(new OsmMap());
+    IoUtils::loadMaps(map, inputs, false, Status::Invalid);
+
+    const QString bounds =
+      GeometryUtils::envelopeToString(CalculateMapBoundsVisitor::getGeosBounds(map));
+    std::cout << "Map extent (minx,miny,maxx,maxy): " << bounds << std::endl;
 
     LOG_STATUS(
       "Map extent calculated in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 
     return 0;
   }
-
 };
 
 HOOT_FACTORY_REGISTER(Command, ExtentCmd)

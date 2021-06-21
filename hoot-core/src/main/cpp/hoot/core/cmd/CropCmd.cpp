@@ -59,33 +59,71 @@ public:
 
   int runSimple(QStringList& args) override
   {
-    if (args.size() < 3 || args.size() > 4)
+    bool recursive = false;
+    const QStringList inputFilters = _parseRecursiveInputParameter(args, recursive);
+
+    if (args.size() < 3)
     {
-      cout << getHelp() << endl << endl;
-      throw HootException(QString("%1 takes three or four parameters.").arg(getName()));
+      std::cout << getHelp() << std::endl << std::endl;
+      throw IllegalArgumentException(
+        QString("%1 takes at least three parameters. You provided %2: %3")
+          .arg(getName())
+          .arg(args.size())
+          .arg(args.join(",")));
+    }
+
+    int boundsIndex;
+    if (args.contains("--write-bounds"))
+    {
+      boundsIndex = args.size() - 2;
+    }
+    else
+    {
+      boundsIndex = args.size() - 1;
+    }
+    _env = GeometryUtils::boundsFromString(args.at(boundsIndex));
+    args.removeAt(boundsIndex);
+    // This has to be done after we get the envelope.
+    BoundedCommand::runSimple(args);
+
+    const QString output = args.last();
+    args.removeLast();
+
+    // Everything left is an input.
+    QStringList inputs;
+    if (!recursive)
+    {
+      inputs = args;
+    }
+    else
+    {
+      inputs = IoUtils::getSupportedInputsRecursively(args, inputFilters);
     }
 
     QElapsedTimer timer;
     timer.start();
-    QString in = args[0];
-    QString out = args[1];
 
     LOG_STATUS(
-      "Cropping ..." << FileUtils::toLogFormat(in, 25) << " and writing output to ..." <<
-      FileUtils::toLogFormat(out, 25) << "...");
-
-    BoundedCommand::runSimple(args);
-    _env = GeometryUtils::boundsFromString(args[2]);
+      "Cropping ..." << FileUtils::toLogFormat(inputs, 25) << " and writing output to ..." <<
+      FileUtils::toLogFormat(output, 25) << "...");
 
     OsmMapPtr map(new OsmMap());
-    IoUtils::loadMap(map, in, true);
+    if (inputs.size() == 1)
+    {
+      IoUtils::loadMap(map, inputs.at(0), true);
+    }
+    else
+    {
+      // Avoid ID conflicts across multiple inputs.
+      IoUtils::loadMaps(map, inputs, false);
+    }
 
     MapCropper cropper;
     cropper.setBounds(_env);
     cropper.setConfiguration(Settings::getInstance());
     cropper.apply(map);
 
-    IoUtils::saveMap(map, out);
+    IoUtils::saveMap(map, output);
 
     LOG_STATUS("Map cropped in: " << StringUtils::millisecondsToDhms(timer.elapsed()) + " total.");
 

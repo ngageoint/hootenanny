@@ -27,13 +27,14 @@
 #include "PoiPolygonAlphaShapeDistanceExtractor.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/algorithms/alpha-shape/AlphaShapeGenerator.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
+#include <hoot/core/ops/CopyMapSubsetOp.h>
+#include <hoot/core/util/Factory.h>
 
 // geos
-#include <geos/util/TopologyException.h>
 #include <geos/geom/Geometry.h>
+#include <geos/util/TopologyException.h>
 
 using namespace geos::geom;
 
@@ -62,9 +63,9 @@ double PoiPolygonAlphaShapeDistanceExtractor::extract(const OsmMap& map,
       return -1.0;
     }
 
+    ConstOsmMapPtr original = map.shared_from_this();
     OsmMapPtr polyMap(new OsmMap());
-    ElementPtr polyTemp(poly->clone());
-    polyMap->addElement(polyTemp);
+    CopyMapSubsetOp(original, poly->getElementId()).apply(polyMap);
     AlphaShapeGenerator alphaShapeGenerator(1000.0, 0.0);
     std::shared_ptr<Geometry> polyAlphaShape = alphaShapeGenerator.generateGeometry(polyMap);
     // Oddly, even if the area is zero calc'ing the distance can have a positive effect. This may
