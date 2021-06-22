@@ -112,10 +112,13 @@ public:
 
       if (!separateOutput)
       {
+        // combines all inputs, generates their validation summary, and optionally writes them all
+        // to the same output
         std::cout << _validate(inputs, output)->getSummary() << std::endl;
       }
       else
       {
+        // writes a separate output for each input
         _validateSeparateOutput(inputs);
       }
     }
