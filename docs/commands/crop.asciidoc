@@ -18,8 +18,8 @@ given bounds. This behavior may be customized with the `crop.*` configuration op
                         or "*myFile*".
 * +--separate-output+ - The default behavior when processing multiple inputs is to combine them into the same single 
                         output. With this parameter specified, each input is modified and written to a separate output. 
-                        The +output+ parameter is invalid in combination with this paramter, and output is written back 
-                        to a new URL with the same base name as each input with the text "-cleaned" appended to it. This
+                        The +output+ parameter is invalid in combination with this parameter, and output is written back 
+                        to a new URL with the same base name as each input with the text "-cropped" appended to it. This
                         parameter cannot be used with OSM API database (osmapidb://) or OSM API (http://) inputs.
 * +--write-bounds+    - Optionally outputs a file containing the cropped bounds. The location of the file is controlled 
                         via the `bounds.output.file` configuration option.
