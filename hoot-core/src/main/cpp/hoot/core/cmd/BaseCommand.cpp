@@ -29,7 +29,9 @@
 
 // Hoot
 #include <hoot/core/Hoot.h>
+#include <hoot/core/io/HootApiDb.h>
 #include <hoot/core/util/ConfPath.h>
+#include <hoot/core/util/DbUtils.h>
 #include <hoot/core/util/Progress.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/Log.h>
@@ -37,6 +39,7 @@
 
 // Qt
 #include <QFileInfo>
+#include <QDir>
 
 using namespace geos::geom;
 
@@ -144,6 +147,42 @@ QStringList BaseCommand::_parseRecursiveInputParameter(QStringList& args, bool& 
   }
   LOG_VARD(inputFilters);
   return inputFilters;
+}
+
+QString BaseCommand::_getSeparateOutputUrl(const QString& url, const QString& appendText)
+{
+  if (DbUtils::isOsmApiDbUrl(url) || url.startsWith("http://"))
+  {
+    throw IllegalArgumentException(
+      QString("--separate-output cannot be used with OSM API database (osmapidb://) or OSM API ") +
+      QString("web (http://) inputs."));
+  }
+
+  QString str;
+  if (DbUtils::isHootApiDbUrl(url))
+  {
+    const QString existingLayerName = HootApiDb::getLayerName(url);
+    str = url;
+    str = str.replace(existingLayerName, existingLayerName + appendText);
+  }
+  else
+  {
+    QFileInfo urlInfo(url);
+    if (urlInfo.isFile())
+    {
+      const QString existingBaseFileName = QFileInfo(url).baseName();
+      str = url;
+      str = str.replace(existingBaseFileName, existingBaseFileName + appendText);
+    }
+    else if (urlInfo.isDir())
+    {
+      QDir dir(url);
+      const QString existingDirName = dir.dirName();
+      str = url;
+      str = str.replace(existingDirName, existingDirName + appendText);
+    }
+  }
+  return str;
 }
 
 }

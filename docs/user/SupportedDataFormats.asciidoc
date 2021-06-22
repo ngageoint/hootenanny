@@ -11,8 +11,8 @@ the Hootenanny Developer Guide for details.
 * GeoJSON (.geojson file or Overpass query URL) (M1)
 * https://www.geonames.org[GeoNames] (.geonames)
 * https://geonames.nga.mil/gns/html/gis_countryfiles.html[Geonames.nga.mil] (.geonames)
-* Hootenanny API Database (hootapidb://<user name>:<password>@<host name>:<port>/<database name>)
-* OpenStreetMap API Database (osmapidb://<user name>:<password>@<host name>:<port>/<database name>)
+* Hootenanny API Database (hootapidb://)
+* OpenStreetMap API Database (osmapidb://)
 * OpenStreetMap API Web Service (http://)
 * OpenStreetMap Protocol Buffers (.osm.pbf)
 * OpenStreetMap XML (.osm)
@@ -25,9 +25,9 @@ the Hootenanny Developer Guide for details.
 
 * File Geodatabase (.gdb)
 * GeoJSON (.geojson) (M1)
-* Hootenanny API Database (hootapidb://<user name>:<password>@<host name>:<port>/<database name>)
-* OpenStreetMap API Database (osmapidb://<user name>:<password>@<host name>:<port>/<database name>)
-* OpenStreetMap API Web Service (http://; via changeset only)
+* Hootenanny API Database (hootapidb://)
+* OpenStreetMap API Database (osmapidb://)
+* OpenStreetMap API Web Service (http:// via changeset only)
 * OpenStreetMap Protocol Buffers file (.osm.pbf)
 * OpenStreetMap SQL changeset file (.osc.sql)
 * OpenStreetMap XML file (.osm) (M2)
@@ -56,10 +56,18 @@ recognized correctly.
 
 === OSM API Database
 
+The format of a OSM API database URL is: 
+
+osmapidb://<user name>:<password>@<host name>:<port>/<database name>/<database table>
+
 Writing to OSM API databases (osmapidb://) is intended to be a bulk operation for new data only (no updates on 
 existing data).
 
 === Hootenanny API Database
+
+The format of a Hootenanny API database URL is: 
+
+hootapidb://<user name>:<password>@<host name>:<port>/<database name>/<database table>
 
 The Hootenanny API database format (hootapidb://) is a slightly optimized version of the OSM API database with a 
 different schema than the database used with public OSM (osmapidb://) for use with conflation. The primary difference 

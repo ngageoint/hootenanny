@@ -2347,6 +2347,12 @@ QUrl HootApiDb::getBaseUrl()
   return result;
 }
 
+QString HootApiDb::getLayerName(const QString& url)
+{
+  const QStringList urlParts =  url.split("/");
+  return urlParts[urlParts.size() - 1];
+}
+
 QString HootApiDb::removeLayerName(const QString& url)
 {
   QStringList urlParts =  url.split("/");

@@ -86,6 +86,15 @@ protected:
    * filtering was specified with "*".
    */
   static QStringList _parseRecursiveInputParameter(QStringList& args, bool& paramPresent);
+
+  /*
+   * TODO
+   *
+   * @param url
+   * @param appendText
+   * @return
+   */
+  static QString _getSeparateOutputUrl(const QString& url, const QString& appendText);
 };
 
 using BaseCommandPtr = std::shared_ptr<BaseCommand>;

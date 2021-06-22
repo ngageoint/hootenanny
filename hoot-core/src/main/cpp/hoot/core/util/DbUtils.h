@@ -92,11 +92,26 @@ public:
    */
   static bool isDbUrl(const QString& url);
 
+  /**
+   * Identifies Hootenanny API database URLs
+   *
+   * @param url the string to examine
+   * @return true if the input string is a Hootenanny API database URL; false otherwise
+   */
+  static bool isHootApiDbUrl(const QString& url);
+
+  /**
+   * Identifies OSM API database URLs
+   *
+   * @param url the string to examine
+   * @return true if the input string is a Hootenanny API database URL; false otherwise
+   */
+  static bool isOsmApiDbUrl(const QString& url);
+
 private:
 
-  static void _modifyTableConstraints(const QSqlDatabase& database, const QString& tableName,
-                                      const bool disable = true);
-
+  static void _modifyTableConstraints(
+    const QSqlDatabase& database, const QString& tableName, const bool disable = true);
 };
 
 }

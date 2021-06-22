@@ -55,15 +55,11 @@ public:
   static const QString TIMESTAMP_FUNCTION;
 
   OsmApiDb();
-
   ~OsmApiDb();
 
   void close() override;
-
   bool isSupported(const QUrl& url) override;
-
   void open(const QUrl& url) override;
-
   void commit() override;
 
   void deleteUser(long userId) override;
@@ -84,23 +80,21 @@ public:
   void deleteData() const;
 
   /**
-   * Purpose: to extract tags from the extra lines returned in the
-   *   selectAll for OsmApi data
+   * Extracts tags from the extra lines returned in the selectAll for OsmApi data
+   *
    * Input: apidb row in form with row[8]=k, row[9]=v
    * Output: "k"=>"v"
-   * Note: this gets the tags in a form that is the same as how selectAll
-   *       returns them for Services DB
    *
-   * @param row
+   * @param row TODO
    * @param Type
    * @return
+   * @note This gets the tags in a form that is the same as how selectAll returns them for Services
+   * .DB
    */
   QString extractTagFromRow(const std::shared_ptr<QSqlQuery>& row, ElementType::Type Type) const;
 
   std::shared_ptr<QSqlQuery> selectTagsForNode(long nodeId);
-
   std::shared_ptr<QSqlQuery> selectTagsForWay(long wayId);
-
   std::shared_ptr<QSqlQuery> selectTagsForRelation(long wayId);
 
   /**
@@ -110,7 +104,6 @@ public:
    * @return the next sequence ID for the given type
    */
   long getNextId(const ElementType& elementType);
-
   /**
    * Increment the sequence ID for the given sequence and return it
    *
@@ -129,7 +122,6 @@ public:
    * @return a converted coordinate
    */
   static long toOsmApiDbCoord(const double x);
-
   /**
    * Converts a node coordinate from how its stored in an OSMAPI database (100 nanodegrees
    * as a 64 bit integer) to how its stored in an OSM API database (0.01 nanodegrees
@@ -146,7 +138,6 @@ public:
    * @see ApiDb::elementTypeToElementTableName
    */
   QString elementTypeToElementTableName(const ElementType& elementType) const override;
-
   /**
    * Converts a table type to a OSM API database table name
    *
@@ -154,7 +145,6 @@ public:
    * @return a database table name string
    */
   QString tableTypeToTableName(const TableType& tableType) const override;
-
   /**
    * Returns an OSM API database table name
    *
@@ -163,14 +153,13 @@ public:
    * @param tags if true; returns the corresponding element tag table name
    * @return a database table name string
    */
-  static QString elementTypeToElementTableName(const ElementType& elementType,
-                                               const bool historical, const bool tags);
+  static QString elementTypeToElementTableName(
+    const ElementType& elementType, const bool historical, const bool tags);
 
   /**
    * Disables all OSM table constraints
    */
   void disableConstraints();
-
   /**
    * Enables all OSM table constraints
    */
@@ -180,7 +169,6 @@ public:
    * Drops all OSM table indexes
    */
   void dropIndexes();
-
   /**
    * Creates all OSM table indexes
    */

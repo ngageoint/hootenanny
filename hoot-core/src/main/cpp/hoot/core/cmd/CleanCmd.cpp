@@ -61,11 +61,18 @@ public:
 
   int runSimple(QStringList& args) override
   {
+    bool separateOutput = false;
+    if (args.contains("--separate-output"))
+    {
+      separateOutput = true;
+      args.removeAt(args.indexOf("--separate-output"));
+    }
+
     bool recursive = false;
     const QStringList inputFilters = _parseRecursiveInputParameter(args, recursive);
     LOG_VARD(inputFilters);
 
-    if (args.size() < 2)
+    if (!separateOutput && args.size() < 2)
     {
       std::cout << getHelp() << std::endl << std::endl;
       throw IllegalArgumentException(
@@ -74,11 +81,24 @@ public:
           .arg(args.size())
           .arg(args.join(",")));
     }
+    else if (separateOutput && args.size() < 1)
+    {
+      std::cout << getHelp() << std::endl << std::endl;
+      throw IllegalArgumentException(
+        QString("%1 takes at least one parameter. You provided %2: %3")
+          .arg(getName())
+          .arg(args.size())
+          .arg(args.join(",")));
+    }
 
-    // Output is the last param.
-    const int outputIndex = args.size() - 1;
-    const QString output = args[outputIndex];
-    args.removeAt(outputIndex);
+    QString output;
+    if (!separateOutput)
+    {
+      // Output is the last param.
+      const int outputIndex = args.size() - 1;
+      output = args[outputIndex];
+      args.removeAt(outputIndex);
+    }
 
     // Everything that's left is an input.
     QStringList inputs;
@@ -93,12 +113,39 @@ public:
 
     QElapsedTimer timer;
     timer.start();
-    Progress progress(
-      ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running, 0.0,
-      // import, export, and cleaning tasks
-      1.0 / 3.0);
+    std::shared_ptr<Progress> progress = std::make_shared<Progress>();
 
-    progress.set(
+    if (!separateOutput)
+    {
+      _clean(inputs, output, progress);
+    }
+    else
+    {
+      _cleanSeparateOutput(inputs, progress);
+    }
+
+    LOG_VARD(progress.get());
+    progress->set(
+      1.0, Progress::JobState::Successful,
+      "Cleaning job completed using " +
+      QString::number(ConfigOptions().getMapCleanerTransforms().size()) +
+      " cleaning operations in " + StringUtils::millisecondsToDhms(timer.elapsed()));
+
+    return 0;
+  }
+
+private:
+
+  void _clean(
+    const QStringList& inputs, const QString& output, std::shared_ptr<Progress> progress)
+  {
+    progress.reset(
+      new Progress(
+        ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running, 0.0,
+        // import, export, and cleaning tasks
+        1.0 / 3.0));
+
+    progress->set(
       0.0, Progress::JobState::Running,
       "Importing " + QString::number(inputs.size()) + " map(s)...");
     OsmMapPtr map(new OsmMap());
@@ -116,20 +163,53 @@ public:
       IoUtils::loadMaps(map, inputs, false, Status::Unknown1);
     }
 
-    progress.set(1.0 / 3.0, Progress::JobState::Running, "Cleaning map...");
-    MapCleaner(progress).apply(map);
+    progress->set(1.0 / 3.0, Progress::JobState::Running, "Cleaning map...");
+    MapCleaner(*progress).apply(map);
 
-    progress.set(2.0 / 3.0, Progress::JobState::Running, "Exporting map...");
+    progress->set(
+      2.0 / 3.0, Progress::JobState::Running,
+      "Exporting map: ..." + FileUtils::toLogFormat(output, 25) + "...");
     MapProjector::projectToWgs84(map);
     IoUtils::saveMap(map, output);
+  }
 
-    progress.set(
-      1.0, Progress::JobState::Successful,
-      "Cleaning job completed using " +
-      QString::number(ConfigOptions().getMapCleanerTransforms().size()) +
-      " cleaning operations in " + StringUtils::millisecondsToDhms(timer.elapsed()));
+  void _cleanSeparateOutput(const QStringList& inputs, std::shared_ptr<Progress> progress)
+  {
+    // (import, export, and cleaning tasks) * number of inputs
+    const double numTasks = 3.0 * (double)inputs.size();
+    LOG_VARD(numTasks);
+    progress.reset(
+      new Progress(
+        ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running, 0.0, 1.0 / numTasks));
 
-    return 0;
+    double currentTask = 0.0;
+    for (int i = 0; i < inputs.size(); i++)
+    {
+      const QString input = inputs.at(i);
+
+      progress->set(
+        currentTask / numTasks, Progress::JobState::Running,
+        "Importing: ..." + FileUtils::toLogFormat(input, 25) + "...");
+      OsmMapPtr map(new OsmMap());
+      // See note in _clean about why we don't stream this input.
+      IoUtils::loadMap(map, input, true, Status::Unknown1);
+      currentTask++;
+
+      progress->set(
+        currentTask / numTasks, Progress::JobState::Running,
+        "Cleaning: ..." + FileUtils::toLogFormat(input, 25) + "...");
+      MapCleaner(*progress).apply(map);
+      currentTask++;
+
+      // Write to another location
+      const QString output = _getSeparateOutputUrl(input, "-cleaned");
+      progress->set(
+        currentTask / numTasks, Progress::JobState::Running,
+        "Exporting: ..." + FileUtils::toLogFormat(output, 25) + "...");
+      MapProjector::projectToWgs84(map);
+      IoUtils::saveMap(map, output);
+      currentTask++;
+    }
   }
 };
 
