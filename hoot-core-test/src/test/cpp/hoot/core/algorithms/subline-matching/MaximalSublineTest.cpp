@@ -258,7 +258,7 @@ public:
     double bestScore;
     vector<WaySublineMatch> m = uut.findAllMatches(map, w52, w812, bestScore);
     HOOT_STR_EQUALS(
-      "[1]{subline 1: start: way(-1) index: 2 fraction: 0.440972029007195 end: way(-1) index: 2 fraction: 0.553077810038132\n"
+      "[1]{subline 1: start: way(-1) index: 2 fraction: 0.44151598466472 end: way(-1) index: 2 fraction: 0.553667817034221\n"
       "subline 2: start: way(-2) index: 2 fraction: 0 end: way(-2) index: 3 fraction: 0}",
       m);
   }
@@ -431,7 +431,7 @@ public:
 
         HOOT_STR_EQUALS(1, m.size());
         HOOT_STR_EQUALS(
-          "subline 1: start: way(-3) index: 0 fraction: 0 end: way(-3) index: 10 fraction: 0.834339910124657\n"
+          "subline 1: start: way(-3) index: 0 fraction: 0 end: way(-3) index: 10 fraction: 0.843082410522636\n"
           "subline 2: start: way(-6) index: 0 fraction: 0 end: way(-6) index: 17 fraction: 0",
           m[0].toString());
       }

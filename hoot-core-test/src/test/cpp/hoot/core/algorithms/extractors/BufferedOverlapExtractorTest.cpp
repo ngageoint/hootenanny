@@ -127,7 +127,7 @@ public:
     const OsmMap* constMap = const_cast<const OsmMap*>(map.get());
 
     BufferedOverlapExtractor uut(0.2);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.671148, uut.extract(*constMap, w, w1), 0.00001);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.670930, uut.extract(*constMap, w, w1), 0.00001);
   }
 };
 

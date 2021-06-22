@@ -292,7 +292,7 @@ public:
         std::dynamic_pointer_cast<Way>(MapUtils::getFirstElementWithNote(map, "1")),
         std::dynamic_pointer_cast<Way>(MapUtils::getFirstElementWithNote(map, "3"))));
     HOOT_STR_EQUALS("matches:\n"
-      "subline 1: start: way(-3) index: 0 fraction: 0.354292349419726 end: way(-3) index: 1 fraction: 0\n"
+      "subline 1: start: way(-3) index: 0 fraction: 0.354297104004969 end: way(-3) index: 1 fraction: 0\n"
       "subline 2: start: way(-2) index: 0 fraction: 0 end: way(-2) index: 1 fraction: 0",
       sublineMatcher->findMatch(
         map,
