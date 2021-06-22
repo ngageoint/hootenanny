@@ -279,6 +279,20 @@ std::shared_ptr<OGRSpatialReference> MapProjector::createPlanarProjection(const 
 {
   LOG_TRACE("Selecting best planar projection...");
 
+  //  If the envelope is undefined, return an orthographic projection around (0, 0)
+  if (!env.IsInit())
+  {
+    OGREnvelope empty;
+    empty.Merge(0, 0);
+    return createOrthographic(empty);
+  }
+
+  // If the envelope has zero size, then return an orthographic projection.
+  if (env.MaxX == env.MinX || env.MaxY == env.MinY)
+  {
+    return createOrthographic(env);
+  }
+
   vector<std::shared_ptr<OGRSpatialReference>> projs = createAllPlanarProjections(env);
   LOG_VART(projs.size());
 
@@ -291,12 +305,6 @@ std::shared_ptr<OGRSpatialReference> MapProjector::createPlanarProjection(const 
 
   vector<PlanarTestResult> testResults;
   vector<PlanarTestResult> passingResults;
-
-  // If the envelope has zero size, then return an orthographic projection.
-  if (env.MaxX == env.MinX || env.MaxY == env.MinY)
-  {
-    return createOrthographic(env);
-  }
 
   for (size_t i = 0; i < projs.size(); ++i)
   {

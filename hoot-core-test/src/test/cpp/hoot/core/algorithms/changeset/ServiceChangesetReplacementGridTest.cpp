@@ -375,9 +375,9 @@ public:
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDuplicateElementPairs());
       CPPUNIT_ASSERT_EQUAL(1, uut.getOutputMetrics().getNumWayEndNodes());
 
-      CPPUNIT_ASSERT_EQUAL(1L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
+      CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY]);
-      CPPUNIT_ASSERT_EQUAL(10L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY]);
+      CPPUNIT_ASSERT_EQUAL(9L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY]);
       CPPUNIT_ASSERT_EQUAL(1L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_MODIFY_KEY]);
       CPPUNIT_ASSERT_EQUAL(4L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_DELETE_KEY]);
@@ -442,17 +442,17 @@ public:
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodes());
       CPPUNIT_ASSERT_EQUAL(10, uut.getOutputMetrics().getNumDisconnectedWays());
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWays());
-      CPPUNIT_ASSERT_EQUAL(1, uut.getOutputMetrics().getNumDuplicateElementPairs());
+      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDuplicateElementPairs());
       CPPUNIT_ASSERT_EQUAL(101, uut.getOutputMetrics().getNumWayEndNodes());
 
-      CPPUNIT_ASSERT_EQUAL(2067L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
-      CPPUNIT_ASSERT_EQUAL(173L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY]);
+      CPPUNIT_ASSERT_EQUAL(2065L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
+      CPPUNIT_ASSERT_EQUAL(167L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY]);
       CPPUNIT_ASSERT_EQUAL(587L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY]);
-      CPPUNIT_ASSERT_EQUAL(447L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_CREATE_KEY]);
+      CPPUNIT_ASSERT_EQUAL(445L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(158L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_MODIFY_KEY]);
-      CPPUNIT_ASSERT_EQUAL(99L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_DELETE_KEY]);
+      CPPUNIT_ASSERT_EQUAL(97L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_DELETE_KEY]);
       CPPUNIT_ASSERT_EQUAL(10L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_CREATE_KEY]);
-      CPPUNIT_ASSERT_EQUAL(6L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_MODIFY_KEY]);
+      CPPUNIT_ASSERT_EQUAL(4L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_MODIFY_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY]);
 
       HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
@@ -515,15 +515,15 @@ public:
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodes());
       CPPUNIT_ASSERT_EQUAL(463, uut.getOutputMetrics().getNumDisconnectedWays());
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWays());
-      CPPUNIT_ASSERT_EQUAL(8, uut.getOutputMetrics().getNumDuplicateElementPairs());
+      CPPUNIT_ASSERT_EQUAL(9, uut.getOutputMetrics().getNumDuplicateElementPairs());
       CPPUNIT_ASSERT_EQUAL(986, uut.getOutputMetrics().getNumWayEndNodes());
 
-      CPPUNIT_ASSERT_EQUAL(17647L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
-      CPPUNIT_ASSERT_EQUAL(659L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY]);
-      CPPUNIT_ASSERT_EQUAL(748L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY]);
-      CPPUNIT_ASSERT_EQUAL(2495L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_CREATE_KEY]);
+      CPPUNIT_ASSERT_EQUAL(17648L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
+      CPPUNIT_ASSERT_EQUAL(651L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY]);
+      CPPUNIT_ASSERT_EQUAL(747L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY]);
+      CPPUNIT_ASSERT_EQUAL(2496L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(189L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_MODIFY_KEY]);
-      CPPUNIT_ASSERT_EQUAL(156L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_DELETE_KEY]);
+      CPPUNIT_ASSERT_EQUAL(157L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_DELETE_KEY]);
       CPPUNIT_ASSERT_EQUAL(281L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(24L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_MODIFY_KEY]);
       CPPUNIT_ASSERT_EQUAL(48L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY]);
@@ -655,15 +655,15 @@ public:
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodes());
       CPPUNIT_ASSERT_EQUAL(18, uut.getOutputMetrics().getNumDisconnectedWays());
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWays());
-      CPPUNIT_ASSERT_EQUAL(1, uut.getOutputMetrics().getNumDuplicateElementPairs());
-      CPPUNIT_ASSERT_EQUAL(228, uut.getOutputMetrics().getNumWayEndNodes());
+      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDuplicateElementPairs());
+      CPPUNIT_ASSERT_EQUAL(227, uut.getOutputMetrics().getNumWayEndNodes());
 
-      CPPUNIT_ASSERT_EQUAL(17943L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
-      CPPUNIT_ASSERT_EQUAL(529L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY]);
-      CPPUNIT_ASSERT_EQUAL(199L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY]);
-      CPPUNIT_ASSERT_EQUAL(2503L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_CREATE_KEY]);
+      CPPUNIT_ASSERT_EQUAL(17945L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
+      CPPUNIT_ASSERT_EQUAL(507L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY]);
+      CPPUNIT_ASSERT_EQUAL(202L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY]);
+      CPPUNIT_ASSERT_EQUAL(2506L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(349L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_MODIFY_KEY]);
-      CPPUNIT_ASSERT_EQUAL(130L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_DELETE_KEY]);
+      CPPUNIT_ASSERT_EQUAL(133L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_DELETE_KEY]);
       CPPUNIT_ASSERT_EQUAL(40L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(17L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_MODIFY_KEY]);
       CPPUNIT_ASSERT_EQUAL(12L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY]);
@@ -955,7 +955,7 @@ public:
       CPPUNIT_ASSERT_EQUAL(96, uut.getOutputMetrics().getNumWayEndNodes());
 
       CPPUNIT_ASSERT_EQUAL(1941L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
-      CPPUNIT_ASSERT_EQUAL(240L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY]);
+      CPPUNIT_ASSERT_EQUAL(239L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY]);
       CPPUNIT_ASSERT_EQUAL(56L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY]);
       CPPUNIT_ASSERT_EQUAL(419L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(76L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_MODIFY_KEY]);
@@ -1236,9 +1236,9 @@ public:
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDuplicateElementPairs());
       CPPUNIT_ASSERT_EQUAL(5, uut.getOutputMetrics().getNumWayEndNodes());
 
-      CPPUNIT_ASSERT_EQUAL(1975L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
+      CPPUNIT_ASSERT_EQUAL(1976L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY]);
-      CPPUNIT_ASSERT_EQUAL(1443L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY]);
+      CPPUNIT_ASSERT_EQUAL(1444L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY]);
       CPPUNIT_ASSERT_EQUAL(297L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_MODIFY_KEY]);
       CPPUNIT_ASSERT_EQUAL(297L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_DELETE_KEY]);
