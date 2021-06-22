@@ -8,6 +8,13 @@ mkdir -p $OUTPUT_DIR
 
 RECURSIVE_INPUT=test-files/cmd/slow/CountCmdTest/inputDir
 
+SEPARATE_OUTPUT_INPUT_1=$OUTPUT_DIR/ToyTestA.osm
+SEPARATE_OUTPUT_INPUT_2=$OUTPUT_DIR/ToyTestB.osm
+SEPARATE_OUTPUT_OUTPUT_1=$OUTPUT_DIR/ToyTestA-converted.osm
+SEPARATE_OUTPUT_OUTPUT_2=$OUTPUT_DIR/ToyTestB-converted.osm
+GOLD_FILE_SEPARATE_OUTPUT_1=test-files/ToyTestA.osm
+GOLD_FILE_SEPARATE_OUTPUT_2=test-files/ToyTestB.osm
+
 CONFIG="-C Testing.conf"
 LOG_LEVEL="--warn"
 
@@ -26,6 +33,16 @@ echo "OSM dir with filter to single OSM..."
 # elements due to the input filtering.
 hoot convert $CONFIG -D reader.use.data.source.ids=false $RECURSIVE_INPUT $OUTPUT_DIR/recursive-out-2.osm --recursive "*.json"
 hoot diff $CONFIG $INPUT_DIR/recursive-out-2.osm $OUTPUT_DIR/recursive-out-2.osm
+
+echo ""
+echo "Writing to separate outputs..."
+echo ""
+# Copy the inputs to the output directory and work from there, so we don't write to the input dir 
+# under source control.
+cp $GOLD_FILE_SEPARATE_OUTPUT_1 $GOLD_FILE_SEPARATE_OUTPUT_2 $OUTPUT_DIR
+hoot convert $LOG_LEVEL $CONFIG $SEPARATE_OUTPUT_INPUT_1 $SEPARATE_OUTPUT_INPUT_2 --separate-output
+hoot diff $LOG_LEVEL $CONFIG $GOLD_FILE_SEPARATE_OUTPUT_1 $SEPARATE_OUTPUT_OUTPUT_1
+hoot diff $LOG_LEVEL $CONFIG $GOLD_FILE_SEPARATE_OUTPUT_2 $SEPARATE_OUTPUT_OUTPUT_2
 
 echo "PBF to OSM..."
 hoot convert $LOG_LEVEL $CONFIG test-files/ToyTestA.osm.pbf $OUTPUT_DIR/ToyTestA.osm

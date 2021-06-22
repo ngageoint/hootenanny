@@ -68,14 +68,30 @@ public:
 
     BoundedCommand::runSimple(args);
 
+    bool separateOutput = false;
+    if (args.contains("--separate-output"))
+    {
+      separateOutput = true;
+      args.removeAt(args.indexOf("--separate-output"));
+    }
+
     bool recursive = false;
     const QStringList inputFilters = _parseRecursiveInputParameter(args, recursive);
 
-    if (args.size() < 2)
+    if (!separateOutput && args.size() < 2)
     { 
       std::cout << getHelp() << std::endl << std::endl;
       throw IllegalArgumentException(
         QString("%1 takes at least two parameters. You provided %2: %3")
+          .arg(getName())
+          .arg(args.size())
+          .arg(args.join(",")));
+    }
+    else if (separateOutput && args.size() < 1)
+    {
+      std::cout << getHelp() << std::endl << std::endl;
+      throw IllegalArgumentException(
+        QString("%1 takes at least one parameter. You provided %2: %3")
           .arg(getName())
           .arg(args.size())
           .arg(args.join(",")));
@@ -91,10 +107,16 @@ public:
         ConfigOptions::getCropBoundsKey() + " option must be specified.");
     }
 
-    // Output is the last param.
-    const int outputIndex = args.size() - 1;
-    const QString output = args[outputIndex];
-    args.removeAt(outputIndex);
+    QString output;
+    if (!separateOutput)
+    {
+      // Output is the last param.
+      const int outputIndex = args.size() - 1;
+      output = args[outputIndex];
+      args.removeAt(outputIndex);
+    }
+    LOG_VARD(output);
+
     // Everything that's left is an input.
     QStringList inputs;
     if (!recursive)
@@ -110,8 +132,22 @@ public:
 
     DataConverter converter;
     converter.setConfiguration(conf());
-    converter.convert(inputs, output);
-
+    if (!separateOutput)
+    {
+      // combines all inputs and writes them to the same output
+      converter.convert(inputs, output);
+    }
+    else
+    {
+      // writes a separate output for each input
+      for (int i = 0; i < inputs.size(); i++)
+      {
+        const QString input = inputs.at(i);
+        // Write each output to a similarly named path as the input with some text appended to the
+        // input name.
+        converter.convert(input, _getSeparateOutputUrl(input, "-converted"));
+      }
+    }
     LOG_STATUS(
       "Data conversion completed in " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
 
