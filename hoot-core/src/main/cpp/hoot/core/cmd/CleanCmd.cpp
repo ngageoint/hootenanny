@@ -117,10 +117,12 @@ public:
 
     if (!separateOutput)
     {
+      // combines all inputs and writes them to the same output
       _clean(inputs, output, progress);
     }
     else
     {
+      // writes a separate output for each input
       _cleanSeparateOutput(inputs, progress);
     }
 

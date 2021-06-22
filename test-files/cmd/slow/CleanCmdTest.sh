@@ -60,7 +60,8 @@ hoot diff $LOG_LEVEL $CONFIG $GOLD_FILE_RECURSIVE_2 $OUTPUT_FILE_RECURSIVE_2 || 
 echo ""
 echo "Cleaning files and writing to separate outputs..."
 echo ""
-# TODO
+# Copy the inputs to the output directory and work from there, so we don't write to the input dir 
+# under source control.
 cp $INPUT_MULTIPLE $OUT_DIR
 hoot clean $LOG_LEVEL $CONFIG $SEPARATE_OUTPUT_INPUT_1 $SEPARATE_OUTPUT_INPUT_2 --separate-output
 hoot diff $LOG_LEVEL $CONFIG $GOLD_FILE_SEPARATE_OUTPUT_1 $SEPARATE_OUTPUT_OUTPUT_1 || diff $GOLD_FILE_SEPARATE_OUTPUT_1 $SEPARATE_OUTPUT_OUTPUT_1
