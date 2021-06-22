@@ -75,15 +75,11 @@ public:
           .arg(args.join(",")));
     }
 
-    Progress progress(
-      ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running, 0.0,
-      // import, export, and cleaning tasks
-      1.0 / 3.0);
-
     // Output is the last param.
     const int outputIndex = args.size() - 1;
     const QString output = args[outputIndex];
     args.removeAt(outputIndex);
+
     // Everything that's left is an input.
     QStringList inputs;
     if (!recursive)
@@ -97,6 +93,10 @@ public:
 
     QElapsedTimer timer;
     timer.start();
+    Progress progress(
+      ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running, 0.0,
+      // import, export, and cleaning tasks
+      1.0 / 3.0);
 
     progress.set(
       0.0, Progress::JobState::Running,

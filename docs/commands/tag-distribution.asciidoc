@@ -19,9 +19,10 @@ The +tag-distribution+ command displays a distribution of values for tags in one
                                counted in the element total. With this option enabled, only elements which have one of the
                                specified tags are counted in the element total. Enabling this option has no effect if
                                all tag keys are parsed (nothing specified for `tagKeys`).
-* +--recursive+              - Allows for processing inputs recursively in a directory structure. This must be followed 
-                               by either "*" to denote no filtering or one or more wildcard name filters. e.g. 
-                               "*.osm;*.json" or "*myFile*".
+* +--recursive+              - Allows for processing the files contained in any directories specified in 
+                               +input(s)+ recursively. This parameter has no effect on the processing of non-directory 
+                               inputs. This must be followed by either "*" to denote no filtering or one or more wildcard 
+                               name filters. e.g. "*.osm;*.json" or "*myFile*".
 * +--sort-by-value +         - Sorts results alphabetically by tag value. If not specified, results are sorted by decreasing 
                                tag value occurrence frequency.
 * +--tagKeys+                - The tag keys to gather statistics for. If this parameter is omitted, all tag keys are 

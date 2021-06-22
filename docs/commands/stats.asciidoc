@@ -8,8 +8,9 @@ The +stats+ command calculates a pre-determined set of statistics for one or mor
 * +input(s)+    - Input(s); may be any supported input format (e.g. .osm file).
 * +--brief+     - Only calculates subset of statistics. 
 * +--output+    - Optional output; supported formats are text (.txt) and JSON (.json).
-* +--recursive+ - Allows for processing inputs recursively in a directory structure. This must be followed by either "*" 
-                  to denote no filtering or one or more wildcard name filters. e.g. "*.osm;*.json" or "*myFile*".
+* +--recursive+ - Allows for processing the files contained in any directories specified in +input(s)+ recursively.
+                  This parameter has no effect on the processing of non-directory inputs. This must be followed by either 
+                  "*" to denote no filtering or one or more wildcard name filters. e.g. "*.osm;*.json" or "*myFile*".
 
 === Usage
 

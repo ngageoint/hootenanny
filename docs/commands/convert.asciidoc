@@ -9,9 +9,10 @@ the conversion.  The process may be memory bound depending upon the input or out
 * +input(s)+       - Input(s); may be any supported input format (e.g. .osm file). Path wildcards may be used for inputs 
                      within the same directory. For OGR inputs, layer filtering may be performed (see syntax in Usage section).
 * +output+         - Output; may be any supported output format (e.g. .osm file).
-* +--recursive+    - Allows for processing inputs recursively in a directory structure. This must be followed by either "*" 
-                     to denote no filtering or one or more wildcard name filters. e.g. "*.osm;*.json" or "*myFile*". 
-                     This parameter is not compatible with the OGR layer syntax.
+* +--recursive+    - Allows for processing the files contained in any directories specified in +input(s)+ recursively.
+                     This parameter has no effect on the processing of non-directory inputs. This must be followed by 
+                     either "*" to denote no filtering or one or more wildcard name filters. e.g. "*.osm;*.json" or 
+                     "*myFile*". This parameter is not compatible with the OGR layer syntax.
 * +--write-bounds+ - If the `bounds` configuration option is specified, optionally outputs a file containing the input bounds.
                      The location of the file is controlled via the `bounds.output.file` configuration option.
 
