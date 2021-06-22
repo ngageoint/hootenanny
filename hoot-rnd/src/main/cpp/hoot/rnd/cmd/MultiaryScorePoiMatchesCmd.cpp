@@ -93,11 +93,12 @@ public:
 
     if (args.size() < 3)
     {
-      LOG_VAR(args);
-      cout << getHelp() << endl << endl;
-      throw HootException(
-        QString("%1 takes at least two parameters: two or more input maps")
-          .arg(getName()));
+      std::cout << getHelp() << std::endl << std::endl;
+      throw IllegalArgumentException(
+        QString("%1 takes at least three parameters. You provided %2: %3")
+          .arg(getName())
+          .arg(args.size())
+          .arg(args.join(",")));
     }
 
     LOG_STATUS("Scoring multiary conflate matches from ..." << args.size() << " inputs...");

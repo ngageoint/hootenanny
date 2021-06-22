@@ -4,20 +4,23 @@
 === Description
 
 The +de-duplicate+ command removes intra-map duplicate elements from a single map or inter-map duplicate elements across 
-two separate maps. For inter-map de-duplication, the first map's features are kept. Unlike cleaning operations, such as `DuplicateWayRemover`, this command will only remove completely identical elements and not just those that are very similar.
+two separate maps. For inter-map de-duplication, the first map's features are kept. Unlike duplicate element removal 
+cleaning operations, such as `DuplicateWayRemover`, this command will only remove completely identical elements and not 
+simply those that are very similar.
 
-* +input1+                 - First map with features to de-duplicate; may be any supported input format. If only one map input 
-                             is specified, only intra-map de-duplication is performed. When two input maps are specified 
-                             and identical features are found between both maps, this map's features are retained.
-* +input2+                 - Optional second map with features to de-duplicate; may be any supported input format. When two 
-                             input maps are specified, both intra-map and inter-map de-duplicate is performed. When two 
-                             input maps are specified and identical features are found between both maps, this map's features 
-                             are removed.
-* +output1+                - The de-duplicated first map output; may be any supported output format.
-* +output2+                - The de-duplicated second map output; may be any supported output format; required if two inputs 
-                             are specified.
-* +--favor-connected-ways+ - When two identical ways are found, favors the way with more connections with other ways, 
-                             regardless of which input map its from.
+* +input1+                 - The first input map with features to de-duplicate; may be any supported input format 
+                             (e.g. .osm file). If only one map input is specified, only intra-map de-duplication is 
+                             performed. When two input maps are specified and identical features are found between both 
+                             maps, this map's features are retained.
+* +input2+                 - Optional second input map with features to de-duplicate; may be any supported input format 
+                             (e.g. .osm file). When two input maps are specified, both intra-map and inter-map de-duplicate 
+                             is performed. When two input maps are specified and identical features are found between both 
+                             maps, this map's features are removed.
+* +output1+                - The de-duplicated first map output; may be any supported output format (e.g. .osm file).
+* +output2+                - The de-duplicated second map output; may be any supported output format (e.g. .osm file); 
+                             required if two inputs are specified.
+* +--favor-connected-ways+ - When two identical ways are found, causes de-duplication to favor the way having more 
+                             connections with other ways, regardless of which input map its from.
 
 === Usage
 

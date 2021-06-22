@@ -4,7 +4,7 @@
 === Description
 
 The +sort+ command sorts a file first by element type, then by increasing element ID. The element type sorting order 
-is: 1) nodes, 2) ways, and then 3) relations.
+is: nodes, ways, and then relations.
 
 * +input+  - Input; may be any supported input format (e.g. .osm file).
 * +output+ - Output; may be any supported output format (e.g. .osm file).
@@ -12,7 +12,7 @@ is: 1) nodes, 2) ways, and then 3) relations.
 === Usage
 
 --------------------------------------
-sort (input) (output)
+hoot sort (input) (output)
 --------------------------------------
 
 https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#sort-a-map-to-the-osm-standard-in-memory[Examples]

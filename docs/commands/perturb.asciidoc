@@ -3,21 +3,15 @@
 
 === Description
 
-The +perturb+ command perturbs map data.  It reads from input, permutes the data, and writes to output files. The 
-+perturb+ command uses the PERTY algorithm based on the paper, 
+The +perturb+ command perturbs map data using the PERTY algorithm based on the paper, 
 "Evaluating conflation methods using uncertainty modeling," P. Doucette, et. al, 2012.
 
-* +input+   - Input; may be any supported input format (e.g. OSM file).
-* +output+  - Output; may be any supported output format (e.g. OSM file).. If specifying --score or --test this must 
+* +input+   - Input; may be any supported input format (e.g. .osm file).
+* +output+  - Output; may be any supported output format (e.g. .osm file). If specifying --score or --test this must 
               be a directory.
-* +--score+ - (optional) Generates a PERTY score for a conflation operation.  Must be specified after configuration 
-              options. Not valid in combination with the --test option.  This option causes the command to read from 
-              reference input, create a permuted copy of the reference data, conflate the referenced data with the 
-              permuted data, and then write the reference data, permuted data, and conflated data to output files.
-* +--test+  - (optional) This option causes the command to generate a series of PERTY scores for the same set of 
-              conflation inputs and averages them together (to account for randomness), which yields a single PERTY 
-              score.  Must be specified after configuration options.  Not valid in combination with the --score option. 
-              Any number of conflation jobs may be run per test.
+* +--score+ - Generates a PERTY score for a conflation operation. Not valid in combination with the +--test+ option.
+* +--test+  - Generates a series of PERTY scores for the same set of conflation inputs and averages them together yielding 
+              a single score. Not valid in combination with the +--score+ option.
 
 === Optional Defines
 
@@ -27,7 +21,7 @@ details. Use the `info` command to learn more about the available configuration 
 === Usage
 
 --------------------------------------
-perturb (input) (output) [--score] [--test]
+hoot perturb (input) (output) [--score]|[--test]
 --------------------------------------
 
 === Examples

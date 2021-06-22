@@ -3,15 +3,14 @@
 
 === Description
 
-The +score-matches+ command scores how well conflation performs using manually matched data as a reference. It validates 
-manual matches, conflates data, and scores the matches created during conflation against the manual matches. The 
-command will return an error if any manual match is invalid.
+The +score-matches+ command scores how well conflation performs using manually matched data as a reference. The command 
+will return an error if any manual match is invalid.
 
-* +input+            - One or more pairs of inputs where the first item in the pair contain REF1 data (no manual matches) 
-                       and the second item in the pair contain REF2 or REVIEW data (with manual matches); may be any 
-                       supported input format (e.g. .osm file).
-* +output+           - Output file for debugging; may be any supported output format (e.g. OSM file). Only the first 
-                       conflated file will be output. Invalid if +--optimize+ is selected.
+* +input+            - One or more pairs of inputs where the first item in the pair contains REF1 data (no manual matches) 
+                       and the second item in the pair contains REF2 or REVIEW data (manual matches); may be any supported 
+                       input format (e.g. .osm file).
+* +output+           - Output for debugging; may be any supported output format (e.g. .osm file). Only the first conflated 
+                       file will be output. Invalid if +--optimize+ is selected.
 * +--confusion+      - Prints a confusion matrix
 * +--optimize+       - Optimizes the scoring function; No file is output when this option is used.
 * +--validation-off+ - Turns off manual match validation; recommended for debugging manual matches only
@@ -19,8 +18,8 @@ command will return an error if any manual match is invalid.
 === Usage
 
 --------------------------------------
-score-matches [--confusion] [--validation-off] (input1 input2) [input1 input2 ...] (output)
-score-matches [--confusion] [--optimize] [--validation-off] (input1 input2) [input1 input2 ...]
+hoot score-matches (input1 input2) [input1 input2 ...] (output) [--confusion] [--validation-off]
+hoot score-matches (input1 input2) [input1 input2 ...] [--confusion] [--optimize] [--validation-off]
 --------------------------------------
 
 === Examples

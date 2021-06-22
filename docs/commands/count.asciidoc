@@ -5,21 +5,18 @@
 
 The +count+ command displays a count of the number of features in one or more maps.
 
-* +input(s)+        - One or more inputs; may be any supported input format (e.g. .osm file).
-* +--all-elements+  - The default behavior is to only count features. Features are defined as elements with at least 
-                      one information tag, whereas elements have no tag requirements. Activating this option causes the 
-                      command to consider all elements regardless of whether they have any information tags. The contents 
-                      of the `criteria` parameter may prevent all elements from actually being parsed, however, when used
-                      with this parameter.
+* +input(s)+        - Input(s); may be any supported input format (e.g. .osm file).
+* +--all-elements+  - Counts all elements instead of just counting features. The default behavior is to only count 
+                      features. Features are defined as elements with at least one information tag, whereas elements have 
+                      no tag requirements.
 * +--criteria+      - Optional filtering criteria for the inputs; May be one or more class names inheriting 
                       from `ElementCriterion`. By default, multiple criteria are logically OR'd together. Set 
                       the `element.counter.chain.element.criteria` option to true to have the criteria logically 
                       AND'd together. The criteria can be negated with the option `element.criteria.negate`. Use the 
                       +info --operators+ command to obtain a list of available criteria.
-* +--recursive+     - Allows for counting elements recursively in a directory structure. This must be followed 
-                      by either "*" to denote no filtering or one or more wildcard name filters. e.g. "*.osm;*.json" 
-                      or "*myFile*". The recursion is only performed on file directories and this parameter is ignored 
-                      for other input types.
+* +--recursive+     - Allows for processing inputs recursively in a directory structure. This must be followed by either "*" 
+                      to denote no filtering or one or more wildcard name filters. e.g. "*.osm;*.json" or "*myFile*". 
+                      The recursion is only performed on file directories and this parameter is ignored for other input types.
 
 === Usage
 

@@ -54,16 +54,31 @@ public:
   QString getDescription() const override { return "Calculates the bounds of a map"; }
 
   int runSimple(QStringList& args) override
-  {    
+  {
+    bool recursive = false;
+    const QStringList inputFilters = _parseRecursiveInputParameter(args, recursive);
+
     if (args.size() < 1)
     {
       std::cout << getHelp() << std::endl << std::endl;
-      throw HootException(QString("%1 takes at least one parameters.").arg(getName()));
+      throw IllegalArgumentException(
+        QString("%1 takes at least one parameter. You provided %2: %3")
+          .arg(getName())
+          .arg(args.size())
+          .arg(args.join(",")));
     }
 
     conf().set(ConfigOptions::getWriterPrecisionKey(), 9);
 
-    const QStringList inputs = args;
+    QStringList inputs;
+    if (!recursive)
+    {
+      inputs = args;
+    }
+    else
+    {
+      inputs = IoUtils::getSupportedInputsRecursively(args, inputFilters);
+    }
 
     QElapsedTimer timer;
     timer.start();

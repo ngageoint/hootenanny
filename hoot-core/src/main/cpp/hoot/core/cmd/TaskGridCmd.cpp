@@ -278,7 +278,10 @@ private:
     {
       std::cout << getHelp() << std::endl << std::endl;
       throw IllegalArgumentException(
-        QString("%1 takes at least two parameters with the --node-density option.").arg(getName()));
+        QString("%1 takes at least two parameters. You provided %2: %3")
+          .arg(getName())
+          .arg(args.size())
+          .arg(args.join(",")));
     }
     LOG_VARD(args);
 

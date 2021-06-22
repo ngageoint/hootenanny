@@ -23,24 +23,24 @@ psql --quiet $OSM_API_DB_AUTH -d $DB_NAME_OSMAPI -f test-files/servicesdb/users.
 
 echo "in memory test 1..."
 echo ""
-hoot changeset-derive $LOG_LEVEL -C Testing.conf -D changeset.user.id=1 $INPUT_DIR/map1.osm $INPUT_DIR/map2.osm $OUTPUT_DIR/changeset-1.osc.sql $OSM_API_DB_URL
+hoot changeset-derive $LOG_LEVEL -C Testing.conf -D changeset.user.id=1 $INPUT_DIR/map1.osm $INPUT_DIR/map2.osm $OUTPUT_DIR/changeset-1.osc.sql --osmApiDatabaseUrl $OSM_API_DB_URL
 diff $INPUT_DIR_2/changeset-1.osc.sql $OUTPUT_DIR/changeset-1.osc.sql 
 
 echo "in memory test 2..."
 echo ""
-hoot changeset-derive $LOG_LEVEL -C Testing.conf -D changeset.user.id=1 $INPUT_DIR/map1.osm "" $OUTPUT_DIR/changeset-2.osc.sql $OSM_API_DB_URL
+hoot changeset-derive $LOG_LEVEL -C Testing.conf -D changeset.user.id=1 $INPUT_DIR/map1.osm "" $OUTPUT_DIR/changeset-2.osc.sql --osmApiDatabaseUrl $OSM_API_DB_URL
 diff $INPUT_DIR_2/changeset-2.osc.sql $OUTPUT_DIR/changeset-2.osc.sql 
 
 # external merge sorting tests
 
 echo "external test 1..."
 echo ""
-hoot changeset-derive $LOG_LEVEL -C Testing.conf -D changeset.user.id=1 -D element.sorter.element.buffer.size=5 $INPUT_DIR/map1.osm $INPUT_DIR/map2.osm $OUTPUT_DIR/changeset-3.osc.sql $OSM_API_DB_URL
+hoot changeset-derive $LOG_LEVEL -C Testing.conf -D changeset.user.id=1 -D element.sorter.element.buffer.size=5 $INPUT_DIR/map1.osm $INPUT_DIR/map2.osm $OUTPUT_DIR/changeset-3.osc.sql --osmApiDatabaseUrl $OSM_API_DB_URL
 diff $INPUT_DIR_2/changeset-3.osc.sql $OUTPUT_DIR/changeset-3.osc.sql 
 
 echo "external test 2..."
 echo ""
-hoot changeset-derive $LOG_LEVEL -C Testing.conf -D changeset.user.id=1 -D element.sorter.element.buffer.size=5 $INPUT_DIR/map1.osm "" $OUTPUT_DIR/changeset-4.osc.sql $OSM_API_DB_URL
+hoot changeset-derive $LOG_LEVEL -C Testing.conf -D changeset.user.id=1 -D element.sorter.element.buffer.size=5 $INPUT_DIR/map1.osm "" $OUTPUT_DIR/changeset-4.osc.sql --osmApiDatabaseUrl $OSM_API_DB_URL
 diff $INPUT_DIR_2/changeset-4.osc.sql $OUTPUT_DIR/changeset-4.osc.sql 
 
 scripts/database/CleanAndInitializeOsmApiDb.sh

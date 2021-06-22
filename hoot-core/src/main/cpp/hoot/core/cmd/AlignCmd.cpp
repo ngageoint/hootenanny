@@ -103,7 +103,11 @@ public:
       if (args.size() != 3)
       {
         std::cout << getHelp() << std::endl << std::endl;
-        throw HootException(QString("%1 takes three parameters.").arg(getName()));
+        throw IllegalArgumentException(
+          QString("%1 takes three parameters. You provided %2: %3")
+            .arg(getName())
+            .arg(args.size())
+            .arg(args.join(",")));
       }
 
       RubberSheeter().rubberSheet(args[0], args[1], args[2]);

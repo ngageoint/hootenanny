@@ -3,14 +3,16 @@
 
 === Description
 
-The +extent+ command outputs the geospatial bounds of the input map data as an AOI string (minx,maxx,miny,maxy).
+The +extent+ command displays the geospatial bounds of one or more maps.
 
-* +input(s)+ - One or more input paths; may be any supported input format (e.g. OSM file).
+* +input(s)+    - Inputs(s); may be any supported input format (e.g. .osm file).
+* +--recursive+ - Allows for processing inputs recursively in a directory structure. This must be followed by either "*"
+                  to denote no filtering or one or more wildcard name filters. e.g. "*.osm;*.json" or "*myFile*".
 
 === Usage
 
 --------------------------------------
-extent (input1) [input2...]
+hoot extent (input1) [input2...] [--recursive "*"|"filter1;filter2..."]
 --------------------------------------
 
 https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#display-the-geospatial-extent-of-a-map[Examples]

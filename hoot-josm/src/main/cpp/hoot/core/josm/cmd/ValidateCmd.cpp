@@ -53,14 +53,20 @@ public:
 
   virtual int runSimple(QStringList& args) override
   {
-    if (args.size() == 1)
+    bool showAvailableValidatorsOnly = false;
+    if (args.contains("--available-validators"))
     {
-      if (!args.contains("--available-validators"))
-      {
-        throw IllegalArgumentException(
-          "When the validate command is called with one parameter, the parameter must be "
-          "'--available-validators'.");
-      }
+      showAvailableValidatorsOnly = true;
+      args.removeAt(args.indexOf("--available-validators"));
+    }
+
+    bool recursive = false;
+    const QStringList inputFilters = _parseRecursiveInputParameter(args, recursive);
+    LOG_VARD(recursive);
+    LOG_VARD(inputFilters);
+
+    if (showAvailableValidatorsOnly)
+    {
       _printJosmValidators();
     }
     else
@@ -81,7 +87,16 @@ public:
       }
 
       // Everything left is an input.
-      const QStringList inputs = args;
+      QStringList inputs;
+      if (!recursive)
+      {
+        inputs = args;
+      }
+      else
+      {
+        inputs = IoUtils::getSupportedInputsRecursively(args, inputFilters);
+      }
+      LOG_VARD(inputs);
 
       OsmMapPtr map(new OsmMap());
       if (inputs.size() == 1)
@@ -100,8 +115,11 @@ public:
       validator.apply(map);
       LOG_INFO(validator.getCompletedStatusMessage());
 
-      MapProjector::projectToWgs84(map);
-      IoUtils::saveMap(map, output);
+      if (!output.isEmpty())
+      {
+        MapProjector::projectToWgs84(map);
+        IoUtils::saveMap(map, output);
+      }
 
       std::cout << validator.getSummary() << std::endl;
     }
@@ -131,4 +149,3 @@ private:
 HOOT_FACTORY_REGISTER(Command, ValidateCmd)
 
 }
-

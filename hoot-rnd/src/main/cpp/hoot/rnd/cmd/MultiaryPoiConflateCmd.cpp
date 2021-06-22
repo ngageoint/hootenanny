@@ -80,8 +80,12 @@ public:
 
     if (args.size() < 3)
     {
-      throw HootException(
-        "Expected at least three parameters (input1, input2, ..., output)");
+      std::cout << getHelp() << std::endl << std::endl;
+      throw IllegalArgumentException(
+        QString("%1 takes at least three parameters. You provided %2: %3")
+          .arg(getName())
+          .arg(args.size())
+          .arg(args.join(",")));
     }
 
     inputs = args.mid(0, args.length() - 1);
