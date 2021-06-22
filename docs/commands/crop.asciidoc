@@ -17,7 +17,7 @@ given bounds. This behavior may be customized with the `crop.*` configuration op
                         by either "*" to denote no filtering or one or more wildcard name filters. e.g. "*.osm;*.json" 
                         or "*myFile*".
 * +--separate-output+ - The default behavior when processing multiple inputs is to combine them into the same single 
-                        output. With this parameter specified, each input is modified and written to a separate output. 
+                        output. With this parameter specified, each input is processed and written to a separate output. 
                         The +output+ parameter is invalid in combination with this parameter, and output is written back 
                         to a new URL with the same base name as each input with the text "-cropped" appended to it. This
                         parameter cannot be used with OSM API database (osmapidb://) or OSM API (http://) inputs.

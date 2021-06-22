@@ -19,7 +19,7 @@ The +validate+ command uses JOSM to identify map data with erroneous aspects.
 * +--separate-output+      - This parameter replaces the `--output` parameter and will result in no validation summary to
                              be displayed on the screen. The default behavior when processing multiple inputs is to 
                              combine them into the same single output. With this parameter specified, each input is 
-                             modified and written to a separate output. The +output+ parameter is invalid in combination 
+                             processed and written to a separate output. The +output+ parameter is invalid in combination 
                              with this parameter, and output is written back to a new URL with the same base name as 
                              each input with the text "-validated" appended to it. This parameter cannot be used with OSM 
                              API database (osmapidb://) or OSM API (http://) inputs.
