@@ -107,4 +107,10 @@ void NodesPerWayVisitor::visit(const ConstElementPtr& e)
   }
 }
 
+double NodesPerWayVisitor::getAverage() const
+{
+  const double average = _numAffected == 0 ? 0.0 : _totalWayNodes / _numAffected;
+  return average;
+}
+
 }

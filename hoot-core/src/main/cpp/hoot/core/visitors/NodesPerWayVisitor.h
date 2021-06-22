@@ -70,11 +70,7 @@ public:
   double getStat() const override { return _totalWayNodes; }
   double getMin() const override { return _minNodesPerWay; }
   double getMax() const override { return _maxNodesPerWay; }
-  double getAverage() const override
-  {
-    const double average = _numAffected == 0 ? 0.0 : _totalWayNodes / _numAffected;
-    return average;
-  }
+  double getAverage() const override;
 
   QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }
