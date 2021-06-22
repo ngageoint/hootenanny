@@ -203,7 +203,8 @@ private:
       MapCleaner(*progress).apply(map);
       currentTask++;
 
-      // Write to another location
+      // Write the output to a similarly named path as the input with some text appended to the
+      // input name.
       const QString output = _getSeparateOutputUrl(input, "-cleaned");
       progress->set(
         currentTask / numTasks, Progress::JobState::Running,

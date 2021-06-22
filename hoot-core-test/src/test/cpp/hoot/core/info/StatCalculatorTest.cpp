@@ -42,7 +42,6 @@ class StatCalculatorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(StatCalculatorTest);
   CPPUNIT_TEST(runVisitorUnsupportedStatTypeTest);
-  CPPUNIT_TEST(runAverageStatAgainstMultipleFilesTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -64,25 +63,6 @@ public:
       "Visitors passed to the stat command with a statistic type other than \"total\" must "
       "support the NumericStatistic interface.";
     CPPUNIT_ASSERT_EQUAL(expectedErrorMsg.toStdString(), exceptionMsg.toStdString());
-  }
-
-  void runAverageStatAgainstMultipleFilesTest()
-  {
-    QStringList inputs("blah"); // What the inputs actually are doesn't matter here.
-    inputs.append("bleh");
-    QString visClassName = NodesPerWayVisitor::className();
-    QString exceptionMsg;
-    try
-    {
-      StatCalculator().calculateStat(inputs, visClassName, "average");
-    }
-    catch (const HootException& e)
-    {
-      exceptionMsg = e.what();
-    }
-    CPPUNIT_ASSERT_EQUAL(
-      QString("An average statistic may only be calculated against a single input.").toStdString(),
-      exceptionMsg.toStdString());
   }
 };
 

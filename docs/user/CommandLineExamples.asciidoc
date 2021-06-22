@@ -119,6 +119,12 @@ See the User Guide for more specific details on command usage. Most of these exa
     hoot clean /my/dir output.osm --recursive "*.osm"
 -----
 
+==== Clean erroneous data from a map and write to separate output files:
+
+-----
+    hoot clean input1.osm input2.osm --separate-output
+-----
+
 ==== Clean erroneous data from a map using Hooteanny's default cleaning operations plus JOSM's cleaning capabilities:
 
 -----
@@ -1479,6 +1485,12 @@ Requires a language translation server installation.  See the Hootenanny Install
 
 -----
     hoot crop /my/dir output.osm "-77.0551,38.8845,-77.0281,38.9031" --recursive "*.osm"
+-----
+
+==== Crop map data and write to separate output files:
+
+-----
+    hoot crop input1.osm input2.osm "-77.0551,38.8845,-77.0281,38.9031" --separate-output
 -----
 
 ==== Crop out a random subset of data with a maximum node size:

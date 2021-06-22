@@ -176,8 +176,9 @@ private:
 
       _crop(map);
 
-      const QString output = _getSeparateOutputUrl(input, "-cropped");
-      IoUtils::saveMap(map, output);
+      // Write the output to a similarly named path as the input with some text appended to the
+      // input name.
+      IoUtils::saveMap(map, _getSeparateOutputUrl(input, "-cropped"));
     }
   }
 
