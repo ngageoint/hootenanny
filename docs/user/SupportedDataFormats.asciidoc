@@ -48,7 +48,7 @@ option to false and leave the elements unsorted by ID in output.
 
 * OGR layers may selectively be read with the syntax:
 -----
-# Note that each path;layer input combo must be surrounded in quotes.
+# Note that each path;layer input combo must be surrounded in quotes. Otherwise, the entire input will be read.
 "(input1[;layer])" "[input2[;layer])" ...
 -----
 * The format for OGR database URLs is: PG:"dbname='databasename' host='addr' port='5432' user='x' password='y'"

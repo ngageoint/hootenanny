@@ -186,7 +186,7 @@ void IoUtils::ogrPathAndLayerToLayer(QString& input)
 
 bool IoUtils::isOgrPathAndLayer(const QString& input)
 {
-  return input.contains(";");
+  return input.split(";").size() == 2;
 }
 
 QStringList IoUtils::getSupportedInputsRecursively(

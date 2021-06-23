@@ -719,9 +719,9 @@ void Settings::parseCommonArguments(QStringList& args)
       }
 
       const QString optionName = kvl[0];
-      LOG_VART(optionName);
+      LOG_VARD(optionName);
       const QString optionVal = kvl[1];
-      LOG_VART(optionVal);
+      LOG_VARD(optionVal);
 
       if (!conf().hasKey(optionName))
       {
@@ -729,7 +729,7 @@ void Settings::parseCommonArguments(QStringList& args)
       }
 
       const QStringList values = optionVal.split(";", QString::SkipEmptyParts);
-      LOG_VART(values);
+      LOG_VARD(values);
 
       // There are many more options that take class names as input than this. It would be
       // difficult to validate all of them since they inherit from various base classes, so just

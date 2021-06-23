@@ -532,7 +532,8 @@ See the User Guide for more specific details on command usage. Most of these exa
 ==== Convert roads, bridges, overpasses and tunnels from a layers in a file geodatabase into a single .osm file:
 
 -----
-    # Note that each path;layer input combo must be surrounded in quotes.
+    # Note that each path;layer input combo must be surrounded in quotes. Otherwise, the entire
+    # input will be read.
     hoot convert "input.gdb;ROAD_L" "input.gdb;BRIDGE_OVERPASS_L" "input.gdb;TUNNEL_L" output.osm
 -----
 

@@ -112,7 +112,7 @@ public:
   static void ogrPathsAndLayersToPaths(QStringList& inputs);
 
   /**
-   * Converts the OGR input with layer syntax to just the input
+   * Converts the OGR input with layer syntax to the input path
    *
    * @param input the input to convert
    * @return a path
@@ -120,17 +120,18 @@ public:
   static void ogrPathAndLayerToPath(QString& input);
 
   /**
-   * TODO
+   * Converts the OGR input with layer syntax to the layer
    *
-   * @param input
+   * @param input the input to convert
+   * @return a layer name
    */
   static void ogrPathAndLayerToLayer(QString& input);
 
   /**
+   * Determines if an OGR input URL has the layer syntax: file;layer
    *
-   *
-   * @param input
-   * @return
+   * @param input the URL to examine
+   * @return true if the input URL has the layer syntax; false otherwise
    */
   static bool isOgrPathAndLayer(const QString& input);
 

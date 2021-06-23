@@ -66,7 +66,7 @@ QString BaseCommand::_getHelpPath() const
 int BaseCommand::run(char* argv[], int argc)
 {
   QStringList args = toQStringList(argv, argc);
-  LOG_VART(args);
+  LOG_VARD(args);
   LOG_VART(args.join(" "));
 
   args = args.mid(2);
