@@ -564,7 +564,7 @@ void OgrReader::finalizePartial()
 
 bool OgrReader::isSupported(const QString& url)
 {
-  LOG_VARD(url);
+  LOG_VART(url);
   QString justPath = url;
   IoUtils::ogrPathAndLayerToPath(justPath); // in case the layer syntax is in use
   return OgrUtilities::getInstance().isReasonableUrl(justPath);
@@ -583,7 +583,7 @@ void OgrReader::open(const QString& url)
   IoUtils::ogrPathAndLayerToPath(path); // in case the layer syntax is in use
   QString layer = url;
   IoUtils::ogrPathAndLayerToLayer(layer);
-  LOG_VARD(layer);
+  LOG_VART(layer);
   // If there was no layer in the URL, the layer will be empty and the path will be the same as
   // the url passed in.
   _d->open(path, layer);
