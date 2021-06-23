@@ -214,7 +214,7 @@ See the User Guide for more specific details on command usage. Most of these exa
 ==== Remove features that have likely been incorrectly marked as roads:
 
 -----
-hoot convert -D convert.ops="UnlikelyRoadRemover" input.osm output.osm
+    hoot convert -D convert.ops="UnlikelyRoadRemover" input.osm output.osm
 -----
 
 ==== Simplify ways in a map by removing unnecessary nodes from them:
@@ -455,6 +455,12 @@ hoot convert -D convert.ops="UnlikelyRoadRemover" input.osm output.osm
     hoot convert input1.osm input2.osm output.osm
 -----
 
+==== Combine multiple maps by name wildcard into a single map without conflating:
+
+-----
+    hoot convert input*.osm output.osm
+-----
+
 ==== Combine two maps into a single map affecting data within a bounding box only:
 
 -----
@@ -478,6 +484,12 @@ hoot convert -D convert.ops="UnlikelyRoadRemover" input.osm output.osm
 
 -----
     hoot convert /my/dir output.osm --recursive "*.osm"
+-----
+
+==== Convert files of multiple formats into OSM files while writing each to a separate output:
+
+-----
+    hoot convert input1.shp input2.osm.pbf osm --separate-output
 -----
 
 ==== Combine like polygons together without using full-fledged conflation:

@@ -205,7 +205,7 @@ private:
 
       // Write the output to a similarly named path as the input with some text appended to the
       // input name.
-      const QString output = _getSeparateOutputUrl(input, "-cleaned");
+      const QString output = IoUtils::getOutputUrlFromInput(input, "-cleaned");
       progress->set(
         currentTask / numTasks, Progress::JobState::Running,
         "Exporting: ..." + FileUtils::toLogFormat(output, 25) + "...");

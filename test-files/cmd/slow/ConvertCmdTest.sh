@@ -8,12 +8,12 @@ mkdir -p $OUTPUT_DIR
 
 RECURSIVE_INPUT=test-files/cmd/slow/CountCmdTest/inputDir
 
-SEPARATE_OUTPUT_INPUT_1=$OUTPUT_DIR/ToyTestA.osm
-SEPARATE_OUTPUT_INPUT_2=$OUTPUT_DIR/ToyTestB.osm
+SEPARATE_OUTPUT_INPUT_1=$OUTPUT_DIR/ToyTestA.shp
+SEPARATE_OUTPUT_INPUT_2=$OUTPUT_DIR/ToyTestB.osm.pbf
 SEPARATE_OUTPUT_OUTPUT_1=$OUTPUT_DIR/ToyTestA-converted.osm
 SEPARATE_OUTPUT_OUTPUT_2=$OUTPUT_DIR/ToyTestB-converted.osm
-GOLD_FILE_SEPARATE_OUTPUT_1=test-files/ToyTestA.osm
-GOLD_FILE_SEPARATE_OUTPUT_2=test-files/ToyTestB.osm
+GOLD_FILE_SEPARATE_OUTPUT_1=$OUTPUT_DIR/ToyTestAShp.osm
+GOLD_FILE_SEPARATE_OUTPUT_2=test-files/ToyTestB.osm.pbf
 
 CONFIG="-C Testing.conf"
 LOG_LEVEL="--warn"
@@ -22,27 +22,17 @@ echo "Multiple OSM to single OSM..."
 hoot convert $CONFIG test-files/ToyTestA.osm test-files/ToyTestB.osm $OUTPUT_DIR/ToyTestC.osm
 hoot diff $CONFIG $INPUT_DIR/ToyTestC.osm $OUTPUT_DIR/ToyTestC.osm
 
-echo "OSM dir with no filter to single OSM..."
+echo "Dir with no filter to single OSM..."
 # The input dir has duplicated files. Set to not load data source IDs to load in the duplicated 
 # elements. The output should have duplicated features in it.
 hoot convert $CONFIG -D reader.use.data.source.ids=false $RECURSIVE_INPUT $OUTPUT_DIR/recursive-out-1.osm --recursive "*"
 hoot diff $CONFIG $INPUT_DIR/recursive-out-1.osm $OUTPUT_DIR/recursive-out-1.osm
 
-echo "OSM dir with filter to single OSM..."
+echo "Dir with filter to single OSM..."
 # In this case there's only one json file in the dir, so the output won't have any duplicated
 # elements due to the input filtering.
 hoot convert $CONFIG -D reader.use.data.source.ids=false $RECURSIVE_INPUT $OUTPUT_DIR/recursive-out-2.osm --recursive "*.json"
 hoot diff $CONFIG $INPUT_DIR/recursive-out-2.osm $OUTPUT_DIR/recursive-out-2.osm
-
-echo ""
-echo "Writing to separate outputs..."
-echo ""
-# Copy the inputs to the output directory and work from there, so we don't write to the input dir 
-# under source control.
-cp $GOLD_FILE_SEPARATE_OUTPUT_1 $GOLD_FILE_SEPARATE_OUTPUT_2 $OUTPUT_DIR
-hoot convert $LOG_LEVEL $CONFIG $SEPARATE_OUTPUT_INPUT_1 $SEPARATE_OUTPUT_INPUT_2 --separate-output
-hoot diff $LOG_LEVEL $CONFIG $GOLD_FILE_SEPARATE_OUTPUT_1 $SEPARATE_OUTPUT_OUTPUT_1
-hoot diff $LOG_LEVEL $CONFIG $GOLD_FILE_SEPARATE_OUTPUT_2 $SEPARATE_OUTPUT_OUTPUT_2
 
 echo "PBF to OSM..."
 hoot convert $LOG_LEVEL $CONFIG test-files/ToyTestA.osm.pbf $OUTPUT_DIR/ToyTestA.osm
@@ -75,3 +65,14 @@ hoot convert $LOG_LEVEL $CONFIG -D convert.ops=hoot::SchemaTranslationVisitor -D
 echo "Multi-layer GDB to OSM..."
 hoot convert $LOG_LEVEL $CONFIG test-files/cmd/slow/CountCmdTest/input.gdb $OUTPUT_DIR/multi-layer-gdb-out.osm
 hoot diff $LOG_LEVEL $CONFIG $INPUT_DIR/multi-layer-gdb-out.osm $OUTPUT_DIR/multi-layer-gdb-out.osm
+
+echo ""
+echo "Multiple formats to OSM and writing to separate outputs..."
+echo ""
+# Copy the inputs to the output directory and work from there, so we don't write to the input dir 
+# under source control. Note the file comparison here depends on the output of a previous command in 
+# this test and that input doesn't need to be copied to the output dir.
+cp $GOLD_FILE_SEPARATE_OUTPUT_2 $OUTPUT_DIR
+hoot convert $LOG_LEVEL $CONFIG $SEPARATE_OUTPUT_INPUT_1 $SEPARATE_OUTPUT_INPUT_2 "osm" --separate-output
+hoot diff $LOG_LEVEL $CONFIG $GOLD_FILE_SEPARATE_OUTPUT_1 $SEPARATE_OUTPUT_OUTPUT_1
+hoot diff $LOG_LEVEL $CONFIG $GOLD_FILE_SEPARATE_OUTPUT_2 $SEPARATE_OUTPUT_OUTPUT_2

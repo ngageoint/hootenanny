@@ -48,6 +48,10 @@
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/visitors/ConstElementVisitor.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/io/HootApiDb.h>
+#include <hoot/core/io/ShapefileWriter.h>
+#include <hoot/core/util/ConfPath.h>
+#include <hoot/core/util/DbUtils.h>
 
 // Qt
 #include <QFileInfo>
@@ -194,9 +198,23 @@ bool IoUtils::isSupportedInputFormat(const QString& url)
   return !OsmMapReaderFactory::getReaderName(url).trimmed().isEmpty();
 }
 
+bool IoUtils::areSameSupportedInputFormat(const QString& url1, const QString& url2)
+{
+  const QString readerName1 = OsmMapReaderFactory::getReaderName(url1);
+  const QString readerName2 = OsmMapReaderFactory::getReaderName(url2);
+  return !readerName1.isEmpty() && !readerName2.isEmpty() && readerName1 == readerName2;
+}
+
 bool IoUtils::isSupportedOutputFormat(const QString& url)
 {
   return !OsmMapWriterFactory::getWriterName(url).trimmed().isEmpty();
+}
+
+bool IoUtils::areSameSupportedOutputFormat(const QString& url1, const QString& url2)
+{
+  const QString writerName1 = OsmMapWriterFactory::getWriterName(url1);
+  const QString writerName2 = OsmMapWriterFactory::getWriterName(url2);
+  return !writerName1.isEmpty() && !writerName2.isEmpty() && writerName1 == writerName2;
 }
 
 bool IoUtils::isStreamableIo(const QString& input, const QString& output)
@@ -231,7 +249,7 @@ bool IoUtils::areStreamableIo(const QStringList& inputs, const QString& output)
       LOG_INFO(
         "Unable to stream I/O due to input: ..." << FileUtils::toLogFormat(inputs.at(i), 25) <<
         " and/or output: ..." << FileUtils::toLogFormat(output, 25) <<
-        ". Loading entire map into memory...");
+        ". Loading entire map...");
       return false;
     }
   }
@@ -542,6 +560,87 @@ void IoUtils::writeOutputDir(const QString& dirName)
   {
     throw IllegalArgumentException("Unable to create output path for: " + dirName);
   }
+}
+
+QString IoUtils::getOutputUrlFromInput(
+  const QString& inputUrl, const QString& appendText, const QString& outputFormat)
+{
+  if (DbUtils::isOsmApiDbUrl(inputUrl) || inputUrl.startsWith("http://"))
+  {
+    throw IllegalArgumentException(
+      QString("--separate-output cannot be used with OSM API database (osmapidb://) or OSM API ") +
+      QString("web (http://) inputs."));
+  }
+  // This check prevents the overwriting of the input URL.
+  if (appendText.isEmpty() && outputFormat.isEmpty())
+  {
+    throw IllegalArgumentException(
+      QString("Either text to append or an output format must be specified when generating an ") +
+      QString("output URL from an input URL."));
+  }
+
+  LOG_VART(inputUrl);
+  LOG_VART(outputFormat);
+
+  // Get the base name of the input and the extension if its a file format or one of our custom
+  // dir formats that requires an extension at the end of the dir name (gdb, shp, etc.).
+  QString existingBaseName;
+  QString existingExtension;
+  if (DbUtils::isHootApiDbUrl(inputUrl))
+  {
+    existingBaseName = HootApiDb::getLayerName(inputUrl);
+  }
+  else
+  {
+    QFileInfo urlInfo(inputUrl);
+    LOG_VART(urlInfo.isFile());
+    LOG_VART(urlInfo.isDir());
+    if (urlInfo.isFile())
+    {
+      existingBaseName = urlInfo.baseName();
+      existingExtension = urlInfo.completeSuffix();
+    }
+    else if (urlInfo.isDir())
+    {
+      QDir dir(inputUrl);
+      existingBaseName = dir.dirName();
+      // This is a little kludgy, and we may be able to make it more extensible going forward. We
+      // want to get the extension from our custom dir formats as well in order to be able to write
+      // the output URL correctly.
+      if (existingBaseName.endsWith(ShapefileWriter().supportedFormats()))
+      {
+        existingExtension = ShapefileWriter().supportedFormats().replace(".", "");
+        existingBaseName = existingBaseName.replace(ShapefileWriter().supportedFormats(), "");
+      }
+      else if (existingBaseName.endsWith("gdb"))
+      {
+        existingExtension = "gdb";
+        existingBaseName = existingBaseName.replace(".gdb", "");
+      }
+    }
+  }
+  LOG_VART(existingBaseName);
+  LOG_VART(existingExtension);
+
+  if (!existingExtension.isEmpty() && !outputFormat.isEmpty() && existingExtension == outputFormat)
+  {
+    throw IllegalArgumentException(
+      "Generated output URL for format: " + outputFormat + " will overwrite input URL: " + inputUrl);
+  }
+
+  // Create the output url to be the input url with the custom text appended to it. This prevents
+  // us from overwriting any output.
+  QString str = inputUrl;
+  str = str.replace(existingBaseName, existingBaseName + appendText);
+  // If a format was passed in, then the output format is potentially different than the input
+  // format. If the input URL was a file or dir format with an extension, we need to swap that
+  // extension out for the output format.
+  if (!outputFormat.isEmpty() && !DbUtils::isHootApiDbUrl(outputFormat) &&
+      !existingExtension.isEmpty())
+  {
+    str = str.replace(existingExtension, outputFormat);
+  }
+  return str;
 }
 
 }

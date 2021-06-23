@@ -29,9 +29,8 @@
 
 // Hoot
 #include <hoot/core/Hoot.h>
-#include <hoot/core/io/HootApiDb.h>
+#include <hoot/core/io/IoUtils.h>
 #include <hoot/core/util/ConfPath.h>
-#include <hoot/core/util/DbUtils.h>
 #include <hoot/core/util/Progress.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/Log.h>
@@ -62,33 +61,6 @@ QString BaseCommand::getHelp() const
 QString BaseCommand::_getHelpPath() const
 {
   return ConfPath::getHootHome() + "/docs/commands/" + getName() + ".asciidoc";
-}
-
-Envelope BaseCommand::parseEnvelope(QString envStr) const
-{
-  QStringList envArr = envStr.split(",");
-
-  if (envArr.size() != 4)
-  {
-    throw HootException("Invalid bounds format, requires 4 values: " + envStr);
-  }
-
-  bool ok, allOk = true;
-  double left = envArr[0].toDouble(&ok);
-  allOk &= ok;
-  double bottom = envArr[1].toDouble(&ok);
-  allOk &= ok;
-  double right = envArr[2].toDouble(&ok);
-  allOk &= ok;
-  double top = envArr[3].toDouble(&ok);
-  allOk &= ok;
-
-  if (allOk == false)
-  {
-    throw HootException("Invalid bounds format: " + envStr);
-  }
-
-  return Envelope(left, right, bottom, top);
 }
 
 int BaseCommand::run(char* argv[], int argc)
@@ -147,42 +119,6 @@ QStringList BaseCommand::_parseRecursiveInputParameter(QStringList& args, bool& 
   }
   LOG_VARD(inputFilters);
   return inputFilters;
-}
-
-QString BaseCommand::_getSeparateOutputUrl(const QString& url, const QString& appendText)
-{
-  if (DbUtils::isOsmApiDbUrl(url) || url.startsWith("http://"))
-  {
-    throw IllegalArgumentException(
-      QString("--separate-output cannot be used with OSM API database (osmapidb://) or OSM API ") +
-      QString("web (http://) inputs."));
-  }
-
-  QString str;
-  if (DbUtils::isHootApiDbUrl(url))
-  {
-    const QString existingLayerName = HootApiDb::getLayerName(url);
-    str = url;
-    str = str.replace(existingLayerName, existingLayerName + appendText);
-  }
-  else
-  {
-    QFileInfo urlInfo(url);
-    if (urlInfo.isFile())
-    {
-      const QString existingBaseFileName = QFileInfo(url).baseName();
-      str = url;
-      str = str.replace(existingBaseFileName, existingBaseFileName + appendText);
-    }
-    else if (urlInfo.isDir())
-    {
-      QDir dir(url);
-      const QString existingDirName = dir.dirName();
-      str = url;
-      str = str.replace(existingDirName, existingDirName + appendText);
-    }
-  }
-  return str;
 }
 
 }

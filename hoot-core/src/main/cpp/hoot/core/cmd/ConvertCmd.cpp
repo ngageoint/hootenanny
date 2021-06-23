@@ -41,6 +41,7 @@
 // Qt
 #include <QElapsedTimer>
 #include <QStringList>
+#include <QFileInfo>
 
 using namespace std;
 
@@ -78,20 +79,11 @@ public:
     bool recursive = false;
     const QStringList inputFilters = _parseRecursiveInputParameter(args, recursive);
 
-    if (!separateOutput && args.size() < 2)
+    if (args.size() < 2)
     { 
       std::cout << getHelp() << std::endl << std::endl;
       throw IllegalArgumentException(
         QString("%1 takes at least two parameters. You provided %2: %3")
-          .arg(getName())
-          .arg(args.size())
-          .arg(args.join(",")));
-    }
-    else if (separateOutput && args.size() < 1)
-    {
-      std::cout << getHelp() << std::endl << std::endl;
-      throw IllegalArgumentException(
-        QString("%1 takes at least one parameter. You provided %2: %3")
           .arg(getName())
           .arg(args.size())
           .arg(args.join(",")));
@@ -107,14 +99,10 @@ public:
         ConfigOptions::getCropBoundsKey() + " option must be specified.");
     }
 
-    QString output;
-    if (!separateOutput)
-    {
-      // Output is the last param.
-      const int outputIndex = args.size() - 1;
-      output = args[outputIndex];
-      args.removeAt(outputIndex);
-    }
+    // Output is the last param.
+    const int outputIndex = args.size() - 1;
+    const QString output = args[outputIndex];
+    args.removeAt(outputIndex);
     LOG_VARD(output);
 
     // Everything that's left is an input.
@@ -130,11 +118,11 @@ public:
 
     ConfigUtils::checkForDuplicateElementCorrectionMismatch(ConfigOptions().getConvertOps());
 
-    DataConverter converter;
-    converter.setConfiguration(conf());
     if (!separateOutput)
     {
       // combines all inputs and writes them to the same output
+      DataConverter converter;
+      converter.setConfiguration(conf());
       converter.convert(inputs, output);
     }
     else
@@ -143,9 +131,12 @@ public:
       for (int i = 0; i < inputs.size(); i++)
       {
         const QString input = inputs.at(i);
-        // Write each output to a similarly named path as the input with some text appended to the
-        // input name.
-        converter.convert(input, _getSeparateOutputUrl(input, "-converted"));
+        // Write each output to the format specified by output and a similarly named path as the
+        // input with some text appended to the input name. We need to re-init DataConverter here
+        // each time since it sets and holds onto conversion operators based on the input type.
+        DataConverter converter;
+        converter.setConfiguration(conf());
+        converter.convert(input, IoUtils::getOutputUrlFromInput(input, "-converted", output));
       }
     }
     LOG_STATUS(

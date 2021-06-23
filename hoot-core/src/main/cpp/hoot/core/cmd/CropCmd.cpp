@@ -178,7 +178,7 @@ private:
 
       // Write the output to a similarly named path as the input with some text appended to the
       // input name.
-      IoUtils::saveMap(map, _getSeparateOutputUrl(input, "-cropped"));
+      IoUtils::saveMap(map, IoUtils::getOutputUrlFromInput(input, "-cropped"));
     }
   }
 

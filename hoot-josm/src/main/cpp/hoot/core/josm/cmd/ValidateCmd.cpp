@@ -175,7 +175,7 @@ private:
 
       // Write the output to a similarly named path as the input with some text appended to the
       // input name.
-      const QString output = _getSeparateOutputUrl(input, "-validated");
+      const QString output = IoUtils::getOutputUrlFromInput(input, "-validated");
       MapProjector::projectToWgs84(map);
       IoUtils::saveMap(map, output);
     }
