@@ -64,35 +64,54 @@ public:
     QElapsedTimer timer;
     timer.start();
 
-    if (args.size() < 1)
+    bool quick = false;
+    if (args.contains("--brief"))
     {
-      cout << getHelp() << endl << endl;
-      throw HootException(QString("%1 takes one parameter.").arg(getName()));
+      quick = true;
+      args.removeAt(args.indexOf("--brief"));
     }
 
-    const QString QUICK_SWITCH = "--brief";
-    const QString OUTPUT_SWITCH = "--output=";
-
-    QStringList inputs(args);
-
-    bool quick = false;
-    bool toFile = false;
-    QString outputFilename = "";
-    // Capture any flags and remove them before processing inputs.
-    for (int i = 0; i < args.size(); i++)
+    QString output;
+    if (args.contains("--output"))
     {
-      if (args[i].startsWith(OUTPUT_SWITCH))
+      const int outputIndex = args.indexOf("--output");
+      output = args.at(outputIndex + 1).trimmed();
+
+      QStringList supportedOutputFormats;
+      supportedOutputFormats.append(".json");
+      supportedOutputFormats.append(".txt");
+      if (!StringUtils::endsWithAny(output, supportedOutputFormats))
       {
-        outputFilename = args[i];
-        outputFilename.remove(OUTPUT_SWITCH);
-        toFile = true;
-        inputs.removeOne(args[i]);
+        throw IllegalArgumentException(
+          "Invalid output format: ..." + FileUtils::toLogFormat(output, 25));
       }
-      else if (args[i] == QUICK_SWITCH)
-      {
-        quick = true;
-        inputs.removeOne(args[i]);
-      }
+
+      args.removeAt(outputIndex + 1);
+      args.removeAt(outputIndex);
+    }
+
+    bool recursive = false;
+    const QStringList inputFilters = _parseRecursiveInputParameter(args, recursive);
+
+    if (args.size() < 1)
+    {
+      std::cout << getHelp() << std::endl << std::endl;
+      throw IllegalArgumentException(
+        QString("%1 takes at least one parameter. You provided %2: %3")
+          .arg(getName())
+          .arg(args.size())
+          .arg(args.join(",")));
+    }
+
+    // Everything left is an input.
+    QStringList inputs;
+    if (!recursive)
+    {
+      inputs = args;
+    }
+    else
+    {
+      inputs = IoUtils::getSupportedInputsRecursively(args, inputFilters);
     }
 
     const QString sep = "\t";
@@ -108,7 +127,7 @@ public:
       // Tried using IoUtils::loadMap here, but it has extra logic beyond OsmMapReaderFactory::read
       // for reading in OGR layers. Using it causes the last part of Osm2OgrTranslationTest to fail.
       // Need to determine why either strictly use one reading method or the other.
-      LOG_STATUS("Reading from: ..." << inputs[i].right(25) << "...");
+      LOG_STATUS("Reading from: ..." << FileUtils::toLogFormat(inputs[i], 25) << "...");
       OsmMapReaderFactory::read(map, inputs[i], true, Status::Invalid);
       MapProjector::projectToPlanar(map);
 
@@ -126,14 +145,14 @@ public:
         inputs[i].right(25) << " in " + StringUtils::millisecondsToDhms(timer2.elapsed()));
     }
 
-    if (toFile)
+    if (!output.isEmpty())
     {
       LOG_STATUS(
-        "Writing statistics output to: " << FileUtils::toLogFormat(outputFilename, 25) << "...");
-      if (outputFilename.endsWith(".json", Qt::CaseInsensitive))
-        MapStatsWriter().writeStatsToJson(allStats, outputFilename);
+        "Writing statistics output to: " << FileUtils::toLogFormat(output, 25) << "...");
+      if (output.endsWith(".json", Qt::CaseInsensitive))
+        MapStatsWriter().writeStatsToJson(allStats, output);
       else
-        MapStatsWriter().writeStatsToText(allStats, outputFilename);
+        MapStatsWriter().writeStatsToText(allStats, output);
     }
     else
     {

@@ -1,4 +1,34 @@
+
+Listing available validators...
+
 DuplicatedWayNodes                              Duplicated way nodes
+
+Validating a single input...
+
+Total JOSM validation errors: 4 found in 45 total features.
+Duplicated way nodes errors: 1
+Unclosed Ways errors: 2
+Untagged, empty and one node ways errors: 1
+Total failing JOSM validators: 0
+
+Validating a single input and using an output file...
+
+Total JOSM validation errors: 4 found in 45 total features.
+Duplicated way nodes errors: 1
+Unclosed Ways errors: 2
+Untagged, empty and one node ways errors: 1
+Total failing JOSM validators: 0
+
+Validating multiple inputs...
+
+Total JOSM validation errors: 8 found in 90 total features.
+Duplicated way nodes errors: 2
+Unclosed Ways errors: 4
+Untagged, empty and one node ways errors: 2
+Total failing JOSM validators: 0
+
+Validating recursively in a directory structure with a filter...
+
 Total JOSM validation errors: 4 found in 45 total features.
 Duplicated way nodes errors: 1
 Unclosed Ways errors: 2

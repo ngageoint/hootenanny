@@ -1,10 +1,5 @@
-10:55:34.849 INFO   ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from ...md/slow/ConflateCmdStatsTest/toy-buildings-out.osm...
-10:55:34.851 INFO   .../hoot/core/io/OsmXmlReader.cpp( 912) Read 0 elements from input.        10:55:34.852 INFO   .../hoot/core/io/OsmXmlReader.cpp( 912) Read 0 elements from input.        10:55:34.859 INFO   .../hoot/core/io/OsmXmlReader.cpp( 476) 	Reporting missing elements...
-10:55:34.859 INFO   ...ore/io/OsmMapReaderFactory.cpp( 227) Read 103 elements from input in: 00:00.
-10:55:34.859 INFO   ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from ...md/slow/ConflateCmdStatsTest/toy-buildings-out.osm...
-10:55:34.860 INFO   .../hoot/core/io/OsmXmlReader.cpp( 912) Read 0 elements from input.        10:55:34.860 INFO   .../hoot/core/io/OsmXmlReader.cpp( 912) Read 0 elements from input.        10:55:34.867 INFO   .../hoot/core/io/OsmXmlReader.cpp( 476) 	Reporting missing elements...
-10:55:34.867 INFO   ...ore/io/OsmMapReaderFactory.cpp( 227) Read 103 elements from input in: 00:00.
-10:55:34.870 STATUS .../cpp/hoot/core/cmd/DiffCmd.cpp( 145) Map difference calculated in 00:00 total.
+17:04:06.670 STATUS .../cpp/hoot/core/cmd/DiffCmd.cpp( 114) Comparing ...est/toy-buildings-out.osm and ...est/toy-buildings-out.osm...
+17:04:06.678 STATUS .../cpp/hoot/core/cmd/DiffCmd.cpp( 149) Map difference calculated in 00:00 total.
 stats = (stat) OR (input map 1 stat) (input map 2 stat) (output map stat)
 Nodes	70	41	90	
 Ways	10	8	12	
@@ -17,6 +12,8 @@ Least Members in a Relation	0	0	2
 Most Members in a Relation	0	0	2	
 Average Members Per Relation	0	0	2	
 Total Relation Members	0	0	2	
+Unique Feature Tags	16	14	24	
+Unique Feature Tag Keys	6	4	7	
 Least Tags on a Feature	2	2	1	
 Most Tags on a Feature	4	4	6	
 Average Tags Per Feature	3	2	3	
@@ -83,10 +80,10 @@ Percentage of Number of Total Map 2 Features Not Matched With Map 1 Features			3
 Percentage of Area of Map 1 Buildings Matched With Map 2 Buildings			883.2856427137721	
 Percentage of Area of Map 1 Buildings Not Matched With Map 2 Buildings			409.7576556436464	
 Percentage of Area of Map 2 Buildings Not Matched With Map 1 Buildings			311.1930817416132	
-Calculate Stats for Input 1 Time (sec)				11.69059491157532
-Calculate Stats for Input 2 Time (sec)				1.035919189453125
-Apply Pre-Conflate Ops Time (sec)				0.009142875671386719
-Apply Post-Conflate Ops Time (sec)				0.005414962768554688
-Calculate Stats for Output Time (sec)				1.472883939743042
+Calculate Stats for Input 1 Time (sec)				4.118635892868042
+Calculate Stats for Input 2 Time (sec)				0.2986130714416504
+Apply Pre-Conflate Ops Time (sec)				0.002938985824584961
+Apply Post-Conflate Ops Time (sec)				0.001488208770751953
+Calculate Stats for Output Time (sec)				0.3110389709472656
 
-10:55:34.296 STATUS ...pp/hoot/core/util/Progress.cpp(  86) Conflate (100%): Conflation job completed in 00:13 for reference map: ...st-files/ToyBuildingsTestA.osm and secondary map: ...st-files/ToyBuildingsTestB.osm and written to output: ...tatsTest/toy-buildings-out.osm
+17:04:06.352 STATUS ...pp/hoot/core/util/Progress.cpp(  86) Conflate (100%): Conflation job completed in 00:04 for reference map: ...st-files/ToyBuildingsTestA.osm and secondary map: ...st-files/ToyBuildingsTestB.osm and written to output: ...tatsTest/toy-buildings-out.osm

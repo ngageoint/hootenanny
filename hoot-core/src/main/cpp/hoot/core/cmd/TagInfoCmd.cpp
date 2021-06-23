@@ -28,6 +28,7 @@
 // Hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
+#include <hoot/core/io/IoUtils.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/schema/TagInfo.h>
 #include <hoot/core/util/StringUtils.h>
@@ -54,9 +55,6 @@ public:
 
   int runSimple(QStringList& args) override
   {
-    QElapsedTimer timer;
-    timer.start();
-
     if (args.size() < 1)
     {
       cout << getHelp() << endl << endl;
@@ -77,6 +75,7 @@ public:
       args.removeAt(limitIndex + 1);
       args.removeAt(limitIndex);
     }
+
     QStringList keys;
     if (args.contains("--keys"))
     {
@@ -85,24 +84,28 @@ public:
       args.removeAt(keysIndex + 1);
       args.removeAt(keysIndex);
     }
+
     bool keysOnly = false;
     if (args.contains("--keys-only"))
     {
       keysOnly = true;
       args.removeAt(args.indexOf("--keys-only"));
     }
+
     bool caseSensitive = true;
     if (args.contains("--case-insensitive"))
     {
       caseSensitive = false;
       args.removeAt(args.indexOf("--case-insensitive"));
     }
+
     bool exactKeyMatch = true;
     if (args.contains("--partial-key-match"))
     {
       exactKeyMatch = false;
       args.removeAt(args.indexOf("--partial-key-match"));
     }
+
     bool delimitedTextOutput = false;
     if (args.contains("--delimited-text"))
     {
@@ -116,12 +119,32 @@ public:
       args.removeAt(args.indexOf("--delimited-text"));
     }
 
+    bool recursive = false;
+    const QStringList inputFilters = _parseRecursiveInputParameter(args, recursive);
+
+    if (args.size() < 1)
+    {
+      std::cout << getHelp() << std::endl << std::endl;
+      throw IllegalArgumentException(
+        QString("%1 takes at least one parameter. You provided %2: %3")
+          .arg(getName())
+          .arg(args.size())
+          .arg(args.join(",")));
+    }
+
     // Everything left is an input.
     QStringList inputs;
-    for (int i = 0; i < args.size(); i++)
+    if (!recursive)
     {
-      inputs.append(args[i]);
+      inputs = args;
     }
+    else
+    {
+      inputs = IoUtils::getSupportedInputsRecursively(args, inputFilters);
+    }
+
+    QElapsedTimer timer;
+    timer.start();
 
     LOG_STATUS("Displaying tag information for " << inputs.size() << "inputs...");
     TagInfo tagInfo(

@@ -3,33 +3,27 @@
 
 === Description
 
-The +alpha-shape+ command provides a way to generate a "concave hull" for a set of points.  Specifically, it reads data from
-one input, calculates the alpha shape and writes the resulting multipolygon to output. This is most useful when seeding the
-+cut+ command. The degree of the concaveness is determined by the alpha parameters. A small alpha parameter creates a
-shape with a large number of holes and concave sections. A large alpha value creates a shape closer to a convex hull. An alpha
-value equal to the maximum distance between any two points in the data or larger will create a convex hull. Additional details
-can be found in the _Cookie Cutter_ section of <<hootalgo, Hootenanny - Algorithms>> and in the following documents:
-https://github.com/ngageoint/hootenanny/files/595246/Hootenanny.-.Alpha.Shape.2013-03-07.pptx[here].
+The +alpha-shape+ command provides a way to generate a concave hull for a set of points. This is most useful when seeding the
++cut+ command. The degree of the concaveness is determined by the alpha parameters.
 
-* +--alpha value+   - The size in meters used for alpha. A larger value makes a smoother shape and a smaller value will 
-                      create a rough shape with more holes. Value in meters. If no alpha value is given, Hootenanny will run 
-                      an approximation algorithm to find a valid alpha value.
-* +--buffer value+  - The buffer to add to the alpha shape before cutting. A negative value will make the shape smaller. 
-                      Value in meters. Generally a buffer of zero will be used. If using the alpha shape command with 
-                      cookie cutter it is a good idea to use a larger negative value on complex data shapes. This will limit 
-                      the number of holes in the data. A negative value equal to the alpha value is a good rule of thumb. 
-                      Default value of the buffer is 0 meters.
-* +points+          - The input data to use for deriving the alpha shape; may be any supported input format (e.g. OSM file). 
-                      The alpha shape algorithm is used to derive a polygon representing the bounds.
-* +output+          - The output; may be any supported output format (e.g. OSM file).
-
-When output to a +.osm+ file the alpha shape will always be a multi-polygon with one attribute +area=yes+. When output as 
-a Shapefile it will be a multipolygon shapefile with a single record. Hootenanny doesn't support relations in +.osm.pbf+ files.
+* +input+    - Input; may be any supported input format (e.g. OSM file). The alpha shape is derived using the boundary of 
+               the input.
+* +output+   - Output; may be any supported output format (e.g. OSM file). When output to a +.osm+ file, the alpha 
+               shape will always be a multi-polygon with one attribute +area=yes+. When output as a Shapefile, it will be 
+               a multipolygon shapefile with a single record.
+* +--alpha+  - Optional size in meters used for alpha. A larger value makes a smoother shape closer to a convex hull, and 
+               a smaller value will create a rough shape with more holes and concave sections. An alpha value equal to 
+               the maximum distance between any two points in the data or larger will create a convex hull. If no alpha 
+               value is given, Hootenanny will run an approximation algorithm to find a valid alpha value.
+* +--buffer+ - Optional buffer, in meters, to add to the alpha shape before cutting. A negative value will make the 
+               shape smaller. If using the alpha shape command with the +cut+ command, it is helpful to use a larger 
+               negative value on complex data shapes to limit the number of holes in the output data. A negative value 
+               equal to the alpha value is a good rule of thumb.
 
 === Usage
 
 --------------------------------------
-alpha-shape [--alpha value] [--buffer value] (points) (output)
+hoot alpha-shape (input) (output) [--alpha value] [--buffer value]
 --------------------------------------
 
 https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#create-a-shape-that-covers-a-set-of-features-with-a-buffer[Examples]

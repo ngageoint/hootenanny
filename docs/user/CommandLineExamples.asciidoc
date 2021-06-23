@@ -94,114 +94,127 @@ See the User Guide for more specific details on command usage. Most of these exa
 ==== Derive a changeset between two maps and write the result directly to an OSM API database:
 
 -----
-    hoot changeset-derive inputData1.osm inputData2.osm changeset.osc.sql
+    hoot changeset-derive inputData1.osm inputData2.osm changeset.osc.sql \
+      --osmApiDatabaseUrl osmapidb://username:password@localhost:5432/databaseName
     hoot changeset-apply changeset.osc.sql osmapidb://username:password@localhost:5432/databaseName
 -----
 
 === Cleaning
 
-==== Clean erroneous data from two maps:
+==== Clean erroneous data from a map:
 
 -----
     hoot clean input.osm output.osm
 -----
 
-==== Clean erroneous data from two maps using Hooteanny's default cleaning operations plus JOSM's cleaning capabilities:
+==== Clean erroneous data recursively across multiple files under a directory:
 
 -----
-    hoot clean -D map.cleaner.transforms++=hoot::JosmMapCleaner input.osm output.osm
+    hoot clean /my/dir output.osm --recursive "*"
+-----
+
+==== Clean erroneous data recursively across multiple OSM files under a directory:
+
+-----
+    hoot clean /my/dir output.osm --recursive "*.osm"
+-----
+
+==== Clean erroneous data from a map using Hooteanny's default cleaning operations plus JOSM's cleaning capabilities:
+
+-----
+    hoot clean -D map.cleaner.transforms++=JosmMapCleaner input.osm output.osm
 -----
 
 ==== Clean erroneous data from two maps using Hooteanny's default cleaning operations plus a subset of JOSM's cleaning capabilities via exclusion:
 
 -----
-    hoot clean -D map.cleaner.transforms++=hoot::JosmMapCleaner \
+    hoot clean -D map.cleaner.transforms++=JosmMapCleaner \
       -D josm.validators.exclude="UntaggedWay;DuplicatedWayNodes" input.osm output.osm
 -----
 
 ==== Clean erroneous data from two maps using Hooteanny's default cleaning operations plus a subset of JOSM's cleaning capabilities via inclusion:
 
 -----
-    hoot clean -D map.cleaner.transforms++=hoot::JosmMapCleaner \
+    hoot clean -D map.cleaner.transforms++=JosmMapCleaner \
       -D josm.validators.include="UntaggedWay;DuplicatedWayNodes" input.osm output.osm
 -----
 
 ==== Run JOSM cleaning only on a map:
 
 -----
-    hoot convert -D convert.ops=hoot::JosmMapCleaner input.osm output.osm
+    hoot convert -D convert.ops=JosmMapCleaner input.osm output.osm
 -----
 
 ==== Prepend a cleaning operation to the existing set of cleaning operations:
 
 -----
-    hoot clean -D map.cleaner.transforms++=hoot::MyCleaningOp input.osm output.osm
+    hoot clean -D map.cleaner.transforms++=MyCleaningOp input.osm output.osm
 -----
 
 ==== Append a cleaning operation to the existing set of cleaning operations:
 
 -----
-    hoot clean -D map.cleaner.transforms+=hoot::MyCleaningOp input.osm output.osm
+    hoot clean -D map.cleaner.transforms+=MyCleaningOp input.osm output.osm
 -----
 
 ==== Remove a cleaning operation from the existing set of cleaning operations:
 
 -----
-    hoot clean -D map.cleaner.transforms-=hoot::NoInformationElementRemover input.osm output.osm
+    hoot clean -D map.cleaner.transforms-=NoInformationElementRemover input.osm output.osm
 -----
 
 ==== Mark exactly duplicated features within a map:
 
 -----
-    hoot convert -D convert.ops="hoot::DuplicateElementMarker" input.osm output.osm
+    hoot convert -D convert.ops="DuplicateElementMarker" input.osm output.osm
 -----
 
 ==== Remove all duplicate ways from a map:
 
 -----
-    hoot convert -D convert.ops="hoot::DuplicateWayRemover" input.osm output.osm
+    hoot convert -D convert.ops="DuplicateWayRemover" input.osm output.osm
 -----
 
 ==== Remove all duplicate areas from a map:
 
 -----
-    hoot convert -D convert.ops="hoot::RemoveDuplicateAreasVisitor" input.osm output.osm
+    hoot convert -D convert.ops="RemoveDuplicateAreasVisitor" input.osm output.osm
 -----
 
 ==== Remove all empty areas from a map:
 
 -----
-    hoot convert -D convert.ops="hoot::RemoveEmptyAreasVisitor" input.osm output.osm
+    hoot convert -D convert.ops="RemoveEmptyAreasVisitor" input.osm output.osm
 -----
 
 ==== Remove duplicate name tags from features:
 
 -----
-    hoot convert -D convert.ops="hoot::DuplicateNameRemover" input.osm output.osm
+    hoot convert -D convert.ops="DuplicateNameRemover" input.osm output.osm
 -----
 
 ==== Remove duplicate nodes:
 
 -----
-    hoot convert -D convert.ops="hoot::DuplicateNodeRemover" input.osm output.osm
+    hoot convert -D convert.ops="DuplicateNodeRemover" input.osm output.osm
 -----
 
 ==== Remove elements that contain no useful information:
 
 -----
-    hoot convert -D convert.ops="hoot::NoInformationElementRemover" input.osm output.osm
+    hoot convert -D convert.ops="NoInformationElementRemover" input.osm output.osm
 -----
 
 ==== Remove features that have likely been incorrectly marked as roads:
 
 -----
-hoot convert -D convert.ops="hoot::UnlikelyRoadRemover" input.osm output.osm
+hoot convert -D convert.ops="UnlikelyRoadRemover" input.osm output.osm
 -----
 
 ==== Simplify ways in a map by removing unnecessary nodes from them:
 
 -----
-    hoot convert -D convert.ops="hoot::WayGeneralizeVisitor" -D way.generalizer.epsilon=5.0 input.osm output.osm
+    hoot convert -D convert.ops="WayGeneralizeVisitor" -D way.generalizer.epsilon=5.0 input.osm output.osm
 -----
 
 ==== Remove intra-map duplicates within a single map:
@@ -277,7 +290,7 @@ hoot convert -D convert.ops="hoot::UnlikelyRoadRemover" input.osm output.osm
 
 -----
     hoot conflate -C ReferenceConflation.conf -C UnifyingAlgorithm.conf \
-      -D conflate.pre.ops=hoot::CookieCutterOp -D cookie.cutter.alpha=2500 \
+      -D conflate.pre.ops=CookieCutterOp -D cookie.cutter.alpha=2500 \
       -D cookie.cutter.alpha.shape.buffer=0 -D cookie.cutter.output.crop=false \
       input1.osm input2.osm output.osm
 -----
@@ -299,7 +312,7 @@ hoot convert -D convert.ops="hoot::UnlikelyRoadRemover" input.osm output.osm
 
 -----
     hoot conflate -C AttributeConflation.conf -C UnifyingAlgorithm.conf \
-      -D conflate.pre.ops="hoot::SchemaTranslationVisitor" \
+      -D conflate.pre.ops="SchemaTranslationVisitor" \
       -D schema.translation.script=myTranslation.js input1.osm input2.osm output.osm
 -----
 
@@ -342,7 +355,7 @@ hoot convert -D convert.ops="hoot::UnlikelyRoadRemover" input.osm output.osm
 
 -----
     hoot conflate -C ReferenceConflation.conf -C UnifyingAlgorithm.conf \
-      -D match.creators="hoot::BuildingMatchCreator" -D merger.creators="hoot::BuildingMergerCreator" \ 
+      -D match.creators="BuildingMatchCreator" -D merger.creators="BuildingMergerCreator" \ 
       input1.osm input2.osm output.osm
 -----
 
@@ -350,7 +363,7 @@ hoot convert -D convert.ops="hoot::UnlikelyRoadRemover" input.osm output.osm
 
 -----
     hoot conflate -C ReferenceConflation.conf -C UnifyingAlgorithm.conf \
-      -D match.creators="hoot::BuildingMatchCreator" -D merger.creators="hoot::BuildingMergerCreator" \ 
+      -D match.creators="BuildingMatchCreator" -D merger.creators="BuildingMergerCreator" \ 
       -D conflate.tag.filter="{ \"must\": [ { \"tag\": \"amenity=restaurant\" } ] }" \
       input1.osm input2.osm output.osm
 -----
@@ -359,9 +372,9 @@ hoot convert -D convert.ops="hoot::UnlikelyRoadRemover" input.osm output.osm
 
 -----
     hoot conflate -C ReferenceConflation.conf -C UnifyingAlgorithm.conf \
-      -D match.creators="hoot::BuildingMatchCreator" -D merger.creators="hoot::BuildingMergerCreator" \ 
+      -D match.creators="BuildingMatchCreator" -D merger.creators="BuildingMergerCreator" \ 
       -D conflate.tag.filter="{ \"must\": [ { \"tag\": \"amenity=restaurant\" } ] }" \
-      -D conflate.pre.ops="hoot::TagCriterion" -D tag.criterion.kvps="name;Subway" \
+      -D conflate.pre.ops="TagCriterion" -D tag.criterion.kvps="name;Subway" \
       input1.osm input2.osm output.osm
 -----
 
@@ -372,12 +385,12 @@ hoot convert -D convert.ops="hoot::UnlikelyRoadRemover" input.osm output.osm
       -D conflate.tag.filter=myFilter.json input1.osm input2.osm output.osm
 -----
 
-==== Filter maps down to POIs only before conflating them:
+==== Filter POIs out of maps before conflating them:
 
 -----
     hoot conflate -C AttributeConflation.conf -C UnifyingAlgorithm.conf \
-      -D conflate.pre.ops="hoot::RemoveElementsVisitor" \
-      -D remove.elements.visitor.element.criteria="hoot::PoiCriterion" input1.osm input2.osm \
+      -D conflate.pre.ops="RemoveElementsVisitor" \
+      -D remove.elements.visitor.element.criteria="PoiCriterion" input1.osm input2.osm \
       output.osm
 -----
 
@@ -385,9 +398,20 @@ hoot convert -D convert.ops="hoot::UnlikelyRoadRemover" input.osm output.osm
 
 -----
     hoot conflate -C AttributeConflation.conf -C UnifyingAlgorithm.conf \
-      -D convert.ops=hoot::RemoveElementsVisitor \
-      -D remove.elements.visitor.element.criteria=hoot::LinearWaterwayCriterion;hoot::LinearWaterwayWayNodeCriterion;hoot::RelationWithRiverMembersCriterion \
-      -D element.criterion.negate=true \
+      -D convert.ops=RemoveElementsVisitor \
+      -D remove.elements.visitor.element.criteria=RiverCriterion \
+      -D element.criteria.negate=true \
+      -D remove.elements.visitor.chain.element.criteria=true \
+      -D remove.elements.visitor.recursive=false input1.osm input2.osm output.osm
+-----
+
+==== Filter maps down to rivers only before conflating them and keep any relations that contain them:
+
+-----
+    hoot conflate -C AttributeConflation.conf -C UnifyingAlgorithm.conf \
+      -D convert.ops=RemoveElementsVisitor \
+      -D remove.elements.visitor.element.criteria=RiverCriterion;RelationWithRiverMembersCriterion \
+      -D element.criteria.negate=true \
       -D remove.elements.visitor.chain.element.criteria=true \
       -D remove.elements.visitor.recursive=false input1.osm input2.osm output.osm
 -----
@@ -413,7 +437,7 @@ hoot convert -D convert.ops="hoot::UnlikelyRoadRemover" input.osm output.osm
 
 -----
     hoot conflate -C ReferenceConflation.conf -C UnifyingAlgorithm.conf \
-      -D conflate.post.ops+="hoot::ResolveReviewsOp" \
+      -D conflate.post.ops+="ResolveReviewsOp" \
       input1.osm input2.osm output.osm --differential
 -----
 
@@ -438,10 +462,22 @@ hoot convert -D convert.ops="hoot::UnlikelyRoadRemover" input.osm output.osm
       input1.osm input2.osm output.osm
 -----
 
+==== Combine multiple maps recursively across multiple files under a directory:
+
+-----
+    hoot convert /my/dir output.osm --recursive "*"
+-----
+
+==== Combine multiple maps recursively across multiple OSM files under a directory:
+
+-----
+    hoot convert /my/dir output.osm --recursive "*.osm"
+-----
+
 ==== Combine like polygons together without using full-fledged conflation:
 
 -----
-    hoot convert -D convert.ops="hoot::UnionPolygonsOp" input.osm output.osm
+    hoot convert -D convert.ops="UnionPolygonsOp" input.osm output.osm
 -----
 
 ==== Retrieve OSM data around Paris, France from the OSM API:
@@ -524,31 +560,31 @@ hoot convert -D convert.ops="hoot::UnlikelyRoadRemover" input.osm output.osm
 ==== Remove relations from a map:
 
 -----
-    hoot convert -D convert.ops="hoot::RemoveElementsVisitor" \
-      -D remove.elements.visitor.element.criteria="hoot::RelationCriterion" input.osm output.osm
+    hoot convert -D convert.ops="RemoveElementsVisitor" \
+      -D remove.elements.visitor.element.criteria="RelationCriterion" input.osm output.osm
 -----
 
 ==== Remove all but two specific relations:
 
 -----
-    hoot convert -D convert.ops="hoot::RemoveElementsVisitor" \
-    -D remove.elements.visitor.element.criteria="hoot::ElementIdCriterion" 
+    hoot convert -D convert.ops="RemoveElementsVisitor" \
+    -D remove.elements.visitor.element.criteria="ElementIdCriterion" 
     -D element.id.criterion.ids="Relation:-1;Relation:7387470" 
-    -D element.criterion.negate=true input.osm output.osm
+    -D element.criteria.negate=true input.osm output.osm
 -----
 
 ==== Remove relations and ways from a map:
 
 -----
-    hoot convert -D convert.ops="hoot::RemoveElementsVisitor" \
-      -D remove.elements.visitor.element.criteria="hoot::RelationCriterion;hoot::WayCriterion" input.osm output.osm
+    hoot convert -D convert.ops="RemoveElementsVisitor" \
+      -D remove.elements.visitor.element.criteria="RelationCriterion;WayCriterion" input.osm output.osm
 -----
 
 ==== Remove everything but polygon geometries and their constituent features from a map:
 
 -----
-    hoot convert -D convert.ops="hoot::RemoveElementsVisitor" \
-      -D remove.elements.visitor.element.criteria="hoot::PolygonCriterion" -D element.criterion.negate=true \ 
+    hoot convert -D convert.ops="RemoveElementsVisitor" \
+      -D remove.elements.visitor.element.criteria="PolygonCriterion" -D element.criteria.negate=true \
       input.osm output.osm
 -----
 
@@ -559,7 +595,7 @@ Requires a language translation server installation.  See the Hootenanny Install
 ==== Translate tags with specified keys from German or Spanish to English:
 
 -----
-    hoot convert -D convert.ops="hoot::ToEnglishTranslationVisitor" \
+    hoot convert -D convert.ops="ToEnglishTranslationVisitor" \
       -D language.translation.source.languages="de;es" \
       -D language.tag.keys="name;alt_name" input.osm output.osm
 -----
@@ -567,7 +603,7 @@ Requires a language translation server installation.  See the Hootenanny Install
 ==== Automatically determine all the name tags in the source map and then translate those tags to English, allowing the source language to first be detected:
 
 -----
-    hoot convert -D convert.ops="hoot::ToEnglishTranslationVisitor" \
+    hoot convert -D convert.ops="ToEnglishTranslationVisitor" \
       -D language.translation.source.languages="detect" \
       -D language.parse.names=true input.osm output.osm
 -----
@@ -576,7 +612,7 @@ Requires a language translation server installation.  See the Hootenanny Install
 
 -----
     hoot conflate -C ReferenceConflation.conf -C UnifyingAlgorithm.conf \
-      -D conflate.pre.ops="hoot::ToEnglishTranslationVisitor" \
+      -D conflate.pre.ops="ToEnglishTranslationVisitor" \
       -D language.translation.source.languages="detect" \
       -D language.translation.to.translate.tag.keys="name" input1.osm input2.osm output.osm
       -D language.tag.keys="name" input.osm output.osm
@@ -586,7 +622,7 @@ Requires a language translation server installation.  See the Hootenanny Install
 
 -----
     hoot convert -D language.parse.names=true \
-      -D convert.ops="hoot::PoiCriterion;hoot::NonEnglishLanguageDetectionVisitor" \
+      -D convert.ops="PoiCriterion;NonEnglishLanguageDetectionVisitor" \
       input.osm output.osm
 -----
 
@@ -799,7 +835,7 @@ Requires a language translation server installation.  See the Hootenanny Install
 ==== List all way snap criteria for a specific set of conflate matchers:
 
 -----
-    hoot info -D match.creators="hoot::HighwayMatchCreator;hoot::ScriptMatchCreator,River.js" \
+    hoot info -D match.creators="HighwayMatchCreator;ScriptMatchCreator,River.js" \
       --way-snap-critera
 -----
 
@@ -863,75 +899,132 @@ Requires a language translation server installation.  See the Hootenanny Install
     hoot count input.osm --all-elements
 -----
 
+==== Count all features recursively across multiple files under a directory:
+
+-----
+    hoot count /my/dir --recursive "*"
+-----
+
+==== Count all features recursively across multiple OSM files under a directory:
+
+-----
+    hoot count /my/dir --recursive "*.osm"
+-----
+
 ==== Count all elements within a bounding box:
 
 -----
     hoot count -D in.bounds.criterion.bounds="-77.0551,38.8845,-77.0281,38.9031" -D in.bounds.criterion.strict=true \
-      input.osm hoot::InBoundsCriterion
+      input.osm --criteria InBoundsCriterion
 -----
 
 ==== Count all the POIs in multiple maps:
 
 -----
-    hoot count "input1.osm;input2.osm" hoot::PoiCriterion
+    hoot count input1.osm input2.osm --criteria PoiCriterion
 -----
 
 ==== Count all elements that are not POIs:
 
 -----
-    hoot count -D element.criterion.negate=true "input1.osm;input2.osm" hoot::PoiCriterion \
+    hoot count -D element.criteria.negate=true "input1.osm;input2.osm" --criteria PoiCriterion \
       --all-elements
+-----
+
+==== Count all elements that are either POIs or roads:
+
+-----
+    hoot count input.osm --criteria PoiCriterion --all-elements
+-----
+
+==== Count all POIs that have a phone number:
+
+-----
+    hoot count input.osm -D element.criteria.chain=true --criteria "PoiCriterion;HasPhoneNumberCriterion"
 -----
 
 ==== Count all features which have a tag whose key contains the text "phone":
 
 -----
-    hoot count -D tag.key.contains.criterion.text="phone" input.osm hoot::TagKeyContainsCriterion
+    hoot count -D tag.key.contains.criterion.text="phone" input.osm --criteria TagKeyContainsCriterion
 -----
 
 ==== Count all features which have a name:
 
 -----
-    hoot count input.osm hoot::HasNameCriterion
+    hoot count input.osm --criteria HasNameCriterion
 -----
 
 ==== Count all features which have the name, "Old Town Tavern":
 
 -----
     hoot count -D name.criterion.names="Old Town Tavern" -D name.criterion.case.sensitive=false \
-      input.osm hoot::NameCriterion
+      input.osm --criteria NameCriterion
 -----
 
 ==== Count all features whose name contains "subway":
 
 -----
     hoot count -D name.criterion.names="subway" -D name.criterion.case.sensitive=false \
-      input.osm hoot::NameCriterion
+      input.osm --criteria NameCriterion
+-----
+
+==== Count all conflatable elements in a map:
+
+-----
+    # Generally, this should be equal to the total number of elements in a map since Hootenanny 
+    # be able to conflate any feature. In the rare circumstance its not, this can be used to
+    # track down which elements cannot be conflated.
+    hoot count input.osm --criteria ConflatableElementCriterion
+-----
+
+==== Count unique tags:
+
+-----
+    hoot stat input.osm UniqueTagCounter
+-----
+
+==== Count unique tag keys:
+
+-----
+    hoot stat input.osm UniqueTagKeyCounter
+-----
+
+==== Count unique tag keys recursively across multiple files under a directory:
+
+-----
+    hoot count /my/dir UniqueTagKeyCounter --recursive "*"
+-----
+
+==== Count unique tag keys recursively across multiple OSM files under a directory:
+
+-----
+    hoot count /my/dir UniqueTagKeyCounter --recursive "*.osm"
 -----
 
 ==== Calculate the area of all features in a map:
 
 -----
-    hoot stat input.osm hoot::CalculateAreaVisitor
+    hoot stat input.osm CalculateAreaVisitor
 -----
 
 ==== Calculate the length of all ways in a map:
 
 -----
-    hoot stat input.osm hoot::LengthOfWaysVisitor
+    hoot stat input.osm LengthOfWaysVisitor
 -----
 
 ==== Count the number of features containing a node by specifying its ID:
 
 -----
-    hoot count -D contains.node.criterion.id=-234 input.osm hoot::ContainsNodeCriterion
+    hoot count -D contains.node.criterion.id=-234 input.osm ContainsNodeCriterion
 -----
 
 ==== Count the number of nodes within 25 meters of a coordinate:
 
 -----
     hoot count -D distance.node.criterion.center=-77.3453,38.3456 \
-      -D distance.node.criterion.distance=25.0 input.osm hoot::DistanceNodeCriterion
+      -D distance.node.criterion.distance=25.0 input.osm DistanceNodeCriterion
 -----
 
 ==== Count the number of elements with a version greater than or equal to one:
@@ -939,7 +1032,7 @@ Requires a language translation server installation.  See the Hootenanny Install
 -----
     hoot count -D attribute.value.criterion.type=version \
       -D attribute.value.criterion.comparison.type=NumericGreaterThanOrEqualTo \
-      -D attribute.value.criterion.comparison.value=1 input.osm hoot::AttributeValueCriterion
+      -D attribute.value.criterion.comparison.value=1 input.osm AttributeValueCriterion
 -----
 
 ==== Count the number of elements authored by a particular user:
@@ -947,51 +1040,51 @@ Requires a language translation server installation.  See the Hootenanny Install
 -----
     hoot count -D attribute.value.criterion.type=user \
       -D attribute.value.criterion.comparison.type=TextEqualTo \
-      -D attribute.value.criterion.comparison.value="username" input.osm hoot::AttributeValueCriterion
+      -D attribute.value.criterion.comparison.value="username" input.osm AttributeValueCriterion
 -----
 
 ==== Count the number of elements with valid phone number tags in a map:
 
 -----
-    hoot count input.osm hoot::HasPhoneNumberCriterion
+    hoot count input.osm HasPhoneNumberCriterion
 -----
 
 ==== Count how many roads intersect two other roads given their IDs:
 
 -----
     hoot count -D intersecting.way.criterion.source.way.ids="-76;-985" input.osm \
-      hoot::IntersectingWayCriterion
+      IntersectingWayCriterion
 -----
 
 ==== Count the number of elements with valid address tags in a map:
 
 -----
-    hoot count input.osm hoot::HasAddressCriterion
+    hoot count input.osm HasAddressCriterion
 -----
 
 ==== Calculate the average number of nodes for a set of buildings:
 
 -----
-    hoot stat -D nodes.per.way.visitor.element.criterion=hoot::BuildingCriterion input.osm \
-      hoot::NodesPerWayVisitor average
+    hoot stat -D nodes.per.way.visitor.element.criterion=BuildingCriterion input.osm \
+      NodesPerWayVisitor average
 -----
 
 ==== Calculate the numerical average of all tags with a given key:
 
 -----
-    hoot stat -D tags.visitor.keys="accuracy" input.osm hoot::AverageNumericTagsVisitor
+    hoot stat -D tags.visitor.keys="accuracy" input.osm AverageNumericTagsVisitor
 -----
 
 ==== Count the total number of valid address tags in a map:
 
 -----
-    hoot stat input.osm hoot::AddressCountVisitor
+    hoot stat input.osm AddressCountVisitor
 -----
 
 ==== Count the total number of valid phone number tags in a map:
 
 -----
-    hoot stat input.osm hoot::PhoneNumberCountVisitor
+    hoot stat input.osm PhoneNumberCountVisitor
 -----
 
 ==== Display a set of statistics for a map:
@@ -1000,15 +1093,65 @@ Requires a language translation server installation.  See the Hootenanny Install
     hoot stats input.osm
 -----
 
-=== Tag Info
-
-==== Display the distribution of highway tags for roads in a map:
+==== Display a set of statistics recursively across multiple maps under a directory:
 
 -----
-    hoot tag-distribution input.osm highway hoot::HighwayCriterion
+    hoot stats /my/dir --recursive "*"
+-----
 
-    365	(97.59%)	road
-    9	(2.41%)		motorway
+==== Display a set of statistics recursively across multiple OSM file maps under a directory:
+
+-----
+    hoot stats /my/dir --recursive "*.osm"
+-----
+
+=== Tag Info
+
+==== Display the distribution of highway tags for all elements in a map:
+
+-----
+    hoot tag-distribution input.osm --tagKeys highway --limit 3
+    
+    Total elements with specified tags: 8,707
+    401	(4.61%)	highway=residential
+    97	(1.11%)	highway=service
+    56	(<1%)	highway=secondary
+-----
+
+==== Display the distribution of highway tags recursively across multiple maps under a directory:
+
+-----
+    hoot tag-distribution /my/dir --tagKeys highway --limit 3 --recursive "*"
+-----
+
+==== Display the distribution of highway tags recursively across multiple OSM file maps under a directory:
+
+-----
+    hoot tag-distribution /my/dir --tagKeys highway --limit 3 --recursive "*.osm"
+-----
+
+==== Display the distribution of highway tags for only way roads in a map:
+
+-----
+    hoot tag-distribution input.osm --tagKeys highway --criteria HighwayCriterion --limit 3
+
+    Total elements with specified tags: 673
+    401	(59.6%)	highway=residential
+    97	(14.4%)	highway=service
+    56	(8.32%)	highway=secondary
+-----
+
+==== Display the distribution of highway tags for any feature having the tag:
+
+-----
+    # This adds non-way features with the "highway" tag. e.g. `highway=traffic_signals` and
+`highway=turning_circle` nodes
+    hoot tag-distribution input.osm --tagKeys highway --criteria HighwayCriterion --limit 3
+
+    Total elements with specified tags: 673
+    401	(59.6%)	highway=residential
+    97	(14.4%)	highway=service
+    56	(8.32%)	highway=secondary
 -----
 
 ==== Display occurrence frequencies of tokenized feature names:
@@ -1016,28 +1159,28 @@ Requires a language translation server installation.  See the Hootenanny Install
 -----
     hoot tag-distribution input.osm --names --tokenize --limit 5
 
-    320	(6.81%)	nw
-    246	(5.24%)	st
-    80	(1.70%)	ave
-    45	(0.96%)	sw
-    18	(0.38%)	h
+    320	(6.81%)	name=nw
+    246	(5.24%)	name=st
+    80	(1.70%)	name=ave
+    45	(0.96%)	name=sw
+    18	(0.38%)	name=h
 -----
 
-==== Show a summary of building conflation reviews by type and frequency:
+==== Show a summary of conflation reviews by type and frequency:
 
 -----
-    hoot tag-distribution input.osm hoot:review:note hoot::ReviewRelationCriterion
+    hoot tag-distribution input.osm --tagKeys hoot:review:note --criteria ReviewRelationCriterion
 
     Total tag count: 129
-    62	(48.1%)	unmatched buildings are overlapping
-    20	(15.5%)	very little building overlap building orientation not similar building edges not very close to each other
-    15	(11.6%)	very little building overlap similar building orientation building edges not very close to each other
-    14	(10.9%)	very little building overlap semisimilar building orientation building edges not very close to each other
-    12	(9.3%)	very little building overlap very similar building orientation building edges not very close to each other
-    3	(2.33%)	small building overlap building orientation not similar building edges not very close to each other
-    1	(<1%)	small building overlap similar building orientation building edges not very close to each other
-    1	(<1%)	small building overlap semisimilar building orientation building edges not very close to each other
-    1	(<1%)	medium building overlap building orientation not similar building edges not very close to each other
+    62	(48.1%)	hoot:review:note=unmatched buildings are overlapping
+    20	(15.5%)	hoot:review:note=very little building overlap building orientation not similar building edges not very close to each other
+    15	(11.6%)	hoot:review:note=very little building overlap similar building orientation building edges not very close to each other
+    14	(10.9%)	hoot:review:note=very little building overlap semisimilar building orientation building edges not very close to each other
+    12	(9.3%)	hoot:review:note=very little building overlap very similar building orientation building edges not very close to each other
+    3	  (2.33%)	hoot:review:note=small building overlap building orientation not similar building edges not very close to each other
+    1	  (<1%)	  hoot:review:note=small building overlap similar building orientation building edges not very close to each other
+    1	  (<1%)	  hoot:review:note=small building overlap semisimilar building orientation building edges not very close to each other
+    1	  (<1%)	 hoot:review:note=medium building overlap building orientation not similar building edges not very close to each other
 -----
 
 ==== Display tag schema information for a map
@@ -1074,6 +1217,18 @@ Requires a language translation server installation.  See the Hootenanny Install
     }}
 -----
 
+==== Display tag information recursively across multiple maps under a directory:
+
+-----
+    hoot tag-info /my/dir --recursive "*"
+-----
+
+==== Display tag information recursively across multiple OSM file maps under a directory:
+
+-----
+    hoot tag-info /my/dir --recursive "*.osm"
+-----
+
 ==== Display all unique values for a particular tag key in a map:
 
 -----
@@ -1083,7 +1238,7 @@ Requires a language translation server installation.  See the Hootenanny Install
 ==== Display all tag keys in a map as a delimited list string:
 
 -----
-    hoot tag-info --warn --keys-only --delimited-text input.osm
+    hoot tag-info --keys-only --delimited-text input.osm
 -----
 
 === Tag Manipulation
@@ -1091,55 +1246,55 @@ Requires a language translation server installation.  See the Hootenanny Install
 ==== Add the tag "error:circular=5.0" to all elements:
 
 -----
-    hoot convert -D convert.ops=hoot::SetTagValueVisitor -D set.tag.value.visitor.keys=error:circular \
+    hoot convert -D convert.ops=SetTagValueVisitor -D set.tag.value.visitor.keys=error:circular \
       -D set.tag.value.visitor.values=5.0 input.osm output.osm
 -----
 
 ==== Add the tag "error:circular=5.0" to all relations and their members: 
 
 -----
-    hoot convert -D convert.ops=hoot::RecursiveSetTagValueOp -D set.tag.value.visitor.keys=error:circular \
-      -D set.tag.value.visitor.values=5.0 -D set.tag.value.visitor.criterion=hoot::RelationCriterion \ 
+    hoot convert -D convert.ops=RecursiveSetTagValueOp -D set.tag.value.visitor.keys=error:circular \
+      -D set.tag.value.visitor.values=5.0 -D set.tag.value.visitor.criterion=RelationCriterion \ 
       input.osm output.osm
 -----
 
 ==== Remove all "source" and "error:circular" tags from ways:
 
 -----
-    hoot convert -D convert.ops="hoot::RemoveTagsVisitor" \
-      -D tag.filter.element.criterion="hoot::WayCriterion" \
+    hoot convert -D convert.ops="RemoveTagsVisitor" \
+      -D tag.filter.element.criterion="WayCriterion" \
       -D tag.filter.keys="source;error:circular" input.osm output.osm
 -----
 
 ==== Remove all tag keys starting with "source" from ways:
 
 -----
-    hoot convert -D convert.ops="hoot::RemoveTagsVisitor" \
-      -D tag.filter.element.criterion="hoot::WayCriterion" \
+    hoot convert -D convert.ops="RemoveTagsVisitor" \
+      -D tag.filter.element.criterion="WayCriterion" \
       -D tag.filter.keys="source*" input.osm output.osm
 -----
 
 ==== Remove all elements that have the tag "status=proposed":
 
 -----
-    hoot convert -D convert.ops=hoot::RemoveElementsVisitor \
-      -D remove.elements.visitor.filter=hoot::TagCriterion -D tag.criterion.kvps="status=proposed"
+    hoot convert -D convert.ops=RemoveElementsVisitor \
+      -D remove.elements.visitor.filter=TagCriterion -D tag.criterion.kvps="status=proposed"
 -----
 
 ==== Remove all tags with keys "REF1" and "REF2" from elements containing the tag "power=line":
 
 -----
-    hoot convert -D convert.ops=hoot::RemoveTagsVisitor -D tag.filter.keys="REF1;REF2" \
-      -D tag.filter.element.criterion=hoot::TagCriterion \
-      -D tag.criterion.kvps="power=line" -D element.criterion.negate=true input.osm output.osm
+    hoot convert -D convert.ops=RemoveTagsVisitor -D tag.filter.keys="REF1;REF2" \
+      -D tag.filter.element.criterion=TagCriterion \
+      -D tag.criterion.kvps="power=line" -D element.criteria.negate=true input.osm output.osm
 -----
 
 ==== For all features with a "voltage" tag between 1 and 45k volts, set the tag "power=minor_line":
 
 -----
-    hoot convert -D convert.ops=hoot::SetTagValueVisitor -D set.tag.value.visitor.keys=power \
+    hoot convert -D convert.ops=SetTagValueVisitor -D set.tag.value.visitor.keys=power \
       -D set.tag.value.visitor.values=minor_line \
-      -D set.tag.value.visitor.element.criteria="hoot::TagValueNumericRangeCriterion" \
+      -D set.tag.value.visitor.element.criteria="TagValueNumericRangeCriterion" \
       -D tag.value.numeric.range.criterion.keys=voltage \
       -D tag.value.numeric.range.criterion.min=1 -D tag.value.numeric.range.criterion.max=45000 \
       input.osm output.osm
@@ -1148,25 +1303,25 @@ Requires a language translation server installation.  See the Hootenanny Install
 ==== Normalize all the element address tags in a map:
 
 -----
-    hoot convert -D convert.ops="hoot::NormalizeAddressesVisitor" input.osm output.osm
+    hoot convert -D convert.ops="NormalizeAddressesVisitor" input.osm output.osm
 -----
 
 ==== Normalize all the element phone number tags in a map:
 
 -----
-    hoot convert -D convert.ops="hoot::NormalizePhoneNumbersVisitor" input.osm output.osm
+    hoot convert -D convert.ops="NormalizePhoneNumbersVisitor" input.osm output.osm
 -----
 
 ==== Add admin boundary level location tags associated with element phone numbers:
 
 -----
-    hoot convert -D convert.ops="hoot::PhoneNumberLocateVisitor" input.osm output.osm
+    hoot convert -D convert.ops="PhoneNumberLocateVisitor" input.osm output.osm
 -----
 
 ==== Add missing attributes to corrupted elements:
 
 -----
-    hoot convert -D convert.ops="hoot::AddAttributesVisitor" \
+    hoot convert -D convert.ops="AddAttributesVisitor" \
       -D add.attributes.visitor.kvps="changeset=1" input.osm output.osm
 -----
 
@@ -1187,8 +1342,8 @@ Requires a language translation server installation.  See the Hootenanny Install
 ==== Snap unconnected roads in one dataset back to neighboring roads in another dataset:
 
 -----
-    hoot convert -D convert.ops="hoot::UnconnectedWaySnapper" \
-      -D snap.unconnected.ways.snap.criteria=hoot::HighwayCriterion \
+    hoot convert -D convert.ops="UnconnectedWaySnapper" \
+      -D snap.unconnected.ways.snap.criteria=HighwayCriterion \
       -D snap.unconnected.ways.snap.to.way.status=Input1 \
       -D snap.unconnected.ways.snap.way.status=Input2 \
       input1.osm input2.osm output.osm
@@ -1197,9 +1352,9 @@ Requires a language translation server installation.  See the Hootenanny Install
 ==== Snap unconnected secondary roads in one dataset back to any type of linear feature in another dataset:
 
 -----
-    hoot convert -D convert.ops="hoot::UnconnectedWaySnapper" \
-      -D snap.unconnected.ways.snap.way.criteria=hoot::HighwayCriterion \
-      -D snap.unconnected.ways.snap.to.way.criteria=hoot::LinearCriterion \
+    hoot convert -D convert.ops="UnconnectedWaySnapper" \
+      -D snap.unconnected.ways.snap.way.criteria=HighwayCriterion \
+      -D snap.unconnected.ways.snap.to.way.criteria=LinearCriterion \
       -D snap.unconnected.ways.snap.to.way.status=Input1 \
       -D snap.unconnected.ways.snap.way.status=Input2 \
       input1.osm input2.osm output.osm
@@ -1208,9 +1363,9 @@ Requires a language translation server installation.  See the Hootenanny Install
 ==== Snap unconnected roads in one dataset back to neighboring roads in another dataset using a stricter feature type matching requirement:
 
 -----
-    hoot convert -D convert.ops="hoot::UnconnectedWaySnapper" \
+    hoot convert -D convert.ops="UnconnectedWaySnapper" \
       -D snap.unconnected.ways.minimum.type.match.score=0.8 \
-      -D snap.unconnected.ways.snap.criterion=hoot::HighwayCriterion \
+      -D snap.unconnected.ways.snap.criterion=HighwayCriterion \
       -D snap.unconnected.ways.snap.to.way.status=Input1 \
       -D snap.unconnected.ways.snap.way.status=Input2 \
       input1.osm input2.osm output.osm
@@ -1219,8 +1374,8 @@ Requires a language translation server installation.  See the Hootenanny Install
 ==== Snap unconnected roads in one dataset back to neighboring roads in another dataset and mark them as needing review:
 
 -----
-    hoot convert -D convert.ops="hoot::UnconnectedWaySnapper" \
-      -D snap.unconnected.ways.snap.criterion=hoot::HighwayCriterion \
+    hoot convert -D convert.ops="UnconnectedWaySnapper" \
+      -D snap.unconnected.ways.snap.criterion=HighwayCriterion \
       -D snap.unconnected.ways.snap.to.way.status=Input1 \
       -D snap.unconnected.ways.snap.way.status=Input2 \
       -D snap.unconnected.ways.review.snapped=true \
@@ -1230,8 +1385,8 @@ Requires a language translation server installation.  See the Hootenanny Install
 ==== Mark unconnected roads as needing review in one dataset that could be snapped back to neighboring roads in another dataset:
 
 -----
-    hoot convert -D convert.ops="hoot::UnconnectedWaySnapper" \
-      -D snap.unconnected.ways.snap.way.criterion=hoot::HighwayCriterion \
+    hoot convert -D convert.ops="UnconnectedWaySnapper" \
+      -D snap.unconnected.ways.snap.way.criterion=HighwayCriterion \
       -D snap.unconnected.ways.snap.to.way.status=Input1 \
       -D snap.unconnected.ways.snap.way.status=Input2 \
       -D snap.unconnected.ways.review.snapped=true \
@@ -1242,7 +1397,7 @@ Requires a language translation server installation.  See the Hootenanny Install
 ==== Find street intersection locations in a map by street name:
 
 -----
-    hoot convert -D convert.ops="hoot::FindStreetIntersectionsByName" \
+    hoot convert -D convert.ops="FindStreetIntersectionsByName" \
       -D name.criterion.names="streetName1;streetName2" -D name.criterion.case.sensitive=false \
       -D name.criterion.partial.match=false input.osm output.osm
 -----
@@ -1250,38 +1405,44 @@ Requires a language translation server installation.  See the Hootenanny Install
 ==== Attempt to add missing type tags to POIs and buildings:
 
 -----
-    hoot convert -D convert.ops=hoot::ImplicitPoiPolygonTypeTagger input.osm output.osm
+    hoot convert -D convert.ops=ImplicitPoiPolygonTypeTagger input.osm output.osm
 -----
 
 ==== Attempt to add missing type tags to POIs and buildings before conflating them:
 
 -----
-    hoot convert -D conflate.pre.ops=hoot::ImplicitPoiPolygonTypeTagger input1.osm input2.osm \
+    hoot convert -D conflate.pre.ops=ImplicitPoiPolygonTypeTagger input1.osm input2.osm \
       output.osm
 -----
 
 ==== Tag features with a conflate matcher capable of matching them (useful in debugging):
 
 -----
-    hoot convert -D convert.ops="hoot::ConflatableCriteriaVisitor" input.osm output.osm
+    hoot convert -D convert.ops="ConflatableCriteriaVisitor" input.osm output.osm
 -----
 
 ==== Detect road intersections:
 
 -----
-    hoot convert -D convert.ops="hoot::FindHighwayIntersectionsOp" input.osm output.osm
+    hoot convert -D convert.ops="FindHighwayIntersectionsOp" input.osm output.osm
 -----
 
 ==== Detect railway intersections:
 
 -----
-    hoot convert -D convert.ops="hoot::FindRailwayIntersectionsOp" input.osm output.osm
+    hoot convert -D convert.ops="FindRailwayIntersectionsOp" input.osm output.osm
 -----
 
 ===== Detect and mark divided highways:
 
 -----
-    hoot convert -D convert.ops="hoot::DualHighwayMarker" input.osm output.osm
+    hoot convert -D convert.ops="DualHighwayMarker" input.osm output.osm
+-----
+
+===== Split a way into segments of a particular size:
+
+-----
+    hoot convert -D convert.ops="WaySplitterOp" -D way.splitter.max.length=100 input.osm output.osm
 -----
 
 ==== Crop a map to an extent:
@@ -1306,6 +1467,18 @@ Requires a language translation server installation.  See the Hootenanny Install
 
 -----
     hoot crop -D crop.invert=true input.osm output.osm "-77.0551,38.8845,-77.0281,38.9031"
+-----
+
+==== Crop map data recursively across multiple files under a directory:
+
+-----
+    hoot crop /my/dir output.osm "-77.0551,38.8845,-77.0281,38.9031" --recursive "*"
+-----
+
+==== Crop map data recursively across multiple OSM files under a directory:
+
+-----
+    hoot crop /my/dir output.osm "-77.0551,38.8845,-77.0281,38.9031" --recursive "*.osm"
 -----
 
 ==== Crop out a random subset of data with a maximum node size:
@@ -1342,6 +1515,18 @@ Requires a language translation server installation.  See the Hootenanny Install
 
 -----
     hoot extent input.osm
+-----
+
+==== Display the geospatial extent of map data recursively across multiple files under a directory:
+
+-----
+    hoot extent /my/dir --recursive "*"
+-----
+
+==== isplay the geospatial extent of map data recursively across multiple OSM files under a directory:
+
+-----
+    hoot extent /my/dir --recursive "*.osm"
 -----
 
 ==== Determine if a map is sorted to the OSM standard:
@@ -1413,39 +1598,39 @@ Requires a language translation server installation.  See the Hootenanny Install
 ==== Generate a grid with regular shaped cells across an entire map:
 
 -----
-    hoot task-grid "input1.osm;input2.osm" output.geojson --uniform
+    hoot task-grid input1.osm input2.osm output.geojson --uniform
 -----
 
 ==== Generate a grid with irregular shaped cells that will fit at most 1000 nodes each for an entire map:
 
 -----
-    hoot task-grid "input1.osm;input2.osm" output.geojson --maxNodesPerCell 1000 --node-density
+    hoot task-grid input1.osm input2.osm output.geojson --maxNodesPerCell 1000 --node-density
 -----
 
 ==== Generate a grid with regular shaped cells across a subset of a map:
 
 -----
-    hoot task-grid  "-71.4698,42.4866,-71.4657,42.4902" output.geojson --uniform
+    hoot task-grid "-71.4698,42.4866,-71.4657,42.4902" output.geojson --uniform
 -----
 
 ==== Generate a grid with irregular shaped cells that will fit at most 1000 nodes each for a subset of a map:
 
 -----
-    hoot task-grid "input1.osm;input2.osm" output.geojson \
+    hoot task-grid input1.osm input2.osm output.geojson \
       --maxNodesPerCell 1000 --bounds "-71.4698,42.4866,-71.4657,42.4902" --node-density
 -----
 
 ==== Generate a grid based on node density, specifying the maximum allowed node count per grid cell and a pixel size:
 
 --------------------------------------
-hoot task-grid "test-files/MyInputFile1.osm;test-files/MyInputFile2.osm" MyOutputFile.geojson \
+hoot task-grid test-files/MyInputFile1.osm test-files/MyInputFile2.osm MyOutputFile.geojson \
    --maxNodesPerCell 1000 --pixelSize 0.001 --node-density
 --------------------------------------
 
 ==== Calculate a grid based on node density, specifying the maximum allowed node count per cell, a pixel size, and allow for more than one calculation attempt:
 
 --------------------------------------
-hoot task-grid "test-files/MyInputFile1.osm;test-files/MyInputFile2.osm" MyOutputFile.geojson \
+hoot task-grid test-files/MyInputFile1.osm test-files/MyInputFile2.osm MyOutputFile.geojson \
   --maxNodesPerCell 1000 --pixelSize 0.001 --maxAttempts 5 --pixelSizeAutoReductionFactor 10 --node-density
 --------------------------------------
 
@@ -1464,16 +1649,28 @@ hoot task-grid test-files/MyInputFile.osm MyOutputFile.geojson --maxNodesPerCell
 
 === Validation
 
-==== Run JOSM validation on a map:
+==== Run validation on a map:
 
 -----
     hoot validate input.osm
 -----
 
-==== Run JOSM validation on a map and mark failing features:
+==== Run validation on a map and mark failing features:
 
 -----
     hoot validate input.osm output.osm
+-----
+
+==== Run validation on map data recursively across multiple files under a directory:
+
+-----
+    hoot validate /my/dir output.osm --recursive "*"
+-----
+
+==== Run validation on map data map data recursively across multiple OSM files under a directory:
+
+-----
+    hoot validate /my/dir output.osm --recursive "*.osm"
 -----
 
 ==== List the available JOSM validators:

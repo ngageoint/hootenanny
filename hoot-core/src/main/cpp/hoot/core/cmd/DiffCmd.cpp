@@ -99,8 +99,12 @@ public:
 
     if (args.size() != 2)
     {
-      cout << getHelp() << endl << endl;
-      throw HootException(QString("%1 takes two parameters.").arg(getName()));
+      std::cout << getHelp() << std::endl << std::endl;
+      throw IllegalArgumentException(
+        QString("%1 takes two parameters. You provided %2: %3")
+          .arg(getName())
+          .arg(args.size())
+          .arg(args.join(",")));
     }
 
     // We always want to know if there are duplicate nodes during comparison.
@@ -114,7 +118,7 @@ public:
       FileUtils::toLogFormat(pathname2, 25) << "...");
 
     int result = 1;
-    //  Compare changesets differently than all other types
+    //  Compare changesets differently than all other types.
     if (_pathIsChangeset(pathname1) && _pathIsChangeset(pathname2))
     {
       XmlChangeset changeset1(pathname1);
@@ -135,7 +139,7 @@ public:
 
       OsmMapPtr map1(new OsmMap());
       IoUtils::loadMap(map1, pathname1, true, Status::Unknown1);
-      //  Some maps that don't have IDs cooked in will fail comparison if the IDs aren't reset
+      //  Some maps that don't have IDs cooked in will fail comparison if the IDs aren't reset.
       OsmMap::resetCounters();
       OsmMapPtr map2(new OsmMap());
       IoUtils::loadMap(map2, pathname2, true, Status::Unknown1);

@@ -1,7 +1,8 @@
-== Grail work notes
+== Grail Notes
 
-There are various operations we labeled as 'grail' work and these notes should be used as a reminder of
-implementation decisions.
+The term 'Grail' describes the process for updating data in a versioned, OpenStreetMap API enabled data store with data from some
+other external source using various conflation techniques. Often this manifests itself as updating data in a private OSM data store with that from the public OSM data store. Described here are various operations we labeled as 'Grail' work and these 
+notes should be used as a reminder of implementation decisions.
 
 === Grail pull from OSM Overpass and the Rails Port
 

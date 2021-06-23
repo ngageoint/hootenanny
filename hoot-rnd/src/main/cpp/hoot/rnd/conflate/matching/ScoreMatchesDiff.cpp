@@ -114,10 +114,10 @@ void ScoreMatchesDiff::calculateDiff(const QString& input1, const QString& input
   std::shared_ptr<CountManualMatchesVisitor> manualMatchVisitor(
     new CountManualMatchesVisitor());
   map1->visitRo(*manualMatchVisitor);
-  const int numManualMatches1 = manualMatchVisitor->getStat();
+  const int numManualMatches1 = static_cast<int>(manualMatchVisitor->getStat());
   manualMatchVisitor.reset(new CountManualMatchesVisitor());
   map2->visitRo(*manualMatchVisitor);
-  const int numManualMatches2 = manualMatchVisitor->getStat();
+  const int numManualMatches2 = static_cast<int>(manualMatchVisitor->getStat());
 
   LOG_VARD(numManualMatches1);
   LOG_VARD(numManualMatches2);

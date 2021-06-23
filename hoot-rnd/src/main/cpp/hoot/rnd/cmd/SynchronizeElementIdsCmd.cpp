@@ -39,9 +39,6 @@
 namespace hoot
 {
 
-/*
- * @todo needs command line test
- */
 class SynchronizeElementIdsCmd : public BaseCommand
 {
 public:
@@ -57,14 +54,14 @@ public:
 
   int runSimple(QStringList& args) override
   {
-    QElapsedTimer timer;
-    timer.start();
-
     if (args.size() != 3)
     {
-      LOG_VAR(args);
       std::cout << getHelp() << std::endl << std::endl;
-      throw HootException(QString("%1 takes three parameters.").arg(getName()));
+      throw IllegalArgumentException(
+        QString("%1 takes three parameters. You provided %2: %3")
+          .arg(getName())
+          .arg(args.size())
+          .arg(args.join(",")));
     }
 
     const QString input1 = args[0].trimmed();
@@ -73,6 +70,9 @@ public:
     LOG_VARD(input1);
     LOG_VARD(input2);
     LOG_VARD(output);
+
+    QElapsedTimer timer;
+    timer.start();
 
     LOG_STATUS(
       "Synchronizing element IDs between ..." << FileUtils::toLogFormat(input1, 25) << " and ..." <<

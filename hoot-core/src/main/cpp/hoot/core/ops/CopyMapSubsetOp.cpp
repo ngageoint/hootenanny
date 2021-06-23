@@ -26,6 +26,8 @@
  */
 #include "CopyMapSubsetOp.h"
 
+// Hoot
+#include <hoot/core/criterion/CriterionUtils.h>
 #include <hoot/core/visitors/ConstElementVisitor.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
@@ -154,6 +156,15 @@ _from(from),
 _copyChildren(true)
 {
   addCriterion(crit);
+}
+
+void CopyMapSubsetOp::setConfiguration(const Settings& conf)
+{
+  ConfigOptions opts = ConfigOptions(conf);
+  QStringList criterionClassNames = opts.getCopyMapSubsetOpElementCriteria();
+  addCriterion(
+    CriterionUtils::constructCriterion(
+      criterionClassNames, opts.getElementCriteriaChain(), opts.getElementCriteriaNegate()));
 }
 
 void CopyMapSubsetOp::apply(OsmMapPtr& map)

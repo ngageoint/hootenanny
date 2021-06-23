@@ -51,6 +51,7 @@ class RunDiffCommand extends GrailCommand {
         List<String> options = new LinkedList<>();
 
         Map<String, String> hoot2AdvOptions = params.getAdvancedOptions();
+        String algorithm = "";
 
         if (hoot2AdvOptions != null && !hoot2AdvOptions.isEmpty()) {
             for (Entry<String, String> option: hoot2AdvOptions.entrySet()) {
@@ -65,6 +66,10 @@ class RunDiffCommand extends GrailCommand {
                     options.add("\"" + optionConfig.get("key") + "=" + optionValue + "\"");
                 }
             }
+
+            if (hoot2AdvOptions.get("RoadEngines") != null) {
+                algorithm = hoot2AdvOptions.get("RoadEngines") + "Algorithm.conf";
+            }
         }
 
         Map<String, Object> substitutionMap = new HashMap<>();
@@ -74,8 +79,11 @@ class RunDiffCommand extends GrailCommand {
         substitutionMap.put("OUTPUT", params.getOutput());
         substitutionMap.put("DEBUG_LEVEL", debugLevel);
         substitutionMap.put("STATS_FILE", new File(params.getWorkDir(), "stats.json").getPath());
+        substitutionMap.put("ROAD_ALGORITHM", algorithm);
 
-        String command = "hoot.bin conflate --${DEBUG_LEVEL} -C DifferentialConflation.conf -C NetworkAlgorithm.conf ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} --differential --changeset-stats ${STATS_FILE} --include-tags --separate-output";
+        String command = "hoot.bin conflate --${DEBUG_LEVEL} -C DifferentialConflation.conf"
+                + (!algorithm.equals("") ? " -C ${ROAD_ALGORITHM}" : "")
+                + " ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} --differential --changeset-stats ${STATS_FILE} --include-tags --separate-output";
 
         super.configureCommand(command, substitutionMap, caller);
     }

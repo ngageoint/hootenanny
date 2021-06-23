@@ -180,14 +180,14 @@ QSet<QString> StringUtils::getDuplicates(const QStringList& input)
   return duplicateStrings;
 }
 
-bool StringUtils::containsSubstring(const QStringList& input, const QString& substring,
-                                    Qt::CaseSensitivity caseSensitivity)
+bool StringUtils::containsSubstring(
+  const QStringList& input, const QString& substring, Qt::CaseSensitivity caseSensitivity)
 {
   return !input.filter(substring, caseSensitivity).empty();
 }
 
-bool StringUtils::containsSubstrings(const QStringList& input, const QStringList& substrings,
-                                     Qt::CaseSensitivity caseSensitivity)
+bool StringUtils::containsSubstrings(
+  const QStringList& input, const QStringList& substrings, Qt::CaseSensitivity caseSensitivity)
 {
   for (int i = 0; i < substrings.size(); i++)
   {
@@ -199,8 +199,8 @@ bool StringUtils::containsSubstrings(const QStringList& input, const QStringList
   return false;
 }
 
-int StringUtils::indexOfSubstring(const QStringList& input, const QString& substring,
-                                  Qt::CaseSensitivity caseSensitivity)
+int StringUtils::indexOfSubstring(
+  const QStringList& input, const QString& substring, Qt::CaseSensitivity caseSensitivity)
 {
   for (int i = 0; i < input.size(); i++)
   {
@@ -212,6 +212,21 @@ int StringUtils::indexOfSubstring(const QStringList& input, const QString& subst
   return -1;
 }
 
+void StringUtils::removePrefixes(const QString& prefix, QStringList& input)
+{
+  QStringList inputCopy(input);
+  for (int i = 0; i < input.size(); i++)
+  {
+    QString inputStr = input.at(i);
+    if (inputStr.startsWith(prefix))
+    {
+      inputStr = inputStr.replace(prefix, "");
+    }
+    inputCopy.append(inputStr);
+  }
+  input = inputCopy;
+}
+
 void StringUtils::removeAll(QStringList& input, const QStringList& toRemove)
 {
   for (int i = 0; i < toRemove.size(); i++)
@@ -220,8 +235,8 @@ void StringUtils::removeAll(QStringList& input, const QStringList& toRemove)
   }
 }
 
-void StringUtils::removeLastIndexOf(QString& input, const QStringList& toRemove,
-                                    Qt::CaseSensitivity caseSensitivity)
+void StringUtils::removeLastIndexOf(
+  QString& input, const QStringList& toRemove, Qt::CaseSensitivity caseSensitivity)
 {
   for (int i = 0; i < toRemove.size(); i++)
   {
@@ -233,8 +248,8 @@ void StringUtils::removeLastIndexOf(QString& input, const QStringList& toRemove,
   }
 }
 
-bool StringUtils::containsAny(const QStringList& input, const QStringList& toCompare,
-                              Qt::CaseSensitivity caseSensitivity)
+bool StringUtils::containsAny(
+  const QStringList& input, const QStringList& toCompare, Qt::CaseSensitivity caseSensitivity)
 {
   for (int i = 0; i < toCompare.size(); i++)
   {
@@ -246,8 +261,21 @@ bool StringUtils::containsAny(const QStringList& input, const QStringList& toCom
   return false;
 }
 
-bool StringUtils::endsWithAny(const QString& input, const QStringList& toCompare,
-                              Qt::CaseSensitivity caseSensitivity)
+bool StringUtils::matchesWildcard(const QString& str, const QStringList& wildcards)
+{
+  for (int i = 0; i < wildcards.size(); i++)
+  {
+    QRegExp regex(wildcards.at(i), Qt::CaseInsensitive, QRegExp::Wildcard);
+    if (regex.exactMatch(str))
+    {
+      return true;
+    }
+  }
+  return false;
+}
+
+bool StringUtils::endsWithAny(
+  const QString& input, const QStringList& toCompare, Qt::CaseSensitivity caseSensitivity)
 {
   for (int i = 0; i < toCompare.size(); i++)
   {
@@ -259,8 +287,21 @@ bool StringUtils::endsWithAny(const QString& input, const QStringList& toCompare
   return false;
 }
 
-QString StringUtils::endsWithAnyAsStr(const QString& input, const QStringList& toCompare,
-                                      Qt::CaseSensitivity caseSensitivity)
+bool StringUtils::endsWithAny(
+  const QStringList& inputs, const QString& compareStr, Qt::CaseSensitivity caseSensitivity)
+{
+  for (int i = 0; i < inputs.size(); i++)
+  {
+    if (inputs.at(i).endsWith(compareStr, caseSensitivity))
+    {
+      return true;
+    }
+  }
+  return false;
+}
+
+QString StringUtils::endsWithAnyAsStr(
+  const QString& input, const QStringList& toCompare, Qt::CaseSensitivity caseSensitivity)
 {
   for (int i = 0; i < toCompare.size(); i++)
   {
@@ -285,8 +326,8 @@ bool StringUtils::bisectsAny(const QString& input, const QList<QRegExp>& toCompa
   return false;
 }
 
-QStringList StringUtils::splitOnAny(const QString& input, const QList<QRegExp>& tokenList,
-                                    const int numOutputTokens)
+QStringList StringUtils::splitOnAny(
+  const QString& input, const QList<QRegExp>& tokenList, const int numOutputTokens)
 {
   for (int i = 0; i < tokenList.size(); i++)
   {
@@ -308,9 +349,9 @@ void StringUtils::removeAllWithKey(QMap<QString, QString>& input, const QStringL
   }
 }
 
-void StringUtils::replaceLastIndexOf(QString& input, const QString& strToReplace,
-                                     const QString& replacementStr,
-                                     Qt::CaseSensitivity caseSensitivity)
+void StringUtils::replaceLastIndexOf(
+  QString& input, const QString& strToReplace, const QString& replacementStr,
+  Qt::CaseSensitivity caseSensitivity)
 {
   const int index = input.lastIndexOf(strToReplace, -1, caseSensitivity);
   if (index != -1)
@@ -322,12 +363,11 @@ void StringUtils::replaceLastIndexOf(QString& input, const QString& strToReplace
 void StringUtils::splitAndRemoveAtIndex(QString& input, const QRegExp& splitExp, const int index)
 {
   QStringList tokens = input.split(splitExp);
-  LOG_VART(tokens);
   input = StringUtils::_splitAndRemoveAtIndex(tokens, index, " ");
 }
 
-QString StringUtils::_splitAndRemoveAtIndex(QStringList& input, const int index,
-                                            const QString& separator)
+QString StringUtils::_splitAndRemoveAtIndex(
+  QStringList& input, const int index, const QString& separator)
 {
   if (!input.empty() && index < input.size())
   {

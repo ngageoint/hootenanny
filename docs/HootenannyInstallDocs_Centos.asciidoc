@@ -1,7 +1,0 @@
-
-= Hootenanny - Installation Instructions
-
-include::install/HootenannyInstall_Centos.asciidoc[]
-include::install/Tuning.asciidoc[]
-include::install/HootenannyTroubleshooting.asciidoc[]
-include::References.asciidoc[]

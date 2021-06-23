@@ -4,12 +4,14 @@
 === Description
 
 The +clean+ command corrects common erroneous data scenarios from input and writes to output by applying the 
-operations specified in the `map.cleaner.transforms` configuration option.
+operations specified in the `map.cleaner.transforms` configuration option. The operation is memory bound.
 
-* +input+  - Input; may be any supported input format (e.g. .osm file).
-* +output+ - Output file; may be any supported output format (e.g. .osm file).
+* +input(s)+    - One or more inputs(s); may be any supported input format (e.g. .osm file).
+* +output+      - Output; may be any supported output format (e.g. .osm file).
+* +--recursive+ - Allows for processing inputs recursively in a directory structure. This must be followed by either "*" 
+                  to denote no filtering or one or more wildcard name filters. e.g. "*.osm;*.json" or "*myFile*".
 
-To see a list of available cleaning operations:
+To see a list of the default cleaning operation configuration:
 -----
 hoot info --cleaning-operations
 -----
@@ -17,7 +19,7 @@ hoot info --cleaning-operations
 === Usage
 
 --------------------------------------
-clean (input) (output)
+hoot clean (input) [input2] ... (output) [--recursive "*"|"filter1;filter2..."]
 --------------------------------------
 
 https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#cleaning[Examples]

@@ -1,3 +1,6 @@
+
+Display tag information from a single input...
+
 {
   "jakarta_raya_coastline.shp":{
     "jakarta_raya_coastline":{
@@ -8,6 +11,242 @@
       }
   }
 }
+
+Display tag information from multiple inputs...
+
+{
+  "jakarta_raya_coastline.shp":{
+    "jakarta_raya_coastline":{
+      "NATURAL":[
+        "shoreline",
+        "water"
+        ]
+      }
+  },
+  "DcTigerRoads.osm":{
+    "osm":{
+      "foot":[
+        "designated"
+        ],
+      "highway":[
+        "path",
+        "primary",
+        "road",
+        "secondary",
+        "unclassified"
+        ],
+      "name":[
+        "12th St NW",
+        "12th St SW",
+        "13 1/2 St NW",
+        "13th St NW",
+        "13th St SW",
+        "14th St NW",
+        "14th St SW",
+        "15th St NW",
+        "15th St SW",
+        "16th St NW",
+        "17th St NW",
+        "17th St SW",
+        "18th St NW",
+        "19th St NW",
+        "20th St NW",
+        "21st St NW",
+        "22nd St NW",
+        "23rd St NW",
+        "24th St NW",
+        "25th St NW",
+        "26th St NW",
+        "Alexander Hamilton Pl NW",
+        "Arlington Memorial Brg",
+        "C St NW",
+        "C St SW",
+        "Colonial Ln NW",
+        "Connecticut Ave NW",
+        "Constitution Ave NW",
+        "D St NW",
+        "D St SW",
+        "Daniel French Dr SW",
+        "E Executive Ave NW",
+        "E St Expy",
+        "E St NW",
+        "Ellipse Rd NW",
+        "Executive Ave NW",
+        "F St NW",
+        "G St NW",
+        "H St NW",
+        "Henry Bacon Dr NW",
+        "Hughes Mews St NW",
+        "I St NW",
+        "I- 66",
+        "Independence Ave SW",
+        "Jackson Pl NW",
+        "Jefferson Dr SW",
+        "K St NW",
+        "Kutz Brg",
+        "Lees Ct NW",
+        "Lincoln Memorial Cir",
+        "Madison Dr NW",
+        "Madison Pl NW",
+        "Maine Ave SW",
+        "New Hampshire Ave NW",
+        "New York Ave NW",
+        "Ohio Dr SW",
+        "Pennsylvania Ave NW",
+        "Queen Annes Ln NW",
+        "Raoul Wallenberg Pl",
+        "Raoul Wallenberg Pl SW",
+        "Rawlings Sq NW",
+        "Reed Ct NW",
+        "Rock Crk and Potomac Pkwy NW",
+        "Snows Ct NW",
+        "South Pl NW",
+        "State Pl NW",
+        "US Hwy 1",
+        "US Hwy 29",
+        "US Hwy 50",
+        "Vermont Ave NW",
+        "Virginia Ave NW",
+        "Virginia Avenue North W",
+        "W Basin Dr SW",
+        "W Executive Ave NW",
+        "Washington Cir NW",
+        "Whitehurst Fwy Rmp",
+        "Zei Aly NW"
+        ]
+      }
+  }
+}
+
+Display tag information recursively from a directory...
+
+{
+  "input1.json":{
+    "osm":{
+      "highway":[
+        "road"
+        ],
+      "note":[
+        "0",
+        "1",
+        "2",
+        "3"
+        ]
+      }
+  },
+  "input1a.osm":{
+    "osm":{
+      "highway":[
+        "road"
+        ],
+      "note":[
+        "0",
+        "1",
+        "2",
+        "3"
+        ]
+      }
+  },
+  "input1b.osm":{
+    "osm":{
+      "highway":[
+        "road"
+        ],
+      "note":[
+        "0",
+        "1",
+        "2",
+        "3"
+        ]
+      }
+  },
+  "input1a.osm":{
+    "osm":{
+      "highway":[
+        "road"
+        ],
+      "note":[
+        "0",
+        "1",
+        "2",
+        "3"
+        ]
+      }
+  },
+  "input1b.osm":{
+    "osm":{
+      "highway":[
+        "road"
+        ],
+      "note":[
+        "0",
+        "1",
+        "2",
+        "3"
+        ]
+      }
+  }
+}
+
+Display tag information recursively from a directory filtered to json files...
+
+{
+  "input1a.osm":{
+    "osm":{
+      "highway":[
+        "road"
+        ],
+      "note":[
+        "0",
+        "1",
+        "2",
+        "3"
+        ]
+      }
+  },
+  "input1b.osm":{
+    "osm":{
+      "highway":[
+        "road"
+        ],
+      "note":[
+        "0",
+        "1",
+        "2",
+        "3"
+        ]
+      }
+  },
+  "input1a.osm":{
+    "osm":{
+      "highway":[
+        "road"
+        ],
+      "note":[
+        "0",
+        "1",
+        "2",
+        "3"
+        ]
+      }
+  },
+  "input1b.osm":{
+    "osm":{
+      "highway":[
+        "road"
+        ],
+      "note":[
+        "0",
+        "1",
+        "2",
+        "3"
+        ]
+      }
+  }
+}
+
+Display tag information with limiting part 1...
+
 {
   "jakarta_raya_coastline.shp":{
     "jakarta_raya_coastline":{
@@ -17,6 +256,9 @@
       }
   }
 }
+
+Display tag information with limiting part 2...
+
 {
   "DcTigerRoads.osm":{
     "osm":{
@@ -40,6 +282,9 @@
       }
   }
 }
+
+Display tag information for keys only...
+
 {
   "DcTigerRoads.osm":{
     "osm":[
@@ -50,6 +295,9 @@
 
   }
 }
+
+Display tag information for keys part 1...
+
 {
   "DcTigerRoads.osm":{
     "osm":{
@@ -66,6 +314,9 @@
       }
   }
 }
+
+Display tag information for keys part 2...
+
 {
   "DcTigerRoads.osm":{
     "osm":{
@@ -75,6 +326,9 @@
       }
   }
 }
+
+Display tag information for keys with case insenstivity...
+
 {
   "DcTigerRoads.osm":{
     "osm":{
@@ -91,11 +345,17 @@
       }
   }
 }
+
+Display tag information for non-existent key...
+
 {
   "DcTigerRoads.osm":{
 No keys found from input key list.
   }
 }
+
+Display tag information for keys with partial match part 1...
+
 {
   "DcTigerRoads.osm":{
     "osm":{
@@ -109,11 +369,17 @@ No keys found from input key list.
       }
   }
 }
+
+Display tag information for keys with partial match part 2...
+
 {
   "DcTigerRoads.osm":{
 No keys found from input key list.
   }
 }
+
+Display tag information for keys with partial match and case insensitivity...
+
 {
   "DcTigerRoads.osm":{
     "osm":{
@@ -127,4 +393,7 @@ No keys found from input key list.
       }
   }
 }
+
+Display tag information for keys as delimited text...
+
 foot;highway;name

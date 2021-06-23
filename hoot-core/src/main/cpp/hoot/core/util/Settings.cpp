@@ -31,6 +31,7 @@
 #include <hoot/core/Hoot.h>
 #include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/ops/OsmMapOperation.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/ConfigDefaults.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ConfPath.h>
@@ -222,13 +223,12 @@ void Settings::clear()
 
 void Settings::_addNamespacePrefixIfClassNameWithout(QString& val)
 {
-  const QString namespacePrefix = "hoot::";
   // If the interal factory recognizes this option value as a factory class name and it doesn't have
   // the global namespace already prepended to it, we'll do that here.
-  if (!val.isEmpty() && !val.startsWith(namespacePrefix) &&
-      Factory::getInstance().hasClass(namespacePrefix + val))
+  if (!val.isEmpty() && !val.startsWith(MetadataTags::HootNamespacePrefix()) &&
+      Factory::getInstance().hasClass(MetadataTags::HootNamespacePrefix() + val))
   {
-    val.prepend(namespacePrefix);
+    val.prepend(MetadataTags::HootNamespacePrefix());
   }
 }
 
@@ -503,10 +503,9 @@ void Settings::_validateOperatorRefs(const QStringList& operators)
     LOG_VARD(operatorName);
     const QString errorMsg = "Invalid option operator class name: " + operatorName;
 
-    const QString namespacePrefix = "hoot::";
-    if (!operatorName.startsWith(namespacePrefix))
+    if (!operatorName.startsWith(MetadataTags::HootNamespacePrefix()))
     {
-      operatorName.prepend(namespacePrefix);
+      operatorName.prepend(MetadataTags::HootNamespacePrefix());
     }
 
     // Should either be a visitor, op, or criterion, but we don't know which one, so check for all
@@ -782,7 +781,7 @@ void Settings::parseCommonArguments(QStringList& args)
     }
   }
 
-  // re-initialize the logger and other resources after the settings have been parsed.
+  // Re-initialize the logger and other resources after the settings have been parsed.
   Hoot::getInstance().reinit();
 }
 

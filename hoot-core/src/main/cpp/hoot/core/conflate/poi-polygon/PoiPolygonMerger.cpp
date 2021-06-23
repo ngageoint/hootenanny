@@ -128,12 +128,12 @@ void PoiPolygonMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, Elemen
   // This debug map writing is very expensive, so just turn it on when debugging small datasets.
   if (_writeDebugMaps)
   {
-    OsmMapWriterFactory::writeDebugMap(map, "PoiPolygonMerger-after-poi-tags-merge-1");
+    OsmMapWriterFactory::writeDebugMap(map, className(), "after-poi-tags-merge-1");
   }
   Tags poiTags2 = _mergePoiTags(map, Status::Unknown2);
   if (_writeDebugMaps)
   {
-    OsmMapWriterFactory::writeDebugMap(map, "PoiPolygonMerger-after-poi-tags-merge-2");
+    OsmMapWriterFactory::writeDebugMap(map, className(), "after-poi-tags-merge-2");
   }
 
   // Get all the building parts for each status
@@ -146,7 +146,7 @@ void PoiPolygonMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, Elemen
   LOG_VART(finalBuildingEid);
   if (_writeDebugMaps)
   {
-    OsmMapWriterFactory::writeDebugMap(map, "PoiPolygonMerger-after-building-merge");
+    OsmMapWriterFactory::writeDebugMap(map, className(), "after-building-merge");
   }
 
   ElementPtr finalBuilding = map->getElement(finalBuildingEid);
@@ -186,7 +186,7 @@ void PoiPolygonMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, Elemen
     LOG_VART(finalBuildingTags);
     if (_writeDebugMaps)
     {
-      OsmMapWriterFactory::writeDebugMap(map, "PoiPolygonMerger-after-building-tags-merge-1");
+      OsmMapWriterFactory::writeDebugMap(map, className(), "after-building-tags-merge-1");
     }
   }
   if (!poiTags2.empty())
@@ -198,7 +198,7 @@ void PoiPolygonMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, Elemen
     LOG_VART(finalBuildingTags);
     if (_writeDebugMaps)
     {
-      OsmMapWriterFactory::writeDebugMap(map, "PoiPolygonMerger-after-building-tags-merge-2");
+      OsmMapWriterFactory::writeDebugMap(map, className(), "after-building-tags-merge-2");
     }
   }
 
@@ -257,7 +257,7 @@ void PoiPolygonMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, Elemen
   LOG_VART(poisMerged);
   if (_writeDebugMaps)
   {
-    OsmMapWriterFactory::writeDebugMap(map, "PoiPolygonMerger-after-poi-removal");
+    OsmMapWriterFactory::writeDebugMap(map, className(), "after-poi-removal");
   }
 
   if (poisMerged > 0)

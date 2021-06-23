@@ -32,19 +32,26 @@
 #include <hoot/core/criterion/WayCriterion.h>
 #include <hoot/core/criterion/TagKeyCriterion.h>
 #include <hoot/core/geometry/GeometryUtils.h>
-#include <hoot/core/io/OgrReader.h>
 #include <hoot/core/io/OgrUtilities.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/ops/ImmediatelyConnectedOutOfBoundsWayTagger.h>
 #include <hoot/core/ops/MapCropper.h>
+#include <hoot/core/util/ConfigUtils.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/Progress.h>
+#include <hoot/core/io/OgrReader.h>
+#include <hoot/core/elements/OsmMapConsumer.h>
+#include <hoot/core/io/ElementCriterionInputStream.h>
+#include <hoot/core/io/OsmXmlWriter.h>
+#include <hoot/core/util/Configurable.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Qt
 #include <QFileInfo>
+#include <QDirIterator>
 
 // GEOS
 #include <geos/geom/GeometryFactory.h>
@@ -87,14 +94,14 @@ bool IoUtils::isSupportedOgrFormat(const QString& input, const bool allowDir)
     return false;
   }
 
-  LOG_VART(QFileInfo(input).isDir());
-  //input is a dir; only accepting a dir as input if it contains a shape file or is a file geodb
+  // input is a dir; only accepting a dir as input if it contains a shape file or is a file geodb
   if (QFileInfo(input).isDir())
   {
-    return input.toLower().endsWith(".gdb") ||
-           FileUtils::dirContainsFileWithExtension(QFileInfo(input).dir(), "shp");
+    return
+      input.toLower().endsWith(".gdb") ||
+      FileUtils::dirContainsFileWithExtension(QFileInfo(input).dir(), "shp");
   }
-  //single input
+  // single input
   else
   {
     //The only zip file format we support are ones containing OGR inputs.
@@ -108,8 +115,9 @@ bool IoUtils::isSupportedOgrFormat(const QString& input, const bool allowDir)
     }
     LOG_VART(OgrUtilities::getInstance().getSupportedFormats(false));
     LOG_VART(QFileInfo(input).suffix());
-    return OgrUtilities::getInstance().getSupportedFormats(false)
-             .contains("." + QFileInfo(input).suffix());
+    return
+      OgrUtilities::getInstance().getSupportedFormats(false).contains(
+        "." + QFileInfo(input).suffix());
   }
 }
 
@@ -147,30 +155,291 @@ bool IoUtils::areSupportedOgrFormats(const QStringList& inputs, const bool allow
   return true;
 }
 
-void IoUtils::loadMap(const OsmMapPtr& map, const QString& path, bool useFileId,
-                      Status defaultStatus)
+QStringList IoUtils::getSupportedInputsRecursively(
+  const QStringList& topLevelPaths, const QStringList& nameFilters)
 {
-  // TODO: Roll this whole thing into OsmMapReaderFactory somehow and get rid of OgrReader portion?
+  QStringList validInputs;
+  for (int i = 0; i < topLevelPaths.size(); i++)
+  {
+    // If its a file and not a dir, go ahead and add it if its supported.
+    const QString path = topLevelPaths.at(i);
+    if (!QFileInfo(path).isDir())
+    {
+      if ((nameFilters.isEmpty() || StringUtils::matchesWildcard(path, nameFilters)) &&
+           isSupportedInputFormat(path))
+      {
+        validInputs.append(path);
+      }
+    }
+    else
+    {
+      QDirIterator itr(path, nameFilters, QDir::NoFilter, QDirIterator::Subdirectories);
+      while (itr.hasNext())
+      {
+        const QString input = itr.next();
+        if (isSupportedInputFormat(input))
+        {
+          validInputs.append(input);
+        }
+      }
+    }
+  }
+  // Sort for consistent results for callers.
+  validInputs.sort();
+  return validInputs;
+}
 
-  QStringList pathLayer = path.split(";");
-  QString justPath = pathLayer[0];
-  if (OgrReader::isReasonablePath(justPath))
+bool IoUtils::isSupportedInputFormat(const QString& url)
+{
+  return !OsmMapReaderFactory::getReaderName(url).trimmed().isEmpty();
+}
+
+bool IoUtils::isSupportedOutputFormat(const QString& url)
+{
+  return !OsmMapWriterFactory::getWriterName(url).trimmed().isEmpty();
+}
+
+bool IoUtils::isStreamableIo(const QString& input, const QString& output)
+{
+  QString writerName = ConfigOptions().getMapFactoryWriter();
+  if (writerName.trimmed().isEmpty())
+  {
+    writerName = OsmMapWriterFactory::getWriterName(output);
+  }
+  LOG_VARD(writerName);
+  LOG_VARD(isStreamableInput(input));
+  LOG_VARD(isStreamableOutput(output));
+  LOG_VARD(ConfigUtils::boundsOptionEnabled());
+  LOG_VARD(ConfigOptions().getWriterXmlSortById());
+
+  return
+    isStreamableInput(input) && isStreamableOutput(output) &&
+    // The XML writer can't keep sorted output when streaming, so require an additional config
+    // option be specified in order to stream when writing that format
+    (writerName != OsmXmlWriter::className() ||
+     (writerName == OsmXmlWriter::className() && !ConfigOptions().getWriterXmlSortById())) &&
+    // No readers when using the bounds option are able to do streaming I/O at this point.
+    !ConfigUtils::boundsOptionEnabled();
+}
+
+bool IoUtils::areStreamableIo(const QStringList& inputs, const QString& output)
+{
+  for (int i = 0; i < inputs.size(); i++)
+  {
+    if (!isStreamableIo(inputs.at(i), output))
+    {
+      LOG_INFO(
+        "Unable to stream I/O due to input: ..." << FileUtils::toLogFormat(inputs.at(i), 25) <<
+        " and/or output: ..." << FileUtils::toLogFormat(output, 25) <<
+        ". Loading entire map into memory...");
+      return false;
+    }
+  }
+  return true;
+}
+
+bool IoUtils::areStreamableInputs(const QStringList& inputs, const bool logUnstreamable)
+{
+  for (int i = 0; i < inputs.size(); i++)
+  {
+    if (!isStreamableInput(inputs.at(i)))
+    {
+      if (logUnstreamable)
+      {
+        LOG_INFO(
+          "Unable to stream inputs due to input: " << inputs.at(i).right(25) <<
+          ". Loading entire map into memory...");
+      }
+      return false;
+    }
+  }
+  return true;
+}
+
+bool IoUtils::isStreamableInput(const QString& url)
+{
+  bool result = false;
+  std::shared_ptr<OsmMapReader> reader =
+    OsmMapReaderFactory::createReader(url, true, Status::Unknown1);
+  std::shared_ptr<ElementInputStream> eis =
+    std::dynamic_pointer_cast<ElementInputStream>(reader);
+  if (eis)
+  {
+    result = true;
+  }
+  return result;
+}
+
+bool IoUtils::isStreamableOutput(const QString& url)
+{
+  bool result = false;
+  std::shared_ptr<OsmMapWriter> writer = OsmMapWriterFactory::createWriter(url);
+  std::shared_ptr<ElementOutputStream> streamWriter =
+    std::dynamic_pointer_cast<ElementOutputStream>(writer);
+  if (streamWriter)
+  {
+    result = true;
+  }
+  return result;
+}
+
+bool IoUtils::areValidStreamingOps(const QStringList& ops)
+{
+  LOG_VARD(ops);
+  // add visitor/criterion operations if any of the convert ops are visitors.
+  foreach (QString opName, ops)
+  {
+    if (!opName.trimmed().isEmpty())
+    {
+      const QString unstreamableMsg =
+        "Unable to stream I/O due to op: " + opName + ". Loading entire map...";
+
+      if (Factory::getInstance().hasBase<ElementCriterion>(opName))
+      {
+        ElementCriterionPtr criterion(
+          Factory::getInstance().constructObject<ElementCriterion>(opName));
+        // when streaming we can't provide a reliable OsmMap.
+        if (dynamic_cast<OsmMapConsumer*>(criterion.get()) != nullptr)
+        {
+          LOG_INFO(unstreamableMsg);
+          return false;
+        }
+      }
+      else if (Factory::getInstance().hasBase<ElementVisitor>(opName))
+      {
+        ElementVisitorPtr vis(
+          Factory::getInstance().constructObject<ElementVisitor>(opName));
+        // when streaming we can't provide a reliable OsmMap.
+        if (dynamic_cast<OsmMapConsumer*>(vis.get()) != nullptr)
+        {
+          LOG_INFO(unstreamableMsg);
+          return false;
+        }
+      }
+      else if (Factory::getInstance().hasBase<ConstElementVisitor>(opName))
+      {
+        ConstElementVisitorPtr vis(
+          Factory::getInstance().constructObject<ConstElementVisitor>(opName));
+        // when streaming we can't provide a reliable OsmMap.
+        if (dynamic_cast<OsmMapConsumer*>(vis.get()) != nullptr)
+        {
+          LOG_INFO(unstreamableMsg);
+          return false;
+        }
+      }
+      // OsmMapOperation isn't streamable.
+      else
+      {
+        LOG_INFO(unstreamableMsg);
+        return false;
+      }
+    }
+  }
+
+  return true;
+}
+
+ElementInputStreamPtr IoUtils::getFilteredInputStream(
+  ElementInputStreamPtr streamToFilter, const QStringList& ops)
+{
+  if (ops.empty())
+  {
+    return streamToFilter;
+  }
+
+  ConfigUtils::checkForDuplicateElementCorrectionMismatch(ops);
+
+  foreach (QString opName, ops)
+  {
+    LOG_VARD(opName);
+    if (!opName.trimmed().isEmpty())
+    {
+      // Can this be cleaned up?
+
+      if (Factory::getInstance().hasBase<ElementCriterion>(opName))
+      {
+        LOG_INFO("Initializing operation: " << opName << "...");
+        ElementCriterionPtr criterion(
+          Factory::getInstance().constructObject<ElementCriterion>(opName));
+
+        std::shared_ptr<Configurable> critConfig;
+        if (criterion.get())
+        {
+          critConfig = std::dynamic_pointer_cast<Configurable>(criterion);
+        }
+        LOG_VART(critConfig.get());
+        if (critConfig.get())
+        {
+          critConfig->setConfiguration(conf());
+        }
+
+        streamToFilter.reset(new ElementCriterionInputStream(streamToFilter, criterion));
+      }
+      else if (Factory::getInstance().hasBase<ElementVisitor>(opName))
+      {
+        LOG_INFO("Initializing operation: " << opName << "...");
+        ElementVisitorPtr visitor(Factory::getInstance().constructObject<ElementVisitor>(opName));
+
+        std::shared_ptr<Configurable> visConfig;
+        if (visitor.get())
+        {
+          visConfig = std::dynamic_pointer_cast<Configurable>(visitor);
+        }
+        LOG_VART(visConfig.get());
+        if (visConfig.get())
+        {
+          visConfig->setConfiguration(conf());
+        }
+
+        streamToFilter.reset(new ElementVisitorInputStream(streamToFilter, visitor));
+      }
+      else
+      {
+        throw HootException(
+          "An unsupported operation was passed to a streaming conversion: " + opName);
+      }
+    }
+  }
+
+  return streamToFilter;
+}
+
+void IoUtils::loadMap(
+  const OsmMapPtr& map, const QString& path, bool useFileId, Status defaultStatus,
+  const QString& translationScript, const int ogrFeatureLimit, const QString& jobSource,
+  const int numTasks)
+{
+  const QStringList pathLayer = path.split(";");
+  const QString justPath = pathLayer[0];
+  LOG_VART(path);
+  LOG_VART(pathLayer);
+  LOG_VART(justPath);
+  // We need to perform custom read logic for OGR inputs due to the fact they may have multiple
+  // layers per input file or multiple files per directory.
+  if (isSupportedOgrFormat(path, true))
   {
     OgrReader reader;
-    reader.setDefaultStatus(defaultStatus);
     reader.setConfiguration(conf());
-    reader.read(justPath, pathLayer.size() > 1 ? pathLayer[1] : "", map);
-    reader.close();
+    reader.setDefaultStatus(defaultStatus);
+    if (ogrFeatureLimit > 0)
+    {
+      reader.setLimit(ogrFeatureLimit);
+    }
+    reader.setSchemaTranslationScript(translationScript);
+    // This reader closes itself.
+    reader.read(path, pathLayer.size() > 1 ? pathLayer[1] : "", map, jobSource, numTasks);
   }
   else
   {
+    // This handles all non-OGR format reading.
     OsmMapReaderFactory::read(map, path, useFileId, defaultStatus);
   }
 }
 
-void IoUtils::loadMaps(const OsmMapPtr& map, const QStringList& paths, bool useFileId,
-                       Status defaultStatus)
+void IoUtils::loadMaps(
+  const OsmMapPtr& map, const QStringList& paths, bool useFileId, Status defaultStatus)
 {
+  // TODO: it would be nice to allow this to take in Progress for updating
   for (int i = 0; i < paths.size(); i++)
   {
     loadMap(map, paths.at(i), useFileId, defaultStatus);
@@ -179,18 +448,20 @@ void IoUtils::loadMaps(const OsmMapPtr& map, const QStringList& paths, bool useF
 
 void IoUtils::saveMap(const OsmMapPtr& map, const QString& path)
 {
-  // We could pass a progress in here to get more granular write status feedback.
+  // We could pass progress in here to get more granular write status feedback. Otherwise, this is
+  // merely a wrapper.
   OsmMapWriterFactory::write(map, path);
 }
 
-void IoUtils::cropToBounds(OsmMapPtr& map, const geos::geom::Envelope& bounds,
-                           const bool keepConnectedOobWays)
+void IoUtils::cropToBounds(
+  OsmMapPtr& map, const geos::geom::Envelope& bounds, const bool keepConnectedOobWays)
 {
   cropToBounds(map, GeometryUtils::envelopeToPolygon(bounds), keepConnectedOobWays);
 }
 
-void IoUtils::cropToBounds(OsmMapPtr& map, const std::shared_ptr<geos::geom::Geometry>& bounds,
-                           const bool keepConnectedOobWays)
+void IoUtils::cropToBounds(
+  OsmMapPtr& map, const std::shared_ptr<geos::geom::Geometry>& bounds,
+  const bool keepConnectedOobWays)
 {
   LOG_INFO(
     "Applying bounds filtering to input data: ..." <<
@@ -234,7 +505,7 @@ void IoUtils::cropToBounds(OsmMapPtr& map, const std::shared_ptr<geos::geom::Geo
   LOG_DEBUG(cropper.getCompletedStatusMessage());
   LOG_VARD(StringUtils::formatLargeNumber(map->getElementCount()));
 
-  OsmMapWriterFactory::writeDebugMap(map, "cropped-to-bounds");
+  OsmMapWriterFactory::writeDebugMap(map, className(), "cropped-to-bounds");
 }
 
 std::shared_ptr<ElementVisitorInputStream> IoUtils::getVisitorInputStream(

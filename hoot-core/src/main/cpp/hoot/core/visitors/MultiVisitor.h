@@ -48,9 +48,7 @@ public:
   void addVisitor(ElementOsmMapVisitor* v) { _visitors.push_back(v); }
 
   QString getDescription() const override { return "Allows for combining multiple visitors"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 
 private:

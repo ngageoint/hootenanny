@@ -50,6 +50,24 @@ class IoUtils
 
 public:
 
+  static QString className() { return "hoot::IoUtils"; }
+
+  /**
+   * Determines if the a URL is a supported input format
+   *
+   * @param url the URL to examine
+   * @return true if the URL points to a valid input format; false otherwise
+   */
+  static bool isSupportedInputFormat(const QString& url);
+
+  /**
+   * Determines if the a URL is a supported output format
+   *
+   * @param url the URL to examine
+   * @return true if the URL points to a valid output format; false otherwise
+   */
+  static bool isSupportedOutputFormat(const QString& url);
+
   /**
    * Returns true if the input format is a Hootenanny supported OSM format
    *
@@ -86,6 +104,84 @@ public:
   static bool anyAreSupportedOgrFormats(const QStringList& inputs, const bool allowDir = false);
 
   /**
+   * Returns all file paths under a directory point to a supported input format
+   *
+   * @param topLevelPaths one or more directory paths
+   * @param nameFilters wildcard filters for path exclusion; e.g. *myFile*, *.json
+   * @return a list of file paths
+   */
+  static QStringList getSupportedInputsRecursively(
+    const QStringList& topLevelPaths, const QStringList& nameFilters = QStringList());
+
+  /**
+   * Determines whether both input and output are streamable data sources (associated
+   * readers/writers must implemented the partial map interfaces)
+   *
+   * @param input data source
+   * @param output data destination
+   * @return true if both formats are streamable; false otherwise
+   */
+  static bool isStreamableIo(const QString& input, const QString& output);
+
+  /**
+   * Determines whether both inputs and output are streamable data sources (associated
+   * readers/writers must implemented the partial map interfaces)
+   *
+   * @param inputs data sources
+   * @param output data destination
+   * @return true if all formats are streamable; false otherwise
+   */
+  static bool areStreamableIo(const QStringList& inputs, const QString& output);
+
+  /**
+   * Determines whether inputs and are streamable data sources (associated
+   * readers/writers must implemented the partial map interfaces)
+   *
+   * @param inputs data sources
+   * @param logUnstreamable if true, a message is logged to indicate the input being parsed is not
+   * a streamable input
+   * @return true if all inputs are streamable; false otherwise
+   */
+  static bool areStreamableInputs(const QStringList& inputs, const bool logUnstreamable = false);
+
+  /**
+   * Return true if all the specified operations are valid streaming operations.
+   *
+   * There are some ops that require the whole map be available in RAM (e.g. remove duplicate
+   * nodes). These operations are not applicable for streaming.
+   *
+   * @param ops
+   * @return
+   */
+  static bool areValidStreamingOps(const QStringList& ops);
+
+  /**
+   * Determines if a URL points to a valid streamable input
+   *
+   * @param url the URL to examine
+   * @return true if the URL points to a valid streamable input; false otherwise
+   */
+  static bool isStreamableInput(const QString& url);
+
+  /**
+   * Determines if a URL points to a valid streamable output
+   *
+   * @param url the URL to examine
+   * @return true if the URL points to a valid streamable output; false otherwise
+   */
+  static bool isStreamableOutput(const QString& url);
+
+  /**
+   * Get an input stream set up to be filtered by operations
+   *
+   * @param streamToFilter the stream to be filtered
+   * @param ops a list of Hoot operation class names to use for inline filtering on the input stream
+   * @return an input stream
+   */
+  static ElementInputStreamPtr getFilteredInputStream(
+    ElementInputStreamPtr streamToFilter, const QStringList& ops);
+
+  /**
     Loads an OSM map into an OsmMap object
 
     @param map the object to load the map into
@@ -93,9 +189,18 @@ public:
     @param useFileId if true, uses the element ID's in the map file; otherwise, generates new
     element ID's
     @param defaultStatus the hoot status to assign to all elements
+    @param translationScript script used to translate data; required only if the input is an OGR
+    format; ignored otherwise
+    @param ogrFeatureLimit limit of features to read per input; applicable to OGR inputs only;
+    ignored otherwise
+    @param jobSource job name for status reporting; applicable to OGR inputs only; ignored otherwise
+    @param numTasks number of job tasks being performed for status reporting; applicable to OGR
+    inputs only; ignored otherwise
     */
-  static void loadMap(const OsmMapPtr& map, const QString& path, bool useFileId,
-                      Status defaultStatus = Status::Invalid);
+  static void loadMap(
+    const OsmMapPtr& map, const QString& path, bool useFileId = true,
+    Status defaultStatus = Status::Invalid, const QString& translationScript = "",
+    const int ogrFeatureLimit = -1, const QString& jobSource = "", const int numTasks = -1);
 
   /**
     Loads multiple OSM maps into an OsmMap object
@@ -106,15 +211,15 @@ public:
     element ID's
     @param defaultStatus the hoot status to assign to all elements
     */
-  static void loadMaps(const OsmMapPtr& map, const QStringList& paths, bool useFileId,
-                       Status defaultStatus = Status::Invalid);
+  static void loadMaps(
+    const OsmMapPtr& map, const QStringList& paths, bool useFileId,
+    Status defaultStatus = Status::Invalid);
 
   /**
     Saves an OSM map to an OsmMap object
 
     @param map the map object to save
     @param path the file path to save the map to
-    @todo get rid of this?
    */
   static void saveMap(const OsmMapPtr& map, const QString& path);
 
@@ -126,8 +231,8 @@ public:
    * @param keepConnectedOobWays if true any way falling outside of the bounds but directly
    * connected to a way within the bounds will be kept
    */
-  static void cropToBounds(OsmMapPtr& map, const geos::geom::Envelope& bounds,
-                           const bool keepConnectedOobWays = false);
+  static void cropToBounds(
+    OsmMapPtr& map, const geos::geom::Envelope& bounds, const bool keepConnectedOobWays = false);
 
   /**
    * Crops a map to a given bounds
@@ -137,8 +242,9 @@ public:
    * @param keepConnectedOobWays if true any way falling outside of the bounds but directly
    * connected to a way within the bounds will be kept
    */
-  static void cropToBounds(OsmMapPtr& map, const std::shared_ptr<geos::geom::Geometry>& bounds,
-                           const bool keepConnectedOobWays = false);
+  static void cropToBounds(
+    OsmMapPtr& map, const std::shared_ptr<geos::geom::Geometry>& bounds,
+    const bool keepConnectedOobWays = false);
 
   /**
    * Creates an input stream with a visitor in the loop

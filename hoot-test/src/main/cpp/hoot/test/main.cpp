@@ -565,6 +565,14 @@ _TimeOutValue getTimeoutValue(_TestType type)
     return QUICK_WAIT;
 }
 
+void reportFailedTests(int failedTests, int totalTests)
+{
+  if (totalTests < 1 || failedTests > totalTests || failedTests == 0)
+    return;
+  //  Report the number of failed tests
+  cout << failedTests << " of " << totalTests << " tests failed" << endl;
+}
+
 int main(int argc, char* argv[])
 {
   // set the Qt hash seed to 0 for consistent test results
@@ -654,6 +662,8 @@ int main(int argc, char* argv[])
       }
 
       runSingleTest(t, args, &result);
+      if (result.failures().size() == 0)
+        cout << endl;
       return result.failures().size() > 0 ? -1 : 0;
     }
     else if (args.contains("--listen"))
@@ -767,6 +777,7 @@ int main(int argc, char* argv[])
       pool.wait();
 
       cout << endl;
+      reportFailedTests(pool.getFailures(), allNames.size());
       cout << "Elapsed: " << Tgs::Time::getTime() - start << endl;
       return pool.getFailures() > 0 ? -1 : 0;
     }
@@ -794,6 +805,7 @@ int main(int argc, char* argv[])
         vTestsToRun[i]->run(&result);
 
       cout << endl;
+      reportFailedTests(result.failures().size(), vTestsToRun.size());
       cout << "Elapsed: " << Tgs::Time::getTime() - start << endl;
       return result.failures().size() > 0 ? -1 : 0;
     }

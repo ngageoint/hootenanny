@@ -64,15 +64,23 @@ public:
     if (args.size() != 2)
     {
       std::cout << getHelp() << std::endl << std::endl;
-      throw HootException(QString("%1 takes two parameters.").arg(getName()));
+      throw IllegalArgumentException(
+        QString("%1 takes at two parameters. You provided %2: %3")
+          .arg(getName())
+          .arg(args.size())
+          .arg(args.join(",")));
     }
 
     const QString input = args[0];
     const QString output = args[1];
+    const bool sortingInMemory =
+      !(IoUtils::isStreamableInput(input) &&
+        ConfigOptions().getElementSorterElementBufferSize() != -1);
+    const QString sortingStr = sortingInMemory ? " in memory" : " externally";
 
     LOG_STATUS(
-      "Sorting maps ..." << FileUtils::toLogFormat(input, 25) << " and writing output to ..." <<
-      FileUtils::toLogFormat(output, 25) << "...");
+      "Sorting maps ..." << FileUtils::toLogFormat(input, 25) << sortingInMemory <<
+      " and writing output to ..." << FileUtils::toLogFormat(output, 25) << "...");
 
     if (_inputIsSorted(input))
     {
@@ -80,8 +88,7 @@ public:
       return 0;
     }
 
-    if (OsmMapReaderFactory::hasElementInputStream(input) &&
-        ConfigOptions().getElementSorterElementBufferSize() != -1)
+    if (!sortingInMemory)
     {
       _sortExternally(input, output);
     }

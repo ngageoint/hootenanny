@@ -30,6 +30,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/io/DataConverter.h>
+#include <hoot/core/io/IoUtils.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
@@ -67,10 +68,17 @@ public:
 
     BoundedCommand::runSimple(args);
 
+    bool recursive = false;
+    const QStringList inputFilters = _parseRecursiveInputParameter(args, recursive);
+
     if (args.size() < 2)
-    {
-      cout << getHelp() << endl << endl;
-      throw HootException(QString("%1 takes at least two parameters.").arg(getName()));
+    { 
+      std::cout << getHelp() << std::endl << std::endl;
+      throw IllegalArgumentException(
+        QString("%1 takes at least two parameters. You provided %2: %3")
+          .arg(getName())
+          .arg(args.size())
+          .arg(args.join(",")));
     }
 
     ConfigOptions configOpts(conf());
@@ -83,34 +91,20 @@ public:
         ConfigOptions::getCropBoundsKey() + " option must be specified.");
     }
 
+    // Output is the last param.
+    const int outputIndex = args.size() - 1;
+    const QString output = args[outputIndex];
+    args.removeAt(outputIndex);
+    // Everything that's left is an input.
     QStringList inputs;
-    QString output;
-    int argIndex = 0;
-    for (int i = 0; i < args.size(); i++)
+    if (!recursive)
     {
-      const QString arg = args[i];
-      LOG_VART(arg);
-      // Formerly, "--" options existed and were required to all be at the end of the command, so
-      // you could break here once you reached them, and you knew you were done parsing
-      // inputs/outputs. Now, the command doesn't take any command line options except
-      // --write-bounds, which is parsed out beforehand. After that, it uses all configuration
-      // options. So, let's throw if we see a command line option at this point.
-      if (arg.startsWith("--"))
-      {
-        throw IllegalArgumentException(
-          QString("The convert command takes no inline options starting with '--'. All options ") +
-          QString("are passed in as configuration options (-D)."));
-      }
-      argIndex++;
-      inputs.append(arg);
+      inputs = args;
     }
-    LOG_VART(inputs.size());
-    LOG_VART(argIndex);
-    output = inputs.at(argIndex - 1);
-    inputs.removeAt(argIndex - 1);
-    LOG_VART(inputs.size());
-    LOG_VART(inputs);
-    LOG_VART(output);  
+    else
+    {
+      inputs = IoUtils::getSupportedInputsRecursively(args, inputFilters);
+    }
 
     ConfigUtils::checkForDuplicateElementCorrectionMismatch(ConfigOptions().getConvertOps());
 

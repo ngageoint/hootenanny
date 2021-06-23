@@ -37,6 +37,9 @@
 namespace hoot
 {
 
+/**
+ * A Co-occurence matrix for examining element attributes
+ */
 class AttributeCoOccurrence
 {
 public:
@@ -46,9 +49,7 @@ public:
   AttributeCoOccurrence() = default;
 
   void addToMatrix(const ConstOsmMapPtr& in);
-
   QString printTable();
-
   QString printList();
 
 private:

@@ -1,10 +1,5 @@
-10:55:37.460 INFO   ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from ...ut/cmd/slow/ConflateCmdStatsTest/toy-roads-out.osm...
-10:55:37.462 INFO   .../hoot/core/io/OsmXmlReader.cpp( 912) Read 0 elements from input.        10:55:37.462 INFO   .../hoot/core/io/OsmXmlReader.cpp( 912) Read 0 elements from input.        10:55:37.465 INFO   .../hoot/core/io/OsmXmlReader.cpp( 476) 	Reporting missing elements...
-10:55:37.465 INFO   ...ore/io/OsmMapReaderFactory.cpp( 227) Read 41 elements from input in: 00:00.
-10:55:37.465 INFO   ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from ...es/cmd/slow/ConflateCmdStatsTest/toy-roads-out.osm...
-10:55:37.466 INFO   .../hoot/core/io/OsmXmlReader.cpp( 912) Read 0 elements from input.        10:55:37.466 INFO   .../hoot/core/io/OsmXmlReader.cpp( 912) Read 0 elements from input.        10:55:37.467 INFO   .../hoot/core/io/OsmXmlReader.cpp( 476) 	Reporting missing elements...
-10:55:37.467 INFO   ...ore/io/OsmMapReaderFactory.cpp( 227) Read 41 elements from input in: 00:00.
-10:55:37.468 STATUS .../cpp/hoot/core/cmd/DiffCmd.cpp( 145) Map difference calculated in 00:00 total.
+17:05:02.234 STATUS .../cpp/hoot/core/cmd/DiffCmd.cpp( 114) Comparing ...atsTest/toy-roads-out.osm and ...atsTest/toy-roads-out.osm...
+17:05:02.241 STATUS .../cpp/hoot/core/cmd/DiffCmd.cpp( 149) Map difference calculated in 00:00 total.
 stats = (stat) OR (input map 1 stat) (input map 2 stat) (output map stat)
 Nodes	36	65	37	
 Ways	4	4	4	
@@ -17,6 +12,8 @@ Least Members in a Relation	0	0	0
 Most Members in a Relation	0	0	0	
 Average Members Per Relation	0	0	0	
 Total Relation Members	0	0	0	
+Unique Feature Tags	5	1	9	
+Unique Feature Tag Keys	2	1	5	
 Least Tags on a Feature	2	1	2	
 Most Tags on a Feature	2	1	2	
 Average Tags Per Feature	2	1	2	
@@ -78,10 +75,10 @@ Percentage of Number of Total Map 2 Features Not Matched With Map 1 Features			0
 Percentage of Length of Map 1 Roads Matched With Map 2 Roads			94.07987660599386	
 Percentage of Length of Map 1 Roads Not Matched With Map 2 Roads			5.920123412083215	
 Percentage of Length of Map 2 Roads Not Matched With Map 1 Roads			0	
-Calculate Stats for Input 1 Time (sec)				11.95708703994751
-Calculate Stats for Input 2 Time (sec)				1.180166006088257
-Apply Pre-Conflate Ops Time (sec)				0.01044607162475586
-Apply Post-Conflate Ops Time (sec)				0.005541086196899414
-Calculate Stats for Output Time (sec)				0.9687809944152832
+Calculate Stats for Input 1 Time (sec)				3.927995920181274
+Calculate Stats for Input 2 Time (sec)				0.2804830074310303
+Apply Pre-Conflate Ops Time (sec)				0.003022909164428711
+Apply Post-Conflate Ops Time (sec)				0.001689910888671875
+Calculate Stats for Output Time (sec)				0.3091721534729004
 
-10:55:36.939 STATUS ...pp/hoot/core/util/Progress.cpp(  86) Conflate (100%): Conflation job completed in 00:16 for reference map: ...test-files/ToyTestA.osm and secondary map: ...test-files/ToyTestB.osm and written to output: ...CmdStatsTest/toy-roads-out.osm
+17:05:01.878 STATUS ...pp/hoot/core/util/Progress.cpp(  86) Conflate (100%): Conflation job completed in 00:05 for reference map: ...test-files/ToyTestA.osm and secondary map: ...test-files/ToyTestB.osm and written to output: ...CmdStatsTest/toy-roads-out.osm

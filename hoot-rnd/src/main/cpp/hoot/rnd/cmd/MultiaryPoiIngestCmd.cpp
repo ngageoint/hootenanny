@@ -57,7 +57,11 @@ public:
     if (args.size() != 4)
     {
       std::cout << getHelp() << std::endl << std::endl;
-      throw HootException(QString("%1 takes four parameters.").arg(getName()));
+      throw IllegalArgumentException(
+        QString("%1 takes four parameters. You provided %2: %3")
+          .arg(getName())
+          .arg(args.size())
+          .arg(args.join(",")));
     }
 
     const QString input = args[0];
@@ -70,9 +74,7 @@ public:
       " using translation ..." << FileUtils::toLogFormat(translation, 25) <<
       " and writing output to ..." << FileUtils::toLogFormat(output, 25) <<
       " and changeset output to ..." << FileUtils::toLogFormat(changesetOutput, 25) << "...");
-
     MultiaryIngester().ingest(input, translation, output, changesetOutput);
-
     LOG_STATUS(
       "Ingest completed in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 

@@ -27,6 +27,11 @@
 
 #include "Log.h"
 
+// Hoot
+#include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/util/HootException.h>
+#include <hoot/core/util/StringUtils.h>
+
 // Qt
 #include <QDateTime>
 #include <QDebug>
@@ -49,10 +54,11 @@ void Log::log(WarningLevel level, const string& str)
   log(level, str, "...?", "", -1);
 }
 
-void Log::log(WarningLevel level, const string& str, const string& filename,
-  const string& prettyFunction, int lineNumber)
+void Log::log(
+  WarningLevel level, const string& str, const string& filename, const string& prettyFunction,
+  int lineNumber)
 {  
-  if (level >= _level && notFiltered(prettyFunction))
+  if (level >= _level && _passesFilter(prettyFunction))
   {
     QDateTime dt = QDateTime::currentDateTime();
 
@@ -63,10 +69,11 @@ void Log::log(WarningLevel level, const string& str, const string& filename,
   }
 }
 
-void Log::progress(WarningLevel level, const string& str, const string& filename,
-  const string& prettyFunction, int lineNumber)
+void Log::progress(
+  WarningLevel level, const string& str, const string& filename, const string& prettyFunction,
+  int lineNumber)
 {
-  if (level >= _level && notFiltered(prettyFunction))
+  if (level >= _level && _passesFilter(prettyFunction))
   {
     QDateTime dt = QDateTime::currentDateTime();
 
@@ -77,32 +84,18 @@ void Log::progress(WarningLevel level, const string& str, const string& filename
   }
 }
 
-bool Log::notFiltered(const string& prettyFunction)
+bool Log::_passesFilter(const string& prettyFunction)
 {
-  // TODO: This check does not work at the trace level for some reason, and the class filter is
-  // being reset to empty at some point after initialization. The result is no log filtering
-  // occurs at the trace level and messages for all classes are logged.
+  // Currently, this initialization call needs to be executed each time here, rather than in a
+  // constructor. There may be a way to optimize this.
+  if (_includeClassFilter.isEmpty() && _excludeClassFilter.isEmpty())
+    _setFilter();
 
-  // init here instead of in init() since some logs are being produced before the init() call
-//  if (!_classFilterInitialized)
-//  {
-//    _classFilter = ConfigOptions().getLogClassFilter().split(";", QString::SkipEmptyParts);
-//    _classFilterInitialized = true;
-//  }
-//  if (_classFilter.isEmpty())
-//  {
-//    return true;
-//  }
-
-  // The unnecessary extra calls to this initialization will have to remain until the above problem
-  // is fixed for trace logging.
-  if (_classFilter.isEmpty())
-    _classFilter = ConfigOptions().getLogClassFilter().split(";", QString::SkipEmptyParts);
-
-  if (_classFilter.isEmpty())
+  if (_includeClassFilter.isEmpty() && _excludeClassFilter.isEmpty())
     return true;
 
-  const QString prettyFunctionQt = QString::fromStdString(prettyFunction);
+  QString prettyFunctionQt = QString::fromStdString(prettyFunction);
+  QString name;
   if (!prettyFunctionQt.endsWith(".js"))    // call from C++
   {
     // split arguments from function call name
@@ -111,12 +104,12 @@ bool Log::notFiltered(const string& prettyFunction)
 
     // split class name from function name
     nameParts = nameParts[0].split("::", QString::SkipEmptyParts);
-    const int listLen = nameParts.length();
-
-    // Is there any way we can throw here if the class name isn't recognized, so we don't wonder
-    // why a typo caused us not to get the logging we thought we were going to get?
-
-    return (listLen > 1 && _classFilter.contains(nameParts[listLen - 2]));
+    const int listLen = nameParts.size();
+    if (listLen <= 1)
+    {
+      return false;
+    }
+    name = nameParts[listLen - 2];
   }
   else  // call from a JS generic conflate script
   {
@@ -124,15 +117,38 @@ bool Log::notFiltered(const string& prettyFunction)
     const QStringList nameParts = prettyFunctionQt.split("/", QString::SkipEmptyParts);
     if (nameParts.length() < 1) return true;
 
-    const QString scriptName = nameParts[nameParts.size() - 1];
-
-    return _classFilter.contains(scriptName);
+    name = nameParts[nameParts.size() - 1];
   }
+
+  // It would be nice if we could throw here if the class name isn't recognized, so we don't
+  // wonder why a typo caused us not to get the logging we thought we were going to get. However,
+  // Factory::hasClass as a check won't work here since not all classes doing logging are
+  // factories and not sure of any other way to validate it.
+
+  // If anything was added to the exclude filter and this class was explicitly excluded, we'll skip
+  // logging.
+  if (!_excludeClassFilter.isEmpty() && StringUtils::matchesWildcard(name, _excludeClassFilter))
+  {
+    return false;
+  }
+  // If nothing was added to the include list, everything is allowed to log. Otherwise, only allow
+  // this class to log if it has been added to the include list.
+  return _includeClassFilter.isEmpty() || StringUtils::matchesWildcard(name, _includeClassFilter);
 }
 
 void Log::setLevel(WarningLevel l)
 {
   _level = l;
+}
+
+void Log::_setFilter()
+{
+  _includeClassFilter = ConfigOptions().getLogClassIncludeFilter();
+  StringUtils::removePrefixes(MetadataTags::HootNamespacePrefix(), _includeClassFilter);
+  _includeClassFilter.removeDuplicates();
+  _excludeClassFilter = ConfigOptions().getLogClassExcludeFilter();
+  StringUtils::removePrefixes(MetadataTags::HootNamespacePrefix(), _excludeClassFilter);
+  _excludeClassFilter.removeDuplicates();
 }
 
 }

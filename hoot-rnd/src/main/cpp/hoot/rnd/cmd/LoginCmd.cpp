@@ -52,24 +52,28 @@ public:
     if (!args.empty())
     {
       std::cout << getHelp() << std::endl << std::endl;
-      throw HootException(QString("%1 takes zero parameters.").arg(getName()));
+      throw IllegalArgumentException(
+        QString("%1 takes zero parameters. You provided %2: %3")
+          .arg(getName())
+          .arg(args.size())
+          .arg(args.join(",")));
     }
 
     HootServicesLoginManager loginManager;
 
-    // get a request token and display the authorization url
+    // Get a request token and display the authorization url.
     QString authUrl;
     const QString requestToken = loginManager.getRequestToken(authUrl);
     std::cout << std::endl << "Authorization URL: " << authUrl << std::endl << std::endl;
 
-    // prompt user to auth through the 3rd party (OpenStreetMap, etc.)
+    // Prompt the user to auth through the 3rd party (OpenStreetMap, etc.).
     const QString verifier = loginManager.promptForAuthorizationVerifier();
 
-    // verify the user's login, create the user, and get their id and user name
+    // Verify the user's login, create the user, and get their id and user name.
     QString userName;
     const long userId = loginManager.verifyUserAndLogin(requestToken, verifier, userName);
 
-    // retrieve access tokens and display to the user
+    // Retrieve access tokens and display to the user.
     QString accessToken;
     QString accessTokenSecret;
     loginManager.getAccessTokens(userId, accessToken, accessTokenSecret);

@@ -58,8 +58,6 @@ public:
     timer.start();
 
     bool tableFormat = true;
-    AttributeCoOccurrence cooccurrence;
-
     // Print a table or just a list
     if (args.contains("--no-table"))
     {
@@ -69,9 +67,12 @@ public:
 
     if (args.size() != 2)
     {
-      LOG_VARD(args);
-      cout << getHelp() << endl << endl;
-      throw HootException(QString("%1 takes two parameters.").arg(getName()));
+      std::cout << getHelp() << std::endl << std::endl;
+      throw IllegalArgumentException(
+        QString("%1 takes at two parameters. You provided %2: %3")
+          .arg(getName())
+          .arg(args.size())
+          .arg(args.join(",")));
     }
 
     const QString input1 = args[0];
@@ -85,6 +86,7 @@ public:
     IoUtils::loadMap(map, input1, false, Status::Unknown1);
     IoUtils::loadMap(map, input2, false, Status::Unknown2);
 
+    AttributeCoOccurrence cooccurrence;
     cooccurrence.addToMatrix(map);
 
     if (tableFormat)

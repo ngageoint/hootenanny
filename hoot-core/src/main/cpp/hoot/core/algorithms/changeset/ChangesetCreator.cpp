@@ -36,7 +36,6 @@
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/io/ElementCriterionVisitorInputStream.h>
-#include <hoot/core/io/ElementStreamer.h>
 #include <hoot/core/io/IoUtils.h>
 #include <hoot/core/io/OsmChangesetFileWriter.h>
 #include <hoot/core/io/OsmChangesetFileWriterFactory.h>
@@ -119,7 +118,7 @@ void ChangesetCreator::create(const QString& output, const QString& input1, cons
   LOG_VARD(_singleInput);
   // both inputs must support streaming to use streaming I/O
   const bool useStreamingIo =
-    // TODO: may be able to move this check to ElementStreamer::areValidStreamingOps
+    // TODO: may be able to move this check to IoUtils::areValidStreamingOps
     !ConfigUtils::boundsOptionEnabled() &&
     _inputIsStreamable(input1) &&
     (_singleInput || _inputIsStreamable(input2));
@@ -139,7 +138,7 @@ void ChangesetCreator::create(const QString& output, const QString& input1, cons
       // Convert ops get a single task, which OpExecutor will break down into sub-tasks during
       // progress reporting.
       _numTotalTasks++;
-      if (!ElementStreamer::areValidStreamingOps(ConfigOptions().getConvertOps()))
+      if (!IoUtils::areValidStreamingOps(ConfigOptions().getConvertOps()))
       {
         // Have the extra work of combining and separating data inputs when any of the convert
         // ops aren't streamable.
@@ -267,8 +266,10 @@ void ChangesetCreator::create(
       "Creating changeset from inputs: " << FileUtils::toLogFormat(map1->getName()) << " of size: " << map1->size() <<
       " and " << FileUtils::toLogFormat(map2->getName()) << " of size: " << map2->size() << " to output: " <<
       FileUtils::toLogFormat(output, 25) << "...");
-    OsmMapWriterFactory::writeDebugMap(map1, "map1-before-changeset-derivation-" + map1->getName());
-    OsmMapWriterFactory::writeDebugMap(map2, "map2-before-changeset-derivation-" + map2->getName());
+    OsmMapWriterFactory::writeDebugMap(
+      map1, className(), "map1-before-changeset-derivation-" + map1->getName());
+    OsmMapWriterFactory::writeDebugMap(
+      map2, className(), "map2-before-changeset-derivation-" + map2->getName());
 
     if (!_includeReviews)
     {
@@ -342,14 +343,14 @@ bool ChangesetCreator::_inputIsSorted(const QString& input) const
 
 bool ChangesetCreator::_inputIsStreamable(const QString& input) const
 {
-  LOG_VARD(OsmMapReaderFactory::hasElementInputStream(input));
-  LOG_VARD(ElementStreamer::areValidStreamingOps(ConfigOptions().getConvertOps()));
+  LOG_VARD(IoUtils::isStreamableInput(input));
+  LOG_VARD(IoUtils::areValidStreamingOps(ConfigOptions().getConvertOps()));
   LOG_VARD(ConfigOptions().getElementSorterElementBufferSize());
   return
     // The input format itself must be streamable (partially read).
-    OsmMapReaderFactory::hasElementInputStream(input) &&
+    IoUtils::isStreamableInput(input) &&
     // All ops must be streamable, otherwise we'll load both inputs into memory.
-    ElementStreamer::areValidStreamingOps(ConfigOptions().getConvertOps()) &&
+    IoUtils::areValidStreamingOps(ConfigOptions().getConvertOps()) &&
     // If no sort buffer size is set, we sort in-memory. If we're already loading the data
     // into memory for sorting, might as well force it into memory for the initial read as well.
     ConfigOptions().getElementSorterElementBufferSize() != -1;
@@ -371,13 +372,15 @@ void ChangesetCreator::_handleUnstreamableConvertOpsInMemory(
     // Load the first map. If we have a bounded query, let's check for the crop related option
     // overrides.
     IoUtils::loadMap(fullMap, input1, true, Status::Unknown1);
-    OsmMapWriterFactory::writeDebugMap(fullMap, "after-initial-read-unstreamable-ref-map");
+    OsmMapWriterFactory::writeDebugMap(
+      fullMap, className(), "after-initial-read-unstreamable-ref-map");
 
     // append the second map onto the first one
 
     OsmMapPtr tmpMap(new OsmMap());
     IoUtils::loadMap(tmpMap, input2, true, Status::Unknown2);
-    OsmMapWriterFactory::writeDebugMap(tmpMap, "after-initial-read-unstreamable-sec-map");
+    OsmMapWriterFactory::writeDebugMap(
+      tmpMap, className(), "after-initial-read-unstreamable-sec-map");
 
     try
     {
@@ -406,7 +409,8 @@ void ChangesetCreator::_handleUnstreamableConvertOpsInMemory(
   }
 
   LOG_VARD(fullMap->getElementCount());
-  OsmMapWriterFactory::writeDebugMap(fullMap, "after-initial-read-unstreamable-full-map");
+  OsmMapWriterFactory::writeDebugMap(
+    fullMap, className(), "after-initial-read-unstreamable-full-map");
   _currentTaskNum++;
 
   // Apply our convert ops to the entire map. If any of these are map consumers (OsmMapOperation)
@@ -417,7 +421,7 @@ void ChangesetCreator::_handleUnstreamableConvertOpsInMemory(
   convertOps.setProgress(
     Progress(
       ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running,
-      (float)(_currentTaskNum - 1) / (float)_numTotalTasks, 1.0 / (float)_numTotalTasks));
+      (float)(_currentTaskNum - 1) / (float)_numTotalTasks, 1.0f / (float)_numTotalTasks));
   convertOps.apply(fullMap);
   // get back into wgs84 in case some op changed the proj
   MapProjector::projectToWgs84(fullMap);
@@ -442,9 +446,9 @@ void ChangesetCreator::_handleUnstreamableConvertOpsInMemory(
     map1->visitRw(remove1Vis);
   }
   LOG_VARD(map1->getElementCount());
-  OsmMapWriterFactory::writeDebugMap(map1, "unstreamable-separated-map-1");
+  OsmMapWriterFactory::writeDebugMap(map1, className(), "unstreamable-separated-map-1");
   LOG_VARD(map2->getElementCount());
-  OsmMapWriterFactory::writeDebugMap(map2, "unstreamable-separated-map-2");
+  OsmMapWriterFactory::writeDebugMap(map2, className(), "unstreamable-separated-map-2");
   _currentTaskNum++;
 }
 
@@ -474,8 +478,8 @@ void ChangesetCreator::_handleStreamableConvertOpsInMemory(
     // input.
     IoUtils::loadMap(map1, input1, true, Status::Unknown2);
   }
-  OsmMapWriterFactory::writeDebugMap(map1, "after-initial-read-streamable-map-1");
-  OsmMapWriterFactory::writeDebugMap(map2, "after-initial-read-streamable-map-2");
+  OsmMapWriterFactory::writeDebugMap(map1, className(), "after-initial-read-streamable-map-1");
+  OsmMapWriterFactory::writeDebugMap(map2, className(), "after-initial-read-streamable-map-2");
   _currentTaskNum++;
 
   // Apply our convert ops to each map separately.
@@ -484,7 +488,7 @@ void ChangesetCreator::_handleStreamableConvertOpsInMemory(
   convertOps.setProgress(
     Progress(
       ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running,
-      (float)(_currentTaskNum - 1) / (float)_numTotalTasks, 1.0 / (float)_numTotalTasks));
+      (float)(_currentTaskNum - 1) / (float)_numTotalTasks, 1.0f / (float)_numTotalTasks));
   convertOps.apply(map1);
   MapProjector::projectToWgs84(map1);
   if (!_singleInput)
@@ -501,7 +505,7 @@ void ChangesetCreator::_readInputsFully(
   LOG_VARD(ConfigOptions().getConvertOps().size());
   if (!ConfigOptions().getConvertOps().empty())
   {
-    if (!ElementStreamer::areValidStreamingOps(ConfigOptions().getConvertOps()))
+    if (!IoUtils::areValidStreamingOps(ConfigOptions().getConvertOps()))
     {
       /*
        * If any op in the convert ops is a map consumer, then it must go through this logic, which
@@ -544,8 +548,8 @@ void ChangesetCreator::_readInputsFully(
       // input.
       IoUtils::loadMap(map1, input1, true, Status::Unknown2);
     }
-    OsmMapWriterFactory::writeDebugMap(map1, "after-initial-read-no-ops-map-1");
-    OsmMapWriterFactory::writeDebugMap(map2, "after-initial-read-no-ops-map-2");
+    OsmMapWriterFactory::writeDebugMap(map1, className(), "after-initial-read-no-ops-map-1");
+    OsmMapWriterFactory::writeDebugMap(map2, className(), "after-initial-read-no-ops-map-2");
     _currentTaskNum++;
   }
 
@@ -563,8 +567,8 @@ void ChangesetCreator::_readInputsFully(
     {
       map2->visitRw(removeElementsVisitor);
     }
-    OsmMapWriterFactory::writeDebugMap(map1, "after-remove-reviews-map-1");
-    OsmMapWriterFactory::writeDebugMap(map2, "after-remove-reviews-map-2");
+    OsmMapWriterFactory::writeDebugMap(map1, className(), "after-remove-reviews-map-1");
+    OsmMapWriterFactory::writeDebugMap(map2, className(), "after-remove-reviews-map-2");
     _currentTaskNum++;
   }
 
@@ -577,8 +581,8 @@ void ChangesetCreator::_readInputsFully(
   {
     map2->visitRw(truncateTags);
   }
-  OsmMapWriterFactory::writeDebugMap(map1, "after-truncate-tags-map-1");
-  OsmMapWriterFactory::writeDebugMap(map2, "after-truncate-tags-map-2");
+  OsmMapWriterFactory::writeDebugMap(map1, className(), "after-truncate-tags-map-1");
+  OsmMapWriterFactory::writeDebugMap(map2, className(), "after-truncate-tags-map-2");
   _currentTaskNum++;
 }
 
@@ -655,7 +659,7 @@ ElementInputStreamPtr ChangesetCreator::_getFilteredInputStream(const QString& i
   // TODO: Any OsmMapOperations in the bunch need to operate on the entire map made up of both
   // inputs to work correctly.
   return
-    ElementStreamer::getFilteredInputStream(filteredInputStream, ConfigOptions().getConvertOps());
+    IoUtils::getFilteredInputStream(filteredInputStream, ConfigOptions().getConvertOps());
 }
 
 ElementInputStreamPtr ChangesetCreator::_sortElementsInMemory(OsmMapPtr map) const

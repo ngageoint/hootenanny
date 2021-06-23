@@ -1,7 +1,7 @@
 
-== Hootenanny Advanced options rules meta file description
+== Hootenanny Advanced Options Design
 
-This description is for quick overview of conflation advanced option meta data rule rest endpoint.
+This description is for a quick overview of the conflation advanced option meta data rule rest endpoint in the Hootenanny Web Services.
 
 1. Main rule file conf/services/conflateAdvOps.json consists of subset of all hoot options. (see ticket 5840)
 2. It is JSONArray with each option as JSON object

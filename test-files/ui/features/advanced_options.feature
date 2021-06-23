@@ -111,17 +111,17 @@ Feature: Advanced Conflation Options
         And I should see element "#poipolygon_review_evidence_threshold" with no value and placeholder "1"
 	And I should see checkbox "Review Matches Against Multi-Use Buildings" unchecked
         And I click on "#hoot_poi_poly_options_label"
-        And I should see "Waterway Options"
-        And I click on "#hoot_waterway_options_label"
+        And I should see "River Options"
+        And I click on "#hoot_river_options_label"
         And I should see checkbox "Enabled" checked
-        And I should see element "#waterway_way_angle_sample_distance" with no value and placeholder "20.0"
-        And I should see element "#waterway_way_matcher_heading_delta" with no value and placeholder "150.0"
-        And I should see checkbox "Waterway Auto Calculate Search Radius" checked
-        And I should see element "#search_radius_waterway" with no value and placeholder "-1"
-        And I should see "Waterway Search Radius" not enabled
-        And I should see element "#waterway_rubber_sheet_minimum_ties" with no value and placeholder "5"
-        And I should see checkbox "Waterway Auto-Search Radius Calculation Rubber Sheet Ref" checked
-        And I click on "#hoot_waterway_options_label"
+        And I should see element "#river_way_angle_sample_distance" with no value and placeholder "20.0"
+        And I should see element "#river_way_matcher_heading_delta" with no value and placeholder "150.0"
+        And I should see checkbox "River Auto Calculate Search Radius" checked
+        And I should see element "#search_radius_river" with no value and placeholder "-1"
+        And I should see "River Search Radius" not enabled
+        And I should see element "#river_rubber_sheet_minimum_ties" with no value and placeholder "5"
+        And I should see checkbox "River Auto-Search Radius Calculation Rubber Sheet Ref" checked
+        And I click on "#hoot_river_options_label"
         Then I click the "x" icon
         And I accept the alert
         And I should see "►"
@@ -143,7 +143,7 @@ Feature: Advanced Conflation Options
         And I should see "Building Options"
         And I should see "POI Options"
         And I should see "POI to Polygon Options"
-        And I should see "Waterway Options"
+        And I should see "River Options"
         And I should see "Cookie Cutter & Horizontal Options"
         Then I click on "#horizontal_conflation_options_label"
         And I should see element "#horizontal_cookie_cutter_alpha_shape_buffer" with no value and placeholder "0"

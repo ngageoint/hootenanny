@@ -66,21 +66,107 @@ public:
   { return "Scores the performance of multiary-poi-conflate against a manually matched map (experimental) "; }
   QString getType() const override { return "rnd"; }
 
+  int runSimple(QStringList& args) override
+  {
+    QElapsedTimer timer;
+    timer.start();
 
-  QString evaluateThreshold(OsmMapPtr map, QString output,
+    bool showConfusion = false;
+    if (args.contains("--confusion"))
+    {
+      args.removeAll("--confusion");
+      showConfusion = true;
+    }
+
+    if (args.contains("--translator"))
+    {
+      int at = args.indexOf("--translator");
+      args.removeAt(at);
+
+      if (args.size() <= at)
+      {
+        throw HootException("Expected the translator path to be after --translator.");
+      }
+      _translator = args.at(at);
+      args.removeAt(at);
+    }
+
+    if (args.size() < 3)
+    {
+      std::cout << getHelp() << std::endl << std::endl;
+      throw IllegalArgumentException(
+        QString("%1 takes at least three parameters. You provided %2: %3")
+          .arg(getName())
+          .arg(args.size())
+          .arg(args.join(",")));
+    }
+
+    LOG_STATUS("Scoring multiary conflate matches from ..." << args.size() << " inputs...");
+
+    // modifying the schema is necessary to ensure the conflation concatenates values.
+    SchemaVertex id;
+    id.setName("ID");
+    id.setType(SchemaVertex::Tag);
+    id.valueType = Text;
+    OsmSchema::getInstance().updateOrCreateVertex(id);
+
+    SchemaVertex match;
+    id.setName("MATCH");
+    id.setType(SchemaVertex::Tag);
+    id.valueType = Text;
+    OsmSchema::getInstance().updateOrCreateVertex(match);
+
+    SchemaVertex review;
+    id.setName("REVIEW");
+    id.setType(SchemaVertex::Tag);
+    id.valueType = Text;
+    OsmSchema::getInstance().updateOrCreateVertex(review);
+
+    QString output = args.last();
+    OsmMapPtr map(new OsmMap());
+    for (int i = 0; i < args.size() - 1; i++)
+    {
+      Status s = Status::fromInput(i);
+      IoUtils::loadMap(map, args[i], false, s);
+    }
+
+    MultiaryPoiHashVisitor hashVisitor;
+    hashVisitor.setIncludeCircularError(true);
+    map->visitRw(hashVisitor);
+
+    OsmMapWriterFactory::write(map, ConfPath::getHootHome() + "/tmp/score-matches-after-prep.osm");
+    MapProjector::projectToPlanar(map);
+
+    // Apparently, multiary will allow with > 1.0 review thresholds.
+    std::shared_ptr<MatchThreshold> mt = std::make_shared<MatchThreshold>(0.5, 0.5, 1.0, false);
+    QString result = _evaluateThreshold(map, output, mt, showConfusion);
+
+    cout << result;
+
+    LOG_STATUS(
+      "Matches scored in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
+
+    return 0;
+  }
+
+private:
+
+  QString _translator;
+
+  QString _evaluateThreshold(OsmMapPtr map, QString output,
     std::shared_ptr<MatchThreshold> mt, bool showConfusion) const
   {
     MultiaryMatchComparator comparator;
     comparator.setTranslationScript(_translator);
 
     QString result;
-
     OsmMapPtr copy(new OsmMap(map));
 
     // Apply any user specified operations.
     OpExecutor(ConfigOptions().getConflatePreOps()).apply(copy);
 
     MultiaryUtilities::conflate(copy);
+
     // Apply any user specified operations.
     OpExecutor(ConfigOptions().getConflatePostOps()).apply(copy);
 
@@ -110,93 +196,6 @@ public:
 
     return result;
   }
-
-  int runSimple(QStringList& args) override
-  {
-    QElapsedTimer timer;
-    timer.start();
-
-    bool showConfusion = false;
-    if (args.contains("--confusion"))
-    {
-      args.removeAll("--confusion");
-      showConfusion = true;
-    }
-
-    if (args.contains("--translator"))
-    {
-      int at = args.indexOf("--translator");
-      args.removeAt(at);
-
-      if (args.size() <= at)
-      {
-        throw HootException("Expected the translator path to be after --translator.");
-      }
-      _translator = args.at(at);
-      args.removeAt(at);
-    }
-
-    if (args.size() < 3)
-    {
-      LOG_VAR(args);
-      cout << getHelp() << endl << endl;
-      throw HootException(
-        QString("%1 takes at least two parameters: two or more input maps")
-          .arg(getName()));
-    }
-
-    LOG_STATUS("Scoring multiary conflate matches from ..." << args.size() << " inputs...");
-
-    // modifying the schema is necessary to ensure the conflation concatenates values.
-    SchemaVertex id;
-    id.setName("ID");
-    id.setType(SchemaVertex::Tag);
-    id.valueType = Text;
-    OsmSchema::getInstance().updateOrCreateVertex(id);
-
-    SchemaVertex match;
-    id.setName("MATCH");
-    id.setType(SchemaVertex::Tag);
-    id.valueType = Text;
-    OsmSchema::getInstance().updateOrCreateVertex(match);
-
-    SchemaVertex review;
-    id.setName("REVIEW");
-    id.setType(SchemaVertex::Tag);
-    id.valueType = Text;
-    OsmSchema::getInstance().updateOrCreateVertex(review);
-
-    QString output = args.last();
-    OsmMapPtr map(new OsmMap());
-
-    for (int i = 0; i < args.size() - 1; i++)
-    {
-      Status s = Status::fromInput(i);
-      IoUtils::loadMap(map, args[i], false, s);
-    }
-
-    MultiaryPoiHashVisitor hashVisitor;
-    hashVisitor.setIncludeCircularError(true);
-    map->visitRw(hashVisitor);
-
-    OsmMapWriterFactory::write(map, ConfPath::getHootHome() + "/tmp/score-matches-after-prep.osm");
-    MapProjector::projectToPlanar(map);
-
-    // Apparently, multiary will allow with > 1.0 review thresholds.
-    std::shared_ptr<MatchThreshold> mt = std::make_shared<MatchThreshold>(0.5, 0.5, 1.0, false);
-    QString result = evaluateThreshold(map, output, mt, showConfusion);
-
-    cout << result;
-
-    LOG_STATUS(
-      "Matches scored in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
-
-    return 0;
-  }
-
-private:
-  QString _translator;
-
 };
 
 HOOT_FACTORY_REGISTER(Command, MultiaryScorePoiMatchesCmd)

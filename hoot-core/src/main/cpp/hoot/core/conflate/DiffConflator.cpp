@@ -150,7 +150,7 @@ void DiffConflator::apply(OsmMapPtr& map)
 
   MapProjector::projectToPlanar(_map); // will actually reproject here only if necessary
   _stats.append(SingleStat("Project to Planar Time (sec)", _timer.getElapsedAndRestart()));
-  OsmMapWriterFactory::writeDebugMap(_map, "after-projecting-to-planar");
+  OsmMapWriterFactory::writeDebugMap(_map, className(), "after-projecting-to-planar");
 
   // Find all the matches in this map.
   _intraDatasetMatchOnlyElementIds.clear();
@@ -257,7 +257,7 @@ void DiffConflator::_discardUnconflatableElements()
   MemoryUsageChecker::getInstance().check();
   _stats.append(
     SingleStat("Remove Non-conflatable Elements Time (sec)", _timer.getElapsedAndRestart()));
-  OsmMapWriterFactory::writeDebugMap(_map, "after-removing-non-conflatable");
+  OsmMapWriterFactory::writeDebugMap(_map, className(), "after-removing-non-conflatable");
   _numUnconflatableElementsDiscarded = mapSizeBefore - _map->size();
   LOG_INFO(
     "Discarded " << StringUtils::formatLargeNumber(_numUnconflatableElementsDiscarded) <<
@@ -334,7 +334,7 @@ bool DiffConflator::_isMatchToRemovePartially(const ConstMatchPtr& match)
   // River matches are handled by their own config option, since they can be expensive to optimize.
   const bool removeRiverPartialMatchesAsWhole =
     ConfigOptions().getDifferentialRemoveRiverPartialMatchesAsWhole();
-  if (removeRiverPartialMatchesAsWhole && match->getName().toLower() == "waterway")
+  if (removeRiverPartialMatchesAsWhole && match->getName().toLower() == "river")
   {
     isMatchToRemovePartially = false;
   }
@@ -455,7 +455,7 @@ long DiffConflator::_snapSecondaryLinearFeaturesBackToRef()
   LOG_INFO("\t" << linearFeatureSnapper.getInitStatusMessage());
   linearFeatureSnapper.apply(_map);
   LOG_DEBUG("\t" << linearFeatureSnapper.getCompletedStatusMessage());
-  OsmMapWriterFactory::writeDebugMap(_map, "after-road-snapping");
+  OsmMapWriterFactory::writeDebugMap(_map, className(), "after-road-snapping");
 
   const long numFeaturesSnapped = linearFeatureSnapper.getNumFeaturesAffected();
   if (numFeaturesSnapped > 0)
@@ -468,7 +468,7 @@ long DiffConflator::_snapSecondaryLinearFeaturesBackToRef()
     LOG_INFO("\t" << wayJoiner.getInitStatusMessage());
     wayJoiner.apply(_map);
     LOG_DEBUG("\t" << wayJoiner.getCompletedStatusMessage());
-    OsmMapWriterFactory::writeDebugMap(_map, "after-way-joining");
+    OsmMapWriterFactory::writeDebugMap(_map, className(), "after-way-joining");
 
     // No point in running way joining a second time in post conflate ops since we already did it here
     // (its configured in post ops by default), so let's remove it.
@@ -539,7 +539,8 @@ void DiffConflator::_removeMatchElementsCompletely(const Status& status)
   LOG_TRACE(
     "\tRemoved " << StringUtils::formatLargeNumber(mapSizeBefore -_map->size()) <<
     " match elements completely with status: " << status.toString() << "...");
-  OsmMapWriterFactory::writeDebugMap(_map, "after-removing-" + status.toString() + "-matches");
+  OsmMapWriterFactory::writeDebugMap(
+    _map, className(), "after-removing-" + status.toString() + "-matches");
 }
 
 bool DiffConflator::_satisfiesCompleteElementRemovalCondition(
@@ -664,7 +665,7 @@ void DiffConflator::_removeRefData()
   const int mapSizeBefore = _map->size();
   _map->visitRw(removeRef1Visitor);
   MemoryUsageChecker::getInstance().check();
-  OsmMapWriterFactory::writeDebugMap(_map, "after-removing-ref-elements");
+  OsmMapWriterFactory::writeDebugMap(_map, className(), "after-removing-ref-elements");
 
   LOG_DEBUG(
     "Removed " << StringUtils::formatLargeNumber(mapSizeBefore - _map->size()) <<
@@ -718,7 +719,7 @@ void DiffConflator::addChangesToMap(OsmMapPtr map, ChangesetProviderPtr pChanges
       }
     }
   }
-  OsmMapWriterFactory::writeDebugMap(map, "after-adding-diff-tag-changes");
+  OsmMapWriterFactory::writeDebugMap(map, className(), "after-adding-diff-tag-changes");
 }
 
 void DiffConflator::_calcAndStoreTagChanges()
@@ -811,7 +812,7 @@ void DiffConflator::_calcAndStoreTagChanges()
     "Stored tag changes for " << StringUtils::formatLargeNumber(numMatchesProcessed) <<
     " matches in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
 
-  OsmMapWriterFactory::writeDebugMap(_map, "after-storing-tag-changes");
+  OsmMapWriterFactory::writeDebugMap(_map, className(), "after-storing-tag-changes");
   MemoryUsageChecker::getInstance().check();
 }
 

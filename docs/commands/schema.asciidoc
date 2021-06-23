@@ -3,15 +3,12 @@
 
 === Description
 
-The +schema+ command prints OSM tag documentation. If +[documentation script]+ is not provided, the default translation script
-+$HOOT_HOME/translations/PrintOsmDocs.js+ will be used.
-
-* +documentation script+ - The script that will print the documentation.
+The +schema+ command prints documentation for the OSM tag schema in use.
 
 === Usage
 
 --------------------------------------
-schema [documentation script]
+hoot schema
 --------------------------------------
 
 https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#display-the-internal-tag-schema-that-hootenanny-uses[Examples]

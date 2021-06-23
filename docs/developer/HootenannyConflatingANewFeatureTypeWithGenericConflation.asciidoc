@@ -1,5 +1,5 @@
 
-== Conflating a New Feature Type With Generic Conflation
+== Conflating a New Feature Type With Script Conflation
 
 This document discusses in detail some of the processes involved with using generic conflation to
 conflate a new type of feature with Hootenanny.  Hootenanny's generic conflation framework allows for
@@ -28,7 +28,7 @@ See the "Hootenanny Manual Conflation" section in this document for more details
 
 First, you will want to set up a Hootenanny JSON configuration file.  An example shown here
 is similar to the file provided with Hootenanny for conflating rivers,
-`$HOOT_HOME/conf/LinearWaterway.conf`:
+`$HOOT_HOME/conf/River.conf`:
 
 ----------------
 {
@@ -60,7 +60,7 @@ test data by comparing its matches to the manually made matches.  Here is an exa
 command:
 
 --------
-time hoot score-matches -C conf/LinearWaterway.conf --confusion Haiti_CNIGS_Rivers_REF1-cropped.osm Haiti_osm_waterway_ss_REF2-cropped.osm tmp/Test1.osm
+time hoot score-matches -C conf/River.conf --confusion Haiti_CNIGS_Rivers_REF1-cropped.osm Haiti_osm_waterway_ss_REF2-cropped.osm tmp/Test1.osm
 --------
 
 Data sources:
@@ -153,7 +153,7 @@ The following code C++ code changes are required to add a new schema for a featu
 Doing so helps the conflation to uniquely recognize the feature type you want conflate.  This primarily involves deriving the
 feature's type given the attributes (tags) it possesses.  Here is an example from the river conflation:
 ----------------
-bool LinearWaterwayCriterion::isSatisfied(const ConstElementPtr& e) const
+bool RiverCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   if (e->getElementType() == ElementType::Way || e->getElementType() == ElementType::Relation)
   {
@@ -174,13 +174,13 @@ bool LinearWaterwayCriterion::isSatisfied(const ConstElementPtr& e) const
 * OsmSchemaJs - You will need to wrap the method entry made in OsmSchema in the classes that expose
 the Javascript interface.  River example:
 -----------------
-Handle<Value> OsmSchemaJs::isLinearWaterway(const Arguments& args)
+Handle<Value> OsmSchemaJs::isRiver(const Arguments& args)
 {
   HandleScope scope;
 
   ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
 
-  return scope.Close(Boolean::New(LinearWaterwayCriterion().isSatisfied(e)));
+  return scope.Close(Boolean::New(RiverCriterion().isSatisfied(e)));
 }
 -----------------
 * NodeMatcher::calculateAngles - To make map cleaning work for your feature type, you may have to
@@ -188,7 +188,7 @@ include your new feature type here.  example:
 -------------
 ...
 if (HighwayCriterion().isSatisfied(w) == false &&
-    LinearWaterwayCriterion().isSatisfied(w) == false &&
+    RiverCriterion().isSatisfied(w) == false &&
     PowerLineCriterion().isSatisfied(w) == false)
 {
   // If this isn't a feature type we're interested in, then don't consider it.
@@ -200,48 +200,37 @@ if (HighwayCriterion().isSatisfied(w) == false &&
 ==== Javascript Code Changes Required
 
 The following Javascript code changes are required to add new schema entries:
-* HootLib.js - Make a Javascript API entry for your wrapped C++ method here.  Example:
--------------
-/**
- * Returns true if the specified element is an linear waterway element.
- *
- * See the OSM wiki for more information:
- * http://wiki.openstreetmap.org/wiki/River
- */
-function isLinearWaterway(e)
-{
-  return hoot.OsmSchema.isLinearWaterway(e);
-}
--------------
-* rules file - Finally, reference your schema related method from your rules file so that the generic
-conflation can identify the correct features to conflate.  Example from rules/River.js:
+
+* Update `isMatchCandidate` to tell your script which type of features it should conflate.  
+Example from rules/River.js:
 ------------
 /**
  * Returns true if e is a candidate for a match. Implementing this method is
  * optional, but may dramatically increase speed if you can cull some features
  * early on. E.g. no need to check nodes for a polygon to polygon match.
  */
-exports.isMatchCandidate = function(map, e) {
-    return isLinearWaterway(e);
+exports.isMatchCandidate = function(map, e) 
+{
+  return hoot.OsmSchema.isRiver(e);
 };
 ------------
 
 === Conflation Thresholds
 
 Your Javascript rules file can be configured to set the conflation match/miss/review threshold based
-on existing Hootenanny configuration settings.  This examples shows how it is done in the linear
-waterway rules file:
+on existing Hootenanny configuration settings.  This examples shows how it is done in the river rules
+file:
 
 -------------
-exports.matchThreshold = parseFloat(hoot.get("waterway.match.threshold"));
-exports.missThreshold = parseFloat(hoot.get("waterway.miss.threshold"));
-exports.reviewThreshold = parseFloat(hoot.get("waterway.review.threshold"));
+exports.matchThreshold = parseFloat(hoot.get("river.match.threshold"));
+exports.missThreshold = parseFloat(hoot.get("river.miss.threshold"));
+exports.reviewThreshold = parseFloat(hoot.get("river.review.threshold"));
 -------------
 If you wish to change these threshold settings, when conflating from the command line, the best way
 to do it is by passing a new value in for each setting.  e.g.:
 
 ------------
--D waterway.match.threshold=0.8 -D waterway.miss.threshold=0.8 -D waterway.review.threshold=0.8
+-D river.match.threshold=0.8 -D river.miss.threshold=0.8 -D river.review.threshold=0.8
 ------------
 
 === Search Radius
@@ -249,29 +238,29 @@ to do it is by passing a new value in for each setting.  e.g.:
 Generic conflation can be set up to automatically calculate the search radius of the input data with
 a modification to the associated Javascript rules file.  It can be done by adding a single line making
 a call to the calculateSearchRadius function inside the rules file init method.  Here is an example
-from the linear waterways rules file:
+from the river rules file:
 
 ------
 exports.init = function(map)
 {
-  if (Boolean(hoot.get("waterway.auto.calc.search.radius")))
+  if (Boolean(hoot.get("river.auto.calc.search.radius")))
   {
     hoot.log("Automatically calculating search radius...");
     exports.searchRadius =
       parseFloat(
         calculateSearchRadius(
           map,
-          hoot.get("waterway.rubber.sheet.ref"),
-          hoot.get("waterway.rubber.sheet.minimum.ties")));
+          hoot.get("river.rubber.sheet.ref"),
+          hoot.get("river.rubber.sheet.minimum.ties")));
   }
   else
   {
-    exports.searchRadius = parseFloat(hoot.get("search.radius.waterway"));
+    exports.searchRadius = parseFloat(hoot.get("search.radius.river"));
     hoot.log("Using specified search radius: " + exports.searchRadius);
   }
 }
 ------
-The above example automatically calculates the search radius when "waterway.auto.calc.search.radius"
+The above example automatically calculates the search radius when "river.auto.calc.search.radius"
 is set to true.  Otherwise, it uses the default search radius setting for conflating waterways.
 With automatic search radius calculation enabled, the input data cannot be rubber sheeted since
 the automatic calculation makes use of tie points derived from the rubber sheeting algorithm.
@@ -284,7 +273,7 @@ river data:
 
 ---------
 {
-  "waterway.search.radius": "20.0"
+  "river.search.radius": "20.0"
 }
 ---------
 
@@ -368,7 +357,7 @@ After you have implemented the getMatchFeatureDetails method in your Javascript 
 model file can be output from Hootenanny using the build-model command.  An example:
 
 ----------------
-hoot build-model -C conf/LinearWaterway.conf dataset-1.osm dataset-2.osm model-file
+hoot build-model -C conf/River.conf dataset-1.osm dataset-2.osm model-file
 ----------------
 
 ==== Examining the Model in Weka
@@ -643,7 +632,7 @@ user interface, add a description string to your rules file and turn the "experi
 off.  An example:
 
 -----------------
-exports.description = "Linear Waterway";
+exports.description = "River";
 exports.experimental = false;
 -----------------
 

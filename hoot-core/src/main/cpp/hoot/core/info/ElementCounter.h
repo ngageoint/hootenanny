@@ -55,40 +55,34 @@ public:
    */
   long count(const QStringList& inputs);
 
-  /**
-   * Counts the number of elements in inputs that satisify a criterion
-   *
-   * @param inputs paths to map inputs to count within
-   * @param criterionClassName name of the ElementCriterion class to use for filtering
-   * @return a count
-   */
-  long count(const QStringList& inputs, QString& criterionClassName);
-
   void setCountFeaturesOnly(const bool countFeaturesOnly)
   { _countFeaturesOnly = countFeaturesOnly; }
+  void setCriteria(QStringList& names);
 
 private:
 
   // if true, elements with no information tags are not counted
   bool _countFeaturesOnly;
-  int _taskStatusUpdateInterval;
+  // optional filtering criteria
+  ElementCriterionPtr _crit;
+  // determines whether _crit supports streaming I/O
+  bool _isStreamableCrit;
   // total number of elements counted
   long _total;
 
+  int _taskStatusUpdateInterval;
+
   void _checkForMissingInputs(const QStringList& inputs) const;
-  QString _getStatusMessage(const QString& input, const QString& criterionClassName) const;
-  QString _getStatusMessage(const int inputsSize, const QString& criterionClassName) const;
+  QString _getStreamingStatusMessage(const QString& input) const;
+  QString _getMemoryBoundStatusMessage(const int inputsSize) const;
 
   std::shared_ptr<PartialOsmMapReader> _getStreamingReader(const QString& input) const;
-  ElementCriterionPtr _getCriterion(
-    const QString& criterionClassName, const bool negate, bool& isStreamable) const;
   ElementInputStreamPtr _getFilteredInputStream(
-    ElementInputStreamPtr inputStream, const ElementCriterionPtr& criterion,
-    ConstElementVisitorPtr countVis) const;
+    ElementInputStreamPtr inputStream, ConstElementVisitorPtr countVis) const;
   ConstElementVisitorPtr _getCountVis() const;
 
-  long _countMemoryBound(const QStringList& inputs, const ElementCriterionPtr& criterion) const;
-  long _countStreaming(const QString& input, const ElementCriterionPtr& criterion) const;
+  long _countMemoryBound(const QStringList& inputs) const;
+  long _countStreaming(const QString& input) const;
 };
 
 }

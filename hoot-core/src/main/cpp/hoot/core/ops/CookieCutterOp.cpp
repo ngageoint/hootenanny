@@ -62,7 +62,7 @@ void CookieCutterOp::apply(std::shared_ptr<OsmMap>& map)
 {
   LOG_VARD(map->getNodeCount());
   LOG_VARD(MapProjector::toWkt(map->getProjection()));
-  OsmMapWriterFactory::writeDebugMap(map, "cookie-cutter-op-input-map");
+  OsmMapWriterFactory::writeDebugMap(map, className(), "input-map");
 
   // This assumes that the incoming map has status Unknown1 for the replacement data and status
   // Unknown2 for the data being replaced.
@@ -86,7 +86,7 @@ void CookieCutterOp::apply(std::shared_ptr<OsmMap>& map)
   cutterShapeMap->visitRw(doughRemover);
   LOG_VARD(cutterShapeMap->getNodes().size());
   LOG_VARD(MapProjector::toWkt(cutterShapeMap->getProjection()));
-  OsmMapWriterFactory::writeDebugMap(cutterShapeMap, "cookie-cutter-op-cutter-shape-map");
+  OsmMapWriterFactory::writeDebugMap(cutterShapeMap, className(), "cutter-shape-map");
 
   // Create an alpha shape based on the map with the cutter shape data to get our cookie cutter
   // shape outline.
@@ -114,7 +114,7 @@ void CookieCutterOp::apply(std::shared_ptr<OsmMap>& map)
   map.reset(new OsmMap(result));
   LOG_VARD(map->getNodes().size());
   LOG_VARD(MapProjector::toWkt(map->getProjection()));
-  OsmMapWriterFactory::writeDebugMap(map, "cookie-cutter-op-final-combined-map");
+  OsmMapWriterFactory::writeDebugMap(map, className(), "final-combined-map");
 }
 
 }

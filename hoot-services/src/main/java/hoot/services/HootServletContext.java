@@ -42,6 +42,7 @@ import javax.servlet.ServletContextListener;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 
+import hoot.services.controllers.ingest.CustomScriptResource;
 import hoot.services.controllers.nodejs.ElementMergeServiceResource;
 import hoot.services.controllers.nodejs.TranslationServiceResource;
 
@@ -60,6 +61,8 @@ public class HootServletContext implements ServletContextListener {
         TranslationServiceResource.startTranslationService();
 
         ElementMergeServiceResource.startElementMergeService();
+
+        CustomScriptResource.scanTranslations();
     }
 
     @Override

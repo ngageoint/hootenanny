@@ -52,6 +52,7 @@ class MetadataTags
 public:
 
   inline static QString HootTagPrefix()                 { return "hoot:"; }
+  inline static QString HootNamespacePrefix()           { return "hoot::"; }
 
   inline static QString BuildingPart()                  { return "building:part"; }
   inline static QString BuildingHeight()                { return "height"; }

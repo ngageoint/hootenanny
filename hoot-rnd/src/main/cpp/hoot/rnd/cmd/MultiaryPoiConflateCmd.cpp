@@ -80,8 +80,12 @@ public:
 
     if (args.size() < 3)
     {
-      throw HootException(
-        "Expected at least three parameters (input1, input2, ..., output)");
+      std::cout << getHelp() << std::endl << std::endl;
+      throw IllegalArgumentException(
+        QString("%1 takes at least three parameters. You provided %2: %3")
+          .arg(getName())
+          .arg(args.size())
+          .arg(args.join(",")));
     }
 
     inputs = args.mid(0, args.length() - 1);
@@ -91,10 +95,8 @@ public:
       "Conflating " << FileUtils::toLogFormat(inputs) <<
       " and writing the output to " << FileUtils::toLogFormat(output, 50) << "...");
 
-    // read input 1
     OsmMapPtr map(new OsmMap());
-
-    // load all the inputs into a single map
+    // Load all the inputs into a single map.
     for (int i = 0; i < inputs.size(); ++i)
     {
       IoUtils::loadMap(map, inputs[i], false, Status::fromInput(i));
@@ -114,9 +116,7 @@ public:
     OpExecutor(ConfigOptions().getConflatePostOps()).apply(map);
 
     MapProjector::projectToWgs84(map);
-
     map->visitRw(hashVisitor);
-
     IoUtils::saveMap(map, output);
 
     LOG_STATUS(

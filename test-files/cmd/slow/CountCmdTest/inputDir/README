@@ -1,0 +1,1 @@
+The contents of this directory are set up as input to test the recursive directory parsing command parameter, --recursive, for several commands. Changing the contents of this directory will affect several tests.

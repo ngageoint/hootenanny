@@ -1,7 +1,7 @@
 [[info]]
 == info
 
-The +info+ command displays information about Hootenanny capabilities. For further detail on how to use this information see both the Hootenanny User and Developer Guides.
+The +info+ command displays information about command capabilities.
 
 === Option Overview
 
@@ -53,7 +53,7 @@ are applied.
 ==== Usage
 
 --------------------------------------
-info --cleaning-operations
+hoot info --cleaning-operations
 --------------------------------------
 
 === Configuration Options
@@ -73,10 +73,10 @@ One of the following input parameters must be specified:
 ==== Usage
 
 --------------------------------------
-info --config-options [--option-names]
-info --config-options [--option-details]
-info --config-options (name) [--option-names]
-info --config-options (name) [--option-details]
+hoot info --config-options [--option-names]
+hoot info --config-options [--option-details]
+hoot info --config-options (name) [--option-names]
+hoot info --config-options (name) [--option-details]
 --------------------------------------
 
 === Conflatable Criteria
@@ -86,7 +86,7 @@ The +--conflatable-crieria++ option prints out all element criteria classes that
 ==== Usage
 
 --------------------------------------
-info --conflatable-criteria
+hoot info --conflatable-criteria
 --------------------------------------
 
 === Conflate Post Operations
@@ -97,7 +97,7 @@ conflation job with the 'conflate' command.  The configuration option 'conflate.
 ==== Usage
 
 --------------------------------------
-info --conflate-post-operations
+hoot info --conflate-post-operations
 --------------------------------------
 
 === Conflate Pre Operations
@@ -108,7 +108,7 @@ conflation job with the 'conflate' command.  The configuration option 'conflate.
 ==== Usage
 
 --------------------------------------
-info --conflate-pre-operations
+hoot info --conflate-pre-operations
 --------------------------------------
 
 === Element Criterion Consumers
@@ -120,7 +120,7 @@ data transformations on them.
 ==== Usage
 
 --------------------------------------
-info --criterion-consumers
+hoot info --criterion-consumers
 --------------------------------------
 
 === Feature Extractors
@@ -131,7 +131,7 @@ model with manually matched map training data.
 ==== Usage
 
 --------------------------------------
-info --feature-extractors
+hoot info --feature-extractors
 --------------------------------------
 
 === Filters
@@ -142,7 +142,7 @@ the +--operators+ option. Element criteria can be used to filter elements during
 ==== Usage
 
 --------------------------------------
-info --filters
+hoot info --filters
 --------------------------------------
 
 === Formats
@@ -155,7 +155,7 @@ configuration option.
 ==== Usage
 
 --------------------------------------
-info --formats [--input] [--output] [--input-bounded] [--input-streamable] [--output-streamable] [--ogr]
+hoot info --formats [--input] [--input-bounded] [--input-streamable] [--ogr] [--output] [--output-streamable]
 --------------------------------------
 
 === Geometry Type Criteria
@@ -166,7 +166,7 @@ element's geometry.
 ==== Usage
 
 --------------------------------------
-info --geometry-type-crieria
+hoot info --geometry-type-crieria
 --------------------------------------
 
 === Matchers
@@ -177,7 +177,7 @@ contain the criteria to match a specific pair of features
 ==== Usage
 
 --------------------------------------
-info --matchers
+hoot info --matchers
 --------------------------------------
 
 === Match Creators
@@ -188,7 +188,7 @@ Match Creators are responsible for spawning matchers.
 ==== Usage
 
 --------------------------------------
-info --match-creators
+hoot info --match-creators
 --------------------------------------
 
 === Mergers
@@ -199,7 +199,7 @@ created to merge a feature pair supported by a corresponding matcher.
 ==== Usage
 
 --------------------------------------
-info --mergers
+hoot info --mergers
 --------------------------------------
 
 === Merger Creators
@@ -210,7 +210,7 @@ Merger Creators are responsible for spawning mergers.
 ==== Usage
 
 --------------------------------------
-info --merger-creators
+hoot info --merger-creators
 --------------------------------------
 
 === Operators
@@ -225,7 +225,7 @@ Map operators can be criterion, operations, or visitors.
 ==== Usage
 
 --------------------------------------
-info --operators
+hoot info --operators
 --------------------------------------
 
 === Subline Matchers
@@ -235,7 +235,7 @@ The +--subline-matchers+ option prints out available subline matchers that deter
 ==== Usage
 
 --------------------------------------
-info --subline-matchers
+hoot info --subline-matchers
 --------------------------------------
 
 === Subline String Matchers
@@ -246,7 +246,7 @@ of multilinestring matching is used during conflation.
 ==== Usage
 
 --------------------------------------
-info --subline-string-matchers
+hoot info --subline-string-matchers
 --------------------------------------
 
 === String Comparators
@@ -256,7 +256,7 @@ The +--string-comparators+ option prints out available string comparators that c
 ==== Usage
 
 --------------------------------------
-info --string-comparators
+hoot info --string-comparators
 --------------------------------------
 
 === Tag Mergers
@@ -266,7 +266,7 @@ The +--tag-mergers+ option prints out available tag mergers that may be applied 
 ==== Usage
 
 --------------------------------------
-info --tag-mergers
+hoot info --tag-mergers
 --------------------------------------
 
 === Value Aggregators
@@ -277,7 +277,7 @@ a conflation model with manually matched map training data.
 ==== Usage
 
 --------------------------------------
-info --value-aggregators
+hoot info --value-aggregators
 --------------------------------------
 
 === Way Joiners
@@ -288,7 +288,7 @@ in conjunction with the OsmMapOperation, `hoot::WayJoinerOp`.
 ==== Usage
 
 --------------------------------------
-info --way-joiners
+hoot info --way-joiners
 --------------------------------------
 
 === Way Snap Criteria
@@ -305,6 +305,6 @@ list with all available snapping criteria are returned. The list of available ma
 ==== Usage
 
 --------------------------------------
-info --way-snap-criteria
+hoot info --way-snap-criteria
 --------------------------------------
 

@@ -62,10 +62,6 @@ public:
   AddressScoreExtractor();
   ~AddressScoreExtractor() = default;
 
-  QString getClassName() const override { return className(); }
-
-  QString getName() const override { return className(); }
-
   void setConfiguration(const Settings& conf) override;
 
   /**
@@ -81,6 +77,8 @@ public:
   double extract(const OsmMap& map, const ConstElementPtr& element1,
                          const ConstElementPtr& element2) const override;
 
+  QString getClassName() const override { return className(); }
+  QString getName() const override { return className(); }
   QString getDescription() const override
   { return "Scores address similarity for conflation"; }
 

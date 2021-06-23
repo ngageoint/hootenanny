@@ -60,7 +60,7 @@ void AddAttributesVisitor::setConfiguration(const Settings& conf)
   _addOnlyIfEmpty = configOptions.getAddAttributesVisitorAddOnlyIfEmpty();
   LOG_VARD(_addOnlyIfEmpty);
 
-  _negateCriteria = configOptions.getElementCriterionNegate();
+  _negateCriteria = configOptions.getElementCriteriaNegate();
   _chainCriteria = configOptions.getAddAttributesVisitorChainElementCriteria();
   const QStringList critNames = configOptions.getAddAttributesVisitorElementCriteria();
   LOG_VART(critNames);
