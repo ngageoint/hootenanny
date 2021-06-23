@@ -476,17 +476,21 @@ void OgrReader::read(
   const QString& path, const QString& layer, const OsmMapPtr& map, const QString& jobSource,
   const int numTasks)
 {
+  LOG_VARD(path);
+  LOG_VARD(layer);
+
   map->appendSource(path);
 
   // These are the OGR inputs types for which we need to iterate through layers. This list may
   // eventually need to be expanded. May be able to tighten the dir condition to dirs with shape
   // files only.
-  // TODO: Can we just check to see if layer is empty here instead?
-  if (path.endsWith(".gdb") || QFileInfo(path).isDir() || path.endsWith(".zip"))
+  // TODO: Can we only check to see if layer is empty here instead?
+  if (layer.isEmpty() &&
+      (path.endsWith(".gdb") || QFileInfo(path).isDir() || path.endsWith(".zip")))
   {
     QString pathCopy = path;
     const QStringList layers = _getLayersFromPath(pathCopy);
-    LOG_VART(layers);
+    LOG_VARD(layers);
     const std::vector<float> progressWeights = _getInputProgressWeights(path, layers);
     // Read each layer's data.
     for (int j = 0; j < layers.size(); j++)
