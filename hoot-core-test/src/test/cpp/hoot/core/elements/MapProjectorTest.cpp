@@ -290,7 +290,7 @@ public:
       std::shared_ptr<OGRSpatialReference> srs = MapProjector::getInstance().
         createPlanarProjection(env);
       CPPUNIT_ASSERT_EQUAL(true,
-        (bool)MapProjector::toWkt(srs).contains("Orthographic"));
+        (bool)MapProjector::toWkt(srs).contains("Two_Point_Equidistant"));
     }
 
     {
