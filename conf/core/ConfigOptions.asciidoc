@@ -3348,9 +3348,10 @@ to be simplified. For example : watrcrsl_hydro instead of 'watrcrsl@hydro(*)_lin
 * Data Type: string
 * Default Value: ``
 
-This is used to pass the output format (file extension: shp, gdb etc) to translation scripts to enable output format specific translations.
-E.g. Setting this to 'shp' would be telling the translation script to shorten attribute names to 10 characters and keep text
-attributes below the 255 character maximum length.
+This is used to pass the output format (file extension: shp, gdb etc) to translation scripts to
+enable output format specific translations. e.g. Setting this to 'shp' would be telling the
+translation script to shorten attribute names to 10 characters and keep text attributes below the
+255 character maximum length.
 
 === ogr.split.o2s
 

@@ -6,10 +6,18 @@
 The +clean+ command corrects common erroneous data scenarios from input and writes to output by applying the 
 operations specified in the `map.cleaner.transforms` configuration option. The operation is memory bound.
 
-* +input(s)+    - One or more inputs(s); may be any supported input format (e.g. .osm file).
-* +output+      - Output; may be any supported output format (e.g. .osm file).
-* +--recursive+ - Allows for processing inputs recursively in a directory structure. This must be followed by either "*" 
-                  to denote no filtering or one or more wildcard name filters. e.g. "*.osm;*.json" or "*myFile*".
+* +input(s)+          - One or more inputs(s); may be any supported input format (e.g. .osm file).
+* +output+            - Output; may be any supported output format (e.g. .osm file). This parameter may not be specified with 
+                        the `--separate-output` parameter.
+* +--recursive+       - Allows for processing inputs recursively in a directory structure. This must be followed by either "*" 
+                        to denote no filtering or one or more wildcard name filters. e.g. "*.osm;*.json" or "*myFile*".
+* +--separate-output+ - This parameter replaces the `--output` parameter and will result in no validation summary to
+                        be displayed on the screen. The default behavior when processing multiple inputs is to 
+                        combine them into the same single output. With this parameter specified, each input is 
+                        processed and written to a separate output. The +output+ parameter is invalid in combination 
+                        with this parameter, and output is written back to a new URL with the same base name as 
+                        each input with the text "-validated" appended to it. This parameter cannot be used with OSM 
+                        API database (osmapidb://) or OSM API (http://) inputs.
 
 To see a list of the default cleaning operation configuration:
 -----
@@ -20,6 +28,8 @@ hoot info --cleaning-operations
 
 --------------------------------------
 hoot clean (input) [input2] ... (output) [--recursive "*"|"filter1;filter2..."]
+
+hoot clean (input) [input2] ... [--recursive "*"|"filter1;filter2..."] [--separate-output]
 --------------------------------------
 
 https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#cleaning[Examples]

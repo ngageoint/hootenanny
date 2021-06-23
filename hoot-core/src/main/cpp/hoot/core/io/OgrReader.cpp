@@ -373,11 +373,6 @@ QStringList OgrReader::getFilteredLayerNames(const QString& path) const
   return result;
 }
 
-bool OgrReader::isReasonablePath(const QString& path)
-{
-  return OgrUtilities::getInstance().isReasonableUrl(path);
-}
-
 long OgrReader::getFeatureCount(const QString& path, const QString& layer) const
 {
   _d->open(path, layer);
@@ -560,7 +555,7 @@ void OgrReader::finalizePartial()
 
 bool OgrReader::isSupported(const QString& url)
 {
-  return isReasonablePath(url);
+  return OgrUtilities::getInstance().isReasonableUrl(url);
 }
 
 void OgrReader::setUseDataSourceIds(bool useDataSourceIds)

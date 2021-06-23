@@ -61,30 +61,19 @@ public:
   ~OsmXmlWriter();
 
   bool isSupported(const QString& url) override { return url.toLower().endsWith(".osm"); }
-
   void open(const QString& url) override;
-
   void close() override;
+  QString supportedFormats() override { return ".osm"; }
+  void write(const ConstOsmMapPtr& map) override;
+  void writePartial(const ConstNodePtr& node) override;
+  void writePartial(const ConstWayPtr& way) override;
+  void writePartial(const ConstRelationPtr& relation) override;
+  void finalizePartial() override;
 
   /**
-   * These tags can be included to allow Osmosis to read the files. There is no useful
-   * information in the tags.
+   * Provided for backwards compatibility. Better to just use OsmMapWriterFactory::write()
    */
-  void setIncludeCompatibilityTags(bool includeCompatibility)
-  { _includeCompatibilityTags = includeCompatibility; }
-  void setIncludeIds(bool includeIds) { _addExportTagsVisitor.setIncludeIds( includeIds ); }
-  void setIncludeHootInfo(bool includeInfo)
-  { _addExportTagsVisitor.setIncludeHootInfo( includeInfo ); }
-  void setIncludePid(bool includePid) { _includePid = includePid; }
-
-  /**
-   * Includes the x/y location of the node with the nd element. This is not standard for OSM
-   * and can cause inconsistencies if it isn't updated properly when the file is rewritten, however
-   * it can make the recreation of way geometries dramatically more efficient.
-   */
-  void setIncludePointsInWays(bool includePoints) { _includePointInWays = includePoints; }
-
-  void setPrecision(int p) { _precision = p; }
+  void write(const ConstOsmMapPtr& map, const QString& path);
 
   /**
    * Write the map out to a string and return it. This is handy for debugging, but has obvious
@@ -97,28 +86,32 @@ public:
   static QString toString(const ConstOsmMapPtr& map, const bool formatXml = true);
 
   /**
-   * Provided for backwards compatibility. Better to just use OsmMapWriterFactory::write()
-   */
-  void write(const ConstOsmMapPtr& map, const QString& path);
-
-  void write(const ConstOsmMapPtr& map) override;
-
-  void writePartial(const ConstNodePtr& node) override;
-  void writePartial(const ConstWayPtr& way) override;
-  void writePartial(const ConstRelationPtr& relation) override;
-  void finalizePartial() override;
-
-  bool getFormatXml() const { return _formatXml; }
-  void setFormatXml(const bool format) { _formatXml = format; }
-
-  QString supportedFormats() override { return ".osm"; }
-
-  /**
    * Remove illegal XML characters from the string s and print an error if one is found.  These
    * chars cannot exist in an XML document in any spot and could only have been read in from a
    * non-XML source.
    */
   QString removeInvalidCharacters(const QString& s);
+
+  bool getFormatXml() const { return _formatXml; }
+
+  /**
+   * These tags can be included to allow Osmosis to read the files. There is no useful
+   * information in the tags.
+   */
+  void setIncludeCompatibilityTags(bool includeCompatibility)
+  { _includeCompatibilityTags = includeCompatibility; }
+  void setIncludeIds(bool includeIds) { _addExportTagsVisitor.setIncludeIds( includeIds ); }
+  void setIncludeHootInfo(bool includeInfo)
+  { _addExportTagsVisitor.setIncludeHootInfo( includeInfo ); }
+  void setIncludePid(bool includePid) { _includePid = includePid; }
+  /**
+   * Includes the x/y location of the node with the nd element. This is not standard for OSM
+   * and can cause inconsistencies if it isn't updated properly when the file is rewritten, however
+   * it can make the recreation of way geometries dramatically more efficient.
+   */
+  void setIncludePointsInWays(bool includePoints) { _includePointInWays = includePoints; }
+  void setPrecision(int p) { _precision = p; }
+  void setFormatXml(const bool format) { _formatXml = format; }
 
 private:
 

@@ -59,14 +59,13 @@ public:
   ShapefileWriter();
   ~ShapefileWriter() = default;
 
+  /**
+   * Set the configuration for this object.
+   */
+  void setConfiguration(const Settings& conf) override;
+
   bool isSupported(const QString& url) override { return url.toLower().endsWith(".shp"); }
-
   void open(const QString& url) override;
-
-  QStringList getColumns(ConstOsmMapPtr map, ElementType type) const;
-
-  void setColumns(QStringList columns) { _columns = columns; }
-
   /**
    * Will write out up to three files:
    * path + "Points.shp"
@@ -74,26 +73,21 @@ public:
    * path + "Polygons.shp"
    */
   void write(const ConstOsmMapPtr& map) override;
+  QString supportedFormats() override { return ".shp"; }
 
   /**
    * @deprecated Use open and write instead.
    */
   void write(const ConstOsmMapPtr& map, const QString& path);
-
   void writeLines(const ConstOsmMapPtr& map, const QString& path);
-
   void writePoints(const ConstOsmMapPtr& map, const QString& path);
-
   void writePolygons(const ConstOsmMapPtr& map, const QString& path);
 
-  QString supportedFormats() override { return ".shp"; }
+  QStringList getColumns(ConstOsmMapPtr map, ElementType type) const;
 
-  /**
-   * Set the configuration for this object.
-   */
-  void setConfiguration(const Settings& conf) override;
+  void setColumns(QStringList columns) { _columns = columns; }
 
-protected:
+private:
 
   QStringList _columns;
   bool _includeCircularError;
@@ -104,12 +98,11 @@ protected:
 
   void _writeRelationPolygon(const ConstOsmMapPtr& map, const RelationPtr& relation,
     OGRLayer* poLayer, const QStringList& columns, const QStringList& shpColumns) const;
-
   void _writeWayPolygon(const ConstOsmMapPtr& map, const WayPtr& way, OGRLayer *poLayer,
     const QStringList& columns, const QStringList &shpColumns) const;
 };
 
-} // hoot
+}
 
 
 #endif // SHAPEFILEWRITER_H
