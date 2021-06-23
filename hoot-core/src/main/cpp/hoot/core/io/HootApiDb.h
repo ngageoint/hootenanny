@@ -361,19 +361,19 @@ public:
   long getMapIdByName(const QString& name);
 
   /**
-   * TODO
-   *
-   * @param url
-   * @return
-   */
-  static QString getLayerName(const QString& url);
-  /**
-   * Removes the layer name from a Hooteanny API database URL
+   * Removes the table name from a Hootenanny API database URL
    *
    * @param url input URL
-   * @return a URL with the layer name removed
+   * @return a URL
    */
-  static QString removeLayerName(const QString& url);
+  static QString getTableName(const QString& url);
+  /**
+   * Removes the table name from a Hooteanny API database URL
+   *
+   * @param url input URL
+   * @return a URL
+   */
+  static QString removeTableName(const QString& url);
 
   void setCreateIndexesOnClose(bool create) { _createIndexesOnClose = create; }
   void setFlushOnClose(bool flush) { _flushOnClose = flush; }

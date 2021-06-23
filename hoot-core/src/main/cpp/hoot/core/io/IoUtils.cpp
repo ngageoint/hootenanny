@@ -198,23 +198,9 @@ bool IoUtils::isSupportedInputFormat(const QString& url)
   return !OsmMapReaderFactory::getReaderName(url).trimmed().isEmpty();
 }
 
-bool IoUtils::areSameSupportedInputFormat(const QString& url1, const QString& url2)
-{
-  const QString readerName1 = OsmMapReaderFactory::getReaderName(url1);
-  const QString readerName2 = OsmMapReaderFactory::getReaderName(url2);
-  return !readerName1.isEmpty() && !readerName2.isEmpty() && readerName1 == readerName2;
-}
-
 bool IoUtils::isSupportedOutputFormat(const QString& url)
 {
   return !OsmMapWriterFactory::getWriterName(url).trimmed().isEmpty();
-}
-
-bool IoUtils::areSameSupportedOutputFormat(const QString& url1, const QString& url2)
-{
-  const QString writerName1 = OsmMapWriterFactory::getWriterName(url1);
-  const QString writerName2 = OsmMapWriterFactory::getWriterName(url2);
-  return !writerName1.isEmpty() && !writerName2.isEmpty() && writerName1 == writerName2;
 }
 
 bool IoUtils::isStreamableIo(const QString& input, const QString& output)
@@ -588,7 +574,7 @@ QString IoUtils::getOutputUrlFromInput(
   QString existingExtension;
   if (DbUtils::isHootApiDbUrl(inputUrl))
   {
-    existingBaseName = HootApiDb::getLayerName(inputUrl);
+    existingBaseName = HootApiDb::getTableName(inputUrl);
   }
   else
   {

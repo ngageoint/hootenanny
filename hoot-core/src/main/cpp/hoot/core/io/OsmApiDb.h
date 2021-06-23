@@ -85,9 +85,6 @@ public:
    * Input: apidb row in form with row[8]=k, row[9]=v
    * Output: "k"=>"v"
    *
-   * @param row TODO
-   * @param Type
-   * @return
    * @note This gets the tags in a form that is the same as how selectAll returns them for Services
    * .DB
    */

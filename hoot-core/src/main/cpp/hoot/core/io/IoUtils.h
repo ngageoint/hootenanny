@@ -61,30 +61,12 @@ public:
   static bool isSupportedInputFormat(const QString& url);
 
   /**
-   * TODO
-   *
-   * @param url1
-   * @param url2
-   * @return
-   */
-  static bool areSameSupportedInputFormat(const QString& url1, const QString& url2);
-
-  /**
    * Determines if the a URL is a supported output format
    *
    * @param url the URL to examine
    * @return true if the URL points to a valid output format; false otherwise
    */
   static bool isSupportedOutputFormat(const QString& url);
-
-  /**
-   * TODO
-   *
-   * @param url1
-   * @param url2
-   * @return
-   */
-  static bool areSameSupportedOutputFormat(const QString& url1, const QString& url2);
 
   /**
    * Returns true if the input format is a Hootenanny supported OSM format
