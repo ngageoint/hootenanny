@@ -171,7 +171,7 @@ private:
     {
       const QString input = inputs.at(i);
 
-      OsmMapPtr map(new OsmMap());
+      OsmMapPtr map = std::make_shared<OsmMap>();
       IoUtils::loadMap(map, input, true);
 
       _crop(map);
@@ -182,7 +182,7 @@ private:
     }
   }
 
-  void _crop(OsmMapPtr& map)
+  void _crop(OsmMapPtr& map) const
   {
     MapCropper cropper;
     cropper.setBounds(_env);

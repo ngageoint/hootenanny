@@ -139,13 +139,13 @@ public:
 private:
 
   void _clean(
-    const QStringList& inputs, const QString& output, std::shared_ptr<Progress> progress)
+    const QStringList& inputs, const QString& output, std::shared_ptr<Progress> progress) const
   {
     progress.reset(
       new Progress(
         ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running, 0.0,
         // import, export, and cleaning tasks
-        1.0 / 3.0));
+        1.0f / 3.0f));
 
     progress->set(
       0.0, Progress::JobState::Running,
@@ -165,26 +165,27 @@ private:
       IoUtils::loadMaps(map, inputs, false, Status::Unknown1);
     }
 
-    progress->set(1.0 / 3.0, Progress::JobState::Running, "Cleaning map...");
+    progress->set(1.0f / 3.0f, Progress::JobState::Running, "Cleaning map...");
     MapCleaner(*progress).apply(map);
 
     progress->set(
-      2.0 / 3.0, Progress::JobState::Running,
+      2.0f / 3.0f, Progress::JobState::Running,
       "Exporting map: ..." + FileUtils::toLogFormat(output, 25) + "...");
     MapProjector::projectToWgs84(map);
     IoUtils::saveMap(map, output);
   }
 
-  void _cleanSeparateOutput(const QStringList& inputs, std::shared_ptr<Progress> progress)
+  void _cleanSeparateOutput(const QStringList& inputs, std::shared_ptr<Progress> progress) const
   {
     // (import, export, and cleaning tasks) * number of inputs
-    const double numTasks = 3.0 * (double)inputs.size();
+    const float numTasks = 3.0 * (float)inputs.size();
     LOG_VARD(numTasks);
     progress.reset(
       new Progress(
-        ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running, 0.0, 1.0 / numTasks));
+        ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running,
+        0.0f, 1.0f / numTasks));
 
-    double currentTask = 0.0;
+    float currentTask = 0.0;
     for (int i = 0; i < inputs.size(); i++)
     {
       const QString input = inputs.at(i);
@@ -192,7 +193,7 @@ private:
       progress->set(
         currentTask / numTasks, Progress::JobState::Running,
         "Importing: ..." + FileUtils::toLogFormat(input, 25) + "...");
-      OsmMapPtr map(new OsmMap());
+      OsmMapPtr map = std::make_shared<OsmMap>();
       // See note in _clean about why we don't stream this input.
       IoUtils::loadMap(map, input, true, Status::Unknown1);
       currentTask++;
