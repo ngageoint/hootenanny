@@ -120,7 +120,8 @@ void ApiDb::_resetQueries()
   {
     itr.value().reset();
   }
-  for (QHash<QString, std::shared_ptr<QSqlQuery>>::iterator itr = _numEstimatedElementsQueries.begin();
+  for (QHash<QString, std::shared_ptr<QSqlQuery>>::iterator itr =
+         _numEstimatedElementsQueries.begin();
        itr != _numEstimatedElementsQueries.end(); ++itr)
   {
     itr.value().reset();

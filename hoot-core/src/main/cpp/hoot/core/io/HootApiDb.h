@@ -51,26 +51,21 @@ public:
   HootApiDb();
   ~HootApiDb();
 
+  void close() override;
+  bool isSupported(const QUrl& url) override;
+  void open(const QUrl& url) override;
+  void commit() override;
+
   /**
    * Called after open. This will read the bounds of the specified layer in a relatively efficient
    * manner. (e.g. SELECT min(x)...)
-   */
-  /**
-   * TODO: Implement EnvelopeProvider
+   *
+   * @todo implement EnvelopeProvider
    */
   virtual geos::geom::Envelope calculateEnvelope() const;
 
-  void close() override;
-
   virtual bool isCorrectHootDbVersion();
-
   virtual QString getHootDbVersion();
-
-  bool isSupported(const QUrl& url) override;
-
-  void open(const QUrl& url) override;
-
-  void commit() override;
 
   /**
    * @see ApiDb::elementTypeToElementTableName
@@ -187,10 +182,10 @@ public:
    */
   long insertMap(QString mapName);
 
-  bool insertNode(const double lat, const double lon, const Tags &tags, long& assignedId,
-                  long version = 0);
-  bool insertNode(const long id, const double lat, const double lon, const Tags &tags,
-                  long version = 0);
+  bool insertNode(
+    const double lat, const double lon, const Tags &tags, long& assignedId, long version = 0);
+  bool insertNode(
+    const long id, const double lat, const double lon, const Tags &tags, long version = 0);
   bool insertNode(ConstNodePtr node, long version = 0);
 
   bool insertWay(const Tags& tags, long& assignedId, long version = 0);
@@ -211,8 +206,9 @@ public:
    * @param sequenceId Sequence for the relation
    * @return True if success, else false
    */
-  bool insertRelationMember(const long relationId, const ElementType& type,
-    const long elementId, const QString& role, const int sequenceId);
+  bool insertRelationMember(
+    const long relationId, const ElementType& type, const long elementId, const QString& role,
+    const int sequenceId);
 
   void insertRelationTag(long relationId, const QString& k, const QString& v);
 
@@ -253,11 +249,9 @@ public:
    */
   QStringList selectMapNamesAvailableToCurrentUser();
 
-  void updateNode(const long id, const double lat, const double lon, const long version,
-                  const Tags& tags);
-
+  void updateNode(
+    const long id, const double lat, const double lon, const long version, const Tags& tags);
   void updateNode(ConstNodePtr node);
-
   void deleteNode(ConstNodePtr node);
 
   void updateRelation(const long id, const long version, const Tags& tags);
@@ -367,12 +361,19 @@ public:
   long getMapIdByName(const QString& name);
 
   /**
-   * Removes the layer name from a Hooteanny API database URL
+   * Removes the table name from a Hootenanny API database URL
    *
    * @param url input URL
-   * @return a URL with the layer name removed
+   * @return a URL
    */
-  static QString removeLayerName(const QString& url);
+  static QString getTableName(const QString& url);
+  /**
+   * Removes the table name from a Hooteanny API database URL
+   *
+   * @param url input URL
+   * @return a URL
+   */
+  static QString removeTableName(const QString& url);
 
   void setCreateIndexesOnClose(bool create) { _createIndexesOnClose = create; }
   void setFlushOnClose(bool flush) { _flushOnClose = flush; }
@@ -385,8 +386,8 @@ public:
    * @param accessTokenSecret private OAuth access token for the user
    * @return an HTTP session ID or an empty string if no session ID was found for the given input
    */
-  QString getSessionIdByAccessTokens(const QString& userName, const QString& accessToken,
-                                     const QString& accessTokenSecret);
+  QString getSessionIdByAccessTokens(
+    const QString& userName, const QString& accessToken, const QString& accessTokenSecret);
 
   /**
    * Determines whether a set of access tokens are valid for a user
@@ -397,8 +398,8 @@ public:
    * @return true if the access tokens passed in are associated with the specified user; false
    * otherwise
    */
-  bool accessTokensAreValid(const QString& userName, const QString& accessToken,
-                            const QString& accessTokenSecret);
+  bool accessTokensAreValid(
+    const QString& userName, const QString& accessToken, const QString& accessTokenSecret);
 
   /**
    * Returns the HTTP session ID associated with a user
@@ -439,8 +440,8 @@ public:
    * @param accessToken OAuth public access token
    * @param accessTokenSecret OAuth private access token
    */
-  void updateUserAccessTokens(const long userId, const QString& accessToken,
-                              const QString& accessTokenSecret);
+  void updateUserAccessTokens(
+    const long userId, const QString& accessToken, const QString& accessTokenSecret);
 
   /**
    * Determines whether a user has permission to access a map
@@ -465,8 +466,8 @@ public:
    * @param isPublic folder visibility
    * @returns ID of the created folder
    */
-  long insertFolder(const QString& displayName, const long parentId, const long userId,
-                    const bool isPublic);
+  long insertFolder(
+    const QString& displayName, const long parentId, const long userId, const bool isPublic);
 
   /**
    * Creates a mapping between a map and a data folder
@@ -537,9 +538,8 @@ public:
   long getJobStatusResourceId(const QString& jobId);
 
   /**
-   * @brief updateImportSequences Updates the node/way/relation ID sequences to ensure that
-   *   any elements inserted afterwards have the correct beginning ID so that there is no
-   *   reuse of IDs or ID collisions
+   * Updates the node/way/relation ID sequences to ensure that any elements inserted afterwards
+   * have the correct beginning ID so that there is no reuse of IDs or ID collisions
    */
   void updateImportSequences();
 

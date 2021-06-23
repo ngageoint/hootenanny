@@ -279,6 +279,19 @@ public:
    * interface
    */
   static bool urlsAreBoundable(const QStringList& urls);
+
+  /**
+   * Creates an output URL based on an input URL that will not overwrite the input
+   *
+   * @param inputUrl the input URL to generate an output URL for
+   * @param appendText optional text to append to the output URL; not optional if outputFormat is
+   * not specified
+   * @param outputFormat optional output format made up of a file extension (e.g. osm) or a custom
+   * output directory extension (e.g. shp); not option if appendText is not specified
+   * @return a URL
+   */
+  static QString getOutputUrlFromInput(
+    const QString& inputUrl, const QString& appendText = "", const QString& outputFormat = "");
 };
 
 }

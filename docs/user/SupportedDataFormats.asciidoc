@@ -8,41 +8,40 @@ the Hootenanny Developer Guide for details.
 === Input
 
 * File Geodatabase (.gdb)
-* GeoJSON (.geojson file or Overpass query URL) (M1)
+* GeoJSON (.geojson or http://) (memory bound)
 * https://www.geonames.org[GeoNames] (.geonames)
 * https://geonames.nga.mil/gns/html/gis_countryfiles.html[Geonames.nga.mil] (.geonames)
-* Hootenanny API Database (hootapidb://<user name>:<password>@<host name>:<port>/<database name>)
-* OpenStreetMap API Database (osmapidb://<user name>:<password>@<host name>:<port>/<database name>)
+* Hootenanny API Database (hootapidb://)
+* OpenStreetMap API Database (osmapidb://)
 * OpenStreetMap API Web Service (http://)
 * OpenStreetMap Protocol Buffers (.osm.pbf)
 * OpenStreetMap XML (.osm)
-* Overpass JSON (.json file or Overpass query URL) (M1)
+* Overpass JSON (.json or http://overpass-api.de) (memory bound)
 * Shapefile (.shp)
-* Zip files containing shapefiles and/or ESRI File Geodatabase files (.zip)
+* Zip files containing shape files and/or File Geodatabase files (.zip)
 * Any additional OGR supported format not listed here (untested)
 
 === Output
 
 * File Geodatabase (.gdb)
-* GeoJSON (.geojson) (M1)
-* Hootenanny API Database (hootapidb://<user name>:<password>@<host name>:<port>/<database name>)
-* OpenStreetMap API Database (osmapidb://<user name>:<password>@<host name>:<port>/<database name>)
-* OpenStreetMap API Web Service (http://; via changeset only)
-* OpenStreetMap Protocol Buffers file (.osm.pbf)
-* OpenStreetMap SQL changeset file (.osc.sql)
-* OpenStreetMap XML file (.osm) (M2)
-* OpenStreetMap XML changeset file (.osc)
-* Overpass JSON file (.json) (M1)
-* Shapefile (.shp) (M1)
+* GeoJSON (.geojson) (memory bound)
+* Hootenanny API Database (hootapidb://)
+* OpenStreetMap API Database (osmapidb://)
+* OpenStreetMap API Web Service (http://)
+* OpenStreetMap Protocol Buffers (.osm.pbf)
+* OpenStreetMap SQL changeset (.osc.sql)
+* OpenStreetMap XML (.osm) (memory bound if sorted by ID)
+* OpenStreetMap XML changeset (.osc)
+* Overpass JSON (.json) (memory bound)
+* Shapefile (.shp) (memory bound)
 * Any additional OGR supported format not listed here (untested)
 
 === Memory Consumption
 
-* (M1) = format requires reading entire dataset into memory during processing
-* (M2) = format requires reading entire dataset into memory during processing only if element ID output needs to remain sorted
+* A read/write operation is memory bound if either the input or output format is memory bound.
+* If both the input being read and written to are OGR supported formats, the operation will be memory bound.
 * To prevent memory bound conversion when converting to OSM XML, you must set the `writer.xml.sort.by.id` configuration 
-option to false.
-* If both the input being read and written to are OGR formats, the operation will be memory bound.
+option to false and leave the elements unsorted by ID in output.
 * All data read with a specified bounding box filter requires reading the entire dataset into memory during processing.
 
 === OGR
@@ -54,25 +53,43 @@ http://trac.osgeo.org/gdal/wiki/FileGDB for details.
 recognized correctly.
 * A directory of shape files must have the top level directory named as *.shp in order to be recognized correctly.
 
+==== Shape Files
+
+* The conversion from OSM file to shape file is a lossy process that generates a point, line and polygon shapefile. The 
+OSM XML format is a richer format than Shapefile and supports such things as multiple geometry types within one file, 
+inherit topology and arbitrary tagging. For these reasons the conversion to Shapefile is a lossy conversion.
+* Column filtering for shape files is supported with the `shape.file.writer.cols` configuration option.
+
 === OSM API Database
 
-Writing to OSM API databases (osmapidb://) is intended to be a bulk operation for new data only (no updates on 
-existing data).
+The format of a OSM API database URL is: 
+
+osmapidb://<user name>:<password>@<host name>:<port>/<database name>
+
+Writing to OSM API database is intended to be a bulk operation for new data only (no updates on existing data).
 
 === Hootenanny API Database
 
+The format of a Hootenanny API database URL is: 
+
+hootapidb://<user name>:<password>@<host name>:<port>/<database name>/<database table>
+
 The Hootenanny API database format (hootapidb://) is a slightly optimized version of the OSM API database with a 
-different schema than the database used with public OSM (osmapidb://) for use with conflation. The primary difference 
-between the two is that the Hootenanny API database allows for multiple feature layers with each one corresponding to a 
-map stored in its own table. The public OSM API database supports a single feature layer for the entire world. The Hootenanny 
-API database format is meant for internal use by Hootenanny only.
+different schema for use with conflation. The primary difference between the two is that the Hootenanny API database allows 
+for multiple feature layers with each one corresponding to a map stored in its own table. The public OSM API database 
+supports a single feature layer for the entire world. The Hootenanny API database format is meant for internal use 
+by Hootenanny only.
+
+=== OSM API Web Service
+
+Only changesets may be written to an OSM API Web Service (http://).
 
 === Compressed
 
 * The format for specifying zip file data is: "/vsizip/<path to Zip file>/<path to the shape file INSIDE the Zip file>. 
 The "/" are field separators. If you get errors using absolute paths, check that you have the right number of "/".
-** a Zip file located at /gis-data/test_data.zip
-*** The path to the shapefile inside the Zip file: "dir/LAP010.shp
-*** The input is: "/vsizip//gis-data/test_data.zip/dir/LAP010.shp"
-*** If the Zip file is in the current directory, the input will be: /vsizip/./test_data.zip/dir/LAP010.shp
-*** If you do not specify a specific shapefile then, it will read in all shapefiles in the given directory.
+* A Zip file located at /gis-data/test_data.zip:
+  * The path to the shapefile inside the Zip file: "dir/LAP010.shp
+  * The input is: "/vsizip//gis-data/test_data.zip/dir/LAP010.shp"
+  * If the Zip file is in the current directory, the input will be: /vsizip/./test_data.zip/dir/LAP010.shp
+  * If you do not specify a specific shapefile then, it will read in all shapefiles in the given directory.

@@ -31,11 +31,14 @@
 // Qt
 #include <QString>
 
+// std
+#include <memory>
+
 namespace hoot
 {
 
 /**
- * @defgroup cmd Command Line Interface
+ * Command Line Interface
  *
  * Generally you will want to subclass BaseCommand rather than implementing this interface directly.
  */

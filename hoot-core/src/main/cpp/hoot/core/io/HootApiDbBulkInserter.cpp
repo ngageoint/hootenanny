@@ -225,8 +225,8 @@ void HootApiDbBulkInserter::_writeDataToDbPsql()
   //sql file, so no need doing the extra work to handle buffering the sql read manually and
   //applying it to a QSqlQuery.
   LOG_VART(_outputUrl);
-  LOG_VART(HootApiDb::removeLayerName(_outputUrl));
-  ApiDb::execSqlFile(HootApiDb::removeLayerName(_outputUrl), _sqlOutputCombinedFile->fileName());
+  LOG_VART(HootApiDb::removeTableName(_outputUrl));
+  ApiDb::execSqlFile(HootApiDb::removeTableName(_outputUrl), _sqlOutputCombinedFile->fileName());
 
   LOG_INFO(
     "SQL execution complete.  Time elapsed: " << StringUtils::millisecondsToDhms(_timer->elapsed()));
