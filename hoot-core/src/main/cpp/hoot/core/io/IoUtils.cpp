@@ -172,6 +172,23 @@ void IoUtils::ogrPathAndLayerToPath(QString& input)
   input = input.split(";")[0];
 }
 
+void IoUtils::ogrPathAndLayerToLayer(QString& input)
+{
+  if (input.contains(";"))
+  {
+    input = input.split(";")[1];
+  }
+  else
+  {
+    input = "";
+  }
+}
+
+bool IoUtils::isOgrPathAndLayer(const QString& input)
+{
+  return input.contains(";");
+}
+
 QStringList IoUtils::getSupportedInputsRecursively(
   const QStringList& topLevelPaths, const QStringList& nameFilters)
 {

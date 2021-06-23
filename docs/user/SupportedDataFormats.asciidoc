@@ -46,6 +46,11 @@ option to false and leave the elements unsorted by ID in output.
 
 === OGR
 
+* OGR layers may selectively be read with the syntax:
+-----
+# Note that each path;layer input combo must be surrounded in quotes.
+"(input1[;layer])" "[input2[;layer])" ...
+-----
 * The format for OGR database URLs is: PG:"dbname='databasename' host='addr' port='5432' user='x' password='y'"
 * To use file geodatabases, the File Geodatabase module must be compiled into your version of GDAL to work. See
 http://trac.osgeo.org/gdal/wiki/FileGDB for details.
@@ -64,7 +69,9 @@ inherit topology and arbitrary tagging. For these reasons the conversion to Shap
 
 The format of a OSM API database URL is: 
 
+-----
 osmapidb://<user name>:<password>@<host name>:<port>/<database name>
+-----
 
 Writing to OSM API database is intended to be a bulk operation for new data only (no updates on existing data).
 
@@ -72,7 +79,9 @@ Writing to OSM API database is intended to be a bulk operation for new data only
 
 The format of a Hootenanny API database URL is: 
 
+-----
 hootapidb://<user name>:<password>@<host name>:<port>/<database name>/<database table>
+-----
 
 The Hootenanny API database format (hootapidb://) is a slightly optimized version of the OSM API database with a 
 different schema for use with conflation. The primary difference between the two is that the Hootenanny API database allows 

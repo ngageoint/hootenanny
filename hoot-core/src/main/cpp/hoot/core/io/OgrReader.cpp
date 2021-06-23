@@ -41,6 +41,7 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Tags.h>
 #include <hoot/core/geometry/GeometryUtils.h>
+#include <hoot/core/io/IoUtils.h>
 #include <hoot/core/io/OgrUtilities.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/schema/PythonSchemaTranslator.h>
@@ -245,11 +246,13 @@ private:
   OgrReaderInternal* _d;
 };
 
-OgrReader::OgrReader() : _d(new OgrReaderInternal())
+OgrReader::OgrReader() :
+_d(new OgrReaderInternal())
 {
 }
 
-OgrReader::OgrReader(const QString& path) : _d(new OgrReaderInternal())
+OgrReader::OgrReader(const QString& path) :
+_d(new OgrReaderInternal())
 {
   if (isSupported(path) == true)
   {
@@ -561,7 +564,10 @@ void OgrReader::finalizePartial()
 
 bool OgrReader::isSupported(const QString& url)
 {
-  return OgrUtilities::getInstance().isReasonableUrl(url);
+  LOG_VARD(url);
+  QString justPath = url;
+  IoUtils::ogrPathAndLayerToPath(justPath); // in case the layer syntax is in use
+  return OgrUtilities::getInstance().isReasonableUrl(justPath);
 }
 
 void OgrReader::setUseDataSourceIds(bool useDataSourceIds)
@@ -572,7 +578,15 @@ void OgrReader::setUseDataSourceIds(bool useDataSourceIds)
 void OgrReader::open(const QString& url)
 {
   OsmMapReader::open(url);
-  _d->open(url, "");
+
+  QString path = url;
+  IoUtils::ogrPathAndLayerToPath(path); // in case the layer syntax is in use
+  QString layer = url;
+  IoUtils::ogrPathAndLayerToLayer(layer);
+  LOG_VARD(layer);
+  // If there was no layer in the URL, the layer will be empty and the path will be the same as
+  // the url passed in.
+  _d->open(path, layer);
 }
 
 std::shared_ptr<OGRSpatialReference> OgrReader::getProjection() const
@@ -582,21 +596,21 @@ std::shared_ptr<OGRSpatialReference> OgrReader::getProjection() const
 
 int OgrReaderInternal::logWarnCount = 0;
 
-OgrReaderInternal::OgrReaderInternal()
+OgrReaderInternal::OgrReaderInternal() :
+_defaultCircularError(ConfigOptions().getCircularErrorDefaultValue()),
+_circularErrorTagKeys(ConfigOptions().getCircularErrorTagKeys()),
+_status(Status::Invalid),
+_map(OsmMapPtr(new OsmMap())),
+_layer(nullptr),
+_limit(-1),
+_featureCount(0),
+_transform(nullptr),
+_addSourceDateTime(ConfigOptions().getReaderAddSourceDatetime()),
+_nodeIdFieldName(ConfigOptions().getOgrReaderNodeIdFieldName())
 {
-  _map = OsmMapPtr(new OsmMap());
   _nodesItr = _map->getNodes().begin();
   _waysItr =  _map->getWays().begin();
   _relationsItr = _map->getRelations().begin();
-  _layer = nullptr;
-  _transform = nullptr;
-  _status = Status::Invalid;
-  _defaultCircularError = ConfigOptions().getCircularErrorDefaultValue();
-  _circularErrorTagKeys = ConfigOptions().getCircularErrorTagKeys();
-  _limit = -1;
-  _featureCount = 0;
-  _addSourceDateTime = ConfigOptions().getReaderAddSourceDatetime();
-  _nodeIdFieldName = ConfigOptions().getOgrReaderNodeIdFieldName();
 }
 
 OgrReaderInternal::~OgrReaderInternal()

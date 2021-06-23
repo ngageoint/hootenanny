@@ -10,7 +10,8 @@ The +stats+ command calculates a pre-determined set of statistics for one or mor
 * +--output+    - Optional output; supported formats are text (.txt) and JSON (.json).
 * +--recursive+ - Allows for processing the files contained in any directories specified in +input(s)+ recursively.
                   This parameter has no effect on the processing of non-directory inputs. This must be followed by either 
-                  "*" to denote no filtering or one or more wildcard name filters. e.g. "*.osm;*.json" or "*myFile*".
+                  "*" to denote no filtering or one or more wildcard name filters. e.g. "*.osm;*.json" or "*myFile*". 
+                  This parameter is not compatible with the OGR layer input syntax.
 
 === Usage
 

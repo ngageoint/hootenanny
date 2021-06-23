@@ -120,6 +120,21 @@ public:
   static void ogrPathAndLayerToPath(QString& input);
 
   /**
+   * TODO
+   *
+   * @param input
+   */
+  static void ogrPathAndLayerToLayer(QString& input);
+
+  /**
+   *
+   *
+   * @param input
+   * @return
+   */
+  static bool isOgrPathAndLayer(const QString& input);
+
+  /**
    * Returns all file paths under a directory point to a supported input format
    *
    * @param topLevelPaths one or more directory paths
