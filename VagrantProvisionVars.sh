@@ -13,8 +13,8 @@ export STXXL_VERSION=1.3.1
 
 # Geoint deps library versions.
 export ARMADILLO_VERSION=8.600.1
-export GDAL_VERSION=3.9.1
-export GEOS_VERSION=3.6.2
+export GDAL_VERSION=3.2.2
+export GEOS_VERSION=3.9.1
 export LIBGEOTIFF_VERSION=1.6.0
 export PROJ_VERSION=7.2.1
 
