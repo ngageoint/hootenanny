@@ -393,14 +393,16 @@ std::vector<float> OgrReader::_getInputProgressWeights(
   {
     LOG_VART(layers[i]);
     // simply open the file, get the meta feature count value, and close
-    int featuresPerLayer = getFeatureCount(input, layers[i]);
+    long featuresPerLayer = getFeatureCount(input, layers[i]);
     LOG_VART(featuresPerLayer);
     progressWeights.push_back((float)featuresPerLayer);
     // cover the case where no feature count available efficiently; Despite the documentation
     // saying "-1" should be returned for layers without the number of features calculated, a size
     // of zero has been seen with some layers.
-    if (featuresPerLayer < 1) undefinedCounts++;
-    else featureCountTotal += featuresPerLayer;
+    if (featuresPerLayer < 1)
+      undefinedCounts++;
+    else
+      featureCountTotal += featuresPerLayer;
   }
   LOG_VART(featureCountTotal);
   LOG_VART(undefinedCounts);

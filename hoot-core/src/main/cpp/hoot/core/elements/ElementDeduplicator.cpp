@@ -82,9 +82,9 @@ void ElementDeduplicator::dedupe(OsmMapPtr map)
   _removeElements(elementsToRemove[ElementType::Way], map);
   _removeElements(elementsToRemove[ElementType::Node], map);
 
-  _map1DuplicateNodesRemoved = nodesBefore - map->getNodeCount();
-  _map1DuplicateWaysRemoved = waysBefore - map->getWayCount();
-  _map1DuplicateRelationsRemoved = relationsBefore - map->getRelationCount();
+  _map1DuplicateNodesRemoved = (int)(nodesBefore - map->getNodeCount());
+  _map1DuplicateWaysRemoved = (int)(waysBefore - map->getWayCount());
+  _map1DuplicateRelationsRemoved = (int)(relationsBefore - map->getRelationCount());
 
   LOG_DEBUG(map->getName() << " size after de-duping: " << map->size());
   LOG_DEBUG("Removed " << _map1DuplicateNodesRemoved << " duplicate nodes from " << map->getName());
@@ -159,12 +159,12 @@ void ElementDeduplicator::dedupe(OsmMapPtr map1, OsmMapPtr map2)
   }
   _removeElements(elementsToRemove[ElementType::Node], map2);
 
-  _map1DuplicateNodesRemoved = map1NodesBefore - map1->getNodeCount();
-  _map1DuplicateWaysRemoved = map1WaysBefore - map1->getWayCount();
-  _map1DuplicateRelationsRemoved = map1RelationsBefore - map1->getRelationCount();
-  _map2DuplicateNodesRemoved = map2NodesBefore - map2->getNodeCount();
-  _map2DuplicateWaysRemoved = map2WaysBefore - map2->getWayCount();
-  _map2DuplicateRelationsRemoved = map2RelationsBefore - map2->getRelationCount();
+  _map1DuplicateNodesRemoved = static_cast<int>(map1NodesBefore - map1->getNodeCount());
+  _map1DuplicateWaysRemoved = static_cast<int>(map1WaysBefore - map1->getWayCount());
+  _map1DuplicateRelationsRemoved = static_cast<int>(map1RelationsBefore - map1->getRelationCount());
+  _map2DuplicateNodesRemoved = static_cast<int>(map2NodesBefore - map2->getNodeCount());
+  _map2DuplicateWaysRemoved = static_cast<int>(map2WaysBefore - map2->getWayCount());
+  _map2DuplicateRelationsRemoved = static_cast<int>(map2RelationsBefore - map2->getRelationCount());
 
   LOG_DEBUG(map1->getName() << " size after de-duping: " << map1->size());
   LOG_DEBUG(map2->getName() << " size after de-duping: " << map2->size());
