@@ -93,35 +93,37 @@ bool IoUtils::isSupportedOgrFormat(const QString& input, const bool allowDir)
   LOG_VART(input);
   LOG_VART(allowDir);
 
-  if (!allowDir && QFileInfo(input).isDir())
+  const QString justPath = input.split(";")[0];
+
+  if (!allowDir && QFileInfo(justPath).isDir())
   {
     return false;
   }
 
   // input is a dir; only accepting a dir as input if it contains a shape file or is a file geodb
-  if (QFileInfo(input).isDir())
+  if (QFileInfo(justPath).isDir())
   {
     return
-      input.toLower().endsWith(".gdb") ||
+      justPath.toLower().endsWith(".gdb") ||
       FileUtils::dirContainsFileWithExtension(QFileInfo(input).dir(), "shp");
   }
   // single input
   else
   {
-    //The only zip file format we support are ones containing OGR inputs.
-    if (input.toLower().endsWith(".zip") ||
-        //We only support this type of postgres URL for OGR inputs.
-        input.toLower().startsWith("pg:") ||
+    // The only zip file format we support are ones containing OGR inputs.
+    if (justPath.toLower().endsWith(".zip") ||
+        // We only support this type of postgres URL for OGR inputs.
+        justPath.toLower().startsWith("pg:") ||
         // Or, OGDI Vectors. Things like VPF (DNC, VMAP etc)
-        input.toLower().startsWith("gltp:"))
+        justPath.toLower().startsWith("gltp:"))
     {
       return true;
     }
     LOG_VART(OgrUtilities::getInstance().getSupportedFormats(false));
-    LOG_VART(QFileInfo(input).suffix());
+    LOG_VART(QFileInfo(justPath).suffix());
     return
       OgrUtilities::getInstance().getSupportedFormats(false).contains(
-        "." + QFileInfo(input).suffix());
+        "." + QFileInfo(justPath).suffix());
   }
 }
 
@@ -133,10 +135,7 @@ bool IoUtils::anyAreSupportedOgrFormats(const QStringList& inputs, const bool al
   for (int i = 0; i < inputs.size(); i++)
   {
     const QString input = inputs.at(i);
-    LOG_VART(input);
-    const QString file = input.split(";")[0];
-    LOG_VART(file);
-    if (isSupportedOgrFormat(file, allowDir))
+    if (isSupportedOgrFormat(input, allowDir))
       return true;
   }
   return false;
@@ -150,13 +149,44 @@ bool IoUtils::areSupportedOgrFormats(const QStringList& inputs, const bool allow
   for (int i = 0; i < inputs.size(); i++)
   {
     const QString input = inputs.at(i);
-    LOG_VART(input);
-    const QString file = input.split(";")[0];
-    LOG_VART(file);
-    if (!isSupportedOgrFormat(file, allowDir))
+    if (!isSupportedOgrFormat(input, allowDir))
       return false;
   }
   return true;
+}
+
+void IoUtils::ogrPathsAndLayersToPaths(QStringList& inputs)
+{
+  QStringList modifiedInputs;
+  for (int i = 0; i < inputs.size(); i++)
+  {
+    QString input = inputs.at(i);
+    ogrPathAndLayerToPath(input);
+    modifiedInputs.append(input);
+  }
+  inputs = modifiedInputs;
+}
+
+void IoUtils::ogrPathAndLayerToPath(QString& input)
+{
+  input = input.split(";")[0];
+}
+
+void IoUtils::ogrPathAndLayerToLayer(QString& input)
+{
+  if (input.contains(";"))
+  {
+    input = input.split(";")[1];
+  }
+  else
+  {
+    input = "";
+  }
+}
+
+bool IoUtils::isOgrPathAndLayer(const QString& input)
+{
+  return input.split(";").size() == 2;
 }
 
 QStringList IoUtils::getSupportedInputsRecursively(
@@ -420,7 +450,7 @@ void IoUtils::loadMap(
   LOG_VART(justPath);
   // We need to perform custom read logic for OGR inputs due to the fact they may have multiple
   // layers per input file or multiple files per directory.
-  if (isSupportedOgrFormat(path, true))
+  if (isSupportedOgrFormat(justPath, true))
   {
     OgrReader reader;
     reader.setConfiguration(conf());
@@ -431,7 +461,7 @@ void IoUtils::loadMap(
     }
     reader.setSchemaTranslationScript(translationScript);
     // This reader closes itself.
-    reader.read(path, pathLayer.size() > 1 ? pathLayer[1] : "", map, jobSource, numTasks);
+    reader.read(justPath, pathLayer.size() > 1 ? pathLayer[1] : "", map, jobSource, numTasks);
   }
   else
   {
