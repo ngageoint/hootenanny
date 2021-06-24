@@ -758,7 +758,7 @@ INPUT                  = ../hoot-core/src/main/cpp/hoot/core \
                          ../hoot-core-test/src/test/cpp/hoot/core \
                          ../hoot-js/src/main/cpp/hoot/js \
                          ../hoot-cmd.src/main/cpp/hoot/cmd \
-                         ../hoot-josm/src/main/cpp/hoot/core \
+                         ../hoot-josm/src/main/cpp/hoot/josm \
                          ../hoot-rnd/src/main/cpp/hoot/rnd \
                          ../tbs/src/main/cpp/tbs \
                          ../tgs/src/main/cpp/tgs
