@@ -35,7 +35,8 @@ namespace hoot
 {
 
 /**
- * Fitness function which optimizes against Hootenanny regression PERTY test data.
+ * @brief The PertyTestFitnessFunction class is a fitness function which optimizes against
+ * Hootenanny regression PERTY test data.
  */
 class PertyTestFitnessFunction : public AbstractRegressionTestFitnessFunction
 {
@@ -43,8 +44,7 @@ class PertyTestFitnessFunction : public AbstractRegressionTestFitnessFunction
 public:
 
   /**
-   * Constructor
-   *
+   * @brief PertyTestFitnessFunction Constructor
    * @param dir base dir for the tests
    * @param configFile custom config file to pass to the associated test suite
    */

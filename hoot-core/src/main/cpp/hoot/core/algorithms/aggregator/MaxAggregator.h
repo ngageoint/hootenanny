@@ -36,20 +36,42 @@ class MaxAggregator : public ValueAggregator
 {
 public:
 
+  /**
+   * @brief className Returns the name of the class
+   * @return a class name
+   */
   static QString className() { return "hoot::MaxAggregator"; }
 
+  /**
+   * @brief Constructor
+   */
   MaxAggregator() = default;
+  /**
+   * @brief Destructor
+   */
   ~MaxAggregator() = default;
 
+  /**
+   * @see ValueAggregator
+   */
   double aggregate(std::vector<double>& d) const override;
 
+  /**
+   * @see ApiEntityInfo
+   */
   QString toString() const override { return "MaxAggregator"; }
-
+  /**
+   * @see ApiEntityInfo
+   */
   QString getDescription() const override
   { return "Aggregates data based on the maximum value"; }
-
+  /**
+   * @see ApiEntityInfo
+   */
   QString getName() const override { return className(); }
-
+  /**
+   * @see ApiEntityInfo
+   */
   QString getClassName() const override { return className(); }
 };
 

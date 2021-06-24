@@ -44,7 +44,8 @@ public:
   ~QuantileAggregator() = default;
 
   /**
-   * quantile - A value from 0 to 1 for the quantile.
+   * @brief Constructor
+   * @param quantile A value from 0 to 1 for the quantile.
    */
   QuantileAggregator(double quantile);
 
@@ -54,12 +55,9 @@ public:
 
   QString toString() const override
   { return QString("QuantileAggregator %1").arg(_quantile); }
-
   QString getDescription() const override
   { return "Aggregates data based on the quantile value"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 
 private:

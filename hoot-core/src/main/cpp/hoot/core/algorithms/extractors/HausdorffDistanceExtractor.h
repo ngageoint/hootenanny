@@ -34,13 +34,13 @@ namespace hoot
 {
 
 /**
+ * @brief The HausdorffDistanceExtractor class measures how far two subsets of a metric space are
+ * from each other.
  * @author RoadMatcher
  * @copyright GPL
  * http://www.vividsolutions.com/products.asp?catg=spaapp&code=roadmatcher
  * The ideas were shamelessly taken from RoadMatcher, but reimplemented in C++ with Hootenanny
  * appropriate data structures.
- *
- * Hausdorff distance measures how far two subsets of a metric space are from each other.
  */
 class HausdorffDistanceExtractor : public AbstractDistanceExtractor
 {
@@ -54,9 +54,7 @@ public:
     const std::shared_ptr<const Element>& candidate) const override;
 
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return HausdorffDistanceExtractor::className(); }
-
   QString getDescription() const override
   { return "Calculates the Hausdorff distance between two features"; }
 };

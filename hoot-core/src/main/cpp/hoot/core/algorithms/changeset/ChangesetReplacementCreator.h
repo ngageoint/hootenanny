@@ -34,9 +34,10 @@ namespace hoot
 {
 
 /**
- * Single geometry pass version of ChangesetReplacement, which solves the bug in handling relations
- * with children of mixed geometry types. This drops support for overlapping only replacement and
- * strict bounds handling, as they are not useful for replacements within a task grid.
+ * @brief The ChangesetReplacementCreator class is a single geometry pass version of
+ * ChangesetReplacement, which solves the bug in handling relations with children of mixed geometry
+ * types. This drops support for overlapping only replacement and strict bounds handling, as they
+ * are not useful for replacements within a task grid.
  */
 class ChangesetReplacementCreator : public ChangesetReplacementCreatorAbstract
 {
@@ -48,9 +49,8 @@ public:
   ChangesetReplacementCreator();
 
   /**
-   * Creates a changeset that replaces features in the first input with features from the second
-   * input
-   *
+   * @brief create creates a changeset that replaces features in the first input with features from
+   * the second input.
    * @param input1 the target data file path for the changeset in which to replace features; must
    * support Boundable
    * @param input2 the source data file path for the changeset to get replacement features from;
@@ -60,11 +60,9 @@ public:
    */
   void create(const QString& input1, const QString& input2, const geos::geom::Envelope& bounds,
     const QString& output) override;
-
   /**
-   * Creates a changeset that replaces features in the first input with features from the second
-   * input
-   *
+   * @brief create creates a changeset that replaces features in the first input with features from
+   * the second input.
    * @param input1 the target data file path for the changeset in which to replace features; must
    * support Boundable
    * @param input2 the source data file path for the changeset to get replacement features from;

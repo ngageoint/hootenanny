@@ -34,9 +34,11 @@ namespace hoot
 {
 
 /**
- * Removes mistakes from changesets. This is meant to be used when algorithms create erroneous
- * changesets and the cause isn't immediately discernible. Whenever possible, the changeset
- * generation itself should be fixed. The cleaning operation is memory bound.
+ * @brief The ChangesetCleaner class removes mistakes from changesets.
+ *
+ * This is meant to be used when algorithms create erroneous changesets and the cause isn't
+ * immediately discernible. Whenever possible, the changeset generation itself should be fixed. The
+ * cleaning operation is memory bound.
  *
  * Current cleaning ops:
  *
@@ -52,12 +54,11 @@ class ChangesetCleaner : public ChangesetProvider
 public:
 
   /**
-   * Constructor - cleans the changeset summed together from the input providers
-   *
+   * @brief ChangesetCleaner Constructor that cleans the changeset summed together from the input
+   * providers
    * @param changesetProviders a collection of changeset providers
    */
   ChangesetCleaner(const QList<ChangesetProviderPtr>& changesetProviders);
-
   ~ChangesetCleaner();
 
   /**

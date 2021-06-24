@@ -33,7 +33,7 @@ namespace hoot
 {
 
 /**
- * Manages the suite of conflate case tests
+ * @brief The ConflateCaseTestSuite class manages the suite of conflate case tests.
  */
 class ConflateCaseTestSuite : public AbstractTestSuite
 {
@@ -43,10 +43,7 @@ public:
   ConflateCaseTestSuite(const QString& dir, bool hideDisableTests = false);
 
   /**
-   * Attempts to load a conflate case test given a directory
-   *
-   * @param dir directory to load the test from
-   * @param confs hoot configuration files to pass to the test
+   * @see AbstractTestSuite
    */
   virtual void loadDir(const QString& dir, QStringList confs) override;
 

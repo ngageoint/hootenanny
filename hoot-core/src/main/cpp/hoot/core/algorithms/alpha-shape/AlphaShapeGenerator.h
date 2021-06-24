@@ -39,8 +39,7 @@ namespace hoot
 {
 
 /**
- * Generates an alpha shape
- *
+ * @brief The AlphaShapeGenerator class generates an alpha shape.
  * @see AlphaShape
  */
 class AlphaShapeGenerator
@@ -50,30 +49,28 @@ public:
   static QString className() { return "hoot::AlphaShapeGenerator"; }
 
   /**
-   * Constructor
-   *
+   * @brief AlphaShapeGenerator Constructor
    * @param alpha tuning parameter used to calculate the alpha shape
    * @param buffer how far out from the calculated alpha shape the output shape should be buffered
    */
   AlphaShapeGenerator(const double alpha, const double buffer = 0.0);
 
   /**
-   * Generates an alpha shape as a map based on the geometry of some input map
-   *
+   * @brief generateMap generates an alpha shape as a map based on the geometry of some input map.
    * @param inputMap the map to use for generating the alpha shape
    * @return a map containing the alpha shape's points
    */
   OsmMapPtr generateMap(OsmMapPtr inputMap);
 
   /**
-   * Generates an alpha shape as a geometry based on the geometry of some input map
-   *
+   * @brief generateGeometry generates an alpha shape as a geometry based on the geometry of some
+   * input map.
    * @param inputMap the map to use for generating the alpha shape
    * @return a geometry containing the alpha shape's points
    */
   std::shared_ptr<geos::geom::Geometry> generateGeometry(OsmMapPtr inputMap);
   /**
-   * @brief setManuallyCoverSmallPointClusters Update the "stragglers" flag
+   * @brief setManuallyCoverSmallPointClusters updates the "stragglers" flag.
    * @param cover New value for cover flag
    */
   void setManuallyCoverSmallPointClusters(bool cover) { _manuallyCoverSmallPointClusters = cover; }

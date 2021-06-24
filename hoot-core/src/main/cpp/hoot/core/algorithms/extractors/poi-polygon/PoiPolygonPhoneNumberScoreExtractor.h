@@ -43,7 +43,8 @@ class OsmMap;
 class Element;
 
 /**
- * Scores phone number similarity between features.
+ * @brief The PoiPolygonPhoneNumberScoreExtractor class scores phone number similarity between
+ * features for POI to Polygon conflation.
  */
 class PoiPolygonPhoneNumberScoreExtractor : public FeatureExtractorBase, public Configurable
 {
@@ -54,15 +55,13 @@ public:
   PoiPolygonPhoneNumberScoreExtractor();
   ~PoiPolygonPhoneNumberScoreExtractor() = default;
 
-  QString getClassName() const override { return className(); }
-
-  QString getName() const  override{ return className(); }
-
   double extract(const OsmMap& map, const ConstElementPtr& poi,
                  const ConstElementPtr& poly) const override;
 
   void setConfiguration(const Settings& conf) override;
 
+  QString getClassName() const override { return className(); }
+  QString getName() const  override{ return className(); }
   QString getDescription() const override
   { return "Scores phone number similarity for POI/Polygon conflation"; }
 

@@ -36,7 +36,8 @@ namespace hoot
 {
 
 /**
- * Joins ways back together that were split during pre-conflation cleaning or during matching.
+ * @brief The WayJoinerBasic class joins ways back together that were split during pre-conflation
+ * cleaning or during matching.
  */
 class WayJoinerBasic : public WayJoiner
 {
@@ -48,15 +49,13 @@ public:
   ~WayJoinerBasic() = default;
 
   /**
-   * Static method to join all joinable ways using WayJoinerBasic
+   * @brief joinWays is a static method to join all joinable ways using WayJoinerBasic.
    */
   static void joinWays(const OsmMapPtr& map);
 
   QString getDescription() const override
   { return "Rejoins ways split during pre-conflation cleaning or conflation matching."; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 };
 

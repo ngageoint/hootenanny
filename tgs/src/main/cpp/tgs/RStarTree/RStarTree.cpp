@@ -40,7 +40,9 @@
 #include <tgs/RStarTree/RTreeNode.h>
 
 using namespace std;
-using namespace Tgs;
+
+namespace Tgs
+{
 
 RStarTree::RStarTree(const std::shared_ptr<PageStore>& ps, int dimensions)
   : _store(dimensions, ps)
@@ -639,4 +641,6 @@ void RStarTree::_updateBounds(RTreeNode* node)
     // cout << *node << endl;
     parentId = node->getParentId();
   }
+}
+
 }

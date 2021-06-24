@@ -38,7 +38,9 @@ namespace hoot
 class Histogram;
 
 /**
- * Similar to AngleHistogramExtractor with the following differences:
+ * @brief The SampledAngleHistogramExtractor class is similar to AngleHistogramExtractor
+ *
+ * It has the following differences:
  *
  * - The angle is sampled at a configurable distance along the way.
  * - The distance from the sampled location on the way to look to calculate the heading is
@@ -55,20 +57,18 @@ public:
 
   static QString className() { return "hoot::SampledAngleHistogramExtractor"; }
 
-  QString getName() const override { return className(); }
-
-  QString getClassName() const override { return className(); }
-
   void setConfiguration(const Settings& conf) override;
 
-  void setSampleDistance(double sampleDistance) { _sampleDistance = sampleDistance; }
-  void setHeadingDelta(double headingDelta) { _headingDelta = headingDelta; }
-
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
   QString getDescription() const override
   {
     return
       "Calculates the angle of each line segment in a sampled fashion and adds it to a histogram";
   }
+
+  void setSampleDistance(double sampleDistance) { _sampleDistance = sampleDistance; }
+  void setHeadingDelta(double headingDelta) { _headingDelta = headingDelta; }
 
 protected:
 

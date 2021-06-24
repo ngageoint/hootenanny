@@ -39,6 +39,7 @@ namespace hoot
 class WayMatchStringMappingConverter
 {
 public:
+
   WayMatchStringMappingConverter() = default;
 
   WaySublineMatchStringPtr toWaySublineMatchString(WayMatchStringMappingPtr mapping) const;

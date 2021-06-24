@@ -28,10 +28,15 @@
 #ifndef CONVOLUTIONFILTER_H
 #define CONVOLUTIONFILTER_H
 
+namespace tgs
+{
+
 class ConvolutionFilter
 {
 public:
     ConvolutionFilter();
 };
+
+}
 
 #endif // CONVOLUTIONFILTER_H

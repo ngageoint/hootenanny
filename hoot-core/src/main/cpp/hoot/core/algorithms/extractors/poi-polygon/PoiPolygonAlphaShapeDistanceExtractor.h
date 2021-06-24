@@ -36,7 +36,8 @@ namespace hoot
 {
 
 /**
- * Calculates the convex hull distance between a poi and a polygon
+ * @brief The PoiPolygonAlphaShapeDistanceExtractor class calculates the convex hull distance
+ * between a poi and a polygon for POI to Polygon conflation.
  */
 class PoiPolygonAlphaShapeDistanceExtractor : public FeatureExtractorBase
 {
@@ -46,8 +47,6 @@ public:
 
   PoiPolygonAlphaShapeDistanceExtractor() = default;
   ~PoiPolygonAlphaShapeDistanceExtractor() = default;
-
-  QString getClassName() const override { return className(); }
 
   /**
    * Calculates the convex hull distance between a poi and a polygon
@@ -60,9 +59,9 @@ public:
   double extract(const OsmMap& map, const ConstElementPtr& poi,
                  const ConstElementPtr& poly) const override;
 
+  QString getClassName() const override { return className(); }
   QString getDescription() const override
   { return "Calculates the convex hull distance between a poi and a polygon"; }
-
   QString getName() const override { return className(); }
 };
 

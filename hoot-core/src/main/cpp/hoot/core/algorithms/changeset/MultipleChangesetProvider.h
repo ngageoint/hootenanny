@@ -33,8 +33,8 @@ namespace hoot
 {
 
 /**
- * This is essentially a changeset provider container, allowing multiple changeset providers to be
- * chained together
+ * @brief The MultipleChangesetProvider class is essentially a changeset provider container,
+ * allowing multiple changeset providers to be chained together
  */
 class MultipleChangesetProvider : public ChangesetProvider
 {

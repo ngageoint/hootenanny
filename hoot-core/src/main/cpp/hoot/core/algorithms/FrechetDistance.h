@@ -50,9 +50,12 @@ using frechet_subline = std::pair<Meters, subline_entry>;
 
 using LineStringPtr = std::shared_ptr<geos::geom::LineString>;
 
-/** Class for calculating Frechet Distance between two ways and calculating maximal subline matches.
- *  Algorithm developed from "A new merging process for data integration base on the descrete Frechet distance"
- *  (http://thomas.devogele.free.fr/articles/avant_2003_selection/DevogeleSDH2002.pdf)
+/**
+ * @brief The FrechetDistance class is for calculating Frechet Distance between two ways and
+ * calculating maximal subline matches.
+ *
+ * Algorithm developed from "A new merging process for data integration base on the descrete Frechet
+ * distance" (http://thomas.devogele.free.fr/articles/avant_2003_selection/DevogeleSDH2002.pdf)
  */
 class FrechetDistance
 {

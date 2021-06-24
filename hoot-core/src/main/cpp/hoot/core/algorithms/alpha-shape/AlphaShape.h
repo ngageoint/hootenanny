@@ -65,8 +65,13 @@ class Way;
 using GeometryPtr = std::shared_ptr<geos::geom::Geometry>;
 
 /**
- * Representation of an Alpha Shape. Technically an Alpha complex, not an Alpha Shape, but the
- * literature seems to alternate between the terms.
+ *
+ */
+/**
+ * @brief The AlphaShape class is a representation of an Alpha Shape.
+ *
+ * Technically an Alpha complex, not an Alpha Shape, but the literature seems to alternate between
+ * the terms.
  *
  * https://github.com/ngageoint/hootenanny/files/595246/Hootenanny.-.Alpha.Shape.2013-03-07.pptx
  * https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/AlphaShape.asciidoc
@@ -81,36 +86,31 @@ public:
   static int logWarnCount;
 
   /**
-   * Constructor
-   *
+   * @brief AlphaShape Constructor
    * @param alpha tuning parameter which determines the makeup of the output shape
    */
   AlphaShape(double alpha = -1.0);
 
   /**
-   * Converts this shape to a GEOS geometry
-   *
+   * @brief toGeometry Converts this shape to a GEOS geometry.
    * @return a GEOS geometry
    */
   GeometryPtr toGeometry();
 
   /**
-   * Inserts points which are used to build the shape
-   *
+   * @brief insert inserts points which are used to build the shape.
    * @param points a collection of points
    */
   void insert(const std::vector<std::pair<double, double>>& points);
 
   /**
-   * Returns a string representation of the shape
-   *
+   * @brief toString returns a string representation of the shape.
    * @return a string
    */
   QString toString() const;
 
   /**
-   * Returns the length of the longest face edge used to create the shape
-   *
+   * @brief getLongestFaceEdge returns the length of the longest face edge used to create the shape.
    * @return a length
    */
   double getLongestFaceEdge() const { return _longestFaceEdge; }

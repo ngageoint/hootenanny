@@ -38,15 +38,14 @@ namespace hoot
 class Element;
 
 /**
- * Shamelessly taken from JCS.
- *
- * This is exactly the same as the SymDiffMatcher (in JCS speak).
- *
+ * @brief The BufferedOverlapExtractor class is similar to OverlapExtractor, but the objects are
+ * buffered before the overlap is calculated.
  * @author RoadMatcher
  * @copyright GPL
  * http://www.vividsolutions.com/products.asp?catg=spaapp&code=roadmatcher
  * The ideas were shamelessly taken from RoadMatcher, but reimplemented in C++ with Hootenanny
  * appropriate data structures.
+ * Shamelessly taken from JCS.
  */
 class BufferedOverlapExtractor : public FeatureExtractorBase, public Configurable
 {
@@ -55,8 +54,7 @@ public:
   BufferedOverlapExtractor();
   ~BufferedOverlapExtractor() = default;
   /**
-   * Similar to OverlapExtractor, but the objects are buffered before the overlap is calculated.
-   *
+   * @brief Constructor
    * @param bufferPortion Buffer the objects by this portion of the sqrt of the max area.
    */
   explicit BufferedOverlapExtractor(double bufferPortion);

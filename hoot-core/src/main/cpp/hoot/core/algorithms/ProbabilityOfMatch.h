@@ -38,7 +38,7 @@ namespace hoot
 {
 
 /**
- * (Singleton)
+ * @brief The ProbabilityOfMatch class (Singleton)
  */
 class ProbabilityOfMatch
 {
@@ -51,7 +51,6 @@ public:
 
   double distanceScore(const ConstOsmMapPtr& map, const ConstWayPtr& w1,
     const ConstWayPtr& w2);
-
   double distanceScore(const hoot::ConstOsmMapPtr &map, const ConstWayPtr &w1,
     const std::shared_ptr<const geos::geom::LineString> &ls2, Meters circularError);
 

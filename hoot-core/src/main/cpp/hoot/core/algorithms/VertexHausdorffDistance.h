@@ -40,17 +40,16 @@ namespace hoot
 {
 
 /**
- * Implements algorithm for computing a distance metric
+ * @brief The VertexHausdorffDistance class implements algorithm for computing a distance metric
  * which can be thought of as the "Vertex Hausdorff Distance".
- * This is the Hausdorff distance restricted to vertices for
- * one of the geometries.
- * Also computes two points of the Geometries which are separated by the computed distance.
- * <p>
- * <b>NOTE: This algorithm does NOT compute the full Hausdorff distance correctly, but
- * an approximation that is correct for a large subset of useful cases.
- * One important part of this subset is Linestrings that are roughly parallel to each other,
- * and roughly equal in length - just what is needed for line matching.
- * </b>
+ *
+ * This is the Hausdorff distance restricted to vertices for one of the geometries. Also computes
+ * two points of the Geometries which are separated by the computed distance.
+ *
+ * NOTE: This algorithm does NOT compute the full Hausdorff distance correctly, but an approximation
+ * that is correct for a large subset of useful cases. One important part of this subset is
+ * Linestrings that are roughly parallel to each other, and roughly equal in length - just what is
+ * needed for line matching.
  *
  * @author RoadMatcher
  * @copyright GPL
