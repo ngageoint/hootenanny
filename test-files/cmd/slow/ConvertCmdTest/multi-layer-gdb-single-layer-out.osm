@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="5.684341886080801e-14" minlon="0.4000000000000341" maxlat="0.1000000000000227" maxlon="0.4000000000000341"/>
+    <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.1000000000000227" lon="0.4000000000000341"/>
+    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0000000000000568" lon="0.4000000000000341"/>
+    <way visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-1"/>
+        <nd ref="-2"/>
+        <tag k="ARA" v="-999999"/>
+        <tag k="LTN" v="2"/>
+        <tag k="NAM" v="w3"/>
+        <tag k="PCF" v="2"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:ingest:datetime" v="2021-06-23T18:51:43.933Z"/>
+    </way>
+</osm>

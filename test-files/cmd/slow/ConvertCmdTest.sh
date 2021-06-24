@@ -66,6 +66,11 @@ echo "Multi-layer GDB to OSM..."
 hoot convert $LOG_LEVEL $CONFIG test-files/cmd/slow/CountCmdTest/input.gdb $OUTPUT_DIR/multi-layer-gdb-out.osm
 hoot diff $LOG_LEVEL $CONFIG $INPUT_DIR/multi-layer-gdb-out.osm $OUTPUT_DIR/multi-layer-gdb-out.osm
 
+echo "Multi-layer GDB to OSM single layer only..."
+hoot convert $LOG_LEVEL $CONFIG "test-files/cmd/slow/CountCmdTest/input.gdb;LAP030" \
+  $OUTPUT_DIR/multi-layer-gdb-single-layer-out.osm
+hoot diff $LOG_LEVEL $CONFIG $INPUT_DIR/multi-layer-gdb-single-layer-out.osm $OUTPUT_DIR/multi-layer-gdb-single-layer-out.osm
+
 echo ""
 echo "Multiple formats to OSM and writing to separate outputs..."
 echo ""

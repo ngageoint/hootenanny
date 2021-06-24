@@ -15,12 +15,13 @@ given bounds. This behavior may be customized with the `crop.*` configuration op
 * +--recursive+       - Allows for processing the files contained in any directories specified in +input(s)+ recursively.
                         This parameter has no effect on the processing of non-directory inputs. This must be followed 
                         by either "*" to denote no filtering or one or more wildcard name filters. e.g. "*.osm;*.json" 
-                        or "*myFile*".
+                        or "*myFile*". This parameter is not compatible with the OGR layer input syntax.
 * +--separate-output+ - The default behavior when processing multiple inputs is to combine them into the same single 
                         output. With this parameter specified, each input is processed and written to a separate output. 
                         The +output+ parameter is invalid in combination with this parameter, and output is written back 
                         to a new URL with the same base name as each input with the text "-cropped" appended to it. This
-                        parameter cannot be used with OSM API database (osmapidb://) or OSM API (http://) inputs.
+                        parameter cannot be used with OSM API database (osmapidb://) or OSM API (http://) inputs. This 
+                        parameter is not compatible with the OGR layer input syntax.
 * +--write-bounds+    - Optionally outputs a file containing the cropped bounds. The location of the file is controlled 
                         via the `bounds.output.file` configuration option.
 

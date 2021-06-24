@@ -104,6 +104,38 @@ public:
   static bool anyAreSupportedOgrFormats(const QStringList& inputs, const bool allowDir = false);
 
   /**
+   * Converts the OGR inputs with layer syntax to just the inputs
+   *
+   * @param inputs the inputs to convert
+   * @return a list of paths
+   */
+  static void ogrPathsAndLayersToPaths(QStringList& inputs);
+
+  /**
+   * Converts the OGR input with layer syntax to the input path
+   *
+   * @param input the input to convert
+   * @return a path
+   */
+  static void ogrPathAndLayerToPath(QString& input);
+
+  /**
+   * Converts the OGR input with layer syntax to the layer
+   *
+   * @param input the input to convert
+   * @return a layer name
+   */
+  static void ogrPathAndLayerToLayer(QString& input);
+
+  /**
+   * Determines if an OGR input URL has the layer syntax: file;layer
+   *
+   * @param input the URL to examine
+   * @return true if the input URL has the layer syntax; false otherwise
+   */
+  static bool isOgrPathAndLayer(const QString& input);
+
+  /**
    * Returns all file paths under a directory point to a supported input format
    *
    * @param topLevelPaths one or more directory paths

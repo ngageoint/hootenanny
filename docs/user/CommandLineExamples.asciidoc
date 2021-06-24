@@ -529,10 +529,12 @@ See the User Guide for more specific details on command usage. Most of these exa
     hoot convert input1.shp input2.shp output.osm
 -----
 
-==== Convert roads, bridges, overpasses and tunnels from a file geodatabase into a single .osm file:
+==== Convert roads, bridges, overpasses and tunnels from a layers in a file geodatabase into a single .osm file:
 
 -----
-    hoot convert input.gdb;ROAD_L input.gdb;BRIDGE_OVERPASS_L input.gdb;TUNNEL_L output.osm
+    # Note that each path;layer input combo must be surrounded in quotes. Otherwise, the entire
+    # input will be read.
+    hoot convert "input.gdb;ROAD_L" "input.gdb;BRIDGE_OVERPASS_L" "input.gdb;TUNNEL_L" output.osm
 -----
 
 ==== Convert a shape file that is stored inside of a zip file:
