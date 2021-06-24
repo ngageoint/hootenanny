@@ -84,7 +84,6 @@ public:
   bool isInput() const { return _type == Unknown1 || _type == Unknown2 || _type > Conflated; }
 
   /**
-   * @deprecated
    * @brief isUnknown Provided for backwards compatibility.
    * @return Returns true if the status is one of the first two inputs.
    */

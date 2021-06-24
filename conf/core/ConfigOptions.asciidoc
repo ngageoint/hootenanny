@@ -2226,7 +2226,7 @@ If true, cleaning/validation detail tags will be added to map outputs when clean
 === josm.map.validator.java.implementation
 
 * Data Type: string
-* Default Value: `hoot/core/josm/JosmMapValidator`
+* Default Value: `hoot/josm/JosmMapValidator`
 
 File path relative to Hootenanny root directory without file extension or prefixed namespace to
 Java class to use as the JOSM Java map validator/cleaner implementation.

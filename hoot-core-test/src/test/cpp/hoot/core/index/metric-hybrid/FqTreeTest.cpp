@@ -44,7 +44,6 @@
 // Tgs
 #include <tgs/System/Time.h>
 
-
 using namespace hoot::hybrid;
 using namespace std;
 
