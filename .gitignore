@@ -51,6 +51,7 @@ docs/TestTop.asciidoc
 docs/test.asciidoc
 docs/test.sh
 docs/wpsDocs
+docs/coreClasses
 dum*
 fouo
 gcov/
