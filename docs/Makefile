@@ -42,7 +42,7 @@ $(HOME)/.asciidoc/filters/gnuplot/gnuplot-filter.conf: filters/gnuplot/gnuplot-f
 	cp filters/gnuplot/* $(HOME)/.asciidoc/filters/gnuplot/
 
 clean:
-	rm -rf tmp *.pdf *.png *.html *-docinfo.xml restDocs developer/CoreAPI developer/ServicesAPI
+	rm -rf tmp *.pdf *.png *.html *-docinfo.xml restDocs developer/CoreAPI
 
 node_modules:
 	npm install --silent xml2js htmlparser imagemagick mocha@1.20.1 express@3.1.2 async html-to-text restler
@@ -132,8 +132,8 @@ Hootenanny\ -\ Developer\ Guide.pdf: \
 	tmp/RulesTemplate.asciidoc \
 	tmp/rules-lib-doxygen \
 	tmp/rules-template-doxygen \
-	user/*.asciidoc #\
-	#CoreAPI
+	user/*.asciidoc \
+	CoreAPI
 	$(call buildAsciidoc)
 
 Hootenanny\ -\ Installation\ Instructions.pdf: \
