@@ -409,7 +409,7 @@ LOOKUP_CACHE_SIZE      = 0
 # normally produced when WARNINGS is set to YES.
 # The default value is: NO.
 
-EXTRACT_ALL            = YES
+EXTRACT_ALL            = NO
 
 # If the EXTRACT_PRIVATE tag is set to YES all private members of a class will
 # be included in the documentation.
@@ -726,7 +726,7 @@ WARN_IF_DOC_ERROR      = YES
 # documentation, but not about the absence of documentation.
 # The default value is: NO.
 
-WARN_NO_PARAMDOC       = NO
+WARN_NO_PARAMDOC       = YES
 
 # The WARN_FORMAT tag determines the format of the warning messages that doxygen
 # can produce. The string should contain the $file, $line, and $text tags, which
@@ -742,7 +742,7 @@ WARN_FORMAT            = "$file:$line: $text"
 # messages should be written. If left blank the output is written to standard
 # error (stderr).
 
-WARN_LOGFILE           =
+WARN_LOGFILE           = developer/CoreAPI/error-log
 
 #---------------------------------------------------------------------------
 # Configuration options related to the input files
@@ -757,7 +757,7 @@ WARN_LOGFILE           =
 INPUT                  = ../hoot-core/src/main/cpp/hoot/core \
                          ../hoot-core-test/src/test/cpp/hoot/core \
                          ../hoot-js/src/main/cpp/hoot/js \
-                         ../hoot-cmd.src/main/cpp/hoot/cmd \
+                         ../hoot-cmd/src/main/cpp/hoot/cmd \
                          ../hoot-josm/src/main/cpp/hoot/josm \
                          ../hoot-rnd/src/main/cpp/hoot/rnd \
                          ../tbs/src/main/cpp/tbs \
