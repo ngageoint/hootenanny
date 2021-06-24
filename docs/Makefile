@@ -28,14 +28,13 @@ all: \
 	Hootenanny\ -\ Developer\ Guide.pdf \
   Hootenanny\ -\ Algorithms.pdf
 
-# A generic dep for all asciidoc documents. Make sure the environment is setup
-# properly.
+# A generic dep for all asciidoc documents. Make sure the environment is setup properly.
 tmp/asciidoc-config: $(HOME)/.asciidoc/filters/gnuplot/gnuplot-filter.conf node_modules
 	mkdir -p tmp
 	touch $@
 
-# I haven't found a way to specify a filter based on a relative or absolute path
-# so I'm making sure it is in the home config directory.
+# I haven't found a way to specify a filter based on a relative or absolute path so I'm making sure 
+# it is in the home config directory.
 # http://www.methods.co.nz/asciidoc/userguide.html#X101
 $(HOME)/.asciidoc/filters/gnuplot/gnuplot-filter.conf: filters/gnuplot/gnuplot-filter.conf
 	mkdir -p $(HOME)/.asciidoc/filters/gnuplot/
@@ -43,7 +42,7 @@ $(HOME)/.asciidoc/filters/gnuplot/gnuplot-filter.conf: filters/gnuplot/gnuplot-f
 	cp filters/gnuplot/* $(HOME)/.asciidoc/filters/gnuplot/
 
 clean:
-	rm -rf tmp *.pdf *.png *.html *-docinfo.xml restDocs
+	rm -rf tmp *.pdf *.png *.html *-docinfo.xml restDocs developer/CoreAPI developer/ServicesAPI
 
 node_modules:
 	npm install --silent xml2js htmlparser imagemagick mocha@1.20.1 express@3.1.2 async html-to-text restler
@@ -55,6 +54,18 @@ tmp/rules-lib-doxygen: RulesLib.dox ../rules/lib/*
 tmp/rules-template-doxygen: RulesTemplate.dox ../rules/template/*
 	mkdir -p tmp
 	doxygen RulesTemplate.dox
+	
+# This generates XML. Tried without success to embed the Core API docs into asciidoc via XML, like 
+# the Javascript API is done, but it errors out with a non-descript message during the conversion 
+# from xml to asciidoc. Worth trying to fix at some point. Going with HTML instead for now.
+#tmp/core-doxygen: CoreAPI.dox
+#  mkdir -p tmp
+#	doxygen CoreAPI.dox
+	
+# This generates HTML.
+CoreAPI: CoreAPI.dox
+	mkdir -p developer/CoreAPI
+	doxygen CoreAPI.dox
 
 tmp/RulesLib.asciidoc: tmp/rules-lib-doxygen DoxygenToAsciiDoc.xslt
 	xsltproc tmp/rules-lib-doxygen/xml/combine.xslt tmp/rules-lib-doxygen/xml/index.xml > tmp/rules-lib-doxygen/xml/combined.xml
@@ -63,6 +74,10 @@ tmp/RulesLib.asciidoc: tmp/rules-lib-doxygen DoxygenToAsciiDoc.xslt
 tmp/RulesTemplate.asciidoc: tmp/rules-template-doxygen DoxygenToAsciiDoc.xslt
 	xsltproc tmp/rules-template-doxygen/xml/combine.xslt tmp/rules-template-doxygen/xml/index.xml > tmp/rules-template-doxygen/xml/combined.xml
 	xsltproc DoxygenToAsciiDoc.xslt tmp/rules-template-doxygen/xml/combined.xml > $@
+	
+tmp/Core.asciidoc: tmp/core-doxygen DoxygenToAsciiDoc.xslt
+	xsltproc tmp/core-doxygen/xml/combine.xslt tmp/core-doxygen/xml/index.xml > tmp/core-doxygen/xml/combined.xml
+	xsltproc DoxygenToAsciiDoc.xslt tmp/core-doxygen/xml/combined.xml > $@
 
 Hootenanny\ -\ Algorithms.pdf: \
 	HootenannyAlgorithms.asciidoc \
@@ -117,7 +132,8 @@ Hootenanny\ -\ Developer\ Guide.pdf: \
 	tmp/RulesTemplate.asciidoc \
 	tmp/rules-lib-doxygen \
 	tmp/rules-template-doxygen \
-	user/*.asciidoc
+	user/*.asciidoc #\
+	#CoreAPI
 	$(call buildAsciidoc)
 
 Hootenanny\ -\ Installation\ Instructions.pdf: \

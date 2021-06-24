@@ -1,0 +1,15 @@
+
+== Hootenanny API
+
+=== Core C++
+
+See `docs/developer/CoreAPI/html/index.html` in `hootenanny-documentation-$(HOOT_VERSION).tar.gz`.
+
+=== Core JavaScript
+
+See the "JavaScript Overview" section in the Hootennany User Guide.
+
+=== Services Java
+
+See `hoot-services/target/site/apidocs/index.html` in `hootenanny-services-javadoc-$(HOOT_VERSION).tar.gz`.
+

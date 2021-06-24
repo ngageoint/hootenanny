@@ -19,6 +19,6 @@ include::developer/HootenannyLanguageTranslation.asciidoc[]
 include::developer/HootenannyServicesDatabaseNotes.asciidoc[]
 include::developer/HootenannyDevelopmentAdvancedOptionsInfo.asciidoc[]
 include::developer/HootenannyGrailNotes.asciidoc[]
-
+include::developer/HootenannyAPI.asciidoc[]
 
 
