@@ -95,16 +95,14 @@ public:
 protected:
 
   ConstOsmMapPtr _map;
-  bool _includeDebug;
-  // This setting is here to stay in sync with how OsmXmlWriter writes attribute metadata.
-  bool _includeCompatibilityTags;
+
   int _precision;
   QFile _fp;
   QIODevice* _out;
-  bool _pretty;
+
   bool _firstElement;
-  bool _writeEmptyTags;
   bool _writeHootFormat;
+
   long _numWritten;
   long _statusUpdateInterval;
 
@@ -120,13 +118,20 @@ protected:
   void _writeKvp(const QString& key, long value);
   void _writeKvp(const QString& key, double value);
   bool _hasTags(const ConstElementPtr& e) const;
-  void _writeTag(const QString& key, const QString& value, bool& firstTag);
   void _writeTags(const ConstElementPtr& e);
-  void _writeMetadata(const Element& element);
 
 private:
 
+  bool _includeDebug;
+  // This setting is here to stay in sync with how OsmXmlWriter writes attribute metadata.
+  bool _includeCompatibilityTags;
+  bool _pretty;
+  bool _writeEmptyTags;
+
   AddExportTagsVisitor _addExportTagsVisitor;
+
+  void _writeTag(const QString& key, const QString& value, bool& firstTag);
+  void _writeMetadata(const Element& element);
 };
 
 }

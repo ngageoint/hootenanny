@@ -118,9 +118,7 @@ void OsmGbdxJsonWriter::write(const ConstOsmMapPtr& map)
   _map = map;
 
   _writeNodes();
-
   _writeWays();
-
   _writeRelations();
 
   // This will move out of here eventually.
