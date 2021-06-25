@@ -124,10 +124,6 @@ public:
 
 protected:
 
-  static int logWarnCount;
-
-  bool _osmFound;
-
   // Maps from old node ids to new node ids.
   QHash<long, long> _nodeIdMap;
   QHash<long, long> _relationIdMap;
@@ -135,9 +131,24 @@ protected:
 
   QString _errorString;
   OsmMapPtr _map;
-  std::shared_ptr<Element> _element;
 
   Status _status;
+
+  bool _keepStatusTag;
+  bool _useFileStatus;
+  bool _useDataSourceId;
+
+  bool _preserveAllTags;
+
+  long _numRead;
+
+private:
+
+  static int logWarnCount;
+
+  bool _osmFound;
+
+  std::shared_ptr<Element> _element;
 
   // the CE value used if no CE tag is found
   Meters _defaultCircularError;
@@ -148,9 +159,6 @@ protected:
   int _missingWayCount;
   int _badAccuracyCount;
 
-  bool _keepStatusTag;
-  bool _useFileStatus;
-  bool _useDataSourceId;
   bool _addSourceDateTime;
 
   long _wayId;
@@ -159,8 +167,6 @@ protected:
   mutable std::shared_ptr<OGRSpatialReference> _wgs84;
 
   bool _inputCompressed;
-
-  bool _preserveAllTags;
 
   QFile _inputFile;  // used for partial reading
   QXmlStreamReader _streamReader; // used for partial reading
@@ -174,7 +180,6 @@ protected:
   // determines whether missing elements trigger a warning
   bool _logWarningsForMissingElements;
 
-  long _numRead;
   long _statusUpdateInterval;
 
   // only valid is _bounds is not null
