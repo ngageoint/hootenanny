@@ -248,20 +248,14 @@ protected:
 
   // the CE value used if no CE tag is found
   Meters _defaultCircErr;
-  // keys for tags containing CE data
-  QStringList _circularErrorTagKeys;
 
   // Our property tree that holds JSON
   boost::property_tree::ptree _propTree;
 
   // Store these items from overpass api
-  QString _version;
   QString _generator;
-  QString _timestamp_base;
-  QString _copyright;
 
   bool _isFile;
-  bool _isWeb;
   QFile _file;
 
   OsmMapPtr _map;
@@ -271,6 +265,39 @@ protected:
 
   /** List of JSON strings, one for each HTTP response */
   QStringList _results;
+
+  /**
+   * @brief _loadJSON Loads JSON into a boost property tree
+   * @param jsonStr String to load
+   */
+  void _loadJSON(const QString& jsonStr);
+
+  /**
+   * @brief _addTags Reads tags from the given ptree, and adds them to the
+   *        supplied map element
+   * @param item Property Tree (subtree)
+   * @param pElement Element to which we will add the tags
+   */
+  void _addTags(const boost::property_tree::ptree &item,
+                hoot::ElementPtr pElement) const;
+
+  /**
+   * @brief _readFromHttp Creates HTTP(S) connection and downloads JSON to the _results list or
+   *   spawns a thread pool to query bounding boxes
+   */
+  void _readFromHttp();
+
+private:
+
+  // keys for tags containing CE data
+  QStringList _circularErrorTagKeys;
+
+  // Store these items from overpass api
+  QString _version;
+  QString _timestamp_base;
+  QString _copyright;
+
+  bool _isWeb;
 
   // only valid is _bounds is not null
   bool _keepImmediatelyConnectedWaysOutsideBounds;
@@ -295,12 +322,6 @@ protected:
   bool _addChildRefsWhenMissing;
   // determines whether missing elements trigger a warning
   bool _logWarningsForMissingElements;
-
-  /**
-   * @brief _loadJSON Loads JSON into a boost property tree
-   * @param jsonStr String to load
-   */
-  void _loadJSON(const QString& jsonStr);
 
   /**
    * @brief parseOverpassJson Traverses our property tree and adds elements to the map. Removes
@@ -328,21 +349,6 @@ protected:
    * @param item Property Tree (likely a subtree)
    */
   void _parseOverpassRelation(const boost::property_tree::ptree &item);
-
-  /**
-   * @brief _addTags Reads tags from the given ptree, and adds them to the
-   *        supplied map element
-   * @param item Property Tree (subtree)
-   * @param pElement Element to which we will add the tags
-   */
-  void _addTags(const boost::property_tree::ptree &item,
-                hoot::ElementPtr pElement) const;
-
-  /**
-   * @brief _readFromHttp Creates HTTP(S) connection and downloads JSON to the _results list or
-   *   spawns a thread pool to query bounding boxes
-   */
-  void _readFromHttp();
 
   void _readToMap();
 
