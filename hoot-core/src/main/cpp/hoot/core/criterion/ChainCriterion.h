@@ -73,9 +73,9 @@ public:
 
 protected:
 
-  ChainCriterion(const std::vector<ElementCriterionPtr>& criteria);
-
   std::vector<std::shared_ptr<ElementCriterion>> _criteria;
+
+  ChainCriterion(const std::vector<ElementCriterionPtr>& criteria);
 
 private:
 

@@ -65,10 +65,9 @@ public:
    */
   static void splitWays(const std::shared_ptr<OsmMap>& map, double threshold);
 
-protected:
+private:
 
   std::shared_ptr<OsmMap> _map;
-
   double _threshold;
 
   void _divideWay(const std::shared_ptr<Way>& way, int numPieces) const;

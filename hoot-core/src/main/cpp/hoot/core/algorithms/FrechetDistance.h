@@ -60,6 +60,7 @@ using LineStringPtr = std::shared_ptr<geos::geom::LineString>;
 class FrechetDistance
 {
 public:
+
   /**
    * @brief FrechetDistance class constructor
    * @param map - pointer to the OSM map containing the two ways to be compared
@@ -88,7 +89,8 @@ public:
    */
   std::vector<frechet_subline> matchingSublines(Meters maxDistance = 15.0);
 
-protected:
+private:
+
   /**
    * @brief calculateMatrix - calculate the matrix of distances between any two given points in the ways
    * @return distinct Frechet matrix of distances calculated
