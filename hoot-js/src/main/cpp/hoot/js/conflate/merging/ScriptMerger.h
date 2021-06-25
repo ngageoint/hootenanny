@@ -67,7 +67,7 @@ public:
 
   void setMatchType(const QString& matchType) { _matchType = matchType; }
 
-protected:
+private:
 
   v8::Persistent<v8::Object> _plugin;
   std::shared_ptr<PluginContext> _script;

@@ -53,16 +53,10 @@ public:
   ~IntersectionIterator() = default;
 
   const Box& getBox() const override;
-
   int getId() const override;
 
   bool hasNext() override;
-
   bool next() override;
-
-protected:
-
-  bool _determineIntesection(const Box& box);
 
 private:
 
@@ -71,7 +65,6 @@ private:
   public:
 
     Result() : id(-1) { }
-
     Result(const Box& box, int id) : box(box), id(id) { }
 
     Box box;
@@ -87,6 +80,7 @@ private:
   Result _currentResult;
 
   void _populateNext();
+    bool _determineIntesection(const Box& box);
 };
 
 }

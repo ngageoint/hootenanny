@@ -32,11 +32,11 @@
 namespace hoot
 {
 
-FieldDefinition::FieldDefinition()
+FieldDefinition::FieldDefinition() :
+_width(-1),
+_allowNull(true),
+_defaultIsNull(false)
 {
-  _width = -1;
-  _allowNull = true;
-  _defaultIsNull = false;
 }
 
 void FieldDefinition::_reportError(const QString& field, const QString& error,

@@ -81,7 +81,7 @@ public:
 
   QString getClassName() const override { return className(); }
 
-protected:
+private:
 
   ConstElementProviderPtr _provider;
   std::vector<geos::geom::Geometry*>* _ls;

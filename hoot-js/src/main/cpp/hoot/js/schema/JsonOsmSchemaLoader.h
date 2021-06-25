@@ -45,7 +45,6 @@ public:
   static int logWarnCount;
 
   JsonOsmSchemaLoader();
-
   ~JsonOsmSchemaLoader() = default;
 
   bool isSupported(QString url) const override { return url.endsWith(".json"); }
@@ -54,35 +53,27 @@ public:
 
   std::set<QString> getDependencies() override { return _deps; }
 
-protected:
+private:
 
   std::set<QString> _deps;
   QList<QString> _baseDir;
   v8::Persistent<v8::Context> _context;
 
   double _asDouble(const QVariant& v) const;
-
   /**
    * Will return the string representation iff v is a string.
    */
   QString _asString(const QVariant& v) const;
-
   QStringList _asStringList(const QVariant& v) const;
 
   void _processObject(const QVariantMap& v, OsmSchema& s);
 
   void _loadBase(QVariantMap& v, OsmSchema &s, SchemaVertex& tv) const;
-
   void _loadCompound(const QVariantMap& v, OsmSchema& s) const;
-
   void _loadCompoundTags(SchemaVertex& tv, const QVariant& value) const;
-
   void _loadGeometries(SchemaVertex& tv, const QVariant& v) const;
-
   void _loadSimilarTo(QString fromName, const QVariant& value, OsmSchema& s) const;
-
   void _loadTag(const QVariantMap& v, OsmSchema& s) const;
-
 };
 
 }

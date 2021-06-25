@@ -9,6 +9,7 @@ Many of these come directly from [Sonar](https://sonarcloud.io/dashboard?id=hoot
 * Use forward declarations where possible to mimimize build dependencies.
 * Similar class methods/variables should be grouped together in the header file with constructors/destructors being toward 
 the top.
+* Per class member access type, list member variables before member methods.
 * Place getters/setters at the end of the public documentation in the header file.
 * Group header includes by type. e.g. hoot includes together, Qt includes together, etc.
 * Header includes should be alphabetized.
@@ -20,6 +21,7 @@ the top.
 * Use appropriately descriptive class names.
 * Keep classes focused on a single primary functionality.
 * Keep public class member variables at a minimum.
+* Initialize class member variables in the constructor inline when possible.
 * Favor constructors with signatures that force the client of a class to set it up properly vs many getter methods.
 * Use interface inheritance with a focus on simple, skinny interface definitions.
 * Make use of configuration options via the `Configurable` interface to keep functionality adapatable to a broad range of 

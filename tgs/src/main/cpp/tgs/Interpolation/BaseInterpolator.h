@@ -42,23 +42,20 @@ public:
   BaseInterpolator();
 
   virtual ~BaseInterpolator() = default;
-
   double estimateError() override;
 
   void readInterpolator(QIODevice& is) override;
+  void writeInterpolator(QIODevice& os) const override;
 
   void setData(const std::shared_ptr<const DataFrame>& df) override;
 
   void setDependentColumns(const std::vector<std::string>& labels) override;
-
   void setIndependentColumns(const std::vector<std::string>& labels) override;
 
-  void writeInterpolator(QIODevice& os) const override;
+  int getMaxOptimizationLoopIterations() override { return _iterations; }
 
   void setMaxAllowedPerLoopOptimizationIterations(int maxIterations) override
   { _maxAllowedPerLoopOptimizationIterations = maxIterations; }
-
-  int getMaxOptimizationLoopIterations() override { return _iterations; }
 
 protected:
 
@@ -74,7 +71,6 @@ protected:
   mutable int _iterations;
 
   virtual void _buildModel() = 0;
-
   virtual void _checkRebuild();
 
   /**
@@ -90,7 +86,6 @@ protected:
    * been read before _readInterpolator is called.
    */
   virtual void _readInterpolator(QIODevice& is) = 0;
-
   /**
    * To be implemented by child classes to serialize class specific info.
    * The data frame and columns are serialized automatically.

@@ -58,13 +58,7 @@ public:
   void matchNetworks(ConstOsmMapPtr map, OsmNetworkPtr n1, OsmNetworkPtr n2) override;
 
   QList<NetworkEdgeScorePtr> getAllEdgeScores() const override;
-
   QList<NetworkVertexScorePtr> getAllVertexScores() const override;
-
-protected:
-  virtual double _scoreEdges(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2) const;
-
-  virtual double _scoreVertices(ConstNetworkVertexPtr e1, ConstNetworkVertexPtr e2) const;
 
 private:
 
@@ -159,6 +153,9 @@ private:
   double _p;
   double _dampening;
 
+  double _scoreEdges(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2) const;
+  double _scoreVertices(ConstNetworkVertexPtr e1, ConstNetworkVertexPtr e2) const;
+
   double _aggregateScores(QList<double> pairs) const;
 
   double _calculateEdgeVertexScore(const VertexScoreMap& vm, ConstNetworkVertexPtr from1,
@@ -167,7 +164,6 @@ private:
   QList<ConstNetworkEdgePtr> _getEdgesOnVertex(ConstNetworkVertexPtr v) const;
 
   void _normalizeAllScores();
-
   /**
    * Normalizes the scores in a table. All the weights will sum to a constant based on the network
    * size. All values will be treated as at least EPSILON for normalizing purposes.
@@ -183,13 +179,10 @@ private:
   void _normalizeScores(VertexScoreMap& t) const;
 
   void _seedEdgeScores();
-
   void _seedVertexScores();
 
   void _updateEdgeScores(EdgeScoreMap &em, const VertexScoreMap &vm) const;
-
   void _updateVertexScores(VertexScoreMap& vm, EdgeScoreMap &em) const;
-
 };
 
 }

@@ -73,13 +73,10 @@ public:
 protected:
 
   int _width, _height;
-
-  std::shared_ptr<OsmMap> _map1, _map2;
-  std::shared_ptr<OsmMap> _mapP1, _mapP2;
-
   Meters _pixelSize;
 
-  OGREnvelope _worldBounds;
+  std::shared_ptr<OsmMap> _mapP1, _mapP2;
+
   OGREnvelope _projectedBounds;
 
   Meters _sigma;
@@ -94,13 +91,19 @@ protected:
   geos::geom::Coordinate _findNearestPointOnFeature(
     const std::shared_ptr<OsmMap>& map, const geos::geom::Coordinate& c);
 
+  void _saveImage(cv::Mat& image, QString path, double max = 0.0, bool gradient = true) const;
+
+private:
+
+  std::shared_ptr<OsmMap> _map1, _map2;
+
+  OGREnvelope _worldBounds;
+
   void _calculateColor(double v, double max, QRgb& c) const;
   /**
    * Calculates rings on 10min intervals.
    */
   void _calculateRingColor(double v, double max, QRgb& c) const;
-
-  void _saveImage(cv::Mat& image, QString path, double max = 0.0, bool gradient = true) const;
 };
 
 }

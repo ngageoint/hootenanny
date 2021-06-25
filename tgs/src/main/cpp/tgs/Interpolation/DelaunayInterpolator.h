@@ -56,7 +56,6 @@ public:
   static QString className() { return "Tgs::DelaunayInterpolator"; }
 
   DelaunayInterpolator();
-
   ~DelaunayInterpolator() = default;
 
   /**
@@ -71,6 +70,14 @@ public:
   QString toString() const override;
 
 protected:
+
+  double _estimateError(unsigned int /*index*/) const override
+  { throw Tgs::Exception("Not Implemented."); }
+
+  void _readInterpolator(QIODevice& is) override;
+  void _writeInterpolator(QIODevice& os) const override;
+
+private:
 
   /// The number of folds in cross validation
   int _kFold;
@@ -92,12 +99,6 @@ protected:
    * Calculate the squared error for a given fold.
    */
   double _calculateFoldError(int fold, const std::vector<size_t>& indexes) const;
-
-  double _estimateError(unsigned int /*index*/) const override { throw Tgs::Exception("Not Implemented."); }
-
-  void _readInterpolator(QIODevice& is) override;
-
-  void _writeInterpolator(QIODevice& os) const override;
 };
 
 }

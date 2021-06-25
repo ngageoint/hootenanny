@@ -47,7 +47,6 @@ public:
    * If swap is set to true then t1 will be overwritten with t2 values.
    */
   OverwriteTagMerger(bool swap = false);
-
   virtual ~OverwriteTagMerger() = default;
 
   Tags mergeTags(const Tags& t1, const Tags& t2, ElementType et) const override;
@@ -64,7 +63,7 @@ public:
   void setAccumulateValuesTagKeys(const QStringList& tagKeys)
   { _accumulateValuesTagKeys = tagKeys; }
 
-protected:
+private:
 
   bool _swap;
 
@@ -91,9 +90,7 @@ public:
 
   QString getDescription() const override
   {  return "Overwrites conflicting tags with those from the reference feature"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 };
 
@@ -111,9 +108,7 @@ public:
 
   QString getDescription() const override
   {  return "Overwrites conflicting tags with those from the secondary feature"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 };
 

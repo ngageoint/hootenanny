@@ -47,17 +47,18 @@ namespace Tgs
   class TGS_EXPORT RandomForestManager : public BaseRandomForestManager
   {
   public:
+
     /**
     *  Constructor
     */
     RandomForestManager();
-
     /**
     *  Destructor
     */
     ~RandomForestManager() = default;
 
   protected:
+
     /**
      * @brief _initForests initializes the list of random forests
      * @param numForests the number of forests to create
@@ -69,7 +70,6 @@ namespace Tgs
      * @param forestsNode the list of <RandomForest> DOM nodes
      */
     void _parseXmlForestNodes(QDomNodeList & forestNodes) override;
-
   };
 }
 #endif
