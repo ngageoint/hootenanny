@@ -59,14 +59,30 @@ public:
 
   int runSimple(QStringList& args) override
   {
+    bool separateOutput = false;
+    if (args.contains("--separate-output"))
+    {
+      separateOutput = true;
+      args.removeAt(args.indexOf("--separate-output"));
+    }
+
     bool recursive = false;
     const QStringList inputFilters = _parseRecursiveInputParameter(args, recursive);
 
-    if (args.size() < 3)
+    if (!separateOutput && args.size() < 3)
     {
       std::cout << getHelp() << std::endl << std::endl;
       throw IllegalArgumentException(
         QString("%1 takes at least three parameters. You provided %2: %3")
+          .arg(getName())
+          .arg(args.size())
+          .arg(args.join(",")));
+    }
+    else if (separateOutput && args.size() < 2)
+    {
+      std::cout << getHelp() << std::endl << std::endl;
+      throw IllegalArgumentException(
+        QString("%1 takes at least two parameters. You provided %2: %3")
           .arg(getName())
           .arg(args.size())
           .arg(args.join(",")));
@@ -86,8 +102,12 @@ public:
     // This has to be done after we get the envelope.
     BoundedCommand::runSimple(args);
 
-    const QString output = args.last();
-    args.removeLast();
+    QString output;
+    if (!separateOutput)
+    {
+      output = args.last();
+      args.removeLast();
+    }
 
     // Everything left is an input.
     QStringList inputs;
@@ -107,6 +127,28 @@ public:
       "Cropping ..." << FileUtils::toLogFormat(inputs, 25) << " and writing output to ..." <<
       FileUtils::toLogFormat(output, 25) << "...");
 
+    if (!separateOutput)
+    {
+      // combines all inputs and writes them to the same output
+      _crop(inputs, output);
+    }
+    else
+    {
+      // writes a separate output for each input
+      _cropSeparateOutput(inputs);
+    }
+
+    LOG_STATUS("Map cropped in: " << StringUtils::millisecondsToDhms(timer.elapsed()) + " total.");
+
+    return 0;
+  }
+
+private:
+
+  std::shared_ptr<geos::geom::Geometry> _env;
+
+  void _crop(const QStringList& inputs, const QString& output)
+  {
     OsmMapPtr map(new OsmMap());
     if (inputs.size() == 1)
     {
@@ -118,21 +160,35 @@ public:
       IoUtils::loadMaps(map, inputs, false);
     }
 
-    MapCropper cropper;
-    cropper.setBounds(_env);
-    cropper.setConfiguration(Settings::getInstance());
-    cropper.apply(map);
+    _crop(map);
 
     IoUtils::saveMap(map, output);
-
-    LOG_STATUS("Map cropped in: " << StringUtils::millisecondsToDhms(timer.elapsed()) + " total.");
-
-    return 0;
   }
 
-private:
+  void _cropSeparateOutput(const QStringList& inputs)
+  {
+    for (int i = 0; i < inputs.size(); i++)
+    {
+      const QString input = inputs.at(i);
 
-  std::shared_ptr<geos::geom::Geometry> _env;
+      OsmMapPtr map = std::make_shared<OsmMap>();
+      IoUtils::loadMap(map, input, true);
+
+      _crop(map);
+
+      // Write the output to a similarly named path as the input with some text appended to the
+      // input name.
+      IoUtils::saveMap(map, IoUtils::getOutputUrlFromInput(input, "-cropped"));
+    }
+  }
+
+  void _crop(OsmMapPtr& map) const
+  {
+    MapCropper cropper;
+    cropper.setBounds(_env);
+    cropper.setConfiguration(conf());
+    cropper.apply(map);
+  }
 
   void _writeBoundsFile() override
   {

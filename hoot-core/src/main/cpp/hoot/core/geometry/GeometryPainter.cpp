@@ -38,8 +38,6 @@
 #include <QPainter>
 #include <QPainterPath>
 
-using namespace hoot::elements;
-
 namespace hoot
 {
 

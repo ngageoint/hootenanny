@@ -45,23 +45,11 @@ namespace hoot
 class OsmGeoJsonWriter : public OsmJsonWriter
 {
 public:
+
   static QString className() { return "hoot::OsmGeoJsonWriter"; }
 
   OsmGeoJsonWriter(int precision = ConfigOptions().getWriterPrecision());
   ~OsmGeoJsonWriter() = default;
-
-  /**
-   * @brief write Write the OsmMap out to a file in GeoJSON format, writer must be "open"
-   * @param map
-   */
-  void write(const ConstOsmMapPtr& map) override;
-
-  /**
-   * @brief isSupported returns true if the URL is likely supported
-   * @param url Filename ending in ".geojson"
-   * @return
-   */
-  bool isSupported(const QString& url) override { return url.toLower().endsWith(".geojson"); }
 
   /**
    * @brief setConfiguration allows configuration settings to override the defaults
@@ -69,6 +57,17 @@ public:
    */
   void setConfiguration(const Settings& conf) override;
 
+  /**
+   * @brief write Write the OsmMap out to a file in GeoJSON format, writer must be "open"
+   * @param map
+   */
+  void write(const ConstOsmMapPtr& map) override;
+  /**
+   * @brief isSupported returns true if the URL is likely supported
+   * @param url Filename ending in ".geojson"
+   * @return
+   */
+  bool isSupported(const QString& url) override { return url.toLower().endsWith(".geojson"); }
   QString supportedFormats() override { return ".geojson"; }
 
   QString toString(const ConstOsmMapPtr& map);
@@ -80,31 +79,26 @@ protected:
    *   them out to the GeoJSON file
    */
   void _writeNodes() override;
-
   /**
    * @brief _writeNode Writes a single node; metadata, tags, and geometry
    * @param node
    */
   void _writeNode(ConstNodePtr node);
-
   /**
    * @brief _writeWays Iterates all ways that aren't part of another element and writes
    *   them out to the GeoJSON file
    */
   void _writeWays() override;
-
   /**
    * @brief _writeWay Writes a single way; metadata, tags, and geometry
    * @param way
    */
   void _writeWay(ConstWayPtr way);
-
   /**
    * @brief _writeRelations Iterates all relations that aren't part of another element and writes
    *   them out to the GeoJSON file
    */
   void _writeRelations() override;
-
   /**
    * @brief _writeRelationInfo Writes relation specific information, relation-type and roles
    * @param relation
@@ -117,38 +111,32 @@ protected:
    * @param element
    */
   void _writeFeature(ConstElementPtr element);
-
   /**
    * @brief _writeMeta Write node/way/relation metadata, i.e. timestamp, version, and visible
    * @param element
    */
   void _writeMeta(ConstElementPtr element);
-
   /**
    * @brief _writeGeometry Write out the geometry in GeoJSON format based on the type
    * @param nodes Vector of node ids in OsmMap
    * @param type GeoJSON geometry type, i.e. Point, LineString, Polygon
    */
   void _writeGeometry(const std::vector<long>& nodes, std::string type);
-
   /**
    * @brief _writeGeometry Write out geometry for any element
    * @param element
    */
   void _writeGeometry(ConstElementPtr element);
-
   /**
    * @brief _writeGeometry Write out geometry for a single node
    * @param node
    */
   void _writeGeometry(ConstNodePtr node);
-
   /**
    * @brief _writeGeometry Write out geometry for a single way
    * @param way
    */
   void _writeGeometry(ConstWayPtr way);
-
   /**
    * @brief _writeGeometry Write out geometry for a single relation
    * @param relation

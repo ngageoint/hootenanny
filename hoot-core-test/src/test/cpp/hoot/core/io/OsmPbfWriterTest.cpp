@@ -190,7 +190,7 @@ public:
     OsmPbfWriter writer;
     // makes for a consistent output.
     writer.setCompressionLevel(0);
-    writer.includVersion(false);
+    writer.setIncludeVersion(false);
 
     OsmMapPtr map(new OsmMap());
     NodePtr n(new Node(Status::Unknown1, 72, 42.0, 3.14159, 7.1));

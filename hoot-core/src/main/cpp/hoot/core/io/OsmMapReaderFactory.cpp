@@ -60,9 +60,9 @@ bool OsmMapReaderFactory::supportsPartialReading(const QString& url)
 
 std::shared_ptr<OsmMapReader> OsmMapReaderFactory::_createReader(const QString& url)
 {
-  QString readerOverride = ConfigOptions().getMapFactoryReader();
-
   std::shared_ptr<OsmMapReader> reader;
+
+  const QString readerOverride = ConfigOptions().getMapFactoryReader();
   if (readerOverride != "")
   {
     reader.reset(Factory::getInstance().constructObject<OsmMapReader>(readerOverride));
@@ -125,15 +125,15 @@ QString OsmMapReaderFactory::getReaderName(const QString& url)
   LOG_VARD(url);
   vector<QString> names = Factory::getInstance().getObjectNamesByBase(OsmMapReader::className());
   LOG_VARD(names.size());
-  std::shared_ptr<OsmMapReader> writer;
+  std::shared_ptr<OsmMapReader> reader;
   for (size_t i = 0; i < names.size(); i++)
   {
     const QString name = names[i];
     LOG_VART(name);
-    writer.reset(Factory::getInstance().constructObject<OsmMapReader>(name));
+    reader.reset(Factory::getInstance().constructObject<OsmMapReader>(name));
     LOG_VART(url);
-    LOG_VART(writer->isSupported(url));
-    if (writer->isSupported(url))
+    LOG_VART(reader->isSupported(url));
+    if (reader->isSupported(url))
     {
       return name;
     }

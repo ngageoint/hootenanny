@@ -2347,7 +2347,13 @@ QUrl HootApiDb::getBaseUrl()
   return result;
 }
 
-QString HootApiDb::removeLayerName(const QString& url)
+QString HootApiDb::getTableName(const QString& url)
+{
+  const QStringList urlParts =  url.split("/");
+  return urlParts[urlParts.size() - 1];
+}
+
+QString HootApiDb::removeTableName(const QString& url)
 {
   QStringList urlParts =  url.split("/");
   QString modifiedUrl;

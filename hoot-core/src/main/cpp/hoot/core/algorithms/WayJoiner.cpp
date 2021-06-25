@@ -29,6 +29,8 @@
 
 //  Hoot
 #include <hoot/core/criterion/AreaCriterion.h>
+#include <hoot/core/criterion/BridgeCriterion.h>
+#include <hoot/core/criterion/CriterionUtils.h>
 #include <hoot/core/criterion/OneWayCriterion.h>
 #include <hoot/core/elements/NodeToWayMap.h>
 #include <hoot/core/index/OsmMapIndex.h>
@@ -456,6 +458,21 @@ bool WayJoiner::_joinWays(const WayPtr& parent, const WayPtr& child)
     return false;
   }
   LOG_VART(parentFirst);
+
+  //  Don't join bridges and non-bridges
+  std::vector<ConstElementPtr> elements;
+  elements.push_back(parent);
+  elements.push_back(child);
+  const bool onlyOneIsABridge =
+    CriterionUtils::containsSatisfyingElements<BridgeCriterion>(elements, OsmMapPtr(), 1, true);
+  if (ConfigOptions().getAttributeConflationAllowRefGeometryChangesForBridges() &&
+      onlyOneIsABridge)
+  {
+    LOG_TRACE(
+      "Only one of the features: " << parent->getElementId() << " and " <<
+      child->getElementId() << " to be joined is a bridge. Skipping join.");
+    return false;
+  }
 
   // Don't join area ways; moved this to here, as its a little more expensive than the calcs done
   // above

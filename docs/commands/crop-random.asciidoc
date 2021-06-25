@@ -15,7 +15,8 @@ have a very large file dataset and need to generate a small subset of data to te
 * +pixelSize+     - The pixel size in degrees. A good starting default is 0.001.
 * +--randomSeed+  - Optionally seeds the random number generator for consistent output; useful during testing; use -1 for 
                     no seeding
-* +--write-tiles+ - Optionally writes the calculated tile footprints to a separate file in the same output directory as +output+.
+* +--write-tiles+ - Optionally writes the calculated tile footprints to a separate file in the same output directory 
+                    as +output+.
 
 === Usage
 

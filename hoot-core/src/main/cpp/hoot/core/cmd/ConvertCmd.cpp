@@ -41,6 +41,7 @@
 // Qt
 #include <QElapsedTimer>
 #include <QStringList>
+#include <QFileInfo>
 
 using namespace std;
 
@@ -67,6 +68,13 @@ public:
     LOG_VART(args);
 
     BoundedCommand::runSimple(args);
+
+    bool separateOutput = false;
+    if (args.contains("--separate-output"))
+    {
+      separateOutput = true;
+      args.removeAt(args.indexOf("--separate-output"));
+    }
 
     bool recursive = false;
     const QStringList inputFilters = _parseRecursiveInputParameter(args, recursive);
@@ -95,6 +103,8 @@ public:
     const int outputIndex = args.size() - 1;
     const QString output = args[outputIndex];
     args.removeAt(outputIndex);
+    LOG_VARD(output);
+
     // Everything that's left is an input.
     QStringList inputs;
     if (!recursive)
@@ -108,10 +118,27 @@ public:
 
     ConfigUtils::checkForDuplicateElementCorrectionMismatch(ConfigOptions().getConvertOps());
 
-    DataConverter converter;
-    converter.setConfiguration(conf());
-    converter.convert(inputs, output);
-
+    if (!separateOutput)
+    {
+      // combines all inputs and writes them to the same output
+      DataConverter converter;
+      converter.setConfiguration(conf());
+      converter.convert(inputs, output);
+    }
+    else
+    {
+      // writes a separate output for each input
+      for (int i = 0; i < inputs.size(); i++)
+      {
+        const QString input = inputs.at(i);
+        // Write each output to the format specified by output and a similarly named path as the
+        // input with some text appended to the input name. We need to re-init DataConverter here
+        // each time since it sets and holds onto conversion operators based on the input type.
+        DataConverter converter;
+        converter.setConfiguration(conf());
+        converter.convert(input, IoUtils::getOutputUrlFromInput(input, "-converted", output));
+      }
+    }
     LOG_STATUS(
       "Data conversion completed in " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
 

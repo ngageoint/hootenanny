@@ -1200,7 +1200,6 @@ bool OsmPbfReader::isSupported(const QString& urlStr)
   QFileInfo fileInfo(urlStr);
   if (fileInfo.isDir())
   {
-    LOG_TRACE("Can't handle dirs with partial read yet.");
     return false;
   }
 

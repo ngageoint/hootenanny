@@ -97,7 +97,8 @@ bool OsmApiReader::isSupported(const QString& url)
   //  Support HTTP and HTTPS URLs to OSM API servers
   for (int i = 0; i < validPrefixes.size(); ++i)
   {
-    if (checkString.startsWith(validPrefixes[i]) && checkString.endsWith(OsmApiEndpoints::API_PATH_MAP))
+    if (checkString.startsWith(validPrefixes[i]) &&
+        checkString.endsWith(OsmApiEndpoints::API_PATH_MAP))
       return true;
   }
   //  If we fall out of loop, no dice

@@ -55,7 +55,6 @@
 #include <QDebug>
 #include <QFileInfo>
 
-using namespace hoot::elements;
 using namespace std;
 
 namespace hoot

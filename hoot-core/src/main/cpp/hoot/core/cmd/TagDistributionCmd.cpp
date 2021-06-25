@@ -166,6 +166,7 @@ public:
     {
       inputs = IoUtils::getSupportedInputsRecursively(args, inputFilters);
     }
+    LOG_VARD(inputs);
 
     LOG_STATUS("Calculating tag distribution for " << inputs.size() << " input(s)...");
 

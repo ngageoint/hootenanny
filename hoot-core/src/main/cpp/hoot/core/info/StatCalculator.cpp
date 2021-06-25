@@ -74,12 +74,6 @@ double StatCalculator::calculateStat(
   {
     throw IllegalArgumentException("Invalid statistic type: " + statType);
   }
-  // TODO: We may be able to calculate this after all...
-  if (inputs.size() > 1 && statType == "average")
-  {
-    throw IllegalArgumentException(
-      "An average statistic may only be calculated against a single input.");
-  }
 
   ConstElementVisitorPtr statCollector = _getStatCollector(statType, visitorClassName);
   double stat = -1.0;
@@ -225,7 +219,8 @@ double StatCalculator::_calcStatStreaming(
   double stat = 0.0;
   double statMin = std::numeric_limits<double>::max();
   double statMax = std::numeric_limits<double>::min();
-  double statAvg = 0.0;
+  long numElementsParsed = 0;
+  long numWithStat = 0;
   for (int i = 0; i < inputs.size(); i++)
   {
     LOG_STATUS(
@@ -238,7 +233,6 @@ double StatCalculator::_calcStatStreaming(
       std::make_shared<ElementVisitorInputStream>(
         std::dynamic_pointer_cast<ElementInputStream>(reader), statCollector);
 
-    long numElementsParsed = 0;
     while (filteredInputStream->hasMoreElements())
     {
       /*ConstElementPtr element = */filteredInputStream->readNextElement();
@@ -262,8 +256,11 @@ double StatCalculator::_calcStatStreaming(
     }
     else if (statType == "average")
     {
-      // This works b/c we're limiting the inputs to a size of 1.
-      statAvg = numericStatCtr->getAverage();
+      // numericStatCtr->getAverage() returns the average for the current file being parsed, but
+      // we want to calculate the average for all files, so just record the current total here and
+      // we'll calc the avg after all files have been parsed.
+      stat += singleStatCtr->getStat();
+      numWithStat += numericStatCtr->numWithStat();
     }
     else if (statType == "total")
     {
@@ -289,8 +286,12 @@ double StatCalculator::_calcStatStreaming(
     return statMax;
   }
   else if (statType == "average")
-  {
-    return statAvg;
+  {;
+    if (numWithStat > 0)
+    {
+      return stat / (double)numWithStat;
+    }
+    return 0.0;
   }
   else if (statType == "total")
   {

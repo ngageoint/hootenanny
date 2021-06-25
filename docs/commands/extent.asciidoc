@@ -6,8 +6,10 @@
 The +extent+ command displays the geospatial bounds of one or more maps.
 
 * +input(s)+    - Inputs(s); may be any supported input format (e.g. .osm file).
-* +--recursive+ - Allows for processing inputs recursively in a directory structure. This must be followed by either "*"
-                  to denote no filtering or one or more wildcard name filters. e.g. "*.osm;*.json" or "*myFile*".
+* +--recursive+ - Allows for processing the files contained in any directories specified in +input(s)+ recursively. 
+                  This parameter has no effect on the processing of non-directory inputs. This must be followed by either 
+                  "*" to denote no filtering or one or more wildcard name filters. e.g. "*.osm;*.json" or "*myFile*". 
+                  This parameter is not compatible with the OGR layer input syntax.
 
 === Usage
 
