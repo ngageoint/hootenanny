@@ -107,4 +107,3 @@ CONFIG -= release
 For Hootenanny core development, Qt Creator is an excellent choice for an IDE. Details on its installation and 
 configuration are outside of the scope of this document.
 
-

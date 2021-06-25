@@ -66,13 +66,10 @@ public:
   void setConfiguration(const Settings& conf) override;
 
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
-
   QString getDescription() const override { return "Crops a map"; }
 
   QString getInitStatusMessage() const override;
-
   QString getCompletedStatusMessage() const override
   {
     return

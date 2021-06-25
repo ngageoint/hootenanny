@@ -48,15 +48,11 @@ namespace hoot
 {
 
 /**
- * Writes an OsmMap to a .json file format.
- * http://overpass-api.de/output_formats.html#json
+ * Writes an OsmMap to a .json file format: http://overpass-api.de/output_formats.html#json
  *
  * This class uses very simple writing of one element at a time out to the string with print
  * methods. There is not proper JSON writer. This both simplifies dependencies, code and should
  * make things a bit faster.
- *
- * This is being used for unit testing only as of 3/24/2014 and has not been tested for
- * interoperability with any other tools.
  */
 class OsmJsonWriter : public QXmlDefaultHandler, public OsmMapWriter, public Configurable
 {
@@ -67,46 +63,34 @@ public:
   OsmJsonWriter(int precision = ConfigOptions().getWriterPrecision());
   virtual ~OsmJsonWriter() = default;
 
+  void setConfiguration(const Settings& conf) override;
+
   bool isSupported(const QString& url) override { return url.toLower().endsWith(".json"); }
-
-  /**
-   * Mark up a string so it can be used in JSON. This will add double quotes around the string too.
-   */
-  static QString markupString(const QString& str);
-
   void open(const QString& url) override;
-
   virtual void close() { if (_fp.isOpen()) { _fp.close(); } }
-
-  void setIncludeHootInfo(bool includeInfo) { _includeDebug = includeInfo; }
-
-  void setPrecision(int p) { _precision = p; }
+  void write(const ConstOsmMapPtr& map) override;
+  QString supportedFormats() override { return ".json"; }
 
   /**
    * Provided for backwards compatibility. Better to just use OsmMapWriterFactory::write()
    */
   void write(const ConstOsmMapPtr& map, const QString& path);
 
-  void write(const ConstOsmMapPtr& map) override;
+  /**
+   * Mark up a string so it can be used in JSON. This will add double quotes around the string too.
+   */
+  static QString markupString(const QString& str);
 
   /**
    * Very handy for testing.
    */
   QString toString(const ConstOsmMapPtr& map);
 
-  /**
-   * Allow the writer to write empty tags to JSON
-   */
-  void SetWriteEmptyTags(bool writeEmpty) { _writeEmptyTags = writeEmpty; }
-
+  void setPrecision(int p) { _precision = p; }
   void setIncludeCompatibilityTags(bool includeCompatibility)
   { _includeCompatibilityTags = includeCompatibility; }
   void setIncludeCircularError(bool includeCircularError)
   { _addExportTagsVisitor.setIncludeCircularError( includeCircularError); }
-
-  QString supportedFormats() override { return ".json"; }
-
-  void setConfiguration(const Settings& conf) override;
 
 protected:
 

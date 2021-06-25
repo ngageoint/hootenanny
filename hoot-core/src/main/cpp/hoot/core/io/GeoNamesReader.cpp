@@ -69,7 +69,6 @@ bool GeoNamesReader::isSupported(const QString& url)
 {
   QString path = QDir().absoluteFilePath(url);
   QFile f(path);
-
   bool result = path.toLower().endsWith(".geonames") && f.exists();
   return result;
 }

@@ -2226,7 +2226,7 @@ If true, cleaning/validation detail tags will be added to map outputs when clean
 === josm.map.validator.java.implementation
 
 * Data Type: string
-* Default Value: `hoot/core/josm/JosmMapValidator`
+* Default Value: `hoot/josm/JosmMapValidator`
 
 File path relative to Hootenanny root directory without file extension or prefixed namespace to
 Java class to use as the JOSM Java map validator/cleaner implementation.
@@ -3348,9 +3348,10 @@ to be simplified. For example : watrcrsl_hydro instead of 'watrcrsl@hydro(*)_lin
 * Data Type: string
 * Default Value: ``
 
-This is used to pass the output format (file extension: shp, gdb etc) to translation scripts to enable output format specific translations.
-E.g. Setting this to 'shp' would be telling the translation script to shorten attribute names to 10 characters and keep text
-attributes below the 255 character maximum length.
+This is used to pass the output format (file extension: shp, gdb etc) to translation scripts to
+enable output format specific translations. e.g. Setting this to 'shp' would be telling the
+translation script to shorten attribute names to 10 characters and keep text attributes below the
+255 character maximum length.
 
 === ogr.split.o2s
 

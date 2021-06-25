@@ -31,8 +31,8 @@
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/jni/JniConversion.h>
-#include <hoot/core/jni/JniUtils.h>
+#include <hoot/josm/jni/JniConversion.h>
+#include <hoot/josm/jni/JniUtils.h>
 
 // Qt
 #include <QTemporaryFile>

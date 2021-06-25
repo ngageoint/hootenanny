@@ -41,6 +41,7 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Tags.h>
 #include <hoot/core/geometry/GeometryUtils.h>
+#include <hoot/core/io/IoUtils.h>
 #include <hoot/core/io/OgrUtilities.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/schema/PythonSchemaTranslator.h>
@@ -245,11 +246,13 @@ private:
   OgrReaderInternal* _d;
 };
 
-OgrReader::OgrReader() : _d(new OgrReaderInternal())
+OgrReader::OgrReader() :
+_d(new OgrReaderInternal())
 {
 }
 
-OgrReader::OgrReader(const QString& path) : _d(new OgrReaderInternal())
+OgrReader::OgrReader(const QString& path) :
+_d(new OgrReaderInternal())
 {
   if (isSupported(path) == true)
   {
@@ -373,11 +376,6 @@ QStringList OgrReader::getFilteredLayerNames(const QString& path) const
   return result;
 }
 
-bool OgrReader::isReasonablePath(const QString& path)
-{
-  return OgrUtilities::getInstance().isReasonableUrl(path);
-}
-
 long OgrReader::getFeatureCount(const QString& path, const QString& layer) const
 {
   _d->open(path, layer);
@@ -481,17 +479,21 @@ void OgrReader::read(
   const QString& path, const QString& layer, const OsmMapPtr& map, const QString& jobSource,
   const int numTasks)
 {
+  LOG_VARD(path);
+  LOG_VARD(layer);
+
   map->appendSource(path);
 
   // These are the OGR inputs types for which we need to iterate through layers. This list may
   // eventually need to be expanded. May be able to tighten the dir condition to dirs with shape
   // files only.
-  // TODO: Can we just check to see if layer is empty here instead?
-  if (path.endsWith(".gdb") || QFileInfo(path).isDir() || path.endsWith(".zip"))
+  // TODO: Can we only check to see if layer is empty here instead?
+  if (layer.isEmpty() &&
+      (path.endsWith(".gdb") || QFileInfo(path).isDir() || path.endsWith(".zip")))
   {
     QString pathCopy = path;
     const QStringList layers = _getLayersFromPath(pathCopy);
-    LOG_VART(layers);
+    LOG_VARD(layers);
     const std::vector<float> progressWeights = _getInputProgressWeights(path, layers);
     // Read each layer's data.
     for (int j = 0; j < layers.size(); j++)
@@ -562,7 +564,10 @@ void OgrReader::finalizePartial()
 
 bool OgrReader::isSupported(const QString& url)
 {
-  return isReasonablePath(url);
+  LOG_VART(url);
+  QString justPath = url;
+  IoUtils::ogrPathAndLayerToPath(justPath); // in case the layer syntax is in use
+  return OgrUtilities::getInstance().isReasonableUrl(justPath);
 }
 
 void OgrReader::setUseDataSourceIds(bool useDataSourceIds)
@@ -573,7 +578,15 @@ void OgrReader::setUseDataSourceIds(bool useDataSourceIds)
 void OgrReader::open(const QString& url)
 {
   OsmMapReader::open(url);
-  _d->open(url, "");
+
+  QString path = url;
+  IoUtils::ogrPathAndLayerToPath(path); // in case the layer syntax is in use
+  QString layer = url;
+  IoUtils::ogrPathAndLayerToLayer(layer);
+  LOG_VART(layer);
+  // If there was no layer in the URL, the layer will be empty and the path will be the same as
+  // the url passed in.
+  _d->open(path, layer);
 }
 
 std::shared_ptr<OGRSpatialReference> OgrReader::getProjection() const
@@ -583,21 +596,21 @@ std::shared_ptr<OGRSpatialReference> OgrReader::getProjection() const
 
 int OgrReaderInternal::logWarnCount = 0;
 
-OgrReaderInternal::OgrReaderInternal()
+OgrReaderInternal::OgrReaderInternal() :
+_defaultCircularError(ConfigOptions().getCircularErrorDefaultValue()),
+_circularErrorTagKeys(ConfigOptions().getCircularErrorTagKeys()),
+_status(Status::Invalid),
+_map(OsmMapPtr(new OsmMap())),
+_layer(nullptr),
+_limit(-1),
+_featureCount(0),
+_transform(nullptr),
+_addSourceDateTime(ConfigOptions().getReaderAddSourceDatetime()),
+_nodeIdFieldName(ConfigOptions().getOgrReaderNodeIdFieldName())
 {
-  _map = OsmMapPtr(new OsmMap());
   _nodesItr = _map->getNodes().begin();
   _waysItr =  _map->getWays().begin();
   _relationsItr = _map->getRelations().begin();
-  _layer = nullptr;
-  _transform = nullptr;
-  _status = Status::Invalid;
-  _defaultCircularError = ConfigOptions().getCircularErrorDefaultValue();
-  _circularErrorTagKeys = ConfigOptions().getCircularErrorTagKeys();
-  _limit = -1;
-  _featureCount = 0;
-  _addSourceDateTime = ConfigOptions().getReaderAddSourceDatetime();
-  _nodeIdFieldName = ConfigOptions().getOgrReaderNodeIdFieldName();
 }
 
 OgrReaderInternal::~OgrReaderInternal()

@@ -119,6 +119,12 @@ See the User Guide for more specific details on command usage. Most of these exa
     hoot clean /my/dir output.osm --recursive "*.osm"
 -----
 
+==== Clean erroneous data from a map and write to separate output files:
+
+-----
+    hoot clean input1.osm input2.osm --separate-output
+-----
+
 ==== Clean erroneous data from a map using Hooteanny's default cleaning operations plus JOSM's cleaning capabilities:
 
 -----
@@ -208,7 +214,7 @@ See the User Guide for more specific details on command usage. Most of these exa
 ==== Remove features that have likely been incorrectly marked as roads:
 
 -----
-hoot convert -D convert.ops="UnlikelyRoadRemover" input.osm output.osm
+    hoot convert -D convert.ops="UnlikelyRoadRemover" input.osm output.osm
 -----
 
 ==== Simplify ways in a map by removing unnecessary nodes from them:
@@ -449,6 +455,12 @@ hoot convert -D convert.ops="UnlikelyRoadRemover" input.osm output.osm
     hoot convert input1.osm input2.osm output.osm
 -----
 
+==== Combine multiple maps by name wildcard into a single map without conflating:
+
+-----
+    hoot convert input*.osm output.osm
+-----
+
 ==== Combine two maps into a single map affecting data within a bounding box only:
 
 -----
@@ -472,6 +484,12 @@ hoot convert -D convert.ops="UnlikelyRoadRemover" input.osm output.osm
 
 -----
     hoot convert /my/dir output.osm --recursive "*.osm"
+-----
+
+==== Convert files of multiple formats into OSM files while writing each to a separate output:
+
+-----
+    hoot convert input1.shp input2.osm.pbf osm --separate-output
 -----
 
 ==== Combine like polygons together without using full-fledged conflation:
@@ -511,10 +529,12 @@ hoot convert -D convert.ops="UnlikelyRoadRemover" input.osm output.osm
     hoot convert input1.shp input2.shp output.osm
 -----
 
-==== Convert roads, bridges, overpasses and tunnels from a file geodatabase into a single .osm file:
+==== Convert roads, bridges, overpasses and tunnels from a layers in a file geodatabase into a single .osm file:
 
 -----
-    hoot convert input.gdb;ROAD_L input.gdb;BRIDGE_OVERPASS_L input.gdb;TUNNEL_L output.osm
+    # Note that each path;layer input combo must be surrounded in quotes. Otherwise, the entire
+    # input will be read.
+    hoot convert "input.gdb;ROAD_L" "input.gdb;BRIDGE_OVERPASS_L" "input.gdb;TUNNEL_L" output.osm
 -----
 
 ==== Convert a shape file that is stored inside of a zip file:
@@ -1481,6 +1501,12 @@ Requires a language translation server installation.  See the Hootenanny Install
     hoot crop /my/dir output.osm "-77.0551,38.8845,-77.0281,38.9031" --recursive "*.osm"
 -----
 
+==== Crop map data and write to separate output files:
+
+-----
+    hoot crop input1.osm input2.osm "-77.0551,38.8845,-77.0281,38.9031" --separate-output
+-----
+
 ==== Crop out a random subset of data with a maximum node size:
 
 -----
@@ -1655,22 +1681,28 @@ hoot task-grid test-files/MyInputFile.osm MyOutputFile.geojson --maxNodesPerCell
     hoot validate input.osm
 -----
 
-==== Run validation on a map and mark failing features:
+==== Run validation on a map and mark failing features in an output file:
 
 -----
-    hoot validate input.osm output.osm
+    hoot validate input.osm --output output.osm
 -----
 
 ==== Run validation on map data recursively across multiple files under a directory:
 
 -----
-    hoot validate /my/dir output.osm --recursive "*"
+    hoot validate /my/dir --recursive "*"
 -----
 
-==== Run validation on map data map data recursively across multiple OSM files under a directory:
+==== Run validation on map data recursively across multiple OSM files under a directory:
 
 -----
-    hoot validate /my/dir output.osm --recursive "*.osm"
+    hoot validate /my/dir --recursive "*.osm"
+-----
+
+==== Run validation on a map and mark failing features in separate output files:
+
+-----
+    hoot validate input1.osm input2.osm --separate-output
 -----
 
 ==== List the available JOSM validators:

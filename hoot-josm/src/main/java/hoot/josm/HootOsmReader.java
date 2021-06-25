@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
-package hoot.core.josm;
+package hoot.josm;
 
 import java.io.InputStream;
 

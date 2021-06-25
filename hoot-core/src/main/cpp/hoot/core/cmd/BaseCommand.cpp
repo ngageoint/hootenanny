@@ -29,6 +29,7 @@
 
 // Hoot
 #include <hoot/core/Hoot.h>
+#include <hoot/core/io/IoUtils.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/Progress.h>
 #include <hoot/core/util/Settings.h>
@@ -37,6 +38,7 @@
 
 // Qt
 #include <QFileInfo>
+#include <QDir>
 
 using namespace geos::geom;
 
@@ -59,33 +61,6 @@ QString BaseCommand::getHelp() const
 QString BaseCommand::_getHelpPath() const
 {
   return ConfPath::getHootHome() + "/docs/commands/" + getName() + ".asciidoc";
-}
-
-Envelope BaseCommand::parseEnvelope(QString envStr) const
-{
-  QStringList envArr = envStr.split(",");
-
-  if (envArr.size() != 4)
-  {
-    throw HootException("Invalid bounds format, requires 4 values: " + envStr);
-  }
-
-  bool ok, allOk = true;
-  double left = envArr[0].toDouble(&ok);
-  allOk &= ok;
-  double bottom = envArr[1].toDouble(&ok);
-  allOk &= ok;
-  double right = envArr[2].toDouble(&ok);
-  allOk &= ok;
-  double top = envArr[3].toDouble(&ok);
-  allOk &= ok;
-
-  if (allOk == false)
-  {
-    throw HootException("Invalid bounds format: " + envStr);
-  }
-
-  return Envelope(left, right, bottom, top);
 }
 
 int BaseCommand::run(char* argv[], int argc)

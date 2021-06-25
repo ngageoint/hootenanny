@@ -139,8 +139,10 @@ void DataConverter::convert(const QStringList& inputs, const QString& output)
     // We require that a translation be present when converting from OGR, since OgrReader is tightly
     // coupled to the translation logic. If we have a gdb or a dir as input and no translation is
     // present, we'll add a quick and dirty translation script here.
+    QStringList justPaths = inputs;
+    IoUtils::ogrPathsAndLayersToPaths(justPaths);
     if (_translation.isEmpty() &&
-        (StringUtils::endsWithAny(inputs, ".gdb") || FileUtils::anyAreDirs(inputs)))
+        (StringUtils::endsWithAny(justPaths, ".gdb") || FileUtils::anyAreDirs(justPaths)))
     {
       _translation = "translations/quick.js";
     }

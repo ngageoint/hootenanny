@@ -28,7 +28,7 @@
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/core/josm/ops/JosmMapValidator.h>
+#include <hoot/josm/ops/JosmMapValidator.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/elements/MapProjector.h>
@@ -60,6 +60,13 @@ public:
       args.removeAt(args.indexOf("--available-validators"));
     }
 
+    bool separateOutput = false;
+    if (args.contains("--separate-output"))
+    {
+      separateOutput = true;
+      args.removeAt(args.indexOf("--separate-output"));
+    }
+
     bool recursive = false;
     const QStringList inputFilters = _parseRecursiveInputParameter(args, recursive);
     LOG_VARD(recursive);
@@ -80,6 +87,11 @@ public:
         args.removeAt(outputIndex);
       }
 
+      if (separateOutput && !output.isEmpty())
+      {
+        throw IllegalArgumentException("--output and --separate-output cannot both be specified.");
+      }
+
       if (args.size() < 1)
       {
         std::cout << getHelp() << std::endl << std::endl;
@@ -98,36 +110,76 @@ public:
       }
       LOG_VARD(inputs);
 
-      OsmMapPtr map(new OsmMap());
-      if (inputs.size() == 1)
+      if (!separateOutput)
       {
-        IoUtils::loadMap(map, inputs.at(0), true, Status::Unknown1);
+        // combines all inputs, generates their validation summary, and optionally writes them all
+        // to the same output
+        std::cout << _validate(inputs, output)->getSummary() << std::endl;
       }
       else
       {
-        // Avoid ID conflicts across multiple inputs.
-        IoUtils::loadMaps(map, inputs, false, Status::Unknown1);
+        // writes a separate output for each input
+        _validateSeparateOutput(inputs);
       }
-
-      JosmMapValidator validator;
-      validator.setConfiguration(conf());
-      LOG_STATUS(validator.getInitStatusMessage());
-      validator.apply(map);
-      LOG_INFO(validator.getCompletedStatusMessage());
-
-      if (!output.isEmpty())
-      {
-        MapProjector::projectToWgs84(map);
-        IoUtils::saveMap(map, output);
-      }
-
-      std::cout << validator.getSummary() << std::endl;
     }
 
     return 0;
   }
 
 private:
+
+  std::shared_ptr<JosmMapValidator> _validate(OsmMapPtr& map)
+  {
+    std::shared_ptr<JosmMapValidator> validator = std::make_shared<JosmMapValidator>();
+    validator->setConfiguration(conf());
+    LOG_STATUS(validator->getInitStatusMessage());
+    validator->apply(map);
+    LOG_INFO(validator->getCompletedStatusMessage());
+    return validator;
+  }
+
+  std::shared_ptr<JosmMapValidator> _validate(const QStringList& inputs, const QString& output)
+  {
+    OsmMapPtr map(new OsmMap());
+    if (inputs.size() == 1)
+    {
+      IoUtils::loadMap(map, inputs.at(0), true, Status::Unknown1);
+    }
+    else
+    {
+      // Avoid ID conflicts across multiple inputs.
+      IoUtils::loadMaps(map, inputs, false, Status::Unknown1);
+    }
+
+    std::shared_ptr<JosmMapValidator> validator = _validate(map);
+
+    if (!output.isEmpty())
+    {
+      MapProjector::projectToWgs84(map);
+      IoUtils::saveMap(map, output);
+    }
+
+    return validator;
+  }
+
+  void _validateSeparateOutput(const QStringList& inputs)
+  {
+    for (int i = 0; i < inputs.size(); i++)
+    {
+      const QString input = inputs.at(i);
+
+      OsmMapPtr map(new OsmMap());
+      IoUtils::loadMap(map, input, true, Status::Unknown1);
+
+      /*std::shared_ptr<JosmMapValidator> validator =*/ _validate(map);
+
+      // Write the output to a similarly named path as the input with some text appended to the
+      // input name.
+      const QString output = IoUtils::getOutputUrlFromInput(input, "-validated");
+      MapProjector::projectToWgs84(map);
+      IoUtils::saveMap(map, output);
+    }
+  }
 
   void _printJosmValidators()
   {

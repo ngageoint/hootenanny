@@ -39,8 +39,7 @@ namespace hoot
 {
 
 /**
- * A composite class for cleaning maps and prepping them for conflation. This performs operations
- * like splitting intersections, fixing some common errors, etc.
+ * A composite class for cleaning maps to prep them for conflation.
  */
 class MapCleaner : public OsmMapOperation
 {
@@ -51,15 +50,13 @@ public:
   static QString opsKey() { return "map.cleaner.transforms"; }
 
   MapCleaner() = default;
-  MapCleaner(const Progress& progress) : _progress(progress) { }
+  MapCleaner(const Progress& progress);
   ~MapCleaner() = default;
 
   void apply(std::shared_ptr<OsmMap>& map) override;
 
   QString getDescription() const override { return "Cleans map data"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 
 private:

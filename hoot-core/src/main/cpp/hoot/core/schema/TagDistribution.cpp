@@ -227,7 +227,7 @@ void TagDistribution::_countTagsStreaming(const QString& input, std::map<QString
 
   LOG_STATUS(
     "Processed " << StringUtils::formatLargeNumber(inputTagsTotal) << " tags from " <<
-    StringUtils::formatLargeNumber(inputElementTotal) << " elements from " <<
+    StringUtils::formatLargeNumber(inputElementTotal) << " elements from ..." <<
     FileUtils::toLogFormat(input, 25) << ".");
 
   reader->finalizePartial();

@@ -104,6 +104,38 @@ public:
   static bool anyAreSupportedOgrFormats(const QStringList& inputs, const bool allowDir = false);
 
   /**
+   * Converts the OGR inputs with layer syntax to just the inputs
+   *
+   * @param inputs the inputs to convert
+   * @return a list of paths
+   */
+  static void ogrPathsAndLayersToPaths(QStringList& inputs);
+
+  /**
+   * Converts the OGR input with layer syntax to the input path
+   *
+   * @param input the input to convert
+   * @return a path
+   */
+  static void ogrPathAndLayerToPath(QString& input);
+
+  /**
+   * Converts the OGR input with layer syntax to the layer
+   *
+   * @param input the input to convert
+   * @return a layer name
+   */
+  static void ogrPathAndLayerToLayer(QString& input);
+
+  /**
+   * Determines if an OGR input URL has the layer syntax: file;layer
+   *
+   * @param input the URL to examine
+   * @return true if the input URL has the layer syntax; false otherwise
+   */
+  static bool isOgrPathAndLayer(const QString& input);
+
+  /**
    * Returns all file paths under a directory point to a supported input format
    *
    * @param topLevelPaths one or more directory paths
@@ -279,6 +311,19 @@ public:
    * interface
    */
   static bool urlsAreBoundable(const QStringList& urls);
+
+  /**
+   * Creates an output URL based on an input URL that will not overwrite the input
+   *
+   * @param inputUrl the input URL to generate an output URL for
+   * @param appendText optional text to append to the output URL; not optional if outputFormat is
+   * not specified
+   * @param outputFormat optional output format made up of a file extension (e.g. osm) or a custom
+   * output directory extension (e.g. shp); not option if appendText is not specified
+   * @return a URL
+   */
+  static QString getOutputUrlFromInput(
+    const QString& inputUrl, const QString& appendText = "", const QString& outputFormat = "");
 };
 
 }

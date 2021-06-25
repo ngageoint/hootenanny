@@ -27,10 +27,12 @@ Hootenanny conflation occurs at the dataset level, where the user’s workflow d
 
 No automated map conflation technology is perfect. If you are conflating a relatively small number of features, you may be best served to combine them manually yourself, given you are looking for a perfect result and want to avoid any potential time spent configuring software options to get the best conflated output. For larger datasets, however, Hootenanny is a valuable tool that can be utilized standalone or as an inital step in conjunction with a crowd sourced [mapping campaign](https://tasks.hotosm.org/) to add new data into your dataset. You will find that the conflation automation provided by Hootenanny saves effort overall, and that most inaccuracies in the conflated output are a small subset of the input data which often end up being flagged for human review so that they may be manually corrected.
 
+# [Releases](https://github.com/ngageoint/hootenanny/releases)
+
 # Documentation
 
-Documentation is included as a [PDF](https://github.com/ngageoint/hootenanny/releases) with each release. Download 
-the Hootenanny .tar.gz installation file and locate the documentation within the "docs" directory.
+Documentation is included as [PDF files](https://github.com/ngageoint/hootenanny/releases) with each release. Download 
+the Hootenanny `.tar.gz` installation file and locate the documentation within the "docs" directory.
 
 # Conflatable Feature Types
 

@@ -28,9 +28,6 @@
 #ifndef BASECOMMAND_H
 #define BASECOMMAND_H
 
-// geos
-#include <geos/geom/Envelope.h>
-
 // Hoot
 #include <hoot/core/cmd/Command.h>
 #include <hoot/core/elements/Status.h>
@@ -49,11 +46,6 @@ public:
   virtual ~BaseCommand() = default;
 
   QString getHelp() const override;
-
-  /**
-   * Parses a comma delimited envelope in the form minx,miny,maxx,maxy.
-   */
-  geos::geom::Envelope parseEnvelope(QString envStr) const;
 
   /**
    * This method will pull out common arguments (e.g. --conf), convert the args to a QStringList
