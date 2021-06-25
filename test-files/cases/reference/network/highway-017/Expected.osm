@@ -355,24 +355,50 @@
         <tag k="surface" v="paved"/>
         <tag k="width" v="2.5"/>
     </way>
-    <way visible="true" id="-306578" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-306204"/>
-        <nd ref="-306492"/>
-        <nd ref="-306205"/>
-        <nd ref="-306493"/>
-        <nd ref="-306169"/>
+    <way visible="true" id="-306582" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-306494"/>
         <nd ref="-306173"/>
         <nd ref="-306160"/>
         <nd ref="-306174"/>
         <tag k="all_weather" v="yes"/>
         <tag k="alt_name" v="PERINDUSTRIAN"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:id" v="-306582"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="4"/>
+        <tag k="lanes" v="1"/>
+        <tag k="name" v="Perindustrian"/>
+        <tag k="source" v="Bing"/>
+        <tag k="surface" v="paved"/>
+        <tag k="width" v="2.5"/>
+    </way>
+    <way visible="true" id="-306581" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-306169"/>
+        <nd ref="-306494"/>
         <tag k="bridge" v="yes"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:id" v="-306581"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="2"/>
+        <tag k="name" v="Perindustrian"/>
+        <tag k="source" v="Bing"/>
+        <tag k="width" v="2.5"/>
+    </way>
+    <way visible="true" id="-306578" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-306204"/>
+        <nd ref="-306492"/>
+        <nd ref="-306205"/>
+        <nd ref="-306493"/>
+        <nd ref="-306169"/>
+        <tag k="all_weather" v="yes"/>
+        <tag k="alt_name" v="PERINDUSTRIAN"/>
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-306578"/>
         <tag k="hoot:status" v="3"/>
-        <tag k="hoot:way:node:count" v="9"/>
+        <tag k="hoot:way:node:count" v="5"/>
         <tag k="lanes" v="1"/>
         <tag k="name" v="Perindustrian"/>
         <tag k="source" v="Bing"/>
@@ -398,42 +424,65 @@
         <tag k="surface" v="paved"/>
         <tag k="width" v="2.5"/>
     </way>
-    <way visible="true" id="-306571" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-306165"/>
-        <nd ref="-306485"/>
-        <nd ref="-306486"/>
-        <nd ref="-306166"/>
-        <nd ref="-306206"/>
+    <way visible="true" id="-306574" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-306207"/>
         <nd ref="-306208"/>
         <tag k="all_weather" v="yes"/>
-        <tag k="bridge" v="yes"/>
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
-        <tag k="hoot:id" v="-306571"/>
+        <tag k="hoot:id" v="-306574"/>
         <tag k="hoot:status" v="3"/>
-        <tag k="hoot:way:node:count" v="7"/>
+        <tag k="hoot:way:node:count" v="2"/>
         <tag k="lanes" v="1"/>
         <tag k="name" v="KOL. SUTOMO 2"/>
         <tag k="surface" v="paved"/>
         <tag k="width" v="2.5"/>
     </way>
+    <way visible="true" id="-306573" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-306486"/>
+        <nd ref="-306166"/>
+        <nd ref="-306206"/>
+        <nd ref="-306207"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:id" v="-306573"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:way:node:count" v="4"/>
+    </way>
+    <way visible="true" id="-306572" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-306485"/>
+        <nd ref="-306486"/>
+        <tag k="all_weather" v="yes"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:id" v="-306572"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="2"/>
+        <tag k="lanes" v="1"/>
+        <tag k="name" v="KOL. SUTOMO 2"/>
+        <tag k="surface" v="paved"/>
+        <tag k="width" v="2.5"/>
+    </way>
+    <way visible="true" id="-306571" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-306165"/>
+        <nd ref="-306485"/>
+        <tag k="bridge" v="yes"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:id" v="-306571"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="2"/>
+        <tag k="width" v="2.5"/>
+    </way>
     <way visible="true" id="-306566" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-306168"/>
         <nd ref="-306475"/>
-        <nd ref="-306209"/>
-        <nd ref="-306210"/>
-        <nd ref="-306208"/>
-        <tag k="all_weather" v="yes"/>
         <tag k="bridge" v="yes"/>
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-306566"/>
         <tag k="hoot:status" v="3"/>
-        <tag k="hoot:way:node:count" v="5"/>
-        <tag k="lanes" v="1"/>
-        <tag k="name" v="KOL. SUTOMO 3"/>
-        <tag k="surface" v="paved"/>
+        <tag k="hoot:way:node:count" v="2"/>
         <tag k="width" v="2.5"/>
     </way>
     <way visible="true" id="-306564" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -448,6 +497,22 @@
         <tag k="hoot:id" v="-306564"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="5"/>
+        <tag k="lanes" v="1"/>
+        <tag k="name" v="KOL. SUTOMO 3"/>
+        <tag k="surface" v="paved"/>
+        <tag k="width" v="2.5"/>
+    </way>
+    <way visible="true" id="-306230" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-306475"/>
+        <nd ref="-306209"/>
+        <nd ref="-306210"/>
+        <nd ref="-306208"/>
+        <tag k="all_weather" v="yes"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:id" v="-306230"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="4"/>
         <tag k="lanes" v="1"/>
         <tag k="name" v="KOL. SUTOMO 3"/>
         <tag k="surface" v="paved"/>
