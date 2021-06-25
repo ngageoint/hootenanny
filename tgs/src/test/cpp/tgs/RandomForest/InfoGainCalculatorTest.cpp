@@ -39,9 +39,7 @@
 #include <tgs/RandomForest/DataFrame.h>
 #include <tgs/RandomForest/InfoGainCalculator.h>
 
-using namespace Tgs;
-
-namespace SaUrgent
+namespace Tgs
 {
 
   // A set of factors with labels to test
@@ -66,6 +64,7 @@ namespace SaUrgent
     CPPUNIT_TEST_SUITE(InfoGainCalculatorTest);
     CPPUNIT_TEST(test1);
     CPPUNIT_TEST_SUITE_END();
+
   public:
    
     void test1()
@@ -145,4 +144,4 @@ namespace SaUrgent
   };
 }  //End namespace
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(SaUrgent::InfoGainCalculatorTest, PluginFactory::testName());
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(Tgs::InfoGainCalculatorTest, PluginFactory::testName());

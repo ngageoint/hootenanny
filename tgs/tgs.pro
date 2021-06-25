@@ -45,6 +45,9 @@ win32 {
 }
 MISC_FILES += Tgs.pro
 
+# When this list of classes is updated, also update docs/CoreAPI.dox. Maybe eventually we can
+# automate the process. Fortunately, what we use from tgs/tbs doesn't change very often.
+
 HEADERS += \
     src/main/cpp/tgs/HashMap.h \
     src/main/cpp/tgs/LruCache.h \

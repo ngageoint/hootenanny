@@ -129,68 +129,6 @@ public:
     }
   }
 
-  class AddPairsVisitor : public ConstElementVisitor
-  {
-  public:
-
-    AddPairsVisitor(OsmMapPtr map, QString scenario) : _map(map), _scenario(scenario) {}
-
-    set<pair<ElementId, ElementId>> getPairs() const
-    {
-      set<pair<ElementId, ElementId>> result;
-
-      for (size_t i = 0; i < max(_e1.size(), _e2.size()); i++)
-      {
-        size_t i1 = min(i, _e1.size() - 1);
-        size_t i2 = min(i, _e2.size() - 1);
-        result.insert(pair<ElementId, ElementId>(_e1[i1], _e2[i2]));
-      }
-
-      return result;
-    }
-
-    virtual void visit(const ConstElementPtr& e)
-    {
-      ElementId eid = e->getElementId();
-
-      ElementPtr ee = _map->getElement(eid);
-
-      if (ee->getTags().get("note") == _scenario)
-      {
-        if (ee->getStatus() == Status::Unknown1)
-        {
-          _e1.push_back(eid);
-        }
-        else if (ee->getStatus() == Status::Unknown2)
-        {
-          _e2.push_back(eid);
-        }
-      }
-      else
-      {
-        RecursiveElementRemover(eid).apply(_map);
-      }
-    }
-
-    virtual QString getDescription() const {return ""; }
-    virtual QString getName() const { return ""; }
-    virtual QString getClassName() const { return ""; }
-
-  private:
-
-    set<pair<ElementId, ElementId>> _pairs;
-    vector<ElementId> _e1, _e2;
-    OsmMapPtr _map;
-    QString _scenario;
-  };
-
-  set<pair<ElementId, ElementId>> _addPairs(QString scenario, OsmMapPtr map)
-  {
-    AddPairsVisitor v(map, scenario);
-    map->visitRw(v);
-    return v.getPairs();
-  }
-
   void toyScenario1Test()
   {
     OsmMapPtr map(new OsmMap());
@@ -345,6 +283,70 @@ public:
     writer.write(map);
     writer.close();
     HOOT_FILE_EQUALS(_inputPath + testFileName, _outputPath + testFileName);
+  }
+
+private:
+
+  class AddPairsVisitor : public ConstElementVisitor
+  {
+  public:
+
+    AddPairsVisitor(OsmMapPtr map, QString scenario) : _map(map), _scenario(scenario) {}
+
+    set<pair<ElementId, ElementId>> getPairs() const
+    {
+      set<pair<ElementId, ElementId>> result;
+
+      for (size_t i = 0; i < max(_e1.size(), _e2.size()); i++)
+      {
+        size_t i1 = min(i, _e1.size() - 1);
+        size_t i2 = min(i, _e2.size() - 1);
+        result.insert(pair<ElementId, ElementId>(_e1[i1], _e2[i2]));
+      }
+
+      return result;
+    }
+
+    virtual void visit(const ConstElementPtr& e)
+    {
+      ElementId eid = e->getElementId();
+
+      ElementPtr ee = _map->getElement(eid);
+
+      if (ee->getTags().get("note") == _scenario)
+      {
+        if (ee->getStatus() == Status::Unknown1)
+        {
+          _e1.push_back(eid);
+        }
+        else if (ee->getStatus() == Status::Unknown2)
+        {
+          _e2.push_back(eid);
+        }
+      }
+      else
+      {
+        RecursiveElementRemover(eid).apply(_map);
+      }
+    }
+
+    virtual QString getDescription() const {return ""; }
+    virtual QString getName() const { return ""; }
+    virtual QString getClassName() const { return ""; }
+
+  private:
+
+    set<pair<ElementId, ElementId>> _pairs;
+    vector<ElementId> _e1, _e2;
+    OsmMapPtr _map;
+    QString _scenario;
+  };
+
+  set<pair<ElementId, ElementId>> _addPairs(QString scenario, OsmMapPtr map)
+  {
+    AddPairsVisitor v(map, scenario);
+    map->visitRw(v);
+    return v.getPairs();
   }
 };
 
