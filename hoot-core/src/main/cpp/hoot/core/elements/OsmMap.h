@@ -337,6 +337,11 @@ public:
 
 protected:
 
+  void _next() override;
+  void resetIterator() override;
+
+private:
+
   mutable std::shared_ptr<IdGenerator> _idGen;
 
   static std::shared_ptr<OGRSpatialReference> _wgs84;
@@ -398,9 +403,6 @@ protected:
   void _replaceNodeInRelations(long oldId, long newId);
 
   void _initCounters();
-
-  void _next() override;
-  void resetIterator() override;
 };
 
 using OsmMapPtr = std::shared_ptr<OsmMap>;

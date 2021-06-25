@@ -429,6 +429,7 @@ template <class KeyType, class DataType, class DistanceFunction>
 class FqTree
 {
 public:
+
   FqTree(int depth = -1)
   {
     _depth = depth;
@@ -472,7 +473,7 @@ public:
 
   QString toString() const { return _root->toString(); }
 
-protected:
+private:
 
   Node<KeyType, DataType>* _root;
 

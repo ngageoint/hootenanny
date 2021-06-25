@@ -63,7 +63,6 @@ public:
 protected:
 
   double _calculateDistance(const Tgs::BoxInternalData& box, int id) const override;
-
   double _calculateDistance(const Tgs::BoxInternalData& box) const override;
 
 private:

@@ -143,7 +143,7 @@ public:
    */
   bool coordsMatch(const Node& other) const;
 
-protected:
+private:
 
   friend class SharedPtrPool<Node>;
 

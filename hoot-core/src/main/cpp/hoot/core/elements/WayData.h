@@ -64,7 +64,7 @@ public:
   long getPid() const { return _pid; }
   void setPid(long pid) { _pid = pid; }
 
-protected:
+private:
 
   /** List of node IDs in the way */
   std::vector<long> _nodes;

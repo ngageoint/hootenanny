@@ -202,7 +202,7 @@ public:
 
   void setNodeFactory(const std::shared_ptr<NodeFactory>& nf) { _nf = nf; }
 
-protected:
+private:
 
   static int logWarnCount;
 

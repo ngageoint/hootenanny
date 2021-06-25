@@ -261,7 +261,6 @@ public:
 protected:
 
   ElementData& _getElementData() override { _makeWritable(); return *_wayData; }
-
   const ElementData& _getElementData() const override { return *_wayData; }
 
   void _makeWritable();
