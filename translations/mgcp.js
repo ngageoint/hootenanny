@@ -528,7 +528,7 @@ mgcp = {
     // Convert Rasilway guage widths
     if (attrs.GAW)
     {
-      attrs.GAW = number(attrs.GAW) * 1000; // Convert M to MM
+      attrs.GAW = Number(attrs.GAW) * 1000; // Convert M to MM
     }
 
   }, // End of applyToOsmPreProcessing
@@ -556,21 +556,11 @@ mgcp = {
 
       if (attrs.OSMTAGS)
       {
-        try
+        var tmp = translate.unpackText(attrs,'OSMTAGS',4);
+        for (var i in tmp)
         {
-          var tStr = attrs.OSMTAGS;
-          ['OSMTAGS2','OSMTAGS3','OSMTAGS4'].forEach( item => { if (attrs[item]) tStr = tStr.concat(attrs[item]); });
-
-          var tmp = JSON.parse(tStr);
-          for (var i in tmp)
-          {
-            if (tTags[i]) hoot.logWarn('Overwriting unpacked tag ' + i + '=' + tTags[i] + ' with ' + tmp[i]);
-            tTags[i] = tmp[i];
-          }
-        }
-        catch (error)
-        {
-          hoot.logError('Unable to parse OSM tags from one of the OSMTAGS attributes');
+          if (tTags[i]) hoot.logWarn('Overwriting unpacked tag ' + i + '=' + tTags[i] + ' with ' + tmp[i]);
+          tTags[i] = tmp[i];
         }
       }
 
@@ -2171,7 +2161,7 @@ mgcp = {
       if (~tags['gauge'].indexOf(';'))
       {
         notUsedTags.gauge = tags.gauge; // Save the raw value
-        tags.gauge = tags.['gauge'].split(';')[0]; // Grab the first value
+        tags.gauge = tags['gauge'].split(';')[0]; // Grab the first value
       }
 
       // Handle "standard" text values
@@ -2197,19 +2187,19 @@ mgcp = {
       // Now work on the numbers
       var gWidth = parseInt(tags.gauge,10);
 
-      if (!isNan(gWidth) && gWidth > 0)
+      if (!isNaN(gWidth) && gWidth > 0)
       {
         if (gWidth == 1435)
         {
-          attrs.RGC = 3;
+          attrs.RGC = '3';
         }
-        else if (gWidth < 1435)
+        else if (gWidth < 1435) // Narrow
         {
-          attrs.RGC = 2;
+          attrs.RGC = '2';
         }
         else
         {
-          attrs.RGC = 1;
+          attrs.RGC = '1';
         }
         attrs.GAW = (gWidth / 1000).toFixed(3);  // Convert to Metres
       }
@@ -2248,7 +2238,7 @@ mgcp = {
     // See if we have an o2s_X layer and try to unpack it
     if (layerName.indexOf('o2s_') > -1)
     {
-      tags = translate.parseO2S(attrs);
+      tags = translate.unpackText(attrs,'tag',4);
 
       // Add some metadata
       if (! tags.uuid)
@@ -2465,7 +2455,6 @@ mgcp = {
 
     // pre processing
     mgcp.applyToOgrPreProcessing(tags, attrs, geometryType);
-if (mgcp.configOut.OgrDebugDumptags == 'true') translate.debugOutput(tags,'',geometryType,elementType,'Tags after PreProc: ');
 
     // Make a copy of the input tags so we can remove them as they get translated. What is left is
     // the not used tags
@@ -2482,8 +2471,6 @@ if (mgcp.configOut.OgrDebugDumptags == 'true') translate.debugOutput(tags,'',geo
 
     // one 2 one
     translate.applyOne2One(notUsedTags, attrs, mgcp.lookup, mgcp.fcodeLookup, transMap);
-
-if (mgcp.configOut.OgrDebugDumptags == 'true') translate.debugOutput(notUsedTags,'',geometryType,elementType,'After one2one: Not used: ');
 
     // post processing
     // mgcp.applyToOgrPostProcessing(attrs, tableName, geometryType);
@@ -2536,10 +2523,13 @@ if (mgcp.configOut.OgrDebugDumptags == 'true') translate.debugOutput(notUsedTags
             var str = JSON.stringify(notUsedTags,Object.keys(notUsedTags).sort());
             if (mgcp.configOut.OgrFormat == 'shp')
             {
-              returnData[i]['attrs']['OSMTAGS'] = str.substring(0,225);
-              returnData[i]['attrs']['OSMTAGS2'] = str.substring(225,450);
-              returnData[i]['attrs']['OSMTAGS3'] = str.substring(450,675);
-              returnData[i]['attrs']['OSMTAGS4'] = str.substring(675,900);
+              // Split the tags into a maximum of 4 fields, each no greater than 225 char long.
+              var tList = translate.packText(notUsedTags,4,225);
+              returnData[i]['attrs']['OSMTAGS'] = tList[1];
+              for (var j = 2; j < 5; j++)
+              {
+                returnData[i]['attrs']['OSMTAGS' + j] = tList[j];
+              }
             }
             else
             {
@@ -2623,23 +2613,21 @@ if (mgcp.configOut.OgrDebugDumptags == 'true') translate.debugOutput(notUsedTags
         if (i.indexOf('hoot:') !== -1) delete tags[i];
       }
 
-      // var str = JSON.stringify(tags);
-      var str = JSON.stringify(tags,Object.keys(tags).sort());
-
       // Shapefiles can't handle fields > 254 chars
       // If the tags are > 254 char, split into pieces. Not pretty but stops errors
       // A nicer thing would be to arrange the tags until they fit neatly
       if (mgcp.configOut.OgrFormat == 'shp')
       {
+        var str = JSON.stringify(tags,Object.keys(tags).sort());
         // Throw a warning that text will get truncated.
         if (str.length > 900) hoot.logWarn('o2s tags truncated to fit in available space.');
 
-        // NOTE: if the start & end of the substring are grater than the length of the string, they get assigned to the length of the string
-        // which means that it returns an empty string.
-        attrs = {tag1:str.substring(0,225),
-          tag2:str.substring(225,450),
-          tag3:str.substring(450,675),
-          tag4:str.substring(675,900)};
+        attrs = {};
+        var tList = translate.packText(tags,4,225);
+        for (var i = 1; i < 5; i++)
+        {
+          attrs['tag'+i] = tList[i];
+        }
       }
       else
       {

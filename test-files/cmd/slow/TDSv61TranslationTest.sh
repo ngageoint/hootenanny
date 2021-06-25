@@ -16,7 +16,7 @@ HOOT_OPT="--debug -C Testing.conf"
 
 # Hoot options for debugging the test input and output
 # NOTE: This will generate HEAPS of output.
-# HOOT_OPT+=" -D ogr.debug.dumptags=true -D ogr.debug.lookupcolumn=true -D ogr.debug.lookupclash=true -D ogr.debug.dumpvalidate=true"
+#HOOT_OPT+=" -D ogr.debug.dumptags=true -D ogr.debug.lookupcolumn=true -D ogr.debug.lookupclash=true -D ogr.debug.dumpvalidate=true"
 
 # Script to compare shapefiles. NOTE: This might not run on Jenkins.
 COMPARE_SHAPE=$HOOT_HOME/scripts/util/CompareShapefiles.py
@@ -37,7 +37,7 @@ hoot diff  --error-limit 20 $outputDir/new_TDSv61.osm $inputDir/TDSv61.osm  || d
 # NOTE: These are 1 x FCODE / file and it assumes that the output dir doesn't have any shapefiles in it
 hoot convert $HOOT_OPT \
   -D schema.translation.script=$TRANS \
-  -D ogr.thematic.structure=false $outputDir/new_TDSv61.osm $outputDir".shp" # > tmp/TDSv61_to_TDS.txt
+  -D ogr.thematic.structure=false $outputDir/new_TDSv61.osm $outputDir".shp"  #> tmp/TDSv61_to_TDS.txt
 
 # Make shapefiles - Thematic
 # hoot convert-osm2ogr $HOOT_OPT $TRANS $outputDir/new_TDSv61.osm $outputDir/"new_files.shp" > tmp/TDSv61_to_TDS2.txt

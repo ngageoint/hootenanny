@@ -614,24 +614,13 @@ dnc = {
         }
       }
 
-
       if (attrs.OSMTAGS)
       {
-        try
+        var tmp = translate.unpackText(attrs,'OSMTAGS',4);
+        for (var i in tmp)
         {
-          var tStr = attrs.OSMTAGS;
-          ['OSMTAGS2','OSMTAGS3','OSMTAGS4'].forEach( item => { if (attrs[item]) tStr = tStr.concat(attrs[item]); });
-
-          var tmp = JSON.parse(tStr);
-          for (var i in tmp)
-          {
-            if (tTags[i]) hoot.logWarn('Overwriting unpacked tag ' + i + '=' + tTags[i] + ' with ' + tmp[i]);
-            tTags[i] = tmp[i];
-          }
-        }
-        catch (error)
-        {
-          hoot.logError('Unable to parse OSM tags from one of the OSMTAGS attributes');
+          if (tTags[i]) hoot.logWarn('Overwriting unpacked tag ' + i + '=' + tTags[i] + ' with ' + tmp[i]);
+          tTags[i] = tmp[i];
         }
       }
 
@@ -1355,7 +1344,7 @@ dnc = {
     // See if we have an o2s_X layer and try to unpack it
     if (layerName.indexOf('o2s_') > -1)
     {
-      tags = translate.parseO2S(attrs);
+      tags = translate.unpackText(attrs,'tag',4);
 
       // Add some metadata
       if (! tags.uuid)
@@ -1629,10 +1618,13 @@ dnc = {
             var str = JSON.stringify(notUsedTags,Object.keys(notUsedTags).sort());
             if (dnc.configOut.OgrFormat == 'shp')
             {
-              returnData[i]['attrs']['OSMTAGS'] = str.substring(0,225);
-              returnData[i]['attrs']['OSMTAGS2'] = str.substring(225,450);
-              returnData[i]['attrs']['OSMTAGS3'] = str.substring(450,675);
-              returnData[i]['attrs']['OSMTAGS4'] = str.substring(675,900);
+              // Split the tags into a maximum of 4 fields, each no greater than 225 char long.
+              var tList = translate.packText(notUsedTags,4,225);
+              returnData[i]['attrs']['OSMTAGS'] = tList[1];
+              for (var j = 2; j < 5; j++)
+              {
+                returnData[i]['attrs']['OSMTAGS' + j] = tList[j];
+              }
             }
             else
             {
@@ -1727,12 +1719,12 @@ dnc = {
         // Throw a warning that text will get truncated.
         if (str.length > 900) hoot.logWarn('o2s tags truncated to fit in available space.');
 
-        // NOTE: if the start & end of the substring are grater than the length of the string, they get assigned to the length of the string
-        // which means that it returns an empty string.
-        attrs = {tag1:str.substring(0,225),
-          tag2:str.substring(225,450),
-          tag3:str.substring(450,675),
-          tag4:str.substring(675,900)};
+        attrs = {};
+        var tList = translate.packText(tags,4,225);
+        for (var i = 1; i < 5; i++)
+        {
+          attrs['tag'+i] = tList[i];
+        }
       }
       else
       {
