@@ -34,7 +34,7 @@ namespace hoot
 {
 
 /**
- * This interface calculates the search radius for a given feature.
+ * @brief The SearchRadiusProvider class calculates the search radius for a given feature.
  */
 class SearchRadiusProvider
 {
@@ -44,12 +44,12 @@ public:
   virtual ~SearchRadiusProvider() = default;
 
   /**
-   * Optional init
+   * @brief init Optional init
    */
   virtual void init(const ConstOsmMapPtr& /*map*/) {}
 
   /**
-   * Returns the search radius for the given element.
+   * @brief calculateSearchRadius returns the search radius for the given element.
    */
   virtual Meters calculateSearchRadius(const ConstOsmMapPtr& map, const ConstElementPtr& e) = 0;
 };

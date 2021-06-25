@@ -36,9 +36,8 @@ namespace hoot
 {
 
 /**
- * Range of values. Min is inclusive. Max is inclusive.
+ * @brief The Range class is a range of values. Min is inclusive. Max is inclusive.
  */
-
 class Range
 {
 public:
@@ -46,25 +45,19 @@ public:
   static QString className() { return "hoot::Range"; }
 
   Range() = default;
-
   Range(long int min, long int max);
-
   virtual ~Range() = default;
 
   bool hashCode() const;
 
   bool operator>(const Range& r) const { return _min > r.getMin(); }
-
   bool operator<(const Range& r) const { return _min < r.getMin(); }
-
   bool operator<=(const Range& r) const { return operator <(r) || operator==(r); }
-
   bool operator==(const Range& r) const { return _min == r.getMin() && _max == r.getMax(); }
 
   bool in(long int l) const;
 
   bool isValid() const;
-
   void setInvalid();
 
   QString toString() const;
@@ -72,12 +65,12 @@ public:
   long calculateSize() const { return (_max - _min) + 1; }
 
   long int getMin() const { return _min; }
-
   long int getMax() const { return _max; }
 
   void set(long int min, long int max);
 
 private:
+
   long int _min;
   long int _max;
 };

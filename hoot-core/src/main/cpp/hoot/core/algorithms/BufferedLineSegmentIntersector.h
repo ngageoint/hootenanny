@@ -60,7 +60,7 @@ public:
   bool isWithinLineSegment(const geos::geom::LineSegment& ls, const geos::geom::Coordinate& c) const;
 
   /**
-   * @brief circleIntersection Intersect a circle with a line segment and returns the intersecting
+   * @brief circleIntersection intersects a circle with a line segment and returns the intersecting
    * points in p1 and p2.
    *
    * If there are no intersections then p1 and p2 are set to null. If there is only on intersection

@@ -37,7 +37,7 @@ namespace hoot
 {
 
 /**
- * Used to represent a bounding box in Z-Value space.
+ * @brief The LongBox class is used to represent a bounding box in Z-Value space.
  */
 class LongBox
 {
@@ -71,10 +71,6 @@ public:
 
   bool in(const std::vector<long int>& p) const;
 
-  /**
-   * @brief toString
-   * @return QString
-   */
   QString toString() const;
 
   long getWidth(int d) const;

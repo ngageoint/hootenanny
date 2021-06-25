@@ -40,9 +40,6 @@
 namespace hoot
 {
 
-/**
- *
- */
 class PermuteGridCalculator
 {
 public:
@@ -53,25 +50,26 @@ public:
   virtual ~PermuteGridCalculator() = default;
 
   /**
-   * Calculates a permutation grid and the values in that grid for a given envelope. The number of
-   * rows and columns are returned in rows and cols.
+   * @brief permute calculates a permutation grid and the values in that grid for a given envelope.
+   * @return The number of rows and columns are returned in rows and cols.
    */
   virtual cv::Mat permute(const geos::geom::Envelope& env, int& pointRows, int& pointCols) = 0;
 
   /**
-   * Seeds the permutation process. By default a seed is generated based on time. The seed should
-   * be non-negative or -1 to generate a seed based on time.
+   * @brief setSeed seeds the permutation process.
+   *
+   * By default a seed is generated based on time. The seed should be non-negative or -1 to generate
+   * a seed based on time.
    */
   void setSeed(int seed) { _seed = seed; }
-
   /**
-   * Sets the systematic error. This is the sigma value for Sx and Sy. The same sigma value is used
-   * for all values in each matrix. See [1] for more information.
+   * @brief setSystematicError sets the systematic error.
+   *
+   * This is the sigma value for Sx and Sy. The same sigma value is used for all values in each
+   * matrix. See [1] for more information.
    */
   void setSystematicError(Meters sigmaX, Meters sigmaY) { _sigmaSx = sigmaX; _sigmaSy = sigmaY; }
-
   void setCsmParameters(double D) { _D = D; }
-
   void setGridSpacing(Meters gridSpacing) { _gridSpacing = gridSpacing; }
 
 protected:

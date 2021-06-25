@@ -49,12 +49,6 @@ public:
   IdSwap() = default;
   IdSwap(ElementId id_1, ElementId id_2) { add(id_1, id_2); }
 
-  /**
-   * @brief add
-   * @param type
-   * @param id_1
-   * @param id_2
-   */
   void add(ElementId id_1, ElementId id_2);
   /**
    * @brief begin Begin iterator

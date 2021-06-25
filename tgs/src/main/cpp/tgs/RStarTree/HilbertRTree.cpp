@@ -41,7 +41,9 @@
 #include <tgs/Statistics/Random.h>
 
 using namespace std;
-using namespace Tgs;
+
+namespace Tgs
+{
 
 HilbertRTree::HilbertRTree(const std::shared_ptr<PageStore>& ps, int dimensions) :
   RStarTree(ps, dimensions),
@@ -537,4 +539,6 @@ double HilbertRTree::_swapGrandChildNodes(int parentId, const std::vector<double
   }
 
   return result;
+}
+
 }

@@ -35,9 +35,7 @@ namespace hoot
 {
 
 /**
- * @brief The WordWeightDictionary class
- *
- * Return the weight of a given word.
+ * @brief The WordWeightDictionary class returns the weight of a given word.
  */
 class WordWeightDictionary
 {

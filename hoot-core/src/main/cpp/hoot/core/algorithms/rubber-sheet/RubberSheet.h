@@ -60,12 +60,12 @@ public:
   static QString className() { return "hoot::RubberSheet"; }
 
   /**
-   * If this configuration setting is set to true then the first layer is treated as the reference
-   * layer and will not be moved.
+   * @brief refKey If this configuration setting is set to true then the first layer is treated as
+   * the reference layer and will not be moved.
    */
   static QString refKey() { return "rubber.sheet.ref"; }
   /**
-   * If this is true then debug tags will be added to the output file.
+   * @brief debugKey If this is true then debug tags will be added to the output file.
    */
   static QString debugKey() { return "rubber.sheet.debug"; }
 
@@ -95,59 +95,47 @@ public:
   void setConfiguration(const Settings& conf) override;
 
   /**
-   * Applies a perviously calculated or loaded transform to the specified map
-   *
+   * @brief applyTransform applies a perviously calculated or loaded transform to the specified map.
    * @param map the map to apply the transform to
    * @return true if the operation succeeded; false otherwise
    */
   bool applyTransform(std::shared_ptr<OsmMap>& map);
-
   /**
-   * Calculates an appropriate transform for the specified map, but does not change any data
-   *
+   * @brief calculateTransform calculates an appropriate transform for the specified map, but does
+   * not change any data.
    * @param map the map to calculate the transform for
    * @return true if the operation succeeded; false otherwise
    */
   bool calculateTransform(std::shared_ptr<OsmMap>& map);
 
   /**
-   * Reads the data necessary to perform a transform from unknown1 to unknown2.
+   * @brief readTransform1to2 reads the data necessary to perform a transform from unknown1 to
+   * unknown2.
    */
   void readTransform1to2(QIODevice& is) { _interpolator1to2 = _readInterpolator(is); }
-
   /**
-   * Reads the data necessary to perform a transform from unknown1 to unknown2.
+   * @brief readTransform2to1 reads the data necessary to perform a transform from unknown1 to
+   * unknown2.
    */
   void readTransform2to1(QIODevice& is) { _interpolator2to1 = _readInterpolator(is); }
-
   /**
-   * Writes out the data necessary to perform a transform from unknown1 to unknown2.
+   * @brief writeTransform1to2 writes out the data necessary to perform a transform from unknown1 to
+   * unknown2.
    */
   void writeTransform1to2(QIODevice& os) const { _writeInterpolator(_interpolator1to2, os); }
-
   /**
-   * Writes out the data necessary to perform a transform from unknown1 to unknown2.
+   * @brief writeTransform2to1 writes out the data necessary to perform a transform from unknown1 to
+   * unknown2.
    */
   void writeTransform2to1(QIODevice& os) const { _writeInterpolator(_interpolator2to1, os); }
 
   /**
-   * Calculates the distances between each of the rubber sheet's tie points
-   *
+   * @brief calculateTiePointDistances calculates the distances between each of the rubber sheet's
+   * tie points.
    * @return a collection of distance values
    * @throws HootException if the tie points have not been created
    */
    std::vector<double> calculateTiePointDistances();
-
-   void setReference(bool ref) { _ref = ref; }
-   void setDebug(bool debug) { _debug = debug; }
-   void setMinimumTies(int minTies) { _minimumTies = minTies; }
-   void setFailWhenMinimumTiePointsNotFound(bool fail) { _failWhenMinTiePointsNotFound = fail; }
-   void setLogWarningWhenRequirementsNotFound(bool logWarning)
-   { _logWarningWhenRequirementsNotFound = logWarning; }
-   void setMaxAllowedWays(int max) { _maxAllowedWays = max; }
-   void setCriteria(const QStringList& criteria, OsmMapPtr map = OsmMapPtr());
-
-   QString getDescription() const override { return "Applies rubber sheeting to a map"; }
 
    /**
     * @see FilteredByGeometryTypeCriteria
@@ -155,8 +143,8 @@ public:
    QStringList getCriteria() const override;
 
    QString getName() const override { return className(); }
-
    QString getClassName() const override { return className(); }
+   QString getDescription() const override { return "Applies rubber sheeting to a map"; }
 
    /**
     * @see OperationStatus
@@ -172,6 +160,15 @@ public:
        "Rubbersheeted " + StringUtils::formatLargeNumber(_numAffected) + " / " +
        StringUtils::formatLargeNumber(_numProcessed) + " linear features.";
    }
+
+   void setReference(bool ref) { _ref = ref; }
+   void setDebug(bool debug) { _debug = debug; }
+   void setMinimumTies(int minTies) { _minimumTies = minTies; }
+   void setFailWhenMinimumTiePointsNotFound(bool fail) { _failWhenMinTiePointsNotFound = fail; }
+   void setLogWarningWhenRequirementsNotFound(bool logWarning)
+   { _logWarningWhenRequirementsNotFound = logWarning; }
+   void setMaxAllowedWays(int max) { _maxAllowedWays = max; }
+   void setCriteria(const QStringList& criteria, OsmMapPtr map = OsmMapPtr());
 
 private:
 

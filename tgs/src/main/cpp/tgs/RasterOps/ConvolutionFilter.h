@@ -28,7 +28,7 @@
 #ifndef CONVOLUTIONFILTER_H
 #define CONVOLUTIONFILTER_H
 
-namespace tgs
+namespace Tgs
 {
 
 class ConvolutionFilter

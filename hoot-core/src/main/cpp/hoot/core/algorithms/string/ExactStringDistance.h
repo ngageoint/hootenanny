@@ -40,7 +40,8 @@ namespace hoot
 {
 
 /**
- * Returns 1 if the strings match exactly (ignoring case) and 0 otherwise.
+ * @brief The ExactStringDistance class returns 1 if the strings match exactly (ignoring case) and 0
+ * otherwise.
  */
 class ExactStringDistance : public StringDistance
 {
@@ -56,9 +57,7 @@ public:
   QString toString() const override { return "ExactStringDistance"; }
 
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
-
   QString getDescription() const override
   { return "Returns a matching string comparison score only if the strings match exactly (ignoring case)"; }
 };

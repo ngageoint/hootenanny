@@ -41,9 +41,10 @@ namespace hoot
 {
 
 /**
- * @brief The TextFileWordWeightDictionary class
+ * @brief The TextFileWordWeightDictionary class performs a lazy read of a sorted word weight
+ * dictionary file.
  *
- * Performs a lazy read of a sorted file where the format is:
+ * The file format is:
  *
  * Total word count: 787892387
  *
@@ -64,14 +65,15 @@ namespace hoot
 class TextFileWordWeightDictionary : public WordWeightDictionary
 {
 public:
+
   TextFileWordWeightDictionary(const QString& filePath);
   ~TextFileWordWeightDictionary() = default;
 
   double getMinWeight() const override { return 1.0 / (double)_count; }
-
   double getWeight(const QString& word) const override;
 
 private:
+
   // some white box testing.
   friend class TextFileWordWeightDictionaryTest;
 

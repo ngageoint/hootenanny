@@ -40,30 +40,24 @@ public:
   static QString className() { return "hoot::BBox"; }
 
   BBox(const std::vector<double>& min, const std::vector<double>& max);
-
   BBox(const geos::geom::Envelope& envelope);
-
   virtual ~BBox();
 
   int getDimensions() const { return _max.size(); }
 
   std::vector<double> getMax() const { return _max; }
-
   std::vector<double> getMin() const { return _min; }
 
   bool in(const std::vector<double>& p) const;
 
   bool intersects(const BBox& b) const;
 
-  /**
-   * @brief toString
-   * @return QString
-   */
   QString toString() const;
 
   double getWidth(int d) const;
 
 private:
+
   void _check() const;
   std::vector<double> _min;
   std::vector<double> _max;

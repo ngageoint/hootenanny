@@ -38,9 +38,14 @@ class OsmMap;
 class Way;
 
 /**
- * This class is designed for splitting ways that are too large into smaller ways. If the
- * way length is greater than threshold into an number of equal sized pieces that are smaller than
- * threshold.
+ *
+ */
+/**
+ * @brief The LargeWaySplitter class is designed for splitting ways that are too large into smaller
+ * ways.
+ *
+ * If the way length is greater than threshold, it is split into an number of equal sized pieces
+ * that are smaller than threshold.
  */
 class LargeWaySplitter
 {
@@ -55,8 +60,8 @@ public:
   void apply(const std::shared_ptr<OsmMap>& map);
 
   /**
-   * Split large ways into smaller ways.
-   * @param threshold - The threshold length. This projection units.
+   * @brief splitWays splist large ways into smaller ways.
+   * @param threshold the threshold length.
    */
   static void splitWays(const std::shared_ptr<OsmMap>& map, double threshold);
 

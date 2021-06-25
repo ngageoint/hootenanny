@@ -49,8 +49,8 @@ namespace hoot
 class MatchCreator;
 
 /**
- * Caches conflatable elements, their relationships with other elements, and conflation
- * configuration details that may aid in speeding up conflation jobs.
+ * @brief The ConflateInfoCache class caches conflatable elements, their relationships with other
+ * elements, and conflation configuration details that may aid in speeding up conflation jobs.
  *
  * This is generally expected to be initialized separately for each section of the code using it. It
  * is done this way rather than implementing a Singleton or using global static instances, since
@@ -85,8 +85,7 @@ public:
   void setConfiguration(const Settings& conf) override;
 
   /**
-   * Returns the distance between two elements; backed by a cache
-   *
+   * @brief getDistance returns the distance between two elements; backed by a cache.
    * @param element1 the first element to measure distance from
    * @param element2 the second element to measure distance from
    * @return the distance between the two elements or -1.0 if the distance could not be calculated
@@ -94,20 +93,18 @@ public:
   double getDistance(const ConstElementPtr& element1, const ConstElementPtr& element2);
 
   /**
-   * Calculates the area of an element; backed by a cache
-   *
+   * @brief getArea calculates the area of an element; backed by a cache.
    * @param element the feature to calculate the area of
    * @return the area of the feature or -1.0 if the area could not be calculated
    */
   double getArea(const ConstElementPtr& element);
 
   /**
-   * Determines if an element contains another element geographically
+   * @brief elementContains determines if an element contains another element geographically.
    *
    * Unlike ElementGeometryUtils::haveGeometricRelationship, this backs the element to geometry
    * conversion with a cache. This will contribute to increased runtime performance if the same
    * elements are being used in a comparison many times within the same conflate job.
-   *
    * @param containingElement the element to check for containing containedElement
    * @param containedElement the element to check if contained by containingElement
    * @return true if containingElement contains the containedElement geographicaly; false otherwise
@@ -117,12 +114,12 @@ public:
                        const ConstElementPtr& containedElement);
 
   /**
-   * Determines if an element intersects another element; backed by a cache
+   * @brief elementsIntersect determines if an element intersects another element; backed by a
+   * cache.
    *
    * Unlike ElementGeometryUtils::haveGeometricRelationship, this backs the element to geometry
    * conversion with a cache. This will contribute to increased runtime performance if the same
    * elements are being used in a comparison many times within the same conflate job.
-   *
    * @param element1 the first element to examine
    * @param element2 the second element to examine
    * @return true if the two elements intersect; false otherwise or if the intersection could not
@@ -131,12 +128,11 @@ public:
   bool elementsIntersect(const ConstElementPtr& element1, const ConstElementPtr& element2);
 
   /**
-   * Determines if an element has a given criterion; backed by a cache
+   * @brief hasCriterion determines if an element has a given criterion; backed by a cache.
    *
    * Unlike CriterionUtils::hasCriterion, this backs the criterion creation with a cache. This will
    * contribute to increased runtime performance if the same elements are being used in a comparison
    * many times within the same conflate job.
-   *
    * @param element the element to examine
    * @param criterionClassName class name of the ElementCriterion to determine membership of
    * @return true if the element has the criterion; false otherwise
@@ -145,17 +141,15 @@ public:
   bool hasCriterion(const ConstElementPtr& element, const QString& criterionClassName);
 
   /**
-   * Returns the number of addresses contained by an element; backed by a cache
-   *
+   * @brief numAddresses returns the number of addresses contained by an element; backed by a cache.
    * @param element the element to examine
    * @return a number of addresses
    */
   int numAddresses(const ConstElementPtr& element);
 
   /**
-   * Determines if one element a child of another; e.g. way node or relation member; backed by a
-   * cache
-   *
+   * @brief containsMember determines if one element a child of another; e.g. way node or relation
+   * member; backed by a cache.
    * @param parent the parent element
    * @param memberId the element ID of the child
    * @return true if parent has the element with memberId as a child; false otherwise
@@ -163,19 +157,18 @@ public:
   bool containsMember(const ConstElementPtr& parent, const ElementId& memberId) const;
 
   /**
-   * Clears the contents of the cache
+   * @brief clear clears the contents of the cache.
    */
   virtual void clear();
 
   /**
-   * Prints information about the caches used by this class
+   * @brief printCacheInfo prints information about the caches used by this class.
    */
   void printCacheInfo();
 
   /**
-   * Determines if an element can be conflated by any of the actively configured matchers for
-   * conflation.
-   *
+   * @brief elementCanBeConflatedByActiveMatcher determines if an element can be conflated by any of
+   * the actively configured matchers for conflation.
    * @param element element to examine
    * @param caller optional name of the class calling this method for debugging purposes
    * @return true if the conflate matchers are configured with at least one matcher that
@@ -183,10 +176,9 @@ public:
    */
   bool elementCanBeConflatedByActiveMatcher(
     const ConstElementPtr& element, const QString& caller = QString());
-
   /**
-   * Determines if a ConflatableCriterion is in use by any actively configured conflate matcher
-   *
+   * @brief elementCriterionInUseByActiveMatcher determines if a ConflatableCriterion is in use by
+   * any actively configured conflate matcher.
    * @param criterionClassName class name of the criterion
    * @return true if an active matcher uses the criterion with the specified name; false otherwise
    */

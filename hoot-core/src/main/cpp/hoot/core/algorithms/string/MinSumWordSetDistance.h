@@ -35,19 +35,18 @@ namespace hoot
 {
 
 /**
- * See ScoreMatrix::minSumScore for details.
+ * @see ScoreMatrix::minSumScore for details.
  */
 class MinSumWordSetDistance : public StringDistance, public StringDistanceConsumer,
   public Configurable
 {
 public:
 
+  MinSumWordSetDistance() = default;
   /**
    * @param d Takes ownership of d.
    */
   MinSumWordSetDistance(StringDistancePtr d);
-
-  MinSumWordSetDistance() = default;
   ~MinSumWordSetDistance() = default;
 
   static QString className() { return "hoot::MinSumWordSetDistance"; }
@@ -60,11 +59,8 @@ public:
 
   QString toString() const override
   { return QString("MinSumWordSetDistance %1 %2").arg(_p).arg(_d->toString()); }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
-
   QString getDescription() const override
   { return "Returns a string comparison score based on Minimum Sum Wordset Distance"; }
 

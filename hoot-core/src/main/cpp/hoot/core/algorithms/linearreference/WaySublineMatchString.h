@@ -42,7 +42,8 @@ namespace hoot
 class WaySublineCollection;
 
 /**
- * Contains multiple WaySublineMatches. The matches must not overlap.
+ * @brief The WaySublineMatchString class contains multiple WaySublineMatches. The matches must not
+ * overlap.
  *
  * @todo this is a brittle way of handling the problem. Changing any way will break the matches.
  * In the future we should entertain switching to WayMatchStringMapping.
@@ -57,26 +58,25 @@ public:
 
   WaySublineMatchString() = default;
   /**
-   * Makes a new WaySublineMatchString where all the WayLocations are remapped to reference the
-   * new map.
+   * @brief WaySublineMatchString Constructor - Makes a new WaySublineMatchString where all the
+   * WayLocations are remapped to reference the new map.
    */
   WaySublineMatchString(const WaySublineMatchString& other, const OsmMapPtr& newMap);
   WaySublineMatchString(const MatchCollection& m);
 
   /**
-   * Returns true if one or more sublines in all the matches are contained by this
+   * @brief contains returns true if one or more sublines in all the matches are contained by this
    * WaySublineMatchString. This is most useful when calculating conflicts.
    */
   bool contains(const WaySublineMatchString& other) const;
-
   /**
-   * Returns true if one or more of the sublines in the match are contained by this
+   * @brief contains returns true if one or more of the sublines in the match are contained by this
    * WaySublineMatchString. This is most useful when calculating conflicts.
    */
   bool contains(const WaySublineMatch& other) const;
 
   /**
-   * Returns the mean of the length of getSublineString1().getLength() and
+   * @brief getLength returns the mean of the length of getSublineString1().getLength() and
    * getSublineString2().getLength().
    */
   Meters getLength() const;
@@ -88,33 +88,32 @@ public:
   std::vector<bool> getReverseVector2() const;
 
   /**
-   * Returns the string of sublines that represent the first match.
+   * @brief getSublineString1 returns the string of sublines that represent the first match.
    */
   WaySublineCollection getSublineString1() const;
-
   /**
-   * Returns the string of sublines that represent the second match.
+   * @brief getSublineString2 returns the string of sublines that represent the second match.
    */
   WaySublineCollection getSublineString2() const;
 
   /**
-   * Returns true if there is no match.
+   * @brief isEmpty returns true if there is no match.
    */
   bool isEmpty() const { return _matches.size() == 0; }
 
   /**
-   * Returns true if there is more than one match and they're all non-zero length.
+   * @brief isValid returns true if there is more than one match and they're all non-zero length.
    */
   bool isValid() const;
 
   /**
-   * This method really shouldn't be necessary. It removes any matches between zero-length ways
-   * and other ways. See #4593
+   * @brief removeEmptyMatches really shouldn't be necessary. It removes any matches between
+   * zero-length ways and other ways. See Redmine #4593
    */
   void removeEmptyMatches();
 
   /**
-   * Returns true if any part of this matches other.
+   * @brief touches returns true if any part of this matches other.
    */
   bool touches(const WaySublineMatchString& other) const;
 

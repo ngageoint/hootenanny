@@ -1,0 +1,42 @@
+
+== Code Documentation
+
+Class documentation is used to build displayable documentation with doxygen. At a minimum, all 
+public class members that are not simple getters or setters should be documented. Protected/private 
+members may be documented on an as needed basis but will not be documented by doxygen. Qt Creator 
+will autocreate documentation templates for classes and method when you type `/**` and press enter.
+
+Class documentation should look something like this:
+
+-----
+@brief The WaySublineRemover class removes a sublines from ways.
+
+Optional other info a couple lines down...
+-----
+
+Public bethod documentation should look something like this:
+
+-----
+/**
+  * @brief removeSubline removes a subline from a way.
+   
+    Optional other info a couple lines down...
+  * @param way the way to modify
+  * @param subline the subline in the way to remove
+  * @param map the map owning the way
+  * @return IDs of the ways created and added back to the map as a result of the subline removal
+  */
+  static std::vector<ElementId> removeSubline(
+    const WayPtr& way, const WaySubline& subline, OsmMapPtr& map);
+-----
+
+Public variable documentation should look something like this:
+
+-----
+/** This integer variable is documented. */
+static int MY_INT;
+
+/// This integer variable is documented.
+static int MY_INT;
+----
+

@@ -38,7 +38,7 @@ namespace hoot
 {
 
 /**
- * A command that operates within a bounds
+ * @brief The BoundedCommand class is a command that operates within a bounds.
  */
 class BoundedCommand : public BaseCommand
 {

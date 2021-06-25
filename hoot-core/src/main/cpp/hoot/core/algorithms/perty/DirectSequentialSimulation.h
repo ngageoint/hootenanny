@@ -36,9 +36,6 @@
 namespace hoot
 {
 
-/**
- *
- */
 class DirectSequentialSimulation : public PermuteGridCalculator
 {
 public:

@@ -46,16 +46,15 @@ namespace hoot
 class PermuteGridCalculator;
 
 /**
- * Performs a perty style permutation on the data. The specifics of which operations are performed
- * can be specified via the "perty.ops" configuration setting.
+ * @brief The PertyOp class performs a perty style permutation on the data.
  *
- * The geometry permutations are done in accordance with [1].
+ * The specifics of which operations are performed can be specified via the "perty.ops"
+ * configuration setting. The geometry permutations are done in accordance with [1].
  *
  * 1. Evaluating conflation methods using uncertainty modeling - Peter Doucette, et al. 2013
  *    https://github.com/ngageoint/hootenanny/files/609201/2013.Evaluating.conflation.methods.using.uncertainty.modeling.pdf
  *    http://proceedings.spiedigitallibrary.org/proceeding.aspx?articleid=1691369
- *
- * TODO: implement OperationStatus
+ * @todo implement OperationStatus
  */
 class PertyOp : public OsmMapOperation, public Configurable
 {
@@ -69,42 +68,39 @@ public:
   void setConfiguration(const Settings& conf) override;
 
   /**
-   * Permute the map and then apply all "perty.ops" to the map as well.
+   * @brief Permute the map and then apply all "perty.ops" to the map as well.
+   * @see OsmMapOperation
    */
   void apply(std::shared_ptr<OsmMap>& map) override;
 
   /**
-   * Generates a map of all the grid offset vectors and permutes the given map.
+   * @brief generateDebugMap generates a map of all the grid offset vectors and permutes the given
+   * map.
    */
   std::shared_ptr<OsmMap> generateDebugMap(std::shared_ptr<OsmMap>& map);
 
   void permute(const std::shared_ptr<OsmMap>& map);
 
   void setCsmParameters(double D) { _D = D; }
-
   void setGridSpacing(Meters gridSpacing) { _gridSpacing = gridSpacing; }
-
   /**
-   * Sets a list of operations that should be run after the permute method is called.
+   * @brief setNamedOps sets a list of operations that should be run after the permute method is
+   * called.
    */
   void setNamedOps(QStringList namedOps) { _namedOps = namedOps; }
-
   /**
-   * Seeds the permutation process. By default a seed is generated based on time. The seed should
-   * be non-negative or -1 to generate a seed based on time.
+   * @brief setSeed seeds the permutation process. By default a seed is generated based on time. The
+   * seed should be non-negative or -1 to generate a seed based on time.
    */
   void setSeed(int seed) { _seed = seed; }
-
   /**
-   * Sets the systematic error. This is the sigma value for Sx and Sy. The same sigma value is used
-   * for all values in each matrix. See [1] for more information.
+   * @brief setSystematicError sets the systematic error. This is the sigma value for Sx and Sy. The
+   * same sigma value is used for all values in each matrix. See [1] for more information.
    */
   void setSystematicError(Meters sigmaX, Meters sigmaY) { _sigmaSx = sigmaX; _sigmaSy = sigmaY; }
 
   QString getDescription() const override { return "Perturbs map data"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 
 private:
