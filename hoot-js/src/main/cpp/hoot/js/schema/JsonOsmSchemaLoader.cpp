@@ -154,7 +154,8 @@ QStringList JsonOsmSchemaLoader::_asStringList(const QVariant& v) const
   return result;
 }
 
-void JsonOsmSchemaLoader::_loadAssociatedWith(SchemaVertex& tv, const QVariant& v, OsmSchema& s)
+void JsonOsmSchemaLoader::_loadAssociatedWith(
+  SchemaVertex& tv, const QVariant& v, OsmSchema& s) const
 {
   if (v.type() != QVariant::List)
   {
