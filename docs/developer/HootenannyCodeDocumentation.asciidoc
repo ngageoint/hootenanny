@@ -23,7 +23,7 @@ Removes a sublines from ways.
 Optional other info a couple lines down...
 -----
 
-Public bethod documentation should look something like this:
+Method documentation should look something like this:
 
 -----
 /**
@@ -55,7 +55,7 @@ It will also work without @brief:
     const WayPtr& way, const WaySubline& subline, OsmMapPtr& map);
 -----
 
-Public variable documentation should look something like this:
+Variable documentation should look something like this:
 
 -----
 /** This integer variable is documented. */

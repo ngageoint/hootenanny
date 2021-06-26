@@ -32,12 +32,12 @@
 #include <hoot/core/visitors/ConstElementVisitor.h>
 #include <hoot/core/info/SingleStatistic.h>
 
-/**
- * A visitor for finding the worst circular error among elements. Worst = greatest.
- */
 namespace hoot
 {
 
+/**
+ * A visitor for finding the worst circular error among elements. Worst = greatest.
+ */
 class WorstCircularErrorVisitor : public ConstElementVisitor, public SingleStatistic
 {
 public:
@@ -55,17 +55,13 @@ public:
 
   // Convenient way to get worst circular error
   static Meters getWorstCircularError(const OsmMapPtr& map);
-
   // Handle const pointers to const
   static Meters getWorstCircularError(const ConstOsmMapPtr& map);
-
   static Meters getWorstCircularError(const std::vector<ElementPtr>& elements);
 
   QString getDescription() const override
   { return "Determines the highest circular error value"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 
 private:

@@ -36,14 +36,17 @@
 #include <tgs/RStarTree/MemoryPageStore.h>
 #include <tgs/RStarTree/RTreeNodeStore.h>
 
-using namespace Tgs;
+namespace Tgs
+{
 
 class RTreeNodeStoreTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(RTreeNodeStoreTest);
   CPPUNIT_TEST(test1);
   CPPUNIT_TEST_SUITE_END();
+
 public:
+
   void test1()
   {
     std::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(100));
@@ -63,3 +66,5 @@ public:
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(RTreeNodeStoreTest, PluginFactory::testName());
+
+}

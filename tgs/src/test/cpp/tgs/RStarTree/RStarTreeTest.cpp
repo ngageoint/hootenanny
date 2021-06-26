@@ -47,7 +47,8 @@
 #include <tgs/RStarTree/KnnIterator.h>
 #include <tgs/Statistics/Random.h>
 
-using namespace Tgs;
+namespace Tgs
+{
 
 class RStarTreeTest : public CppUnit::TestFixture
 {
@@ -336,3 +337,5 @@ public:
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(RStarTreeTest, PluginFactory::testName());
+
+}

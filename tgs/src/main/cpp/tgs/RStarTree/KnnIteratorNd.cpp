@@ -39,7 +39,8 @@
 
 #include <tgs/TgsException.h>
 
-using namespace Tgs;
+namespace Tgs
+{
 
 static inline double min(double a, double b) { return a < b ? a : b; }
 static inline double max(double a, double b) { return a > b ? a : b; }
@@ -345,4 +346,6 @@ void KnnIteratorNd::reset(const std::vector<double>& point)
     _knnLeafHeap.pop();
   }
   _knnSearchQueue.push(_createNodeDistance(-1, _searchTree->getRoot()->getId()));
+}
+
 }
