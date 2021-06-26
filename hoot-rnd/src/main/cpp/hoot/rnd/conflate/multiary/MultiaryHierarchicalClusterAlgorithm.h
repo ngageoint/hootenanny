@@ -67,7 +67,8 @@ public:
    */
   QList<ClusterLinkPtr> takeReviews() override;
 
-protected:
+private:
+
   MatchThreshold _matchThreshold;
 
   /**
@@ -84,7 +85,6 @@ protected:
    */
   void _initializeClusters(OsmMapPtr map,
     std::set<std::pair<ElementId, ElementId>>& pairs);
-
 };
 
 }

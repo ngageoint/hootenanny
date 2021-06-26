@@ -31,6 +31,9 @@
 #include <string>
 #include <vector>
 
+namespace Tgs
+{
+
 class CslUtilities
 {
 public:
@@ -42,5 +45,7 @@ public:
    */
   static std::vector<float> readCostMatrix(std::string filename);
 };
+
+}
 
 #endif // CSLUTILITIES_H

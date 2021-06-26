@@ -85,7 +85,7 @@ public:
 
   void setIgnoreStatus(bool ignore) { _ignoreStatus = ignore; }
 
-protected:
+private:
 
   std::shared_ptr<OsmMap> _map;
 

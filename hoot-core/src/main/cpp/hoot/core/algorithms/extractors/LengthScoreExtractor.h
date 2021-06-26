@@ -32,24 +32,18 @@
 namespace hoot
 {
 
-/**
- * See the exploratory funds report for details.
- */
 class LengthScoreExtractor : public WayFeatureExtractor
 {
 public:
 
   static QString className() { return "hoot::LengthScoreExtractor"; }
 
-  LengthScoreExtractor(ValueAggregatorPtr wayAgg);
-
   LengthScoreExtractor() = default;
+  LengthScoreExtractor(ValueAggregatorPtr wayAgg);
   ~LengthScoreExtractor() = default;
 
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
-
   QString getDescription() const override
   { return "Calculates a score based on the length of a match between way features"; }
 

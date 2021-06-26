@@ -49,6 +49,9 @@
 
 using Real = double;
 
+namespace Tgs
+{
+
 class Vector2d
 {
 public:
@@ -235,6 +238,8 @@ inline int Line::classify(const Point2d& p) const
 {
   Real d = eval(p);
   return (d < -EPS) ? -1 : (d > EPS ? 1 : 0);
+}
+
 }
 
 #endif

@@ -42,12 +42,12 @@ namespace hoot
 
 ParallelBoundedApiReader::ParallelBoundedApiReader(bool useOsmApiBboxFormat, bool addProjection)
   : _dataType(DataType::Text),
+    _coordGridSize(ConfigOptions().getReaderHttpBboxMaxSize()),
+    _threadCount(ConfigOptions().getReaderHttpBboxThreadCount()),
     _totalResults(0),
     _totalEnvelopes(0),
     _bboxContinue(true),
-    _coordGridSize(ConfigOptions().getReaderHttpBboxMaxSize()),
     _maxGridSize(ConfigOptions().getReaderHttpBboxMaxDownloadSize()),
-    _threadCount(ConfigOptions().getReaderHttpBboxThreadCount()),
     _fatalError(false),
     _useOsmApiBboxFormat(useOsmApiBboxFormat),
     _addProjection(addProjection),

@@ -73,7 +73,6 @@ namespace Tgs
      * @brief BaseRandomForest constructor
      */
     BaseRandomForest();
-
     /**
      * @brief ~BaseRandomForest destructor
      */
@@ -231,13 +230,15 @@ namespace Tgs
     std::vector<std::shared_ptr<RandomTree>> _forest; /// A container for the random forest
 
     unsigned int _numSplitFactors;  /// The number of factors to test to split a node
-    unsigned int _nodeSize;  /// The minimum number of data vectors in a set to split a node
     std::vector<std::string> _factorLabels; /// Labels for all the factors used in training.
 
     static TrainingInputs _trainInputs;  ///The inputs used by the map function train
 
     bool _forestCreated;  /// A flag to indicate if the forest was created successfully
 
+  private:
+
+    unsigned int _nodeSize;  /// The minimum number of data vectors in a set to split a node
   };
 }
 

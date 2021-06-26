@@ -37,7 +37,7 @@ namespace hoot
 {
 
 /**
- * General utilities to be used with conflation
+ * @brief The ConflateUtils class contains general utilities to be used with conflation.
  */
 class ConflateUtils
 {
@@ -45,8 +45,7 @@ class ConflateUtils
 public:
 
   /**
-   * Writes any data that cannot be conflated
-   *
+   * @brief writeNonConflatable writes any data that cannot be conflated.
    * @param map the map to examine
    * @param output the URL to write the data to
    * @param ignoreGenericConflators if enabled, elements conflatable only by generic conflators
@@ -57,8 +56,7 @@ public:
     const ConstOsmMapPtr& map, const QString& output, const bool ignoreGenericConflators = false);
 
   /**
-   * Writes the differential between two maps
-   *
+   * @brief writeDiff writes the differential between two maps.
    * @param mapUrl1 map 1 URL
    * @param mapUrl2 map 2 URL
    * @param bounds the area over which to calculate the differential
@@ -69,8 +67,7 @@ public:
     QString& output);
 
   /**
-   * Determines if the Network road conflate algorithm is activated
-   *
+   * @brief isNetworkConflate determines if the Network road conflate algorithm is activated.
    * @return true if Network road conflation is enabled; false otherwise
    */
   static bool isNetworkConflate();

@@ -33,7 +33,7 @@ namespace hoot
 {
 
 /**
- * A SublineMatcher facade for MaximalSubline.
+ * @brief The MaximalSublineMatcher class is a SublineMatcher facade for MaximalSubline.
  */
 class MaximalSublineMatcher : public SublineMatcher
 {

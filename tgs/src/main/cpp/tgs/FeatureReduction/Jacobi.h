@@ -35,7 +35,19 @@
 
 #define DSIGNIF 64
 
-/**
+namespace Tgs
+{
+
+/*====================================Jacobi================================
+This code was taken from the newmat11 beta library.  I wanted to turn off
+the sorting of the eigenvalues and vectors without altering the original 
+library.
+
+/// Eigen value decomposition using Jacobi method.
+
+// Copyright (C) 1991,2,3,4: R B Davies
+// Altered by Jason Goffeney SPADAC 2008.
+
  * @license http://www.robertnz.net/nm10.htm
  * @author newmat11
  * http://www.robertnz.net/nm_intro.htm
@@ -65,20 +77,6 @@
  * Davies) take no responsibility for any errors or omissions in this package or for any misfortune
  * that may befall you or others as a result of your use, distribution or other dealings with it.
  */
-
-namespace Tgs
-{
-
-/*====================================Jacobi================================
-This code was taken from the newmat11 beta library.  I wanted to turn off
-the sorting of the eigenvalues and vectors without altering the original 
-library.
-
-/// Eigen value decomposition using Jacobi method.
-
-
-// Copyright (C) 1991,2,3,4: R B Davies
-// Altered by Jason Goffeney SPADAC 2008.
 */
 class Jacobi
 {

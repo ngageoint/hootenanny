@@ -178,7 +178,7 @@ private:
   void _cleanSeparateOutput(const QStringList& inputs, std::shared_ptr<Progress> progress) const
   {
     // (import, export, and cleaning tasks) * number of inputs
-    const float numTasks = 3.0 * (float)inputs.size();
+    const float numTasks = 3.0f * (float)inputs.size();
     LOG_VARD(numTasks);
     progress.reset(
       new Progress(

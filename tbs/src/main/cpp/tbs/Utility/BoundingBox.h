@@ -34,6 +34,9 @@
 #include "Utility/Exception.h"
 #include "Utility/NumericLimits.h"
 
+namespace tbs
+{
+
 /**
  * A basic n-dimensional bounding box
  */
@@ -321,5 +324,7 @@ private:
 
   std::vector<std::pair<T,T> > _bounds;
 };
+
+}
 
 #endif // BOUNDINGBOX_H

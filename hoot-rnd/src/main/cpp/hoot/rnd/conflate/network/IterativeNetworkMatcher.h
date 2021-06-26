@@ -53,6 +53,7 @@ class IterativeNetworkMatcherTest;
 class IterativeNetworkMatcher : public NetworkMatcher
 {
 public:
+
   static QString className() { return "hoot::IterativeNetworkMatcher"; }
 
   const static double EPSILON;
@@ -77,13 +78,7 @@ public:
   void matchNetworks(ConstOsmMapPtr map, OsmNetworkPtr n1, OsmNetworkPtr n2) override;
 
   QList<NetworkEdgeScorePtr> getAllEdgeScores() const override;
-
   QList<NetworkVertexScorePtr> getAllVertexScores() const override;
-
-protected:
-  virtual double _scoreEdges(ConstEdgeMatchPtr em) const;
-
-  virtual double _scoreVertices(ConstNetworkVertexPtr e1, ConstNetworkVertexPtr e2) const;
 
 private:
 
@@ -147,10 +142,12 @@ private:
   /// The higher this value the faster the algorithm will converge
   double _dampening;
 
+  double _scoreEdges(ConstEdgeMatchPtr em) const;
+  double _scoreVertices(ConstNetworkVertexPtr e1, ConstNetworkVertexPtr e2) const;
+
   double _aggregateScores(QList<double> pairs) const;
 
   void _createEmptyStubEdges(OsmNetworkPtr na, OsmNetworkPtr nb) const;
-
   void _createStubIntersection(OsmNetworkPtr na, OsmNetworkPtr nb, ConstNetworkVertexPtr va,
     ConstNetworkEdgePtr eb) const;
 
@@ -160,14 +157,12 @@ private:
   QList<ConstNetworkEdgePtr> _getEdgesOnVertex(ConstNetworkVertexPtr v) const;
 
   void _normalizeAllScores();
-
   /**
    * Normalizes the scores in a table. All the weights will sum to a constant based on the network
    * size. All values will be treated as at least EPSILON for normalizing purposes.
    */
   void _normalizeScoresGlobal(EdgeScoreMap& t) const;
   void _normalizeScoresGlobal(VertexScoreMap& t) const;
-
   /**
    * Normalizes the scores in a table. All the columns in a given row will sum to 1. All values will
    * be treated as at least EPSILON for normalizing purposes.
@@ -176,13 +171,10 @@ private:
   void _normalizeScoresLocal(VertexScoreMap& t) const;
 
   void _seedEdgeScores();
-
   void _seedVertexScores();
 
   void _updateEdgeScores(EdgeScoreMap &em, const VertexScoreMap &vm) const;
-
   void _updateVertexScores(VertexScoreMap& vm, EdgeScoreMap &em) const;
-
 };
 
 using IterativeNetworkMatcherPtr = std::shared_ptr<IterativeNetworkMatcher>;

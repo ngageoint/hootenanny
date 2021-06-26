@@ -40,7 +40,8 @@ namespace hoot
 {
 
 /**
- * Allows for creating a rectangular task grid for performing distributed map operations
+ * @brief The TaskGridGenerator class allows for creating a rectangular task grid for performing
+ * distributed map operations.
  */
 class TaskGridGenerator
 {
@@ -48,8 +49,7 @@ class TaskGridGenerator
 public:
 
   /**
-   * Generates a task grid
-   *
+   * @brief generateTaskGrid generates a task grid.
    * @return a task grid
    */
   virtual TaskGrid generateTaskGrid() = 0;

@@ -51,7 +51,6 @@ public:
    * evaluation.
    */
   IdwInterpolator(double p = -1.0);
-
   ~IdwInterpolator() = default;
 
   QString getName() const override { return className(); }
@@ -59,7 +58,6 @@ public:
   const std::vector<double>& interpolate(const std::vector<double>& point) const override;
 
   void setP(double p) { _p = p; }
-
   /**
    * Stop looking for a sigma when sigma is within this distance of "optimal".
    */
@@ -69,6 +67,13 @@ public:
 
 protected:
 
+  void _readInterpolator(QIODevice& is) override;
+  void _writeInterpolator(QIODevice& os) const override;
+
+  double _estimateError(unsigned int index) const override;
+
+private:
+
   double _p;
   double _stopDelta;
 
@@ -76,16 +81,10 @@ protected:
 
   double _calculateWeight(double d) const;
 
-  double _estimateError(unsigned int index) const override;
-
   /**
    * The ignoreId is used to ignore a specific point when doing hold one back error estimation.
    */
   const std::vector<double>& _interpolate(const std::vector<double>& point, int ignoreId) const;
-
-  void _readInterpolator(QIODevice& is) override;
-
-  void _writeInterpolator(QIODevice& os) const override;
 };
 
 }

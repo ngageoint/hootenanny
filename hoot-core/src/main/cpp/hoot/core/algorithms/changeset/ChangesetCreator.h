@@ -36,8 +36,8 @@ namespace hoot
 {
 
 /**
- * High level class for prepping data for changeset generation and then calls on appropriate
- * changeset file writers.
+ * @brief The ChangesetCreator class is a high level class for prepping data for changeset
+ * generation and then calls on appropriate changeset file writers.
  *
  * Streaming I/O and external element can be used from here.  However, the in-memory input
  * reading/sorting has been left in place to support faster I/O in the situation where large inputs
@@ -70,8 +70,7 @@ public:
   static const QString JOB_SOURCE;
 
   /**
-   * Constructor
-   *
+   * @brief ChangesetCreator Constructor
    * @param printStats prints statistics for the output changeset
    * @param statsOutputFile optional file to output the changeset statistics to; if empty, stats
    * go to stdout
@@ -83,28 +82,23 @@ public:
     const QString osmApiDbUrl = "");
 
   /**
-   * Writes a changeset between one or two inputs to an output file. If only one input is
-   * specified, the resulting changeset will be made entirely of the elements from the input.
-   *
+   * @brief create writes a changeset between one or two inputs to an output file. If only one input
+   * is specified, the resulting changeset will be made entirely of the elements from the input.
    * @param output the changeset output file target
    * @param input1 the first input source
    * @param input2 the optional second input source
    */
   void create(const QString& output, const QString& input1, const QString& input2 = "");
-
   /**
-   * Writes a changeset between two maps to an output file.
-   *
+   * @brief create writes a changeset between two maps to an output file.
    * @param map1 the first input source
    * @param map2 the second input source
    * @param output the changeset output file target
    */
   void create(OsmMapPtr& map1, OsmMapPtr& map2, const QString& output);
-
   /**
-   * Writes a single combined changeset between multiple sets of maps to an output file. The number
-   * of maps in each set must be equal to each other
-   *
+   * @brief create writes a single combined changeset between multiple sets of maps to an output
+   * file. The number of maps in each set must be equal to each other
    * @param map1Inputs A set of maps with the original state of the data.
    * @param map2Inputs A set of maps with the new state of the data.
    * @param output the changeset output file target

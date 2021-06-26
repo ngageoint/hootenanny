@@ -40,7 +40,8 @@ namespace hoot
 {
 
 /**
- * Returns the max (best) pairwise word comparison within two sets of words.
+ * @brief The WeightedWordDistance class returns the max (best) pairwise word comparison within two
+ * sets of words.
  */
 class WeightedWordDistance : public StringDistance, public StringDistanceConsumer,
   public Configurable
@@ -60,11 +61,8 @@ public:
   void setStringDistance(const StringDistancePtr& sd) override { _d = sd; }
 
   QString toString() const override { return "WeightedWordDistance " + _d->toString(); }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
-
   QString getDescription() const override
   { return "Returns a score based on the best pairwise comparison within two sets of words"; }
 

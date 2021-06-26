@@ -31,12 +31,12 @@
 // Qt
 #include <QString>
 
-/**
- * Derives a rubber sheet transforms
- */
 namespace hoot
 {
 
+/**
+ * @brief The RubberSheetDeriver class derives a rubber sheet transforms.
+ */
 class RubberSheetDeriver
 {
 public:
@@ -44,8 +44,8 @@ public:
   RubberSheetDeriver() = default;
 
   /**
-   * Derives rubber sheet transforms for rubber sheeting either direction between two inputs
-   *
+   * @brief derive derives rubber sheet transforms for rubber sheeting either direction between two
+   * inputs.
    * @param input1 input 1
    * @param input2 input 2
    * @param transform2To1 output transformation for rubber sheeting from input 2 to input 1

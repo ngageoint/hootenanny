@@ -76,11 +76,8 @@ public:
                         const Meters threshold = ConfigOptions().getSmallHighwayMergerThreshold());
 
   QString getInitStatusMessage() const override { return "Merging very small roads..."; }
-
   QString getCompletedStatusMessage() const override
   { return "Merged " + QString::number(_numAffected) + " very small roads"; }
-
-  QString getDescription() const override { return "Merges very small roads"; }
 
   /**
    * @see FilteredByGeometryTypeCriteria
@@ -88,10 +85,10 @@ public:
   QStringList getCriteria() const override;
 
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+  QString getDescription() const override { return "Merges very small roads"; }
 
-protected:
+private:
 
   std::shared_ptr<OsmMap> _map;
 

@@ -48,6 +48,7 @@ public:
 
   TagKeyCriterion() = default;
   explicit TagKeyCriterion(QString key);
+  explicit TagKeyCriterion(QStringList keys);
   TagKeyCriterion(QString key1, QString key2);
   TagKeyCriterion(QString key1, QString key2, QString key3);
   ~TagKeyCriterion() = default;
@@ -65,10 +66,6 @@ public:
   QString toString() const override { return className(); }
   QString getDescription() const override
   { return "Identifies elements that contain a specified tag key"; }
-
-protected:
-
-  explicit TagKeyCriterion(QStringList keys);
 
 private:
 

@@ -39,8 +39,8 @@ namespace hoot
 {
 
 /**
- * This is a form of the assignment problem [1], but I couldn't find a specific form of the
- * assignment problem that is an exact match.
+ * @brief The SingleAssignmentProblemSolver class is a form of the assignment problem [1], but I
+ * couldn't find a specific form of the assignment problem that is an exact match.
  *
  * In this case we have a set of actors and tasks. Each actor can be assigned to only one task and
  * each task can have up to 1 actor. We're attempting to maximize the sum of the costs of assigning
@@ -59,8 +59,9 @@ public:
   class CostFunction
   {
   public:
+
     /**
-     * Returns the cost associated with assigning actor a to task t.
+     * @brief cost returns the cost associated with assigning actor a to task t.
      */
     virtual double cost(const Actor* a, const Task* t) const = 0;
   };
@@ -83,9 +84,10 @@ public:
   void addTask(const Task* t) { _tasks.push_back(t); }
 
   /**
-   * Calculate one of the optimal pairings. All the actors that are not paired will be placed into
-   * a result pair w/ a null task. All the tasks that are not paired will be placed into a result
-   * pair w/ a null actor.
+   * @brief calculatePairing calculates one of the optimal pairings.
+   *
+   * All the actors that are not paired will be placed into a result pair w/ a null task. All the
+   * tasks that are not paired will be placed into a result pair w/ a null actor.
    */
   std::vector<ResultPair> calculatePairing() const
   {

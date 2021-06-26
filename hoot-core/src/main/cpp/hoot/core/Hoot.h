@@ -36,8 +36,9 @@ namespace hoot
 {
 
 /**
- * A Singleton to initialize hootenanny. You should call getInstance() on this before any other
- * use of hoot. You can call getInstance multiple times without any ill effects.
+ * @brief The Hoot class is a Singleton to initialize hootenanny. You should call getInstance() on
+ * this before any other use of hoot. You can call getInstance multiple times without any ill
+ * effects.
  */
 class Hoot
 {
@@ -46,17 +47,17 @@ public:
   static Hoot& getInstance();
 
   /**
-   * A no-op that makes the code a little easier to read.
+   * @brief init A no-op that makes the code a little easier to read.
    */
   void init() const {}
 
   /**
-   * Load the specified library if it exists using QLibrary.
+   * @brief loadLibrary Load the specified library if it exists using QLibrary.
    */
   void loadLibrary(const QString& name) const;
 
   /**
-   * Reinitialize hootenanny based on configuration changes.
+   * @brief reinit Reinitialize hootenanny based on configuration changes.
    */
   void reinit() const;
 

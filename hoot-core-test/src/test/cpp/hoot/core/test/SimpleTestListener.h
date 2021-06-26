@@ -34,7 +34,8 @@ namespace hoot
 {
 
 /**
- * Wrapper around CPPUnit test listener for test failure notification purposes
+ * @brief The SimpleTestListener class is a wrapper around CPPUnit test listener for test failure
+ * notification purposes
  */
 class SimpleTestListener : public CppUnit::TestListener
 {

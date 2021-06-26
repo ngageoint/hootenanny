@@ -34,7 +34,9 @@ namespace hoot
 {
 
 /**
- * Similar to Metric Distance as described in [1].
+ * @brief The WeightedMetricDistanceExtractor class is similar to Metric Distance as described in
+ * [1].
+ *
  * 1. Savary & Zeitouni, 2005
  */
 class WeightedMetricDistanceExtractor : public WayFeatureExtractor, public Configurable
@@ -45,24 +47,18 @@ public:
 
   WeightedMetricDistanceExtractor(ValueAggregatorPtr wayAgg, ValueAggregatorPtr pointAgg,
                                   Meters searchRadius = -1);
-
-  // Get point aggregator from ConfigOptions()
   WeightedMetricDistanceExtractor(Meters searchRadius = -1);
-
   ~WeightedMetricDistanceExtractor() = default;
-
-  QString getClassName() const override { return className(); }
-
-  QString getName() const override;
 
   void setConfiguration(const Settings& conf) override;
 
-  void setPointAggregator(const QString& aggregator);
-
-  void setSearchRadius(const double radius);
-
+  QString getClassName() const override { return className(); }
+  QString getName() const override;
   QString getDescription() const override
   { return "Calculates weighted metric distance between features"; }
+
+  void setPointAggregator(const QString& aggregator);
+  void setSearchRadius(const double radius);
 
 protected:
 

@@ -35,14 +35,17 @@
 #include <tgs/RStarTree/Box.h>
 #include "../PluginFactory.h"
 
-using namespace Tgs;
+namespace Tgs
+{
 
 class BoxTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(BoxTest);
   CPPUNIT_TEST(test1);
   CPPUNIT_TEST_SUITE_END();
+
 public:
+
   void test1()
   {
     Box empty(2);
@@ -77,3 +80,5 @@ public:
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(BoxTest, PluginFactory::testName());
+
+}

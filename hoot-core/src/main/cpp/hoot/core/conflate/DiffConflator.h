@@ -40,10 +40,11 @@ class MatchThreshold;
 class ConflateInfoCache;
 
 /**
- * This conflator calculates the difference between two inputs and adds to the output only features
- * from the second output which match with nothing in the first input. The diff can be set up to
- * only exclude the partial matching portions of linear features involved in a partial match
- * (default) or remove all portions of the feature.
+ * @brief The DiffConflator class calculates the difference between two inputs and adds to the
+ * output only features from the second output which match with nothing in the first input.
+ *
+ * The diff can be set up to only exclude the partial matching portions of linear features involved
+ * in a partial match (default) or remove all portions of the feature.
  *
  * This conflator also supports calculating a tag differential, The conflator iterates through all
  * of the match pairs, looking for new or different tags in the input2 elements. If a difference is
@@ -79,60 +80,52 @@ class DiffConflator : public AbstractConflator
 public:
 
   /**
-   * Returns a string that represents this class name
-   *
+   * @brief className returns a string that represents this class name.
    * @return class name
    */
   static QString className() { return "hoot::DiffConflator"; }
 
   /**
-   * Default constructor
+   * @brief DiffConflator Constructor
    */
   DiffConflator();
-
   /**
-   * Construct & set a match threshold
-   *
-   * @param matchThreshold - Match threshold
+   * @brief DiffConflator Constructor that sets a match threshold.
+   * @param matchThreshold Match threshold
    */
   DiffConflator(const std::shared_ptr<MatchThreshold>& matchThreshold);
 
   /**
-   * Applies the differential conflation operation to the supplied
-   * map. If the map is not in a planar projection it is reprojected. The map
-   * is not reprojected back to the original projection when conflation is complete.
-   *
-   * @param map - The map to operate on
+   * @see OsmMapOperation
    */
   void apply(OsmMapPtr& map) override;
 
   /**
-   * Stores the original map. This is necessary for calculating the tag differential, and it's
-   * important to call this after loading the Input1 map, and before loading the Input2 map.
+   * @brief storeOriginalMap Stores the original map.
    *
-   * @param map - Map that should be holding only the original "Input1" elements
+   * This is necessary for calculating the tag differential, and it's important to call this after
+   * loading the Input1 map, and before loading the Input2 map.
+   * @param map Map that should be holding only the original "Input1" elements
    */
   void storeOriginalMap(OsmMapPtr& map);
 
   /**
-   * Uniquely mark input1 elements
-   *
-   * @param map - Map to add the changes to
+   * @brief markInputElements uniquely mark input1 elements.
+   * @param map Map to add the changes to
    */
   void markInputElements(OsmMapPtr map) const;
 
   /**
-   * Adds the changes to a map, as regular elements. This is useful for visualizing tag-diff output
-   * in JOSM and the hoot UI.
+   * @brief addChangesToMap adds the changes to a map, as regular elements.
    *
-   * @param map - Map to add the changes to
-   * @param pChanges - Changeset provider
+   * This is useful for visualizing tag-diff output in JOSM and the hoot UI.
+   * @param map Map to add the changes to
+   * @param pChanges Changeset provider
    */
   void addChangesToMap(OsmMapPtr map, ChangesetProviderPtr pChanges) const;
 
   /**
-   * Writes a changeset with just the data from the input map
-   *
+   * @brief writeChangeset writes a changeset with just the data from the input map.
    * @param pResultMap the input map
    * @param output the output changeset path
    * @param separateOutput if true, separates geometry and tag changeset output
@@ -159,12 +152,12 @@ public:
   bool conflatingTags() const { return _conflateTags;}
 
   /**
-   * Returns the tag differential that was calculated during the conflation. This will be a list of
-   * 'modify' changes that contain tag updates for elements that matched between the input maps.
+   * @brief getTagDiff returns the tag differential that was calculated during the conflation.
    *
-   * To calculate these changes we look through all of the matches, and compare tags. A set of newer
-   * tags is returned as a changeset (because updating the tags requires a modify operation).
-   *
+   * This will be a list of 'modify' changes that contain tag updates for elements that matched
+   * between the input maps. To calculate these changes we look through all of the matches, and
+   * compare tags. A set of newer tags is returned as a changeset (because updating the tags
+   * requires a modify operation).
    * @return A changeset provider that can be used with ChangesetWriter classes
    */
   MemChangesetProviderPtr getTagDiff() const { return _tagChanges; }

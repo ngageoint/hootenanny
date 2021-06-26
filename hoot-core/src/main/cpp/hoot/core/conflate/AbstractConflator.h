@@ -48,7 +48,7 @@ class MatchThreshold;
 class MergerFactory;
 
 /**
- * Base class for conflators
+ * @brief The AbstractConflator class is the base class for conflators.
  */
 class AbstractConflator : public OsmMapOperation, public Boundable, public ProgressReporter
 {
@@ -63,7 +63,9 @@ public:
   QList<SingleStat> getStats() const { return _stats; }
 
   /**
-   * Sets the factory to use when creating mergers. This method is likely only useful when testing.
+   * @brief setMergerFactory sets the factory to use when creating mergers.
+   *
+   * This method is likely only useful when testing.
    */
   void setMergerFactory(const std::shared_ptr<MergerFactory>& mf) { _mergerFactory = mf; }
 

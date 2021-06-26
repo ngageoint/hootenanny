@@ -52,8 +52,7 @@ class TestOsmChangesetProvider : public ChangesetProvider
 public:
 
   /**
-   * Constructor
-   *
+   * @brief Constructor
    * @param useCoordScale SQL changeset provider uses the ApiDb::COORDINATE_SCALE
    *  while the OSM changeset does not
    */

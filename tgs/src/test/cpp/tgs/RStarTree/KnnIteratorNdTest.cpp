@@ -44,7 +44,8 @@
 
 #include "../PluginFactory.h"
 
-using namespace Tgs;
+namespace Tgs
+{
 
 class KnnIteratorNdTest : public CppUnit::TestFixture
 {
@@ -153,3 +154,5 @@ public:
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(KnnIteratorNdTest, PluginFactory::testName());
+
+}

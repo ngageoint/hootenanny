@@ -38,7 +38,8 @@ namespace hoot
 {
 
 /**
- * Interface for classes generating changesets where one dataset replaces another
+ * @brief The ChangesetReplacement class is the interface to implement for classes generating
+ * changesets where one dataset replaces another
  *
  * The interface supports a Polygon geometry instead of any geometry as input due to the fact the
  * bounds option string has to be set by the creators at the beginning of the replacement
@@ -56,7 +57,6 @@ public:
   /**
    * The manner in which replacement boundary conditions are handled. See the
    * changeset-derive CLI doc for more detail.
-   *
    * @todo remove Hybrid; not used anywhere
    */
   enum BoundsInterpretation
@@ -67,8 +67,7 @@ public:
   };
 
   /**
-   * Creates a changeset that replaces data
-   *
+   * @brief create creates a changeset that replaces data.
    * @param input1 the target data file path
    * @param input2 the source data file path
    * @param bounds the rectangular bounds over which features are to be replaced
@@ -77,10 +76,8 @@ public:
   virtual void create(
     const QString& input1, const QString& input2, const geos::geom::Envelope& bounds,
     const QString& output) = 0;
-
   /**
-   * Creates a changeset that replaces data
-   *
+   * @brief create creates a changeset that replaces data.
    * @param input1 the target data file path
    * @param input2 the source data file path
    * @param bounds the bounds over which features are to be replaced
@@ -98,8 +95,7 @@ public:
   virtual void setChangesetId(const QString& id) = 0;
 
   /**
-   * Sets changeset options
-   *
+   * @brief setChangesetOptions sets changeset options.
    * @param printStats prints statistics for the output changeset
    * @param outputStatsFile optional file to output the changeset statistics to
    * @param osmApiDbUrl URL to an OSM API database used to calculate element IDs; required only if

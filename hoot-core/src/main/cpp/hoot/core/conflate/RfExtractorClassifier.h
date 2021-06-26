@@ -50,7 +50,7 @@ public:
   virtual ~RfExtractorClassifier() = default;
 
   /**
-   * Classifies the match type of a building pair and returns the results.
+   * @brief classify classifies the match type of a building pair and returns the results.
    */
   virtual MatchClassification classify(const ConstOsmMapPtr& map,
     ElementId eid1, ElementId eid2) const;

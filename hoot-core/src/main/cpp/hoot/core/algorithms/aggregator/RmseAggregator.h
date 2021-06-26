@@ -36,7 +36,7 @@ namespace hoot
 {
 
 /**
- * This class assumes that the values d are the error values.
+ * @brief The RmseAggregator class assumes that the values d are the error values.
  */
 class RmseAggregator : public ValueAggregator
 {
@@ -50,12 +50,9 @@ public:
   double aggregate(std::vector<double>& d) const override;
 
   QString toString() const override { return "RmseAggregator"; }
-
   QString getDescription() const override
   { return "Aggregates data based on the Root Mean Square Deviation value"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 };
 

@@ -36,9 +36,11 @@ namespace hoot
 class MatchThreshold;
 
 /**
- * A different conflation algorithm compared to the original greedy conflation alg. This is named
- * Unifying because it unifies different feature type conflation approaches (building, road, etc.)
- * that were originally separated from each other.
+ * @brief The UnifyingConflator class is a conflator implementing Unifying Confaltion.
+ *
+ * This is a different conflation algorithm compared to the original greedy conflation alg. This is
+ * named Unifying because it unifies different feature type conflation approaches (building, road,
+ * etc.) that were originally separated from each other.
  *
  * This class is re-entrant but not thread safe.
  */
@@ -52,8 +54,11 @@ public:
   UnifyingConflator(const std::shared_ptr<MatchThreshold>& matchThreshold);
 
   /**
-   * Conflates the specified map. If the map is not in a planar projection it is reprojected. The
-   * map is not reprojected back to the original projection when conflation is complete.
+   * @brief apply conflates the specified map.
+   *
+   * If the map is not in a planar projection it is reprojected. The map is not reprojected back to
+   * the original projection when conflation is complete.
+   * @see OsmMapOperation
    */
   void apply(OsmMapPtr& map) override;
 

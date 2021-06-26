@@ -33,7 +33,8 @@ namespace hoot
 {
 
 /**
- * Similar to Shape Distance as described in [1].
+ * @brief The WeightedShapeDistanceExtractor class is similar to Shape Distance as described in [1].
+ *
  * 1. Savary & Zeitouni, 2005
  */
 class WeightedShapeDistanceExtractor : public WayFeatureExtractor
@@ -42,15 +43,12 @@ public:
 
   static QString className() { return "hoot::WeightedShapeDistanceExtractor"; }
 
-  WeightedShapeDistanceExtractor(ValueAggregatorPtr wayAgg);
-
   WeightedShapeDistanceExtractor() = default;
+  WeightedShapeDistanceExtractor(ValueAggregatorPtr wayAgg);
   ~WeightedShapeDistanceExtractor() = default;
 
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
-
   QString getDescription() const override
   { return "Calculates shape distance between features"; }
 

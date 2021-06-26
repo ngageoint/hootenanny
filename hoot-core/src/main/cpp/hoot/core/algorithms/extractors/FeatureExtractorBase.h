@@ -33,7 +33,8 @@ namespace hoot
 {
 
 /**
- * Base class for feature extractors, which compare two feature and provide a metric score
+ * @brief The FeatureExtractorBase class is the base class for feature extractors, which compare two
+ * feature and provide a metric score.
  */
 class FeatureExtractorBase : public FeatureExtractor
 {
@@ -47,13 +48,12 @@ public:
   static double nullValue() { return -999999999; }
 
   /**
-   * Returns the factor type for this feature/factor (Nominal or Numeric).
+   * @see FeatureExtractor
    */
   Tgs::DataFrame::FactorType getFactorType() const override
   { return Tgs::DataFrame::Numerical; }
-
   /**
-   * Returns the null treatment for this feature/factor (NullAsValue or NullAsMissingValue).
+   * @see FeatureExtractor
    */
   Tgs::DataFrame::NullTreatment getNullTreatment() const override
   {

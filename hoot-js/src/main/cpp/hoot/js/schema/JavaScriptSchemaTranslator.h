@@ -70,7 +70,6 @@ public:
   static int logWarnCount;
 
   JavaScriptSchemaTranslator();
-
   virtual ~JavaScriptSchemaTranslator();
 
   QString getScriptPath() const { return _scriptPath; }
@@ -96,13 +95,19 @@ public:
 
   std::vector<TranslatedFeature> translateToOgr(Tags& tags, ElementType elementType,
     geos::geom::GeometryTypeId geometryType) override;
-
   std::vector<Tags> translateToOgrTags(Tags& tags, ElementType elementType,
     geos::geom::GeometryTypeId geometryType) override;
 
   void setConfiguration(const Settings& conf) override;
 
 protected:
+
+  void _init() override;
+  void _finalize() override;
+
+  void _translateToOsm(Tags& t, const char *layerName, const char* geomType) override;
+
+private:
 
   std::shared_ptr<PluginContext> _gContext;
   QString _toOsmFunctionName;
@@ -120,14 +125,8 @@ protected:
   std::vector<TranslatedFeature> _createAllFeatures(const QVariantList& vm);
   std::shared_ptr<Feature> _createFeature(const QVariantMap& vm, QString& tableName) const;
 
-  void _init() override;
-
-  void _finalize() override;
-
   void _parseEnumerations(DoubleFieldDefinition* fd, QVariant& enumerations) const;
-
   void _parseEnumerations(IntegerFieldDefinition* fd, QVariant& enumerations) const;
-
   void _parseEnumerations(LongIntegerFieldDefinition* fd, QVariant& enumerations) const;
 
   std::shared_ptr<FieldDefinition> _parseFieldDefinition(const QVariant& fieldV) const;
@@ -135,15 +134,11 @@ protected:
   std::shared_ptr<Layer> _parseLayer(const QVariant& layer) const;
 
   double _toDouble(const QVariant& v) const;
-
   qint32 _toInt32(const QVariant& v) const;
-
   qint64 _toInt64(const QVariant& v) const;
 
   QVariantList _translateToOgrVariants(Tags& tags,
     ElementType elementType, geos::geom::GeometryTypeId geometryType);
-
-  void _translateToOsm(Tags& t, const char *layerName, const char* geomType) override;
 };
 
 }

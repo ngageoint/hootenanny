@@ -37,9 +37,11 @@ namespace hoot
 {
 
 /**
- * Interface for way joiners. During conflation, linear features may need to be split in order for
- * matching and/or merging to perform correctly. The job of the way joiners is to restore such split
- * features by rejoining them.
+ * @brief Interface for way joiners.
+ *
+ * During conflation, linear features may need to be split in order for matching and/or merging to
+ * perform correctly. The job of the way joiners is to restore such split features by rejoining
+ * them.
  */
 class WayJoiner : public ApiEntityInfo
 {

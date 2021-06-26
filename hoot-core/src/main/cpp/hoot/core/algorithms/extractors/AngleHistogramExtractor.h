@@ -39,15 +39,16 @@ namespace hoot
 class Histogram;
 
 /**
- * This idea was taken from JCS, but the code has been reimplemented to better take advantage
- * of the OSM schema.
+ * @brief The AngleHistogramExtractor class works by calculating the angle of each line segment in
+ * a line string and adding that angle to a histogram where the weight is the length of the line
+ * segment. A histogram is built up in this way for both input lines, normalized and the difference
+ * calculated.
  *
- * The angle histogram extractor works by calculating the angle of each line segment in a line
- * string and adding that angle to a histogram where the weight is the length of the line segment.
- * A histogram is built up in this way for both input lines, normalized and the difference
- * calculated. 16 bins are used in the histogram.
+ * 16 bins are used in the histogram. 1 means the histograms have effectively no difference. 0 means
+ * they're completely different.
  *
- * 1 means the histograms have effectively no difference. 0 means they're completely different.
+ * This idea was taken from JCS, but the code has been reimplemented to better take advantage of the
+ * OSM schema.
  */
 class AngleHistogramExtractor : public FeatureExtractorBase, public Configurable
 {
@@ -75,8 +76,7 @@ public:
   { return "Calculates the angle of each line segment and adds it to a histogram"; }
 
   /**
-   * Creates a normalized heading variance histogram for an element
-   *
+   * @brief getNormalizedHistogram creates a normalized heading variance histogram for an element.
    * @param map map owning the element
    * @param e the element for which to create the histogram
    * @return a heading variance histogram

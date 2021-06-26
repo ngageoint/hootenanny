@@ -44,7 +44,7 @@ PROJECT_NUMBER         =
 # for a project that appears at the top of each page and should give viewer a
 # quick idea about the purpose of the project. Keep the description short.
 
-PROJECT_BRIEF          =
+PROJECT_BRIEF          = "https://github.com/ngageoint/hootenanny"
 
 # With the PROJECT_LOGO tag one can specify an logo or icon that is included in
 # the documentation. The maximum height of the logo should not exceed 55 pixels
@@ -180,7 +180,7 @@ SHORT_NAMES            = YES
 # description.)
 # The default value is: NO.
 
-JAVADOC_AUTOBRIEF      = NO
+JAVADOC_AUTOBRIEF      = YES
 
 # If the QT_AUTOBRIEF tag is set to YES then doxygen will interpret the first
 # line (until the first dot) of a Qt-style comment as the brief description. If
@@ -309,7 +309,7 @@ AUTOLINK_SUPPORT       = YES
 # diagrams that involve STL classes more complete and accurate.
 # The default value is: NO.
 
-BUILTIN_STL_SUPPORT    = NO
+BUILTIN_STL_SUPPORT    = YES
 
 # If you use Microsoft's C++/CLI language, you should set this option to YES to
 # enable parsing support.
@@ -409,7 +409,7 @@ LOOKUP_CACHE_SIZE      = 0
 # normally produced when WARNINGS is set to YES.
 # The default value is: NO.
 
-EXTRACT_ALL            = NO
+EXTRACT_ALL            = YES
 
 # If the EXTRACT_PRIVATE tag is set to YES all private members of a class will
 # be included in the documentation.
@@ -703,14 +703,14 @@ QUIET                  = YES
 # Tip: Turn warnings on while writing the documentation.
 # The default value is: YES.
 
-WARNINGS               = YES
+WARNINGS               = NO
 
 # If the WARN_IF_UNDOCUMENTED tag is set to YES, then doxygen will generate
 # warnings for undocumented members. If EXTRACT_ALL is set to YES then this flag
 # will automatically be disabled.
 # The default value is: YES.
 
-WARN_IF_UNDOCUMENTED   = YES
+WARN_IF_UNDOCUMENTED   = NO
 
 # If the WARN_IF_DOC_ERROR tag is set to YES, doxygen will generate warnings for
 # potential errors in the documentation, such as not documenting some parameters
@@ -718,7 +718,7 @@ WARN_IF_UNDOCUMENTED   = YES
 # markup commands wrongly.
 # The default value is: YES.
 
-WARN_IF_DOC_ERROR      = YES
+WARN_IF_DOC_ERROR      = NO
 
 # This WARN_NO_PARAMDOC option can be enabled to get warnings for functions that
 # are documented, but have no documentation for their parameters or return
@@ -726,7 +726,7 @@ WARN_IF_DOC_ERROR      = YES
 # documentation, but not about the absence of documentation.
 # The default value is: NO.
 
-WARN_NO_PARAMDOC       = YES
+WARN_NO_PARAMDOC       = NO
 
 # The WARN_FORMAT tag determines the format of the warning messages that doxygen
 # can produce. The string should contain the $file, $line, and $text tags, which
@@ -754,14 +754,157 @@ WARN_LOGFILE           = developer/CoreAPI/error-log
 # spaces.
 # Note: If this tag is empty the current directory is searched.
 
+#../tbs \
+#../tgs
+# We don't use all of tgs or tbs and only want to document what we do use. The tgs/tbs file names 
+# were copied from tgs.pro and tbs.pro and formatted manually.. Maybe eventually we can automate the 
+# process. Fortunately, what we use from tgs/tbs doesn't change very often.
+
 INPUT                  = ../hoot-core/src/main/cpp/hoot/core \
                          ../hoot-core-test/src/test/cpp/hoot/core \
                          ../hoot-js/src/main/cpp/hoot/js \
                          ../hoot-cmd/src/main/cpp/hoot/cmd \
                          ../hoot-josm/src/main/cpp/hoot/josm \
                          ../hoot-rnd/src/main/cpp/hoot/rnd \
-                         ../tbs/src/main/cpp/tbs \
-                         ../tgs/src/main/cpp/tgs
+                         ../tbs/src/test/cpp/tbs/optimization/GoldenSectionSearchTest.cpp \
+                         ../tbs/src/test/cpp/tbs/stats/TDistributionTest.cpp \
+                         ../tbs/src/main/cpp/tbs/stats/TDistribution.h \
+                         ../tbs/src/main/cpp/tbs/optimization/GoldenSectionSearch.h \
+                         ../tbs/src/main/cpp/tbs/optimization/LineSearch.h \
+                         ../tbs/src/main/cpp/tbs/stats/SampleStats.h \
+                         ../tbs/src/main/cpp/tbs/stats/TDistribution.cpp \
+                         ../tbs/src/main/cpp/tbs/optimization/GoldenSectionSearch.cpp \
+                         ../tbs/src/main/cpp/tbs/optimization/LineSearch.cpp \
+                         ../tbs/src/main/cpp/tbs/stats/SampleStats.cpp \
+                         ../tgs/src/main/cpp/tgs/HashMap.h \
+                         ../tgs/src/main/cpp/tgs/LruCache.h \
+                         ../tgs/src/main/cpp/tgs/Progress.h \
+                         ../tgs/src/main/cpp/tgs/StreamUtils.h \
+                         ../tgs/src/main/cpp/tgs/StreamUtils.hh \
+                         ../tgs/src/main/cpp/tgs/TgsException.h \
+                         ../tgs/src/main/cpp/tgs/TgsExport.h \
+                         ../tgs/src/main/cpp/tgs/Version.h \
+                         ../tgs/src/main/cpp/tgs/BigContainers/BasicBloomFilter.h \
+                         ../tgs/src/main/cpp/tgs/BigContainers/BigMap.h \
+                         ../tgs/src/main/cpp/tgs/BigContainers/BigMapStxxl.h \
+                         ../tgs/src/main/cpp/tgs/BigContainers/Stxxl.h \
+                         ../tgs/src/main/cpp/tgs/DelaunayTriangulation/geom2d.h \
+                         ../tgs/src/main/cpp/tgs/DelaunayTriangulation/DelaunayTriangulation.h \
+                         ../tgs/src/main/cpp/tgs/DisjointSet/DisjointSet.h \
+                         ../tgs/src/main/cpp/tgs/DisjointSet/DisjointSetMap.h \
+                         ../tgs/src/main/cpp/tgs/Interpolation/BaseInterpolator.h \
+                         ../tgs/src/main/cpp/tgs/Interpolation/DelaunayInterpolator.h \
+                         ../tgs/src/main/cpp/tgs/Interpolation/IdwInterpolator.h \
+                         ../tgs/src/main/cpp/tgs/Interpolation/Interpolator.h \
+                         ../tgs/src/main/cpp/tgs/Interpolation/KernelEstimationInterpolator.h \
+                         ../tgs/src/main/cpp/tgs/Optimization/FitnessFunction.h \
+                         ../tgs/src/main/cpp/tgs/Optimization/NelderMead.h \
+                         ../tgs/src/main/cpp/tgs/Optimization/SimulatedAnnealing.h \
+                         ../tgs/src/main/cpp/tgs/Optimization/State.h \
+                         ../tgs/src/main/cpp/tgs/Optimization/StateDescription.h \
+                         ../tgs/src/main/cpp/tgs/Optimization/VariableDescription.h \
+                         ../tgs/src/main/cpp/tgs/ProbablePath/ProbablePathCalculator.h \
+                         ../tgs/src/main/cpp/tgs/RandomForest/DataFrame.h \
+                         ../tgs/src/main/cpp/tgs/RandomForest/InfoGainCalculator.h \
+                         ../tgs/src/main/cpp/tgs/RandomForest/BaseRandomForest.h \
+                         ../tgs/src/main/cpp/tgs/RandomForest/RandomForest.h \
+                         ../tgs/src/main/cpp/tgs/RandomForest/BaseRandomForestManager.h \
+                         ../tgs/src/main/cpp/tgs/RandomForest/RandomForestManager.h \
+                         ../tgs/src/main/cpp/tgs/RandomForest/RandomTree.h \
+                         ../tgs/src/main/cpp/tgs/RandomForest/TreeNode.h \
+                         ../tgs/src/main/cpp/tgs/RandomForest/MissingDataHandler.h \
+                         ../tgs/src/main/cpp/tgs/RandomForest/MultithreadedRandomForest.h \
+                         ../tgs/src/main/cpp/tgs/RandomForest/MultithreadedRandomForestManager.h \
+                         ../tgs/src/main/cpp/tgs/RandomForest/RandomForestThread.h \
+                         ../tgs/src/main/cpp/tgs/RandomForest/RandomForestUtilities.h \
+                         ../tgs/src/main/cpp/tgs/RasterOps/Image.hpp \
+                         ../tgs/src/main/cpp/tgs/RStarTree/Box.h \
+                         ../tgs/src/main/cpp/tgs/RStarTree/HilbertCurve.h \
+                         ../tgs/src/main/cpp/tgs/RStarTree/HilbertRTree.h \
+                         ../tgs/src/main/cpp/tgs/RStarTree/IntersectionIterator.h \
+                         ../tgs/src/main/cpp/tgs/RStarTree/Iterator.h \
+                         ../tgs/src/main/cpp/tgs/RStarTree/KnnIterator.h \
+                         ../tgs/src/main/cpp/tgs/RStarTree/KnnIteratorNd.h \
+                         ../tgs/src/main/cpp/tgs/RStarTree/MemoryPageStore.h \
+                         ../tgs/src/main/cpp/tgs/RStarTree/Page.h \
+                         ../tgs/src/main/cpp/tgs/RStarTree/PageStore.h \
+                         ../tgs/src/main/cpp/tgs/RStarTree/RStarTree.h \
+                         ../tgs/src/main/cpp/tgs/RStarTree/RStarTreePrinter.h \
+                         ../tgs/src/main/cpp/tgs/RStarTree/RTreeNode.h \
+                         ../tgs/src/main/cpp/tgs/RStarTree/RTreeNodeStore.h \
+                         ../tgs/src/main/cpp/tgs/Statistics/Normal.h \
+                         ../tgs/src/main/cpp/tgs/Statistics/Random.h \
+                         ../tgs/src/main/cpp/tgs/System/DisableCout.h \
+                         ../tgs/src/main/cpp/tgs/System/SystemInfo.h \
+                         ../tgs/src/main/cpp/tgs/System/Time.h \
+                         ../tgs/src/main/cpp/tgs/System/Timer.h \
+                         ../tgs/src/main/cpp/tgs/RStarTree/FilePageStore.h \
+                         ../tgs/src/main/cpp/tgs/StreamUtils.cpp \
+                         ../tgs/src/main/cpp/tgs/Version.cpp \
+                         ../tgs/src/main/cpp/tgs/BigContainers/Stxxl.cpp \
+                         ../tgs/src/main/cpp/tgs/DelaunayTriangulation/DelaunayTriangulation.cpp \
+                         ../tgs/src/main/cpp/tgs/Interpolation/BaseInterpolator.cpp \
+                         ../tgs/src/main/cpp/tgs/Interpolation/DelaunayInterpolator.cpp \
+                         ../tgs/src/main/cpp/tgs/Interpolation/IdwInterpolator.cpp \
+                         ../tgs/src/main/cpp/tgs/Interpolation/KernelEstimationInterpolator.cpp \
+                         ../tgs/src/main/cpp/tgs/Optimization/SimulatedAnnealing.cpp \
+                         ../tgs/src/main/cpp/tgs/Optimization/State.cpp \
+                         ../tgs/src/main/cpp/tgs/Optimization/VariableDescription.cpp \
+                         ../tgs/src/main/cpp/tgs/ProbablePath/ProbablePathCalculator.cpp \
+                         ../tgs/src/main/cpp/tgs/RandomForest/DataFrame.cpp \
+                         ../tgs/src/main/cpp/tgs/RandomForest/InfoGainCalculator.cpp \
+                         ../tgs/src/main/cpp/tgs/RandomForest/BaseRandomForest.cpp \
+                         ../tgs/src/main/cpp/tgs/RandomForest/RandomForest.cpp \
+                         ../tgs/src/main/cpp/tgs/RandomForest/BaseRandomForestManager.cpp \
+                         ../tgs/src/main/cpp/tgs/RandomForest/RandomForestManager.cpp \
+                         ../tgs/src/main/cpp/tgs/RandomForest/RandomTree.cpp \
+                         ../tgs/src/main/cpp/tgs/RandomForest/MissingDataHandler.cpp \
+                         ../tgs/src/main/cpp/tgs/RandomForest/MultithreadedRandomForest.cpp \
+                         ../tgs/src/main/cpp/tgs/RandomForest/MultithreadedRandomForestManager.cpp \
+                         ../tgs/src/main/cpp/tgs/RandomForest/RandomForestThread.cpp \
+                         ../tgs/src/main/cpp/tgs/RandomForest/RandomForestUtilities.cpp \
+                         ../tgs/src/main/cpp/tgs/RStarTree/Box.cpp \
+                         ../tgs/src/main/cpp/tgs/RStarTree/HilbertRTree.cpp \
+                         ../tgs/src/main/cpp/tgs/RStarTree/IntersectionIterator.cpp \
+                         ../tgs/src/main/cpp/tgs/RStarTree/KnnIterator.cpp \
+                         ../tgs/src/main/cpp/tgs/RStarTree/KnnIteratorNd.cpp \
+                         ../tgs/src/main/cpp/tgs/RStarTree/MemoryPageStore.cpp \
+                         ../tgs/src/main/cpp/tgs/RStarTree/Page.cpp \
+                         ../tgs/src/main/cpp/tgs/RStarTree/RStarTree.cpp \
+                         ../tgs/src/main/cpp/tgs/RStarTree/RStarTreePrinter.cpp \
+                         ../tgs/src/main/cpp/tgs/RStarTree/RTreeNode.cpp \
+                         ../tgs/src/main/cpp/tgs/RStarTree/RTreeNodeStore.cpp \
+                         ../tgs/src/main/cpp/tgs/Statistics/Normal.cpp \
+                         ../tgs/src/main/cpp/tgs/Statistics/Random.cpp \
+                         ../tgs/src/main/cpp/tgs/System/DisableCout.cpp \
+                         ../tgs/src/main/cpp/tgs/System/SystemInfo.cpp \
+                         ../tgs/src/main/cpp/tgs/System/Time.cpp \
+                         ../tgs/src/test/cpp/tgs/LruCacheTest.cpp \
+                         ../tgs/src/test/cpp/tgs/PluginFactory.cpp \
+                         ../tgs/src/test/cpp/tgs/BigContainers/BigMapTest.cpp \
+                         ../tgs/src/test/cpp/tgs/BigContainers/BasicBloomFilterTest.cpp \
+                         ../tgs/src/test/cpp/tgs/DelaunayTriangulation/DelaunayTriangulationTest.cpp \
+                         ../tgs/src/test/cpp/tgs/DisjointSet/DisjointSetTest.cpp \
+                         ../tgs/src/test/cpp/tgs/DisjointSet/DisjointSetMapTest.cpp \
+                         ../tgs/src/test/cpp/tgs/Interpolation/KernelEstimationInterpolatorTest.cpp \
+                         ../tgs/src/test/cpp/tgs/Interpolation/DelaunayInterpolatorTest.cpp \
+                         ../tgs/src/test/cpp/tgs/Optimization/NelderMeadTest.cpp \
+                         ../tgs/src/test/cpp/tgs/Optimization/SimulatedAnnealingTest.cpp \
+                         ../tgs/src/test/cpp/tgs/ProbablePath/ProbablePathCalculatorTest.cpp \
+                         ../tgs/src/test/cpp/tgs/RandomForest/RandomForestTest.cpp \
+                         ../tgs/src/test/cpp/tgs/RandomForest/RfDataFrameTest.cpp \
+                         ../tgs/src/test/cpp/tgs/RandomForest/InfoGainCalculatorTest.cpp \
+                         ../tgs/src/test/cpp/tgs/RandomForest/RandomTreeTest.cpp \
+                         ../tgs/src/test/cpp/tgs/RStarTree/HilbertRTreeTest.cpp \
+                         ../tgs/src/test/cpp/tgs/RStarTree/RTreeNodeStoreTest.cpp \
+                         ../tgs/src/test/cpp/tgs/RStarTree/RTreeNodeTest.cpp \
+                         ../tgs/src/test/cpp/tgs/RStarTree/RStarTreeTest.cpp \
+                         ../tgs/src/test/cpp/tgs/RStarTree/BoxTest.cpp \
+                         ../tgs/src/test/cpp/tgs/RStarTree/HilbertCurveTest.cpp \
+                         ../tgs/src/test/cpp/tgs/RStarTree/KnnIteratorNdTest.cpp \
+                         ../tgs/src/test/cpp/tgs/System/SystemInfoTest.cpp \
+                         ../tgs/src/main/cpp/tgs/RStarTree/FilePageStore.cpp \
+                         ../tgs/src/test/cpp/tgs/RStarTree/PageStoreTest.cpp
 
 # This tag can be used to specify the character encoding of the source files
 # that doxygen parses. Internally doxygen uses the UTF-8 encoding. Doxygen uses
@@ -783,7 +926,8 @@ INPUT_ENCODING         = UTF-8
 
 FILE_PATTERNS          = *.cpp \
                          *.h \
-                         *.hh
+                         *.hh \
+                         *.hpp
 
 # The RECURSIVE tag can be used to specify whether or not subdirectories should
 # be searched for input files as well.
@@ -1259,14 +1403,14 @@ CHM_INDEX_ENCODING     =
 # The default value is: NO.
 # This tag requires that the tag GENERATE_HTMLHELP is set to YES.
 
-BINARY_TOC             = NO
+BINARY_TOC             = YES
 
 # The TOC_EXPAND flag can be set to YES to add extra items for group members to
 # the table of contents of the HTML help documentation and to the tree view.
 # The default value is: NO.
 # This tag requires that the tag GENERATE_HTMLHELP is set to YES.
 
-TOC_EXPAND             = NO
+TOC_EXPAND             = YES
 
 # If the GENERATE_QHP tag is set to YES and both QHP_NAMESPACE and
 # QHP_VIRTUAL_FOLDER are set, an additional index file will be generated that
@@ -1377,7 +1521,7 @@ DISABLE_INDEX          = NO
 # The default value is: NO.
 # This tag requires that the tag GENERATE_HTML is set to YES.
 
-GENERATE_TREEVIEW      = NO
+GENERATE_TREEVIEW      = YES
 
 # The ENUM_VALUES_PER_LINE tag can be used to set the number of enum values that
 # doxygen will group on one line in the generated HTML documentation.
@@ -2043,7 +2187,7 @@ PERL_PATH              = /usr/bin/perl
 # powerful graphs.
 # The default value is: YES.
 
-CLASS_DIAGRAMS         = NO
+CLASS_DIAGRAMS         = YES
 
 # You can define message sequence charts within doxygen comments using the \msc
 # command. Doxygen will then run the mscgen tool (see:

@@ -58,28 +58,24 @@ public:
     const geos::geom::Coordinate& inputPt);
 
   /**
-   * Find the nearest location along a {@link Way} to a given point.
-   *
+   * @brief locate finds the nearest location along a {@link Way} to a given point.
    * @param inputPt the coordinate to locate
    * @return the location of the nearest point
    */
   WayLocation locate(const geos::geom::Coordinate& inputPt) const;
-
   /**
-   * Find the point on way that is d distance along the way.
-   *
+   * @brief locate finds the point on way that is d distance along the way.
    * @param d the distance along way.
    * @return the location of the point d distance along the way.
    */
   geos::geom::Coordinate locate(double d);
 
   /**
-   * Find the nearest location along a {@link Way} to a given point after the specified minimum
-   * {@link LineStringLocation}. If possible the location returned will be strictly greater than
-   * the <code>minLocation</code>. If this is not possible, the value returned will equal
-   * <code>minLocation</code>.  (An example where this is not possible is when minLocation =
-   * [end of line]).
-   *
+   * @brief locateAfter finds the nearest location along a {@link Way} to a given point after the
+   * specified minimum {@link LineStringLocation}. If possible the location returned will be
+   * strictly greater than the <code>minLocation</code>. If this is not possible, the value returned
+   * will equal <code>minLocation</code>.  (An example where this is not possible is when
+   * minLocation = [end of line]).
    * @param inputPt the coordinate to locate
    * @param minLocation the minimum location for the point location
    * @return the location of the nearest point
@@ -88,9 +84,8 @@ public:
                           const WayLocation& minLocation) const;
 
   /**
-   * Tests whether a location given by a <index, segmentFraction> pair is located after a
-   * {@link WayLocation}.
-   *
+   * @brief isGreater tests whether a location given by a <index, segmentFraction> pair is located
+   * after a {@link WayLocation}.
    * @param i the segment index
    * @param segFrac the fraction along the segment
    * @param loc a location

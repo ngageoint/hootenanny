@@ -53,6 +53,7 @@ public:
   class LeafDistance
   {
   public:
+
     LeafDistance() : distance(0.0), fid(0) { }
 
     LeafDistance(double dist, int fid)
@@ -69,6 +70,7 @@ public:
     : public std::binary_function<KnnIterator::LeafDistance, KnnIterator::LeafDistance, bool>
   {
   public:
+
     bool operator()(const KnnIterator::LeafDistance& _Left,
       const KnnIterator::LeafDistance& _Right) const
     {
@@ -87,6 +89,7 @@ public:
   class NodeDistance
   {
   public:
+
     NodeDistance() = default;
 
     NodeDistance(double dist, int nodeId)
@@ -103,6 +106,7 @@ public:
     : public std::binary_function<KnnIterator::NodeDistance*, KnnIterator::NodeDistance*, bool>
   {
   public:
+
     bool operator()(KnnIterator::NodeDistance*& _Left,
                     KnnIterator::NodeDistance*& _Right) const
     {
@@ -126,6 +130,7 @@ public:
   static double distPtToLine(double x, double y, double s1, double t1, double s2, double t2);
 
 protected:
+
   enum
   {
     RESERVED_ID = -1,

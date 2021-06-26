@@ -66,7 +66,8 @@ void ElementToRelationMap::addRelation(const OsmMap& map,
     QString getName() const override { return ""; }
     QString getClassName() const override { return ""; }
 
-  protected:
+  private:
+
     HashMap<ElementId, set<long>>& _mapping;
     long _rid;
   };

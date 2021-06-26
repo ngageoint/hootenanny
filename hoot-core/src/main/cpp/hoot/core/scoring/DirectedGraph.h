@@ -78,7 +78,7 @@ public:
 
   virtual bool isOneWay(const std::shared_ptr<Way>& way);
 
-protected:
+private:
 
   QMultiHash<long, Edge> _edges;
 

@@ -84,17 +84,13 @@ public:
   static std::shared_ptr<VagabondNetworkMatcher> create();
 
   void iterate() override;
-
   virtual void iteratePageRank();
-
   virtual void iteratePageRankBleeding();
-
   virtual void iterateVoting();
 
   void matchNetworks(ConstOsmMapPtr map, OsmNetworkPtr n1, OsmNetworkPtr n2) override;
 
   QList<NetworkEdgeScorePtr> getAllEdgeScores() const override;
-
   QList<NetworkVertexScorePtr> getAllVertexScores() const override;
 
 private:

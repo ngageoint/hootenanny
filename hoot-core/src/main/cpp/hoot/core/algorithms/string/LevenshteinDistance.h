@@ -56,16 +56,8 @@ public:
 
   double compare(const QString& s1, const QString& s2) const override;
 
-  static double score(const char* s1, const char* s2)
-  {
-    return score(QString::fromUtf8(s1), QString::fromUtf8(s2));
-  }
-
-  static double score(const QString& s1, const QString& s2)
-  {
-    return score<QString>(s1, s2);
-  }
-
+  static double score(const char* s1, const char* s2);
+  static double score(const QString& s1, const QString& s2);
   template<class T> static
   double score(const T& s1, const T& s2)
   {
@@ -74,16 +66,8 @@ public:
     return 1.0 - (double)d / (double)size;
   }
 
-  static unsigned int distance(const QString& s1, const QString& s2)
-  {
-    return distance<QString>(s1.toLower(), s2.toLower());
-  }
-
-  static unsigned int distance(const char* s1, const char* s2)
-  {
-    return distance(QString(s1), QString(s2));
-  }
-
+  static unsigned int distance(const QString& s1, const QString& s2);
+  static unsigned int distance(const char* s1, const char* s2);
   template<class T> static
   unsigned int distance(const T& s1, const T& s2)
   {
@@ -112,18 +96,15 @@ public:
     return distance(s1, s2);
   }
 
-  void setAlpha(double alpha);
-
   void setConfiguration(const Settings& conf) override;
 
   QString toString() const override { return QString("Levenshtein %1").arg(_alpha); }
-
   QString getDescription() const override
   { return "Returns a string comparison score derived using Levenshtein Distance"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+
+  void setAlpha(double alpha);
 
 private:
 

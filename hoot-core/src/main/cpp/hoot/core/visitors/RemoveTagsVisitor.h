@@ -61,13 +61,10 @@ public:
 
   void visit(const std::shared_ptr<Element>& e) override;
 
-  QString getDescription() const override { return "Removes tags by key"; }
-
   void setNegateCriterion(bool negate) { _negateCriterion = negate; }
 
   QString getInitStatusMessage() const override
   { return "Removing tags..."; }
-
   QString getCompletedStatusMessage() const override
   {
     return
@@ -75,8 +72,8 @@ public:
       StringUtils::formatLargeNumber(_numAffected) + " different elements";
   }
 
+  QString getDescription() const override { return "Removes tags by key"; }
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 
 protected:
@@ -87,12 +84,12 @@ protected:
   // Criterion the element whose tags are to be remove must match
   std::shared_ptr<ElementCriterion> _criterion;
 
-  // This allows for negating the criterion as an option sent in from the command line.
-  bool _negateCriterion;
-
   long _numTagsRemoved;
 
 private:
+
+  // This allows for negating the criterion as an option sent in from the command line.
+  bool _negateCriterion;
 
   void _setCriterion(const QString& criterionName);
   void _setKeys(const QStringList& keys);

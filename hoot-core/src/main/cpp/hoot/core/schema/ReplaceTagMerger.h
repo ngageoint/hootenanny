@@ -46,7 +46,6 @@ public:
    * If swap is set to true then t1 will be overwritten with t2 values.
    */
   ReplaceTagMerger(bool swap = false);
-
   virtual ~ReplaceTagMerger() = default;
 
   Tags mergeTags(const Tags& t1, const Tags& t2, ElementType et) const override;
@@ -61,7 +60,7 @@ public:
   void setOverwriteExcludeTagKeys(const QStringList& overwriteExcludeTagKeys)
   { _overwriteExcludeTagKeys = overwriteExcludeTagKeys; }
 
-protected:
+private:
 
   bool _swap;
   // keys of tags not to be overwritten
@@ -86,9 +85,7 @@ public:
     return
       "Completely replaces tags in the secondary feature with those from the reference feature";
   }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 };
 
@@ -110,9 +107,7 @@ public:
     return
       "Completely replaces tags in the reference feature with those from the secondary feature";
   }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 };
 

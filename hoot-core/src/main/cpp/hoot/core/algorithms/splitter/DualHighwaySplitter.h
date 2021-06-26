@@ -44,10 +44,11 @@ class OsmMap;
 class Way;
 
 /**
- * Splits all "divided=yes" highways into two one way streets. All intersections should be split
- * before this method is called. Failure to do so will result in undefined behavior. A number of
- * assumptions must be made to do this including assumptions about the direction of travel on
- * roads (right or left hand drivers).
+ * @brief The DualHighwaySplitter class splits all "divided=yes" highways into two one way streets.
+ *
+ * All intersections should be split before this method is called. Failure to do so will result in
+ * undefined behavior. A number of assumptions must be made to do this including assumptions about
+ * the direction of travel on roads (right or left hand drivers).
  */
 class DualHighwaySplitter : public OsmMapOperation
 {
@@ -75,24 +76,21 @@ public:
 
   QString getInitStatusMessage() const override
   { return "Splitting divided highways into two one way streets..."; }
-
   QString getCompletedStatusMessage() const override
   { return "Split " + QString::number(_numAffected) + " divided highways"; }
 
-  QString getDescription() const override
-  { return "Splits all 'divided=yes' highways into two one way streets"; }
-
   /**
+   * @brief getCriteria isn't actually using HighwayCriterion in the filtering, but for the purposes
+   * of reducing unnecessary conflate ops we don't need to run it unless we're running road
+   * conflation.
    * @see FilteredByGeometryTypeCriteria
-   *
-   * This isn't actually using HighwayCriterion in the filtering, but for the purposes of reducing
-   * unnecessary conflate ops we don't need to run it unless we're running road conflation.
    */
   QStringList getCriteria() const override;
 
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+  QString getDescription() const override
+  { return "Splits all 'divided=yes' highways into two one way streets"; }
 
 private:
 

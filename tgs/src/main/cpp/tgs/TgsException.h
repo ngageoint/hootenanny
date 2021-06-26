@@ -116,7 +116,7 @@ namespace Tgs
       return _errorStr.data();
     }
 
-  protected:
+  private:
 
     std::string _errorStr;
   };

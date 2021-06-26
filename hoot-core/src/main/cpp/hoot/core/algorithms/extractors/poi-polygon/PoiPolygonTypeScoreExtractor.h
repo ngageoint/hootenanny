@@ -41,7 +41,8 @@ namespace hoot
 {
 
 /**
- * Scores element type similarity
+ * @brief The PoiPolygonTypeScoreExtractor class scores element type similarity for POI to Polygon
+ * conflation.
  */
 class PoiPolygonTypeScoreExtractor : public FeatureExtractorBase, public Configurable
 {

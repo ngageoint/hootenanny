@@ -557,7 +557,7 @@ test output verification methods you will use.
 * Do not overwrite generated test output used to verify a test unless you are sure that in doing
 so you are still preserving the integrity of the test.
 * In Java, mock objects are your friends when writing tests.
-* Design a class so that testing of all of its members is possible.  In some cases, you may need
+* Design a class so that testing of all of its members is possible. In some cases, you may need
 to expose members only to the tests. e.g. Use C++ friend keyword, etc.; or in Java, Mockito may
 help with this.
 

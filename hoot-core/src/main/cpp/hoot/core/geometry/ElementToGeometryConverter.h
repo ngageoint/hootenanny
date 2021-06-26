@@ -126,7 +126,7 @@ public:
 
   static const int UNKNOWN_GEOMETRY = -1;
 
-protected:
+private:
 
   ConstElementProviderPtr _constProvider;
   std::shared_ptr<OGRSpatialReference>  _spatialReference;

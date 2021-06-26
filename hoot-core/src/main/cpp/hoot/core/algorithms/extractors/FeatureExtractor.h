@@ -46,22 +46,25 @@ namespace hoot
 class OsmMap;
 
 /**
- * Extracts a single feature (AKA factor) for a given element pair.
+ * @brief The FeatureExtractor class extracts a single feature (AKA factor) for a given element
+ * pair.
  */
 class FeatureExtractor : public ApiEntityInfo
 {
 public:
 
+  static QString className() { return "hoot::FeatureExtractor"; }
+
   FeatureExtractor() = default;
   virtual ~FeatureExtractor() = default;
-
-  static QString className() { return "hoot::FeatureExtractor"; }
 
   static double nullValue() { return -999999999; }
 
   /**
-   * Extracts a feature from a given pair of elements. The feature may be something like the
-   * distance between colors, the overlap of two polygons, etc.
+   * @brief extract extracts a feature from a given pair of elements.
+   *
+   * The feature may be something like the distance between colors, the overlap of two polygons,
+   * etc.
    */
   virtual double extract(const OsmMap& map, const std::shared_ptr<const Element>& target,
     const std::shared_ptr<const Element>& candidate) const = 0;
@@ -69,12 +72,13 @@ public:
   QString toString() const override { return ""; }
 
   /**
-   * Returns the factor type for this feature/factor (Nominal or Numeric).
+   * @brief getFactorType returns the factor type for this feature/factor (Nominal or Numeric).
    */
   virtual Tgs::DataFrame::FactorType getFactorType() const = 0;
 
   /**
-   * Returns the null treatment for this feature/factor (NullAsValue or NullAsMissingValue).
+   * @brief getNullTreatment returns the null treatment for this feature/factor (NullAsValue or
+   * NullAsMissingValue).
    */
   virtual Tgs::DataFrame::NullTreatment getNullTreatment() const = 0;
 

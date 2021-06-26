@@ -261,14 +261,13 @@ public:
 protected:
 
   ElementData& _getElementData() override { _makeWritable(); return *_wayData; }
-
   const ElementData& _getElementData() const override { return *_wayData; }
-
-  void _makeWritable();
 
 private:
 
   std::shared_ptr<WayData> _wayData;
+
+  void _makeWritable();
 
   // for debugging only; SLOW - We don't check for duplicated nodes (outside of start/end) at
   // runtime due to the performance hit. So, use this to debug when that occurs.

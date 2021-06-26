@@ -70,7 +70,7 @@ public:
 
   QString getClassName() const override { return className(); }
 
-protected:
+private:
 
   std::shared_ptr<OsmMap> _map;
 };
