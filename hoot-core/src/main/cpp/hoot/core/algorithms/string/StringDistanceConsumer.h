@@ -34,7 +34,7 @@ namespace hoot
 {
 
 /**
- * Interface for consuming a StringDistance. Most useful w/ plugins.
+ * @brief The StringDistanceConsumer class is an interface for consuming a StringDistance.
  */
 class StringDistanceConsumer
 {

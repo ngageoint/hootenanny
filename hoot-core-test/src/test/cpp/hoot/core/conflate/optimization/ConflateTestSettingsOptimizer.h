@@ -37,9 +37,9 @@ namespace hoot
 class AbstractTestFitnessFunction;
 
 /**
- * Uses simulated annealing to attempt to determine the optimal configuration for conflation
- * related configuration options, given a fitness function that describes how well a conflation
- * test performs.
+ * @brief the ConflateTestSettingsOptimizer class uses simulated annealing to attempt to determine
+ * the optimal configuration for conflation related configuration options, given a fitness function
+ * that describes how well a conflation test performs.
  */
 class ConflateTestSettingsOptimizer
 {
@@ -48,8 +48,7 @@ public:
   ConflateTestSettingsOptimizer(bool verbose);
 
   /**
-   * Runs the optimization process
-   *
+   * @brief runOptimization Runs the optimization process
    * @param fitnessFunction a user specified fitness function that determines the value of test
    * outcome
    * @param numIterations the number of iterations to run the optimization

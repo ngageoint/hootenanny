@@ -40,7 +40,7 @@ namespace hoot
 {
 
 /**
- * Abstract base class for hoot test suites
+ * @brief The AbstractTestSuite class is an abstract base class for hoot test suites
  */
 class AbstractTestSuite : public CppUnit::TestSuite
 {

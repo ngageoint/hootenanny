@@ -59,21 +59,17 @@ public:
   WayDiscretizer(const ConstOsmMapPtr& map, const std::shared_ptr<const hoot::Way>& way);
 
   /**
-   * Given an input way, discretize the way out into discrete coordinates. The first and last nodes
-   * are guaranteed to be included.
-   *
+   * @brief discretize given an input way, discretize the way out into discrete coordinates. The
+   * first and last nodes are guaranteed to be included.
    * @param spacing the maximum distance between points
    * @param result discretized coordinates
    * @return true if the operation was successful; false otherwise
    */
   bool discretize(double spacing, std::vector<geos::geom::Coordinate>& result);
-
   /**
-   * The above function is much more efficient.
-   *
-   * Split a way up into a number of equally spaced way locations. As long as the way length > 0
-   * you are guaranteed to get at least two points, one for the beginning and one for the end.
-   *
+   * @brief discretize splits a way up into a number of equally spaced way locations. As long as the
+   * way length > 0 you are guaranteed to get at least two points, one for the beginning and one for
+   * the end. The above function is much more efficient.
    * @param spacing the maximum distance between points
    * @param result discretized coordinates
    * @return true if the operation was successful; false otherwise
@@ -82,7 +78,7 @@ public:
   bool discretize(double spacing, std::vector<WayLocation>& result) const;
 
   /**
-   * Interpolates the coordinate at the given distance d.
+   * @brief interpolate interpolates the coordinate at the given distance d.
    */
   geos::geom::Coordinate interpolate(double d);
 

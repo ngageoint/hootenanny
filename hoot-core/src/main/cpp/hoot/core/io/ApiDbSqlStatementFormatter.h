@@ -40,12 +40,14 @@ namespace hoot
 class ApiDbSqlStatementFormatter
 {
 public:
+
   /** Constructor */
   ApiDbSqlStatementFormatter();
   /** Destructor */
   virtual ~ApiDbSqlStatementFormatter() = default;
 
 protected:
+
   /** Map of table names and output format strings */
   QMap<QString, QString> _outputFormatStrings;
   /** Date string format */

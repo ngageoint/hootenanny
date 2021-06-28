@@ -36,7 +36,9 @@
 #include <tgs/RStarTree/RTreeNodeStore.h>
 
 using namespace std;
-using namespace Tgs;
+
+namespace Tgs
+{
 
 BoxInternalData::BoxInternalData(int dimensions, const char* data)
 {
@@ -357,4 +359,6 @@ void RTreeNode::updateChildEnvelope(int index, const Box& envelope)
   assert(index < getChildCount());
   BoxInternalData bid(_dimensions, _getChildPtr(index)->getBox(), envelope);
   _page->setDirty();
+}
+
 }

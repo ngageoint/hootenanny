@@ -39,7 +39,9 @@
 #include "../PluginFactory.h"
 
 using namespace std;
-using namespace Tgs;
+
+namespace Tgs
+{
 
 class HilbertCurveTest : public CppUnit::TestFixture
 {
@@ -126,3 +128,5 @@ public:
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(HilbertCurveTest, PluginFactory::testName());
+
+}

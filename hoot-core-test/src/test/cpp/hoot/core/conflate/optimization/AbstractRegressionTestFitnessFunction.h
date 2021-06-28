@@ -40,7 +40,8 @@ namespace hoot
 class AbstractRegressionTest;
 
 /**
- * Fitness function which optimizes against Hootenanny regression release test data.
+ * @brief The AbstractRegressionTestFitnessFunction class Fitness function which optimizes against
+ * Hootenanny regression release test data.
  *
  * This class uses the error log setting to allow for more easily viewing the results of the
  * optimization without having to view conflation log clutter...there may be a better way to
@@ -54,43 +55,39 @@ class AbstractRegressionTestFitnessFunction : public AbstractTestFitnessFunction
 
 public:
 
-    AbstractRegressionTestFitnessFunction(const QString& dir, const QString& configFile,
-                                          const QString& testDirExtension);
+  AbstractRegressionTestFitnessFunction(const QString& dir, const QString& configFile,
+                                        const QString& testDirExtension);
 
-    /**
-     * Fitness function that determines the performance based on the test output
-     *
-     * @param s a simulated annealing state
-     * @return a fitness value (lower is better)
-     */
-    virtual double f(const Tgs::ConstStatePtr& s);
+  /**
+   * @see Tgs::FitnessFunction
+   */
+  virtual double f(const Tgs::ConstStatePtr& s);
 
-    /**
-     * Executes just before the test runs
-     */
-    virtual void initTest(Settings& testSettings);
+  /**
+   * @see AbstractTestFitnessFunction
+   */
+  virtual void initTest(Settings& testSettings);
+  /**
+   * @see AbstractTestFitnessFunction
+   */
+  virtual void afterTestRun();
 
-    /**
-     * Executes just after the test runs
-     */
-    virtual void afterTestRun();
-
-    /**
-     * Pretty printed string for the best score for each test in the test suite
-     *
-     * @return a scores string
-     */
-    QString bestScoresPerTestToString() const;
+  /**
+   * @brief bestScoresPerTestToString Pretty printed string for the best score for each test in the
+   * test suite
+   * @return a scores string
+   */
+  QString bestScoresPerTestToString() const;
 
 protected:
 
-    QMap<QString, double> _testsToBestScores;
-    QString _configFile;
+  QMap<QString, double> _testsToBestScores;
+  QString _configFile;
 
 private:
 
-    void _createConfig(const QString& testName, Settings& testSettings);
-    void _checkForBetterScoreFromTest(AbstractRegressionTest* regressionTest);
+  void _createConfig(const QString& testName, Settings& testSettings);
+  void _checkForBetterScoreFromTest(AbstractRegressionTest* regressionTest);
 };
 
 }

@@ -38,7 +38,7 @@ class ChainCriterion;
 class Settings;
 
 /**
- * This is the cut only version of C&R.
+ * @brief The ChangesetCutOnlyCreator class is the cut only version of Cut and Replace.
  */
 class ChangesetCutOnlyCreator : public ChangesetReplacementCreatorAbstract
 {
@@ -50,8 +50,7 @@ public:
   ChangesetCutOnlyCreator();
 
   /**
-   * Creates a changeset that replaces features in the first input
-   *
+   * @brief create creates a changeset that replaces features in the first input.
    * @param input1 the target data file path for the changeset in which to replace features; must
    * support Boundable
    * @param input2 ignored
@@ -60,10 +59,8 @@ public:
    */
   void create(const QString& input1, const QString& input2, const geos::geom::Envelope& bounds,
     const QString& output) override;
-
   /**
-   * Creates a changeset that replaces features in the first input
-   *
+   * @brief create creates a changeset that replaces features in the first input.
    * @param input1 the target data file path for the changeset in which to replace features; must
    * support Boundable
    * @param input2 ignored

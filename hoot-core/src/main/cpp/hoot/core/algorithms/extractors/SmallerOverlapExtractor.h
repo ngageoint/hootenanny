@@ -38,12 +38,12 @@ namespace hoot
 class Element;
 
 /**
- * Based on the JCS OverlapExtractor.
+ * @brief The SmallerOverlapExtractor class uses the feature with more overlap to calculate the
+ * percentage overlap.
  *
- * This extractor uses the feature with more overlap to calculate the percentage overlap. For
- * instance if you have a small feature contained within a larger feature, the result will be 1.0.
- * If either feature has an area of zero, then zero is returned.
- *
+ * It is based on the JCS OverlapExtractor. For instance if you have a small feature contained
+ * within a larger feature, the result will be 1.0. If either feature has an area of zero, then
+ * zero is returned.
  * @author RoadMatcher
  * @copyright GPL
  * http://www.vividsolutions.com/products.asp?catg=spaapp&code=roadmatcher
@@ -59,20 +59,18 @@ public:
 
   static QString className() { return "hoot::SmallerOverlapExtractor"; }
 
-  QString getClassName() const override { return className(); }
-
   double extract(const OsmMap& map, const std::shared_ptr<const Element>& target,
     const std::shared_ptr<const Element>& candidate) const override;
-
-  QString getDescription() const override
-  { return "Determines the overlap between two features focusing on the feature with more overlap"; }
 
   /**
    * @see Configurable
    */
   void setConfiguration(const Settings& conf) override;
 
+  QString getClassName() const override { return className(); }
   QString getName() const override { return className(); }
+  QString getDescription() const override
+  { return "Determines the overlap between two features focusing on the feature with more overlap"; }
 
 private:
 

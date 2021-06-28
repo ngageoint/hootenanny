@@ -71,8 +71,10 @@ namespace hoot
 {
 
 /**
- * I looked at the boost implementation, but it didn't have an iterator to iterate over the
- * populated cells. That is the main point of this implementation.
+ * @brief The Sparse2dMatrix class
+ *
+ * Looked at the boost implementation, but it didn't have an iterator to iterate over the populated
+ * cells. That is the main point of this implementation.
  */
 class Sparse2dMatrix
 {
@@ -85,13 +87,11 @@ public:
   virtual ~Sparse2dMatrix() = default;
 
   double get(const CellId& cid) const;
-
   double get(int row, int col) const { return get(CellId(row, col)); }
 
   void set(int row, int col, double v) { _map[CellId(row, col)] = v; }
 
   HashMap<CellId, double>::const_iterator begin() const { return _map.begin(); }
-
   HashMap<CellId, double>::const_iterator end() const { return _map.end(); }
 
   QString toString() const;

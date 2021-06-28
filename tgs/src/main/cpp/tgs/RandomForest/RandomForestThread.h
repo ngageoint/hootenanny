@@ -42,6 +42,7 @@ namespace Tgs
   class RandomForestThread : public QObject, public QRunnable
   {
     Q_OBJECT
+
   public:
     /**
      * @brief RandomForestThread Constructor
@@ -56,18 +57,22 @@ namespace Tgs
 
 
   signals:
+
     /**
      * @brief exceptionThrown a signal to emit when an exception is thrown
      * @param what the exception message
      */
     void exceptionThrown(QString what);
+
   protected:
+
     /**
      * @brief starts the thread
      */
     void run() override;
 
   private:
+
     std::shared_ptr<RandomTree> _tree;
     std::shared_ptr<DataFrame> _data;
     unsigned int _numFactors;

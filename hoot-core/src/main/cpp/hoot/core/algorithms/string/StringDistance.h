@@ -40,7 +40,7 @@ namespace hoot
 {
 
 /**
- * An interface to determining the similarity of two strings.
+ * @brief The StringDistance class is an interface to determining the similarity of two strings.
  */
 class StringDistance : public ApiEntityInfo
 {
@@ -52,11 +52,10 @@ public:
   virtual ~StringDistance() = default;
 
   /**
-   * Returns a value from 1 (very similar) to 0 (very dissimilar) describing the distance between
-   * two strings.
+   * @brief compare returns a value from 1 (very similar) to 0 (very dissimilar) describing the
+   * distance between two strings.
    */
   virtual double compare(const QString& s1, const QString& s2) const = 0;
-
 };
 
 using StringDistancePtr = std::shared_ptr<StringDistance>;

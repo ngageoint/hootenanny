@@ -66,22 +66,19 @@ public:
 
   QString getInitStatusMessage() const override
   { return "Merging offset intersections..."; }
-
   QString getCompletedStatusMessage() const override
   { return "Merged " + QString::number(_numAffected) + " offset intersections"; }
 
   QString getDescription() const override
   { return "Merges road intersections that are offset into one intersection"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 
-protected:
-
-  void _mergeOffsetIntersection(long node1, long node2);
+private:
 
   double _offsetMax;
+
+  void _mergeOffsetIntersection(long node1, long node2);
 };
 
 }

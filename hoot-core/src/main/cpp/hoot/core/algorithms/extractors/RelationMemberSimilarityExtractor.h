@@ -36,11 +36,12 @@ namespace hoot
 {
 
 /**
- * Uses a Jaccard index to score how similar the members of two relations are in the range of 0.0
- * to 1.0.
+ * @brief The RelationMemberSimilarityExtractor class scores how similar the members of two
+ * relations are.
  *
- * Since relations may have similar members with different element IDs between reference and
- * secondary layers, the comparisons ignore element IDs and look at the member elements directly.
+ * It uses a Jaccard index which calculates a score in the range of 0.0 to 1.0. Since relations may
+ * have similar members with different element IDs between reference and secondary layers, the
+ * comparisons ignore element IDs and look at the member elements directly.
  *
  * https://en.wikipedia.org/wiki/Jaccard_index
  * https://www.statisticshowto.datasciencecentral.com/jaccard-index/
@@ -54,14 +55,12 @@ public:
 
   static QString className() { return "hoot::RelationMemberSimilarityExtractor"; }
 
-  QString getClassName() const override { return className(); }
-
   double extract(const OsmMap& map, const std::shared_ptr<const Element>& target,
     const std::shared_ptr<const Element>& candidate) const override;
 
+  QString getClassName() const override { return className(); }
   QString getDescription() const override
   { return "Scores the similarity between two sets of relation members"; }
-
   QString getName() const override { return className(); }
 };
 

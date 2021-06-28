@@ -47,7 +47,7 @@ class FindNodesInWayFactory;
 class WayLocation;
 
 /**
- * Splits ways
+ * @brief The WaySplitter class splits ways.
  *
  * @todo Not all of the methods add the split parent ID...more may need to.
  */
@@ -58,10 +58,9 @@ public:
   WaySplitter(const OsmMapPtr& map, WayPtr way);
 
   /**
-   * Creates a split for each way location (+1) and returns the new ways.
+   * @brief createSplits creates a split for each way location (+1) and returns the new ways.
    *
    * The old way is not modified, and the new ways are not added to the map.
-   *
    * @param wl A sorted list of split points. There may be duplicate split points.
    * @return The first result in the vector refers to the way before wl[0], the next one is
    * wl[0] -> wl[1], etc. The returned vector may contain empty entries if the split size is zero.
@@ -71,7 +70,7 @@ public:
   std::vector<WayPtr> createSplits(const std::vector<WayLocation>& wl) const;
 
   /**
-   * Given an input subline, breaks the way up into up to 3 pieces
+   * @brief createSubline given an input subline, breaks the way up into up to 3 pieces.
    *
    * @param subline to split
    * @param populated with scraps from the split
@@ -80,30 +79,27 @@ public:
   WayPtr createSubline(const WaySubline& subline, std::vector<WayPtr>& scraps) const;
 
   /**
-   * Given a split point on a way, breaks the way into two smaller ways
+   * @brief split given a split point on a way, breaks the way into two smaller ways.
    *
    * The old way will be removed from the source map and the two new ones will be added. No nodes
    * will be removed or replaced, but a new node may be added.
-   *
    * @param splitPoint point at which to split the way
    * @return split way parts, which are added to the map
    */
   std::vector<WayPtr> split(WayLocation& splitPoint) const;
-
   /**
-   * Splits way into smaller ways no bigger than maxSize. If a is smaller than maxSize already
-   * then nothing is done. There are no guarantees about the size, but the child ways should be
-   * approximately equal.The resulting ways will be placed in a's parent OsmMap.
+   * @brief split splits way into smaller ways no bigger than maxSize.
    *
+   * If a is smaller than maxSize already, then nothing is done. There are no guarantees about the
+   * size, but the child ways should be approximately equal.The resulting ways will be placed in a's
+   * parent OsmMap.
    * @param map map owning the way being split
    * @param w the way to split
    * @param maxSize the maximum size of the way in map units
    */
   static void split(const OsmMapPtr& map, const WayPtr& w, double maxSize);
-
   /**
-   * Splits a way into smaller ways
-   *
+   * @brief split splits a way into smaller ways.
    * @param map map owning the way
    * @param way the way to split
    * @param splitPoint the point at which to split the way

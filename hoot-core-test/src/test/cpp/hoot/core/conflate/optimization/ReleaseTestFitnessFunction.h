@@ -35,8 +35,8 @@ namespace hoot
 {
 
 /**
- * Fitness function which optimizes configuration settings against Hootenanny regression release
- * test data.
+ * @brief The ReleaseTestFitnessFunction class is a fitness function which optimizes configuration
+ * settings against Hootenanny regression release test data.
  */
 class ReleaseTestFitnessFunction : public AbstractRegressionTestFitnessFunction
 {
@@ -44,8 +44,7 @@ class ReleaseTestFitnessFunction : public AbstractRegressionTestFitnessFunction
 public:
 
   /**
-   * Constructor
-   *
+   * @brief ReleaseTestFitnessFunction Constructor
    * @param dir base dir for the tests
    * @param configFile custom config file to pass to the associated test suite
    */

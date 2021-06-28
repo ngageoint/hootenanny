@@ -56,14 +56,14 @@ public:
 
 protected:
 
+  void _init() override;
+  void _finalize() override;
+  void _translateToOsm(Tags& t, const char *layerName, const char* geomType) override;
+
+private:
+
   // avoid including Python.h in this header file.
   void* _translateFunction;
-
-  void _init() override;
-
-  void _finalize() override;
-
-  void _translateToOsm(Tags& t, const char *layerName, const char* geomType) override;
 };
 
 }

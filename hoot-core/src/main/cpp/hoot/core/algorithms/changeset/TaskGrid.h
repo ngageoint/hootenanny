@@ -37,7 +37,7 @@ namespace hoot
 {
 
 /**
- * Represents a subdivided area for performing work on a map
+ * @brief The TaskGrid class represents a subdivided area for performing work on a map.
  */
 class TaskGrid
 {
@@ -57,8 +57,7 @@ public:
   TaskGrid() = default;
 
   /**
-   * Adds a task grid cell to this task grid; cell ordering will be maintainied
-   *
+   * @brief addCell adds a task grid cell to this task grid; cell ordering will be maintainied.
    * @param cell task grid cell to add
    */
   void addCell(const TaskGridCell& cell) { _cells.append(cell); }

@@ -39,30 +39,26 @@ namespace hoot
 class Settings;
 
 /**
- * This class provides the ability to segement an ordered set of points with constraints.
+ * @brief The ExpectationIntersection class provides the ability to segement an ordered set of
+ * points with constraints.
  */
 class ExpectationIntersection
 {
 public:
 
-  /**
-   * @param minMatches The minimum number of matches that should be in a line.
-   */
   ExpectationIntersection();
 
   /**
-   * Given a set of matches along a line, determine a good split point using an EM inspired
-   * algorithm. [1]
-   *
-   * @param matches An ordered matrix of the points describing matches. Each row is a point record
-   *    and the columns are features of that point. Must be of type CV_64F.
-   * @param ranges The valid ranges for each of the sublines. The ranges must overlap at least
-   *    a little. Each row is a range, the columns are the start and stop values. Must be of type
-   *    CV_32S.
-   * @return Returns a vector of the split points. Each split point will be between the overlapping
-   *    ranges.
-   *
+   * @brief snapMatches Given a set of matches along a line, determine a good split point using an
+   * EM inspired algorithm. [1]
    * 1. http://en.wikipedia.org/wiki/Expectation%E2%80%93maximization_algorithm
+   * @param matches An ordered matrix of the points describing matches. Each row is a point record
+   * and the columns are features of that point. Must be of type CV_64F.
+   * @param ranges The valid ranges for each of the sublines. The ranges must overlap at least
+   * a little. Each row is a range, the columns are the start and stop values. Must be of type
+   * CV_32S.
+   * @return Returns a vector of the split points. Each split point will be between the overlapping
+   * ranges.
    */
   std::vector<double> snapMatches(const cv::Mat& matches, const cv::Mat& ranges) const;
 
@@ -77,8 +73,7 @@ private:
     int start, int stop) const;
 
   /**
-   * Verify that the caller provided meaningful ranges.
-   * Throws an exception on failure.
+   * Verify that the caller provided meaningful ranges. Throws an exception on failure.
    */
   void _validateRanges(int rowCount, const cv::Mat& ranges) const;
 };

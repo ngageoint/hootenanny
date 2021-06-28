@@ -37,13 +37,15 @@ class DirectionFinder
 public:
 
   /**
-   * Returns true if these lines are generally pointed in a similar direction.
+   * @brief isSimilarDirection returns true if these lines are generally pointed in a similar
+   * direction.
    */
   static bool isSimilarDirection(
     const ConstOsmMapPtr& map, const ConstWayPtr& w1, const ConstWayPtr& w2);
 
   /**
-   * Returns true if these lines are generally pointed in a similar direction.
+   * @brief isSimilarDirection2 Returns true if these lines are generally pointed in a similar
+   * direction.
    *
    * This is an alternative implementation written for Attribute Conflation, which may possibly
    * replace the original at some point after extensive testing.

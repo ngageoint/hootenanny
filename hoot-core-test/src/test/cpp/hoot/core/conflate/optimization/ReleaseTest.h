@@ -34,7 +34,8 @@ namespace hoot
 {
 
 /**
- * Represents a hoot regression release test to be run as part of a hoot tests suite.
+ * @brief The ReleaseTest class represents a hoot regression release test to be run as part of a
+ * hoot-tests suite.
  *
  * This class uses the error log setting to allow for more easily viewing the results of the
  * optimization without having to view conflation log clutter...there may be a better way to
@@ -50,7 +51,7 @@ class ReleaseTest : public AbstractRegressionTest
 public:
 
   /**
-   * @brief PertyTest
+   * @brief ReleaseTest Constructor
    * @param d base dir containing the tests
    * @param confs configuration file paths to pass along to the tests
    */
@@ -62,7 +63,6 @@ protected:
    * Parse the score output of a regression test from a file
    */
   virtual void _parseScore();
-
 };
 
 }

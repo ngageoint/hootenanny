@@ -41,9 +41,13 @@ class ChainCriterion;
 class Settings;
 
 /**
- * High level abstract class for prepping data for replacement changeset generation (changesets
- * which replace features inside of a specified bounds) and then calls on the appropriate changeset
- * file writer to output a changeset file.
+ *
+ */
+/**
+ * @brief The ChangesetReplacementCreatorAbstract class is a high level abstract class for prepping
+ * data for replacement changeset generation (changesets which replace features inside of a
+ * specified bounds) and then calls on the appropriate changeset file writer to output a changeset
+ * file.
  *
  * This class uses a customized workflow that depends upon the feature type the changeset is being
  * generated for, whether all the reference features or just those that overlap secondary features
@@ -69,7 +73,6 @@ class Settings;
  */
 class ChangesetReplacementCreatorAbstract : public ChangesetReplacement
 {
-
   /**
    * Options used to control cropping at various stages of the replacement changeset workflow
    */

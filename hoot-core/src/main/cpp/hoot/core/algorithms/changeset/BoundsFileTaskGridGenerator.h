@@ -37,7 +37,8 @@ namespace hoot
 {
 
 /**
- * Generates a rectangular task grid from one or more rectangular bounds file inputs
+ * @brief The BoundsFileTaskGridGenerator class generates a rectangular task grid from one or more
+ * rectangular bounds file inputs.
  */
 class BoundsFileTaskGridGenerator : public TaskGridGenerator
 {
@@ -45,8 +46,7 @@ class BoundsFileTaskGridGenerator : public TaskGridGenerator
 public:
 
   /**
-   * Constructor
-   *
+   * @brief BoundsFileTaskGridGenerator Constructor
    * @param inputs one or more bounds file inputs
    */
   BoundsFileTaskGridGenerator(const QStringList& inputs);

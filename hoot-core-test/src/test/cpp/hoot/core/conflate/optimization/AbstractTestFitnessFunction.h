@@ -49,7 +49,8 @@ namespace hoot
 class Settings;
 
 /**
- * Fitness function which optimizes against Hootenanny conflate case test data
+ * @brief The AbstractTestFitnessFunction class is a fitness function which optimizes against
+ * Hootenanny conflate case test data
  *
  * This class uses the error log setting to allow for more easily viewing the results of the
  * optimization without having to view conflation log clutter...there may be a better way to
@@ -67,29 +68,27 @@ public:
   int getTestCount() { return _testCount; }
 
   /**
-   * Returns a list of test names that failed for the best test run(s) (test runs with lowest
-   * numbers of failures)
-   *
+   * @brief getFailingTestsForBestRuns returns a list of test names that failed for the best test
+   * run(s) (test runs with lowest numbers of failures).
    * @return a list of test names; or an empty list if there were no test failures for the best
    * test run(s)
    */
   QStringList getFailingTestsForBestRuns() const { return _failingTestsForBestRuns; }
 
   /**
-   * Returns the current number of failing tests for the best test runs(s) (lowest number of
-   * failures)
-   *
+   * @brief getLowestNumFailingTestsPerRun returns the current number of failing tests for the best
+   * test runs(s) (lowest number of failures)
    * @return count of test failures
    */
   int getLowestNumFailingTestsPerRun() const { return _lowestNumFailingTestsPerRun; }
 
   /**
-   * Executes just before the test runs
+   * @brief initTest executes just before the test runs.
    */
   virtual void initTest(Settings& testSettings) = 0;
 
   /**
-   * Executes just after the test runs
+   * @brief afterTestRun executes just after the test runs.
    */
   virtual void afterTestRun() = 0;
 

@@ -62,21 +62,21 @@ int OsmXmlReader::logWarnCount = 0;
 HOOT_FACTORY_REGISTER(OsmMapReader, OsmXmlReader)
 
 OsmXmlReader::OsmXmlReader() :
-_osmFound(false),
 _status(Status::Invalid),
-_missingNodeCount(0),
-_missingWayCount(0),
-_badAccuracyCount(0),
 _keepStatusTag(false),
 _useFileStatus(false),
 _useDataSourceId(false),
+_numRead(0),
+_osmFound(false),
+_missingNodeCount(0),
+_missingWayCount(0),
+_badAccuracyCount(0),
 _addSourceDateTime(true),
 _wayId(0),
 _relationId(0),
 _inputCompressed(false),
 _addChildRefsWhenMissing(false),
 _logWarningsForMissingElements(true),
-_numRead(0),
 _statusUpdateInterval(1000),
 _keepImmediatelyConnectedWaysOutsideBounds(false)
 {

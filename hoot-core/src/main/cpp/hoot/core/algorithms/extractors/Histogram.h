@@ -40,7 +40,7 @@ namespace hoot
 {
 
 /**
- * A class for storing a histogram of angle values.
+ * @brief The Histogram class is for storing a histogram of angle values.
  */
 class Histogram
 {
@@ -49,43 +49,39 @@ public:
   Histogram(int bins);
 
   const std::vector<double>& getBins() const { return _bins; }
-
   size_t numBins() const { return _bins.size(); }
-
-  void addAngle(Radians theta, double length);
-
   size_t getBin(Radians theta) const;
-
   /**
-   * Returns the angle of the center of the specified bin.
+   * @brief getBinCenter returns the angle of the center of the specified bin.
    */
   Radians getBinCenter(size_t bin) const;
 
+  void addAngle(Radians theta, double length);
+
   /**
-   * Normalize all the bins so the sum of the bins is 1.0.
+   * @brief normalize normalizes all the bins so the sum of the bins is 1.0.
    */
   void normalize();
 
   /**
-   * Returns a value from 0.0 to 1.0 describing the diff. 1.0 is exactly the same.
+   * @brief diff returns a value from 0.0 to 1.0 describing the diff. 1.0 is exactly the same.
    */
   double diff(Histogram& other);
 
   /**
-   * Smooth the histogram with a gaussian filter with the specified sigma.
+   * @brief smooth smoothes the histogram with a gaussian filter with the specified sigma.
    */
   void smooth(Radians sigma);
 
   /**
-   * Creates a printable string for all histogram bins
-   *
+   * @brief toString creates a printable string for all histogram bins.
    * @return a histogram string
    */
   QString toString() const;
 
   /**
-   * Creates a printable string for histogram bins with positive values only
-   *
+   * @brief printPositiveBins creates a printable string for histogram bins with positive values
+   * only.
    * @return a histogram string
    */
   QString printPositiveBins() const;

@@ -65,20 +65,16 @@ int OsmJsonReader::logWarnCount = 0;
 HOOT_FACTORY_REGISTER(OsmMapReader, OsmJsonReader)
 
 // TODO: implement Configurable to help simplify this
-OsmJsonReader::OsmJsonReader() : ParallelBoundedApiReader(false, true),
+OsmJsonReader::OsmJsonReader() :
+ParallelBoundedApiReader(false, true),
 _defaultStatus(Status::Invalid),
 _useDataSourceIds(true),
 _defaultCircErr(ConfigOptions().getCircularErrorDefaultValue()),
-_circularErrorTagKeys(ConfigOptions().getCircularErrorTagKeys()),
-_propTree(),
-_version(""),
-_generator(""),
-_timestamp_base(""),
-_copyright(""),
 _isFile(false),
-_isWeb(false),
 _numRead(0),
 _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval() * 10),
+_circularErrorTagKeys(ConfigOptions().getCircularErrorTagKeys()),
+_isWeb(false),
 _keepImmediatelyConnectedWaysOutsideBounds(
   ConfigOptions().getBoundsKeepImmediatelyConnectedWaysOutsideBounds()),
 _missingNodeCount(0),

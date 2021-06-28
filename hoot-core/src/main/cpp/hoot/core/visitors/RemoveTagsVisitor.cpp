@@ -45,8 +45,8 @@ _numTagsRemoved(0)
 }
 
 RemoveTagsVisitor::RemoveTagsVisitor(const QStringList& keys) :
-_negateCriterion(false),
-_numTagsRemoved(0)
+_numTagsRemoved(0),
+_negateCriterion(false)
 {
   _setKeys(keys);
 }

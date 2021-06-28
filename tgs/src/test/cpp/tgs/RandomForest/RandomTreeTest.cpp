@@ -39,7 +39,7 @@
 #include <tgs/RandomForest/DataFrame.h>
 #include <tgs/RandomForest/RandomTree.h>
 
-namespace SaUrgent
+namespace Tgs
 {
 
   // A set of factors with labels to test
@@ -128,4 +128,4 @@ namespace SaUrgent
   };
 }  //End namespace
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(SaUrgent::RandomTreeTest, PluginFactory::testName());
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(Tgs::RandomTreeTest, PluginFactory::testName());

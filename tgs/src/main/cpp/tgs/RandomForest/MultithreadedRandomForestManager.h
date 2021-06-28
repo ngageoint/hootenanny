@@ -39,6 +39,7 @@ namespace Tgs
   class MultithreadedRandomForestManager : public BaseRandomForestManager
   {
   public:
+
     /**
      * @brief MultithreadedRandomForestManager Constructor
      */
@@ -50,6 +51,7 @@ namespace Tgs
     ~MultithreadedRandomForestManager() = default;
 
   protected:
+
     /**
      * @brief _initForests initializes the list of random forests
      * @param numForests the number of forests to create

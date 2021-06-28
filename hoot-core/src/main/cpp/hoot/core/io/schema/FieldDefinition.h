@@ -95,13 +95,12 @@ protected:
 
   void _reportError(const QString& field, const QString& error, StrictChecking strict) const;
 
-  bool _allowNull;
-  bool _defaultIsNull;
-
 private:
 
   int _width;
   QString _name;
+  bool _allowNull;
+  bool _defaultIsNull;
 };
 
 }

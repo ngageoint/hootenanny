@@ -37,7 +37,7 @@ namespace hoot
 {
 
 /**
- * Abstract base class for hoot regression tests
+ * @brief The AbstractRegressionTest class is the base class for hoot regression tests
  */
 class AbstractRegressionTest : public AbstractTest
 {

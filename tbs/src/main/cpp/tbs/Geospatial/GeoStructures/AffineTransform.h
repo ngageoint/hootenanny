@@ -37,6 +37,9 @@
 #include "../../Utilities/Exception.h"
 #include "../../Utilities/Point2.h"
 
+namespace tbs
+{
+
 /**
  * @brief The AffineTransform class
  *
@@ -107,5 +110,7 @@ private:
   double _transform[6]; 
  
 };
+
+}
 
 #endif

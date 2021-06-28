@@ -43,7 +43,9 @@ namespace hoot
 class Address;
 
 /**
- * Calculates the address similarity score of two features involved in certain types of conflation.
+ * @brief The AddressScoreExtractor class calculates the address similarity score of two features
+ * involved in certain types of conflation.
+ *
  * Only exact string matches yield a 1.0 score that is considered a match. There is limited support
  * for partial matching.
  *
@@ -65,8 +67,7 @@ public:
   void setConfiguration(const Settings& conf) override;
 
   /**
-   * Calculates the address similarity score of two features
-   *
+   * @brief extract calculates the address similarity score of two features
    * @param map map containing the elements whose score is to be determined
    * @param element1 the first element whose address is to be compared
    * @param element2 the second element whose address is to be compared
@@ -74,8 +75,9 @@ public:
    * for a non-match where both input elements have an address, and a score of -1.0 is returned if
    * either input element does not have an address
    */
-  double extract(const OsmMap& map, const ConstElementPtr& element1,
-                         const ConstElementPtr& element2) const override;
+  double extract(
+    const OsmMap& map, const ConstElementPtr& element1,
+    const ConstElementPtr& element2) const override;
 
   QString getClassName() const override { return className(); }
   QString getName() const override { return className(); }

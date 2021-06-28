@@ -38,9 +38,11 @@ namespace hoot
 class WaySublineMatchString;
 
 /**
- * This subline string matcher is a facade that wraps usage of multiple subline string matchers. The
- * general idea being that the first matcher is possibly more accurate but expensive to run on some
- * features (e.g. maximal subline matching) and the second matcher is possibly slightly less
+ * @brief The MultipleMatcherSublineStringMatcher class is a facade that wraps usage of multiple
+ * subline string matchers.
+ *
+ * The general idea being that the first matcher is possibly more accurate but expensive to run on
+ * some features (e.g. maximal subline matching) and the second matcher is possibly slightly less
  * accurate but less expensive to run (e.g. Frechet subline matching). So, you can run the first one
  * and then back out at a certain point in the processing to run the second.
  */
@@ -70,7 +72,7 @@ public:
 
   void setMaxRelevantAngle(Radians r) override;
   /**
-   * minSplitSize is not supported at this time.
+   * @brief setMinSplitSize minSplitSize is not supported at this time.
    */
   void setMinSplitSize(Meters minSplitSize) override;
   void setHeadingDelta(Meters headingDelta) override;

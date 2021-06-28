@@ -52,9 +52,7 @@ public:
     const std::shared_ptr<const Element>& candidate) const override;
 
   QString getName() const  override{ return className(); }
-
   QString getClassName() const  override{ return CentroidDistanceExtractor::className(); }
-
   QString getDescription() const override
   { return "Finds feature centroids and calculates the distance between them"; }
 };

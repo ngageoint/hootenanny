@@ -38,7 +38,7 @@ namespace hoot
 {
 
 /**
- * Represents the outcome of a PERTY test run
+ * @brief The PertyTestRunResult class represents the outcome of a PERTY test run.
  */
 class PertyTestRunResult
 {
@@ -53,77 +53,66 @@ public:
                      const double dynamicVariableIncrement, const double dynamicVariableValue);
 
   /**
-    Returns the test run number
-    */
-  int getTestRunNum() const { return _testRunNum; }
-
-  /**
-    Returns the test run input
-    */
-  QString getReferenceInput() const { return _referenceInput; }
-
-  /**
-    Returns the expected score
-    */
-  double getExpectedScore() const { return _expectedScore; }
-
-  /**
-    Returns the score variance
-    */
-  double getScoreVariance() const { return _scoreVariance; }
-
-  /**
-    Returns the allowed score variance
-    */
-  double getAllowedScoreVariance() const { return _allowedScoreVariance; }
-
-  /**
-    Returns whether the test run should fail if its score is better that its expected score
-    */
-  bool getFailOnBetterScore() const { return _failOnBetterScore; }
-
-  /**
-    Returns the dynamic variables
-    */
-  QStringList getDynamicVariables() const { return _dynamicVariables; }
-
-  /**
-    Returns the dynamic variable starting value
-    */
-  double getDynamicVariableStartingValue() const { return _dynamicVariableStartingValue; }
-
-  /**
-    Returns the dynamic variable increment
-    */
-  double getDynamicVariableIncrement() const { return _dynamicVariableIncrement; }
-
-  /**
-    Returns the dynamic variable value
-    */
-  double getDynamicVariableValue() const { return _dynamicVariableValue; }
-
-  /**
-    Returns the test run score
-    */
-  double getScore() const { return _score; }
-
-  /**
-    Returns the simulation scores for the test run
-    */
-  QList<double> getSimulationScores() const { return _simulationScores; }
-
-  /**
-    Determines whether the test run passed
-    */
+    @brief testPassed determines whether the test run passed.
+   */
   bool testPassed() const;
 
   /**
-    Returns the output directory
+    @brief getTestRunNum returns the test run number.
+    */
+  int getTestRunNum() const { return _testRunNum; }
+  /**
+    @brief getReferenceInput returns the test run input.
+    */
+  QString getReferenceInput() const { return _referenceInput; }
+  /**
+    @brief getExpectedScore returns the expected score.
+    */
+  double getExpectedScore() const { return _expectedScore; }
+  /**
+    @brief getScoreVariance returns the score variance.
+    */
+  double getScoreVariance() const { return _scoreVariance; }
+  /**
+    @brief getAllowedScoreVariance returns the allowed score variance.
+    */
+  double getAllowedScoreVariance() const { return _allowedScoreVariance; }
+  /**
+    @brief getFailOnBetterScore returns whether the test run should fail if its score is better that
+    its expected score.
+    */
+  bool getFailOnBetterScore() const { return _failOnBetterScore; }
+  /**
+    @brief getDynamicVariables returns the dynamic variables.
+    */
+  QStringList getDynamicVariables() const { return _dynamicVariables; }
+  /**
+    @brief getDynamicVariableStartingValue returns the dynamic variable starting value.
+    */
+  double getDynamicVariableStartingValue() const { return _dynamicVariableStartingValue; }
+  /**
+    @brief getDynamicVariableIncrement returns the dynamic variable increment.
+    */
+  double getDynamicVariableIncrement() const { return _dynamicVariableIncrement; }
+  /**
+    @brief getDynamicVariableValue returns the dynamic variable value.
+    */
+  double getDynamicVariableValue() const { return _dynamicVariableValue; }
+  /**
+    @brief getScore returns the test run score.
+    */
+  double getScore() const { return _score; }
+  /**
+    @brief getSimulationScores returns the simulation scores for the test run.
+    */
+  QList<double> getSimulationScores() const { return _simulationScores; }
+  /**
+    @brief getOutputDir returns the output directory.
     */
   QString getOutputDir() const { return _outputDir; }
 
   /**
-    Returns a string representation of the object
+    @brief toString returns a string representation of the object.
     */
   QString toString() const;
 
@@ -142,7 +131,6 @@ private:
   const double _dynamicVariableStartingValue;
   const double _dynamicVariableIncrement;
   const double _dynamicVariableValue;
-
 };
 
 }

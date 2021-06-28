@@ -35,10 +35,16 @@ namespace Tgs
 class FitnessFunction
 {
 public:
+
   /**
    * Calculates the fitness of the specified state. Lower values are better.
    *
    * While not required fitness functions that return values from [0, 1] may work better.
+   */
+  /**
+   * @brief f Calculates the fitness of the specified state. Lower values are better.
+   * @param s a simulated annealing state
+   * @return a fitness value (lower is better)
    */
   virtual double f(const ConstStatePtr& s) = 0;
 };

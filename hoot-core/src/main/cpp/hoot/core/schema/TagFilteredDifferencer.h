@@ -46,7 +46,7 @@ public:
 
 protected:
 
-  virtual bool isValidTag(const SchemaVertex& sv) const = 0;
+  virtual bool _isValidTag(const SchemaVertex& sv) const = 0;
 };
 
 }

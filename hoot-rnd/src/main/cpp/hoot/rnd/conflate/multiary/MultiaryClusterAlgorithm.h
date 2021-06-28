@@ -49,6 +49,7 @@ namespace hoot
 class MultiaryClusterAlgorithm
 {
 public:
+
   /**
    * Represents a link between two clusters.
    */
@@ -160,6 +161,7 @@ public:
   virtual QList<ClusterLinkPtr> takeReviews() = 0;
 
 protected:
+
   /// List of clusters that have been found as the algorithm runs. This should be updated
   /// dynamically during execution.
   ClusterList _clusters;

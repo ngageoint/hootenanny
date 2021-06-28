@@ -35,7 +35,8 @@ namespace hoot
 {
 
 /**
- * This performs some additional element ID synchronization specific to cut and replace.
+ * @brief The ChangesetReplacementElementIdSynchronizer class performs some additional element ID
+ * synchronization specific to cut and replace.
  */
 class ChangesetReplacementElementIdSynchronizer : public ElementIdSynchronizer
 {

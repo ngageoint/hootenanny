@@ -50,7 +50,6 @@ class TGS_EXPORT RTreeNodeStore
 public:
 
   RTreeNodeStore(int dimensions, const std::shared_ptr<PageStore>& ps);
-
   ~RTreeNodeStore();
 
   /**
@@ -66,12 +65,10 @@ public:
    * This method is thread safe. It is the only thread safe method in RTreeNodeStore.
    */
   const RTreeNode* getNode(int id) const;
-
   RTreeNode* getNode(int id);
 
-protected:
+private:
 
-  void _flushNodes();
   class RecItem
   {
   public:
@@ -84,7 +81,6 @@ protected:
     std::list<int>::iterator list_it;
     RTreeNode * pNode;
   };
-
   using NodeMap = HashMap<int, RecItem*>;
 
   // mutable cache
@@ -93,9 +89,10 @@ protected:
   std::shared_ptr<PageStore> _storeSp;
   /// pointer to the same thing as above, only faster. Zoom zoom!
   PageStore* _store;
+  mutable std::list<int> _nodesList;
 
   void _addNode(RecItem * item, int key);
-  mutable std::list<int>_nodesList;
+  void _flushNodes();
 };
 
 }

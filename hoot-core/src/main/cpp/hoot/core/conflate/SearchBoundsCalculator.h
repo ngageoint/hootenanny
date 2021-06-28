@@ -38,7 +38,8 @@ namespace hoot
 {
 
 /**
- * Given a POI in WGS84, calculate the search bounds in decimal degrees.
+ * @brief The SearchBoundsCalculator class given a POI in WGS84, calculate the search bounds in
+ * decimal degrees.
  *
  * Bad things may happen at the anti-meridian and poles.
  */

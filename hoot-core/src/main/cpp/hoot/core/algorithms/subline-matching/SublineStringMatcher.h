@@ -39,7 +39,7 @@ namespace hoot
 {
 
 /**
- * Finds matching sublines in linear elements.
+ * @brief The SublineStringMatcher class finds matching sublines in linear elements.
  */
 class SublineStringMatcher : public Configurable, public ApiEntityInfo
 {
@@ -51,9 +51,10 @@ public:
   virtual ~SublineStringMatcher() = default;
 
   /**
-   * Given two elements find one or more collections of sublines that match. The input elements may
-   * be either multilinestrings or simple ways. The output collection of sublines matches must not
-   * overlap.
+   * @brief findMatch given two elements, finds one or more collections of sublines that match.
+   *
+   * The input elements may be either multilinestrings or simple ways. The output collection of
+   * sublines matches must not overlap.
    */
   virtual WaySublineMatchString findMatch(
     const ConstOsmMapPtr& map, const ConstElementPtr& e1, const ConstElementPtr& e2,
@@ -69,8 +70,7 @@ public:
   virtual void setHeadingDelta(Meters headingDelta) = 0;
 
   /**
-   * Returns the class name of the underlying subline matcher
-   *
+   * @brief getSublineMatcherName returns the class name of the underlying subline matcher.
    * @return class name string
    */
   virtual QString getSublineMatcherName() const = 0;

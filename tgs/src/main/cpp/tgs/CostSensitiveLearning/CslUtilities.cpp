@@ -35,6 +35,9 @@
 
 #include "../TgsException.h"
 
+namespace Tgs
+{
+
 std::vector<float> CslUtilities::readCostMatrix(std::string filename)
 {
   try
@@ -100,4 +103,6 @@ std::vector<float> CslUtilities::readCostMatrix(std::string filename)
   {
     throw Tgs::Exception("CslUtilities", __FUNCTION__, __LINE__, e);
   }
+}
+
 }

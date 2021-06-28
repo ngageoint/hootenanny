@@ -37,14 +37,15 @@ namespace hoot
 
 /**
  * @brief The ApiTagTruncateVisitor class truncates tags that are going to be passed into
- *  an OSM API database.  The OSM API imposes a 255 character limit to tag values even though
- *  the database doesn't.  Allow this class to specify its own upper limit for custom OSM API
- *  instances.  All tags have this limit but three tags (so far) require special
- *  processing.  First, lists aren't truncated mid-listitem, the last item that starts but
- *  doesn't end before the upper limit is removed along with all items after that.  Second,
- *  `source:datetime` and `source:ingest:datetime` are date lists that are truncated down
- *  to include only the last date in the list.  Thirdly the `uuid` field is handled the
- *  same way, only the last UUID in the list is preserved.
+ * an OSM API database.
+ *
+ * The OSM API imposes a 255 character limit to tag values even though the database doesn't. Allow
+ * this class to specify its own upper limit for custom OSM API instances.  All tags have this limit
+ * but three tags (so far) require special processing.  First, lists aren't truncated mid-listitem,
+ * the last item that starts but doesn't end before the upper limit is removed along with all items
+ * after that. Second, `source:datetime` and `source:ingest:datetime` are date lists that are
+ * truncated down to include only the last date in the list.  Thirdly the `uuid` field is handled
+ * the same way, only the last UUID in the list is preserved.
  *
  * No need to implement FilteredByGeometryTypeCriteria or ElementConflatableCheck here, as this op
  * is necessary for any element to be written back to an OSM data store via HTTP and should always
@@ -61,12 +62,8 @@ public:
 
   void visit(const ElementPtr& e) override;
 
-  QString getDescription() const override
-  { return QString("Truncates tag key/value pairs to the API limit of %1 characters").arg(_maxLength); }
-
   QString getInitStatusMessage() const override
   { return "Truncating tag key/value pairs for OSM API..."; }
-
   QString getCompletedStatusMessage() const override
   {
     return
@@ -75,8 +72,9 @@ public:
   }
 
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+  QString getDescription() const override
+  { return QString("Truncates tag key/value pairs to the API limit of %1 characters").arg(_maxLength); }
 
   void setConfiguration(const Settings& conf) override;
 

@@ -48,13 +48,12 @@ public:
   QString getHelp() const override;
 
   /**
-   * This method will pull out common arguments (e.g. --conf), convert the args to a QStringList
-   * and pass it to runSimple.
+   * @see Command
    */
   int run(char* argv[], int argc) override;
 
   /**
-   * This is the preferred method to override.
+   * @brief runSimple is the preferred run method to override.
    */
   virtual int runSimple(QStringList& args) = 0;
 

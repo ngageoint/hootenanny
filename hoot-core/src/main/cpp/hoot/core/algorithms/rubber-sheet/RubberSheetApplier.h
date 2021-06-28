@@ -35,7 +35,7 @@ namespace hoot
 {
 
 /**
- * Applies a rubber sheet transform
+ * @brief The RubberSheetApplier class applies a rubber sheet transform.
  */
 class RubberSheetApplier
 {
@@ -44,8 +44,7 @@ public:
   RubberSheetApplier() = default;
 
   /**
-   * Applies a rubber sheet transform to input and writes to output
-   *
+   * @brief apply applies a rubber sheet transform to input and writes to output.
    * @param transform transform to apply
    * @param input input to apply the transform to
    * @param output path to write the transformed output

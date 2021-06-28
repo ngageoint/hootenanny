@@ -35,15 +35,15 @@ namespace hoot
 {
 
 /**
- * A factory for creating subline string matchers
+ * @brief The SublineStringMatcherFactory class a factory for creating subline string matchers.
  */
 class SublineStringMatcherFactory
 {
 public:
 
   /**
-   * Returns the appropriate subline string matcher given the feature type being conflated
-   *
+   * @brief getMatcher returns the appropriate subline string matcher given the feature type being
+   * conflated
    * @param featureType the type of feature being conflated; if type is Unknown, then the default
    * general way parameters will be used to configure the returned subline string matcher
    * @param map optional map; needed to configure the matcher for some feature types

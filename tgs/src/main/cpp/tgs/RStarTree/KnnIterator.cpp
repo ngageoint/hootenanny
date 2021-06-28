@@ -42,7 +42,8 @@
 #include <tgs/RStarTree/MemoryPageStore.h>
 #include <tgs/RStarTree/FilePageStore.h>
 
-using namespace Tgs;
+namespace Tgs
+{
 
 static inline double min(double a, double b) { return a < b ? a : b; }
 static inline double max(double a, double b) { return a > b ? a : b; }
@@ -407,4 +408,6 @@ void KnnIterator::reset(const double x, const double y)
     _knnLeafHeap.pop();
   }
   _knnSearchQueue.push(_createNodeDistance(-1, _searchTree->getRoot()->getId()));
+}
+
 }

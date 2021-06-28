@@ -35,7 +35,8 @@ namespace hoot
 {
 
 /**
- * A SublineMatcher based on the Frechet distance algorithm.
+ * @brief The FrechetSublineMatcher class is a SublineMatcher based on the Frechet distance
+ * algorithm.
  */
 class FrechetSublineMatcher : public SublineMatcher, public Configurable
 {
