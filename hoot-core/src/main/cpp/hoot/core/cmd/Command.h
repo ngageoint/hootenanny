@@ -38,9 +38,9 @@ namespace hoot
 {
 
 /**
- * Command Line Interface
+ * @brief The Command class is the interface for commands to implement.
  *
- * Generally you will want to subclass BaseCommand rather than implementing this interface directly.
+ * Generally, you will want to subclass BaseCommand rather than implementing this interface directly.
  */
 class Command
 {
@@ -49,28 +49,30 @@ public:
   static QString className() { return "hoot::Command"; }
 
   Command() = default;
-
   virtual ~Command() = default;
 
   /**
-   * Returns true if the command should be displayed in the help list.
+   * @brief displayInHelp returns true if the command should be displayed in the help list.
    */
   virtual bool displayInHelp() const { return true; }
 
   /**
-   * Returns a help message for the command. The help message can span multiple lines, but each
-   * line should be no longer than 80 characters. The final line must _not_ end with a endl.
+   * @brief getHelp returns a help message for the command.
+   *
+   * The help message can span multiple lines, but each line should be no longer than 80 characters.
+   * The final line must _not_ end with a endl.
    */
   virtual QString getHelp() const = 0;
 
   /**
-   * Returns the name of the command. This should take a form similar to "my-command" and ideally
-   * be 30 characters or less.
+   * @brief getName returns the name of the command.
+   *
+   * This should take a form similar to "my-command" and ideally be 30 characters or less.
    */
   virtual QString getName() const = 0;
 
   /**
-   * Returns a one sentence description for the command.
+   * @brief getDescription returns a one sentence description for the command.
    *
    * Keep this as short as possible, capitalize the first letter, and check to see that it stays
    * on one line when displayed when typing 'hoot'.
@@ -78,13 +80,13 @@ public:
   virtual QString getDescription() const = 0;
 
   /**
-   * BaseCommand for an example implementation.
+   * @brief run will pull out common arguments (e.g. --conf), convert the args to a QStringList
+   * and pass it to runSimple.
    */
   virtual int run(char* argv[], int argc) = 0;
 
   /**
-   * The 'type' of command; e.g. 'core' or 'rnd'
-   *
+   * @brief getType returns the 'type' of command; e.g. 'core' or 'rnd'.
    * @return the command typedef
    */
   virtual QString getType() const { return "core"; }

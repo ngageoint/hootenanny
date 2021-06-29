@@ -44,11 +44,12 @@ class ChangesetReplacement;
 class OsmApiDbSqlChangesetApplier;
 
 /**
- * This class can replace data in an OSM API database across multiple AOI's via changeset generation
- * and application. Its primarily meant as a testing harness to support
- * ServiceChangesetReplacementGridTest. However, in theory, with some tweaks it could be used in a
- * production environment if desired. Any of the TaskGridGenerator implementations can be used to
- * create a task grid to pass to this class.
+ * @brief The ChangesetTaskGridReplacer class can replace data in an OSM API database across multiple
+ * AOI's via changeset generation and application.
+ *
+ * Its primarily meant as a testing harness to support ServiceChangesetReplacementGridTest. However,
+ * in theory, with some tweaks it could be used in a production environment if desired. Any of the
+ * TaskGridGenerator implementations can be used to create a task grid to pass to this class.
  */
 class ChangesetTaskGridReplacer
 {
@@ -59,8 +60,7 @@ public:
   virtual ~ChangesetTaskGridReplacer() = default;
 
   /**
-   * Replaces data within a task grid cell
-   *
+   * @brief replace replaces data within a task grid cell.
    * @param toReplace URL to the data to replace; must be an OSM API database
    * @param replacement URL to the replacement data; must be a Hoot API database
    * @param taskGrid the task grid that partitions the individual replacement operations

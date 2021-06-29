@@ -38,7 +38,8 @@ namespace hoot
 {
 
 /**
- * Scores element name similarity
+ * @brief The PoiPolygonNameScoreExtractor class scores element name similarity for POI to Polygon
+ * conflation.
  */
 class PoiPolygonNameScoreExtractor : public FeatureExtractorBase, public Configurable
 {
@@ -48,10 +49,6 @@ public:
 
   PoiPolygonNameScoreExtractor();
   ~PoiPolygonNameScoreExtractor() = default;
-
-  QString getClassName() const override { return PoiPolygonNameScoreExtractor::className(); }
-
-  QString getName() const override { return className(); }
 
   /**
    * Returns a score from 0 to 1 representing the similarity of the feature names.  A score of -1
@@ -66,20 +63,22 @@ public:
 
   void setConfiguration(const Settings& conf) override;
 
-  double getNameScoreThreshold() const { return _nameScoreThreshold; }
-  void setNameScoreThreshold(double threshold) { _nameScoreThreshold = threshold; }
-
-  double getLevDist() const { return _levDist; }
-  void setLevDist(double dist) { _levDist = dist; }
-
-  bool getTranslateTagValuesToEnglish() const { return _translateTagValuesToEnglish; }
-  void setTranslateTagValuesToEnglish(bool translate) { _translateTagValuesToEnglish = translate; }
-
   QString getDescription() const override
   { return "Scores name similarity for POI/Polygon conflation"; }
+  QString getClassName() const override { return PoiPolygonNameScoreExtractor::className(); }
+  QString getName() const override { return className(); }
 
+  double getNameScoreThreshold() const { return _nameScoreThreshold; }
+  double getLevDist() const { return _levDist; }
+  bool getTranslateTagValuesToEnglish() const { return _translateTagValuesToEnglish; }
   long getNamesProcessed() const { return _namesProcessed; }
   bool getMatchAttemptMade() const { return _matchAttemptMade; }
+
+  void setNameScoreThreshold(double threshold) { _nameScoreThreshold = threshold; }
+  void setLevDist(double dist) { _levDist = dist; }
+  void setTranslateTagValuesToEnglish(bool translate) { _translateTagValuesToEnglish = translate; }
+
+
 
 private:
 

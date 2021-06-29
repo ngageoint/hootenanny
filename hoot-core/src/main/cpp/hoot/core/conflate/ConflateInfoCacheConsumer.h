@@ -34,7 +34,8 @@ namespace hoot
 {
 
 /**
- * Interface for classes that make use of a ConflateInfoCache
+ * @brief The ConflateInfoCacheConsumer class is the interface for classes that make use of a
+ * ConflateInfoCache
  */
 class ConflateInfoCacheConsumer
 {
@@ -44,7 +45,7 @@ public:
   virtual ~ConflateInfoCacheConsumer() = default;
 
   /**
-   * Sets a ConflateInfoCache instance on the consumer
+   * @brief setConflateInfoCache sets a ConflateInfoCache instance on the consumer.
    */
   virtual void setConflateInfoCache(const std::shared_ptr<ConflateInfoCache>& cache) = 0;
 };

@@ -37,8 +37,10 @@ namespace hoot
 {
 
 /**
- * An way joiner with extended features implemented to work with Attribute Conflation. Eventually
- * some of the logic other than tag merging could be moved up to WayJoinerBasic.
+ * @brief The WayJoinerAdvanced class is a way joiner with extended features implemented to work
+ * with Attribute Conflation.
+ *
+ * Eventually some of the logic other than tag merging could be moved up to WayJoinerBasic.
  */
 class WayJoinerAdvanced : public WayJoiner
 {
@@ -57,7 +59,7 @@ public:
   virtual ~WayJoinerAdvanced() = default;
 
   /**
-   * Static method to join all joinable ways using WayJoinerAdvanced
+   * @brief joinWays is a static method to join all joinable ways using WayJoinerAdvanced.
    */
   static void joinWays(const OsmMapPtr& map);
 
@@ -71,9 +73,13 @@ public:
    */
   QString getDescription() const override
   { return "Extends WayJoinerBasic with additional join pre-conditions."; }
-
+  /**
+   * @see ApiEntityInfo
+   */
   QString getName() const override { return className(); }
-
+  /**
+   * @see ApiEntityInfo
+   */
   QString getClassName() const override { return className(); }
 
 protected:

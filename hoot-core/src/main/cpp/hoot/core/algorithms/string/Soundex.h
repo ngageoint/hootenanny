@@ -40,7 +40,7 @@ namespace hoot
 {
 
 /**
- * Implements Soundex as described on Wikipedia on 5/16/2013 [1].
+ * @brief The Soundex class mplements Soundex as described on Wikipedia on 5/16/2013 [1].
  *
  * 1. http://en.wikipedia.org/wiki/Soundex
  */
@@ -56,33 +56,31 @@ public:
   double compare(const QString& s1, const QString& s2) const override;
 
   /**
-   * Compares word1 & word2 by encoding the strings and counting each mismatched character as an
-   * error. The result is 0 for no similarity and 4 is a high similarity.
+   * @brief compareSoundex compares word1 & word2 by encoding the strings and counting each
+   * mismatched character as an error. The result is 0 for no similarity and 4 is a high similarity.
    */
   static int compareSoundex(QString word1, QString word2);
 
   /**
-   * Similar to above, but it compares two soundex encoded strings.
+   * @brief compareEncoded Compares two soundex encoded strings.
    */
   static int compareEncoded(QString encoded1, QString encoded2);
 
   /**
-   * Encodes the given word as a soundex string.
+   * @brief encode Encodes the given word as a soundex string.
    */
   static QString encode(QString s);
 
   /**
-   * Returns the soundex digit that represents the specified character. If there is no match then
-   * an empty string is returned.
+   * @brief toDigit returns the soundex digit that represents the specified character.
+   *
+   * If there is no match then an empty string is returned.
    */
   static QString toDigit(QChar c);
 
   QString toString() const override { return "Soundex"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
-
   QString getDescription() const override
   { return "Returns a string comparison score based on the Soundex algorithm"; }
 };

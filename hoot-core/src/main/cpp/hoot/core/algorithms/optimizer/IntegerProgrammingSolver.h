@@ -46,8 +46,9 @@
 
 namespace hoot
 {
+
 /**
- * A thin C++ style wrapper for a small subset of GLPK.
+ * @brief The IntegerProgrammingSolver class is a thin C++ style wrapper for a small subset of GLPK.
  * http://www.gnu.org/software/glpk/
  *
  * It would be nice if we could get better progress logging out of this class, but that may not be
@@ -72,7 +73,7 @@ public:
   int getNumColumns() const { return glp_get_num_cols(_lp); }
 
   /**
-   * Returns true if at least one column is an integer or binary column.
+   * @brief isIntegerProblem returns true if at least one column is an integer or binary column.
    */
   bool isIntegerProblem() const
   {
@@ -80,61 +81,51 @@ public:
   }
 
   /**
-   * Just like GLPK the index starts at 1, not 0. This means that i.size() - 1 records will be
-   * loaded.
+   * @brief loadMatrix Just like GLPK the index starts at 1, not 0. This means that i.size() - 1
+   * records will be loaded.
    */
   void loadMatrix(const std::vector<int>& i, const std::vector<int>& j, const std::vector<double>& r)
   {
     glp_load_matrix(_lp, i.size() - 1, &(i[0]), &(j[0]), &(r[0]));
   }
 
+  /**
+   * @brief solve solves the problem using the default method.
+   */
+  void solve();
+  void solveBranchAndCut();
+  void solveSimplex();
+
   void setColumnBounds(int colIndex, int type, double lowerBound, double upperBound)
   {
     glp_set_col_bnds(_lp, colIndex, type, lowerBound, upperBound);
   }
-
   void setColumnKind(int colIndex, int kind) { glp_set_col_kind(_lp, colIndex, kind); }
-
   void setColumnName(int colIndex, const QString& s)
   {
     glp_set_col_name(_lp, colIndex, toUtf8(s));
   }
-
   void setObjectiveCoefficient(int colIndex, double coef) { glp_set_obj_coef(_lp, colIndex, coef); }
-
   /**
-   * Sets the objective direction to either GLP_MAX or GLP_MIN.
+   * @brief setObjectiveDirection sets the objective direction to either GLP_MAX or GLP_MIN.
    */
   void setObjectiveDirection(int dir) { glp_set_obj_dir(_lp, dir); }
-
   /**
-   * Similar to glp_set_row_name.
+   * @brief setRowName similar to glp_set_row_name.
    */
   void setRowName(int rowIndex, const QString& s)
   {
     glp_set_row_name(_lp, rowIndex, s.toUtf8().data());
   }
-
   /**
-   * Similar to glp_set_row_bnds.
+   * @brief setRowBounds similar to glp_set_row_bnds.
    */
   void setRowBounds(int rowIndex, int type, double lowerBound, double upperBound)
   {
     glp_set_row_bnds(_lp, rowIndex, type, lowerBound, upperBound);
   }
-
   void setProblemName(const QString& s) { glp_set_prob_name(_lp, toUtf8(s)); }
-
   void setTimeLimit(double limit) { _timeLimit = limit; }
-
-  /**
-   * Solves the problem using the default method.
-   */
-  void solve();
-
-  void solveBranchAndCut();
-
-  void solveSimplex();
 
 private:
 

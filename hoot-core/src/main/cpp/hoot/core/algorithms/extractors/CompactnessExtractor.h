@@ -60,15 +60,13 @@ public:
 
   static QString className() { return "hoot::CompactnessExtractor"; }
 
-  QString getClassName() const override { return className(); }
-
-  QString getName() const override { return className(); }
-
   double extract(const OsmMap& map, const std::shared_ptr<const Element>& target,
     const std::shared_ptr<const Element>& candidate) const override;
 
   QString getDescription() const override
   { return "Calculates the compactness of a shape where circles score the highest"; }
+  QString getClassName() const override { return className(); }
+  QString getName() const override { return className(); }
 
 private:
 

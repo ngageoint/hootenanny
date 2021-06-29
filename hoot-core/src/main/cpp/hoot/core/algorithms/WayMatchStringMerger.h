@@ -38,8 +38,8 @@ namespace hoot
 class WayMatchStringMergerTest;
 
 /**
- * Provides methods for merging features/geometries in one string of ways into another string of
- * ways.
+ * @brief The WayMatchStringMerger class provides methods for merging features/geometries in one
+ * string of ways into another string of ways.
  */
 class WayMatchStringMerger
 {
@@ -56,7 +56,8 @@ public:
 
     WayLocation getEnd1() const { return _end; }
     WayLocation getEnd2() const { return _subline2.getEnd(); }
-    WayLocation getEnd(WayNumber way) const{ return (way == WayNumber::Way1) ? getEnd1() : getEnd2(); }
+    WayLocation getEnd(WayNumber way) const
+    { return (way == WayNumber::Way1) ? getEnd1() : getEnd2(); }
 
     WayPtr getNewWay1() const { return _newWay1; }
     WayPtr getNewWay2() const { return _newWay2; }
@@ -68,7 +69,8 @@ public:
     WayLocation getStart(WayNumber way) const
     { return (way == WayNumber::Way1) ? getStart1() : getStart2(); }
     /**
-     * This is only valid if start and end are part of the same way which is not guaranteed.
+     * @brief getSubline1 This is only valid if start and end are part of the same way which is not
+     * guaranteed.
      */
     WaySubline getSubline1() const { return WaySubline(_start, _end); }
 
@@ -120,12 +122,13 @@ public:
     std::vector<std::pair<ElementId, ElementId>>& replaced);
 
   /**
-   * Alternative constructor. If this is used operations that modify the map will fail.
+   * @brief Alternative constructor. If this is used operations that modify the map will fail.
    */
   WayMatchStringMerger(const ConstOsmMapPtr& map, WayMatchStringMappingPtr mapping);
 
   /**
-   * Create a subline match string. This is useful if calling a highway classifier.
+   * @brief createMatchString creates a subline match string. This is useful if calling a highway
+   * classifier.
    */
   WaySublineMatchStringPtr createMatchString() const;
 
@@ -134,33 +137,30 @@ public:
   WayMatchStringMappingPtr getMapping() const { return _mapping; }
 
   /**
-   * Merge scrapNode into the keeper way node at the end of a keeper way.
+   * @brief mergeIntersection merges scrapNode into the keeper way node at the end of a keeper way.
    */
   void mergeIntersection(ElementId scrapNodeId);
-
   /**
-   * Merge scrapNode into the keeper way.
+   * @brief mergeNode merges scrapNode into the keeper way.
    */
   void mergeNode(ElementId scrapNode);
-
   /**
-   * Merge all the tags from the scrap into the associated keeper ways.
+   * @brief mergeTags merges all the tags from the scrap into the associated keeper ways.
    */
   void mergeTags();
 
   /**
-   * Replaces all instances of the scrap elements with the associated set of keeper elements.
+   * @brief replaceScraps replaces all instances of the scrap elements with the associated set of
+   * keeper elements.
    */
   void replaceScraps();
 
   /**
-   * Set the status on all the keeper ways.
+   * @brief setKeeperStatus sets the status on all the keeper ways.
    */
   void setKeeperStatus(Status s);
-
   /**
-   * Allows for appending tags to the elements being retained by this merger.
-   *
+   * @brief addKeeperTags allows for appending tags to the elements being retained by this merger.
    * @param tags tags to append to existing element tags
    */
   void addKeeperTags(const Tags& tags);
@@ -168,8 +168,8 @@ public:
   void setTagMerger(ConstTagMergerPtr tagMerger) { _tagMerger = tagMerger; }
 
   /**
-   * This must be called if any of the SublineMappingPtr values are changed. (e.g.
-   * WayMatchStringSplitter)
+   * @brief updateSublineMapping This must be called if any of the SublineMappingPtr values are
+   * changed. (e.g. WayMatchStringSplitter)
    */
   void updateSublineMapping()
   { _rebuildWayString(WayNumber::Way1); _rebuildWayString(WayNumber::Way2); }
@@ -188,7 +188,8 @@ private:
 
   void _addSublineMapping(SublineMappingPtr sm);
 
-  void _createWayMappings(const WayLocation& split1, const WayLocation& split2, const WaySubline& subline2);
+  void _createWayMappings(
+    const WayLocation& split1, const WayLocation& split2, const WaySubline& subline2);
 
   WayLocation _findNodeLocation2(WayStringPtr ws, ElementId nodeId);
 

@@ -33,9 +33,10 @@ namespace hoot
 {
 
 /**
- * Used by the GeometryUtils class to create a new way using only nodes from the old way, or by
- * creating new nodes. If new nodes are created then they are also used before creating another
- * node.
+ * @brief The FindNodesInWayFactory class is used by the GeometryUtils class to create a new way
+ * using only nodes from the old way, or by creating new nodes.
+ *
+ * If new nodes are created then they are also used before creating another node.
  */
 class FindNodesInWayFactory : public GeometryToElementConverter::NodeFactory
 {

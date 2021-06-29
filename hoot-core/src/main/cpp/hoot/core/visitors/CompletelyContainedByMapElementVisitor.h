@@ -73,14 +73,13 @@ public:
 
   QString getClassName() const override { return className(); }
 
-protected:
+private:
 
   bool _complete;
 
   bool _isComplete(const std::shared_ptr<const Element>& e);
 
   void _visit(const std::shared_ptr<const Way>& w);
-
   void _visit(const std::shared_ptr<const Relation>& r);
 };
 

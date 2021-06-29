@@ -38,7 +38,8 @@ namespace hoot
 class OsmMap;
 
 /**
- * Scores the accuracy of conflating an unmodified file with a PERTY'd version of that file
+ * @brief The PertyMatchScorer class scores the accuracy of conflating an unmodified file with a
+ * PERTY perturbed version of that file.
  */
 class PertyMatchScorer : public Configurable
 {
@@ -50,9 +51,8 @@ public:
   ~PertyMatchScorer() = default;
 
   /**
-    Takes a single file as input, runs PERTY on the file, and then conflates the unmodified data
-    with the PERTY'd data
-
+    @brief scoreMatches takes a single file as input, runs PERTY on the file, and then conflates the
+    unmodified data with the PERTY'd data
     @param referenceMapInputPath input file path for the reference data
     @param outputPath output directory
     @returns a match comparator from which the PERTY score can be retrieved
@@ -66,29 +66,29 @@ public:
   void setConfiguration(const Settings &conf) override { _settings = conf; }
 
   /**
-    Returns the output path of the reference map
+    @brief getReferenceMapOutput returns the output path of the reference map.
     */
   QString getReferenceMapOutput() const { return _referenceMapOutput; }
   /**
-    Returns the output path of the perturbed map
+    @brief getPerturbedMapOutput returns the output path of the perturbed map.
     */
   QString getPerturbedMapOutput() const { return _perturbedMapOutput; }
   /**
-    Returns the output path of the conflated map
+    @brief getConflatedMapOutput returns the output path of the conflated map.
     */
   QString getConflatedMapOutput() const { return _conflatedMapOutput; }
-
   /**
-    Returns the search distance used during conflation
+    @brief getSearchDistance returns the search distance used during conflation.
     */
   double getSearchDistance() const { return _searchDistance; }
+
   /**
-    Sets the search distance used during conflation
+    @brief setSearchDistance sets the search distance used during conflation.
     */
   void setSearchDistance(double searchDistance) { _searchDistance = searchDistance; }
 
   /**
-    Returns a string representation of the object
+    @brief toString returns a string representation of the object.
     */
   QString toString() const;
 

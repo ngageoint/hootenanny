@@ -52,8 +52,7 @@ public:
   static QString className() { return "hoot::WayAverager"; }
 
   /**
-   * Constructor
-   *
+   * @brief Constructor
    * @param map map owning ways to be averaged
    * @param w1 the first way to be averaged
    * @param w2 the second way to be averaged
@@ -61,17 +60,14 @@ public:
   WayAverager(const OsmMapPtr& map, const WayPtr& w1, const WayPtr& w2);
 
   /**
-   * Averages the two input ways into a new output way. The two input ways are removed from their
-   * containing map.
-   *
+   * @brief replaceWaysWithAveragedWay averages the two input ways into a new output way. The two
+   * input ways are removed from their containing map.
    * @return the averaged way
    */
   WayPtr replaceWaysWithAveragedWay();
-
   /**
-   * Averages the two input ways into a new output way. The two input ways are removed from their
-   * containing map.
-   *
+   * @brief replaceWaysWithAveragedWay averages the two input ways into a new output way. The two
+   * input ways are removed from their containing map.
    * @param map map owning ways to be averaged
    * @param w1 the first way to be averaged
    * @param w2 the second way to be averaged
@@ -81,24 +77,22 @@ public:
     const OsmMapPtr& map, const WayPtr& w1, const WayPtr& w2);
 
   /**
-   * Returns the maximum distance that w1 moved.
+   * @brief getMaxMovement1 returns the maximum distance that w1 moved.
    */
   Meters getMaxMovement1() const { return _maxMovement1; }
-
   /**
-   * Returns the maximum distance that w1 moved.
+   * @brief getMaxMovement2 returns the maximum distance that w1 moved.
    */
   Meters getMaxMovement2() const { return _maxMovement2; }
 
   /**
-   * Returns the mean of the distance that the nodes in way 1 moved during the last average
-   * operation.
+   * @brief getMeanMovement1 returns the mean of the distance that the nodes in way 1 moved during
+   * the last average operation.
    */
   Meters getMeanMovement1() const { return _meanMovement1; }
-
   /**
-   * Returns the mean of the distance that the nodes in way 2 moved during the last average
-   * operation.
+   * @brief getMeanMovement2 returns the mean of the distance that the nodes in way 2 moved during
+   * the last average operation.
    */
   Meters getMeanMovement2() const { return _meanMovement2; }
 

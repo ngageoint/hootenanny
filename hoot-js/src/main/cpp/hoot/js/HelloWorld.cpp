@@ -36,10 +36,11 @@
 #include <hoot/js/SystemNodeJs.h>
 #include <hoot/js/HootJsStable.h>
 
-
-using namespace hoot;
 using namespace std;
 using namespace v8;
+
+namespace hoot
+{
 
 /**
  * This class is used to determine if the HootJs library has already been loaded or not. This may
@@ -60,3 +61,5 @@ void init(Local<Object> exports)
 }
 
 NODE_MODULE(HootJs, init)
+
+}

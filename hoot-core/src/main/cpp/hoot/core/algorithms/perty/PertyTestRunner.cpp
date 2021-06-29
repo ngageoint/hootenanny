@@ -63,6 +63,69 @@ _returnTestScores(false)
   setGenerateMapStats(configOptions.getPertyTestGenerateMapStats());
 }
 
+void PertyTestRunner::setNumTestRuns(int numRuns)
+{
+  if (numRuns < 1)
+  {
+    throw HootException("Invalid number of test runs: " + QString::number(numRuns));
+  }
+  _numTestRuns = numRuns;
+}
+
+void PertyTestRunner::setNumTestSimulations(int numSimulations)
+{
+  if (numSimulations < 1)
+  {
+    throw HootException("Invalid number of test simulations: " + QString::number(numSimulations));
+  }
+  _numTestSimulations = numSimulations;
+}
+
+void PertyTestRunner::setDynamicVariables(const QStringList& dynamicVariables)
+{
+  _dynamicVariables.clear();
+  foreach (QString var, dynamicVariables)
+  {
+    //this isn't the best check, since not all perty.* vars are numeric but will do for now
+    if (var.trimmed() != "")
+    {
+      if (!var.startsWith("perty."))
+      {
+        throw HootException("Only PERTY variables may be manipulated during a PERTY test (config options = perty.*");
+      }
+      _dynamicVariables.append(var);
+    }
+  }
+}
+
+void PertyTestRunner::setExpectedScores(const QStringList& scores)
+{
+  if (scores.size() < 1)
+  {
+    throw HootException("Invalid number of expected scores: " + scores.size());
+  }
+  QList<double> expectedScores;
+  for (int i = 0; i < scores.size(); i++)
+  {
+    bool ok;
+    expectedScores.append(scores[i].toDouble(&ok)) ;
+    if (!ok)
+    {
+      throw HootException("Error parsing expected score value: " + scores[i]);
+    }
+  }
+  _expectedScores = expectedScores;
+}
+
+void PertyTestRunner::setAllowedScoreVariance(double scoreVariance)
+{
+  if (scoreVariance > 1.0 || scoreVariance < 0.0)
+  {
+    throw HootException("Invalid allowed score variance: " + QString::number(scoreVariance));
+  }
+  _allowedScoreVariance = scoreVariance;
+}
+
 void PertyTestRunner::_writeStatsForOutputFiles(const QString& inputMapPath, const QString& sep) const
 {
   QString statsOutputPath = inputMapPath;

@@ -38,7 +38,7 @@ class LibPostalInit;
 using LibPostalInitPtr = std::shared_ptr<LibPostalInit>;
 
 /**
- * Singleton access for initializing/destroying libpostal (Singleton)
+ * @brief The LibPostalInit class is Singleton access for initializing/destroying libpostal.
  */
 class LibPostalInit
 {

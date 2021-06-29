@@ -37,10 +37,10 @@ namespace hoot
 class OsmMap;
 
 /**
- * Calculates Intersection over Union (IoU) for polygons
+ * @brief The IntersectionOverUnionExtractor class calculates Intersection over Union (IoU) for
+ * polygons.
  *
  * https://stackoverflow.com/questions/28723670/intersection-over-union-between-two-detections
- *
  * https://www.pyimagesearch.com/2016/11/07/intersection-over-union-iou-for-object-detection/
  */
 class IntersectionOverUnionExtractor : public FeatureExtractorBase
@@ -68,7 +68,9 @@ public:
    */
   QString getDescription() const override
   { return "Calculates Intersection over Union (IoU) for polygons"; }
-
+  /**
+   * @see ApiEntityInfo
+   */
   QString getName() const override { return className(); }
 };
 

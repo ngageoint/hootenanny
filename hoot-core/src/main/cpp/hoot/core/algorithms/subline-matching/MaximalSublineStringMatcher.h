@@ -38,8 +38,8 @@ class MaximalSublineStringMatcherTest;
 class WaySublineMatchString;
 
 /**
- * This class wraps the MaximalSublineMatcher class to create a matcher that can work on
- * multilinestrings.
+ * @brief The MaximalSublineStringMatcher class wraps the MaximalSublineMatcher class to create a
+ * matcher that can work on multilinestrings.
  */
 class MaximalSublineStringMatcher : public SublineStringMatcher
 {

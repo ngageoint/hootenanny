@@ -66,12 +66,10 @@ public:
    * Returns the page with the given id.
    */
   virtual std::shared_ptr<Page> getPage(int id) = 0;
-
   /**
    * Returns the number of pages in this page store
    */
   virtual int getPageCount() const = 0;
-
   /**
    * Returns the size of the pages in bytes.
    */

@@ -60,7 +60,6 @@ class Node;
  *    should be just fine.
  *  * If you are using matrix manipulations you may see strange things happen when your pen width
  *    is something other than 0. This occurs b/c the pen width gets scaled with everything else.
- *
  */
 class GeometryPainter
 {
@@ -71,7 +70,6 @@ public:
   * the appropriate aspect ratio.
   */
   static QMatrix createMatrix(const QRect& window, const OGREnvelope& world);
-
   /**
    * Create a matrix for drawing to a painter in world coordinates. This matrix will maintain
    * the appropriate aspect ratio.
@@ -80,28 +78,19 @@ public:
     const OGRPoint& worldCenter);
 
   static void drawElement(QPainter& pt, const OsmMap *map, const Element *e, const QMatrix &m);
-
   static void drawGeometry(QPainter& pt, const OGRGeometry* geom, const QMatrix& m = QMatrix());
-
   static void drawLineString(QPainter& pt, const OGRLineString* lineString,
     const QMatrix& m = QMatrix());
-
   static void drawGeometryCollection(QPainter& pt, const OGRGeometryCollection* collection,
     const QMatrix& m = QMatrix());
-
   static void drawNode(QPainter& pt, const hoot::Node* e, const QMatrix& m);
-
   static void drawOsmMap(QPainter& pt, const OsmMap* map, const QMatrix& m = QMatrix());
-
   static void drawPolygon(QPainter& pt, const OGRPolygon* polygon, const QMatrix& m = QMatrix());
-
   static void drawPoint(QPainter& pt, double x, double y, const QMatrix& m = QMatrix());
-
   static void drawPoint(QPainter& pt, const OGRPoint* point, const QMatrix& m = QMatrix());
-
   static void drawWay(QPainter& pt, const OsmMap* map, const hoot::Way* e, const QMatrix& m);
 
-protected:
+private:
 
   static void _convertRingToQPolygon(const OGRLinearRing* ring, QPolygonF& qp,
     const QMatrix& m = QMatrix());

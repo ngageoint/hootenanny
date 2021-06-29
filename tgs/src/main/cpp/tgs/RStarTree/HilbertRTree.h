@@ -43,7 +43,6 @@ namespace Tgs
   public:
 
     HilbertRTree(const std::shared_ptr<PageStore>& ps, int dimensions);
-
     ~HilbertRTree() = default;
 
     /**
@@ -54,7 +53,7 @@ namespace Tgs
 
     void greedyShuffle();
 
-  protected:
+  private:
 
     class UserBoxHolder
     {
@@ -85,11 +84,8 @@ namespace Tgs
 
     void _calculateHilbertValues(const std::vector<Box>& boxes, 
       const std::vector<int>& fids, std::vector<UserBoxHolder>& hilbertBoxes) const;
-
     double _calculateArea(int parentId);
-
     double _calculateOverlap(int parentId);
-
     double _calculatePairwiseOverlap(int parentId, std::vector<double>& overlaps);
 
     /**
@@ -100,7 +96,6 @@ namespace Tgs
 
     void _createLeafNodes(const std::vector<UserBoxHolder>& hilbertBoxes, 
       std::vector<int>& result);
-
     void _createParentNodes(const std::vector<int>& childNodes, 
       std::vector<int>& result);
 

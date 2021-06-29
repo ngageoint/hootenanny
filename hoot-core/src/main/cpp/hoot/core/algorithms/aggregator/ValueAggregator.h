@@ -49,9 +49,8 @@ public:
   virtual ~ValueAggregator() = default;
 
   /**
-   * Aggregates the values in the vector d into a single value. The aggregation may be something
-   * like min, max, mode, mean, sum, etc.
-   *
+   * @brief aggregate aggregates the values in the vector d into a single value. The aggregation may
+   * be something like min, max, mode, mean, sum, etc.
    * @param d The vector may be re-ordered, but the values shouldn't be removed or changed.
    */
   virtual double aggregate(std::vector<double>& d) const = 0;

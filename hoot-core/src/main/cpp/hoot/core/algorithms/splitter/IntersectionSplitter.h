@@ -47,8 +47,13 @@ class OsmMap;
 class Way;
 
 /**
- * Given an OsmMap intersection splitter makes all intersections contain only way end nodes. For
- * example, if two ways make a four way intesection the intersection splitter will convert that
+ * G
+ */
+/**
+ * @brief The IntersectionSplitter class given a map, makes all intersections contain only way end
+ * nodes.
+ *
+ * For example, if two ways make a four way intesection the intersection splitter will convert that
  * into four ways that meet at a four way intersection. No nodes are modified in this process.
  */
 class IntersectionSplitter : public OsmMapOperation

@@ -128,7 +128,7 @@ public:
    */
   unsigned int getNumSteps() const override { return 1; }
 
-protected:
+private:
 
   // the CE value used if no CE tag is found
   Meters _defaultCircularError;

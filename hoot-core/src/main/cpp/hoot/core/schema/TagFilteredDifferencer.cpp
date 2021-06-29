@@ -45,11 +45,11 @@ double TagFilteredDifferencer::diff(
 
   for (size_t i = 0; i < v1.size(); ++i)
   {
-    if (isValidTag(v1[i]))
+    if (_isValidTag(v1[i]))
     {
       for (size_t j = 0; j < v2.size(); ++j)
       {
-        if (isValidTag(v2[j]))
+        if (_isValidTag(v2[j]))
         {
           const double score = 1 - schema.score(v1[i], v2[j]);
           result = min(score, result);

@@ -34,7 +34,7 @@ namespace hoot
 {
 
 /**
- * Simple class to assist with setting up conflate case test runs
+ * @brief The TestSetup class is a simple class to assist with setting up conflate case test runs.
  */
 class TestSetup
 {
@@ -44,7 +44,7 @@ public:
   ~TestSetup();
 
   /**
-   * Resets the test environment
+   * @brief reset resets the test environment.
    */
   void reset();
 

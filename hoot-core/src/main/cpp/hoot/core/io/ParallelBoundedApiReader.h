@@ -53,6 +53,7 @@ namespace hoot
 class ParallelBoundedApiReader
 {
 public:
+
   /**
    * @brief ParallelBoundedApiReader - Constructor
    * @param useOsmApiBboxFormat True for using the x1,y1,x2,y2 format, false for the x1,x2,y1,y2 format
@@ -115,22 +116,7 @@ public:
   bool isError() const { return _fatalError; }
 
 protected:
-  /**
-   * @brief _process Thread function that does the actual work of sending
-   *  the HTTP request for a give area and responds to the result
-   */
-  void _process();
-  /**
-   * @brief _sleep Sleep the current thread
-   */
-  void _sleep() const;
-  /**
-   * @brief writeDebugMap Write out the reponse from the API to a file for
-   *  debugging purposes
-   * @param data Response from API to write to file
-   * @param name Name of file to write in $HOOT_HOME/tmp/
-   */
-  void writeDebugMap(const QString& data, const QString& name);
+
   /** Type of data that is being downloaded, for internal use in derived classes */
   enum DataType
   {
@@ -142,6 +128,31 @@ protected:
   DataType _dataType;
   /** URL of the API endpoint to query */
   QUrl _sourceUrl;
+  /** Grid division size (0.25 degrees lat/lon default) */
+  double _coordGridSize;
+  /** Number of threads to process the HTTP requests */
+  int _threadCount;
+
+  /**
+   * @brief _sleep Sleep the current thread
+   */
+  void _sleep() const;
+
+private:
+
+  /**
+   * @brief _process Thread function that does the actual work of sending
+   *  the HTTP request for a give area and responds to the result
+   */
+  void _process();
+  /**
+   * @brief writeDebugMap Write out the reponse from the API to a file for
+   *  debugging purposes
+   * @param data Response from API to write to file
+   * @param name Name of file to write in $HOOT_HOME/tmp/
+   */
+  void writeDebugMap(const QString& data, const QString& name);
+
   /** List of result strings, one for each HTTP response */
   QStringList _resultsList;
   /** Total number of results received, should match _totalEnvelopes at the end to ensure all data has arrived */
@@ -156,12 +167,8 @@ protected:
   std::mutex _bboxMutex;
   /** Flag indicating that the _bboxes list is still being loaded, set to false when completely loaded */
   bool _bboxContinue;
-  /** Grid division size (0.25 degrees lat/lon default) */
-  double _coordGridSize;
   /** Maximum size of an area that can be downloaded */
   double _maxGridSize;
-  /** Number of threads to process the HTTP requests */
-  int _threadCount;
   /** Processing thread pool */
   std::vector<std::thread> _threads;
   /** Mutex guarding error processing code */

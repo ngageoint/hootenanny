@@ -31,14 +31,15 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/visitors/ConstElementVisitor.h>
 
-/**
- * A visitor for finding the bounds of a map, based on the old OsmMap::calculateBounds
- * method. As with the original function, this uses map nodes to generate
- * the envelope.
- */
 namespace hoot
 {
 
+/**
+ * @brief The CalculateMapBoundsVisitor class is a visitor for finding the bounds of a map, based on
+ * the old OsmMap::calculateBounds method.
+ *
+ * As with the original function, this uses map nodes to generate the envelope.
+ */
 class CalculateMapBoundsVisitor : public ConstElementVisitor
 {
 public:
@@ -60,9 +61,7 @@ public:
   static geos::geom::Envelope getGeosBounds(const ConstOsmMapPtr& map);
 
   QString getDescription() const override { return "Calculates the extent of a map"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 
 private:

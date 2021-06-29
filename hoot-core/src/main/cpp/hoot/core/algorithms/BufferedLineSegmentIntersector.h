@@ -39,26 +39,31 @@ namespace hoot
 class BufferedLineSegmentIntersector
 {
 public:
+
   BufferedLineSegmentIntersector() = default;
 
   /**
-   * Buffer a and intersect it with b. The result is put into @a result. Return true if the line
-   * intersects in more than one point.
-   * @optimize This was done with very little tuning. A bit of tuning will likely make it
-   *  significantly faster.
+   * @brief intersect Buffer a and intersect it with b. The result is put into @a result. Return
+   * true if the line intersects in more than one point.
+   *
+   * This was done with very little tuning. A bit of tuning will likely make it significantly
+   * faster.
    */
   bool intersect(const geos::geom::LineSegment& a, Meters buffer,
                  const geos::geom::LineSegment& b, geos::geom::LineSegment& result);
 
   /**
-   * Determines if the coordinate c is within the endpoints of ls. It is assumed that c falls on
-   * or approximately on the line formed by ls (as in the line that goes to inifite).
+   * @brief isWithinLineSegment determines if the coordinate c is within the endpoints of ls. It is
+   * assumed that c falls on or approximately on the line formed by ls (as in the line that goes to
+   * inifite).
    */
   bool isWithinLineSegment(const geos::geom::LineSegment& ls, const geos::geom::Coordinate& c) const;
 
   /**
-   * Intersect a circle with a line segment and returns the intersecting points in p1 and p2. If
-   * there are no intersections then p1 and p2 are set to null. If there is only on intersection
+   * @brief circleIntersection intersects a circle with a line segment and returns the intersecting
+   * points in p1 and p2.
+   *
+   * If there are no intersections then p1 and p2 are set to null. If there is only on intersection
    * then p2 is set to null. The algorithm is taken from [1].
    *
    * 1. http://mathworld.wolfram.com/Circle-LineIntersection.html
@@ -66,7 +71,6 @@ public:
   void circleIntersection(const geos::geom::Coordinate& origin, Meters radius,
                           const geos::geom::LineSegment& l,
                           geos::geom::Coordinate& p1, geos::geom::Coordinate& p2) const;
-
 };
 
 }

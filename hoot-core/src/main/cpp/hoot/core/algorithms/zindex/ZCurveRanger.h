@@ -38,7 +38,7 @@ class Range;
 class BBox;
 
 /**
- * Decomposes a bounding box into a range of zcurve values.
+ * @brief The ZCurveRanger class decomposes a bounding box into a range of zcurve values.
  *
  * Yes, ZCurve Ranger. Picture a guy wearing a space helmet in blue spandex covered in Zs.
  */
@@ -51,7 +51,8 @@ public:
   ZCurveRanger(const ZValue& zv);
   ~ZCurveRanger() = default;
 
-  /** Find a good break point for the given box based on major z-value breaks
+  /**
+   * @brief breakBox finds a good break point for the given box based on major z-value breaks
    * and break the box into two children.
    */
   std::vector<std::shared_ptr<LongBox>> breakBox(const std::shared_ptr<LongBox>& box) const;
@@ -68,19 +69,17 @@ public:
   static long int getSplitValue(long int v1, long int v2);
 
   /**
-   * Decomposes the z value ranges that cover box into an array of ranges.
-   *
-   * @param box - Must be a valid box within the ZValue.
+   * @brief decomposeRange decomposes the z value ranges that cover box into an array of ranges.
+   * @param box Must be a valid box within the ZValue.
    */
   std::vector<Range> decomposeRange(const BBox& box, int levels);
   std::vector<Range> decomposeRange(const LongBox& box, int levels);
 
   /**
-   * The number of cells that can be acceptably merged into one range. This
-   * should never be less than one. Other than that it is a tunable parameter.
-   * Denser data sets probably want a smaller value. Less dense data sets
-   * should have a higher value.
+   * @brief setSlop sets the number of cells that can be acceptably merged into one range.
    *
+   * This should never be less than one. Other than that it is a tunable parameter. Denser data sets
+   * probably want a smaller value. Less dense data sets should have a higher value.
    * @param slop
    */
   void setSlop(int slop) { _slop = slop; }
@@ -88,13 +87,13 @@ public:
   bool rangeCoversIdentity(const Range& r) const;
 
 private:
+
   /**
    * Condense ranges that overlap or are within "slop" cells of each other.
    */
   std::vector<Range> _condenseRanges(std::vector<Range>& r) const;
 
   Range _toRange(const std::shared_ptr<LongBox>& box);
-
   LongBox _toLongBox(const BBox& box);
 
   LongBox _clipBox(const LongBox& box) const;

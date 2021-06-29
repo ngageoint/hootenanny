@@ -138,7 +138,7 @@ public:
   void setConflateInfoCache(const std::shared_ptr<ConflateInfoCache>& cache) override
   { _conflateInfoCache = cache; }
 
-protected:
+private:
 
   // Turning this off is useful for debugging the existence of orphaned nodes.
   bool _removeNodes;

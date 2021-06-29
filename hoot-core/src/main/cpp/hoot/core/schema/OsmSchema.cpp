@@ -1387,10 +1387,8 @@ private:
 
 std::shared_ptr<OsmSchema> OsmSchema::_theInstance = nullptr;
 
-QStringList _genericKvps;
-
-OsmSchema::OsmSchema()
-  : _d(new OsmSchemaData())
+OsmSchema::OsmSchema() :
+_d(new OsmSchemaData())
 {
 }
 

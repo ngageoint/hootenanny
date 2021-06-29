@@ -42,7 +42,7 @@ TagCategoryDifferencer::TagCategoryDifferencer(OsmSchemaCategory category) :
   }
 }
 
-bool TagCategoryDifferencer::isValidTag(const SchemaVertex& sv) const
+bool TagCategoryDifferencer::_isValidTag(const SchemaVertex& sv) const
 {
   if (_category.getEnum() == OsmSchemaCategory::Empty)
   {

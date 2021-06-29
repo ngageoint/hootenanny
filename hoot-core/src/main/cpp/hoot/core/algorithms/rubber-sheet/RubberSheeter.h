@@ -35,7 +35,7 @@ namespace hoot
 {
 
 /**
- * Rubber sheets two inputs together
+ * @brief The RubberSheeter class rubber sheets two inputs together.
  */
 class RubberSheeter
 {
@@ -44,8 +44,7 @@ public:
   RubberSheeter() = default;
 
   /**
-   * Rubber sheets two inputs together
-   *
+   * @brief rubberSheet rubber sheets two inputs together.
    * @param input1 the first input to rubber sheet
    * @param input2 the second input to rubber sheet
    * @param output the rubber sheeted combined output

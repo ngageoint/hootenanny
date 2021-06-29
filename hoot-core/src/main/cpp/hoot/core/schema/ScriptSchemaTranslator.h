@@ -91,7 +91,7 @@ public:
    * Translates the specified tags. The result is placed back into the original tag set. The script
    * will be initialized if necessary.
    */
-  void translateToOsm(Tags& tags, const char *layerName, const char* geomType);
+  void translateToOsm(Tags& tags, const char* layerName, const char* geomType);
 
 protected:
 
@@ -99,9 +99,6 @@ protected:
   QString _scriptPath;
 
   StrictChecking _strict;
-  // store all key/value strings in this QHash, this promotes implicit sharing of string data. The
-  // QHash goes away when the reading is done, but the memory sharing remains.
-  QHash<QString, QString> _strings;
 
   /**
    * Called before translate is called. It is possible to get multiple calls. E.g:
@@ -119,14 +116,20 @@ protected:
    */
   virtual void _finalize() = 0;
 
-  const QString& _saveMemory(const QString& s);
+  virtual const QString& _saveMemory(const QString& s);
 
-  void strictError(const QString& s) const;
+  virtual void strictError(const QString& s) const;
 
   /**
    * Wrapped by translateToOsm().
    */
-  virtual void _translateToOsm(Tags& tags, const char *layerName, const char* geomType) = 0;
+  virtual void _translateToOsm(Tags& tags, const char* layerName, const char* geomType) = 0;
+
+private:
+
+  // store all key/value strings in this QHash, this promotes implicit sharing of string data. The
+  // QHash goes away when the reading is done, but the memory sharing remains.
+  QHash<QString, QString> _strings;
 };
 
 using ScriptSchemaTranslatorPtr = std::shared_ptr<ScriptSchemaTranslator>;

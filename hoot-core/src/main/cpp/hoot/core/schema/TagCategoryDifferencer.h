@@ -51,9 +51,11 @@ public:
 
 protected:
 
-  OsmSchemaCategory _category;
+  bool _isValidTag(const SchemaVertex& sv) const override;
 
-  bool isValidTag(const SchemaVertex& sv) const override;
+private:
+
+  OsmSchemaCategory _category;
 };
 
 }

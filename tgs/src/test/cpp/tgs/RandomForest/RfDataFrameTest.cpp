@@ -38,7 +38,7 @@
 #include "../PluginFactory.h"
 #include <tgs/RandomForest/DataFrame.h>
 
-namespace SaUrgent
+namespace Tgs
 {
 
   // A set of factors with labels to test
@@ -152,4 +152,4 @@ namespace SaUrgent
   };
 }  //End namespace
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(SaUrgent::RfDataFrameTest, PluginFactory::testName());
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(Tgs::RfDataFrameTest, PluginFactory::testName());

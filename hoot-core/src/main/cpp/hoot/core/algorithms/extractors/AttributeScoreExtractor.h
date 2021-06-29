@@ -34,8 +34,7 @@ namespace hoot
 {
 
 /**
- * See exporatory funds report for details.
- * Calculates "distance" between tags using hoot::TagComparator
+ * @brief The AttributeScoreExtractor class calculates "distance" between tags using TagComparator.
  */
 class AttributeScoreExtractor : public WayFeatureExtractor, public Configurable
 {
@@ -44,20 +43,16 @@ public:
   static QString className() { return "hoot::AttributeScoreExtractor"; }
 
   AttributeScoreExtractor(ValueAggregatorPtr wayAgg, bool useWeight = false);
-
   AttributeScoreExtractor(bool useWeight = false);
   ~AttributeScoreExtractor() = default;
 
+  QString getDescription() const override
+  { return "Calculates the similarity between two tag sets"; }
   QString getClassName() const override { return className(); }
-
   QString getName() const override;
 
   void setConfiguration(const Settings& conf) override;
-
   void setUseWeight(const bool useWeight);
-
-  QString getDescription() const override
-  { return "Calculates the similarity between two tag sets"; }
 
 protected:
 

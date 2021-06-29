@@ -118,8 +118,7 @@ public:
    */
   static void resetBasic();
   /**
-   * Resets the test environment to a known state.
-   *
+   * @brief resetEnvironment Resets the test environment to a known state.
    * @param confs custom confs to load during reset; if left blank the default config in
    * ConfigOptions will be loaded
    */
@@ -189,10 +188,9 @@ public:
    */
   static QStringList getConflateCmdSnapshotCleaningOps();
   /**
-   * Runs a conflate op reduction test which tests for which superfluous conflate pre/post/cleaning
+   * @brief runConflateOpReductionTest Runs a conflate op reduction test which tests for which superfluous conflate pre/post/cleaning
    * ops are removed by SuperfluousConflateOpRemover. This is in TestUtils b/c it is shared by
    * SuperfluousConflateOpRemoveTest in hoot-core and SuperfluousConflateOpRemoveJsTest in hoot-js.
-   *
    * @param matchCreators the match creator class names involved in the conflation job
    * @param expectedPreOpSize the expected number of conflation pre ops after op reduction
    * @param expectedPostOpsSize the expected number of conflation post ops after op reduction
@@ -243,7 +241,8 @@ protected:
     ResetAll    // resets entire environment (config, etc.)
   };
 
-  /** Constructor to set the paths to begin with $HOOT_HOME if used, default reset to none,
+  /**
+   *  @brief Constructor to set the paths to begin with $HOOT_HOME if used, default reset to none,
    *  and create the output path if needed
    */
   HootTestFixture(const QString& inputPath = UNUSED_PATH, const QString& outputPath = UNUSED_PATH)

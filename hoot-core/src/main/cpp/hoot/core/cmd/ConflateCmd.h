@@ -40,7 +40,7 @@ namespace hoot
 class SingleStat;
 
 /**
- * Executes conflation
+ * @brief The ConflateCmd class executes conflation.
  */
 class ConflateCmd : public BoundedCommand
 {

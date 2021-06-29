@@ -33,7 +33,11 @@ namespace hoot
 {
 
 /**
- * Similar to Metric Distance as described in [1].
+ *
+ */
+/**
+ * @brief The DistanceScoreExtractor class is similar to Metric Distance as described in [1].
+ *
  * 1. Savary & Zeitouni, 2005
  */
 class DistanceScoreExtractor : public WayFeatureExtractor
@@ -42,15 +46,12 @@ public:
 
   static QString className() { return "hoot::DistanceScoreExtractor"; }
 
-  DistanceScoreExtractor(ValueAggregatorPtr wayAgg);
-
   DistanceScoreExtractor() = default;
+  DistanceScoreExtractor(ValueAggregatorPtr wayAgg);
   ~DistanceScoreExtractor() = default;
 
   QString getClassName() const override { return className(); }
-
   QString getName() const override { return className(); }
-
   QString getDescription() const override
   { return "Calculates metric distance between features"; }
 

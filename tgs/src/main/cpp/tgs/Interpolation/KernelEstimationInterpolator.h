@@ -51,19 +51,16 @@ public:
    * appropriate sigma.
    */
   KernelEstimationInterpolator(double sigma = -1);
-
   ~KernelEstimationInterpolator() = default;
 
   QString getName() const override { return className(); }
 
-  double getSigma() const { return _sigma; }
-
-  double getStopDelta() const { return _stopDelta; }
-
   const std::vector<double>& interpolate(const std::vector<double>& point) const override;
 
-  void setSigma(double sigma) { _sigma = sigma; _checkRebuild(); }
+  double getSigma() const { return _sigma; }
+  double getStopDelta() const { return _stopDelta; }
 
+  void setSigma(double sigma) { _sigma = sigma; _checkRebuild(); }
   /**
    * Stop looking for a sigma when sigma is within this distance of "optimal".
    */
@@ -73,16 +70,17 @@ public:
 
 protected:
 
-  double _sigma;
-  double _stopDelta;
-
   void _buildModel() override;
 
   double _estimateError(unsigned int index) const override;
 
   void _readInterpolator(QIODevice& is) override;
-
   void _writeInterpolator(QIODevice& os) const override;
+
+private:
+
+  double _sigma;
+  double _stopDelta;
 };
 
 }

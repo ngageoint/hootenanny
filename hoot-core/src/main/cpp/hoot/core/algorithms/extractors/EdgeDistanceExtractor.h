@@ -36,15 +36,17 @@ namespace hoot
 class ValueAggregator;
 
 /**
- * Calculates the distance from one set of lines to the other set of lines. There are several
- * options for how to aggregate the distances. See subclasses of ValueAggregator.
  *
+ */
+/**
+ * @brief The EdgeDistanceExtractor class calculates the distance from one set of lines to the other
+ * set of lines.
+ *
+ * There are several options for how to aggregate the distances. See subclasses of ValueAggregator.
  * The distance will be calculated from target to candidate and candidate to target. The lower
- * of the two values will be returned.
- *
- * The distances are determined by sampling one of the geometries into points every samples meters
- * and then calculating the distance from each sample to the lines that make up the other
- * geometry.
+ * of the two values will be returned. The distances are determined by sampling one of the
+ * geometries into points every samples meters and then calculating the distance from each sample to
+ * the lines that make up the other geometry.
  */
 class EdgeDistanceExtractor : public AbstractDistanceExtractor, public ValueAggregatorConsumer,
   public Configurable
@@ -60,18 +62,15 @@ public:
   double distance(const OsmMap& map, const std::shared_ptr<const Element>& target,
     const std::shared_ptr<const Element>& candidate) const override;
 
-  QString getClassName() const override { return className(); }
-
-  QString getName() const override;
-
-  void setValueAggregator(const ValueAggregatorPtr& va) override { _aggregator = va; }
-
   void setConfiguration(const Settings& conf) override;
 
+  void setValueAggregator(const ValueAggregatorPtr& va) override { _aggregator = va; }
   void setSpacing(const double spacing) { _spacing = spacing; }
 
   QString getDescription() const override
   { return "Calculates the distance from one set of lines to another"; }
+  QString getClassName() const override { return className(); }
+  QString getName() const override;
 
 private:
 

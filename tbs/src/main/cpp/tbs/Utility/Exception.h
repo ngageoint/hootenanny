@@ -34,6 +34,9 @@
 #include <sstream>
 #include <string>
 
+namespace tbs
+{
+
 /**
 *  An Exception class extending the stl exceptions to add extra
 *  description for the error
@@ -84,5 +87,6 @@ protected:
   std::string _errorStr;
 };
 
+}
 
 #endif // EXCEPTION_H

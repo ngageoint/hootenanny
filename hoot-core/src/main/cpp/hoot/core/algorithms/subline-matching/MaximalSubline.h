@@ -43,8 +43,8 @@ class WayLocation;
 class WaySublineMatch;
 
 /**
- * Given a set of limitations on defining whether or not two points "match", calculate an
- * approximation of the maximal line within those constraints.
+ * @brief The MaximalSubline class given a set of limitations on defining whether or not two points
+ * "match", calculates an approximation of the maximal line within those constraints.
  *
  * @todo It may be worth investaging a probabilistic approach to this problem. Although we'll either
  * need a clever way to do it unsupervised, or some point matching training data to establish
@@ -68,13 +68,13 @@ public:
     ~MatchCriteria() = default;
 
     /**
-     * Returns a match score for @a index1 way segment matches @a index2. The indexes refer to a
-     * line segment within the way. An index refers to the line segment made up by node[index]
-     * and node[index + 1].
+     * @brief match returns a match score for @a index1 way segment matches @a index2.
+     *
+     * The indexes refer to a line segment within the way. An index refers to the line segment made
+     * up by node[index] and node[index + 1].
      *
      * Generally the match is some multiple of the length of the ways that matches in meters.
      * However, the class defines what a match means.
-     *
      * @param index1 The line segment in w1.
      * @param index2 The line segment in w2.
      * @returns A value from 0 to 1 defining the match where 0 is no match and 1 is an exact match.
@@ -82,8 +82,8 @@ public:
     virtual double match(int index1, int index2) const = 0;
 
     /**
-     * Crops the line segments a and b down to their maximal nearest sublines relative to each
-     * other.
+     * @brief maximalNearestSubline crops the line segments a and b down to their maximal nearest
+     * sublines relative to each other.
      */
     virtual void maximalNearestSubline(
       geos::geom::LineSegment& a, geos::geom::LineSegment& b) const;
@@ -98,8 +98,10 @@ public:
   };
 
   /**
-   * Uses the maxDistance and maxAngleDiff values to determine if the two way locations are a match
-   * or not. 1 is returned on match and 0 is returned on mismatch.
+   * @brief The ThresholdMatchCriteria class uses the maxDistance and maxAngleDiff values to
+   * determine if the two way locations are a match or not.
+   *
+   * 1 is returned on match and 0 is returned on mismatch.
    *
    * @note If any point on the maximal nearest subline is greater than maxDistance then the whole
    * subline is discarded. With a little fancy linear algebra we should be able to clip at the max
@@ -123,22 +125,20 @@ public:
   };
 
   /**
-   * Uses the specified match criteria to determine match. This class takes ownership of the
-   * criteria object.
+   * @brief MaximalSubline - Constructor that uses the specified match criteria to determine match.
    *
+   * This class takes ownership of the criteria object.
    * @param criteria The matching criteria for matching these lines. This class takes ownership
-   *  of @a criteria.
+   * of @a criteria.
    */
   MaximalSubline(MatchCriteria* criteria, Meters minSplitSize);
   ~MaximalSubline() = default;
 
   /**
-   * This code is still experimental at best.
-   *
-   * Given two ways, find all the matching and non-conflicting sublines between w1 and w2. This
-   * method can give very different results from "findMaximalSubline". It will search for the
-   * optimal set of matches to obtain the highest score within a line. For simple cases this won't
-   * make any difference, but complex cases may give very different results.
+   * @brief findAllMatches given two ways, find all the matching and non-conflicting sublines
+   * between w1 and w2. This method can give very different results from "findMaximalSubline". It
+   * will search for the optimal set of matches to obtain the highest score within a line. For
+   * simple cases this won't make any difference, but complex cases may give very different results.
    *
    * This method also searches for gentle join scenarios using the ExpectationIntersection code.
    * This is computationally complex, but for simple scenarios it should run quickly. When it is
@@ -146,16 +146,18 @@ public:
    * the match region and maximizing the similarity of the miss regions. See #2635 for a more
    * thorough description.
    *
+   * This code is still experimental at best.
    * @param bestScore The score for the set of matches returned. Higher is better. The score for
-   *  a line is dependant on the MatchCriteria and the only thing that can safely be said about
-   *  it is that higher is better, but you cannot directly compare scores for different sets of
-   *  ways. (it is likely length dependent).
+   * a line is dependant on the MatchCriteria and the only thing that can safely be said about
+   * it is that higher is better, but you cannot directly compare scores for different sets of
+   * ways. (it is likely length dependent).
    */
   std::vector<WaySublineMatch> findAllMatches(const ConstOsmMapPtr &map, const ConstWayPtr& w1,
     const ConstWayPtr &w2, double &bestScore, bool snapIntersections = true);
 
   /**
-   * Given two ways, find the highest scoring subline that exists in both w1 and w2.
+   * @brief findMaximalSubline given two ways, finds the highest scoring subline that exists in both
+   * w1 and w2.
    * @param w1 The first way
    * @param w2 The second way
    * @param wl1 The way locations that match in w1. The start is index 0 and the end is 1. The

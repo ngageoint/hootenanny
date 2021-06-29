@@ -43,9 +43,9 @@ namespace hoot
 {
 
 /**
- * @brief The OsmMapSplitter class splits a map up into multiple maps based on preprocessed
- * tile boundaries.  Elements that span tiles will only be assigned to one tile output map
- * so that they aren't duplicated in conflation campaigns.
+ * @brief The OsmMapSplitter class splits a map up into multiple maps based on preprocessed tile
+ * boundaries.  Elements that span tiles will only be assigned to one tile output map so that they
+ * aren't duplicated in conflation campaigns.
  */
 class OsmMapSplitter : public Configurable
 {

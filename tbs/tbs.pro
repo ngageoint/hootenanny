@@ -33,10 +33,12 @@ MISC_FILES += tbs.pro
 
 cppunit {
 
+# When this list of classes is updated, also update the in docs/CoreAPI.dox. Maybe eventually we can
+# automate the process. Fortunately, what we use from tgs/tbs doesn't change very often.
+
 SOURCES += \
     src/test/cpp/tbs/optimization/GoldenSectionSearchTest.cpp \
-    src/test/cpp/tbs/stats/TDistributionTest.cpp \
-
+    src/test/cpp/tbs/stats/TDistributionTest.cpp
 }
 
 HEADERS += src/main/cpp/tbs/stats/TDistribution.h \

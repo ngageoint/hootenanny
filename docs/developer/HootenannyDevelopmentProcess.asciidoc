@@ -1,5 +1,18 @@
 
 == Hootenanny Development Process
 
-"Described here":http://github.com/ngageoint/hootenanny/blob/master/CONTRIBUTING.md
+* Open a GitHub issue for the new feature to be worked on.
+* Perform work for the feature on a new git feature branch derived from the master branch and named with the number of the 
+GitHub issue that was opened.
+* Ensure your changes match the https://github.com/ngageoint/hootenanny/blob/master/docs/developer/HootenannyCodeStyle.asciidoc[Hootenanny code style].
+* Ensure your changes are https://github.com/ngageoint/hootenanny/blob/master/docs/developer/HootenannyCodeDocumentation.asciidoc[properly documented] with code comments and corresponding updates to the User Guide.
+* Ensure your changes are https://github.com/ngageoint/hootenanny/blob/master/docs/developer/HootenannyTests.asciidoc[adequately tested] via CPPUnit, conflate case, or command line tests.
+* https://github.com/ngageoint/hootenanny/pulls[Open a pull request] to merge the feature branch into the master branch 
+and assign at least one individual to review the changes before merging.
+* Correct test failures if necessary.
+* Check the quality of your changes using https://sonarcloud.io/dashboard?id=hoot[Sonar] and improve them as necessary 
+before merging.
+* Once the pull request is approved, all tests are passing, and all https://sonarcloud.io/dashboard?id=hoot[Sonar] issues 
+have been dealt with, merge the pull request.
+* Check the status of the nightly regression tests the following day and fix failing regression tests if necessary.
 

@@ -83,7 +83,6 @@ public:
    * until the node is released via some new method.
    */
   const RTreeNode* getNode(int nodeId) const;
-
   /**
    * Returns the root of the tree. This can then be used for any number of traversals. It is
    * best not to cache this value between inserts as the root can change from time to time.
@@ -130,6 +129,7 @@ public:
       return *this;
     }
   };
+
 protected:
 
   enum
@@ -149,6 +149,56 @@ protected:
     int height;
   };
 
+  int _dimensions;
+  RTreeNodeStore _store;
+
+  /**
+   * Taken directly from [BEC 90], choose the most efficient index to split on. Returns the
+   * index on which the second group starts. E.g. 0 to result -1 is the first group, result to
+   * M - 1 is the second group.
+   */
+  int _chooseSplitIndex(const BoxVector& boxes) const;
+
+  int _getHeight() const;
+
+  RTreeNode* _getNode(int id);
+  RTreeNode* _getRoot();
+  int _getRootId() const { return _rootId; }
+
+  bool _sanityCheck(const RTreeNode* node) const;
+
+  void _setHeight(int height);
+  void _setRootId(int id);
+
+  /**
+   * Given a vector of boxes, find a good split to create two new nodes. Sort, the boxes
+   * and return the index of the box to split on.
+   */
+  virtual int _splitBoxes(BoxVector& boxes);
+
+  /**
+   * Updates the bounds for the specified node and all parents.
+   */
+  void _updateBounds(RTreeNode* node);
+
+private:
+
+  double _mPercent;
+  int _m;
+  int _M;
+  double _p;
+
+  Header* _headerStruct;
+  std::shared_ptr<Page> _header;
+  /// Levels that have been treated for overflow during this insert.
+  std::set<int> _overflowedLevels;
+
+  /// call _[get|set]RootId() instead of setting directly.
+  int _rootId;
+
+  /// call _[get|set]Height() instead of setting directly.
+  int _height;
+
   void _addChild(RTreeNode* parent, const Box& b, int id);
 
   /**
@@ -163,13 +213,6 @@ protected:
   void _chooseSplitAxis(BoxVector& boxes) const;
 
   /**
-   * Taken directly from [BEC 90], choose the most efficient index to split on. Returns the
-   * index on which the second group starts. E.g. 0 to result -1 is the first group, result to
-   * M - 1 is the second group.
-   */
-  int _chooseSplitIndex(const BoxVector& boxes) const;
-
-  /**
    * Taken directly from [BEC 90], choose the distribution w/ the minimum overlap value. Resolve
    * ties by choosing the distributions w/ minimum area.
    * @param node - pick a child node from this node. node must not be a leaf.
@@ -181,72 +224,26 @@ protected:
    * Find the child with the least enlargement. This is consistent w/ [GUT 84]'s implementation
    */
   int _findLeastEnlargement(RTreeNode* node, const Box& b) const;
-
   /**
    * Find the child with the least overlap enlargement. This could potentially be optimized by
    * implementing [BEC 90]'s "determine the nearly minimum overlap cost"
    */
   int _findLeastOverlapEnlargement(RTreeNode* node, const Box& b) const;
 
-  int _getHeight() const;
-
-  RTreeNode* _getNode(int id);
-
-  RTreeNode* _getRoot();
-
-  int _getRootId() const { return _rootId; }
-
   /**
    * Insert an entry at the specified level. If level 0 is a leaf node and it counts up from
    * there.
    */
   void _insert(const Box& b, int id, int level);
+  void _reinsert(RTreeNode* node, int level);
 
   bool _isClose(const double a, const double b) const;
 
   int _overflowTreatment(RTreeNode* node, RTreeNode*& newNode, int level);
 
-  void _reinsert(RTreeNode* node, int level);
-
-  bool _sanityCheck(const RTreeNode* node) const;
-
-  void _setHeight(int height);
-
-  void _setRootId(int id);
-
   static void _sortOnDimension(BoxVector& boxes, int dim);
 
   void _split(RTreeNode* node, RTreeNode*& newNode);
-
-  /**
-   * Given a vector of boxes, find a good split to create two new nodes. Sort, the boxes
-   * and return the index of the box to split on.
-   */
-  virtual int _splitBoxes(BoxVector& boxes);
-
-  /**
-   * Updates the bounds for the specified node and all parents.
-   */
-  void _updateBounds(RTreeNode* node);
-
-  int _dimensions;
-  double _mPercent;
-  int _m;
-  int _M;
-  double _p;
-  RTreeNodeStore _store;
-  Header* _headerStruct;
-  std::shared_ptr<Page> _header;
-  /// Levels that have been treated for overflow during this insert.
-  std::set<int> _overflowedLevels;
-
-private:
-
-  /// call _[get|set]RootId() instead of setting directly.
-  int _rootId;
-
-  /// call _[get|set]Height() instead of setting directly.
-  int _height;
 };
 
 inline const RTreeNode* RStarTree::getNode(int nodeId) const

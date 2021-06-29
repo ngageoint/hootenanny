@@ -29,6 +29,9 @@
 //Std Includes
 #include <typeinfo>
 
+namespace tbs
+{
+
 AffineTransform::AffineTransform()
 {
   try
@@ -146,4 +149,6 @@ Point2<double> AffineTransform::convertGridToGeo(Point2<double> gridPoint)
       ") -->" << std::endl << e.what();
     throw Exception(ss.str());
   }
+}
+
 }
