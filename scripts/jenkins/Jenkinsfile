@@ -17,6 +17,8 @@ pipeline {
         booleanParam(name: 'Destroy_VM', defaultValue: true)
         booleanParam(name: 'Hoot_provision', defaultValue: true)
         booleanParam(name: 'Configure_Tests', defaultValue: false)
+        // This must also be enabled if enabling Core_coverage.
+        booleanParam(name: 'Configure_coverage', defaultValue: false)
         booleanParam(name: 'Build', defaultValue: true)
         booleanParam(name: 'Archive_docs', defaultValue: false)
         booleanParam(name: 'Core_tests', defaultValue: true)
@@ -119,7 +121,7 @@ pipeline {
             }
         }
         stage("Configure Coverage") {
-            when { expression { return params.Core_coverage } }
+            when { expression { return params.Configure_coverage } }
             steps {
                 // Allow test coverage to be generated.
                 sh "sed -i 's/--with-uitests/--with-uitests --with-coverage/g' VagrantBuild.sh"
