@@ -1,7 +1,7 @@
 
 == Hootenanny Development Process
 
-* Open a GitHub issue for the new feature to be worked on.
+* Open a GitHub issue for the new feature to be worked on and assign it to yourself.
 * Perform work for the feature on a new git feature branch derived from the master branch and named with the number of the 
 GitHub issue that was opened.
 * Ensure your changes follow the https://github.com/ngageoint/hootenanny/blob/master/docs/developer/HootenannyCodeBestPractices.asciidoc[coding best practices].
