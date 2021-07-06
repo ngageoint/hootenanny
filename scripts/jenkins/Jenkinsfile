@@ -19,12 +19,13 @@ pipeline {
         booleanParam(name: 'Configure_Tests', defaultValue: false)
         booleanParam(name: 'Build', defaultValue: true)
         booleanParam(name: 'Core_tests', defaultValue: true)
-        booleanParam(name: 'Services_tests', defaultValue: true)
-        // This needs to be run after Services_tests since translations_test run in there.
+        booleanParam(name: 'Translations_tests', defaultValue: true)
         booleanParam(name: 'Core_coverage', defaultValue: true)
-        booleanParam(name: 'UI_hoot1_tests', defaultValue: true)
-        booleanParam(name: 'UI_hoot2_tests', defaultValue: true)
-        booleanParam(name: 'Sonar', defaultValue: false)
+        // TODO: re-enable
+        //booleanParam(name: 'Services_tests', defaultValue: true)
+        //booleanParam(name: 'UI_hoot1_tests', defaultValue: true)
+        //booleanParam(name: 'UI_hoot2_tests', defaultValue: true)
+        //booleanParam(name: 'Sonar', defaultValue: false)
         booleanParam(name: 'Halt_on_failure', defaultValue: true)
         string(name: 'Box', defaultValue: 'default', description: 'Vagrant Box')
         string(name: 'HOOT_AWS_ENV_TAG', defaultValue: 'testing')
@@ -151,10 +152,15 @@ pipeline {
                 archiveArtifacts artifacts: '**/coverage.tar.gz'
             }
         }
-        stage("Services Tests") {
+        stage("Translations Tests") {
             when { expression { return params.Services_tests } }
             steps {
                 sh "vagrant ssh ${params.Box} -c 'cd hoot; make -sj`nproc` translations-test'"
+            }
+        }
+        stage("Services Tests") {
+            when { expression { return params.Services_tests } }
+            steps {
                 sh "vagrant ssh ${params.Box} -c 'cd hoot; make -sj`nproc` services-test-all'"
             }
         }
