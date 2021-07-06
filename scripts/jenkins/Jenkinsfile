@@ -20,6 +20,8 @@ pipeline {
         booleanParam(name: 'Build', defaultValue: true)
         booleanParam(name: 'Core_tests', defaultValue: true)
         booleanParam(name: 'Services_tests', defaultValue: true)
+        // This needs to be run after Services_tests since translations_test run in there.
+        booleanParam(name: 'Core_coverage', defaultValue: true)
         booleanParam(name: 'UI_hoot1_tests', defaultValue: true)
         booleanParam(name: 'UI_hoot2_tests', defaultValue: true)
         booleanParam(name: 'Sonar', defaultValue: false)
@@ -111,12 +113,12 @@ pipeline {
                 sh "sed -i 's/^make \$SILENT_MAKE -j\$(nproc)\$/build-wrapper-linux-x86-64 --out-dir bw-output make \$SILENT_MAKE -j\$(nproc)/' VagrantBuild.sh"
                 // Until PCH support is fixed in Sonar, run this to fix
                 sh "sed -i 's|^make \$SILENT_MAKE clean|make \$SILENT_MAKE clean\\n./scripts/sonar/sonar-prep-makefile.sh|g' VagrantBuild.sh"
-                script {
-                    if (env.BRANCH_NAME == "master") {
-                        // Compile instrumented code for master branch which allows for calculating coverage
-                        sh "sed -i 's/--with-uitests/--with-uitests --with-coverage/g' VagrantBuild.sh"
-                    }
-                }
+                //script {
+                //    if (env.BRANCH_NAME == "master") {
+                //        // Compile instrumented code for master branch which allows for calculating coverage
+                //        sh "sed -i 's/--with-uitests/--with-uitests --with-coverage/g' VagrantBuild.sh"
+                //    }
+                //}
             }
         }
         stage("Build") {
@@ -126,6 +128,8 @@ pipeline {
                 sh "vagrant ssh ${params.Box} -c 'echo \"export BUILD_VERBOSE=${env.BUILD_VERBOSE}\" | sudo tee -a /etc/environment'"
                 // Set debug/release build
                 sh "vagrant ssh ${params.Box} -c 'echo \"export BUILD_DEBUG=${env.BUILD_DEBUG}\" | sudo tee -a /etc/environment'"
+                // Allow test coverage to be generated.
+                sh "sed -i 's/--with-uitests/--with-uitests --with-coverage/g' VagrantBuild.sh"
                 // Perform remainder of provisioning
                 sh "vagrant provision ${params.Box} --provision-with build,EGD,tomcat"
                 // Configure authentication and reboot tomcat
@@ -136,8 +140,13 @@ pipeline {
         stage("Core Tests") {
             when { expression { return params.Core_tests } }
             steps {
-                sh "sed -i 's/--with-uitests/--with-uitests --with-coverage/g' VagrantBuild.sh"
-                sh "vagrant ssh ${params.Box} -c 'cd hoot; source ./SetupEnv.sh; hoot version --debug; bin/HootTest --diff --glacial --parallel 6; make -j6 core-coverage; tar czf coverage.tar.gz coverage || touch coverage.tar.gz'"
+                sh "vagrant ssh ${params.Box} -c 'cd hoot; source ./SetupEnv.sh; hoot version --debug; bin/HootTest --diff --glacial --parallel 6'"
+            }
+        }
+        stage("Core Coverage") {
+            when { expression { return params.Core_tests } }
+            steps {
+                sh "vagrant ssh ${params.Box} -c 'cd hoot; source ./SetupEnv.sh; make -j`nproc` core-coverage; tar czf coverage.tar.gz coverage || touch coverage.tar.gz'"
                 sh "vagrant scp ${params.Box}:~/hoot/coverage.tar.gz ./"
                 archiveArtifacts artifacts: '**/coverage.tar.gz'
             }
@@ -188,9 +197,9 @@ pipeline {
                         sh "vagrant ssh ${params.Box} -c 'cd hoot; ./SetupEnv.sh; ./scripts/sonar/sonar-scan.sh -l ${env.SONAR_CLOUD_KEY} -b ${env.BRANCH_NAME} -p ${env.CHANGE_ID} -a ${env.DGIS_BOT_TOKEN}'"
                     }
                     else {
-                        if (env.BRANCH_NAME == "master") {
-                            sh "vagrant ssh ${params.Box} -c 'cd hoot; ./SetupEnv.sh; ./scripts/cover/coverGcov.sh'"
-                        }
+                        //if (env.BRANCH_NAME == "master") {
+                        //    sh "vagrant ssh ${params.Box} -c 'cd hoot; ./SetupEnv.sh; ./scripts/cover/coverGcov.sh'"
+                        //}
                         sh "vagrant ssh ${params.Box} -c 'cd hoot; ./SetupEnv.sh; ./scripts/sonar/sonar-scan.sh -l ${env.SONAR_CLOUD_KEY} -b ${env.BRANCH_NAME}'"
                     }
                 }
