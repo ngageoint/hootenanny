@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="38.85324242720167" minlon="-104.9005816798765" maxlat="38.8549367344021" maxlon="-104.8961823052624"/>
-    <node visible="true" id="-1670021" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8543016985796186" lon="-104.9005816798765096"/>
-    <node visible="true" id="-1670019" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8549367344021022" lon="-104.9005275060070659"/>
+    <node visible="true" id="-1670006" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8543016985796186" lon="-104.9005816798765096"/>
+    <node visible="true" id="-1670004" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8549367344021022" lon="-104.9005275060070659"/>
     <node visible="true" id="-1669963" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8532424272016712" lon="-104.8996868263970015"/>
     <node visible="true" id="-1669962" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8533001490996028" lon="-104.8994528828182951"/>
     <node visible="true" id="-1669961" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8533470481071959" lon="-104.8993671807151884"/>
@@ -48,9 +48,9 @@
         <tag k="note" v="0"/>
     </way>
     <way visible="true" id="-1669947" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-1670021"/>
+        <nd ref="-1670006"/>
         <nd ref="-1669945"/>
-        <nd ref="-1670019"/>
+        <nd ref="-1670004"/>
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="road"/>
         <tag k="note" v="3"/>

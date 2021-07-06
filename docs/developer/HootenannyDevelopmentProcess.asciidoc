@@ -7,13 +7,12 @@ GitHub issue that was opened.
 * Ensure your changes follow the https://github.com/ngageoint/hootenanny/blob/master/docs/developer/HootenannyCodeBestPractices.asciidoc[coding best practices].
 * Ensure your changes match the https://github.com/ngageoint/hootenanny/blob/master/docs/developer/HootenannyCodeStyle.asciidoc[Hootenanny code style].
 * Ensure your changes are https://github.com/ngageoint/hootenanny/blob/master/docs/developer/HootenannyCodeDocumentation.asciidoc[properly documented] with code comments and corresponding updates to the User Guide.
-* Ensure your changes are https://github.com/ngageoint/hootenanny/blob/master/docs/developer/HootenannyTests.asciidoc[adequately tested].
-* https://github.com/ngageoint/hootenanny/pulls[Open a pull request] to merge the feature branch into the master branch 
-and assign at least one individual to review the changes before merging.
+* Ensure your changes are https://github.com/ngageoint/hootenanny/blob/master/docs/developer/HootenannyTests.asciidoc[adequately tested]. While we have no official test coverage required and 100% test coverage is not absolutely required, you should be able to get 90%-95% coverage most of the time. (TODO: link to generated test coverage report)
+* https://github.com/ngageoint/hootenanny/pulls[Open a pull request] to merge the feature branch into the master branch and assign it to yourself.
 * Correct test failures if necessary.
 * Check the quality of your changes using https://sonarcloud.io/dashboard?id=hoot[Sonar] and improve them as necessary 
 before merging.
-* Submit your work for review by creating a GitHub pull request, assign it to yourself, an request to at least on individual to review it.
+* Request at least on individual to review your pull request.
 * Once the pull request has been approved by the reviewer(s), all tests are passing, and all https://sonarcloud.io/dashboard?id=hoot[Sonar] issues have been dealt with, merge the pull request.
 * Check the status of the nightly regression tests the following day and fix failing regression tests if necessary.
 
