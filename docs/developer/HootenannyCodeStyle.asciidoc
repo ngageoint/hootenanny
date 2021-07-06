@@ -1,7 +1,7 @@
 
 == Code Style
 
-=== Core
+=== C++
 
 The file `conf/core/QtCreatorStyle.xml` should take care of settings up most of the styling for you. 
 Here are the highlights:

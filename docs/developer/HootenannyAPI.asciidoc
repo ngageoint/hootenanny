@@ -5,13 +5,13 @@ Run `make archive` to generate the documentation. The generated file is: `$HOOT_
 
 === Core C++
 
-See `docs/developer/CoreAPI/html/index.html` in `hootenanny-core-API-$(HOOT_VERSION).tar.gz`.
+See `docs/developer/CoreAPI/html/index.html` in `hootenanny-core-API-$(HOOT_VERSION).tar.gz` in the `docs` directory of `$HOOT_HOME/hootenanny-$(HOOT_VERSION).tar.gz`.
 
 === Core JavaScript
 
-See the "JavaScript Overview" section in `docs/Hootenanny - User Guide.pdf`.
+See the "JavaScript Overview" section in `docs/Hootenanny - User Guide.pdf` in the `docs` directory of `$HOOT_HOME/hootenanny-$(HOOT_VERSION).tar.gz`.
 
 === Services Java
 
-See `hoot-services/target/site/apidocs/index.html` in `hootenanny-services-API-$(HOOT_VERSION).tar.gz`.
+See `hoot-services/target/site/apidocs/index.html` in `hootenanny-services-API-$(HOOT_VERSION).tar.gz` in the `docs` directory of `$HOOT_HOME/hootenanny-$(HOOT_VERSION).tar.gz`.
 
