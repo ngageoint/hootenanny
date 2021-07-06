@@ -170,7 +170,7 @@ pipeline {
         stage("Core Coverage") {
             when { expression { return params.Core_coverage } }
             steps {
-                sh "vagrant ssh ${params.Box} -c 'cd hoot; source ./SetupEnv.sh; make -j`nproc` core-coverage; tar czf coverage.tar.gz coverage || touch coverage.tar.gz'"
+                sh "vagrant ssh ${params.Box} -c 'cd hoot; source ./SetupEnv.sh; aclocal && autoconf && autoheader && automake --add-missing --copy && ./configure --with-rnd --with-josm --with-services --with-coverage; make -j`nproc` core-coverage; tar czf coverage.tar.gz coverage || touch coverage.tar.gz'"
                 sh "vagrant scp ${params.Box}:~/hoot/coverage.tar.gz ./"
                 archiveArtifacts artifacts: '**/coverage.tar.gz'
             }
