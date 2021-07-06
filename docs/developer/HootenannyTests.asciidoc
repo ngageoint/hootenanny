@@ -493,12 +493,16 @@ image::images/LoadLatest.png[]
 
 === Test Coverage Reporting
 
-Reports can be generated which detail how well test coverage is for Hootenanny code.  The report
-will take into account command line and CPPUnit tests in the Hootenanny core code, as well as Java
-JUnit tests in the Hootenanny Web Services code when the application is configured --with-services.
-Hootenanny Core code coverage is supplied +gcov+ and +lcov+, utilities for using GCC to generate
-coverage results.  Java code coverage is supplied by http://cobertura.github.io/cobertura/[Cobertura]
-via Maven.  Report coverage generation for Javascript code is currently in the works.
+Reports can be generated from the command line which detail how well test coverage is for Hootenanny 
+code.  Alternatively, you can configure your Jenkins pull request job to generate a test coverage 
+report (core only) by selecting: "Build with Parameters" and checking the "Core_coverage" checkbox.
+The coverage report can be downloaded from the Jenkins job page as `coverage.tar.gz`.
+
+The report can take into account command line and CPPUnit tests in the Hootenanny core code, as well 
+as Java JUnit tests in the Hootenanny Web Services code when the application is configured 
+--with-services. Hootenanny Core code coverage is supplied +gcov+ and +lcov+, utilities for using GCC 
+to generate coverage results.  Java code coverage is supplied by 
+http://cobertura.github.io/cobertura/[Cobertura] via Maven.
 
 *Coverage report generation has the pre-requisite of running all tests associated with the code being profiled.*
 For the Java Web Services code, this is done automatically by Cobertura, but for the Hootenanny Core code, 'make test' must
