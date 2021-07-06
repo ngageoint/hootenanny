@@ -24,11 +24,9 @@ pipeline {
         // Generating a core test coverage report slows down the core tests quite a bit, so turning 
         // it off by default.
         booleanParam(name: 'Core_coverage', defaultValue: false)
-        // TODO: re-enable
-        booleanParam(name: 'Services_tests', defaultValue: false)
-        booleanParam(name: 'UI_hoot1_tests', defaultValue: false)
-        booleanParam(name: 'UI_hoot2_tests', defaultValue: false)
-        // END re-enable
+        booleanParam(name: 'Services_tests', defaultValue: true)
+        booleanParam(name: 'UI_hoot1_tests', defaultValue: true)
+        booleanParam(name: 'UI_hoot2_tests', defaultValue: true)
         booleanParam(name: 'Sonar', defaultValue: false)
         booleanParam(name: 'Halt_on_failure', defaultValue: true)
         string(name: 'Box', defaultValue: 'default', description: 'Vagrant Box')
