@@ -136,7 +136,10 @@ pipeline {
         stage("Core Tests") {
             when { expression { return params.Core_tests } }
             steps {
-                sh "vagrant ssh ${params.Box} -c 'cd hoot; source ./SetupEnv.sh; hoot version --debug; bin/HootTest --diff --glacial --parallel 6'"
+                sh "sed -i 's/--with-uitests/--with-uitests --with-coverage/g' VagrantBuild.sh"
+                sh "vagrant ssh ${params.Box} -c 'cd hoot; source ./SetupEnv.sh; hoot version --debug; bin/HootTest --diff --glacial --parallel 6; make -j6 core-coverage; tar czf coverage.tar.gz coverage || touch coverage.tar.gz'"
+                sh "vagrant scp ${params.Box}:~/hoot/coverage.tar.gz ./"
+                archiveArtifacts artifacts: '**/coverage.tar.gz'
             }
         }
         stage("Services Tests") {
