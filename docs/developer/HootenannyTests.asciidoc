@@ -495,8 +495,9 @@ image::images/LoadLatest.png[]
 
 Reports can be generated from the command line which detail how well test coverage is for Hootenanny 
 code.  Alternatively, you can configure your Jenkins pull request job to generate a test coverage 
-report (core only) by selecting: "Build with Parameters" and checking the "Core_coverage" checkbox.
-The coverage report can be downloaded from the Jenkins job page as `coverage.tar.gz`.
+report (core only) by selecting: "Build with Parameters" and checking the "Core_coverage" and 
+"Configure_coverage" checkboxes. The coverage report can be downloaded from the Jenkins job page as 
+`coverage.tar.gz`.
 
 The report can take into account command line and CPPUnit tests in the Hootenanny core code, as well 
 as Java JUnit tests in the Hootenanny Web Services code when the application is configured 

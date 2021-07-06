@@ -9,7 +9,13 @@ request job to archive the documentation by selecting: "Build with Parameters" a
 
 === Core C++
 
-See `docs/developer/CoreAPI/html/index.html` in `hootenanny-core-API-$(HOOT_VERSION).tar.gz` in the `docs` directory of `$HOOT_HOME/hootenanny-$(HOOT_VERSION).tar.gz`.
+When running `make archive`, see `docs/developer/CoreAPI/html/index.html` in 
+`hootenanny-core-API-$(HOOT_VERSION).tar.gz` in the `docs` directory of 
+`$HOOT_HOME/hootenanny-$(HOOT_VERSION).tar.gz`.
+
+When generating the documentation from a pull request job look for 
+`docs/developer/CoreAPI/html/index.html` in the `docs` directory of 
+`$HOOT_HOME/hootenanny-$(HOOT_VERSION).tar.gz`.
 
 === Core JavaScript
 
