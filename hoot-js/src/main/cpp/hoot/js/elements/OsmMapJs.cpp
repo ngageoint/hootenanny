@@ -126,7 +126,7 @@ void OsmMapJs::clone(const FunctionCallbackInfo<Value>& args)
   // on our js object, then the map is treated as const.
   ConstOsmMapPtr newConstMap;
   OsmMapPtr newMap;
-  if (from->getConstMap())
+  if (from->isConst())
   {
     newConstMap.reset(new OsmMap(from->getConstMap()));
   }
@@ -141,11 +141,11 @@ void OsmMapJs::clone(const FunctionCallbackInfo<Value>& args)
   OsmMapJs* obj = ObjectWrap::Unwrap<OsmMapJs>(result);
   if (newConstMap)
   {
-    obj->_constMap = newConstMap;
+    obj->_setMap(newConstMap);
   }
   else
   {
-    obj->_map = newMap;
+    obj->_setMap(newMap);
   }
 
   args.GetReturnValue().Set(result);
