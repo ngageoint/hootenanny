@@ -113,6 +113,7 @@ public:
   std::string toString() const;
 
 private:
+
   mutable InternalEdge* _ie;
 };
 
@@ -134,11 +135,10 @@ inline double TriArea2(const Point2d & a, const Point2d & b, const Point2d & c)
 class Face
 {
 public:
-  Face() : _id(-1) { }
 
+  Face() : _id(-1) { }
   Face(Face& other);
   Face(const Face& other);
-
   Face(Edge start);
 
   virtual ~Face();
@@ -162,6 +162,7 @@ public:
   std::string toString() const;
 
 private:
+
   int _id;
   // a face is made up of six edges. A set of three in each direction
   Edge _edges[6];
@@ -172,7 +173,6 @@ class EdgeIterator
 public:
 
   EdgeIterator(const std::set<QuadEdge*>& edges);
-
   EdgeIterator() : _atEnd(true) { }
 
   Edge operator*() const;
@@ -204,7 +204,7 @@ class FaceIterator
 {
 public:
 
-  FaceIterator(EdgeIterator it, const EdgeIterator& end);
+  FaceIterator(const EdgeIterator& it, const EdgeIterator& end);
   FaceIterator(const FaceIterator& from);
 
   FaceIterator() : _f(nullptr), _atEnd(true) { }

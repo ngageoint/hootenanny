@@ -62,7 +62,7 @@ public:
    */
   void mark(const OsmMapPtr& map, const ConstElementPtr& e1, const ConstElementPtr& e2,
             const QString& note, const QString& reviewType, double score = -1,
-            std::vector<QString> choices = std::vector<QString>()) const;
+            const std::vector<QString>& choices = std::vector<QString>()) const;
   /**
    * Marks a set of elements as needing review and sets them to reference each other. If the score
    * is negative then the score is omitted.
@@ -73,13 +73,13 @@ public:
    */
   void mark(const OsmMapPtr& map, const std::set<ElementId>& ids, const QString& note,
             const QString& reviewType, double score = -1,
-            std::vector<QString> choices = std::vector<QString>()) const;
+            const std::vector<QString>& choices = std::vector<QString>()) const;
   /**
    * Marks a single element as needing review.
    */
   void mark(const OsmMapPtr& map, const ConstElementPtr& e, const QString& note,
             const QString& reviewType, double score = -1,
-            std::vector<QString> choices = std::vector<QString>()) const;
+            const std::vector<QString>& choices = std::vector<QString>()) const;
   /**
    * Marks a vector of elements as needing review and sets them to reference each other. If the score
    * is negative then the score is omitted.
@@ -90,7 +90,7 @@ public:
    */
   void mark(const OsmMapPtr& map, const std::vector<ElementId>& ids, const QString& note,
             const QString& reviewType, double score = -1,
-            std::vector<QString> choices = std::vector<QString>()) const;
+            const std::vector<QString>& choices = std::vector<QString>()) const;
 
   static QString getBadGeometryType() { return _complexGeometryType; }
 

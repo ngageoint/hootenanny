@@ -178,7 +178,7 @@ namespace Tgs
     }
   }
 
-  void RandomTree::exportTree(std::ostream & fileStream, std::string tabDepth)
+  void RandomTree::exportTree(std::ostream& fileStream, const std::string& tabDepth)
   {
     try
     {
@@ -374,7 +374,7 @@ namespace Tgs
   }
 
   void RandomTree::trainBinary(const std::shared_ptr<DataFrame>& data, unsigned int numFactors,
-    std::string /*posClass*/, unsigned int nodeSize, bool balanced)
+    const std::string& /*posClass*/, unsigned int nodeSize, bool balanced)
   {
     try
     {
@@ -444,7 +444,8 @@ namespace Tgs
   }
 
   void RandomTree::trainRoundRobin(const std::shared_ptr<DataFrame>& data, unsigned int numFactors,
-    std::string posClass, std::string negClass, unsigned int nodeSize, bool /*balanced*/)
+    const std::string& posClass, const std::string& negClass, unsigned int nodeSize,
+    bool /*balanced*/)
   {
     try
     {
@@ -605,7 +606,7 @@ namespace Tgs
   }
 
   void RandomTree::_exportNode(std::ostream & fileStream, std::shared_ptr<TreeNode> & node,
-     std::string tabDepth)
+     const std::string& tabDepth)
   {
     try
     {

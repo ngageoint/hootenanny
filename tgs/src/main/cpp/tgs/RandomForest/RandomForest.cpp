@@ -44,7 +44,7 @@ namespace Tgs
 {
 
 void RandomForest::trainBinary(const std::shared_ptr<DataFrame>& data, unsigned int numTrees,
-  unsigned int numFactors, std::string posClass, unsigned int nodeSize, double retrain,
+  unsigned int numFactors, const std::string& posClass, unsigned int nodeSize, double retrain,
   bool balanced)
 {
   try
@@ -235,8 +235,8 @@ void RandomForest::trainMulticlass(const std::shared_ptr<DataFrame>& data, unsig
 }
 
 void RandomForest::trainRoundRobin(const std::shared_ptr<DataFrame>& data, unsigned int numTrees,
-  unsigned int numFactors, std::string posClass, std::string negClass, unsigned int nodeSize,
-  double retrain, bool balanced)
+  unsigned int numFactors, const std::string& posClass, const std::string& negClass,
+  unsigned int nodeSize, double retrain, bool balanced)
 {
   try
   {

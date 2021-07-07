@@ -78,8 +78,8 @@ namespace Tgs
     }
   }
 
-  void DataFrame::addDataVector(std::string label, const std::vector<double>& dataItem,
-    double eventWeight /*= 1.*/)
+  void DataFrame::addDataVector(
+    const std::string& label, const std::vector<double>& dataItem, double eventWeight /*= 1.*/)
   {
     try
     {
@@ -98,7 +98,7 @@ namespace Tgs
     }
   }
 
-  void DataFrame::addDataVector(std::string label, const double* dataItem,
+  void DataFrame::addDataVector(const std::string& label, const double* dataItem,
     double eventWeight /*= 1.*/)
   {
     try
@@ -834,8 +834,9 @@ namespace Tgs
     }
   }
 
-  void DataFrame::makeBalancedRoundRobinBootstrapAndOobSets(std::string className1, 
-    std::string className2, std::vector<unsigned int> & bootstrap, std::vector<unsigned int> & oob)
+  void DataFrame::makeBalancedRoundRobinBootstrapAndOobSets(const std::string& className1,
+    const std::string& className2, std::vector<unsigned int>& bootstrap,
+    std::vector<unsigned int>& oob)
   {
     try
     {
@@ -1123,7 +1124,7 @@ namespace Tgs
     }
   }
 
-  void DataFrame::setBinaryClassLabels(std::string posClass)
+  void DataFrame::setBinaryClassLabels(const std::string& posClass)
   {
     try
     {

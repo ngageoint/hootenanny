@@ -117,27 +117,27 @@ namespace Tgs
     * @param fileStream the stream to export the data
     * @param tabDepth set of tabs to indent the exported content
     */
-    void exportTree(std::ostream & fileStream, std::string tabDepth);
+    void exportTree(std::ostream& fileStream, const std::string& tabDepth);
 
     /**
      * @brief exportTree exports the random tree to an XML doc
      * @param modelDoc the source document
      * @param parentNode the node to append tree to
      */
-    void exportTree(QDomDocument & modelDoc, QDomElement & parentNode);
+    void exportTree(QDomDocument& modelDoc, QDomElement& parentNode);
 
     /**
     *  Imports a tree from the file stream
     *
     * @param fileStream the stream to import the data
     */
-    void import(std::istream & fileStream);
+    void import(std::istream& fileStream);
 
     /**
      * @brief import imports a tree
      * @param e the XML DOM element containing the tree
      */
-    void import(QDomElement & e);
+    void import(QDomElement& e);
 
     /**
     * Builds a tree 
@@ -148,8 +148,8 @@ namespace Tgs
     * @param nodeSize the minimum number of data vectors in a set to split a node 
     * @param balanced true if the tree should used balanced data
     */
-    void trainBinary(const std::shared_ptr<DataFrame>& data, unsigned int numFactors, std::string posClass,
-      unsigned int nodeSize = 1, bool balanced = false);
+    void trainBinary(const std::shared_ptr<DataFrame>& data, unsigned int numFactors,
+      const std::string& posClass, unsigned int nodeSize = 1, bool balanced = false);
 
     /**
     * Builds a tree 
@@ -172,8 +172,9 @@ namespace Tgs
     * @param nodeSize the minimum number of data vectors in a set to split a node 
     * @param balanced true if the tree should used balanced data
     */
-    void trainRoundRobin(const std::shared_ptr<DataFrame>& data, unsigned int numFactors, std::string posClass,
-      std::string negClass, unsigned int nodeSize = 1, bool balanced = false);
+    void trainRoundRobin(const std::shared_ptr<DataFrame>& data, unsigned int numFactors,
+      const std::string& posClass, const std::string& negClass, unsigned int nodeSize = 1,
+      bool balanced = false);
     /**
     * Resets the id counter.  Only needed in build-model when a model is loaded, increasing the ids,
     * and then a model is created, subsequently creating a new model where the random forest's first tree doesn't start
@@ -212,7 +213,8 @@ namespace Tgs
     * @param node the current node under consideration
     * @param tabDepth set of tabs to indent the exported content
     */
-    void _exportNode(std::ostream & fileStream, std::shared_ptr<TreeNode> &node, std::string tabDepth);
+    void _exportNode(
+      std::ostream& fileStream, std::shared_ptr<TreeNode>& node, const std::string& tabDepth);
 
     /**
      * @brief _exportNode a recursive function to write a trees nodes

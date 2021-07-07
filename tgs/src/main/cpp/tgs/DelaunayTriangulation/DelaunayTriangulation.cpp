@@ -191,6 +191,7 @@ std::string Edge::toString() const
 class Subdivision
 {
 public:
+
   Subdivision(const Point2d &, const Point2d &, const Point2d &);
   virtual ~Subdivision();
   void InsertSite(const Point2d &);
@@ -207,6 +208,7 @@ public:
   InternalEdge *Locate(const Point2d &);
 
 private:
+
   InternalEdge * startingEdge;
 
   set<QuadEdge*> _edges;
@@ -216,6 +218,7 @@ private:
 class QuadEdge
 {
 public:
+
   QuadEdge();
   // should only be used by MakeEdge
   InternalEdge e[4];
@@ -797,7 +800,7 @@ FaceIterator::FaceIterator(const FaceIterator& from)
   _f = new Face(*_it);
 }
 
-FaceIterator::FaceIterator(EdgeIterator it, const EdgeIterator& end)
+FaceIterator::FaceIterator(const EdgeIterator& it, const EdgeIterator& end)
   : _f(new Face(*it)),
     _it(it),
     _end(end),

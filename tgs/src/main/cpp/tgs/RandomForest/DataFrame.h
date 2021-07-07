@@ -73,7 +73,6 @@ namespace Tgs
     * Constructor
     */
     DataFrame();
-
     DataFrame(const DataFrame& from);
 
     /**
@@ -88,13 +87,13 @@ namespace Tgs
     * @param dataItem the data vector to add
     * @param eventWeight the weight associated with the data vector
     */
-    void addDataVector(std::string label, const std::vector<double>& dataItem, double eventWeight = 1.);
-
+    void addDataVector(
+      const std::string& label, const std::vector<double>& dataItem, double eventWeight = 1.);
     /**
      * Similar to above, but the pointer to dataItem is assumed to be an array of a length equal to
      * getFactorTypes().size().
      */
-    void addDataVector(std::string label, const double* dataItem, double eventWeight = 1.);
+    void addDataVector(const std::string& label, const double* dataItem, double eventWeight = 1.);
 
     /**
     *  Resets all the internal data structures associated with data frame
@@ -334,7 +333,8 @@ namespace Tgs
     * @param bootstrap the output container to hold indices to data vectors for the bootstrap set
     * @param oob  the output container to hold indices to data vectors for the out of bag set
     */
-    void makeBalancedRoundRobinBootstrapAndOobSets(std::string className1, std::string className2, 
+    void makeBalancedRoundRobinBootstrapAndOobSets(
+      const std::string& className1, const std::string& className2,
       std::vector<unsigned int> & bootstrap, std::vector<unsigned int> & oob);
 
     /**
@@ -412,7 +412,7 @@ namespace Tgs
     *
     * @param posClass the positive class label
     */
-    void setBinaryClassLabels(std::string posClass);
+    void setBinaryClassLabels(const std::string& posClass);
 
     /**
      * Sets the value of a single data element.

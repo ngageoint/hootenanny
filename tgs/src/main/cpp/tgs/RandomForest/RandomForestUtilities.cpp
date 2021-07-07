@@ -152,7 +152,8 @@ namespace Tgs
     }
   }
 
-  RandomForestInputs RandomForestUtilities::generateTrainingDataFromFile(std::string filename)
+  RandomForestInputs RandomForestUtilities::generateTrainingDataFromFile(
+    const std::string& filename)
   {
     try
     {
@@ -177,7 +178,8 @@ namespace Tgs
     }
   }
 
-  RandomForestInputs RandomForestUtilities::_generateTrainingDataFromAARFFile(std::string filename)
+  RandomForestInputs RandomForestUtilities::_generateTrainingDataFromAARFFile(
+    const std::string& filename)
   {
     try
     {

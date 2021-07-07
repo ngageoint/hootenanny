@@ -87,7 +87,7 @@ namespace Tgs
      * @param filename the path to the target file
      * @return a set of training vectors
      */
-    static RandomForestInputs generateTrainingDataFromFile(std::string filename);
+    static RandomForestInputs generateTrainingDataFromFile(const std::string& filename);
 
   private:
     /**
@@ -95,7 +95,7 @@ namespace Tgs
      * @param filename the name of the file
      * @return a set of training vectors
      */
-    static RandomForestInputs _generateTrainingDataFromAARFFile(std::string filename);
+    static RandomForestInputs _generateTrainingDataFromAARFFile(const std::string& filename);
   };
 }
 
