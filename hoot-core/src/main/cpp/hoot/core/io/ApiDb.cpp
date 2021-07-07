@@ -556,9 +556,8 @@ unsigned int ApiDb::tileForPoint(double lat, double lon)
   int latInt = round((lat + 90.0) * 65535.0 / 180.0);
 
   unsigned int tile = 0;
-  int          i;
 
-  for (i = 15; i >= 0; i--)
+  for (int i = 15; i >= 0; i--)
   {
     tile = (tile << 1) | ((lonInt >> i) & 1);
     tile = (tile << 1) | ((latInt >> i) & 1);

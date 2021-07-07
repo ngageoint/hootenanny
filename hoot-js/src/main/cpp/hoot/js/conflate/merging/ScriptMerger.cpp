@@ -113,7 +113,7 @@ void ScriptMerger::_applyMergePair(const OsmMapPtr& map,
     logWarnCount++;
     return;
   }
-  else if (_pairs.size() == 0)
+  else if (_pairs.empty())
   {
     if (logWarnCount < Log::getWarnMessageLimit())
     {
