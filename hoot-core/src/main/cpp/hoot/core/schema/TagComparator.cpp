@@ -186,8 +186,8 @@ void TagComparator::averageTags(const Tags& t1In, double w1, const Tags& t2In, d
   }
 }
 
-void TagComparator::compareEnumeratedTags(Tags t1, Tags t2, double& score,
-                                          double& weight)
+void TagComparator::compareEnumeratedTags(
+  Tags t1, Tags t2, double& score, double& weight) const
 {
   OsmSchema& schema = OsmSchema::getInstance();
   score = 1.0;
@@ -532,8 +532,9 @@ void TagComparator::_mergeExactMatches(Tags& t1, Tags& t2, Tags& result) const
   }
 }
 
-void TagComparator::mergeNames(Tags& t1, Tags& t2, Tags& result,
-                               const QStringList& overwriteExcludeTagKeys, bool caseSensitive) const
+void TagComparator::mergeNames(
+  Tags& t1, Tags& t2, Tags& result, const QStringList& overwriteExcludeTagKeys,
+  bool caseSensitive) const
 {
   LOG_TRACE("Merging names...");
   LOG_VART(t1);

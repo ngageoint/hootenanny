@@ -196,8 +196,8 @@ void BufferedLineSegmentIntersector::circleIntersection(const Coordinate& origin
   }
 }
 
-bool BufferedLineSegmentIntersector::intersect(const LineSegment& a, Meters buffer,
-  const LineSegment& b, LineSegment& result)
+bool BufferedLineSegmentIntersector::intersect(
+  const LineSegment& a, Meters buffer, const LineSegment& b, LineSegment& result) const
 {
   LineSegmentResult lsr(b);
 

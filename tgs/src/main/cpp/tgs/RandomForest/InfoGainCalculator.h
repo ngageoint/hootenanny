@@ -74,7 +74,7 @@ namespace Tgs
     */
     bool findDataSplit(DataFrame & df, std::vector<unsigned int> & fIndices, 
       std::vector<unsigned int> & dIndices, unsigned int & splitIdx, unsigned int & fIdx,
-      double & splitVal, double & purityDelta);
+      double & splitVal, double & purityDelta) const;
 
     /**
     * This method looks at a single factor and computes the maximum gain against
@@ -104,7 +104,7 @@ namespace Tgs
     * @return the information gain ratio corresponding to bestSplit
     */
     double getMaxInfoGainRatioByFactor(DataFrame & df, std::vector<unsigned int> & indices, 
-      unsigned int fIdx, double totalEntropy, unsigned int & bestSplit);
+      unsigned int fIdx, double totalEntropy, unsigned int & bestSplit) const;
 
   private:
     /**

@@ -135,8 +135,8 @@ void OsmPbfReader::setConfiguration(const Settings &conf)
   _circularErrorTagKeys = ConfigOptions().getCircularErrorTagKeys();
 }
 
-void OsmPbfReader::_addTag(const std::shared_ptr<Element>& e, const QString& key,
-                           const QString& value)
+void OsmPbfReader::_addTag(
+  const std::shared_ptr<Element>& e, const QString& key, const QString& value) const
 {
   QString k = key.trimmed();
   QString v = value.trimmed();

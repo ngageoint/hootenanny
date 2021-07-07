@@ -226,7 +226,7 @@ private:
 
   void _init(bool useFileId);
 
-  void _addTag(const std::shared_ptr<Element>& n, const QString& k, const QString& v);
+  void _addTag(const std::shared_ptr<Element>& n, const QString& k, const QString& v) const;
 
   double _convertLon(long lon) const;
   double _convertLat(long lat) const;

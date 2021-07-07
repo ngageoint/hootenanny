@@ -192,7 +192,7 @@ shared_ptr<MatchCreator> CalculateStatsOp::getMatchCreator(
       {
         featureType = descIt->getBaseFeatureType();
         LOG_VART(featureType);
-        return (*matchIt);
+        return *matchIt;
       }
     }
   }

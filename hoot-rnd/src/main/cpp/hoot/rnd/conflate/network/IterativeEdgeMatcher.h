@@ -100,8 +100,8 @@ private:
     CostFunction()
     {
       p = 1.0;
-      em1 = 0;
-      em2 = 0;
+      em1 = nullptr;
+      em2 = nullptr;
     }
 
     ~CostFunction() = default;

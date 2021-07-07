@@ -92,7 +92,7 @@ void PartialNetworkMerger::apply(const OsmMapPtr& map,
 
   if (_edgeMatches.size() == 1 && (*_edgeMatches.begin())->containsStub())
   {
-    _processStubMatch(map, replaced, (*_edgeMatches.begin()));
+    _processStubMatch(map, replaced, *_edgeMatches.begin());
   }
   else
   {

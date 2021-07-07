@@ -136,7 +136,7 @@ void OsmGbdxJsonWriter::_writeGeometry(ConstWayPtr w)
 {
   const vector<long>& nodes = w->getNodeIds();
   const bool isPolygon = AreaCriterion().isSatisfied(w) || nodes[0] == nodes[nodes.size() - 1];
-  _writeGeometry(nodes, (isPolygon) ? "Polygon" : "LineString");
+  _writeGeometry(nodes, isPolygon ? "Polygon" : "LineString");
 }
 
 void OsmGbdxJsonWriter::_writeGeometry(ConstRelationPtr r)

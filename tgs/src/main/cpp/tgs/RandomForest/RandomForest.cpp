@@ -177,7 +177,8 @@ void RandomForest::trainMulticlass(const std::shared_ptr<DataFrame>& data, unsig
 
         std::vector<std::string> badFactors;
 
-        unsigned int cutOffIdx = (unsigned int)((topFactors.size() - (unsigned int)((double)topFactors.size() * retrain)));
+        unsigned int cutOffIdx =
+          (unsigned int)((topFactors.size() - (unsigned int)((double)topFactors.size() * retrain)));
 
         std::multimap<double, std::string> sortedFactors;
         std::multimap<double, std::string>::iterator mMapItr;

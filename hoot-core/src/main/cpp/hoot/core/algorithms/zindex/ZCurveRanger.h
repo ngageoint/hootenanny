@@ -93,7 +93,7 @@ private:
    */
   std::vector<Range> _condenseRanges(std::vector<Range>& r) const;
 
-  Range _toRange(const std::shared_ptr<LongBox>& box);
+  Range _toRange(const std::shared_ptr<LongBox>& box) const;
   LongBox _toLongBox(const BBox& box);
 
   LongBox _clipBox(const LongBox& box) const;

@@ -62,7 +62,7 @@ public:
   void averageTags(const Tags& t1, double w1, const Tags& t2, double w2, Tags& result,
     bool keepAllUnknownTags = false, bool caseSensitive = true);
 
-  void compareEnumeratedTags(Tags t1, Tags t2, double& score, double& weight);
+  void compareEnumeratedTags(Tags t1, Tags t2, double& score, double& weight) const;
 
   void compareNames(const Tags& t1, const Tags& t2, double& score, double& weight,
                     bool strict = false) const;

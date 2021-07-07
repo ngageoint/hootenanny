@@ -62,7 +62,7 @@ void RemoveNodeByEid::_removeNodeNoCheck(const OsmMapPtr& map, long nId) const
   LOG_TRACE("Erased index for: " << nId << ".");
 }
 
-void RemoveNodeByEid::_removeNode(const OsmMapPtr& map, long nId)
+void RemoveNodeByEid::_removeNode(const OsmMapPtr& map, long nId) const
 {
   const std::shared_ptr<NodeToWayMap>& n2w = map->getIndex().getNodeToWayMap();
   const set<long>& ways = n2w->getWaysByNode(nId);
@@ -81,7 +81,7 @@ void RemoveNodeByEid::_removeNode(const OsmMapPtr& map, long nId)
   _removeNodeNoCheck(map, nId);
 }
 
-void RemoveNodeByEid::_removeNodeFully(const OsmMapPtr& map, long nId)
+void RemoveNodeByEid::_removeNodeFully(const OsmMapPtr& map, long nId) const
 {
   // copy the set because we may modify it later.
   set<long> rid =

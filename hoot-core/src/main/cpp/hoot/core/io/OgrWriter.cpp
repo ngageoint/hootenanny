@@ -309,7 +309,7 @@ void OgrWriter::translateToFeatures(
         LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
       }
       logWarnCount++;
-      g.reset((GeometryFactory::getDefaultInstance()->createEmptyGeometry()));
+      g.reset(GeometryFactory::getDefaultInstance()->createEmptyGeometry());
     }
 
     LOG_TRACE("After conversion to geometry, element is now a " << g->getGeometryType());

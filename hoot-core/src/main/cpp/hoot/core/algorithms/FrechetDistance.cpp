@@ -143,13 +143,13 @@ void FrechetDistance::advanceAndCheck(const int rows, const int cols, int& r, in
   }
 }
 
-Radians FrechetDistance::getHeadingWay1(int index)
+Radians FrechetDistance::getHeadingWay1(int index) const
 {
   //  Return the heading for _w1 at index
   return getHeading(_w1, index);
 }
 
-Radians FrechetDistance::getHeadingWay2(int index)
+Radians FrechetDistance::getHeadingWay2(int index) const
 {
   //  Return the heading for _w2 at index
   return getHeading(_w2, index);

@@ -93,7 +93,7 @@ JavaScriptSchemaTranslator::~JavaScriptSchemaTranslator()
 }
 
 vector<JavaScriptSchemaTranslator::TranslatedFeature> JavaScriptSchemaTranslator::_createAllFeatures(
-  const QVariantList& list)
+  const QVariantList& list) const
 {
   vector<TranslatedFeature> result;
   result.reserve(list.size());

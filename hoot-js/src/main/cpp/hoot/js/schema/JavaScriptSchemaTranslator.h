@@ -122,7 +122,7 @@ private:
 
   Settings _conf;
 
-  std::vector<TranslatedFeature> _createAllFeatures(const QVariantList& vm);
+  std::vector<TranslatedFeature> _createAllFeatures(const QVariantList& vm) const;
   std::shared_ptr<Feature> _createFeature(const QVariantMap& vm, QString& tableName) const;
 
   void _parseEnumerations(DoubleFieldDefinition* fd, QVariant& enumerations) const;

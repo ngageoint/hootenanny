@@ -152,8 +152,9 @@ public:
    * it is that higher is better, but you cannot directly compare scores for different sets of
    * ways. (it is likely length dependent).
    */
-  std::vector<WaySublineMatch> findAllMatches(const ConstOsmMapPtr &map, const ConstWayPtr& w1,
-    const ConstWayPtr &w2, double &bestScore, bool snapIntersections = true);
+  std::vector<WaySublineMatch> findAllMatches(
+    const ConstOsmMapPtr &map, const ConstWayPtr& w1, const ConstWayPtr &w2, double &bestScore,
+    bool snapIntersections = true);
 
   /**
    * @brief findMaximalSubline given two ways, finds the highest scoring subline that exists in both
@@ -166,8 +167,9 @@ public:
    *  vector will be resized as needed.
    * @return 0.0 if there are no common sublines, otherwise the score of the best subline.
    */
-  double findMaximalSubline(const ConstOsmMapPtr &map, const ConstWayPtr& w1, const ConstWayPtr& w2,
-    std::vector<WayLocation>& wl1, std::vector<WayLocation>& wl2);
+  double findMaximalSubline(
+    const ConstOsmMapPtr &map, const ConstWayPtr& w1, const ConstWayPtr& w2,
+    std::vector<WayLocation>& wl1, std::vector<WayLocation>& wl2) const;
 
   int getBestMatchesRecursionCount() const { return _findBestMatchesRecursionCount; }
 
@@ -216,7 +218,7 @@ private:
     const ConstWayPtr& w1, const ConstWayPtr& w2, std::vector<WaySublineMatch> &rawSublineMatches) const;
 
   std::vector<WaySublineMatch> _extractAllMatches(const ConstOsmMapPtr& map, const ConstWayPtr& w1,
-    const ConstWayPtr& w2, Sparse2dMatrix& sublineMatrix);
+    const ConstWayPtr& w2, Sparse2dMatrix& sublineMatrix) const;
 
   std::vector<WaySublineMatch> _findBestMatches(const ConstOsmMapPtr& map, const ConstWayPtr& w1,
     const ConstWayPtr& w2, Sparse2dMatrix& sublineMatrix, double& bestScore);
@@ -238,8 +240,9 @@ private:
   void _populateTotalScores(const Sparse2dMatrix& scores, Sparse2dMatrix& sublines,
     Sparse2dMatrix::CellId& bestCid, double& bestScore) const;
 
-  std::vector<WaySublineMatch> _snapIntersections(const ConstOsmMapPtr &map, const ConstWayPtr& w1,
-    const ConstWayPtr &w2, std::vector<WaySublineMatch> &rawSublineMatches);
+  std::vector<WaySublineMatch> _snapIntersections(
+    const ConstOsmMapPtr &map, const ConstWayPtr& w1, const ConstWayPtr& w2,
+    std::vector<WaySublineMatch> &rawSublineMatches) const;
 
   /**
    * If the Match Criteria considers these close enough to the ends of the line then they'll be
