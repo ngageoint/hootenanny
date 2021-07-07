@@ -654,6 +654,7 @@ void OsmGeoJsonReader::_parseMultiLineGeometry(const boost::property_tree::ptree
       _map->addNode(node);
       way->addNode(node_id);
     }
+    _map->addWay(way);
     relation->addElement("", ElementType::Way, way_id);
   }
 }
