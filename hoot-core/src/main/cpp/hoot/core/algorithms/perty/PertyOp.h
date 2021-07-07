@@ -109,7 +109,6 @@ private:
 
   Meters _gridSpacing;
   int _seed;
-  Meters _sigmaRx, _sigmaRy;
   Meters _sigmaSx, _sigmaSy;
   /**
    * Previously the full covariance method was also supported as described in Doucette et al. However,

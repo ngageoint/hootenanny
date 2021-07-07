@@ -455,7 +455,7 @@ namespace Tgs
 
       return _data[vIdx][fIdx];
     }
-    catch(const std::out_of_range& oor)
+    catch(const std::out_of_range& /*oor*/)
     {
       std::stringstream ss;
       ss << "Out of range accessing data vector " << vIdx << ", element " << fIdx;
@@ -473,7 +473,7 @@ namespace Tgs
     {
       return _data[vIdx];
     }
-    catch(const std::out_of_range& oor)
+    catch(const std::out_of_range& /*oor*/)
     {
       std::stringstream ss;
       ss << "Out of range accessing data vector index: "  << vIdx;
@@ -607,7 +607,7 @@ namespace Tgs
     {
       return _trainingLabels[dIdx];
     }
-    catch(const std::out_of_range& oor)
+    catch(const std::out_of_range& /*oor*/)
     {
       std::stringstream ss;
       ss << "Out of range accessing training label " << dIdx;
@@ -660,7 +660,7 @@ namespace Tgs
 
             for (unsigned int fIdx = 0; fIdx < (unsigned int)factorList.size(); fIdx++)
             {
-              _factorLabels.push_back(factorList[fIdx].toLatin1().constData());
+              _factorLabels.emplace_back(factorList[fIdx].toLatin1().constData());
             }
           }
           else if (tag == "DATAVECTORS")
@@ -1007,7 +1007,7 @@ namespace Tgs
     {
       return _data[vIdx];
     }
-    catch(const std::out_of_range& oor)
+    catch(const std::out_of_range& /*oor*/)
     {
       std::stringstream ss;
       ss << "Out of range accessing data vector index: "  << vIdx;
@@ -1339,7 +1339,7 @@ namespace Tgs
 
           if (tag == "CLASSNAME")
           {
-            _trainingLabels.push_back(element.text().toLatin1().constData());
+            _trainingLabels.emplace_back(element.text().toLatin1().constData());
           }
           else if (tag == "DATA")
           {

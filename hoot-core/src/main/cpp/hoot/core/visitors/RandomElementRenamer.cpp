@@ -85,6 +85,7 @@ QString RandomElementRenamer::permuteName(const QString& s)
           result[i] = result[pos];
           result[pos] = c1;
         } break;
+      default: break;
       }
     }
   }

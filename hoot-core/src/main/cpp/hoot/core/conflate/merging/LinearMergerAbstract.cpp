@@ -73,7 +73,7 @@ void LinearMergerAbstract::apply(const OsmMapPtr& map, vector<pair<ElementId, El
 
     if (_map->containsElement(eid1) && _map->containsElement(eid2))
     {
-      pairs.push_back(pair<ElementId, ElementId>(eid1, eid2));
+      pairs.emplace_back(eid1, eid2);
     }
     else
     {

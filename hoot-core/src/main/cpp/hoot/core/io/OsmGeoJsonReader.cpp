@@ -488,7 +488,7 @@ void OsmGeoJsonReader::_parseGeoJsonRelation(const string& id, const pt::ptree& 
         _roles.push(*it);
     }
     else
-      _roles.push("");
+      _roles.emplace("");
   }
   //  Make sure that we have the 'GeometryCollection' with the 'geometries' tree inside
   string geo_type = geometry.get("type", "");
@@ -509,7 +509,7 @@ void OsmGeoJsonReader::_parseGeoJsonRelation(const string& id, const pt::ptree& 
         string type = geo.get("type", "");
         //  Make sure that there is always at least a blank role
         if (_roles.empty())
-          _roles.push("");
+          _roles.emplace("");
         QString role(_roles.front().c_str());
         _roles.pop();
         if (type == "Point")

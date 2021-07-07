@@ -369,10 +369,10 @@ std::shared_ptr<DataFrame> RubberSheet::_buildDataFrame(Status s) const
 {
   std::shared_ptr<DataFrame> df(new DataFrame());
   vector<string> labels;
-  labels.push_back("x");
-  labels.push_back("y");
-  labels.push_back("dx");
-  labels.push_back("dy");
+  labels.emplace_back("x");
+  labels.emplace_back("y");
+  labels.emplace_back("dx");
+  labels.emplace_back("dy");
   vector<int> types(4, DataFrame::Numerical);
   df->setFactorLabels(labels);
   df->setFactorTypes(types);
@@ -451,11 +451,11 @@ std::shared_ptr<Interpolator> RubberSheet::_buildInterpolator(Status s) const
     }
     candidate->setMaxAllowedPerLoopOptimizationIterations(maxOptIterations);
     vector<string> ind;
-    ind.push_back("x");
-    ind.push_back("y");
+    ind.emplace_back("x");
+    ind.emplace_back("y");
     vector<string> dep;
-    dep.push_back("dx");
-    dep.push_back("dy");
+    dep.emplace_back("dx");
+    dep.emplace_back("dy");
 
     candidate->setData(df);
     candidate->setIndependentColumns(ind);

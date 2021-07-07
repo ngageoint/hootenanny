@@ -56,7 +56,7 @@ std::string toString(ChangesetType type)
 }
 
 /**  Global regular expression for truncating tag keys/values at max tag length */
-QRegularExpression truncateTags("&[^;]+$", QRegularExpression::UseUnicodePropertiesOption);
+const QRegularExpression truncateTags("&[^;]+$", QRegularExpression::UseUnicodePropertiesOption);
 
 ChangesetElement::ChangesetElement(const XmlObject& object, ElementIdToIdMap* idMap)
   : _type(ElementType::Unknown),

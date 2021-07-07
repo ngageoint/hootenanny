@@ -397,6 +397,7 @@ namespace Tgs
           _randomizePatches();
           break;
         }
+      default: break;
       }
     }
     for (unsigned int i = 0; i < _currentValues.size(); i++)

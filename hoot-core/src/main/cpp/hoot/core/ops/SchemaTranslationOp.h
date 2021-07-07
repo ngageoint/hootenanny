@@ -77,7 +77,6 @@ public:
 private:
 
   SchemaTranslationVisitor _translator;
-  bool _toOgr;
 };
 
 }
