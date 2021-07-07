@@ -511,7 +511,7 @@ namespace Tgs
     }
   }
 
-  const vector<string> DataFrame::getFactorLabels() const
+  vector<string> DataFrame::getFactorLabels() const
   {
     try
     {

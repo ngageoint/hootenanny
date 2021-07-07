@@ -107,6 +107,7 @@ public:
   class BoxPair
   {
   public:
+
     BoxInternalData box;
     int id;
 
