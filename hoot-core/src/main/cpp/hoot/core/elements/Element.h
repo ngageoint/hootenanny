@@ -70,7 +70,6 @@ public:
   static QString className() { return "hoot::Element"; }
 
   Element();
-
   virtual ~Element() = default;
 
   virtual void clear() = 0;

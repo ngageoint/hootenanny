@@ -65,7 +65,6 @@ public:
    */
   void setBounds(std::shared_ptr<geos::geom::Geometry> bounds) override
   { _boundsChecker.setBounds(bounds); }
-
   // Why must this be explicitly called once the
   // setBounds(std::shared_ptr<geos::geom::Geometry> bounds) version is overridden to avoid compiler
   // errors?
@@ -77,7 +76,6 @@ public:
    */
   QString getInitStatusMessage() const override
   { return "Adding tags to immediately connected out of bounds ways..."; }
-
   /**
    * @see OperationStatus
    */
@@ -88,6 +86,8 @@ public:
       StringUtils::formatLargeNumber(_numProcessed) + " total ways.";
   }
 
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
   /**
    * @see ApiEntityInfo
    */
@@ -98,10 +98,6 @@ public:
   }
 
   long getNumTagged() const { return _numAffected; }
-
-  QString getName() const override { return className(); }
-
-  QString getClassName() const override { return className(); }
 
 private:
 

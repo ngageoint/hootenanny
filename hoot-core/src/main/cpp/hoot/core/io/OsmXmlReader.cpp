@@ -95,7 +95,7 @@ void OsmXmlReader::setConfiguration(const Settings& conf)
   ConfigOptions configOptions(conf);
   setDefaultAccuracy(configOptions.getCircularErrorDefaultValue());
   setKeepStatusTag(configOptions.getReaderKeepStatusTag());
-  setUseFileStatus(configOptions.getReaderUseFileStatus()),
+  setUseFileStatus(configOptions.getReaderUseFileStatus());
   setAddSourceDateTime(configOptions.getReaderAddSourceDatetime());
   setPreserveAllTags(configOptions.getReaderPreserveAllTags());
   setStatusUpdateInterval(configOptions.getTaskStatusUpdateInterval() * 10);
