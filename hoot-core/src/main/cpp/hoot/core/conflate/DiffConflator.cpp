@@ -210,6 +210,7 @@ void DiffConflator::apply(OsmMapPtr& map)
       // Use the MergerCreator framework and only remove the sections of linear features that match.
       // All other feature types are removed completely.
       _removePartialSecondaryMatchElements();
+
       // Originally tried doing this cleanup as part of conflate.post.ops, which required re-order
       // some of the ops. Unfortunately, that breaks some ref conflate regression tests. So, opting
       // to do it inside DiffConflator instead.
@@ -346,17 +347,31 @@ void DiffConflator::_separateMatchesToRemoveAsPartial()
 {
   LOG_DEBUG("Separating matches to remove as partial...");
 
+  // If we're treating reviews as matches, elements involved in reviews will be removed as well.
+  const bool treatReviewsAsMatches = ConfigOptions().getDifferentialTreatReviewsAsMatches();
+  LOG_VARD(treatReviewsAsMatches);
   for (std::vector<ConstMatchPtr>::const_iterator mit = _matches.begin(); mit != _matches.end();
        ++mit)
   {
     ConstMatchPtr match = *mit;
-    if (!_isMatchToRemovePartially(match))
+    const MatchType matchType = match->getType();
+    // Don't include misses.
+    if (matchType == MatchType::Match)
     {
-      _matchesToRemoveAsWhole.push_back(match);
-    }
-    else
-    {
-      _matchesToRemoveAsPartial.push_back(match);
+      // If an element is not something that could be involved in a partial match (e.g. not linear),
+      // OR its involved in a review and we're configured to treat reviews as matches, we'll add it
+      // to the group to be removed completely. Regarding reviews, *think* this is the correct way
+      // to handle them. Feature reviews are generated for entire features only (is that true?), so
+      // removing them completely makes sense over trying to remove them partially.
+      if (!_isMatchToRemovePartially(match) ||
+          (treatReviewsAsMatches && matchType == MatchType::Review))
+      {
+        _matchesToRemoveAsWhole.push_back(match);
+      }
+      else
+      {
+        _matchesToRemoveAsPartial.push_back(match);
+      }
     }
   }
   LOG_VART(_matchesToRemoveAsWhole);
@@ -384,6 +399,7 @@ QSet<ElementId> DiffConflator::_getElementIdsInvolvedInOnlyIntraDatasetMatches(
   QSet<ElementId> elementIds;
 
   const bool allowReviews = ConfigOptions().getDifferentialTreatReviewsAsMatches();
+  LOG_VARD(allowReviews);
 
   // Go through and record any element's involved in an intra-dataset match, since we don't want
   // those types of matches from preventing an element from passing through to the diff output.
@@ -487,7 +503,7 @@ void DiffConflator::_removeMatchElementsCompletely(const Status& status)
 
   // If we're treating reviews as matches, elements involved in reviews will be removed as well.
   const bool treatReviewsAsMatches = ConfigOptions().getDifferentialTreatReviewsAsMatches();
-  LOG_VART(treatReviewsAsMatches);
+  LOG_VARD(treatReviewsAsMatches);
 
   // If we're removing linear feature partial matches in a partial manner, we need to skip
   // processing them here. Otherwise, remove everything.
@@ -500,8 +516,8 @@ void DiffConflator::_removeMatchElementsCompletely(const Status& status)
   {
     matchesToRemoveCompletely = _matches;
   }
-  //LOG_VART(matchesToRemoveCompletely.size());
-  LOG_VART(matchesToRemoveCompletely);
+  LOG_VARD(matchesToRemoveCompletely.size());
+  //LOG_VART(matchesToRemoveCompletely);
 
   // We don't want remove elements involved in intra-dataset matches, so record those now.
   if (!_intraDatasetElementIdsPopulated)
@@ -518,7 +534,7 @@ void DiffConflator::_removeMatchElementsCompletely(const Status& status)
     ConstMatchPtr match = *mit;
     const MatchType matchType = match->getType();
 
-    // Make sure its not a miss.
+    // Make sure its not a miss. Throw out reviews if configured to do so.
     if (matchType == MatchType::Match || (treatReviewsAsMatches && matchType == MatchType::Review))
     {
       LOG_VART(match->getName());
@@ -614,6 +630,8 @@ void DiffConflator::_removeMatchElementPairCompletely(
 
 void DiffConflator::_removePartialSecondaryMatchElements()
 {
+  LOG_DEBUG("Removing partial secondary match elements...");
+
   std::vector<MergerPtr> relationMergers;
   _createMergers(relationMergers);
   // We already projected the map to planar earlier, so its strange that it should need to be done
