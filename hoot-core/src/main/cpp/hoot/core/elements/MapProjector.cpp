@@ -252,15 +252,9 @@ vector<std::shared_ptr<OGRSpatialReference>> MapProjector::createAllPlanarProjec
 
 std::shared_ptr<OGRSpatialReference> MapProjector::createOrthographic(const OGREnvelope& env)
 {
-  std::shared_ptr<OGRSpatialReference> srs(new OGRSpatialReference());
-  srs->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
   double x = (env.MinX + env.MaxX) / 2.0;
   double y = (env.MinY + env.MaxY) / 2.0;
-  if (srs->SetOrthographic(y, x, 0, 0) != OGRERR_NONE)
-  {
-    throw HootException("Error creating orthographic projection.");
-  }
-  return srs;
+  return createOrthographic(x, y);
 }
 
 std::shared_ptr<OGRSpatialReference> MapProjector::createOrthographic(double x, double y)
@@ -281,17 +275,11 @@ std::shared_ptr<OGRSpatialReference> MapProjector::createPlanarProjection(const 
 
   //  If the envelope is undefined, return an orthographic projection around (0, 0)
   if (!env.IsInit())
-  {
-    OGREnvelope empty;
-    empty.Merge(0, 0);
-    return createOrthographic(empty);
-  }
+    return createOrthographic(0, 0);
 
   // If the envelope has zero size, then return an orthographic projection.
   if (env.MaxX == env.MinX || env.MaxY == env.MinY)
-  {
     return createOrthographic(env);
-  }
 
   vector<std::shared_ptr<OGRSpatialReference>> projs = createAllPlanarProjections(env);
   LOG_VART(projs.size());
@@ -365,12 +353,6 @@ std::shared_ptr<OGRSpatialReference> MapProjector::createPlanarProjection(const 
             << "and max angular error: " << toDegrees(testResults[bestIndex].angleError) << deg
             << " test distance: " << testDistance << "m");
   LOG_LEVEL(level, "Projection: " << toWkt(projs[bestIndex]));
-//  LOG_DEBUG("Planar projection has max distance error " << fixed << setprecision(2)
-//            << testResults[bestIndex].distanceError << "m "
-//            << "(" << testResults[bestIndex].distanceError / testDistance * 100.0 << "%) "
-//            << "and max angular error: " << toDegrees(testResults[bestIndex].angleError) << deg
-//            << " test distance: " << testDistance << "m");
-//  LOG_DEBUG("Projection: " << toWkt(projs.at(bestIndex)));
 
   if (bestIndex == -1)
   {
@@ -652,9 +634,7 @@ void MapProjector::projectToWgs84(const std::shared_ptr<OsmMap>& map)
   if (isGeographic(map) == false)
   {
     MapProjector proj;
-    std::shared_ptr<OGRSpatialReference> srs(new OGRSpatialReference());
-    srs->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
-    srs->SetWellKnownGeogCS("WGS84");
+    std::shared_ptr<OGRSpatialReference> srs = MapProjector::createWgs84Projection();
     proj.project(map, srs);
   }
 }
@@ -663,9 +643,7 @@ Coordinate MapProjector::projectFromWgs84(const Coordinate& c,
                                           const std::shared_ptr<OGRSpatialReference>& srs)
 {
   LOG_TRACE("Projecting from WGS84...");
-  std::shared_ptr<OGRSpatialReference> wgs84(new OGRSpatialReference());
-  wgs84->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
-  wgs84->importFromEPSG(4326);
+  std::shared_ptr<OGRSpatialReference> wgs84 = MapProjector::createWgs84Projection();
   return project(c, wgs84, srs);
 }
 

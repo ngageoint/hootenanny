@@ -32,6 +32,7 @@
 // Hoot Includes
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Element.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/io/ElementInputStream.h>
 #include <hoot/core/io/PbfConstants.h>
 #include <hoot/core/proto/FileFormat.pb.h>
@@ -1429,13 +1430,7 @@ void OsmPbfReader::_parseTimestamp(const hoot::pb::Info& info, Tags& t) const
 
 std::shared_ptr<OGRSpatialReference> OsmPbfReader::getProjection() const
 {
-  std::shared_ptr<OGRSpatialReference> wgs84(new OGRSpatialReference());
-  wgs84->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
-  if (wgs84->SetWellKnownGeogCS("WGS84") != OGRERR_NONE)
-  {
-    throw HootException("Error creating EPSG:4326 projection.");
-  }
-  return wgs84;
+  return MapProjector::createWgs84Projection();
 }
 
 }
