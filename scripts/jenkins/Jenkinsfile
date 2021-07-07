@@ -18,6 +18,7 @@ pipeline {
         booleanParam(name: 'Hoot_provision', defaultValue: true)
         booleanParam(name: 'Configure_Tests', defaultValue: false)
         booleanParam(name: 'Build', defaultValue: true)
+        booleanParam(name: 'Archive_docs', defaultValue: false)
         booleanParam(name: 'Core_tests', defaultValue: true)
         booleanParam(name: 'Services_tests', defaultValue: true)
         booleanParam(name: 'UI_hoot1_tests', defaultValue: true)
@@ -131,6 +132,15 @@ pipeline {
                 // Configure authentication and reboot tomcat
                 sh "vagrant ssh ${params.Box} -c 'sed -i 's,oauthRedirectURL=http://localhost:8080/,oauthRedirectURL=http://${SYS_URL}:8080/hootenanny-id/,' /var/lib/tomcat8/webapps/hoot-services/WEB-INF/classes/conf/hoot-services.conf'"
                 sh "vagrant provision ${params.Box} --provision-with tomcat"
+            }
+        }
+        stage("Archive Docs") {
+            when { expression { return params.Archive_docs } }
+            steps {
+                // make archive does this same thing, but we don't run it from this script.
+                sh "vagrant ssh ${params.Box} -c 'cd hoot; source ./SetupEnv.sh; tar czf docs.tar.gz docs || touch docs.tar.gz'"
+                sh "vagrant scp ${params.Box}:~/hoot/docs.tar.gz ./"
+                archiveArtifacts artifacts: '**/docs.tar.gz'
             }
         }
         stage("Core Tests") {
