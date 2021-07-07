@@ -105,11 +105,11 @@ bool OsmApiReader::isSupported(const QString& url)
   return false;
 }
 
-void OsmApiReader::open(const QString& url)
-{
-  //  Save off the URL
-  OsmMapReader::open(url);
-}
+//void OsmApiReader::open(const QString& url)
+//{
+//  //  Save off the URL
+//  OsmMapReader::open(url);
+//}
 
 void OsmApiReader::read(const OsmMapPtr& map)
 {

@@ -87,7 +87,7 @@ void ChangesetElement::addTag(const XmlObject& tag)
       else if (it->name() == "v")
         value = it->value().toString();
     }
-    if (key != "" and value != "")
+    if (key != "" && value != "")
       _tags.push_back(std::make_pair(key, value));
   }
 }
