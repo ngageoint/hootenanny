@@ -94,7 +94,7 @@ void KnnIterator::_calculateNextNn()
     // get the next most likely area to search (minimum distance first)
     NodeDistance* nd = nullptr;
     const RTreeNode* currNode = nullptr;
-    if (_knnSearchQueue.size() != 0)
+    if (!_knnSearchQueue.empty())
     {
       nd = _knnSearchQueue.top();
       currNode = _searchTree->getNode(nd->id);

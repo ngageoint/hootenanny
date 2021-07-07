@@ -715,6 +715,8 @@ void WayJoinerAdvanced::_determineKeeperFeatureForTags(WayPtr parent, WayPtr chi
 
   const QString tagMergerClassName = ConfigOptions().getTagMergerDefault();
   LOG_VART(tagMergerClassName);
+  keeper = parent;
+  toRemove = child;
   if (parent->getStatus() == Status::Unknown1)
   {
     if (tagMergerClassName == "hoot::OverwriteTagMerger" ||
@@ -724,11 +726,6 @@ void WayJoinerAdvanced::_determineKeeperFeatureForTags(WayPtr parent, WayPtr chi
       toRemove = parent;
     }
     else if (tagMergerClassName == "hoot::OverwriteTag1Merger")
-    {
-      keeper = parent;
-      toRemove = child;
-    }
-    else
     {
       keeper = parent;
       toRemove = child;
@@ -748,17 +745,6 @@ void WayJoinerAdvanced::_determineKeeperFeatureForTags(WayPtr parent, WayPtr chi
       keeper = child;
       toRemove = parent;
     }
-    else
-    {
-      keeper = parent;
-      toRemove = child;
-    }
-  }
-  // does this make sense??
-  else
-  {
-    keeper = parent;
-    toRemove = child;
   }
 }
 

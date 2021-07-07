@@ -360,7 +360,7 @@ QString TagInfo::_printDelimitedText(TagInfoHash& data) const
 
   QStringList attrKey = data.keys();
   // Skip empty layers
-  if (attrKey.count() == 0)
+  if (attrKey.empty())
   {
     return "";
   }

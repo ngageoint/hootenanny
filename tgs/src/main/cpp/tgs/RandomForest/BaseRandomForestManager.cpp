@@ -1055,8 +1055,6 @@ namespace Tgs
     try
     {
       std::set<std::string> classNames = _data->getClassLabels();
-      std::set<std::string>::iterator itr;
-      std::set<std::string>::iterator itr2;
 
       unsigned int numClasses = _data->getClassLabels().size();
 
@@ -1064,9 +1062,9 @@ namespace Tgs
       _rfList.resize(numClasses * (numClasses - 1) / 2);
 
       unsigned int itrCtr = 0;
-      for (itr = classNames.begin(); itr != classNames.end(); ++itr)
+      for (std::set<std::string>::iterator itr = classNames.begin(); itr != classNames.end(); ++itr)
       {
-        for (itr2 = itr; itr2 != classNames.end(); ++itr2)
+        for ( std::set<std::string>::iterator itr2 = itr; itr2 != classNames.end(); ++itr2)
         {
           std::string posClass = *itr;
           std::string negClass = *itr2;
