@@ -111,7 +111,7 @@ private:
 
   void _sortInMemory(const QString& input, const QString& output) const
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     IoUtils::loadMap(map, input, true, Status::Unknown1);
     InMemoryElementSorterPtr(new InMemoryElementSorter(map));
     IoUtils::saveMap(map, output);

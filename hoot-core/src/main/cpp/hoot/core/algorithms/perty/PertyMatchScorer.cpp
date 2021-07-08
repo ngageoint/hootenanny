@@ -107,7 +107,7 @@ OsmMapPtr PertyMatchScorer::_loadReferenceMap(const QString& referenceMapInputPa
     "Loading the reference data with status " << MetadataTags::Unknown1() << " and adding " <<
     MetadataTags::Ref1() << " tags to it; Saving a copy to " << referenceMapOutputPath << "...");
 
-  OsmMapPtr referenceMap(new OsmMap());
+  OsmMapPtr referenceMap = std::make_shared<OsmMap>();
   IoUtils::loadMap(referenceMap, referenceMapInputPath, false, Status::Unknown1);
   OsmMapWriterFactory::writeDebugMap(referenceMap, className(), "ref-map-initial");
   MapCleaner().apply(referenceMap);
@@ -138,7 +138,7 @@ void PertyMatchScorer::_loadPerturbedMap(const QString& perturbedMapInputPath,
 
   // load from the modified reference data output to get the added ref1 tags; don't copy the map,
   // since updates to the names of the ref tags on this map will propagate to the map copied from
-  OsmMapPtr perturbedMap(new OsmMap());
+  OsmMapPtr perturbedMap = std::make_shared<OsmMap>();
   IoUtils::loadMap(perturbedMap, perturbedMapInputPath, false, Status::Unknown2);
   OsmMapWriterFactory::writeDebugMap(perturbedMap, className(), "pre-perturbed-map");
   MapCleaner().apply(perturbedMap);

@@ -52,11 +52,11 @@ public:
   QMap<Change::ChangeType, QList<long>> _getChangeset(
     const QString& input1, const QString& input2, const bool allowRefDelete = true)
   {
-    OsmMapPtr map1(new OsmMap());
+    OsmMapPtr map1 = std::make_shared<OsmMap>();
     // each dataset needs to have a different input status
     OsmMapReaderFactory::read(map1, input1, true, Status::Unknown1);
 
-    OsmMapPtr map2(new OsmMap());
+    OsmMapPtr map2 = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(map2, input2, true, Status::Unknown2);
 
     // input has to be sorted

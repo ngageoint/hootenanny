@@ -60,7 +60,7 @@ public:
   void runBasicTest()
   {
     OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.setUseDataSourceIds(true);
     reader.read(_inputPath + "RunBasicTestIn.osm", map);

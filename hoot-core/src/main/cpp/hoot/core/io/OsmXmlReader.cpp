@@ -490,7 +490,7 @@ OsmMapPtr OsmXmlReader::fromXml(
 
   LOG_DEBUG("Reading map from xml...");
   //LOG_VART(xml);
-  OsmMapPtr map(new OsmMap());
+  OsmMapPtr map = std::make_shared<OsmMap>();
   OsmXmlReader reader;
   reader.setUseDataSourceIds(useDataSourceId);
   reader.setUseFileStatus(useDataSourceStatus);

@@ -129,7 +129,7 @@ void RelationWithMostMembersOp::_setOutput(const long relationId, OsmMapPtr& out
 {
   std::set<ElementId> elementIds;
   elementIds.insert(ElementId(ElementType::Relation, relationId));
-  OsmMapPtr tmpMap(new OsmMap());
+  OsmMapPtr tmpMap = std::make_shared<OsmMap>();
   CopyMapSubsetOp mapCopier(outputMap, elementIds);
   mapCopier.apply(tmpMap);
   outputMap = tmpMap;

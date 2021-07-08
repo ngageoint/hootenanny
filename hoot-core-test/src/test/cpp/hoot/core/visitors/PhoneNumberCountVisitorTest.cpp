@@ -52,7 +52,7 @@ public:
 
   void runBasicTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(map, _inputPath + "PoiPolygon2.osm", false, Status::Unknown1);
 
     PhoneNumberCountVisitor uut;
@@ -63,7 +63,7 @@ public:
 
   void runConfigureTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(map, _inputPath + "PoiPolygon2.osm", false, Status::Unknown1);
 
     PhoneNumberCountVisitor uut;

@@ -55,7 +55,7 @@ public:
   void runInvalidMemberCountTest()
   {
     //add some nodes to a map
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     ElementPtr n1(new Node(Status::Unknown1, 1, 0, 0, 0));
     ElementPtr n2(new Node(Status::Unknown2, 2, 0, 0, 0));
     ElementPtr n3(new Node(Status::Unknown1, 3, 0, 0, 0));
@@ -102,7 +102,7 @@ public:
   void runEmptyRelationNoMemberCountTagTest()
   {
     //add some nodes to a map
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     ElementPtr n1(new Node(Status::Unknown1, 1, 0, 0, 0));
     ElementPtr n2(new Node(Status::Unknown2, 2, 0, 0, 0));
     ElementPtr n3(new Node(Status::Unknown1, 3, 0, 0, 0));

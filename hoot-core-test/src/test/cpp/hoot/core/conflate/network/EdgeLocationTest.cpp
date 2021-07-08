@@ -45,7 +45,7 @@ public:
 
   void basicTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     ConstNetworkVertexPtr vertex1(
       new NetworkVertex(TestUtils::createNode(map, "", Status::Unknown1, 0, 0)));
     ConstNetworkVertexPtr vertex2(
@@ -85,7 +85,7 @@ public:
 
   void invalidTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     ConstNetworkVertexPtr vertex1(
       new NetworkVertex(TestUtils::createNode(map, "", Status::Unknown1, 0, 0)));
     ConstNetworkVertexPtr vertex2(
@@ -99,7 +99,7 @@ public:
 
   void operatorTests()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     ConstNetworkVertexPtr vertex1(
       new NetworkVertex(TestUtils::createNode(map, "", Status::Unknown1, 0, 0)));
     ConstNetworkVertexPtr vertex2(
@@ -119,7 +119,7 @@ public:
 
   void hashTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     ConstNetworkVertexPtr vertex1(
       new NetworkVertex(TestUtils::createNode(map, "", Status::Unknown1, 0, 0)));
     ConstNetworkVertexPtr vertex2(

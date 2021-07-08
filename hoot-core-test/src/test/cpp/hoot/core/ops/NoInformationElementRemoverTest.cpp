@@ -67,7 +67,7 @@ public:
 
   void runWayWithInfoOneNodeWithoutInfoTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     QList<NodePtr> nodes;
     NodePtr node1(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15));
@@ -95,7 +95,7 @@ public:
 
   void runStandAloneNodesWithAndWithoutInfoTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     NodePtr node1(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15));
     node1->getTags().appendValue("hoot:test", "test1");
@@ -121,7 +121,7 @@ public:
 
   void runWayWithoutInfoOneNodeWithInfoTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     QList<NodePtr> nodes;
     NodePtr node1(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15));
@@ -145,7 +145,7 @@ public:
 
   void runEmptyWayOrphanNodesTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     QList<NodePtr> nodes;
     NodePtr node1(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15));
@@ -170,7 +170,7 @@ public:
 
   void runWayWithoutInfoAllNodesWithoutInfoTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     QList<NodePtr> nodes;
     NodePtr node1(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15));
@@ -192,7 +192,7 @@ public:
 
   void runRelationWithInfoOneElementWithoutInfoTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     QList<ElementPtr> elements;
 
@@ -232,7 +232,7 @@ public:
 
   void runRelationWithoutInfoOneNodeElementWithInfoTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     QList<ElementPtr> elements;
 
@@ -269,7 +269,7 @@ public:
 
   void runRelationWithoutInfoOneWayElementWithInfoTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     QList<ElementPtr> elements;
 
@@ -306,7 +306,7 @@ public:
 
   void runEmptyRelationWithoutInfoTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     QList<ElementPtr> elements;
 
@@ -344,7 +344,7 @@ public:
 
   void runRelationWithoutInfoAllElementsWithoutInfoTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     NodePtr node1(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15));
     node1->getTags().appendValue("hoot:test", "test1");
@@ -374,7 +374,7 @@ public:
 
   void runUnrelatedElementsWithInfoTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     NodePtr node1(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15));
     node1->getTags().appendValue("hoot:test", "test1");

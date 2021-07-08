@@ -147,7 +147,7 @@ public:
 
   long insertDataForBoundTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map, _inputPath + "runReadByBoundsTestInput.osm", false, Status::Unknown1);
 
@@ -191,7 +191,7 @@ public:
     HootApiDbReader reader;
     reader.setUserEmail(userEmail(_testName));
     // make sure all the element ids start with -1
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setUseDataSourceIds(false);
     reader.open(ServicesDbTestUtils::getDbReadUrl(_mapId).toString());
     reader.read(map);
@@ -399,7 +399,7 @@ public:
 
     HootApiDbReader reader;
     reader.setUserEmail(userEmail(_testName));
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.open(ServicesDbTestUtils::getDbReadUrl(_mapId).toString());
     reader.read(map);
     verifyFullReadOutput(map);
@@ -413,7 +413,7 @@ public:
 
     HootApiDbReader reader;
     reader.setUserEmail(userEmail(_testName));
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.open(ServicesDbTestUtils::getDbReadUrl(_mapId, 3, "node").toString());
     reader.read(map);
     verifySingleReadOutput(map);
@@ -425,7 +425,7 @@ public:
     setUpTest("runFactoryReadTest");
     _mapId = populateMap();
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     conf().set("api.db.email", userEmail(_testName));
     OsmMapReaderFactory::read(map, ServicesDbTestUtils::getDbReadUrl(_mapId).toString());
     verifyFullReadOutput(map);
@@ -446,7 +446,7 @@ public:
     reader.initializePartial();
 
     int ctr = 0;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     //3 nodes
 
@@ -612,7 +612,7 @@ public:
 
     HootApiDbReader reader;
     reader.setUserEmail(userEmail(_testName));
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.open(ServicesDbTestUtils::getDbReadUrl(_mapId).toString());
 
     // See related note in ServiceOsmApiDbReaderTest::runReadByBoundsTest.
@@ -667,7 +667,7 @@ public:
 
     HootApiDbReader reader;
     reader.setUserEmail("");
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.open(ServicesDbTestUtils::getDbReadUrl(_mapId).toString());
     reader.read(map);
     verifyFullReadOutput(map);
@@ -767,7 +767,7 @@ public:
     LOG_VARD(secondMapId);
 
     HootApiDbReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     QString url = ServicesDbTestUtils::getDbReadUrl(_mapId).toString();
     url = url.replace("/" + QString::number(_mapId), "/" + _testName);
     LOG_VARD(url);
@@ -831,7 +831,7 @@ public:
 
     LOG_DEBUG("Reading first map with first user...");
     HootApiDbReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     QString url = ServicesDbTestUtils::getDbReadUrl(_mapId).toString();
     url = url.replace("/" + QString::number(_mapId), "/" + _testName);
     // Configure the reader for the original user, and we should be able to read out the second map.
@@ -937,7 +937,7 @@ public:
     HootApiDbReader reader;
     reader.setUserEmail(userEmail(_testName));
     reader.setKeepImmediatelyConnectedWaysOutsideBounds(true);
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.open(ServicesDbTestUtils::getDbReadUrl(_mapId).toString());
 
     // See related note in ServiceOsmApiDbReaderTest::runReadByBoundsTest.
@@ -1006,7 +1006,7 @@ public:
     //  Attempt to read the original map with the admin user
     LOG_DEBUG("Reading map with second user...");
     HootApiDbReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     QString url = ServicesDbTestUtils::getDbReadUrl(_mapId).toString();
     reader.setUserEmail(userEmail(testMap2));
     reader.open(url);

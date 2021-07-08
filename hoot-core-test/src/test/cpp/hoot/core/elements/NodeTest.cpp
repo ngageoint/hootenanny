@@ -83,7 +83,7 @@ public:
 
   void runSetTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     NodePtr n(new Node(Status::Unknown1, 123, 1.2, 2.3, 3.14));
     n->setTag("foo", "bar");

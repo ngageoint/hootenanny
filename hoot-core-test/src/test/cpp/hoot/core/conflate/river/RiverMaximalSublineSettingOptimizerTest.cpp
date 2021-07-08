@@ -57,7 +57,7 @@ public:
 
   void runBasicTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map, _inputPath + "Haiti_CNIGS_Rivers_REF1-cropped-2.osm", false, Status::Unknown1);
     OsmMapReaderFactory::read(

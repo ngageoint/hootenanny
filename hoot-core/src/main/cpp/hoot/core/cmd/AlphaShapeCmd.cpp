@@ -115,7 +115,7 @@ public:
       "Deriving alpha shape for input ..." << FileUtils::toLogFormat(pointsPath, 25) <<
       " and writing output to " << FileUtils::toLogFormat(outputPath, 25) << "...");
 
-    OsmMapPtr pointsMap(new OsmMap());
+    OsmMapPtr pointsMap = std::make_shared<OsmMap>();
     IoUtils::loadMap(pointsMap, pointsPath, false, Status::Unknown1);
 
     AlphaShapeGenerator generator(alpha, buffer);

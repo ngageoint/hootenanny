@@ -123,7 +123,7 @@ public:
     OsmSchema::getInstance().updateOrCreateVertex(review);
 
     QString output = args.last();
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     for (int i = 0; i < args.size() - 1; i++)
     {
       Status s = Status::fromInput(i);

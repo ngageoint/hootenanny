@@ -248,7 +248,7 @@ void RubberSheet::_filterCalcAndApplyTransform(OsmMapPtr& map)
   std::shared_ptr<CopyMapSubsetOp> mapCopier;
 
   // copy out elements meeting the filter criteria into a map
-  OsmMapPtr toModify(new OsmMap());
+  OsmMapPtr toModify = std::make_shared<OsmMap>();
   LOG_VARD(_criteria->toString());
   mapCopier.reset(new CopyMapSubsetOp(map, _criteria));
   mapCopier->apply(toModify);
@@ -274,7 +274,7 @@ void RubberSheet::_filterCalcAndApplyTransform(OsmMapPtr& map)
   OsmMapWriterFactory::writeDebugMap(toModify, className(), "to-modify");
 
   // copy out elements not meeting filter criteria into another map
-  OsmMapPtr toNotModify(new OsmMap());
+  OsmMapPtr toNotModify = std::make_shared<OsmMap>();
   mapCopier.reset(new CopyMapSubsetOp(map, NotCriterionPtr(new NotCriterion(_criteria))));
   mapCopier->apply(toNotModify);
   LOG_DEBUG(

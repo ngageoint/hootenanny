@@ -58,7 +58,7 @@ public:
 
   void runLocateAfterTest()
   {
-    std::shared_ptr<OsmMap> map(new OsmMap());
+    std::shared_ptr<OsmMap> map = std::make_shared<OsmMap>();
 
     geos::geom::Coordinate c[] =
     {

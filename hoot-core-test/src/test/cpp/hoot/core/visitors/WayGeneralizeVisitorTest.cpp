@@ -63,7 +63,7 @@ public:
 
   void runBasicTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map,
       "test-files/visitors/RandomWayGeneralizerTest/RandomWayGeneralizerTest-in-1.osm");
@@ -81,7 +81,7 @@ public:
 
   void runCritTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map, "test-files/conflate/unified/AllDataTypesA.osm", false, Status::Unknown1);
 
@@ -105,7 +105,7 @@ public:
     uut.setEpsilon(1.0);
 
     uut.setRemoveNodesSharedByWays(true);
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(map, _inputPath + "runRemoveSharedNodeTest.osm");
     map->visitRw(uut);
 
@@ -130,7 +130,7 @@ public:
 
   void runConfigureTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map,
       "test-files/visitors/RandomWayGeneralizerTest/RandomWayGeneralizerTest-in-1.osm");

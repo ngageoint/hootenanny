@@ -77,7 +77,7 @@ public:
     SimpleReaderTestServer server(PORT_SIMPLE);
     server.start();
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     OsmApiReader reader;
     //  Set the bounds to be smaller than 0.25 degrees by 0.25 degrees so that there is no splitting
@@ -101,7 +101,7 @@ public:
     GeographicSplitReaderTestServer server(PORT_SPLIT_GEO);
     server.start();
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     OsmApiReader reader;
     Settings s;
@@ -128,7 +128,7 @@ public:
     ElementSplitReaderTestServer server(PORT_SPLIT_ELEMENTS);
     server.start();
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     OsmApiReader reader;
     Settings s;
@@ -155,7 +155,7 @@ public:
     QString exceptionMsg("");
     try
     {
-      OsmMapPtr map(new OsmMap());
+      OsmMapPtr map = std::make_shared<OsmMap>();
       OsmApiReader reader;
       //  Set the bounds to be larger than 1 degree by 1 degree so that it will fail
       reader.setBounds(geos::geom::Envelope(-111.3914, -110.2914, 40.5557, 41.7557));

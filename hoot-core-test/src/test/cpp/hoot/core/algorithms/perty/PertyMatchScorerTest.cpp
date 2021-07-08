@@ -88,7 +88,7 @@ public:
   void runCombineMapTest()
   {
     OsmXmlReader reader;
-    OsmMapPtr referenceMap(new OsmMap());
+    OsmMapPtr referenceMap = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.setUseDataSourceIds(true);
     reader.read(
@@ -119,7 +119,7 @@ public:
     testSettings.set("conflate.enable.old.roads", "false");
 
     OsmXmlReader reader;
-    OsmMapPtr combinedMap(new OsmMap());
+    OsmMapPtr combinedMap = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.setUseDataSourceIds(true);
     reader.read(

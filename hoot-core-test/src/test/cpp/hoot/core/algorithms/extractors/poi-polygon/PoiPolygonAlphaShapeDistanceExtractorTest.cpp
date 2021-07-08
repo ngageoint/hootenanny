@@ -59,7 +59,7 @@ public:
   {
     PoiPolygonAlphaShapeDistanceExtractor uut;
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map,
       _inputPath + "PoiPolygonAlphaShapeDistanceExtractorTest1.osm",

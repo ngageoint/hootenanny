@@ -58,7 +58,7 @@ public:
 
   void runTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     Coordinate c[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
                        Coordinate(100.0, 10.0), Coordinate(0.0, 10.0),
@@ -66,7 +66,7 @@ public:
     WayPtr w1 = TestUtils::createWay(map,  c, "", Status::Unknown1, 1);
     WayPtr w2 = TestUtils::createWay(map, c, "", Status::Unknown2, 1);
 
-    OsmMapPtr copy(new OsmMap());
+    OsmMapPtr copy = std::make_shared<OsmMap>();
     set<ElementId> eids;
     eids.insert(w1->getElementId());
     eids.insert(w2->getElementId());
@@ -87,7 +87,7 @@ public:
 
   void runTouchesTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     Coordinate c[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
                        Coordinate(100.0, 10.0), Coordinate(0.0, 10.0),
@@ -95,7 +95,7 @@ public:
     WayPtr w1 = TestUtils::createWay(map, c, "", Status::Unknown1, 1);
     WayPtr w2 = TestUtils::createWay(map, c, "", Status::Unknown2, 1);
 
-    OsmMapPtr copy(new OsmMap());
+    OsmMapPtr copy = std::make_shared<OsmMap>();
     set<ElementId> eids;
     eids.insert(w1->getElementId());
     eids.insert(w2->getElementId());

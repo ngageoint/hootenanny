@@ -106,8 +106,8 @@ bool TestUtils::compareMaps(const QString& refPath, const QString& testPath)
   reader.setUseFileStatus(true);
   reader.setAddSourceDateTime(false);
 
-  OsmMapPtr ref(new OsmMap());
-  OsmMapPtr test(new OsmMap());
+  OsmMapPtr ref = std::make_shared<OsmMap>();
+  OsmMapPtr test = std::make_shared<OsmMap>();
   reader.read(refPath, ref);
   reader.read(testPath, test);
   return compareMaps(ref, test);

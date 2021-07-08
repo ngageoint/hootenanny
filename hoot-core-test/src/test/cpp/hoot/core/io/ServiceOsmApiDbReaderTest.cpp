@@ -154,7 +154,7 @@ public:
   void runReadOsmApiTest()
   {
     OsmApiDbReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     insertData();
 
@@ -176,7 +176,7 @@ public:
     database.open(ServicesDbTestUtils::getOsmApiDbUrl());
     OsmApiDbReader reader;
     reader.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     // The default behavior is return both features entirely within the bounds and those that
     // cross the bounds. This uses MapCropper internally, so other variations on the cropping are
@@ -242,7 +242,7 @@ public:
     reader.initializePartial();
 
     int ctr = 0;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     //3 nodes
 
@@ -381,7 +381,7 @@ public:
     OsmApiDbReader reader;
     reader.setKeepImmediatelyConnectedWaysOutsideBounds(true);
     reader.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     // The default behavior is return both features entirely within the bounds and those that
     // cross the bounds. This uses MapCropper internally, so other variations on the cropping are

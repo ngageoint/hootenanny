@@ -60,7 +60,7 @@ public:
 
   void runTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map, _inputPath + "IntersectionOverUnionExtractorTest-in.osm");
     IntersectionOverUnionExtractor uut;
@@ -88,7 +88,7 @@ public:
 
   void runUnsupportedGeometriesTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map, _inputPath + "IntersectionOverUnionExtractorTest-in.osm");
     IntersectionOverUnionExtractor uut;

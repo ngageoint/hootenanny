@@ -69,7 +69,7 @@ public:
     const QString testName = "runSnapTest";
 
     OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(_inputPath + testName + "In1.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
@@ -110,7 +110,7 @@ public:
 
     const QString testName = "runSnapMultipleTypesTest";
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(map, false, true, _inputPath + testName + "In.osm");
 
     UnconnectedWaySnapper uut;
@@ -149,7 +149,7 @@ public:
 
     const QString testName = "runSnapOneOfMultipleTypesTest";
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(map, false, true, _inputPath + "runSnapMultipleTypesTestIn.osm");
 
     UnconnectedWaySnapper uut;
@@ -186,7 +186,7 @@ public:
 
     const QString testName = "runSnapToDifferentTypeTest";
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(map, false, true, _inputPath + testName + "In.osm");
 
     UnconnectedWaySnapper uut;
@@ -224,7 +224,7 @@ public:
     const QString testName = "runReviewSnappedTest";
 
     OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(_inputPath + "runSnapTestIn1.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
@@ -264,7 +264,7 @@ public:
     const QString testName = "runMarkOnlyTest";
 
     OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(_inputPath + "runSnapTestIn1.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
@@ -356,7 +356,7 @@ public:
     const QString testName = "runStaticSnapTest";
 
     OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setUseDataSourceIds(true);
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(_inputPath + testName + "In1.osm", map);
@@ -391,7 +391,7 @@ public:
     const QString testName = "runTypeMatch";
 
     OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(_inputPath + testName + "In1.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
@@ -437,7 +437,7 @@ public:
     const QString testName = "runTypeExcludeTest";
 
     OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(_inputPath + "runTypeMatchIn1.osm", map);
     reader.setDefaultStatus(Status::Unknown2);

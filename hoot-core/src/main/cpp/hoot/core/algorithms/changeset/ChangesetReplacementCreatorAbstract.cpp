@@ -431,7 +431,7 @@ OsmMapPtr ChangesetReplacementCreatorAbstract::_getCookieCutMap(
         LOG_DEBUG(
           "Nothing in cutter map. Full replacement enabled, so returning an empty map " <<
           "as the map after cutting...");
-        return OsmMapPtr(new OsmMap());
+        return std::make_shared<OsmMap>();
       }
       else
       {
@@ -456,7 +456,7 @@ OsmMapPtr ChangesetReplacementCreatorAbstract::_getCookieCutMap(
         LOG_DEBUG(
           "Nothing in cutter map for linear features. Full replacement and lenient bounds "
           "interpretation, so returning an empty map as the map after cutting...");
-        return OsmMapPtr(new OsmMap());
+        return std::make_shared<OsmMap>();
       }
       else if (_fullReplacement && _boundsInterpretation != BoundsInterpretation::Lenient )
       {

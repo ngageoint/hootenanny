@@ -98,7 +98,7 @@ void RemoveDuplicateReviewsOp::apply(std::shared_ptr<OsmMap>& map)
       ElementId beid = *eids.begin();
       ElementId eeid = *eids.rbegin();
 
-      std::shared_ptr<OsmMap> copy(new OsmMap());
+      std::shared_ptr<OsmMap> copy = std::make_shared<OsmMap>();
       CopyMapSubsetOp(map, beid, eeid).apply(copy);
       copy->getElement(beid)->setStatus(Status::Unknown1);
       copy->getElement(eeid)->setStatus(Status::Unknown2);

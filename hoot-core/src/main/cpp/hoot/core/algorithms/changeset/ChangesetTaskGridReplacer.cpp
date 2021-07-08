@@ -364,7 +364,7 @@ OsmMapPtr ChangesetTaskGridReplacer::_writeUpdatedData(const QString& outputFile
   conf().set(ConfigOptions::getBoundsKey(), "");
 
   LOG_STATUS("Reading the modified data out of: ..." << FileUtils::toLogFormat(_dataToReplaceUrl, 25) << "...");
-  OsmMapPtr map(new OsmMap());
+  OsmMapPtr map = std::make_shared<OsmMap>();
   OsmMapReaderFactory::read(map, _dataToReplaceUrl, true, Status::Unknown1);
 
   // had to do this cleaning to get the relations to behave and be viewable in JOSM

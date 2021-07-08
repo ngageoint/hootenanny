@@ -70,7 +70,7 @@ public:
 
   void runAddAttributesTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map, _inputPath + "AddAttributesVisitorTest.osm", false, Status::Unknown1);
 
@@ -91,7 +91,7 @@ public:
 
   void runAddAttributesOnlyIfEmptyTest1()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map, _inputPath + "AddAttributesVisitorTest2.osm", false, Status::Unknown1);
 
@@ -115,7 +115,7 @@ public:
 
   void runAddAttributesOnlyIfEmptyTest2()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map, _inputPath + "AddAttributesVisitorTest3.osm", false, Status::Unknown1);
 
@@ -139,7 +139,7 @@ public:
 
   void runAddInvalidAttributeKeyTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map, _inputPath + "AddAttributesVisitorTest.osm", false, Status::Unknown1);
 
@@ -162,7 +162,7 @@ public:
 
   void runAddMissingAttributeValueTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map, _inputPath + "AddAttributesVisitorTest.osm", false, Status::Unknown1);
 
@@ -185,7 +185,7 @@ public:
 
   void runAddEmptyAttributeValueTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map, _inputPath + "AddAttributesVisitorTest.osm", false, Status::Unknown1);
 
@@ -208,7 +208,7 @@ public:
 
   void runAddInvalidValueTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map, _inputPath + "AddAttributesVisitorTest.osm", false, Status::Unknown1);
 
@@ -276,7 +276,7 @@ public:
 
   void runNegatedFilterTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map, "test-files/visitors/RemoveElementsVisitorTest/RemoveElementsVisitorInput.osm");
 
@@ -298,7 +298,7 @@ public:
 
   void runMultipleCriteriaTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map, "test-files/visitors/RemoveElementsVisitorTest/RemoveElementsVisitorInput.osm");
 

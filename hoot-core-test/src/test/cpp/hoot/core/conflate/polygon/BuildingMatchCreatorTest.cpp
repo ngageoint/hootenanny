@@ -105,7 +105,7 @@ public:
   OsmMapPtr getTestMap(const bool targetWaysOnly = true)
   {
     OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(_inputPath + "ToyBuildingsTestA.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
@@ -154,7 +154,7 @@ public:
     BuildingMatchCreator uut;
 
     OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     conf().set("building.address.match.enabled", "false");
 

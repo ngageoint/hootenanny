@@ -169,7 +169,7 @@ private:
 
   OsmMapPtr _readInputs(const QStringList& inputs) const
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     for (int i = 0; i < inputs.size(); i++)
     {
       const QString input = inputs.at(i);

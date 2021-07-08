@@ -58,10 +58,10 @@ public:
   {
     OsmXmlReader reader;
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.read(_inputPath + "ToyTestA.osm", map);
 
-    OsmMapPtr map2(new OsmMap());
+    OsmMapPtr map2 = std::make_shared<OsmMap>();
     reader.read(_inputPath + "ToyTestB.osm", map2);
 
     RasterComparator uut(map, map2);

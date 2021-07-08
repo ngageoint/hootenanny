@@ -106,7 +106,7 @@ public:
      "}                                      \n";
 
     OsmJsonReader uut;
-    OsmMapPtr pMap(new OsmMap());
+    OsmMapPtr pMap = std::make_shared<OsmMap>();
     uut.loadFromString(testJsonStr, pMap);
 
     // Need to test read from file, too
@@ -125,7 +125,7 @@ public:
       "    <node visible=\"true\" id=\"-1\" timestamp=\"1970-01-01T00:00:00Z\" version=\"1\" lat=\"2.0\" lon=\"-3.0\"/>\n"
       "</osm>\n";
 
-    OsmMapPtr pTestMap(new OsmMap());
+    OsmMapPtr pTestMap = std::make_shared<OsmMap>();
     OsmXmlReader reader;
     reader.setUseDataSourceIds(true);
     reader.readFromString(testOsmStr, pTestMap);
@@ -145,7 +145,7 @@ public:
                           "{\"type\":\"way\",\"id\":-1,\"nodes\":[-1,-2,-3,-4,-5],\"tags\":{\"note\":\"w1\",\"alt_name\":\"bar\",\"name\":\"foo\",\"area\":\"yes\",\"amenity\":\"bar\",\"" + MetadataTags::ErrorCircular() + "\":\"5\"}}]\n"
                           "}\n";
     OsmJsonReader uut;
-    OsmMapPtr pMap(new OsmMap());
+    OsmMapPtr pMap = std::make_shared<OsmMap>();
     uut.loadFromString(testJsonStr, pMap);
 
     // Test against osm xml
@@ -172,7 +172,7 @@ public:
       "    </way>\n"
       "</osm>\n";
 
-    OsmMapPtr pTestMap(new OsmMap());
+    OsmMapPtr pTestMap = std::make_shared<OsmMap>();
     OsmXmlReader reader;
     reader.setUseDataSourceIds(true);
     reader.readFromString(testOsmStr, pTestMap);
@@ -279,7 +279,7 @@ public:
       "}                                       \n";
 
     OsmJsonReader uut;
-    OsmMapPtr pMap(new OsmMap());
+    OsmMapPtr pMap = std::make_shared<OsmMap>();
     uut.loadFromString(testJsonStr, pMap);
 
     // Useful for debug
@@ -331,7 +331,7 @@ public:
       "  </relation>                                                                                                    \n"
       "</osm>                                                                                                           \n";
 
-    OsmMapPtr pTestMap(new OsmMap());
+    OsmMapPtr pTestMap = std::make_shared<OsmMap>();
     OsmXmlReader reader;
     reader.setUseDataSourceIds(true);
     reader.readFromString(testOsmStr, pTestMap);
@@ -385,7 +385,7 @@ public:
     // File URL
     QString fname = QDir::currentPath() + "/test-files/nodes.json";
     QString urlFile = "file://" + fname;
-    OsmMapPtr pMap2(new OsmMap());
+    OsmMapPtr pMap2 = std::make_shared<OsmMap>();
     CPPUNIT_ASSERT(uut.isSupported(urlFile));
     uut.open(urlFile);
     uut.read(pMap2);
@@ -595,7 +595,7 @@ public:
 
     OsmJsonReader uut;
     uut.setBounds(geos::geom::Envelope(-104.8996,-104.8976,38.8531,38.8552));
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     uut.open(_inputPath + "runBoundsTest-in.json");
     uut.read(map);
     uut.close();
@@ -619,7 +619,7 @@ public:
     conf().set(ConfigOptions::getBoundsKeepEntireFeaturesCrossingBoundsKey(), false);
     conf().set(ConfigOptions::getBoundsKeepOnlyFeaturesInsideBoundsKey(), true);
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     uut.open(_inputPath + "runBoundsLeaveConnectedOobWaysTest-in.json");
     uut.read(map);
     uut.close();

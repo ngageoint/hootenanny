@@ -169,7 +169,7 @@ void ConflateExecutor::conflate(const QString& input1, const QString& input2, QS
   _taskTimer.reset();
   _progress.reset(
     new Progress(ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running));
-  OsmMapPtr map(new OsmMap());
+  OsmMapPtr map = std::make_shared<OsmMap>();
   const bool isChangesetOutput = output.endsWith(".osc") || output.endsWith(".osc.sql");
   double bytesRead = IoSingleStat(IoSingleStat::RChar).value;
   LOG_VART(bytesRead);

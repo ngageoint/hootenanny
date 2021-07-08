@@ -164,7 +164,7 @@ public:
     QString exceptionMsg("");
     try
     {
-      OsmMapPtr map(new OsmMap());
+      OsmMapPtr map = std::make_shared<OsmMap>();
       OsmMapReaderFactory::read(map, true, true, _inputPath + inFileName);
 
       ElementMergerJs::_mergeElements(map, v8::Isolate::GetCurrent());

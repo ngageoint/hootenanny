@@ -95,7 +95,7 @@ public:
       "Conflating " << FileUtils::toLogFormat(inputs) <<
       " and writing the output to " << FileUtils::toLogFormat(output, 50) << "...");
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     // Load all the inputs into a single map.
     for (int i = 0; i < inputs.size(); ++i)
     {

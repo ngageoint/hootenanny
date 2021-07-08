@@ -140,7 +140,7 @@ private:
 
   std::shared_ptr<JosmMapValidator> _validate(const QStringList& inputs, const QString& output)
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     if (inputs.size() == 1)
     {
       IoUtils::loadMap(map, inputs.at(0), true, Status::Unknown1);
@@ -168,7 +168,7 @@ private:
     {
       const QString input = inputs.at(i);
 
-      OsmMapPtr map(new OsmMap());
+      OsmMapPtr map = std::make_shared<OsmMap>();
       IoUtils::loadMap(map, input, true, Status::Unknown1);
 
       /*std::shared_ptr<JosmMapValidator> validator =*/ _validate(map);

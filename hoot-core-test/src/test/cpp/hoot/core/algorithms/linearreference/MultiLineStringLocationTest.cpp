@@ -73,7 +73,7 @@ public:
 
   void runSingleWayTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     Coordinate coords[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
                             Coordinate(100.0, 10.0), Coordinate(0.0, 10.0),
@@ -113,7 +113,7 @@ public:
 
   void runMultipleWaysWayLocationOnFirstWayTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     Coordinate coords1[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
                              Coordinate::getNull() };
@@ -154,7 +154,7 @@ public:
 
   void runMultipleWaysWayLocationOnLastWayTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     Coordinate coords1[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
                              Coordinate::getNull() };
@@ -195,7 +195,7 @@ public:
 
   void runMultipleWaysWayLocationOnMiddleWayTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     Coordinate coords1[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
                              Coordinate::getNull() };
@@ -240,7 +240,7 @@ public:
 
   void runWayLocationAtBeginningOfWayTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     Coordinate coords[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
                             Coordinate(100.0, 10.0), Coordinate(0.0, 10.0),
@@ -280,7 +280,7 @@ public:
 
   void runWayLocationAtEndOfWayTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     Coordinate coords[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
                             Coordinate(100.0, 10.0), Coordinate(0.0, 10.0),
@@ -320,7 +320,7 @@ public:
 
   void runRelationHasNoWaysTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     Coordinate coords[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
                             Coordinate(100.0, 10.0), Coordinate(0.0, 10.0),
@@ -349,7 +349,7 @@ public:
 
   void runRelationNotMultiLineStringTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     Coordinate coords[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
                             Coordinate(100.0, 10.0), Coordinate(0.0, 10.0),
@@ -377,7 +377,7 @@ public:
 
   void runInvalidWayIndexTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     Coordinate coords[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
                             Coordinate(100.0, 10.0), Coordinate(0.0, 10.0),
@@ -405,7 +405,7 @@ public:
 
   void runRelationWayMemberDoesntMatchWayLocationWayTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     Coordinate coords[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
                             Coordinate(100.0, 10.0), Coordinate(0.0, 10.0),
@@ -435,7 +435,7 @@ public:
 
   void runRelationContainsFeaturesOtherThanWaysTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     Coordinate coords1[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
                              Coordinate::getNull() };

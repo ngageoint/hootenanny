@@ -291,7 +291,7 @@ void DiffConflator::storeOriginalMap(const OsmMapPtr& map)
   std::shared_ptr<NotCriterion> crit(
     new NotCriterion(ElementCriterionPtr(new TagKeyCriterion(MetadataTags::Ref2()))));
   CopyMapSubsetOp mapCopier(map, crit);
-  _originalRef1Map.reset(new OsmMap());
+  _originalRef1Map = std::make_shared<OsmMap>();
   mapCopier.apply(_originalRef1Map);
 }
 

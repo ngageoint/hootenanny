@@ -61,7 +61,7 @@ public:
 
   void convertToGeometryTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     ElementToGeometryConverter ec(map);
     QList<NodePtr> nodes;
     nodes.push_back(TestUtils::createNode(map, "", Status::Unknown1,  0.0,  0.0));
@@ -107,7 +107,7 @@ public:
 
   void convertToLinestringTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     ElementToGeometryConverter ec(map);
     QList<NodePtr> nodes;
     nodes.push_back(TestUtils::createNode(map, "", Status::Unknown1,  0.0,  0.0));
@@ -124,7 +124,7 @@ public:
 
   void convertToPolygonTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     ElementToGeometryConverter ec(map);
     QList<NodePtr> nodes;
     nodes.push_back(TestUtils::createNode(map, "", Status::Unknown1,  0.0,  0.0));
@@ -142,7 +142,7 @@ public:
 
   void getGeometryTypeTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     ElementToGeometryConverter ec(map);
     QList<NodePtr> nodes;
     nodes.push_back(TestUtils::createNode(map, "", Status::Unknown1,  0.0,  0.0));

@@ -51,7 +51,7 @@ OsmMapPtr MapUtils::getMapSubset(const ConstOsmMapPtr& map, const ElementCriteri
 {
   CopyMapSubsetOp mapCopier(map, filter);
   mapCopier.setCopyChildren(copyChildren);
-  OsmMapPtr output(new OsmMap());
+  OsmMapPtr output = std::make_shared<OsmMap>();
   mapCopier.apply(output);
   return output;
 }
