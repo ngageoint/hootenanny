@@ -239,7 +239,7 @@ QQueue<BuildingPartRelationship> BuildingPartMergeOp::_getBuildingPartRelationPr
   return buildingPartInput;
 }
 
-QQueue<BuildingPartRelationship> BuildingPartMergeOp::_getBuildingPartPreProcessingInput()
+QQueue<BuildingPartRelationship> BuildingPartMergeOp::_getBuildingPartPreProcessingInput() const
 {
   // Tried caching all of the geometries beforehand in order to pass them to the task threads to
   // try to not only avoid repeated geometry calcs but also get rid of an extra call to

@@ -159,7 +159,7 @@ private:
   /*
    * Groups contained and neighboring building part with the buildings containing them
    */
-  QQueue<BuildingPartRelationship> _getBuildingPartPreProcessingInput();
+  QQueue<BuildingPartRelationship> _getBuildingPartPreProcessingInput() const;
   QQueue<BuildingPartRelationship> _getBuildingPartWayPreProcessingInput() const;
   QQueue<BuildingPartRelationship> _getBuildingPartRelationPreProcessingInput() const;
 

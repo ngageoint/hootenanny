@@ -874,8 +874,8 @@ namespace Tgs
   }
 
 
-  void BaseRandomForestManager::_generateRemappedResults(std::string& filename,
-    std::map<std::string, std::vector<std::string>>& classMap)
+  void BaseRandomForestManager::_generateRemappedResults(
+    const std::string& filename, std::map<std::string, std::vector<std::string>>& classMap)
   {
     try
     {

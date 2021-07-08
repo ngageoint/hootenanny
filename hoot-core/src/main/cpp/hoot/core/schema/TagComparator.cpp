@@ -377,7 +377,7 @@ void TagComparator::compareNames(const Tags& t1, const Tags& t2, double& score, 
   }
 }
 
-double TagComparator::compareTags(const Tags &t1, const Tags &t2, bool strict)
+double TagComparator::compareTags(const Tags &t1, const Tags &t2, bool strict) const
 {
   // compare and get a score for name comparison
   double nameScore, nameWeight;

@@ -57,7 +57,7 @@ public:
    */
   std::vector<std::shared_ptr<LongBox>> breakBox(const std::shared_ptr<LongBox>& box) const;
 
-  long int calculateExcess(const std::shared_ptr<LongBox>& box);
+  long int calculateExcess(const std::shared_ptr<LongBox>& box) const;
 
   /**
    * Recursively decompose a box over level iterations.

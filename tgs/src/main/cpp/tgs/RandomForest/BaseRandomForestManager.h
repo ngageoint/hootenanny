@@ -373,8 +373,8 @@ namespace Tgs
     * @param basefilename the name of the output file without file suffix
     * @param map of stuff
     */
-    void _generateRemappedResults(std::string& basefilename,
-      std::map<std::string, std::vector<std::string>>& classMap);
+    void _generateRemappedResults(
+      const std::string& basefilename, std::map<std::string, std::vector<std::string>>& classMap);
   };
 }
 

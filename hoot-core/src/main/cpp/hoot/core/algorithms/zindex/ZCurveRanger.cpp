@@ -101,7 +101,7 @@ vector<std::shared_ptr<LongBox>> ZCurveRanger::breakBox(const std::shared_ptr<Lo
    return result;
 }
 
-long int ZCurveRanger::calculateExcess(const std::shared_ptr<LongBox>& box)
+long int ZCurveRanger::calculateExcess(const std::shared_ptr<LongBox>& box) const
 {
   long int startSize = _toRange(box).calculateSize();
   return startSize - box->calculateVolume();
