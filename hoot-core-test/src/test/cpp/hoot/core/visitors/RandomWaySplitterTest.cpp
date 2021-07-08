@@ -66,7 +66,7 @@ public:
   void runWaySplitTest()
   {
     OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.setUseDataSourceIds(true);
     reader.read(_inputPath + "RandomWaySplitterTest-in-1.osm", map);
@@ -100,7 +100,7 @@ public:
   void runMultiLineStringSplitTest()
   {
     OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.setUseDataSourceIds(true);
     reader.read(_inputPath + "RandomWaySplitterTest-in-2.osm", map);

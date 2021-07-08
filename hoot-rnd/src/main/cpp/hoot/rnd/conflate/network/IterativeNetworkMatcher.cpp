@@ -145,42 +145,6 @@ void IterativeNetworkMatcher::_createEmptyStubEdges(OsmNetworkPtr na, OsmNetwork
       {
         _createStubIntersection(na, nb, va, eb);
       }
-
-//      //foreach (ConstNetworkEdgePtr e, na->getEdgesFromVertex(va))
-//      QList<ConstNetworkEdgePtr> edges = na->getEdgesFromVertex(va);
-//      if (edges.size() >= 1)
-//      {
-//        ConstNetworkEdgePtr e = edges[0];
-//        // create a new vertex that points to the same element
-//        NetworkVertexPtr newV(new NetworkVertex(va->getElement()));
-//        LOG_INFO("Adding vertex: " << newV);
-//        na->addVertex(newV);
-
-//        LOG_INFO("Removing edge: " << e);
-//        na->removeEdge(e);
-//        ConstNetworkVertexPtr newFrom = e->getFrom();
-//        ConstNetworkVertexPtr newTo = e->getTo();
-//        if (e->getFrom() == va)
-//        {
-//          newFrom = newV;
-//        }
-//        if (e->getTo() == va)
-//        {
-//          newTo = newV;
-//        }
-
-//        // connect the new vertex to va with a new stub edge
-//        NetworkEdgePtr newEdge(new NetworkEdge(newFrom, newTo, e->isDirected()));
-//        newEdge->setMembers(e->getMembers());
-//        LOG_INFO("Adding new edge: " << newEdge);
-//        na->addEdge(newEdge);
-
-//        // connect the new vertex to va with a new stub edge
-//        NetworkEdgePtr newStub(new NetworkEdge(newV, va, false));
-//        newStub->addMember(va->getElement());
-//        na->addEdge(newStub);
-//        LOG_INFO("Adding stub edge: " << newStub);
-//      }
     }
   }
 }
@@ -206,19 +170,15 @@ void IterativeNetworkMatcher::_createStubIntersection(OsmNetworkPtr na, OsmNetwo
     // go through all the eb neighbors
     foreach (ConstNetworkEdgePtr ebNeighbor, ebNeighborhood)
     {
-      if (ebNeighbor->contains(smallWayB->getFrom()))
+      if (ebNeighbor->contains(smallWayB->getFrom()) &&
+          _details->isPartialCandidateMatch(va, smallWayB->getFrom(), ea, ebNeighbor))
       {
-        if (_details->isPartialCandidateMatch(va, smallWayB->getFrom(), ea, ebNeighbor))
-        {
-          fromMatch = true;
-        }
+        fromMatch = true;
       }
-      if (ebNeighbor->contains(smallWayB->getTo()))
+      if (ebNeighbor->contains(smallWayB->getTo()) &&
+          _details->isPartialCandidateMatch(va, smallWayB->getTo(), ea, ebNeighbor))
       {
-        if (_details->isPartialCandidateMatch(va, smallWayB->getTo(), ea, ebNeighbor))
-        {
-          toMatch = true;
-        }
+        toMatch = true;
       }
     }
 
@@ -608,8 +568,8 @@ void IterativeNetworkMatcher::_updateEdgeScores(EdgeScoreMap &em, const VertexSc
   }
 }
 
-// modify this to use the EdgeMatchSet rather than the vertices
-void IterativeNetworkMatcher::_updateVertexScores(VertexScoreMap& vm, EdgeScoreMap &/*em*/) const
+void IterativeNetworkMatcher::_updateVertexScores(
+  VertexScoreMap& vm, const EdgeScoreMap& /*em*/) const
 {
   CostFunction cost;
   if (&vm == &_vertex12Scores)
@@ -648,50 +608,7 @@ void IterativeNetworkMatcher::_updateVertexScores(VertexScoreMap& vm, EdgeScoreM
       double edgeScore = std::max(EPSILON,
         pow(_aggregateScores(scores), _dampening) * pow(_scoreVertices(va, vb), _p));
 
-// only use the best matches, don't use them all.
-//      cost.v2 = v2;
-
-//      QSet<EdgeStringPtr> strings1, strings2;
-
-//      // get all the neighboring edges for the first vertex.
-//      foreach (EdgeMatchPtr m, matches)
-//      {
-//        strings1.insert(m->getString1());
-//        strings2.insert(m->getString2());
-//      }
-
-//      double edgeScore = EPSILON;
-//      if (strings1.size() > 0 && strings2.size() > 0)
-//      {
-//        foreach (const ConstEdgeStringPtr& s1, strings1)
-//        {
-//          sap.addActor(s1.get());
-//        }
-//        foreach (const ConstEdgeStringPtr& s2, strings2)
-//        {
-//          sap.addTask(s2.get());
-//        }
-
-//        // find the best match of scores between the two sets of edges
-//        vector<Saps::ResultPair> pairing = sap.calculatePairing();
-//        QList<double> scores;
-//        LOG_VAR(pairing);
-
-//        for (size_t i = 0; i < pairing.size(); ++i)
-//        {
-//          if (pairing[i].actor && pairing[i].task)
-//          {
-//            scores.append(cost.cost(pairing[i].actor, pairing[i].task));
-//          }
-//        }
-
-//        LOG_VAR(scores);
-//        LOG_VAR(_scoreVertices(v1, v2));
-//        // aggregate the scores between the two sets of edges
-//        edgeScore = pow(_aggregateScores(scores), _dampening) * _scoreVertices(v1, v2);
-//      }
-
-      // set this vertex pair's score to the new aggregated score.
+      // Set this vertex pair's score to the new aggregated score.
       jt.value() = edgeScore;
     }
   }

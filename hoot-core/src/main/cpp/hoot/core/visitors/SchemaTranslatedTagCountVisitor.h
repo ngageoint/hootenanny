@@ -90,7 +90,7 @@ private:
 
   int _taskStatusUpdateInterval;
 
-  void _countTags(std::shared_ptr<Feature>& f);
+  void _countTags(const std::shared_ptr<Feature>& f);
 };
 
 }

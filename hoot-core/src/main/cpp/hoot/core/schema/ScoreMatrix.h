@@ -130,7 +130,7 @@ public:
    */
   _type sumCells() const;
 
-  void setLabels(const std::vector<QString>& labelRows, std::vector<QString>& labelCols)
+  void setLabels(const std::vector<QString>& labelRows, const std::vector<QString>& labelCols)
   {
     _labelRows = labelRows;
     _labelCols = labelCols;

@@ -88,15 +88,11 @@ bool EdgeSubline::contains(const ConstNetworkVertexPtr& v) const
 bool EdgeSubline::contains(const ConstEdgeSublinePtr& es) const
 {
   bool result = false;
-
-  if (es->getEdge() == getEdge())
+  if (es->getEdge() == getEdge() && getFormer() <= es->getFormer() &&
+      getLatter() >= es->getLatter())
   {
-    if (getFormer() <= es->getFormer() && getLatter() >= es->getLatter())
-    {
-      result = true;
-    }
+    result = true;
   }
-
   return result;
 }
 

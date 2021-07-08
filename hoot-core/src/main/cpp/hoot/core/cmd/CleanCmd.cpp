@@ -150,7 +150,7 @@ private:
     progress->set(
       0.0, Progress::JobState::Running,
       "Importing " + QString::number(inputs.size()) + " map(s)...");
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     // We don't try to stream here, b/c there are generally always going to be non-streamable
     // cleaning ops (possibly not, though, if someone drastically changed the default cleaning
     // config...unlikely). If we only have one input, then we'll retain the source IDs to keep the

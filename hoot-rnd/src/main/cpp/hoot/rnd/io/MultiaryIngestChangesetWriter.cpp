@@ -133,7 +133,7 @@ void MultiaryIngestChangesetWriter::writeChange(const Change& change)
   nodeCopy->getTags().remove(MetadataTags::HootHash());
   _exportTagsVisitor.visit(nodeCopy);
 
-  OsmMapPtr tmpMap(new OsmMap());
+  OsmMapPtr tmpMap = std::make_shared<OsmMap>();
   tmpMap->addElement(nodeCopy);
 
   QString changeLine;

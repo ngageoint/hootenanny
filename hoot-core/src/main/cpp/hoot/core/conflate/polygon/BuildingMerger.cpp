@@ -77,19 +77,15 @@ public:
   bool isSatisfied(const ConstElementPtr& e) const override
   {
     bool result = false;
-
     if (e->getElementType() == ElementType::Node && e->getTags().getInformationCount() == 0)
     {
       result = true;
     }
-    else if (e->getElementType() != ElementType::Node)
+    else if (e->getElementType() != ElementType::Node &&
+             (_buildingCrit.isSatisfied(e) || _buildingPartCrit.isSatisfied(e)))
     {
-      if (_buildingCrit.isSatisfied(e) || _buildingPartCrit.isSatisfied(e))
-      {
-        result = true;
-      }
+      result = true;
     }
-
     return !result;
   }
 

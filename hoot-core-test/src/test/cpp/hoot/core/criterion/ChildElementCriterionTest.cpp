@@ -42,7 +42,7 @@ public:
 
   void runBasicTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     ChildElementCriterion uut(map);
 
     // Unnecessary for this test but adds a line of test coverage.

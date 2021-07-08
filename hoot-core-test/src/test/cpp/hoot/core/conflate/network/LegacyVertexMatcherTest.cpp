@@ -54,7 +54,7 @@ public:
    */
   void toyTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     //       c
     //       |

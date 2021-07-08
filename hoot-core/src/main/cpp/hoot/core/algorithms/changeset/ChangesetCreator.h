@@ -95,7 +95,7 @@ public:
    * @param map2 the second input source
    * @param output the changeset output file target
    */
-  void create(OsmMapPtr& map1, OsmMapPtr& map2, const QString& output);
+  void create(const OsmMapPtr& map1, const OsmMapPtr& map2, const QString& output);
   /**
    * @brief create writes a single combined changeset between multiple sets of maps to an output
    * file. The number of maps in each set must be equal to each other

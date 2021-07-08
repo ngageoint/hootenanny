@@ -89,7 +89,7 @@ public:
   void runToyTest()
   {
     OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/DcGisRoads.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
@@ -105,7 +105,7 @@ public:
     uut._calculateTiles();
     vector<vector<Envelope>> e = uut.getTiles();
 
-    OsmMapPtr bounds(new OsmMap());
+    OsmMapPtr bounds = std::make_shared<OsmMap>();
 
     for (size_t tx = 0; tx < e.size(); tx++)
     {

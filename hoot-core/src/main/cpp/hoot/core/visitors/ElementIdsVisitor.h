@@ -102,9 +102,7 @@ public:
   static std::vector<long> findWaysByNode(const ConstOsmMapPtr& map, long nodeId);
 
   QString getDescription() const override { return "Collects the element IDs visited"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 
 private:
@@ -117,7 +115,7 @@ private:
 
   static std::vector<long> _findCloseWays(const ConstOsmMapPtr& map, ConstWayPtr refWay,
                                           Meters maxDistance, bool addError);
-  static std::vector<long> _findElements(const ConstOsmMapPtr& map, ElementCriterion* pCrit,
+  static std::vector<long> _findElements(const ConstOsmMapPtr& map, const ElementCriterion* pCrit,
                                          const std::vector<long>& closeElementIds);
 };
 

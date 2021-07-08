@@ -74,9 +74,9 @@ QList<MultiaryElement> MultiaryUtilities::conflateCluster(QList<QByteArray> pbfE
 {
   QList<MultiaryElement> result;
 
-  OsmMapPtr map(new OsmMap());
+  OsmMapPtr map = std::make_shared<OsmMap>();
 
-  OsmMapPtr tmpMap(new OsmMap());
+  OsmMapPtr tmpMap = std::make_shared<OsmMap>();
   foreach (const QByteArray& ba, pbfElements)
   {
     tmpMap->clear();
@@ -126,7 +126,7 @@ QList<hoot::MultiarySimpleMatch> MultiaryUtilities::findMatches(
   OsmPbfReader reader;
   reader.setUseDataSourceIds(false);
 
-  OsmMapPtr map(new OsmMap());
+  OsmMapPtr map = std::make_shared<OsmMap>();
 
   reader.parseElements(checkElement, map);
   if (map->getElementCount() != 1)
@@ -139,7 +139,7 @@ QList<hoot::MultiarySimpleMatch> MultiaryUtilities::findMatches(
   NodePtr check = map->getNodes().begin()->second;
 
   QList<int> ids;
-  OsmMapPtr tmpMap(new OsmMap());
+  OsmMapPtr tmpMap = std::make_shared<OsmMap>();
   foreach (const QByteArray& ba, againstElements)
   {
     tmpMap->clear();

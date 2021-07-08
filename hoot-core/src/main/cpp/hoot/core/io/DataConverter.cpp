@@ -277,7 +277,7 @@ void DataConverter::_convertToOgr(const QStringList& inputs, const QString& outp
 
     Progress inputLoadProgress(
       ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running, 0.0, taskWeight);
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     for (int i = 0; i < inputs.size(); i++)
     {
       inputLoadProgress.setFromRelative(
@@ -362,7 +362,7 @@ void DataConverter::_convertFromOgr(const QStringList& inputs, const QString& ou
   int currentTask = 1;
   const float taskWeight = 1.0 / (float)numTasks;
 
-  OsmMapPtr map(new OsmMap());
+  OsmMapPtr map = std::make_shared<OsmMap>();
   for (int i = 0; i < inputs.size(); i++)
   {
     QString input = inputs[i].trimmed();
@@ -496,7 +496,7 @@ void DataConverter::_convert(const QStringList& inputs, const QString& output)
   {
     Progress inputLoadProgress(
       ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running, 0.0, taskWeight);
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     for (int i = 0; i < inputs.size(); i++)
     {
       inputLoadProgress.setFromRelative(
@@ -670,14 +670,12 @@ void DataConverter::_setFromOgrOptions()
 
   // Nodes that are very close together but with different IDs present a problem from OGR sources,
   // so let's merge them together.
-  if (ConfigOptions().getOgr2osmMergeNearbyNodes())
+  if (ConfigOptions().getOgr2osmMergeNearbyNodes() &&
+      !_convertOps.contains(DuplicateNodeRemover::className()))
   {
-    if (!_convertOps.contains(DuplicateNodeRemover::className()))
-    {
-      _convertOps.append(DuplicateNodeRemover::className());
-      // also run dupe way node removal
-      _convertOps.append(RemoveDuplicateWayNodesVisitor::className());
-    }
+    _convertOps.append(DuplicateNodeRemover::className());
+    // Also run dupe way node removal.
+    _convertOps.append(RemoveDuplicateWayNodesVisitor::className());
   }
 
   // Complex building simplification is primarily meant for UFD buildings, commonly read from OGR

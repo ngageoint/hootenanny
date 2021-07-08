@@ -90,7 +90,7 @@ public:
 
   OsmMapPtr createTestMap(QString filename)
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(map, _inputPath + filename);
 
     MapProjector::projectToPlanar(map);

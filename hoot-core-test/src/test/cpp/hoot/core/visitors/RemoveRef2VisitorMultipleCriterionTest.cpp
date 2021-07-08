@@ -62,7 +62,7 @@ public:
 
   void runToyTest1()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map, _inputPath + "RemoveRef2VisitorMultipleCriterionInput.osm");
 
@@ -85,7 +85,7 @@ public:
 
   void runToyTest2()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map, _inputPath + "RemoveRef2VisitorMultipleCriterionInput.osm");
 

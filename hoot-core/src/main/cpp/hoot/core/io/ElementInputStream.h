@@ -41,10 +41,6 @@ public:
 
   ElementInputStream() = default;
 
-  /**
-   * @brief getProjection
-   * @return
-   */
   virtual std::shared_ptr<OGRSpatialReference> getProjection() const = 0;
 
   /**

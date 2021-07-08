@@ -359,7 +359,7 @@ long OsmMapIndex::findNearestWay(Coordinate c) const
   return result;
 }
 
-std::vector<long> OsmMapIndex::findWayNeighbors(Coordinate& from, Meters buffer) const
+std::vector<long> OsmMapIndex::findWayNeighbors(const Coordinate& from, Meters buffer) const
 {
   vector<long> result;
 

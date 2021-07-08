@@ -628,7 +628,7 @@ OsmMapPtr ChangesetReplacementCreator::_getImmediatelyConnectedOutOfBoundsWays(
 }
 
 void ChangesetReplacementCreator::_removeUnsnappedImmediatelyConnectedOutOfBoundsWays(
-  OsmMapPtr& map) const
+  const OsmMapPtr& map) const
 {
   LOG_INFO(
     "Removing any immediately connected ways that were not previously snapped in: " <<

@@ -220,7 +220,7 @@ RTreeNode* RStarTree::_chooseSubTree(const Box& b, int level)
   return N ;
 }
 
-int RStarTree::_findLeastEnlargement(RTreeNode* node, const Box& b) const
+int RStarTree::_findLeastEnlargement(const RTreeNode* node, const Box& b) const
 {
   double minExpansion = DBL_MAX;
   int minId = -1;
@@ -236,7 +236,7 @@ int RStarTree::_findLeastEnlargement(RTreeNode* node, const Box& b) const
   return minId;
 }
 
-int RStarTree::_findLeastOverlapEnlargement(RTreeNode* node, const Box& b) const
+int RStarTree::_findLeastOverlapEnlargement(const RTreeNode* node, const Box& b) const
 {
   double minOverlapExpansion = DBL_MAX;
   int minId = -1;

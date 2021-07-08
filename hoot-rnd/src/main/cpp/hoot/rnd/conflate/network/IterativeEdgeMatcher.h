@@ -92,6 +92,7 @@ private:
     public SingleAssignmentProblemSolver<ConstNetworkEdgePtr, ConstNetworkEdgePtr>::CostFunction
   {
   public:
+
     const EdgeScoreMap* em1;
     const EdgeScoreMap* em2;
     ConstNetworkVertexPtr v1, v2;
@@ -100,10 +101,9 @@ private:
     CostFunction()
     {
       p = 1.0;
-      em1 = 0;
-      em2 = 0;
+      em1 = nullptr;
+      em2 = nullptr;
     }
-
     ~CostFunction() = default;
 
     /**
@@ -181,8 +181,8 @@ private:
   void _seedEdgeScores();
   void _seedVertexScores();
 
-  void _updateEdgeScores(EdgeScoreMap &em, const VertexScoreMap &vm) const;
-  void _updateVertexScores(VertexScoreMap& vm, EdgeScoreMap &em) const;
+  void _updateEdgeScores(EdgeScoreMap& em, const VertexScoreMap& vm) const;
+  void _updateVertexScores(VertexScoreMap& vm, const EdgeScoreMap& em) const;
 };
 
 }

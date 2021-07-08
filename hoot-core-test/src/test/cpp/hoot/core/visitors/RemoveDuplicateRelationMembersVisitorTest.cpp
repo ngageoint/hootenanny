@@ -48,7 +48,7 @@ public:
 
   void runTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     NodePtr node1(new Node(Status::Unknown1, 1, 0, 0, 0));
     map->addNode(node1);

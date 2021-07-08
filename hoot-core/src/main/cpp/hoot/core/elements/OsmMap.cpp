@@ -508,14 +508,11 @@ void OsmMap::replace(
 
   const std::shared_ptr<NodeToWayMap>& n2w = getIndex().getNodeToWayMap();
 
-  // do some error checking before we add the new element.
-  if (from->getElementType() == ElementType::Node && to->getElementType() != ElementType::Node)
+  // Do some error checking before we add the new element.
+  if (from->getElementType() == ElementType::Node && to->getElementType() != ElementType::Node &&
+      !n2w->getWaysByNode(from->getId()).empty())
   {
-    if (!n2w->getWaysByNode(from->getId()).empty())
-    {
-      throw HootException(
-        "Trying to replace a node with a non-node when the node is part of a way.");
-    }
+    throw HootException("Trying to replace a node with a non-node when the node is part of a way.");
   }
 
   if (from->getElementType() == ElementType::Node && to->getElementType() == ElementType::Node)
@@ -547,13 +544,11 @@ void OsmMap::replace(const std::shared_ptr<const Element>& from, const QList<Ele
 
   // Do some error checking before we add the new element.
   if (from->getElementType() == ElementType::Node &&
-      (_listContainsNode(to) == false || to.size() > 1))
+      (_listContainsNode(to) == false || to.size() > 1) &&
+      !n2w->getWaysByNode(from->getId()).empty())
   {
-    if (!n2w->getWaysByNode(from->getId()).empty())
-    {
-      throw IllegalArgumentException(
-        "Trying to replace a node with multiple nodes or a non-node when the node is part of a way.");
-    }
+    throw IllegalArgumentException(
+      "Trying to replace a node with multiple nodes or a non-node when the node is part of a way.");
   }
 
   if (from->getElementType() == ElementType::Node && to.size() == 1 &&

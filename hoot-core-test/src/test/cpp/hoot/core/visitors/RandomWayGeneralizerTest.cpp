@@ -84,7 +84,7 @@ public:
       Log::getInstance().setLevel(Log::Debug);
     }
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     if (_inputMapCache.contains(inputFile))
     {
       map.reset(new OsmMap(_inputMapCache[inputFile]));

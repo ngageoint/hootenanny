@@ -55,7 +55,7 @@ public:
 
   void runBasicTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(map, _inputPath + "runBasicTestInput.osm", true);
     MapProjector::projectToPlanar(map);
 
@@ -74,7 +74,7 @@ public:
 
   void runConfigureTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(map, _inputPath + "runBasicTestInput.osm", true);
     MapProjector::projectToPlanar(map);
 

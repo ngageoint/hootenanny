@@ -51,7 +51,7 @@ public:
 
   void runBasicTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     // reusing BuildingHeightVisitorTest's input
     OsmMapReaderFactory::read(
       map, _inputPath + "BuildingHeightVisitorTestInput.osm", false, Status::Unknown1);

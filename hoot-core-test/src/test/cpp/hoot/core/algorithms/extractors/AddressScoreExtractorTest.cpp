@@ -81,7 +81,7 @@ public:
     // within the same process, thus sharing the cache. If we weren't using the same element IDs
     // across tests, then it wouldn't have to be disabled.
     uut.setCacheEnabled(false);
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
     node1->getTags().set(AddressTagKeys::FULL_ADDRESS_TAG_NAME, "123 Main Street");
@@ -121,7 +121,7 @@ public:
     AddressScoreExtractor uut;
     uut.setConfiguration(conf());
     uut.setCacheEnabled(false);
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
     node1->getTags().set(AddressTagKeys::HOUSE_NUMBER_TAG_NAME, "123");
@@ -149,7 +149,7 @@ public:
     AddressScoreExtractor uut;
     uut.setConfiguration(conf());
     uut.setCacheEnabled(false);
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
     node1->getTags().set(AddressTagKeys::HOUSE_NUMBER_TAG_NAME, "123-125");
@@ -187,7 +187,7 @@ public:
     AddressScoreExtractor uut;
     uut.setConfiguration(conf());
     uut.setCacheEnabled(false);
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
     node1->getTags().set(
@@ -223,7 +223,7 @@ public:
     AddressScoreExtractor uut;
     uut.setConfiguration(conf());
     uut.setCacheEnabled(false);
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
     node1->getTags().set(AddressTagKeys::HOUSE_NUMBER_TAG_NAME, "123");
@@ -247,7 +247,7 @@ public:
     uut.setConfiguration(conf());
     uut.setCacheEnabled(false);
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
     map->addNode(node1);
     WayPtr way1(new Way(Status::Unknown2, -1, 15.0));
@@ -345,7 +345,7 @@ public:
     AddressScoreExtractor uut;
     uut.setConfiguration(conf());
     uut.setCacheEnabled(false);
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
     node1->getTags().set(AddressTagKeys::HOUSE_NUMBER_TAG_NAME, "123");
@@ -393,7 +393,7 @@ public:
     AddressScoreExtractor uut;
     uut.setConfiguration(conf());
     uut.setCacheEnabled(false);
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
     node1->getTags().set(AddressTagKeys::HOUSE_NUMBER_TAG_NAME, "123");
@@ -468,7 +468,7 @@ public:
   {
     AddressScoreExtractor uut;
     Settings settings = conf();
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     settings.set("address.translate.to.english", "true");
     settings.set("language.translation.translator", "hoot::ToEnglishDictionaryTranslator");
@@ -512,7 +512,7 @@ public:
     uut.setConfiguration(conf());
     uut.setCacheEnabled(false);
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
     map->addNode(node1);
     WayPtr way1(new Way(Status::Unknown2, -1, 15.0));
@@ -547,7 +547,7 @@ public:
     uut.setConfiguration(conf());
     uut.setCacheEnabled(false);
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
     map->addNode(node1);
     WayPtr way1(new Way(Status::Unknown2, -1, 15.0));
@@ -591,7 +591,7 @@ public:
     uut.setConfiguration(conf());
     uut.setCacheEnabled(false);
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
     map->addNode(node1);
     WayPtr way1(new Way(Status::Unknown2, -1, 15.0));
@@ -628,7 +628,7 @@ public:
     uut.setCacheEnabled(false);
 
     {
-      OsmMapPtr map(new OsmMap());
+      OsmMapPtr map = std::make_shared<OsmMap>();
 
       NodePtr node(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
       node->getTags().set(AddressTagKeys::FULL_ADDRESS_TAG_NAME, "Main Street");
@@ -642,7 +642,7 @@ public:
     }
 
     {
-      OsmMapPtr map(new OsmMap());
+      OsmMapPtr map = std::make_shared<OsmMap>();
 
       NodePtr node(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
       node->getTags().set(AddressTagKeys::FULL_ADDRESS_TAG_NAME, "123 Main Street");
@@ -656,7 +656,7 @@ public:
     }
 
     {
-      OsmMapPtr map(new OsmMap());
+      OsmMapPtr map = std::make_shared<OsmMap>();
 
       NodePtr node(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
       node->getTags().set(AddressTagKeys::FULL_ADDRESS_TAG_NAME, "Main Street");
@@ -670,7 +670,7 @@ public:
     }
 
     {
-      OsmMapPtr map(new OsmMap());
+      OsmMapPtr map = std::make_shared<OsmMap>();
 
       WayPtr way(new Way(Status::Unknown1, -1, 15.0));
       way->getTags().set(AddressTagKeys::CITY_TAG_NAME, "San Ignacio");
@@ -685,7 +685,7 @@ public:
     }
 
     {
-      OsmMapPtr map(new OsmMap());
+      OsmMapPtr map = std::make_shared<OsmMap>();
 
       WayPtr way(new Way(Status::Unknown1, -1, 15.0));
       // See note in AddressTagKeys::_getAddressTag. Not completely sure that this is a valid
@@ -703,7 +703,7 @@ public:
     }
 
     {
-      OsmMapPtr map(new OsmMap());
+      OsmMapPtr map = std::make_shared<OsmMap>();
 
       WayPtr way(new Way(Status::Unknown1, -1, 15.0));
       // See note in AddressTagKeys::_getAddressTag. Don't allow anything other than a number for
@@ -720,7 +720,7 @@ public:
     }
 
     {
-      OsmMapPtr map(new OsmMap());
+      OsmMapPtr map = std::make_shared<OsmMap>();
 
       WayPtr way(new Way(Status::Unknown1, -1, 15.0));
       way->getTags().set(AddressTagKeys::HOUSE_NAME_TAG_NAME, "462");
@@ -744,7 +744,7 @@ public:
     {
       // matching street names and house numbers, one doesn't have a suffix
 
-      OsmMapPtr map(new OsmMap());
+      OsmMapPtr map = std::make_shared<OsmMap>();
 
       NodePtr node(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
       node->getTags().set("address", "670 Brunswick");
@@ -761,7 +761,7 @@ public:
     {
       // street names are spelled very slightly differently
 
-      OsmMapPtr map(new OsmMap());
+      OsmMapPtr map = std::make_shared<OsmMap>();
 
       NodePtr node(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
       node->getTags().set("name", "100 Whitney Young Circle");
@@ -778,7 +778,7 @@ public:
     {
       // range address where one has no suffix
 
-      OsmMapPtr map(new OsmMap());
+      OsmMapPtr map = std::make_shared<OsmMap>();
 
       NodePtr node(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
       node->getTags().set("address", "150 Sutter Street");

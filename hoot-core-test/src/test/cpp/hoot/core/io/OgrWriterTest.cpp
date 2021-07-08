@@ -67,7 +67,7 @@ public:
 
   OsmMapPtr createTestMap()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     _map = map;
 
     NodePtr n1 = createNode(0.0, 0.0);

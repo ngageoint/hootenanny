@@ -79,7 +79,7 @@ Meters MaximalNearestSubline::_calculateIntervalLength()
   return result;
 }
 
-void MaximalNearestSubline::_expandInterval(WayLocation& loc)
+void MaximalNearestSubline::_expandInterval(const WayLocation& loc)
 {
   // expand maximal interval if this point is outside it
   if (_maxInterval[0].isValid() == false || loc.compareTo(_maxInterval[0]) < 0)

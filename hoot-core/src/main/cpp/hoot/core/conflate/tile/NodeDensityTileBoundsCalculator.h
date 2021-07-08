@@ -229,7 +229,7 @@ private:
 
   void _calculateMin();
 
-  int _calculateSplitX(PixelBox& b);
+  int _calculateSplitX(const PixelBox& b);
   int _calculateSplitY(const PixelBox& b);
 
   void _countNode(const std::shared_ptr<Node>& n);

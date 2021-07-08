@@ -79,7 +79,7 @@ private:
   std::shared_ptr<OsmMap> _map;
   ReviewMarker _reviewMarker;
 
-  void _createOutline(const RelationPtr& building);
+  void _createOutline(const RelationPtr& building) const;
   void _unionOutline(const RelationPtr& building, const ElementPtr& element,
                      std::shared_ptr<geos::geom::Geometry>& outline) const;
 

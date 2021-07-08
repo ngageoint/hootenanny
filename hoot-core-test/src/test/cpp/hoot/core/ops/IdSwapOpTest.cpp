@@ -55,7 +55,7 @@ public:
     long pid1 = 1111;
     long pid2 = 2222;
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     geos::geom::Coordinate w1[] =
     { geos::geom::Coordinate(0.0, 0.0), geos::geom::Coordinate(1.0, 10.0),
       geos::geom::Coordinate(-1.0, 20.0), geos::geom::Coordinate(0.0, 30.0),

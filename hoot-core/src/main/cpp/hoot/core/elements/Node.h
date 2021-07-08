@@ -47,17 +47,14 @@ public:
   static QString className() { return "hoot::Node"; }
 
   Node(const Node& from);
-
   Node(Status s, long id, const geos::geom::Coordinate& c,
        Meters circularError = ElementData::CIRCULAR_ERROR_EMPTY);
-
   Node(Status s, long id, double x, double y,
        Meters circularError = ElementData::CIRCULAR_ERROR_EMPTY,
        long changeset = ElementData::CHANGESET_EMPTY, long version = ElementData::VERSION_EMPTY,
        unsigned int timestamp = ElementData::TIMESTAMP_EMPTY,
        QString user = ElementData::USER_EMPTY, long uid = ElementData::UID_EMPTY,
        bool visible = ElementData::VISIBLE_EMPTY);
-
   ~Node() = default;
 
   /**

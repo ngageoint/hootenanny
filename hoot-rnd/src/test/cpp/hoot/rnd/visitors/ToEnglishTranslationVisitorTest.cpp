@@ -168,7 +168,7 @@ private:
 
   void _runTranslationTest(const Settings& config, const QString& outputFile, const QString& goldFile)
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map, _inputPath + "ToEnglishTranslationVisitorTest.osm", false, Status::Unknown1);
 

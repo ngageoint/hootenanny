@@ -62,7 +62,7 @@ public:
 
 private:
 
-  JsFunctionCriterion(v8::Persistent<v8::Function>& func)
+  JsFunctionCriterion(const v8::Persistent<v8::Function>& func)
   { _func.Reset(v8::Isolate::GetCurrent(), func); }
 
   v8::Persistent<v8::Function> _func;

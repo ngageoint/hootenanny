@@ -74,7 +74,7 @@ public:
   {
     NetworkVertex::reset();
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     OsmMapReaderFactory::read(map, _inputPath + "ParitalEdgeMatch.osm",
       false, Status::Unknown1);

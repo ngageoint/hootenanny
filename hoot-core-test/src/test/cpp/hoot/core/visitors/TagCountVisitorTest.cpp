@@ -89,7 +89,7 @@ private:
   ConstOsmMapPtr _loadMap()
   {
     OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(_inputPath + "TagCountVisitorTest.osm", map);
     ConstOsmMapPtr constMap = map;

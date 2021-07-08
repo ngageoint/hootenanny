@@ -121,7 +121,7 @@ public:
   void runValidateTest()
   {
     const QString testName = "runValidateTest";
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(map, "test-files/ops/JosmMapCleanerTest/runCleanTest-in.osm");
     LOG_VARD(map->size());
 
@@ -155,7 +155,7 @@ public:
   void runValidateFileTest()
   {
     const QString testName = "runValidateFileTest";
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(map, "test-files/ops/JosmMapCleanerTest/runCleanTest-in.osm");
     LOG_VARD(map->size());
 

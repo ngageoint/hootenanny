@@ -90,7 +90,7 @@ public:
   void runWayTest()
   {
     ElementHashVisitor uut;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     uut.setOsmMap(map.get());
 
     NodePtr n1(new Node(Status::Unknown1, -1, -104.8852148123, 38.8467218123, 5));
@@ -121,7 +121,7 @@ public:
   void runRelationTest()
   {
     ElementHashVisitor uut;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     uut.setOsmMap(map.get());
 
     NodePtr n1(new Node(Status::Unknown1, -1, -104.8852148123, 38.8467218123, 5));

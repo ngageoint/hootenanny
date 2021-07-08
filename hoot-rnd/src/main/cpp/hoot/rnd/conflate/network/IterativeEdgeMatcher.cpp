@@ -44,7 +44,6 @@ IterativeEdgeMatcher::IterativeEdgeMatcher() :
 
 double IterativeEdgeMatcher::_aggregateScores(QList<double> pairs) const
 {
-  //qSort(pairs.begin(), pairs.end(), greaterThan);
   qSort(pairs);
 
   // this quick little method makes the scores decrease with each matching pair
@@ -86,11 +85,11 @@ QList<NetworkEdgeScorePtr> IterativeEdgeMatcher::getAllEdgeScores() const
     ConstNetworkEdgePtr e1 = it.key();
 
     for (QHash<ConstNetworkEdgePtr, DirectedEdgeScore>::const_iterator jt = it.value().begin();
-      jt != it.value().end(); ++jt)
+         jt != it.value().end(); ++jt)
     {
       ConstNetworkEdgePtr e2 = jt.key();
 
-throw NotImplementedException();
+      throw NotImplementedException();
 //      NetworkEdgeScorePtr p(new NetworkEdgeScore(e1, e2, jt.value().score,
 //        _edge21Scores[e2][e1].score));
 //      result.append(p);
@@ -360,7 +359,7 @@ void IterativeEdgeMatcher::_updateEdgeScores(EdgeScoreMap &em, const VertexScore
   }
 }
 
-void IterativeEdgeMatcher::_updateVertexScores(VertexScoreMap& vm, EdgeScoreMap &/*em*/) const
+void IterativeEdgeMatcher::_updateVertexScores(VertexScoreMap& vm, const EdgeScoreMap& /*em*/) const
 {
   CostFunction cost;
   if (&vm == &_vertex12Scores)

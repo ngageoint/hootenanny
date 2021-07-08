@@ -54,7 +54,7 @@ public:
     //from the xml reader before its sorted that we don't care to see.
     DisableLog dl;
 
-    OsmMapPtr inputMap(new OsmMap());
+    OsmMapPtr inputMap = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       inputMap,
       _inputPath + "ExternalMergeElementSorterTest.osm",

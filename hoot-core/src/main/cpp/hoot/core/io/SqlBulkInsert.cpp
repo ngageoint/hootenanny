@@ -42,7 +42,7 @@
 namespace hoot
 {
 
-SqlBulkInsert::SqlBulkInsert(QSqlDatabase& db, const QString &tableName,
+SqlBulkInsert::SqlBulkInsert(const QSqlDatabase& db, const QString &tableName,
   const QStringList &columns, bool ignoreConflict) :
     _db(db),
     _tableName(tableName),

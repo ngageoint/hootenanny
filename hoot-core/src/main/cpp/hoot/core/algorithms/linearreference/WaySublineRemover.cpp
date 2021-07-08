@@ -101,7 +101,7 @@ std::vector<ElementId> WaySublineRemover::removeSubline(
 }
 
 std::vector<ElementId> WaySublineRemover::removeSubline(
-  const WayPtr& way, const WayLocation& start, const WayLocation& end, OsmMapPtr& map)
+  const WayPtr& way, const WayLocation& start, const WayLocation& end, const OsmMapPtr& map)
 {
   if (!MapProjector::isPlanar(map))
   {

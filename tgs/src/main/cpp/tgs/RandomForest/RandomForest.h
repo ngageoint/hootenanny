@@ -71,7 +71,7 @@ public:
   * @param balanced true if the forest will be balanced
   */
   void trainBinary(const std::shared_ptr<DataFrame>& data, unsigned int numTrees,
-    unsigned int numFactors, std::string posClass, unsigned int nodeSize = 1,
+    unsigned int numFactors, const std::string& posClass, unsigned int nodeSize = 1,
     double retrain = 1.0, bool balanced = false) override;
 
   /**
@@ -101,7 +101,7 @@ public:
   * @param balanced true if the forest will be balanced
   */
   void trainRoundRobin(const std::shared_ptr<DataFrame>& data, unsigned int numTrees,
-    unsigned int numFactors, std::string posClass, std::string negClass,
+    unsigned int numFactors, const std::string& posClass, const std::string& negClass,
     unsigned int nodeSize = 1, double retrain = 1.0, bool balanced = false) override;
 
 };

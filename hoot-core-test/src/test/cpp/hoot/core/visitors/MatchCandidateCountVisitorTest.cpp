@@ -74,7 +74,7 @@ public:
   void runBuildingMatchCandidateCountTest()
   {
     OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(_inputPath + "AllDataTypesA.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
@@ -98,7 +98,7 @@ public:
   void runHighwayMatchCandidateCountTest()
   {
     OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(_inputPath + "AllDataTypesA.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
@@ -122,7 +122,7 @@ public:
   void runCombinedMatchCandidateCountTest()
   {
     OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(_inputPath + "AllDataTypesA.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
@@ -155,7 +155,7 @@ public:
     // used by the visitor are the correct ones that were specified in the configuration.
 
     OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(_inputPath + "AllDataTypesA.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
@@ -180,7 +180,7 @@ public:
   void runMultipleScriptMatchCreatorTest()
   {
     OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(_inputPath + "AllDataTypesA.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
@@ -207,7 +207,7 @@ public:
   void runDualPoiScriptMatchCreatorTest()
   {
     OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(_inputPath + "AllDataTypesA.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
@@ -231,7 +231,7 @@ public:
 
   void runFilteredPoiMatchCreatorTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     NodePtr node1(new Node(Status::Unknown1, 1, geos::geom::Coordinate(0.0, 0.0), 15.0));
     NodePtr node2(new Node(Status::Unknown2, 2, geos::geom::Coordinate(0.0, 0.0), 15.0));
 
@@ -279,7 +279,7 @@ public:
   void runFilteredMultipleMatchCreatorTest()
   {
     OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(_inputPath + "AllDataTypesA.osm", map);
     reader.setDefaultStatus(Status::Unknown2);

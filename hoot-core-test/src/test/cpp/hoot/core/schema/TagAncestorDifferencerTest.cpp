@@ -45,7 +45,7 @@ public:
   {
     TagAncestorDifferencer uut("public_transport=platform");
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     NodePtr n1(new Node(Status::Unknown1, 1, 0, 0, 15.0));
     Tags t1;
     t1["railway"] = "platform";

@@ -53,16 +53,14 @@ public:
 
   void setConfiguration(const Settings& conf) override;
 
+  QString getDescription() const override
+  { return "Cookie cuts one dataset out of another"; }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
+
   void setAlpha(double alpha) { _alpha = alpha; }
   void setAlphaShapeBuffer(double buffer) { _alphaShapeBuffer = buffer; }
   void setCrop(bool crop) { _crop = crop; }
-
-  QString getDescription() const override
-  { return "Cookie cuts one dataset out of another"; }
-
-  QString getName() const override { return className(); }
-
-  QString getClassName() const override { return className(); }
 
 private:
 

@@ -75,8 +75,9 @@ namespace Tgs
      * @param lineNum the line number throwing the exception
      * @param error the previous error in the exception chain
      */
-    Exception(std::string className, std::string functionName, unsigned int lineNum,
-      const Exception & error)
+    Exception(
+      const std::string& className, const std::string& functionName, unsigned int lineNum,
+      const Exception& error)
     {
       std::stringstream ss;
       ss <<  className << "::" << functionName << " Line( " << lineNum << "): -->" << error.what() <<
@@ -94,7 +95,8 @@ namespace Tgs
      * @param lineNum the line number throwing the exception
      * @param errorMessage the description of the error
      */
-    Exception(std::string className, std::string functionName, unsigned int lineNum,
+    Exception(
+      const std::string& className, const std::string& functionName, unsigned int lineNum,
       const std::string & errorMessage)
     {
       std::stringstream ss;

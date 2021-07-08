@@ -89,7 +89,7 @@ public:
    * Returns false if we're confident this is not a tie point, otherwise returns true.
    */
   bool isCandidateMatch(ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2,
-    SearchRadiusProvider& srp);
+    const SearchRadiusProvider& srp);
 
   /**
    * Process n1 and n2 to identify candidate and confident tie points.
@@ -130,7 +130,7 @@ private:
 
   Tgs::IntersectionIterator _createIterator(const geos::geom::Envelope& env) const;
 
-  void _createVertexIndex(const OsmNetwork::VertexMap& vm, SearchRadiusProvider &srp);
+  void _createVertexIndex(const OsmNetwork::VertexMap& vm, const SearchRadiusProvider &srp);
 
   /**
    * Returns the sum of all scores that involve either of the vertices in tie.

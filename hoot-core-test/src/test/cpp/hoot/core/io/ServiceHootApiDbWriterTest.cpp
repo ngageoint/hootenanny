@@ -112,7 +112,7 @@ public:
     writer.setPreserveVersionOnInsert(false);
     writer.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     NodePtr n1(new Node(Status::Unknown1, -1, 0.0, 0.0, 10.0));
     n1->setTag("note", "n1',\n");
@@ -148,7 +148,7 @@ public:
     writer.setPreserveVersionOnInsert(false);
     writer.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     NodePtr n1(new Node(Status::Unknown1, 1, 0.0, 0.0, 10.0));
     n1->setTag("note", "n1");
@@ -261,7 +261,7 @@ public:
     writer.setPreserveVersionOnInsert(false);
     writer.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     NodePtr n1(new Node(Status::Unknown1, -1, 0.0, 0.0, 10.0));
     n1->setTag("note", "n1");
@@ -362,7 +362,7 @@ public:
     writer.setIncludeDebug(true);
     writer.setPreserveVersionOnInsert(false);
     writer.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     NodePtr n1(new Node(Status::Unknown1, 1, 0.0, 0.0, 10.0));
     n1->setTag("note", "n1");
     map->addNode(n1);
@@ -403,7 +403,7 @@ public:
     setUpTest("ServiceHootApiDbWriterTest-twoMapsSameNameSameUserOverwriteDisabledTest");
 
     // create a map
-    OsmMapPtr map1(new OsmMap());
+    OsmMapPtr map1 = std::make_shared<OsmMap>();
     NodePtr n1(new Node(Status::Unknown1, 1, 0.0, 0.0, 10.0));
     n1->setTag("note", "n1");
     map1->addNode(n1);
@@ -420,7 +420,7 @@ public:
     writer.close();
 
     //create a second map
-    OsmMapPtr map2(new OsmMap());
+    OsmMapPtr map2 = std::make_shared<OsmMap>();
     NodePtr n2(new Node(Status::Unknown1, 2, 0.0, 0.0, 10.0));
     n2->setTag("note", "n2");
     map2->addNode(n2);
@@ -451,7 +451,7 @@ public:
     setUpTest("ServiceHootApiDbWriterTest-twoMapsSameNameSameUserOverwriteEnabledTest");
 
     // create a map
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     NodePtr n1(new Node(Status::Unknown1, 1, 0.0, 0.0, 10.0));
     n1->setTag("note", "n1");
     map->addNode(n1);
@@ -468,7 +468,7 @@ public:
     writer.close();
 
     //create a second map
-    OsmMapPtr map2(new OsmMap());
+    OsmMapPtr map2 = std::make_shared<OsmMap>();
     NodePtr n2(new Node(Status::Unknown1, 2, 0.0, 0.0, 10.0));
     n2->setTag("note", "n2");
     map2->addNode(n2);
@@ -512,7 +512,7 @@ public:
     db.close();
 
     // create a map
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     NodePtr n1(new Node(Status::Unknown1, 1, 0.0, 0.0, 10.0));
     n1->setTag("note", "n1");
     map->addNode(n1);
@@ -570,7 +570,7 @@ public:
     writer.setPreserveVersionOnInsert(true);
     writer.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     NodePtr n1(new Node(Status::Unknown1, 1, 0.0, 0.0, 10.0));
     n1->setTag("note", "n1");

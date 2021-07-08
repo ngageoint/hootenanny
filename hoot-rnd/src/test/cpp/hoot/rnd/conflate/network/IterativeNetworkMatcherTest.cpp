@@ -77,7 +77,7 @@ public:
    */
   void edgeMatchTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     OsmMapReaderFactory::read(map, _inputPath + "ToyTestE1.osm", true,
       Status::Unknown1);
@@ -111,7 +111,7 @@ public:
    */
   void toyTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     OsmMapReaderFactory::read(map, _inputPath + "ToyTestB1.osm", false,
       Status::Unknown1);

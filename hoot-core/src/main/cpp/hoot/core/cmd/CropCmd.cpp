@@ -149,7 +149,7 @@ private:
 
   void _crop(const QStringList& inputs, const QString& output) const
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     if (inputs.size() == 1)
     {
       IoUtils::loadMap(map, inputs.at(0), true);

@@ -44,7 +44,7 @@ ScriptSchemaTranslatorFactory& ScriptSchemaTranslatorFactory::getInstance()
   return instance;
 }
 
-bool CompareSt(ScriptSchemaTranslator* st1, ScriptSchemaTranslator* st2)
+bool CompareSt(const ScriptSchemaTranslator* st1, const ScriptSchemaTranslator* st2)
 {
   return st1->order() < st2->order();
 }

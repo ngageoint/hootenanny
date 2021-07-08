@@ -245,7 +245,7 @@ void AlphaShape::insert(const vector<pair<double, double>>& points)
 
 OsmMapPtr AlphaShape::_toOsmMap()
 {
-  OsmMapPtr result(new OsmMap());
+  OsmMapPtr result = std::make_shared<OsmMap>();
   GeometryToElementConverter(result).convertGeometryToElement(toGeometry().get(), Status::Unknown1, -1);
   const RelationMap& rm = result->getRelations();
   for (RelationMap::const_iterator it = rm.begin(); it != rm.end(); ++it)

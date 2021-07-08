@@ -56,7 +56,7 @@ public:
 
   void runInvalidWayTest1()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     NodePtr node1(new Node(Status::Unknown1, 1, 0, 0, 0));
     map->addNode(node1);
@@ -91,7 +91,7 @@ public:
 
   void runInvalidWayTest2()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     NodePtr node1(new Node(Status::Unknown1, 1, 0, 0, 0));
     map->addNode(node1);
@@ -126,7 +126,7 @@ public:
 
   void runInvalidWayTest3()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     NodePtr node1(new Node(Status::Unknown1, 1, 0, 0, 0));
     map->addNode(node1);
@@ -150,7 +150,7 @@ public:
 
   void runValidStartAndEndNodeSameTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     NodePtr node1(new Node(Status::Unknown1, 1, 0, 0, 0));
     map->addNode(node1);
@@ -185,7 +185,7 @@ public:
 
   void runValidUnclosedWayTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     NodePtr node1(new Node(Status::Unknown1, 1, 0, 0, 0));
     map->addNode(node1);
@@ -223,7 +223,7 @@ public:
 
   void runValidLoopTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     IoUtils::loadMap(
       map, _inputPath + "RemoveDuplicateWayNodesVisitorTest-runValidLoopTest.osm", true);
 

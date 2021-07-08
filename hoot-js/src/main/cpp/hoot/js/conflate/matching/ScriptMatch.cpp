@@ -119,14 +119,11 @@ void ScriptMatch::_calculateClassification(
     {
       _explainText = _threshold->getTypeDetail(_p);
     }
-    if (_threshold->getType(_p) == MatchType::Review)
+    if (_threshold->getType(_p) == MatchType::Review && _explainText.isEmpty())
     {
-      if (_explainText.isEmpty())
-      {
-        throw IllegalArgumentException(
-          "If the match is a review an appropriate explanation must be provided (E.g. "
-          "{ 'review': 1, 'explain': 'some reason' }.");
-      }
+      throw IllegalArgumentException(
+        "If the match is a review an appropriate explanation must be provided (E.g. "
+        "{ 'review': 1, 'explain': 'some reason' }.");
     }
   }
   catch (const NeedsReviewException& ex)
