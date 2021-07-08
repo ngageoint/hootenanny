@@ -48,7 +48,7 @@ public:
 
   void calculateLengthTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     MapProjector::projectToPlanar(map);
     QList<NodePtr> nodes;
     nodes.push_back(TestUtils::createNode(map, "", Status::Unknown1,  0.0,  0.0));

@@ -71,7 +71,7 @@ public:
       "]                                      \n"
       "}                                      \n";
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmJsonReader().loadFromString(testJsonStr, map);
 
     map->setProjection(MapProjector::createOrthographic(0, 0));

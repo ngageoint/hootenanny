@@ -47,15 +47,13 @@ public:
   ProjectToGeographicVisitor();
   ~ProjectToGeographicVisitor();
 
-  void initialize(std::shared_ptr<OGRSpatialReference>& projection);
+  void initialize(const std::shared_ptr<OGRSpatialReference>& projection);
 
   void visit(const std::shared_ptr<Element>& e) override;
 
   QString getDescription() const override
   { return "Projects features to a geographic coordinate system"; }
-
   QString getName() const  override{ return className(); }
-
   QString getClassName() const override { return className(); }
 
 private:

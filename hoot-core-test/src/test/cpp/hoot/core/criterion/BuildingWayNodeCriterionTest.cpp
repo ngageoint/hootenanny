@@ -48,7 +48,7 @@ public:
 
   void runBasicTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(map, _inputPath + "BuildingWayNodeCriterionTest.osm");
 
     BuildingWayNodeCriterion uut;

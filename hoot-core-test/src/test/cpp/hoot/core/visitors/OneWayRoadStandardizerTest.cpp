@@ -56,7 +56,7 @@ public:
   void runWayTest()
   {
     {
-      OsmMapPtr map(new OsmMap());
+      OsmMapPtr map = std::make_shared<OsmMap>();
       geos::geom::Coordinate coords[] =
       { geos::geom::Coordinate(0, 0), geos::geom::Coordinate(10, 10),
         geos::geom::Coordinate::getNull() };
@@ -78,7 +78,7 @@ public:
     }
 
     {
-      OsmMapPtr map(new OsmMap());
+      OsmMapPtr map = std::make_shared<OsmMap>();
       geos::geom::Coordinate coords[] =
       { geos::geom::Coordinate(0, 0), geos::geom::Coordinate(10, 10),
         geos::geom::Coordinate::getNull() };
@@ -100,7 +100,7 @@ public:
     }
 
     {
-      OsmMapPtr map(new OsmMap());
+      OsmMapPtr map = std::make_shared<OsmMap>();
       geos::geom::Coordinate coords[] =
       { geos::geom::Coordinate(0, 0), geos::geom::Coordinate(10, 10),
         geos::geom::Coordinate::getNull() };
@@ -123,7 +123,7 @@ public:
     }
 
     {
-      OsmMapPtr map(new OsmMap());
+      OsmMapPtr map = std::make_shared<OsmMap>();
       geos::geom::Coordinate coords[] =
       { geos::geom::Coordinate(0, 0), geos::geom::Coordinate(10, 10),
         geos::geom::Coordinate::getNull() };
@@ -149,7 +149,7 @@ public:
   void runRelationTest()
   {
     {
-      OsmMapPtr map(new OsmMap());
+      OsmMapPtr map = std::make_shared<OsmMap>();
       geos::geom::Coordinate coords[] =
       { geos::geom::Coordinate(0, 0), geos::geom::Coordinate(10, 10),
         geos::geom::Coordinate::getNull() };
@@ -177,7 +177,7 @@ public:
     }
 
     {
-      OsmMapPtr map(new OsmMap());
+      OsmMapPtr map = std::make_shared<OsmMap>();
       geos::geom::Coordinate coords[] =
       { geos::geom::Coordinate(0, 0), geos::geom::Coordinate(10, 10),
         geos::geom::Coordinate::getNull() };
@@ -205,7 +205,7 @@ public:
     }
 
     {
-      OsmMapPtr map(new OsmMap());
+      OsmMapPtr map = std::make_shared<OsmMap>();
       geos::geom::Coordinate coords[] =
       { geos::geom::Coordinate(0, 0), geos::geom::Coordinate(10, 10),
         geos::geom::Coordinate::getNull() };
@@ -233,7 +233,7 @@ public:
     }
 
     {
-      OsmMapPtr map(new OsmMap());
+      OsmMapPtr map = std::make_shared<OsmMap>();
       geos::geom::Coordinate coords[] =
       { geos::geom::Coordinate(0, 0), geos::geom::Coordinate(10, 10),
         geos::geom::Coordinate::getNull() };

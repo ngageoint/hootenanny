@@ -68,7 +68,7 @@ public:
       "]                                      \n"
       "}                                      \n";
 
-    OsmMapPtr pMap(new OsmMap());
+    OsmMapPtr pMap = std::make_shared<OsmMap>();
     OsmJsonReader().loadFromString(testJsonStr, pMap);
     return pMap;
   }

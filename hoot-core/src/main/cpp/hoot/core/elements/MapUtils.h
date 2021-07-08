@@ -72,7 +72,7 @@ public:
    * @param map2
    * @param throwOutDupes
    */
-  static void combineMaps(OsmMapPtr& map1, OsmMapPtr& map2, const bool throwOutDupes);
+  static void combineMaps(const OsmMapPtr& map1, const OsmMapPtr& map2, const bool throwOutDupes);
 
   /**
    * Gets a single element by the "note" tag

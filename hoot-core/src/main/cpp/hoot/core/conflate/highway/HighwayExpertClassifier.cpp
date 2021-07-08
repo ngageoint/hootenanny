@@ -70,7 +70,7 @@ MatchClassification HighwayExpertClassifier::classify(
 {
   MatchClassification result;
 
-  OsmMapPtr mapCopy(new OsmMap());
+  OsmMapPtr mapCopy = std::make_shared<OsmMap>();
   CopyMapSubsetOp(map,
                match.getSubline1().getElementId(),
                match.getSubline2().getElementId()).apply(mapCopy);

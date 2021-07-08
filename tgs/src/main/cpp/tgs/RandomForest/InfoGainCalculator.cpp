@@ -48,19 +48,9 @@ namespace Tgs
     return (-n * (log(n)/log(2.0)));
   }
 
-  double InfoGainCalculator::computeEntropyByClass(DataFrame & df, 
-    std::vector<unsigned int> & indices) const
+  double InfoGainCalculator::computeEntropyByClass(
+    const DataFrame& df, const std::vector<unsigned int>& indices) const
   {
-//     double entSum = 0;
-//     std::vector<int> popDist;
-//     df.getClassDistribution(indices, popDist);
-// 
-//     for (unsigned int i = 0; i < popDist.size(); i++)
-//     {
-//       entSum += _calcLogFunc((double)popDist[i] / (double)indices.size()); 
-//     }
-// 
-//     return entSum;
     double entSum = 0;
     HashMap<std::string, int> popMap;
     df.getClassPopulations(indices, popMap);
@@ -94,9 +84,9 @@ namespace Tgs
      }
    }
 
-  bool InfoGainCalculator::findDataSplit(DataFrame & df, std::vector<unsigned int> & fIndices, 
-    std::vector<unsigned int> & indices, unsigned int & splitIdx, unsigned int & fIdx, 
-    double & splitVal, double & purityDelta)
+  bool InfoGainCalculator::findDataSplit(
+    DataFrame& df, std::vector<unsigned int>& fIndices, std::vector<unsigned int>& indices,
+    unsigned int& splitIdx, unsigned int& fIdx, double& splitVal, double& purityDelta) const
   {
     if (!df.empty())
     {
@@ -219,25 +209,9 @@ namespace Tgs
 
     double maxIg = -1E20;
     unsigned int maxSplitIdx = 1;
-    //Compute the class entropy per split
+    // Compute the class entropy per split
     for (unsigned int i = 0; i < splits.size(); i++)
     {
-//       //Construct the left and right splits based on splits[i] (a split point within indices)
-//       std::vector<unsigned int> leftSplit;
-//       std::vector<unsigned int> rightSplit;
-// 
-//       for (unsigned int j = 0; j < indices.size(); j++)
-//       {
-//         if (j < splits[i])
-//         {
-//           leftSplit.push_back(indices[j]);
-//         }
-//         else
-//         {
-//           rightSplit.push_back(indices[j]);
-//         }
-//       }
-
       double leftEnt;
       if (splits[i] <= 0)
       {
@@ -257,23 +231,9 @@ namespace Tgs
         rightEnt = rightEntVec[splits[i]];
       }
       
-//       double leftEnt2 = computeEntropyByClass(df, leftSplit);
-//       if (fabs(leftEnt2 - leftEnt) > 1e-6)
-//       {
-//         std::cout << "not close " << leftEnt << " " << leftEnt2 << std::endl;
-//       }
-//       double rightEnt2 = computeEntropyByClass(df, rightSplit);
-//       if (fabs(rightEnt2 - rightEnt) > 1e-6)
-//       {
-//         std::cout << "not close " << rightEnt << " " << rightEnt2 << std::endl;
-//       }
       double splitEnt = (double)(splits[i])/(double)(indices.size()) * leftEnt +
         (double)(indices.size() - splits[i])/(double)(indices.size()) * rightEnt;
       double infoGain = totalEntropy - splitEnt;
-      
-      //std::cout << " InfoGain1 " << infoGain << std::endl;
-      //std::cout << "left " << leftEnt << " right " << rightEnt << " split " << splitEnt << std::endl;
-      //std::cout << "leftSize " << leftSplit.size() << " rightSize " << rightSplit.size() << std::endl;
 
       if (infoGain > maxIg)
       {
@@ -286,9 +246,9 @@ namespace Tgs
     return maxIg;
   }
 
-  double InfoGainCalculator::getMaxInfoGainRatioByFactor(DataFrame & df, 
-    std::vector<unsigned int> & indices, unsigned int fIdx, double totalEntropy, 
-    unsigned int & bestSplit)
+  double InfoGainCalculator::getMaxInfoGainRatioByFactor(
+    DataFrame& df, std::vector<unsigned int>& indices, unsigned int fIdx, double totalEntropy,
+    unsigned int& bestSplit) const
   {
     //Indices need to be sorted on the factor to use this as a public function 
 

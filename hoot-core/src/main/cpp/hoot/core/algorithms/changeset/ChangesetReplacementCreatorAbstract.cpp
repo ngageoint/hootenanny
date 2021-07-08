@@ -202,12 +202,9 @@ void ChangesetReplacementCreatorAbstract::_validateInputs() const
       "GeoJSON inputs are not supported by replacement changeset derivation.");
   }
   QFile outputFile(_output);
-  if (outputFile.exists())
+  if (outputFile.exists() && !outputFile.remove())
   {
-    if (!outputFile.remove())
-    {
-      throw HootException("Unable to remove changeset output file: " + _output);
-    }
+    throw HootException("Unable to remove changeset output file: " + _output);
   }
 
   if (!ConfigOptions().getConvertOps().empty())
@@ -250,7 +247,7 @@ OsmMapPtr ChangesetReplacementCreatorAbstract::_loadInputMap(
     // automatically for us without reading all of the source data in.
     LOG_STATUS(
       "Loading " << mapName << " map from: ..." << FileUtils::toLogFormat(inputUrl, _maxFilePrintLength) << "...");
-    map.reset(new OsmMap());
+    map = std::make_shared<OsmMap>();
     IoUtils::loadMap(map, inputUrl, useFileIds, status);
   }
   else
@@ -268,7 +265,7 @@ OsmMapPtr ChangesetReplacementCreatorAbstract::_loadInputMap(
       conf().set(ConfigOptions::getBoundsKey(), "");
 
       LOG_STATUS("Loading map from: ..." << FileUtils::toLogFormat(inputUrl, _maxFilePrintLength) << "...");
-      cachedMap.reset(new OsmMap());
+      cachedMap = std::make_shared<OsmMap>();
       cachedMap->setName(mapName);
       IoUtils::loadMap(cachedMap, inputUrl, useFileIds, status);
       // Restore it back to original.
@@ -319,7 +316,8 @@ void ChangesetReplacementCreatorAbstract::_removeMetadataTags(const OsmMapPtr& m
   LOG_DEBUG(tagRemover.getCompletedStatusMessage());
 }
 
-void ChangesetReplacementCreatorAbstract::_markElementsWithMissingChildren(OsmMapPtr& map) const
+void ChangesetReplacementCreatorAbstract::_markElementsWithMissingChildren(
+  const OsmMapPtr& map) const
 {
   ReportMissingElementsVisitor elementMarker;
   // Originally, this was going to add reviews for this rather than tagging elements, but there was
@@ -339,7 +337,7 @@ void ChangesetReplacementCreatorAbstract::_markElementsWithMissingChildren(OsmMa
 }
 
 void ChangesetReplacementCreatorAbstract::_filterFeatures(
-  OsmMapPtr& map, const ElementCriterionPtr& featureFilter,
+  const OsmMapPtr& map, const ElementCriterionPtr& featureFilter,
   const GeometryTypeCriterion::GeometryType& /*geometryType*/, const Settings& config,
   const QString& debugFileName) const
 {
@@ -433,7 +431,7 @@ OsmMapPtr ChangesetReplacementCreatorAbstract::_getCookieCutMap(
         LOG_DEBUG(
           "Nothing in cutter map. Full replacement enabled, so returning an empty map " <<
           "as the map after cutting...");
-        return OsmMapPtr(new OsmMap());
+        return std::make_shared<OsmMap>();
       }
       else
       {
@@ -458,7 +456,7 @@ OsmMapPtr ChangesetReplacementCreatorAbstract::_getCookieCutMap(
         LOG_DEBUG(
           "Nothing in cutter map for linear features. Full replacement and lenient bounds "
           "interpretation, so returning an empty map as the map after cutting...");
-        return OsmMapPtr(new OsmMap());
+        return std::make_shared<OsmMap>();
       }
       else if (_fullReplacement && _boundsInterpretation != BoundsInterpretation::Lenient )
       {

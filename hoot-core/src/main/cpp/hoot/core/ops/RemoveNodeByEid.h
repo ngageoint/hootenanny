@@ -109,8 +109,8 @@ private:
   bool _removeOnlyUnused;
 
   void _removeNodeNoCheck(const OsmMapPtr& map, long nId) const;
-  void _removeNode(const OsmMapPtr& map, long nId);
-  void _removeNodeFully(const OsmMapPtr& map, long nId);
+  void _removeNode(const OsmMapPtr& map, long nId) const;
+  void _removeNodeFully(const OsmMapPtr& map, long nId) const;
 };
 
 }

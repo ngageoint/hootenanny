@@ -723,7 +723,7 @@ OsmMapPtr ChangesetCutOnlyCreator::_loadSecMap(
   else
   {
     // return an empty map for the cut only workflow
-    return OsmMapPtr(new OsmMap());
+    return std::make_shared<OsmMap>();
   }
 }
 

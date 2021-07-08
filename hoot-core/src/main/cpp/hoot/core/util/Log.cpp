@@ -64,6 +64,7 @@ void myLoggerFunction(QtMsgType type, const QMessageLogContext& context, const Q
   case QtCriticalMsg:   l = Log::Error;   break;
   case QtFatalMsg:      l = Log::Fatal;   break;
   case QtInfoMsg:       l = Log::Info;    break;
+  default: break;
   }
   Log::getInstance().log(l, msg, context.file, context.function, context.line);
 }
@@ -78,6 +79,7 @@ static void cplErrorHandler(CPLErr eErrClass, int err_no, const char *msg)
   case CE_Warning:      l = Log::Warn;    break;
   case CE_Failure:      l = Log::Error;   break;
   case CE_Fatal:        l = Log::Fatal;   break;
+  default: break;
   }
   stringstream ss;
   ss << "CPL Error #: " << err_no << " " << msg;

@@ -66,7 +66,7 @@ public:
     OsmMapWriterFactory::write(
       GeometryUtils::createMapFromBounds(bounds), _outputPath + testName + "-bounds.osm");
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(map, true, true,  _inputPath + "in.osm");
 
     ImmediatelyConnectedOutOfBoundsWayTagger uut(true);
@@ -90,7 +90,7 @@ public:
     OsmMapWriterFactory::write(
       GeometryUtils::createMapFromBounds(bounds), _outputPath + testName + "-bounds.osm");
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(map, true, true,  _inputPath + "in.osm");
 
     ImmediatelyConnectedOutOfBoundsWayTagger uut(false);

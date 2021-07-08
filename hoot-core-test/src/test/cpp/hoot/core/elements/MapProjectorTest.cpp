@@ -99,7 +99,7 @@ public:
 
     OGRCoordinateTransformation* t(OGRCreateCoordinateTransformation(wgs84.get(), srs.get()));
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     if (t == 0)
     {

@@ -71,7 +71,7 @@ public:
   void runRoadsTest()
   {
     //test highway (linestring)
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     _map = map;
 
     WayPtr w1(new Way(Status::Unknown1, map->createNextWayId(), 13.0));

@@ -50,8 +50,7 @@ public:
 
   static int logWarnCount;
 
-  SchemaChecker(OsmSchema& osmSchema);
-
+  SchemaChecker(const OsmSchema& osmSchema);
   ~SchemaChecker() = default;
 
   /**
@@ -68,13 +67,14 @@ public:
   /**
    * Retrun true if schemavertex is unkonw vertex type.
    */
-
-  static bool isUnknownVertexType(const SchemaVertex& schemaVertex) { return schemaVertex.isValid(); }
+  static bool isUnknownVertexType(const SchemaVertex& schemaVertex)
+  { return schemaVertex.isValid(); }
 
   /**
    * Return true if schemavertex has empty geometry.
    */
-  static bool isEmptyGeometry(const SchemaVertex& schemaVertex) { return schemaVertex.geometries > 0; }
+  static bool isEmptyGeometry(const SchemaVertex& schemaVertex)
+  { return schemaVertex.geometries > 0; }
 
 private:
 

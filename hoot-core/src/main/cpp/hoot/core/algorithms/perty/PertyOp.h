@@ -77,7 +77,7 @@ public:
    * @brief generateDebugMap generates a map of all the grid offset vectors and permutes the given
    * map.
    */
-  std::shared_ptr<OsmMap> generateDebugMap(std::shared_ptr<OsmMap>& map);
+  std::shared_ptr<OsmMap> generateDebugMap(const std::shared_ptr<OsmMap>& map);
 
   void permute(const std::shared_ptr<OsmMap>& map);
 
@@ -109,7 +109,6 @@ private:
 
   Meters _gridSpacing;
   int _seed;
-  Meters _sigmaRx, _sigmaRy;
   Meters _sigmaSx, _sigmaSy;
   /**
    * Previously the full covariance method was also supported as described in Doucette et al. However,

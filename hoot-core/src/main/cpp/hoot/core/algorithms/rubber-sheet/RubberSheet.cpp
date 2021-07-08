@@ -248,7 +248,7 @@ void RubberSheet::_filterCalcAndApplyTransform(OsmMapPtr& map)
   std::shared_ptr<CopyMapSubsetOp> mapCopier;
 
   // copy out elements meeting the filter criteria into a map
-  OsmMapPtr toModify(new OsmMap());
+  OsmMapPtr toModify = std::make_shared<OsmMap>();
   LOG_VARD(_criteria->toString());
   mapCopier.reset(new CopyMapSubsetOp(map, _criteria));
   mapCopier->apply(toModify);
@@ -274,7 +274,7 @@ void RubberSheet::_filterCalcAndApplyTransform(OsmMapPtr& map)
   OsmMapWriterFactory::writeDebugMap(toModify, className(), "to-modify");
 
   // copy out elements not meeting filter criteria into another map
-  OsmMapPtr toNotModify(new OsmMap());
+  OsmMapPtr toNotModify = std::make_shared<OsmMap>();
   mapCopier.reset(new CopyMapSubsetOp(map, NotCriterionPtr(new NotCriterion(_criteria))));
   mapCopier->apply(toNotModify);
   LOG_DEBUG(
@@ -307,7 +307,7 @@ void RubberSheet::_filterCalcAndApplyTransform(OsmMapPtr& map)
   }
 }
 
-bool RubberSheet::applyTransform(std::shared_ptr<OsmMap>& map)
+bool RubberSheet::applyTransform(const OsmMapPtr& map)
 {
   LOG_DEBUG("Applying transform...");
 
@@ -369,10 +369,10 @@ std::shared_ptr<DataFrame> RubberSheet::_buildDataFrame(Status s) const
 {
   std::shared_ptr<DataFrame> df(new DataFrame());
   vector<string> labels;
-  labels.push_back("x");
-  labels.push_back("y");
-  labels.push_back("dx");
-  labels.push_back("dy");
+  labels.emplace_back("x");
+  labels.emplace_back("y");
+  labels.emplace_back("dx");
+  labels.emplace_back("dy");
   vector<int> types(4, DataFrame::Numerical);
   df->setFactorLabels(labels);
   df->setFactorTypes(types);
@@ -451,11 +451,11 @@ std::shared_ptr<Interpolator> RubberSheet::_buildInterpolator(Status s) const
     }
     candidate->setMaxAllowedPerLoopOptimizationIterations(maxOptIterations);
     vector<string> ind;
-    ind.push_back("x");
-    ind.push_back("y");
+    ind.emplace_back("x");
+    ind.emplace_back("y");
     vector<string> dep;
-    dep.push_back("dx");
-    dep.push_back("dy");
+    dep.emplace_back("dx");
+    dep.emplace_back("dy");
 
     candidate->setData(df);
     candidate->setIndependentColumns(ind);
@@ -485,7 +485,7 @@ std::shared_ptr<Interpolator> RubberSheet::_buildInterpolator(Status s) const
   return bestCandidate;
 }
 
-bool RubberSheet::calculateTransform(std::shared_ptr<OsmMap>& map)
+bool RubberSheet::calculateTransform(const OsmMapPtr& map)
 {
   LOG_DEBUG("Calculating transform...");
 

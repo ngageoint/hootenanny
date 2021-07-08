@@ -52,7 +52,7 @@ public:
    * Construct with a subgraph of pairs. The links in the set of pairs are used to determine links
    * between elements so it is important that the pairs are represenetative of the matches.
    */
-  MultiaryPoiMerger(std::set<std::pair<ElementId, ElementId>>& pairs);
+  MultiaryPoiMerger(const std::set<std::pair<ElementId, ElementId>>& pairs);
 
   /**
    * See parent.

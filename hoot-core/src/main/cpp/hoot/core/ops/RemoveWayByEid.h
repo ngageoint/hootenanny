@@ -35,7 +35,7 @@ namespace hoot
 {
 
 /**
- * Remove ways from an map
+ * Removes ways from an map
  */
 class RemoveWayByEid : public OsmMapOperation
 {
@@ -91,7 +91,7 @@ private:
   long _wayIdToRemove;
   bool _removeFully;
 
-  void _removeWay(OsmMapPtr& map, long wId) const;
+  void _removeWay(const OsmMapPtr& map, long wId) const;
   void _removeWayFully(OsmMapPtr& map, long wId) const;
 };
 

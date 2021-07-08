@@ -70,7 +70,7 @@ OsmMapPtr JosmMapValidator::_getUpdatedMap(OsmMapPtr& inputMap)
     _validate(_josmValidators, tempInputFile->fileName(), tempOutputPath);
 
     LOG_DEBUG("Reading validated map from " << tempOutputPath << "...");
-    OsmMapPtr validatedMap(new OsmMap());
+    OsmMapPtr validatedMap = std::make_shared<OsmMap>();
     OsmXmlReader reader;
     reader.setUseDataSourceIds(true);
     reader.setUseFileStatus(true);

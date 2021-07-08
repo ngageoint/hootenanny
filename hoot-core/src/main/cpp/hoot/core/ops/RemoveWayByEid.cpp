@@ -48,7 +48,7 @@ _removeFully(removeFully)
 {
 }
 
-void RemoveWayByEid::_removeWay(OsmMapPtr& map, long wId) const
+void RemoveWayByEid::_removeWay(const OsmMapPtr& map, long wId) const
 {
   if (map->_ways.find(wId) != map->_ways.end())
   {

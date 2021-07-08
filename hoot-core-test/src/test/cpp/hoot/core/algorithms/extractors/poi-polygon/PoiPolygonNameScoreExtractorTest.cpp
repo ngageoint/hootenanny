@@ -58,7 +58,7 @@ public:
   {
     PoiPolygonNameScoreExtractor uut;
     uut.setConfiguration(conf());
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
     node1->getTags().set("name", "blah");
@@ -75,7 +75,7 @@ public:
   {
     PoiPolygonNameScoreExtractor uut;
     Settings settings = conf();
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     settings.set("poi.polygon.name.translate.to.english", "true");
     settings.set("language.translation.translator", "hoot::ToEnglishDictionaryTranslator");
@@ -104,7 +104,7 @@ public:
 //    //conf().set(ConfigOptions::getPoiPolygonStringComparerKey(), "hoot::KskipBigramDistance");
 //    PoiPolygonNameScoreExtractor uut;
 //    uut.setConfiguration(conf());
-//    OsmMapPtr map(new OsmMap());
+//    OsmMapPtr map = std::make_shared<OsmMap>();
 //    NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
 //    WayPtr way1(new Way(Status::Unknown2, -1, 15.0));
 

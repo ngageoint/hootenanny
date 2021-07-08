@@ -69,9 +69,9 @@ public:
       "  'tags':{'hoot:status':'Input002', 'ID':'2-000000', 'MATCH':'none', 'poi':'yes'}}\n"
       "]}\n";
 
-    OsmMapPtr input(new OsmMap());
+    OsmMapPtr input = std::make_shared<OsmMap>();
     OsmJsonReader().loadFromString(inputJson, input);
-    OsmMapPtr conflated(new OsmMap());
+    OsmMapPtr conflated = std::make_shared<OsmMap>();
     OsmJsonReader().loadFromString(inputJson, conflated);
 
     MultiaryMatchComparator uut;
@@ -106,9 +106,9 @@ public:
     OsmJsonReader reader;
     reader.setDefaultStatus(Status::Unknown1);
 
-    OsmMapPtr input(new OsmMap());
+    OsmMapPtr input = std::make_shared<OsmMap>();
     reader.loadFromString(inputJson, input);
-    OsmMapPtr conflated(new OsmMap());
+    OsmMapPtr conflated = std::make_shared<OsmMap>();
     reader.loadFromString(conflatedJson, conflated);
 
     MultiaryMatchComparator uut;
@@ -149,11 +149,11 @@ public:
     OsmJsonReader reader;
     reader.setDefaultStatus(Status::Unknown1);
 
-    OsmMapPtr input(new OsmMap());
+    OsmMapPtr input = std::make_shared<OsmMap>();
     reader.loadFromString(inputJson, input);
     input->getNode(-3)->setStatus(Status::Unknown2);
 
-    OsmMapPtr conflated(new OsmMap());
+    OsmMapPtr conflated = std::make_shared<OsmMap>();
     reader.loadFromString(conflatedJson, conflated);
     conflated->getNode(-3)->setStatus(Status::Unknown2);
 
@@ -204,11 +204,11 @@ public:
     OsmJsonReader reader;
     reader.setDefaultStatus(Status::Unknown1);
 
-    OsmMapPtr input(new OsmMap());
+    OsmMapPtr input = std::make_shared<OsmMap>();
     reader.loadFromString(inputJson, input);
     input->getNode(-3)->setStatus(Status::Unknown2);
 
-    OsmMapPtr conflated(new OsmMap());
+    OsmMapPtr conflated = std::make_shared<OsmMap>();
     reader.loadFromString(conflatedJson, conflated);
     conflated->getNode(-3)->setStatus(Status::Unknown2);
 
@@ -247,10 +247,10 @@ public:
     OsmJsonReader reader;
     reader.setDefaultStatus(Status::Unknown1);
 
-    OsmMapPtr input(new OsmMap());
+    OsmMapPtr input = std::make_shared<OsmMap>();
     reader.loadFromString(inputJson, input);
 
-    OsmMapPtr conflated(new OsmMap());
+    OsmMapPtr conflated = std::make_shared<OsmMap>();
     reader.loadFromString(conflatedJson, conflated);
 
     MultiaryMatchComparator uut;
@@ -307,11 +307,11 @@ public:
     OsmJsonReader reader;
     reader.setDefaultStatus(Status::Unknown1);
 
-    OsmMapPtr input(new OsmMap());
+    OsmMapPtr input = std::make_shared<OsmMap>();
     reader.loadFromString(inputJson, input);
     input->getNode(-3)->setStatus(Status::Unknown2);
 
-    OsmMapPtr conflated(new OsmMap());
+    OsmMapPtr conflated = std::make_shared<OsmMap>();
     reader.loadFromString(conflatedJson, conflated);
     conflated->getNode(-3)->setStatus(Status::Unknown2);
 
@@ -366,11 +366,11 @@ public:
     OsmJsonReader reader;
     reader.setDefaultStatus(Status::Unknown1);
 
-    OsmMapPtr input(new OsmMap());
+    OsmMapPtr input = std::make_shared<OsmMap>();
     reader.loadFromString(inputJson, input);
     input->getNode(-3)->setStatus(Status::Unknown2);
 
-    OsmMapPtr conflated(new OsmMap());
+    OsmMapPtr conflated = std::make_shared<OsmMap>();
     reader.loadFromString(conflatedJson, conflated);
     conflated->getNode(-3)->setStatus(Status::Unknown2);
 
@@ -418,11 +418,11 @@ public:
     OsmJsonReader reader;
     reader.setDefaultStatus(Status::Unknown1);
 
-    OsmMapPtr input(new OsmMap());
+    OsmMapPtr input = std::make_shared<OsmMap>();
     reader.loadFromString(inputJson, input);
     input->getNode(-2)->setStatus(Status::Unknown2);
 
-    OsmMapPtr conflated(new OsmMap());
+    OsmMapPtr conflated = std::make_shared<OsmMap>();
     reader.loadFromString(conflatedJson, conflated);
     conflated->getNode(-2)->setStatus(Status::Unknown2);
 
@@ -480,11 +480,11 @@ public:
     OsmJsonReader reader;
     reader.setDefaultStatus(Status::Unknown1);
 
-    OsmMapPtr input(new OsmMap());
+    OsmMapPtr input = std::make_shared<OsmMap>();
     reader.loadFromString(inputJson, input);
     input->getNode(-2)->setStatus(Status::Unknown2);
 
-    OsmMapPtr conflated(new OsmMap());
+    OsmMapPtr conflated = std::make_shared<OsmMap>();
     reader.loadFromString(conflatedJson, conflated);
     conflated->getNode(-2)->setStatus(Status::Unknown2);
 
@@ -545,10 +545,10 @@ public:
 
     OsmJsonReader reader;
     reader.setDefaultStatus(Status::Unknown1);
-    OsmMapPtr input(new OsmMap());
+    OsmMapPtr input = std::make_shared<OsmMap>();
     reader.loadFromString(inputJson, input);
 
-    OsmMapPtr conflated(new OsmMap());
+    OsmMapPtr conflated = std::make_shared<OsmMap>();
     reader.loadFromString(conflatedJson, conflated);
 
     MultiaryMatchComparator uut;

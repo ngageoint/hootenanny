@@ -92,7 +92,7 @@ void FindStreetIntersectionsByName::apply(OsmMapPtr& map)
   matchingRoads1Map.reset();
   matchingRoads2Map.reset();
 
-  OsmMapPtr intersectingWayNodesMap(new OsmMap());
+  OsmMapPtr intersectingWayNodesMap = std::make_shared<OsmMap>();
   // make a copy so we can iterate through even if there are changes
   const WayMap ways = combinedMatchingRoadsMap->getWays();
   LOG_VARD(ways.size());
@@ -158,7 +158,7 @@ OsmMapPtr FindStreetIntersectionsByName::_filterRoadsByStreetName(
   ElementCriterionPtr crit(
     new ChainCriterion(std::shared_ptr<HighwayCriterion>(new HighwayCriterion(map)), _nameCrit));
   CopyMapSubsetOp mapCopier(map, crit);
-  OsmMapPtr matchingRoadsMap(new OsmMap());
+  OsmMapPtr matchingRoadsMap = std::make_shared<OsmMap>();
   mapCopier.apply(matchingRoadsMap);
   StatusUpdateVisitor statusUpdater(status);
   matchingRoadsMap->visitWaysRw(statusUpdater);

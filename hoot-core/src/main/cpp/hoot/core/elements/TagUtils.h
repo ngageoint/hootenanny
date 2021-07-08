@@ -89,7 +89,7 @@ public:
    * key/value pairs specified in kvps; false otherwise
    */
   static bool anyElementsHaveAnyKvp(const QStringList& kvps,
-                                    const std::set<ElementId>& elementIds, OsmMapPtr& map);
+                                    const std::set<ElementId>& elementIds, const OsmMapPtr& map);
 
   /**
    * Determines if all elements in a specified collection have any tag key from a specified set of
@@ -102,7 +102,7 @@ public:
    * tag keys specified in tagKeys; false otherwise
    */
   static bool allElementsHaveAnyTagKey(const QStringList& tagKeys,
-                                       const std::set<ElementId>& elementIds, OsmMapPtr& map);
+                                       const std::set<ElementId>& elementIds, const OsmMapPtr& map);
 
   /**
    * Determines if any elements in a specified collection have any tag key from a specified set of
@@ -115,7 +115,7 @@ public:
    * tag keys specified in tagKeys; false otherwise
    */
   static bool anyElementsHaveAnyTagKey(const QStringList& tagKeys,
-                                       const std::set<ElementId>& elementIds, OsmMapPtr& map);
+                                       const std::set<ElementId>& elementIds, const OsmMapPtr& map);
 
   /**
    * Determines if two elements have conflicting name tags

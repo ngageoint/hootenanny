@@ -62,7 +62,7 @@ public:
 
   void basicTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     ConstNetworkVertexPtr vertex1(
       new NetworkVertex(TestUtils::createNode(map, "", Status::Unknown1, 0, 0)));
     ConstNetworkVertexPtr vertex2(
@@ -114,7 +114,7 @@ public:
 
   void calculateLengthTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     QList<NodePtr> nodes;
     NodePtr node1 = TestUtils::createNode(map, "", Status::Unknown1, 0, 0);
     nodes.append(node1);
@@ -134,7 +134,7 @@ public:
 
   void edgeWithInvalidNumMembersTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     QList<NodePtr> nodes;
     NodePtr node1 = TestUtils::createNode(map, "", Status::Unknown1, 0, 0);
     nodes.append(node1);
@@ -185,7 +185,7 @@ public:
 
   void getEdgeAtOffsetTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     QList<NodePtr> nodes;
     NodePtr node1 = TestUtils::createNode(map, "", Status::Unknown1, 0, 0);
     nodes.append(node1);
@@ -211,7 +211,7 @@ public:
 
   void overlapTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     ConstNetworkVertexPtr vertex1(
       new NetworkVertex(TestUtils::createNode(map, "", Status::Unknown1, 0, 0)));
     ConstNetworkVertexPtr vertex2(
@@ -237,7 +237,7 @@ public:
 
   void overlapEdgeTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     ConstNetworkVertexPtr vertex1(
       new NetworkVertex(TestUtils::createNode(map, "", Status::Unknown1, 0, 0)));
     ConstNetworkVertexPtr vertex2(
@@ -260,7 +260,7 @@ public:
 
   void overlapSublineTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     ConstNetworkVertexPtr vertex1(
       new NetworkVertex(TestUtils::createNode(map, "", Status::Unknown1, 0, 0)));
     ConstNetworkVertexPtr vertex2(
@@ -282,7 +282,7 @@ public:
 
   void reverseTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     ConstNetworkVertexPtr vertex1(
       new NetworkVertex(TestUtils::createNode(map, "", Status::Unknown1, 0, 0)));
     ConstNetworkVertexPtr vertex2(
@@ -324,7 +324,7 @@ public:
 
   void partialTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     ConstNetworkVertexPtr vertex1(
       new NetworkVertex(TestUtils::createNode(map, "", Status::Unknown1, 0, 0)));
     ConstNetworkVertexPtr vertex2(
@@ -351,7 +351,7 @@ public:
 
   void stubTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     ConstNetworkVertexPtr vertex1(
       new NetworkVertex(TestUtils::createNode(map, "", Status::Unknown1, 0, 0)));
     ConstNetworkEdgePtr edge1(new NetworkEdge(vertex1, vertex1, true));
@@ -363,7 +363,7 @@ public:
 
   void addDisconnectedEdgeTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     ConstNetworkVertexPtr vertex1(
       new NetworkVertex(TestUtils::createNode(map, "", Status::Unknown1, 0, 0)));
     ConstNetworkVertexPtr vertex2(
@@ -392,7 +392,7 @@ public:
 
   void equalsTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     ConstNetworkVertexPtr vertex1(
       new NetworkVertex(TestUtils::createNode(map, "", Status::Unknown1, 0, 0)));
     ConstNetworkVertexPtr vertex2(
@@ -423,7 +423,7 @@ public:
 
   void containsEdgeStringTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     ConstNetworkVertexPtr vertex1(
       new NetworkVertex(TestUtils::createNode(map, "", Status::Unknown1, 0, 0)));
     ConstNetworkVertexPtr vertex2(
@@ -452,7 +452,7 @@ public:
 
   void appendSublineTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     ConstNetworkVertexPtr vertex1(
       new NetworkVertex(TestUtils::createNode(map, "", Status::Unknown1, 0, 0)));
     ConstNetworkVertexPtr vertex2(
@@ -501,7 +501,7 @@ public:
 
   void hashTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     ConstNetworkVertexPtr vertex1(
       new NetworkVertex(TestUtils::createNode(map, "", Status::Unknown1, 0, 0)));
     ConstNetworkVertexPtr vertex2(

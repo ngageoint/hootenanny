@@ -93,7 +93,7 @@ JavaScriptSchemaTranslator::~JavaScriptSchemaTranslator()
 }
 
 vector<JavaScriptSchemaTranslator::TranslatedFeature> JavaScriptSchemaTranslator::_createAllFeatures(
-  const QVariantList& list)
+  const QVariantList& list) const
 {
   vector<TranslatedFeature> result;
   result.reserve(list.size());
@@ -366,7 +366,7 @@ std::shared_ptr<const Schema> JavaScriptSchemaTranslator::getOgrOutputSchema()
 }
 
 void JavaScriptSchemaTranslator::_parseEnumerations(DoubleFieldDefinition* fd,
-                                                    QVariant& enumerations)
+                                                    const QVariant& enumerations)
   const
 {
   if (enumerations.canConvert(QVariant::List) == false)
@@ -409,7 +409,7 @@ void JavaScriptSchemaTranslator::_parseEnumerations(DoubleFieldDefinition* fd,
 }
 
 void JavaScriptSchemaTranslator::_parseEnumerations(IntegerFieldDefinition *fd,
-                                                    QVariant& enumerations)
+                                                    const QVariant& enumerations)
   const
 {
   if (enumerations.canConvert(QVariant::List) == false)
@@ -452,7 +452,7 @@ void JavaScriptSchemaTranslator::_parseEnumerations(IntegerFieldDefinition *fd,
 }
 
 void JavaScriptSchemaTranslator::_parseEnumerations(LongIntegerFieldDefinition* fd,
-                                                    QVariant& enumerations)
+                                                    const QVariant& enumerations)
   const
 {
   if (enumerations.canConvert(QVariant::List) == false)

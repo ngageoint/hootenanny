@@ -54,7 +54,7 @@ public:
 
   void emptyWayTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     ElementPtr w(new Way(Status::Unknown1, -1, 0));
     w->getTags()["building"] = "yes";
 

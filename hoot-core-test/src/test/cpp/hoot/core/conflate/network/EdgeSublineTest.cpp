@@ -49,7 +49,7 @@ public:
 
   void basicTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     ConstNetworkVertexPtr vertex1(
       new NetworkVertex(TestUtils::createNode(map, "", Status::Unknown1, 0, 0)));
@@ -77,7 +77,7 @@ public:
 
   void invalidTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     ConstNetworkVertexPtr vertex1(
       new NetworkVertex(TestUtils::createNode(map, "", Status::Unknown1, 0, 0)));
@@ -94,7 +94,7 @@ public:
 
   void zeroLengthTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     ConstNetworkVertexPtr vertex1(
       new NetworkVertex(TestUtils::createNode(map, "", Status::Unknown1, 0, 0)));
@@ -110,7 +110,7 @@ public:
 
   void backwardTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     ConstNetworkVertexPtr vertex1(
       new NetworkVertex(TestUtils::createNode(map, "", Status::Unknown1, 0, 0)));
@@ -127,7 +127,7 @@ public:
 
   void overlapsTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     ConstNetworkVertexPtr vertex1(
           new NetworkVertex(TestUtils::createNode(map, "", Status::Unknown1, 0, 0)));
@@ -150,7 +150,7 @@ public:
 
   void reverseTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     ConstNetworkVertexPtr vertex1(
       new NetworkVertex(TestUtils::createNode(map, "", Status::Unknown1, 0, 0)));
@@ -176,7 +176,7 @@ public:
 
   void createFullSublineTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     ConstNetworkVertexPtr vertex1(
       new NetworkVertex(TestUtils::createNode(map, "", Status::Unknown1, 0, 0)));
@@ -206,7 +206,7 @@ public:
 
   void equalTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     ConstNetworkVertexPtr vertex1(
       new NetworkVertex(TestUtils::createNode(map, "", Status::Unknown1, 0, 0)));

@@ -51,7 +51,7 @@ private:
 
   OsmMapPtr getTestMap1()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     Coordinate c1[] = { Coordinate(0.0, 0.0), Coordinate(20.0, 0.0),
                         Coordinate(20.0, 20.0), Coordinate(0.0, 20.0),
@@ -96,7 +96,7 @@ public:
         map->getWay(ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "name", "foo")[0])));
 
     OsmXmlReader reader;
-    map.reset(new OsmMap());
+    map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(_inputPath + "ToyTestA.osm", map);
     MapProjector::projectToPlanar(map);

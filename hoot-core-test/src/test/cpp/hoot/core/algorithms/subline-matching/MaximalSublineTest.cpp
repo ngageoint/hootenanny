@@ -107,7 +107,7 @@ public:
 
   OsmMapPtr createMap()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMap::resetCounters();
     std::shared_ptr<OGREnvelope> env(GeometryUtils::toOGREnvelope(Envelope(0, 1, 0, 1)));
     MapProjector::projectToPlanar(map, *env);
@@ -125,7 +125,7 @@ public:
   {
     OsmXmlReader reader;
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.read(_inputPath + "MaximalSublineCircleTestIn.osm", map);
 
     double score;
@@ -166,7 +166,7 @@ public:
   {
     OsmXmlReader reader;
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(_inputPath + "MaximalSublineTestIn.osm", map);
 
@@ -245,7 +245,7 @@ public:
 
   void runRealWorld3Test()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(map, "test-files/conflate/highway/HighwayMatchRealWorld3Test.osm",
       false, Status::Unknown1);
     MapProjector::projectToPlanar(map);
@@ -269,7 +269,7 @@ public:
    */
   void runRealWorld4Test()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(map, "test-files/conflate/waterway/RealWorld4Test.osm",
       false, Status::Unknown1);
     MapProjector::projectToPlanar(map);
@@ -411,7 +411,7 @@ public:
   void runToyTest()
   {
     {
-      OsmMapPtr map(new OsmMap());
+      OsmMapPtr map = std::make_shared<OsmMap>();
       OsmXmlReader reader;
       reader.setDefaultStatus(Status::Unknown1);
       reader.read("test-files/ToyTestA.osm", map);

@@ -120,7 +120,7 @@ void MultiaryReviewCommand::setFinalElement(ElementPtr e)
 QString MultiaryReviewCommand::toJsonString() const
 {
   // Put our element in a map to make it easy to write
-  OsmMapPtr pMap(new OsmMap());
+  OsmMapPtr pMap = std::make_shared<OsmMap>();
   if (_finalElement)
     pMap->addElement(_copyElement(_finalElement));
 

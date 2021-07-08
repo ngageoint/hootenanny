@@ -94,7 +94,7 @@ void KnnIterator::_calculateNextNn()
     // get the next most likely area to search (minimum distance first)
     NodeDistance* nd = nullptr;
     const RTreeNode* currNode = nullptr;
-    if (_knnSearchQueue.size() != 0)
+    if (!_knnSearchQueue.empty())
     {
       nd = _knnSearchQueue.top();
       currNode = _searchTree->getNode(nd->id);
@@ -121,16 +121,13 @@ void KnnIterator::_calculateNextNn()
 
     // if we already have some leaf distances calculated, check to see if they're closer than
     // the node
-    if (!_knnLeafHeap.empty())
+    if (!_knnLeafHeap.empty() && (nd == nullptr || (ld.distance <= nd->minPossibleDistance)))
     {
-      if (nd == nullptr || (ld.distance <= nd->minPossibleDistance))
-      {
-        // if the leaf is closer than the next most likely node, return the result
-        _knnLeafHeap.pop();
-        distance = ld.distance;
-        id = ld.fid;
-        break;
-      }
+      // if the leaf is closer than the next most likely node, return the result
+      _knnLeafHeap.pop();
+      distance = ld.distance;
+      id = ld.fid;
+      break;
     }
 
     if (nd == nullptr)
@@ -152,13 +149,11 @@ void KnnIterator::_calculateNextNn()
         {
           const BoxInternalData& b = currNode->getChildEnvelope(i);
           tmpId = currNode->getChildUserId(i);
-          if (_knnReturnedFids.find(tmpId) == _knnReturnedFids.end())
+          if (_knnReturnedFids.find(tmpId) == _knnReturnedFids.end() &&
+              (_knnBounds.isValid() == false || _knnBounds.calculateOverlap(b) > 0))
           {
-            if (_knnBounds.isValid() == false || _knnBounds.calculateOverlap(b) > 0)
-            {
-              tmpDistance = _calculateDistance(b, tmpId);
-              _knnLeafHeap.push(LeafDistance(tmpDistance, tmpId));
-            }
+            tmpDistance = _calculateDistance(b, tmpId);
+            _knnLeafHeap.push(LeafDistance(tmpDistance, tmpId));
           }
         }
       }
@@ -183,94 +178,6 @@ void KnnIterator::_calculateNextNn()
   _knnDistance = sqrt(distance);
   _knnId = id;
 }
-
-// /**
-// * Calculate the next nearest neighbor, an id of -1 is returned if there are no more features.
-// */
-// void KnnIterator::_calculateNextNn()
-// {
-//   double distance = -1;
-//   int id = RESERVED_ID;
-// 
-//   while (_knnSearchQueue.size() > 0)
-//   {
-//     // get the next most likely area to search (minimum distance first)
-//     NodeDistance* nd = nullptr;
-//     const RTreeNode * currNode;
-//     if (_knnSearchQueue.size() != 0)
-//     {
-//       nd = _knnSearchQueue.top();
-//       currNode = _searchTree->getNode(nd->id);
-//       _nodesVisited++;
-//     }
-// 
-//     if (_knnSearchQueue.size() == 0)
-//     {
-//       // if we're all out of features
-//       break;
-//     }
-// 
-//     // if we already have some leaf distances calculated, check to see if they're closer than
-//     // the node
-//     if (distance >= 0)
-//     {
-//       if (nd == nullptr || (distance <= nd->minPossibleDistance && !currNode->isLeafNode()))
-//       {
-//         break;
-//       }
-//     }
-// 
-//     if (nd == nullptr)
-//     {
-//       throw std::exception("Internal Error: RTree::calculateNextNn This state should not occur.");
-//     }
-// 
-//     ////
-//     // Process this nd
-//     ////
-// 
-//     _knnSearchQueue.pop();
-// 
-//     if (currNode->isLeafNode())
-//     {
-//       for (int i=0; i<currNode->getChildCount(); i++)
-//       {
-//         const BoxInternalData& b = currNode->getChildEnvelope(i);
-//         double tmpDistance;
-//         int tmpId = currNode->getChildUserId(i);
-//         if (_knnBounds.isValid() == false || _knnBounds.calculateOverlap(b) > 0)
-//         {
-//           tmpDistance = distPtToLine(_knnPoint.x, _knnPoint.y, b.getLowerBoundRaw(0), b.getLowerBoundRaw(1), b.getUpperBoundRaw(0), b.getUpperBoundRaw(1));
-//           if (distance < 0.0 || tmpDistance < distance || (tmpDistance == distance && tmpId > id))
-//           {
-//             distance = tmpDistance;
-//             id = tmpId;
-//           }
-//         }
-//       }
-//     }
-//     else
-//     {
-//       for (int i=0; i<currNode->getChildCount(); i++)
-//       {
-//         const BoxInternalData& b = currNode->getChildEnvelope(i);
-//         double d = _calculateDistance(_knnPoint, b);
-//         int childId = currNode->getChildNodeId(i);
-//         if (_knnBounds.isValid() == false || _knnBounds.calculateOverlap(b) > 0)
-//         {
-//           _knnSearchQueue.push(_createNodeDistance(d, childId));
-//         }      
-//       }
-//     }
-// 
-//     _releaseNodeDistance(nd);
-//   }
-// 
-// 
-//   _knnDistance = sqrt(distance);
-//   _knnId = id;
-// }
-// 
 
 double KnnIterator::_calculateDistance(const BoxInternalData& box) const
 {

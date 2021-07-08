@@ -72,7 +72,7 @@ public:
   void verifyDatabaseOutputOffline()
   {
     OsmApiDbReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
     reader.read(map);
 
@@ -140,7 +140,7 @@ public:
   void verifyDatabaseOutputOfflineValidateOff()
   {
     OsmApiDbReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
     reader.read(map);
 
@@ -208,7 +208,7 @@ public:
   void verifyDatabaseOutputOfflineWithCustomStartingIds()
   {
     OsmApiDbReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
     reader.read(map);
 
@@ -276,7 +276,7 @@ public:
   void verifyDatabaseOutputOfflineWithLargeCustomStartingIds()
   {
     OsmApiDbReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
     reader.read(map);
 
@@ -344,7 +344,7 @@ public:
   void verifyDatabaseOutputOnline()
   {
     OsmApiDbReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
     reader.read(map);
 

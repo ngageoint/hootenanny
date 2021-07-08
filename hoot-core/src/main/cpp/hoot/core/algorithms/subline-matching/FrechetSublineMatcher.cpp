@@ -51,7 +51,7 @@ WaySublineMatchString FrechetSublineMatcher::findMatch(
   Meters mrd = maxRelevantDistance == -1 ? way1->getCircularError() + way2->getCircularError() :
     maxRelevantDistance;
   //  Create a copy of the map and the two ways
-  OsmMapPtr mapCopy(new OsmMap());
+  OsmMapPtr mapCopy = std::make_shared<OsmMap>();
   CopyMapSubsetOp(map, way1->getElementId(), way2->getElementId()).apply(mapCopy);
   //  Calculate the Frechet subline
   FrechetDistance fd(map, way1, way2, _maxRelevantAngle);

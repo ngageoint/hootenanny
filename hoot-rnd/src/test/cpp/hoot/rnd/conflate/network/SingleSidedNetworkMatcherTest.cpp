@@ -75,7 +75,7 @@ public:
    */
   void toyTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     OsmMapReaderFactory::read(map, _inputPath + "ToyTestB1.osm", true, Status::Unknown1);
     OsmMapReaderFactory::read(map, _inputPath + "ToyTestB2.osm", false, Status::Unknown2);

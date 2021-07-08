@@ -184,6 +184,10 @@ public:
     case ElementType::Relation:
       compareRelation(refElement, e);
       break;
+    default:
+      _matches = false;
+      LOG_WARN("Encountered an unexpected element type.");
+      break;
     }
   }
 

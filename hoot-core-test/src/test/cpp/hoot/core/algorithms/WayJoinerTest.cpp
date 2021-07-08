@@ -65,7 +65,7 @@ public:
   void runSimpleTest()
   {
     OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(_inputPath + "WayJoinerSimpleInput.osm", map);
 
@@ -84,7 +84,7 @@ public:
   void runCornerSplitterTest()
   {
     OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(_inputPath + "WayJoinerCornerSplitterInput.osm", map);
 
@@ -103,7 +103,7 @@ public:
   void runIntersectionSplitTest()
   {
     OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(_inputPath + "WayJoinerIntersectionSplitterInput.osm", map);
 
@@ -122,7 +122,7 @@ public:
   void runConflateTest()
   {
     OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/ToyTestA.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
@@ -152,7 +152,7 @@ public:
   void runAdvancedConflateTest()
   {
     OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/ToyTestA.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
@@ -185,7 +185,7 @@ public:
   void runNonIntersectionJoinerTest()
   {
     OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.setUseDataSourceIds(true);
     reader.read(_inputPath + "NonIntersectionWayJoinerInput.osm", map);

@@ -97,12 +97,10 @@ bool OsmJsonReader::isSupported(const QString& url)
   const bool isLocalFile =  myUrl.isLocalFile();
 
   // Is it a file?
-  if (isRelativeUrl || isLocalFile)
+  if ((isRelativeUrl || isLocalFile) &&
+      url.endsWith(".json", Qt::CaseInsensitive) && !url.startsWith("http", Qt::CaseInsensitive))
   {
-    if (url.endsWith(".json", Qt::CaseInsensitive) && !url.startsWith("http", Qt::CaseInsensitive))
-    {
-      return true;
-    }
+    return true;
   }
 
   // Is it a web address?
@@ -329,7 +327,7 @@ void OsmJsonReader::loadFromString(const QString& jsonStr, const OsmMapPtr &map)
 OsmMapPtr OsmJsonReader::loadFromPtree(const boost::property_tree::ptree &tree)
 {
   _propTree = tree;
-  _map.reset(new OsmMap());
+  _map = std::make_shared<OsmMap>();
   _readToMap();
   return _map;
 }
@@ -345,7 +343,7 @@ OsmMapPtr OsmJsonReader::loadFromFile(const QString& path)
   QTextStream instream(&infile);
   QString jsonStr = instream.readAll();
   _loadJSON(jsonStr);
-  _map.reset(new OsmMap());
+  _map = std::make_shared<OsmMap>();
   _readToMap();
   return _map;
 }

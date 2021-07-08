@@ -106,7 +106,7 @@ Change MultiaryIngestChangesetReader::readNextChange()
   LOG_VART(changeType);
 
   LOG_VART(lineParts[1]);
-  OsmMapPtr tmpMap(new OsmMap());
+  OsmMapPtr tmpMap = std::make_shared<OsmMap>();
   if (lineParts[1].startsWith("{"))
   {
     //json - don't use this until #1772 is fixed

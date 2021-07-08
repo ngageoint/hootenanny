@@ -107,14 +107,11 @@ public:
   void setConfiguration(const Settings& conf) override;
 
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
-
   QString getDescription() const override
   { return "Merges individual building parts into a single building"; }
 
   QString getInitStatusMessage() const override { return "Merging building parts..."; }
-
   QString getCompletedStatusMessage() const override
   {
     return
@@ -124,10 +121,10 @@ public:
       StringUtils::formatLargeNumber(_totalBuildingGroupsProcessed) + " total.";
   }
 
-  void setThreadCount(int count) { _threadCount = count; }
-
   int getTotalBuildingGroupsProcessed() const { return _totalBuildingGroupsProcessed; }
   int getNumBuildingGroupsMerged() const { return _numBuildingGroupsMerged; }
+
+  void setThreadCount(int count) { _threadCount = count; }
   void setPreserveTypes(bool preserve) { _preserveTypes = preserve; }
 
 private:
@@ -150,7 +147,7 @@ private:
   // if true, building part type tags will be preserved in the combined building output
   bool _preserveTypes;
 
-  void _init(OsmMapPtr& map);
+  void _init(const OsmMapPtr& map);
 
   std::shared_ptr<geos::geom::Geometry> _getGeometry(const ConstElementPtr& element) const;
 
@@ -162,9 +159,9 @@ private:
   /*
    * Groups contained and neighboring building part with the buildings containing them
    */
-  QQueue<BuildingPartRelationship> _getBuildingPartPreProcessingInput();
-  QQueue<BuildingPartRelationship> _getBuildingPartWayPreProcessingInput();
-  QQueue<BuildingPartRelationship> _getBuildingPartRelationPreProcessingInput();
+  QQueue<BuildingPartRelationship> _getBuildingPartPreProcessingInput() const;
+  QQueue<BuildingPartRelationship> _getBuildingPartWayPreProcessingInput() const;
+  QQueue<BuildingPartRelationship> _getBuildingPartRelationPreProcessingInput() const;
 
   /*
    * Merges building parts grouped by the parallel processing

@@ -71,12 +71,9 @@ void OsmGbdxJsonWriter::open(const QString& path)
   _outputDir = fi.absoluteDir();
   _outputFileName = fi.baseName();
 
-  if (_outputDir.exists() == false)
+  if (!_outputDir.exists() && !FileUtils::makeDir(_outputDir.path()))
   {
-    if (FileUtils::makeDir(_outputDir.path()) == false)
-    {
-      throw HootException("Error creating directory for writing.");
-    }
+    throw HootException("Error creating directory for writing.");
   }
 }
 
@@ -136,7 +133,7 @@ void OsmGbdxJsonWriter::_writeGeometry(ConstWayPtr w)
 {
   const vector<long>& nodes = w->getNodeIds();
   const bool isPolygon = AreaCriterion().isSatisfied(w) || nodes[0] == nodes[nodes.size() - 1];
-  _writeGeometry(nodes, (isPolygon) ? "Polygon" : "LineString");
+  _writeGeometry(nodes, isPolygon ? "Polygon" : "LineString");
 }
 
 void OsmGbdxJsonWriter::_writeGeometry(ConstRelationPtr r)

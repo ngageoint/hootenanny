@@ -51,10 +51,10 @@ public:
   void runTestSmall()
   {
     //  Load in the tile map
-    OsmMapPtr tiles(new OsmMap());
+    OsmMapPtr tiles = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(tiles, _inputPath + "OsmMapSplitterTestTiles_ToyTest.geojson");
     //  Load in the map to split
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(map, "test-files/ToyBuildingsTestA.osm");
 
     OsmMapSplitter splitter(map, tiles);
@@ -76,10 +76,10 @@ public:
   {
     Settings::getInstance().set("log.warn.message.limit", 100);
     //  Load in the tile map
-    OsmMapPtr tiles(new OsmMap());
+    OsmMapPtr tiles = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(tiles, _inputPath + "OsmMapSplitterTestTiles_Boston.geojson");
     //  Load in the map to split
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(map, _inputPath + "OsmMapSplitterTestInput_Boston.osm");
 
     OsmMapSplitter splitter(map, tiles);

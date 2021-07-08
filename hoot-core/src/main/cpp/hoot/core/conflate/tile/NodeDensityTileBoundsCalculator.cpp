@@ -316,7 +316,7 @@ void NodeDensityTileBoundsCalculator::_calculateTiles()
   _exportResult(boxes, "tmp/result.png");
 }
 
-int NodeDensityTileBoundsCalculator::_calculateSplitX(PixelBox& b)
+int NodeDensityTileBoundsCalculator::_calculateSplitX(const PixelBox& b)
 {
   double total = _sumPixels(b);
   LOG_VART(total);

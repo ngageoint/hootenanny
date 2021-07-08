@@ -117,10 +117,9 @@ bool OsmNetworkExtractor::_isContiguous(const ConstRelationPtr& r, long& lastNod
     if (eid.getType() == ElementType::Way)
     {
       ConstWayPtr w = _map->getWay(eid);
-      if (i > 0)
+      if (i > 0 && w->getFirstNodeId() != lastNode)
       {
-        if (w->getFirstNodeId() != lastNode)
-          return false;
+        return false;
       }
       lastNode = w->getLastNodeId();
     }

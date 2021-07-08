@@ -93,7 +93,7 @@ void SearchRadiusCalculator::apply(std::shared_ptr<OsmMap>& map)
 
 OsmMapPtr SearchRadiusCalculator::_getFilteredMap(const ConstOsmMapPtr& map) const
 {
-  OsmMapPtr filteredMap(new OsmMap());
+  OsmMapPtr filteredMap = std::make_shared<OsmMap>();
 
   // don't care about conflated data and invalid data, so filter them out always
   ElementCriterionPtr crit;

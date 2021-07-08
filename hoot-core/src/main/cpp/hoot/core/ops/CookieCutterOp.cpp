@@ -79,7 +79,6 @@ void CookieCutterOp::apply(std::shared_ptr<OsmMap>& map)
   // Remove elements with the dough status out of the full input map and create a new map, which
   // will be our cutter shape map.
   std::shared_ptr<OsmMap> cutterShapeMap(new OsmMap(map));
-  //MapProjector::projectToWgs84(cutterShapeMap);
   RemoveElementsVisitor doughRemover;
   doughRemover.setRecursive(true);
   doughRemover.addCriterion(ElementCriterionPtr(new StatusCriterion(doughMapStatus)));
@@ -92,7 +91,6 @@ void CookieCutterOp::apply(std::shared_ptr<OsmMap>& map)
   // shape outline.
   std::shared_ptr<OsmMap> cutterShapeOutlineMap =
     AlphaShapeGenerator(_alpha, _alphaShapeBuffer).generateMap(cutterShapeMap);
-  //MapProjector::projectToWgs84(cutterShapeOutlineMap);
 
   // Remove elements with the cutter shape status create a new map, which will be our dough map.
   std::shared_ptr<OsmMap> doughMap(new OsmMap(map));
@@ -105,7 +103,6 @@ void CookieCutterOp::apply(std::shared_ptr<OsmMap>& map)
   // a hole in it (or if _crop=false, drop what's around the outline shape instead).
   CookieCutter(_crop, 0.0).cut(cutterShapeOutlineMap, doughMap);
   std::shared_ptr<OsmMap> cookieCutMap = doughMap;
-  //MapProjector::projectToWgs84(cookieCutMap);
 
   // Combine the cutter shape map with the dough map by adding the cutter shape data back into the
   // hole created by cookie cutting the dough map.

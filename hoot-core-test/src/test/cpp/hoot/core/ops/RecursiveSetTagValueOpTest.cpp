@@ -64,7 +64,7 @@ public:
 
   void runRelationTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map, true, true, "test-files/ops/ElementIdToVersionMapper/runBasicTest-in.osm");
 
@@ -88,7 +88,7 @@ public:
 
   void runNoCritTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map, true, true, "test-files/ops/ElementIdToVersionMapper/runBasicTest-in.osm");
 

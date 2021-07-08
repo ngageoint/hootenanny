@@ -93,7 +93,7 @@ using TagGraph = boost::adjacency_list<
 using VertexId = boost::graph_traits<TagGraph>::vertex_descriptor;
 using EdgeId = boost::graph_traits<TagGraph>::edge_descriptor;
 
-SchemaVertex empty;
+const SchemaVertex empty;
 
 struct AverageKey
 {

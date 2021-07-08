@@ -220,7 +220,7 @@ protected:
    * replace from the sec dataset.
    */
   void _filterFeatures(
-    OsmMapPtr& map, const ElementCriterionPtr& featureFilter,
+    const OsmMapPtr& map, const ElementCriterionPtr& featureFilter,
     const GeometryTypeCriterion::GeometryType& geometryType, const Settings& config,
     const QString& debugFileName) const;
 
@@ -234,7 +234,7 @@ protected:
    * in repairing relations manually that were passed in without some of their child elements after
    * the replacement changeset is written.
    */
-  void _markElementsWithMissingChildren(OsmMapPtr& map) const;
+  void _markElementsWithMissingChildren(const OsmMapPtr& map) const;
 
   /*
    * Keeps track of the changeset versions for features
