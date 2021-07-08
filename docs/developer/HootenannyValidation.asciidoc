@@ -1,0 +1,69 @@
+
+== Using Validation Checks to Improve Conflated Maps
+
+It is quite easy to produce conflated map output that seems accurate, but upon further examination,
+has quality issues. https://josm.openstreetmap.de/[JOSM] has an extensive collection of validation
+tools that can be used to detect such issues. Hootenanny is integrated with 
+https://josm.openstreetmap.de/[JOSM] via the 
+https://en.wikipedia.org/wiki/Java_Native_Interface[Java Native Interface (JNI)]. This allows 
+Hootenanny C++ core code to invoke JOSM validators by making calls into its Java code. The 
+integration code resides in the `hoot-josm` library and is used by the `validate` command.
+
+=== Generating Validation Reports
+
+The https://github.com/ngageoint/hootenanny/blob/master/docs/developer/HootenannyTests.asciidoc[Hootenanny tests]
+provide a testing option, `--validate`, to run validation on selected test output. Here is an 
+example of running validation on test output:
+
+-----
+HootTest --slow --validate '--include=.*AreaConflateStandaloneTest.*'
+-----
+
+The previous command will generate a validation report for each test output encountered named as: 
+`<test-output-file-name>-validation-report.txt`. Note that when performing validation any test suite 
+may be invoked (`--quick`, `--slow`, etc.), the `--parallel` option is ignored, and test filtering 
+may be performed with `--include` or `--exclude`. 
+
+In the previous example, a validation report named 
+`test-output/cmd/slow/AreaConflateStandaloneTest/output1-validation-report.txt` will be generated
+for the test output `test-output/cmd/slow/AreaConflateStandaloneTest/output1.osm` with all the
+validation errors encountered in the output.
+
+=== Comparing Validation Reports Against Different Code Versions
+
+If you want to compare validation errors between two different versions of code, use the following
+workflow:
+
+* Check out a branch of code without the changes that need to be evaluated to be used as a baseline 
+(e.g. master branch). 
+* Generate test validation reports for the baseline branch.
+* Switch to another source directory and check out the branch of your code with the changes that 
+need to be evaluated.
+* Generate test validation reports on the second test branch.
+* Finally, you can use the `--validate-diff` feature of `HootTest` to generate a differential 
+between your baseline validation reports and your test reports. Here is an example:
+
+-----
+HootTest --slow --validation-diff '--include=.*AreaConflateStandaloneTest.*' hoot-master \
+  hoot-test validation-output
+-----
+
+Note that when generating validation differentials any test suite may be invoked 
+(`--quick`, `--slow`, etc.), the `--parallel` option is ignored, and test filtering may be performed 
+with `--include` or `--exclude`.  The previous example will compare each validation report matching 
+the test filter in the baseline directory to the corresponding report in the test directory by 
+generating a text differential output file. The differential output files will be written to the 
+specified output directory and named as `<test-name>-<validation-report-file-base-name>-diff.txt`.
+If the validation reports being compared are identical, then no differential file will be output.
+
+Combining the examples described so far, the following will generate the file 
+`validation-output/AreaConflateStandaloneTest-output1-validation-report-diff.txt` if the validation 
+reports `hoot-master/reaConflateStandaloneTest-output1-validation-report.txt` and
+`hoot-test/AsreaConflateStandaloneTest-output1-validation-report.txt` are different from each other:
+
+-----
+HootTest --slow --validate '--include=.*AreaConflateStandaloneTest.*'
+HootTest --slow --validation-diff '--include=.*AreaConflateStandaloneTest.*' hoot-master \
+  hoot-test validation-output
+-----
+

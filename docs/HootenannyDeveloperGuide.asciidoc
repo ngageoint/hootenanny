@@ -3,6 +3,7 @@
 = Hootenanny Developer Guide
 
 include::developer/HootenannyArchitecture.asciidoc[]
+include::developer/HootenannyDevelopmentProcess.asciidoc[]
 include::developer/HootenannyBuild.asciidoc[]
 include::developer/HootenannyNotesOnConfigure.asciidoc[]
 include::developer/HootenannyTests.asciidoc[]
@@ -10,8 +11,8 @@ include::developer/HootenannyCodeDocumentation.asciidoc[]
 include::developer/HootenannyCodeStyle.asciidoc[]
 include::developer/HootenannyCodeBestPractices.asciidoc[]
 include::developer/HootenannyDebugging.asciidoc[]
-include::developer/HootenannyDevelopmentProcess.asciidoc[]
 include::developer/HootenannyInconsistentOutput.asciidoc[]
+include::developer/HootenannyValidation.asciidoc[]
 include::developer/HootenannyManualConflation.asciidoc[]
 include::developer/HootenannyManualMultiaryConflation.asciidoc[]
 include::developer/HootenannyRegenerateUnifyingRandomForestModels.asciidoc[]
