@@ -39,9 +39,8 @@ public:
   WayMatchStringSplitter() = default;
 
   /**
-   * Traverses all mappings, splits ways where appropriate and updates the subline mappings in
-   * place.
-   *
+   * @brief applySplits rraverses all mappings, splits ways where appropriate and updates the
+   * subline mappings in place.
    * @throws NeedsReviewException
    */
   void applySplits(

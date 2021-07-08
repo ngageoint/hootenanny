@@ -43,7 +43,7 @@ public:
   WaySublineMatch(const WaySubline& ws1, const WaySubline& ws2, bool reversed = false);
 
   /**
-   * Returns the mean length of subline1 and subline2.
+   * @brief getLength returns the mean length of subline1 and subline2.
    */
   Meters getLength() const { return (getSubline1().getLength() + getSubline2().getLength()) / 2.0; }
 
@@ -58,7 +58,7 @@ public:
   bool isValid() const { return _ws1.isValid() && _ws2.isValid(); }
 
   /**
-   * Returns true if the two sublines are part of the same way and they overlap.
+   * @brief overlaps returns true if the two sublines are part of the same way and they overlap.
    */
   bool overlaps(const WaySublineMatch& ws) const;
 

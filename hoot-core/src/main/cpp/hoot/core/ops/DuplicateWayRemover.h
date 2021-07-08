@@ -93,23 +93,21 @@ public:
   void setConflateInfoCache(const std::shared_ptr<ConflateInfoCache>& cache) override
   { _conflateInfoCache = cache; }
 
-protected:
+private:
 
   OsmMapPtr _map;
-
-  bool _isCandidateWay(const ConstWayPtr& w) const;
-  void _splitDuplicateWays(WayPtr w1, WayPtr w2, bool rev1 = false, bool rev2 = false);
-  std::vector<WayPtr> _splitWay(WayPtr w, int start, int length, bool newIds = false) const;
-  WayPtr _getUpdatedWay(WayPtr way, const std::vector<long>& nodes, bool newIds) const;
-  void _replaceMultiple(const ConstWayPtr& oldWay, const std::vector<WayPtr>& ways);
-
- private:
 
   bool _strictTagMatching;
 
   // Existence of this cache tells us that elements must be individually checked to see that they
   // are conflatable given the current configuration before modifying them.
   std::shared_ptr<ConflateInfoCache> _conflateInfoCache;
+
+  bool _isCandidateWay(const ConstWayPtr& w) const;
+  void _splitDuplicateWays(WayPtr w1, WayPtr w2, bool rev1 = false, bool rev2 = false);
+  std::vector<WayPtr> _splitWay(WayPtr w, int start, int length, bool newIds = false) const;
+  WayPtr _getUpdatedWay(WayPtr way, const std::vector<long>& nodes, bool newIds) const;
+  void _replaceMultiple(const ConstWayPtr& oldWay, const std::vector<WayPtr>& ways);
 };
 
 }

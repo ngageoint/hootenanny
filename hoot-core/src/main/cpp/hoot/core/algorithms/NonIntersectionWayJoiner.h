@@ -37,7 +37,8 @@ namespace hoot
 {
 
 /**
- * Way joiner to join continuous ways but not at way intersections where more than two ways meet.
+ * @brief The NonIntersectionWayJoiner class is a way joiner to join continuous ways but not at way
+ * intersections where more than two ways meet.
  */
 class NonIntersectionWayJoiner : public WayJoiner
 {
@@ -49,15 +50,13 @@ public:
   ~NonIntersectionWayJoiner() = default;
 
   /**
-   * Static method to join all joinable ways using NonIntersectionWayJoiner
+   * @brief joinWays is a static method to join all joinable ways using NonIntersectionWayJoiner.
    */
   static void joinWays(const OsmMapPtr& map);
 
   QString getDescription() const override
   { return "Joins ways split between actual intersections."; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 
 protected:
@@ -73,13 +72,6 @@ protected:
   void _joinParentChild() override { }
   void _joinSiblings() override { }
   void _rejoinSiblings(std::deque<long>& /*way_ids*/) override { }
-
-  /**
-   * @brief areJoinable Check the status of the ways to see if they are compatible when joining at
-   * a node; essentially UNKNOWN1 and UNKNOWN2 ways aren't joinable together
-   */
-//  bool _areJoinable(const WayPtr& w1, const WayPtr& w2) const override;
-
 };
 
 }

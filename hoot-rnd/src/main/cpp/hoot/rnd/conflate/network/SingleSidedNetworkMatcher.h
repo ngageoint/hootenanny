@@ -85,13 +85,7 @@ public:
   void matchNetworks(ConstOsmMapPtr map, OsmNetworkPtr n1, OsmNetworkPtr n2) override;
 
   QList<NetworkEdgeScorePtr> getAllEdgeScores() const override;
-
   QList<NetworkVertexScorePtr> getAllVertexScores() const override;
-
-protected:
-  virtual double _scoreEdges(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2) const;
-
-  virtual double _scoreVertices(ConstNetworkVertexPtr e1, ConstNetworkVertexPtr e2) const;
 
 private:
 
@@ -133,8 +127,10 @@ private:
   double _dampening;
   double _w;
 
-  double _calculateProbabilityOfMatch(ConstEdgeMatchPtr e) const;
+  double _scoreEdges(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2) const;
+  double _scoreVertices(ConstNetworkVertexPtr e1, ConstNetworkVertexPtr e2) const;
 
+  double _calculateProbabilityOfMatch(ConstEdgeMatchPtr e) const;
   double _calculateProbabilityOfMatch(ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2) const;
 
   double _getScore(ConstNetworkEdgePtr e2, ConstEdgeMatchPtr em) const;
@@ -142,15 +138,11 @@ private:
   void _normalizeScores();
 
   void _seedEdgeScores();
-
   void _seedVertexScores();
 
   void _updateEdgeScores();
-
   void _updateEdgeScoresAdditive();
-
   void _updateVertexScores() const;
-
 };
 
 using SingleSidedNetworkMatcherPtr = std::shared_ptr<SingleSidedNetworkMatcher>;

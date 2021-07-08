@@ -47,7 +47,8 @@ namespace hoot
 {
 
 /**
- * Contains information to group a building part either as a contained way or a neighboring part
+ * @brief The BuildingPartRelationship struct contains information to group a building part either
+ * as a contained way or a neighboring part
  */
 struct BuildingPartRelationship
 {
@@ -82,7 +83,7 @@ struct BuildingPartRelationship
 };
 
 /**
- * Building part merge pre-processing thread
+ * @brief The BuildingPartPreMergeCollector class is a building part merge pre-processing thread.
  */
 class BuildingPartPreMergeCollector : public QRunnable
 {
@@ -93,9 +94,8 @@ public:
   ~BuildingPartPreMergeCollector() = default;
 
   /**
-   * Takes building part input from an input queue and adds groups it with a disjoint set as
-   * appropriate
-   *
+   * @brief run takes building part input from an input queue and adds groups it with a disjoint set
+   * as appropriate.
    * @see QRunnable
    */
   void run() override;

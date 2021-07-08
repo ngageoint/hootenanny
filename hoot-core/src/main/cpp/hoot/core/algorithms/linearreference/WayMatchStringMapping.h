@@ -44,10 +44,10 @@ enum WayNumber
 };
 
 /**
- * Maintains a mapping from one waystring to another. This allows the caller to get a corresponding
- * WayLocation on WayString1 for a WayLocation on WayString2, or vice versa.
+ * @brief The WayMatchStringMapping class maintains a mapping from one way string to another.
  *
- * This interface guarantees:
+ * This allows the caller to get a corresponding WayLocation on WayString1 for a WayLocation on
+ * WayString2, or vice versa. This interface guarantees:
  *
  * - The beginning of WayString1 will map to the beginning of WayString2
  * - The end of WayString1 will map to the end of WayString2

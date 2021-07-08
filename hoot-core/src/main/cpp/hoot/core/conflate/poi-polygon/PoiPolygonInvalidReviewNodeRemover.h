@@ -78,7 +78,7 @@ public:
    */
   QStringList getCriteria() const override;
 
-protected:
+private:
 
   std::set<long> _nodesToRemove;
   std::set<long> _reviewRelationsToRemove;

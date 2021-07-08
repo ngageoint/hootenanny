@@ -86,7 +86,7 @@ public:
   void setWayKvp(QString kvp) { _wayKvp = kvp; }
   void setRelationKvp(QString kvp) { _relationKvp = kvp; }
 
-protected:
+private:
 
   OsmMap* _map;
 

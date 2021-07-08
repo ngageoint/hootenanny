@@ -33,29 +33,32 @@ namespace hoot
   class Way;
 
 /**
- * Given two ways it calculates the longest string of nodes that are identical within the ways.
+ * @brief The LongestCommonNodeString class given two ways calculates the longest string of nodes
+ * that are identical within the ways.
  */
 class LongestCommonNodeString
 {
 public:
+
   LongestCommonNodeString(const std::shared_ptr<Way>& w1, const std::shared_ptr<Way>& w2);
 
   /**
-   * Returns the length of the common substring. Zero if no common substring was found.
+   * @brief apply Returns the length of the common substring. Zero if no common substring was found.
    */
   int apply();
 
   /**
-   * Returns the start index of the match in w1.
+   * @brief getW1Index returns the start index of the match in w1.
    */
   int getW1Index() const{ return _i1; }
 
   /**
-   * Returns the start index of the match in w2.
+   * @brief getW2Index returns the start index of the match in w2.
    */
   int getW2Index() const{ return _i2; }
 
 private:
+
   std::shared_ptr<Way> _w1, _w2;
   size_t _i1, _i2;
 };

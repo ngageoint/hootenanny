@@ -154,23 +154,21 @@ protected:
    * Reads the entire dataset into a map
    */
   void _fullRead(OsmMapPtr map);
-
   /*
    * Reads a portion of the dataset into a map over the specified bounds. Note that this fully
    * hydrates relations, so extra filtering may need to be done after the fact to prevent conflating
    * features outside of the bounds.
    */
   void _readByBounds(OsmMapPtr map, const geos::geom::Envelope& bounds);
-
   /*
    * Reads a portion of the dataset into a map over the specified bounds. This reads the entire
    * dataset in and then crops it after the fact. See the description of the
    * apidb.reader.read.full.then.crop.on.bounded configuration option for more information.
    */
   void _readByBounds2(OsmMapPtr map, const geos::geom::Envelope& bounds);
-
   void _readWaysByNodeIds(OsmMapPtr map, const QSet<QString>& nodeIds, QSet<QString>& wayIds,
                           QSet<QString>& additionalNodeIds, long& nodeCount, long& wayCount);
+
   void _updateMetadataOnElement(ElementPtr element) const;
 
   bool _hasBounds() const;

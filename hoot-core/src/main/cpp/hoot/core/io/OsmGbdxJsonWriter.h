@@ -74,6 +74,31 @@ public:
 
 protected:
 
+  /**
+   * @brief _writeNodes Iterates all nodes that aren't part of another element and writes
+   *   them out individual GeoJSON files
+   */
+  void _writeNodes() override;
+  /**
+   * @brief _writeWays Iterates all ways that aren't part of another element and writes
+   *   them out individual GeoJSON files
+   */
+  void _writeWays() override;
+  /**
+   * @brief _writeRelations Iterates all relations that aren't part of another element and writes
+   *   them out individual GeoJSON files
+   */
+  void _writeRelations() override;
+
+  /**
+   * @brief _buildRoles Iterates all members of relations (recurses super-relations) collecting roles
+   * @param relation
+   * @return Semicolon separated list of roles
+   */
+  std::string _buildRoles(ConstRelationPtr relation);
+
+private:
+
   QDir _outputDir;
   QString _outputFileName;
   int _fileNumber;
@@ -84,10 +109,12 @@ protected:
   void _newOutputFile();
 
   /**
-   * @brief _writeNodes Iterates all nodes that aren't part of another element and writes
-   *   them out individual GeoJSON files
+   * @brief _buildRoles Recursive version of _buildRoles, called my previous version
+   * @param relation
+   * @param first Flag used for semicolon separation
+   * @return Semicolon separated list of roles
    */
-  void _writeNodes() override;
+  std::string _buildRoles(ConstRelationPtr relation, bool& first);
 
   /**
    * @brief _writeNode Writes a single node; metadata, tags, and geometry
@@ -96,22 +123,11 @@ protected:
   void _writeNode(ConstNodePtr node);
 
   /**
-   * @brief _writeWays Iterates all ways that aren't part of another element and writes
-   *   them out individual GeoJSON files
-   */
-  void _writeWays() override;
-
-  /**
    * @brief _writeWay Writes a single way; metadata, tags, and geometry
    * @param way
    */
   void _writeWay(ConstWayPtr way);
 
-  /**
-   * @brief _writeRelations Iterates all relations that aren't part of another element and writes
-   *   them out individual GeoJSON files
-   */
-  void _writeRelations() override;
   /**
    * @brief _writeRelationInfo Writes relation specific information, relation-type and roles
    * @param relation
@@ -131,48 +147,26 @@ protected:
    * @param type GeoJSON geometry type, i.e. Point, LineString, Polygon
    */
   void _writeGeometry(const std::vector<long>& nodes, std::string type);
-
   /**
    * @brief _writeGeometry Write out geometry for any element
    * @param element
    */
   void _writeGeometry(ConstElementPtr element);
-
   /**
    * @brief _writeGeometry Write out geometry for a single node
    * @param node
    */
   void _writeGeometry(ConstNodePtr node);
-
   /**
    * @brief _writeGeometry Write out geometry for a single way
    * @param way
    */
   void _writeGeometry(ConstWayPtr way);
-
   /**
    * @brief _writeGeometry Write out geometry for a single relation
    * @param relation
    */
   void _writeGeometry(ConstRelationPtr relation);
-
-  /**
-   * @brief _buildRoles Iterates all members of relations (recurses super-relations) collecting roles
-   * @param relation
-   * @return Semicolon separated list of roles
-   */
-  std::string _buildRoles(ConstRelationPtr relation);
-
-private:
-
-  /**
-   * @brief _buildRoles Recursive version of _buildRoles, called my previous version
-   * @param relation
-   * @param first Flag used for semicolon separation
-   * @return Semicolon separated list of roles
-   */
-  std::string _buildRoles(ConstRelationPtr relation, bool& first);
-
 };
 
 } // hoot

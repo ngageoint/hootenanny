@@ -54,16 +54,16 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapWriter, OsmJsonWriter)
 
-OsmJsonWriter::OsmJsonWriter(int precision)
-  : _includeDebug(ConfigOptions().getWriterIncludeDebugTags()),
-    _includeCompatibilityTags(true),
-    _precision(precision),
-    _out(nullptr),
-    _pretty(ConfigOptions().getJsonPrettyPrint()),
-    _writeEmptyTags(ConfigOptions().getJsonPerserveEmptyTags()),
-    _writeHootFormat(ConfigOptions().getJsonFormatHootenanny()),
-    _numWritten(0),
-    _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval() * 10)
+OsmJsonWriter::OsmJsonWriter(int precision) :
+_precision(precision),
+_out(nullptr),
+_writeHootFormat(ConfigOptions().getJsonFormatHootenanny()),
+_numWritten(0),
+_statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval() * 10),
+_includeDebug(ConfigOptions().getWriterIncludeDebugTags()),
+_includeCompatibilityTags(true),
+_pretty(ConfigOptions().getJsonPrettyPrint()),
+_writeEmptyTags(ConfigOptions().getJsonPerserveEmptyTags())
 {
 }
 

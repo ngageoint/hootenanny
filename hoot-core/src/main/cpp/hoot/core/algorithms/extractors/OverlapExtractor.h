@@ -37,11 +37,7 @@ namespace hoot
 class Element;
 
 /**
- * This is exactly the same as the SymDiffMatcher (in JCS speak) so I've skipped implementing the
- * SymDiffMatcher.
- *
- * All non-area geometries have 0% overlap. (due to 0 area)
- *
+ * @brief The OverlapExtractor class is exactly the same as the JCS SymDiffMatcher.
  * @author RoadMatcher
  * @copyright GPL
  * http://www.vividsolutions.com/products.asp?catg=spaapp&code=roadmatcher
@@ -57,13 +53,11 @@ public:
 
   static QString className() { return "hoot::OverlapExtractor"; }
 
-  QString getClassName() const override { return className(); }
-
   double extract(const OsmMap& map, const std::shared_ptr<const Element>& target,
     const std::shared_ptr<const Element>& candidate) const override;
 
+  QString getClassName() const override { return className(); }
   QString getDescription() const override { return "Determines the overlap between two features"; }
-
   QString getName() const override { return className(); }
 };
 

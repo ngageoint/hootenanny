@@ -1,0 +1,19 @@
+
+== Code Style
+
+=== C++
+
+The file `conf/core/QtCreatorStyle.xml` should take care of settings up most of the styling for you. 
+Here are the highlights:
+
+* Class names use Pascal Case: `MyClass`.
+* Method names use Camel Case: `myMethod`.
+* Private method names are prepended with an underscore: `_myPrivateMethod`.
+* Non-const private variable names use Camel Case and an underscore: `_myVar`.
+* Const variable names use all capitals and an underscore: `MY_CONSTANT`.
+* Indents are two spaces.
+* Braces are put on lines separate from code.
+* There are no spaces between parameters: `dontDoThis( var )` and `doThis(var)`.
+* There is a limit of 100 spaces per line (this is negotiable). This supports individuals who 
+rotate their screens vertically.
+

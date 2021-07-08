@@ -56,7 +56,7 @@ public:
    */
   double compareMaps() override;
 
-protected:
+private:
 
   cv::Mat _render1, _render2;
   Meters _wayLengthSum;

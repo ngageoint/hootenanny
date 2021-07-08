@@ -39,8 +39,8 @@ namespace hoot
 class WayLocation;
 
 /**
- * Represents an ordered collection of WaySublines. Each subline must match end to start and all
- * ways must be connected topogically (nodes, not just overlap).
+ * @brief The WayString class represents an ordered collection of WaySublines. Each subline must
+ * match end to start and all ways must be connected topogically (nodes, not just overlap).
  *
  * NOTE: Do you want to relax these simple rules? Make a new class.
  */
@@ -57,38 +57,34 @@ public:
   void append(const WaySubline& subline);
 
   WaySubline& at(int i) { return _sublines[i]; }
-
   const WaySubline& back() const { return _sublines.back(); }
 
   Meters calculateDistanceOnString(const WayLocation &l) const;
-
-  Meters calculateLength() const;
-
   WayLocation calculateLocationFromStart(
     Meters distance, ElementId preferredEid = ElementId()) const;
 
+  Meters calculateLength() const;
+
   /**
-   * Simplifies this WayString from a complex collection of sublines into a single simple way. The
-   * new way and all the associated nodes are put into destination.
+   * @brief copySimplifiedWayIntoMap simplifies this WayString from a complex collection of sublines
+   * into a single simple way.
    *
-   * This is primarily useful when performing experiments (e.g. does this WayString match that
-   * WayString).
-   *
-   * Some information may be lost as the new way is created (e.g. conflicting tags within child
-   * ways).
+   * The new way and all the associated nodes are put into destination. This is primarily useful
+   * when performing experiments (e.g. does this WayString match that WayString). Some information
+   * may be lost as the new way is created (e.g. conflicting tags within child ways).
    */
   WayPtr copySimplifiedWayIntoMap(const ElementProvider& map, OsmMapPtr destination);
 
   Meters getMaxCircularError() const;
 
-  /** returns number of sublines in this string */
+  /** @brief getSize returns number of sublines in this string. */
   int getSize() const{ return _sublines.size(); }
 
   QString toString() const;
 
   /**
-   * Similar to the visitRw method in Element, this will visit all elements in the way string along
-   * with all the children that make up the WayString.
+   * @brief visitRo Similar to the visitRw method in Element, this will visit all elements in the
+   * way string along with all the children that make up the WayString.
    *
    * Only nodes that are part of the way string will be visited (e.g. if they intersect the
    * WaySubline).

@@ -38,7 +38,7 @@ class WayLocation;
 class WaySubline;
 
 /**
- * Removes a sublines from ways
+ * @brief The WaySublineRemover class removes a sublines from ways.
  */
 class WaySublineRemover
 {
@@ -47,8 +47,7 @@ public:
   static QString className() { return "hoot::WaySublineRemover"; }
 
   /**
-   * Removes a subline from a way
-   *
+   * @brief removeSubline removes a subline from a way.
    * @param way the way to modify
    * @param subline the subline in the way to remove
    * @param map the map owning the way
@@ -56,10 +55,8 @@ public:
    */
   static std::vector<ElementId> removeSubline(
     const WayPtr& way, const WaySubline& subline, OsmMapPtr& map);
-
   /**
-   * Removes a subline from a way
-   *
+   * @brief removeSubline removes a subline from a way.
    * @param way the way to modify
    * @param start the starting point at which to remove a subline from the way
    * @param end the ending point at which to remove a subline from the way

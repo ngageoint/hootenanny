@@ -56,7 +56,7 @@ public:
 
   NodeData& operator=(const NodeData& nd);
 
-protected:
+private:
 
   double _x, _y;
 };

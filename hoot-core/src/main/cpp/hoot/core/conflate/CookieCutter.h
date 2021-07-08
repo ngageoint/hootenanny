@@ -35,7 +35,7 @@ namespace hoot
 {
 
 /**
- * Cuts a shape out of a dough map
+ * @brief The CookieCutter class cuts a shape out of a dough map.
  */
 class CookieCutter
 {
@@ -47,8 +47,7 @@ public:
                bool keepOnlyFeaturesInsideBounds = false, bool removeMissingElements = true);
 
   /**
-   * Uses an input map geometry to cut the shape out of another map
-   *
+   * @brief cut uses an input map geometry to cut the shape out of another map.
    * @param cutterShapeOutlineMap the input geometry use for cutting
    * @param doughMap the map to be cut from
    */

@@ -35,12 +35,13 @@ namespace hoot
 {
 
 /**
- * Calculates the mean distance between two sets of words. The mean distance is calculate by first
- * determining the distance between each pair of words in the two sets, then a heuristic is used
- * to calculate the mean distance between the best pairings. See ScoreMatrix for a more thorough
- * description of mean.
+ * @brief The MeanWordSetDistance class calculates the mean distance between two sets of words.
  *
- * Very similar to Monge-Elkan String Comparison, but makes sure a string is only used once.
+ * The mean distance is calculate by first determining the distance between each pair of words in
+ * the two sets, then a heuristic is used to calculate the mean distance between the best pairings.
+ * See ScoreMatrix for a more thorough description of mean.
+ *
+ * This is very similar to Monge-Elkan String Comparison, but makes sure a string is only used once.
  */
 class MeanWordSetDistance : public StringDistance, public StringDistanceConsumer,
   public Configurable
@@ -64,11 +65,8 @@ public:
 
   QString toString() const override
   { return QString("MeanWordSet %1 %2").arg(_p).arg(_d->toString()); }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
-
   QString getDescription() const override
   { return "Returns a score based on the mean distance between two sets of words"; }
 

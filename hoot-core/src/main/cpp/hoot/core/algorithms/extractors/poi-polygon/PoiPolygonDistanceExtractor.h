@@ -36,7 +36,8 @@ namespace hoot
 {
 
 /**
- * Calculates the distance between a poi and a polygon
+ * @brief The PoiPolygonDistanceExtractor class calculates the distance between a poi and a polygon
+ * for POI to Polygon conflation.
  */
 class PoiPolygonDistanceExtractor : public FeatureExtractorBase
 {
@@ -47,11 +48,8 @@ public:
   PoiPolygonDistanceExtractor(PoiPolygonInfoCachePtr infoCache = PoiPolygonInfoCachePtr());
   ~PoiPolygonDistanceExtractor() = default;
 
-  QString getClassName() const override { return className(); }
-
   /**
-   * Calculates the distance between a poi and a polygon
-   *
+   * @brief extract calculates the distance between a poi and a polygon.
    * @param map map containing the elements whose distance is to be determined
    * @param poi a POI element
    * @param poly a polygon element
@@ -60,9 +58,9 @@ public:
   double extract(const OsmMap& map, const ConstElementPtr& poi,
                  const ConstElementPtr& poly) const override;
 
+  QString getClassName() const override { return className(); }
   QString getDescription() const override
   { return "Calculates the distance between a poi and a polygon"; }
-
   QString getName() const override { return className(); }
 
 private:

@@ -188,7 +188,7 @@ public:
     return result;
   }
 
-protected:
+private:
 
   Node<KeyType, DataType>* _root;
 

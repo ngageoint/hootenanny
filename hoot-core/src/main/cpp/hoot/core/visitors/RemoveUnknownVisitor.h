@@ -78,9 +78,7 @@ public:
 
   QString getDescription() const override
   { return "Removes all elements with a status of Unknown1"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 };
 
@@ -100,9 +98,7 @@ public:
 
   QString getDescription() const override
   { return "Removes all elements with a status of Unknown2"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 };
 

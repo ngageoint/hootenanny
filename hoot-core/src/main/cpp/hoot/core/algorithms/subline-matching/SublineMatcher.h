@@ -35,8 +35,9 @@ namespace hoot
 {
 
 /**
- * Given two ways, calculate zero or more likely matching sublines. The definition of a matching
- * subline is implementation dependent.
+ * @brief The SublineMatcher class given two ways, calculates zero or more likely matching sublines.
+ *
+ * The definition of a matching subline is implementation dependent.
  */
 class SublineMatcher : public ApiEntityInfo
 {

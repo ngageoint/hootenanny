@@ -27,10 +27,16 @@
 #ifndef HELLOWORLD_H
 #define HELLOWORLD_H
 
+namespace hoot
+{
+
 class HelloWorld
 {
 public:
+
   HelloWorld();
 };
+
+}
 
 #endif // HELLOWORLD_H

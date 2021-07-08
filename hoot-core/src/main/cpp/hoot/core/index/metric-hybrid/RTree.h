@@ -329,6 +329,7 @@ public:
   }
 
 private:
+
   mutable geos::geom::Coordinate _queryC;
   mutable double _queryRadius;
 
@@ -416,10 +417,9 @@ public:
     return _root->toString();
   }
 
-protected:
+private:
 
   Node<KeyType, DataType>* _root;
-
   RTreeLayer<KeyType, DataType> _layer;
 };
 

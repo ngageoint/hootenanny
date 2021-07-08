@@ -37,7 +37,7 @@ namespace hoot
 class ConstElementVisitor;
 
 /**
- * Represents a section of a way.
+ * @brief The WaySubline class represents a section of a way.
  *
  * If the start is after the end, the WaySubline is considered to be backwards. This can be handy
  * when representing strings of ways.
@@ -55,7 +55,7 @@ public:
 
   bool contains(const WayLocation& wl) const;
   /**
-   * Returns true if all the points in other overlap with this.
+   * @brief contains returns true if all the points in other overlap with this.
    */
   bool contains(const WaySubline& other) const;
 
@@ -65,20 +65,22 @@ public:
   Meters calculateLength() const;
 
   /**
-   * Returns true if the two sublines have interior points in common. If they only touch at one
-   * point, then they do not overlap.
+   * @brief overlaps returns true if the two sublines have interior points in common. If they only
+   * touch at one point, then they do not overlap.
    */
   bool overlaps(const WaySubline& other) const;
 
   /**
-   * This conceptually does the same as if you were to reverse the way without changing the
-   * subline values. Or said another way, if you reverse the way you'll have to call this to
-   * keep the WaySubline correct.
+   * @brief reverse conceptually does the same as if you were to reverse the way without changing
+   * the subline values.
+   *
+   * Or said another way, if you reverse the way you'll have to call this to keep the WaySubline
+   * correct.
    */
   WaySubline reverse(const ConstWayPtr& reversedWay) const;
 
   /**
-   * @brief toWay - Create a new way that represents this subline and return it. This way will not
+   * @brief toWay creates a new way that represents this subline and return it. This way will not
    *  be added to a map.
    * @param map - pointer to OsmMap object
    * @param nf - pointer (if available) to NodeFactory object
@@ -90,17 +92,17 @@ public:
     bool reuse = false) const;
 
   /**
-   * Returns true if the two sublines have any points in common.
+   * @brief touches returns true if the two sublines have any points in common.
    */
   bool touches(const WaySubline& other) const;
 
   /**
-   * Visit the way and all nodes on the way that intersect the WaySubline.
+   * @brief visitRo visits the way and all nodes on the way that intersect the WaySubline.
    */
   void visitRo(const ElementProvider& ep, ConstElementVisitor& visitor) const;
 
   /**
-   * Ensures that start <= end by swapping start/end if necessary.
+   * @brief ensureForwards ensures that start <= end by swapping start/end if necessary.
    */
   void ensureForwards() { if (isBackwards()) { WayLocation s = _end; _end = _start; _start = s; } }
 
@@ -112,13 +114,13 @@ public:
   const WayLocation& getEnd() const { return _end; }
 
   /**
-   * Returns the way location that is closer to the beginning of the way regardless of the
-   * isBackwards() result.
+   * @brief getFormer returns the way location that is closer to the beginning of the way regardless
+   * of the isBackwards() result.
    */
   const WayLocation& getFormer() const { return isBackwards() ? _end : _start; }
   /**
-   * Returns the way location that is closer to the end of the way regardless of the
-   * isBackwards() result.
+   * @brief getLatter returns the way location that is closer to the end of the way regardless of
+   * the isBackwards() result.
    */
   const WayLocation& getLatter() const { return isBackwards() ? _start : _end; }
 

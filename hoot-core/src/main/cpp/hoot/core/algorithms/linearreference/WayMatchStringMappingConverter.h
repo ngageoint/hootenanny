@@ -34,11 +34,13 @@ namespace hoot
 {
 
 /**
- * Provides a conversion from a WayMatchStringMapping to a WaySublineMatchString
+ * @brief The WayMatchStringMappingConverter class provides a conversion from a
+ * WayMatchStringMapping to a WaySublineMatchString
  */
 class WayMatchStringMappingConverter
 {
 public:
+
   WayMatchStringMappingConverter() = default;
 
   WaySublineMatchStringPtr toWaySublineMatchString(WayMatchStringMappingPtr mapping) const;

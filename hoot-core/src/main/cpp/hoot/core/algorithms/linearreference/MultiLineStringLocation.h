@@ -39,7 +39,7 @@ class Relation;
 class OsmMap;
 
 /**
- * Represents a location on a multi-line feature
+ * @brief The MultiLineStringLocation class represents a location on a multi-line feature.
  */
 class MultiLineStringLocation
 {
@@ -47,8 +47,7 @@ public:
 
   MultiLineStringLocation() = default;
   /**
-   * Creates a location along the multi-line string
-   *
+   * @brief Constructor - Creates a location along the multi-line string
    * @param map map containing the multi-line string data
    * @param relation a multi-line string relation containing only ways; will throw if relation
    *        contains feature types other than ways
@@ -60,17 +59,18 @@ public:
                           const WayLocation& wayLocation);
 
   /**
-   * Returns the collection of way sublines up to and including _wayLocation
+   * @brief getWaySublineString returns the collection of way sublines up to and including
+   * _wayLocation.
    */
   WaySublineCollection getWaySublineString() const { return _waySublineString; }
 
   /**
-   * Returns the location along the selected way in the multi-line string
+   * @brief getWayLocation returns the location along the selected way in the multi-line string.
    */
   WayLocation getWayLocation() const { return _wayLocation; }
 
   /**
-   * Determines whether the location is valid
+   * @brief isValid determines whether the location is valid.
    */
   bool isValid() const { return _wayLocation.getSegmentIndex() != -1; }
 

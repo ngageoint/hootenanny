@@ -34,7 +34,7 @@ namespace hoot
 {
 
 /**
- * Interface for consuming a ValueAggregator.
+ * @brief The ValueAggregatorConsumer class is an interface for consuming a ValueAggregator.
  */
 class ValueAggregatorConsumer
 {
@@ -42,6 +42,7 @@ public:
 
   ValueAggregatorConsumer() = default;
   virtual ~ValueAggregatorConsumer() = default;
+
   virtual void setValueAggregator(const ValueAggregatorPtr& sd) = 0;
 };
 

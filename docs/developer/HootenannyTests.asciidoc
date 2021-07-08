@@ -493,12 +493,10 @@ image::images/LoadLatest.png[]
 
 === Test Coverage Reporting
 
-Reports can be generated which detail how well test coverage is for Hootenanny code.  The report
-will take into account command line and CPPUnit tests in the Hootenanny core code, as well as Java
-JUnit tests in the Hootenanny Web Services code when the application is configured --with-services.
-Hootenanny Core code coverage is supplied +gcov+ and +lcov+, utilities for using GCC to generate
-coverage results.  Java code coverage is supplied by http://cobertura.github.io/cobertura/[Cobertura]
-via Maven.  Report coverage generation for Javascript code is currently in the works.
+Reports can be generated which detail the test coverage of Hootenanny code. Hootenanny Core code 
+test coverage report generation is supplied +gcov+ and +lcov+, utilities for using GCC to generate
+coverage results. Java code coverage is supplied by http://cobertura.github.io/cobertura/[Cobertura]
+via Maven.
 
 *Coverage report generation has the pre-requisite of running all tests associated with the code being profiled.*
 For the Java Web Services code, this is done automatically by Cobertura, but for the Hootenanny Core code, 'make test' must
@@ -557,7 +555,7 @@ test output verification methods you will use.
 * Do not overwrite generated test output used to verify a test unless you are sure that in doing
 so you are still preserving the integrity of the test.
 * In Java, mock objects are your friends when writing tests.
-* Design a class so that testing of all of its members is possible.  In some cases, you may need
+* Design a class so that testing of all of its members is possible. In some cases, you may need
 to expose members only to the tests. e.g. Use C++ friend keyword, etc.; or in Java, Mockito may
 help with this.
 

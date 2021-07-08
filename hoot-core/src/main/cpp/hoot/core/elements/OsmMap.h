@@ -52,14 +52,6 @@
 
 namespace hoot
 {
-  namespace elements
-  {
-    class Tags;
-  }
-}
-
-namespace hoot
-{
 
 class ElementId;
 class IdSwap;
@@ -81,24 +73,17 @@ class RubberSheet;
 class OsmMap : public std::enable_shared_from_this<OsmMap>, public ElementProvider,
   public ElementIterator
 {
-  // Friend classes that need to modify private elements
-  friend class RemoveNodeByEid;
-  friend class RemoveWayByEid;
-  friend class RemoveRelationByEid;
-
 public:
 
   static QString className() { return "hoot::OsmMap"; }
 
   OsmMap();
-
   explicit OsmMap(const std::shared_ptr<const OsmMap>&);
   explicit OsmMap(const std::shared_ptr<OsmMap>&);
   explicit OsmMap(const std::shared_ptr<OGRSpatialReference>& srs);
-
   ~OsmMap() = default;
 
-  // GENERIC ELEMENT
+  ///////////////////////////////////////GENERIC ELEMENT////////////////////////////////////////////
 
   void addElement(const std::shared_ptr<Element>& e);
   template<class T>
@@ -271,38 +256,8 @@ public:
    * appended from
    */
   void append(const std::shared_ptr<const OsmMap>& map, const bool throwOutDupes = false);
-
-  const std::vector<std::shared_ptr<OsmMapListener>>& getListeners() const { return _listeners; }
-
-  /**
-   * This returns an index of the OsmMap. Adding or removing ways from the map will make the index
-   * out of date and will require calling getIndex again.
-   */
-  const OsmMapIndex& getIndex() const { return *_index; }
-
-  std::set<ElementId> getParents(ElementId eid) const;
-
-  /**
-   * Returns the SRS for this map. The SRS should never be changed and defaults to WGS84.
-   */
-  std::shared_ptr<OGRSpatialReference> getProjection() const override { return _srs; }
-
   void clear();
-
   bool isEmpty() const { return getElementCount() == 0; }
-
-  void registerListener(const std::shared_ptr<OsmMapListener>& l) { _listeners.push_back(l); }
-
-  /**
-   * Resets the way and node counters. This should ONLY BE CALLED BY UNIT TESTS.
-   */
-  static void resetCounters() { IdGenerator::getInstance()->reset(); }
-
-  const IdGenerator& getIdGenerator() const { return *_idGen; }
-  void setIdGenerator(const std::shared_ptr<IdGenerator>& gen)
-  { _idGen = gen;  }
-
-  void setProjection(const std::shared_ptr<OGRSpatialReference>& srs);
 
   /**
    * Validates the consistency of the map. Primarily this checks to make sure that all nodes
@@ -314,28 +269,56 @@ public:
    */
   bool validate(bool strict = true) const;
 
-  // Helps us handle roundabouts
-  void setRoundabouts(const std::vector<std::shared_ptr<Roundabout>>& rnd) { _roundabouts = rnd; }
-  std::vector<std::shared_ptr<Roundabout>> getRoundabouts() const { return _roundabouts; }
+  std::set<ElementId> getParents(ElementId eid) const;
 
-  //  Handle ID preservation swaps
-  void setIdSwap(const std::shared_ptr<IdSwap>& swap) { _idSwap = swap; }
-  std::shared_ptr<IdSwap> getIdSwap() const { return _idSwap; }
+  /**
+   * Returns the SRS for this map. The SRS should never be changed and defaults to WGS84.
+   */
+  std::shared_ptr<OGRSpatialReference> getProjection() const override { return _srs; }
 
-  QString getName() const { return _name; }
-  void setName(const QString& name) { _name = name; }
+  void registerListener(const std::shared_ptr<OsmMapListener>& l) { _listeners.push_back(l); }
 
-  QString getSource() const;
+  /**
+   * Resets the way and node counters. This should ONLY BE CALLED BY UNIT TESTS.
+   */
+  static void resetCounters() { IdGenerator::getInstance()->reset(); }
+
   void appendSource(const QString& url);
   void replaceSource(const QString& url);
 
-  void setEnableProgressLogging(bool enable) { _enableProgressLogging = enable; }
+  /**
+   * This returns an index of the OsmMap. Adding or removing ways from the map will make the index
+   * out of date and will require calling getIndex again.
+   */
+  const OsmMapIndex& getIndex() const { return *_index; }
+  const std::vector<std::shared_ptr<OsmMapListener>>& getListeners() const { return _listeners; }
+  const IdGenerator& getIdGenerator() const { return *_idGen; }
+  QString getSource() const;
+  std::vector<std::shared_ptr<Roundabout>> getRoundabouts() const { return _roundabouts; }
+  std::shared_ptr<IdSwap> getIdSwap() const { return _idSwap; }
+  QString getName() const { return _name; }
 
+  void setName(const QString& name) { _name = name; }
+  void setIdSwap(const std::shared_ptr<IdSwap>& swap) { _idSwap = swap; }
+  void setRoundabouts(const std::vector<std::shared_ptr<Roundabout>>& rnd) { _roundabouts = rnd; }
+  void setProjection(const std::shared_ptr<OGRSpatialReference>& srs);
+  void setEnableProgressLogging(bool enable) { _enableProgressLogging = enable; }
   void setCachedRubberSheet(std::shared_ptr<RubberSheet> rubbersheet)
   { _cachedRubberSheet = rubbersheet; }
   std::shared_ptr<RubberSheet> getCachedRubberSheet() const { return _cachedRubberSheet; }
+  void setIdGenerator(const std::shared_ptr<IdGenerator>& gen) { _idGen = gen;  }
 
 protected:
+
+  void _next() override;
+  void resetIterator() override;
+
+private:
+
+  // Friend classes that need to modify private elements
+  friend class RemoveNodeByEid;
+  friend class RemoveWayByEid;
+  friend class RemoveRelationByEid;
 
   mutable std::shared_ptr<IdGenerator> _idGen;
 
@@ -398,9 +381,6 @@ protected:
   void _replaceNodeInRelations(long oldId, long newId);
 
   void _initCounters();
-
-  void _next() override;
-  void resetIterator() override;
 };
 
 using OsmMapPtr = std::shared_ptr<OsmMap>;
@@ -511,4 +491,4 @@ inline WayPtr OsmMap::getWay(ElementId eid)
 
 }
 
-#endif // OSMMAP_H
+#endif

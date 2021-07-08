@@ -37,7 +37,8 @@ namespace hoot
 {
 
 /**
- * Generates a rectangular task grid with a single cell from an envelope string
+ * @brief The BoundsStringTaskGridGenerator class generates a rectangular task grid with a single
+ * cell from an envelope string.
  */
 class BoundsStringTaskGridGenerator : public TaskGridGenerator
 {
@@ -45,8 +46,7 @@ class BoundsStringTaskGridGenerator : public TaskGridGenerator
 public:
 
   /**
-   * Constructor
-   *
+   * @brief BoundsStringTaskGridGenerator Constructor
    * @param bounds a string of the form minx,miny,maxx,maxy
    * @param output optional output path for writing the bounds file
    */

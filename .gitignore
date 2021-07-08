@@ -51,7 +51,7 @@ docs/TestTop.asciidoc
 docs/test.asciidoc
 docs/test.sh
 docs/wpsDocs
-docs/coreClasses
+docs/developer/CoreAPI
 dum*
 fouo
 gcov/
@@ -82,6 +82,7 @@ test-files/cmd/**/*.failed
 hoot-pipes/tmp
 hoot-streaming/tmp
 hootenanny-*.tar.gz
+hootenanny-*_dirty
 HOOT_VERSION_FILE
 HootConfig.h
 .idea/*

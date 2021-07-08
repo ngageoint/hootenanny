@@ -149,7 +149,7 @@ void OgrWriter::setCacheCapacity(const unsigned long maxNodes, const unsigned lo
     std::shared_ptr<ElementCache>(new ElementCacheLRU(maxNodes, maxWays, maxRelations));
 }
 
-void OgrWriter::strictError(const QString& warning) const
+void OgrWriter::_strictError(const QString& warning) const
 {
   if (_strictChecking == StrictOn)
   {
@@ -705,7 +705,7 @@ OGRLayer* OgrWriter::_getLayer(const QString& layerName)
   {
     if (!_schema->hasLayer(layerName))
     {
-      strictError("Layer specified is not part of the schema. (" + layerName + ")");
+      _strictError("Layer specified is not part of the schema. (" + layerName + ")");
       return nullptr;
     }
     else
@@ -778,7 +778,7 @@ void OgrWriter::_addFeature(
       break;
     }
     default:
-      strictError("Can't convert the provided value into an OGR value. (" + v.toString() + ")");
+      _strictError("Can't convert the provided value into an OGR value. (" + v.toString() + ")");
       return;
     }
   }

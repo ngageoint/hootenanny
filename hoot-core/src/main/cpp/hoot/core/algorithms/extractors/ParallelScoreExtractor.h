@@ -33,7 +33,7 @@ namespace hoot
 {
 
 /**
- * Derive a score from how parallel the ways are
+ * @brief The ParallelScoreExtractor class derive a score for how parallel two ways are.
  */
 class ParallelScoreExtractor : public WayFeatureExtractor
 {
@@ -45,9 +45,7 @@ public:
   ~ParallelScoreExtractor() = default;
 
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
-
   QString getDescription() const override
   { return "Calculates how parallel ways are with each other"; }
 

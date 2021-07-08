@@ -51,9 +51,11 @@ public:
 
 protected:
 
-  QString _ancestor;
+  bool _isValidTag(const SchemaVertex& sv) const override;
 
-  bool isValidTag(const SchemaVertex& sv) const override;
+ private:
+
+  QString _ancestor;
 };
 
 }

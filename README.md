@@ -27,10 +27,12 @@ Hootenanny conflation occurs at the dataset level, where the user’s workflow d
 
 No automated map conflation technology is perfect. If you are conflating a relatively small number of features, you may be best served to combine them manually yourself, given you are looking for a perfect result and want to avoid any potential time spent configuring software options to get the best conflated output. For larger datasets, however, Hootenanny is a valuable tool that can be utilized standalone or as an inital step in conjunction with a crowd sourced [mapping campaign](https://tasks.hotosm.org/) to add new data into your dataset. You will find that the conflation automation provided by Hootenanny saves effort overall, and that most inaccuracies in the conflated output are a small subset of the input data which often end up being flagged for human review so that they may be manually corrected.
 
+# [Releases](https://github.com/ngageoint/hootenanny/releases)
+
 # Documentation
 
-Documentation is included as a [PDF](https://github.com/ngageoint/hootenanny/releases) with each release. Download 
-the Hootenanny .tar.gz installation file and locate the documentation within the "docs" directory.
+Documentation is included as [PDF files](https://github.com/ngageoint/hootenanny/releases) with each release. Download 
+the Hootenanny `.tar.gz` installation file and locate the documentation within the "docs" directory.
 
 # Conflatable Feature Types
 
@@ -160,13 +162,13 @@ In addition to conflating map data, Hootenanny also provides these supporting ca
 * [De-duplicate features](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/de-duplicate.asciidoc) within a single map or across two maps or simply [find duplicate features](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/de-duplicate.asciidoc) in a map (experimental)
 * [Derive changesets between maps](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/changeset-derive.asciidoc) and [push](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/changeset-apply.asciidoc) through the OpenStreetMap API
 * [Detect spoken languages](https://github.com/ngageoint/hootenanny/blob/master/docs/user/LanguageTranslation.asciidoc) in a map's tag data (experimental)
-* [Explore tag data](https://github.com/ngageoint/hootenanny/blob/master/docs/user/TagExploration.asciidoc)
+* [Explore tag data](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#tag-info)
 * [Filter a subset of features](https://github.com/ngageoint/hootenanny/blob/master/docs/user/FeatureFiltering.asciidoc) before conflation based on tag content and schema relationships
 * [Find street intersections by name](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#find-street-intersection-locations-in-a-map-by-street-name)
 * [Generate a task grid](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/task-grid.asciidoc)
 * Generate [pre-configured](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/stats.asciidoc) or [custom](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/stat.asciidoc) map statistics
 * [Grab a random section of data](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/crop-random.asciidoc) from a map for testing against
-* [Identify street intersection locations](hhttps://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#detect-road-intersections) in a map
+* [Identify street intersection locations](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#detect-road-intersections) in a map
 * [Locate phone numbers](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#add-admin-boundary-level-location-tags-associated-with-element-phone-numbers) geographically
 * [Replace or remove data](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/changeset-derive.asciidoc) completely within a bounding box via changeset and [push](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/changeset-apply.asciidoc) the changes through the OpenStreetMap API
 * [Perturb map data](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/perturb.asciidoc) for testing purposes

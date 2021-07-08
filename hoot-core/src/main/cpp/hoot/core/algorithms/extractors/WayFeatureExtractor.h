@@ -38,10 +38,11 @@ namespace hoot
 class OsmMap;
 
 /**
- * Extracts a feature from two ways. If the features are not both ways and they aren't both
- * multilinestrings of the same count, then a null is returned. If they're both multilinestrings
- * then it is assumed that the first ways in the multilinestring correspond along with the second,
- * etc.
+ * @brief The WayFeatureExtractor class extracts a feature from two ways.
+ *
+ * If the features are not both ways and they aren't both multilinestrings of the same count, then a
+ * null is returned. If they're both multilinestrings then it is assumed that the first ways in the
+ * multilinestring correspond along with the second, etc.
  */
 class WayFeatureExtractor : public FeatureExtractorBase, public ValueAggregatorConsumer
 {
@@ -49,16 +50,14 @@ public:
 
   static QString className() { return "hoot::WayFeatureExtractor"; }
 
-  WayFeatureExtractor(ValueAggregatorPtr agg);
-
   WayFeatureExtractor();
+  WayFeatureExtractor(ValueAggregatorPtr agg);
   virtual ~WayFeatureExtractor() = default;
 
   double extract(const OsmMap& map, const std::shared_ptr<const Element>& target,
     const std::shared_ptr<const Element>& candidate) const override;
 
   QString getClassName() const override { return className(); }
-
   QString getName() const override;
 
   void setValueAggregator(const ValueAggregatorPtr& va) override { _agg = va; }

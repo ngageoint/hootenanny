@@ -147,7 +147,7 @@ private:
 
   std::shared_ptr<geos::geom::Geometry> _env;
 
-  void _crop(const QStringList& inputs, const QString& output)
+  void _crop(const QStringList& inputs, const QString& output) const
   {
     OsmMapPtr map(new OsmMap());
     if (inputs.size() == 1)
@@ -165,7 +165,7 @@ private:
     IoUtils::saveMap(map, output);
   }
 
-  void _cropSeparateOutput(const QStringList& inputs)
+  void _cropSeparateOutput(const QStringList& inputs) const
   {
     for (int i = 0; i < inputs.size(); i++)
     {

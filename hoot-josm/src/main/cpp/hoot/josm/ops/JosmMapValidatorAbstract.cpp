@@ -28,11 +28,11 @@
 
 // hoot
 #include <hoot/core/util/Log.h>
-#include <hoot/core/jni/JavaEnvironment.h>
+#include <hoot/josm/jni/JavaEnvironment.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/jni/JniConversion.h>
+#include <hoot/josm/jni/JniConversion.h>
 #include <hoot/core/elements/MapProjector.h>
-#include <hoot/core/jni/JniUtils.h>
+#include <hoot/josm/jni/JniUtils.h>
 
 namespace hoot
 {

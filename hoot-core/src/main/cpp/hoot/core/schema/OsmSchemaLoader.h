@@ -38,7 +38,6 @@ public:
   static QString className() { return "hoot::OsmSchemaLoader"; }
 
   OsmSchemaLoader() = default;
-
   virtual ~OsmSchemaLoader() = default;
 
   /**

@@ -33,7 +33,7 @@ namespace hoot
 {
 
 /**
- * Represents an individual OSM change in a changeset
+ * @brief The Change class represents an individual OSM change in a changeset.
  */
 class Change
 {

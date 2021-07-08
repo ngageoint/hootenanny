@@ -42,8 +42,10 @@ class Node;
 class Way;
 
 /**
- * Uses the Ramer-Douglas Peucker algorithm [1] to generalize a set of point.  This
- * implementation modeled after [2].  A description of the algorithm from [2]:
+ * @brief The RdpWayGeneralizer class uses the Ramer-Douglas Peucker algorithm [1] to generalize a
+ * set of points.
+ *
+ * This implementation is modeled after [2].  A description of the algorithm from [2]:
  *
  * "The Ramer-Douglas Peucker algorithm is an algorithm for reducing the number of points in a curve
  * that is approximated by a series of points. It does so by "thinking" of a line between the first
@@ -78,16 +80,16 @@ public:
   ~RdpWayGeneralizer() = default;
 
   /**
-    Generalizes a way to a set of reduced points.  The map the way belongs to is modified.
-
+    @brief generalize generalizes a way to a set of reduced points.  The map the way belongs to is
+    modified.
     @param way the way whose points are to be reduced
     @return the number of nodes removed
     */
   int generalize(const std::shared_ptr<Way>& way);
 
   /**
-    Sets the distance parameter that determines to what degree the way is generalized; higher
-    values result in more generalization (more nodes are removed)
+    @brief setEpsilon sets the distance parameter that determines to what degree the way is
+    generalized; higher values result in more generalization (more nodes are removed)
     */
   void setEpsilon(double epsilon);
 

@@ -41,11 +41,11 @@ namespace hoot
 {
 
 /**
- * Facade around conflate classes to abstract some details internal to conflate.
+ * @brief The ConflateExecutor class is a facade around conflate classes to abstract some details
+ * internal to conflate.
  *
  * The primary conflate classes are UnifyingConflator and DiffConflator. UnifyingConflator handles
  * all non-differential workflows and DiffConflator handles the differential conflate workflow.
- *
  * @todo refactor the stats display logic into its own class?
  */
 class ConflateExecutor
@@ -60,8 +60,7 @@ public:
   ConflateExecutor();
 
   /**
-   * Conflates to inputs and writes the conflated data to an output
-   *
+   * @brief conflate conflates to inputs and writes the conflated data to an output.
    * @param input1 URL of first map to conflate
    * @param input2 URL of second map to conflate
    * @param outputPath URL to write conflated output

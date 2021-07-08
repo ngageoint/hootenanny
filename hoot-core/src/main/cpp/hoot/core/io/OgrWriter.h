@@ -121,6 +121,10 @@ public:
 
 protected:
 
+  virtual void _writePartial(ElementProviderPtr& provider, const ConstElementPtr& e);
+
+private:
+
   static int logWarnCount;
 
   bool _createAllLayers;
@@ -138,6 +142,15 @@ protected:
   OGRSpatialReference _wgs84;
   AddExportTagsVisitor _addExportTagsVisitor;
 
+  // contains relations that weren't written on a first pass b/c they contained relations as a
+  // member which had not yet been written
+  QList<long> _unwrittenFirstPassRelationIds;
+  bool _failOnSkipRelation;
+  int _maxFieldWidth;
+
+  int _numWritten;
+  int _statusUpdateInterval;
+
   void _addFeature(
     OGRLayer* layer, const std::shared_ptr<Feature>& f,
     const std::shared_ptr<geos::geom::Geometry>& g) const;
@@ -148,20 +161,7 @@ protected:
   OGRLayer* _getLayer(const QString& layerName);
   OGRLayer* _getLayerByName(const QString& layerName);
 
-  void strictError(const QString& warning) const;
-
-  virtual void _writePartial(ElementProviderPtr& provider, const ConstElementPtr& e);
-
-private:
-
-  // contains relations that weren't written on a first pass b/c they contained relations as a
-  // member which had not yet been written
-  QList<long> _unwrittenFirstPassRelationIds;
-  bool _failOnSkipRelation;
-  int _maxFieldWidth;
-
-  int _numWritten;
-  int _statusUpdateInterval;
+  void _strictError(const QString& warning) const;
 };
 
 }

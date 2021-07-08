@@ -28,7 +28,7 @@
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/core/josm/ops/JosmMapValidator.h>
+#include <hoot/josm/ops/JosmMapValidator.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/elements/MapProjector.h>

@@ -45,8 +45,10 @@ class OsmMap;
 class Way;
 
 /**
- * Given an OsmMap, ways are split at sharp (or rounded, if desired) corners. This can help
- * when conflating data that is mostly major roads with data that contains a lot of
+ * @brief The HighwayCornerSplitter class given an OsmMap, splits ways at sharp (or rounded, if
+ * desired) corners.
+ *
+ * This can help when conflating data that is mostly major roads with data that contains a lot of
  * neighborhood-level data.
  */
 class HighwayCornerSplitter : public OsmMapOperation, public Configurable
@@ -62,17 +64,14 @@ public:
   void apply(std::shared_ptr<OsmMap>& map) override;
 
   static void splitCorners(const std::shared_ptr<OsmMap>& map);
-
   void splitCorners();
 
-  QString getDescription() const override { return "Splits sharp road corners"; }
   /**
    * Set the configuration for this object.
    */
   void setConfiguration(const Settings& conf) override;
 
   QString getInitStatusMessage() const override { return "Splitting sharp road corners..."; }
-
   QString getCompletedStatusMessage() const override
   { return "Split " + QString::number(_numAffected) + " road corners"; }
 
@@ -82,17 +81,19 @@ public:
   QStringList getCriteria() const override;
 
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+  QString getDescription() const override { return "Splits sharp road corners"; }
 
 private:
 
   /**
-   * @brief _splitRoundedCorners Split rounded corners in the middle just like a non-rounded corner
+   * @brief _splitRoundedCorners splits rounded corners in the middle just like a non-rounded
+   * corner.
    */
   void _splitRoundedCorners();
   /**
-   * @brief _splitWay Split the way at the given node, using the WaySplitter, then process the results
+   * @brief _splitWay splits the way at the given node, using the WaySplitter, then process the
+   * results.
    * @param wayId Index of way to split
    * @param nodeIdx Index of node to split at
    * @param nodeId ID of the node to split at
