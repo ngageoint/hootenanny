@@ -1,9 +1,9 @@
 
 == Hootenanny Development Process
 
-* Open a (https://github.com/ngageoint/hootenanny/issues)[GitHub issue] for the work to be done and 
+* Open a https://github.com/ngageoint/hootenanny/issues[GitHub issue] for the work to be done and 
 assign it to yourself.
-* Perform the work on a (https://github.com/ngageoint/hootenanny/branches)[new GitHub branch] 
+* Perform the work on a https://github.com/ngageoint/hootenanny/branches[new GitHub branch] 
 derived from the master branch and named as the number of the corresponding GitHub issue.
 * Ensure your changes follow the https://github.com/ngageoint/hootenanny/blob/master/docs/developer/HootenannyCodeBestPractices.asciidoc[coding best practices].
 * Ensure your changes match the https://github.com/ngageoint/hootenanny/blob/master/docs/developer/HootenannyCodeStyle.asciidoc[approved code style].
@@ -11,10 +11,10 @@ derived from the master branch and named as the number of the corresponding GitH
 required, you should be able to get to 90%-95% coverage for most code. A test coverage report may 
 be generated from the command line.
 * Ensure your changes are https://github.com/ngageoint/hootenanny/blob/master/docs/developer/HootenannyCodeDocumentation.asciidoc[properly documented] with code comments. 
-(https://github.com/ngageoint/hootenanny/blob/master/docs/developer/HootenannyAPI.asciidoc)[API documentation] 
+https://github.com/ngageoint/hootenanny/blob/master/docs/developer/HootenannyAPI.asciidoc[API documentation] 
 may be generated from the command line or as part of the pull request job.
 * Ensure your changes are adequately documented in the Algorithms, Developer, and/or User Guide(s).
-* Create a (https://github.com/ngageoint/hootenanny/pulls)[pull request] to merge the work branch 
+* Create a https://github.com/ngageoint/hootenanny/pulls[pull request] to merge the work branch 
 into the master branch and assign it to yourself. Link the pull request to the original issue and
 add any additional required detail to the pull request description. Tests will automatically run as
 part of the pull request and their outcome may be viewed on Jenkins.
