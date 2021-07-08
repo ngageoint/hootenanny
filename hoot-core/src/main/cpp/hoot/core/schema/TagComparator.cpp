@@ -205,15 +205,15 @@ void TagComparator::compareEnumeratedTags(
   for (size_t i = 0; i < v1.size(); ++i)
   {
     const SchemaVertex* tv = &v1[i];
-    if (tv->valueType == Enumeration)
+    if (tv->getValueType() == Enumeration)
     {
-      if (tv->value == "*")
+      if (tv->getValue() == "*")
       {
-        n1.push_back(OsmSchema::toKvp(tv->key, t1[tv->key]));
+        n1.push_back(OsmSchema::toKvp(tv->getKey(), t1[tv->getKey()]));
       }
       else
       {
-        n1.push_back(tv->name);
+        n1.push_back(tv->getName());
       }
     }
   }
@@ -221,15 +221,15 @@ void TagComparator::compareEnumeratedTags(
   for (size_t i = 0; i < v2.size(); ++i)
   {
     const SchemaVertex* tv = &v2[i];
-    if (tv->valueType == Enumeration)
+    if (tv->getValueType() == Enumeration)
     {
-      if (tv->value == "*")
+      if (tv->getValue() == "*")
       {
-        n2.push_back(OsmSchema::toKvp(tv->key, t2[tv->key]));
+        n2.push_back(OsmSchema::toKvp(tv->getKey(), t2[tv->getKey()]));
       }
       else
       {
-        n2.push_back(tv->name);
+        n2.push_back(tv->getName());
       }
     }
   }
@@ -284,10 +284,10 @@ void TagComparator::compareTextTags(const Tags& t1, const Tags& t2, double& scor
   {
     const SchemaVertex& tv = schema.getTagVertex(it.key());
     if (schema.isAncestor(it.key(), "abstract_name") == false &&
-        tv.valueType == Text && t2.contains(it.key()))
+        tv.getValueType() == Text && t2.contains(it.key()))
     {
       score *= LevenshteinDistance::score(it.value(), t2[it.key()]);
-      weight += tv.influence;
+      weight += tv.getInfluence();
     }
   }
 
@@ -645,7 +645,7 @@ void TagComparator::mergeText(Tags& t1, Tags& t2, Tags& result,
     const SchemaVertex& tv = schema.getTagVertex(it1.key());
 
     // if this is a text field and it exists in both tag sets.
-    if (tv.valueType == Text && t2.contains(it1.key()))
+    if (tv.getValueType() == Text && t2.contains(it1.key()))
     {
       // only keep the unique text fields
       QStringList values1 = t1.getList(it1.key());
@@ -887,9 +887,9 @@ void TagComparator::_promoteToCommonAncestor(Tags& t1, Tags& t2, Tags& result) c
         // erase from the iterators in a safe way
         t1.erase(it1++);
         t2.erase(it2++);
-        if (ancestor.value.isEmpty() == false)
+        if (ancestor.getValue().isEmpty() == false)
         {
-          result[ancestor.key] = ancestor.value;
+          result[ancestor.getKey()] = ancestor.getValue();
         }
       }
       else

@@ -139,7 +139,7 @@ public:
               QString kvp1 = OsmSchema::toKvp(tag1.key(),tag1.value());
 
               // We are only looking at Enumerated tags
-              if (OsmSchema::getInstance().getTagVertex(kvp1).valueType == hoot::Enumeration)
+              if (OsmSchema::getInstance().getTagVertex(kvp1).getValueType() == hoot::Enumeration)
               {
                 // Get the value from the corresponding tag in REF2
                 QString kvp2 =
@@ -160,7 +160,7 @@ public:
               // Skip the tags that are common
               if (e->getTags().contains(tag2.key())) continue;
 
-              if (OsmSchema::getInstance().getTagVertex(kvp2).valueType == hoot::Enumeration)
+              if (OsmSchema::getInstance().getTagVertex(kvp2).getValueType() == hoot::Enumeration)
               {
                 // "Missing" == "" tag value
                 QString kvp1 = OsmSchema::toKvp(tag2.key(),"");

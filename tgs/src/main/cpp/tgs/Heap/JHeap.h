@@ -123,7 +123,7 @@ public:
         else if (_left == nullptr)
         {
           _left = _right;
-          _right = NULL;
+          _right = nullptr;
           return;
         }
         JHeapNode* skipped = nullptr;
@@ -164,7 +164,7 @@ public:
         node->_left = nullptr;
         node->_right = nullptr;
 
-        if (_left == NULL) 
+        if (_left == nullptr)
         {
           node->_parent = this;
           _left = node;
@@ -359,12 +359,12 @@ public:
 
   TgsJHeap()
   {
-    _root = NULL;
+    _root = nullptr;
   }
 
 
 
-  int getChildCount() { return _root != NULL ? _root->getChildCount() + 1 : 0; }
+  int getChildCount() { return _root != nullptr ? _root->getChildCount() + 1 : 0; }
 
   _Type inspectRootValue() { return _root->getValue(); }
   _Type inspectRootIndex() { return _root->getIndex(); }

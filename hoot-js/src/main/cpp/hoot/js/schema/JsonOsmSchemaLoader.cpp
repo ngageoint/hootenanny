@@ -167,7 +167,7 @@ void JsonOsmSchemaLoader::_loadAssociatedWith(
 
     for (int i = 0; i < l.size(); ++i)
     {
-      s.addAssociatedWith(tv.name, toString(l[i]));
+      s.addAssociatedWith(tv.getName(), toString(l[i]));
     }
   }
 }
@@ -185,43 +185,43 @@ void JsonOsmSchemaLoader::_loadBase(QVariantMap& copy, const OsmSchema& s, Schem
   }
   if (copy.contains("isA"))
   {
-    s.addIsA(tv.name, _asString(copy.take("isA")));
+    s.addIsA(tv.getName(), _asString(copy.take("isA")));
   }
   if (copy.contains("similarTo"))
   {
-    _loadSimilarTo(tv.name, copy.take("similarTo"), s);
+    _loadSimilarTo(tv.getName(), copy.take("similarTo"), s);
   }
   if (copy.contains("description"))
   {
-    tv.description = _asString(copy.take("description"));
+    tv.setDescription(_asString(copy.take("description")));
   }
   if (copy.contains("tagInfoDescription"))
   {
-    if (tv.description.isEmpty())
+    if (tv.getDescription().isEmpty())
     {
-      tv.description = _asString(copy["tagInfoDescription"]);
+      tv.setDescription(_asString(copy["tagInfoDescription"]));
     }
     copy.remove("tagInfoDescription");
   }
   if (copy.contains("influence"))
   {
-    tv.influence = _asDouble(copy.take("influence"));
+    tv.setInfluence(_asDouble(copy.take("influence")));
   }
   if (copy.contains("childWeight"))
   {
-    tv.childWeight = _asDouble(copy.take("childWeight"));
+    tv.setChildWeight(_asDouble(copy.take("childWeight")));
   }
   if (copy.contains("mismatchScore"))
   {
-    tv.mismatchScore = _asDouble(copy.take("mismatchScore"));
+    tv.setMismatchScore(_asDouble(copy.take("mismatchScore")));
   }
   if (copy.contains("aliases"))
   {
-    tv.aliases = _asStringList(copy.take("aliases"));
+    tv.setAliases(_asStringList(copy.take("aliases")));
   }
   if (copy.contains("categories"))
   {
-    tv.categories = _asStringList(copy.take("categories"));
+    tv.setCategories(_asStringList(copy.take("categories")));
   }
   if (copy.contains("geometries"))
   {
@@ -232,7 +232,7 @@ void JsonOsmSchemaLoader::_loadBase(QVariantMap& copy, const OsmSchema& s, Schem
   {
     if (logWarnCount < Log::getWarnMessageLimit())
     {
-      LOG_WARN(QString("Unrecognized tags found in %1: (%2)").arg(tv.name).
+      LOG_WARN(QString("Unrecognized tags found in %1: (%2)").arg(tv.getName()).
         arg(toJson(toV8(copy.keys()))));
     }
     else if (logWarnCount == Log::getWarnMessageLimit())
@@ -349,7 +349,7 @@ void JsonOsmSchemaLoader::_loadGeometries(SchemaVertex& tv, const QVariant& v) c
     }
     LOG_VART(g);
 
-    tv.geometries = g;
+    tv.setGeometries(g);
   }
 }
 

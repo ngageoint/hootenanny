@@ -56,7 +56,7 @@ QSet<QString> BuildingRelationMemberTagMerger::getBuildingPartTagNames()
       OsmSchema::getInstance().getAssociatedTagsAsVertices(MetadataTags::BuildingPart() + "=yes");
     for (size_t i = 0; i < buildingPartTags.size(); i++)
     {
-      _buildingPartTagNames.insert(buildingPartTags[i].name.split("=")[0]);
+      _buildingPartTagNames.insert(buildingPartTags[i].getName().split("=")[0]);
     }
     _buildingPartTagNames.insert(MetadataTags::BuildingPart());
   }

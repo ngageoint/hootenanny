@@ -99,17 +99,17 @@ inline v8::Local<v8::Value> toV8(const SchemaVertex& tv)
   else
   {
     result->Set(context, toV8("name"), toV8(tv.getName()));
-    result->Set(context, toV8("description"), toV8(tv.description));
-    result->Set(context, toV8("key"), toV8(tv.key));
-    result->Set(context, toV8("value"), toV8(tv.value));
-    result->Set(context, toV8("influence"), toV8(tv.influence));
-    result->Set(context, toV8("childWeight"), toV8(tv.childWeight));
-    result->Set(context, toV8("mismatchScore"), toV8(tv.mismatchScore));
+    result->Set(context, toV8("description"), toV8(tv.getDescription()));
+    result->Set(context, toV8("key"), toV8(tv.getKey()));
+    result->Set(context, toV8("value"), toV8(tv.getValue()));
+    result->Set(context, toV8("influence"), toV8(tv.getInfluence()));
+    result->Set(context, toV8("childWeight"), toV8(tv.getChildWeight()));
+    result->Set(context, toV8("mismatchScore"), toV8(tv.getMismatchScore()));
     // need to create a string conversion for this if we want to use it. Unused for now.
     //result->Set(toV8("valueType"), toV8(tv.valueType), None);
-    result->Set(context, toV8("aliases"), toV8(tv.aliases));
-    result->Set(context, toV8("categories"), toV8(tv.categories));
-    result->Set(context, toV8("geometries"), toV8(tv.geometries));
+    result->Set(context, toV8("aliases"), toV8(tv.getAliases()));
+    result->Set(context, toV8("categories"), toV8(tv.getCategories()));
+    result->Set(context, toV8("geometries"), toV8(tv.getGeometries()));
   }
 
   return result;
