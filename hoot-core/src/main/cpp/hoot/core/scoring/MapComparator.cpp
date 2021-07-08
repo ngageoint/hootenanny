@@ -246,7 +246,7 @@ public:
     for (size_t i = 0; i < refRelation->getMembers().size(); i++)
     {
       CHECK_MSG(
-        refRelation->getMembers()[i].role == testRelation->getMembers()[i].role,
+        refRelation->getMembers()[i].getRole() == testRelation->getMembers()[i].getRole(),
         "Member role does not match. " + relationStr);
       CHECK_MSG(
         refRelation->getMembers()[i].getElementId() == testRelation->getMembers()[i].getElementId(),

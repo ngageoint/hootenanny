@@ -91,40 +91,34 @@ public:
    */
   void addCompoundRule(const CompoundRule& rule);
 
-  /**
-   * Yes, technically you could modify the contents of the rules returned. Please don't. Taking
-   * this short cut we don't need to copy the rules into a proper const object each time.
-   */
-  const CompoundRuleList& getCompoundRules() const { return _compoundRules; }
-
   VertexType getType() const { return _type; }
 
   /**
    * Returns true if one or more of the compound rules match this tag.
    */
   bool isCompoundMatch(const Tags& t) const;
-
   bool isEmpty() const { return name.isEmpty(); }
-
   /**
    * Returns ture if each of the elements in this rule matches one of the kvps in t.
    */
   static bool isMatch(const CompoundRule& rule, const Tags& t);
-
   bool isValid() const { return _type != UnknownVertexType; }
+
+  /**
+   * Yes, technically you could modify the contents of the rules returned. Please don't. Taking
+   * this short cut we don't need to copy the rules into a proper const object each time.
+   */
+  const CompoundRuleList& getCompoundRules() const { return _compoundRules; }
 
   /**
    * Sets the name and does not parse out the key/value. The key and value will not be changed.
    */
   void setName(QString n);
-
   /**
    * Sets the name and parses out and stores the key/value.
    */
   void setNameKvp(QString n);
-
   void setType(VertexType t);
-
   void setValueTypeString(QString t);
 
   QString toString() const;

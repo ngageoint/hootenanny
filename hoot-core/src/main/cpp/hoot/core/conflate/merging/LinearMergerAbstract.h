@@ -62,8 +62,8 @@ public:
     else
     {
       LengthOfWaysVisitor v;
-      v.setOsmMap(map.get());
-      map->getElement(eid)->visitRo(*map, v);
+      v.setOsmMap(_map.get());
+      _map->getElement(eid)->visitRo(*_map, v);
       result = v.getLengthOfWays();
       _lengthMap[eid] = result;
     }
@@ -73,9 +73,11 @@ public:
   // commenting this out results in a crash...what??
   virtual QString getDescription() const { return ""; }
 
-  OsmMapPtr map;
+  void setMap(const OsmMapPtr& map) { _map = map; }
 
 private:
+
+  OsmMapPtr _map;
 
   QHash<ElementId, Meters> _lengthMap;
 };

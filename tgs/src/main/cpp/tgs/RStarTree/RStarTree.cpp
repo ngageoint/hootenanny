@@ -104,11 +104,6 @@ int RStarTree::_calculateNodeLevel(const RTreeNode* node) const
   return level;
 }
 
-void RStarTree::cleanTree() const
-{
-  //_store.checkThresholdAndFlush();
-}
-
 void RStarTree::_chooseSplitAxis(BoxVector& boxes) const
 {
   double S = -1;

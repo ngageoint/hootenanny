@@ -122,7 +122,7 @@ namespace Tgs
     *
     * @param factor the factor to deactivate
     */
-    void deactivateFactor(std::string factor);
+    void deactivateFactor(const std::string& factor);
 
     /**
     *  @return true is DataFrame contains 0 data vectors

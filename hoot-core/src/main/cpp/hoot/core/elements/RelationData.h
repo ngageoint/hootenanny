@@ -44,15 +44,9 @@ public:
 
   struct Entry
   {
-    QString role;
-
     Entry() = default;
-    Entry(QString r, ElementId eid) : role(r), _eid(eid)  { }
+    Entry(QString r, ElementId eid) : _role(r), _eid(eid)  { }
     Entry(ElementId eid) : _eid(eid) { }
-
-    ElementId getElementId() const { return _eid; }
-    void setElementId(ElementId eid) { _eid = eid; }
-    const QString& getRole() const { return role; }
 
     bool operator!=(const Entry& other) const { return !(*this == other); }
     bool operator==(const Entry& other) const
@@ -65,11 +59,18 @@ public:
 
     QString toString() const
     {
-      return QString("Entry: role: %1, eid: %2").arg(role).arg(_eid.toString());
+      return QString("Entry: role: %1, eid: %2").arg(_role).arg(_eid.toString());
     }
+
+    ElementId getElementId() const { return _eid; }
+    QString getRole() const { return _role; }
+
+    void setElementId(ElementId eid) { _eid = eid; }
+    void setRole(const QString& role) { _role = role; }
 
   private:
 
+    QString _role;
     ElementId _eid;
   };
 
@@ -84,10 +85,6 @@ public:
   void addElement(const QString& role, ElementId eid);
 
   void clear() override;
-
-  const std::vector<Entry>& getElements() const { return _members; }
-
-  const QString& getType() const { return _type; }
 
   /**
    * @optimize This is very slow and may copy the whole entries list. This should be fine for
@@ -107,8 +104,10 @@ public:
   template<typename IT>
   void replaceElements(Entry old, IT start, IT end);
 
-  void setMembers(const std::vector<Entry>& members) { _members = members; }
+  const std::vector<Entry>& getElements() const { return _members; }
+  const QString& getType() const { return _type; }
 
+  void setMembers(const std::vector<Entry>& members) { _members = members; }
   void setType(const QString& type) { _type = type; }
 
 private:
@@ -141,17 +140,17 @@ void RelationData::replaceElements(Entry old, IT start, IT end)
   for (size_t i = 0; i < oldMembers.size(); ++i)
   {
     // if the roles match, or the old role is empty and the other attributes match.
-    if ((old.role.isEmpty() || old.role == oldMembers[i].role) &&
+    if ((old.getRole().isEmpty() || old.getRole() == oldMembers[i].getRole()) &&
         old.getElementId() == oldMembers[i].getElementId())
     {
       // go through all the new members
       for (IT it = start; it != end; ++it)
       {
         // if the old role is empty, then assign the role that the old member has
-        if (old.role.isEmpty())
+        if (old.getRole().isEmpty())
         {
           Entry e = *it;
-          e.role = oldMembers[i].role;
+          e.setRole(oldMembers[i].getRole());
           _members.push_back(e);
         }
         // if the old role is specified then just add the child as is.

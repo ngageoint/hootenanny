@@ -449,7 +449,7 @@ Tags ImplicitTagRulesSqliteReader::_getTagsForWords(const QSet<long>& queriedWor
       //file.  It would also work for any entires in the rules database, but we don't write multiple
       //tags for the same rules during derivation yet.
       const QStringList kvps = kvp.split(";");
-      if ((!_addTopTagOnly || (_addTopTagOnly && tags2.isEmpty())))
+      if (!_addTopTagOnly || (_addTopTagOnly && tags2.isEmpty()))
       {
         for (int i = 0; i < kvps.size(); i++)
         {

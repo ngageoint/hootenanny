@@ -134,9 +134,9 @@ bool PythonSchemaTranslator::isValidScript()
       _init();
       _initialized = true;
     }
-    catch (const HootException&)
+    catch (const HootException& e)
     {
-      // pass
+      LOG_DEBUG(e.getWhat());
     }
   }
 

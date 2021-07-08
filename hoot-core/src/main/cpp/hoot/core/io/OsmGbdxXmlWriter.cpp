@@ -553,7 +553,7 @@ void OsmGbdxXmlWriter::writePartial(const ConstRelationPtr& r)
     _writer->writeStartElement("member");
     _writer->writeAttribute("type", _typeName(e.getElementId().getType()));
     _writer->writeAttribute("ref", QString::number(e.getElementId().getId()));
-    _writer->writeAttribute("role", removeInvalidCharacters(e.role));
+    _writer->writeAttribute("role", removeInvalidCharacters(e.getRole()));
     _writer->writeEndElement();
   }
 

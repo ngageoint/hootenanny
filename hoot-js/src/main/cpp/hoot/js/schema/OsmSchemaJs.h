@@ -98,7 +98,7 @@ inline v8::Local<v8::Value> toV8(const SchemaVertex& tv)
   }
   else
   {
-    result->Set(context, toV8("name"), toV8(tv.name));
+    result->Set(context, toV8("name"), toV8(tv.getName()));
     result->Set(context, toV8("description"), toV8(tv.description));
     result->Set(context, toV8("key"), toV8(tv.key));
     result->Set(context, toV8("value"), toV8(tv.value));
