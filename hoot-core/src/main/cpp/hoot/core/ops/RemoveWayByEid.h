@@ -92,7 +92,7 @@ private:
   bool _removeFully;
 
   void _removeWay(const OsmMapPtr& map, long wId) const;
-  void _removeWayFully(OsmMapPtr& map, long wId) const;
+  void _removeWayFully(const OsmMapPtr& map, long wId) const;
 };
 
 }

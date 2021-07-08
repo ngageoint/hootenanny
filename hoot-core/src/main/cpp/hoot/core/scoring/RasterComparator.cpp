@@ -142,7 +142,7 @@ void RasterComparator::_dumpImage(cv::Mat& image) const
   printf("\n");
   for (int y = 0; y < _height; y++)
   {
-    float* row = image.ptr<float>(y);
+    const float* row = image.ptr<float>(y);
     for (int x = 0; x < _width; x++)
     {
       printf("%.2g ", row[x]);

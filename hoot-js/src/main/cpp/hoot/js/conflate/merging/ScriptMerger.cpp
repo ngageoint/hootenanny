@@ -140,7 +140,7 @@ void ScriptMerger::_applyMergePair(const OsmMapPtr& map,
   Local<Value> v = _callMergePair(map);
 
   Local<Object> o = Local<Object>::Cast(v);
-  ElementJs* newElementJs = ObjectWrap::Unwrap<ElementJs>(o);
+  const ElementJs* newElementJs = ObjectWrap::Unwrap<ElementJs>(o);
   ConstElementPtr newElement = newElementJs->getConstElement();
 
   if (map->containsElement(newElement) == false)

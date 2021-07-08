@@ -510,7 +510,7 @@ private:
   bool fixRelationFailure(ChangesetInfoPtr changeset, const ChangesetInfoPtr& split,
                           long element_id,
                           long member_id, ElementType::Type member_type);
-  bool fixElementGoneDeletedFailure(ChangesetInfoPtr changeset, ChangesetInfoPtr& split,
+  bool fixElementGoneDeletedFailure(ChangesetInfoPtr changeset, const ChangesetInfoPtr& split,
                                     long element_id, ElementType::Type element_type);
   bool fixMultiElementFailure(ChangesetInfoPtr changeset, const ChangesetInfoPtr& split,
                               long element_id, ElementType::Type element_type,

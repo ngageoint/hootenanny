@@ -47,7 +47,7 @@ namespace Tgs
 RStarTree::RStarTree(const std::shared_ptr<PageStore>& ps, int dimensions)
   : _store(dimensions, ps)
 {
-  RTreeNode* root;
+  const RTreeNode* root;
 
   if (ps->getPageCount() > 0)
   {
@@ -190,7 +190,7 @@ RTreeNode* RStarTree::_chooseSubTree(const Box& b, int level)
     int id;
 
     // if the childpointers in N point to leaves
-    RTreeNode* firstChild = _store.getNode(N ->getChildNodeId(0));
+    const RTreeNode* firstChild = _store.getNode(N ->getChildNodeId(0));
     if (firstChild->isLeafNode())
     {
       // determine the minimum overlap cost

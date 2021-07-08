@@ -91,7 +91,7 @@ vector<long> ElementIdsVisitor::_findElements(
   return result;
 }
 
-vector<long> ElementIdsVisitor::findNodes(const ConstOsmMapPtr& map, ElementCriterion* pCrit,
+vector<long> ElementIdsVisitor::findNodes(const ConstOsmMapPtr& map, const ElementCriterion* pCrit,
                                           const Coordinate& refCoord, Meters maxDistance)
 {
   return _findElements(map, pCrit, map->getIndex().findNodes(refCoord, maxDistance));

@@ -92,7 +92,7 @@ QList<RoadCrossingPolyRule> RoadCrossingPolyRule::readRules(const QString& rules
   }
 
   QList<RoadCrossingPolyRule> rules;
-  for (boost::property_tree::ptree::value_type& ruleProp : propTree.get_child("rules"))
+  for (const boost::property_tree::ptree::value_type& ruleProp : propTree.get_child("rules"))
   {
     const QString ruleName =
       QString::fromStdString(ruleProp.second.get<std::string>("name", "")).trimmed();

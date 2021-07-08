@@ -529,7 +529,8 @@ void ChangesetReplacementCreator::_snapUnconnectedPreChangesetMapCropping(OsmMap
 }
 
 void ChangesetReplacementCreator::_snapUnconnectedPostChangesetMapCropping(
-  OsmMapPtr& refMap, OsmMapPtr& combinedMap, OsmMapPtr& immediatelyConnectedOutOfBoundsWays) const
+  const OsmMapPtr& refMap, OsmMapPtr& combinedMap,
+  const OsmMapPtr& immediatelyConnectedOutOfBoundsWays) const
 {
   QStringList snapWayStatuses;
   snapWayStatuses.append("Input2");
@@ -684,7 +685,8 @@ void ChangesetReplacementCreator::_cropMapForChangesetDerivation(
   LOG_DEBUG("Cropped map: " << map->getName() << " size: " << map->size());
 }
 
-void ChangesetReplacementCreator::_generateChangeset(OsmMapPtr& refMap, OsmMapPtr& combinedMap)
+void ChangesetReplacementCreator::_generateChangeset(
+  const OsmMapPtr& refMap, const OsmMapPtr& combinedMap)
 {
   LOG_STATUS(
     "Generating changeset for ref map of size: " <<

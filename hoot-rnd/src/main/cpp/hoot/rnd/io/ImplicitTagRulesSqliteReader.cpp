@@ -312,7 +312,7 @@ Tags ImplicitTagRulesSqliteReader::_checkCachedTags(const QSet<QString>& words,
 {
   const QStringList wordsList = words.toList();
   const QString wordsKey = wordsList.join(";");
-  Tags* cachedTags = _tagsCache[wordsKey];
+  const Tags* cachedTags = _tagsCache[wordsKey];
   if (cachedTags != nullptr)
   {
     LOG_TRACE("Found cached tags.");

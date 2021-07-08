@@ -320,7 +320,7 @@ QString GeometryUtils::polygonStringToEnvelopeString(const QString& str)
 QString GeometryUtils::polygonToString(const std::shared_ptr<Polygon>& poly)
 {
   const int precision = ConfigOptions().getWriterPrecision();
-  geos::geom::CoordinateSequence* coords = poly->getCoordinates();
+  const geos::geom::CoordinateSequence* coords = poly->getCoordinates();
   QString str;
   for (size_t i = 0; i < coords->getSize(); i++)
   {
@@ -520,7 +520,7 @@ OsmMapPtr GeometryUtils::createMapFromBounds(const std::shared_ptr<geos::geom::P
 {
   OsmMapPtr boundaryMap = std::make_shared<OsmMap>();
   WayPtr boundsWay(new Way(Status::Unknown1, boundaryMap->createNextWayId()));
-  geos::geom::CoordinateSequence* coords = bounds->getCoordinates();
+  const geos::geom::CoordinateSequence* coords = bounds->getCoordinates();
   for (size_t i = 0; i < coords->getSize(); i++)
   {
     const geos::geom::Coordinate& coord = coords->getAt(i);

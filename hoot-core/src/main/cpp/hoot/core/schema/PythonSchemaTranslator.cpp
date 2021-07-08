@@ -208,8 +208,8 @@ void PythonSchemaTranslator::_translateToOsm(Tags& tags, const char* layerName, 
                             "convertable to strings.");
       }
 
-      Py_UNICODE* keyUnicodeData = PyUnicode_AsUnicode(keyUnicode);
-      Py_UNICODE* valueUnicodeData = PyUnicode_AsUnicode(valueUnicode);
+      const Py_UNICODE* keyUnicodeData = PyUnicode_AsUnicode(keyUnicode);
+      const Py_UNICODE* valueUnicodeData = PyUnicode_AsUnicode(valueUnicode);
       QString qKey, qValue;
 #       if (Py_UNICODE_SIZE == 4)
       {

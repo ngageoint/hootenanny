@@ -179,7 +179,8 @@ public:
     v8::HandleScope scope(current);
     v8::Local<v8::Context> context = current->GetCurrentContext();
 
-    ElementCriterionJs* obj = node::ObjectWrap::Unwrap<ElementCriterionJs>(v->ToObject(context).ToLocalChecked());
+    const ElementCriterionJs* obj =
+      node::ObjectWrap::Unwrap<ElementCriterionJs>(v->ToObject(context).ToLocalChecked());
     ElementCriterionConsumer* c = dynamic_cast<ElementCriterionConsumer*>(consumer);
 
     if (c == nullptr)
@@ -317,7 +318,8 @@ public:
     v8::HandleScope scope(current);
     v8::Local<v8::Context> context = current->GetCurrentContext();
 
-    ElementVisitorJs* obj = node::ObjectWrap::Unwrap<ElementVisitorJs>(v->ToObject(context).ToLocalChecked());
+    const ElementVisitorJs* obj =
+      node::ObjectWrap::Unwrap<ElementVisitorJs>(v->ToObject(context).ToLocalChecked());
 
     ElementVisitorConsumer* c = dynamic_cast<ElementVisitorConsumer*>(consumer);
 

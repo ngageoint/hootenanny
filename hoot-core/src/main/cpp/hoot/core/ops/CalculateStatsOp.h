@@ -149,7 +149,7 @@ private:
     const hoot::FilteredVisitor& v, boost::any& visitorData, const QString& statName,
     StatData::StatCall call = StatData::StatCall::Stat);
   double _applyVisitor(
-    ElementCriterion* pCrit, ConstElementVisitor* pVis, const QString& statName,
+    const ElementCriterion* pCrit, ConstElementVisitor* pVis, const QString& statName,
     StatData::StatCall call = StatData::StatCall::Stat);
   void _applyVisitor(ConstElementVisitor* v, const QString& statName);
   double _getApplyVisitor(ConstElementVisitor* v, const QString& statName);

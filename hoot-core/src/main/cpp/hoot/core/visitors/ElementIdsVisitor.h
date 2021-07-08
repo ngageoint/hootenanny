@@ -76,7 +76,7 @@ public:
    * @param maxDistance the furthest distance away from the source point to search
    * @return a collection of numerical node IDs
    */
-  static std::vector<long> findNodes(const ConstOsmMapPtr& map, ElementCriterion* pCrit,
+  static std::vector<long> findNodes(const ConstOsmMapPtr& map, const ElementCriterion* pCrit,
                                      const geos::geom::Coordinate& refCoord, Meters maxDistance);
 
   /**

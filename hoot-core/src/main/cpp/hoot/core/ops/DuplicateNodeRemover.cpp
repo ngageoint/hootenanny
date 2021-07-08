@@ -234,7 +234,7 @@ void DuplicateNodeRemover::apply(std::shared_ptr<OsmMap>& map)
 }
 
 bool DuplicateNodeRemover::_passesLogMergeFilter(
-  const long nodeId1, const long nodeId2, OsmMapPtr& map) const
+  const long nodeId1, const long nodeId2, const OsmMapPtr& map) const
 {
   // can add various filtering criteria here for debugging purposes...
 

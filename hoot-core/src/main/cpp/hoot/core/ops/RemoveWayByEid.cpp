@@ -62,7 +62,7 @@ void RemoveWayByEid::_removeWay(const OsmMapPtr& map, long wId) const
   }
 }
 
-void RemoveWayByEid::_removeWayFully(OsmMapPtr& map, long wId) const
+void RemoveWayByEid::_removeWayFully(const OsmMapPtr& map, long wId) const
 {
   // copy the set because we may modify it later.
   set<long> rid =

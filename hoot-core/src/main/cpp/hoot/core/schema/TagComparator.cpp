@@ -77,7 +77,7 @@ void TagComparator::_addDefaults(Tags& t) const
 
 void TagComparator::_addNonConflictingTags(Tags& t1, const Tags& t2, Tags& result) const
 {
-  OsmSchema& schema = OsmSchema::getInstance();
+  const OsmSchema& schema = OsmSchema::getInstance();
 
   // we're deleting as we iterate so be careful making changes.
   for (Tags::iterator it1 = t1.begin(); it1 != t1.end(); )
@@ -116,7 +116,7 @@ void TagComparator::averageTags(const Tags& t1In, double w1, const Tags& t2In, d
                                 Tags& result, bool keepAllUnknownTags, bool caseSensitive)
 {
   result.clear();
-  OsmSchema& schema = OsmSchema::getInstance();
+  const OsmSchema& schema = OsmSchema::getInstance();
 
   Tags t1 = t1In;
   Tags t2 = t2In;
@@ -189,7 +189,7 @@ void TagComparator::averageTags(const Tags& t1In, double w1, const Tags& t2In, d
 void TagComparator::compareEnumeratedTags(
   Tags t1, Tags t2, double& score, double& weight) const
 {
-  OsmSchema& schema = OsmSchema::getInstance();
+  const OsmSchema& schema = OsmSchema::getInstance();
   score = 1.0;
   weight = 0;
 
@@ -275,7 +275,7 @@ void TagComparator::compareEnumeratedTags(
 
 void TagComparator::compareTextTags(const Tags& t1, const Tags& t2, double& score, double& weight) const
 {
-  OsmSchema& schema = OsmSchema::getInstance();
+  const OsmSchema& schema = OsmSchema::getInstance();
 
   score = 1.0;
   weight = 0.0;
@@ -497,7 +497,7 @@ Tags TagComparator::generalize(Tags t1, Tags t2, bool overwriteUnrecognizedTags,
 
 void TagComparator::_mergeExactMatches(Tags& t1, Tags& t2, Tags& result) const
 {
-  OsmSchema& schema = OsmSchema::getInstance();
+  const OsmSchema& schema = OsmSchema::getInstance();
 
   Tags t1Copy = t1;
   for (Tags::ConstIterator it1 = t1Copy.begin(); it1 != t1Copy.end(); ++it1)
@@ -637,7 +637,7 @@ void TagComparator::mergeText(Tags& t1, Tags& t2, Tags& result,
   LOG_TRACE("Merging text...");
   LOG_VART(t1);
   LOG_VART(t2);
-  OsmSchema& schema = OsmSchema::getInstance();
+  const OsmSchema& schema = OsmSchema::getInstance();
 
   const Tags t1Copy = t1;
   for (Tags::ConstIterator it1 = t1Copy.begin(); it1 != t1Copy.end(); ++it1)
@@ -687,7 +687,7 @@ void TagComparator::mergeText(Tags& t1, Tags& t2, Tags& result,
 
 void TagComparator::_mergeUnrecognizedTags(Tags& t1, Tags& t2, Tags& result)
 {
-  OsmSchema& schema = OsmSchema::getInstance();
+  const OsmSchema& schema = OsmSchema::getInstance();
 
   const Tags t1Copy = t1;
   for (Tags::ConstIterator it1 = t1Copy.begin(); it1 != t1Copy.end(); ++it1)
@@ -839,7 +839,7 @@ void TagComparator::_overwriteRemainingTags(Tags& t1, Tags& t2, Tags& result,
 
 void TagComparator::_overwriteUnrecognizedTags(Tags& t1, Tags& t2, Tags& result) const
 {
-  OsmSchema& schema = OsmSchema::getInstance();
+  const OsmSchema& schema = OsmSchema::getInstance();
 
   const Tags t1Copy = t1;
   for (Tags::ConstIterator it1 = t1Copy.begin(); it1 != t1Copy.end(); ++it1)
@@ -873,7 +873,7 @@ void TagComparator::_overwriteUnrecognizedTags(Tags& t1, Tags& t2, Tags& result)
 
 void TagComparator::_promoteToCommonAncestor(Tags& t1, Tags& t2, Tags& result) const
 {
-  OsmSchema& schema = OsmSchema::getInstance();
+  const OsmSchema& schema = OsmSchema::getInstance();
 
   // we're deleting as we iterate so be careful making changes.
   for (Tags::iterator it1 = t1.begin(); it1 != t1.end(); )

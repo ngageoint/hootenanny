@@ -80,7 +80,7 @@ Tags BuildingRelationMemberTagMerger::mergeTags(
   LOG_VART(mergedTags);
 
   // go through all the tags
-  OsmSchema& schema = OsmSchema::getInstance();
+  const OsmSchema& schema = OsmSchema::getInstance();
   for (Tags::const_iterator it = constituentBuildingTags.begin();
        it != constituentBuildingTags.end(); ++it)
   {

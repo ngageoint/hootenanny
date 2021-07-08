@@ -87,7 +87,7 @@ void JsonOsmSchemaLoader::load(QString path, OsmSchema& s)
       }
       _processObject(l[i].toMap(), s);
     }
-    catch(HootException& e)
+    catch(const HootException& e)
     {
       throw HootException(QString("Error processing '%1' in object '%2'. %3").
         arg(path).arg(toJson(toV8(l[i]))).arg(e.getWhat()));
@@ -243,7 +243,7 @@ void JsonOsmSchemaLoader::_loadBase(QVariantMap& copy, const OsmSchema& s, Schem
   }
 }
 
-void JsonOsmSchemaLoader::_loadCompound(const QVariantMap& v, OsmSchema& s) const
+void JsonOsmSchemaLoader::_loadCompound(const QVariantMap& v, const OsmSchema& s) const
 {
   QVariantMap copy;
   // copy all the non-comments
@@ -435,7 +435,7 @@ void JsonOsmSchemaLoader::_loadSimilarTo(
   }
 }
 
-void JsonOsmSchemaLoader::_loadTag(const QVariantMap& v, OsmSchema& s) const
+void JsonOsmSchemaLoader::_loadTag(const QVariantMap& v, const OsmSchema& s) const
 {
   QVariantMap copy;
   // copy all the non-comments

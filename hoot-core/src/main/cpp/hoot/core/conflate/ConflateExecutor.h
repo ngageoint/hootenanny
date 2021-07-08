@@ -121,14 +121,14 @@ private:
   float _getJobPercentComplete(const int currentTaskNum) const;
   float _getTaskWeight() const;
 
-  void _load(const QString& input1, const QString& input2, OsmMapPtr& map,
-             const bool isChangesetOut);
+  void _load(
+    const QString& input1, const QString& input2, const OsmMapPtr& map, const bool isChangesetOut);
 
   void _runConflate(OsmMapPtr& map);
 
   void _runConflateOps(OsmMapPtr& map, const bool runPre);
 
-  void _writeOutput(const OsmMapPtr& map, QString& output, const bool isChangesetOutput);
+  void _writeOutput(const OsmMapPtr& map, const QString& output, const bool isChangesetOutput);
   void _writeStats(const OsmMapPtr& map, const CalculateStatsOp& input1Cso,
                    const CalculateStatsOp& input2Cso, const QString& outputFileName);
   void _writeChangesetStats();

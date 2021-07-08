@@ -178,8 +178,8 @@ NodeMatcherPtr LegacyVertexMatcher::_getNodeMatcher()
   return _nodeMatcher;
 }
 
-void LegacyVertexMatcher::identifyVertexMatches(ConstOsmNetworkPtr n1, ConstOsmNetworkPtr n2,
-  SearchRadiusProvider& srp)
+void LegacyVertexMatcher::identifyVertexMatches(
+  ConstOsmNetworkPtr n1, ConstOsmNetworkPtr n2, const SearchRadiusProvider& srp)
 {
   LOG_DEBUG("Identifying vertex matches...");
 

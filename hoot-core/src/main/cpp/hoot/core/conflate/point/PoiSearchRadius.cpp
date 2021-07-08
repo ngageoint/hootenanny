@@ -72,7 +72,7 @@ QList<PoiSearchRadius> PoiSearchRadius::readSearchRadii(const QString& jsonStrin
     {
       boost::property_tree::read_json(jsonStringOrFile.toStdString(), *propTree);
     }
-    catch (boost::property_tree::json_parser::json_parser_error& e)
+    catch (const boost::property_tree::json_parser::json_parser_error& e)
     {
       throw HootException(
         QString("Error parsing JSON: %1 (line %2)")
@@ -88,7 +88,7 @@ QList<PoiSearchRadius> PoiSearchRadius::readSearchRadii(const QString& jsonStrin
 
   QList<PoiSearchRadius> radii;
 
-  for (boost::property_tree::ptree::value_type& distProp : propTree->get_child("search_radii"))
+  for (const boost::property_tree::ptree::value_type& distProp : propTree->get_child("search_radii"))
   {
     const QString key =
       QString::fromStdString(distProp.second.get<std::string>("key", "")).trimmed();
