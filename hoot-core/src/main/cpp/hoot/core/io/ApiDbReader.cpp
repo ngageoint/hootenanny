@@ -89,7 +89,7 @@ void ApiDbReader::setOverrideBoundingBox(const QString& bbox)
 
 void ApiDbReader::initializePartial()
 {
-  _partialMap.reset(new OsmMap());
+  _partialMap = std::make_shared<OsmMap>();
 
   _firstPartialReadCompleted = false;
   _elementsRead = 0;

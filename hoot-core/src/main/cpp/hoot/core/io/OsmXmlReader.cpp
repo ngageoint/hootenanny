@@ -1019,7 +1019,7 @@ bool OsmXmlReader::hasMoreElements()
     finalizePartial();
     //map needed for assigning new element ids only (not actually putting any of the elements that
     //are read into this map, since this is the partial reading logic)
-    _map.reset(new OsmMap());
+    _map = std::make_shared<OsmMap>();
 
     if (_url.endsWith(".osm.bz2") || _url.endsWith(".osm.gz"))
     {

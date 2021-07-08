@@ -117,7 +117,7 @@ public:
     }
     else
     {
-      input2Map.reset(new OsmMap());
+      input2Map = std::make_shared<OsmMap>();
       IoUtils::loadMap(input2Map, input2, true, Status::Unknown2);
       input2Map->setName("map2");
 

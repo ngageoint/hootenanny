@@ -181,8 +181,8 @@ void ChangesetCreator::create(const QString& output, const QString& input1, cons
     // use memory bound sorting.
 
     // read both inputs completely
-    OsmMapPtr map1(new OsmMap());
-    OsmMapPtr map2(new OsmMap());
+    OsmMapPtr map1 = std::make_shared<OsmMap>();
+    OsmMapPtr map2 = std::make_shared<OsmMap>();
     _readInputsFully(input1, input2, map1, map2, progress);
     _map1List.append(map1);
     _map2List.append(map2);
@@ -270,8 +270,8 @@ void ChangesetCreator::create(
 
     if (!_includeReviews)
     {
-      std::shared_ptr<TagKeyCriterion> elementCriterion(
-        new TagKeyCriterion(MetadataTags::HootReviewNeeds()));
+      std::shared_ptr<TagKeyCriterion> elementCriterion =
+        std::make_shared<TagKeyCriterion>(MetadataTags::HootReviewNeeds());
       RemoveElementsVisitor removeElementsVisitor;
       removeElementsVisitor.setRecursive(false);
       removeElementsVisitor.addCriterion(elementCriterion);
@@ -360,7 +360,7 @@ void ChangesetCreator::_handleUnstreamableConvertOpsInMemory(
 
   progress.set(
     (float)(_currentTaskNum - 1) / (float)_numTotalTasks, "Reading entire input ...");
-  OsmMapPtr fullMap(new OsmMap());
+  OsmMapPtr fullMap = std::make_shared<OsmMap>();
   if (!_singleInput)
   {
     // We must preserve the original element IDs while loading in order for changeset derivation
@@ -374,7 +374,7 @@ void ChangesetCreator::_handleUnstreamableConvertOpsInMemory(
 
     // append the second map onto the first one
 
-    OsmMapPtr tmpMap(new OsmMap());
+    OsmMapPtr tmpMap = std::make_shared<OsmMap>();
     IoUtils::loadMap(tmpMap, input2, true, Status::Unknown2);
     OsmMapWriterFactory::writeDebugMap(
       tmpMap, className(), "after-initial-read-unstreamable-sec-map");

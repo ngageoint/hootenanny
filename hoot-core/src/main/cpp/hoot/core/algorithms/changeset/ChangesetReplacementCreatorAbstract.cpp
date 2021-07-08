@@ -247,7 +247,7 @@ OsmMapPtr ChangesetReplacementCreatorAbstract::_loadInputMap(
     // automatically for us without reading all of the source data in.
     LOG_STATUS(
       "Loading " << mapName << " map from: ..." << FileUtils::toLogFormat(inputUrl, _maxFilePrintLength) << "...");
-    map.reset(new OsmMap());
+    map = std::make_shared<OsmMap>();
     IoUtils::loadMap(map, inputUrl, useFileIds, status);
   }
   else
@@ -265,7 +265,7 @@ OsmMapPtr ChangesetReplacementCreatorAbstract::_loadInputMap(
       conf().set(ConfigOptions::getBoundsKey(), "");
 
       LOG_STATUS("Loading map from: ..." << FileUtils::toLogFormat(inputUrl, _maxFilePrintLength) << "...");
-      cachedMap.reset(new OsmMap());
+      cachedMap = std::make_shared<OsmMap>();
       cachedMap->setName(mapName);
       IoUtils::loadMap(cachedMap, inputUrl, useFileIds, status);
       // Restore it back to original.

@@ -208,7 +208,7 @@ public:
   OgrElementIterator(OgrReaderInternal* d)
   {
     _d = d;
-    _map.reset(new OsmMap());
+    _map = std::make_shared<OsmMap>();
   }
 
   ~OgrElementIterator()
@@ -1326,7 +1326,7 @@ void OgrReaderInternal::_translate(Tags& t)
 
 void OgrReaderInternal::initializePartial()
 {
-  _map.reset(new OsmMap());
+  _map = std::make_shared<OsmMap>();
   _nodesItr = _map->getNodes().begin();
   _waysItr =  _map->getWays().begin();
   _relationsItr = _map->getRelations().begin();

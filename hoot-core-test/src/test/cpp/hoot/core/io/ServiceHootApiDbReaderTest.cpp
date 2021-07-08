@@ -490,7 +490,7 @@ public:
 
     //2 nodes, 1 way
 
-    map.reset(new OsmMap());
+    map = std::make_shared<OsmMap>();
     CPPUNIT_ASSERT(reader.hasMoreElements());
     reader.readPartial(map);
     CPPUNIT_ASSERT_EQUAL(2, (int)map->getNodes().size());
@@ -530,7 +530,7 @@ public:
 
     //2 ways, 1 relation
 
-    map.reset(new OsmMap());
+    map = std::make_shared<OsmMap>();
     CPPUNIT_ASSERT(reader.hasMoreElements());
     reader.readPartial(map);
     CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodes().size());
@@ -577,7 +577,7 @@ public:
 
     //1 relation
 
-    map.reset(new OsmMap());
+    map = std::make_shared<OsmMap>();
     CPPUNIT_ASSERT(reader.hasMoreElements());
     reader.readPartial(map);
     CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodes().size());
@@ -648,7 +648,7 @@ public:
     //just want to make sure I can read against the same data twice in a row w/o crashing and also
     //make sure I don't get the same result again for a different bounds
     reader.setBoundingBox("-1,-1,1,1");
-    map.reset(new OsmMap());
+    map = std::make_shared<OsmMap>();
     reader.read(map);
 
     CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodes().size());
@@ -783,7 +783,7 @@ public:
 
     // Configure the reader for the second user, and we should be able to read out the map as well.
     LOG_DEBUG("Reading second map with second user...");
-    map.reset(new OsmMap());
+    map = std::make_shared<OsmMap>();
     reader.setUserEmail(differentUserEmail);
     reader.open(url);
     reader.read(map);
@@ -844,7 +844,7 @@ public:
 
     // Configure the reader for the second user, and we should be able to read out the map as well.
     LOG_DEBUG("Reading second map with second user...");
-    map.reset(new OsmMap());
+    map = std::make_shared<OsmMap>();
     reader.setUserEmail(differentUserEmail);
     reader.open(url);
     reader.read(map);
@@ -976,7 +976,7 @@ public:
     //just want to make sure I can read against the same data twice in a row w/o crashing and also
     //make sure I don't get the same result again for a different bounds
     reader.setBoundingBox("-1,-1,1,1");
-    map.reset(new OsmMap());
+    map = std::make_shared<OsmMap>();
     reader.read(map);
 
     CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodes().size());

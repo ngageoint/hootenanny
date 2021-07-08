@@ -51,7 +51,7 @@ FrechetDistance::FrechetDistance(const ConstOsmMapPtr &map, const ConstWayPtr &w
   : _matrix(boost::extents[way1->getNodeCount()][way2->getNodeCount()]), _maxAngle(maxAngle)
 {
   //  Copy the map and two ways
-  _map.reset(new OsmMap());
+  _map = std::make_shared<OsmMap>();
   CopyMapSubsetOp(map,
                way1->getElementId(),
                way2->getElementId()).apply(_map);

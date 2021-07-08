@@ -665,7 +665,7 @@ void WayJoinerAdvanced::_joinUnsplitWaysAtNode()
 
             // Since this is basically an unmarked, non-oneway road, let's check both the regular
             // and reversed versions of the way we want to join.
-            WayPtr reversedWayToJoinCopy(new Way(*wayToJoin));
+            WayPtr reversedWayToJoinCopy = std::make_shared<Way>(*wayToJoin);
             reversedWayToJoinCopy->reverseOrder();
 
             if (!roadVal.isEmpty() && roadVal != "road" && connectedWay->getTags().hasName() &&

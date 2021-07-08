@@ -159,7 +159,7 @@ void RelationWithMostMembersOp::apply(std::shared_ptr<OsmMap>& map)
   else
   {
     // output an empty map since we didn't find a relation that satisifes the criteria
-    map.reset(new OsmMap());
+    map = std::make_shared<OsmMap>();
   }
   LOG_VARD(map->getElementCount());
 }

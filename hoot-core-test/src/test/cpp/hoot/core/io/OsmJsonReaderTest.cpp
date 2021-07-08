@@ -360,7 +360,7 @@ public:
       try
       {
         // Get clean map
-        pMap.reset(new OsmMap());
+        pMap = std::make_shared<OsmMap>();
 
         // Get Nodes
         CPPUNIT_ASSERT(uut.isSupported(urlNodes));
@@ -639,7 +639,7 @@ public:
     TestUtils::resetBasic();
     testFileName = "elementTypeUnorderedTest1.osm";
     uut.setUseDataSourceIds(true);
-    map.reset(new OsmMap());
+    map = std::make_shared<OsmMap>();
     uut.open(_inputPath + "elementTypeUnorderedTest-in.json");
     uut.read(map);
     uut.close();
@@ -651,7 +651,7 @@ public:
     TestUtils::resetBasic();
     testFileName = "elementTypeUnorderedTest2.osm";
     uut.setUseDataSourceIds(false);
-    map.reset(new OsmMap());
+    map = std::make_shared<OsmMap>();
     uut.open(_inputPath + "elementTypeUnorderedTest-in.json");
     uut.read(map);
     uut.close();
@@ -675,7 +675,7 @@ public:
     TestUtils::resetBasic();
     outputFile = "elementTypeUnorderedMissingTest1.osm";
     uut.setUseDataSourceIds(true);
-    map.reset(new OsmMap());
+    map = std::make_shared<OsmMap>();
     uut.open(_inputPath + "elementTypeUnorderedMissingTest-in.json");
     uut.read(map);
     uut.close();
@@ -687,7 +687,7 @@ public:
     TestUtils::resetBasic();
     outputFile = "elementTypeUnorderedMissingTest2.osm";
     uut.setUseDataSourceIds(false);
-    map.reset(new OsmMap());
+    map = std::make_shared<OsmMap>();
     uut.open(_inputPath + "elementTypeUnorderedMissingTest-in.json");
     uut.read(map);
     uut.close();

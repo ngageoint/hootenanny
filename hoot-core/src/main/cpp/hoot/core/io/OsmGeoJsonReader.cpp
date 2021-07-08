@@ -128,7 +128,7 @@ OsmMapPtr OsmGeoJsonReader::loadFromFile(const QString& path)
   QTextStream instream(&infile);
   QString jsonStr = instream.readAll();
   _loadJSON(jsonStr);
-  _map.reset(new OsmMap());
+  _map = std::make_shared<OsmMap>();
   _parseGeoJson();
   return _map;
 }

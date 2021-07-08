@@ -116,7 +116,7 @@ public:
     HOOT_FILE_EQUALS(_inputPath + "runRemoveSharedNodeTest-removed.osm", outputFile);
 
     uut.setRemoveNodesSharedByWays(false);
-    map.reset(new OsmMap());
+    map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(map, _inputPath + "runRemoveSharedNodeTest.osm");
     map->visitRw(uut);
 

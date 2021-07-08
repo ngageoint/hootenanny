@@ -226,7 +226,7 @@ public:
     uut.setBounds(bounds);
 
     // regular crop output
-    map.reset(new OsmMap());
+    map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(map, "test-files/ToyTestA.osm");
     uut.setInvert(false);
     uut.setKeepEntireFeaturesCrossingBounds(false);
@@ -238,7 +238,7 @@ public:
     HOOT_FILE_EQUALS(_inputPath + "/" + testFileName, _outputPath + "/" + testFileName);
 
     // only one way remains since it was the only one completely inside the bounds
-    map.reset(new OsmMap());
+    map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(map, "test-files/ToyTestA.osm");
     uut.setInvert(false);
     uut.setKeepEntireFeaturesCrossingBounds(false);
@@ -265,7 +265,7 @@ public:
 
     // setting invert to true negates the keep only features inside bounds setting;
     // so output looks like regular inverted crop output
-    map.reset(new OsmMap());
+    map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(map, "test-files/ToyTestA.osm");
     uut.setInvert(true);
     uut.setKeepEntireFeaturesCrossingBounds(false);
@@ -290,7 +290,7 @@ public:
     uut.setBounds(bounds);
 
     // regular crop output
-    map.reset(new OsmMap());
+    map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(map, "test-files/ToyTestA.osm");
     uut.setInvert(false);
     uut.setKeepOnlyFeaturesInsideBounds(false);
@@ -302,7 +302,7 @@ public:
     HOOT_FILE_EQUALS(_inputPath + "/" + testFileName, _outputPath + "/" + testFileName);
 
     // should end up with all features
-    map.reset(new OsmMap());
+    map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(map, "test-files/ToyTestA.osm");
     uut.setInvert(false);
     uut.setKeepOnlyFeaturesInsideBounds(false);
@@ -329,7 +329,7 @@ public:
 
     // setting invert to true negates the keep entire features crossing bounds setting; so output
     // looks like regular inverted crop output
-    map.reset(new OsmMap());
+    map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(map, "test-files/ToyTestA.osm");
     uut.setInvert(true);
     uut.setKeepOnlyFeaturesInsideBounds(false);
@@ -354,7 +354,7 @@ public:
     uut.setBounds(bounds);
 
     // should end up with everything inside of the bounds
-    map.reset(new OsmMap());
+    map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(map, "test-files/ToyTestA.osm");
     uut.setInvert(false);
     uut.setKeepOnlyFeaturesInsideBounds(false);
@@ -366,7 +366,7 @@ public:
     HOOT_FILE_EQUALS(_inputPath + "/" + testFileName, _outputPath + "/" + testFileName);
 
     // should end up with everything outside of the bounds
-    map.reset(new OsmMap());
+    map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(map, "test-files/ToyTestA.osm");
     uut.setInvert(true);
     uut.setKeepOnlyFeaturesInsideBounds(false);
@@ -390,7 +390,7 @@ public:
 
     MapCropper uut;
     uut.setBounds(bounds);
-    map.reset(new OsmMap());
+    map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map, "test-files/ops/ImmediatelyConnectedOutOfBoundsWayTagger/in.osm", true);
     uut.setInvert(false);

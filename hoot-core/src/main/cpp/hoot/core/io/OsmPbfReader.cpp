@@ -1253,7 +1253,7 @@ void OsmPbfReader::initializePartial()
 {
   _permissive = true;
 
-  _map.reset(new OsmMap());
+  _map = std::make_shared<OsmMap>();
   _blobIndex = 0;
 
   _elementsRead = 0;

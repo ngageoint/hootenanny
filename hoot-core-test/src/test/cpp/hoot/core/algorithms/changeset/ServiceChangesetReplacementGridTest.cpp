@@ -1473,7 +1473,7 @@ private:
       }
     }
 
-    map.reset(new OsmMap());
+    map = std::make_shared<OsmMap>();
     // TODO: replace the string truncation lengths with getProgressVarPrintLengthMax
     LOG_STATUS("Reading the data to replace from: ..." << FileUtils::toLogFormat(input, 25) << "...");
     OsmMapReaderFactory::read(map, input, true, Status::Unknown1);

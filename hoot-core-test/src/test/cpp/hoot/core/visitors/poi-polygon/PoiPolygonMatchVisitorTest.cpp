@@ -96,7 +96,7 @@ public:
         map->getWay(ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "name", "foo")[0])));
 
     OsmXmlReader reader;
-    map.reset(new OsmMap());
+    map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(_inputPath + "ToyTestA.osm", map);
     MapProjector::projectToPlanar(map);

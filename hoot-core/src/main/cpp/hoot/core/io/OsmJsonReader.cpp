@@ -327,7 +327,7 @@ void OsmJsonReader::loadFromString(const QString& jsonStr, const OsmMapPtr &map)
 OsmMapPtr OsmJsonReader::loadFromPtree(const boost::property_tree::ptree &tree)
 {
   _propTree = tree;
-  _map.reset(new OsmMap());
+  _map = std::make_shared<OsmMap>();
   _readToMap();
   return _map;
 }
@@ -343,7 +343,7 @@ OsmMapPtr OsmJsonReader::loadFromFile(const QString& path)
   QTextStream instream(&infile);
   QString jsonStr = instream.readAll();
   _loadJSON(jsonStr);
-  _map.reset(new OsmMap());
+  _map = std::make_shared<OsmMap>();
   _readToMap();
   return _map;
 }
