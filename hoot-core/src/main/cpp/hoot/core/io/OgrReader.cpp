@@ -297,29 +297,30 @@ std::shared_ptr<OGRSpatialReference> OgrReaderInternal::_fixProjection(
     return result;
   }
 
+  //  Cannot fix a null projection
+  if (!srs)
+    return srs;
+
   // proj4 requires some extra parameters to handle Google map style projections. Check for this
   // situation for known EPSGs and warn/fix the issue.
   result.reset(new OGRSpatialReference());
   result->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
   result->importFromEPSG(3785);
-  if (srs && result->IsSame(srs.get()) &&
-    _toWkt(result.get()) != _toWkt(srs.get()))
+  if (result->IsSame(srs.get()) && _toWkt(result.get()) != _toWkt(srs.get()))
   {
     LOG_WARN("Overriding input projection with proj4 compatible EPSG:3785. See this for details: https://trac.osgeo.org/proj/wiki/FAQ#ChangingEllipsoidWhycantIconvertfromWGS84toGoogleEarthVirtualGlobeMercator");
     return result;
   }
 
   result->importFromEPSG(900913);
-  if (srs && result->IsSame(srs.get()) &&
-    _toWkt(result.get()) != _toWkt(srs.get()))
+  if (result->IsSame(srs.get()) && _toWkt(result.get()) != _toWkt(srs.get()))
   {
     LOG_WARN("Overriding input projection with proj4 compatible EPSG:900913. See this for details: https://trac.osgeo.org/proj/wiki/FAQ#ChangingEllipsoidWhycantIconvertfromWGS84toGoogleEarthVirtualGlobeMercator");
     return result;
   }
 
   result->importFromEPSG(3857);
-  if (srs && result->IsSame(srs.get()) &&
-    _toWkt(result.get()) != _toWkt(srs.get()))
+  if (result->IsSame(srs.get()) && _toWkt(result.get()) != _toWkt(srs.get()))
   {
     LOG_WARN(
       "Overriding input projection with proj4 compatible EPSG:3857. See this for details: https://trac.osgeo.org/proj/wiki/FAQ#ChangingEllipsoidWhycantIconvertfromWGS84toGoogleEarthVirtualGlobeMercator");
@@ -331,12 +332,20 @@ std::shared_ptr<OGRSpatialReference> OgrReaderInternal::_fixProjection(
   const char* wkt3857 =
     "PROJCS[\"WGS_1984_Web_Mercator_Auxiliary_Sphere\",GEOGCS[\"GCS_WGS_1984\",DATUM[\"WGS_1984\",SPHEROID[\"WGS_84\",6378137.0,298.257223563]],PRIMEM[\"Greenwich\",0.0],UNIT[\"Degree\",0.0174532925199433]],PROJECTION[\"Mercator_Auxiliary_Sphere\"],PARAMETER[\"False_Easting\",0.0],PARAMETER[\"False_Northing\",0.0],PARAMETER[\"Central_Meridian\",0.0],PARAMETER[\"Standard_Parallel_1\",0.0],PARAMETER[\"Auxiliary_Sphere_Type\",0.0],UNIT[\"Meter\",1.0],AUTHORITY[\"EPSG\",\"3857\"]]";
   result->importFromWkt((const char**)&wkt3857);
-  if (srs && result->IsSame(srs.get()))
+  if (result->IsSame(srs.get()))
   {
     LOG_WARN(
       "Overriding input projection with proj4 compatible EPSG:3857. See this for details: https://trac.osgeo.org/proj/wiki/FAQ#ChangingEllipsoidWhycantIconvertfromWGS84toGoogleEarthVirtualGlobeMercator");
     result->importFromEPSG(3857);
     return result;
+  }
+
+  //  TODO: Fix the crash when using NAD83/Maryland i.e. EPSG:2248
+  if (srs->GetEPSGGeogCS() == 4269 && MapProjector::toWkt(srs).contains("NAD83 / Maryland"))
+  {
+    LOG_WARN(
+      "Overriding input projection NAD83 / Maryland with WGS84")
+    return MapProjector::createWgs84Projection();
   }
 
   result = srs;
@@ -1088,12 +1097,7 @@ void OgrReaderInternal::_openLayer(const QString& path, const QString& layer)
   if (sourceSrs.get() != nullptr && sourceSrs->IsProjected())
   {
     LOG_DEBUG("Input SRS: " << _toWkt(sourceSrs.get()));
-    _wgs84.reset(new OGRSpatialReference());
-    _wgs84->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
-    if (_wgs84->SetWellKnownGeogCS("WGS84") != OGRERR_NONE)
-    {
-      throw HootException("Error creating EPSG:4326 projection.");
-    }
+    _wgs84 = MapProjector::createWgs84Projection();
     _transform = OGRCreateCoordinateTransformation(sourceSrs.get(), _wgs84.get());
 
     if (_transform == nullptr)
@@ -1406,13 +1410,7 @@ void OgrReaderInternal::populateElementMap()
 
 std::shared_ptr<OGRSpatialReference> OgrReaderInternal::getProjection() const
 {
-  std::shared_ptr<OGRSpatialReference> wgs84(new OGRSpatialReference());
-  wgs84->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
-  if (wgs84->SetWellKnownGeogCS("WGS84") != OGRERR_NONE)
-  {
-    throw HootException("Error creating EPSG:4326 projection.");
-  }
-  return wgs84;
+  return MapProjector::createWgs84Projection();
 }
 
 QString OgrReaderInternal::_toWkt(OGRSpatialReference* srs)
