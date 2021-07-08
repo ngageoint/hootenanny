@@ -372,7 +372,7 @@ namespace Tgs
     }
   }
 
-  void DataFrame::exportData(std::ostream & fileStream) const
+  void DataFrame::exportData(std::ostream& fileStream) const
   {
     try
     {
@@ -389,8 +389,8 @@ namespace Tgs
     }
   }
 
-  void DataFrame::getClassPopulations(const std::vector<unsigned int> & indices, 
-    HashMap<std::string, int>& populations)
+  void DataFrame::getClassPopulations(
+    const std::vector<unsigned int>& indices, HashMap<std::string, int>& populations) const
   {
     try
     {
@@ -636,7 +636,7 @@ namespace Tgs
     }
   }
 
-  void DataFrame::import(QDomElement & e)
+  void DataFrame::import(const QDomElement & e)
   {
     try
     {
@@ -689,7 +689,7 @@ namespace Tgs
     }
   }
 
-  bool DataFrame::isDataSetPure(std::vector<unsigned int> & indices)
+  bool DataFrame::isDataSetPure(const std::vector<unsigned int>& indices)
   {
     try
     {
@@ -1317,7 +1317,7 @@ namespace Tgs
     return s;
   }
 
-  void DataFrame::_importDataVector(QDomElement & e)
+  void DataFrame::_importDataVector(const QDomElement & e)
   {
     try
     {

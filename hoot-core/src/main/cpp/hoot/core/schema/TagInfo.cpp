@@ -354,7 +354,7 @@ void TagInfo::_parseElement(const ConstElementPtr& e, TagInfoHash& result) const
   }
 }
 
-QString TagInfo::_printDelimitedText(TagInfoHash& data) const
+QString TagInfo::_printDelimitedText(const TagInfoHash& data) const
 {
   assert(_keysOnly);
 

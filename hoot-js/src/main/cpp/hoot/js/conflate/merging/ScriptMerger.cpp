@@ -50,8 +50,9 @@ HOOT_FACTORY_REGISTER(Merger, ScriptMerger)
 
 int ScriptMerger::logWarnCount = 0;
 
-ScriptMerger::ScriptMerger(const std::shared_ptr<PluginContext>& script, Persistent<Object>& plugin,
-                           const set<pair<ElementId, ElementId>>& pairs) :
+ScriptMerger::ScriptMerger(
+  const std::shared_ptr<PluginContext>& script, const Persistent<Object>& plugin,
+  const set<pair<ElementId, ElementId>>& pairs) :
 MergerBase(pairs),
 _script(script)
 {

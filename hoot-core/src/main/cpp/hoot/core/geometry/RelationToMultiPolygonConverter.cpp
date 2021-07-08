@@ -237,8 +237,8 @@ std::shared_ptr<Geometry> RelationToMultiPolygonConverter::createMultipolygon() 
   return result;
 }
 
-QString RelationToMultiPolygonConverter::_findRelationship(LinearRing* ring1,
-                                                           LinearRing* ring2) const
+QString RelationToMultiPolygonConverter::_findRelationship(
+  const LinearRing* ring1, const LinearRing* ring2) const
 {
   QString result = "";
 
@@ -534,7 +534,7 @@ void RelationToMultiPolygonConverter::_createSingleRing(
   }
 }
 
-bool RelationToMultiPolygonConverter::_isValidInner(LinearRing* innerRing) const
+bool RelationToMultiPolygonConverter::_isValidInner(const LinearRing* innerRing) const
 {
   if (innerRing->getNumPoints() > 0 && innerRing->getNumPoints() < 4)
   {

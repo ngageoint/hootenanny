@@ -189,7 +189,7 @@ namespace Tgs
     * 2 = Binary 1 to All, 3 = Round Robin class to class)
     * @param factorLabels the list of factor labels (order in parallel with data vector use)
     */
-    void init(unsigned int modelMethod, std::vector<std::string> & factorLabels);
+    void init(unsigned int modelMethod, const std::vector<std::string>& factorLabels);
 
     /**
      * @brief replaceMissingData
@@ -218,7 +218,7 @@ namespace Tgs
     *
     * @param factorLabels the list of factor labels
     */
-    void setFactorLabels(std::vector<std::string>& factorLabels) const;
+    void setFactorLabels(const std::vector<std::string>& factorLabels) const;
 
     /**
      * @brief toXml converts the model to an XML formatted string

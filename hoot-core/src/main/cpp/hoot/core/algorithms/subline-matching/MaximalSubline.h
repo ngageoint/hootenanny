@@ -202,7 +202,6 @@ private:
    */
   WayLocation _calculateEndWayLocation(const ConstOsmMapPtr &map, const ConstWayPtr& a,
     const ConstWayPtr& b, int indexA, int indexB) const;
-
   /**
    * Determines the start of the way location in way a. The way location will start in the line
    * segment specified by index.
@@ -210,7 +209,6 @@ private:
    */
   WayLocation _calculateStartWayLocation(const ConstOsmMapPtr& map, const ConstWayPtr& a,
     const ConstWayPtr& b, int indexA, int indexB) const;
-
   void _calculateSublineScores(const ConstOsmMapPtr& map, const ConstWayPtr& w1,
     const ConstWayPtr& w2, Sparse2dMatrix &scores) const;
 
@@ -222,15 +220,12 @@ private:
 
   std::vector<WaySublineMatch> _findBestMatches(const ConstOsmMapPtr& map, const ConstWayPtr& w1,
     const ConstWayPtr& w2, Sparse2dMatrix& sublineMatrix, double& bestScore);
-
   double _findBestMatchesRecursive(std::vector<WaySublineMatch>& candidates,
                                    std::vector<bool>& keepers, size_t offset);
-
   /**
    * Find the ends of all the subline matches.
    */
-  std::vector<Sparse2dCellId> _findEndMatches(Sparse2dMatrix& sublines) const;
-
+  std::vector<Sparse2dCellId> _findEndMatches(const Sparse2dMatrix& sublines) const;
   /**
    * Finds the starting location for the given end match location.
    */

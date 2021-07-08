@@ -158,7 +158,7 @@ private:
    * @param reply Network reply object
    * @return HTTP response code as an integer instead of a string
    */
-  int _getHttpResponseCode(QNetworkReply* reply) const;
+  int _getHttpResponseCode(const QNetworkReply* reply) const;
   /**
    * @brief _setOAuthHeader Sets the "Authorize: OAuth" HTTP header for the specific request
    * @param http_op OAuth signatures are based off of the HTTP operation type (GET/PUT/POST)

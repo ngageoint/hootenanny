@@ -66,7 +66,7 @@ bool MapUtils::mapIsPointsOnly(const OsmMapPtr& map)
       ElementVisitorPtr(new ElementCountVisitor()), map) == (int)map->getElementCount();
 }
 
-void MapUtils::combineMaps(OsmMapPtr& map1, OsmMapPtr& map2, const bool throwOutDupes)
+void MapUtils::combineMaps(const OsmMapPtr& map1, const OsmMapPtr& map2, const bool throwOutDupes)
 {
   LOG_VART(map1.get());
   LOG_VART(map2.get());

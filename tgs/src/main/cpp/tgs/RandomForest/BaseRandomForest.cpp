@@ -61,8 +61,8 @@ namespace Tgs
     }
   }
 
-  void BaseRandomForest::classifyVector(std::vector<double>& dataVector,
-    std::map<std::string, double>& scores) const
+  void BaseRandomForest::classifyVector(
+    const std::vector<double>& dataVector, std::map<std::string, double>& scores) const
   {
     try
     {
@@ -263,7 +263,7 @@ namespace Tgs
     }
   }
 
-  void BaseRandomForest::importModel(QDomElement & e)
+  void BaseRandomForest::importModel(const QDomElement & e)
   {
     try
     {

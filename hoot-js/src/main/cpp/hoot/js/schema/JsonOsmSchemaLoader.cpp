@@ -155,7 +155,7 @@ QStringList JsonOsmSchemaLoader::_asStringList(const QVariant& v) const
 }
 
 void JsonOsmSchemaLoader::_loadAssociatedWith(
-  SchemaVertex& tv, const QVariant& v, OsmSchema& s) const
+  const SchemaVertex& tv, const QVariant& v, const OsmSchema& s) const
 {
   if (v.type() != QVariant::List)
   {
@@ -172,7 +172,7 @@ void JsonOsmSchemaLoader::_loadAssociatedWith(
   }
 }
 
-void JsonOsmSchemaLoader::_loadBase(QVariantMap& copy, OsmSchema& s, SchemaVertex& tv) const
+void JsonOsmSchemaLoader::_loadBase(QVariantMap& copy, const OsmSchema& s, SchemaVertex& tv) const
 {
   // we don't need this anymore
   copy.remove("objectType");
@@ -353,8 +353,8 @@ void JsonOsmSchemaLoader::_loadGeometries(SchemaVertex& tv, const QVariant& v) c
   }
 }
 
-void JsonOsmSchemaLoader::_loadSimilarTo(QString fromName, const QVariant& value, OsmSchema& s)
-  const
+void JsonOsmSchemaLoader::_loadSimilarTo(
+  QString fromName, const QVariant& value, const OsmSchema& s) const
 {
   if (value.type() == QVariant::List)
   {

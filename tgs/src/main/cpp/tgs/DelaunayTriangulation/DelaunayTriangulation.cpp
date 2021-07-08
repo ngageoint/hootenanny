@@ -443,17 +443,17 @@ int ccw(const Point2d & a, const Point2d & b, const Point2d & c)
   return (TriArea2(a, b, c) > 0);
 }
 
-int RightOf(const Point2d & x, InternalEdge * e)
+int RightOf(const Point2d & x, const InternalEdge * e)
 {
   return ccw(x, e->Dest2d(), e->Org2d());
 }
 
-int LeftOf(const Point2d & x, InternalEdge * e)
+int LeftOf(const Point2d & x, const InternalEdge * e)
 {
   return ccw(x, e->Org2d(), e->Dest2d());
 }
 
-int OnEdge(const Point2d & x, InternalEdge * e)
+int OnEdge(const Point2d & x, const InternalEdge * e)
 // A predicate that determines if the point x is on the edge e.
 // The point is considered on if it is in the EPS-neighborhood
 // of the edge.
@@ -666,11 +666,6 @@ Edge& EdgeIterator::operator++()
   return _e;
 }
 
-Face::Face(Face& other)
-{
-  *this = other;
-}
-
 Face::Face(const Face& other)
 {
   *this = other;
@@ -789,7 +784,6 @@ std::string Face::toString() const
   }
   return strm.str();
 }
-
 
 FaceIterator::FaceIterator(const FaceIterator& from)
   : _it(from._it),

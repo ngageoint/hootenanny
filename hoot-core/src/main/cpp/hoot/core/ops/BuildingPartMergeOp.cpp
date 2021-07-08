@@ -71,7 +71,7 @@ void BuildingPartMergeOp::setConfiguration(const Settings& conf)
   LOG_VARD(_threadCount);
 }
 
-void BuildingPartMergeOp::_init(OsmMapPtr& map)
+void BuildingPartMergeOp::_init(const OsmMapPtr& map)
 {
   _buildingPartGroups.clear();
   _map = map;

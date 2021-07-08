@@ -506,8 +506,8 @@ namespace Tgs
     }
   }
 
-  void BaseRandomForestManager::init(unsigned int modelMethod,
-    std::vector<std::string> & factorLabels)
+  void BaseRandomForestManager::init(
+    unsigned int modelMethod, const std::vector<std::string> & factorLabels)
   {
     try
     {
@@ -579,7 +579,7 @@ namespace Tgs
     }
   }
 
-  void BaseRandomForestManager::setFactorLabels(std::vector<std::string>& factorLabels) const
+  void BaseRandomForestManager::setFactorLabels(const std::vector<std::string>& factorLabels) const
   {
     try
     {

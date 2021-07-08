@@ -122,7 +122,7 @@ void HootExceptionJs::checkV8Exception(Local<Value> result, TryCatch& tc)
   }
 }
 
-void HootExceptionJs::throwAsHootException(TryCatch& tc)
+void HootExceptionJs::throwAsHootException(const TryCatch& tc)
 {
   v8::Isolate* current = v8::Isolate::GetCurrent();
   v8::HandleScope scope(current);

@@ -933,7 +933,7 @@ void OsmPbfReader::_loadWays()
   }
 }
 
-void OsmPbfReader::parseBlob(BlobLocation& bl, istream* strm, const OsmMapPtr& map)
+void OsmPbfReader::parseBlob(const BlobLocation& bl, istream* strm, const OsmMapPtr& map)
 {
   parseBlob(bl.headerOffset, strm, map);
 }

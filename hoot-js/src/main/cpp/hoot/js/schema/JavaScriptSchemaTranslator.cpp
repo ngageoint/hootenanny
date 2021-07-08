@@ -366,7 +366,7 @@ std::shared_ptr<const Schema> JavaScriptSchemaTranslator::getOgrOutputSchema()
 }
 
 void JavaScriptSchemaTranslator::_parseEnumerations(DoubleFieldDefinition* fd,
-                                                    QVariant& enumerations)
+                                                    const QVariant& enumerations)
   const
 {
   if (enumerations.canConvert(QVariant::List) == false)
@@ -409,7 +409,7 @@ void JavaScriptSchemaTranslator::_parseEnumerations(DoubleFieldDefinition* fd,
 }
 
 void JavaScriptSchemaTranslator::_parseEnumerations(IntegerFieldDefinition *fd,
-                                                    QVariant& enumerations)
+                                                    const QVariant& enumerations)
   const
 {
   if (enumerations.canConvert(QVariant::List) == false)
@@ -452,7 +452,7 @@ void JavaScriptSchemaTranslator::_parseEnumerations(IntegerFieldDefinition *fd,
 }
 
 void JavaScriptSchemaTranslator::_parseEnumerations(LongIntegerFieldDefinition* fd,
-                                                    QVariant& enumerations)
+                                                    const QVariant& enumerations)
   const
 {
   if (enumerations.canConvert(QVariant::List) == false)

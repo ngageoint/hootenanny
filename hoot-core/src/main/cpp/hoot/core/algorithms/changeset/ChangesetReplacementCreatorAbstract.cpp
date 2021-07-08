@@ -316,7 +316,8 @@ void ChangesetReplacementCreatorAbstract::_removeMetadataTags(const OsmMapPtr& m
   LOG_DEBUG(tagRemover.getCompletedStatusMessage());
 }
 
-void ChangesetReplacementCreatorAbstract::_markElementsWithMissingChildren(OsmMapPtr& map) const
+void ChangesetReplacementCreatorAbstract::_markElementsWithMissingChildren(
+  const OsmMapPtr& map) const
 {
   ReportMissingElementsVisitor elementMarker;
   // Originally, this was going to add reviews for this rather than tagging elements, but there was
@@ -336,7 +337,7 @@ void ChangesetReplacementCreatorAbstract::_markElementsWithMissingChildren(OsmMa
 }
 
 void ChangesetReplacementCreatorAbstract::_filterFeatures(
-  OsmMapPtr& map, const ElementCriterionPtr& featureFilter,
+  const OsmMapPtr& map, const ElementCriterionPtr& featureFilter,
   const GeometryTypeCriterion::GeometryType& /*geometryType*/, const Settings& config,
   const QString& debugFileName) const
 {

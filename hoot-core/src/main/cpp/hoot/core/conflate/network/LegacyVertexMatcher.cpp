@@ -106,7 +106,7 @@ IntersectionIterator LegacyVertexMatcher::_createIterator(const Envelope& env)  
 }
 
 void LegacyVertexMatcher::_createVertexIndex(const OsmNetwork::VertexMap& vm,
-  SearchRadiusProvider& srp)
+  const SearchRadiusProvider& srp)
 {
   // No tuning was done, I just copied these settings from OsmMapIndex.
   // 10 children = 368 bytes
@@ -215,7 +215,7 @@ void LegacyVertexMatcher::identifyVertexMatches(ConstOsmNetworkPtr n1, ConstOsmN
 }
 
 bool LegacyVertexMatcher::isCandidateMatch(ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2,
-  SearchRadiusProvider& srp)
+  const SearchRadiusProvider& srp)
 {
   bool result = false;
   double score = scoreMatch(v1, v2);

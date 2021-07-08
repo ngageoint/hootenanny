@@ -45,7 +45,7 @@ public:
   static QString className() { return "hoot::NeedsReviewCriterion"; }
 
   NeedsReviewCriterion() = default;
-  NeedsReviewCriterion(ConstOsmMapPtr& map) : _map(map) { }
+  NeedsReviewCriterion(const ConstOsmMapPtr& map);
   ~NeedsReviewCriterion() = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;

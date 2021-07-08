@@ -129,8 +129,7 @@ QList<MultiaryClusterAlgorithm::ClusterLinkPtr> MultiaryHierarchicalClusterAlgor
 }
 
 void MultiaryHierarchicalClusterAlgorithm::_initializeClusters(
-  OsmMapPtr map,
-  std::set<std::pair<ElementId, ElementId>>& pairs)
+  OsmMapPtr map, const std::set<std::pair<ElementId, ElementId>>& pairs)
 {
   _clusters.clear();
   while (!_linkQueue.empty())

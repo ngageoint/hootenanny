@@ -495,7 +495,7 @@ bool MapProjector::_distanceLessThan(const MapProjector::PlanarTestResult& p1,
   return p1.distanceError < p2.distanceError;
 }
 
-size_t MapProjector::_findBestScore(vector<PlanarTestResult>& results) const
+size_t MapProjector::_findBestScore(const vector<PlanarTestResult>& results) const
 {
   vector<PlanarTestResult> orderByScore = results;
   sort(orderByScore.begin(), orderByScore.end(), _scoreLessThan);
@@ -678,7 +678,7 @@ bool MapProjector::_scoreLessThan(const MapProjector::PlanarTestResult& p1,
   return p1.score < p2.score;
 }
 
-QString MapProjector::toWkt(OGRSpatialReference* srs)
+QString MapProjector::toWkt(const OGRSpatialReference* srs)
 {
   char* wkt = nullptr;
   srs->exportToWkt(&wkt);

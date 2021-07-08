@@ -609,7 +609,8 @@ bool CalculateStatsOp::_statPassesFilter(const StatData& statData) const
     _filter.contains(statData.getFilterCriterion());
 }
 
-void CalculateStatsOp::_interpretStatData(shared_ptr<const OsmMap>& constMap, StatData& d)
+void CalculateStatsOp::_interpretStatData(
+  const shared_ptr<const OsmMap>& constMap, const StatData& d)
 {
   // Check against the applied filter to see whether this stat should be generated.
   LOG_VART(_filter);

@@ -107,7 +107,7 @@ public:
    * loading the Input1 map, and before loading the Input2 map.
    * @param map Map that should be holding only the original "Input1" elements
    */
-  void storeOriginalMap(OsmMapPtr& map);
+  void storeOriginalMap(const OsmMapPtr& map);
 
   /**
    * @brief markInputElements uniquely mark input1 elements.
@@ -133,7 +133,7 @@ public:
    * @param osmApiDbUrl specifies the target OSM API database, if SQL changeset output is specified
    */
   void writeChangeset(
-    OsmMapPtr pResultMap, QString& output, bool separateOutput,
+    OsmMapPtr pResultMap, const QString& output, bool separateOutput,
     const ChangesetStatsFormat& changesetStatsFormat =
       ChangesetStatsFormat(ChangesetStatsFormat::Unknown),
     const QString& osmApiDbUrl = "");

@@ -99,14 +99,14 @@ public:
    * @param map the map to apply the transform to
    * @return true if the operation succeeded; false otherwise
    */
-  bool applyTransform(std::shared_ptr<OsmMap>& map);
+  bool applyTransform(const std::shared_ptr<OsmMap>& map);
   /**
    * @brief calculateTransform calculates an appropriate transform for the specified map, but does
    * not change any data.
    * @param map the map to calculate the transform for
    * @return true if the operation succeeded; false otherwise
    */
-  bool calculateTransform(std::shared_ptr<OsmMap>& map);
+  bool calculateTransform(const std::shared_ptr<OsmMap>& map);
 
   /**
    * @brief readTransform1to2 reads the data necessary to perform a transform from unknown1 to

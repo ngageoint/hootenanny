@@ -59,7 +59,7 @@ FilteredVisitor::FilteredVisitor(ElementCriterionPtr criterion, ElementVisitorPt
 {
 }
 
-FilteredVisitor::FilteredVisitor(ElementCriterion* criterion, ElementVisitor* visitor) :
+FilteredVisitor::FilteredVisitor(const ElementCriterion* criterion, ElementVisitor* visitor) :
   _criterion(criterion),
   _visitor(visitor),
   _map(nullptr)

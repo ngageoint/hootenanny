@@ -498,7 +498,8 @@ void ConflateExecutor::_runConflateOps(OsmMapPtr& map, const bool runPre)
     StringUtils::millisecondsToDhms(opsTimer.elapsed()) << " total.");
 }
 
-void ConflateExecutor::_writeOutput(OsmMapPtr& map, QString& output, const bool isChangesetOutput)
+void ConflateExecutor::_writeOutput(
+  const OsmMapPtr& map, QString& output, const bool isChangesetOutput)
 {
   // Figure out what to write
   _progress->set(
@@ -541,7 +542,7 @@ void ConflateExecutor::_writeOutput(OsmMapPtr& map, QString& output, const bool 
 }
 
 void ConflateExecutor::_writeStats(
-  OsmMapPtr& map, const CalculateStatsOp& input1Cso, const CalculateStatsOp& input2Cso,
+  const OsmMapPtr& map, const CalculateStatsOp& input1Cso, const CalculateStatsOp& input2Cso,
   const QString& outputFileName)
 {
   _progress->set(

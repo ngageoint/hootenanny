@@ -224,12 +224,12 @@ private:
   /**
    * Find the child with the least enlargement. This is consistent w/ [GUT 84]'s implementation
    */
-  int _findLeastEnlargement(RTreeNode* node, const Box& b) const;
+  int _findLeastEnlargement(const RTreeNode* node, const Box& b) const;
   /**
    * Find the child with the least overlap enlargement. This could potentially be optimized by
    * implementing [BEC 90]'s "determine the nearly minimum overlap cost"
    */
-  int _findLeastOverlapEnlargement(RTreeNode* node, const Box& b) const;
+  int _findLeastOverlapEnlargement(const RTreeNode* node, const Box& b) const;
 
   /**
    * Insert an entry at the specified level. If level 0 is a leaf node and it counts up from

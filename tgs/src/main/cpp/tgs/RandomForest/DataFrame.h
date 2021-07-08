@@ -165,7 +165,7 @@ namespace Tgs
     *  @param populations the output map of class names to number of instances
     */
     void getClassPopulations(const std::vector<unsigned int>& indices, 
-      HashMap<std::string, int>& populations);
+      HashMap<std::string, int>& populations) const;
 
     /**
      *  Get the number of instances per class based on the subset of data
@@ -291,13 +291,13 @@ namespace Tgs
     *
     * @param e a QDomElement containing the contents of tag <DataFrame> from an XML file
     */
-    void import(QDomElement & e);
+    void import(const QDomElement & e);
 
     /**
     *  Checks to see if the data vectors belonging to the set of indices
     * are all of the same class
     */
-    bool isDataSetPure(std::vector<unsigned int> & indices);
+    bool isDataSetPure(const std::vector<unsigned int>& indices);
 
     /**
      * Returns true if the specified column is nominal.
@@ -373,18 +373,6 @@ namespace Tgs
     * @param labelMap a map of the original class name to a new class name
     */
     void remapClassLabels(std::map<std::string, std::string> & labelMap);
-    
-    /**
-    * Partitions the dataframe into two parts based on the splitting idx
-    *
-    *
-    * NOT IMPLEMENTED
-    * @param splitIdx the data vector to split on
-    * @param leftSplit the data vectors indices on the left side of the split
-    * @param rightSplit the data vectors indices on the right side of the split
-    */
-//     void partition(unsigned int splitIdx, std::vector<unsigned int> & leftSplit, 
-//       std::vector<unsigned int> & rightSplit);
 
     /**
     * Restores the list of class labels from the backup (use after creating binary classes)
@@ -462,7 +450,7 @@ namespace Tgs
     *
     * @param e a QDomElement containing the contents of child node within tag <DataVectors> from an XML file
     */
-    void _importDataVector(QDomElement & e);
+    void _importDataVector(const QDomElement & e);
 
     /**
     * Sorts a vector of indices to data vectors by the selected factor

@@ -307,7 +307,7 @@ void RubberSheet::_filterCalcAndApplyTransform(OsmMapPtr& map)
   }
 }
 
-bool RubberSheet::applyTransform(std::shared_ptr<OsmMap>& map)
+bool RubberSheet::applyTransform(const OsmMapPtr& map)
 {
   LOG_DEBUG("Applying transform...");
 
@@ -485,7 +485,7 @@ std::shared_ptr<Interpolator> RubberSheet::_buildInterpolator(Status s) const
   return bestCandidate;
 }
 
-bool RubberSheet::calculateTransform(std::shared_ptr<OsmMap>& map)
+bool RubberSheet::calculateTransform(const OsmMapPtr& map)
 {
   LOG_DEBUG("Calculating transform...");
 

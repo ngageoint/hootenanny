@@ -460,7 +460,7 @@ double MaximalSubline::_findBestMatchesRecursive(
   return result;
 }
 
-vector<Sparse2dCellId> MaximalSubline::_findEndMatches(Sparse2dMatrix& sublines) const
+vector<Sparse2dCellId> MaximalSubline::_findEndMatches(const Sparse2dMatrix& sublines) const
 {
   LOG_TRACE("Finding end matches...");
 

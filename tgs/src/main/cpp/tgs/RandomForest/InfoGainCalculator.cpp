@@ -48,19 +48,9 @@ namespace Tgs
     return (-n * (log(n)/log(2.0)));
   }
 
-  double InfoGainCalculator::computeEntropyByClass(DataFrame & df, 
-    std::vector<unsigned int> & indices) const
+  double InfoGainCalculator::computeEntropyByClass(
+    const DataFrame& df, const std::vector<unsigned int>& indices) const
   {
-//     double entSum = 0;
-//     std::vector<int> popDist;
-//     df.getClassDistribution(indices, popDist);
-// 
-//     for (unsigned int i = 0; i < popDist.size(); i++)
-//     {
-//       entSum += _calcLogFunc((double)popDist[i] / (double)indices.size()); 
-//     }
-// 
-//     return entSum;
     double entSum = 0;
     HashMap<std::string, int> popMap;
     df.getClassPopulations(indices, popMap);

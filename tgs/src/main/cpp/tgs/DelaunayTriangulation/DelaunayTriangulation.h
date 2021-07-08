@@ -137,10 +137,8 @@ class Face
 public:
 
   Face() : _id(-1) { }
-  Face(Face& other);
   Face(const Face& other);
   Face(Edge start);
-
   virtual ~Face();
 
   /**
@@ -236,7 +234,6 @@ class DelaunayTriangulation
 public:
 
   DelaunayTriangulation();
-
   virtual ~DelaunayTriangulation();
 
   /**

@@ -135,7 +135,7 @@ public:
   void read(const QString& path, const OsmMapPtr& map);
 
   void parse(std::istream* strm, const OsmMapPtr& map);
-  void parseBlob(BlobLocation& bl, std::istream* strm, const OsmMapPtr& map);
+  void parseBlob(const BlobLocation& bl, std::istream* strm, const OsmMapPtr& map);
   void parseBlob(long headerOffset, std::istream* strm, const OsmMapPtr& map);
   /**
    * Reads a uint32 in network order from the stream to determine the PBF size, then reads the

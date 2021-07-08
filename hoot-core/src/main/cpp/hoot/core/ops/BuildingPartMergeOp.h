@@ -147,7 +147,7 @@ private:
   // if true, building part type tags will be preserved in the combined building output
   bool _preserveTypes;
 
-  void _init(OsmMapPtr& map);
+  void _init(const OsmMapPtr& map);
 
   std::shared_ptr<geos::geom::Geometry> _getGeometry(const ConstElementPtr& element) const;
 

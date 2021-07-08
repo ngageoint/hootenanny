@@ -56,6 +56,7 @@ namespace Tgs
   class TGS_EXPORT RandomTree
   {
   public:
+
     /**
     *  Constructor
     */
@@ -137,7 +138,7 @@ namespace Tgs
      * @brief import imports a tree
      * @param e the XML DOM element containing the tree
      */
-    void import(QDomElement& e);
+    void import(const QDomElement& e);
 
     /**
     * Builds a tree 
@@ -150,7 +151,6 @@ namespace Tgs
     */
     void trainBinary(const std::shared_ptr<DataFrame>& data, unsigned int numFactors,
       const std::string& posClass, unsigned int nodeSize = 1, bool balanced = false);
-
     /**
     * Builds a tree 
     *
@@ -161,7 +161,6 @@ namespace Tgs
     */
     void trainMulticlass(const std::shared_ptr<DataFrame>& data, unsigned int numFactors,
       unsigned int nodeSize = 1, bool balanced = false);
-
     /**
     * Builds a tree 
     *
@@ -175,19 +174,22 @@ namespace Tgs
     void trainRoundRobin(const std::shared_ptr<DataFrame>& data, unsigned int numFactors,
       const std::string& posClass, const std::string& negClass, unsigned int nodeSize = 1,
       bool balanced = false);
-    /**
+
+   /**
     * Resets the id counter.  Only needed in build-model when a model is loaded, increasing the ids,
-    * and then a model is created, subsequently creating a new model where the random forest's first tree doesn't start
-    * with an id of zero like it should
+    * and then a model is created, subsequently creating a new model where the random forest's
+    * first tree doesn't start with an id of zero like it should
     */
     static void resetIds() { _idCtr = 0; }
 
   private:
+
     /**
     * Recursive function for building random tree nodes
     */
-    void _build(const std::shared_ptr<DataFrame>& data, std::vector<unsigned int> & dataSet,
-      std::shared_ptr<TreeNode> &node, unsigned int nodeSize);
+    void _build(
+      const std::shared_ptr<DataFrame>& data, std::vector<unsigned int> & dataSet,
+      const std::shared_ptr<TreeNode>& node, unsigned int nodeSize);
 
     /**
     * A recursive function to sum the purity gain per node based for its splitting factor
@@ -196,8 +198,8 @@ namespace Tgs
     *  @param factorPurity the results container as a map of factor index to current purity gain 
     *  sum
     */
-    void _calcFactorPurity(std::shared_ptr<TreeNode> &node,
-      std::map<unsigned int, double> & factorPurity);
+    void _calcFactorPurity(
+      const std::shared_ptr<TreeNode>& node, std::map<unsigned int, double> & factorPurity);
     
     /**
     *  Destroys the tree by recursively deleting its child nodes
@@ -214,7 +216,7 @@ namespace Tgs
     * @param tabDepth set of tabs to indent the exported content
     */
     void _exportNode(
-      std::ostream& fileStream, std::shared_ptr<TreeNode>& node, const std::string& tabDepth);
+      std::ostream& fileStream, const std::shared_ptr<TreeNode>& node, const std::string& tabDepth);
 
     /**
      * @brief _exportNode a recursive function to write a trees nodes
@@ -225,8 +227,8 @@ namespace Tgs
      * @param parentNode the parent XML node to append the tree nodes
      * @param node the current tree node
      */
-    void _exportNode(QDomDocument & modelDoc, QDomElement & parentNode,
-      std::shared_ptr<TreeNode> & node);
+    void _exportNode(
+      QDomDocument& modelDoc, QDomElement& parentNode, const std::shared_ptr<TreeNode>& node);
 
     /**
     *  Exports the out of bag set indices
@@ -242,27 +244,27 @@ namespace Tgs
     * @param fileStream the stream to import the data
     * @param node the current node under consideration
     */
-    void _importNode(std::istream & fileStream, std::shared_ptr<TreeNode> &node);
+    void _importNode(std::istream& fileStream, const std::shared_ptr<TreeNode>& node);
 
     /**
      * @brief _importNode imports nodes for creation
      * @param treeNode the XML DOM node containing a tree node
      * @param node the tree node object to fill
      */
-    QDomElement _importNode(QDomElement & treeNode, std::shared_ptr<TreeNode> &node);
+    QDomElement _importNode(const QDomElement& treeNode, const std::shared_ptr<TreeNode>& node);
 
     /**
     * Imports the out of bag set indices
     *
     * @param fileStream the stream to export the data
     */
-    void _importOobSet(std::istream & fileStream);
+    void _importOobSet(std::istream& fileStream);
 
     /**
      * @brief _importOobSet parses the oobSet
      * @param oobString the space delimited OOB set
      */
-    void _importOobSet(QString & oobString);
+    void _importOobSet(const QString& oobString);
 
     
     unsigned int _factPerNode;  ///The number of factors to consider per node split

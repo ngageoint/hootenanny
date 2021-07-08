@@ -136,7 +136,7 @@ void WaySplitter::split(const OsmMapPtr& map, const WayPtr& w, double maxSize)
   }
 }
 
-vector<WayPtr> WaySplitter::split(WayLocation& splitPoint) const
+vector<WayPtr> WaySplitter::split(const WayLocation& splitPoint) const
 {
   vector<WayPtr> result;
 

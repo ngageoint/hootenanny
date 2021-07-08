@@ -235,7 +235,7 @@ void ChangesetCreator::create(const QString& output, const QString& input1, cons
     "Changeset written to: ..." + FileUtils::toLogFormat(output, maxFilePrintLength));
 }
 
-void ChangesetCreator::create(OsmMapPtr& map1, OsmMapPtr& map2, const QString& output)
+void ChangesetCreator::create(const OsmMapPtr& map1, const OsmMapPtr& map2, const QString& output)
 {
   QList<OsmMapPtr> map1Inputs;
   map1Inputs.append(map1);

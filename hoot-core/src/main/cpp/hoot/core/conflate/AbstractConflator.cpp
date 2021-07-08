@@ -306,7 +306,7 @@ void AbstractConflator::_replaceElementIds(
   }
 }
 
-void AbstractConflator::_applyMergers(const std::vector<MergerPtr>& mergers, OsmMapPtr& map)
+void AbstractConflator::_applyMergers(const std::vector<MergerPtr>& mergers, const OsmMapPtr& map)
 {
   if (mergers.empty())
   {

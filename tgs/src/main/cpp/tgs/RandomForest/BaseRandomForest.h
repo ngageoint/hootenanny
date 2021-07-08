@@ -93,7 +93,7 @@ namespace Tgs
     * @param scores a map to hold the classification results as class name mapped to probability
     */
     void classifyVector(
-      std::vector<double> & dataVector, std::map<std::string, double>& scores) const;
+      const std::vector<double> & dataVector, std::map<std::string, double>& scores) const;
 
     /**
     *  Exports the random forest to a file
@@ -156,7 +156,7 @@ namespace Tgs
      * @brief importModel import the random forest object
      * @param e the XML DOM element for the forest
      */
-    void importModel(QDomElement& e);
+    void importModel(const QDomElement& e);
 
     /**
      * Import the random forest object

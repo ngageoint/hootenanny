@@ -40,6 +40,7 @@ namespace Tgs
   class TGS_EXPORT InfoGainCalculator
   {
   public:
+
     /**
     *  Constructor
     */
@@ -56,7 +57,8 @@ namespace Tgs
     *  @param df the source data set
     *  @param indices a list of data vector indices in the data set
     */
-    double computeEntropyByClass(DataFrame & df, std::vector<unsigned int> & indices) const;
+    double computeEntropyByClass(
+      const DataFrame& df, const std::vector<unsigned int>& indices) const;
 
     /**
     * Using the list of data vector indices as input this method
@@ -107,6 +109,7 @@ namespace Tgs
       unsigned int fIdx, double totalEntropy, unsigned int & bestSplit) const;
 
   private:
+
     /**
     *  Computes the entropy function -n * log2(n)
     */
@@ -124,7 +127,6 @@ namespace Tgs
     */
     void _findCandidateSplits(DataFrame & df, std::vector<unsigned int> & indices, 
       unsigned int fIdx, std::vector<unsigned int> & splits) const;
-
   };
 }  //End Namespace
 #endif 

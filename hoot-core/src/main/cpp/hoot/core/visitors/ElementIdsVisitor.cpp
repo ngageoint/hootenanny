@@ -78,8 +78,8 @@ vector<long> ElementIdsVisitor::_findCloseWays(const ConstOsmMapPtr& map,
   return map->getIndex().findWayNeighbors(refWay, maxDistance, addError);
 }
 
-vector<long> ElementIdsVisitor::_findElements(const ConstOsmMapPtr& map, ElementCriterion* pCrit,
-                                              const vector<long>& closeElementIds)
+vector<long> ElementIdsVisitor::_findElements(
+  const ConstOsmMapPtr& map, const ElementCriterion* pCrit, const vector<long>& closeElementIds)
 {
   vector<long> result;
   for (size_t i = 0; i < closeElementIds.size(); i++)
