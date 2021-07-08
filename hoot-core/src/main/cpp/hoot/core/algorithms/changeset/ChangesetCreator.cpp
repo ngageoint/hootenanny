@@ -83,12 +83,9 @@ _numDeleteChanges(0)
   if (printDetailedStats)
   {
     QFile statsFile(statsOutputFile);
-    if (statsFile.exists())
+    if (statsFile.exists() && !statsFile.remove())
     {
-      if (!statsFile.remove())
-      {
-        LOG_ERROR("Unable to remove changeset statistics file: " << statsOutputFile);
-      }
+      LOG_ERROR("Unable to remove changeset statistics file: " << statsOutputFile);
     }
   }
 }

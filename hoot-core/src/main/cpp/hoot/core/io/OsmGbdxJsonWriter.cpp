@@ -71,12 +71,9 @@ void OsmGbdxJsonWriter::open(const QString& path)
   _outputDir = fi.absoluteDir();
   _outputFileName = fi.baseName();
 
-  if (_outputDir.exists() == false)
+  if (!_outputDir.exists() && !FileUtils::makeDir(_outputDir.path()))
   {
-    if (FileUtils::makeDir(_outputDir.path()) == false)
-    {
-      throw HootException("Error creating directory for writing.");
-    }
+    throw HootException("Error creating directory for writing.");
   }
 }
 

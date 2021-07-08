@@ -610,15 +610,9 @@ void OgrWriter::_createLayer(const std::shared_ptr<const Layer>& layer)
     }
 
     // Add a Feature Dataset to a ESRI File GeoDatabase if requested
-    if (name == QString("FileGDB"))
+    if (name == QString("FileGDB") && layer->getFdName() != "")
     {
-      if (layer->getFdName() != "")
-      {
-        options["FEATURE_DATASET"] = layer->getFdName();
-        // speed up bulk inserts.
-        // NOTE: Seems to be depreciated in GDAL 2.0+
-        //options["FGDB_BULK_LOAD"] = "YES";
-      }
+      options["FEATURE_DATASET"] = layer->getFdName();
     }
   }
 

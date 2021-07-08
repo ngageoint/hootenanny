@@ -45,13 +45,11 @@ void GeometryModifierVisitor::visit(const ElementPtr& pElement)
   _numProcessed++;
 
   // apply _actionDesc filter
-  if (_actionDesc.filter.isSatisfied(pElement))
+  if (_actionDesc.filter.isSatisfied(pElement) &&
+      _actionDesc.pAction->processElement(pElement, _pMap))
   {
-    if (_actionDesc.pAction->processElement(pElement, _pMap))
-    {
-      _numAffected++;
-    }
+    _numAffected++;
   }
 }
 
-} // namespace hoot
+}

@@ -202,12 +202,9 @@ void ChangesetReplacementCreatorAbstract::_validateInputs() const
       "GeoJSON inputs are not supported by replacement changeset derivation.");
   }
   QFile outputFile(_output);
-  if (outputFile.exists())
+  if (outputFile.exists() && !outputFile.remove())
   {
-    if (!outputFile.remove())
-    {
-      throw HootException("Unable to remove changeset output file: " + _output);
-    }
+    throw HootException("Unable to remove changeset output file: " + _output);
   }
 
   if (!ConfigOptions().getConvertOps().empty())

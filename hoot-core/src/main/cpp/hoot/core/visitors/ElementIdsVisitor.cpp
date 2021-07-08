@@ -44,12 +44,10 @@ _pCrit(pCrit)
 
 void ElementIdsVisitor::visit(const std::shared_ptr<const Element>& e)
 {
-  if (e->getElementType() == ElementType::Unknown || e->getElementType() == _elementType)
+  if ((e->getElementType() == ElementType::Unknown || e->getElementType() == _elementType) &&
+      (_pCrit == nullptr || _pCrit->isSatisfied(e)))
   {
-    if (_pCrit == nullptr || _pCrit->isSatisfied(e))
-    {
-      _elementIds.push_back(e->getId());
-    }
+    _elementIds.push_back(e->getId());
   }
 }
 

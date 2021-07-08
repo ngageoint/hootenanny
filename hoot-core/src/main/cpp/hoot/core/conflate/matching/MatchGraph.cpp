@@ -206,15 +206,12 @@ public:
         for (MatchSet::const_iterator m2_it = matches.begin(); m2_it != matches.end(); ++m2_it)
         {
           ConstMatchPtr m2 = *m2_it;
-          if (m1 != m2)
+          if (m1 != m2 && checkForConflicts &&
+              MergerFactory::getInstance().isConflicting(map, m1, m2, idIndexedMatches))
           {
-            if (checkForConflicts &&
-                MergerFactory::getInstance().isConflicting(map, m1, m2, idIndexedMatches))
-            {
-              LOG_INFO(m1->toString());
-              LOG_INFO(m2->toString());
-              throw InternalErrorException("Found an unexpected conflicting match.");
-            }
+            LOG_INFO(m1->toString());
+            LOG_INFO(m2->toString());
+            throw InternalErrorException("Found an unexpected conflicting match.");
           }
         }
       }

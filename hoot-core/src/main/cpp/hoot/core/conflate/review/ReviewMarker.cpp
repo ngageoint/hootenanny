@@ -147,12 +147,10 @@ bool ReviewMarker::isNeedsReview(const ConstOsmMapPtr& map, ConstElementPtr e1, 
 bool ReviewMarker::isReview(const ConstElementPtr& e)
 {
   bool result = false;
-  if (e->getElementType() == ElementType::Relation)
+  if (e->getElementType() == ElementType::Relation &&
+      e->getTags().isTrue(MetadataTags::HootReviewNeeds()))
   {
-    if (e->getTags().isTrue(MetadataTags::HootReviewNeeds()))
-    {
-      result = true;
-    }
+    result = true;
   }
   return result;
 }

@@ -178,15 +178,13 @@ WayLocation WayMatchStringMerger::_findNodeLocation2(WayStringPtr ws, ElementId 
            j <= subline.getLatter().getSegmentIndex(); ++j)
       {
         WayLocation wl(_map, w, j, 0.0);
-        if (subline.contains(wl))
+        if (subline.contains(wl) && !_nodeToWayLocation2.contains(ElementId::node(w->getNodeId(j))))
         {
-          // only record the first instance.
-          if (_nodeToWayLocation2.contains(ElementId::node(w->getNodeId(j))) == false)
-          {
-            assert(wl.isNode(WayLocation::SLOPPY_EPSILON) &&
-              wl.getNode(WayLocation::SLOPPY_EPSILON)->getId() == w->getNodeId(j));
-            _nodeToWayLocation2[ElementId::node(w->getNodeId(j))] = wl;
-          }
+          // Only record the first instance.
+          assert(
+            wl.isNode(WayLocation::SLOPPY_EPSILON) &&
+            wl.getNode(WayLocation::SLOPPY_EPSILON)->getId() == w->getNodeId(j));
+          _nodeToWayLocation2[ElementId::node(w->getNodeId(j))] = wl;
         }
       }
     }

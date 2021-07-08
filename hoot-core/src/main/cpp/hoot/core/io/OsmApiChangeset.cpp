@@ -923,16 +923,14 @@ bool XmlChangeset::addRelation(const ChangesetInfoPtr& changeset, ChangesetType 
               addWay(changeset, type, way);
             }
           }
-          else if (member.isRelation())
+          else if (member.isRelation() &&
+                   //  Make sure that the ID is negative (create) in the ID map
+                   _idMap.getId(ElementType::Relation, member.getRef()) < 0)
           {
-            //  Make sure that the ID is negative (create) in the ID map
-            if (_idMap.getId(ElementType::Relation, member.getRef()) < 0)
-            {
-              ChangesetRelation* relation_member = dynamic_cast<ChangesetRelation*>(_allRelations[member.getRef()].get());
-              //  Don't re-add self referencing relations
-              if (relation_member && relation->id() != relation_member->id())
-                addRelation(changeset, type, relation_member);
-            }
+            ChangesetRelation* relation_member = dynamic_cast<ChangesetRelation*>(_allRelations[member.getRef()].get());
+            //  Don't re-add self referencing relations
+            if (relation_member && relation->id() != relation_member->id())
+              addRelation(changeset, type, relation_member);
           }
         }
       }
@@ -1044,16 +1042,14 @@ bool XmlChangeset::moveRelation(const ChangesetInfoPtr& source, const ChangesetI
             moveWay(source, destination, (ChangesetType)current_type, dynamic_cast<ChangesetWay*>(_allWays[id].get()), failing);
         }
       }
-      else if (member.isRelation())
+      else if (member.isRelation() &&
+               //  Don't attempt to move circular relation references
+               id != relation->id())
       {
-        //  Don't attempt to move circular relation references
-        if (id != relation->id())
+        for (int current_type = ChangesetType::TypeCreate; current_type != ChangesetType::TypeMax; ++current_type)
         {
-          for (int current_type = ChangesetType::TypeCreate; current_type != ChangesetType::TypeMax; ++current_type)
-          {
-            if (source->contains(ElementType::Relation, (ChangesetType)current_type, id))
-              moveRelation(source, destination, (ChangesetType)current_type, dynamic_cast<ChangesetRelation*>(_allRelations[id].get()), failing);
-          }
+          if (source->contains(ElementType::Relation, (ChangesetType)current_type, id))
+            moveRelation(source, destination, (ChangesetType)current_type, dynamic_cast<ChangesetRelation*>(_allRelations[id].get()), failing);
         }
       }
     }

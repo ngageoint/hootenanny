@@ -54,15 +54,13 @@ double ExactTagDifferencer::diff(const ConstOsmMapPtr& /*map*/, const ConstEleme
     touched.insert(it.key());
 
     LOG_VART(OsmSchema::getInstance().isMetaData(it.key(), it.value()));
-    if (OsmSchema::getInstance().isMetaData(it.key(), it.value()) == false)
+    if (OsmSchema::getInstance().isMetaData(it.key(), it.value()) == false &&
+        it.value() != t2.get(it.key()))
     {
-      if (it.value() != t2.get(it.key()))
-      {
-        LOG_TRACE(
-          "Returning exact tag difference on key: " << it.key() << " for " << e1->getElementId() <<
-          " and " << e2->getElementId() << "...");
-        return 1;
-      }
+      LOG_TRACE(
+        "Returning exact tag difference on key: " << it.key() << " for " << e1->getElementId() <<
+        " and " << e2->getElementId() << "...");
+      return 1;
     }
   }
   LOG_VART(touched);
@@ -75,15 +73,13 @@ double ExactTagDifferencer::diff(const ConstOsmMapPtr& /*map*/, const ConstEleme
     if (touched.contains(it.key()) == false)
     {
       LOG_VART(OsmSchema::getInstance().isMetaData(it.key(), it.value()));
-      if (OsmSchema::getInstance().isMetaData(it.key(), it.value()) == false)
+      if (OsmSchema::getInstance().isMetaData(it.key(), it.value()) == false &&
+          it.value() != t1.get(it.key()))
       {
-        if (it.value() != t1.get(it.key()))
-        {
-          LOG_TRACE(
-            "Returning exact tag difference on key: " << it.key() << " for " <<
-            e1->getElementId() << " and " << e2->getElementId() << "...");
-          return 1;
-        }
+        LOG_TRACE(
+          "Returning exact tag difference on key: " << it.key() << " for " <<
+          e1->getElementId() << " and " << e2->getElementId() << "...");
+        return 1;
       }
     }
   }

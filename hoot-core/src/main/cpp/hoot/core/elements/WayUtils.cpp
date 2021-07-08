@@ -485,12 +485,9 @@ bool WayUtils::nodeContainedByWaySharingNodesWithAnotherWay(
        containingWayItr != waysContainingNode.end(); ++containingWayItr)
   {
     ConstWayPtr containingWay = *containingWayItr;
-    if (containingWay)
+    if (containingWay && containingWay->hasSharedNode(*way))
     {
-      if (containingWay->hasSharedNode(*way))
-      {
-        return true;
-      }
+      return true;
     }
   }
   return false;

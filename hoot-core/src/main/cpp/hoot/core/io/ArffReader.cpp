@@ -103,12 +103,9 @@ std::shared_ptr<DataSamples> ArffReader::read()
   {
     QStringList l = line.split(" ");
     columnNames.append(l[1]);
-    if (l[2] != "NUMERIC")
+    if (l[2] != "NUMERIC" && l[1] != "class")
     {
-      if (l[1] != "class")
-      {
-        throw IoException("Got a non-numeric column. " + line);
-      }
+      throw IoException("Got a non-numeric column. " + line);
     }
     line = _readLine();
   }

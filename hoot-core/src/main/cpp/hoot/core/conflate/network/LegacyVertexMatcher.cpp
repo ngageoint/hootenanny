@@ -224,21 +224,16 @@ bool LegacyVertexMatcher::isCandidateMatch(ConstNetworkVertexPtr v1, ConstNetwor
   {
     result = true;
   }
-  // if this isn't a tie point and the intersections aren't part of any confident tie points
+  // If this isn't a tie point, the intersections aren't part of any confident tie points, and
   else if (score == 0.0 &&
-    _hasConfidentTie.contains(v1) == false &&
-    _hasConfidentTie.contains(v2) == false)
+           _hasConfidentTie.contains(v1) == false && _hasConfidentTie.contains(v2) == false &&
+           // these aren't technically intersections, then they might be tie points.
+           (_getNodeMatcher()->getDegree(v1->getElementId()) <= 2 ||
+            _getNodeMatcher()->getDegree(v2->getElementId()) <= 2))
   {
-    // if these aren't technically intersections they might be tie points.
-    if (_getNodeMatcher()->getDegree(v1->getElementId()) <= 2 ||
-        _getNodeMatcher()->getDegree(v2->getElementId()) <= 2)
-    {
-      Meters sr = srp.getSearchRadius(v1, v2);
-
-      double d = EuclideanDistanceExtractor().distance(*_map, v1->getElement(), v2->getElement());
-
-      result = d <= sr;
-    }
+    Meters sr = srp.getSearchRadius(v1, v2);
+    double d = EuclideanDistanceExtractor().distance(*_map, v1->getElement(), v2->getElement());
+    result = d <= sr;
   }
 
   return result;

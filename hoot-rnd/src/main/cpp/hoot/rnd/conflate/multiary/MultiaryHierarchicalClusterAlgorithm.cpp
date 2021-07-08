@@ -53,19 +53,17 @@ void MultiaryHierarchicalClusterAlgorithm::_addChildLinks(MultiaryClusterPtr par
     {
       MatchClassification s = _scoreCache->getScore(parent, other);
 
-      // if the match is a miss there is no reason to record it as a link.
-      if (_matchThreshold.getType(s) != MatchType::Miss)
+      // If the match is a miss, there is no reason to record it as a link.
+      if (_matchThreshold.getType(s) != MatchType::Miss &&
+          // Only create a new ClusterLink if paren't hasn't already been linked.
+          other->links.contains(parent) == false)
       {
-        // only create a new ClusterLink if paren't hasn't already been linked.
-        if (other->links.contains(parent) == false)
-        {
-          parent->links.append(other);
-          other->links.append(parent);
+        parent->links.append(other);
+        other->links.append(parent);
 
-          ClusterLinkPtr l(new ClusterLink(parent, other, s));
-          l->explainText = _scoreCache->getLastExplainText();
-          _linkQueue.push(l);
-        }
+        ClusterLinkPtr l(new ClusterLink(parent, other, s));
+        l->explainText = _scoreCache->getLastExplainText();
+        _linkQueue.push(l);
       }
     }
   }

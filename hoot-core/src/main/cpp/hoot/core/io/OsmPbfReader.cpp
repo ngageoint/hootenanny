@@ -1409,20 +1409,17 @@ void OsmPbfReader::close()
 
 void OsmPbfReader::_parseTimestamp(const hoot::pb::Info& info, Tags& t) const
 {
-  if (_addSourceDateTime && t.getInformationCount() > 0) // Make sure we actually have attributes
+  if (_addSourceDateTime &&
+      // Make sure we actually have attributes.
+      t.getInformationCount() > 0 &&
+      info.has_timestamp())
   {
-    if (info.has_timestamp())
+    long timestamp = info.timestamp() * _dateGranularity;
+    if (timestamp != 0)
     {
-      long timestamp = info.timestamp() * _dateGranularity;
-
-      if (timestamp != 0)
-      {
-        //QDateTime dt = QDateTime::fromMSecsSinceEpoch(timestamp).toTimeSpec(Qt::UTC);
-        QDateTime dt = QDateTime::fromTime_t(0).addMSecs(timestamp).toUTC();
-        QString dts = dt.toString("yyyy-MM-ddThh:mm:ss.zzzZ");
-
-        t.set(MetadataTags::SourceDateTime(), dts);
-      }
+      QDateTime dt = QDateTime::fromTime_t(0).addMSecs(timestamp).toUTC();
+      QString dts = dt.toString("yyyy-MM-ddThh:mm:ss.zzzZ");
+      t.set(MetadataTags::SourceDateTime(), dts);
     }
   }
 }

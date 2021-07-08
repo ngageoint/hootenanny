@@ -846,15 +846,13 @@ void TagComparator::_overwriteUnrecognizedTags(Tags& t1, Tags& t2, Tags& result)
   {
     // if this is an unknown type
     if (schema.getTagVertex(it1.key() + "=" + it1.value()).isEmpty() &&
-        schema.getTagVertex(it1.key()).isEmpty())
+        schema.getTagVertex(it1.key()).isEmpty() &&
+        // if this is also in t2
+        t2.contains(it1.key()))
     {
-      // if this is also in t2.
-      if (t2.contains(it1.key()))
-      {
-        result[it1.key()] = it1.value();
-        t1.remove(it1.key());
-        t2.remove(it1.key());
-      }
+      result[it1.key()] = it1.value();
+      t1.remove(it1.key());
+      t2.remove(it1.key());
     }
   }
 
