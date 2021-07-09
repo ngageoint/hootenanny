@@ -64,7 +64,7 @@ void OsmMapSplitter::apply()
   for (WayMap::const_iterator tile_it = tiles.begin(); tile_it != tiles.end(); ++tile_it)
   {
     _tileEnvelopes.push_back(tile_it->second->getEnvelopeInternal(_tiles));
-    _tileMaps.push_back(OsmMapPtr(new OsmMap(_map->getProjection())));
+    _tileMaps.push_back(std::make_shared<OsmMap>(_map->getProjection()));
   }
   //  Iterate all of the elements in the map and copy them to the corresponding map by envelope
   //  Start with relations

@@ -39,9 +39,9 @@ namespace hoot
 {
 
 InMemoryElementSorter::InMemoryElementSorter(ConstOsmMapPtr source) :
-  _nodeIndex(0),
-  _wayIndex(0),
-  _relationIndex(0)
+_nodeIndex(0),
+_wayIndex(0),
+_relationIndex(0)
 {
   if (source)
   {
