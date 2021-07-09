@@ -230,7 +230,7 @@ void ImplicitTagRulesDatabaseDeriver::_populateSchemaTagValues()
        tagItr != tags.end(); ++tagItr)
   {
     SchemaVertex tag = *tagItr;
-    const QString tagVal = tag.value.toLower().replace("_", " ");
+    const QString tagVal = tag.getValue().toLower().replace("_", " ");
     if (!tagVal.contains("*"))  //skip wildcards
     {
       if (!_customRules.getWordIgnoreList().contains(tagVal, Qt::CaseInsensitive))

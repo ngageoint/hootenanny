@@ -77,7 +77,7 @@ void TagComparator::_addDefaults(Tags& t) const
 
 void TagComparator::_addNonConflictingTags(Tags& t1, const Tags& t2, Tags& result) const
 {
-  OsmSchema& schema = OsmSchema::getInstance();
+  const OsmSchema& schema = OsmSchema::getInstance();
 
   // we're deleting as we iterate so be careful making changes.
   for (Tags::iterator it1 = t1.begin(); it1 != t1.end(); )
@@ -116,7 +116,7 @@ void TagComparator::averageTags(const Tags& t1In, double w1, const Tags& t2In, d
                                 Tags& result, bool keepAllUnknownTags, bool caseSensitive)
 {
   result.clear();
-  OsmSchema& schema = OsmSchema::getInstance();
+  const OsmSchema& schema = OsmSchema::getInstance();
 
   Tags t1 = t1In;
   Tags t2 = t2In;
@@ -189,7 +189,7 @@ void TagComparator::averageTags(const Tags& t1In, double w1, const Tags& t2In, d
 void TagComparator::compareEnumeratedTags(
   Tags t1, Tags t2, double& score, double& weight) const
 {
-  OsmSchema& schema = OsmSchema::getInstance();
+  const OsmSchema& schema = OsmSchema::getInstance();
   score = 1.0;
   weight = 0;
 
@@ -205,15 +205,15 @@ void TagComparator::compareEnumeratedTags(
   for (size_t i = 0; i < v1.size(); ++i)
   {
     const SchemaVertex* tv = &v1[i];
-    if (tv->valueType == Enumeration)
+    if (tv->getValueType() == Enumeration)
     {
-      if (tv->value == "*")
+      if (tv->getValue() == "*")
       {
-        n1.push_back(OsmSchema::toKvp(tv->key, t1[tv->key]));
+        n1.push_back(OsmSchema::toKvp(tv->getKey(), t1[tv->getKey()]));
       }
       else
       {
-        n1.push_back(tv->name);
+        n1.push_back(tv->getName());
       }
     }
   }
@@ -221,15 +221,15 @@ void TagComparator::compareEnumeratedTags(
   for (size_t i = 0; i < v2.size(); ++i)
   {
     const SchemaVertex* tv = &v2[i];
-    if (tv->valueType == Enumeration)
+    if (tv->getValueType() == Enumeration)
     {
-      if (tv->value == "*")
+      if (tv->getValue() == "*")
       {
-        n2.push_back(OsmSchema::toKvp(tv->key, t2[tv->key]));
+        n2.push_back(OsmSchema::toKvp(tv->getKey(), t2[tv->getKey()]));
       }
       else
       {
-        n2.push_back(tv->name);
+        n2.push_back(tv->getName());
       }
     }
   }
@@ -275,7 +275,7 @@ void TagComparator::compareEnumeratedTags(
 
 void TagComparator::compareTextTags(const Tags& t1, const Tags& t2, double& score, double& weight) const
 {
-  OsmSchema& schema = OsmSchema::getInstance();
+  const OsmSchema& schema = OsmSchema::getInstance();
 
   score = 1.0;
   weight = 0.0;
@@ -284,10 +284,10 @@ void TagComparator::compareTextTags(const Tags& t1, const Tags& t2, double& scor
   {
     const SchemaVertex& tv = schema.getTagVertex(it.key());
     if (schema.isAncestor(it.key(), "abstract_name") == false &&
-        tv.valueType == Text && t2.contains(it.key()))
+        tv.getValueType() == Text && t2.contains(it.key()))
     {
       score *= LevenshteinDistance::score(it.value(), t2[it.key()]);
-      weight += tv.influence;
+      weight += tv.getInfluence();
     }
   }
 
@@ -497,7 +497,7 @@ Tags TagComparator::generalize(Tags t1, Tags t2, bool overwriteUnrecognizedTags,
 
 void TagComparator::_mergeExactMatches(Tags& t1, Tags& t2, Tags& result) const
 {
-  OsmSchema& schema = OsmSchema::getInstance();
+  const OsmSchema& schema = OsmSchema::getInstance();
 
   Tags t1Copy = t1;
   for (Tags::ConstIterator it1 = t1Copy.begin(); it1 != t1Copy.end(); ++it1)
@@ -637,7 +637,7 @@ void TagComparator::mergeText(Tags& t1, Tags& t2, Tags& result,
   LOG_TRACE("Merging text...");
   LOG_VART(t1);
   LOG_VART(t2);
-  OsmSchema& schema = OsmSchema::getInstance();
+  const OsmSchema& schema = OsmSchema::getInstance();
 
   const Tags t1Copy = t1;
   for (Tags::ConstIterator it1 = t1Copy.begin(); it1 != t1Copy.end(); ++it1)
@@ -645,7 +645,7 @@ void TagComparator::mergeText(Tags& t1, Tags& t2, Tags& result,
     const SchemaVertex& tv = schema.getTagVertex(it1.key());
 
     // if this is a text field and it exists in both tag sets.
-    if (tv.valueType == Text && t2.contains(it1.key()))
+    if (tv.getValueType() == Text && t2.contains(it1.key()))
     {
       // only keep the unique text fields
       QStringList values1 = t1.getList(it1.key());
@@ -687,7 +687,7 @@ void TagComparator::mergeText(Tags& t1, Tags& t2, Tags& result,
 
 void TagComparator::_mergeUnrecognizedTags(Tags& t1, Tags& t2, Tags& result)
 {
-  OsmSchema& schema = OsmSchema::getInstance();
+  const OsmSchema& schema = OsmSchema::getInstance();
 
   const Tags t1Copy = t1;
   for (Tags::ConstIterator it1 = t1Copy.begin(); it1 != t1Copy.end(); ++it1)
@@ -839,7 +839,7 @@ void TagComparator::_overwriteRemainingTags(Tags& t1, Tags& t2, Tags& result,
 
 void TagComparator::_overwriteUnrecognizedTags(Tags& t1, Tags& t2, Tags& result) const
 {
-  OsmSchema& schema = OsmSchema::getInstance();
+  const OsmSchema& schema = OsmSchema::getInstance();
 
   const Tags t1Copy = t1;
   for (Tags::ConstIterator it1 = t1Copy.begin(); it1 != t1Copy.end(); ++it1)
@@ -873,7 +873,7 @@ void TagComparator::_overwriteUnrecognizedTags(Tags& t1, Tags& t2, Tags& result)
 
 void TagComparator::_promoteToCommonAncestor(Tags& t1, Tags& t2, Tags& result) const
 {
-  OsmSchema& schema = OsmSchema::getInstance();
+  const OsmSchema& schema = OsmSchema::getInstance();
 
   // we're deleting as we iterate so be careful making changes.
   for (Tags::iterator it1 = t1.begin(); it1 != t1.end(); )
@@ -887,9 +887,9 @@ void TagComparator::_promoteToCommonAncestor(Tags& t1, Tags& t2, Tags& result) c
         // erase from the iterators in a safe way
         t1.erase(it1++);
         t2.erase(it2++);
-        if (ancestor.value.isEmpty() == false)
+        if (ancestor.getValue().isEmpty() == false)
         {
-          result[ancestor.key] = ancestor.value;
+          result[ancestor.getKey()] = ancestor.getValue();
         }
       }
       else

@@ -84,7 +84,7 @@ void TagAdvancedCriterion::_parseFilterString(const QString& filterJsonStringOrP
     {
       boost::property_tree::read_json(filterJsonStringOrPath.toStdString(), *propTree);
     }
-    catch (boost::property_tree::json_parser::json_parser_error& e)
+    catch (const boost::property_tree::json_parser::json_parser_error& e)
     {
       throw HootException(
         QString("Error parsing JSON: %1 (line %2)")
@@ -120,7 +120,7 @@ void TagAdvancedCriterion::_loadTagFilters(
     propTree->get_child_optional(tagFilterType.toStdString());
   if (tagFilterChild)
   {
-    for (boost::property_tree::ptree::value_type& tagFilterPart :
+    for (const boost::property_tree::ptree::value_type& tagFilterPart :
          propTree->get_child(tagFilterType.toStdString()))
     {
       TagFilter tagFilter = TagFilter::fromJson(tagFilterPart);

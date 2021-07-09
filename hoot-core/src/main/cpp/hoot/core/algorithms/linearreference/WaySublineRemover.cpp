@@ -47,7 +47,7 @@ namespace hoot
 {
 
 std::vector<ElementId> WaySublineRemover::removeSubline(
-  const WayPtr& way, const WaySubline& subline, OsmMapPtr& map)
+  const WayPtr& way, const WaySubline& subline, const OsmMapPtr& map)
 {
   if (!way || !subline.isValid())
   {
@@ -213,7 +213,8 @@ std::vector<ElementId> WaySublineRemover::removeSubline(
 }
 
 std::vector<ElementId> WaySublineRemover::_split(
-  const WayPtr& way, WayLocation& splitLocation, const OsmMapPtr& map, const bool keepFirstSegment)
+  const WayPtr& way, const WayLocation& splitLocation, const OsmMapPtr& map,
+  const bool keepFirstSegment)
 {
   std::vector<ElementId> newWayIds;
   LOG_VART(splitLocation.isExtreme());

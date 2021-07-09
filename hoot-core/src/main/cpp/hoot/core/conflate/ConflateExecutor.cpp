@@ -359,8 +359,8 @@ void ConflateExecutor::conflate(const QString& input1, const QString& input2, QS
     FileUtils::toLogFormat(output, _maxFilePrintLength));
 }
 
-void ConflateExecutor::_load(const QString& input1, const QString& input2, OsmMapPtr& map,
-                             const bool isChangesetOut)
+void ConflateExecutor::_load(
+  const QString& input1, const QString& input2, const OsmMapPtr& map, const bool isChangesetOut)
 {
   //  Loading order is important if datasource IDs 2 is true but 1 is not
   if (!ConfigOptions().getConflateUseDataSourceIds1() &&
@@ -499,7 +499,7 @@ void ConflateExecutor::_runConflateOps(OsmMapPtr& map, const bool runPre)
 }
 
 void ConflateExecutor::_writeOutput(
-  const OsmMapPtr& map, QString& output, const bool isChangesetOutput)
+  const OsmMapPtr& map, const QString& output, const bool isChangesetOutput)
 {
   // Figure out what to write
   _progress->set(

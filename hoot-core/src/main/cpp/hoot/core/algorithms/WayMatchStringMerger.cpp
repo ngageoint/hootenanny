@@ -452,7 +452,7 @@ void WayMatchStringMerger::_splitPrimary()
   // Create mappings from the sublines in s2 to sublines in s1
   for (int i = 0; i < ws2->getSize(); ++i)
   {
-    WaySubline& s2 = ws2->at(i);
+    const WaySubline& s2 = ws2->at(i);
     LOG_VART(s2);
     WayLocation splitStart = _mapping->map2To1(s2.getStart());
     WayLocation splitEnd = _mapping->map2To1(s2.getEnd());

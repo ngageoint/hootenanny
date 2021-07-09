@@ -118,8 +118,8 @@ public:
     relation->setType("review");
     relation->getTags().appendValue("name", "Test Review");
     std::vector<RelationData::Entry> members = relation->getMembers();
-    members[0].role = "reviewee";
-    members[1].role = "reviewee";
+    members[0].setRole("reviewee");
+    members[1].setRole("reviewee");
     relation->setMembers(members);
 
     QString output = OsmPgCsvWriter::toString(map);

@@ -736,7 +736,7 @@ bool OsmApiWriter::usingCgiMap(HootNetworkRequestPtr request) const
     QRegExp regex("generator=(\"|')CGImap", Qt::CaseInsensitive);
     cgimap = responseXml.contains(regex);
   }
-  catch (HootException& ex)
+  catch (const HootException& ex)
   {
     LOG_WARN(ex.what());
   }

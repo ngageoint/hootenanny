@@ -527,8 +527,8 @@ double MaximalSubline::findMaximalSubline(
   return score;
 }
 
-Sparse2dMatrix::CellId MaximalSubline::_findStartMatch(Sparse2dMatrix& sublines,
-  Sparse2dMatrix::CellId end) const
+Sparse2dMatrix::CellId MaximalSubline::_findStartMatch(
+  const Sparse2dMatrix& sublines, Sparse2dMatrix::CellId end) const
 {
   Sparse2dMatrix::CellId result = end;
 

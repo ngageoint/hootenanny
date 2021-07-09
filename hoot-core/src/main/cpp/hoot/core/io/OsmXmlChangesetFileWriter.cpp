@@ -458,8 +458,7 @@ void OsmXmlChangesetFileWriter::_writeRelation(QXmlStreamWriter& writer, ConstEl
     }
     writer.writeAttribute("ref", QString::number(memberId));
     writer.writeAttribute(
-      "role",
-      _invalidCharacterHandler.removeInvalidCharacters(e.role));
+      "role", _invalidCharacterHandler.removeInvalidCharacters(e.getRole()));
     writer.writeEndElement();
   }
 

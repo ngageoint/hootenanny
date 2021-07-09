@@ -334,7 +334,7 @@ bool ConflateInfoCache::elementsIntersect(
     key1 = element1->getElementId().toString() % ";" % element2->getElementId().toString();
     key2 = element2->getElementId().toString() % ";" % element1->getElementId().toString();
 
-    bool* cachedVal = _elementIntersectsCache[key1];
+    const bool* cachedVal = _elementIntersectsCache[key1];
     if (cachedVal != nullptr)
     {
       _incrementCacheHitCount("intersects");
@@ -512,7 +512,7 @@ bool ConflateInfoCache::elementCanBeConflatedByActiveMatcher(
   if (_cachingEnabled)
   {
     // Check the element can be conflated cache first.
-    bool* cachedVal = _conflatableElementCache[element->getElementId()];
+    const bool* cachedVal = _conflatableElementCache[element->getElementId()];
     if (cachedVal != nullptr)
     {
       _incrementCacheHitCount("conflatable");

@@ -125,8 +125,8 @@ namespace Tgs
     * @param fIdx the factor index in the data vectors
     * @param splits the potential splits in the data to consider 
     */
-    void _findCandidateSplits(DataFrame & df, std::vector<unsigned int> & indices, 
-      unsigned int fIdx, std::vector<unsigned int> & splits) const;
+    void _findCandidateSplits(const DataFrame& df, std::vector<unsigned int>& indices,
+      unsigned int fIdx, std::vector<unsigned int>& splits) const;
   };
 }  //End Namespace
 #endif 

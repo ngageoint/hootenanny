@@ -74,7 +74,7 @@ public:
    * Return true if schemavertex has empty geometry.
    */
   static bool isEmptyGeometry(const SchemaVertex& schemaVertex)
-  { return schemaVertex.geometries > 0; }
+  { return schemaVertex.getGeometries() > 0; }
 
 private:
 
