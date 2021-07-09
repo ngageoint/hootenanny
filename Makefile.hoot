@@ -493,7 +493,7 @@ tmp/schema.png: tmp/schema.dot
 
 # Code Coverage
 
-IGNORED=/usr/\* \*test/cpp\* \*/local/\* \*/tmp/moc/\* \*core/proto\*
+IGNORED=/usr/\* \*test/cpp\* \*/local/\* \*/tmp/moc/\* \*core/proto\* /opt/\* \*8/\*
 
 # Passing the --quiet switch to lcov when -s is present is causing errors, so writing out to a log every time instead.
 

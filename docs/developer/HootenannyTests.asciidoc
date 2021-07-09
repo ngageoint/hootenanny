@@ -528,12 +528,19 @@ The test coverage reports will be output to _$HOOT_HOME/coverage_.
 
 *NOTES:*
 
-* To get a code coverage report for *all* Hootenanny code, you *must* run 'make test-all' before running 'make coverage'
-for the Hootenanny Core code or you will get incomplete results.  The Java Web Services'make services-coverage' command doesn't actually require 'make test' to be run beforehand since it is done automatically, but if you run 'make coverage' when generating coverage reporting using the --with-services configuration option, you should always run 'make test' beforehand in order to not receive inaccurate reporting for the Hootenanny Core code.
-* Running tests `--with-coverage` may signficantly slow down their runtime and increase memory
+* Running tests `--with-coverage` may signficantly slow down their runtime and increase their memory
 usage. Therefore, its recommended to use `--with-coverage` only when you need to generate a test
 coverage report, and you may need to use a lower `--parallel` test count in conjunction with it.
-* For the Hootenanny Core code coverage reporting, although certain configuration options disable the compiling of certain code (--with-rnd, --with-services, etc.), the total lines the coverage report reports does not seem to change.  Therefore, to get a totally accurate coverage report for the Core code you need to always run with all configuration options enabled and run 'make test-all' to make sure all the code is covered.
+* To get a code coverage report for *all* Hootenanny code, you *must* run 'make test-all' before 
+running 'make coverage' for the Hootenanny Core code or you will get incomplete results. The Java 
+Web Services 'make services-coverage' command doesn't actually require 'make test' to be run 
+beforehand since it is done automatically, but if you run 'make coverage' when generating coverage 
+reporting using the `--with-services` configuration option, you should always run 'make test' 
+beforehand in order to not receive inaccurate reporting for the Hootenanny Core code.
+* For Hootenanny Core code coverage reporting, to get a totally accurate coverage report you need to 
+run with all compile configuration options enabled (--with-rnd, --with-services, etc.), and either 
+run 'make test-all', or if you don't want to run the Java web services tests then run something 
+like: 'HootTest --glacial --parallel && make translations-test'.
 
 === General Test Writing Guidelines
 
@@ -553,12 +560,12 @@ most likely be put into the integration tests.
 * Small amounts of test data should be used for testing if possible. Do not check very large test data
 files into the repository. Keep test files to <= 1MB when possible.
 * During testing you can verify test output via CPPUnit asserts against the state of the output data or via
-file comparison (`HOOT_FILE_EQUALS`) of the output with known good output. An advantage to using file comparison for
-testing output is that the test code is less verbose and tedious to maintain as the class evolves.
-A disadvantage of using file comparison is that it is not always clear what the intentions of your
-test are and individuals can inadvertently overwrite your intended test output if they do not
-understand why they broke the test. Weigh these pros and cons when selecting which one of these
-test output verification methods you will use.
+file comparison (`HOOT_FILE_EQUALS`) of the output with known good output. An advantage to using file 
+comparison for testing output is that the test code is less verbose and tedious to maintain as the 
+class evolves. A disadvantage of using file comparison is that it is not always clear what the 
+intentions of your test are and individuals can inadvertently overwrite your intended test output if 
+they do not understand why they broke the test. Weigh these pros and cons when selecting which one 
+of these test output verification methods you will use.
 * Do not overwrite generated test output used to verify a test unless you are sure that in doing
 so you are still preserving the integrity of the test.
 * In Java, mock objects are your friends when writing tests.

@@ -200,7 +200,7 @@ sudo yum -y install \
     xorg-x11-server-Xvfb \
     zip \
     
-# need this version for gcc 8
+# need this version for lcov to work with gcc 8
 wget https://github.com/linux-test-project/lcov/releases/download/v1.14/lcov-1.14-1.noarch.rpm
 sudo yum -y localinstall lcov-1.14-1.noarch.rpm
 
