@@ -530,6 +530,9 @@ The test coverage reports will be output to _$HOOT_HOME/coverage_.
 
 * To get a code coverage report for *all* Hootenanny code, you *must* run 'make test-all' before running 'make coverage'
 for the Hootenanny Core code or you will get incomplete results.  The Java Web Services'make services-coverage' command doesn't actually require 'make test' to be run beforehand since it is done automatically, but if you run 'make coverage' when generating coverage reporting using the --with-services configuration option, you should always run 'make test' beforehand in order to not receive inaccurate reporting for the Hootenanny Core code.
+* Running tests `--with-coverage` may signficantly slow down their runtime and increase memory
+usage. Therefore, its recommended to use `--with-coverage` only when you need to generate a test
+coverage report, and you may need to use a lower `--parallel` test count in conjunction with it.
 * For the Hootenanny Core code coverage reporting, although certain configuration options disable the compiling of certain code (--with-rnd, --with-services, etc.), the total lines the coverage report reports does not seem to change.  Therefore, to get a totally accurate coverage report for the Core code you need to always run with all configuration options enabled and run 'make test-all' to make sure all the code is covered.
 
 === General Test Writing Guidelines

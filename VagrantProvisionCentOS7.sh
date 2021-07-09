@@ -150,7 +150,6 @@ sudo yum -y install \
     git \
     git-core \
     gnuplot \
-    lcov \
     libicu-devel \
     libpng-devel \
     libtool \
@@ -200,6 +199,10 @@ sudo yum -y install \
     words \
     xorg-x11-server-Xvfb \
     zip \
+    
+# need this version for gcc 8
+wget https://github.com/linux-test-project/lcov/releases/download/v1.14/lcov-1.14-1.noarch.rpm
+sudo yum localinstall lcov-1.14-1.noarch.rpm
 
 # Fix missing qmake
 if ! hash qmake >/dev/null 2>&1 ; then
