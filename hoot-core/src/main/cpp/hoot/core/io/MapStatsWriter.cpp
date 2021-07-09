@@ -142,7 +142,7 @@ void MapStatsWriter::writeStats(
 
   // read the conflation status from the file.
   conf().set(ConfigOptions::getReaderUseFileStatusKey(), true);
-  OsmMapPtr map(new OsmMap());
+  OsmMapPtr map = std::make_shared<OsmMap>();
   IoUtils::loadMap(map, mapInputPath, true, Status::Invalid);
   MapProjector::projectToPlanar(map);
 

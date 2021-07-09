@@ -71,11 +71,11 @@ public:
     reader.setAddSourceDateTime(true);
 
     OsmMap::resetCounters();
-    OsmMapPtr map1(new OsmMap());
+    OsmMapPtr map1 = std::make_shared<OsmMap>();
     reader.read(_inputPath + "ToyTestA.osm", map1);
 
     OsmMap::resetCounters();
-    OsmMapPtr map2(new OsmMap());
+    OsmMapPtr map2 = std::make_shared<OsmMap>();
     reader.read(_inputPath + "ToyTestA.osm", map2);
 
     MapComparator uut;

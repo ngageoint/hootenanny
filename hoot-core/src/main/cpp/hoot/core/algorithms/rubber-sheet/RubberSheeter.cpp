@@ -49,7 +49,7 @@ void RubberSheeter::rubberSheet(const QString& input1, const QString& input2, co
     " and " << FileUtils::toLogFormat(input2, 25) << "; writing output to " <<
     FileUtils::toLogFormat(output, 25)  << "...");
 
-  OsmMapPtr map(new OsmMap());
+  OsmMapPtr map = std::make_shared<OsmMap>();
   IoUtils::loadMap(map, input1, false, Status::Unknown1);
   IoUtils::loadMap(map, input2, false, Status::Unknown2);
 

@@ -51,7 +51,7 @@ public:
 
   void runBasicTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(map, "test-files/ToyTestA.osm", false, Status::Unknown1);
 
     NodesPerWayVisitor uut;
@@ -67,7 +67,7 @@ public:
 
   void runCritTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map, "test-files/conflate/unified/AllDataTypesA.osm", false, Status::Unknown1);
 

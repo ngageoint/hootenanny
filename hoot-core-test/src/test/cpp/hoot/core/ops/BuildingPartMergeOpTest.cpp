@@ -71,7 +71,7 @@ public:
   void runToyTest()
   {
     OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(_inputPath + "ToyBuildings.osm", map);
 
@@ -92,7 +92,7 @@ public:
   void runToyMultithreadTest()
   {
     OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(_inputPath + "ToyBuildings.osm", map);
 
@@ -114,7 +114,7 @@ public:
   void runPreserveTypesTest()
   {
     OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     const QString inputPath =
       "test-files/cases/attribute/unifying/building/building-3136-many-to-many-auto-merge-1";

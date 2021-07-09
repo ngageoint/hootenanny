@@ -168,7 +168,7 @@ int ServicesDbTestUtils::findIndex(const QList<QString>& keys, const QString& ke
 void ServicesDbTestUtils::verifyTestDatabaseEmpty()
 {
   OsmApiDbReader reader;
-  OsmMapPtr map(new OsmMap());
+  OsmMapPtr map = std::make_shared<OsmMap>();
   reader.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
   reader.read(map);
 
@@ -227,7 +227,7 @@ std::shared_ptr<Node> ServicesDbTestUtils::_createNode(double x, double y, OsmMa
 
 std::shared_ptr<OsmMap> ServicesDbTestUtils::createTestMap1()
 {
-  std::shared_ptr<OsmMap> map(new OsmMap());
+  std::shared_ptr<OsmMap> map = std::make_shared<OsmMap>();
 
   std::shared_ptr<Node> n1 = _createNode(-77.0, 38.0, map);
   n1->setTag("building", "yes");
@@ -284,7 +284,7 @@ std::shared_ptr<OsmMap> ServicesDbTestUtils::createTestMap1()
 
 OsmMapPtr ServicesDbTestUtils::createServiceTestMap()
 {
-  OsmMapPtr map(new OsmMap());
+  OsmMapPtr map = std::make_shared<OsmMap>();
 
   NodePtr n1(new Node(Status::Unknown1, 1, 0.0, 0.0, 10.0));
   map->addNode(n1);

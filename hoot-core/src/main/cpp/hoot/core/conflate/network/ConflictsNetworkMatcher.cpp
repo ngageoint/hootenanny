@@ -161,7 +161,7 @@ Meters ConflictsNetworkMatcher::_getMatchSeparation(ConstEdgeMatchPtr pMatch) co
   if (str1->getSize() > 0 && str2->getSize() > 0)
   {
     //  Create a temp map, and add the ways
-    OsmMapPtr tempMap(new OsmMap());
+    OsmMapPtr tempMap = std::make_shared<OsmMap>();
     tempMap->setProjection(_details->getMap()->getProjection());
     WayPtr pWay1 = str1->copySimplifiedWayIntoMap(*(_details->getMap()), tempMap);
     WayPtr pWay2 = str2->copySimplifiedWayIntoMap(*(_details->getMap()), tempMap);

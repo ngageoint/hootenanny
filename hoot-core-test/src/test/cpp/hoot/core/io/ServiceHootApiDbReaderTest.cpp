@@ -147,7 +147,7 @@ public:
 
   long insertDataForBoundTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map, _inputPath + "runReadByBoundsTestInput.osm", false, Status::Unknown1);
 
@@ -191,7 +191,7 @@ public:
     HootApiDbReader reader;
     reader.setUserEmail(userEmail(_testName));
     // make sure all the element ids start with -1
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setUseDataSourceIds(false);
     reader.open(ServicesDbTestUtils::getDbReadUrl(_mapId).toString());
     reader.read(map);
@@ -348,10 +348,10 @@ public:
     CPPUNIT_ASSERT(relation->contains(ElementId::node(1)));
     CPPUNIT_ASSERT(relation->contains(ElementId::way(1)));
     RelationData::Entry member = relationMembers.at(0);
-    HOOT_STR_EQUALS("n1", member.role);
+    HOOT_STR_EQUALS("n1", member.getRole());
     CPPUNIT_ASSERT_EQUAL((long)1, member.getElementId().getId());
     member = relationMembers.at(1);
-    HOOT_STR_EQUALS("w1", member.role);
+    HOOT_STR_EQUALS("w1", member.getRole());
     CPPUNIT_ASSERT_EQUAL((long)1, member.getElementId().getId());
     CPPUNIT_ASSERT_EQUAL(2, relation->getTags().size());
     HOOT_STR_EQUALS("r1", relation->getTags().get("note"));
@@ -367,7 +367,7 @@ public:
     CPPUNIT_ASSERT(relation->contains(ElementId::node(2)));
     CPPUNIT_ASSERT_EQUAL(size_t(1), relation->getMembers().size());
     member = relation->getMembers().at(0);
-    HOOT_STR_EQUALS("n2", member.role);
+    HOOT_STR_EQUALS("n2", member.getRole());
     CPPUNIT_ASSERT_EQUAL((long)2, member.getElementId().getId());
     CPPUNIT_ASSERT_EQUAL(1, relation->getTags().size());
     CPPUNIT_ASSERT_EQUAL((long)1, relation->getVersion());
@@ -399,7 +399,7 @@ public:
 
     HootApiDbReader reader;
     reader.setUserEmail(userEmail(_testName));
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.open(ServicesDbTestUtils::getDbReadUrl(_mapId).toString());
     reader.read(map);
     verifyFullReadOutput(map);
@@ -413,7 +413,7 @@ public:
 
     HootApiDbReader reader;
     reader.setUserEmail(userEmail(_testName));
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.open(ServicesDbTestUtils::getDbReadUrl(_mapId, 3, "node").toString());
     reader.read(map);
     verifySingleReadOutput(map);
@@ -425,7 +425,7 @@ public:
     setUpTest("runFactoryReadTest");
     _mapId = populateMap();
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     conf().set("api.db.email", userEmail(_testName));
     OsmMapReaderFactory::read(map, ServicesDbTestUtils::getDbReadUrl(_mapId).toString());
     verifyFullReadOutput(map);
@@ -446,7 +446,7 @@ public:
     reader.initializePartial();
 
     int ctr = 0;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     //3 nodes
 
@@ -490,7 +490,7 @@ public:
 
     //2 nodes, 1 way
 
-    map.reset(new OsmMap());
+    map = std::make_shared<OsmMap>();
     CPPUNIT_ASSERT(reader.hasMoreElements());
     reader.readPartial(map);
     CPPUNIT_ASSERT_EQUAL(2, (int)map->getNodes().size());
@@ -530,7 +530,7 @@ public:
 
     //2 ways, 1 relation
 
-    map.reset(new OsmMap());
+    map = std::make_shared<OsmMap>();
     CPPUNIT_ASSERT(reader.hasMoreElements());
     reader.readPartial(map);
     CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodes().size());
@@ -564,10 +564,10 @@ public:
     CPPUNIT_ASSERT(relation->contains(ElementId::node(1)));
     CPPUNIT_ASSERT(relation->contains(ElementId::way(1)));
     RelationData::Entry member = relation->getMembers().at(0);
-    HOOT_STR_EQUALS("n1", member.role);
+    HOOT_STR_EQUALS("n1", member.getRole());
     CPPUNIT_ASSERT_EQUAL((long)1, member.getElementId().getId());
     member = relation->getMembers().at(1);
-    HOOT_STR_EQUALS("w1", member.role);
+    HOOT_STR_EQUALS("w1", member.getRole());
     CPPUNIT_ASSERT_EQUAL((long)1, member.getElementId().getId());
     CPPUNIT_ASSERT_EQUAL(2, relation->getTags().size());
     HOOT_STR_EQUALS("r1", relation->getTags().get("note"));
@@ -577,7 +577,7 @@ public:
 
     //1 relation
 
-    map.reset(new OsmMap());
+    map = std::make_shared<OsmMap>();
     CPPUNIT_ASSERT(reader.hasMoreElements());
     reader.readPartial(map);
     CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodes().size());
@@ -592,7 +592,7 @@ public:
     CPPUNIT_ASSERT(relation->contains(ElementId::node(2)));
     CPPUNIT_ASSERT_EQUAL(size_t(1), relation->getMembers().size());
     member = relation->getMembers().at(0);
-    HOOT_STR_EQUALS("n2", member.role);
+    HOOT_STR_EQUALS("n2", member.getRole());
     CPPUNIT_ASSERT_EQUAL((long)2, member.getElementId().getId());
     CPPUNIT_ASSERT_EQUAL(1, relation->getTags().size());
     HOOT_STR_EQUALS("2", relation->getTags().get(MetadataTags::HootId()));
@@ -612,7 +612,7 @@ public:
 
     HootApiDbReader reader;
     reader.setUserEmail(userEmail(_testName));
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.open(ServicesDbTestUtils::getDbReadUrl(_mapId).toString());
 
     // See related note in ServiceOsmApiDbReaderTest::runReadByBoundsTest.
@@ -648,7 +648,7 @@ public:
     //just want to make sure I can read against the same data twice in a row w/o crashing and also
     //make sure I don't get the same result again for a different bounds
     reader.setBoundingBox("-1,-1,1,1");
-    map.reset(new OsmMap());
+    map = std::make_shared<OsmMap>();
     reader.read(map);
 
     CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodes().size());
@@ -667,7 +667,7 @@ public:
 
     HootApiDbReader reader;
     reader.setUserEmail("");
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.open(ServicesDbTestUtils::getDbReadUrl(_mapId).toString());
     reader.read(map);
     verifyFullReadOutput(map);
@@ -767,7 +767,7 @@ public:
     LOG_VARD(secondMapId);
 
     HootApiDbReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     QString url = ServicesDbTestUtils::getDbReadUrl(_mapId).toString();
     url = url.replace("/" + QString::number(_mapId), "/" + _testName);
     LOG_VARD(url);
@@ -783,7 +783,7 @@ public:
 
     // Configure the reader for the second user, and we should be able to read out the map as well.
     LOG_DEBUG("Reading second map with second user...");
-    map.reset(new OsmMap());
+    map = std::make_shared<OsmMap>();
     reader.setUserEmail(differentUserEmail);
     reader.open(url);
     reader.read(map);
@@ -831,7 +831,7 @@ public:
 
     LOG_DEBUG("Reading first map with first user...");
     HootApiDbReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     QString url = ServicesDbTestUtils::getDbReadUrl(_mapId).toString();
     url = url.replace("/" + QString::number(_mapId), "/" + _testName);
     // Configure the reader for the original user, and we should be able to read out the second map.
@@ -844,7 +844,7 @@ public:
 
     // Configure the reader for the second user, and we should be able to read out the map as well.
     LOG_DEBUG("Reading second map with second user...");
-    map.reset(new OsmMap());
+    map = std::make_shared<OsmMap>();
     reader.setUserEmail(differentUserEmail);
     reader.open(url);
     reader.read(map);
@@ -937,7 +937,7 @@ public:
     HootApiDbReader reader;
     reader.setUserEmail(userEmail(_testName));
     reader.setKeepImmediatelyConnectedWaysOutsideBounds(true);
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.open(ServicesDbTestUtils::getDbReadUrl(_mapId).toString());
 
     // See related note in ServiceOsmApiDbReaderTest::runReadByBoundsTest.
@@ -976,7 +976,7 @@ public:
     //just want to make sure I can read against the same data twice in a row w/o crashing and also
     //make sure I don't get the same result again for a different bounds
     reader.setBoundingBox("-1,-1,1,1");
-    map.reset(new OsmMap());
+    map = std::make_shared<OsmMap>();
     reader.read(map);
 
     CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodes().size());
@@ -1006,7 +1006,7 @@ public:
     //  Attempt to read the original map with the admin user
     LOG_DEBUG("Reading map with second user...");
     HootApiDbReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     QString url = ServicesDbTestUtils::getDbReadUrl(_mapId).toString();
     reader.setUserEmail(userEmail(testMap2));
     reader.open(url);

@@ -83,8 +83,7 @@ private:
    * @param map Map that contains the pairs.
    * @param pairs Pairs that represent links in the subgraph.
    */
-  void _initializeClusters(OsmMapPtr map,
-    std::set<std::pair<ElementId, ElementId>>& pairs);
+  void _initializeClusters(OsmMapPtr map, const std::set<std::pair<ElementId, ElementId>>& pairs);
 };
 
 }

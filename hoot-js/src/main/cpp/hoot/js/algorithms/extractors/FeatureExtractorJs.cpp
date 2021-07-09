@@ -55,7 +55,7 @@ void FeatureExtractorJs::extract(const FunctionCallbackInfo<Value>& args)
   HandleScope scope(current);
   Local<Context> context = current->GetCurrentContext();
 
-  FeatureExtractorJs* feJs = ObjectWrap::Unwrap<FeatureExtractorJs>(args.This());
+  const FeatureExtractorJs* feJs = ObjectWrap::Unwrap<FeatureExtractorJs>(args.This());
 
   if (args.Length() != 3)
   {
@@ -70,7 +70,7 @@ void FeatureExtractorJs::extract(const FunctionCallbackInfo<Value>& args)
     feJs->getFeatureExtractor()->extract(
       *(mapJs->getConstMap()), e1Js->getConstElement(), e2Js->getConstElement());
 
-  if (result == feJs->getFeatureExtractor()->nullValue())
+  if (result == FeatureExtractor::nullValue())
   {
     args.GetReturnValue().SetNull();
   }

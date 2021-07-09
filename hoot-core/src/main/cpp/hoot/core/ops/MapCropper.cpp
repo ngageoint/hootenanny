@@ -377,19 +377,17 @@ void MapCropper::apply(OsmMapPtr& map)
       }
       LOG_VART(nodeInside);
 
-      // if the node is outside
-      if (!nodeInside)
+      // If the node is outside,
+      if (!nodeInside &&
+          // the node is within the limiting bounds, and the node is not part of a way,
+          n2w->find(it->first) == n2w->end())
       {
-        // If the node is within the limiting bounds, and the node is not part of a way,
-        if (n2w->find(it->first) == n2w->end())
-        {
-          // remove the node.
-          LOG_TRACE(
-            "Removing node with coords: " << it->second->getX() << " : " << it->second->getY());
-          RemoveNodeByEid::removeNodeNoCheck(map, it->second->getId());
-          nodesRemoved++;
-          _numAffected++;
-        }
+        // remove the node.
+        LOG_TRACE(
+          "Removing node with coords: " << it->second->getX() << " : " << it->second->getY());
+        RemoveNodeByEid::removeNodeNoCheck(map, it->second->getId());
+        nodesRemoved++;
+        _numAffected++;
       }
     }
 

@@ -120,7 +120,7 @@ void MultiaryReviewCommand::setFinalElement(ElementPtr e)
 QString MultiaryReviewCommand::toJsonString() const
 {
   // Put our element in a map to make it easy to write
-  OsmMapPtr pMap(new OsmMap());
+  OsmMapPtr pMap = std::make_shared<OsmMap>();
   if (_finalElement)
     pMap->addElement(_copyElement(_finalElement));
 
@@ -186,7 +186,7 @@ MultiaryReviewCommand MultiaryReviewCommand::fromJsonString(QString jsonStr)
   {
     pt::read_json(ss, propTree);
   }
-  catch (pt::json_parser::json_parser_error& e)
+  catch (const pt::json_parser::json_parser_error& e)
   {
     QString reason = QString::fromStdString(e.message());
     QString line = QString::number(e.line());

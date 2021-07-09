@@ -62,7 +62,7 @@ public:
 
   void runRemoveTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map, _inputPath + "RemoveTagsVisitorTest.osm", false, Status::Unknown1);
 
@@ -81,7 +81,7 @@ public:
 
   void runFilterTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map, _inputPath + "RemoveTagsVisitorTest.osm", false, Status::Unknown1);
 
@@ -101,7 +101,7 @@ public:
 
   void runNegatedFilterTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map, _inputPath + "RemoveTagsVisitorTest.osm", false, Status::Unknown1);
 
@@ -121,7 +121,7 @@ public:
 
   void runWildcardTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map, _inputPath + "RemoveTagsVisitorTest.osm", false, Status::Unknown1);
 

@@ -128,7 +128,7 @@ private:
   void _addStat(const char* name, double value);
   bool _statPassesFilter(const StatData& statData) const;
   int _getNumStatsPassingFilter(const QList<StatData>& stats) const;
-  void _interpretStatData(std::shared_ptr<const OsmMap>& constMap, StatData& d);
+  void _interpretStatData(const std::shared_ptr<const OsmMap>& constMap, const StatData& d);
   double GetRequestedStatValue(const ElementVisitor* pVisitor, StatData::StatCall call) const;
 
   /**
@@ -149,7 +149,7 @@ private:
     const hoot::FilteredVisitor& v, boost::any& visitorData, const QString& statName,
     StatData::StatCall call = StatData::StatCall::Stat);
   double _applyVisitor(
-    ElementCriterion* pCrit, ConstElementVisitor* pVis, const QString& statName,
+    const ElementCriterion* pCrit, ConstElementVisitor* pVis, const QString& statName,
     StatData::StatCall call = StatData::StatCall::Stat);
   void _applyVisitor(ConstElementVisitor* v, const QString& statName);
   double _getApplyVisitor(ConstElementVisitor* v, const QString& statName);

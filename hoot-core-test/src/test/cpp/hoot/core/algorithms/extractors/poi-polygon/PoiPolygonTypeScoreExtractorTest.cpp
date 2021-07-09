@@ -63,7 +63,7 @@ public:
 
   void runTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     PoiPolygonDistanceTruthRecorder::resetMatchDistanceInfo();
     PoiPolygonInfoCachePtr infoCache(new PoiPolygonInfoCache(map));
     infoCache->setConfiguration(conf());
@@ -104,7 +104,7 @@ public:
   void translateTagValueTest()
   {
     Settings settings = conf();
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     settings.set("poi.polygon.type.translate.to.english", "true");
     settings.set("language.translation.translator", "hoot::ToEnglishDictionaryTranslator");

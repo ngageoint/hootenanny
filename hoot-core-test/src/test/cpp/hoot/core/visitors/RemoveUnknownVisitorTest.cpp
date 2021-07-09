@@ -51,7 +51,7 @@ public:
 
   OsmMapPtr loadMap()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmXmlReader reader;
     reader.setUseDataSourceIds(true);
     //  Load up ToyTestA as Unknown1

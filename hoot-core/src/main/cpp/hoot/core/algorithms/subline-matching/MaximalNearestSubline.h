@@ -114,7 +114,7 @@ private:
 
   Meters _calculateIntervalLength();
 
-  void _expandInterval(WayLocation& loc);
+  void _expandInterval(const WayLocation& loc);
 
   /**
    * Returns the end node in the MNS.

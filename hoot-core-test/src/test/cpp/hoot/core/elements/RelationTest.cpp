@@ -63,7 +63,7 @@ public:
   {
     DisableLog dl;
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     RelationPtr r1(new Relation(Status::Unknown1, 1, 15));
     RelationPtr r2(new Relation(Status::Unknown1, 2, 15));
     map->addElement(r1);
@@ -82,7 +82,7 @@ public:
   {
     DisableLog dl;
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     RelationPtr r1(new Relation(Status::Unknown1, 1, 15));
     RelationPtr r2(new Relation(Status::Unknown1, 2, 15));
     map->addElement(r1);
@@ -101,7 +101,7 @@ public:
   {
     DisableLog dl;
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     RelationPtr r1(new Relation(Status::Unknown1, 1, 15));
     RelationPtr r2(new Relation(Status::Unknown1, 2, 15));
     map->addElement(r1);
@@ -120,7 +120,7 @@ public:
   {
     DisableLog dl;
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     RelationPtr r1(new Relation(Status::Unknown1, 1, 15));
     RelationPtr r2(new Relation(Status::Unknown1, 2, 15));
     map->addElement(r1);
@@ -140,7 +140,7 @@ public:
    */
   void runReplaceTest1()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     RelationPtr r1(new Relation(Status::Unknown1, 1, 15));
     WayPtr w1(new Way(Status::Unknown1, 1, 15));
     WayPtr w2(new Way(Status::Unknown1, 2, 15));
@@ -174,7 +174,7 @@ public:
    */
   void runReplaceTest2()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     RelationPtr r1(new Relation(Status::Unknown1, 1, 15));
     WayPtr w1(new Way(Status::Unknown1, 1, 15));
     WayPtr w2(new Way(Status::Unknown1, 2, 15));
@@ -206,7 +206,7 @@ public:
 
   void runIndexOfTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     RelationPtr r1(new Relation(Status::Unknown1, 1, 15));
     WayPtr w1(new Way(Status::Unknown1, 1, 15));
     WayPtr w2(new Way(Status::Unknown1, 2, 15));
@@ -227,7 +227,7 @@ public:
 
   void runInsertTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     RelationPtr r1(new Relation(Status::Unknown1, 1, 15));
     WayPtr w1(new Way(Status::Unknown1, 1, 15));
     WayPtr w2(new Way(Status::Unknown1, 2, 15));

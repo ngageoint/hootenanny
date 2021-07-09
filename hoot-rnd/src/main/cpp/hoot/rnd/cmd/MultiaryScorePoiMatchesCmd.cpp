@@ -107,23 +107,23 @@ public:
     SchemaVertex id;
     id.setName("ID");
     id.setType(SchemaVertex::Tag);
-    id.valueType = Text;
+    id.setValueType(Text);
     OsmSchema::getInstance().updateOrCreateVertex(id);
 
     SchemaVertex match;
     id.setName("MATCH");
     id.setType(SchemaVertex::Tag);
-    id.valueType = Text;
+    id.setValueType(Text);
     OsmSchema::getInstance().updateOrCreateVertex(match);
 
     SchemaVertex review;
     id.setName("REVIEW");
     id.setType(SchemaVertex::Tag);
-    id.valueType = Text;
+    id.setValueType(Text);
     OsmSchema::getInstance().updateOrCreateVertex(review);
 
     QString output = args.last();
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     for (int i = 0; i < args.size() - 1; i++)
     {
       Status s = Status::fromInput(i);

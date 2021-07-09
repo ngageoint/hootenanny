@@ -148,7 +148,7 @@ public:
     vector<QString> names;
     for (size_t i = 0; i < tvs.size(); i++)
     {
-      names.push_back(tvs[i].name);
+      names.push_back(tvs[i].getName());
     }
     HOOT_STR_EQUALS("[5]{highway=road, highway=primary, highway=secondary, highway=residential, highway=service}",
                     names);
@@ -160,13 +160,13 @@ public:
     uut.createTestingGraph();
 
     const SchemaVertex& v1 = uut.getFirstCommonAncestor("highway=primary", "highway=secondary");
-    CPPUNIT_ASSERT_EQUAL(string("road"), v1.value.toStdString());
+    CPPUNIT_ASSERT_EQUAL(string("road"), v1.getValue().toStdString());
     const SchemaVertex& v2 = uut.getFirstCommonAncestor("highway=primary", "highway=primary");
-    CPPUNIT_ASSERT_EQUAL(string("primary"), v2.value.toStdString());
+    CPPUNIT_ASSERT_EQUAL(string("primary"), v2.getValue().toStdString());
     const SchemaVertex& v3 = uut.getFirstCommonAncestor("highway=road", "highway=primary");
-    CPPUNIT_ASSERT_EQUAL(string("road"), v3.value.toStdString());
+    CPPUNIT_ASSERT_EQUAL(string("road"), v3.getValue().toStdString());
     const SchemaVertex& v4 = uut.getFirstCommonAncestor("highway=primary", "highway=road");
-    CPPUNIT_ASSERT_EQUAL(string("road"), v4.value.toStdString());
+    CPPUNIT_ASSERT_EQUAL(string("road"), v4.getValue().toStdString());
   }
 
   void dumpAsCsv(OsmSchema& schema, QString tag)
@@ -177,21 +177,21 @@ public:
 
     for (size_t i = 0; i < surfaces.size(); i++)
     {
-      csvDistance += ", " + surfaces[i].name;
+      csvDistance += ", " + surfaces[i].getName();
     }
     csvDistance += "\n";
     csvAverage = csvDistance;
 
     for (size_t i = 0; i < surfaces.size(); i++)
     {
-      csvDistance += surfaces[i].name;
-      csvAverage += surfaces[i].name;
+      csvDistance += surfaces[i].getName();
+      csvAverage += surfaces[i].getName();
       for (size_t j = 0; j < surfaces.size(); j++)
       {
-        double d = schema.score(surfaces[i].name, surfaces[j].name);
+        double d = schema.score(surfaces[i].getName(), surfaces[j].getName());
         csvDistance += QString(", %1").arg(d);
         double best;
-        QString avg = schema.average(surfaces[i].name, surfaces[j].name, best);
+        QString avg = schema.average(surfaces[i].getName(), surfaces[j].getName(), best);
         csvAverage += QString(", %1").arg(avg);
       }
       csvDistance += "\n";
@@ -223,7 +223,7 @@ public:
     QStringList l;
     for (size_t i = 0; i < v.size(); i++)
     {
-      l << v[i].name;
+      l << v[i].getName();
     }
 
     return l;
@@ -383,13 +383,13 @@ public:
     OsmSchema uut;
     uut.createTestingGraph();
 
-    HOOT_STR_EQUALS("abstract_name", uut.getTagVertex("abstract_name").name);
-    HOOT_STR_EQUALS("abstract_name", uut.getTagVertex("abstract_name=foo").name);
-    HOOT_STR_EQUALS("name", uut.getTagVertex("name").name);
-    HOOT_STR_EQUALS("name", uut.getTagVertex("name=bar").name);
-    HOOT_STR_EQUALS("", uut.getTagVertex("poi=foo").name);
-    HOOT_STR_EQUALS("poi=yes", uut.getTagVertex("poi=yes").name);
-    HOOT_STR_EQUALS("leisure=*", uut.getTagVertex("leisure=foo").name);
+    HOOT_STR_EQUALS("abstract_name", uut.getTagVertex("abstract_name").getName());
+    HOOT_STR_EQUALS("abstract_name", uut.getTagVertex("abstract_name=foo").getName());
+    HOOT_STR_EQUALS("name", uut.getTagVertex("name").getName());
+    HOOT_STR_EQUALS("name", uut.getTagVertex("name=bar").getName());
+    HOOT_STR_EQUALS("", uut.getTagVertex("poi=foo").getName());
+    HOOT_STR_EQUALS("poi=yes", uut.getTagVertex("poi=yes").getName());
+    HOOT_STR_EQUALS("leisure=*", uut.getTagVertex("leisure=foo").getName());
   }
 
   void isAncestorTest()

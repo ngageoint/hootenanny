@@ -169,7 +169,7 @@ void ConflateExecutor::conflate(const QString& input1, const QString& input2, QS
   _taskTimer.reset();
   _progress.reset(
     new Progress(ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running));
-  OsmMapPtr map(new OsmMap());
+  OsmMapPtr map = std::make_shared<OsmMap>();
   const bool isChangesetOutput = output.endsWith(".osc") || output.endsWith(".osc.sql");
   double bytesRead = IoSingleStat(IoSingleStat::RChar).value;
   LOG_VART(bytesRead);
@@ -359,8 +359,8 @@ void ConflateExecutor::conflate(const QString& input1, const QString& input2, QS
     FileUtils::toLogFormat(output, _maxFilePrintLength));
 }
 
-void ConflateExecutor::_load(const QString& input1, const QString& input2, OsmMapPtr& map,
-                             const bool isChangesetOut)
+void ConflateExecutor::_load(
+  const QString& input1, const QString& input2, const OsmMapPtr& map, const bool isChangesetOut)
 {
   //  Loading order is important if datasource IDs 2 is true but 1 is not
   if (!ConfigOptions().getConflateUseDataSourceIds1() &&
@@ -498,7 +498,8 @@ void ConflateExecutor::_runConflateOps(OsmMapPtr& map, const bool runPre)
     StringUtils::millisecondsToDhms(opsTimer.elapsed()) << " total.");
 }
 
-void ConflateExecutor::_writeOutput(OsmMapPtr& map, QString& output, const bool isChangesetOutput)
+void ConflateExecutor::_writeOutput(
+  const OsmMapPtr& map, const QString& output, const bool isChangesetOutput)
 {
   // Figure out what to write
   _progress->set(
@@ -541,7 +542,7 @@ void ConflateExecutor::_writeOutput(OsmMapPtr& map, QString& output, const bool 
 }
 
 void ConflateExecutor::_writeStats(
-  OsmMapPtr& map, const CalculateStatsOp& input1Cso, const CalculateStatsOp& input2Cso,
+  const OsmMapPtr& map, const CalculateStatsOp& input1Cso, const CalculateStatsOp& input2Cso,
   const QString& outputFileName)
 {
   _progress->set(

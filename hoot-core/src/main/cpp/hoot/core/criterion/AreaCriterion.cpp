@@ -69,7 +69,7 @@ bool AreaCriterion::isSatisfied(const Tags& tags, const ElementType& elementType
   {
     const QString kvp = OsmSchema::toKvp(it.key(), it.value());
     const SchemaVertex& tv = OsmSchema::getInstance().getTagVertex(kvp);
-    uint16_t g = tv.geometries;
+    uint16_t g = tv.getGeometries();
 
     LOG_VART(tv.toString());
     LOG_VART(g);

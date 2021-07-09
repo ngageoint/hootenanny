@@ -107,7 +107,7 @@ public:
     ElementDeduplicator deduper;
     deduper.setFavorMoreConnectedWays(favorMoreConnectedWays);
 
-    OsmMapPtr input1Map(new OsmMap());
+    OsmMapPtr input1Map = std::make_shared<OsmMap>();
     IoUtils::loadMap(input1Map, input1, true, Status::Unknown1);
     input1Map->setName("map1");
     OsmMapPtr input2Map;
@@ -117,7 +117,7 @@ public:
     }
     else
     {
-      input2Map.reset(new OsmMap());
+      input2Map = std::make_shared<OsmMap>();
       IoUtils::loadMap(input2Map, input2, true, Status::Unknown2);
       input2Map->setName("map2");
 

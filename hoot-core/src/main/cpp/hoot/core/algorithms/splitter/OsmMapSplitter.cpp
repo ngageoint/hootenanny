@@ -103,7 +103,7 @@ void OsmMapSplitter::_placeElementInMap(const ElementPtr& element)
   long maxEnvelopeIndex = -1;
   for (long tile_index = 0; tile_index < (long)_tileEnvelopes.size(); ++tile_index)
   {
-    Envelope& renv = _tileEnvelopes[tile_index];
+    const Envelope& renv = _tileEnvelopes[tile_index];
     //  Find the best envelope for this element
     if (renv.contains(env))
     {
@@ -136,7 +136,7 @@ void OsmMapSplitter::_placeElementInMap(const ElementPtr& element)
   CopyMapSubsetOp op(_map, element->getElementId());
   op.apply(tile);
   //  Update the list of elements already copied to maps
-  std::set<ElementId>& eids = op.getEidsCopied();
+  const std::set<ElementId>& eids = op.getEidsCopied();
   _eidsCompleted.insert(eids.begin(), eids.end());
 
   if (_eidsCompleted.size() % _statusUpdateInterval == 0)

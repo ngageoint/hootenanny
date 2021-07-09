@@ -90,7 +90,7 @@ ElementCriterionPtr CriterionUtils::constructCriterion(
       throw IllegalArgumentException("Invalid criterion: " + criterionClassName);
     }
 
-    OsmMapConsumer* omc = dynamic_cast<OsmMapConsumer*>(subCrit.get());
+    const OsmMapConsumer* omc = dynamic_cast<OsmMapConsumer*>(subCrit.get());
     if (omc)
     {
       isStreamable = isStreamable && false;

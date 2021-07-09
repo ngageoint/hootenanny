@@ -51,7 +51,7 @@ FrechetDistance::FrechetDistance(const ConstOsmMapPtr &map, const ConstWayPtr &w
   : _matrix(boost::extents[way1->getNodeCount()][way2->getNodeCount()]), _maxAngle(maxAngle)
 {
   //  Copy the map and two ways
-  _map.reset(new OsmMap());
+  _map = std::make_shared<OsmMap>();
   CopyMapSubsetOp(map,
                way1->getElementId(),
                way2->getElementId()).apply(_map);
@@ -143,13 +143,13 @@ void FrechetDistance::advanceAndCheck(const int rows, const int cols, int& r, in
   }
 }
 
-Radians FrechetDistance::getHeadingWay1(int index)
+Radians FrechetDistance::getHeadingWay1(int index) const
 {
   //  Return the heading for _w1 at index
   return getHeading(_w1, index);
 }
 
-Radians FrechetDistance::getHeadingWay2(int index)
+Radians FrechetDistance::getHeadingWay2(int index) const
 {
   //  Return the heading for _w2 at index
   return getHeading(_w2, index);

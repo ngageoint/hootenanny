@@ -192,7 +192,7 @@ shared_ptr<MatchCreator> CalculateStatsOp::getMatchCreator(
       {
         featureType = descIt->getBaseFeatureType();
         LOG_VART(featureType);
-        return (*matchIt);
+        return *matchIt;
       }
     }
   }
@@ -609,7 +609,8 @@ bool CalculateStatsOp::_statPassesFilter(const StatData& statData) const
     _filter.contains(statData.getFilterCriterion());
 }
 
-void CalculateStatsOp::_interpretStatData(shared_ptr<const OsmMap>& constMap, StatData& d)
+void CalculateStatsOp::_interpretStatData(
+  const shared_ptr<const OsmMap>& constMap, const StatData& d)
 {
   // Check against the applied filter to see whether this stat should be generated.
   LOG_VART(_filter);
@@ -784,7 +785,7 @@ bool CalculateStatsOp::_matchDescriptorCompare(
 }
 
 double CalculateStatsOp::_applyVisitor(
-  ElementCriterion* pCrit, ConstElementVisitor* pVis, const QString& statName,
+  const ElementCriterion* pCrit, ConstElementVisitor* pVis, const QString& statName,
   StatData::StatCall call)
 {
   return _applyVisitor(FilteredVisitor(pCrit, pVis), statName, call);
@@ -822,7 +823,7 @@ double CalculateStatsOp::_applyVisitor(
 
   _constMap->visitRo(*fv);
 
-  DataProducer* dataProducer = dynamic_cast<DataProducer*>(&childVisitor);
+  const DataProducer* dataProducer = dynamic_cast<DataProducer*>(&childVisitor);
   if (dataProducer != nullptr)
   {
     visitorData = dataProducer->getData();

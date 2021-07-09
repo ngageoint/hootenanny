@@ -66,13 +66,13 @@ public:
 
     switch (args.size())
     {
-    default:
-      cout << getHelp() << endl << endl;
-      throw HootException(QString("%1 takes two, four, or six parameters.").arg(getName()));
-      break;
     case 2:   //  Input/output filenames only
     case 4:   //  Input/output filenames and one of '--alpha' or '--buffer'
     case 6:   //  Input/output filenames and both of '--alpha' and '--buffer'
+      break;
+    default:
+      cout << getHelp() << endl << endl;
+      throw HootException(QString("%1 takes two, four, or six parameters.").arg(getName()));
       break;
     }
     //  Parse and remove the alpha value from the arguments, if present
@@ -115,7 +115,7 @@ public:
       "Deriving alpha shape for input ..." << FileUtils::toLogFormat(pointsPath, 25) <<
       " and writing output to " << FileUtils::toLogFormat(outputPath, 25) << "...");
 
-    OsmMapPtr pointsMap(new OsmMap());
+    OsmMapPtr pointsMap = std::make_shared<OsmMap>();
     IoUtils::loadMap(pointsMap, pointsPath, false, Status::Unknown1);
 
     AlphaShapeGenerator generator(alpha, buffer);

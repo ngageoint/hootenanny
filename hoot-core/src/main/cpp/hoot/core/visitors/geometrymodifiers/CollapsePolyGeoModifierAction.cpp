@@ -75,8 +75,8 @@ bool CollapsePolyGeoModifierAction::processElement(const ElementPtr& pElement, O
     if (checkLength)
     {
       // calculate minimum rectangle/aligned bounding box
-      Geometry* pMinRect = MinimumDiameter::getMinimumRectangle(pPoly.get());
-      CoordinateSequence* pMinRectCoords = pMinRect->getCoordinates();
+      const Geometry* pMinRect = MinimumDiameter::getMinimumRectangle(pPoly.get());
+      const CoordinateSequence* pMinRectCoords = pMinRect->getCoordinates();
 
       /* Debug polygon
       WayPtr pDebugWay(new Way(Status::Unknown1, pMap->createNextWayId()));

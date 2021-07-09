@@ -87,7 +87,7 @@ public:
    */
   void runMajorOverlapTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OGREnvelope env;
     env.MinX = 0;
     env.MinY = 0;
@@ -135,7 +135,7 @@ public:
    */
   void runPartialMatchTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OGREnvelope env;
     env.MinX = 0;
     env.MinY = 0;
@@ -185,7 +185,7 @@ public:
    */
   void runPartialOverlapTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OGREnvelope env;
     env.MinX = 0;
     env.MinY = 0;
@@ -231,7 +231,7 @@ public:
    */
   void runSimpleConflictTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OGREnvelope env;
     env.MinX = 0;
     env.MinY = 0;
@@ -278,7 +278,7 @@ public:
    */
   void runRealWorld1Test()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(map, _inputPath + "HighwayMatchRealWorld1Test.osm", false);
     MapProjector::projectToOrthographic(map);
 
@@ -304,7 +304,7 @@ public:
    */
   void runRealWorld2Test()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(map, _inputPath + "HighwayMatchRealWorld2Test.osm", false);
     MapProjector::projectToOrthographic(map);
 

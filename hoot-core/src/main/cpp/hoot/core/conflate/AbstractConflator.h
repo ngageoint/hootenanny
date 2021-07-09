@@ -152,7 +152,7 @@ private:
    */
   void _removeWholeGroups(std::vector<ConstMatchPtr>& matches, MatchSetVector& matchSets) const;
 
-  void _applyMergers(const std::vector<MergerPtr>& mergers, OsmMapPtr& map);
+  void _applyMergers(const std::vector<MergerPtr>& mergers, const OsmMapPtr& map);
 };
 
 }

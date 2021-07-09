@@ -123,7 +123,7 @@ public:
       QElapsedTimer timer2;
       timer2.restart();
 
-      OsmMapPtr map(new OsmMap());
+      OsmMapPtr map = std::make_shared<OsmMap>();
       // Tried using IoUtils::loadMap here, but it has extra logic beyond OsmMapReaderFactory::read
       // for reading in OGR layers. Using it causes the last part of Osm2OgrTranslationTest to fail.
       // Need to determine why either strictly use one reading method or the other.

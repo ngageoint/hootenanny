@@ -62,7 +62,7 @@ public:
    *
    * @param map map to modify
    */
-  void restore(OsmMapPtr& map);
+  void restore(const OsmMapPtr& map);
 
   QString getInitStatusMessage() const override { return "Remapping element IDs..."; }
   QString getCompletedStatusMessage() const override

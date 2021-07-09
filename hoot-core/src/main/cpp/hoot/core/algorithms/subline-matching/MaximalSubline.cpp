@@ -263,8 +263,9 @@ vector<pair<WayLocation, WayLocation>> MaximalSubline::_discretizePointPairs(
   return result;
 }
 
-vector<WaySublineMatch> MaximalSubline::_extractAllMatches(const ConstOsmMapPtr& map,
-  const ConstWayPtr& w1, const ConstWayPtr& w2, Sparse2dMatrix& sublineMatrix)
+vector<WaySublineMatch> MaximalSubline::_extractAllMatches(
+  const ConstOsmMapPtr& map, const ConstWayPtr& w1, const ConstWayPtr& w2,
+  Sparse2dMatrix& sublineMatrix) const
 {
   LOG_TRACE("Extracting all matches...");
 
@@ -459,7 +460,7 @@ double MaximalSubline::_findBestMatchesRecursive(
   return result;
 }
 
-vector<Sparse2dCellId> MaximalSubline::_findEndMatches(Sparse2dMatrix& sublines) const
+vector<Sparse2dCellId> MaximalSubline::_findEndMatches(const Sparse2dMatrix& sublines) const
 {
   LOG_TRACE("Finding end matches...");
 
@@ -480,8 +481,9 @@ vector<Sparse2dCellId> MaximalSubline::_findEndMatches(Sparse2dMatrix& sublines)
   return result;
 }
 
-double MaximalSubline::findMaximalSubline(const ConstOsmMapPtr& map, const ConstWayPtr& w1,
-  const ConstWayPtr& w2, vector<WayLocation>& wl1, vector<WayLocation>& wl2)
+double MaximalSubline::findMaximalSubline(
+  const ConstOsmMapPtr& map, const ConstWayPtr& w1, const ConstWayPtr& w2, vector<WayLocation>& wl1,
+  vector<WayLocation>& wl2) const
 {
   // create a sparse matrix of line segment scores
   Sparse2dMatrix scores;
@@ -525,8 +527,8 @@ double MaximalSubline::findMaximalSubline(const ConstOsmMapPtr& map, const Const
   return score;
 }
 
-Sparse2dMatrix::CellId MaximalSubline::_findStartMatch(Sparse2dMatrix& sublines,
-  Sparse2dMatrix::CellId end) const
+Sparse2dMatrix::CellId MaximalSubline::_findStartMatch(
+  const Sparse2dMatrix& sublines, Sparse2dMatrix::CellId end) const
 {
   Sparse2dMatrix::CellId result = end;
 
@@ -791,11 +793,11 @@ void MaximalSubline::_calculateSnapEnds(const int matchIndex, const vector<doubl
   LOG_TRACE("w2End: " << w2End.toString());
 }
 
-void MaximalSubline::_calculatePointPairMatches(const double way1CircularError,
-                                                const double way2CircularError,
-                                                const vector<WaySublineMatch>& rawSublineMatches,
-                                                const vector<pair<WayLocation, WayLocation>>& pairs,
-                                                cv::Mat& m, vector<int>& starts, vector<int>& ends) const
+void MaximalSubline::_calculatePointPairMatches(
+  const double way1CircularError, const double way2CircularError,
+  const vector<WaySublineMatch>& rawSublineMatches,
+  const vector<pair<WayLocation, WayLocation>>& pairs, cv::Mat& m, vector<int>& starts,
+  vector<int>& ends) const
 {
   LOG_TRACE("Calculating point pair matches...");
 
@@ -848,8 +850,9 @@ void MaximalSubline::_calculatePointPairMatches(const double way1CircularError,
   LOG_TRACE("ends: " << ends);
 }
 
-vector<WaySublineMatch> MaximalSubline::_snapIntersections(const ConstOsmMapPtr& map,
-  const ConstWayPtr& w1, const ConstWayPtr& w2, vector<WaySublineMatch>& rawSublineMatches)
+vector<WaySublineMatch> MaximalSubline::_snapIntersections(
+  const ConstOsmMapPtr& map, const ConstWayPtr& w1, const ConstWayPtr& w2,
+  vector<WaySublineMatch>& rawSublineMatches) const
 {
   // this only works if the rawSublineMatches are in order. We order by subline1
   sort(rawSublineMatches.begin(), rawSublineMatches.end(), lessThan);

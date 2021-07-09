@@ -57,7 +57,7 @@ public:
    */
   std::vector<std::shared_ptr<LongBox>> breakBox(const std::shared_ptr<LongBox>& box) const;
 
-  long int calculateExcess(const std::shared_ptr<LongBox>& box);
+  long int calculateExcess(const std::shared_ptr<LongBox>& box) const;
 
   /**
    * Recursively decompose a box over level iterations.
@@ -93,7 +93,7 @@ private:
    */
   std::vector<Range> _condenseRanges(std::vector<Range>& r) const;
 
-  Range _toRange(const std::shared_ptr<LongBox>& box);
+  Range _toRange(const std::shared_ptr<LongBox>& box) const;
   LongBox _toLongBox(const BBox& box);
 
   LongBox _clipBox(const LongBox& box) const;

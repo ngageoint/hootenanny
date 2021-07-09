@@ -155,9 +155,9 @@ WayPtr MetadataOp::_assignToDataset( ElementPtr pElement )
   // area for closed ways or the longest distance for open ones.
 
   // check if element is inside poly
-  Way* pw = dynamic_cast<Way*>(pElement.get());
-  Node* pn = dynamic_cast<Node*>(pElement.get());
-  Relation* pr = dynamic_cast<Relation*>(pElement.get());
+  const Way* pw = dynamic_cast<Way*>(pElement.get());
+  const Node* pn = dynamic_cast<Node*>(pElement.get());
+  const Relation* pr = dynamic_cast<Relation*>(pElement.get());
 
   vector<long> elementNodes;
 

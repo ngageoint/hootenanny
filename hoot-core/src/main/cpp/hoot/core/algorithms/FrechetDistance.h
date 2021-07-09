@@ -141,8 +141,8 @@ private:
    * @param index - node index into way of where to get the heading at
    * @return heading of way at the point index in radians
    */
-  Radians getHeadingWay1(int index);
-  Radians getHeadingWay2(int index);
+  Radians getHeadingWay1(int index) const;
+  Radians getHeadingWay2(int index) const;
 
   /**
    * @brief getHeadingAvg - get the heading of the way averaged over three way segments (if possible)

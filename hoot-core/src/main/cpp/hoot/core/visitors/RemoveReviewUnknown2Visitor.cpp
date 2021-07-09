@@ -43,7 +43,7 @@ void RemoveReviewUnknown2Visitor::visit(const std::shared_ptr<Element>& e)
 {
   if (e->getElementType() == ElementType::Relation)
   {
-    Relation* r = dynamic_cast<Relation*>(e.get());
+    const Relation* r = dynamic_cast<Relation*>(e.get());
     OsmMapPtr map = _map->shared_from_this();
 
     //  Only look at review relations

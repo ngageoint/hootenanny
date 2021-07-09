@@ -67,7 +67,7 @@ public:
     ConfigOptions co;
     conf().set(co.getUuidHelperRepeatableKey(), true);
     conf().set(co.getReaderUseFileStatusKey(), true);
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(map, _inputPath + "ScriptMatchTest.osm", true);
     MapProjector::projectToPlanar(map);
 

@@ -62,7 +62,7 @@ public:
 
   void runTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(map, _inputPath + "RemoveElementsVisitorInput.osm");
 
     RemoveElementsVisitor removeElementsVisitor(false);
@@ -79,7 +79,7 @@ public:
 
   void runRecursiveTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(map, _inputPath + "RemoveElementsVisitorInput.osm");
 
     RemoveElementsVisitor removeElementsVisitor(false);
@@ -96,7 +96,7 @@ public:
 
   void runNegatedFilterTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(map, _inputPath + "RemoveElementsVisitorInput.osm");
 
     RemoveElementsVisitor removeElementsVisitor(true);
@@ -113,7 +113,7 @@ public:
 
   void runReviewRelationTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(map, _inputPath + "RemoveElementsVisitorTest-reviewRelationTest.osm");
 
     RemoveElementsVisitor removeElementsVisitor(false);
@@ -130,7 +130,7 @@ public:
 
   void runMultipleCriteriaTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(map, _inputPath + "RemoveElementsVisitorInput.osm");
 
     RemoveElementsVisitor removeElementsVisitor(false);

@@ -307,7 +307,7 @@ public:
       return;
     }
 
-    QString v = (*it);
+    QString v = *it;
     QString value = v.replace(";", ";;");
     ++it;
     while (it != end)

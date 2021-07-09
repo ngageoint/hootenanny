@@ -226,7 +226,7 @@ Mat PertyOp::_calculatePermuteGrid(const geos::geom::Envelope& env, int& rows, i
   return _gridCalculator->permute(env, rows, cols);
 }
 
-std::shared_ptr<OsmMap> PertyOp::generateDebugMap(std::shared_ptr<OsmMap>& map)
+std::shared_ptr<OsmMap> PertyOp::generateDebugMap(const OsmMapPtr& map)
 {
   MapProjector::projectToPlanar(map);
   std::shared_ptr<OsmMap> result(new OsmMap(map->getProjection()));

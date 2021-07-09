@@ -86,7 +86,7 @@ public:
    * @param splitPoint point at which to split the way
    * @return split way parts, which are added to the map
    */
-  std::vector<WayPtr> split(WayLocation& splitPoint) const;
+  std::vector<WayPtr> split(const WayLocation& splitPoint) const;
   /**
    * @brief split splits way into smaller ways no bigger than maxSize.
    *
@@ -105,7 +105,7 @@ public:
    * @param splitPoint the point at which to split the way
    * @return the split ways
    */
-  static std::vector<WayPtr> split(const OsmMapPtr& map, WayPtr way, WayLocation& splitPoint);
+  static std::vector<WayPtr> split(const OsmMapPtr& map, WayPtr way, const WayLocation& splitPoint);
 
 private:
 

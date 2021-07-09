@@ -152,8 +152,9 @@ public:
    * it is that higher is better, but you cannot directly compare scores for different sets of
    * ways. (it is likely length dependent).
    */
-  std::vector<WaySublineMatch> findAllMatches(const ConstOsmMapPtr &map, const ConstWayPtr& w1,
-    const ConstWayPtr &w2, double &bestScore, bool snapIntersections = true);
+  std::vector<WaySublineMatch> findAllMatches(
+    const ConstOsmMapPtr &map, const ConstWayPtr& w1, const ConstWayPtr &w2, double &bestScore,
+    bool snapIntersections = true);
 
   /**
    * @brief findMaximalSubline given two ways, finds the highest scoring subline that exists in both
@@ -166,8 +167,9 @@ public:
    *  vector will be resized as needed.
    * @return 0.0 if there are no common sublines, otherwise the score of the best subline.
    */
-  double findMaximalSubline(const ConstOsmMapPtr &map, const ConstWayPtr& w1, const ConstWayPtr& w2,
-    std::vector<WayLocation>& wl1, std::vector<WayLocation>& wl2);
+  double findMaximalSubline(
+    const ConstOsmMapPtr &map, const ConstWayPtr& w1, const ConstWayPtr& w2,
+    std::vector<WayLocation>& wl1, std::vector<WayLocation>& wl2) const;
 
   int getBestMatchesRecursionCount() const { return _findBestMatchesRecursionCount; }
 
@@ -200,7 +202,6 @@ private:
    */
   WayLocation _calculateEndWayLocation(const ConstOsmMapPtr &map, const ConstWayPtr& a,
     const ConstWayPtr& b, int indexA, int indexB) const;
-
   /**
    * Determines the start of the way location in way a. The way location will start in the line
    * segment specified by index.
@@ -208,7 +209,6 @@ private:
    */
   WayLocation _calculateStartWayLocation(const ConstOsmMapPtr& map, const ConstWayPtr& a,
     const ConstWayPtr& b, int indexA, int indexB) const;
-
   void _calculateSublineScores(const ConstOsmMapPtr& map, const ConstWayPtr& w1,
     const ConstWayPtr& w2, Sparse2dMatrix &scores) const;
 
@@ -216,30 +216,28 @@ private:
     const ConstWayPtr& w1, const ConstWayPtr& w2, std::vector<WaySublineMatch> &rawSublineMatches) const;
 
   std::vector<WaySublineMatch> _extractAllMatches(const ConstOsmMapPtr& map, const ConstWayPtr& w1,
-    const ConstWayPtr& w2, Sparse2dMatrix& sublineMatrix);
+    const ConstWayPtr& w2, Sparse2dMatrix& sublineMatrix) const;
 
   std::vector<WaySublineMatch> _findBestMatches(const ConstOsmMapPtr& map, const ConstWayPtr& w1,
     const ConstWayPtr& w2, Sparse2dMatrix& sublineMatrix, double& bestScore);
-
   double _findBestMatchesRecursive(std::vector<WaySublineMatch>& candidates,
                                    std::vector<bool>& keepers, size_t offset);
-
   /**
    * Find the ends of all the subline matches.
    */
-  std::vector<Sparse2dCellId> _findEndMatches(Sparse2dMatrix& sublines) const;
-
+  std::vector<Sparse2dCellId> _findEndMatches(const Sparse2dMatrix& sublines) const;
   /**
    * Finds the starting location for the given end match location.
    */
-  Sparse2dMatrix::CellId _findStartMatch(Sparse2dMatrix &sublines,
-    Sparse2dMatrix::CellId end) const;
+  Sparse2dMatrix::CellId _findStartMatch(
+    const Sparse2dMatrix &sublines, Sparse2dMatrix::CellId end) const;
 
   void _populateTotalScores(const Sparse2dMatrix& scores, Sparse2dMatrix& sublines,
     Sparse2dMatrix::CellId& bestCid, double& bestScore) const;
 
-  std::vector<WaySublineMatch> _snapIntersections(const ConstOsmMapPtr &map, const ConstWayPtr& w1,
-    const ConstWayPtr &w2, std::vector<WaySublineMatch> &rawSublineMatches);
+  std::vector<WaySublineMatch> _snapIntersections(
+    const ConstOsmMapPtr &map, const ConstWayPtr& w1, const ConstWayPtr& w2,
+    std::vector<WaySublineMatch> &rawSublineMatches) const;
 
   /**
    * If the Match Criteria considers these close enough to the ends of the line then they'll be

@@ -383,7 +383,7 @@ void DualHighwaySplitter::_reconnectEnd(long centerNodeId, const std::shared_ptr
   }
 }
 
-void DualHighwaySplitter::_splitIntersectingWays(long nid)
+void DualHighwaySplitter::_splitIntersectingWays(long nid) const
 {
   std::vector<long> wids = ElementIdsVisitor::findWaysByNode(_result, nid);
 

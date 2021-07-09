@@ -51,7 +51,7 @@ UniformTaskGridGenerator::UniformTaskGridGenerator(
 _gridDimensionSize(gridDimensionSize),
 _output(output)
 {
-  OsmMapPtr map(new OsmMap());
+  OsmMapPtr map = std::make_shared<OsmMap>();
   for (int i = 0; i < inputs.size(); i++)
   {
     IoUtils::loadMap(map, inputs.at(i), true, Status::Invalid);

@@ -53,7 +53,7 @@ void RubberSheetDeriver::derive(
     "Deriving alignment transform for inputs ..." << FileUtils::toLogFormat(input1, 25) <<
     " and " << FileUtils::toLogFormat(input2, 25) << "...");
 
-  OsmMapPtr map(new OsmMap());
+  OsmMapPtr map = std::make_shared<OsmMap>();
   IoUtils::loadMap(map, input1, false, Status::Unknown1);
   IoUtils::loadMap(map, input2, false, Status::Unknown2);
 

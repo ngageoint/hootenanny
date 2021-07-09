@@ -456,7 +456,7 @@ const QStringList& Tags::getNameKeys()
     const vector<SchemaVertex>& tags =
       OsmSchema::getInstance().getTagByCategory(OsmSchemaCategory::name());
     for (size_t i = 0; i < tags.size(); i++)
-      _nameKeys.append(tags[i].key);
+      _nameKeys.append(tags[i].getKey());
   }
 
   return _nameKeys;
@@ -497,8 +497,8 @@ const QStringList& Tags::getPseudoNameKeys() const
 
     for (size_t i = 0; i < tags.size(); i++)
     {
-      LOG_TRACE("key : " << (tags[i].key.toStdString()));
-      _pseudoNameKeys.append(tags[i].key);
+      LOG_TRACE("key : " << (tags[i].getKey().toStdString()));
+      _pseudoNameKeys.append(tags[i].getKey());
     }
   }
 
@@ -903,7 +903,7 @@ Tags Tags::schemaVerticesToTags(const std::vector<SchemaVertex>& schemaVertices)
        itr != schemaVertices.end(); ++itr)
   {
     const SchemaVertex vertex = *itr;
-    tags.appendValue(vertex.key, vertex.value);
+    tags.appendValue(vertex.getKey(), vertex.getValue());
   }
   return tags;
 }

@@ -47,7 +47,7 @@ public:
 
   ScriptMerger() = default;
   ScriptMerger(
-    const std::shared_ptr<PluginContext>& script, v8::Persistent<v8::Object>& plugin,
+    const std::shared_ptr<PluginContext>& script, const v8::Persistent<v8::Object>& plugin,
     const std::set<std::pair<ElementId, ElementId>>& pairs);
   ~ScriptMerger() = default;
 

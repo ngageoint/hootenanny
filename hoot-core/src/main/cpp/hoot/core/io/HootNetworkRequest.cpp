@@ -213,7 +213,7 @@ bool HootNetworkRequest::_networkRequest(const QUrl& url, int timeout,
   return true;
 }
 
-int HootNetworkRequest::_getHttpResponseCode(QNetworkReply* reply) const
+int HootNetworkRequest::_getHttpResponseCode(const QNetworkReply* reply) const
 {
   if (reply != nullptr)
   {

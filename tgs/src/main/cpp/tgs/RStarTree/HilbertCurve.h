@@ -102,7 +102,6 @@ namespace Tgs
       }
 
       result = hilbert_c2inew(_dimensions, _order, _point);
-      //hilbert_c2i(_dimensions, _order, point, &result);
       return result;
     }
 

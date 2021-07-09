@@ -58,7 +58,7 @@ public:
 
   void runBasicTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(map, true, true, _inputPath + "/runBasicTest-in.osm");
 
     ElementIdToVersionMapper uut;
@@ -76,7 +76,7 @@ public:
 
   void runNoVerionsTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(map, true, true, "test-files/ToyTestA.osm");
 
     ElementIdToVersionMapper uut;

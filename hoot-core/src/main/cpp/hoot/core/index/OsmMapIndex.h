@@ -83,7 +83,7 @@ public:
   /**
    * Very inefficient.
    */
-  std::vector<long> findWayNeighbors(geos::geom::Coordinate& from, Meters buffer) const;
+  std::vector<long> findWayNeighbors(const geos::geom::Coordinate& from, Meters buffer) const;
   std::vector<long> findWayNeighborsBruteForce(ConstWayPtr way, Meters buffer) const;
 
   /**

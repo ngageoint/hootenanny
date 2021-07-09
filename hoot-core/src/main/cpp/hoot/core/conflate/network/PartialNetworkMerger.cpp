@@ -92,7 +92,7 @@ void PartialNetworkMerger::apply(const OsmMapPtr& map,
 
   if (_edgeMatches.size() == 1 && (*_edgeMatches.begin())->containsStub())
   {
-    _processStubMatch(map, replaced, (*_edgeMatches.begin()));
+    _processStubMatch(map, replaced, *_edgeMatches.begin());
   }
   else
   {
@@ -249,7 +249,7 @@ void PartialNetworkMerger::_processFullMatch(const OsmMapPtr& map,
       _applyMerger(map, merger);
     }
   }
-  catch (NeedsReviewException& e)
+  catch (const NeedsReviewException& e)
   {
     set<ElementId> reviews;
     foreach (WayMatchStringMerger::SublineMappingPtr mapping, _allSublineMappings)
@@ -279,7 +279,7 @@ void PartialNetworkMerger::_processFullMatch(const OsmMapPtr& map,
 }
 
 void PartialNetworkMerger::_processStubMatch(const OsmMapPtr& map,
-  vector<pair<ElementId, ElementId>>& /*replaced*/, ConstEdgeMatchPtr edgeMatch)
+  const vector<pair<ElementId, ElementId>>& /*replaced*/, ConstEdgeMatchPtr edgeMatch)
 {
   LOG_TRACE("Processing stub match...");
   LOG_VART(edgeMatch);

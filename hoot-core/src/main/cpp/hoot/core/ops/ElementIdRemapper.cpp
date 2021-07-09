@@ -132,7 +132,7 @@ void ElementIdRemapper::apply(OsmMapPtr& map)
   }
 }
 
-void ElementIdRemapper::restore(OsmMapPtr& map)
+void ElementIdRemapper::restore(const OsmMapPtr& map)
 {
   LOG_INFO("Restoring original element IDs for: " << map->getName() << "...");
 

@@ -59,7 +59,7 @@ public:
 
   void runCaseInsensitiveTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     Coordinate coords[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
                             Coordinate(100.0, 10.0), Coordinate(0.0, 10.0),
                             Coordinate::getNull() };
@@ -79,7 +79,7 @@ public:
 
   void runCaseSensitiveTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     Coordinate coords[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
                             Coordinate(100.0, 10.0), Coordinate(0.0, 10.0),
                             Coordinate::getNull() };
@@ -99,7 +99,7 @@ public:
 
   void runExtraNamesTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     Coordinate coords[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
                             Coordinate(100.0, 10.0), Coordinate(0.0, 10.0),
                             Coordinate::getNull() };

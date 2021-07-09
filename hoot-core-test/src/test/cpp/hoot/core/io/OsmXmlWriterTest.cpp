@@ -55,7 +55,7 @@ public:
   {
     OsmXmlWriter uut;
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     Tags tags1;
     tags1.set("note", "1 & 2");
     TestUtils::createNode(map, "", Status::Unknown1, 0.0, 0.0, 15.0, tags1);
@@ -78,7 +78,7 @@ public:
   {
     OsmXmlWriter uut;
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     Tags tags1;
     tags1.set("Note", "Node1");
     NodePtr node1 = TestUtils::createNode(map, "", Status::Unknown1, 0.0, 0.0, 15.0, tags1);

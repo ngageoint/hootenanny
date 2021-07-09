@@ -121,7 +121,7 @@ std::shared_ptr<boost::property_tree::ptree> StringUtils::jsonStringToPropTree(
   {
     boost::property_tree::read_json(strStrm, *jsonObj);
   }
-  catch (boost::property_tree::json_parser::json_parser_error& e)
+  catch (const boost::property_tree::json_parser::json_parser_error& e)
   {
     QString reason = QString::fromStdString(e.message());
     QString line = QString::number(e.line());

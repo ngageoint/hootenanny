@@ -344,7 +344,7 @@ QString HootServicesLanguageDetectorClient::_parseResponse(
 QString HootServicesLanguageDetectorClient::_getLangFromCache(const QString& text)
 {
   QString detectedLangCode = "";
-  DetectionResult* cachedDetection = _cache->object(text.toLower());
+  const DetectionResult* cachedDetection = _cache->object(text.toLower());
   if (cachedDetection != nullptr)
   {
     detectedLangCode = cachedDetection->detectedLangCode;

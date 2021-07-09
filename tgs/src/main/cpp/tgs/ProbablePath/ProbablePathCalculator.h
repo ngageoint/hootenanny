@@ -59,7 +59,7 @@ namespace Tgs
     PpPoint(int row, int col)
       : row(row), col(col), cost(0.0f) { }
 
-    PpPoint(int row, int col, std::string name)
+    PpPoint(int row, int col, const std::string& name)
       : row(row), col(col), name(name), cost(0.0f) { }
 
     bool operator!=(const PpPoint& p) const

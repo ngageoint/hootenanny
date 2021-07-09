@@ -67,7 +67,7 @@ public:
     QString outputFile = "ToyWGS84.osm";
 
     OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(_inputPath + inputFile, map);
 

@@ -241,7 +241,7 @@ public:
     }
 
     _numElementsVisited++;
-    if (_numElementsVisited % (_taskStatusUpdateInterval /* 10*/) == 0)
+    if (_numElementsVisited % _taskStatusUpdateInterval == 0)
     {
       PROGRESS_STATUS(
         "Processed " << StringUtils::formatLargeNumber(_numElementsVisited) << " of " <<
@@ -311,11 +311,9 @@ private:
   int _neighborCountMax;
   int _neighborCountSum;
   int _elementsEvaluated;
-  size_t _maxGroupSize;
   Meters _searchRadius;
   ConstMatchThresholdPtr _threshold;
   std::shared_ptr<TagAncestorDifferencer> _tagAncestorDiff;
-  double _highwayMaxEnumDiff;
   ElementCriterionPtr _filter;
 
   // Used for finding neighbors

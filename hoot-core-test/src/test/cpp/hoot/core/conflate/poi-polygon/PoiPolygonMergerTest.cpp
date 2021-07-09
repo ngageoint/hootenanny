@@ -73,7 +73,7 @@ public:
 
   void basicTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     Coordinate c1[] = { Coordinate(0.0, 0.0), Coordinate(20.0, 0.0),
                         Coordinate(20.0, 20.0), Coordinate(0.0, 20.0),
@@ -131,7 +131,7 @@ public:
 
   void toyScenario1Test()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map, "test-files/conflate/poi-polygon/PoiBuildingA.osm", false, Status::Unknown1);
     OsmMapReaderFactory::read(
@@ -157,7 +157,7 @@ public:
 
   void toyScenario2Test()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map, "test-files/conflate/poi-polygon/PoiBuildingA.osm", false, Status::Unknown1);
     OsmMapReaderFactory::read(
@@ -183,7 +183,7 @@ public:
 
   void toyScenario3Test()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map, "test-files/conflate/poi-polygon/PoiBuildingA.osm", false, Status::Unknown1);
     OsmMapReaderFactory::read(
@@ -209,7 +209,7 @@ public:
 
   void toyScenario4Test()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map, "test-files/conflate/poi-polygon/PoiBuildingA.osm", false, Status::Unknown1);
     OsmMapReaderFactory::read(
@@ -235,7 +235,7 @@ public:
 
   void toyScenario5Test()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map, "test-files/conflate/poi-polygon/PoiBuildingA.osm", false, Status::Unknown1);
     OsmMapReaderFactory::read(
@@ -262,7 +262,7 @@ public:
 
   void toyScenario6Test()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map, "test-files/conflate/poi-polygon/PoiBuildingA.osm", false, Status::Unknown1);
     OsmMapReaderFactory::read(

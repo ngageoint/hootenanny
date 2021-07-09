@@ -59,7 +59,7 @@ public:
   void runBasic()
   {
     OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/ScoreMatchRef1.osm", map);
 
@@ -84,7 +84,7 @@ public:
   void runString()
   {
     OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/UndividedHighwayPreSplit.osm", map);
 
@@ -95,7 +95,7 @@ public:
 
   void runEscapeTags()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     Coordinate coords[] = { Coordinate(0, 0), Coordinate(0, 1), Coordinate(1, 1), Coordinate(1, 0), Coordinate::getNull() };
     Tags tags;
     tags.set("note", "<2>");
@@ -118,8 +118,8 @@ public:
     relation->setType("review");
     relation->getTags().appendValue("name", "Test Review");
     std::vector<RelationData::Entry> members = relation->getMembers();
-    members[0].role = "reviewee";
-    members[1].role = "reviewee";
+    members[0].setRole("reviewee");
+    members[1].setRole("reviewee");
     relation->setMembers(members);
 
     QString output = OsmPgCsvWriter::toString(map);

@@ -78,8 +78,8 @@ namespace Tgs
     }
   }
 
-  void DataFrame::addDataVector(std::string label, const std::vector<double>& dataItem,
-    double eventWeight /*= 1.*/)
+  void DataFrame::addDataVector(
+    const std::string& label, const std::vector<double>& dataItem, double eventWeight /*= 1.*/)
   {
     try
     {
@@ -98,7 +98,7 @@ namespace Tgs
     }
   }
 
-  void DataFrame::addDataVector(std::string label, const double* dataItem,
+  void DataFrame::addDataVector(const std::string& label, const double* dataItem,
     double eventWeight /*= 1.*/)
   {
     try
@@ -195,7 +195,7 @@ namespace Tgs
     }
   }
 
-  void DataFrame::deactivateFactor(std::string factor)
+  void DataFrame::deactivateFactor(const std::string& factor)
   {
     try
     {
@@ -372,7 +372,7 @@ namespace Tgs
     }
   }
 
-  void DataFrame::exportData(std::ostream & fileStream) const
+  void DataFrame::exportData(std::ostream& fileStream) const
   {
     try
     {
@@ -389,8 +389,8 @@ namespace Tgs
     }
   }
 
-  void DataFrame::getClassPopulations(const std::vector<unsigned int> & indices, 
-    HashMap<std::string, int>& populations)
+  void DataFrame::getClassPopulations(
+    const std::vector<unsigned int>& indices, HashMap<std::string, int>& populations) const
   {
     try
     {
@@ -455,7 +455,7 @@ namespace Tgs
 
       return _data[vIdx][fIdx];
     }
-    catch(const std::out_of_range& oor)
+    catch(const std::out_of_range& /*oor*/)
     {
       std::stringstream ss;
       ss << "Out of range accessing data vector " << vIdx << ", element " << fIdx;
@@ -473,7 +473,7 @@ namespace Tgs
     {
       return _data[vIdx];
     }
-    catch(const std::out_of_range& oor)
+    catch(const std::out_of_range& /*oor*/)
     {
       std::stringstream ss;
       ss << "Out of range accessing data vector index: "  << vIdx;
@@ -511,7 +511,7 @@ namespace Tgs
     }
   }
 
-  const vector<string> DataFrame::getFactorLabels() const
+  vector<string> DataFrame::getFactorLabels() const
   {
     try
     {
@@ -607,7 +607,7 @@ namespace Tgs
     {
       return _trainingLabels[dIdx];
     }
-    catch(const std::out_of_range& oor)
+    catch(const std::out_of_range& /*oor*/)
     {
       std::stringstream ss;
       ss << "Out of range accessing training label " << dIdx;
@@ -636,7 +636,7 @@ namespace Tgs
     }
   }
 
-  void DataFrame::import(QDomElement & e)
+  void DataFrame::import(const QDomElement & e)
   {
     try
     {
@@ -660,7 +660,7 @@ namespace Tgs
 
             for (unsigned int fIdx = 0; fIdx < (unsigned int)factorList.size(); fIdx++)
             {
-              _factorLabels.push_back(factorList[fIdx].toLatin1().constData());
+              _factorLabels.emplace_back(factorList[fIdx].toLatin1().constData());
             }
           }
           else if (tag == "DATAVECTORS")
@@ -689,7 +689,7 @@ namespace Tgs
     }
   }
 
-  bool DataFrame::isDataSetPure(std::vector<unsigned int> & indices)
+  bool DataFrame::isDataSetPure(const std::vector<unsigned int>& indices)
   {
     try
     {
@@ -834,8 +834,9 @@ namespace Tgs
     }
   }
 
-  void DataFrame::makeBalancedRoundRobinBootstrapAndOobSets(std::string className1, 
-    std::string className2, std::vector<unsigned int> & bootstrap, std::vector<unsigned int> & oob)
+  void DataFrame::makeBalancedRoundRobinBootstrapAndOobSets(const std::string& className1,
+    const std::string& className2, std::vector<unsigned int>& bootstrap,
+    std::vector<unsigned int>& oob)
   {
     try
     {
@@ -1007,7 +1008,7 @@ namespace Tgs
     {
       return _data[vIdx];
     }
-    catch(const std::out_of_range& oor)
+    catch(const std::out_of_range& /*oor*/)
     {
       std::stringstream ss;
       ss << "Out of range accessing data vector index: "  << vIdx;
@@ -1123,7 +1124,7 @@ namespace Tgs
     }
   }
 
-  void DataFrame::setBinaryClassLabels(std::string posClass)
+  void DataFrame::setBinaryClassLabels(const std::string& posClass)
   {
     try
     {
@@ -1316,7 +1317,7 @@ namespace Tgs
     return s;
   }
 
-  void DataFrame::_importDataVector(QDomElement & e)
+  void DataFrame::_importDataVector(const QDomElement & e)
   {
     try
     {
@@ -1339,7 +1340,7 @@ namespace Tgs
 
           if (tag == "CLASSNAME")
           {
-            _trainingLabels.push_back(element.text().toLatin1().constData());
+            _trainingLabels.emplace_back(element.text().toLatin1().constData());
           }
           else if (tag == "DATA")
           {

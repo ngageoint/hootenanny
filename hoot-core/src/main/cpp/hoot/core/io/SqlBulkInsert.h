@@ -44,8 +44,10 @@ namespace hoot
 class SqlBulkInsert : public BulkInsert
 {
 public:
-  SqlBulkInsert(QSqlDatabase& db, const QString& tableName, const QStringList& columns, bool ignoreConflict = false);
 
+  SqlBulkInsert(
+    const QSqlDatabase& db, const QString& tableName, const QStringList& columns,
+    bool ignoreConflict = false);
   ~SqlBulkInsert();
 
   void flush() override;
@@ -57,6 +59,7 @@ public:
   void insert(const QList<QVariant> l) override;
 
 private:
+
   QList<QList<QVariant>> _pending;
   QSqlQuery _query;
   QSqlDatabase _db;

@@ -167,10 +167,10 @@ private:
 
   void _addFeature(OGRFeature* f);
   void _addGeometry(OGRGeometry* g, Tags& t);
-  void _addLineString(OGRLineString* ls, Tags& t);
+  void _addLineString(const OGRLineString* ls, Tags& t);
   void _addMultiPolygon(OGRMultiPolygon* mp, Tags& t);
   void _addPolygon(OGRPolygon* p, Tags& t);
-  void _addPoint(OGRPoint* p, Tags& t);
+  void _addPoint(const OGRPoint* p, Tags& t);
   void _addPolygon(OGRPolygon* p, RelationPtr r, Meters circularError);
 
   WayPtr _createWay(OGRLinearRing* lr, Meters circularError);
@@ -197,8 +197,8 @@ private:
 
   void populateElementMap();
 
-  QString _toWkt(OGRSpatialReference* srs);
-  QString _toWkt(OGRGeometry* geom);
+  QString _toWkt(const OGRSpatialReference* srs);
+  QString _toWkt(const OGRGeometry* geom);
 };
 
 class OgrElementIterator : public ElementIterator
@@ -208,7 +208,7 @@ public:
   OgrElementIterator(OgrReaderInternal* d)
   {
     _d = d;
-    _map.reset(new OsmMap());
+    _map = std::make_shared<OsmMap>();
   }
 
   ~OgrElementIterator()
@@ -761,7 +761,7 @@ void OgrReaderInternal::_addGeometry(OGRGeometry* g, Tags& t)
   }
 }
 
-void OgrReaderInternal::_addLineString(OGRLineString* ls, Tags& t)
+void OgrReaderInternal::_addLineString(const OGRLineString* ls, Tags& t)
 {
   Meters circularError = _parseCircularError(t);
 
@@ -804,7 +804,7 @@ void OgrReaderInternal::_addMultiPolygon(OGRMultiPolygon* mp, Tags& t)
   }
 }
 
-void OgrReaderInternal::_addPoint(OGRPoint* p, Tags& t)
+void OgrReaderInternal::_addPoint(const OGRPoint* p, Tags& t)
 {
   Meters circularError = _parseCircularError(t);
 
@@ -838,7 +838,7 @@ void OgrReaderInternal::_addPolygon(OGRPolygon* p, Tags& t)
   AreaCriterion areaCrit;
   if (p->getNumInteriorRings() == 0)
   {
-    OGRLinearRing* exteriorRing = p->getExteriorRing();
+    const OGRLinearRing* exteriorRing = p->getExteriorRing();
     if (exteriorRing != nullptr)
     {
       WayPtr outer = _createWay(p->getExteriorRing(), circularError);
@@ -878,7 +878,7 @@ void OgrReaderInternal::_addPolygon(OGRPolygon* p, Tags& t)
   }
 }
 
-QString OgrReaderInternal::_toWkt(OGRGeometry* geom)
+QString OgrReaderInternal::_toWkt(const OGRGeometry* geom)
 {
   char* buffer;
   geom->exportToWkt(&buffer);
@@ -1326,7 +1326,7 @@ void OgrReaderInternal::_translate(Tags& t)
 
 void OgrReaderInternal::initializePartial()
 {
-  _map.reset(new OsmMap());
+  _map = std::make_shared<OsmMap>();
   _nodesItr = _map->getNodes().begin();
   _waysItr =  _map->getWays().begin();
   _relationsItr = _map->getRelations().begin();
@@ -1414,7 +1414,7 @@ std::shared_ptr<OGRSpatialReference> OgrReaderInternal::getProjection() const
   return wgs84;
 }
 
-QString OgrReaderInternal::_toWkt(OGRSpatialReference* srs)
+QString OgrReaderInternal::_toWkt(const OGRSpatialReference* srs)
 {
   char* buffer;
   srs->exportToWkt(&buffer);

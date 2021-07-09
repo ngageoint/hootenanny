@@ -70,7 +70,7 @@ bool StatsAreaCriterion::isSatisfied(const ConstElementPtr& e) const
   for (Tags::const_iterator it = t.constBegin(); it != t.constEnd(); ++it)
   {
     const SchemaVertex& tv = OsmSchema::getInstance().getTagVertex(it.key() + "=" + it.value());
-    uint16_t g = tv.geometries;
+    uint16_t g = tv.getGeometries();
     if (g & OsmGeometries::Area && !(g & (OsmGeometries::LineString | OsmGeometries::ClosedWay)))
     {
       result = true;

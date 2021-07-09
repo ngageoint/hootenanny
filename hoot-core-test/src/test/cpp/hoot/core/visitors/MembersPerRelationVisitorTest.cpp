@@ -51,7 +51,7 @@ public:
 
   void runBasicTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(map, input, false, Status::Unknown1);
 
     MembersPerRelationVisitor uut;

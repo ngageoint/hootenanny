@@ -169,7 +169,7 @@ void HootServicesTranslatorClient::_validateAvailableLangs(
   const std::shared_ptr<boost::property_tree::ptree>& replyObj, const QString& type) const
 {
   QMap<QString, bool> returnedLangs;
-  for (boost::property_tree::ptree::value_type& language : replyObj->get_child("languages"))
+  for (const boost::property_tree::ptree::value_type& language : replyObj->get_child("languages"))
   {
     const QString sourceLangCode =
       QString::fromStdString(language.second.get<std::string>("iso6391Code"));
@@ -250,7 +250,7 @@ void HootServicesTranslatorClient::_parseResponse(const std::shared_ptr<boost::p
 
 bool HootServicesTranslatorClient::_getTranslationFromCache(const QString& text)
 {
-  TranslationResult* cachedTranslation = _cache->object(text.toLower());
+  const TranslationResult* cachedTranslation = _cache->object(text.toLower());
   if (cachedTranslation != nullptr)
   {
     _translatedText = cachedTranslation->translatedText;

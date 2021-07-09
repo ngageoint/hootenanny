@@ -58,7 +58,7 @@ public:
 
   void runDataSummaryTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmXmlReader reader;
     reader.setDefaultStatus(Status::Unknown1);
     reader.setUseDataSourceIds(true);

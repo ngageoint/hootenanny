@@ -56,7 +56,7 @@ public:
 
   void runBasicTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     PoiPolygonInfoCachePtr infoCache(new PoiPolygonInfoCache(map));
     infoCache->setConfiguration(conf());
     PoiPolygonDistanceExtractor uut(infoCache);

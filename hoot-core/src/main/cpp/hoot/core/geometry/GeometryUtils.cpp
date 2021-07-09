@@ -320,7 +320,7 @@ QString GeometryUtils::polygonStringToEnvelopeString(const QString& str)
 QString GeometryUtils::polygonToString(const std::shared_ptr<Polygon>& poly)
 {
   const int precision = ConfigOptions().getWriterPrecision();
-  geos::geom::CoordinateSequence* coords = poly->getCoordinates();
+  const geos::geom::CoordinateSequence* coords = poly->getCoordinates();
   QString str;
   for (size_t i = 0; i < coords->getSize(); i++)
   {
@@ -459,7 +459,7 @@ Geometry* GeometryUtils::validatePolygon(const Polygon* p)
 
 OsmMapPtr GeometryUtils::createMapFromBounds(const geos::geom::Envelope& bounds)
 {
-  OsmMapPtr boundaryMap(new OsmMap());
+  OsmMapPtr boundaryMap = std::make_shared<OsmMap>();
   createBoundsInMap(boundaryMap, bounds);
   return boundaryMap;
 }
@@ -467,7 +467,7 @@ OsmMapPtr GeometryUtils::createMapFromBounds(const geos::geom::Envelope& bounds)
 OsmMapPtr GeometryUtils::createMapFromBoundsCollection(
   const QMap<int, geos::geom::Envelope>& boundsCollection)
 {
-  OsmMapPtr boundariesMap(new OsmMap());
+  OsmMapPtr boundariesMap = std::make_shared<OsmMap>();
   for (QMap<int, geos::geom::Envelope>::const_iterator boundsItr = boundsCollection.begin();
        boundsItr != boundsCollection.end(); ++boundsItr)
   {
@@ -518,9 +518,9 @@ ElementId GeometryUtils::createBoundsInMap(const OsmMapPtr& map, const geos::geo
 
 OsmMapPtr GeometryUtils::createMapFromBounds(const std::shared_ptr<geos::geom::Polygon>& bounds)
 {
-  OsmMapPtr boundaryMap(new OsmMap());
+  OsmMapPtr boundaryMap = std::make_shared<OsmMap>();
   WayPtr boundsWay(new Way(Status::Unknown1, boundaryMap->createNextWayId()));
-  geos::geom::CoordinateSequence* coords = bounds->getCoordinates();
+  const geos::geom::CoordinateSequence* coords = bounds->getCoordinates();
   for (size_t i = 0; i < coords->getSize(); i++)
   {
     const geos::geom::Coordinate& coord = coords->getAt(i);
@@ -540,7 +540,7 @@ QMap<int, geos::geom::Envelope> GeometryUtils::readBoundsFileWithIds(const QStri
 {
   // This will sort the bounds inputs by their "id" tag.
   QMap<int, geos::geom::Envelope> boundsById;
-  OsmMapPtr map(new OsmMap());
+  OsmMapPtr map = std::make_shared<OsmMap>();
   OsmMapReaderFactory::read(map, input);
   const WayMap ways = map->getWays();
   for (WayMap::const_iterator wayItr = ways.begin(); wayItr != ways.end(); ++wayItr)
@@ -567,7 +567,7 @@ QMap<int, geos::geom::Envelope> GeometryUtils::readBoundsFileWithIds(const QStri
 
 std::shared_ptr<geos::geom::Geometry> GeometryUtils::readBoundsFromFile(const QString& input)
 {
-  OsmMapPtr map(new OsmMap());
+  OsmMapPtr map = std::make_shared<OsmMap>();
   LOG_INFO("Loading map bounds from ..." << FileUtils::toLogFormat(input, 50) << "...");
   OsmMapReaderFactory::read(map, input);
   const NodeMap nodes = map->getNodes();
