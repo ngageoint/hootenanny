@@ -3,6 +3,8 @@
 
 === Core
 
+==== General
+
 Many of these come directly from https://sonarcloud.io/dashboard?id=hoot[Sonar] recommendations.
 
 * Keep as much implementation out of header files as possible. The implementations of simple 
@@ -28,6 +30,9 @@ logic needed to be executed by the command.
 * Favor constructors with signatures that force the client of a class to set it up properly vs many 
 getter methods.
 * Use interface inheritance with a focus on simple, skinny interface definitions.
+
+==== Hootenanny Specific
+
 * Make use of configuration options via the `Configurable` interface to keep functionality adapatable 
 to a broad range of data inputs.
 * Favor the visitor pattern via classes ineriting `ElementVisitor` for map data processing. Use 
@@ -35,7 +40,7 @@ to a broad range of data inputs.
 * Use classes inheriting `ElementCriterion` to identify data based on its properties.
 * Use streaming I/O whereever possible to avoid loading large maps into memory all at once.
 * Place experimental code into the `hoot-rnd` library. This code is expected to be at a lower TRL 
-than code in `hoot-core`.
+than code in `hoot-core`, and we can be a little lenient on test coverage.
 * Make use of the `ApiEntityInfo` interface to appropriately describe map operators (classes 
 inheriting `OsmMapOperation`, `ElementVisitor`, `ElementCriterion`, etc.).
 * Make use of the `OperationStatus` interface and the `Progress` class to appropriately report 
@@ -44,4 +49,7 @@ progress for map operators (classes inheriting `OsmMapOperation`, `ElementVisito
 * Make use of the `FilteredByGeometryTypeCriteria` interface to properly describe the feature 
 geometry types a map operator (classes inheriting `OsmMapOperation`, `ElementVisitor`, 
 `ElementCriterion`, etc.) operates on.
+* See the "General Test Writing Guidelines" section in the 
+https://github.com/ngageoint/hootenanny/blob/master/docs/developer/HootenannyTests.asciidoc[testing document] 
+for some test writing tips.
 
