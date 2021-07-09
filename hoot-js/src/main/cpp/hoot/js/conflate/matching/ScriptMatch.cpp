@@ -261,7 +261,7 @@ bool ScriptMatch::_isOrderedConflicting(
   eids.emplace(other1);
   eids.emplace(other2);
 
-  OsmMapPtr copiedMap(new OsmMap(map->getProjection()));
+  OsmMapPtr copiedMap = std::make_shared<OsmMap>(map->getProjection());
   CopyMapSubsetOp(map, eids).apply(copiedMap);
   Local<Object> copiedMapJs = OsmMapJs::create(copiedMap);
 

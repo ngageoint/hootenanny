@@ -79,7 +79,7 @@ public:
     reader.setUseDataSourceIds(true);
     reader.read(_inputPath + "MaximalNearestSubline.osm", map);
 
-    OsmMapPtr map2(new OsmMap(map->getProjection()));
+    OsmMapPtr map2 = std::make_shared<OsmMap>(map->getProjection());
 
     std::shared_ptr<OGRSpatialReference> srs =
         MapProjector::createAeacProjection(CalculateMapBoundsVisitor::getBounds(map));

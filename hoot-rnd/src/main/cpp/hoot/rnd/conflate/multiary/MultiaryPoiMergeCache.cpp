@@ -122,7 +122,7 @@ MultiaryClusterPtr MultiaryPoiMergeCache::merge(const MultiaryClusterPtr& c1, co
     eids.insert(e->getElementId());
   }
 
-  OsmMapPtr tmp(new OsmMap(_map->getProjection()));
+  OsmMapPtr tmp = std::make_shared<OsmMap>(_map->getProjection());
   CopyMapSubsetOp(_map, eids).apply(tmp);
 
   std::vector<std::pair<ElementId, ElementId>> replaced;
