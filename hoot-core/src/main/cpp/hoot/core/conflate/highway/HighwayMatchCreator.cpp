@@ -273,13 +273,13 @@ public:
 
       // No tuning was done, I just copied these settings from OsmMapIndex.
       // 10 children - 368 - see #3054
-      std::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
+      std::shared_ptr<MemoryPageStore> mps = std::make_shared<MemoryPageStore>(728);
       _index.reset(new HilbertRTree(mps, 2));
 
       // Only index elements satisfy isMatchCandidate(e)
       std::function<bool (ConstElementPtr e)> f =
         std::bind(&HighwayMatchVisitor::isMatchCandidate, this, placeholders::_1);
-      std::shared_ptr<ArbitraryCriterion> pCrit(new ArbitraryCriterion(f));
+      std::shared_ptr<ArbitraryCriterion> pCrit = std::make_shared<ArbitraryCriterion>(f);
 
       SpatialIndexer v(
         _index, _indexToEid, pCrit,
@@ -333,7 +333,7 @@ HighwayMatchCreator::HighwayMatchCreator()
       ConfigOptions().getConflateMatchHighwayClassifier()));
   _sublineMatcher =
     SublineStringMatcherFactory::getMatcher(CreatorDescription::BaseFeatureType::Highway);
-  _tagAncestorDiff = std::shared_ptr<TagAncestorDifferencer>(new TagAncestorDifferencer("highway"));
+  _tagAncestorDiff = std::make_shared<TagAncestorDifferencer>("highway");
 }
 
 MatchPtr HighwayMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2)
