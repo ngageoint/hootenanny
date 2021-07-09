@@ -65,7 +65,7 @@ public:
    * @param input2 URL of second map to conflate
    * @param outputPath URL to write conflated output
    */
-  void conflate(const QString& input1, const QString& input2, QString& output);
+  void conflate(const QString& input1, const QString& input2, const QString& output);
 
   void setIsDiffConflate(bool isDiffConflate) { _isDiffConflate = isDiffConflate; }
   void setDiffConflateEnableTags(bool enable) { if (enable) _diffConflator.enableTags(); }

@@ -77,7 +77,6 @@ namespace Tgs
 
       _point = new bitmask_t[_dimensions];
     }
-
     HilbertCurve(const HilbertCurve& curve)
     {
       _dimensions = curve._dimensions;
@@ -85,13 +84,12 @@ namespace Tgs
       _point = new bitmask_t[_dimensions];
       std::memcpy(_point, curve._point, sizeof(bitmask_t) * _dimensions);
     }
-
     ~HilbertCurve()
     {
       delete [] _point;
     }
 
-    long encode(int point[])
+    long encode(const int point[])
     {
       long int result;
 

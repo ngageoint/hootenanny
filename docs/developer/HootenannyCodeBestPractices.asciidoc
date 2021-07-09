@@ -17,7 +17,7 @@ constructors/destructors being toward the top.
 * Keep as much logic out of classes inheriting `BaseCommand` as possible. Create a new class to hold
 logic needed to be executed by the command.
 * Use default constructors and destructors where applicable.
-* Use `std::make_shared` to created shared pointers when possible.
+* Use `std::make_shared` to create shared pointers when possible.
 * Pass variables to methods as const references when possible.
 * Make methods const when possible.
 * Use appropriately descriptive class names.

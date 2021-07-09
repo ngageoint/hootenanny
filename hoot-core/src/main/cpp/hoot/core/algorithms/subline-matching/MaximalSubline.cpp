@@ -265,7 +265,7 @@ vector<pair<WayLocation, WayLocation>> MaximalSubline::_discretizePointPairs(
 
 vector<WaySublineMatch> MaximalSubline::_extractAllMatches(
   const ConstOsmMapPtr& map, const ConstWayPtr& w1, const ConstWayPtr& w2,
-  Sparse2dMatrix& sublineMatrix) const
+  const Sparse2dMatrix& sublineMatrix) const
 {
   LOG_TRACE("Extracting all matches...");
 

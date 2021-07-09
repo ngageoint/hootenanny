@@ -67,7 +67,7 @@ namespace Tgs
 
   void BaseRandomForestManager::classifyTestVector(
     const std::string& objId, const std::string& objClass,
-    std::vector<double>& dataVector, std::map<std::string, double>& scores)
+    const std::vector<double>& dataVector, std::map<std::string, double>& scores)
   {
     try
     {
@@ -103,7 +103,7 @@ namespace Tgs
   }
 
   void BaseRandomForestManager::classifyVector(const std::string& objId,
-    std::vector<double>& dataVector, std::map<std::string, double>& scores)
+    const std::vector<double>& dataVector, std::map<std::string, double>& scores)
   {
     try
     {

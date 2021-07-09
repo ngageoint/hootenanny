@@ -163,7 +163,7 @@ void ConflateExecutor::_initTaskCount()
   _currentTask = 1;
 }
 
-void ConflateExecutor::conflate(const QString& input1, const QString& input2, QString& output)
+void ConflateExecutor::conflate(const QString& input1, const QString& input2, const QString& output)
 {
   Tgs::Timer totalTime;
   _taskTimer.reset();

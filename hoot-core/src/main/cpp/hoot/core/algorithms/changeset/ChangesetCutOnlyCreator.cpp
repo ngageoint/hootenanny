@@ -608,14 +608,14 @@ QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>
   // The maps will get set on the crits here that need them by the RemoveElementsVisitor later on,
   // right before they are needed.
 
-  ElementCriterionPtr pointCrit(new PointCriterion());
+  ElementCriterionPtr pointCrit = std::make_shared<PointCriterion>();
   std::shared_ptr<RelationWithPointMembersCriterion> relationPointCrit(
     new RelationWithPointMembersCriterion());
   relationPointCrit->setAllowMixedChildren(false);
   OrCriterionPtr pointOr(new OrCriterion(pointCrit, relationPointCrit));
   featureFilters[GeometryTypeCriterion::GeometryType::Point] = pointOr;
 
-  ElementCriterionPtr lineCrit(new LinearCriterion());
+  ElementCriterionPtr lineCrit = std::make_shared<LinearCriterion>();
   std::shared_ptr<RelationWithLinearMembersCriterion> relationLinearCrit(
     new RelationWithLinearMembersCriterion());
   relationLinearCrit->setAllowMixedChildren(true);
@@ -624,7 +624,7 @@ QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>
 
   // Poly crit has been converted over to encapsulate RelationWithGeometryMembersCriterion, while
   // the other types have not yet (#4151).
-  std::shared_ptr<PolygonCriterion> polyCrit(new PolygonCriterion());
+  std::shared_ptr<PolygonCriterion> polyCrit = std::make_shared<PolygonCriterion>();
   polyCrit->setAllowMixedChildren(false);
   featureFilters[GeometryTypeCriterion::GeometryType::Polygon] = polyCrit;
 
@@ -672,18 +672,15 @@ QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>
     if (geomType == GeometryTypeCriterion::GeometryType::Line)
     {
       LOG_TRACE("Adding roundabouts to line filter...");
-      updatedGeometryCrit.reset(
-        new OrCriterion(
-          geometryCrit, std::shared_ptr<HighwayCriterion>(new HighwayCriterion())));
+      updatedGeometryCrit =
+        std::make_shared<OrCriterion>(geometryCrit, std::make_shared<HighwayCriterion>());
     }
     else if (geomType == GeometryTypeCriterion::GeometryType::Polygon)
     {
       LOG_TRACE("Removing roads from polygon filter...");
-      updatedGeometryCrit.reset(
-        new ChainCriterion(
-          geometryCrit,
-          NotCriterionPtr(
-            new NotCriterion(std::shared_ptr<HighwayCriterion>(new HighwayCriterion())))));
+      updatedGeometryCrit =
+        std::make_shared<ChainCriterion>(
+          geometryCrit, std::make_shared<NotCriterion>(std::make_shared<HighwayCriterion>()));
     }
     else
     {
