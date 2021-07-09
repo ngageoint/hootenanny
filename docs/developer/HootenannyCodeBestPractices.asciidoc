@@ -40,7 +40,7 @@ to a broad range of data inputs.
 * Use classes inheriting `ElementCriterion` to identify data based on its properties.
 * Use streaming I/O whereever possible to avoid loading large maps into memory all at once.
 * Place experimental code into the `hoot-rnd` library. This code is expected to be at a lower TRL 
-than code in `hoot-core`.
+than code in `hoot-core`, and we can be a little lenient on test coverage.
 * Make use of the `ApiEntityInfo` interface to appropriately describe map operators (classes 
 inheriting `OsmMapOperation`, `ElementVisitor`, `ElementCriterion`, etc.).
 * Make use of the `OperationStatus` interface and the `Progress` class to appropriately report 
