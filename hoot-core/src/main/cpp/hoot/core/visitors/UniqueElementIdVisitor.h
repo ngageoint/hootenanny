@@ -48,18 +48,16 @@ public:
   UniqueElementIdVisitor() = default;
   ~UniqueElementIdVisitor() = default;
 
+  void visit(const ConstElementPtr& e) override;
+
+  QString getDescription() const override { return "Returns the unique element IDs visited"; }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
+
   /**
    * Returns a set containing all the ElementIds visited.
    */
   const std::set<ElementId>& getElementSet() const { return _elements; }
-
-  void visit(const ConstElementPtr& e) override;
-
-  QString getDescription() const override { return "Returns the unique element IDs visited"; }
-
-  QString getName() const override { return className(); }
-
-  QString getClassName() const override { return className(); }
 
 private:
 

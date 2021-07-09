@@ -50,14 +50,11 @@ public:
   ~LengthOfWaysVisitor() = default;
 
   static Meters getLengthOfWays(const OsmMapPtr& map, ElementPtr e);
-
   Meters getLengthOfWays() const { return _total; }
 
   double getStat() const override { return getLengthOfWays(); }
 
   void visit(const ConstElementPtr& e) override;
-
-  QString getDescription() const override { return "Calculates the length of all ways"; }
 
   long numWithStat() const override { return _numAffected; }
   double getMin() const override { return _smallest; }
@@ -69,8 +66,8 @@ public:
   }
 
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+  QString getDescription() const override { return "Calculates the length of all ways"; }
 
 private:
 

@@ -178,7 +178,7 @@ public:
 
   std::shared_ptr<BuildingMatch> createMatch(ElementId eid1, ElementId eid2) const
   {
-    return std::shared_ptr<BuildingMatch>(new BuildingMatch(_map, _rf, eid1, eid2, _mt));
+    return std::make_shared<BuildingMatch>(_map, _rf, eid1, eid2, _mt);
   }
 
   static bool isRelated(ConstElementPtr e1, ConstElementPtr e2)
@@ -258,13 +258,12 @@ public:
 
       // No tuning was done, I just copied these settings from OsmMapIndex.
       // 10 children - 368 - see #3054
-      std::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
-      _index.reset(new HilbertRTree(mps, 2));
+      _index = std::make_shared<HilbertRTree>(std::make_shared<MemoryPageStore>(728), 2);
 
       // Only index elements that isMatchCandidate(e)
       std::function<bool (ConstElementPtr e)> f =
         std::bind(&BuildingMatchVisitor::isMatchCandidate, this, placeholders::_1);
-      std::shared_ptr<ArbitraryCriterion> pCrit(new ArbitraryCriterion(f));
+      std::shared_ptr<ArbitraryCriterion> pCrit = std::make_shared<ArbitraryCriterion>(f);
 
       // Instantiate our visitor
       SpatialIndexer v(_index,

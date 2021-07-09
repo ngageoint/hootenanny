@@ -71,12 +71,8 @@ public:
 
   QString getInitStatusMessage() const override
   { return "Marking road sections that appear to be divided highways..."; }
-
   QString getCompletedStatusMessage() const override
   { return "Marked " + QString::number(_numAffected) + " road sections as divided highways"; }
-
-  QString getDescription() const override
-  { return "Marks road sections that implicitly appear to be divided highways"; }
 
   /**
    * @see FilteredByGeometryTypeCriteria
@@ -86,8 +82,9 @@ public:
    */
   QStringList getCriteria() const override;
 
+  QString getDescription() const override
+  { return "Marks road sections that implicitly appear to be divided highways"; }
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 
 private:

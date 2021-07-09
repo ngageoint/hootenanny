@@ -45,15 +45,13 @@ public:
 
   double getStat() const override { return _longestTag; }
 
-  QString getLongestTag() const { return _tag; }
-
   void visit(const ConstElementPtr& e) override;
 
   QString getDescription() const override { return "Identifies the tag with the largest text size"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+
+  QString getLongestTag() const { return _tag; }
 
 private:
 

@@ -82,6 +82,10 @@ public:
 
   void setOsmMap(OsmMap* map) override;
 
+  QString getDescription() const override { return "Randomly splits ways"; }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
+
   /**
     the probability that any way will be split into smaller segements
    */
@@ -105,12 +109,6 @@ public:
     }
     _minNodeSpacing = spacing;
   }
-
-  QString getDescription() const override { return "Randomly splits ways"; }
-
-  QString getName() const override { return className(); }
-
-  QString getClassName() const override { return className(); }
 
 private:
 

@@ -59,15 +59,12 @@ public:
 
   QString getInitStatusMessage() const override
   { return "Removing elements with no information tags..."; }
-
   QString getCompletedStatusMessage() const override
   { return "Removed " + QString::number(_numAffected) + " elements with no information tags"; }
 
   QString getDescription() const override
   { return "Removes elements containing no information in tags"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 
 private:

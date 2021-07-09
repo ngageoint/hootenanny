@@ -68,15 +68,16 @@ public:
 
   void visit(const ElementPtr& pElement) override;
 
-  void setIncludeHootInfo(bool includeInfo) { _includeDebug = includeInfo; }
-  void setIncludeIds(bool includeIds) { _includeIds = includeIds; }
-  void setIncludeCircularError(bool includeCircularError)
-  { _includeCircularError = includeCircularError; }
   void overrideDebugSettings();
 
   QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }
   QString getDescription() const override { return "Adds tags needed for exporting"; }
+
+  void setIncludeHootInfo(bool includeInfo) { _includeDebug = includeInfo; }
+  void setIncludeIds(bool includeIds) { _includeIds = includeIds; }
+  void setIncludeCircularError(bool includeCircularError)
+  { _includeCircularError = includeCircularError; }
 
 private:
 

@@ -61,8 +61,6 @@ public:
 
   void visit(const std::shared_ptr<Element>& e) override;
 
-  void setNegateCriterion(bool negate) { _negateCriterion = negate; }
-
   QString getInitStatusMessage() const override
   { return "Removing tags..."; }
   QString getCompletedStatusMessage() const override
@@ -75,6 +73,8 @@ public:
   QString getDescription() const override { return "Removes tags by key"; }
   QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }
+
+  void setNegateCriterion(bool negate) { _negateCriterion = negate; }
 
 protected:
 

@@ -69,11 +69,11 @@ public:
    */
   static void removeRelation(OsmMapPtr map, long rId);
 
-  void setRelationId(long rId) { _rIdToRemove = rId; }
-
   QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }
   QString getDescription() const override { return "Removes a single relation by element ID"; }
+
+  void setRelationId(long rId) { _rIdToRemove = rId; }
 
 private:
 

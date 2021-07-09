@@ -154,13 +154,12 @@ bool NetworkMergerCreator::createMergers(
 
             const NetworkMatch* nm = dynamic_cast<const NetworkMatch*>(it->get());
             mergers.push_back(
-              MergerPtr(
-                new MarkForReviewMerger(
-                  eids,
-                  "A complex road situation was found with multiple plausible solutions. Please "
-                  "reference input data/imagery and manually merge or modify as needed.",
-                  nm->getName(),
-                  nm->getScore())));
+              std::make_shared<MarkForReviewMerger>(
+                eids,
+                "A complex road situation was found with multiple plausible solutions. Please "
+                "reference input data/imagery and manually merge or modify as needed.",
+                nm->getName(),
+                nm->getScore()));
 
             count++;
             if (count % 100 == 0)

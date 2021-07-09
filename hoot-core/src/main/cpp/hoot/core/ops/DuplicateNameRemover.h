@@ -54,7 +54,7 @@ public:
   DuplicateNameRemover();
   ~DuplicateNameRemover() = default;
 
-  void apply(std::shared_ptr<OsmMap>& map);
+  void apply(std::shared_ptr<OsmMap>& map) override;
 
   /**
    * Remove alternate names that are duplicates.

@@ -61,11 +61,8 @@ public:
 
   void setConfiguration(const Settings& conf) override;
 
-  QString getDescription() const override { return "Rejoins ways split during conflation"; }
-
   QString getInitStatusMessage() const override
   { return "Rejoining ways split during conflation..."; }
-
   QString getCompletedStatusMessage() const override
   {
     return
@@ -78,8 +75,8 @@ public:
   QStringList getCriteria() const override;
 
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+  QString getDescription() const override { return "Rejoins ways split during conflation"; }
 
   std::shared_ptr<WayJoiner> getWayJoiner() const { return _wayJoiner; }
 

@@ -78,7 +78,7 @@ void OsmNetworkExtractor::_addEdge(ConstElementPtr from, ConstElementPtr to,
     _network->addVertex(v2);
   }
 
-  NetworkEdgePtr edge(new NetworkEdge(v1, v2, directed));
+  NetworkEdgePtr edge = std::make_shared<NetworkEdge>(v1, v2, directed);
   edge->setMembers(members);
 
   _network->addEdge(edge);

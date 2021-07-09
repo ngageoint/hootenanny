@@ -72,13 +72,11 @@ public:
 
   bool isMatchCandidate(ConstElementPtr element) const;
 
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
   QString getDescription() const override { return ""; }
 
   long getNumMatchCandidatesFound() const { return _numMatchCandidatesVisited; }
-
-  QString getName() const override { return className(); }
-
-  QString getClassName() const override { return className(); }
 
 private:
 

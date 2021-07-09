@@ -53,26 +53,24 @@ public:
   GeometryModifierVisitor() = default;
   ~GeometryModifierVisitor() = default;
 
+  // TODO: implement OsmMapConsumer
   void setOsmMap(OsmMap* pMap) { _pMap = pMap; }
 
-  void setActionDesc(const GeometryModifierActionDesc& actionDesc ) { _actionDesc = actionDesc; }
-
-  // ElementVisitor
   static QString className() { return "hoot::GeometryModifierVisitor"; }
-  QString getDescription() const override { return "Modifies map geometry as specified"; }
 
   // visits the element, checks if it matches the filter set in _actionDesc and
   // calls the action's process function
   void visit(const ElementPtr& e) override;
 
-  // OperationStatus
   QString getInitStatusMessage() const override { return "Modifying geometry..."; }
   QString getCompletedStatusMessage() const override
   { return "Modified " + QString::number(_numAffected) + " elements"; }
 
+  QString getDescription() const override { return "Modifies map geometry as specified"; }
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+
+   void setActionDesc(const GeometryModifierActionDesc& actionDesc ) { _actionDesc = actionDesc; }
 
 private:
   OsmMap* _pMap;

@@ -53,14 +53,12 @@ public:
 
   void visit(const ConstElementPtr& e) override;
 
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
   QString getDescription() const override
   { return "Determines if elements are sorted to the OSM standard"; }
 
   bool getIsSorted() const { return _isSorted; }
-
-  QString getName() const override { return className(); }
-
-  QString getClassName() const override { return className(); }
 
 private:
 

@@ -58,17 +58,15 @@ public:
 
   void setConfiguration(const Settings& conf) override;
 
+  QString getDescription() const override
+  { return "Calculates a search radius using tie points found by rubbersheeting"; }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
+
   void setCircularError(double val) { _circularError = val; }
   void setRubberSheetRef(bool val) { _rubberSheetRef = val; }
   void setRubberSheetMinTies(int minTies) { _minTies = minTies; }
   void setPrecision(int precision) { _precision = precision; }
-
-  QString getDescription() const override
-  { return "Calculates a search radius using tie points found by rubbersheeting"; }
-
-  QString getName() const override { return className(); }
-
-  QString getClassName() const override { return className(); }
 
 private:
 

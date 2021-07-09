@@ -59,19 +59,15 @@ public:
   MetadataOp() : _pConf(&conf()) { }
   virtual ~MetadataOp() = default;
 
-  // OsmMapOperation
   void apply(std::shared_ptr<OsmMap>& pMap) override;
 
-  // OperationStatus
   QString getInitStatusMessage() const override { return "Processing metadata..."; }
   QString getCompletedStatusMessage() const override
   { return "Modified " + QString::number(_numAffected) + " elements"; }
 
-  // Configurable
   void setConfiguration(const Settings& conf) override;
 
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 
 protected:
@@ -81,7 +77,6 @@ protected:
   QHash<QString,QString> _tags;
   double _gridCellSize;
 
-  // protected data
   std::shared_ptr<OsmMap> _pMap;
 
   WayMap _allWays;

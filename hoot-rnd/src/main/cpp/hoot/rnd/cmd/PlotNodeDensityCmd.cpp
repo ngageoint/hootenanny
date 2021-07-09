@@ -46,7 +46,7 @@ public:
 
   QString getName() const override { return "plot-node-density"; }
   QString getDescription() const override { return "Creates a node density plot for a map"; }
-  QString getType() const { return "rnd"; }
+  QString getType() const override { return "rnd"; }
 
   int runSimple(QStringList& args) override
   {

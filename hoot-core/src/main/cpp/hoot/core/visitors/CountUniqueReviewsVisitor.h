@@ -54,13 +54,11 @@ public:
 
   void visit(const ConstElementPtr& e) override;
 
-  QString getDescription() const override { return "Counts the number of unique feature reviews"; }
-
   void clear();
 
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+  QString getDescription() const override { return "Counts the number of unique feature reviews"; }
 
 private:
 

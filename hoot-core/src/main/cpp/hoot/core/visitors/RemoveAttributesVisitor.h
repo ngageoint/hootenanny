@@ -59,14 +59,12 @@ public:
 
   void setConfiguration(const Settings &conf) override;
 
-  void setTypes(const QStringList types);
-
   QString getDescription() const override
   { return "Removes one or more common OSM attributes from features"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+
+  void setTypes(const QStringList types);
 
 private:
 
