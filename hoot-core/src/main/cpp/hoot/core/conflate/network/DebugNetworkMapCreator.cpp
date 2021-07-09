@@ -60,7 +60,9 @@ void DebugNetworkMapCreator::_addEdgeLink(OsmMapPtr map, NetworkEdgeScorePtr edg
     ConstNodePtr n1 = _getMedianNode(map, edgeScore->getEdgeMatch()->getString1()->getMembers());
     ConstNodePtr n2 = _getMedianNode(map, edgeScore->getEdgeMatch()->getString2()->getMembers());
 
-    WayPtr w(new Way(Status::Invalid, map->createNextWayId(), ElementData::CIRCULAR_ERROR_EMPTY));
+    WayPtr w =
+      std::make_shared<Way>(
+        Status::Invalid, map->createNextWayId(), ElementData::CIRCULAR_ERROR_EMPTY);
     w->addNode(n1->getId());
     w->addNode(n2->getId());
     Tags tags;
@@ -70,9 +72,9 @@ void DebugNetworkMapCreator::_addEdgeLink(OsmMapPtr map, NetworkEdgeScorePtr edg
     tags.set(MetadataTags::HootEdgeId(), edgeScore->getEdgeMatch()->getUid());
     tags.set(MetadataTags::HootEdge(), edgeScore->toString());
 
-    RelationPtr r(
-      new Relation(
-        Status::Invalid, map->createNextRelationId(), ElementData::CIRCULAR_ERROR_EMPTY, "match"));
+    RelationPtr r =
+      std::make_shared<Relation>(
+        Status::Invalid, map->createNextRelationId(), ElementData::CIRCULAR_ERROR_EMPTY, "match");
     r->setTags(tags);
     r->addElement("visual", w);
 
@@ -118,7 +120,8 @@ void DebugNetworkMapCreator::_addVertexLink(OsmMapPtr map, NetworkVertexScorePtr
 
   if (vertexScore->getScore() >= 0.001)
   {
-    WayPtr w(new Way(Status::Invalid, map->createNextWayId(), ElementData::CIRCULAR_ERROR_EMPTY));
+    WayPtr w =
+      std::make_shared<Way>(Status::Invalid, map->createNextWayId(), ElementData::CIRCULAR_ERROR_EMPTY);
     w->addNode(n1->getId());
     w->addNode(n2->getId());
     w->getTags().set(MetadataTags::HootVertexScore12(), vertexScore->getScore12());

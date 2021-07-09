@@ -75,7 +75,6 @@ ConflictsNetworkMatcher::ConflictsNetworkMatcher()
 
 double ConflictsNetworkMatcher::_aggregateScores(QList<double> pairs) const
 {
-  //qSort(pairs.begin(), pairs.end(), greaterThan);
   qSort(pairs);
 
   // this quick little method makes the scores decrease with each matching pair
@@ -101,7 +100,7 @@ QList<NetworkVertexScorePtr> ConflictsNetworkMatcher::getAllVertexScores() const
 
 std::shared_ptr<ConflictsNetworkMatcher> ConflictsNetworkMatcher::create()
 {
-  return std::shared_ptr<ConflictsNetworkMatcher>(new ConflictsNetworkMatcher());
+  return std::make_shared<ConflictsNetworkMatcher>();
 }
 
 void ConflictsNetworkMatcher::_createEmptyStubEdges(OsmNetworkPtr na, OsmNetworkPtr nb) const
@@ -144,7 +143,7 @@ void ConflictsNetworkMatcher::_createEmptyStubEdges(OsmNetworkPtr na, OsmNetwork
     if (createStub)
     {
       // Create stub
-      NetworkEdgePtr newStub(new NetworkEdge(va, va, false));
+      NetworkEdgePtr newStub = std::make_shared<NetworkEdge>(va, va, false);
       newStub->addMember(va->getElement());
       LOG_TRACE("Adding new edge: " << newStub);
       na->addEdge(newStub);
@@ -308,12 +307,12 @@ void ConflictsNetworkMatcher::_createMatchRelationships()
     // Conflicts
     foreach (ConstEdgeMatchPtr other, conflict)
     {
-      _matchRelationships[em].append(ConstMatchRelationshipPtr(new MatchRelationship(other, true)));
+      _matchRelationships[em].append(std::make_shared<const MatchRelationship>(other, true));
     }
 
     foreach (ConstEdgeMatchPtr other, support)
     {
-      MatchRelationshipPtr mr(new MatchRelationship(other, false));
+      MatchRelationshipPtr mr = std::make_shared<MatchRelationship>(other, false);
       QSet<ConstEdgeMatchPtr> connectingStubs = _edgeMatches->getConnectingStubs(em, other);
       QSet<ConstEdgeMatchPtr> nonConflictingStubs = connectingStubs - conflict;
       if (connectingStubs.empty() || nonConflictingStubs.size() >= 1)
@@ -352,8 +351,7 @@ QList<NetworkEdgeScorePtr> ConflictsNetworkMatcher::getAllEdgeScores() const
   QList<NetworkEdgeScorePtr> result;
   foreach (ConstEdgeMatchPtr em, _scores.keys())
   {
-    NetworkEdgeScorePtr p(new NetworkEdgeScore(em, _scores[em], _scores[em]));
-    result.append(p);
+    result.append(std::make_shared<NetworkEdgeScore>(em, _scores[em], _scores[em]));
   }
   return result;
 }

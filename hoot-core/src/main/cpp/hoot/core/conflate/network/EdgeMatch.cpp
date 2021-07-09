@@ -60,7 +60,7 @@ EdgeMatch::EdgeMatch(ConstEdgeStringPtr es1, ConstEdgeStringPtr es2) :
 
 std::shared_ptr<EdgeMatch> EdgeMatch::clone() const
 {
-  EdgeMatchPtr result(new EdgeMatch);
+  EdgeMatchPtr result = std::make_shared<EdgeMatch>();
   result->_edges1 = _edges1->clone();
   result->_edges2 = _edges2->clone();
 

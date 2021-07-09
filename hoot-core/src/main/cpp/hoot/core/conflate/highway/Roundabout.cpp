@@ -90,7 +90,7 @@ NodePtr Roundabout::getNewCenter(OsmMapPtr pMap)
   lat = lat / count;
   lon = lon / count;
 
-  NodePtr pNewNode(new Node(_status, pMap->createNextNodeId(), lon, lat, 15));
+  NodePtr pNewNode = std::make_shared<Node>(_status, pMap->createNextNodeId(), lon, lat, 15);
   pNewNode->setTag(MetadataTags::HootSpecial(), MetadataTags::RoundaboutCenter());
 
   return pNewNode;
@@ -98,7 +98,7 @@ NodePtr Roundabout::getNewCenter(OsmMapPtr pMap)
 
 RoundaboutPtr Roundabout::makeRoundabout(const OsmMapPtr& pMap, WayPtr pWay)
 {
-  RoundaboutPtr rnd(new Roundabout());
+  RoundaboutPtr rnd = std::make_shared<Roundabout>();
 
   // Add the way to the roundabout
   rnd->setRoundaboutWay(pWay);
@@ -204,7 +204,7 @@ void Roundabout::handleCrossingWays(OsmMapPtr pMap)
               _connectingWays.push_back(newWays[j]);
 
               // Now make connector way
-              WayPtr w(new Way(_otherStatus, pMap->createNextWayId(), 15));
+              WayPtr w = std::make_shared<Way>(_otherStatus, pMap->createNextWayId(), 15);
               w->addNode(pCenterNode->getId());
               w->setTag("highway", "unclassified");
               w->setTag(MetadataTags::HootSpecial(), MetadataTags::RoundaboutConnector());
@@ -307,7 +307,7 @@ void Roundabout::removeRoundabout(OsmMapPtr pMap)
   LOG_TRACE("Connecting center node: " << _pCenterNode << "...");
   for (std::set<long>::iterator it = connectingNodeIDs.begin(); it != connectingNodeIDs.end(); ++it)
   {
-    WayPtr pWay(new Way(_status, pMap->createNextWayId(), 15));
+    WayPtr pWay = std::make_shared<Way>(_status, pMap->createNextWayId(), 15);
     pWay->addNode(_pCenterNode->getId());
     pWay->addNode(*it);
     LOG_VART(pWay->getNodeIds());
@@ -364,7 +364,7 @@ void Roundabout::replaceRoundabout(OsmMapPtr pMap)
         if (thisNode->toCoordinate().distance(otherNode->toCoordinate()) >
             thisNode->getCircularError())
         {
-          NodePtr pNewNode(new Node(*thisNode));
+          NodePtr pNewNode = std::make_shared<Node>(*thisNode);
           pNewNode->setId(pMap->createNextNodeId());
           LOG_TRACE(
             "Node with ID: " << nodeId << " found. Adding it with ID: " << pNewNode->getId() <<
@@ -378,7 +378,7 @@ void Roundabout::replaceRoundabout(OsmMapPtr pMap)
       // If not found, we need to add it back to the map
       if (!found)
       {
-        NodePtr pNewNode(new Node(*(_roundaboutNodes[i])));
+        NodePtr pNewNode = std::make_shared<Node>(*(_roundaboutNodes[i]));
         LOG_TRACE(
           "Node with ID: " << nodeId << " not found. Adding new node: " << pNewNode->getId() <<
           "...");
@@ -388,7 +388,7 @@ void Roundabout::replaceRoundabout(OsmMapPtr pMap)
     }
 
     // All our nodes should be there, now lets add the way back
-    WayPtr pRoundabout(new Way(*_roundaboutWay));
+    WayPtr pRoundabout = std::make_shared<Way>(*_roundaboutWay);
 
     // Make sure our nodes are set correctly
     std::vector<long> nodeIds;
