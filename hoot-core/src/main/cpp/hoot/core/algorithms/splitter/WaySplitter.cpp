@@ -112,7 +112,7 @@ WayPtr WaySplitter::createSubline(const WaySubline& subline, vector<WayPtr>& scr
   return splits[1];
 }
 
-vector<WayPtr> WaySplitter::split(const OsmMapPtr& map, WayPtr way, WayLocation& splitPoint)
+vector<WayPtr> WaySplitter::split(const OsmMapPtr& map, WayPtr way, const WayLocation& splitPoint)
 {
   WaySplitter s(map, way);
   return s.split(splitPoint);

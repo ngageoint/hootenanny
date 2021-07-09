@@ -86,7 +86,7 @@ public:
                         const ConstOsmMapPtr& map);
   static double getStat(ElementCriterionPtr criterion, ElementVisitorPtr visitor,
                         const ConstOsmMapPtr& map, const ElementPtr& element);
-  static double getStat(ElementCriterion* criterion, ElementVisitor* visitor,
+  static double getStat(const ElementCriterion* criterion, ElementVisitor* visitor,
                         const ConstOsmMapPtr& map, const ElementPtr& element);
 
   QString getDescription() const override { return ""; }

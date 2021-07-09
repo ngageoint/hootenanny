@@ -123,7 +123,7 @@ QSet<QString> PoiPolygonTypeScoreExtractor::_getTagValueTokens(const QString& ca
          tagItr != tags.end(); ++tagItr)
     {
       SchemaVertex tag = *tagItr;
-      const QString tagVal = tag.value.toLower();
+      const QString tagVal = tag.getValue().toLower();
       if (!tagVal.contains("*"))  //skip wildcards
       {
         _categoriesToSchemaTagValues[category].insert(tagVal);

@@ -68,7 +68,7 @@ void RelationData::removeElement(const QString& role, ElementId eid)
   for (size_t i = 0; i < _members.size(); i++)
   {
     const Entry& e = _members[i];
-    if (e.role == role && e.getElementId() == eid)
+    if (e.getRole() == role && e.getElementId() == eid)
     {
       // pass
     }
@@ -128,7 +128,7 @@ void RelationData::replaceElement(ElementId from, const QList<ElementId>& to)
     {
       for (int j = 0; j < to.size(); ++j)
       {
-        newCopy.emplace_back(e.role, to[j]);
+        newCopy.emplace_back(e.getRole(), to[j]);
       }
     }
     else

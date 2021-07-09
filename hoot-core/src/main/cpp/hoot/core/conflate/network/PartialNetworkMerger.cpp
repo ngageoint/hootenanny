@@ -249,7 +249,7 @@ void PartialNetworkMerger::_processFullMatch(const OsmMapPtr& map,
       _applyMerger(map, merger);
     }
   }
-  catch (NeedsReviewException& e)
+  catch (const NeedsReviewException& e)
   {
     set<ElementId> reviews;
     foreach (WayMatchStringMerger::SublineMappingPtr mapping, _allSublineMappings)

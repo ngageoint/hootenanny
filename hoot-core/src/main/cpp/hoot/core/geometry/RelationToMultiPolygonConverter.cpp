@@ -214,7 +214,7 @@ std::shared_ptr<Geometry> RelationToMultiPolygonConverter::createMultipolygon() 
     const RelationData::Entry& e = _r->getMembers()[i];
     LOG_VART(e.getElementId());
     if (e.getElementId().getType() == ElementType::Relation &&
-        (e.role == MetadataTags::RoleOuter() || e.role == MetadataTags::RolePart()))
+        (e.getRole() == MetadataTags::RoleOuter() || e.getRole() == MetadataTags::RolePart()))
     {
       ConstRelationPtr r = _provider->getRelation(e.getElementId().getId());
       if (r && (r->isMultiPolygon() || AreaCriterion().isSatisfied(r)))
@@ -408,7 +408,7 @@ void RelationToMultiPolygonConverter::_createRings(
   for (size_t i = 0; i < elements.size(); i++)
   {
     const RelationData::Entry& e = elements[i];
-    if (e.getElementId().getType() == ElementType::Way && e.role == role)
+    if (e.getElementId().getType() == ElementType::Way && e.getRole() == role)
     {
       const ConstWayPtr& w = _provider->getWay(e.getElementId().getId());
       if (!w || w->getNodeCount() == 0)

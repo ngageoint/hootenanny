@@ -676,7 +676,7 @@ namespace Tgs
   }
 
   void BaseRandomForestManager::_classifyBinaryTestVector(const std::string& objId,
-    const std::string& objClass, std::vector<double>& dataVector,
+    const std::string& objClass, const std::vector<double>& dataVector,
     std::map<std::string, double>& scores)
   {
     try
@@ -744,7 +744,7 @@ namespace Tgs
   }
 
   void BaseRandomForestManager::_classifyMultiClassTestVector(const std::string& objId,
-    const std::string& objClass, std::vector<double>& dataVector,
+    const std::string& objClass, const std::vector<double>& dataVector,
     std::map<std::string, double>& scores)
   {
     try
@@ -786,7 +786,7 @@ namespace Tgs
   }
 
   void BaseRandomForestManager::_classifyRoundRobinTestVector(const std::string& objId,
-    const std::string& objClass, std::vector<double>& dataVector,
+    const std::string& objClass, const std::vector<double>& dataVector,
     std::map<std::string, double>& scores)
   {
     try
@@ -837,7 +837,7 @@ namespace Tgs
   }
 
   void BaseRandomForestManager::_classifyMultiClassVector(const std::string& objId,
-    std::vector<double>& dataVector, std::map<std::string, double>& scores)
+    const std::vector<double>& dataVector, std::map<std::string, double>& scores)
   {
     try
     {

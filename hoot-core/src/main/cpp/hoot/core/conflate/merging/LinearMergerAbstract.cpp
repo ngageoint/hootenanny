@@ -90,7 +90,7 @@ void LinearMergerAbstract::_mergeShortestPairsFirst(
   std::vector<std::pair<ElementId, ElementId>>& replaced)
 {
     ShortestFirstComparator shortestFirst;
-    shortestFirst.map = _map;
+    shortestFirst.setMap(_map);
     sort(pairs.begin(), pairs.end(), shortestFirst);
     LOG_VART(pairs);
     for (vector<pair<ElementId, ElementId>>::const_iterator it = pairs.begin(); it != pairs.end();

@@ -187,7 +187,7 @@ void BaseComparator::_saveImage(cv::Mat& image, QString path, double max, bool g
     int pixelCtr = 0;
     for (int y = 0; y < _height; y++)
     {
-      float* row = image.ptr<float>(y);
+      const float* row = image.ptr<float>(y);
       for (int x = 0; x < _width; x++)
       {
         max = std::max((double)row[x], max);
@@ -210,7 +210,7 @@ void BaseComparator::_saveImage(cv::Mat& image, QString path, double max, bool g
     int pixelCtr = 0;
     for (int y = 0; y < _height; y++)
     {
-      float* row = image.ptr<float>(y);
+      const float* row = image.ptr<float>(y);
       for (int x = 0; x < _width; x++)
       {
         if (gradient)

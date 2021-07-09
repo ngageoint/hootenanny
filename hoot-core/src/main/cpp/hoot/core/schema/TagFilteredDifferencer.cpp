@@ -36,7 +36,7 @@ namespace hoot
 double TagFilteredDifferencer::diff(
   const ConstOsmMapPtr&, const ConstElementPtr& e1, const ConstElementPtr& e2) const
 {
-  OsmSchema& schema = OsmSchema::getInstance();
+  const OsmSchema& schema = OsmSchema::getInstance();
 
   vector<SchemaVertex> v1 = schema.getUniqueSchemaVertices(e1->getTags());
   vector<SchemaVertex> v2 = schema.getUniqueSchemaVertices(e2->getTags());

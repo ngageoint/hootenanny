@@ -1103,7 +1103,7 @@ std::shared_ptr<MatchThreshold> ScriptMatchCreator::getMatchThreshold()
       missThreshold = ScriptMatchVisitor::getNumber(plugin, "missThreshold", 0.0, 1.0);
       reviewThreshold = ScriptMatchVisitor::getNumber(plugin, "reviewThreshold", 0.0, 1.0);
     }
-    catch (const IllegalArgumentException& e)
+    catch (const IllegalArgumentException& /*e*/)
     {
     }
 

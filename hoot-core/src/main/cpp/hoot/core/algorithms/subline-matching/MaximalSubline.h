@@ -229,8 +229,8 @@ private:
   /**
    * Finds the starting location for the given end match location.
    */
-  Sparse2dMatrix::CellId _findStartMatch(Sparse2dMatrix &sublines,
-    Sparse2dMatrix::CellId end) const;
+  Sparse2dMatrix::CellId _findStartMatch(
+    const Sparse2dMatrix &sublines, Sparse2dMatrix::CellId end) const;
 
   void _populateTotalScores(const Sparse2dMatrix& scores, Sparse2dMatrix& sublines,
     Sparse2dMatrix::CellId& bestCid, double& bestScore) const;

@@ -213,7 +213,7 @@ void RubberSheet::apply(std::shared_ptr<OsmMap>& map)
   map->setCachedRubberSheet(std::shared_ptr<RubberSheet>(this->clone()));
 }
 
-bool RubberSheet::_calcAndApplyTransform(OsmMapPtr& map)
+bool RubberSheet::_calcAndApplyTransform(const OsmMapPtr& map)
 {
   LOG_INFO(
     "Rubber sheeting map having " <<

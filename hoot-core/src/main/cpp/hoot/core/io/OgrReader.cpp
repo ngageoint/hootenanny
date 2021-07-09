@@ -847,7 +847,7 @@ void OgrReaderInternal::_addPolygon(OGRPolygon* p, Tags& t)
   AreaCriterion areaCrit;
   if (p->getNumInteriorRings() == 0)
   {
-    OGRLinearRing* exteriorRing = p->getExteriorRing();
+    const OGRLinearRing* exteriorRing = p->getExteriorRing();
     if (exteriorRing != nullptr)
     {
       WayPtr outer = _createWay(p->getExteriorRing(), circularError);

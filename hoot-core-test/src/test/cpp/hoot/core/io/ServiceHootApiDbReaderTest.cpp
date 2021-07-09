@@ -348,10 +348,10 @@ public:
     CPPUNIT_ASSERT(relation->contains(ElementId::node(1)));
     CPPUNIT_ASSERT(relation->contains(ElementId::way(1)));
     RelationData::Entry member = relationMembers.at(0);
-    HOOT_STR_EQUALS("n1", member.role);
+    HOOT_STR_EQUALS("n1", member.getRole());
     CPPUNIT_ASSERT_EQUAL((long)1, member.getElementId().getId());
     member = relationMembers.at(1);
-    HOOT_STR_EQUALS("w1", member.role);
+    HOOT_STR_EQUALS("w1", member.getRole());
     CPPUNIT_ASSERT_EQUAL((long)1, member.getElementId().getId());
     CPPUNIT_ASSERT_EQUAL(2, relation->getTags().size());
     HOOT_STR_EQUALS("r1", relation->getTags().get("note"));
@@ -367,7 +367,7 @@ public:
     CPPUNIT_ASSERT(relation->contains(ElementId::node(2)));
     CPPUNIT_ASSERT_EQUAL(size_t(1), relation->getMembers().size());
     member = relation->getMembers().at(0);
-    HOOT_STR_EQUALS("n2", member.role);
+    HOOT_STR_EQUALS("n2", member.getRole());
     CPPUNIT_ASSERT_EQUAL((long)2, member.getElementId().getId());
     CPPUNIT_ASSERT_EQUAL(1, relation->getTags().size());
     CPPUNIT_ASSERT_EQUAL((long)1, relation->getVersion());
@@ -564,10 +564,10 @@ public:
     CPPUNIT_ASSERT(relation->contains(ElementId::node(1)));
     CPPUNIT_ASSERT(relation->contains(ElementId::way(1)));
     RelationData::Entry member = relation->getMembers().at(0);
-    HOOT_STR_EQUALS("n1", member.role);
+    HOOT_STR_EQUALS("n1", member.getRole());
     CPPUNIT_ASSERT_EQUAL((long)1, member.getElementId().getId());
     member = relation->getMembers().at(1);
-    HOOT_STR_EQUALS("w1", member.role);
+    HOOT_STR_EQUALS("w1", member.getRole());
     CPPUNIT_ASSERT_EQUAL((long)1, member.getElementId().getId());
     CPPUNIT_ASSERT_EQUAL(2, relation->getTags().size());
     HOOT_STR_EQUALS("r1", relation->getTags().get("note"));
@@ -592,7 +592,7 @@ public:
     CPPUNIT_ASSERT(relation->contains(ElementId::node(2)));
     CPPUNIT_ASSERT_EQUAL(size_t(1), relation->getMembers().size());
     member = relation->getMembers().at(0);
-    HOOT_STR_EQUALS("n2", member.role);
+    HOOT_STR_EQUALS("n2", member.getRole());
     CPPUNIT_ASSERT_EQUAL((long)2, member.getElementId().getId());
     CPPUNIT_ASSERT_EQUAL(1, relation->getTags().size());
     HOOT_STR_EQUALS("2", relation->getTags().get(MetadataTags::HootId()));

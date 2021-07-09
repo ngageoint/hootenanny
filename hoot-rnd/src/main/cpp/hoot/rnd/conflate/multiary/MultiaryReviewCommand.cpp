@@ -186,7 +186,7 @@ MultiaryReviewCommand MultiaryReviewCommand::fromJsonString(QString jsonStr)
   {
     pt::read_json(ss, propTree);
   }
-  catch (pt::json_parser::json_parser_error& e)
+  catch (const pt::json_parser::json_parser_error& e)
   {
     QString reason = QString::fromStdString(e.message());
     QString line = QString::number(e.line());

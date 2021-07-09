@@ -785,7 +785,7 @@ bool CalculateStatsOp::_matchDescriptorCompare(
 }
 
 double CalculateStatsOp::_applyVisitor(
-  ElementCriterion* pCrit, ConstElementVisitor* pVis, const QString& statName,
+  const ElementCriterion* pCrit, ConstElementVisitor* pVis, const QString& statName,
   StatData::StatCall call)
 {
   return _applyVisitor(FilteredVisitor(pCrit, pVis), statName, call);
@@ -823,7 +823,7 @@ double CalculateStatsOp::_applyVisitor(
 
   _constMap->visitRo(*fv);
 
-  DataProducer* dataProducer = dynamic_cast<DataProducer*>(&childVisitor);
+  const DataProducer* dataProducer = dynamic_cast<DataProducer*>(&childVisitor);
   if (dataProducer != nullptr)
   {
     visitorData = dataProducer->getData();

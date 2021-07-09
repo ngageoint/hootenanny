@@ -58,7 +58,7 @@ public:
   virtual std::map<QString, double> getFeatures(const ConstOsmMapPtr& m,
     ElementId eid1, ElementId eid2) const;
 
-  void import(QDomElement& docRoot);
+  void import(const QDomElement& docRoot);
 
 protected:
 

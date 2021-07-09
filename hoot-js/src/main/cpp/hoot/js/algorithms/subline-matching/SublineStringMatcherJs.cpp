@@ -121,7 +121,7 @@ void SublineStringMatcherJs::extractMatchingSublines(const FunctionCallbackInfo<
   HandleScope scope(current);
   Local<Context> context = current->GetCurrentContext();
 
-  SublineStringMatcherJs* smJs = ObjectWrap::Unwrap<SublineStringMatcherJs>(args.This());
+  const SublineStringMatcherJs* smJs = ObjectWrap::Unwrap<SublineStringMatcherJs>(args.This());
   SublineStringMatcherPtr sm = smJs->getSublineStringMatcher();
 
   OsmMapJs* mapJs = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject(context).ToLocalChecked());

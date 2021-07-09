@@ -63,7 +63,7 @@ void RemoveInvalidMultilineStringMembersVisitor::visit(const ElementPtr& e)
     if (r->getType() == MetadataTags::RelationMultilineString())
     {
       vector<RelationData::Entry> multi_members = r->getMembers();
-      Tags& tags = r->getTags();
+      const Tags& tags = r->getTags();
       for (vector<RelationData::Entry>::iterator it = multi_members.begin();
            it != multi_members.end(); ++it)
       {

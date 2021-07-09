@@ -236,7 +236,7 @@ namespace Tgs
     * @param fileStream the stream to export the data
     * @param tabDepth set of tabs to indent the exported content
     */
-    void _exportOobSet(std::ostream & fileStream, std::string tabDepth);
+    void _exportOobSet(std::ostream & fileStream, const std::string& tabDepth);
 
     /**
     *  A recursive method for importing nodes for creation

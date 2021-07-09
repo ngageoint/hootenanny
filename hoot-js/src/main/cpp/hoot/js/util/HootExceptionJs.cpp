@@ -88,7 +88,7 @@ bool HootExceptionJs::isHootException(Local<Value> v)
   if (v->IsObject())
   {
     Local<Object> obj = Local<Object>::Cast(v);
-    HootExceptionJs* e = nullptr;
+    const HootExceptionJs* e = nullptr;
     if (obj->InternalFieldCount() >= 1)
     {
       e = node::ObjectWrap::Unwrap<HootExceptionJs>(obj);
@@ -114,7 +114,7 @@ void HootExceptionJs::New(const FunctionCallbackInfo<Value>& args)
   args.GetReturnValue().Set(args.This());
 }
 
-void HootExceptionJs::checkV8Exception(Local<Value> result, TryCatch& tc)
+void HootExceptionJs::checkV8Exception(Local<Value> result, const TryCatch& tc)
 {
   if (result.IsEmpty())
   {

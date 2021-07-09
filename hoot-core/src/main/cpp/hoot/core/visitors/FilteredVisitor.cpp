@@ -127,7 +127,7 @@ double FilteredVisitor::getStat(ElementCriterionPtr criterion, ElementVisitorPtr
                                 const ConstOsmMapPtr& map)
 {
   FilteredVisitor filteredVisitor(criterion, visitor);
-  SingleStatistic* stat = dynamic_cast<SingleStatistic*>(&filteredVisitor.getChildVisitor());
+  const SingleStatistic* stat = dynamic_cast<SingleStatistic*>(&filteredVisitor.getChildVisitor());
   if (stat == nullptr)
   {
     throw HootException("Visitor does not implement SingleStatistic.");
@@ -143,11 +143,11 @@ double FilteredVisitor::getStat(ElementCriterionPtr criterion, ElementVisitorPtr
   return getStat(criterion.get(), visitor.get(), map, element);
 }
 
-double FilteredVisitor::getStat(ElementCriterion* criterion, ElementVisitor* visitor,
+double FilteredVisitor::getStat(const ElementCriterion* criterion, ElementVisitor* visitor,
                                 const ConstOsmMapPtr& map, const ElementPtr& element)
 {
   FilteredVisitor filteredVisitor(criterion, visitor);
-  SingleStatistic* stat = dynamic_cast<SingleStatistic*>(&filteredVisitor.getChildVisitor());
+  const SingleStatistic* stat = dynamic_cast<SingleStatistic*>(&filteredVisitor.getChildVisitor());
   if (stat == nullptr)
   {
     throw HootException("Visitor does not implement SingleStatistic.");

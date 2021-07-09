@@ -729,7 +729,7 @@ void OsmPbfWriter::_writeRelation(const std::shared_ptr<const hoot::Relation>& r
     lastId = id + _nodeIdDelta;
     pbr->add_types((hoot::pb::Relation_MemberType)
                    _toRelationMemberType(entries[i].getElementId().getType()));
-    pbr->add_roles_sid(_convertString(entries[i].role));
+    pbr->add_roles_sid(_convertString(entries[i].getRole()));
   }
 
   // From http://wiki.openstreetmap.org/wiki/PBF_Format#Ways_and_Relations

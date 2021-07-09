@@ -141,7 +141,7 @@ void GraphComparator::_calculateRasterCost(cv::Mat& mat, const RandomPtr& random
 
   for (int y = 0; y < _height; y++)
   {
-    float* row = mat.ptr<float>(y);
+    const float* row = mat.ptr<float>(y);
     for (int x = 0; x < _width; x++)
     {
       cost.pixel(x, y) = row[x];

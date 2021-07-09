@@ -733,7 +733,7 @@ namespace Tgs
     }
   }
 
-  void RandomTree::_exportOobSet(std::ostream & fileStream, std::string tabDepth)
+  void RandomTree::_exportOobSet(std::ostream & fileStream, const std::string& tabDepth)
   {
     try
     {

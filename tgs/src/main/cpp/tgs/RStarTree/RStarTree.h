@@ -96,8 +96,6 @@ public:
    */
   void insert(const Box& b, int userId);
 
-  void cleanTree() const;
-
   /**
    * Traverses the tree and looks for inconsistencies. This is helpful when debugging. Returns
    * false if the sanity check fails.
@@ -111,24 +109,25 @@ public:
     BoxInternalData box;
     int id;
 
-    BoxPair(const BoxPair& bp) :
-      box(bp.box)
-    {
-      id = bp.id;
-    }
-
+//    BoxPair(const BoxPair& bp) :
+//      box(bp.box)
+//    {
+//      id = bp.id;
+//    }
+    BoxPair(const BoxPair& bp) = default;
     BoxPair(const BoxInternalData& b, int id) :
       box(b)
     {
       this->id = id;
     }
 
-    BoxPair& operator=(const BoxPair& bp)
-    {
-      box = bp.box;
-      id = bp.id;
-      return *this;
-    }
+//    BoxPair& operator=(const BoxPair& bp)
+//    {
+//      box = bp.box;
+//      id = bp.id;
+//      return *this;
+//    }
+    BoxPair& operator=(const BoxPair& bp) = default;
   };
 
 protected:

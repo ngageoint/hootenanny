@@ -229,7 +229,7 @@ bool ElementComparer::_compareRelation(ElementPtr re, ElementPtr e) const
 
     for (size_t i = 0; i < rr->getMembers().size(); i++)
     {
-      if (rr->getMembers()[i].role != r->getMembers()[i].role ||
+      if (rr->getMembers()[i].getRole() != r->getMembers()[i].getRole() ||
           rr->getMembers()[i].getElementId() != r->getMembers()[i].getElementId())
       {
         LOG_TRACE(

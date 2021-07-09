@@ -183,8 +183,8 @@ void NodeDensityTileBoundsCalculator::_calculateMin()
   _maxValue = 1.0;
   for (int py = 0; py < h; py++)
   {
-    int32_t* row1 = _r1.ptr<int32_t>(py);
-    int32_t* row2 = _r2.ptr<int32_t>(py);
+    const int32_t* row1 = _r1.ptr<int32_t>(py);
+    const int32_t* row2 = _r2.ptr<int32_t>(py);
     int32_t* rowM = _min.ptr<int32_t>(py);
 
     for (int px = 0; px < w; px++)
@@ -242,7 +242,7 @@ void NodeDensityTileBoundsCalculator::_calculateTiles()
     LOG_TRACE("width: " << width);
     for (size_t i = 0; i < boxes.size(); i++)
     {
-      PixelBox& b = boxes[i];
+      const PixelBox& b = boxes[i];
       double splitX = _calculateSplitX(b);
       int tx = i % (width / 2);
       int ty = i / (width / 2);
@@ -280,7 +280,7 @@ void NodeDensityTileBoundsCalculator::_calculateTiles()
     _nodeCounts[tx].resize(width);
     for (size_t ty = 0; ty < width; ty++)
     {
-      PixelBox& pb = boxes[tx + ty * width];
+      const PixelBox& pb = boxes[tx + ty * width];
       LOG_VART(pb.getWidth());
       LOG_VART(pb.getHeight());
 
@@ -533,7 +533,7 @@ void NodeDensityTileBoundsCalculator::_exportImage(cv::Mat& r, QString output) c
   LOG_VART(r.cols); //18k
   for (int y = 0; y < r.rows; y++)
   {
-    int32_t* row = r.ptr<int32_t>(y);
+    const int32_t* row = r.ptr<int32_t>(y);
     for (int x = 0; x < r.cols; x++)
     {
       double l;
@@ -579,8 +579,8 @@ void NodeDensityTileBoundsCalculator::_exportResult(const vector<PixelBox>& boxe
   LOG_VART(_r1.cols); //18k
   for (int y = 0; y < _r1.rows; y++)
   {
-    int32_t* row1 = _r1.ptr<int32_t>(y);
-    int32_t* row2 = _r2.ptr<int32_t>(y);
+    const int32_t* row1 = _r1.ptr<int32_t>(y);
+    const int32_t* row2 = _r2.ptr<int32_t>(y);
     for (int x = 0; x < _r1.cols; x++)
     {
       double l1 = row1[x] <= 0 ? 0.0 : log(row1[x]) / log(_maxValue);
@@ -613,7 +613,7 @@ bool NodeDensityTileBoundsCalculator::_isDone(vector<PixelBox>& boxes)
 
   for (size_t i = 0; i < boxes.size(); i++)
   {
-    PixelBox& b = boxes[i];
+    const PixelBox& b = boxes[i];
     if (b.getWidth() == 1 || b.getHeight() == 1)
     {
       minSize = true;
@@ -735,7 +735,7 @@ long NodeDensityTileBoundsCalculator::_sumPixels(const PixelBox& pb, cv::Mat& r)
   long sum = 0.0;
   for (int py = pb.minY; py <= pb.maxY; py++)
   {
-    int32_t* row = r.ptr<int32_t>(py);
+    const int32_t* row = r.ptr<int32_t>(py);
 
     for (int px = pb.minX; px <= pb.maxX; px++)
     {
