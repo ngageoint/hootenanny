@@ -135,7 +135,7 @@ public:
 
   OsmMapPtr createMapForCopyTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmXmlReader reader;
     reader.setUseDataSourceIds(true);
     reader.setDefaultStatus(Status::Unknown1);
@@ -184,11 +184,11 @@ public:
     reader.setUseDataSourceIds(true);
 
     reader.setDefaultStatus(Status::Unknown1);
-    OsmMapPtr mapA(new OsmMap());
+    OsmMapPtr mapA = std::make_shared<OsmMap>();
     reader.read("test-files/ToyTestA.osm", mapA);
 
     reader.setDefaultStatus(Status::Unknown2);
-    OsmMapPtr mapB(new OsmMap());
+    OsmMapPtr mapB = std::make_shared<OsmMap>();
     reader.read("test-files/ToyTestB.osm", mapB);
 
     mapA->append(mapB);
@@ -206,11 +206,11 @@ public:
     reader.setUseDataSourceIds(true);
 
     reader.setDefaultStatus(Status::Unknown1);
-    OsmMapPtr mapA(new OsmMap());
+    OsmMapPtr mapA = std::make_shared<OsmMap>();
     reader.read("test-files/ToyTestA.osm", mapA);
 
     reader.setDefaultStatus(Status::Unknown2);
-    OsmMapPtr mapB(new OsmMap());
+    OsmMapPtr mapB = std::make_shared<OsmMap>();
     reader.read("test-files/ToyTestB.osm", mapB);
 
     const size_t sizeMapAPlusMapBBefore = mapA->getElementCount() + mapB->getElementCount();
@@ -230,11 +230,11 @@ public:
     reader.setUseDataSourceIds(true);
 
     reader.setDefaultStatus(Status::Unknown1);
-    OsmMapPtr mapA(new OsmMap());
+    OsmMapPtr mapA = std::make_shared<OsmMap>();
     reader.read("test-files/ToyTestA.osm", mapA);
 
     reader.setDefaultStatus(Status::Unknown2);
-    OsmMapPtr mapB(new OsmMap());
+    OsmMapPtr mapB = std::make_shared<OsmMap>();
     reader.read("test-files/ToyTestB.osm", mapB);
 
     const size_t sizeMapAPlusMapBBefore = mapA->getElementCount() + mapB->getElementCount();
@@ -254,11 +254,11 @@ public:
     reader.setUseDataSourceIds(true);
 
     reader.setDefaultStatus(Status::Unknown1);
-    OsmMapPtr mapA(new OsmMap());
+    OsmMapPtr mapA = std::make_shared<OsmMap>();
     reader.read("test-files/ToyTestA.osm", mapA);
 
     reader.setDefaultStatus(Status::Unknown2);
-    OsmMapPtr mapB(new OsmMap());
+    OsmMapPtr mapB = std::make_shared<OsmMap>();
     reader.read("test-files/ToyTestB.osm", mapB);
 
     RelationPtr relation(new Relation(Status::Unknown1, -1, 15.0));
@@ -282,11 +282,11 @@ public:
     reader.setUseDataSourceIds(true);
 
     reader.setDefaultStatus(Status::Unknown1);
-    OsmMapPtr mapA(new OsmMap());
+    OsmMapPtr mapA = std::make_shared<OsmMap>();
     reader.read("test-files/ToyTestA.osm", mapA);
 
     reader.setDefaultStatus(Status::Unknown2);
-    OsmMapPtr mapB(new OsmMap());
+    OsmMapPtr mapB = std::make_shared<OsmMap>();
     reader.read("test-files/ToyTestB.osm", mapB);
 
     // Since the element is not an exact duplicate and has the same ID, no appending will occur
@@ -313,11 +313,11 @@ public:
     reader.setUseDataSourceIds(true);
 
     reader.setDefaultStatus(Status::Unknown1);
-    OsmMapPtr mapA(new OsmMap());
+    OsmMapPtr mapA = std::make_shared<OsmMap>();
     reader.read("test-files/ToyTestA.osm", mapA);
 
     reader.setDefaultStatus(Status::Unknown2);
-    OsmMapPtr mapB(new OsmMap());
+    OsmMapPtr mapB = std::make_shared<OsmMap>();
     reader.read("test-files/ToyTestB.osm", mapB);
 
     // Since the element is not an exact duplicate and has the same ID, no appending will occur
@@ -344,11 +344,11 @@ public:
     reader.setUseDataSourceIds(true);
 
     reader.setDefaultStatus(Status::Unknown1);
-    OsmMapPtr mapA(new OsmMap());
+    OsmMapPtr mapA = std::make_shared<OsmMap>();
     reader.read("test-files/ToyTestA.osm", mapA);
 
     reader.setDefaultStatus(Status::Unknown2);
-    OsmMapPtr mapB(new OsmMap());
+    OsmMapPtr mapB = std::make_shared<OsmMap>();
     reader.read("test-files/ToyTestB.osm", mapB);
 
     RelationPtr relation(new Relation(Status::Unknown1, -1, 15.0));
@@ -380,11 +380,11 @@ public:
     reader.setUseDataSourceIds(true);
 
     reader.setDefaultStatus(Status::Unknown1);
-    OsmMapPtr mapA(new OsmMap());
+    OsmMapPtr mapA = std::make_shared<OsmMap>();
     reader.read("test-files/ToyTestA.osm", mapA);
 
     reader.setDefaultStatus(Status::Unknown2);
-    OsmMapPtr mapB(new OsmMap());
+    OsmMapPtr mapB = std::make_shared<OsmMap>();
     reader.read("test-files/ToyTestB.osm", mapB);
 
     const size_t sizeMapAPlusMapBBefore = mapA->getElementCount() + mapB->getElementCount();
@@ -406,11 +406,11 @@ public:
     reader.setUseDataSourceIds(true);
 
     reader.setDefaultStatus(Status::Unknown1);
-    OsmMapPtr mapA(new OsmMap());
+    OsmMapPtr mapA = std::make_shared<OsmMap>();
     reader.read("test-files/ToyTestA.osm", mapA);
 
     reader.setDefaultStatus(Status::Unknown2);
-    OsmMapPtr mapB(new OsmMap());
+    OsmMapPtr mapB = std::make_shared<OsmMap>();
     reader.read("test-files/ToyTestB.osm", mapB);
 
     const size_t sizeMapAPlusMapBBefore = mapA->getElementCount() + mapB->getElementCount();
@@ -432,11 +432,11 @@ public:
     reader.setUseDataSourceIds(true);
 
     reader.setDefaultStatus(Status::Unknown1);
-    OsmMapPtr mapA(new OsmMap());
+    OsmMapPtr mapA = std::make_shared<OsmMap>();
     reader.read("test-files/ToyTestA.osm", mapA);
 
     reader.setDefaultStatus(Status::Unknown2);
-    OsmMapPtr mapB(new OsmMap());
+    OsmMapPtr mapB = std::make_shared<OsmMap>();
     reader.read("test-files/ToyTestB.osm", mapB);
 
     RelationPtr relation(new Relation(Status::Unknown1, -1, 15.0));
@@ -463,7 +463,7 @@ public:
     reader.setUseDataSourceIds(true);
 
     reader.setDefaultStatus(Status::Unknown1);
-    OsmMapPtr mapA(new OsmMap());
+    OsmMapPtr mapA = std::make_shared<OsmMap>();
     reader.read("test-files/ToyTestA.osm", mapA);
 
     QString exceptionMsg = "<wrong>";
@@ -484,11 +484,11 @@ public:
     reader.setUseDataSourceIds(true);
 
     reader.setDefaultStatus(Status::Unknown1);
-    OsmMapPtr mapA(new OsmMap());
+    OsmMapPtr mapA = std::make_shared<OsmMap>();
     reader.read("test-files/ToyTestA.osm", mapA);
 
     reader.setDefaultStatus(Status::Unknown2);
-    OsmMapPtr mapB(new OsmMap());
+    OsmMapPtr mapB = std::make_shared<OsmMap>();
     reader.read("test-files/ToyTestB.osm", mapB);
 
     MapProjector::projectToPlanar(mapB);
@@ -514,7 +514,7 @@ public:
 
     LOG_INFO("Reading file...");
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/ToyTestA.osm", map);
 
@@ -567,7 +567,7 @@ public:
   {
     OsmXmlReader reader;
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/ToyTestA.osm", map);
 
@@ -596,7 +596,7 @@ public:
   {
     OsmXmlReader reader;
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/ToyTestA.osm", map);
 
@@ -627,7 +627,7 @@ public:
    */
   void runReplaceListTest1()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     RelationPtr r1(new Relation(Status::Unknown1, 1, 15));
     WayPtr w1(new Way(Status::Unknown1, 1, 15));
     WayPtr w2(new Way(Status::Unknown1, 2, 15));
@@ -662,7 +662,7 @@ public:
    */
   void runReplaceListTest2()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     WayPtr w1(new Way(Status::Unknown1, 1, 15));
     NodePtr n1(new Node(Status::Unknown1, 1, 0, 0, 15));
     NodePtr n2(new Node(Status::Unknown1, 2, 0, 0, 15));
@@ -693,7 +693,7 @@ public:
    */
   void runReplaceListTest3()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     WayPtr w1(new Way(Status::Unknown1, 1, 15));
     WayPtr w2(new Way(Status::Unknown1, 2, 15));
     NodePtr n1(new Node(Status::Unknown1, 1, 0, 0, 15));
@@ -737,7 +737,7 @@ public:
   {
     OsmXmlReader reader;
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/ToyTestA.osm", map);
 

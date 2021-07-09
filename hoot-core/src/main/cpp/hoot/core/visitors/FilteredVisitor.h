@@ -69,7 +69,7 @@ public:
    * visitor. WARNING: FilteredVisitor DOES NOT take ownership of the criterion and visitor and
    * WON'T delete them when destructed.
    */
-  FilteredVisitor(ElementCriterion* criterion, ElementVisitor* visitor);
+  FilteredVisitor(const ElementCriterion* criterion, ElementVisitor* visitor);
 
   void addCriterion(const ElementCriterionPtr& e) override;
 
@@ -90,9 +90,7 @@ public:
                         const ConstOsmMapPtr& map, const ElementPtr& element);
 
   QString getDescription() const override { return ""; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 
 private:

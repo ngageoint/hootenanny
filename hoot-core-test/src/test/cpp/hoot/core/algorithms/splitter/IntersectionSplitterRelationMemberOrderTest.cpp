@@ -101,7 +101,7 @@ public:
         std::make_shared<TagCriterion>("ref", "36"));
 
     // Filter the input map down to a temp map with just the relation in question.
-    OsmMapPtr tempMap(new OsmMap());
+    OsmMapPtr tempMap = std::make_shared<OsmMap>();
     CopyMapSubsetOp(rawMap, relationCrit).apply(tempMap);
     LOG_VART(tempMap->size());
     const RelationMap& relations = tempMap->getRelations();
@@ -122,7 +122,7 @@ public:
 
     // Filter the map to process down to the relation we're examining and its members plus all
     // splittable features that intersect those members.
-    OsmMapPtr filteredMap(new OsmMap());
+    OsmMapPtr filteredMap = std::make_shared<OsmMap>();
     CopyMapSubsetOp(
       rawMap,
       std::make_shared<OrCriterion>(

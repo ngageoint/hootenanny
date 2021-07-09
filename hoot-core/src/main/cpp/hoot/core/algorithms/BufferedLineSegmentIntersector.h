@@ -49,15 +49,17 @@ public:
    * This was done with very little tuning. A bit of tuning will likely make it significantly
    * faster.
    */
-  bool intersect(const geos::geom::LineSegment& a, Meters buffer,
-                 const geos::geom::LineSegment& b, geos::geom::LineSegment& result);
+  bool intersect(
+    const geos::geom::LineSegment& a, Meters buffer, const geos::geom::LineSegment& b,
+    geos::geom::LineSegment& result) const;
 
   /**
    * @brief isWithinLineSegment determines if the coordinate c is within the endpoints of ls. It is
    * assumed that c falls on or approximately on the line formed by ls (as in the line that goes to
    * inifite).
    */
-  bool isWithinLineSegment(const geos::geom::LineSegment& ls, const geos::geom::Coordinate& c) const;
+  bool isWithinLineSegment(
+    const geos::geom::LineSegment& ls, const geos::geom::Coordinate& c) const;
 
   /**
    * @brief circleIntersection intersects a circle with a line segment and returns the intersecting
@@ -68,9 +70,9 @@ public:
    *
    * 1. http://mathworld.wolfram.com/Circle-LineIntersection.html
    */
-  void circleIntersection(const geos::geom::Coordinate& origin, Meters radius,
-                          const geos::geom::LineSegment& l,
-                          geos::geom::Coordinate& p1, geos::geom::Coordinate& p2) const;
+  void circleIntersection(
+    const geos::geom::Coordinate& origin, Meters radius, const geos::geom::LineSegment& l,
+    geos::geom::Coordinate& p1, geos::geom::Coordinate& p2) const;
 };
 
 }

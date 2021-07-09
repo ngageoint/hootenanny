@@ -214,7 +214,7 @@ void BuildingOutlineUpdateOp::_unionOutline(const RelationPtr& pBuilding,
   }
 }
 
-void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& pBuilding)
+void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& pBuilding) const
 {
   LOG_TRACE("Input building: " << pBuilding->toString());
 

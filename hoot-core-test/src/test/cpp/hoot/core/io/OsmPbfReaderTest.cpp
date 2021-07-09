@@ -89,7 +89,7 @@ public:
   {
     OsmPbfReader uut(false);
     fstream input(_inputPath.toStdString() + "SmallSplits.pbf", ios::in | ios::binary);
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     vector<OsmPbfReader::BlobLocation> v = uut.loadOsmDataBlobOffsets(input);
 
@@ -159,7 +159,7 @@ public:
     memcpy((char*)s.data(), data, dataSize);
     stringstream ss(s, stringstream::in);
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     OsmPbfReader reader(true);
     reader.setUseFileStatus(true);
@@ -193,7 +193,7 @@ public:
     memcpy((char*)s.data(), data, dataSize);
     stringstream ss(s, stringstream::in);
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     OsmPbfReader reader(true);
     reader.setPermissive(true);
@@ -226,7 +226,7 @@ public:
     memcpy((char*)s.data(), data, dataSize);
     stringstream ss(s, stringstream::in);
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     OsmPbfReader reader(true);
     reader.setPermissive(true);
@@ -264,7 +264,7 @@ public:
     memcpy((char*)s.data(), data, dataSize);
     stringstream ss(s, stringstream::in);
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     OsmPbfReader reader(true);
     reader.setPermissive(true);
@@ -286,7 +286,7 @@ public:
   {
     OsmPbfReader uut(false);
     fstream input("test-files/ToyTestA.osm.pbf", ios::in | ios::binary);
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     uut.parse(&input, map);
 
     OsmXmlWriter writer;
@@ -301,7 +301,7 @@ public:
   {
     OsmPbfReader uut(false);
     fstream input(_inputPath.toStdString() + "OsmPbfRelationTest.osm.pbf", ios::in | ios::binary);
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     uut.parse(&input, map);
 
     const QString testFileName = "runToyRelationTest.json";
@@ -366,7 +366,7 @@ public:
   void runReadMapTest()
   {
     OsmPbfReader reader(false);
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.open("test-files/ToyTestA.osm.pbf");
     reader.read(map);
     reader.close();
@@ -381,7 +381,7 @@ public:
 
   void runFactoryReadMapTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(map, "test-files/ToyTestA.osm.pbf", false, Status::Unknown1);
 
     OsmXmlWriter writer;
@@ -413,7 +413,7 @@ public:
     int ctr = 0;
     while (reader.hasMoreElements())
     {
-      OsmMapPtr map(new OsmMap());
+      OsmMapPtr map = std::make_shared<OsmMap>();
       reader.readPartial(map);
       CPPUNIT_ASSERT_EQUAL(
         chunkSize,
@@ -455,7 +455,7 @@ public:
     int ctr = 0;
     while (reader.hasMoreElements())
     {
-      OsmMapPtr map(new OsmMap());
+      OsmMapPtr map = std::make_shared<OsmMap>();
       reader.readPartial(map);
 
       //some of these before the last one don't read out the full buffer size..not sure why
@@ -518,7 +518,7 @@ public:
   void runReadSortTypeTest()
   {
     //This pbf file contains Sort.Type_then_ID in the header. Test to read it.
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmPbfReader reader(true);
     reader.open("test-files/OsmPbfPartialReaderTest4_with_sorttype.osm.pbf");
     reader.read(map);
@@ -533,7 +533,7 @@ public:
     //The test is for #161 - OsmPbfReader should be more permissive when the file is unsorted
     //This file doesn't have Sort.Type_then_ID in the header. Before changes, when permissive
     //set to false, the nodes count with ways are all zeros. Now the ways contain valid nodes.
-    OsmMapPtr map1(new OsmMap());
+    OsmMapPtr map1 = std::make_shared<OsmMap>();
     OsmPbfReader reader1(true);
     reader1.open("test-files/OsmPbfPartialReaderTest4_without_sorttype.osm.pbf");
     reader1.setPermissive(false);
@@ -555,7 +555,7 @@ public:
 
 
     //test the pbf file that the sorted flag isn't set and values are out of order
-    OsmMapPtr map2(new OsmMap());
+    OsmMapPtr map2 = std::make_shared<OsmMap>();
     OsmPbfReader reader2(true);
     reader2.open("test-files/OsmPbfTest_withoursoretype_unsorted.osm.pbf");
     reader2.setPermissive(false);

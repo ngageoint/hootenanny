@@ -60,7 +60,7 @@ public:
 
   void runRemoveAttributesTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(
       map, _inputPath + "RemoveAttributesVisitorTest.osm", false, Status::Unknown1);
 

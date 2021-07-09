@@ -116,7 +116,7 @@ public:
     LOG_VARD(_mapId);
 
     HootApiDbReader reader;
-    OsmMapPtr actualMap(new OsmMap());
+    OsmMapPtr actualMap = std::make_shared<OsmMap>();
     reader.setUserEmail(userEmail());
     reader.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
     reader.read(actualMap);

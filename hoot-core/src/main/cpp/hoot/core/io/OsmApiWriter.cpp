@@ -512,12 +512,12 @@ void OsmApiWriter::_changesetThreadFunc(int index)
           if (workInfo->size() == 1)
             workInfo->setAttemptedResolveChangesetIssues(true);
           //  Attempt to split the changeset
-          if (!_splitChangeset(workInfo, info->response))
+          if (!_splitChangeset(workInfo, info->response) &&
+              //  For HTTP_GONE, it could come back false if the element that is gone is removed
+              //  successfully and the rest of the changeset needs to be processed
+              workInfo->size() > 0)
           {
-            //  For HTTP_GONE, it could come back false if the element that is gone is removed
-            //  successfully and the rest of the changeset needs to be processed
-            if (workInfo->size() > 0)
-              _pushChangesets(workInfo);
+            _pushChangesets(workInfo);
           }
           break;
         case HttpResponseCode::HTTP_INTERNAL_SERVER_ERROR:  //  Internal Server Error, could be caused by the database being saturated
@@ -806,10 +806,10 @@ bool OsmApiWriter::_parsePermissions(const QString& permissions) const
     {
       QStringRef name = reader.name();
       QXmlStreamAttributes attributes = reader.attributes();
-      if (name == "permission" && attributes.hasAttribute("name"))
+      if (name == "permission" && attributes.hasAttribute("name") &&
+          attributes.value("name") == "allow_write_api")
       {
-        if (attributes.value("name") == "allow_write_api")
-          return true;
+        return true;
       }
     }
   }

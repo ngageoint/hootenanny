@@ -186,8 +186,8 @@ void TagComparator::averageTags(const Tags& t1In, double w1, const Tags& t2In, d
   }
 }
 
-void TagComparator::compareEnumeratedTags(Tags t1, Tags t2, double& score,
-                                          double& weight)
+void TagComparator::compareEnumeratedTags(
+  Tags t1, Tags t2, double& score, double& weight) const
 {
   OsmSchema& schema = OsmSchema::getInstance();
   score = 1.0;
@@ -377,7 +377,7 @@ void TagComparator::compareNames(const Tags& t1, const Tags& t2, double& score, 
   }
 }
 
-double TagComparator::compareTags(const Tags &t1, const Tags &t2, bool strict)
+double TagComparator::compareTags(const Tags &t1, const Tags &t2, bool strict) const
 {
   // compare and get a score for name comparison
   double nameScore, nameWeight;
@@ -532,8 +532,9 @@ void TagComparator::_mergeExactMatches(Tags& t1, Tags& t2, Tags& result) const
   }
 }
 
-void TagComparator::mergeNames(Tags& t1, Tags& t2, Tags& result,
-                               const QStringList& overwriteExcludeTagKeys, bool caseSensitive) const
+void TagComparator::mergeNames(
+  Tags& t1, Tags& t2, Tags& result, const QStringList& overwriteExcludeTagKeys,
+  bool caseSensitive) const
 {
   LOG_TRACE("Merging names...");
   LOG_VART(t1);
@@ -845,15 +846,13 @@ void TagComparator::_overwriteUnrecognizedTags(Tags& t1, Tags& t2, Tags& result)
   {
     // if this is an unknown type
     if (schema.getTagVertex(it1.key() + "=" + it1.value()).isEmpty() &&
-        schema.getTagVertex(it1.key()).isEmpty())
+        schema.getTagVertex(it1.key()).isEmpty() &&
+        // if this is also in t2
+        t2.contains(it1.key()))
     {
-      // if this is also in t2.
-      if (t2.contains(it1.key()))
-      {
-        result[it1.key()] = it1.value();
-        t1.remove(it1.key());
-        t2.remove(it1.key());
-      }
+      result[it1.key()] = it1.value();
+      t1.remove(it1.key());
+      t2.remove(it1.key());
     }
   }
 

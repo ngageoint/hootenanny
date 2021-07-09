@@ -123,7 +123,7 @@ private:
   bool _onRight(long intersectionId, const std::shared_ptr<Way>& inbound, long leftNn,
                 long rightNn) const;
   void _reconnectEnd(long centerNodeId, const std::shared_ptr<Way>& edge) const;
-  void _splitIntersectingWays(long nid);
+  void _splitIntersectingWays(long nid) const;
   void _splitWay(long wid);
 };
 

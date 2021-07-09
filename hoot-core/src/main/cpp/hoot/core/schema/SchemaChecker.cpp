@@ -37,8 +37,8 @@ namespace hoot
 
 int SchemaChecker::logWarnCount = 0;
 
-SchemaChecker::SchemaChecker(OsmSchema& osmSchema)
-  : _schemaVertexList(osmSchema.getAllTags())
+SchemaChecker::SchemaChecker(const OsmSchema& osmSchema) :
+_schemaVertexList(osmSchema.getAllTags())
 {
 }
 

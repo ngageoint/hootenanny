@@ -77,7 +77,7 @@ public:
   void runSimpleTest()
   {
     OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/DcGisRoads.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
@@ -107,7 +107,7 @@ public:
     {
       OsmXmlReader reader;
       OsmMap::resetCounters();
-      OsmMapPtr map(new OsmMap());
+      OsmMapPtr map = std::make_shared<OsmMap>();
       reader.setDefaultStatus(Status::Unknown1);
       reader.read("test-files/DcGisRoads.osm", map);
       reader.setDefaultStatus(Status::Unknown2);
@@ -136,7 +136,7 @@ public:
     {
       OsmXmlReader reader;
       OsmMap::resetCounters();
-      OsmMapPtr map(new OsmMap());
+      OsmMapPtr map = std::make_shared<OsmMap>();
       reader.setDefaultStatus(Status::Unknown1);
       reader.read("test-files/DcGisRoads.osm", map);
       reader.setDefaultStatus(Status::Unknown2);
@@ -211,7 +211,7 @@ public:
   void runCalculateTiePointDistancesNotEnoughTiePointsTest2()
   {
     OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/DcGisRoads.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
@@ -243,7 +243,7 @@ public:
   void runFilterTest1()
   {
     OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/cmd/glacial/RelationMergeTest/input1.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
@@ -266,7 +266,7 @@ public:
   void runFilterTest2()
   {
     OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/cmd/glacial/RelationMergeTest/input1.osm", map);
     reader.setDefaultStatus(Status::Unknown2);

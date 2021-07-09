@@ -108,7 +108,7 @@ public:
     const QString msg = "Perturbation operation ran in %1 total.";
     if (!scoreOptionSpecified && !testOptionSpecified)
     {
-      OsmMapPtr map(new OsmMap());
+      OsmMapPtr map = std::make_shared<OsmMap>();
       IoUtils::loadMap(map, input, true, Status::Unknown1);
 
       PertyOp perty;

@@ -58,7 +58,7 @@ public:
 
   void runNeedsReviewTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     ElementPtr n1(new Node(Status::Unknown1, 1, 0, 0, 0));
     ElementPtr n2(new Node(Status::Unknown2, 2, 0, 0, 0));
     ElementPtr n3(new Node(Status::Unknown2, 3, 0, 0, 0));
@@ -90,7 +90,7 @@ public:
 
   void runSimpleTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     ElementPtr n1(new Node(Status::Unknown1, 1, 0, 0, 0));
     ElementPtr n2(new Node(Status::Unknown2, 2, 0, 0, 0));
 
@@ -120,7 +120,7 @@ public:
    */
   void runMultipleScoresTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     DisableLog dl;
 
     ElementPtr n1(new Node(Status::Unknown1, 1, 0, 0, 0));
@@ -150,7 +150,7 @@ public:
 
   void runAddReviewTagsToFeaturesTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     ElementPtr n1(new Node(Status::Unknown1, 1, 0, 0, 0));
     ElementPtr n2(new Node(Status::Unknown2, 2, 0, 0, 0));
     ElementPtr n3(new Node(Status::Unknown2, 3, 0, 0, 0));

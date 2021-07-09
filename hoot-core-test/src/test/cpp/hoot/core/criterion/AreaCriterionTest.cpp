@@ -96,7 +96,7 @@ public:
                        Coordinate::getNull() };
     Tags tags;
     tags.set("poi", "yes");
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     ConstWayPtr w1 = TestUtils::createWay(map, c, "", Status::Unknown1, 15.0, tags);
 
     CPPUNIT_ASSERT(!uut.isSatisfied(w1));

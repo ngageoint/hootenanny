@@ -97,7 +97,7 @@ public:
   {
     OsmGeoJsonReader reader;
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.open(_inputPath + input);
     reader.read(map);

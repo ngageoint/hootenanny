@@ -301,8 +301,6 @@ private:
   int _elementsEvaluated;
   size_t _maxGroupSize;
   Meters _searchRadius;
-  /// reject any manipulation with a miss score >= _rejectScore
-  double _rejectScore;
 
   // Used for finding neighbors
   std::shared_ptr<HilbertRTree> _index;

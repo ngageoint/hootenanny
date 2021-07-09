@@ -90,7 +90,7 @@ void ApiDbReader::setOverrideBoundingBox(const QString& bbox)
 
 void ApiDbReader::initializePartial()
 {
-  _partialMap.reset(new OsmMap());
+  _partialMap = std::make_shared<OsmMap>();
 
   _firstPartialReadCompleted = false;
   _elementsRead = 0;
@@ -398,155 +398,152 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
   }
   LOG_VART(nodeIds.size());
 
-  if (!_returnNodesOnly)
+  if (!_returnNodesOnly && !nodeIds.empty())
   {
-    if (!nodeIds.empty())
-    {
-      QSet<QString> wayIds;
-      QSet<QString> additionalWayNodeIds;
-      _readWaysByNodeIds(
-        map, nodeIds, wayIds, additionalWayNodeIds, boundedNodeCount, boundedWayCount);
-      nodeIds.unite(additionalWayNodeIds);
-      LOG_VART(nodeIds.size());
-      LOG_VART(wayIds.size());
+    QSet<QString> wayIds;
+    QSet<QString> additionalWayNodeIds;
+    _readWaysByNodeIds(
+      map, nodeIds, wayIds, additionalWayNodeIds, boundedNodeCount, boundedWayCount);
+    nodeIds.unite(additionalWayNodeIds);
+    LOG_VART(nodeIds.size());
+    LOG_VART(wayIds.size());
 
-      LOG_DEBUG("Retrieving relation IDs referenced by the selected ways and nodes...");
-      QSet<QString> relationIds;
-      assert(nodeIds.size() > 0);
-      std::shared_ptr<QSqlQuery> relationIdItr =
-        _getDatabase()->selectRelationIdsByMemberIds(nodeIds, ElementType::Node);
+    LOG_DEBUG("Retrieving relation IDs referenced by the selected ways and nodes...");
+    QSet<QString> relationIds;
+    assert(nodeIds.size() > 0);
+    std::shared_ptr<QSqlQuery> relationIdItr =
+      _getDatabase()->selectRelationIdsByMemberIds(nodeIds, ElementType::Node);
+    while (relationIdItr->next())
+    {
+      const long relationId = (*relationIdItr).value(0).toLongLong();
+      LOG_VART(ElementId(ElementType::Relation, relationId));
+      relationIds.insert(QString::number(relationId));
+    }
+    if (!wayIds.empty())
+    {
+      relationIdItr = _getDatabase()->selectRelationIdsByMemberIds(wayIds, ElementType::Way);
       while (relationIdItr->next())
       {
         const long relationId = (*relationIdItr).value(0).toLongLong();
         LOG_VART(ElementId(ElementType::Relation, relationId));
         relationIds.insert(QString::number(relationId));
       }
-      if (!wayIds.empty())
+    }
+    LOG_VART(relationIds.size());
+
+    //  Iterate all relations (and sub-relations) that are "within" the bounds
+    QSet<QString> completedRelationIds;
+    while (!relationIds.empty())
+    {
+      QSet<QString> newNodes;
+      QSet<QString> newWays;
+      QSet<QString> newRelations;
+
+      LOG_DEBUG("Retrieving relations by relation ID...");
+      std::shared_ptr<QSqlQuery> relationItr =
+        _getDatabase()->selectElementsByElementIdList(relationIds, TableType::Relation);
+      while (relationItr->next())
       {
-        relationIdItr = _getDatabase()->selectRelationIdsByMemberIds(wayIds, ElementType::Way);
-        while (relationIdItr->next())
+        RelationPtr relation = _resultToRelation(*relationItr, *map);
+        map->addElement(relation);
+        const vector<RelationData::Entry>& members = relation->getMembers();
+        //  Iterate all members so that they can be retrieved later
+        for (vector<RelationData::Entry>::const_iterator it = members.begin();
+             it != members.end(); ++it)
         {
-          const long relationId = (*relationIdItr).value(0).toLongLong();
-          LOG_VART(ElementId(ElementType::Relation, relationId));
-          relationIds.insert(QString::number(relationId));
+          ElementType type = it->getElementId().getType();
+          QString id = QString::number(it->getElementId().getId());
+          if (type == ElementType::Node)
+            newNodes.insert(id);
+          else if (type == ElementType::Way)
+            newWays.insert(id);
+          else if (type == ElementType::Relation)
+            newRelations.insert(id);
+          else
+          {
+            LOG_WARN("Unknown relation member type");
+          }
+        }
+        LOG_VART(relation);
+        boundedRelationCount++;
+        //  Keep track of all relations that have been added to the map so we don't try them again
+        completedRelationIds.insert(QString::number(relation->getId()));
+      }
+
+      //  Clear the relations that we are iterating on, it is then filled with new relations later
+      relationIds.clear();
+
+      //  Iterate any new nodes that are members of relations that need to be queried
+      newNodes = newNodes.subtract(nodeIds);
+      if (!newNodes.empty())
+      {
+        std::shared_ptr<QSqlQuery> queryItr =
+          _getDatabase()->selectElementsByElementIdList(newNodes, TableType::Node);
+        while (queryItr->next())
+        {
+          const QSqlQuery resultIterator = *queryItr;
+          NodePtr node = _resultToNode(resultIterator, *map);
+          LOG_VART(node);
+          map->addElement(node);
+          boundedNodeCount++;
+          const long nodeId = resultIterator.value(0).toLongLong();
+          LOG_VART(ElementId(ElementType::Node, nodeId));
+          nodeIds.insert(QString::number(nodeId));
         }
       }
-      LOG_VART(relationIds.size());
 
-      //  Iterate all relations (and sub-relations) that are "within" the bounds
-      QSet<QString> completedRelationIds;
-      while (!relationIds.empty())
+      //  Iterate any new ways that are members of relations that need to be queried
+      newWays = newWays.subtract(wayIds);
+      if (!newWays.empty())
       {
-        QSet<QString> newNodes;
-        QSet<QString> newWays;
-        QSet<QString> newRelations;
+        QSet<QString> additionalNodeIds;
 
-        LOG_DEBUG("Retrieving relations by relation ID...");
-        std::shared_ptr<QSqlQuery> relationItr =
-          _getDatabase()->selectElementsByElementIdList(relationIds, TableType::Relation);
-        while (relationItr->next())
+        LOG_DEBUG("Retrieving ways by way ID...");
+        std::shared_ptr<QSqlQuery> wayItr =
+          _getDatabase()->selectElementsByElementIdList(newWays, TableType::Way);
+        while (wayItr->next())
         {
-          RelationPtr relation = _resultToRelation(*relationItr, *map);
-          map->addElement(relation);
-          const vector<RelationData::Entry>& members = relation->getMembers();
-          //  Iterate all members so that they can be retrieved later
-          for (vector<RelationData::Entry>::const_iterator it = members.begin();
-               it != members.end(); ++it)
-          {
-            ElementType type = it->getElementId().getType();
-            QString id = QString::number(it->getElementId().getId());
-            if (type == ElementType::Node)
-              newNodes.insert(id);
-            else if (type == ElementType::Way)
-              newWays.insert(id);
-            else if (type == ElementType::Relation)
-              newRelations.insert(id);
-            else
-            {
-              LOG_WARN("Unknown relation member type");
-            }
-          }
-          LOG_VART(relation);
-          boundedRelationCount++;
-          //  Keep track of all relations that have been added to the map so we don't try them again
-          completedRelationIds.insert(QString::number(relation->getId()));
+          WayPtr way = _resultToWay(*wayItr, *map);
+          map->addElement(way);
+          LOG_VART(way);
+          boundedWayCount++;
         }
 
-        //  Clear the relations that we are iterating on, it is then filled with new relations later
-        relationIds.clear();
-
-        //  Iterate any new nodes that are members of relations that need to be queried
-        newNodes = newNodes.subtract(nodeIds);
-        if (!newNodes.empty())
+        LOG_DEBUG("Retrieving way node IDs referenced by the selected ways...");
+        std::shared_ptr<QSqlQuery> additionalWayNodeIdItr =
+          _getDatabase()->selectWayNodeIdsByWayIds(newWays);
+        while (additionalWayNodeIdItr->next())
         {
-          std::shared_ptr<QSqlQuery> queryItr =
-            _getDatabase()->selectElementsByElementIdList(newNodes, TableType::Node);
-          while (queryItr->next())
+          const long nodeId = (*additionalWayNodeIdItr).value(0).toLongLong();
+          LOG_VART(ElementId(ElementType::Node, nodeId));
+          additionalNodeIds.insert(QString::number(nodeId));
+        }
+
+        // subtract nodeIds from additionalWayNodeIds, so no dupes get added
+        LOG_VART(nodeIds.size());
+        LOG_VART(additionalNodeIds.size());
+        additionalNodeIds = additionalNodeIds.subtract(nodeIds);
+        LOG_VART(additionalNodeIds.size());
+
+        if (!additionalNodeIds.empty())
+        {
+          LOG_DEBUG(
+            "Retrieving nodes falling outside of the query bounds but belonging to a selected " <<
+            "way...");
+          std::shared_ptr<QSqlQuery> additionalWayNodeItr =
+            _getDatabase()->selectElementsByElementIdList(additionalNodeIds, TableType::Node);
+          while (additionalWayNodeItr->next())
           {
-            const QSqlQuery resultIterator = *queryItr;
-            NodePtr node = _resultToNode(resultIterator, *map);
-            LOG_VART(node);
+            NodePtr node = _resultToNode(*additionalWayNodeItr, *map);
             map->addElement(node);
+            LOG_VART(node);
             boundedNodeCount++;
-            const long nodeId = resultIterator.value(0).toLongLong();
-            LOG_VART(ElementId(ElementType::Node, nodeId));
-            nodeIds.insert(QString::number(nodeId));
           }
         }
-
-        //  Iterate any new ways that are members of relations that need to be queried
-        newWays = newWays.subtract(wayIds);
-        if (!newWays.empty())
-        {
-          QSet<QString> additionalNodeIds;
-
-          LOG_DEBUG("Retrieving ways by way ID...");
-          std::shared_ptr<QSqlQuery> wayItr =
-            _getDatabase()->selectElementsByElementIdList(newWays, TableType::Way);
-          while (wayItr->next())
-          {
-            WayPtr way = _resultToWay(*wayItr, *map);
-            map->addElement(way);
-            LOG_VART(way);
-            boundedWayCount++;
-          }
-
-          LOG_DEBUG("Retrieving way node IDs referenced by the selected ways...");
-          std::shared_ptr<QSqlQuery> additionalWayNodeIdItr =
-            _getDatabase()->selectWayNodeIdsByWayIds(newWays);
-          while (additionalWayNodeIdItr->next())
-          {
-            const long nodeId = (*additionalWayNodeIdItr).value(0).toLongLong();
-            LOG_VART(ElementId(ElementType::Node, nodeId));
-            additionalNodeIds.insert(QString::number(nodeId));
-          }
-
-          // subtract nodeIds from additionalWayNodeIds, so no dupes get added
-          LOG_VART(nodeIds.size());
-          LOG_VART(additionalNodeIds.size());
-          additionalNodeIds = additionalNodeIds.subtract(nodeIds);
-          LOG_VART(additionalNodeIds.size());
-
-          if (!additionalNodeIds.empty())
-          {
-            LOG_DEBUG(
-              "Retrieving nodes falling outside of the query bounds but belonging to a selected " <<
-              "way...");
-            std::shared_ptr<QSqlQuery> additionalWayNodeItr =
-              _getDatabase()->selectElementsByElementIdList(additionalNodeIds, TableType::Node);
-            while (additionalWayNodeItr->next())
-            {
-              NodePtr node = _resultToNode(*additionalWayNodeItr, *map);
-              map->addElement(node);
-              LOG_VART(node);
-              boundedNodeCount++;
-            }
-          }
-        }
-
-        //  Get the set of new relations found minus anything that has already been completed
-        relationIds = newRelations.subtract(completedRelationIds);
       }
+
+      //  Get the set of new relations found minus anything that has already been completed
+      relationIds = newRelations.subtract(completedRelationIds);
     }
   }
 

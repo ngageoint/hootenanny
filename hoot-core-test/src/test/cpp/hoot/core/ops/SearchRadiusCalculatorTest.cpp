@@ -71,7 +71,7 @@ public:
   void runCalcResultTest()
   {
     OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(_inputPath + "Haiti_CNIGS_Rivers_REF1-cropped-2.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
@@ -115,7 +115,7 @@ public:
   void runPreviouslyConflatedDataTest()
   {
     OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(_inputPath + "Haiti_CNIGS_Rivers_REF1-cropped-2.osm", map);
     reader.setDefaultStatus(Status::Unknown2);

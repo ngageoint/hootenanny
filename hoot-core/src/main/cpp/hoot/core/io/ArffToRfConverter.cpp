@@ -73,7 +73,7 @@ void ArffToRfConverter::convert(const QString& input, const QString& output)
   LOG_DEBUG("Error: " << error << " sigma: " << sigma);
 
   std::ofstream fileStream;
-  fileStream.open((output).toStdString().data());
+  fileStream.open(output.toStdString().data());
   rf.exportModel(fileStream);
   fileStream.close();
 }

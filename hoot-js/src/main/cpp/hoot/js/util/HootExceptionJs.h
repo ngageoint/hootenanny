@@ -70,7 +70,7 @@ public:
    *
    * @param tc Try catch object. Must be instantiated before the V8 function is called.
    */
-  static void throwAsHootException(v8::TryCatch& tc);
+  static void throwAsHootException(const v8::TryCatch& tc);
 
   virtual ~HootExceptionJs() = default;
 

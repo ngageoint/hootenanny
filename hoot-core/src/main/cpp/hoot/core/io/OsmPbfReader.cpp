@@ -136,8 +136,8 @@ void OsmPbfReader::setConfiguration(const Settings &conf)
   _circularErrorTagKeys = ConfigOptions().getCircularErrorTagKeys();
 }
 
-void OsmPbfReader::_addTag(const std::shared_ptr<Element>& e, const QString& key,
-                           const QString& value)
+void OsmPbfReader::_addTag(
+  const std::shared_ptr<Element>& e, const QString& key, const QString& value) const
 {
   QString k = key.trimmed();
   QString v = value.trimmed();
@@ -934,7 +934,7 @@ void OsmPbfReader::_loadWays()
   }
 }
 
-void OsmPbfReader::parseBlob(BlobLocation& bl, istream* strm, const OsmMapPtr& map)
+void OsmPbfReader::parseBlob(const BlobLocation& bl, istream* strm, const OsmMapPtr& map)
 {
   parseBlob(bl.headerOffset, strm, map);
 }
@@ -1254,7 +1254,7 @@ void OsmPbfReader::initializePartial()
 {
   _permissive = true;
 
-  _map.reset(new OsmMap());
+  _map = std::make_shared<OsmMap>();
   _blobIndex = 0;
 
   _elementsRead = 0;
@@ -1410,20 +1410,17 @@ void OsmPbfReader::close()
 
 void OsmPbfReader::_parseTimestamp(const hoot::pb::Info& info, Tags& t) const
 {
-  if (_addSourceDateTime && t.getInformationCount() > 0) // Make sure we actually have attributes
+  if (_addSourceDateTime &&
+      // Make sure we actually have attributes.
+      t.getInformationCount() > 0 &&
+      info.has_timestamp())
   {
-    if (info.has_timestamp())
+    long timestamp = info.timestamp() * _dateGranularity;
+    if (timestamp != 0)
     {
-      long timestamp = info.timestamp() * _dateGranularity;
-
-      if (timestamp != 0)
-      {
-        //QDateTime dt = QDateTime::fromMSecsSinceEpoch(timestamp).toTimeSpec(Qt::UTC);
-        QDateTime dt = QDateTime::fromTime_t(0).addMSecs(timestamp).toUTC();
-        QString dts = dt.toString("yyyy-MM-ddThh:mm:ss.zzzZ");
-
-        t.set(MetadataTags::SourceDateTime(), dts);
-      }
+      QDateTime dt = QDateTime::fromTime_t(0).addMSecs(timestamp).toUTC();
+      QString dts = dt.toString("yyyy-MM-ddThh:mm:ss.zzzZ");
+      t.set(MetadataTags::SourceDateTime(), dts);
     }
   }
 }

@@ -132,7 +132,7 @@ void OsmGeoJsonWriter::_writeMeta(ConstElementPtr e)
   _write("\"meta\": {");
   _writeKvp("timestamp", DateTimeUtils::toTimeString(e->getTimestamp())); _write(",");
   _writeKvp("version", e->getVersion()); _write(",");
-  _writeKvp("visible", (e->getVisible() ? "true" : "false"));
+  _writeKvp("visible", e->getVisible() ? "true" : "false");
   _write("}");
 }
 

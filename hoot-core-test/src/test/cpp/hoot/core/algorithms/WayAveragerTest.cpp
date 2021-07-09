@@ -53,11 +53,11 @@ public:
 
   void runSimpleTest()
   {
-    OsmMapPtr sourceMap(new OsmMap());
+    OsmMapPtr sourceMap = std::make_shared<OsmMap>();
     OsmMapReaderFactory::read(sourceMap, _inputPath + "input1.osm", false, Status::Unknown1);
     OsmMapReaderFactory::read(sourceMap, _inputPath + "input2.osm", false, Status::Unknown2);
 
-    OsmMapPtr targetMap(new OsmMap());
+    OsmMapPtr targetMap = std::make_shared<OsmMap>();
     _replaceWithAveragedWay(
       sourceMap, "{7dec13af-4519-426b-a007-a392a3e8710c}", "{46030cab-b4e4-4a65-952f-99bb09de439f}",
       targetMap);

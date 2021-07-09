@@ -91,7 +91,7 @@ private:
   void _exportMetadataFromElements();
 
   // helper functions
-  long _addNodeToPoly(double x, double y, WayPtr& pPoly) const;
+  long _addNodeToPoly(double x, double y, const WayPtr& pPoly) const;
 };
 
 }

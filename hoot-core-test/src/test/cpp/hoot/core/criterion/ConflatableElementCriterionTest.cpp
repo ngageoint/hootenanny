@@ -42,7 +42,7 @@ public:
 
   void runBasicTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     geos::geom::Coordinate wayCoords[] = {
       geos::geom::Coordinate(0.0, 0.0),
       geos::geom::Coordinate(1.0, 0.0),

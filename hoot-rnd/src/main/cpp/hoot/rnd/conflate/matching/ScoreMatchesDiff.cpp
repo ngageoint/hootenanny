@@ -99,10 +99,10 @@ void ScoreMatchesDiff::calculateDiff(const QString& input1, const QString& input
   // and the inputs had to be conflated at some point where they were read completely into
   // memory anyway. There's a lot of repeated element processing here that could be optimized.
 
-  OsmMapPtr map1(new OsmMap());
+  OsmMapPtr map1 = std::make_shared<OsmMap>();
   IoUtils::loadMap(map1, _input1, true);
   map1->setName("original");
-  OsmMapPtr map2(new OsmMap());
+  OsmMapPtr map2 = std::make_shared<OsmMap>();
   IoUtils::loadMap(map2, _input2, true);
   map2->setName("new");
 

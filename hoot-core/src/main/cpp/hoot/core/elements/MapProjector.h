@@ -163,7 +163,7 @@ public:
                                         const std::shared_ptr<OGRSpatialReference>& srs2);
 
   static QString toWkt(const std::shared_ptr<OGRSpatialReference>& srs) { return toWkt(srs.get()); }
-  static QString toWkt(OGRSpatialReference* srs);
+  static QString toWkt(const OGRSpatialReference* srs);
 
 private:
 
@@ -210,7 +210,7 @@ private:
     const OGREnvelope& env, const std::shared_ptr<OGRSpatialReference>& srs, Meters testDistance,
     Meters& maxDistanceError, Radians& maxAngleError) const;
 
-  size_t _findBestScore(std::vector<PlanarTestResult>& results) const;
+  size_t _findBestScore(const std::vector<PlanarTestResult>& results) const;
 
   static bool _scoreLessThan(const PlanarTestResult& p1, const PlanarTestResult& p2);
 };

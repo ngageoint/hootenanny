@@ -85,7 +85,7 @@ void RandomForestModelBuilder::build(
       "Processing dataset pair " << datasetPairCtr << " of " << ((trainingData.size() - 1) / 2) <<
       ": " << trainingData[i].right(50) << " and " << trainingData[i + 1].right(50));
     datasetPairCtr++;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     IoUtils::loadMap(map, trainingData[i], false, Status::Unknown1);
     IoUtils::loadMap(map, trainingData[i + 1], false, Status::Unknown2);

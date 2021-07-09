@@ -97,7 +97,7 @@ OsmMapPtr JosmMapCleaner::_getUpdatedMap(OsmMapPtr& inputMap)
     _clean(_josmValidators, tempInputFile->fileName(), tempOutputPath, _addDetailTags);
 
     LOG_DEBUG("Reading cleaned map from " << tempOutputPath << "...");
-    OsmMapPtr cleanedMap(new OsmMap());
+    OsmMapPtr cleanedMap = std::make_shared<OsmMap>();
     OsmXmlReader reader;
     reader.setUseDataSourceIds(true);
     reader.setUseFileStatus(true);

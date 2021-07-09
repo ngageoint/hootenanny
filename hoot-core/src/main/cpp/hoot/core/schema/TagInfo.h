@@ -92,7 +92,7 @@ private:
   QString _getInfoFromMemoryBoundInput(const QString& input) const;
 
   QString _printJSON(const QString& lName, TagInfoHash& data) const;
-  QString _printDelimitedText(TagInfoHash& data) const;
+  QString _printDelimitedText(const TagInfoHash& data) const;
 
   void _parseElement(const ConstElementPtr& e, TagInfoHash& result) const;
   bool _tagKeysMatch(const QString& tagKey) const;

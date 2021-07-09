@@ -340,17 +340,15 @@ bool PoiPolygonTypeScoreExtractor::_failsCuisineMatch(const ConstElementPtr& e1,
   QString t2Val;
   if (_infoCache->isType(e1, PoiPolygonSchemaType::Restaurant) &&
       _infoCache->isType(e2, PoiPolygonSchemaType::Restaurant) &&
-      _haveConflictingTags("cuisine", t1, t2, t1Val, t2Val))
+      _haveConflictingTags("cuisine", t1, t2, t1Val, t2Val) &&
+      // Don't return false on regional, since its location dependent, and we don't take the
+      // location into account for this.
+      t1Val != "regional" && t2Val != "regional" &&
+      // Don't fail on "other", since that's not very descriptive.
+      t1Val != "other" && t2Val != "other")
   {
-    if (//Don't return false on regional, since its location dependent, and we don't take the
-        //location into account for this.
-        t1Val != "regional" && t2Val != "regional" &&
-        //Don't fail on "other", since that's not very descriptive.
-        t1Val != "other" && t2Val != "other")
-    {
-      LOG_TRACE("Failed type match on different cuisines.");
-      return true;
-    }
+    LOG_TRACE("Failed type match on different cuisines.");
+    return true;
   }
   return false;
 }

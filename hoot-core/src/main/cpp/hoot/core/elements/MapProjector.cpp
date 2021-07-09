@@ -116,8 +116,8 @@ MapProjector& MapProjector::getInstance()
   return instance;
 }
 
-bool MapProjector::_angleLessThan(const MapProjector::PlanarTestResult& p1,
-  const MapProjector::PlanarTestResult& p2)
+bool MapProjector::_angleLessThan(
+  const MapProjector::PlanarTestResult& p1, const MapProjector::PlanarTestResult& p2)
 {
   return p1.angleError < p2.angleError;
 }
@@ -268,8 +268,9 @@ std::shared_ptr<OGRSpatialReference> MapProjector::createOrthographic(double x, 
   return srs;
 }
 
-std::shared_ptr<OGRSpatialReference> MapProjector::createPlanarProjection(const OGREnvelope& env,
-  Radians maxAngleError, Meters maxDistanceError, Meters testDistance, bool warnOnFail) const
+std::shared_ptr<OGRSpatialReference> MapProjector::createPlanarProjection(
+  const OGREnvelope& env, Radians maxAngleError, Meters maxDistanceError, Meters testDistance,
+  bool warnOnFail) const
 {
   LOG_TRACE("Selecting best planar projection...");
 
@@ -363,7 +364,8 @@ std::shared_ptr<OGRSpatialReference> MapProjector::createPlanarProjection(const 
   return projs[bestIndex];
 }
 
-std::shared_ptr<OGRSpatialReference> MapProjector::createSinusoidalProjection(const OGREnvelope& env)
+std::shared_ptr<OGRSpatialReference> MapProjector::createSinusoidalProjection(
+const OGREnvelope& env)
 {
   double centerLon = (env.MaxX + env.MinX) / 2.0;
   std::shared_ptr<OGRSpatialReference> srs(new OGRSpatialReference());
@@ -471,7 +473,7 @@ bool MapProjector::_distanceLessThan(const MapProjector::PlanarTestResult& p1,
   return p1.distanceError < p2.distanceError;
 }
 
-size_t MapProjector::_findBestScore(vector<PlanarTestResult>& results) const
+size_t MapProjector::_findBestScore(const vector<PlanarTestResult>& results) const
 {
   vector<PlanarTestResult> orderByScore = results;
   sort(orderByScore.begin(), orderByScore.end(), _scoreLessThan);
@@ -653,7 +655,7 @@ bool MapProjector::_scoreLessThan(const MapProjector::PlanarTestResult& p1,
   return p1.score < p2.score;
 }
 
-QString MapProjector::toWkt(OGRSpatialReference* srs)
+QString MapProjector::toWkt(const OGRSpatialReference* srs)
 {
   char* wkt = nullptr;
   srs->exportToWkt(&wkt);
@@ -663,4 +665,3 @@ QString MapProjector::toWkt(OGRSpatialReference* srs)
 }
 
 }
-

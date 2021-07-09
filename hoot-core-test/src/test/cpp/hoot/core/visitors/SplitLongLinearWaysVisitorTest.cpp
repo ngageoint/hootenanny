@@ -117,7 +117,7 @@ private:
     int numNodes;
 
     // 0 nodes: no-op
-    _map.reset(new OsmMap());
+    _map = std::make_shared<OsmMap>();
     startNode = 1;
     numNodes = 0;
     _createWay(++wayID, startNode, startNode + numNodes - 1);
@@ -135,7 +135,7 @@ private:
     }
 
     // 1 nodes: no-op
-    _map.reset(new OsmMap());
+    _map = std::make_shared<OsmMap>();
     startNode = 5;
     numNodes = 1;
     _createWay(++wayID, startNode, startNode + numNodes - 1);
@@ -153,7 +153,7 @@ private:
     }
 
     // 2 nodes: no-op
-    _map.reset(new OsmMap());
+    _map = std::make_shared<OsmMap>();
     startNode = 10;
     numNodes = 2;
     _createWay(++wayID, startNode, startNode + numNodes - 1);
@@ -171,7 +171,7 @@ private:
     }
 
     // N - 1 nodes: no-op
-    _map.reset(new OsmMap());
+    _map = std::make_shared<OsmMap>();
     startNode = 1000;
     numNodes = splitVisitor.getMaxNumberOfNodes() - 1;
     _createWay(++wayID, startNode, startNode + numNodes - 1);
@@ -189,7 +189,7 @@ private:
     }
 
     // N nodes: no-op
-    _map.reset(new OsmMap());
+    _map = std::make_shared<OsmMap>();
     startNode = 2001;
     numNodes = splitVisitor.getMaxNumberOfNodes();
     _createWay(++wayID, startNode, startNode + numNodes - 1);
@@ -216,7 +216,7 @@ private:
     int numWays;
 
     // N + 1 nodes: 2 ways
-    _map.reset(new OsmMap());
+    _map = std::make_shared<OsmMap>();
     numNodes = splitVisitor.getMaxNumberOfNodes() + 1;
     numWays = _calcNumWays(numNodes, splitVisitor);
     _createWay(++wayID, startNode, startNode + numNodes - 1);
@@ -230,7 +230,7 @@ private:
 
 
     // N + 2 nodes: 2 ways
-    _map.reset(new OsmMap());
+    _map = std::make_shared<OsmMap>();
     numNodes = splitVisitor.getMaxNumberOfNodes() + 2;
     numWays = _calcNumWays(numNodes, splitVisitor);
     _createWay(++wayID, startNode, startNode + numNodes - 1);
@@ -243,7 +243,7 @@ private:
     startNode += numNodes;
 
     // (2N) - 2 nodes: 2 ways
-    _map.reset(new OsmMap());
+    _map = std::make_shared<OsmMap>();
     numNodes = (splitVisitor.getMaxNumberOfNodes() * 2) - 2;
     numWays = _calcNumWays(numNodes, splitVisitor);
     _createWay(++wayID, startNode, startNode + numNodes - 1);
@@ -257,7 +257,7 @@ private:
 
 
     // (2N) - 1 nodes: 2 ways
-    _map.reset(new OsmMap());
+    _map = std::make_shared<OsmMap>();
     numNodes = (splitVisitor.getMaxNumberOfNodes() * 2) - 1;
     numWays = _calcNumWays(numNodes, splitVisitor);
     _createWay(++wayID, startNode, startNode + numNodes - 1);
@@ -271,7 +271,7 @@ private:
 
 
     // (2N) nodes: 2 ways
-    _map.reset(new OsmMap());
+    _map = std::make_shared<OsmMap>();
     numNodes = (splitVisitor.getMaxNumberOfNodes() * 2);
     numWays = _calcNumWays(numNodes, splitVisitor);
     _createWay(++wayID, startNode, startNode + numNodes - 1);
@@ -285,7 +285,7 @@ private:
 
 
     // (2N) + 1 nodes: 3 ways
-    _map.reset(new OsmMap());
+    _map = std::make_shared<OsmMap>();
     numNodes = (splitVisitor.getMaxNumberOfNodes() * 2) + 1;
     numWays = _calcNumWays(numNodes, splitVisitor);
     _createWay(++wayID, startNode, startNode + numNodes - 1);
@@ -299,7 +299,7 @@ private:
 
 
     // (2N) + 2 nodes: 3 ways
-    _map.reset(new OsmMap());
+    _map = std::make_shared<OsmMap>();
     numNodes = (splitVisitor.getMaxNumberOfNodes() * 2) + 2;
     numWays = _calcNumWays(numNodes, splitVisitor);
     _createWay(++wayID, startNode, startNode + numNodes - 1);
@@ -317,7 +317,7 @@ private:
     //    and primes are good at exposing problems
 
     // (541N) - 2 nodes: 541 ways
-    _map.reset(new OsmMap());
+    _map = std::make_shared<OsmMap>();
     numNodes = (splitVisitor.getMaxNumberOfNodes() * 541) - 2;
     numWays = _calcNumWays(numNodes, splitVisitor);
     _createWay(++wayID, startNode, startNode + numNodes - 1);
@@ -329,7 +329,7 @@ private:
 
 
     // (541N) - 1 nodes: 541 ways
-    _map.reset(new OsmMap());
+    _map = std::make_shared<OsmMap>();
     numNodes = (splitVisitor.getMaxNumberOfNodes() * 541) - 1;
     numWays = _calcNumWays(numNodes, splitVisitor);
     _createWay(++wayID, startNode, startNode + numNodes - 1);
@@ -341,7 +341,7 @@ private:
 
 
     // (541N) nodes: 541 ways
-    _map.reset(new OsmMap());
+    _map = std::make_shared<OsmMap>();
     numNodes = (splitVisitor.getMaxNumberOfNodes() * 541);
     numWays = _calcNumWays(numNodes, splitVisitor);
     _createWay(++wayID, startNode, startNode + numNodes - 1);
@@ -353,7 +353,7 @@ private:
 
 
     // (541N) + 1 nodes: 542 ways
-    _map.reset(new OsmMap());
+    _map = std::make_shared<OsmMap>();
     numNodes = (splitVisitor.getMaxNumberOfNodes() * 541) + 1;
     numWays = _calcNumWays(numNodes, splitVisitor);
     _createWay(++wayID, startNode, startNode + numNodes - 1);
@@ -365,7 +365,7 @@ private:
 
 
     // (541N) + 2 nodes: 542 ways
-    _map.reset(new OsmMap());
+    _map = std::make_shared<OsmMap>();
     numNodes = (splitVisitor.getMaxNumberOfNodes() * 541) + 2;
     numWays = _calcNumWays(numNodes, splitVisitor);
     _createWay(++wayID, startNode, startNode + numNodes - 1);

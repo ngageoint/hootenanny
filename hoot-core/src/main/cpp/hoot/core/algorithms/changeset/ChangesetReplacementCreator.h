@@ -116,7 +116,7 @@ private:
    * Removes all ways from the map with both MetadataTags::HootConnectedWayOutsideBounds() and
    * MetadataTags::HootSnapped() tags
    */
-  void _removeUnsnappedImmediatelyConnectedOutOfBoundsWays(OsmMapPtr& map) const;
+  void _removeUnsnappedImmediatelyConnectedOutOfBoundsWays(const OsmMapPtr& map) const;
 
   void _snapUnconnectedPreChangesetMapCropping(OsmMapPtr& combinedMap) const;
   void _snapUnconnectedPostChangesetMapCropping(

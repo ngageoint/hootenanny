@@ -77,7 +77,7 @@ public:
   {
     // Creates a single match and should result in a PoiPolygonMerger
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     Coordinate c1[] = { Coordinate(0.0, 0.0), Coordinate(20.0, 0.0),
                         Coordinate(20.0, 20.0), Coordinate(0.0, 20.0),
@@ -115,7 +115,7 @@ public:
     // Create a building and poi/poly match with feature overlap and ensure they create reviews and
     // don't merge together when cross feature conflate merging is not allowed.
 
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
 
     Coordinate c1[] = { Coordinate(0.0, 0.0), Coordinate(20.0, 0.0),
                         Coordinate(20.0, 20.0), Coordinate(0.0, 20.0),
@@ -203,7 +203,7 @@ public:
     PoiPolygonMergerCreator uut;
     // Neither of the match types used here actually require a map to calculate isConflicting, but
     // since the merger creator requires a map we'll pass in an empty one.
-    OsmMapPtr emptyMap(new OsmMap());
+    OsmMapPtr emptyMap = std::make_shared<OsmMap>();
     uut.setOsmMap(emptyMap.get());
     uut.setAllowCrossConflationMerging(true);
 

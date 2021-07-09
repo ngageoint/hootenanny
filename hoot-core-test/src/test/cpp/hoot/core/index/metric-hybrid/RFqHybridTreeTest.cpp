@@ -484,7 +484,7 @@ public:
 
   void runRandomQueryTest()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmPbfReader(true).read("test-files/index/metric-hybrid/TinyGeoNamesOrg.osm.pbf", map);
 
     MapProjector::projectToPlanar(map);

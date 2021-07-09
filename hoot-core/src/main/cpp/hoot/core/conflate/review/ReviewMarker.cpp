@@ -147,12 +147,10 @@ bool ReviewMarker::isNeedsReview(const ConstOsmMapPtr& map, ConstElementPtr e1, 
 bool ReviewMarker::isReview(const ConstElementPtr& e)
 {
   bool result = false;
-  if (e->getElementType() == ElementType::Relation)
+  if (e->getElementType() == ElementType::Relation &&
+      e->getTags().isTrue(MetadataTags::HootReviewNeeds()))
   {
-    if (e->getTags().isTrue(MetadataTags::HootReviewNeeds()))
-    {
-      result = true;
-    }
+    result = true;
   }
   return result;
 }
@@ -164,7 +162,7 @@ bool ReviewMarker::isReviewUid(const ConstOsmMapPtr& map, ReviewUid uid)
 
 void ReviewMarker::mark(
   const OsmMapPtr& map, const ConstElementPtr& e1, const ConstElementPtr& e2, const QString& note,
-  const QString& reviewType, double score, vector<QString> choices) const
+  const QString& reviewType, double score, const vector<QString>& choices) const
 {
   if (!e1 || !e2)
     return;
@@ -177,7 +175,7 @@ void ReviewMarker::mark(
 
 void ReviewMarker::mark(
   const OsmMapPtr& map, const std::set<ElementId>& ids, const QString& note,
-  const QString& reviewType, double score, vector<QString> choices) const
+  const QString& reviewType, double score, const vector<QString>& choices) const
 {
   //  Copy element IDs into a vector to preserve ordering used by other overloads of mark() function
   vector<ElementId> vids(ids.begin(), ids.end());
@@ -186,7 +184,7 @@ void ReviewMarker::mark(
 
 void ReviewMarker::mark(
   const OsmMapPtr& map, const ConstElementPtr& e, const QString& note, const QString& reviewType,
-  double score, vector<QString> choices) const
+  double score, const vector<QString>& choices) const
 {
   if (!e)
     return;
@@ -199,7 +197,7 @@ void ReviewMarker::mark(
 
 void ReviewMarker::mark(
   const OsmMapPtr& map, const std::vector<ElementId>& ids, const QString& note,
-  const QString& reviewType, double score, vector<QString> choices) const
+  const QString& reviewType, double score, const vector<QString>& choices) const
 {
   if (note.isEmpty())
   {

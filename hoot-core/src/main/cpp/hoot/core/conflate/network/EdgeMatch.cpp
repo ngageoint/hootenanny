@@ -139,7 +139,7 @@ bool EdgeMatch::isVerySimilarTo(const std::shared_ptr<const EdgeMatch>& other) c
 
   if (0 == this1.compare(other1))
   {
-    if (0 == this2.compare((other2)))
+    if (0 == this2.compare(other2))
     {
       LOG_DEBUG("Matches very similar: " << this << "; " << other);
       return true;

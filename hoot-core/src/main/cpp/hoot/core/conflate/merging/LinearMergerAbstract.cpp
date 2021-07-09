@@ -73,7 +73,7 @@ void LinearMergerAbstract::apply(const OsmMapPtr& map, vector<pair<ElementId, El
 
     if (_map->containsElement(eid1) && _map->containsElement(eid2))
     {
-      pairs.push_back(pair<ElementId, ElementId>(eid1, eid2));
+      pairs.emplace_back(eid1, eid2);
     }
     else
     {
@@ -232,18 +232,16 @@ void LinearMergerAbstract::_removeSpans(const WayPtr& w1, const WayPtr& w2) cons
       // the data set we're conflating in
       if (w->getElementId() != w1->getElementId() &&
           w->getElementId() != w2->getElementId() &&
-          w->getStatus() == Status::Unknown2)
+          w->getStatus() == Status::Unknown2 &&
+          // if this way connects w1 to w2 at the beginning or the end
+          (_doesWayConnect(w1->getNodeId(0), w2->getNodeId(0), w) ||
+           _doesWayConnect(w1->getLastNodeId(), w2->getLastNodeId(), w)) &&
+          // if the connection is more or less a straight shot. Don't want to worry about round
+          // about connections (e.g. lollipop style).
+          _directConnect(w))
       {
-        // if this way connects w1 to w2 at the beginning or the end
-        if ((_doesWayConnect(w1->getNodeId(0), w2->getNodeId(0), w) ||
-             _doesWayConnect(w1->getLastNodeId(), w2->getLastNodeId(), w)) &&
-            // if the connection is more or less a straight shot. Don't want to worry about round
-            // about connections (e.g. lollipop style).
-            _directConnect(w))
-        {
-          // This should likely remove the way even if it is part of another relation - #2938
-          RecursiveElementRemover(w->getElementId()).apply(_map);
-        }
+        // This should likely remove the way even if it is part of another relation - #2938
+        RecursiveElementRemover(w->getElementId()).apply(_map);
       }
     }
   }

@@ -178,7 +178,7 @@ namespace Tgs
     }
   }
 
-  void RandomTree::exportTree(std::ostream & fileStream, std::string tabDepth)
+  void RandomTree::exportTree(std::ostream& fileStream, const std::string& tabDepth)
   {
     try
     {
@@ -308,7 +308,7 @@ namespace Tgs
 
   }
 
-  void RandomTree::import(QDomElement & e)
+  void RandomTree::import(const QDomElement& e)
   {
     try
     {
@@ -374,7 +374,7 @@ namespace Tgs
   }
 
   void RandomTree::trainBinary(const std::shared_ptr<DataFrame>& data, unsigned int numFactors,
-    std::string /*posClass*/, unsigned int nodeSize, bool balanced)
+    const std::string& /*posClass*/, unsigned int nodeSize, bool balanced)
   {
     try
     {
@@ -444,7 +444,8 @@ namespace Tgs
   }
 
   void RandomTree::trainRoundRobin(const std::shared_ptr<DataFrame>& data, unsigned int numFactors,
-    std::string posClass, std::string negClass, unsigned int nodeSize, bool /*balanced*/)
+    const std::string& posClass, const std::string& negClass, unsigned int nodeSize,
+    bool /*balanced*/)
   {
     try
     {
@@ -471,8 +472,9 @@ namespace Tgs
 
   }
 
-  void RandomTree::_build(const std::shared_ptr<DataFrame>& data, std::vector<unsigned int> & dataSet,
-    std::shared_ptr<TreeNode> & node, unsigned int nodeSize)
+  void RandomTree::_build(
+    const std::shared_ptr<DataFrame>& data, std::vector<unsigned int> & dataSet,
+    const std::shared_ptr<TreeNode>& node, unsigned int nodeSize)
   {
     try
     {
@@ -525,16 +527,10 @@ namespace Tgs
 
           //  bandwidth
           data->computeBandwidthByFactor(fIdx, dataSet, minVal,
-            maxVal, mean, q1, q3);
-//          node->rangeMin = mean - (6 * bandwidth);
-//          node->rangeMax = mean + (6 * bandwidth);
-//          double midVal = (maxVal - minVal) / 2.0;
-//          node->rangeMin = minVal - (0.5 *(maxVal - minVal));
-//          node->rangeMax = maxVal + (0.5 * (maxVal - minVal));
-           double iqr = q3 - q1;
-           node->rangeMin = q1 - ( 3 * iqr);
-           node->rangeMax = q3 + (3 * iqr);
-
+          maxVal, mean, q1, q3);
+          double iqr = q3 - q1;
+          node->rangeMin = q1 - ( 3 * iqr);
+          node->rangeMax = q3 + (3 * iqr);
 
           data->sortIndicesOnFactorValue(dataSet, fIdx);
 
@@ -572,8 +568,8 @@ namespace Tgs
     }
   }
 
-  void RandomTree::_calcFactorPurity(std::shared_ptr<TreeNode> & node,
-    std::map<unsigned int, double> & factorPurity)
+  void RandomTree::_calcFactorPurity(
+    const std::shared_ptr<TreeNode>& node, std::map<unsigned int, double>& factorPurity)
   {
     try
     {
@@ -604,8 +600,8 @@ namespace Tgs
     }
   }
 
-  void RandomTree::_exportNode(std::ostream & fileStream, std::shared_ptr<TreeNode> & node,
-     std::string tabDepth)
+  void RandomTree::_exportNode(
+     std::ostream& fileStream, const std::shared_ptr<TreeNode>& node, const std::string& tabDepth)
   {
     try
     {
@@ -658,8 +654,8 @@ namespace Tgs
     }
   }
 
-  void RandomTree::_exportNode(QDomDocument & modelDoc, QDomElement & parentNode,
-    std::shared_ptr<TreeNode> & node)
+  void RandomTree::_exportNode(
+    QDomDocument& modelDoc, QDomElement& parentNode, const std::shared_ptr<TreeNode>& node)
   {
     try
     {
@@ -761,7 +757,7 @@ namespace Tgs
     }
   }
 
-  void RandomTree::_importNode(std::istream & fileStream, std::shared_ptr<TreeNode> & node)
+  void RandomTree::_importNode(std::istream& fileStream, const std::shared_ptr<TreeNode>& node)
   {
     try
     {
@@ -874,7 +870,8 @@ namespace Tgs
     }
   }
 
-  QDomElement RandomTree::_importNode(QDomElement & treeNode, std::shared_ptr<TreeNode> &node)
+  QDomElement RandomTree::_importNode(
+    const QDomElement& treeNode, const std::shared_ptr<TreeNode>& node)
   {
     try
     {
@@ -1078,7 +1075,7 @@ namespace Tgs
     }
   }
 
-  void RandomTree::_importOobSet(QString & oobString)
+  void RandomTree::_importOobSet(const QString& oobString)
   {
     try
     {

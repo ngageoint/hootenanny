@@ -48,7 +48,7 @@ public:
 
   OsmMapPtr createTestMap1()
   {
-    OsmMapPtr result(new OsmMap());
+    OsmMapPtr result = std::make_shared<OsmMap>();
 
     for (long nid = 1; nid <= 13; nid++)
     {

@@ -265,7 +265,7 @@ void DiffConflator::_discardUnconflatableElements()
     " unconflatable elements.");
 }
 
-void DiffConflator::storeOriginalMap(OsmMapPtr& map)
+void DiffConflator::storeOriginalMap(const OsmMapPtr& map)
 {
   // Check map to make sure it contains only Unknown1 elements
   // TODO: valid and conflated could be in here too, should we check for them as well?
@@ -291,7 +291,7 @@ void DiffConflator::storeOriginalMap(OsmMapPtr& map)
   std::shared_ptr<NotCriterion> crit(
     new NotCriterion(ElementCriterionPtr(new TagKeyCriterion(MetadataTags::Ref2()))));
   CopyMapSubsetOp mapCopier(map, crit);
-  _originalRef1Map.reset(new OsmMap());
+  _originalRef1Map = std::make_shared<OsmMap>();
   mapCopier.apply(_originalRef1Map);
 }
 
@@ -898,7 +898,7 @@ ChangesetProviderPtr DiffConflator::_getChangesetFromMap(OsmMapPtr map) const
 }
 
 void DiffConflator::writeChangeset(
-  OsmMapPtr pResultMap, QString& output, bool separateOutput,
+  OsmMapPtr pResultMap, const QString& output, bool separateOutput,
   const ChangesetStatsFormat& changesetStatsFormat, const QString& osmApiDbUrl)
 {
   LOG_DEBUG("Writing changeset: " << output << "...");

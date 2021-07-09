@@ -64,7 +64,7 @@ public:
     // basic test with default config; one intersection node should be found
 
     FindStreetIntersectionsByName uut;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     Settings conf;
 
     OsmMapReaderFactory::read(map, true, Status::Unknown1, "test-files/DcTigerRoads.osm");
@@ -83,7 +83,7 @@ public:
   void runCaseSensitivityTest()
   {
     FindStreetIntersectionsByName uut;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapPtr cachedMap;
     Settings conf;
 
@@ -128,7 +128,7 @@ public:
   void runPartialMatchTest()
   {
     FindStreetIntersectionsByName uut;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmMapPtr cachedMap;
     Settings conf;
 
@@ -175,7 +175,7 @@ public:
     // input and a single street matching the second input should be returned.
 
     FindStreetIntersectionsByName uut;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     Settings conf;
 
     OsmMapReaderFactory::read(

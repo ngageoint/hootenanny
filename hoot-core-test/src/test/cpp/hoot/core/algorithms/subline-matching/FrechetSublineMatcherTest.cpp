@@ -135,7 +135,7 @@ public:
   void runCircleTest()
   {
     Settings s;
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     OsmXmlReader reader;
     reader.read(_inputPath + "MaximalSublineCircleTestIn.osm", map);
     double score;
@@ -160,7 +160,7 @@ public:
 
   OsmMapPtr createMap()
   {
-    OsmMapPtr map(new OsmMap());
+    OsmMapPtr map = std::make_shared<OsmMap>();
     MapProjector::projectToPlanar(map);
     return map;
   }

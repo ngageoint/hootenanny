@@ -50,7 +50,7 @@ public:
     Relation = 2,
     WayNode = 3,
     RelationMember = 4,
-    Unknown
+    Unknown = 5
   };
 
   TableType() { _type = Unknown; }
