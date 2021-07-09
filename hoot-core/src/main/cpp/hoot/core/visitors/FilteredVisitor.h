@@ -68,6 +68,8 @@ public:
    * Similar to above but this is convenient if you want to pass in a temporary criterion and
    * visitor. WARNING: FilteredVisitor DOES NOT take ownership of the criterion and visitor and
    * WON'T delete them when destructed.
+   *
+   * @todo think we can probably get rid of this constructor
    */
   FilteredVisitor(const ElementCriterion* criterion, ElementVisitor* visitor);
 

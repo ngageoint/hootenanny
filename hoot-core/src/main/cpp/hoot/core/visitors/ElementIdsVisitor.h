@@ -62,6 +62,7 @@ public:
    * @param elementType type of element to retrieve
    * @param pCrit criteria to satisfy
    * @return a collection of numerical element IDs
+   * @todo change this to take in ElementCriterionPtr instead?
    */
   static std::vector<long> findElements(const ConstOsmMapPtr& map, const ElementType& elementType,
                                         ElementCriterion* pCrit);
@@ -75,6 +76,7 @@ public:
    * @param refCoord the point out from which to search
    * @param maxDistance the furthest distance away from the source point to search
    * @return a collection of numerical node IDs
+   * @todo change this to take in ElementCriterionPtr instead?
    */
   static std::vector<long> findNodes(const ConstOsmMapPtr& map, const ElementCriterion* pCrit,
                                      const geos::geom::Coordinate& refCoord, Meters maxDistance);
