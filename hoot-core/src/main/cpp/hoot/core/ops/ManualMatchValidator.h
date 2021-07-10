@@ -65,13 +65,14 @@ public:
    */
   void apply(const OsmMapPtr& map) override;
 
-  QString getDescription() const override { return "Validates manual matches"; }
-
   QString getInitStatusMessage() const override
   { return "Validating manual matches..."; }
-
   QString getCompletedStatusMessage() const override
   { return "Validated " + QString::number(_numAffected) + " manual matches"; }
+
+  QString getDescription() const override { return "Validates manual matches"; }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
   /**
    * Returns found errors grouped by element ID (up to one for each element)
@@ -104,10 +105,6 @@ public:
   void setRequireRef1(bool require) { _requireRef1 = require; }
   void setAllowUuidManualMatchIds(bool allow) { _allowUuidManualMatchIds = allow; }
   void setFullDebugOutput(bool fullDebugOutput) { _fullDebugOutput = fullDebugOutput; }
-
-  QString getName() const override { return className(); }
-
-  QString getClassName() const override { return className(); }
 
 private:
 

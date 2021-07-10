@@ -46,8 +46,7 @@ public:
   ConstOsmMapOperation() = default;
   virtual ~ConstOsmMapOperation() = default;
 
-  void apply(std::shared_ptr<OsmMap>& map) override
-  { apply((const std::shared_ptr<OsmMap>&)map); }
+  void apply(std::shared_ptr<OsmMap>& map) override { apply((const std::shared_ptr<OsmMap>&)map); }
 
   /**
    * This guarantees that we won't actually change the map pointer, although the map itself may

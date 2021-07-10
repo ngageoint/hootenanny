@@ -50,20 +50,17 @@ public:
 
   void apply(OsmMapPtr& map) override;
 
-  QString getName() const override { return className(); }
-
-  QString getClassName() const override { return className(); }
-
-  long getNumRemoved() const { return _numAffected; }
-
   QString getInitStatusMessage() const override
   { return "Removing empty relations..."; }
-
   QString getCompletedStatusMessage() const override
   { return "Removed " + StringUtils::formatLargeNumber(_numAffected) + " empty relations"; }
 
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
   QString getDescription() const override
   { return "Removes relations with no members"; }
+
+  long getNumRemoved() const { return _numAffected; }
 
 private:
 

@@ -600,7 +600,7 @@ OgrReaderInternal::OgrReaderInternal() :
 _defaultCircularError(ConfigOptions().getCircularErrorDefaultValue()),
 _circularErrorTagKeys(ConfigOptions().getCircularErrorTagKeys()),
 _status(Status::Invalid),
-_map(OsmMapPtr(new OsmMap())),
+_map(std::make_shared<OsmMap>()),
 _layer(nullptr),
 _limit(-1),
 _featureCount(0),

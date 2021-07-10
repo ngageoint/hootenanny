@@ -90,7 +90,7 @@ namespace Tgs
     * @param bestSplit the index for the split in indices corresponding to the max gain
     * @return the information gain corresponding to bestSplit
     */
-    double getMaxInfoGainByFactor(DataFrame & df, std::vector<unsigned int> & indices, 
+    double getMaxInfoGainByFactor(const DataFrame& df, std::vector<unsigned int> & indices,
       unsigned int fIdx, double totalEntropy, unsigned int & bestSplit) const;
 
     /**

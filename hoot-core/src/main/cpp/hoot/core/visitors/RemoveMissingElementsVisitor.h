@@ -55,7 +55,6 @@ public:
 
   QString getInitStatusMessage() const override
   { return "Removing references to elements that do not exist..."; }
-
   QString getCompletedStatusMessage() const override
   {
     return
@@ -64,9 +63,7 @@ public:
 
   QString getDescription() const override
   { return "Removes references to any elements that do not exist"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 
 private:

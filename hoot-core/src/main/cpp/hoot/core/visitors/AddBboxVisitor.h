@@ -45,9 +45,7 @@ public:
 
   QString getDescription() const override
   { return "Adds a bounding box tag to applicable elements"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 };
 

@@ -229,7 +229,7 @@ Mat PertyOp::_calculatePermuteGrid(const geos::geom::Envelope& env, int& rows, i
 std::shared_ptr<OsmMap> PertyOp::generateDebugMap(const OsmMapPtr& map)
 {
   MapProjector::projectToPlanar(map);
-  std::shared_ptr<OsmMap> result(new OsmMap(map->getProjection()));
+  std::shared_ptr<OsmMap> result = std::make_shared<OsmMap>(map->getProjection());
 
   geos::geom::Envelope env = CalculateMapBoundsVisitor::getGeosBounds(map);
   LOG_INFO("env: " << env.toString());
@@ -251,12 +251,13 @@ std::shared_ptr<OsmMap> PertyOp::generateDebugMap(const OsmMapPtr& map)
       double dx = EX.at<double>((i * cols + j) * 2, 0);
       double dy = EX.at<double>((i * cols + j) * 2 + 1, 0);
 
-      NodePtr n1(new Node(Status::Unknown1, result->createNextNodeId(), x, y, 5));
-      NodePtr n2(new Node(Status::Unknown1, result->createNextNodeId(), x + dx, y + dy, 5));
+      NodePtr n1 = std::make_shared<Node>(Status::Unknown1, result->createNextNodeId(), x, y, 5);
+      NodePtr n2 =
+        std::make_shared<Node>(Status::Unknown1, result->createNextNodeId(), x + dx, y + dy, 5);
       result->addNode(n1);
       result->addNode(n2);
 
-      WayPtr w(new Way(Status::Unknown1, result->createNextWayId(), 5.0));
+      WayPtr w = std::make_shared<Way>(Status::Unknown1, result->createNextWayId(), 5.0);
       w->addNode(n1->getId());
       w->addNode(n2->getId());
       w->getTags().addNote(QString("r: %1 c: %2").arg(i).arg(j));

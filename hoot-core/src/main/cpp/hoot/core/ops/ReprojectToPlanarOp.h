@@ -50,14 +50,11 @@ public:
   void apply(std::shared_ptr<OsmMap>& map) override;
 
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
-
   QString getDescription() const override { return "Reprojects to a custom planar projection"; }
 
   QString getInitStatusMessage() const override
   { return "Reprojecting map to planar coordinates..."; }
-
   QString getCompletedStatusMessage() const override
   { return  "Reprojected map to planar coordinates"; }
 };

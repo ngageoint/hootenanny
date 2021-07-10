@@ -52,17 +52,14 @@ public:
    * @brief IdSwapOp - Default constructor
    */
   IdSwapOp() = default;
-
   /**
    * @brief IdSwapOp - Constructor taking a swap object with the IDs to swap
    */
   IdSwapOp(const IdSwapPtr& idSwap) : _idSwap(idSwap) { }
-
   /**
    * @brief IdSwapOp - Constructor taking two elements to swap IDs
    */
   IdSwapOp(ElementId e1, ElementId e2) : _idSwap(new IdSwap(e1, e2)) { }
-
   ~IdSwapOp() = default;
 
   /**

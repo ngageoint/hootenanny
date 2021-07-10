@@ -131,7 +131,7 @@ void IndexedEdgeMatchSet::_removeVertexToMatchMapping(ConstEdgeStringPtr str,
 
 std::shared_ptr<IndexedEdgeLinks> IndexedEdgeMatchSet::calculateEdgeLinks()
 {
-  std::shared_ptr<IndexedEdgeLinks> result(new IndexedEdgeLinks());
+  std::shared_ptr<IndexedEdgeLinks> result = std::make_shared<IndexedEdgeLinks>();
   for (QHash<ConstEdgeMatchPtr, double>::const_iterator it = getAllMatches().begin();
        it != getAllMatches().end(); ++it)
   {
@@ -166,7 +166,7 @@ std::shared_ptr<IndexedEdgeLinks> IndexedEdgeMatchSet::calculateEdgeLinks()
 
 std::shared_ptr<IndexedEdgeMatchSet> IndexedEdgeMatchSet::clone() const
 {
-  IndexedEdgeMatchSetPtr result(new IndexedEdgeMatchSet());
+  IndexedEdgeMatchSetPtr result = std::make_shared<IndexedEdgeMatchSet>();
   result->_matches = _matches;
   return result;
 }

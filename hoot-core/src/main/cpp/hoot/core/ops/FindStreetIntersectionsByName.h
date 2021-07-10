@@ -65,16 +65,13 @@ public:
    */
   QString getDescription() const override
   { return "Locates street intersections by street name"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 
   /**
    * @see OperationStatus
    */
   QString getInitStatusMessage() const override { return "Locating street intersections..."; }
-
   /**
    * @see OperationStatus
    */

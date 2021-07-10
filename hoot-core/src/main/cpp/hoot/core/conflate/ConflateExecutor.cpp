@@ -163,7 +163,7 @@ void ConflateExecutor::_initTaskCount()
   _currentTask = 1;
 }
 
-void ConflateExecutor::conflate(const QString& input1, const QString& input2, QString& output)
+void ConflateExecutor::conflate(const QString& input1, const QString& input2, const QString& output)
 {
   Tgs::Timer totalTime;
   _taskTimer.reset();
@@ -250,11 +250,9 @@ void ConflateExecutor::conflate(const QString& input1, const QString& input2, QS
 
   const QSet<QString> matchCreatorCrits =
     SuperfluousConflateOpRemover::getMatchCreatorGeometryTypeCrits(false);
-  CalculateStatsOp input1Cso(
-    ElementCriterionPtr(new StatusCriterion(Status::Unknown1)), "input map 1");
+  CalculateStatsOp input1Cso(std::make_shared<StatusCriterion>(Status::Unknown1), "input map 1");
   input1Cso.setFilter(matchCreatorCrits);
-  CalculateStatsOp input2Cso(
-    ElementCriterionPtr(new StatusCriterion(Status::Unknown2)), "input map 2");
+  CalculateStatsOp input2Cso(std::make_shared<StatusCriterion>(Status::Unknown2), "input map 2");
   // We only want statistics generated that correspond to the feature types being conflated.
   input2Cso.setFilter(matchCreatorCrits);
   if (_displayStats)

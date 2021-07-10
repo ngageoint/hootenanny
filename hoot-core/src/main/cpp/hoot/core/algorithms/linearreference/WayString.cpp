@@ -38,7 +38,7 @@ namespace hoot
 
 int WayString::logWarnCount = 0;
 
-// if the difference is smaller than this we consider it to be equivalent.
+// If the difference is smaller than this, we consider it to be equivalent.
 Meters WayString::_epsilon = 1e-9;
 
 Meters WayString::_aggregateCircularError() const
@@ -211,7 +211,7 @@ WayPtr WayString::copySimplifiedWayIntoMap(const ElementProvider& map, OsmMapPtr
 {
   ConstWayPtr w = _sublines.front().getWay();
   Meters ce = _aggregateCircularError();
-  WayPtr newWay(new Way(w->getStatus(), destination->createNextWayId(), ce));
+  WayPtr newWay = std::make_shared<Way>(w->getStatus(), destination->createNextWayId(), ce);
   newWay->setPid(w->getPid());
 
   Tags newTags;
@@ -231,8 +231,9 @@ WayPtr WayString::copySimplifiedWayIntoMap(const ElementProvider& map, OsmMapPtr
     vector<long> newNids;
     if (subline.getFormer().isNode() == false)
     {
-      NodePtr n = NodePtr(new Node(w->getStatus(), destination->createNextNodeId(),
-                                   subline.getFormer().getCoordinate(), ce));
+      NodePtr n =
+        std::make_shared<Node>(
+          w->getStatus(), destination->createNextNodeId(), subline.getFormer().getCoordinate(), ce);
       destination->addNode(n);
       newNids.push_back(n->getId());
       formeri = subline.getFormer().getSegmentIndex() + 1;
@@ -250,14 +251,15 @@ WayPtr WayString::copySimplifiedWayIntoMap(const ElementProvider& map, OsmMapPtr
     {
       long nid = oldWay->getNodeId(i);
       newNids.push_back(nid);
-      destination->addNode(NodePtr(new Node(*map.getNode(nid))));
+      destination->addNode(std::make_shared<Node>(*map.getNode(nid)));
     }
 
     // if the last location isn't on a node, create a new node for it
     if (subline.getLatter().isNode() == false)
     {
-      NodePtr n = NodePtr(new Node(w->getStatus(), destination->createNextNodeId(),
-        subline.getLatter().getCoordinate(), ce));
+      NodePtr n =
+        std::make_shared<Node>(
+          w->getStatus(), destination->createNextNodeId(), subline.getLatter().getCoordinate(), ce);
       destination->addNode(n);
       newNids.push_back(n->getId());
     }

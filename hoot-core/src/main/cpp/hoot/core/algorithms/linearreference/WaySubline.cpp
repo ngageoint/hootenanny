@@ -160,7 +160,7 @@ WayPtr WaySubline::toWay(
   if (!reuse)
     way_id = map->createNextWayId();
   LOG_VART(way_id);
-  WayPtr result(new Way(way->getStatus(), way_id, ce));
+  WayPtr result = std::make_shared<Way>(way->getStatus(), way_id, ce);
   result->setPid(way->getPid());
   result->setVersion(way->getVersion());
   result->setTimestamp(way->getTimestamp());

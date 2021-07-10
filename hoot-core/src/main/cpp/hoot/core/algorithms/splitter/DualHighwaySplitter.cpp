@@ -117,7 +117,7 @@ std::shared_ptr<Way> DualHighwaySplitter::_createOneWay(const std::shared_ptr<co
   long way_id = w->getId();
   if (!left)
     way_id = _result->createNextWayId();
-  WayPtr result(new Way(w->getStatus(), way_id, w->getRawCircularError()));
+  WayPtr result = std::make_shared<Way>(w->getStatus(), way_id, w->getRawCircularError());
   result->setPid(w->getPid());
 
   // This sometimes happens if the buffer builder returns a multilinestring. See #2275
@@ -149,8 +149,9 @@ std::shared_ptr<Way> DualHighwaySplitter::_createOneWay(const std::shared_ptr<co
     const CoordinateSequence* cs = ls->getCoordinatesRO();
     for (size_t i = 0; i < cs->getSize(); i++)
     {
-      std::shared_ptr<Node> n(new Node(w->getStatus(), _result->createNextNodeId(), cs->getAt(i),
-        w->getCircularError()));
+      std::shared_ptr<Node> n =
+        std::make_shared<Node>(
+          w->getStatus(), _result->createNextNodeId(), cs->getAt(i), w->getCircularError());
       _result->addNode(n);
       result->addNode(n->getId());
     }
@@ -160,8 +161,9 @@ std::shared_ptr<Way> DualHighwaySplitter::_createOneWay(const std::shared_ptr<co
     const CoordinateSequence* cs = newLs->getCoordinatesRO();
     for (size_t i = 0; i < cs->getSize(); i++)
     {
-      std::shared_ptr<Node> n(new Node(w->getStatus(), _result->createNextNodeId(), cs->getAt(i),
-        w->getCircularError()));
+      std::shared_ptr<Node> n =
+        std::make_shared<Node>(
+          w->getStatus(), _result->createNextNodeId(), cs->getAt(i), w->getCircularError());
       _result->addNode(n);
       result->addNode(n->getId());
     }
@@ -265,7 +267,7 @@ std::shared_ptr<OsmMap> DualHighwaySplitter::splitAll(const std::shared_ptr<cons
 std::shared_ptr<OsmMap> DualHighwaySplitter::splitAll()
 {
   _numAffected = 0;
-  std::shared_ptr<OsmMap> result(new OsmMap(_map));
+  std::shared_ptr<OsmMap> result = std::make_shared<OsmMap>(_map);
   _result = result;
   // TODO: Why does the class description ref 'divided=yes' and this uses 'divider=yes'?
   TagCriterion tagCrit("divider", "yes");
@@ -343,12 +345,13 @@ void DualHighwaySplitter::_reconnectEnd(long centerNodeId, const std::shared_ptr
     edgeEndId = last->getId();
   }
 
-  // find all the nodes that are about the right distance from centerNodeId
-  // Find nodes that are > _splitSize*.99 away, but less than _splitSize*1.01
-  std::shared_ptr<DistanceNodeCriterion> outerCrit(
-    new DistanceNodeCriterion(centerNodeC, _splitSize * 1.01));
-  std::shared_ptr<NotCriterion> notInnerCrit(
-    new NotCriterion(new DistanceNodeCriterion(centerNodeC, _splitSize * .99)));
+  // Find all the nodes that are about the right distance from centerNodeId. Find nodes that are >
+  // _splitSize*.99 away, but less than _splitSize*1.01.
+  std::shared_ptr<DistanceNodeCriterion> outerCrit =
+    std::make_shared<DistanceNodeCriterion>(centerNodeC, _splitSize * 1.01);
+  std::shared_ptr<NotCriterion> notInnerCrit =
+    std::make_shared<NotCriterion>(
+      std::make_shared<DistanceNodeCriterion>(centerNodeC, _splitSize * .99));
   ChainCriterion chainCrit(outerCrit, notInnerCrit);
 
   vector<long> nids =

@@ -47,6 +47,7 @@ public:
 
   ChainCriterion() = default;
   ChainCriterion(const ElementCriterionPtr& child1, const ElementCriterionPtr& child2);
+  // TODO: Think we can probably get rid of these version that take in ElementCriterion*.
   ChainCriterion(ElementCriterion* child1, ElementCriterion* child2);
   ChainCriterion(ElementCriterion* child1, ElementCriterionPtr child2);
   ChainCriterion(ElementCriterion* child1, ElementCriterion* child2, ElementCriterion* child3);

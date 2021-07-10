@@ -73,7 +73,7 @@ public:
 
   // Leaving this hardcoded for now, as we don't use this matcher in production conflation jobs.
   // If we ever do end up using it production, then add a config option for it.
-  virtual double getMatchThreshold() const override { return 0.15; }
+  double getMatchThreshold() const override { return 0.15; }
 
   /**
    * Use this instead of a constructor.

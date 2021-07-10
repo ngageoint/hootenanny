@@ -65,13 +65,10 @@ public:
 
   QString getDescription() const override
   { return "Counts the number of tags translated to a schema"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 
   QString getInitStatusMessage() const override { return "Counting translated tags..."; }
-
   QString getCompletedStatusMessage() const override
   {
     return

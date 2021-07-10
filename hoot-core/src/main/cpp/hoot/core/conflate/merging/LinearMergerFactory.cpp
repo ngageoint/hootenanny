@@ -74,11 +74,9 @@ MergerPtr LinearMergerFactory::getMerger(
   if (isAttributeConflate)
   {
     // This is messy, but we'll need some refactoring to get rid of it.
-    merger.reset(
-      new LinearTagOnlyMerger(
-        eids,
-        std::shared_ptr<PartialNetworkMerger>(
-          new PartialNetworkMerger(eids, edgeMatches, details))));
+    merger =
+      std::make_shared<LinearTagOnlyMerger>(
+        eids, std::make_shared<PartialNetworkMerger>(eids, edgeMatches, details));
     std::shared_ptr<LinearMergerAbstract> linearMerger =
       std::dynamic_pointer_cast<LinearMergerAbstract>(merger);
     linearMerger->setMatchedBy(matchedBy);

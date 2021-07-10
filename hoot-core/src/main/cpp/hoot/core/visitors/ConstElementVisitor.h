@@ -42,10 +42,10 @@ class ConstElementVisitor : public ElementVisitor
 {
 public:
 
+  static QString className() { return "hoot::ConstElementVisitor"; }
+
   ConstElementVisitor() = default;
   virtual ~ConstElementVisitor() = default;
-
-  static QString className() { return "hoot::ConstElementVisitor"; }
 
   virtual void visit(const ConstElementPtr& e) = 0;
 

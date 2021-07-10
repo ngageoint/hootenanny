@@ -51,7 +51,7 @@ Persistent<Function> OsmMapJs::_constructor;
 
 OsmMapJs::OsmMapJs()
 {
-  _setMap(OsmMapPtr(new OsmMap()));
+  _setMap(std::make_shared<OsmMap>());
 }
 
 void OsmMapJs::Init(Local<Object> target)

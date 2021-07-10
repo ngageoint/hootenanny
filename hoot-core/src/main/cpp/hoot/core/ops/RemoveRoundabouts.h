@@ -82,13 +82,10 @@ public:
    *                            with simple intersections
    * @param removed - Vector of the removed roundabouts
    */
-  void removeRoundabouts(std::vector<RoundaboutPtr> &removed);
-
-  QString getDescription() const override { return "Removes roundabouts from roads"; }
+  void removeRoundabouts(std::vector<RoundaboutPtr>& removed);
 
   QString getInitStatusMessage() const override
   { return "Removing road roundabouts..."; }
-
   QString getCompletedStatusMessage() const override
   { return "Removed " + QString::number(_numAffected) + " road roundabouts"; }
 
@@ -97,8 +94,8 @@ public:
    */
   QStringList getCriteria() const override;
 
+  QString getDescription() const override { return "Removes roundabouts from roads"; }
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 
 private:

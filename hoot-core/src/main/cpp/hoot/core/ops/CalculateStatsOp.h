@@ -148,6 +148,7 @@ private:
   double _applyVisitor(
     const hoot::FilteredVisitor& v, boost::any& visitorData, const QString& statName,
     StatData::StatCall call = StatData::StatCall::Stat);
+  // TODO: Change these to take in shared ptrs?
   double _applyVisitor(
     const ElementCriterion* pCrit, ConstElementVisitor* pVis, const QString& statName,
     StatData::StatCall call = StatData::StatCall::Stat);

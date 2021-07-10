@@ -130,13 +130,13 @@ public:
   QString getCompletedStatusMessage() const override
   { return "Removed " + StringUtils::formatLargeNumber(_numAffected) + " superfluous nodes"; }
 
+  void setConflateInfoCache(const std::shared_ptr<ConflateInfoCache>& cache) override
+  { _conflateInfoCache = cache; }
+
   std::set<long> getSuperfluousNodeIds() const { return _superfluousNodeIds; }
 
   void setIgnoreInformationTags(bool ignore) { _ignoreInformationTags = ignore; }
   void setRemoveNodes(bool remove) { _removeNodes = remove; }
-
-  void setConflateInfoCache(const std::shared_ptr<ConflateInfoCache>& cache) override
-  { _conflateInfoCache = cache; }
 
 private:
 

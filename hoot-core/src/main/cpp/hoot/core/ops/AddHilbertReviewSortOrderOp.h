@@ -48,16 +48,13 @@ public:
 
   void apply(OsmMapPtr& map) override;
 
-  QString getName() const override { return className(); }
-
-  QString getClassName() const override { return className(); }
-
   QString getInitStatusMessage() const override
   { return "Adding geospatial sorting tags to review relations..."; }
-
   QString getCompletedStatusMessage() const override
   { return "Added " + StringUtils::formatLargeNumber(_numAffected) + " sorting tags"; }
 
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
   QString getDescription() const override
   { return "Adds tags that enable sorting reviewable features geospatially"; }
 

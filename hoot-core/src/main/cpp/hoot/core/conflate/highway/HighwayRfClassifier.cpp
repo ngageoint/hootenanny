@@ -121,107 +121,22 @@ MatchClassification HighwayRfClassifier::classify(const ConstOsmMapPtr& map,
   return p;
 }
 
-void HighwayRfClassifier::_createAllExtractors() const
-{
-  _extractors.clear();
-//  vector<std::string> extractorNames = Factory::getInstance().getObjectNamesByBase(
-//    FeatureExtractor::className());
-
-//  for (size_t i = 0; i < extractorNames.size(); i++)
-//  {
-//    FeatureExtractor* fe = Factory::getInstance().constructObject<FeatureExtractor>(
-//      extractorNames[i]);
-//    _extractors.push_back(std::shared_ptr<FeatureExtractor>(fe));
-//  }
-
-  // These are all the factors that seem reasonable. Many of the other factors will overtrain due
-  // to distance values and such.
-  _extractors.push_back(FeatureExtractorPtr(new AngleHistogramExtractor()));
-  _extractors.push_back(FeatureExtractorPtr(new AttributeScoreExtractor(false)));
-  _extractors.push_back(FeatureExtractorPtr(new WeightedShapeDistanceExtractor()));
-  _extractors.push_back(FeatureExtractorPtr(new AttributeScoreExtractor(true)));
-
-  _extractors.push_back(FeatureExtractorPtr(new WeightedMetricDistanceExtractor(
-                        ValueAggregatorPtr(new MeanAggregator()),
-                        ValueAggregatorPtr(new SigmaAggregator()))));
-  _extractors.push_back(FeatureExtractorPtr(new WeightedMetricDistanceExtractor(
-                        ValueAggregatorPtr(new MeanAggregator()),
-                        ValueAggregatorPtr(new RmseAggregator()))));
-
-  _extractors.push_back(FeatureExtractorPtr(new EdgeDistanceExtractor(
-                        ValueAggregatorPtr(new RmseAggregator()))));
-  _extractors.push_back(FeatureExtractorPtr(new EdgeDistanceExtractor(
-                        ValueAggregatorPtr(new SigmaAggregator()))));
-
-  // at some point names will make sense, but for now there isn't enough name data.
-//  _extractors.push_back(std::shared_ptr<FeatureExtractor>(new NameExtractor(
-//    new ExactStringDistance())));
-//  _extractors.push_back(std::shared_ptr<FeatureExtractor>(new NameExtractor(
-//    new MaxWordSetDistance(new ExactStringDistance()))));
-//  _extractors.push_back(std::shared_ptr<FeatureExtractor>(new NameExtractor(
-//    new MeanWordSetDistance(new ExactStringDistance()))));
-//  _extractors.push_back(std::shared_ptr<FeatureExtractor>(new NameExtractor(
-//    new ToEnglishTranslateStringDistance(new ExactStringDistance()))));
-//  _extractors.push_back(std::shared_ptr<FeatureExtractor>(new NameExtractor(
-//    new ToEnglishTranslateStringDistance(new MaxWordSetDistance(new ExactStringDistance())))));
-//  _extractors.push_back(std::shared_ptr<FeatureExtractor>(new NameExtractor(
-//    new ToEnglishTranslateStringDistance(new MeanWordSetDistance(new ExactStringDistance())))));
-
-//  _extractors.push_back(std::shared_ptr<FeatureExtractor>(new NameExtractor(
-//    new LevenshteinDistance())));
-//  _extractors.push_back(std::shared_ptr<FeatureExtractor>(new NameExtractor(
-//    new MaxWordSetDistance(new LevenshteinDistance()))));
-//  _extractors.push_back(std::shared_ptr<FeatureExtractor>(new NameExtractor(
-//    new MeanWordSetDistance(new LevenshteinDistance()))));
-//  _extractors.push_back(std::shared_ptr<FeatureExtractor>(new NameExtractor(
-//    new ToEnglishTranslateStringDistance(new LevenshteinDistance()))));
-//  _extractors.push_back(std::shared_ptr<FeatureExtractor>(new NameExtractor(
-//    new ToEnglishTranslateStringDistance(new MaxWordSetDistance(new LevenshteinDistance())))));
-//  _extractors.push_back(std::shared_ptr<FeatureExtractor>(new NameExtractor(
-//    new ToEnglishTranslateStringDistance(new MeanWordSetDistance(new LevenshteinDistance())))));
-
-//  for (double a = 1.0; a < 1.8; a += 0.05)
-//  {
-//    _extractors.push_back(std::shared_ptr<FeatureExtractor>(new NameExtractor(
-//      new MeanWordSetDistance(new LevenshteinDistance(a)))));
-//    _extractors.push_back(std::shared_ptr<FeatureExtractor>(new NameExtractor(
-//      new ToEnglishTranslateStringDistance(new MeanWordSetDistance(new LevenshteinDistance(a))))));
-//  }
-
-//  _extractors.push_back(std::shared_ptr<FeatureExtractor>(new NameExtractor(new Soundex())));
-//  _extractors.push_back(std::shared_ptr<FeatureExtractor>(new NameExtractor(
-//    new MaxWordSetDistance(new Soundex()))));
-//  _extractors.push_back(std::shared_ptr<FeatureExtractor>(new NameExtractor(
-//    new MeanWordSetDistance(new Soundex()))));
-//  _extractors.push_back(std::shared_ptr<FeatureExtractor>(new NameExtractor(
-//    new ToEnglishTranslateStringDistance(new Soundex()))));
-//  _extractors.push_back(std::shared_ptr<FeatureExtractor>(new NameExtractor(
-//    new ToEnglishTranslateStringDistance(new MaxWordSetDistance(new Soundex())))));
-//  _extractors.push_back(std::shared_ptr<FeatureExtractor>(new NameExtractor(
-//    new ToEnglishTranslateStringDistance(new MeanWordSetDistance(new Soundex())))));
-
-}
-
 void HighwayRfClassifier::_createTestExtractors() const
 {
   _extractors.clear();
 
-  _extractors.push_back(FeatureExtractorPtr(new EdgeDistanceExtractor(
-                        ValueAggregatorPtr(new RmseAggregator()))));
-  _extractors.push_back(FeatureExtractorPtr(new EdgeDistanceExtractor(
-                        ValueAggregatorPtr(new SigmaAggregator()))));
-  _extractors.push_back(FeatureExtractorPtr(new AngleHistogramExtractor()));
-//  _extractors.push_back(std::shared_ptr<FeatureExtractor>(new AttributeScoreExtractor(false)));
-//  _extractors.push_back(std::shared_ptr<FeatureExtractor>(new AttributeScoreExtractor(true)));
-//  _extractors.push_back(std::shared_ptr<FeatureExtractor>(new WeightedShapeDistanceExtractor()));
+  _extractors.push_back(
+    std::make_shared<EdgeDistanceExtractor>(std::make_shared<RmseAggregator>()));
+  _extractors.push_back(
+     std::make_shared<EdgeDistanceExtractor>(std::make_shared<SigmaAggregator>()));
+  _extractors.push_back(std::make_shared<AngleHistogramExtractor>());
 
-//  _extractors.push_back(std::shared_ptr<FeatureExtractor>(new WeightedMetricDistanceExtractor(
-//    new MeanAggregator(), new SigmaAggregator())));
-  _extractors.push_back(FeatureExtractorPtr(new WeightedMetricDistanceExtractor(
-                        ValueAggregatorPtr(new MeanAggregator()),
-                        ValueAggregatorPtr(new RmseAggregator()),
-                        ConfigOptions().getSearchRadiusHighway())));
+  _extractors.push_back(
+    std::make_shared<WeightedMetricDistanceExtractor>(
+      std::make_shared<MeanAggregator>(), std::make_shared<RmseAggregator>(),
+      ConfigOptions().getSearchRadiusHighway()));
 
+  // TODO: At some point names will make sense, but for now there isn't enough name data (#4874).
 }
 
 map<QString, double> HighwayRfClassifier::getFeatures(const ConstOsmMapPtr& m,
@@ -235,7 +150,7 @@ map<QString, double> HighwayRfClassifier::getFeatures(const ConstOsmMapPtr& m,
   set<ElementId> eids;
   eids.insert(eid1);
   eids.insert(eid2);
-  OsmMapPtr copiedMap(new OsmMap(m->getProjection()));
+  OsmMapPtr copiedMap = std::make_shared<OsmMap>(m->getProjection());
   CopyMapSubsetOp(m, eids).apply(copiedMap);
   WaySublineMatchString copiedMatch(match, copiedMap);
 
@@ -255,10 +170,10 @@ map<QString, double> HighwayRfClassifier::getFeatures(const ConstOsmMapPtr& m,
     LOG_VART(eid1);
     LOG_VART(eid2);
     LOG_VART(match.toString());
-    throw NeedsReviewException("Internal Error: Found a situation where the match after copy is "
-                               "invalid. Marking as needs review.  Expected a matching subline, "
-                               "but got an empty match. Please report this to "
-                               " https://github.com/ngageoint/hootenanny.");
+    throw NeedsReviewException(
+      "Internal Error: Found a situation where the match after copy is invalid. Marking as needs "
+      "review.  Expected a matching subline, but got an empty match. Please report this to "
+      " https://github.com/ngageoint/hootenanny.");
   }
   else
   {
@@ -281,7 +196,6 @@ void HighwayRfClassifier::_init() const
 {
   if (!_rf)
   {
-    //_createAllExtractors();
     _createTestExtractors();
 
     QString path = ConfPath::search(ConfigOptions().getConflateMatchHighwayModel());

@@ -113,7 +113,7 @@ private:
   {
     OsmMapPtr map = std::make_shared<OsmMap>();
     IoUtils::loadMap(map, input, true, Status::Unknown1);
-    InMemoryElementSorterPtr(new InMemoryElementSorter(map));
+    /*InMemoryElementSorterPtr sorter =*/ std::make_shared<InMemoryElementSorter>(map);
     IoUtils::saveMap(map, output);
   }
 

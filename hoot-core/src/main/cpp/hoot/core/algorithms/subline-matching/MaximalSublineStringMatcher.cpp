@@ -214,7 +214,7 @@ MaximalSublineStringMatcher::ScoredMatch MaximalSublineStringMatcher::_evaluateM
   set<ElementId> eids;
   _insertElementIds(ways1, eids);
   _insertElementIds(ways2, eids);
-  OsmMapPtr copiedMap(new OsmMap(map->getProjection()));
+  OsmMapPtr copiedMap = std::make_shared<OsmMap>(map->getProjection());
   CopyMapSubsetOp(map, eids).apply(copiedMap);
 
   vector<WayPtr> prep1 = _changeMap(ways1, copiedMap);

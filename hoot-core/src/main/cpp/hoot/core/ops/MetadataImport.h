@@ -71,16 +71,12 @@ public:
   MetadataImport() = default;
   ~MetadataImport() = default;
 
-  // OsmMapOperation
   QString getDescription() const override { return "Imports metadata"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 
 private:
 
-  // MetadataOp
   void _apply() override;
 
   // process sequence functions

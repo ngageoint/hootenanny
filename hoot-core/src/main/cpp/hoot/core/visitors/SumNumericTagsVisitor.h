@@ -63,16 +63,13 @@ public:
 
   double getStat() const override { return _sum; }
 
-  QString getDescription() const override { return "Sums numeric tag values with specified keys"; }
-
   void setConfiguration(const Settings& conf) override;
 
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+  QString getDescription() const override { return "Sums numeric tag values with specified keys"; }
 
   QString getInitStatusMessage() const override { return "Summing values of numeric tags..."; }
-
   QString getCompletedStatusMessage() const override
   {
     return
