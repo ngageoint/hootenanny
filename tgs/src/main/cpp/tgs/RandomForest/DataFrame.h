@@ -297,7 +297,7 @@ namespace Tgs
     *  Checks to see if the data vectors belonging to the set of indices
     * are all of the same class
     */
-    bool isDataSetPure(const std::vector<unsigned int>& indices);
+    bool isDataSetPure(const std::vector<unsigned int>& indices) const;
 
     /**
      * Returns true if the specified column is nominal.

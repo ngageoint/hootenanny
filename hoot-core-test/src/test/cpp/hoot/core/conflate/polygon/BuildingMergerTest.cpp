@@ -99,9 +99,9 @@ public:
       }
     }
 
-    virtual QString getDescription() const {return ""; }
-    virtual QString getName() const { return ""; }
-    virtual QString getClassName() const { return ""; }
+    QString getDescription() const override {return ""; }
+    QString getName() const override { return ""; }
+    QString getClassName() const override { return ""; }
 
   private:
 
