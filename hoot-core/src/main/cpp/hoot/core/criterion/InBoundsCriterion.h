@@ -62,6 +62,7 @@ public:
    * @see ElementCriterion
    */
   bool isSatisfied(const ConstElementPtr& e) const override;
+  ElementCriterionPtr clone() override { return std::make_shared<InBoundsCriterion>(); }
 
   /**
    * @see Configurable
@@ -73,14 +74,6 @@ public:
    */
   void setOsmMap(const OsmMap* map) override;
 
-  ElementCriterionPtr clone() override { return ElementCriterionPtr(new InBoundsCriterion()); }
-
-  void setTreatWayNodesAsPartOfWays(const bool treatAsPartOfWays)
-  { _treatWayNodesAsPartOfWays = treatAsPartOfWays; }
-
-  void setMustCompletelyContain(bool mustCompletelyContain)
-  { _mustCompletelyContain = mustCompletelyContain; }
-
   QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }
   QString toString() const override { return className(); }
@@ -89,6 +82,11 @@ public:
    */
   QString getDescription() const override
   { return "Determines whether an element is within a specified geospatial bounds"; }
+
+  void setTreatWayNodesAsPartOfWays(const bool treatAsPartOfWays)
+  { _treatWayNodesAsPartOfWays = treatAsPartOfWays; }
+  void setMustCompletelyContain(bool mustCompletelyContain)
+  { _mustCompletelyContain = mustCompletelyContain; }
 
 private:
 

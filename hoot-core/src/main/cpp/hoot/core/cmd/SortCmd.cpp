@@ -126,7 +126,8 @@ private:
     reader->open(input);
     reader->initializePartial();
 
-    std::shared_ptr<ExternalMergeElementSorter> sorted(new ExternalMergeElementSorter());
+    std::shared_ptr<ExternalMergeElementSorter> sorted =
+      std::make_shared<ExternalMergeElementSorter>();
     sorted->sort(std::dynamic_pointer_cast<ElementInputStream>(reader));
 
     reader->finalizePartial();

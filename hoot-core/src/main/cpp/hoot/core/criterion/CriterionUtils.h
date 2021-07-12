@@ -104,8 +104,7 @@ public:
     }
 
     const long count =
-      (long)FilteredVisitor::getStat(
-        crit, ConstElementVisitorPtr(new ElementCountVisitor()), map);
+      (long)FilteredVisitor::getStat(crit, std::make_shared<ElementCountVisitor>(), map);
     LOG_VART(count);
     return exactCount ? (count == minCount) : (count >= minCount);
   }
