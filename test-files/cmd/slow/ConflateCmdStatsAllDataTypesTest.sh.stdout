@@ -1,5 +1,5 @@
-17:45:34.914 STATUS .../cpp/hoot/core/cmd/DiffCmd.cpp( 114) Comparing ...st/all-data-types-out.osm and ...st/all-data-types-out.osm...
-17:45:34.928 STATUS .../cpp/hoot/core/cmd/DiffCmd.cpp( 149) Map difference calculated in 00:00 total.
+19:08:37.105 STATUS .../cpp/hoot/core/cmd/DiffCmd.cpp( 118) Comparing ...st/all-data-types-out.osm and ...st/all-data-types-out.osm...
+19:08:37.116 STATUS .../cpp/hoot/core/cmd/DiffCmd.cpp( 153) Map difference calculated in 00:00 total.
 stats = (stat) OR (input map 1 stat) (input map 2 stat) (output map stat)
 Nodes	117	116	142	
 Ways	14	12	16	
@@ -158,23 +158,23 @@ Percentage of Polygons Marked for Review	0	0	0
 Percentage of Unmatched Polygons From Map 1	100	0	46.15384615384615	
 Percentage of Unmatched Polygons From Map 2	0	100	23.07692307692308	
 Percentage of Unmatched Polygons	100	100	69.23076923076923	
-Areas	0	0	0	
+Areas	0	0	2	
 Conflatable Areas	0	0	0	
 Conflated Areas	0	0	0	
 Areas Marked for Review	0	0	0	
 Area Reviews to be Made	0	0	0	
-Unmatched Areas	0	0	0	
+Unmatched Areas	0	0	2	
 Unmatched Areas From Map 1	0	0	0	
-Unmatched Areas From Map 2	0	0	0	
-Total Square Meters of Areas	0	0	0	
+Unmatched Areas From Map 2	0	0	2	
+Total Square Meters of Areas	0	0	161.1001296314614	
 Square Meters of Conflated Areas	0	0	0	
 Square Meters of Unmatched Areas From Map 1	0	0	0	
-Square Meters of Unmatched Areas From Map 2	0	0	0	
+Square Meters of Unmatched Areas From Map 2	0	0	709.8419141394307	
 Percentage of Areas Conflated	0	0	0	
 Percentage of Areas Marked for Review	0	0	0	
 Percentage of Unmatched Areas From Map 1	0	0	0	
-Percentage of Unmatched Areas From Map 2	0	0	0	
-Percentage of Unmatched Areas	0	0	0	
+Percentage of Unmatched Areas From Map 2	0	0	100	
+Percentage of Unmatched Areas	0	0	100	
 Railways	0	0	0	
 Conflatable Railways	0	0	0	
 Conflated Railways	0	0	0	
@@ -274,10 +274,10 @@ Percentage of Area of Map 2 Polygons Not Matched With Map 1 Polygons			358.33780
 Percentage of Length of Map 1 Lines Matched With Map 2 Lines			94.06469567813517	
 Percentage of Length of Map 1 Lines Not Matched With Map 2 Lines			5.935273565020475	
 Percentage of Length of Map 2 Lines Not Matched With Map 1 Lines			0	
-Calculate Stats for Input 1 Time (sec)				4.238797903060913
-Calculate Stats for Input 2 Time (sec)				0.4116981029510498
-Apply Pre-Conflate Ops Time (sec)				0.007838010787963867
-Apply Post-Conflate Ops Time (sec)				0.004173994064331055
-Calculate Stats for Output Time (sec)				0.5036461353302002
+Calculate Stats for Input 1 Time (sec)				4.153403043746948
+Calculate Stats for Input 2 Time (sec)				0.4023950099945068
+Apply Pre-Conflate Ops Time (sec)				0.0136711597442627
+Apply Post-Conflate Ops Time (sec)				0.003762006759643555
+Calculate Stats for Output Time (sec)				0.4040729999542236
 
-17:45:34.510 STATUS ...pp/hoot/core/util/Progress.cpp(  86) Conflate (100%): Conflation job completed in 00:06 for reference map: ...late/unified/AllDataTypesA.osm and secondary map: ...late/unified/AllDataTypesB.osm and written to output: ...atsTest/all-data-types-out.osm
+19:08:36.734 STATUS ...pp/hoot/core/util/Progress.cpp(  86) Conflate (100%): Conflation job completed in 00:05 for reference map: ...late/unified/AllDataTypesA.osm and secondary map: ...late/unified/AllDataTypesB.osm and written to output: ...atsTest/all-data-types-out.osm

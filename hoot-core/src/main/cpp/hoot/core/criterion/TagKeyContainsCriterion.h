@@ -49,19 +49,18 @@ public:
   ~TagKeyContainsCriterion() = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
-
-  ElementCriterionPtr clone() override { return ElementCriterionPtr(new TagKeyContainsCriterion()); }
+  ElementCriterionPtr clone() override { return std::make_shared<TagKeyContainsCriterion>(); }
 
   void setConfiguration(const Settings& conf) override;
-
-  void setText(const QString& text) { _text = text; }
-  void setCaseSensitive(bool caseSens) { _caseSensitive = caseSens; }
 
   QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }
   QString toString() const override { return className(); }
   QString getDescription() const override
   { return "Identifies elements which have a tag key containing specified text"; }
+
+  void setText(const QString& text) { _text = text; }
+  void setCaseSensitive(bool caseSens) { _caseSensitive = caseSens; }
 
 private:
 

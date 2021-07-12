@@ -47,15 +47,15 @@ HOOT_FACTORY_REGISTER(ElementCriterion, TagAdvancedCriterion)
 TagAdvancedCriterion::TagAdvancedCriterion() :
 // not seeing a need to use anything other than case-insensitive here, but can make it
 // configurable if needed
-_keyMatcher(new QRegExp("*", Qt::CaseInsensitive, QRegExp::Wildcard)),
-_valueMatcher(new QRegExp("*", Qt::CaseInsensitive, QRegExp::Wildcard))
+_keyMatcher(std::make_shared<QRegExp>("*", Qt::CaseInsensitive, QRegExp::Wildcard)),
+_valueMatcher(std::make_shared<QRegExp>("*", Qt::CaseInsensitive, QRegExp::Wildcard))
 {
   setConfiguration(conf());
 }
 
 TagAdvancedCriterion::TagAdvancedCriterion(const QString& filterJsonStringOrPath) :
-_keyMatcher(new QRegExp("*", Qt::CaseInsensitive, QRegExp::Wildcard)),
-_valueMatcher(new QRegExp("*", Qt::CaseInsensitive, QRegExp::Wildcard))
+_keyMatcher(std::make_shared<QRegExp>("*", Qt::CaseInsensitive, QRegExp::Wildcard)),
+_valueMatcher(std::make_shared<QRegExp>("*", Qt::CaseInsensitive, QRegExp::Wildcard))
 {
   _parseFilterString(filterJsonStringOrPath);
 }

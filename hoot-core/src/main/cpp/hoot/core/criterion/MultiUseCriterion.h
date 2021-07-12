@@ -46,8 +46,7 @@ public:
   ~MultiUseCriterion() = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
-
-  ElementCriterionPtr clone() override { return ElementCriterionPtr(new MultiUseCriterion()); }
+  ElementCriterionPtr clone() override { return std::make_shared<MultiUseCriterion>(); }
 
   QString getDescription() const override { return "Identifies features with multiple purposes"; }
   QString getName() const override { return className(); }

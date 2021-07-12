@@ -46,9 +46,7 @@ public:
   ~ReviewRelationCriterion() = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
-
-  ElementCriterionPtr clone() override
-  { return ElementCriterionPtr(new ReviewRelationCriterion()); }
+  ElementCriterionPtr clone() override { return std::make_shared<ReviewRelationCriterion>(); }
 
   QString getDescription() const override
   { return "Identifies review relations created during conflation"; }

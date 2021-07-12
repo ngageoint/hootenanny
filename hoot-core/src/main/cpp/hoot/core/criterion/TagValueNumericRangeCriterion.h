@@ -51,9 +51,7 @@ public:
   ~TagValueNumericRangeCriterion() = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
-
-  ElementCriterionPtr clone() override
-  { return ElementCriterionPtr(new TagValueNumericRangeCriterion()); }
+  ElementCriterionPtr clone() override { return std::make_shared<TagValueNumericRangeCriterion>(); }
 
   void setConfiguration(const Settings& conf) override;
 

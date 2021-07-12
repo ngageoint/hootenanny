@@ -46,9 +46,7 @@ public:
   ~MultiUseBuildingCriterion() = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
-
-  ElementCriterionPtr clone() override
-  { return ElementCriterionPtr(new MultiUseBuildingCriterion()); }
+  ElementCriterionPtr clone() override { return std::shared_ptr<MultiUseBuildingCriterion>(); }
 
   GeometryType getGeometryType() const override { return GeometryType::Polygon; }
 
