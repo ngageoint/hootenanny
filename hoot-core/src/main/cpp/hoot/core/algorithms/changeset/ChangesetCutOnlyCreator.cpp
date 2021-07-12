@@ -608,19 +608,17 @@ QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>
   // The maps will get set on the crits here that need them by the RemoveElementsVisitor later on,
   // right before they are needed.
 
-  ElementCriterionPtr pointCrit = std::make_shared<PointCriterion>();
-  std::shared_ptr<RelationWithPointMembersCriterion> relationPointCrit(
-    new RelationWithPointMembersCriterion());
+  std::shared_ptr<RelationWithPointMembersCriterion> relationPointCrit =
+    std::make_shared<RelationWithPointMembersCriterion>();
   relationPointCrit->setAllowMixedChildren(false);
-  OrCriterionPtr pointOr(new OrCriterion(pointCrit, relationPointCrit));
-  featureFilters[GeometryTypeCriterion::GeometryType::Point] = pointOr;
+  featureFilters[GeometryTypeCriterion::GeometryType::Point] =
+    std::make_shared<OrCriterion>(std::make_shared<PointCriterion>(), relationPointCrit);
 
-  ElementCriterionPtr lineCrit = std::make_shared<LinearCriterion>();
-  std::shared_ptr<RelationWithLinearMembersCriterion> relationLinearCrit(
-    new RelationWithLinearMembersCriterion());
+  std::shared_ptr<RelationWithLinearMembersCriterion> relationLinearCrit =
+    std::make_shared<RelationWithLinearMembersCriterion>();
   relationLinearCrit->setAllowMixedChildren(true);
-  OrCriterionPtr lineOr(new OrCriterion(lineCrit, relationLinearCrit));
-  featureFilters[GeometryTypeCriterion::GeometryType::Line] = lineOr;
+  featureFilters[GeometryTypeCriterion::GeometryType::Line] =
+    std::make_shared<OrCriterion>(std::make_shared<LinearCriterion>(), relationLinearCrit);
 
   // Poly crit has been converted over to encapsulate RelationWithGeometryMembersCriterion, while
   // the other types have not yet (#4151).

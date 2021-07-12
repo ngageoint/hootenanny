@@ -55,9 +55,8 @@ public:
   ~DistanceNodeCriterion() = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
-
   ElementCriterionPtr clone() override
-  { return ElementCriterionPtr(new DistanceNodeCriterion(_center, _distance)); }
+  { return std::make_shared<DistanceNodeCriterion>(_center, _distance); }
 
   void setConfiguration(const Settings& s) override;
 

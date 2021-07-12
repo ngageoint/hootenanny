@@ -50,10 +50,9 @@ public:
 
   bool isSatisfied(const ConstElementPtr& e) const override;
   bool isSatisfied(const Tags& tags, const ElementType& elementType) const;
+  ElementCriterionPtr clone() override { return std::make_shared<AreaCriterion>(_map); }
 
   GeometryType getGeometryType() const override { return GeometryType::Polygon; }
-
-  ElementCriterionPtr clone() override { return ElementCriterionPtr(new AreaCriterion(_map)); }
 
   QString getDescription() const override { return "Identifies areas"; }
   QString getName() const override { return className(); }

@@ -59,8 +59,7 @@ public:
     LOG_VART(result);
     return result;
   }
-
-  ElementCriterionPtr clone() override { return ElementCriterionPtr(new ArbitraryCriterion(_f)); }
+  ElementCriterionPtr clone() override { return std::make_shared<ArbitraryCriterion>(_f); }
 
   QString getDescription() const override { return ""; }
   QString getName() const override { return className(); }

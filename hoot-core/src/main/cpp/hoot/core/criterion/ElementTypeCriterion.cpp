@@ -33,6 +33,11 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, ElementTypeCriterion)
 
+ElementTypeCriterion::ElementTypeCriterion(ElementType::Type eType) :
+_elementType(eType)
+{
+}
+
 bool ElementTypeCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   return e->getElementType() == _elementType;

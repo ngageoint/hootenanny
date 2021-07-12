@@ -47,7 +47,7 @@ public:
   ~RelationWithPowerLineMembersCriterion() = default;
 
   ElementCriterionPtr clone() override
-  { return ElementCriterionPtr(new RelationWithPowerLineMembersCriterion()); }
+  { return std::make_shared<RelationWithPowerLineMembersCriterion>(); }
 
   QString getCriterion() const override;
 
@@ -56,8 +56,7 @@ public:
   QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }
   QString toString() const override { return className(); }
-  QString getDescription() const override
-  { return "Identifies relations with power line members"; }
+  QString getDescription() const override { return "Identifies relations with power line members"; }
 };
 
 }

@@ -44,25 +44,24 @@ public:
   static QString className() { return "hoot::AttributeValueCriterion"; }
 
   AttributeValueCriterion();
-  AttributeValueCriterion(const ElementAttributeType& attributeType,
-                          const QString& comparisonVal,
-                          const TextComparisonType& comparisonType);
-  AttributeValueCriterion(const ElementAttributeType& attributeType,
-                          const double comparisonVal,
-                          const NumericComparisonType& comparisonType);
+  AttributeValueCriterion(
+    const ElementAttributeType& attributeType, const QString& comparisonVal,
+    const TextComparisonType& comparisonType);
+  AttributeValueCriterion(
+    const ElementAttributeType& attributeType, const double comparisonVal,
+    const NumericComparisonType& comparisonType);
   ~AttributeValueCriterion() = default;
 
   /**
    * @see ElementCriterion
    */
   bool isSatisfied(const ConstElementPtr& e) const override;
+  ElementCriterionPtr clone() override { return std::make_shared<AttributeValueCriterion>(); }
 
   /**
    * @see Configurable
    */
   void setConfiguration(const Settings& conf) override;
-
-  ElementCriterionPtr clone() override { return ElementCriterionPtr(new AttributeValueCriterion()); }
 
   /**
    * @see ApiEntityInfo
@@ -74,7 +73,7 @@ public:
 
 private:
 
-  static int logWarnCount;
+  static int _logWarnCount;
 
   // attribute to examine
   ElementAttributeType _attributeType;

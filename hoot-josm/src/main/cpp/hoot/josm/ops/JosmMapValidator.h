@@ -50,19 +50,23 @@ public:
   virtual ~JosmMapValidator() = default;
 
   /**
-   * @see ApiEntityInfo
-   */
-  virtual QString getDescription() const { return "Validates a map using JOSM"; }
-
-  /**
    * @see OperationStatus
    */
   virtual QString getInitStatusMessage() const
   { return "Validating elements with JOSM..."; }
 
-  virtual QString getName() const { return className(); }
-
-  virtual QString getClassName() const override { return className(); }
+  /**
+   * @see ApiEntityInfo
+   */
+  QString getName() const override { return className(); }
+  /**
+   * @see ApiEntityInfo
+   */
+  QString getClassName() const override { return className(); }
+  /**
+   * @see ApiEntityInfo
+   */
+  QString getDescription() const override { return "Validates a map using JOSM"; }
 
 protected:
 

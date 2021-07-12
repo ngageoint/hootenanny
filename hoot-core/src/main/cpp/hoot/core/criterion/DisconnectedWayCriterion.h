@@ -52,14 +52,12 @@ public:
    * @see ElementCriterion
    */
   bool isSatisfied(const ConstElementPtr& e) const override;
+  ElementCriterionPtr clone() override { return std::make_shared<DisconnectedWayCriterion>(_map); }
 
   /**
    * @see ConstOsmMapConsumer
    */
   void setOsmMap(const OsmMap* map) override { _map = map->shared_from_this(); }
-
-  ElementCriterionPtr clone() override
-  { return ElementCriterionPtr(new DisconnectedWayCriterion(_map)); }
 
   QString getDescription() const override
   { return "Identifies ways that are connected to no other ways"; }

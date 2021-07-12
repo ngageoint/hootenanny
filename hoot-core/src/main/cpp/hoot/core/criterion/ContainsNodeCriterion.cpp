@@ -38,6 +38,11 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, ContainsNodeCriterion)
 
+ContainsNodeCriterion::ContainsNodeCriterion(long nodeId) :
+_nodeId(nodeId)
+{
+}
+
 void ContainsNodeCriterion::setConfiguration(const Settings& s)
 {
   ConfigOptions opts(s);

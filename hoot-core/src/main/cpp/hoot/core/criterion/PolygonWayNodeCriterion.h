@@ -45,8 +45,7 @@ public:
 
   void setOsmMap(const OsmMap* map) override;
 
-  ElementCriterionPtr clone() override
-  { return ElementCriterionPtr(new PolygonWayNodeCriterion(_map)); }
+  ElementCriterionPtr clone() override { return std::make_shared<PolygonWayNodeCriterion>(_map); }
 
   QString getDescription() const override { return "Identifies nodes belonging to polygons"; }
   QString getName() const override { return className(); }

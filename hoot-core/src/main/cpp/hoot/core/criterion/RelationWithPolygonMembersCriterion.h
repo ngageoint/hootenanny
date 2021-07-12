@@ -35,7 +35,7 @@ namespace hoot
 {
 
 /**
- * Identifies relations with children having polygon geometries
+ * Identifies relations with members that have polygon geometries
  */
 class RelationWithPolygonMembersCriterion : public RelationWithMembersOfTypeCriterion
 {
@@ -48,7 +48,7 @@ public:
   ~RelationWithPolygonMembersCriterion() = default;
 
   ElementCriterionPtr clone() override
-  { return ElementCriterionPtr(new RelationWithPolygonMembersCriterion(_map)); }
+  { return std::make_shared<RelationWithPolygonMembersCriterion>(_map); }
 
   QString getCriterion() const override;
 

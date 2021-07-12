@@ -86,9 +86,6 @@ public:
     return _c;
   }
 
-  virtual QString getName() const { return "Fake Match"; }
-  virtual QString getClassName() const { return ""; }
-
   virtual double getProbability() const { return _p; }
 
   virtual bool isConflicting(const ConstMatchPtr& /*other*/, const ConstOsmMapPtr& /*map*/,
@@ -113,7 +110,9 @@ public:
 
   MatchType getType() const { return _threshold->getType(*this); }
 
-  virtual QString getDescription() const { return ""; }
+  QString getDescription() const override { return ""; }
+  QString getName() const override { return "Fake Match"; }
+  QString getClassName() const override { return ""; }
 
 private:
 

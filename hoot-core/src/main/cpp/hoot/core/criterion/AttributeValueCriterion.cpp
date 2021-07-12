@@ -33,7 +33,7 @@
 namespace hoot
 {
 
-int AttributeValueCriterion::logWarnCount = 0;
+int AttributeValueCriterion::_logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(ElementCriterion, AttributeValueCriterion)
 
@@ -140,15 +140,15 @@ bool AttributeValueCriterion::_satisfiesComparison(const QVariant& val) const
 
     if (!ok)
     {
-      if (logWarnCount < Log::getWarnMessageLimit())
+      if (_logWarnCount < Log::getWarnMessageLimit())
       {
         LOG_WARN("Unable to convert " << val.toString() << " to a numeric value.");
       }
-      else if (logWarnCount == Log::getWarnMessageLimit())
+      else if (_logWarnCount == Log::getWarnMessageLimit())
       {
         LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
       }
-      logWarnCount++;
+      _logWarnCount++;
       return false;
     }
 

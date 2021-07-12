@@ -51,15 +51,12 @@ public:
   ~PointCriterion() = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
-
-  ElementCriterionPtr clone() override { return ElementCriterionPtr(new PointCriterion(_map)); }
-
-  GeometryType getGeometryType() const override
-  { return GeometryType::Point; }
+  ElementCriterionPtr clone() override { return std::make_shared<PointCriterion>(_map); }
 
   void setOsmMap(const OsmMap* map) override;
 
   bool supportsSpecificConflation() const override { return false; }
+  GeometryType getGeometryType() const override { return GeometryType::Point; }
 
   QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }
