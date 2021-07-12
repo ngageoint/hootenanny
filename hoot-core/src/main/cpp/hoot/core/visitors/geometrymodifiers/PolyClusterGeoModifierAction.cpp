@@ -328,11 +328,7 @@ void PolyClusterGeoModifierAction::_createClusterPolygons()
 
     foreach (long wayId, cluster)
     {
-<<<<<<< HEAD
       std::unique_ptr<CoordinateSequence> pCoords = _polyByWayId[wayId]->getCoordinates();
-=======
-      const CoordinateSequence* pCoords = _polyByWayId[wayId]->getCoordinates();
->>>>>>> origin/master
 
       CoordinateExt last;
       bool hasLast = false;
