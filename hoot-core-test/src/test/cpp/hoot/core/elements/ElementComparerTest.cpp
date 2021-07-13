@@ -208,11 +208,11 @@ public:
   {
     WayPtr way1(new Way(Status::Unknown1, 1, 15.0));
 
-    RelationPtr relation1(new Relation(Status::Unknown1, 1, 15.0, "type1"));
+    RelationPtr relation1 = std::make_shared<Relation>(Status::Unknown1, 1, 15.0, "type1");
     relation1->setTag("key1", "value1");
     relation1->addElement("role1", way1);
 
-    RelationPtr relation2(new Relation(Status::Unknown1, 1, 15.0, "type1"));
+    RelationPtr relation2 = std::make_shared<Relation>(Status::Unknown1, 1, 15.0, "type1");
     relation2->setTag("key1", "value1");
     relation2->addElement("role1", way1);
 
@@ -223,11 +223,11 @@ public:
   {
     WayPtr way1(new Way(Status::Unknown1, 1, 15.0));
 
-    RelationPtr relation1(new Relation(Status::Unknown1, 1, 15.0, "type1"));
+    RelationPtr relation1 = std::make_shared<Relation>(Status::Unknown1, 1, 15.0, "type1");
     relation1->setTag("key1", "value1");
     relation1->addElement("role1", way1);
 
-    RelationPtr relation2(new Relation(Status::Unknown1, 2, 15.0, "type1"));
+    RelationPtr relation2 = std::make_shared<Relation>(Status::Unknown1, 2, 15.0, "type1");
     relation2->setTag("key1", "value1");
     relation2->addElement("role1", way1);
 
@@ -238,11 +238,11 @@ public:
   {
     WayPtr way1(new Way(Status::Unknown1, 1, 15.0));
 
-    RelationPtr relation1(new Relation(Status::Unknown1, 1, 15.0, "type1"));
+    RelationPtr relation1 = std::make_shared<Relation>(Status::Unknown1, 1, 15.0, "type1");
     relation1->setTag("key1", "value1");
     relation1->addElement("role1", way1);
 
-    RelationPtr relation2(new Relation(Status::Unknown1, 1, 15.0, "type2"));
+    RelationPtr relation2 = std::make_shared<Relation>(Status::Unknown1, 1, 15.0, "type2");
     relation2->setTag("key1", "value1");
     relation2->addElement("role1", way1);
 
@@ -254,11 +254,11 @@ public:
     WayPtr way1(new Way(Status::Unknown1, 1, 15.0));
     WayPtr way2(new Way(Status::Unknown1, 2, 15.0));
 
-    RelationPtr relation1(new Relation(Status::Unknown1, 1, 15.0, "type1"));
+    RelationPtr relation1 = std::make_shared<Relation>(Status::Unknown1, 1, 15.0, "type1");
     relation1->setTag("key1", "value1");
     relation1->addElement("role1", way1);
 
-    RelationPtr relation2(new Relation(Status::Unknown1, 1, 15.0, "type1"));
+    RelationPtr relation2 = std::make_shared<Relation>(Status::Unknown1, 1, 15.0, "type1");
     relation2->setTag("key1", "value1");
     relation2->addElement("role1", way2);
 
@@ -269,11 +269,11 @@ public:
   {
     WayPtr way1(new Way(Status::Unknown1, 1, 15.0));
 
-    RelationPtr relation1(new Relation(Status::Unknown1, 1, 15.0, "type1"));
+    RelationPtr relation1 = std::make_shared<Relation>(Status::Unknown1, 1, 15.0, "type1");
     relation1->setTag("key1", "value1");
     relation1->addElement("role1", way1);
 
-    RelationPtr relation2(new Relation(Status::Unknown1, 1, 15.0, "type1"));
+    RelationPtr relation2 = std::make_shared<Relation>(Status::Unknown1, 1, 15.0, "type1");
     relation2->setTag("key1", "value1");
     relation2->addElement("role2", way1);
 
@@ -284,11 +284,11 @@ public:
   {
     WayPtr way1(new Way(Status::Unknown1, 1, 15.0));
 
-    RelationPtr relation1(new Relation(Status::Unknown1, 1, 15.0, "type1"));
+    RelationPtr relation1 = std::make_shared<Relation>(Status::Unknown1, 1, 15.0, "type1");
     relation1->setTag("key1", "value1");
     relation1->addElement("role1", way1);
 
-    RelationPtr relation2(new Relation(Status::Unknown1, 1, 15.0, "type1"));
+    RelationPtr relation2 = std::make_shared<Relation>(Status::Unknown1, 1, 15.0, "type1");
     relation2->setTag("key1", "value2");
     relation2->addElement("role1", way1);
 

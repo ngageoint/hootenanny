@@ -112,7 +112,7 @@ public:
     OsmPbfWriter writer;
 
     OsmMapPtr map = std::make_shared<OsmMap>();
-    RelationPtr r(new Relation(Status::Unknown1, 42, 1.7, "foo"));
+    RelationPtr r = std::make_shared<Relation>(Status::Unknown1, 42, 1.7, "foo");
     r->addElement("s", ElementId::node(1));
     r->addElement("t", ElementId::node(2));
     r->addElement("u", ElementId::node(3));

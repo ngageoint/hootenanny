@@ -330,7 +330,7 @@ public:
     way2->getTags().appendValue("hoot:test", "test2");
     elements.append(way2);
 
-    RelationPtr relation1(new Relation(Status::Unknown1, 15, 15));
+    RelationPtr relation1 = std::make_shared<Relation>(Status::Unknown1, 15, 15);
     map->addRelation(relation1);
     relation1->getTags().appendValue("hoot:test", "test");
 
@@ -360,7 +360,7 @@ public:
     way2->getTags().appendValue("hoot:test", "test4");
     map->addWay(way2);
 
-    RelationPtr relation1(new Relation(Status::Unknown1, 15, 15));
+    RelationPtr relation1 = std::make_shared<Relation>(Status::Unknown1, 15, 15);
     map->addRelation(relation1);
     relation1->getTags().appendValue("hoot:test", "test");
 
@@ -397,7 +397,7 @@ public:
     map->addWay(way2);
 
 
-    RelationPtr relation1(new Relation(Status::Unknown1, 15, 15));
+    RelationPtr relation1 = std::make_shared<Relation>(Status::Unknown1, 15, 15);
     map->addRelation(relation1);
     relation1->getTags().appendValue("hoot:test", "test");
     relation1->getTags().appendValue("name", "some relation");

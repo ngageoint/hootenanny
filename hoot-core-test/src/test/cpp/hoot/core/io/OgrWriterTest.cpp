@@ -112,7 +112,8 @@ public:
     w5->addNode(w5->getNodeId(0));
     map->addWay(w5);
 
-    RelationPtr r1(new Relation(Status::Unknown1, 1, 15.0, MetadataTags::RelationMultiPolygon()));
+    RelationPtr r1 =
+      std::make_shared<Relation>(Status::Unknown1, 1, 15.0, MetadataTags::RelationMultiPolygon());
     r1->setTag("building", "yes");
     r1->setTag("name", "r1");
     r1->addElement(MetadataTags::RoleOuter(), w4->getElementId());
@@ -158,7 +159,8 @@ public:
   {
     OsmMapPtr map = createTestMap();
 
-    RelationPtr r2(new Relation(Status::Unknown1, 2, 15.0, MetadataTags::RelationMultiPolygon()));
+    RelationPtr r2 =
+      std::make_shared<Relation>(Status::Unknown1, 2, 15.0, MetadataTags::RelationMultiPolygon());
     r2->setTag("building", "yes");
     r2->setTag("name", "r2");
     r2->addElement(MetadataTags::RoleOuter(), ElementId(ElementType::Way, 1));

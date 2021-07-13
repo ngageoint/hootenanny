@@ -81,19 +81,19 @@ public:
     way3->setNodes(nodeIds);
     map->addWay(way3);
 
-    RelationPtr relation1(new Relation(Status::Unknown1, 1, 15.0));
+    RelationPtr relation1 = std::make_shared<Relation>(Status::Unknown1, 1, 15.0);
     relation1->addElement("role1", node1);
     map->addRelation(relation1);
 
-    RelationPtr relation2(new Relation(Status::Unknown1, 2, 15.0));
+    RelationPtr relation2 = std::make_shared<Relation>(Status::Unknown1, 2, 15.0);
     relation2->addElement("role1", node2);
     map->addRelation(relation2);
 
-    RelationPtr relation3(new Relation(Status::Unknown1, 3, 15.0));
+    RelationPtr relation3 = std::make_shared<Relation>(Status::Unknown1, 3, 15.0);
     relation3->addElement("role1", node3);
     map->addRelation(relation3);
 
-    RelationPtr relation4(new Relation(Status::Unknown1, 4, 15.0));
+    RelationPtr relation4 = std::make_shared<Relation>(Status::Unknown1, 4, 15.0);
     relation4->addElement("role1", node1);
     relation4->addElement("role1", node1);
     relation4->addElement("role2", node2);

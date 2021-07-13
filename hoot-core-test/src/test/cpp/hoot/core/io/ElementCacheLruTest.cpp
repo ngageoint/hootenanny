@@ -141,7 +141,7 @@ public:
     CPPUNIT_ASSERT_EQUAL( myCache.size(), static_cast<unsigned long>(2) );
 
     // Add new relation
-    ConstElementPtr newRelation(new Relation(status, 20, circularError));
+    ConstElementPtr newRelation = std::make_shared<Relation>(status, 20, circularError);
     myCache.addElement(newRelation);
     CPPUNIT_ASSERT_EQUAL( myCache.hasMoreElements(), true );
     CPPUNIT_ASSERT_EQUAL( myCache.isEmpty(), false );
@@ -279,17 +279,17 @@ public:
     // Add first relation
     Status status;
     Meters circularError(4.0);
-    ConstElementPtr newRelation1(new Relation(status, 1, circularError));
+    ConstElementPtr newRelation1 = std::make_shared<const Relation>(status, 1, circularError);
     myCache.addElement(newRelation1);
     CPPUNIT_ASSERT_EQUAL( myCache.size(), static_cast<unsigned long>(1) );
 
     // Add second relation
-    ConstElementPtr newRelation2 = ConstElementPtr(new Relation(status, 2, circularError));
+    ConstElementPtr newRelation2 = std::make_shared<const Relation>(status, 2, circularError);
     myCache.addElement(newRelation2);
     CPPUNIT_ASSERT_EQUAL( myCache.size(), static_cast<unsigned long>(2) );
 
     // Add third relation -- force first relation out
-    ConstElementPtr newRelation3 = ConstElementPtr(new Relation(status, 3, circularError));
+    ConstElementPtr newRelation3 = std::make_shared<const Relation>(status, 3, circularError);
     myCache.addElement(newRelation3);
     CPPUNIT_ASSERT_EQUAL( myCache.size(), static_cast<unsigned long>(2) );
 

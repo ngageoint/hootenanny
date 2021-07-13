@@ -272,7 +272,8 @@ std::shared_ptr<OsmMap> ServicesDbTestUtils::createTestMap1()
   w5->addNode(w5->getNodeId(0));
   map->addWay(w5);
 
-  std::shared_ptr<Relation> r1(new Relation(Status::Unknown1, 1, 15.0, "multipolygon"));
+  std::shared_ptr<Relation> r1 =
+    std::make_shared<Relation>(Status::Unknown1, 1, 15.0, "multipolygon");
   r1->setTag("building", "yes");
   r1->setTag("name", "r1");
   r1->addElement("outer", w4->getElementId());
@@ -314,12 +315,13 @@ OsmMapPtr ServicesDbTestUtils::createServiceTestMap()
   w3->addNode(2);
   map->addWay(w3);
 
-  RelationPtr r1(new Relation(Status::Unknown1, 1, 18.1, MetadataTags::RelationCollection()));
+  RelationPtr r1 =
+    std::make_shared<Relation>(Status::Unknown1, 1, 18.1, MetadataTags::RelationCollection());
   r1->addElement("n1", n1->getElementId());
   r1->addElement("w1", w1->getElementId());
   r1->setTag("note", "r1");
   map->addRelation(r1);
-  RelationPtr r2(new Relation(Status::Unknown1, 2, -1.0));
+  RelationPtr r2 = std::make_shared<Relation>(Status::Unknown1, 2, -1.0);
   r2->addElement("n2", n2->getElementId());
   map->addRelation(r2);
 

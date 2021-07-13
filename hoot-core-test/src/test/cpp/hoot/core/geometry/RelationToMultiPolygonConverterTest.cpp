@@ -76,7 +76,8 @@ public:
   void runBadOuterRingsTest()
   {
     OsmMapPtr map = std::make_shared<OsmMap>();
-    RelationPtr uut(new Relation(Status::Unknown1, 1, 10, MetadataTags::RelationMultiPolygon()));
+    RelationPtr uut =
+      std::make_shared<Relation>(Status::Unknown1, 1, 10, MetadataTags::RelationMultiPolygon());
     WayPtr w;
     // way #1
     w.reset(new Way(Status::Unknown1, map->createNextWayId(), 10));
@@ -107,7 +108,8 @@ public:
   void runMultiPolygonExample1Test()
   {
     OsmMapPtr map = std::make_shared<OsmMap>();
-    RelationPtr uut(new Relation(Status::Unknown1, 1, 10, MetadataTags::RelationMultiPolygon()));
+    RelationPtr uut =
+      std::make_shared<Relation>(Status::Unknown1, 1, 10, MetadataTags::RelationMultiPolygon());
     WayPtr w;
     w.reset(new Way(Status::Unknown1, map->createNextWayId(), 10));
     map->addWay(w);
@@ -141,7 +143,8 @@ public:
   void runMultiPolygonExample7Test()
   {
     OsmMapPtr map = std::make_shared<OsmMap>();
-    RelationPtr uut(new Relation(Status::Unknown1, 1, 10, MetadataTags::RelationMultiPolygon()));
+    RelationPtr uut =
+      std::make_shared<Relation>(Status::Unknown1, 1, 10, MetadataTags::RelationMultiPolygon());
     WayPtr w;
     w.reset(new Way(Status::Unknown1, map->createNextWayId(), 10));
     map->addWay(w);
@@ -184,7 +187,8 @@ public:
   void runMultipleWaysFormingARing()
   {
     OsmMapPtr map = std::make_shared<OsmMap>();
-    RelationPtr uut(new Relation(Status::Unknown1, 1, 10, MetadataTags::RelationMultiPolygon()));
+    RelationPtr uut =
+      std::make_shared<Relation>(Status::Unknown1, 1, 10, MetadataTags::RelationMultiPolygon());
     WayPtr w;
     // way #1
     w.reset(new Way(Status::Unknown1, map->createNextWayId(), 10));

@@ -399,7 +399,7 @@ public:
     node1->getTags().set(AddressTagKeys::HOUSE_NUMBER_TAG_NAME, "123");
     node1->getTags().set(AddressTagKeys::STREET_TAG_NAME, "Main Street");
     map->addNode(node1);
-    RelationPtr relation1(new Relation(Status::Unknown2, -1, 15.0));
+    RelationPtr relation1 = std::make_shared<Relation>(Status::Unknown2, -1, 15.0);
     NodePtr node2(new Node(Status::Unknown1, -2, Coordinate(0.0, 0.0), 15.0));
     node2->getTags().set(AddressTagKeys::HOUSE_NUMBER_TAG_NAME, "123");
     node2->getTags().set(AddressTagKeys::STREET_TAG_NAME, "main street");
@@ -412,7 +412,7 @@ public:
     node4->getTags().set(AddressTagKeys::HOUSE_NUMBER_TAG_NAME, "123");
     node4->getTags().set(AddressTagKeys::STREET_TAG_NAME, "Main Street");
     map->addNode(node4);
-    RelationPtr relation3(new Relation(Status::Unknown2, -3, 15.0));
+    RelationPtr relation3 = std::make_shared<Relation>(Status::Unknown2, -3, 15.0);
     NodePtr node5(new Node(Status::Unknown1, -5, Coordinate(0.0, 0.0), 15.0));
     node5->getTags().set(AddressTagKeys::HOUSE_NUMBER_TAG_NAME, "567");
     node5->getTags().set(AddressTagKeys::STREET_TAG_NAME, "first street");
@@ -425,7 +425,7 @@ public:
     node6->getTags().set(AddressTagKeys::HOUSE_NUMBER_TAG_NAME, "567");
     node6->getTags().set(AddressTagKeys::STREET_TAG_NAME, "first street");
     map->addNode(node6);
-    RelationPtr relation4(new Relation(Status::Unknown2, -4, 15.0));
+    RelationPtr relation4 = std::make_shared<Relation>(Status::Unknown2, -4, 15.0);
     WayPtr way3(new Way(Status::Unknown2, -3, 15.0));
     way3->getTags().set(AddressTagKeys::HOUSE_NUMBER_TAG_NAME, "123");
     way3->getTags().set(AddressTagKeys::STREET_TAG_NAME, "main street");
@@ -438,7 +438,7 @@ public:
     node7->getTags().set(AddressTagKeys::HOUSE_NUMBER_TAG_NAME, "123");
     node7->getTags().set(AddressTagKeys::STREET_TAG_NAME, "main street");
     map->addNode(node7);
-    RelationPtr relation5(new Relation(Status::Unknown2, -5, 15.0));
+    RelationPtr relation5 = std::make_shared<Relation>(Status::Unknown2, -5, 15.0);
     WayPtr way4(new Way(Status::Unknown2, -4, 15.0));
     way4->getTags().set(AddressTagKeys::HOUSE_NUMBER_TAG_NAME, "123");
     way4->getTags().set(AddressTagKeys::STREET_TAG_NAME, "main street");
@@ -451,12 +451,12 @@ public:
     map->addNode(node8);
     WayPtr way5(new Way(Status::Unknown2, -5, 15.0));
     map->addWay(way5);
-    RelationPtr relation6(new Relation(Status::Unknown2, -6, 15.0));
+    RelationPtr relation6 = std::make_shared<Relation>(Status::Unknown2, -6, 15.0);
     relation6->addElement("test", way5->getElementId());
     relation6->getTags().set(AddressTagKeys::HOUSE_NUMBER_TAG_NAME, "123");
     relation6->getTags().set(AddressTagKeys::STREET_TAG_NAME, "main street");
     map->addRelation(relation5);
-    RelationPtr relation7(new Relation(Status::Unknown2, -7, 15.0));
+    RelationPtr relation7 = std::make_shared<Relation>(Status::Unknown2, -7, 15.0);
     relation7->addElement("test", node8->getElementId());
     relation7->getTags().set(AddressTagKeys::HOUSE_NUMBER_TAG_NAME, "123");
     relation7->getTags().set(AddressTagKeys::STREET_TAG_NAME, "main street");

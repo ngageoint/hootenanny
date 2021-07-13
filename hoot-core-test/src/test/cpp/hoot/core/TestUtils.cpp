@@ -200,7 +200,8 @@ RelationPtr TestUtils::createRelation(
   const OsmMapPtr& map, const QList<ElementPtr>& elements, const QString& note,
   const Status& status, const Meters circularError, const Tags& tags)
 {
-  RelationPtr relation(new Relation(status, map->createNextRelationId(), circularError));
+  RelationPtr relation =
+    std::make_shared<Relation>(status, map->createNextRelationId(), circularError);
   foreach (ElementPtr element, elements)
   {
     map->addElement(element);
@@ -219,7 +220,8 @@ RelationPtr TestUtils::createRelation(
   const OsmMapPtr& map, const QList<ElementId>& elementIds, const QString& note,
   const Status& status, const Meters circularError, const Tags& tags)
 {
-  RelationPtr relation(new Relation(status, map->createNextRelationId(), circularError));
+  RelationPtr relation =
+    std::make_shared<Relation>(status, map->createNextRelationId(), circularError);
   foreach (ElementId elementId, elementIds)
   {
     if (!map->containsElement(elementId))

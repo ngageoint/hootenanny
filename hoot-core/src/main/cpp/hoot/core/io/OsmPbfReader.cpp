@@ -1370,7 +1370,7 @@ std::shared_ptr<Element> OsmPbfReader::readNextElement()
   }
   else if (_partialRelationsRead < int(_map->getRelations().size()))
   {
-    element.reset(new Relation(*_relationsItr->second.get()));
+    element = std::make_shared<Relation>(*_relationsItr->second.get());
     ++_relationsItr;
     _partialRelationsRead++;
   }

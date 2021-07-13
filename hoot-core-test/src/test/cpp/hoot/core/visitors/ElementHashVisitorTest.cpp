@@ -139,7 +139,7 @@ public:
     way->addNode(n1->getId());
     way->addNode(n2->getId());
     map->addWay(way);
-    RelationPtr relation(new Relation(Status::Unknown1, -1, 15, "route"));
+    RelationPtr relation = std::make_shared<Relation>(Status::Unknown1, -1, 15, "route");
     relation->addElement("test1", n1->getElementId());
     relation->addElement("test1", n2->getElementId());
     relation->addElement("test2", way->getElementId());

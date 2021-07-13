@@ -64,7 +64,7 @@ public:
 
     for (long rid = 1; rid <= 4; rid++)
     {
-      RelationPtr r(new Relation(Status::Unknown1, rid, -1));
+      RelationPtr r = std::make_shared<Relation>(Status::Unknown1, rid, -1);
       result->addRelation(r);
     }
 

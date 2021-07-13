@@ -1388,7 +1388,7 @@ ElementPtr OgrReaderInternal::readNextElement()
   }
   else
   {
-    returnElement.reset(new Relation(*_relationsItr->second.get()));
+    returnElement = std::make_shared<Relation>(*_relationsItr->second.get());
     ++_relationsItr;
   }
 
