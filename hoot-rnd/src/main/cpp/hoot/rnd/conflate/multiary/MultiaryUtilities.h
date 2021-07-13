@@ -82,13 +82,10 @@ public:
   const geos::geom::Envelope& getBounds() const { return _bounds; }
 
   QString getHash() const { return _hash; }
-
   QByteArray getPayload() const { return _payload; }
 
   void setBounds(const geos::geom::Envelope& bounds) { _bounds = bounds; }
-
   void setHash(QString hash) { _hash = hash; }
-
   void setPayload(QByteArray payload) { _payload = payload; }
 
   QString toString() const { return QString("{hash: '%1', bounds: '%2', payload: '%3'}").
