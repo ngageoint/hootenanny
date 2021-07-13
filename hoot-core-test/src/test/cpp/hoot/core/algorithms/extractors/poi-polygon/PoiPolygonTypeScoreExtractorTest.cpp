@@ -73,7 +73,7 @@ public:
 
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
     node1->getTags().set("amenity", "school");
-    WayPtr way1(new Way(Status::Unknown2, -1, 15.0));
+    WayPtr way1 = std::make_shared<Way>(Status::Unknown2, -1, 15.0);
     way1->getTags().set("amenity", "school");
     // Mocking a feature distance here that would have been otherwise set by PoiPolygonMatch.
     uut.setFeatureDistance(20.5);
@@ -115,7 +115,7 @@ public:
 
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
     node1->getTags().set("amenity", "ticket_office");
-    WayPtr way1(new Way(Status::Unknown2, -1, 15.0));
+    WayPtr way1 = std::make_shared<Way>(Status::Unknown2, -1, 15.0);
     way1->getTags().set("amenity", "Fahrscheinschalter");
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
 

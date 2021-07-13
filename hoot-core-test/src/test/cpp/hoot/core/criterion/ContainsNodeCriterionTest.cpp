@@ -48,7 +48,7 @@ public:
 
     ContainsNodeCriterion uut1(1);
 
-    WayPtr way1(new Way(Status::Unknown1, 1, 15.0));
+    WayPtr way1 = std::make_shared<Way>(Status::Unknown1, 1, 15.0);
     CPPUNIT_ASSERT(!uut1.isSatisfied(way1));
     way1->addNode(node1->getId());
     way1->addNode(node2->getId());

@@ -61,7 +61,7 @@ public:
     map->addNode(node4);
     CPPUNIT_ASSERT(!uut.isSatisfied(node4));
 
-    WayPtr way1(new Way(Status::Unknown1, 1, 15.0));
+    WayPtr way1 = std::make_shared<Way>(Status::Unknown1, 1, 15.0);
     way1->getTags().set("bridge", "yes");
     CPPUNIT_ASSERT(!uut.isSatisfied(way1));
     way1->addNode(node1->getId());

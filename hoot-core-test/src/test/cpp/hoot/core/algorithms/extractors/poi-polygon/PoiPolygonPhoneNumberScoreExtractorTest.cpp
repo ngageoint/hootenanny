@@ -67,7 +67,7 @@ public:
     OsmMapPtr map = std::make_shared<OsmMap>();
 
     NodePtr node1(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
-    WayPtr way1(new Way(Status::Unknown2, -1, 15.0));
+    WayPtr way1 = std::make_shared<Way>(Status::Unknown2, -1, 15.0);
 
     node1->getTags().set("phone", "(123) 456 7890");
     way1->getTags().set("phone", "123 456 7890");
@@ -80,7 +80,7 @@ public:
     OsmMapPtr map = std::make_shared<OsmMap>();
 
     NodePtr node1(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
-    WayPtr way1(new Way(Status::Unknown2, -1, 15.0));
+    WayPtr way1 = std::make_shared<Way>(Status::Unknown2, -1, 15.0);
 
     node1->getTags().set("phone", "(123) 456 7890");
     way1->getTags().set("phone", "123 456 7890");
@@ -102,7 +102,7 @@ public:
     OsmMapPtr map = std::make_shared<OsmMap>();
 
     NodePtr node1(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
-    WayPtr way1(new Way(Status::Unknown2, -1, 15.0));
+    WayPtr way1 = std::make_shared<Way>(Status::Unknown2, -1, 15.0);
 
     node1->getTags().set("phone", "blah");
     way1->getTags().set("phone", "123 456 7890");
@@ -115,7 +115,7 @@ public:
     OsmMapPtr map = std::make_shared<OsmMap>();
 
     NodePtr node1(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
-    WayPtr way1(new Way(Status::Unknown2, -1, 15.0));
+    WayPtr way1 = std::make_shared<Way>(Status::Unknown2, -1, 15.0);
 
     node1->getTags().set("source:phone", "(123) 456 7890");
     way1->getTags().set("phone", "123 456 7890");
@@ -143,7 +143,7 @@ public:
     OsmMapPtr map = std::make_shared<OsmMap>();
 
     NodePtr node1(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
-    WayPtr way1(new Way(Status::Unknown2, -1, 15.0));
+    WayPtr way1 = std::make_shared<Way>(Status::Unknown2, -1, 15.0);
 
     node1->getTags().set("note", "(123) 456 7890");
     way1->getTags().set("phone", "123 456 7890");
@@ -161,7 +161,7 @@ public:
     OsmMapPtr map = std::make_shared<OsmMap>();
 
     NodePtr node1(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
-    WayPtr way1(new Way(Status::Unknown2, -1, 15.0));
+    WayPtr way1 = std::make_shared<Way>(Status::Unknown2, -1, 15.0);
 
     node1->getTags().set(
       "phone",

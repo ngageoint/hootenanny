@@ -1383,7 +1383,7 @@ ElementPtr OgrReaderInternal::readNextElement()
   }
   else if (_waysItr != _map->getWays().end())
   {
-    returnElement.reset(new Way(*_waysItr->second.get()));
+    returnElement = std::make_shared<Way>(*_waysItr->second.get());
     ++_waysItr;
   }
   else

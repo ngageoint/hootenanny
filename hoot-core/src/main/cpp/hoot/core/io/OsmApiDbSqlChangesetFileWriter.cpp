@@ -246,7 +246,7 @@ ElementPtr OsmApiDbSqlChangesetFileWriter::_getChangeElement(ConstElementPtr ele
       changeElement.reset(new Node(*std::dynamic_pointer_cast<const Node>(element)));
       break;
     case ElementType::Way:
-      changeElement.reset(new Way(*std::dynamic_pointer_cast<const Way>(element)));
+      changeElement = std::make_shared<Way>(*std::dynamic_pointer_cast<const Way>(element));
       break;
    case ElementType::Relation:
       changeElement =

@@ -89,7 +89,7 @@ void FindIntersectionsOp::apply(std::shared_ptr<OsmMap>& map)
   // remove all ways first
   std::shared_ptr<RemoveElementsVisitor> removeWaysVis =
     std::make_shared<RemoveElementsVisitor>();
-  removeWaysVis->addCriterion(ElementCriterionPtr(new WayCriterion()));
+  removeWaysVis->addCriterion(std::make_shared<WayCriterion>());
   VisitorOp(removeWaysVis).apply(map);
 
   // remove anything that is not a node and in the list of intersections found

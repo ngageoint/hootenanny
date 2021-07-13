@@ -1364,7 +1364,7 @@ std::shared_ptr<Element> OsmPbfReader::readNextElement()
   }
   else if (_partialWaysRead < int(_map->getWays().size()))
   {
-    element.reset(new Way(*_waysItr->second.get()));
+    element = std::make_shared<Way>(*_waysItr->second.get());
     ++_waysItr;
     _partialWaysRead++;
   }

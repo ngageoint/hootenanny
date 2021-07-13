@@ -155,7 +155,7 @@ public:
     NodePtr node2(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15));
     node2->getTags().appendValue("hoot:test", "test2");
     nodes.append(node2);
-    WayPtr way1(new Way(Status::Unknown1, 15, 15));
+    WayPtr way1 = std::make_shared<Way>(Status::Unknown1, 15, 15);
     way1->getTags().appendValue("hoot:test", "test3");
     map->addWay(way1);
 
@@ -352,7 +352,7 @@ public:
     NodePtr node2(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15));
     node2->getTags().appendValue("hoot:test", "test2");
 
-    WayPtr way1(new Way(Status::Unknown1, 15, 15));
+    WayPtr way1 = std::make_shared<Way>(Status::Unknown1, 15, 15);
     way1->getTags().appendValue("hoot:test", "test3");
     map->addWay(way1);
 
@@ -386,7 +386,7 @@ public:
     node2->getTags().appendValue("name", "blue house");
     map->addNode(node2);
 
-    WayPtr way1(new Way(Status::Unknown1, 15, 15));
+    WayPtr way1 = std::make_shared<Way>(Status::Unknown1, 15, 15);
     way1->getTags().appendValue("hoot:test", "test3");
     way1->getTags().appendValue("name", "some way");
     map->addWay(way1);
@@ -412,7 +412,6 @@ public:
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(NoInformationElementRemoverTest, "quick");
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(NoInformationElementRemoverTest, "current");
 
 }
 

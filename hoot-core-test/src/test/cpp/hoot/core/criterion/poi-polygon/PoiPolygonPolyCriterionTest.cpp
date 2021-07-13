@@ -51,7 +51,7 @@ public:
     CPPUNIT_ASSERT(!uut.isSatisfied(node1));
 
     //type specifically excluded outside of schema
-    WayPtr way1(new Way(Status::Unknown1, -1, 15.0));
+    WayPtr way1 = std::make_shared<Way>(Status::Unknown1, -1, 15.0);
     way1->getTags().set("area", "yes");
     way1->getTags().set("landuse", "grass");
     CPPUNIT_ASSERT(!uut.isSatisfied(way1));

@@ -143,7 +143,7 @@ WayPtr GeometryToElementConverter::convertLineStringToWay(
   if (ls->getNumPoints() > 0)
   {
     Coordinate c = ls->getCoordinateN(0);
-    way.reset(new Way(s, map->createNextWayId(), circularError));
+    way = std::make_shared<Way>(s, map->createNextWayId(), circularError);
 
     for (size_t i = 0; i < ls->getNumPoints(); i++)
     {
