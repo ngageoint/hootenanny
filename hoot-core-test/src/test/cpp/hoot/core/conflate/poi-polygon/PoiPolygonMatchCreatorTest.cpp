@@ -69,7 +69,7 @@ private:
     n1->getTags().set("poi", true);
     n1->getTags().set("name", "foo");
     map->addNode(n1);
-    NodePtr n2 = std::make_shared<Node>(Status::Unknown2, 2, 5, 10, 5));
+    NodePtr n2 = std::make_shared<Node>(Status::Unknown2, 2, 5, 10, 5);
     n2->getTags().set("poi", true);
     n2->getTags().set("name", "bar");
     map->addNode(n2);

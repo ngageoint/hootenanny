@@ -77,7 +77,7 @@ public:
     map->setProjection(MapProjector::createAeacProjection(env));
     // force the map bounds
     NodePtr n1 = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), 0, 0, 10);
-    NodePtr n2 = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), 500, 500, 10));
+    NodePtr n2 = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), 500, 500, 10);
     map->addNode(n1);
     map->addNode(n2);
 
@@ -146,7 +146,7 @@ public:
     map->setProjection(MapProjector::createAeacProjection(env));
     // force the map bounds
     NodePtr n1 = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), 0, 0, 10);
-    NodePtr n2 = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), 100, 100, 10));
+    NodePtr n2 = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), 100, 100, 10);
     map->addNode(n1);
     map->addNode(n2);
 

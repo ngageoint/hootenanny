@@ -70,7 +70,7 @@ public:
     n1->getTags()["alt_name"] = "strange;test";
     map->addNode(n1);
 
-    NodePtr n2 = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), 500, 500, 10));
+    NodePtr n2 = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), 500, 500, 10);
     n2->getTags()["name"] = "little town";
     n2->getTags()["name:he"] = QString::fromUtf8("העיר קטנה");
     n2->getTags()["alt_name"] = "small town;littleville";

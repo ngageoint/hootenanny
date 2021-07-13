@@ -142,7 +142,7 @@ public:
 
           if (e->contains(c2))
           {
-            NodePtr n2 = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), c2, 10));
+            NodePtr n2 = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), c2, 10);
             map->addNode(n2);
             WayPtr w = std::make_shared<Way>(Status::Unknown1, map->createNextWayId(), 10);
             map->addWay(w);

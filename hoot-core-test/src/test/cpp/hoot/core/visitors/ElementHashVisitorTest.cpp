@@ -98,7 +98,7 @@ public:
     n1->getTags()["name"] = "Bus Stop 1";
     n1->getTags()["source"] = "imagery";
     map->addNode(n1);
-    NodePtr n2 = std::make_shared<Node>(Status::Unknown1, -2, -104.8852158123, 38.8467228123, 15));
+    NodePtr n2 = std::make_shared<Node>(Status::Unknown1, -2, -104.8852158123, 38.8467228123, 15);
     n2->getTags()["highway"] = "bus_stop";
     n2->getTags()["name"] = "Bus Stop 2";
     n2->getTags()["source"] = "imagery";
@@ -129,7 +129,7 @@ public:
     n1->getTags()["name"] = "Bus Stop 1";
     n1->getTags()["source"] = "imagery";
     map->addNode(n1);
-    NodePtr n2 = std::make_shared<Node>(Status::Unknown1, -2, -104.8852158123, 38.8467228123, 15));
+    NodePtr n2 = std::make_shared<Node>(Status::Unknown1, -2, -104.8852158123, 38.8467228123, 15);
     n2->getTags()["highway"] = "bus_stop";
     n2->getTags()["name"] = "Bus Stop 2";
     n2->getTags()["source"] = "imagery";

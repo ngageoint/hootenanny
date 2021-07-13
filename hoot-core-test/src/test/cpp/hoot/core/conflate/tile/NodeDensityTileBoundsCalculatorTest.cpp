@@ -68,9 +68,15 @@ public:
     NodePtr n1 =
       std::make_shared<Node>(
         Status::Unknown1, map->createNextNodeId(), e.getMinX(), e.getMinY(), 10.0);
-    NodePtr n2 = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), e.getMaxX(), e.getMinY(), 10.0));
-    NodePtr n3(new Node(Status::Unknown1, map->createNextNodeId(), e.getMinX(), e.getMaxY(), 10.0));
-    NodePtr n4(new Node(Status::Unknown1, map->createNextNodeId(), e.getMaxX(), e.getMaxY(), 10.0));
+    NodePtr n2 =
+      std::make_shared<Node>(
+        Status::Unknown1, map->createNextNodeId(), e.getMaxX(), e.getMinY(), 10.0);
+    NodePtr n3 =
+      std::make_shared<Node>(
+        Status::Unknown1, map->createNextNodeId(), e.getMinX(), e.getMaxY(), 10.0);
+    NodePtr n4 =
+      std::make_shared<Node>(
+        Status::Unknown1, map->createNextNodeId(), e.getMaxX(), e.getMaxY(), 10.0);
 
     map->addNode(n1);
     map->addNode(n2);

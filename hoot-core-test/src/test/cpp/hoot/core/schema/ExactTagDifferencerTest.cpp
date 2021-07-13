@@ -53,44 +53,44 @@ public:
     n1->setTags(t1);
     map->addNode(n1);
 
-    NodePtr n2 = std::make_shared<Node>(Status::Unknown1, 2, 0, 0, 15.0));
+    NodePtr n2 = std::make_shared<Node>(Status::Unknown1, 2, 0, 0, 15.0);
     Tags t2;
     t2["railway"] = "platform";
     t2["highway"] = "primary";
     n2->setTags(t2);
     map->addNode(n2);
 
-    NodePtr n3(new Node(Status::Unknown1, 3, 0, 0, 15.0));
+    NodePtr n3 = std::make_shared<Node>(Status::Unknown1, 3, 0, 0, 15.0);
     Tags t3;
     t3["railway"] = "platform";
     n3->setTags(t3);
     map->addNode(n3);
 
-    NodePtr n4(new Node(Status::Unknown1, 4, 0, 0, 15.0));
+    NodePtr n4 = std::make_shared<Node>(Status::Unknown1, 4, 0, 0, 15.0);
     Tags t4;
     t4["highway"] = "primary";
     n4->setTags(t4);
     map->addNode(n4);
 
-    NodePtr n5(new Node(Status::Unknown1, 5, 0, 0, 15.0));
+    NodePtr n5 = std::make_shared<Node>(Status::Unknown1, 5, 0, 0, 15.0);
     Tags t5;
     t5["public_transport"] = "platform";
     n5->setTags(t5);
     map->addNode(n5);
 
-    NodePtr n6(new Node(Status::Unknown1, 6, 0, 0, 15.0));
+    NodePtr n6 = std::make_shared<Node>(Status::Unknown1, 6, 0, 0, 15.0);
     Tags t6;
     t6["hoot:status"] = "Unknown2";
     n6->setTags(t6);
     map->addNode(n6);
 
-    NodePtr n7(new Node(Status::Unknown1, 7, 0, 0, 15.0));
+    NodePtr n7 = std::make_shared<Node>(Status::Unknown1, 7, 0, 0, 15.0);
     Tags t7;
     t7["hoot:status"] = "Unknown2";
     n7->setTags(t7);
     map->addNode(n7);
 
-    NodePtr n8(new Node(Status::Unknown1, 8, 0, 0, 15.0));
+    NodePtr n8 = std::make_shared<Node>(Status::Unknown1, 8, 0, 0, 15.0);
     Tags t8;
     t8["hoot:status"] = "1";
     n8->setTags(t8);

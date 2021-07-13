@@ -666,8 +666,8 @@ public:
     OsmMapPtr map = std::make_shared<OsmMap>();
     WayPtr w1 = std::make_shared<Way>(Status::Unknown1, 1, 15);
     NodePtr n1 = std::make_shared<Node>(Status::Unknown1, 1, 0, 0, 15);
-    NodePtr n2 = std::make_shared<Node>(Status::Unknown1, 2, 0, 0, 15));
-    NodePtr n3(new Node(Status::Unknown1, 3, 0, 0, 15));
+    NodePtr n2 = std::make_shared<Node>(Status::Unknown1, 2, 0, 0, 15);
+    NodePtr n3 = std::make_shared<Node>(Status::Unknown1, 3, 0, 0, 15);
     map->addElement(w1);
     map->addElement(n1);
 
@@ -698,8 +698,8 @@ public:
     WayPtr w1 = std::make_shared<Way>(Status::Unknown1, 1, 15);
     WayPtr w2 = std::make_shared<Way>(Status::Unknown1, 2, 15);
     NodePtr n1 = std::make_shared<Node>(Status::Unknown1, 1, 0, 0, 15);
-    NodePtr n2 = std::make_shared<Node>(Status::Unknown1, 2, 0, 0, 15));
-    NodePtr n3(new Node(Status::Unknown1, 3, 0, 0, 15));
+    NodePtr n2 = std::make_shared<Node>(Status::Unknown1, 2, 0, 0, 15);
+    NodePtr n3 = std::make_shared<Node>(Status::Unknown1, 3, 0, 0, 15);
     map->addElement(w1);
     map->addElement(n1);
 

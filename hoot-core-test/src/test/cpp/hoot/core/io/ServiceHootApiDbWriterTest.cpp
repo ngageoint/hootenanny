@@ -116,9 +116,9 @@ public:
 
     NodePtr n1 = std::make_shared<Node>(Status::Unknown1, -1, 0.0, 0.0, 10.0);
     n1->setTag("note", "n1',\n");
-    NodePtr n2 = std::make_shared<Node>(Status::Unknown2, -2, 0.1, 0.0, 11.0));
+    NodePtr n2 = std::make_shared<Node>(Status::Unknown2, -2, 0.1, 0.0, 11.0);
     n2->setTag("note", "n2\"");
-    NodePtr n3(new Node(Status::Conflated, -3, 0.2, 0.0, 12.0));
+    NodePtr n3 = std::make_shared<Node>(Status::Conflated, -3, 0.2, 0.0, 12.0);
     n3->setTag("note", "n3\\");
     map->addNode(n1);
     map->addNode(n2);
@@ -152,9 +152,9 @@ public:
 
     NodePtr n1 = std::make_shared<Node>(Status::Unknown1, 1, 0.0, 0.0, 10.0);
     n1->setTag("note", "n1");
-    NodePtr n2 = std::make_shared<Node>(Status::Unknown2, 2, 0.1, 0.0, 11.0));
+    NodePtr n2 = std::make_shared<Node>(Status::Unknown2, 2, 0.1, 0.0, 11.0);
     n2->setTag("note", "n2");
-    NodePtr n3(new Node(Status::Conflated, 3, 0.2, 0.0, 12.0));
+    NodePtr n3 = std::make_shared<Node>(Status::Conflated, 3, 0.2, 0.0, 12.0);
     n3->setTag("note", "n3");
     map->addNode(n1);
     map->addNode(n2);
@@ -266,9 +266,9 @@ public:
 
     NodePtr n1 = std::make_shared<Node>(Status::Unknown1, -1, 0.0, 0.0, 10.0);
     n1->setTag("note", "n1");
-    NodePtr n2 = std::make_shared<Node>(Status::Unknown2, -2, 0.1, 0.0, 11.0));
+    NodePtr n2 = std::make_shared<Node>(Status::Unknown2, -2, 0.1, 0.0, 11.0);
     n2->setTag("note", "n2");
-    NodePtr n3(new Node(Status::Conflated, -3, 0.2, 0.0, 12.0));
+    NodePtr n3 = std::make_shared<Node>(Status::Conflated, -3, 0.2, 0.0, 12.0);
     n3->setTag("note", "n3");
     map->addNode(n1);
     map->addNode(n2);
@@ -424,7 +424,7 @@ public:
 
     //create a second map
     OsmMapPtr map2 = std::make_shared<OsmMap>();
-    NodePtr n2 = std::make_shared<Node>(Status::Unknown1, 2, 0.0, 0.0, 10.0));
+    NodePtr n2 = std::make_shared<Node>(Status::Unknown1, 2, 0.0, 0.0, 10.0);
     n2->setTag("note", "n2");
     map2->addNode(n2);
 
@@ -472,7 +472,7 @@ public:
 
     //create a second map
     OsmMapPtr map2 = std::make_shared<OsmMap>();
-    NodePtr n2 = std::make_shared<Node>(Status::Unknown1, 2, 0.0, 0.0, 10.0));
+    NodePtr n2 = std::make_shared<Node>(Status::Unknown1, 2, 0.0, 0.0, 10.0);
     n2->setTag("note", "n2");
     map2->addNode(n2);
 
@@ -577,10 +577,10 @@ public:
 
     NodePtr n1 = std::make_shared<Node>(Status::Unknown1, 1, 0.0, 0.0, 10.0);
     n1->setTag("note", "n1");
-    NodePtr n2 = std::make_shared<Node>(Status::Unknown2, 2, 0.1, 0.0, 11.0));
+    NodePtr n2 = std::make_shared<Node>(Status::Unknown2, 2, 0.1, 0.0, 11.0);
     n2->setTag("note", "n2");
     n2->setVersion(2);
-    NodePtr n3(new Node(Status::Conflated, 3, 0.2, 0.0, 12.0));
+    NodePtr n3 = std::make_shared<Node>(Status::Conflated, 3, 0.2, 0.0, 12.0);
     n3->setTag("note", "n3");
     n3->setVersion(1);
     map->addNode(n1);

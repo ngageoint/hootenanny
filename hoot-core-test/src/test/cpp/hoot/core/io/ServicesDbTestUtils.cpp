@@ -289,13 +289,13 @@ OsmMapPtr ServicesDbTestUtils::createServiceTestMap()
 
   NodePtr n1 = std::make_shared<Node>(Status::Unknown1, 1, 0.0, 0.0, 10.0);
   map->addNode(n1);
-  NodePtr n2 = std::make_shared<Node>(Status::Unknown2, 2, 0.1, 0.0, 11.0));
+  NodePtr n2 = std::make_shared<Node>(Status::Unknown2, 2, 0.1, 0.0, 11.0);
   n2->setTag("noteb", "n2b");
   map->addNode(n2);
-  NodePtr n3(new Node(Status::Conflated, 3, 0.2, 0.0, 12.0));
+  NodePtr n3 = std::make_shared<Node>(Status::Conflated, 3, 0.2, 0.0, 12.0);
   n3->setTag("note", "n3");
   map->addNode(n3);
-  NodePtr n4(new Node(Status::Conflated, 4, 0.3, 0.0, 13.0));
+  NodePtr n4 = std::make_shared<Node>(Status::Conflated, 4, 0.3, 0.0, 13.0);
   n4->setTag("note", "n4");
   map->addNode(n4);
   NodePtr n5(new Node(Status::Invalid, 5, 0.4, 0.0, 14.0));
