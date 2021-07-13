@@ -380,7 +380,7 @@ void ShapefileWriter::writePoints(const ConstOsmMapPtr& map, const QString& path
       }
 
       // convert the geometry.
-      std::shared_ptr<OGRGeometry> geom(new OGRPoint(node->getX(), node->getY()));
+      std::shared_ptr<OGRGeometry> geom = std::make_shared<OGRPoint>(node->getX(), node->getY());
 
       if (poFeature->SetGeometry(geom.get()) != OGRERR_NONE)
       {

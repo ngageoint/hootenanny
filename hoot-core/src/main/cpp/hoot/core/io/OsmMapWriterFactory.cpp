@@ -218,7 +218,7 @@ void OsmMapWriterFactory::writeDebugMap(
             ".osm", "-" + fileNumberStr + "-" + callingClassNoNamespace + ".osm");
       }
       LOG_INFO("Writing debug output to: ..." << FileUtils::toLogFormat(debugMapFileName, 30));
-      OsmMapPtr copy(new OsmMap(map));
+      OsmMapPtr copy = std::make_shared<OsmMap>(map);
 
       if (matcher)
       {
@@ -247,7 +247,7 @@ void OsmMapWriterFactory::writeDebugMap(
   std::shared_ptr<OGRSpatialReference> spatRef, const QString& callingClass, const QString& title,
   NetworkMatcherPtr matcher)
 {
-  OsmMapPtr map(new OsmMap(spatRef));
+  OsmMapPtr map = std::make_shared<OsmMap>(spatRef);
   // add the resulting alpha shape for debugging.
   GeometryToElementConverter(map).convertGeometryToElement(geometry.get(), Status::Invalid, -1);
 

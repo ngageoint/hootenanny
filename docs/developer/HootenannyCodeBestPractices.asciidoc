@@ -49,6 +49,8 @@ progress for map operators (classes inheriting `OsmMapOperation`, `ElementVisito
 * Make use of the `FilteredByGeometryTypeCriteria` interface to properly describe the feature 
 geometry types a map operator (classes inheriting `OsmMapOperation`, `ElementVisitor`, 
 `ElementCriterion`, etc.) operates on.
+* Make use of object pools when objects are created in very large numbers e.g. create `Node` with 
+`Node::newSp`.
 * See the "General Test Writing Guidelines" section in the 
 https://github.com/ngageoint/hootenanny/blob/master/docs/developer/HootenannyTests.asciidoc[testing document] 
 for some test writing tips.

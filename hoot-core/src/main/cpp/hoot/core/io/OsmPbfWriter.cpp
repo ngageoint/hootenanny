@@ -77,8 +77,8 @@ public:
   PrimitiveBlock primitiveBlock;
 };
 
-OsmPbfWriter::OsmPbfWriter()
-  : _d(new OsmPbfWriterData())
+OsmPbfWriter::OsmPbfWriter() :
+_d(std::make_shared<OsmPbfWriterData>())
 {
   _dn = nullptr;
   _lonOffset = 0.0;

@@ -192,7 +192,7 @@ bool OsmApiWriter::apply()
     if (queueSize < QUEUE_SIZE_MULTIPLIER * _maxWriters)
     {
       //  Divide up the changes into atomic changesets
-      ChangesetInfoPtr changeset_info(new ChangesetInfo());
+      ChangesetInfoPtr changeset_info = std::make_shared<ChangesetInfo>();
       //  Repeat divide until all changes have been committed
       _changesetMutex.lock();
       bool newChangeset = _changeset.calculateChangeset(changeset_info);
@@ -923,7 +923,7 @@ void OsmApiWriter::_closeChangeset(HootNetworkRequestPtr request, long changeset
  */
 OsmApiWriter::OsmApiFailureInfoPtr OsmApiWriter::_uploadChangeset(HootNetworkRequestPtr request, long id, const QString& changeset) const
 {
-  OsmApiFailureInfoPtr info(new OsmApiFailureInfo());
+  OsmApiFailureInfoPtr info = std::make_shared<OsmApiFailureInfo>();
   //  Don't even attempt if the ID is bad
   if (id < 1)
     return info;

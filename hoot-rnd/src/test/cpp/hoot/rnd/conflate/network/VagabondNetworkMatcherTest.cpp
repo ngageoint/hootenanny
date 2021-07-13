@@ -60,7 +60,7 @@ public:
   void writeDebugMap(OsmMapPtr map, VagabondNetworkMatcher& uut, int index)
   {
     FileUtils::makeDir("tmp");
-    OsmMapPtr copy(new OsmMap(map));
+    OsmMapPtr copy = std::make_shared<OsmMap>(map);
     DebugNetworkMapCreator().addDebugElements(copy, uut.getAllEdgeScores(),
       uut.getAllVertexScores());
 

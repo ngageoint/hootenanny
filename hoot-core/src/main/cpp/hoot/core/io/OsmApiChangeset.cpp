@@ -294,7 +294,7 @@ void XmlChangeset::splitLongWays(long maxWayNodes)
       while (way->getNodeCount() > maxWayNodes)
       {
         //  Create a copy of the way
-        ChangesetWayPtr newWay(new ChangesetWay(*way));
+        ChangesetWayPtr newWay = std::make_shared<ChangesetWay>(*way);
         newWay->changeId(getNextWayId());
         //  Remove maxWayNodes from the original and add them to this way
         way->removeNodes(0, maxWayNodes - 1);
@@ -1409,7 +1409,7 @@ bool XmlChangeset::writeErrorFile()
 
 ChangesetInfoPtr XmlChangeset::splitChangeset(const ChangesetInfoPtr& changeset, const QString& splitHint)
 {
-  ChangesetInfoPtr split(new ChangesetInfo());
+  ChangesetInfoPtr split = std::make_shared<ChangesetInfo>();
   //  If there is only one element then splitting only marks that element as failed
   if (changeset->size() == 1)
   {
@@ -1574,7 +1574,7 @@ QString XmlChangeset::getFailedChangesetString()
   if (_failedCount == 0)
     return "";
   //  Create a changeset info object to hold all of the failed elements
-  ChangesetInfoPtr changeset(new ChangesetInfo());
+  ChangesetInfoPtr changeset = std::make_shared<ChangesetInfo>();
   for (int current_type = ChangesetType::TypeCreate; current_type != ChangesetType::TypeMax; ++current_type)
   {
     //  Iterate all of the nodes in the changeset looking for failed elements
@@ -2222,7 +2222,7 @@ ChangesetInfoPtr XmlChangeset::fixOrphanedNodesSplit(const ChangesetInfoPtr& cha
     }
   }
   //  Remove any of the nodes from the changeset so that they are blocked for upload later
-  ChangesetInfoPtr orphanedNodes(new ChangesetInfo());
+  ChangesetInfoPtr orphanedNodes = std::make_shared<ChangesetInfo>();
   for (set<long>::iterator n = nodes.begin(); n != nodes.end(); ++n)
   {
     const ChangesetElement* node = _allNodes[*n].get();
@@ -2456,7 +2456,7 @@ bool XmlChangeset::fixChangesetDeletePreconditionFailure(ChangesetInfoPtr change
   const ChangesetType type = ChangesetType::TypeDelete;
   if (changeset->contains(element_type, type, element_id))
   {
-    ChangesetInfoPtr temp_split(new ChangesetInfo());
+    ChangesetInfoPtr temp_split = std::make_shared<ChangesetInfo>();
     //  Add the offending change from the temp changeset
     temp_split->add(element_type, type, element_id);
     //  Check if the blocking element is part of this changeset, it could be
@@ -2502,7 +2502,7 @@ bool XmlChangeset::fixChangesetDeletePreconditionFailure(ChangesetInfoPtr change
     //  Don't send the element again if the blocking elements aren't in the split
     if (temp_split->size() != member_ids.size() + 1) //  +1 includes element reported
     {
-      ChangesetInfoPtr failing(new ChangesetInfo());
+      ChangesetInfoPtr failing = std::make_shared<ChangesetInfo>();
       //  Move the offending element (and its children if applicable) to the error changeset
       switch(element_type)
       {
