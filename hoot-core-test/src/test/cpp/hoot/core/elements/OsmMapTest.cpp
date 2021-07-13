@@ -630,9 +630,9 @@ public:
   {
     OsmMapPtr map = std::make_shared<OsmMap>();
     RelationPtr r1 = std::make_shared<Relation>(Status::Unknown1, 1, 15);
-    WayPtr w1(new Way(Status::Unknown1, 1, 15));
-    WayPtr w2(new Way(Status::Unknown1, 2, 15));
-    WayPtr w3(new Way(Status::Unknown1, 3, 15));
+    WayPtr w1 = std::make_shared<Way>(Status::Unknown1, 1, 15);
+    WayPtr w2 = std::make_shared<Way>(Status::Unknown1, 2, 15);
+    WayPtr w3 = std::make_shared<Way>(Status::Unknown1, 3, 15);
     map->addElement(r1);
     map->addElement(w1);
     map->addElement(w2);
@@ -664,7 +664,7 @@ public:
   void runReplaceListTest2()
   {
     OsmMapPtr map = std::make_shared<OsmMap>();
-    WayPtr w1(new Way(Status::Unknown1, 1, 15));
+    WayPtr w1 = std::make_shared<Way>(Status::Unknown1, 1, 15);
     NodePtr n1(new Node(Status::Unknown1, 1, 0, 0, 15));
     NodePtr n2(new Node(Status::Unknown1, 2, 0, 0, 15));
     NodePtr n3(new Node(Status::Unknown1, 3, 0, 0, 15));
@@ -695,8 +695,8 @@ public:
   void runReplaceListTest3()
   {
     OsmMapPtr map = std::make_shared<OsmMap>();
-    WayPtr w1(new Way(Status::Unknown1, 1, 15));
-    WayPtr w2(new Way(Status::Unknown1, 2, 15));
+    WayPtr w1 = std::make_shared<Way>(Status::Unknown1, 1, 15);
+    WayPtr w2 = std::make_shared<Way>(Status::Unknown1, 2, 15);
     NodePtr n1(new Node(Status::Unknown1, 1, 0, 0, 15));
     NodePtr n2(new Node(Status::Unknown1, 2, 0, 0, 15));
     NodePtr n3(new Node(Status::Unknown1, 3, 0, 0, 15));

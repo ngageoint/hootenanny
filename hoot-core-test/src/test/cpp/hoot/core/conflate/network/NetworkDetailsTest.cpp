@@ -81,16 +81,16 @@ public:
     NodePtr n1f(new Node(Status::Invalid, -6, 200, 300, 15.0));
     NetworkVertexPtr v6(new NetworkVertex(n1f));
 
-    WayPtr w1(new Way(Status::Invalid, -1, 15.0));
+    WayPtr w1 = std::make_shared<Way>(Status::Invalid, -1, 15.0);
     w1->addNode(-1);
     w1->addNode(-2);
-    WayPtr w2(new Way(Status::Invalid, -2, 15.0));
+    WayPtr w2 = std::make_shared<Way>(Status::Invalid, -2, 15.0);
     w2->addNode(-2);
     w2->addNode(-3);
-    WayPtr w3(new Way(Status::Invalid, -3, 15.0));
+    WayPtr w3 = std::make_shared<Way>(Status::Invalid, -3, 15.0);
     w3->addNode(-3);
     w3->addNode(-4);
-    WayPtr w4(new Way(Status::Invalid, -4, 15.0));
+    WayPtr w4 = std::make_shared<Way>(Status::Invalid, -4, 15.0);
     w4->addNode(-4);
     w4->addNode(-5);
     w4->addNode(-6);

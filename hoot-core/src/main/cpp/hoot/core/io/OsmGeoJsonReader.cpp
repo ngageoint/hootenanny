@@ -394,10 +394,10 @@ void OsmGeoJsonReader::_parseGeoJsonWay(const string& id, const pt::ptree& prope
   uid = properties.get("@uid", uid);
 
   //  Construct Way
-  WayPtr way(
-    new Way(
+  WayPtr way =
+    std::make_shared<Way>(
       _defaultStatus, way_id, _defaultCircErr, changeset, version, timestamp,
-      QString::fromStdString(user), uid));
+      QString::fromStdString(user), uid);
   bool isPoly = (geometry.get("type", "").compare("Polygon") == 0);
 
   //  Add nodes

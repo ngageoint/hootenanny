@@ -107,7 +107,7 @@ public:
     way1->addNode(node1->getId());
     way1->addNode(node2->getId());
 
-    WayPtr way2(new Way(Status::Unknown1, 1, 15.0));
+    WayPtr way2 = std::make_shared<Way>(Status::Unknown1, 1, 15.0);
     way2->setTag("key1", "value1");
     way2->addNode(node1->getId());
     way2->addNode(node2->getId());
@@ -125,7 +125,7 @@ public:
     way1->addNode(node1->getId());
     way1->addNode(node2->getId());
 
-    WayPtr way2(new Way(Status::Unknown1, 2, 15.0));
+    WayPtr way2 = std::make_shared<Way>(Status::Unknown1, 2, 15.0);
     way2->setTag("key1", "value1");
     way2->addNode(node1->getId());
     way2->addNode(node2->getId());
@@ -143,7 +143,7 @@ public:
     way1->addNode(node1->getId());
     way1->addNode(node2->getId());
 
-    WayPtr way2(new Way(Status::Unknown1, 1, 15.0));
+    WayPtr way2 = std::make_shared<Way>(Status::Unknown1, 1, 15.0);
     way2->setTag("key1", "value1");
     way2->addNode(node1->getId());
 
@@ -160,7 +160,7 @@ public:
     way1->addNode(node1->getId());
     way1->addNode(node2->getId());
 
-    WayPtr way2(new Way(Status::Unknown1, 1, 15.0));
+    WayPtr way2 = std::make_shared<Way>(Status::Unknown1, 1, 15.0);
     way2->setTag("key1", "value1");
     way2->addNode(node2->getId());
     way2->addNode(node1->getId());
@@ -178,7 +178,7 @@ public:
     way1->addNode(node1->getId());
     way1->addNode(node2->getId());
 
-    WayPtr way2(new Way(Status::Unknown1, 1, 15.0));
+    WayPtr way2 = std::make_shared<Way>(Status::Unknown1, 1, 15.0);
     way2->setTag("key1", "value2");
     way2->addNode(node1->getId());
     way2->addNode(node2->getId());
@@ -197,7 +197,7 @@ public:
     way1->addNode(node1->getId());
     way1->addNode(node2->getId());
 
-    WayPtr way2(new Way(Status::Unknown1, 1, 15.0, ElementData::CHANGESET_EMPTY, 2));
+    WayPtr way2 = std::make_shared<Way>(Status::Unknown1, 1, 15.0, ElementData::CHANGESET_EMPTY, 2);
     way2->setTag("key1", "value1");
     way2->addNode(node1->getId());
     way2->addNode(node2->getId());
@@ -253,7 +253,7 @@ public:
   void runRelationDifferentMembersTest()
   {
     WayPtr way1 = std::make_shared<Way>(Status::Unknown1, 1, 15.0);
-    WayPtr way2(new Way(Status::Unknown1, 2, 15.0));
+    WayPtr way2 = std::make_shared<Way>(Status::Unknown1, 2, 15.0);
 
     RelationPtr relation1 = std::make_shared<Relation>(Status::Unknown1, 1, 15.0, "type1");
     relation1->setTag("key1", "value1");

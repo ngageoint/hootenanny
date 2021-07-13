@@ -71,7 +71,7 @@ public:
     map->addNode(node4);
     CPPUNIT_ASSERT(!uut.isSatisfied(node4));
 
-    WayPtr way2(new Way(Status::Unknown1, 2, 15.0));
+    WayPtr way2 = std::make_shared<Way>(Status::Unknown1, 2, 15.0);
     CPPUNIT_ASSERT(!uut.isSatisfied(way2));
     way2->addNode(node3->getId());
     way2->addNode(node4->getId());
@@ -87,7 +87,7 @@ public:
     map->addNode(node6);
     CPPUNIT_ASSERT(!uut.isSatisfied(node6));
 
-    WayPtr way3(new Way(Status::Unknown1, 3, 15.0));
+    WayPtr way3 = std::make_shared<Way>(Status::Unknown1, 3, 15.0);
     way3->getTags().set("bridge", "no");
     CPPUNIT_ASSERT(!uut.isSatisfied(way3));
     way3->addNode(node5->getId());
@@ -104,7 +104,7 @@ public:
     map->addNode(node8);
     CPPUNIT_ASSERT(!uut.isSatisfied(node8));
 
-    WayPtr way4(new Way(Status::Unknown1, 4, 15.0));
+    WayPtr way4 = std::make_shared<Way>(Status::Unknown1, 4, 15.0);
     way4->getTags().set("bridge", "");
     CPPUNIT_ASSERT(!uut.isSatisfied(way4));
     way4->addNode(node7->getId());

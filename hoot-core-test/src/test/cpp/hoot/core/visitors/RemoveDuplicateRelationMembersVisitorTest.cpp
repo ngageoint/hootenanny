@@ -67,14 +67,14 @@ public:
     map->addWay(way1);
     nodeIds.clear();
 
-    WayPtr way2(new Way(Status::Unknown1, 2, 15.0));
+    WayPtr way2 = std::make_shared<Way>(Status::Unknown1, 2, 15.0);
     nodeIds.push_back(2);
     nodeIds.push_back(1);
     nodeIds.push_back(3);
     way2->setNodes(nodeIds);
     map->addWay(way2);
 
-    WayPtr way3(new Way(Status::Unknown1, 3, 15.0));
+    WayPtr way3 = std::make_shared<Way>(Status::Unknown1, 3, 15.0);
     nodeIds.push_back(3);
     nodeIds.push_back(1);
     nodeIds.push_back(2);

@@ -58,7 +58,7 @@ public:
 
     for (long wid = 1; wid <= 5; wid++)
     {
-      WayPtr w(new Way(Status::Unknown1, wid, -1));
+      WayPtr w = std::make_shared<Way>(Status::Unknown1, wid, -1);
       result->addWay(w);
     }
 

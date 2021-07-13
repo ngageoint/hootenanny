@@ -79,7 +79,7 @@ public:
     OsmMapPtr map = std::make_shared<OsmMap>();
     _map = map;
 
-    WayPtr w1(new Way(Status::Unknown1, map->createNextWayId(), 13.0));
+    WayPtr w1 = std::make_shared<Way>(Status::Unknown1, map->createNextWayId(), 13.0);
     w1->setTag("highway", "track");
     w1->setTag("name", "w1");
     w1->addNode(createNode(-104.9, 38.855)->getId());
@@ -87,7 +87,7 @@ public:
     w1->addNode(createNode(-104.8991, 38.8544)->getId());
     _map->addWay(w1);
 
-    WayPtr w2(new Way(Status::Unknown1, map->createNextWayId(), 13.0));
+    WayPtr w2 = std::make_shared<Way>(Status::Unknown1, map->createNextWayId(), 13.0);
     w2->setTag("highway", "road");
     w2->setTag("name", "w2");
     w2->addNode(createNode(-104.91, 38.8548)->getId());
@@ -97,9 +97,11 @@ public:
 
     BufferedOverlapExtractor uut(0.2);
     const OsmMap* constMap = const_cast<const OsmMap*>(_map.get());
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0,
-                                 uut.extract(*constMap, std::const_pointer_cast<const Way>(w1), std::const_pointer_cast<const Way>(w2)),
-                                 0.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(
+      1.0,
+      uut.extract(
+        *constMap,
+        std::const_pointer_cast<const Way>(w1), std::const_pointer_cast<const Way>(w2)), 0.0);
   }
 
   void runBuildingsTest()

@@ -356,7 +356,7 @@ public:
     way1->getTags().appendValue("hoot:test", "test3");
     map->addWay(way1);
 
-    WayPtr way2(new Way(Status::Unknown1, 15, 15));
+    WayPtr way2 = std::make_shared<Way>(Status::Unknown1, 15, 15);
     way2->getTags().appendValue("hoot:test", "test4");
     map->addWay(way2);
 
@@ -391,7 +391,7 @@ public:
     way1->getTags().appendValue("name", "some way");
     map->addWay(way1);
 
-    WayPtr way2(new Way(Status::Unknown1, 16, 15));
+    WayPtr way2 = std::make_shared<Way>(Status::Unknown1, 16, 15);
     way2->getTags().appendValue("hoot:test", "test4");
     way2->getTags().appendValue("name", "some other way");
     map->addWay(way2);

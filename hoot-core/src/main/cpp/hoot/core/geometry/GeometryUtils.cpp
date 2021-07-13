@@ -515,7 +515,7 @@ ElementId GeometryUtils::createBoundsInMap(const OsmMapPtr& map, const geos::geo
 OsmMapPtr GeometryUtils::createMapFromBounds(const std::shared_ptr<geos::geom::Polygon>& bounds)
 {
   OsmMapPtr boundaryMap = std::make_shared<OsmMap>();
-  WayPtr boundsWay(new Way(Status::Unknown1, boundaryMap->createNextWayId()));
+  WayPtr boundsWay = std::make_shared<Way>(Status::Unknown1, boundaryMap->createNextWayId());
   const geos::geom::CoordinateSequence* coords = bounds->getCoordinates();
   for (size_t i = 0; i < coords->getSize(); i++)
   {

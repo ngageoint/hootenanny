@@ -144,7 +144,7 @@ public:
           {
             NodePtr n2(new Node(Status::Unknown1, map->createNextNodeId(), c2, 10));
             map->addNode(n2);
-            WayPtr w(new Way(Status::Unknown1, map->createNextWayId(), 10));
+            WayPtr w = std::make_shared<Way>(Status::Unknown1, map->createNextWayId(), 10);
             map->addWay(w);
             w->addNode(n1->getId());
             w->addNode(n2->getId());

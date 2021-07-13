@@ -64,7 +64,7 @@ public:
     map->addNode(n2);
     NodePtr n3(new Node(Status::Unknown1, map->createNextNodeId(), 0, 20, 10));
     map->addNode(n3);
-    WayPtr w1(new Way(Status::Unknown1, map->createNextWayId(), 13.0));
+    WayPtr w1 = std::make_shared<Way>(Status::Unknown1, map->createNextWayId(), 13.0);
     // The geometry must be valid in order to get back a geometry type during conversion, so add
     // some dummy nodes to this road.
     w1->addNode(n2->getId());

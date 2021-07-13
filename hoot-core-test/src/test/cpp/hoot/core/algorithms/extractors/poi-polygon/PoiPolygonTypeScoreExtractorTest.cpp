@@ -81,14 +81,14 @@ public:
 
     NodePtr node2(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
     node2->getTags().set("amenity", "hospital");
-    WayPtr way2(new Way(Status::Unknown2, -1, 15.0));
+    WayPtr way2 = std::make_shared<Way>(Status::Unknown2, -1, 15.0);
     way2->getTags().set("amenity", "clinic");
     uut.setFeatureDistance(10.2);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.6, uut.extract(*map, node2, way2), 0.0001);
 
     NodePtr node3(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
     node3->getTags().set("amenity", "drinking_water");
-    WayPtr way3(new Way(Status::Unknown2, -1, 15.0));
+    WayPtr way3 = std::make_shared<Way>(Status::Unknown2, -1, 15.0);
     way3->getTags().set("building", "yes");
     uut.setFeatureDistance(5.1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node3, way3), 0.0);

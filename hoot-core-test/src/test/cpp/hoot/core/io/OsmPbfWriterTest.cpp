@@ -151,7 +151,7 @@ public:
     OsmPbfWriter writer;
 
     OsmMapPtr map = std::make_shared<OsmMap>();
-    WayPtr w(new Way(Status::Unknown1, 42, 1.7));
+    WayPtr w = std::make_shared<Way>(Status::Unknown1, 42, 1.7);
     vector<long> nodes;
     nodes.push_back(1);
     nodes.push_back(3);
@@ -197,7 +197,7 @@ public:
     n->setTag("hello", "world");
     n->setTag("note", "test tag");
     map->addNode(n);
-    WayPtr w(new Way(Status::Unknown1, 42, 1.7));
+    WayPtr w = std::make_shared<Way>(Status::Unknown1, 42, 1.7);
     vector<long> nodes;
     nodes.push_back(1);
     nodes.push_back(3);

@@ -66,7 +66,7 @@ public:
     way1->getTags().set("name", "blah");
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
 
-    WayPtr way2(new Way(Status::Unknown2, -1, 15.0));
+    WayPtr way2 = std::make_shared<Way>(Status::Unknown2, -1, 15.0);
     way2->getTags().set("name", "dfghdgf");
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node1, way2), 0.001);
   }

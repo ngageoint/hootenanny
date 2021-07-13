@@ -134,7 +134,7 @@ public:
     CPPUNIT_ASSERT_EQUAL( myCache.size(), static_cast<unsigned long>(1) );
 
     // Add new way
-    ConstElementPtr newWay(new Way(status, 10, circularError));
+    ConstElementPtr newWay = std::make_shared<const Way>(status, 10, circularError);
     myCache.addElement(newWay);
     CPPUNIT_ASSERT_EQUAL( myCache.hasMoreElements(), true );
     CPPUNIT_ASSERT_EQUAL( myCache.isEmpty(), false );
@@ -247,17 +247,17 @@ public:
     // Add first way
     Status status;
     Meters circularError(4.0);
-    ConstElementPtr newWay1(new Way(status, 1, circularError));
+    ConstElementPtr newWay1 = std::make_shared<const Way>(status, 1, circularError);
     myCache.addElement(newWay1);
     CPPUNIT_ASSERT_EQUAL( myCache.size(), static_cast<unsigned long>(1) );
 
     // Add second way
-    ConstElementPtr newWay2 = ConstElementPtr(new Way(status, 2, circularError));
+    ConstElementPtr newWay2 = std::make_shared<const Way>(status, 2, circularError);
     myCache.addElement(newWay2);
     CPPUNIT_ASSERT_EQUAL( myCache.size(), static_cast<unsigned long>(2) );
 
     // Add third way -- force first way out
-    ConstElementPtr newWay3 = ConstElementPtr(new Way(status, 3, circularError));
+    ConstElementPtr newWay3 = std::make_shared<const Way>(status, 3, circularError);
     myCache.addElement(newWay3);
     CPPUNIT_ASSERT_EQUAL( myCache.size(), static_cast<unsigned long>(2) );
 

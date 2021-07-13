@@ -160,11 +160,11 @@ public:
     map->addNode(n2);
     map->addNode(n3);
 
-    WayPtr w1(new Way(Status::Unknown1, 1, 13.0));
+    WayPtr w1 = std::make_shared<Way>(Status::Unknown1, 1, 13.0);
     w1->addNode(1);
     w1->addNode(2);
     w1->setTag("note", "w1");
-    WayPtr w2(new Way(Status::Unknown2, 2, 14.0));
+    WayPtr w2 = std::make_shared<Way>(Status::Unknown2, 2, 14.0);
     w2->addNode(2);
     w2->addNode(3);
     w2->setTag("note", "w2");
@@ -274,11 +274,11 @@ public:
     map->addNode(n2);
     map->addNode(n3);
 
-    WayPtr w1(new Way(Status::Unknown1, -1, 13.0));
+    WayPtr w1 = std::make_shared<Way>(Status::Unknown1, -1, 13.0);
     w1->addNode(-1);
     w1->addNode(-2);
     w1->setTag("note", "w1");
-    WayPtr w2(new Way(Status::Unknown2, -2, 14.0));
+    WayPtr w2 = std::make_shared<Way>(Status::Unknown2, -2, 14.0);
     w2->addNode(-2);
     w2->addNode(-3);
     w2->setTag("note", "w2");
@@ -587,12 +587,12 @@ public:
     map->addNode(n2);
     map->addNode(n3);
 
-    WayPtr w1(new Way(Status::Unknown1, 1, 13.0));
+    WayPtr w1 = std::make_shared<Way>(Status::Unknown1, 1, 13.0);
     w1->addNode(1);
     w1->addNode(2);
     w1->setTag("note", "w1");
     w1->setVersion(3);
-    WayPtr w2(new Way(Status::Unknown2, 2, 14.0));
+    WayPtr w2 = std::make_shared<Way>(Status::Unknown2, 2, 14.0);
     w2->addNode(2);
     w2->addNode(3);
     w2->setTag("note", "w2");

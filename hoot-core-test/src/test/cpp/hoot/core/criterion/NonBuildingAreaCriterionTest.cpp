@@ -49,7 +49,7 @@ public:
     way1->getTags().set("area", "yes");
     CPPUNIT_ASSERT(!uut.isSatisfied(way1));
 
-    WayPtr way2(new Way(Status::Unknown1, -1, 15.0));
+    WayPtr way2 = std::make_shared<Way>(Status::Unknown1, -1, 15.0);
     way2->getTags().set("area", "yes");
     CPPUNIT_ASSERT(uut.isSatisfied(way2));
   }

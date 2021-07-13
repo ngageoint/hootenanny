@@ -234,7 +234,7 @@ std::shared_ptr<OsmMap> ServicesDbTestUtils::createTestMap1()
   //put a space in this tag value, since hstore dies on those if they are not esacaped properly
   n1->setTag("name", "n1 - n2");
 
-  std::shared_ptr<Way> w1(new Way(Status::Unknown1, map->createNextWayId(), 13.0));
+  std::shared_ptr<Way> w1 = std::make_shared<Way>(Status::Unknown1, map->createNextWayId(), 13.0);
   w1->setTag("area", "yes");
   w1->setTag("building", "yes");
   w1->setTag("name", "w1");
@@ -244,28 +244,28 @@ std::shared_ptr<OsmMap> ServicesDbTestUtils::createTestMap1()
   w1->addNode(w1->getNodeId(0));
   map->addWay(w1);
 
-  std::shared_ptr<Way> w2(new Way(Status::Unknown1, map->createNextWayId(), 13.0));
+  std::shared_ptr<Way> w2 = std::make_shared<Way>(Status::Unknown1, map->createNextWayId(), 13.0);
   w2->setTag("highway", "track");
   w2->setTag("name", "w2");
   w2->addNode(_createNode(-77.3, 38.0, map)->getId());
   w2->addNode(_createNode(-77.3, 38.1, map)->getId());
   map->addWay(w2);
 
-  std::shared_ptr<Way> w3(new Way(Status::Unknown1, map->createNextWayId(), 13.0));
+  std::shared_ptr<Way> w3 = std::make_shared<Way>(Status::Unknown1, map->createNextWayId(), 13.0);
   w3->setTag("highway", "road");
   w3->setTag("name", "w3");
   w3->addNode(_createNode(-77.4, 38.0, map)->getId());
   w3->addNode(_createNode(-77.4, 38.1, map)->getId());
   map->addWay(w3);
 
-  std::shared_ptr<Way> w4(new Way(Status::Unknown1, map->createNextWayId(), 13.0));
+  std::shared_ptr<Way> w4 = std::make_shared<Way>(Status::Unknown1, map->createNextWayId(), 13.0);
   w4->addNode(_createNode(-77.5, 38.0, map)->getId());
   w4->addNode(_createNode(-77.7, 38.0, map)->getId());
   w4->addNode(_createNode(-77.6, 38.1, map)->getId());
   w4->addNode(w4->getNodeId(0));
   map->addWay(w4);
 
-  std::shared_ptr<Way> w5(new Way(Status::Unknown1, map->createNextWayId(), 13.0));
+  std::shared_ptr<Way> w5 = std::make_shared<Way>(Status::Unknown1, map->createNextWayId(), 13.0);
   w5->addNode(_createNode(-77.55, 38.01, map)->getId());
   w5->addNode(_createNode(-77.65, 38.01, map)->getId());
   w5->addNode(_createNode(-77.6, 38.05, map)->getId());
@@ -301,17 +301,17 @@ OsmMapPtr ServicesDbTestUtils::createServiceTestMap()
   NodePtr n5(new Node(Status::Invalid, 5, 0.4, 0.0, 14.0));
   map->addNode(n5);
 
-  WayPtr w1(new Way(Status::Unknown1, 1, 15.0));
+  WayPtr w1 = std::make_shared<Way>(Status::Unknown1, 1, 15.0);
   w1->addNode(1);
   w1->addNode(2);
   w1->setTag("noteb", "w1b");
   map->addWay(w1);
-  WayPtr w2(new Way(Status::Unknown2, 2, 16.0));
+  WayPtr w2 = std::make_shared<Way>(Status::Unknown2, 2, 16.0);
   w2->addNode(2);
   w2->addNode(3);
   w2->setTag("note", "w2");
   map->addWay(w2);
-  WayPtr w3(new Way(Status::Unknown2, 3, 17.0));
+  WayPtr w3 = std::make_shared<Way>(Status::Unknown2, 3, 17.0);
   w3->addNode(2);
   map->addWay(w3);
 

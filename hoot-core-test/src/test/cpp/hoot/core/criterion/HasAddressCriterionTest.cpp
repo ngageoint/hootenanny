@@ -53,7 +53,7 @@ public:
     way1->getTags().set(AddressTagKeys::FULL_ADDRESS_TAG_NAME, "blah");
     CPPUNIT_ASSERT(!uut.isSatisfied(way1));
 
-    WayPtr way2(new Way(Status::Unknown1, -1, 15.0));
+    WayPtr way2 = std::make_shared<Way>(Status::Unknown1, -1, 15.0);
     way2->getTags().set("blah", "123 Main Street");
     CPPUNIT_ASSERT(!uut.isSatisfied(way2));
   }

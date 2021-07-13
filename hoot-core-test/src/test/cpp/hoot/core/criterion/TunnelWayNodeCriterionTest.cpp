@@ -69,7 +69,7 @@ public:
     map->addNode(node4);
     CPPUNIT_ASSERT(!uut.isSatisfied(node4));
 
-    WayPtr way2(new Way(Status::Unknown1, 2, 15.0));
+    WayPtr way2 = std::make_shared<Way>(Status::Unknown1, 2, 15.0);
     way2->getTags().set("tunnel", "no");
     CPPUNIT_ASSERT(!uut.isSatisfied(way2));
     way2->addNode(node3->getId());
@@ -86,7 +86,7 @@ public:
     map->addNode(node6);
     CPPUNIT_ASSERT(!uut.isSatisfied(node6));
 
-    WayPtr way3(new Way(Status::Unknown1, 3, 15.0));
+    WayPtr way3 = std::make_shared<Way>(Status::Unknown1, 3, 15.0);
     CPPUNIT_ASSERT(!uut.isSatisfied(way3));
     way3->addNode(node5->getId());
     way3->addNode(node6->getId());

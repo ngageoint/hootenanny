@@ -66,21 +66,21 @@ public:
     OsmMapPtr map = std::make_shared<OsmMap>();
     _map = map;
 
-    WayPtr w1(new Way(Status::Unknown1, map->createNextWayId(), 13.0));
+    WayPtr w1 = std::make_shared<Way>(Status::Unknown1, map->createNextWayId(), 13.0);
     w1->setTag("highway", "track");
     w1->setTag("name", "w1");
     w1->addNode(createNode(-104.9, 38.855)->getId());
     w1->addNode(createNode(-104.899, 38.8549)->getId());
     _map->addWay(w1);
 
-    WayPtr w2(new Way(Status::Unknown1, map->createNextWayId(), 13.0));
+    WayPtr w2 = std::make_shared<Way>(Status::Unknown1, map->createNextWayId(), 13.0);
     w2->setTag("highway", "road");
     w2->setTag("name", "w2");
     w2->addNode(createNode(-104.9, 38.8545)->getId());
     w2->addNode(createNode(-104.8988, 38.8555)->getId());
      _map->addWay(w2);
 
-    WayPtr w3(new Way(Status::Unknown1, map->createNextWayId(), 13.0));
+    WayPtr w3 = std::make_shared<Way>(Status::Unknown1, map->createNextWayId(), 13.0);
     w3->setTag("highway", "track");
     w3->setTag("name", "w1");
     w3->addNode(createNode(-104.9, 38.855)->getId());
