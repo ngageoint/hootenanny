@@ -51,8 +51,7 @@ void MetadataExport::_apply()
   // create cells
   _createCells();
 
-  // gather all potential source elements for metadata tags and
-  // create node location lookup
+  // gather all potential source elements for metadata tags and create node location lookup
   _gatherProcessElements();
 
   // apply tags from elements to the dataset
@@ -100,7 +99,7 @@ void MetadataExport::_createCells()
   {
     for (double y = minY; y < maxY; y += gridY)
     {
-      WayPtr pGrid(new Way(Status::Unknown1, _pMap->createNextWayId(), -1));
+      WayPtr pGrid = std::make_shared<Way>(Status::Unknown1, _pMap->createNextWayId(), -1);
 
       // create grid poly
       long startId = _addNodeToPoly(x ,y, pGrid);
@@ -188,8 +187,7 @@ void MetadataExport::_exportMetadataFromElements()
 long MetadataExport::_addNodeToPoly(double x, double y, const WayPtr& pPoly) const
 {
   long nodeId = _pMap->createNextNodeId();
-  NodePtr pNode(new Node(Status::Unknown1, nodeId, Coordinate(x,y)));
-  _pMap->addElement(pNode);
+  _pMap->addElement(std::make_shared<Node>(Status::Unknown1, nodeId, Coordinate(x, y)));
   pPoly->addNode(nodeId);
   return nodeId;
 }
