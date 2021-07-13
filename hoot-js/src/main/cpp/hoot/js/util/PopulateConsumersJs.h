@@ -363,7 +363,7 @@ public:
     }
     else if (ecc != nullptr)
     {
-      std::shared_ptr<JsFunctionCriterion> ecp(new JsFunctionCriterion());
+      std::shared_ptr<JsFunctionCriterion> ecp = std::make_shared<JsFunctionCriterion>();
       ecp->addFunction(current, func);
       ecc->addCriterion(ecp);
     }

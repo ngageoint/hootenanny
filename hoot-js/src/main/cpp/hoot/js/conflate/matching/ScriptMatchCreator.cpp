@@ -111,10 +111,11 @@ public:
     // Point/Polygon is not meant to conflate any polygons that are conflatable by other *specific*
     // alg conflation routines (generic geometry algs should be ignored here), hence the use of
     // NonConflatableCriterion.
-    std::shared_ptr<NonConflatableCriterion> nonConflatableCrit(new NonConflatableCriterion(map));
+    std::shared_ptr<NonConflatableCriterion> nonConflatableCrit =
+      std::make_shared<NonConflatableCriterion>(map);
     nonConflatableCrit->setIgnoreGenericConflators(true);
-    _pointPolyCrit.reset(
-      new ChainCriterion(ElementCriterionPtr(new PolygonCriterion(map)), nonConflatableCrit));
+    _pointPolyCrit =
+      std::make_shared<ChainCriterion>(std::make_shared<PolygonCriterion>(map), nonConflatableCrit);
 
     _timer.start();
   }
@@ -224,9 +225,9 @@ public:
 
       if (attemptToMatch)
       {
-        // score each candidate and push it on the result vector
-        std::shared_ptr<ScriptMatch> m(
-          new ScriptMatch(_script, plugin, map, mapJs, from, *it, _mt));
+        // Score each candidate and push it on the result vector.
+        std::shared_ptr<ScriptMatch> m =
+          std::make_shared<ScriptMatch>(_script, plugin, map, mapJs, from, *it, _mt);
         m->setMatchMembers(
           ScriptMatch::geometryTypeToMatchMembers(
             GeometryTypeCriterion::typeToString(_scriptInfo.getGeometryType())));
@@ -387,7 +388,7 @@ public:
     Local<Value> jsArgs[1];
     int argc = 0;
     assert(getMap().get());
-    OsmMapPtr copiedMap(new OsmMap(getMap()));
+    OsmMapPtr copiedMap = std::make_shared<OsmMap>(getMap());
     jsArgs[argc++] = OsmMapJs::create(copiedMap);
 
     Local<Value> c = func->Call(context, ToLocal(&plugin), argc, jsArgs).ToLocalChecked();
@@ -417,8 +418,7 @@ public:
 
       // No tuning was done, I just copied these settings from OsmMapIndex.
       // 10 children - 368 - see #3054
-      std::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
-      _index.reset(new HilbertRTree(mps, 2));
+      _index = std::make_shared<Tgs::HilbertRTree>(std::make_shared<Tgs::MemoryPageStore>(728), 2);
 
       // Only index elements that satisfy the isMatchCandidate. Previously we only indexed Unknown2,
       // but that causes issues when wanting to conflate from n datasets and support intra-dataset
@@ -434,7 +434,7 @@ public:
       {
         std::function<bool (ConstElementPtr)> f =
           std::bind(&ScriptMatchVisitor::isMatchCandidate, this, placeholders::_1);
-        std::shared_ptr<ArbitraryCriterion> pC(new ArbitraryCriterion(f));
+        std::shared_ptr<ArbitraryCriterion> pC = std::make_shared<ArbitraryCriterion>(f);
 
         SpatialIndexer v(_index,
                          _indexToEid,
@@ -763,17 +763,17 @@ MatchPtr ScriptMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId ei
     {
       if (!_pointPolyPolyCrit)
       {
-        _pointPolyPolyCrit.reset(
-          new ChainCriterion(
-            ElementCriterionPtr(new PolygonCriterion(map)),
-            ElementCriterionPtr(new NonConflatableCriterion(map))));
+          _pointPolyPolyCrit =
+            std::make_shared<ChainCriterion>(
+              std::make_shared<PolygonCriterion>(map),
+              std::make_shared<NonConflatableCriterion>(map));
       }
       if (!_pointPolyPointCrit)
       {
-        _pointPolyPointCrit.reset(
-          new ChainCriterion(
-            ElementCriterionPtr(new PointCriterion(map)),
-            ElementCriterionPtr(new NonConflatableCriterion(map))));
+          _pointPolyPointCrit =
+            std::make_shared<ChainCriterion>(
+              std::make_shared<PointCriterion>(map),
+              std::make_shared<NonConflatableCriterion>(map));
       }
 
       // see related note in ScriptMatchVisitor::checkForMatch
@@ -993,7 +993,7 @@ CreatorDescription ScriptMatchCreator::_getScriptDescription(QString path) const
   CreatorDescription result;
   result.setExperimental(true);
 
-  std::shared_ptr<PluginContext> script(new PluginContext());
+  std::shared_ptr<PluginContext> script = std::make_shared<PluginContext>();
   Isolate* current = v8::Isolate::GetCurrent();
   HandleScope handleScope(current);
   Context::Scope context_scope(script->getContext(current));
@@ -1109,12 +1109,11 @@ std::shared_ptr<MatchThreshold> ScriptMatchCreator::getMatchThreshold()
 
     if (matchThreshold != -1.0 && missThreshold != -1.0 && reviewThreshold != -1.0)
     {
-      return std::shared_ptr<MatchThreshold>(
-        new MatchThreshold(matchThreshold, missThreshold, reviewThreshold));
+      return std::make_shared<MatchThreshold>(matchThreshold, missThreshold, reviewThreshold);
     }
     else
     {
-      return std::shared_ptr<MatchThreshold>(new MatchThreshold());
+      return std::make_shared<MatchThreshold>();
     }
   }
   return _matchThreshold;

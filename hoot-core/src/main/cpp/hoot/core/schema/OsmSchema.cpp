@@ -1385,7 +1385,7 @@ private:
 std::shared_ptr<OsmSchema> OsmSchema::_theInstance = nullptr;
 
 OsmSchema::OsmSchema() :
-_d(new OsmSchemaData())
+_d(std::make_shared<OsmSchemaData>())
 {
 }
 
@@ -1399,7 +1399,8 @@ void OsmSchema::addIsA(const QString& name1, const QString& name2) const
   _d->addIsA(name1, name2);
 }
 
-void OsmSchema::addSimilarTo(const QString& name1, const QString& name2, double weight, bool oneway) const
+void OsmSchema::addSimilarTo(
+  const QString& name1, const QString& name2, double weight, bool oneway) const
 {
   _d->addSimilarTo(name1, name2, weight, oneway);
 }

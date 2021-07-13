@@ -93,8 +93,10 @@ bool CollapsePolyGeoModifierAction::processElement(const ElementPtr& pElement, O
 
       if (pMinRectCoords->getSize() > 2)
       {
-        double len1 = (CoordinateExt(pMinRectCoords->getAt(0)) - CoordinateExt(pMinRectCoords->getAt(1))).length();
-        double len2 = (CoordinateExt(pMinRectCoords->getAt(1)) - CoordinateExt(pMinRectCoords->getAt(2))).length();
+        double len1 =
+          (CoordinateExt(pMinRectCoords->getAt(0)) - CoordinateExt(pMinRectCoords->getAt(1))).length();
+        double len2 =
+          (CoordinateExt(pMinRectCoords->getAt(1)) - CoordinateExt(pMinRectCoords->getAt(2))).length();
         polyLength = std::max(len1,len2);
       }
     }
@@ -106,11 +108,13 @@ bool CollapsePolyGeoModifierAction::processElement(const ElementPtr& pElement, O
       if (pPoly->getCentroid(centroid) == false)
       {
         // throwing a HootException might be too harsh
-        LOG_ERROR("Collapse polygon modifier could not calculate centroid for element id " + pElement->getId());
+        LOG_ERROR(
+          "Collapse polygon modifier could not calculate centroid for element id " +
+          pElement->getId());
         return false;
       }
 
-      NodePtr pNode(new Node(Status::Unknown1, pMap->createNextNodeId(), centroid));
+      NodePtr pNode = std::make_shared<Node>(Status::Unknown1, pMap->createNextNodeId(), centroid);
 
       // copy tags from original way to node
       pNode->setTags(pWay->getTags());

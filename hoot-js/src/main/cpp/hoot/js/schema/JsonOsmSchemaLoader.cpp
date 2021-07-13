@@ -321,7 +321,7 @@ void JsonOsmSchemaLoader::_loadCompoundTags(SchemaVertex& tv, const QVariant& va
           throw HootException("A compound tag rule must be an array of strings.");
         }
 
-        rule.append(KeyValuePairPtr(new KeyValuePair(_asString(v3))));
+        rule.append(std::make_shared<KeyValuePair>(_asString(v3)));
       }
 
       tv.addCompoundRule(rule);
