@@ -69,12 +69,11 @@ void RoadCrossingPolyReviewMarker::apply(const OsmMapPtr& map)
 
   // If there are no polygons in the input, then skip initialization of the road crossing poly
   // rules, since the road index creation can be expensive when calling conflation in a loop.
-  ElementCriterionPtr polyCrit(new PolygonCriterion(_map));
-  ElementCriterionPtr tagCrit(
-    std::shared_ptr<NotCriterion>(
-      new NotCriterion(std::shared_ptr<TagKeyCriterion>(new TagKeyCriterion("highway")))));
-  ElementCriterionPtr crit(new ChainCriterion(polyCrit, tagCrit));
-  if (FilteredVisitor::getStat(crit, ConstElementVisitorPtr(new ElementCountVisitor()), _map) == 0)
+  ElementCriterionPtr polyCrit = std::make_shared<PolygonCriterion>(_map);
+  ElementCriterionPtr tagCrit =
+    std::make_shared<NotCriterion>(std::make_shared<TagKeyCriterion>("highway"));
+  ElementCriterionPtr crit = std::make_shared<ChainCriterion>(polyCrit, tagCrit);
+  if (FilteredVisitor::getStat(crit, std::make_shared<ElementCountVisitor>(), _map) == 0)
   {
     LOG_DEBUG("No polygons found in input map. Skipping marking roads for review.");
     return;
