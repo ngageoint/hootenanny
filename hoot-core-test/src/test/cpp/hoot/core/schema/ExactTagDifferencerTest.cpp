@@ -96,7 +96,7 @@ public:
     n8->setTags(t8);
     map->addNode(n8);
 
-    NodePtr n9(new Node(Status::Unknown1, 9, 0, 0, 15.0));
+    NodePtr n9 = std::make_shared<Node>(Status::Unknown1, 9, 0, 0, 15.0);
     Tags t9;
     t9["monitoring:water_level"] = "yes";
     t9["hoot:status"] = "1";

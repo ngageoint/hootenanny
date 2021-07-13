@@ -107,7 +107,8 @@ public:
       std::make_shared<Node>(Status::Unknown1, 7, geos::geom::Coordinate(0.0, 0.0), 15.0);
     map->addNode(node7);
     CPPUNIT_ASSERT(!uut.isSatisfied(node7));
-    NodePtr node8(new Node(Status::Unknown1, 8, geos::geom::Coordinate(0.0, 10.0), 15.0));
+    NodePtr node8 =
+      std::make_shared<Node>(Status::Unknown1, 8, geos::geom::Coordinate(0.0, 10.0), 15.0);
     map->addNode(node8);
     CPPUNIT_ASSERT(!uut.isSatisfied(node8));
 

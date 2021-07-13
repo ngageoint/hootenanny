@@ -849,10 +849,6 @@ void HootApiDb::deleteNode(ConstNodePtr node)
     _nodeBulkDelete->flush();
   }
 
-  // for multiary-poi-ingest: how to update envelope here?
-  //ConstNodePtr envelopeNode(new Node(Status::Unknown1, id, lon, lat, 0.0));
-  //_updateChangesetEnvelope(envelopeNode);
-
   LOG_TRACE("Deleted node: " << ElementId(ElementType::Node, node->getId()));
 }
 

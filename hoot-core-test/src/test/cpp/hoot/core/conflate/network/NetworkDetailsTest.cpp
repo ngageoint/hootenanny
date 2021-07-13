@@ -68,17 +68,17 @@ public:
     std::shared_ptr<OGREnvelope> env(GeometryUtils::toOGREnvelope(Envelope(0, 1, 0, 1)));
     MapProjector::projectToPlanar(map, *env);
 
-    NodePtr n1a(new Node(Status::Invalid, -1, 0, 0, 15.0));
+    NodePtr n1a = std::make_shared<Node>(Status::Invalid, -1, 0, 0, 15.0);
     NetworkVertexPtr v1(new NetworkVertex(n1a));
-    NodePtr n1b(new Node(Status::Invalid, -2, 0, 100, 15.0));
+    NodePtr n1b = std::make_shared<Node>(Status::Invalid, -2, 0, 100, 15.0);
     NetworkVertexPtr v2(new NetworkVertex(n1b));
-    NodePtr n1c(new Node(Status::Invalid, -3, 0, 300, 15.0));
+    NodePtr n1c = std::make_shared<Node>(Status::Invalid, -3, 0, 300, 15.0);
     NetworkVertexPtr v3(new NetworkVertex(n1c));
-    NodePtr n1d(new Node(Status::Invalid, -4, 100, 300, 15.0));
+    NodePtr n1d = std::make_shared<Node>(Status::Invalid, -4, 100, 300, 15.0);
     NetworkVertexPtr v4(new NetworkVertex(n1d));
-    NodePtr n1e(new Node(Status::Invalid, -5, 150, 350, 15.0));
+    NodePtr n1e = std::make_shared<Node>(Status::Invalid, -5, 150, 350, 15.0);
     NetworkVertexPtr v5(new NetworkVertex(n1e));
-    NodePtr n1f(new Node(Status::Invalid, -6, 200, 300, 15.0));
+    NodePtr n1f = std::make_shared<Node>(Status::Invalid, -6, 200, 300, 15.0);
     NetworkVertexPtr v6(new NetworkVertex(n1f));
 
     WayPtr w1 = std::make_shared<Way>(Status::Invalid, -1, 15.0);

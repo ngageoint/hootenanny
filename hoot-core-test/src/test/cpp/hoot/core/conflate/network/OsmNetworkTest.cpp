@@ -53,11 +53,11 @@ public:
     NetworkVertex::reset();
 
     // Setup some vertexes and edges
-    NodePtr pN1(new Node(Status::Unknown1, -100, Coordinate(1.0, 1.0), 10.0));
-    NodePtr pN2(new Node(Status::Unknown1, -200, Coordinate(2.0, 2.0), 10.0));
+    NodePtr pN1 = std::make_shared<Node>(Status::Unknown1, -100, Coordinate(1.0, 1.0), 10.0);
+    NodePtr pN2 = std::make_shared<Node>(Status::Unknown1, -200, Coordinate(2.0, 2.0), 10.0);
     WayPtr  pW1 = std::make_shared<Way>(Status::Unknown1, -1000, 10);
-    NodePtr pN3(new Node(Status::Unknown1, -300, Coordinate(1.0, 2.0), 10.0));
-    NodePtr pN4(new Node(Status::Unknown1, -400, Coordinate(2.0, 1.0), 10.0));
+    NodePtr pN3 = std::make_shared<Node>(Status::Unknown1, -300, Coordinate(1.0, 2.0), 10.0);
+    NodePtr pN4 = std::make_shared<Node>(Status::Unknown1, -400, Coordinate(2.0, 1.0), 10.0);
     WayPtr  pW2 = std::make_shared<Way>(Status::Unknown1, -1001, 10);
     ConstNetworkVertexPtr pNV1(new NetworkVertex(pN1));
     ConstNetworkVertexPtr pNV2(new NetworkVertex(pN2));

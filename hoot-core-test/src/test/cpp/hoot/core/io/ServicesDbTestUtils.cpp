@@ -220,7 +220,8 @@ void ServicesDbTestUtils::verifyTestDatabaseEmpty()
 
 std::shared_ptr<Node> ServicesDbTestUtils::_createNode(double x, double y, OsmMapPtr map)
 {
-  std::shared_ptr<Node> n(new Node(Status::Unknown1, map->createNextNodeId(), x, y, 10.0));
+  std::shared_ptr<Node> n =
+    std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), x, y, 10.0);
   map->addNode(n);
   return n;
 }
@@ -298,7 +299,7 @@ OsmMapPtr ServicesDbTestUtils::createServiceTestMap()
   NodePtr n4 = std::make_shared<Node>(Status::Conflated, 4, 0.3, 0.0, 13.0);
   n4->setTag("note", "n4");
   map->addNode(n4);
-  NodePtr n5(new Node(Status::Invalid, 5, 0.4, 0.0, 14.0));
+  NodePtr n5 = std::make_shared<Node>(Status::Invalid, 5, 0.4, 0.0, 14.0);
   map->addNode(n5);
 
   WayPtr w1 = std::make_shared<Way>(Status::Unknown1, 1, 15.0);

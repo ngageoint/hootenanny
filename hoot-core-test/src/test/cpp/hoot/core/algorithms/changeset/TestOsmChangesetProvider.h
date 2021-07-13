@@ -63,7 +63,6 @@ public:
     if (useCoordScale)
       _coordinateScale = ApiDb::COORDINATE_SCALE;
   }
-
   ~TestOsmChangesetProvider() { }
 
   std::shared_ptr<OGRSpatialReference> getProjection() const override
@@ -95,22 +94,21 @@ public:
         change =
           Change(
             changeType,
-            NodePtr(
-              new Node(
-                Status::Unknown1, ++_node, _getLon(), _getLat(), 15.0, ElementData::CHANGESET_EMPTY,
-                version)));
+            std::make_shared<Node>(
+              Status::Unknown1, ++_node, _getLon(), _getLat(), 15.0, ElementData::CHANGESET_EMPTY,
+              version));
       }
       break;
     case ElementType::Way:
       {
-        NodePtr node1(
-          new Node(
+        NodePtr node1 =
+          std::make_shared<Node>(
             Status::Unknown1, ++_node, _getLon(), _getLat(), 15.0, ElementData::CHANGESET_EMPTY,
-            version));
-        NodePtr node2(
-          new Node(
+            version);
+        NodePtr node2 =
+          std::make_shared<Node>(
             Status::Unknown1, ++_node, _getLon(), _getLat(), 15.0, ElementData::CHANGESET_EMPTY,
-            version));
+            version);
         WayPtr way =
           std::make_shared<Way>(
             Status::Unknown1, ++_way, 15.0, ElementData::CHANGESET_EMPTY, version);
@@ -122,14 +120,14 @@ public:
       break;
     case ElementType::Relation:
       {
-        NodePtr node1(
-          new Node(
+        NodePtr node1 =
+          std::make_shared<Node>(
             Status::Unknown1, ++_node, _getLon(), _getLat(), 15.0, ElementData::CHANGESET_EMPTY,
-            version));
-        NodePtr node2(
-          new Node(
+            version);
+        NodePtr node2 =
+          std::make_shared<Node>(
             Status::Unknown1, ++_node, _getLon(), _getLat(), 15.0, ElementData::CHANGESET_EMPTY,
-            version));
+            version);
         WayPtr way =
           std::make_shared<Way>(
             Status::Unknown1, ++_way, 15.0, ElementData::CHANGESET_EMPTY, version);

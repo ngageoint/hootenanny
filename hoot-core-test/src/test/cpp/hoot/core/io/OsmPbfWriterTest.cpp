@@ -214,7 +214,7 @@ public:
 
     map->clear();
 
-    n.reset(new Node(Status::Unknown1, 73, 20, 30, 15));
+    n = std::make_shared<Node>(Status::Unknown1, 73, 20, 30, 15);
     map->addNode(n);
     w = std::make_shared<Way>(Status::Unknown1, 43, 1.7);
     nodes.clear();

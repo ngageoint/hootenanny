@@ -94,7 +94,7 @@ public:
     // Add new node
     Status nodeStatus;
     Meters circularError(3.0);
-    ConstElementPtr newNode(new Node(nodeStatus, 1, 2.0, 3.0, circularError) );
+    ConstElementPtr newNode = std::make_shared<const Node>(nodeStatus, 1, 2.0, 3.0, circularError);
     myCache.addElement(newNode);
     // Now we should be not empty
     CPPUNIT_ASSERT_EQUAL( myCache.hasMoreElements(), true );
@@ -126,7 +126,7 @@ public:
     // Add new node
     Status status;
     Meters circularError(3.0);
-    ConstElementPtr newNode(new Node(status, 1, 2.0, 3.0, circularError) );
+    ConstElementPtr newNode = std::make_shared<const Node>(status, 1, 2.0, 3.0, circularError);
     myCache.addElement(newNode);
     // Now we should be not empty, iterators have work
     CPPUNIT_ASSERT_EQUAL( myCache.hasMoreElements(), true );
@@ -215,17 +215,17 @@ public:
     // Add first node
     Status status;
     Meters circularError(4.0);
-    ConstElementPtr newNode1(new Node(status, 1, 2.0, 3.0, circularError) );
+    ConstElementPtr newNode1 = std::make_shared<const Node>(status, 1, 2.0, 3.0, circularError);
     myCache.addElement(newNode1);
     CPPUNIT_ASSERT_EQUAL( myCache.size(), static_cast<unsigned long>(1) );
 
     // Add second node
-    ConstElementPtr newNode2 = ConstElementPtr(new Node(status, 5, 6.0, 7.0, circularError));
+    ConstElementPtr newNode2 = std::make_shared<const Node>(status, 5, 6.0, 7.0, circularError);
     myCache.addElement(newNode2);
     CPPUNIT_ASSERT_EQUAL( myCache.size(), static_cast<unsigned long>(2) );
 
     // Add third node -- force first node out
-    ConstElementPtr newNode3 = ConstElementPtr(new Node(status, 8, 9.0, 10.0, circularError));
+    ConstElementPtr newNode3 = std::make_shared<Node>(status, 8, 9.0, 10.0, circularError);
     myCache.addElement(newNode3);
     CPPUNIT_ASSERT_EQUAL( myCache.size(), static_cast<unsigned long>(2) );
 
@@ -315,7 +315,7 @@ public:
     {
       Status status(Status::Unknown1);
       Meters circularError(15.0);
-      ConstElementPtr newNode(new Node(status, i, 2.0, 3.0, circularError));
+      ConstElementPtr newNode = std::make_shared<const Node>(status, i, 2.0, 3.0, circularError);
       myCache.addElement(newNode);
     }
 
@@ -341,7 +341,7 @@ public:
     {
       Status status(Status::Unknown1);
       Meters circularError(15.0);
-      ConstElementPtr newNode(new Node(status, i, 2.0, 3.0, circularError));
+      ConstElementPtr newNode = std::make_shared<const Node>(status, i, 2.0, 3.0, circularError);
       myCache.addElement(newNode);
     }
 

@@ -78,19 +78,6 @@ bool CollapsePolyGeoModifierAction::processElement(const ElementPtr& pElement, O
       const Geometry* pMinRect = MinimumDiameter::getMinimumRectangle(pPoly.get());
       const CoordinateSequence* pMinRectCoords = pMinRect->getCoordinates();
 
-      /* Debug polygon
-      WayPtr pDebugWay(new Way(Status::Unknown1, pMap->createNextWayId()));
-      pMap->addElement(pDebugWay);
-
-      for (size_t i = 0; i < pMinRectCoords->getSize(); i++)
-      {
-        Coordinate pos = pMinRectCoords->getAt(i);
-        NodePtr pNode(new Node(Status::Unknown1, pMap->createNextNodeId(), pos));
-        pDebugWay->addNode(pNode->getId());
-        pMap->addElement(pNode);
-      }
-      */
-
       if (pMinRectCoords->getSize() > 2)
       {
         double len1 =
