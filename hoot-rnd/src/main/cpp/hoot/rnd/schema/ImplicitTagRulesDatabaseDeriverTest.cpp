@@ -55,7 +55,7 @@ public:
   {
   }
 
-  void runBasicTest() const
+  void runBasicTest()
   {
     const QString input = _inputPath + "ImplicitTagRulesDatabaseDeriverTest-input.implicitTagRules";
     const QString dbOutputFile =
@@ -76,7 +76,7 @@ public:
     dbReader.close();
   }
 
-  void runBadInputsTest() const
+  void runBadInputsTest()
   {
     ImplicitTagRulesDatabaseDeriver rulesDeriver;
     rulesDeriver.setMinTagOccurrencesPerWord(1);
@@ -115,7 +115,7 @@ public:
     CPPUNIT_ASSERT(exceptionMsg.contains("Incorrect output specified"));
   }
 
-  void runMinTagOccurrencePerWordTest() const
+  void runMinTagOccurrencePerWordTest()
   {
     const QString input = _inputPath + "ImplicitTagRulesDatabaseDeriverTest-input.implicitTagRules";
     const QString dbOutputFile =
@@ -136,7 +136,7 @@ public:
     dbReader.close();
   }
 
-  void runMinWordLengthTest() const
+  void runMinWordLengthTest()
   {
     const QString input = _inputPath + "ImplicitTagRulesDatabaseDeriverTest-input.implicitTagRules";
     const QString dbOutputFile =
@@ -157,7 +157,7 @@ public:
     dbReader.close();
   }
 
-  void runTagIgnoreTest() const
+  void runTagIgnoreTest()
   {
     const QString input = _inputPath + "ImplicitTagRulesDatabaseDeriverTest-input.implicitTagRules";
     const QString dbOutputFile =
@@ -179,7 +179,7 @@ public:
     dbReader.close();
   }
 
-  void runWordIgnoreTest() const
+  void runWordIgnoreTest()
   {
     const QString input = _inputPath + "ImplicitTagRulesDatabaseDeriverTest-input.implicitTagRules";
     const QString dbOutputFile =
@@ -202,7 +202,7 @@ public:
     dbReader.close();
   }
 
-  void runCustomRuleTest() const
+  void runCustomRuleTest()
   {
     const QString input = _inputPath + "ImplicitTagRulesDatabaseDeriverTest-input.implicitTagRules";
     const QString dbOutputFile =
@@ -225,7 +225,7 @@ public:
     dbReader.close();
   }
 
-  void runSchemaValuesOnlyOffTest() const
+  void runSchemaValuesOnlyOffTest()
   {
     const QString input = _inputPath + "ImplicitTagRulesDatabaseDeriverTest-input.implicitTagRules";
     const QString dbOutputFile =

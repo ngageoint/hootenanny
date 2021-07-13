@@ -58,7 +58,7 @@ public:
   {
   }
 
-  void runBasicPoiTest() const
+  void runBasicPoiTest()
   {
     QStringList inputs;
     inputs.append(_inputPath + "yemen-crop-2.osm.pbf");
@@ -81,7 +81,7 @@ public:
       _inputPath + "ImplicitTagRawRulesDeriverTest-runBasicTest.implicitTagRules", outputFile);
   }
 
-  void runMultipleInputsPoiTest() const
+  void runMultipleInputsPoiTest()
   {
     QStringList inputs;
     inputs.append(_inputPath + "yemen-crop-2.osm.pbf");
@@ -109,7 +109,7 @@ public:
       outputFile);
   }
 
-  void runDuplicateWordKeyCountPoiTest() const
+  void runDuplicateWordKeyCountPoiTest()
   {
     DisableLog dl;
 
@@ -155,10 +155,10 @@ public:
       rawRulesDeriver._tieResolvedCountFile->fileName());
   }
 
-  void runNameCasePoiTest() const
+  void runNameCasePoiTest()
   {
-    //Case is actually already handled correctly in runBasicTest, but this smaller input dataset
-    //will make debugging case problems easier, if needed.
+    // Case is actually already handled correctly in runBasicTest, but this smaller input dataset
+    // will make debugging case problems easier, if needed.
 
     QStringList inputs;
     inputs.append(_inputPath + "ImplicitTagRawRulesDeriverTest-runNameCaseTest.osm");
@@ -183,7 +183,7 @@ public:
       _inputPath + "ImplicitTagRawRulesDeriverTest-runNameCaseTest.implicitTagRules", outputFile);
   }
 
-  void runTranslateNamesFalsePoiTest() const
+  void runTranslateNamesFalsePoiTest()
   {
     QStringList inputs;
     inputs.append(_inputPath + "yemen-crop-2.osm.pbf");
@@ -208,7 +208,7 @@ public:
       outputFile);
   }
 
-  void runBadInputsTest() const
+  void runBadInputsTest()
   {
     QString exceptionMsg("");
     QStringList inputs;

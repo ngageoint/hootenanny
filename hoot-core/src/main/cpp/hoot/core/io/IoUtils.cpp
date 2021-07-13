@@ -552,11 +552,9 @@ std::shared_ptr<ElementVisitorInputStream> IoUtils::getVisitorInputStream(
   reader->initializePartial();
 
   return
-    std::shared_ptr<ElementVisitorInputStream>(
-      new ElementVisitorInputStream(
-        std::dynamic_pointer_cast<ElementInputStream>(reader),
-        ElementVisitorPtr(
-          Factory::getInstance().constructObject<ElementVisitor>(visitorClassName))));
+    std::make_shared<ElementVisitorInputStream>(
+      std::dynamic_pointer_cast<ElementInputStream>(reader),
+      ElementVisitorPtr(Factory::getInstance().constructObject<ElementVisitor>(visitorClassName)));
 }
 
 bool IoUtils::isUrl(const QString& str)
