@@ -29,35 +29,36 @@ source ~/.bash_profile
 
 if [ "${ADDREPOS:-yes}" = "yes" ]; then
     echo "Adding additional software repositories..."
+
+    # Ensure that CentOS Yum repository data is GPG-verified.
+    echo "### Configuring CentOS to verify repository metadata ###" > CentOS_upgrade.txt
+    yum-config-manager \
+        --save \
+        --setopt=base.repo_gpgcheck=1 \
+        --setopt=extras.repo_gpgcheck=1 \
+        --setopt=updates.repo_gpgcheck=1 &> /dev/null
+
     # add EPEL repo for extra packages
     echo "### Add epel repo ###" > CentOS_upgrade.txt
     sudo yum -y install epel-release >> CentOS_upgrade.txt 2>&1
+
+    # add GEOINT for spatial libraries and utilities.
+    echo "### Add geoint-deps repo ###" >> CentOS_upgrade.txt
+    sudo $HOOT_HOME/scripts/yum/geoint-repo.sh
 
     # add Hoot repo for our pre-built dependencies.
     echo "### Add Hoot repo ###" >> CentOS_upgrade.txt
     sudo $HOOT_HOME/scripts/yum/hoot-repo.sh
 
-    # configure PGDG repository for PostgreSQL 9.5.
+    # configure PGDG repository for PostgreSQL 13.
     echo "### Add pgdg repo ###" >> CentOS_upgrade.txt
-    sudo $HOOT_HOME/scripts/yum/pgdg-repo.sh 9.5
-
-    # configure the devtoolset repository
-#    echo "### Add devtoolset repo ###"
-#    sudo yum install -y centos-release-scl
-#    sudo yum-config-manager --enable rhel-server-rhscl-7-rpms
-    # add the geoint-deps repository
-#    echo  "### Add geoint-deps repo ###"
-#    sudo yum-config-manager --add-repo https://geoint-deps.s3.amazonaws.com/el7/stable/geoint-deps.repo
+    sudo $HOOT_HOME/scripts/yum/pgdg-repo.sh 13
 fi
 
 # configure the devtoolset repository
 echo "### Add devtoolset repo ###"
 sudo yum install -y centos-release-scl yum-utils
 sudo yum-config-manager --enable rhel-server-rhscl-7-rpms
-
-# add the geoint-deps repository
-echo  "### Add geoint-deps repo ###"
-sudo yum-config-manager --add-repo https://geoint-deps.s3.amazonaws.com/el7/stable/geoint-deps.repo
 
 if [ "${YUMUPDATE:-yes}" = "yes" ]; then
     echo "Updating OS..."
@@ -176,10 +177,10 @@ sudo yum -y install \
     libpostal-data \
     libpostal-devel \
     parallel \
-    postgresql95 \
-    postgresql95-contrib \
-    postgresql95-devel \
-    postgresql95-server \
+    postgresql13 \
+    postgresql13-contrib \
+    postgresql13-devel \
+    postgresql13-server \
     protobuf \
     protobuf-compiler \
     protobuf-devel \
