@@ -157,7 +157,7 @@ public:
     node1->getTags().set("test1", "1");
     NodePtr node2(new Node(Status::Unknown1, 2, 57.546465, 100.21651651, 15.0));
     node2->getTags().set(MetadataTags::HootHash(), "2");
-    WayPtr way(new Way(Status::Unknown1, 1, 15.0));
+    WayPtr way = std::make_shared<Way>(Status::Unknown1, 1, 15.0);
     way->addNode(node1->getId());
     way->addNode(node2->getId());
 

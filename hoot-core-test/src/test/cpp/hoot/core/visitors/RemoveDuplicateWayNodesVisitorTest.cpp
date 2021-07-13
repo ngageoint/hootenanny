@@ -65,7 +65,7 @@ public:
     NodePtr node3(new Node(Status::Unknown1, 3, 0, 0, 0));
     map->addNode(node3);
 
-    WayPtr way(new Way(Status::Unknown1, 1, 15.0));
+    WayPtr way = std::make_shared<Way>(Status::Unknown1, 1, 15.0);
     std::vector<long> nodeIds;
     nodeIds.push_back(1);
     nodeIds.push_back(2);
@@ -100,7 +100,7 @@ public:
     NodePtr node3(new Node(Status::Unknown1, 3, 0, 0, 0));
     map->addNode(node3);
 
-    WayPtr way(new Way(Status::Unknown1, 1, 15.0));
+    WayPtr way = std::make_shared<Way>(Status::Unknown1, 1, 15.0);
     std::vector<long> nodeIds;
     nodeIds.push_back(1);
     nodeIds.push_back(1); //invalid
@@ -131,7 +131,7 @@ public:
     NodePtr node1(new Node(Status::Unknown1, 1, 0, 0, 0));
     map->addNode(node1);
 
-    WayPtr way(new Way(Status::Unknown1, 1, 15.0));
+    WayPtr way = std::make_shared<Way>(Status::Unknown1, 1, 15.0);
     std::vector<long> nodeIds;
     nodeIds.push_back(1);
     nodeIds.push_back(1); //invalid
@@ -159,7 +159,7 @@ public:
     NodePtr node3(new Node(Status::Unknown1, 3, 0, 0, 0));
     map->addNode(node3);
 
-    WayPtr way(new Way(Status::Unknown1, 1, 15.0));
+    WayPtr way = std::make_shared<Way>(Status::Unknown1, 1, 15.0);
     std::vector<long> nodeIds;
     nodeIds.push_back(1);
     nodeIds.push_back(2);
@@ -196,7 +196,7 @@ public:
     NodePtr node4(new Node(Status::Unknown1, 4, 0, 0, 0));
     map->addNode(node4);
 
-    WayPtr way(new Way(Status::Unknown1, 1, 15.0));
+    WayPtr way = std::make_shared<Way>(Status::Unknown1, 1, 15.0);
     std::vector<long> nodeIds;
     nodeIds.push_back(1);
     nodeIds.push_back(2);

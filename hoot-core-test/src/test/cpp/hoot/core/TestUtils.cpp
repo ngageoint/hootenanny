@@ -136,7 +136,7 @@ WayPtr TestUtils::createWay(
   const OsmMapPtr& map, const geos::geom::Coordinate c[], const QString& note, const Status& s,
   const Meters circularError, const Tags& tags)
 {
-  WayPtr way(new Way(s, map->createNextWayId(), circularError));
+  WayPtr way = std::make_shared<Way>(s, map->createNextWayId(), circularError);
   if (c != nullptr)
   {
     for (size_t i = 0; c[i].isNull() == false; i++)
@@ -159,7 +159,7 @@ WayPtr TestUtils::createWay(
   const OsmMapPtr& map, const QList<NodePtr>& nodes, const QString& note, const Status& status,
   const Meters circularError, const Tags& tags)
 {
-  WayPtr way(new Way(status, map->createNextWayId(), circularError));
+  WayPtr way = std::make_shared<Way>(status, map->createNextWayId(), circularError);
   foreach (NodePtr node, nodes)
   {
     map->addNode(node);
@@ -178,7 +178,7 @@ WayPtr TestUtils::createWay(
   const OsmMapPtr& map, const QList<ElementId>& nodeIds, const QString& note, const Status& status,
   const Meters circularError, const Tags& tags)
 {
-  WayPtr way(new Way(status, map->createNextWayId(), circularError));
+  WayPtr way = std::make_shared<Way>(status, map->createNextWayId(), circularError);
   foreach (ElementId nodeId, nodeIds)
   {
     if (!map->containsNode(nodeId.getId()))

@@ -634,7 +634,7 @@ public:
       node->getTags().set(AddressTagKeys::FULL_ADDRESS_TAG_NAME, "Main Street");
       map->addNode(node);
 
-      WayPtr way(new Way(Status::Unknown2, -1, 15.0));
+      WayPtr way = std::make_shared<Way>(Status::Unknown2, -1, 15.0);
       way->getTags().set(AddressTagKeys::FULL_ADDRESS_TAG_NAME, "123 Main Street");
       map->addWay(way);
 
@@ -648,7 +648,7 @@ public:
       node->getTags().set(AddressTagKeys::FULL_ADDRESS_TAG_NAME, "123 Main Street");
       map->addNode(node);
 
-      WayPtr way(new Way(Status::Unknown2, -1, 15.0));
+      WayPtr way = std::make_shared<Way>(Status::Unknown2, -1, 15.0);
       way->getTags().set(AddressTagKeys::FULL_ADDRESS_TAG_NAME, "Main Street");
       map->addWay(way);
 
@@ -662,7 +662,7 @@ public:
       node->getTags().set(AddressTagKeys::FULL_ADDRESS_TAG_NAME, "Main Street");
       map->addNode(node);
 
-      WayPtr way(new Way(Status::Unknown2, -1, 15.0));
+      WayPtr way = std::make_shared<Way>(Status::Unknown2, -1, 15.0);
       way->getTags().set(AddressTagKeys::FULL_ADDRESS_TAG_NAME, "Main Street");
       map->addWay(way);
 
@@ -672,7 +672,7 @@ public:
     {
       OsmMapPtr map = std::make_shared<OsmMap>();
 
-      WayPtr way(new Way(Status::Unknown1, -1, 15.0));
+      WayPtr way = std::make_shared<Way>(Status::Unknown1, -1, 15.0);
       way->getTags().set(AddressTagKeys::CITY_TAG_NAME, "San Ignacio");
       way->getTags().set(AddressTagKeys::STREET_TAG_NAME, "Hudson Street");
       map->addWay(way);
@@ -687,7 +687,7 @@ public:
     {
       OsmMapPtr map = std::make_shared<OsmMap>();
 
-      WayPtr way(new Way(Status::Unknown1, -1, 15.0));
+      WayPtr way = std::make_shared<Way>(Status::Unknown1, -1, 15.0);
       // See note in AddressTagKeys::_getAddressTag. Not completely sure that this is a valid
       // address but going with it for now.
       way->getTags().set(AddressTagKeys::HOUSE_NAME_TAG_NAME, "462");
@@ -705,7 +705,7 @@ public:
     {
       OsmMapPtr map = std::make_shared<OsmMap>();
 
-      WayPtr way(new Way(Status::Unknown1, -1, 15.0));
+      WayPtr way = std::make_shared<Way>(Status::Unknown1, -1, 15.0);
       // See note in AddressTagKeys::_getAddressTag. Don't allow anything other than a number for
       // addr:housename posing as a street num.
       way->getTags().set(AddressTagKeys::HOUSE_NAME_TAG_NAME, "462 blah");
@@ -722,7 +722,7 @@ public:
     {
       OsmMapPtr map = std::make_shared<OsmMap>();
 
-      WayPtr way(new Way(Status::Unknown1, -1, 15.0));
+      WayPtr way = std::make_shared<Way>(Status::Unknown1, -1, 15.0);
       way->getTags().set(AddressTagKeys::HOUSE_NAME_TAG_NAME, "462");
       way->getTags().set(AddressTagKeys::STREET_TAG_NAME, "Duboce Avenue");
       map->addWay(way);
@@ -750,7 +750,7 @@ public:
       node->getTags().set("address", "670 Brunswick");
       map->addNode(node);
 
-      WayPtr way(new Way(Status::Unknown2, -1, 15.0));
+      WayPtr way = std::make_shared<Way>(Status::Unknown2, -1, 15.0);
       way->getTags().set(AddressTagKeys::HOUSE_NUMBER_TAG_NAME, "670");
       way->getTags().set(AddressTagKeys::STREET_TAG_NAME, "Brunswick Street");
       map->addWay(way);
@@ -767,7 +767,7 @@ public:
       node->getTags().set("name", "100 Whitney Young Circle");
       map->addNode(node);
 
-      WayPtr way(new Way(Status::Unknown2, -1, 15.0));
+      WayPtr way = std::make_shared<Way>(Status::Unknown2, -1, 15.0);
       way->getTags().set(AddressTagKeys::HOUSE_NUMBER_TAG_NAME, "100");
       way->getTags().set(AddressTagKeys::HOUSE_NAME_TAG_NAME, "Whitney Yound Circle");
       map->addWay(way);
@@ -784,7 +784,7 @@ public:
       node->getTags().set("address", "150 Sutter Street");
       map->addNode(node);
 
-      WayPtr way(new Way(Status::Unknown2, -1, 15.0));
+      WayPtr way = std::make_shared<Way>(Status::Unknown2, -1, 15.0);
       way->getTags().set(AddressTagKeys::HOUSE_NAME_TAG_NAME, "Hallidie Building");
       way->getTags().set(AddressTagKeys::HOUSE_NUMBER_TAG_NAME, "130-150");
       way->getTags().set(AddressTagKeys::STREET_TAG_NAME, "Sutter");

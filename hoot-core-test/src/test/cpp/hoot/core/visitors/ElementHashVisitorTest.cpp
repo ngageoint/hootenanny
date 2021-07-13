@@ -103,7 +103,7 @@ public:
     n2->getTags()["name"] = "Bus Stop 2";
     n2->getTags()["source"] = "imagery";
     map->addNode(n2);
-    WayPtr way(new Way(Status::Unknown1, -1, 15.0));
+    WayPtr way = std::make_shared<Way>(Status::Unknown1, -1, 15.0);
     way->getTags().set("area", "yes");
     way->addNode(n1->getId());
     way->addNode(n2->getId());
@@ -134,7 +134,7 @@ public:
     n2->getTags()["name"] = "Bus Stop 2";
     n2->getTags()["source"] = "imagery";
     map->addNode(n2);
-    WayPtr way(new Way(Status::Unknown1, -1, 15.0));
+    WayPtr way = std::make_shared<Way>(Status::Unknown1, -1, 15.0);
     way->getTags().set("area", "yes");
     way->addNode(n1->getId());
     way->addNode(n2->getId());
