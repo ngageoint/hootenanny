@@ -804,7 +804,7 @@ bool HootApiDb::insertNode(const long id, const double lat, const double lon, co
     _nodeBulkInsert->flush();
   }
 
-  ConstNodePtr envelopeNode(new Node(Status::Unknown1, id, lon, lat, 0.0));
+  ConstNodePtr envelopeNode = std::make_shared<Node>(Status::Unknown1, id, lon, lat, 0.0);
   _updateChangesetEnvelope(envelopeNode);
 
   LOG_TRACE("Inserted node: " << ElementId(ElementType::Node, id));

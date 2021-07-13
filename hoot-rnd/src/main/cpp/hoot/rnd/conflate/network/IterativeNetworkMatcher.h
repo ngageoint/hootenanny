@@ -110,7 +110,7 @@ private:
       em1 = nullptr;
       em2 = nullptr;
     }
-    ~CostFunction() = default;
+    virtual ~CostFunction() = default;
 
     /**
      * Returns the cost associated with assigning actor a to task t.

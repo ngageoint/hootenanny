@@ -2348,7 +2348,7 @@ bool XmlChangeset::fixRelationFailure(ChangesetInfoPtr changeset, const Changese
     {
       for (ChangesetElementMap::iterator it = _relations[current_type].begin(); it != _relations[current_type].end(); ++it)
       {
-        ChangesetRelation* relation = dynamic_cast<ChangesetRelation*>(it->second.get());
+        const ChangesetRelation* relation = dynamic_cast<ChangesetRelation*>(it->second.get());
         //  Make sure that the changeset contains this relation and this relation contains the problematic element
         if (relation->hasMember(member_type, member_id) &&
             changeset->contains(ElementType::Relation, (ChangesetType)current_type, relation->id()))

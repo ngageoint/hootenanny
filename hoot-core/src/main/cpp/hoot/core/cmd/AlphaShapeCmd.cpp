@@ -136,7 +136,7 @@ public:
 
 private:
 
-  void _writeOutput(const OsmMapPtr& map, const QString& path)
+  void _writeOutput(const OsmMapPtr& map, const QString& path) const
   {
     if (path.toLower().endsWith(".shp"))
     {

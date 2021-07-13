@@ -80,7 +80,7 @@ _maxThreads(1)
 }
 
 cv::Mat GraphComparator::_calculateCostDistance(
-  OsmMapPtr map, Coordinate c, double& maxGraphCost, const RandomPtr& random)
+  OsmMapPtr map, Coordinate c, double& maxGraphCost, const RandomPtr& random) const
 {
   // make a copy of the map so we can manipulate it.
   map.reset(new OsmMap(map));

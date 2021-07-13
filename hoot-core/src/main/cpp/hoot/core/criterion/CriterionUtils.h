@@ -176,7 +176,7 @@ public:
       mapConsumer->setOsmMap(map.get());
     }
 
-    std::shared_ptr<UniqueElementIdVisitor> idVis(new UniqueElementIdVisitor());
+    std::shared_ptr<UniqueElementIdVisitor> idVis = std::make_shared<UniqueElementIdVisitor>();
     FilteredVisitor filteredVis(crit, idVis);
     map->visitRo(filteredVis);
     return idVis->getElementSet();

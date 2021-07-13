@@ -525,11 +525,10 @@ void IoUtils::cropToBounds(
     LOG_INFO(tagger.getInitStatusMessage());
     tagger.apply(map);
     LOG_DEBUG(tagger.getCompletedStatusMessage());
-    inclusionCrit.reset(
-      new ChainCriterion(
-        std::shared_ptr<WayCriterion>(new WayCriterion()),
-        std::shared_ptr<TagKeyCriterion>(
-          new TagKeyCriterion(MetadataTags::HootConnectedWayOutsideBounds()))));
+    inclusionCrit =
+      std::make_shared<ChainCriterion>(
+        std::make_shared<WayCriterion>(),
+        std::make_shared<TagKeyCriterion>(MetadataTags::HootConnectedWayOutsideBounds()));
   }
   cropper.setInclusionCriterion(inclusionCrit);
 

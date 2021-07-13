@@ -1275,7 +1275,7 @@ private:
     if (_isValid(parent))
     {
       _updateInheritance(parent);
-      SchemaVertex& parentTv = _graph[parent];
+      const SchemaVertex& parentTv = _graph[parent];
 
       if (childTv.getGeometries() == 0)
       {

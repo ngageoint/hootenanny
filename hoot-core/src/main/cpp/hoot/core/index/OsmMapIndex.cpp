@@ -97,8 +97,7 @@ void OsmMapIndex::_buildNodeTree() const
 
   LOG_INFO("Building node R-Tree index");
   // 10 children - 368 - see #3054
-  std::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
-  _nodeTree.reset(new HilbertRTree(mps, 2));
+  _nodeTree = std::make_shared<HilbertRTree>(std::make_shared<MemoryPageStore>(728), 2);
 
   vector<Box> boxes;
   vector<int> ids;
@@ -149,8 +148,7 @@ void OsmMapIndex::_buildWayTree() const
 
   LOG_INFO("Building way R-Tree index...");
   // 10 children - 368 - see #3054
-  std::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
-  _wayTree.reset(new HilbertRTree(mps, 2));
+  _wayTree = std::make_shared<HilbertRTree>(std::make_shared<MemoryPageStore>(728), 2);
 
   vector<Box> boxes;
   vector<int> ids;

@@ -311,7 +311,7 @@ void DataConverter::_convertToOgr(const QStringList& inputs, const QString& outp
       (float)(currentTask - 1) / (float)numTasks,
       "Writing map: ..." + FileUtils::toLogFormat(output, _printLengthMax) + "...");
     MapProjector::projectToWgs84(map);
-    std::shared_ptr<OgrWriter> writer(new OgrWriter());
+    std::shared_ptr<OgrWriter> writer = std::make_shared<OgrWriter>();
     writer->setSchemaTranslationScript(_translation);
     writer->open(output);
     writer->write(map);
@@ -608,11 +608,11 @@ void DataConverter::_transToOgrMT(const QStringList& inputs, const QString& outp
   LOG_DEBUG("_transToOgrMT");
 
   QQueue<ElementPtr> elementQ;
-  ElementCachePtr pElementCache(
-    new ElementCacheLRU(
+  ElementCachePtr pElementCache =
+    std::make_shared<ElementCacheLRU>(
       ConfigOptions().getElementCacheSizeNode(),
       ConfigOptions().getElementCacheSizeWay(),
-      ConfigOptions().getElementCacheSizeRelation()));
+      ConfigOptions().getElementCacheSizeRelation());
   QMutex initMutex;
   QMutex transFeaturesMutex;
   QQueue<std::pair<std::shared_ptr<geos::geom::Geometry>,

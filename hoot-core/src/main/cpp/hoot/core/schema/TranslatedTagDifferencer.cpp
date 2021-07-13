@@ -107,7 +107,7 @@ double TranslatedTagDifferencer::diff(const ConstOsmMapPtr& map, const ConstElem
   {
   public:
     CostFunction() = default;
-    ~CostFunction() = default;
+    virtual ~CostFunction() = default;
 
     const TranslatedTagDifferencer* ttd;
     /**
