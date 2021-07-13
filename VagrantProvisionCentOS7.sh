@@ -28,21 +28,21 @@ cd ~
 source ~/.bash_profile
 
 # Install yum-utils for setting up repositories
-sudo yum install -y yum-utils
+sudo yum install -y yum-utils > CentOS_upgrade.txt
 
 if [ "${ADDREPOS:-yes}" = "yes" ]; then
     echo "Adding additional software repositories..."
 
     # Ensure that CentOS Yum repository data is GPG-verified.
-    echo "### Configuring CentOS to verify repository metadata ###" > CentOS_upgrade.txt
-    yum-config-manager \
+    echo "### Configuring CentOS to verify repository metadata ###" >> CentOS_upgrade.txt
+    sudo yum-config-manager \
         --save \
         --setopt=base.repo_gpgcheck=1 \
         --setopt=extras.repo_gpgcheck=1 \
         --setopt=updates.repo_gpgcheck=1 &> /dev/null
 
     # add EPEL repo for extra packages
-    echo "### Add epel repo ###" > CentOS_upgrade.txt
+    echo "### Add epel repo ###" >> CentOS_upgrade.txt
     sudo yum -y install epel-release >> CentOS_upgrade.txt 2>&1
 
     # add GEOINT for spatial libraries and utilities.
