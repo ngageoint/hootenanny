@@ -130,10 +130,10 @@ void OsmFileSorter::_sortPbf(const QString& input, const QString& output)
 
 std::shared_ptr<QTemporaryFile> OsmFileSorter::_ogrToPbfTemp(const QString& input)
 {
-  std::shared_ptr<QTemporaryFile> pbfTemp(
-    new QTemporaryFile(
+  std::shared_ptr<QTemporaryFile> pbfTemp =
+    std::make_shared<QTemporaryFile>(
       ConfigOptions().getApidbBulkInserterTempFileDir() +
-      "/multiary-ingest-sort-temp-XXXXXX.osm.pbf"));
+      "/multiary-ingest-sort-temp-XXXXXX.osm.pbf");
   //for debugging only
   //pbfTemp->setAutoRemove(false);
   if (!pbfTemp->open())

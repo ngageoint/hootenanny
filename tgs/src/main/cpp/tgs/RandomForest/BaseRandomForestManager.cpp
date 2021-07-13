@@ -40,11 +40,13 @@ namespace Tgs
 {
   const float BaseRandomForestManager::RF_XML_VERSION = 2.0;
 
-  BaseRandomForestManager::BaseRandomForestManager() : _initialized(false), _trained(false)
+  BaseRandomForestManager::BaseRandomForestManager() :
+  _initialized(false),
+  _trained(false)
   {
     try
     {
-      _data = std::shared_ptr<DataFrame>(new DataFrame);
+      _data = std::make_shared<DataFrame>();
     }
     catch(const Exception & e)
     {
