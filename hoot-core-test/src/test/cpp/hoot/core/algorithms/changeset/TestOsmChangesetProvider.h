@@ -63,6 +63,7 @@ public:
     if (useCoordScale)
       _coordinateScale = ApiDb::COORDINATE_SCALE;
   }
+
   ~TestOsmChangesetProvider() { }
 
   std::shared_ptr<OGRSpatialReference> getProjection() const override
@@ -94,24 +95,23 @@ public:
         change =
           Change(
             changeType,
-            std::make_shared<Node>(
-              Status::Unknown1, ++_node, _getLon(), _getLat(), 15.0, ElementData::CHANGESET_EMPTY,
-              version));
+            NodePtr(
+              new Node(
+                Status::Unknown1, ++_node, _getLon(), _getLat(), 15.0, ElementData::CHANGESET_EMPTY,
+                version)));
       }
       break;
     case ElementType::Way:
       {
-        NodePtr node1 =
-          std::make_shared<Node>(
+        NodePtr node1(
+          new Node(
             Status::Unknown1, ++_node, _getLon(), _getLat(), 15.0, ElementData::CHANGESET_EMPTY,
-            version);
-        NodePtr node2 =
-          std::make_shared<Node>(
+            version));
+        NodePtr node2(
+          new Node(
             Status::Unknown1, ++_node, _getLon(), _getLat(), 15.0, ElementData::CHANGESET_EMPTY,
-            version);
-        WayPtr way =
-          std::make_shared<Way>(
-            Status::Unknown1, ++_way, 15.0, ElementData::CHANGESET_EMPTY, version);
+            version));
+        WayPtr way(new Way(Status::Unknown1, ++_way, 15.0, ElementData::CHANGESET_EMPTY, version));
         way->addNode(node1->getId());
         way->addNode(node2->getId());
         way->setTag("key1", "value1");
@@ -120,23 +120,20 @@ public:
       break;
     case ElementType::Relation:
       {
-        NodePtr node1 =
-          std::make_shared<Node>(
+        NodePtr node1(
+          new Node(
             Status::Unknown1, ++_node, _getLon(), _getLat(), 15.0, ElementData::CHANGESET_EMPTY,
-            version);
-        NodePtr node2 =
-          std::make_shared<Node>(
+            version));
+        NodePtr node2(
+          new Node(
             Status::Unknown1, ++_node, _getLon(), _getLat(), 15.0, ElementData::CHANGESET_EMPTY,
-            version);
-        WayPtr way =
-          std::make_shared<Way>(
-            Status::Unknown1, ++_way, 15.0, ElementData::CHANGESET_EMPTY, version);
+            version));
+        WayPtr way(new Way(Status::Unknown1, ++_way, 15.0, ElementData::CHANGESET_EMPTY, version));
         way->addNode(node1->getId());
         way->addNode(node2->getId());
         way->setTag("key1", "value1");
-        RelationPtr relation =
-          std::make_shared<Relation>(
-            Status::Unknown1, ++_rel, 15.0, "", ElementData::CHANGESET_EMPTY, version);
+        RelationPtr relation(
+          new Relation(Status::Unknown1, ++_rel, 15.0, "", ElementData::CHANGESET_EMPTY, version));
         relation->addElement("role1", node1->getElementId());
         relation->addElement("role2", way->getElementId());
         relation->setTag("key2", "value2");
