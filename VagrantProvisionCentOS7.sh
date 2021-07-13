@@ -53,14 +53,14 @@ if [ "${ADDREPOS:-yes}" = "yes" ]; then
     echo "### Add Hoot repo ###" >> CentOS_upgrade.txt
     sudo $HOOT_HOME/scripts/yum/hoot-repo.sh
 
-    # configure PGDG repository for PostgreSQL 13.
+    # configure PGDG repository for PostgreSQL
     echo "### Add pgdg repo ###" >> CentOS_upgrade.txt
-    sudo $HOOT_HOME/scripts/yum/pgdg-repo.sh 13
+    sudo $HOOT_HOME/scripts/yum/pgdg-repo.sh $POSTGRESQL_VERSION
 fi
 
 # configure the devtoolset repository
 echo "### Add devtoolset repo ###"
-sudo yum install -y centos-release-scl
+sudo yum install -y centos-release-scl >> CentOS_upgrade.txt 2>&1
 sudo yum-config-manager --enable rhel-server-rhscl-7-rpms
 
 if [ "${YUMUPDATE:-yes}" = "yes" ]; then
@@ -71,7 +71,7 @@ fi
 
 if ! rpm -qa | grep -q ^yum-plugin-versionlock ; then
     # Install the versionlock plugin version first.
-    sudo yum install -y yum-plugin-versionlock
+    sudo yum install -y yum-plugin-versionlock >> CentOS_upgrade.txt 2>&1
 else
     # Remove any version locks to allow upgrading when versions have changed.
     sudo yum versionlock delete \
@@ -94,7 +94,7 @@ else
          proj \
          proj-devel \
          stxxl \
-         stxxl-devel
+         stxxl-devel >> CentOS_upgrade.txt 2>&1
 fi
 
 echo "### Installing libraries with locked versions"
@@ -163,6 +163,7 @@ sudo yum -y install \
     git \
     git-core \
     gnuplot \
+    lcov \
     libffi-devel \
     libicu-devel \
     libpng-devel \
@@ -180,10 +181,10 @@ sudo yum -y install \
     libpostal-data \
     libpostal-devel \
     parallel \
-    postgresql13 \
-    postgresql13-contrib \
-    postgresql13-devel \
-    postgresql13-server \
+    postgresql${POSTGRESQL_VERSION} \
+    postgresql${POSTGRESQL_VERSION}-contrib \
+    postgresql${POSTGRESQL_VERSION}-devel \
+    postgresql${POSTGRESQL_VERSION}-server \
     protobuf \
     protobuf-compiler \
     protobuf-devel \
@@ -194,6 +195,9 @@ sudo yum -y install \
     python3-matplotlib \
     python3-pip  \
     python3-setuptools \
+    ruby \
+    ruby-devel \
+    rubygem-bundler \
     qt5-qtbase \
     qt5-qtbase-devel \
     qt5-qtbase-postgresql \
@@ -216,10 +220,6 @@ sudo yum -y install \
     xorg-x11-server-Xvfb \
     zip
     
-# need this version for lcov to work with gcc 8
-wget https://github.com/linux-test-project/lcov/releases/download/v1.14/lcov-1.14-1.noarch.rpm
-sudo yum -y localinstall lcov-1.14-1.noarch.rpm
-
 # Fix missing qmake
 if ! hash qmake >/dev/null 2>&1 ; then
     if hash qmake-qt5 >/dev/null 2>&1 ; then
@@ -260,13 +260,8 @@ if ! grep --quiet GDAL_DATA ~/.bash_profile; then
     source ~/.bash_profile
 fi
 
-# Use RVM to install the desired Ruby version, and then install
-# the bundler at the desired version.
-$HOOT_HOME/scripts/ruby/rvm-install.sh
-$HOOT_HOME/scripts/ruby/bundler-install.sh
-
 # Install gems with bundler and strict versioning (see Gemfile)
-$RVM_HOME/bin/rvm $RUBY_VERSION_HOOT do bundle install
+bundle install
 
 # Make sure that we are in ~ before trying to wget & install stuff
 cd ~
