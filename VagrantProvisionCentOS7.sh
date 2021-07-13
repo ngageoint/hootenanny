@@ -191,6 +191,9 @@ sudo yum -y install \
     python3-matplotlib \
     python3-pip  \
     python3-setuptools \
+    ruby \
+    ruby-devel \
+    rubygem-bundler \
     qt5-qtbase \
     qt5-qtbase-devel \
     qt5-qtbase-postgresql \
@@ -226,9 +229,6 @@ cd $HOOT_HOME
 
 echo "### Configuring environment..."
 
-# Update RVM flags to run auto-update to latest version
-echo rvm_autoupdate_flag=2 >> ~/.rvmrc
-
 # Configure https alternative mirror for maven install, this can likely be removed once
 # we are using maven 3.2.3 or higher
 sudo /usr/bin/perl $HOOT_HOME/scripts/maven/SetMavenHttps.pl
@@ -256,13 +256,8 @@ if ! grep --quiet GDAL_DATA ~/.bash_profile; then
     source ~/.bash_profile
 fi
 
-# Use RVM to install the desired Ruby version, and then install
-# the bundler at the desired version.
-$HOOT_HOME/scripts/ruby/rvm-install.sh
-$HOOT_HOME/scripts/ruby/bundler-install.sh
-
 # Install gems with bundler and strict versioning (see Gemfile)
-$RVM_HOME/bin/rvm $RUBY_VERSION_HOOT do bundle install
+bundle install
 
 # Make sure that we are in ~ before trying to wget & install stuff
 cd ~
