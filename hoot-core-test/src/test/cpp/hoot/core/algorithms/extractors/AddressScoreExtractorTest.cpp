@@ -373,7 +373,7 @@ public:
     map->addWay(way2);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node3, way2), 0.01);
 
-    NodePtr node5(new Node(Status::Unknown1, -5, Coordinate(0.0, 0.0), 15.0));
+    NodePtr node5 = std::make_shared<Node>(Status::Unknown1, -5, Coordinate(0.0, 0.0), 15.0);
     map->addNode(node5);
     WayPtr way3 = std::make_shared<Way>(Status::Unknown2, -3, 15.0);
     way3->getTags().set(AddressTagKeys::HOUSE_NUMBER_TAG_NAME, "123");
@@ -413,7 +413,7 @@ public:
     node4->getTags().set(AddressTagKeys::STREET_TAG_NAME, "Main Street");
     map->addNode(node4);
     RelationPtr relation3 = std::make_shared<Relation>(Status::Unknown2, -3, 15.0);
-    NodePtr node5(new Node(Status::Unknown1, -5, Coordinate(0.0, 0.0), 15.0));
+    NodePtr node5 = std::make_shared<Node>(Status::Unknown1, -5, Coordinate(0.0, 0.0), 15.0);
     node5->getTags().set(AddressTagKeys::HOUSE_NUMBER_TAG_NAME, "567");
     node5->getTags().set(AddressTagKeys::STREET_TAG_NAME, "first street");
     map->addNode(node5);
@@ -421,7 +421,7 @@ public:
     map->addRelation(relation3);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node4, relation3), 0.01);
 
-    NodePtr node6(new Node(Status::Unknown1, -6, Coordinate(0.0, 0.0), 15.0));
+    NodePtr node6 = std::make_shared<Node>(Status::Unknown1, -6, Coordinate(0.0, 0.0), 15.0);
     node6->getTags().set(AddressTagKeys::HOUSE_NUMBER_TAG_NAME, "567");
     node6->getTags().set(AddressTagKeys::STREET_TAG_NAME, "first street");
     map->addNode(node6);
@@ -434,7 +434,7 @@ public:
     map->addRelation(relation4);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node6, relation4), 0.01);
 
-    NodePtr node7(new Node(Status::Unknown1, -7, Coordinate(0.0, 0.0), 15.0));
+    NodePtr node7 = std::make_shared<Node>(Status::Unknown1, -7, Coordinate(0.0, 0.0), 15.0);
     node7->getTags().set(AddressTagKeys::HOUSE_NUMBER_TAG_NAME, "123");
     node7->getTags().set(AddressTagKeys::STREET_TAG_NAME, "main street");
     map->addNode(node7);
@@ -447,7 +447,7 @@ public:
     map->addRelation(relation5);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node7, relation5), 0.01);
 
-    NodePtr node8(new Node(Status::Unknown1, -8, Coordinate(0.0, 0.0), 15.0));
+    NodePtr node8 = std::make_shared<Node>(Status::Unknown1, -8, Coordinate(0.0, 0.0), 15.0);
     map->addNode(node8);
     WayPtr way5 = std::make_shared<Way>(Status::Unknown2, -5, 15.0);
     map->addWay(way5);
