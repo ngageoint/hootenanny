@@ -27,6 +27,9 @@ export LANG=en_US.UTF-8
 cd ~
 source ~/.bash_profile
 
+# Install yum-utils for setting up repositories
+sudo yum install -y yum-utils
+
 if [ "${ADDREPOS:-yes}" = "yes" ]; then
     echo "Adding additional software repositories..."
 
@@ -57,7 +60,7 @@ fi
 
 # configure the devtoolset repository
 echo "### Add devtoolset repo ###"
-sudo yum install -y centos-release-scl yum-utils
+sudo yum install -y centos-release-scl
 sudo yum-config-manager --enable rhel-server-rhscl-7-rpms
 
 if [ "${YUMUPDATE:-yes}" = "yes" ]; then
