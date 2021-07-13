@@ -62,7 +62,7 @@ public:
 
   void runCopyTest()
   {
-    NodePtr n(new Node(Status::Unknown1, 123, 1.2, 2.3, 3.14));
+    NodePtr n = std::make_shared<Node>(Status::Unknown1, 123, 1.2, 2.3, 3.14);
     n->setTag("foo", "bar");
 
     HOOT_STR_EQUALS(Status::Unknown1, (Status::TypeEnum)n->getStatus().getEnum());
@@ -85,7 +85,7 @@ public:
   {
     OsmMapPtr map = std::make_shared<OsmMap>();
 
-    NodePtr n(new Node(Status::Unknown1, 123, 1.2, 2.3, 3.14));
+    NodePtr n = std::make_shared<Node>(Status::Unknown1, 123, 1.2, 2.3, 3.14);
     n->setTag("foo", "bar");
 
     HOOT_STR_EQUALS(Status::Unknown1, (Status::TypeEnum)n->getStatus().getEnum());

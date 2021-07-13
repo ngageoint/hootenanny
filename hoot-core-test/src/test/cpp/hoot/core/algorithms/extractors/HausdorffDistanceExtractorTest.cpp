@@ -63,7 +63,7 @@ public:
 
   NodePtr createNode(double x, double y)
   {
-    NodePtr n(new Node(Status::Unknown1, _map->createNextNodeId(), x, y, 10.0));
+    NodePtr n = std::make_shared<Node>(Status::Unknown1, _map->createNextNodeId(), x, y, 10.0);
     _map->addNode(n);
     return n;
   }

@@ -141,7 +141,7 @@ WayPtr TestUtils::createWay(
   {
     for (size_t i = 0; c[i].isNull() == false; i++)
     {
-      NodePtr n(new Node(s, map->createNextNodeId(), c[i], circularError));
+      NodePtr n = std::make_shared<Node>(s, map->createNextNodeId(), c[i], circularError);
       map->addNode(n);
       way->addNode(n->getId());
     }

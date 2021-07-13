@@ -84,7 +84,7 @@ public:
 
     OsmPbfWriter writer;
 
-    NodePtr n(new Node(Status::Unknown1, 72, 42.0, 3.14159, 7.1));
+    NodePtr n = std::make_shared<Node>(Status::Unknown1, 72, 42.0, 3.14159, 7.1);
     n->setTag("hello", "world");
     n->setTag("note", "test tag");
     writer.writePb(n, &ss);
@@ -193,7 +193,7 @@ public:
     writer.setIncludeVersion(false);
 
     OsmMapPtr map = std::make_shared<OsmMap>();
-    NodePtr n(new Node(Status::Unknown1, 72, 42.0, 3.14159, 7.1));
+    NodePtr n = std::make_shared<Node>(Status::Unknown1, 72, 42.0, 3.14159, 7.1);
     n->setTag("hello", "world");
     n->setTag("note", "test tag");
     map->addNode(n);
