@@ -123,7 +123,7 @@ void RelationData::replaceElement(ElementId from, const QList<ElementId>& to)
   vector<Entry> newCopy;
   for (size_t i = 0; i < _members.size(); i++)
   {
-    Entry& e = _members[i];
+    const Entry& e = _members[i];
     if (e.getElementId() == from)
     {
       for (int j = 0; j < to.size(); ++j)

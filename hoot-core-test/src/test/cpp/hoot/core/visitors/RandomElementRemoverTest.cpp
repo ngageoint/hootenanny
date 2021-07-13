@@ -72,8 +72,8 @@ public:
 
     for (int i = 0; i < 100; i++)
     {
-      NodePtr n(new Node(Status::Unknown1, map->createNextNodeId(), uni(rng), uni(rng), 10));
-      map->addNode(n);
+      map->addNode(
+        std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), uni(rng), uni(rng), 10));
     }
 
     RandomElementRemover v;

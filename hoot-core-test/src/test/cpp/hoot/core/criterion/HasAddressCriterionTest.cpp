@@ -45,15 +45,16 @@ public:
     HasAddressCriterion uut;
     uut.setConfiguration(conf());
 
-    NodePtr node1(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
+    NodePtr node1 =
+      std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
     node1->getTags().set(AddressTagKeys::FULL_ADDRESS_TAG_NAME, "123 Main Street");
     CPPUNIT_ASSERT(uut.isSatisfied(node1));
 
-    WayPtr way1(new Way(Status::Unknown1, -1, 15.0));
+    WayPtr way1 = std::make_shared<Way>(Status::Unknown1, -1, 15.0);
     way1->getTags().set(AddressTagKeys::FULL_ADDRESS_TAG_NAME, "blah");
     CPPUNIT_ASSERT(!uut.isSatisfied(way1));
 
-    WayPtr way2(new Way(Status::Unknown1, -1, 15.0));
+    WayPtr way2 = std::make_shared<Way>(Status::Unknown1, -1, 15.0);
     way2->getTags().set("blah", "123 Main Street");
     CPPUNIT_ASSERT(!uut.isSatisfied(way2));
   }

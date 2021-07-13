@@ -309,8 +309,7 @@ namespace Tgs
             for (unsigned int rIdx = 0; rIdx < (unsigned int)treeList.size(); rIdx++)
             {
               QDomElement treeElement = treeList.at(rIdx).toElement();
-
-              _forest.push_back(std::shared_ptr<RandomTree>(new RandomTree()));
+              _forest.push_back(std::make_shared<RandomTree>());
               _forest.back()->import(treeElement);
             }
           }

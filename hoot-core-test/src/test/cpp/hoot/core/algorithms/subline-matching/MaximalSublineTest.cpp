@@ -89,7 +89,7 @@ public:
 
   void addEndNode(OsmMapPtr map, Coordinate c, QString note)
   {
-    NodePtr n(new Node(Status::Unknown1, map->createNextNodeId(), c, 10));
+    NodePtr n = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), c, 10);
     n->getTags()["note"] = note;
     map->addNode(n);
   }

@@ -109,8 +109,8 @@ private:
   void _graphCompareThreadFunc();
 
   cv::Mat _calculateCostDistance(
-    OsmMapPtr map, geos::geom::Coordinate c, double& maxGraphCost, const Tgs::RandomPtr& random);
-
+    OsmMapPtr map, geos::geom::Coordinate c, double& maxGraphCost,
+    const Tgs::RandomPtr& random) const;
   void _calculateRasterCost(cv::Mat& mat, const Tgs::RandomPtr& random) const;
 
   void _exportGraphImage(
@@ -122,7 +122,6 @@ private:
   cv::Mat _paintGraph(
     const ConstOsmMapPtr& map, const DirectedGraph& graph, const ShortestPath& sp,
     double& maxGraphCost) const;
-
   void _paintWay(
     cv::Mat& mat, const ConstOsmMapPtr& map, const ConstWayPtr& way, double friction,
     double startCost, double endCost) const;

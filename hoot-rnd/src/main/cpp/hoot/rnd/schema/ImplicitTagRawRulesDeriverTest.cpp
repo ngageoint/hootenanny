@@ -72,8 +72,7 @@ public:
     rawRulesDeriver.setSkipFiltering(false);
     rawRulesDeriver.setSortParallelCount(1);
     rawRulesDeriver.setTranslateNamesToEnglish(true);
-    rawRulesDeriver._translator =
-      std::shared_ptr<ToEnglishDictionaryTranslator>(new ToEnglishDictionaryTranslator());
+    rawRulesDeriver._translator = std::make_shared<ToEnglishDictionaryTranslator>();
     rawRulesDeriver.setElementCriterion("hoot::ImplicitTagEligiblePoiPolyCriterion");
     rawRulesDeriver.deriveRawRules(inputs, translationScripts, outputFile);
 
@@ -99,8 +98,7 @@ public:
     rawRulesDeriver.setSkipFiltering(false);
     rawRulesDeriver.setSortParallelCount(1);
     rawRulesDeriver.setTranslateNamesToEnglish(true);
-    rawRulesDeriver._translator =
-      std::shared_ptr<ToEnglishDictionaryTranslator>(new ToEnglishDictionaryTranslator());
+    rawRulesDeriver._translator = std::make_shared<ToEnglishDictionaryTranslator>();
     rawRulesDeriver.setElementCriterion("hoot::ImplicitTagEligiblePoiPolyCriterion");
     rawRulesDeriver.deriveRawRules(inputs, translationScripts, outputFile);
 
@@ -113,10 +111,10 @@ public:
   {
     DisableLog dl;
 
-    std::shared_ptr<QTemporaryFile> sortedCountFile(
-      new QTemporaryFile(
+    std::shared_ptr<QTemporaryFile> sortedCountFile =
+      std::make_shared<QTemporaryFile>(
         _outputPath +
-        "ImplicitTagRawRulesDeriverTest-runDuplicateWordKeyCountTest-sortedCountsInput-XXXXXX"));
+        "ImplicitTagRawRulesDeriverTest-runDuplicateWordKeyCountTest-sortedCountsInput-XXXXXX");
     sortedCountFile->setAutoRemove(false);
     if (!sortedCountFile->open())
     {
@@ -141,8 +139,7 @@ public:
     rawRulesDeriver.setSkipFiltering(false);
     rawRulesDeriver.setSortParallelCount(1);
     rawRulesDeriver.setTranslateNamesToEnglish(true);
-    rawRulesDeriver._translator =
-      std::shared_ptr<ToEnglishDictionaryTranslator>(new ToEnglishDictionaryTranslator());
+    rawRulesDeriver._translator = std::make_shared<ToEnglishDictionaryTranslator>();
     rawRulesDeriver.setElementCriterion("hoot::ImplicitTagEligiblePoiPolyCriterion");
     rawRulesDeriver._sortedCountFile = sortedCountFile;
     rawRulesDeriver._removeDuplicatedKeyTypes();
@@ -157,8 +154,8 @@ public:
 
   void runNameCasePoiTest()
   {
-    //Case is actually already handled correctly in runBasicTest, but this smaller input dataset
-    //will make debugging case problems easier, if needed.
+    // Case is actually already handled correctly in runBasicTest, but this smaller input dataset
+    // will make debugging case problems easier, if needed.
 
     QStringList inputs;
     inputs.append(_inputPath + "ImplicitTagRawRulesDeriverTest-runNameCaseTest.osm");
@@ -174,8 +171,7 @@ public:
     rawRulesDeriver.setSkipFiltering(false);
     rawRulesDeriver.setSortParallelCount(1);
     rawRulesDeriver.setTranslateNamesToEnglish(true);
-    rawRulesDeriver._translator =
-      std::shared_ptr<ToEnglishDictionaryTranslator>(new ToEnglishDictionaryTranslator());
+    rawRulesDeriver._translator = std::make_shared<ToEnglishDictionaryTranslator>();
     rawRulesDeriver.setElementCriterion("hoot::ImplicitTagEligiblePoiPolyCriterion");
     rawRulesDeriver.deriveRawRules(inputs, translationScripts, outputFile);
 
@@ -198,8 +194,7 @@ public:
     rawRulesDeriver.setSkipFiltering(false);
     rawRulesDeriver.setSortParallelCount(1);
     rawRulesDeriver.setTranslateNamesToEnglish(false);
-    rawRulesDeriver._translator =
-      std::shared_ptr<ToEnglishDictionaryTranslator>(new ToEnglishDictionaryTranslator());
+    rawRulesDeriver._translator = std::make_shared<ToEnglishDictionaryTranslator>();
     rawRulesDeriver.setElementCriterion("hoot::ImplicitTagEligiblePoiPolyCriterion");
     rawRulesDeriver.deriveRawRules(inputs, translationScripts, outputFile);
 
@@ -219,8 +214,7 @@ public:
     rawRulesDeriver.setSkipFiltering(false);
     rawRulesDeriver.setSortParallelCount(1);
     rawRulesDeriver.setTranslateNamesToEnglish(true);
-    rawRulesDeriver._translator =
-      std::shared_ptr<ToEnglishDictionaryTranslator>(new ToEnglishDictionaryTranslator());
+    rawRulesDeriver._translator = std::make_shared<ToEnglishDictionaryTranslator>();
 
     try
     {

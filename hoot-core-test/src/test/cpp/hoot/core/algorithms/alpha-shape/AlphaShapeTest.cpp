@@ -105,8 +105,9 @@ public:
 
     for (size_t i = 0; i < points.size(); i++)
     {
-      NodePtr n(new Node(Status::Invalid, map->createNextNodeId(), points[i].first, points[i].second, -1));
-      map->addNode(n);
+      map->addNode(
+        std::make_shared<Node>(
+          Status::Invalid, map->createNextNodeId(), points[i].first, points[i].second, -1));
     }
 
     OsmXmlWriter writer;
@@ -165,8 +166,9 @@ public:
 
     for (size_t i = 0; i < points.size(); i++)
     {
-      NodePtr n(new Node(Status::Invalid, map->createNextNodeId(), points[i].first, points[i].second, -1));
-      map->addNode(n);
+      map->addNode(
+        std::make_shared<Node>(
+          Status::Invalid, map->createNextNodeId(), points[i].first, points[i].second, -1));
     }
 
     OsmXmlWriter writer;

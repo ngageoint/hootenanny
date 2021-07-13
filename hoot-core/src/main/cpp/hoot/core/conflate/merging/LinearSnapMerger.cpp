@@ -469,10 +469,10 @@ void LinearSnapMerger::_splitElement(
     RelationPtr r;
     if (!scrap || scrap->getElementType() == ElementType::Way)
     {
-      r.reset(
-        new Relation(
+      r =
+        std::make_shared<Relation>(
           splitee->getStatus(), _map->createNextRelationId(), splitee->getCircularError(),
-          MetadataTags::RelationMultilineString()));
+          MetadataTags::RelationMultilineString());
       if (scrap)
       {
         r->addElement("", scrap);

@@ -43,7 +43,8 @@ public:
   void runTest()
   {
     NameCriterion uut;
-    NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
+    NodePtr node =
+      std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
     node->getTags().set("name", "Old Town Tavern");
     node->getTags().set("key2", "blah");
 

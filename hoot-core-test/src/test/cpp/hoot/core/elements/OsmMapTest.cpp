@@ -141,7 +141,8 @@ public:
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/ToyTestA.osm", map);
 
-    RelationPtr r(new Relation(Status::Unknown1, -1, 10, MetadataTags::RelationMultiPolygon()));
+    RelationPtr r =
+      std::make_shared<Relation>(Status::Unknown1, -1, 10, MetadataTags::RelationMultiPolygon());
     r->addElement(MetadataTags::RoleOuter(), ElementId::way(-1669799));
     map->addRelation(r);
 
@@ -261,7 +262,7 @@ public:
     OsmMapPtr mapB = std::make_shared<OsmMap>();
     reader.read("test-files/ToyTestB.osm", mapB);
 
-    RelationPtr relation(new Relation(Status::Unknown1, -1, 15.0));
+    RelationPtr relation = std::make_shared<Relation>(Status::Unknown1, -1, 15.0);
     relation->addElement(
       "", mapA->getWay(ElementIdsVisitor::findElementsByTag(mapA, ElementType::Way, "note", "1")[0]));
     mapA->addRelation(relation);
@@ -351,7 +352,7 @@ public:
     OsmMapPtr mapB = std::make_shared<OsmMap>();
     reader.read("test-files/ToyTestB.osm", mapB);
 
-    RelationPtr relation(new Relation(Status::Unknown1, -1, 15.0));
+    RelationPtr relation = std::make_shared<Relation>(Status::Unknown1, -1, 15.0);
     relation->addElement(
       "", mapA->getWay(ElementIdsVisitor::findElementsByTag(mapA, ElementType::Way, "note", "1")[0]));
     mapA->addRelation(relation);
@@ -439,7 +440,7 @@ public:
     OsmMapPtr mapB = std::make_shared<OsmMap>();
     reader.read("test-files/ToyTestB.osm", mapB);
 
-    RelationPtr relation(new Relation(Status::Unknown1, -1, 15.0));
+    RelationPtr relation = std::make_shared<Relation>(Status::Unknown1, -1, 15.0);
     relation->addElement(
       "", mapA->getWay(ElementIdsVisitor::findElementsByTag(mapA, ElementType::Way, "note", "1")[0]));
     mapA->addRelation(relation);
@@ -628,10 +629,10 @@ public:
   void runReplaceListTest1()
   {
     OsmMapPtr map = std::make_shared<OsmMap>();
-    RelationPtr r1(new Relation(Status::Unknown1, 1, 15));
-    WayPtr w1(new Way(Status::Unknown1, 1, 15));
-    WayPtr w2(new Way(Status::Unknown1, 2, 15));
-    WayPtr w3(new Way(Status::Unknown1, 3, 15));
+    RelationPtr r1 = std::make_shared<Relation>(Status::Unknown1, 1, 15);
+    WayPtr w1 = std::make_shared<Way>(Status::Unknown1, 1, 15);
+    WayPtr w2 = std::make_shared<Way>(Status::Unknown1, 2, 15);
+    WayPtr w3 = std::make_shared<Way>(Status::Unknown1, 3, 15);
     map->addElement(r1);
     map->addElement(w1);
     map->addElement(w2);
@@ -663,10 +664,10 @@ public:
   void runReplaceListTest2()
   {
     OsmMapPtr map = std::make_shared<OsmMap>();
-    WayPtr w1(new Way(Status::Unknown1, 1, 15));
-    NodePtr n1(new Node(Status::Unknown1, 1, 0, 0, 15));
-    NodePtr n2(new Node(Status::Unknown1, 2, 0, 0, 15));
-    NodePtr n3(new Node(Status::Unknown1, 3, 0, 0, 15));
+    WayPtr w1 = std::make_shared<Way>(Status::Unknown1, 1, 15);
+    NodePtr n1 = std::make_shared<Node>(Status::Unknown1, 1, 0, 0, 15);
+    NodePtr n2 = std::make_shared<Node>(Status::Unknown1, 2, 0, 0, 15);
+    NodePtr n3 = std::make_shared<Node>(Status::Unknown1, 3, 0, 0, 15);
     map->addElement(w1);
     map->addElement(n1);
 
@@ -694,11 +695,11 @@ public:
   void runReplaceListTest3()
   {
     OsmMapPtr map = std::make_shared<OsmMap>();
-    WayPtr w1(new Way(Status::Unknown1, 1, 15));
-    WayPtr w2(new Way(Status::Unknown1, 2, 15));
-    NodePtr n1(new Node(Status::Unknown1, 1, 0, 0, 15));
-    NodePtr n2(new Node(Status::Unknown1, 2, 0, 0, 15));
-    NodePtr n3(new Node(Status::Unknown1, 3, 0, 0, 15));
+    WayPtr w1 = std::make_shared<Way>(Status::Unknown1, 1, 15);
+    WayPtr w2 = std::make_shared<Way>(Status::Unknown1, 2, 15);
+    NodePtr n1 = std::make_shared<Node>(Status::Unknown1, 1, 0, 0, 15);
+    NodePtr n2 = std::make_shared<Node>(Status::Unknown1, 2, 0, 0, 15);
+    NodePtr n3 = std::make_shared<Node>(Status::Unknown1, 3, 0, 0, 15);
     map->addElement(w1);
     map->addElement(n1);
 
@@ -744,11 +745,11 @@ public:
     // Sample data does not have any relations, have to add some with nodes in them
     RelationPtr relations[5] =
     {
-      RelationPtr(new Relation(Status::Unknown1, 100, 3.0, "relationtype0")),
-      RelationPtr(new Relation(Status::Unknown1, 101, 4.1, "relationtype1")),
-      RelationPtr(new Relation(Status::Unknown1, 102, 5.2, "relationtype2")),
-      RelationPtr(new Relation(Status::Unknown1, 103, 6.3, "relationtype3")),
-      RelationPtr(new Relation(Status::Unknown1, 104, 7.4, "relationtype4")),
+      std::make_shared<Relation>(Status::Unknown1, 100, 3.0, "relationtype0"),
+      std::make_shared<Relation>(Status::Unknown1, 101, 4.1, "relationtype1"),
+      std::make_shared<Relation>(Status::Unknown1, 102, 5.2, "relationtype2"),
+      std::make_shared<Relation>(Status::Unknown1, 103, 6.3, "relationtype3"),
+      std::make_shared<Relation>(Status::Unknown1, 104, 7.4, "relationtype4"),
     };
 
     // Add relations to the map

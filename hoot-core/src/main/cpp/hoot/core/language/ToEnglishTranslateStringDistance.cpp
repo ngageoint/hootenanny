@@ -52,7 +52,7 @@ _translateAll(true),
    default is hardcoded. That supports cases where the caller doesn't specify a translator
    (Poi.js, some classifiers, etc.). For now, it works.
   */
-_translator(std::shared_ptr<ToEnglishDictionaryTranslator>(new ToEnglishDictionaryTranslator()))
+_translator(std::make_shared<ToEnglishDictionaryTranslator>())
 {
   setConfiguration(conf());
 }
@@ -62,7 +62,7 @@ _d(d),
 _tokenize(true),
 _translateAll(true),
 //see comments above
-_translator(std::shared_ptr<ToEnglishDictionaryTranslator>(new ToEnglishDictionaryTranslator()))
+_translator(std::make_shared<ToEnglishDictionaryTranslator>())
 {
   setConfiguration(conf());
 }

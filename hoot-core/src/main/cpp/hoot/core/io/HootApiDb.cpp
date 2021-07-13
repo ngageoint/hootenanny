@@ -804,7 +804,7 @@ bool HootApiDb::insertNode(const long id, const double lat, const double lon, co
     _nodeBulkInsert->flush();
   }
 
-  ConstNodePtr envelopeNode(new Node(Status::Unknown1, id, lon, lat, 0.0));
+  ConstNodePtr envelopeNode = std::make_shared<Node>(Status::Unknown1, id, lon, lat, 0.0);
   _updateChangesetEnvelope(envelopeNode);
 
   LOG_TRACE("Inserted node: " << ElementId(ElementType::Node, id));
@@ -848,10 +848,6 @@ void HootApiDb::deleteNode(ConstNodePtr node)
   {
     _nodeBulkDelete->flush();
   }
-
-  // for multiary-poi-ingest: how to update envelope here?
-  //ConstNodePtr envelopeNode(new Node(Status::Unknown1, id, lon, lat, 0.0));
-  //_updateChangesetEnvelope(envelopeNode);
 
   LOG_TRACE("Deleted node: " << ElementId(ElementType::Node, node->getId()));
 }

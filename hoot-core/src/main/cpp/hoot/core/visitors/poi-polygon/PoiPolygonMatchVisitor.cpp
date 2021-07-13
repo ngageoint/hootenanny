@@ -110,8 +110,8 @@ void PoiPolygonMatchVisitor::_checkForMatch(const std::shared_ptr<const Element>
         // score each candidate and push it on the result vector
         LOG_TRACE(
           "Calculating match between: " << poiId << " and " << poly->getElementId() << "...");
-        std::shared_ptr<PoiPolygonMatch> m(
-          new PoiPolygonMatch(_map, _threshold, _rf, _infoCache, surroundingPolyIds));
+        std::shared_ptr<PoiPolygonMatch> m =
+          std::make_shared<PoiPolygonMatch>(_map, _threshold, _rf, _infoCache, surroundingPolyIds);
         m->setConfiguration(conf());
         m->calculateMatch(poiId, polyId);
 
@@ -245,10 +245,10 @@ std::shared_ptr<Tgs::HilbertRTree>& PoiPolygonMatchVisitor::_getPolyIndex()
     LOG_INFO("Creating POI/Polygon feature index...");
 
     // tune this? - see #3054
-    std::shared_ptr<Tgs::MemoryPageStore> mps(new Tgs::MemoryPageStore(728));
-    _polyIndex.reset(new Tgs::HilbertRTree(mps, 2));
+    _polyIndex =
+      std::make_shared<Tgs::HilbertRTree>(std::make_shared<Tgs::MemoryPageStore>(728), 2);
 
-    std::shared_ptr<PoiPolygonPolyCriterion> crit(new PoiPolygonPolyCriterion());
+    std::shared_ptr<PoiPolygonPolyCriterion> crit = std::make_shared<PoiPolygonPolyCriterion>();
 
     SpatialIndexer v(_polyIndex,
                      _polyIndexToEid,

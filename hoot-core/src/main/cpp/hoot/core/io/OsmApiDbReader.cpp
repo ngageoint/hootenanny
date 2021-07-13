@@ -47,7 +47,7 @@ namespace hoot
 HOOT_FACTORY_REGISTER(OsmMapReader, OsmApiDbReader)
 
 OsmApiDbReader::OsmApiDbReader() :
-_database(new OsmApiDb())
+_database(std::make_shared<OsmApiDb>())
 {
   setConfiguration(conf());
 }
@@ -171,14 +171,11 @@ WayPtr OsmApiDbReader::_resultToWay(const QSqlQuery& resultIterator, OsmMap& map
   QDateTime dt = resultIterator.value(ApiDb::WAYS_TIMESTAMP).toDateTime();
   dt.setTimeSpec(Qt::UTC);
 
-  WayPtr way(
-    new Way(
-      _status,
-      newWayId,
-      _defaultCircularError,
+  WayPtr way =
+    std::make_shared<Way>(
+      _status, newWayId, _defaultCircularError,
       resultIterator.value(ApiDb::WAYS_CHANGESET).toLongLong(),
-      resultIterator.value(ApiDb::WAYS_VERSION).toLongLong(),
-      dt.toMSecsSinceEpoch() / 1000));
+      resultIterator.value(ApiDb::WAYS_VERSION).toLongLong(), dt.toMSecsSinceEpoch() / 1000);
 
   // If performance here is ever a problem, try reading these out in batch at the same time the
   // element results are read
@@ -214,15 +211,12 @@ RelationPtr OsmApiDbReader::_resultToRelation(const QSqlQuery& resultIterator, c
   QDateTime dt = resultIterator.value(ApiDb::RELATIONS_TIMESTAMP).toDateTime();
   dt.setTimeSpec(Qt::UTC);
 
-  RelationPtr relation(
-    new Relation(
-      _status,
-      newRelationId,
-      _defaultCircularError,
-      "",
+  RelationPtr relation =
+    std::make_shared<Relation>(
+      _status, newRelationId, _defaultCircularError, "",
       resultIterator.value(ApiDb::RELATIONS_CHANGESET).toLongLong(),
       resultIterator.value(ApiDb::RELATIONS_VERSION).toLongLong(),
-      dt.toMSecsSinceEpoch() / 1000));
+      dt.toMSecsSinceEpoch() / 1000);
 
   // If performance here is ever a problem, these could be read out in batch at the same time the
   // element results are read.

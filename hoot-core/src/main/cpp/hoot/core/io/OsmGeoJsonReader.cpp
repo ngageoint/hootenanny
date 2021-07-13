@@ -202,7 +202,7 @@ void OsmGeoJsonReader::_parseCoordSys()
     if (ok && crs != -1)
     {
       LOG_DEBUG("Setting map projection to EPSG: " << crs);
-      std::shared_ptr<OGRSpatialReference> spatRef(new OGRSpatialReference());
+      std::shared_ptr<OGRSpatialReference> spatRef = std::make_shared<OGRSpatialReference>();
       spatRef->importFromEPSG(crs);
       _map->setProjection(spatRef);
     }
@@ -335,10 +335,11 @@ void OsmGeoJsonReader::_parseGeoJsonNode(const string& id, const pt::ptree& prop
   uid = properties.get("@uid", uid);
 
   //  Construct node
-  NodePtr pNode(
-    new Node(
+  NodePtr pNode =
+    Node::newSp(
       _defaultStatus, node_id, lon, lat, _defaultCircErr, changeset, version, timestamp,
-      QString::fromStdString(user), uid));
+      QString::fromStdString(user), uid);
+
   //  Add tags
   _addTags(properties, pNode);
   LOG_VART(pNode);
@@ -393,10 +394,10 @@ void OsmGeoJsonReader::_parseGeoJsonWay(const string& id, const pt::ptree& prope
   uid = properties.get("@uid", uid);
 
   //  Construct Way
-  WayPtr way(
-    new Way(
+  WayPtr way =
+    std::make_shared<Way>(
       _defaultStatus, way_id, _defaultCircErr, changeset, version, timestamp,
-      QString::fromStdString(user), uid));
+      QString::fromStdString(user), uid);
   bool isPoly = (geometry.get("type", "").compare("Polygon") == 0);
 
   //  Add nodes
@@ -410,8 +411,8 @@ void OsmGeoJsonReader::_parseGeoJsonWay(const string& id, const pt::ptree& prope
     else
     {
       long node_id = _map->createNextNodeId();
-      NodePtr node(new Node(_defaultStatus, node_id, *it, _defaultCircErr));
-      _map->addNode(node);
+      const Coordinate coord = *it;
+      _map->addNode(Node::newSp(_defaultStatus, node_id, coord.x, coord.y, _defaultCircErr));
       way->addNode(node_id);
     }
   }
@@ -462,10 +463,10 @@ void OsmGeoJsonReader::_parseGeoJsonRelation(const string& id, const pt::ptree& 
   //  Create an empty set of properties
   pt::ptree empty;
   //  Construct Relation
-  RelationPtr relation(
-    new Relation(
+  RelationPtr relation =
+    std::make_shared<Relation>(
       _defaultStatus, relation_id, _defaultCircErr, "", changeset, version, timestamp,
-      QString::fromStdString(user), uid));
+      QString::fromStdString(user), uid);
 
   //  Add the relation type and parse the roles
   // NOTE: This may be empty which will cause errors later. If it is empty, we add a type
@@ -547,7 +548,7 @@ void OsmGeoJsonReader::_parseGeoJsonRelation(const string& id, const pt::ptree& 
           //  Also a Relation but cannot be a relation of relations
           long rid = _map->createNextRelationId();
           //  Construct Relation
-          RelationPtr r(new Relation(_defaultStatus, rid, _defaultCircErr));
+          RelationPtr r = std::make_shared<Relation>(_defaultStatus, rid, _defaultCircErr);
           if (type == "MultiPoint")
             _parseMultiPointGeometry(geo, r);
           else if (type == "MultiLineString")
@@ -625,7 +626,7 @@ void OsmGeoJsonReader::_parseMultiPointGeometry(
     double lat = coord[0].y;
     double lon = coord[0].x;
     //  Construct node
-    NodePtr pNode(new Node(_defaultStatus, node_id, lon, lat, _defaultCircErr));
+    NodePtr pNode = Node::newSp(_defaultStatus, node_id, lon, lat, _defaultCircErr);
     //  Add node to map
     _map->addNode(pNode);
     relation->addElement("", ElementType::Node, node_id);
@@ -639,15 +640,15 @@ void OsmGeoJsonReader::_parseMultiLineGeometry(
   for (vector<JsonCoordinates>::const_iterator multi = multigeo.begin(); multi != multigeo.end(); ++multi)
   {
     long way_id = _map->createNextWayId();
-    WayPtr way(new Way(_defaultStatus, way_id, _defaultCircErr));
+    WayPtr way = std::make_shared<Way>(_defaultStatus, way_id, _defaultCircErr);
     for (JsonCoordinates::const_iterator coord = multi->begin(); coord != multi->end(); ++coord)
     {
       long node_id = _map->createNextNodeId();
       double lat = coord[0].y;
       double lon = coord[0].x;
       //  Construct node
-      NodePtr node(new Node(_defaultStatus, node_id, lon, lat, _defaultCircErr));
-      //  Add node to map
+      NodePtr node = Node::newSp(_defaultStatus, node_id, lon, lat, _defaultCircErr);
+      //  Add node to map;
       _map->addNode(node);
       way->addNode(node_id);
     }
@@ -663,19 +664,20 @@ void OsmGeoJsonReader::_parseMultiPolygonGeometry(
   for (vector<JsonCoordinates>::const_iterator multi = multigeo.begin(); multi != multigeo.end(); ++multi)
   {
     long way_id = _map->createNextWayId();
-    WayPtr way(new Way(_defaultStatus, way_id, _defaultCircErr));
+    WayPtr way = std::make_shared<Way>(_defaultStatus, way_id, _defaultCircErr);
     for (JsonCoordinates::const_iterator coord = multi->begin(); coord != multi->end(); ++coord)
     {
       if ((coord + 1) == multi->end())
       {
-        //  Don't create another node to close the polygon, just use the first one
+        //  Don't create another node to close the polygon, just use the first one.
         way->addNode(way->getNodeId(0));
       }
       else
       {
         long node_id = _map->createNextNodeId();
-        NodePtr node(new Node(_defaultStatus, node_id, *coord, _defaultCircErr));
-        _map->addNode(node);
+        const geos::geom::Coordinate coordinate = *coord;
+        _map->addNode(
+          Node::newSp(_defaultStatus, node_id, coordinate.x, coordinate.y, _defaultCircErr));
         way->addNode(node_id);
       }
     }
@@ -862,7 +864,7 @@ std::shared_ptr<Coordinate> OsmGeoJsonReader::_readCoordinate(const pt::ptree& c
     if (coord != coordsIt.end())
     {
       y = coord->second.get_value<double>();
-      pCoord = std::shared_ptr<Coordinate>( new Coordinate(x, y) );
+      pCoord = std::make_shared<Coordinate>(x, y);
     }
   }
 

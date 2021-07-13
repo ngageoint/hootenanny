@@ -185,8 +185,9 @@ public:
                           Coordinate::getNull() };
     WayPtr wg2b = TestUtils::createWay(map, cg2b, "g2", Status::Unknown2, 15.0);
 
-    RelationPtr r(new Relation(Status::Unknown1, map->createNextRelationId(), 5,
-      MetadataTags::RelationMultilineString()));
+    RelationPtr r =
+      std::make_shared<Relation>(
+        Status::Unknown1, map->createNextRelationId(), 5, MetadataTags::RelationMultilineString());
     r->getTags()["note"] = "rg2";
     r->addElement("", wg2a);
     r->addElement("", wg2b);
@@ -216,8 +217,9 @@ public:
                           Coordinate::getNull() };
     WayPtr wh2b = TestUtils::createWay(map, ch2b, "h2", Status::Unknown2, ce);
 
-    RelationPtr rh2(new Relation(Status::Unknown1, map->createNextRelationId(), 3,
-      MetadataTags::RelationMultilineString()));
+    RelationPtr rh2 =
+      std::make_shared<Relation>(
+        Status::Unknown1, map->createNextRelationId(), 3, MetadataTags::RelationMultilineString());
     rh2->getTags()["note"] = "rh2";
     rh2->addElement("", wh2a);
     rh2->addElement("", wh2b);
@@ -247,8 +249,9 @@ public:
                           Coordinate::getNull() };
     WayPtr wi2b = TestUtils::createWay(map, ci2b, "i2", Status::Unknown2, ce);
 
-    RelationPtr ri2(new Relation(Status::Unknown1, map->createNextRelationId(), 3,
-      MetadataTags::RelationMultilineString()));
+    RelationPtr ri2 =
+      std::make_shared<Relation>(
+      Status::Unknown1, map->createNextRelationId(), 3, MetadataTags::RelationMultilineString());
     ri2->getTags()["note"] = "ri2";
     ri2->addElement("", wi2a);
     ri2->addElement("", wi2b);
@@ -528,8 +531,9 @@ public:
 
     // test the simplest case
     {
-      RelationPtr r(new Relation(Status::Unknown1, map->createNextRelationId(), 5,
-        MetadataTags::RelationMultilineString()));
+      RelationPtr r =
+        std::make_shared<Relation>(
+          Status::Unknown1, map->createNextRelationId(), 5, MetadataTags::RelationMultilineString());
       r->addElement("", toWay(map, "a1"));
       map->addElement(r);
 

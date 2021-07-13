@@ -63,7 +63,7 @@ public:
   {
     std::shared_ptr<ChangesetProvider> changesetProvider(new TestOsmChangesetProvider(true));
 
-    //clear out the db so we get consistent next id results
+    // Clear out the db so we get consistent next id results.
     database.open(ServicesDbTestUtils::getOsmApiDbUrl());
     database.deleteData();
     ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), _scriptDir + "users.sql");
@@ -80,6 +80,6 @@ public:
 #ifdef HOOT_HAVE_SERVICES
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ServiceOsmApiDbSqlChangesetFileWriterTest, "quick");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ServiceOsmApiDbSqlChangesetFileWriterTest, "serial");
-#endif  // HOOT_HAVE_SERVICES
+#endif
 
 }

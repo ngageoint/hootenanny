@@ -47,7 +47,7 @@ SimulatedAnnealing::SimulatedAnnealing(ConstStateDescriptionPtr sd,
 
 StatePtr SimulatedAnnealing::_generateNeighbor(ConstStatePtr from, double T) const
 {
-  StatePtr result(new State());
+  StatePtr result = std::make_shared<State>();
 
   double scale = pow(T, 1.0);
 
@@ -85,7 +85,7 @@ StatePtr SimulatedAnnealing::_generateNeighbor(ConstStatePtr from, double T) con
 
 StatePtr SimulatedAnnealing::_generateRandomState() const
 {
-  StatePtr result(new State());
+  StatePtr result = std::make_shared<State>();
 
   foreach (ConstVariableDescriptionPtr vd, _stateDescription->getVariables())
   {

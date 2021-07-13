@@ -77,19 +77,18 @@ private:
     // Make sure way in question does not already exist in map
     CPPUNIT_ASSERT_EQUAL(_map->containsWay(wayId), false );
 
-    WayPtr newWay(new Way(Status::Unknown1, wayId, 1.0));
+    WayPtr newWay = std::make_shared<Way>(Status::Unknown1, wayId, 1.0);
 
     // Make sure there are nodes to add
-    if ( startNodeId <= endNodeId )
+    if (startNodeId <= endNodeId)
     {
       // Create the nodes and and add them to the map, if necessary
-      for ( unsigned int i = startNodeId; i <= endNodeId; i++ )
+      for (unsigned int i = startNodeId; i <= endNodeId; i++)
       {
         // Make sure map does not already have node in question
-        if ( _map->containsNode(i) == false )
+        if (_map->containsNode(i) == false)
         {
-          std::shared_ptr<Node> createNode(new Node(Status::Unknown1, i, i * 1.0, i * 1.0, 1.0));
-          _map->addNode(createNode);
+          _map->addNode(std::make_shared<Node>(Status::Unknown1, i, i * 1.0, i * 1.0, 1.0));
         }
 
         // Add the node into the new way

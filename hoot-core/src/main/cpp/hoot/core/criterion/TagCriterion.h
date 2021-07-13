@@ -51,19 +51,18 @@ public:
   ~TagCriterion() = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
+  ElementCriterionPtr clone() override { return std::make_shared<TagCriterion>(); }
 
   void setConfiguration(const Settings& s) override;
-
-  void setKvps(const QStringList kvps);
-  void setCaseSensitive(bool caseSens) { _caseSensitive = caseSens; }
-
-  ElementCriterionPtr clone() override { return ElementCriterionPtr(new TagCriterion()); }
 
   QString getDescription() const override
   { return "Identifies elements containing a specified tag key/value combination"; }
   QString toString() const override;
   QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }
+
+  void setKvps(const QStringList kvps);
+  void setCaseSensitive(bool caseSens) { _caseSensitive = caseSens; }
 
 private:
 

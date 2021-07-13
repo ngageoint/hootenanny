@@ -113,7 +113,9 @@ void WayToIntersectionGeoModifier::processIntersections(
   for (IntersectionInfo intersInfo : inters)
   {
     // create new node with tags from original way
-    NodePtr pNode(new Node(Status::Unknown1, pMap->createNextNodeId(), intersInfo.intersectionPoint));
+    NodePtr pNode =
+      std::make_shared<Node>(
+        Status::Unknown1, pMap->createNextNodeId(), intersInfo.intersectionPoint);
     pNode->setTags(pWay->getTags());
     pMap->addNode(pNode);
   }

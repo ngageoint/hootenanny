@@ -52,7 +52,6 @@ public:
   { _func.Reset(isolate, func); }
 
   bool isSatisfied(const ConstElementPtr& e) const override;
-
   ElementCriterionPtr clone() override
   { return ElementCriterionPtr(new JsFunctionCriterion(_func)); }
 

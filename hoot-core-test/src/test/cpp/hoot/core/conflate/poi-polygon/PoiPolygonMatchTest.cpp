@@ -75,7 +75,7 @@ public:
     w1->getTags().set("area", true);
     w1->getTags().set("poi", true);
     w1->getTags()["name"] = "United Kingdoms";
-    NodePtr n1(new Node(Status::Unknown1, 1, 10, 10, 5));
+    NodePtr n1 = std::make_shared<Node>(Status::Unknown1, 1, 10, 10, 5);
     n1->getTags().set("poi", true);
     n1->getTags()["name"] = "United Kingdom";
     map->addNode(n1);
@@ -128,7 +128,7 @@ public:
                         Coordinate::getNull() };
     WayPtr w1 = TestUtils::createWay(map, c1, "w1", Status::Unknown1, 5);
     w1->getTags().set("building", true);
-    NodePtr n1(new Node(Status::Unknown1, 1, -1, 10, 5));
+    NodePtr n1 = std::make_shared<Node>(Status::Unknown1, 1, -1, 10, 5);
     map->addNode(n1);
     w1->getTags().set("name", "foo");
     n1->getTags().set("name", "bar");
@@ -182,7 +182,7 @@ public:
                         Coordinate::getNull() };
     WayPtr w1 = TestUtils::createWay(map, c1, "w1", Status::Unknown1, 5);
     w1->getTags().set("building", true);
-    NodePtr n1(new Node(Status::Unknown1, 1, 10, 10, 5));
+    NodePtr n1 = std::make_shared<Node>(Status::Unknown1, 1, 10, 10, 5);
     map->addNode(n1);
     w1->getTags().set("name", "foo");
     n1->getTags().set("name", "bar");
@@ -258,7 +258,7 @@ public:
     w1->getTags().set("area", true);
     w1->getTags().set("poi", true);
     w1->getTags()["name"] = "United Kingdoms";
-    NodePtr n1(new Node(Status::Unknown1, 1, 10, 10, 5));
+    NodePtr n1 = std::make_shared<Node>(Status::Unknown1, 1, 10, 10, 5);
     n1->getTags().set("poi", true);
     n1->getTags().set("building", "yes");
     n1->getTags()["name"] = "United Kingdom";
@@ -542,7 +542,7 @@ public:
     w1->getTags().set("area", true);
     w1->getTags().set("poi", true);
     w1->getTags()["name"] = "United Kingdoms";
-    NodePtr n1(new Node(Status::Unknown1, 1, 10, 10, 5));
+    NodePtr n1 = std::make_shared<Node>(Status::Unknown1, 1, 10, 10, 5);
     n1->getTags().set("poi", true);
     n1->getTags()["name"] = "United Kingdom";
     map->addNode(n1);
@@ -606,7 +606,7 @@ public:
     w1->getTags().set("area", true);
     w1->getTags().set("poi", true);
     w1->getTags()["name"] = "United Kingdoms";
-    NodePtr n1(new Node(Status::Unknown1, 1, 10, 10, 5));
+    NodePtr n1 = std::make_shared<Node>(Status::Unknown1, 1, 10, 10, 5);
     n1->getTags().set("poi", true);
     n1->getTags()["name"] = "United Kingdom";
     map->addNode(n1);
@@ -670,7 +670,7 @@ public:
     w1->getTags().set("area", true);
     w1->getTags().set("poi", true);
     w1->getTags()["name"] = "United Kingdoms";
-    NodePtr n1(new Node(Status::Unknown1, 1, 10, 10, 5));
+    NodePtr n1 = std::make_shared<Node>(Status::Unknown1, 1, 10, 10, 5);
     n1->getTags().set("poi", true);
     n1->getTags()["name"] = "United Kingdom";
     map->addNode(n1);
@@ -711,7 +711,7 @@ public:
     w1->getTags().set("area", true);
     w1->getTags().set("poi", true);
     w1->getTags()["name"] = "United Kingdoms";
-    NodePtr n1(new Node(Status::Unknown1, 1, 10, 10, 5));
+    NodePtr n1 = std::make_shared<Node>(Status::Unknown1, 1, 10, 10, 5);
     n1->getTags().set("poi", true);
     n1->getTags()["name"] = "United Kingdom";
     n1->getTags()["source"] = "mySource:a";
@@ -766,7 +766,7 @@ public:
                         Coordinate(0.0, 0.0),
                         Coordinate::getNull() };
 
-    NodePtr n1(new Node(Status::Unknown1, 1, 10, 10, 5));
+    NodePtr n1 = std::make_shared<Node>(Status::Unknown1, 1, 10, 10, 5);
     n1->getTags().set("poi", true);
     map->addNode(n1);
 
@@ -928,7 +928,7 @@ public:
     w1->getTags().set("area", true);
     w1->getTags().set("poi", true);
     w1->getTags()["name"] = "United Kingdoms";
-    NodePtr n1(new Node(Status::Unknown1, 1, 10, 10, 5));
+    NodePtr n1 = std::make_shared<Node>(Status::Unknown1, 1, 10, 10, 5);
     n1->getTags().set("poi", true);
     n1->getTags()["name"] = "United Kingdom";
     map->addNode(n1);

@@ -43,10 +43,10 @@ int VersionUtils::versionLessThanOneCount(const OsmMapPtr& map)
 {
   return
     (int)FilteredVisitor::getStat(
-      ElementCriterionPtr(
-        new AttributeValueCriterion(
-          ElementAttributeType(ElementAttributeType::Version), 1, NumericComparisonType::LessThan)),
-      ElementVisitorPtr(new ElementCountVisitor()), map);
+      std::make_shared<AttributeValueCriterion>(
+        ElementAttributeType(ElementAttributeType::Version), 1, NumericComparisonType::LessThan),
+      std::make_shared<ElementCountVisitor>(),
+      map);
 }
 
 bool VersionUtils::checkVersionLessThanOneCountAndLogWarning(const OsmMapPtr& map)

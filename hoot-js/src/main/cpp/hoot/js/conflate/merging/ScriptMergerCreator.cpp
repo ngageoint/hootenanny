@@ -110,7 +110,8 @@ bool ScriptMergerCreator::createMergers(const MatchSet& matches, vector<MergerPt
     { 
       LOG_TRACE("Overlapping matches:\n" << eids << "\nmatch types: " << matchType.join(";"));
       mergers.push_back(
-        MergerPtr(new MarkForReviewMerger(eids, "Overlapping matches", matchType.join(";"), 1.0)));
+        std::make_shared<MarkForReviewMerger>(
+          eids, "Overlapping matches", matchType.join(";"), 1.0));
       result = true;
     }
   }

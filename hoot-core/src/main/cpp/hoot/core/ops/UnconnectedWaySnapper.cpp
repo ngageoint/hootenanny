@@ -484,12 +484,10 @@ ElementCriterionPtr UnconnectedWaySnapper::_getStatusCriteria(const QStringList&
   }
   else
   {
-    std::shared_ptr<OrCriterion> orCrit(new OrCriterion());
+    std::shared_ptr<OrCriterion> orCrit = std::make_shared<OrCriterion>();
     for (int i = 0; i < statuses.size(); i++)
     {
-      orCrit->addCriterion(
-        std::shared_ptr<StatusCriterion>(
-          new StatusCriterion(Status::fromString(statuses.at(i)))));
+      orCrit->addCriterion(std::make_shared<StatusCriterion>(Status::fromString(statuses.at(i))));
     }
     statusCrit = orCrit;
   }
@@ -504,22 +502,22 @@ void UnconnectedWaySnapper::_createFeatureIndex(
   LOG_DEBUG("Creating feature index of type: " << elementType << "...");
 
   // tune these indexes? - see #3054
-  std::shared_ptr<Tgs::MemoryPageStore> mps(new Tgs::MemoryPageStore(728));
-  featureIndex.reset(new Tgs::HilbertRTree(mps, 2));
+  featureIndex =
+    std::make_shared<Tgs::HilbertRTree>(std::make_shared<Tgs::MemoryPageStore>(728), 2);
   std::shared_ptr<SpatialIndexer> spatialIndexer;
   if (elementType == ElementType::Node)
   {
-    spatialIndexer.reset(
-      new SpatialIndexer(
+    spatialIndexer =
+      std::make_shared<SpatialIndexer>(
         featureIndex, featureIndexToEid, featureCrit,
-        std::bind(&UnconnectedWaySnapper::_getWayNodeSearchRadius, this, placeholders::_1), _map));
+        std::bind(&UnconnectedWaySnapper::_getWayNodeSearchRadius, this, placeholders::_1), _map);
   }
   else
   {
-    spatialIndexer.reset(
-      new SpatialIndexer(
-        featureIndex, featureIndexToEid, featureCrit,
-        std::bind(&UnconnectedWaySnapper::_getWaySearchRadius, this, placeholders::_1), _map));
+      spatialIndexer =
+        std::make_shared<SpatialIndexer>(
+          featureIndex, featureIndexToEid, featureCrit,
+          std::bind(&UnconnectedWaySnapper::_getWaySearchRadius, this, placeholders::_1), _map);
   }
   LOG_DEBUG(spatialIndexer->getInitStatusMessage());
   if (elementType == ElementType::Node)
@@ -533,7 +531,6 @@ void UnconnectedWaySnapper::_createFeatureIndex(
   spatialIndexer->finalizeIndex();
   LOG_DEBUG(spatialIndexer->getCompletedStatusMessage());
   LOG_VARD(featureIndexToEid.size());
-  //LOG_VARD(featureIndexToEid);
   LOG_VARD(_map->getIndex().getElementToRelationMap()->size());
 }
 

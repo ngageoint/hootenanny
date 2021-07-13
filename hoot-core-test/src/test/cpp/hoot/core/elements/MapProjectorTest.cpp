@@ -127,7 +127,7 @@ public:
         Coordinate c1(x, y);
         Coordinate p1 = c1;
         success &= t->Transform(1, &p1.x, &p1.y);
-        NodePtr n1(new Node(Status::Unknown1, map->createNextNodeId(), c1, 10));
+        NodePtr n1 = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), c1, 10);
         map->addNode(n1);
 
         Coordinate upc = GeometryUtils::calculateDestination(c1, 0.0, distance);
@@ -142,9 +142,9 @@ public:
 
           if (e->contains(c2))
           {
-            NodePtr n2(new Node(Status::Unknown1, map->createNextNodeId(), c2, 10));
+            NodePtr n2 = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), c2, 10);
             map->addNode(n2);
-            WayPtr w(new Way(Status::Unknown1, map->createNextWayId(), 10));
+            WayPtr w = std::make_shared<Way>(Status::Unknown1, map->createNextWayId(), 10);
             map->addWay(w);
             w->addNode(n1->getId());
             w->addNode(n2->getId());

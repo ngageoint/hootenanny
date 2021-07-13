@@ -632,7 +632,7 @@ void OsmJsonReader::_parseOverpassNode(const pt::ptree& item)
 
   // Construct node
   NodePtr pNode(
-    new Node(
+    Node::newSp(
       _defaultStatus, newId, lon, lat, _defaultCircErr, changeset, version, timestamp,
       QString::fromStdString(user), uid));
 
@@ -719,10 +719,10 @@ void OsmJsonReader::_parseOverpassWay(const pt::ptree& item)
   uid = item.get("uid", uid);
 
   // Construct Way
-  WayPtr pWay(
-    new Way(
+  WayPtr pWay =
+    std::make_shared<Way>(
       _defaultStatus, newId, _defaultCircErr, changeset, version, timestamp,
-      QString::fromStdString(user), uid));
+      QString::fromStdString(user), uid);
 
   // Add nodes
   if (item.not_found() != item.find("nodes"))
@@ -845,10 +845,10 @@ void OsmJsonReader::_parseOverpassRelation(const pt::ptree& item)
   uid = item.get("uid", uid);
 
   // Construct Relation
-  RelationPtr pRelation(
-    new Relation(
+  RelationPtr pRelation =
+    std::make_shared<Relation>(
       _defaultStatus, newId, _defaultCircErr, "", changeset, version, timestamp,
-      QString::fromStdString(user), uid));
+      QString::fromStdString(user), uid);
 
   // Add members
   if (item.not_found() != item.find("members"))

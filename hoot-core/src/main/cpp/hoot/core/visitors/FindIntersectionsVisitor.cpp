@@ -104,12 +104,12 @@ void FindIntersectionsVisitor::visit(const ConstElementPtr& e)
 
 ElementCriterionPtr FindHighwayIntersectionsVisitor::createCriterion(ConstOsmMapPtr map)
 {
-  return ElementCriterionPtr(new HighwayCriterion(map));
+  return std::make_shared<HighwayCriterion>(map);
 }
 
 ElementCriterionPtr FindRailwayIntersectionsVisitor::createCriterion(ConstOsmMapPtr /*map*/)
 {
-  return ElementCriterionPtr(new RailwayCriterion());
+  return std::make_shared<RailwayCriterion>();
 }
 
 }

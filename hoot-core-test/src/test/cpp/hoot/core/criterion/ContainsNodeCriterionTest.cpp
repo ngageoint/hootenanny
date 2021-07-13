@@ -42,13 +42,16 @@ public:
 
   void runBasicTest()
   {
-    NodePtr node1(new Node(Status::Unknown1, 1, geos::geom::Coordinate(0.0, 0.0), 15.0));
-    NodePtr node2(new Node(Status::Unknown1, 2, geos::geom::Coordinate(0.0, 10.0), 15.0));
-    NodePtr node3(new Node(Status::Unknown1, 3, geos::geom::Coordinate(0.0, 20.0), 15.0));
+    NodePtr node1 =
+      std::make_shared<Node>(Status::Unknown1, 1, geos::geom::Coordinate(0.0, 0.0), 15.0);
+    NodePtr node2 =
+      std::make_shared<Node>(Status::Unknown1, 2, geos::geom::Coordinate(0.0, 10.0), 15.0);
+    NodePtr node3 =
+      std::make_shared<Node>(Status::Unknown1, 3, geos::geom::Coordinate(0.0, 20.0), 15.0);
 
     ContainsNodeCriterion uut1(1);
 
-    WayPtr way1(new Way(Status::Unknown1, 1, 15.0));
+    WayPtr way1 = std::make_shared<Way>(Status::Unknown1, 1, 15.0);
     CPPUNIT_ASSERT(!uut1.isSatisfied(way1));
     way1->addNode(node1->getId());
     way1->addNode(node2->getId());

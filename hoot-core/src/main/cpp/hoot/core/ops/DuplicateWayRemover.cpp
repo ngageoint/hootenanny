@@ -319,8 +319,8 @@ WayPtr DuplicateWayRemover::_getUpdatedWay(WayPtr way, const vector<long>& nodes
   if (newIds)
   {
     //  Create a new way, update it, and add it to the map
-    WayPtr newWay;
-    newWay.reset(new Way(way->getStatus(), _map->createNextWayId(), way->getRawCircularError()));
+    WayPtr newWay =
+     std::make_shared<Way>(way->getStatus(), _map->createNextWayId(), way->getRawCircularError());
     newWay->addNodes(nodes);
     newWay->setPid(way->getId());
     newWay->setTags(way->getTags());

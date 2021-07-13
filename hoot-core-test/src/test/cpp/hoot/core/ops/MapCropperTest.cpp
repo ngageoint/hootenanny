@@ -91,8 +91,8 @@ public:
       double x = Random::instance()->generateUniform() * 360 - 180;
       double y = Random::instance()->generateUniform() * 180 - 90;
 
-      NodePtr n(new Node(Status::Invalid, result->createNextNodeId(), x, y, 10));
-      result->addNode(n);
+      result->addNode(
+        std::make_shared<Node>(Status::Invalid, result->createNextNodeId(), x, y, 10));
     }
 
     return result;

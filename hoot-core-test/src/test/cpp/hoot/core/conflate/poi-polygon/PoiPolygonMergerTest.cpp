@@ -83,7 +83,7 @@ public:
     w1->getTags().set("area", true);
     w1->getTags()["name"] = "foo";
     w1->getTags()["amenity"] = "bar";
-    NodePtr n1(new Node(Status::Unknown2, 1, 10, 10, 5));
+    NodePtr n1 = std::make_shared<Node>(Status::Unknown2, 1, 10, 10, 5);
     n1->getTags()["name"] = "bar";
     n1->getTags()["amenity"] = "cafe";
     map->addNode(n1);
