@@ -272,10 +272,10 @@ const Envelope& Relation::getEnvelopeInternal(
 
 void Relation::_makeWritable()
 {
-  // make sure we're the only one with a reference to the data before we modify it.
+  // Make sure we're the only one with a reference to the data before we modify it.
   if (_relationData.use_count() > 1)
   {
-    _relationData.reset(new RelationData(*_relationData));
+    _relationData = std::make_shared<RelationData>(*_relationData);
   }
 }
 

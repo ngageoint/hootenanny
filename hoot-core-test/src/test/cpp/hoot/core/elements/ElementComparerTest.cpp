@@ -299,13 +299,13 @@ public:
   {
     WayPtr way1(new Way(Status::Unknown1, 1, 15.0));
 
-    RelationPtr relation1(
-      new Relation(Status::Unknown1, 1, 15.0, "type1", ElementData::CHANGESET_EMPTY, 1));
+    RelationPtr relation1 =
+      std::make_shared<Relation>(Status::Unknown1, 1, 15.0, "type1", ElementData::CHANGESET_EMPTY, 1);
     relation1->setTag("key1", "value1");
     relation1->addElement("role1", way1);
 
-    RelationPtr relation2(
-      new Relation(Status::Unknown1, 1, 15.0, "type1", ElementData::CHANGESET_EMPTY, 2));
+    RelationPtr relation2 =
+      std::make_shared<Relation>(Status::Unknown1, 1, 15.0, "type1", ElementData::CHANGESET_EMPTY, 2);
     relation2->setTag("key1", "value1");
     relation2->addElement("role1", way1);
 

@@ -77,7 +77,7 @@ public:
 
     // Write two tags to the relation and its members only.
 
-    RecursiveSetTagValueOp uut(keys, values, ElementCriterionPtr(new RelationCriterion()));
+    RecursiveSetTagValueOp uut(keys, values, std::make_shared<RelationCriterion>());
     uut.apply(map);
 
     MapProjector::projectToWgs84(map);

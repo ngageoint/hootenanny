@@ -136,8 +136,9 @@ public:
         way->addNode(node1->getId());
         way->addNode(node2->getId());
         way->setTag("key1", "value1");
-        RelationPtr relation(
-          new Relation(Status::Unknown1, ++_rel, 15.0, "", ElementData::CHANGESET_EMPTY, version));
+        RelationPtr relation =
+          std::make_shared<Relation>(
+            Status::Unknown1, ++_rel, 15.0, "", ElementData::CHANGESET_EMPTY, version);
         relation->addElement("role1", node1->getElementId());
         relation->addElement("role2", way->getElementId());
         relation->setTag("key2", "value2");
