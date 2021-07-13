@@ -59,8 +59,9 @@ if [ "${ADDREPOS:-yes}" = "yes" ]; then
 fi
 
 # configure the devtoolset repository
-echo "### Add devtoolset repo ###"
-sudo yum install -y centos-release-scl >> CentOS_upgrade.txt 2>&1
+echo "### Add devtoolset repo and postgresql ${POSTGRESQL_VERSION} libraries ###"
+sudo yum install -y \
+     centos-release-scl postgresql${POSTGRESQL_VERSION}-libs >> CentOS_upgrade.txt 2>&1
 sudo yum-config-manager --enable rhel-server-rhscl-7-rpms
 
 if [ "${YUMUPDATE:-yes}" = "yes" ]; then
@@ -219,7 +220,7 @@ sudo yum -y install \
     words \
     xorg-x11-server-Xvfb \
     zip
-    
+
 # Fix missing qmake
 if ! hash qmake >/dev/null 2>&1 ; then
     if hash qmake-qt5 >/dev/null 2>&1 ; then
@@ -261,6 +262,7 @@ if ! grep --quiet GDAL_DATA ~/.bash_profile; then
 fi
 
 # Install gems with bundler and strict versioning (see Gemfile)
+bundle config set --local path vendor/bundle
 bundle install
 
 # Make sure that we are in ~ before trying to wget & install stuff
