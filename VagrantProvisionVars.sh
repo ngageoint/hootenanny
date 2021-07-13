@@ -19,7 +19,7 @@ export LIBGEOTIFF_VERSION=1.6.0
 export PROJ_VERSION=7.2.1
 
 # PostgreSQL version
-export POSTRESQL_VERSION=13
+export POSTGRESQL_VERSION=13
 
 # FGDB 1.5 is required to compile using g++ >= 5.1
 # https://trac.osgeo.org/gdal/wiki/FileGDB#HowtodealwithGCC5.1C11ABIonLinux
