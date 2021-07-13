@@ -43,13 +43,12 @@ public:
   static QString className() { return "hoot::ElementTypeCriterion"; }
 
   ElementTypeCriterion() = default;
-  ElementTypeCriterion(ElementType::Type eType) : _elementType(eType) {}
+  ElementTypeCriterion(ElementType::Type eType);
   virtual ~ElementTypeCriterion() = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
-
   ElementCriterionPtr clone() override
-  { return ElementCriterionPtr(new ElementTypeCriterion(_elementType)); }
+  { return std::make_shared<ElementTypeCriterion>(_elementType); }
 
   QString getDescription() const override
   { return "Identifies elements based on the specified type"; }

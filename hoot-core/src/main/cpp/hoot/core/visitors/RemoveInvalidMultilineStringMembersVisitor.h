@@ -53,7 +53,6 @@ public:
 
   QString getInitStatusMessage() const override
   { return "Removing invalid multiline string relation members..."; }
-
   QString getCompletedStatusMessage() const override
   {
     return
@@ -63,9 +62,7 @@ public:
 
   QString getDescription() const override
   { return "Removes invalid multiline string relation members"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 
 private:

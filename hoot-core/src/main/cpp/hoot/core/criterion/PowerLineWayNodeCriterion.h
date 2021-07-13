@@ -43,8 +43,7 @@ public:
   PowerLineWayNodeCriterion(ConstOsmMapPtr map);
   ~PowerLineWayNodeCriterion() = default;
 
-  ElementCriterionPtr clone() override
-  { return ElementCriterionPtr(new PowerLineWayNodeCriterion(_map)); }
+  ElementCriterionPtr clone() override { return std::make_shared<PowerLineWayNodeCriterion>(_map); }
 
   QString getDescription() const override { return "Identifies power line nodes"; }
   QString getName() const override { return className(); }

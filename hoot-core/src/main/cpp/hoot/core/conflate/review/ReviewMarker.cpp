@@ -204,9 +204,9 @@ void ReviewMarker::mark(
     throw IllegalArgumentException("You must specify a review note.");
   }
 
-  RelationPtr r(
-    new Relation(
-      Status::Conflated, map->createNextRelationId(), 0, MetadataTags::RelationReview()));
+  RelationPtr r =
+    std::make_shared<Relation>(
+      Status::Conflated, map->createNextRelationId(), 0, MetadataTags::RelationReview());
   r->getTags().set(MetadataTags::HootReviewNeeds(), true);
   if (_addReviewTagsToFeatures)
   {

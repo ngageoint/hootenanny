@@ -59,17 +59,14 @@ public:
   void setOsmMap(OsmMap* map) override { _map = map; }
   void setOsmMap(const OsmMap* /*map*/) const { assert(false); }
 
-  QString getDescription() const override
-  { return "Decomposes complex buildings into simpler elements"; }
-
   QString getInitStatusMessage() const override { return "Decomposing complex buildings..."; }
-
   QString getCompletedStatusMessage() const override
   { return "Decomposed " + QString::number(_numAffected) + " complex buildings"; }
 
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+  QString getDescription() const override
+  { return "Decomposes complex buildings into simpler elements"; }
 
 private:
 

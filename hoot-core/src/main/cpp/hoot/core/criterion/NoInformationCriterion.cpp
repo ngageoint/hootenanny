@@ -38,6 +38,16 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, NoInformationCriterion)
 
+NoInformationCriterion::NoInformationCriterion()
+{
+  setConfiguration(conf());
+}
+
+NoInformationCriterion::NoInformationCriterion(bool treatReviewTagsAsMetadata) :
+_treatReviewTagsAsMetadata(treatReviewTagsAsMetadata)
+{
+}
+
 bool NoInformationCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   const Tags tags = e->getTags();

@@ -42,7 +42,6 @@ public:
   virtual bool contains(const ConstEdgeMatchPtr &em) const = 0;
 
   virtual QString toString() const = 0;
-
 };
 
 using EdgeMatchSetPtr = std::shared_ptr<EdgeMatchSet>;

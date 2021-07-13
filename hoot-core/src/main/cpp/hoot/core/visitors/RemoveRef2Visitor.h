@@ -72,9 +72,7 @@ public:
 
   QString getDescription() const override
   { return "Removes REF2 tags when a criterion is met for both REF1 and REF2 elements"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 
 protected:

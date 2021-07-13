@@ -268,7 +268,7 @@ bool DuplicateNodeRemover::_passesLogMergeFilter(
 }
 
 void DuplicateNodeRemover::_logMergeResult(
-  const long nodeId1, const long nodeId2, OsmMapPtr& map, const bool replaced,
+  const long nodeId1, const long nodeId2, const OsmMapPtr& map, const bool replaced,
   const double distance, const double calcdDistance) const
 {
   if (_passesLogMergeFilter(nodeId1, nodeId2, map))

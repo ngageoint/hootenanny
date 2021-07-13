@@ -85,7 +85,7 @@ namespace Tgs
    }
 
   bool InfoGainCalculator::findDataSplit(
-    DataFrame& df, std::vector<unsigned int>& fIndices, std::vector<unsigned int>& indices,
+    const DataFrame& df, std::vector<unsigned int>& fIndices, std::vector<unsigned int>& indices,
     unsigned int& splitIdx, unsigned int& fIdx, double& splitVal, double& purityDelta) const
   {
     if (!df.empty())
@@ -148,9 +148,9 @@ namespace Tgs
     }
   }
 
-  double InfoGainCalculator::getMaxInfoGainByFactor(DataFrame & df, 
-    std::vector<unsigned int> & indices, unsigned int fIdx, double totalEntropy, 
-    unsigned int & bestSplit) const
+  double InfoGainCalculator::getMaxInfoGainByFactor(const DataFrame& df,
+    std::vector<unsigned int>& indices, unsigned int fIdx, double totalEntropy,
+    unsigned int& bestSplit) const
   {
     //Indices need to be sorted on the factor to use this as a public function 
 
@@ -244,7 +244,7 @@ namespace Tgs
   }
 
   double InfoGainCalculator::getMaxInfoGainRatioByFactor(
-    DataFrame& df, std::vector<unsigned int>& indices, unsigned int fIdx, double totalEntropy,
+    const DataFrame& df, std::vector<unsigned int>& indices, unsigned int fIdx, double totalEntropy,
     unsigned int& bestSplit) const
   {
     //Indices need to be sorted on the factor to use this as a public function 

@@ -102,7 +102,6 @@ public:
    */
   QString getInitStatusMessage() const override
   { return "Snapping unconnected ways to the nearest way..."; }
-
   /**
    * @see OperationStatus
    */

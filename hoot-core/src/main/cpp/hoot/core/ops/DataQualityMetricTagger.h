@@ -57,18 +57,15 @@ public:
    */
   void apply(OsmMapPtr& map) override;
 
-  QString getName() const override { return className(); }
-
-  QString getClassName() const override { return className(); }
-
   QString getInitStatusMessage() const override
   { return "Calculating data quality metrics..."; }
-
   QString getCompletedStatusMessage() const override
   {
     return "Calculated data quality metrics.";
   }
 
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
   QString getDescription() const override
   { return "Calculates select data quality metrics for a map and tags features with issues"; }
 

@@ -53,16 +53,15 @@ Meters MaximalNearestSubline::_headingDelta = -1;
 MaximalNearestSubline::MaximalNearestSubline(
   const ConstOsmMapPtr& map, ConstWayPtr a, ConstWayPtr b, Meters minSplitSize,
   Meters maxRelevantDistance, Radians maxRelevantAngle, Meters headingDelta) :
-_a(a), _b(b),
+_a(a),
+_b(b),
 _aPtLocator(map, a),
-_map(map)
+_minSplitSize(minSplitSize),
+_map(map),
+_maxRelevantDistance(maxRelevantDistance),
+_maxRelevantAngle(maxRelevantAngle)
 {
-  _a = a;
-  _b = b;
   _maxInterval.resize(2);
-  _minSplitSize = minSplitSize;
-  _maxRelevantDistance = maxRelevantDistance;
-  _maxRelevantAngle = maxRelevantAngle;
   _headingDelta = headingDelta;
 }
 
@@ -81,7 +80,7 @@ Meters MaximalNearestSubline::_calculateIntervalLength()
 
 void MaximalNearestSubline::_expandInterval(const WayLocation& loc)
 {
-  // expand maximal interval if this point is outside it
+  // Expand maximal interval if this point is outside it.
   if (_maxInterval[0].isValid() == false || loc.compareTo(_maxInterval[0]) < 0)
   {
     _maxInterval[0] = loc;
@@ -288,7 +287,7 @@ vector<WayPtr> MaximalNearestSubline::splitWay(OsmMapPtr map, int& mnsIndex)
   // c. ----x---x
   // d. x-------x
 
-  std::shared_ptr<FindNodesInWayFactory> nf(new FindNodesInWayFactory(_a));
+  std::shared_ptr<FindNodesInWayFactory> nf = std::make_shared<FindNodesInWayFactory>(_a);
 
   // if this is b or c
   if (start.getSegmentIndex() != 0 || start.getSegmentFraction() > 0.0)

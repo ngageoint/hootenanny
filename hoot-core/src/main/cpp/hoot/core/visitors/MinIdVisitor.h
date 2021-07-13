@@ -50,18 +50,16 @@ public:
   MinIdVisitor() : _minId(std::numeric_limits<long>::max()) { }
   ~MinIdVisitor() = default;
 
-  long getMinId() const { return _minId; }
-
   double getStat() const override { return _minId; }
 
   void visit(const ConstElementPtr& e) override;
 
   QString getDescription() const override
   { return "Returns the smallest element ID value found"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+
+  long getMinId() const { return _minId; }
 
 private:
 

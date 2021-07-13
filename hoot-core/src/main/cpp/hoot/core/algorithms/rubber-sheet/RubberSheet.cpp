@@ -275,7 +275,7 @@ void RubberSheet::_filterCalcAndApplyTransform(OsmMapPtr& map)
 
   // copy out elements not meeting filter criteria into another map
   OsmMapPtr toNotModify = std::make_shared<OsmMap>();
-  mapCopier.reset(new CopyMapSubsetOp(map, NotCriterionPtr(new NotCriterion(_criteria))));
+  mapCopier = std::make_shared<CopyMapSubsetOp>(map, std::make_shared<NotCriterion>(_criteria));
   mapCopier->apply(toNotModify);
   LOG_DEBUG(
     "Element count for map not being modified: " <<
@@ -367,7 +367,7 @@ bool RubberSheet::applyTransform(const OsmMapPtr& map)
 
 std::shared_ptr<DataFrame> RubberSheet::_buildDataFrame(Status s) const
 {
-  std::shared_ptr<DataFrame> df(new DataFrame());
+  std::shared_ptr<DataFrame> df = std::make_shared<DataFrame>();
   vector<string> labels;
   labels.emplace_back("x");
   labels.emplace_back("y");

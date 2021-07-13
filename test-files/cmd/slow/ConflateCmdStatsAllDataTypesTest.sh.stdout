@@ -1,5 +1,5 @@
-17:26:35.012 STATUS .../cpp/hoot/core/cmd/DiffCmd.cpp( 114) Comparing ...st/all-data-types-out.osm and ...st/all-data-types-out.osm...
-17:26:35.043 STATUS .../cpp/hoot/core/cmd/DiffCmd.cpp( 149) Map difference calculated in 00:00 total.
+19:08:37.105 STATUS .../cpp/hoot/core/cmd/DiffCmd.cpp( 118) Comparing ...st/all-data-types-out.osm and ...st/all-data-types-out.osm...
+19:08:37.116 STATUS .../cpp/hoot/core/cmd/DiffCmd.cpp( 153) Map difference calculated in 00:00 total.
 stats = (stat) OR (input map 1 stat) (input map 2 stat) (output map stat)
 Nodes	117	116	142	
 Ways	14	12	16	
@@ -158,23 +158,23 @@ Percentage of Polygons Marked for Review	0	0	0
 Percentage of Unmatched Polygons From Map 1	100	0	46.15384615384615	
 Percentage of Unmatched Polygons From Map 2	0	100	23.07692307692308	
 Percentage of Unmatched Polygons	100	100	69.23076923076923	
-Areas	0	0	0	
+Areas	0	0	2	
 Conflatable Areas	0	0	0	
 Conflated Areas	0	0	0	
 Areas Marked for Review	0	0	0	
 Area Reviews to be Made	0	0	0	
-Unmatched Areas	0	0	0	
+Unmatched Areas	0	0	2	
 Unmatched Areas From Map 1	0	0	0	
-Unmatched Areas From Map 2	0	0	0	
-Total Square Meters of Areas	0	0	0	
+Unmatched Areas From Map 2	0	0	2	
+Total Square Meters of Areas	0	0	161.1001296314614	
 Square Meters of Conflated Areas	0	0	0	
 Square Meters of Unmatched Areas From Map 1	0	0	0	
-Square Meters of Unmatched Areas From Map 2	0	0	0	
+Square Meters of Unmatched Areas From Map 2	0	0	709.8419141394307	
 Percentage of Areas Conflated	0	0	0	
 Percentage of Areas Marked for Review	0	0	0	
 Percentage of Unmatched Areas From Map 1	0	0	0	
-Percentage of Unmatched Areas From Map 2	0	0	0	
-Percentage of Unmatched Areas	0	0	0	
+Percentage of Unmatched Areas From Map 2	0	0	100	
+Percentage of Unmatched Areas	0	0	100	
 Railways	0	0	0	
 Conflatable Railways	0	0	0	
 Conflated Railways	0	0	0	

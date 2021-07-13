@@ -49,8 +49,7 @@ public:
   void setConfiguration(const Settings& conf) override;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
-
-  ElementCriterionPtr clone() override { return ElementCriterionPtr(new HasPhoneNumberCriterion()); }
+  ElementCriterionPtr clone() override { return std::make_shared<HasPhoneNumberCriterion>(); }
 
   QString getDescription() const override { return "Identifies features with phone numbers"; }
   QString getName() const override { return className(); }

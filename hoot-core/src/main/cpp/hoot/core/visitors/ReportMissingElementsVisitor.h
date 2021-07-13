@@ -61,16 +61,13 @@ public:
 
   void setConfiguration(const Settings& conf) override;
 
-  QString getDescription() const override
-  { return "Reports references to missing elements in a map"; }
-
   QString getInitStatusMessage() const override { return "Reporting missing elements..."; }
-
   QString getCompletedStatusMessage() const override
   { return "Reported " + StringUtils::formatLargeNumber(_missingCount) + " missing elements."; }
 
+  QString getDescription() const override
+  { return "Reports references to missing elements in a map"; }
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 
   int getMissingCount() const { return _missingCount; }

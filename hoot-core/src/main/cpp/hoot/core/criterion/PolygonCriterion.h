@@ -50,17 +50,12 @@ public:
   ~PolygonCriterion() = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
-
-  ElementCriterionPtr clone() override { return ElementCriterionPtr(new PolygonCriterion(_map)); }
-
-  GeometryType getGeometryType() const override { return GeometryType::Polygon; }
+  ElementCriterionPtr clone() override { return std::make_shared<PolygonCriterion>(_map); }
 
   void setOsmMap(const OsmMap* map) override;
 
   bool supportsSpecificConflation() const override { return false; }
-
-  void setAllowMixedChildren(bool allow) { _relationCrit.setAllowMixedChildren(allow); }
-
+  GeometryType getGeometryType() const override { return GeometryType::Polygon; }
   QStringList getChildCriteria() const override;
 
   QString getName() const override { return className(); }
@@ -68,10 +63,11 @@ public:
   QString toString() const override { return className(); }
   QString getDescription() const override { return "Identifies polygon features"; }
 
+  void setAllowMixedChildren(bool allow) { _relationCrit.setAllowMixedChildren(allow); }
+
 private:
 
   ConstOsmMapPtr _map;
-
   RelationWithPolygonMembersCriterion _relationCrit;
 };
 

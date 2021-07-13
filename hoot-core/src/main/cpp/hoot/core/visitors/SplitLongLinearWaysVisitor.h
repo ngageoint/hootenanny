@@ -53,25 +53,21 @@ public:
   ~SplitLongLinearWaysVisitor() = default;
 
   void setOsmMap(OsmMap* map) override { _map = map; }
-
   void setOsmMap(const OsmMap*) override { assert(false); }
 
   void visit(const std::shared_ptr<Element>& e) override;
 
-  unsigned int getMaxNumberOfNodes() const { return _maxNodesPerWay; }
-
-  QString getDescription() const override
-  { return "Splits ways containing a number of nodes above a specified threshold"; }
-
   QString getInitStatusMessage() const override
   { return "Splitting ways..."; }
-
   QString getCompletedStatusMessage() const override
   { return "Split " + QString::number(_numAffected) + " ways"; }
 
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+  QString getDescription() const override
+  { return "Splits ways containing a number of nodes above a specified threshold"; }
+
+  unsigned int getMaxNumberOfNodes() const { return _maxNodesPerWay; }
 
 private:
 

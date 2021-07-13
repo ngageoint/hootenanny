@@ -55,8 +55,6 @@ public:
   MultiLineStringVisitor();
   ~MultiLineStringVisitor() = default;
 
-  void setElementProvider(const ConstElementProviderPtr& provider ) { _provider = provider; }
-
   /**
    * Retrieves the multi line string created by this visitor. The caller retains ownership. If the
    * method is called multiple times the first call will create a multi line string for the elements
@@ -66,20 +64,18 @@ public:
   geos::geom::MultiLineString* createMultiLineString();
 
   void visit(const ConstElementPtr& e) override;
-
   void visit(const ConstWayPtr& w);
-
-  QString getDescription() const override { return "Creates a multi-linestring out of ways"; }
 
   QString getInitStatusMessage() const override
   { return "Creating multi-linestrings..."; }
-
   QString getCompletedStatusMessage() const override
   { return "Created " + QString::number(_numAffected) + " multi-line strings"; }
 
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+  QString getDescription() const override { return "Creates a multi-linestring out of ways"; }
+
+  void setElementProvider(const ConstElementProviderPtr& provider ) { _provider = provider; }
 
 private:
 

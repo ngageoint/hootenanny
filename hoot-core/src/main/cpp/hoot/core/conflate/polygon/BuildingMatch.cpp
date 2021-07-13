@@ -232,7 +232,7 @@ QStringList BuildingMatch::_getNonMatchDescription(const ConstOsmMapPtr& map, co
     _p.setReviewP(1.0);
     description.append("Unmatched buildings are overlapping.");
   }
-  //  Add extra explanation text to reviews
+  //  Add extra explanation text to reviews.
   else if (type == MatchType::Review)
   {
     //  Deal with the overlap first
@@ -241,7 +241,7 @@ QStringList BuildingMatch::_getNonMatchDescription(const ConstOsmMapPtr& map, co
     else if (overlap >= 0.25)   description.append("Small building overlap.");
     else                        description.append("Very little building overlap.");
 
-    //  Next check the Angle Histogram
+    //  Next check the Angle Histogram.
     const double angle = AngleHistogramExtractor(0.0).extract(*map, element1, element2);
     LOG_VART(angle);
     if (angle >= 0.75)          description.append("Very similar building orientation.");
@@ -249,10 +249,10 @@ QStringList BuildingMatch::_getNonMatchDescription(const ConstOsmMapPtr& map, co
     else if (angle >= 0.25)     description.append("Semi-similar building orientation.");
     else                        description.append("Building orientation not similar.");
 
-    //  Finally, the edge distance
+    //  Finally, check edge distance.
     const double edge =
       EdgeDistanceExtractor(
-        ValueAggregatorPtr(new QuantileAggregator(0.4))).extract(*map, element1, element2);
+        std::make_shared<QuantileAggregator>(0.4)).extract(*map, element1, element2);
     LOG_VART(edge);
     if (edge >= 90)             description.append("Building edges very close to each other.");
     else if (edge >= 70)        description.append("Building edges somewhat close to each other.");

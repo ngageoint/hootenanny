@@ -93,8 +93,7 @@ public:
   QString getName() const override { return ""; }
   QString getClassName() const override { return ""; }
 
-  ElementCriterionPtr clone() override
-  { return ElementCriterionPtr(new DeletableBuildingCriterion()); }
+  ElementCriterionPtr clone() override { return std::make_shared<DeletableBuildingCriterion>(); }
 
   QString toString() const override { return ""; }
 
@@ -337,15 +336,14 @@ Tags BuildingMerger::_getMergedTags(const ElementPtr& e1, const ElementPtr& e2)
 ElementId BuildingMerger::_getIdOfMoreComplexBuilding(
   const ElementPtr& building1, const ElementPtr& building2, const OsmMapPtr& map) const
 {
-  // use node count as a surrogate for complexity of the geometry.
+  // Use node count as a surrogate for complexity of the geometry.
   int nodeCount1 = 0;
   if (building1.get())
   {
     LOG_VART(building1);
     nodeCount1 =
       (int)FilteredVisitor::getStat(
-        ElementCriterionPtr(new NodeCriterion()),
-        ElementVisitorPtr(new ElementCountVisitor()), map, building1);
+        std::make_shared<NodeCriterion>(), std::make_shared<ElementCountVisitor>(), map, building1);
   }
   LOG_VART(nodeCount1);
 
@@ -355,8 +353,7 @@ ElementId BuildingMerger::_getIdOfMoreComplexBuilding(
     LOG_VART(building2);
     nodeCount2 =
       (int)FilteredVisitor::getStat(
-        ElementCriterionPtr(new NodeCriterion()),
-        ElementVisitorPtr(new ElementCountVisitor()), map, building2);
+        std::make_shared<NodeCriterion>(), std::make_shared<ElementCountVisitor>(), map, building2);
   }
   LOG_VART(nodeCount2);
 
@@ -613,10 +610,10 @@ RelationPtr BuildingMerger::combineConstituentBuildingsIntoRelation(
   {
     relationType = MetadataTags::RelationBuilding();
   }
-  RelationPtr parentRelation(
-    new Relation(
+  RelationPtr parentRelation =
+    std::make_shared<Relation>(
       constituentBuildings[0]->getStatus(), map->createNextRelationId(),
-      WorstCircularErrorVisitor::getWorstCircularError(constituentBuildings), relationType));
+      WorstCircularErrorVisitor::getWorstCircularError(constituentBuildings), relationType);
   LOG_VART(parentRelation->getElementId());
 
   TagMergerPtr tagMerger;

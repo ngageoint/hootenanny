@@ -60,12 +60,8 @@ public:
    */
   void visit(const ElementPtr& e) override;
 
-  QString getDescription() const override
-  { return "Determines admin level locations for elements based on phone numbers"; }
-
-  QString getInitStatusMessage() const
+  QString getInitStatusMessage() const override
   { return "Locating elements with phone numbers..."; }
-
   QString getCompletedStatusMessage() const override
   {
     return
@@ -74,8 +70,9 @@ public:
   }
 
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+  QString getDescription() const override
+  { return "Determines admin level locations for elements based on phone numbers"; }
 
 private:
 

@@ -53,14 +53,11 @@ public:
 
   QString getInitStatusMessage() const override
   { return "Removing review relations with no members..."; }
-
   QString getCompletedStatusMessage() const override
   { return "Removed " + QString::number(_numAffected) + " empty review relations"; }
 
   QString getDescription() const override { return "Removes empty review relations"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 };
 

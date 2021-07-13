@@ -89,7 +89,7 @@ WaySublineMatchStringPtr WayMatchStringMappingConverter::toWaySublineMatchString
     }
   }
 
-  return WaySublineMatchStringPtr(new WaySublineMatchString(coll));
+  return std::make_shared<WaySublineMatchString>(coll);
 }
 
 }

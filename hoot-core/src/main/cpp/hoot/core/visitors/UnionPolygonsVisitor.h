@@ -55,18 +55,15 @@ public:
 
   void visit(const std::shared_ptr<const Element>& e) override;
 
-  QString getDescription() const override
-  { return "Combines all areas together into a single area"; }
-
   QString getInitStatusMessage() const override
   { return "Combining areas..."; }
-
   QString getCompletedStatusMessage() const override
   { return "Combined " + QString::number(_numAffected) + " areas"; }
 
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+  QString getDescription() const override
+  { return "Combines all areas together into a single area"; }
 
 private:
 

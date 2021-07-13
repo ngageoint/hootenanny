@@ -689,7 +689,7 @@ namespace Tgs
     }
   }
 
-  bool DataFrame::isDataSetPure(const std::vector<unsigned int>& indices)
+  bool DataFrame::isDataSetPure(const std::vector<unsigned int>& indices) const
   {
     try
     {

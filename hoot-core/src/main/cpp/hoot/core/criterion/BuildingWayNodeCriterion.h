@@ -34,7 +34,7 @@ namespace hoot
 {
 
 /**
- * A criterion that keeps nodes belonging to a building way.
+ * A criterion that identifies nodes belonging to a building way.
  */
 class BuildingWayNodeCriterion : public WayNodeCriterion
 {
@@ -48,8 +48,7 @@ public:
 
   void setOsmMap(const OsmMap* map) override;
 
-  ElementCriterionPtr clone() override
-  { return ElementCriterionPtr(new BuildingWayNodeCriterion(_map)); }
+  ElementCriterionPtr clone() override { return std::make_shared<BuildingWayNodeCriterion>(_map); }
 
   QString getDescription() const override { return "Identifies way nodes in buildings"; }
   QString getName() const override { return className(); }

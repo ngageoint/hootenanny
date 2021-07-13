@@ -78,9 +78,8 @@ public:
     return _c;
   }
 
-  virtual QString getName() const override { return "Fake Match"; }
-
-  virtual QString getClassName() const { return ""; }
+  QString getName() const override { return "Fake Match"; }
+  QString getClassName() const override { return ""; }
 
   virtual double getProbability() const override { return _p; }
 
@@ -110,7 +109,7 @@ public:
     return QString::fromStdString(ss.str());
   }
 
-  virtual QString getDescription() const override { return ""; }
+  QString getDescription() const override { return ""; }
 
 private:
 

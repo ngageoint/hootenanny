@@ -54,16 +54,14 @@ public:
   void visit(const ElementPtr& e) override;
 
   QString getDescription() const override { return "Sets element statuses"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 
 private:
 
-  //status to apply to elements
+  // status to apply to elements
   Status _status;
-  //if true, will only update the status if it is already set to invalid
+  // if true, will only update the status if it is already set to invalid
   bool _onlyUpdateIfStatusInvalid;
 };
 

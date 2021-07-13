@@ -47,11 +47,8 @@ public:
 
   void visit(const ConstElementPtr& e) override;
 
-  QString getDescription() const override { return "Calculates relation member statistics"; }
-
   QString getInitStatusMessage() const override
   { return "Calculating relation member statistics..."; }
-
   QString getCompletedStatusMessage() const override
   { return "Calculated member statistics for " + QString::number(_numAffected) + " relations"; }
 
@@ -66,8 +63,8 @@ public:
   }
 
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+  QString getDescription() const override { return "Calculates relation member statistics"; }
 
 private:
 

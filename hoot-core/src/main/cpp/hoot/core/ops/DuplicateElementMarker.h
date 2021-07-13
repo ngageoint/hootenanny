@@ -50,10 +50,9 @@ public:
   /**
    * @see OsmMapOperation
    */
-  void apply(OsmMapPtr& map);
+  void apply(OsmMapPtr& map) override;
 
   QString getInitStatusMessage() const override { return "Marking duplicate elements..."; }
-
   QString getCompletedStatusMessage() const override
   {
     return
@@ -62,9 +61,7 @@ public:
   }
 
   QString getDescription() const override { return "Adds a tag to elements who have duplicates"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 
   std::set<QString> getContainingWayTypes() const { return _containingWayTypes; }

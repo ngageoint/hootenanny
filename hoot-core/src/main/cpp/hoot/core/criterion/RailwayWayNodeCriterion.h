@@ -43,8 +43,7 @@ public:
   RailwayWayNodeCriterion(ConstOsmMapPtr map);
   ~RailwayWayNodeCriterion() = default;
 
-  ElementCriterionPtr clone() override
-  { return ElementCriterionPtr(new RailwayWayNodeCriterion(_map)); }
+  ElementCriterionPtr clone() override { return std::make_shared<RailwayWayNodeCriterion>(_map); }
 
   QString getDescription() const override { return "Identifies railway nodes"; }
   QString getName() const override { return className(); }

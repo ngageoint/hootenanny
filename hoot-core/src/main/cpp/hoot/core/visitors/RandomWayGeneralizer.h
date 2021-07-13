@@ -76,6 +76,11 @@ public:
 
   void setOsmMap(OsmMap* map) override;
 
+  QString getDescription() const override { return "Randomly simplifies ways by removing nodes"; }
+  QString getName() const override { return className(); }
+  QString getClassName() const override { return className(); }
+
+   void setRemoveNodesSharedByWays(bool remove) { _removeNodesSharedByWays = remove; }
   /**
     the probability that any way will be generalized
    */
@@ -92,14 +97,6 @@ public:
     @see RdpWayGeneralizer::setEpsilon
     */
   void setEpsilon(double epsilon) { _epsilon = epsilon; }
-
-  QString getDescription() const override { return "Randomly simplifies ways by removing nodes"; }
-
-  void setRemoveNodesSharedByWays(bool remove) { _removeNodesSharedByWays = remove; }
-
-  QString getName() const override { return className(); }
-
-  QString getClassName() const override { return className(); }
 
 private:
 

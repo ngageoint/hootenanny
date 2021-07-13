@@ -38,8 +38,7 @@ namespace hoot
 /**
  * Randomly removes elements from a map
  */
-class RandomElementRemover : public ElementOsmMapVisitor, public RngConsumer,
-    public Configurable
+class RandomElementRemover : public ElementOsmMapVisitor, public RngConsumer, public Configurable
 {
 public:
 
@@ -53,27 +52,24 @@ public:
 
   void setConfiguration(const Settings& conf) override;
 
-  /**
-   * Set the probability that a feature will be removed.
-   */
-  void setProbability(double p) { _p = p; }
-
   void setRng(boost::minstd_rand& rng) override { _rng = &rng; }
 
   void visit(const ConstElementPtr& e) override;
   void visit(const std::shared_ptr<Element>& /*e*/) override { }
 
-  QString getDescription() const override { return "Randomly removes elements from a map"; }
-
   QString getInitStatusMessage() const override
   { return "Removing random elements..."; }
-
   QString getCompletedStatusMessage() const override
   { return "Randomly removed " + QString::number(_numAffected) + " elements"; }
 
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+  QString getDescription() const override { return "Randomly removes elements from a map"; }
+
+  /**
+   * Set the probability that a feature will be removed.
+   */
+  void setProbability(double p) { _p = p; }
 
 private:
 

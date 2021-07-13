@@ -52,11 +52,8 @@ public:
   void visit(const std::shared_ptr<Element>& e) override;
 
   QString getInitStatusMessage() const override { return "Removing empty areas..."; }
-
   QString getCompletedStatusMessage() const override
   { return "Removed " + QString::number(_numAffected) + " empty areas"; }
-
-  QString getDescription() const override { return "Removes empty areas"; }
 
   /**
    * @see FilteredByGeometryTypeCriteria
@@ -64,8 +61,8 @@ public:
   QStringList getCriteria() const override;
 
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+  QString getDescription() const override { return "Removes empty areas"; }
 
   /**
    * @see Configurable

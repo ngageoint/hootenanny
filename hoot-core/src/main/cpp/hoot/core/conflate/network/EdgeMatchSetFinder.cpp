@@ -73,7 +73,7 @@ void EdgeMatchSetFinder::addEdgeMatches(ConstNetworkEdgePtr e1, ConstNetworkEdge
 
   if (e1->isStub() || e2->isStub())
   {
-    EdgeMatchPtr em(new EdgeMatch());
+    EdgeMatchPtr em = std::make_shared<EdgeMatch>();
     em->getString1()->addFirstEdge(e1);
     em->getString2()->addFirstEdge(e2);
     _recordMatch(em);
@@ -84,7 +84,7 @@ void EdgeMatchSetFinder::addEdgeMatches(ConstNetworkEdgePtr e1, ConstNetworkEdge
     QList<EdgeSublineMatchPtr> sublines = _details->calculateMatchingSublines(e1, e2);
     foreach (EdgeSublineMatchPtr s, sublines)
     {
-      EdgeMatchPtr em(new EdgeMatch());
+      EdgeMatchPtr em = std::make_shared<EdgeMatch>();
       em->getString1()->addFirstEdge(s->getSubline1());
       em->getString2()->addFirstEdge(s->getSubline2());
       _steps = 0;
@@ -445,7 +445,7 @@ void EdgeMatchSetFinder::_addReverseMatch(ConstEdgeMatchPtr edgeMatch, const dou
 {
   EdgeStringPtr rev1 = edgeMatch->getString1()->clone();
   rev1->reverse();
-  EdgeMatchPtr em2(new EdgeMatch(rev1, edgeMatch->getString2()));
+  EdgeMatchPtr em2 = std::make_shared<EdgeMatch>(rev1, edgeMatch->getString2());
   _matchSet->addEdgeMatch(em2, score);
 }
 

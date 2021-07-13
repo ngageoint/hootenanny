@@ -49,9 +49,7 @@ public:
    * @see ElementCriterion
    */
   bool isSatisfied(const ConstElementPtr& e) const override;
-
-  ElementCriterionPtr clone() override
-  { return ElementCriterionPtr(new WayNodeCountCriterion()); }
+  ElementCriterionPtr clone() override { return std::make_shared<WayNodeCountCriterion>(); }
 
   QString getDescription() const override
   { return "Identifies ways that meet a node count threshold"; }

@@ -47,24 +47,21 @@ public:
   SplitNameVisitor();
   ~SplitNameVisitor() = default;
 
-  void setMaxSize(int s) { _maxSize = s; }
-
   void visit(const std::shared_ptr<Element>& e) override;
-
-  QString getDescription() const override
-  { return QString("Splits name tags over %1 characters").arg(_maxSize); }
 
   QString getInitStatusMessage() const override
   { return "..."; }
-
   QString getCompletedStatusMessage() const override
   { return "Removed " + QString::number(_numAffected) + " building outlines"; }
 
   void setConfiguration(const Settings& conf) override;
 
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+  QString getDescription() const override
+  { return QString("Splits name tags over %1 characters").arg(_maxSize); }
+
+  void setMaxSize(int s) { _maxSize = s; }
 
 private:
 

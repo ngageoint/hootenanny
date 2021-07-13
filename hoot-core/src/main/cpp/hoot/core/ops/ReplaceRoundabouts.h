@@ -82,12 +82,8 @@ public:
 
   QString getInitStatusMessage() const override
   { return "Replacing road roundabouts with simple intersections..."; }
-
   QString getCompletedStatusMessage() const override
   { return "Replaced " + QString::number(_numAffected) + " road roundabouts"; }
-
-  QString getDescription() const override
-  { return "Replaces road roundabouts with simple intersections"; }
 
   /**
    * @see FilteredByGeometryTypeCriteria
@@ -95,8 +91,9 @@ public:
   QStringList getCriteria() const override;
 
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+  QString getDescription() const override
+  { return "Replaces road roundabouts with simple intersections"; }
 
 private:
 

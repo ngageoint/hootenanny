@@ -102,7 +102,7 @@ sudo yum install -y \
      glpk-devel-$GLPK_VERSION \
      gdal-$GDAL_VERSION \
      gdal-devel-$GDAL_VERSION \
-     gdal-python-$GDAL_VERSION \
+     gdal-python-tools-$GDAL_VERSION \
      libgeotiff-$LIBGEOTIFF_VERSION \
      libgeotiff-devel-$LIBGEOTIFF_VERSION \
      libphonenumber-$LIBPHONENUMBER_VERSION \
@@ -125,7 +125,7 @@ sudo yum versionlock add \
      glpk-devel-$GLPK_VERSION \
      gdal-$GDAL_VERSION \
      gdal-devel-$GDAL_VERSION \
-     gdal-python-$GDAL_VERSION \
+     gdal-python-tools-$GDAL_VERSION \
      libgeotiff-$LIBGEOTIFF_VERSION \
      libgeotiff-devel-$LIBGEOTIFF_VERSION \
      libphonenumber-$LIBPHONENUMBER_VERSION \
@@ -159,7 +159,6 @@ sudo yum -y install \
     git \
     git-core \
     gnuplot \
-    lcov \
     libffi-devel \
     libicu-devel \
     libpng-devel \
@@ -191,9 +190,6 @@ sudo yum -y install \
     python3-matplotlib \
     python3-pip  \
     python3-setuptools \
-    ruby \
-    ruby-devel \
-    rubygem-bundler \
     qt5-qtbase \
     qt5-qtbase-devel \
     qt5-qtbase-postgresql \
@@ -215,6 +211,10 @@ sudo yum -y install \
     words \
     xorg-x11-server-Xvfb \
     zip
+    
+# need this version for lcov to work with gcc 8
+wget https://github.com/linux-test-project/lcov/releases/download/v1.14/lcov-1.14-1.noarch.rpm
+sudo yum -y localinstall lcov-1.14-1.noarch.rpm
 
 # Fix missing qmake
 if ! hash qmake >/dev/null 2>&1 ; then
@@ -256,8 +256,13 @@ if ! grep --quiet GDAL_DATA ~/.bash_profile; then
     source ~/.bash_profile
 fi
 
+# Use RVM to install the desired Ruby version, and then install
+# the bundler at the desired version.
+$HOOT_HOME/scripts/ruby/rvm-install.sh
+$HOOT_HOME/scripts/ruby/bundler-install.sh
+
 # Install gems with bundler and strict versioning (see Gemfile)
-bundle install
+$RVM_HOME/bin/rvm $RUBY_VERSION_HOOT do bundle install
 
 # Make sure that we are in ~ before trying to wget & install stuff
 cd ~

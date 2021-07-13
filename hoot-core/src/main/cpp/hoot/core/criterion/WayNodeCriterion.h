@@ -42,16 +42,8 @@ public:
   static QString className() { return "hoot::WayNodeCriterion"; }
 
   WayNodeCriterion() = default;
-  WayNodeCriterion(ConstOsmMapPtr map) : _map(map) { }
+  WayNodeCriterion(ConstOsmMapPtr map);
   ~WayNodeCriterion() = default;
-
-  bool isSatisfied(const ConstElementPtr& e) const override;
-
-  ElementCriterionPtr clone() override { return ElementCriterionPtr(new WayNodeCriterion(_map)); }
-
-  void setOsmMap(const OsmMap* map) override { _map = map->shared_from_this(); }
-
-  GeometryType getGeometryType() const override { return GeometryType::Point; }
 
   /**
    * Returns the ID of the first way that owns input node
@@ -61,6 +53,13 @@ public:
    * @todo move to WayUtils
    */
   long getFirstOwningWayId(const ConstNodePtr& node) const;
+
+  bool isSatisfied(const ConstElementPtr& e) const override;
+  ElementCriterionPtr clone() override { return std::make_shared<WayNodeCriterion>(_map); }
+
+  void setOsmMap(const OsmMap* map) override { _map = map->shared_from_this(); }
+
+  GeometryType getGeometryType() const override { return GeometryType::Point; }
 
   QString getName() const override { return className(); }
   QString getClassName() const override { return className(); }

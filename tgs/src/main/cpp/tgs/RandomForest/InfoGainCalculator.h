@@ -74,7 +74,7 @@ namespace Tgs
     * @param purityDelta the contribution of the data split in increasing the info gain
     * @return false if a split is not possible (all factor values are same across all factors)
     */
-    bool findDataSplit(DataFrame & df, std::vector<unsigned int> & fIndices, 
+    bool findDataSplit(const DataFrame & df, std::vector<unsigned int> & fIndices,
       std::vector<unsigned int> & dIndices, unsigned int & splitIdx, unsigned int & fIdx,
       double & splitVal, double & purityDelta) const;
 
@@ -90,7 +90,7 @@ namespace Tgs
     * @param bestSplit the index for the split in indices corresponding to the max gain
     * @return the information gain corresponding to bestSplit
     */
-    double getMaxInfoGainByFactor(DataFrame & df, std::vector<unsigned int> & indices, 
+    double getMaxInfoGainByFactor(const DataFrame& df, std::vector<unsigned int> & indices,
       unsigned int fIdx, double totalEntropy, unsigned int & bestSplit) const;
 
     /**
@@ -105,7 +105,7 @@ namespace Tgs
     * @param bestSplit the index for the split in indices corresponding to the max gain
     * @return the information gain ratio corresponding to bestSplit
     */
-    double getMaxInfoGainRatioByFactor(DataFrame & df, std::vector<unsigned int> & indices, 
+    double getMaxInfoGainRatioByFactor(const DataFrame & df, std::vector<unsigned int> & indices,
       unsigned int fIdx, double totalEntropy, unsigned int & bestSplit) const;
 
   private:

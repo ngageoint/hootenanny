@@ -68,12 +68,8 @@ public:
 
   QString getInitStatusMessage() const override
   { return "Removing unlikely intersections..."; }
-
   QString getCompletedStatusMessage() const override
   { return "Removed " + QString::number(_numAffected) + " unlikely intersections"; }
-
-  QString getDescription() const override
-  { return "Removes road intersections that are likely mistakes"; }
 
   /**
    * @see FilteredByGeometryTypeCriteria
@@ -81,8 +77,9 @@ public:
   QStringList getCriteria() const override;
 
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
+  QString getDescription() const override
+  { return "Removes road intersections that are likely mistakes"; }
 
   void setConflateInfoCache(const std::shared_ptr<ConflateInfoCache>& cache) override
   { _conflateInfoCache = cache; }

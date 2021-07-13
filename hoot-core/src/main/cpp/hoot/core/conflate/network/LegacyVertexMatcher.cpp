@@ -110,8 +110,7 @@ void LegacyVertexMatcher::_createVertexIndex(const OsmNetwork::VertexMap& vm,
 {
   // No tuning was done, I just copied these settings from OsmMapIndex.
   // 10 children = 368 bytes
-  std::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
-  _vertex2Index.reset(new HilbertRTree(mps, 2));
+  _vertex2Index = std::make_shared<HilbertRTree>(std::make_shared<MemoryPageStore>(728), 2);
 
   std::vector<Box> boxes;
   std::vector<int> fids;
@@ -202,7 +201,7 @@ void LegacyVertexMatcher::identifyVertexMatches(
       double score = _scoreSinglePair(v1, v2);
       if (score > 0)
       {
-        TiePointScorePtr tps(new TiePointScore(v1, v2, score));
+        TiePointScorePtr tps = std::make_shared<TiePointScore>(v1, v2, score);
         // calculate the vertex score and store it
         _scores1[v1].append(tps);
         _scores2[v2].append(tps);
@@ -210,7 +209,7 @@ void LegacyVertexMatcher::identifyVertexMatches(
     }
   }
 
-  // balance the vertex scores by considering neighboring scores.
+  // Balance the vertex scores by considering neighboring scores.
   _balanceVertexScores();
 }
 

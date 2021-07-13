@@ -78,9 +78,7 @@ public:
   void clearHashes();
 
   QString getDescription() const override { return "Calculates unique hash values for elements"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 
   QMap<QString, ElementId> getHashesToElementIds() const { return _hashesToElementIds; }

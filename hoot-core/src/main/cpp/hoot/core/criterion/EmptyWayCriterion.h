@@ -50,8 +50,7 @@ public:
   EmptyWayCriterion();
   ~EmptyWayCriterion() = default;
 
-  ElementCriterionPtr clone() override
-  { return ElementCriterionPtr(new EmptyWayCriterion()); }
+  ElementCriterionPtr clone() override { return std::make_shared<EmptyWayCriterion>(); }
 
   QString getDescription() const override { return "Identifies ways with no nodes"; }
   QString getName() const override { return className(); }

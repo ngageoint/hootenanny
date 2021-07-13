@@ -71,7 +71,6 @@ public:
    * @param wId ID of way to remove
    */
   static void removeWay(OsmMapPtr map, long wId);
-
   /**
    * @brief removeWayFully Removes the way from all relations and
    *                       then removes the way from the map.

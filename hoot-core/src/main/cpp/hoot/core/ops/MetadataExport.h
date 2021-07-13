@@ -67,19 +67,14 @@ public:
   MetadataExport() = default;
   ~MetadataExport() = default;
 
-  // OsmMapOperation
   QString getDescription() const override { return "Creates and exports metadata"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 
 private:
 
-  // MetadataOp
   void _apply() override;
 
-  // private data
   QList<WayPtr> _modifiedDatasets;
 
   // process sequence functions
