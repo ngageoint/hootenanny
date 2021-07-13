@@ -93,7 +93,7 @@ public:
     uut.setCaseSensitive(false);
     uut.setKvps(QStringList("key=val"));
 
-    NodePtr node(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+    NodePtr node = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0);
     node->getTags().set("key", "val");
     CPPUNIT_ASSERT(uut.isSatisfied(node));
 

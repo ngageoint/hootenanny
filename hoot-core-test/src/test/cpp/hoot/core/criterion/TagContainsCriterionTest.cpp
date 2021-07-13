@@ -54,7 +54,7 @@ public:
     TagContainsCriterion uut;
     uut.setKvps(kvps);
 
-    NodePtr node(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+    NodePtr node = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0);
 
     node->getTags().set("key1", "val1");
     node->getTags().set("key2", "val2");
@@ -76,7 +76,7 @@ public:
   {
     TagContainsCriterion uut("key1", "val");
 
-    NodePtr node(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+    NodePtr node = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0);
 
     node->getTags().set("key1", "val1");
     CPPUNIT_ASSERT(uut.isSatisfied(node));
@@ -104,7 +104,7 @@ public:
     TagContainsCriterion uut;
     uut.setConfiguration(settings);
 
-    NodePtr node(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+    NodePtr node = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0);
 
     node->getTags().set("key1", "val1");
     node->getTags().set("key2", "val2");
@@ -128,7 +128,7 @@ public:
     uut.setKvps(QStringList("key=val"));
     uut.setCaseSensitive(false);
 
-    NodePtr node(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+    NodePtr node = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0);
 
     node->getTags().set("key", "val1");
     CPPUNIT_ASSERT(uut.isSatisfied(node));

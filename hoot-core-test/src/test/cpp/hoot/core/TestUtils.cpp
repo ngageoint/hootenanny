@@ -122,7 +122,7 @@ NodePtr TestUtils::createNode(
   const OsmMapPtr& map, const QString& note, const Status& status, const double x, const double y,
   const Meters circularError, const Tags& tags)
 {
-  NodePtr node(new Node(status, map->createNextNodeId(), x, y, circularError));
+  NodePtr node = std::make_shared<Node>(status, map->createNextNodeId(), x, y, circularError);
   map->addNode(node);
   node->getTags().add(tags);
   if (!note.isEmpty())
