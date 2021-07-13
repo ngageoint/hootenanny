@@ -46,14 +46,14 @@ public:
     ExactTagDifferencer uut;
     OsmMapPtr map = std::make_shared<OsmMap>();
 
-    NodePtr n1(new Node(Status::Unknown1, 1, 0, 0, 15.0));
+    NodePtr n1 = std::make_shared<Node>(Status::Unknown1, 1, 0, 0, 15.0);
     Tags t1;
     t1["railway"] = "platform";
     t1["highway"] = "primary";
     n1->setTags(t1);
     map->addNode(n1);
 
-    NodePtr n2(new Node(Status::Unknown1, 2, 0, 0, 15.0));
+    NodePtr n2 = std::make_shared<Node>(Status::Unknown1, 2, 0, 0, 15.0));
     Tags t2;
     t2["railway"] = "platform";
     t2["highway"] = "primary";

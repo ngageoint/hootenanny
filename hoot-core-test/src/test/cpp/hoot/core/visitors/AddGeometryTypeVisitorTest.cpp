@@ -56,11 +56,11 @@ public:
   void runBasicTest()
   {
     OsmMapPtr map = std::make_shared<OsmMap>();
-    NodePtr n1(new Node(Status::Unknown1, map->createNextNodeId(), 0, 0, 10));
+    NodePtr n1 = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), 0, 0, 10);
     n1->getTags()["name"] = "strange test";
     map->addNode(n1);
 
-    NodePtr n2(new Node(Status::Unknown1, map->createNextNodeId(), 0, 10, 10));
+    NodePtr n2 = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), 0, 10, 10));
     map->addNode(n2);
     NodePtr n3(new Node(Status::Unknown1, map->createNextNodeId(), 0, 20, 10));
     map->addNode(n3);

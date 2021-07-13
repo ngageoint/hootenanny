@@ -52,7 +52,7 @@ public:
   {
     ElementHashVisitor uut;
 
-    NodePtr n1(new Node(Status::Unknown1, -1, -104.8852148123, 38.8467218123, 5));
+    NodePtr n1 = std::make_shared<Node>(Status::Unknown1, -1, -104.8852148123, 38.8467218123, 5);
     n1->getTags()["highway"] = "bus_stop";
     n1->getTags()["name"] = "Bus Stop 1";
     n1->getTags()["source"] = "imagery";
@@ -71,7 +71,7 @@ public:
     ElementHashVisitor uut;
     uut.setIncludeCircularError(true);
 
-    NodePtr n1(new Node(Status::Unknown1, -1, -104.8852148123, 38.8467218123, 5));
+    NodePtr n1 = std::make_shared<Node>(Status::Unknown1, -1, -104.8852148123, 38.8467218123, 5);
     n1->getTags()["highway"] = "bus_stop";
     n1->getTags()["name"] = "Bus Stop 1";
     n1->getTags()["source"] = "imagery";
@@ -93,12 +93,12 @@ public:
     OsmMapPtr map = std::make_shared<OsmMap>();
     uut.setOsmMap(map.get());
 
-    NodePtr n1(new Node(Status::Unknown1, -1, -104.8852148123, 38.8467218123, 5));
+    NodePtr n1 = std::make_shared<Node>(Status::Unknown1, -1, -104.8852148123, 38.8467218123, 5);
     n1->getTags()["highway"] = "bus_stop";
     n1->getTags()["name"] = "Bus Stop 1";
     n1->getTags()["source"] = "imagery";
     map->addNode(n1);
-    NodePtr n2(new Node(Status::Unknown1, -2, -104.8852158123, 38.8467228123, 15));
+    NodePtr n2 = std::make_shared<Node>(Status::Unknown1, -2, -104.8852158123, 38.8467228123, 15));
     n2->getTags()["highway"] = "bus_stop";
     n2->getTags()["name"] = "Bus Stop 2";
     n2->getTags()["source"] = "imagery";
@@ -124,12 +124,12 @@ public:
     OsmMapPtr map = std::make_shared<OsmMap>();
     uut.setOsmMap(map.get());
 
-    NodePtr n1(new Node(Status::Unknown1, -1, -104.8852148123, 38.8467218123, 5));
+    NodePtr n1 = std::make_shared<Node>(Status::Unknown1, -1, -104.8852148123, 38.8467218123, 5);
     n1->getTags()["highway"] = "bus_stop";
     n1->getTags()["name"] = "Bus Stop 1";
     n1->getTags()["source"] = "imagery";
     map->addNode(n1);
-    NodePtr n2(new Node(Status::Unknown1, -2, -104.8852158123, 38.8467228123, 15));
+    NodePtr n2 = std::make_shared<Node>(Status::Unknown1, -2, -104.8852158123, 38.8467228123, 15));
     n2->getTags()["highway"] = "bus_stop";
     n2->getTags()["name"] = "Bus Stop 2";
     n2->getTags()["source"] = "imagery";

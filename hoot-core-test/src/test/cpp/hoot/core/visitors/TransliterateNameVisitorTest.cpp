@@ -49,7 +49,7 @@ public:
   void runBasicTest()
   {
     OsmMapPtr map = std::make_shared<OsmMap>();
-    NodePtr n1(new Node(Status::Unknown1, map->createNextNodeId(), 0, 0, 10));
+    NodePtr n1 = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), 0, 0, 10);
     n1->getTags()["name"] = "أَلِف";
     map->addNode(n1);
 
@@ -61,7 +61,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(false, n1->getTags().find("note") == n1->getTags().end());
 
     OsmMapPtr map1 = std::make_shared<OsmMap>();
-    NodePtr n2(new Node(Status::Unknown1, map->createNextNodeId(), 500, 500, 10));
+    NodePtr n2 = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), 500, 500, 10));
     n2->getTags()["name"] = "little town";
     map1->addNode(n2);
     TransliterateNameVisitor v1;

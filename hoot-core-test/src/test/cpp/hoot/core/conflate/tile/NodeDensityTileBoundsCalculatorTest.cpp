@@ -65,8 +65,10 @@ public:
   void addEnvelope(OsmMapPtr map, Envelope& e, int tx, int ty)
   {
     WayPtr w = std::make_shared<Way>(Status::Unknown1, map->createNextWayId(), 10.0);
-    NodePtr n1(new Node(Status::Unknown1, map->createNextNodeId(), e.getMinX(), e.getMinY(), 10.0));
-    NodePtr n2(new Node(Status::Unknown1, map->createNextNodeId(), e.getMaxX(), e.getMinY(), 10.0));
+    NodePtr n1 =
+      std::make_shared<Node>(
+        Status::Unknown1, map->createNextNodeId(), e.getMinX(), e.getMinY(), 10.0);
+    NodePtr n2 = std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), e.getMaxX(), e.getMinY(), 10.0));
     NodePtr n3(new Node(Status::Unknown1, map->createNextNodeId(), e.getMinX(), e.getMaxY(), 10.0));
     NodePtr n4(new Node(Status::Unknown1, map->createNextNodeId(), e.getMaxX(), e.getMaxY(), 10.0));
 

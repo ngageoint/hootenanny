@@ -72,7 +72,7 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(3.14, n->getCircularError(), 1e-3);
     HOOT_STR_EQUALS(QString("bar"), n->getTags()["foo"]);
 
-    NodePtr n2(new Node(*n));
+    NodePtr n2 = std::make_shared<Node>(*n));
     HOOT_STR_EQUALS(Status::Unknown1, (Status::TypeEnum)n2->getStatus().getEnum());
     CPPUNIT_ASSERT_EQUAL(123l, n2->getId());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.2, n2->getX(), 1e-3);
