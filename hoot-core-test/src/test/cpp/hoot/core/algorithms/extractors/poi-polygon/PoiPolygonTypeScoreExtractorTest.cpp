@@ -71,7 +71,7 @@ public:
     uut.setConfiguration(conf());
     uut.setCalculateMatchDistanceTruth(true);
 
-    NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+    NodePtr node1 = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0);
     node1->getTags().set("amenity", "school");
     WayPtr way1 = std::make_shared<Way>(Status::Unknown2, -1, 15.0);
     way1->getTags().set("amenity", "school");
@@ -113,7 +113,7 @@ public:
     PoiPolygonTypeScoreExtractor uut(infoCache);
     uut.setConfiguration(settings);
 
-    NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+    NodePtr node1 = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0);
     node1->getTags().set("amenity", "ticket_office");
     WayPtr way1 = std::make_shared<Way>(Status::Unknown2, -1, 15.0);
     way1->getTags().set("amenity", "Fahrscheinschalter");

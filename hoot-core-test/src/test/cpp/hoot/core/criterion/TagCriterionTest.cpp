@@ -53,7 +53,7 @@ public:
     TagCriterion uut;
     uut.setKvps(kvps);
 
-    NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+    NodePtr node1 = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0);
     node1->getTags().set("amenity", "school");
     node1->getTags().set("poi", "yes");
     CPPUNIT_ASSERT(uut.isSatisfied(node1));

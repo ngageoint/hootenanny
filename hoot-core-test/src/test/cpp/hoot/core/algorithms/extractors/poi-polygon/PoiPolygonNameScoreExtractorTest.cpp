@@ -60,7 +60,7 @@ public:
     uut.setConfiguration(conf());
     OsmMapPtr map = std::make_shared<OsmMap>();
 
-    NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+    NodePtr node1 = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0);
     node1->getTags().set("name", "blah");
     WayPtr way1 = std::make_shared<Way>(Status::Unknown2, -1, 15.0);
     way1->getTags().set("name", "blah");
@@ -87,7 +87,7 @@ public:
 
     // ToEnglishDictionaryTranslator has some support for acronyms in the same manner that it
     // supports to English translations.
-    NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+    NodePtr node1 = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0);
     node1->getTags().set("name", "Kentucky Fried Chicken");
     WayPtr way1 = std::make_shared<Way>(Status::Unknown2, -1, 15.0);
     way1->getTags().set("name", "KFC");
@@ -105,7 +105,7 @@ public:
 //    PoiPolygonNameScoreExtractor uut;
 //    uut.setConfiguration(conf());
 //    OsmMapPtr map = std::make_shared<OsmMap>();
-//    NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+//    NodePtr node1 = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
 //    WayPtr way1 = std::make_shared<Way>(Status::Unknown2, -1, 15.0));
 
 //    node1->getTags().set("name", "54 Mint");

@@ -232,7 +232,8 @@ public:
   void runFilteredPoiMatchCreatorTest()
   {
     OsmMapPtr map = std::make_shared<OsmMap>();
-    NodePtr node1(new Node(Status::Unknown1, 1, geos::geom::Coordinate(0.0, 0.0), 15.0));
+    NodePtr node1 =
+      std::make_shared<Node>(Status::Unknown1, 1, geos::geom::Coordinate(0.0, 0.0), 15.0);
     NodePtr node2(new Node(Status::Unknown2, 2, geos::geom::Coordinate(0.0, 0.0), 15.0));
 
     node1->getTags().clear();

@@ -47,7 +47,7 @@ public:
     PoiPolygonPolyCriterion uut;
 
     //way only
-    NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+    NodePtr node1 = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0);
     CPPUNIT_ASSERT(!uut.isSatisfied(node1));
 
     //type specifically excluded outside of schema

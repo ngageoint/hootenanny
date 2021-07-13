@@ -48,7 +48,8 @@ public:
     // Unnecessary for this test but adds a line of test coverage.
     uut.setOsmMap(map.get());
 
-    NodePtr node1(new Node(Status::Unknown1, 1, geos::geom::Coordinate(0.0, 0.0), 15.0));
+    NodePtr node1 =
+      std::make_shared<Node>(Status::Unknown1, 1, geos::geom::Coordinate(0.0, 0.0), 15.0);
     map->addNode(node1);
     CPPUNIT_ASSERT(!uut.isSatisfied(node1));
     NodePtr node2(new Node(Status::Unknown1, 2, geos::geom::Coordinate(0.0, 10.0), 15.0));

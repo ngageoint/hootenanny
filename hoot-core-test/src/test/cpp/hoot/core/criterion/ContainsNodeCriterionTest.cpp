@@ -42,7 +42,8 @@ public:
 
   void runBasicTest()
   {
-    NodePtr node1(new Node(Status::Unknown1, 1, geos::geom::Coordinate(0.0, 0.0), 15.0));
+    NodePtr node1 =
+      std::make_shared<Node>(Status::Unknown1, 1, geos::geom::Coordinate(0.0, 0.0), 15.0);
     NodePtr node2(new Node(Status::Unknown1, 2, geos::geom::Coordinate(0.0, 10.0), 15.0));
     NodePtr node3(new Node(Status::Unknown1, 3, geos::geom::Coordinate(0.0, 20.0), 15.0));
 

@@ -44,7 +44,8 @@ public:
   {
     HasNameCriterion uut;
 
-    NodePtr node1(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
+    NodePtr node1 =
+      std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
     node1->getTags().set("name", "blah");
     CPPUNIT_ASSERT(uut.isSatisfied(node1));
 

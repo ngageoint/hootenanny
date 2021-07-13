@@ -51,7 +51,7 @@ public:
     CPPUNIT_ASSERT(!uut.isSatisfied(way1));
 
     //type specifically excluded outside of schema
-    NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+    NodePtr node1 = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0);
     node1->getTags().set("amenity", "drinking_water");
     CPPUNIT_ASSERT(!uut.isSatisfied(node1));
 

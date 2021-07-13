@@ -106,7 +106,8 @@ public:
     way->setTags(tags);
 
     QList<ElementPtr> nodes;
-    NodePtr node1(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.1), 15));
+    NodePtr node1 =
+      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.1), 15);
     node1->getTags().appendValue("name", "test1");
     nodes.append(node1);
 
