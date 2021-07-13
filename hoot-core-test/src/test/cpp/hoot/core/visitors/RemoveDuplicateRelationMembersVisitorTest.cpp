@@ -52,9 +52,9 @@ public:
 
     NodePtr node1 = std::make_shared<Node>(Status::Unknown1, 1, 0, 0, 0);
     map->addNode(node1);
-    NodePtr node2(new Node(Status::Unknown1, 2, 0, 0, 0));
+    NodePtr node2 = std::make_shared<Node>(Status::Unknown1, 2, 0, 0, 0);
     map->addNode(node2);
-    NodePtr node3(new Node(Status::Unknown1, 3, 0, 0, 0));
+    NodePtr node3 = std::make_shared<Node>(Status::Unknown1, 3, 0, 0, 0);
     map->addNode(node3);
 
     std::vector<long> nodeIds;

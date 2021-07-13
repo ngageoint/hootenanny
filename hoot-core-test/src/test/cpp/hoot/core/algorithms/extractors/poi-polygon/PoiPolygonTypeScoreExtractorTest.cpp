@@ -79,14 +79,14 @@ public:
     uut.setFeatureDistance(20.5);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
 
-    NodePtr node2(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+    NodePtr node2 = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0);
     node2->getTags().set("amenity", "hospital");
     WayPtr way2 = std::make_shared<Way>(Status::Unknown2, -1, 15.0);
     way2->getTags().set("amenity", "clinic");
     uut.setFeatureDistance(10.2);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.6, uut.extract(*map, node2, way2), 0.0001);
 
-    NodePtr node3(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+    NodePtr node3 = std::make_shared<Node>(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0);
     node3->getTags().set("amenity", "drinking_water");
     WayPtr way3 = std::make_shared<Way>(Status::Unknown2, -1, 15.0);
     way3->getTags().set("building", "yes");

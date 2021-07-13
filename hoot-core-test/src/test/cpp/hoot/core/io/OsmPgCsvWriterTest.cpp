@@ -111,7 +111,8 @@ public:
     node1->getTags().appendValue("name", "test1");
     nodes.append(node1);
 
-    NodePtr node2(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.1, 0.0), 15));
+    NodePtr node2 =
+      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.1, 0.0), 15);
     node2->getTags().appendValue("name", "test2");
     nodes.append(node2);
 

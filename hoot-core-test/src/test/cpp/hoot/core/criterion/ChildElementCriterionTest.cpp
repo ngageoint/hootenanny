@@ -52,13 +52,16 @@ public:
       std::make_shared<Node>(Status::Unknown1, 1, geos::geom::Coordinate(0.0, 0.0), 15.0);
     map->addNode(node1);
     CPPUNIT_ASSERT(!uut.isSatisfied(node1));
-    NodePtr node2(new Node(Status::Unknown1, 2, geos::geom::Coordinate(0.0, 10.0), 15.0));
+    NodePtr node2 =
+      std::make_shared<Node>(Status::Unknown1, 2, geos::geom::Coordinate(0.0, 10.0), 15.0);
     map->addNode(node2);
     CPPUNIT_ASSERT(!uut.isSatisfied(node2));
-    NodePtr node3(new Node(Status::Unknown1, 3, geos::geom::Coordinate(0.0, 15.0), 15.0));
+    NodePtr node3 =
+      std::make_shared<Node>(Status::Unknown1, 3, geos::geom::Coordinate(0.0, 15.0), 15.0);
     map->addNode(node3);
     CPPUNIT_ASSERT(!uut.isSatisfied(node2));
-    NodePtr node4(new Node(Status::Unknown1, 4, geos::geom::Coordinate(0.0, 20.0), 15.0));
+    NodePtr node4 =
+      std::make_shared<Node>(Status::Unknown1, 4, geos::geom::Coordinate(0.0, 20.0), 15.0);
     map->addNode(node4);
     CPPUNIT_ASSERT(!uut.isSatisfied(node4));
 

@@ -75,7 +75,8 @@ public:
     node1->getTags().appendValue("hoot:test", "test1");
     node1->getTags().appendValue("test", "test1");
     nodes.append(node1);
-    NodePtr node2(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15));
+    NodePtr node2 =
+      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node2->getTags().appendValue("hoot:test", "test2");
     nodes.append(node2);
 
@@ -103,7 +104,8 @@ public:
     node1->getTags().appendValue("hoot:test", "test1");
     node1->getTags().appendValue("test", "test1");
     map->addNode(node1);
-    NodePtr node2(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15));
+    NodePtr node2 =
+      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node2->getTags().appendValue("hoot:test", "test2");
     map->addNode(node2);
 
@@ -131,7 +133,8 @@ public:
     node1->getTags().appendValue("hoot:test", "test1");
     node1->getTags().appendValue("test", "test1");
     nodes.append(node1);
-    NodePtr node2(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15));
+    NodePtr node2 =
+      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node2->getTags().appendValue("hoot:test", "test2");
     nodes.append(node2);
 
@@ -156,7 +159,8 @@ public:
     node1->getTags().appendValue("hoot:test", "test1");
     node1->getTags().appendValue("test", "test1");
     nodes.append(node1);
-    NodePtr node2(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15));
+    NodePtr node2 =
+      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node2->getTags().appendValue("hoot:test", "test2");
     nodes.append(node2);
     WayPtr way1 = std::make_shared<Way>(Status::Unknown1, 15, 15);
@@ -181,7 +185,8 @@ public:
       std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node1->getTags().appendValue("hoot:test", "test1");
     nodes.append(node1);
-    NodePtr node2(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15));
+    NodePtr node2 =
+      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node2->getTags().appendValue("hoot:test", "test2");
     nodes.append(node2);
     WayPtr way1 = TestUtils::createWay(map, nodes);
@@ -208,7 +213,8 @@ public:
     nodes.append(node1);
     elements.append(node1);
 
-    NodePtr node2(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15));
+    NodePtr node2 =
+      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node2->getTags().appendValue("hoot:test", "test2");
     node1->getTags().appendValue("test", "test2");
     nodes.append(node2);
@@ -249,7 +255,8 @@ public:
     nodes.append(node1);
     elements.append(node1);
 
-    NodePtr node2(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15));
+    NodePtr node2 =
+      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node2->getTags().appendValue("hoot:test", "test2");
     node1->getTags().appendValue("test", "test2");
     nodes.append(node2);
@@ -287,7 +294,8 @@ public:
     nodes.append(node1);
     elements.append(node1);
 
-    NodePtr node2(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15));
+    NodePtr node2 =
+      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node2->getTags().appendValue("hoot:test", "test2");
     nodes.append(node2);
     elements.append(node2);
@@ -325,7 +333,8 @@ public:
     nodes.append(node1);
     elements.append(node1);
 
-    NodePtr node2(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15));
+    NodePtr node2 =
+      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node2->getTags().appendValue("hoot:test", "test2");
     nodes.append(node2);
     elements.append(node2);
@@ -359,7 +368,8 @@ public:
       std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node1->getTags().appendValue("hoot:test", "test1");
 
-    NodePtr node2(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15));
+    NodePtr node2 =
+      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node2->getTags().appendValue("hoot:test", "test2");
 
     WayPtr way1 = std::make_shared<Way>(Status::Unknown1, 15, 15);
@@ -392,7 +402,8 @@ public:
     node1->getTags().appendValue("name", "red house");
     map->addNode(node1);
 
-    NodePtr node2(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15));
+    NodePtr node2 =
+      std::make_shared<Node>(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15);
     node2->getTags().appendValue("hoot:test", "test2");
     node2->getTags().appendValue("name", "blue house");
     map->addNode(node2);

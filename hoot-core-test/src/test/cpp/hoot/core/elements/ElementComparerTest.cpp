@@ -69,7 +69,7 @@ public:
     NodePtr node1 = std::make_shared<Node>(Status::Unknown1, 1, 0.0, 0.0, 15.0);
     node1->setTag("key1", "value1");
 
-    NodePtr node2(new Node(Status::Unknown1, 1, 0.0, 0.00000001, 15.0));
+    NodePtr node2 = std::make_shared<Node>(Status::Unknown1, 1, 0.0, 0.00000001, 15.0);
     node2->setTag("key1", "value1");
 
     CPPUNIT_ASSERT(ElementComparer().isSame(node1, node2));
@@ -80,7 +80,7 @@ public:
     NodePtr node1 = std::make_shared<Node>(Status::Unknown1, 1, 0.0, 0.0, 15.0);
     node1->setTag("key1", "value1");
 
-    NodePtr node2(new Node(Status::Unknown1, 1, 0.0, 0.01, 15.0));
+    NodePtr node2 = std::make_shared<Node>(Status::Unknown1, 1, 0.0, 0.01, 15.0);
     node2->setTag("key1", "value1");
 
     CPPUNIT_ASSERT(!ElementComparer().isSame(node1, node2));
@@ -91,7 +91,7 @@ public:
     NodePtr node1 = std::make_shared<Node>(Status::Unknown1, 1, 0.0, 0.0, 15.0);
     node1->setTag("key1", "value1");
 
-    NodePtr node2(new Node(Status::Unknown1, 1, 0.0, 0.00000001, 15.0));
+    NodePtr node2 = std::make_shared<Node>(Status::Unknown1, 1, 0.0, 0.00000001, 15.0);
     node2->setTag("key1", "value2");
 
     CPPUNIT_ASSERT(!ElementComparer().isSame(node1, node2));
@@ -100,7 +100,7 @@ public:
   void runWaySameTest()
   {
     NodePtr node1 = std::make_shared<Node>(Status::Unknown1, 1, 0.0, 0.0, 15.0);
-    NodePtr node2(new Node(Status::Unknown1, 1, 0.0, 0.0, 15.0));
+    NodePtr node2 = std::make_shared<Node>(Status::Unknown1, 1, 0.0, 0.0, 15.0);
 
     WayPtr way1 = std::make_shared<Way>(Status::Unknown1, 1, 15.0);
     way1->setTag("key1", "value1");
@@ -118,7 +118,7 @@ public:
   void runWayDifferentIdsTest()
   {
     NodePtr node1 = std::make_shared<Node>(Status::Unknown1, 1, 0.0, 0.0, 15.0);
-    NodePtr node2(new Node(Status::Unknown1, 2, 0.0, 0.0, 15.0));
+    NodePtr node2 = std::make_shared<Node>(Status::Unknown1, 2, 0.0, 0.0, 15.0);
 
     WayPtr way1 = std::make_shared<Way>(Status::Unknown1, 1, 15.0);
     way1->setTag("key1", "value1");
@@ -136,7 +136,7 @@ public:
   void runWayDifferentNodesTest()
   {
     NodePtr node1 = std::make_shared<Node>(Status::Unknown1, 1, 0.0, 0.0, 15.0);
-    NodePtr node2(new Node(Status::Unknown1, 2, 0.0, 0.0, 15.0));
+    NodePtr node2 = std::make_shared<Node>(Status::Unknown1, 2, 0.0, 0.0, 15.0);
 
     WayPtr way1 = std::make_shared<Way>(Status::Unknown1, 1, 15.0);
     way1->setTag("key1", "value1");
@@ -153,7 +153,7 @@ public:
   void runWayDifferentNodeOrderTest()
   {
     NodePtr node1 = std::make_shared<Node>(Status::Unknown1, 1, 0.0, 0.0, 15.0);
-    NodePtr node2(new Node(Status::Unknown1, 2, 0.0, 0.0, 15.0));
+    NodePtr node2 = std::make_shared<Node>(Status::Unknown1, 2, 0.0, 0.0, 15.0);
 
     WayPtr way1 = std::make_shared<Way>(Status::Unknown1, 1, 15.0);
     way1->setTag("key1", "value1");
@@ -171,7 +171,7 @@ public:
   void runWayDifferentTagsTest()
   {
     NodePtr node1 = std::make_shared<Node>(Status::Unknown1, 1, 0.0, 0.0, 15.0);
-    NodePtr node2(new Node(Status::Unknown1, 1, 0.0, 0.0, 15.0));
+    NodePtr node2 = std::make_shared<Node>(Status::Unknown1, 1, 0.0, 0.0, 15.0);
 
     WayPtr way1 = std::make_shared<Way>(Status::Unknown1, 1, 15.0);
     way1->setTag("key1", "value1");
@@ -189,7 +189,7 @@ public:
   void runWayDifferentVersionsTest()
   {
     NodePtr node1 = std::make_shared<Node>(Status::Unknown1, 1, 0.0, 0.0, 15.0);
-    NodePtr node2(new Node(Status::Unknown1, 1, 0.0, 0.0, 15.0));
+    NodePtr node2 = std::make_shared<Node>(Status::Unknown1, 1, 0.0, 0.0, 15.0);
 
     WayPtr way1 =
       std::make_shared<Way>(Status::Unknown1, 1, 15.0, ElementData::CHANGESET_EMPTY, 1);
