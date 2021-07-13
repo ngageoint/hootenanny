@@ -181,10 +181,10 @@ sudo yum -y install \
     libpostal-data \
     libpostal-devel \
     parallel \
-    postgresql${POSTGRESQL_VERSION} \
-    postgresql${POSTGRESQL_VERSION}-contrib \
-    postgresql${POSTGRESQL_VERSION}-devel \
-    postgresql${POSTGRESQL_VERSION}-server \
+    postgresql${POSTGRESQL_VERSION_DOTLESS} \
+    postgresql${POSTGRESQL_VERSION_DOTLESS}-contrib \
+    postgresql${POSTGRESQL_VERSION_DOTLESS}-devel \
+    postgresql${POSTGRESQL_VERSION_DOTLESS}-server \
     protobuf \
     protobuf-compiler \
     protobuf-devel \
