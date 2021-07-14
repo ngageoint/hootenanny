@@ -153,8 +153,8 @@ public:
   {
     OsmMapPtr map = createTestMap("WayMatchStringMergerTest.osm");
 
-    WayMatchStringMappingPtr mapping(new NaiveWayMatchStringMapping(createWayString1(map),
-      createWayString2(map)));
+    WayMatchStringMappingPtr mapping =
+      std::make_shared<NaiveWayMatchStringMapping>(createWayString1(map), createWayString2(map));
 
     vector<pair<ElementId, ElementId>> replaced;
     WayMatchStringMerger uut(map, mapping, replaced);
@@ -179,8 +179,9 @@ public:
   {
     OsmMapPtr map = createTestMap("WayMatchStringMergerTest.osm");
 
-    WayMatchStringMappingPtr mapping(new NaiveWayMatchStringMapping(createWayString1(map),
-      createWayString2(map)));
+    WayMatchStringMappingPtr mapping =
+      std::make_shared<NaiveWayMatchStringMapping>(
+        createWayString1(map), createWayString2(map));
 
     vector<pair<ElementId, ElementId>> replaced;
     WayMatchStringMerger uut(map, mapping, replaced);

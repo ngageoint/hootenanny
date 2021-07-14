@@ -72,7 +72,7 @@ public:
     wstr2->append(WaySubline(WayLocation(map, w3, 0), WayLocation::createAtEndOfWay(map, w3)));
     wstr2->append(WaySubline(WayLocation::createAtEndOfWay(map, w4), WayLocation(map, w4, 0)));
 
-    WayMatchStringMappingPtr mapping(new NaiveWayMatchStringMapping(wstr1, wstr2));
+    WayMatchStringMappingPtr mapping = std::make_shared<NaiveWayMatchStringMapping>(wstr1, wstr2);
     WaySublineMatchStringPtr wsms = WayMatchStringMappingConverter().
       toWaySublineMatchString(mapping);
 

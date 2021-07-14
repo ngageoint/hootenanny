@@ -1508,7 +1508,7 @@ private:
 
     // Add a tag specifying this is the to replace data, so we can see it in the output.
     SetTagValueVisitor addTagVis("note", "Source 1");
-    NotCriterion addTagCrit(std::shared_ptr<WayNodeCriterion>(new WayNodeCriterion(map)));
+    NotCriterion addTagCrit(std::make_shared<WayNodeCriterion>(map));
     FilteredVisitor deleteExcludeTagVis(addTagCrit, addTagVis);
     map->visitRw(deleteExcludeTagVis);
 
@@ -1566,7 +1566,7 @@ private:
 
     // add a tag specifying this is the to replace data, so we can see it in the output
     SetTagValueVisitor addTagVis("note", "Source 2");
-    NotCriterion addTagCrit(std::shared_ptr<WayNodeCriterion>(new WayNodeCriterion(map)));
+    NotCriterion addTagCrit(std::make_shared<WayNodeCriterion>(map));
     FilteredVisitor deleteExcludeTagVis(addTagCrit, addTagVis);
     map->visitRw(deleteExcludeTagVis);
 
