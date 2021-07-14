@@ -190,7 +190,7 @@ public:
   {
     NetworkDetailsPtr details = createSampleDetails();
 
-    EdgeStringPtr str(new EdgeString());
+    EdgeStringPtr str = std::make_shared<EdgeString>();
     str->appendEdge(EdgeSublinePtr(new EdgeSubline(
       ConstEdgeLocationPtr(new EdgeLocation(_e1ab, 0.4)),
       ConstEdgeLocationPtr(new EdgeLocation(_e1ab, 1.0)))));
@@ -259,7 +259,7 @@ public:
     CPPUNIT_ASSERT(elStr->getEdge() == _e1bc);
     CPPUNIT_ASSERT(elStr->getPortion() >= 0.5 && elStr->getPortion() <= 0.51);
 
-    EdgeStringPtr str2(new EdgeString());
+    EdgeStringPtr str2 = std::make_shared<EdgeString>();
     str2->appendEdge(_e1bc);
     str2->appendEdge(_e1cd);
 
@@ -301,7 +301,7 @@ public:
   {
     NetworkDetailsPtr details = createSampleDetails();
 
-    EdgeStringPtr str(new EdgeString());
+    EdgeStringPtr str = std::make_shared<EdgeString>();
     str->appendEdge(EdgeSublinePtr(new EdgeSubline(
       ConstEdgeLocationPtr(new EdgeLocation(_e1ab, 0.4)),
       ConstEdgeLocationPtr(new EdgeLocation(_e1ab, 1.0)))));
@@ -336,12 +336,12 @@ public:
     ///     *-----*---es1----|-------*
     /// *---------*|--es2----|-----------------*
     ///     |=====match======|
-    es1.reset(new EdgeString());
+    es1 = std::make_shared<EdgeString>();
     es1->appendEdge(EdgeSublinePtr(new EdgeSubline(
       ConstEdgeLocationPtr(new EdgeLocation(_e1bc, 0.1)),
       ConstEdgeLocationPtr(new EdgeLocation(_e1bc, 0.5)))));
 
-    es2.reset(new EdgeString());
+    es2 = std::make_shared<EdgeString>();
     es2->appendEdge(EdgeSublinePtr(new EdgeSubline(
       ConstEdgeLocationPtr(new EdgeLocation(_e2bc, 0.07)),
       ConstEdgeLocationPtr(new EdgeLocation(_e2bc, 0.33)))));
@@ -358,12 +358,12 @@ public:
     ///     *-es1-*---e1bc---*
     /// *---|-es2-*------e2bc--------*
     ///     |=====match======|
-    es1.reset(new EdgeString());
+    es1 = std::make_shared<EdgeString>();
     es1->appendEdge(EdgeSublinePtr(new EdgeSubline(
       ConstEdgeLocationPtr(new EdgeLocation(_e1ab, 0)),
       ConstEdgeLocationPtr(new EdgeLocation(_e1ab, 1)))));
 
-    es2.reset(new EdgeString());
+    es2 = std::make_shared<EdgeString>();
     es2->appendEdge(EdgeSublinePtr(new EdgeSubline(
       ConstEdgeLocationPtr(new EdgeLocation(_e2ab, 0.33)),
       ConstEdgeLocationPtr(new EdgeLocation(_e2ab, 1)))));
@@ -384,7 +384,7 @@ public:
   {
     NetworkDetailsPtr details = createSampleDetails();
 
-    EdgeStringPtr str(new EdgeString());
+    EdgeStringPtr str = std::make_shared<EdgeString>();
     str->appendEdge(EdgeSublinePtr(new EdgeSubline(
       ConstEdgeLocationPtr(new EdgeLocation(_e1bc, 0.4)),
       ConstEdgeLocationPtr(new EdgeLocation(_e1bc, 0.6)))));
@@ -396,7 +396,7 @@ public:
     CPPUNIT_ASSERT_THROW(details->extendEdgeString(str, _e1df), IllegalArgumentException);
 
     // try again, but start with a backwards edge
-    str.reset(new EdgeString());
+    str = std::make_shared<EdgeString>();
     str->appendEdge(EdgeSublinePtr(new EdgeSubline(
       ConstEdgeLocationPtr(new EdgeLocation(_e1bc, 0.6)),
       ConstEdgeLocationPtr(new EdgeLocation(_e1bc, 0.4)))));

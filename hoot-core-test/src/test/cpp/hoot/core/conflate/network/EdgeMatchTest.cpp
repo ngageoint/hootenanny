@@ -60,10 +60,10 @@ public:
     ConstNetworkVertexPtr vertex4(
       new NetworkVertex(TestUtils::createNode(map, "", Status::Unknown1, 30, 0)));
     ConstNetworkEdgePtr edge3(new NetworkEdge(vertex3, vertex4, true));
-    EdgeStringPtr edgeStr1(new EdgeString());
+    EdgeStringPtr edgeStr1 = std::make_shared<EdgeString>();
     edgeStr1->appendEdge(edge1);
     edgeStr1->appendEdge(edge2);
-    EdgeStringPtr edgeStr2(new EdgeString());
+    EdgeStringPtr edgeStr2 = std::make_shared<EdgeString>();
     edgeStr2->appendEdge(edge2);
     edgeStr2->appendEdge(edge3);
 
@@ -119,13 +119,13 @@ public:
     ConstNetworkVertexPtr vertex5(
       new NetworkVertex(TestUtils::createNode(map, "", Status::Unknown1, 30, 0)));
     ConstNetworkEdgePtr edge4(new NetworkEdge(vertex4, vertex5, true));
-    EdgeStringPtr edgeStr1(new EdgeString());
+    EdgeStringPtr edgeStr1 = std::make_shared<EdgeString>();
     edgeStr1->appendEdge(edge1);
     edgeStr1->appendEdge(edge2);
-    EdgeStringPtr edgeStr2(new EdgeString());
+    EdgeStringPtr edgeStr2 = std::make_shared<EdgeString>();
     edgeStr2->appendEdge(edge2);
     edgeStr2->appendEdge(edge3);
-    EdgeStringPtr edgeStr3(new EdgeString());
+    EdgeStringPtr edgeStr3 = std::make_shared<EdgeString>();
     edgeStr3->appendEdge(edge3);
     edgeStr3->appendEdge(edge4);
 
@@ -150,9 +150,9 @@ public:
     ConstEdgeLocationPtr edgeLocEnd2(new EdgeLocation(edge1, 1.0));
     ConstEdgeSublinePtr edgeSubline1(new EdgeSubline(edgeLocStart1, edgeLocEnd1));
     ConstEdgeSublinePtr edgeSubline2(new EdgeSubline(edgeLocStart1, edgeLocEnd2));
-    EdgeStringPtr edgeStr1(new EdgeString());
+    EdgeStringPtr edgeStr1 = std::make_shared<EdgeString>();
     edgeStr1->appendEdge(edgeSubline1);
-    EdgeStringPtr edgeStr2(new EdgeString());
+    EdgeStringPtr edgeStr2 = std::make_shared<EdgeString>();
     edgeStr2->appendEdge(edgeSubline2);
 
     EdgeMatch edgeMatch1(edgeStr1, edgeStr2);
@@ -171,9 +171,9 @@ public:
       new NetworkVertex(TestUtils::createNode(map, "", Status::Unknown1, 10, 0)));
     ConstNetworkEdgePtr edge1(new NetworkEdge(vertex1, vertex1, true));
     ConstNetworkEdgePtr edge2(new NetworkEdge(vertex1, vertex2, true));
-    EdgeStringPtr edgeStr1(new EdgeString());
+    EdgeStringPtr edgeStr1 = std::make_shared<EdgeString>();
     edgeStr1->appendEdge(edge1);
-    EdgeStringPtr edgeStr2(new EdgeString());
+    EdgeStringPtr edgeStr2 = std::make_shared<EdgeString>();
     edgeStr2->appendEdge(edge2);
 
     EdgeMatch edgeMatch(edgeStr1, edgeStr2);
@@ -194,11 +194,11 @@ public:
     ConstEdgeSublinePtr edgeSubline1(new EdgeSubline(edgeLoc1, edgeLoc2));
     ConstEdgeSublinePtr edgeSubline2(new EdgeSubline(edgeLoc1, edgeLoc3));
     ConstEdgeSublinePtr edgeSubline3(new EdgeSubline(edgeLoc2, edgeLoc3));
-    EdgeStringPtr edgeStr1(new EdgeString());
+    EdgeStringPtr edgeStr1 = std::make_shared<EdgeString>();
     edgeStr1->appendEdge(edgeSubline1);
-    EdgeStringPtr edgeStr2(new EdgeString());
+    EdgeStringPtr edgeStr2 = std::make_shared<EdgeString>();
     edgeStr2->appendEdge(edgeSubline2);
-    EdgeStringPtr edgeStr3(new EdgeString());
+    EdgeStringPtr edgeStr3 = std::make_shared<EdgeString>();
     edgeStr3->appendEdge(edgeSubline3);
 
     ConstEdgeMatchPtr edgeMatch1(new EdgeMatch(edgeStr1, edgeStr1));
@@ -223,10 +223,10 @@ public:
     ConstNetworkVertexPtr vertex4(
       new NetworkVertex(TestUtils::createNode(map, "", Status::Unknown1, 30, 0)));
     ConstNetworkEdgePtr edge3(new NetworkEdge(vertex3, vertex4, true));
-    EdgeStringPtr edgeStr1(new EdgeString());
+    EdgeStringPtr edgeStr1 = std::make_shared<EdgeString>();
     edgeStr1->appendEdge(edge1);
     edgeStr1->appendEdge(edge2);
-    EdgeStringPtr edgeStr2(new EdgeString());
+    EdgeStringPtr edgeStr2 = std::make_shared<EdgeString>();
     edgeStr2->appendEdge(edge2);
     edgeStr2->appendEdge(edge3);
 
@@ -278,10 +278,10 @@ public:
     ConstNetworkVertexPtr vertex4(
       new NetworkVertex(TestUtils::createNode(map, "", Status::Unknown1, 30, 0)));
     ConstNetworkEdgePtr edge3(new NetworkEdge(vertex3, vertex4, true));
-    EdgeStringPtr edgeStr1(new EdgeString());
+    EdgeStringPtr edgeStr1 = std::make_shared<EdgeString>();
     edgeStr1->appendEdge(edge1);
     edgeStr1->appendEdge(edge2);
-    EdgeStringPtr edgeStr2(new EdgeString());
+    EdgeStringPtr edgeStr2 = std::make_shared<EdgeString>();
     edgeStr2->appendEdge(edge2);
     edgeStr2->appendEdge(edge3);
 

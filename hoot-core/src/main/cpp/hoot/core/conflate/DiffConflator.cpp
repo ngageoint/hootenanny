@@ -751,7 +751,7 @@ void DiffConflator::_calcAndStoreTagChanges()
   // Make sure we have a container for our changes
   if (!_tagChanges)
   {
-    _tagChanges.reset(new MemChangesetProvider(_map->getProjection()));
+    _tagChanges = std::make_shared<MemChangesetProvider>(_map->getProjection());
   }
 
   int numMatchesProcessed = 0;
