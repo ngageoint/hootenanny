@@ -38,13 +38,13 @@ HOOT_FACTORY_REGISTER(ElementCriterion, BridgeWayNodeCriterion)
 BridgeWayNodeCriterion::BridgeWayNodeCriterion() :
 WayNodeCriterion()
 {
-  _parentCriterion.reset(new BridgeCriterion());
+  _parentCriterion = std::make_shared<BridgeCriterion>();
 }
 
 BridgeWayNodeCriterion::BridgeWayNodeCriterion(ConstOsmMapPtr map) :
 WayNodeCriterion(map)
 {
-  _parentCriterion.reset(new BridgeCriterion());
+  _parentCriterion = std::make_shared<BridgeCriterion>();
 }
 
 void BridgeWayNodeCriterion::setOsmMap(const OsmMap* map)

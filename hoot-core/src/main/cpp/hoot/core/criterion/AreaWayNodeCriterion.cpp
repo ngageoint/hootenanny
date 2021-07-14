@@ -38,13 +38,13 @@ HOOT_FACTORY_REGISTER(ElementCriterion, AreaWayNodeCriterion)
 AreaWayNodeCriterion::AreaWayNodeCriterion() :
 WayNodeCriterion()
 {
-  _parentCriterion.reset(new AreaCriterion());
+  _parentCriterion = std::make_shared<AreaCriterion>();
 }
 
 AreaWayNodeCriterion::AreaWayNodeCriterion(ConstOsmMapPtr map) :
 WayNodeCriterion(map)
 {
-  _parentCriterion.reset(new AreaCriterion(_map));
+  _parentCriterion = std::make_shared<AreaCriterion>(_map);
 }
 
 void AreaWayNodeCriterion::setOsmMap(const OsmMap* map)
@@ -52,7 +52,7 @@ void AreaWayNodeCriterion::setOsmMap(const OsmMap* map)
   _map = map->shared_from_this();
   if (_parentCriterion)
   {
-    _parentCriterion.reset(new AreaCriterion(_map));
+    _parentCriterion = std::make_shared<AreaCriterion>(_map);
   }
 }
 

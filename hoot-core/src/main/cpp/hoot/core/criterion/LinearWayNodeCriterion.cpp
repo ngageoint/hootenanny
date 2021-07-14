@@ -38,7 +38,7 @@ HOOT_FACTORY_REGISTER(ElementCriterion, LinearWayNodeCriterion)
 LinearWayNodeCriterion::LinearWayNodeCriterion() :
 WayNodeCriterion()
 {
-  _parentCriterion.reset(new LinearCriterion());
+  _parentCriterion = std::make_shared<LinearCriterion>();
 }
 
 }

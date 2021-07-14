@@ -189,7 +189,7 @@ void HighwayRfClassifier::_init() const
     {
       throw HootException("Error opening file: " + path);
     }
-    _rf.reset(new RandomForest());
+    _rf = std::make_shared<RandomForest>();
     try
     {
       _rf->importModel(file);

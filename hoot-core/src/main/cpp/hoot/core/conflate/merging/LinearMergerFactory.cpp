@@ -90,7 +90,7 @@ MergerPtr LinearMergerFactory::getMerger(
   {
     // Reference or Differential Network Conflation; The Network algorithm doesn't support
     // Differential Conflation partial match merging yet, so we don't use it.
-    merger.reset(new PartialNetworkMerger(eids, edgeMatches, details));
+    merger = std::make_shared<PartialNetworkMerger>(eids, edgeMatches, details);
   }
 
   return merger;

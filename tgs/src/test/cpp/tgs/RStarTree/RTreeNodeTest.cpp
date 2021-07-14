@@ -45,7 +45,9 @@ namespace Tgs
     CPPUNIT_TEST(test1);
     CPPUNIT_TEST(test2);
     CPPUNIT_TEST_SUITE_END();
+
   public:
+
     void test1()
     {
       std::shared_ptr<PageStore>mps(new MemoryPageStore(100));

@@ -152,7 +152,7 @@ void OsmGbdxXmlWriter::_newOutputFile()
     }
   }
 
-  _fp.reset(new QFile());
+  _fp = std::make_shared<QFile>();
   std::dynamic_pointer_cast<QFile>(_fp)->setFileName(url);
 
   if (!_fp->open(QIODevice::WriteOnly | QIODevice::Text))
@@ -160,7 +160,7 @@ void OsmGbdxXmlWriter::_newOutputFile()
     throw HootException(QObject::tr("Error opening %1 for writing").arg(url));
   }
 
-  _writer.reset(new QXmlStreamWriter(_fp.get()));
+  _writer = std::make_shared<QXmlStreamWriter>(_fp.get());
   _writer->setCodec("UTF-8");
 
   if (_formatXml)

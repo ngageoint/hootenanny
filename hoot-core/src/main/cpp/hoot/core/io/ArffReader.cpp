@@ -62,7 +62,7 @@ _autoStrm(std::make_shared<std::fstream>())
 
   if (path.endsWith(".bz2"))
   {
-    _bstrm.reset(new boost::iostreams::filtering_istream);
+    _bstrm = std::make_shared<boost::iostreams::filtering_istream>();
     boost::iostreams::filtering_istream& zdat = *_bstrm;
     zdat.push(boost::iostreams::bzip2_decompressor());
     zdat.push(*_autoStrm.get());

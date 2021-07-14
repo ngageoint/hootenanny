@@ -480,7 +480,7 @@ ElementCriterionPtr UnconnectedWaySnapper::_getStatusCriteria(const QStringList&
   ElementCriterionPtr statusCrit = ElementCriterionPtr();
   if (statuses.size() == 1)
   {
-    statusCrit.reset(new StatusCriterion(Status::fromString(statuses.at(0))));
+    statusCrit = std::make_shared<StatusCriterion>(Status::fromString(statuses.at(0)));
   }
   else
   {

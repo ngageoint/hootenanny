@@ -121,7 +121,7 @@ void WayMatchStringMerger::_createWayMappings(const WayLocation& splitStart,
     // if there isn't a last mapping then create one.
     if (!lastSm)
     {
-      lastSm.reset(new SublineMapping());
+      lastSm = std::make_shared<SublineMapping>();
       lastSm->setStart1(ws1->at(i).getStart());
       lastSm->setWay2(way2);
     }

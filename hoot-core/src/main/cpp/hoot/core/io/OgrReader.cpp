@@ -288,7 +288,7 @@ std::shared_ptr<OGRSpatialReference> OgrReaderInternal::_fixProjection(
   int epsgOverride = ConfigOptions().getOgrReaderEpsgOverride();
   if (epsgOverride >= 0)
   {
-    result.reset(new OGRSpatialReference());
+    result = std::make_shared<OGRSpatialReference>();
 
     if (result->importFromEPSG(epsgOverride) != OGRERR_NONE)
     {
@@ -300,7 +300,7 @@ std::shared_ptr<OGRSpatialReference> OgrReaderInternal::_fixProjection(
 
   // proj4 requires some extra parameters to handle Google map style projections. Check for this
   // situation for known EPSGs and warn/fix the issue.
-  result.reset(new OGRSpatialReference());
+  result = std::make_shared<OGRSpatialReference>();
   result->importFromEPSG(3785);
   if (srs && result->IsSame(srs.get()) &&
     _toWkt(result.get()) != _toWkt(srs.get()))
@@ -974,7 +974,7 @@ std::shared_ptr<Envelope> OgrReaderInternal::getBoundingBoxFromConfig(
 
   if (!asWgs84)
   {
-    result.reset(new Envelope(GeometryUtils::envelopeFromString(bboxStr)));
+    result = std::make_shared<Envelope>(GeometryUtils::envelopeFromString(bboxStr));
   }
   else
   {
@@ -1004,7 +1004,7 @@ std::shared_ptr<Envelope> OgrReaderInternal::getBoundingBoxFromConfig(
       }
     }
 
-    result.reset(new Envelope());
+    result = std::make_shared<Envelope>();
     std::shared_ptr<OGRSpatialReference> wgs84 = MapProjector::createWgs84Projection();
     std::shared_ptr<OGRCoordinateTransformation> transform(
       OGRCreateCoordinateTransformation(wgs84.get(), srs));
@@ -1090,7 +1090,7 @@ void OgrReaderInternal::_openLayer(const QString& path, const QString& layer)
   if (sourceSrs.get() != nullptr && sourceSrs->IsProjected())
   {
     LOG_DEBUG("Input SRS: " << _toWkt(sourceSrs.get()));
-    _wgs84.reset(new OGRSpatialReference());
+    _wgs84 = std::make_shared<OGRSpatialReference>();
     if (_wgs84->SetWellKnownGeogCS("WGS84") != OGRERR_NONE)
     {
       throw HootException("Error creating EPSG:4326 projection.");

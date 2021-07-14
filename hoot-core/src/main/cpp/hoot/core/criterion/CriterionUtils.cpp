@@ -102,7 +102,7 @@ ElementCriterionPtr CriterionUtils::constructCriterion(
 
     if (negate)
     {
-      subCrit.reset(new NotCriterion(subCrit));
+      subCrit = std::make_shared<NotCriterion>(subCrit);
     }
     LOG_VART(subCrit.get());
 

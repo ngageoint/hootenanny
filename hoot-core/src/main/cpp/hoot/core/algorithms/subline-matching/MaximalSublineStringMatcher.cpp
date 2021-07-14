@@ -136,7 +136,7 @@ void MaximalSublineStringMatcher::_configureSublineMatcher()
 {
   if (!_sublineMatcher)
   {
-    _sublineMatcher.reset(new MaximalSublineMatcher());
+    _sublineMatcher = std::make_shared<MaximalSublineMatcher>();
   }
   _sublineMatcher->setMaxRelevantAngle(_maxAngle);
   _sublineMatcher->setMinSplitSize(_minSplitsize);

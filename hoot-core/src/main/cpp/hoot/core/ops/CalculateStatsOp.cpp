@@ -1018,7 +1018,7 @@ void CalculateStatsOp::_generateFeatureStats(
       _applyVisitor(
         FilteredVisitor(
           criterion->clone(),
-          ConstElementVisitorPtr(new LengthOfWaysVisitor())),
+          std::make_shared<LengthOfWaysVisitor>()),
         "Total Meters: " + description));
     _addStat(QString("Meters of Conflated %1s").arg(description),
       _applyVisitor(

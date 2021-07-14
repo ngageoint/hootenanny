@@ -40,9 +40,9 @@ namespace hoot
 {
 
 AddressNormalizer::AddressNormalizer() :
-_numNormalized(0)
+_numNormalized(0),
+_addressTagKeys(std::make_shared<AddressTagKeys>())
 {
-  _addressTagKeys.reset(new AddressTagKeys());
 }
 
 void AddressNormalizer::normalizeAddresses(const ElementPtr& e) const

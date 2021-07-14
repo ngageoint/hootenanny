@@ -71,7 +71,7 @@ void DataQualityMetricTagger::apply(OsmMapPtr& map)
     new ElementIdCriterion(
       ElementType::Node,
       SuperfluousNodeRemover::collectSuperfluousNodeIds(map, false, _bounds)));
-  filteredVis.reset(new FilteredVisitor(crit, tagVis));
+  filteredVis = std::make_shared<FilteredVisitor>(crit, tagVis);
   map->visitRo(*filteredVis);
   _orphanedNodes = tagVis->getNumFeaturesAffected();
   LOG_STATUS(

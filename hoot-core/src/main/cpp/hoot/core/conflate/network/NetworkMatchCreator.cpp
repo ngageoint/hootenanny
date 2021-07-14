@@ -65,11 +65,11 @@ namespace hoot
 HOOT_FACTORY_REGISTER(MatchCreator, NetworkMatchCreator)
 
 NetworkMatchCreator::NetworkMatchCreator() :
+_userCriterion(std::make_shared<HighwayCriterion>()),
 _matchScoringFunctionMax(ConfigOptions().getNetworkMatchScoringFunctionMax()),
 _matchScoringFunctionCurveMidpointX(ConfigOptions().getNetworkMatchScoringFunctionCurveMidX()),
 _matchScoringFunctionCurveSteepness(ConfigOptions().getNetworkMatchScoringFunctionCurveSteepness())
 {
-  _userCriterion.reset(new HighwayCriterion());
 }
 
 MatchPtr NetworkMatchCreator::createMatch(const ConstOsmMapPtr& /*map*/, ElementId /*eid1*/,

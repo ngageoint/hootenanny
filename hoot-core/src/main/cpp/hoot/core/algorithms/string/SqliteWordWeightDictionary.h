@@ -49,7 +49,6 @@ public:
   ~SqliteWordWeightDictionary() = default;
 
   double getMinWeight() const override { return 1.0 / (double)_count; }
-
   double getWeight(const QString& word) const override;
 
 private:

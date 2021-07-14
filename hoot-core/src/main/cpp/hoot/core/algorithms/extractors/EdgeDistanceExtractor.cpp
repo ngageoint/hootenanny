@@ -109,13 +109,13 @@ EdgeDistanceExtractor::EdgeDistanceExtractor(ValueAggregatorPtr a, Meters spacin
 _aggregator(a)
 {
   if (!_aggregator)
-    _aggregator.reset(new MeanAggregator());
+    _aggregator = std::make_shared<MeanAggregator>();
   setSpacing(spacing);
 }
 
 EdgeDistanceExtractor::EdgeDistanceExtractor(Meters spacing)
 {
-  _aggregator.reset(new MeanAggregator());
+  _aggregator = std::make_shared<MeanAggregator>();
   setSpacing(spacing);
 }
 

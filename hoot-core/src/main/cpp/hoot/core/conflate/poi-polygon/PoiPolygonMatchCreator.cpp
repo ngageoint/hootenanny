@@ -52,7 +52,7 @@ MatchPtr PoiPolygonMatchCreator::createMatch(
   if (!_infoCache)
   {
     LOG_DEBUG("Initializing info cache...");
-    _infoCache.reset(new PoiPolygonInfoCache(map));
+    _infoCache = std::make_shared<PoiPolygonInfoCache>(map);
   }
 
   std::shared_ptr<PoiPolygonMatch> result;
@@ -66,7 +66,7 @@ MatchPtr PoiPolygonMatchCreator::createMatch(
     const bool foundPoly = _polyCrit.isSatisfied(e1) || _polyCrit.isSatisfied(e2);
     if (foundPoi && foundPoly)
     {
-      result.reset(new PoiPolygonMatch(map, getMatchThreshold(), _getRf(), _infoCache));
+      result = std::make_shared<PoiPolygonMatch>(map, getMatchThreshold(), _getRf(), _infoCache);
       result->setConfiguration(conf());
       result->calculateMatch(eid1, eid2);
     }
@@ -111,7 +111,7 @@ void PoiPolygonMatchCreator::createMatches(const ConstOsmMapPtr& map,
   if (!_infoCache)
   {
     LOG_DEBUG("Initializing info cache...");
-    _infoCache.reset(new PoiPolygonInfoCache(map));
+    _infoCache = std::make_shared<PoiPolygonInfoCache>(map);
     _infoCache->setConfiguration(conf());
   }
 
@@ -561,7 +561,7 @@ std::shared_ptr<MatchThreshold> PoiPolygonMatchCreator::getMatchThreshold()
 {
   //  Since the POI to Poly matcher is an additive model, all thresholds are 1.0
   if (!_matchThreshold.get())
-    _matchThreshold.reset(new MatchThreshold(1.0, 1.0, 1.0));
+    _matchThreshold = std::make_shared<MatchThreshold>(1.0, 1.0, 1.0);
   return _matchThreshold;
 }
 
@@ -569,7 +569,7 @@ std::shared_ptr<PoiPolygonRfClassifier> PoiPolygonMatchCreator::_getRf()
 {
   if (!_rf)
   {
-    _rf.reset(new PoiPolygonRfClassifier());
+    _rf = std::make_shared<PoiPolygonRfClassifier>();
   }
   return _rf;
 }

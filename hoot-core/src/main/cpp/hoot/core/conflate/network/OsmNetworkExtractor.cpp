@@ -68,13 +68,13 @@ void OsmNetworkExtractor::_addEdge(ConstElementPtr from, ConstElementPtr to,
   ConstNetworkVertexPtr v1 = _network->getSingleVertex(from->getElementId());
   if (!v1.get())
   {
-    v1.reset(new NetworkVertex(from));
+    v1 = std::make_shared<NetworkVertex>(from);
     _network->addVertex(v1);
   }
   ConstNetworkVertexPtr v2 = _network->getSingleVertex(to->getElementId());
   if (!v2.get())
   {
-    v2.reset(new NetworkVertex(to));
+    v2 = std::make_shared<NetworkVertex>(to);
     _network->addVertex(v2);
   }
 
@@ -86,7 +86,7 @@ void OsmNetworkExtractor::_addEdge(ConstElementPtr from, ConstElementPtr to,
 
 OsmNetworkPtr OsmNetworkExtractor::extractNetwork(ConstOsmMapPtr map)
 {
-  _network.reset(new OsmNetwork());
+  _network = std::make_shared<OsmNetwork>();
 
   _map = map;
   // go through all the elements.

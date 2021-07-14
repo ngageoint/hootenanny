@@ -102,7 +102,7 @@ std::shared_ptr<InBoundsCriterion> ConfigUtils::getBoundsFilter(const ConstOsmMa
   {
     const GeometricRelationship boundsRelationship = ConfigUtils::getBoundsRelationship();
     const bool mustContain = true ? (boundsRelationship == GeometricRelationship::Contains) : false;
-    boundsCrit.reset(new InBoundsCriterion(mustContain));
+    boundsCrit = std::make_shared<InBoundsCriterion>(mustContain);
     std::shared_ptr<geos::geom::Geometry> bounds = GeometryUtils::boundsFromString(boundsStr);
     if (!MapProjector::isGeographic(map))
     {

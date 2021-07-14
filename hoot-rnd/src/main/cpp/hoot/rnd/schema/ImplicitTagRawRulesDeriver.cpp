@@ -256,7 +256,7 @@ void ImplicitTagRawRulesDeriver::_validateInputs(const QStringList& inputs,
   {
     throw HootException("No output was specified.");
   }
-  _output.reset(new QFile());
+  _output = std::make_shared<QFile>();
   _output->setFileName(output);
   if (_output->exists() && !_output->remove())
   {

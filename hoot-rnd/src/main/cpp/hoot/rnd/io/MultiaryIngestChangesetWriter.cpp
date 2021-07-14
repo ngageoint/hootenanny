@@ -69,7 +69,7 @@ void MultiaryIngestChangesetWriter::open(const QString& fileName)
 {
   close();
 
-  _fp.reset(new QFile());
+  _fp = std::make_shared<QFile>();
   _fp->setFileName(fileName);
   if (_fp->exists() && !_fp->remove())
   {

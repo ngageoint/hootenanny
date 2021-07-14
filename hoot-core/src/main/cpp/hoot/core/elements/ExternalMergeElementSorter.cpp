@@ -318,7 +318,7 @@ std::shared_ptr<PartialOsmMapWriter> ExternalMergeElementSorter::_getFinalOutput
 
   const QString tempFile =
     ConfigOptions().getApidbBulkInserterTempFileDir() + "/" + SORT_TEMP_FILE_BASE_NAME + ".osm";
-  _sortFinalOutput.reset(new QTemporaryFile(tempFile));
+  _sortFinalOutput = std::make_shared<QTemporaryFile>(tempFile);
   _sortFinalOutput->setAutoRemove(!_retainTempFiles);
   if (!_sortFinalOutput->open())
   {

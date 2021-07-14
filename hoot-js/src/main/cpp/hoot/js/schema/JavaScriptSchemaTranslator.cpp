@@ -210,11 +210,11 @@ void JavaScriptSchemaTranslator::_finalize()
 
 void JavaScriptSchemaTranslator::_init()
 {
-  //This can be a costly operation, hence putting it at INFO for runtime awareness purposes.
+  // This can be a costly operation, hence putting it at INFO for runtime awareness purposes.
   LOG_INFO("Loading translation script: " << _scriptPath << "...");
 
   _error = false;
-  _gContext.reset(new PluginContext());
+  _gContext = std::make_shared<PluginContext>();
   Isolate* current = v8::Isolate::GetCurrent();
   HandleScope handleScope(current);
   Context::Scope context_scope(_gContext->getContext(current));

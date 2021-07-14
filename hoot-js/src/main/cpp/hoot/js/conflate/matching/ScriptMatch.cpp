@@ -375,7 +375,7 @@ std::shared_ptr<const ScriptMatch> ScriptMatch::_getMatch(
 
   if (!match)
   {
-    match.reset(new ScriptMatch(_script, _plugin, map, mapJs, eid1, eid2, _threshold));
+    match = std::make_shared<ScriptMatch>(_script, _plugin, map, mapJs, eid1, eid2, _threshold);
   }
 
   return match;

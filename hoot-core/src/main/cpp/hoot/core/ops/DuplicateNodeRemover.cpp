@@ -95,7 +95,7 @@ void DuplicateNodeRemover::apply(std::shared_ptr<OsmMap>& map)
   if (MapProjector::isGeographic(map))
   {
     wgs84 = map;
-    planar.reset(new OsmMap(map));
+    planar = std::make_shared<OsmMap>(map);
     MapProjector::projectToPlanar(planar);
   }
   else

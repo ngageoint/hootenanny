@@ -105,8 +105,8 @@ public:
     WayPtr w3 = TestUtils::createWay(map, w3c, "", Status::Unknown1);
 
     ConstMatchThresholdPtr mt(new MatchThreshold(0.05, 0.6));
-    std::shared_ptr<HighwayExpertClassifier> classifier(new HighwayExpertClassifier());
-    std::shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
+    std::shared_ptr<HighwayExpertClassifier> classifier = std::make_shared<HighwayExpertClassifier>();
+    std::shared_ptr<MaximalSublineStringMatcher> sublineMatcher = std::make_shared<MaximalSublineStringMatcher>();
     sublineMatcher->setMinSplitSize(5.0);
     sublineMatcher->setMaxRelevantAngle(toRadians(60.0));
     MatchPtr match12(new HighwayMatch(classifier, sublineMatcher, map, w1->getElementId(), w2->getElementId(),
@@ -155,8 +155,8 @@ public:
 
     ConstMatchThresholdPtr mt(new MatchThreshold(0.05, 0.9));
 
-    std::shared_ptr<HighwayExpertClassifier> classifier(new HighwayExpertClassifier());
-    std::shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
+    std::shared_ptr<HighwayExpertClassifier> classifier = std::make_shared<HighwayExpertClassifier>();
+    std::shared_ptr<MaximalSublineStringMatcher> sublineMatcher = std::make_shared<MaximalSublineStringMatcher>();
     sublineMatcher->setMinSplitSize(5.0);
     sublineMatcher->setMaxRelevantAngle(toRadians(60.0));
     MatchPtr match12(new HighwayMatch(classifier, sublineMatcher, map, w1->getElementId(), w2->getElementId(),
@@ -203,8 +203,8 @@ public:
     WayPtr w3 = TestUtils::createWay(map, w3c, "", Status::Unknown1);
 
     ConstMatchThresholdPtr mt(new MatchThreshold(0.05, 0.95));
-    std::shared_ptr<HighwayExpertClassifier> classifier(new HighwayExpertClassifier());
-    std::shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
+    std::shared_ptr<HighwayExpertClassifier> classifier = std::make_shared<HighwayExpertClassifier>();
+    std::shared_ptr<MaximalSublineStringMatcher> sublineMatcher = std::make_shared<MaximalSublineStringMatcher>();
     sublineMatcher->setMinSplitSize(5.0);
     sublineMatcher->setMaxRelevantAngle(toRadians(60.0));
     MatchPtr match12(new HighwayMatch(classifier, sublineMatcher, map, w1->getElementId(), w2->getElementId(),
@@ -249,8 +249,8 @@ public:
     WayPtr w3 = TestUtils::createWay(map, w3c, "", Status::Unknown1);
 
     ConstMatchThresholdPtr mt(new MatchThreshold(0.1, 0.6));
-    std::shared_ptr<HighwayExpertClassifier> classifier(new HighwayExpertClassifier());
-    std::shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
+    std::shared_ptr<HighwayExpertClassifier> classifier = std::make_shared<HighwayExpertClassifier>();
+    std::shared_ptr<MaximalSublineStringMatcher> sublineMatcher = std::make_shared<MaximalSublineStringMatcher>();
     sublineMatcher->setMinSplitSize(5.0);
     sublineMatcher->setMaxRelevantAngle(toRadians(60.0));
     MatchPtr match12(new HighwayMatch(classifier, sublineMatcher, map, w1->getElementId(), w2->getElementId(),
@@ -282,7 +282,7 @@ public:
     OsmMapReaderFactory::read(map, _inputPath + "HighwayMatchRealWorld1Test.osm", false);
     MapProjector::projectToOrthographic(map);
 
-    std::shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
+    std::shared_ptr<MaximalSublineStringMatcher> sublineMatcher = std::make_shared<MaximalSublineStringMatcher>();
     sublineMatcher->setMinSplitSize(5.0);
     sublineMatcher->setMaxRelevantAngle(toRadians(60.0));
 
@@ -312,8 +312,8 @@ public:
     conf.set(
       ConfigOptions::getWaySublineMatcherKey(), MaximalNearestSublineMatcher::className());
 
-    std::shared_ptr<HighwayExpertClassifier> classifier(new HighwayExpertClassifier());
-    std::shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
+    std::shared_ptr<HighwayExpertClassifier> classifier = std::make_shared<HighwayExpertClassifier>();
+    std::shared_ptr<MaximalSublineStringMatcher> sublineMatcher = std::make_shared<MaximalSublineStringMatcher>();
     sublineMatcher->setConfiguration(conf);
     sublineMatcher->setMinSplitSize(5.0);
     sublineMatcher->setMaxRelevantAngle(toRadians(60.0));

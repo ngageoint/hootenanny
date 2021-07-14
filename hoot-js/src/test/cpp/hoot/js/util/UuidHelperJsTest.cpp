@@ -63,7 +63,7 @@ public:
 
   void uuidHashTest()
   {
-    std::shared_ptr<PluginContext> _pc(new PluginContext());
+    std::shared_ptr<PluginContext> _pc = std::make_shared<PluginContext>();
     Isolate* current = v8::Isolate::GetCurrent();
     HandleScope handleScope(current);
     Context::Scope context_scope(_pc->getContext(current));

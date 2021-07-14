@@ -407,7 +407,7 @@ ElementInputStreamPtr IoUtils::getFilteredInputStream(
           critConfig->setConfiguration(conf());
         }
 
-        streamToFilter.reset(new ElementCriterionInputStream(streamToFilter, criterion));
+        streamToFilter = std::make_shared<ElementCriterionInputStream>(streamToFilter, criterion);
       }
       else if (Factory::getInstance().hasBase<ElementVisitor>(opName))
       {
@@ -425,7 +425,7 @@ ElementInputStreamPtr IoUtils::getFilteredInputStream(
           visConfig->setConfiguration(conf());
         }
 
-        streamToFilter.reset(new ElementVisitorInputStream(streamToFilter, visitor));
+        streamToFilter = std::make_shared<ElementVisitorInputStream>(streamToFilter, visitor);
       }
       else
       {

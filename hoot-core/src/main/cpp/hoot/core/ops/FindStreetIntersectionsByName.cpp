@@ -46,7 +46,7 @@ HOOT_FACTORY_REGISTER(OsmMapOperation, FindStreetIntersectionsByName)
 void FindStreetIntersectionsByName::setConfiguration(const Settings& conf)
 {
   ConfigOptions opts(conf);
-  _nameCrit.reset(new NameCriterion());
+  _nameCrit = std::make_shared<NameCriterion>();
   _nameCrit->setConfiguration(conf);
   const QStringList streetNames = opts.getNameCriterionNames();
   if (streetNames.size() != 2)

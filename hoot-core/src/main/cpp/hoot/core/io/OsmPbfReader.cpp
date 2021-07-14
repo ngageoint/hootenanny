@@ -101,7 +101,7 @@ OsmPbfReader::OsmPbfReader(const QString& urlString)
 
 void OsmPbfReader::_init(bool useFileId)
 {
-  _d.reset(new OsmPbfReaderData());
+  _d = std::make_shared<OsmPbfReaderData>();
   _useFileId = useFileId;
   _status = hoot::Status::Invalid;
   _useFileStatus = false;

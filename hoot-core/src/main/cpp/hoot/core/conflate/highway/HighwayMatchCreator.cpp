@@ -273,8 +273,7 @@ public:
 
       // No tuning was done, I just copied these settings from OsmMapIndex.
       // 10 children - 368 - see #3054
-      std::shared_ptr<MemoryPageStore> mps = std::make_shared<MemoryPageStore>(728);
-      _index.reset(new HilbertRTree(mps, 2));
+      _index = std::make_shared<HilbertRTree>(std::make_shared<MemoryPageStore>(728), 2);
 
       // Only index elements satisfy isMatchCandidate(e)
       std::function<bool (ConstElementPtr e)> f =

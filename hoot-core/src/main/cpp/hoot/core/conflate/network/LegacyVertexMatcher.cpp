@@ -170,7 +170,7 @@ NodeMatcherPtr LegacyVertexMatcher::_getNodeMatcher()
 {
   if (!_nodeMatcher)
   {
-    _nodeMatcher.reset(new NodeMatcher());
+    _nodeMatcher = std::make_shared<NodeMatcher>();
     _nodeMatcher->setMap(_map);
   }
 

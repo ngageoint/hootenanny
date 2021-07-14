@@ -73,7 +73,7 @@ void DelaunayInterpolator::_buildModel()
 
   if (_dt.get() == nullptr)
   {
-    _dt.reset(new DelaunayTriangulation());
+    _dt = std::make_shared<DelaunayTriangulation>();
 
     const DataFrame& df = *_df;
 

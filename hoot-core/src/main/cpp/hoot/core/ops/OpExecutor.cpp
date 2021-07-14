@@ -96,7 +96,7 @@ void OpExecutor::apply(OsmMapPtr& map)
   std::shared_ptr<ConflateInfoCache> conflateInfoCache;
   if (_operateOnlyOnConflatableElements)
   {
-    conflateInfoCache.reset(new ConflateInfoCache(map));
+    conflateInfoCache = std::make_shared<ConflateInfoCache>(map);
   }
 
   int opCount = 1;
