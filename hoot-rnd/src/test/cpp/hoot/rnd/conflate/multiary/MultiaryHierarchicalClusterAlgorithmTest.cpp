@@ -104,8 +104,8 @@ public:
     std::shared_ptr<MatchCreator> matchCreator = matchFactory.getCreators()[0];
 
     MultiaryScoreCachePtr scoreCache = std::make_shared<MultiaryScoreCache>(map, matchCreator);
-    MultiaryPoiMergeCachePtr mergeCache(
-      new MultiaryPoiMergeCache(map, matchCreator, mergerCreator));
+    MultiaryPoiMergeCachePtr mergeCache =
+      std::make_shared<MultiaryPoiMergeCache>(map, matchCreator, mergerCreator);
     MatchThreshold mt(0.6, 0.6, 0.4);
     MultiaryHierarchicalClusterAlgorithm uut(mergeCache, scoreCache, mt);
 

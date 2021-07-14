@@ -141,10 +141,10 @@ void ImplicitTagRulesDatabaseDeriver::_removeKvpsBelowOccurrenceThreshold(const 
     "Removing tags below minimum occurrence threshold of: " +
     QString::number(minOccurrencesThreshold) << "...");
 
-  _thresholdedCountFile.reset(
-    new QTemporaryFile(
+  _thresholdedCountFile =
+   std::make_shared<QTemporaryFile>(
       ConfigOptions().getApidbBulkInserterTempFileDir() +
-      "/implicit-tag-rules-deriver-temp-XXXXXX"));
+      "/implicit-tag-rules-deriver-temp-XXXXXX");
   _thresholdedCountFile->setAutoRemove(!ConfigOptions().getImplicitTaggingKeepTempFiles());
   if (!_thresholdedCountFile->open())
   {
@@ -279,10 +279,10 @@ void ImplicitTagRulesDatabaseDeriver::_applyFiltering(const QString& input)
 {
   LOG_INFO("Applying word/tag/rule filtering to output...");
 
-  _filteredCountFile.reset(
-    new QTemporaryFile(
+  _filteredCountFile =
+    std::make_shared<QTemporaryFile>(
       ConfigOptions().getApidbBulkInserterTempFileDir() +
-      "/implicit-tag-rules-deriver-temp-XXXXXX"));
+      "/implicit-tag-rules-deriver-temp-XXXXXX");
   _filteredCountFile->setAutoRemove(!ConfigOptions().getImplicitTaggingKeepTempFiles());
   if (!_filteredCountFile->open())
   {

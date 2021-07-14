@@ -106,8 +106,9 @@ void ImplicitTagRawRulesDeriver::_init()
   _duplicatedWordTagKeyCountsToValues.clear();
   _countFileLineCtr = 0;
 
-  _countFile.reset(
-    new QTemporaryFile(_tempFileDir + "/implicit-tag-raw-rules-generator-temp-XXXXXX"));
+  _countFile =
+    std::make_shared<QTemporaryFile>(
+      _tempFileDir + "/implicit-tag-raw-rules-generator-temp-XXXXXX");
   _countFile->setAutoRemove(!_keepTempFiles);
   if (!_countFile->open())
   {
@@ -402,8 +403,9 @@ void ImplicitTagRawRulesDeriver::_sortByTagOccurrence()
   LOG_INFO("Sorting output by tag occurrence count...");
   LOG_VART(_sortParallelCount);
 
-  _sortedCountFile.reset(
-    new QTemporaryFile(_tempFileDir + "/implicit-tag-raw-rules-generator-temp-XXXXXX"));
+  _sortedCountFile =
+    std::make_shared<QTemporaryFile>(
+      _tempFileDir + "/implicit-tag-raw-rules-generator-temp-XXXXXX");
   _sortedCountFile->setAutoRemove(!_keepTempFiles);
   if (!_sortedCountFile->open())
   {
@@ -453,9 +455,9 @@ void ImplicitTagRawRulesDeriver::_removeDuplicatedKeyTypes()
   //i.e. don't allow amenity=school AND amenity=shop to be associated with the same word...pick one
   //of them
 
-  _dedupedCountFile.reset(
-    new QTemporaryFile(
-      _tempFileDir + "/implicit-tag-raw-rules-generator-temp-XXXXXX"));
+  _dedupedCountFile =
+    std::make_shared<QTemporaryFile>(
+      _tempFileDir + "/implicit-tag-raw-rules-generator-temp-XXXXXX");
   _dedupedCountFile->setAutoRemove(!_keepTempFiles);
   if (!_dedupedCountFile->open())
   {
@@ -553,9 +555,9 @@ void ImplicitTagRawRulesDeriver::_resolveCountTies()
     StringUtils::formatLargeNumber(_duplicatedWordTagKeyCountsToValues.size()) <<
     " duplicated word/tag key/counts...");
 
-  _tieResolvedCountFile.reset(
-    new QTemporaryFile(
-      _tempFileDir + "/implicit-tag-raw-rules-generator-temp-XXXXXX"));
+  _tieResolvedCountFile =
+    std::make_shared<QTemporaryFile>(
+      _tempFileDir + "/implicit-tag-raw-rules-generator-temp-XXXXXX");
   _tieResolvedCountFile->setAutoRemove(!_keepTempFiles);
   if (!_tieResolvedCountFile->open())
   {

@@ -518,10 +518,10 @@ std::shared_ptr<MatchThreshold> BuildingMatchCreator::getMatchThreshold()
   if (!_matchThreshold.get())
   {
     LOG_VART(ConfigOptions().getBuildingMatchThreshold());
-    _matchThreshold.reset(
-      new MatchThreshold(
+    _matchThreshold =
+      std::make_shared<MatchThreshold>(
         ConfigOptions().getBuildingMatchThreshold(), ConfigOptions().getBuildingMissThreshold(),
-        ConfigOptions().getBuildingReviewThreshold()));
+        ConfigOptions().getBuildingReviewThreshold());
   }
   return _matchThreshold;
 }

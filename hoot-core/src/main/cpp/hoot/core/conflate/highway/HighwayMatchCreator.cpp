@@ -194,9 +194,9 @@ public:
       if (tagAncestorDiff->diff(map, e1, e2) <= maxEnumDiff)
       {
         // score each candidate and push it on the result vector
-        result.reset(
-          new HighwayMatch(
-            classifier, sublineMatcher, map, e1->getElementId(), e2->getElementId(), threshold));
+        result =
+          std::make_shared<HighwayMatch>(
+            classifier, sublineMatcher, map, e1->getElementId(), e2->getElementId(), threshold);
         // if we're confident this is a miss
         if (result->getType() == MatchType::Miss)
         {
@@ -402,10 +402,10 @@ std::shared_ptr<MatchThreshold> HighwayMatchCreator::getMatchThreshold()
 {
   if (!_matchThreshold.get())
   {
-    _matchThreshold.reset(
-      new MatchThreshold(
+    _matchThreshold =
+      std::make_shared<MatchThreshold>(
         ConfigOptions().getHighwayMatchThreshold(), ConfigOptions().getHighwayMissThreshold(),
-        ConfigOptions().getHighwayReviewThreshold()));
+        ConfigOptions().getHighwayReviewThreshold());
   }
   return _matchThreshold;
 }

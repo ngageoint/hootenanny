@@ -950,8 +950,9 @@ std::shared_ptr<ScriptMatchVisitor> ScriptMatchCreator::_getCachedVisitor(
     LOG_TRACE("Resetting the match candidate checker: " << scriptFileInfo.fileName() << "...");
 
     vector<ConstMatchPtr> emptyMatches;
-    _cachedScriptVisitor.reset(
-      new ScriptMatchVisitor(map, emptyMatches, ConstMatchThresholdPtr(), _script, _filter));
+    _cachedScriptVisitor =
+      std::make_shared<ScriptMatchVisitor>(
+        map, emptyMatches, ConstMatchThresholdPtr(), _script, _filter);
 
     _cachedScriptVisitor->setScriptPath(scriptPath);
 
