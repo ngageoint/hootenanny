@@ -1788,7 +1788,7 @@ void OsmSchema::loadDefault()
 {
   QString path = ConfPath::search("schema.json");
 
-  _d.reset(new OsmSchemaData());
+  _d = std::make_shared<OsmSchemaData>();
 
   LOG_DEBUG("Loading translation files...");
   OsmSchemaLoaderFactory::getInstance().createLoader(path)->load(path, *this);
@@ -1797,7 +1797,7 @@ void OsmSchema::loadDefault()
 
 double OsmSchema::score(const QString& kvp1, const QString& kvp2) const
 {
-  // I tried using a LruCache here to speed up scoring, but it had a negative impact. :(
+  // Tried using a LruCache here to speed up scoring, but it had a negative impact. :(
   return std::max(_d->score(kvp1, kvp2), _d->score(kvp2, kvp1));
 }
 

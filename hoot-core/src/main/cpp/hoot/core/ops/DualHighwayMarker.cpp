@@ -112,7 +112,7 @@ void DualHighwayMarker::apply(const OsmMapPtr& map)
   _numProcessed = 0;
   _map = map;
   _createIndex();
-  _elementInfo.reset(new ConflateInfoCache(map));
+  _elementInfo = std::make_shared<ConflateInfoCache>(map);
 
   const WayMap& ways = _map->getWays();
   for (WayMap::const_iterator waysItr = ways.begin(); waysItr != ways.end(); ++waysItr)

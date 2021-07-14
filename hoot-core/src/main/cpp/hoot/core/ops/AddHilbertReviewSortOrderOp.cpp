@@ -160,7 +160,7 @@ int64_t AddHilbertReviewSortOrderOp::_calculateHilbertValue(
 
   if (_mapEnvelope.get() == nullptr)
   {
-    _mapEnvelope.reset(new Envelope(CalculateMapBoundsVisitor::getGeosBounds(map)));
+    _mapEnvelope = std::make_shared<Envelope>(CalculateMapBoundsVisitor::getGeosBounds(map));
   }
 
   Coordinate center;

@@ -527,7 +527,7 @@ long HootApiDb::_getNextNodeId()
   _checkLastMapId(mapId);
   if (_nodeIdReserver == nullptr)
   {
-    _nodeIdReserver.reset(new InternalIdReserver(_db, getCurrentNodesSequenceName(mapId)));
+    _nodeIdReserver = std::make_shared<InternalIdReserver>(_db, getCurrentNodesSequenceName(mapId));
   }
   return _nodeIdReserver->getNextId();
 }
@@ -538,7 +538,8 @@ long HootApiDb::_getNextRelationId()
   _checkLastMapId(mapId);
   if (_relationIdReserver == nullptr)
   {
-    _relationIdReserver.reset(new InternalIdReserver(_db, getCurrentRelationsSequenceName(mapId)));
+    _relationIdReserver =
+      std::make_shared<InternalIdReserver>(_db, getCurrentRelationsSequenceName(mapId));
   }
   return _relationIdReserver->getNextId();
 }
@@ -549,7 +550,7 @@ long HootApiDb::_getNextWayId()
   _checkLastMapId(mapId);
   if (_wayIdReserver == nullptr)
   {
-    _wayIdReserver.reset(new InternalIdReserver(_db, getCurrentWaysSequenceName(mapId)));
+    _wayIdReserver = std::make_shared<InternalIdReserver>(_db, getCurrentWaysSequenceName(mapId));
   }
   return _wayIdReserver->getNextId();
 }
@@ -838,7 +839,7 @@ void HootApiDb::deleteNode(ConstNodePtr node)
 
   if (_nodeBulkDelete == nullptr)
   {
-    _nodeBulkDelete.reset(new SqlBulkDelete(_db, getCurrentNodesTableName(mapId)));
+    _nodeBulkDelete = std::make_shared<SqlBulkDelete>(_db, getCurrentNodesTableName(mapId));
   }
   _nodeBulkDelete->deleteElement(node->getId());
 
@@ -2259,7 +2260,9 @@ void HootApiDb::insertWayNodes(long wayId, const vector<long>& nodeIds)
     QStringList columns;
     columns << "way_id" << "node_id" << "sequence_id";
 
-    _wayNodeBulkInsert.reset(new SqlBulkInsert(_db, getCurrentWayNodesTableName(mapId), columns, _ignoreInsertConflicts));
+    _wayNodeBulkInsert =
+      std::make_shared<SqlBulkInsert>(
+        _db, getCurrentWayNodesTableName(mapId), columns, _ignoreInsertConflicts);
   }
 
   QList<QVariant> v;
