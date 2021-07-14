@@ -243,13 +243,14 @@ ElementPtr OsmApiDbSqlChangesetFileWriter::_getChangeElement(ConstElementPtr ele
   switch (element->getElementType().getEnum())
   {
     case ElementType::Node:
-      changeElement.reset(new Node(*std::dynamic_pointer_cast<const Node>(element)));
+      changeElement = std::make_shared<Node>(*std::dynamic_pointer_cast<const Node>(element));
       break;
     case ElementType::Way:
-      changeElement.reset(new Way(*std::dynamic_pointer_cast<const Way>(element)));
+      changeElement = std::make_shared<Way>(*std::dynamic_pointer_cast<const Way>(element));
       break;
    case ElementType::Relation:
-      changeElement.reset(new Relation(*std::dynamic_pointer_cast<const Relation>(element)));
+      changeElement =
+        std::make_shared<Relation>(*std::dynamic_pointer_cast<const Relation>(element));
       break;
     default:
       throw HootException("Unknown element type");

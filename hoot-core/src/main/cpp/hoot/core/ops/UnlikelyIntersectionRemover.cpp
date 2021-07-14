@@ -245,10 +245,10 @@ void UnlikelyIntersectionRemover::_splitIntersection(long intersectingNode,
   }
   LOG_VART(oldNode->getElementId());
   // create a copy of the intersecting node
-  NodePtr newNode(
-    new Node(
+  NodePtr newNode =
+    std::make_shared<Node>(
       oldNode->getStatus(), _result->createNextNodeId(), oldNode->toCoordinate(),
-      oldNode->getCircularError()));
+      oldNode->getCircularError());
   newNode->setTags(oldNode->getTags());
   LOG_VART(newNode->getElementId());
   _result->addNode(newNode);

@@ -63,7 +63,7 @@ namespace hoot
 std::shared_ptr<OGRSpatialReference> OsmMap::_wgs84;
 
 OsmMap::OsmMap() :
-_idSwap(new IdSwap())
+_idSwap(std::make_shared<IdSwap>())
 {
   if (!_wgs84)
   {
@@ -92,7 +92,7 @@ OsmMap::OsmMap(const OsmMapPtr& map)
 }
 
 OsmMap::OsmMap(const std::shared_ptr<OGRSpatialReference>& srs) :
-_idSwap(new IdSwap())
+_idSwap(std::make_shared<IdSwap>())
 {
   setIdGenerator(IdGenerator::getInstance());
   _index.reset(new OsmMapIndex(*this));
@@ -173,7 +173,7 @@ void OsmMap::append(const ConstOsmMapPtr& appendFromMap, const bool throwOutDupe
 
     if (appendElement)
     {
-      NodePtr n = NodePtr(new Node(*node));
+      NodePtr n = std::make_shared<Node>(*node);
       LOG_TRACE("Appending: " << n->getElementId() << "...");
       addNode(n);
       _numNodesAppended++;
@@ -212,7 +212,7 @@ void OsmMap::append(const ConstOsmMapPtr& appendFromMap, const bool throwOutDupe
 
     if (appendElement)
     {
-      WayPtr w = WayPtr(new Way(*way));
+      WayPtr w = std::make_shared<Way>(*way);
       LOG_TRACE("Appending: " << w->getElementId() << "...");
       addWay(w);
       _numWaysAppended++;
@@ -251,7 +251,7 @@ void OsmMap::append(const ConstOsmMapPtr& appendFromMap, const bool throwOutDupe
 
     if (appendElement)
     {
-      RelationPtr r = RelationPtr(new Relation(*relation));
+      RelationPtr r = std::make_shared<Relation>(*relation);
       LOG_TRACE("Appending: " << r->getElementId() << "...");
       addRelation(r);
       _numRelationsAppended++;
@@ -407,28 +407,28 @@ void OsmMap::_copy(const ConstOsmMapPtr& from)
   const RelationMap& allRelations = from->getRelations();
   for (RelationMap::const_iterator it = allRelations.begin(); it != allRelations.end(); ++it)
   {
-    RelationPtr r = RelationPtr(new Relation(*(it->second)));
+    RelationPtr r = std::make_shared<Relation>(*(it->second));
     r->registerListener(_index.get());
     _relations[it->first] = r;
-    // no need to add it to the index b/c the index is created in a lazy fashion.
+    // No need to add it to the index, b/c the index is created in a lazy fashion.
     i++;
   }
 
   WayMap::const_iterator it = from->_ways.begin();
   while (it != from->_ways.end())
   {
-    WayPtr w(new Way(*(it->second)));
+    WayPtr w = std::make_shared<Way>(*(it->second));
     w->registerListener(_index.get());
     _ways[it->first] = w;
-    // no need to add it to the index b/c the index is created in a lazy fashion.
+    // No need to add it to the index, b/c the index is created in a lazy fashion.
     ++it;
   }
 
   NodeMap::const_iterator itn = from->_nodes.begin();
   while (itn != from->_nodes.end())
   {
-    _nodes[itn->first] = NodePtr(new Node(*itn->second));
-    // no need to add it to the index b/c the index is created in a lazy fashion.
+    _nodes[itn->first] = std::make_shared<Node>(*itn->second);
+    // No need to add it to the index, b/c the index is created in a lazy fashion.
     ++itn;
   }
 

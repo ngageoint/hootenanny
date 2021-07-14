@@ -192,9 +192,8 @@ ElementId ElementMergerJs::_getMergeTargetFeatureId(ConstOsmMapPtr map)
 {
   const long numMergeTargets =
     (long)FilteredVisitor::getStat(
-      ElementCriterionPtr(new TagKeyCriterion(MetadataTags::HootMergeTarget())),
-      ConstElementVisitorPtr(new ElementCountVisitor()),
-      map);
+      std::make_shared<TagKeyCriterion>(MetadataTags::HootMergeTarget()),
+      std::make_shared<ElementCountVisitor>(), map);
   LOG_VART(numMergeTargets);
   if (numMergeTargets != 1)
   {

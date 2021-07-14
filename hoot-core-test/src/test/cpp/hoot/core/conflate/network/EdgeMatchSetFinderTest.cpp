@@ -62,7 +62,7 @@ public:
   void writeDebugMap(OsmMapPtr map, int testNumber)
   {
     FileUtils::makeDir("tmp");
-    OsmMapPtr copy(new OsmMap(map));
+    OsmMapPtr copy = std::make_shared<OsmMap>(map);
 
     MapProjector::projectToWgs84(copy);
     conf().set(ConfigOptions().getWriterIncludeDebugTagsKey(), true);

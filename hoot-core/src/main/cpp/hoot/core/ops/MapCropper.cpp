@@ -484,7 +484,7 @@ void MapCropper::_cropWay(const OsmMapPtr& map, long wid)
   }
   LOG_VART(GeometryUtils::geometryTypeIdToString(g));
 
-  std::shared_ptr<FindNodesInWayFactory> nodeFactory(new FindNodesInWayFactory(way));
+  std::shared_ptr<FindNodesInWayFactory> nodeFactory = std::make_shared<FindNodesInWayFactory>(way);
   GeometryToElementConverter gc(map);
   gc.setNodeFactory(nodeFactory);
   ElementPtr e = gc.convertGeometryToElement(g.get(), way->getStatus(), way->getCircularError());

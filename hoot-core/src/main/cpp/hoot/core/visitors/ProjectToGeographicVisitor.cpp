@@ -54,8 +54,10 @@ ProjectToGeographicVisitor::~ProjectToGeographicVisitor()
 
 void ProjectToGeographicVisitor::initialize(const std::shared_ptr<OGRSpatialReference>& projection)
 {
-  _transform = OGRCreateCoordinateTransformation(projection.get(), MapProjector::createWgs84Projection().get());
-  _rcf = std::shared_ptr<ReprojectCoordinateFilter>(new ReprojectCoordinateFilter(_transform));
+  _transform =
+    OGRCreateCoordinateTransformation(
+      projection.get(), MapProjector::createWgs84Projection().get());
+  _rcf = std::make_shared<ReprojectCoordinateFilter>(_transform);
 }
 
 void ProjectToGeographicVisitor::visit(const std::shared_ptr<Element>& e)

@@ -206,10 +206,11 @@ std::shared_ptr<ElementInputStream> MultiaryIngester::_getFilteredNewInputStream
     std::dynamic_pointer_cast<ElementInputStream>(newInputReader);
 
   //filter data down to POIs only, translate each element, and assign it a unique hash id
-  std::shared_ptr<PoiCriterion> elementCriterion(new PoiCriterion());
+  std::shared_ptr<PoiCriterion> elementCriterion = std::make_shared<PoiCriterion>();
   QList<ElementVisitorPtr> visitors;
 
-  std::shared_ptr<SchemaTranslationVisitor> translationVisitor(new SchemaTranslationVisitor());
+  std::shared_ptr<SchemaTranslationVisitor> translationVisitor =
+    std::make_shared<SchemaTranslationVisitor>();
   // I think we always want to be going to OSM here unless otherwise specified (or maybe
   // regardless if its specified), but that should be verified.
   QString translationDirection =
@@ -225,12 +226,11 @@ std::shared_ptr<ElementInputStream> MultiaryIngester::_getFilteredNewInputStream
     conf().getString(ConfigOptions::getSchemaTranslationScriptKey()));
 
   visitors.append(translationVisitor);
-  std::shared_ptr<MultiaryPoiHashVisitor> hashVis(new MultiaryPoiHashVisitor());
+  std::shared_ptr<MultiaryPoiHashVisitor> hashVis = std::make_shared<MultiaryPoiHashVisitor>();
   hashVis->setIncludeCircularError(true);
   visitors.append(hashVis);
-  std::shared_ptr<ElementInputStream> filteredNewInputStream(
-    new ElementCriterionVisitorInputStream(inputStream, elementCriterion, visitors));
-  return filteredNewInputStream;
+  return
+    std::make_shared<ElementCriterionVisitorInputStream>(inputStream, elementCriterion, visitors);
 }
 
 void MultiaryIngester::_writeNewReferenceData(const std::shared_ptr<ElementInputStream>& filteredNewInputStream,
@@ -334,10 +334,10 @@ std::shared_ptr<QTemporaryFile> MultiaryIngester::_deriveAndWriteChangesToChange
   //the element payload json for writing the change to the database in the next step, write out
   //a second changeset with the payload in xml; this spark changeset writer will write the
   //element payload as xml for db writing
-  std::shared_ptr<QTemporaryFile> tmpChangeset(
-    new QTemporaryFile(
+  std::shared_ptr<QTemporaryFile> tmpChangeset =
+    std::make_shared<QTemporaryFile>(
       ConfigOptions().getApidbBulkInserterTempFileDir() +
-      "/multiary-ingest-changeset-temp-XXXXXX.mic"));
+      "/multiary-ingest-changeset-temp-XXXXXX.mic");
   //for debugging only
   //tmpChangeset->setAutoRemove(false);
   if (!tmpChangeset->open())

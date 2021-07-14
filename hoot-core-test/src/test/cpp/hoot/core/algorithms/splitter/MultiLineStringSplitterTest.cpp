@@ -113,8 +113,10 @@ public:
 
     Coordinate w1c[] = { Coordinate(0, 0), Coordinate(100, 0), Coordinate::getNull() };
     WayPtr way1 = TestUtils::createWay(map, w1c);
-    RelationPtr relation(new Relation(way1->getStatus(), map->createNextRelationId(),
-      way1->getCircularError(), MetadataTags::RelationMultilineString()));
+    RelationPtr relation =
+      std::make_shared<Relation>(
+      way1->getStatus(), map->createNextRelationId(), way1->getCircularError(),
+      MetadataTags::RelationMultilineString());
     relation->addElement("", way1->getElementId());
     map->addElement(relation);
 

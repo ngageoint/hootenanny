@@ -311,7 +311,8 @@ std::shared_ptr<ElementInputStream> ImplicitTagRawRulesDeriver::_getInputStream(
   //"none" allows for bypassing translation for an input; e.g. OSM data
   if (translationScript.toLower() != "none")
   {
-    std::shared_ptr<SchemaTranslationVisitor> translationVisitor(new SchemaTranslationVisitor());
+    std::shared_ptr<SchemaTranslationVisitor> translationVisitor =
+      std::make_shared<SchemaTranslationVisitor>();
 
     // I think we always want to be going to OSM here unless otherwise specified (or maybe
     // regardless if its specified), but that should be verified.

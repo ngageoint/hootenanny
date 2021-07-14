@@ -87,7 +87,8 @@ public:
     matchCmd.setOp(MultiaryReviewCommand::Match);
     matchCmd.addElementHash(pMap->getElement(ElementType::Node, -1));
     matchCmd.addElementHash(pMap->getElement(ElementType::Node, -2));
-    NodePtr pMatchNode(new Node(Status::Unknown1, -1, geos::geom::Coordinate(-3.0, 2.0), 15.0));
+    NodePtr pMatchNode =
+      std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(-3.0, 2.0), 15.0);
     pMatchNode->getTags().appendValue("name", "James Bar");
     pMatchNode->getTags().appendValue("amenity", "pub");
     matchCmd.setFinalElement(pMatchNode);
@@ -100,7 +101,8 @@ public:
     // Modify
     modifyCmd.setOp(MultiaryReviewCommand::Modify);
     modifyCmd.addElementHash(pMap->getElement(ElementType::Node, -4));
-    NodePtr pModNode(new Node(Status::Unknown1, -4, geos::geom::Coordinate(-3.0, 2.1), 15.0));
+    NodePtr pModNode =
+      std::make_shared<Node>(Status::Unknown1, -4, geos::geom::Coordinate(-3.0, 2.1), 15.0);
     pModNode->getTags().appendValue("name", "James\\'s Town");
     pModNode->getTags().appendValue("place", "locality");
     modifyCmd.setFinalElement(pModNode);

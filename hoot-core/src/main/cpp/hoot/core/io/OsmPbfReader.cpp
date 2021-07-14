@@ -514,7 +514,7 @@ void OsmPbfReader::_loadNode(const hoot::pb::Node& n)
   double x = _convertLon(n.lon());
   double y = _convertLat(n.lat());
 
-  std::shared_ptr<hoot::Node> newNode(new hoot::Node(_status, newId, x, y, _defaultCircularError));
+  std::shared_ptr<hoot::Node> newNode = Node::newSp(_status, newId, x, y, _defaultCircularError);
 
   for (int i = 0; i < n.keys().size() && i < n.vals().size(); i++)
   {
@@ -661,8 +661,8 @@ void OsmPbfReader::_loadRelation(const hoot::pb::Relation& r)
 {
   long newId = _createRelationId(r.id());
 
-  std::shared_ptr<hoot::Relation> newRelation(
-    new hoot::Relation(_status, newId, _defaultCircularError));
+  std::shared_ptr<hoot::Relation> newRelation =
+    std::make_shared<Relation>(_status, newId, _defaultCircularError);
 
   if (r.roles_sid_size() != r.memids_size() || r.roles_sid_size() != r.types_size())
   {
@@ -813,7 +813,7 @@ void OsmPbfReader::_loadWay(const hoot::pb::Way& w)
 {
   long newId = _createWayId(w.id());
 
-  std::shared_ptr<hoot::Way> newWay(new hoot::Way(_status, newId, _defaultCircularError));
+  std::shared_ptr<hoot::Way> newWay = std::make_shared<Way>(_status, newId, _defaultCircularError);
 
   // if the cached envelope is valid
   if (w.has_bbox())
@@ -1365,13 +1365,13 @@ std::shared_ptr<Element> OsmPbfReader::readNextElement()
   }
   else if (_partialWaysRead < int(_map->getWays().size()))
   {
-    element.reset(new Way(*_waysItr->second.get()));
+    element = std::make_shared<Way>(*_waysItr->second.get());
     ++_waysItr;
     _partialWaysRead++;
   }
   else if (_partialRelationsRead < int(_map->getRelations().size()))
   {
-    element.reset(new Relation(*_relationsItr->second.get()));
+    element = std::make_shared<Relation>(*_relationsItr->second.get());
     ++_relationsItr;
     _partialRelationsRead++;
   }

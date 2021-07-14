@@ -227,14 +227,12 @@ private:
     // "double PoiPolygonMatch::_calculateNameScore"
 
     // found experimentally when doing building name comparisons
-    double score = NameExtractor(StringDistancePtr(new ToEnglishTranslateStringDistance(
-                                 StringDistancePtr(new MeanWordSetDistance(
-                                 StringDistancePtr(new LevenshteinDistance(1.45)))))))
-                   .extract(e1, e2);
-
-    return score;
+    return
+      NameExtractor(
+        std::make_shared<ToEnglishTranslateStringDistance>(
+          std::make_shared<MeanWordSetDistance>(std::make_shared<LevenshteinDistance>(1.45))))
+        .extract(e1, e2);
   }
-
 };
 
 

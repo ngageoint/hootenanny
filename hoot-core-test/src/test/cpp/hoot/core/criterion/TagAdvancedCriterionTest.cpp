@@ -82,7 +82,8 @@ public:
     TagAdvancedCriterion uut(
       "{ \"must\": [ { \"tag\": \"amenity=restaurant\" }, { \"tag\": \"poi=yes\" } ] }");
 
-    NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
+    NodePtr node =
+      std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
 
     node->getTags().clear();
     node->getTags().set("amenity", "restaurant");
@@ -109,7 +110,8 @@ public:
     TagAdvancedCriterion uut(
       "{ \"should\": [ { \"tag\": \"amenity=restaurant\" }, { \"tag\": \"poi=yes\" } ] }");
 
-    NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
+    NodePtr node =
+      std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
 
     node->getTags().clear();
     node->getTags().set("amenity", "restaurant");
@@ -136,7 +138,8 @@ public:
     TagAdvancedCriterion uut(
       "{ \"must_not\": [ { \"tag\": \"amenity=restaurant\" }, { \"tag\": \"poi=yes\" } ] }");
 
-    NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
+    NodePtr node =
+      std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
 
     node->getTags().clear();
     node->getTags().set("amenity", "restaurant");
@@ -160,7 +163,8 @@ public:
   {
     TagAdvancedCriterion uut("{ \"should\": [ { \"tag\": \"*=restaurant\" } ] }");
 
-    NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
+    NodePtr node =
+      std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
 
     node->getTags().clear();
     node->getTags().set("amenity", "restaurant");
@@ -184,7 +188,8 @@ public:
   {
     TagAdvancedCriterion uut("{ \"should\": [ { \"tag\": \"amenity*=restaurant\" } ] }");
 
-    NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
+    NodePtr node =
+      std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
 
     node->getTags().clear();
     node->getTags().set("amenity", "restaurant");
@@ -212,7 +217,8 @@ public:
   {
     TagAdvancedCriterion uut("{ \"should\": [ { \"tag\": \"*amenity=restaurant\" } ] }");
 
-    NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
+    NodePtr node =
+      std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
 
     node->getTags().clear();
     node->getTags().set("amenity", "restaurant");
@@ -240,7 +246,8 @@ public:
   {
     TagAdvancedCriterion uut("{ \"should\": [ { \"tag\": \"*amenity*=restaurant\" } ] }");
 
-    NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
+    NodePtr node =
+      std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
 
     node->getTags().clear();
     node->getTags().set("amenity", "restaurant");
@@ -268,7 +275,8 @@ public:
   {
     TagAdvancedCriterion uut("{ \"should\": [ { \"tag\": \"amenity=*\" } ] }");
 
-    NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
+    NodePtr node =
+      std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
 
     node->getTags().clear();
     node->getTags().set("amenity", "restaurant");
@@ -292,7 +300,8 @@ public:
   {
     TagAdvancedCriterion uut("{ \"should\": [ { \"tag\": \"amenity=water*\" } ] }");
 
-    NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
+    NodePtr node =
+      std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
 
     node->getTags().clear();
     node->getTags().set("amenity", "water");
@@ -320,7 +329,8 @@ public:
   {
     TagAdvancedCriterion uut("{ \"should\": [ { \"tag\": \"amenity=*water\" } ] }");
 
-    NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
+    NodePtr node =
+      std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
 
     node->getTags().clear();
     node->getTags().set("amenity", "water");
@@ -348,7 +358,8 @@ public:
   {
     TagAdvancedCriterion uut("{ \"should\": [ { \"tag\": \"amenity=*water*\" } ] }");
 
-    NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
+    NodePtr node =
+      std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
 
     node->getTags().clear();
     node->getTags().set("amenity", "water");
@@ -375,7 +386,8 @@ public:
   void runSimilarityTest()
   {
     std::shared_ptr<TagAdvancedCriterion> uut;
-    NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
+    NodePtr node =
+      std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
 
     node->getTags().clear();
     // amenity=community_centre has a similarity score of 0.7 with amenity=arts_centre as defined
@@ -414,7 +426,8 @@ public:
   void runAliasTest()
   {
     std::shared_ptr<TagAdvancedCriterion> uut;
-    NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
+    NodePtr node =
+      std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
 
     node->getTags().clear();
     // amenity=ev_charging is an alias for amenity=charging_station, as defined in the hoot schema.
@@ -457,7 +470,8 @@ public:
   void runChildTest()
   {
     std::shared_ptr<TagAdvancedCriterion> uut;
-    NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
+    NodePtr node =
+      std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
 
     node->getTags().clear();
     // surface=pebblestone is a child of surface=gravel.
@@ -498,7 +512,8 @@ public:
   void runAncestorTest()
   {
     std::shared_ptr<TagAdvancedCriterion> uut;
-    NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
+    NodePtr node =
+      std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
 
     node->getTags().clear();
     // highway=road is an ancestor child of highway=primary.
@@ -539,7 +554,8 @@ public:
   void runAssociatedWithTest()
   {
     std::shared_ptr<TagAdvancedCriterion> uut;
-    NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
+    NodePtr node =
+      std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
 
     node->getTags().clear();
     // roof:height is associated with building:part=yes.  The value used is irrelevant.
@@ -605,7 +621,8 @@ public:
   void runCategoryTest()
   {
     std::shared_ptr<TagAdvancedCriterion> uut;
-    NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
+    NodePtr node =
+      std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
 
     node->getTags().clear();
     node->getTags().set("highway", "road");
@@ -620,7 +637,8 @@ public:
   void runContradictoryFilterTest()
   {
     std::shared_ptr<TagAdvancedCriterion> uut;
-    NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
+    NodePtr node =
+      std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
 
     node->getTags().clear();
     node->getTags().set("amenity", "restaurant");
@@ -643,7 +661,8 @@ public:
   void runCaseSensitivityTest()
   {
     std::shared_ptr<TagAdvancedCriterion> uut;
-    NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
+    NodePtr node =
+      std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
 
     node->getTags().clear();
     node->getTags().set("name", "Starbucks");
@@ -671,7 +690,8 @@ public:
       QString("\"must_not\": [ { \"tag\": \"tourism=hotel\" }, { \"tag\": \"building=yes\" } ], ") +
       QString("\"should\": [ { \"tag\": \"cuisine=italian\" } ] }"));
 
-    NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
+    NodePtr node =
+      std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
 
     node->getTags().clear();
     node->getTags().set("amenity", "restaurant");
@@ -712,7 +732,8 @@ public:
   void runFileTest()
   {
     TagAdvancedCriterion uut(_inputPath + "TagAdvancedCriterionTest.json");
-    NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
+    NodePtr node =
+      std::make_shared<Node>(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0);
 
     node->getTags().clear();
     node->getTags().set("amenity", "restaurant");

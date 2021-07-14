@@ -47,7 +47,7 @@ void MultipleCriterionConsumerVisitor::addCriterion(const ElementCriterionPtr& c
   LOG_VART(crit.get());
   if (_negateCriteria)
   {
-    _criteria.push_back(ElementCriterionPtr(new NotCriterion(crit)));
+    _criteria.push_back(std::make_shared<NotCriterion>(crit));
   }
   else
   {

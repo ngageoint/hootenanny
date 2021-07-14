@@ -118,7 +118,7 @@ QString OsmXmlWriter::removeInvalidCharacters(const QString& s)
 
 void OsmXmlWriter::open(const QString& url)
 {
-  std::shared_ptr<QFile> f(new QFile());
+  std::shared_ptr<QFile> f = std::make_shared<QFile>();
   f->setFileName(url);
   _fp = f;
   if (!_fp->open(QIODevice::WriteOnly | QIODevice::Text))
@@ -153,8 +153,8 @@ QString OsmXmlWriter::toString(const ConstOsmMapPtr& map, const bool formatXml)
 
   OsmXmlWriter writer;
   writer.setFormatXml(formatXml);
-  // this will be deleted by the _fp std::shared_ptr
-  std::shared_ptr<QBuffer> buf(new QBuffer());
+  // This will be deleted by the _fp std::shared_ptr.
+  std::shared_ptr<QBuffer> buf = std::make_shared<QBuffer>();
   writer._fp = buf;
   if (!writer._fp->open(QIODevice::WriteOnly | QIODevice::Text))
   {

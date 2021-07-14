@@ -247,12 +247,12 @@ private:
 };
 
 OgrReader::OgrReader() :
-_d(new OgrReaderInternal())
+_d(std::make_shared<OgrReaderInternal>())
 {
 }
 
 OgrReader::OgrReader(const QString& path) :
-_d(new OgrReaderInternal())
+_d(std::make_shared<OgrReaderInternal>())
 {
   if (isSupported(path) == true)
   {
@@ -774,7 +774,7 @@ void OgrReaderInternal::_addLineString(const OGRLineString* ls, Tags& t)
 {
   Meters circularError = _parseCircularError(t);
 
-  WayPtr way(new Way(_status, _map->createNextWayId(), circularError));
+  WayPtr way = std::make_shared<Way>(_status, _map->createNextWayId(), circularError);
 
   way->setTags(t);
   for (int i = 0; i < ls->getNumPoints(); i++)
@@ -800,8 +800,9 @@ void OgrReaderInternal::_addMultiPolygon(OGRMultiPolygon* mp, Tags& t)
   }
   else
   {
-    RelationPtr r(new Relation(_status, _map->createNextRelationId(), circularError,
-      MetadataTags::RelationMultiPolygon()));
+    RelationPtr r =
+      std::make_shared<Relation>(
+        _status, _map->createNextRelationId(), circularError, MetadataTags::RelationMultiPolygon());
     r->setTags(t);
 
     for (int i = 0; i < nParts; i++)
@@ -875,8 +876,9 @@ void OgrReaderInternal::_addPolygon(OGRPolygon* p, Tags& t)
   }
   else
   {
-    RelationPtr r(new Relation(_status, _map->createNextRelationId(), circularError,
-      MetadataTags::RelationMultiPolygon()));
+    RelationPtr r =
+      std::make_shared<Relation>(
+        _status, _map->createNextRelationId(), circularError, MetadataTags::RelationMultiPolygon());
     if (areaCrit.isSatisfied(t, ElementType::Relation) == false)
     {
       t.setArea(true);
@@ -930,7 +932,7 @@ void OgrReaderInternal::close()
 
 WayPtr OgrReaderInternal::_createWay(OGRLinearRing* lr, Meters circularError)
 {
-  WayPtr way(new Way(_status, _map->createNextWayId(), circularError));
+  WayPtr way = std::make_shared<Way>(_status, _map->createNextWayId(), circularError);
 
   // make sure the ring is closed
   lr->closeRings();
@@ -1385,12 +1387,12 @@ ElementPtr OgrReaderInternal::readNextElement()
   }
   else if (_waysItr != _map->getWays().end())
   {
-    returnElement.reset(new Way(*_waysItr->second.get()));
+    returnElement = std::make_shared<Way>(*_waysItr->second.get());
     ++_waysItr;
   }
   else
   {
-    returnElement.reset(new Relation(*_relationsItr->second.get()));
+    returnElement = std::make_shared<Relation>(*_relationsItr->second.get());
     ++_relationsItr;
   }
 

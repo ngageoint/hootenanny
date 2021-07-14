@@ -91,7 +91,7 @@ OsmMapPtr NodeDensityTaskGridWriter::_tilesToOsmMap(
 {
   OsmMapPtr boundaryMap = std::make_shared<OsmMap>();
   // This ensures the ways stay in the same order as the task IDs when the map is written out.
-  boundaryMap->setIdGenerator(std::shared_ptr<IdGenerator>(new PositiveIdGenerator));
+  boundaryMap->setIdGenerator(std::make_shared<PositiveIdGenerator>());
   int bboxCtr = 1;
   for (size_t tx = 0; tx < tiles.size(); tx++)
   {

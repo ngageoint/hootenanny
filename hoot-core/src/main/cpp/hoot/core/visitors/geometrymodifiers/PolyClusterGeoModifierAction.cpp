@@ -198,7 +198,7 @@ void PolyClusterGeoModifierAction::_generateClusters()
   _distanceSquared = _distance * _distance;
 
   // build the ClosePointHash
-  _pClosePointHash = std::shared_ptr<ClosePointHash>(new ClosePointHash(_distance));
+  _pClosePointHash = std::make_shared<ClosePointHash>(_distance);
 
   // gather coordinates and build lookups
   foreach (std::shared_ptr<Polygon> poly, _polys)

@@ -46,8 +46,8 @@ namespace Tgs
 {
 
 HilbertRTree::HilbertRTree(const std::shared_ptr<PageStore>& ps, int dimensions) :
-  RStarTree(ps, dimensions),
-  _hilbertCurve(new HilbertCurve(dimensions, 8))
+RStarTree(ps, dimensions),
+_hilbertCurve(std::make_shared<HilbertCurve>(dimensions, 8))
 {
 }
 

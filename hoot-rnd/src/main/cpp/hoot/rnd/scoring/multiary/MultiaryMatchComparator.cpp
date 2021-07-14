@@ -68,8 +68,8 @@ MultiaryMatchComparator::MultiaryMatchComparator()
   _tagErrors = true;
 }
 
-void MultiaryMatchComparator::_addToConfusionTable(const ConfusionTable& x, ConfusionTable& addTo)
-  const
+void MultiaryMatchComparator::_addToConfusionTable(
+  const ConfusionTable& x, ConfusionTable& addTo) const
 {
   bool foundOne = false;
   foreach (int i, x.keys())
@@ -214,7 +214,7 @@ void MultiaryMatchComparator::_clearCache()
 double MultiaryMatchComparator::evaluateMatches(const ConstOsmMapPtr& in,
   const OsmMapPtr& conflated)
 {
-  OsmMapPtr copyIn(new OsmMap(in));
+  OsmMapPtr copyIn = std::make_shared<OsmMap>(in);
   MultiaryMatchTrainingValidator().apply(copyIn);
 
   _clearCache();
@@ -224,15 +224,9 @@ double MultiaryMatchComparator::evaluateMatches(const ConstOsmMapPtr& in,
   _findActualMatches(conflated);
   _findActualReviews(conflated);
 
-//  LOG_VAR(_actualMatchGroups);
-//  LOG_VAR(_expectedMatchGroups);
-//  LOG_VAR(_actualReviews);
-//  LOG_VAR(_expectedReviews);
-
   // go through all the IDs in the in data set.
   foreach (QString id, _expectedIdToEid.keys())
   {
-//    LOG_VAR(id);
     assert(_actualMatchGroups.contains(id));
     assert(_expectedMatchGroups.contains(id));
 
@@ -245,12 +239,6 @@ double MultiaryMatchComparator::evaluateMatches(const ConstOsmMapPtr& in,
     expectedMatchSet -= id;
     actualReviewSet -= id;
     expectedReviewSet -= id;
-
-//    LOG_VAR(id);
-//    LOG_VAR(actualMatchSet);
-//    LOG_VAR(expectedMatchSet);
-//    LOG_VAR(actualReviewSet);
-//    LOG_VAR(expectedReviewSet);
 
     // confusion matrix contributions. Variables are named as: actualExpected
 
@@ -370,8 +358,7 @@ void MultiaryMatchComparator::_findActualMatches(const ConstOsmMapPtr& conflated
         }
       }
 
-      IdClusterPtr cluster(new IdCluster());
-
+      IdClusterPtr cluster = std::make_shared<IdCluster>();
       foreach (QString id, ids)
       {
         if (_matchGroups.contains(id))
@@ -459,7 +446,7 @@ void MultiaryMatchComparator::_findExpectedMatches(const ConstOsmMapPtr& in)
         _idToEid[t[id]] = e->getElementId();
         if (_matchGroups.contains(t[id]) == false)
         {
-          _matchGroups.insert(t[id], IdClusterPtr(new IdCluster()));
+          _matchGroups.insert(t[id], std::make_shared<IdCluster>());
         }
         _matchGroups[t[id]]->insert(t[id]);
       }
@@ -480,7 +467,7 @@ void MultiaryMatchComparator::_findExpectedMatches(const ConstOsmMapPtr& in)
         {
           if (_matchGroups.contains(t[match]) == false)
           {
-            _matchGroups.insert(t[match], IdClusterPtr(new IdCluster()));
+            _matchGroups.insert(t[match], std::make_shared<IdCluster>());
           }
           // copy all the matches in t[id] into t[match]
           *_matchGroups[t[match]] += *_matchGroups[t[id]];
@@ -713,10 +700,10 @@ void MultiaryMatchComparator::_setElementWrongCount(const ConstOsmMapPtr& map,
 {
   _elementWrongCounts[elementType] =
     (int)FilteredVisitor::getStat(
-      ElementCriterionPtr(new ChainCriterion(
-      ElementCriterionPtr(new ElementTypeCriterion(elementType)),
-      ElementCriterionPtr(new TagKeyCriterion(MetadataTags::HootWrong())))),
-      ConstElementVisitorPtr(new ElementCountVisitor()),
+      std::make_shared<ChainCriterion>(
+        std::make_shared<ElementTypeCriterion>(elementType),
+        std::make_shared<TagKeyCriterion>(MetadataTags::HootWrong())),
+      std::make_shared<ElementCountVisitor>(),
       map);
 }
 

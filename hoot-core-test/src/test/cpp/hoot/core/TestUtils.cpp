@@ -122,7 +122,7 @@ NodePtr TestUtils::createNode(
   const OsmMapPtr& map, const QString& note, const Status& status, const double x, const double y,
   const Meters circularError, const Tags& tags)
 {
-  NodePtr node(new Node(status, map->createNextNodeId(), x, y, circularError));
+  NodePtr node = std::make_shared<Node>(status, map->createNextNodeId(), x, y, circularError);
   map->addNode(node);
   node->getTags().add(tags);
   if (!note.isEmpty())
@@ -136,12 +136,12 @@ WayPtr TestUtils::createWay(
   const OsmMapPtr& map, const geos::geom::Coordinate c[], const QString& note, const Status& s,
   const Meters circularError, const Tags& tags)
 {
-  WayPtr way(new Way(s, map->createNextWayId(), circularError));
+  WayPtr way = std::make_shared<Way>(s, map->createNextWayId(), circularError);
   if (c != nullptr)
   {
     for (size_t i = 0; c[i].isNull() == false; i++)
     {
-      NodePtr n(new Node(s, map->createNextNodeId(), c[i], circularError));
+      NodePtr n = std::make_shared<Node>(s, map->createNextNodeId(), c[i], circularError);
       map->addNode(n);
       way->addNode(n->getId());
     }
@@ -159,7 +159,7 @@ WayPtr TestUtils::createWay(
   const OsmMapPtr& map, const QList<NodePtr>& nodes, const QString& note, const Status& status,
   const Meters circularError, const Tags& tags)
 {
-  WayPtr way(new Way(status, map->createNextWayId(), circularError));
+  WayPtr way = std::make_shared<Way>(status, map->createNextWayId(), circularError);
   foreach (NodePtr node, nodes)
   {
     map->addNode(node);
@@ -178,7 +178,7 @@ WayPtr TestUtils::createWay(
   const OsmMapPtr& map, const QList<ElementId>& nodeIds, const QString& note, const Status& status,
   const Meters circularError, const Tags& tags)
 {
-  WayPtr way(new Way(status, map->createNextWayId(), circularError));
+  WayPtr way = std::make_shared<Way>(status, map->createNextWayId(), circularError);
   foreach (ElementId nodeId, nodeIds)
   {
     if (!map->containsNode(nodeId.getId()))
@@ -200,7 +200,8 @@ RelationPtr TestUtils::createRelation(
   const OsmMapPtr& map, const QList<ElementPtr>& elements, const QString& note,
   const Status& status, const Meters circularError, const Tags& tags)
 {
-  RelationPtr relation(new Relation(status, map->createNextRelationId(), circularError));
+  RelationPtr relation =
+    std::make_shared<Relation>(status, map->createNextRelationId(), circularError);
   foreach (ElementPtr element, elements)
   {
     map->addElement(element);
@@ -219,7 +220,8 @@ RelationPtr TestUtils::createRelation(
   const OsmMapPtr& map, const QList<ElementId>& elementIds, const QString& note,
   const Status& status, const Meters circularError, const Tags& tags)
 {
-  RelationPtr relation(new Relation(status, map->createNextRelationId(), circularError));
+  RelationPtr relation =
+    std::make_shared<Relation>(status, map->createNextRelationId(), circularError);
   foreach (ElementId elementId, elementIds)
   {
     if (!map->containsElement(elementId))

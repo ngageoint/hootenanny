@@ -583,8 +583,8 @@ deque<ConstWayPtr> RelationToMultiPolygonConverter::_orderWaysForRing(
     // if the ways are start to start or end to end
     if (w->getNodeId(0) == firstId || w->getLastNodeId() == lastId)
     {
-      // this way needs to be reversed, but clone it first so we don't change any source data
-      WayPtr cloned = WayPtr(new Way(*partials[i]));
+      // This way needs to be reversed, but clone it first so we don't change any source data.
+      WayPtr cloned = std::make_shared<Way>(*partials[i]);
       cloned->reverseOrder();
       w = cloned;
     }

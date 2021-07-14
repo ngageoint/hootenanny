@@ -150,7 +150,7 @@ void SublineStringMatcherJs::extractMatchingSublines(const FunctionCallbackInfo<
     set<ElementId> eids;
     eids.insert(e1->getElementId());
     eids.insert(e2->getElementId());
-    OsmMapPtr copiedMap(new OsmMap(m->getProjection()));
+    OsmMapPtr copiedMap = std::make_shared<OsmMap>(m->getProjection());
     CopyMapSubsetOp(m, eids).apply(copiedMap);
     LOG_VART(copiedMap->size());
     WaySublineMatchString copiedMatch(match, copiedMap);

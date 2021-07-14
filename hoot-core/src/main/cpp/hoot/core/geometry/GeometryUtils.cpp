@@ -481,32 +481,28 @@ OsmMapPtr GeometryUtils::createMapFromBoundsCollection(
 
 ElementId GeometryUtils::createBoundsInMap(const OsmMapPtr& map, const geos::geom::Envelope& bounds)
 {
-  NodePtr lowerLeft(
-    new Node(
-      Status::Unknown1,
-      map->createNextNodeId(),
-      geos::geom::Coordinate(bounds.getMinX(), bounds.getMinY())));
+  NodePtr lowerLeft =
+    std::make_shared<Node>(
+      Status::Unknown1, map->createNextNodeId(), geos::geom::Coordinate(bounds.getMinX(),
+      bounds.getMinY()));
   map->addNode(lowerLeft);
-  NodePtr upperRight(
-    new Node(
-      Status::Unknown1,
-      map->createNextNodeId(),
-      geos::geom::Coordinate(bounds.getMaxX(), bounds.getMaxY())));
+  NodePtr upperRight =
+    std::make_shared<Node>(
+      Status::Unknown1, map->createNextNodeId(), geos::geom::Coordinate(bounds.getMaxX(),
+      bounds.getMaxY()));
   map->addNode(upperRight);
-  NodePtr upperLeft(
-    new Node(
-      Status::Unknown1,
-      map->createNextNodeId(),
-      geos::geom::Coordinate(bounds.getMinX(), bounds.getMaxY())));
+  NodePtr upperLeft =
+    std::make_shared<Node>(
+      Status::Unknown1, map->createNextNodeId(), geos::geom::Coordinate(bounds.getMinX(),
+      bounds.getMaxY()));
   map->addNode(upperLeft);
-  NodePtr lowerRight(
-    new Node(
-      Status::Unknown1,
-      map->createNextNodeId(),
-      geos::geom::Coordinate(bounds.getMaxX(), bounds.getMinY())));
+  NodePtr lowerRight =
+    std::make_shared<Node>(
+      Status::Unknown1, map->createNextNodeId(), geos::geom::Coordinate(bounds.getMaxX(),
+      bounds.getMinY()));
   map->addNode(lowerRight);
 
-  WayPtr bbox(new Way(Status::Unknown1, map->createNextWayId()));
+  WayPtr bbox = std::make_shared<Way>(Status::Unknown1, map->createNextWayId());
   bbox->addNode(lowerLeft->getId());
   bbox->addNode(upperLeft->getId());
   bbox->addNode(upperRight->getId());
@@ -520,16 +516,15 @@ ElementId GeometryUtils::createBoundsInMap(const OsmMapPtr& map, const geos::geo
 OsmMapPtr GeometryUtils::createMapFromBounds(const std::shared_ptr<geos::geom::Polygon>& bounds)
 {
   OsmMapPtr boundaryMap = std::make_shared<OsmMap>();
-  WayPtr boundsWay(new Way(Status::Unknown1, boundaryMap->createNextWayId()));
+  WayPtr boundsWay = std::make_shared<Way>(Status::Unknown1, boundaryMap->createNextWayId());
   std::unique_ptr<geos::geom::CoordinateSequence> coords = bounds->getCoordinates();
   for (size_t i = 0; i < coords->getSize(); i++)
   {
     const geos::geom::Coordinate& coord = coords->getAt(i);
-    NodePtr node(
-      new Node(
-        Status::Unknown1,
-        boundaryMap->createNextNodeId(),
-        geos::geom::Coordinate(coord.x, coord.y)));
+    NodePtr node =
+      std::make_shared<Node>(
+        Status::Unknown1, boundaryMap->createNextNodeId(),
+        geos::geom::Coordinate(coord.x, coord.y));
     boundaryMap->addNode(node);
     boundsWay->addNode(node->getId());
   }

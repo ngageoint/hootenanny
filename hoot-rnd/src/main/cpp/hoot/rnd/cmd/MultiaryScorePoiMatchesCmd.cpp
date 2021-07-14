@@ -160,7 +160,7 @@ private:
     comparator.setTranslationScript(_translator);
 
     QString result;
-    OsmMapPtr copy(new OsmMap(map));
+    OsmMapPtr copy = std::make_shared<OsmMap>(map);
 
     // Apply any user specified operations.
     OpExecutor(ConfigOptions().getConflatePreOps()).apply(copy);

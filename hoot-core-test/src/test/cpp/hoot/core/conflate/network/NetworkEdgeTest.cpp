@@ -56,9 +56,9 @@ public:
     NetworkVertex::reset();
 
     // Make some nodes and Vertexes
-    NodePtr pN1(new Node(Status::Unknown1, -100, Coordinate(1.0, 1.0), 10.0));
-    NodePtr pN2(new Node(Status::Unknown1, -200, Coordinate(2.0, 2.0), 10.0));
-    NodePtr pN3(new Node(Status::Unknown1, -300, Coordinate(3.0, 3.0), 10.0));
+    NodePtr pN1 = std::make_shared<Node>(Status::Unknown1, -100, Coordinate(1.0, 1.0), 10.0);
+    NodePtr pN2 = std::make_shared<Node>(Status::Unknown1, -200, Coordinate(2.0, 2.0), 10.0);
+    NodePtr pN3 = std::make_shared<Node>(Status::Unknown1, -300, Coordinate(3.0, 3.0), 10.0);
     ConstNetworkVertexPtr pNV1(new NetworkVertex(pN1));
     ConstNetworkVertexPtr pNV2(new NetworkVertex(pN2));
     ConstNetworkVertexPtr pNV3(new NetworkVertex(pN3));

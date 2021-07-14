@@ -97,7 +97,7 @@ static OGRFieldType toOgrFieldType(QVariant::Type t)
 
 OgrWriter::OgrWriter():
 _elementCache(
-  new ElementCacheLRU(
+  std::make_shared<ElementCacheLRU>(
     ConfigOptions().getElementCacheSizeNode(),
     ConfigOptions().getElementCacheSizeWay(),
     ConfigOptions().getElementCacheSizeRelation())),
@@ -144,9 +144,7 @@ void OgrWriter::setConfiguration(const Settings& conf)
 void OgrWriter::setCacheCapacity(const unsigned long maxNodes, const unsigned long maxWays,
                                  const unsigned long maxRelations)
 {
-  _elementCache.reset();
-  _elementCache =
-    std::shared_ptr<ElementCache>(new ElementCacheLRU(maxNodes, maxWays, maxRelations));
+  _elementCache = std::make_shared<ElementCacheLRU>(maxNodes, maxWays, maxRelations);
 }
 
 void OgrWriter::_strictError(const QString& warning) const

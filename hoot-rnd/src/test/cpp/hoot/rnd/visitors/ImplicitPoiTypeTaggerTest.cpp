@@ -169,7 +169,7 @@ public:
     writer.close();
 
     OsmMapPtr map = std::make_shared<OsmMap>();
-    NodePtr node(new Node(Status::Unknown1, 1, geos::geom::Coordinate(1, 1), 15.0));
+    NodePtr node = std::make_shared<Node>(Status::Unknown1, 1, geos::geom::Coordinate(1, 1), 15.0);
     //Even though this node has school in the name and could likely be a school, since it already
     //is tagged at a bank, we don't want to risk introducing a false positive tag...so don't add
     //amenity=school to it.
@@ -206,7 +206,7 @@ public:
     writer.close();
 
     OsmMapPtr map = std::make_shared<OsmMap>();
-    NodePtr node(new Node(Status::Unknown1, 1, geos::geom::Coordinate(1, 1), 15.0));
+    NodePtr node = std::make_shared<Node>(Status::Unknown1, 1, geos::geom::Coordinate(1, 1), 15.0);
     //This node has a more specific amenity tag than the one in the rules file, so the node should
     //keep the amenity tag it starts with.
     node->getTags()["name"] = "hall";
@@ -242,7 +242,7 @@ public:
     writer.close();
 
     OsmMapPtr map = std::make_shared<OsmMap>();
-    NodePtr node(new Node(Status::Unknown1, 1, geos::geom::Coordinate(1, 1), 15.0));
+    NodePtr node = std::make_shared<Node>(Status::Unknown1, 1, geos::geom::Coordinate(1, 1), 15.0);
     //The amenity tag referenced in the rules file is more specific than the one this node has, so
     //the node's amenity tag should be replaced by the one in the rules file.
     node->getTags()["name"] = "hall";

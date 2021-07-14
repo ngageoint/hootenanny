@@ -74,12 +74,23 @@ public:
    */
   static std::shared_ptr<Node> newSp(Status s, long id, double x, double y,
     Meters circularError = ElementData::CIRCULAR_ERROR_EMPTY);
-
   static std::shared_ptr<Node> newSp(Status s, long id, double x, double y, Meters circularError,
                                      long changeset, long version, quint64 timestamp,
                                      QString user = ElementData::USER_EMPTY,
                                      long uid = ElementData::UID_EMPTY,
                                      bool visible = ElementData::VISIBLE_EMPTY);
+
+  /**
+   * Determines if the coordinates from this node match with that of another given a configurable
+   * tolerance
+   *
+   * @param other the node to compare coordinates with
+   * @return true if the coordinates match; false otherwise
+   */
+  bool coordsMatch(const Node& other) const;
+
+  geos::geom::Coordinate toCoordinate() const
+  { return geos::geom::Coordinate(_nodeData.getX(), _nodeData.getY()); }
 
   /**
    * Clears all tags. However, unlike the other elements the x/y data and circular error aren't
@@ -88,7 +99,6 @@ public:
   void clear() override;
 
   Element* clone() const override { return new Node(*this); }
-
   /**
    * Clone this node as a shared pointer. At this time the allocated node will be allocated as
    * part of an object pool which should avoid some memory fragmentation and provide faster
@@ -102,20 +112,10 @@ public:
 
   geos::geom::Envelope* getEnvelope(
     const std::shared_ptr<const ElementProvider>& ep) const override;
-
   const geos::geom::Envelope& getEnvelopeInternal(
     const std::shared_ptr<const ElementProvider>& ep) const override;
 
-  double getX() const { return _nodeData.getX(); }
-  double getY() const { return _nodeData.getY(); }
-
-  void setX(double y);
-  void setY(double x);
-
   ElementType getElementType() const override { return ElementType(ElementType::Node); }
-
-  geos::geom::Coordinate toCoordinate() const
-  { return geos::geom::Coordinate(_nodeData.getX(), _nodeData.getY()); }
 
   QString toString() const override;
 
@@ -124,21 +124,17 @@ public:
    */
   void visitRo(const ElementProvider& map, ConstElementVisitor& visitor,
                const bool recursive = false) const override;
-
   /**
    * @see Element
    */
   void visitRw(ElementProvider& map, ConstElementVisitor& visitor,
                const bool recursive = false) override;
 
-  /**
-   * Determines if the coordinates from this node match with that of another given a configurable
-   * tolerance
-   *
-   * @param other the node to compare coordinates with
-   * @return true if the coordinates match; false otherwise
-   */
-  bool coordsMatch(const Node& other) const;
+  double getX() const { return _nodeData.getX(); }
+  double getY() const { return _nodeData.getY(); }
+
+  void setX(double y);
+  void setY(double x);
 
 private:
 

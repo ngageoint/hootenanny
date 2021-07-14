@@ -50,11 +50,7 @@ public:
   ~PoiPolygonPoiCriterion() = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
-
-  GeometryType getGeometryType() const override
-  { return GeometryType::Point; }
-
-  ElementCriterionPtr clone() override { return ElementCriterionPtr(new PoiPolygonPoiCriterion()); }
+  ElementCriterionPtr clone() override { return std::make_shared<PoiPolygonPoiCriterion>(); }
 
   QString getDescription() const override
   { return "Identifies POIs as defined by POI/Polygon Conflation"; }
@@ -63,6 +59,7 @@ public:
   QString toString() const override { return className(); }
 
   bool supportsSpecificConflation() const override { return true; }
+  GeometryType getGeometryType() const override { return GeometryType::Point; }
 
 private:
 

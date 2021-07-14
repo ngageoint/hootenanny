@@ -109,11 +109,6 @@ public:
     BoxInternalData box;
     int id;
 
-//    BoxPair(const BoxPair& bp) :
-//      box(bp.box)
-//    {
-//      id = bp.id;
-//    }
     BoxPair(const BoxPair& bp) = default;
     BoxPair(const BoxInternalData& b, int id) :
       box(b)
@@ -121,12 +116,6 @@ public:
       this->id = id;
     }
 
-//    BoxPair& operator=(const BoxPair& bp)
-//    {
-//      box = bp.box;
-//      id = bp.id;
-//      return *this;
-//    }
     BoxPair& operator=(const BoxPair& bp) = default;
   };
 

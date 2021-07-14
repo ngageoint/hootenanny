@@ -49,11 +49,11 @@ public:
    */
   void runMeanLevenshteinTest()
   {
-    NodePtr n1(new Node(Status::Invalid, -1, 0, 0, 0));
+    NodePtr n1 = std::make_shared<Node>(Status::Invalid, -1, 0, 0, 0);
     n1->setTag("name", "Sheraton Sana'a Hotel");
     n1->setTag("alt_name", QString::fromUtf8("Funduq Shiratun;Funduq Shīrātūn;Hotel Sheraton San`a';Hotel Sheraton San‘ā’;fndq shyratwn;فندق شيراتون"));
 
-    NodePtr n2(new Node(Status::Invalid, -2, 0, 0, 0));
+    NodePtr n2 = std::make_shared<Node>(Status::Invalid, -2, 0, 0, 0);
     n2->setTag("name", QString::fromUtf8("شيراتون"));
     n2->setTag("name:ar", QString::fromUtf8("شيراتون"));
     n2->setTag("name:en", "Sheraton hotel");

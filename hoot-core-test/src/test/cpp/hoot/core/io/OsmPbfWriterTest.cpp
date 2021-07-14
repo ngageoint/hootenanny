@@ -84,7 +84,7 @@ public:
 
     OsmPbfWriter writer;
 
-    NodePtr n(new Node(Status::Unknown1, 72, 42.0, 3.14159, 7.1));
+    NodePtr n = std::make_shared<Node>(Status::Unknown1, 72, 42.0, 3.14159, 7.1);
     n->setTag("hello", "world");
     n->setTag("note", "test tag");
     writer.writePb(n, &ss);
@@ -112,7 +112,7 @@ public:
     OsmPbfWriter writer;
 
     OsmMapPtr map = std::make_shared<OsmMap>();
-    RelationPtr r(new Relation(Status::Unknown1, 42, 1.7, "foo"));
+    RelationPtr r = std::make_shared<Relation>(Status::Unknown1, 42, 1.7, "foo");
     r->addElement("s", ElementId::node(1));
     r->addElement("t", ElementId::node(2));
     r->addElement("u", ElementId::node(3));
@@ -151,7 +151,7 @@ public:
     OsmPbfWriter writer;
 
     OsmMapPtr map = std::make_shared<OsmMap>();
-    WayPtr w(new Way(Status::Unknown1, 42, 1.7));
+    WayPtr w = std::make_shared<Way>(Status::Unknown1, 42, 1.7);
     vector<long> nodes;
     nodes.push_back(1);
     nodes.push_back(3);
@@ -193,11 +193,11 @@ public:
     writer.setIncludeVersion(false);
 
     OsmMapPtr map = std::make_shared<OsmMap>();
-    NodePtr n(new Node(Status::Unknown1, 72, 42.0, 3.14159, 7.1));
+    NodePtr n = std::make_shared<Node>(Status::Unknown1, 72, 42.0, 3.14159, 7.1);
     n->setTag("hello", "world");
     n->setTag("note", "test tag");
     map->addNode(n);
-    WayPtr w(new Way(Status::Unknown1, 42, 1.7));
+    WayPtr w = std::make_shared<Way>(Status::Unknown1, 42, 1.7);
     vector<long> nodes;
     nodes.push_back(1);
     nodes.push_back(3);
@@ -214,9 +214,9 @@ public:
 
     map->clear();
 
-    n.reset(new Node(Status::Unknown1, 73, 20, 30, 15));
+    n = std::make_shared<Node>(Status::Unknown1, 73, 20, 30, 15);
     map->addNode(n);
-    w.reset(new Way(Status::Unknown1, 43, 1.7));
+    w = std::make_shared<Way>(Status::Unknown1, 43, 1.7);
     nodes.clear();
     nodes.push_back(73);
     w->addNodes(nodes);

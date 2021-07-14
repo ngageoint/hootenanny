@@ -184,8 +184,7 @@ public:
   AutoRegister(QString baseName, QString name, bool baseClass = false)
   {
     Factory::getInstance().registerCreator(
-      std::shared_ptr<ObjectCreatorTemplate<Base, T>>(
-        new ObjectCreatorTemplate<Base, T>(baseName, name)), baseClass);
+      std::make_shared<ObjectCreatorTemplate<Base, T>>(baseName, name), baseClass);
   }
 };
 

@@ -46,9 +46,8 @@ public:
   ~ImplicitTagEligiblePoiCriterion() = default;
 
   bool isSatisfied(const ConstElementPtr& e) const override;
-
   ElementCriterionPtr clone() override
-  { return ElementCriterionPtr(new ImplicitTagEligiblePoiCriterion()); }
+  { return std::make_shared<ImplicitTagEligiblePoiCriterion>(); }
 
   /**
    * Returns all tag key/value pairs which could be applied implicitly by an implicit POI tagger
@@ -57,7 +56,6 @@ public:
    * @return a list of key/value pairs (key=value)
    */
   QStringList getEligibleKvps(const Tags& tags) const override;
-
   /**
    * Returns true if the input tags contain at least one key/value pair which could be applied
    * implicitly by an implicit POI tagger
@@ -69,9 +67,7 @@ public:
 
   QString getDescription() const override
   { return "Identifies POIs eligible for type tag addition"; }
-
   QString getName() const override { return className(); }
-
   QString getClassName() const override { return className(); }
 };
 

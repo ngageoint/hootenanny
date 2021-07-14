@@ -38,6 +38,16 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, IdSwapOp)
 
+IdSwapOp::IdSwapOp(const IdSwapPtr& idSwap) :
+_idSwap(idSwap)
+{
+}
+
+IdSwapOp::IdSwapOp(ElementId e1, ElementId e2) :
+_idSwap(std::make_shared<IdSwap>(e1, e2))
+{
+}
+
 void IdSwapOp::apply(const std::shared_ptr<hoot::OsmMap>& map)
 {
   //  Validate the swap information

@@ -717,10 +717,10 @@ void MatchComparator::_setElementWrongCount(const ConstOsmMapPtr& map,
 {
   _elementWrongCounts[elementType] =
     (int)FilteredVisitor::getStat(
-      ElementCriterionPtr(new ChainCriterion(
-        ElementCriterionPtr(new ElementTypeCriterion(elementType)),
-        ElementCriterionPtr(new TagKeyCriterion(MetadataTags::HootWrong())))),
-      ConstElementVisitorPtr(new ElementCountVisitor()),
+      std::make_shared<ChainCriterion>(
+        std::make_shared<ElementTypeCriterion>(elementType),
+        std::make_shared<TagKeyCriterion>(MetadataTags::HootWrong())),
+      std::make_shared<ElementCountVisitor>(),
       map);
 }
 

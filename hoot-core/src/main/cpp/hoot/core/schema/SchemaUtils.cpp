@@ -42,8 +42,7 @@ bool SchemaUtils::anyElementsHaveType(const ConstOsmMapPtr& map)
 {
   return
     (int)FilteredVisitor::getStat(
-      ElementCriterionPtr(new HasTypeCriterion()),
-      ElementVisitorPtr(new ElementCountVisitor()), map) > 0;
+      std::make_shared<HasTypeCriterion>(), std::make_shared<ElementCountVisitor>(), map) > 0;
 }
 
 void SchemaUtils::validateTranslationUrl(const QString& url)

@@ -284,8 +284,9 @@ void OsmXmlReader::_createWay(const QXmlAttributes& attributes)
     logWarnCount++;
   }
 
-  _element.reset(
-    new Way(_status, newId, _defaultCircularError, changeset, version, timestamp, user, uid));
+  _element =
+    std::make_shared<Way>(
+      _status, newId, _defaultCircularError, changeset, version, timestamp, user, uid);
 
   _parseTimeStamp(attributes);
 }
@@ -353,9 +354,9 @@ void OsmXmlReader::_createRelation(const QXmlAttributes& attributes)
     logWarnCount++;
   }
 
-  _element.reset(
-    new Relation(
-      _status, newId, _defaultCircularError, "", changeset, version, timestamp, user, uid));
+  _element =
+    std::make_shared<Relation>(
+      _status, newId, _defaultCircularError, "", changeset, version, timestamp, user, uid);
 
   _parseTimeStamp(attributes);
 }
