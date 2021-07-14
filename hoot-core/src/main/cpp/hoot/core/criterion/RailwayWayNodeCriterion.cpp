@@ -38,13 +38,13 @@ HOOT_FACTORY_REGISTER(ElementCriterion, RailwayWayNodeCriterion)
 RailwayWayNodeCriterion::RailwayWayNodeCriterion() :
 WayNodeCriterion()
 {
-  _parentCriterion.reset(new RailwayCriterion());
+  _parentCriterion = std::make_shared<RailwayCriterion>();
 }
 
 RailwayWayNodeCriterion::RailwayWayNodeCriterion(ConstOsmMapPtr map) :
 WayNodeCriterion(map)
 {
-  _parentCriterion.reset(new RailwayCriterion());
+  _parentCriterion = std::make_shared<RailwayCriterion>();
 }
 
 }

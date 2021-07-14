@@ -247,7 +247,7 @@ void PoiPolygonMatch::setConfiguration(const Settings& conf)
   }
   if (!_typeScorer)
   {
-    _typeScorer.reset(new PoiPolygonTypeScoreExtractor(_infoCache));
+    _typeScorer = std::make_shared<PoiPolygonTypeScoreExtractor>(_infoCache);
   }
   _typeScorer->setConfiguration(conf);
   _nameScorer.setConfiguration(conf);
