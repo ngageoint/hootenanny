@@ -152,7 +152,7 @@ void OsmGbdxXmlWriter::_newOutputFile()
     }
   }
 
-  _fp.reset(new QFile());
+  _fp = std::make_shared<QFile>();
   std::dynamic_pointer_cast<QFile>(_fp)->setFileName(url);
 
   if (!_fp->open(QIODevice::WriteOnly | QIODevice::Text))

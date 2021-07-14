@@ -181,7 +181,7 @@ QString OsmXmlWriter::_typeName(ElementType e)
 
 void OsmXmlWriter::_initWriter()
 {
-  _writer.reset(new QXmlStreamWriter(_fp.get()));
+  _writer = std::make_shared<QXmlStreamWriter>(_fp.get());
   _writer->setCodec("UTF-8");
 
   if (_formatXml)

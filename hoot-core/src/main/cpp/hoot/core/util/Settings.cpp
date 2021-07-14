@@ -327,7 +327,7 @@ Settings& Settings::getInstance()
 {
   if (_theInstance == nullptr)
   {
-    _theInstance.reset(new Settings());
+    _theInstance = std::make_shared<Settings>();
     _theInstance->loadDefaults();
   }
   return *_theInstance;

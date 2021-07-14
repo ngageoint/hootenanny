@@ -45,9 +45,9 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, UnionPolygonsOp)
 
-UnionPolygonsOp::UnionPolygonsOp()
+UnionPolygonsOp::UnionPolygonsOp() :
+_combiner(std::make_shared<UnionPolygonsVisitor>())
 {
-  _combiner.reset(new UnionPolygonsVisitor());
 }
 
 void UnionPolygonsOp::apply(std::shared_ptr<OsmMap>& map)

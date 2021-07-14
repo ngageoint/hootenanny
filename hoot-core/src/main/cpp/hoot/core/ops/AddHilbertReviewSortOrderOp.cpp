@@ -144,7 +144,7 @@ int64_t AddHilbertReviewSortOrderOp::_calculateHilbertValue(
       LOG_VART(env.get());
       if (env.get() == nullptr)
       {
-        env.reset(new Envelope(*te));
+        env = std::make_shared<Envelope>(*te);
       }
       else
       {

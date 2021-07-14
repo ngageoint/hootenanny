@@ -380,7 +380,7 @@ ElementInputStreamPtr TagDistribution::_getFilteredInputStream(
 
   if (_crit)
   {
-    filteredInputStream.reset(new ElementCriterionInputStream(inputStream, _crit));
+    filteredInputStream = std::make_shared<ElementCriterionInputStream>(inputStream, _crit);
   }
   else
   {

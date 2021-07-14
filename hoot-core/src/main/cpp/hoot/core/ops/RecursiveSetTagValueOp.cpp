@@ -77,7 +77,7 @@ void RecursiveSetTagValueOp::addCriterion(const ElementCriterionPtr& e)
   }
   else
   {
-    _crit.reset(new NotCriterion(e));
+    _crit = std::make_shared<NotCriterion>(e);
   }
 }
 
